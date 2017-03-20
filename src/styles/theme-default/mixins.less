@@ -1,0 +1,12 @@
+@import "./variables.less";
+
+.veui-shadow(strong, @offset: 0) {
+    box-shadow: 0 @offset + 1px @offset * 2 + 3px @veui-shadow-color-normal;
+}
+.veui-shadow(none) {
+    box-shadow: none;
+}
+.veui-shadow(@type: normal, @offset: 0) when (@type = normal) {
+    box-shadow: 0 @offset + 1px @offset * 2 + 2px @veui-shadow-color-normal;
+}
+
