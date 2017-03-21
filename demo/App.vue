@@ -37,7 +37,7 @@ export default {
         logs: [],
         expanded: false
       },
-      year: (new Date).getFullYear()
+      year: (new Date()).getFullYear()
     }
   },
   methods: {
@@ -57,11 +57,12 @@ export default {
 </script>
 
 <style lang="less">
-@import "../styles/theme-default/common.less";
+@import "../src/styles/theme-default/common.less";
 
 @nav-width: 240px;
 @light-bg-color: #f6f9ff;
 @console-height: 40vh;
+@title-height: 30px;
 
 #app {
   position: fixed;
@@ -79,7 +80,7 @@ export default {
     }
 
     main {
-      height: ~"calc(100vh - @{console-height})";
+      height: ~"calc(100vh - @{console-height} - @{title-height})";
     }
   }
 }
@@ -155,8 +156,7 @@ main {
   background-color: #fff;
 
   h2 {
-    height: 30px;
-    line-height: 30px;
+    .centered-line(30px);
     margin: 0;
     padding: 0 1em;
     background-color: @light-bg-color;

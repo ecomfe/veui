@@ -3,7 +3,10 @@
     ["env", { "modules": false }],
     "stage-2"
   ],
-  "plugins": ["transform-runtime"],
+  "plugins": [
+    "lodash",
+    "transform-runtime"
+  ],
   "comments": false,
   "env": {
     "test": {

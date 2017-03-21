@@ -1,10 +1,27 @@
 <template>
-  <button class="veui-button" v-bind="attrs" @click="$emit('click', $event)"><template v-if="!loading"><slot></slot></template><template v-else><slot name="loading">加载中…</slot></template></button>
+  <button class="veui-button" :class="{ 'veui-non-interactive': loading }" v-bind="attrs" @click="$emit('click', $event)">
+    <template v-if="!loading"><slot></slot></template>
+    <template v-else>
+      <slot name="loading">
+        <slot name="icon">
+          <icon name="circle-o-notch" spin></icon>
+        </slot>
+        <span v-if="!noText">加载中…</span>
+      </slot>
+    </template>
+  </button>
 </template>
 
 <script>
+import { omit, intersection } from 'lodash'
+import Icon from './Icon'
+import 'vue-awesome/icons/circle-o-notch'
+
 export default {
   name: 'veui-button',
+  components: {
+    Icon
+  },
   props: {
     ui: String,
     disabled: Boolean,
@@ -13,12 +30,16 @@ export default {
     value: String,
     loading: Boolean
   },
-  data () {
-    let attrs = {
-      ...this.$props
+  computed: {
+    uiProps () {
+      return (this.ui || '').split(/\s+/).filter(prop => prop.trim() !== '')
+    },
+    noText () {
+      return !!intersection(this.uiProps, ['round', 'square']).length
+    },
+    attrs () {
+      return omit(this.$props, 'loading')
     }
-    delete attrs.loading
-    return { attrs }
   }
 }
 </script>
@@ -34,6 +55,9 @@ export default {
   background-color: #fff;
   color: @veui-theme-color-primary;
   border-radius: 2px;
+  user-select: none;
+  vertical-align: middle;
+  transition: all .2s;
 
   &:hover,
   &:active {
@@ -131,6 +155,10 @@ export default {
 
   &[ui~="round"] {
     border-radius: 50%;
+  }
+
+  &[ui~="round"],
+  &[ui~="square"] {
     width: @veui-height-normal;
     min-width: auto;
     padding: 0;
@@ -143,6 +171,10 @@ export default {
     &[ui~="small"] {
       width: @veui-height-small;
     }
+  }
+
+  .fa-icon {
+    vertical-align: middle;
   }
 }
 </style>

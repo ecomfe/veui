@@ -19,6 +19,7 @@
 
 html {
     font-size: 14px;
+    font-weight: @veui-font-weight-normal;
 }
 
 h1,
@@ -27,5 +28,10 @@ h3,
 h4,
 h5,
 h6 {
-    font-weight: 600;
+    font-weight: @veui-font-weight-bold;
+}
+
+.veui-non-interactive {
+    pointer-events: none;
+    opacity: .7;
 }
