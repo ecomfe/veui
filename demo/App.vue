@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import routes from './component-routes'
+import routes from './cases'
 import bus from './bus'
 import 'vue-awesome/icons/caret-up'
 import 'vue-awesome/icons/caret-down'
