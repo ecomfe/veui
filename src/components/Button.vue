@@ -59,14 +59,15 @@ export default {
   &:active {
     border-color: @veui-theme-color-hover;
     color: @veui-theme-color-hover;
+  }
+
+  &:hover {
     .veui-shadow();
   }
 
-  &:hover,
-  &:focus
-
   &:active {
     background-color: @veui-theme-color-sup-4;
+    .veui-shadow(none);
   }
 
   &:focus {
@@ -88,17 +89,19 @@ export default {
     &:active {
       border-color: @veui-gray-color-sup-1;
       color: @veui-text-color-strong;
-      .veui-shadow();
+    }
+
+    &:hover {
+      background-color: #fff;
     }
 
     &:active {
-      background-color: @veui-gray-color-sup-3;
+      background-color: @veui-gray-color-sup-4;
     }
 
     &:disabled {
       background-color: @veui-gray-color-sup-3;
       color: @veui-text-color-weak;
-      .veui-shadow(none);
     }
   }
 
@@ -117,7 +120,7 @@ export default {
 
     &:active {
       background-color: @veui-theme-color-active;
-      .veui-shadow();
+      .veui-shadow(none);
     }
 
     &:disabled {
