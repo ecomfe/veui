@@ -1,19 +1,18 @@
 <template>
-  <button class="veui-button" :class="{ 'veui-non-interactive': loading }" v-bind="attrs" @click="$emit('click', $event)">
+  <button class="veui-button" :class="{'veui-non-interactive': loading}" v-bind="attrs" @click="$emit('click', $event)">
     <template v-if="!loading"><slot></slot></template>
     <template v-else>
       <slot name="loading">
         <slot name="icon">
           <icon name="circle-o-notch" spin></icon>
         </slot>
-        <span v-if="!noText">加载中…</span>
+        <span class="veui-button-loading-text">加载中…</span>
       </slot>
     </template>
   </button>
 </template>
 
 <script>
-import { omit, intersection } from 'lodash'
 import Icon from './Icon'
 import 'vue-awesome/icons/circle-o-notch'
 
@@ -28,24 +27,21 @@ export default {
     name: String,
     type: String,
     value: String,
+    autofocus: Boolean,
     loading: Boolean
   },
   computed: {
-    uiProps () {
-      return (this.ui || '').split(/\s+/).filter(prop => prop.trim() !== '')
-    },
-    noText () {
-      return !!intersection(this.uiProps, ['round', 'square']).length
-    },
     attrs () {
-      return omit(this.$props, 'loading')
+      let attrs = Object.assign({}, this.$props)
+      delete attrs.loading
+      return attrs
     }
   }
 }
 </script>
 
 <style lang="less">
-@import "../styles/theme-default/abstract.less";
+@import "../styles/theme-default/lib.less";
 
 .veui-button {
   padding: 0 20px;
@@ -66,6 +62,9 @@ export default {
     .veui-shadow();
   }
 
+  &:hover,
+  &:focus
+
   &:active {
     background-color: @veui-theme-color-sup-4;
   }
@@ -75,15 +74,10 @@ export default {
   }
 
   &:disabled {
-    &,
-    &:focus,
-    &:hover,
-    &:active {
-      border: none;
-      background-color: @veui-gray-color-sup-3;
-      color: @veui-text-color-weak;
-      .veui-shadow(none);
-    }
+    border: none;
+    background-color: @veui-gray-color-sup-3;
+    color: @veui-text-color-weak;
+    .veui-shadow(none);
   }
 
   &[ui~="aux"] {
@@ -102,14 +96,9 @@ export default {
     }
 
     &:disabled {
-      &,
-      &:focus,
-      &:hover,
-      &:active {
-        background-color: @veui-gray-color-sup-3;
-        color: @veui-text-color-weak;
-        .veui-shadow(none);
-      }
+      background-color: @veui-gray-color-sup-3;
+      color: @veui-text-color-weak;
+      .veui-shadow(none);
     }
   }
 
@@ -132,14 +121,9 @@ export default {
     }
 
     &:disabled {
-      &,
-      &:focus,
-      &:hover,
-      &:active {
-        background-color: @veui-gray-color-sup-1;
-        color: #fff;
-        .veui-shadow(none);
-      }
+      background-color: @veui-gray-color-sup-1;
+      color: #fff;
+      .veui-shadow(none);
     }
   }
 
@@ -175,6 +159,15 @@ export default {
 
   .fa-icon {
     vertical-align: middle;
+  }
+}
+
+.veui-button-loading-text {
+  vertical-align: middle;
+
+  [ui~="round"] > &,
+  [ui~="square"] > & {
+    display: none;
   }
 }
 </style>
