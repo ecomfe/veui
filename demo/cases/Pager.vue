@@ -16,7 +16,7 @@
     <div class="pager">
       <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" layout="advanced"
         @redirect="handlePageRedirect"></veui-pager>
-      <div class="message">{{ fivthPagerMessage }}</div>
+      <div class="message">{{ fifthPagerMessage }}</div>
     </div>
   </article>
 </template>
@@ -36,13 +36,13 @@ export default {
       pageTotal: 10101,
       hrefTpl: '#/pager/$page',
 
-      fivthPagerMessage: ''
+      fifthPagerMessage: ''
     }
   },
   methods: {
     handlePageRedirect ({pageNo, event}) {
       event.preventDefault()
-      this.fivthPagerMessage = `已阻止你跳转到第${pageNo}页`
+      this.fifthPagerMessage = `已阻止你跳转到第${pageNo}页`
     }
   },
   mounted () {
