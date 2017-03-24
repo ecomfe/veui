@@ -55,10 +55,9 @@ export default {
   destroyed () {
 
   },
-  route: {
-    data ({next, abort, to: {params: {pageNo = 1}}}) {
-      next({pageNo})
-    }
+  beforeRouteUpdate ({params}, from, next) {
+    let pageNo = parseInt(params.pageNo, 10)
+    this.pageNo = isNaN(pageNo) ? 1 : pageNo
   }
 }
 </script>
