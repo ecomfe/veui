@@ -12,7 +12,7 @@ export default [
     path: '/pager/:pageNo',
     name: 'Pager',
     params: {
-      pageNo: 1
+      pageNo: 0
     },
     component: Pager
   }

@@ -156,8 +156,8 @@ export default {
   },
   methods: {
     handleClick (event) {
-      let target = event.target
-      if (target.tagName.toUpperCase() !== 'A') {
+      let target = findClosestAncestor(event.target, 'a')
+      if (!target) {
         return
       }
       let pageNo = parseInt(target.dataset.pageNo, 10)
@@ -179,6 +179,23 @@ function getPage (hrefTpl, pageNo) {
 function formatHref (hrefTpl, pageNo) {
   return hrefTpl.replace(HREF_TPL_PLACEHOLDER, pageNo)
 }
+
+function findClosestAncestor (element, selectors) {
+  if (element.closest) {
+    return element.closest(selectors)
+  }
+
+  let matches = (element.document || element.ownerDocument).querySelectorAll(selectors)
+  let i
+  let el = this
+
+  do {
+    i = matches.length
+    while (--i >= 0 && matches.item(i) !== el) {}
+  } while ((i < 0) && (el = el.parentElement))
+
+  return el
+}
 </script>
 
 <style lang="less">
@@ -199,6 +216,7 @@ function formatHref (hrefTpl, pageNo) {
 
   .veui-page-info {
     float: left;
+    margin-right: 2.4em;
   }
 
   .veui-page-size {
@@ -314,12 +332,6 @@ function formatHref (hrefTpl, pageNo) {
       .veui-button-relative {
         border-right: 1px solid @veui-gray-color-sup-5;
       }
-    }
-  }
-
-  &[ui~="full"] {
-    .veui-page-switch {
-      margin-left: 2.4em;
     }
   }
 
