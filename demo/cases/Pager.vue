@@ -5,16 +5,16 @@
       <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl"></veui-pager>
     </div>
     <div class="pager">
-      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" layout="hetero"></veui-pager>
+      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" ui="hetero"></veui-pager>
     </div>
     <div class="pager">
-      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" layout="advanced"></veui-pager>
+      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" ui="advanced"></veui-pager>
     </div>
     <div class="pager">
-      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" layout="full"></veui-pager>
+      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" ui="full"></veui-pager>
     </div>
     <div class="pager">
-      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" layout="advanced"
+      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" ui="advanced"
         @redirect="handlePageRedirect"></veui-pager>
       <div class="message">{{ fifthPagerMessage }}</div>
     </div>

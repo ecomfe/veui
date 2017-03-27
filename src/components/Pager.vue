@@ -1,38 +1,38 @@
 <template>
-  <div class="veui-pager">
-    <div class="layout" :class="{['layout-' + layout]: true}">
-      <div class="page-info">
-        <span class="page-total">共 {{ pageTotal }} 条</span>
-        <span class="page-size">
+  <div class="veui-pager" :ui="ui">
+    <div class="veui-wrapper">
+      <div class="veui-page-info">
+        <span class="veui-page-total">共 {{ pageTotal }} 条</span>
+        <span class="veui-page-size">
           每页显示
           <select v-model="realPageSize">
             <option v-for="item in optionalPageSizes" :value="item">{{ item }}</option>
           </select>
         </span>
       </div>
-      <div class="page-switch" @click="handleClick($event)">
-        <ul class="pages">
+      <div class="veui-page-switch" @click="handleClick($event)">
+        <ul class="veui-pages">
           <li v-for="item in pageIndicatorSeries" :class="{
-            active: item.pageNo === pageNo,
-            muted: !item.pageNo,
+            'veui-active': item.pageNo === pageNo
           }">
-            <a :href="item.href" :data-page-no="item.pageNo">{{ item.text }}</a>
+            <a v-if="item.pageNo" :href="item.href" :data-page-no="item.pageNo">{{ item.pageNo }}</a>
+            <span v-else>…</span>
           </li>
         </ul>
-        <div class="buttons">
-          <div class="group group-previous">
-            <a :href="pageNavHref.first.href" :data-page-no="pageNavHref.first.pageNo" class="button absolute">
+        <div class="veui-buttons">
+          <div class="veui-group-previous">
+            <a :href="pageNavHref.first.href" :data-page-no="pageNavHref.first.pageNo" class="veui-button-absolute">
               <icon name="fa-chevron-circle-left"></icon>
             </a>
-            <a :href="pageNavHref.previous.href" :data-page-no="pageNavHref.previous.pageNo" class="button relative">
+            <a :href="pageNavHref.previous.href" :data-page-no="pageNavHref.previous.pageNo" class="veui-button-relative">
               <icon name="fa-chevron-left"></icon>
             </a>
           </div>
-          <div class="group group-next">
-            <a :href="pageNavHref.next.href" :data-page-no="pageNavHref.next.pageNo" class="button relative">
+          <div class="veui-group-next">
+            <a :href="pageNavHref.next.href" :data-page-no="pageNavHref.next.pageNo" class="veui-button-relative">
               <icon name="fa-chevron-right"></icon>
             </a>
-            <a :href="pageNavHref.last.href" :data-page-no="pageNavHref.last.pageNo" class="button absolute">
+            <a :href="pageNavHref.last.href" :data-page-no="pageNavHref.last.pageNo" class="veui-button-absolute">
               <icon name="fa-chevron-circle-right"></icon>
             </a>
           </div>
@@ -61,8 +61,7 @@ const OPTIONAL_PAGE_SIZES = [
 ]
 
 const PAGE_INDICATOR_COUNT = 7
-const PAGE_INDICATOR_MORE = '...'
-const HREF_TPL_PLACEHOLDER = '$page'
+const HREF_TPL_PLACEHOLDER = /\$page\b/g
 
 export default {
   name: 'veui-pager',
@@ -86,11 +85,16 @@ export default {
       type: String,
       default: '$page'
     },
-    layout: {
+    ui: {
       type: String,
-      default: LAYOUTS[0],
-      validate (val) {
-        return LAYOUTS.indexOf(val) >= 0
+      default () {
+        return LAYOUTS[0]
+      },
+      validator (val) {
+        // 有且只有一个有效 layout
+        return val.trim().split(/\s+/).filter(function (item) {
+          return LAYOUTS.indexOf(item) >= 0
+        }).length === 1
       }
     }
   },
@@ -122,10 +126,7 @@ export default {
       return Math.ceil(this.pageTotal / this.realPageSize)
     },
     pageIndicatorSeries () {
-      let hrefTpl = this.hrefTpl
-
-      let pageNo = this.pageNo
-      let pageCount = this.pageCount
+      let {hrefTpl, pageNo, pageCount} = this
 
       let series = []
       let halfPageIndicatorCount = Math.floor(PAGE_INDICATOR_COUNT / 2)
@@ -171,13 +172,11 @@ export default {
 function getPage (hrefTpl, pageNo) {
   return {
     pageNo,
-    text: pageNo || PAGE_INDICATOR_MORE,
     href: pageNo ? formatHref(hrefTpl, pageNo) : null
   }
 }
 
 function formatHref (hrefTpl, pageNo) {
-  // TODO: 多处占位符的情况
   return hrefTpl.replace(HREF_TPL_PLACEHOLDER, pageNo)
 }
 </script>
@@ -189,122 +188,137 @@ function formatHref (hrefTpl, pageNo) {
   color: @veui-gray-color-normal;
   font-weight: normal;
 
-  .layout {
-    display: flex;
-  }
-
   a {
     color: inherit;
     text-decoration: none;
   }
 
-  .page-size {
+  .veui-wrapper {
+    .clearfix();
+  }
+
+  .veui-page-info {
+    float: left;
+  }
+
+  .veui-page-size {
     margin-left: 1.2em;
+
   }
 
-  .page-switch {
-    display: flex;
+  .veui-page-switch {
+    float: left;
   }
 
-  .buttons {
-    display: flex;
+  .veui-buttons {
+    float: left;
 
-    .group {
-      display: flex;
+    [class|="veui-group"] {
+      float: left;
     }
-    .button {
+
+    [class|="veui-button"] {
+      float: left;
       display: block;
       padding: 5px 8px 3px;
     }
   }
 
-  .pages {
+  .veui-pages {
+    float: left;
     margin: 0;
     padding: 0;
     list-style: none;
-    display: flex;
 
     li {
+      float: left;
       margin: 0 2px;
       padding: 5px 8px 3px;
     }
 
-    .active {
+    .veui-active {
       color: @veui-gray-color-strong;
       background-color: @veui-gray-color-sup-2;
     }
-    .muted {
+
+    span {
       color: @veui-gray-color-weak;
     }
   }
 
-  .group-bg() {
+  .veui-group-bg() {
     border-radius: 3px;
     background-color: @veui-gray-color-sup-2;
     box-shadow: 1px 1px 3px @veui-gray-color-weak;
   }
 
-  .layout-basic,
-  .layout-advanced {
-    .page-switch {
+  &[ui~="basic"],
+  &[ui~="advanced"] {
+    .veui-page-switch {
       padding: 0 2.4em;
       position: relative;
     }
 
-    .buttons {
-      .group {
+    .veui-buttons {
+      [class|="veui-group"] {
         position: absolute;
-        .group-bg();
+        .veui-group-bg();
       }
-      .group-previous {
+      .veui-group-previous {
         left: 0;
       }
-      .group-next {
+      .veui-group-next {
         right: 0;
       }
     }
   }
 
-  .layout-basic,
-  .layout-hetero,
-  .layout-full {
-    .buttons .absolute {
+  &[ui~="basic"],
+  &[ui~="hetero"],
+  &[ui~="full"] {
+    .veui-buttons .veui-button-absolute {
       display: none;
     }
   }
 
-  .layout-basic,
-  .layout-hetero,
-  .layout-advanced {
-    .page-info {
+  &[ui~="basic"],
+  &[ui~="hetero"],
+  &[ui~="advanced"] {
+    .veui-page-info {
       display: none;
     }
   }
 
-  .layout-advanced {
-    .page-switch {
+  &[ui~="advanced"] {
+    .veui-page-switch {
       padding: 0 4.8em;
     }
-    .group-previous .relative {
-      border-left: 1px solid @veui-gray-color-sup-5;
+    .veui-group-previous {
+      .veui-button-relative {
+        border-left: 1px solid @veui-gray-color-sup-5;
+      }
     }
-    .group-next .relative {
-      border-right: 1px solid @veui-gray-color-sup-5;
-    }
-  }
-
-  .layout-hetero,
-  .layout-full {
-    .buttons {
-      .group-bg();
-    }
-    .group-previous .relative {
-      border-right: 1px solid @veui-gray-color-sup-5;
+    .veui-group-next {
+      .veui-button-relative {
+        border-right: 1px solid @veui-gray-color-sup-5;
+      }
     }
   }
 
-  .layout-full {
-    .page-switch {
+  &[ui~="hetero"],
+  &[ui~="full"] {
+    .veui-buttons {
+      .veui-group-bg();
+    }
+    .veui-group-previous {
+      .veui-button-relative {
+        border-right: 1px solid @veui-gray-color-sup-5;
+      }
+    }
+  }
+
+  &[ui~="full"] {
+    .veui-page-switch {
       margin-left: 2.4em;
     }
   }
