@@ -1,5 +1,5 @@
 <template>
-  <button class="veui-button" :class="{'veui-non-interactive': loading}" v-bind="attrs" @click="$emit('click', $event)">
+  <button class="veui-button" :class="{'veui-button-loading': loading}" v-bind="attrs" @click="$emit('click', $event)">
     <template v-if="!loading"><slot></slot></template>
     <template v-else>
       <slot name="loading">
@@ -34,6 +34,7 @@ export default {
     attrs () {
       let attrs = Object.assign({}, this.$props)
       delete attrs.loading
+      attrs.disabled = this.disabled || this.loading
       return attrs
     }
   }
@@ -44,7 +45,7 @@ export default {
 @import "../styles/theme-default/lib.less";
 
 .veui-button {
-  padding: 0 20px;
+  padding: 10px 20px;
   min-width: 94px;
   height: @veui-height-normal;
   border: 1px solid @veui-theme-color-primary;
@@ -53,21 +54,24 @@ export default {
   border-radius: 2px;
   user-select: none;
   vertical-align: middle;
+  line-height: 1;
   transition: all .2s;
 
-  &:hover,
-  &:active {
-    border-color: @veui-theme-color-hover;
-    color: @veui-theme-color-hover;
-  }
+  &:not(.veui-button-loading) {
+    &:hover,
+    &:active {
+      border-color: @veui-theme-color-hover;
+      color: @veui-theme-color-hover;
+    }
 
-  &:hover {
-    .veui-shadow();
-  }
+    &:hover {
+      .veui-shadow();
+    }
 
-  &:active {
-    background-color: @veui-theme-color-sup-4;
-    .veui-shadow(none);
+    &:active {
+      background-color: @veui-theme-color-sup-4;
+      .veui-shadow(none);
+    }
   }
 
   &:focus {
@@ -75,69 +79,82 @@ export default {
   }
 
   &:disabled {
-    border: none;
-    background-color: @veui-gray-color-sup-3;
-    color: @veui-text-color-weak;
-    .veui-shadow(none);
+    cursor: not-allowed;
+
+    &:not(.veui-button-loading) {
+      border: none;
+      background-color: @veui-gray-color-sup-3;
+      color: @veui-text-color-weak;
+      .veui-shadow(none);
+    }
+  }
+
+  &.veui-button-loading {
+    cursor: default;
   }
 
   &[ui~="aux"] {
     border-color: @veui-gray-color-sup-1;
     color: @veui-text-color-normal;
 
-    &:hover,
-    &:active {
-      border-color: @veui-gray-color-sup-1;
-      color: @veui-text-color-strong;
-    }
+    &:not(.veui-button-loading) {
+      &:hover,
+      &:active {
+        border-color: @veui-gray-color-sup-1;
+        color: @veui-text-color-strong;
+      }
 
-    &:hover {
-      background-color: #fff;
-    }
+      &:hover {
+        background-color: #fff;
+      }
 
-    &:active {
-      background-color: @veui-gray-color-sup-4;
-    }
+      &:active {
+        background-color: @veui-gray-color-sup-4;
+      }
 
-    &:disabled {
-      background-color: @veui-gray-color-sup-3;
-      color: @veui-text-color-weak;
+      &:disabled {
+        background-color: @veui-gray-color-sup-3;
+        color: @veui-text-color-weak;
+      }
     }
   }
 
   &[ui~="primary"] {
-    border: none;
     background-color: @veui-theme-color-primary;
     color: #fff;
     .veui-shadow();
 
-    &:hover,
-    &:active {
-      background-color: @veui-theme-color-hover;
-      color: #fff;
-      .veui-shadow(strong);
-    }
+    &:not(.veui-button-loading) {
+      &:hover,
+      &:active {
+        background-color: @veui-theme-color-hover;
+        color: #fff;
+        .veui-shadow(strong);
+      }
 
-    &:active {
-      background-color: @veui-theme-color-active;
-      .veui-shadow(none);
-    }
+      &:active {
+        background-color: @veui-theme-color-active;
+        .veui-shadow(none);
+      }
 
-    &:disabled {
-      background-color: @veui-gray-color-sup-1;
-      color: #fff;
-      .veui-shadow(none);
+      &:disabled {
+        background-color: @veui-gray-color-sup-1;
+        color: #fff;
+        .veui-shadow(none);
+      }
     }
   }
 
   &[ui~="large"] {
-    min-width: 130px;
+    .padding(12px, _);
     height: @veui-height-large;
+    font-size: @veui-font-size-large;
   }
 
   &[ui~="small"] {
-    min-width: 80px;
+    .padding(8px, _);
     height: @veui-height-small;
+    font-size: @veui-font-size-small;
   }
 
   &[ui~="round"] {
@@ -148,7 +165,7 @@ export default {
   &[ui~="square"] {
     width: @veui-height-normal;
     min-width: auto;
-    padding: 0;
+    .padding(_, 0);
     text-align: center;
 
     &[ui~="large"] {
@@ -161,12 +178,13 @@ export default {
   }
 
   .fa-icon {
-    vertical-align: middle;
+    max-width: 1em;
+    vertical-align: text-top;
   }
 }
 
 .veui-button-loading-text {
-  vertical-align: middle;
+  vertical-align: text-top;
 
   [ui~="round"] > &,
   [ui~="square"] > & {

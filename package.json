@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "vue-awesome": "^2.2.0"
+    "vue-awesome": "^2.2.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
