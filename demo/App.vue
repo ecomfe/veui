@@ -3,7 +3,7 @@
     <nav id="main-nav">
       <h1>VEUI controls</h1>
       <ul v-for="route in routes">
-        <li><router-link :to='route.name'>{{route.name}}</router-link></li>
+        <li><router-link :to='route'>{{route.name}}</router-link></li>
       </ul>
       <footer>© {{year}} Baidu, Inc.</footer>
     </nav>
