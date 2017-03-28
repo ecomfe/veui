@@ -70,6 +70,16 @@ devMiddleware.waitUntilValid(function () {
   console.log('> Listening at ' + uri + '\n')
 })
 
+// Uploader test url
+app.use('/upload', function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/html'})
+  res.end(`<script>
+    window.parent.postMessage(JSON.stringify({status: '${Math.random() > 0.5 ? 'success' : 'failure'}',
+      name: 'abcdefg${Math.random()}.gif', fileUid: 'file${Math.random()}',
+      size: '250kb'}), '*');
+    </script>`)
+})
+
 module.exports = app.listen(port, function (err) {
   if (err) {
     console.log(err)
