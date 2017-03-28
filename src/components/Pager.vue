@@ -185,16 +185,16 @@ function findClosestAncestor (element, selectors) {
     return element.closest(selectors)
   }
 
+  // Polyfill from https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
   let matches = (element.document || element.ownerDocument).querySelectorAll(selectors)
   let i
-  let el = this
 
   do {
     i = matches.length
-    while (--i >= 0 && matches.item(i) !== el) {}
-  } while ((i < 0) && (el = el.parentElement))
+    while (--i >= 0 && matches.item(i) !== element) {}
+  } while ((i < 0) && (element = element.parentElement))
 
-  return el
+  return element
 }
 </script>
 
@@ -237,7 +237,6 @@ function findClosestAncestor (element, selectors) {
 
     [class|="veui-button"] {
       float: left;
-      display: block;
       padding: 5px 8px 3px;
     }
   }
