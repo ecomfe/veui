@@ -76,7 +76,8 @@ app.use('/upload', function (req, res) {
   res.end(`<script>
     window.parent.postMessage(JSON.stringify({status: '${Math.random() > 0.5 ? 'success' : 'failure'}',
       name: 'abcdefg${Math.random()}.gif', fileUid: 'file${Math.random()}',
-      size: '250kb'}), '*');
+      size: '250kb',
+      src: 'http://ww4.sinaimg.cn/bmiddle/62bf1f1fjw1f9zw8x6wbsj20ii0cbwfo.jpg'}), '*');
     </script>`)
 })
 
