@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "vue-awesome": "^2.2.1"
+    "vue-awesome": "^2.2.1",
+    "tether": "^1.4.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
