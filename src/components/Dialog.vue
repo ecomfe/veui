@@ -94,14 +94,26 @@ export default {
   },
   mounted () {
     this.$on('dragstart', () => {
+      if (!this.draggable) {
+        return
+      }
+
       this.isDragging = true
       this.dragInitX = this.realLeft
       this.dragInitY = this.realTop
     })
     this.$on('dragend', () => {
+      if (!this.draggable) {
+        return
+      }
+
       this.isDragging = false
     })
     this.$on('drag', ({ distanceX, distanceY }) => {
+      if (!this.draggable) {
+        return
+      }
+
       this.realLeft = this.dragInitX + distanceX
       this.realTop = this.dragInitY + distanceY
     })
