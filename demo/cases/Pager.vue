@@ -14,6 +14,10 @@
       <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" ui="full"></veui-pager>
     </div>
     <div class="pager">
+      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" ui="slim"></veui-pager>
+    </div>
+
+    <div class="pager">
       <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" ui="advanced"
         @redirect="handlePageRedirect"></veui-pager>
       <div class="message">{{ fifthPagerMessage }}</div>
