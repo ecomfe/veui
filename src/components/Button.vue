@@ -3,9 +3,7 @@
     <template v-if="!loading"><slot></slot></template>
     <template v-else>
       <slot name="loading">
-        <slot name="icon">
-          <icon name="circle-o-notch" spin></icon>
-        </slot>
+        <icon name="circle-o-notch" spin></icon>
         <span class="veui-button-loading-text">加载中…</span>
       </slot>
     </template>
@@ -46,7 +44,7 @@ export default {
 
 .veui-button {
   padding: 10px 20px;
-  min-width: 94px;
+  min-width: 70px;
   height: @veui-height-normal;
   border: 1px solid @veui-theme-color-primary;
   background-color: #fff;

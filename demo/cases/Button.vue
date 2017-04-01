@@ -58,29 +58,12 @@ export default {
   components: {
     'veui-button': Button
   },
-  data () {
-    return {
-      timer: null,
-      loading: false
-    }
-  },
-  methods: {
-    load () {
-      this.loading = true
-      this.timer = setTimeout(() => {
-        this.loading = false
-      }, 2000)
-    }
-  },
   mounted () {
     this.$children.forEach(child => {
       child.$on('click', () => {
         bus.$emit('log', child.$el.getAttribute('ui'))
       })
     })
-  },
-  destroyed () {
-    clearTimeout(this.timer)
   }
 }
 </script>
