@@ -60,8 +60,19 @@ const OPTIONAL_PAGE_SIZES = [
   30, 60, 100, 200
 ]
 
-const PAGE_INDICATOR_COUNT = 7
 const HREF_TPL_PLACEHOLDER = /\$page\b/g
+
+/**
+ * 总页面切换按钮数
+ * @type {Number}
+ */
+const pageIndicatorLength = 9
+
+/**
+ * 围绕切换按钮数
+ * @type {Number}
+ */
+const aroundIndicatorLength = 2
 
 export default {
   name: 'veui-pager',
@@ -107,10 +118,10 @@ export default {
   computed: {
     pageNavHref () {
       return {
-        first: getPage(this.hrefTpl, 1),
-        last: getPage(this.hrefTpl, this.pageCount),
-        previous: getPage(this.hrefTpl, Math.max(1, this.pageNo - 1)),
-        next: getPage(this.hrefTpl, Math.min(this.pageCount, this.pageNo + 1))
+        first: getPageIndicator(this.hrefTpl, 1),
+        last: getPageIndicator(this.hrefTpl, this.pageCount),
+        previous: getPageIndicator(this.hrefTpl, Math.max(1, this.pageNo - 1)),
+        next: getPageIndicator(this.hrefTpl, Math.min(this.pageCount, this.pageNo + 1))
       }
     },
     realPageSize: {
@@ -128,30 +139,42 @@ export default {
     pageIndicatorSeries () {
       let {hrefTpl, pageNo, pageCount} = this
 
-      let series = []
-      let halfPageIndicatorCount = Math.floor(PAGE_INDICATOR_COUNT / 2)
+      let continuousIndicatorLength = aroundIndicatorLength * 2 + 1
+      let boundaryIndicatorLength = (pageIndicatorLength - continuousIndicatorLength - 2) / 2
 
-      if (pageCount <= PAGE_INDICATOR_COUNT) {
-        for (let i = pageCount; i > 0; i--) {
-          series[i - 1] = getPage(hrefTpl, i)
-        }
-      } else if (pageNo <= halfPageIndicatorCount || pageNo + halfPageIndicatorCount > pageCount) {
-        for (let i = 0; i < halfPageIndicatorCount; i++) {
-          series[i] = getPage(hrefTpl, i + 1)
-        }
-        series[halfPageIndicatorCount] = getPage()
-        for (let i = 1; i <= halfPageIndicatorCount; i++) {
-          series[i + halfPageIndicatorCount] = getPage(hrefTpl, pageCount - halfPageIndicatorCount + i)
-        }
-      } else {
-        series[0] = getPage()
-        series[PAGE_INDICATOR_COUNT - 1] = getPage()
-        for (let i = 1; i < PAGE_INDICATOR_COUNT - 1; i++) {
-          series[i] = getPage(hrefTpl, pageNo - halfPageIndicatorCount + i)
-        }
+      let len
+
+      switch (true) {
+        case pageCount <= pageIndicatorLength:
+          return getPageSeries(1, pageCount)
+
+        case pageNo < continuousIndicatorLength:
+          len = Math.max(continuousIndicatorLength, pageNo + aroundIndicatorLength)
+          return getPageSeries(1, len)
+            .concat(getPageIndicator())
+            .concat(getPageSeries(pageCount - len + 1, pageIndicatorLength - len - 1))
+
+        case pageNo > pageCount - continuousIndicatorLength + 1:
+          len = Math.max(pageCount - pageNo + 1 + aroundIndicatorLength, continuousIndicatorLength)
+          return getPageSeries(1, pageIndicatorLength - len - 1)
+            .concat(getPageIndicator())
+            .concat(getPageSeries(pageCount - len + 1, len))
+
+        default:
+          return getPageSeries(1, boundaryIndicatorLength)
+            .concat(getPageIndicator())
+            .concat(getPageSeries(pageNo - boundaryIndicatorLength - 1, continuousIndicatorLength))
+            .concat(getPageIndicator())
+            .concat(getPageSeries(pageCount, boundaryIndicatorLength))
       }
 
-      return series
+      function getPageSeries(fromPageNo, length) {
+        let series = []
+        for (let i = 0; i < length; i++) {
+          series[i] = getPageIndicator(hrefTpl, fromPageNo + i)
+        }
+        return series
+      }
     }
   },
   methods: {
@@ -169,7 +192,7 @@ export default {
   }
 }
 
-function getPage (hrefTpl, pageNo) {
+function getPageIndicator (hrefTpl, pageNo) {
   return {
     pageNo,
     href: pageNo ? formatHref(hrefTpl, pageNo) : null
