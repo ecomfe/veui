@@ -15,8 +15,7 @@
           <li v-for="item in pageIndicatorSeries" :class="{
             'veui-active': item.pageNo === pageNo
           }">
-            <a v-if="item.pageNo" :href="item.href" :data-page-no="item.pageNo">{{ item.pageNo }}</a>
-            <span v-else>…</span>
+            <a :href="item.href" :data-page-no="item.pageNo">{{ item.text }}</a>
           </li>
         </ul>
         <div class="veui-buttons">
@@ -74,6 +73,12 @@ const pageIndicatorLength = 9
  */
 const aroundIndicatorLength = 2
 
+/**
+ * 省略号点击跳转偏移页数
+ * @type {Number}
+ */
+const moreIndicatorOffsetLength = 5
+
 export default {
   name: 'veui-pager',
   components: {
@@ -118,10 +123,10 @@ export default {
   computed: {
     pageNavHref () {
       return {
-        first: getPageIndicator(this.hrefTpl, 1),
-        last: getPageIndicator(this.hrefTpl, this.pageCount),
-        previous: getPageIndicator(this.hrefTpl, Math.max(1, this.pageNo - 1)),
-        next: getPageIndicator(this.hrefTpl, Math.min(this.pageCount, this.pageNo + 1))
+        first: this.getPageIndicator(1),
+        last: this.getPageIndicator(this.pageCount),
+        previous: this.getPageIndicator(Math.max(1, this.pageNo - 1)),
+        next: this.getPageIndicator(Math.min(this.pageCount, this.pageNo + 1))
       }
     },
     realPageSize: {
@@ -137,12 +142,14 @@ export default {
       return Math.ceil(this.pageTotal / this.realPageSize)
     },
     pageIndicatorSeries () {
-      let {hrefTpl, pageNo, pageCount} = this
+      let {hrefTpl, pageNo, pageCount, getPageIndicator} = this
 
       let continuousIndicatorLength = aroundIndicatorLength * 2 + 1
       let boundaryIndicatorLength = (pageIndicatorLength - continuousIndicatorLength - 2) / 2
 
       let len
+      let offsetBackward = Math.max(pageNo - moreIndicatorOffsetLength, 1)
+      let offsetForward = Math.min(pageNo + moreIndicatorOffsetLength, pageCount)
 
       switch (true) {
         case pageCount <= pageIndicatorLength:
@@ -151,30 +158,31 @@ export default {
         case pageNo < continuousIndicatorLength:
           len = Math.max(continuousIndicatorLength, pageNo + aroundIndicatorLength)
           return getPageSeries(1, len)
-            .concat(getPageIndicator())
+            .concat(getPageIndicator(offsetForward, true))
             .concat(getPageSeries(pageCount - len + 1, pageIndicatorLength - len - 1))
 
         case pageNo > pageCount - continuousIndicatorLength + 1:
           len = Math.max(pageCount - pageNo + 1 + aroundIndicatorLength, continuousIndicatorLength)
           return getPageSeries(1, pageIndicatorLength - len - 1)
-            .concat(getPageIndicator())
+            .concat(getPageIndicator(offsetBackward, true))
             .concat(getPageSeries(pageCount - len + 1, len))
 
         default:
           return getPageSeries(1, boundaryIndicatorLength)
-            .concat(getPageIndicator())
+            .concat(getPageIndicator(offsetBackward, true))
             .concat(getPageSeries(pageNo - boundaryIndicatorLength - 1, continuousIndicatorLength))
-            .concat(getPageIndicator())
+            .concat(getPageIndicator(offsetForward, true))
             .concat(getPageSeries(pageCount, boundaryIndicatorLength))
       }
 
-      function getPageSeries(fromPageNo, length) {
+      function getPageSeries (fromPageNo, length) {
         let series = []
         for (let i = 0; i < length; i++) {
-          series[i] = getPageIndicator(hrefTpl, fromPageNo + i)
+          series[i] = getPageIndicator(fromPageNo + i)
         }
         return series
       }
+
     }
   },
   methods: {
@@ -188,14 +196,15 @@ export default {
         return
       }
       this.$emit('redirect', {pageNo, event})
-    }
-  }
-}
+    },
 
-function getPageIndicator (hrefTpl, pageNo) {
-  return {
-    pageNo,
-    href: pageNo ? formatHref(hrefTpl, pageNo) : null
+    getPageIndicator (pageNo, isMore = false) {
+      return {
+        pageNo: isMore ? null : pageNo,
+        text: isMore ? '...' : pageNo,
+        href: pageNo ? formatHref(this.hrefTpl, pageNo) : null
+      }
+    }
   }
 }
 
