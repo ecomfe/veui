@@ -4,7 +4,7 @@ export default {
       if (!this.ui || !this.ui.trim()) {
         return []
       }
-      return this.ui.split(/\s+/)
+      return this.ui.trim().split(/\s+/)
     }
   }
 }
