@@ -11,7 +11,7 @@
         </span>
       </div>
       <div class="veui-page-switch" @click="handleClick($event)">
-        <ul class="veui-pages">
+        <ul class="veui-pages" :class="{['veui-page-digit-length-' + pageDigitLength]: true}">
           <li v-for="item in pageIndicatorSeries" :class="{
             'veui-active': item.pageNo === pageNo
           }">
@@ -182,7 +182,10 @@ export default {
         }
         return series
       }
+    },
 
+    pageDigitLength() {
+      return this.pageCount.toString(10).length
     }
   },
   methods: {
@@ -234,6 +237,14 @@ function findClosestAncestor (element, selectors) {
 @import "../styles/theme-default/lib.less";
 
 .veui-pager {
+  @button-width: 36px;
+  @button-height: 30px;
+  @button-gap-width: 15px;
+
+  @digit-width: 28px;
+  @digit-width-delta: 6px;
+  @digit-height: 30px;
+
   color: @veui-gray-color-normal;
   font-weight: normal;
 
@@ -248,11 +259,12 @@ function findClosestAncestor (element, selectors) {
 
   .veui-page-info {
     float: left;
-    margin-right: 2.4em;
+    margin-right: @button-gap-width * 2;
+    line-height: @digit-height;
   }
 
   .veui-page-size {
-    margin-left: 1.2em;
+    margin-left: @button-gap-width;
 
   }
 
@@ -269,7 +281,11 @@ function findClosestAncestor (element, selectors) {
 
     [class|="veui-button"] {
       float: left;
-      padding: 5px 8px 3px;
+      width: @button-width;
+      height: @button-height;
+      line-height: 34px;
+      text-align: center;
+      background-color: @veui-gray-color-sup-2;
     }
   }
 
@@ -281,12 +297,17 @@ function findClosestAncestor (element, selectors) {
 
     li {
       float: left;
-      margin: 0 2px;
-      padding: 5px 8px 3px;
+      width: @digit-width;
+      height: @digit-height;
+      text-align: center;
+      line-height: @digit-height;
+      font-size: 14px;
+      border-radius: 2px;
     }
 
     .veui-active {
       color: @veui-gray-color-strong;
+      font-weight: bold;
       background-color: @veui-gray-color-sup-2;
     }
 
@@ -295,23 +316,36 @@ function findClosestAncestor (element, selectors) {
     }
   }
 
-  .veui-group-bg() {
+  .generate-responsive-page-digit-width(@length) when (@length > 2) {
+
+    .veui-page-digit-length-@{length} {
+      li {
+        width: @digit-width + @digit-width-delta * (@length - 2)
+      }
+    }
+
+    .generate-responsive-page-digit-width(@length - 1);
+  }
+
+  .generate-responsive-page-digit-width(4);
+
+  .veui-group-shadow() {
     border-radius: 3px;
-    background-color: @veui-gray-color-sup-2;
+    background-color: @veui-gray-color-sup-5;
     box-shadow: 1px 1px 3px @veui-gray-color-weak;
   }
 
   &[ui~="basic"],
   &[ui~="advanced"] {
     .veui-page-switch {
-      padding: 0 2.4em;
+      padding: 0 @button-width + @button-gap-width;
       position: relative;
     }
 
     .veui-buttons {
       [class|="veui-group"] {
         position: absolute;
-        .veui-group-bg();
+        .veui-group-shadow();
       }
       .veui-group-previous {
         left: 0;
@@ -340,16 +374,16 @@ function findClosestAncestor (element, selectors) {
 
   &[ui~="advanced"] {
     .veui-page-switch {
-      padding: 0 4.8em;
+      padding: 0 @button-width * 2 + @button-gap-width;
     }
     .veui-group-previous {
       .veui-button-relative {
-        border-left: 1px solid @veui-gray-color-sup-5;
+        margin-left: 1px;
       }
     }
     .veui-group-next {
       .veui-button-relative {
-        border-right: 1px solid @veui-gray-color-sup-5;
+        margin-right: 1px;
       }
     }
   }
@@ -357,11 +391,12 @@ function findClosestAncestor (element, selectors) {
   &[ui~="hetero"],
   &[ui~="full"] {
     .veui-buttons {
-      .veui-group-bg();
+      margin-left: @button-gap-width;
+      .veui-group-shadow();
     }
     .veui-group-previous {
       .veui-button-relative {
-        border-right: 1px solid @veui-gray-color-sup-5;
+        margin-right: 1px;
       }
     }
   }
