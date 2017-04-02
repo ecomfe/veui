@@ -72,13 +72,15 @@ devMiddleware.waitUntilValid(function () {
 
 // Uploader test url
 app.use('/upload', function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/html'})
-  res.end(`<script>
-    window.parent.postMessage(JSON.stringify({status: '${Math.random() > 0.5 ? 'success' : 'failure'}',
-      name: 'abcdefg${Math.random()}.gif', fileUid: 'file${Math.random()}',
-      size: '250kb',
-      src: 'http://ww4.sinaimg.cn/bmiddle/62bf1f1fjw1f9zw8x6wbsj20ii0cbwfo.jpg'}), '*');
-    </script>`)
+  setTimeout(() => {
+    res.writeHead(200, {'Content-Type': 'text/html'})
+    res.end(`<script>
+      window.parent.postMessage(JSON.stringify({status: '${Math.random() > 0.5 ? 'success' : 'failure'}',
+        name: 'abcdefg${Math.random()}.gif', fileUid: 'file${Math.random()}',
+        size: '250kb',
+        src: 'http://ww4.sinaimg.cn/bmiddle/62bf1f1fjw1f9zw8x6wbsj20ii0cbwfo.jpg'}), '*');
+      </script>`)
+  }, 1500);
 })
 
 module.exports = app.listen(port, function (err) {

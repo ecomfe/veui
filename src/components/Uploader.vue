@@ -5,33 +5,36 @@
         class="veui-button veui-uploader-input-label"
         :class="{'veui-uploader-input-label-disabled': disabled}"
         ui="aux" ref="label"><icon class="veui-uploader-input-label-icon" name="upload"></icon>{{text}}
-        <input hidden type="file" ref="input" @change="onChange" :name="name" :disabled="disabled">
+        <input hidden="hidden" type="file" ref="input" @change="onChange" :name="name" :disabled="disabled">
       </label>
       <span class="veui-uploader-tip" slot="tip">{{tip}}</span>
     </div>
-    <div class="veui-uploader-warning">
-      <slot name="warning" :warning="warning">
-        <span :class="warningClass">{{warningText}}</span>
-      </slot>
-    </div>
-    <ul v-if="uploaderType === 'file'" class="veui-uploader-list">
-      <li v-for="file in fileList" :class="{'veui-uploader-list-preview':
-        previewImage && (!file.status || file.status === 'success')}">
+    <transition name="veui-uploader-warning">
+      <div v-if="warning" class="veui-uploader-warning">
+        <slot name="warning" :warning="warning">
+          <span :class="warningClass">{{warningText}}</span>
+        </slot>
+      </div>
+    </transition>
+    <transition-group name="veui-uploader-list" tag="ul" v-if="uploaderType === 'file'" class="veui-uploader-list">
+      <li v-for="(file, index) in fileList" :class="{'veui-uploader-list-preview':
+        previewImage && (!file.status || file.status === 'success')}"
+        :key="index">
         <template v-if="!file.status || file.status === 'success'">
           <slot name="file-content" :file="file">
             <div v-if="previewImage" class="veui-uploader-list-preview-container">
               <img :src="file.src" :alt="file.alt">
             </div>
             <span class="veui-uploader-list-name"
-            :title="uiProps.indexOf('ellipsis') > -1 ? file.name: ''">{{file.name}}</span>
+            :title="uiProps.indexOf('ellipsis') > -1 ? file.name : ''">{{file.name}}</span>
             <span class="veui-uploader-list-size">{{file.size}}</span>
-            <veui-button ui="simple delete" @click="deleteFile(file.fileUid)"><icon name="close"></icon></veui-button>
+            <veui-button v-if="deleteFile" ui="simple delete" @click="deleteFile(file.fileUid)"><icon name="close"></icon></veui-button>
           </slot>
         </template>
         <template v-else-if="file.status === 'uploading'">
           <slot name="uploading-content" :file="file">
             <span class="veui-uploader-list-hint veui-uploader-uploading">{{uploadingText}}</span>
-            <veui-button ui="simple delete" @click="cancelUploading(file.fileUid)"><icon name="close"></icon></veui-button>
+            <veui-button v-if="cancelUploading" ui="simple delete" @click="cancelUploading(file.fileUid)"><icon name="close"></icon></veui-button>
           </slot>
         </template>
         <template v-else-if="file.status === 'failure'">
@@ -41,15 +44,15 @@
           </slot>
         </template>
       </li>
-    </ul>
-    <ul v-else-if="uploaderType === 'image'" class="veui-uploader-list-image">
-      <li v-for="file in fileList" :class="{'veui-uploader-list-image-content'
-        : !file.status || file.status === 'success'}">
+    </transition-group>
+    <transition-group name="veui-uploader-list" tag="ul" v-else-if="uploaderType === 'image'" class="veui-uploader-list-image">
+      <li v-for="(file, index) in fileList" :class="{'veui-uploader-list-image-content'
+        : !file.status || file.status === 'success'}" :key="index">
         <template v-if="!file.status || file.status === 'success'">
           <slot name="file-content" :file="file">
             <img :src="file.src" :alt="file.alt">
-            <div class="veui-uploader-list-image-mask">
-              <veui-button ui="simple" @click="deleteFile(file.fileUid)">移除</veui-button>
+            <div v-if="deleteFile" class="veui-uploader-list-image-mask">
+              <veui-button v-if="deleteFile" ui="simple middle" @click="deleteFile(file.fileUid)">移除</veui-button>
             </div>
           </slot>
         </template>
@@ -58,7 +61,7 @@
             <div class="veui-uploader-list-image-hint">
               <span class="veui-uploader-uploading">{{uploadingText}}</span>
             </div>
-            <veui-button ui="aux operation" @click="cancelUploading(file.fileUid)">取消</veui-button>
+            <veui-button v-if="cancelUploading" ui="aux operation" @click="cancelUploading(file.fileUid)">取消</veui-button>
           </slot>
         </template>
         <template v-else-if="file.status === 'failure'">
@@ -70,13 +73,13 @@
           </slot>
         </template>
       </li>
-      <li>
+      <li key="input">
         <label class="veui-uploader-input-label-image"
           :class="{'veui-uploader-input-label-disabled': disabled}"
           ref="label"><input hidden type="file" ref="input" @change="onChange" :name="name" :disabled="disabled">
         </label>
       </li>
-    </ul>
+    </transition-group>
   </div>
 </template>
 <script>
@@ -168,7 +171,8 @@ export default {
     },
     warningText () {
       return this.warning ? this[this.warning + 'Text'] : ''
-    }}, ui.computed
+    }},
+    ui.computed
   ),
   created () {
     let iframe = document.createElement('iframe')
@@ -188,13 +192,20 @@ export default {
   },
   mounted () {
     this.onMessage = event => {
+      if (event.source.frameElement.id !== this.iframeId) return
       if (this.canceled) return
+      // 支持action为绝对路径或相对路径，ie9里的location没有origin
+      let actionOrigin = /^https?:\/\//.test(this.action)
+        ? this.action.match(/^https?:\/\/[^/]*/)[0]
+        : location.origin || (location.protocol + '//' + location.host)
+      if (actionOrigin !== event.origin) return
+
       let data = JSON.parse(event.data)
       if (data.status === 'success') {
-        this.$emit('uploadSuccess', data)
+        this.$emit('success', data)
         this.onSuccess(data)
       } else if (data.status === 'failure') {
-        this.$emit('uploadFailure', data)
+        this.$emit('failure', data)
         this.onFailure(data)
       }
     }
@@ -268,6 +279,7 @@ export default {
       document.getElementById(this.formId).submit()
     },
     reset () {
+      this.$refs.input.value = ''
       this.$refs.label.appendChild(this.$refs.input)
       document.getElementById(this.formId).innerHTML = ''
     }
@@ -279,6 +291,7 @@ export default {
 @import "../styles/theme-default/lib.less";
 @prefix: veui-uploader;
 @prefix-button: veui-button;
+@veui-uploader-width: 350px;
 @veui-uploader-icon-size: 16px;
 @veui-uploader-preview-size: 60px;
 @veui-uploader-image-large: 300px;
@@ -294,7 +307,7 @@ export default {
 }
 
 .@{prefix} {
-  width: 350px;
+  width: @veui-uploader-width;
   overflow: hidden;
   &-input-label {
     cursor: pointer;
@@ -305,19 +318,29 @@ export default {
       margin-right: 5px;
     }
     &-disabled {
-      cursor: default;
+      cursor: default !important;
       .veui-uploader-disabled()!important;
       &:hover {
         .veui-uploader-disabled()!important;
       }
     }
   }
-  &-list {
-    color: @veui-theme-color-primary;
+  &-list,
+  &-list-image {
     padding: 0;
     margin: 0;
     list-style: none;
     overflow: hidden;
+    img {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      vertical-align: middle;
+    }
+  }
+  &-list {
+    color: @veui-theme-color-primary;
     li {
       position: relative;
       padding: 10px 5px;
@@ -351,11 +374,6 @@ export default {
       line-height: @veui-uploader-preview-size;
       font-size: 0;
       text-align: center;
-      img {
-        max-width: 100%;
-        max-height: 100%;
-        vertical-align: middle;
-      }
     }
     &-name {
       overflow: hidden;
@@ -372,10 +390,6 @@ export default {
     }
   }
   &-list-image {
-    list-style: none;
-    overflow: hidden;
-    padding: 0;
-    margin: 0;
     li {
       overflow: hidden;
       width: @veui-uploader-image-normal;
@@ -396,11 +410,6 @@ export default {
 
     &-content {
       line-height: @veui-uploader-image-normal;
-      img {
-        max-width: 100%;
-        max-height: 100%;
-        vertical-align: middle;
-      }
       &:hover {
         .@{prefix}-list-image-mask {
           display: block;
@@ -416,18 +425,18 @@ export default {
       width: ~"calc(100% - "2 * @veui-uploader-list-padding~")";;
       height: ~"calc(100% - "2 * @veui-uploader-list-padding~")";;
       text-align: center;
-      button {
+      .@{prefix-button}[ui~="middle"] {
         vertical-align: middle;
-        float: none !important;
         background: none;
         font-size: 18px;
+        height: 18px !important;
         color: #fff;
         line-height: 1;
       }
-      button:active,
-      button:hover {
-        background: none !important;
-        color: #fff !important;
+      .@{prefix-button}[ui~="middle"]:active,
+      .@{prefix-button}[ui~="middle"]:hover {
+        background: none;
+        color: #fff;
       }
     }
     &-hint {
@@ -446,34 +455,35 @@ export default {
         vertical-align: middle;
       }
     }
-    .@{prefix}-input-label-image {
-      position: relative;
-      display: block;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
+  }
+  &-input-label-image {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
 
-      &::before,
-      &::after, {
-        content: '';
-        position: absolute;
-      }
-      &::before {
-        border-top: 2px solid @veui-gray-color-sup-2;
-        top: ~"calc(50% - 1px)";
-        left: 30%;
-        width: 40%;
-      }
-      &::after {
-        border-left: 2px solid @veui-gray-color-sup-2;
-        top: 30%;
-        left: ~"calc(50% - 1px)";
-        height: 40%;
-      }
+    &::before,
+    &::after, {
+      content: '';
+      position: absolute;
+    }
+    &::before {
+      border-top: 2px solid @veui-gray-color-sup-2;
+      top: ~"calc(50% - 1px)";
+      left: 30%;
+      width: 40%;
+    }
+    &::after {
+      border-left: 2px solid @veui-gray-color-sup-2;
+      top: 30%;
+      left: ~"calc(50% - 1px)";
+      height: 40%;
     }
   }
   &-warning {
     margin: 20px 0 5px 5px;
+    overflow: hidden;
   }
   &-tip {
     color: @veui-gray-color-weak;
@@ -507,7 +517,7 @@ export default {
       width: 100%;
       li {
         float: left;
-        width: 350px;
+        width: @veui-uploader-width;
         margin-right: 10px;
       }
     }
@@ -552,6 +562,29 @@ export default {
     min-width: @veui-uploader-icon-size;
     width: @veui-uploader-icon-size;
     visibility: hidden;
+  }
+  &-warning-enter,
+  &-warning-leave-active {
+    margin: 0;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    line-height: 0;
+  }
+  &-warning-enter-active,
+  &-warning-leave-active {
+    transition: all .6s ease;
+  }
+  &-list-enter,
+  &-list-leave-active {
+    opacity: 0;
+  }
+  &-list-enter-active,
+  &-list-leave-active {
+    transition: all .6s ease;
+  }
+  &-list-move {
+    transition: transform 1s;
   }
 }
 </style>

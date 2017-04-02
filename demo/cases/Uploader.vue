@@ -10,6 +10,8 @@
       <veui-button @click="changeImageSize('small')">小图</veui-button>
     </div>
     <veui-uploader :uploaderType="uploaderType"
+      action="/upload"
+      :disabled="false"
       :maxNumber="3"
       :tip="tip"
       :files="files"
@@ -21,7 +23,8 @@
       :cancelUploading="cancelUploading"
       :ui="ui"
       @change="onChange"
-      action="http://localhost:8080/upload">
+      @success="onSuccess"
+      @failure="onFailure">
     </veui-uploader>
   </article>
 </template>
@@ -68,14 +71,12 @@ export default {
         this.fileList = this.fileList.filter(file => {
           return file.fileUid !== fileUid
         })
+        this.$emit('change', this.fileList)
       },
       cancelUploading () {
-        if (this.latestFile.status === 'failure') {
-          this.fileList.pop()
-        } else if (this.latestFile.status === 'uploading') {
-          this.canceled = true
-          this.deleteFile(this.latestFile.fileUid)
-        }
+        this.canceled = true
+        this.fileList.pop()
+        this.$emit('change', this.fileList)
         this.reset()
       }
     }
@@ -84,6 +85,12 @@ export default {
   methods: {
     onChange (fileList) {
       this.files = cloneDeep(fileList)
+    },
+    onSuccess (data) {
+      console.log(data)
+    },
+    onFailure (data) {
+      console.log(data)
     },
     toggleUploaderType () {
       this.uploaderType = this.uploaderType === 'image' ? 'file' : 'image'
