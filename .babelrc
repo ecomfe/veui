@@ -5,6 +5,7 @@
   ],
   "plugins": [
     "lodash",
+    "transform-vue-jsx",
     "transform-runtime"
   ],
   "comments": false,

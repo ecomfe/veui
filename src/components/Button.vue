@@ -3,9 +3,7 @@
     <template v-if="!loading"><slot></slot></template>
     <template v-else>
       <slot name="loading">
-        <slot name="icon">
-          <icon name="circle-o-notch" spin></icon>
-        </slot>
+        <icon name="circle-o-notch" spin></icon>
         <span class="veui-button-loading-text">加载中…</span>
       </slot>
     </template>
@@ -46,7 +44,7 @@ export default {
 
 .veui-button {
   padding: 10px 20px;
-  min-width: 94px;
+  min-width: 70px;
   height: @veui-height-normal;
   border: 1px solid @veui-theme-color-primary;
   background-color: #fff;
@@ -58,6 +56,10 @@ export default {
   transition: all .2s;
 
   &:not(.veui-button-loading) {
+    &:focus {
+      .veui-shadow(glow, @veui-theme-color-primary);
+    }
+
     &:hover,
     &:active {
       border-color: @veui-theme-color-hover;
@@ -98,6 +100,11 @@ export default {
     color: @veui-text-color-normal;
 
     &:not(.veui-button-loading) {
+      &:focus {
+        color: @veui-theme-color-primary;
+        .veui-shadow(none);
+      }
+
       &:hover,
       &:active {
         border-color: @veui-gray-color-sup-1;
@@ -125,8 +132,16 @@ export default {
     .veui-shadow();
 
     &:not(.veui-button-loading) {
+      &:focus {
+        border-color: @veui-theme-color-secondary;
+        background-color: @veui-theme-color-secondary;
+        color: #fff;
+        .veui-shadow(none);
+      }
+
       &:hover,
       &:active {
+        border-color: @veui-theme-color-hover;
         background-color: @veui-theme-color-hover;
         color: #fff;
         .veui-shadow(strong);
@@ -165,7 +180,7 @@ export default {
   &[ui~="square"] {
     width: @veui-height-normal;
     min-width: auto;
-    .padding(_, 0);
+    .padding(_, 0);Table
     text-align: center;
 
     &[ui~="large"] {
