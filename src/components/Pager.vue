@@ -47,6 +47,7 @@ import 'vue-awesome/icons/fa-chevron-left'
 import 'vue-awesome/icons/fa-chevron-right'
 import 'vue-awesome/icons/fa-chevron-circle-left'
 import 'vue-awesome/icons/fa-chevron-circle-right'
+import {closest} from '../utils/dom'
 
 const LAYOUTS = [
   'basic',
@@ -191,7 +192,7 @@ export default {
   },
   methods: {
     handleClick (event) {
-      let target = findClosestAncestor(event.target, 'a')
+      let target = closest(event.target, 'a')
       if (!target) {
         return
       }
@@ -214,23 +215,6 @@ export default {
 
 function formatHref (hrefTpl, pageNo) {
   return hrefTpl.replace(HREF_TPL_PLACEHOLDER, pageNo)
-}
-
-function findClosestAncestor (element, selectors) {
-  if (element.closest) {
-    return element.closest(selectors)
-  }
-
-  // Polyfill from https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
-  let matches = (element.document || element.ownerDocument).querySelectorAll(selectors)
-  let i
-
-  do {
-    i = matches.length
-    while (--i >= 0 && matches.item(i) !== element) {}
-  } while ((i < 0) && (element = element.parentElement))
-
-  return element
 }
 </script>
 
