@@ -1,40 +1,48 @@
 <template>
-  <veui-layer class="veui-dialog"
-    :layer-visible="realVisible"
+  <veui-overlay class="veui-dialog"
+    :open="$data._open"
     mode="NORMAL"
-    :layer-class="{ 'veui-dialog-box': true, 'veui-dialog-box-mask': mask }"
-    :layer-ui="ui"
+    :layer-class="{ 'veui-dialog-box': true, 'veui-dialog-box-mask': modal }"
+    :ui="ui"
     ref="layer">
-    <div class="content"
+    <div class="veui-dialog-content"
       :style="contentRectStyle"
-      @mousedown="bringToTop">
-      <div class="head" :class="{ draggable }" v-drag>
-        <span class="title" v-if="realTitle" v-text="realTitle"></span>
-        <span class="title" v-else><slot name="title">弹窗标题</slot></span>
-        <a class="close" v-show="realCloseVisible" @click="hide"><icon name="close"></icon></a>
+      @mousedown="focus">
+      <div class="veui-dialog-content-head"
+        :class="{ 'veui-dialog-draggable': draggable }"
+        ref="head"
+        v-drag>
+        <span class="veui-dialog-content-head-title"
+          v-if="$data._title"
+          v-text="$data._title"></span>
+        <span class="veui-dialog-content-head-title" v-else><slot name="title">弹窗标题</slot></span>
+        <a class="veui-dialog-content-head-close"
+          v-show="$data._closable"
+          @click="hide"><icon name="close"></icon></a>
       </div>
-      <div class="body" :style="{ height: `${bodyHeight}px` }"><slot></slot></div>
-      <div class="foot"><slot name="foot"><veui-button ui="primary" @click="$emit('ok')">确定</veui-button><veui-button @click="$emit('cancel')">取消</veui-button></slot></div>
+      <div ref="body" class="veui-dialog-content-body" :style="{ height: `${bodyHeight}px` }"><slot></slot></div>
+      <div ref="foot" class="veui-dialog-content-foot"><slot name="foot"><veui-button ui="primary" @click="$emit('ok')">确定</veui-button><veui-button @click="$emit('cancel')">取消</veui-button></slot></div>
     </div>
-  </veui-layer>
+  </veui-overlay>
 </template>
 
 <script>
-import Layer from './Layer'
+import { includes, upperFirst } from 'lodash'
+import Overlay from './Overlay'
 import 'vue-awesome/icons/close'
 import Button from './Button'
-import drag from '../directives/drag'
+import { ui } from '../mixins'
 
 export default {
   name: 'veui-dialog',
-  directives: { drag },
   components: {
-    'veui-layer': Layer,
+    'veui-overlay': Overlay,
     'veui-button': Button
   },
+  mixins: [ ui ],
   props: {
     ui: String,
-    mask: {
+    modal: {
       type: Boolean,
       default: true
     },
@@ -42,7 +50,7 @@ export default {
       type: String,
       default: null
     },
-    visible: {
+    open: {
       type: Boolean,
       default: false
     },
@@ -54,21 +62,9 @@ export default {
       type: Number,
       default: 200
     },
-    closeVisible: {
+    closable: {
       type: Boolean,
       default: true
-    },
-    center: {
-      type: Boolean,
-      default: true
-    },
-    left: {
-      type: Number,
-      default: null
-    },
-    top: {
-      type: Number,
-      default: null
     },
     draggable: {
       type: Boolean,
@@ -77,19 +73,25 @@ export default {
   },
   data () {
     return {
-      realVisible: this.visible,
-      realWidth: this.width,
-      realCloseVisible: this.closeVisible,
-      realLeft: this.left || 0,
-      realTop: this.top || 0,
-      realHeight: this.height,
-      realTitle: this.title || null,
+      _open: this.open,
+      _width: this.width,
+      _closable: this.closable,
+      _left: 0,
+      _top: 0,
+      _height: this.height,
+      _title: this.title || null,
 
       isDragging: false,
       dragDistanceX: 0,
       dragDistanceY: 0,
       dragInitX: 0,
-      dragInitY: 0
+      dragInitY: 0,
+      // 是否被拖拽过了。
+      // 如果被拖拽过，那么在window resize的时候就不要纠正对话框的位置了
+      // 在每次对话框显示的时候，这个值都会被重置为false
+      isDragged: false,
+
+      bodyHeight: 0
     }
   },
   mounted () {
@@ -99,8 +101,8 @@ export default {
       }
 
       this.isDragging = true
-      this.dragInitX = this.realLeft
-      this.dragInitY = this.realTop
+      this.dragInitX = this.$data._left
+      this.dragInitY = this.$data._top
     })
     this.$on('dragend', () => {
       if (!this.draggable) {
@@ -114,72 +116,90 @@ export default {
         return
       }
 
-      this.realLeft = this.dragInitX + distanceX
-      this.realTop = this.dragInitY + distanceY
+      this.$data._left = this.dragInitX + distanceX
+      this.$data._top = this.dragInitY + distanceY
+
+      this.isDragged = true
     })
   },
   watch: {
     title (value) {
-      this.realTitle = value
+      this.$data._title = value
     },
-    visible (value) {
-      this.realVisible = value
+    open (value) {
+      this.$data._open = value
+
+      if (value) {
+        this.$nextTick(() => {
+          this.bodyHeight = this.getBodyHeight()
+        })
+        this.isDragged = false
+        this[`set${upperFirst(this.position)}`]()
+      }
     },
     width (value) {
-      this.realWidth = value
+      this.$data._width = value
     },
     height (value) {
-      this.realHeight = value
+      this.$data._height = value
     },
-    closeVisible (value) {
-      this.realCloseVisible = value
-    },
-    left (value) {
-      this.realLeft = value
-    },
-    top (value) {
-      this.realTop = value
+    closable (value) {
+      this.$data._closable = value
     }
   },
   computed: {
-    realCenter () {
-      return this.left === null && this.top === null && this.center
-    },
-    bodyHeight () {
-      // 42 是 header 的高度
-      // 36 是 button 的高度
-      // 40 是 foot 垂直方向的 padding 占用的高度
-      return this.height - 42 - 36 - 40
+    position () {
+      if (includes(this.uiProps, 'top')) {
+        return 'top'
+      }
+
+      if (includes(this.uiProps, 'center')) {
+        return 'center'
+      }
+
+      return 'top'
     },
     contentRectStyle () {
       return {
-        width: `${this.realWidth}px`,
-        height: `${this.realHeight}px`,
+        width: `${this.$data._width}px`,
+        height: `${this.$data._height}px`,
         left: 0,
         top: 0,
-        transform: `translateX(${this.realLeft}px) translateY(${this.realTop}px)`
+        transform: `translateX(${this.$data._left}px) translateY(${this.$data._top}px)`
       }
     }
   },
   methods: {
+    setPosition ({ topRatio = 0.5, leftRatio = 0.5 } = {}) {
+      this.$data._left = (window.innerWidth - this.$data._width) * leftRatio + document.body.scrollLeft
+      this.$data._top = (window.innerHeight - this.$data._height) * topRatio + document.body.scrollTop
+    },
     setCenter () {
-      if (this.realCenter) {
-        this.realLeft = (window.innerWidth - this.realWidth) / 2 + document.body.scrollLeft
-        this.realTop = (window.innerHeight - this.realHeight) / 2 + document.body.scrollTop
-      }
+      this.setPosition()
+    },
+    setTop () {
+      this.setPosition({ topRatio: 0.382 })
+    },
+    getBodyHeight () {
+      const headHeight = this.$refs.head.getBoundingClientRect().height
+      const footHeight = this.$refs.foot.getBoundingClientRect().height
+      return this.height - headHeight - footHeight
     },
     hide () {
-      this.realVisible = false
-      this.$emit('hide')
+      this.$data._open = false
+      this.$emit('propchange', 'open', this.$data._open)
     },
-    bringToTop () {
-      this.$refs.layer.bringToTop()
+    focus () {
+      this.$refs.layer.focus()
     }
   },
   created () {
-    this.setCenter()
-
-    this.resizeListener = () => this.setCenter()
+    this.resizeListener = () => {
+      if (this.isDragged) {
+        return
+      }
+      this[`set${upperFirst(this.position)}`]()
+    }
     window.addEventListener('resize', this.resizeListener)
   },
   beforeDestroy () {
@@ -194,76 +214,72 @@ export default {
     display: none;
   }
 
-  .veui-dialog-box {
-    &.veui-dialog-box-mask {
-      width: 100%;
-      height: 100%;
-      background: rgba(204, 204, 204, .6);
-    }
+  .veui-dialog-box[ui~="reverse"] .veui-dialog-content-head {
+    background: #fff;
+  }
+  .veui-dialog-box[ui~="reverse"] .veui-dialog-content-head-title,
+  .veui-dialog-box[ui~="reverse"] .veui-dialog-content-head-close {
+    color: @veui-theme-color-primary;
+  }
 
-    .draggable {
-      user-select: none;
-      cursor: all-scroll;
-    }
+  .veui-dialog-box-mask {
+    width: 100%;
+    height: 100%;
+    background: rgba(204, 204, 204, .6);
+  }
 
-    .content {
-      background: #fff;
-      position: absolute;
-      box-shadow: 0px 2px 4px @veui-shadow-color-normal;
-      border-radius: 4px;
+  .veui-dialog-draggable {
+    user-select: none;
+    cursor: all-scroll;
+  }
 
-      .head,
-      .body,
-      .foot {
-        padding: 0 20px;
-      }
+  .veui-dialog-content {
+    background: #fff;
+    position: absolute;
+    box-shadow: 0px 2px 4px @veui-shadow-color-normal;
+    border-radius: 4px;
+  }
 
-      .head {
-        height: 42px;
-        line-height: 42px;
-        background: @veui-theme-color-primary;
-        border-radius: 4px 4px 0 0;
+  .veui-dialog-content-head,
+  .veui-dialog-content-body,
+  .veui-dialog-content-foot {
+    padding: 0 20px;
+  }
 
-        .title {
-          font-weight: 400;
-          color: #fff;
-          font-size: 16px;
-        }
-      }
+  .veui-dialog-content-head {
+    height: 42px;
+    line-height: 42px;
+    background: @veui-theme-color-primary;
+    border-radius: 4px 4px 0 0;
+  }
 
-      .body {
-        padding-top: 20px;
-      }
+  .veui-dialog-content-head-title {
+    font-weight: 400;
+    color: #fff;
+    font-size: 16px;
+  }
 
-      .foot {
-        padding: 20px;
+  .veui-dialog-content-body {
+    padding-top: 20px;
+  }
 
-        .veui-button {
-          margin-right: 10px;
-        }
-      }
+  .veui-dialog-content-foot {
+    padding: 20px;
+  }
 
-      .close {
-        color: #fff;
-        float: right;
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        line-height: 16px;
-        text-align: center;
-        font-size: 16px;
-        margin-top: 12px;
-        cursor: pointer;
-      }
-    }
+  .veui-dialog-content-foot .veui-button {
+    margin-right: 10px;
+  }
 
-    &[ui~="reverse"] .head {
-      background: none;
-
-      .title,
-      .close {
-        color: @veui-theme-color-primary;
-      }
-    }
+  .veui-dialog-content-head-close {
+    color: #fff;
+    float: right;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 12px;
+    cursor: pointer;
   }
 </style>

@@ -1,4 +1,4 @@
-import { uniqueId, remove as lodashRemove } from 'lodash'
+import { uniqueId, remove } from 'lodash'
 import Vue from 'vue'
 
 const tree = []
@@ -53,40 +53,7 @@ function addToList (list, treeNode) {
   }
 }
 
-function add (parentLayerId, isTopMost = false) {
-  let uid = genUid()
-
-  let treeNode
-
-  if (parentLayerId) {
-    // 找到父节点
-    const parentTreeNode = treeNodeIndex[parentLayerId].treeNode
-
-    if (!parentTreeNode) {
-      throw new Error('parent layer does not exists!')
-    } else {
-      treeNode = new TreeNode({ id: uid, parentId: parentTreeNode.id, isTopMost })
-      addToList(parentTreeNode.children, treeNode)
-    }
-  } else {
-    treeNode = new TreeNode({ id: uid, isTopMost })
-    addToList(tree, treeNode)
-  }
-
-  const layerZIndexInstance = new Vue()
-  layerZIndexInstance.id = uid
-  layerZIndexInstance.toTop = () => toTop(uid)
-  layerZIndexInstance.remove = () => remove(uid)
-  layerZIndexInstance.refresh = () => refreshZIndex()
-  treeNodeIndex[uid] = {
-    treeNode,
-    layerZIndexInstance
-  }
-
-  return layerZIndexInstance
-}
-
-function remove (id) {
+function removeTreeNode (id) {
   if (treeNodeIndex[id] === null) {
     return
   }
@@ -95,7 +62,7 @@ function remove (id) {
     if (treeNode.id === id) {
       const parentTreeNode = treeNode.parentId && treeNodeIndex[treeNode.parentId].treeNode
       const treeNodeList = parentTreeNode ? parentTreeNode.children : tree
-      lodashRemove(treeNodeList, item => item.id === id)
+      remove(treeNodeList, item => item.id === id)
       return true
     }
   })
@@ -127,7 +94,7 @@ function toTop (id) {
       treeNodeList[treeNodeListLength - 1] = treeNode
     }
   } else {
-    throw new Error('not exists!')
+    throw new Error(`The treeNode ${id} does not exist!`)
   }
 
   // 变了位置，自然要刷一遍zindex了
@@ -142,9 +109,39 @@ function refreshZIndex () {
   })
 }
 
-export default {
-  install (Vue, { baseZIndex: base } = {}) {
-    baseZIndex = base || baseZIndex
-    Vue.prototype.$addLayer = add
+export function addLayer (parentLayerId, isTopMost = false) {
+  let uid = genUid()
+
+  let treeNode
+
+  if (parentLayerId) {
+    // 找到父节点
+    const parentTreeNode = treeNodeIndex[parentLayerId].treeNode
+
+    if (!parentTreeNode) {
+      throw new Error('parent layer does not exists!')
+    } else {
+      treeNode = new TreeNode({ id: uid, parentId: parentTreeNode.id, isTopMost })
+      addToList(parentTreeNode.children, treeNode)
+    }
+  } else {
+    treeNode = new TreeNode({ id: uid, isTopMost })
+    addToList(tree, treeNode)
   }
+
+  const layerZIndexInstance = new Vue()
+  layerZIndexInstance.id = uid
+  layerZIndexInstance.toTop = () => toTop(uid)
+  layerZIndexInstance.remove = () => removeTreeNode(uid)
+  layerZIndexInstance.refresh = () => refreshZIndex()
+  treeNodeIndex[uid] = {
+    treeNode,
+    layerZIndexInstance
+  }
+
+  return layerZIndexInstance
+}
+
+export function setBaseZIndex (zIndex) {
+  baseZIndex = zIndex
 }

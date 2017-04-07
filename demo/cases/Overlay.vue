@@ -1,9 +1,9 @@
 <template>
   <article class="demo-layer">
-    <h1><code>&lt;veui-layer&gt;</code></h1>
+    <h1><code>&lt;veui-overlay&gt;</code></h1>
 
     <div class="row">
-      <veui-layer layer-class="demo-layer-box" :layer-visible="layerVisible"
+      <veui-overlay layer-class="demo-layer-box" :open="layerVisible"
         :options="{attachment: 'top right', targetAttachment: 'top left'}">
         点击按钮展开的
         <veui-button slot="target"
@@ -12,7 +12,7 @@
           <template v-if="layerVisible">隐藏layer</template>
           <template v-else>展示layer</template>
         </veui-button>
-      </veui-layer>
+      </veui-overlay>
     </div>
 
     <div class="row">
@@ -24,11 +24,11 @@
       </pre>
       <div class="preview">
         <div class="scroll-content">
-          <veui-layer layer-class="demo-layer-box" :layer-visible="true"
+          <veui-overlay layer-class="demo-layer-box" :open="true"
             :options="{attachment: 'top right', targetAttachment: 'top left'}">
             提示信息
             <div class="target" slot="target"></div>
-          </veui-layer>
+          </veui-overlay>
         </div>
       </div>
     </div>
@@ -42,11 +42,11 @@
       </pre>
       <div class="preview">
         <div class="scroll-content">
-          <veui-layer layer-class="demo-layer-box" :layer-visible="true"
+          <veui-overlay layer-class="demo-layer-box" :open="true"
             :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
             提示信息
             <div class="target" slot="target"></div>
-          </veui-layer>
+          </veui-overlay>
         </div>
       </div>
     </div>
@@ -54,12 +54,12 @@
   </article>
 </template>
 <script>
-import Layer from '../../src/components/Layer'
+import Overlay from '../../src/components/Overlay'
 import Button from '../../src/components/Button'
 
 export default {
   components: {
-    'veui-layer': Layer,
+    'veui-overlay': Overlay,
     'veui-button': Button
   },
   data () {
@@ -81,22 +81,22 @@ export default {
 
 .demo-layer {
   .row {
-    display: flex;
     background: @veui-gray-color-sup-4;
     align-items: center;
     padding: 10px 15px 10px 5px;
     margin-bottom: 20px;
+    .clearfix();
   }
 
   pre {
+    float: left;
     width: 400px;
     margin: 0;
   }
 
   .preview {
-    flex: 1;
+    margin-left: 400px;
     height: 160px;
-    width: 400px;
     overflow: scroll;
     border: 1px solid @veui-gray-color-sup-1;
 
@@ -105,7 +105,7 @@ export default {
       height: 2000px;
     }
 
-    .veui-layer {
+    .veui-overlay {
       margin-top: 65px;
       margin-left: 100px;
     }

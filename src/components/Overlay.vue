@@ -3,37 +3,27 @@
     <slot name="target"></slot>
     <div class="veui-layer-box"
       :class="layerClass"
-      :ui="layerUi"
+      :ui="ui"
       ref="box"
       :style="{zIndex}"
-      v-show="layerVisible"><slot></slot></div>
+      v-show="open"><slot></slot></div>
   </div>
 </template>
 <script>
   import Tether from 'tether'
-  import { includes, omit, isObject, isString } from 'lodash'
-  import layerManager from '../plugins/layerManager'
-  import Vue from 'vue'
+  import { omit, isObject, isString } from 'lodash'
 
-  Vue.use(layerManager)
-
-  const PREFIX = '__veui_layer'
-  const ZINDEX_INSTANCE_KEY = `${PREFIX}_zindex_instance`
+  const ZINDEX_INSTANCE_KEY = `__veui_overlay_zindex_instance`
 
   export default {
-    [PREFIX]: true,
+    name: 'overlay',
+    uiTypes: ['overlay'],
     props: {
-      layerVisible: {
+      open: {
         type: Boolean,
         default: false
       },
-      layerUi: String,
-      mode: {
-        validator (value) {
-          return includes(['ATTACH', 'NORMAL'], value)
-        },
-        default: 'ATTACH'
-      },
+      ui: String,
       options: {
         type: Object,
         default () {
@@ -53,15 +43,15 @@
       }
     },
     watch: {
-      layerVisible (value) {
+      open (value) {
         // 在显示的时候重新定位一下，因为在隐藏状态下计算不了位置
-        if (value && this.mode === 'ATTACH') {
+        if (value && this.isAttach()) {
           this.$nextTick(() => this.tether.position())
         }
       }
     },
     mounted () {
-      if (this.mode === 'ATTACH') {
+      if (this.isAttach()) {
         this.tether = new Tether({
           element: this.$refs.box,
           target: this.$slots.target[0].elm,
@@ -72,10 +62,10 @@
         document.body.appendChild(box)
       }
 
-      this[ZINDEX_INSTANCE_KEY] = this.$addLayer(this.mode === 'ATTACH' ? this.findParentLayerId() : null)
+      this[ZINDEX_INSTANCE_KEY] = this.$veui.addLayer(this.isAttach() ? this.findParentLayerId() : null)
       this[ZINDEX_INSTANCE_KEY].$on(
         'zindexchange',
-        (zIndex) => {
+        zIndex => {
           this.zIndex = zIndex
         }
       )
@@ -83,23 +73,33 @@
     },
     methods: {
 
+      isOverlay (componentInstance) {
+        return componentInstance.uiTypes && componentInstance.uiTypes[0] === 'overlay'
+      },
+
       /**
        * 向上找到父级layer组件的layerId
        */
       findParentLayerId () {
-        for (let cur = this.$slots.target[0]; cur; cur = cur.parent) {
-          if (cur.componentInstance && cur.componentInstance[PREFIX]) {
+        let cur = this.$slots.target[0]
+        while (cur) {
+          if (cur.componentInstance && this.isOverlay(cur.componentInstance)) {
             return cur.componentInstance[ZINDEX_INSTANCE_KEY].id
           }
+          cur = cur.parent
         }
       },
 
-      bringToTop () {
+      focus () {
         this[ZINDEX_INSTANCE_KEY].toTop()
+      },
+
+      isAttach () {
+        return this.$slots.target && this.$slots.target.length
       }
     },
     beforeDestroy () {
-      if (this.mode === 'ATTACH') {
+      if (this.isAttach()) {
         this.tether.destroy()
         document.body.removeChild(this.tether.element)
       } else {

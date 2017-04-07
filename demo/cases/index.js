@@ -2,7 +2,7 @@ import Button from './Button'
 import Table from './Table'
 import Pager from './Pager'
 import Dialog from './Dialog'
-import Layer from './Layer'
+import Overlay from './Overlay'
 
 export default [
   {
@@ -29,8 +29,8 @@ export default [
     component: Dialog
   },
   {
-    path: '/layer',
-    name: 'Layer',
-    component: Layer
+    path: '/overlay',
+    name: 'Overlay',
+    component: Overlay
   }
 ]

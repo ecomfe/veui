@@ -1,15 +1,9 @@
-import { keys } from 'lodash'
-
 export default {
   bind (el, { modifiers }, vnode) {
     const contextComponent = vnode.context
-    const modifierList = keys(modifiers)
 
     const dragData = {
       dragging: false,
-      statusKey: modifierList[0],
-      distanceXKey: modifierList[1],
-      distanceYKey: modifierList[2],
       initX: 0,
       initY: 0,
 
