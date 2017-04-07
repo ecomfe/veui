@@ -1,8 +1,8 @@
 <template>
-  <div class="veui-layer">
+  <div class="veui-overlay">
     <slot name="target"></slot>
-    <div class="veui-layer-box"
-      :class="layerClass"
+    <div class="veui-overlay-box"
+      :class="overlayClass"
       :ui="ui"
       ref="box"
       :style="{zIndex}"
@@ -30,7 +30,7 @@
           return {}
         }
       },
-      layerClass: {
+      overlayClass: {
         validator (value) {
           return isObject(value) || isString(value)
         },
@@ -62,7 +62,7 @@
         document.body.appendChild(box)
       }
 
-      this[ZINDEX_INSTANCE_KEY] = this.$veui.addLayer(this.isAttach() ? this.findParentLayerId() : null)
+      this[ZINDEX_INSTANCE_KEY] = this.$veui.addOverlay(this.isAttach() ? this.findParentOverlayId() : null)
       this[ZINDEX_INSTANCE_KEY].$on(
         'zindexchange',
         zIndex => {
@@ -78,9 +78,9 @@
       },
 
       /**
-       * 向上找到父级layer组件的layerId
+       * 向上找到父级overlay组件的Id
        */
-      findParentLayerId () {
+      findParentOverlayId () {
         let cur = this.$slots.target[0]
         while (cur) {
           if (cur.componentInstance && this.isOverlay(cur.componentInstance)) {
@@ -113,11 +113,11 @@
   }
 </script>
 <style lang="less">
-.veui-layer {
+.veui-overlay {
   display: inline-block;
 }
 
-.veui-layer-box {
+.veui-overlay-box {
   position: absolute;
 }
 </style>

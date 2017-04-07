@@ -1,16 +1,16 @@
 <template>
-  <article class="demo-layer">
+  <article class="demo-overlay">
     <h1><code>&lt;veui-overlay&gt;</code></h1>
 
     <div class="row">
-      <veui-overlay layer-class="demo-layer-box" :open="layerVisible"
+      <veui-overlay overlay-class="demo-overlay-box" :open="overlayVisible"
         :options="{attachment: 'top right', targetAttachment: 'top left'}">
         点击按钮展开的
         <veui-button slot="target"
           ui="primary"
-          @click="layerVisible=!layerVisible">
-          <template v-if="layerVisible">隐藏layer</template>
-          <template v-else>展示layer</template>
+          @click="overlayVisible=!overlayVisible">
+          <template v-if="overlayVisible">隐藏overlay</template>
+          <template v-else>展示overlay</template>
         </veui-button>
       </veui-overlay>
     </div>
@@ -24,7 +24,7 @@
       </pre>
       <div class="preview">
         <div class="scroll-content">
-          <veui-overlay layer-class="demo-layer-box" :open="true"
+          <veui-overlay overlay-class="demo-overlay-box" :open="true"
             :options="{attachment: 'top right', targetAttachment: 'top left'}">
             提示信息
             <div class="target" slot="target"></div>
@@ -42,7 +42,7 @@
       </pre>
       <div class="preview">
         <div class="scroll-content">
-          <veui-overlay layer-class="demo-layer-box" :open="true"
+          <veui-overlay overlay-class="demo-overlay-box" :open="true"
             :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
             提示信息
             <div class="target" slot="target"></div>
@@ -64,7 +64,7 @@ export default {
   },
   data () {
     return {
-      layerVisible: false
+      overlayVisible: false
     }
   },
   methods: {
@@ -74,12 +74,12 @@ export default {
 <style lang="less">
 @import "../../src/styles/theme-default/variables";
 
-.demo-layer-box {
+.demo-overlay-box {
   box-shadow: 1px 1px 6px @veui-shadow-color-normal;
   padding: 10px 20px;
 }
 
-.demo-layer {
+.demo-overlay {
   .row {
     background: @veui-gray-color-sup-4;
     align-items: center;

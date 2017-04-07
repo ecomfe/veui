@@ -31,7 +31,7 @@ function iterateTree (tree, iteratee) {
 }
 
 function genUid () {
-  return uniqueId('layer-')
+  return uniqueId('overlay-')
 }
 
 function addToList (list, treeNode) {
@@ -105,21 +105,21 @@ function refreshZIndex () {
   let counter = baseZIndex
   iterateTree(tree, (treeNode) => {
     counter++
-    treeNodeIndex[treeNode.id].layerZIndexInstance.$emit('zindexchange', counter)
+    treeNodeIndex[treeNode.id].overlayZIndexInstance.$emit('zindexchange', counter)
   })
 }
 
-export function addLayer (parentLayerId, isTopMost = false) {
+export function addOverlay (parentOverlayId, isTopMost = false) {
   let uid = genUid()
 
   let treeNode
 
-  if (parentLayerId) {
+  if (parentOverlayId) {
     // 找到父节点
-    const parentTreeNode = treeNodeIndex[parentLayerId].treeNode
+    const parentTreeNode = treeNodeIndex[parentOverlayId].treeNode
 
     if (!parentTreeNode) {
-      throw new Error('parent layer does not exists!')
+      throw new Error(`The overlay(${parentOverlayId})'s parent overlay does not exist!`)
     } else {
       treeNode = new TreeNode({ id: uid, parentId: parentTreeNode.id, isTopMost })
       addToList(parentTreeNode.children, treeNode)
@@ -129,17 +129,17 @@ export function addLayer (parentLayerId, isTopMost = false) {
     addToList(tree, treeNode)
   }
 
-  const layerZIndexInstance = new Vue()
-  layerZIndexInstance.id = uid
-  layerZIndexInstance.toTop = () => toTop(uid)
-  layerZIndexInstance.remove = () => removeTreeNode(uid)
-  layerZIndexInstance.refresh = () => refreshZIndex()
+  const overlayZIndexInstance = new Vue()
+  overlayZIndexInstance.id = uid
+  overlayZIndexInstance.toTop = () => toTop(uid)
+  overlayZIndexInstance.remove = () => removeTreeNode(uid)
+  overlayZIndexInstance.refresh = () => refreshZIndex()
   treeNodeIndex[uid] = {
     treeNode,
-    layerZIndexInstance
+    overlayZIndexInstance
   }
 
-  return layerZIndexInstance
+  return overlayZIndexInstance
 }
 
 export function setBaseZIndex (zIndex) {

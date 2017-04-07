@@ -2,9 +2,9 @@
   <veui-overlay class="veui-dialog"
     :open="$data._open"
     mode="NORMAL"
-    :layer-class="{ 'veui-dialog-box': true, 'veui-dialog-box-mask': modal }"
+    :overlay-class="{ 'veui-dialog-box': true, 'veui-dialog-box-mask': modal }"
     :ui="ui"
-    ref="layer">
+    ref="overlay">
     <div class="veui-dialog-content"
       :style="contentRectStyle"
       @mousedown="focus">
@@ -190,7 +190,7 @@ export default {
       this.$emit('propchange', 'open', this.$data._open)
     },
     focus () {
-      this.$refs.layer.focus()
+      this.$refs.overlay.focus()
     }
   },
   created () {
