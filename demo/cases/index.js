@@ -4,6 +4,7 @@ import Pager from './Pager'
 import Dialog from './Dialog'
 import Overlay from './Overlay'
 import Breadcrumb from './Breadcrumb'
+import Input from './Input'
 
 export default [
   {
@@ -38,5 +39,10 @@ export default [
     path: '/breadcrumb',
     name: 'Breadcrumb',
     component: Breadcrumb
+  },
+  {
+    path: '/input',
+    name: 'Input',
+    component: Input
   }
 ]
