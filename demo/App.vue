@@ -137,7 +137,7 @@ main {
   .absolute(0, 0, 0, @nav-width);
   overflow: scroll;
   padding: 1em 4em 0;
-  height: 100vh;
+  height: ~"calc(100vh - @{title-height})";
   transition: height .2s;
 
   h1 {
@@ -156,7 +156,7 @@ main {
   background-color: #fff;
 
   h2 {
-    .centered-line(30px);
+    .centered-line(@title-height);
     margin: 0;
     padding: 0 1em;
     background-color: @light-bg-color;

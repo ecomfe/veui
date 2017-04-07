@@ -11,12 +11,11 @@
         </span>
       </div>
       <div class="veui-page-switch" @click="handleClick($event)">
-        <ul class="veui-pages">
+        <ul class="veui-pages" :class="{['veui-page-digit-length-' + pageDigitLength]: true}">
           <li v-for="item in pageIndicatorSeries" :class="{
             'veui-active': item.pageNo === pageNo
           }">
-            <a v-if="item.pageNo" :href="item.href" :data-page-no="item.pageNo">{{ item.pageNo }}</a>
-            <span v-else>…</span>
+            <a :href="item.href" :data-page-no="item.pageNo">{{ item.text }}</a>
           </li>
         </ul>
         <div class="veui-buttons">
@@ -48,20 +47,39 @@ import 'vue-awesome/icons/fa-chevron-left'
 import 'vue-awesome/icons/fa-chevron-right'
 import 'vue-awesome/icons/fa-chevron-circle-left'
 import 'vue-awesome/icons/fa-chevron-circle-right'
+import {closest} from '../utils/dom'
 
 const LAYOUTS = [
   'basic',
   'hetero',
   'advanced',
-  'full'
+  'full',
+  'slim'
 ]
 
 const OPTIONAL_PAGE_SIZES = [
   30, 60, 100, 200
 ]
 
-const PAGE_INDICATOR_COUNT = 7
 const HREF_TPL_PLACEHOLDER = /\$page\b/g
+
+/**
+ * 总页面切换按钮数
+ * @type {Number}
+ */
+const pageIndicatorLength = 9
+
+/**
+ * 围绕切换按钮数
+ * @type {Number}
+ */
+const aroundIndicatorLength = 2
+
+/**
+ * 省略号点击跳转偏移页数
+ * @type {Number}
+ */
+const moreIndicatorOffsetLength = 5
 
 export default {
   name: 'veui-pager',
@@ -107,10 +125,10 @@ export default {
   computed: {
     pageNavHref () {
       return {
-        first: getPage(this.hrefTpl, 1),
-        last: getPage(this.hrefTpl, this.pageCount),
-        previous: getPage(this.hrefTpl, Math.max(1, this.pageNo - 1)),
-        next: getPage(this.hrefTpl, Math.min(this.pageCount, this.pageNo + 1))
+        first: this.getPageIndicator(1),
+        last: this.getPageIndicator(this.pageCount),
+        previous: this.getPageIndicator(Math.max(1, this.pageNo - 1)),
+        next: this.getPageIndicator(Math.min(this.pageCount, this.pageNo + 1))
       }
     },
     realPageSize: {
@@ -126,37 +144,55 @@ export default {
       return Math.ceil(this.pageTotal / this.realPageSize)
     },
     pageIndicatorSeries () {
-      let {hrefTpl, pageNo, pageCount} = this
+      let {pageNo, pageCount, getPageIndicator} = this
 
-      let series = []
-      let halfPageIndicatorCount = Math.floor(PAGE_INDICATOR_COUNT / 2)
+      let continuousIndicatorLength = aroundIndicatorLength * 2 + 1
+      let boundaryIndicatorLength = (pageIndicatorLength - continuousIndicatorLength - 2) / 2
 
-      if (pageCount <= PAGE_INDICATOR_COUNT) {
-        for (let i = pageCount; i > 0; i--) {
-          series[i - 1] = getPage(hrefTpl, i)
-        }
-      } else if (pageNo <= halfPageIndicatorCount || pageNo + halfPageIndicatorCount > pageCount) {
-        for (let i = 0; i < halfPageIndicatorCount; i++) {
-          series[i] = getPage(hrefTpl, i + 1)
-        }
-        series[halfPageIndicatorCount] = getPage()
-        for (let i = 1; i <= halfPageIndicatorCount; i++) {
-          series[i + halfPageIndicatorCount] = getPage(hrefTpl, pageCount - halfPageIndicatorCount + i)
-        }
-      } else {
-        series[0] = getPage()
-        series[PAGE_INDICATOR_COUNT - 1] = getPage()
-        for (let i = 1; i < PAGE_INDICATOR_COUNT - 1; i++) {
-          series[i] = getPage(hrefTpl, pageNo - halfPageIndicatorCount + i)
-        }
+      let len
+      let offsetBackward = Math.max(pageNo - moreIndicatorOffsetLength, 1)
+      let offsetForward = Math.min(pageNo + moreIndicatorOffsetLength, pageCount)
+
+      switch (true) {
+        case pageCount <= pageIndicatorLength:
+          return getPageSeries(1, pageCount)
+
+        case pageNo < continuousIndicatorLength:
+          len = Math.max(continuousIndicatorLength, pageNo + aroundIndicatorLength)
+          return getPageSeries(1, len)
+            .concat(getPageIndicator(offsetForward, true))
+            .concat(getPageSeries(pageCount - len + 1, pageIndicatorLength - len - 1))
+
+        case pageNo > pageCount - continuousIndicatorLength + 1:
+          len = Math.max(pageCount - pageNo + 1 + aroundIndicatorLength, continuousIndicatorLength)
+          return getPageSeries(1, pageIndicatorLength - len - 1)
+            .concat(getPageIndicator(offsetBackward, true))
+            .concat(getPageSeries(pageCount - len + 1, len))
+
+        default:
+          return getPageSeries(1, boundaryIndicatorLength)
+            .concat(getPageIndicator(offsetBackward, true))
+            .concat(getPageSeries(pageNo - boundaryIndicatorLength - 1, continuousIndicatorLength))
+            .concat(getPageIndicator(offsetForward, true))
+            .concat(getPageSeries(pageCount, boundaryIndicatorLength))
       }
 
-      return series
+      function getPageSeries (fromPageNo, length) {
+        let series = []
+        for (let i = 0; i < length; i++) {
+          series[i] = getPageIndicator(fromPageNo + i)
+        }
+        return series
+      }
+    },
+
+    pageDigitLength () {
+      return this.pageCount.toString(10).length
     }
   },
   methods: {
     handleClick (event) {
-      let target = findClosestAncestor(event.target, 'a')
+      let target = closest(event.target, 'a')
       if (!target) {
         return
       }
@@ -165,36 +201,20 @@ export default {
         return
       }
       this.$emit('redirect', {pageNo, event})
-    }
-  }
-}
+    },
 
-function getPage (hrefTpl, pageNo) {
-  return {
-    pageNo,
-    href: pageNo ? formatHref(hrefTpl, pageNo) : null
+    getPageIndicator (pageNo, isMore = false) {
+      return {
+        pageNo: isMore ? null : pageNo,
+        text: isMore ? '...' : pageNo,
+        href: pageNo ? formatHref(this.hrefTpl, pageNo) : null
+      }
+    }
   }
 }
 
 function formatHref (hrefTpl, pageNo) {
   return hrefTpl.replace(HREF_TPL_PLACEHOLDER, pageNo)
-}
-
-function findClosestAncestor (element, selectors) {
-  if (element.closest) {
-    return element.closest(selectors)
-  }
-
-  let matches = (element.document || element.ownerDocument).querySelectorAll(selectors)
-  let i
-  let el = this
-
-  do {
-    i = matches.length
-    while (--i >= 0 && matches.item(i) !== el) {}
-  } while ((i < 0) && (el = el.parentElement))
-
-  return el
 }
 </script>
 
@@ -202,6 +222,16 @@ function findClosestAncestor (element, selectors) {
 @import "../styles/theme-default/lib.less";
 
 .veui-pager {
+  @button-width: 36px;
+  @button-height: 30px;
+  @button-gap-width: 15px;
+
+  @digit-width: 28px;
+  @digit-width-delta: 6px;
+  @digit-height: 30px;
+
+  @digit-size: 14px;
+
   color: @veui-gray-color-normal;
   font-weight: normal;
 
@@ -216,11 +246,12 @@ function findClosestAncestor (element, selectors) {
 
   .veui-page-info {
     float: left;
-    margin-right: 2.4em;
+    margin-right: @button-gap-width * 2;
+    line-height: @digit-height;
   }
 
   .veui-page-size {
-    margin-left: 1.2em;
+    margin-left: @button-gap-width;
 
   }
 
@@ -237,8 +268,11 @@ function findClosestAncestor (element, selectors) {
 
     [class|="veui-button"] {
       float: left;
-      display: block;
-      padding: 5px 8px 3px;
+      width: @button-width;
+      height: @button-height;
+      line-height: @button-width - 2px;
+      text-align: center;
+      background-color: @veui-gray-color-sup-2;
     }
   }
 
@@ -250,12 +284,17 @@ function findClosestAncestor (element, selectors) {
 
     li {
       float: left;
-      margin: 0 2px;
-      padding: 5px 8px 3px;
+      width: @digit-width;
+      height: @digit-height;
+      text-align: center;
+      line-height: @digit-height;
+      font-size: @digit-size;
+      border-radius: 2px;
     }
 
     .veui-active {
       color: @veui-gray-color-strong;
+      font-weight: bold;
       background-color: @veui-gray-color-sup-2;
     }
 
@@ -264,23 +303,37 @@ function findClosestAncestor (element, selectors) {
     }
   }
 
-  .veui-group-bg() {
+  .generate-responsive-page-digit-width(@length, @scale-ratio: 1) when (@length > 2) {
+
+    .veui-page-digit-length-@{length} {
+      li {
+        width: (@digit-width + @digit-width-delta * (@length - 2)) * @scale-ratio;
+      }
+    }
+
+    .generate-responsive-page-digit-width(@length - 1, @scale-ratio);
+  }
+
+  .generate-responsive-page-digit-width(4);
+
+  .veui-group-shadow() {
     border-radius: 3px;
-    background-color: @veui-gray-color-sup-2;
+    background-color: @veui-gray-color-sup-5;
     box-shadow: 1px 1px 3px @veui-gray-color-weak;
   }
 
   &[ui~="basic"],
+  &[ui~="slim"],
   &[ui~="advanced"] {
     .veui-page-switch {
-      padding: 0 2.4em;
+      padding: 0 @button-width + @button-gap-width;
       position: relative;
     }
 
     .veui-buttons {
       [class|="veui-group"] {
         position: absolute;
-        .veui-group-bg();
+        .veui-group-shadow();
       }
       .veui-group-previous {
         left: 0;
@@ -293,6 +346,7 @@ function findClosestAncestor (element, selectors) {
 
   &[ui~="basic"],
   &[ui~="hetero"],
+  &[ui~="slim"],
   &[ui~="full"] {
     .veui-buttons .veui-button-absolute {
       display: none;
@@ -301,6 +355,7 @@ function findClosestAncestor (element, selectors) {
 
   &[ui~="basic"],
   &[ui~="hetero"],
+  &[ui~="slim"],
   &[ui~="advanced"] {
     .veui-page-info {
       display: none;
@@ -309,16 +364,16 @@ function findClosestAncestor (element, selectors) {
 
   &[ui~="advanced"] {
     .veui-page-switch {
-      padding: 0 4.8em;
+      padding: 0 @button-width * 2 + @button-gap-width;
     }
     .veui-group-previous {
       .veui-button-relative {
-        border-left: 1px solid @veui-gray-color-sup-5;
+        margin-left: 1px;
       }
     }
     .veui-group-next {
       .veui-button-relative {
-        border-right: 1px solid @veui-gray-color-sup-5;
+        margin-right: 1px;
       }
     }
   }
@@ -326,13 +381,59 @@ function findClosestAncestor (element, selectors) {
   &[ui~="hetero"],
   &[ui~="full"] {
     .veui-buttons {
-      .veui-group-bg();
+      margin-left: @button-gap-width;
+      .veui-group-shadow();
     }
     .veui-group-previous {
       .veui-button-relative {
-        border-right: 1px solid @veui-gray-color-sup-5;
+        margin-right: 1px;
       }
     }
+  }
+
+  &[ui~="slim"] {
+    @scale-ratio: 0.55;
+
+    .veui-page-switch {
+      padding: 0 (@button-width + @button-gap-width) * @scale-ratio;
+
+      li {
+        width: @digit-width * @scale-ratio;
+        height: @digit-height * @scale-ratio;
+        line-height: @digit-height * @scale-ratio;
+        font-size: 13px;
+      }
+
+      .veui-active {
+        background: transparent;
+      }
+    }
+
+    .veui-buttons {
+      [class|="veui-group"] {
+        box-shadow: none;
+      }
+      [class|="veui-button"] {
+        width: @button-height * .55;
+        height: @button-height * .55;
+        line-height: 1.5;
+        border: 1px solid @veui-gray-color-normal;
+        border-radius: @button-width;
+        color: @veui-gray-color-normal;
+        background: transparent;
+
+        svg {
+          width: @button-height * .2;
+
+          path {
+            fill: currentColor;
+          }
+        }
+      }
+    }
+
+    .generate-responsive-page-digit-width(4, .8);
+
   }
 
 }
