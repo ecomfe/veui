@@ -9,29 +9,27 @@
       <veui-button @click="changeImageSize('')">中图</veui-button>
       <veui-button @click="changeImageSize('small')">小图</veui-button>
     </div>
-    <veui-uploader :uploaderType="uploaderType"
+    <veui-uploader-iframe :uploaderType="uploaderType"
       action="/upload"
       :disabled="false"
       :maxNumber="3"
       :tip="tip"
       :files="files"
-      :maxSize="100"
+      :maxSize="0.5"
       :previewImage="previewImage"
-      extentionTypes="jpg,jpeg,gif,wav"
+      extentionTypes="jpg,jpeg,gif"
       :args="extraArgs"
       :deleteFile="deleteFile"
       :cancelUploading="cancelUploading"
       :ui="ui"
-      :uploadCallback="uploadCallback"
-      uploadingContent="progressBar"
       @change="onChange"
       @success="onSuccess"
       @failure="onFailure">
-    </veui-uploader>
+    </veui-uploader-iframe>
   </article>
 </template>
 <script>
-import Uploader from '@/components/Uploader'
+import UploaderIframe from '@/components/Uploader-iframe'
 import Button from '@/components/Button'
 import {cloneDeep} from 'lodash'
 import {ui} from '../../src/mixins/index'
@@ -39,7 +37,7 @@ import {ui} from '../../src/mixins/index'
 export default {
   name: 'uploader',
   components: {
-    'veui-uploader': Uploader,
+    'veui-uploader-iframe': UploaderIframe,
     'veui-button': Button
   },
   data: function () {
@@ -80,9 +78,6 @@ export default {
         this.fileList.pop()
         this.$emit('change', this.fileList)
         this.reset()
-      },
-      uploadCallback (data) {
-        // console.log(JSON.parse(data))
       }
     }
   },
