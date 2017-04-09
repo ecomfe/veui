@@ -67,7 +67,7 @@ export default {
       if (typeof keys === 'string') {
         keys = map(this.data, keys)
       }
-      return keys
+      return keys.map(String)
     },
     selectStatus () {
       let keys = this.realKeys

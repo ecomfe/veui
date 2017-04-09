@@ -19,7 +19,7 @@ export default {
         {this._l(this.data, (item, index) => (
           <tr>
             {this.table.selectable
-              ? <td><veui-checkbox key={index} checked={
+              ? <td><veui-checkbox checked={
                   !!this.selectedItems[this.keys ? this.keys[index] : index]
                 } onChange={checked => { this.$emit('select', checked, index) }}/></td>
               : ''
