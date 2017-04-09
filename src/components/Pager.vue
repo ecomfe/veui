@@ -149,7 +149,8 @@ export default {
       let continuousIndicatorLength = aroundIndicatorLength * 2 + 1
       let boundaryIndicatorLength = (pageIndicatorLength - continuousIndicatorLength - 2) / 2
 
-      let len
+      let leftLen
+      let rightLen
       let offsetBackward = Math.max(pageNo - moreIndicatorOffsetLength, 1)
       let offsetForward = Math.min(pageNo + moreIndicatorOffsetLength, pageCount)
 
@@ -158,16 +159,18 @@ export default {
           return getPageSeries(1, pageCount)
 
         case pageNo < continuousIndicatorLength:
-          len = Math.max(continuousIndicatorLength, pageNo + aroundIndicatorLength)
-          return getPageSeries(1, len)
+          leftLen = Math.max(continuousIndicatorLength, pageNo + aroundIndicatorLength)
+          rightLen = pageIndicatorLength - leftLen - 1
+          return getPageSeries(1, leftLen)
             .concat(getPageIndicator(offsetForward, true))
-            .concat(getPageSeries(pageCount - len + 1, pageIndicatorLength - len - 1))
+            .concat(getPageSeries(pageCount - rightLen + 1, rightLen))
 
         case pageNo > pageCount - continuousIndicatorLength + 1:
-          len = Math.max(pageCount - pageNo + 1 + aroundIndicatorLength, continuousIndicatorLength)
-          return getPageSeries(1, pageIndicatorLength - len - 1)
+          rightLen = Math.max(pageCount - pageNo + 1 + aroundIndicatorLength, continuousIndicatorLength)
+          leftLen = pageIndicatorLength - rightLen - 1
+          return getPageSeries(1, leftLen)
             .concat(getPageIndicator(offsetBackward, true))
-            .concat(getPageSeries(pageCount - len + 1, len))
+            .concat(getPageSeries(pageCount - rightLen + 1, rightLen))
 
         default:
           return getPageSeries(1, boundaryIndicatorLength)
