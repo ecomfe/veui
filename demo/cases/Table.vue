@@ -2,35 +2,41 @@
   <article>
     <h1><code>&lt;veui-table&gt;</code></h1>
     <section>
-      <veui-table :data="data">
-        <veui-table-column field="id" title="ID">
-          <template slot="foot" scope="props">Total</template>
+      <veui-button ui="primary" @click="append">添加</veui-button>
+    </section>
+    <section>
+      <veui-table ui="slim alt" :data="data" :columnFilter="columns" keys="id" selectable @select="handleSelect" @selectall="handleSelect">
+        <veui-table-column field="id" title="数据 ID"></veui-table-column>
+        <veui-table-column field="desc" title="数据描述"></veui-table-column>
+        <veui-table-column field="price" title="价格">
+          <template scope="props">{{ '¥' + props.item.price.toFixed(2) }}</template>
         </veui-table-column>
-        <veui-table-column field="name" title="Name">
-          <template scope="props"><strong>{{ props.item.name }}</strong></template>
-          <template slot="head" scope="props"><span style="color: #999;">Name</span></template>
+        <veui-table-column field="updateDate" title="更新时间">
+          <template scope="props">{{ props.item.updateDate | date }}</template>
         </veui-table-column>
-        <veui-table-column field="role" title="Role">
-          <template scope="props"><i>{{ props.item.role }}</i></template>
-        </veui-table-column>
-        <veui-table-column field="score" title="Score">
-          <template slot="foot" scope="props">{{ data.map(item => item.score).reduce((acc, cur) => acc + cur) }}</template>
-        </veui-table-column>
-        <veui-table-column title="Operation">
+        <veui-table-column title="操作">
           <template scope="props">
-            <veui-button ui="small" @click="log(props.item)">Edit</veui-button>
+            <veui-button ui="link" @click="log(props.item)">编辑</veui-button>
+            <veui-button ui="link alert" @click="del(props.index)">删除</veui-button>
           </template>
         </veui-table-column>
       </veui-table>
+    </section>
+    <section>
+      <label><input type="checkbox" value="id" v-model="columns"> ID</label>
+      <label><input type="checkbox" value="desc" v-model="columns"> 描述</label>
+      <label><input type="checkbox" value="price" v-model="columns"> 价格</label>
+      <label><input type="checkbox" value="updateDate" v-model="columns"> 更新时间</label>
     </section>
   </article>
 </template>
 
 <script>
+import moment from 'moment'
 import bus from '../bus'
 import Button from '@/components/Button'
 import Table from '@/components/Table'
-import Column from '@/components/TableColumn'
+import Column from '@/components/Table/Column'
 
 export default {
   name: 'table',
@@ -39,32 +45,61 @@ export default {
     'veui-table': Table,
     'veui-table-column': Column
   },
+  filters: {
+    date (value) {
+      return moment(value).format('YYYY-MM-DD')
+    }
+  },
   data () {
     return {
       data: [
         {
-          id: '1', name: 'Steve Rogers', role: 'Captain America', score: 90
+          id: '3154', desc: '数据描述1', price: 1024, updateDate: '20131117'
         },
         {
-          id: '2', name: 'Tony Stark', role: 'Ironman', score: 82
+          id: '3155', desc: '数据描述2', price: 598, updateDate: '20140214'
         },
         {
-          id: '3', name: 'Natasha Romanova', role: 'Black Widow', score: 85
+          id: '3156', desc: '数据描述3', price: 820, updateDate: '20170610'
         }
-      ]
+      ],
+      nextId: 3157,
+      nextIndex: 4,
+      columns: ['id', 'desc', 'price', 'updateDate']
     }
   },
   methods: {
-    log (item) {
-      bus.$emit('log', item)
+    log (...args) {
+      bus.$emit('log', ...args)
+    },
+    del (index) {
+      this.log(this.data.splice(index, 1)[0])
+    },
+    append () {
+      let item = {
+        id: this.nextId,
+        desc: `数据描述${this.nextIndex}`,
+        price: Math.floor(Math.random() * 1280),
+        updateDate: moment(Date.now() + Math.floor(Math.random() * 1e10)).format('YYYYMMDD')
+      }
+      this.nextId++
+      this.nextIndex++
+      this.data.push(item)
+      this.log(item)
+    },
+    handleSelect (...args) {
+      this.log(...args)
     }
   }
 }
 </script>
 
-<style lang="less">
-th,
-td {
-  padding: .5em 1.5em !important;
+<style lang="less" scoped>
+section {
+  margin-bottom: 20px;
+}
+
+label {
+  margin-right: 10px;
 }
 </style>

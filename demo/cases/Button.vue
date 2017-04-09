@@ -68,8 +68,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 p {
   user-select: none;
+}
+
+.veui-button {
+  margin-right: 10px;
 }
 </style>

@@ -1,24 +1,20 @@
 <template>
-  <col>
+  <col :width="width">
 </template>
 
 <script>
+import mixin from './mixin'
+
 export default {
   name: 'veui-table-column',
-  props: ['title', 'field'],
-  methods: {
-    getTable () {
-      let current = this.$parent
-      while (current) {
-        if (current.tableId) {
-          return current
-        }
-        current = current.$parent
-      }
-    }
+  mixins: [mixin],
+  props: {
+    title: String,
+    field: String,
+    width: [String, Number]
   },
   mounted () {
-    let table = this.getTable()
+    let table = this.table
     if (!table) {
       return
     }
