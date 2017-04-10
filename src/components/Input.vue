@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import mixin from '@/mixins/input'
+import mixin from '../mixins/input'
 import omit from 'lodash/omit'
 export default {
   name: 'veui-input',
