@@ -6,6 +6,7 @@
 import { each, filter } from 'lodash'
 
 export default {
+  name: 'veui-breadcrumb',
   props: {
     separator: {
       type: String,

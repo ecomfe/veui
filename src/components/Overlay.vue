@@ -16,7 +16,7 @@
   const ZINDEX_INSTANCE_KEY = '__veui_overlay_zindex_instance'
 
   export default {
-    name: 'overlay',
+    name: 'veui-overlay',
     uiTypes: ['overlay'],
     props: {
       open: {
