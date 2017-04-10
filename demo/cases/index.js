@@ -3,6 +3,7 @@ import Table from './Table'
 import Pager from './Pager'
 import Dialog from './Dialog'
 import Overlay from './Overlay'
+import Breadcrumb from './Breadcrumb'
 
 export default [
   {
@@ -32,5 +33,10 @@ export default [
     path: '/overlay',
     name: 'Overlay',
     component: Overlay
+  },
+  {
+    path: '/breadcrumb',
+    name: 'Breadcrumb',
+    component: Breadcrumb
   }
 ]
