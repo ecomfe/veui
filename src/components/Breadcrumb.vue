@@ -3,9 +3,6 @@ import BreadcrumbItem from './BreadcrumbItem'
 
 export default {
   name: 'veui-breadcrumb',
-  components: {
-    'veui-breadcrumb-item': BreadcrumbItem
-  },
   props: {
     routers: {
       type: Array,
