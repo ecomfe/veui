@@ -53,9 +53,9 @@
               :uploadingText="uploadingText" :convertSizeUnit="convertSizeUnit">
             </veui-uploader-progress>
             <veui-button v-if="uploaderType === 'file'" ui="simple delete"
-              @click="$emit('cancel', file)"><icon name="close"></icon></veui-button>
+              @click="cancelFile(file)"><icon name="close"></icon></veui-button>
             <veui-button v-else-if="uploaderType === 'image'" ui="aux operation"
-              @click="$emit('cancel', file)">取消</veui-button>
+              @click="cancelFile(file)">取消</veui-button>
           </slot>
         </template>
         <template v-else-if="file.status === 'failure'">
@@ -215,15 +215,14 @@ export default {
           : location.origin || (location.protocol + '//' + location.host)
         if (actionOrigin !== event.origin) return
 
-        let data = JSON.parse(event.data)
-        this.uploadCallback(data, this.latestFile)
+        this.uploadCallback(JSON.parse(event.data), this.latestFile)
       }
       window.addEventListener('message', this.onMessage)
     } else if (this.iframeCallbackType === 'func') {
       if (!window.veuiUploaderCallback) window.veuiUploaderCallback = {}
       window.veuiUploaderCallback[this.callbackFuncName] = data => {
-        data = JSON.parse(data)
-        this.uploadCallback(data, this.latestFile)
+        if (this.canceled) return
+        this.uploadCallback(JSON.parse(data), this.latestFile)
       }
     }
   },
@@ -240,23 +239,13 @@ export default {
       let newFiles
       if (!this.throughIframe) {
         newFiles = filter(this.$refs.input.files, file => {
-          let typeValidation = this.validateFileType(file.name)
-          this.warning.typeInvalid = !typeValidation
-          let sizeValidation = this.validateFileSize(file.size)
-          this.warning.sizeInvalid = !sizeValidation
-          return typeValidation && sizeValidation
+          return this.validateFile(file)
         })
       } else {
-        let filename = this.$refs.input.value
-        if (!this.validateFileType(filename)) {
-          this.warning.typeInvalid = false
-          return
-        }
-        if (this.$refs.input.files && !this.validateFileSize(this.$refs.input.files[0]).size) {
-          this.warning.sizeInvalid = false
-          return
-        }
-        newFiles = [{status: 'uploading', name: filename}]
+        let name = this.$refs.input.value
+        let size = this.$refs.input.files && this.$refs.input.files[0].size
+        if (!this.validateFile({name, size})) return
+        newFiles = [{status: 'uploading', name}]
       }
       if (!newFiles.length) return
 
@@ -281,6 +270,13 @@ export default {
       if (!this.throughIframe && this.autoUpload) this.uploadFiles()
       this.$refs.input.value = ''
     },
+    validateFile (file) {
+      let typeValidation = this.validateFileType(file.name)
+      this.warning.typeInvalid = !typeValidation
+      let sizeValidation = this.validateFileSize(file.size)
+      this.warning.sizeInvalid = !sizeValidation
+      return typeValidation && sizeValidation
+    },
     validateFileType (filename) {
       let extentionTypes = Array.isArray(this.extentionTypes)
         ? this.extentionTypes
@@ -288,7 +284,7 @@ export default {
       return extentionTypes.some(ext => endsWith(filename, '.' + ext))
     },
     validateFileSize (fileSize) {
-      return !this.maxSize || fileSize <= this.maxSize * 1024 * 1024
+      return !this.maxSize || !fileSize || fileSize <= this.maxSize * 1024 * 1024
     },
     uploadFiles () {
       this.fileList.forEach(file => {
@@ -355,10 +351,16 @@ export default {
     updateFileList (file, options) {
       if (options) Object.assign(file, options)
       this.$set(this.fileList, this.fileList.indexOf(file), file)
+      this.$emit('change', this.fileList)
     },
     retry (file) {
       if (this.throughIframe) this.submit()
       else this.upload(file)
+    },
+    cancelFile (file) {
+      if (this.throughIframe) this.canceled = true
+      this.$emit('cancel', file)
+      this.reset()
     },
     reset () {
       this.$refs.input.value = ''

@@ -98,11 +98,13 @@ export default {
       console.log(data)
     },
     deleteFile (file) {
-      this.files.splice(this.files.indexOf(file), 1)
+      this.files = this.files.filter(item => {
+        return item.name !== file.name
+      })
     },
     cancelUploading (file) {
       file.xhr.abort()
-      this.files.splice(this.files.indexOf(file), 1)
+      this.deleteFile(file)
     },
     toggleUploaderType () {
       this.uploaderType = this.uploaderType === 'image' ? 'file' : 'image'
