@@ -1,22 +1,32 @@
 <template>
   <input
+    v-if="type !== 'textarea'"
     class="veui-input"
     v-bind="attrs"
     v-model="localValue"
     @focus="$emit('focus', $event)"
     @click="$emit('click', $event)"
-    @change="$emit('change', $event)"
     @blur="$emit('blur', $event)"
-    @input="$emit('input', _updateValue($event))"
+    @change="$emit('change', $event.target.value, $event)"
+    @input="_handleInput"
   >
+  <textarea
+    v-else
+    class="veui-textarea"
+    v-bind="attrs"
+    v-model="localValue"
+    @focus="$emit('focus', $event)"
+    @click="$emit('click', $event)"
+    @blur="$emit('blur', $event)"
+    @change="$emit('change', $event.target.value, $event)"
+    @input="_handleInput"></textarea>
 </template>
 
 <script>
 import mixin from '../mixins/input'
-import omit from 'lodash/omit'
-import includes from 'lodash/includes'
+import {omit, includes} from 'lodash'
 
-const typeList = ['text', 'password']
+const typeList = ['text', 'password', 'textarea']
 
 export default {
   name: 'veui-input',
@@ -32,18 +42,9 @@ export default {
     },
     placeholder: String,
     value: [String, Number],
-    autofocus: {
-      type: Boolean,
-      default: false
-    },
-    autoselect: {
-      type: Boolean,
-      default: false
-    },
-    ignorecomposition: {
-      type: Boolean,
-      default: true
-    }
+    autofocus: Boolean,
+    autoselect: Boolean,
+    composition: Boolean
   },
   data () {
     return {
@@ -52,7 +53,7 @@ export default {
   },
   computed: {
     attrs () {
-      let omitItems = ['autoselect', 'ignorecomposition', ...['readonly', 'disabled'].filter(item => !this[item])]
+      let omitItems = ['autoselect', 'composition', ...['readonly', 'disabled'].filter(item => !this[item])]
       let attrs = Object.assign({}, omit(this.$props, omitItems))
       return attrs
     }
@@ -63,11 +64,9 @@ export default {
     }
   },
   methods: {
-    _updateValue ($event) {
-      if (!this.ignorecomposition) {
-        return $event.target.value
-      } else {
-        return this.localValue
+    _handleInput ($event) {
+      if (this.composition || !this.composition && this.localValue !== this.value) {
+        this.$emit('input', $event.target.value, $event)
       }
     }
   },
@@ -86,10 +85,10 @@ export default {
 <style lang="less">
 @import "../styles/theme-default/lib.less";
 
-.veui-input {
+.veui-input,
+.veui-textarea {
   height: @veui-height-normal;
   width: 250px;
-  padding: 0 11px;
   line-height: 1;
   vertical-align: middle;
   border: 1px solid @veui-theme-color-primary;
@@ -119,7 +118,10 @@ export default {
   &:disabled {
     cursor: not-allowed;
   }
+}
 
+.veui-input {
+  padding: 0 11px;
   &[ui~="large"] {
     height: @veui-height-large;
     font-size: @veui-font-size-large;
@@ -130,4 +132,5 @@ export default {
     font-size: @veui-font-size-small;
   }
 }
+
 </style>

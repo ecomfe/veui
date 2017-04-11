@@ -6,14 +6,8 @@ export default {
   props: {
     value: null,
     name: String,
-    readonly: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    }
+    readonly: Boolean,
+    disabled: Boolean
   },
   computed: {
     // _validateRules () {
