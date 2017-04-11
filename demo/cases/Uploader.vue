@@ -18,18 +18,18 @@
       :throughIframe="false"
       action="/upload"
       :disabled="false"
-      :maxNumber="3"
+      :maxCount="3"
       :tip="tip"
       :files="files"
       :maxSize="10"
       :previewImage="previewImage"
       extentionTypes="jpg,jpeg,gif,wav"
       :args="extraArgs"
-      :deleteFile="deleteFile"
-      :cancelUploading="cancelUploading"
       :ui="ui"
       :uploadCallback="uploadCallback"
       :uploadingContent="uploadingContent"
+      @delete="deleteFile"
+      @cancel="cancelUploading"
       @change="onChange"
       @success="onSuccess"
       @failure="onFailure">
@@ -40,7 +40,7 @@
 import Uploader from '@/components/Uploader'
 import Button from '@/components/Button'
 import {cloneDeep} from 'lodash'
-import {ui} from '../../src/mixins/index'
+import {ui} from '../../src/mixins'
 
 export default {
   name: 'uploader',
@@ -75,15 +75,6 @@ export default {
         }
       },
       tip: '请选择图片',
-      deleteFile (file) {
-        this.fileList.splice(this.fileList.indexOf(file), 1)
-        this.$emit('change', this.fileList)
-      },
-      cancelUploading (file) {
-        file.xhr.abort()
-        this.fileList.splice(this.fileList.indexOf(file), 1)
-        this.$emit('change', this.fileList)
-      },
       uploadCallback (data, file) {
         if (data.status === 'success') {
           this.$emit('success', data)
@@ -95,7 +86,7 @@ export default {
       }
     }
   },
-  computed: ui.computed,
+  mixins: [ui],
   methods: {
     onChange (fileList) {
       this.files = cloneDeep(fileList)
@@ -105,6 +96,13 @@ export default {
     },
     onFailure (data) {
       console.log(data)
+    },
+    deleteFile (file) {
+      this.files.splice(this.files.indexOf(file), 1)
+    },
+    cancelUploading (file) {
+      file.xhr.abort()
+      this.files.splice(this.files.indexOf(file), 1)
     },
     toggleUploaderType () {
       this.uploaderType = this.uploaderType === 'image' ? 'file' : 'image'

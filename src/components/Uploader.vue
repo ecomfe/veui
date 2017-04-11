@@ -28,12 +28,12 @@
               <span :class="classType + '-name'"
                 :title="uiProps.indexOf('ellipsis') > -1 ? file.name : ''">{{file.name}}</span>
               <span :class="classType + '-size'">{{convertSizeUnit(file.size)}}</span>
-              <veui-button v-if="deleteFile" ui="simple delete" @click="deleteFile(file)"><icon name="close"></icon></veui-button>
+              <veui-button ui="simple delete" @click="$emit('delete', file)"><icon name="close"></icon></veui-button>
             </template>
             <template v-else-if="uploaderType === 'image'">
               <img :src="file.src" :alt="file.alt || ''">
-              <div v-if="deleteFile" :class="classType + '-mask'">
-                <veui-button ui="simple" @click="deleteFile(file)">移除</veui-button>
+              <div :class="classType + '-mask'">
+                <veui-button ui="simple" @click="$emit('delete', file)">移除</veui-button>
               </div>
             </template>
             <transition name="veui-uploader-fade">
@@ -52,10 +52,10 @@
               :class="uploaderType === 'image' ? classType + '-status' : ''"
               :uploadingText="uploadingText" :convertSizeUnit="convertSizeUnit">
             </veui-uploader-progress>
-            <veui-button v-if="cancelUploading && uploaderType === 'file'" ui="simple delete"
-              @click="cancelUploading(file)"><icon name="close"></icon></veui-button>
-            <veui-button v-else-if="cancelUploading && uploaderType === 'image'" ui="aux operation"
-              @click="cancelUploading(file)">取消</veui-button>
+            <veui-button v-if="uploaderType === 'file'" ui="simple delete"
+              @click="$emit('cancel', file)"><icon name="close"></icon></veui-button>
+            <veui-button v-else-if="uploaderType === 'image'" ui="aux operation"
+              @click="$emit('cancel', file)">取消</veui-button>
           </slot>
         </template>
         <template v-else-if="file.status === 'failure'">
@@ -75,6 +75,13 @@
         </label>
       </li>
     </transition-group>
+    <iframe v-if="throughIframe" ref="iframe"
+     :id="iframeId" :name="iframeId" style="display: none;"></iframe>
+    <form v-if="throughIframe" ref="form" :action="action" enctype="multipart/form-data"
+      method="POST" :target="iframeId" style="display: none;">
+      <input v-for="(value, key) in args" :name="key" :value="typeof value === 'function' ? value() : value">
+      <input v-if="iframeCallbackType === 'func'" name="callbackFunc" :value="callbackFuncName">
+    </form>
   </div>
 </template>
 
@@ -85,8 +92,8 @@ import 'vue-awesome/icons/close'
 import 'vue-awesome/icons/upload'
 import 'vue-awesome/icons/plus'
 import 'vue-awesome/icons/check-circle-o'
-import {endsWith, cloneDeep, filter, map} from 'lodash'
-import {ui} from '../mixins/index'
+import {endsWith, cloneDeep, filter, map, uniqueId} from 'lodash'
+import {ui} from '../mixins'
 
 export default {
   name: 'veui-uploader',
@@ -101,6 +108,8 @@ export default {
       default: 'file'
     },
     throughIframe: Boolean,
+    iframeCallbackType: String,
+    uploadCallback: Function,
     files: Array,
     name: {
       type: String,
@@ -122,21 +131,12 @@ export default {
     extentionTypes: [Array, String],
     disabled: Boolean,
     ui: String,
-    maxNumber: Number,
+    maxCount: Number,
     maxSize: Number,
     args: Object,
     uploadingContent: {
       type: String,
       default: 'text'
-    },
-    cancelUploading: {
-      type: Function,
-      default: null
-    },
-    uploadCallback: Function,
-    deleteFile: {
-      type: Function,
-      default: null
     },
     text: {
       type: String,
@@ -176,8 +176,8 @@ export default {
         typeInvalid: false,
         sizeInvalid: false
       },
-      iframeId: 'veui-uploader-iframe' + Date.now(),
-      formId: 'veui-uploader-form' + Date.now(),
+      iframeId: uniqueId('veui-uploader-iframe'),
+      callbackFuncName: uniqueId('veui-uploader-callback'),
       onMessage: null
     }
   },
@@ -186,7 +186,7 @@ export default {
       this.fileList = cloneDeep(val)
     }
   },
-  computed: Object.assign({
+  computed: {
     classType () {
       return 'veui-uploader-list-' + this.uploaderType
     },
@@ -198,47 +198,40 @@ export default {
       text += this.warning.typeInvalid ? this.typeInvalidText : ''
       text += this.warning.sizeInvalid ? this.sizeInvalidText : ''
       return text
-    }},
-    ui.computed
-  ),
-  created () {
-    if (!this.throughIframe) return
-    let iframe = document.createElement('iframe')
-    iframe.id = this.iframeId
-    iframe.name = this.iframeId
-    iframe.style.display = 'none'
-    document.body.appendChild(iframe)
-
-    let form = document.createElement('form')
-    form.id = this.formId
-    form.setAttribute('enctype', 'multipart/form-data')
-    form.method = 'POST'
-    form.target = this.iframeId
-    form.action = this.action
-    form.style.display = 'none'
-    document.body.appendChild(form)
+    }
   },
+  mixins: [ui],
   mounted () {
     if (!this.throughIframe) return
-    this.onMessage = event => {
-      if (event.source.frameElement.id !== this.iframeId) return
-      if (this.canceled) return
-      // 支持action为绝对路径或相对路径，ie9里的location没有origin
-      let actionOrigin = /^https?:\/\//.test(this.action)
-        ? this.action.match(/^https?:\/\/[^/]*/)[0]
-        : location.origin || (location.protocol + '//' + location.host)
-      if (actionOrigin !== event.origin) return
+    document.body.appendChild(this.$refs.iframe)
+    document.body.appendChild(this.$refs.form)
+    if (this.iframeCallbackType === 'postmessage') {
+      this.onMessage = event => {
+        if (event.source.frameElement.id !== this.iframeId) return
+        if (this.canceled) return
+        // 支持action为绝对路径或相对路径，ie9里的location没有origin
+        let actionOrigin = /^https?:\/\//.test(this.action)
+          ? this.action.match(/^https?:\/\/[^/]*/)[0]
+          : location.origin || (location.protocol + '//' + location.host)
+        if (actionOrigin !== event.origin) return
 
-      let data = JSON.parse(event.data)
-      this.uploadCallback(data, this.latestFile)
+        let data = JSON.parse(event.data)
+        this.uploadCallback(data, this.latestFile)
+      }
+      window.addEventListener('message', this.onMessage)
+    } else if (this.iframeCallbackType === 'func') {
+      if (!window.veuiUploaderCallback) window.veuiUploaderCallback = {}
+      window.veuiUploaderCallback[this.callbackFuncName] = data => {
+        data = JSON.parse(data)
+        this.uploadCallback(data, this.latestFile)
+      }
     }
-    window.addEventListener('message', this.onMessage)
   },
   beforeDestroy () {
     if (!this.throughIframe) return
     window.removeEventListener('message', this.onMessage)
-    document.body.removeChild(document.getElementById(this.iframeId))
-    document.body.removeChild(document.getElementById(this.formId))
+    document.body.removeChild(this.$refs.form)
+    document.body.removeChild(this.$refs.iframe)
   },
   methods: {
     onChange () {
@@ -275,8 +268,8 @@ export default {
         })
       ]
 
-      if (this.maxNumber && this.fileList.length > this.maxNumber) {
-        this.fileList = this.fileList.slice(-this.maxNumber)
+      if (this.maxCount && this.fileList.length > this.maxCount) {
+        this.fileList = this.fileList.slice(-this.maxCount)
       }
       this.$emit('change', this.fileList)
       if (this.throughIframe) this.submit()
@@ -335,14 +328,8 @@ export default {
     },
     submit () {
       this.latestFile.status = 'uploading'
-      let form = document.getElementById(this.formId)
+      let form = this.$refs.form
       form.appendChild(this.$refs.input)
-      let extraArgsHTML = ''
-      for (let key in this.args) {
-        extraArgsHTML += `<input name="${key}"
-          value="${typeof this.args[key] === 'function' ? this.args[key](this) : this.args[key]}">`
-      }
-      form.innerHTML += extraArgsHTML
       form.submit()
     },
     onSuccess (data, file) {
@@ -371,7 +358,6 @@ export default {
     reset () {
       this.$refs.input.value = ''
       this.$refs.label.appendChild(this.$refs.input)
-      document.getElementById(this.formId).innerHTML = ''
     },
     convertSizeUnit (size) {
       if (!size) return ''
@@ -424,23 +410,23 @@ function getProgress () {
 @import "../styles/theme-default/lib.less";
 @prefix: veui-uploader;
 @prefix-button: veui-button;
-@veui-uploader-width: 350px;
-@veui-uploader-icon-size: 16px;
-@veui-uploader-preview-size: 60px;
-@veui-uploader-image-large: 300px;
-@veui-uploader-image-normal: 200px;
-@veui-uploader-image-small: 100px;
-@veui-uploader-list-padding: 3px;
-
-.veui-uploader-disabled() {
-  border: none;
-  background-color: @veui-gray-color-sup-3;
-  color: @veui-text-color-weak;
-  box-shadow: none;
-}
 
 .@{prefix} {
-  width: @veui-uploader-width;
+  @width: 350px;
+  @icon-size: 16px;
+  @preview-size: 60px;
+  @image-large: 300px;
+  @image-normal: 200px;
+  @image-small: 100px;
+  @list-padding: 3px;
+  .disabled() {
+    border: none;
+    background-color: @veui-gray-color-sup-3;
+    color: @veui-text-color-weak;
+    box-shadow: none;
+  }
+
+  width: @width;
   overflow: hidden;
   &-input-label {
     cursor: pointer;
@@ -452,9 +438,9 @@ function getProgress () {
     }
     &-disabled {
       cursor: default !important;
-      .veui-uploader-disabled()!important;
+      .disabled()!important;
       &:hover {
-        .veui-uploader-disabled()!important;
+        .disabled()!important;
       }
     }
   }
@@ -576,45 +562,45 @@ function getProgress () {
     }
   }
   &-list-preview {
-    height: @veui-uploader-preview-size;
-    padding: @veui-uploader-list-padding !important;
+    height: @preview-size;
+    padding: @list-padding !important;
     &-container {
       display: inline-block;
       vertical-align: middle;
-      width: @veui-uploader-preview-size;
-      height: @veui-uploader-preview-size;
-      line-height: @veui-uploader-preview-size;
+      width: @preview-size;
+      height: @preview-size;
+      line-height: @preview-size;
       font-size: 0;
       text-align: center;
     }
 
     .@{prefix}-list-file-success {
-      line-height: @veui-uploader-preview-size;
+      line-height: @preview-size;
       padding: 0;
     }
     .@{prefix}-list-file-name {
-      width: ~"calc(70% - "@veui-uploader-preview-size~")";
+      width: ~"calc(70% - "@preview-size~")";
     }
     .@{prefix}-progress {
       width: ~"calc(100% - 3em)";
-      top: (@veui-uploader-preview-size - 14px) / 2;
+      top: (@preview-size - 14px) / 2;
 
       & + button {
-        top: (@veui-uploader-preview-size - @veui-uploader-icon-size) / 2;
+        top: (@preview-size - @icon-size) / 2;
       }
     }
   }
   &-list-image {
     li {
       overflow: hidden;
-      width: @veui-uploader-image-normal;
-      height: @veui-uploader-image-normal;
-      padding: @veui-uploader-list-padding;
+      width: @image-normal;
+      height: @image-normal;
+      padding: @list-padding;
       box-sizing: content-box;
       margin: 5px;
       border: 2px dashed @veui-gray-color-sup-2;
       text-align: center;
-      line-height: @veui-uploader-image-normal;
+      line-height: @image-normal;
       position: relative;
       button[ui~="operation"] {
         position: absolute;
@@ -629,10 +615,10 @@ function getProgress () {
     &-mask {
       display: none;
       position: absolute;
-      top: @veui-uploader-list-padding;
-      left: @veui-uploader-list-padding;
-      width: ~"calc(100% - "2 * @veui-uploader-list-padding~")";
-      height: ~"calc(100% - "2 * @veui-uploader-list-padding~")";
+      top: @list-padding;
+      left: @list-padding;
+      width: ~"calc(100% - "2 * @list-padding~")";
+      height: ~"calc(100% - "2 * @list-padding~")";
       background-color: rgba(0, 0, 0, .5);
       text-align: center;
       button {
@@ -664,7 +650,7 @@ function getProgress () {
         margin-bottom: 25%;
       }
       svg {
-        font-size: @veui-uploader-icon-size;
+        font-size: @icon-size;
       }
     }
     .@{prefix}-progress {
@@ -703,7 +689,7 @@ function getProgress () {
       width: 100%;
       li {
         float: left;
-        width: @veui-uploader-width;
+        width: @width;
         margin-right: 10px;
       }
     }
@@ -713,16 +699,16 @@ function getProgress () {
   }
   &[ui~="small"] &-list-image {
     li {
-      height: @veui-uploader-image-small;
-      width: @veui-uploader-image-small;
-      line-height: @veui-uploader-image-small;
+      height: @image-small;
+      width: @image-small;
+      line-height: @image-small;
     }
   }
   &[ui~="large"] &-list-image {
     li {
-      height: @veui-uploader-image-large;
-      width: @veui-uploader-image-large;
-      line-height: @veui-uploader-image-large;
+      height: @image-large;
+      width: @image-large;
+      line-height: @image-large;
     }
   }
   .@{prefix-button}[ui~="simple"] {
@@ -730,15 +716,15 @@ function getProgress () {
     background-color: none;
     transition: none;
     .veui-shadow(none);
-    height: @veui-uploader-icon-size;
+    height: @icon-size;
     min-width: 2em;
     padding: 0;
   }
   .@{prefix-button}[ui~="delete"] {
     color: @veui-alert-color-primary;
-    font-size: @veui-uploader-icon-size;
-    min-width: @veui-uploader-icon-size;
-    width: @veui-uploader-icon-size;
+    font-size: @icon-size;
+    min-width: @icon-size;
+    width: @icon-size;
     visibility: hidden;
   }
 

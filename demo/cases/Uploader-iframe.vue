@@ -12,8 +12,9 @@
     <veui-uploader :uploaderType="uploaderType"
       action="/uploadiframe"
       :throughIframe="true"
+      iframeCallbackType="postmessage"
       :disabled="false"
-      :maxNumber="3"
+      :maxCount="3"
       :tip="tip"
       :files="files"
       :maxSize="0.5"
@@ -21,10 +22,10 @@
       extentionTypes="jpg,jpeg,gif"
       :uploadCallback="uploadCallback"
       :args="extraArgs"
-      :deleteFile="deleteFile"
-      :cancelUploading="cancelUploading"
       uploadingContent="text"
       :ui="ui"
+      @delete="deleteFile"
+      @cancel="cancelUploading"
       @change="onChange"
       @success="onSuccess"
       @failure="onFailure">
@@ -35,7 +36,7 @@
 import Uploader from '@/components/Uploader'
 import Button from '@/components/Button'
 import {cloneDeep} from 'lodash'
-import {ui} from '../../src/mixins/index'
+import {ui} from '../../src/mixins'
 
 export default {
   name: 'uploader',
@@ -77,20 +78,10 @@ export default {
           this.$emit('failure', data)
           this.onFailure(data, file)
         }
-      },
-      deleteFile (file) {
-        this.fileList.splice(this.fileList.indexOf(file), 1)
-        this.$emit('change', this.fileList)
-      },
-      cancelUploading () {
-        this.canceled = true
-        this.fileList.pop()
-        this.$emit('change', this.fileList)
-        this.reset()
       }
     }
   },
-  computed: ui.computed,
+  mixins: [ui],
   methods: {
     onChange (fileList) {
       this.files = cloneDeep(fileList)
@@ -100,6 +91,14 @@ export default {
     },
     onFailure (data) {
       console.log(data)
+    },
+    deleteFile (file) {
+      this.files.splice(this.files.indexOf(file), 1)
+    },
+    cancelUploading () {
+      this.canceled = true
+      this.files.pop()
+      this.reset()
     },
     toggleUploaderType () {
       this.uploaderType = this.uploaderType === 'image' ? 'file' : 'image'
