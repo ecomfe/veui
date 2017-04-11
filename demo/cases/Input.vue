@@ -5,25 +5,16 @@
       <div class="form-row">
         <div class="form-key">描述：</div>
         <div class="form-value">
-          <veui-input ui="small" v-model="key" @change="log('change')" @click="log('click')"></veui-input>
-          <veui-input v-model="key" :readonly="true"></veui-input>
-          <veui-input ui="large" v-model="key" :disabled="true"></veui-input>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-key">年龄：</div>
-        <div class="form-value">
-          <veui-input ui="small" v-model="age" :placeholder="'请输入年龄'" @change="log('change')" @blur="log('blur')"></veui-input>
-          <veui-input v-model="age" :readonly="true" :placeholder="'请输入年龄'"></veui-input>
-          <veui-input ui="large"  v-model="age" :disabled="true" :placeholder="'请输入年龄'"></veui-input>
+          <veui-input ui="small" v-model="key" :ignorecomposition="false" @change="log('change')"></veui-input>
+          <veui-input v-model="key" :ignorecomposition="false" :readonly="true"></veui-input>
+          <veui-input ui="large" :ignorecomposition="false" v-model="key" :disabled="true"></veui-input>
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-key">姓名：</div>
         <div class="form-value">
-          <veui-input ui="small" v-model="name" @change="log('change')" @focus="log('focus')"></veui-input>
+          <veui-input ui="small" v-model="name" @focus="log('focus')"></veui-input>
           <veui-input v-model="name" :readonly="true"></veui-input>
           <veui-input ui="large" v-model="name" :disabled="true"></veui-input>
         </div>
@@ -32,9 +23,18 @@
       <div class="form-row">
         <div class="form-key">手机：</div>
         <div class="form-value">
-          <veui-input ui="small" v-model="phone" @change="log('change')" @input="log('input')"></veui-input>
+          <veui-input ui="small" v-model="phone" :autoselect="true" @blur="log('blur')"></veui-input>
           <veui-input v-model="phone" :readonly="true"></veui-input>
           <veui-input ui="large" v-model="phone" :disabled="true"></veui-input>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-key">密码：</div>
+        <div class="form-value">
+          <veui-input ui="small" v-model="password" type="password" :autofocus="true" placeholder="请输入密码" @click="log('click')"></veui-input>
+          <veui-input v-model="password" type="password" placeholder="请输入密码" :readonly="true"></veui-input>
+          <veui-input ui="large" v-model="password" type="password" placeholder="请输入密码" :disabled="true"></veui-input>
         </div>
       </div>
     </div>
@@ -52,10 +52,11 @@ export default {
   },
   data () {
     return {
-      key: null,
+      key: '默认忽略输入法，此处不忽略',
       age: null,
-      name: '李彦宏·马云·马化腾',
-      phone: '13800138000'
+      name: '李云腾',
+      phone: '13800138000',
+      password: null
     }
   },
   methods: {
@@ -79,5 +80,9 @@ export default {
 
   .form-value {
     float: left;
+
+    .veui-input {
+      margin-right: 10px;
+    }
   }
 </style>
