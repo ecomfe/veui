@@ -1,33 +1,87 @@
-<template>
-  <ul class="veui-breadcrumb"><slot></slot></ul>
-</template>
-
 <script>
-import { each, filter } from 'lodash'
+import BreadcrumbItem from './BreadcrumbItem'
 
 export default {
   name: 'veui-breadcrumb',
+  components: {
+    'veui-breadcrumb-item': BreadcrumbItem
+  },
   props: {
-    separator: {
-      type: String,
-      default: '|'
+    routers: {
+      type: Array,
+      default () {
+        return []
+      }
     }
   },
-  beforeUpdate () {
-    const breadcrumbItems = filter(
-      this.$slots.default,
-      slot => slot.componentOptions && slot.componentOptions.tag === 'veui-breadcrumb-item'
-    )
-    // 在子组件创建之前，塞点数据进去
-    const length = breadcrumbItems.length
-    each(breadcrumbItems, (itemSlot, index) => {
-      if (length - 1 === index) {
-        itemSlot.componentOptions.propsData.type = 'TEXT'
-      } else {
-        itemSlot.componentOptions.propsData.type = 'LINK'
-        itemSlot.componentOptions.propsData.separator = this.separator
+  data () {
+    return {
+      localRouters: this.routers
+    }
+  },
+  watch: {
+    routers (value) {
+      this.localRouters = value
+      this.checkLocalRouters()
+    }
+  },
+  created () {
+    this.checkLocalRouters()
+  },
+  render () {
+    function renderSlot (slotName, ...args) {
+      if (this.$slots[slotName]) {
+        return this.$slots[slotName]
       }
-    })
+      if (this.$scopedSlots[slotName]) {
+        return this.$scopedSlots[slotName](...args)
+      }
+    }
+
+    return (
+      <ul class="veui-breadcrumb">
+        {this._l(this.localRouters, (router, index) => {
+          return (
+            <BreadcrumbItem to={router.to}
+              replace={router.replace}
+              type={router.type}
+              native={router.native}
+              onRedirect={event => this.fireRedirect(event, router, index)}>
+              {renderSlot.call(this, 'default', { router })}
+              {
+                (() => {
+                  if (index !== this.localRouters.length - 1) {
+                    return (
+                      <span slot="separator" class="veui-breadcrumb-separator">
+                        {renderSlot.call(this, 'separator', { router })}
+                      </span>
+                    )
+                  }
+                })()
+              }
+            </BreadcrumbItem>
+          )
+        })}
+      </ul>
+    )
+  },
+  methods: {
+
+    /**
+     * 默认将最后一个router的type设置为text
+     */
+    checkLocalRouters () {
+      if (this.localRouters.length) {
+        const lastRouter = this.localRouters[this.localRouters.length - 1]
+        if (!lastRouter.type) {
+          lastRouter.type = 'text'
+        }
+      }
+    },
+
+    fireRedirect (event, router, index) {
+      this.$emit('redirect', event, router, index)
+    }
   }
 }
 </script>
@@ -37,5 +91,9 @@ export default {
   margin: 0;
   list-style: none;
   .clearfix();
+}
+
+.veui-breadcrumb-separator {
+  padding: 0 8px;
 }
 </style>

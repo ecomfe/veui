@@ -1,12 +1,21 @@
 <template>
   <li class="veui-breadcrumb-item">
-    <template v-if="type === 'LINK'">
-      <a class="veui-breadcrumb-item-link"
-        v-if="type === 'LINK'"
-        :title="to"
-        @click="redirect"><slot></slot></a><span class="veui-breadcrumb-item-separator">{{ separator || '' }}</span>
+    <template v-if="$router && !native">
+      <router-link :to="to"
+        :replace="replace"
+        :tag="{link: 'a', text: 'span'}[type]">
+        <slot></slot>
+      </router-link>
     </template>
-    <span v-else-if="type === 'TEXT'"><slot></slot></span>
+    <template v-else>
+      <a :href="to"
+        @click="handleRedirect"
+        v-if="type === 'link'">
+        <slot></slot>
+      </a>
+      <span v-else><slot></slot></span>
+    </template>
+    <slot name="separator"></slot>
   </li>
 </template>
 <script>
@@ -17,70 +26,35 @@ export default {
   props: {
     to: {
       type: String,
-      default: null
+      default: ''
     },
     replace: {
       type: Boolean,
       default: false
     },
     type: {
-      default: 'LINK',
+      default: 'link',
       validator (value) {
-        return includes(['LINK', 'TEXT'], value)
+        return includes(['link', 'text'], value)
       }
     },
-    separator: {
-      default: '|',
-      type: String
+    native: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
-
-    /**
-     * 对hash路由进行跳转
-     *
-     * @private
-     */
-    redirectHash () {
-      this.$router
-        ? (
-          this.replace
-            ? this.$router.replace(this.to)
-            : this.$router.push(this.to)
-        )
-        : (
-          this.replace
-            ? (location.hash = this.to)
-            : (location.replace(location.href + this.to))
-        )
-    },
-
-    /**
-     * 跳转
-     *
-     * @private
-     */
-    redirect () {
+    handleRedirect (event) {
       if (this.to) {
-        // 只有传入了to，才会自动尝试去做跳转
+        this.$emit('redirect', event)
 
-        const isHashUrl = /^#/.test(this.to)
-        if (isHashUrl) {
-          // 如果是hash路由，则需要判断当前vm实例上是否绑定了$router，
-          // 如果绑定了，则借助$router进行跳转，否则使用location进行跳转。
-
-          this.redirectHash()
-        } else {
-          // 如果不是hash路由，就直接用location进行跳转。
-
-          this.replace
-            ? location.replace(this.to)
-            : location.assign(this.to)
+        if (this.replace && !event.defaultPrevented) {
+          event.preventDefault()
+          location.replace(this.to)
         }
       } else {
-        // 如果没有传入to，直接向外部抛出跳转事件就行了
-
-        this.$emit('redirect')
+        event.preventDefault()
+        this.$emit('redirect', event)
       }
     }
   }
@@ -91,10 +65,6 @@ export default {
 
 .veui-breadcrumb-item {
   float: left;
-}
-
-.veui-breadcrumb-item-separator {
-  padding: 0 8px;
 }
 
 .veui-breadcrumb-item-link {

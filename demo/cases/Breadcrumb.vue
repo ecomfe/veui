@@ -1,12 +1,8 @@
 <template>
 <div>
-  <veui-breadcrumb>
-    <veui-breadcrumb-item @redirect="redirect">listen to redirect event</veui-breadcrumb-item>
-    <veui-breadcrumb-item v-for="item in items"
-      :key="item.to"
-      :to="item.to">
-      {{ item.text }}
-    </veui-breadcrumb-item>
+  <veui-breadcrumb :routers="items" @redirect="handleRedirect">
+    <template scope="scope">{{ scope.router.text }}</template>
+    <template slot="separator">&gt;</template>
   </veui-breadcrumb>
 </div>
 </template>
@@ -22,7 +18,12 @@ export default {
   data () {
     return {
       items: [
-        { to: 'http://www.baidu.com', text: 'baidu' },
+        { to: 'http://www.baidu.com', text: 'baidu', native: true },
+        { to: 'http://brandplus.baidu.com', text: '开放服务平台', type: 'text', native: true },
+        { text: '监听跳转事件', native: true },
+        { to: 'http://www.baidu.com', text: '阻止跳转事件', native: true },
+        { to: 'http://www.baidu.com', text: 'replace', replace: true, native: true },
+        { to: '/dialog', text: 'Dialog' },
         { to: 'http://jn.baidu.com', text: 'jn' }
       ]
     }
@@ -34,8 +35,13 @@ export default {
     // }, 1000)
   },
   methods: {
-    redirect () {
-      alert('redirect')
+    handleRedirect (event, router, index) {
+      if (index === 2) {
+        alert('redirect event')
+      } else if (index === 3) {
+        event.preventDefault()
+        alert('prevent redirect event')
+      }
     }
   }
 }
