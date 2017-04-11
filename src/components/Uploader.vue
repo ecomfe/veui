@@ -232,6 +232,7 @@ export default {
     window.removeEventListener('message', this.onMessage)
     document.body.removeChild(this.$refs.form)
     document.body.removeChild(this.$refs.iframe)
+    if (this.iframeCallbackType === 'func') window.veuiUploaderCallback[this.callbackFuncName] = null
   },
   methods: {
     onChange () {
@@ -249,6 +250,10 @@ export default {
         let filename = this.$refs.input.value
         if (!this.validateFileType(filename)) {
           this.warning.typeInvalid = false
+          return
+        }
+        if (this.$refs.input.files && !this.validateFileSize(this.$refs.input.files[0]).size) {
+          this.warning.sizeInvalid = false
           return
         }
         newFiles = [{status: 'uploading', name: filename}]

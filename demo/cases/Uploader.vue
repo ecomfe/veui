@@ -23,7 +23,7 @@
       :files="files"
       :maxSize="10"
       :previewImage="previewImage"
-      extentionTypes="jpg,jpeg,gif,wav"
+      extentionTypes="jpg,jpeg,gif"
       :args="extraArgs"
       :ui="ui"
       :uploadCallback="uploadCallback"
