@@ -1,6 +1,6 @@
 <template>
   <article>
-    <h1><code>&lt;veui-uploader&gt;</code></h1>
+    <h1><code>&lt;veui-uploader-iframe&gt;</code></h1>
     <div style="margin-bottom: 10px">
       <veui-button @click="toggleUploaderType">切换上传类型</veui-button>
       <veui-button @click="toggleAlign">切换横竖排列</veui-button>
@@ -9,8 +9,9 @@
       <veui-button @click="changeImageSize('')">中图</veui-button>
       <veui-button @click="changeImageSize('small')">小图</veui-button>
     </div>
-    <veui-uploader-iframe :uploaderType="uploaderType"
-      action="/upload"
+    <veui-uploader :uploaderType="uploaderType"
+      action="/uploadiframe"
+      :throughIframe="true"
       :disabled="false"
       :maxNumber="3"
       :tip="tip"
@@ -18,18 +19,20 @@
       :maxSize="0.5"
       :previewImage="previewImage"
       extentionTypes="jpg,jpeg,gif"
+      :uploadCallback="uploadCallback"
       :args="extraArgs"
       :deleteFile="deleteFile"
       :cancelUploading="cancelUploading"
+      uploadingContent="text"
       :ui="ui"
       @change="onChange"
       @success="onSuccess"
       @failure="onFailure">
-    </veui-uploader-iframe>
+    </veui-uploader>
   </article>
 </template>
 <script>
-import UploaderIframe from '@/components/Uploader-iframe'
+import Uploader from '@/components/Uploader'
 import Button from '@/components/Button'
 import {cloneDeep} from 'lodash'
 import {ui} from '../../src/mixins/index'
@@ -37,7 +40,7 @@ import {ui} from '../../src/mixins/index'
 export default {
   name: 'uploader',
   components: {
-    'veui-uploader-iframe': UploaderIframe,
+    'veui-uploader': Uploader,
     'veui-button': Button
   },
   data: function () {
@@ -66,11 +69,17 @@ export default {
         }
       },
       tip: '请选择图片',
-      deleteFile (fileUid) {
-        if (!fileUid) return
-        this.fileList = this.fileList.filter(file => {
-          return file.fileUid !== fileUid
-        })
+      uploadCallback (data, file) {
+        if (data.status === 'success') {
+          this.$emit('success', data)
+          this.onSuccess(data, file)
+        } else if (data.status === 'failure') {
+          this.$emit('failure', data)
+          this.onFailure(data, file)
+        }
+      },
+      deleteFile (file) {
+        this.fileList.splice(this.fileList.indexOf(file), 1)
         this.$emit('change', this.fileList)
       },
       cancelUploading () {

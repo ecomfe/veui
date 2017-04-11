@@ -71,7 +71,7 @@ devMiddleware.waitUntilValid(function () {
 })
 
 // Uploader test url
-app.use('/upload', function (req, res) {
+app.use('/uploadiframe', function (req, res) {
   setTimeout(() => {
     res.writeHead(200, {'Content-Type': 'text/html'})
     res.end(`<script>
@@ -80,7 +80,15 @@ app.use('/upload', function (req, res) {
         size: '250kb',
         src: 'http://ww4.sinaimg.cn/bmiddle/62bf1f1fjw1f9zw8x6wbsj20ii0cbwfo.jpg'}), '*');
       </script>`)
-  }, 1500);
+  }, 1500)
+})
+app.use('/upload', function (req, res) {
+  setTimeout(() => {
+    res.json({
+      status: Math.random() > 0.5 ? 'success' : 'failure',
+      reason: '文件重复上传'
+    })
+  }, 1500)
 })
 
 module.exports = app.listen(port, function (err) {

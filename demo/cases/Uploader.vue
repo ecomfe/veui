@@ -8,14 +8,20 @@
       <veui-button @click="changeImageSize('large')">上传类型是图片时，显示大图</veui-button>
       <veui-button @click="changeImageSize('')">中图</veui-button>
       <veui-button @click="changeImageSize('small')">小图</veui-button>
+      <br>
+      <veui-button @click="changeUploadingContent('text')">切换上传进度中的内容，显示文字</veui-button>
+      <veui-button @click="changeUploadingContent('progressPercent')">显示进度百分比</veui-button>
+      <veui-button @click="changeUploadingContent('progressBar')">显示进度条</veui-button>
+
     </div>
     <veui-uploader :uploaderType="uploaderType"
+      :throughIframe="false"
       action="/upload"
       :disabled="false"
       :maxNumber="3"
       :tip="tip"
       :files="files"
-      :maxSize="100"
+      :maxSize="10"
       :previewImage="previewImage"
       extentionTypes="jpg,jpeg,gif,wav"
       :args="extraArgs"
@@ -23,7 +29,7 @@
       :cancelUploading="cancelUploading"
       :ui="ui"
       :uploadCallback="uploadCallback"
-      uploadingContent="progressBar"
+      :uploadingContent="uploadingContent"
       @change="onChange"
       @success="onSuccess"
       @failure="onFailure">
@@ -47,6 +53,7 @@ export default {
       uploaderType: 'image',
       ui: 'multiline horizontal',
       previewImage: true,
+      uploadingContent: 'progressPercent',
       files: [
         {
           name: 'aaaa.jpg',
@@ -68,21 +75,23 @@ export default {
         }
       },
       tip: '请选择图片',
-      deleteFile (fileUid) {
-        if (!fileUid) return
-        this.fileList = this.fileList.filter(file => {
-          return file.fileUid !== fileUid
-        })
+      deleteFile (file) {
+        this.fileList.splice(this.fileList.indexOf(file), 1)
         this.$emit('change', this.fileList)
       },
-      cancelUploading () {
-        this.canceled = true
-        this.fileList.pop()
+      cancelUploading (file) {
+        file.xhr.abort()
+        this.fileList.splice(this.fileList.indexOf(file), 1)
         this.$emit('change', this.fileList)
-        this.reset()
       },
-      uploadCallback (data) {
-        // console.log(JSON.parse(data))
+      uploadCallback (data, file) {
+        if (data.status === 'success') {
+          this.$emit('success', data)
+          this.onSuccess(data, file)
+        } else if (data.status === 'failure') {
+          this.$emit('failure', data)
+          this.onFailure(data, file)
+        }
       }
     }
   },
@@ -114,6 +123,9 @@ export default {
     changeImageSize (size) {
       this.ui = this.ui.replace(/\s?(large)|(small)/, '')
       this.ui += (size ? ' ' + size : '')
+    },
+    changeUploadingContent (type) {
+      this.uploadingContent = type
     }
   }
 }
