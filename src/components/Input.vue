@@ -13,6 +13,7 @@
   <textarea
     v-else
     class="veui-textarea"
+    :class="{ 'veui-textarea-resizable': resizable }"
     v-bind="attrs"
     v-model="localValue"
     @focus="$emit('focus', $event)"
@@ -27,7 +28,6 @@ import mixin from '../mixins/input'
 import {omit, includes} from 'lodash'
 
 const typeList = ['text', 'password', 'textarea']
-const completeTypeList = ['on', 'off']
 
 export default {
   name: 'veui-input',
@@ -41,19 +41,13 @@ export default {
         return includes(typeList, value)
       }
     },
-    autocomplete: {
-      type: String,
-      default: 'off',
-      validator (value) {
-        return includes(completeTypeList, value)
-      }
-    },
+    autocomplete: String,
     placeholder: String,
     value: [String, Number],
     autofocus: Boolean,
     autoselect: Boolean,
     composition: Boolean,
-    resize: Boolean,
+    resizable: Boolean,
     autosize: Boolean
   },
   data () {
@@ -63,9 +57,7 @@ export default {
   },
   computed: {
     attrs () {
-      let omitItems = ['autoselect', 'composition']
-      let attrs = omit(this.$props, omitItems)
-      return attrs
+      return omit(this.$props, ['autoselect', 'composition', 'resizable'])
     }
   },
   watch: {
@@ -75,6 +67,11 @@ export default {
   },
   methods: {
     _handleInput ($event) {
+      // 分3种情况
+      // 1. 感知输入法，触发原生 input 事件就必须向上继续抛出
+      // 2. 不感知输入法
+      //  2.1 vue 底层会对原生 input 的 v-model 做忽略输入法组合态处理，所以 localValue 和 $event.target.value 不同步，只有当 localValue 产生变化时才向上继续抛出
+      //  2.2 在 localValue 没有变化的情况下，原则上不抛出
       if (this.composition || !this.composition && this.localValue !== this.value) {
         this.$emit('input', $event.target.value, $event)
       }
@@ -150,7 +147,7 @@ export default {
   padding: 10px 12px;
   resize: none;
 
-  &[resize="true"] {
+  &.veui-textarea-resizable {
     resize: both;
   }
 }
