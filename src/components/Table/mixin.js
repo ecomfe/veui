@@ -1,10 +1,12 @@
+import { includes } from 'lodash'
+
 export default {
   computed: {
     table () {
       let current = this.$parent
       while (current) {
         let { uiTypes } = current.$options
-        if (uiTypes && uiTypes.indexOf('table') !== -1) {
+        if (uiTypes && includes(uiTypes, 'table')) {
           return current
         }
         current = current.$parent

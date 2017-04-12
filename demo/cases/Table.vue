@@ -5,16 +5,17 @@
       <veui-button ui="primary" @click="append">添加</veui-button>
     </section>
     <section>
-      <veui-table ui="slim alt" :data="data" :columnFilter="columns" keys="id" selectable @select="handleSelect" @selectall="handleSelect">
-        <veui-table-column field="id" title="数据 ID"></veui-table-column>
+      <veui-table ui="slim alt" :data="data" :columnFilter="columns" keys="id" selectable
+        :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort">
+        <veui-table-column field="id" title="数据 ID" sortable></veui-table-column>
         <veui-table-column field="desc" title="数据描述"></veui-table-column>
-        <veui-table-column field="price" title="价格">
+        <veui-table-column field="price" title="价格" sortable>
           <template scope="props">{{ '¥' + props.item.price.toFixed(2) }}</template>
         </veui-table-column>
         <veui-table-column field="updateDate" title="更新时间">
           <template scope="props">{{ props.item.updateDate | date }}</template>
         </veui-table-column>
-        <veui-table-column title="操作">
+        <veui-table-column field="operation" title="操作">
           <template scope="props">
             <veui-button ui="link" @click="log(props.item)">编辑</veui-button>
             <veui-button ui="link alert" @click="del(props.index)">删除</veui-button>
@@ -27,6 +28,7 @@
       <label><input type="checkbox" value="desc" v-model="columns"> 描述</label>
       <label><input type="checkbox" value="price" v-model="columns"> 价格</label>
       <label><input type="checkbox" value="updateDate" v-model="columns"> 更新时间</label>
+      <label><input type="checkbox" value="operation" v-model="columns"> 操作</label>
     </section>
   </article>
 </template>
@@ -65,7 +67,9 @@ export default {
       ],
       nextId: 3157,
       nextIndex: 4,
-      columns: ['id', 'desc', 'price', 'updateDate']
+      columns: ['id', 'desc', 'price', 'updateDate', 'operation'],
+      order: false,
+      orderBy: null
     }
   },
   methods: {
@@ -89,6 +93,10 @@ export default {
     },
     handleSelect (...args) {
       this.log(...args)
+    },
+    handleSort (orderBy, order) {
+      this.orderBy = orderBy
+      this.order = order
     }
   }
 }

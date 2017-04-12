@@ -1,8 +1,7 @@
-<template>
-  <col :width="width">
-</template>
+<template></template>
 
 <script>
+import { pick } from 'lodash'
 import mixin from './mixin'
 
 export default {
@@ -10,18 +9,22 @@ export default {
   mixins: [mixin],
   props: {
     title: String,
-    field: String,
-    width: [String, Number]
+    field: {
+      type: String,
+      required: true
+    },
+    width: [String, Number],
+    sortable: Boolean,
+    order: [String, Boolean]
   },
   mounted () {
     let table = this.table
     if (!table) {
       return
     }
-    let { title, field, $scopedSlots: slots } = this
+    let slots = this.$scopedSlots
     table.columns.push({
-      title,
-      field,
+      ...pick(this.$props, 'title', 'field', 'sortable'),
       hasFoot: !!slots.foot,
       renderBody: slots.default
         ? data => slots.default(data)

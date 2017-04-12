@@ -161,14 +161,13 @@ export default {
   }
 
   &[ui~="link"] {
-    & {
-      min-width: auto;
-      height: auto;
-      border: none;
-      padding: 0;
-      color: @veui-theme-color-primary;
-      .veui-shadow(none);
-    }
+    min-width: auto;
+    height: auto;
+    border: none;
+    padding: 0;
+    background: transparent;
+    color: @veui-theme-color-primary;
+    .veui-shadow(none);
 
     &:hover {
       color: @veui-theme-color-hover;
@@ -191,6 +190,14 @@ export default {
     &:focus {
       background: none;
       .veui-shadow(none);
+    }
+
+    &:disabled:not(.veui-button-loading) {
+      &,
+      &:hover {
+        background: transparent;
+        color: @veui-text-color-weak;
+      }
     }
   }
 
@@ -229,6 +236,10 @@ export default {
   .fa-icon {
     max-width: 1em;
     vertical-align: text-top;
+
+    & + .veui-button-loading-text {
+      margin-left: 5px;
+    }
   }
 }
 

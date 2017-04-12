@@ -21,18 +21,18 @@
         <div class="veui-buttons">
           <div class="veui-group-previous">
             <a :href="pageNavHref.first.href" :data-page-no="pageNavHref.first.pageNo" class="veui-button-absolute">
-              <icon name="fa-chevron-circle-left"></icon>
+              <icon name="chevron-circle-left"></icon>
             </a>
             <a :href="pageNavHref.previous.href" :data-page-no="pageNavHref.previous.pageNo" class="veui-button-relative">
-              <icon name="fa-chevron-left"></icon>
+              <icon name="chevron-left"></icon>
             </a>
           </div>
           <div class="veui-group-next">
             <a :href="pageNavHref.next.href" :data-page-no="pageNavHref.next.pageNo" class="veui-button-relative">
-              <icon name="fa-chevron-right"></icon>
+              <icon name="chevron-right"></icon>
             </a>
             <a :href="pageNavHref.last.href" :data-page-no="pageNavHref.last.pageNo" class="veui-button-absolute">
-              <icon name="fa-chevron-circle-right"></icon>
+              <icon name="chevron-circle-right"></icon>
             </a>
           </div>
         </div>
@@ -43,10 +43,10 @@
 
 <script>
 import Icon from './Icon'
-import 'vue-awesome/icons/fa-chevron-left'
-import 'vue-awesome/icons/fa-chevron-right'
-import 'vue-awesome/icons/fa-chevron-circle-left'
-import 'vue-awesome/icons/fa-chevron-circle-right'
+import 'vue-awesome/icons/chevron-left'
+import 'vue-awesome/icons/chevron-right'
+import 'vue-awesome/icons/chevron-circle-left'
+import 'vue-awesome/icons/chevron-circle-right'
 import {closest} from '../utils/dom'
 
 const LAYOUTS = [

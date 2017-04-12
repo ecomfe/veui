@@ -12,9 +12,11 @@ export default {
       <thead>
         <tr>
           {this.table.selectable ? <th></th> : ''}
-          {this._l(this.columns, col => (
-            <th>{col.renderFoot.call(this._renderProxy, { col })}</th>
-          ))}
+          {
+            this._l(this.columns, col => (
+              <th>{col.renderFoot.call(this._renderProxy, { col })}</th>
+            ))
+          }
         </tr>
       </thead>
     )
