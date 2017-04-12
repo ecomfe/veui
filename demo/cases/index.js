@@ -1,6 +1,9 @@
 import Button from './Button'
 import Table from './Table'
 import Pager from './Pager'
+import Dialog from './Dialog'
+import Overlay from './Overlay'
+import Breadcrumb from './Breadcrumb'
 
 export default [
   {
@@ -20,5 +23,20 @@ export default [
       pageNo: 0
     },
     component: Pager
+  },
+  {
+    path: '/dialog',
+    name: 'Dialog',
+    component: Dialog
+  },
+  {
+    path: '/overlay',
+    name: 'Overlay',
+    component: Overlay
+  },
+  {
+    path: '/breadcrumb',
+    name: 'Breadcrumb',
+    component: Breadcrumb
   }
 ]
