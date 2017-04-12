@@ -27,6 +27,7 @@ import mixin from '../mixins/input'
 import {omit, includes} from 'lodash'
 
 const typeList = ['text', 'password', 'textarea']
+const completeTypeList = ['on', 'off']
 
 export default {
   name: 'veui-input',
@@ -40,11 +41,20 @@ export default {
         return includes(typeList, value)
       }
     },
+    autocomplete: {
+      type: String,
+      default: 'off',
+      validator (value) {
+        return includes(completeTypeList, value)
+      }
+    },
     placeholder: String,
     value: [String, Number],
     autofocus: Boolean,
     autoselect: Boolean,
-    composition: Boolean
+    composition: Boolean,
+    resize: Boolean,
+    autosize: Boolean
   },
   data () {
     return {
@@ -53,8 +63,8 @@ export default {
   },
   computed: {
     attrs () {
-      let omitItems = ['autoselect', 'composition', ...['readonly', 'disabled'].filter(item => !this[item])]
-      let attrs = Object.assign({}, omit(this.$props, omitItems))
+      let omitItems = ['autoselect', 'composition']
+      let attrs = omit(this.$props, omitItems)
       return attrs
     }
   },
@@ -77,6 +87,9 @@ export default {
     }
     if (this.autoselect) {
       this.$on('focus', (e) => e.target.select())
+    }
+    if (this.autosize) {
+      // TODO
     }
   }
 }
@@ -130,6 +143,15 @@ export default {
   &[ui~="small"] {
     height: @veui-height-small;
     font-size: @veui-font-size-small;
+  }
+}
+
+.veui-textarea {
+  padding: 10px 12px;
+  resize: none;
+
+  &[resize="true"] {
+    resize: both;
   }
 }
 

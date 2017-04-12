@@ -39,10 +39,10 @@
       </div>
 
       <div class="form-row">
-        <div class="form-key">密码：</div>
+        <div class="form-key">多行：</div>
         <div class="form-value">
           <veui-input type="textarea" @input="log"></veui-input>
-          <veui-input type="textarea" readonly></veui-input>
+          <veui-input type="textarea" resize readonly></veui-input>
           <veui-input type="textarea" disabled></veui-input>
         </div>
       </div>
