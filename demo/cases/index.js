@@ -1,7 +1,6 @@
 import Button from './Button'
 import Table from './Table'
 import Pager from './Pager'
-import UploaderIframe from './Uploader-iframe'
 import Uploader from './Uploader'
 
 export default [
@@ -22,11 +21,6 @@ export default [
       pageNo: 0
     },
     component: Pager
-  },
-  {
-    path: '/uploader-iframe',
-    name: 'UploaderIframe',
-    component: UploaderIframe
   },
   {
     path: '/uploader',
