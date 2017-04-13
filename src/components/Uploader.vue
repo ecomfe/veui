@@ -293,8 +293,7 @@ export default {
       })
     },
     upload (file) {
-      file.status = 'uploading'
-      this.updateFileList(file)
+      this.updateFileList(file, {status: 'uploading'})
       let xhr = new XMLHttpRequest()
       file.xhr = xhr
       xhr.upload.onprogress = e => {
@@ -328,7 +327,7 @@ export default {
       xhr.send(formData)
     },
     submit () {
-      this.latestFile.status = 'uploading'
+      this.updateFileList(this.latestFile, {status: 'uploading'})
       let form = this.$refs.form
       form.appendChild(this.$refs.input)
       form.submit()
