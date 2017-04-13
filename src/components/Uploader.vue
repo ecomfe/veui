@@ -634,10 +634,9 @@ function getProgress () {
       button {
         vertical-align: middle;
         background: none;
-        font-size: 18px;
-        height: 18px !important;
         color: #fff;
         line-height: 1;
+        height: 1.4em !important;
         font-size: @veui-font-size-normal;
       }
       button:active,
