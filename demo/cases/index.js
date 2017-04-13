@@ -2,6 +2,10 @@ import Button from './Button'
 import Table from './Table'
 import Pager from './Pager'
 import Uploader from './Uploader'
+import Dialog from './Dialog'
+import Overlay from './Overlay'
+import Breadcrumb from './Breadcrumb'
+import Input from './Input'
 
 export default [
   {
@@ -26,5 +30,25 @@ export default [
     path: '/uploader',
     name: 'Uploader',
     component: Uploader
+  },
+  {
+    path: '/dialog',
+    name: 'Dialog',
+    component: Dialog
+  },
+  {
+    path: '/overlay',
+    name: 'Overlay',
+    component: Overlay
+  },
+  {
+    path: '/breadcrumb',
+    name: 'Breadcrumb',
+    component: Breadcrumb
+  },
+  {
+    path: '/input',
+    name: 'Input',
+    component: Input
   }
 ]

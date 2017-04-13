@@ -20,7 +20,14 @@
       <veui-button ui="aux">取消</veui-button>
       <veui-button ui="aux large">取消</veui-button>
       <veui-button ui="aux" disabled>取消</veui-button>
-      <veui-button ui="aux" loading>保存</veui-button>
+      <veui-button ui="aux" loading>取消</veui-button>
+    </p>
+    <p>
+      <veui-button ui="link small">编辑</veui-button>
+      <veui-button ui="link">编辑</veui-button>
+      <veui-button ui="link large">编辑</veui-button>
+      <veui-button ui="link" disabled>编辑</veui-button>
+      <veui-button ui="link" loading>编辑</veui-button>
     </p>
     <p>
       <veui-button ui="round primary small"><icon name="thumbs-up"></icon></veui-button>
@@ -68,8 +75,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 p {
   user-select: none;
+}
+
+.veui-button {
+  margin-right: 10px;
 }
 </style>

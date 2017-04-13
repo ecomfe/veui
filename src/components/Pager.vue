@@ -21,18 +21,18 @@
         <div class="veui-buttons">
           <div class="veui-group-previous">
             <a :href="pageNavHref.first.href" :data-page-no="pageNavHref.first.pageNo" class="veui-button-absolute">
-              <icon name="fa-chevron-circle-left"></icon>
+              <icon name="chevron-circle-left"></icon>
             </a>
             <a :href="pageNavHref.previous.href" :data-page-no="pageNavHref.previous.pageNo" class="veui-button-relative">
-              <icon name="fa-chevron-left"></icon>
+              <icon name="chevron-left"></icon>
             </a>
           </div>
           <div class="veui-group-next">
             <a :href="pageNavHref.next.href" :data-page-no="pageNavHref.next.pageNo" class="veui-button-relative">
-              <icon name="fa-chevron-right"></icon>
+              <icon name="chevron-right"></icon>
             </a>
             <a :href="pageNavHref.last.href" :data-page-no="pageNavHref.last.pageNo" class="veui-button-absolute">
-              <icon name="fa-chevron-circle-right"></icon>
+              <icon name="chevron-circle-right"></icon>
             </a>
           </div>
         </div>
@@ -43,10 +43,10 @@
 
 <script>
 import Icon from './Icon'
-import 'vue-awesome/icons/fa-chevron-left'
-import 'vue-awesome/icons/fa-chevron-right'
-import 'vue-awesome/icons/fa-chevron-circle-left'
-import 'vue-awesome/icons/fa-chevron-circle-right'
+import 'vue-awesome/icons/chevron-left'
+import 'vue-awesome/icons/chevron-right'
+import 'vue-awesome/icons/chevron-circle-left'
+import 'vue-awesome/icons/chevron-circle-right'
 import {closest} from '../utils/dom'
 
 const LAYOUTS = [
@@ -149,7 +149,8 @@ export default {
       let continuousIndicatorLength = aroundIndicatorLength * 2 + 1
       let boundaryIndicatorLength = (pageIndicatorLength - continuousIndicatorLength - 2) / 2
 
-      let len
+      let leftLen
+      let rightLen
       let offsetBackward = Math.max(pageNo - moreIndicatorOffsetLength, 1)
       let offsetForward = Math.min(pageNo + moreIndicatorOffsetLength, pageCount)
 
@@ -158,16 +159,18 @@ export default {
           return getPageSeries(1, pageCount)
 
         case pageNo < continuousIndicatorLength:
-          len = Math.max(continuousIndicatorLength, pageNo + aroundIndicatorLength)
-          return getPageSeries(1, len)
+          leftLen = Math.max(continuousIndicatorLength, pageNo + aroundIndicatorLength)
+          rightLen = pageIndicatorLength - leftLen - 1
+          return getPageSeries(1, leftLen)
             .concat(getPageIndicator(offsetForward, true))
-            .concat(getPageSeries(pageCount - len + 1, pageIndicatorLength - len - 1))
+            .concat(getPageSeries(pageCount - rightLen + 1, rightLen))
 
         case pageNo > pageCount - continuousIndicatorLength + 1:
-          len = Math.max(pageCount - pageNo + 1 + aroundIndicatorLength, continuousIndicatorLength)
-          return getPageSeries(1, pageIndicatorLength - len - 1)
+          rightLen = Math.max(pageCount - pageNo + 1 + aroundIndicatorLength, continuousIndicatorLength)
+          leftLen = pageIndicatorLength - rightLen - 1
+          return getPageSeries(1, leftLen)
             .concat(getPageIndicator(offsetBackward, true))
-            .concat(getPageSeries(pageCount - len + 1, len))
+            .concat(getPageSeries(pageCount - rightLen + 1, rightLen))
 
         default:
           return getPageSeries(1, boundaryIndicatorLength)
