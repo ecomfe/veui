@@ -1,6 +1,6 @@
 @import "./variables.less";
 
-.veui-shadow(@type: normal, @color: @veui-shadow-color-normal) {
+.veui-shadow(@type: normal, @color: @veui-shadow-color-normal) when (@type = normal) {
     box-shadow: 0 1px 2px @color;
 }
 .veui-shadow(strong, @color: @veui-shadow-color-strong) {

@@ -160,6 +160,47 @@ export default {
     }
   }
 
+  &[ui~="link"] {
+    min-width: auto;
+    height: auto;
+    border: none;
+    padding: 0;
+    background: transparent;
+    color: @veui-theme-color-primary;
+    .veui-shadow(none);
+
+    &:hover {
+      color: @veui-theme-color-hover;
+    }
+
+    &:active {
+      color: @veui-theme-color-active;
+    }
+
+    &[ui~="alert"] {
+      color: @veui-alert-color-primary;
+
+      &:hover {
+        color: @veui-alert-color-hover;
+      }
+    }
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: none;
+      .veui-shadow(none);
+    }
+
+    &:disabled:not(.veui-button-loading) {
+      &,
+      &:hover {
+        background: transparent;
+        color: @veui-text-color-weak;
+      }
+    }
+  }
+
   &[ui~="large"] {
     .padding(12px, _);
     height: @veui-height-large;
@@ -180,7 +221,7 @@ export default {
   &[ui~="square"] {
     width: @veui-height-normal;
     min-width: auto;
-    .padding(_, 0);Table
+    .padding(_, 0);
     text-align: center;
 
     &[ui~="large"] {
@@ -195,6 +236,10 @@ export default {
   .fa-icon {
     max-width: 1em;
     vertical-align: text-top;
+
+    & + .veui-button-loading-text {
+      margin-left: 5px;
+    }
   }
 }
 

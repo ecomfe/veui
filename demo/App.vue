@@ -16,7 +16,9 @@
         <icon :name="console.expanded ? 'caret-down' : 'caret-up'" label="Toggle console"></icon>
         Console <small>({{console.logs.length}})</small>
       </h2>
-      <pre ref="logList"><p v-for="log in console.logs"><template v-if="log != null">{{log}}</template><template v-else><span style="color: #ccc">{{log === '' ? 'empty' : String(log)}}</span></template></p></pre>
+      <section class="output" ref="logList">
+        <pre class="log" v-for="log in console.logs"><template v-if="log != null"><div v-if="log instanceof String">{{log}}</div><div class="line" v-else v-for="line in log" v-html="format(line)"></div></template><template v-else v-html="format(log)"></template></pre>
+      </section>
     </aside>
   </div>
 </template>
@@ -41,17 +43,23 @@ export default {
     }
   },
   methods: {
-    log (msg) {
-      console.log(msg)
-      this.console.logs.push(msg)
+    log (...messages) {
+      console.log(...messages)
+      this.console.logs.push(messages)
       let el = this.$refs.logList
       this.$nextTick(() => {
         el.scrollTop = el.scrollHeight
       })
+    },
+    format (text) {
+      if (text != null) {
+        return text
+      }
+      return `<span style="color: #ccc">${text === '' ? 'empty' : String(text)}</span>`
     }
   },
   mounted () {
-    bus.$on('log', msg => this.log(msg))
+    bus.$on('log', (...messages) => this.log(...messages))
   }
 }
 </script>
@@ -74,8 +82,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
 
   &.console-expanded {
-    pre {
-      overflow: scroll;
+    .output {
+      overflow: auto;
       height: @console-height;
     }
 
@@ -178,7 +186,7 @@ main {
     }
   }
 
-  pre {
+  .output {
     overflow: hidden;
     height: 0;
     margin: 0;
@@ -186,12 +194,16 @@ main {
     font-size: 10px;
     transition: height .2s;
 
-    p {
+    .log {
       position: relative;
       min-height: 20px;
       margin: 0;
       padding: 0 1em;
       border-bottom: 1px solid #f3f3f3;
+
+      .line:not(:last-child) {
+        border-bottom: 1px solid #f3f3f3;
+      }
 
       &:last-child::before {
         content: "";

@@ -1,31 +1,30 @@
-<template>
-  <col>
-</template>
+<template></template>
 
 <script>
+import { pick } from 'lodash'
+import mixin from './mixin'
+
 export default {
   name: 'veui-table-column',
-  props: ['title', 'field'],
-  methods: {
-    getTable () {
-      let current = this.$parent
-      while (current) {
-        if (current.tableId) {
-          return current
-        }
-        current = current.$parent
-      }
-    }
+  mixins: [mixin],
+  props: {
+    title: String,
+    field: {
+      type: String,
+      required: true
+    },
+    width: [String, Number],
+    sortable: Boolean,
+    order: [String, Boolean]
   },
   mounted () {
-    let table = this.getTable()
+    let table = this.table
     if (!table) {
       return
     }
-    let { title, field, $scopedSlots: slots } = this
+    let slots = this.$scopedSlots
     table.columns.push({
-      title,
-      field,
+      ...pick(this.$props, 'title', 'field', 'sortable'),
       hasFoot: !!slots.foot,
       renderBody: slots.default
         ? data => slots.default(data)
