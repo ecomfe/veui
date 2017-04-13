@@ -7,6 +7,7 @@ import Overlay from './Overlay'
 import Breadcrumb from './Breadcrumb'
 import Input from './Input'
 import Calendar from './Calendar'
+import Select from './Select'
 
 export default [
   {
@@ -53,8 +54,14 @@ export default [
     component: Input
   },
   {
+<<<<<<< 268dbaabd2511d5ad96f8acea1019323c649060c
     path: '/calendar',
     name: 'Calendar',
     component: Calendar
+=======
+    path: '/select',
+    name: 'Select',
+    component: Select
+>>>>>>> Select组件
   }
 ]
