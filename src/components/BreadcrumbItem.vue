@@ -1,28 +1,22 @@
 <template>
   <li class="veui-breadcrumb-item">
-    <template v-if="$router && !native">
-      <router-link :to="to"
-        :replace="replace"
-        :tag="{link: 'a', text: 'span'}[type]">
-        <slot></slot>
-      </router-link>
-    </template>
-    <template v-else>
-      <a :href="to"
-        @click="handleRedirect"
-        v-if="type === 'link'">
-        <slot></slot>
-      </a>
-      <span v-else><slot></slot></span>
-    </template>
+    <hyper-link v-if="type === 'link'" @redirect="$emit('redirect', $event)"
+      :to="to" :replace="replace" :native="native"><slot></slot></hyper-link>
+    <span v-else><slot></slot></span>
     <slot name="separator"></slot>
   </li>
 </template>
 <script>
 import { includes } from 'lodash'
+import HyperLink from './HyperLink'
+
+const ALLOWED_LINK_TYPES = ['link', 'text']
 
 export default {
   name: 'veui-breadcrumb-item',
+  components: {
+    HyperLink
+  },
   props: {
     to: {
       type: String,
@@ -35,7 +29,7 @@ export default {
     type: {
       default: 'link',
       validator (value) {
-        return includes(['link', 'text'], value)
+        return includes(ALLOWED_LINK_TYPES, value)
       }
     },
     native: {
@@ -44,19 +38,7 @@ export default {
     }
   },
   methods: {
-    handleRedirect (event) {
-      if (this.to) {
-        this.$emit('redirect', event)
 
-        if (this.replace && !event.defaultPrevented) {
-          event.preventDefault()
-          location.replace(this.to)
-        }
-      } else {
-        event.preventDefault()
-        this.$emit('redirect', event)
-      }
-    }
   }
 }
 </script>

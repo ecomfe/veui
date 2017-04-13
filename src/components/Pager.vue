@@ -10,30 +10,36 @@
           </select>
         </span>
       </div>
-      <div class="veui-page-switch" @click="handleClick($event)">
+      <div class="veui-page-switch">
         <ul class="veui-pages" :class="{['veui-page-digit-length-' + pageDigitLength]: true}">
           <li v-for="item in pageIndicatorSeries" :class="{
             'veui-active': item.pageNo === pageNo
           }">
-            <a :href="item.href" :data-page-no="item.pageNo">{{ item.text }}</a>
+            <hyper-link :to="item.href" :native="native"
+              @redirect="handleRedirect(item.pageNo, $event)">{{ item.text }}</hyper-link>
           </li>
         </ul>
         <div class="veui-buttons">
           <div class="veui-group-previous">
-            <a :href="pageNavHref.first.href" :data-page-no="pageNavHref.first.pageNo" class="veui-button-absolute">
+            <hyper-link class="veui-button-absolute" :to="pageNavHref.first.href" :native="native"
+              @redirect="handleRedirect(pageNavHref.first.pageNo, $event)">
               <icon name="chevron-circle-left"></icon>
-            </a>
-            <a :href="pageNavHref.previous.href" :data-page-no="pageNavHref.previous.pageNo" class="veui-button-relative">
+            </hyper-link>
+            <hyper-link class="veui-button-relative" :to="pageNavHref.previous.href" :native="native"
+              @redirect="handleRedirect(pageNavHref.previous.pageNo, $event)">
               <icon name="chevron-left"></icon>
-            </a>
+            </hyper-link>
           </div>
-          <div class="veui-group-next">
-            <a :href="pageNavHref.next.href" :data-page-no="pageNavHref.next.pageNo" class="veui-button-relative">
+          <div
+          class="veui-group-next">
+            <hyper-link class="veui-button-relative" :to="pageNavHref.next.href" :native="native"
+              @redirect="handleRedirect(pageNavHref.next.pageNo, $event)">
               <icon name="chevron-right"></icon>
-            </a>
-            <a :href="pageNavHref.last.href" :data-page-no="pageNavHref.last.pageNo" class="veui-button-absolute">
+            </hyper-link>
+            <hyper-link class="veui-button-absolute" :to="pageNavHref.last.href" :native="native"
+              @redirect="handleRedirect(pageNavHref.last.pageNo, $event)">
               <icon name="chevron-circle-right"></icon>
-            </a>
+            </hyper-link>
           </div>
         </div>
       </div>
@@ -47,7 +53,7 @@ import 'vue-awesome/icons/chevron-left'
 import 'vue-awesome/icons/chevron-right'
 import 'vue-awesome/icons/chevron-circle-left'
 import 'vue-awesome/icons/chevron-circle-right'
-import {closest} from '../utils/dom'
+import HyperLink from './HyperLink'
 
 const LAYOUTS = [
   'basic',
@@ -61,7 +67,7 @@ const OPTIONAL_PAGE_SIZES = [
   30, 60, 100, 200
 ]
 
-const HREF_TPL_PLACEHOLDER = /\$page\b/g
+const HREF_TPL_PLACEHOLDER = /:pageNo\b/g
 
 /**
  * 总页面切换按钮数
@@ -84,7 +90,8 @@ const moreIndicatorOffsetLength = 5
 export default {
   name: 'veui-pager',
   components: {
-    Icon
+    Icon,
+    HyperLink
   },
   props: {
     pageNo: {
@@ -100,8 +107,8 @@ export default {
       required: true
     },
     hrefTpl: {
-      type: String,
-      default: '$page'
+      type: [String, Object],
+      default: ':pageNo'
     },
     ui: {
       type: String,
@@ -114,6 +121,10 @@ export default {
           return LAYOUTS.indexOf(item) >= 0
         }).length === 1
       }
+    },
+    native: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -123,6 +134,14 @@ export default {
     }
   },
   computed: {
+    realHrefTpl () {
+      let hrefTpl = this.hrefTpl
+      if (typeof hrefTpl === 'string') {
+        return hrefTpl
+      } else {
+        return this.$router.resolve(hrefTpl).href.substring(1)
+      }
+    },
     pageNavHref () {
       return {
         first: this.getPageIndicator(1),
@@ -194,31 +213,24 @@ export default {
     }
   },
   methods: {
-    handleClick (event) {
-      let target = closest(event.target, 'a')
-      if (!target) {
-        return
-      }
-      let pageNo = parseInt(target.dataset.pageNo, 10)
-      if (isNaN(pageNo)) {
-        return
-      }
+    handleRedirect (pageNo, event) {
       this.$emit('redirect', {pageNo, event})
     },
 
     getPageIndicator (pageNo, isMore = false) {
       return {
-        pageNo: isMore ? null : pageNo,
+        pageNo,
         text: isMore ? '...' : pageNo,
-        href: pageNo ? formatHref(this.hrefTpl, pageNo) : null
+        href: pageNo ? this.formatHref(pageNo) : null
       }
+    },
+
+    formatHref (pageNo) {
+      return this.realHrefTpl.replace(HREF_TPL_PLACEHOLDER, pageNo)
     }
   }
 }
 
-function formatHref (hrefTpl, pageNo) {
-  return hrefTpl.replace(HREF_TPL_PLACEHOLDER, pageNo)
-}
 </script>
 
 <style lang="less">
@@ -293,6 +305,10 @@ function formatHref (hrefTpl, pageNo) {
       line-height: @digit-height;
       font-size: @digit-size;
       border-radius: 2px;
+
+      a {
+        display: block;
+      }
     }
 
     .veui-active {
