@@ -1,7 +1,7 @@
 <template>
   <div class="veui-uploader" :ui="ui">
     <div>
-      <label v-if="uploaderType === 'file'"
+      <label v-if="uploaderType === 'file' || (uploaderType === 'image' && needButton)"
         class="veui-button veui-uploader-input-label"
         :class="{'veui-uploader-input-label-disabled': disabled}"
         ui="aux" ref="label"><icon class="veui-uploader-input-label-icon" name="upload"></icon>{{text}}
@@ -68,7 +68,7 @@
           </slot>
         </template>
       </li>
-      <li v-if="uploaderType === 'image'" key="input">
+      <li v-if="uploaderType === 'image' && !needButton" key="input">
         <label class="veui-uploader-input-label-image"
           :class="{'veui-uploader-input-label-disabled': disabled}"
           ref="label"><input hidden type="file" ref="input" @change="onChange" :name="name" :disabled="disabled" multiple>
@@ -129,6 +129,10 @@ export default {
       default: false
     },
     extentionTypes: [Array, String],
+    needButton: {
+      type: Boolean,
+      default: false
+    },
     disabled: Boolean,
     ui: String,
     maxCount: Number,
@@ -634,6 +638,7 @@ function getProgress () {
         height: 18px !important;
         color: #fff;
         line-height: 1;
+        font-size: @veui-font-size-normal;
       }
       button:active,
       button:hover {
@@ -716,6 +721,14 @@ function getProgress () {
       width: @image-large;
       line-height: @image-large;
     }
+  }
+  &[ui~="bottom-mask"] &-list-image-mask {
+    top: auto;
+    bottom: @list-padding;
+    left: @list-padding;
+    width: ~"calc(100% - "2 * @list-padding~")";
+    height: 3 * @veui-font-size-normal;
+    line-height: 3 * @veui-font-size-normal;
   }
   .@{prefix-button}[ui~="simple"] {
     border: none;

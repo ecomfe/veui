@@ -4,10 +4,14 @@
     <div style="margin-bottom: 10px">
       <veui-button @click="toggleUploaderType('')">切换上传类型</veui-button>
       <veui-button @click="toggleAlign('')">切换横竖排列</veui-button>
-      <veui-button @click="togglePreview('')">上传类型是文件时，切换显示小图预览</veui-button>
+      <veui-button @click="togglePreview('')">上传类型是文件时，切换是否显示小图预览</veui-button>
+      <br>
       <veui-button @click="changeImageSize('large')">上传类型是图片时，显示大图</veui-button>
       <veui-button @click="changeImageSize('')">中图</veui-button>
       <veui-button @click="changeImageSize('small')">小图</veui-button>
+      <br>
+      <veui-button @click="toggleNeedButton">上传类型是图片时，切换显示上传按钮是button还是列表里的+</veui-button>
+      <veui-button @click="toggleMaskType">上传类型是图片时，切换显示预览图遮罩类型是全部遮罩还是底部部分遮罩</veui-button>
       <br>
       <veui-button @click="changeUploadingContent('text')">切换上传进度中的内容，显示文字</veui-button>
       <veui-button @click="changeUploadingContent('progressPercent')">显示进度百分比</veui-button>
@@ -23,6 +27,7 @@
       :files="files"
       :maxSize="10"
       :previewImage="previewImage"
+      :needButton="needButton"
       extentionTypes="jpg,jpeg,gif"
       :args="extraArgs"
       :ui="ui"
@@ -38,7 +43,8 @@
     <div style="margin-bottom: 10px">
       <veui-button @click="toggleUploaderType('Iframe')">切换上传类型</veui-button>
       <veui-button @click="toggleAlign('Iframe')">切换横竖排列</veui-button>
-      <veui-button @click="togglePreview('Iframe')">上传类型是文件时，切换显示小图预览</veui-button>
+      <veui-button @click="togglePreview('Iframe')">上传类型是文件时，切换是否显示小图预览</veui-button>
+      <br>
       <veui-button @click="changeImageSize('large', 'Iframe')">上传类型是图片时，显示大图</veui-button>
       <veui-button @click="changeImageSize('', 'Iframe')">中图</veui-button>
       <veui-button @click="changeImageSize('small', 'Iframe')">小图</veui-button>
@@ -82,8 +88,9 @@ export default {
     return {
       uploaderType: 'image',
       uploaderTypeIframe: 'file',
-      ui: 'multiline horizontal',
+      ui: 'multiline horizontal bottom-mask',
       uiIframe: 'multiline horizontal',
+      needButton: false,
       previewImage: true,
       previewImageIframe: true,
       uploadingContent: 'progressPercent',
@@ -186,6 +193,16 @@ export default {
     },
     togglePreview (iframe = '') {
       this['previewImage' + iframe] = !this['previewImage' + iframe]
+    },
+    toggleMaskType () {
+      if (this.uiProps.indexOf('bottom-mask') > -1) {
+        this.ui = this.ui.replace('bottom-mask', '')
+      } else {
+        this.ui += 'bottom-mask'
+      }
+    },
+    toggleNeedButton () {
+      this.needButton = !this.needButton
     },
     changeImageSize (size, iframe = '') {
       let ui = 'ui' + iframe
