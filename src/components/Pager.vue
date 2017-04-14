@@ -15,7 +15,8 @@
           <li v-for="item in pageIndicatorSeries" :class="{
             'veui-active': item.pageNo === pageNo
           }">
-            <a :href="item.href" :data-page-no="item.pageNo">{{ item.text }}</a>
+            <router-link :to="item.href">{{ item.text }}</router-link>
+            <!-- <a :href="item.href" :data-page-no="item.pageNo">{{ item.text }}</a> -->
           </li>
         </ul>
         <div class="veui-buttons">

@@ -36,9 +36,10 @@ export default {
   },
   data () {
     return {
-      pageNo: 1,
+      pageNo: parseInt(this.$route.params.pageNo, 10),
       pageTotal: 10101,
-      hrefTpl: '#/pager/$page',
+      // hrefTpl: '#/pager/$page',
+      hrefTpl: '/pager/$page',
 
       fifthPagerMessage: ''
     }
@@ -62,6 +63,7 @@ export default {
   beforeRouteUpdate ({params}, from, next) {
     let pageNo = parseInt(params.pageNo, 10)
     this.pageNo = isNaN(pageNo) ? 1 : pageNo
+    next()
   }
 }
 </script>

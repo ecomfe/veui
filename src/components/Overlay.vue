@@ -1,17 +1,18 @@
 <template>
   <div class="veui-overlay">
-    <slot name="target"></slot>
     <div class="veui-overlay-box"
       :class="overlayClass"
       :ui="ui"
       ref="box"
       :style="{zIndex}"
-      v-show="open"><slot></slot></div>
+      v-show="overlayVisible">
+      <slot></slot>
+    </div>
   </div>
 </template>
 <script>
   import Tether from 'tether'
-  import { omit, isObject, isString } from 'lodash'
+  import { omit, isObject, isString, isArray, isBoolean, find } from 'lodash'
 
   const ZINDEX_INSTANCE_KEY = '__veui_overlay_zindex_instance'
 
@@ -19,74 +20,178 @@
     name: 'veui-overlay',
     uiTypes: ['overlay'],
     props: {
+      ui: String,
+      overlayClass: {
+        validator (value) {
+          return isObject(value) || isString(value)
+        },
+        default: null
+      },
       open: {
-        type: Boolean,
+        validator (value) {
+          return isBoolean(value) || isObject(value)
+        },
         default: false
       },
-      ui: String,
       options: {
         type: Object,
         default () {
           return {}
         }
       },
-      overlayClass: {
-        validator (value) {
-          return isObject(value) || isString(value)
-        },
+      defaultOptions: {
+        type: Object,
+        default () {
+          return {}
+        }
+      },
+      targets: {
+        type: Array,
         default: null
       }
     },
     data () {
       return {
-        zIndex: 0
+        zIndex: 0,
+        appendBody: false,
+        overlayVisible: false
       }
     },
-    watch: {
-      open (value) {
-        // 在显示的时候重新定位一下，因为在隐藏状态下计算不了位置
-        if (value && this.isAttach()) {
-          this.$nextTick(() => this.tether.position())
-        }
-      }
+    created () {
+      this.isOpenDirty = true
+      this.$watch('open', () => {
+        this.isOpenDirty = true
+        this.$forceUpdate()
+      }, { deep: true })
     },
     mounted () {
-      if (this.isAttach()) {
-        this.tether = new Tether({
-          element: this.$refs.box,
-          target: this.$slots.target[0].elm,
-          ...omit(this.options, 'element', 'target')
-        })
-      } else {
-        let box = this.$refs.box
-        document.body.appendChild(box)
+      const box = this.$refs.box
+      document.body.appendChild(box)
+    },
+    beforeUpdate () {
+      if (this.isOpenDirty) {
+        this.isOpenDirty = false
+        this.updateOverlay()
       }
-
-      this[ZINDEX_INSTANCE_KEY] = this.$veui.addOverlay(this.isAttach() ? this.findParentOverlayId() : null)
-      this[ZINDEX_INSTANCE_KEY].$on(
-        'zindexchange',
-        zIndex => {
-          this.zIndex = zIndex
-        }
-      )
-      this[ZINDEX_INSTANCE_KEY].refresh()
     },
     methods: {
+      updateOverlay () {
+        if (this.isAttach()) {
+          const { targetRef, targetIndex } = this.findAttachTarget()
+          if (targetRef) {
+            this.closeOverlay()
+            this.openOverlay(targetRef, targetIndex)
+          } else {
+            this.closeOverlay()
+          }
+        } else {
+          if (this.open) {
+            this.closeOverlay()
+            this.openOverlay()
+          } else {
+            this.closeOverlay()
+          }
+        }
+      },
+      findAttachTarget () {
+        // 找到第一个要求显示的元素
+        let targetRef
+        let targetIndex
+        find(this.open, (visible, ref) => {
+          if (isArray(visible)) {
+            return find(visible, (v, index) => {
+              if (v) {
+                targetRef = ref
+                targetIndex = index
+                return true
+              }
+            })
+          } else if (visible) {
+            targetRef = ref
+            targetIndex = 0
+          }
+        })
+
+        return { targetRef, targetIndex }
+      },
+
+      openOverlay (targetRef, targetIndex) {
+        function getOptions (targetRef, targetIndex) {
+          if (!this.options[targetRef]) {
+            return this.defaultOptions
+          }
+
+          if (isObject(this.options[targetRef])) {
+            return targetIndex === 0 ? this.options[targetRef] : this.defaultOptions
+          }
+
+          if (isArray(this.options[targetRef])) {
+            return this.options[targetRef][targetIndex] || this.defaultOptions
+          }
+        }
+
+        function createZIndexInstance (attach) {
+          this[ZINDEX_INSTANCE_KEY] = this.$veui.addOverlay(attach ? this.findParentOverlayId() : null)
+          this[ZINDEX_INSTANCE_KEY].$on(
+            'zindexchange',
+            zIndex => {
+              this.zIndex = zIndex
+            }
+          )
+          this[ZINDEX_INSTANCE_KEY].refresh()
+        }
+
+        const attach = this.isAttach()
+        if (attach) {
+          const targets = this.$vnode.context.$refs[targetRef]
+          const target = isArray(targets) ? targets[targetIndex] : targets
+          const targetNode = target.$el || target
+          if (targetNode) {
+            this.overlayVisible = true
+            this.tether = new Tether({
+              element: this.$refs.box,
+              target: targetNode,
+              ...omit(getOptions.call(this, targetRef, targetIndex), 'element', 'target')
+            })
+            this.$nextTick(() => this.tether.position())
+            createZIndexInstance.call(this, true)
+          }
+        } else {
+          this.overlayVisible = true
+          createZIndexInstance.call(this, false)
+        }
+      },
+
+      closeOverlay () {
+        if (this.isAttach()) {
+          this.tether && this.tether.destroy()
+          this.tether = null
+        }
+
+        this.overlayVisible = false
+
+        if (this[ZINDEX_INSTANCE_KEY]) {
+          this[ZINDEX_INSTANCE_KEY].$off()
+          this[ZINDEX_INSTANCE_KEY].remove()
+          this[ZINDEX_INSTANCE_KEY] = null
+        }
+      },
 
       isOverlay (componentInstance) {
         return componentInstance.uiTypes && componentInstance.uiTypes[0] === 'overlay'
       },
 
       /**
-       * 向上找到父级overlay组件的Id
+       * 向上找到父级overlay组件的Id。
+       * 前提条件：Overlay和target元素必须在同一个父Overlay之内
        */
       findParentOverlayId () {
-        let cur = this.$slots.target[0]
+        let cur = this.$vnode.context
         while (cur) {
-          if (cur.componentInstance && this.isOverlay(cur.componentInstance)) {
-            return cur.componentInstance[ZINDEX_INSTANCE_KEY].id
+          if (cur && this.isOverlay(cur)) {
+            return cur[ZINDEX_INSTANCE_KEY].id
           }
-          cur = cur.parent
+          cur = cur.$parent
         }
       },
 
@@ -95,29 +200,17 @@
       },
 
       isAttach () {
-        return this.$slots.target && this.$slots.target.length
+        return !!this.targets
       }
     },
     beforeDestroy () {
-      if (this.isAttach()) {
-        this.tether.destroy()
-        document.body.removeChild(this.tether.element)
-      } else {
-        document.body.removeChild(this.$refs.box)
-      }
-
-      this[ZINDEX_INSTANCE_KEY].$off()
-      this[ZINDEX_INSTANCE_KEY].remove()
-      this[ZINDEX_INSTANCE_KEY] = null
+      this.closeOverlay()
+      this.$refs.box.parentNode.removeChild(this.$refs.box)
     }
   }
 </script>
 <style lang="less">
 .veui-overlay {
-  display: inline-block;
-}
-
-.veui-overlay-box {
-  position: absolute;
+  display: none;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <article>
+  <article class="demo-dialog">
     <h1><code>&lt;veui-dialog&gt;</code></h1>
      <p>
       <veui-dialog :modal="true"
@@ -101,7 +101,13 @@ export default {
 </script>
 
 <style lang="less">
-.svg {
-  width: 20px;
+.demo-dialog {
+  .svg {
+    width: 20px;
+  }
+
+  .veui-button {
+    margin-right: 10px;
+  }
 }
 </style>

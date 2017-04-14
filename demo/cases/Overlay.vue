@@ -3,15 +3,19 @@
     <h1><code>&lt;veui-overlay&gt;</code></h1>
 
     <div class="row">
-      <veui-overlay overlay-class="demo-overlay-box" :open="overlayVisible"
-        :options="{attachment: 'top right', targetAttachment: 'top left'}">
+      <veui-button slot="target"
+        ui="primary"
+        @click="overlayVisible=!overlayVisible"
+        ref="clickOpen">
+        <template v-if="overlayVisible">隐藏overlay</template>
+        <template v-else>展示overlay</template>
+      </veui-button>
+
+      <veui-overlay overlay-class="demo-overlay-box"
+        :targets="['clickOpen']"
+        :open="{clickOpen: overlayVisible}"
+        :defaultOptions="{attachment: 'top right', targetAttachment: 'top left'}">
         点击按钮展开的
-        <veui-button slot="target"
-          ui="primary"
-          @click="overlayVisible=!overlayVisible">
-          <template v-if="overlayVisible">隐藏overlay</template>
-          <template v-else>展示overlay</template>
-        </veui-button>
       </veui-overlay>
     </div>
 
@@ -24,11 +28,13 @@
       </pre>
       <div class="preview">
         <div class="scroll-content">
-          <veui-overlay overlay-class="demo-overlay-box" :open="true"
-            :options="{attachment: 'top right', targetAttachment: 'top left'}">
+          <veui-overlay overlay-class="demo-overlay-box"
+            :targets="['overlay1']"
+            :open="{overlay1: true}"
+            :defaultOptions="{attachment: 'top right', targetAttachment: 'top left'}">
             提示信息
-            <div class="target" slot="target"></div>
           </veui-overlay>
+          <div class="target" ref="overlay1"></div>
         </div>
       </div>
     </div>
@@ -42,13 +48,39 @@
       </pre>
       <div class="preview">
         <div class="scroll-content">
-          <veui-overlay overlay-class="demo-overlay-box" :open="true"
-            :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
+          <div class="target" slot="target" ref="overlay2"></div>
+          <veui-overlay overlay-class="demo-overlay-box"
+            :targets="['overlay2']"
+            :open="{overlay2: true}"
+            :defaultOptions="{attachment: 'bottom left', targetAttachment: 'top left'}">
             提示信息
-            <div class="target" slot="target"></div>
           </veui-overlay>
         </div>
       </div>
+    </div>
+
+    <div class="row">
+      <veui-button ref="overlay3" @click="showMultiFirst">第一个target</veui-button>
+      <veui-button ref="overlay4" @click="showMultiSecond">第二个target</veui-button>
+      <veui-overlay overlay-class="demo-overlay-box"
+        :targets="['overlay3', 'overlay4']"
+        :open="multiTargetOpen"
+        :options="multiOptions">多个target</veui-overlay>
+    </div>
+
+    <div class="row">
+      <veui-button v-for="(item, index) in items"
+        ref="overlay5"
+        :key="item.name"
+        @click="showItem(item, index)">
+        {{ item.name }}
+      </veui-button>
+      <veui-overlay overlay-class="demo-overlay-box"
+        :targets="['overlay5']"
+        :open="vforOpen"
+        :defaultOptions="{attachment: 'bottom left', targetAttachment: 'top left'}">
+        年龄是{{ vforCurrentItem.age }}
+      </veui-overlay>
     </div>
 
   </article>
@@ -63,16 +95,60 @@ export default {
     'veui-button': Button
   },
   data () {
+    const items = [
+      {
+        name: 'John',
+        age: 18
+      },
+      {
+        name: 'Joe',
+        age: 19
+      },
+      {
+        name: 'Amy',
+        age: 20
+      }
+    ]
     return {
-      overlayVisible: false
+      overlayVisible: false,
+      multiTargetOpen: {
+        overlay3: true,
+        overlay4: false
+      },
+      multiOptions: {
+        overlay3: {
+          attachment: 'bottom left',
+          targetAttachment: 'top left'
+        },
+        overlay4: {
+          attachment: 'top left',
+          targetAttachment: 'top right'
+        }
+      },
+      items,
+      vforOpen: { overlay5: [ true ] },
+      vforCurrentItem: items[0]
     }
   },
   methods: {
+    showMultiFirst () {
+      this.multiTargetOpen.overlay3 = true
+      this.multiTargetOpen.overlay4 = false
+    },
+    showMultiSecond () {
+      this.multiTargetOpen.overlay3 = false
+      this.multiTargetOpen.overlay4 = true
+    },
+    showItem (item, index) {
+      this.vforOpen.overlay5 = []
+      this.vforOpen.overlay5[index] = true
+      this.vforCurrentItem = item
+    }
   }
 }
 </script>
 <style lang="less">
-@import "../../src/styles/theme-default/variables";
+@import "../../src/styles/theme-default/lib.less";
 
 .demo-overlay-box {
   box-shadow: 1px 1px 6px @veui-shadow-color-normal;
@@ -115,6 +191,10 @@ export default {
     background: @veui-success-color-primary;
     width: 100px;
     height: 80px;
+  }
+
+  .veui-button {
+    margin-right: 20px;
   }
 }
 </style>

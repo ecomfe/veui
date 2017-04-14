@@ -223,6 +223,9 @@ export default {
   }
 
   .veui-dialog-box-mask {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
     background: rgba(204, 204, 204, .6);
@@ -261,6 +264,7 @@ export default {
 
   .veui-dialog-content-body {
     padding-top: 20px;
+    box-sizing: border-box;
   }
 
   .veui-dialog-content-foot {
