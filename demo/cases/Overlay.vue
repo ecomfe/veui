@@ -12,9 +12,9 @@
       </veui-button>
 
       <veui-overlay overlay-class="demo-overlay-box"
-        :targets="['clickOpen']"
-        :open="{clickOpen: overlayVisible}"
-        :defaultOptions="{attachment: 'top right', targetAttachment: 'top left'}">
+        target-ref="clickOpen"
+        :open="overlayVisible"
+        :options="{attachment: 'top right', targetAttachment: 'top left'}">
         点击按钮展开的
       </veui-overlay>
     </div>
@@ -29,9 +29,9 @@
       <div class="preview">
         <div class="scroll-content">
           <veui-overlay overlay-class="demo-overlay-box"
-            :targets="['overlay1']"
-            :open="{overlay1: true}"
-            :defaultOptions="{attachment: 'top right', targetAttachment: 'top left'}">
+            target-ref="overlay1"
+            :open="true"
+            :options="{attachment: 'top right', targetAttachment: 'top left'}">
             提示信息
           </veui-overlay>
           <div class="target" ref="overlay1"></div>
@@ -48,11 +48,11 @@
       </pre>
       <div class="preview">
         <div class="scroll-content">
-          <div class="target" slot="target" ref="overlay2"></div>
+          <div class="target" ref="overlay2"></div>
           <veui-overlay overlay-class="demo-overlay-box"
-            :targets="['overlay2']"
-            :open="{overlay2: true}"
-            :defaultOptions="{attachment: 'bottom left', targetAttachment: 'top left'}">
+            target-ref="overlay2"
+            :open="true"
+            :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
             提示信息
           </veui-overlay>
         </div>
@@ -63,22 +63,23 @@
       <veui-button ref="overlay3" @click="showMultiFirst">第一个target</veui-button>
       <veui-button ref="overlay4" @click="showMultiSecond">第二个target</veui-button>
       <veui-overlay overlay-class="demo-overlay-box"
-        :targets="['overlay3', 'overlay4']"
+        :target-ref="multiTargetRef"
         :open="multiTargetOpen"
         :options="multiOptions">多个target</veui-overlay>
     </div>
 
     <div class="row">
-      <veui-button v-for="(item, index) in items"
+      <veui-button v-for="(item, index) in vforItems"
         ref="overlay5"
         :key="item.name"
         @click="showItem(item, index)">
         {{ item.name }}
       </veui-button>
       <veui-overlay overlay-class="demo-overlay-box"
-        :targets="['overlay5']"
+        :target-ref="vforTargetRef"
+        :target-index="vforTargetIndex"
         :open="vforOpen"
-        :defaultOptions="{attachment: 'bottom left', targetAttachment: 'top left'}">
+        :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
         年龄是{{ vforCurrentItem.age }}
       </veui-overlay>
     </div>
@@ -111,38 +112,34 @@ export default {
     ]
     return {
       overlayVisible: false,
-      multiTargetOpen: {
-        overlay3: true,
-        overlay4: false
-      },
+
+      multiTargetRef: 'overlay3',
+      multiTargetOpen: false,
       multiOptions: {
-        overlay3: {
-          attachment: 'bottom left',
-          targetAttachment: 'top left'
-        },
-        overlay4: {
-          attachment: 'top left',
-          targetAttachment: 'top right'
-        }
+        attachment: 'bottom left',
+        targetAttachment: 'top left'
       },
-      items,
-      vforOpen: { overlay5: [ true ] },
-      vforCurrentItem: items[0]
+
+      vforItems: items,
+      vforOpen: false,
+      vforCurrentItem: items[0],
+      vforTargetRef: 'overlay5',
+      vforTargetIndex: 0
     }
   },
   methods: {
     showMultiFirst () {
-      this.multiTargetOpen.overlay3 = true
-      this.multiTargetOpen.overlay4 = false
+      this.multiTargetOpen = true
+      this.multiTargetRef = 'overlay3'
     },
     showMultiSecond () {
-      this.multiTargetOpen.overlay3 = false
-      this.multiTargetOpen.overlay4 = true
+      this.multiTargetOpen = true
+      this.multiTargetRef = 'overlay4'
     },
     showItem (item, index) {
-      this.vforOpen.overlay5 = []
-      this.vforOpen.overlay5[index] = true
+      this.vforOpen = true
       this.vforCurrentItem = item
+      this.vforTargetIndex = index
     }
   }
 }

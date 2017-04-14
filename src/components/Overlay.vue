@@ -12,7 +12,7 @@
 </template>
 <script>
   import Tether from 'tether'
-  import { omit, isObject, isString, isArray, isBoolean, find } from 'lodash'
+  import { omit, isObject, isString, isArray } from 'lodash'
 
   const ZINDEX_INSTANCE_KEY = '__veui_overlay_zindex_instance'
 
@@ -28,26 +28,22 @@
         default: null
       },
       open: {
-        validator (value) {
-          return isBoolean(value) || isObject(value)
-        },
+        type: Boolean,
         default: false
+      },
+      targetRef: {
+        type: String,
+        default: ''
+      },
+      targetIndex: {
+        type: Number,
+        default: 0
       },
       options: {
         type: Object,
         default () {
           return {}
         }
-      },
-      defaultOptions: {
-        type: Object,
-        default () {
-          return {}
-        }
-      },
-      targets: {
-        type: Array,
-        default: null
       }
     },
     data () {
@@ -55,25 +51,24 @@
         zIndex: 0,
         appendBody: false,
         overlayVisible: false,
-        targetRef: null,
-        targetIndex: null,
-        targetNode: null,
-        targetOptions: null
+        targetNode: null
       }
     },
     computed: {
       isAttach () {
-        return !!this.targets
+        return !!this.targetRef
       }
     },
-    created () {
-      this.$watch(
-        'open',
-        () => {
-          this.updateOverlayData()
-        },
-        { deep: true }
-      )
+    watch: {
+      open (value) {
+        this.updateOverlayData()
+      },
+      targetRef () {
+        this.updateOverlayData()
+      },
+      targetIndex () {
+        this.updateOverlayData()
+      }
     },
     mounted () {
       const box = this.$refs.box
@@ -88,80 +83,9 @@
       }
     },
     methods: {
-      updateOverlayData () {
-        this.isOpenDirty = true
-        this.overlayVisible = false
 
-        if (this.isAttach && this.open) {
-          const attachTarget = this.findAttachTarget()
-          this.targetRef = attachTarget.targetRef
-          this.targetIndex = attachTarget.targetIndex
-          this.targetNode = this.findAttachTargetNode()
-          this.targetOptions = this.getOptions(this.targetRef, this.targetIndex)
-
-          if (this.targetNode) {
-            this.overlayVisible = true
-          }
-        } else if (!this.isAttach && this.open) {
-          this.overlayVisible = true
-        }
-      },
-
-      updateOverlayDOM () {
-        if ((this.isAttach && this.targetNode) || this.open) {
-          this.closeOverlay()
-          this.openOverlay()
-        } else {
-          this.closeOverlay()
-        }
-      },
-      findAttachTarget () {
-        // 找到第一个要求显示的元素
-        let targetRef
-        let targetIndex
-        find(this.open, (visible, ref) => {
-          if (isArray(visible)) {
-            return find(visible, (v, index) => {
-              if (v) {
-                targetRef = ref
-                targetIndex = index
-                return true
-              }
-            })
-          } else if (visible) {
-            targetRef = ref
-            targetIndex = 0
-          }
-        })
-
-        return { targetRef, targetIndex }
-      },
-
-      findAttachTargetNode () {
-        if (!this.targetRef) {
-          return null
-        }
-        const targets = this.$vnode.context.$refs[this.targetRef]
-        const target = isArray(targets) ? targets[this.targetIndex] : targets
-        return target.$el || target
-      },
-
-      getOptions (targetRef, targetIndex) {
-        if (!this.options[targetRef]) {
-          return this.defaultOptions
-        }
-
-        if (isObject(this.options[targetRef])) {
-          return targetIndex === 0 ? this.options[targetRef] : this.defaultOptions
-        }
-
-        if (isArray(this.options[targetRef])) {
-          return this.options[targetRef][targetIndex] || this.defaultOptions
-        }
-      },
-
-      createZIndexInstance (attach) {
-        this[ZINDEX_INSTANCE_KEY] = this.$veui.addOverlay(attach ? this.findParentOverlayId() : null)
+      createZIndexInstance () {
+        this[ZINDEX_INSTANCE_KEY] = this.$veui.addOverlay(this.isAttach ? this.findParentOverlayId() : null)
         this[ZINDEX_INSTANCE_KEY].$on(
           'zindexchange',
           zIndex => {
@@ -171,22 +95,44 @@
         this[ZINDEX_INSTANCE_KEY].refresh()
       },
 
-      openOverlay () {
+      updateOverlayDOM () {
         if (this.isAttach) {
-          const targetNode = this.targetNode
-          if (targetNode) {
-            this.overlayVisible = true
+          if (this.open && this.targetNode) {
+            this.closeOverlay()
             this.tether = new Tether({
               element: this.$refs.box,
-              target: targetNode,
-              ...omit(this.targetOptions, 'element', 'target')
+              target: this.targetNode,
+              ...omit(this.options, 'element', 'target')
             })
             this.$nextTick(() => this.tether.position())
-            this.createZIndexInstance(true)
+            this.createZIndexInstance()
+          } else {
+            this.closeOverlay()
           }
         } else {
-          this.overlayVisible = true
-          this.createZIndexInstance(false)
+          if (this.open) {
+            this.closeOverlay()
+            this.createZIndexInstance()
+          } else {
+            this.closeOverlay()
+          }
+        }
+      },
+
+      updateOverlayData () {
+        this.isOpenDirty = true
+        this.overlayVisible = false
+        if (this.isAttach) {
+          if (this.open) {
+            let targetNode = this.$vnode.context.$refs[this.targetRef]
+            targetNode = isArray(targetNode) ? targetNode[this.targetIndex] : targetNode
+            this.targetNode = targetNode.$el || targetNode
+            this.overlayVisible = !!this.targetNode
+          } else {
+            this.overlayVisible = false
+          }
+        } else {
+          this.overlayVisible = this.open
         }
       },
 
@@ -195,8 +141,6 @@
           this.tether && this.tether.destroy()
           this.tether = null
         }
-
-        this.overlayVisible = false
 
         if (this[ZINDEX_INSTANCE_KEY]) {
           this[ZINDEX_INSTANCE_KEY].$off()
