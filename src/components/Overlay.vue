@@ -54,43 +54,65 @@
       return {
         zIndex: 0,
         appendBody: false,
-        overlayVisible: false
+        overlayVisible: false,
+        targetRef: null,
+        targetIndex: null,
+        targetNode: null,
+        targetOptions: null
+      }
+    },
+    computed: {
+      isAttach () {
+        return !!this.targets
       }
     },
     created () {
-      this.isOpenDirty = true
-      this.$watch('open', () => {
-        this.isOpenDirty = true
-        this.$forceUpdate()
-      }, { deep: true })
+      this.$watch(
+        'open',
+        () => {
+          this.updateOverlayData()
+        },
+        { deep: true }
+      )
     },
     mounted () {
       const box = this.$refs.box
       document.body.appendChild(box)
+
+      this.updateOverlayData()
     },
-    beforeUpdate () {
+    updated () {
       if (this.isOpenDirty) {
         this.isOpenDirty = false
-        this.updateOverlay()
+        this.updateOverlayDOM()
       }
     },
     methods: {
-      updateOverlay () {
-        if (this.isAttach()) {
-          const { targetRef, targetIndex } = this.findAttachTarget()
-          if (targetRef) {
-            this.closeOverlay()
-            this.openOverlay(targetRef, targetIndex)
-          } else {
-            this.closeOverlay()
+      updateOverlayData () {
+        this.isOpenDirty = true
+        this.overlayVisible = false
+
+        if (this.isAttach && this.open) {
+          const attachTarget = this.findAttachTarget()
+          this.targetRef = attachTarget.targetRef
+          this.targetIndex = attachTarget.targetIndex
+          this.targetNode = this.findAttachTargetNode()
+          this.targetOptions = this.getOptions(this.targetRef, this.targetIndex)
+
+          if (this.targetNode) {
+            this.overlayVisible = true
           }
+        } else if (!this.isAttach && this.open) {
+          this.overlayVisible = true
+        }
+      },
+
+      updateOverlayDOM () {
+        if ((this.isAttach && this.targetNode) || this.open) {
+          this.closeOverlay()
+          this.openOverlay()
         } else {
-          if (this.open) {
-            this.closeOverlay()
-            this.openOverlay()
-          } else {
-            this.closeOverlay()
-          }
+          this.closeOverlay()
         }
       },
       findAttachTarget () {
@@ -115,55 +137,61 @@
         return { targetRef, targetIndex }
       },
 
-      openOverlay (targetRef, targetIndex) {
-        function getOptions (targetRef, targetIndex) {
-          if (!this.options[targetRef]) {
-            return this.defaultOptions
-          }
+      findAttachTargetNode () {
+        if (!this.targetRef) {
+          return null
+        }
+        const targets = this.$vnode.context.$refs[this.targetRef]
+        const target = isArray(targets) ? targets[this.targetIndex] : targets
+        return target.$el || target
+      },
 
-          if (isObject(this.options[targetRef])) {
-            return targetIndex === 0 ? this.options[targetRef] : this.defaultOptions
-          }
-
-          if (isArray(this.options[targetRef])) {
-            return this.options[targetRef][targetIndex] || this.defaultOptions
-          }
+      getOptions (targetRef, targetIndex) {
+        if (!this.options[targetRef]) {
+          return this.defaultOptions
         }
 
-        function createZIndexInstance (attach) {
-          this[ZINDEX_INSTANCE_KEY] = this.$veui.addOverlay(attach ? this.findParentOverlayId() : null)
-          this[ZINDEX_INSTANCE_KEY].$on(
-            'zindexchange',
-            zIndex => {
-              this.zIndex = zIndex
-            }
-          )
-          this[ZINDEX_INSTANCE_KEY].refresh()
+        if (isObject(this.options[targetRef])) {
+          return targetIndex === 0 ? this.options[targetRef] : this.defaultOptions
         }
 
-        const attach = this.isAttach()
-        if (attach) {
-          const targets = this.$vnode.context.$refs[targetRef]
-          const target = isArray(targets) ? targets[targetIndex] : targets
-          const targetNode = target.$el || target
+        if (isArray(this.options[targetRef])) {
+          return this.options[targetRef][targetIndex] || this.defaultOptions
+        }
+      },
+
+      createZIndexInstance (attach) {
+        this[ZINDEX_INSTANCE_KEY] = this.$veui.addOverlay(attach ? this.findParentOverlayId() : null)
+        this[ZINDEX_INSTANCE_KEY].$on(
+          'zindexchange',
+          zIndex => {
+            this.zIndex = zIndex
+          }
+        )
+        this[ZINDEX_INSTANCE_KEY].refresh()
+      },
+
+      openOverlay () {
+        if (this.isAttach) {
+          const targetNode = this.targetNode
           if (targetNode) {
             this.overlayVisible = true
             this.tether = new Tether({
               element: this.$refs.box,
               target: targetNode,
-              ...omit(getOptions.call(this, targetRef, targetIndex), 'element', 'target')
+              ...omit(this.targetOptions, 'element', 'target')
             })
             this.$nextTick(() => this.tether.position())
-            createZIndexInstance.call(this, true)
+            this.createZIndexInstance(true)
           }
         } else {
           this.overlayVisible = true
-          createZIndexInstance.call(this, false)
+          this.createZIndexInstance(false)
         }
       },
 
       closeOverlay () {
-        if (this.isAttach()) {
+        if (this.isAttach) {
           this.tether && this.tether.destroy()
           this.tether = null
         }
@@ -197,10 +225,6 @@
 
       focus () {
         this[ZINDEX_INSTANCE_KEY].toTop()
-      },
-
-      isAttach () {
-        return !!this.targets
       }
     },
     beforeDestroy () {

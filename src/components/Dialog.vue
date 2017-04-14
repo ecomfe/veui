@@ -214,6 +214,9 @@ export default {
     display: none;
   }
 
+  .veui-dialog-box {
+    position: relative;
+  }
   .veui-dialog-box[ui~="reverse"] .veui-dialog-content-head {
     background: #fff;
   }
