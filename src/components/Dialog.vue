@@ -1,6 +1,6 @@
 <template>
   <veui-overlay class="veui-dialog"
-    :open="$data._open"
+    :open="localOpen"
     mode="NORMAL"
     :overlay-class="{ 'veui-dialog-box': true, 'veui-dialog-box-mask': modal }"
     :ui="ui"
@@ -13,11 +13,11 @@
         ref="head"
         v-drag>
         <span class="veui-dialog-content-head-title"
-          v-if="$data._title"
-          v-text="$data._title"></span>
+          v-if="localTitle"
+          v-text="localTitle"></span>
         <span class="veui-dialog-content-head-title" v-else><slot name="title">弹窗标题</slot></span>
         <a class="veui-dialog-content-head-close"
-          v-show="$data._closable"
+          v-show="localClosable"
           @click="hide"><icon name="close"></icon></a>
       </div>
       <div ref="body" class="veui-dialog-content-body" :style="{ height: `${bodyHeight}px` }"><slot></slot></div>
@@ -73,14 +73,14 @@ export default {
   },
   data () {
     return {
-      _open: this.open,
-      _width: this.width,
-      _closable: this.closable,
-      _left: 0,
-      _top: 0,
-      _height: this.height,
-      _title: this.title || null,
+      localOpen: this.open,
+      localWidth: this.width,
+      localClosable: this.closable,
+      localHeight: this.height,
+      localTitle: this.title || null,
 
+      left: 0,
+      top: 0,
       isDragging: false,
       dragDistanceX: 0,
       dragDistanceY: 0,
@@ -101,8 +101,8 @@ export default {
       }
 
       this.isDragging = true
-      this.dragInitX = this.$data._left
-      this.dragInitY = this.$data._top
+      this.dragInitX = this.left
+      this.dragInitY = this.top
     })
     this.$on('dragend', () => {
       if (!this.draggable) {
@@ -116,18 +116,18 @@ export default {
         return
       }
 
-      this.$data._left = this.dragInitX + distanceX
-      this.$data._top = this.dragInitY + distanceY
+      this.left = this.dragInitX + distanceX
+      this.top = this.dragInitY + distanceY
 
       this.isDragged = true
     })
   },
   watch: {
     title (value) {
-      this.$data._title = value
+      this.localTitle = value
     },
     open (value) {
-      this.$data._open = value
+      this.localOpen = value
 
       if (value) {
         this.$nextTick(() => {
@@ -138,13 +138,13 @@ export default {
       }
     },
     width (value) {
-      this.$data._width = value
+      this.localWidth = value
     },
     height (value) {
-      this.$data._height = value
+      this.localHeight = value
     },
     closable (value) {
-      this.$data._closable = value
+      this.localClosable = value
     }
   },
   computed: {
@@ -161,18 +161,18 @@ export default {
     },
     contentRectStyle () {
       return {
-        width: `${this.$data._width}px`,
-        height: `${this.$data._height}px`,
+        width: `${this.localWidth}px`,
+        height: `${this.localHeight}px`,
         left: 0,
         top: 0,
-        transform: `translateX(${this.$data._left}px) translateY(${this.$data._top}px)`
+        transform: `translateX(${this.left}px) translateY(${this.top}px)`
       }
     }
   },
   methods: {
     setPosition ({ topRatio = 0.5, leftRatio = 0.5 } = {}) {
-      this.$data._left = (window.innerWidth - this.$data._width) * leftRatio + document.body.scrollLeft
-      this.$data._top = (window.innerHeight - this.$data._height) * topRatio + document.body.scrollTop
+      this.left = (window.innerWidth - this.localWidth) * leftRatio + document.body.scrollLeft
+      this.top = (window.innerHeight - this.localHeight) * topRatio + document.body.scrollTop
     },
     setCenter () {
       this.setPosition()
@@ -186,8 +186,8 @@ export default {
       return this.height - headHeight - footHeight
     },
     hide () {
-      this.$data._open = false
-      this.$emit('propchange', 'open', this.$data._open)
+      this.localOpen = false
+      this.$emit('propchange', 'open', this.localOpen)
     },
     focus () {
       this.$refs.overlay.focus()

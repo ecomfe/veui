@@ -5,7 +5,7 @@
       :ui="ui"
       ref="box"
       :style="{zIndex}"
-      v-show="overlayVisible">
+      v-show="localOpen">
       <slot></slot>
     </div>
   </div>
@@ -31,7 +31,7 @@
         type: Boolean,
         default: false
       },
-      targetRef: {
+      target: {
         type: String,
         default: ''
       },
@@ -50,20 +50,20 @@
       return {
         zIndex: 0,
         appendBody: false,
-        overlayVisible: false,
+        localOpen: false,
         targetNode: null
       }
     },
     computed: {
       isAttach () {
-        return !!this.targetRef
+        return !!this.target
       }
     },
     watch: {
       open (value) {
         this.updateOverlayData()
       },
-      targetRef () {
+      target () {
         this.updateOverlayData()
       },
       targetIndex () {
@@ -121,18 +121,23 @@
 
       updateOverlayData () {
         this.isOpenDirty = true
-        this.overlayVisible = false
+        this.localOpen = false
         if (this.isAttach) {
           if (this.open) {
-            let targetNode = this.$vnode.context.$refs[this.targetRef]
+            let targetNode = this.$vnode.context.$refs[this.target]
             targetNode = isArray(targetNode) ? targetNode[this.targetIndex] : targetNode
             this.targetNode = targetNode.$el || targetNode
-            this.overlayVisible = !!this.targetNode
+            this.localOpen = !!this.targetNode
           } else {
-            this.overlayVisible = false
+            this.localOpen = false
           }
         } else {
-          this.overlayVisible = this.open
+          this.localOpen = this.open
+        }
+
+        // 发生了变化才抛事件出去
+        if (this.localOpen !== this.open) {
+          this.$emit('propchange', 'open', this.localOpen)
         }
       },
 

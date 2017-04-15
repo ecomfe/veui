@@ -12,7 +12,7 @@
       </veui-button>
 
       <veui-overlay overlay-class="demo-overlay-box"
-        target-ref="clickOpen"
+        target="clickOpen"
         :open="overlayVisible"
         :options="{attachment: 'top right', targetAttachment: 'top left'}">
         点击按钮展开的
@@ -29,7 +29,7 @@
       <div class="preview">
         <div class="scroll-content">
           <veui-overlay overlay-class="demo-overlay-box"
-            target-ref="overlay1"
+            target="overlay1"
             :open="true"
             :options="{attachment: 'top right', targetAttachment: 'top left'}">
             提示信息
@@ -50,7 +50,7 @@
         <div class="scroll-content">
           <div class="target" ref="overlay2"></div>
           <veui-overlay overlay-class="demo-overlay-box"
-            target-ref="overlay2"
+            target="overlay2"
             :open="true"
             :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
             提示信息
@@ -63,7 +63,7 @@
       <veui-button ref="overlay3" @click="showMultiFirst">第一个target</veui-button>
       <veui-button ref="overlay4" @click="showMultiSecond">第二个target</veui-button>
       <veui-overlay overlay-class="demo-overlay-box"
-        :target-ref="multiTargetRef"
+        :target="multiTargetRef"
         :open="multiTargetOpen"
         :options="multiOptions">多个target</veui-overlay>
     </div>
@@ -76,7 +76,7 @@
         {{ item.name }}
       </veui-button>
       <veui-overlay overlay-class="demo-overlay-box"
-        :target-ref="vforTargetRef"
+        :target="vforTargetRef"
         :target-index="vforTargetIndex"
         :open="vforOpen"
         :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
