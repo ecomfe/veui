@@ -22,10 +22,10 @@
       :throughIframe="false"
       action="/upload"
       :disabled="false"
-      :maxCount="3"
+      :max-count="3"
       :tip="tip"
       :files="files"
-      :maxSize="10"
+      :max-size="10"
       :previewImage="previewImage"
       :needButton="needButton"
       extentionTypes="jpg,jpeg,gif"
@@ -54,10 +54,10 @@
       :throughIframe="true"
       iframeCallbackType="postmessage"
       :disabled="false"
-      :maxCount="3"
+      :max-count="3"
       :tip="tip"
       :files="filesIframe"
-      :maxSize="10"
+      :max-size="10"
       :previewImage="previewImageIframe"
       extentionTypes="jpg,jpeg,gif"
       :uploadCallback="uploadCallback"
@@ -99,13 +99,13 @@ export default {
           name: 'aaaa.jpg',
           fileUid: '123456',
           size: '200kb',
-          src: 'http://ww4.sinaimg.cn/bmiddle/88d71a4bjw1eyhwlb01d0j20ci0go0tu.jpg'
+          src: 'https://www.baidu.com/img/bd_logo1.png'
         },
         {
           name: 'bbbb.gif',
           fileUid: '222333',
           size: '350kb',
-          src: 'http://ww4.sinaimg.cn/mw690/6926e2a6gw1f2dhgdg52qj20j60as40h.jpg'
+          src: 'http://images.nvidia.com/graphics-cards/geforce/pascal/cn/images/1080-ti-design.png'
         }
       ],
       filesIframe: [
@@ -113,13 +113,13 @@ export default {
           name: 'aaaa.jpg',
           fileUid: '123456',
           size: '200kb',
-          src: 'http://ww4.sinaimg.cn/bmiddle/88d71a4bjw1eyhwlb01d0j20ci0go0tu.jpg'
+          src: 'https://www.baidu.com/img/bd_logo1.png'
         },
         {
           name: 'bbbb.gif',
           fileUid: '222333',
           size: '350kb',
-          src: 'http://ww4.sinaimg.cn/mw690/6926e2a6gw1f2dhgdg52qj20j60as40h.jpg'
+          src: 'http://images.nvidia.com/graphics-cards/geforce/pascal/cn/images/1080-ti-design.png'
         }
       ],
       extraArgs: {

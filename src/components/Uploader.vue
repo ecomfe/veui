@@ -28,12 +28,12 @@
               <span :class="classType + '-name'"
                 :title="uiProps.indexOf('ellipsis') > -1 ? file.name : ''">{{file.name}}</span>
               <span :class="classType + '-size'">{{convertSizeUnit(file.size)}}</span>
-              <veui-button ui="simple delete" @click="$emit('delete', file)"><icon name="close"></icon></veui-button>
+              <veui-button ui="link delete" @click="$emit('delete', file)"><icon name="close"></icon></veui-button>
             </template>
             <template v-else-if="uploaderType === 'image'">
               <img :src="file.src" :alt="file.alt || ''">
               <div :class="classType + '-mask'">
-                <veui-button ui="simple" @click="$emit('delete', file)">移除</veui-button>
+                <veui-button ui="link" @click="$emit('delete', file)">移除</veui-button>
               </div>
             </template>
             <transition name="veui-uploader-fade">
@@ -52,7 +52,7 @@
               :class="uploaderType === 'image' ? classType + '-status' : ''"
               :uploadingText="uploadingText" :convertSizeUnit="convertSizeUnit">
             </veui-uploader-progress>
-            <veui-button v-if="uploaderType === 'file'" ui="simple delete"
+            <veui-button v-if="uploaderType === 'file'" ui="link delete"
               @click="cancelFile(file)"><icon name="close"></icon></veui-button>
             <veui-button v-else-if="uploaderType === 'image'" ui="aux operation"
               @click="cancelFile(file)">取消</veui-button>
@@ -63,7 +63,7 @@
             <div :class="classType + '-status'">
               <span class="veui-uploader-failure">{{file.failureReason}}</span>
             </div>
-            <veui-button :ui="uploaderType === 'file' ? 'simple' : 'aux operation'"
+            <veui-button :ui="uploaderType === 'file' ? 'link' : 'aux operation'"
               @click="retry(file)">重试</veui-button>
           </slot>
         </template>
@@ -135,8 +135,8 @@ export default {
     },
     disabled: Boolean,
     ui: String,
-    maxCount: Number,
-    maxSize: Number,
+    'max-count': Number,
+    'max-size': Number,
     args: Object,
     uploadingContent: {
       type: String,
@@ -266,8 +266,8 @@ export default {
         })
       ]
 
-      if (this.maxCount && this.fileList.length > this.maxCount) {
-        this.fileList = this.fileList.slice(-this.maxCount)
+      if (this['max-count'] && this.fileList.length > this['max-count']) {
+        this.fileList = this.fileList.slice(-this['max-count'])
       }
       this.$emit('change', this.fileList)
       if (this.throughIframe) this.submit()
@@ -288,7 +288,7 @@ export default {
       return extentionTypes.some(ext => endsWith(filename, '.' + ext))
     },
     validateFileSize (fileSize) {
-      return !this.maxSize || !fileSize || fileSize <= this.maxSize * 1024 * 1024
+      return !this['max-size'] || !fileSize || fileSize <= this['max-size'] * 1024 * 1024
     },
     uploadFiles () {
       this.fileList.forEach(file => {
@@ -528,7 +528,7 @@ function getProgress () {
     }
     li:hover {
       background-color: @veui-gray-color-sup-3;
-      .@{prefix-button}[ui~="simple"] {
+      .@{prefix-button}[ui~="link"] {
         background-color: @veui-gray-color-sup-3;
       }
       .@{prefix-button}[ui~="delete"] {
@@ -634,9 +634,7 @@ function getProgress () {
       button {
         vertical-align: middle;
         background: none;
-        color: #fff;
-        line-height: 1;
-        height: 1.4em !important;
+        color: #fff !important;
         font-size: @veui-font-size-normal;
       }
       button:active,
@@ -728,15 +726,6 @@ function getProgress () {
     width: ~"calc(100% - "2 * @list-padding~")";
     height: 3 * @veui-font-size-normal;
     line-height: 3 * @veui-font-size-normal;
-  }
-  .@{prefix-button}[ui~="simple"] {
-    border: none;
-    background-color: none;
-    transition: none;
-    .veui-shadow(none);
-    height: @icon-size;
-    min-width: 2em;
-    padding: 0;
   }
   .@{prefix-button}[ui~="delete"] {
     color: @veui-alert-color-primary;
