@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { includes, upperFirst } from 'lodash'
+import { includes, upperFirst, isObject, isString } from 'lodash'
 import Overlay from './Overlay'
 import 'vue-awesome/icons/close'
 import Button from './Button'
@@ -69,6 +69,12 @@ export default {
     draggable: {
       type: Boolean,
       default: false
+    },
+    overlayClass: {
+      validator (value) {
+        return isObject(value) || isString(value)
+      },
+      default: null
     }
   },
   data () {
