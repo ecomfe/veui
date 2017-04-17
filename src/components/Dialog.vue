@@ -187,7 +187,7 @@ export default {
     },
     hide () {
       this.localOpen = false
-      this.$emit('propchange', 'open', this.localOpen)
+      this.$emit('update:open', this.localOpen)
     },
     focus () {
       this.$refs.overlay.focus()

@@ -137,7 +137,7 @@
 
         // 发生了变化才抛事件出去
         if (this.localOpen !== this.open) {
-          this.$emit('propchange', 'open', this.localOpen)
+          this.$emit('update:open', this.localOpen)
         }
       },
 
