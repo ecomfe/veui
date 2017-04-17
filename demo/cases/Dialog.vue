@@ -3,6 +3,7 @@
     <h1><code>&lt;veui-dialog&gt;</code></h1>
      <p>
       <veui-dialog :modal="true"
+        overlay-class="test"
         :open="modalDialogVisible"
         @update:open="(value) => modalDialogVisible = value"></veui-dialog>
       <veui-button ui="primary"

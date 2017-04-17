@@ -2,7 +2,7 @@
   <veui-overlay class="veui-dialog"
     :open="localOpen"
     mode="NORMAL"
-    :overlay-class="{ 'veui-dialog-box': true, 'veui-dialog-box-mask': modal }"
+    :overlay-class="mergedOverlayClass"
     :ui="ui"
     ref="overlay">
     <div class="veui-dialog-content"
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { includes, upperFirst, isObject, isString } from 'lodash'
+import { includes, upperFirst, isObject, isString, each, extend } from 'lodash'
 import Overlay from './Overlay'
 import 'vue-awesome/icons/close'
 import Button from './Button'
@@ -154,6 +154,21 @@ export default {
     }
   },
   computed: {
+    mergedOverlayClass () {
+      const klass = {}
+      if (isString(this.overlayClass)) {
+        each(this.overlayClass.split(/\s+/), cls => {
+          klass[cls] = true
+        })
+      } else {
+        extend(klass, this.overlayClass)
+      }
+
+      klass['veui-dialog-box'] = true
+      klass['veui-dialog-box-mask'] = this.modal
+
+      return klass
+    },
     position () {
       if (includes(this.uiProps, 'top')) {
         return 'top'
