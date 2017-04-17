@@ -41,12 +41,6 @@ export default {
         this.$emit('redirect', event)
       }
     }
-  },
-  created () {
-    let redirectListeners = this._events.redirect
-    if (redirectListeners && !this.native) {
-      console.warn('Redirect event only works on the native-enabled <HyperLink>')
-    }
   }
 }
 </script>
