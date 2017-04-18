@@ -70,14 +70,13 @@
 
     <div class="row">
       <veui-button v-for="(item, index) in vforItems"
-        ref="overlay5"
+        :ref="`overlay5-${index}`"
         :key="item.name"
         @click="showItem(item, index)">
         {{ item.name }}
       </veui-button>
       <veui-overlay overlay-class="demo-overlay-box"
         :target="vforTargetRef"
-        :target-index="vforTargetIndex"
         :open="vforOpen"
         :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
         年龄是{{ vforCurrentItem.age }}
@@ -123,8 +122,7 @@ export default {
       vforItems: items,
       vforOpen: false,
       vforCurrentItem: items[0],
-      vforTargetRef: 'overlay5',
-      vforTargetIndex: 0
+      vforTargetRef: 'overlay5-0'
     }
   },
   methods: {
@@ -139,7 +137,7 @@ export default {
     showItem (item, index) {
       this.vforOpen = true
       this.vforCurrentItem = item
-      this.vforTargetIndex = index
+      this.vforTargetRef = `overlay5-${index}`
     }
   }
 }

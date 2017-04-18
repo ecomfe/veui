@@ -35,10 +35,6 @@
         type: String,
         default: ''
       },
-      targetIndex: {
-        type: Number,
-        default: 0
-      },
       options: {
         type: Object,
         default () {
@@ -64,9 +60,6 @@
         this.updateOverlayData()
       },
       target () {
-        this.updateOverlayData()
-      },
-      targetIndex () {
         this.updateOverlayData()
       }
     },
@@ -125,7 +118,7 @@
         if (this.isAttach) {
           if (this.open) {
             let targetNode = this.$vnode.context.$refs[this.target]
-            targetNode = isArray(targetNode) ? targetNode[this.targetIndex] : targetNode
+            targetNode = isArray(targetNode) ? targetNode[0] : targetNode
             this.targetNode = targetNode.$el || targetNode
             this.localOpen = !!this.targetNode
           } else {
