@@ -15,6 +15,8 @@ import Checkbox from './Checkbox'
 import RadioboxGroup from './RadioboxGroup'
 import CheckboxGroup from './CheckboxGroup'
 import Tooltip from './Tooltip'
+import Toast from './Toast'
+import Alert from './Alert'
 
 export default [
   {
@@ -101,6 +103,16 @@ export default [
     path: '/tooltip',
     name: 'Tooltip',
     component: Tooltip
+  },
+  {
+    path: '/toast',
+    name: 'Toast',
+    component: Toast
+  },
+  {
+    path: '/alert',
+    name: 'Alert',
+    component: Alert
   }
 
 ]
