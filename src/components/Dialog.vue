@@ -157,7 +157,7 @@ export default {
     mergedOverlayClass () {
       const klass = {}
       if (isString(this.overlayClass)) {
-        each(this.overlayClass.split(/\s+/), cls => {
+        each(this.overlayClass.split(/[\s']+/), cls => {
           klass[cls] = true
         })
       } else {
@@ -186,7 +186,7 @@ export default {
         height: `${this.localHeight}px`,
         left: 0,
         top: 0,
-        transform: `translateX(${this.left}px) translateY(${this.top}px)`
+        transform: `translate(${this.left}px,${this.top}px)`
       }
     }
   },
