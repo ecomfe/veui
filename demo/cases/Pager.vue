@@ -50,7 +50,6 @@ export default {
       pageNo: parseInt(this.$route.params.pageNo, 10) || 1,
       pageTotal: 10101,
       hrefTpl: '/pager/:pageNo',
-
       fifthPagerMessage: ''
     }
   },

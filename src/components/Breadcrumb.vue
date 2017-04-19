@@ -47,7 +47,7 @@ export default {
               {renderSlot.call(this, 'default', { router })}
               {
                 index !== this.localRouters.length - 1
-                  ? <span class="veui-breadcrumb-separator">
+                  ? <span slot="separator" class="veui-breadcrumb-separator">
                       {renderSlot.call(this, 'separator', { router })}
                     </span>
                   : null
@@ -80,6 +80,8 @@ export default {
 </script>
 
 <style lang="less">
+@import "../styles/theme-default/lib.less";
+
 .veui-breadcrumb {
   padding: 0;
   margin: 0;

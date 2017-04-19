@@ -65,7 +65,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../src/styles/theme-default/common.less";
+@import "../src/styles/theme-default/lib.less";
 
 @nav-width: 240px;
 @light-bg-color: #f6f9ff;
