@@ -1,5 +1,5 @@
 /* Theme colors */
-@veui-theme-color-nav: #304ffe;
+@veui-theme-color-nav: shade(@veui-theme-color-primary, 50%);
 @veui-theme-color-primary: #3685ff;
 @veui-theme-color-active: shade(@veui-theme-color-primary, 20%);
 @veui-theme-color-hover: shade(@veui-theme-color-primary, 10%);
@@ -42,6 +42,7 @@
 @veui-text-color-strong: @veui-gray-color-strong;
 @veui-text-color-normal: @veui-gray-color-normal;
 @veui-text-color-weak: @veui-gray-color-weak;
+@veui-text-color-aux: @veui-gray-color-sup-1;
 
 /* Shadow colors */
 @veui-shadow-color-normal: fadeout(#000, 80%);
@@ -54,6 +55,7 @@
 
 @veui-font-weight-normal: 400;
 @veui-font-weight-bold: 500;
+@veui-font-weight-extra-bold: 600;
 
 @veui-font-family: Helvetica, Arial, Verdana, "PingFang SC", "STHeiti", "Microsoft YaHei", "SimHei", sans-serif;
 
@@ -65,3 +67,4 @@
 @veui-height-large: 42px;
 @veui-height-normal: 36px;
 @veui-height-small: 30px;
+@veui-height-tiny: 24px;

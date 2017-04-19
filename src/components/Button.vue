@@ -202,14 +202,21 @@ export default {
   }
 
   &[ui~="large"] {
-    .padding(12px, _);
     height: @veui-height-large;
+    .padding(12px, _);
     font-size: @veui-font-size-large;
   }
 
   &[ui~="small"] {
     .padding(8px, _);
     height: @veui-height-small;
+    font-size: @veui-font-size-small;
+  }
+
+  &[ui~="tiny"] {
+    min-width: auto;
+    height: @veui-height-tiny;
+    padding: 6px 10px;
     font-size: @veui-font-size-small;
   }
 
@@ -230,6 +237,10 @@ export default {
 
     &[ui~="small"] {
       width: @veui-height-small;
+    }
+
+    &[ui~="tiny"] {
+      width: @veui-height-tiny;
     }
   }
 
