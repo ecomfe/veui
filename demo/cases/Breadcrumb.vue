@@ -11,12 +11,10 @@
 </template>
 <script>
 import Breadcrumb from '@/components/Breadcrumb'
-import BreadcrumbItem from '@/components/BreadcrumbItem'
 
 export default {
   components: {
-    'veui-breadcrumb': Breadcrumb,
-    'veui-breadcrumb-item': BreadcrumbItem
+    'veui-breadcrumb': Breadcrumb
   },
   data () {
     return {
