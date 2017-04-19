@@ -22,7 +22,7 @@ export default [
     path: '/pager/:pageNo',
     name: 'Pager',
     params: {
-      pageNo: 0
+      pageNo: 1
     },
     component: Pager
   },
