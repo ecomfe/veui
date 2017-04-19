@@ -5,6 +5,7 @@
       :class="{'veui-button-chevron': icon === 'chevron'}"
       :disabled="disabled"
       @click.stop="expanded = !expanded"
+      v-clickoutside="clickoutside"
       slot="target"
       ref="veui-dropdown-button">
       <slot name="dropdown-button" :label="label">
@@ -15,8 +16,7 @@
     <veui-overlay
       target="veui-dropdown-button"
       :open="expanded"
-      :options="overlay"
-      v-clickoutside="clickoutside">
+      :options="overlay">
       <div class="veui-dropdown-options">
         <div v-for="(option, index) in options"
           :key="index"
@@ -77,7 +77,6 @@ export default {
   },
   methods: {
     clickHandler (index) {
-      this.expanded = !this.expanded
       this.$emit('click', index)
     },
     clickoutside () {
