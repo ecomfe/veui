@@ -1,19 +1,22 @@
 <template>
   <div class="veui-select" :ui="ui">
-    <veui-overlay :open="expanded"
+    <veui-button
+      :ui="ui"
+      :class="{'veui-button-empty': value === null}"
+      :disabled="disabled || readonly"
+      @click="expanded = !expanded"
+      v-clickoutside="clickoutside"
+      slot="target"
+      ref="veui-select-button">
+      <slot name="select-target" :label="label">
+        <icon :name="`caret-${expanded ? 'up' : 'down'}`"></icon>
+        <span>{{ label }}</span>
+      </slot>
+    </veui-button>
+    <veui-overlay
+      target="veui-select-button"
+      :open="expanded"
       :options="overlay">
-      <veui-button
-        :ui="ui"
-        :class="{'veui-button-empty': value === null}"
-        :disabled="disabled || readonly"
-        @click="expanded = !expanded"
-        v-clickoutside="clickoutside"
-        slot="target">
-        <slot name="select-target" :label="label">
-          <icon :name="`caret-${expanded ? 'up' : 'down'}`"></icon>
-          <span>{{ label }}</span>
-        </slot>
-      </veui-button>
       <div class="veui-select-options">
         <template v-for="option in options">
           <veui-option
@@ -137,13 +140,13 @@ export default {
     width: 160px;
     padding: 11px 12px;
     position: relative;
+    text-align: left;
     span {
       display: inline-block;
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      text-align: left;
     }
     &.veui-button-empty {
       color: @veui-gray-color-weak;
@@ -155,7 +158,7 @@ export default {
       right: 11px;
       top: 9px;
       & + span {
-        padding-right: 17px;
+        width: calc(100% - 12px);
       }
     }
   }

@@ -192,7 +192,7 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 p {
   margin: 0 0 30px 0;
   height: 36px;

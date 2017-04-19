@@ -51,7 +51,6 @@ export default {
 @import "../../styles/theme-default/lib.less";
 .veui-option {
   cursor: pointer;
-  width: 100%;
   height: 36px;
   line-height: 36px;
   padding: 0 10px;
