@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { includes, upperFirst, isObject, isString, each, extend } from 'lodash'
+import { includes, upperFirst, isObject, isString, extend } from 'lodash'
 import Overlay from './Overlay'
 import 'vue-awesome/icons/close'
 import Button from './Button'
@@ -157,7 +157,7 @@ export default {
     mergedOverlayClass () {
       const klass = {}
       if (isString(this.overlayClass)) {
-        each(this.overlayClass.split(/[\s']+/), cls => {
+        this.overlayClass.split(/\s+/).forEach(cls => {
           klass[cls] = true
         })
       } else {
