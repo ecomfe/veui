@@ -1,6 +1,7 @@
 import Button from './Button'
 import Table from './Table'
 import Pager from './Pager'
+import Uploader from './Uploader'
 import Dialog from './Dialog'
 import Overlay from './Overlay'
 import Breadcrumb from './Breadcrumb'
@@ -24,6 +25,11 @@ export default [
       pageNo: 0
     },
     component: Pager
+  },
+  {
+    path: '/uploader',
+    name: 'Uploader',
+    component: Uploader
   },
   {
     path: '/dialog',
