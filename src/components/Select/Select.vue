@@ -1,13 +1,13 @@
 <template>
   <div class="veui-select" :ui="ui">
     <veui-overlay :open="expanded"
-      :options="overlay"
-      v-clickoutside="clickoutside">
+      :options="overlay">
       <veui-button
         :ui="ui"
         :class="{'veui-button-empty': value === null}"
         :disabled="disabled || readonly"
         @click="expanded = !expanded"
+        v-clickoutside="clickoutside"
         slot="target">
         <slot name="select-target" :label="label">
           <icon :name="`caret-${expanded ? 'up' : 'down'}`"></icon>
@@ -119,7 +119,6 @@ export default {
   },
   methods: {
     selectHandler (val) {
-      this.expanded = !this.expanded
       this.$emit('change', val)
     },
     clickoutside () {
