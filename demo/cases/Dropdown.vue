@@ -52,7 +52,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 p {
   margin: 10px 0;
 }

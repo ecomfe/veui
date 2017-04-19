@@ -1,19 +1,22 @@
 <template>
   <div class="veui-dropdown" :ui="ui">
-    <veui-overlay :open="expanded"
+    <veui-button
+      :ui="ui"
+      :class="{'veui-button-chevron': icon === 'chevron'}"
+      :disabled="disabled"
+      @click.stop="expanded = !expanded"
+      slot="target"
+      ref="veui-dropdown-button">
+      <slot name="dropdown-button" :label="label">
+        <icon :name="`${icon}-${expanded ? 'up' : 'down'}`"></icon>
+        <span>{{ label }}</span>
+      </slot>
+    </veui-button>
+    <veui-overlay
+      target="veui-dropdown-button"
+      :open="expanded"
       :options="overlay"
       v-clickoutside="clickoutside">
-      <veui-button
-        :ui="ui"
-        :class="{'veui-button-chevron': icon === 'chevron'}"
-        :disabled="disabled"
-        @click.stop="expanded = !expanded"
-        slot="target">
-        <slot name="dropdown-button" :label="label">
-          <icon :name="`${icon}-${expanded ? 'up' : 'down'}`"></icon>
-          <span>{{ label }}</span>
-        </slot>
-      </veui-button>
       <div class="veui-dropdown-options">
         <div v-for="(option, index) in options"
           :key="index"
@@ -93,13 +96,13 @@ export default {
     width: 110px;
     padding: 11px 15px;
     position: relative;
+    text-align: left;
     > span {
       display: inline-block;
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      text-align: left;
     }
     > svg {
       width: 13px;
@@ -108,7 +111,7 @@ export default {
       right: 15px;
       top: 11px;
       & + span {
-        padding-right: 16px;
+        width: calc(100% - 14px);
       }
     }
     &.veui-button-chevron {
@@ -129,7 +132,6 @@ export default {
   border-radius: 2px;
   .veui-dropdown-option {
     cursor: pointer;
-    width: 100%;
     height: 36px;
     line-height: 36px;
     padding: 0 10px;
