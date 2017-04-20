@@ -1,12 +1,13 @@
 <template>
   <div class="veui-uploader" :ui="ui">
-    <div>
+    <div class="veui-uploader-button-container">
       <label v-if="uploaderType === 'file' || (uploaderType === 'image' && needButton)"
         class="veui-button veui-uploader-input-label"
         :class="{'veui-uploader-input-label-disabled': disabled}"
         ui="aux" ref="label"><icon class="veui-uploader-input-label-icon" name="upload"></icon>{{text}}
         <input hidden="hidden" type="file" ref="input" @change="onChange" :name="name" :disabled="disabled" multiple>
       </label>
+      <slot name="button"></slot>
       <span class="veui-uploader-tip" slot="tip">{{tip}}</span>
     </div>
     <transition name="veui-uploader-warning">
@@ -26,7 +27,9 @@
                 <img :src="file.src" :alt="file.alt || ''">
               </div>
               <span :class="classType + '-name'"
-                :title="uiProps.indexOf('ellipsis') > -1 ? file.name : ''">{{file.name}}</span>
+                :title="uiProps.indexOf('ellipsis') > -1 ? file.name : ''">
+                <icon name="file-zip-o" class="veui-uploader-list-icon"></icon>{{file.name}}
+              </span>
               <span :class="classType + '-size'">{{convertSizeUnit(file.size)}}</span>
               <veui-button ui="link delete" @click="$emit('delete', file)"><icon name="close"></icon></veui-button>
             </template>
@@ -92,6 +95,7 @@ import 'vue-awesome/icons/close'
 import 'vue-awesome/icons/upload'
 import 'vue-awesome/icons/plus'
 import 'vue-awesome/icons/check-circle-o'
+import 'vue-awesome/icons/file-zip-o'
 import {endsWith, cloneDeep, filter, map, uniqueId} from 'lodash'
 import {ui} from '../mixins'
 
@@ -108,8 +112,8 @@ export default {
       default: 'file'
     },
     throughIframe: Boolean,
+    convertResponse: Function,
     iframeCallbackType: String,
-    uploadCallback: Function,
     files: Array,
     name: {
       type: String,
@@ -206,6 +210,13 @@ export default {
   },
   mixins: [ui],
   mounted () {
+    if (this.$slots.button.length && (this.uploaderType === 'file' || this.needButton)) {
+      let button = this.$slots.button[0].elm
+      let labelStyle = this.$refs.label.style
+      labelStyle.height = button.offsetHeight + 'px'
+      labelStyle.width = button.offsetWidth + 'px'
+      labelStyle.opacity = 0
+    }
     if (!this.throughIframe) return
     document.body.appendChild(this.$refs.iframe)
     document.body.appendChild(this.$refs.form)
@@ -270,7 +281,7 @@ export default {
         this.fileList = this.fileList.slice(-this['max-count'])
       }
       this.$emit('change', this.fileList)
-      if (this.throughIframe) this.submit()
+      if (this.throughIframe && this.autoUpload) this.submit()
       if (!this.throughIframe && this.autoUpload) this.uploadFiles()
       this.$refs.input.value = ''
     },
@@ -335,6 +346,16 @@ export default {
       let form = this.$refs.form
       form.appendChild(this.$refs.input)
       form.submit()
+    },
+    uploadCallback (data, file) {
+      if (this.convertResponse) data = this.convertResponse(data)
+      if (data.status === 'success') {
+        this.$emit('success', data)
+        this.onSuccess(data, file)
+      } else if (data.status === 'failure') {
+        this.$emit('failure', data)
+        this.onFailure(data, file)
+      }
     },
     onSuccess (data, file) {
       Object.assign(file, data)
@@ -438,6 +459,9 @@ function getProgress () {
 
   width: @width;
   overflow: hidden;
+  &-button-container {
+    position: relative;
+  }
   &-input-label {
     cursor: pointer;
     display: inline-block;
@@ -571,6 +595,9 @@ function getProgress () {
       }
     }
   }
+  &-list-icon {
+    display: none;
+  }
   &-list-preview {
     height: @preview-size;
     padding: @list-padding !important;
@@ -582,6 +609,8 @@ function getProgress () {
       line-height: @preview-size;
       font-size: 0;
       text-align: center;
+      background-color: #fff;
+      margin-right: 3px;
     }
 
     .@{prefix}-list-file-success {
@@ -718,6 +747,10 @@ function getProgress () {
       width: @image-large;
       line-height: @image-large;
     }
+  }
+  &[ui~="list-icon"] &-list-icon {
+    display: inline;
+    margin-right: 3px;
   }
   &[ui~="bottom-mask"] &-list-image-mask {
     top: auto;

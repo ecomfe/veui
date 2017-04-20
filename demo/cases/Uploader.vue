@@ -31,7 +31,6 @@
       extentionTypes="jpg,jpeg,gif"
       :args="extraArgs"
       :ui="ui"
-      :uploadCallback="uploadCallback"
       :uploadingContent="uploadingContent"
       @delete="deleteFile"
       @cancel="cancelUploading"
@@ -60,7 +59,6 @@
       :max-size="10"
       :previewImage="previewImageIframe"
       extentionTypes="jpg,jpeg,gif"
-      :uploadCallback="uploadCallback"
       :args="extraArgs"
       uploadingContent="text"
       :ui="uiIframe"
@@ -88,7 +86,7 @@ export default {
     return {
       uploaderType: 'image',
       uploaderTypeIframe: 'file',
-      ui: 'multiline horizontal bottom-mask',
+      ui: 'multiline horizontal bottom-mask list-icon',
       uiIframe: 'multiline horizontal',
       needButton: false,
       previewImage: true,
@@ -96,13 +94,13 @@ export default {
       uploadingContent: 'progressPercent',
       files: [
         {
-          name: 'aaaa.jpg',
+          name: 'demo-file1.jpg',
           fileUid: '123456',
           size: '200kb',
           src: 'https://www.baidu.com/img/bd_logo1.png'
         },
         {
-          name: 'bbbb.gif',
+          name: 'demo-file2.gif',
           fileUid: '222333',
           size: '350kb',
           src: 'http://images.nvidia.com/graphics-cards/geforce/pascal/cn/images/1080-ti-design.png'
@@ -110,13 +108,13 @@ export default {
       ],
       filesIframe: [
         {
-          name: 'aaaa.jpg',
+          name: 'demo-file1.jpg',
           fileUid: '123456',
           size: '200kb',
           src: 'https://www.baidu.com/img/bd_logo1.png'
         },
         {
-          name: 'bbbb.gif',
+          name: 'demo-file2.gif',
           fileUid: '222333',
           size: '350kb',
           src: 'http://images.nvidia.com/graphics-cards/geforce/pascal/cn/images/1080-ti-design.png'
@@ -128,16 +126,7 @@ export default {
           return new Date().getMonth() + 1
         }
       },
-      tip: '请选择jpg,jpeg,gif图片，大小在10M以内',
-      uploadCallback (data, file) {
-        if (data.status === 'success') {
-          this.$emit('success', data)
-          this.onSuccess(data, file)
-        } else if (data.status === 'failure') {
-          this.$emit('failure', data)
-          this.onFailure(data, file)
-        }
-      }
+      tip: '请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图'
     }
   },
   computed: {
@@ -215,3 +204,12 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.veui-uploader-demo-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+</style>
