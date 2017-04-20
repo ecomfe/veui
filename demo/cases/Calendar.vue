@@ -2,10 +2,10 @@
   <article>
     <h1><code>&lt;veui-calendar&gt;</code></h1>
     <section>
-      <veui-calendar :selected="selected" @select="selected = arguments[0]"></veui-calendar>
+      <veui-calendar :selected="selected1" @select="selected1 = arguments[0]"></veui-calendar>
     </section>
     <section>
-      <veui-calendar :selected="selected" @select="selected = arguments[0]" range :panel="3"></veui-calendar>
+      <veui-calendar :selected="selected2" @select="selected2 = arguments[0]" range :panel="3"></veui-calendar>
     </section>
   </article>
 </template>
@@ -20,7 +20,8 @@ export default {
   },
   data () {
     return {
-      selected: null
+      selected1: new Date(1987, 6, 11),
+      selected2: [new Date(1987, 6, 11), new Date(1987, 6, 14)]
     }
   }
 }
