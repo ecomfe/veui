@@ -7,7 +7,8 @@ export default {
       initX: 0,
       initY: 0,
 
-      mousedownHandler ({ clientX, clientY }) {
+      mousedownHandler (event) {
+        const { clientX, clientY } = event
         if (dragData.dragging) {
           return
         }
@@ -15,26 +16,28 @@ export default {
         dragData.dragging = true
         dragData.initX = clientX
         dragData.initY = clientY
-        contextComponent.$emit('dragstart')
+        contextComponent.$emit('dragstart', { originEvent: event })
 
         function selectstarthandler (e) {
           e.preventDefault()
         }
 
-        function mousemoveHandler ({ clientX, clientY }) {
+        function mousemoveHandler (event) {
+          const { clientX, clientY } = event
           if (!dragData.dragging) {
             return
           }
 
           contextComponent.$emit('drag', {
             distanceX: clientX - dragData.initX,
-            distanceY: clientY - dragData.initY
+            distanceY: clientY - dragData.initY,
+            originEvent: event
           })
         }
 
-        function mouseupHandler () {
+        function mouseupHandler (event) {
           dragData.dragging = false
-          contextComponent.$emit('dragend', false)
+          contextComponent.$emit('dragend', { originEvent: event })
           window.removeEventListener('mousemove', mousemoveHandler)
           window.removeEventListener('mouseup', mouseupHandler)
           window.removeEventListener('selectstart', selectstarthandler)
