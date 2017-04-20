@@ -23,7 +23,13 @@
       <pre>
       {
         attachment: 'top right',
-        targetAttachment: 'top left'
+        targetAttachment: 'top left',
+        constraints: [
+          {
+            to: 'scrollParent',
+            pin: true
+          }
+        ]
       }
       </pre>
       <div class="preview">
@@ -148,14 +154,14 @@ export default {
 .demo-overlay-box {
   box-shadow: 1px 1px 6px @veui-shadow-color-normal;
   padding: 10px 20px;
+  background: #fff;
 }
 
 .demo-overlay {
   .row {
     background: @veui-gray-color-sup-4;
-    align-items: center;
     padding: 10px 15px 10px 5px;
-    margin-bottom: 20px;
+    margin-bottom: 120px;
     .clearfix();
   }
 

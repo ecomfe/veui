@@ -6,6 +6,7 @@ import Dialog from './Dialog'
 import Overlay from './Overlay'
 import Breadcrumb from './Breadcrumb'
 import Input from './Input'
+import Calendar from './Calendar'
 
 export default [
   {
@@ -50,5 +51,10 @@ export default [
     path: '/input',
     name: 'Input',
     component: Input
+  },
+  {
+    path: '/calendar',
+    name: 'Calendar',
+    component: Calendar
   }
 ]
