@@ -78,6 +78,8 @@ export default {
 </script>
 
 <style lang="less">
+  @import "../../src/styles/theme-default/lib.less";
+
   .form-row {
     margin-bottom: 10px;
     .clearfix();

@@ -6,6 +6,7 @@ import Dialog from './Dialog'
 import Overlay from './Overlay'
 import Breadcrumb from './Breadcrumb'
 import Input from './Input'
+import Calendar from './Calendar'
 
 export default [
   {
@@ -22,7 +23,7 @@ export default [
     path: '/pager/:pageNo',
     name: 'Pager',
     params: {
-      pageNo: 0
+      pageNo: 1
     },
     component: Pager
   },
@@ -50,5 +51,10 @@ export default [
     path: '/input',
     name: 'Input',
     component: Input
+  },
+  {
+    path: '/calendar',
+    name: 'Calendar',
+    component: Calendar
   }
 ]

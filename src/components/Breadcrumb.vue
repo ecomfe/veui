@@ -46,15 +46,11 @@ export default {
               onRedirect={event => this.fireRedirect(event, router, index)}>
               {renderSlot.call(this, 'default', { router })}
               {
-                (() => {
-                  if (index !== this.localRouters.length - 1) {
-                    return (
-                      <span slot="separator" class="veui-breadcrumb-separator">
-                        {renderSlot.call(this, 'separator', { router })}
-                      </span>
-                    )
-                  }
-                })()
+                index !== this.localRouters.length - 1
+                  ? <span slot="separator" class="veui-breadcrumb-separator">
+                      {renderSlot.call(this, 'separator', { router })}
+                    </span>
+                  : null
               }
             </BreadcrumbItem>
           )
@@ -82,7 +78,10 @@ export default {
   }
 }
 </script>
+
 <style lang="less">
+@import "../styles/theme-default/lib.less";
+
 .veui-breadcrumb {
   padding: 0;
   margin: 0;
