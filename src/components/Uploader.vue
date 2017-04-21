@@ -1,18 +1,21 @@
 <template>
   <div class="veui-uploader" :ui="ui">
-    <div>
+    <div class="veui-uploader-button-container">
       <label v-if="uploaderType === 'file' || (uploaderType === 'image' && needButton)"
         class="veui-button veui-uploader-input-label"
         :class="{'veui-uploader-input-label-disabled': disabled}"
-        ui="aux" ref="label"><icon class="veui-uploader-input-label-icon" name="upload"></icon>{{text}}
+        ui="aux" ref="label">
+        <icon class="veui-uploader-input-label-icon" name="upload"></icon><slot name="text">选择文件</slot>
         <input hidden="hidden" type="file" ref="input" @change="onChange" :name="name" :disabled="disabled" multiple>
       </label>
-      <span class="veui-uploader-tip" slot="tip">{{tip}}</span>
+      <slot name="button"></slot>
+      <span class="veui-uploader-tip"><slot name="tip"></slot></span>
     </div>
     <transition name="veui-uploader-warning">
-      <div v-if="warningText" class="veui-uploader-warning-container">
-        <slot name="warning" :warningText="warningText">
-          <span class="veui-uploader-warning">{{warningText}}</span>
+      <div v-if="warning.typeInvalid || warning.sizeInvalid" class="veui-uploader-warning-container">
+        <slot name="warning" :warning="warning">
+          <span v-if="warning.typeInvalid" class="veui-uploader-warning"><slot name="typeInvalidText">文件类型不符合要求！</slot></span>
+          <span v-if="warning.sizeInvalid" class="veui-uploader-warning"><slot name="sizeInvalidText">文件大小超过限制！</slot></span>
         </slot>
       </div>
     </transition>
@@ -26,21 +29,23 @@
                 <img :src="file.src" :alt="file.alt || ''">
               </div>
               <span :class="classType + '-name'"
-                :title="uiProps.indexOf('ellipsis') > -1 ? file.name : ''">{{file.name}}</span>
+                :title="uiProps.indexOf('ellipsis') > -1 ? file.name : ''">
+                <icon name="file-zip-o" class="veui-uploader-list-icon"></icon>{{file.name}}
+              </span>
               <span :class="classType + '-size'">{{convertSizeUnit(file.size)}}</span>
-              <veui-button ui="link delete" @click="$emit('delete', file)"><icon name="close"></icon></veui-button>
+              <veui-button ui="link delete" @click="$emit('remove', file)"><icon name="close"></icon></veui-button>
             </template>
             <template v-else-if="uploaderType === 'image'">
               <img :src="file.src" :alt="file.alt || ''">
               <div :class="classType + '-mask'">
-                <veui-button ui="link" @click="$emit('delete', file)">移除</veui-button>
+                <veui-button ui="link" @click="$emit('remove', file)">移除</veui-button>
               </div>
             </template>
             <transition name="veui-uploader-fade">
               <div v-if="file.status === 'success'"
                 :class="classType + '-success'"
                 @click="updateFileList(file, {status: null})">
-                <span class="veui-uploader-success">{{successText}}</span>
+                <span class="veui-uploader-success"><slot name="successText">上传成功！</slot></span>
                 <icon name="check-circle-o"></icon>
               </div>
             </transition>
@@ -50,7 +55,8 @@
           <slot name="uploading-content" :file="file">
             <veui-uploader-progress :type="uploadingContent" :loaded="file.loaded" :total="file.total"
               :class="uploaderType === 'image' ? classType + '-status' : ''"
-              :uploadingText="uploadingText" :convertSizeUnit="convertSizeUnit">
+              :convertSizeUnit="convertSizeUnit">
+              <slot name="uploadingText">上传中...</slot>
             </veui-uploader-progress>
             <veui-button v-if="uploaderType === 'file'" ui="link delete"
               @click="cancelFile(file)"><icon name="close"></icon></veui-button>
@@ -61,7 +67,7 @@
         <template v-else-if="file.status === 'failure'">
           <slot name="failure-content" :file="file">
             <div :class="classType + '-status'">
-              <span class="veui-uploader-failure">{{file.failureReason}}</span>
+              <span class="veui-uploader-failure"><slot name="failureText">上传失败！</slot>{{file.failureReason}}</span>
             </div>
             <veui-button :ui="uploaderType === 'file' ? 'link' : 'aux operation'"
               @click="retry(file)">重试</veui-button>
@@ -75,12 +81,12 @@
         </label>
       </li>
     </transition-group>
-    <iframe v-if="throughIframe" ref="iframe"
+    <iframe v-if="requestMode === 'iframe'" ref="iframe"
      :id="iframeId" :name="iframeId" style="display: none;"></iframe>
-    <form v-if="throughIframe" ref="form" :action="action" enctype="multipart/form-data"
+    <form v-if="requestMode === 'iframe'" ref="form" :action="action" enctype="multipart/form-data"
       method="POST" :target="iframeId" style="display: none;">
-      <input v-for="(value, key) in args" :name="key" :value="typeof value === 'function' ? value() : value">
-      <input v-if="iframeCallbackType === 'func'" name="callbackFunc" :value="callbackFuncName">
+      <input v-for="(value, key) in payload" :name="key" :value="typeof value === 'function' ? value() : value">
+      <input v-if="iframeMode === 'callback'" name="callbackFunc" :value="callbackFuncName">
     </form>
   </div>
 </template>
@@ -92,8 +98,10 @@ import 'vue-awesome/icons/close'
 import 'vue-awesome/icons/upload'
 import 'vue-awesome/icons/plus'
 import 'vue-awesome/icons/check-circle-o'
+import 'vue-awesome/icons/file-zip-o'
 import {endsWith, cloneDeep, filter, map, uniqueId} from 'lodash'
 import {ui} from '../mixins'
+import mixin from '../mixins/input'
 
 export default {
   name: 'veui-uploader',
@@ -102,19 +110,18 @@ export default {
     'veui-button': Button,
     'veui-uploader-progress': getProgress()
   },
+  mixins: [ui, mixin],
   props: {
     uploaderType: {
       type: String,
       default: 'file'
     },
-    throughIframe: Boolean,
-    iframeCallbackType: String,
-    uploadCallback: Function,
-    files: Array,
-    name: {
+    requestMode: {
       type: String,
-      default: 'file'
+      required: true
     },
+    convertResponse: Function,
+    iframeMode: String,
     action: {
       type: String,
       required: true
@@ -133,39 +140,13 @@ export default {
       type: Boolean,
       default: false
     },
-    disabled: Boolean,
     ui: String,
     'max-count': Number,
     'max-size': Number,
-    args: Object,
+    payload: Object,
     uploadingContent: {
       type: String,
       default: 'text'
-    },
-    text: {
-      type: String,
-      default: '选择文件'
-    },
-    tip: String,
-    uploadingText: {
-      type: String,
-      default: '上传中...'
-    },
-    successText: {
-      type: String,
-      default: '上传成功！'
-    },
-    failureText: {
-      type: String,
-      default: '上传失败！'
-    },
-    sizeInvalidText: {
-      type: String,
-      default: '文件大小超过限制！'
-    },
-    typeInvalidText: {
-      type: String,
-      default: '文件格式不符！'
     },
     autoUpload: {
       type: Boolean,
@@ -174,7 +155,7 @@ export default {
   },
   data () {
     return {
-      fileList: cloneDeep(this.files),
+      fileList: cloneDeep(this.value),
       canceled: false,
       warning: {
         typeInvalid: false,
@@ -186,7 +167,7 @@ export default {
     }
   },
   watch: {
-    files (val) {
+    value (val) {
       this.fileList = cloneDeep(val)
     }
   },
@@ -196,20 +177,20 @@ export default {
     },
     latestFile () {
       return this.fileList[this.fileList.length - 1]
-    },
-    warningText () {
-      let text = ''
-      text += this.warning.typeInvalid ? this.typeInvalidText : ''
-      text += this.warning.sizeInvalid ? this.sizeInvalidText : ''
-      return text
     }
   },
-  mixins: [ui],
   mounted () {
-    if (!this.throughIframe) return
+    if (this.$slots.button && (this.uploaderType === 'file' || this.needButton)) {
+      let button = this.$slots.button[0].elm
+      let labelStyle = this.$refs.label.style
+      labelStyle.height = button.offsetHeight + 'px'
+      labelStyle.width = button.offsetWidth + 'px'
+      labelStyle.opacity = 0
+    }
+    if (this.requestMode === 'xhr') return
     document.body.appendChild(this.$refs.iframe)
     document.body.appendChild(this.$refs.form)
-    if (this.iframeCallbackType === 'postmessage') {
+    if (this.iframeMode === 'postmessage') {
       this.onMessage = event => {
         if (event.source.frameElement.id !== this.iframeId) return
         if (this.canceled) return
@@ -222,7 +203,7 @@ export default {
         this.uploadCallback(JSON.parse(event.data), this.latestFile)
       }
       window.addEventListener('message', this.onMessage)
-    } else if (this.iframeCallbackType === 'func') {
+    } else if (this.iframeMode === 'callback') {
       if (!window.veuiUploaderCallback) window.veuiUploaderCallback = {}
       window.veuiUploaderCallback[this.callbackFuncName] = data => {
         if (this.canceled) return
@@ -231,17 +212,17 @@ export default {
     }
   },
   beforeDestroy () {
-    if (!this.throughIframe) return
+    if (this.requestMode === 'xhr') return
     window.removeEventListener('message', this.onMessage)
     document.body.removeChild(this.$refs.form)
     document.body.removeChild(this.$refs.iframe)
-    if (this.iframeCallbackType === 'func') window.veuiUploaderCallback[this.callbackFuncName] = null
+    if (this.iframeMode === 'callback') window.veuiUploaderCallback[this.callbackFuncName] = null
   },
   methods: {
     onChange () {
       this.canceled = false
       let newFiles
-      if (!this.throughIframe) {
+      if (this.requestMode === 'xhr') {
         newFiles = filter(this.$refs.input.files, file => {
           return this.validateFile(file)
         })
@@ -258,20 +239,19 @@ export default {
           return file.status !== 'failure'
         }),
         ...map(newFiles, file => {
-          if (!this.throughIframe && (this.uploaderType === 'image' || this.previewImage)) {
+          if (this.requestMode === 'xhr' && (this.uploaderType === 'image' || this.previewImage)) {
             if (window.URL) file.src = window.URL.createObjectURL(file)
           }
           file.toBeUploaded = true
           return file
         })
       ]
-
-      if (this['max-count'] && this.fileList.length > this['max-count']) {
-        this.fileList = this.fileList.slice(-this['max-count'])
+      if (this.maxCount && this.fileList.length > this.maxCount) {
+        this.fileList = this.fileList.slice(-this.maxCount)
       }
       this.$emit('change', this.fileList)
-      if (this.throughIframe) this.submit()
-      if (!this.throughIframe && this.autoUpload) this.uploadFiles()
+      if (this.requestMode === 'iframe' && this.autoUpload) this.submit()
+      if (this.requestMode === 'xhr' && this.autoUpload) this.uploadFiles()
       this.$refs.input.value = ''
     },
     validateFile (file) {
@@ -288,7 +268,7 @@ export default {
       return extentionTypes.some(ext => endsWith(filename, '.' + ext))
     },
     validateFileSize (fileSize) {
-      return !this['max-size'] || !fileSize || fileSize <= this['max-size'] * 1024 * 1024
+      return !this.maxSize || !fileSize || fileSize <= this.maxSize * 1024 * 1024
     },
     uploadFiles () {
       this.fileList.forEach(file => {
@@ -309,6 +289,7 @@ export default {
             this.updateFileList(file)
             break
         }
+        this.$emit('progress', e)
       }
       xhr.onload = () => {
         this.uploadCallback(JSON.parse(xhr.responseText), file)
@@ -319,8 +300,8 @@ export default {
       let formData = new FormData()
       formData.append(this.name, file)
 
-      for (let key in this.args) {
-        formData.append(key, typeof this.args[key] === 'function' ? this.args[key](this) : this.args[key])
+      for (let key in this.payload) {
+        formData.append(key, typeof this.payload[key] === 'function' ? this.payload[key](this) : this.payload[key])
       }
 
       xhr.open('POST', this.action, true)
@@ -336,19 +317,29 @@ export default {
       form.appendChild(this.$refs.input)
       form.submit()
     },
+    uploadCallback (data, file) {
+      if (this.convertResponse) data = this.convertResponse(data)
+      if (data.status === 'success') {
+        this.$emit('success', data)
+        this.onSuccess(data, file)
+      } else if (data.status === 'failure') {
+        this.$emit('fail', data)
+        this.onFailure(data, file)
+      }
+    },
     onSuccess (data, file) {
       Object.assign(file, data)
       file.status = 'success'
       file.xhr = null
       file.toBeUploaded = null
       this.updateFileList(file)
-      if (this.throughIframe) this.reset()
+      if (this.requestMode === 'iframe') this.reset()
     },
     onFailure (data, file) {
       file.status = 'failure'
       file.xhr = null
       file.toBeUploaded = null
-      file.failureReason = this.failureText + (data.reason || '')
+      file.failureReason = data.reason || ''
       this.updateFileList(file)
     },
     updateFileList (file, options) {
@@ -357,11 +348,11 @@ export default {
       this.$emit('change', this.fileList)
     },
     retry (file) {
-      if (this.throughIframe) this.submit()
+      if (this.requestMode === 'iframe') this.submit()
       else this.upload(file)
     },
     cancelFile (file) {
-      if (this.throughIframe) this.canceled = true
+      if (this.requestMode === 'iframe') this.canceled = true
       this.$emit('cancel', file)
       this.reset()
     },
@@ -392,7 +383,7 @@ function getProgress () {
       content () {
         switch (this.type) {
           case 'text':
-            return this.uploadingText
+            return this.$slots.default
           case 'progressPercent':
             return `${this.percent} ${this.convertSizeUnit(this.loaded)}/${this.convertSizeUnit(this.total)}`
           case 'progressBar':
@@ -438,6 +429,10 @@ function getProgress () {
 
   width: @width;
   overflow: hidden;
+  &-button-container {
+    position: relative;
+    margin-bottom: 5px;
+  }
   &-input-label {
     cursor: pointer;
     display: inline-block;
@@ -571,6 +566,9 @@ function getProgress () {
       }
     }
   }
+  &-list-icon {
+    display: none;
+  }
   &-list-preview {
     height: @preview-size;
     padding: @list-padding !important;
@@ -582,6 +580,8 @@ function getProgress () {
       line-height: @preview-size;
       font-size: 0;
       text-align: center;
+      background-color: #fff;
+      margin-right: 3px;
     }
 
     .@{prefix}-list-file-success {
@@ -718,6 +718,10 @@ function getProgress () {
       width: @image-large;
       line-height: @image-large;
     }
+  }
+  &[ui~="list-icon"] &-list-icon {
+    display: inline;
+    margin-right: 3px;
   }
   &[ui~="bottom-mask"] &-list-image-mask {
     top: auto;
