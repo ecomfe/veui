@@ -299,7 +299,8 @@ export default {
     margin-right: 10px;
   }
 
-  .veui-dialog-content-head-close {
+  .veui-dialog-content-head-close,
+  .veui-dialog-content-head-close:hover {
     color: #fff;
     float: right;
     width: 16px;
