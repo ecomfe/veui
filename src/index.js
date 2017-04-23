@@ -1,4 +1,4 @@
-import { setBaseZIndex, addOverlay } from './helper/overlayManager'
+import { setBaseZIndex, addOverlay } from './managers/overlay'
 import drag from './directives/drag'
 
 export default {

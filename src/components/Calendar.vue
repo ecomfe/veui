@@ -2,7 +2,7 @@
 <div class="veui-calendar">
   <div v-for="(p, pIndex) in panels" class="veui-calendar-panel" :class="{ [`veui-calendar-${p.view}`]: true }">
     <div class="veui-calendar-head">
-      <button v-if="pIndex === 0 || p.view !== 'days'" class="veui-calendar-prev" @click="step(false, p.view)"><veui-icon name="chevron-left"></veui-icon></button>
+      <button type="button" v-if="pIndex === 0 || p.view !== 'days'" class="veui-calendar-prev" @click="step(false, p.view)"><veui-icon name="chevron-left"></veui-icon></button>
       <template v-if="p.view === 'days'">
         <button class="veui-calendar-select" @click="setView(pIndex, 'years')"><b>{{ p.year }}</b> 年 <veui-icon name="caret-down"></veui-icon></button>
         <button class="veui-calendar-select" @click="setView(pIndex, 'months')"><b>{{ p.month + 1 }}</b> 月 <veui-icon name="caret-down"></veui-icon></button>
@@ -31,12 +31,12 @@
                   'veui-calendar-aux': day.month !== p.month,
                   'veui-calendar-today': day.isToday,
                   'veui-calendar-selected': day.isSelected,
-                  'veui-calendar-in-range': day.isInRange,
-                  'veui-calendar-range-start': day.isRangeStart,
-                  'veui-calendar-range-end': day.isRangeEnd
+                  'veui-calendar-in-range': day.rangePosition === 'within',
+                  'veui-calendar-range-start': day.rangePosition === 'start',
+                  'veui-calendar-range-end': day.rangePosition === 'end'
                 }">
                 <button v-if="fillMonth && panel === 1 || day.month === p.month" @click="selectDay(pIndex, day)"
-                  @mouseenter="markEnd(day)" @focus="markEnd(day)">{{ day.date }}</button>
+                  @mouseenter="markEnd(day)" @focus="markEnd(day)" :disabled="day.isDisabled">{{ day.date }}</button>
               </td>
             </tr>
           </tbody>
@@ -55,7 +55,9 @@
         <tbody v-else-if="p.view === 'years'">
           <tr v-for="i in 3">
             <td v-for="j in 4" :class="{
-              'veui-calendar-today': p.year + (i - 1) * 4 + j - 7 === today.getFullYear()
+              'veui-calendar-today': p.year + (i - 1) * 4 + j - 7 === today.getFullYear(),
+              'veui-calendar-selected': (localSelected && !multiple && !range) ?
+                p.year + (i - 1) * 4 + j - 7 === localSelected.getFullYear() : false
             }">
               <button @click="selectYear(pIndex, p.year + (i - 1) * 4 + j - 7)">{{ p.year + (i - 1) * 4 + j - 7 }}</button>
             </td>
@@ -68,9 +70,10 @@
 </template>
 
 <script>
-import { getDaysInMonth, isSameDay } from '../utils/date'
-import { findIndex } from 'lodash'
+import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/date'
+import { flattenDeep, findIndex } from 'lodash'
 import Icon from './Icon'
+import input from '../mixins/input'
 import 'vue-awesome/icons/chevron-left'
 import 'vue-awesome/icons/chevron-right'
 import 'vue-awesome/icons/caret-down'
@@ -86,6 +89,11 @@ let monthNames = [
 
 export default {
   name: 'veui-calendar',
+  mixins: [input],
+  model: {
+    prop: 'selected',
+    event: 'select'
+  },
   components: {
     'veui-icon': Icon
   },
@@ -115,6 +123,12 @@ export default {
     fillMonth: {
       type: Boolean,
       default: true
+    },
+    isDisabledDate: {
+      type: Function,
+      default: function () {
+        return false
+      }
     }
   },
   data () {
@@ -175,13 +189,11 @@ export default {
               }
             }
             let day = weeks[i][j]
+            day.isDisabled = this.isDisabledDate(fromDateData(day))
             if (day.month === month) {
               day.isToday = isSameDay(day, this.today)
               day.isSelected = this.isSelected(day)
-              let position = this.getRangePosition(day)
-              day.isInRange = position === true
-              day.isRangeStart = position === 'start'
-              day.isRangeEnd = position === 'end'
+              day.rangePosition = this.getRangePosition(day)
             }
           }
         }
@@ -209,7 +221,6 @@ export default {
       if (!this.range) {
         if (!this.multiple) {
           this.$emit('select', selected)
-          this.$emit('update:selected', selected)
           return
         }
         let result = [...this.localSelected]
@@ -222,28 +233,26 @@ export default {
           result.splice(pos, 1)
         }
         this.$emit('select', result)
-        this.$emit('update:selected', result)
         return
       }
-      if (!this.multiple) {
-        if (!this.picking) {
-          this.picking = [selected]
-          return
-        }
-        this.$set(this.picking, 1, selected)
-        let result = [...this.picking.sort((d1, d2) => d1 - d2)]
-        this.picking = null
-        this.$emit('select', result)
-        this.$emit('update:selected', result)
+      if (!this.picking) {
+        this.picking = [selected]
+        return
       }
+      this.$set(this.picking, 1, selected)
+      let picking = this.picking.sort((d1, d2) => d1 - d2)
+      if (!this.multiple) {
+        this.picking = null
+        this.$emit('select', [...picking])
+        return
+      }
+      this.picking = null
+      let result = mergeRange(this.localSelected, picking)
+      this.$emit('select', result)
     },
     markEnd (day) {
       if (this.range && this.picking) {
-        if (day) {
-          this.$set(this.picking, 1, new Date(day.year, day.month, day.date))
-        } else {
-          this.picking.splice(1)
-        }
+        this.$set(this.picking, 1, day ? new Date(day.year, day.month, day.date) : null)
       }
     },
     setView (i, view) {
@@ -270,33 +279,32 @@ export default {
       }
       if (!this.multiple) {
         if (!this.picking) {
-          return isSameDay(this.localSelected[0], day) || isSameDay(day, this.localSelected[1])
+          return isSameDay(this.localSelected[0], day) || isSameDay(this.localSelected[1], day)
         }
         return isSameDay(this.picking[0], day)
       }
+      return this.localSelected.some(selected => {
+        return isSameDay(selected[0], day) || isSameDay(selected[1], day)
+      }) || this.picking && isSameDay(this.picking[0], day)
     },
     getRangePosition (day) {
       if (!this.range) {
         return false
       }
+
       if (!this.multiple) {
         let range = this.picking || this.localSelected
-        if (!range || !range[1]) {
-          return false
-        }
-        let date = new Date(day.year, day.month, day.date)
-        if ((range[0] - date) * (range[1] - date) < 0) {
-          return true
-        }
-        if (range[0] - date === 0) {
-          return 'start'
-        }
-        if (range[1] - date === 0) {
-          return 'end'
-        }
-        return false
+        return getRangePosition(day, range)
       }
-      return false
+      let ranges = [this.picking, ...this.localSelected]
+      let position = false
+      for (let i = 0, j = ranges.length; i < j; i++) {
+        position = getRangePosition(day, ranges[i])
+        if (position) {
+          break
+        }
+      }
+      return position
     },
     step (isNext, view) {
       let sign = isNext ? 1 : -1
@@ -317,17 +325,26 @@ export default {
       }
     },
     getDefaultDate () {
-      let current = this.today
-      if (this.localSelected) {
-        if (this.localSelected instanceof Date) {
-          current = this.localSelected
-        } else {
-          current = this.localSelected[0]
-        }
-      }
-      return current
+      return flattenDeep([this.selected])[0] || this.today
     }
   }
+}
+
+function getRangePosition (day, range) {
+  if (!range || !range[1]) {
+    return false
+  }
+  let date = new Date(day.year, day.month, day.date)
+  if ((range[0] - date) * (range[1] - date) < 0) {
+    return 'within'
+  }
+  if (range[0] - date === 0) {
+    return 'start'
+  }
+  if (range[1] - date === 0) {
+    return 'end'
+  }
+  return false
 }
 </script>
 
@@ -378,6 +395,16 @@ export default {
       &:focus {
         background-color: @veui-gray-color-sup-4;
       }
+
+      &:disabled {
+
+        &,
+        &:hover {
+          background-color: @veui-gray-color-sup-4;
+          color: @veui-text-color-aux;
+          cursor: not-allowed;
+        }
+      }
     }
   }
 
@@ -419,20 +446,6 @@ export default {
     }
   }
 
-  &-selected {
-    button {
-      position: relative;
-      color: #fff;
-      background-color: @veui-theme-color-primary;
-      border-radius: 2px;
-
-      &:hover,
-      &:focus {
-        background-color: @veui-theme-color-secondary;
-      }
-    }
-  }
-
   &-in-range {
     button {
       border-radius: 2px;
@@ -442,6 +455,20 @@ export default {
       &:hover,
       &:focus {
         background-color: @veui-theme-color-sup-4;
+      }
+    }
+  }
+
+  &-selected {
+    button {
+      position: relative;
+      color: #fff;
+      background-color: @veui-theme-color-primary;
+      border-radius: 2px;
+
+      &:hover,
+      &:focus {
+        background-color: @veui-theme-color-hover;
       }
     }
   }
@@ -478,7 +505,7 @@ export default {
       padding: 0 7px;
       outline: none;
 
-      .fa-icon {
+      .veui-icon {
         vertical-align: middle;
         color: @veui-text-color-weak;
       }
@@ -487,7 +514,7 @@ export default {
       &:focus {
         color: @veui-theme-color-primary;
 
-        .fa-icon {
+        .veui-icon {
           color: @veui-theme-color-primary;
         }
       }

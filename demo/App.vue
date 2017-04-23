@@ -113,7 +113,7 @@ export default {
   }
 
   ul {
-    height: ~"calc(100vh - 60px)";
+    height: ~"calc(100vh - 105px)";
     margin: 0;
     padding: 0;
     overflow: auto;
@@ -137,6 +137,7 @@ export default {
   }
 
   footer {
+    border-top: 1px solid #eee;
     color: @veui-gray-color-weak;
     font-size: 12px;
     line-height: 45px;

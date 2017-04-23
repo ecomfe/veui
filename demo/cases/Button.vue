@@ -26,6 +26,14 @@
       <veui-button ui="aux" loading>取消</veui-button>
     </p>
     <p>
+      <veui-button ui="gray tiny">取消</veui-button>
+      <veui-button ui="gray small">取消</veui-button>
+      <veui-button ui="gray">取消</veui-button>
+      <veui-button ui="gray large">取消</veui-button>
+      <veui-button ui="gray" disabled>取消</veui-button>
+      <veui-button ui="gray" loading>取消</veui-button>
+    </p>
+    <p>
       <veui-button ui="link tiny">编辑</veui-button>
       <veui-button ui="link small">编辑</veui-button>
       <veui-button ui="link">编辑</veui-button>
@@ -56,6 +64,14 @@
       <veui-button ui="aux square large"><icon name="gear"></icon></veui-button>
       <veui-button ui="aux square" disabled><icon name="gear"></icon></veui-button>
       <veui-button ui="aux square" loading><icon name="gear"></icon></veui-button>
+    </p>
+    <p>
+      <veui-button ui="alt square tiny"><icon name="gear"></icon></veui-button>
+      <veui-button ui="alt square small"><icon name="gear"></icon></veui-button>
+      <veui-button ui="alt square"><icon name="gear"></icon></veui-button>
+      <veui-button ui="alt square large"><icon name="gear"></icon></veui-button>
+      <veui-button ui="alt square" disabled><icon name="gear"></icon></veui-button>
+      <veui-button ui="alt square" loading><icon name="gear"></icon></veui-button>
     </p>
   </article>
 </template>
