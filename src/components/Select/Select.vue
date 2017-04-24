@@ -14,38 +14,37 @@
       </slot>
     </veui-button>
     <veui-overlay
+      :overlay-class="{'veui-select-options': true}"
       target="veui-select-button"
       :open="expanded"
       :options="overlay">
-      <div class="veui-select-options">
-        <template v-for="option in options">
+      <template v-for="option in options">
+        <veui-option
+          v-if="option.value"
+          v-bind="option"
+          :selected="option.value === value"
+          :key="option.value"
+          :icon="optionicon"
+          @select="selectHandler">
+            <slot name="select-option" v-bind="option"></slot>
+        </veui-option>
+        <div v-else-if="option.options" class="veui-select-options-group">
+          <slot name="option-label" :label="option.label">
+            <div class="veui-select-option-label">
+              <span>{{ option.label }}</span>
+            </div>
+          </slot>
           <veui-option
-            v-if="option.value"
-            v-bind="option"
-            :selected="option.value === value"
-            :key="option.value"
+            v-for="subOption in option.options"
+            v-bind="subOption"
+            :selected="subOption.value === value"
+            :key="subOption.value"
             :icon="optionicon"
             @select="selectHandler">
-              <slot name="select-option" v-bind="option"></slot>
+            <slot name="select-option" v-bind="subOption"></slot>
           </veui-option>
-          <div v-else-if="option.options" class="veui-select-options-group">
-            <slot name="option-label" :label="option.label">
-              <div class="veui-select-option-label">
-                <span>{{ option.label }}</span>
-              </div>
-            </slot>
-            <veui-option
-              v-for="subOption in option.options"
-              v-bind="subOption"
-              :selected="subOption.value === value"
-              :key="subOption.value"
-              :icon="optionicon"
-              @select="selectHandler">
-              <slot name="select-option" v-bind="subOption"></slot>
-            </veui-option>
-          </div>
-        </template>
-      </div>
+        </div>
+      </template>
     </veui-overlay>
   </div>
 </template>

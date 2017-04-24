@@ -54,14 +54,13 @@ export default [
     component: Input
   },
   {
-<<<<<<< 268dbaabd2511d5ad96f8acea1019323c649060c
     path: '/calendar',
     name: 'Calendar',
     component: Calendar
-=======
+  },
+  {
     path: '/select',
     name: 'Select',
     component: Select
->>>>>>> Select组件
   }
 ]
