@@ -86,7 +86,7 @@
     <form v-if="requestMode === 'iframe'" ref="form" :action="action" enctype="multipart/form-data"
       method="POST" :target="iframeId" style="display: none;">
       <input v-for="(value, key) in payload" :name="key" :value="typeof value === 'function' ? value() : value">
-      <input v-if="iframeMode === 'callback'" name="callbackFunc" :value="callbackFuncName">
+      <input v-if="iframeMode === 'callback'" name="callback" :value="callbackFuncName">
     </form>
   </div>
 </template>
@@ -438,6 +438,7 @@ function getProgress () {
     display: inline-block;
     color: @veui-text-color-strong;
     margin-right: 1em;
+    box-sizing: border-box;
     &-icon {
       margin-right: 5px;
     }
