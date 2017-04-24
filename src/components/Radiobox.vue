@@ -1,9 +1,7 @@
 <template>
-  <label class="veui-checkbox" :ui="ui">
-    <input ref="box" type="checkbox" v-bind="attrs" @change="handleChange($event.target.checked)">
-    <span class="checkbox">
-      <icon v-if="checked || localIndeterminate" :name="localIndeterminate ? 'minus' : 'check'"></icon>
-    </span>
+  <label class="veui-radiobox" :ui="ui">
+    <input type="radio" v-bind="attrs" @change="$emit('change', $event.target.checked)">
+    <span class="radiobox"><icon name="fa-circle"></icon></span>
     <span><slot></slot></span>
   </label>
 </template>
@@ -11,11 +9,10 @@
 <script>
 import Icon from './Icon'
 import mixin from '../mixins/input'
-import 'vue-awesome/icons/check'
-import 'vue-awesome/icons/minus'
+import 'vue-awesome/icons/fa-circle'
 
 export default {
-  name: 'veui-checkbox',
+  name: 'veui-radiobox',
   components: {
     Icon
   },
@@ -25,41 +22,18 @@ export default {
     name: String,
     value: String,
     disabled: Boolean,
-    checked: Boolean,
-    indeterminate: Boolean
+    checked: Boolean
   },
   model: {
     prop: 'checked',
     event: 'change'
   },
-  data () {
-    return {
-      localIndeterminate: this.indeterminate
-    }
-  },
   computed: {
     attrs () {
       let attrs = Object.assign({}, this.$props)
       delete attrs.ui
-      delete attrs.indeterminate
       return attrs
     }
-  },
-  methods: {
-    handleChange (checked) {
-      this.localIndeterminate = false
-      this.$emit('update:indeterminate', false)
-      this.$emit('change', checked)
-    }
-  },
-  watch: {
-    indeterminate (value) {
-      this.localIndeterminate = value
-      this.$refs.box.indeterminate = value
-    }
-  },
-  mounted () {
-    this.$refs.box.indeterminate = this.localIndeterminate
   }
 }
 </script>
@@ -67,7 +41,7 @@ export default {
 <style lang="less">
 @import "../styles/theme-default/lib.less";
 
-.veui-checkbox {
+.veui-radiobox {
   display: inline-block;
   margin-right: 20px;
   color: #333;
@@ -84,11 +58,11 @@ export default {
     cursor: pointer;
   }
 
-  .checkbox {
+  .radiobox {
     display: inline-block;
     position: relative;
     background-color: #fff;
-    border-radius: 3px;
+    border-radius: 50%;
     height: @veui-font-size-large;
     width: @veui-font-size-large;
     margin-right: 7px;
@@ -98,24 +72,21 @@ export default {
   }
 
   &:hover {
-    .checkbox {
+    .radiobox {
       border-color: @veui-theme-color-primary;
     }
   }
 
-  :checked,
-  :indeterminate {
-    & + .checkbox {
-      background-color: @veui-theme-color-primary;
-      border-color: @veui-theme-color-primary;
-      .veui-icon {
-        display: inline-block;
-        position: absolute;
-        color: #fff;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.75);
-      }
+  :checked + .radiobox {
+    border-color: @veui-theme-color-primary;
+    .veui-shadow(none);
+    .veui-icon {
+      display: inline-block;
+      color: @veui-theme-color-primary;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
     }
   }
 
@@ -124,15 +95,10 @@ export default {
     & ~ span {
       cursor: not-allowed;
     }
-
     & ~ span {
       color: @veui-gray-color-weak;
     }
-  }
-
-  :disabled,
-  :indeterminate:disabled {
-    & + .checkbox {
+    & + .radiobox {
       border-color: @veui-gray-color-sup-1;
       background-color: @veui-gray-color-sup-2;
       .veui-shadow(none);
@@ -146,17 +112,13 @@ export default {
     font-size: @veui-font-size-small;
     line-height: 1;
 
-    .checkbox {
+    .radiobox {
       margin-right: 6px;
+      font-size: @veui-font-size-small;
       height: @veui-font-size-small;
       width: @veui-font-size-small;
-      font-size: @veui-font-size-small;
-
-      & + span {
-        font-size: @veui-font-size-small;
-      }
     }
   }
-}
 
+}
 </style>
