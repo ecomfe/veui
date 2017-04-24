@@ -1,5 +1,5 @@
 <template>
-<input type="checkbox" ref="box" :checked="checked" :value="value" @change="$emit('change', $event.target.checked)">
+<input type="checkbox" v-bind.prop="$props" @change="$emit('change', $event.target.checked)">
 </template>
 
 <script>
@@ -9,11 +9,6 @@ export default {
   model: {
     prop: 'checked',
     event: 'change'
-  },
-  watch: {
-    indeterminate (newValue) {
-      this.$refs.box.indeterminate = newValue
-    }
   }
 }
 </script>

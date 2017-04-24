@@ -19,25 +19,25 @@
 
     </div>
     <veui-uploader :uploaderType="uploaderType"
-      :throughIframe="false"
+      name="file"
       action="/upload"
+      requestMode="xhr"
       :disabled="false"
       :max-count="3"
-      :tip="tip"
-      :files="files"
+      :value="files"
       :max-size="10"
       :previewImage="previewImage"
       :needButton="needButton"
       extentionTypes="jpg,jpeg,gif"
-      :args="extraArgs"
+      :payload="payload"
       :ui="ui"
-      :uploadCallback="uploadCallback"
       :uploadingContent="uploadingContent"
-      @delete="deleteFile"
+      @remove="removeFile"
       @cancel="cancelUploading"
       @change="onChange"
       @success="onSuccess"
-      @failure="onFailure">
+      @fail="onFailure">
+      <template slot="tip">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
     <h1><code>&lt;veui-uploader(through iframe)&gt;</code></h1>
     <div style="margin-bottom: 10px">
@@ -50,25 +50,25 @@
       <veui-button @click="changeImageSize('small', 'Iframe')">小图</veui-button>
     </div>
     <veui-uploader :uploaderType="uploaderTypeIframe"
+      name="file"
       action="/uploadiframe"
-      :throughIframe="true"
-      iframeCallbackType="postmessage"
+      requestMode="iframe"
+      iframeMode="postmessage"
       :disabled="false"
       :max-count="3"
-      :tip="tip"
-      :files="filesIframe"
+      :value="filesIframe"
       :max-size="10"
       :previewImage="previewImageIframe"
       extentionTypes="jpg,jpeg,gif"
-      :uploadCallback="uploadCallback"
-      :args="extraArgs"
+      :payload="payload"
       uploadingContent="text"
       :ui="uiIframe"
-      @delete="deleteFileIframe"
+      @remove="removeFileIframe"
       @cancel="cancelUploadingIframe"
       @change="onChangeIframe"
       @success="onSuccess"
-      @failure="onFailure">
+      @fail="onFailure">
+      <template slot="tip">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
   </article>
 </template>
@@ -88,7 +88,7 @@ export default {
     return {
       uploaderType: 'image',
       uploaderTypeIframe: 'file',
-      ui: 'multiline horizontal bottom-mask',
+      ui: 'multiline horizontal bottom-mask list-icon',
       uiIframe: 'multiline horizontal',
       needButton: false,
       previewImage: true,
@@ -96,13 +96,13 @@ export default {
       uploadingContent: 'progressPercent',
       files: [
         {
-          name: 'aaaa.jpg',
+          name: 'demo-file1.jpg',
           fileUid: '123456',
           size: '200kb',
           src: 'https://www.baidu.com/img/bd_logo1.png'
         },
         {
-          name: 'bbbb.gif',
+          name: 'demo-file2.gif',
           fileUid: '222333',
           size: '350kb',
           src: 'http://images.nvidia.com/graphics-cards/geforce/pascal/cn/images/1080-ti-design.png'
@@ -110,32 +110,22 @@ export default {
       ],
       filesIframe: [
         {
-          name: 'aaaa.jpg',
+          name: 'demo-file1.jpg',
           fileUid: '123456',
           size: '200kb',
           src: 'https://www.baidu.com/img/bd_logo1.png'
         },
         {
-          name: 'bbbb.gif',
+          name: 'demo-file2.gif',
           fileUid: '222333',
           size: '350kb',
           src: 'http://images.nvidia.com/graphics-cards/geforce/pascal/cn/images/1080-ti-design.png'
         }
       ],
-      extraArgs: {
+      payload: {
         year: '2017',
         month () {
           return new Date().getMonth() + 1
-        }
-      },
-      tip: '请选择jpg,jpeg,gif图片，大小在10M以内',
-      uploadCallback (data, file) {
-        if (data.status === 'success') {
-          this.$emit('success', data)
-          this.onSuccess(data, file)
-        } else if (data.status === 'failure') {
-          this.$emit('failure', data)
-          this.onFailure(data, file)
         }
       }
     }
@@ -162,19 +152,19 @@ export default {
     onFailure (data) {
       console.log(data)
     },
-    deleteFile (file) {
+    removeFile (file) {
       this.files = this.files.filter(item => {
         return item.name !== file.name
       })
     },
-    deleteFileIframe (file) {
+    removeFileIframe (file) {
       this.filesIframe = this.filesIframe.filter(item => {
         return item.name !== file.name
       })
     },
     cancelUploading (file) {
       file.xhr.abort()
-      this.deleteFile(file)
+      this.removeFile(file)
     },
     cancelUploadingIframe () {
       this.filesIframe.pop()
@@ -215,3 +205,4 @@ export default {
   }
 }
 </script>
+

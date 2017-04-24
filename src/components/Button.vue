@@ -1,5 +1,5 @@
 <template>
-  <button class="veui-button" :class="{'veui-button-loading': loading}" v-bind="attrs" @click="$emit('click', $event)">
+  <button class="veui-button" :class="{'veui-button-loading': loading}" v-bind.props="attrs" @click="$emit('click', $event)">
     <template v-if="!loading"><slot></slot></template>
     <template v-else>
       <slot name="loading">
@@ -23,7 +23,10 @@ export default {
     ui: String,
     disabled: Boolean,
     name: String,
-    type: String,
+    type: {
+      type: String,
+      default: 'button'
+    },
     value: String,
     autofocus: Boolean,
     loading: Boolean
@@ -133,8 +136,8 @@ export default {
 
     &:not(.veui-button-loading) {
       &:focus {
-        border-color: @veui-theme-color-secondary;
-        background-color: @veui-theme-color-secondary;
+        border-color: @veui-theme-color-hover;
+        background-color: @veui-theme-color-hover;
         color: #fff;
         .veui-shadow(none);
       }
@@ -155,6 +158,39 @@ export default {
       &:disabled {
         background-color: @veui-gray-color-sup-1;
         color: #fff;
+        .veui-shadow(none);
+      }
+    }
+  }
+
+  &[ui~="alt"] {
+    background-color: @veui-gray-color-sup-3;
+    border-color: @veui-gray-color-sup-3;
+    color: @veui-text-color-normal;
+    .veui-shadow();
+
+    &:not(.veui-button-loading) {
+      &:focus {
+        color: @veui-theme-color-primary;
+        .veui-shadow();
+      }
+
+      &:hover {
+        background-color: @veui-gray-color-sup-3;
+        border-color: @veui-gray-color-sup-3;
+        color: @veui-text-color-strong;
+        .veui-shadow(strong);
+      }
+
+      &:active {
+        border-color: @veui-gray-color-sup-3;
+        background-color: @veui-gray-color-sup-2;
+        .veui-shadow(none);
+      }
+
+      &:disabled {
+        background-color: @veui-gray-color-sup-3;
+        color: @veui-text-color-weak;
         .veui-shadow(none);
       }
     }
@@ -244,7 +280,7 @@ export default {
     }
   }
 
-  .fa-icon {
+  .veui-icon {
     max-width: 1em;
     vertical-align: text-top;
 
