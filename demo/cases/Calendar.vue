@@ -8,7 +8,7 @@
       <veui-calendar v-model="selected2" range :panel="3" :is-disabled-date="isDisabled"></veui-calendar>
     </section>
     <section>
-      <veui-calendar v-model="selected3" range multiple :panel="2"></veui-calendar>
+      <veui-calendar v-model="selected3" range multiple :panel="1"></veui-calendar>
     </section>
   </article>
 </template>

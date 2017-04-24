@@ -15,7 +15,9 @@
       </template>
       <button v-if="pIndex === panels.length - 1 || p.view !== 'days'" class="veui-calendar-next" @click="step(true, p.view)"><veui-icon name="chevron-right"></veui-icon></button>
     </div>
-    <div class="veui-calendar-body" @mouseleave="markEnd()">
+    <div class="veui-calendar-body" :class="{
+        'veui-calendar-multiple-range': multiple && range
+      }" @mouseleave="markEnd()">
       <table>
         <template v-if="p.view === 'days'">
           <thead>
@@ -384,7 +386,8 @@ function getRangePosition (day, range) {
     button {
       position: relative;
       width: 100%;
-      height: 100%;
+      height: 35px;
+      margin-top: 1px;
       border: none;
       padding: 0;
       background-color: #fff;
@@ -446,11 +449,12 @@ function getRangePosition (day, range) {
     }
   }
 
+  &-body&-multiple-range &-selected,
   &-in-range {
     button {
-      border-radius: 2px;
       background-color: @veui-theme-color-sup-3;
       border-radius: 0;
+      color: @veui-text-color-normal;
 
       &:hover,
       &:focus {
@@ -477,7 +481,7 @@ function getRangePosition (day, range) {
   &-range-end::before {
     content: "";
     position: absolute;
-    top: 0;
+    top: 1px;
     bottom: 0;
     width: 2px;
     background: @veui-theme-color-sup-3;
