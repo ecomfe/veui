@@ -14,23 +14,22 @@
       </slot>
     </veui-button>
     <veui-overlay
+      :overlay-class="{'veui-dropdown-options': true}"
       target="veui-dropdown-button"
       :open="expanded"
       :options="overlay">
-      <div class="veui-dropdown-options">
-        <div v-for="(option, index) in options"
-          :key="index"
-          class="veui-dropdown-option"
-          :class="{
-            'veui-dropdown-option-disabled': option.disabled
-          }"
-          @click.stop="clickHandler(index)">
-          <slot name="dropdown-option"
-            v-bind="option"
-            :index="index">
-            <span>{{ option.label }}</span>
-          </slot>
-        </div>
+      <div v-for="(option, index) in options"
+        :key="index"
+        class="veui-dropdown-option"
+        :class="{
+          'veui-dropdown-option-disabled': option.disabled
+        }"
+        @click.stop="clickHandler(index)">
+        <slot name="dropdown-option"
+          v-bind="option"
+          :index="index">
+          <span>{{ option.label }}</span>
+        </slot>
       </div>
     </veui-overlay>
   </div>
@@ -71,7 +70,13 @@ export default {
       overlay: {
         attachment: 'top left',
         targetAttachment: 'bottom left',
-        offset: '-3px 0'
+        offset: '-3px 0',
+        constraints: [
+          {
+            to: 'scrollParent',
+            attachment: 'together none'
+          }
+        ]
       }
     }
   },
@@ -121,30 +126,30 @@ export default {
       }
     }
   }
-}
-.veui-dropdown-options {
-  min-width: 110px;
-  max-height: 280px;
-  overflow-y: auto;
-  background-color: #fff;
-  border: 1px solid @veui-gray-color-sup-2;
-  border-radius: 2px;
-  .veui-dropdown-option {
-    cursor: pointer;
-    height: 36px;
-    line-height: 36px;
-    padding: 0 10px;
-    &:hover {
-      background-color: @veui-theme-color-sup-4;
-    }
-    &.veui-dropdown-option-selected {
-      color: @veui-theme-color-primary;
-      font-weight: @veui-font-weight-bold;
-    }
-    &.veui-dropdown-option-disabled {
-      background-color: #fff;
-      color: @veui-gray-color-weak;
-      cursor: not-allowed;
+  &-options {
+    min-width: 110px;
+    max-height: 280px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid @veui-gray-color-sup-2;
+    border-radius: 2px;
+    .veui-dropdown-option {
+      cursor: pointer;
+      height: 36px;
+      line-height: 36px;
+      padding: 0 10px;
+      &:hover {
+        background-color: @veui-theme-color-sup-4;
+      }
+      &.veui-dropdown-option-selected {
+        color: @veui-theme-color-primary;
+        font-weight: @veui-font-weight-bold;
+      }
+      &.veui-dropdown-option-disabled {
+        background-color: #fff;
+        color: @veui-gray-color-weak;
+        cursor: not-allowed;
+      }
     }
   }
 }
