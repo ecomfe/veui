@@ -189,13 +189,14 @@ export default {
       }
     }
   },
-  updated() {
-    if (this.open) {
+  beforeUpdate () {
+    if (this.open && !this.isDragged) {
       // 只有在对话框显示出来了，并且没被拖拽过，才去纠正位置
-      if (!this.isDragged) {
-        this[`set${upperFirst(this.position)}`]()
-      }
-
+      this[`set${upperFirst(this.position)}`]()
+    }
+  },
+  updated () {
+    if (this.open) {
       this.$refs.body.style.height = `${this.getBodyHeight()}px`
     }
   },
