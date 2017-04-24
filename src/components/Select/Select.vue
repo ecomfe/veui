@@ -97,7 +97,7 @@ export default {
         constraints: [
           {
             to: 'scrollParent',
-            attachment: 'together none'
+            attachment: 'together'
           }
         ]
       }
