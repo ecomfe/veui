@@ -167,24 +167,24 @@ export default {
       }
     }
   }
-}
-.veui-select-options {
-  min-width: 160px;
-  max-height: 280px;
-  overflow-y: auto;
-  background-color: #fff;
-  border: 1px solid @veui-gray-color-sup-2;
-  border-radius: 2px;
-  .veui-select-options-group {
-    .veui-select-option-label {
-      padding: 0 10px;
-      height: 36px;
-      line-height: 36px;
-      font-size: @veui-font-size-small;
-      color: @veui-gray-color-weak;
-    }
-    .veui-option {
-      padding-left: 20px;
+  &-options {
+    min-width: 160px;
+    max-height: 280px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid @veui-gray-color-sup-2;
+    border-radius: 2px;
+    .veui-select-options-group {
+      .veui-select-option-label {
+        padding: 0 10px;
+        height: 36px;
+        line-height: 36px;
+        font-size: @veui-font-size-small;
+        color: @veui-gray-color-weak;
+      }
+      .veui-option {
+        padding-left: 20px;
+      }
     }
   }
 }
