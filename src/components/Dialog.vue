@@ -229,85 +229,86 @@ export default {
 }
 </script>
 <style lang="less">
-  @import "../styles/theme-default/lib.less";
+@import "../styles/theme-default/lib.less";
 
-  .veui-dialog {
-    display: none;
-  }
+.veui-dialog {
+  display: none;
+}
 
-  .veui-dialog-box {
-    position: relative;
-  }
-  .veui-dialog-box[ui~="reverse"] .veui-dialog-content-head {
-    background: #fff;
-  }
-  .veui-dialog-box[ui~="reverse"] .veui-dialog-content-head-title,
-  .veui-dialog-box[ui~="reverse"] .veui-dialog-content-head-close {
-    color: @veui-theme-color-primary;
-  }
+.veui-dialog-box {
+  position: relative;
+}
+.veui-dialog-box[ui~="reverse"] .veui-dialog-content-head {
+  background: #fff;
+}
+.veui-dialog-box[ui~="reverse"] .veui-dialog-content-head-title,
+.veui-dialog-box[ui~="reverse"] .veui-dialog-content-head-close {
+  color: @veui-theme-color-primary;
+}
 
-  .veui-dialog-box-mask {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(204, 204, 204, .6);
-  }
+.veui-dialog-box-mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(204, 204, 204, .6);
+}
 
-  .veui-dialog-draggable {
-    user-select: none;
-    cursor: all-scroll;
-  }
+.veui-dialog-draggable {
+  user-select: none;
+  cursor: all-scroll;
+}
 
-  .veui-dialog-content {
-    background: #fff;
-    position: absolute;
-    box-shadow: 0px 2px 4px @veui-shadow-color-normal;
-    border-radius: 4px;
-  }
+.veui-dialog-content {
+  background: #fff;
+  position: absolute;
+  box-shadow: 0px 2px 4px @veui-shadow-color-normal;
+  border-radius: 4px;
+}
 
-  .veui-dialog-content-head,
-  .veui-dialog-content-body,
-  .veui-dialog-content-foot {
-    padding: 0 20px;
-  }
+.veui-dialog-content-head,
+.veui-dialog-content-body,
+.veui-dialog-content-foot {
+  padding: 0 20px;
+}
 
-  .veui-dialog-content-head {
-    height: 42px;
-    line-height: 42px;
-    background: @veui-theme-color-primary;
-    border-radius: 4px 4px 0 0;
-  }
+.veui-dialog-content-head {
+  height: 42px;
+  line-height: 42px;
+  background: @veui-theme-color-primary;
+  border-radius: 4px 4px 0 0;
+}
 
-  .veui-dialog-content-head-title {
-    font-weight: 400;
-    color: #fff;
-    font-size: 16px;
-  }
+.veui-dialog-content-head-title {
+  font-weight: 400;
+  color: #fff;
+  font-size: 16px;
+}
 
-  .veui-dialog-content-body {
-    padding-top: 20px;
-    box-sizing: border-box;
-  }
+.veui-dialog-content-body {
+  padding-top: 20px;
+  box-sizing: border-box;
+}
 
-  .veui-dialog-content-foot {
-    padding: 20px;
-  }
+.veui-dialog-content-foot {
+  padding: 20px;
+}
 
-  .veui-dialog-content-foot .veui-button {
-    margin-right: 10px;
-  }
+.veui-dialog-content-foot .veui-button {
+  margin-right: 10px;
+}
 
-  .veui-dialog-content-head-close {
-    color: #fff;
-    float: right;
-    width: 16px;
-    height: 16px;
-    line-height: 16px;
-    text-align: center;
-    font-size: 16px;
-    margin-top: 12px;
-    cursor: pointer;
-  }
+.veui-dialog-content-head-close,
+.veui-dialog-content-head-close:hover {
+  color: #fff;
+  float: right;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  font-size: 16px;
+  margin-top: 12px;
+  cursor: pointer;
+}
 </style>

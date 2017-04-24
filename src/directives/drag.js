@@ -7,7 +7,8 @@ export default {
       initX: 0,
       initY: 0,
 
-      mousedownHandler ({ clientX, clientY }) {
+      mousedownHandler (event) {
+        const { clientX, clientY } = event
         if (dragData.dragging) {
           return
         }
@@ -15,36 +16,38 @@ export default {
         dragData.dragging = true
         dragData.initX = clientX
         dragData.initY = clientY
-        contextComponent.$emit('dragstart')
+        contextComponent.$emit('dragstart', { event })
 
-        function selectstarthandler (e) {
+        function selectStartHandler (e) {
           e.preventDefault()
         }
 
-        function mousemoveHandler ({ clientX, clientY }) {
+        function mouseMoveHandler (event) {
+          const { clientX, clientY } = event
           if (!dragData.dragging) {
             return
           }
 
           contextComponent.$emit('drag', {
             distanceX: clientX - dragData.initX,
-            distanceY: clientY - dragData.initY
+            distanceY: clientY - dragData.initY,
+            event
           })
         }
 
-        function mouseupHandler () {
+        function mouseupHandler (event) {
           dragData.dragging = false
-          contextComponent.$emit('dragend', false)
-          window.removeEventListener('mousemove', mousemoveHandler)
+          contextComponent.$emit('dragend', { event })
+          window.removeEventListener('mousemove', mouseMoveHandler)
           window.removeEventListener('mouseup', mouseupHandler)
-          window.removeEventListener('selectstart', selectstarthandler)
+          window.removeEventListener('selectstart', selectStartHandler)
         }
 
         // TODO: 非IE下面不用移除选区
         document.getSelection().removeAllRanges()
-        window.addEventListener('selectstart', selectstarthandler)
+        window.addEventListener('selectstart', selectStartHandler)
 
-        window.addEventListener('mousemove', mousemoveHandler)
+        window.addEventListener('mousemove', mouseMoveHandler)
         window.addEventListener('mouseup', mouseupHandler)
       }
     }
