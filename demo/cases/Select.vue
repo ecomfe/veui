@@ -22,7 +22,7 @@
         </template>
       </veui-select>
     </p>
-    <p>
+    <p style="margin-top:500px;">
       <span>默认分组样式：</span>
       <veui-select v-bind="optGroupAttrs" v-model="defaultValue5"></veui-select>
       <span>有选择ICON分组样式：</span>

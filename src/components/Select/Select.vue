@@ -93,7 +93,13 @@ export default {
       overlay: {
         attachment: 'top left',
         targetAttachment: 'bottom left',
-        offset: '-3px 0'
+        offset: '-3px 0',
+        constraints: [
+          {
+            to: 'scrollParent',
+            attachment: 'together none'
+          }
+        ]
       }
     }
   },
