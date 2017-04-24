@@ -21,6 +21,7 @@ import ConfirmBox from './ConfirmBox'
 import AlertBox from './AlertBox'
 import SpecialDialog from './SpecialDialog'
 import Tabs from './Tabs'
+import Switch from './Switch'
 
 export default [
   {
@@ -137,5 +138,10 @@ export default [
     path: '/tabs',
     name: 'Tabs',
     component: Tabs
+  },
+  {
+    path: '/switch',
+    name: 'Switch',
+    component: Switch
   }
 ]

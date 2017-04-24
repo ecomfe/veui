@@ -1,0 +1,235 @@
+<template>
+  <article>
+    <h1><code>&lt;veui-button&gt;</code></h1>
+    <p>
+      <veui-button-group :items="items11" :current="current" :mode="modeExclusive"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group :items="items12" :current="current" :mode="modeExclusive"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group :items="items1" :current="current" :mode="modeExclusive"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group :items="items2" :current="current" :mode="modeExclusive"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group :items="items2" :current="current" :mode="modeMultiple"></veui-button-group>
+    </p>
+
+    <p>
+      <veui-button-group ui="tiny" :current="current" :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group ui="small" :current="current" :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group :current="current" :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group ui="large" :current="current" :items="itemsLink"></veui-button-group>
+    </p>
+
+    <p>
+      <veui-button-group ui="tiny aux" :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group ui="aux" :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group ui="small aux" :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group ui="large aux" :items="itemsLink"></veui-button-group>
+    </p>
+
+    <p>
+      <veui-button-group ui="tiny alt" :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group ui="alt" :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group ui="small alt" :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group ui="large alt" :items="itemsLink"></veui-button-group>
+    </p>
+
+    <p>
+      <veui-button-group ui="small" :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group ui="large" :items="itemsLink"></veui-button-group>
+    </p>
+
+    <p>
+      <veui-button-group ui="tiny link" :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group ui="small link" :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group ui="link" :items="itemsLink"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group ui="large link" :items="itemsLink"></veui-button-group>
+    </p>
+
+    <p>
+      <veui-button-group :items="items11" :current="current" :mode="modeExclusive" :vertical="vertical"></veui-button-group>
+    </p>
+
+    <!-- <p>
+      <veui-button-group :items="items3" :current="current" :mode="mode"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group :items="items1" :vertical="vertical"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group :items="items1" ui="vertical" :vertical="vertical"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group :items="items2" :vertical="vertical"></veui-button-group>
+    </p>
+    <p>
+      <veui-button-group :items="items3" :current="current" :vertical="vertical"></veui-button-group>
+    </p> -->
+
+  </article>
+</template>
+
+<script>
+import bus from '../bus'
+import ButtonGroup from '@/components/ButtonGroup'
+import 'vue-awesome/icons/thumbs-up'
+import 'vue-awesome/icons/flash'
+import 'vue-awesome/icons/gear'
+import 'vue-awesome/icons/code-fork'
+import 'vue-awesome/icons/download'
+
+export default {
+  name: 'buttonGroup',
+  components: {
+    'veui-button-group': ButtonGroup
+  },
+  data () {
+    return {
+      items1: [
+        {
+          text: '菜单1',
+          icon: 'upload'
+        },
+        {
+          text: '菜单2',
+          icon: 'download'
+        },
+        {
+          text: '菜单3',
+          icon: 'code-fork'
+        },
+        {
+          text: '菜单4',
+          icon: 'check'
+        }
+      ],
+      items11: [
+        {
+          text: '菜单1'
+        },
+        {
+          text: '菜单2'
+        },
+        {
+          text: '菜单3'
+        },
+        {
+          text: '菜单4'
+        }
+      ],
+      items12: [
+        {
+          icon: 'upload'
+        },
+        {
+          icon: 'download'
+        },
+        {
+          icon: 'code-fork'
+        },
+        {
+          icon: 'check'
+        }
+      ],
+      items2: [
+        {
+          text: 'menu1',
+          value: 'DOWNLOAD',
+          icon: 'thumbs-up'
+        },
+        {
+          text: 'menu2',
+          value: 'UPLOAD',
+          icon: 'gear'
+        },
+        {
+          text: 'menu3',
+          value: 'UPLOAD',
+          icon: 'flash'
+        }
+      ],
+      items3: [
+        {
+          text: '垂直菜单1'
+        },
+        {
+          text: '垂直菜单2'
+        },
+        {
+          text: '垂直菜单3'
+        },
+        {
+          text: '垂直菜单4'
+        }
+      ],
+      itemsLink: [
+        {
+          text: '上传'
+        },
+        {
+          text: '下载'
+        },
+        {
+          text: '更新'
+        }
+      ],
+      current: [0],
+      current1: [0, 1],
+      current2: [2],
+      vertical: true,
+      modeExclusive: 'exclusive',
+      modeMultiple: 'multiple'
+    }
+  },
+  mounted () {
+    this.$children.forEach((child, index) => {
+      child.$on('click', (index) => {
+        bus.$emit('log', child.$el.getAttribute('class'))
+        console.log(index)
+        this.current = index
+      })
+    })
+  },
+  destroyed () {
+  }
+}
+</script>
+
+<style>
+p {
+  user-select: none;
+}
+</style>
