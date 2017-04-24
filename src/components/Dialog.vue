@@ -20,7 +20,7 @@
           v-show="localClosable"
           @click="hide"><icon name="close"></icon></a>
       </div>
-      <div ref="body" class="veui-dialog-content-body" :style="{ height: `${bodyHeight}px` }"><slot></slot></div>
+      <div ref="body" class="veui-dialog-content-body"><slot></slot></div>
       <div ref="foot" class="veui-dialog-content-foot"><slot name="foot"><veui-button ui="primary" @click="$emit('ok')">确定</veui-button><veui-button @click="$emit('cancel')">取消</veui-button></slot></div>
     </div>
   </veui-overlay>
@@ -95,9 +95,7 @@ export default {
       // 是否被拖拽过了。
       // 如果被拖拽过，那么在window resize的时候就不要纠正对话框的位置了
       // 在每次对话框显示的时候，这个值都会被重置为false
-      isDragged: false,
-
-      bodyHeight: 0
+      isDragged: false
     }
   },
   mounted () {
@@ -127,6 +125,11 @@ export default {
 
       this.isDragged = true
     })
+
+    // 一进来就要求把对话框展示出来，此时对话框肯定没被拖拽过，所以要设置一下对话框位置
+    if (this.open) {
+      this[`set${upperFirst(this.position)}`]()
+    }
   },
   watch: {
     title (value) {
@@ -136,11 +139,7 @@ export default {
       this.localOpen = value
 
       if (value) {
-        this.$nextTick(() => {
-          this.bodyHeight = this.getBodyHeight()
-        })
         this.isDragged = false
-        this[`set${upperFirst(this.position)}`]()
       }
     },
     width (value) {
@@ -188,6 +187,16 @@ export default {
         top: 0,
         transform: `translate(${this.left}px,${this.top}px)`
       }
+    }
+  },
+  updated() {
+    if (this.open) {
+      // 只有在对话框显示出来了，并且没被拖拽过，才去纠正位置
+      if (!this.isDragged) {
+        this[`set${upperFirst(this.position)}`]()
+      }
+
+      this.$refs.body.style.height = `${this.getBodyHeight()}px`
     }
   },
   methods: {
