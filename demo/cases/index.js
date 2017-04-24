@@ -7,6 +7,9 @@ import Overlay from './Overlay'
 import Breadcrumb from './Breadcrumb'
 import Input from './Input'
 import Calendar from './Calendar'
+import Radiobox from './Radiobox'
+import Checkbox from './Checkbox'
+import BoxGroup from './BoxGroup'
 
 export default [
   {
@@ -56,5 +59,20 @@ export default [
     path: '/calendar',
     name: 'Calendar',
     component: Calendar
+  },
+  {
+    path: '/radiobox',
+    name: 'Radiobox',
+    component: Radiobox
+  },
+  {
+    path: '/checkbox',
+    name: 'Checkbox',
+    component: Checkbox
+  },
+  {
+    path: '/boxGroup',
+    name: 'BoxGroup',
+    component: BoxGroup
   }
 ]
