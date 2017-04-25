@@ -171,7 +171,7 @@ export default {
     }
   }
 
-  &-no-data {
+  td&-no-data {
     text-align: center;
   }
 

@@ -6,7 +6,7 @@
         :class="{'veui-uploader-input-label-disabled': disabled}"
         ui="aux" ref="label">
         <icon class="veui-uploader-input-label-icon" name="upload"></icon><slot name="text">选择文件</slot>
-        <input hidden="hidden" type="file" ref="input" @change="onChange" :name="name" :disabled="disabled" multiple>
+        <input hidden="hidden" type="file" ref="input" @change="onChange" :name="name" :disabled="disabled" :accept="accept" multiple>
       </label>
       <slot name="button"></slot>
       <span class="veui-uploader-tip"><slot name="tip"></slot></span>
@@ -77,21 +77,22 @@
       <li v-if="uploaderType === 'image' && !needButton" key="input">
         <label class="veui-uploader-input-label-image"
           :class="{'veui-uploader-input-label-disabled': disabled}"
-          ref="label"><input hidden type="file" ref="input" @change="onChange" :name="name" :disabled="disabled" multiple>
+          ref="label"><input hidden type="file" ref="input" @change="onChange" :name="name" :disabled="disabled" :accept="accept" multiple>
         </label>
       </li>
     </transition-group>
     <iframe v-if="requestMode === 'iframe'" ref="iframe"
      :id="iframeId" :name="iframeId" style="display: none;"></iframe>
-    <form v-if="requestMode === 'iframe'" ref="form" :action="action" enctype="multipart/form-data"
+    <form v-if="requestMode === 'iframe'" ref="form" :action="action + `?callback=parent.${callbackName}['${callbackFuncName}']`" enctype="multipart/form-data"
       method="POST" :target="iframeId" style="display: none;">
       <input v-for="(value, key) in payload" :name="key" :value="typeof value === 'function' ? value() : value">
-      <input v-if="iframeMode === 'callback'" name="callback" :value="callbackFuncName">
+      <input v-if="iframeMode === 'callback'" name="callback" :value="`parent.${callbackName}['${callbackFuncName}']`">
     </form>
   </div>
 </template>
 
 <script>
+import config from '../managers/config'
 import Icon from './Icon'
 import Button from './Button'
 import 'vue-awesome/icons/close'
@@ -116,17 +117,10 @@ export default {
       type: String,
       default: 'file'
     },
-    requestMode: {
-      type: String,
-      required: true
-    },
-    convertResponse: Function,
-    iframeMode: String,
     action: {
       type: String,
       required: true
     },
-    headers: Object,
     withCredentials: {
       type: Boolean,
       default: true
@@ -136,6 +130,7 @@ export default {
       default: false
     },
     extentionTypes: [Array, String],
+    accept: String,
     needButton: {
       type: Boolean,
       default: false
@@ -162,8 +157,13 @@ export default {
         sizeInvalid: false
       },
       iframeId: uniqueId('veui-uploader-iframe'),
-      callbackFuncName: uniqueId('veui-uploader-callback'),
-      onMessage: null
+      callbackFuncName: uniqueId('veuiUploaderCallback'),
+      onMessage: null,
+      requestMode: config.get('requestMode'),
+      headers: config.get('headers'),
+      convertResponse: config.get('convertResponse'),
+      iframeMode: config.get('iframeMode'),
+      callbackName: config.get('callbackName')
     }
   },
   watch: {
@@ -178,6 +178,11 @@ export default {
     latestFile () {
       return this.fileList[this.fileList.length - 1]
     }
+  },
+  beforeCreate () {
+    config.setDefault('requestMode', 'xhr')
+    config.setDefault('iframeMode', 'postmessage')
+    config.setDefault('callbackName', 'veuiUploadResult')
   },
   mounted () {
     if (this.$slots.button && (this.uploaderType === 'file' || this.needButton)) {
@@ -200,14 +205,14 @@ export default {
           : location.origin || (location.protocol + '//' + location.host)
         if (actionOrigin !== event.origin) return
 
-        this.uploadCallback(JSON.parse(event.data), this.latestFile)
+        this.uploadCallback(this.parseData(event.data), this.latestFile)
       }
       window.addEventListener('message', this.onMessage)
     } else if (this.iframeMode === 'callback') {
-      if (!window.veuiUploaderCallback) window.veuiUploaderCallback = {}
-      window.veuiUploaderCallback[this.callbackFuncName] = data => {
+      if (!window[this.callbackName]) window[this.callbackName] = {}
+      window[this.callbackName][this.callbackFuncName] = data => {
         if (this.canceled) return
-        this.uploadCallback(JSON.parse(data), this.latestFile)
+        this.uploadCallback(this.parseData(data), this.latestFile)
       }
     }
   },
@@ -216,7 +221,7 @@ export default {
     window.removeEventListener('message', this.onMessage)
     document.body.removeChild(this.$refs.form)
     document.body.removeChild(this.$refs.iframe)
-    if (this.iframeMode === 'callback') window.veuiUploaderCallback[this.callbackFuncName] = null
+    if (this.iframeMode === 'callback') window[this.callbackName][this.callbackFuncName] = null
   },
   methods: {
     onChange () {
@@ -246,6 +251,7 @@ export default {
           return file
         })
       ]
+
       if (this.maxCount && this.fileList.length > this.maxCount) {
         this.fileList = this.fileList.slice(-this.maxCount)
       }
@@ -262,6 +268,7 @@ export default {
       return typeValidation && sizeValidation
     },
     validateFileType (filename) {
+      if (!this.extentionTypes || !this.extentionTypes.length) return true
       let extentionTypes = Array.isArray(this.extentionTypes)
         ? this.extentionTypes
         : this.extentionTypes.split(/[,;.]/)
@@ -292,7 +299,7 @@ export default {
         this.$emit('progress', e)
       }
       xhr.onload = () => {
-        this.uploadCallback(JSON.parse(xhr.responseText), file)
+        this.uploadCallback(this.parseData(xhr.responseText), file)
       }
       xhr.onerror = () => {
         this.onFailure({}, file)
@@ -366,6 +373,15 @@ export default {
       return size > 1024 * 1024
         ? (size / 1024 / 1024).toFixed(1) + 'M'
         : Math.ceil(size / 1024) + 'KB'
+    },
+    parseData (data) {
+      if (typeof data === 'object') return data
+      if (typeof data === 'string') {
+        try {
+          data = JSON.parse(data)
+        } catch (e) {}
+      }
+      return data
     }
   }
 }

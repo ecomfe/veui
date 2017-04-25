@@ -2,6 +2,7 @@ import Button from './Button'
 import Table from './Table'
 import Pager from './Pager'
 import Uploader from './Uploader'
+import UploaderIframe from './UploaderIframe'
 import Dialog from './Dialog'
 import Overlay from './Overlay'
 import Breadcrumb from './Breadcrumb'
@@ -31,6 +32,11 @@ export default [
     path: '/uploader',
     name: 'Uploader',
     component: Uploader
+  },
+  {
+    path: '/uploaderiframe',
+    name: 'UploaderIframe',
+    component: UploaderIframe
   },
   {
     path: '/dialog',

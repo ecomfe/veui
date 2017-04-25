@@ -20,7 +20,7 @@
           v-show="localClosable"
           @click="hide"><icon name="close"></icon></a>
       </div>
-      <div ref="body" class="veui-dialog-content-body" :style="{ height: `${bodyHeight}px` }"><slot></slot></div>
+      <div ref="body" class="veui-dialog-content-body"><slot></slot></div>
       <div ref="foot" class="veui-dialog-content-foot"><slot name="foot"><veui-button ui="primary" @click="$emit('ok')">确定</veui-button><veui-button @click="$emit('cancel')">取消</veui-button></slot></div>
     </div>
   </veui-overlay>
@@ -95,9 +95,7 @@ export default {
       // 是否被拖拽过了。
       // 如果被拖拽过，那么在window resize的时候就不要纠正对话框的位置了
       // 在每次对话框显示的时候，这个值都会被重置为false
-      isDragged: false,
-
-      bodyHeight: 0
+      isDragged: false
     }
   },
   mounted () {
@@ -127,6 +125,11 @@ export default {
 
       this.isDragged = true
     })
+
+    // 一进来就要求把对话框展示出来，此时对话框肯定没被拖拽过，所以要设置一下对话框位置
+    if (this.open) {
+      this[`set${upperFirst(this.position)}`]()
+    }
   },
   watch: {
     title (value) {
@@ -136,11 +139,7 @@ export default {
       this.localOpen = value
 
       if (value) {
-        this.$nextTick(() => {
-          this.bodyHeight = this.getBodyHeight()
-        })
         this.isDragged = false
-        this[`set${upperFirst(this.position)}`]()
       }
     },
     width (value) {
@@ -190,6 +189,17 @@ export default {
       }
     }
   },
+  beforeUpdate () {
+    if (this.open && !this.isDragged) {
+      // 只有在对话框显示出来了，并且没被拖拽过，才去纠正位置
+      this[`set${upperFirst(this.position)}`]()
+    }
+  },
+  updated () {
+    if (this.open) {
+      this.$refs.body.style.height = `${this.getBodyHeight()}px`
+    }
+  },
   methods: {
     setPosition ({ topRatio = 0.5, leftRatio = 0.5 } = {}) {
       this.left = (window.innerWidth - this.localWidth) * leftRatio + document.body.scrollLeft
@@ -229,85 +239,86 @@ export default {
 }
 </script>
 <style lang="less">
-  @import "../styles/theme-default/lib.less";
+@import "../styles/theme-default/lib.less";
 
-  .veui-dialog {
-    display: none;
-  }
+.veui-dialog {
+  display: none;
+}
 
-  .veui-dialog-box {
-    position: relative;
-  }
-  .veui-dialog-box[ui~="reverse"] .veui-dialog-content-head {
-    background: #fff;
-  }
-  .veui-dialog-box[ui~="reverse"] .veui-dialog-content-head-title,
-  .veui-dialog-box[ui~="reverse"] .veui-dialog-content-head-close {
-    color: @veui-theme-color-primary;
-  }
+.veui-dialog-box {
+  position: relative;
+}
+.veui-dialog-box[ui~="reverse"] .veui-dialog-content-head {
+  background: #fff;
+}
+.veui-dialog-box[ui~="reverse"] .veui-dialog-content-head-title,
+.veui-dialog-box[ui~="reverse"] .veui-dialog-content-head-close {
+  color: @veui-theme-color-primary;
+}
 
-  .veui-dialog-box-mask {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(204, 204, 204, .6);
-  }
+.veui-dialog-box-mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(204, 204, 204, .6);
+}
 
-  .veui-dialog-draggable {
-    user-select: none;
-    cursor: all-scroll;
-  }
+.veui-dialog-draggable {
+  user-select: none;
+  cursor: all-scroll;
+}
 
-  .veui-dialog-content {
-    background: #fff;
-    position: absolute;
-    box-shadow: 0px 2px 4px @veui-shadow-color-normal;
-    border-radius: 4px;
-  }
+.veui-dialog-content {
+  background: #fff;
+  position: absolute;
+  box-shadow: 0px 2px 4px @veui-shadow-color-normal;
+  border-radius: 4px;
+}
 
-  .veui-dialog-content-head,
-  .veui-dialog-content-body,
-  .veui-dialog-content-foot {
-    padding: 0 20px;
-  }
+.veui-dialog-content-head,
+.veui-dialog-content-body,
+.veui-dialog-content-foot {
+  padding: 0 20px;
+}
 
-  .veui-dialog-content-head {
-    height: 42px;
-    line-height: 42px;
-    background: @veui-theme-color-primary;
-    border-radius: 4px 4px 0 0;
-  }
+.veui-dialog-content-head {
+  height: 42px;
+  line-height: 42px;
+  background: @veui-theme-color-primary;
+  border-radius: 4px 4px 0 0;
+}
 
-  .veui-dialog-content-head-title {
-    font-weight: 400;
-    color: #fff;
-    font-size: 16px;
-  }
+.veui-dialog-content-head-title {
+  font-weight: 400;
+  color: #fff;
+  font-size: 16px;
+}
 
-  .veui-dialog-content-body {
-    padding-top: 20px;
-    box-sizing: border-box;
-  }
+.veui-dialog-content-body {
+  padding-top: 20px;
+  box-sizing: border-box;
+}
 
-  .veui-dialog-content-foot {
-    padding: 20px;
-  }
+.veui-dialog-content-foot {
+  padding: 20px;
+}
 
-  .veui-dialog-content-foot .veui-button {
-    margin-right: 10px;
-  }
+.veui-dialog-content-foot .veui-button {
+  margin-right: 10px;
+}
 
-  .veui-dialog-content-head-close {
-    color: #fff;
-    float: right;
-    width: 16px;
-    height: 16px;
-    line-height: 16px;
-    text-align: center;
-    font-size: 16px;
-    margin-top: 12px;
-    cursor: pointer;
-  }
+.veui-dialog-content-head-close,
+.veui-dialog-content-head-close:hover {
+  color: #fff;
+  float: right;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  font-size: 16px;
+  margin-top: 12px;
+  cursor: pointer;
+}
 </style>
