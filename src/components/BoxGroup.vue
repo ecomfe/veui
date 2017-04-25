@@ -1,15 +1,8 @@
 <template>
   <div>
-    <template v-if="type === 'radiobox'">
-      <veui-radiobox type="radiobox" :ui="ui" :name="name" v-for="(item, index) in items" :key="index" v-bind="{ value: item.value, disabled: item.disabled, checked: item.checked, id: item.id }" @change="radioChange(index)">
-        <slot :label="item.label"></slot>
-      </veui-radiobox>
-    </template>
-    <template v-else-if="type === 'checkbox'">
-      <veui-checkbox type="checkbox" :ui="ui" :name="name" v-for="(item, index) in items" :key="index" v-bind="{ value: item.value, disabled: item.disabled, checked: item.checked, indeterminate: item.indeterminate, id: item.id }" @change="checkboxChange(index, arguments[0])">
-        <slot :label="item.label"></slot>
-      </veui-checkbox>
-    </template>
+    <component :is="type" :ui="ui" :name="name" v-for="(item, index) in items" :key="index" v-bind="{ value: item.value, disabled: item.disabled, checked: item.checked}" @change="boxChange(index, arguments[0])">
+      <slot :label="item.label"></slot>
+    </component>
   </div>
 </template>
 
@@ -21,49 +14,42 @@ import Checkbox from './Checkbox'
 export default {
   name: 'veui-boxgroup',
   components: {
-    'veui-radiobox': Radiobox,
-    'veui-checkbox': Checkbox
+    'radiobox': Radiobox,
+    'checkbox': Checkbox
   },
   mixins: [ mixin ],
   props: {
     type: String,
     ui: String,
     name: String,
-    items: Array
-  },
-  computed: {
-    picked () {
-      if (this.type === 'radiobox') {
-        return this.items.find(item => item.checked).value
-      } else if (this.type === 'checkbox') {
-        return this.items.filter(item => item.checked).map(item => item.value)
-      }
-    }
+    items: Array,
+    value: [ String, Array ]
   },
   mounted () {
-    this.$emit('input', this.picked)
+    this.items.map(item => {
+      item.checked = this.type === 'radiobox' ? item.value === this.value : this.value.indexOf(item.value) !== -1
+    })
+  },
+  watch: {
+    value (value) {
+      this.items.map(item => {
+        item.checked = this.type === 'radiobox' ? item.value === value : value.indexOf(item.value) !== -1
+      })
+    }
   },
   methods: {
-    radioChange (index) {
-      let items = this.items
-      let value = items[index].value
-      items.forEach((v, i) => {
-        this.$set(v, 'checked', index === i)
-      })
-      this.$emit('input', value)
-    },
-    checkboxChange (index, checked) {
-      let items = this.items
-      let value = items[index].value
-      let picked = this.picked
-      items[index].checked = checked
-      if (checked) {
-        picked.push(value)
+    boxChange (index, checked) {
+      if (this.type === 'radiobox') {
+        this.$emit('input', this.items[index].value)
       } else {
-        let i = picked.findIndex(item => item === value)
-        picked.splice(i, 1)
+        let value = this.items[index].value
+        if (checked) {
+          this.value.push(value)
+        } else {
+          this.value.splice(this.value.findIndex(item => item === value), 1)
+        }
+        this.$emit('input', this.value)
       }
-      this.$emit('input', picked)
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <label class="veui-radiobox" :ui="ui">
     <input type="radio" v-bind="attrs" @change="$emit('change', $event.target.checked)">
-    <span class="radiobox"><icon name="fa-circle"></icon></span>
+    <span class="veui-radiobox-box"><icon name="circle"></icon></span>
     <span><slot></slot></span>
   </label>
 </template>
@@ -9,7 +9,7 @@
 <script>
 import Icon from './Icon'
 import mixin from '../mixins/input'
-import 'vue-awesome/icons/fa-circle'
+import 'vue-awesome/icons/circle'
 
 export default {
   name: 'veui-radiobox',
@@ -58,7 +58,7 @@ export default {
     cursor: pointer;
   }
 
-  .radiobox {
+  &-box {
     display: inline-block;
     position: relative;
     background-color: #fff;
@@ -71,13 +71,11 @@ export default {
     box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   }
 
-  &:hover {
-    .radiobox {
-      border-color: @veui-theme-color-primary;
-    }
+  &:hover &-box {
+    border-color: @veui-theme-color-primary;
   }
 
-  :checked + .radiobox {
+  & :checked + &-box {
     border-color: @veui-theme-color-primary;
     .veui-shadow(none);
     .veui-icon {
@@ -98,26 +96,27 @@ export default {
     & ~ span {
       color: @veui-gray-color-weak;
     }
-    & + .radiobox {
-      border-color: @veui-gray-color-sup-1;
-      background-color: @veui-gray-color-sup-2;
-      .veui-shadow(none);
-      .veui-icon {
-        color: @veui-gray-color-weak;
-      }
+  }
+
+  & :disabled + &-box {
+    border-color: @veui-gray-color-sup-1;
+    background-color: @veui-gray-color-sup-2;
+    .veui-shadow(none);
+    .veui-icon {
+      color: @veui-gray-color-weak;
     }
   }
 
   &[ui~="small"] {
     font-size: @veui-font-size-small;
     line-height: 1;
+  }
 
-    .radiobox {
-      margin-right: 6px;
-      font-size: @veui-font-size-small;
-      height: @veui-font-size-small;
-      width: @veui-font-size-small;
-    }
+  &[ui~="small"] &-box {
+    margin-right: 6px;
+    font-size: @veui-font-size-small;
+    height: @veui-font-size-small;
+    width: @veui-font-size-small;
   }
 
 }

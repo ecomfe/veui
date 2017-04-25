@@ -1,7 +1,7 @@
 <template>
   <label class="veui-checkbox" :ui="ui">
     <input ref="box" type="checkbox" v-bind="attrs" @change="handleChange($event.target.checked)">
-    <span class="checkbox">
+    <span class="veui-checkbox-box">
       <icon v-if="checked || localIndeterminate" :name="localIndeterminate ? 'minus' : 'check'"></icon>
     </span>
     <span><slot></slot></span>
@@ -84,7 +84,7 @@ export default {
     cursor: pointer;
   }
 
-  .checkbox {
+  &-box {
     display: inline-block;
     position: relative;
     background-color: #fff;
@@ -97,25 +97,21 @@ export default {
     box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   }
 
-  &:hover {
-    .checkbox {
-      border-color: @veui-theme-color-primary;
-    }
+  &:hover &-box {
+    border-color: @veui-theme-color-primary;
   }
 
-  :checked,
-  :indeterminate {
-    & + .checkbox {
-      background-color: @veui-theme-color-primary;
-      border-color: @veui-theme-color-primary;
-      .veui-icon {
-        display: inline-block;
-        position: absolute;
-        color: #fff;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.75);
-      }
+  & :checked + &-box,
+  & :indeterminate + &-box {
+    background-color: @veui-theme-color-primary;
+    border-color: @veui-theme-color-primary;
+    .veui-icon {
+      display: inline-block;
+      position: absolute;
+      color: #fff;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.75);
     }
   }
 
@@ -130,31 +126,29 @@ export default {
     }
   }
 
-  :disabled,
-  :indeterminate:disabled {
-    & + .checkbox {
-      border-color: @veui-gray-color-sup-1;
-      background-color: @veui-gray-color-sup-2;
-      .veui-shadow(none);
-      .veui-icon {
-        color: @veui-gray-color-weak;
-      }
+  & :disabled + &-box,
+  & :indeterminate:disabled + &-box {
+    border-color: @veui-gray-color-sup-1;
+    background-color: @veui-gray-color-sup-2;
+    .veui-shadow(none);
+    .veui-icon {
+      color: @veui-gray-color-weak;
     }
   }
 
   &[ui~="small"] {
     font-size: @veui-font-size-small;
     line-height: 1;
+  }
 
-    .checkbox {
-      margin-right: 6px;
-      height: @veui-font-size-small;
-      width: @veui-font-size-small;
+  &[ui~="small"] &-box {
+    margin-right: 6px;
+    height: @veui-font-size-small;
+    width: @veui-font-size-small;
+    font-size: @veui-font-size-small;
+
+    & + span {
       font-size: @veui-font-size-small;
-
-      & + span {
-        font-size: @veui-font-size-small;
-      }
     }
   }
 }
