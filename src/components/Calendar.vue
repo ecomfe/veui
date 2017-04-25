@@ -1,5 +1,5 @@
 <template>
-<div class="veui-calendar">
+<div class="veui-calendar" @mouseleave="markEnd()">
   <div v-for="(p, pIndex) in panels" class="veui-calendar-panel" :class="{ [`veui-calendar-${p.view}`]: true }">
     <div class="veui-calendar-head">
       <button type="button" v-if="pIndex === 0 || p.view !== 'days'" class="veui-calendar-prev" @click="step(false, p.view)"><veui-icon name="chevron-left"></veui-icon></button>
@@ -15,9 +15,7 @@
       </template>
       <button v-if="pIndex === panels.length - 1 || p.view !== 'days'" class="veui-calendar-next" @click="step(true, p.view)"><veui-icon name="chevron-right"></veui-icon></button>
     </div>
-    <div class="veui-calendar-body" :class="{
-        'veui-calendar-multiple-range': multiple && range
-      }" @mouseleave="markEnd()">
+    <div class="veui-calendar-body" :class="{ 'veui-calendar-multiple-range': multiple && range }">
       <table>
         <template v-if="p.view === 'days'">
           <thead>
@@ -29,14 +27,7 @@
             <tr v-for="week in p.weeks">
               <td v-for="day in week"
                 :key="`${day.year}-${day.month + 1}-${day.date}`"
-                :class="{
-                  'veui-calendar-aux': day.month !== p.month,
-                  'veui-calendar-today': day.isToday,
-                  'veui-calendar-selected': day.isSelected,
-                  'veui-calendar-in-range': day.rangePosition === 'within',
-                  'veui-calendar-range-start': day.rangePosition === 'start',
-                  'veui-calendar-range-end': day.rangePosition === 'end'
-                }">
+                :class="getDateClasses(day, p)">
                 <button v-if="fillMonth && panel === 1 || day.month === p.month" @click="selectDay(pIndex, day)"
                   @mouseenter="markEnd(day)" @focus="markEnd(day)" :disabled="day.isDisabled">{{ day.date }}</button>
               </td>
@@ -131,6 +122,12 @@ export default {
       default: function () {
         return false
       }
+    },
+    getDateClass: {
+      type: Function,
+      default: function () {
+        return {}
+      }
     }
   },
   data () {
@@ -214,6 +211,17 @@ export default {
     }
   },
   methods: {
+    getDateClasses (day, panel) {
+      return {
+        'veui-calendar-aux': day.month !== panel.month,
+        'veui-calendar-today': day.isToday,
+        'veui-calendar-selected': day.isSelected,
+        'veui-calendar-in-range': day.rangePosition === 'within',
+        'veui-calendar-range-start': day.rangePosition === 'start',
+        'veui-calendar-range-end': day.rangePosition === 'end',
+        ...this.getDateClass(day)
+      }
+    },
     selectDay (i, day) {
       // switch month in days view
       this.year = day.year - Math.floor((day.month - i) / 12)

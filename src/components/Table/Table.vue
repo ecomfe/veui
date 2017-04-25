@@ -1,8 +1,8 @@
 <template>
 <table class="veui-table" :ui="ui">
   <colgroup>
-    <col v-if="selectable" width="60">
-    <col v-for="col in displayedColumns" :width="col.width">
+    <col v-if="selectable" width="60"></col>
+    <col v-for="col in displayedColumns" :width="col.width"></col>
   </colgroup>
   <table-head :columns="displayedColumns" :selectable="selectable" :select-status="selectStatus" @select="select" @sort="sort"></table-head>
   <slot name="foot"><table-foot v-if="hasFoot" :data="data" :columns="displayedColumns"></table-foot></slot>

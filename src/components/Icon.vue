@@ -8,6 +8,6 @@ export default {
   components: {
     Icon
   },
-  props: ['name', 'scale', 'spin', 'inverse', 'flip', 'label']
+  props: Icon.props
 }
 </script>
