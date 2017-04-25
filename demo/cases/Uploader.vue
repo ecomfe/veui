@@ -122,9 +122,7 @@ export default {
       ],
       payload: {
         year: '2017',
-        month () {
-          return new Date().getMonth() + 1
-        }
+        month: '4'
       }
     }
   },

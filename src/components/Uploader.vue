@@ -83,9 +83,9 @@
     </transition-group>
     <iframe v-if="requestMode === 'iframe'" ref="iframe"
      :id="iframeId" :name="iframeId" style="display: none;"></iframe>
-    <form v-if="requestMode === 'iframe'" ref="form" :action="action + `?callback=parent.${callbackNamespace}['${callbackFuncName}']`" enctype="multipart/form-data"
+    <form v-if="requestMode === 'iframe'" ref="form" :action="`${action}?callback=parent.${callbackNamespace}['${callbackFuncName}']`" enctype="multipart/form-data"
       method="POST" :target="iframeId" style="display: none;">
-      <input v-for="(value, key) in payload" :name="key" :value="typeof value === 'function' ? value() : value">
+      <input v-for="(value, key) in payload" :name="key" :value="value">
       <input v-if="iframeMode === 'callback'" name="callback" :value="`parent.${callbackNamespace}['${callbackFuncName}']`">
     </form>
   </div>
@@ -122,9 +122,9 @@ export default {
       required: true
     },
     headers: {
-      type: String,
+      type: Object,
       default () {
-        return config.get('uploader.headers')
+        return cloneDeep(config.get('uploader.headers'))
       }
     },
     withCredentials: {
@@ -144,7 +144,7 @@ export default {
       }
     },
     convertResponse: {
-      type: String,
+      type: Function,
       default () {
         return config.get('uploader.convertResponse')
       }
@@ -229,7 +229,9 @@ export default {
       }
       window.addEventListener('message', this.onMessage)
     } else if (this.iframeMode === 'callback') {
-      if (!window[this.callbackNamespace]) window[this.callbackNamespace] = {}
+      if (!window[this.callbackNamespace]) {
+        window[this.callbackNamespace] = {}
+      }
       window[this.callbackNamespace][this.callbackFuncName] = data => {
         if (this.canceled) return
         this.uploadCallback(this.parseData(data), this.latestFile)
@@ -241,7 +243,9 @@ export default {
     window.removeEventListener('message', this.onMessage)
     document.body.removeChild(this.$refs.form)
     document.body.removeChild(this.$refs.iframe)
-    if (this.iframeMode === 'callback') window[this.callbackNamespace][this.callbackFuncName] = null
+    if (this.iframeMode === 'callback') {
+      window[this.callbackNamespace][this.callbackFuncName] = null
+    }
   },
   methods: {
     onChange () {
@@ -257,6 +261,7 @@ export default {
         if (!this.validateFile({name, size})) return
         newFiles = [{status: 'uploading', name}]
       }
+
       if (!newFiles.length) return
 
       this.fileList = [
@@ -275,7 +280,9 @@ export default {
       if (this.maxCount && this.fileList.length > this.maxCount) {
         this.fileList = this.fileList.slice(-this.maxCount)
       }
+
       this.$emit('change', this.fileList)
+
       if (this.requestMode === 'iframe' && this.autoUpload) this.submit()
       if (this.requestMode === 'xhr' && this.autoUpload) this.uploadFiles()
       this.$refs.input.value = ''
@@ -307,6 +314,7 @@ export default {
       this.updateFileList(file, {status: 'uploading'})
       let xhr = new XMLHttpRequest()
       file.xhr = xhr
+
       xhr.upload.onprogress = e => {
         switch (this.uploadingContent) {
           case 'progressPercent':
@@ -328,7 +336,7 @@ export default {
       formData.append(this.name, file)
 
       for (let key in this.payload) {
-        formData.append(key, typeof this.payload[key] === 'function' ? this.payload[key](this) : this.payload[key])
+        formData.append(key, this.payload[key])
       }
 
       xhr.open('POST', this.action, true)
@@ -345,7 +353,7 @@ export default {
       form.submit()
     },
     uploadCallback (data, file) {
-      if (this.convertResponse) data = this.convertResponse(data)
+      this.convertResponse(data) || data
       if (data.status === 'success') {
         this.$emit('success', data)
         this.onSuccess(data, file)
