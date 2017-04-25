@@ -83,10 +83,10 @@
     </transition-group>
     <iframe v-if="requestMode === 'iframe'" ref="iframe"
      :id="iframeId" :name="iframeId" style="display: none;"></iframe>
-    <form v-if="requestMode === 'iframe'" ref="form" :action="action + `?callback=parent.${callbackName}['${callbackFuncName}']`" enctype="multipart/form-data"
+    <form v-if="requestMode === 'iframe'" ref="form" :action="action + `?callback=parent.${callbackNamespace}['${callbackFuncName}']`" enctype="multipart/form-data"
       method="POST" :target="iframeId" style="display: none;">
       <input v-for="(value, key) in payload" :name="key" :value="typeof value === 'function' ? value() : value">
-      <input v-if="iframeMode === 'callback'" name="callback" :value="`parent.${callbackName}['${callbackFuncName}']`">
+      <input v-if="iframeMode === 'callback'" name="callback" :value="`parent.${callbackNamespace}['${callbackFuncName}']`">
     </form>
   </div>
 </template>
@@ -121,9 +121,39 @@ export default {
       type: String,
       required: true
     },
+    headers: {
+      type: String,
+      default () {
+        return config.get('uploader.headers')
+      }
+    },
     withCredentials: {
       type: Boolean,
       default: true
+    },
+    requestMode: {
+      type: String,
+      default () {
+        return config.get('uploader.requestMode')
+      }
+    },
+    iframeMode: {
+      type: String,
+      default () {
+        return config.get('uploader.iframeMode')
+      }
+    },
+    convertResponse: {
+      type: String,
+      default () {
+        return config.get('uploader.convertResponse')
+      }
+    },
+    callbackNamespace: {
+      type: String,
+      default () {
+        return config.get('uploader.callbackNamespace')
+      }
     },
     previewImage: {
       type: Boolean,
@@ -158,12 +188,7 @@ export default {
       },
       iframeId: uniqueId('veui-uploader-iframe'),
       callbackFuncName: uniqueId('veuiUploaderCallback'),
-      onMessage: null,
-      requestMode: config.get('requestMode'),
-      headers: config.get('headers'),
-      convertResponse: config.get('convertResponse'),
-      iframeMode: config.get('iframeMode'),
-      callbackName: config.get('callbackName')
+      onMessage: null
     }
   },
   watch: {
@@ -178,11 +203,6 @@ export default {
     latestFile () {
       return this.fileList[this.fileList.length - 1]
     }
-  },
-  beforeCreate () {
-    config.setDefault('requestMode', 'xhr')
-    config.setDefault('iframeMode', 'postmessage')
-    config.setDefault('callbackName', 'veuiUploadResult')
   },
   mounted () {
     if (this.$slots.button && (this.uploaderType === 'file' || this.needButton)) {
@@ -209,8 +229,8 @@ export default {
       }
       window.addEventListener('message', this.onMessage)
     } else if (this.iframeMode === 'callback') {
-      if (!window[this.callbackName]) window[this.callbackName] = {}
-      window[this.callbackName][this.callbackFuncName] = data => {
+      if (!window[this.callbackNamespace]) window[this.callbackNamespace] = {}
+      window[this.callbackNamespace][this.callbackFuncName] = data => {
         if (this.canceled) return
         this.uploadCallback(this.parseData(data), this.latestFile)
       }
@@ -221,7 +241,7 @@ export default {
     window.removeEventListener('message', this.onMessage)
     document.body.removeChild(this.$refs.form)
     document.body.removeChild(this.$refs.iframe)
-    if (this.iframeMode === 'callback') window[this.callbackName][this.callbackFuncName] = null
+    if (this.iframeMode === 'callback') window[this.callbackNamespace][this.callbackFuncName] = null
   },
   methods: {
     onChange () {
@@ -378,10 +398,11 @@ export default {
       if (typeof data === 'object') return data
       if (typeof data === 'string') {
         try {
-          data = JSON.parse(data)
-        } catch (e) {}
+          return JSON.parse(data)
+        } catch (error) {
+          this.$emit('fail', {error})
+        }
       }
-      return data
     }
   }
 }
@@ -479,13 +500,13 @@ function getProgress () {
       position: absolute;
     }
     &::before {
-      border-top: 2px solid @veui-gray-color-sup-2;
+      border-top: 4px solid @veui-gray-color-sup-2;
       top: ~"calc(50% - 1px)";
       left: 30%;
       width: 40%;
     }
     &::after {
-      border-left: 2px solid @veui-gray-color-sup-2;
+      border-left: 4px solid @veui-gray-color-sup-2;
       top: 30%;
       left: ~"calc(50% - 1px)";
       height: 40%;

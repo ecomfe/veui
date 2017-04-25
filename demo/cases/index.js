@@ -2,12 +2,12 @@ import Button from './Button'
 import Table from './Table'
 import Pager from './Pager'
 import Uploader from './Uploader'
-import UploaderIframe from './UploaderIframe'
 import Dialog from './Dialog'
 import Overlay from './Overlay'
 import Breadcrumb from './Breadcrumb'
 import Input from './Input'
 import Calendar from './Calendar'
+import Select from './Select'
 
 export default [
   {
@@ -34,11 +34,6 @@ export default [
     component: Uploader
   },
   {
-    path: '/uploaderiframe',
-    name: 'UploaderIframe',
-    component: UploaderIframe
-  },
-  {
     path: '/dialog',
     name: 'Dialog',
     component: Dialog
@@ -62,5 +57,10 @@ export default [
     path: '/calendar',
     name: 'Calendar',
     component: Calendar
+  },
+  {
+    path: '/select',
+    name: 'Select',
+    component: Select
   }
 ]
