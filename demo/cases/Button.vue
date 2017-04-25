@@ -26,12 +26,12 @@
       <veui-button ui="aux" loading>取消</veui-button>
     </p>
     <p>
-      <veui-button ui="gray tiny">取消</veui-button>
-      <veui-button ui="gray small">取消</veui-button>
-      <veui-button ui="gray">取消</veui-button>
-      <veui-button ui="gray large">取消</veui-button>
-      <veui-button ui="gray" disabled>取消</veui-button>
-      <veui-button ui="gray" loading>取消</veui-button>
+      <veui-button ui="alt tiny">取消</veui-button>
+      <veui-button ui="alt small">取消</veui-button>
+      <veui-button ui="alt">取消</veui-button>
+      <veui-button ui="alt large">取消</veui-button>
+      <veui-button ui="alt" disabled>取消</veui-button>
+      <veui-button ui="alt" loading>取消</veui-button>
     </p>
     <p>
       <veui-button ui="link tiny">编辑</veui-button>
