@@ -253,6 +253,7 @@ export default {
   a {
     color: inherit;
     text-decoration: none;
+    border-radius: 2px;
   }
 
   .veui-wrapper {
@@ -279,6 +280,8 @@ export default {
 
     [class|="veui-group"] {
       float: left;
+      border-radius: 2px;
+      .veui-shadow();
     }
 
     [class|="veui-button"] {
@@ -335,12 +338,6 @@ export default {
 
   .generate-responsive-page-digit-width(4);
 
-  .veui-group-shadow() {
-    border-radius: 3px;
-    background-color: @veui-gray-color-sup-5;
-    box-shadow: 1px 1px 3px @veui-gray-color-weak;
-  }
-
   &[ui~="basic"],
   &[ui~="slim"],
   &[ui~="advanced"] {
@@ -352,7 +349,6 @@ export default {
     .veui-buttons {
       [class|="veui-group"] {
         position: absolute;
-        .veui-group-shadow();
       }
       .veui-group-previous {
         left: 0;
@@ -395,17 +391,41 @@ export default {
         margin-right: 1px;
       }
     }
+    [class|="veui-group"] {
+      :first-child {
+        border-radius: 2px 0 0 2px;
+      }
+
+      :last-child {
+        border-radius: 0 2px 2px 0;
+      }
+    }
   }
 
   &[ui~="hetero"],
   &[ui~="full"] {
     .veui-buttons {
       margin-left: @button-gap-width;
-      .veui-group-shadow();
+      border-radius: 2px;
+      .veui-shadow();
+    }
+    [class|="veui-group"] {
+      .veui-shadow(none);
     }
     .veui-group-previous {
       .veui-button-relative {
         margin-right: 1px;
+      }
+    }
+    .veui-group-previous {
+      :last-child {
+        border-radius: 2px 0 0 2px;
+      }
+    }
+
+    .veui-group-next {
+      :first-child {
+        border-radius: 0 2px 2px 0;
       }
     }
   }
@@ -429,9 +449,6 @@ export default {
     }
 
     .veui-buttons {
-      [class|="veui-group"] {
-        box-shadow: none;
-      }
       [class|="veui-button"] {
         width: @button-height * .55;
         height: @button-height * .55;
