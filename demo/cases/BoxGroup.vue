@@ -38,16 +38,16 @@ export default {
   },
   data () {
     return {
-      picked1: '',
-      picked2: '',
-      picked3: '',
-      picked4: '',
+      picked1: 'Akiyama Mio',
+      picked2: 'Nakano Azusa',
+      picked3: ['Hirasawa Yui', 'Akiyama Mio'],
+      picked4: [],
       data1: [
         {
           value: 'Hirasawa Yui', label: 'Hirasawa Yui'
         },
         {
-          value: 'Akiyama Mio', label: 'Akiyama Mio', checked: true
+          value: 'Akiyama Mio', label: 'Akiyama Mio'
         },
         {
           value: 'Nakano Azusa', label: 'Nakano Azusa'
@@ -61,15 +61,15 @@ export default {
           value: 'Akiyama Mio', label: 'Akiyama Mio'
         },
         {
-          value: 'Nakano Azusa', label: 'Nakano Azusa', checked: true
+          value: 'Nakano Azusa', label: 'Nakano Azusa'
         }
       ],
       data3: [
         {
-          value: 'Hirasawa Yui', label: 'Hirasawa Yui', checked: true
+          value: 'Hirasawa Yui', label: 'Hirasawa Yui'
         },
         {
-          value: 'Akiyama Mio', label: 'Akiyama Mio', checked: true
+          value: 'Akiyama Mio', label: 'Akiyama Mio'
         },
         {
           value: 'Nakano Azusa', label: 'Nakano Azusa'
@@ -83,7 +83,7 @@ export default {
           value: 'Akiyama Mio', label: 'Akiyama Mio'
         },
         {
-          value: 'Nakano Azusa', label: 'Nakano Azusa', indeterminate: true
+          value: 'Nakano Azusa', label: 'Nakano Azusa'
         }
       ]
     }

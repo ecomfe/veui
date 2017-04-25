@@ -2,10 +2,10 @@
   <article>
     <h1><code>&lt;veui-radiobox&gt;</code></h1>
     <p>
-      <veui-radiobox value="normal" v-model="a1">正常状态</veui-radiobox>
+      <veui-radiobox name="a" value="normal" v-model="a1">正常状态</veui-radiobox>
     </p>
     <p>
-      <veui-radiobox value="small" ui="small" v-model="a2">正常状态</veui-radiobox>
+      <veui-radiobox name="a" value="small" ui="small" v-model="a2">正常状态</veui-radiobox>
     </p>
     <p>
       <veui-radiobox checked>选中状态</veui-radiobox>
