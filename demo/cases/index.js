@@ -7,6 +7,7 @@ import Overlay from './Overlay'
 import Breadcrumb from './Breadcrumb'
 import Input from './Input'
 import Calendar from './Calendar'
+import Select from './Select'
 
 export default [
   {
@@ -56,5 +57,10 @@ export default [
     path: '/calendar',
     name: 'Calendar',
     component: Calendar
+  },
+  {
+    path: '/select',
+    name: 'Select',
+    component: Select
   }
 ]
