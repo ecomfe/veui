@@ -8,19 +8,19 @@
     </p>
     <p>value: {{ picked1 }}</p>
     <p>
-      <veui-boxgroup :items="data2" type="radiobox" name="222" ui="small" v-model="picked2">
+      <veui-boxgroup :items="data2" type="radiobox" ui="small" v-model="picked2">
         <template scope="props">{{ props.label }}</template>
       </veui-boxgroup>
     </p>
     <p>value: {{ picked2 }}</p>
     <p>
-      <veui-boxgroup :items="data3" type="checkbox" name="333" v-model="picked3">
+      <veui-boxgroup :items="data3" type="checkbox" v-model="picked3">
         <template scope="props">{{ props.label }}</template>
       </veui-boxgroup>
     </p>
     <p>value: {{ picked3 }}</p>
     <p>
-      <veui-boxgroup :items="data4" type="checkbox" name="444" ui="small" v-model="picked4">
+      <veui-boxgroup :items="data4" type="checkbox" ui="small" v-model="picked4">
         <template scope="props">{{ props.label }}</template>
       </veui-boxgroup>
     </p>

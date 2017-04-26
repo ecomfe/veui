@@ -130,10 +130,15 @@ export default {
   & :indeterminate:disabled + &-box {
     border-color: @veui-gray-color-sup-1;
     background-color: @veui-gray-color-sup-2;
-    .veui-shadow(none);
     .veui-icon {
       color: @veui-gray-color-weak;
     }
+  }
+
+  & :checked + &-box,
+  & :disabled + &-box,
+  & :indeterminate + &-box {
+    .veui-shadow(none);
   }
 
   &[ui~="small"] {

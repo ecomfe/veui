@@ -1,7 +1,7 @@
 <template>
   <div>
-    <component :is="type" :ui="ui" :name="name" v-for="(item, index) in items" :key="index" v-bind="{ value: item.value, disabled: item.disabled, checked: item.checked}" @change="boxChange(index, arguments[0])">
-      <slot :label="item.label"></slot>
+    <component :is="type" :ui="ui" :name="localName" v-for="(item, index) in items" :key="index" :value="item.value" :disabled=" item.disabled" :checked = "type === 'radiobox' ? item.value === value : value.includes(item.value)" @change="boxChange(index, arguments[0])">
+      <slot :label="item.label" :value="item.value"></slot>
     </component>
   </div>
 </template>
@@ -10,6 +10,7 @@
 import mixin from '../mixins/input'
 import Radiobox from './Radiobox'
 import Checkbox from './Checkbox'
+import { uniqueId } from 'lodash'
 
 export default {
   name: 'veui-boxgroup',
@@ -25,16 +26,9 @@ export default {
     items: Array,
     value: [ String, Array ]
   },
-  mounted () {
-    this.items.map(item => {
-      item.checked = this.type === 'radiobox' ? item.value === this.value : this.value.indexOf(item.value) !== -1
-    })
-  },
-  watch: {
-    value (value) {
-      this.items.map(item => {
-        item.checked = this.type === 'radiobox' ? item.value === value : value.indexOf(item.value) !== -1
-      })
+  computed: {
+    localName () {
+      return this.name || uniqueId('veui-boxgroup-')
     }
   },
   methods: {
