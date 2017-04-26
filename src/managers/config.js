@@ -1,21 +1,39 @@
+import { cloneDeep } from 'lodash'
+
+function set (obj, key, value, isOverride) {
+  if (typeof key === 'object') {
+    isOverride = value
+    value = key
+    Object.keys(value).forEach(key => {
+      set(obj, key, value, isOverride)
+    })
+    return
+  }
+
+  if (typeof key !== 'string') {
+    return
+  }
+
+  if (!(key in obj) || isOverride) {
+    obj[key] = value
+  }
+}
+
 export class ConfigManager {
   constructor () {
     this.store = {}
   }
 
   set (key, value) {
-    this.store[key] = value
+    set(this, key, value, true)
   }
 
-  setDefault (key, value) {
-    if (key in this.store) {
-      return
-    }
-    return this.set(key, value)
+  defaults (key, value) {
+    set(this, key, value, false)
   }
 
   get (key) {
-    return this.store[key]
+    return cloneDeep(this.store[key])
   }
 }
 

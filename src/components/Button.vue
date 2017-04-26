@@ -56,7 +56,7 @@ export default {
   user-select: none;
   vertical-align: middle;
   line-height: 1;
-  transition: all .2s;
+  .veui-button-transition();
 
   &:not(.veui-button-loading) {
     &:focus {
@@ -70,7 +70,7 @@ export default {
     }
 
     &:hover {
-      .veui-shadow();
+      .veui-shadow(extend);
     }
 
     &:active {
@@ -122,7 +122,8 @@ export default {
         background-color: @veui-gray-color-sup-4;
       }
 
-      &:disabled {
+      &:disabled,
+      &.veui-disabled {
         background-color: @veui-gray-color-sup-3;
         color: @veui-text-color-weak;
       }
@@ -151,6 +152,7 @@ export default {
       }
 
       &:active {
+        border-color: @veui-theme-color-active;
         background-color: @veui-theme-color-active;
         .veui-shadow(none);
       }
@@ -170,29 +172,7 @@ export default {
     .veui-shadow();
 
     &:not(.veui-button-loading) {
-      &:focus {
-        color: @veui-theme-color-primary;
-        .veui-shadow();
-      }
-
-      &:hover {
-        background-color: @veui-gray-color-sup-3;
-        border-color: @veui-gray-color-sup-3;
-        color: @veui-text-color-strong;
-        .veui-shadow(strong);
-      }
-
-      &:active {
-        border-color: @veui-gray-color-sup-3;
-        background-color: @veui-gray-color-sup-2;
-        .veui-shadow(none);
-      }
-
-      &:disabled {
-        background-color: @veui-gray-color-sup-3;
-        color: @veui-text-color-weak;
-        .veui-shadow(none);
-      }
+      .veui-button-alt();
     }
   }
 
@@ -239,12 +219,12 @@ export default {
 
   &[ui~="large"] {
     height: @veui-height-large;
-    .padding(12px, _);
+    .padding(11px, _);
     font-size: @veui-font-size-large;
   }
 
   &[ui~="small"] {
-    .padding(8px, _);
+    .padding(7px, _);
     height: @veui-height-small;
     font-size: @veui-font-size-small;
   }
@@ -252,7 +232,7 @@ export default {
   &[ui~="tiny"] {
     min-width: auto;
     height: @veui-height-tiny;
-    padding: 6px 10px;
+    padding: 5px 10px;
     font-size: @veui-font-size-small;
   }
 

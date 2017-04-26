@@ -273,8 +273,8 @@ export default {
 .veui-dialog-content {
   background: #fff;
   position: absolute;
-  box-shadow: 0px 2px 4px @veui-shadow-color-normal;
   border-radius: 4px;
+  .veui-shadow(strong);
 }
 
 .veui-dialog-content-head,
