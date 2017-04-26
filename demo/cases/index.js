@@ -9,6 +9,9 @@ import Input from './Input'
 import Calendar from './Calendar'
 import Select from './Select'
 import Dropdown from './Dropdown'
+import Radiobox from './Radiobox'
+import Checkbox from './Checkbox'
+import BoxGroup from './BoxGroup'
 
 export default [
   {
@@ -68,5 +71,20 @@ export default [
     path: '/dropdown',
     name: 'Dropdown',
     component: Dropdown
+  },
+  {
+    path: '/radiobox',
+    name: 'Radiobox',
+    component: Radiobox
+  },
+  {
+    path: '/checkbox',
+    name: 'Checkbox',
+    component: Checkbox
+  },
+  {
+    path: '/boxGroup',
+    name: 'BoxGroup',
+    component: BoxGroup
   }
 ]
