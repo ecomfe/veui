@@ -82,9 +82,9 @@
       </li>
     </transition-group>
     <iframe v-if="requestMode === 'iframe'" ref="iframe"
-     :id="iframeId" :name="iframeId" style="display: none;"></iframe>
+     :id="iframeId" :name="iframeId" class="hide"></iframe>
     <form v-if="requestMode === 'iframe'" ref="form" :action="`${action}?callback=parent.${callbackNamespace}['${callbackFuncName}']`" enctype="multipart/form-data"
-      method="POST" :target="iframeId" style="display: none;">
+      method="POST" :target="iframeId" class="hide">
       <input v-for="(value, key) in payload" :name="key" :value="value">
       <input v-if="iframeMode === 'callback'" name="callback" :value="`parent.${callbackNamespace}['${callbackFuncName}']`">
     </form>
@@ -730,6 +730,9 @@ function getProgress () {
   }
   &-warning {
     color: @veui-warning-color-primary;
+  }
+  .hide {
+    display: none;
   }
   &[ui~="ellipsis"] &-list-file-name {
     text-overflow: ellipsis;
