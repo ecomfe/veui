@@ -9,7 +9,7 @@
         :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort">
         <veui-table-column field="id" title="数据 ID" sortable></veui-table-column>
         <veui-table-column field="desc" title="数据描述"></veui-table-column>
-        <veui-table-column field="price" title="价格" sortable>
+        <veui-table-column field="price" title="价格" sortable width="160">
           <template scope="props">{{ '¥' + props.item.price.toFixed(2) }}</template>
         </veui-table-column>
         <veui-table-column field="updateDate" title="更新时间">
