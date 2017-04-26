@@ -124,7 +124,7 @@ export default {
     headers: {
       type: Object,
       default () {
-        return cloneDeep(config.get('uploader.headers'))
+        return config.get('uploader.headers')
       }
     },
     withCredentials: {
