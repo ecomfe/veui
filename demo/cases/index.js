@@ -8,6 +8,7 @@ import Breadcrumb from './Breadcrumb'
 import Input from './Input'
 import Calendar from './Calendar'
 import Select from './Select'
+import Dropdown from './Dropdown'
 
 export default [
   {
@@ -62,5 +63,10 @@ export default [
     path: '/select',
     name: 'Select',
     component: Select
+  },
+  {
+    path: '/dropdown',
+    name: 'Dropdown',
+    component: Dropdown
   }
 ]
