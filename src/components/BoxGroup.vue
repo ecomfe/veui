@@ -1,6 +1,14 @@
 <template>
   <div>
-    <component :is="type" :ui="ui" :name="localName" v-for="(item, index) in items" :key="index" :value="item.value" :disabled=" item.disabled" :checked = "type === 'radiobox' ? item.value === value : value.includes(item.value)" @change="boxChange(index, arguments[0])">
+    <component :is="type"
+    :ui="ui"
+    :name="localName"
+    v-for="(item, index) in items"
+    :key="index"
+    :value="item.value"
+    :disabled="item.disabled"
+    :checked="type === 'radiobox' ? item.value === value : value.includes(item.value)"
+    @change="boxChange(index, arguments[0])">
       <slot :label="item.label" :value="item.value"></slot>
     </component>
   </div>
