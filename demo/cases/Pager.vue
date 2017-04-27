@@ -2,34 +2,32 @@
   <article>
     <h1><code>&lt;veui-pager&gt;</code></h1>
     <div class="pager">
-      <h2>五种版式</h2>
-      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl"></veui-pager>
+      <h2>四种版式</h2>
+      <veui-pager :page="page" :page-total="pageTotal" :href-tpl="hrefTpl"></veui-pager>
 
-      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" ui="hetero"></veui-pager>
+      <veui-pager :page="page" :page-total="pageTotal" :href-tpl="hrefTpl" ui="hetero"></veui-pager>
 
-      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" ui="advanced"></veui-pager>
+      <veui-pager :page="page" :page-total="pageTotal" :href-tpl="hrefTpl" ui="full"></veui-pager>
 
-      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" ui="full"></veui-pager>
-
-      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" ui="slim"></veui-pager>
+      <veui-pager :page="page" :page-total="pageTotal" :href-tpl="hrefTpl" ui="slim"></veui-pager>
     </div>
 
     <div class="pager">
       <h2>目标位置模板</h2>
       <p><small>格式和 &lt;router-link&gt; 的 to prop 一样</small></p>
-      <veui-pager :page-no="pageNo" :page-total="pageTotal" ui="advanced"
-        :href-tpl="{name: 'Pager', params: { pageNo: ':pageNo'}}"></veui-pager>
+      <veui-pager :page="page" :page-total="pageTotal" ui="advanced"
+        :href-tpl="{name: 'Pager', params: { page: ':page'}}"></veui-pager>
     </div>
 
     <div class="pager">
       <h2>原生跳转</h2>
-      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="'#' + hrefTpl" ui="advanced" :native="true"></veui-pager>
+      <veui-pager :page="page" :page-total="pageTotal" :href-tpl="'#' + hrefTpl" ui="advanced" :native="true"></veui-pager>
     </div>
 
     <div class="pager">
       <h2>事件与阻止跳转</h2>
       <p><small>仅原生跳转可用</small></p>
-      <veui-pager :page-no="pageNo" :page-total="pageTotal" :href-tpl="hrefTpl" ui="advanced" :native="true"
+      <veui-pager :page="page" :page-total="pageTotal" :href-tpl="hrefTpl" ui="advanced" :native="true"
         @redirect="handlePageRedirect"></veui-pager>
       <div class="message">{{ fifthPagerMessage }}</div>
     </div>
@@ -47,16 +45,16 @@ export default {
   },
   data () {
     return {
-      pageNo: parseInt(this.$route.params.pageNo, 10) || 1,
+      page: parseInt(this.$route.params.page, 10) || 1,
       pageTotal: 10101,
-      hrefTpl: '/pager/:pageNo',
+      hrefTpl: '/pager/:page',
       fifthPagerMessage: ''
     }
   },
   methods: {
-    handlePageRedirect ({pageNo, event}) {
+    handlePageRedirect ({page, event}) {
       event.preventDefault()
-      this.fifthPagerMessage = `已阻止你跳转到第${pageNo}页`
+      this.fifthPagerMessage = `已阻止你跳转到第${page}页`
     }
   },
   mounted () {
@@ -70,8 +68,8 @@ export default {
 
   },
   beforeRouteUpdate ({params}, from, next) {
-    let pageNo = parseInt(params.pageNo, 10)
-    this.pageNo = isNaN(pageNo) ? 1 : pageNo
+    let page = parseInt(params.page, 10)
+    this.page = isNaN(page) ? 1 : page
     next()
   }
 }

@@ -10,13 +10,13 @@
     <p>
       <span>slot样式：</span>
       <veui-select v-bind="attrs" v-model="defaultValue3">
-        <template slot="select-target" scope="props">
+        <template slot="option" scope="props">
           <span>{{ props.label }}</span>
         </template>
       </veui-select>
       <span>slot样式2：</span>
       <veui-select v-bind="attrs" v-model="defaultValue4">
-        <template slot="select-option" scope="props">
+        <template slot="option" scope="props">
           <span class="veui-option-label">{{ props.label }}</span>
           <icon name="eye"></icon>
         </template>
@@ -31,13 +31,13 @@
     <p>
       <span>slot样式1：</span>
       <veui-select v-bind="optGroupAttrs" v-model="defaultValue7">
-        <template slot="select-target" scope="props">
+        <template slot="option" scope="props">
           <span>{{ props.label }}</span>
         </template>
       </veui-select>
       <span>slot样式2：</span>
       <veui-select v-bind="optGroupAttrs" v-model="defaultValue8">
-        <template slot="select-option" scope="props">
+        <template slot="option" scope="props">
           <span class="veui-option-label">{{ props.label }}</span>
           <icon name="gift"></icon>
         </template>

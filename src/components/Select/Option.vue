@@ -18,10 +18,10 @@ import 'vue-awesome/icons/check'
 export default {
   name: 'veui-option',
   components: {
-    'icon': Icon
+    Icon
   },
   props: {
-    label: String,
+    label: [String, Number],
     value: [String, Number],
     disabled: {
       type: Boolean,
@@ -38,10 +38,9 @@ export default {
   },
   methods: {
     select () {
-      if (this.disabled) {
-        return
+      if (!this.disabled) {
+        this.$emit('select', this.value)
       }
-      this.$emit('select', this.value)
     }
   }
 }
@@ -52,29 +51,31 @@ export default {
 .veui-option {
   cursor: pointer;
   height: 36px;
-  line-height: 36px;
-  padding: 0 10px;
+  line-height: 1;
+  padding: 11px 10px;
   position: relative;
+  color: @veui-text-color-normal;
+
   &:hover {
     background-color: @veui-theme-color-sup-4;
   }
-  &.veui-option-selected {
+
+  &-selected {
     color: @veui-theme-color-primary;
   }
-  &.veui-option-disabled {
+
+  &-disabled {
     background-color: #fff;
-    color: @veui-gray-color-weak;
+    color: @veui-text-color-weak;
     cursor: not-allowed;
   }
-  .veui-option-label {
-    margin-right: 17px;
+
+  &-label {
+    margin-right: 10px;
   }
-  svg {
-    width: 12px;
-    height: 12px;
-    position: absolute;
-    right: 10px;
-    top: 12px;
+
+  .veui-icon {
+    float: right;
   }
 }
 </style>

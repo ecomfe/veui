@@ -5,46 +5,49 @@
       :class="{'veui-button-empty': value === null}"
       :disabled="disabled || readonly"
       @click="expanded = !expanded"
-      v-clickoutside="clickoutside"
-      slot="target"
       ref="veui-select-button">
-      <slot name="select-target" :label="label">
-        <icon :name="`caret-${expanded ? 'up' : 'down'}`"></icon>
+      <slot name="label" :label="label">
         <span>{{ label }}</span>
       </slot>
+      <icon :name="`caret-${expanded ? 'up' : 'down'}`"></icon>
     </veui-button>
     <veui-overlay
-      :overlay-class="{'veui-select-options': true}"
+      v-if="expanded"
+      overlay-class="veui-select-overlay"
       target="veui-select-button"
       :open="expanded"
       :options="overlay">
-      <template v-for="option in options">
-        <veui-option
-          v-if="option.value"
-          v-bind="option"
-          :selected="option.value === value"
-          :key="option.value"
-          :icon="optionicon"
-          @select="selectHandler">
-            <slot name="select-option" v-bind="option"></slot>
-        </veui-option>
-        <div v-else-if="option.options" class="veui-select-options-group">
-          <slot name="option-label" :label="option.label">
-            <div class="veui-select-option-label">
-              <span>{{ option.label }}</span>
+      <div class="veui-select-options" v-clickoutside="close">
+        <slot>
+          <template v-for="option in options">
+            <veui-option
+              v-if="option.value"
+              v-bind="option"
+              :selected="option.value === value"
+              :key="option.value"
+              :icon="optionicon"
+              @select="handleSelect">
+                <slot name="option" v-bind="option"></slot>
+            </veui-option>
+            <div v-else-if="option.options" class="veui-select-option-group">
+              <slot name="option-label" :label="option.label">
+                <div class="veui-select-option-label">
+                  <span>{{ option.label }}</span>
+                </div>
+              </slot>
+              <veui-option
+                v-for="subOption in option.options"
+                v-bind="subOption"
+                :selected="subOption.value === value"
+                :key="subOption.value"
+                :icon="optionicon"
+                @select="handleSelect">
+                <slot name="option" v-bind="subOption"></slot>
+              </veui-option>
             </div>
-          </slot>
-          <veui-option
-            v-for="subOption in option.options"
-            v-bind="subOption"
-            :selected="subOption.value === value"
-            :key="subOption.value"
-            :icon="optionicon"
-            @select="selectHandler">
-            <slot name="select-option" v-bind="subOption"></slot>
-          </veui-option>
-        </div>
-      </template>
+          </template>
+        </slot>
+      </div>
     </veui-overlay>
   </div>
 </template>
@@ -57,7 +60,6 @@ import Overlay from '../Overlay'
 import mixin from '../../mixins/input'
 import 'vue-awesome/icons/caret-down'
 import 'vue-awesome/icons/caret-up'
-import { forEach } from 'lodash'
 
 export default {
   name: 'veui-select',
@@ -107,7 +109,10 @@ export default {
     labelMap () {
       let mapOptions = {}
       function extract (options) {
-        forEach(options, option => {
+        if (!options) {
+          return
+        }
+        options.forEach(option => {
           if (option.value) {
             mapOptions[option.value] = option.label
           } else if (option.options) {
@@ -126,13 +131,15 @@ export default {
     }
   },
   methods: {
-    selectHandler (val) {
+    handleSelect (val) {
+      this.expanded = false
       this.$emit('change', val)
     },
-    clickoutside () {
-      if (this.expanded) {
-        this.expanded = !this.expanded
-      }
+    close () {
+      // FIXME: prevent being reversed by button click for now
+      setTimeout(() => {
+        this.expanded = false
+      })
     }
   }
 }
@@ -141,13 +148,16 @@ export default {
 <style lang="less">
 @import "../../styles/theme-default/lib.less";
 .veui-select {
+  display: inline-block;
+  width: 160px;
+
   .veui-button {
-    width: 160px;
-    padding: 11px 12px;
+    width: 100%;
     position: relative;
     text-align: left;
     span {
       display: inline-block;
+      max-width: ~"calc(100% - 16px)";
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
@@ -156,15 +166,8 @@ export default {
     &.veui-button-empty {
       color: @veui-gray-color-weak;
     }
-    svg {
-      width: 18px;
-      height: 18px;
-      position: absolute;
-      right: 11px;
-      top: 9px;
-      & + span {
-        width: calc(100% - 12px);
-      }
+    .veui-icon {
+      float: right;
     }
   }
   &-options {
@@ -174,17 +177,19 @@ export default {
     background-color: #fff;
     border: 1px solid @veui-gray-color-sup-2;
     border-radius: 2px;
-    .veui-select-options-group {
-      .veui-select-option-label {
-        padding: 0 10px;
-        height: 36px;
-        line-height: 36px;
-        font-size: @veui-font-size-small;
-        color: @veui-gray-color-weak;
-      }
-      .veui-option {
-        padding-left: 20px;
-      }
+  }
+
+  &-option-group {
+    .veui-select-option-label {
+      display: inline-block;
+      .centered-line(@veui-height-normal);
+      padding: 0 10px;
+      font-size: @veui-font-size-small;
+      color: @veui-gray-color-weak;
+    }
+
+    .veui-option {
+      padding-left: 20px;
     }
   }
 }

@@ -152,7 +152,7 @@ export default {
 @import "../../src/styles/theme-default/lib.less";
 
 .demo-overlay-box {
-  box-shadow: 1px 1px 6px @veui-shadow-color-normal;
+  box-shadow: 1px 1px 6px fadeOut(#000, 80%);
   padding: 10px 20px;
   background: #fff;
 }
