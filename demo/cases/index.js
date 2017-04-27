@@ -25,10 +25,10 @@ export default [
     component: Table
   },
   {
-    path: '/pager/:pageNo',
+    path: '/pager/:page',
     name: 'Pager',
     params: {
-      pageNo: 1
+      page: 1
     },
     component: Pager
   },

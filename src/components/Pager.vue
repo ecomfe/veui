@@ -5,42 +5,27 @@
         <span class="veui-page-total">共 {{ pageTotal }} 条</span>
         <span class="veui-page-size">
           每页显示
-          <select v-model="realPageSize">
-            <option v-for="item in optionalPageSizes" :value="item">{{ item }}</option>
-          </select>
+          <veui-select v-model="realPageSize" ui="link small" :options="optionalPageSizes"></veui-select>
         </span>
       </div>
       <div class="veui-page-switch">
         <ul class="veui-pages" :class="{['veui-page-digit-length-' + pageDigitLength]: true}">
           <li v-for="item in pageIndicatorSeries" :class="{
-            'veui-active': item.pageNo === pageNo
+            'veui-active': item.page === page
           }">
             <hyper-link :to="item.href" :native="native"
-              @redirect="handleRedirect(item.pageNo, $event)">{{ item.text }}</hyper-link>
+              @redirect="handleRedirect(item.page, $event)">{{ item.text }}</hyper-link>
           </li>
         </ul>
         <div class="veui-buttons">
-          <div class="veui-group-previous">
-            <hyper-link class="veui-button-absolute" :to="pageNavHref.first.href" :native="native"
-              @redirect="handleRedirect(pageNavHref.first.pageNo, $event)">
-              <icon name="chevron-circle-left"></icon>
-            </hyper-link>
-            <hyper-link class="veui-button-relative" :to="pageNavHref.previous.href" :native="native"
-              @redirect="handleRedirect(pageNavHref.previous.pageNo, $event)">
-              <icon name="chevron-left"></icon>
-            </hyper-link>
-          </div>
-          <div
-          class="veui-group-next">
-            <hyper-link class="veui-button-relative" :to="pageNavHref.next.href" :native="native"
-              @redirect="handleRedirect(pageNavHref.next.pageNo, $event)">
-              <icon name="chevron-right"></icon>
-            </hyper-link>
-            <hyper-link class="veui-button-absolute" :to="pageNavHref.last.href" :native="native"
-              @redirect="handleRedirect(pageNavHref.last.pageNo, $event)">
-              <icon name="chevron-circle-right"></icon>
-            </hyper-link>
-          </div>
+          <hyper-link class="veui-button-previous" :class="{ 'veui-disabled': page === 1 }" :to="pageNavHref.previous.href" :native="native"
+            @redirect="handleRedirect(pageNavHref.previous.page, $event)">
+            <icon name="chevron-left"></icon>
+          </hyper-link>
+          <hyper-link class="veui-button-next" :class="{ 'veui-disabled': page === pageCount }" :to="pageNavHref.next.href" :native="native"
+            @redirect="handleRedirect(pageNavHref.next.page, $event)">
+            <icon name="chevron-right"></icon>
+          </hyper-link>
         </div>
       </div>
     </div>
@@ -54,20 +39,14 @@ import 'vue-awesome/icons/chevron-right'
 import 'vue-awesome/icons/chevron-circle-left'
 import 'vue-awesome/icons/chevron-circle-right'
 import HyperLink from './HyperLink'
-
-const LAYOUTS = [
-  'basic',
-  'hetero',
-  'advanced',
-  'full',
-  'slim'
-]
+import Select from './Select'
+import Option from './Select/Option'
 
 const OPTIONAL_PAGE_SIZES = [
   30, 60, 100, 200
 ]
 
-const HREF_TPL_PLACEHOLDER = /:pageNo\b/g
+const HREF_TPL_PLACEHOLDER = /:page\b/g
 
 /**
  * 总页面切换按钮数
@@ -91,10 +70,12 @@ export default {
   name: 'veui-pager',
   components: {
     Icon,
-    HyperLink
+    HyperLink,
+    'veui-select': Select,
+    'veui-option': Option
   },
   props: {
-    pageNo: {
+    page: {
       type: Number,
       default: 1
     },
@@ -108,20 +89,9 @@ export default {
     },
     hrefTpl: {
       type: [String, Object],
-      default: ':pageNo'
+      default: ':page'
     },
-    ui: {
-      type: String,
-      default () {
-        return LAYOUTS[0]
-      },
-      validator (val) {
-        // 有且只有一个有效 layout
-        return val.trim().split(/\s+/).filter(function (item) {
-          return LAYOUTS.indexOf(item) >= 0
-        }).length === 1
-      }
-    },
+    ui: String,
     native: {
       type: Boolean,
       default: false
@@ -130,7 +100,10 @@ export default {
   data () {
     return {
       customPageSize: 0,
-      optionalPageSizes: OPTIONAL_PAGE_SIZES
+      optionalPageSizes: OPTIONAL_PAGE_SIZES.map(size => ({
+        label: size,
+        value: size
+      }))
     }
   },
   computed: {
@@ -144,10 +117,8 @@ export default {
     },
     pageNavHref () {
       return {
-        first: this.getPageIndicator(1),
-        last: this.getPageIndicator(this.pageCount),
-        previous: this.getPageIndicator(Math.max(1, this.pageNo - 1)),
-        next: this.getPageIndicator(Math.min(this.pageCount, this.pageNo + 1))
+        previous: this.getPageIndicator(Math.max(1, this.page - 1)),
+        next: this.getPageIndicator(Math.min(this.pageCount, this.page + 1))
       }
     },
     realPageSize: {
@@ -163,29 +134,29 @@ export default {
       return Math.ceil(this.pageTotal / this.realPageSize)
     },
     pageIndicatorSeries () {
-      let {pageNo, pageCount, getPageIndicator} = this
+      let {page, pageCount, getPageIndicator} = this
 
       let continuousIndicatorLength = aroundIndicatorLength * 2 + 1
       let boundaryIndicatorLength = (pageIndicatorLength - continuousIndicatorLength - 2) / 2
 
       let leftLen
       let rightLen
-      let offsetBackward = Math.max(pageNo - moreIndicatorOffsetLength, 1)
-      let offsetForward = Math.min(pageNo + moreIndicatorOffsetLength, pageCount)
+      let offsetBackward = Math.max(page - moreIndicatorOffsetLength, 1)
+      let offsetForward = Math.min(page + moreIndicatorOffsetLength, pageCount)
 
       switch (true) {
         case pageCount <= pageIndicatorLength:
           return getPageSeries(1, pageCount)
 
-        case pageNo < continuousIndicatorLength:
-          leftLen = Math.max(continuousIndicatorLength, pageNo + aroundIndicatorLength)
+        case page < continuousIndicatorLength:
+          leftLen = Math.max(continuousIndicatorLength, page + aroundIndicatorLength)
           rightLen = pageIndicatorLength - leftLen - 1
           return getPageSeries(1, leftLen)
             .concat(getPageIndicator(offsetForward, true))
             .concat(getPageSeries(pageCount - rightLen + 1, rightLen))
 
-        case pageNo > pageCount - continuousIndicatorLength + 1:
-          rightLen = Math.max(pageCount - pageNo + 1 + aroundIndicatorLength, continuousIndicatorLength)
+        case page > pageCount - continuousIndicatorLength + 1:
+          rightLen = Math.max(pageCount - page + 1 + aroundIndicatorLength, continuousIndicatorLength)
           leftLen = pageIndicatorLength - rightLen - 1
           return getPageSeries(1, leftLen)
             .concat(getPageIndicator(offsetBackward, true))
@@ -194,15 +165,15 @@ export default {
         default:
           return getPageSeries(1, boundaryIndicatorLength)
             .concat(getPageIndicator(offsetBackward, true))
-            .concat(getPageSeries(pageNo - boundaryIndicatorLength - 1, continuousIndicatorLength))
+            .concat(getPageSeries(page - boundaryIndicatorLength - 1, continuousIndicatorLength))
             .concat(getPageIndicator(offsetForward, true))
             .concat(getPageSeries(pageCount, boundaryIndicatorLength))
       }
 
-      function getPageSeries (fromPageNo, length) {
+      function getPageSeries (frompage, length) {
         let series = []
         for (let i = 0; i < length; i++) {
-          series[i] = getPageIndicator(fromPageNo + i)
+          series[i] = getPageIndicator(frompage + i)
         }
         return series
       }
@@ -213,24 +184,23 @@ export default {
     }
   },
   methods: {
-    handleRedirect (pageNo, event) {
-      this.$emit('redirect', {pageNo, event})
+    handleRedirect (page, event) {
+      this.$emit('redirect', {page, event})
     },
 
-    getPageIndicator (pageNo, isMore = false) {
+    getPageIndicator (page, isMore = false) {
       return {
-        pageNo,
-        text: isMore ? '...' : pageNo,
-        href: pageNo ? this.formatHref(pageNo) : null
+        page,
+        text: isMore ? '...' : page,
+        href: page ? this.formatHref(page) : null
       }
     },
 
-    formatHref (pageNo) {
-      return this.realHrefTpl.replace(HREF_TPL_PLACEHOLDER, pageNo)
+    formatHref (page) {
+      return this.realHrefTpl.replace(HREF_TPL_PLACEHOLDER, page)
     }
   }
 }
-
 </script>
 
 <style lang="less">
@@ -247,13 +217,17 @@ export default {
 
   @digit-size: 14px;
 
-  color: @veui-gray-color-normal;
+  color: @veui-text-color-normal;
   font-weight: normal;
 
   a {
     color: inherit;
     text-decoration: none;
     border-radius: 2px;
+
+    &:focus {
+      outline: none;
+    }
   }
 
   .veui-wrapper {
@@ -268,30 +242,31 @@ export default {
 
   .veui-page-size {
     margin-left: @button-gap-width;
-
   }
 
   .veui-page-switch {
     float: left;
   }
 
+  .veui-select {
+    width: 40px;
+  }
+
   .veui-buttons {
     float: left;
+    margin-left: @button-gap-width;
+  }
 
-    [class|="veui-group"] {
-      float: left;
-      border-radius: 2px;
-      .veui-shadow();
-    }
-
-    [class|="veui-button"] {
-      float: left;
-      width: @button-width;
-      height: @button-height;
-      line-height: @button-width - 2px;
-      text-align: center;
-      background-color: @veui-gray-color-sup-2;
-    }
+  .veui-button-previous,
+  .veui-button-next {
+    position: relative;
+    float: left;
+    width: @button-width;
+    height: @button-height;
+    line-height: @button-width - 2px;
+    text-align: center;
+    background-color: @veui-gray-color-sup-3;
+    border-radius: 2px;
   }
 
   .veui-pages {
@@ -311,13 +286,22 @@ export default {
 
       a {
         display: block;
+
+        &:hover {
+          color: @veui-text-color-strong;
+          font-weight: @veui-font-weight-extra-bold;
+        }
+
+        &:focus {
+          color: @veui-theme-color-primary;
+        }
       }
     }
 
-    .veui-active {
-      color: @veui-gray-color-strong;
-      font-weight: bold;
-      background-color: @veui-gray-color-sup-2;
+    .veui-active a {
+      color: @veui-text-color-strong;
+      font-weight: @veui-font-weight-extra-bold;
+      background-color: @veui-gray-color-sup-3;
     }
 
     span {
@@ -338,103 +322,54 @@ export default {
 
   .generate-responsive-page-digit-width(4);
 
-  &[ui~="basic"],
-  &[ui~="slim"],
-  &[ui~="advanced"] {
+  &,
+  &[ui~="slim"] {
     .veui-page-switch {
       padding: 0 @button-width + @button-gap-width;
       position: relative;
     }
 
-    .veui-buttons {
-      [class|="veui-group"] {
-        position: absolute;
-      }
-      .veui-group-previous {
-        left: 0;
-      }
-      .veui-group-next {
-        right: 0;
-      }
+    .veui-button-previous {
+      position: absolute;
+      left: 0;
     }
   }
 
-  &[ui~="basic"],
   &[ui~="hetero"],
-  &[ui~="slim"],
   &[ui~="full"] {
-    .veui-buttons .veui-button-absolute {
-      display: none;
-    }
-  }
-
-  &[ui~="basic"],
-  &[ui~="hetero"],
-  &[ui~="slim"],
-  &[ui~="advanced"] {
-    .veui-page-info {
-      display: none;
-    }
-  }
-
-  &[ui~="advanced"] {
     .veui-page-switch {
-      padding: 0 @button-width * 2 + @button-gap-width;
+      padding-left: 0;
     }
-    .veui-group-previous {
-      .veui-button-relative {
-        margin-left: 1px;
-      }
-    }
-    .veui-group-next {
-      .veui-button-relative {
-        margin-right: 1px;
-      }
-    }
-    [class|="veui-group"] {
-      :first-child {
-        border-radius: 2px 0 0 2px;
-      }
 
-      :last-child {
-        border-radius: 0 2px 2px 0;
-      }
+    .veui-button-previous {
+      position: static;
+      margin-right: 5px;
     }
   }
 
-  &[ui~="hetero"],
-  &[ui~="full"] {
-    .veui-buttons {
-      margin-left: @button-gap-width;
-      border-radius: 2px;
-      .veui-shadow();
-    }
-    [class|="veui-group"] {
-      .veui-shadow(none);
-    }
-    .veui-group-previous {
-      .veui-button-relative {
-        margin-right: 1px;
-      }
-    }
-    .veui-group-previous {
-      :last-child {
-        border-radius: 2px 0 0 2px;
-      }
-    }
+  .veui-page-info {
+    display: none;
+  }
 
-    .veui-group-next {
-      :first-child {
-        border-radius: 0 2px 2px 0;
-      }
+  &[ui~="full"] {
+    .veui-page-info {
+      display: block;
+    }
+  }
+
+  &:not([ui~="slim"]) {
+    .veui-button-previous,
+    .veui-button-next {
+      .veui-button-alt();
+      .veui-button-transition();
     }
   }
 
   &[ui~="slim"] {
-    @scale-ratio: 0.55;
+    @scale-ratio: 2 / 3;
 
     .veui-page-switch {
-      padding: 0 (@button-width + @button-gap-width) * @scale-ratio;
+      padding: 0 (@button-height + @button-gap-width) * @scale-ratio;
 
       li {
         width: @digit-width * @scale-ratio;
@@ -443,34 +378,53 @@ export default {
         font-size: 13px;
       }
 
-      .veui-active {
+      .veui-active a {
         background: transparent;
       }
     }
 
-    .veui-buttons {
-      [class|="veui-button"] {
-        width: @button-height * .55;
-        height: @button-height * .55;
-        line-height: 1.5;
-        border: 1px solid @veui-gray-color-normal;
-        border-radius: @button-width;
-        color: @veui-gray-color-normal;
-        background: transparent;
+    .veui-button-previous,
+    .veui-button-next {
+      width: @button-height * @scale-ratio;
+      height: @button-height * @scale-ratio;
+      line-height: 1.5;
+      border: 1px solid @veui-gray-color-sup-1;
+      border-radius: 50%;
+      color: @veui-text-color-weak;
+      background: transparent;
+      .veui-button-transition();
 
-        svg {
-          width: @button-height * .2;
+      &:focus {
+        color: @veui-theme-color-primary;
+        .veui-shadow(none);
+      }
 
-          path {
-            fill: currentColor;
-          }
-        }
+      &:hover {
+        color: @veui-text-color-strong;
+        .veui-shadow();
+      }
+
+      &:active {
+        background-color: @veui-gray-color-sup-3;
+        color: @veui-text-color-strong;
+        .veui-shadow(none);
+      }
+
+      &.veui-disabled {
+        background-color: @veui-gray-color-sup-3;
+        border-color: @veui-gray-color-sup-3;
+        color: @veui-text-color-weak;
+        cursor: not-allowed;
+        .veui-shadow(none);
+      }
+
+      .veui-icon {
+        width: @button-height * .2;
+        .position-center()
       }
     }
 
     .generate-responsive-page-digit-width(4, .8);
-
   }
-
 }
 </style>
