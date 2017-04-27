@@ -1,5 +1,6 @@
 <template>
-  <router-link v-if="$router && !native"
+  <span v-if="!to"><slot></slot></span>
+  <router-link v-else-if="$router && !native"
     :to="to"
     :replace="replace">
     <slot></slot>
