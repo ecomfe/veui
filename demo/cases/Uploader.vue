@@ -16,22 +16,21 @@
       <veui-button @click="changeUploadingContent('text')">切换上传进度中的内容，显示文字</veui-button>
       <veui-button @click="changeUploadingContent('progressPercent')">显示进度百分比</veui-button>
       <veui-button @click="changeUploadingContent('progressBar')">显示进度条</veui-button>
-
     </div>
     <veui-uploader :uploaderType="uploaderType"
       name="file"
       action="/upload"
-      requestMode="xhr"
+      request-mode="xhr"
       :disabled="false"
       :max-count="3"
       :value="files"
       :max-size="10"
-      :previewImage="previewImage"
+      :preview-image="previewImage"
       :needButton="needButton"
-      extentionTypes="jpg,jpeg,gif"
+      extention-types="jpg,jpeg,gif"
       :payload="payload"
       :ui="ui"
-      :uploadingContent="uploadingContent"
+      :uploading-content="uploadingContent"
       @remove="removeFile"
       @cancel="cancelUploading"
       @change="onChange"
@@ -52,16 +51,15 @@
     <veui-uploader :uploaderType="uploaderTypeIframe"
       name="file"
       action="/uploadiframe"
-      requestMode="iframe"
-      iframeMode="postmessage"
+      request-mode="iframe"
       :disabled="false"
       :max-count="3"
       :value="filesIframe"
       :max-size="10"
-      :previewImage="previewImageIframe"
-      extentionTypes="jpg,jpeg,gif"
+      :preview-image="previewImageIframe"
+      extention-types="jpg,jpeg,gif"
       :payload="payload"
-      uploadingContent="text"
+      uploading-content="text"
       :ui="uiIframe"
       @remove="removeFileIframe"
       @cancel="cancelUploadingIframe"
@@ -124,9 +122,7 @@ export default {
       ],
       payload: {
         year: '2017',
-        month () {
-          return new Date().getMonth() + 1
-        }
+        month: '4'
       }
     }
   },
@@ -188,7 +184,7 @@ export default {
       if (this.uiProps.indexOf('bottom-mask') > -1) {
         this.ui = this.ui.replace('bottom-mask', '')
       } else {
-        this.ui += 'bottom-mask'
+        this.ui += ' bottom-mask'
       }
     },
     toggleNeedButton () {

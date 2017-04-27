@@ -29,6 +29,7 @@ import bus from './bus'
 import 'vue-awesome/icons/caret-up'
 import 'vue-awesome/icons/caret-down'
 import 'vue-awesome/icons/ban'
+import config from '../src/managers/config'
 
 export default {
   name: 'app',
@@ -57,6 +58,11 @@ export default {
       }
       return `<span style="color: #ccc">${text === '' ? 'empty' : String(text)}</span>`
     }
+  },
+  created () {
+    config.setDefault('uploader.requestMode', 'xhr')
+    config.setDefault('uploader.iframeMode', 'postmessage')
+    config.setDefault('uploader.callbackNamespace', 'veuiUploadResult')
   },
   mounted () {
     bus.$on('log', (...messages) => this.log(...messages))

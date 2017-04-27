@@ -6,7 +6,7 @@
         :class="{'veui-uploader-input-label-disabled': disabled}"
         ui="aux" ref="label">
         <icon class="veui-uploader-input-label-icon" name="upload"></icon><slot name="text">选择文件</slot>
-        <input hidden="hidden" type="file" ref="input" @change="onChange" :name="name" :disabled="disabled" multiple>
+        <input hidden="hidden" type="file" ref="input" @change="onChange" :name="name" :disabled="disabled" :accept="accept" multiple>
       </label>
       <slot name="button"></slot>
       <span class="veui-uploader-tip"><slot name="tip"></slot></span>
@@ -77,21 +77,22 @@
       <li v-if="uploaderType === 'image' && !needButton" key="input">
         <label class="veui-uploader-input-label-image"
           :class="{'veui-uploader-input-label-disabled': disabled}"
-          ref="label"><input hidden type="file" ref="input" @change="onChange" :name="name" :disabled="disabled" multiple>
+          ref="label"><input hidden type="file" ref="input" @change="onChange" :name="name" :disabled="disabled" :accept="accept" multiple>
         </label>
       </li>
     </transition-group>
     <iframe v-if="requestMode === 'iframe'" ref="iframe"
-     :id="iframeId" :name="iframeId" style="display: none;"></iframe>
-    <form v-if="requestMode === 'iframe'" ref="form" :action="action" enctype="multipart/form-data"
-      method="POST" :target="iframeId" style="display: none;">
-      <input v-for="(value, key) in payload" :name="key" :value="typeof value === 'function' ? value() : value">
-      <input v-if="iframeMode === 'callback'" name="callback" :value="callbackFuncName">
+     :id="iframeId" :name="iframeId" class="veui-uploader-hide"></iframe>
+    <form v-if="requestMode === 'iframe'" ref="form" :action="`${action}?callback=parent.${callbackNamespace}['${callbackFuncName}']`" enctype="multipart/form-data"
+      method="POST" :target="iframeId" class="veui-uploader-hide">
+      <input v-for="(value, key) in payload" :name="key" :value="value">
+      <input v-if="iframeMode === 'callback'" name="callback" :value="`parent.${callbackNamespace}['${callbackFuncName}']`">
     </form>
   </div>
 </template>
 
 <script>
+import config from '../managers/config'
 import Icon from './Icon'
 import Button from './Button'
 import 'vue-awesome/icons/close'
@@ -116,26 +117,50 @@ export default {
       type: String,
       default: 'file'
     },
-    requestMode: {
-      type: String,
-      required: true
-    },
-    convertResponse: Function,
-    iframeMode: String,
     action: {
       type: String,
       required: true
     },
-    headers: Object,
+    headers: {
+      type: Object,
+      default () {
+        return config.get('uploader.headers')
+      }
+    },
     withCredentials: {
       type: Boolean,
       default: true
+    },
+    requestMode: {
+      type: String,
+      default () {
+        return config.get('uploader.requestMode')
+      }
+    },
+    iframeMode: {
+      type: String,
+      default () {
+        return config.get('uploader.iframeMode')
+      }
+    },
+    convertResponse: {
+      type: Function,
+      default () {
+        return config.get('uploader.convertResponse')
+      }
+    },
+    callbackNamespace: {
+      type: String,
+      default () {
+        return config.get('uploader.callbackNamespace')
+      }
     },
     previewImage: {
       type: Boolean,
       default: false
     },
     extentionTypes: [Array, String],
+    accept: String,
     needButton: {
       type: Boolean,
       default: false
@@ -162,7 +187,7 @@ export default {
         sizeInvalid: false
       },
       iframeId: uniqueId('veui-uploader-iframe'),
-      callbackFuncName: uniqueId('veui-uploader-callback'),
+      callbackFuncName: uniqueId('veuiUploaderCallback'),
       onMessage: null
     }
   },
@@ -200,14 +225,16 @@ export default {
           : location.origin || (location.protocol + '//' + location.host)
         if (actionOrigin !== event.origin) return
 
-        this.uploadCallback(JSON.parse(event.data), this.latestFile)
+        this.uploadCallback(this.parseData(event.data), this.latestFile)
       }
       window.addEventListener('message', this.onMessage)
     } else if (this.iframeMode === 'callback') {
-      if (!window.veuiUploaderCallback) window.veuiUploaderCallback = {}
-      window.veuiUploaderCallback[this.callbackFuncName] = data => {
+      if (!window[this.callbackNamespace]) {
+        window[this.callbackNamespace] = {}
+      }
+      window[this.callbackNamespace][this.callbackFuncName] = data => {
         if (this.canceled) return
-        this.uploadCallback(JSON.parse(data), this.latestFile)
+        this.uploadCallback(this.parseData(data), this.latestFile)
       }
     }
   },
@@ -216,7 +243,9 @@ export default {
     window.removeEventListener('message', this.onMessage)
     document.body.removeChild(this.$refs.form)
     document.body.removeChild(this.$refs.iframe)
-    if (this.iframeMode === 'callback') window.veuiUploaderCallback[this.callbackFuncName] = null
+    if (this.iframeMode === 'callback') {
+      window[this.callbackNamespace][this.callbackFuncName] = null
+    }
   },
   methods: {
     onChange () {
@@ -232,6 +261,7 @@ export default {
         if (!this.validateFile({name, size})) return
         newFiles = [{status: 'uploading', name}]
       }
+
       if (!newFiles.length) return
 
       this.fileList = [
@@ -246,10 +276,13 @@ export default {
           return file
         })
       ]
+
       if (this.maxCount && this.fileList.length > this.maxCount) {
         this.fileList = this.fileList.slice(-this.maxCount)
       }
+
       this.$emit('change', this.fileList)
+
       if (this.requestMode === 'iframe' && this.autoUpload) this.submit()
       if (this.requestMode === 'xhr' && this.autoUpload) this.uploadFiles()
       this.$refs.input.value = ''
@@ -262,6 +295,7 @@ export default {
       return typeValidation && sizeValidation
     },
     validateFileType (filename) {
+      if (!this.extentionTypes || !this.extentionTypes.length) return true
       let extentionTypes = Array.isArray(this.extentionTypes)
         ? this.extentionTypes
         : this.extentionTypes.split(/[,;.]/)
@@ -280,6 +314,7 @@ export default {
       this.updateFileList(file, {status: 'uploading'})
       let xhr = new XMLHttpRequest()
       file.xhr = xhr
+
       xhr.upload.onprogress = e => {
         switch (this.uploadingContent) {
           case 'progressPercent':
@@ -292,7 +327,7 @@ export default {
         this.$emit('progress', e)
       }
       xhr.onload = () => {
-        this.uploadCallback(JSON.parse(xhr.responseText), file)
+        this.uploadCallback(this.parseData(xhr.responseText), file)
       }
       xhr.onerror = () => {
         this.onFailure({}, file)
@@ -301,7 +336,7 @@ export default {
       formData.append(this.name, file)
 
       for (let key in this.payload) {
-        formData.append(key, typeof this.payload[key] === 'function' ? this.payload[key](this) : this.payload[key])
+        formData.append(key, this.payload[key])
       }
 
       xhr.open('POST', this.action, true)
@@ -318,7 +353,7 @@ export default {
       form.submit()
     },
     uploadCallback (data, file) {
-      if (this.convertResponse) data = this.convertResponse(data)
+      this.convertResponse(data) || data
       if (data.status === 'success') {
         this.$emit('success', data)
         this.onSuccess(data, file)
@@ -366,6 +401,16 @@ export default {
       return size > 1024 * 1024
         ? (size / 1024 / 1024).toFixed(1) + 'M'
         : Math.ceil(size / 1024) + 'KB'
+    },
+    parseData (data) {
+      if (typeof data === 'object') return data
+      if (typeof data === 'string') {
+        try {
+          return JSON.parse(data)
+        } catch (error) {
+          this.$emit('fail', {error})
+        }
+      }
     }
   }
 }
@@ -463,13 +508,13 @@ function getProgress () {
       position: absolute;
     }
     &::before {
-      border-top: 2px solid @veui-gray-color-sup-2;
+      border-top: 4px solid @veui-gray-color-sup-2;
       top: ~"calc(50% - 1px)";
       left: 30%;
       width: 40%;
     }
     &::after {
-      border-left: 2px solid @veui-gray-color-sup-2;
+      border-left: 4px solid @veui-gray-color-sup-2;
       top: 30%;
       left: ~"calc(50% - 1px)";
       height: 40%;
@@ -685,6 +730,9 @@ function getProgress () {
   }
   &-warning {
     color: @veui-warning-color-primary;
+  }
+  &-hide {
+    display: none;
   }
   &[ui~="ellipsis"] &-list-file-name {
     text-overflow: ellipsis;
