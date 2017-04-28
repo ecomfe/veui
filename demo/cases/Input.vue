@@ -56,7 +56,7 @@ import bus from '../bus'
 import Input from '@/components/Input'
 
 export default {
-  name: 'text-input',
+  name: 'input-demo',
   components: {
     'veui-input': Input
   },

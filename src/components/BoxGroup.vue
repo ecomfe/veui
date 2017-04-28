@@ -9,7 +9,7 @@
     :disabled="item.disabled"
     :checked="type === 'radiobox' ? item.value === value : value.includes(item.value)"
     @change="boxChange(index, arguments[0])">
-      <slot :label="item.label" :value="item.value"></slot>
+      <slot :label="item.label" :value="item.value">{{ item.label }}</slot>
     </component>
   </div>
 </template>

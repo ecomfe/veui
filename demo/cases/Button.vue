@@ -84,7 +84,7 @@ import 'vue-awesome/icons/flash'
 import 'vue-awesome/icons/gear'
 
 export default {
-  name: 'button',
+  name: 'button-demo',
   components: {
     'veui-button': Button
   },

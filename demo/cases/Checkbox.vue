@@ -44,7 +44,7 @@
 import Checkbox from '@/components/Checkbox'
 
 export default {
-  name: 'checkbox',
+  name: 'checkbox-demo',
   components: {
     'veui-checkbox': Checkbox
   },

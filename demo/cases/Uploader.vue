@@ -77,7 +77,7 @@ import {cloneDeep} from 'lodash'
 import {ui} from '../../src/mixins'
 
 export default {
-  name: 'uploader',
+  name: 'uploader-demo',
   components: {
     'veui-uploader': Uploader,
     'veui-button': Button

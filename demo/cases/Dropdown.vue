@@ -22,7 +22,7 @@ import bus from '../bus'
 import Dropdown from '@/components/Dropdown'
 
 export default {
-  name: 'dropdown',
+  name: 'dropdown-demo',
   components: {
     'veui-dropdown': Dropdown
   },

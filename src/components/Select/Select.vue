@@ -159,9 +159,7 @@ export default {
       display: inline-block;
       max-width: ~"calc(100% - 16px)";
       width: 100%;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      .ellipsis();
     }
     &.veui-button-empty {
       color: @veui-gray-color-weak;
