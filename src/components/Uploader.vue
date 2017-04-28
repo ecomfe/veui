@@ -92,7 +92,6 @@
 </template>
 
 <script>
-import config from '../managers/config'
 import Icon from './Icon'
 import Button from './Button'
 import 'vue-awesome/icons/close'
@@ -100,9 +99,16 @@ import 'vue-awesome/icons/upload'
 import 'vue-awesome/icons/plus'
 import 'vue-awesome/icons/check-circle-o'
 import 'vue-awesome/icons/file-zip-o'
-import {endsWith, cloneDeep, filter, map, uniqueId} from 'lodash'
-import {ui} from '../mixins'
+import { endsWith, cloneDeep, filter, map, uniqueId } from 'lodash'
+import { ui } from '../mixins'
 import mixin from '../mixins/input'
+import config from '../managers/config'
+
+config.defaults({
+  'uploader.requestMode': 'xhr',
+  'uploader.iframeMode': 'postmessage',
+  'uploader.callbackNamespace': 'veuiUploadResult'
+})
 
 export default {
   name: 'veui-uploader',
