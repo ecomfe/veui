@@ -117,14 +117,14 @@ export default {
       type: Boolean,
       default: true
     },
-    isDisabledDate: {
+    disabledDate: {
       type: Function,
       default: function () {
         return false
       }
     },
     dateClass: {
-      type: Function,
+      type: [String, Object, Function],
       default: function () {
         return {}
       }
@@ -191,7 +191,7 @@ export default {
               }
             }
             let day = weeks[i][j]
-            day.isDisabled = this.isDisabledDate(fromDateData(day))
+            day.isDisabled = this.disabledDate(fromDateData(day))
             if (day.month === month) {
               day.isToday = isSameDay(day, this.today)
               day.isSelected = this.isSelected(day)

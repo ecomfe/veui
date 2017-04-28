@@ -2,7 +2,7 @@
   <article class="veui-demo-calendar">
     <h1><code>&lt;veui-calendar&gt;</code></h1>
     <section>
-      <veui-calendar v-model="selected1" :is-disabled-date="isDisabled"></veui-calendar>
+      <veui-calendar v-model="selected1" :disabled-date="isDisabled"></veui-calendar>
       <veui-calendar v-model="selected0" multiple :date-class="dateClass"></veui-calendar>
     </section>
     <section>

@@ -73,8 +73,15 @@
 <script>
 import Uploader from '@/components/Uploader'
 import Button from '@/components/Button'
-import {cloneDeep} from 'lodash'
-import {ui} from '../../src/mixins'
+import { cloneDeep } from 'lodash'
+import { ui } from '../../src/mixins'
+import config from '@/managers/config'
+
+config.defaults({
+  'uploader.requestMode': 'xhr',
+  'uploader.iframeMode': 'postmessage',
+  'uploader.callbackNamespace': 'veuiUploadResult'
+})
 
 export default {
   name: 'uploader-demo',
