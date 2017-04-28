@@ -147,6 +147,9 @@ export default {
     }
   },
   computed: {
+    viewMonth () {
+      return `${this.year}/${this.month}`
+    },
     localSelected () {
       return this.selected ? this.selected : (this.multiple ? [] : null)
     },
@@ -358,13 +361,19 @@ export default {
           this.year += sign * 12
           break
       }
-      this.$emit('viewchange', {
-        month: this.month,
-        year: this.year
-      })
     },
     getDefaultDate () {
       return flattenDeep([this.selected])[0] || this.today
+    }
+  },
+  watch: {
+    month (val, oldVal) {
+      if (val !== oldVal) {
+        this.$emit('viewchange', {
+          year: this.year,
+          month: this.month
+        })
+      }
     }
   }
 }
