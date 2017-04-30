@@ -14,7 +14,7 @@
   import Tether from 'tether'
   import { omit, isObject, isString, isArray } from 'lodash'
 
-  const ZINDEX_INSTANCE_KEY = '__veui_overlay_zindex_instance'
+  const ZINDEX_INSTANCE_KEY = '__veui_overlay_zindex_instance__'
 
   export default {
     name: 'veui-overlay',

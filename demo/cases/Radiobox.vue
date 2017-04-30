@@ -32,7 +32,7 @@
 import Radiobox from '@/components/Radiobox'
 
 export default {
-  name: 'Radiobox',
+  name: 'radiobox-demo',
   components: {
     'veui-radiobox': Radiobox
   },

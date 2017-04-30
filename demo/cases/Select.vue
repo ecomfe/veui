@@ -55,7 +55,7 @@ import 'vue-awesome/icons/eye'
 import 'vue-awesome/icons/gift'
 
 export default {
-  name: 'select',
+  name: 'select-demo',
   components: {
     'veui-select': Select,
     'veui-option': Option,

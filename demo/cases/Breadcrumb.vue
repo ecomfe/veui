@@ -13,6 +13,7 @@
 import Breadcrumb from '@/components/Breadcrumb'
 
 export default {
+  name: 'breadcrumb-demo',
   components: {
     'veui-breadcrumb': Breadcrumb
   },

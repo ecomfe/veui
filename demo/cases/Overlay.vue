@@ -96,6 +96,7 @@ import Overlay from '../../src/components/Overlay'
 import Button from '../../src/components/Button'
 
 export default {
+  name: 'overlay-demo',
   components: {
     'veui-overlay': Overlay,
     'veui-button': Button

@@ -73,11 +73,11 @@
 <script>
 import Uploader from '@/components/Uploader'
 import Button from '@/components/Button'
-import {cloneDeep} from 'lodash'
-import {ui} from '../../src/mixins'
+import { cloneDeep } from 'lodash'
+import { ui } from '@/mixins'
 
 export default {
-  name: 'uploader',
+  name: 'uploader-demo',
   components: {
     'veui-uploader': Uploader,
     'veui-button': Button

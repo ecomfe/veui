@@ -2,8 +2,8 @@
   <article class="veui-demo-calendar">
     <h1><code>&lt;veui-calendar&gt;</code></h1>
     <section>
-      <veui-calendar v-model="selected1" :is-disabled-date="isDisabled"></veui-calendar>
-      <veui-calendar v-model="selected0" multiple :get-date-class="getDateClass"></veui-calendar>
+      <veui-calendar v-model="selected1" :disabled-date="isDisabled"></veui-calendar>
+      <veui-calendar v-model="selected0" multiple :date-class="dateClass"></veui-calendar>
     </section>
     <section>
       <veui-calendar v-model="selected2" range :panel="2" :is-disabled-date="isDisabled"></veui-calendar>
@@ -18,7 +18,7 @@
 import Calendar from '@/components/Calendar'
 
 export default {
-  name: 'table',
+  name: 'calendar-demo',
   components: {
     'veui-calendar': Calendar
   },
@@ -32,9 +32,8 @@ export default {
       isDisabled (day) {
         return !(day.getDate() % 5)
       },
-      getDateClass (day) {
-        let date = new Date(day.year, day.month, day.date)
-        if ((date.getDay() + 1) % 7 < 2) {
+      dateClass (day) {
+        if ((day.getDay() + 1) % 7 < 2) {
           return {
             'veui-calendar-weekend': true
           }
@@ -59,7 +58,7 @@ export default {
     float: left;
     margin-right: 10px;
 
-    &-weekend {
+    &-weekend:not(.veui-calendar-selected) {
       button {
         background-color: tint(rebeccapurple, 90%);
       }

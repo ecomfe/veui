@@ -39,7 +39,7 @@ import bus from '../bus'
 import Pager from '@/components/Pager'
 
 export default {
-  name: 'pager',
+  name: 'pager-demo',
   components: {
     'veui-pager': Pager
   },

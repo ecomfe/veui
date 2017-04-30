@@ -67,7 +67,7 @@ import Button from '@/components/Button'
 import 'vue-awesome/icons/circle-o-notch'
 
 export default {
-  name: 'dialog',
+  name: 'dialog-demo',
   components: {
     'veui-dialog': Dialog,
     'veui-button': Button

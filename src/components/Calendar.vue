@@ -27,7 +27,7 @@
             <tr v-for="week in p.weeks">
               <td v-for="day in week"
                 :key="`${day.year}-${day.month + 1}-${day.date}`"
-                :class="getDateClasses(day, p)">
+                :class="getDateClass(day, p)">
                 <button v-if="fillMonth && panel === 1 || day.month === p.month" @click="selectDay(pIndex, day)"
                   @mouseenter="markEnd(day)" @focus="markEnd(day)" :disabled="day.isDisabled">{{ day.date }}</button>
               </td>
@@ -117,14 +117,14 @@ export default {
       type: Boolean,
       default: true
     },
-    isDisabledDate: {
+    disabledDate: {
       type: Function,
       default: function () {
         return false
       }
     },
-    getDateClass: {
-      type: Function,
+    dateClass: {
+      type: [String, Object, Function],
       default: function () {
         return {}
       }
@@ -147,6 +147,9 @@ export default {
     }
   },
   computed: {
+    viewMonth () {
+      return `${this.year}/${this.month}`
+    },
     localSelected () {
       return this.selected ? this.selected : (this.multiple ? [] : null)
     },
@@ -188,7 +191,7 @@ export default {
               }
             }
             let day = weeks[i][j]
-            day.isDisabled = this.isDisabledDate(fromDateData(day))
+            day.isDisabled = this.disabledDate(fromDateData(day))
             if (day.month === month) {
               day.isToday = isSameDay(day, this.today)
               day.isSelected = this.isSelected(day)
@@ -211,7 +214,25 @@ export default {
     }
   },
   methods: {
-    getDateClasses (day, panel) {
+    getDateClass (day, panel) {
+      let extraClass = {}
+      switch (typeof this.dateClass) {
+        case 'function':
+          extraClass = this.dateClass(fromDateData(day))
+          break
+        case 'object':
+          extraClass = {
+            ...this.dateClass
+          }
+          break
+        case 'string':
+          extraClass = this.dateClass
+            .split(/\s+/)
+            .filter(c => c)
+            .reduce((result, current) => {
+              result[current] = true
+            }, {})
+      }
       return {
         'veui-calendar-aux': day.month !== panel.month,
         'veui-calendar-today': day.isToday,
@@ -219,7 +240,7 @@ export default {
         'veui-calendar-in-range': day.rangePosition === 'within',
         'veui-calendar-range-start': day.rangePosition === 'start',
         'veui-calendar-range-end': day.rangePosition === 'end',
-        ...this.getDateClass(day)
+        ...extraClass
       }
     },
     selectDay (i, day) {
@@ -265,17 +286,24 @@ export default {
         this.$set(this.picking, 1, day ? new Date(day.year, day.month, day.date) : null)
       }
     },
-    setView (i, view) {
-      this.$set(this.views, i, view)
+    setView (i, value) {
+      if (value) {
+        this.$set(this.views, i, value)
+      } else {
+        value = i
+        this.views.forEach((view, i) => {
+          this.$set(this.views, i, value)
+        })
+      }
     },
     selectMonth (i, month) {
       this.month = (month - i + 12) % 12
       this.year += Math.floor((month - i) / 12)
-      this.$set(this.views, i, 'days')
+      this.setView('days')
     },
     selectYear (i, year) {
       this.year = year - Math.floor((this.panels[i].month - i) / 12)
-      this.$set(this.views, i, 'days')
+      this.setView('days')
     },
     isSelected (day) {
       if (!this.localSelected && !this.picking) {
@@ -336,6 +364,16 @@ export default {
     },
     getDefaultDate () {
       return flattenDeep([this.selected])[0] || this.today
+    }
+  },
+  watch: {
+    month (val, oldVal) {
+      if (val !== oldVal) {
+        this.$emit('viewchange', {
+          year: this.year,
+          month: this.month
+        })
+      }
     }
   }
 }
@@ -408,7 +446,6 @@ function getRangePosition (day, range) {
       }
 
       &:disabled {
-
         &,
         &:hover {
           background-color: @veui-gray-color-sup-4;

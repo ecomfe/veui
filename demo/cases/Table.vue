@@ -6,7 +6,7 @@
     </section>
     <section>
       <veui-table ui="slim alt" :data="data" :columnFilter="columns" keys="id" selectable
-        :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort">
+        :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected.sync="selected">
         <veui-table-column field="id" title="数据 ID" sortable></veui-table-column>
         <veui-table-column field="desc" title="数据描述"></veui-table-column>
         <veui-table-column field="price" title="价格" sortable width="160">
@@ -24,11 +24,17 @@
       </veui-table>
     </section>
     <section>
-      <label><input type="checkbox" value="id" v-model="columns"> ID</label>
-      <label><input type="checkbox" value="desc" v-model="columns"> 描述</label>
-      <label><input type="checkbox" value="price" v-model="columns"> 价格</label>
-      <label><input type="checkbox" value="updateDate" v-model="columns"> 更新时间</label>
-      <label><input type="checkbox" value="operation" v-model="columns"> 操作</label>
+      <veui-box-group type="checkbox" v-model="columns" :items="[
+        { value: 'id', label: 'ID'},
+        { value: 'desc', label: '描述'},
+        { value: 'price', label: '价格'},
+        { value: 'updateDate', label: '更新时间'},
+        { value: 'operation', label: '操作'}
+      ]"></veui-box-group>
+    </section>
+    <section>
+      已选ID：
+      {{ JSON.stringify(selected) }}
     </section>
   </article>
 </template>
@@ -37,15 +43,17 @@
 import moment from 'moment'
 import bus from '../bus'
 import Button from '@/components/Button'
+import BoxGroup from '@/components/BoxGroup'
 import Table from '@/components/Table'
 import Column from '@/components/Table/Column'
 
 export default {
-  name: 'table',
+  name: 'table-demo',
   components: {
     'veui-button': Button,
     'veui-table': Table,
-    'veui-table-column': Column
+    'veui-table-column': Column,
+    'veui-box-group': BoxGroup
   },
   filters: {
     date (value) {
@@ -69,7 +77,8 @@ export default {
       nextIndex: 4,
       columns: ['id', 'desc', 'price', 'updateDate', 'operation'],
       order: false,
-      orderBy: null
+      orderBy: null,
+      selected: ['3155', '3156']
     }
   },
   methods: {
