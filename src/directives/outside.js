@@ -50,13 +50,11 @@ function generate (el, value, context) {
         handler(e)
       }
     } else {
-      /* eslint-disable brace-style */
-      // 如果鼠标第一次在whiteList里面动，就改一下状态
       if (hoverState.state === 'ready' && some(whiteList, element => isContain(element, e.target))) {
+        // 如果鼠标第一次在whiteList里面动，就改一下状态
         hoverState.state = 'in'
-      }
-      // 鼠标从whiteList里面移出去了，记录下这个时间点
-      else if (hoverState.state === 'in' && every(whiteList, element => !isContain(element, e.target))) {
+      } else if (hoverState.state === 'in' && every(whiteList, element => !isContain(element, e.target))) {
+        // 鼠标从whiteList里面移出去了，就设置一下超时
         hoverState.state = 'out'
 
         hoverState.timer = setTimeout(() => {
@@ -70,17 +68,15 @@ function generate (el, value, context) {
             hoverState.timer = null
           }
         }, delay)
-      }
-      // 鼠标在外面了，就要随时检查鼠标是不是移回whiteList了
-      else if (hoverState.state === 'out') {
-        // 鼠标移了回来，重置一下状态
+      } else if (hoverState.state === 'out') {
+        // 鼠标在外面了，就要随时检查鼠标是不是移回whiteList了
         if (some(whiteList, element => isContain(element, e.target))) {
+          // 鼠标移了回来，重置一下状态
           hoverState.state = 'in'
           clearTimeout(hoverState.timer)
           hoverState.timer = null
         }
       }
-      /* eslint-enable brace-style */
 
       hoverState.prevEvent = e
     }
