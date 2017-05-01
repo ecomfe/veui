@@ -17,7 +17,7 @@
       target="veui-select-button"
       :open="expanded"
       :options="overlay">
-      <div class="veui-select-options" v-clickoutside="close">
+      <div class="veui-select-options" v-outside="close">
         <slot>
           <template v-for="option in options">
             <veui-option

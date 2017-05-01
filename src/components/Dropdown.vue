@@ -5,7 +5,7 @@
       :class="{'veui-button-chevron': icon === 'chevron'}"
       :disabled="disabled"
       @click.stop="expanded = !expanded"
-      v-clickoutside="clickoutside"
+      v-outside="clickoutside"
       slot="target"
       ref="veui-dropdown-button">
       <slot name="dropdown-button" :label="label">
