@@ -1,4 +1,4 @@
-import { isFunction, uniqueId, remove, isObject, every, isArray, some } from 'lodash'
+import { isFunction, uniqueId, remove, every, isArray, some, find, isNumber } from 'lodash'
 
 let handlerBindings = []
 const bindingKey = '__veui_click_outside__'
@@ -38,7 +38,7 @@ function getElementsByRefs (refs, context) {
 
 function empty () {}
 
-function generate (el, value, context) {
+function generate (el, { whiteList, handler, trigger, delay }) {
   const hoverState = {
     state: 'ready',
     prevEvent: null,
@@ -83,23 +83,6 @@ function generate (el, value, context) {
   }
 
   return function (e) {
-    let whiteList = [el]
-    let handler
-    let trigger = 'click'
-    // delay表示如果鼠标移动到whiteList元素之外多少秒之后，才会触发handler；
-    let delay = 0
-
-    if (isFunction(value)) {
-      handler = value
-    } else if (isObject(value)) {
-      whiteList = isArray(value.refs) ? [el, ...getElementsByRefs(value.refs, context)] : whiteList
-      handler = isFunction(value.handler) ? value.handler : empty
-      trigger = value.trigger || trigger
-      delay = value.delay || delay
-    } else {
-      throw new Error(`The value of v-outside directive must be a function or an object, but now it is ${value}`)
-    }
-
     // click 模式，直接判断元素包含情况
     if (e.type === trigger && every(whiteList, element => !isContain(element, e.target))) {
       handler(e)
@@ -111,17 +94,42 @@ function generate (el, value, context) {
   }
 }
 
+function parseParams (el, arg, modifiers, value, context) {
+  let whiteList
+  let handler
+  let trigger
+  // delay表示如果鼠标移动到whiteList元素之外多少秒之后，才会触发handler；
+  let delay
+
+  const refs = arg ? arg.split(',') : []
+  whiteList = [el, ...getElementsByRefs(refs, context)]
+
+  handler = isFunction(value) ? value : empty
+
+  trigger = modifiers.hover ? 'hover' : 'click'
+
+  delay = find(Object.keys(modifiers), key => isNumber(parseInt(key, 10)) && modifiers[key])
+  delay = delay ? parseInt(delay, 10) : 0
+
+  return {
+    whiteList,
+    handler,
+    trigger,
+    delay
+  }
+}
+
 export default {
-  bind (el, { value }, vnode) {
+  bind (el, { value, arg, modifiers }, vnode) {
     el[bindingKey] = {
       id: uniqueId(),
-      handler: generate(el, value, vnode.context)
+      handler: generate(el, parseParams(el, arg, modifiers, value, vnode.context))
     }
     handlerBindings.push(el)
   },
-  update (el, { value }, vnode) {
+  update (el, { value, arg, modifiers }, vnode) {
     if (isFunction(value)) {
-      el[bindingKey].handler = generate(el, value, vnode.context)
+      el[bindingKey].handler = generate(el, parseParams(el, arg, modifiers, value, vnode.context))
     }
   },
   unbind (el) {
