@@ -32,6 +32,7 @@ import Overlay from './Overlay'
 import 'vue-awesome/icons/close'
 import Button from './Button'
 import { ui } from '../mixins'
+import drag from '../directives/drag'
 
 export default {
   name: 'veui-dialog',
@@ -39,6 +40,7 @@ export default {
     'veui-overlay': Overlay,
     'veui-button': Button
   },
+  directives: { drag },
   mixins: [ ui ],
   props: {
     ui: String,

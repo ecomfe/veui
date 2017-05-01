@@ -1,7 +1,7 @@
 import { isFunction, uniqueId, remove, every, isArray, some, find, isNumber } from 'lodash'
 
 let handlerBindings = []
-const bindingKey = '__veui_click_outside__'
+const bindingKey = '__veui_outside__'
 
 document.addEventListener('click', e => {
   handlerBindings.forEach(item => {

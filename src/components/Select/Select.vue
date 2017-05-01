@@ -58,6 +58,7 @@ import Button from '../Button'
 import Option from './Option'
 import Overlay from '../Overlay'
 import mixin from '../../mixins/input'
+import outside from '../../directives/outside'
 import 'vue-awesome/icons/caret-down'
 import 'vue-awesome/icons/caret-up'
 
@@ -73,6 +74,7 @@ export default {
     'veui-option': Option,
     'veui-overlay': Overlay
   },
+  directives: { outside },
   props: {
     ui: String,
     placeholder: {
