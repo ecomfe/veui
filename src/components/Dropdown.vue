@@ -5,7 +5,7 @@
       :class="{'veui-button-chevron': icon === 'chevron'}"
       :disabled="disabled"
       @click.stop="expanded = !expanded"
-      v-clickoutside="clickoutside"
+      v-outside="clickoutside"
       slot="target"
       ref="veui-dropdown-button">
       <slot name="dropdown-button" :label="label">
@@ -39,6 +39,7 @@
 import Icon from './Icon'
 import Button from './Button'
 import Overlay from './Overlay'
+import outside from '../directives/outside'
 import 'vue-awesome/icons/caret-down'
 import 'vue-awesome/icons/caret-up'
 import 'vue-awesome/icons/chevron-down'
@@ -51,6 +52,7 @@ export default {
     'veui-button': Button,
     'veui-overlay': Overlay
   },
+  directives: { outside },
   props: {
     ui: String,
     label: String,
