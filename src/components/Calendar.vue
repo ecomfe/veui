@@ -65,8 +65,8 @@
 <script>
 import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/date'
 import { flattenDeep, findIndex } from 'lodash'
+import { input } from '../mixins'
 import Icon from './Icon'
-import input from '../mixins/input'
 import 'vue-awesome/icons/chevron-left'
 import 'vue-awesome/icons/chevron-right'
 import 'vue-awesome/icons/caret-down'

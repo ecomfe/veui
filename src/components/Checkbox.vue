@@ -10,7 +10,7 @@
 
 <script>
 import Icon from './Icon'
-import mixin from '../mixins/input'
+import { input } from '../mixins'
 import { assign } from 'lodash'
 import { patchIndeterminate } from '../utils/dom'
 import 'vue-awesome/icons/check'
@@ -21,7 +21,7 @@ export default {
   components: {
     Icon
   },
-  mixins: [mixin],
+  mixins: [input],
   props: {
     ui: String,
     name: String,

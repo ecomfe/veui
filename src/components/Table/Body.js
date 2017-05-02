@@ -1,11 +1,11 @@
 import Checkbox from '../Checkbox'
-import mixin from './mixin'
+import { table } from '../../mixins'
 
 export default {
   components: {
     'veui-checkbox': Checkbox
   },
-  mixins: [mixin],
+  mixins: [table],
   props: {
     data: Array,
     columns: Array,

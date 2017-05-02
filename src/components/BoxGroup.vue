@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import mixin from '../mixins/input'
+import { input } from '../mixins'
 import Radiobox from './Radiobox'
 import Checkbox from './Checkbox'
 import { uniqueId, findIndex } from 'lodash'
@@ -26,7 +26,7 @@ export default {
     'radiobox': Radiobox,
     'checkbox': Checkbox
   },
-  mixins: [ mixin ],
+  mixins: [input],
   props: {
     type: String,
     ui: String,

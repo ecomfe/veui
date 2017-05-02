@@ -1,35 +1,36 @@
 <template>
   <div class="veui-dropdown" :ui="ui">
     <veui-button
-      :ui="ui"
+      :ui="buttonUI"
       :class="{'veui-button-chevron': icon === 'chevron'}"
       :disabled="disabled"
-      @click.stop="expanded = !expanded"
-      v-outside="clickoutside"
+      @click="expanded = !expanded"
       slot="target"
-      ref="veui-dropdown-button">
+      ref="button">
       <slot name="dropdown-button" :label="label">
         <icon :name="`${icon}-${expanded ? 'up' : 'down'}`"></icon>
         <span>{{ label }}</span>
       </slot>
     </veui-button>
     <veui-overlay
-      :overlay-class="{'veui-dropdown-options': true}"
-      target="veui-dropdown-button"
+      overlay-class="veui-dropdown-options"
+      target="button"
       :open="expanded"
       :options="overlay">
-      <div v-for="(option, index) in options"
-        :key="index"
-        class="veui-dropdown-option"
-        :class="{
-          'veui-dropdown-option-disabled': option.disabled
-        }"
-        @click.stop="clickHandler(index)">
-        <slot name="dropdown-option"
-          v-bind="option"
-          :index="index">
-          <span>{{ option.label }}</span>
-        </slot>
+      <div class="veui-dropdown-commands" v-outside:button="close">
+        <div v-for="(option, index) in options"
+          :key="index"
+          class="veui-dropdown-option"
+          :class="{
+            'veui-dropdown-option-disabled': option.disabled
+          }"
+          @click.stop="clickHandler(index)">
+          <slot name="dropdown-option"
+            v-bind="option"
+            :index="index">
+            <span>{{ option.label }}</span>
+          </slot>
+        </div>
       </div>
     </veui-overlay>
   </div>
@@ -39,7 +40,7 @@
 import Icon from './Icon'
 import Button from './Button'
 import Overlay from './Overlay'
-import outside from '../directives/outside'
+import { dropdown } from '../mixins'
 import 'vue-awesome/icons/caret-down'
 import 'vue-awesome/icons/caret-up'
 import 'vue-awesome/icons/chevron-down'
@@ -52,7 +53,7 @@ export default {
     'veui-button': Button,
     'veui-overlay': Overlay
   },
-  directives: { outside },
+  mixins: [dropdown],
   props: {
     ui: String,
     label: String,
@@ -68,11 +69,9 @@ export default {
   },
   data () {
     return {
-      expanded: false,
       overlay: {
         attachment: 'top left',
         targetAttachment: 'bottom left',
-        offset: '-3px 0',
         constraints: [
           {
             to: 'scrollParent',
@@ -84,12 +83,8 @@ export default {
   },
   methods: {
     clickHandler (index) {
+      this.expanded = !this.expanded
       this.$emit('click', index)
-    },
-    clickoutside () {
-      if (this.expanded) {
-        this.expanded = !this.expanded
-      }
     }
   }
 }
@@ -103,14 +98,14 @@ export default {
     padding: 11px 15px;
     position: relative;
     text-align: left;
-    > span {
+    & > span {
       display: inline-block;
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
-    > svg {
+    & > .veui-icon {
       width: 13px;
       height: 13px;
       position: absolute;
@@ -121,7 +116,7 @@ export default {
       }
     }
     &.veui-button-chevron {
-      > svg {
+      & > .veui-icon {
         width: 14px;
         height: 8px;
         top: 14px;

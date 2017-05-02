@@ -1,5 +1,5 @@
 <template>
-  <div class="veui-select"
+  <div class="veui-select" :ui="ui"
     :class="{
       'veui-select-empty': value === null,
       'veui-select-expanded': expanded
@@ -20,7 +20,7 @@
       target="button"
       :open="expanded"
       :options="overlay">
-      <div class="veui-select-options" v-outside="close">
+      <div class="veui-select-options" v-outside:button="close">
         <slot>
           <template v-for="option in options">
             <veui-option
@@ -60,21 +60,13 @@ import Icon from '../Icon'
 import Button from '../Button'
 import Option from './Option'
 import Overlay from '../Overlay'
-import input from '../../mixins/input'
-import ui from '../../mixins/ui'
-import outside from '../../directives/outside'
-import { includes } from 'lodash'
-import config from '../../managers/config'
+import { input, dropdown } from '../../mixins'
 import 'vue-awesome/icons/caret-down'
 import 'vue-awesome/icons/caret-up'
 
-config.defaults({
-  'select.btnUI': 'aux'
-})
-
 export default {
   name: 'veui-select',
-  mixins: [input, ui],
+  mixins: [input, dropdown],
   model: {
     event: 'change'
   },
@@ -84,7 +76,6 @@ export default {
     'veui-option': Option,
     'veui-overlay': Overlay
   },
-  directives: { outside },
   props: {
     ui: String,
     placeholder: {
@@ -103,7 +94,6 @@ export default {
   },
   data () {
     return {
-      expanded: false,
       overlay: {
         attachment: 'top left',
         targetAttachment: 'bottom left',
@@ -117,15 +107,6 @@ export default {
     }
   },
   computed: {
-    buttonUI () {
-      let props = this.uiProps.filter(prop => {
-        return includes(['alt', 'tiny', 'small', 'large'], prop)
-      })
-      if (!includes(props, 'alt')) {
-        props.push('aux')
-      }
-      return props.join(' ')
-    },
     labelMap () {
       return extractOptions(this.options, {})
     },
@@ -140,12 +121,6 @@ export default {
     handleSelect (val) {
       this.expanded = false
       this.$emit('change', val)
-    },
-    close () {
-      // FIXME: prevent being reversed by button click for now
-      setTimeout(() => {
-        this.expanded = false
-      })
     }
   }
 }
@@ -167,27 +142,7 @@ function extractOptions (options, map) {
   display: inline-block;
   width: 160px;
 
-  .veui-button {
-    width: 100%;
-    .padding(_, 12px);
-    text-align: left;
-    span {
-      display: inline-block;
-      max-width: ~"calc(100% - 16px)";
-      width: 100%;
-      .ellipsis();
-    }
-    .veui-icon {
-      float: right;
-    }
-  }
-
-  &-expanded .veui-button:not(.veui-button-loading) {
-    &,
-    &:hover {
-      color: @veui-theme-color-primary;
-    }
-  }
+  .veui-make-dropdown-button();
 
   &-options {
     min-width: 160px;

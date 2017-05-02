@@ -8,7 +8,7 @@
 
 <script>
 import Icon from './Icon'
-import mixin from '../mixins/input'
+import { input } from '../mixins'
 import { assign } from 'lodash'
 import 'vue-awesome/icons/circle'
 
@@ -17,7 +17,7 @@ export default {
   components: {
     Icon
   },
-  mixins: [mixin],
+  mixins: [input],
   props: {
     ui: String,
     name: String,

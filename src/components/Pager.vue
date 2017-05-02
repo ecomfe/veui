@@ -34,13 +34,13 @@
 
 <script>
 import Icon from './Icon'
+import HyperLink from './HyperLink'
+import Select from './Select'
+import Option from './Select/Option'
 import 'vue-awesome/icons/chevron-left'
 import 'vue-awesome/icons/chevron-right'
 import 'vue-awesome/icons/chevron-circle-left'
 import 'vue-awesome/icons/chevron-circle-right'
-import HyperLink from './HyperLink'
-import Select from './Select'
-import Option from './Select/Option'
 
 const OPTIONAL_PAGE_SIZES = [
   30, 60, 100, 200

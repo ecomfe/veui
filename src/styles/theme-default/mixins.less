@@ -61,6 +61,30 @@
   .veui-shadow(drop);
 }
 
+.veui-make-dropdown-button() {
+  .veui-button {
+    width: 100%;
+    .padding(_, 12px);
+    text-align: left;
+    span {
+      display: inline-block;
+      max-width: ~"calc(100% - 16px)";
+      width: 100%;
+      .ellipsis();
+    }
+    .veui-icon {
+      float: right;
+    }
+  }
+
+  &-expanded .veui-button:not(.veui-button-loading) {
+    &,
+    &:hover {
+      color: @veui-theme-color-primary;
+    }
+  }
+}
+
 .position-center() {
   position: absolute;
   top: 50%;

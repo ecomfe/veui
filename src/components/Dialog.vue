@@ -29,10 +29,10 @@
 <script>
 import { includes, upperFirst, isObject, isString, extend } from 'lodash'
 import Overlay from './Overlay'
-import 'vue-awesome/icons/close'
 import Button from './Button'
 import { ui } from '../mixins'
-import drag from '../directives/drag'
+import { drag } from '../directives'
+import 'vue-awesome/icons/close'
 
 export default {
   name: 'veui-dialog',
@@ -41,7 +41,7 @@ export default {
     'veui-button': Button
   },
   directives: { drag },
-  mixins: [ ui ],
+  mixins: [ui],
   props: {
     ui: String,
     modal: {
