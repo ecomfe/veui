@@ -1,11 +1,14 @@
 <template>
-  <div class="veui-select" :ui="ui">
+  <div class="veui-select"
+    :class="{
+      'veui-select-empty': value === null,
+      'veui-select-expanded': expanded
+    }">
     <veui-button
-      :ui="ui"
-      :class="{'veui-button-empty': value === null}"
+      :ui="buttonUI"
       :disabled="disabled || readonly"
       @click="expanded = !expanded"
-      ref="veui-select-button">
+      ref="button">
       <slot name="label" :label="label">
         <span>{{ label }}</span>
       </slot>
@@ -14,7 +17,7 @@
     <veui-overlay
       v-if="expanded"
       overlay-class="veui-select-overlay"
-      target="veui-select-button"
+      target="button"
       :open="expanded"
       :options="overlay">
       <div class="veui-select-options" v-outside="close">
@@ -57,19 +60,26 @@ import Icon from '../Icon'
 import Button from '../Button'
 import Option from './Option'
 import Overlay from '../Overlay'
-import mixin from '../../mixins/input'
+import input from '../../mixins/input'
+import ui from '../../mixins/ui'
 import outside from '../../directives/outside'
+import { includes } from 'lodash'
+import config from '../../managers/config'
 import 'vue-awesome/icons/caret-down'
 import 'vue-awesome/icons/caret-up'
 
+config.defaults({
+  'select.btnUI': 'aux'
+})
+
 export default {
   name: 'veui-select',
-  mixins: [mixin],
+  mixins: [input, ui],
   model: {
     event: 'change'
   },
   components: {
-    'icon': Icon,
+    Icon,
     'veui-button': Button,
     'veui-option': Option,
     'veui-overlay': Overlay
@@ -97,7 +107,6 @@ export default {
       overlay: {
         attachment: 'top left',
         targetAttachment: 'bottom left',
-        offset: '-3px 0',
         constraints: [
           {
             to: 'scrollParent',
@@ -108,22 +117,17 @@ export default {
     }
   },
   computed: {
-    labelMap () {
-      let mapOptions = {}
-      function extract (options) {
-        if (!options) {
-          return
-        }
-        options.forEach(option => {
-          if (option.value) {
-            mapOptions[option.value] = option.label
-          } else if (option.options) {
-            extract(option.options)
-          }
-        })
+    buttonUI () {
+      let props = this.uiProps.filter(prop => {
+        return includes(['alt', 'tiny', 'small', 'large'], prop)
+      })
+      if (!includes(props, 'alt')) {
+        props.push('aux')
       }
-      extract(this.options)
-      return mapOptions
+      return props.join(' ')
+    },
+    labelMap () {
+      return extractOptions(this.options, {})
     },
     label () {
       if (this.value === null) {
@@ -145,6 +149,16 @@ export default {
     }
   }
 }
+
+function extractOptions (options, map) {
+  options.forEach(({ label, value, options }) => {
+    map[value] = label
+    if (options) {
+      extractOptions(options, map)
+    }
+  })
+  return map
+}
 </script>
 
 <style lang="less">
@@ -155,7 +169,7 @@ export default {
 
   .veui-button {
     width: 100%;
-    position: relative;
+    .padding(_, 12px);
     text-align: left;
     span {
       display: inline-block;
@@ -163,20 +177,24 @@ export default {
       width: 100%;
       .ellipsis();
     }
-    &.veui-button-empty {
-      color: @veui-gray-color-weak;
-    }
     .veui-icon {
       float: right;
     }
   }
+
+  &-expanded .veui-button:not(.veui-button-loading) {
+    &,
+    &:hover {
+      color: @veui-theme-color-primary;
+    }
+  }
+
   &-options {
     min-width: 160px;
     max-height: 280px;
     overflow-y: auto;
     background-color: #fff;
-    border: 1px solid @veui-gray-color-sup-2;
-    border-radius: 2px;
+    .veui-make-overlay(dropdown);
   }
 
   &-option-group {

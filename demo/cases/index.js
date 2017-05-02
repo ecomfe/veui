@@ -7,6 +7,7 @@ import Overlay from './Overlay'
 import Breadcrumb from './Breadcrumb'
 import Input from './Input'
 import Calendar from './Calendar'
+import DatePicker from './DatePicker'
 import Select from './Select'
 import Dropdown from './Dropdown'
 import Radiobox from './Radiobox'
@@ -61,6 +62,11 @@ export default [
     path: '/calendar',
     name: 'Calendar',
     component: Calendar
+  },
+  {
+    path: '/datepicker',
+    name: 'DatePicker',
+    component: DatePicker
   },
   {
     path: '/select',

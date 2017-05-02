@@ -11,6 +11,8 @@
 <script>
 import Icon from './Icon'
 import mixin from '../mixins/input'
+import { assign } from 'lodash'
+import { patchIndeterminate } from '../utils/dom'
 import 'vue-awesome/icons/check'
 import 'vue-awesome/icons/minus'
 
@@ -39,7 +41,7 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = Object.assign({}, this.$props)
+      let attrs = assign({}, this.$props)
       delete attrs.ui
       delete attrs.indeterminate
       return attrs
@@ -59,7 +61,9 @@ export default {
     }
   },
   mounted () {
-    this.$refs.box.indeterminate = this.localIndeterminate
+    let box = this.$refs.box
+    box.indeterminate = this.localIndeterminate
+    patchIndeterminate(box)
   }
 }
 </script>

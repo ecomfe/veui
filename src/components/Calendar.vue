@@ -405,16 +405,16 @@ function getRangePosition (day, range) {
   overflow: hidden;
   border: 1px solid @veui-gray-color-sup-2;
   border-radius: 4px;
+  background-color: #fff;
 
   &::before {
     content: "";
     position: absolute;
-    top: 0;
+    top: 36px;
     left: 0;
     right: 0;
-    height: 37px;
+    height: 0;
     border-bottom: 1px solid @veui-gray-color-sup-2;
-    z-index: -1;
   }
 
   &-panel {
@@ -437,6 +437,7 @@ function getRangePosition (day, range) {
       border: none;
       padding: 0;
       background-color: #fff;
+      color: @veui-text-color-weak;
       text-align: center;
       outline: none;
 
@@ -555,6 +556,7 @@ function getRangePosition (day, range) {
       outline: none;
 
       .veui-icon {
+        width: 16px;
         vertical-align: middle;
         color: @veui-text-color-weak;
       }

@@ -7,7 +7,7 @@
     :key="index"
     :value="item.value"
     :disabled="item.disabled"
-    :checked="type === 'radiobox' ? item.value === value : value.includes(item.value)"
+    :checked="type === 'radiobox' ? item.value === value : value.indexOf(item.value) !== -1"
     @change="boxChange(index, arguments[0])">
       <slot :label="item.label" :value="item.value">{{ item.label }}</slot>
     </component>
@@ -18,7 +18,7 @@
 import mixin from '../mixins/input'
 import Radiobox from './Radiobox'
 import Checkbox from './Checkbox'
-import { uniqueId } from 'lodash'
+import { uniqueId, findIndex } from 'lodash'
 
 export default {
   name: 'veui-boxgroup',
@@ -48,7 +48,7 @@ export default {
         if (checked) {
           this.value.push(value)
         } else {
-          this.value.splice(this.value.findIndex(item => item === value), 1)
+          this.value.splice(findIndex(this.value, item => item === value), 1)
         }
         this.$emit('input', this.value)
       }
