@@ -83,7 +83,6 @@
           default:
             break
         }
-        console.log(this.localCurrent)
         this.$emit('changestate', index)
       }
     },

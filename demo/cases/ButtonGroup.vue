@@ -222,8 +222,6 @@ export default {
         this.current = index
       })
     })
-  },
-  destroyed () {
   }
 }
 </script>
