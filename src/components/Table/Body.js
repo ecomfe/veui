@@ -16,21 +16,24 @@ export default {
   render () {
     return (
       <tbody>
-        {this._l(this.data, (item, index) => (
-          <tr>
-            {
-              this.table.selectable
-                ? <td><veui-checkbox checked={!!this.selectedItems[this.keys ? this.keys[index] : index]}
-                    key={this.keys[index]} onChange={checked => { this.$emit('select', checked, index) }}/></td>
-                : ''
-            }
-            {
-              this._l(this.columns, col => (
-                <td>{col.renderBody.call(this._renderProxy, { item, col, index })}</td>
-              ))
-            }
-          </tr>
-        ))}
+        {this._l(this.data, (item, index) => {
+          let checked = !!this.selectedItems[this.keys ? this.keys[index] : index]
+          return (
+            <tr class={{ 'veui-table-selected-row': checked }}>
+              {
+                this.table.selectable
+                  ? <td><veui-checkbox checked={checked}
+                      key={this.keys[index]} onChange={checked => { this.$emit('select', checked, index) }}/></td>
+                  : ''
+              }
+              {
+                this._l(this.columns, col => (
+                  <td>{col.renderBody.call(this._renderProxy, { item, col, index })}</td>
+                ))
+              }
+            </tr>
+          )
+        })}
       </tbody>
     )
   }

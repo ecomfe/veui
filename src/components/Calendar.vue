@@ -11,7 +11,7 @@
         <span class="veui-calendar-label"><b>{{ p.year }}</b> 年</span>
       </template>
       <template v-if="p.view === 'years'">
-        <span class="veui-calendar-label"><b>{{ p.year - 6 }}–{{ p.year + 5 }}</b> 年</span>
+        <span class="veui-calendar-label"><b>{{ p.year - p.year % 10 }}–{{ p.year - p.year % 10 + 9 }}</b> 年</span>
       </template>
       <button v-if="pIndex === panels.length - 1 || p.view !== 'days'" class="veui-calendar-next" @click="step(true, p.view)"><veui-icon name="chevron-right"></veui-icon></button>
     </div>
@@ -36,23 +36,15 @@
         </template>
         <tbody v-else-if="p.view === 'months'">
           <tr v-for="i in 3">
-            <td v-for="j in 4" :class="{
-              'veui-calendar-today': (i - 1) * 4 + j - 1 === today.getMonth() && p.year === today.getFullYear(),
-              'veui-calendar-selected': (localSelected && !multiple && !range) ?
-                ((i - 1) * 4 + j - 1 === localSelected.getMonth() && p.year === localSelected.getFullYear()) : false
-            }">
+            <td v-for="j in 4" :class="getMonthClass(p, i, j)">
               <button @click="selectMonth(pIndex, (i - 1) * 4 + j - 1)">{{ (i - 1) * 4 + j }} 月</button>
             </td>
           </tr>
         </tbody>
         <tbody v-else-if="p.view === 'years'">
           <tr v-for="i in 3">
-            <td v-for="j in 4" :class="{
-              'veui-calendar-today': p.year + (i - 1) * 4 + j - 7 === today.getFullYear(),
-              'veui-calendar-selected': (localSelected && !multiple && !range) ?
-                p.year + (i - 1) * 4 + j - 7 === localSelected.getFullYear() : false
-            }">
-              <button @click="selectYear(pIndex, p.year + (i - 1) * 4 + j - 7)">{{ p.year + (i - 1) * 4 + j - 7 }}</button>
+            <td v-for="j in 4" :class="getYearClass(p, i, j)">
+              <button v-if="(i - 1) * 4 + j - 1 < 10" @click="selectYear(pIndex, p.year - p.year % 10 + (i - 1) * 4 + j - 1)">{{ p.year - p.year % 10 + (i - 1) * 4 + j - 1 }}</button>
             </td>
           </tr>
         </tbody>
@@ -241,6 +233,22 @@ export default {
         'veui-calendar-range-start': day.rangePosition === 'start',
         'veui-calendar-range-end': day.rangePosition === 'end',
         ...extraClass
+      }
+    },
+    getMonthClass (panel, i, j) {
+      let month = (i - 1) * 4 + j - 1
+      return {
+        'veui-calendar-today': month === this.today.getMonth() && panel.year === this.today.getFullYear(),
+        'veui-calendar-selected': (this.localSelected && !this.multiple && !this.range)
+          ? (month === this.localSelected.getMonth() && panel.year === this.localSelected.getFullYear()) : false
+      }
+    },
+    getYearClass (panel, i, j) {
+      let year = panel.year - panel.year % 10 + (i - 1) * 4 + j - 1
+      return {
+        'veui-calendar-today': year === this.today.getFullYear(),
+        'veui-calendar-selected': (this.localSelected && !this.multiple && !this.range)
+          ? year === this.localSelected.getFullYear() : false
       }
     },
     selectDay (i, day) {
