@@ -16,11 +16,10 @@
     </veui-button>
     <veui-overlay
       v-if="expanded"
-      overlay-class="veui-select-overlay"
       target="button"
       :open="expanded"
       :options="overlay">
-      <div class="veui-select-options" v-outside:button="close">
+      <div class="veui-select-options veui-overlay-dropdown" v-outside:button="close">
         <slot>
           <template v-for="option in options">
             <veui-option
@@ -149,7 +148,6 @@ function extractOptions (options, map) {
     max-height: 280px;
     overflow-y: auto;
     background-color: #fff;
-    .veui-make-overlay(dropdown);
   }
 
   &-option-group {

@@ -1,7 +1,7 @@
 <template>
   <div class="veui-dropdown" :ui="ui">
     <veui-button
-      :ui="buttonUI"
+      :ui="ui"
       :class="{'veui-button-chevron': icon === 'chevron'}"
       :disabled="disabled"
       @click="expanded = !expanded"
@@ -13,11 +13,10 @@
       </slot>
     </veui-button>
     <veui-overlay
-      overlay-class="veui-dropdown-options"
       target="button"
       :open="expanded"
       :options="overlay">
-      <div class="veui-dropdown-commands" v-outside:button="close">
+      <div class="veui-dropdown-options veui-overlay-dropdown" v-outside:button="close">
         <div v-for="(option, index) in options"
           :key="index"
           class="veui-dropdown-option"

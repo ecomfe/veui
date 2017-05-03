@@ -3,31 +3,31 @@
     <h1><code>&lt;veui-pager&gt;</code></h1>
     <div class="pager">
       <h2>四种版式</h2>
-      <veui-pager :page="page" :page-total="pageTotal" :href-tpl="hrefTpl"></veui-pager>
+      <veui-pager :page="page" :page-total="pageTotal" :to="to"></veui-pager>
 
-      <veui-pager :page="page" :page-total="pageTotal" :href-tpl="hrefTpl" ui="hetero"></veui-pager>
+      <veui-pager :page="page" :page-total="pageTotal" :to="to" ui="hetero"></veui-pager>
 
-      <veui-pager :page="page" :page-total="pageTotal" :href-tpl="hrefTpl" ui="full"></veui-pager>
+      <veui-pager :page="page" :page-total="pageTotal" :to="to" ui="full"></veui-pager>
 
-      <veui-pager :page="page" :page-total="pageTotal" :href-tpl="hrefTpl" ui="slim"></veui-pager>
+      <veui-pager :page="page" :page-total="pageTotal" :to="to" ui="slim"></veui-pager>
     </div>
 
     <div class="pager">
       <h2>目标位置模板</h2>
       <p><small>格式和 &lt;router-link&gt; 的 to prop 一样</small></p>
       <veui-pager :page="page" :page-total="pageTotal" ui="advanced"
-        :href-tpl="{name: 'Pager', params: { page: ':page'}}"></veui-pager>
+        :to="{name: 'Pager', params: { page: ':page'}}"></veui-pager>
     </div>
 
     <div class="pager">
       <h2>原生跳转</h2>
-      <veui-pager :page="page" :page-total="pageTotal" :href-tpl="'#' + hrefTpl" ui="advanced" :native="true"></veui-pager>
+      <veui-pager :page="page" :page-total="pageTotal" :to="'#' + to" ui="advanced" :native="true"></veui-pager>
     </div>
 
     <div class="pager">
       <h2>事件与阻止跳转</h2>
       <p><small>仅原生跳转可用</small></p>
-      <veui-pager :page="page" :page-total="pageTotal" :href-tpl="hrefTpl" ui="advanced" :native="true"
+      <veui-pager :page="page" :page-total="pageTotal" :to="to" ui="advanced" :native="true"
         @redirect="handlePageRedirect"></veui-pager>
       <div class="message">{{ fifthPagerMessage }}</div>
     </div>
@@ -47,7 +47,7 @@ export default {
     return {
       page: parseInt(this.$route.params.page, 10) || 1,
       pageTotal: 10101,
-      hrefTpl: '/pager/:page',
+      to: '/pager/:page',
       fifthPagerMessage: ''
     }
   },

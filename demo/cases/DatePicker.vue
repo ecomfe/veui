@@ -2,8 +2,10 @@
   <article>
     <h1><code>&lt;veui-datepicker&gt;</code></h1>
     <section>
-      <veui-datepicker></veui-datepicker>
-      <veui-datepicker></veui-datepicker>
+      <p><veui-datepicker v-model="selected"></veui-datepicker></p>
+    </section>
+    <section>
+      <p><veui-datepicker v-model="selected"></veui-datepicker></p>
     </section>
   </article>
 </template>
@@ -15,6 +17,11 @@ export default {
   name: 'datepicker-demo',
   components: {
     'veui-datepicker': DatePicker
+  },
+  data () {
+    return {
+      selected: null
+    }
   }
 }
 </script>

@@ -1,7 +1,8 @@
-import { includes } from 'lodash'
+import { intersection } from 'lodash'
 import { outside } from '../directives'
 import { config } from '../managers'
 import { ui } from '../mixins'
+import '../styles/theme-default/dropdown.less'
 
 config.defaults({
   'dropdown.buttonUI': 'aux'
@@ -17,13 +18,11 @@ export default {
   },
   computed: {
     buttonUI () {
-      let props = this.uiProps.filter(prop => {
-        return includes(['alt', 'tiny', 'small', 'large'], prop)
-      })
-      if (!includes(props, 'alt')) {
-        props.push(config.get('dropdown.buttonUI'))
+      let defaultUI = config.get('dropdown.buttonUI')
+      if (!intersection(this.uiProps, ['primary', 'aux', 'alt', 'link']).length) {
+        return [...this.uiProps, defaultUI].join(' ')
       }
-      return props.join(' ')
+      return this.ui
     }
   },
   methods: {

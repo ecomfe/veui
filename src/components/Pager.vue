@@ -87,7 +87,7 @@ export default {
       type: Number,
       required: true
     },
-    hrefTpl: {
+    to: {
       type: [String, Object],
       default: ':page'
     },
@@ -107,12 +107,12 @@ export default {
     }
   },
   computed: {
-    realHrefTpl () {
-      let hrefTpl = this.hrefTpl
-      if (typeof hrefTpl === 'string') {
-        return hrefTpl
+    realTo () {
+      let to = this.to
+      if (typeof to === 'string') {
+        return to
       } else {
-        return this.$router.resolve(hrefTpl).href.substring(1)
+        return this.$router.resolve(to).href.substring(1)
       }
     },
     pageNavHref () {
@@ -197,7 +197,7 @@ export default {
     },
 
     formatHref (page) {
-      return this.realHrefTpl.replace(HREF_TPL_PLACEHOLDER, page)
+      return this.realTo.replace(HREF_TPL_PLACEHOLDER, page)
     }
   }
 }

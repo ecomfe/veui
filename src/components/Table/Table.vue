@@ -186,6 +186,10 @@ export default {
     text-align: center;
   }
 
+  &-selected-row td {
+    background-color: @veui-theme-color-sup-4;
+  }
+
   .veui-button + .veui-button {
     margin-left: 30px;
   }
