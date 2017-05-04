@@ -15,7 +15,7 @@
     </section>
     <section>
       <h2>可清除范围选择</h2>
-      <p><veui-datepicker v-model="selected2" range clearable></veui-datepicker></p>
+      <p><veui-datepicker v-model="selected2" range clearable :panel="3"></veui-datepicker></p>
     </section>
   </article>
 </template>
