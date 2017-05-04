@@ -5,7 +5,7 @@ function set (obj, key, value, isOverride) {
     isOverride = value
     value = key
     Object.keys(value).forEach(key => {
-      set(obj, key, value, isOverride)
+      set(obj, key, value[key], isOverride)
     })
     return
   }
@@ -24,12 +24,12 @@ export class ConfigManager {
     this.store = {}
   }
 
-  set (key, value) {
-    set(this, key, value, true)
+  set (...args) {
+    set(this.store, ...args, true)
   }
 
-  defaults (key, value) {
-    set(this, key, value, false)
+  defaults (...args) {
+    set(this.store, ...args, false)
   }
 
   get (key) {

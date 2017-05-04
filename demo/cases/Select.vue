@@ -75,7 +75,6 @@ export default {
       defaultValue7: null,
       defaultValue8: '1-1',
       attrs: {
-        ui: 'aux',
         name: 'age',
         readonly: false,
         disabled: false,

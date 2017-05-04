@@ -1,6 +1,6 @@
 <template>
   <article>
-    <h1><code>&lt;veui-button&gt;</code></h1>
+    <h1><code>&lt;veui-dropdown&gt;</code></h1>
     <p>
       <veui-dropdown
         ui="primary"

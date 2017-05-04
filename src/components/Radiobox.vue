@@ -8,7 +8,8 @@
 
 <script>
 import Icon from './Icon'
-import mixin from '../mixins/input'
+import { input } from '../mixins'
+import { assign } from 'lodash'
 import 'vue-awesome/icons/circle'
 
 export default {
@@ -16,7 +17,7 @@ export default {
   components: {
     Icon
   },
-  mixins: [mixin],
+  mixins: [input],
   props: {
     ui: String,
     name: String,
@@ -30,7 +31,7 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = Object.assign({}, this.$props)
+      let attrs = assign({}, this.$props)
       delete attrs.ui
       return attrs
     }

@@ -78,8 +78,6 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 
   &.console-expanded {
     .output {

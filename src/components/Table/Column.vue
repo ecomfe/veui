@@ -2,11 +2,11 @@
 
 <script>
 import { pick } from 'lodash'
-import mixin from './mixin'
+import { table } from '../../mixins'
 
 export default {
   name: 'veui-table-column',
-  mixins: [mixin],
+  mixins: [table],
   props: {
     title: String,
     field: {

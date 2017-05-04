@@ -24,14 +24,14 @@
 </template>
 
 <script>
-import mixin from '../mixins/input'
-import {omit, includes} from 'lodash'
+import { input } from '../mixins'
+import { omit, includes } from 'lodash'
 
 const typeList = ['text', 'password', 'textarea']
 
 export default {
   name: 'veui-input',
-  mixins: [mixin],
+  mixins: [input],
   props: {
     ui: String,
     type: {

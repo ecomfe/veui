@@ -94,15 +94,14 @@
 <script>
 import Icon from './Icon'
 import Button from './Button'
+import { endsWith, cloneDeep, filter, map, uniqueId, assign } from 'lodash'
+import { ui, input } from '../mixins'
+import { config } from '../managers'
 import 'vue-awesome/icons/close'
 import 'vue-awesome/icons/upload'
 import 'vue-awesome/icons/plus'
 import 'vue-awesome/icons/check-circle-o'
 import 'vue-awesome/icons/file-zip-o'
-import { endsWith, cloneDeep, filter, map, uniqueId } from 'lodash'
-import { ui } from '../mixins'
-import mixin from '../mixins/input'
-import config from '../managers/config'
 
 config.defaults({
   'uploader.requestMode': 'xhr',
@@ -117,7 +116,7 @@ export default {
     'veui-button': Button,
     'veui-uploader-progress': getProgress()
   },
-  mixins: [ui, mixin],
+  mixins: [ui, input],
   props: {
     uploaderType: {
       type: String,
@@ -369,7 +368,7 @@ export default {
       }
     },
     onSuccess (data, file) {
-      Object.assign(file, data)
+      assign(file, data)
       file.status = 'success'
       file.xhr = null
       file.toBeUploaded = null
@@ -384,7 +383,7 @@ export default {
       this.updateFileList(file)
     },
     updateFileList (file, options) {
-      if (options) Object.assign(file, options)
+      if (options) assign(file, options)
       this.$set(this.fileList, this.fileList.indexOf(file), file)
       this.$emit('change', this.fileList)
     },

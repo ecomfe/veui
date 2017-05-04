@@ -1,7 +1,7 @@
 import Checkbox from '../Checkbox'
 import Button from '../Button'
 import Sorter from './Sorter'
-import mixin from './mixin'
+import { table } from '../../mixins'
 
 export default {
   components: {
@@ -9,7 +9,7 @@ export default {
     'veui-button': Button,
     'veui-table-sorter': Sorter
   },
-  mixins: [mixin],
+  mixins: [table],
   props: {
     columns: Array,
     selectable: Boolean,

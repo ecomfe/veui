@@ -29,7 +29,7 @@ function getElementsByRefs (refs, context) {
       } else if (isArray(element)) {
         elements.splice(elements.length - 1, 0, ...element)
       } else if (element) {
-        elements.push(element.$el)
+        elements.push(element)
       }
     }
   })

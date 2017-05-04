@@ -1,7 +1,7 @@
-import mixin from './mixin'
+import { table } from '../../mixins'
 
 export default {
-  mixins: [mixin],
+  mixins: [table],
   props: {
     columns: Array,
     selectable: Boolean,
