@@ -18,8 +18,14 @@
 html {
   font-size: 14px;
   font-weight: @veui-font-weight-normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+}
+
+// only enable on Retina displays
+@media screen and (min-resolution: 2dppx) {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
 h1,

@@ -9,9 +9,9 @@
       :disabled="disabled || readonly"
       @click="expanded = !expanded"
       ref="button">
-      <slot name="label" :label="label">
-        <span>{{ label }}</span>
-      </slot>
+      <span class="veui-dropdown-label">
+        <slot name="label" :label="label">{{ label }}</slot>
+      </span>
       <icon :name="`caret-${expanded ? 'up' : 'down'}`"></icon>
     </veui-button>
     <veui-overlay
@@ -90,20 +90,6 @@ export default {
       default: false
     },
     options: Array
-  },
-  data () {
-    return {
-      overlay: {
-        attachment: 'top left',
-        targetAttachment: 'bottom left',
-        constraints: [
-          {
-            to: 'scrollParent',
-            attachment: 'together'
-          }
-        ]
-      }
-    }
   },
   computed: {
     labelMap () {

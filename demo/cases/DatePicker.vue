@@ -2,10 +2,20 @@
   <article>
     <h1><code>&lt;veui-datepicker&gt;</code></h1>
     <section>
-      <p><veui-datepicker v-model="selected"></veui-datepicker></p>
+      <h2>普通</h2>
+      <p><veui-datepicker v-model="selected1"></veui-datepicker></p>
     </section>
     <section>
-      <p><veui-datepicker v-model="selected"></veui-datepicker></p>
+      <h2>可清除选择</h2>
+      <p><veui-datepicker v-model="selected1" clearable></veui-datepicker></p>
+    </section>
+    <section>
+      <h2>范围选择</h2>
+      <p><veui-datepicker v-model="selected2" range></veui-datepicker></p>
+    </section>
+    <section>
+      <h2>可清除范围选择</h2>
+      <p><veui-datepicker v-model="selected2" range clearable></veui-datepicker></p>
     </section>
   </article>
 </template>
@@ -20,7 +30,8 @@ export default {
   },
   data () {
     return {
-      selected: null
+      selected1: null,
+      selected2: null
     }
   }
 }
