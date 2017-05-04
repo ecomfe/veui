@@ -2,13 +2,19 @@
   <article class="veui-demo-calendar">
     <h1><code>&lt;veui-calendar&gt;</code></h1>
     <section>
+      <h2>单日选择</h2>
       <veui-calendar v-model="selected1" :disabled-date="isDisabled"></veui-calendar>
+    </section>
+    <section>
+      <h2>多单日选择 <small>(<code>multiple</code>)</small></h2>
       <veui-calendar v-model="selected0" multiple :date-class="dateClass"></veui-calendar>
     </section>
     <section>
+      <h2>时间段选择 <small>(<code>range</code>)</small></h2>
       <veui-calendar v-model="selected2" range :panel="2" :is-disabled-date="isDisabled"></veui-calendar>
     </section>
     <section>
+      <h2>多时间段选择 <small>(<code>multiple</code> &amp; <code>range</code>)</small></h2>
       <veui-calendar v-model="selected3" range multiple :panel="3"></veui-calendar>
     </section>
   </article>

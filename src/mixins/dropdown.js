@@ -13,7 +13,18 @@ export default {
   directives: { outside },
   data () {
     return {
-      expanded: false
+      expanded: false,
+      overlay: {
+        attachment: 'top left',
+        targetAttachment: 'bottom left',
+        constraints: [
+          {
+            to: 'scrollParent',
+            attachment: 'together',
+            pin: true
+          }
+        ]
+      }
     }
   },
   computed: {

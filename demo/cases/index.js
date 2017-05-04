@@ -26,11 +26,8 @@ export default [
     component: Table
   },
   {
-    path: '/pager/:page',
+    path: '/pager/:page?',
     name: 'Pager',
-    params: {
-      page: 1
-    },
     component: Pager
   },
   {

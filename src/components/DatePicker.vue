@@ -1,16 +1,36 @@
 <template>
 <div class="veui-datepicker" :ui="ui"
   :class="{
-    'veui-datepicker-empty': value === null,
+    'veui-datepicker-empty': !selected,
+    'veui-datepicker-range': range,
     'veui-datepicker-expanded': expanded
   }">
   <veui-button :ui="buttonUI" ref="button" @click="expanded = !expanded">
-    <span>{{ formatted || placeholder }}</span>
+    <template v-if="range">
+      <span class="veui-dropdown-label">
+        <slot v-if="formatted" name="date" :formatted="formatted ? formatted[0] : null" :date="selected ? selected[0] : null">{{ formatted[0] }}</slot>
+        <slot v-else name="placeholder-begin">开始时间</slot>
+      </span>
+      <span class="veui-datepicker-tilde">~</span>
+      <span class="veui-dropdown-label">
+        <slot v-if="formatted" name="date" :formatted="formatted ? formatted[1] : null" :date="selected ? selected[1] : null">{{ formatted[1] }}</slot>
+        <slot v-else name="placeholder-end">结束时间</slot>
+      </span>
+    </template>
+    <template v-else>
+      <span class="veui-dropdown-label">
+        <slot v-if="formatted" name="date" :date="formatted">{{ formatted }}</slot>
+        <slot v-else name="placeholder">{{ placeholder }}</slot>
+      </span>
+    </template>
     <veui-icon name="calendar"></veui-icon>
   </veui-button>
-  <button v-show="!!selected" class="veui-datepicker-clear" @click="clear($event)"><veui-icon name="remove"></veui-icon></button>
+  <button v-if="clearable" v-show="!!selected" class="veui-datepicker-clear" @click="clear">
+    <veui-icon name="remove"></veui-icon>
+  </button>
   <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay">
-    <veui-calendar class="veui-overlay-dropdown" v-model="localSelected" @select="handleSelect" v-outside:button="close"></veui-calendar>
+    <veui-calendar class="veui-overlay-dropdown" v-model="localSelected" v-outside:button="close"
+      @select="handleSelect" :range="range" :panel="2"></veui-calendar>
   </veui-overlay>
 </div>
 </template>
@@ -22,6 +42,7 @@ import Calendar from './Calendar'
 import Icon from './Icon'
 import moment from 'moment'
 import { dropdown, input } from '../mixins'
+import { isArray } from 'lodash'
 import 'vue-awesome/icons/calendar'
 import 'vue-awesome/icons/remove'
 
@@ -41,46 +62,43 @@ export default {
   props: {
     ui: String,
     selected: {
-      type: Date,
+      type: [Date, Array],
       default () {
         return null
       }
     },
+    clearable: Boolean,
     placeholder: {
       type: String,
-      default: '选择日期'
+      default: '选择时间'
     },
     format: {
       type: String,
       default: 'YYYY-MM-DD'
-    }
+    },
+    range: Boolean
   },
   data () {
     return {
-      expanded: false,
-      overlay: {
-        attachment: 'top left',
-        targetAttachment: 'bottom left',
-        constraints: [
-          {
-            to: 'scrollParent',
-            attachment: 'together'
-          }
-        ]
-      },
       localSelected: this.selected
     }
   },
   computed: {
     formatted () {
-      let day = this.selected
-      if (!day) {
+      let selected = this.localSelected
+      if (!selected) {
         return ''
       }
-      return moment(day).format(this.format)
+      if (isArray(selected)) {
+        return selected.map(date => this.formatDate(date))
+      }
+      return this.formatDate(selected)
     }
   },
   methods: {
+    formatDate (date) {
+      return moment(date).format(this.format)
+    },
     handleSelect (selected) {
       this.$emit('select', selected)
       this.expanded = false
@@ -88,7 +106,11 @@ export default {
     clear (e) {
       this.$emit('select', null)
       this.expanded = false
-      e.stopPropagation()
+    }
+  },
+  watch: {
+    selected (value) {
+      this.localSelected = value
     }
   }
 }
@@ -104,9 +126,17 @@ export default {
 
   .veui-make-dropdown-button();
 
+  &-empty {
+    .veui-button {
+      color: @veui-text-color-weak;
+    }
+  }
+
   &-clear {
-    .absolute(11px, 38px, _, _);
-    background: none;
+    display: none;
+    .absolute(11px, 12px, _, _);
+    .size(16px);
+    background: #fff;
     outline: none;
     border: none;
     padding: 0;
@@ -116,6 +146,26 @@ export default {
     &:hover {
       color: @veui-text-color-normal;
     }
+  }
+
+  &-clear:hover,
+  .veui-button:hover + &-clear {
+    display: block;
+  }
+
+  &-range {
+    width: 313px;
+
+    .veui-button .veui-dropdown-label {
+      width: (300px - 12px * 4 - 16px * 2) / 2;
+    }
+  }
+  &-tilde {
+    display: inline-block;
+    line-height: 1;
+    vertical-align: middle;
+    width: 16px;
+    margin: 0 12px;
   }
 }
 </style>

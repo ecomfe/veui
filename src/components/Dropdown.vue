@@ -7,10 +7,10 @@
       @click="expanded = !expanded"
       slot="target"
       ref="button">
-      <slot name="dropdown-button" :label="label">
-        <icon :name="`${icon}-${expanded ? 'up' : 'down'}`"></icon>
-        <span>{{ label }}</span>
-      </slot>
+      <span class="veui-dropdown-label">
+        <slot name="dropdown-button" :label="label">{{ label }}</slot>
+      </span>
+      <icon :name="`${icon}-${expanded ? 'up' : 'down'}`"></icon>
     </veui-button>
     <veui-overlay
       target="button"
