@@ -29,8 +29,8 @@
     <veui-icon name="remove"></veui-icon>
   </button>
   <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay">
-    <veui-calendar class="veui-overlay-dropdown" v-model="localSelected" v-outside:button="close"
-      @select="handleSelect" :range="range" :panel="2"></veui-calendar>
+    <veui-calendar class="veui-overlay-dropdown" v-model="localSelected" v-bind="calendarProps"
+      v-outside:button="close" @select="handleSelect" :panel="realPanel"></veui-calendar>
   </veui-overlay>
 </div>
 </template>
@@ -42,9 +42,11 @@ import Calendar from './Calendar'
 import Icon from './Icon'
 import moment from 'moment'
 import { dropdown, input } from '../mixins'
-import { isArray } from 'lodash'
+import { isArray, pick } from 'lodash'
 import 'vue-awesome/icons/calendar'
 import 'vue-awesome/icons/remove'
+
+let calendarProps = ['range', 'weekStart', 'fillMonth', 'disabledDate', 'dateClass']
 
 export default {
   name: 'veui-datepicker',
@@ -62,11 +64,12 @@ export default {
   props: {
     ui: String,
     selected: {
-      type: [Date, Array],
+      type: [Array, Date],
       default () {
         return null
       }
     },
+    panel: Number,
     clearable: Boolean,
     placeholder: {
       type: String,
@@ -76,7 +79,7 @@ export default {
       type: String,
       default: 'YYYY-MM-DD'
     },
-    range: Boolean
+    ...pick(Calendar.props, calendarProps)
   },
   data () {
     return {
@@ -93,6 +96,12 @@ export default {
         return selected.map(date => this.formatDate(date))
       }
       return this.formatDate(selected)
+    },
+    calendarProps () {
+      return pick(this, calendarProps)
+    },
+    realPanel () {
+      return this.panel || (this.range ? 2 : 1)
     }
   },
   methods: {
