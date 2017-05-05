@@ -20,6 +20,10 @@ export default {
         constraints: [
           {
             to: 'scrollParent',
+            attachment: 'together'
+          },
+          {
+            to: 'window',
             attachment: 'together',
             pin: true
           }
