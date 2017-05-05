@@ -356,6 +356,7 @@ export default {
       let form = this.$refs.form
       form.appendChild(this.$refs.input)
       form.submit()
+      this.reset()
     },
     uploadCallback (data, file) {
       this.convertResponse(data) || data
@@ -373,7 +374,6 @@ export default {
       file.xhr = null
       file.toBeUploaded = null
       this.updateFileList(file)
-      if (this.requestMode === 'iframe') this.reset()
     },
     onFailure (data, file) {
       file.status = 'failure'
