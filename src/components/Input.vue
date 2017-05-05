@@ -27,7 +27,7 @@
 import { input } from '../mixins'
 import { omit, includes } from 'lodash'
 
-const typeList = ['text', 'password', 'textarea']
+const TYPE_LIST = ['text', 'password', 'hidden', 'textarea']
 
 export default {
   name: 'veui-input',
@@ -37,18 +37,18 @@ export default {
     type: {
       type: String,
       default: 'text',
-      validator (value) {
-        return includes(typeList, value)
+      validator (val) {
+        return includes(TYPE_LIST, val)
       }
     },
     autocomplete: String,
     placeholder: String,
     value: [String, Number],
     autofocus: Boolean,
-    autoselect: Boolean,
+    selectOnFocus: Boolean,
     composition: Boolean,
     resizable: Boolean,
-    autosize: Boolean
+    fitContent: Boolean
   },
   data () {
     return {
@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     attrs () {
-      return omit(this.$props, ['autoselect', 'composition', 'resizable'])
+      return omit(this.$props, ['selectOnFocus', 'fitContent', 'composition', 'resizable'])
     }
   },
   watch: {
@@ -75,18 +75,23 @@ export default {
       if (this.composition || !this.composition && this.localValue !== this.value) {
         this.$emit('input', $event.target.value, $event)
       }
+    },
+    focus () {
+      this.$el.focus()
     }
   },
   mounted () {
-    if (this.placeholder && !('placeholder' in document.createElement('input'))) {
-      // TODO
-      // this.$on('focus', handlePlaceHolder)
-    }
-    if (this.autoselect) {
-      this.$on('focus', (e) => e.target.select())
-    }
-    if (this.autosize) {
-      // TODO
+    if (this.type !== 'hidden') {
+      if (this.placeholder && !('placeholder' in document.createElement('input'))) {
+        // TODO
+        // this.$on('focus', handlePlaceHolder)
+      }
+      if (this.selectOnFocus) {
+        this.$on('focus', (e) => e.target.select())
+      }
+      if (this.fitContent) {
+        // TODO
+      }
     }
   }
 }
@@ -98,7 +103,7 @@ export default {
 .veui-input,
 .veui-textarea {
   height: @veui-height-normal;
-  width: 250px;
+  width: 300px;
   line-height: 1;
   vertical-align: middle;
   border: 1px solid @veui-theme-color-primary;
@@ -128,6 +133,10 @@ export default {
   &:disabled {
     cursor: not-allowed;
   }
+
+  &::placeholder {
+    color: @veui-gray-color-weak;
+  }
 }
 
 .veui-input {
@@ -144,7 +153,8 @@ export default {
 }
 
 .veui-textarea {
-  padding: 10px 12px;
+  padding: 6.5px 12px;
+  line-height: 1.5;
   resize: none;
 
   &.veui-textarea-resizable {

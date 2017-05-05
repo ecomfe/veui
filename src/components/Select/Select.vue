@@ -77,6 +77,7 @@ export default {
   },
   props: {
     ui: String,
+    value: null,
     placeholder: {
       type: String,
       default: '请选择'
