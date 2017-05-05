@@ -1,7 +1,7 @@
 <template>
   <article>
     <h1><code>&lt;veui-input&gt;</code></h1>
-    <div class="form-block">
+    <section class="form-block">
       <div class="form-row">
         <div class="form-key">描述：</div>
         <div class="form-value">
@@ -23,7 +23,7 @@
       <div class="form-row">
         <div class="form-key">手机：</div>
         <div class="form-value">
-          <veui-input ui="small" v-model="phone" autoselect @blur="log('blur')"></veui-input>
+          <veui-input ui="small" v-model="phone" select-on-focus @blur="log('blur')"></veui-input>
           <veui-input v-model="phone" readonly></veui-input>
           <veui-input ui="large" v-model="phone" disabled></veui-input>
         </div>
@@ -39,15 +39,22 @@
       </div>
 
       <div class="form-row">
-        <div class="form-key">多行：</div>
+        <div class="form-key">隐藏：</div>
         <div class="form-value">
-          <veui-input type="textarea" @input="log"></veui-input>
-          <veui-input type="textarea" resizable readonly></veui-input>
-          <veui-input type="textarea" disabled></veui-input>
+          <span class="hidden-tips">这里有一个隐藏的&nbsp;input</span><veui-input v-model="hiddenValue" type="hidden"></veui-input>
         </div>
       </div>
 
-    </div>
+      <div class="form-row">
+        <div class="form-key">多行：</div>
+        <div class="form-value">
+          <veui-input type="textarea" v-model="textarea1" rows=3 @input="log"></veui-input>
+          <veui-input type="textarea" v-model="textarea2" resizable readonly></veui-input>
+          <veui-input type="textarea" v-model="textarea3" disabled></veui-input>
+        </div>
+      </div>
+
+    </section>
   </article>
 </template>
 
@@ -56,7 +63,7 @@ import bus from '../bus'
 import Input from '@/components/Input'
 
 export default {
-  name: 'input-demo',
+  name: 'text-input',
   components: {
     'veui-input': Input
   },
@@ -66,7 +73,11 @@ export default {
       age: null,
       name: '李云腾',
       phone: '13800138000',
-      password: null
+      password: null,
+      hiddenValue: '隐藏值',
+      textarea1: '1. 使用rows\n2. 固定3行高度\n3. 不包括padding',
+      textarea2: '设置高度，同时可缩放',
+      textarea3: '默认高度'
     }
   },
   methods: {
@@ -78,24 +89,41 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../src/styles/theme-default/lib.less";
+@import "../../src/styles/theme-default/lib.less";
 
-  .form-row {
-    margin-bottom: 10px;
-    .clearfix();
+.form-row {
+  margin-bottom: 10px;
+  .clearfix();
+}
+
+.form-key {
+  line-height: 42px;
+  float: left;
+}
+
+.form-value {
+  float: left;
+
+  .veui-input,
+  .veui-textarea {
+    width: 280px;
+    margin-right: 10px;
   }
 
-  .form-key {
-    line-height: 42px;
-    float: left;
-  }
+  .veui-textarea {
+    vertical-align: top;
 
-  .form-value {
-    float: left;
+    &:nth-child(1) {
+      height: auto;
+    }
 
-    .veui-input,
-    .veui-textarea {
-      margin-right: 10px;
+    &:nth-child(2) {
+      height: 100px;
     }
   }
+}
+
+.hidden-tips {
+  line-height: 42px;
+}
 </style>
