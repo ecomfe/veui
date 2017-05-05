@@ -118,7 +118,7 @@ export default {
   },
   mixins: [ui, input],
   props: {
-    varlue: {
+    value: {
       type: Array
     },
     uploaderType: {
