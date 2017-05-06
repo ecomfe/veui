@@ -118,7 +118,7 @@ export default {
   },
   mixins: [ui, input],
   props: {
-    varlue: {
+    value: {
       type: Array
     },
     uploaderType: {
@@ -225,7 +225,7 @@ export default {
     document.body.appendChild(this.$refs.form)
     if (this.iframeMode === 'postmessage') {
       this.onMessage = event => {
-        if (event.source.frameElement.id !== this.iframeId) return
+        if (!event.source.frameElement || event.source.frameElement.id !== this.iframeId) return
         if (this.canceled) return
         // 支持action为绝对路径或相对路径，ie9里的location没有origin
         let actionOrigin = /^https?:\/\//.test(this.action)
