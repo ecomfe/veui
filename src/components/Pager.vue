@@ -5,7 +5,11 @@
         <span class="veui-page-total">共 {{ pageTotal }} 条</span>
         <span class="veui-page-size">
           每页显示
-          <veui-select v-model="realPageSize" ui="link" :options="optionalPageSizes" @change="size => $emit('pagesizechange', size)"></veui-select>
+          <veui-select v-model="realPageSize"
+            ui="link"
+            :options="optionalPageSizes"
+            @change="size => $emit('pagesizechange', size)">
+          </veui-select>
         </span>
       </div>
       <div class="veui-page-switch">
@@ -18,11 +22,17 @@
           </li>
         </ul>
         <div class="veui-buttons">
-          <hyper-link class="veui-button-previous" :class="{ 'veui-disabled': page === 1 }" :to="pageNavHref.previous.href" :native="native"
+          <hyper-link class="veui-button-previous"
+            :class="{ 'veui-disabled': page === 1 }"
+            :to="page === 1 ? '' : pageNavHref.previous.href"
+            :native="native"
             @redirect="handleRedirect(pageNavHref.previous.page, $event)">
             <icon name="chevron-left"></icon>
           </hyper-link>
-          <hyper-link class="veui-button-next" :class="{ 'veui-disabled': page === pageCount }" :to="pageNavHref.next.href" :native="native"
+          <hyper-link class="veui-button-next"
+            :class="{ 'veui-disabled': page === pageCount }"
+            :to="page === pageCount ? '' : pageNavHref.next.href"
+            :native="native"
             @redirect="handleRedirect(pageNavHref.next.page, $event)">
             <icon name="chevron-right"></icon>
           </hyper-link>

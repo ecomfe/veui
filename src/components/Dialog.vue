@@ -129,7 +129,7 @@ export default {
     })
 
     // 一进来就要求把对话框展示出来，此时对话框肯定没被拖拽过，所以要设置一下对话框位置
-    if (this.open) {
+    if (this.localOpen) {
       this[`set${upperFirst(this.position)}`]()
     }
   },
@@ -192,13 +192,13 @@ export default {
     }
   },
   beforeUpdate () {
-    if (this.open && !this.isDragged) {
+    if (this.localOpen && !this.isDragged) {
       // 只有在对话框显示出来了，并且没被拖拽过，才去纠正位置
       this[`set${upperFirst(this.position)}`]()
     }
   },
   updated () {
-    if (this.open) {
+    if (this.localOpen) {
       this.$refs.body.style.height = `${this.getBodyHeight()}px`
     }
   },
