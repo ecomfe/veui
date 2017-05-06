@@ -126,8 +126,12 @@ export default {
     }
   },
   watch: {
-    selected (newValue) {
-      this.localSelectedKeys = newValue
+    selected (value) {
+      this.localSelectedKeys = value
+    },
+    realKeys (value) {
+      this.localSelectedKeys = intersection(this.localSelectedKeys, value)
+      this.$emit('update:selected', this.localSelectedKeys)
     }
   }
 }

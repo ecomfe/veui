@@ -17,6 +17,23 @@
       <h2>可清除范围选择</h2>
       <p><veui-datepicker v-model="selected2" range clearable :panel="3"></veui-datepicker></p>
     </section>
+    <section style="height: 500px;"></section>
+    <section>
+      <h2>普通</h2>
+      <p><veui-datepicker v-model="selected1"></veui-datepicker></p>
+    </section>
+    <section>
+      <h2>可清除选择</h2>
+      <p><veui-datepicker v-model="selected1" clearable></veui-datepicker></p>
+    </section>
+    <section>
+      <h2>范围选择</h2>
+      <p><veui-datepicker v-model="selected2" range></veui-datepicker></p>
+    </section>
+    <section>
+      <h2>可清除范围选择</h2>
+      <p><veui-datepicker v-model="selected2" range clearable :panel="3"></veui-datepicker></p>
+    </section>
   </article>
 </template>
 
