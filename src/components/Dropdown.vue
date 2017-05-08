@@ -1,33 +1,32 @@
 <template>
   <div class="veui-dropdown" :ui="ui">
     <veui-button
+      class="veui-dropdown-button"
       :ui="ui"
-      :class="{'veui-button-chevron': icon === 'chevron'}"
       :disabled="disabled"
       @click="expanded = !expanded"
       slot="target"
       ref="button">
       <span class="veui-dropdown-label">
-        <slot name="dropdown-button" :label="label">{{ label }}</slot>
+        <slot name="label" :label="label">{{ label }}</slot>
       </span>
-      <icon :name="`${icon}-${expanded ? 'up' : 'down'}`"></icon>
+      <icon class="veui-dropdown-icon" :name="`${icon}-${expanded ? 'up' : 'down'}`"></icon>
     </veui-button>
     <veui-overlay
+      v-if="expanded"
       target="button"
       :open="expanded"
       :options="overlay">
-      <div class="veui-dropdown-options veui-overlay-dropdown" v-outside:button="close">
-        <div v-for="(option, index) in options"
-          :key="index"
+      <div class="veui-dropdown-options" v-outside:button="close">
+        <div v-for="option in options"
+          :key="option.value"
           class="veui-dropdown-option"
           :class="{
             'veui-dropdown-option-disabled': option.disabled
           }"
-          @click.stop="clickHandler(index)">
-          <slot name="dropdown-option"
-            v-bind="option"
-            :index="index">
-            <span>{{ option.label }}</span>
+          @click.stop="handleClick(option)">
+          <slot name="button" v-bind="option">
+            <span class="veui-dropdown-option-label">{{ option.label }}</span>
           </slot>
         </div>
       </div>
@@ -81,9 +80,12 @@ export default {
     }
   },
   methods: {
-    clickHandler (index) {
-      this.expanded = !this.expanded
-      this.$emit('click', index)
+    handleClick (option) {
+      if (option.disabled) {
+        return
+      }
+      this.expanded = false
+      this.$emit('click', option.value)
     }
   }
 }
@@ -91,62 +93,27 @@ export default {
 
 <style lang="less">
 @import "../styles/theme-default/lib.less";
+@import (reference) "../styles/theme-default/dropdown.less";
+
 .veui-dropdown {
-  .veui-button {
-    width: 110px;
-    padding: 11px 15px;
-    position: relative;
-    text-align: left;
-    & > span {
-      display: inline-block;
-      width: 100%;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-    & > .veui-icon {
-      width: 13px;
-      height: 13px;
-      position: absolute;
-      right: 15px;
-      top: 11px;
-      & + span {
-        width: calc(100% - 14px);
-      }
-    }
-    &.veui-button-chevron {
-      & > .veui-icon {
-        width: 14px;
-        height: 8px;
-        top: 14px;
-      }
-    }
-  }
+  &:extend(._veui-dropdown-button all);
+  display: inline-block;
+  width: 110px;
+
   &-options {
+    &:extend(._veui-dropdown-overlay all);
     min-width: 110px;
     max-height: 280px;
     overflow-y: auto;
     background-color: #fff;
-    border: 1px solid @veui-gray-color-sup-2;
-    border-radius: 2px;
-    .veui-dropdown-option {
-      cursor: pointer;
-      height: 36px;
-      line-height: 36px;
-      padding: 0 10px;
-      &:hover {
-        background-color: @veui-theme-color-sup-4;
-      }
-      &.veui-dropdown-option-selected {
-        color: @veui-theme-color-primary;
-        font-weight: @veui-font-weight-bold;
-      }
-      &.veui-dropdown-option-disabled {
-        background-color: #fff;
-        color: @veui-gray-color-weak;
-        cursor: not-allowed;
-      }
-    }
+  }
+
+  &-option {
+    &:extend(._veui-dropdown-option all);
+  }
+
+  &[ui~="link"] &-button {
+    padding: 9px 12px;
   }
 }
 </style>

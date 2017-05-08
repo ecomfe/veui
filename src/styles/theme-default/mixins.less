@@ -54,33 +54,6 @@
   transition-duration: .2s;
 }
 
-.veui-make-dropdown-button() {
-  .veui-button {
-    width: 100%;
-    .padding(_, 12px);
-    text-align: left;
-    .veui-dropdown-label {
-      display: inline-block;
-      max-width: ~"calc(100% - 28px)";
-      width: 100%;
-      .ellipsis();
-    }
-    & > span {
-      vertical-align: middle;
-    }
-    .veui-icon {
-      float: right;
-    }
-  }
-
-  &-expanded .veui-button:not(.veui-button-loading) {
-    &,
-    &:hover {
-      color: @veui-theme-color-primary;
-    }
-  }
-}
-
 .position-center() {
   position: absolute;
   top: 50%;

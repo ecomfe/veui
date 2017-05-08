@@ -5,31 +5,31 @@
     'veui-datepicker-range': range,
     'veui-datepicker-expanded': expanded
   }">
-  <veui-button :ui="buttonUI" ref="button" @click="expanded = !expanded">
+  <veui-button class="veui-datepicker-button" :ui="buttonUI" ref="button" @click="expanded = !expanded">
     <template v-if="range">
-      <span class="veui-dropdown-label">
+      <span class="veui-datepicker-label">
         <slot v-if="formatted" name="date" :formatted="formatted ? formatted[0] : null" :date="selected ? selected[0] : null">{{ formatted[0] }}</slot>
         <slot v-else name="placeholder-begin">开始时间</slot>
       </span>
       <span class="veui-datepicker-tilde">~</span>
-      <span class="veui-dropdown-label">
+      <span class="veui-datepicker-label">
         <slot v-if="formatted" name="date" :formatted="formatted ? formatted[1] : null" :date="selected ? selected[1] : null">{{ formatted[1] }}</slot>
         <slot v-else name="placeholder-end">结束时间</slot>
       </span>
     </template>
     <template v-else>
-      <span class="veui-dropdown-label">
+      <span class="veui-datepicker-label">
         <slot v-if="formatted" name="date" :date="formatted">{{ formatted }}</slot>
         <slot v-else name="placeholder">{{ placeholder }}</slot>
       </span>
     </template>
-    <veui-icon name="calendar"></veui-icon>
+    <veui-icon class="veui-datepicker-icon" name="calendar"></veui-icon>
   </veui-button>
   <button v-if="clearable" v-show="!!selected" class="veui-datepicker-clear" @click="clear">
     <veui-icon name="remove"></veui-icon>
   </button>
   <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay">
-    <veui-calendar class="veui-overlay-dropdown" v-model="localSelected" v-bind="calendarProps"
+    <veui-calendar class="veui-datepicker-overlay" v-model="localSelected" v-bind="calendarProps"
       v-outside:button="close" @select="handleSelect" :panel="realPanel"></veui-calendar>
   </veui-overlay>
 </div>
@@ -127,13 +127,18 @@ export default {
 
 <style lang="less">
 @import "../styles/theme-default/lib.less";
+@import (reference) "../styles/theme-default/dropdown.less";
 
 .veui-datepicker {
+  &:extend(._veui-dropdown-button all);
+
   position: relative;
   display: inline-block;
   width: 160px;
 
-  .veui-make-dropdown-button();
+  &-overlay {
+    &:extend(._veui-dropdown-overlay all);
+  }
 
   &-empty {
     .veui-button {
@@ -143,7 +148,7 @@ export default {
 
   &-clear {
     display: none;
-    .absolute(11px, 12px, _, _);
+    .absolute(10px, 12px, _, _);
     .size(16px);
     background: #fff;
     outline: none;
@@ -163,9 +168,9 @@ export default {
   }
 
   &-range {
-    width: 313px;
+    width: 300px;
 
-    .veui-button .veui-dropdown-label {
+    .veui-datepicker-label {
       width: (300px - 12px * 4 - 16px * 2) / 2;
     }
   }

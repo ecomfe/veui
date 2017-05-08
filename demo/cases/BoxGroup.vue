@@ -1,6 +1,6 @@
 <template>
   <article>
-    <h1><code>&lt;veui-box-group&gt;</code></h1>
+    <h1><code>&lt;veui-boxgroup&gt;</code></h1>
     <p>
       <veui-box-group :items="data1" type="radiobox" name="111" v-model="picked1">
         <template scope="props">{{ props.label }}</template>
