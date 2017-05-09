@@ -32,8 +32,7 @@ export default {
       default: false
     },
     target: {
-      type: String,
-      default: ''
+      default: null
     },
     options: {
       type: Object,
@@ -112,14 +111,32 @@ export default {
       }
     },
 
+    getTargetNode (target) {
+      if (!target) {
+        return null
+      }
+
+      let targetNode
+      if (isString(this.target)) {
+        targetNode = this.$vnode.context.$refs[this.target]
+        targetNode = isArray(targetNode) ? targetNode[0] : targetNode
+        targetNode = targetNode.$el || targetNode
+      } else if (this.target.$el) {
+        // 组件
+        targetNode = this.target.$el
+      } else if (this.target.nodeType === 1 || this.target.nodeType === 1) {
+        // dom元素节点和文本节点
+        targetNode = this.target
+      }
+      return targetNode
+    },
+
     updateOverlayData () {
       this.isOpenDirty = true
       this.localOpen = false
       if (this.isAttach) {
         if (this.open) {
-          let targetNode = this.$vnode.context.$refs[this.target]
-          targetNode = isArray(targetNode) ? targetNode[0] : targetNode
-          this.targetNode = targetNode.$el || targetNode
+          this.targetNode = this.getTargetNode(this.target)
           this.localOpen = !!this.targetNode
         } else {
           this.localOpen = false

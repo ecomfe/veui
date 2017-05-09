@@ -89,6 +89,30 @@
       </veui-overlay>
     </div>
 
+    <div class="row">
+      <a ref="vnodeTest">直接传vnode</a>
+      <veui-overlay overlay-class="demo-overlay-box"
+        :target="vnodeTarget"
+        :open="true"
+        :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
+        好的，一切正常。
+      </veui-overlay>
+      <veui-overlay overlay-class="demo-overlay-box"
+        :target="null"
+        :open="true"
+        :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
+        这个没有飞到左上角去，就说明有bug了。
+      </veui-overlay>
+
+      <veui-button ref="vnodeComponentTest">组件vnode</veui-button>
+      <veui-overlay overlay-class="demo-overlay-box"
+        :target="vnodeComponentTarget"
+        :open="true"
+        :options="{attachment: 'top left', targetAttachment: 'bottom left'}">
+        组件vnode的overlay
+      </veui-overlay>
+    </div>
+
   </article>
 </template>
 <script>
@@ -129,8 +153,14 @@ export default {
       vforItems: items,
       vforOpen: false,
       vforCurrentItem: items[0],
-      vforTargetRef: 'overlay5-0'
+      vforTargetRef: 'overlay5-0',
+      vnodeTarget: null,
+      vnodeComponentTarget: null
     }
+  },
+  mounted () {
+    this.vnodeTarget = this.$refs.vnodeTest
+    this.vnodeComponentTarget = this.$refs.vnodeComponentTest
   },
   methods: {
     showMultiFirst () {
