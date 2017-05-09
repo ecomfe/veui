@@ -117,16 +117,16 @@ export default {
       }
 
       let targetNode
-      if (isString(this.target)) {
-        targetNode = this.$vnode.context.$refs[this.target]
+      if (isString(target)) {
+        targetNode = this.$vnode.context.$refs[target]
         targetNode = isArray(targetNode) ? targetNode[0] : targetNode
         targetNode = targetNode.$el || targetNode
-      } else if (this.target.$el) {
+      } else if (target.$el) {
         // 组件
-        targetNode = this.target.$el
-      } else if (this.target.nodeType === 1 || this.target.nodeType === 1) {
+        targetNode = target.$el
+      } else if (target.nodeType === 1 || target.nodeType === 1) {
         // dom元素节点和文本节点
-        targetNode = this.target
+        targetNode = target
       }
       return targetNode
     },

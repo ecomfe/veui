@@ -108,7 +108,7 @@
       <veui-overlay overlay-class="demo-overlay-box"
         :target="vnodeComponentTarget"
         :open="true"
-        :options="{attachment: 'top left', targetAttachment: 'bottom left'}">
+        :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
         组件vnode的overlay
       </veui-overlay>
     </div>
