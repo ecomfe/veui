@@ -2,7 +2,6 @@ import { intersection } from 'lodash'
 import { outside } from '../directives'
 import { config } from '../managers'
 import { ui } from '../mixins'
-import '../styles/theme-default/dropdown.less'
 
 config.defaults({
   'dropdown.buttonUI': 'aux'
@@ -20,6 +19,10 @@ export default {
         constraints: [
           {
             to: 'scrollParent',
+            attachment: 'together'
+          },
+          {
+            to: 'window',
             attachment: 'together',
             pin: true
           }

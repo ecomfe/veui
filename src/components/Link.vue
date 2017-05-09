@@ -13,7 +13,7 @@
 </template>
 <script>
 export default {
-  name: 'veui-hyper-link',
+  name: 'veui-link',
   props: {
     to: {
       type: String,
@@ -31,7 +31,7 @@ export default {
   methods: {
     handleRedirect (event) {
       if (this.to) {
-        this.$emit('redirect', event)
+        this.$emit('click', event)
 
         if (this.replace && !event.defaultPrevented) {
           event.preventDefault()
@@ -39,7 +39,7 @@ export default {
         }
       } else {
         event.preventDefault()
-        this.$emit('redirect', event)
+        this.$emit('click', event)
       }
     }
   }

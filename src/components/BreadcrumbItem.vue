@@ -1,21 +1,21 @@
 <template>
   <li class="veui-breadcrumb-item">
-    <hyper-link v-if="type === 'link'" @redirect="$emit('redirect', $event)"
-      :to="to" :replace="replace" :native="native"><slot></slot></hyper-link>
+    <veui-link v-if="type === 'link'" @redirect="$emit('redirect', $event)"
+      :to="to" :replace="replace" :native="native"><slot></slot></veui-link>
     <span v-else><slot></slot></span>
     <slot name="separator"></slot>
   </li>
 </template>
 <script>
 import { includes } from 'lodash'
-import HyperLink from './HyperLink'
+import Link from './Link'
 
 const ALLOWED_LINK_TYPES = ['link', 'text']
 
 export default {
   name: 'veui-breadcrumb-item',
   components: {
-    HyperLink
+    'veui-link': Link
   },
   props: {
     to: {

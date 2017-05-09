@@ -5,21 +5,22 @@
       'veui-select-expanded': expanded
     }">
     <veui-button
+      class="veui-select-button"
       :ui="buttonUI"
       :disabled="disabled || readonly"
       @click="expanded = !expanded"
       ref="button">
-      <span class="veui-dropdown-label">
+      <span class="veui-select-label">
         <slot name="label" :label="label">{{ label }}</slot>
       </span>
-      <icon :name="`caret-${expanded ? 'up' : 'down'}`"></icon>
+      <icon class="veui-select-icon" :name="`caret-${expanded ? 'up' : 'down'}`"></icon>
     </veui-button>
     <veui-overlay
       v-if="expanded"
       target="button"
       :open="expanded"
       :options="overlay">
-      <div class="veui-select-options veui-overlay-dropdown" v-outside:button="close">
+      <div class="veui-select-options" :ui="ui" v-outside:button="close">
         <slot>
           <template v-for="option in options">
             <veui-option
@@ -27,24 +28,20 @@
               v-bind="option"
               :selected="option.value === value"
               :key="option.value"
-              :icon="optionicon"
-              @select="handleSelect">
-                <slot name="option" v-bind="option"></slot>
+              @select="handleSelect(option)">
+                <slot name="option" v-bind="option" :selected="option.value === value"></slot>
             </veui-option>
             <div v-else-if="option.options" class="veui-select-option-group">
-              <slot name="option-label" :label="option.label">
-                <div class="veui-select-option-label">
-                  <span>{{ option.label }}</span>
-                </div>
+              <slot name="group-label" :label="option.label">
+                <div class="veui-select-group-label">{{ option.label }}</div>
               </slot>
               <veui-option
                 v-for="subOption in option.options"
                 v-bind="subOption"
                 :selected="subOption.value === value"
                 :key="subOption.value"
-                :icon="optionicon"
                 @select="handleSelect">
-                <slot name="option" v-bind="subOption"></slot>
+                <slot name="option" v-bind="subOption" :selected="option.value === value"></slot>
               </veui-option>
             </div>
           </template>
@@ -77,6 +74,7 @@ export default {
   },
   props: {
     ui: String,
+    value: null,
     placeholder: {
       type: String,
       default: '请选择'
@@ -85,7 +83,7 @@ export default {
       type: Boolean,
       default: false
     },
-    optionicon: {
+    checkmark: {
       type: Boolean,
       default: false
     },
@@ -103,9 +101,12 @@ export default {
     }
   },
   methods: {
-    handleSelect (val) {
+    handleSelect (option) {
+      if (option.disabled) {
+        return
+      }
       this.expanded = false
-      this.$emit('change', val)
+      this.$emit('change', option.value)
     }
   }
 }
@@ -123,13 +124,16 @@ function extractOptions (options, map) {
 
 <style lang="less">
 @import "../../styles/theme-default/lib.less";
+@import (reference) "../../styles/theme-default/dropdown.less";
+
 .veui-select {
+  &:extend(._veui-dropdown-button all);
+
   display: inline-block;
   width: 160px;
 
-  .veui-make-dropdown-button();
-
   &-options {
+    &:extend(._veui-dropdown-overlay all);
     min-width: 160px;
     max-height: 280px;
     overflow-y: auto;
@@ -137,7 +141,7 @@ function extractOptions (options, map) {
   }
 
   &-option-group {
-    .veui-select-option-label {
+    .veui-select-group-label {
       display: inline-block;
       .centered-line(@veui-height-normal);
       padding: 0 10px;

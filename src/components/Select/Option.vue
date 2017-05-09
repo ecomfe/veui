@@ -4,10 +4,8 @@
     'veui-option-selected': selected
   }"
     @click.stop="select">
-    <slot>
-      <span :class="{'veui-option-label': icon}">{{ label }}</span>
-      <icon v-if="icon && selected" name="check"></icon>
-    </slot>
+    <span class="veui-option-label"><slot>{{ label }}</slot></span>
+    <icon class="veui-option-checkmark" v-if="selected" name="check"></icon>
   </div>
 </template>
 
@@ -30,10 +28,6 @@ export default {
     selected: {
       type: Boolean,
       default: false
-    },
-    icon: {
-      type: Boolean,
-      default: false
     }
   },
   methods: {
@@ -48,34 +42,18 @@ export default {
 
 <style lang="less">
 @import "../../styles/theme-default/lib.less";
+@import (reference) "../../styles/theme-default/dropdown.less";
+
 .veui-option {
-  cursor: pointer;
-  height: 36px;
-  line-height: 1;
-  padding: 11px 10px;
-  position: relative;
-  color: @veui-text-color-normal;
+  &:extend(._veui-dropdown-option all);
 
-  &:hover {
-    background-color: @veui-theme-color-sup-4;
-  }
-
-  &-selected {
-    color: @veui-theme-color-primary;
-  }
-
-  &-disabled {
-    background-color: #fff;
-    color: @veui-text-color-weak;
-    cursor: not-allowed;
-  }
-
-  &-label {
-    margin-right: 10px;
-  }
-
-  .veui-icon {
+  &-checkmark {
     float: right;
+    display: none;
+  }
+
+  [ui~="checkmark"] & &-checkmark {
+    display: block;
   }
 }
 </style>

@@ -8,7 +8,7 @@
     :value="item.value"
     :disabled="item.disabled"
     :checked="type === 'radiobox' ? item.value === value : value.indexOf(item.value) !== -1"
-    @change="boxChange(index, arguments[0])">
+    @change="checked => handleChange(index, checked)">
       <slot :label="item.label" :value="item.value">{{ item.label }}</slot>
     </component>
   </div>
@@ -32,7 +32,7 @@ export default {
     ui: String,
     name: String,
     items: Array,
-    value: [ String, Array ]
+    value: [String, Array]
   },
   computed: {
     localName () {
@@ -40,7 +40,7 @@ export default {
     }
   },
   methods: {
-    boxChange (index, checked) {
+    handleChange (index, checked) {
       if (this.type === 'radiobox') {
         this.$emit('input', this.items[index].value)
       } else {

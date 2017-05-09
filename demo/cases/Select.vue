@@ -1,48 +1,64 @@
 <template>
   <article>
     <h1><code>&lt;veui-select&gt;</code></h1>
-    <p>
-      <span>默认样式：</span>
+    <section>
+      <h2>默认样式：</h2>
       <veui-select v-bind="attrs" v-model="defaultValue1"></veui-select>
-      <span>选择有ICON样式：</span>
-      <veui-select v-bind="attrs" :optionicon="icon" v-model="defaultValue2"></veui-select>
-    </p>
-    <p>
-      <span>slot样式：</span>
+    </section>
+    <section>
+      <h2>显示已选图标样式：</h2>
+      <veui-select v-bind="attrs" ui="checkmark" v-model="defaultValue2"></veui-select>
+    </section>
+    <section>
+      <h2>Slot 样式：</h2>
       <veui-select v-bind="attrs" v-model="defaultValue3">
         <template slot="option" scope="props">
           <span>{{ props.label }}</span>
         </template>
       </veui-select>
-      <span>slot样式2：</span>
+    </section>
+    <section>
+      <h2>Slot 样式 2：</h2>
       <veui-select v-bind="attrs" v-model="defaultValue4">
         <template slot="option" scope="props">
           <span class="veui-option-label">{{ props.label }}</span>
           <icon name="eye"></icon>
         </template>
       </veui-select>
-    </p>
-    <p style="margin-top:500px;">
-      <span>默认分组样式：</span>
+    </section>
+    <section>
+      <h2>Slot 样式 3：</h2>
+      <veui-select v-bind="attrs" v-model="defaultValue1">
+        <template slot="option" scope="props">
+          <radiobox :checked="props.selected">{{ props.label }}</radiobox>
+        </template>
+      </veui-select>
+    </section>
+    <section style="margin-top:500px;">
+      <h2>默认分组样式：</h2>
       <veui-select v-bind="optGroupAttrs" v-model="defaultValue5"></veui-select>
-      <span>有选择ICON分组样式：</span>
-      <veui-select v-bind="optGroupAttrs" :optionicon="icon" v-model="defaultValue6"></veui-select>
-    </p>
-    <p>
-      <span>slot样式1：</span>
+    </section>
+    <section>
+      <h2>显示已选图标分组样式：</h2>
+      <veui-select v-bind="optGroupAttrs" ui="checkmark" v-model="defaultValue6"></veui-select>
+    </section>
+    <section>
+      <h2>Slot 分组样式 1：</h2>
       <veui-select v-bind="optGroupAttrs" v-model="defaultValue7">
         <template slot="option" scope="props">
           <span>{{ props.label }}</span>
         </template>
       </veui-select>
-      <span>slot样式2：</span>
+    </section>
+    <section>
+      <h2>Slot 分组样式 2：</h2>
       <veui-select v-bind="optGroupAttrs" v-model="defaultValue8">
         <template slot="option" scope="props">
           <span class="veui-option-label">{{ props.label }}</span>
           <icon name="gift"></icon>
         </template>
       </veui-select>
-    </p>
+    </section>
   </article>
 </template>
 
@@ -50,6 +66,7 @@
 import Icon from '@/components/Icon'
 import bus from '../bus'
 import Select from '@/components/Select'
+import Radiobox from '@/components/Radiobox'
 import Option from '@/components/Select/Option'
 import 'vue-awesome/icons/eye'
 import 'vue-awesome/icons/gift'
@@ -59,6 +76,7 @@ export default {
   components: {
     'veui-select': Select,
     'veui-option': Option,
+    'radiobox': Radiobox,
     'icon': Icon
   },
   data () {
@@ -191,23 +209,3 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
-p {
-  margin: 0 0 30px 0;
-  height: 36px;
-  clear: both;
-  > span {
-    width: 80px;
-    float: left;
-    line-height: 26px;
-    margin: 0 10px;
-  }
-}
-.veui-select {
-  float: left;
-  margin-right: 10px;
-}
-.veui-option {
-  width: 100px;
-}
-</style>

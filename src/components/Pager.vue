@@ -17,25 +17,25 @@
           <li v-for="item in pageIndicatorSeries" :class="{
             'veui-active': item.page === page
           }">
-            <hyper-link :to="item.href" :native="native"
-              @redirect="handleRedirect(item.page, $event)">{{ item.text }}</hyper-link>
+            <veui-link :to="item.href" :native="native"
+              @click="handleRedirect(item.page, $event)">{{ item.text }}</veui-link>
           </li>
         </ul>
         <div class="veui-buttons">
-          <hyper-link class="veui-button-previous"
+          <veui-link class="veui-button-previous"
             :class="{ 'veui-disabled': page === 1 }"
             :to="page === 1 ? '' : pageNavHref.previous.href"
             :native="native"
-            @redirect="handleRedirect(pageNavHref.previous.page, $event)">
+            @click="handleRedirect(pageNavHref.previous.page, $event)">
             <icon name="chevron-left"></icon>
-          </hyper-link>
-          <hyper-link class="veui-button-next"
+          </veui-link>
+          <veui-link class="veui-button-next"
             :class="{ 'veui-disabled': page === pageCount }"
             :to="page === pageCount ? '' : pageNavHref.next.href"
             :native="native"
-            @redirect="handleRedirect(pageNavHref.next.page, $event)">
+            @click="handleRedirect(pageNavHref.next.page, $event)">
             <icon name="chevron-right"></icon>
-          </hyper-link>
+          </veui-link>
         </div>
       </div>
     </div>
@@ -44,7 +44,7 @@
 
 <script>
 import Icon from './Icon'
-import HyperLink from './HyperLink'
+import Link from './Link'
 import Select from './Select'
 import Option from './Select/Option'
 import 'vue-awesome/icons/chevron-left'
@@ -80,7 +80,7 @@ export default {
   name: 'veui-pager',
   components: {
     Icon,
-    HyperLink,
+    'veui-link': Link,
     'veui-select': Select,
     'veui-option': Option
   },
