@@ -1,17 +1,15 @@
 <template>
-  <div>
-    <div class="demo-div" ref="topLeft" @click="localOpen = !localOpen"><slot name="button"></slot></div>
-    <veui-overlay
-      :target="target"
-      :open="localOpen"
-      :options="overlay">
-      <div class="veui-tooltip" :ui="localUi">
-        <div class="veui-tooltip-content">
-          <slot></slot>
-        </div>
+  <veui-overlay
+    :target="target"
+    :open="localOpen"
+    :options="overlay"
+    overlayClass="veui-tooltip-box">
+    <div class="veui-tooltip" :ui="ui" v-outside.hover="switchTip">
+      <div class="veui-tooltip-content">
+        <slot></slot>
       </div>
-    </veui-overlay>
-  </div>
+    </div>
+  </veui-overlay>
 </template>
 <script>
 import Overlay from './Overlay'
@@ -32,16 +30,13 @@ export default {
     'veui-overlay': Overlay
   },
   props: {
-    ui: {
-      type: String,
-      default: 'dark'
-    },
+    ui: String,
     align: {
       type: String,
       default: 'center'
     },
     position: String,
-    target: String,
+    target: Object,
     open: {
       type: Boolean,
       default: false
@@ -58,11 +53,6 @@ export default {
     }
   },
   computed: {
-    localUi () {
-      let ui = this.ui + ' ' + this.position + '-' + this.align
-      ui = ui.trim()
-      return ui
-    },
     overlay () {
       let attachment
       let targetAttachment
@@ -93,7 +83,7 @@ export default {
   methods: {
     switchTip () {
       this.localOpen = !this.localOpen
-      this.$emit('update:open', this.localOpen)
+      this.$emit('update', this.localOpen)
     }
   }
 }
@@ -101,34 +91,34 @@ export default {
 <style lang="less">
 @import "../styles/theme-default/lib.less";
 
-.veui-tooltip {
-  @angle-size: 5px;
-  @white-color: #fff;
-  @black-color: #000;
-  @align-width: 10px;
-  @angle-size: 5px * sqrt(2);
-  @angle-size-small: 4px * sqrt(2);
-  .wrap-triangle(@direction, @size, @color) when (@direction = top) {
-    left: 50%;
-    top: 0;
-    .triangle(@direction, @size, @color, side);
-  }
-  .wrap-triangle(@direction, @size, @color) when (@direction = left) {
-    left: 0;
-    top: 50%;
-    .triangle(@direction, @size, @color, side);
-  }
-  .wrap-triangle(@direction, @size, @color) when (@direction = bottom) {
-    left: 50%;
-    top: 100%;
-    .triangle(@direction, @size, @color, side);
-  }
-  .wrap-triangle(@direction, @size, @color) when (@direction = right) {
-    left: 100%;
-    top: 50%;
-    .triangle(@direction, @size, @color, side);
-  }
+@white-color: #fff;
+@black-color: #000;
+@align-width: 10px;
+@angle-size: 5px;
+@diagonal-size: @angle-size * sqrt(2);
+@diagonal-size-small: 4px * sqrt(2);
+.wrap-triangle(@direction, @size, @color) when (@direction = top) {
+  left: 50%;
+  top: 0;
+  .triangle(@direction, @size, @color, side);
+}
+.wrap-triangle(@direction, @size, @color) when (@direction = left) {
+  left: 0;
+  top: 50%;
+  .triangle(@direction, @size, @color, side);
+}
+.wrap-triangle(@direction, @size, @color) when (@direction = bottom) {
+  left: 50%;
+  top: 100%;
+  .triangle(@direction, @size, @color, side);
+}
+.wrap-triangle(@direction, @size, @color) when (@direction = right) {
+  left: 100%;
+  top: 50%;
+  .triangle(@direction, @size, @color, side);
+}
 
+.veui-tooltip {
   .veui-tooltip-content {
     padding: 11px 15px;
     .border-radius(3px);
@@ -140,39 +130,6 @@ export default {
       content: '';
       position: absolute;
       opacity: .8;
-    }
-  }
-
-  &[ui*='top-'] {
-    padding-bottom: @angle-size;
-    .veui-tooltip-content {
-      &::before {
-        .wrap-triangle(bottom, @angle-size, @veui-gray-color-strong);
-      }
-    }
-  }
-  &[ui*='left-'] {
-    padding-right: @angle-size;
-    .veui-tooltip-content {
-      &::before {
-        .wrap-triangle(right, @angle-size, @veui-gray-color-strong);
-      }
-    }
-  }
-  &[ui*='bottom-'] {
-    padding-top: @angle-size;
-    .veui-tooltip-content {
-      &::before {
-        .wrap-triangle(top, @angle-size, @veui-gray-color-strong);
-      }
-    }
-  }
-  &[ui*='right-'] {
-    padding-left: @angle-size;
-    .veui-tooltip-content {
-      &::before {
-        .wrap-triangle(left, @angle-size, @veui-gray-color-strong);
-      }
     }
   }
 
@@ -192,56 +149,97 @@ export default {
         position: absolute;
       }
     }
-    &[ui*='top-'] {
+  }
+}
+.veui-tooltip-box {
+  &.tether-element-attached-left.tether-target-attached-right {
+    .veui-tooltip {
+      margin-left: @angle-size;
+      padding-left: @angle-size;
       .veui-tooltip-content {
         &::before {
-          .wrap-triangle(bottom, @angle-size, @veui-gray-color-sup-2);
-        }
-        &::after {
-          .wrap-triangle(bottom, @angle-size-small, @white-color);
-          left: calc(50% + 1px);
+          .wrap-triangle(left, @diagonal-size, @veui-gray-color-strong);
         }
       }
-    }
-    &[ui*='left-'] {
-      .veui-tooltip-content {
-        &::before {
-          .wrap-triangle(right, @angle-size, @veui-gray-color-sup-2);
-        }
-        &::after {
-          .wrap-triangle(right, @angle-size-small, @white-color);
-          top: calc(50% + 1px);
-        }
-      }
-    }
-    &[ui*='bottom-'] {
-      .veui-tooltip-content {
-        &::before {
-          .wrap-triangle(top, @angle-size, @veui-gray-color-sup-2);
-        }
-        &::after {
-          .wrap-triangle(top, @angle-size-small, @white-color);
-          left: calc(50% + 1px);
-        }
-      }
-    }
-    &[ui*='right-'] {
-      .veui-tooltip-content {
-        &::before {
-          .wrap-triangle(left, @angle-size, @veui-gray-color-sup-2);
-        }
-        &::after {
-          .wrap-triangle(left, @angle-size-small, @white-color);
-          top: calc(50% + 1px);
+      &[ui~='light'] {
+        .veui-tooltip-content {
+          &::before {
+            .wrap-triangle(left, @diagonal-size, @veui-gray-color-sup-2);
+          }
+          &::after {
+            .wrap-triangle(left, @diagonal-size-small, @white-color);
+          }
         }
       }
     }
   }
-
-  &[ui~='light'],
-  &[ui~='dark'] {
-    &[ui~='top-left'],
-    &[ui~='bottom-left'] {
+  &.tether-element-attached-right.tether-target-attached-left {
+    .veui-tooltip {
+      margin-right: @angle-size;
+      padding-right: @angle-size;
+      .veui-tooltip-content {
+        &::before {
+          .wrap-triangle(right, @diagonal-size, @veui-gray-color-strong);
+        }
+      }
+      &[ui~='light'] {
+        .veui-tooltip-content {
+          &::before {
+            .wrap-triangle(right, @diagonal-size, @veui-gray-color-sup-2);
+          }
+          &::after {
+            .wrap-triangle(right, @diagonal-size-small, @white-color);
+          }
+        }
+      }
+    }
+  }
+  &.tether-element-attached-top.tether-target-attached-bottom {
+    .veui-tooltip {
+      margin-top: @angle-size;
+      padding-top: @angle-size;
+      .veui-tooltip-content {
+        &::before {
+          .wrap-triangle(top, @diagonal-size, @veui-gray-color-strong);
+        }
+      }
+      &[ui~='light'] {
+        .veui-tooltip-content {
+          &::before {
+            .wrap-triangle(top, @diagonal-size, @veui-gray-color-sup-2);
+          }
+          &::after {
+            .wrap-triangle(top, @diagonal-size-small, @white-color);
+          }
+        }
+      }
+    }
+  }
+  &.tether-element-attached-bottom.tether-target-attached-top {
+    .veui-tooltip {
+      margin-bottom: @angle-size;
+      padding-bottom: @angle-size;
+      .veui-tooltip-content {
+        &::before {
+          .wrap-triangle(bottom, @diagonal-size, @veui-gray-color-strong);
+        }
+      }
+      &[ui~='light'] {
+        .veui-tooltip-content {
+          &::before {
+            .wrap-triangle(bottom, @diagonal-size, @veui-gray-color-sup-2);
+          }
+          &::after {
+            .wrap-triangle(bottom, @diagonal-size-small, @white-color);
+          }
+        }
+      }
+    }
+  }
+  /**三角形位置**/
+  &.tether-element-attached-left.tether-target-attached-left {
+    .veui-tooltip[ui] {
+      // 加上ui属性，是为了增加CSS优先级
       .veui-tooltip-content {
         &::before,
         &::after {
@@ -249,8 +247,9 @@ export default {
         }
       }
     }
-    &[ui~='top-right'],
-    &[ui~='bottom-right'] {
+  }
+  &.tether-element-attached-right.tether-target-attached-right {
+    .veui-tooltip[ui] {
       .veui-tooltip-content {
         &::before,
         &::after {
@@ -262,8 +261,9 @@ export default {
         }
       }
     }
-    &[ui~='left-top'],
-    &[ui~='right-top'] {
+  }
+  &.tether-element-attached-top.tether-target-attached-top {
+    .veui-tooltip[ui] {
       .veui-tooltip-content {
         &::before,
         &::after {
@@ -271,8 +271,9 @@ export default {
         }
       }
     }
-    &[ui~='left-bottom'],
-    &[ui~='right-bottom'] {
+  }
+  &.tether-element-attached-bottom.tether-target-attached-bottom {
+    .veui-tooltip[ui] {
       .veui-tooltip-content {
         &::before,
         &::after {
@@ -285,14 +286,5 @@ export default {
       }
     }
   }
-}
-.demo-div {
-  width: 100px;
-  height: 30px;
-  background-color: #ccc;
-  text-align: center;
-  line-height: 30px;
-  margin: 15px 0 15px 200px;
-  display: inline-block;
 }
 </style>
