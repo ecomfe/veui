@@ -101,6 +101,7 @@ export default {
   @black-color: #000;
   @align-width: 10px;
   @angle-size: 5px;
+  @padding-width: @angle-size * 2;
   @diagonal-size: @angle-size * sqrt(2);
   @diagonal-size-small: 4px * sqrt(2);
   .wrap-triangle(@direction, @size, @color, @left, @top) {
@@ -163,25 +164,25 @@ export default {
   }
   .veui-tooltip-triangle-left() {
     .veui-tooltip {
-      padding-left: @angle-size * 2;
+      padding-left: @padding-width;
     }
     .veui-tooltip-triangle(left, 0, 50%);
   }
   .veui-tooltip-triangle-right() {
     .veui-tooltip {
-      padding-right: @angle-size * 2;
+      padding-right: @padding-width;
     }
     .veui-tooltip-triangle(right, 100%, 50%);
   }
   .veui-tooltip-triangle-top() {
     .veui-tooltip {
-      padding-top: @angle-size * 2;
+      padding-top: @padding-width;
     }
     .veui-tooltip-triangle(top, 50%, 0);
   }
   .veui-tooltip-triangle-bottom() {
     .veui-tooltip {
-      padding-bottom: @angle-size * 2;
+      padding-bottom: @padding-width;
     }
     .veui-tooltip-triangle(bottom, 50%, 100%);
   }
