@@ -101,15 +101,32 @@ function parseParams (el, arg, modifiers, value, context) {
   // delay表示如果鼠标移动到whiteList元素之外多少秒之后，才会触发handler；
   let delay
 
-  const refs = arg ? arg.split(',') : []
-  whiteList = [el, ...getElementsByRefs(refs, context)]
+  // 如果value是Function的话，其余参数就尽量从modifier、arg里面去解析
+  // 否则从value里面去解析
+  if (isFunction(value)) {
+    handler = value
 
-  handler = isFunction(value) ? value : empty
+    const refs = arg ? arg.split(',') : []
+    whiteList = [el, ...getElementsByRefs(refs, context)]
 
-  trigger = modifiers.hover ? 'hover' : 'click'
+    trigger = modifiers.hover ? 'hover' : 'click'
 
-  delay = find(Object.keys(modifiers), key => isNumber(parseInt(key, 10)) && modifiers[key])
-  delay = delay ? parseInt(delay, 10) : 0
+    delay = find(Object.keys(modifiers), key => isNumber(parseInt(key, 10)) && modifiers[key])
+    delay = delay ? parseInt(delay, 10) : 0
+  } else {
+    const normalizedValue = value || {}
+    handler = isFunction(normalizedValue.handler) ? normalizedValue.handler : empty
+
+    const refs = isArray(normalizedValue.refs) ? normalizedValue.refs : String(normalizedValue).refs.split(',')
+    whiteList = [el, ...getElementsByRefs(refs, context)]
+
+    trigger = normalizedValue.trigger === 'hover' ? 'hover' : 'click'
+
+    delay = parseInt(normalizedValue.delay, 10)
+    if (isNaN(delay)) {
+      delay = 0
+    }
+  }
 
   return {
     whiteList,
