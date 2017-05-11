@@ -12,7 +12,8 @@
 </template>
 <script>
 import Tether from 'tether'
-import { omit, isObject, isString, isArray } from 'lodash'
+import { omit, isObject, isString } from 'lodash'
+import { getNodes } from '../utils/context'
 
 const ZINDEX_INSTANCE_KEY = '__veui_overlay_zindex_instance__'
 
@@ -112,23 +113,7 @@ export default {
     },
 
     getTargetNode (target) {
-      if (!target) {
-        return null
-      }
-
-      let targetNode
-      if (isString(target)) {
-        targetNode = this.$vnode.context.$refs[target]
-        targetNode = isArray(targetNode) ? targetNode[0] : targetNode
-        targetNode = targetNode.$el || targetNode
-      } else if (target.$el) {
-        // 组件
-        targetNode = target.$el
-      } else if (target.nodeType === 1 || target.nodeType === 1) {
-        // dom元素节点和文本节点
-        targetNode = target
-      }
-      return targetNode
+      return getNodes(target, this.$vnode.context)[0]
     },
 
     updateOverlayData () {

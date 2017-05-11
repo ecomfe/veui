@@ -1,4 +1,5 @@
 import { isFunction, uniqueId, remove, every, isArray, some, find, isNumber } from 'lodash'
+import { getNodes } from '../utils/context'
 
 let handlerBindings = []
 const bindingKey = '__veui_outside__'
@@ -22,16 +23,7 @@ function isContain (container, contained) {
 function getElementsByRefs (refs, context) {
   const elements = []
   refs.forEach((ref) => {
-    if (context.$refs[ref]) {
-      let element = context.$refs[ref]
-      if (element.$el) {
-        elements.push(element.$el)
-      } else if (isArray(element)) {
-        elements.splice(elements.length - 1, 0, ...element)
-      } else if (element) {
-        elements.push(element)
-      }
-    }
+    elements.push(...getNodes(ref, context))
   })
   return elements
 }
