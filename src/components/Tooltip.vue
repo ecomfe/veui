@@ -4,7 +4,7 @@
     :open="localOpen"
     :options="overlay"
     overlayClass="veui-tooltip-box">
-    <div class="veui-tooltip" :ui="ui" v-outside="switchTip('click')" v-outside.hover="switchTip('hover')">
+    <div class="veui-tooltip" :ui="ui" v-outside="outsideOptions">
       <div class="veui-tooltip-content">
         <slot></slot>
       </div>
@@ -81,14 +81,19 @@ export default {
           }
         ]
       }
+    },
+    outsideOptions () {
+      return {
+        handler: this.switchTip,
+        refs: this.$vnode.context.$refs[this.target],
+        trigger: this.eventType
+      }
     }
   },
   methods: {
     switchTip (type) {
-      if (type === this.eventType) {
-        this.localOpen = false
-        this.$emit('update:open', this.localOpen)
-      }
+      this.localOpen = false
+      this.$emit('update:open', this.localOpen)
     }
   }
 }

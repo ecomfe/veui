@@ -109,7 +109,7 @@ function parseParams (el, arg, modifiers, value, context) {
     const normalizedValue = value || {}
     handler = isFunction(normalizedValue.handler) ? normalizedValue.handler : empty
 
-    const refs = isArray(normalizedValue.refs) ? normalizedValue.refs : String(normalizedValue).refs.split(',')
+    const refs = isArray(normalizedValue.refs) ? normalizedValue.refs : [normalizedValue.refs]
     whiteList = [el, ...getElementsByRefs(refs, context)]
 
     trigger = normalizedValue.trigger === 'hover' ? 'hover' : 'click'
@@ -137,9 +137,11 @@ export default {
     handlerBindings.push(el)
   },
   update (el, { value, arg, modifiers }, vnode) {
-    if (isFunction(value)) {
-      el[bindingKey].handler = generate(el, parseParams(el, arg, modifiers, value, vnode.context))
+    el[bindingKey] = {
+      id: uniqueId(),
+      handler: generate(el, parseParams(el, arg, modifiers, value, vnode.context))
     }
+    handlerBindings.push(el)
   },
   unbind (el) {
     remove(handlerBindings, item => item[bindingKey].id === el[bindingKey].id)

@@ -2,7 +2,10 @@
   <article>
     <h1><code>&lt;veui-tooltip&gt;</code></h1>
     <p>
-      <div class="change-theme"><veui-button ui="primary" @click="changeTheme">切换皮肤</veui-button></div>
+      <div class="change-theme">
+        <veui-button ui="primary" @click="ui = ui ? '' : 'light'">切换皮肤</veui-button>
+        <veui-button ui="primary" @click="eventType = eventType === 'click' ? 'hover' : 'click'">切换事件</veui-button>
+      </div>
       <div class="demo-wrap">
         <div class="box">
           <div class="top">
@@ -51,7 +54,7 @@
           </div>
         </div>
       </div>
-      <veui-tooltip :placement="placement" :ui="ui" :target="target" :open="open" @update:open="update">提示文字提示文字提示文字</veui-tooltip>
+      <veui-tooltip :placement="placement" :ui="ui" :target="target" :open="open" @update:open="update" :eventType="eventType">提示文字提示文字提示文字</veui-tooltip>
     </p>
   </article>
 </template>
@@ -68,7 +71,8 @@ export default {
       placement: '',
       ui: '',
       target: '',
-      open: false
+      open: false,
+      eventType: 'hover'
     }
   },
   components: {
@@ -90,10 +94,6 @@ export default {
     },
     update (value) {
       this.open = value
-    },
-    changeTheme () {
-      this.ui = this.ui ? '' : 'light'
-      alert('已成功切换')
     }
   }
 }
@@ -105,6 +105,9 @@ p {
 }
 .change-theme {
   margin-bottom: 10px;
+}
+.change-theme .veui-button {
+  margin-right: 10px;
 }
 .demo-wrap {
   width: 500px;
