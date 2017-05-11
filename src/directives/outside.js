@@ -1,4 +1,4 @@
-import { isFunction, uniqueId, remove, every, isArray, some, find, isNumber } from 'lodash'
+import { isFunction, uniqueId, remove, every, isArray, some, find, isNumber, isString } from 'lodash'
 import { getNodes } from '../utils/context'
 
 let handlerBindings = []
@@ -109,7 +109,8 @@ function parseParams (el, arg, modifiers, value, context) {
     const normalizedValue = value || {}
     handler = isFunction(normalizedValue.handler) ? normalizedValue.handler : empty
 
-    const refs = isArray(normalizedValue.refs) ? normalizedValue.refs : [normalizedValue.refs]
+    const refs = isArray(normalizedValue.refs) ? normalizedValue.refs
+      : (isString(normalizedValue.refs) ? normalizedValue.refs.split(',') : [normalizedValue.refs])
     whiteList = [el, ...getElementsByRefs(refs, context)]
 
     trigger = normalizedValue.trigger === 'hover' ? 'hover' : 'click'
