@@ -30,7 +30,7 @@ export default {
   },
   props: {
     ui: String,
-    placement: {
+    position: {
       type: String,
       default: 'top'
     },
@@ -39,7 +39,7 @@ export default {
       type: Boolean,
       default: false
     },
-    eventType: {
+    trigger: {
       type: String,
       default: 'hover'
     }
@@ -61,15 +61,15 @@ export default {
     overlay () {
       let attachment
       let targetAttachment
-      let placement = this.placement.split(' ')
-      let position = placement[0] || 'top'
-      let align = placement[1] || 'center'
-      if (position === 'left' || position === 'right') {
-        attachment = align + ' ' + posMap[position]
-        targetAttachment = align + ' ' + position
+      let position = this.position.split(' ')
+      let placement = position[0] || 'top'
+      let align = position[1] || 'center'
+      if (placement === 'left' || placement === 'right') {
+        attachment = align + ' ' + posMap[placement]
+        targetAttachment = align + ' ' + placement
       } else {
-        attachment = posMap[position] + ' ' + align
-        targetAttachment = position + ' ' + align
+        attachment = posMap[placement] + ' ' + align
+        targetAttachment = placement + ' ' + align
       }
       return {
         attachment: attachment,
@@ -86,7 +86,7 @@ export default {
       return {
         handler: this.switchTip,
         refs: this.$vnode.context.$refs[this.target],
-        trigger: this.eventType
+        trigger: this.trigger
       }
     }
   },

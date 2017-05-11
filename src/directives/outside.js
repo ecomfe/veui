@@ -132,17 +132,13 @@ function parseParams (el, arg, modifiers, value, context) {
 export default {
   bind (el, { value, arg, modifiers }, vnode) {
     el[bindingKey] = {
-      id: uniqueId(),
+      id: uniqueId('veui-outside-'),
       handler: generate(el, parseParams(el, arg, modifiers, value, vnode.context))
     }
     handlerBindings.push(el)
   },
   update (el, { value, arg, modifiers }, vnode) {
-    el[bindingKey] = {
-      id: uniqueId(),
-      handler: generate(el, parseParams(el, arg, modifiers, value, vnode.context))
-    }
-    handlerBindings.push(el)
+    el[bindingKey].handler = generate(el, parseParams(el, arg, modifiers, value, vnode.context))
   },
   unbind (el) {
     remove(handlerBindings, item => item[bindingKey].id === el[bindingKey].id)
