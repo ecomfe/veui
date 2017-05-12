@@ -3,9 +3,7 @@
     <div class="veui-wrapper">
       <div class="veui-page-info">
         <span class="veui-page-total">共 {{ pageTotal }} 条</span>
-        <span class="veui-page-size">
-          每页显示
-          <veui-select v-model="realPageSize"
+        <span class="veui-page-size">每页显示<veui-select v-model="realPageSize"
             ui="link"
             :options="optionalPageSizes"
             @change="size => $emit('pagesizechange', size)">
@@ -260,6 +258,7 @@ export default {
 
   .veui-select {
     width: auto;
+    margin-left: 8px;
     vertical-align: text-top;
     line-height: 1;
 
@@ -269,18 +268,16 @@ export default {
       font-weight: @veui-font-weight-extra-bold;
       .padding(0, _);
 
-      .veui-dropdown-label {
-        max-width: none;
-      }
-
-      .veui-dropdown-label,
       .veui-icon {
-        vertical-align: top;
+        float: left;
       }
+    }
 
-      .veui-icon {
-        float: none;
-      }
+    .veui-select-label {
+      max-width: none;
+      width: auto;
+      float: left;
+      margin-right: 5px;
     }
   }
 
