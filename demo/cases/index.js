@@ -12,7 +12,8 @@ import Select from './Select'
 import Dropdown from './Dropdown'
 import Radiobox from './Radiobox'
 import Checkbox from './Checkbox'
-import BoxGroup from './BoxGroup'
+import RadioboxGroup from './RadioboxGroup'
+import CheckboxGroup from './CheckboxGroup'
 
 export default [
   {
@@ -81,13 +82,19 @@ export default [
     component: Radiobox
   },
   {
+    path: '/radioboxgroup',
+    name: 'RadioboxGroup',
+    component: RadioboxGroup
+  },
+  {
     path: '/checkbox',
     name: 'Checkbox',
     component: Checkbox
   },
   {
-    path: '/boxGroup',
-    name: 'BoxGroup',
-    component: BoxGroup
+    path: '/checkboxgroup',
+    name: 'CheckboxGroup',
+    component: CheckboxGroup
   }
+
 ]
