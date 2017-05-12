@@ -1,13 +1,13 @@
 <template>
   <veui-overlay class="veui-dialog"
     :open="localOpen"
-    mode="NORMAL"
     :overlay-class="mergedOverlayClass"
     :ui="ui"
     ref="overlay">
     <div class="veui-dialog-content"
       :style="contentRectStyle"
-      @mousedown="focus">
+      @mousedown="focus"
+      ref="content">
       <div class="veui-dialog-content-head"
         :class="{ 'veui-dialog-draggable': draggable }"
         ref="head"
@@ -21,7 +21,12 @@
           @click="hide"><icon name="close"></icon></a>
       </div>
       <div ref="body" class="veui-dialog-content-body"><slot></slot></div>
-      <div ref="foot" class="veui-dialog-content-foot"><slot name="foot"><veui-button ui="primary" @click="$emit('ok')">确定</veui-button><veui-button @click="$emit('cancel')">取消</veui-button></slot></div>
+      <div ref="foot" class="veui-dialog-content-foot">
+        <slot name="foot">
+          <veui-button ui="primary" @click="$emit('ok')">确定</veui-button>
+          <veui-button @click="$emit('cancel')">取消</veui-button>
+        </slot>
+      </div>
     </div>
   </veui-overlay>
 </template>
@@ -62,7 +67,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 200
+      default: null
     },
     closable: {
       type: Boolean,
@@ -122,8 +127,23 @@ export default {
         return
       }
 
+      // 不要让对话框拖到可视区外部去了
       this.left = this.dragInitX + distanceX
+      if (this.left < 0) {
+        this.left = 0
+      } else if (this.left + this.$refs.content.offsetWidth > window.innerWidth) {
+        this.left = window.innerWidth - this.$refs.content.offsetWidth
+      }
+
       this.top = this.dragInitY + distanceY
+      if (this.top < 0) {
+        this.top = 0
+      } else if (
+        this.$refs.content.offsetHeight < window.innerHeight &&
+        this.top + this.$refs.content.offsetHeight > window.innerHeight
+      ) {
+        this.top = window.innerHeight - this.$refs.content.offsetHeight
+      }
 
       this.isDragged = true
     })
@@ -198,14 +218,36 @@ export default {
     }
   },
   updated () {
-    if (this.localOpen) {
+    // 如果设置了总体高度，就要计算出body部分的高度。
+    // 为什么在这里计算，而不是在mounted里面计算一次就万事大吉了呢？
+    // 因为在mounted的时候，Dialog很可能还没显示出来，甚至有可能都没有挂载到Document上面去。
+    if (this.localOpen && this.localHeight !== null) {
       this.$refs.body.style.height = `${this.getBodyHeight()}px`
     }
   },
   methods: {
     setPosition ({ topRatio = 0.5, leftRatio = 0.5 } = {}) {
-      this.left = (window.innerWidth - this.localWidth) * leftRatio + window.pageXOffset
-      this.top = (window.innerHeight - this.localHeight) * topRatio + window.pageYOffset
+      let height = this.localHeight
+
+      const setTop = () => {
+        // 如果对话框超过可视区域高度的话，就直接把对话框的top设为0
+        if (height <= window.innerHeight) {
+          this.top = (window.innerHeight - height) * topRatio
+        } else {
+          this.top = 0
+        }
+      }
+
+      if (height === null) {
+        this.$nextTick(() => {
+          height = this.$refs.content.offsetHeight
+          setTop()
+        })
+      } else {
+        setTop()
+      }
+
+      this.left = (window.innerWidth - this.localWidth) * leftRatio
     },
     setCenter () {
       this.setPosition()
@@ -266,12 +308,13 @@ export default {
   }
 
   &-box-mask {
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     background: rgba(204, 204, 204, .6);
+    overflow: auto;
   }
 
   &-draggable {
