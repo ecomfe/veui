@@ -11,6 +11,7 @@ export default {
   },
   mixins: [table],
   props: {
+    data: Array,
     columns: Array,
     selectable: Boolean,
     selectStatus: String
@@ -22,6 +23,7 @@ export default {
           {
             this.selectable
               ? <th><veui-checkbox checked={this.selectStatus === 'all'}
+                disabled={!this.data.length}
                 indeterminate={this.selectStatus === 'partial'}
                 onChange={checked => { this.$emit('select', checked) }}/></th>
               : ''

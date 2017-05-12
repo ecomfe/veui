@@ -4,7 +4,7 @@
     <col v-if="selectable" width="60"></col>
     <col v-for="col in displayedColumns" :width="col.width"></col>
   </colgroup>
-  <table-head :columns="displayedColumns" :selectable="selectable" :select-status="selectStatus" @select="select" @sort="sort"></table-head>
+  <table-head :data="data" :columns="displayedColumns" :selectable="selectable" :select-status="selectStatus" @select="select" @sort="sort"></table-head>
   <slot name="foot"><table-foot v-if="hasFoot" :data="data" :columns="displayedColumns"></table-foot></slot>
   <tbody v-if="!data.length">
     <tr><td class="veui-table-no-data" :colspan="(selectable ? 1 : 0) + displayedColumns.length"><slot name="no-data">没有数据</slot></td></tr>
