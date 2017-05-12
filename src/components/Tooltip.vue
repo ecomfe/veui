@@ -14,6 +14,7 @@
 <script>
 import Overlay from './Overlay'
 import { outside } from '../directives'
+import { getNodes } from '../utils/context'
 
 let posMap = {
   left: 'right',
@@ -56,7 +57,7 @@ export default {
   },
   computed: {
     targetNode () {
-      return this.$vnode.context.$refs[this.target]
+      return getNodes(this.target, this.$vnode.context)[0]
     },
     overlay () {
       let attachment
@@ -84,14 +85,14 @@ export default {
     },
     outsideOptions () {
       return {
-        handler: this.switchTip,
-        refs: this.$vnode.context.$refs[this.target],
+        handler: this.close,
+        refs: this.targetNode,
         trigger: this.trigger
       }
     }
   },
   methods: {
-    switchTip (type) {
+    close (type) {
       this.localOpen = false
       this.$emit('update:open', this.localOpen)
     }
@@ -130,7 +131,7 @@ export default {
       }
     }
 
-    &[ui~='light'] {
+    &[ui~="light"] {
       .veui-tooltip-content {
         padding: 11px 12px;
         color: @veui-gray-color-normal;
@@ -155,7 +156,7 @@ export default {
           .wrap-triangle(@direction, @diagonal-size, @veui-gray-color-strong, @left, @top);
         }
       }
-      &[ui~='light'] {
+      &[ui~="light"] {
         .veui-tooltip-content {
           &::before {
             .wrap-triangle(@direction, @diagonal-size, @veui-gray-color-sup-2, @left, @top);
