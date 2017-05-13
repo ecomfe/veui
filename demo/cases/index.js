@@ -14,7 +14,6 @@ import Radiobox from './Radiobox'
 import Checkbox from './Checkbox'
 import RadioboxGroup from './RadioboxGroup'
 import CheckboxGroup from './CheckboxGroup'
-import BoxGroup from './BoxGroup'
 import Tooltip from './Tooltip'
 
 export default [
@@ -97,11 +96,6 @@ export default [
     path: '/checkboxgroup',
     name: 'CheckboxGroup',
     component: CheckboxGroup
-  },
-  {
-    path: '/boxGroup',
-    name: 'BoxGroup',
-    component: BoxGroup
   },
   {
     path: '/tooltip',
