@@ -1,13 +1,13 @@
 <template>
   <span class="veui-switch" v-bind="attrs">
-    <label class="veui-switch-label animate-bg" :class="_state">
-      <input class="veui-switch-cb" type="checkbox" name="cb" v-model="inputValue" @change="handleChange"  :disabled="disabled" :readonly="readonly">
-      <span class="veui-switch-switch" :class="_state">
+    <label class="veui-switch-label" :class="localState">
+      <input class="veui-switch-cb" type="checkbox" v-model="inputValue" @change="handleChange"  :disabled="disabled" :readonly="readonly">
+      <span class="veui-switch-switch" :class="localState">
         <template v-if="disabled">
-          <span class="veui-switch-disabled-icon">x</span>
+          <span class="veui-remove-icon">x</span>
         </template>
         <template v-if="readonly">
-          <span class="veui-switch-icon" :class="_state"></span>
+          <span class="veui-switch-icon" :class="localState"></span>
         </template>
       </span>
     </label>
@@ -39,15 +39,15 @@ export default {
       let attrs = Object.assign({}, this.$props)
       return attrs
     },
-    _state () {
-      let _state
+    localState () {
+      let localState
 
       if (this.state) {
-        _state = this.state
+        localState = this.state
       } else {
-        _state = (this.inputValue) ? 'on' : 'off'
+        localState = (this.inputValue) ? 'on' : 'off'
       }
-      return _state
+      return localState
     }
   },
   watch: {
@@ -77,7 +77,11 @@ export default {
   margin-right: 10px;
 
   @label-height: @veui-height-normal;
-  .computeItems(@label-height) {
+  .computed_items(@label-height) {
+    .veui-remove-icon {
+      font-size: @label-height * 2 / 3;
+    }
+
     .veui-switch-label {
       height: @label-height;
       min-width: @label-height * 1.8;
@@ -103,11 +107,17 @@ export default {
       width: @label-height - 4;
       height: @label-height - 4;
       line-height: @label-height - 4;
-      
+
       &.off {
         left: 0;
         margin-left: 2px;
       }
+    }
+
+    .veui-remove-icon {
+      font-weight: bold;
+      position: relative;
+      color: @veui-gray-color-sup-1;
     }
 
     .veui-switch-icon {
@@ -116,25 +126,21 @@ export default {
       border-radius: @label-height * 0.2;
       vertical-align: middle;
     }
-
-    .veui-switch-disabled-icon {
-      font-size: @label-height * 2 / 3;
-    }
   }
 
   &[ui~="small"] {
     @label-height: @veui-height-small;
-    .computeItems(@label-height);
+    .computed_items(@label-height);
     font-size: @veui-font-size-small;
   }
 
   &[ui~="large"] {
     @label-height: @veui-height-large;
-    .computeItems(@label-height);
+    .computed_items(@label-height);
     font-size: @veui-font-size-large;
   }
 
-  .computeItems(@label-height);
+  .computed_items(@label-height);
 
   span {
     display: inline-block;
@@ -153,6 +159,7 @@ export default {
     text-align: left;
     user-select: none;
     overflow: hidden;
+    transition: background-color ease 0.8s;
 
     background-color: @veui-theme-color-primary;
     .veui-shadow();
@@ -160,45 +167,36 @@ export default {
     &.off {
       background-color: @veui-gray-color-sup-1;
     }
-
-    &.animate-bg {
-      transition: background-color ease 0.8s;
-    }
-  }
-
-  .veui-switch-text {
-    font-weight: bold;
-    color: #fff;
   }
 
   .veui-switch-switch {
-      text-align: center;
-      vertical-align: middle;
-      position: absolute;
-      top: 0px;
-      
-      /*border-radius:20px;*/
-      border-radius: 100%;
-      background-color: #fff;
-      .veui-shadow();
-      margin-top: 2px;
+    text-align: center;
+    vertical-align: middle;
+    position: absolute;
+    top: 0px;
+    
+    /*border-radius:20px;*/
+    border-radius: 100%;
+    background-color: #fff;
+    .veui-shadow();
+    margin-top: 2px;
 
-      &.on {
-        right: 0;
-        margin-right: 2px;
-      }
+    &.on {
+      right: 0;
+      margin-right: 2px;
+    }
 
-      &.off {
-        left: 0;
-        margin-left: 2px;
-      }
+    &.off {
+      left: 0;
+      margin-left: 2px;
+    }
   }
 
   .veui-switch-error-message {
     color: red;
   }
 
-  &[disabled='disabled'] {
+  &[disabled] {
     border: none;
     color: @veui-text-color-weak;
     .veui-shadow(none);
@@ -207,14 +205,14 @@ export default {
       cursor: not-allowed;
     }
 
-    .veui-switch-disabled-icon {
+    .veui-switch-icon {
       font-weight: bold;
       position: relative;
       color: @veui-gray-color-sup-1;
     }
   }
 
-  &[readonly="readonly"] {
+  &[readonly] {
     .veui-switch-label {
       cursor: not-allowed;
     }
@@ -232,10 +230,6 @@ export default {
   }
 
   &[ui~="plain"] {
-    .veui-switch-text {
-      font-weight: bold;
-      color: @veui-gray-color-weak;
-    }
     .veui-switch-label {
       background-color: @veui-gray-color-sup-2;
 

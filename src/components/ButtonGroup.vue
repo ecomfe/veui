@@ -1,16 +1,18 @@
 <template>
-  <div class="veui-button-group" :ui="ui" :class="orientationClass" :mode="mode" :current="current" @changestate="changeStateHandler(index)">   
+  <div class="veui-button-group" :ui="ui" :class="`${this.vertical ? 'vertical' : 'horiztontal'}`" :mode="mode" :active.sync="active"> 
     <veui-button v-for="(item, index) in items" :key="index" :ui="ui" ref="button"
-    :class="{current: localCurrent === index || localCurrent.includes(index), vertical: vertical}"
-    @click="clickHandler(index, $event)">
+    :class="{active: localActive.indexOf(item.value) >= 0, vertical: vertical}"
+    @click.stop="clickHandler(index, item, $event)">
       <span v-if="item.icon"><icon :name="item.icon"></icon></span>
-      {{ item.text }}
+      {{ item.label }}
     </veui-button>
   </div>
 </template>
 <script>
   import Button from './Button'
+  import Icon from './Icon'
   import {includes} from 'lodash'
+  import 'vue-awesome/icons/remove'
 
   const ALLOWED_MODE_TYPES = ['stateless', 'exclusive', 'multiple']
 
@@ -18,14 +20,14 @@
     name: 'veui-button-group',
     components: {
       'veui-button': Button,
-      'props': ['current']
+      Icon
     },
     props: {
       ui: {
         type: String
       },
-      current: {
-        type: [Number, Array]
+      active: {
+        type: [Number, String, Array]
       },
       vertical: {
         type: Boolean,
@@ -34,8 +36,9 @@
       items: {
         /**
          * {
-         *  text: '显示的文本',
-         *  icon: '要配置的icon名字'
+         *  label: '显示的文本',
+         *  icon: '要配置的icon名字',
+         *  value: '单个按钮的值'
          * }
          */
         type: Array
@@ -46,52 +49,50 @@
         validator (value) {
           return includes(ALLOWED_MODE_TYPES, value)
         }
+      },
+      value: {
+        type: [Number, String]
       }
     },
     data () {
-      // let localCurrent = this.current && (this.current == index || this.current.includes(index))
-      // console.log(this)
       return {
-        orientationClass: this.vertical ? 'vertical' : 'horiztontal',
-        isCurrent: false,
-        localCurrent: this.current || []
+        localActive: this.active || []
       }
     },
     computed: {
-      isCurrent (index) {
-        let isCurrent = this.current && (this.current === index || this.current.includes(index))
-        return isCurrent
-      }
     },
     methods: {
-      clickHandler (index, $event) {
+      clickHandler (index, item, $event) {
+        console.log(index)
+
         switch (this.mode) {
           case 'exclusive':
-            // this.localCurrent = index
-            this.localCurrent = []
-            this.localCurrent.push(index)
-            console.log(this.localCurrent === index)
+            this.localActive = [item.value]
+            console.log(this.localActive)
             break
           case 'multiple':
-            if (this.localCurrent.includes(index)) {
-              this.localCurrent.splice(index, 1)
+            if (includes(this.localActive, item.value)) {
+              console.log(this.localActive)
+              let newIndex = this.localActive.indexOf(item.value)
+              console.log(newIndex)
+              this.localActive.splice(newIndex, 1)
             } else {
-              this.localCurrent.push(index)
+              this.localActive.push(item.value)
             }
-            console.log(this.localCurrent)
             break
           default:
             break
         }
-        this.$emit('changestate', index)
+        this.$emit('click', item.value)
+        // console.log(item.value)
+
+        if (this.mode !== 'stateless') {
+          this.$emit('change', item.active, item.value)
+
+          this.$emit('update:active', this.localActive)
+          console.log(this.localActive)
+        }
       }
-    },
-    mounted () {
-      this.$children.forEach((child, index) => {
-        child.$on('click', (index) => {
-          // this.current = index
-        })
-      })
     }
   }
 </script>
@@ -153,7 +154,7 @@
     border-color: @veui-theme-color-hover;
   }
 
-  .current {
+  .active {
     background-color: @veui-theme-color-primary;
     color: #fff;
     .veui-shadow();

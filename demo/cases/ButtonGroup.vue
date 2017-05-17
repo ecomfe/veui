@@ -1,33 +1,35 @@
 <template>
   <article>
-    <h1><code>&lt;veui-button&gt;</code></h1>
+    <h1><code>&lt;veui-button-group&gt;</code></h1>
     <p>
-      <veui-button-group :items="items11" :current="current" :mode="modeExclusive"></veui-button-group>
+      <veui-button-group :items="items11" :active="active" :mode="modeExclusive"></veui-button-group>
+      mode: {{modeExclusive}}
     </p>
     <p>
-      <veui-button-group :items="items12" :current="current" :mode="modeExclusive"></veui-button-group>
+      <veui-button-group :items="items12" :active="active" :mode="modeExclusive"></veui-button-group>
+      mode: {{modeExclusive}}
     </p>
     <p>
-      <veui-button-group :items="items1" :current="current" :mode="modeExclusive"></veui-button-group>
+      <veui-button-group :items="items1" :active="active" :mode="modeExclusive"></veui-button-group>
     </p>
     <p>
-      <veui-button-group :items="items2" :current="current" :mode="modeExclusive"></veui-button-group>
+      <veui-button-group :items="items2" :active="active" :mode="modeExclusive"></veui-button-group>
     </p>
     <p>
-      <veui-button-group :items="items2" :current="current" :mode="modeMultiple"></veui-button-group>
+      <veui-button-group :items="items2" :active="active" :mode="modeMultiple"></veui-button-group>
     </p>
 
     <p>
-      <veui-button-group ui="tiny" :current="current" :items="itemsLink"></veui-button-group>
+      <veui-button-group ui="tiny" :active="active" :items="itemsLink"></veui-button-group>
     </p>
     <p>
-      <veui-button-group ui="small" :current="current" :items="itemsLink"></veui-button-group>
+      <veui-button-group ui="small" :active="active" :items="itemsLink"></veui-button-group>
     </p>
     <p>
-      <veui-button-group :current="current" :items="itemsLink"></veui-button-group>
+      <veui-button-group :active="active" :items="itemsLink"></veui-button-group>
     </p>
     <p>
-      <veui-button-group ui="large" :current="current" :items="itemsLink"></veui-button-group>
+      <veui-button-group ui="large" :active="active" :items="itemsLink"></veui-button-group>
     </p>
 
     <p>
@@ -80,11 +82,11 @@
     </p>
 
     <p>
-      <veui-button-group :items="items11" :current="current" :mode="modeExclusive" :vertical="vertical"></veui-button-group>
+      <veui-button-group :items="items11" :active="active" :mode="modeExclusive" :vertical="vertical"></veui-button-group>
     </p>
 
     <!-- <p>
-      <veui-button-group :items="items3" :current="current" :mode="mode"></veui-button-group>
+      <veui-button-group :items="items3" :active="active" :mode="mode"></veui-button-group>
     </p>
     <p>
       <veui-button-group :items="items1" :vertical="vertical"></veui-button-group>
@@ -96,7 +98,7 @@
       <veui-button-group :items="items2" :vertical="vertical"></veui-button-group>
     </p>
     <p>
-      <veui-button-group :items="items3" :current="current" :vertical="vertical"></veui-button-group>
+      <veui-button-group :items="items3" :active="active" :vertical="vertical"></veui-button-group>
     </p> -->
 
   </article>
@@ -120,106 +122,117 @@ export default {
     return {
       items1: [
         {
-          text: '菜单1',
-          icon: 'upload'
+          label: '菜单1',
+          icon: 'upload',
+          value: 'upload'
         },
         {
-          text: '菜单2',
-          icon: 'download'
+          label: '菜单2',
+          icon: 'download',
+          value: 'download'
         },
         {
-          text: '菜单3',
-          icon: 'code-fork'
+          label: '菜单3',
+          icon: 'code-fork',
+          value: 'codeFork'
         },
         {
-          text: '菜单4',
-          icon: 'check'
+          label: '菜单4',
+          icon: 'check',
+          value: 'check'
         }
       ],
       items11: [
         {
-          text: '菜单1'
+          label: '菜单1',
+          value: 'menu1'
         },
         {
-          text: '菜单2'
+          label: '菜单2',
+          value: 'menu2'
         },
         {
-          text: '菜单3'
+          label: '菜单3',
+          value: 'menu3'
         },
         {
-          text: '菜单4'
+          label: '菜单4',
+          value: 'menu4'
         }
       ],
       items12: [
         {
-          icon: 'upload'
+          icon: 'upload',
+          value: 1
         },
         {
-          icon: 'download'
+          icon: 'download',
+          value: 2
         },
         {
-          icon: 'code-fork'
+          icon: 'code-fork',
+          value: 3
         },
         {
-          icon: 'check'
+          icon: 'check',
+          value: 4
         }
       ],
       items2: [
         {
-          text: 'menu1',
+          label: 'menu1',
           value: 'DOWNLOAD',
           icon: 'thumbs-up'
         },
         {
-          text: 'menu2',
+          label: 'menu2',
           value: 'UPLOAD',
           icon: 'gear'
         },
         {
-          text: 'menu3',
-          value: 'UPLOAD',
+          label: 'menu3',
+          value: 'FlASH',
           icon: 'flash'
         }
       ],
       items3: [
         {
-          text: '垂直菜单1'
+          label: '垂直菜单1'
         },
         {
-          text: '垂直菜单2'
+          label: '垂直菜单2'
         },
         {
-          text: '垂直菜单3'
+          label: '垂直菜单3'
         },
         {
-          text: '垂直菜单4'
+          label: '垂直菜单4'
         }
       ],
       itemsLink: [
         {
-          text: '上传'
+          label: '上传'
         },
         {
-          text: '下载'
+          label: '下载'
         },
         {
-          text: '更新'
+          label: '更新'
         }
       ],
-      current: [0],
-      current1: [0, 1],
-      current2: [2],
+      active: ['menu2'],
+      active1: [0, 1],
+      active2: [2],
       vertical: true,
       modeExclusive: 'exclusive',
       modeMultiple: 'multiple'
     }
   },
   mounted () {
-    this.$children.forEach((child, index) => {
+    this.$children.forEach((child, value) => {
       child.$on('click', (index) => {
         bus.$emit('log', child.$el.getAttribute('class'))
-        console.log(index)
-        this.current = index
+        this.active = index
       })
     })
   }
