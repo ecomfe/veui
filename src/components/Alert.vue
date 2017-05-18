@@ -165,7 +165,7 @@
         margin-left: 24px;
       }
       &.veui-alert-icon-disabled {
-        cursor: auto;
+        cursor: not-allowed;
         color: @veui-text-color-weak;
       }
     }
