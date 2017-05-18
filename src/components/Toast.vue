@@ -58,12 +58,12 @@
   @veui-warning-color-primary: #fe9700;
   @veui-warning-color-hover: #e48800;
   @veui-info-color-hover: #3077e5;
-
   .veui-toast-style(@color, @shadow-color) {
     color: @color;
     border: 1px solid fadeOut(@color, 50%);
     box-shadow: 0 1px 4px fadeOut(@shadow-color, 80%);
   }
+
   position: relative;
   padding: 14px 30px;
   max-width: 800px;
@@ -72,24 +72,24 @@
   span {
     display: inline-block;
   }
-  .veui-toast-message {
+  &-message {
     margin-left: 35px;
   }
-  .veui-toast-icon {
+  &-icon {
     .absolute(50%, _, _, 30px);
     transform: translateY(-50%);
   }
-  &.veui-toast-success {
+  &-success {
     .veui-toast-style(@veui-success-color-primary, @veui-success-color-hover);
   }
-  &.veui-toast-warning {
+  &-warning {
     .veui-toast-style(@veui-warning-color-primary, @veui-warning-color-hover);
   }
-  &.veui-toast-info {
+  &-info {
     .veui-toast-style(@veui-theme-color-secondary, @veui-info-color-hover);
     color: @veui-theme-color-primary;
   }
-  &.veui-toast-error {
+  &-error {
     .veui-toast-style(@veui-alert-color-primary, @veui-alert-color-hover);
   }
 }

@@ -1,19 +1,25 @@
 <template>
   <div v-if="localOpen" class="veui-alert" :ui="ui" :class="`veui-alert-${type}`">
-    <slot name="all-content">
+    <slot name="content">
       <veui-icon class="veui-alert-icon" :name="`${iconName}-circle`"></veui-icon>
-      <slot name="content">
+      <slot>
         <span v-if="isMultiple" class="veui-alert-message veui-alert-message-multiple">{{ message[index] }}</span>
         <span v-else class="veui-alert-message">{{ message }}</span>
       </slot>
-      <span v-if="closeText" class="veui-alert-close veui-alert-close-text" @click="close">{{ closeText }}</span>
-      <span v-else class="veui-alert-close">
-        <template v-if="isMultiple">
-          <veui-icon :class="{'veui-alert-icon-disabled': prevDisabled}" name="chevron-left" @click.native="switchMessage(-1)"></veui-icon>
-          <veui-icon :class="{'veui-alert-icon-disabled': nextDisabled}" name="chevron-right" @click.native="switchMessage(1)"></veui-icon>
-        </template>
-        <veui-icon v-else name="close" @click.native="close"></veui-icon>
-      </span>
+      <button v-if="closeText" class="veui-alert-close veui-alert-close-text" @click="close">{{ closeText }}</button>
+      <template v-else-if="isMultiple">
+        <span class="veui-alert-close">
+          <button :disabled="isFirst" @click="switchMessage(-1)">
+            <veui-icon name="chevron-left"></veui-icon>
+          </button>
+          <button :disabled="isLast" @click="switchMessage(1)">
+            <veui-icon name="chevron-right"></veui-icon>
+          </button>
+        </span>
+      </template>
+      <button v-else class="veui-alert-close" @click="close">
+        <veui-icon name="close"></veui-icon>
+      </button>
     </slot>
   </div>
 </template>
@@ -72,10 +78,10 @@
       isMultiple () {
         return isArray(this.message)
       },
-      prevDisabled () {
+      isFirst () {
         return this.index <= 0
       },
-      nextDisabled () {
+      isLast () {
         return this.index >= this.message.length - 1
       }
     },
@@ -85,7 +91,7 @@
         this.$emit('update:open', false)
       },
       switchMessage (step) {
-        if ((step > 0 && this.nextDisabled) || (step < 0 && this.prevDisabled)) {
+        if ((step > 0 && this.isLast) || (step < 0 && this.isFirst)) {
           return
         }
         this.index = this.index + step
@@ -101,9 +107,9 @@
   @warning: #fe9700;
   @info: @veui-theme-color-primary;
   @error: @veui-alert-color-primary;
-  @iconActiveColor: #3077e5;
-  @messageHoverColor: #72a9ff;
-  @messageActiveColor: #5e9dff;
+  @icon-active-color: #3077e5;
+  @message-hover-color: #72a9ff;
+  @message-active-color: #5e9dff;
   position: relative;
   margin: 30px 0;
   padding: 14px 20px;
@@ -111,63 +117,68 @@
   span {
     display: inline-block;
   }
-  .veui-alert-icon {
+  &-icon {
     transform: translateY(-50%);
     .absolute(50%, _, _, 20px);
   }
-  .veui-alert-message {
+  &-message {
     margin: 0 44px 0 34px;
-    &.veui-alert-message-multiple {
+    &-multiple {
       margin-right: 82px;
     }
   }
-  &.veui-alert-success {
+  &-success {
     background-color: fadeout(@success, 90%);
     color: @success;
   }
-  &.veui-alert-warning {
+  &-warning {
     background-color: fadeout(@warning, 90%);
     color: @warning;
   }
-  &.veui-alert-info {
+  &-info {
     background-color: @veui-theme-color-sup-4;
     color: @info;
   }
-  &.veui-alert-error {
+  &-error {
     background-color: fadeout(@error, 90%);
     color: @error;
   }
-  .veui-alert-close {
+  &-close {
     .absolute(50%, 20px, _, _);
     transform: translateY(-50%);
+    button + button {
+      margin-left: 24px;
+    }
     &.veui-alert-close-text {
-      cursor: pointer;
       color: @veui-theme-color-secondary;
       &:hover,
       &:visited {
-        color: @messageHoverColor;
+        color: @message-hover-color;
       }
       &:active {
-        color: @messageActiveColor;
+        color: @message-active-color;
       }
     }
-    .veui-icon {
-      cursor: pointer;
-      color: @veui-text-color-normal;
-      &:hover,
-      &:visited {
-        color: @veui-theme-color-primary;
-      }
-      &:active {
-        color: @iconActiveColor;
-      }
-      &+.veui-icon {
-        margin-left: 24px;
-      }
-      &.veui-alert-icon-disabled {
-        cursor: not-allowed;
-        color: @veui-text-color-weak;
-      }
+  }
+  button {
+    border: none;
+    background: none;
+    padding: 0;
+    user-select: none;
+    color: @veui-text-color-normal;
+    &:focus {
+      outline: none;
+    }
+    &:hover,
+    &:visited {
+      color: @veui-theme-color-primary;
+    }
+    &:active {
+      color: @icon-active-color;
+    }
+    &:disabled {
+      cursor: not-allowed;
+      color: @veui-text-color-weak;
     }
   }
 }
