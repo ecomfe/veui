@@ -2,67 +2,79 @@ import Vue from 'vue'
 import { isString, isArray, isObject } from 'lodash'
 
 let Container = Vue.extend(require('@/components/ToastList'))
-let instance = new Container()
-let el
 
-export function add (option) {
-  if (!el) {
-    el = document.createElement('div')
+class ToastManager {
+
+  constructor (option) {
+    this.instance = new Container()
+    let el = document.createElement('div')
     document.body.appendChild(el)
-    instance.$mount(el)
-  }
-
-  if (isArray(option)) {
-    option.forEach(item => {
-      instance.add(item)
-    })
-  } else if (isObject(option)) {
-    instance.add(option)
-  } else {
-    throw new Error('The toast\'s param is invalid!')
-  }
-}
-
-export function success (option) {
-  if (isString(option)) {
-    option = {
-      type: 'success',
-      text: option
+    this.instance.$mount(el)
+    el = null
+    if (option) {
+      this.add(option)
     }
   }
-  add(option)
-}
 
-export function warn (option) {
-  if (isString(option)) {
-    option = {
-      type: 'warn',
-      text: option
+  add (option) {
+    if (isArray(option)) {
+      option.forEach(item => {
+        this.instance.add(item)
+      })
+    } else if (isObject(option)) {
+      this.instance.add(option)
+    } else {
+      throw new Error('The toast\'s param is invalid!')
     }
   }
-  add(option)
-}
 
-export function remind (option) {
-  if (isString(option)) {
-    option = {
-      type: 'remind',
-      text: option
-    }
+  remove (index) {
+    this.instance.remove(this.instance.messages[index])
   }
-  add(option)
-}
 
-export function error (option) {
-  if (isString(option)) {
-    option = {
-      type: 'error',
-      text: option
+  success (option) {
+    if (isString(option)) {
+      option = {
+        type: 'success',
+        text: option
+      }
     }
+    this.add(option)
   }
-  add(option)
+
+  warning (option) {
+    if (isString(option)) {
+      option = {
+        type: 'warning',
+        text: option
+      }
+    }
+    this.add(option)
+  }
+
+  info (option) {
+    if (isString(option)) {
+      option = {
+        type: 'info',
+        text: option
+      }
+    }
+    this.add(option)
+  }
+
+  error (option) {
+    if (isString(option)) {
+      option = {
+        type: 'error',
+        text: option
+      }
+    }
+    this.add(option)
+  }
 }
 
-export function remove (index) {
-  instance.remove(instance.messages[index])
-}
+export {ToastManager}
+
+let toast = new ToastManager()
+
+export {toast}

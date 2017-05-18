@@ -5,8 +5,8 @@
       <div class="toast-title">全局提示</div>
       <veui-button ui="aux" @click="showToast('all')">全部</veui-button>
       <veui-button ui="aux" @click="showToast('success')">成功</veui-button>
-      <veui-button ui="aux" @click="showToast('warn')">警告</veui-button>
-      <veui-button ui="aux" @click="showToast('remind')">提醒</veui-button>
+      <veui-button ui="aux" @click="showToast('warning')">警告</veui-button>
+      <veui-button ui="aux" @click="showToast('info')">提醒</veui-button>
       <veui-button ui="aux" @click="showToast('error')">错误</veui-button>
     </p>
   </article>
@@ -14,28 +14,31 @@
 
 <script>
 import bus from '../bus'
-import { add } from '@/managers/toast'
+// import {toast} from '@/managers/toast'
+import {ToastManager} from '@/managers/toast'
 import Button from '@/components/Button'
+
+let toast = new ToastManager()
 let msg = [
   {
     type: 'success',
-    text: '恭喜您，您的请求已成功处理',
-    time: 2500
+    message: '恭喜您，您的请求已成功处理',
+    duration: 2500
   },
   {
-    type: 'warn',
-    text: '警告，有法律风险存在',
-    time: 2000
+    type: 'warning',
+    message: '警告，有法律风险存在',
+    duration: 2000
   },
   {
-    type: 'remind',
-    text: '提醒，请注意这个消息',
-    time: 1500
+    type: 'info',
+    message: '提醒，请注意这个消息',
+    duration: 1500
   },
   {
     type: 'error',
-    text: '错误，请检查并修改后再提交',
-    time: 1000
+    message: '错误，请检查并修改后再提交',
+    duration: 1000
   }
 ]
 
@@ -61,9 +64,9 @@ export default {
   methods: {
     showToast (type) {
       if (type === 'all') {
-        add(this.msg)
+        toast.add(this.msg)
       } else {
-        add(this.msgMap[type])
+        toast.add(this.msgMap[type])
       }
     }
   },

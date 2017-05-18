@@ -1,7 +1,7 @@
 <template>
   <div :ui="ui" class="veui-toast" :class="`veui-toast-${type}`">
     <veui-icon class="veui-toast-icon" :name="`${iconName}-circle`"></veui-icon>
-    <span class="veui-toast-text">{{ text }}</span>
+    <span class="veui-toast-message">{{ message }}</span>
   </div>
 </template>
 
@@ -11,6 +11,13 @@
   import 'vue-awesome/icons/exclamation-circle'
   import 'vue-awesome/icons/info-circle'
   import 'vue-awesome/icons/times-circle'
+
+  const TYPE_MAP = {
+    success: 'check',
+    warning: 'exclamation',
+    info: 'info',
+    error: 'times'
+  }
 
   export default {
     name: 'toast',
@@ -23,31 +30,21 @@
         type: String,
         default: 'success'
       },
-      text: String,
-      time: {
+      message: String,
+      duration: {
         type: Number,
         default: 3000
       }
     },
-    data () {
-      return {
-        typeMap: {
-          success: 'check',
-          warn: 'exclamation',
-          remind: 'info',
-          error: 'times'
-        }
-      }
-    },
     computed: {
       iconName () {
-        return this.typeMap[this.type]
+        return TYPE_MAP[this.type]
       }
     },
     mounted () {
       this.timer = setTimeout(() => {
         this.$emit('close')
-      }, this.time)
+      }, this.duration)
     },
     beforeDestroy () {
       clearTimeout(this.timer)
@@ -58,10 +55,14 @@
 <style lang="less">
 @import "../styles/theme-default/lib.less";
 .veui-toast {
-  .veui-toast-style(@color, @shadowColor, @fadeOut: 50%) {
+  @veui-warning-color-primary: #fe9700;
+  @veui-warning-color-hover: #e48800;
+  @veui-info-color-hover: #3077e5;
+
+  .veui-toast-style(@color, @shadow-color) {
     color: @color;
-    border: 1px solid fadeOut(@color, @fadeOut);
-    box-shadow: 0 1px 4px fadeOut(@shadowColor, 80%);
+    border: 1px solid fadeOut(@color, 50%);
+    box-shadow: 0 1px 4px fadeOut(@shadow-color, 80%);
   }
   position: relative;
   padding: 14px 30px;
@@ -71,26 +72,25 @@
   span {
     display: inline-block;
   }
-  .veui-toast-text {
+  .veui-toast-message {
     margin-left: 35px;
   }
   .veui-toast-icon {
-    position: absolute;
-    top: 50%;
+    .absolute(50%, _, _, 30px);
     transform: translateY(-50%);
-    left: 30px;
   }
   &.veui-toast-success {
-    .veui-toast-style(@veui-success-color-primary, #389a91);
+    .veui-toast-style(@veui-success-color-primary, @veui-success-color-hover);
   }
-  &.veui-toast-warn {
-    .veui-toast-style(#fe9700, #e38800);
+  &.veui-toast-warning {
+    .veui-toast-style(@veui-warning-color-primary, @veui-warning-color-hover);
   }
-  &.veui-toast-remind {
-    .veui-toast-style(@veui-theme-color-primary, #3077e5, 0);
+  &.veui-toast-info {
+    .veui-toast-style(@veui-theme-color-secondary, @veui-info-color-hover);
+    color: @veui-theme-color-primary;
   }
   &.veui-toast-error {
-    .veui-toast-style(@veui-alert-color-primary, #e55151);
+    .veui-toast-style(@veui-alert-color-primary, @veui-alert-color-hover);
   }
 }
 </style>

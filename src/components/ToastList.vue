@@ -40,11 +40,9 @@ export default {
 <style lang="less">
 @import "../styles/theme-default/lib.less";
 .veui-toast-list {
-  position: absolute;
-  left: 50%;
-  top: @nav-bar-height + 15px;
+  .absolute(@veui-nav-bar-height + 15px, _, _, 50%);
   transform: translateX(-50%);
-  background-color: fadeOut(#000, 100%);
+  background: none;
   .veui-toast {
     margin-bottom: 10px;
     &:last-child {

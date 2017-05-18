@@ -3,14 +3,14 @@
     <h1><code>&lt;veui-alert&gt;</code></h1>
     <p>
       <div>固定提示</div>
-      <veui-alert type="success" text="恭喜你，你的请求已成功处理" @update:open="close"></veui-alert>
-      <veui-alert type="success" text="恭喜你，你的请求已成功处理" @update:open="close" width="300px"></veui-alert>
-      <veui-alert type="warn" text="警告，进行检查，有风险信息存在" @update:open="close"></veui-alert>
-      <veui-alert type="warn" text="警告，进行检查，有风险信息存在" @update:open="close" width="300px"></veui-alert>
-      <veui-alert type="remind" text="提醒，这个消息需要注意" @update:open="close"></veui-alert>
-      <veui-alert type="remind" text="提醒，这个消息需要注意" @update:open="close" width="300px" close-text="不在提示"></veui-alert>
-      <veui-alert type="error" text="错误，请检查并修改后再进行操作" @update:open="close"></veui-alert>
-      <veui-alert type="error" text="错误，请检查并修改后再进行操作" @update:open="close" width="300px"></veui-alert>
+      <veui-alert type="success" message="恭喜你，你的请求已成功处理" @update:open="close"></veui-alert>
+      <veui-alert class="limit-width" type="success" message="恭喜你，你的请求已成功处理" @update:open="close"></veui-alert>
+      <veui-alert type="warning" message="警告，进行检查，有风险信息存在" @update:open="close"></veui-alert>
+      <veui-alert class="limit-width" type="warning" :message="messages" @update:open="close"></veui-alert>
+      <veui-alert type="info" message="提醒，这个消息需要注意" @update:open="close"></veui-alert>
+      <veui-alert class="limit-width" type="info" message="提醒，这个消息需要注意" @update:open="close" close-text="不在提示"></veui-alert>
+      <veui-alert type="error" message="错误，请检查并修改后再进行操作" @update:open="close"></veui-alert>
+      <veui-alert class="limit-width" type="error" message="错误，请检查并修改后再进行操作" @update:open="close"></veui-alert>
       <veui-dialog
           title="提示"
           :open="open"
@@ -36,7 +36,14 @@ export default {
   },
   data () {
     return {
-      open: false
+      open: false,
+      messages: [
+        '我是消息1我是消息1我是消息1我是消息1',
+        '我是消息2',
+        '我是消息3',
+        '我是消息4',
+        '我是消息5'
+      ]
     }
   },
   methods: {
@@ -57,5 +64,8 @@ export default {
 <style scoped>
 p {
   margin: 30px;
+}
+.veui-alert.limit-width {
+  width: 350px;
 }
 </style>
