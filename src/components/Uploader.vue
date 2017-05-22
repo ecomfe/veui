@@ -46,7 +46,7 @@
                 :class="classType + '-success'"
                 @click="updateFileList(file, {status: null})">
                 <span class="veui-uploader-success"><slot name="successText">上传成功！</slot></span>
-                <icon name="check-circle-o"></icon>
+                <icon name="check-circle"></icon>
               </div>
             </transition>
           </slot>
@@ -100,7 +100,7 @@ import { config } from '../managers'
 import 'vue-awesome/icons/close'
 import 'vue-awesome/icons/upload'
 import 'vue-awesome/icons/plus'
-import 'vue-awesome/icons/check-circle-o'
+import 'vue-awesome/icons/check-circle'
 import 'vue-awesome/icons/file-zip-o'
 
 config.defaults({
@@ -466,13 +466,11 @@ function getProgress () {
 @prefix-button: veui-button;
 
 .@{prefix} {
-  @width: 350px;
+  @width: 292px;
   @icon-size: 16px;
-  @preview-size: 60px;
-  @image-large: 300px;
-  @image-normal: 200px;
-  @image-small: 100px;
-  @list-padding: 3px;
+  @preview-size: 32px;
+  @image-size: 140px;
+  @list-padding: 2px;
   .disabled() {
     border: none;
     background-color: @veui-gray-color-sup-3;
@@ -484,7 +482,7 @@ function getProgress () {
   overflow: hidden;
   &-button-container {
     position: relative;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
   }
   &-input-label {
     cursor: pointer;
@@ -516,16 +514,16 @@ function getProgress () {
       position: absolute;
     }
     &::before {
-      border-top: 4px solid @veui-gray-color-sup-2;
-      top: ~"calc(50% - 1px)";
-      left: 30%;
-      width: 40%;
+      border-top: 4px solid @veui-gray-color-sup-1;
+      top: ~"calc(50% - 2px)";
+      left: @image-size / 2 - @list-padding - 1px - 30px;
+      width: 60px;
     }
     &::after {
-      border-left: 4px solid @veui-gray-color-sup-2;
-      top: 30%;
-      left: ~"calc(50% - 1px)";
-      height: 40%;
+      border-left: 4px solid @veui-gray-color-sup-1;
+      top: @image-size / 2 - @list-padding - 1px - 30px;
+      left: ~"calc(50% - 2px)";
+      height: 60px;
     }
   }
 
@@ -563,6 +561,7 @@ function getProgress () {
       left: 0;
       width: 100%;
       height: 100%;
+      padding: 9px 4px;
       display: block;
       background-color: #fff;
       color: @veui-success-color-primary;
@@ -572,7 +571,7 @@ function getProgress () {
     color: @veui-theme-color-primary;
     li {
       position: relative;
-      padding: 10px 5px;
+      padding: 9px 4px;
       box-sizing: content-box;
     }
     li:hover {
@@ -603,7 +602,6 @@ function getProgress () {
       height: 100%;
     }
     &-success {
-      padding: 10px 5px;
       svg {
         position: relative;
         top: 2px;
@@ -625,7 +623,7 @@ function getProgress () {
   }
   &-list-preview {
     height: @preview-size;
-    padding: @list-padding !important;
+    padding: 4px !important;
     &-container {
       display: inline-block;
       vertical-align: middle;
@@ -638,10 +636,6 @@ function getProgress () {
       margin-right: 3px;
     }
 
-    .@{prefix}-list-file-success {
-      line-height: @preview-size;
-      padding: 0;
-    }
     .@{prefix}-list-file-name {
       width: ~"calc(70% - "@preview-size~")";
     }
@@ -657,19 +651,21 @@ function getProgress () {
   &-list-image {
     li {
       overflow: hidden;
-      width: @image-normal;
-      height: @image-normal;
+      width: @image-size;
+      height: @image-size;
       padding: @list-padding;
-      box-sizing: content-box;
-      margin: 5px;
-      border: 2px dashed @veui-gray-color-sup-2;
+      box-sizing: border-box;
+      margin: 0 10px 5px 0;
+      border: 1px dashed @veui-gray-color-sup-2;
       text-align: center;
-      line-height: @image-normal;
+      line-height: @image-size - 2px - 2 * @list-padding;
       position: relative;
       button[ui~="operation"] {
         position: absolute;
         min-width: 70px;
-        top: ~"calc(50% + 10px)";
+        font-size: 12px;
+        height: 30px;
+        bottom: 30px;
         left: ~"calc(50% - 35px)";
       }
     }
@@ -705,11 +701,11 @@ function getProgress () {
       }
     }
     &-success {
-      padding-top: 25%;
+      padding-top: 50px;
       line-height: 1;
       span {
         display: block;
-        margin-bottom: 25%;
+        margin-bottom: 10px;
       }
       svg {
         font-size: @icon-size;
@@ -762,20 +758,6 @@ function getProgress () {
       float: left;
     }
   }
-  &[ui~="small"] &-list-image {
-    li {
-      height: @image-small;
-      width: @image-small;
-      line-height: @image-small;
-    }
-  }
-  &[ui~="large"] &-list-image {
-    li {
-      height: @image-large;
-      width: @image-large;
-      line-height: @image-large;
-    }
-  }
   &[ui~="list-icon"] &-list-icon {
     display: inline;
     margin-right: 3px;
@@ -785,8 +767,8 @@ function getProgress () {
     bottom: @list-padding;
     left: @list-padding;
     width: ~"calc(100% - "2 * @list-padding~")";
-    height: 3 * @veui-font-size-normal;
-    line-height: 3 * @veui-font-size-normal;
+    height: 30px;
+    line-height: 30px;
   }
   .@{prefix-button}[ui~="delete"] {
     color: @veui-alert-color-primary;
@@ -829,20 +811,22 @@ function getProgress () {
     position: relative;
     line-height: 1.2;
     color: @veui-theme-color-primary;
+
     &-bar,
     &-bar-full {
       display: inline-block;
       position: absolute;
-      left: 0;
+      left: ~"calc(50% - 35px)";
       top: 50%;
-      height: 5px;
-      max-width: 100% !important;
+      height: 6px;
+      max-width: 70px !important;
+      border-radius: 3px;
     }
     &-bar {
       background-color: @veui-theme-color-primary;
       &-full {
         z-index: -1;
-        width: 100%;
+        width: 70px;
         background-color: @veui-gray-color-sup-3;
       }
     }
