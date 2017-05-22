@@ -204,8 +204,8 @@ export default {
   },
   methods: {
     setPosition ({ topRatio = 0.5, leftRatio = 0.5 } = {}) {
-      this.left = (window.innerWidth - this.localWidth) * leftRatio + document.body.scrollLeft
-      this.top = (window.innerHeight - this.localHeight) * topRatio + document.body.scrollTop
+      this.left = (window.innerWidth - this.localWidth) * leftRatio + window.pageXOffset
+      this.top = (window.innerHeight - this.localHeight) * topRatio + window.pageYOffset
     },
     setCenter () {
       this.setPosition()
