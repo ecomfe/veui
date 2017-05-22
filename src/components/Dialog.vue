@@ -127,22 +127,25 @@ export default {
         return
       }
 
+      const windowHeight = window.innerHeight
+      const windowWidth = window.innerWidth
+
       // 不要让对话框拖到可视区外部去了
       this.left = this.dragInitX + distanceX
       if (this.left < 0) {
         this.left = 0
-      } else if (this.left + this.$refs.content.offsetWidth > window.innerWidth) {
-        this.left = window.innerWidth - this.$refs.content.offsetWidth
+      } else if (this.left + this.$refs.content.offsetWidth > windowWidth) {
+        this.left = windowWidth - this.$refs.content.offsetWidth
       }
 
       this.top = this.dragInitY + distanceY
       if (this.top < 0) {
         this.top = 0
       } else if (
-        this.$refs.content.offsetHeight < window.innerHeight &&
-        this.top + this.$refs.content.offsetHeight > window.innerHeight
+        this.$refs.content.offsetHeight < windowHeight &&
+        this.top + this.$refs.content.offsetHeight > windowHeight
       ) {
-        this.top = window.innerHeight - this.$refs.content.offsetHeight
+        this.top = windowHeight - this.$refs.content.offsetHeight
       }
 
       this.isDragged = true
@@ -308,12 +311,8 @@ export default {
   }
 
   &-box-mask {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(204, 204, 204, .6);
+    .fixed(0);
+    background: rgba(0, 0, 0, .5);
     overflow: auto;
   }
 
