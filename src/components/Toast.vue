@@ -55,9 +55,6 @@
 <style lang="less">
 @import "../styles/theme-default/lib.less";
 .veui-toast {
-  @veui-warning-color-primary: #fe9700;
-  @veui-warning-color-hover: #e48800;
-  @veui-info-color-hover: #3077e5;
   .veui-toast-style(@color, @shadow-color) {
     color: @color;
     border: 1px solid fadeOut(@color, 50%);
@@ -86,8 +83,8 @@
     .veui-toast-style(@veui-warning-color-primary, @veui-warning-color-hover);
   }
   &-info {
-    .veui-toast-style(@veui-theme-color-secondary, @veui-info-color-hover);
-    color: @veui-theme-color-primary;
+    .veui-toast-style(@veui-info-color-secondary, @veui-info-color-primary);
+    color: @veui-info-color-primary;
   }
   &-error {
     .veui-toast-style(@veui-alert-color-primary, @veui-alert-color-hover);

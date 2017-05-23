@@ -104,10 +104,9 @@
 @import "../styles/theme-default/lib.less";
 .veui-alert {
   @success: @veui-success-color-primary;
-  @warning: #fe9700;
-  @info: @veui-theme-color-primary;
+  @warning: @veui-warning-color-primary;
+  @info: @veui-info-color-primary;
   @error: @veui-alert-color-primary;
-  @icon-active-color: #3077e5;
   @message-hover-color: #72a9ff;
   @message-active-color: #5e9dff;
   position: relative;
@@ -136,7 +135,7 @@
     color: @warning;
   }
   &-info {
-    background-color: @veui-theme-color-sup-4;
+    background-color: @veui-info-color-sup-2;
     color: @info;
   }
   &-error {
@@ -150,7 +149,7 @@
       margin-left: 24px;
     }
     &.veui-alert-close-text {
-      color: @veui-theme-color-secondary;
+      color: @veui-info-color-secondary;
       &:hover,
       &:visited {
         color: @message-hover-color;
@@ -171,10 +170,10 @@
     }
     &:hover,
     &:visited {
-      color: @veui-theme-color-primary;
+      color: @veui-info-color-primary;
     }
     &:active {
-      color: @icon-active-color;
+      color: @veui-info-color-hover;
     }
     &:disabled {
       cursor: not-allowed;
