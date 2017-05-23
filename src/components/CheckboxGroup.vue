@@ -51,3 +51,21 @@ export default {
 }
 </script>
 
+<style lang="less">
+@import "../styles/theme-default/lib.less";
+
+.veui-checkboxgroup {
+  height: @veui-height-normal;
+  line-height: @veui-height-normal - 1;
+
+  &[ui~="small"] {
+    height: @veui-height-small;
+    line-height: @veui-height-small - 1;
+  }
+
+  &[ui~="large"] {
+    height: @veui-height-large;
+    line-height: @veui-height-large - 1;
+  }
+}
+</style>

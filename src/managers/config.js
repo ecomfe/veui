@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash'
+import cloneDeep from './cloneDeep'
 
 function set (obj, key, value, isOverride) {
   if (typeof key === 'object') {

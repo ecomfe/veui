@@ -6,6 +6,7 @@ import Dialog from './Dialog'
 import Overlay from './Overlay'
 import Breadcrumb from './Breadcrumb'
 import Input from './Input'
+import Form from './Form'
 import Calendar from './Calendar'
 import DatePicker from './DatePicker'
 import Select from './Select'
@@ -64,6 +65,11 @@ export default [
     path: '/input',
     name: 'Input',
     component: Input
+  },
+  {
+    path: '/form',
+    name: 'Form',
+    component: Form
   },
   {
     path: '/calendar',

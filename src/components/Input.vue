@@ -93,6 +93,9 @@ export default {
         // TODO
       }
     }
+  },
+  created () {
+    this.$on('labelclick', this.focus)
   }
 }
 </script>
@@ -111,6 +114,7 @@ export default {
   border-color: @veui-gray-color-sup-1;
   background-color: #fff;
   font-size: @veui-font-size-normal;
+  box-shadow: 0 0.5px 2px 0 rgba(0, 0, 0, 0.1) inset;
 
   &:hover {
     border-color: @veui-theme-color-primary;
