@@ -1,4 +1,8 @@
-import { isArray, isString } from 'lodash'
+import { isArray, isString, isObject } from 'lodash'
+
+function isVnode (vnode) {
+  return isObject(vnode) && vnode.componentOptions
+}
 
 /**
  * 根据ref拿到指定的DOM节点，主要有一下情况：
@@ -16,19 +20,36 @@ export function getNodes (ref, context) {
     return []
   }
 
-  let targetNodes
-  if (isString(ref)) {
-    targetNodes = context.$refs[ref]
-    targetNodes = isArray(targetNodes) ? targetNodes : [targetNodes]
-    targetNodes = targetNodes.map((item) => {
-      return item.$el || item
-    })
-  } else if (ref.$el) {
-    // 组件
-    targetNodes = [ref.$el]
-  } else if (ref.nodeType === 1 || ref.nodeType === 3) {
-    // dom元素节点和文本节点
-    targetNodes = [ref]
+  let vnodes = getVnodes(ref, context)
+  return vnodes.map(item => {
+    if (isVnode(item)) {
+      return item.elm
+    }
+    return item
+  })
+}
+
+export function getVnodes (ref, context) {
+  if (!ref) {
+    return []
   }
-  return targetNodes || []
+  let vnodes
+  if (isString(ref)) {
+    vnodes = context.$refs[ref]
+    vnodes = isArray(vnodes) ? vnodes : [vnodes]
+    vnodes = vnodes.map(item => item.$vnode || item)
+  } else {
+    ref = isArray(ref) ? ref : [ref]
+    vnodes = ref.map(item => {
+      if (item.$vnode) {
+        return item.$vnode
+      } else if (isVnode(item) ||
+        item.nodeType === 1 ||
+        item.nodeType === 3) {
+        // vnode节点、dom元素节点和文本节点
+        return item
+      }
+    })
+  }
+  return vnodes || []
 }
