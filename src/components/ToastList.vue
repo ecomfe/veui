@@ -40,7 +40,7 @@ export default {
 <style lang="less">
 @import "../styles/theme-default/lib.less";
 .veui-toast-list {
-  .absolute(@veui-nav-bar-height + 15px, _, _, 50%);
+  .fixed(@veui-nav-bar-height + 15px, _, _, 50%);
   transform: translateX(-50%);
   background: none;
   .veui-toast {
