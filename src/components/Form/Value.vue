@@ -169,6 +169,10 @@ export default {
     > .veui-input,
     > .veui-textarea {
       border-color: @veui-alert-color-primary;
+
+      &:focus {
+        .veui-shadow(glow, @veui-alert-color-primary);
+      }
     }
   }
 }
