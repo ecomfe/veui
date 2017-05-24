@@ -14,11 +14,9 @@
 
 <script>
 import bus from '../bus'
-// import {toast} from '@/managers/toast'
-import {ToastManager} from '@/managers/toast'
+import toast from '@/managers/toast'
 import Button from '@/components/Button'
 
-let toast = new ToastManager()
 let msg = [
   {
     type: 'success',
@@ -66,7 +64,7 @@ export default {
       if (type === 'all') {
         toast.add(this.msg)
       } else {
-        toast.add(this.msgMap[type])
+        toast[type](this.msgMap[type])
       }
     }
   },
