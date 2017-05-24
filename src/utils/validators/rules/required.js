@@ -4,6 +4,6 @@ export default {
   validate (val) {
     return !isFalsely(val)
   },
-  errMsg: '该项必须填写',
+  errMsg: '请填写',
   priority: 0
 }

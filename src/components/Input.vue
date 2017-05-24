@@ -161,6 +161,10 @@ export default {
   line-height: 1.5;
   resize: none;
 
+  &[rows] {
+    height: auto;
+  }
+
   &.veui-textarea-resizable {
     resize: both;
   }

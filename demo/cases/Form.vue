@@ -179,13 +179,9 @@
           </veui-form-value>
         </veui-form-row>
 
-        <veui-form-row class="two-name" label="昵称" label-for="firstName" tip='使用 label-for="refName" 来实现 for'>
-          <veui-form-value>
-            <veui-input name="lastName" placeholder="姓" v-model="storeData2.lastName"></veui-input>
-          </veui-form-value>
-
-          <veui-form-value>
-            <veui-input name="firstName" ref="firstName" placeholder="名" v-model="storeData2.firstName"></veui-input>
+        <veui-form-row label="介绍">
+          <veui-form-value rules="required">
+            <veui-input name="desc" rows="3" type="textarea" v-model="storeData4.desc"></veui-input>
           </veui-form-value>
         </veui-form-row>
 
@@ -338,7 +334,8 @@ export default {
       },
       storeData4: {
         name: '',
-        age: null
+        age: null,
+        desc: ''
       },
       dynamicNameRule: [
         {

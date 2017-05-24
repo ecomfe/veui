@@ -1,7 +1,7 @@
 <template>
   <div class="veui-form-value" :class="{'veui-form-value-invalid': invalid}">
     <slot></slot>
-    <p v-if="invalid" class="veui-form-value-error">{{ errMsg }}</p>
+    <p v-if="invalid" class="veui-form-value-error"><veui-icon name="exclamation-circle"></veui-icon>{{ errMsg }}</p>
   </div>
 </template>
 
@@ -10,11 +10,16 @@ import validator from '../../utils/validators'
 import cloneDeep from '../../managers/cloneDeep'
 import { includes, isBoolean, assign } from 'lodash'
 import { genParentTracker, getCustomModelProp, getCustomModelEvent } from '../../utils/helper'
+import Icon from '../Icon'
+import 'vue-awesome/icons/exclamation-circle'
 const { computed: computedForm } = genParentTracker('form')
 
 export default {
   name: 'veui-form-value',
   uiTypes: ['formValue'],
+  components: {
+    'veui-icon': Icon
+  },
   props: {
     rules: [String, Array]
   },
@@ -161,7 +166,8 @@ export default {
   }
 
   &-invalid {
-    > [class*="veui"] {
+    > .veui-input,
+    > .veui-textarea {
       border-color: @veui-alert-color-primary;
     }
   }
@@ -169,15 +175,23 @@ export default {
 
 .veui-form-value-error {
   position: absolute;
-  margin: 0;
+  margin: 4px 0 0;
   color: @veui-alert-color-primary;
+  vertical-align: top;
+
+  svg {
+    vertical-align: -2px;
+    margin-right: 7px;
+  }
 }
 
 .veui-form-value-invalid:last-child {
   .veui-form-value-error  {
     position: static;
     display: inline-block;
-    margin-left: 10px;
+    height: @veui-height-normal;
+    line-height: @veui-height-normal;
+    margin: 0 0 0 10px;
   }
 }
 
