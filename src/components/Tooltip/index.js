@@ -75,7 +75,8 @@ export default {
         constraints: [
           {
             to: 'window',
-            attachment: 'together'
+            attachment: 'together',
+            pin: true
           }
         ]
       }
