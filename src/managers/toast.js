@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import { isString, isArray, isObject } from 'lodash'
+import ToastList from '../components/ToastList'
 
-let Container = Vue.extend(require('@/components/ToastList'))
+let Container = Vue.extend(ToastList)
 
 class ToastManager {
 
@@ -32,49 +33,33 @@ class ToastManager {
     this.instance.remove(this.instance.messages[index])
   }
 
-  success (option) {
-    if (isString(option)) {
+  _show (message, type) {
+    let option = message
+    if (isString(message)) {
       option = {
-        type: 'success',
-        text: option
+        message
       }
     }
+    option.type = type
     this.add(option)
   }
 
-  warning (option) {
-    if (isString(option)) {
-      option = {
-        type: 'warning',
-        text: option
-      }
-    }
-    this.add(option)
+  success (message) {
+    this._show(message, 'success')
   }
 
-  info (option) {
-    if (isString(option)) {
-      option = {
-        type: 'info',
-        text: option
-      }
-    }
-    this.add(option)
+  warning (message) {
+    this._show(message, 'warning')
   }
 
-  error (option) {
-    if (isString(option)) {
-      option = {
-        type: 'error',
-        text: option
-      }
-    }
-    this.add(option)
+  info (message) {
+    this._show(message, 'info')
+  }
+
+  error (message) {
+    this._show(message, 'error')
   }
 }
 
-export {ToastManager}
-
 let toast = new ToastManager()
-
-export {toast}
+export default toast
