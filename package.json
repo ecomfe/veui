@@ -1,9 +1,9 @@
 {
   "name": "veui",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Baidu Enterprise UI for Vue.js.",
-  "author": "Justineo <justice360@gmail.com>",
-  "private": true,
+  "author": "ecomfe <ecomfe@baidu.com>",
+  "keywords": ["vue", "components", "ui", "baidu"],
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
