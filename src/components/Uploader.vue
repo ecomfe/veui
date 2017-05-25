@@ -462,10 +462,8 @@ function getProgress () {
 
 <style lang="less">
 @import "../styles/theme-default/lib.less";
-@prefix: veui-uploader;
-@prefix-button: veui-button;
 
-.@{prefix} {
+.veui-uploader {
   @width: 292px;
   @icon-size: 16px;
   @preview-size: 32px;
@@ -576,10 +574,10 @@ function getProgress () {
     }
     li:hover {
       background-color: @veui-gray-color-sup-3;
-      .@{prefix-button}[ui~="link"] {
+      .veui-button[ui~="link"] {
         background-color: @veui-gray-color-sup-3;
       }
-      .@{prefix-button}[ui~="delete"] {
+      .veui-button[ui~="delete"] {
         visibility: visible;
       }
     }
@@ -608,7 +606,7 @@ function getProgress () {
       }
     }
 
-    .@{prefix}-progress {
+    .veui-uploader-progress {
       width: ~"calc(100% - 3em)";
       top: 0;
       & + button {
@@ -636,10 +634,10 @@ function getProgress () {
       margin-right: 3px;
     }
 
-    .@{prefix}-list-file-name {
+    .veui-uploader-list-file-name {
       width: ~"calc(70% - "@preview-size~")";
     }
-    .@{prefix}-progress {
+    .veui-uploader-progress {
       width: ~"calc(100% - 3em)";
       top: (@preview-size - 14px) / 2;
 
@@ -711,7 +709,7 @@ function getProgress () {
         font-size: @icon-size;
       }
     }
-    .@{prefix}-progress {
+    .veui-uploader-progress {
       display: block;
     }
   }
@@ -746,7 +744,7 @@ function getProgress () {
   }
   &[ui~="horizontal"] {
     width: 100%;
-    .@{prefix}-list-file {
+    .veui-uploader-list-file {
       width: 100%;
       li {
         float: left;
@@ -754,7 +752,7 @@ function getProgress () {
         margin-right: 10px;
       }
     }
-    .@{prefix}-list-image li {
+    .veui-uploader-list-image li {
       float: left;
     }
   }
@@ -770,7 +768,7 @@ function getProgress () {
     height: 30px;
     line-height: 30px;
   }
-  .@{prefix-button}[ui~="delete"] {
+  .veui-button[ui~="delete"] {
     color: @veui-alert-color-primary;
     font-size: @icon-size;
     min-width: @icon-size;
