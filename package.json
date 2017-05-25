@@ -1,15 +1,16 @@
 {
   "name": "veui",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Baidu Enterprise UI for Vue.js.",
   "author": "Justineo <justice360@gmail.com>",
-  "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
-    "lint": "eslint --ext .js,.vue src test/unit/specs"
+    "lint": "eslint --ext .js,.vue src test/unit/specs",
+    "prepublish": "npm run build && cp -r ./src/* .",
+    "publish": "rm -rf ./components ./directives ./managers ./mixins ./styles ./utils ./index.js"
   },
   "dependencies": {
     "lodash": "^4.17.4",
@@ -80,7 +81,7 @@
     "vue-router": "^2.2.0",
     "vue-style-loader": "^2.0.0",
     "vue-template-compiler": "^2.3.0",
-    "webpack": "^2.2.1",
+    "webpack": "~2.5.1",
     "webpack-bundle-analyzer": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.16.1",

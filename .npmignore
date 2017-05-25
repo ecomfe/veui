@@ -1,0 +1,9 @@
+.*
+test
+static
+src
+build
+node_modules
+config
+demo
+index.html
