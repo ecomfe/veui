@@ -1,22 +1,22 @@
 <template>
   <div class="veui-form-value" :class="{'veui-form-value-invalid': invalid}">
     <slot></slot>
-    <p v-if="invalid" class="veui-form-value-error"><veui-icon name="exclamation-circle"></veui-icon>{{ errMsg }}</p>
+    <p v-if="invalid" class="veui-form-value-error" :title="errMsg"><veui-icon name="exclamation-circle"></veui-icon>{{ errMsg }}</p>
   </div>
 </template>
 
 <script>
-import validator from '../../utils/validators'
+import Validator from '../../utils/validators'
 import cloneDeep from '../../managers/cloneDeep'
 import { includes, isBoolean, assign } from 'lodash'
-import { genParentTracker, getCustomModelProp, getCustomModelEvent } from '../../utils/helper'
+import { genParentTracker, getCustomModelProp, getCustomModelEvent, splitToArray } from '../../utils/helper'
 import Icon from '../Icon'
 import 'vue-awesome/icons/exclamation-circle'
 const { computed: computedForm } = genParentTracker('form')
 
 export default {
   name: 'veui-form-value',
-  uiTypes: ['formValue'],
+  uiTypes: ['formValue', 'formContainer'],
   components: {
     'veui-icon': Icon
   },
@@ -26,9 +26,10 @@ export default {
   data () {
     return {
       invalid: false,
-      initialData: null,
+      invalidType: null,
       errMsg: '',
-      ruleCbStore: {}
+      rulesCbStore: {},
+      initialData: null
     }
   },
   computed: assign(
@@ -45,7 +46,7 @@ export default {
           let rules
           if (Array.isArray(this.rules)) {
             rules = cloneDeep(this.rules)
-            validator.initRules(rules)
+            Validator.initRules(rules)
           } else {
             rules = this.rules.trim().split(/\s+/).map(rule => {
               return {
@@ -53,7 +54,7 @@ export default {
                 value: true
               }
             })
-            validator.initRules(rules)
+            Validator.initRules(rules)
           }
           return rules
         }
@@ -63,13 +64,13 @@ export default {
       _reactiveRules () {
         return this._validateRules
           ? this._validateRules.filter(rule => {
-            if (!rule.trigger) {
+            if (!rule.triggers) {
               return false
             }
 
-            let trigger = Array.isArray(rule.trigger) ? rule.trigger : [rule.trigger]
-            // 没有写trigger按submit处理，写了trigger且不含submit才放进来
-            return !!rule.trigger && !includes(trigger, 'submit')
+            let triggers = splitToArray(rule.triggers)
+            // 没有写triggers按submit处理，写了triggers且不只是submit才放进来
+            return !!rule.triggers && !(triggers.length === 1 && triggers[0] === 'submit')
           })
           : []
       }
@@ -80,11 +81,10 @@ export default {
     _reactiveRules (newVal, oldVal) {
       let added = newVal || []
       if (oldVal && oldVal.length) {
-        let diff = validator.diffRules(newVal, oldVal)
+        let diff = Validator.diffRules(newVal, oldVal)
         diff.removed.forEach(rule => {
-          let trigger = Array.isArray(rule.trigger) ? rule.trigger : [rule.trigger]
-          trigger.forEach(trigger => {
-            this.input.$off(trigger, this.ruleCbStore[rule.name])
+          splitToArray(rule.triggers).forEach(trigger => {
+            this.input.$off(trigger, this.rulesCbStore[rule.name])
           })
         })
         added = diff.added
@@ -102,44 +102,46 @@ export default {
       let rules = this._validateRules
       let input = this.input
       let prop = getCustomModelProp(input)
-      let res = validator.validate(input[prop], rules)
+      let res = Validator.validate(input[prop], rules)
       if (this._isValid(res)) {
         this.hideValidity()
+        return res
       } else {
-        this.setValidity(res)
+        this.setValidity(res.err, res.name)
+        return res.err
       }
-
-      return res
     },
     _bindReactiveRules (rules) {
       let input = this.input
-      let prop = getCustomModelProp()
+      let prop = getCustomModelProp(input)
       rules && rules.forEach(rule => {
-        let trigger = Array.isArray(rule.trigger) ? rule.trigger : [rule.trigger]
-        trigger.forEach(trigger => {
+        splitToArray(rule.triggers).filter(event => event !== 'submit').forEach(event => {
           let me = this
           // TODO: dirty
-          assign(this.ruleCbStore, {
-            [trigger]: e => {
-              let res = validator.validate(input[prop], [rule])
+          assign(this.rulesCbStore, {
+            [event]: e => {
+              let res = Validator.validate(input[prop], [rule])
               if (me._isValid(res)) {
-                me.hideValidity()
+                me.hideValidity(rule.name)
               } else {
-                me.setValidity(res)
+                me.setValidity(res.err, rule.name)
               }
             }
           })
-          input.$on(trigger, this.ruleCbStore[trigger])
+          input.$on(event, this.rulesCbStore[event])
         })
       })
     },
-    setValidity (err) {
+    setValidity (err, invalidType) {
       this.invalid = true
+      this.invalidType = invalidType
       this.errMsg = err
     },
-    hideValidity () {
-      this.invalid = false
-      this.errMsg = ''
+    hideValidity (invalidType) {
+      if (!invalidType || this.invalidType === invalidType) {
+        this.invalid = false
+        this.errMsg = ''
+      }
     },
     _isValid (res) {
       return isBoolean(res) && res
@@ -150,6 +152,9 @@ export default {
   },
   mounted () {
     this._bindReactiveRules(this._reactiveRules)
+  },
+  beforeDestroy () {
+    this.form.items.splice(this.form.items.indexOf(this), 1)
   }
 }
 </script>

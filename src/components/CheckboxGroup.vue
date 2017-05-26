@@ -6,7 +6,7 @@
       v-for="(item, index) in items"
       :key="index"
       :true-value="item.value"
-      :disabled="item.disabled"
+      :disabled="item.disabled || realDisabled"
       :checked="value.indexOf(item.value) !== -1"
       @change="checked => handleChange(item.value, checked)">
       <slot v-bind="item">{{ item.label }}</slot>
@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     localName () {
-      return this.name || uniqueId('veui-checkboxgroup-')
+      return this.realName || uniqueId('veui-checkboxgroup-')
     }
   },
   methods: {

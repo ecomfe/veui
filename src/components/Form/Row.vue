@@ -10,7 +10,7 @@
 <script>
 export default {
   name: 'veui-form-row',
-  uiTypes: ['formRow'],
+  uiTypes: ['formRow', 'formContainer'],
   props: {
     label: String,
     tip: String,
@@ -42,6 +42,10 @@ export default {
 
   &:last-of-type {
     margin-bottom: 0;
+  }
+
+  > [class*="veui"]:not([class*="veui-form-key"]) {
+    vertical-align: top;
   }
 
   > [class*="veui"]:not([class*="veui-form-key"]),

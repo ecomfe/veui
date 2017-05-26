@@ -55,3 +55,7 @@ export function getCustomModelEvent (vm) {
 export function isFalsely (val) {
   return val == null || val === ''
 }
+
+export function splitToArray (val, separator = ',') {
+  return Array.isArray(val) ? val : val.split(separator)
+}

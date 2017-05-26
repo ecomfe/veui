@@ -5,20 +5,19 @@
 </template>
 
 <script>
-import { isBoolean, isFunction, pick, includes, keys, assign, zipObject, find } from 'lodash'
-import { promiseAllSettled, getCustomModelProp } from '../../utils/helper'
+import { isBoolean, isFunction, includes, assign, zipObject, find } from 'lodash'
+import { promiseAllSettled, getCustomModelProp, splitToArray } from '../../utils/helper'
 import cloneDeep from '../../managers/cloneDeep'
+import Validator from '../../utils/validators'
+import Vue from 'vue'
 
 export default {
   name: 'veui-form',
-  uiTypes: ['form'],
+  uiTypes: ['form', 'formContainer'],
 
   props: {
     data: Object,
-    readonly: Boolean,
-    disabled: Boolean,
-    noValidationOnSubmit: Boolean,
-    validators: Object,
+    validators: Array,
     hideError: Boolean,
     beforeValidate: Function,
     afterValidate: Function,
@@ -28,22 +27,48 @@ export default {
   data () {
     return {
       // 存 formValue 的
-      items: []
+      items: [],
+      handlersStore: {}
     }
   },
 
   computed: {
-    submitBtnRef () {
-      return this.submitBtn ? this.$vnode.context.$refs[this.submitBtn] : null
+    // submitBtnRef () {
+    //   return this.submitBtn ? this.$vnode.context.$refs[this.submitBtn] : null
+    // }
+    _reactiveValidators () {
+      return this.validators
+        ? this.validators.filter(validator => {
+          let fn = validator.handler
+          let triggers = validator.triggers
+          if (!isFunction(fn) || !validator.fields || !triggers) {
+            return false
+          }
+
+          triggers = splitToArray(triggers).filter(event => event !== 'submit')
+          // 去掉都是submit的
+          return triggers.length
+        })
+        : null
     }
   },
 
   watch: {
-    readonly (newVal) {
-      this._setReadOnly(newVal)
-    },
-    disable (newVal) {
-      this._setDisabled(newVal)
+    _reactiveValidators (newVal, oldVal) {
+      let added = newVal || []
+      if (oldVal && oldVal.length) {
+        let diff = Validator.diffRules(newVal, oldVal)
+        diff.removed.forEach(validator => {
+          let triggers = splitToArray(validator.trigger)
+          let fields = splitToArray(validator.fields)
+          let justified = fields.map((field, index) => ({field, event: triggers[index]}))
+          justified.forEach((field, event) => {
+            find(this.items, item => item.name === field).input.$off(event, this.handlersStore[`${fields.join(',')}-${field}-${event}`])
+          })
+        })
+        added = diff.added
+      }
+      this._bindReactiveValidators(added)
     }
   },
 
@@ -52,40 +77,47 @@ export default {
       // if (this.submitBtnRef) {
       //   this.submitBtnRef.loading = true
       // }
-      let me = this
       let data = this.data || this.getFormData()
-      if (!this.noValidationOnSubmit) {
-        return new Promise((resolve, reject) =>
-          isFunction(me.beforeValidate)
-            ? resolve(me.beforeValidate(data))
+      return new Promise((resolve, reject) =>
+        isFunction(this.beforeValidate)
+          ? resolve(this.beforeValidate.call(this.$vnode.context, data))
+          : resolve()
+      )
+      .then(this.validate.bind(this))
+      .then(
+        () => new Promise((resolve, reject) =>
+          isFunction(this.afterValidate)
+            ? resolve(this.afterValidate.call(this.$vnode.context, data))
             : resolve()
         )
-        .then(this.validate.bind(this))
-        .then(
-          () => new Promise((resolve, reject) =>
-            isFunction(me.afterValidate)
-              ? resolve(me.afterValidate(data))
-              : resolve()
-          ),
-          err => {
-            return this.$emit('invalid', err)
-          }
-        )
-        .then(this.$emit.bind(me, 'submit', data, e))
-      } else {
-        this.$emit('submit', data, e)
-      }
+      )
+      .then(
+        this.$emit.bind(this, 'submit', data, e),
+        err => {
+          this.$emit('invalid', err)
+        }
+      )
     },
 
-    _setReadOnly (readonly) {
-      this.items.forEach(item => {
-        item.input.readonly = readonly
-      })
-    },
-
-    _setDisabled (disabled) {
-      this.items.forEach(item => {
-        item.input.disabled = disabled
+    _bindReactiveValidators (validators) {
+      validators && validators.forEach(validator => {
+        let triggers = splitToArray(validator.triggers)
+        let fields = splitToArray(validator.fields)
+        let justified = fields.map((field, index) => ({field, trigger: triggers[index]}))
+        let targets = fields.map(name => find(this.items, item => name === item.input.name))
+        justified.forEach(({field, trigger}) => {
+          // TODO: dirty
+          assign(this.handlersStore, {
+            [`${fields.join(',')}-${field}-${trigger}`]: e => {
+              Vue.nextTick(() => validator.handler(
+                zipObject(fields, targets.map(target => target.input[getCustomModelProp(target.input)])),
+                zipObject(fields, targets),
+                this.$vnode.context
+              ))
+            }
+          })
+          find(targets, target => target.input.name === field).input.$on(trigger, this.handlersStore[`${fields.join(',')}-${field}-${trigger}`])
+        })
       })
     },
 
@@ -110,7 +142,7 @@ export default {
       let validators = this.validators
       if (Array.isArray(names) && names.length) {
         items = items.filter(item => includes(names, item.input.name))
-        validators = pick(validators, keys(validators).filter(validatorName => includes(names, validatorName)))
+        validators = validators.filter(validator => includes(names, validator.fields))
       }
 
       return promiseAllSettled(
@@ -124,20 +156,20 @@ export default {
             return Promise.resolve(true)
           }),
 
-          ...keys(validators).map(key => {
-            let fn = validators[key]
-            if (isFunction(fn)) {
-              let keys = key.split(',').map(name => name.trim())
-              let targets = keys.map(name => find(items, item => name === item.input.name))
+          ...validators.map(validator => {
+            let fn = validator.handler
+            if (isFunction(fn) && validator.fields) {
+              let fields = splitToArray(validator.fields)
+              let targets = fields.map(name => find(items, item => name === item.input.name))
               let itemRes = fn.apply(
                 this,
                 [
-                  zipObject(keys, targets.map(item => {
+                  zipObject(fields, targets.map(item => {
                     let input = item.input
                     let prop = getCustomModelProp(input)
                     return input[prop]
                   })),
-                  zipObject(keys, targets),
+                  zipObject(fields, targets),
                   this.$vnode.context
                 ]
               )
@@ -146,11 +178,11 @@ export default {
                 return itemRes.then(
                   val => ({ val }),
                   err => {
-                    return Promise.reject({ [key]: err })
+                    return Promise.reject({ [fields]: err })
                   }
                 )
               }
-              return itemRes ? Promise.resolve(itemRes) : Promise.reject({ [key]: itemRes })
+              return itemRes ? Promise.resolve(itemRes) : Promise.reject({ [fields]: itemRes })
             } else {
               return Promise.resolve(true)
             }
@@ -177,8 +209,7 @@ export default {
     }
   },
   mounted () {
-    this._setReadOnly(this.readonly)
-    this._setDisabled(this.disabled)
+    this._reactiveValidators && this._bindReactiveValidators(this._reactiveValidators)
   }
 }
 </script>

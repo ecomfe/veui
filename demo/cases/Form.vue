@@ -14,9 +14,16 @@
 
         <veui-form-row label="性别">
           <veui-form-value>
-            <veui-radioboxgroup type="radiobox" :items="storeData1.sexItems" name="sex" v-model="storeData1.sex"></veui-radioboxgroup>
+            <veui-select :options="storeData1.sexItems" name="sex" v-model="storeData1.sex"></veui-select>
           </veui-form-value>
           <p class="output">{{ outputData.sex }}</p>
+        </veui-form-row>
+
+        <veui-form-row label="婚姻">
+          <veui-form-value>
+            <veui-radioboxgroup :items="storeData1.marryItems" name="married" v-model="storeData1.married"></veui-radioboxgroup>
+          </veui-form-value>
+          <p class="output">{{ outputData.married }}</p>
         </veui-form-row>
 
         <veui-form-row label="爱好">
@@ -153,7 +160,12 @@
     </section>
     <section>
       <h2>表单提示和验证</h2>
-      <veui-form ref="form2" @submit="submit" @invalid="handleInvalid" :validators="validators" :afterValidate="afterValidate">
+      <veui-form ref="form2"
+        @submit="submit"
+        @invalid="handleInvalid"
+        :validators="validators"
+        :beforeValidate="beforeValidate"
+        :afterValidate="afterValidate">
 
         <veui-form-row label="姓名" tip="必填，默认提交时校验">
           <veui-form-value rules="required">
@@ -195,8 +207,14 @@
           </veui-form-value>
         </veui-form-row>
 
+        <veui-form-row label="爱好" tip="至少选择三个">
+          <veui-form-value :rules="habitRule">
+            <veui-checkboxgroup type="checkbox" :items="storeData1.habitItems" name="habit" v-model="storeData1.habit"></veui-checkboxgroup>
+          </veui-form-value>
+        </veui-form-row>
+
         <veui-form-row label="预期收入" class="salary" tip="联合校验，下限必须小于上限">
-          <veui-form-value rules="numeric required">
+          <veui-form-value rules="numeric required" class="start-form-value">
             <veui-input name="start" v-model="storeData2.start"></veui-input>
           </veui-form-value>
           <span class="veui-span">-</span>
@@ -206,8 +224,34 @@
         </veui-form-row>
 
         <veui-form-row>
-          <veui-button ui="primary" ref="submitBtn" @click="setLoading" :loading="isValidating" type="submit">提交</veui-button>
+          <veui-button ui="primary" ref="submitBtn" :loading="isValidating" type="submit">提交</veui-button>
         </veui-form-row>
+      </veui-form>
+    </section>
+    <section>
+      <h2>动态表单</h2>
+      <veui-form>
+
+        <veui-form-row label="负责人">
+          <veui-form-value>
+            <veui-input value="Evan You"></veui-input>
+          </veui-form-value>
+        </veui-form-row>
+
+        <veui-form-row v-for="(item, index) in storeData5" :label="'项目排期-' + (index + 1)">
+          <veui-form-value>
+            <veui-input placeholder="项目名称" v-model="item.project"></veui-input>
+          </veui-form-value>
+          <veui-form-value>
+            <veui-datepicker v-model="item.range" range></veui-datepicker>
+          </veui-form-value>
+          <veui-button @click="dynamicDelete(index)">删除</veui-button>
+        </veui-form-row>
+
+        <veui-form-row>
+          <veui-button ui="primary" @click="dynamicAdd">新增项目及排期</veui-button>
+        </veui-form-row>
+
       </veui-form>
     </section>
   </article>
@@ -248,7 +292,19 @@ export default {
       storeData1: {
         nickName: '李云腾',
         sex: '女',
+        married: false,
+        marryItems: [
+          {
+            value: true, label: '已婚'
+          },
+          {
+            value: false, label: '未婚'
+          }
+        ],
         sexItems: [
+          {
+            value: '-', label: '不告诉你'
+          },
           {
             value: '男', label: '男'
           },
@@ -341,7 +397,7 @@ export default {
         {
           name: 'required',
           value: true,
-          trigger: 'blur'
+          triggers: ['blur', 'input']
         },
         {
           name: 'minLength',
@@ -356,55 +412,82 @@ export default {
         {
           name: 'maxLength',
           value: 3,
-          trigger: 'change'
+          triggers: 'input'
+        }
+      ],
+      habitRule: [
+        {
+          name: 'minLength',
+          value: 3,
+          errMsg: '至少选择三个爱好',
+          triggers: 'change'
         }
       ],
       isValidating: false,
-      validators: {
-        'start,end' (values, refs) {
-          if (!values.start || !values.end) {
-            return true
-          }
+      validators: [
+        {
+          fields: ['start', 'end'],
+          handler (values, refs) {
+            if (!values.start || !values.end) {
+              return true
+            }
 
-          if (parseInt(values.start, 10) >= parseInt(values.end, 10)) {
-            refs.start.setValidity('下限必须小于上限')
-            return false
-          } else {
-            refs.start.hideValidity() && refs.end.hideValidity()
-            return true
-          }
+            if (parseInt(values.start, 10) >= parseInt(values.end, 10)) {
+              refs.start.setValidity('下限必须小于上限', 'custom')
+              return false
+            } else {
+              refs.start.hideValidity('custom') && refs.end.hideValidity('custom')
+              return true
+            }
+          },
+          triggers: 'change,input'
         },
-        'phone' (values, refs) {
-          return new Promise(function (resolve, reject) {
-            setTimeout(function () {
-              if (values.phone === '18888888888') {
-                refs.phone.setValidity('该手机已被注册')
-                return reject('该手机已被注册')
-              } else {
-                refs.phone.hideValidity()
-                return resolve()
-              }
-            }, 3000)
-          })
+        {
+          fields: 'phone',
+          handler (values, refs) {
+            return new Promise(function (resolve, reject) {
+              setTimeout(function () {
+                if (values.phone === '18888888888') {
+                  refs.phone.setValidity('该手机已被注册', 'custom')
+                  return reject('该手机已被注册')
+                } else {
+                  refs.phone.hideValidity('custom')
+                  return resolve()
+                }
+              }, 3000)
+            })
+          }
         }
+      ],
+      beforeValidate () {
+        bus.$emit('log', 'beforeValidate')
+        this.isValidating = true
       },
       afterValidate () {
         bus.$emit('log', 'afterValidate')
-        this.$vnode.context.isValidating = false
-      }
+        this.isValidating = false
+      },
+      storeData5: [
+        {
+          project: 'vuejs',
+          range: [moment().toDate(), moment().add(3, 'month').toDate()]
+        }
+      ]
     }
   },
 
   computed: {
     outputData () {
       let nickName = '🇨🇳 ' + this.storeData1.nickName || ''
-      let sex = this.storeData1.sex === '男' ? '👔' : '👗'
+      let married = this.storeData1.married ? '💍' : '💿'
+      let sex = this.storeData1.sex !== '-' ? this.storeData1.sex === '男' ? '👔' : '👗' : '👽'
       let habit = this.storeData1.habit.join(' ')
       let phone = '📞 ' + this.storeData1.phone
       let birthdayObj = moment(this.storeData1.birthday)
       let birthday = birthdayObj.isValid() ? birthdayObj.format('YYYY年M月D日') : ''
       return {
         nickName,
+        married,
         sex,
         habit,
         phone,
@@ -415,17 +498,21 @@ export default {
   },
 
   methods: {
-    setLoading (e) {
-      this.isValidating = true
-      // TODO: 需要 BUTTON 修改
-      this.$refs.form2._handleSubmit()
-    },
     handleInvalid (e) {
       bus.$emit('log', 'handleInvalid', e)
       this.isValidating = false
     },
     submit (data, e) {
       bus.$emit('log', 'submit', data, e)
+    },
+    dynamicAdd () {
+      this.storeData5.push({
+        project: null,
+        range: []
+      })
+    },
+    dynamicDelete (index) {
+      this.storeData5.splice(index, 1)
     }
   }
 }
@@ -488,6 +575,15 @@ export default {
 
   .veui-uploader-list-image li {
     margin: 0;
+  }
+
+  .start-form-value {
+    .veui-form-value-error:first-of-type {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 80px;
+      white-space: nowrap;
+    }
   }
 }
 </style>

@@ -30,18 +30,20 @@ export default {
     }
 
     let err
+    let name
     rules = Array.isArray(rules) ? rules : [rules]
     return rules.some(rule => {
       let validator = ruleValidators[rule.name]
       if (!validator.validate(val, rule.value)) {
         err = (rule.errMsg || validator.errMsg).replace(replaceRe, rule.value)
+        name = rule.name
         // 代表有错
         return true
       }
       // 代表没错
       return false
     })
-    ? err
+    ? { name, err }
     : true
   },
 
@@ -50,7 +52,7 @@ export default {
   },
 
   diffRules (newRules, oldRules) {
-    let ruleNames = map(oldRules, 'name')
+    let ruleNames = map(oldRules, oldRules[0].name ? 'name' : 'fileds')
     let removed = []
     let added = newRules.filter(newRule => {
       // 过滤出新添加和更新的
@@ -60,7 +62,7 @@ export default {
           // 没有改变的直接去掉，跳出遍历
           return true
         }
-        if (!equal && !includes(ruleNames, newRule.name)) {
+        if (!equal && !includes(ruleNames, newRule.name || newRule.fields)) {
           // 改变了的要看是不是新加的，查一下之前有没有这条规则，有的话说明是修改，标记为去掉
           removed.push(oldRule)
         }
