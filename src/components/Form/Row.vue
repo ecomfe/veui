@@ -44,14 +44,12 @@ export default {
     margin-bottom: 0;
   }
 
-  > [class*="veui"]:not([class*="veui-form-key"]) {
+  > [class*="veui"]:not([class*="veui-form-key"]):not([class*="veui-span"]) {
+    display: inline-block;
     vertical-align: top;
   }
 
-  > [class*="veui"]:not([class*="veui-form-key"]),
-  > .veui-span {
-    display: inline-block;
-
+  > [class*="veui"]:not([class*="veui-form-key"]) {
     & + [class*="veui"],
     & + .veui-span {
       margin-left: 10px;

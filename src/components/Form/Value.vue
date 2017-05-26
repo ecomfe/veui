@@ -11,6 +11,7 @@ import cloneDeep from '../../managers/cloneDeep'
 import { includes, isBoolean, assign } from 'lodash'
 import { genParentTracker, getCustomModelProp, getCustomModelEvent, splitToArray } from '../../utils/helper'
 import Icon from '../Icon'
+import Vue from 'vue'
 import 'vue-awesome/icons/exclamation-circle'
 const { computed: computedForm } = genParentTracker('form')
 
@@ -120,12 +121,14 @@ export default {
           // TODO: dirty
           assign(this.rulesCbStore, {
             [event]: e => {
-              let res = Validator.validate(input[prop], [rule])
-              if (me._isValid(res)) {
-                me.hideValidity(rule.name)
-              } else {
-                me.setValidity(res.err, rule.name)
-              }
+              Vue.nextTick(() => {
+                let res = Validator.validate(input[prop], [rule])
+                if (me._isValid(res)) {
+                  me.hideValidity(rule.name)
+                } else {
+                  me.setValidity(res.err, rule.name)
+                }
+              })
             }
           })
           input.$on(event, this.rulesCbStore[event])
@@ -134,7 +137,7 @@ export default {
     },
     setValidity (err, invalidType) {
       this.invalid = true
-      this.invalidType = invalidType
+      this.invalidType = invalidType || 'custom'
       this.errMsg = err
     },
     hideValidity (invalidType) {

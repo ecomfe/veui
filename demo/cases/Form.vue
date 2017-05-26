@@ -94,7 +94,8 @@
           <span class="veui-span">-</span>
           <veui-form-value>
             <veui-input name="end" v-model="storeData2.end"></veui-input>
-          </veui-form-value> 万
+          </veui-form-value>
+          <span class="veui-span">万</span>
         </veui-form-row>
       </veui-form>
     </section>
@@ -220,7 +221,8 @@
           <span class="veui-span">-</span>
           <veui-form-value rules="numeric required">
             <veui-input name="end" v-model="storeData2.end"></veui-input>
-          </veui-form-value> 万
+          </veui-form-value>
+          <span class="veui-span">万</span>
         </veui-form-row>
 
         <veui-form-row>
@@ -230,26 +232,32 @@
     </section>
     <section>
       <h2>动态表单</h2>
-      <veui-form>
+      <veui-form
+        @submit="submit"
+        @invalid="handleInvalid"
+        :validators="qindianValidator"
+        :beforeValidate="beforeValidate"
+        :afterValidate="afterValidate">
 
         <veui-form-row label="负责人">
           <veui-form-value>
-            <veui-input value="Evan You"></veui-input>
+            <veui-input name="qindian" v-model="storeData5.qindian"></veui-input>
           </veui-form-value>
         </veui-form-row>
 
-        <veui-form-row v-for="(item, index) in storeData5" :label="'项目排期-' + (index + 1)">
-          <veui-form-value>
+        <veui-form-row v-for="(item, index) in storeData5.scheduleInfo" :label="'项目排期-' + (index + 1)">
+          <veui-form-value :rules="requiredRule">
             <veui-input placeholder="项目名称" v-model="item.project"></veui-input>
           </veui-form-value>
-          <veui-form-value>
+          <veui-form-value :rules="requiredRule">
             <veui-datepicker v-model="item.range" range></veui-datepicker>
           </veui-form-value>
           <veui-button @click="dynamicDelete(index)">删除</veui-button>
         </veui-form-row>
 
         <veui-form-row>
-          <veui-button ui="primary" @click="dynamicAdd">新增项目及排期</veui-button>
+          <veui-button ui="primary" ref="submitBtn" :loading="isValidating" type="submit">提交</veui-button>
+          <veui-button @click="dynamicAdd">新增项目及排期</veui-button>
         </veui-form-row>
 
       </veui-form>
@@ -393,6 +401,13 @@ export default {
         age: null,
         desc: ''
       },
+      requiredRule: [
+        {
+          name: 'required',
+          value: true,
+          triggers: 'blur,input'
+        }
+      ],
       dynamicNameRule: [
         {
           name: 'required',
@@ -467,10 +482,27 @@ export default {
         bus.$emit('log', 'afterValidate')
         this.isValidating = false
       },
-      storeData5: [
+      storeData5: {
+        qindian: 'Evan You',
+        scheduleInfo: [
+          {
+            project: 'vuejs',
+            range: [moment().toDate(), moment().add(3, 'month').toDate()]
+          }
+        ]
+      },
+      qindianValidator: [
         {
-          project: 'vuejs',
-          range: [moment().toDate(), moment().add(3, 'month').toDate()]
+          fields: 'qindian,qindian',
+          handler (values, refs) {
+            if (values.qindian !== 'Evan You') {
+              refs.qindian.setValidity('该项为钦点项，就别改了')
+              return false
+            }
+            refs.qindian.hideValidity()
+            return true
+          },
+          triggers: 'input,submit'
         }
       ]
     }
@@ -508,7 +540,7 @@ export default {
     dynamicAdd () {
       this.storeData5.push({
         project: null,
-        range: []
+        range: null
       })
     },
     dynamicDelete (index) {

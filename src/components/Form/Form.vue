@@ -138,8 +138,8 @@ export default {
     },
 
     validate (names) {
-      let items = this.items
-      let validators = this.validators
+      let items = this.items || []
+      let validators = this.validators || []
       if (Array.isArray(names) && names.length) {
         items = items.filter(item => includes(names, item.input.name))
         validators = validators.filter(validator => includes(names, validator.fields))
@@ -151,7 +151,8 @@ export default {
             let itemRes = item.validate()
             // utils/Validator 是同步的，检查一下不是 true 就好，返回其他的都当成错误信息
             if (!isBoolean(itemRes) || !itemRes) {
-              return Promise.reject({ [item.input.name]: itemRes })
+              // 没有name的无法描述，invalid的时候就不抛了
+              return Promise.reject(item.input.name ? { [item.input.name]: itemRes } : undefined)
             }
             return Promise.resolve(true)
           }),
