@@ -17,9 +17,9 @@
       name="file"
       action="/upload"
       request-mode="xhr"
+      v-model="files"
       :disabled="false"
       :max-count="3"
-      :value="files"
       :max-size="10"
       :preview-image="previewImage"
       :needButton="needButton"
@@ -29,7 +29,6 @@
       :uploading-content="uploadingContent"
       @remove="removeFile"
       @cancel="cancelUploading"
-      @change="onChange"
       @success="onSuccess"
       @fail="onFailure">
       <template slot="tip">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
@@ -44,9 +43,9 @@
       name="file"
       action="/uploadiframe"
       request-mode="iframe"
+      v-model="filesIframe"
       :disabled="false"
       :max-count="3"
-      :value="filesIframe"
       :max-size="10"
       :preview-image="previewImageIframe"
       extention-types="jpg,jpeg,gif"
@@ -55,7 +54,6 @@
       :ui="uiIframe"
       @remove="removeFileIframe"
       @cancel="cancelUploadingIframe"
-      @change="onChangeIframe"
       @success="onSuccess"
       @fail="onFailure">
       <template slot="tip">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
@@ -65,7 +63,6 @@
 <script>
 import Uploader from '@/components/Uploader'
 import Button from '@/components/Button'
-import { cloneDeep } from 'lodash'
 import { ui } from '@/mixins'
 
 export default {
@@ -128,12 +125,6 @@ export default {
   },
   mixins: [ui],
   methods: {
-    onChange (fileList) {
-      this.files = cloneDeep(fileList)
-    },
-    onChangeIframe (fileList) {
-      this.filesIframe = cloneDeep(fileList)
-    },
     onSuccess (data) {
       console.log(data)
     },
