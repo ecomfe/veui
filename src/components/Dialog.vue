@@ -14,11 +14,17 @@
         v-drag>
         <span class="veui-dialog-content-head-title"
           v-if="localTitle"
-          v-text="localTitle"></span>
-        <span class="veui-dialog-content-head-title" v-else><slot name="title">弹窗标题</slot></span>
+          v-text="localTitle">
+        </span>
+        <span class="veui-dialog-content-head-title"
+          v-else>
+          <slot name="title">弹窗标题</slot>
+        </span>
         <a class="veui-dialog-content-head-close"
           v-show="localClosable"
-          @click="hide"><icon name="close"></icon></a>
+          @click="hide">
+          <icon name="close"></icon>
+        </a>
       </div>
       <div ref="body" class="veui-dialog-content-body"><slot></slot></div>
       <div ref="foot" class="veui-dialog-content-foot">
@@ -302,9 +308,12 @@ export default {
           background: #fff;
         }
 
-        &-head-title,
+        &-head-title {
+          color: @veui-gray-color-strong;
+        }
+
         &-head-close {
-          color: @veui-theme-color-primary;
+          color: @veui-gray-color-normal;
         }
       }
     }
@@ -334,8 +343,8 @@ export default {
     }
 
     &-head {
-      height: 42px;
-      line-height: 42px;
+      height: 40px;
+      line-height: 40px;
       background: @veui-theme-color-primary;
       border-radius: 4px 4px 0 0;
     }
@@ -352,11 +361,13 @@ export default {
     }
 
     &-foot {
-      padding: 20px;
+      padding: 15px 20px;
+      text-align: center;
     }
 
     &-foot .veui-button {
-      margin-right: 10px;
+      margin-right: 20px;
+      min-width: 94px;
     }
 
     &-head-close,
