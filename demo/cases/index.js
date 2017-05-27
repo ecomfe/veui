@@ -13,6 +13,8 @@ import Dropdown from './Dropdown'
 import Radiobox from './Radiobox'
 import Checkbox from './Checkbox'
 import BoxGroup from './BoxGroup'
+import Alert from './Alert'
+import Toast from './Toast'
 
 export default [
   {
@@ -89,5 +91,15 @@ export default [
     path: '/boxGroup',
     name: 'BoxGroup',
     component: BoxGroup
+  },
+  {
+    path: '/alert',
+    name: 'Alert',
+    component: Alert
+  },
+  {
+    path: '/toast',
+    name: 'Toast',
+    component: Toast
   }
 ]

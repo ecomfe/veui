@@ -10,23 +10,29 @@
 @veui-theme-color-sup-4: tint(@veui-theme-color-primary, 90%);     // #ebf3ff
 
 /* Additional colors */
-@veui-alert-color-hover: #e55252;
-@veui-alert-color-primary: #ff5b5b;
-@veui-alert-color-secondary: #ff9d9d;
-@veui-alert-color-sup-1: #ffdede;
-@veui-alert-color-sup-2: #ffefef;
-
-@veui-warning-color-hover: #e5a643;
-@veui-warning-color-primary: #ffb94b;
-@veui-warning-color-secondary: #ffd593;
-@veui-warning-color-sup-1: #fff1db;
-@veui-warning-color-sup-2: #fff8ed;
-
-@veui-success-color-hover: #399a92;
 @veui-success-color-primary: #3faca3;
-@veui-success-color-secondary: #8ccdcb;
-@veui-success-color-sup-1: #d9eeed;
-@veui-success-color-sup-2: #ecf7f6;
+@veui-success-color-hover: shade(@veui-success-color-primary, 10%);
+@veui-success-color-secondary: tint(@veui-success-color-primary, 40%);
+@veui-success-color-sup-1: tint(@veui-success-color-primary, 80%);
+@veui-success-color-sup-2: tint(@veui-success-color-primary, 90%);
+
+@veui-warning-color-primary: #fe9700;
+@veui-warning-color-hover: shade(@veui-warning-color-primary, 10%);
+@veui-warning-color-secondary: tint(@veui-warning-color-primary, 40%);
+@veui-warning-color-sup-1: tint(@veui-warning-color-primary, 80%);
+@veui-warning-color-sup-2: tint(@veui-warning-color-primary, 90%);
+
+@veui-info-color-primary: #3685ff;
+@veui-info-color-hover: shade(@veui-info-color-primary, 10%);
+@veui-info-color-secondary: tint(@veui-info-color-primary, 40%);
+@veui-info-color-sup-1: tint(@veui-info-color-primary, 80%);
+@veui-info-color-sup-2: tint(@veui-info-color-primary, 90%);
+
+@veui-alert-color-primary: #ff5b5b;
+@veui-alert-color-hover: shade(@veui-alert-color-primary, 10%);
+@veui-alert-color-secondary: tint(@veui-alert-color-primary, 40%);
+@veui-alert-color-sup-1: tint(@veui-alert-color-primary, 80%);
+@veui-alert-color-sup-2: tint(@veui-alert-color-primary, 90%);
 
 /* Grayscale colors */
 @veui-gray-color-strong: #333;
@@ -64,3 +70,4 @@
 @veui-height-normal: 36px;
 @veui-height-small: 30px;
 @veui-height-tiny: 24px;
+@veui-nav-bar-height: 70px;
