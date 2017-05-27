@@ -538,13 +538,13 @@ export default {
       bus.$emit('log', 'submit', data, e)
     },
     dynamicAdd () {
-      this.storeData5.push({
+      this.storeData5.scheduleInfo.push({
         project: null,
         range: null
       })
     },
     dynamicDelete (index) {
-      this.storeData5.splice(index, 1)
+      this.storeData5.scheduleInfo.splice(index, 1)
     }
   }
 }
