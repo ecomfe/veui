@@ -6,7 +6,7 @@
       mode: {{modeExclusive}}
     </p>
     <p>
-      <veui-button-group :items="items12" :active="active" :mode="modeExclusive"></veui-button-group>
+      <veui-button-group :items="items12" :active="active1" :mode="modeExclusive"></veui-button-group>
       mode: {{modeExclusive}}
     </p>
     <p>
@@ -221,7 +221,7 @@ export default {
         }
       ],
       active: ['menu2'],
-      active1: [0, 1],
+      active1: [2],
       active2: [2],
       vertical: true,
       modeExclusive: 'exclusive',

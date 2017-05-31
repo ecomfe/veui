@@ -4,10 +4,12 @@
       <input class="veui-switch-cb" type="checkbox" v-model="inputValue" @change="handleChange"  :disabled="disabled" :readonly="readonly">
       <span class="veui-switch-switch" :class="localState">
         <template v-if="disabled">
-          <span class="veui-remove-icon">x</span>
+          <!-- <span class="veui-remove-icon">x</span> -->
+        <icon name="remove"></icon>
         </template>
         <template v-if="readonly">
-          <span class="veui-switch-icon" :class="localState"></span>
+          <!-- <span class="veui-switch-icon" :class="localState"></span> -->
+          <icon name="window-minimize"></icon>
         </template>
       </span>
     </label>
@@ -16,6 +18,8 @@
 
 <script>
 import mixin from '../mixins/input'
+import 'vue-awesome/icons/remove'
+import 'vue-awesome/icons/window-minimize'
 
 export default {
   name: 'veui-switch',
@@ -78,10 +82,6 @@ export default {
 
   @label-height: @veui-height-normal;
   .computed_items(@label-height) {
-    .veui-remove-icon {
-      font-size: @label-height * 2 / 3;
-    }
-
     .veui-switch-label {
       height: @label-height;
       min-width: @label-height * 1.8;
@@ -114,11 +114,11 @@ export default {
       }
     }
 
-    .veui-remove-icon {
-      font-weight: bold;
-      position: relative;
-      color: @veui-gray-color-sup-1;
-    }
+    // .veui-remove-icon {
+    //   font-weight: bold;
+    //   position: relative;
+    //   color: @veui-gray-color-sup-1;
+    // }
 
     .veui-switch-icon {
       width: @label-height * 8 / 15;
@@ -215,16 +215,15 @@ export default {
   &[readonly] {
     .veui-switch-label {
       cursor: not-allowed;
-    }
 
-    .veui-switch-icon {
-      &.on {
-        background-color: @veui-theme-color-primary;
-      }
-
-      &.off {
-        left: 0;
-        background-color: @veui-gray-color-sup-1;
+      .veui-switch-switch {
+        &.on {
+          color: @veui-theme-color-primary;
+        }
+        
+        &.off {
+          color: @veui-gray-color-sup-1;
+        }
       }
     }
   }

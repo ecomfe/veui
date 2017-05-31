@@ -1,8 +1,8 @@
 <template>
-  <div class="veui-button-group" :ui="ui" :class="`${this.vertical ? 'vertical' : 'horiztontal'}`" :mode="mode" :active.sync="active"> 
+  <div class="veui-button-group" :ui="ui" :class="`${this.vertical ? 'veui-button-group-vertical' : 'veui-button-group-horiztontal'}`" :mode="mode" :active="active"> 
     <veui-button v-for="(item, index) in items" :key="index" :ui="ui" ref="button"
-    :class="{active: localActive.indexOf(item.value) >= 0, vertical: vertical}"
-    @click.stop="clickHandler(index, item, $event)">
+    :class="{'veui-button-active': localActive == item.value || localActive.indexOf(item.value) >= 0, vertical: vertical, multiple: multiple}"
+    @click.stop="handleClick(item)">
       <span v-if="item.icon"><icon :name="item.icon"></icon></span>
       {{ item.label }}
     </veui-button>
@@ -17,7 +17,7 @@
   const ALLOWED_MODE_TYPES = ['stateless', 'exclusive', 'multiple']
 
   export default {
-    name: 'veui-button-group',
+    name: 'veui-buttongroup',
     components: {
       'veui-button': Button,
       Icon
@@ -56,25 +56,19 @@
     },
     data () {
       return {
-        localActive: this.active || []
+        localActive: this.active || [],
+        multiple: this.mode === 'multiple'
       }
     },
-    computed: {
-    },
     methods: {
-      clickHandler (index, item, $event) {
-        console.log(index)
-
+      handleClick (item) {
         switch (this.mode) {
           case 'exclusive':
             this.localActive = [item.value]
-            console.log(this.localActive)
             break
           case 'multiple':
             if (includes(this.localActive, item.value)) {
-              console.log(this.localActive)
               let newIndex = this.localActive.indexOf(item.value)
-              console.log(newIndex)
               this.localActive.splice(newIndex, 1)
             } else {
               this.localActive.push(item.value)
@@ -84,13 +78,11 @@
             break
         }
         this.$emit('click', item.value)
-        // console.log(item.value)
 
         if (this.mode !== 'stateless') {
           this.$emit('change', item.active, item.value)
 
           this.$emit('update:active', this.localActive)
-          console.log(this.localActive)
         }
       }
     }
@@ -104,13 +96,13 @@
   .veui-button {
     /* border: 1px solid @veui-gray-color-sup-1; */
 
-    &:not(:first-child):not(:last-child) {
+    &:not(:first-child):not(:last-child):not(.multiple) {
       border-radius: 0;
     }
   }
 
-  &.horiztontal {
-    .veui-button:not(:last-child) {
+  &.veui-button-group-horiztontal {
+    .veui-button:not(:last-child):not(.multiple) {
       border-right: none;
     }
 
@@ -128,11 +120,15 @@
       &[ui~='link'] {
         margin-right: 10px;
       }
+
+      &.multiple {
+        margin-right: 10px;
+      }
     }
   }
 
-  &.vertical {
-    .veui-button:not(:last-child) {
+  &.veui-button-group-vertical {
+    .veui-button:not(:last-child):not(.multiple) {
       border-bottom: none;
     }
 
@@ -154,7 +150,7 @@
     border-color: @veui-theme-color-hover;
   }
 
-  .active {
+  .veui-button-active {
     background-color: @veui-theme-color-primary;
     color: #fff;
     .veui-shadow();
