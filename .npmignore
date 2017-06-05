@@ -1,9 +1,10 @@
 .*
-test
-static
-src
 build
-node_modules
 config
 demo
+node_modules
+src
+static
+test
 index.html
+publish.sh
