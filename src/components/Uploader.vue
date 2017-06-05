@@ -117,6 +117,9 @@ export default {
     'veui-uploader-progress': getProgress()
   },
   mixins: [ui, input],
+  model: {
+    event: 'change'
+  },
   props: {
     value: {
       type: Array
