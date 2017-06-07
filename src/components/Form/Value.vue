@@ -40,7 +40,7 @@ export default {
       }
     },
     {
-      _validateRules () {
+      localRules () {
         if (!this.rules) {
           return null
         } else {
@@ -62,9 +62,9 @@ export default {
       }
     },
     {
-      _reactiveRules () {
-        return this._validateRules
-          ? this._validateRules.filter(rule => {
+      interactiveRules () {
+        return this.localRules
+          ? this.localRules.filter(rule => {
             if (!rule.triggers) {
               return false
             }
@@ -79,7 +79,7 @@ export default {
     computedForm
   ),
   watch: {
-    _reactiveRules (newVal, oldVal) {
+    interactiveRules (newVal, oldVal) {
       let added = newVal || []
       if (oldVal && oldVal.length) {
         let diff = Validator.diffRules(newVal, oldVal)
@@ -90,7 +90,7 @@ export default {
         })
         added = diff.added
       }
-      this._bindReactiveRules(added)
+      this.bindInteractiveRules(added)
     }
   },
   methods: {
@@ -100,11 +100,11 @@ export default {
       input.$emit(event, cloneDeep(this.initialData))
     },
     validate () {
-      let rules = this._validateRules
+      let rules = this.localRules
       let input = this.input
       let prop = getCustomModelProp(input)
       let res = Validator.validate(input[prop], rules)
-      if (this._isValid(res)) {
+      if (this.isValid(res)) {
         this.hideValidity()
         return res
       } else {
@@ -112,7 +112,7 @@ export default {
         return res.err
       }
     },
-    _bindReactiveRules (rules) {
+    bindInteractiveRules (rules) {
       let input = this.input
       let prop = getCustomModelProp(input)
       rules && rules.forEach(rule => {
@@ -123,7 +123,7 @@ export default {
             [event]: e => {
               Vue.nextTick(() => {
                 let res = Validator.validate(input[prop], [rule])
-                if (me._isValid(res)) {
+                if (me.isValid(res)) {
                   me.hideValidity(rule.name)
                 } else {
                   me.setValidity(res.err, rule.name)
@@ -146,7 +146,7 @@ export default {
         this.errMsg = ''
       }
     },
-    _isValid (res) {
+    isValid (res) {
       return isBoolean(res) && res
     }
   },
@@ -154,7 +154,7 @@ export default {
     this.form.items.push(this)
   },
   mounted () {
-    this._bindReactiveRules(this._reactiveRules)
+    this.bindInteractiveRules(this.interactiveRules)
   },
   beforeDestroy () {
     this.form.items.splice(this.form.items.indexOf(this), 1)
@@ -177,6 +177,10 @@ export default {
     > .veui-input,
     > .veui-textarea {
       border-color: @veui-alert-color-primary;
+
+      &:hover {
+        .veui-shadow(glow, @veui-alert-color-primary);
+      }
 
       &:focus {
         .veui-shadow(glow, @veui-alert-color-primary);

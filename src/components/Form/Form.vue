@@ -1,5 +1,5 @@
 <template>
-  <form class="veui-form" @submit.prevent="_handleSubmit">
+  <form class="veui-form" @submit.prevent="handleSubmit">
     <slot></slot>
   </form>
 </template>
@@ -36,7 +36,7 @@ export default {
     // submitBtnRef () {
     //   return this.submitBtn ? this.$vnode.context.$refs[this.submitBtn] : null
     // }
-    _reactiveValidators () {
+    interactiveValidators () {
       return this.validators
         ? this.validators.filter(validator => {
           let fn = validator.handler
@@ -54,7 +54,7 @@ export default {
   },
 
   watch: {
-    _reactiveValidators (newVal, oldVal) {
+    interactiveValidators (newVal, oldVal) {
       let added = newVal || []
       if (oldVal && oldVal.length) {
         let diff = Validator.diffRules(newVal, oldVal)
@@ -68,12 +68,12 @@ export default {
         })
         added = diff.added
       }
-      this._bindReactiveValidators(added)
+      this.bindInteractiveValidators(added)
     }
   },
 
   methods: {
-    _handleSubmit (e) {
+    handleSubmit (e) {
       // if (this.submitBtnRef) {
       //   this.submitBtnRef.loading = true
       // }
@@ -99,7 +99,7 @@ export default {
       )
     },
 
-    _bindReactiveValidators (validators) {
+    bindInteractiveValidators (validators) {
       validators && validators.forEach(validator => {
         let triggers = splitToArray(validator.triggers)
         let fields = splitToArray(validator.fields)
@@ -210,7 +210,7 @@ export default {
     }
   },
   mounted () {
-    this._reactiveValidators && this._bindReactiveValidators(this._reactiveValidators)
+    this.interactiveValidators && this.bindInteractiveValidators(this.interactiveValidators)
   }
 }
 </script>

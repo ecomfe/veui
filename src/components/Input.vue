@@ -8,7 +8,7 @@
     @click="$emit('click', $event)"
     @blur="$emit('blur', $event)"
     @change="$emit('change', $event.target.value, $event)"
-    @input="_handleInput"
+    @input="handleInput"
   >
   <textarea
     v-else
@@ -20,7 +20,7 @@
     @click="$emit('click', $event)"
     @blur="$emit('blur', $event)"
     @change="$emit('change', $event.target.value, $event)"
-    @input="_handleInput"></textarea>
+    @input="handleInput"></textarea>
 </template>
 
 <script>
@@ -66,7 +66,7 @@ export default {
     }
   },
   methods: {
-    _handleInput ($event) {
+    handleInput ($event) {
       // 分3种情况
       // 1. 感知输入法，触发原生 input 事件就必须向上继续抛出
       // 2. 不感知输入法
