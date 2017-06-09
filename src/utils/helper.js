@@ -1,9 +1,10 @@
-import { includes } from 'lodash'
+import { includes, camelCase } from 'lodash'
+import { getByName } from './object'
 
-export function genParentTracker (name, type) {
+export function getTypedAncestorTracker (name, type) {
   return {
     computed: {
-      [name] () {
+      [camelCase(name)] () {
         let current = this.$parent
         while (current) {
           let { uiTypes } = current.$options
@@ -18,44 +19,26 @@ export function genParentTracker (name, type) {
   }
 }
 
-export function promiseAllSettled (promises) {
-  return Promise.all(
-    promises.map(p => Promise.resolve(p).then(
-      val => ({ val }),
-      err => ({ err })
-    ))
-  )
-}
-
-export function getTypeByInstance (obj) {
-  if (obj !== null && obj !== undefined) {
-    return getType(obj.constructor)
-  } else {
-    return obj
+export function isTopestType (vm, type) {
+  let parent = vm.$parent
+  while (parent && !includes(getByName('$options.uiTypes', parent), type)) {
+    parent = parent.$parent
   }
+  return !parent
 }
 
-export function getType (fn) {
-  const match = fn && fn.toString().match(/^\s*function (\w+)/)
-  return match ? match[1] : ''
+export function getModelProp (vm) {
+  return getByName('$options.model.prop', vm) || 'value'
 }
 
-export function isType (type, fn) {
-  return getType(fn) === getType(type)
+export function getModelEvent (vm) {
+  return getByName('$options.model.event', vm) || 'input'
 }
 
-export function getCustomModelProp (vm) {
-  return (vm && vm.$options && vm.$options.model && vm.$options.model.prop) || 'value'
+export function isFalsy (val) {
+  return val == null || val === '' || val === false
 }
 
-export function getCustomModelEvent (vm) {
-  return (vm && vm.$options && vm.$options.model && vm.$options.model.event) || 'input'
-}
-
-export function isFalsely (val) {
-  return val == null || val === ''
-}
-
-export function splitToArray (val, separator = ',') {
-  return Array.isArray(val) ? val : val.split(separator)
-}
+// export function splitToArray (val, separator = ',') {
+//   return Array.isArray(val) ? val : val.split(separator).map(item => item && item.trim())
+// }

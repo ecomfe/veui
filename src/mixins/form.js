@@ -1,2 +1,2 @@
-import { genParentTracker } from '../utils/mixins'
-export default genParentTracker('form')
+import { getTypedAncestorTracker } from '../utils/mixins'
+export default getTypedAncestorTracker('form')

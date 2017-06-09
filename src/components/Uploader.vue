@@ -6,7 +6,7 @@
         :class="{'veui-uploader-input-label-disabled': disabled}"
         ui="aux" ref="label">
         <icon class="veui-uploader-input-label-icon" name="upload"></icon><slot name="text">选择文件</slot>
-        <input hidden="hidden" type="file" ref="input" @change="onChange" :name="name" :disabled="disabled" :accept="accept" multiple>
+        <input hidden="hidden" type="file" ref="input" @change="onChange" :name="realName" :disabled="disabled" :accept="accept" multiple>
       </label>
       <slot name="button"></slot>
       <span class="veui-uploader-tip"><slot name="tip"></slot></span>
@@ -75,7 +75,7 @@
       <li v-if="uploaderType === 'image' && !needButton" key="input">
         <label class="veui-uploader-input-label-image"
           :class="{'veui-uploader-input-label-disabled': disabled}"
-          ref="label"><input hidden type="file" ref="input" @change="onChange" :name="name" :disabled="disabled" :accept="accept" multiple>
+          ref="label"><input hidden type="file" ref="input" @change="onChange" :name="realName" :disabled="disabled" :accept="accept" multiple>
         </label>
       </li>
     </transition-group>

@@ -1,4 +1,4 @@
-import { isType, getTypeByInstance } from '../../helper'
+import { isType, getTypeByInstance } from '../../utils/lang'
 
 export default {
   validate (val, ruleValue) {

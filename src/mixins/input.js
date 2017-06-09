@@ -1,7 +1,8 @@
-import { genParentTracker } from '../utils/helper'
-import cloneDeep from '../managers/cloneDeep'
+import { getTypedAncestorTracker, getModelProp, isTopestType } from '../utils/helper'
+import { getByName } from '../utils/object'
+import { clone } from '../managers'
 
-const { computed: computedFormValue } = genParentTracker('formValue')
+const { computed: computedFormField } = getTypedAncestorTracker('form-field')
 
 export default {
   uiTypes: ['input'],
@@ -10,11 +11,37 @@ export default {
     readonly: Boolean,
     disabled: Boolean
   },
-  computed: computedFormValue,
-  mounted () {
-    if (this.formValue) {
-      let prop = this.$options.model && this.$options.model.prop || 'value'
-      this.formValue.initialData = cloneDeep(this[prop])
+  data () {
+    return {
+      initialData: undefined
+    }
+  },
+  computed: {
+    realName () {
+      return (this.formField && this.formField.name) || this.name
+    },
+    isTopestInput () {
+      return isTopestType(this, 'input')
+    },
+    realDisabled () {
+      return this.disabled || getByName('formField.realDisabled', this)
+    },
+    realReadOnly () {
+      return this.readonly || getByName('formField.realDisabled', this)
+    },
+    ...computedFormField
+  },
+  created () {
+    if (this.formField && this.isTopestInput) {
+      this.formField.inputs.push(this)
+      this.formField.bindInteractiveRules([this])
+      this.formField.form && this.formField.form.bindInteractiveValidators({ input: this })
+    }
+    this.initialData = clone.exec(this[getModelProp(this)])
+  },
+  beforeDestroy () {
+    if (this.formField && this.isTopestInput) {
+      this.formField.inputs.splice(this.formField.inputs.indexOf(this), 1)
     }
   }
 }

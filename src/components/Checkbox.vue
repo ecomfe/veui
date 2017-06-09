@@ -45,7 +45,8 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = pick(this.$props, 'name', 'checked', 'indeterminate')
+      let attrs = pick(this.$props, 'checked', 'indeterminate')
+      attrs.name = this.realName
       attrs.disabled = this.realDisabled
       attrs.readonly = this.realReadonly
       return attrs

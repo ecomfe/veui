@@ -1,8 +1,8 @@
-import { isFalsely } from '../../helper'
+import { isFalsy } from '../../utils/helper'
 
 export default {
   validate (val, ruleValue) {
-    return !isFalsely(val) ? val >= ruleValue : true
+    return !isFalsy(val) ? val >= ruleValue : true
   },
   errMsg: '不能大于%{ruleValue}',
   priority: 200

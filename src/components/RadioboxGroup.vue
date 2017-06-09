@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     localName () {
-      return this.name || uniqueId('veui-radioboxgroup-')
+      return this.realName || uniqueId('veui-radioboxgroup-')
     }
   },
   methods: {

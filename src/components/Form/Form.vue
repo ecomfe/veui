@@ -5,37 +5,40 @@
 </template>
 
 <script>
-import { isBoolean, isFunction, includes, assign, zipObject, find } from 'lodash'
-import { promiseAllSettled, getCustomModelProp, splitToArray } from '../../utils/helper'
-import cloneDeep from '../../managers/cloneDeep'
-import Validator from '../../utils/validators'
+import { isBoolean, isFunction, includes, assign, zipObject, map, keys, partial } from 'lodash'
+import { allSettled } from '../../utils/promise'
+import { rule } from '../../managers'
 import Vue from 'vue'
 
 export default {
   name: 'veui-form',
-  uiTypes: ['form', 'formContainer'],
+  uiTypes: ['form', 'form-container'],
 
   props: {
-    data: Object,
+    // 假设 validator 的 fields 为 'a,b,c'，triggers 如下，最后生成的结果如下
+    // ['change', 'blur,input,xxx', 'submit'] => a(change), b(blur,input,xxx), c(submit)
+    // ['blur']                               => a(blur), b(submit), c(submit)
+    // 'blur,input'                           => a(blur,input), b(blur,input), c(blur,input)
+    // 'blur'                                 => a(blur), b(blur), c(blur)
     validators: Array,
-    hideError: Boolean,
     beforeValidate: Function,
     afterValidate: Function,
-    submitBtn: String
+    disabled: Boolean,
+    readonly: Boolean
   },
 
   data () {
     return {
-      // 存 formValue 的
-      items: [],
-      handlersStore: {}
+      fields: [],
+      handlers: {}
     }
   },
 
   computed: {
-    // submitBtnRef () {
-    //   return this.submitBtn ? this.$vnode.context.$refs[this.submitBtn] : null
-    // }
+    fieldsMap () {
+      let fields = this.fields.filter(field => field.name)
+      return zipObject(map(fields, 'name'), fields)
+    },
     interactiveValidators () {
       return this.validators
         ? this.validators.filter(validator => {
@@ -45,11 +48,38 @@ export default {
             return false
           }
 
-          triggers = splitToArray(triggers).filter(event => event !== 'submit')
+          // 参照上述 props.validator 支持的格式
+          triggers = (Array.isArray(triggers) ? triggers : [triggers])
+            .filter(events => events.split(',').filter(event => event !== 'submit').length)
+
           // 去掉都是submit的
           return triggers.length
         })
         : null
+    },
+    interactiveValidatorsMap () {
+      let singleFieldMap = {}
+      this.interactiveValidators && this.interactiveValidators.forEach(validator => {
+        let fieldNames = validator.fields
+        let triggers = validator.triggers
+        // 这里肯定有 triggers
+        fieldNames.split(',').forEach((name, index) => {
+          let event = (Array.isArray(triggers) ? triggers[index] : triggers)
+            .split(',').filter(event => event !== 'submit')
+          if (event) {
+            singleFieldMap[name] = singleFieldMap[name] || []
+            singleFieldMap[name].push({
+              event,
+              validator
+            })
+          }
+        })
+      })
+      return singleFieldMap
+    },
+    formData () {
+      let fields = this.fields.filter(field => !field.isAllDisabled)
+      return assign({}, ...fields.map(field => ({ [field.name]: field.submittedValue })))
     }
   },
 
@@ -57,27 +87,43 @@ export default {
     interactiveValidators (newVal, oldVal) {
       let added = newVal || []
       if (oldVal && oldVal.length) {
-        let diff = Validator.diffRules(newVal, oldVal)
+        let diff = rule.diffRules(newVal, oldVal)
         diff.removed.forEach(validator => {
-          let triggers = splitToArray(validator.trigger)
-          let fields = splitToArray(validator.fields)
-          let justified = fields.map((field, index) => ({field, event: triggers[index]}))
-          justified.forEach((field, event) => {
-            find(this.items, item => item.name === field).input.$off(event, this.handlersStore[`${fields.join(',')}-${field}-${event}`])
-          })
+          let triggers = validator.triggers
+          let fieldNames = validator.fields.split(',')
+
+          // 这里的 triggers 应该也过滤过了
+          if (Array.isArray(triggers)) {
+            let justified = fieldNames.map((name, index) => ({name, event: triggers[index]}))
+            justified.forEach(({ name, event }) => {
+              if (event) {
+                let handlerName = `${fieldNames.join(',')}-${name}-${event}`
+                this.fieldsMap[name].removeInteractiveValidator(
+                  event,
+                  this.handlers[handlerName]
+                )
+                delete this.handlers[handlerName]
+              }
+            })
+          } else {
+            fieldNames.forEach(name => {
+              triggers.split(',').forEach(event => {
+                let handlerName = `${fieldNames.join(',')}-${name}-${event}`
+                this.fieldsMap[name].removeInteractiveValidator(event, this.handlers[handlerName])
+                delete this.handlers[handlerName]
+              })
+            })
+          }
         })
         added = diff.added
       }
-      this.bindInteractiveValidators(added)
+      this.bindInteractiveValidators({ validators: added })
     }
   },
 
   methods: {
     handleSubmit (e) {
-      // if (this.submitBtnRef) {
-      //   this.submitBtnRef.loading = true
-      // }
-      let data = this.data || this.getFormData()
+      let data = this.formData
       return new Promise((resolve, reject) =>
         isFunction(this.beforeValidate)
           ? resolve(this.beforeValidate.call(this.$vnode.context, data))
@@ -99,60 +145,103 @@ export default {
       )
     },
 
-    bindInteractiveValidators (validators) {
-      validators && validators.forEach(validator => {
-        let triggers = splitToArray(validator.triggers)
-        let fields = splitToArray(validator.fields)
-        let justified = fields.map((field, index) => ({field, trigger: triggers[index]}))
-        let targets = fields.map(name => find(this.items, item => name === item.input.name))
-        justified.forEach(({field, trigger}) => {
-          // TODO: dirty
-          assign(this.handlersStore, {
-            [`${fields.join(',')}-${field}-${trigger}`]: e => {
-              Vue.nextTick(() => validator.handler(
-                zipObject(fields, targets.map(target => target.input[getCustomModelProp(target.input)])),
-                zipObject(fields, targets),
-                this.$vnode.context
-              ))
-            }
-          })
-          find(targets, target => target.input.name === field).input.$on(trigger, this.handlersStore[`${fields.join(',')}-${field}-${trigger}`])
+    /**
+     * 存在两种情况进入这个函数
+     * 1. input 被添加到 form 中，包括动态添加field或者在field中动态添加input，这个时候传递新增的 input
+     * 2. validators 产生更新，不需要指定 input
+     *
+     * @param  {Component} [input] InputComponent
+     * @param  {Array} [validators=this.interactiveValidators] 配置
+     */
+    bindInteractiveValidators ({ input, validators = this.interactiveValidators }) {
+      let cb = (fieldNames, handler, e) => {
+        fieldNames = fieldNames.split(',')
+        Vue.nextTick(() => {
+          let validities = handler(
+            ...fieldNames.map(name => this.fieldsMap[name].submittedValue)
+          )
+          // 这里不需要 return 了，因为是 interactive 的，没人接 Promise，直接 catch 掉
+          let defaultErr = zipObject(fieldNames, [])
+          if (validities && isFunction(validities.then)) {
+            return validities.then(val => true)
+              .catch(err => err)
+              .then(res => this.handleValidities(res || defaultErr, fieldNames))
+          }
+          this.handleValidities(validities || defaultErr, fieldNames)
         })
-      })
-    },
-
-    getFormData (names) {
-      let items = this.items
-      if (names && (Array.isArray(names) && names.length)) {
-        items = items.filter(item => includes(names, item.input.name))
-      } else {
-        items = items.filter(item => item.input.name)
       }
-      return assign({}, ...items.map(item => {
-        let input = item.input
-        let prop = getCustomModelProp(input)
-        return {
-          [input.name]: cloneDeep(input[prop])
-        }
-      }))
+
+      if (input) {
+        let fieldName = input.formField.name
+        let config = this.interactiveValidatorsMap[fieldName]
+        config && config.forEach(({ event, validator }) => {
+          let fieldNames = validator.fields
+          // 比如写了个多组件联合校验
+          //
+          // {
+          //   fields: ['start', 'end'],
+          //   handler (start, end) {
+          //     if (!start || !end) {
+          //       return true
+          //     }
+
+          //     if (parseInt(start, 10) >= parseInt(end, 10)) {
+          //       return {
+          //         start: '下限必须小于上限'
+          //       }
+          //     }
+          //     return true
+          //   },
+          //   triggers: 'change,input'
+          // }
+          //
+          //
+          // 那么这里就是 'start,end-start-change', 'start,end-end-input'
+          let handlerName = `${fieldNames}-${fieldName}-${event}`
+          !this.handlers[handlerName] && assign(
+            this.handlers,
+            { [handlerName]: partial(cb, fieldNames, validator.handler) }
+          )
+          input.$on(event, this.handlers[handlerName])
+        })
+      } else {
+        validators && validators.forEach(validator => {
+          let triggers = validator.triggers
+          let fieldNames = validator.fields
+
+          fieldNames.split(',').forEach((name, index) => {
+            let events = Array.isArray(triggers) ? triggers : triggers.split(',')
+            events.forEach(event => {
+              if (!event || event === 'submit') {
+                return
+              }
+
+              let handlerName = `${fieldNames}-${name}-${event}`
+              assign(this.handlers, { [handlerName]: partial(cb, fieldNames, validator.handler) })
+              this.fieldsMap[name].addInteractiveValidator(event, this.handlers[handlerName])
+            })
+          })
+        })
+      }
     },
 
     validate (names) {
-      let items = this.items || []
+      // fieldset 可以有 name，但是不会有直接的 input，没有校验规则，只能显示集合校验的出错信息，校验的时候要排除
+      let fields = (this.fields || []).filter(field => field.inputs && field.inputs.length)
       let validators = this.validators || []
       if (Array.isArray(names) && names.length) {
-        items = items.filter(item => includes(names, item.input.name))
+        fields = fields.filter(field => includes(names, field.name))
         validators = validators.filter(validator => includes(names, validator.fields))
       }
 
-      return promiseAllSettled(
+      return allSettled(
         [
-          ...items.map(item => {
-            let itemRes = item.validate()
+          ...fields.map(field => {
+            let validity = field.validate()
             // utils/Validator 是同步的，检查一下不是 true 就好，返回其他的都当成错误信息
-            if (!isBoolean(itemRes) || !itemRes) {
+            if (!isBoolean(validity) || !validity) {
               // 没有name的无法描述，invalid的时候就不抛了
-              return Promise.reject(item.input.name ? { [item.input.name]: itemRes } : undefined)
+              return Promise.reject(field.name ? { [field.name]: validity } : {})
             }
             return Promise.resolve(true)
           }),
@@ -160,31 +249,41 @@ export default {
           ...validators.map(validator => {
             let fn = validator.handler
             if (isFunction(fn) && validator.fields) {
-              let fields = splitToArray(validator.fields)
-              let targets = fields.map(name => find(items, item => name === item.input.name))
-              let itemRes = fn.apply(
+              let fields = validator.fields.split(',')
+              let targets = fields.map(name => this.fieldsMap[name])
+              let validities = fn.apply(
                 this,
-                [
-                  zipObject(fields, targets.map(item => {
-                    let input = item.input
-                    let prop = getCustomModelProp(input)
-                    return input[prop]
-                  })),
-                  zipObject(fields, targets),
-                  this.$vnode.context
-                ]
+                targets.map(field => field && field.submittedValue)
               )
-              // 异步校验交给返回的 Promise，对于同步校验，true 代表校验通过
-              if (itemRes && isFunction(itemRes.then)) {
-                return itemRes.then(
-                  val => ({ val }),
+
+              let defaultErr = zipObject(fields, [])
+              // 异步校验交给返回的 Promise，对于同步校验，true 代表校验通过，false 代表不通过但是没有出错信息，其他当成 { fieldName1: errMsg, ... } 处理
+              // 异步校验
+              if (validities && isFunction(validities.then)) {
+                return validities.then(
+                  val => {
+                    this.handleValidities(true, fields)
+                    return { val }
+                  },
                   err => {
-                    return Promise.reject({ [fields]: err })
+                    let res = err || defaultErr
+                    this.handleValidities(res, fields)
+                    return Promise.reject(res)
                   }
                 )
               }
-              return itemRes ? Promise.resolve(itemRes) : Promise.reject({ [fields]: itemRes })
+
+              let res = validities || defaultErr
+              this.handleValidities(res, fields)
+              // 同步校验但是出错
+              if (!isBoolean(validities) || !validities) {
+                return Promise.reject(res)
+              }
+              // 同步校验并且通过
+              return Promise.resolve(validities)
             } else {
+              // 没有回调或者校验项
+              // TODO: 补个warn？
               return Promise.resolve(true)
             }
           })
@@ -203,14 +302,35 @@ export default {
       )
     },
 
+    /**
+     * 处理validator产生的校验信息
+     *
+     * @param  {Boolean|Object} validities true或者出错的Object
+     * @param  {Array} [fieldNames] 校验的field集合
+     */
+    handleValidities (validities, fieldNames) {
+      if (isBoolean(validities) && validities) {
+        fieldNames.forEach(name => {
+          let field = this.fieldsMap[name]
+          field && field.hideValidity(fieldNames.join(','))
+        })
+      } else {
+        keys(validities).forEach(name => {
+          let field = this.fieldsMap[name]
+          field && field.validities.unshift({
+            valid: false,
+            message: validities[field.name],
+            invalidType: fieldNames.join(',')
+          })
+        })
+      }
+    },
+
     reset () {
-      this.items.forEach(item => {
-        item.resetValue()
+      this.fields.forEach(field => {
+        field.resetValue()
       })
     }
-  },
-  mounted () {
-    this.interactiveValidators && this.bindInteractiveValidators(this.interactiveValidators)
   }
 }
 </script>
@@ -221,43 +341,20 @@ export default {
 .veui-form[ui~="inline"] {
   .clearfix();
 
-  .veui-form-row {
+  .veui-form-field-set,
+  .veui-form-field {
+    display: inline-block;
     margin-bottom: 0;
-    float: left;
+    clear: none;
 
-    .veui-form-key,
-    .veui-form-key-empty {
-      float: left;
+    & > .veui-form-key {
       width: auto;
     }
 
-    & + .veui-form-row {
+    & + .veui-form-field-set,
+    & + .veui-form-field {
       margin-left: 15px;
     }
-  }
-
-  fieldset {
-    margin: 0;
-    padding: 0;
-    border: none;
-
-    .veui-form-row {
-      &:first-child {
-        .veui-form-key {
-          padding-left: 15px;
-          vertical-align: middle;
-        }
-      }
-
-      [class*="veui"][ui~="alt"] {
-        box-shadow: none;
-      }
-    }
-
-    background-color: @veui-gray-color-sup-3;
-    border-color: @veui-gray-color-sup-3;
-    color: @veui-text-color-normal;
-    .veui-shadow();
   }
 }
 </style>

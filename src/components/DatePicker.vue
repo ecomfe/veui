@@ -305,5 +305,18 @@ export default {
       color: @veui-theme-color-primary;
     }
   }
+
+  &[ui~="alt"] {
+    .veui-button {
+      border-color: @veui-gray-color-sup-3;
+      background-color: @veui-gray-color-sup-3;
+    }
+
+    .veui-button:hover,
+    .veui-button:focus {
+      border-color: @veui-gray-color-sup-4;
+      background-color: @veui-gray-color-sup-4;
+    }
+  }
 }
 </style>

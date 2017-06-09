@@ -1,4 +1,4 @@
-import cloneDeep from './cloneDeep'
+import clone from './clone'
 
 function set (obj, key, value, isOverride) {
   if (typeof key === 'object') {
@@ -33,7 +33,7 @@ export class ConfigManager {
   }
 
   get (key) {
-    return cloneDeep(this.store[key])
+    return clone.exec(this.store[key])
   }
 }
 
