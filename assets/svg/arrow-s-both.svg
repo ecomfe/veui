@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.1 (39012) - http://www.bohemiancoding.com/sketch -->
+    <title>arrow-s-both</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="V3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Dux-Icon-V2-@16-预览版" transform="translate(-288.000000, -1424.000000)" fill-rule="nonzero" fill="#000000">
+            <g id="arrow-s-both" transform="translate(296.000000, 1432.000000) scale(1, -1) rotate(90.000000) translate(-296.000000, -1432.000000) translate(288.000000, 1424.000000)">
+                <path d="M4.29352643,4.2942649 C4.92374953,3.66516903 6,4.11153099 6,5.00200433 L6,11.0020043 C6,11.8924777 4.92374953,12.3388396 4.29352643,11.7097438 L1.28815102,8.70974376 C0.896782436,8.31907519 0.896782436,7.68493348 1.28815102,7.2942649 L4.29352643,4.2942649 Z M11.7010981,11.7097438 C11.0708751,12.3388396 9.99462458,11.8924777 9.99462458,11.0020043 L9.99462458,5.00200433 C9.99462458,4.11153099 11.0708751,3.66516903 11.7010981,4.2942649 L14.7064736,7.2942649 C15.0978421,7.68493348 15.0978421,8.31907519 14.7064736,8.70974376 L11.7010981,11.7097438 Z" id="Combined-Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

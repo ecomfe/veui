@@ -8,6 +8,7 @@ export default {
   components: {
     Icon
   },
-  props: Icon.props
+  props: Icon.props,
+  register: Icon.register
 }
 </script>

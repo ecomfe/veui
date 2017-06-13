@@ -17,6 +17,8 @@ import CheckboxGroup from './CheckboxGroup'
 import Tooltip from './Tooltip'
 import Toast from './Toast'
 import Alert from './Alert'
+import ConfirmBox from './ConfirmBox'
+import AlertBox from './AlertBox'
 
 export default [
   {
@@ -113,6 +115,16 @@ export default [
     path: '/alert',
     name: 'Alert',
     component: Alert
+  },
+  {
+    path: '/confirm-box',
+    name: 'ConfirmBox',
+    component: ConfirmBox
+  },
+  {
+    path: '/alert-box',
+    name: 'AlertBox',
+    component: AlertBox
   }
 
 ]

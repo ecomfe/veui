@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.1 (39012) - http://www.bohemiancoding.com/sketch -->
+    <title>arrow-m-down</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="V3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Dux-Icon-V2-@16-预览版" transform="translate(-224.000000, -1392.000000)" fill-rule="nonzero" fill="#000000">
+            <g id="arrow-m-down" transform="translate(232.000000, 1400.000000) rotate(90.000000) translate(-232.000000, -1400.000000) translate(224.000000, 1392.000000)">
+                <path d="M5.29289322,11.2928932 C4.90236893,11.6834175 4.90236893,12.3165825 5.29289322,12.7071068 C5.68341751,13.0976311 6.31658249,13.0976311 6.70710678,12.7071068 L10.7071068,8.70710678 C11.0976311,8.31658249 11.0976311,7.68341751 10.7071068,7.29289322 L6.70710678,3.29289322 C6.31658249,2.90236893 5.68341751,2.90236893 5.29289322,3.29289322 C4.90236893,3.68341751 4.90236893,4.31658249 5.29289322,4.70710678 L8.58578644,8 L5.29289322,11.2928932 Z" id="Path-2-Copy-2"></path>
+            </g>
+        </g>
+    </g>
+</svg>
