@@ -2,24 +2,28 @@
   <veui-dialog :open.sync="localOpen"
     :title="title"
     ui="reverse"
-    overlay-class="veui-confirm-box"
-    @ok="ok()"
-    @cancel="cancel()">
+    overlay-class="veui-confirm-box">
     <template slot="title">
       <slot name="title">confirm title</slot>
     </template>
     <slot></slot>
+    <template slot="foot">
+      <veui-button ui="primary" @click="ok()">确定</veui-button>
+      <veui-button @click="cancel()" ui="aux">取消</veui-button>
+    </template>
   </veui-dialog>
 </template>
 
 <script>
 import { pick } from 'lodash'
 import Dialog from './Dialog'
+import Button from './Button'
 
 export default {
   name: 'veui-confirm-box',
   components: {
-    'veui-dialog': Dialog
+    'veui-dialog': Dialog,
+    'veui-button': Button
   },
   props: pick(Dialog.props, ['open', 'title']),
   data () {

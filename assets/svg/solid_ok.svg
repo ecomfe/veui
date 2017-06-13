@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.1 (39012) - http://www.bohemiancoding.com/sketch -->
+    <title>solid_ok</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="V3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Dux-Icon-V2-@16-预览版" transform="translate(-416.000000, -1312.000000)" fill="#000000">
+            <g id="solid_ok" transform="translate(416.000000, 1312.000000)">
+                <path d="M8,16 C3.581722,16 0,12.418278 0,8 C0,3.581722 3.581722,0 8,0 C12.418278,0 16,3.581722 16,8 C16,12.418278 12.418278,16 8,16 Z M5.70899891,7.73096804 C5.31952242,7.33939876 4.68635972,7.33770221 4.29479043,7.7271787 C3.90322114,8.11665519 3.90152459,8.7498179 4.29100109,9.14138719 L6.11804967,10.9782531 C6.51153372,11.3738515 7.15264533,11.3709118 7.54248493,10.9717215 L11.7154364,6.69867791 C12.1013055,6.30355332 12.0938025,5.6704328 11.6986779,5.28456364 C11.3035533,4.89869449 10.6704328,4.9061975 10.2845636,5.30132209 L6.82051623,8.84845794 L5.70899891,7.73096804 Z" id="Combined-Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

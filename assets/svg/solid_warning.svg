@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.1 (39012) - http://www.bohemiancoding.com/sketch -->
+    <title>solid_warning</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="V3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Dux-Icon-V2-@16-预览版" transform="translate(-352.000000, -1392.000000)" fill="#000000">
+            <g id="solid_warning" transform="translate(352.000000, 1392.000000)">
+                <path d="M8,16 C3.581722,16 0,12.418278 0,8 C0,3.581722 3.581722,0 8,0 C12.418278,0 16,3.581722 16,8 C16,12.418278 12.418278,16 8,16 Z M7,11 C7,11.5561352 7.44771525,12 8,12 C8.55613518,12 9,11.5522847 9,11 C9,10.4438648 8.55228475,10 8,10 C7.44386482,10 7,10.4477153 7,11 Z M7,4.99980749 L7,8.00019251 C7,8.55628335 7.44771525,9 8,9 C8.55613518,9 9,8.55237094 9,8.00019251 L9,4.99980749 C9,4.44371665 8.55228475,4 8,4 C7.44386482,4 7,4.44762906 7,4.99980749 Z" id="Combined-Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

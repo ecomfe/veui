@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.1 (39012) - http://www.bohemiancoding.com/sketch -->
+    <title>circle_plus</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="V3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Dux-Icon-V2-@16-预览版" transform="translate(-352.000000, -1344.000000)" fill-rule="nonzero" fill="#000000">
+            <g id="circle_plus" transform="translate(352.000000, 1344.000000)">
+                <path d="M8,14 C11.3137085,14 14,11.3137085 14,8 C14,4.6862915 11.3137085,2 8,2 C4.6862915,2 2,4.6862915 2,8 C2,11.3137085 4.6862915,14 8,14 Z M7,7 L4.99703014,7 C4.4463856,7 4,7.44386482 4,8 C4,8.55228475 4.45303631,9 4.99703014,9 L7,9 L7,11.0029699 C7,11.5536144 7.44386482,12 8,12 C8.55228475,12 9,11.5469637 9,11.0029699 L9,9 L11.0029699,9 C11.5536144,9 12,8.55613518 12,8 C12,7.44771525 11.5469637,7 11.0029699,7 L9,7 L9,4.99703014 C9,4.4463856 8.55613518,4 8,4 C7.44771525,4 7,4.45303631 7,4.99703014 L7,7 Z M8,16 C3.581722,16 0,12.418278 0,8 C0,3.581722 3.581722,0 8,0 C12.418278,0 16,3.581722 16,8 C16,12.418278 12.418278,16 8,16 Z" id="Oval-1"></path>
+            </g>
+        </g>
+    </g>
+</svg>

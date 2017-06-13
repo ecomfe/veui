@@ -3,7 +3,7 @@
     :open.sync="localOpen"
     :ui="localUi">
 
-    <i class="veui-alert-box-icon"></i>
+    <veui-icon v-if="!!typeIconName" class="veui-alert-box-icon" :name="typeIconName" />
 
     <h3 class="veui-alert-box-title">
       <template v-if="!!title">{{ title }}</template>
@@ -20,9 +20,11 @@
 </template>
 
 <script>
-import { pick } from 'lodash'
+import { pick, find, includes } from 'lodash'
 import Dialog from './Dialog'
 import Button from './Button'
+import Icon from './Icon'
+import '../icons'
 
 export default {
   name: 'veui-alert-box',
@@ -31,7 +33,8 @@ export default {
   ),
   components: {
     'veui-dialog': Dialog,
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-icon': Icon
   },
   data () {
     return {
@@ -39,8 +42,21 @@ export default {
     }
   },
   computed: {
+    uis () {
+      return [...(this.ui || '').split(/\s+/), 'reverse']
+    },
     localUi () {
-      return [...(this.ui || '').split(/\s+/), 'reverse'].join(' ')
+      return this.uis.join(' ')
+    },
+    type () {
+      return find(this.uis, ui => includes(['success', 'error', 'info'], ui))
+    },
+    typeIconName () {
+      return {
+        success: 'circle_ok',
+        info: 'circle_tips',
+        error: 'circle_del'
+      }[this.type]
     }
   },
   watch: {
@@ -61,6 +77,8 @@ export default {
 </script>
 
 <style lang="less">
+@import "../styles/theme-default/lib.less";
+
 .veui-alert-box {
   text-align: center;
 
@@ -82,10 +100,6 @@ export default {
     margin-top: 15px;
   }
 
-  &-icon {
-    background: red;
-  }
-
   .veui-dialog-content-foot {
     padding: 30px 20px;
   }
@@ -94,28 +108,21 @@ export default {
     padding-top: 0;
   }
 
-  &[ui~="success"] {
-    .veui-alert-box-icon {
-      &::before {
-        content: 'success'
-      }
-    }
+  &-icon {
+    width: 34px;
+    height: 34px;
   }
 
-  &[ui~="info"] {
-    .veui-alert-box-icon {
-      &::before {
-        content: 'info'
-      }
-    }
+  &[ui~="success"] .veui-alert-box-icon {
+    color: @veui-success-color-primary;
   }
 
-  &[ui~="error"] {
-    .veui-alert-box-icon {
-      &::before {
-        content: 'error'
-      }
-    }
+  &[ui~="info"] .veui-alert-box-icon {
+    color: @veui-theme-color-primary;
+  }
+
+  &[ui~="error"] .veui-alert-box-icon {
+    color: @veui-alert-color-primary;
   }
 }
 </style>

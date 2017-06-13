@@ -20,7 +20,7 @@
       target="button"
       :open="expanded"
       :options="overlay">
-      <div class="veui-select-options" :ui="ui" v-outside:button="close">
+      <div class="veui-select-options" :ui="ui" v-outside:button.hover.1000="close">
         <slot>
           <template v-for="option in options">
             <veui-option
