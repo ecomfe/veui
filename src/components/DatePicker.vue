@@ -5,7 +5,7 @@
     'veui-datepicker-range': range,
     'veui-datepicker-expanded': expanded
   }">
-  <veui-button class="veui-datepicker-button" :ui="buttonUI" ref="button" @click="expanded = !expanded">
+  <veui-button ref="button" class="veui-datepicker-button" :ui="buttonUI" :disabled="disabled || readonly" @click="expanded = !expanded">
     <template v-if="range">
       <span class="veui-datepicker-label">
         <slot v-if="formatted" name="date" :formatted="formatted ? formatted[0] : null" :date="selected ? selected[0] : null">{{ formatted[0] }}</slot>
@@ -29,8 +29,8 @@
     <veui-icon name="remove"></veui-icon>
   </button>
   <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay">
-    <veui-calendar class="veui-datepicker-overlay" v-model="localSelected" v-bind="calendarProps"
-      v-outside:button="close" @select="handleSelect" :panel="realPanel"></veui-calendar>
+    <veui-calendar ref="cal" class="veui-datepicker-overlay" v-model="localSelected" v-bind="calendarProps"
+      v-outside:button="close" @select="handleSelect" @selectstart="handleStart" :panel="realPanel"></veui-calendar>
   </veui-overlay>
 </div>
 </template>
@@ -83,17 +83,21 @@ export default {
   },
   data () {
     return {
+      picking: null,
       localSelected: this.selected
     }
   },
   computed: {
     formatted () {
       let selected = this.localSelected
+      if (this.range) {
+        let current = this.picking || selected
+        if (isArray(current)) {
+          return current.map(date => this.formatDate(date))
+        }
+      }
       if (!selected) {
         return ''
-      }
-      if (isArray(selected)) {
-        return selected.map(date => this.formatDate(date))
       }
       return this.formatDate(selected)
     },
@@ -106,11 +110,18 @@ export default {
   },
   methods: {
     formatDate (date) {
+      if (!date) {
+        return ''
+      }
       return moment(date).format(this.format)
     },
     handleSelect (selected) {
       this.$emit('select', selected)
+      this.picking = null
       this.expanded = false
+    },
+    handleStart (selected) {
+      this.picking = [selected]
     },
     clear (e) {
       this.$emit('select', null)

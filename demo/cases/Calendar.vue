@@ -6,6 +6,10 @@
       <veui-calendar v-model="selected1" :disabled-date="isDisabled"></veui-calendar>
     </section>
     <section>
+      <h2>禁用</h2>
+      <veui-calendar v-model="selected1" disabled></veui-calendar>
+    </section>
+    <section>
       <h2>多单日选择 <small>(<code>multiple</code>)</small></h2>
       <veui-calendar v-model="selected0" multiple :date-class="dateClass"></veui-calendar>
     </section>

@@ -2,10 +2,10 @@
 <div class="veui-calendar" @mouseleave="markEnd()">
   <div v-for="(p, pIndex) in panels" class="veui-calendar-panel" :class="{ [`veui-calendar-${p.view}`]: true }">
     <div class="veui-calendar-head">
-      <button type="button" v-if="pIndex === 0 || p.view !== 'days'" class="veui-calendar-prev" @click="step(false, p.view)"><veui-icon name="chevron-left"></veui-icon></button>
+      <button type="button" v-if="pIndex === 0 || p.view !== 'days'" class="veui-calendar-prev" @click="step(false, p.view)" :disabled="disabled || readonly"><veui-icon name="chevron-left"></veui-icon></button>
       <template v-if="p.view === 'days'">
-        <button class="veui-calendar-select" @click="setView(pIndex, 'years')"><b>{{ p.year }}</b> 年 <veui-icon name="caret-down"></veui-icon></button>
-        <button class="veui-calendar-select" @click="setView(pIndex, 'months')"><b>{{ p.month + 1 }}</b> 月 <veui-icon name="caret-down"></veui-icon></button>
+        <button class="veui-calendar-select" @click="setView(pIndex, 'years')" :disabled="disabled || readonly"><b>{{ p.year }}</b> 年 <veui-icon name="caret-down"></veui-icon></button>
+        <button class="veui-calendar-select" @click="setView(pIndex, 'months')" :disabled="disabled || readonly"><b>{{ p.month + 1 }}</b> 月 <veui-icon name="caret-down"></veui-icon></button>
       </template>
       <template v-if="p.view === 'months'">
         <span class="veui-calendar-label"><b>{{ p.year }}</b> 年</span>
@@ -13,7 +13,7 @@
       <template v-if="p.view === 'years'">
         <span class="veui-calendar-label"><b>{{ p.year - p.year % 10 }}–{{ p.year - p.year % 10 + 9 }}</b> 年</span>
       </template>
-      <button v-if="pIndex === panels.length - 1 || p.view !== 'days'" class="veui-calendar-next" @click="step(true, p.view)"><veui-icon name="chevron-right"></veui-icon></button>
+      <button v-if="pIndex === panels.length - 1 || p.view !== 'days'" class="veui-calendar-next" @click="step(true, p.view)" :disabled="disabled || readonly"><veui-icon name="chevron-right"></veui-icon></button>
     </div>
     <div class="veui-calendar-body" :class="{ 'veui-calendar-multiple-range': multiple && range }">
       <table>
@@ -29,7 +29,7 @@
                 :key="`${day.year}-${day.month + 1}-${day.date}`"
                 :class="getDateClass(day, p)">
                 <button v-if="fillMonth && panel === 1 || day.month === p.month" @click="selectDay(pIndex, day)"
-                  @mouseenter="markEnd(day)" @focus="markEnd(day)" :disabled="day.isDisabled">{{ day.date }}</button>
+                  @mouseenter="markEnd(day)" @focus="markEnd(day)" :disabled="disabled || readonly || day.isDisabled">{{ day.date }}</button>
               </td>
             </tr>
           </tbody>
@@ -51,6 +51,7 @@
       </table>
     </div>
   </div>
+  <slot></slot>
 </div>
 </template>
 
@@ -276,6 +277,7 @@ export default {
       }
       if (!this.picking) {
         this.picking = [selected]
+        this.$emit('selectstart', selected)
         return
       }
       this.$set(this.picking, 1, selected)
