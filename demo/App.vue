@@ -1,7 +1,7 @@
 <template>
   <div id="app" :class="{'console-expanded': console.expanded}">
     <nav id="main-nav">
-      <h1>VEUI controls</h1>
+      <h1>VEUI components</h1>
       <ul>
         <li v-for="route in routes"><router-link :to='route'>{{route.name}}</router-link></li>
       </ul>
