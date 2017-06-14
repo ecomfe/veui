@@ -1,7 +1,7 @@
 <template>
   <div v-if="localOpen" class="veui-alert" :ui="ui" :class="`veui-alert-${type}`">
     <slot name="content">
-      <veui-icon class="veui-alert-icon" :name="`${iconName}-circle`"></veui-icon>
+      <veui-icon class="veui-alert-icon" :name="iconName"></veui-icon>
       <slot>
         <span v-if="isMultiple" class="veui-alert-message veui-alert-message-multiple">{{ message[index] }}</span>
         <span v-else class="veui-alert-message">{{ message }}</span>
@@ -10,10 +10,10 @@
       <template v-else-if="isMultiple">
         <span class="veui-alert-close">
           <button :disabled="isFirst" @click="switchMessage(-1)">
-            <veui-icon name="chevron-left"></veui-icon>
+            <veui-icon name="angle-left"></veui-icon>
           </button>
           <button :disabled="isLast" @click="switchMessage(1)">
-            <veui-icon name="chevron-right"></veui-icon>
+            <veui-icon name="angle-right"></veui-icon>
           </button>
         </span>
       </template>
@@ -26,20 +26,13 @@
 
 <script>
   import Icon from './Icon'
-  import 'vue-awesome/icons/check-circle'
-  import 'vue-awesome/icons/exclamation-circle'
-  import 'vue-awesome/icons/info-circle'
-  import 'vue-awesome/icons/times-circle'
-  import 'vue-awesome/icons/close'
-  import 'vue-awesome/icons/chevron-left'
-  import 'vue-awesome/icons/chevron-right'
   import { isArray } from 'lodash'
 
   const TYPE_MAP = {
-    success: 'check',
-    warning: 'exclamation',
-    info: 'info',
-    error: 'times'
+    success: 'check-circle',
+    warning: 'exclamation-circle',
+    info: 'info-circle-o',
+    error: 'cross-circle'
   }
 
   export default {

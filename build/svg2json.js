@@ -9,9 +9,12 @@ const svgo = new Svgo({
 const icons = {}
 const svgDir = path.resolve(__dirname, '../assets/svg/')
 fs.readdirSync(svgDir).forEach(function (file) {
+  if (!/\.svg$/.test(file)) {
+    return
+  }
   svgo.optimize(fs.readFileSync(path.resolve(svgDir, file), 'utf8'), ({ error, data }) => {
     if (error) {
-      return console.error(error);
+      return console.error(file, error);
     }
 
     const svg = data
