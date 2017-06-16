@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="96px" height="96px" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.1 (35376) - http://www.bohemiancoding.com/sketch -->
+    <title>arrow-s-both_down</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-480.000000, -1440.000000)" fill="#000000">
+            <g id="arrow-s-both_down" transform="translate(528.000000, 1488.000000) rotate(-90.000000) translate(-528.000000, -1488.000000) translate(480.000000, 1440.000000)">
+                <path d="M25.7611586,25.7655894 C29.5424972,21.9910142 36,24.6691859 36,30.012026 L36,66.0120258 C36,71.3548662 29.5424972,74.0330376 25.7611586,70.2584628 L7.72890612,52.2584626 C5.38069462,49.9144511 5.38069462,46.1096009 7.72890612,43.7655894 L25.7611586,25.7655894 Z" id="Combined-Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

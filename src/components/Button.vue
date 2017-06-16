@@ -3,7 +3,7 @@
     <template v-if="!loading"><slot></slot></template>
     <template v-else>
       <slot name="loading">
-        <icon name="circle-o-notch" spin></icon>
+        <icon name="loading" spin></icon>
         <span class="veui-button-loading-text">加载中…</span>
       </slot>
     </template>
@@ -12,7 +12,6 @@
 
 <script>
 import Icon from './Icon'
-import 'vue-awesome/icons/circle-o-notch'
 
 export default {
   name: 'veui-button',

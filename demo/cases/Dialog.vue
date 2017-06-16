@@ -47,7 +47,7 @@
 
       <veui-dialog :open="customIconTitleDialogVisible"
         @update:open="(value) => customIconTitleDialogVisible = value">
-        <template slot="title">自定义ICON标题<icon class="svg" name="circle-o-notch"></icon></template>
+        <template slot="title">自定义ICON标题 <icon class="svg" name="calendar"></icon></template>
       </veui-dialog>
       <veui-button ui="primary" @click="customIconTitleDialogVisible = true">自定义ICON标题</veui-button>
     </p>
@@ -80,7 +80,6 @@
 <script>
 import Dialog from '@/components/Dialog'
 import Button from '@/components/Button'
-import 'vue-awesome/icons/circle-o-notch'
 
 export default {
   name: 'dialog-demo',

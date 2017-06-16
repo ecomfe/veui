@@ -5,7 +5,6 @@
       <veui-dropdown
         ui="primary"
         label="操作操作操作操作操作操作"
-        icon="chevron"
         :options="options"></veui-dropdown>
     </p>
     <p>

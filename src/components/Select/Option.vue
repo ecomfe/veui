@@ -11,7 +11,6 @@
 
 <script>
 import Icon from '../Icon'
-import 'vue-awesome/icons/check'
 
 export default {
   name: 'veui-option',

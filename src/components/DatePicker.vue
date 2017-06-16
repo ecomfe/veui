@@ -26,11 +26,17 @@
     <veui-icon class="veui-datepicker-icon" name="calendar"></veui-icon>
   </veui-button>
   <button v-if="clearable" v-show="!!selected" class="veui-datepicker-clear" @click="clear">
-    <veui-icon name="remove"></veui-icon>
+    <veui-icon name="cross"></veui-icon>
   </button>
   <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay">
-    <veui-calendar ref="cal" class="veui-datepicker-overlay" v-model="localSelected" v-bind="calendarProps"
-      v-outside:button="close" @select="handleSelect" @selectstart="handleStart" :panel="realPanel"></veui-calendar>
+    <veui-calendar class="veui-datepicker-overlay" v-model="localSelected" v-bind="calendarProps"
+      v-outside:button="close" @select="handleSelect" @selectstart="handleStart" :panel="realPanel">
+      <template v-if="range && shortcuts && shortcuts.length">
+        <div class="veui-datepicker-shortcuts">
+          <veui-button ui="small link" class="veui-datepicker-shortcut" v-for="(shortcut, index) in shortcuts" :key="index" @click="selectShortcut(shortcut)">{{ shortcut.label }}</veui-button>
+        </div>
+      </template>
+    </veui-calendar>
   </veui-overlay>
 </div>
 </template>
@@ -42,9 +48,12 @@ import Calendar from './Calendar'
 import Icon from './Icon'
 import moment from 'moment'
 import { dropdown, input } from '../mixins'
-import { isArray, pick } from 'lodash'
-import 'vue-awesome/icons/calendar'
-import 'vue-awesome/icons/remove'
+import { config } from '../managers'
+import { isArray, isObject, pick } from 'lodash'
+
+config.defaults({
+  'datepicker.shortcuts': []
+})
 
 let calendarProps = ['range', 'weekStart', 'fillMonth', 'disabledDate', 'dateClass']
 
@@ -78,6 +87,12 @@ export default {
     format: {
       type: String,
       default: 'YYYY-MM-DD'
+    },
+    shortcuts: {
+      type: Array,
+      default () {
+        return config.get('datepicker.shortcuts')
+      }
     },
     ...pick(Calendar.props, calendarProps)
   },
@@ -123,9 +138,25 @@ export default {
     handleStart (selected) {
       this.picking = [selected]
     },
+    selectShortcut ({range}) {
+      if (isObject(range)) {
+        let now = new Date()
+        let today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+        let otherDay = moment(today).add(range).toDate()
+        if (today < otherDay) {
+          this.handleSelect([today, otherDay])
+        } else {
+          this.handleSelect([otherDay, today])
+        }
+      }
+    },
     clear (e) {
       this.$emit('select', null)
       this.expanded = false
+    },
+    close () {
+      this.expanded = false
+      this.picking = null
     }
   },
   watch: {
@@ -185,12 +216,30 @@ export default {
       width: (300px - 12px * 4 - 16px * 2) / 2;
     }
   }
+
   &-tilde {
     display: inline-block;
     line-height: 1;
     vertical-align: middle;
     width: 16px;
     margin: 0 12px;
+  }
+
+  &-shortcuts {
+    height: 40px;
+    padding: 10px 16px;
+    border-top: 1px solid @veui-gray-color-sup-2;
+  }
+
+  &-shortcut {
+    margin-right: 10px;
+    border: none;
+    color: @veui-text-color-normal;
+    font-size: @veui-font-size-small;
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 }
 </style>

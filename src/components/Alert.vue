@@ -18,7 +18,7 @@
         </span>
       </template>
       <button v-else class="veui-alert-close" @click="close">
-        <veui-icon name="close"></veui-icon>
+        <veui-icon name="cross"></veui-icon>
       </button>
     </slot>
   </div>
@@ -31,7 +31,7 @@
   const TYPE_MAP = {
     success: 'check-circle',
     warning: 'exclamation-circle',
-    info: 'info-circle-o',
+    info: 'info-circle',
     error: 'cross-circle'
   }
 

@@ -8,7 +8,7 @@
       <veui-alert type="warning" message="警告，进行检查，有风险信息存在" @update:open="close"></veui-alert>
       <veui-alert class="limit-width" type="warning" :message="messages" @update:open="close"></veui-alert>
       <veui-alert type="info" message="提醒，这个消息需要注意" @update:open="close"></veui-alert>
-      <veui-alert class="limit-width" type="info" message="提醒，这个消息需要注意" @update:open="close" close-text="不在提示"></veui-alert>
+      <veui-alert class="limit-width" type="info" message="提醒，这个消息需要注意" @update:open="close" close-text="不再提示"></veui-alert>
       <veui-alert type="error" message="错误，请检查并修改后再进行操作" @update:open="close"></veui-alert>
       <veui-alert class="limit-width" type="error" message="错误，请检查并修改后再进行操作" @update:open="close"></veui-alert>
       <veui-dialog

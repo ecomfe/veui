@@ -7,8 +7,6 @@
 
 <script>
 import Icon from '../Icon'
-import 'vue-awesome/icons/sort-asc'
-import 'vue-awesome/icons/sort-desc'
 
 export default {
   name: 'veui-table-sorter',

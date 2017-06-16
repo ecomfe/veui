@@ -15,7 +15,7 @@
     </section>
     <section>
       <h2>范围选择</h2>
-      <p><veui-datepicker v-model="selected2" range></veui-datepicker></p>
+      <p><veui-datepicker v-model="selected2" range :shortcuts="shortcuts"></veui-datepicker></p>
     </section>
     <section>
       <h2>可清除范围选择</h2>
@@ -56,7 +56,15 @@ export default {
   data () {
     return {
       selected1: null,
-      selected2: null
+      selected2: null,
+      shortcuts: [
+        {
+          label: '最近7天',
+          range: {
+            days: -6
+          }
+        }
+      ]
     }
   }
 }

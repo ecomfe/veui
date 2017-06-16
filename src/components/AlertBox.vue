@@ -25,7 +25,6 @@ import Dialog from './Dialog'
 import Button from './Button'
 import Icon from './Icon'
 import '../icons'
-import 'vue-awesome/icons/info-circle'
 
 export default {
   name: 'veui-alert-box',

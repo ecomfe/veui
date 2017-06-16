@@ -1,36 +1,49 @@
 import Vue from 'vue'
-import { isString, isArray, isObject } from 'lodash'
+import { isString, isArray, isObject, isNumber } from 'lodash'
 import ToastList from '../components/ToastList'
 
 let Container = Vue.extend(ToastList)
 
-class ToastManager {
+export class ToastManager {
 
-  constructor (option) {
-    this.instance = new Container()
+  constructor () {
+    this.container = new Container()
+  }
+
+  init () {
     let el = document.createElement('div')
     document.body.appendChild(el)
-    this.instance.$mount(el)
-    el = null
-    if (option) {
-      this.add(option)
-    }
+    this.container.$mount(el)
+    this.el = el
   }
 
   add (option) {
+    if (!this.el) {
+      this.init()
+    }
+
     if (isArray(option)) {
       option.forEach(item => {
-        this.instance.add(item)
+        this.container.add(item)
       })
     } else if (isObject(option)) {
-      this.instance.add(option)
+      this.container.add(option)
     } else {
-      throw new Error('The toast\'s param is invalid!')
+      Vue.util.warn('Invalid arguments for Toasts.')
     }
   }
 
   remove (index) {
-    this.instance.remove(this.instance.messages[index])
+    let container = this.container
+    if (isNumber(index)) {
+      container.remove(container.messages[index])
+      return
+    }
+
+    // no valid index, remove until empty
+    while (container.messages.length) {
+      this.remove(0)
+    }
   }
 
   _show (message, type) {
@@ -48,7 +61,7 @@ class ToastManager {
     this._show(message, 'success')
   }
 
-  warning (message) {
+  warn (message) {
     this._show(message, 'warning')
   }
 

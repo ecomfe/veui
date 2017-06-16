@@ -24,13 +24,13 @@
       </veui-table>
     </section>
     <section>
-      <veui-box-group type="checkbox" v-model="columns" :items="[
+      <veui-checkboxgroup type="checkbox" v-model="columns" :items="[
         { value: 'id', label: 'ID'},
         { value: 'desc', label: '描述'},
         { value: 'price', label: '价格'},
         { value: 'updateDate', label: '更新时间'},
         { value: 'operation', label: '操作'}
-      ]"></veui-box-group>
+      ]"></veui-checkboxgroup>
     </section>
     <section>
       已选ID：
@@ -43,7 +43,7 @@
 import moment from 'moment'
 import bus from '../bus'
 import Button from '@/components/Button'
-import BoxGroup from '@/components/BoxGroup'
+import CheckboxGroup from '@/components/CheckboxGroup'
 import Table from '@/components/Table'
 import Column from '@/components/Table/Column'
 
@@ -53,7 +53,7 @@ export default {
     'veui-button': Button,
     'veui-table': Table,
     'veui-table-column': Column,
-    'veui-box-group': BoxGroup
+    'veui-checkboxgroup': CheckboxGroup
   },
   filters: {
     date (value) {

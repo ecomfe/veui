@@ -7,16 +7,12 @@
 
 <script>
   import Icon from './Icon'
-  import 'vue-awesome/icons/check-circle'
-  import 'vue-awesome/icons/exclamation-circle'
-  import 'vue-awesome/icons/info-circle'
-  import 'vue-awesome/icons/times-circle'
 
-  const TYPE_MAP = {
+  const ICON_MAP = {
     success: 'check',
     warning: 'exclamation',
     info: 'info',
-    error: 'times'
+    error: 'cross'
   }
 
   export default {
@@ -38,7 +34,7 @@
     },
     computed: {
       iconName () {
-        return TYPE_MAP[this.type]
+        return ICON_MAP[this.type]
       }
     },
     mounted () {

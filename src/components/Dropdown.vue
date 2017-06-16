@@ -10,7 +10,7 @@
       <span class="veui-dropdown-label">
         <slot name="label" :label="label">{{ label }}</slot>
       </span>
-      <icon class="veui-dropdown-icon" :name="`${icon}-${expanded ? 'up' : 'down'}`"></icon>
+      <icon class="veui-dropdown-icon" :name="`${realIcon}-${expanded ? 'up' : 'down'}`"></icon>
     </veui-button>
     <veui-overlay
       v-if="expanded"
@@ -38,11 +38,8 @@
 import Icon from './Icon'
 import Button from './Button'
 import Overlay from './Overlay'
-import { dropdown } from '../mixins'
-import 'vue-awesome/icons/caret-down'
-import 'vue-awesome/icons/caret-up'
-import 'vue-awesome/icons/chevron-down'
-import 'vue-awesome/icons/chevron-up'
+import { ui, dropdown } from '../mixins'
+import { includes } from 'lodash'
 
 export default {
   name: 'veui-dropdown',
@@ -51,7 +48,7 @@ export default {
     'veui-button': Button,
     'veui-overlay': Overlay
   },
-  mixins: [dropdown],
+  mixins: [ui, dropdown],
   props: {
     ui: String,
     label: String,
@@ -59,10 +56,7 @@ export default {
       type: Boolean,
       default: false
     },
-    icon: {
-      type: String,
-      default: 'caret'
-    },
+    icon: String,
     options: Array
   },
   data () {
@@ -77,6 +71,17 @@ export default {
           }
         ]
       }
+    }
+  },
+  computed: {
+    realIcon () {
+      if (this.icon) {
+        return this.icon
+      }
+      if (includes(this.uiProps, 'link')) {
+        return 'triangle'
+      }
+      return 'angle'
     }
   },
   methods: {
