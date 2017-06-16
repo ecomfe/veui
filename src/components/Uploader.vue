@@ -91,6 +91,7 @@
 
 <script>
 import Icon from './Icon'
+import '../icons'
 import Button from './Button'
 import { endsWith, cloneDeep, filter, map, uniqueId, assign } from 'lodash'
 import { ui, input } from '../mixins'

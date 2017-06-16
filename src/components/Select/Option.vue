@@ -11,6 +11,7 @@
 
 <script>
 import Icon from '../Icon'
+import '../../icons'
 
 export default {
   name: 'veui-option',

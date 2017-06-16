@@ -6,46 +6,47 @@
 </template>
 
 <script>
-  import Icon from './Icon'
+import Icon from './Icon'
+import '../icons'
 
-  const ICON_MAP = {
-    success: 'check',
-    warning: 'exclamation',
-    info: 'info',
-    error: 'cross'
-  }
+const ICON_MAP = {
+  success: 'check',
+  warning: 'exclamation',
+  info: 'info',
+  error: 'cross'
+}
 
-  export default {
-    name: 'toast',
-    components: {
-      'veui-icon': Icon
+export default {
+  name: 'toast',
+  components: {
+    'veui-icon': Icon
+  },
+  props: {
+    ui: String,
+    type: {
+      type: String,
+      default: 'success'
     },
-    props: {
-      ui: String,
-      type: {
-        type: String,
-        default: 'success'
-      },
-      message: String,
-      duration: {
-        type: Number,
-        default: 3000
-      }
-    },
-    computed: {
-      iconName () {
-        return ICON_MAP[this.type]
-      }
-    },
-    mounted () {
-      this.timer = setTimeout(() => {
-        this.$emit('close')
-      }, this.duration)
-    },
-    beforeDestroy () {
-      clearTimeout(this.timer)
+    message: String,
+    duration: {
+      type: Number,
+      default: 3000
     }
+  },
+  computed: {
+    iconName () {
+      return ICON_MAP[this.type]
+    }
+  },
+  mounted () {
+    this.timer = setTimeout(() => {
+      this.$emit('close')
+    }, this.duration)
+  },
+  beforeDestroy () {
+    clearTimeout(this.timer)
   }
+}
 </script>
 
 <style lang="less">

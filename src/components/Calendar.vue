@@ -60,6 +60,7 @@ import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/da
 import { flattenDeep, findIndex } from 'lodash'
 import { input } from '../mixins'
 import Icon from './Icon'
+import '../icons'
 
 let dayNames = [
   '一', '二', '三', '四', '五', '六', '日'

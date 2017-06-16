@@ -25,72 +25,73 @@
 </template>
 
 <script>
-  import Icon from './Icon'
-  import { isArray } from 'lodash'
+import Icon from './Icon'
+import '../icons'
+import { isArray } from 'lodash'
 
-  const TYPE_MAP = {
-    success: 'check-circle',
-    warning: 'exclamation-circle',
-    info: 'info-circle',
-    error: 'cross-circle'
-  }
+const TYPE_MAP = {
+  success: 'check-circle',
+  warning: 'exclamation-circle',
+  info: 'info-circle',
+  error: 'cross-circle'
+}
 
-  export default {
-    name: 'alert',
-    components: {
-      'veui-icon': Icon
+export default {
+  name: 'alert',
+  components: {
+    'veui-icon': Icon
+  },
+  props: {
+    ui: String,
+    type: {
+      type: String,
+      default: 'success'
     },
-    props: {
-      ui: String,
-      type: {
-        type: String,
-        default: 'success'
-      },
-      message: [String, Array],
-      closeText: String,
-      open: {
-        type: Boolean,
-        default: true
-      }
+    message: [String, Array],
+    closeText: String,
+    open: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data () {
+    return {
+      localOpen: this.open,
+      index: 0
+    }
+  },
+  watch: {
+    open (value) {
+      this.localOpen = value
+    }
+  },
+  computed: {
+    iconName () {
+      return TYPE_MAP[this.type]
     },
-    data () {
-      return {
-        localOpen: this.open,
-        index: 0
-      }
+    isMultiple () {
+      return isArray(this.message)
     },
-    watch: {
-      open (value) {
-        this.localOpen = value
-      }
+    isFirst () {
+      return this.index <= 0
     },
-    computed: {
-      iconName () {
-        return TYPE_MAP[this.type]
-      },
-      isMultiple () {
-        return isArray(this.message)
-      },
-      isFirst () {
-        return this.index <= 0
-      },
-      isLast () {
-        return this.index >= this.message.length - 1
-      }
+    isLast () {
+      return this.index >= this.message.length - 1
+    }
+  },
+  methods: {
+    close () {
+      this.localOpen = false
+      this.$emit('update:open', false)
     },
-    methods: {
-      close () {
-        this.localOpen = false
-        this.$emit('update:open', false)
-      },
-      switchMessage (step) {
-        if ((step > 0 && this.isLast) || (step < 0 && this.isFirst)) {
-          return
-        }
-        this.index = this.index + step
+    switchMessage (step) {
+      if ((step > 0 && this.isLast) || (step < 0 && this.isFirst)) {
+        return
       }
+      this.index = this.index + step
     }
   }
+}
 </script>
 
 <style lang="less">

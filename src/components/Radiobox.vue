@@ -8,6 +8,7 @@
 
 <script>
 import Icon from './Icon'
+import '../icons'
 import { input } from '../mixins'
 import { assign } from 'lodash'
 

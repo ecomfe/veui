@@ -42,6 +42,7 @@
 
 <script>
 import Icon from './Icon'
+import '../icons'
 import Link from './Link'
 import Select from './Select'
 import Option from './Select/Option'
