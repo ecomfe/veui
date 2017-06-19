@@ -10,9 +10,8 @@
 <script>
 import Label from '../Label'
 import { clone, rule } from '../../managers'
-import { isBoolean, assign, includes } from 'lodash'
+import { isBoolean, assign } from 'lodash'
 import { getTypedAncestorTracker, getModelProp, getModelEvent } from '../../utils/helper'
-import { getByName } from '../../utils/object'
 import Icon from '../Icon'
 import '../../icons'
 import Vue from 'vue'
@@ -200,10 +199,7 @@ export default {
     }
   },
   created () {
-    let types = getByName('$parent.$options.uiTypes', this)
-    if (!includes(types, 'field-set')) {
-      this.form.fields.push(this)
-    }
+    this.form.fields.push(this)
   },
   beforeDestroy () {
     this.form.fields.splice(this.form.fields.indexOf(this), 1)

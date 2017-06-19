@@ -1,10 +1,11 @@
+import { keys } from 'lodash'
 import clone from './clone'
 
 function set (obj, key, value, isOverride) {
   if (typeof key === 'object') {
     isOverride = value
     value = key
-    Object.keys(value).forEach(key => {
+    keys(value).forEach(key => {
       set(obj, key, value[key], isOverride)
     })
     return

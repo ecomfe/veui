@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isString, isArray, isObject, isNumber } from 'lodash'
+import { isString, isObject, isNumber } from 'lodash'
 import ToastList from '../components/ToastList'
 
 let Container = Vue.extend(ToastList)
@@ -22,7 +22,7 @@ export class ToastManager {
       this.init()
     }
 
-    if (isArray(option)) {
+    if (Array.isArray(option)) {
       option.forEach(item => {
         this.container.add(item)
       })

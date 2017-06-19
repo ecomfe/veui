@@ -38,7 +38,3 @@ export function getModelEvent (vm) {
 export function isFalsy (val) {
   return val == null || val === '' || val === false
 }
-
-// export function splitToArray (val, separator = ',') {
-//   return Array.isArray(val) ? val : val.split(separator).map(item => item && item.trim())
-// }

@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { assign } from 'lodash'
 import Icon from './Icon'
 import '../icons'
 
@@ -33,7 +34,7 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = Object.assign({}, this.$props)
+      let attrs = assign({}, this.$props)
       delete attrs.loading
       attrs.disabled = this.disabled || this.loading
       return attrs
