@@ -1,8 +1,8 @@
-import { isFalsy } from '../../utils/helper'
+import { isEmpty } from '../../utils/helper'
 
 export default {
   validate (val) {
-    return !isFalsy(val)
+    return !isEmpty(val)
   },
   errMsg: '请填写',
   priority: 0

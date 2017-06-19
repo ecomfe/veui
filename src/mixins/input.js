@@ -1,4 +1,4 @@
-import { getTypedAncestorTracker, getModelProp, isTopestType } from '../utils/helper'
+import { getTypedAncestorTracker, getModelProp, isTopMostOfType } from '../utils/helper'
 import { clone } from '../managers'
 import { get } from 'lodash'
 
@@ -20,8 +20,8 @@ export default {
     realName () {
       return (this.formField && this.formField.name) || this.name
     },
-    isTopestInput () {
-      return isTopestType(this, 'input')
+    isTopMostInput () {
+      return isTopMostOfType(this, 'input', 'form-field')
     },
     realDisabled () {
       return this.disabled || get(this, 'formField.realDisabled')
@@ -32,7 +32,7 @@ export default {
     ...computedFormField
   },
   created () {
-    if (this.formField && this.isTopestInput) {
+    if (this.formField && this.isTopMostInput) {
       this.formField.inputs.push(this)
       this.formField.bindInteractiveRules([this])
       this.formField.form && this.formField.form.bindInteractiveValidators({ input: this })
@@ -40,7 +40,7 @@ export default {
     this.initialData = clone.exec(this[getModelProp(this)])
   },
   beforeDestroy () {
-    if (this.formField && this.isTopestInput) {
+    if (this.formField && this.isTopMostInput) {
       this.formField.inputs.splice(this.formField.inputs.indexOf(this), 1)
     }
   }

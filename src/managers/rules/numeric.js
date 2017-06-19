@@ -1,9 +1,9 @@
 import { isNumber, toNumber, isNaN } from 'lodash'
-import { isFalsy } from '../../utils/helper'
+import { isEmpty } from '../../utils/helper'
 
 export default {
   validate (val) {
-    return !isFalsy(val)
+    return !isEmpty(val)
       ? isNumber(val) || !isNaN(toNumber(val))
       : true
   },

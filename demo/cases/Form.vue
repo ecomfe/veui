@@ -3,7 +3,7 @@
     <h1><code>&lt;veui-form&gt;</code></h1>
     <section>
       <h2>表单输出数据可与输入分离，做中间转换</h2>
-      <veui-form ref="form1" :data="outputData">
+      <veui-form ref="form1">
 
         <veui-form-field label="昵称" name="nickName">
           <veui-input v-model="storeData1.nickName"></veui-input>
