@@ -1,6 +1,6 @@
 import { getTypedAncestorTracker, getModelProp, isTopestType } from '../utils/helper'
-import { getByName } from '../utils/object'
 import { clone } from '../managers'
+import { get } from 'lodash'
 
 const { computed: computedFormField } = getTypedAncestorTracker('form-field')
 
@@ -24,10 +24,10 @@ export default {
       return isTopestType(this, 'input')
     },
     realDisabled () {
-      return this.disabled || getByName('formField.realDisabled', this)
+      return this.disabled || get(this, 'formField.realDisabled')
     },
     realReadOnly () {
-      return this.readonly || getByName('formField.realDisabled', this)
+      return this.readonly || get(this, 'formField.realDisabled')
     },
     ...computedFormField
   },

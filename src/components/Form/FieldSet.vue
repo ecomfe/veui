@@ -7,7 +7,7 @@
  * fieldset 和 field 的区别是 fieldset 只能用来做 ui 上的排列和显示 tip，合并显示 error
  */
 import Field from './Field'
-import { getByName } from '../../utils/object'
+import { get } from 'lodash'
 export default {
   name: 'veui-form-field-set',
   uiTypes: ['form-field-set', 'form-container'],
@@ -24,10 +24,10 @@ export default {
   },
   computed: {
     realDisabled () {
-      return this.disabled || getByName('$refs.field.form.disabled', this)
+      return this.disabled || get(this, '$refs.field.form.disabled')
     },
     realReadOnly () {
-      return this.readonly || getByName('$refs.field.form.readonly', this)
+      return this.readonly || get(this, '$refs.field.form.readonly')
     }
   }
 }

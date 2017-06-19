@@ -1,5 +1,4 @@
-import { includes, camelCase } from 'lodash'
-import { getByName } from './object'
+import { includes, camelCase, get } from 'lodash'
 
 export function getTypedAncestorTracker (name, type) {
   return {
@@ -21,18 +20,18 @@ export function getTypedAncestorTracker (name, type) {
 
 export function isTopestType (vm, type) {
   let parent = vm.$parent
-  while (parent && !includes(getByName('$options.uiTypes', parent), type)) {
+  while (parent && !includes(get(parent, '$options.uiTypes'), type)) {
     parent = parent.$parent
   }
   return !parent
 }
 
 export function getModelProp (vm) {
-  return getByName('$options.model.prop', vm) || 'value'
+  return get(vm, '$options.model.prop', 'value')
 }
 
 export function getModelEvent (vm) {
-  return getByName('$options.model.event', vm) || 'input'
+  return get(vm, '$options.model.event', 'input')
 }
 
 export function isFalsy (val) {
