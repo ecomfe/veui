@@ -6,50 +6,47 @@
 </template>
 
 <script>
-  import Icon from './Icon'
-  import 'vue-awesome/icons/check-circle'
-  import 'vue-awesome/icons/exclamation-circle'
-  import 'vue-awesome/icons/info-circle'
-  import 'vue-awesome/icons/times-circle'
+import Icon from './Icon'
+import '../icons'
 
-  const TYPE_MAP = {
-    success: 'check',
-    warning: 'exclamation',
-    info: 'info',
-    error: 'times'
-  }
+const ICON_MAP = {
+  success: 'check',
+  warning: 'exclamation',
+  info: 'info',
+  error: 'cross'
+}
 
-  export default {
-    name: 'toast',
-    components: {
-      'veui-icon': Icon
+export default {
+  name: 'toast',
+  components: {
+    'veui-icon': Icon
+  },
+  props: {
+    ui: String,
+    type: {
+      type: String,
+      default: 'success'
     },
-    props: {
-      ui: String,
-      type: {
-        type: String,
-        default: 'success'
-      },
-      message: String,
-      duration: {
-        type: Number,
-        default: 3000
-      }
-    },
-    computed: {
-      iconName () {
-        return TYPE_MAP[this.type]
-      }
-    },
-    mounted () {
-      this.timer = setTimeout(() => {
-        this.$emit('close')
-      }, this.duration)
-    },
-    beforeDestroy () {
-      clearTimeout(this.timer)
+    message: String,
+    duration: {
+      type: Number,
+      default: 3000
     }
+  },
+  computed: {
+    iconName () {
+      return ICON_MAP[this.type]
+    }
+  },
+  mounted () {
+    this.timer = setTimeout(() => {
+      this.$emit('close')
+    }, this.duration)
+  },
+  beforeDestroy () {
+    clearTimeout(this.timer)
   }
+}
 </script>
 
 <style lang="less">

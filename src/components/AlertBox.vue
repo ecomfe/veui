@@ -53,9 +53,9 @@ export default {
     },
     typeIconName () {
       return {
-        success: 'circle_ok',
-        info: 'circle_tips',
-        error: 'circle_del'
+        success: 'check-circle',
+        info: 'info-circle',
+        error: 'cross-circle'
       }[this.type]
     }
   },

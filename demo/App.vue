@@ -13,7 +13,7 @@
     <aside id="console">
       <h2 @click="console.expanded = !console.expanded">
         <icon @click.native.stop="console.logs = []" name="ban" label="Clear console" flip="horizontal"></icon>
-        <icon :name="console.expanded ? 'caret-down' : 'caret-up'" label="Toggle console"></icon>
+        <icon :name="console.expanded ? 'triangle-down' : 'triangle-up'" label="Toggle console"></icon>
         Console <small>({{console.logs.length}})</small>
       </h2>
       <section class="output" ref="logList">
@@ -26,8 +26,6 @@
 <script>
 import routes from './cases'
 import bus from './bus'
-import 'vue-awesome/icons/caret-up'
-import 'vue-awesome/icons/caret-down'
 import 'vue-awesome/icons/ban'
 
 export default {

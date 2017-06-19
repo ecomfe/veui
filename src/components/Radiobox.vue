@@ -1,16 +1,16 @@
 <template>
   <label class="veui-radiobox" :ui="ui">
     <input type="radio" v-bind="attrs" @change="$emit('change', $event.target.checked)">
-    <span class="veui-radiobox-box"><icon name="circle"></icon></span>
+    <span class="veui-radiobox-box"></span>
     <span><slot></slot></span>
   </label>
 </template>
 
 <script>
 import Icon from './Icon'
+import '../icons'
 import { input } from '../mixins'
 import { assign } from 'lodash'
-import 'vue-awesome/icons/circle'
 
 export default {
   name: 'veui-radiobox',
@@ -79,9 +79,13 @@ export default {
   & :checked + &-box {
     border-color: @veui-theme-color-primary;
     .veui-shadow(none);
-    .veui-icon {
-      display: inline-block;
-      color: @veui-theme-color-primary;
+
+    &::before {
+      content: "";
+      display: block;
+      .size(@veui-font-size-large);
+      background-color: @veui-theme-color-primary;
+      border-radius: 50%;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -103,8 +107,9 @@ export default {
     border-color: @veui-gray-color-sup-1;
     background-color: @veui-gray-color-sup-2;
     .veui-shadow(none);
-    .veui-icon {
-      color: @veui-gray-color-weak;
+
+    &::before {
+      background-color: @veui-gray-color-weak;
     }
   }
 
@@ -118,6 +123,10 @@ export default {
     font-size: @veui-font-size-small;
     height: @veui-font-size-small;
     width: @veui-font-size-small;
+
+    &::before {
+      .size(@veui-font-size-small);
+    }
   }
 
 }

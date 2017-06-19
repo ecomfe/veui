@@ -2,10 +2,10 @@
 <div class="veui-calendar" @mouseleave="markEnd()">
   <div v-for="(p, pIndex) in panels" class="veui-calendar-panel" :class="{ [`veui-calendar-${p.view}`]: true }">
     <div class="veui-calendar-head">
-      <button type="button" v-if="pIndex === 0 || p.view !== 'days'" class="veui-calendar-prev" @click="step(false, p.view)" :disabled="disabled || readonly"><veui-icon name="chevron-left"></veui-icon></button>
+      <button type="button" v-if="pIndex === 0 || p.view !== 'days'" class="veui-calendar-prev" @click="step(false, p.view)" :disabled="disabled || readonly"><veui-icon name="angle-left"></veui-icon></button>
       <template v-if="p.view === 'days'">
-        <button class="veui-calendar-select" @click="setView(pIndex, 'years')" :disabled="disabled || readonly"><b>{{ p.year }}</b> 年 <veui-icon name="caret-down"></veui-icon></button>
-        <button class="veui-calendar-select" @click="setView(pIndex, 'months')" :disabled="disabled || readonly"><b>{{ p.month + 1 }}</b> 月 <veui-icon name="caret-down"></veui-icon></button>
+        <button class="veui-calendar-select" @click="setView(pIndex, 'years')" :disabled="disabled || readonly"><b>{{ p.year }}</b> 年 <veui-icon name="angle-down"></veui-icon></button>
+        <button class="veui-calendar-select" @click="setView(pIndex, 'months')" :disabled="disabled || readonly"><b>{{ p.month + 1 }}</b> 月 <veui-icon name="angle-down"></veui-icon></button>
       </template>
       <template v-if="p.view === 'months'">
         <span class="veui-calendar-label"><b>{{ p.year }}</b> 年</span>
@@ -13,7 +13,7 @@
       <template v-if="p.view === 'years'">
         <span class="veui-calendar-label"><b>{{ p.year - p.year % 10 }}–{{ p.year - p.year % 10 + 9 }}</b> 年</span>
       </template>
-      <button v-if="pIndex === panels.length - 1 || p.view !== 'days'" class="veui-calendar-next" @click="step(true, p.view)" :disabled="disabled || readonly"><veui-icon name="chevron-right"></veui-icon></button>
+      <button v-if="pIndex === panels.length - 1 || p.view !== 'days'" class="veui-calendar-next" @click="step(true, p.view)" :disabled="disabled || readonly"><veui-icon name="angle-right"></veui-icon></button>
     </div>
     <div class="veui-calendar-body" :class="{ 'veui-calendar-multiple-range': multiple && range }">
       <table>
@@ -60,9 +60,7 @@ import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/da
 import { flattenDeep, findIndex } from 'lodash'
 import { input } from '../mixins'
 import Icon from './Icon'
-import 'vue-awesome/icons/chevron-left'
-import 'vue-awesome/icons/chevron-right'
-import 'vue-awesome/icons/caret-down'
+import '../icons'
 
 let dayNames = [
   '一', '二', '三', '四', '五', '六', '日'

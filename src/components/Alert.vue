@@ -1,7 +1,7 @@
 <template>
   <div v-if="localOpen" class="veui-alert" :ui="ui" :class="`veui-alert-${type}`">
     <slot name="content">
-      <veui-icon class="veui-alert-icon" :name="`${iconName}-circle`"></veui-icon>
+      <veui-icon class="veui-alert-icon" :name="iconName"></veui-icon>
       <slot>
         <span v-if="isMultiple" class="veui-alert-message veui-alert-message-multiple">{{ message[index] }}</span>
         <span v-else class="veui-alert-message">{{ message }}</span>
@@ -10,94 +10,88 @@
       <template v-else-if="isMultiple">
         <span class="veui-alert-close">
           <button :disabled="isFirst" @click="switchMessage(-1)">
-            <veui-icon name="chevron-left"></veui-icon>
+            <veui-icon name="angle-left"></veui-icon>
           </button>
           <button :disabled="isLast" @click="switchMessage(1)">
-            <veui-icon name="chevron-right"></veui-icon>
+            <veui-icon name="angle-right"></veui-icon>
           </button>
         </span>
       </template>
       <button v-else class="veui-alert-close" @click="close">
-        <veui-icon name="close"></veui-icon>
+        <veui-icon name="cross"></veui-icon>
       </button>
     </slot>
   </div>
 </template>
 
 <script>
-  import Icon from './Icon'
-  import 'vue-awesome/icons/check-circle'
-  import 'vue-awesome/icons/exclamation-circle'
-  import 'vue-awesome/icons/info-circle'
-  import 'vue-awesome/icons/times-circle'
-  import 'vue-awesome/icons/close'
-  import 'vue-awesome/icons/chevron-left'
-  import 'vue-awesome/icons/chevron-right'
-  import { isArray } from 'lodash'
+import Icon from './Icon'
+import '../icons'
+import { isArray } from 'lodash'
 
-  const TYPE_MAP = {
-    success: 'check',
-    warning: 'exclamation',
-    info: 'info',
-    error: 'times'
-  }
+const TYPE_MAP = {
+  success: 'check-circle',
+  warning: 'exclamation-circle',
+  info: 'info-circle',
+  error: 'cross-circle'
+}
 
-  export default {
-    name: 'alert',
-    components: {
-      'veui-icon': Icon
+export default {
+  name: 'alert',
+  components: {
+    'veui-icon': Icon
+  },
+  props: {
+    ui: String,
+    type: {
+      type: String,
+      default: 'success'
     },
-    props: {
-      ui: String,
-      type: {
-        type: String,
-        default: 'success'
-      },
-      message: [String, Array],
-      closeText: String,
-      open: {
-        type: Boolean,
-        default: true
-      }
+    message: [String, Array],
+    closeText: String,
+    open: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data () {
+    return {
+      localOpen: this.open,
+      index: 0
+    }
+  },
+  watch: {
+    open (value) {
+      this.localOpen = value
+    }
+  },
+  computed: {
+    iconName () {
+      return TYPE_MAP[this.type]
     },
-    data () {
-      return {
-        localOpen: this.open,
-        index: 0
-      }
+    isMultiple () {
+      return isArray(this.message)
     },
-    watch: {
-      open (value) {
-        this.localOpen = value
-      }
+    isFirst () {
+      return this.index <= 0
     },
-    computed: {
-      iconName () {
-        return TYPE_MAP[this.type]
-      },
-      isMultiple () {
-        return isArray(this.message)
-      },
-      isFirst () {
-        return this.index <= 0
-      },
-      isLast () {
-        return this.index >= this.message.length - 1
-      }
+    isLast () {
+      return this.index >= this.message.length - 1
+    }
+  },
+  methods: {
+    close () {
+      this.localOpen = false
+      this.$emit('update:open', false)
     },
-    methods: {
-      close () {
-        this.localOpen = false
-        this.$emit('update:open', false)
-      },
-      switchMessage (step) {
-        if ((step > 0 && this.isLast) || (step < 0 && this.isFirst)) {
-          return
-        }
-        this.index = this.index + step
+    switchMessage (step) {
+      if ((step > 0 && this.isLast) || (step < 0 && this.isFirst)) {
+        return
       }
+      this.index = this.index + step
     }
   }
+}
 </script>
 
 <style lang="less">

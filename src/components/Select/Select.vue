@@ -13,7 +13,7 @@
       <span class="veui-select-label">
         <slot name="label" :label="label">{{ label }}</slot>
       </span>
-      <icon class="veui-select-icon" :name="`caret-${expanded ? 'up' : 'down'}`"></icon>
+      <icon class="veui-select-icon" :name="`triangle-${expanded ? 'up' : 'down'}`"></icon>
     </veui-button>
     <veui-overlay
       v-if="expanded"
@@ -53,12 +53,11 @@
 
 <script>
 import Icon from '../Icon'
+import '../../icons'
 import Button from '../Button'
 import Option from './Option'
 import Overlay from '../Overlay'
 import { input, dropdown } from '../../mixins'
-import 'vue-awesome/icons/caret-down'
-import 'vue-awesome/icons/caret-up'
 
 export default {
   name: 'veui-select',

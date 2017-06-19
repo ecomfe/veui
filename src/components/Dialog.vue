@@ -23,7 +23,7 @@
         <a class="veui-dialog-content-head-close"
           v-show="localClosable"
           @click="hide">
-          <icon name="close"></icon>
+          <icon name="cross"></icon>
         </a>
       </div>
       <div ref="body" class="veui-dialog-content-body"><slot></slot></div>
@@ -43,7 +43,6 @@ import Overlay from './Overlay'
 import Button from './Button'
 import { ui } from '../mixins'
 import { drag } from '../directives'
-import 'vue-awesome/icons/close'
 
 export default {
   name: 'veui-dialog',

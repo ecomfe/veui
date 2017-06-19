@@ -5,7 +5,7 @@
       <div class="toast-title">全局提示</div>
       <veui-button ui="aux" @click="showToast('all')">全部</veui-button>
       <veui-button ui="aux" @click="showToast('success')">成功</veui-button>
-      <veui-button ui="aux" @click="showToast('warning')">警告</veui-button>
+      <veui-button ui="aux" @click="showToast('warn')">警告</veui-button>
       <veui-button ui="aux" @click="showToast('info')">提醒</veui-button>
       <veui-button ui="aux" @click="showToast('error')">错误</veui-button>
     </p>
@@ -17,14 +17,14 @@ import bus from '../bus'
 import toast from '@/managers/toast'
 import Button from '@/components/Button'
 
-let msg = [
+let messages = [
   {
     type: 'success',
     message: '恭喜您，您的请求已成功处理',
     duration: 2500
   },
   {
-    type: 'warning',
+    type: 'warn',
     message: '警告，有法律风险存在',
     duration: 2000
   },
@@ -47,24 +47,28 @@ export default {
   },
   data () {
     return {
-      msg: msg
+      messages: messages
     }
   },
   computed: {
-    msgMap () {
-      let map = {}
-      this.msg.forEach(item => {
-        map[item.type] = item
-      })
-      return map
+    messageMap () {
+      return this.messages.reduce((result, current) => {
+        result[current.type] = current
+        return result
+      }, {})
     }
   },
   methods: {
     showToast (type) {
       if (type === 'all') {
-        toast.add(this.msg)
+        messages.forEach(({ type, message, duration }) => {
+          toast[type]({
+            message,
+            duration
+          })
+        })
       } else {
-        toast[type](this.msgMap[type])
+        toast[type](this.messageMap[type].message)
       }
     }
   },

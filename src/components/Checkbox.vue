@@ -10,11 +10,10 @@
 
 <script>
 import Icon from './Icon'
+import '../icons'
 import { input } from '../mixins'
 import { assign } from 'lodash'
 import { patchIndeterminate } from '../utils/dom'
-import 'vue-awesome/icons/check'
-import 'vue-awesome/icons/minus'
 
 export default {
   name: 'veui-checkbox',

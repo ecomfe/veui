@@ -25,14 +25,14 @@
             :to="page === 1 ? '' : pageNavHref.previous.href"
             :native="native"
             @click="handleRedirect(pageNavHref.previous.page, $event)">
-            <icon name="chevron-left"></icon>
+            <icon name="angle-left"></icon>
           </veui-link>
           <veui-link class="veui-button-next"
             :class="{ 'veui-disabled': page === pageCount }"
             :to="page === pageCount ? '' : pageNavHref.next.href"
             :native="native"
             @click="handleRedirect(pageNavHref.next.page, $event)">
-            <icon name="chevron-right"></icon>
+            <icon name="angle-right"></icon>
           </veui-link>
         </div>
       </div>
@@ -42,13 +42,10 @@
 
 <script>
 import Icon from './Icon'
+import '../icons'
 import Link from './Link'
 import Select from './Select'
 import Option from './Select/Option'
-import 'vue-awesome/icons/chevron-left'
-import 'vue-awesome/icons/chevron-right'
-import 'vue-awesome/icons/chevron-circle-left'
-import 'vue-awesome/icons/chevron-circle-right'
 
 const OPTIONAL_PAGE_SIZES = [
   30, 60, 100, 200
@@ -448,7 +445,7 @@ export default {
       }
 
       .veui-icon {
-        width: @button-height * .2;
+        width: @button-height * .4;
         .position-center()
       }
     }

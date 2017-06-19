@@ -29,11 +29,9 @@
                 <img :src="file.src" :alt="file.alt || ''">
               </div>
               <span :class="classType + '-name'"
-                :title="uiProps.indexOf('ellipsis') > -1 ? file.name : ''">
-                <icon name="file-zip-o" class="veui-uploader-list-icon"></icon>{{file.name}}
-              </span>
+                :title="uiProps.indexOf('ellipsis') > -1 ? file.name : ''">{{file.name}}</span>
               <span :class="classType + '-size'">{{convertSizeUnit(file.size)}}</span>
-              <veui-button ui="link delete" @click="$emit('remove', file)"><icon name="close"></icon></veui-button>
+              <veui-button ui="link delete" @click="$emit('remove', file)"><icon name="cross"></icon></veui-button>
             </template>
             <template v-else-if="uploaderType === 'image'">
               <img :src="file.src" :alt="file.alt || ''">
@@ -93,15 +91,11 @@
 
 <script>
 import Icon from './Icon'
+import '../icons'
 import Button from './Button'
 import { endsWith, cloneDeep, filter, map, uniqueId, assign } from 'lodash'
 import { ui, input } from '../mixins'
 import { config } from '../managers'
-import 'vue-awesome/icons/close'
-import 'vue-awesome/icons/upload'
-import 'vue-awesome/icons/plus'
-import 'vue-awesome/icons/check-circle'
-import 'vue-awesome/icons/file-zip-o'
 
 config.defaults({
   'uploader.requestMode': 'xhr',
@@ -634,7 +628,7 @@ function getProgress () {
       font-size: 0;
       text-align: center;
       background-color: #fff;
-      margin-right: 3px;
+      margin-right: 8px;
     }
 
     .veui-uploader-list-file-name {
