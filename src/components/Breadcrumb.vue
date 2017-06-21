@@ -1,9 +1,21 @@
 <script>
 import BreadcrumbItem from './BreadcrumbItem'
+import Icon from './Icon'
+import '../icons'
 
 export default {
   name: 'veui-breadcrumb',
   props: {
+    routes: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+
+    /**
+     * @deprecated
+     **/
     routers: {
       type: Array,
       default () {
@@ -13,42 +25,37 @@ export default {
   },
   data () {
     return {
-      localRouters: this.routers
+      localRoutes: this.routes.length ? this.routes : this.routers
     }
   },
   watch: {
+    routes (value) {
+      this.localRoutes = value
+      this.checkLocalRoutes()
+    },
     routers (value) {
-      this.localRouters = value
-      this.checkLocalRouters()
+      this.localRoutes = value
+      this.checkLocalRoutes()
     }
   },
   created () {
-    this.checkLocalRouters()
+    this.checkLocalRoutes()
   },
   render () {
-    function renderSlot (slotName, ...args) {
-      if (this.$slots[slotName]) {
-        return this.$slots[slotName]
-      }
-      if (this.$scopedSlots[slotName]) {
-        return this.$scopedSlots[slotName](...args)
-      }
-    }
-
     return (
       <ul class="veui-breadcrumb">
-        {this._l(this.localRouters, (router, index) => {
+        {this._l(this.localRoutes, (route, index) => {
           return (
-            <BreadcrumbItem to={router.to}
-              replace={router.replace}
-              type={router.type}
-              native={router.native}
-              onRedirect={event => this.fireRedirect(event, router, index)}>
-              {renderSlot.call(this, 'default', { router })}
+            <BreadcrumbItem to={route.to}
+              replace={route.replace}
+              type={route.type}
+              native={route.native}
+              onRedirect={event => this.fireRedirect(event, route, index)}>
+              {this.$scopedSlots.default({ route, router: route })}
               {
-                index !== this.localRouters.length - 1
+                index !== this.localRoutes.length - 1
                   ? <span slot="separator" class="veui-breadcrumb-separator">
-                      {renderSlot.call(this, 'separator', { router })}
+                      {this.$slots.separator || <Icon name="angle-right"></Icon>}
                     </span>
                   : null
               }
@@ -61,19 +68,20 @@ export default {
   methods: {
 
     /**
-     * 默认将最后一个router的type设置为text
+     * 默认将最后一个route的type设置为text
      */
-    checkLocalRouters () {
-      if (this.localRouters.length) {
-        const lastRouter = this.localRouters[this.localRouters.length - 1]
-        if (!lastRouter.type) {
-          lastRouter.type = 'text'
+    checkLocalRoutes () {
+      if (this.localRoutes.length) {
+        const last = this.localRoutes[this.localRoutes.length - 1]
+        if (!last.type) {
+          last.type = 'text'
         }
       }
     },
 
-    fireRedirect (event, router, index) {
-      this.$emit('redirect', event, router, index)
+    fireRedirect (event, route, index) {
+      debugger
+      this.$emit('redirect', event, route, index)
     }
   }
 }
@@ -83,13 +91,18 @@ export default {
 @import "../styles/theme-default/lib.less";
 
 .veui-breadcrumb {
-  padding: 0;
-  margin: 0;
-  list-style: none;
   .clearfix();
-}
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: @veui-text-color-weak;
 
-.veui-breadcrumb-separator {
-  padding: 0 8px;
+  &-separator {
+    padding: 0 8px;
+
+    .veui-icon {
+      vertical-align: middle;
+    }
+  }
 }
 </style>

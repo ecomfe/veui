@@ -36,9 +36,6 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-  methods: {
-
   }
 }
 </script>
@@ -47,10 +44,10 @@ export default {
 
 .veui-breadcrumb-item {
   float: left;
-}
+  line-height: 20px;
 
-.veui-breadcrumb-item-link {
-  cursor: pointer;
-  color: @veui-theme-color-primary;
+  a {
+    text-decoration: none;
+  }
 }
 </style>

@@ -4,7 +4,7 @@
     <p>
       <veui-breadcrumb :routers="items" @redirect="handleRedirect">
         <template scope="scope">{{ scope.router.text }}</template>
-        <template slot="separator">&gt;</template>
+        <!--<template slot="separator">&raquo;</template>-->
       </veui-breadcrumb>
     </p>
   </article>
@@ -48,6 +48,3 @@ export default {
   }
 }
 </script>
-<style lang="less">
-
-</style>
