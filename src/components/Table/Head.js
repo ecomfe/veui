@@ -4,17 +4,20 @@ import Sorter from './Sorter'
 import { table } from '../../mixins'
 
 export default {
+  name: 'veui-table-head',
   components: {
     'veui-checkbox': Checkbox,
     'veui-button': Button,
     'veui-table-sorter': Sorter
   },
   mixins: [table],
-  props: {
-    data: Array,
-    columns: Array,
-    selectable: Boolean,
-    selectStatus: String
+  computed: {
+    ...table.mapTableData(
+      'data',
+      'selectable',
+      'selectStatus',
+      { displayedColumns: 'columns' }
+    )
   },
   render () {
     return (
@@ -22,16 +25,16 @@ export default {
         <tr>
           {
             this.selectable
-              ? <th><veui-checkbox checked={this.selectStatus === 'all'}
+              ? <th><div class="veui-table-cell"><veui-checkbox checked={this.selectStatus === 'all'}
                 disabled={!this.data.length}
                 indeterminate={this.selectStatus === 'partial'}
-                onChange={checked => { this.$emit('select', checked) }}/></th>
+                onChange={checked => { this.table.select(checked) }}/></div></th>
               : ''
           }
           {
             this._l(this.columns, col => (
               <th>
-                <span class="veui-table-header">{col.renderHead.call(this._renderProxy, { col })}</span>
+                <div class="veui-table-cell">{col.renderHead.call(this._renderProxy, { col })}</div>
                 {
                   col.sortable
                     ? <veui-table-sorter

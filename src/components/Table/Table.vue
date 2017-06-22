@@ -4,15 +4,9 @@
     <col v-if="selectable" width="60"></col>
     <col v-for="col in displayedColumns" :width="col.width"></col>
   </colgroup>
-  <table-head :data="data" :columns="displayedColumns" :selectable="selectable" :select-status="selectStatus" @select="select" @sort="sort"></table-head>
-  <slot name="foot"><table-foot v-if="hasFoot" :data="data" :columns="displayedColumns"></table-foot></slot>
-  <tbody v-if="!data.length">
-    <tr><td class="veui-table-no-data" :colspan="(selectable ? 1 : 0) + displayedColumns.length"><slot name="no-data">没有数据</slot></td></tr>
-  </tbody>
-  <template v-else>
-    <table-body :data="data" :columns="displayedColumns" :selectable="selectable"
-      :selected-items="selectedItems" :keys="realKeys" @select="select"></table-body>
-  </template>
+  <table-head @sort="sort"></table-head>
+  <table-body></table-body>
+  <slot name="foot"><table-foot v-if="hasFoot"></table-foot></slot>
   <slot></slot>
 </table>
 </template>
@@ -145,10 +139,15 @@ export default {
   width: 100%;
   border-collapse: collapse;
 
+  &-cell {
+    display: inline-block;
+    line-height: 30px;
+  }
+
   th,
   td {
     height: 54px;
-    padding: 20px;
+    padding: 12px;
     color: @veui-gray-color-normal;
     text-align: left;
     white-space: nowrap;
@@ -171,7 +170,7 @@ export default {
     th,
     td {
       height: 48px;
-      .padding(17px, _);
+      .padding(9px, _);
     }
   }
 

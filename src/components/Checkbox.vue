@@ -108,7 +108,7 @@ export default {
   & :indeterminate + &-box {
     background-color: @veui-theme-color-primary;
     border-color: @veui-theme-color-primary;
-    .veui-icon {
+    & > .veui-icon {
       display: inline-block;
       position: absolute;
       color: #fff;
