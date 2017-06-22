@@ -29,13 +29,13 @@ export default {
     return <tr class={{ 'veui-table-selected-row': checked }}>
       {
         this.selectable
-          ? <td><veui-checkbox checked={checked}
-              key={this.keys[index]} onChange={checked => { this.table.select(checked, index) }}/></td>
+          ? <td><div class="veui-table-cell"><veui-checkbox checked={checked}
+              key={this.keys[index]} onChange={checked => { this.table.select(checked, index) }}/></div></td>
           : ''
       }
       {
         this._l(this.columns, col => (
-          <td>{col.renderBody.call(this._renderProxy, { item, col, index })}</td>
+          <td><div class="veui-table-cell">{col.renderBody.call(this._renderProxy, { item, col, index })}</div></td>
         ))
       }
     </tr>

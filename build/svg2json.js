@@ -9,9 +9,10 @@ const svgo = new Svgo({
 
 const icons = {}
 const svgDir = path.resolve(__dirname, '../assets/icons/')
+const extPattern = /\.svg$/
 
 fs.readdirSync(svgDir).forEach(file => {
-  if (!/\.svg$/.test(file)) {
+  if (!extPattern.test(file)) {
     return
   }
   svgo.optimize(fs.readFileSync(path.resolve(svgDir, file), 'utf8'), ({ error, data }) => {
@@ -27,7 +28,7 @@ fs.readdirSync(svgDir).forEach(file => {
       console.error(file, 'not match')
       return
     }
-    icons[file] = {
+    icons[file.replace(extPattern, '')] = {
       width: parseInt(sizeMatch[1], 10),
       height: parseInt(sizeMatch[2], 10),
       paths: [{

@@ -107,6 +107,11 @@ export default {
       this.orderBy = orderBy
       this.order = order
     }
+  },
+  mounted () {
+    // for (let i = 0; i < 300; i++) {
+    //   this.append()
+    // }
   }
 }
 </script>

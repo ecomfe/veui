@@ -1,39 +1,31 @@
-import Checkbox from '../Checkbox'
+import Row from './Row'
 import { table } from '../../mixins'
 
 export default {
+  name: 'veui-table-body',
   components: {
-    'veui-checkbox': Checkbox
+    'veui-table-row': Row
   },
   mixins: [table],
-  props: {
-    data: Array,
-    columns: Array,
-    selectable: Boolean,
-    selectedItems: Object,
-    keys: Array
+  computed: {
+    ...table.mapTableData(
+      'data',
+      'selectable',
+      { displayedColumns: 'columns' }
+    )
   },
   render () {
     return (
       <tbody>
-        {this._l(this.data, (item, index) => {
-          let checked = !!this.selectedItems[this.keys ? this.keys[index] : index]
+        {this.data.length ? this._l(this.data, (item, index) => {
           return (
-            <tr class={{ 'veui-table-selected-row': checked }}>
-              {
-                this.table.selectable
-                  ? <td><veui-checkbox checked={checked}
-                      key={this.keys[index]} onChange={checked => { this.$emit('select', checked, index) }}/></td>
-                  : ''
-              }
-              {
-                this._l(this.columns, col => (
-                  <td>{col.renderBody.call(this._renderProxy, { item, col, index })}</td>
-                ))
-              }
-            </tr>
+            <veui-table-row index={ index }></veui-table-row>
           )
-        })}
+        }) : <tr>
+          <td class="veui-table-no-data" colspan={(this.selectable ? 1 : 0) + this.columns.length}>
+            <div class="veui-table-cell">{this.$slots['no-data'] || '没有数据'}</div>
+          </td>
+        </tr>}
       </tbody>
     )
   }

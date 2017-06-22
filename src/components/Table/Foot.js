@@ -1,15 +1,23 @@
 import { table } from '../../mixins'
 
 export default {
+  name: 'veui-table-foot',
   mixins: [table],
   props: {
     columns: Array,
     selectable: Boolean,
     selectStatus: String
   },
+  computed: {
+    ...table.mapTableData(
+      { displayedColumns: 'columns' },
+      'selectable',
+      'selectStatus'
+    )
+  },
   render () {
     return (
-      <thead>
+      <tfoot>
         <tr>
           {this.table.selectable ? <th></th> : ''}
           {
@@ -18,7 +26,7 @@ export default {
             ))
           }
         </tr>
-      </thead>
+      </tfoot>
     )
   }
 }
