@@ -2,7 +2,7 @@
   <label class="veui-checkbox" :ui="ui">
     <input ref="box" type="checkbox" v-bind="attrs" @change="handleChange($event.target.checked)">
     <span class="veui-checkbox-box">
-      <icon v-if="checked || localIndeterminate" :name="localIndeterminate ? 'minus' : 'check'"></icon>
+      <icon v-if="checked || localIndeterminate" :name="`${localIndeterminate ? 'minus' : 'check'}-thick`"></icon>
     </span>
     <span><slot></slot></span>
   </label>
