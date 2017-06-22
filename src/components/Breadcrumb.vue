@@ -44,7 +44,7 @@ export default {
   render () {
     return (
       <ul class="veui-breadcrumb">
-        {this._l(this.localRoutes, (route, index) => {
+        {this.$slots.default || this._l(this.localRoutes, (route, index) => {
           return (
             <BreadcrumbItem to={route.to}
               replace={route.replace}
@@ -55,7 +55,7 @@ export default {
               {
                 index !== this.localRoutes.length - 1
                   ? <span slot="separator" class="veui-breadcrumb-separator">
-                      {this.$slots.separator || <Icon name="angle-right"></Icon>}
+                      {this.$scopedSlots.separator ? this.$scopedSlots.separator() : <Icon name="angle-right"></Icon>}
                     </span>
                   : null
               }
@@ -80,7 +80,6 @@ export default {
     },
 
     fireRedirect (event, route, index) {
-      debugger
       this.$emit('redirect', event, route, index)
     }
   }

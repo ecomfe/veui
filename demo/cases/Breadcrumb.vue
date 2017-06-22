@@ -4,7 +4,7 @@
     <p>
       <veui-breadcrumb :routers="items" @redirect="handleRedirect">
         <template scope="scope">{{ scope.router.text }}</template>
-        <!--<template slot="separator">&raquo;</template>-->
+        <template slot="separator" scope="scope">&raquo;</template>
       </veui-breadcrumb>
     </p>
   </article>
