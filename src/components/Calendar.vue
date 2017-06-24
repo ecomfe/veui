@@ -59,8 +59,13 @@
 import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/date'
 import { flattenDeep, findIndex } from 'lodash'
 import { input } from '../mixins'
+import { config } from '../managers'
 import Icon from './Icon'
 import '../icons'
+
+config.defaults({
+  'calendar.weekStart': 1
+})
 
 let dayNames = [
   '一', '二', '三', '四', '五', '六', '日'
@@ -100,7 +105,10 @@ export default {
     },
     weekStart: {
       type: Number,
-      default: 1
+      default: config.get('calendar.weekStart'),
+      validate (val) {
+        return val >= 0 && val <= 6
+      }
     },
     range: Boolean,
     multiple: Boolean,
@@ -291,7 +299,9 @@ export default {
     },
     markEnd (day) {
       if (this.range && this.picking) {
-        this.$set(this.picking, 1, day ? new Date(day.year, day.month, day.date) : null)
+        let marked = day ? new Date(day.year, day.month, day.date) : null
+        this.$set(this.picking, 1, marked)
+        this.$emit('selecthover', marked)
       }
     },
     setView (i, value) {

@@ -59,10 +59,35 @@ export default {
       selected2: null,
       shortcuts: [
         {
-          label: '最近7天',
-          range: {
-            days: -6
+          label: '上个月',
+          from: {
+            startOf: 'month',
+            month: -1
+          },
+          to: {
+            startOf: 'month',
+            days: -1
           }
+        },
+        {
+          label: '本月',
+          from: {
+            startOf: 'month'
+          },
+          to: 0
+        },
+        {
+          label: '本周',
+          from: {
+            startOf: 'week',
+            days: 0
+          },
+          to: 0
+        },
+        {
+          label: '最近7天',
+          from: -6,
+          to: 0
         }
       ]
     }

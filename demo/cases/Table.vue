@@ -6,13 +6,14 @@
     </section>
     <section>
       <veui-table ui="slim alt" :data="data" :columnFilter="columns" keys="id" selectable
-        :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected.sync="selected">
+        :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected="selected">
         <veui-table-column field="id" title="数据 ID" sortable></veui-table-column>
         <veui-table-column field="desc" title="数据描述"></veui-table-column>
-        <veui-table-column field="price" title="价格" sortable width="160">
-          <template scope="props">{{ '¥' + props.item.price.toFixed(2) }}</template>
+        <veui-table-column field="price" title="价格" sortable width="160" align="right">
+          <template scope="props">{{ props.item.price | currency }}</template>
+          <template scope="props" slot="foot"><strong>{{ total | currency }}</strong></template>
         </veui-table-column>
-        <veui-table-column field="updateDate" title="更新时间">
+        <veui-table-column field="updateDate" title="更新时间" align="center">
           <template scope="props">{{ props.item.updateDate | date }}</template>
         </veui-table-column>
         <veui-table-column field="operation" title="操作">
@@ -56,6 +57,9 @@ export default {
     'veui-checkboxgroup': CheckboxGroup
   },
   filters: {
+    currency (value) {
+      return '¥' + value.toFixed(2)
+    },
     date (value) {
       return moment(value).format('YYYY-MM-DD')
     }
@@ -79,6 +83,13 @@ export default {
       order: false,
       orderBy: null,
       selected: ['3155', '3156']
+    }
+  },
+  computed: {
+    total () {
+      return this.data.reduce((total, item) => {
+        return total + item.price
+      }, 0)
     }
   },
   methods: {
@@ -123,5 +134,12 @@ section {
 
 label {
   margin-right: 10px;
+}
+
+table {
+  tfoot strong {
+    font-size: 16px;
+    font-weight: 400;
+  }
 }
 </style>

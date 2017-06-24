@@ -3,11 +3,6 @@ import { table } from '../../mixins'
 export default {
   name: 'veui-table-foot',
   mixins: [table],
-  props: {
-    columns: Array,
-    selectable: Boolean,
-    selectStatus: String
-  },
   computed: {
     ...table.mapTableData(
       { displayedColumns: 'columns' },
@@ -22,7 +17,7 @@ export default {
           {this.table.selectable ? <th></th> : ''}
           {
             this._l(this.columns, col => (
-              <th>{col.renderFoot.call(this._renderProxy, { col })}</th>
+              <th class={col.align ? `veui-table-column-${col.align}` : ''}>{col.renderFoot.call(this._renderProxy, { col })}</th>
             ))
           }
         </tr>

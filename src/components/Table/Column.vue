@@ -15,7 +15,15 @@ export default {
     },
     width: [String, Number],
     sortable: Boolean,
-    order: [String, Boolean]
+    order: [String, Boolean],
+    align: {
+      type: String,
+      validate (val) {
+        if (val && val !== 'left' && val !== 'right' && val !== 'center') {
+          return false
+        }
+      }
+    }
   },
   mounted () {
     let table = this.table
@@ -24,7 +32,7 @@ export default {
     }
     let slots = this.$scopedSlots
     table.columns.push({
-      ...pick(this.$props, 'title', 'field', 'sortable', 'width'),
+      ...pick(this.$props, 'title', 'field', 'sortable', 'width', 'align'),
       hasFoot: !!slots.foot,
       renderBody: slots.default
         ? data => slots.default(data)

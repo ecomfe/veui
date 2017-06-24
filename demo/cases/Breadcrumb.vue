@@ -4,18 +4,21 @@
     <p>
       <veui-breadcrumb :routers="items" @redirect="handleRedirect">
         <template scope="scope">{{ scope.router.text }}</template>
-        <template slot="separator" scope="scope">&raquo;</template>
+        <template slot="separator" scope="scope"><veui-icon name="angle-double-right"/></template>
       </veui-breadcrumb>
     </p>
   </article>
 </template>
 <script>
 import Breadcrumb from '@/components/Breadcrumb'
+import Icon from '@/components/Icon'
+import '@/icons'
 
 export default {
   name: 'breadcrumb-demo',
   components: {
-    'veui-breadcrumb': Breadcrumb
+    'veui-breadcrumb': Breadcrumb,
+    'veui-icon': Icon
   },
   data () {
     return {
