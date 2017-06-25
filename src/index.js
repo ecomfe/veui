@@ -1,10 +1,12 @@
-import { setBaseZIndex, addOverlay } from './managers/overlay'
+import overlay from './managers/overlay'
 
 export default {
   install (Vue, { baseZIndex = 100 } = {}) {
-    setBaseZIndex(baseZIndex)
+    overlay.setBaseZIndex(baseZIndex)
     Vue.prototype.$veui = {
-      addOverlay
+      overlay: {
+        create: (...args) => overlay.createNode(...args)
+      }
     }
   }
 }

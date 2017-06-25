@@ -40,123 +40,58 @@ export default {
       default () {
         return {}
       }
-    }
+    },
+    priority: Number
   },
   data () {
     return {
       zIndex: 0,
       appendBody: false,
-      localOpen: false,
-      targetNode: null
-    }
-  },
-  computed: {
-    isAttach () {
-      return !!this.target
+      localOpen: this.open,
+      targetNode: null,
+
+      // 把 id 放 data 上面方便 debug
+      zIndexNodeId: null
     }
   },
   watch: {
     open (value) {
-      this.updateOverlayData()
+      this.localOpen = value
+      this.updateOverlayDOM()
+      this[ZINDEX_INSTANCE_KEY].toTop()
     },
     target () {
-      this.updateOverlayData()
+      this.findTargetNode()
+    },
+    targetNode () {
+      this.updateOverlayDOM()
     }
   },
   mounted () {
     const box = this.$refs.box
     document.body.appendChild(box)
 
-    this.updateOverlayData()
-  },
-  updated () {
-    if (this.isOpenDirty) {
-      this.isOpenDirty = false
-      this.updateOverlayDOM()
-    }
+    this.findTargetNode()
+    this.updateOverlayDOM()
   },
   methods: {
 
-    createZIndexInstance () {
-      this[ZINDEX_INSTANCE_KEY] = this.$veui.addOverlay(this.isAttach ? this.findParentOverlayId() : null)
-      this[ZINDEX_INSTANCE_KEY].$on(
-        'zindexchange',
-        zIndex => {
+    // 更新 zindex 树
+    updateNode () {
+      if (!this[ZINDEX_INSTANCE_KEY]) {
+        this[ZINDEX_INSTANCE_KEY] = this.$veui.overlay.create({
+          parentId: this.findParentOverlayId(),
+          priority: this.priority
+        })
+        this[ZINDEX_INSTANCE_KEY].$on('zindexchange', (zIndex) => {
           this.zIndex = zIndex
-        }
-      )
-      this[ZINDEX_INSTANCE_KEY].refresh()
-    },
-
-    updateOverlayDOM () {
-      if (this.isAttach) {
-        if (this.open && this.targetNode) {
-          this.closeOverlay()
-          this.tether = new Tether({
-            element: this.$refs.box,
-            target: this.targetNode,
-            ...omit(this.options, 'element', 'target')
-          })
-          this.$nextTick(() => this.tether.position())
-          this.createZIndexInstance()
-        } else {
-          this.closeOverlay()
-        }
+        })
+        this.zIndexNodeId = this[ZINDEX_INSTANCE_KEY].id
       } else {
-        if (this.open) {
-          this.closeOverlay()
-          this.createZIndexInstance()
-        } else {
-          this.closeOverlay()
-        }
+        this[ZINDEX_INSTANCE_KEY].move(this.findParentOverlayId(), this.priority)
       }
     },
 
-    getTargetNode (target) {
-      return getNodes(target, this.$vnode.context)[0]
-    },
-
-    updateOverlayData () {
-      this.isOpenDirty = true
-      this.localOpen = false
-      if (this.isAttach) {
-        if (this.open) {
-          this.targetNode = this.getTargetNode(this.target)
-          this.localOpen = !!this.targetNode
-        } else {
-          this.localOpen = false
-        }
-      } else {
-        this.localOpen = this.open
-      }
-
-      // 发生了变化才抛事件出去
-      if (this.localOpen !== this.open) {
-        this.$emit('update:open', this.localOpen)
-      }
-    },
-
-    closeOverlay () {
-      if (this.isAttach) {
-        this.tether && this.tether.destroy()
-        this.tether = null
-      }
-
-      if (this[ZINDEX_INSTANCE_KEY]) {
-        this[ZINDEX_INSTANCE_KEY].$off()
-        this[ZINDEX_INSTANCE_KEY].remove()
-        this[ZINDEX_INSTANCE_KEY] = null
-      }
-    },
-
-    isOverlay (componentInstance) {
-      return componentInstance.uiTypes && componentInstance.uiTypes[0] === 'overlay'
-    },
-
-    /**
-     * 向上找到父级overlay组件的Id。
-     * 前提条件：Overlay和target元素必须在同一个父Overlay之内
-     */
     findParentOverlayId () {
       let cur = this.$vnode.context
       while (cur) {
@@ -167,12 +102,58 @@ export default {
       }
     },
 
+    updateOverlayDOM () {
+      if (!this.localOpen) {
+        return
+      }
+
+      if (this.targetNode) {
+        const options = {
+          element: this.$refs.box,
+          target: this.targetNode,
+          ...omit(this.options, 'element', 'target')
+        }
+
+        if (!this.tether) {
+          this.tether = new Tether(options)
+        } else {
+          this.tether.setOptions(options)
+        }
+
+        // 修改 tether 的 options 的时候，有可能 tether 的容器元素还没显示出来，
+        // 所以保险起见，统一 nextTick 触发一下 tether 的重新计算
+        this.$nextTick(() => this.tether.position())
+      }
+
+      this.updateNode()
+    },
+
+    findTargetNode () {
+      if (this.target) {
+        this.targetNode = getNodes(this.target, this.$vnode.context)[0]
+      } else {
+        this.targetNode = null
+      }
+    },
+
+    isOverlay (componentInstance) {
+      return componentInstance.uiTypes && componentInstance.uiTypes[0] === 'overlay'
+    },
+
     focus () {
       this[ZINDEX_INSTANCE_KEY].toTop()
     }
   },
   beforeDestroy () {
-    this.closeOverlay()
+    this.tether && this.tether.destroy()
+    this.tether = null
+
+    if (this[ZINDEX_INSTANCE_KEY]) {
+      this[ZINDEX_INSTANCE_KEY].$off()
+      this[ZINDEX_INSTANCE_KEY].remove()
+      this[ZINDEX_INSTANCE_KEY] = null
+    }
+
     this.$refs.box.parentNode.removeChild(this.$refs.box)
   }
 }
