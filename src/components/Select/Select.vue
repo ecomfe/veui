@@ -20,7 +20,7 @@
       target="button"
       :open="expanded"
       :options="overlay">
-      <div class="veui-select-options" :ui="ui" v-outside:button="close">
+      <div ref="box" class="veui-select-options" :ui="ui" v-outside:button="close">
         <slot>
           <template v-for="option in options">
             <veui-option
@@ -124,6 +124,7 @@ function extractOptions (options, map) {
 <style lang="less">
 @import "../../styles/theme-default/lib.less";
 @import (reference) "../../styles/theme-default/dropdown.less";
+@import "../../styles/theme-default/dropdown-overflow.less";
 
 .veui-select {
   &:extend(._veui-dropdown-button all);

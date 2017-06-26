@@ -17,7 +17,7 @@
       target="button"
       :open="expanded"
       :options="overlay">
-      <div class="veui-dropdown-options" v-outside:button="close">
+      <div ref="box" class="veui-dropdown-options" v-outside:button="close">
         <div v-for="option in options"
           :key="option.value"
           class="veui-dropdown-option"
@@ -100,6 +100,7 @@ export default {
 <style lang="less">
 @import "../styles/theme-default/lib.less";
 @import (reference) "../styles/theme-default/dropdown.less";
+@import "../styles/theme-default/dropdown-overflow.less";
 
 .veui-dropdown {
   &:extend(._veui-dropdown-button all);
