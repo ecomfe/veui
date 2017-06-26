@@ -88,6 +88,10 @@ export default {
           label: '最近7天',
           from: -6,
           to: 0
+        },
+        {
+          label: '今天',
+          to: 0
         }
       ]
     }

@@ -29,15 +29,17 @@
     <veui-icon name="cross"></veui-icon>
   </button>
   <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay">
-    <veui-calendar class="veui-datepicker-overlay" v-model="localSelected" v-bind="calendarProps"
-      v-outside:button="close" @select="handleSelect" @selectstart="handleStart" @selecthover="handleSelectHover" :panel="realPanel">
+    <veui-calendar class="veui-datepicker-overlay" v-model="localSelected" v-bind="calendarProps" ref="cal"
+      v-outside:button="close" @select="handleSelect" @selectstart="handleProgress" @selectprogress="handleProgress" :panel="realPanel">
       <template v-if="range && realShortcuts && realShortcuts.length">
         <div class="veui-datepicker-shortcuts">
           <button v-for="({from, to, label}, index) in realShortcuts" type="button" :key="index"
             :class="{
               'veui-datepicker-shortcut': true,
               'veui-datepicker-shortcut-selected': isShortcutSelected({from, to})
-            }" @click="handleSelect([from, to])">{{ label }}</button>
+            }" @click="handleSelect([from, to])"
+            @mouseenter="handleHoverShortcut([from, to])"
+            @mouseleave="handleHoverShortcut()">{{ label }}</button>
         </div>
       </template>
     </veui-calendar>
@@ -161,11 +163,8 @@ export default {
       this.picking = null
       this.expanded = false
     },
-    handleStart (selected) {
-      this.picking = [selected]
-    },
-    handleSelectHover (selected) {
-      this.$set(this.picking, 1, selected)
+    handleProgress (picking) {
+      this.picking = picking
     },
     clear (e) {
       this.$emit('select', null)
@@ -205,6 +204,9 @@ export default {
         return from - selected[0] === 0 && to - selected[1] === 0
       }
       return to - selected[0] === 0 && from - selected[1] === 0
+    },
+    handleHoverShortcut (picking) {
+      this.$refs.cal.picking = picking || null
     }
   },
   watch: {
@@ -282,20 +284,25 @@ export default {
   &-shortcut {
     height: 24px;
     margin-right: 10px;
-    padding: 0 5px;
+    padding: 0 9px;
     border: 1px solid transparent;
     background: none;
-    color: @veui-theme-color-primary;
     font-size: @veui-font-size-small;
+    color: @veui-text-color-weak;
     border-radius: 2px;
     outline: none;
+
+    &:hover {
+      color: @veui-theme-color-primary;
+    }
 
     &:last-child {
       margin-right: 0;
     }
 
     &-selected {
-      border: 1px solid @veui-theme-color-primary;
+      border-color: @veui-theme-color-primary;
+      color: @veui-theme-color-primary;
     }
   }
 }
