@@ -59,8 +59,13 @@
 import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/date'
 import { flattenDeep, findIndex } from 'lodash'
 import { input } from '../mixins'
+import { config } from '../managers'
 import Icon from './Icon'
 import '../icons'
+
+config.defaults({
+  'calendar.weekStart': 1
+})
 
 let dayNames = [
   '一', '二', '三', '四', '五', '六', '日'
@@ -100,7 +105,10 @@ export default {
     },
     weekStart: {
       type: Number,
-      default: 1
+      default: config.get('calendar.weekStart'),
+      validate (val) {
+        return val >= 0 && val <= 6
+      }
     },
     range: Boolean,
     multiple: Boolean,
@@ -258,9 +266,12 @@ export default {
       let selected = new Date(day.year, day.month, day.date)
       if (!this.range) {
         if (!this.multiple) {
+          // single day selection
           this.$emit('select', selected)
           return
         }
+
+        // multiple single days selection
         let result = [...this.localSelected]
         let pos = findIndex(result, date => {
           return isSameDay(date, selected)
@@ -273,25 +284,34 @@ export default {
         this.$emit('select', result)
         return
       }
+
+      // range selection
       if (!this.picking) {
         this.picking = [selected]
-        this.$emit('selectstart', selected)
+        this.$emit('selectstart', this.picking)
         return
       }
+
+      // prepare to select
       this.$set(this.picking, 1, selected)
       let picking = this.picking.sort((d1, d2) => d1 - d2)
       if (!this.multiple) {
+        // single range selection
         this.picking = null
         this.$emit('select', [...picking])
         return
       }
+
+      // multiple ranges selection
       this.picking = null
       let result = mergeRange(this.localSelected, picking)
       this.$emit('select', result)
     },
     markEnd (day) {
       if (this.range && this.picking) {
-        this.$set(this.picking, 1, day ? new Date(day.year, day.month, day.date) : null)
+        let marked = day ? new Date(day.year, day.month, day.date) : null
+        this.$set(this.picking, 1, marked)
+        this.$emit('selectprogress', this.picking)
       }
     },
     setView (i, value) {
@@ -324,10 +344,8 @@ export default {
         return (this.localSelected || []).some(d => isSameDay(d, day))
       }
       if (!this.multiple) {
-        if (!this.picking) {
-          return isSameDay(this.localSelected[0], day) || isSameDay(this.localSelected[1], day)
-        }
-        return isSameDay(this.picking[0], day)
+        let range = this.picking || this.localSelected
+        return isSameDay(range[0], day) || isSameDay(range[1], day)
       }
       return this.localSelected.some(selected => {
         return isSameDay(selected[0], day) || isSameDay(selected[1], day)

@@ -163,7 +163,7 @@ export default {
   }
 
   tfoot th {
-    border-top: 1px solid @veui-gray-color-sup-2;
+    border-top: none;
   }
 
   &[ui~="slim"] {
@@ -205,6 +205,15 @@ export default {
   &-sorter {
     margin-left: 5px;
     vertical-align: middle;
+  }
+
+  & &-column-center {
+    text-align: center;
+  }
+
+  & &-column-right {
+    text-align: right;
+    padding-right: 38px;
   }
 }
 </style>

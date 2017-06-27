@@ -9,8 +9,22 @@
     </p>
     <p>
       <veui-dropdown
+        ui="primary"
+        label="操作操作操作操作操作操作"
+        disabled
+        :options="options"></veui-dropdown>
+    </p>
+    <p>
+      <veui-dropdown
         ui="link"
         label="操作"
+        :options="options"></veui-dropdown>
+    </p>
+    <p>
+      <veui-dropdown
+        ui="link"
+        label="操作"
+        disabled
         :options="options"></veui-dropdown>
     </p>
   </article>

@@ -61,46 +61,46 @@
         <div style="margin-bottom:10px;">click事件</div>
         <div class="box">
           <div class="top">
-            <veui-button ui="aux" ref="topLeftClick" @mouseenter.native="clickShow({
+            <veui-button ui="aux" ref="topLeftClick" @click.native="clickShow({
               clickPosition: 'top left',
               clickTarget: 'topLeftClick'})">上左</veui-button>
-            <veui-button ui="aux" ref="topCenterClick" @mouseenter.native="clickShow({
+            <veui-button ui="aux" ref="topCenterClick" @click.native="clickShow({
               clickPosition: 'top',
               clickTarget: 'topCenterClick'})">上边</veui-button>
-            <veui-button ui="aux" ref="topRightClick" @mouseenter.native="clickShow({
+            <veui-button ui="aux" ref="topRightClick" @click.native="clickShow({
               clickPosition: 'top right',
               clickTarget: 'topRightClick'})">上右</veui-button>
           </div>
           <div class="left">
-            <veui-button ui="aux" ref="leftTopClick" @mouseenter.native="clickShow({
+            <veui-button ui="aux" ref="leftTopClick" @click.native="clickShow({
               clickPosition: 'left top',
               clickTarget: 'leftTopClick'})">左上</veui-button>
-            <veui-button ui="aux" ref="leftCenterClick" @mouseenter.native="clickShow({
+            <veui-button ui="aux" ref="leftCenterClick" @click.native="clickShow({
               clickPosition: 'left',
               clickTarget: 'leftCenterClick'})">左边</veui-button>
-            <veui-button ui="aux" ref="leftBottomClick" @mouseenter.native="clickShow({
+            <veui-button ui="aux" ref="leftBottomClick" @click.native="clickShow({
               clickPosition: 'left bottom',
               clickTarget: 'leftBottomClick'})">左下</veui-button>
           </div>
           <div class="right">
-            <veui-button ui="aux" ref="rightTopClick" @mouseenter.native="clickShow({
+            <veui-button ui="aux" ref="rightTopClick" @click.native="clickShow({
               clickPosition: 'right top',
               clickTarget: 'rightTopClick'})">右上</veui-button>
-            <veui-button ui="aux" ref="rightCenterClick" @mouseenter.native="clickShow({
+            <veui-button ui="aux" ref="rightCenterClick" @click.native="clickShow({
               clickPosition: 'right',
               clickTarget: 'rightCenterClick'})">右边</veui-button>
-            <veui-button ui="aux" ref="rightBottomClick" @mouseenter.native="clickShow({
+            <veui-button ui="aux" ref="rightBottomClick" @click.native="clickShow({
               clickPosition: 'right bottom',
               clickTarget: 'rightBottomClick'})">右下</veui-button>
           </div>
           <div class="bottom">
-            <veui-button ui="aux" ref="BottomLeftClick" @mouseenter.native="clickShow({
+            <veui-button ui="aux" ref="BottomLeftClick" @click.native="clickShow({
               clickPosition: 'bottom left',
               clickTarget: 'BottomLeftClick'})">下左</veui-button>
-            <veui-button ui="aux" ref="BottomCenterClick" @mouseenter.native="clickShow({
+            <veui-button ui="aux" ref="BottomCenterClick" @click.native="clickShow({
               clickPosition: 'bottom',
               clickTarget: 'BottomCenterClick'})">下边</veui-button>
-            <veui-button ui="aux" ref="BottomRightClick" @mouseenter.native="clickShow({
+            <veui-button ui="aux" ref="BottomRightClick" @click.native="clickShow({
               clickPosition: 'bottom right',
               clickTarget: 'BottomRightClick'})">下右</veui-button>
           </div>
@@ -152,10 +152,12 @@ export default {
     show (obj) {
       this.position = obj.position
       this.target = obj.target
+      this.open = true
     },
     clickShow (obj) {
       this.clickPosition = obj.clickPosition
       this.clickTarget = obj.clickTarget
+      this.clickOpen = true
     }
   }
 }

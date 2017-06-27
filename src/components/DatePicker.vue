@@ -29,11 +29,17 @@
     <veui-icon name="cross"></veui-icon>
   </button>
   <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay">
-    <veui-calendar class="veui-datepicker-overlay" v-model="localSelected" v-bind="calendarProps"
-      v-outside:button="close" @select="handleSelect" @selectstart="handleStart" :panel="realPanel">
-      <template v-if="range && shortcuts && shortcuts.length">
+    <veui-calendar class="veui-datepicker-overlay" v-model="localSelected" v-bind="calendarProps" ref="cal"
+      v-outside:button="close" @select="handleSelect" @selectstart="handleProgress" @selectprogress="handleProgress" :panel="realPanel">
+      <template v-if="range && realShortcuts && realShortcuts.length">
         <div class="veui-datepicker-shortcuts">
-          <veui-button ui="small link" class="veui-datepicker-shortcut" v-for="(shortcut, index) in shortcuts" :key="index" @click="selectShortcut(shortcut)">{{ shortcut.label }}</veui-button>
+          <button v-for="({from, to, label}, index) in realShortcuts" type="button" :key="index"
+            :class="{
+              'veui-datepicker-shortcut': true,
+              'veui-datepicker-shortcut-selected': isShortcutSelected({from, to})
+            }" @click="handleSelect([from, to])"
+            @mouseenter="handleHoverShortcut([from, to])"
+            @mouseleave="handleHoverShortcut()">{{ label }}</button>
         </div>
       </template>
     </veui-calendar>
@@ -50,7 +56,7 @@ import '../icons'
 import moment from 'moment'
 import { dropdown, input } from '../mixins'
 import { config } from '../managers'
-import { isArray, isObject, pick } from 'lodash'
+import { isArray, isNumber, pick, omit } from 'lodash'
 
 config.defaults({
   'datepicker.shortcuts': []
@@ -122,6 +128,27 @@ export default {
     },
     realPanel () {
       return this.panel || (this.range ? 2 : 1)
+    },
+    realShortcuts () {
+      if (!this.shortcuts) {
+        return null
+      }
+      return this.shortcuts.map(({from = 0, to, label}) => {
+        from = this.getDateByOffset(from)
+        to = this.getDateByOffset(to)
+        if (from > to) {
+          return {
+            label,
+            from: to,
+            to: from
+          }
+        }
+        return {
+          label,
+          from,
+          to
+        }
+      })
     }
   },
   methods: {
@@ -136,20 +163,8 @@ export default {
       this.picking = null
       this.expanded = false
     },
-    handleStart (selected) {
-      this.picking = [selected]
-    },
-    selectShortcut ({range}) {
-      if (isObject(range)) {
-        let now = new Date()
-        let today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-        let otherDay = moment(today).add(range).toDate()
-        if (today < otherDay) {
-          this.handleSelect([today, otherDay])
-        } else {
-          this.handleSelect([otherDay, today])
-        }
-      }
+    handleProgress (picking) {
+      this.picking = picking
     },
     clear (e) {
       this.$emit('select', null)
@@ -158,6 +173,40 @@ export default {
     close () {
       this.expanded = false
       this.picking = null
+    },
+    getDateByOffset (offset) {
+      offset = isNumber(offset) ? { days: offset } : offset
+
+      // set locale data according to current prop
+      // and reset later
+      let locale = moment.locale()
+      let dow = moment.localeData().firstDayOfWeek()
+      moment.updateLocale(locale, {
+        week: {
+          dow: this.weekStart
+        }
+      })
+      let startOf = offset.startOf || 'day'
+      let base = moment().startOf(startOf)
+      moment.updateLocale(locale, {
+        week: {
+          dow
+        }
+      })
+      return base.add(omit(offset, 'startOf')).toDate()
+    },
+    isShortcutSelected ({ from, to }) {
+      let selected = this.picking || this.localSelected
+      if (!selected) {
+        return false
+      }
+      if (selected[0] < selected[1]) {
+        return from - selected[0] === 0 && to - selected[1] === 0
+      }
+      return to - selected[0] === 0 && from - selected[1] === 0
+    },
+    handleHoverShortcut (picking) {
+      this.$refs.cal.picking = picking || null
     }
   },
   watch: {
@@ -227,19 +276,33 @@ export default {
   }
 
   &-shortcuts {
-    height: 40px;
-    padding: 10px 16px;
+    height: 41px;
+    padding: 8px 10px;
     border-top: 1px solid @veui-gray-color-sup-2;
   }
 
   &-shortcut {
+    height: 24px;
     margin-right: 10px;
-    border: none;
-    color: @veui-text-color-normal;
+    padding: 0 9px;
+    border: 1px solid transparent;
+    background: none;
     font-size: @veui-font-size-small;
+    color: @veui-text-color-weak;
+    border-radius: 2px;
+    outline: none;
+
+    &:hover {
+      color: @veui-theme-color-primary;
+    }
 
     &:last-child {
       margin-right: 0;
+    }
+
+    &-selected {
+      border-color: @veui-theme-color-primary;
+      color: @veui-theme-color-primary;
     }
   }
 }

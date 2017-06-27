@@ -1,4 +1,4 @@
-import { intersection } from 'lodash'
+import { intersection, throttle } from 'lodash'
 import { outside } from '../directives'
 import { config } from '../managers'
 import { ui } from '../mixins'
@@ -42,6 +42,27 @@ export default {
   methods: {
     close () {
       this.expanded = false
+    }
+  },
+  updated () {
+    let box = this.$refs.box
+    if (!box || !(box instanceof HTMLElement)) {
+      return
+    }
+
+    if (box.scrollHeight > box.offsetHeight) {
+      box.classList.add('veui-dropdown-overflow')
+
+      this.__overlay_scroll_handler__ = throttle(() => {
+        box.classList.toggle('veui-dropdown-overflow-scroll-end', box.scrollTop + box.offsetHeight >= box.scrollHeight)
+      }, 200, { leading: true })
+
+      box.addEventListener('scroll', this.__overlay_scroll_handler__, false)
+    }
+  },
+  destroy () {
+    if (this.__overlay_scroll_handler__) {
+      this.$refs.box.removeEventListener('scroll', this.__overlay_scroll_handler__, false)
     }
   }
 }

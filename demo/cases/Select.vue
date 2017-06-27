@@ -10,6 +10,10 @@
       <veui-select v-bind="attrs" ui="checkmark" v-model="defaultValue2"></veui-select>
     </section>
     <section>
+      <h2>禁用样式：</h2>
+      <veui-select v-bind="attrs" v-model="defaultValue1" disabled></veui-select>
+    </section>
+    <section>
       <h2>Slot 样式：</h2>
       <veui-select v-bind="attrs" v-model="defaultValue3">
         <template slot="option" scope="props">
