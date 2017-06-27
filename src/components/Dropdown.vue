@@ -1,5 +1,8 @@
 <template>
-  <div class="veui-dropdown" :ui="ui">
+  <div :class="{
+    'veui-dropdown': true,
+    'veui-dropdown-expanded': expanded
+  }" :ui="ui">
     <veui-button
       class="veui-dropdown-button"
       :ui="ui"
@@ -106,6 +109,10 @@ export default {
   &:extend(._veui-dropdown-button all);
   display: inline-block;
   width: 110px;
+
+  &-button {
+
+  }
 
   &-options {
     &:extend(._veui-dropdown-overlay all);

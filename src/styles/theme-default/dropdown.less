@@ -26,10 +26,27 @@
     float: right;
   }
 
-  &-expanded &-button:not(.veui-button-loading) {
+  &-button[ui~="primary"]:not(.veui-button-loading):disabled {
+    background-color: @veui-gray-color-sup-3;
+    color: @veui-text-color-weak;
+  }
+
+  &-expanded &-button:not([ui~="primary"]) {
     &,
     &:hover {
       color: @veui-theme-color-primary;
+    }
+  }
+
+  &-expanded &-button[ui~="primary"] {
+    &,
+    &:hover,
+    &:focus {
+      background-color: @veui-theme-color-active;
+    }
+
+    &:hover {
+      .veui-shadow(none);
     }
   }
 }
