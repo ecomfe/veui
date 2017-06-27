@@ -61,6 +61,7 @@
         <div style="margin-bottom:10px;">click事件</div>
         <div class="box">
           <div class="top">
+<<<<<<< Updated upstream
             <veui-button ui="aux" ref="topLeftClick" @click.native="clickShow({
               clickPosition: 'top left',
               clickTarget: 'topLeftClick'})">上左</veui-button>
@@ -68,10 +69,20 @@
               clickPosition: 'top',
               clickTarget: 'topCenterClick'})">上边</veui-button>
             <veui-button ui="aux" ref="topRightClick" @click.native="clickShow({
+=======
+            <veui-button ui="aux" ref="topLeftClick" @click="clickShow({
+              clickPosition: 'top left',
+              clickTarget: 'topLeftClick'})">上左</veui-button>
+            <veui-button ui="aux" ref="topCenterClick" @click="clickShow({
+              clickPosition: 'top',
+              clickTarget: 'topCenterClick'})">上边</veui-button>
+            <veui-button ui="aux" ref="topRightClick" @click="clickShow({
+>>>>>>> Stashed changes
               clickPosition: 'top right',
               clickTarget: 'topRightClick'})">上右</veui-button>
           </div>
           <div class="left">
+<<<<<<< Updated upstream
             <veui-button ui="aux" ref="leftTopClick" @click.native="clickShow({
               clickPosition: 'left top',
               clickTarget: 'leftTopClick'})">左上</veui-button>
@@ -79,10 +90,20 @@
               clickPosition: 'left',
               clickTarget: 'leftCenterClick'})">左边</veui-button>
             <veui-button ui="aux" ref="leftBottomClick" @click.native="clickShow({
+=======
+            <veui-button ui="aux" ref="leftTopClick" @click="clickShow({
+              clickPosition: 'left top',
+              clickTarget: 'leftTopClick'})">左上</veui-button>
+            <veui-button ui="aux" ref="leftCenterClick" @click="clickShow({
+              clickPosition: 'left',
+              clickTarget: 'leftCenterClick'})">左边</veui-button>
+            <veui-button ui="aux" ref="leftBottomClick" @click="clickShow({
+>>>>>>> Stashed changes
               clickPosition: 'left bottom',
               clickTarget: 'leftBottomClick'})">左下</veui-button>
           </div>
           <div class="right">
+<<<<<<< Updated upstream
             <veui-button ui="aux" ref="rightTopClick" @click.native="clickShow({
               clickPosition: 'right top',
               clickTarget: 'rightTopClick'})">右上</veui-button>
@@ -90,10 +111,20 @@
               clickPosition: 'right',
               clickTarget: 'rightCenterClick'})">右边</veui-button>
             <veui-button ui="aux" ref="rightBottomClick" @click.native="clickShow({
+=======
+            <veui-button ui="aux" ref="rightTopClick" @click="clickShow({
+              clickPosition: 'right top',
+              clickTarget: 'rightTopClick'})">右上</veui-button>
+            <veui-button ui="aux" ref="rightCenterClick" @click="clickShow({
+              clickPosition: 'right',
+              clickTarget: 'rightCenterClick'})">右边</veui-button>
+            <veui-button ui="aux" ref="rightBottomClick" @click="clickShow({
+>>>>>>> Stashed changes
               clickPosition: 'right bottom',
               clickTarget: 'rightBottomClick'})">右下</veui-button>
           </div>
           <div class="bottom">
+<<<<<<< Updated upstream
             <veui-button ui="aux" ref="BottomLeftClick" @click.native="clickShow({
               clickPosition: 'bottom left',
               clickTarget: 'BottomLeftClick'})">下左</veui-button>
@@ -101,6 +132,15 @@
               clickPosition: 'bottom',
               clickTarget: 'BottomCenterClick'})">下边</veui-button>
             <veui-button ui="aux" ref="BottomRightClick" @click.native="clickShow({
+=======
+            <veui-button ui="aux" ref="BottomLeftClick" @click="clickShow({
+              clickPosition: 'bottom left',
+              clickTarget: 'BottomLeftClick'})">下左</veui-button>
+            <veui-button ui="aux" ref="BottomCenterClick" @click="clickShow({
+              clickPosition: 'bottom',
+              clickTarget: 'BottomCenterClick'})">下边</veui-button>
+            <veui-button ui="aux" ref="BottomRightClick" @click="clickShow({
+>>>>>>> Stashed changes
               clickPosition: 'bottom right',
               clickTarget: 'BottomRightClick'})">下右</veui-button>
           </div>
