@@ -19,6 +19,7 @@ import Toast from './Toast'
 import Alert from './Alert'
 import ConfirmBox from './ConfirmBox'
 import AlertBox from './AlertBox'
+import OverlayList from './OverlayList'
 
 export default [
   {
@@ -125,6 +126,11 @@ export default [
     path: '/alert-box',
     name: 'AlertBox',
     component: AlertBox
+  },
+  {
+    path: '/veui-overlay-list',
+    name: 'OverlayList',
+    component: OverlayList
   }
 
 ]

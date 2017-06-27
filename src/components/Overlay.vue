@@ -12,8 +12,9 @@
 </template>
 <script>
 import Tether from 'tether'
-import { omit, isObject, isString } from 'lodash'
+import { assign, isObject, isString } from 'lodash'
 import { getNodes } from '../utils/context'
+import overlayManager from '../managers/overlay'
 
 const ZINDEX_INSTANCE_KEY = '__veui_overlay_zindex_instance__'
 
@@ -51,7 +52,7 @@ export default {
       targetNode: null,
 
       // 把 id 放 data 上面方便 debug
-      zIndexNodeId: null
+      overlayNodeId: null
     }
   },
   watch: {
@@ -79,16 +80,16 @@ export default {
     // 更新 zindex 树
     updateNode () {
       if (!this[ZINDEX_INSTANCE_KEY]) {
-        this[ZINDEX_INSTANCE_KEY] = this.$veui.overlay.create({
+        this[ZINDEX_INSTANCE_KEY] = overlayManager.createNode({
           parentId: this.findParentOverlayId(),
           priority: this.priority
         })
         this[ZINDEX_INSTANCE_KEY].$on('zindexchange', (zIndex) => {
           this.zIndex = zIndex
         })
-        this.zIndexNodeId = this[ZINDEX_INSTANCE_KEY].id
+        this.overlayNodeId = this[ZINDEX_INSTANCE_KEY].id
       } else {
-        this[ZINDEX_INSTANCE_KEY].move(this.findParentOverlayId(), this.priority)
+        this[ZINDEX_INSTANCE_KEY].appendTo(this.findParentOverlayId(), this.priority)
       }
     },
 
@@ -108,11 +109,10 @@ export default {
       }
 
       if (this.targetNode) {
-        const options = {
+        const options = assign({}, this.options, {
           element: this.$refs.box,
-          target: this.targetNode,
-          ...omit(this.options, 'element', 'target')
-        }
+          target: this.targetNode
+        })
 
         if (!this.tether) {
           this.tether = new Tether(options)

@@ -1,7 +1,10 @@
 <template>
-  <veui-overlay :open="true" overlay-class="veui-toast-list" >
+  <veui-overlay :open="true" overlay-class="veui-toast-list" :priority="priority">
     <template v-for="message in messages">
-      <veui-toast v-bind="message" :key="message.__message_id__" @close="remove(message)"></veui-toast>
+      <veui-toast v-bind="message"
+        :key="message.__message_id__"
+        @close="remove(message)">
+      </veui-toast>
     </template>
   </veui-overlay>
 </template>
@@ -10,6 +13,11 @@
 import Overlay from './Overlay'
 import Toast from './Toast'
 import { assign, findIndex, uniqueId } from 'lodash'
+import { config } from '../managers'
+
+config.defaults({
+  'toast.priority': 101
+})
 
 export default {
   name: 'toast-list',
@@ -19,7 +27,8 @@ export default {
   },
   data () {
     return {
-      messages: []
+      messages: [],
+      priority: config.get('toast.priority')
     }
   },
   methods: {
@@ -43,8 +52,10 @@ export default {
   .fixed(@veui-nav-bar-height + 15px, _, _, 50%);
   transform: translateX(-50%);
   background: none;
+
   .veui-toast {
     margin-bottom: 10px;
+
     &:last-child {
       margin-bottom: 0;
     }

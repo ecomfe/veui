@@ -36,7 +36,11 @@ export function getVnodes (ref, context) {
   let vnodes
   if (isString(ref)) {
     vnodes = context.$refs[ref]
-    vnodes = isArray(vnodes) ? vnodes : [vnodes]
+    if (!vnodes) {
+      vnodes = []
+    } else {
+      vnodes = isArray(vnodes) ? vnodes : [vnodes]
+    }
     vnodes = vnodes.map(item => item.$vnode || item)
   } else {
     ref = isArray(ref) ? ref : [ref]

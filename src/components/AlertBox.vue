@@ -1,9 +1,13 @@
 <template>
   <veui-dialog overlay-class="veui-alert-box"
     :open.sync="localOpen"
-    :ui="localUi">
+    :ui="localUi"
+    :priority="priority">
 
-    <veui-icon v-if="!!typeIconName" class="veui-alert-box-icon" :name="typeIconName" />
+    <veui-icon v-if="!!typeIconName"
+      class="veui-alert-box-icon"
+      :name="typeIconName">
+    </veui-icon>
 
     <h3 class="veui-alert-box-title">
       <template v-if="!!title">{{ title }}</template>
@@ -25,12 +29,15 @@ import Dialog from './Dialog'
 import Button from './Button'
 import Icon from './Icon'
 import '../icons'
+import { config } from '../managers'
+
+config.defaults({
+  'alertbox.priority': 100
+})
 
 export default {
   name: 'veui-alert-box',
-  props: Object.assign(
-    pick(Dialog.props, ['open', 'title', 'ui'])
-  ),
+  props: pick(Dialog.props, ['open', 'title', 'ui']),
   components: {
     'veui-dialog': Dialog,
     'veui-button': Button,
@@ -38,7 +45,8 @@ export default {
   },
   data () {
     return {
-      localOpen: this.open
+      localOpen: this.open,
+      priority: config.get('alertbox.priority')
     }
   },
   computed: {

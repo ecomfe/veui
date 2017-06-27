@@ -77,16 +77,12 @@ function generate (el, { includeTargets, handler, trigger, delay }) {
 }
 
 function bindHover (el, { includeTargets, handler, delay }) {
+  unbindHover(el)
+
   const bindingData = el[bindingKey] || {}
   bindingData.includeTargets = includeTargets
   bindingData.handler = handler
   bindingData.delay = delay
-
-  // 已经绑定了，就不要重复绑定了
-  if (bindingData.trigger === 'hover') {
-    return
-  }
-
   bindingData.trigger = 'hover'
   bindingData.hoverData = {
     state: 'ready',
@@ -118,28 +114,35 @@ function bindHover (el, { includeTargets, handler, delay }) {
   }
 
   // 所有目标元素都绑定一遍事件
-  includeTargets.forEach((target) => {
+  bindHoverEvents(bindingData)
+
+  el[bindingKey] = bindingData
+}
+
+function bindHoverEvents (bindingData) {
+  bindingData.includeTargets.forEach((target) => {
     target.addEventListener('mouseenter', bindingData.mouseenterHandler)
     target.addEventListener('mouseleave', bindingData.mouseleaveHandler)
   })
+}
 
-  el[bindingKey] = bindingData
+function unbindHoverEvents (bindingData) {
+  bindingData.includeTargets.forEach((target) => {
+    target.removeEventListener('mouseenter', bindingData.mouseenterHandler)
+    target.removeEventListener('mouseleave', bindingData.mouseleaveHandler)
+  })
 }
 
 function unbindHover (el) {
   const bindingData = el[bindingKey]
   if (bindingData && bindingData.trigger === 'hover') {
-    bindingData.includeTargets.forEach((target) => {
-      target.removeEventListener('mouseenter', bindingData.mouseenterHandler)
-      target.removeEventListener('mouseleave', bindingData.mouseleaveHandler)
-    })
+    unbindHoverEvents(bindingData)
     el[bindingKey] = null
   }
 }
 
 function refresh (el, { value, arg, modifiers }, vnode) {
   const params = parseParams(el, arg, modifiers, value, vnode.context)
-
   if (params.trigger === 'click') {
     unbindHover(el)
     el[bindingKey] = {

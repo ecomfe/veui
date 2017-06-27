@@ -18,7 +18,6 @@ import ConfirmBox from '@/components/ConfirmBox'
 import Button from '@/components/Button'
 
 export default {
-  name: '',
   components: {
     'veui-confirm-box': ConfirmBox,
     'veui-button': Button

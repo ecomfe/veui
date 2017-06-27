@@ -24,18 +24,6 @@ class Node {
     this.id = uniqueId('overlay-node-id-')
   }
 
-  setZIndex (v) {
-    this.zIndex = v
-  }
-
-  getZIndex () {
-    return this.zIndex
-  }
-
-  getId () {
-    return this.id
-  }
-
   iterateChildren (callback) {
     for (let i = 0, il = this.childrenGroup.length; i < il; i++) {
       const group = this.childrenGroup[i]
@@ -48,18 +36,7 @@ class Node {
     }
   }
 
-  setParent (parent) {
-    if (parent && ('instance' in parent)) {
-      debugger
-    }
-    this.parent = parent
-  }
-
-  getParent () {
-    return this.parent
-  }
-
-  pushChild (child, priority = 1) {
+  appendChild (child, priority = 1) {
     let index = null
     let isInserted = false
     find(this.childrenGroup, (group, i) => {
@@ -91,7 +68,7 @@ class Node {
   }
 
   removeChildById (id) {
-    for (let i = 0, il = this.childrenGroup; i < il; i++) {
+    for (let i = 0, il = this.childrenGroup.length; i < il; i++) {
       const group = this.childrenGroup[i]
       remove(group.children, child => child.id === id)
     }
@@ -102,8 +79,8 @@ class Node {
       return
     }
 
-    this.parent.removeChildById(this.getId())
-    this.setParent(null)
+    this.parent.removeChildById(this.id)
+    this.parent = null
   }
 
   getChildrenCount () {
@@ -118,18 +95,13 @@ class Node {
 export class Tree {
   rootNode = new Node()
   nodeMap = {
-    [this.rootNode.getId()]: {
+    [this.rootNode.id]: {
       node: this.rootNode,
       instance: null
     }
   }
 
   baseZIndex = 100
-
-  constructor () {
-    window.rootNode = this.rootNode
-    window.nodeMap = this.nodeMap
-  }
 
   setBaseZIndex (zIndex) {
     this.baseZIndex = zIndex
@@ -151,16 +123,17 @@ export class Tree {
     }
 
     const parentNode = parent.node
-    parentNode.pushChild(node, priority)
-    node.setParent(parentNode)
+    parentNode.appendChild(node, priority)
+    node.parent = parentNode
+
+    this.generateTreeZIndex(node.id)
   }
 
-  createNode ({ parentId = this.rootNode.getId(), priority }) {
+  createNode ({ parentId = this.rootNode.id, priority }) {
     const node = new Node()
-    node.setZIndex(this.baseZIndex)
-    this.insertNode(parentId, node, priority)
+    node.zIndex = this.baseZIndex
 
-    const nodeId = node.getId()
+    const nodeId = node.id
     const instance = new Vue({
       data () {
         return {
@@ -172,13 +145,14 @@ export class Tree {
           node.remove()
           this.nodeMap[nodeId] = null
         },
-        move: (parentId, priority) => {
+        appendTo: (parentId, priority) => {
+          this.nodeMap[node.id] = { node, instance }
           this.moveNode(node, parentId, priority)
         },
         toTop: () => {
           let targetGroup
           let targetIndex
-          node.getParent().iterateChildren((child, index, group) => {
+          node.parent.iterateChildren((child, index, group) => {
             if (child === node) {
               targetGroup = group
               targetIndex = index
@@ -191,44 +165,61 @@ export class Tree {
           children[targetIndex] = children[lastIndex]
           children[lastIndex] = node
 
-          const baseZIndexNode = children[lastIndex - 1]
-          const baseZIndex = baseZIndexNode && baseZIndexNode.getZIndex()
-            ? (baseZIndexNode.getZIndex() + 1) : null
-          this.generateTreeZIndex(node.getId(), baseZIndex)
+          this.generateTreeZIndex(node.id)
         }
       }
     })
     this.nodeMap[nodeId] = { node, instance }
+    this.insertNode(parentId, node, priority)
     Vue.nextTick(() => {
-      instance.$emit('zindexchange', node.getZIndex())
+      instance.$emit('zindexchange', node.zIndex)
     })
 
     return instance
   }
 
   moveNode (node, parentId, priority) {
-    const realParentId = parentId || this.rootNode.getId()
+    const realParentId = parentId || this.rootNode.id
     const parentNode = this.nodeMap[realParentId].node
-    const curParentNode = node.getParent()
+    const curParentNode = node.parent
     if (parentNode === curParentNode) {
       return
     }
 
     node.remove()
-    node.setParent(parentNode)
-    this.nodeMap[realParentId].node.pushChild(node, priority)
+    node.parent = parentNode
+    this.nodeMap[realParentId].node.appendChild(node, priority)
+
+    this.generateTreeZIndex(node.id)
   }
 
-  generateTreeZIndex (startNodeId, baseZIndex) {
-    const startNode = this.nodeMap[startNodeId].node
-    let localBaseZIndex = baseZIndex || this.baseZIndex
-    console.log(startNodeId, baseZIndex)
-    this.iterate({
-      curNode: startNode,
-      callback: (curNode) => {
-        const instance = this.nodeMap[curNode.getId()].instance
-        curNode.setZIndex(localBaseZIndex++)
-        instance.$emit('zindexchange', curNode.getZIndex())
+  generateTreeZIndex (startNodeId) {
+    const node = this.nodeMap[startNodeId].node
+    const parentNode = node.parent
+
+    let prevNode
+    let isEncountered = false
+    let baseZIndex
+    parentNode.iterateChildren((child) => {
+      if (!isEncountered && child === node) {
+        isEncountered = true
+        baseZIndex = (prevNode && prevNode.zIndex
+          ? (prevNode.zIndex + 1) : null) || this.baseZIndex
+      }
+
+      if (isEncountered) {
+        this.iterate({
+          curNode: child,
+          callback: (curNode) => {
+            const instance = this.nodeMap[curNode.id].instance
+            curNode.zIndex = baseZIndex++
+            instance.$emit('zindexchange', curNode.zIndex)
+          }
+        })
+      }
+
+      if (!isEncountered) {
+        prevNode = child
       }
     })
   }
