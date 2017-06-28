@@ -84,8 +84,8 @@ export default {
       realDisabled () {
         return this.disabled || (this.fieldSet && this.fieldSet.realDisabled)
       },
-      realReadOnly () {
-        return this.readonly || (this.fieldSet && this.fieldSet.realReadOnly)
+      realReadonly () {
+        return this.readonly || (this.fieldSet && this.fieldSet.realReadonly)
       },
       isAllDisabled () {
         return this.disabled || this.inputs.every(input => input.disabled)

@@ -5,7 +5,7 @@
     'veui-datepicker-range': range,
     'veui-datepicker-expanded': expanded
   }">
-  <veui-button ref="button" class="veui-datepicker-button" :ui="buttonUI" :disabled="disabled || readonly" @click="expanded = !expanded">
+  <veui-button ref="button" class="veui-datepicker-button" :ui="buttonUI" :disabled="realDisabled || realReadonly" @click="expanded = !expanded">
     <template v-if="range">
       <span class="veui-datepicker-label">
         <slot v-if="formatted" name="date" :formatted="formatted ? formatted[0] : null" :date="selected ? selected[0] : null">{{ formatted[0] }}</slot>

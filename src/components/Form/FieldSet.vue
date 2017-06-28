@@ -26,7 +26,7 @@ export default {
     realDisabled () {
       return this.disabled || get(this, '$refs.field.form.disabled')
     },
-    realReadOnly () {
+    realReadonly () {
       return this.readonly || get(this, '$refs.field.form.readonly')
     }
   }

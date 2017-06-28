@@ -4,6 +4,8 @@
     class="veui-input"
     v-bind="attrs"
     v-model="localValue"
+    :readonly="realReadOnly"
+    :disabled="realDisabled"
     @focus="$emit('focus', $event)"
     @click="$emit('click', $event)"
     @blur="$emit('blur', $event)"
@@ -16,6 +18,8 @@
     :class="{ 'veui-textarea-resizable': resizable }"
     v-bind="attrs"
     v-model="localValue"
+    :readonly="realReadOnly"
+    :disabled="realDisabled"
     @focus="$emit('focus', $event)"
     @click="$emit('click', $event)"
     @blur="$emit('blur', $event)"
@@ -57,7 +61,7 @@ export default {
   },
   computed: {
     attrs () {
-      return omit(this.$props, ['selectOnFocus', 'fitContent', 'composition', 'resizable'])
+      return omit(this.$props, ['selectOnFocus', 'fitContent', 'composition', 'resizable', 'disabled', 'readonly'])
     }
   },
   watch: {

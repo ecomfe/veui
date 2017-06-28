@@ -1,6 +1,4 @@
-import { getTypedAncestorTracker, getModelProp, isTopMostOfType } from '../utils/helper'
-import { clone } from '../managers'
-import { get } from 'lodash'
+import { getTypedAncestorTracker, isTopMostOfType } from '../utils/helper'
 
 const { computed: computedFormField } = getTypedAncestorTracker('form-field')
 
@@ -13,31 +11,32 @@ export default {
   },
   data () {
     return {
-      initialData: undefined
+      initialData: undefined,
+      isTopMostInput: isTopMostOfType(this, 'input', 'form-field')
     }
   },
   computed: {
     realName () {
       return (this.formField && this.formField.name) || this.name
     },
-    isTopMostInput () {
-      return isTopMostOfType(this, 'input', 'form-field')
-    },
     realDisabled () {
-      return this.disabled || get(this, 'formField.realDisabled')
+      return this.disabled || (this.formField && this.formField.realDisabled)
     },
-    realReadOnly () {
-      return this.readonly || get(this, 'formField.realDisabled')
+    realReadonly () {
+      return this.readonly || (this.formField && this.formField.realReadonly)
     },
     ...computedFormField
   },
   created () {
-    if (this.formField && this.isTopMostInput) {
-      this.formField.inputs.push(this)
-      this.formField.bindInteractiveRules([this])
-      this.formField.form && this.formField.form.bindInteractiveValidators({ input: this })
+    if (!this.isTopMostInput) {
+      return
     }
-    this.initialData = clone.exec(this[getModelProp(this)])
+
+    let originEmit = this.$emit
+    this.$emit = (...args) => {
+      originEmit(...args)
+
+    }
   },
   beforeDestroy () {
     if (this.formField && this.isTopMostInput) {
