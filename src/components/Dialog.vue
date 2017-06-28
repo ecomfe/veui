@@ -275,6 +275,9 @@ export default {
       this.$emit('update:open', this.localOpen)
     },
     focus () {
+      if (!this.$refs.overlay) {
+        return
+      }
       this.$refs.overlay.focus()
     }
   },

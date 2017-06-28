@@ -2,6 +2,7 @@
   <veui-dialog overlay-class="veui-alert-box"
     :open.sync="localOpen"
     :ui="localUi"
+    :closable="false"
     :priority="priority">
 
     <veui-icon v-if="!!typeIconName"

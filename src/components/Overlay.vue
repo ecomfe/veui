@@ -15,12 +15,20 @@ import Tether from 'tether'
 import { assign, isObject, isString } from 'lodash'
 import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
+import { config } from '../managers'
 
-const ZINDEX_INSTANCE_KEY = '__veui_overlay_zindex_instance__'
+config.defaults({
+  'overlay:baseZIndex': 200
+})
+
+overlayManager.setBaseZIndex(config.get('overlay:baseZIndex'))
+
+const OVERLAY_INSTANCE_KEY = '__veui_overlay_instance_key__'
 
 export default {
   name: 'veui-overlay',
   uiTypes: ['overlay'],
+  abstract: true,
   props: {
     ui: String,
     overlayClass: {
@@ -59,7 +67,7 @@ export default {
     open (value) {
       this.localOpen = value
       this.updateOverlayDOM()
-      this[ZINDEX_INSTANCE_KEY].toTop()
+      this[OVERLAY_INSTANCE_KEY].toTop()
     },
     target () {
       this.findTargetNode()
@@ -79,17 +87,17 @@ export default {
 
     // 更新 zindex 树
     updateNode () {
-      if (!this[ZINDEX_INSTANCE_KEY]) {
-        this[ZINDEX_INSTANCE_KEY] = overlayManager.createNode({
+      if (!this[OVERLAY_INSTANCE_KEY]) {
+        this[OVERLAY_INSTANCE_KEY] = overlayManager.createNode({
           parentId: this.findParentOverlayId(),
           priority: this.priority
         })
-        this[ZINDEX_INSTANCE_KEY].$on('zindexchange', (zIndex) => {
+        this[OVERLAY_INSTANCE_KEY].$on('zindexchange', (zIndex) => {
           this.zIndex = zIndex
         })
-        this.overlayNodeId = this[ZINDEX_INSTANCE_KEY].id
+        this.overlayNodeId = this[OVERLAY_INSTANCE_KEY].id
       } else {
-        this[ZINDEX_INSTANCE_KEY].appendTo(this.findParentOverlayId(), this.priority)
+        this[OVERLAY_INSTANCE_KEY].appendTo(this.findParentOverlayId(), this.priority)
       }
     },
 
@@ -97,7 +105,7 @@ export default {
       let cur = this.$vnode.context
       while (cur) {
         if (cur && this.isOverlay(cur)) {
-          return cur[ZINDEX_INSTANCE_KEY].id
+          return cur[OVERLAY_INSTANCE_KEY].id
         }
         cur = cur.$parent
       }
@@ -141,17 +149,17 @@ export default {
     },
 
     focus () {
-      this[ZINDEX_INSTANCE_KEY].toTop()
+      this[OVERLAY_INSTANCE_KEY].toTop()
     }
   },
   beforeDestroy () {
     this.tether && this.tether.destroy()
     this.tether = null
 
-    if (this[ZINDEX_INSTANCE_KEY]) {
-      this[ZINDEX_INSTANCE_KEY].$off()
-      this[ZINDEX_INSTANCE_KEY].remove()
-      this[ZINDEX_INSTANCE_KEY] = null
+    if (this[OVERLAY_INSTANCE_KEY]) {
+      this[OVERLAY_INSTANCE_KEY].$off()
+      this[OVERLAY_INSTANCE_KEY].remove()
+      this[OVERLAY_INSTANCE_KEY] = null
     }
 
     this.$refs.box.parentNode.removeChild(this.$refs.box)

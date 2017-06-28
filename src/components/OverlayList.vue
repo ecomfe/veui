@@ -4,7 +4,7 @@
       :key="index"
       :open="alert.open"
       :ui="alert.type"
-      @ok="closeAlert()">
+      @ok="closeAlert(alert)">
       <template slot="title">
         <slot name="alertTitle" :item="alert">{{ alert.title || '警告' }}</slot>
       </template>
@@ -23,12 +23,23 @@
     </veui-confirm-box>
 
     <veui-toast-list ref="toastComponent"></veui-toast-list>
+
+    <veui-prompt-box v-for="(prompt, index) in realPrompts"
+      :key="index"
+      :open="prompt.open"
+      @ok="handlePrompt(prompt, 'ok')"
+      @cancel="handlePrompt(prompt, 'cancel')"
+      :title="prompt.title"
+      :content="prompt.content"
+      v-model="prompt.value">
+    </veui-prompt-box>
   </div>
 </template>
 
 <script>
 import AlertBox from './AlertBox'
 import ConfirmBox from './ConfirmBox'
+import PromptBox from './PromptBox'
 import ToastList from './ToastList'
 import { cloneDeep, isFunction, remove, extend } from 'lodash'
 
@@ -37,17 +48,20 @@ export default {
   components: {
     'veui-alert-box': AlertBox,
     'veui-confirm-box': ConfirmBox,
+    'veui-prompt-box': PromptBox,
     'veui-toast-list': ToastList
   },
   props: {
     alerts: Array,
     confirms: Array,
-    toasts: Array
+    toasts: Array,
+    prompts: Array
   },
   data () {
     return {
       realAlerts: this.prepend(this.alerts, []),
-      realConfirms: this.prepend(this.confirms, [])
+      realConfirms: this.prepend(this.confirms, []),
+      realPrompts: this.prependPrompts(this.prompts, [])
     }
   },
   watch: {
@@ -64,6 +78,9 @@ export default {
           this.$refs.toastComponent.add(toast)
         })
       }
+    },
+    prompts (v) {
+      this.prependPrompts(v, this.realPrompts)
     }
   },
   methods: {
@@ -72,23 +89,51 @@ export default {
       targetList.splice(0, 0, ...realList)
       return targetList
     },
-    closeAlert () {
-      this.realAlerts[this.realAlerts.length - 1].open = false
-      this.realAlerts.pop()
+    prependPrompts (list, targetList) {
+      const realList = cloneDeep(list || []).map(item => extend(item, { open: true, value: '' }))
+      targetList.splice(0, 0, ...realList)
+      return targetList
+    },
+    closeAlert (alert) {
+      if (isFunction(alert.ok)) {
+        alert.ok()
+      }
+      this.close(alert, this.realAlerts)
     },
     handleConfirm (confirm, type) {
       const fn = confirm[type]
       if (isFunction(fn)) {
-        fn({
-          close: () => this.closeConfirm(confirm)
-        })
-      } else {
-        this.closeConfirm(confirm)
+        fn()
       }
+      this.close(confirm, this.realConfirms)
     },
-    closeConfirm (confirm) {
-      this.realConfirms[this.realConfirms.length - 1].open = false
-      remove(this.realConfirms, item => item === confirm)
+    handlePrompt (prompt, type) {
+      const fn = prompt[type]
+      if (isFunction(fn)) {
+        fn(prompt.value)
+      }
+      this.close(prompt, this.realPrompts)
+    },
+    close (item, list) {
+      list[list.length - 1].open = false
+      remove(list, i => i === item)
+    },
+
+    popup (type, options) {
+      switch (type) {
+        case 'alert':
+          this.prepend([options], this.realAlerts)
+          break
+        case 'confirm':
+          this.prepend([options], this.realConfirms)
+          break
+        case 'toast':
+          this.$refs.toastComponent.add(options)
+          break
+        case 'prompt':
+          this.prependPrompts([options], this.realPrompts)
+          break
+      }
     }
   }
 }

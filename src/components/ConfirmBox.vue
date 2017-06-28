@@ -2,6 +2,7 @@
   <veui-dialog :open.sync="localOpen"
     :title="title"
     :priority="priority"
+    :closable="false"
     ui="reverse"
     overlay-class="veui-confirm-box">
     <template slot="title">
