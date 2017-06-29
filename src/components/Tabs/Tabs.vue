@@ -20,20 +20,20 @@ export default {
   data () {
     return {
       tabs: [],
-      current: ''
+      localActive: this.active === undefined ? 0 : this.active
     }
   },
 
   render () {
     return (
-      <div class="veui-tabs-wrap" ui={this.ui}>
+      <div class="veui-tabs" ui={this.ui}>
         <div class="veui-tabs-nav">
           <div class="veui-tabs-list">
             {
               this._l(this.tabs, tab => (
                 <div onClick={ $event => this.setCurrent(tab.name) } class={{
                   'veui-tabs-item': true,
-                  'active': tab.name === this.current
+                  'veui-tabs-active': tab.name === this.localActive
                 }}>{ tab.label }</div>
               ))
             }
@@ -47,7 +47,7 @@ export default {
   },
 
   computed: {
-    tabsName () {
+    tabNames () {
       return this.tabs.map(item => item.name)
     }
   },
@@ -58,24 +58,25 @@ export default {
     },
 
     setCurrent (value) {
-      let values = this.tabsName
+      let values = this.tabNames
 
       if (!values.length) return
-      if (typeof value === 'number') {
-        this.current = values[value]
+      // if setCurrent by index, index should be from 0 to values's last one
+      if (typeof value === 'number' && value > -1 && value < values.length) {
+        this.localActive = values[value]
+      // if setCurrent by name, name should be of tab's name
       } else if (typeof value === 'string' && values.indexOf(value) !== -1) {
-        this.current = value
+        this.localActive = value
+      // otherwise setCurrent to first one
       } else {
-        this.current = values[0]
+        this.localActive = values[0]
       }
+
+      this.$emit('update:active', this.localActive)
     }
   },
 
   watch: {
-    current (val) {
-      this.$emit('update:active', val)
-    },
-
     active (val) {
       this.setCurrent(val)
     }
@@ -94,18 +95,18 @@ export default {
 <style lang="less">
 @import "../../styles/theme-default/variables.less";
 
-.veui-tabs-wrap {
+.veui-tabs {
 
-  .veui-tabs-nav {
+  &-nav {
     position: relative;
     margin-bottom: -1px;
   }
 
-  .veui-tabs-list {
+  &-list {
     overflow: hidden;
   }
 
-  .veui-tabs-item {
+  &-item {
     list-style: none;
     color: @veui-gray-color-normal;
     float: left;
@@ -117,21 +118,21 @@ export default {
     border: 1px solid @veui-gray-color-sup-1;
     border-radius: 4px 4px 0 0;
     margin-right: 6px;
-    cursor: pointer;
     background: @veui-gray-color-sup-5;
+    cursor: pointer;
 
     &:hover {
       color: @veui-theme-color-hover;
     }
 
-    &.active {
+    &.veui-tabs-active {
       border-bottom: none;
       background: #fff;
       color: @veui-theme-color-primary;
     }
   }
 
-  .veui-tab-content {
+  &-content {
     border: 1px solid @veui-gray-color-sup-1;
     padding: 20px;
     min-height: 200px;
@@ -148,21 +149,19 @@ export default {
       border: none;
       border-radius: 0;
       background: #fff;
-      border-bottom:1px solid @veui-gray-color-sup-1;
+      border-bottom: 1px solid @veui-gray-color-sup-1;
 
-
-      &.active {
-        border-bottom:1px solid @veui-theme-color-primary;
-      }
-      
+      &.veui-tabs-active {
+        border-bottom: 1px solid @veui-theme-color-primary;
+      } 
     }
     
     .veui-tabs-nav {
-      border-bottom:1px solid @veui-gray-color-sup-1;
+      border-bottom: 1px solid @veui-gray-color-sup-1;
       margin-bottom: 20px;
     }
 
-    .veui-tab-content {
+    .veui-tabs-content {
       border: none;
     }
   }

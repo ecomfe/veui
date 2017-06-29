@@ -1,5 +1,5 @@
 <template>
-  <div class="veui-tab-content" v-show="isActive">
+  <div class="veui-tabs-content" v-show="this.$parent.localActive === this.name">
     <slot></slot>
   </div>
 </template>
@@ -20,22 +20,12 @@ export default {
     }
   },
 
-  methods: {
-
-  },
-
-  computed: {
-    isActive () {
-      return this.$parent.current === this.name
-    }
-  },
-
   created () {
-    this.$parent.add(this)
+    let name = this.name
+    let label = this.label
+    let renderSlots = this.$slots
+    this.$parent.add({name, label, renderSlots})
   }
 }
 </script>
 
-<style lang="less">
-
-</style>
