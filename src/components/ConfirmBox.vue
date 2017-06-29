@@ -1,12 +1,11 @@
 <template>
   <veui-dialog :open.sync="localOpen"
-    :title="title"
     :priority="priority"
     :closable="false"
     ui="reverse"
     overlay-class="veui-confirm-box">
     <template slot="title">
-      <slot name="title">confirm title</slot>
+      <slot name="title">{{ title }}</slot>
     </template>
     <slot></slot>
     <template slot="foot">

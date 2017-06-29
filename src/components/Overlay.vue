@@ -18,17 +18,16 @@ import overlayManager from '../managers/overlay'
 import { config } from '../managers'
 
 config.defaults({
-  'overlay:baseZIndex': 200
+  'overlay.baseZIndex': 200
 })
 
-overlayManager.setBaseZIndex(config.get('overlay:baseZIndex'))
+overlayManager.setBaseZIndex(config.get('overlay.baseZIndex'))
 
 const OVERLAY_INSTANCE_KEY = '__veui_overlay_instance_key__'
 
 export default {
   name: 'veui-overlay',
   uiTypes: ['overlay'],
-  abstract: true,
   props: {
     ui: String,
     overlayClass: {

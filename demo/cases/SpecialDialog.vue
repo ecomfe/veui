@@ -1,7 +1,7 @@
 <template>
-  <div class="demo-overlay-list">
+  <div class="demo-special-dialog">
     <article>
-      <h1><code>&lt;veui-overlay-list&gt;</code></h1>
+      <h1><code>&lt;veui-special-dialog&gt;</code></h1>
       <section>
         <veui-button @click="popupAlerts">弹出一堆 AlertBox</veui-button>
       </section>
@@ -19,15 +19,14 @@
 </template>
 
 <script>
-import OverlayList from '@/components/OverlayList'
 import Button from '@/components/Button'
-import overlayListManager from '@/managers/overlayList'
-
-overlayListManager.init()
+import alertManager from '@/managers/alert'
+import confirmManager from '@/managers/confirm'
+import promptManager from '@/managers/prompt'
+import toastManager from '@/managers/toast'
 
 export default {
   components: {
-    'veui-overlay-list': OverlayList,
     'veui-button': Button
   },
   data () {
@@ -39,14 +38,16 @@ export default {
   },
   methods: {
     popupAlerts () {
-      overlayListManager.alert('success')
-      overlayListManager.alert('error', { content: '已经存在这样的名字了' })
-      overlayListManager.alert('info', { content: '注意一点', ok () { alert('点击了ok') } })
+      alertManager.success('成功了', '成功标题', {
+        ok () {
+          alert('祝贺你成功了！')
+        }
+      })
+      alertManager.info('提示信息', '提示标题')
+      alertManager.error('出错了', '出错标题')
     },
     popupConfirms () {
-      overlayListManager.confirm({
-        title: '确认一下',
-        content: '真的要删除吗？删除之后不能恢复！',
+      confirmManager.popup('真的要删除吗？删除之后不能恢复！', '确认一下', {
         ok () {
           alert('原来你真的想要删除！')
         }
@@ -57,11 +58,11 @@ export default {
       setInterval(() => {
         counter++
         const type = ['error', 'info', 'success'][counter % 3]
-        overlayListManager.toast(type, `${type}-${counter}`)
+        toastManager[type](`${type}-${counter}`)
       }, 1000)
     },
     popupPrompt () {
-      overlayListManager.prompt({
+      promptManager.popup('content', 'title', {
         content: 'content',
         title: 'title',
         ok (value) {

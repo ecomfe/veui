@@ -275,10 +275,9 @@ export default {
       this.$emit('update:open', this.localOpen)
     },
     focus () {
-      if (!this.$refs.overlay) {
-        return
+      if (this.$refs.overlay) {
+        this.$refs.overlay.focus()
       }
-      this.$refs.overlay.focus()
     }
   },
   created () {

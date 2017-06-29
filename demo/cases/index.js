@@ -19,7 +19,7 @@ import Toast from './Toast'
 import Alert from './Alert'
 import ConfirmBox from './ConfirmBox'
 import AlertBox from './AlertBox'
-import OverlayList from './OverlayList'
+import SpecialDialog from './SpecialDialog'
 
 export default [
   {
@@ -128,9 +128,9 @@ export default [
     component: AlertBox
   },
   {
-    path: '/veui-overlay-list',
-    name: 'OverlayList',
-    component: OverlayList
+    path: '/special-dialog',
+    name: 'SpecialDialog',
+    component: SpecialDialog
   }
 
 ]
