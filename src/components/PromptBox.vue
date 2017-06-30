@@ -4,11 +4,12 @@
     :open.sync="localOpen"
     :priority="priority"
     :closable="false"
+    :width="340"
     @ok="$emit('ok')"
     @cancel="$emit('cancel')">
     <template slot="title"><slot name="title">{{ title }}</slot></template>
     <p class="veui-promptbox-info">{{ content }}</p>
-    <veui-input v-model="localValue"></veui-input>
+    <veui-input v-model="localValue" class="veui-promptbox-input"></veui-input>
   </veui-dialog>
 </template>
 
@@ -64,3 +65,9 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.veui-promptbox-input {
+  width: 300px;
+}
+</style>

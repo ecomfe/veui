@@ -10,6 +10,7 @@ export class PromptManager extends SpecialDialog {
   }
 
   createComponent (data) {
+    data.value = data.value || ''
     const component = new Vue({
       render: (h) => {
         return h(
