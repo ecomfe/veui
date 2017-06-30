@@ -13,7 +13,7 @@ export class AlertManager extends SpecialDialog {
     const component = new Vue({
       render: (h) => {
         return h(
-          this.Component,
+          this.type,
           {
             props: {
               open: data.open,

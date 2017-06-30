@@ -2,11 +2,11 @@ import Vue from 'vue'
 import { remove } from 'lodash'
 
 export default class SpecialDialog {
-  Component = null
-  componentList = []
+  type = null
+  components = []
 
-  constructor (Component) {
-    this.Component = Component
+  constructor (type) {
+    this.type = type
   }
 
   createComponent (data) {
@@ -22,11 +22,11 @@ export default class SpecialDialog {
     const el = document.createElement('div')
     document.body.appendChild(el)
     component.$mount(el)
-    this.componentList.push(component)
+    this.components.push(component)
   }
 
   removeComponent (component) {
-    remove(this.componentList, item => item === component)
+    remove(this.components, item => item === component)
     component.$destroy()
     component.$el.parentNode.removeChild(component.$el)
   }
