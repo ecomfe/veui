@@ -19,6 +19,7 @@ import Toast from './Toast'
 import Alert from './Alert'
 import ConfirmBox from './ConfirmBox'
 import AlertBox from './AlertBox'
+import Tabs from './Tabs'
 
 export default [
   {
@@ -125,6 +126,11 @@ export default [
     path: '/alert-box',
     name: 'AlertBox',
     component: AlertBox
+  },
+  {
+    path: '/tabs',
+    name: 'Tabs',
+    component: Tabs
   }
 
 ]
