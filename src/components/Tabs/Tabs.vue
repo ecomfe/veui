@@ -1,8 +1,7 @@
 <script>
-import Tab from './Tab'
 export default {
   name: 'veui-tabs',
-
+  uiTypes: ['tabs'],
   props: {
     ui: {
       type: String,
@@ -16,28 +15,31 @@ export default {
       default: 0
     }
   },
-
   data () {
     return {
       tabs: [],
       localActive: this.active === undefined ? 0 : this.active
     }
   },
-
+  computed: {
+    tabNames () {
+      return this.tabs.map(item => item.name)
+    }
+  },
   render () {
     return (
       <div class="veui-tabs" ui={this.ui}>
-        <div class="veui-tabs-nav">
-          <div class="veui-tabs-list">
+        <div class="veui-tabs-menu">
+          <ul class="veui-tabs-list">
             {
               this._l(this.tabs, tab => (
-                <div onClick={ $event => this.setCurrent(tab.name) } class={{
+                <li onClick={ $event => this.setCurrent(tab.name) } class={{
                   'veui-tabs-item': true,
                   'veui-tabs-active': tab.name === this.localActive
-                }}>{ tab.label }</div>
+                }}>{ tab.label }</li>
               ))
             }
-          </div>
+          </ul>
         </div>
         <div class="veui-tabs-panel">
           { this.$slots.default }
@@ -45,13 +47,6 @@ export default {
       </div>
     )
   },
-
-  computed: {
-    tabNames () {
-      return this.tabs.map(item => item.name)
-    }
-  },
-
   methods: {
     add (tab) {
       this.tabs.push(tab)
@@ -75,35 +70,31 @@ export default {
       this.$emit('update:active', this.localActive)
     }
   },
-
   watch: {
     active (val) {
       this.setCurrent(val)
     }
   },
-
   mounted () {
     this.setCurrent(this.active)
-  },
-
-  components: {
-    Tab
   }
 }
 </script>
 
 <style lang="less">
-@import "../../styles/theme-default/variables.less";
+@import "../../styles/theme-default/lib.less";
 
 .veui-tabs {
 
-  &-nav {
+  &-menu {
     position: relative;
     margin-bottom: -1px;
   }
 
   &-list {
     overflow: hidden;
+    margin: 0;
+    padding: 0;
   }
 
   &-item {
@@ -132,12 +123,6 @@ export default {
     }
   }
 
-  &-content {
-    border: 1px solid @veui-gray-color-sup-1;
-    padding: 20px;
-    min-height: 200px;
-  }
-
   &[ui~="simple"] {
     .veui-tabs-list {
       position: relative;
@@ -153,18 +138,17 @@ export default {
 
       &.veui-tabs-active {
         border-bottom: 1px solid @veui-theme-color-primary;
-      } 
+      }
     }
-    
-    .veui-tabs-nav {
+
+    .veui-tabs-menu {
       border-bottom: 1px solid @veui-gray-color-sup-1;
       margin-bottom: 20px;
     }
 
-    .veui-tabs-content {
+    .veui-tab {
       border: none;
     }
   }
-  
 }
 </style>

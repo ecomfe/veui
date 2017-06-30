@@ -24,7 +24,7 @@
 
 <script>
 import Icon from '@/components/Icon'
-import Tabs from '@/components/Tabs/Tabs'
+import Tabs from '@/components/Tabs'
 import Tab from '@/components/Tabs/Tab'
 
 export default {
@@ -39,13 +39,6 @@ export default {
       tabOneActive: '',
       tabTwoActive: 1,
       tabThreeActive: 2
-    }
-  },
-  mounted () {
-  },
-  methods: {
-    change (value) {
-      // alert('您选中的下拉选项值是' + value)
     }
   }
 }
