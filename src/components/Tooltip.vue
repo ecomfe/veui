@@ -157,7 +157,7 @@ export default {
 
   .veui-tooltip {
     .veui-tooltip-content {
-      padding: 10px 14px;
+      padding: 8px 13px;
       border-radius: 3px;
       box-shadow: 0 -2px 4px fadeOut(@black-color, 90%);
       color: @white-color;

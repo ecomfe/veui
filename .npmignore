@@ -1,4 +1,9 @@
-.*
+.editorconfig
+.eslintrc.js
+.gitignore
+.npmignore
+.postcssrc.js
+.travis.yml
 build
 config
 demo
