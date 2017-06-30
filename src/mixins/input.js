@@ -1,6 +1,7 @@
 import { getTypedAncestorTracker, isTopMostOfType } from '../utils/helper'
+import { partial } from 'lodash'
 
-const { computed: computedFormField } = getTypedAncestorTracker('form-field')
+const { computed: field } = getTypedAncestorTracker('field')
 
 export default {
   uiTypes: ['input'],
@@ -12,35 +13,33 @@ export default {
   data () {
     return {
       initialData: undefined,
-      isTopMostInput: isTopMostOfType(this, 'input', 'form-field')
+      isTopMostInput: isTopMostOfType(this, 'input', 'field')
     }
   },
   computed: {
     realName () {
-      return (this.formField && this.formField.name) || this.name
+      return (this.field && this.field.name) || this.name
     },
     realDisabled () {
-      return this.disabled || (this.formField && this.formField.realDisabled)
+      return this.disabled || (this.field && this.field.realDisabled)
     },
     realReadonly () {
-      return this.readonly || (this.formField && this.formField.realReadonly)
+      return this.readonly || (this.field && this.field.realReadonly)
     },
-    ...computedFormField
+    ...field
   },
   created () {
     if (!this.isTopMostInput) {
       return
     }
 
-    let originEmit = this.$emit
-    this.$emit = (...args) => {
-      originEmit(...args)
-
-    }
+    this.$emit = partial(this.realEmit, this, this.$emit)
   },
-  beforeDestroy () {
-    if (this.formField && this.isTopMostInput) {
-      this.formField.inputs.splice(this.formField.inputs.indexOf(this), 1)
+  methods: {
+    realEmit (originalEmit, eventName, data, event) {
+      originalEmit.apply(this, arguments.slice(1))
+
+      this.field.$emit.apply(this.field, 'interacting', eventName)
     }
   }
 }

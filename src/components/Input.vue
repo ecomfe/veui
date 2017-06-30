@@ -4,8 +4,6 @@
     class="veui-input"
     v-bind="attrs"
     v-model="localValue"
-    :readonly="realReadOnly"
-    :disabled="realDisabled"
     @focus="$emit('focus', $event)"
     @click="$emit('click', $event)"
     @blur="$emit('blur', $event)"
@@ -18,8 +16,6 @@
     :class="{ 'veui-textarea-resizable': resizable }"
     v-bind="attrs"
     v-model="localValue"
-    :readonly="realReadOnly"
-    :disabled="realDisabled"
     @focus="$emit('focus', $event)"
     @click="$emit('click', $event)"
     @blur="$emit('blur', $event)"
@@ -29,7 +25,7 @@
 
 <script>
 import { input } from '../mixins'
-import { omit, includes } from 'lodash'
+import { omit, includes, extend } from 'lodash'
 
 const TYPE_LIST = ['text', 'password', 'hidden', 'textarea']
 
@@ -61,7 +57,13 @@ export default {
   },
   computed: {
     attrs () {
-      return omit(this.$props, ['selectOnFocus', 'fitContent', 'composition', 'resizable', 'disabled', 'readonly'])
+      let attrs = omit(this.$props, ['selectOnFocus', 'fitContent', 'composition', 'resizable'])
+      extend(attrs, {
+        name: this.realName,
+        disabled: this.realDisabled,
+        readonly: this.realReadonly
+      })
+      return attrs
     }
   },
   watch: {

@@ -5,32 +5,32 @@
       <h2>表单输出数据可与输入分离，做中间转换</h2>
       <veui-form ref="form1">
 
-        <veui-form-field label="昵称" name="nickName">
+        <veui-field label="昵称" name="nickName">
           <veui-input v-model="storeData1.nickName"></veui-input>
           <p class="output">{{ outputData.nickName }}</p>
-        </veui-form-field>
+        </veui-field>
 
-        <veui-form-field label="性别" name="sex">
+        <veui-field label="性别" name="sex">
           <veui-select :options="storeData1.sexItems" v-model="storeData1.sex"></veui-select>
           <p class="output">{{ outputData.sex }}</p>
-        </veui-form-field>
+        </veui-field>
 
-        <veui-form-field label="婚姻" name="married">
+        <veui-field label="婚姻" name="married">
           <veui-radioboxgroup :items="storeData1.marryItems" v-model="storeData1.married"></veui-radioboxgroup>
           <p class="output">{{ outputData.married }}</p>
-        </veui-form-field>
+        </veui-field>
 
-        <veui-form-field label="爱好" name="habit">
+        <veui-field label="爱好" name="habit">
           <veui-checkboxgroup type="checkbox" :items="storeData1.habitItems" v-model="storeData1.habit"></veui-checkboxgroup>
           <p class="output">{{ outputData.habit }}</p>
-        </veui-form-field>
+        </veui-field>
 
-        <veui-form-field label="生日" name="birthday">
+        <veui-field label="生日" name="birthday">
           <veui-datepicker v-model="storeData1.birthday"></veui-datepicker>
           <p class="output">{{ outputData.birthday }}</p>
-        </veui-form-field>
+        </veui-field>
 
-        <veui-form-field label="头像" name="avatar">
+        <veui-field label="头像" name="avatar">
           <veui-uploader uploaderType="image"
             action="/upload"
             request-mode="xhr"
@@ -43,7 +43,7 @@
             needButton
             extention-types="jpg,jpeg,png"></veui-uploader>
           <p class="output">{{ outputData.avatar }}</p>
-        </veui-form-field>
+        </veui-field>
 
         <div class="operation">
           <veui-button @click="() => this.$refs.form1.reset()">重置</veui-button>
@@ -54,79 +54,79 @@
       <h2>行内多组件表单</h2>
       <veui-form>
 
-        <veui-form-fieldset class="two-name" label="昵称" label-for="firstName" tip='使用 label-for="refName" 来实现 for'>
-          <veui-form-field name="lastName">
+        <veui-fieldset class="two-name" label="昵称" label-for="firstName" tip='使用 label-for="refName" 来实现 for'>
+          <veui-field name="lastName">
             <veui-input placeholder="姓" v-model="storeData2.lastName"></veui-input>
-          </veui-form-field>
+          </veui-field>
 
-          <veui-form-field name="firstName">
+          <veui-field name="firstName">
             <veui-input ref="firstName" placeholder="名" v-model="storeData2.firstName"></veui-input>
-          </veui-form-field>
-        </veui-form-fieldset>
+          </veui-field>
+        </veui-fieldset>
 
-        <veui-form-fieldset label="电话" label-for="telephone">
-          <veui-form-field name="phoneType">
+        <veui-fieldset label="电话" label-for="telephone">
+          <veui-field name="phoneType">
             <veui-select v-model="storeData2.phoneType" :options="storeData2.phoneTypeOptions"></veui-select>
-          </veui-form-field>
+          </veui-field>
 
-          <veui-form-field name="phone">
+          <veui-field name="phone">
             <veui-input ref="telephone" placeholder="名" v-model="storeData2.phone"></veui-input>
-          </veui-form-field>
-        </veui-form-fieldset>
+          </veui-field>
+        </veui-fieldset>
 
-        <veui-form-fieldset label="预期收入" class="salary" tip="使用 <veui-span> 来插入中间非组件内容">
-          <veui-form-field name="start">
+        <veui-fieldset label="预期收入" class="salary" tip="使用 <veui-span> 来插入中间非组件内容">
+          <veui-field name="start">
             <veui-input v-model="storeData2.start"></veui-input>
-          </veui-form-field>
+          </veui-field>
           <veui-span>-</veui-span>
-          <veui-form-field name="end">
+          <veui-field name="end">
             <veui-input v-model="storeData2.end"></veui-input>
-          </veui-form-field>
+          </veui-field>
           <veui-span>万</veui-span>
-        </veui-form-fieldset>
+        </veui-fieldset>
       </veui-form>
     </section>
     <section>
       <h2>行内表单</h2>
       <veui-form ui="inline">
 
-        <veui-form-fieldset class="left">
-          <veui-form-field label="状态" name="status">
+        <veui-fieldset class="left">
+          <veui-field label="状态" name="status">
             <veui-select v-model="storeData3.statusSelected" :options="storeData3.statusOptions"></veui-select>
-          </veui-form-field>
+          </veui-field>
 
-          <veui-form-field label="搜索项目" name="searchType">
+          <veui-field label="搜索项目" name="searchType">
             <veui-select v-model="storeData3.searchTypeSelected" :options="storeData3.searchTypeOptions"></veui-select>
-          </veui-form-field>
-        </veui-form-fieldset>
+          </veui-field>
+        </veui-fieldset>
 
-        <veui-form-fieldset class="right">
-          <veui-form-field name="searchContent">
+        <veui-fieldset class="right">
+          <veui-field name="searchContent">
             <veui-input placeholder="请输入搜索内容"></veui-input>
-          </veui-form-field>
+          </veui-field>
           <veui-button ui="primary">搜索</veui-button>
-        </veui-form-fieldset>
+        </veui-fieldset>
 
       </veui-form>
 
       <veui-form ui="inline">
 
-        <veui-form-fieldset class="left" ui="alt">
-          <veui-form-field label="状态" name="status">
+        <veui-fieldset class="left" ui="alt">
+          <veui-field label="状态" name="status">
             <veui-select ui="alt" v-model="storeData3.statusSelected" :options="storeData3.statusOptions"></veui-select>
-          </veui-form-field>
+          </veui-field>
 
-          <veui-form-field label="搜索项目" name="searchType">
+          <veui-field label="搜索项目" name="searchType">
             <veui-select ui="alt" v-model="storeData3.searchTypeSelected" :options="storeData3.searchTypeOptions"></veui-select>
-          </veui-form-field>
-        </veui-form-fieldset>
+          </veui-field>
+        </veui-fieldset>
 
-        <veui-form-fieldset class="right" name="searchContent">
-          <veui-form-field>
+        <veui-fieldset class="right" name="searchContent">
+          <veui-field>
             <veui-input placeholder="请输入搜索内容"></veui-input>
-          </veui-form-field>
+          </veui-field>
           <veui-button ui="primary">搜索</veui-button>
-        </veui-form-fieldset>
+        </veui-fieldset>
 
       </veui-form>
     </section>
@@ -139,50 +139,50 @@
         :beforeValidate="beforeValidate"
         :afterValidate="afterValidate">
 
-        <veui-form-field name="name1" rules="required" label="姓名" tip="必填，默认提交时校验">
+        <veui-field name="name1" rules="required" label="姓名" tip="必填，默认提交时校验">
           <veui-input v-model="storeData4.name"></veui-input>
-        </veui-form-field>
+        </veui-field>
 
-        <veui-form-field name="name2" :rules="dynamicNameRule" label="姓名（动态）" tip="blur时校验必填">
+        <veui-field name="name2" :rules="dynamicNameRule" label="姓名（动态）" tip="blur时校验必填">
           <veui-input placeholder="长度不能短于2" v-model="storeData4.name"></veui-input>
-        </veui-form-field>
+        </veui-field>
 
-        <veui-form-field name="age1" rules="numeric required" label="年龄">
+        <veui-field name="age1" rules="numeric required" label="年龄">
           <veui-input placeholder="错误提示优先出在右侧" v-model="storeData4.age"></veui-input>
-        </veui-form-field>
+        </veui-field>
 
-        <veui-form-field name="age2" :rules="dynamicAgeRule" label="年龄（动态）" tip="change 时校验长度">
+        <veui-field name="age2" :rules="dynamicAgeRule" label="年龄（动态）" tip="change 时校验长度">
           <veui-input placeholder="长度不能超过3" v-model="storeData4.age"></veui-input>
-        </veui-form-field>
+        </veui-field>
 
-        <veui-form-field name="desc" rules="required" label="介绍">
+        <veui-field name="desc" rules="required" label="介绍">
           <veui-input rows="3" type="textarea" v-model="storeData4.desc"></veui-input>
-        </veui-form-field>
+        </veui-field>
 
-        <veui-form-fieldset label="电话" label-for="phone">
-          <veui-form-field name="phoneType">
+        <veui-fieldset label="电话" label-for="phone">
+          <veui-field name="phoneType">
             <veui-select v-model="storeData2.phoneType" :options="storeData2.phoneTypeOptions"></veui-select>
-          </veui-form-field>
+          </veui-field>
 
-          <veui-form-field name="phone" rules="numeric required">
+          <veui-field name="phone" rules="numeric required">
             <veui-input ref="phone" v-model="storeData2.phone"></veui-input>
-          </veui-form-field>
-        </veui-form-fieldset>
+          </veui-field>
+        </veui-fieldset>
 
-        <veui-form-field name="habit" :rules="habitRule" label="爱好" tip="至少选择三个">
+        <veui-field name="habit" :rules="habitRule" label="爱好" tip="至少选择三个">
           <veui-checkboxgroup type="checkbox" :items="storeData1.habitItems" v-model="storeData1.habit"></veui-checkboxgroup>
-        </veui-form-field>
+        </veui-field>
 
-        <veui-form-fieldset label="预期收入" class="salary" tip="联合校验，下限必须小于上限">
-          <veui-form-field name="start" rules="numeric required" class="start-form-field">
+        <veui-fieldset label="预期收入" class="salary" tip="联合校验，下限必须小于上限">
+          <veui-field name="start" rules="numeric required" class="start-field">
             <veui-input v-model="storeData2.start"></veui-input>
-          </veui-form-field>
+          </veui-field>
           <veui-span>-</veui-span>
-          <veui-form-field name="end" rules="numeric required">
+          <veui-field name="end" rules="numeric required">
             <veui-input v-model="storeData2.end"></veui-input>
-          </veui-form-field>
+          </veui-field>
           <veui-span>万</veui-span>
-        </veui-form-fieldset>
+        </veui-fieldset>
 
         <div class="operation">
           <veui-button ui="primary" ref="submitBtn" :loading="isValidating" type="submit">提交</veui-button>
@@ -198,19 +198,19 @@
         :beforeValidate="beforeValidate"
         :afterValidate="afterValidate">
 
-        <veui-form-field label="负责人" name="qindian">
+        <veui-field label="负责人" name="qindian">
           <veui-input v-model="storeData5.qindian"></veui-input>
-        </veui-form-field>
+        </veui-field>
 
-        <veui-form-fieldset v-for="(item, index) in storeData5.scheduleInfo">
-          <veui-form-field :name="'projectName' + (index + 1)" :rules="requiredRule" :label="'项目排期-' + (index + 1)">
+        <veui-fieldset v-for="(item, index) in storeData5.scheduleInfo">
+          <veui-field :name="'projectName' + (index + 1)" :rules="requiredRule" :label="'项目排期-' + (index + 1)">
             <veui-input placeholder="项目名称" v-model="item.project"></veui-input>
-          </veui-form-field>
-          <veui-form-field :name="'schedule' + (index + 1)" :rules="requiredRule">
+          </veui-field>
+          <veui-field :name="'schedule' + (index + 1)" :rules="requiredRule">
             <veui-datepicker v-model="item.range" range></veui-datepicker>
-          </veui-form-field>
+          </veui-field>
           <veui-button @click="dynamicDelete(index)">删除</veui-button>
-        </veui-form-fieldset>
+        </veui-fieldset>
 
         <div class="operation">
           <veui-button ui="primary" ref="submitBtn" :loading="isValidating" type="submit">提交</veui-button>
@@ -244,8 +244,8 @@ export default {
     'veui-input': Input,
     'veui-button': Button,
     'veui-form': Form,
-    'veui-form-fieldset': FieldSet,
-    'veui-form-field': Field,
+    'veui-fieldset': FieldSet,
+    'veui-field': Field,
     'veui-datepicker': DatePicker,
     'veui-uploader': Uploader,
     'veui-select': Select,
@@ -565,8 +565,8 @@ export default {
     margin: 0;
   }
 
-  .start-form-field {
-    .veui-form-field-error:first-of-type {
+  .start-field {
+    .veui-field-error:first-of-type {
       overflow: hidden;
       text-overflow: ellipsis;
       width: 80px;

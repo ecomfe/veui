@@ -341,8 +341,8 @@ export default {
 .veui-form[ui~="inline"] {
   .clearfix();
 
-  .veui-form-field-set,
-  .veui-form-field {
+  .veui-field-set,
+  .veui-field {
     display: inline-block;
     margin-bottom: 0;
     clear: none;
@@ -351,8 +351,8 @@ export default {
       width: auto;
     }
 
-    & + .veui-form-field-set,
-    & + .veui-form-field {
+    & + .veui-field-set,
+    & + .veui-field {
       margin-left: 15px;
     }
   }

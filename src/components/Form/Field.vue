@@ -1,9 +1,9 @@
 <template>
-  <div class="veui-form-field" :class="{'veui-form-field-invalid': !validity.valid, 'veui-form-field-no-key': !label, 'veui-form-field-no-tip': !tip}">
+  <div class="veui-field" :class="{'veui-field-invalid': !validity.valid, 'veui-field-no-key': !label, 'veui-field-no-tip': !tip}">
     <veui-label v-if="label" class="veui-form-key" :label="label" :label-for="labelFor"></veui-label>
     <slot></slot>
     <span v-if="tip" class="veui-form-tip">{{ tip }}</span>
-    <p v-if="!validity.valid && !!validity.message" class="veui-form-field-error" :title="validity.message"><veui-icon name="exclamation-circle"></veui-icon>{{ validity.message }}</p>
+    <p v-if="!validity.valid && !!validity.message" class="veui-field-error" :title="validity.message"><veui-icon name="exclamation-circle"></veui-icon>{{ validity.message }}</p>
   </div>
 </template>
 
@@ -11,15 +11,15 @@
 import Label from '../Label'
 import { clone, rule } from '../../managers'
 import { isBoolean, assign } from 'lodash'
-import { getTypedAncestorTracker, getModelProp, getModelEvent } from '../../utils/helper'
+import { getTypedAncestorTracker, getModelProp } from '../../utils/helper'
 import Icon from '../Icon'
 import '../../icons'
 import Vue from 'vue'
-const { computed: computedForm } = getTypedAncestorTracker('form')
+const { computed: form } = getTypedAncestorTracker('form')
 
 export default {
-  name: 'veui-form-field',
-  uiTypes: ['form-field', 'form-container'],
+  name: 'veui-field',
+  uiTypes: ['field', 'form-container'],
   components: {
     'veui-icon': Icon,
     'veui-label': Label
@@ -31,7 +31,8 @@ export default {
     tip: String,
     disabled: Boolean,
     readonly: Boolean,
-    rules: [String, Array]
+    rules: [String, Array],
+    field: String
   },
   data () {
     return {
@@ -86,110 +87,32 @@ export default {
       },
       realReadonly () {
         return this.readonly || (this.fieldSet && this.fieldSet.realReadonly)
-      },
-      isAllDisabled () {
-        return this.disabled || this.inputs.every(input => input.disabled)
-      },
-      submittedValue () {
-        let value = this.inputs.map(input => {
-          let val = input[getModelProp(input)]
-          return val === undefined ? null : val
-        })
-        return this.isAllDisabled
-          ? undefined
-          : (this.inputs.length > 1 ? value : value[0])
       }
     },
-    computedForm
+    form
   ),
-  watch: {
-    interactiveRules (newVal, oldVal) {
-      let added = newVal || []
-      if (oldVal && oldVal.length) {
-        let diff = rule.diffRules(newVal, oldVal)
-        diff.removed.forEach(perRule => {
-          perRule.triggers.split(',').forEach(trigger => {
-            this.inputs.forEach(input => {
-              input.$off(trigger, this.handlers[perRule.name])
-            })
-          })
-        })
-        added = diff.added
-      }
-      this.bindInteractiveRules(this.inputs, added)
-    }
-  },
   methods: {
-    resetValue () {
-      this.inputs.forEach(input => {
-        let event = getModelEvent(input)
-        input.$emit(event, clone.exec(input.initialData))
-      })
-    },
-    validate () {
-      if (!this.inputs.length) {
-        this.hideValidity('local')
-        return true
-      }
+    getFieldValue {
 
-      // 检验的时候所有 rules 一起上
-      let rules = this.localRules
-      let inputs = this.inputs
-      // 支持多个 input 之后，这个 message 应该是取第一次出错的 message
-      let res
-      let isError = inputs.some(input => {
-        // 检查到有出错就停止，disable不检查
-        if (!input.disabled) {
-          res = rule.validate(input[getModelProp(input)], rules)
-          return !this.isValid(res)
-        }
-      })
-      if (isError) {
+    },
+    resetValue () {
+    },
+    validate (rules = this.localRules) {
+      let res = rule.validate(this.getFieldValue(), rules)
+      if (this.isValid(res)) {
+        this.hideValidity('local')
+      } else {
         this.validities.unshift({
           valid: false,
           message: res,
           invalidType: 'local'
         })
-      } else {
-        this.hideValidity('local')
       }
       return res
     },
-    bindInteractiveRules (inputs, rules = this.interactiveRules) {
-      rules && rules.forEach(perRule => {
-        // submit 可能揉在有其他 interactive 的里边，要过滤掉
-        perRule.triggers.split(',').filter(event => event !== 'submit').forEach(event => {
-          inputs.forEach(input => {
-            assign(this.handlers, {
-              [event]: e => {
-                Vue.nextTick(() => {
-                  let res = rule.validate(input[getModelProp(input)], [perRule])
-                  if (this.isValid(res)) {
-                    this.hideValidity('local')
-                  } else {
-                    this.validities.unshift({
-                      valid: false,
-                      message: res,
-                      invalidType: 'local'
-                    })
-                  }
-                })
-              }
-            })
-            input.$on(event, this.handlers[event])
-          })
-        })
-      })
-    },
-    addInteractiveValidator (event, handler) {
-      this.inputs.forEach(input => {
-        input.$on(event, handler)
-      })
-    },
-    removeInteractiveValidator (event, handler) {
-      this.inputs.forEach(input => {
-        input.$off(event, handler)
-      })
+    handleInteract (eventName) {
+      this.validate(this.interactiveRules.filter(perRule => includes(perRule.triggers, eventName)))
+      this.form.$emit.apply(this.form, 'interacting', eventName)
     },
     hideValidity (invalidType) {
       this.$set(this, 'validities', this.validities.filter(validity => validity.invalidType !== invalidType))
@@ -199,9 +122,16 @@ export default {
     }
   },
   created () {
+    if (!this.field) {
+      return
+    }
     this.form.fields.push(this)
+    this.$on('interacting', this.handleInteract)
   },
   beforeDestroy () {
+    if (!this.field) {
+      return
+    }
     this.form.fields.splice(this.form.fields.indexOf(this), 1)
   }
 }
@@ -210,9 +140,9 @@ export default {
 <style lang="less">
 @import "../../styles/theme-default/lib.less";
 
-.veui-form-field {
+.veui-field {
   vertical-align: top;
-  margin-bottom: @veui-form-field-gap;
+  margin-bottom: @veui-field-gap;
   clear: both;
 
   &:last-of-type {
@@ -271,15 +201,15 @@ export default {
     }
   }
 
-  .veui-form-tip + .veui-form-field-error {
+  .veui-form-tip + .veui-field-error {
     position: absolute;
     display: block;
     margin: 0;
-    height: @veui-form-field-gap;
-    line-height: @veui-form-field-gap;
+    height: @veui-field-gap;
+    line-height: @veui-field-gap;
   }
 
-  .veui-form-key ~ .veui-form-tip + .veui-form-field-error {
+  .veui-form-key ~ .veui-form-tip + .veui-field-error {
     margin-left: @veui-form-key-width;
   }
 
