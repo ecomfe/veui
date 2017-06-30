@@ -1,147 +1,228 @@
-import { uniqueId, remove } from 'lodash'
+import { remove, uniqueId, find } from 'lodash'
 import Vue from 'vue'
 
-const tree = []
-const treeNodeIndex = {}
-let baseZIndex = 100
+class Node {
+  parent = null
 
-class TreeNode {
-  children = [];
-  isTopMost = false;
+  /**
+   * 数据结构：
+   *
+   * [
+   *   {
+   *     children: [Node1, Node2, ...],
+   *     priority: 1
+   *   }
+   * ]
+   *
+   * @memberof Node
+   */
+  childrenGroup = []
+  id = null
+  zIndex = null
 
-  constructor ({ id, parentId, isTopMost }) {
-    this.id = id
-    this.parentId = parentId
+  constructor () {
+    this.id = uniqueId('overlay-node-id-')
   }
-}
 
-function iterateTree (tree, iteratee) {
-  for (let i = 0, il = tree.length; i < il; ++i) {
-    let treeNode = tree[i]
-
-    if (iteratee(treeNode)) {
-      return true
-    }
-
-    if (iterateTree(treeNode.children, iteratee)) {
-      return true
-    }
-  }
-  return false
-}
-
-function genUid () {
-  return uniqueId('overlay-')
-}
-
-function addToList (list, treeNode) {
-  if (treeNode.isTopMost) {
-    list.push(treeNode)
-  } else {
-    let firstTopMostIndex
-    for (let i = 0, il = list.length; i < il; ++i) {
-      if (list[i].isTopMost) {
-        firstTopMostIndex = i
+  iterateChildren (callback) {
+    for (let i = 0, il = this.childrenGroup.length; i < il; i++) {
+      const group = this.childrenGroup[i]
+      for (let j = 0, jl = group.children.length; j < jl; j++) {
+        const child = group.children[j]
+        if (callback(child, j, group)) {
+          return child
+        }
       }
     }
-
-    if (firstTopMostIndex === undefined) {
-      list.push(treeNode)
-    } else {
-      list.splice(firstTopMostIndex, 0, TreeNode)
-    }
-  }
-}
-
-function removeTreeNode (id) {
-  if (treeNodeIndex[id] === null) {
-    return
   }
 
-  iterateTree(tree, (treeNode) => {
-    if (treeNode.id === id) {
-      const parentTreeNode = treeNode.parentId && treeNodeIndex[treeNode.parentId].treeNode
-      const treeNodeList = parentTreeNode ? parentTreeNode.children : tree
-      remove(treeNodeList, item => item.id === id)
-      return true
-    }
-  })
-
-  treeNodeIndex[id] = null
-}
-
-function toTop (id) {
-  const treeNode = treeNodeIndex[id].treeNode
-  if (treeNode) {
-    const parentTreeNode = treeNode.parentId && treeNodeIndex[treeNode.parentId].treeNode
-    const treeNodeList = parentTreeNode ? parentTreeNode.children : tree
-
-    const treeNodeIndex = treeNodeList.indexOf(treeNode)
-    const treeNodeListLength = treeNodeList.length
-    for (let i = treeNodeIndex + 1; i < treeNodeListLength; ++i) {
-      const curTreeNode = treeNodeList[i]
-      if (curTreeNode.isTopMost) {
-        treeNodeList.splice(i - 1, 1, treeNode)
-        break
+  appendChild (child, priority = 1) {
+    let index = null
+    let isInserted = false
+    find(this.childrenGroup, (group, i) => {
+      if (group.priority === priority) {
+        group.children.push(child)
+        isInserted = true
+        return true
       }
 
-      treeNodeList[i - 1] = curTreeNode
-      treeNodeList[i] = null
-    }
+      if (group.priority > priority) {
+        index = i
+        return true
+      }
+    })
 
-    // 如果没有topMost的元素，就直接把目标元素放在数组最后面
-    if (treeNodeList[treeNodeListLength - 1] === null) {
-      treeNodeList[treeNodeListLength - 1] = treeNode
+    if (!isInserted) {
+      if (index === null) {
+        this.childrenGroup.push({
+          children: [child],
+          priority
+        })
+      } else {
+        this.childrenGroup.splice(index, 0, {
+          children: [child],
+          priority
+        })
+      }
     }
-  } else {
-    throw new Error(`The treeNode ${id} does not exist!`)
   }
 
-  // 变了位置，自然要刷一遍zindex了
-  refreshZIndex()
-}
-
-function refreshZIndex () {
-  let counter = baseZIndex
-  iterateTree(tree, (treeNode) => {
-    counter++
-    treeNodeIndex[treeNode.id].overlayZIndexInstance.$emit('zindexchange', counter)
-  })
-}
-
-export function addOverlay (parentOverlayId, isTopMost = false) {
-  let uid = genUid()
-
-  let treeNode
-
-  if (parentOverlayId) {
-    // 找到父节点
-    const parentTreeNode = treeNodeIndex[parentOverlayId].treeNode
-
-    if (!parentTreeNode) {
-      throw new Error(`The overlay(${parentOverlayId})'s parent overlay does not exist!`)
-    } else {
-      treeNode = new TreeNode({ id: uid, parentId: parentTreeNode.id, isTopMost })
-      addToList(parentTreeNode.children, treeNode)
+  removeChildById (id) {
+    for (let i = 0, il = this.childrenGroup.length; i < il; i++) {
+      const group = this.childrenGroup[i]
+      remove(group.children, child => child.id === id)
     }
-  } else {
-    treeNode = new TreeNode({ id: uid, isTopMost })
-    addToList(tree, treeNode)
   }
 
-  const overlayZIndexInstance = new Vue()
-  overlayZIndexInstance.id = uid
-  overlayZIndexInstance.toTop = () => toTop(uid)
-  overlayZIndexInstance.remove = () => removeTreeNode(uid)
-  overlayZIndexInstance.refresh = () => refreshZIndex()
-  treeNodeIndex[uid] = {
-    treeNode,
-    overlayZIndexInstance
+  remove () {
+    if (!this.parent) {
+      return
+    }
+
+    this.parent.removeChildById(this.id)
+    this.parent = null
   }
 
-  return overlayZIndexInstance
+  getChildrenCount () {
+    let counter = 0
+    this.childrenGroup.forEach((group) => {
+      counter += group.children.length
+    })
+    return counter
+  }
 }
 
-export function setBaseZIndex (zIndex) {
-  baseZIndex = zIndex
+export class Tree {
+  rootNode = new Node()
+  nodeMap = {
+    [this.rootNode.id]: {
+      node: this.rootNode,
+      instance: null
+    }
+  }
+
+  baseZIndex = 100
+
+  setBaseZIndex (zIndex) {
+    this.baseZIndex = zIndex
+  }
+
+  iterate ({ curNode = this.rootNode, callback } = {}) {
+    const result = callback(curNode)
+    if (result) {
+      return result
+    }
+
+    return curNode.iterateChildren(child => this.iterate({ curNode: child }))
+  }
+
+  insertNode (parentId, node, priority) {
+    const parent = this.nodeMap[parentId]
+    if (!parent) {
+      return
+    }
+
+    const parentNode = parent.node
+    parentNode.appendChild(node, priority)
+    node.parent = parentNode
+
+    this.generateTreeZIndex(node.id)
+  }
+
+  createNode ({ parentId = this.rootNode.id, priority }) {
+    const node = new Node()
+    node.zIndex = this.baseZIndex
+
+    const nodeId = node.id
+    const instance = new Vue({
+      data () {
+        return {
+          id: nodeId
+        }
+      },
+      methods: {
+        remove: () => {
+          node.remove()
+          this.nodeMap[nodeId] = null
+        },
+        appendTo: (parentId, priority) => {
+          this.nodeMap[node.id] = { node, instance }
+          this.moveNode(node, parentId, priority)
+        },
+        toTop: () => {
+          let targetGroup
+          let targetIndex
+          node.parent.iterateChildren((child, index, group) => {
+            if (child === node) {
+              targetGroup = group
+              targetIndex = index
+              return true
+            }
+          })
+
+          const children = targetGroup.children
+          const lastIndex = children.length - 1
+          children[targetIndex] = children[lastIndex]
+          children[lastIndex] = node
+
+          this.generateTreeZIndex(node.id)
+        }
+      }
+    })
+    this.nodeMap[nodeId] = { node, instance }
+    this.insertNode(parentId, node, priority)
+    Vue.nextTick(() => {
+      instance.$emit('zindexchange', node.zIndex)
+    })
+
+    return instance
+  }
+
+  moveNode (node, parentId, priority) {
+    const realParentId = parentId || this.rootNode.id
+    const parentNode = this.nodeMap[realParentId].node
+    const curParentNode = node.parent
+    if (parentNode === curParentNode) {
+      return
+    }
+
+    node.remove()
+    node.parent = parentNode
+    this.nodeMap[realParentId].node.appendChild(node, priority)
+
+    this.generateTreeZIndex(node.id)
+  }
+
+  generateTreeZIndex (startNodeId) {
+    const node = this.nodeMap[startNodeId].node
+    const parentNode = node.parent
+
+    let prevNode
+    let isEncountered = false
+    let baseZIndex
+    parentNode.iterateChildren((child) => {
+      if (!isEncountered && child === node) {
+        isEncountered = true
+        baseZIndex = (prevNode && prevNode.zIndex
+          ? (prevNode.zIndex + 1) : null) || this.baseZIndex
+      }
+
+      if (isEncountered) {
+        this.iterate({
+          curNode: child,
+          callback: (curNode) => {
+            const instance = this.nodeMap[curNode.id].instance
+            curNode.zIndex = baseZIndex++
+            instance.$emit('zindexchange', curNode.zIndex)
+          }
+        })
+      }
+
+      if (!isEncountered) {
+        prevNode = child
+      }
+    })
+  }
 }
+
+export default new Tree()

@@ -12,10 +12,18 @@
 </template>
 <script>
 import Tether from 'tether'
-import { omit, isObject, isString } from 'lodash'
+import { assign, isObject, isString } from 'lodash'
 import { getNodes } from '../utils/context'
+import overlayManager from '../managers/overlay'
+import { config } from '../managers'
 
-const ZINDEX_INSTANCE_KEY = '__veui_overlay_zindex_instance__'
+config.defaults({
+  'overlay.baseZIndex': 200
+})
+
+overlayManager.setBaseZIndex(config.get('overlay.baseZIndex'))
+
+const OVERLAY_INSTANCE_KEY = '__veui_overlay_instance_key__'
 
 export default {
   name: 'veui-overlay',
@@ -40,112 +48,98 @@ export default {
       default () {
         return {}
       }
-    }
+    },
+    priority: Number
   },
   data () {
     return {
       zIndex: 0,
       appendBody: false,
-      localOpen: false,
-      targetNode: null
-    }
-  },
-  computed: {
-    isAttach () {
-      return !!this.target
+      localOpen: this.open,
+      targetNode: null,
+
+      // 把 id 放 data 上面方便 debug
+      overlayNodeId: null
     }
   },
   watch: {
     open (value) {
-      this.updateOverlayData()
+      this.localOpen = value
+      this.updateOverlayDOM()
+      this[OVERLAY_INSTANCE_KEY].toTop()
     },
     target () {
-      this.updateOverlayData()
+      this.findTargetNode()
+    },
+    targetNode () {
+      this.updateOverlayDOM()
     }
   },
   mounted () {
     const box = this.$refs.box
     document.body.appendChild(box)
 
-    this.updateOverlayData()
-  },
-  updated () {
-    if (this.isOpenDirty) {
-      this.isOpenDirty = false
-      this.updateOverlayDOM()
-    }
+    this.findTargetNode()
+    this.updateOverlayDOM()
   },
   methods: {
 
-    createZIndexInstance () {
-      this[ZINDEX_INSTANCE_KEY] = this.$veui.addOverlay(this.isAttach ? this.findParentOverlayId() : null)
-      this[ZINDEX_INSTANCE_KEY].$on(
-        'zindexchange',
-        zIndex => {
+    // 更新 zindex 树
+    updateNode () {
+      if (!this[OVERLAY_INSTANCE_KEY]) {
+        this[OVERLAY_INSTANCE_KEY] = overlayManager.createNode({
+          parentId: this.findParentOverlayId(),
+          priority: this.priority
+        })
+        this[OVERLAY_INSTANCE_KEY].$on('zindexchange', (zIndex) => {
           this.zIndex = zIndex
+        })
+        this.overlayNodeId = this[OVERLAY_INSTANCE_KEY].id
+      } else {
+        this[OVERLAY_INSTANCE_KEY].appendTo(this.findParentOverlayId(), this.priority)
+      }
+    },
+
+    findParentOverlayId () {
+      let cur = this.$vnode.context
+      while (cur) {
+        if (cur && this.isOverlay(cur)) {
+          return cur[OVERLAY_INSTANCE_KEY].id
         }
-      )
-      this[ZINDEX_INSTANCE_KEY].refresh()
+        cur = cur.$parent
+      }
     },
 
     updateOverlayDOM () {
-      if (this.isAttach) {
-        if (this.open && this.targetNode) {
-          this.closeOverlay()
-          this.tether = new Tether({
-            element: this.$refs.box,
-            target: this.targetNode,
-            ...omit(this.options, 'element', 'target')
-          })
-          this.$nextTick(() => this.tether.position())
-          this.createZIndexInstance()
+      if (!this.localOpen) {
+        return
+      }
+
+      if (this.targetNode) {
+        const options = assign({}, this.options, {
+          element: this.$refs.box,
+          target: this.targetNode
+        })
+
+        if (!this.tether) {
+          this.tether = new Tether(options)
         } else {
-          this.closeOverlay()
+          this.tether.setOptions(options)
         }
+
+        // 修改 tether 的 options 的时候，有可能 tether 的容器元素还没显示出来，
+        // 所以保险起见，统一 nextTick 触发一下 tether 的重新计算
+        this.$nextTick(() => this.tether.position())
+      }
+
+      this.updateNode()
+    },
+
+    findTargetNode () {
+      if (this.target) {
+        this.targetNode = getNodes(this.target, this.$vnode.context)[0]
       } else {
-        if (this.open) {
-          this.closeOverlay()
-          this.createZIndexInstance()
-        } else {
-          this.closeOverlay()
-        }
-      }
-    },
-
-    getTargetNode (target) {
-      return getNodes(target, this.$vnode.context)[0]
-    },
-
-    updateOverlayData () {
-      this.isOpenDirty = true
-      this.localOpen = false
-      if (this.isAttach) {
-        if (this.open) {
-          this.targetNode = this.getTargetNode(this.target)
-          this.localOpen = !!this.targetNode
-        } else {
-          this.localOpen = false
-        }
-      } else {
-        this.localOpen = this.open
-      }
-
-      // 发生了变化才抛事件出去
-      if (this.localOpen !== this.open) {
-        this.$emit('update:open', this.localOpen)
-      }
-    },
-
-    closeOverlay () {
-      if (this.isAttach) {
-        this.tether && this.tether.destroy()
-        this.tether = null
-      }
-
-      if (this[ZINDEX_INSTANCE_KEY]) {
-        this[ZINDEX_INSTANCE_KEY].$off()
-        this[ZINDEX_INSTANCE_KEY].remove()
-        this[ZINDEX_INSTANCE_KEY] = null
+        this.targetNode = null
       }
     },
 
@@ -153,26 +147,20 @@ export default {
       return componentInstance.uiTypes && componentInstance.uiTypes[0] === 'overlay'
     },
 
-    /**
-     * 向上找到父级overlay组件的Id。
-     * 前提条件：Overlay和target元素必须在同一个父Overlay之内
-     */
-    findParentOverlayId () {
-      let cur = this.$vnode.context
-      while (cur) {
-        if (cur && this.isOverlay(cur)) {
-          return cur[ZINDEX_INSTANCE_KEY].id
-        }
-        cur = cur.$parent
-      }
-    },
-
     focus () {
-      this[ZINDEX_INSTANCE_KEY].toTop()
+      this[OVERLAY_INSTANCE_KEY].toTop()
     }
   },
   beforeDestroy () {
-    this.closeOverlay()
+    this.tether && this.tether.destroy()
+    this.tether = null
+
+    if (this[OVERLAY_INSTANCE_KEY]) {
+      this[OVERLAY_INSTANCE_KEY].$off()
+      this[OVERLAY_INSTANCE_KEY].remove()
+      this[OVERLAY_INSTANCE_KEY] = null
+    }
+
     this.$refs.box.parentNode.removeChild(this.$refs.box)
   }
 }

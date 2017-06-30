@@ -19,6 +19,7 @@ import Toast from './Toast'
 import Alert from './Alert'
 import ConfirmBox from './ConfirmBox'
 import AlertBox from './AlertBox'
+import SpecialDialog from './SpecialDialog'
 import Tabs from './Tabs'
 
 export default [
@@ -128,9 +129,13 @@ export default [
     component: AlertBox
   },
   {
+    path: '/special-dialog',
+    name: 'SpecialDialog',
+    component: SpecialDialog
+  },
+  {
     path: '/tabs',
     name: 'Tabs',
     component: Tabs
   }
-
 ]

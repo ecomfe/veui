@@ -3,7 +3,8 @@
     :open="localOpen"
     :overlay-class="mergedOverlayClass"
     :ui="ui"
-    ref="overlay">
+    ref="overlay"
+    :priority="priority">
     <div class="veui-dialog-content"
       :style="contentRectStyle"
       @mousedown="focus"
@@ -87,7 +88,8 @@ export default {
         return isObject(value) || isString(value)
       },
       default: null
-    }
+    },
+    priority: Number
   },
   data () {
     return {
@@ -273,7 +275,9 @@ export default {
       this.$emit('update:open', this.localOpen)
     },
     focus () {
-      this.$refs.overlay.focus()
+      if (this.$refs.overlay) {
+        this.$refs.overlay.focus()
+      }
     }
   },
   created () {
