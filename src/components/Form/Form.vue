@@ -5,10 +5,8 @@
 </template>
 
 <script>
-import { isBoolean, isFunction, includes, assign, zipObject, map, keys, partial } from 'lodash'
+import { isBoolean, isFunction, includes, assign, zipObject, map, keys } from 'lodash'
 import { allSettled } from '../../utils/promise'
-import { rule } from '../../managers'
-import Vue from 'vue'
 
 export default {
   name: 'veui-form',
@@ -24,7 +22,8 @@ export default {
     beforeValidate: Function,
     afterValidate: Function,
     disabled: Boolean,
-    readonly: Boolean
+    readonly: Boolean,
+    data: null
   },
 
   data () {
@@ -76,54 +75,12 @@ export default {
         })
       })
       return singleFieldMap
-    },
-    formData () {
-      let fields = this.fields.filter(field => !field.isAllDisabled)
-      return assign({}, ...fields.map(field => ({ [field.name]: field.submittedValue })))
-    }
-  },
-
-  watch: {
-    interactiveValidators (newVal, oldVal) {
-      let added = newVal || []
-      if (oldVal && oldVal.length) {
-        let diff = rule.diffRules(newVal, oldVal)
-        diff.removed.forEach(validator => {
-          let triggers = validator.triggers
-          let fieldNames = validator.fields.split(',')
-
-          // 这里的 triggers 应该也过滤过了
-          if (Array.isArray(triggers)) {
-            let justified = fieldNames.map((name, index) => ({name, event: triggers[index]}))
-            justified.forEach(({ name, event }) => {
-              if (event) {
-                let handlerName = `${fieldNames.join(',')}-${name}-${event}`
-                this.fieldsMap[name].removeInteractiveValidator(
-                  event,
-                  this.handlers[handlerName]
-                )
-                delete this.handlers[handlerName]
-              }
-            })
-          } else {
-            fieldNames.forEach(name => {
-              triggers.split(',').forEach(event => {
-                let handlerName = `${fieldNames.join(',')}-${name}-${event}`
-                this.fieldsMap[name].removeInteractiveValidator(event, this.handlers[handlerName])
-                delete this.handlers[handlerName]
-              })
-            })
-          }
-        })
-        added = diff.added
-      }
-      this.bindInteractiveValidators({ validators: added })
     }
   },
 
   methods: {
     handleSubmit (e) {
-      let data = this.formData
+      let data = this.data
       return new Promise((resolve, reject) =>
         isFunction(this.beforeValidate)
           ? resolve(this.beforeValidate.call(this.$vnode.context, data))
@@ -145,89 +102,9 @@ export default {
       )
     },
 
-    /**
-     * 存在两种情况进入这个函数
-     * 1. input 被添加到 form 中，包括动态添加field或者在field中动态添加input，这个时候传递新增的 input
-     * 2. validators 产生更新，不需要指定 input
-     *
-     * @param  {Component} [input] InputComponent
-     * @param  {Array} [validators=this.interactiveValidators] 配置
-     */
-    bindInteractiveValidators ({ input, validators = this.interactiveValidators }) {
-      let cb = (fieldNames, handler, e) => {
-        fieldNames = fieldNames.split(',')
-        Vue.nextTick(() => {
-          let validities = handler(
-            ...fieldNames.map(name => this.fieldsMap[name].submittedValue)
-          )
-          // 这里不需要 return 了，因为是 interactive 的，没人接 Promise，直接 catch 掉
-          let defaultErr = zipObject(fieldNames, [])
-          if (validities && isFunction(validities.then)) {
-            return validities.then(val => true)
-              .catch(err => err)
-              .then(res => this.handleValidities(res || defaultErr, fieldNames))
-          }
-          this.handleValidities(validities || defaultErr, fieldNames)
-        })
-      }
-
-      if (input) {
-        let fieldName = input.formField.name
-        let config = this.interactiveValidatorsMap[fieldName]
-        config && config.forEach(({ event, validator }) => {
-          let fieldNames = validator.fields
-          // 比如写了个多组件联合校验
-          //
-          // {
-          //   fields: ['start', 'end'],
-          //   handler (start, end) {
-          //     if (!start || !end) {
-          //       return true
-          //     }
-
-          //     if (parseInt(start, 10) >= parseInt(end, 10)) {
-          //       return {
-          //         start: '下限必须小于上限'
-          //       }
-          //     }
-          //     return true
-          //   },
-          //   triggers: 'change,input'
-          // }
-          //
-          //
-          // 那么这里就是 'start,end-start-change', 'start,end-end-input'
-          let handlerName = `${fieldNames}-${fieldName}-${event}`
-          !this.handlers[handlerName] && assign(
-            this.handlers,
-            { [handlerName]: partial(cb, fieldNames, validator.handler) }
-          )
-          input.$on(event, this.handlers[handlerName])
-        })
-      } else {
-        validators && validators.forEach(validator => {
-          let triggers = validator.triggers
-          let fieldNames = validator.fields
-
-          fieldNames.split(',').forEach((name, index) => {
-            let events = Array.isArray(triggers) ? triggers : triggers.split(',')
-            events.forEach(event => {
-              if (!event || event === 'submit') {
-                return
-              }
-
-              let handlerName = `${fieldNames}-${name}-${event}`
-              assign(this.handlers, { [handlerName]: partial(cb, fieldNames, validator.handler) })
-              this.fieldsMap[name].addInteractiveValidator(event, this.handlers[handlerName])
-            })
-          })
-        })
-      }
-    },
-
     validate (names) {
-      // fieldset 可以有 name，但是不会有直接的 input，没有校验规则，只能显示集合校验的出错信息，校验的时候要排除
-      let fields = (this.fields || []).filter(field => field.inputs && field.inputs.length)
+      // fieldset 可以有 name，但是不会有 field
+      let fields = (this.fields || []).filter(item => item.field)
       let validators = this.validators || []
       if (Array.isArray(names) && names.length) {
         fields = fields.filter(field => includes(names, field.name))

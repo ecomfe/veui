@@ -9,12 +9,11 @@
 
 <script>
 import Label from '../Label'
-import { clone, rule } from '../../managers'
-import { isBoolean, assign } from 'lodash'
-import { getTypedAncestorTracker, getModelProp } from '../../utils/helper'
+import { type, rule } from '../../managers'
+import { isBoolean, assign, get, includes } from 'lodash'
+import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
 import '../../icons'
-import Vue from 'vue'
 const { computed: form } = getTypedAncestorTracker('form')
 
 export default {
@@ -55,7 +54,7 @@ export default {
         } else {
           let rules
           if (Array.isArray(this.rules)) {
-            rules = clone.exec(this.rules)
+            rules = type.clone(this.rules)
             rule.initRules(rules)
           } else {
             rules = this.rules.trim().split(/\s+/).map(perRule => {
@@ -92,8 +91,8 @@ export default {
     form
   ),
   methods: {
-    getFieldValue {
-
+    getFieldValue () {
+      return get(this.form.data, this.field)
     },
     resetValue () {
     },
@@ -126,6 +125,7 @@ export default {
       return
     }
     this.form.fields.push(this)
+    this.initialData = clone
     this.$on('interacting', this.handleInteract)
   },
   beforeDestroy () {

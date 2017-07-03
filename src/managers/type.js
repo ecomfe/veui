@@ -1,7 +1,7 @@
 import { cloneDeepWith, find } from 'lodash'
 import { isType, getTypeByInstance } from '../utils/lang'
 
-export class Clone {
+export class Type {
   constructor () {
     this.configs = [
       {
@@ -13,7 +13,7 @@ export class Clone {
     ]
   }
 
-  exec (val) {
+  clone (val) {
     return cloneDeepWith(val, cloneBuiltIn.bind(this))
   }
 
@@ -38,5 +38,5 @@ function cloneBuiltIn (val) {
   }
 }
 
-const instance = new Clone()
+const instance = new Type()
 export default instance

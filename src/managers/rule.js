@@ -7,7 +7,6 @@ import max from './rules/max'
 import min from './rules/min'
 import numeric from './rules/numeric'
 import pattern from './rules/pattern'
-import { isEqual, map, includes } from 'lodash'
 
 const replaceRe = /%\{ruleValue\}/g
 
@@ -56,31 +55,6 @@ export class Rule {
   addRule (rule, validator) {
     if (!(rule in this.ruleValidators)) {
       this.ruleValidators[rule] = validator
-    }
-  }
-
-  diffRules (newRules, oldRules) {
-    let ruleNames = map(oldRules, oldRules[0].name ? 'name' : 'fileds')
-    let removed = []
-    let added = newRules.filter(newRule => {
-      // 过滤出新添加和更新的
-      return !oldRules.some(oldRule => {
-        let equal = isEqual(newRule, oldRule)
-        if (equal) {
-          // 没有改变的直接去掉，跳出遍历
-          return true
-        }
-        if (!equal && !includes(ruleNames, newRule.name || newRule.fields)) {
-          // 改变了的要看是不是新加的，查一下之前有没有这条规则，有的话说明是修改，标记为去掉
-          removed.push(oldRule)
-        }
-        return false
-      })
-    })
-
-    return {
-      added,
-      removed
     }
   }
 }

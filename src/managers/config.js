@@ -1,5 +1,5 @@
 import { keys } from 'lodash'
-import clone from './clone'
+import type from './type'
 
 function set (obj, key, value, isOverride) {
   if (typeof key === 'object') {
@@ -34,7 +34,7 @@ export class ConfigManager {
   }
 
   get (key) {
-    return clone.exec(this.store[key])
+    return type.clone(this.store[key])
   }
 }
 
