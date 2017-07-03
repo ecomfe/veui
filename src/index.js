@@ -1,8 +1,3 @@
-export default {
-  install () {
-  }
-}
-
 export { default as Alert } from './components/Alert'
 export { default as AlertBox } from './components/AlertBox'
 export { default as Breadcrumb } from './components/Breadcrumb'
