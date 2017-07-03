@@ -1,6 +1,6 @@
 <template>
-  <div class="veui-tab" v-if="this.$parent.localActive === this.name">
-    <slot></slot>
+  <div class="veui-tab" v-show="isActive">
+    <slot v-if="this.isInited && isActive"></slot>
   </div>
 </template>
 
@@ -14,6 +14,20 @@ export default {
     },
     name: String,
     disabled: Boolean
+  },
+  data () {
+    return {
+      isInited: false
+    }
+  },
+  computed: {
+    isActive () {
+      let isActive = this.$parent.localActive === this.name
+      if (isActive) {
+        this.isInited = true
+      }
+      return isActive
+    }
   },
   created () {
     let { name, label, disabled } = this

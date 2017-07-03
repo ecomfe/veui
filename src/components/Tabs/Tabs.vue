@@ -11,14 +11,17 @@ export default {
       type: String
     },
     active: {
-      type: [String, Number],
-      default: 0
+      type: String
+    },
+    index: {
+      type: Number
     }
   },
   data () {
     return {
       tabs: [],
-      localActive: this.active === undefined ? 0 : this.active
+      localIndex: undefined,
+      localActive: ''
     }
   },
   computed: {
@@ -32,10 +35,10 @@ export default {
         <div class="veui-tabs-menu">
           <ul class="veui-tabs-list">
             {
-              this._l(this.tabs, tab => (
-                <li onClick={ $event => this.setCurrent(tab.name) } class={{
+              this._l(this.tabs, (tab, index) => (
+                <li onClick={ $event => this.setActive({ name: tab.name, index }) } class={{
                   'veui-tabs-item': true,
-                  'veui-tabs-active': tab.name === this.localActive
+                  'veui-tabs-active': index === this.localIndex
                 }}>{ tab.label }</li>
               ))
             }
@@ -52,31 +55,55 @@ export default {
       this.tabs.push(tab)
     },
 
-    setCurrent (value) {
+    setActive ({active, index}) {
       let values = this.tabNames
 
-      if (!values.length) return
-      // if setCurrent by index, index should be from 0 to values's last one
-      if (typeof value === 'number' && value > -1 && value < values.length) {
-        this.localActive = values[value]
-      // if setCurrent by name, name should be of tab's name
-      } else if (typeof value === 'string' && values.indexOf(value) !== -1) {
-        this.localActive = value
-      // otherwise setCurrent to first one
-      } else {
-        this.localActive = values[0]
-      }
+      this.localIndex = index !== undefined ? index : values.indexOf(active)
+      this.localActive = active !== undefined ? active : values[index]
 
       this.$emit('update:active', this.localActive)
+      this.$emit('update:index', this.localIndex)
+    },
+
+    init () {
+      let values = this.tabNames
+      let { active, index } = this.$props
+
+      if (!values.length) return
+
+      if (active !== undefined) {
+        // if active and index are set at same time
+        if (index !== undefined && active !== values[index]) {
+          this.$utils.warn(`[tabs]active name is not correct`)
+        } else {
+          this.setActive({ active })
+        }
+        return
+      }
+
+      if (index !== undefined) {
+        if (index < 0 || index > values.length - 1) {
+          this.$utils.warn(`[tabs] index should between 0 to ${values.length}`)
+        } else {
+          this.setActive({ index })
+        }
+      }
     }
   },
   watch: {
     active (val) {
-      this.setCurrent(val)
+      this.setActive({
+        active: val
+      })
+    },
+    index (val) {
+      this.setActive({
+        index: val
+      })
     }
   },
   mounted () {
-    this.setCurrent(this.active)
+    this.init()
   }
 }
 </script>
