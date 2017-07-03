@@ -1,4 +1,6 @@
 <script>
+import Vue from 'vue'
+
 export default {
   name: 'veui-tabs',
   uiTypes: ['tabs'],
@@ -14,13 +16,14 @@ export default {
       type: String
     },
     index: {
-      type: Number
+      type: Number,
+      default: 0
     }
   },
   data () {
     return {
       tabs: [],
-      localIndex: undefined,
+      localIndex: null,
       localActive: ''
     }
   },
@@ -36,7 +39,7 @@ export default {
           <ul class="veui-tabs-list">
             {
               this._l(this.tabs, (tab, index) => (
-                <li onClick={ $event => this.setActive({ name: tab.name, index }) } class={{
+                <li onClick={ $event => this.setActive({ index }) } class={{
                   'veui-tabs-item': true,
                   'veui-tabs-active': index === this.localIndex
                 }}>{ tab.label }</li>
@@ -52,7 +55,24 @@ export default {
   },
   methods: {
     add (tab) {
-      this.tabs.push(tab)
+      let names = this.tabs.map(tab => tab.name)
+      let tabIndex = names.length
+
+      if (!tab.name || names.indexOf(tab.name) === -1) {
+        if (tab.name === this.active) {
+          this.localActive = tab.name
+          this.localIndex = tabIndex
+        }
+
+        if (tabIndex === this.index) {
+          this.localActive = tab.name
+          this.localIndex = tabIndex
+        }
+
+        this.tabs.push(tab)
+      } else {
+        Vue.util.warn('invalid! deplicate tab name')
+      }
     },
 
     setActive ({active, index}) {
@@ -63,31 +83,6 @@ export default {
 
       this.$emit('update:active', this.localActive)
       this.$emit('update:index', this.localIndex)
-    },
-
-    init () {
-      let values = this.tabNames
-      let { active, index } = this.$props
-
-      if (!values.length) return
-
-      if (active !== undefined) {
-        // if active and index are set at same time
-        if (index !== undefined && active !== values[index]) {
-          this.$utils.warn(`[tabs]active name is not correct`)
-        } else {
-          this.setActive({ active })
-        }
-        return
-      }
-
-      if (index !== undefined) {
-        if (index < 0 || index > values.length - 1) {
-          this.$utils.warn(`[tabs] index should between 0 to ${values.length}`)
-        } else {
-          this.setActive({ index })
-        }
-      }
     }
   },
   watch: {
@@ -101,9 +96,6 @@ export default {
         index: val
       })
     }
-  },
-  mounted () {
-    this.init()
   }
 }
 </script>
