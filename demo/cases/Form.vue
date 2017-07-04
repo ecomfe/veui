@@ -2,35 +2,30 @@
   <article class="veui-form-demo">
     <h1><code>&lt;veui-form&gt;</code></h1>
     <section>
-      <h2>表单输出数据可与输入分离，做中间转换</h2>
-      <veui-form ref="form1">
+      <h2>通过指定data、field及v-model来创建一个form</h2>
+      <veui-form ref="form1" :data="storeData1">
 
-        <veui-field label="昵称" name="nickName">
+        <veui-field label="昵称" field="nickName">
           <veui-input v-model="storeData1.nickName"></veui-input>
-          <p class="output">{{ outputData.nickName }}</p>
         </veui-field>
 
-        <veui-field label="性别" name="sex">
+        <veui-field label="性别" field="sex">
           <veui-select :options="storeData1.sexItems" v-model="storeData1.sex"></veui-select>
-          <p class="output">{{ outputData.sex }}</p>
         </veui-field>
 
-        <veui-field label="婚姻" name="married">
+        <veui-field label="婚姻" field="married">
           <veui-radioboxgroup :items="storeData1.marryItems" v-model="storeData1.married"></veui-radioboxgroup>
-          <p class="output">{{ outputData.married }}</p>
         </veui-field>
 
-        <veui-field label="爱好" name="habit">
+        <veui-field label="爱好" field="habit">
           <veui-checkboxgroup type="checkbox" :items="storeData1.habitItems" v-model="storeData1.habit"></veui-checkboxgroup>
-          <p class="output">{{ outputData.habit }}</p>
         </veui-field>
 
-        <veui-field label="生日" name="birthday">
+        <veui-field label="生日" field="birthday">
           <veui-datepicker v-model="storeData1.birthday"></veui-datepicker>
-          <p class="output">{{ outputData.birthday }}</p>
         </veui-field>
 
-        <veui-field label="头像" name="avatar">
+        <veui-field label="头像" field="avatar">
           <veui-uploader uploaderType="image"
             action="/upload"
             request-mode="xhr"
@@ -42,7 +37,7 @@
             preview-image
             needButton
             extention-types="jpg,jpeg,png"></veui-uploader>
-          <p class="output">{{ outputData.avatar }}</p>
+          <!-- <p class="output">{{ outputData.avatar }}</p> -->
         </veui-field>
 
         <div class="operation">
@@ -55,31 +50,31 @@
       <veui-form>
 
         <veui-fieldset class="two-name" label="昵称" label-for="firstName" tip='使用 label-for="refName" 来实现 for'>
-          <veui-field name="lastName">
+          <veui-field>
             <veui-input placeholder="姓" v-model="storeData2.lastName"></veui-input>
           </veui-field>
 
-          <veui-field name="firstName">
+          <veui-field>
             <veui-input ref="firstName" placeholder="名" v-model="storeData2.firstName"></veui-input>
           </veui-field>
         </veui-fieldset>
 
         <veui-fieldset label="电话" label-for="telephone">
-          <veui-field name="phoneType">
+          <veui-field>
             <veui-select v-model="storeData2.phoneType" :options="storeData2.phoneTypeOptions"></veui-select>
           </veui-field>
 
-          <veui-field name="phone">
+          <veui-field>
             <veui-input ref="telephone" placeholder="名" v-model="storeData2.phone"></veui-input>
           </veui-field>
         </veui-fieldset>
 
         <veui-fieldset label="预期收入" class="salary" tip="使用 <veui-span> 来插入中间非组件内容">
-          <veui-field name="start">
+          <veui-field>
             <veui-input v-model="storeData2.start"></veui-input>
           </veui-field>
           <veui-span>-</veui-span>
-          <veui-field name="end">
+          <veui-field>
             <veui-input v-model="storeData2.end"></veui-input>
           </veui-field>
           <veui-span>万</veui-span>
@@ -91,17 +86,17 @@
       <veui-form ui="inline">
 
         <veui-fieldset class="left">
-          <veui-field label="状态" name="status">
+          <veui-field label="状态">
             <veui-select v-model="storeData3.statusSelected" :options="storeData3.statusOptions"></veui-select>
           </veui-field>
 
-          <veui-field label="搜索项目" name="searchType">
+          <veui-field label="搜索项目">
             <veui-select v-model="storeData3.searchTypeSelected" :options="storeData3.searchTypeOptions"></veui-select>
           </veui-field>
         </veui-fieldset>
 
         <veui-fieldset class="right">
-          <veui-field name="searchContent">
+          <veui-field>
             <veui-input placeholder="请输入搜索内容"></veui-input>
           </veui-field>
           <veui-button ui="primary">搜索</veui-button>
@@ -112,16 +107,16 @@
       <veui-form ui="inline">
 
         <veui-fieldset class="left" ui="alt">
-          <veui-field label="状态" name="status">
+          <veui-field label="状态">
             <veui-select ui="alt" v-model="storeData3.statusSelected" :options="storeData3.statusOptions"></veui-select>
           </veui-field>
 
-          <veui-field label="搜索项目" name="searchType">
+          <veui-field label="搜索项目">
             <veui-select ui="alt" v-model="storeData3.searchTypeSelected" :options="storeData3.searchTypeOptions"></veui-select>
           </veui-field>
         </veui-fieldset>
 
-        <veui-fieldset class="right" name="searchContent">
+        <veui-fieldset class="right">
           <veui-field>
             <veui-input placeholder="请输入搜索内容"></veui-input>
           </veui-field>
@@ -131,55 +126,56 @@
       </veui-form>
     </section>
     <section>
-      <h2>表单提示和验证</h2>
+      <h2>使用 field 来支持表单验证，使用 name 来定位验证提示</h2>
       <veui-form ref="form2"
         @submit="submit"
         @invalid="handleInvalid"
+        :data="storeData4"
         :validators="validators"
         :beforeValidate="beforeValidate"
         :afterValidate="afterValidate">
 
-        <veui-field name="name1" rules="required" label="姓名" tip="必填，默认提交时校验">
+        <veui-field field="name" name="name1" rules="required" label="姓名" tip="必填，默认提交时校验">
           <veui-input v-model="storeData4.name"></veui-input>
         </veui-field>
 
-        <veui-field name="name2" :rules="dynamicNameRule" label="姓名（动态）" tip="blur时校验必填">
+        <veui-field field="name" name="name2" :rules="dynamicNameRule" label="姓名（动态）" tip="blur时校验必填">
           <veui-input placeholder="长度不能短于2" v-model="storeData4.name"></veui-input>
         </veui-field>
 
-        <veui-field name="age1" rules="numeric required" label="年龄">
+        <veui-field field="age" name="age1" rules="numeric required" label="年龄">
           <veui-input placeholder="错误提示优先出在右侧" v-model="storeData4.age"></veui-input>
         </veui-field>
 
-        <veui-field name="age2" :rules="dynamicAgeRule" label="年龄（动态）" tip="change 时校验长度">
+        <veui-field field="age" name="age2" :rules="dynamicAgeRule" label="年龄（动态）" tip="change 时校验长度">
           <veui-input placeholder="长度不能超过3" v-model="storeData4.age"></veui-input>
         </veui-field>
 
-        <veui-field name="desc" rules="required" label="介绍">
+        <veui-field field="desc" name="desc" rules="required" label="介绍">
           <veui-input rows="3" type="textarea" v-model="storeData4.desc"></veui-input>
         </veui-field>
 
         <veui-fieldset label="电话" label-for="phone">
-          <veui-field name="phoneType">
-            <veui-select v-model="storeData2.phoneType" :options="storeData2.phoneTypeOptions"></veui-select>
+          <veui-field field="phoneType" name="phoneType">
+            <veui-select v-model="storeData4.phoneType" :options="storeData4.phoneTypeOptions"></veui-select>
           </veui-field>
 
-          <veui-field name="phone" rules="numeric required">
-            <veui-input ref="phone" v-model="storeData2.phone"></veui-input>
+          <veui-field field="phone" name="phone" rules="numeric required">
+            <veui-input ref="phone" v-model="storeData4.phone"></veui-input>
           </veui-field>
         </veui-fieldset>
 
-        <veui-field name="habit" :rules="habitRule" label="爱好" tip="至少选择三个">
-          <veui-checkboxgroup type="checkbox" :items="storeData1.habitItems" v-model="storeData1.habit"></veui-checkboxgroup>
+        <veui-field field="habitItems" name="habit" :rules="habitRule" label="爱好" tip="至少选择三个">
+          <veui-checkboxgroup type="checkbox" :items="storeData4.habitItems" v-model="storeData4.habit"></veui-checkboxgroup>
         </veui-field>
 
         <veui-fieldset label="预期收入" class="salary" tip="联合校验，下限必须小于上限">
-          <veui-field name="start" rules="numeric required" class="start-field">
-            <veui-input v-model="storeData2.start"></veui-input>
+          <veui-field field="start" name="start" rules="numeric required" class="start-field">
+            <veui-input v-model="storeData4.start"></veui-input>
           </veui-field>
           <veui-span>-</veui-span>
-          <veui-field name="end" rules="numeric required">
-            <veui-input v-model="storeData2.end"></veui-input>
+          <veui-field field="end" name="end" rules="numeric required">
+            <veui-input v-model="storeData4.end"></veui-input>
           </veui-field>
           <veui-span>万</veui-span>
         </veui-fieldset>
@@ -194,6 +190,7 @@
       <veui-form
         @submit="submit"
         @invalid="handleInvalid"
+        :data="storeData5"
         :validators="qindianValidator"
         :beforeValidate="beforeValidate"
         :afterValidate="afterValidate">
@@ -203,10 +200,17 @@
         </veui-field>
 
         <veui-fieldset v-for="(item, index) in storeData5.scheduleInfo">
-          <veui-field :name="'projectName' + (index + 1)" :rules="requiredRule" :label="'项目排期-' + (index + 1)">
+          <veui-field
+            :field="`scheduleInfo[${item[index]}].project`"
+            :name="'projectName' + (index + 1)"
+            :rules="requiredRule"
+            :label="'项目排期-' + (index + 1)">
             <veui-input placeholder="项目名称" v-model="item.project"></veui-input>
           </veui-field>
-          <veui-field :name="'schedule' + (index + 1)" :rules="requiredRule">
+          <veui-field
+            :field="`scheduleInfo[${item[index]}].range`"
+            :name="'schedule' + (index + 1)"
+            :rules="requiredRule">
             <veui-datepicker v-model="item.range" range></veui-datepicker>
           </veui-field>
           <veui-button @click="dynamicDelete(index)">删除</veui-button>
@@ -237,7 +241,7 @@ import moment from 'moment'
 import bus from '../bus'
 
 export default {
-  name: 'form',
+  name: 'demo-form',
 
   components: {
     'veui-span': Span,
@@ -254,6 +258,32 @@ export default {
   },
 
   data () {
+    let habit = ['🏸']
+    let habitItems = [
+      {
+        value: '⚽️', label: '足球'
+      },
+      {
+        value: '🏀', label: '篮球'
+      },
+      {
+        value: '🏸', label: '羽毛球'
+      },
+      {
+        value: '🎾', label: '网球'
+      }
+    ]
+    let phoneType = 'mobile'
+    let phoneTypeOptions = [
+      {
+        label: '座机',
+        value: 'phone'
+      },
+      {
+        label: '手机',
+        value: 'mobile'
+      }
+    ]
     return {
       storeData1: {
         nickName: '李云腾',
@@ -278,39 +308,19 @@ export default {
             value: '女', label: '女'
           }
         ],
-        habit: ['🏸'],
-        habitItems: [
-          {
-            value: '⚽️', label: '足球'
-          },
-          {
-            value: '🏀', label: '篮球'
-          },
-          {
-            value: '🏸', label: '羽毛球'
-          },
-          {
-            value: '🎾', label: '网球'
-          }
-        ],
+        habit,
+        habitItems,
         birthday: new Date(),
         avatar: [{ src: 'https://www.baidu.com/img/bd_logo1.png' }]
       },
       storeData2: {
         lastName: '',
         firstName: '',
+        habit,
+        habitItems,
         phone: '18888888888',
-        phoneType: 'mobile',
-        phoneTypeOptions: [
-          {
-            label: '座机',
-            value: 'phone'
-          },
-          {
-            label: '手机',
-            value: 'mobile'
-          }
-        ],
+        phoneType,
+        phoneTypeOptions,
         start: null,
         end: null
       },
@@ -357,7 +367,14 @@ export default {
       storeData4: {
         name: '',
         age: null,
-        desc: ''
+        desc: '',
+        habit,
+        habitItems,
+        phone: '18888888888',
+        phoneType,
+        phoneTypeOptions,
+        start: null,
+        end: null
       },
       requiredRule: [
         {
@@ -392,7 +409,7 @@ export default {
         {
           name: 'minLength',
           value: 3,
-          errMsg: '至少选择三个爱好',
+          message: '至少选择三个爱好',
           triggers: 'change'
         }
       ],
@@ -461,27 +478,6 @@ export default {
           triggers: ['input', 'submit']
         }
       ]
-    }
-  },
-
-  computed: {
-    outputData () {
-      let nickName = '🇨🇳 ' + this.storeData1.nickName || ''
-      let married = this.storeData1.married ? '💍' : '💿'
-      let sex = this.storeData1.sex !== '-' ? this.storeData1.sex === '男' ? '👔' : '👗' : '👽'
-      let habit = this.storeData1.habit.join(' ')
-      let phone = '📞 ' + this.storeData1.phone
-      let birthdayObj = moment(this.storeData1.birthday)
-      let birthday = birthdayObj.isValid() ? birthdayObj.format('YYYY年M月D日') : ''
-      return {
-        nickName,
-        married,
-        sex,
-        habit,
-        phone,
-        birthday,
-        avatar: this.storeData1.avatar[0].src
-      }
     }
   },
 

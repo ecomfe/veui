@@ -7,6 +7,6 @@ export default {
       ? isNumber(val) || !isNaN(toNumber(val))
       : true
   },
-  errMsg: '值必须为数字',
+  message: '值必须为数字',
   priority: 10
 }

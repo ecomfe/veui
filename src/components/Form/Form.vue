@@ -38,43 +38,36 @@ export default {
       let fields = this.fields.filter(field => field.name)
       return zipObject(map(fields, 'name'), fields)
     },
-    interactiveValidators () {
-      return this.validators
-        ? this.validators.filter(validator => {
-          let fn = validator.handler
-          let triggers = validator.triggers
-          if (!isFunction(fn) || !validator.fields || !triggers) {
-            return false
-          }
 
-          // 参照上述 props.validator 支持的格式
-          triggers = (Array.isArray(triggers) ? triggers : [triggers])
-            .filter(events => events.split(',').filter(event => event !== 'submit').length)
-
-          // 去掉都是submit的
-          return triggers.length
-        })
-        : null
-    },
     interactiveValidatorsMap () {
-      let singleFieldMap = {}
-      this.interactiveValidators && this.interactiveValidators.forEach(validator => {
-        let fieldNames = validator.fields
-        let triggers = validator.triggers
-        // 这里肯定有 triggers
-        fieldNames.split(',').forEach((name, index) => {
-          let event = (Array.isArray(triggers) ? triggers[index] : triggers)
-            .split(',').filter(event => event !== 'submit')
-          if (event) {
-            singleFieldMap[name] = singleFieldMap[name] || []
-            singleFieldMap[name].push({
-              event,
-              validator
-            })
-          }
+      let map = {}
+      this.validators && this.validators.forEach(({ handler, triggers, fields }) => {
+        // 没有 trigger 代表 submit 检查，这里只存交互的
+        if (!isFunction(handler) || !fields || !triggers) {
+          return
+        }
+
+        // 参照上述 props.validator 支持的格式
+        triggers = (Array.isArray(triggers) ? triggers : [triggers])
+        triggers.forEach(events => {
+          events.split(',').forEach(event => {
+            if (event === 'submit') {
+              return
+            }
+
+            let item = {
+              fields,
+              handler
+            }
+            if (map[event]) {
+              map[event].push(item)
+            } else {
+              map[event] = item
+            }
+          })
         })
       })
-      return singleFieldMap
+      return map
     }
   },
 
@@ -207,7 +200,24 @@ export default {
       this.fields.forEach(field => {
         field.resetValue()
       })
+    },
+
+    handleInteract (eventName, fieldItem) {
+      let validators = this.interactiveValidatorsMap[eventName]
+      if (validators) {
+        validators.forEach(({ handler, fields }) => {
+          fields = fields.split(',')
+          includes(fields, fieldItem.name) && isFunction(handler) && handler.apply(
+            null,
+            fields.map(fieldName => this.fieldsMap[fieldName].getFieldValue())
+          )
+        })
+      }
     }
+  },
+
+  created () {
+    this.$on('interact', this.handleInteract)
   }
 }
 </script>

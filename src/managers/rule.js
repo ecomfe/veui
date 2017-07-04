@@ -35,7 +35,7 @@ export class Rule {
     return rules.some(rule => {
       let validator = this.ruleValidators[rule.name]
       if (!validator.validate(val, rule.value)) {
-        err = (rule.errMsg || validator.errMsg).replace(replaceRe, rule.value)
+        err = (rule.message || validator.message).replace(replaceRe, rule.value)
         // 代表有错
         return true
       }

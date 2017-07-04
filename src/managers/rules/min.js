@@ -4,6 +4,6 @@ export default {
   validate (val, ruleValue) {
     return !isEmpty(val) ? val >= ruleValue : true
   },
-  errMsg: '不能大于%{ruleValue}',
+  message: '不能大于%{ruleValue}',
   priority: 200
 }

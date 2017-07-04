@@ -10,10 +10,11 @@
 <script>
 import Label from '../Label'
 import { type, rule } from '../../managers'
-import { isBoolean, assign, get, includes } from 'lodash'
+import { isBoolean, assign, get, last } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
 import '../../icons'
+import Vue from 'vue'
 const { computed: form } = getTypedAncestorTracker('form')
 
 export default {
@@ -41,64 +42,92 @@ export default {
       initialData: null
     }
   },
-  computed: assign(
-    {
-      validity () {
-        return this.validities[0] || {
-          valid: true
-        }
-      },
-      localRules () {
-        if (!this.rules) {
-          return null
-        } else {
-          let rules
-          if (Array.isArray(this.rules)) {
-            rules = type.clone(this.rules)
-            rule.initRules(rules)
-          } else {
-            rules = this.rules.trim().split(/\s+/).map(perRule => {
-              return {
-                name: perRule,
-                value: true
-              }
-            })
-            rule.initRules(rules)
-          }
-          return rules
-        }
-      },
-      interactiveRules () {
-        return this.localRules
-          ? this.localRules.filter(perRule => {
-            if (!perRule.triggers) {
-              return false
-            }
-
-            let triggers = perRule.triggers.split(',')
-            // 没有写triggers按submit处理，写了triggers且不只是submit才放进来
-            return !!perRule.triggers && !(triggers.length === 1 && triggers[0] === 'submit')
-          })
-          : []
-      },
-      realDisabled () {
-        return this.disabled || (this.fieldSet && this.fieldSet.realDisabled)
-      },
-      realReadonly () {
-        return this.readonly || (this.fieldSet && this.fieldSet.realReadonly)
+  computed: assign({
+    validity () {
+      return this.validities[0] || {
+        valid: true
       }
     },
-    form
-  ),
+    localRules () {
+      if (!this.rules) {
+        return null
+      }
+
+      let rules
+      if (Array.isArray(this.rules)) {
+        rules = type.clone(this.rules)
+        rule.initRules(rules)
+      } else {
+        rules = this.rules.trim().split(/\s+/).map(perRule => ({
+          name: perRule,
+          value: true
+        }))
+        rule.initRules(rules)
+      }
+      return rules
+    },
+    interactiveRulesMap () {
+      let map = {}
+      this.localRules && this.localRules.forEach(({ triggers, name, message, value }) => {
+        if (!triggers) {
+          return
+        }
+
+        triggers = triggers.split(',')
+        triggers.forEach(eventName => {
+          if (eventName === 'submit') {
+            return
+          }
+
+          let item = {
+            value,
+            name,
+            message
+          }
+          if (map[eventName]) {
+            map[eventName].push(item)
+          } else {
+            map[eventName] = [item]
+          }
+        })
+      })
+      return map
+    },
+    realDisabled () {
+      return this.disabled || (this.fieldSet && this.fieldSet.realDisabled)
+    },
+    realReadonly () {
+      return this.readonly || (this.fieldSet && this.fieldSet.realReadonly)
+    }
+  }, form),
   methods: {
     getFieldValue () {
       return get(this.form.data, this.field)
     },
     resetValue () {
+      if (!this.field) {
+        return
+      }
+
+      let path = this.field.split('.')
+      let name = last(path)
+      let parentPath
+      let match = /(\w+)\[(\d+)\]/.exec(name)
+      if (match && match[1]) {
+        parentPath = [...path.slice(0, -1), match[1]]
+        name = match[2]
+      } else {
+        parentPath = path.slice(0, -1)
+      }
+
+      let parentValue = parentPath.length
+        ? get(this.form.data, parentPath.join('.'))
+        : this.form.data
+      Vue.set(parentValue, name, type.clone(this.initialData))
     },
     validate (rules = this.localRules) {
       let res = rule.validate(this.getFieldValue(), rules)
-      if (this.isValid(res)) {
+      if (isBoolean(res) && res) {
         this.hideValidity('local')
       } else {
         this.validities.unshift({
@@ -110,28 +139,30 @@ export default {
       return res
     },
     handleInteract (eventName) {
-      this.validate(this.interactiveRules.filter(perRule => includes(perRule.triggers, eventName)))
-      this.form.$emit.apply(this.form, 'interacting', eventName)
+      if (this.interactiveRulesMap[eventName]) {
+        this.validate(this.interactiveRulesMap[eventName])
+      }
+      this.form.$emit('interacting', eventName, this)
     },
     hideValidity (invalidType) {
       this.$set(this, 'validities', this.validities.filter(validity => validity.invalidType !== invalidType))
-    },
-    isValid (res) {
-      return isBoolean(res) && res
     }
   },
   created () {
+    this.form.fields.push(this)
+    // 如果是 fieldSet 或者没写field，初始值和校验都没有意义
     if (!this.field) {
       return
     }
-    this.form.fields.push(this)
-    this.initialData = clone
+
+    this.initialData = type.clone(this.getFieldValue())
     this.$on('interacting', this.handleInteract)
   },
   beforeDestroy () {
     if (!this.field) {
       return
     }
+
     this.form.fields.splice(this.form.fields.indexOf(this), 1)
   }
 }
