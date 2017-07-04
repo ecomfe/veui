@@ -1,7 +1,7 @@
 <template>
   <div class="veui-button-group" :ui="ui" :class="`${this.vertical ? 'veui-button-group-vertical' : 'veui-button-group-horiztontal'}`" :mode="mode" :active="active"> 
     <veui-button v-for="(item, index) in items" :key="index" :ui="ui" ref="button"
-    :class="{'veui-button-active': localActive == item.value || localActive.indexOf(item.value) >= 0, vertical: vertical, multiple: multiple}"
+    :class="{'veui-button-active': localActive == item.value || localActive.indexOf(item.value) >= 0, 'veui-button-vertical': vertical, 'veui-button-multiple': multiple}"
     @click.stop="handleClick(item)">
       <span v-if="item.icon"><icon :name="item.icon"></icon></span>
       {{ item.label }}
@@ -64,7 +64,7 @@
       handleClick (item) {
         switch (this.mode) {
           case 'exclusive':
-            this.localActive = [item.value]
+            this.localActive = item.value
             break
           case 'multiple':
             if (includes(this.localActive, item.value)) {
@@ -96,18 +96,18 @@
   .veui-button {
     /* border: 1px solid @veui-gray-color-sup-1; */
 
-    &:not(:first-child):not(:last-child):not(.multiple) {
+    &:not(:first-child):not(:last-child):not(.veui-button-multiple) {
       border-radius: 0;
     }
   }
 
-  &.veui-button-group-horiztontal {
-    .veui-button:not(:last-child):not(.multiple) {
+  &-horiztontal {
+    .veui-button:not(:last-child):not(.veui-button-multiple) {
       border-right: none;
     }
 
     .veui-button {
-      &:first-child {
+      &:first-child:not(.veui-button-multiple) {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
       }
@@ -121,14 +121,14 @@
         margin-right: 10px;
       }
 
-      &.multiple {
+      &.veui-button-multiple {
         margin-right: 10px;
       }
     }
   }
 
   &.veui-button-group-vertical {
-    .veui-button:not(:last-child):not(.multiple) {
+    .veui-button:not(:last-child):not(.veui-button-multiple) {
       border-bottom: none;
     }
 
@@ -161,7 +161,7 @@
     }
   }
 
-  .veui-button.vertical {
+  .veui-button.veui-button-vertical {
       display: block;
   }
 }

@@ -47,9 +47,9 @@ export default {
       let localState
 
       if (this.state) {
-        localState = this.state
+        localState = 'veui-switch-' + this.state
       } else {
-        localState = (this.inputValue) ? 'on' : 'off'
+        localState = (this.inputValue) ? 'veui-switch-on' : 'veui-switch-off'
       }
       return localState
     }
@@ -88,14 +88,14 @@ export default {
       line-height: @label-height;
       border-radius: @label-height * 2 / 3;
 
-      &.on {
+      &.veui-switch-on {
         .veui-switch-text {
           padding-left: @label-height / 2;
           padding-right: @label-height + 5;
         }
       }
 
-      &.off {
+      &.veui-switch-off {
         .veui-switch-text {
           padding-left: @label-height + 5;
           padding-right: @label-height / 2;
@@ -108,7 +108,7 @@ export default {
       height: @label-height - 4;
       line-height: @label-height - 4;
 
-      &.off {
+      &.veui-switch-off {
         left: 0;
         margin-left: 2px;
       }
@@ -164,7 +164,7 @@ export default {
     background-color: @veui-theme-color-primary;
     .veui-shadow();
 
-    &.off {
+    &.veui-switch-off {
       background-color: @veui-gray-color-sup-1;
     }
   }
@@ -181,12 +181,12 @@ export default {
     .veui-shadow();
     margin-top: 2px;
 
-    &.on {
+    &.veui-switch-on {
       right: 0;
       margin-right: 2px;
     }
 
-    &.off {
+    &.veui-switch-off {
       left: 0;
       margin-left: 2px;
     }
@@ -217,11 +217,11 @@ export default {
       cursor: not-allowed;
 
       .veui-switch-switch {
-        &.on {
+        &.veui-switch-on {
           color: @veui-theme-color-primary;
         }
         
-        &.off {
+        &.veui-switch-off {
           color: @veui-gray-color-sup-1;
         }
       }
@@ -232,11 +232,11 @@ export default {
     .veui-switch-label {
       background-color: @veui-gray-color-sup-2;
 
-      &.on {
+      &.veui-switch-on {
         background-color: @veui-gray-color-sup-2;
       }
 
-      &.off {
+      &.veui-switch-off {
         left: 0;
         background-color: @veui-gray-color-sup-1;
       }
@@ -245,11 +245,11 @@ export default {
     .veui-switch-switch {
       background-color: @veui-gray-color-weak;
 
-      &.on {
+      &.veui-switch-on {
         background-color: @veui-gray-color-weak;
       }
 
-      &.off {
+      &.veui-switch-off {
         background-color: #fff;
       }
     }
