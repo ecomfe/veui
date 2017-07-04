@@ -77,12 +77,18 @@ export default {
 
     setActive ({active, index}) {
       let values = this.tabNames
+      let _localIndex = this.localIndex
+      let _localActive = this.localActive
 
       this.localIndex = index !== undefined ? index : values.indexOf(active)
       this.localActive = active !== undefined ? active : values[index]
 
-      this.$emit('update:active', this.localActive)
-      this.$emit('update:index', this.localIndex)
+      if (_localIndex !== this.localIndex) {
+        this.$emit('update:active', this.localActive)
+      }
+      if (_localActive !== this.localActive) {
+        this.$emit('update:index', this.localIndex)
+      }
     }
   },
   watch: {

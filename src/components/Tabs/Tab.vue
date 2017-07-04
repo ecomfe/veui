@@ -1,7 +1,7 @@
 <template>
 
   <div class="veui-tab" v-show="isActive">
-    <slot v-if="isInited && isActive"></slot>
+    <slot v-if="isInited || isActive"></slot>
   </div>
 </template>
 
@@ -35,10 +35,10 @@ export default {
     }
   },
   created () {
-    let { name, label, disabled, $vnode } = this
+    let { name, label, disabled } = this
 
-    this.index = this.$parent.$slots.default.indexOf($vnode)
-    this.$parent.add({ name, label, disabled, $vnode })
+    this.index = this.$parent.tabs.length
+    this.$parent.add({ name, label, disabled })
   }
 }
 </script>
