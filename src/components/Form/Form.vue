@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { isBoolean, isFunction, includes, assign, zipObject, map, keys } from 'lodash'
+import { isBoolean, isFunction, includes, assign, zipObject, map, keys, each } from 'lodash'
 import { allSettled } from '../../utils/promise'
 
 export default {
@@ -62,7 +62,7 @@ export default {
             if (map[event]) {
               map[event].push(item)
             } else {
-              map[event] = item
+              map[event] = [item]
             }
           })
         })
@@ -123,7 +123,7 @@ export default {
               let targets = fields.map(name => this.fieldsMap[name])
               let validities = fn.apply(
                 this,
-                targets.map(field => field && field.submittedValue)
+                targets.map(field => field && field.getFieldValue())
               )
 
               let defaultErr = zipObject(fields, [])
@@ -202,22 +202,33 @@ export default {
       })
     },
 
-    handleInteract (eventName, target) {
+    handleInteract (eventName, name) {
       let validators = this.interactiveValidatorsMap[eventName]
       if (validators) {
         validators.forEach(({ handler, fields }) => {
           fields = fields.split(',')
-          includes(fields, target.name) && isFunction(handler) && handler.apply(
-            this,
-            fields.map(fieldName => this.fieldsMap[fieldName].getFieldValue())
-          )
+          if (includes(fields, name) && isFunction(handler)) {
+            let res = handler.apply(
+              this,
+              fields.map(name => this.fieldsMap[name] && this.fieldsMap[name].getFieldValue())
+            )
+            if (res.then && isFunction(res.then)) {
+
+            } else if (isBoolean(res) && !res) {
+              each(res, (message, name) => {
+                this.fieldsMap[name].validities.push({
+                  message
+                })
+              })
+            }
+          }
         })
       }
     }
   },
 
   created () {
-    this.$on('interact', this.handleInteract)
+    this.$on('interacting', this.handleInteract)
   }
 }
 </script>

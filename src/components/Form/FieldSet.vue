@@ -90,6 +90,8 @@ export default {
     position: static;
     display: inline-block;
     margin-left: 10px;
+    height: 36px;
+    line-height: 36px;
   }
 
   & .veui-form-tip + .veui-field-error,

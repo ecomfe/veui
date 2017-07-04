@@ -142,7 +142,7 @@ export default {
       if (this.interactiveRulesMap[eventName]) {
         this.validate(this.interactiveRulesMap[eventName])
       }
-      this.form.$emit('interacting', eventName, this)
+      this.form.$emit('interacting', eventName, this.name)
     },
     hideValidity (invalidType) {
       this.$set(this, 'validities', this.validities.filter(validity => validity.invalidType !== invalidType))
