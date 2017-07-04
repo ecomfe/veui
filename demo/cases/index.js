@@ -21,6 +21,8 @@ import ConfirmBox from './ConfirmBox'
 import AlertBox from './AlertBox'
 import SpecialDialog from './SpecialDialog'
 import Tabs from './Tabs'
+import Switch from './Switch'
+import ButtonGroup from './ButtonGroup'
 
 export default [
   {
@@ -137,5 +139,15 @@ export default [
     path: '/tabs',
     name: 'Tabs',
     component: Tabs
+  },
+  {
+    path: '/switch',
+    name: 'Switch',
+    component: Switch
+  },
+  {
+    path: '/buttonGroup',
+    name: 'ButtonGroup',
+    component: ButtonGroup
   }
 ]
