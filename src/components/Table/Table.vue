@@ -2,7 +2,7 @@
 <table class="veui-table" :ui="ui">
   <colgroup>
     <col v-if="selectable" width="60"></col>
-    <col v-for="col in displayedColumns" :width="col.width"></col>
+    <col v-for="(col, index) in realColumns" :width="col.width" :key="index"></col>
   </colgroup>
   <table-head @sort="sort"></table-head>
   <table-body></table-body>
@@ -54,7 +54,7 @@ export default {
     }
   },
   computed: {
-    displayedColumns () {
+    realColumns () {
       if (!this.columnFilter) {
         return this.columns
       }

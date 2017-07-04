@@ -16,7 +16,7 @@ export default {
   computed: {
     ...table.mapTableData(
       'data',
-      { displayedColumns: 'columns' },
+      { realColumns: 'columns' },
       'selectable',
       'selectedItems',
       { realKeys: 'keys' }

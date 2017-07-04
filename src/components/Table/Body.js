@@ -11,7 +11,7 @@ export default {
     ...table.mapTableData(
       'data',
       'selectable',
-      { displayedColumns: 'columns' }
+      { realColumns: 'columns' }
     )
   },
   render () {

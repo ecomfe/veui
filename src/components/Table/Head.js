@@ -16,7 +16,7 @@ export default {
       'data',
       'selectable',
       'selectStatus',
-      { displayedColumns: 'columns' }
+      { realColumns: 'columns' }
     )
   },
   render () {

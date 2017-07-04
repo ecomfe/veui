@@ -5,7 +5,7 @@ export default {
   mixins: [table],
   computed: {
     ...table.mapTableData(
-      { displayedColumns: 'columns' },
+      { realColumns: 'columns' },
       'selectable',
       'selectStatus'
     )

@@ -24,9 +24,16 @@ export default {
   props: {
     ui: String,
     name: String,
-    value: String,
+    trueValue: {
+      type: null,
+      default: true
+    },
+    falseValue: {
+      type: null,
+      default: false
+    },
     disabled: Boolean,
-    checked: Boolean,
+    checked: null,
     indeterminate: Boolean
   },
   model: {
@@ -50,7 +57,7 @@ export default {
     handleChange (checked) {
       this.localIndeterminate = false
       this.$emit('update:indeterminate', false)
-      this.$emit('change', checked)
+      this.$emit('change', checked ? this.trueValue : this.falseValue)
     }
   },
   watch: {
