@@ -165,7 +165,7 @@
           </veui-field>
         </veui-fieldset>
 
-        <veui-field field="habitItems" name="habit" :rules="habitRule" label="爱好" tip="至少选择三个">
+        <veui-field field="habit" name="habit" :rules="habitRule" label="爱好" tip="至少选择三个">
           <veui-checkboxgroup type="checkbox" :items="storeData4.habitItems" v-model="storeData4.habit"></veui-checkboxgroup>
         </veui-field>
 
@@ -195,7 +195,7 @@
         :beforeValidate="beforeValidate"
         :afterValidate="afterValidate">
 
-        <veui-field label="负责人" name="qindian">
+        <veui-field field="qindian" label="负责人" name="qindian">
           <veui-input v-model="storeData5.qindian"></veui-input>
         </veui-field>
 

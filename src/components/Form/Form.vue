@@ -202,13 +202,13 @@ export default {
       })
     },
 
-    handleInteract (eventName, fieldItem) {
+    handleInteract (eventName, target) {
       let validators = this.interactiveValidatorsMap[eventName]
       if (validators) {
         validators.forEach(({ handler, fields }) => {
           fields = fields.split(',')
-          includes(fields, fieldItem.name) && isFunction(handler) && handler.apply(
-            null,
+          includes(fields, target.name) && isFunction(handler) && handler.apply(
+            this,
             fields.map(fieldName => this.fieldsMap[fieldName].getFieldValue())
           )
         })
