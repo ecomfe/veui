@@ -108,9 +108,14 @@ export default {
 
 <style lang="less">
 @import "../styles/theme-default/lib.less";
+@import (reference) "../styles/theme-default/input.less";
 
 .veui-input,
 .veui-textarea {
+  .veui-field-invalid & {
+    &:extend(._veui-input-invalid all);
+  }
+
   height: @veui-height-normal;
   width: 300px;
   line-height: 1;
@@ -175,5 +180,4 @@ export default {
     resize: both;
   }
 }
-
 </style>

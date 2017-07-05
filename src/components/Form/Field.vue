@@ -130,7 +130,7 @@ export default {
       if (isBoolean(res) && res) {
         this.hideValidity('local')
       } else {
-        this.validities.unshift({
+        !this.validities.some(validity => validity.invalidType === 'local') && this.validities.unshift({
           valid: false,
           message: res,
           invalidType: 'local'
@@ -204,25 +204,6 @@ export default {
 
   & .veui-checkbox {
     line-height: @veui-height-normal;
-  }
-
-  &-invalid {
-    .veui-input,
-    .veui-textarea,
-    .veui-select .veui-button,
-    .veui-datepicker .veui-button {
-      border-color: @veui-alert-color-primary;
-
-      &:hover {
-        border-color: @veui-alert-color-primary;
-        .veui-shadow(glow, @veui-alert-color-primary);
-      }
-
-      &:focus {
-        border-color: @veui-alert-color-primary;
-        .veui-shadow(glow, @veui-alert-color-primary);
-      }
-    }
   }
 
   &-error {

@@ -220,9 +220,14 @@ export default {
 <style lang="less">
 @import "../styles/theme-default/lib.less";
 @import (reference) "../styles/theme-default/dropdown.less";
+@import (reference) "../styles/theme-default/input.less";
 
 .veui-datepicker {
   &:extend(._veui-dropdown-button all);
+
+  .veui-field-invalid & .veui-button.veui-datepicker-button {
+    &:extend(._veui-input-invalid all);
+  }
 
   position: relative;
   display: inline-block;

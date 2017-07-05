@@ -29,6 +29,7 @@ export default {
   data () {
     return {
       fields: [],
+      errorMap: {},
       handlers: {}
     }
   },
@@ -214,16 +215,27 @@ export default {
       if (isBoolean(validities) && validities) {
         fieldNames.split(',').forEach(name => {
           let target = this.fieldsMap[name]
+          let promotion = this.errorMap[fieldNames]
+          if (promotion) {
+            target = this.fieldsMap[promotion]
+            delete this.errorMap[fieldNames]
+          }
           target && target.hideValidity(fieldNames)
         })
       } else {
         keys(validities).forEach(name => {
           let target = this.fieldsMap[name]
-          target && target.validities.unshift({
-            valid: false,
-            message: validities[target.name],
-            invalidType: fieldNames
-          })
+          if (target && !target.validities.some(validity => validity.invalidType === fieldNames)) {
+            target.validities.unshift({
+              valid: false,
+              message: validities[target.name],
+              invalidType: fieldNames
+            })
+            // 防止使用 fieldSet 定位错误之后，上边找不到
+            if (!includes(fieldNames, target.name)) {
+              this.errorMap[fieldNames] = target.name
+            }
+          }
         })
       }
     },

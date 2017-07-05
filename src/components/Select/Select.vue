@@ -7,7 +7,7 @@
     <veui-button
       class="veui-select-button"
       :ui="buttonUI"
-      :disabled="disabled || readonly"
+      :disabled="realDisabled || realReadonly"
       @click="expanded = !expanded"
       ref="button">
       <span class="veui-select-label">
@@ -124,10 +124,15 @@ function extractOptions (options, map) {
 <style lang="less">
 @import "../../styles/theme-default/lib.less";
 @import (reference) "../../styles/theme-default/dropdown.less";
+@import (reference) "../../styles/theme-default/input.less";
 @import "../../styles/theme-default/dropdown-overflow.less";
 
 .veui-select {
   &:extend(._veui-dropdown-button all);
+
+  .veui-field-invalid & .veui-button.veui-select-button {
+    &:extend(._veui-input-invalid all);
+  }
 
   display: inline-block;
   width: 160px;
