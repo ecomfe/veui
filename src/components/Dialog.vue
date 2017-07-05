@@ -24,7 +24,7 @@
         <a class="veui-dialog-content-head-close"
           v-show="localClosable"
           @click="hide">
-          <icon name="cross"></icon>
+          <veui-icon name="cross"></veui-icon>
         </a>
       </div>
       <div ref="body" class="veui-dialog-content-body"><slot></slot></div>
@@ -44,12 +44,15 @@ import Overlay from './Overlay'
 import Button from './Button'
 import { ui } from '../mixins'
 import { drag } from '../directives'
+import Icon from './Icon'
+import '../icons'
 
 export default {
   name: 'veui-dialog',
   components: {
     'veui-overlay': Overlay,
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-icon': Icon
   },
   directives: { drag },
   mixins: [ui],
