@@ -12,7 +12,7 @@
 import Icon from './Icon'
 import '../icons'
 import { input } from '../mixins'
-import { assign } from 'lodash'
+import { pick } from 'lodash'
 import { patchIndeterminate } from '../utils/dom'
 
 export default {
@@ -21,9 +21,12 @@ export default {
     Icon
   },
   mixins: [input],
+  model: {
+    prop: 'checked',
+    event: 'change'
+  },
   props: {
     ui: String,
-    name: String,
     trueValue: {
       type: null,
       default: true
@@ -32,13 +35,8 @@ export default {
       type: null,
       default: false
     },
-    disabled: Boolean,
     checked: null,
     indeterminate: Boolean
-  },
-  model: {
-    prop: 'checked',
-    event: 'change'
   },
   data () {
     return {
@@ -47,10 +45,7 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = assign({}, this.$props)
-      delete attrs.ui
-      delete attrs.indeterminate
-      return attrs
+      return pick(this.$props, 'name', 'disabled', 'readonly', 'checked', 'indeterminate')
     }
   },
   methods: {

@@ -1,71 +1,67 @@
 <template>
-  <span class="veui-switch" v-bind="attrs">
-    <label class="veui-switch-label" :class="localState">
-      <input class="veui-switch-cb" type="checkbox" v-model="inputValue" @change="handleChange"  :disabled="disabled" :readonly="readonly">
-      <span class="veui-switch-switch" :class="localState">
-        <template v-if="disabled">
-          <!-- <span class="veui-remove-icon">x</span> -->
-        <icon name="remove"></icon>
-        </template>
-        <template v-if="readonly">
-          <!-- <span class="veui-switch-icon" :class="localState"></span> -->
-          <icon name="window-minimize"></icon>
-        </template>
-      </span>
-    </label>
+<label :class="{
+    'veui-switch': true,
+    'veui-switch-on': localChecked === trueValue,
+    'veui-switch-readonly': readonly,
+    'veui-switch-disabled': disabled
+  }" :ui="ui">
+  <input type="checkbox" v-bind="attrs" :disabled="disabled || readonly" @change="handleChange($event.target.checked)">
+  <span class="veui-switch-button">
+    <veui-icon name="cross" v-if="disabled"></veui-icon>
+    <veui-icon name="minus-thick" v-if="!disabled && readonly"></veui-icon>
   </span>
+</label>
 </template>
 
 <script>
-import mixin from '../mixins/input'
-import 'vue-awesome/icons/remove'
-import 'vue-awesome/icons/window-minimize'
+import Icon from './Icon'
+import input from '../mixins/input'
+import { pick } from 'lodash'
 
 export default {
   name: 'veui-switch',
-  mixins: [mixin],
+  components: {
+    'veui-icon': Icon
+  },
+  mixins: [input],
+  model: {
+    prop: 'checked',
+    event: 'change'
+  },
   props: {
     ui: String,
-    name: String,
-    type: String,
-    disabled: Boolean,
-    readonly: Boolean,
-    state: String, // 可切换状态
-    value: Boolean // 不可切换
+    trueValue: {
+      type: null,
+      default: true
+    },
+    falseValue: {
+      type: null,
+      default: false
+    },
+    checked: null
   },
   data () {
     return {
-      inputValue: this.value
+      localChecked: this.checked
     }
   },
   computed: {
     attrs () {
-      let attrs = Object.assign({}, this.$props)
-      return attrs
-    },
-    localState () {
-      let localState
-
-      if (this.state) {
-        localState = 'veui-switch-' + this.state
-      } else {
-        localState = (this.inputValue) ? 'veui-switch-on' : 'veui-switch-off'
+      return {
+        ...pick(this.$props, 'name', 'readonly', 'indeterminate'),
+        checked: this.localChecked
       }
-      return localState
     }
   },
   watch: {
-    value (val) {
-      this.inputValue = val
+    checked (val) {
+      this.localChecked = val
     }
   },
   methods: {
-    handleChange (event) {
-      if (this.readonly) {
-        return
-      }
-
-      this.$emit('change', event.currentTarget.checked)
+    handleChange (checked) {
+      this.localChecked = checked ? this.trueValue : this.falseValue
+      this.$emit('change', this.localChecked)
     }
   }
 }
@@ -75,184 +71,76 @@ export default {
 @import "../styles/theme-default/lib.less";
 
 .veui-switch {
+  @gap: 2px;
+
+  .metrics(@size: @veui-height-small) {
+    width: @size * 1.8;
+    height: @size;
+    border-radius: @size / 2;
+
+    .veui-switch-button {
+      .size(@size - @gap * 2);
+      .veui-icon {
+        .size(@size / 3 * 2);
+      }
+    }
+
+    &.veui-switch-on .veui-switch-button {
+      transform: translateX(@size * 0.8);
+    }
+  }
+
+  .metrics();
   display: inline-block;
-  position: relative;
-  font-size: @veui-font-size-normal;
-  margin-right: 10px;
+  background-color: @veui-gray-color-sup-1;
+  color: @veui-gray-color-sup-1;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color ease .2s;
 
-  @label-height: @veui-height-normal;
-  .computed_items(@label-height) {
-    .veui-switch-label {
-      height: @label-height;
-      min-width: @label-height * 1.8;
-      line-height: @label-height;
-      border-radius: @label-height * 2 / 3;
+  &-button {
+    display: inline-block;
+    position: relative;
+    margin: @gap;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform ease .2s;
 
-      &.veui-switch-on {
-        .veui-switch-text {
-          padding-left: @label-height / 2;
-          padding-right: @label-height + 5;
-        }
-      }
-
-      &.veui-switch-off {
-        .veui-switch-text {
-          padding-left: @label-height + 5;
-          padding-right: @label-height / 2;
-        }
-      }
+    .veui-icon {
+      .absolute(50%, _, _, 50%);
+      transform: translate(-50%, -50%);
     }
+  }
 
-    .veui-switch-switch {
-      width: @label-height - 4;
-      height: @label-height - 4;
-      line-height: @label-height - 4;
+  &-on {
+    background-color: @veui-theme-color-primary;
+    color: @veui-theme-color-primary;
+  }
 
-      &.veui-switch-off {
-        left: 0;
-        margin-left: 2px;
-      }
-    }
+  &-readonly {
+    cursor: default;
+  }
 
-    // .veui-remove-icon {
-    //   font-weight: bold;
-    //   position: relative;
-    //   color: @veui-gray-color-sup-1;
-    // }
+  &-disabled {
+    background-color: @veui-gray-color-sup-1;
+    color: @veui-gray-color-sup-1;
+    cursor: not-allowed;
+  }
 
-    .veui-switch-icon {
-      width: @label-height * 8 / 15;
-      height: @label-height * 2 / 15;
-      border-radius: @label-height * 0.2;
-      vertical-align: middle;
-    }
+  &-disabled &-button {
+    background-color: @veui-gray-color-sup-3;
   }
 
   &[ui~="small"] {
-    @label-height: @veui-height-small;
-    .computed_items(@label-height);
-    font-size: @veui-font-size-small;
+    .metrics(@veui-height-tiny);
   }
 
   &[ui~="large"] {
-    @label-height: @veui-height-large;
-    .computed_items(@label-height);
-    font-size: @veui-font-size-large;
+    .metrics(@veui-height-normal);
   }
 
-  .computed_items(@label-height);
-
-  span {
-    display: inline-block;
-  }
-
-  input[type="checkbox"] {
+  input {
     display: none;
-  }
-
-  .veui-switch-label {
-    display: inline-block;
-    cursor: pointer;
-    
-    text-align: center;
-    position: relative;
-    text-align: left;
-    user-select: none;
-    overflow: hidden;
-    transition: background-color ease 0.8s;
-
-    background-color: @veui-theme-color-primary;
-    .veui-shadow();
-
-    &.veui-switch-off {
-      background-color: @veui-gray-color-sup-1;
-    }
-  }
-
-  .veui-switch-switch {
-    text-align: center;
-    vertical-align: middle;
-    position: absolute;
-    top: 0px;
-    
-    /*border-radius:20px;*/
-    border-radius: 100%;
-    background-color: #fff;
-    .veui-shadow();
-    margin-top: 2px;
-
-    &.veui-switch-on {
-      right: 0;
-      margin-right: 2px;
-    }
-
-    &.veui-switch-off {
-      left: 0;
-      margin-left: 2px;
-    }
-  }
-
-  .veui-switch-error-message {
-    color: red;
-  }
-
-  &[disabled] {
-    border: none;
-    color: @veui-text-color-weak;
-    .veui-shadow(none);
-
-    .veui-switch-label {
-      cursor: not-allowed;
-    }
-
-    .veui-switch-icon {
-      font-weight: bold;
-      position: relative;
-      color: @veui-gray-color-sup-1;
-    }
-  }
-
-  &[readonly] {
-    .veui-switch-label {
-      cursor: not-allowed;
-
-      .veui-switch-switch {
-        &.veui-switch-on {
-          color: @veui-theme-color-primary;
-        }
-        
-        &.veui-switch-off {
-          color: @veui-gray-color-sup-1;
-        }
-      }
-    }
-  }
-
-  &[ui~="plain"] {
-    .veui-switch-label {
-      background-color: @veui-gray-color-sup-2;
-
-      &.veui-switch-on {
-        background-color: @veui-gray-color-sup-2;
-      }
-
-      &.veui-switch-off {
-        left: 0;
-        background-color: @veui-gray-color-sup-1;
-      }
-    }
-
-    .veui-switch-switch {
-      background-color: @veui-gray-color-weak;
-
-      &.veui-switch-on {
-        background-color: @veui-gray-color-weak;
-      }
-
-      &.veui-switch-off {
-        background-color: #fff;
-      }
-    }
   }
 }
 </style>

@@ -6,15 +6,19 @@
     Console <small>({{logs.length}})</small>
   </h2>
   <section class="output" ref="logList">
-    <pre class="log" v-for="log in logs"><template v-if="log != null"><div v-if="log instanceof String">{{log}}</div><div class="line" v-else v-for="line in log" v-html="format(line)"></div></template><template v-else v-html="format(log)"></template></pre>
+    <pre class="log" v-for="(log, index) in logs" :key="index"><template v-if="log != null"><div v-if="log instanceof String">{{log}}</div><div class="line" v-else v-for="line in log" v-html="format(line)"></div></template><template v-else v-html="format(log)"></template></pre>
   </section>
 </aside>
 </template>
 
 <script>
 import bus from './bus'
+import Icon from '@/components/Icon'
 
 export default {
+  components: {
+    Icon
+  },
   data () {
     return {
       expanded: false,
