@@ -180,8 +180,8 @@
           <veui-span>万</veui-span>
         </veui-fieldset>
 
-        <veui-field field="protocol" name="protocol" label="协议">
-          <veui-checkbox v-model="storeData4.protocol">同意工作协议</veui-checkbox>
+        <veui-field field="protocol" name="protocol" :rules="protocolRequiredRule" label="协议">
+          <veui-checkbox falseValue="" v-model="storeData4.protocol">我已阅读并同意工作协议</veui-checkbox>
         </veui-field>
 
         <div class="operation">
@@ -203,7 +203,7 @@
           <veui-input v-model="storeData5.qindian"></veui-input>
         </veui-field>
 
-        <veui-fieldset v-for="(item, index) in storeData5.scheduleInfo">
+        <veui-fieldset v-for="(item, index) in storeData5.scheduleInfo" key="index">
           <veui-field
             :field="`scheduleInfo[${index}].project`"
             :name="'projectName' + (index + 1)"
@@ -239,9 +239,9 @@ import Button from '@/components/Button'
 import DatePicker from '@/components/DatePicker'
 import Uploader from '@/components/Uploader'
 import Select from '@/components/Select'
-import CheckBox from '@/components/CheckBox'
-import CheckBoxGroup from '@/components/CheckBoxGroup'
-import RadioBoxGroup from '@/components/RadioBoxGroup'
+import Checkbox from '@/components/Checkbox'
+import CheckboxGroup from '@/components/CheckboxGroup'
+import RadioboxGroup from '@/components/RadioboxGroup'
 import moment from 'moment'
 import bus from '../bus'
 
@@ -258,9 +258,9 @@ export default {
     'veui-datepicker': DatePicker,
     'veui-uploader': Uploader,
     'veui-select': Select,
-    'veui-checkbox': CheckBox,
-    'veui-checkboxgroup': CheckBoxGroup,
-    'veui-radioboxgroup': RadioBoxGroup
+    'veui-checkbox': Checkbox,
+    'veui-checkboxgroup': CheckboxGroup,
+    'veui-radioboxgroup': RadioboxGroup
   },
 
   data () {
@@ -381,13 +381,21 @@ export default {
         phoneTypeOptions,
         start: null,
         end: null,
-        protocol: false
+        protocol: ''
       },
       requiredRule: [
         {
           name: 'required',
           value: true,
           triggers: 'blur,input'
+        }
+      ],
+      protocolRequiredRule: [
+        {
+          name: 'required',
+          value: true,
+          message: '请勾选阅读协议',
+          triggers: 'change'
         }
       ],
       dynamicNameRule: [
@@ -451,14 +459,6 @@ export default {
                 return resolve()
               }, 3000)
             })
-          }
-        },
-        {
-          fields: 'protocol',
-          handler (protocol) {
-            return protocol || {
-              protocol: '必须同意协议'
-            }
           }
         }
       ],

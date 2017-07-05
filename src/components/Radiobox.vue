@@ -10,7 +10,7 @@
 import Icon from './Icon'
 import '../icons'
 import { input } from '../mixins'
-import { assign, omit } from 'lodash'
+import { pick } from 'lodash'
 import 'vue-awesome/icons/circle'
 
 export default {
@@ -30,7 +30,10 @@ export default {
   },
   computed: {
     attrs () {
-      return assign(omit(this.$props, 'ui'), { name: this.realName })
+      let attrs = pick(this.$props, 'checked')
+      attrs.name = this.realName
+      attrs.disabled = this.realDisabled || this.realReadonly
+      return attrs
     }
   }
 }

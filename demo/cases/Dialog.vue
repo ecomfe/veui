@@ -80,10 +80,13 @@
 <script>
 import Dialog from '@/components/Dialog'
 import Button from '@/components/Button'
+import Icon from '@/components/Icon'
+import '@/icons'
 
 export default {
   name: 'dialog-demo',
   components: {
+    Icon,
     'veui-dialog': Dialog,
     'veui-button': Button
   },
