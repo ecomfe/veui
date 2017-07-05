@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { isBoolean, isFunction, includes, assign, zipObject, map, keys, each } from 'lodash'
+import { isBoolean, isFunction, includes, assign, zipObject, map, keys } from 'lodash'
 import { allSettled } from '../../utils/promise'
 
 export default {
@@ -35,8 +35,8 @@ export default {
 
   computed: {
     fieldsMap () {
-      let fields = this.fields.filter(field => field.name)
-      return zipObject(map(fields, 'name'), fields)
+      let targets = this.fields.filter(target => target.name)
+      return zipObject(map(targets, 'name'), targets)
     },
 
     interactiveValidatorsMap () {
@@ -96,58 +96,42 @@ export default {
     },
 
     validate (names) {
-      // fieldset 可以有 name，但是不会有 field
-      let fields = (this.fields || []).filter(item => item.field)
+      // fieldset 可以有 name，但是不会有 field 属性
+      let targets = (this.fields || []).filter(item => item.field)
       let validators = this.validators || []
       if (Array.isArray(names) && names.length) {
-        fields = fields.filter(field => includes(names, field.name))
+        targets = targets.filter(target => includes(names, target.name))
         validators = validators.filter(validator => includes(names, validator.fields))
       }
 
       return allSettled(
         [
-          ...fields.map(field => {
-            let validity = field.validate()
+          ...targets.map(target => {
+            let validity = target.validate()
             // utils/Validator 是同步的，检查一下不是 true 就好，返回其他的都当成错误信息
             if (!isBoolean(validity) || !validity) {
               // 没有name的无法描述，invalid的时候就不抛了
-              return Promise.reject(field.name ? { [field.name]: validity } : {})
+              return Promise.reject(target.name ? { [target.name]: validity } : {})
             }
             return Promise.resolve(true)
           }),
 
-          ...validators.map(validator => {
-            let fn = validator.handler
-            if (isFunction(fn) && validator.fields) {
-              let fields = validator.fields.split(',')
-              let targets = fields.map(name => this.fieldsMap[name])
-              let validities = fn.apply(
-                this,
-                targets.map(field => field && field.getFieldValue())
-              )
+          ...validators.map(({ handler, fields }) => {
+            if (isFunction(handler) && fields) {
+              let fieldsArr = fields.split(',')
+              let defaultErr = zipObject(fieldsArr, [])
 
-              let defaultErr = zipObject(fields, [])
+              let validities = this.execValidator(handler, fields, defaultErr)
+
               // 异步校验交给返回的 Promise，对于同步校验，true 代表校验通过，false 代表不通过但是没有出错信息，其他当成 { fieldName1: errMsg, ... } 处理
               // 异步校验
               if (validities && isFunction(validities.then)) {
-                return validities.then(
-                  val => {
-                    this.handleValidities(true, fields)
-                    return { val }
-                  },
-                  err => {
-                    let res = err || defaultErr
-                    this.handleValidities(res, fields)
-                    return Promise.reject(res)
-                  }
-                )
+                return validities
               }
 
-              let res = validities || defaultErr
-              this.handleValidities(res, fields)
               // 同步校验但是出错
               if (!isBoolean(validities) || !validities) {
-                return Promise.reject(res)
+                return Promise.reject(validities)
               }
               // 同步校验并且通过
               return Promise.resolve(validities)
@@ -172,58 +156,82 @@ export default {
       )
     },
 
-    /**
-     * 处理validator产生的校验信息
-     *
-     * @param  {Boolean|Object} validities true或者出错的Object
-     * @param  {Array} [fieldNames] 校验的field集合
-     */
-    handleValidities (validities, fieldNames) {
-      if (isBoolean(validities) && validities) {
-        fieldNames.forEach(name => {
-          let field = this.fieldsMap[name]
-          field && field.hideValidity(fieldNames.join(','))
-        })
-      } else {
-        keys(validities).forEach(name => {
-          let field = this.fieldsMap[name]
-          field && field.validities.unshift({
-            valid: false,
-            message: validities[field.name],
-            invalidType: fieldNames.join(',')
-          })
-        })
-      }
-    },
+    execValidator (handler, fields, defaultErr) {
+      let fieldsArr = fields.split(',')
+      let targets = fieldsArr.map(name => this.fieldsMap[name])
+      let validities = handler.apply(
+        this,
+        targets.map(target => target && target.getFieldValue())
+      )
 
-    reset () {
-      this.fields.forEach(field => {
-        field.resetValue()
-      })
+      // 异步校验
+      if (validities && isFunction(validities.then)) {
+        return validities.then(
+          val => {
+            this.handleValidities(true, fields)
+            return { val }
+          },
+          err => {
+            let res = err || defaultErr
+            this.handleValidities(res, fields)
+            return Promise.reject(res)
+          }
+        )
+      }
+
+      let res = validities || defaultErr
+      this.handleValidities(res, fields)
+
+      return res
     },
 
     handleInteract (eventName, name) {
       let validators = this.interactiveValidatorsMap[eventName]
       if (validators) {
         validators.forEach(({ handler, fields }) => {
-          fields = fields.split(',')
-          if (includes(fields, name) && isFunction(handler)) {
-            let res = handler.apply(
-              this,
-              fields.map(name => this.fieldsMap[name] && this.fieldsMap[name].getFieldValue())
-            )
-            if (res.then && isFunction(res.then)) {
+          let fieldsArr = fields.split(',')
+          if (includes(fieldsArr, name) && isFunction(handler)) {
+            let defaultErr = zipObject(fields, [])
+            let validities = this.execValidator(handler, fields, defaultErr)
 
-            } else if (isBoolean(res) && !res) {
-              each(res, (message, name) => {
-                this.fieldsMap[name].validities.push({
-                  message
-                })
-              })
+            // 异步校验交给返回的 Promise，由于这里是 interact 的，所以不需要返回
+            if (!validities.then || !isFunction(validities.then)) {
+              let res = validities || defaultErr
+              this.handleValidities(res, fields)
             }
           }
         })
       }
+    },
+
+    /**
+     * 处理validator产生的校验信息
+     *
+     * @param  {Boolean|Object} validities true或者出错的Object
+     * @param  {String} [fieldNames] 校验的field集合
+     */
+    handleValidities (validities, fieldNames) {
+      if (isBoolean(validities) && validities) {
+        fieldNames.split(',').forEach(name => {
+          let target = this.fieldsMap[name]
+          target && target.hideValidity(fieldNames)
+        })
+      } else {
+        keys(validities).forEach(name => {
+          let target = this.fieldsMap[name]
+          target && target.validities.unshift({
+            valid: false,
+            message: validities[target.name],
+            invalidType: fieldNames
+          })
+        })
+      }
+    },
+
+    reset () {
+      this.fields.forEach(target => {
+        target.resetValue()
+      })
     }
   },
 

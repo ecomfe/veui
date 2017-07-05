@@ -37,7 +37,7 @@ export default {
   methods: {
     realEmit (originalEmit, eventName, data, event) {
       originalEmit.apply(this, Array.prototype.slice.call(arguments, 1))
-      this.formField.$emit('interacting', eventName)
+      eventName.indexOf('hook:') !== 0 && this.formField.$emit('interacting', eventName)
     }
   }
 }

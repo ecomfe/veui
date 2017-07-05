@@ -155,7 +155,7 @@
           <veui-input rows="3" type="textarea" v-model="storeData4.desc"></veui-input>
         </veui-field>
 
-        <veui-fieldset label="电话" label-for="phone">
+        <veui-fieldset name="phoneSet" label="电话" label-for="phone">
           <veui-field field="phoneType" name="phoneType">
             <veui-select v-model="storeData4.phoneType" :options="storeData4.phoneTypeOptions"></veui-select>
           </veui-field>
@@ -180,6 +180,10 @@
           <veui-span>万</veui-span>
         </veui-fieldset>
 
+        <veui-field field="protocol" name="protocol" label="协议">
+          <veui-checkbox v-model="storeData4.protocol">同意工作协议</veui-checkbox>
+        </veui-field>
+
         <div class="operation">
           <veui-button ui="primary" ref="submitBtn" :loading="isValidating" type="submit">提交</veui-button>
         </div>
@@ -201,14 +205,14 @@
 
         <veui-fieldset v-for="(item, index) in storeData5.scheduleInfo">
           <veui-field
-            :field="`scheduleInfo[${item[index]}].project`"
+            :field="`scheduleInfo[${index}].project`"
             :name="'projectName' + (index + 1)"
             :rules="requiredRule"
             :label="'项目排期-' + (index + 1)">
             <veui-input placeholder="项目名称" v-model="item.project"></veui-input>
           </veui-field>
           <veui-field
-            :field="`scheduleInfo[${item[index]}].range`"
+            :field="`scheduleInfo[${index}].range`"
             :name="'schedule' + (index + 1)"
             :rules="requiredRule">
             <veui-datepicker v-model="item.range" range></veui-datepicker>
@@ -235,6 +239,7 @@ import Button from '@/components/Button'
 import DatePicker from '@/components/DatePicker'
 import Uploader from '@/components/Uploader'
 import Select from '@/components/Select'
+import CheckBox from '@/components/CheckBox'
 import CheckBoxGroup from '@/components/CheckBoxGroup'
 import RadioBoxGroup from '@/components/RadioBoxGroup'
 import moment from 'moment'
@@ -253,6 +258,7 @@ export default {
     'veui-datepicker': DatePicker,
     'veui-uploader': Uploader,
     'veui-select': Select,
+    'veui-checkbox': CheckBox,
     'veui-checkboxgroup': CheckBoxGroup,
     'veui-radioboxgroup': RadioBoxGroup
   },
@@ -374,7 +380,8 @@ export default {
         phoneType,
         phoneTypeOptions,
         start: null,
-        end: null
+        end: null,
+        protocol: false
       },
       requiredRule: [
         {
@@ -438,12 +445,20 @@ export default {
               setTimeout(function () {
                 if (phone === '18888888888') {
                   return reject({
-                    phone: '该手机已被注册'
+                    phoneSet: '该手机已被注册'
                   })
                 }
                 return resolve()
               }, 3000)
             })
+          }
+        },
+        {
+          fields: 'protocol',
+          handler (protocol) {
+            return protocol || {
+              protocol: '必须同意协议'
+            }
           }
         }
       ],

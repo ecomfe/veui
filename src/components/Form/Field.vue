@@ -142,7 +142,7 @@ export default {
       if (this.interactiveRulesMap[eventName]) {
         this.validate(this.interactiveRulesMap[eventName])
       }
-      this.form.$emit('interacting', eventName, this.name)
+      this.name && this.form.$emit('interacting', eventName, this.name)
     },
     hideValidity (invalidType) {
       this.$set(this, 'validities', this.validities.filter(validity => validity.invalidType !== invalidType))
@@ -202,16 +202,24 @@ export default {
     vertical-align: top;
   }
 
+  & .veui-checkbox {
+    line-height: @veui-height-normal;
+  }
+
   &-invalid {
-    > .veui-input,
-    > .veui-textarea {
+    .veui-input,
+    .veui-textarea,
+    .veui-select .veui-button,
+    .veui-datepicker .veui-button {
       border-color: @veui-alert-color-primary;
 
       &:hover {
+        border-color: @veui-alert-color-primary;
         .veui-shadow(glow, @veui-alert-color-primary);
       }
 
       &:focus {
+        border-color: @veui-alert-color-primary;
         .veui-shadow(glow, @veui-alert-color-primary);
       }
     }
