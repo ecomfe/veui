@@ -1,4 +1,6 @@
 <script>
+import Vue from 'vue'
+
 export default {
   name: 'veui-tabs',
   uiTypes: ['tabs'],
@@ -11,14 +13,18 @@ export default {
       type: String
     },
     active: {
-      type: [String, Number],
+      type: String
+    },
+    index: {
+      type: Number,
       default: 0
     }
   },
   data () {
     return {
       tabs: [],
-      localActive: this.active === undefined ? 0 : this.active
+      localIndex: null,
+      localActive: ''
     }
   },
   computed: {
@@ -32,10 +38,10 @@ export default {
         <div class="veui-tabs-menu">
           <ul class="veui-tabs-list">
             {
-              this._l(this.tabs, tab => (
-                <li onClick={ $event => this.setCurrent(tab.name) } class={{
+              this._l(this.tabs, (tab, index) => (
+                <li onClick={ $event => this.setActive({ index }) } class={{
                   'veui-tabs-item': true,
-                  'veui-tabs-active': tab.name === this.localActive
+                  'veui-tabs-active': index === this.localIndex
                 }}>{ tab.label }</li>
               ))
             }
@@ -49,34 +55,50 @@ export default {
   },
   methods: {
     add (tab) {
-      this.tabs.push(tab)
+      let names = this.tabs.map(tab => tab.name)
+      let tabIndex = names.length
+
+      if (!tab.name || names.indexOf(tab.name) === -1) {
+        if (tab.name === this.active) {
+          this.localActive = tab.name
+          this.localIndex = tabIndex
+        }
+
+        if (tabIndex === this.index) {
+          this.localActive = tab.name
+          this.localIndex = tabIndex
+        }
+
+        this.tabs.push(tab)
+      } else {
+        Vue.util.warn('invalid! deplicate tab name')
+      }
     },
 
-    setCurrent (value) {
+    setActive ({active, index}) {
       let values = this.tabNames
 
-      if (!values.length) return
-      // if setCurrent by index, index should be from 0 to values's last one
-      if (typeof value === 'number' && value > -1 && value < values.length) {
-        this.localActive = values[value]
-      // if setCurrent by name, name should be of tab's name
-      } else if (typeof value === 'string' && values.indexOf(value) !== -1) {
-        this.localActive = value
-      // otherwise setCurrent to first one
-      } else {
-        this.localActive = values[0]
-      }
-
-      this.$emit('update:active', this.localActive)
+      this.localIndex = index !== undefined ? index : values.indexOf(active)
+      this.localActive = active !== undefined ? active : values[index]
     }
   },
   watch: {
     active (val) {
-      this.setCurrent(val)
+      this.setActive({
+        active: val
+      })
+    },
+    index (val) {
+      this.setActive({
+        index: val
+      })
+    },
+    localIndex (val) {
+      this.$emit('update:index', this.val)
+    },
+    localActive (val) {
+      this.$emit('update:active', this.val)
     }
-  },
-  mounted () {
-    this.setCurrent(this.active)
   }
 }
 </script>
