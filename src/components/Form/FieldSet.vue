@@ -1,5 +1,5 @@
 <template>
-  <veui-field ref="field" class="veui-field-set" v-bind="$props"><slot></slot></veui-field>
+  <veui-field ref="field" class="veui-fieldset" v-bind="$props"><slot></slot></veui-field>
 </template>
 
 <script>
@@ -9,8 +9,8 @@
 import Field from './Field'
 import { get } from 'lodash'
 export default {
-  name: 'veui-field-set',
-  uiTypes: ['field-set', 'form-container'],
+  name: 'veui-fieldset',
+  uiTypes: ['fieldset', 'form-container'],
   components: {
     'veui-field': Field
   },
@@ -36,13 +36,8 @@ export default {
 <style lang="less">
 @import "../../styles/theme-default/lib.less";
 
-.veui-field-set {
-  margin-bottom: @veui-field-gap;
+.veui-fieldset {
   clear: both;
-
-  &:last-of-type {
-    margin-bottom: 0;
-  }
 
   & > .veui-field {
     margin-bottom: 0;
@@ -104,7 +99,7 @@ export default {
     line-height: @veui-field-gap;
   }
 
-  & .veui-field:first-of-type .veui-form-key ~ .veui-field-error {
+  & .veui-form-key ~ .veui-field-error {
     margin-left: @veui-form-key-width;
   }
 }

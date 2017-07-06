@@ -1,1 +1,1 @@
-export { default } from './Form/FieldSet'
+export { default } from './Form/Fieldset'

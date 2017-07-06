@@ -231,7 +231,7 @@
 
 <script>
 import Form from '@/components/Form'
-import FieldSet from '@/components/FieldSet'
+import Fieldset from '@/components/Fieldset'
 import Field from '@/components/Field'
 import Span from '@/components/Span'
 import Input from '@/components/Input'
@@ -253,7 +253,7 @@ export default {
     'veui-input': Input,
     'veui-button': Button,
     'veui-form': Form,
-    'veui-fieldset': FieldSet,
+    'veui-fieldset': Fieldset,
     'veui-field': Field,
     'veui-datepicker': DatePicker,
     'veui-uploader': Uploader,
@@ -431,7 +431,7 @@ export default {
       isValidating: false,
       validators: [
         {
-          fields: 'start,end',
+          fields: ['start', 'end'],
           handler (start, end) {
             if (start == null || end == null) {
               return true
@@ -447,7 +447,7 @@ export default {
           triggers: ['change', 'submit,input']
         },
         {
-          fields: 'phone',
+          fields: ['phone'],
           handler (phone) {
             return new Promise(function (resolve, reject) {
               setTimeout(function () {
@@ -481,7 +481,7 @@ export default {
       },
       qindianValidator: [
         {
-          fields: 'qindian,qindian',
+          fields: ['qindian', 'qindian'],
           handler (qindian) {
             if (qindian !== 'Evan You') {
               return {

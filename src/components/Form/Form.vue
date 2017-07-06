@@ -13,7 +13,7 @@ export default {
   uiTypes: ['form', 'form-container'],
 
   props: {
-    // 假设 validator 的 fields 为 'a,b,c'，triggers 如下，最后生成的结果如下
+    // 假设 validator 的 fields 为 ['a,b,c']，triggers 如下，最后生成的结果如下
     // ['change', 'blur,input,xxx', 'submit'] => a(change), b(blur,input,xxx), c(submit)
     // ['blur']                               => a(blur), b(submit), c(submit)
     // 'blur,input'                           => a(blur,input), b(blur,input), c(blur,input)
@@ -42,32 +42,34 @@ export default {
 
     interactiveValidatorsMap () {
       let map = {}
-      this.validators && this.validators.forEach(({ handler, triggers, fields }) => {
-        // 没有 trigger 代表 submit 检查，这里只存交互的
-        if (!isFunction(handler) || !fields || !triggers) {
-          return
-        }
+      if (this.validators) {
+        this.validators.forEach(({ handler, triggers, fields }) => {
+          // 没有 trigger 代表 submit 检查，这里只存交互的
+          if (!isFunction(handler) || !fields || !triggers) {
+            return
+          }
 
-        // 参照上述 props.validator 支持的格式
-        triggers = (Array.isArray(triggers) ? triggers : [triggers])
-        triggers.forEach(events => {
-          events.split(',').forEach(event => {
-            if (event === 'submit') {
-              return
-            }
+          // 参照上述 props.validator 支持的格式
+          triggers = (Array.isArray(triggers) ? triggers : [triggers])
+          triggers.forEach(events => {
+            events.split(',').forEach(event => {
+              if (event === 'submit') {
+                return
+              }
 
-            let item = {
-              fields,
-              handler
-            }
-            if (map[event]) {
-              map[event].push(item)
-            } else {
-              map[event] = [item]
-            }
+              let item = {
+                fields,
+                handler
+              }
+              if (map[event]) {
+                map[event].push(item)
+              } else {
+                map[event] = [item]
+              }
+            })
           })
         })
-      })
+      }
       return map
     }
   },
@@ -102,7 +104,11 @@ export default {
       let validators = this.validators || []
       if (Array.isArray(names) && names.length) {
         targets = targets.filter(target => includes(names, target.name))
-        validators = validators.filter(validator => includes(names, validator.fields))
+        validators = validators.filter(
+          validator => validator.fields && validator.fields.some(
+            fieldName => includes(names, fieldName)
+          )
+        )
       }
 
       return allSettled(
@@ -119,8 +125,7 @@ export default {
 
           ...validators.map(({ handler, fields }) => {
             if (isFunction(handler) && fields) {
-              let fieldsArr = fields.split(',')
-              let defaultErr = zipObject(fieldsArr, [])
+              let defaultErr = zipObject(fields, [])
 
               let validities = this.execValidator(handler, fields, defaultErr)
 
@@ -158,8 +163,7 @@ export default {
     },
 
     execValidator (handler, fields, defaultErr) {
-      let fieldsArr = fields.split(',')
-      let targets = fieldsArr.map(name => this.fieldsMap[name])
+      let targets = fields.map(name => this.fieldsMap[name])
       let validities = handler.apply(
         this,
         targets.map(target => target && target.getFieldValue())
@@ -190,8 +194,7 @@ export default {
       let validators = this.interactiveValidatorsMap[eventName]
       if (validators) {
         validators.forEach(({ handler, fields }) => {
-          let fieldsArr = fields.split(',')
-          if (includes(fieldsArr, name) && isFunction(handler)) {
+          if (includes(fields, name) && isFunction(handler)) {
             let defaultErr = zipObject(fields, [])
             let validities = this.execValidator(handler, fields, defaultErr)
 
@@ -209,31 +212,32 @@ export default {
      * 处理validator产生的校验信息
      *
      * @param  {Boolean|Object} validities true或者出错的Object
-     * @param  {String} [fieldNames] 校验的field集合
+     * @param  {Array} [fields] 校验的field集合
      */
-    handleValidities (validities, fieldNames) {
+    handleValidities (validities, fields) {
+      let fieldStrings = fields.join(',')
       if (isBoolean(validities) && validities) {
-        fieldNames.split(',').forEach(name => {
+        fields.forEach(name => {
           let target = this.fieldsMap[name]
-          let promotion = this.errorMap[fieldNames]
+          let promotion = this.errorMap[fieldStrings]
           if (promotion) {
             target = this.fieldsMap[promotion]
-            delete this.errorMap[fieldNames]
+            delete this.errorMap[fieldStrings]
           }
-          target && target.hideValidity(fieldNames)
+          target && target.hideValidity(fieldStrings)
         })
       } else {
         keys(validities).forEach(name => {
           let target = this.fieldsMap[name]
-          if (target && !target.validities.some(validity => validity.invalidType === fieldNames)) {
+          if (target && !target.validities.some(validity => validity.fields === fieldStrings)) {
             target.validities.unshift({
               valid: false,
               message: validities[target.name],
-              invalidType: fieldNames
+              fields: fieldStrings
             })
             // 防止使用 fieldSet 定位错误之后，上边找不到
-            if (!includes(fieldNames, target.name)) {
-              this.errorMap[fieldNames] = target.name
+            if (!includes(fields, target.name)) {
+              this.errorMap[fieldStrings] = target.name
             }
           }
         })
@@ -248,7 +252,7 @@ export default {
   },
 
   created () {
-    this.$on('interacting', this.handleInteract)
+    this.$on('interact', this.handleInteract)
   }
 }
 </script>
@@ -256,22 +260,29 @@ export default {
 <style lang="less">
 @import "../../styles/theme-default/lib.less";
 
-.veui-form[ui~="inline"] {
-  .clearfix();
-
-  .veui-field-set,
+.veui-form {
+  .veui-fieldset,
   .veui-field {
-    display: inline-block;
-    margin-bottom: 0;
-    clear: none;
+    margin-bottom: @veui-field-gap;
+  }
 
-    & > .veui-form-key {
-      width: auto;
-    }
+  &[ui~="inline"] {
+    .clearfix();
 
-    & + .veui-field-set,
-    & + .veui-field {
-      margin-left: 15px;
+    .veui-fieldset,
+    .veui-field {
+      display: inline-block;
+      margin-bottom: 0;
+      clear: none;
+
+      & > .veui-form-key {
+        width: auto;
+      }
+
+      & + .veui-fieldset,
+      & + .veui-field {
+        margin-left: 15px;
+      }
     }
   }
 }

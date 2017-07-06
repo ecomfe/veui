@@ -4,7 +4,7 @@
 
 <script>
 import { getVnodes } from '../utils/context'
-import { isFunction } from 'lodash'
+import { isFunction, get } from 'lodash'
 export default {
   name: 'veui-label',
 
@@ -18,12 +18,18 @@ export default {
       let labelFor = this.labelFor
       if (this.label && labelFor) {
         let context = getVnodes(this)[0].context
+        let target
+        // 一直往上找component
+        // 如果没有这个 refs，继续往上直到 root
         do {
           context = context.$parent
+          target = get(context, `$refs['${labelFor}']`)
         }
-        while (context && context.$options && context.$options.uiTypes)
-        let target = context.$refs[labelFor]
-        target && isFunction(target.$emit) && target.$emit('labelclick')
+        while (context && !target)
+
+        if (target && isFunction(target.$emit)) {
+          target.$emit('labelclick')
+        }
       }
     }
   }

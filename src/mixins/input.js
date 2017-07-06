@@ -37,7 +37,10 @@ export default {
   methods: {
     realEmit (originalEmit, eventName, data, event) {
       originalEmit.apply(this, Array.prototype.slice.call(arguments, 1))
-      eventName.indexOf('hook:') !== 0 && this.formField.$emit('interacting', eventName)
+      // 过滤掉 vue 内部 hook 的事件，不需要往上处理
+      if (eventName.indexOf('hook:') !== 0) {
+        this.formField.$emit('interact', eventName)
+      }
     }
   }
 }

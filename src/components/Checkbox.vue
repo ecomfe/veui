@@ -88,8 +88,16 @@ export default {
   }
 
   span {
-    vertical-align: middle;
+    vertical-align: baseline;
     cursor: pointer;
+
+    &.veui-checkbox-box {
+      vertical-align: text-bottom;
+    }
+  }
+
+  .veui-field & {
+    line-height: @veui-height-normal;
   }
 
   &-box {

@@ -68,29 +68,31 @@ export default {
     },
     interactiveRulesMap () {
       let map = {}
-      this.localRules && this.localRules.forEach(({ triggers, name, message, value }) => {
-        if (!triggers) {
-          return
-        }
-
-        triggers = triggers.split(',')
-        triggers.forEach(eventName => {
-          if (eventName === 'submit') {
+      if (this.localRules) {
+        this.localRules.forEach(({ triggers, name, message, value }) => {
+          if (!triggers) {
             return
           }
 
-          let item = {
-            value,
-            name,
-            message
-          }
-          if (map[eventName]) {
-            map[eventName].push(item)
-          } else {
-            map[eventName] = [item]
-          }
+          triggers = triggers.split(',')
+          triggers.forEach(eventName => {
+            if (eventName === 'submit') {
+              return
+            }
+
+            let item = {
+              value,
+              name,
+              message
+            }
+            if (map[eventName]) {
+              map[eventName].push(item)
+            } else {
+              map[eventName] = [item]
+            }
+          })
         })
-      })
+      }
       return map
     },
     realDisabled () {
@@ -127,13 +129,14 @@ export default {
     },
     validate (rules = this.localRules) {
       let res = rule.validate(this.getFieldValue(), rules)
+      let name = this.name || 'anonymous'
       if (isBoolean(res) && res) {
-        this.hideValidity('local')
+        this.hideValidity(name)
       } else {
-        !this.validities.some(validity => validity.invalidType === 'local') && this.validities.unshift({
+        !this.validities.some(validity => validity.fields === name) && this.validities.unshift({
           valid: false,
           message: res,
-          invalidType: 'local'
+          fields: name
         })
       }
       return res
@@ -142,10 +145,10 @@ export default {
       if (this.interactiveRulesMap[eventName]) {
         this.validate(this.interactiveRulesMap[eventName])
       }
-      this.name && this.form.$emit('interacting', eventName, this.name)
+      this.name && this.form.$emit('interact', eventName, this.name)
     },
-    hideValidity (invalidType) {
-      this.$set(this, 'validities', this.validities.filter(validity => validity.invalidType !== invalidType))
+    hideValidity (fields) {
+      this.$set(this, 'validities', this.validities.filter(validity => validity.fields !== fields))
     }
   },
   created () {
@@ -156,7 +159,7 @@ export default {
     }
 
     this.initialData = type.clone(this.getFieldValue())
-    this.$on('interacting', this.handleInteract)
+    this.$on('interact', this.handleInteract)
   },
   beforeDestroy () {
     if (!this.field) {
@@ -173,12 +176,7 @@ export default {
 
 .veui-field {
   vertical-align: top;
-  margin-bottom: @veui-field-gap;
   clear: both;
-
-  &:last-of-type {
-    margin-bottom: 0;
-  }
 
   .veui-form-key {
     display: inline-block;
@@ -202,10 +200,6 @@ export default {
     vertical-align: top;
   }
 
-  & .veui-checkbox {
-    line-height: @veui-height-normal;
-  }
-
   &-error {
     position: static;
     display: inline-block;
@@ -215,7 +209,7 @@ export default {
     vertical-align: top;
     color: @veui-alert-color-primary;
 
-    svg {
+    .veui-icon {
       vertical-align: -2px;
       margin-right: 7px;
     }

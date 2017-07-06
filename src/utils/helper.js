@@ -21,15 +21,15 @@ export function getTypedAncestorTracker (name, type) {
 /**
  * 检查组件是否是指定type或根的顶级type类型
  *
- * @param  {Component}  vm         组件实例
- * @param  {string}     type       组件uiType
- * @param  {string}     [stopType] 指定停止判断的父组件uiType
- * @return {Boolean}               检查结果
+ * @param  {Component}  vm          组件实例
+ * @param  {string}     type        组件uiType
+ * @param  {string}     [scopeType] 指定查找的父组件uiTypes范围
+ * @return {Boolean}                检查结果
  */
-export function isTopMostOfType (vm, type, stopType) {
+export function isTopMostOfType (vm, type, scopeType) {
   let parent = vm.$parent
   while (parent && !includes(get(parent, '$options.uiTypes'), type)) {
-    if (stopType && includes(get(parent, '$options.uiTypes'), stopType)) {
+    if (scopeType && includes(get(parent, '$options.uiTypes'), scopeType)) {
       parent = null
       break
     }

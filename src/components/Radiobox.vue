@@ -7,17 +7,11 @@
 </template>
 
 <script>
-import Icon from './Icon'
-import '../icons'
 import { input } from '../mixins'
 import { pick } from 'lodash'
-import 'vue-awesome/icons/circle'
 
 export default {
   name: 'veui-radiobox',
-  components: {
-    Icon
-  },
   mixins: [input],
   props: {
     ui: String,
