@@ -18,6 +18,18 @@ export function getTypedAncestorTracker (name, type) {
   }
 }
 
+export function getTypedAncestor (component, type) {
+  let current = component.$parent
+  while (current) {
+    let { uiTypes } = current.$options
+    if (uiTypes && includes(uiTypes, type)) {
+      return current
+    }
+    current = current.$parent
+  }
+  return null
+}
+
 /**
  * 检查组件是否是指定type或根的顶级type类型
  *

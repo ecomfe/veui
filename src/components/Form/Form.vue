@@ -275,7 +275,7 @@ export default {
       margin-bottom: 0;
       clear: none;
 
-      & > .veui-form-key {
+      & > .veui-form-label {
         width: auto;
       }
 

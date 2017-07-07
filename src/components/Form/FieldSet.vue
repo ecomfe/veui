@@ -1,5 +1,5 @@
 <template>
-  <veui-field ref="field" class="veui-fieldset" v-bind="$props"><slot></slot></veui-field>
+  <veui-field ref="field" class="veui-fieldset" v-bind="$props"><template v-if="$slots.label" slot="label"><slot name="label"></slot></template><slot></slot></veui-field>
 </template>
 
 <script>
@@ -43,16 +43,16 @@ export default {
     margin-bottom: 0;
   }
 
-  &.veui-field-no-key::before,
-  & > .veui-field-no-key::before {
+  &.veui-field-no-label::before,
+  & > .veui-field-no-label::before {
     width: auto;
   }
 
-  & > [class*="veui"]:not([class*="veui-form-key"]):not([class*="veui-span"]) {
+  & > [class*="veui"]:not([class*="veui-form-label"]):not([class*="veui-span"]) {
     display: inline-block;
   }
 
-  & > [class*="veui"]:not([class*="veui-form-key"]) {
+  & > [class*="veui"]:not([class*="veui-form-label"]) {
     & + [class*="veui"],
     & + .veui-span {
       margin-left: 10px;
@@ -62,8 +62,8 @@ export default {
   &[ui~="alt"] {
     .veui-shadow();
 
-    & > .veui-form-key,
-    & > .veui-field:first-child .veui-form-key {
+    & > .veui-form-label,
+    & > .veui-field:first-child .veui-form-label {
       padding-left: 10px;
     }
 
@@ -73,8 +73,8 @@ export default {
     }
 
     &,
-    & > .veui-form-key,
-    & > .veui-field > .veui-form-key {
+    & > .veui-form-label,
+    & > .veui-field > .veui-form-label {
       background-color: @veui-gray-color-sup-3;
       border-color: @veui-gray-color-sup-3;
       color: @veui-text-color-normal;
@@ -99,8 +99,8 @@ export default {
     line-height: @veui-field-gap;
   }
 
-  & .veui-form-key ~ .veui-field-error {
-    margin-left: @veui-form-key-width;
+  & .veui-form-label ~ .veui-field-error {
+    margin-left: @veui-form-label-width;
   }
 }
 </style>

@@ -4,6 +4,7 @@
     class="veui-input"
     v-bind="attrs"
     v-model="localValue"
+    ref="input"
     @focus="$emit('focus', $event)"
     @click="$emit('click', $event)"
     @blur="$emit('blur', $event)"
@@ -16,6 +17,7 @@
     :class="{ 'veui-textarea-resizable': resizable }"
     v-bind="attrs"
     v-model="localValue"
+    ref="input"
     @focus="$emit('focus', $event)"
     @click="$emit('click', $event)"
     @blur="$emit('blur', $event)"
@@ -83,7 +85,10 @@ export default {
       }
     },
     focus () {
-      this.$el.focus()
+      this.$refs.input.focus()
+    },
+    activate () {
+      this.$refs.input.focus()
     }
   },
   mounted () {
@@ -99,9 +104,6 @@ export default {
         // TODO
       }
     }
-  },
-  created () {
-    this.$on('labelclick', this.focus)
   }
 }
 </script>

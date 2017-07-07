@@ -5,27 +5,27 @@
       <h2>通过指定data、field及v-model来创建一个form</h2>
       <veui-form ref="form1" :data="storeData1">
 
-        <veui-field label="昵称" field="nickName">
+        <veui-field label="昵称：" field="nickName">
           <veui-input v-model="storeData1.nickName"></veui-input>
         </veui-field>
 
-        <veui-field label="性别" field="sex">
+        <veui-field label="性别：" field="sex">
           <veui-select :options="storeData1.sexItems" v-model="storeData1.sex"></veui-select>
         </veui-field>
 
-        <veui-field label="婚姻" field="married">
+        <veui-field label="婚姻：" field="married">
           <veui-radioboxgroup :items="storeData1.marryItems" v-model="storeData1.married"></veui-radioboxgroup>
         </veui-field>
 
-        <veui-field label="爱好" field="habit">
+        <veui-field label="爱好：" field="habit">
           <veui-checkboxgroup type="checkbox" :items="storeData1.habitItems" v-model="storeData1.habit"></veui-checkboxgroup>
         </veui-field>
 
-        <veui-field label="生日" field="birthday">
+        <veui-field label="生日：" field="birthday">
           <veui-datepicker v-model="storeData1.birthday"></veui-datepicker>
         </veui-field>
 
-        <veui-field label="头像" field="avatar">
+        <veui-field label="头像：" field="avatar">
           <veui-uploader uploaderType="image"
             action="/upload"
             request-mode="xhr"
@@ -49,7 +49,7 @@
       <h2>行内多组件表单</h2>
       <veui-form>
 
-        <veui-fieldset class="two-name" label="昵称" label-for="firstName" tip='使用 label-for="refName" 来实现 for'>
+        <veui-fieldset class="two-name" label="姓名">
           <veui-field>
             <veui-input placeholder="姓" v-model="storeData2.lastName"></veui-input>
           </veui-field>
@@ -59,7 +59,7 @@
           </veui-field>
         </veui-fieldset>
 
-        <veui-fieldset label="电话" label-for="telephone">
+        <veui-fieldset label="电话">
           <veui-field>
             <veui-select v-model="storeData2.phoneType" :options="storeData2.phoneTypeOptions"></veui-select>
           </veui-field>
@@ -69,7 +69,10 @@
           </veui-field>
         </veui-fieldset>
 
-        <veui-fieldset label="预期收入" class="salary" tip="使用 <veui-span> 来插入中间非组件内容">
+        <veui-fieldset class="salary" tip="使用 <veui-span> 来插入中间非组件内容">
+          <template slot="label">
+            <veui-label>预期收入：</veui-label>💰
+          </template>
           <veui-field>
             <veui-input v-model="storeData2.start"></veui-input>
           </veui-field>
@@ -86,11 +89,11 @@
       <veui-form ui="inline">
 
         <veui-fieldset class="left">
-          <veui-field label="状态">
+          <veui-field label="状态：">
             <veui-select v-model="storeData3.statusSelected" :options="storeData3.statusOptions"></veui-select>
           </veui-field>
 
-          <veui-field label="搜索项目">
+          <veui-field label="搜索项目：">
             <veui-select v-model="storeData3.searchTypeSelected" :options="storeData3.searchTypeOptions"></veui-select>
           </veui-field>
         </veui-fieldset>
@@ -107,11 +110,11 @@
       <veui-form ui="inline">
 
         <veui-fieldset class="left" ui="alt">
-          <veui-field label="状态">
+          <veui-field label="状态：">
             <veui-select ui="alt" v-model="storeData3.statusSelected" :options="storeData3.statusOptions"></veui-select>
           </veui-field>
 
-          <veui-field label="搜索项目">
+          <veui-field label="搜索项目：">
             <veui-select ui="alt" v-model="storeData3.searchTypeSelected" :options="storeData3.searchTypeOptions"></veui-select>
           </veui-field>
         </veui-fieldset>
@@ -135,27 +138,27 @@
         :beforeValidate="beforeValidate"
         :afterValidate="afterValidate">
 
-        <veui-field field="name" name="name1" rules="required" label="姓名" tip="必填，默认提交时校验">
+        <veui-field field="name" name="name1" rules="required" label="姓名：" tip="必填，默认提交时校验">
           <veui-input v-model="storeData4.name"></veui-input>
         </veui-field>
 
-        <veui-field field="name" name="name2" :rules="dynamicNameRule" label="姓名（动态）" tip="blur时校验必填">
+        <veui-field field="name" name="name2" :rules="dynamicNameRule" label="姓名（动态）：" tip="blur时校验必填">
           <veui-input placeholder="长度不能短于2" v-model="storeData4.name"></veui-input>
         </veui-field>
 
-        <veui-field field="age" name="age1" rules="numeric required" label="年龄">
+        <veui-field field="age" name="age1" rules="numeric required" label="年龄：">
           <veui-input placeholder="错误提示优先出在右侧" v-model="storeData4.age"></veui-input>
         </veui-field>
 
-        <veui-field field="age" name="age2" :rules="dynamicAgeRule" label="年龄（动态）" tip="change 时校验长度">
+        <veui-field field="age" name="age2" :rules="dynamicAgeRule" label="年龄（动态）：" tip="change 时校验长度">
           <veui-input placeholder="长度不能超过3" v-model="storeData4.age"></veui-input>
         </veui-field>
 
-        <veui-field field="desc" name="desc" rules="required" label="介绍">
+        <veui-field field="desc" name="desc" rules="required" label="介绍：">
           <veui-input rows="3" type="textarea" v-model="storeData4.desc"></veui-input>
         </veui-field>
 
-        <veui-fieldset name="phoneSet" label="电话" label-for="phone">
+        <veui-fieldset name="phoneSet" label="电话：">
           <veui-field field="phoneType" name="phoneType">
             <veui-select v-model="storeData4.phoneType" :options="storeData4.phoneTypeOptions"></veui-select>
           </veui-field>
@@ -165,11 +168,11 @@
           </veui-field>
         </veui-fieldset>
 
-        <veui-field field="habit" name="habit" :rules="habitRule" label="爱好" tip="至少选择三个">
+        <veui-field field="habit" name="habit" :rules="habitRule" label="爱好：" tip="至少选择三个">
           <veui-checkboxgroup type="checkbox" :items="storeData4.habitItems" v-model="storeData4.habit"></veui-checkboxgroup>
         </veui-field>
 
-        <veui-fieldset label="预期收入" class="salary" tip="联合校验，下限必须小于上限">
+        <veui-fieldset label="预期收入：" class="salary" tip="联合校验，下限必须小于上限">
           <veui-field field="start" name="start" rules="numeric required" class="start-field">
             <veui-input v-model="storeData4.start"></veui-input>
           </veui-field>
@@ -180,7 +183,7 @@
           <veui-span>万</veui-span>
         </veui-fieldset>
 
-        <veui-field field="protocol" name="protocol" :rules="protocolRequiredRule" label="协议">
+        <veui-field field="protocol" name="protocol" :rules="protocolRequiredRule" label="协议：">
           <veui-checkbox falseValue="" v-model="storeData4.protocol">我已阅读并同意工作协议</veui-checkbox>
         </veui-field>
 
@@ -199,7 +202,7 @@
         :beforeValidate="beforeValidate"
         :afterValidate="afterValidate">
 
-        <veui-field field="qindian" label="负责人" name="qindian">
+        <veui-field field="qindian" label="负责人：" name="qindian">
           <veui-input v-model="storeData5.qindian"></veui-input>
         </veui-field>
 
@@ -208,12 +211,12 @@
             :field="`scheduleInfo[${index}].project`"
             :name="'projectName' + (index + 1)"
             :rules="requiredRule"
-            :label="'项目排期-' + (index + 1)">
+            :label="`项目排期-${index + 1}：`">
             <veui-input placeholder="项目名称" v-model="item.project"></veui-input>
           </veui-field>
           <veui-field
             :field="`scheduleInfo[${index}].range`"
-            :name="'schedule' + (index + 1)"
+            :name="`schedule${index + 1}`"
             :rules="requiredRule">
             <veui-datepicker v-model="item.range" range></veui-datepicker>
           </veui-field>
@@ -233,6 +236,7 @@
 import Form from '@/components/Form'
 import Fieldset from '@/components/Fieldset'
 import Field from '@/components/Field'
+import Label from '@/components/Label'
 import Span from '@/components/Span'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
@@ -255,6 +259,7 @@ export default {
     'veui-form': Form,
     'veui-fieldset': Fieldset,
     'veui-field': Field,
+    'veui-label': Label,
     'veui-datepicker': DatePicker,
     'veui-uploader': Uploader,
     'veui-select': Select,

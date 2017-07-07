@@ -47,7 +47,7 @@ export default {
 @import "../styles/theme-default/lib.less";
 
 .veui-button {
-  padding: 9px 20px;
+  padding: 8px 20px 9px;
   min-width: 70px;
   height: @veui-height-normal;
   border: 1px solid @veui-theme-color-primary;

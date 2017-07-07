@@ -1,43 +1,27 @@
 <template>
-  <label class="veui-label" :class="{'veui-label-for': !!labelFor}" @click="findInputComponent">{{ label }}：</label>
+  <label class="veui-label" @click="findLabeledInput"><slot></slot></label>
 </template>
 
 <script>
-import { getVnodes } from '../utils/context'
-import { isFunction, get } from 'lodash'
+import { isFunction, get, includes } from 'lodash'
+import { getTypedAncestor } from '../utils/helper'
 export default {
   name: 'veui-label',
 
-  props: {
-    label: String,
-    labelFor: String
-  },
-
   methods: {
-    findInputComponent () {
-      let labelFor = this.labelFor
-      if (this.label && labelFor) {
-        let context = getVnodes(this)[0].context
-        let target
-        // 一直往上找component
-        // 如果没有这个 refs，继续往上直到 root
-        do {
-          context = context.$parent
-          target = get(context, `$refs['${labelFor}']`)
+    findLabeledInput () {
+      let ancestor = getTypedAncestor(this, 'field')
+      if (ancestor) {
+        let target = ancestor.$children.filter(child => child !== this)[0]
+        while (target && !includes(get(target, '$options.uiTypes', []), 'input')) {
+          target = get(target, '$children[0]')
         }
-        while (context && !target)
 
-        if (target && isFunction(target.$emit)) {
-          target.$emit('labelclick')
+        if (target && isFunction(target.activate)) {
+          target.activate()
         }
       }
     }
   }
 }
 </script>
-
-<style lang="less">
-.veui-label-for {
-  cursor: pointer;
-}
-</style>

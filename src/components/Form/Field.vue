@@ -1,6 +1,8 @@
 <template>
-  <div class="veui-field" :class="{'veui-field-invalid': !validity.valid, 'veui-field-no-key': !label, 'veui-field-no-tip': !tip}">
-    <veui-label v-if="label" class="veui-form-key" :label="label" :label-for="labelFor"></veui-label>
+  <div class="veui-field" :class="{'veui-field-invalid': !validity.valid, 'veui-field-no-label': !label, 'veui-field-no-tip': !tip}">
+    <span v-if="label || $slots.label" class="veui-form-label">
+      <slot name="label"><veui-label>{{ label }}</veui-label></slot>
+    </span>
     <slot></slot>
     <span v-if="tip" class="veui-form-tip">{{ tip }}</span>
     <p v-if="!validity.valid && !!validity.message" class="veui-field-error" :title="validity.message"><veui-icon name="exclamation-circle"></veui-icon>{{ validity.message }}</p>
@@ -26,7 +28,6 @@ export default {
   },
   props: {
     label: String,
-    labelFor: String,
     name: String,
     tip: String,
     disabled: Boolean,
@@ -178,24 +179,24 @@ export default {
   vertical-align: top;
   clear: both;
 
-  .veui-form-key {
+  .veui-form-label {
     display: inline-block;
     height: @veui-height-normal;
-    width: @veui-form-key-width;
+    width: @veui-form-label-width;
     line-height: @veui-height-normal;
   }
 
-  &-no-key::before {
+  &-no-label::before {
     content: "";
     display: inline-block;
-    width: @veui-form-key-width;
+    width: @veui-form-label-width;
   }
 
   .veui-span {
     display: inline-block;
   }
 
-  & > [class*="veui"]:not([class*="veui-form-key"]):not([class*="veui-span"]):not([class*="error"]) {
+  & > [class*="veui"]:not([class*="veui-form-label"]):not([class*="veui-span"]):not([class*="error"]) {
     display: inline-block;
     vertical-align: top;
   }
@@ -223,8 +224,8 @@ export default {
     line-height: @veui-field-gap;
   }
 
-  .veui-form-key ~ .veui-form-tip + .veui-field-error {
-    margin-left: @veui-form-key-width;
+  .veui-form-label ~ .veui-form-tip + .veui-field-error {
+    margin-left: @veui-form-label-width;
   }
 
   .veui-form-tip {
