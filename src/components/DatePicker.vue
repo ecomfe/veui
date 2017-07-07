@@ -5,7 +5,7 @@
     'veui-datepicker-range': range,
     'veui-datepicker-expanded': expanded
   }">
-  <veui-button ref="button" class="veui-datepicker-button" :ui="buttonUI" :disabled="disabled || readonly" @click="expanded = !expanded">
+  <veui-button ref="button" class="veui-datepicker-button" :ui="buttonUI" :disabled="realDisabled || realReadonly" @click="expanded = !expanded">
     <template v-if="range">
       <span class="veui-datepicker-label">
         <slot v-if="formatted" name="date" :formatted="formatted ? formatted[0] : null" :date="selected ? selected[0] : null">{{ formatted[0] }}</slot>
@@ -56,7 +56,7 @@ import '../icons'
 import moment from 'moment'
 import { dropdown, input } from '../mixins'
 import { config } from '../managers'
-import { isArray, isNumber, pick, omit } from 'lodash'
+import { isNumber, pick, omit } from 'lodash'
 
 config.defaults({
   'datepicker.shortcuts': []
@@ -114,7 +114,7 @@ export default {
       let selected = this.localSelected
       if (this.range) {
         let current = this.picking || selected
-        if (isArray(current)) {
+        if (Array.isArray(current)) {
           return current.map(date => this.formatDate(date))
         }
       }
@@ -220,9 +220,14 @@ export default {
 <style lang="less">
 @import "../styles/theme-default/lib.less";
 @import (reference) "../styles/theme-default/dropdown.less";
+@import (reference) "../styles/theme-default/input.less";
 
 .veui-datepicker {
   &:extend(._veui-dropdown-button all);
+
+  .veui-field-invalid & .veui-button.veui-datepicker-button {
+    &:extend(._veui-input-invalid all);
+  }
 
   position: relative;
   display: inline-block;
@@ -303,6 +308,19 @@ export default {
     &-selected {
       border-color: @veui-theme-color-primary;
       color: @veui-theme-color-primary;
+    }
+  }
+
+  &[ui~="alt"] {
+    .veui-button {
+      border-color: @veui-gray-color-sup-3;
+      background-color: @veui-gray-color-sup-3;
+    }
+
+    .veui-button:hover,
+    .veui-button:focus {
+      border-color: @veui-gray-color-sup-4;
+      background-color: @veui-gray-color-sup-4;
     }
   }
 }

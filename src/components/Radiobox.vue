@@ -7,22 +7,15 @@
 </template>
 
 <script>
-import Icon from './Icon'
-import '../icons'
 import { input } from '../mixins'
-import { assign } from 'lodash'
+import { pick } from 'lodash'
 
 export default {
   name: 'veui-radiobox',
-  components: {
-    Icon
-  },
   mixins: [input],
   props: {
     ui: String,
-    name: String,
-    value: String,
-    disabled: Boolean,
+    value: null,
     checked: Boolean
   },
   model: {
@@ -31,8 +24,9 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = assign({}, this.$props)
-      delete attrs.ui
+      let attrs = pick(this.$props, 'checked')
+      attrs.name = this.realName
+      attrs.disabled = this.realDisabled || this.realReadonly
       return attrs
     }
   }

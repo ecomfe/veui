@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { assign } from 'lodash'
 import Icon from './Icon'
 import '../icons'
 
@@ -33,7 +34,7 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = Object.assign({}, this.$props)
+      let attrs = assign({}, this.$props)
       delete attrs.loading
       attrs.disabled = this.disabled || this.loading
       return attrs
@@ -46,7 +47,7 @@ export default {
 @import "../styles/theme-default/lib.less";
 
 .veui-button {
-  padding: 9px 20px;
+  padding: 8px 20px 9px;
   min-width: 70px;
   height: @veui-height-normal;
   border: 1px solid @veui-theme-color-primary;

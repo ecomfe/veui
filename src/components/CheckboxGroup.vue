@@ -6,7 +6,7 @@
       v-for="(item, index) in items"
       :key="index"
       :true-value="item.value"
-      :disabled="item.disabled"
+      :disabled="item.disabled || realDisabled || realReadonly"
       :checked="value.indexOf(item.value) !== -1"
       @change="checked => handleChange(item.value, checked)">
       <slot v-bind="item">{{ item.label }}</slot>
@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     localName () {
-      return this.name || uniqueId('veui-checkboxgroup-')
+      return this.realName || uniqueId('veui-checkboxgroup-')
     }
   },
   methods: {
@@ -51,3 +51,21 @@ export default {
 }
 </script>
 
+<style lang="less">
+@import "../styles/theme-default/lib.less";
+
+.veui-checkboxgroup {
+  height: @veui-height-normal;
+  line-height: @veui-height-normal - 1;
+
+  &[ui~="small"] {
+    height: @veui-height-small;
+    line-height: @veui-height-small - 1;
+  }
+
+  &[ui~="large"] {
+    height: @veui-height-large;
+    line-height: @veui-height-large - 1;
+  }
+}
+</style>

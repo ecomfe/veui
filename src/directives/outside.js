@@ -1,4 +1,4 @@
-import { isFunction, uniqueId, remove, every, isArray, find, isNumber, isString } from 'lodash'
+import { isFunction, uniqueId, remove, every, find, isNumber, isString, keys } from 'lodash'
 import { getNodes } from '../utils/context'
 
 let handlerBindings = []
@@ -41,13 +41,13 @@ function parseParams (el, arg, modifiers, value, context) {
 
     trigger = modifiers.hover ? 'hover' : 'click'
 
-    delay = find(Object.keys(modifiers), key => isNumber(parseInt(key, 10)) && modifiers[key])
+    delay = find(keys(modifiers), key => isNumber(parseInt(key, 10)) && modifiers[key])
     delay = delay ? parseInt(delay, 10) : 0
   } else {
     const normalizedValue = value || {}
     handler = isFunction(normalizedValue.handler) ? normalizedValue.handler : empty
 
-    const refs = isArray(normalizedValue.refs) ? normalizedValue.refs
+    const refs = Array.isArray(normalizedValue.refs) ? normalizedValue.refs
       : (isString(normalizedValue.refs) ? normalizedValue.refs.split(',') : [normalizedValue.refs])
     includeTargets = [el, ...getElementsByRefs(refs, context)]
 

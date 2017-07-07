@@ -6,7 +6,7 @@
       v-for="(item, index) in items"
       :key="index"
       :value="item.value"
-      :disabled="item.disabled"
+      :disabled="item.disabled || realDisabled || realReadonly"
       :checked="item.value === value"
       @change="checked => handleChange(item.value, checked)">
       <slot v-bind="item">{{ item.label }}</slot>
@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     localName () {
-      return this.name || uniqueId('veui-radioboxgroup-')
+      return this.realName || uniqueId('veui-radioboxgroup-')
     }
   },
   methods: {
@@ -47,3 +47,22 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+@import "../styles/theme-default/lib.less";
+
+.veui-radioboxgroup {
+  height: @veui-height-normal;
+  line-height: @veui-height-normal - 1;
+
+  &[ui~="small"] {
+    height: @veui-height-small;
+    line-height: @veui-height-small - 1;
+  }
+
+  &[ui~="large"] {
+    height: @veui-height-large;
+    line-height: @veui-height-large - 1;
+  }
+}
+</style>

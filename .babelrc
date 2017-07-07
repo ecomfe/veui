@@ -6,7 +6,13 @@
   "plugins": [
     "lodash",
     "transform-vue-jsx",
-    "transform-runtime"
+    [
+      "transform-runtime",
+      {
+        "polyfill": false,
+        "regenerator": false
+      }
+    ]
   ],
   "comments": false,
   "env": {

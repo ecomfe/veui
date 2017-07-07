@@ -1,68 +1,46 @@
-// import validator from '../utils/validators'
-// import { genParentTracker } from '../utils/mixins'
-// import { cloneDeep, zipObject, isFunction, isObject } from 'lodash'
+import { getTypedAncestorTracker, isTopMostOfType } from '../utils/helper'
 
-// const { computed: computedRow } = genParentTracker('formRow')
-// const { computed: computedValue } = genParentTracker('formValue')
+const { computed } = getTypedAncestorTracker('field')
 
 export default {
   uiTypes: ['input'],
   props: {
     name: String,
-    // rules: [String, Object],
     readonly: Boolean,
     disabled: Boolean
+  },
+  data () {
+    return {
+      initialData: undefined,
+      isTopMostInput: isTopMostOfType(this, 'input', 'field')
+    }
+  },
+  computed: {
+    realName () {
+      return (this.formField && this.formField.name) || this.name
+    },
+    realDisabled () {
+      return this.disabled || (this.formField && this.formField.realDisabled)
+    },
+    realReadonly () {
+      return this.readonly || (this.formField && this.formField.realReadonly)
+    },
+    formField: computed.field
+  },
+  created () {
+    if (!this.isTopMostInput || !this.formField || !this.formField.field) {
+      return
+    }
+
+    this.$emit = this.realEmit.bind(this, this.$emit)
+  },
+  methods: {
+    realEmit (originalEmit, eventName, data, event) {
+      originalEmit.apply(this, Array.prototype.slice.call(arguments, 1))
+      // 过滤掉 vue 内部 hook 的事件，不需要往上处理
+      if (eventName.indexOf('hook:') !== 0) {
+        this.formField.$emit('interact', eventName)
+      }
+    }
   }
-  // },
-  // computed: Object.assign(
-  //   {
-  //     _validateRules () {
-  //       if (!this.rules) {
-  //         return {}
-  //       } else {
-  //         let rules = this.rules.trim().split(/\s+/)
-  //         switch (typeof this.rules) {
-  //           case 'string':
-  //             return zipObject(
-  //               rules,
-  //               rules.map(rule => {
-  //                 return {
-  //                   value: true
-  //                 }
-  //               })
-  //             )
-  //           case 'object':
-  //             return this.rules
-  //         }
-  //       }
-  //     }
-  //   },
-  //   computedRow,
-  //   computedValue
-  // ),
-  // watch: {
-  //   _validateRules (newVal) {
-
-  //   }
-  // },
-  // methods: {
-  //   validate () {
-  //     let rules = this._validateRules
-  //     let prop = this.$options.model ? this.$options.model.prop : 'value'
-  //     let res = validator.validate(rules, this[prop])
-  //     if (res && isObject(res)) {
-  //       isFunction(this.showErrorMessage) && this.showErrorMessage(res)
-  //     }
-
-  //     return res
-  //   }
-  // },
-  // mounted () {
-  //   if (this.formRow) {
-  //     this.formRow.labelFor = this.name
-  //   }
-  //   if (this.formValue) {
-  //     this.formValue.initialData = cloneDeep(this.value)
-  //   }
-  // }
 }

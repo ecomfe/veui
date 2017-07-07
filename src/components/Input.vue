@@ -4,11 +4,12 @@
     class="veui-input"
     v-bind="attrs"
     v-model="localValue"
+    ref="input"
     @focus="$emit('focus', $event)"
     @click="$emit('click', $event)"
     @blur="$emit('blur', $event)"
     @change="$emit('change', $event.target.value, $event)"
-    @input="_handleInput"
+    @input="handleInput"
   >
   <textarea
     v-else
@@ -16,16 +17,17 @@
     :class="{ 'veui-textarea-resizable': resizable }"
     v-bind="attrs"
     v-model="localValue"
+    ref="input"
     @focus="$emit('focus', $event)"
     @click="$emit('click', $event)"
     @blur="$emit('blur', $event)"
     @change="$emit('change', $event.target.value, $event)"
-    @input="_handleInput"></textarea>
+    @input="handleInput"></textarea>
 </template>
 
 <script>
 import { input } from '../mixins'
-import { omit, includes } from 'lodash'
+import { omit, includes, extend } from 'lodash'
 
 const TYPE_LIST = ['text', 'password', 'hidden', 'textarea']
 
@@ -57,7 +59,13 @@ export default {
   },
   computed: {
     attrs () {
-      return omit(this.$props, ['selectOnFocus', 'fitContent', 'composition', 'resizable'])
+      let attrs = omit(this.$props, ['selectOnFocus', 'fitContent', 'composition', 'resizable'])
+      extend(attrs, {
+        name: this.realName,
+        disabled: this.realDisabled,
+        readonly: this.realReadonly
+      })
+      return attrs
     }
   },
   watch: {
@@ -66,7 +74,7 @@ export default {
     }
   },
   methods: {
-    _handleInput ($event) {
+    handleInput ($event) {
       // 分3种情况
       // 1. 感知输入法，触发原生 input 事件就必须向上继续抛出
       // 2. 不感知输入法
@@ -77,7 +85,10 @@ export default {
       }
     },
     focus () {
-      this.$el.focus()
+      this.$refs.input.focus()
+    },
+    activate () {
+      this.$refs.input.focus()
     }
   },
   mounted () {
@@ -99,9 +110,14 @@ export default {
 
 <style lang="less">
 @import "../styles/theme-default/lib.less";
+@import (reference) "../styles/theme-default/input.less";
 
 .veui-input,
 .veui-textarea {
+  .veui-field-invalid & {
+    &:extend(._veui-input-invalid all);
+  }
+
   height: @veui-height-normal;
   width: 300px;
   line-height: 1;
@@ -111,6 +127,7 @@ export default {
   border-color: @veui-gray-color-sup-1;
   background-color: #fff;
   font-size: @veui-font-size-normal;
+  box-shadow: 0 0.5px 2px 0 rgba(0, 0, 0, 0.1) inset;
 
   &:hover {
     border-color: @veui-theme-color-primary;
@@ -157,9 +174,12 @@ export default {
   line-height: 1.5;
   resize: none;
 
+  &[rows] {
+    height: auto;
+  }
+
   &.veui-textarea-resizable {
     resize: both;
   }
 }
-
 </style>

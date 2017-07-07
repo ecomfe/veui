@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { map, intersection, isString, isArray, includes, indexOf } from 'lodash'
+import { map, intersection, isString, includes, indexOf, keys as objectKeys } from 'lodash'
 import Body from './Body'
 import Head from './Head'
 import Foot from './Foot'
@@ -38,7 +38,7 @@ export default {
         if (!value) {
           return true
         }
-        return isString(value) || isArray(value) && value.length === this.data.length
+        return isString(value) || Array.isArray(value) && value.length === this.data.length
       }
     },
     selectable: Boolean,
@@ -63,7 +63,7 @@ export default {
     realKeys () {
       let keys = this.keys
       if (!keys) {
-        keys = Object.keys(this.data)
+        keys = objectKeys(this.data)
       }
       if (typeof keys === 'string') {
         keys = map(this.data, keys)

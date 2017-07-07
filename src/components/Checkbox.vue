@@ -45,7 +45,10 @@ export default {
   },
   computed: {
     attrs () {
-      return pick(this.$props, 'name', 'disabled', 'readonly', 'checked', 'indeterminate')
+      let attrs = pick(this.$props, 'checked')
+      attrs.name = this.realName
+      attrs.disabled = this.realDisabled || this.realReadonly
+      return attrs
     }
   },
   methods: {
@@ -85,8 +88,16 @@ export default {
   }
 
   span {
-    vertical-align: middle;
+    vertical-align: baseline;
     cursor: pointer;
+
+    &.veui-checkbox-box {
+      vertical-align: text-bottom;
+    }
+  }
+
+  .veui-field & {
+    line-height: @veui-height-normal;
   }
 
   &-box {

@@ -1,10 +1,11 @@
-import { cloneDeep } from 'lodash'
+import { keys } from 'lodash'
+import type from './type'
 
 function set (obj, key, value, isOverride) {
   if (typeof key === 'object') {
     isOverride = value
     value = key
-    Object.keys(value).forEach(key => {
+    keys(value).forEach(key => {
       set(obj, key, value[key], isOverride)
     })
     return
@@ -33,7 +34,7 @@ export class ConfigManager {
   }
 
   get (key) {
-    return cloneDeep(this.store[key])
+    return type.clone(this.store[key])
   }
 }
 
