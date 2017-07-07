@@ -235,7 +235,7 @@ export default {
               message: validities[target.name],
               fields: fieldStrings
             })
-            // 防止使用 fieldSet 定位错误之后，上边找不到
+            // 防止使用 fieldset 定位错误之后，上边找不到
             if (!includes(fields, target.name)) {
               this.errorMap[fieldStrings] = target.name
             }

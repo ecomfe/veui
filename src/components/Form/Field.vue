@@ -97,10 +97,10 @@ export default {
       return map
     },
     realDisabled () {
-      return this.disabled || (this.fieldSet && this.fieldSet.realDisabled)
+      return this.disabled || (this.fieldset && this.fieldset.realDisabled)
     },
     realReadonly () {
-      return this.readonly || (this.fieldSet && this.fieldSet.realReadonly)
+      return this.readonly || (this.fieldset && this.fieldset.realReadonly)
     }
   }, form),
   methods: {
@@ -154,7 +154,7 @@ export default {
   },
   created () {
     this.form.fields.push(this)
-    // 如果是 fieldSet 或者没写field，初始值和校验都没有意义
+    // 如果是 fieldset 或者没写field，初始值和校验都没有意义
     if (!this.field) {
       return
     }

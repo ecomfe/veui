@@ -42,6 +42,9 @@ export default {
   methods: {
     close () {
       this.expanded = false
+    },
+    activate () {
+      this.expanded = true
     }
   },
   updated () {

@@ -1,5 +1,5 @@
 <template>
-  <div class="veui-button-group" :ui="ui" :class="`${this.vertical ? 'veui-button-group-vertical' : 'veui-button-group-horiztontal'}`" :mode="mode" :active="active"> 
+  <div class="veui-button-group" :ui="ui" :class="`${this.vertical ? 'veui-button-group-vertical' : 'veui-button-group-horiztontal'}`" :mode="mode" :active="active">
     <veui-button v-for="(item, index) in items" :key="index" :ui="ui" ref="button"
     :class="{'veui-button-active': localActive == item.value || localActive.indexOf(item.value) >= 0, 'veui-button-vertical': vertical, 'veui-button-multiple': multiple}"
     @click.stop="handleClick(item)">
@@ -11,7 +11,7 @@
 <script>
   import Button from './Button'
   import Icon from './Icon'
-  import {includes} from 'lodash'
+  import { includes } from 'lodash'
   import 'vue-awesome/icons/remove'
 
   const ALLOWED_MODE_TYPES = ['stateless', 'exclusive', 'multiple']
