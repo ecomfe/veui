@@ -25,20 +25,16 @@ export default {
       type: String,
       default: ''
     },
-    replace: {
-      type: Boolean,
-      default: false
-    },
+    // TODO: 提供replace这个属性缺少实际use case？
+    replace: Boolean,
     type: {
+      type: String,
       default: 'link',
       validator (value) {
         return includes(ALLOWED_LINK_TYPES, value)
       }
     },
-    native: {
-      type: Boolean,
-      default: false
-    }
+    native: Boolean
   }
 }
 </script>

@@ -56,6 +56,9 @@ export default {
       this.localIndeterminate = false
       this.$emit('update:indeterminate', false)
       this.$emit('change', checked ? this.trueValue : this.falseValue)
+    },
+    activate () {
+      this.handleChange(!this.checked)
     }
   },
   watch: {

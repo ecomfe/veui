@@ -144,7 +144,22 @@ export default [
   {
     path: '/tabs',
     name: 'Tabs',
-    component: Tabs
+    component: Tabs,
+    redirect: '/tabs/button',
+    children: [
+      {
+        path: 'button',
+        component: Button
+      },
+      {
+        path: 'input',
+        component: Input
+      },
+      {
+        path: 'switch',
+        component: Switch
+      }
+    ]
   },
   {
     path: '/switch',

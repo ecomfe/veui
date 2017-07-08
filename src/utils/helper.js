@@ -1,18 +1,10 @@
 import { includes, camelCase, get } from 'lodash'
 
-export function getTypedAncestorTracker (name, type) {
+export function getTypedAncestorTracker (type, name = type) {
   return {
     computed: {
       [camelCase(name)] () {
-        let current = this.$parent
-        while (current) {
-          let { uiTypes } = current.$options
-          if (uiTypes && includes(uiTypes, type || name)) {
-            return current
-          }
-          current = current.$parent
-        }
-        return null
+        return getTypedAncestor(this, type)
       }
     }
   }

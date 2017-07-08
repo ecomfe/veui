@@ -1,7 +1,5 @@
 import { getTypedAncestorTracker, isTopMostOfType } from '../utils/helper'
 
-const { computed } = getTypedAncestorTracker('field')
-
 export default {
   uiTypes: ['input'],
   props: {
@@ -25,7 +23,7 @@ export default {
     realReadonly () {
       return this.readonly || (this.formField && this.formField.realReadonly)
     },
-    formField: computed.field
+    ...getTypedAncestorTracker('field', 'formField').computed
   },
   created () {
     if (!this.isTopMostInput || !this.formField || !this.formField.field) {

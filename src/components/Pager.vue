@@ -12,9 +12,9 @@
       </div>
       <div class="veui-page-switch">
         <ul class="veui-pages" :class="{['veui-page-digit-length-' + pageDigitLength]: true}">
-          <li v-for="item in pageIndicatorSeries" :class="{
+          <li v-for="(item, index) in pageIndicatorSeries" :class="{
             'veui-active': item.page === page
-          }">
+          }" :key="index">
             <veui-link :to="item.href" :native="native"
               @click="handleRedirect(item.page, $event)">{{ item.text }}</veui-link>
           </li>

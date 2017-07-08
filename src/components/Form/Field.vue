@@ -17,7 +17,6 @@ import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
 import '../../icons'
 import Vue from 'vue'
-const { computed: form } = getTypedAncestorTracker('form')
 
 export default {
   name: 'veui-field',
@@ -26,6 +25,7 @@ export default {
     'veui-icon': Icon,
     'veui-label': Label
   },
+  mixins: [getTypedAncestorTracker('form')],
   props: {
     label: String,
     name: String,
@@ -102,7 +102,7 @@ export default {
     realReadonly () {
       return this.readonly || (this.fieldset && this.fieldset.realReadonly)
     }
-  }, form),
+  }),
   methods: {
     getFieldValue () {
       return get(this.form.data, this.field)

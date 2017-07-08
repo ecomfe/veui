@@ -1,8 +1,6 @@
 import { getTypedAncestorTracker } from '../utils/helper'
 import { isObject } from 'lodash'
 
-let { computed } = getTypedAncestorTracker('table')
-
 function getDataGetter (key) {
   return function () {
     return this.table[key]
@@ -20,7 +18,7 @@ function getOneKeyValue (map) {
 }
 
 export default {
-  computed,
+  computed: getTypedAncestorTracker('table').computed,
   mapTableData (...keys) {
     return keys.reduce((acc, key) => {
       if (isObject(key)) {

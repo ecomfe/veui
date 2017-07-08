@@ -1,5 +1,6 @@
 <script>
 import Vue from 'vue'
+import VeuiLink from '../Link'
 
 export default {
   name: 'veui-tabs',
@@ -8,9 +9,6 @@ export default {
     ui: {
       type: String,
       default: 'default'
-    },
-    type: {
-      type: String
     },
     active: {
       type: String
@@ -39,10 +37,15 @@ export default {
           <ul class="veui-tabs-list">
             {
               this._l(this.tabs, (tab, index) => (
-                <li onClick={ $event => this.setActive({ index }) } class={{
-                  'veui-tabs-item': true,
-                  'veui-tabs-active': index === this.localIndex
-                }}>{ tab.label }</li>
+                tab.to
+                  ? <li class={{
+                    'veui-tabs-item': true,
+                    'veui-tabs-item-active': index === this.localIndex
+                  }}><VeuiLink to={tab.to} native={tab.native}>{ tab.label }</VeuiLink></li>
+                  : <li onClick={$event => this.setActive({ index })} class={{
+                    'veui-tabs-item': true,
+                    'veui-tabs-item-active': index === this.localIndex
+                  }}>{ tab.label }</li>
               ))
             }
           </ul>
@@ -71,7 +74,7 @@ export default {
 
         this.tabs.push(tab)
       } else {
-        Vue.util.warn('invalid! deplicate tab name')
+        Vue.util.warn(`Invalid tab name: [${tab.name}]`)
       }
     },
 
@@ -94,10 +97,10 @@ export default {
       })
     },
     localIndex (val) {
-      this.$emit('update:index', this.val)
+      this.$emit('update:index', val)
     },
     localActive (val) {
-      this.$emit('update:active', this.val)
+      this.$emit('update:active', val)
     }
   }
 }
@@ -110,7 +113,7 @@ export default {
 
   &-menu {
     position: relative;
-    margin-bottom: -1px;
+    z-index: 1;
   }
 
   &-list {
@@ -134,15 +137,37 @@ export default {
     background: @veui-gray-color-sup-5;
     cursor: pointer;
 
+    a {
+      display: block;
+      margin: 0 -25px;
+      padding: 0 25px;
+      text-decoration: none;
+      color: @veui-gray-color-normal;
+    }
+
+    a:focus {
+      outline: none;
+    }
+
     &:hover {
       color: @veui-theme-color-hover;
     }
 
-    &.veui-tabs-active {
+    &-active {
       border-bottom: none;
       background: #fff;
-      color: @veui-theme-color-primary;
+
+      &,
+      & a {
+        color: @veui-theme-color-primary;
+      }
     }
+  }
+
+  &-panel {
+    position: relative;
+    top: -1px;
+    z-index: 0;
   }
 
   &[ui~="simple"] {
