@@ -70,8 +70,8 @@
 import Icon from '@/components/Icon'
 import bus from '../bus'
 import Select from '@/components/Select'
+import Option from '@/components/Option'
 import Radiobox from '@/components/Radiobox'
-import Option from '@/components/Select/Option'
 import 'vue-awesome/icons/eye'
 import 'vue-awesome/icons/gift'
 

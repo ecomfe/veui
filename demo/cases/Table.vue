@@ -46,7 +46,7 @@ import bus from '../bus'
 import Button from '@/components/Button'
 import CheckboxGroup from '@/components/CheckboxGroup'
 import Table from '@/components/Table'
-import Column from '@/components/Table/Column'
+import Column from '@/components/Column'
 
 export default {
   name: 'table-demo',

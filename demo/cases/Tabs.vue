@@ -36,7 +36,7 @@
 <script>
 import Icon from '@/components/Icon'
 import Tabs from '@/components/Tabs'
-import Tab from '@/components/Tabs/Tab'
+import Tab from '@/components/Tab'
 
 export default {
   name: 'tabs-demo',
