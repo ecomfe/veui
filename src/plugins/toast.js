@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { toast } from '../managers'
+import toast from '../managers/toast'
 
 function getMethod (name) {
   return toast[name].bind(toast)

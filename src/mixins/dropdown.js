@@ -1,6 +1,6 @@
 import { intersection, throttle } from 'lodash'
 import { outside } from '../directives'
-import { config } from '../managers'
+import config from '../managers/config'
 import { ui } from '../mixins'
 
 config.defaults({

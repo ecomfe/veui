@@ -19,7 +19,7 @@
 import { pick } from 'lodash'
 import Dialog from './Dialog'
 import Button from './Button'
-import { config } from '../managers'
+import config from '../managers/config'
 
 config.defaults({
   'confirmbox.priority': 100

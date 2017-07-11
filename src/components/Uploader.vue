@@ -95,7 +95,7 @@ import '../icons'
 import Button from './Button'
 import { endsWith, cloneDeep, filter, map, uniqueId, assign } from 'lodash'
 import { ui, input } from '../mixins'
-import { config } from '../managers'
+import config from '../managers/config'
 
 config.defaults({
   'uploader.requestMode': 'xhr',
