@@ -59,7 +59,7 @@
 import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/date'
 import { flattenDeep, findIndex } from 'lodash'
 import { input } from '../mixins'
-import { config } from '../managers'
+import config from '../managers/config'
 import Icon from './Icon'
 import '../icons'
 

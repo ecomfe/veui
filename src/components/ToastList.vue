@@ -12,7 +12,7 @@
 import Overlay from './Overlay'
 import Toast from './Toast'
 import { assign, findIndex, uniqueId } from 'lodash'
-import { config } from '../managers'
+import config from '../managers/config'
 
 config.defaults({
   'toast.priority': 101
