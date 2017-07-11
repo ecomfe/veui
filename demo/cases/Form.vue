@@ -55,7 +55,7 @@
           </veui-field>
 
           <veui-field>
-            <veui-input ref="firstName" placeholder="名" v-model="storeData2.firstName"></veui-input>
+            <veui-input placeholder="名" v-model="storeData2.firstName"></veui-input>
           </veui-field>
         </veui-fieldset>
 
@@ -65,7 +65,7 @@
           </veui-field>
 
           <veui-field>
-            <veui-input ref="telephone" placeholder="名" v-model="storeData2.phone"></veui-input>
+            <veui-input placeholder="名" v-model="storeData2.phone"></veui-input>
           </veui-field>
         </veui-fieldset>
 
@@ -130,7 +130,7 @@
     </section>
     <section>
       <h2>表单的禁用或只读</h2>
-      <veui-form ref="form1" disabled :data="storeData1">
+      <veui-form disabled :data="storeData1">
 
         <veui-field label="昵称：" field="nickName">
           <veui-input v-model="storeData1.nickName"></veui-input>
@@ -175,7 +175,7 @@
           </veui-field>
 
           <veui-field>
-            <veui-input ref="firstName" placeholder="名" v-model="storeData2.firstName"></veui-input>
+            <veui-input placeholder="名" v-model="storeData2.firstName"></veui-input>
           </veui-field>
         </veui-fieldset>
 
@@ -185,7 +185,7 @@
           </veui-field>
 
           <veui-field readonly>
-            <veui-input ref="telephone" placeholder="名" v-model="storeData2.phone"></veui-input>
+            <veui-input placeholder="名" v-model="storeData2.phone"></veui-input>
           </veui-field>
         </veui-fieldset>
 
@@ -206,7 +206,7 @@
     </section>
     <section>
       <h2>使用 field 来支持表单验证，使用 name 来定位验证提示</h2>
-      <veui-form ref="form2"
+      <veui-form
         @submit="submit"
         @invalid="handleInvalid"
         :data="storeData4"
@@ -240,7 +240,7 @@
           </veui-field>
 
           <veui-field field="phone" name="phone" rules="numeric required">
-            <veui-input ref="phone" v-model="storeData4.phone"></veui-input>
+            <veui-input v-model="storeData4.phone"></veui-input>
           </veui-field>
         </veui-fieldset>
 
@@ -264,7 +264,7 @@
         </veui-field>
 
         <div class="operation">
-          <veui-button ui="primary" ref="submitBtn" :loading="isValidating" type="submit">提交</veui-button>
+          <veui-button ui="primary" :loading="isValidating" type="submit">提交</veui-button>
         </div>
       </veui-form>
     </section>
@@ -300,7 +300,7 @@
         </veui-fieldset>
 
         <div class="operation">
-          <veui-button ui="primary" ref="submitBtn" :loading="isValidating" type="submit">提交</veui-button>
+          <veui-button ui="primary" :loading="isValidating" type="submit">提交</veui-button>
           <veui-button @click="dynamicAdd">新增项目及排期</veui-button>
         </div>
       </veui-form>

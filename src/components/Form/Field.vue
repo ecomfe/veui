@@ -12,7 +12,7 @@
 <script>
 import Label from '../Label'
 import { type, rule } from '../../managers'
-import { isBoolean, assign, get, last } from 'lodash'
+import { isBoolean, get, last } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
 import '../../icons'
@@ -44,7 +44,7 @@ export default {
       initialData: null
     }
   },
-  computed: assign({
+  computed: {
     validity () {
       return this.validities[0] || {
         valid: true
@@ -98,14 +98,16 @@ export default {
       return map
     },
     realDisabled () {
-      let {fieldset, form} = this
-      return this.disabled || (fieldset && fieldset.realDisabled) || (form && form.disabled)
+      let {disabled, fieldset, form} = this
+      return disabled || (fieldset && fieldset.realDisabled) || (form && form.disabled)
     },
     realReadonly () {
-      let {fieldset, form} = this
-      return this.readonly || (fieldset && fieldset.realReadonly) || (form && form.readonly)
-    }
-  }, form, fieldset),
+      let {readonly, fieldset, form} = this
+      return readonly || (fieldset && fieldset.realReadonly) || (form && form.readonly)
+    },
+    ...form,
+    ...fieldset
+  },
   methods: {
     getFieldValue () {
       return get(this.form.data, this.field)
