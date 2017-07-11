@@ -12,11 +12,13 @@
 <script>
 import Label from '../Label'
 import { type, rule } from '../../managers'
-import { isBoolean, assign, get, last } from 'lodash'
+import { isBoolean, get, last } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
 import '../../icons'
 import Vue from 'vue'
+const { computed: form } = getTypedAncestorTracker('form')
+const { computed: fieldset } = getTypedAncestorTracker('fieldset')
 
 export default {
   name: 'veui-field',
@@ -25,7 +27,6 @@ export default {
     'veui-icon': Icon,
     'veui-label': Label
   },
-  mixins: [getTypedAncestorTracker('form')],
   props: {
     label: String,
     name: String,
@@ -43,7 +44,7 @@ export default {
       initialData: null
     }
   },
-  computed: assign({
+  computed: {
     validity () {
       return this.validities[0] || {
         valid: true
@@ -97,12 +98,16 @@ export default {
       return map
     },
     realDisabled () {
-      return this.disabled || (this.fieldset && this.fieldset.realDisabled)
+      let {disabled, fieldset, form} = this
+      return disabled || (fieldset && fieldset.realDisabled) || (form && form.disabled)
     },
     realReadonly () {
-      return this.readonly || (this.fieldset && this.fieldset.realReadonly)
-    }
-  }),
+      let {readonly, fieldset, form} = this
+      return readonly || (fieldset && fieldset.realReadonly) || (form && form.readonly)
+    },
+    ...form,
+    ...fieldset
+  },
   methods: {
     getFieldValue () {
       return get(this.form.data, this.field)

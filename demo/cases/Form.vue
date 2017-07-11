@@ -55,7 +55,7 @@
           </veui-field>
 
           <veui-field>
-            <veui-input ref="firstName" placeholder="名" v-model="storeData2.firstName"></veui-input>
+            <veui-input placeholder="名" v-model="storeData2.firstName"></veui-input>
           </veui-field>
         </veui-fieldset>
 
@@ -65,7 +65,7 @@
           </veui-field>
 
           <veui-field>
-            <veui-input ref="telephone" placeholder="名" v-model="storeData2.phone"></veui-input>
+            <veui-input placeholder="名" v-model="storeData2.phone"></veui-input>
           </veui-field>
         </veui-fieldset>
 
@@ -129,8 +129,84 @@
       </veui-form>
     </section>
     <section>
+      <h2>表单的禁用或只读</h2>
+      <veui-form disabled :data="storeData1">
+
+        <veui-field label="昵称：" field="nickName">
+          <veui-input v-model="storeData1.nickName"></veui-input>
+        </veui-field>
+
+        <veui-field label="性别：" field="sex">
+          <veui-select :options="storeData1.sexItems" v-model="storeData1.sex"></veui-select>
+        </veui-field>
+
+        <veui-field label="婚姻：" field="married">
+          <veui-radioboxgroup :items="storeData1.marryItems" v-model="storeData1.married"></veui-radioboxgroup>
+        </veui-field>
+
+        <veui-field label="爱好：" field="habit">
+          <veui-checkboxgroup type="checkbox" :items="storeData1.habitItems" v-model="storeData1.habit"></veui-checkboxgroup>
+        </veui-field>
+
+        <veui-field label="生日：" field="birthday">
+          <veui-datepicker v-model="storeData1.birthday"></veui-datepicker>
+        </veui-field>
+
+        <veui-field label="头像：" field="avatar">
+          <veui-uploader uploaderType="image"
+            action="/upload"
+            request-mode="xhr"
+            ui="multiline vertical bottom-mask list-icon"
+            :disabled="false"
+            :max-count="1"
+            :value="storeData1.avatar"
+            :max-size="10"
+            preview-image
+            needButton
+            extention-types="jpg,jpeg,png"></veui-uploader>
+          <!-- <p class="output">{{ outputData.avatar }}</p> -->
+        </veui-field>
+      </veui-form>
+      <h2>行内禁用或只读</h2>
+      <veui-form>
+        <veui-fieldset disabled class="two-name" label="姓名">
+          <veui-field>
+            <veui-input placeholder="姓" v-model="storeData2.lastName"></veui-input>
+          </veui-field>
+
+          <veui-field>
+            <veui-input placeholder="名" v-model="storeData2.firstName"></veui-input>
+          </veui-field>
+        </veui-fieldset>
+
+        <veui-fieldset label="电话">
+          <veui-field>
+            <veui-select v-model="storeData2.phoneType" :options="storeData2.phoneTypeOptions"></veui-select>
+          </veui-field>
+
+          <veui-field readonly>
+            <veui-input placeholder="名" v-model="storeData2.phone"></veui-input>
+          </veui-field>
+        </veui-fieldset>
+
+        <veui-fieldset class="salary" tip="使用 <veui-span> 来插入中间非组件内容">
+          <template slot="label">
+            <veui-label>预期收入：</veui-label>💰
+          </template>
+          <veui-field>
+            <veui-input v-model="storeData2.start"></veui-input>
+          </veui-field>
+          <veui-span>-</veui-span>
+          <veui-field>
+            <veui-input disabled v-model="storeData2.end"></veui-input>
+          </veui-field>
+          <veui-span>万</veui-span>
+        </veui-fieldset>
+      </veui-form>
+    </section>
+    <section>
       <h2>使用 field 来支持表单验证，使用 name 来定位验证提示</h2>
-      <veui-form ref="form2"
+      <veui-form
         @submit="submit"
         @invalid="handleInvalid"
         :data="storeData4"
@@ -164,7 +240,7 @@
           </veui-field>
 
           <veui-field field="phone" name="phone" rules="numeric required">
-            <veui-input ref="phone" v-model="storeData4.phone"></veui-input>
+            <veui-input v-model="storeData4.phone"></veui-input>
           </veui-field>
         </veui-fieldset>
 
@@ -188,7 +264,7 @@
         </veui-field>
 
         <div class="operation">
-          <veui-button ui="primary" ref="submitBtn" :loading="isValidating" type="submit">提交</veui-button>
+          <veui-button ui="primary" :loading="isValidating" type="submit">提交</veui-button>
         </div>
       </veui-form>
     </section>
@@ -224,7 +300,7 @@
         </veui-fieldset>
 
         <div class="operation">
-          <veui-button ui="primary" ref="submitBtn" :loading="isValidating" type="submit">提交</veui-button>
+          <veui-button ui="primary" :loading="isValidating" type="submit">提交</veui-button>
           <veui-button @click="dynamicAdd">新增项目及排期</veui-button>
         </div>
       </veui-form>
