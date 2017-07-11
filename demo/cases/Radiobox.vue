@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import Radiobox from '@/components/Radiobox'
+import { Radiobox } from 'veui'
 
 export default {
   name: 'radiobox-demo',

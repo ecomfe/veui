@@ -25,8 +25,7 @@
 
 <script>
 import bus from '../bus'
-import Alert from '@/components/Alert'
-import Dialog from '@/components/Dialog'
+import { Alert, Dialog } from 'veui'
 
 export default {
   name: 'alert',

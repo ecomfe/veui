@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import Calendar from '@/components/Calendar'
+import { Calendar } from 'veui'
 
 export default {
   name: 'calendar-demo',
@@ -56,11 +56,9 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../src/styles/theme-default/lib.less";
-
 .veui-demo-calendar {
   section {
-    .clearfix();
+    overflow: hidden;
     margin-bottom: 10px;
   }
 

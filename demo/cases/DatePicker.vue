@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import DatePicker from '@/components/DatePicker'
+import { DatePicker } from 'veui'
 
 export default {
   name: 'datepicker-demo',

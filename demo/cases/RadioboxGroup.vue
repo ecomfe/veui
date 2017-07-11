@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import RadioboxGroup from '@/components/RadioboxGroup'
+import { RadioboxGroup } from 'veui'
 
 export default {
   name: 'radioboxgroup-demo',

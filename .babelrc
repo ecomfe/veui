@@ -4,6 +4,18 @@
     "stage-2"
   ],
   "plugins": [
+    [
+      "import-peer",
+      {
+        "package": "veui",
+        "path": "components",
+        "peerPackage": "veui-theme-dux",
+        "peerPath": "components",
+        "peerGlobal": "common.less",
+        "fileName": "${module}.less",
+        "transform": "kebab-case"
+      }
+    ],
     "lodash",
     "transform-vue-jsx",
     [

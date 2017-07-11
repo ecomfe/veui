@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import Checkbox from '@/components/Checkbox'
+import { Checkbox } from 'veui'
 
 export default {
   name: 'checkbox-demo',

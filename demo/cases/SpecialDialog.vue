@@ -19,11 +19,11 @@
 </template>
 
 <script>
-import Button from '@/components/Button'
-import alertManager from '@/managers/alert'
-import confirmManager from '@/managers/confirm'
-import promptManager from '@/managers/prompt'
-import toastManager from '@/managers/toast'
+import { Button } from 'veui'
+import alertManager from 'veui/managers/alert'
+import confirmManager from 'veui/managers/confirm'
+import promptManager from 'veui/managers/prompt'
+import toastManager from 'veui/managers/toast'
 
 export default {
   components: {

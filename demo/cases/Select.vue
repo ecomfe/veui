@@ -67,11 +67,8 @@
 </template>
 
 <script>
-import Icon from '@/components/Icon'
 import bus from '../bus'
-import Select from '@/components/Select'
-import Option from '@/components/Option'
-import Radiobox from '@/components/Radiobox'
+import { Icon, Select, Option, Radiobox } from 'veui'
 import 'vue-awesome/icons/eye'
 import 'vue-awesome/icons/gift'
 

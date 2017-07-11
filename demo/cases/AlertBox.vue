@@ -48,8 +48,7 @@
 </template>
 
 <script>
-import Button from '@/components/Button'
-import AlertBox from '@/components/AlertBox'
+import { Button, AlertBox } from 'veui'
 
 export default {
   name: 'alert-box-demo',

@@ -78,10 +78,8 @@
   </article>
 </template>
 <script>
-import Dialog from '@/components/Dialog'
-import Button from '@/components/Button'
-import Icon from '@/components/Icon'
-import '@/icons'
+import { Dialog, Button, Icon } from 'veui'
+import 'veui/icons'
 
 export default {
   name: 'dialog-demo',

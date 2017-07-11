@@ -36,7 +36,7 @@
 
 <script>
 import bus from '../bus'
-import Pager from '@/components/Pager'
+import { Pager } from 'veui'
 
 export default {
   name: 'pager-demo',

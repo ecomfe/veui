@@ -43,10 +43,7 @@
 <script>
 import moment from 'moment'
 import bus from '../bus'
-import Button from '@/components/Button'
-import CheckboxGroup from '@/components/CheckboxGroup'
-import Table from '@/components/Table'
-import Column from '@/components/Column'
+import { Button, CheckboxGroup, Table, Column } from 'veui'
 
 export default {
   name: 'table-demo',

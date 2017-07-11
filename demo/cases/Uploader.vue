@@ -61,9 +61,8 @@
   </article>
 </template>
 <script>
-import Uploader from '@/components/Uploader'
-import Button from '@/components/Button'
-import { ui } from '@/mixins'
+import { Uploader, Button } from 'veui'
+import { ui } from 'veui/mixins'
 
 export default {
   name: 'uploader-demo',

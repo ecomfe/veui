@@ -1,0 +1,96 @@
+@import "../lib.less";
+
+.veui-dialog {
+  display: none;
+
+  &-box {
+    position: relative;
+
+    &[ui~="reverse"] {
+      .veui-dialog-content {
+        border: 1px solid @veui-gray-color-sup-3;
+
+        &-head {
+          background: #fff;
+        }
+
+        &-head-title {
+          color: @veui-gray-color-strong;
+        }
+
+        &-head-close {
+          color: @veui-gray-color-normal;
+        }
+      }
+    }
+  }
+
+  &-box-mask {
+    .fixed(0);
+    background: rgba(0, 0, 0, .5);
+    overflow: auto;
+  }
+
+  &-draggable {
+    user-select: none;
+    cursor: all-scroll;
+  }
+
+  &-content {
+    position: absolute;
+    background: #fff;
+    border-radius: 4px;
+    .veui-shadow(extend);
+
+    &-head,
+    &-body,
+    &-foot {
+      padding: 0 20px;
+    }
+
+    &-head {
+      height: 40px;
+      line-height: 40px;
+      background: @veui-theme-color-primary;
+      border-radius: 4px 4px 0 0;
+    }
+
+    &-head-title {
+      font-weight: 400;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    &-body {
+      padding-top: 20px;
+      box-sizing: border-box;
+    }
+
+    &-foot {
+      padding: 15px 20px;
+      text-align: center;
+    }
+
+    &-foot .veui-button {
+      min-width: 94px;
+
+      &:first-child {
+        margin-right: 20px;
+      }
+    }
+
+    &-head-close,
+    &-head-close:hover {
+      color: #fff;
+      float: right;
+      width: 16px;
+      height: 16px;
+      line-height: 16px;
+      text-align: center;
+      font-size: 16px;
+      margin-top: 12px;
+      cursor: pointer;
+    }
+  }
+}
+

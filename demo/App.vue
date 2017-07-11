@@ -3,14 +3,14 @@
     <nav id="main-nav">
       <h1>VEUI components</h1>
       <ul>
-        <li v-for="route in routes"><router-link :to='route'>{{route.name}}</router-link></li>
+        <li v-for="(route, index) in routes" :key="index"><router-link :to='route'>{{route.name}}</router-link></li>
       </ul>
       <footer>© {{year}} Baidu, Inc.</footer>
     </nav>
     <main id="content">
       <router-view></router-view>
     </main>
-    <console id="console"/>
+    <console id="console"></console>
   </div>
 </template>
 
@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../src/styles/theme-default/common.less";
+@import "~veui-theme-dux/common.less";
 
 @nav-width: 240px;
 @light-bg-color: #f6f9ff;

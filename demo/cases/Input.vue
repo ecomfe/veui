@@ -60,7 +60,7 @@
 
 <script>
 import bus from '../bus'
-import Input from '@/components/Input'
+import { Input } from 'veui'
 
 export default {
   name: 'text-input',
@@ -89,7 +89,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../src/styles/theme-default/lib.less";
+@import "~veui-theme-dux/lib.less";
 
 .form-row {
   margin-bottom: 10px;

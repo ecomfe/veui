@@ -32,7 +32,7 @@
 
 <script>
 import bus from '../bus'
-import Dropdown from '@/components/Dropdown'
+import { Dropdown } from 'veui'
 
 export default {
   name: 'dropdown-demo',

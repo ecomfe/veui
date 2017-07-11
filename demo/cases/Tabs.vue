@@ -34,9 +34,7 @@
 </template>
 
 <script>
-import Icon from '@/components/Icon'
-import Tabs from '@/components/Tabs'
-import Tab from '@/components/Tab'
+import { Icon, Tabs, Tab } from 'veui'
 
 export default {
   name: 'tabs-demo',

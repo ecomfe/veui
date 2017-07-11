@@ -22,7 +22,8 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      '@': resolve('src'),
+      'veui': resolve('packages/veui/src'),
+      'veui-theme-dux': resolve('packages/veui-theme-dux')
     }
   },
   module: {
@@ -31,7 +32,7 @@ module.exports = {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: "pre",
-        include: [resolve('src'), resolve('demo'), resolve('test')],
+        include: [resolve('packages/veui/src'), resolve('demo'), resolve('test')],
         options: {
           formatter: require('eslint-friendly-formatter')
         }
@@ -44,7 +45,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('demo'), resolve('test'), resolve('node_modules/vue-awesome')]
+        include: [resolve('packages/veui/src'), resolve('demo'), resolve('test'), resolve('node_modules/vue-awesome')]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

@@ -14,8 +14,7 @@
 </template>
 
 <script>
-import ConfirmBox from '@/components/ConfirmBox'
-import Button from '@/components/Button'
+import { ConfirmBox, Button } from 'veui'
 
 export default {
   components: {

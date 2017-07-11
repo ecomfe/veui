@@ -118,9 +118,8 @@
 
 <script>
 import bus from '../bus'
-import Tooltip from '@/components/Tooltip'
-import Button from '@/components/Button'
-import Input from '@/components/Input'
+import { Tooltip, Button, Input } from 'veui'
+
 export default {
   name: 'tooltip-demo',
   data () {

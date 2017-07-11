@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import Switch from '@/components/Switch'
+import { Switch } from 'veui'
 
 export default {
   name: 'Switch',

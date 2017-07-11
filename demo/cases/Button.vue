@@ -78,9 +78,11 @@
 
 <script>
 import bus from '../bus'
-import Button from '@/components/Button'
-import Icon from '@/components/Icon'
-import '@/icons'
+import { Button, Icon } from 'veui'
+import 'veui/icons'
+import 'vue-awesome/icons/thumbs-up'
+import 'vue-awesome/icons/flash'
+import 'vue-awesome/icons/gear'
 
 export default {
   name: 'button-demo',

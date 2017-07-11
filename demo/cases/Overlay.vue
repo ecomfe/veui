@@ -116,8 +116,7 @@
   </article>
 </template>
 <script>
-import Overlay from '../../src/components/Overlay'
-import Button from '../../src/components/Button'
+import { Overlay, Button } from 'veui'
 
 export default {
   name: 'overlay-demo',
@@ -179,8 +178,9 @@ export default {
   }
 }
 </script>
+
 <style lang="less">
-@import "../../src/styles/theme-default/lib.less";
+@import "~veui-theme-dux/lib.less";
 
 .demo-overlay-box {
   box-shadow: 1px 1px 6px fadeOut(#000, 80%);

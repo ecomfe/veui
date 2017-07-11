@@ -9,10 +9,10 @@
     </p>
   </article>
 </template>
+
 <script>
-import Breadcrumb from '@/components/Breadcrumb'
-import Icon from '@/components/Icon'
-import '@/icons'
+import { Breadcrumb, Icon } from 'veui'
+import 'veui/icons'
 
 export default {
   name: 'breadcrumb-demo',

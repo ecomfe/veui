@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import CheckboxGroup from '@/components/CheckboxGroup'
+import { CheckboxGroup } from 'veui'
 
 export default {
   name: 'checkboxgroup-demo',

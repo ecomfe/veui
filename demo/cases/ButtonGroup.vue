@@ -106,7 +106,7 @@
 
 <script>
 import bus from '../bus'
-import ButtonGroup from '@/components/ButtonGroup'
+import { ButtonGroup } from 'veui'
 import 'vue-awesome/icons/thumbs-up'
 import 'vue-awesome/icons/flash'
 import 'vue-awesome/icons/gear'

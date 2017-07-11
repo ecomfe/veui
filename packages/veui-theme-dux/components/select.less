@@ -1,0 +1,37 @@
+@import "../lib.less";
+@import (reference) "../dropdown.less";
+@import (reference) "../input.less";
+@import "../dropdown-overflow.less";
+
+.veui-select {
+  &:extend(._veui-dropdown-button all);
+
+  .veui-field-invalid & .veui-button.veui-select-button {
+    &:extend(._veui-input-invalid all);
+  }
+
+  display: inline-block;
+  width: 160px;
+
+  &-options {
+    &:extend(._veui-dropdown-overlay all);
+    min-width: 160px;
+    max-height: 280px;
+    overflow-y: auto;
+    background-color: #fff;
+  }
+
+  &-option-group {
+    .veui-select-group-label {
+      display: inline-block;
+      .centered-line(@veui-height-normal);
+      padding: 0 10px;
+      font-size: @veui-font-size-small;
+      color: @veui-gray-color-weak;
+    }
+
+    .veui-option {
+      padding-left: 20px;
+    }
+  }
+}

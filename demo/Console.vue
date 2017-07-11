@@ -13,7 +13,7 @@
 
 <script>
 import bus from './bus'
-import Icon from '@/components/Icon'
+import Icon from 'veui/components/Icon'
 
 export default {
   components: {
@@ -53,7 +53,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../src/styles/theme-default/common.less";
+@import "~veui-theme-dux/common.less";
 
 @nav-width: 240px;
 @light-bg-color: #f6f9ff;

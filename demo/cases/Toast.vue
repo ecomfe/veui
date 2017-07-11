@@ -14,8 +14,8 @@
 
 <script>
 import bus from '../bus'
-import toast from '@/managers/toast'
-import Button from '@/components/Button'
+import { Button } from 'veui'
+import toast from 'veui/managers/toast'
 
 let messages = [
   {

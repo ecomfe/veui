@@ -1,0 +1,81 @@
+@import "../lib.less";
+
+.veui-alert {
+  @success: @veui-success-color-primary;
+  @warning: @veui-warning-color-primary;
+  @info: @veui-info-color-primary;
+  @error: @veui-alert-color-primary;
+  @message-hover-color: #72a9ff;
+  @message-active-color: #5e9dff;
+  position: relative;
+  margin: 30px 0;
+  padding: 14px 20px;
+  border-radius: 2px;
+  span {
+    display: inline-block;
+  }
+  &-icon {
+    transform: translateY(-50%);
+    .absolute(50%, _, _, 20px);
+  }
+  &-message {
+    margin: 0 44px 0 34px;
+    &-multiple {
+      margin-right: 82px;
+    }
+  }
+  &-success {
+    background-color: fadeout(@success, 90%);
+    color: @success;
+  }
+  &-warning {
+    background-color: fadeout(@warning, 90%);
+    color: @warning;
+  }
+  &-info {
+    background-color: @veui-info-color-sup-2;
+    color: @info;
+  }
+  &-error {
+    background-color: fadeout(@error, 90%);
+    color: @error;
+  }
+  &-close {
+    .absolute(50%, 20px, _, _);
+    transform: translateY(-50%);
+    button + button {
+      margin-left: 24px;
+    }
+    &.veui-alert-close-text {
+      color: @veui-info-color-secondary;
+      &:hover,
+      &:visited {
+        color: @message-hover-color;
+      }
+      &:active {
+        color: @message-active-color;
+      }
+    }
+  }
+  button {
+    border: none;
+    background: none;
+    padding: 0;
+    user-select: none;
+    color: @veui-text-color-normal;
+    &:focus {
+      outline: none;
+    }
+    &:hover,
+    &:visited {
+      color: @veui-info-color-primary;
+    }
+    &:active {
+      color: @veui-info-color-hover;
+    }
+    &:disabled {
+      cursor: not-allowed;
+      color: @veui-text-color-weak;
+    }
+  }
+}

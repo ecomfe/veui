@@ -1,0 +1,28 @@
+@import "../lib.less";
+
+.veui-form {
+  .veui-fieldset,
+  .veui-field {
+    margin-bottom: @veui-field-gap;
+  }
+
+  &[ui~="inline"] {
+    .clearfix();
+
+    .veui-fieldset,
+    .veui-field {
+      display: inline-block;
+      margin-bottom: 0;
+      clear: none;
+
+      & > .veui-form-label {
+        width: auto;
+      }
+
+      & + .veui-fieldset,
+      & + .veui-field {
+        margin-left: 15px;
+      }
+    }
+  }
+}
