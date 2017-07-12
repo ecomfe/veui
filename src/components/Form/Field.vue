@@ -1,5 +1,5 @@
 <template>
-  <div class="veui-field" :class="{'veui-field-invalid': !validity.valid, 'veui-field-no-label': !label, 'veui-field-no-tip': !tip}">
+  <div class="veui-field" :class="{'veui-field-invalid': !validity.valid, 'veui-field-no-label': !label, 'veui-field-no-tip': !tip, 'veui-field-required': isRequired}">
     <span v-if="label || $slots.label" class="veui-form-label">
       <slot name="label"><veui-label>{{ label }}</veui-label></slot>
     </span>
@@ -67,6 +67,9 @@ export default {
         rule.initRules(rules)
       }
       return rules
+    },
+    isRequired () {
+      return this.localRules && this.localRules.some(perRule => perRule.name === 'required')
     },
     interactiveRulesMap () {
       let map = {}
@@ -136,10 +139,11 @@ export default {
     validate (rules = this.localRules) {
       let res = rule.validate(this.getFieldValue(), rules)
       let name = this.name || 'anonymous'
-      if (isBoolean(res) && res) {
-        this.hideValidity(name)
-      } else {
-        !this.validities.some(validity => validity.fields === name) && this.validities.unshift({
+      // 把之前同类型的清掉
+      this.hideValidity(name)
+      // 如果有新的错，放进去，这样可以更新错误消息
+      if (!isBoolean(res) || !res) {
+        this.validities.unshift({
           valid: false,
           message: res,
           fields: name
@@ -157,6 +161,11 @@ export default {
       this.$set(this, 'validities', this.validities.filter(validity => validity.fields !== fields))
     }
   },
+  watch: {
+    isRequired (required) {
+      this.fieldset && this.fieldset.$emit('updaterequired', required)
+    }
+  },
   created () {
     this.form.fields.push(this)
     // 如果是 fieldset 或者没写field，初始值和校验都没有意义
@@ -166,6 +175,7 @@ export default {
 
     this.initialData = type.clone(this.getFieldValue())
     this.$on('interact', this.handleInteract)
+    this.fieldset && this.fieldset.$emit('updaterequired', this.isRequired)
   },
   beforeDestroy () {
     if (!this.field) {
@@ -189,6 +199,11 @@ export default {
     height: @veui-height-normal;
     width: @veui-form-label-width;
     line-height: @veui-height-normal;
+
+  }
+
+  &-required > .veui-form-label::after {
+    .veui-field-require();
   }
 
   &-no-label::before {

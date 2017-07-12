@@ -209,6 +209,7 @@
       <veui-form
         @submit="submit"
         @invalid="handleInvalid"
+        :readonly="isValidating"
         :data="storeData4"
         :validators="validators"
         :beforeValidate="beforeValidate"
@@ -218,16 +219,12 @@
           <veui-input v-model="storeData4.name"></veui-input>
         </veui-field>
 
-        <veui-field field="name" name="name2" :rules="dynamicNameRule" label="姓名（动态）：" tip="blur时校验必填">
+        <veui-field field="name" name="name2" :rules="dynamicNameRule" label="姓名（动态）：" tip="blur时校验必填，提交时校验长度，只是个示例">
           <veui-input placeholder="长度不能短于2" v-model="storeData4.name"></veui-input>
         </veui-field>
 
-        <veui-field field="age" name="age1" rules="numeric required" label="年龄：">
-          <veui-input placeholder="错误提示优先出在右侧" v-model="storeData4.age"></veui-input>
-        </veui-field>
-
-        <veui-field field="age" name="age2" :rules="dynamicAgeRule" label="年龄（动态）：" tip="change 时校验长度">
-          <veui-input placeholder="长度不能超过3" v-model="storeData4.age"></veui-input>
+        <veui-field field="age" name="age1" :rules="ageRule" label="年龄：">
+          <veui-input placeholder="错误提示优先出在右侧, 长度不能超过3" v-model="storeData4.age"></veui-input>
         </veui-field>
 
         <veui-field field="desc" name="desc" rules="required" label="介绍：">
@@ -249,11 +246,11 @@
         </veui-field>
 
         <veui-fieldset label="预期收入：" class="salary" tip="联合校验，下限必须小于上限">
-          <veui-field field="start" name="start" rules="numeric required" class="start-field">
+          <veui-field field="start" name="start" :rules="numRequiredRule" class="start-field">
             <veui-input v-model="storeData4.start"></veui-input>
           </veui-field>
           <veui-span>-</veui-span>
-          <veui-field field="end" name="end" rules="numeric required">
+          <veui-field field="end" name="end" :rules="numRequiredRule">
             <veui-input v-model="storeData4.end"></veui-input>
           </veui-field>
           <veui-span>万</veui-span>
@@ -471,6 +468,18 @@ export default {
           triggers: 'blur,input'
         }
       ],
+      numRequiredRule: [
+        {
+          name: 'numeric',
+          value: true,
+          triggers: 'blur,input'
+        },
+        {
+          name: 'required',
+          value: true,
+          triggers: 'blur,input'
+        }
+      ],
       protocolRequiredRule: [
         {
           name: 'required',
@@ -490,10 +499,16 @@ export default {
           value: 2
         }
       ],
-      dynamicAgeRule: [
+      ageRule: [
+        {
+          name: 'required',
+          value: true,
+          triggers: 'blur,input'
+        },
         {
           name: 'numeric',
-          value: true
+          value: true,
+          triggers: 'blur,input'
         },
         {
           name: 'maxLength',
@@ -530,14 +545,15 @@ export default {
         {
           fields: ['phone'],
           handler (phone) {
-            return new Promise(function (resolve, reject) {
+            return new Promise(function (resolve) {
               setTimeout(function () {
+                let res
                 if (phone === '18888888888') {
-                  return reject({
+                  res = {
                     phoneSet: '该手机已被注册'
-                  })
+                  }
                 }
-                return resolve()
+                return resolve(res)
               }, 3000)
             })
           }
