@@ -1,5 +1,8 @@
 <template>
-  <veui-field ref="field" class="veui-fieldset" v-bind="attrs"><template v-if="$slots.label" slot="label"><slot name="label"></slot></template><slot></slot></veui-field>
+  <veui-field ref="field" class="veui-fieldset" :class="{'veui-fieldset-required': isRequired}" v-bind="attrs">
+    <template v-if="$slots.label" slot="label"><slot name="label"></slot></template>
+    <slot></slot>
+  </veui-field>
 </template>
 
 <script>
@@ -13,6 +16,11 @@ export default {
   uiTypes: ['fieldset', 'form-container'],
   components: {
     'veui-field': Field
+  },
+  data () {
+    return {
+      isRequired: false
+    }
   },
   props: {
     label: String,
@@ -34,6 +42,9 @@ export default {
     realReadonly () {
       return this.readonly || get(this, '$refs.field.form.readonly')
     }
+  },
+  created () {
+    this.$on('updaterequired', (required) => { this.isRequired = required })
   }
 }
 </script>
@@ -44,8 +55,8 @@ export default {
 .veui-fieldset {
   clear: both;
 
-  & > .veui-field {
-    margin-bottom: 0;
+  &-required > .veui-form-label::after {
+    .veui-field-require();
   }
 
   &.veui-field-no-label::before,
