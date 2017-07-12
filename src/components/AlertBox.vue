@@ -111,6 +111,7 @@ export default {
 
   .veui-dialog-content-foot {
     padding: 30px 20px;
+    text-align: center;
   }
 
   .veui-dialog-content-body {
