@@ -98,7 +98,7 @@ export default {
       )
       .then(res =>
         this.isValid(res)
-          ? this.$emit.bind(this, 'submit', data, e)
+          ? this.$emit('submit', data, e)
           : this.$emit('invalid', res)
       )
     },
