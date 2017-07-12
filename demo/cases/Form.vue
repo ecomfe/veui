@@ -49,7 +49,7 @@
       <h2>行内多组件表单</h2>
       <veui-form>
 
-        <veui-fieldset class="two-name" label="姓名">
+        <veui-fieldset class="two-name" label="姓名：">
           <veui-field>
             <veui-input placeholder="姓" v-model="storeData2.lastName"></veui-input>
           </veui-field>
@@ -59,7 +59,7 @@
           </veui-field>
         </veui-fieldset>
 
-        <veui-fieldset label="电话">
+        <veui-fieldset label="电话：">
           <veui-field>
             <veui-select v-model="storeData2.phoneType" :options="storeData2.phoneTypeOptions"></veui-select>
           </veui-field>
@@ -169,7 +169,7 @@
       </veui-form>
       <h2>行内禁用或只读</h2>
       <veui-form>
-        <veui-fieldset disabled class="two-name" label="姓名">
+        <veui-fieldset disabled class="two-name" label="姓名：">
           <veui-field>
             <veui-input placeholder="姓" v-model="storeData2.lastName"></veui-input>
           </veui-field>
@@ -179,7 +179,7 @@
           </veui-field>
         </veui-fieldset>
 
-        <veui-fieldset label="电话">
+        <veui-fieldset label="电话：">
           <veui-field>
             <veui-select v-model="storeData2.phoneType" :options="storeData2.phoneTypeOptions"></veui-select>
           </veui-field>

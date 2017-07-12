@@ -7,7 +7,7 @@
 
       <veui-pager :page="page" :page-total="pageTotal" :to="to" ui="hetero"></veui-pager>
 
-      <veui-pager :page="page" :page-total="pageTotal" :to="to" ui="full"></veui-pager>
+      <veui-pager :page="page" :page-total="pageTotal" :page-sizes="pageSizes" :to="to" ui="full"></veui-pager>
 
       <veui-pager :page="page" :page-total="pageTotal" :to="to" ui="slim"></veui-pager>
     </div>
@@ -48,6 +48,7 @@ export default {
       page: parseInt(this.$route.params.page, 10) || 1,
       pageTotal: 10101,
       to: '/pager/:page',
+      pageSizes: [30, 60, 100, 200],
       fifthPagerMessage: ''
     }
   },
@@ -63,9 +64,6 @@ export default {
         bus.$emit('log', child.$el.getAttribute('ui'))
       })
     })
-  },
-  destroyed () {
-
   },
   beforeRouteUpdate ({params}, from, next) {
     let page = parseInt(params.page, 10)
