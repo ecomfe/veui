@@ -54,9 +54,9 @@ export function getModelEvent (vm) {
 /**
  * 表单中空输入
  *
- * @param  {[type]}  val 输入值
+ * @param  {Mixed}  val 输入值
  * @return {Boolean}     是否空输入
  */
 export function isEmpty (val) {
-  return val == null || val === ''
+  return val == null || val === '' || (Array.isArray(val) && !val.length)
 }
