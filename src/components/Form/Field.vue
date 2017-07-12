@@ -161,11 +161,6 @@ export default {
       this.$set(this, 'validities', this.validities.filter(validity => validity.fields !== fields))
     }
   },
-  watch: {
-    isRequired (required) {
-      this.fieldset && this.fieldset.$emit('updaterequired', required)
-    }
-  },
   created () {
     this.form.fields.push(this)
     // 如果是 fieldset 或者没写field，初始值和校验都没有意义
@@ -175,7 +170,6 @@ export default {
 
     this.initialData = type.clone(this.getFieldValue())
     this.$on('interact', this.handleInteract)
-    this.fieldset && this.fieldset.$emit('updaterequired', this.isRequired)
   },
   beforeDestroy () {
     if (!this.field) {
