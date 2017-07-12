@@ -373,9 +373,10 @@ export default {
 
     &-foot .veui-button {
       min-width: 94px;
+      margin-right: 20px;
 
-      &:first-child {
-        margin-right: 20px;
+      &:last-child {
+        margin-right: 0;
       }
     }
 
