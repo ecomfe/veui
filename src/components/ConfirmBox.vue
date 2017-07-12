@@ -65,5 +65,6 @@ export default {
 
 .veui-confirm-box .veui-dialog-content-foot {
   padding: 30px 20px;
+  text-align: center;
 }
 </style>
