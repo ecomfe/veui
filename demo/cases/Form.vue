@@ -207,6 +207,7 @@
     <section>
       <h2>使用 field 来支持表单验证，使用 name 来定位验证提示</h2>
       <veui-form
+        ref="form2"
         @submit="submit"
         @invalid="handleInvalid"
         :readonly="isValidating"
@@ -262,6 +263,7 @@
 
         <div class="operation">
           <veui-button ui="primary" :loading="isValidating" type="submit">提交</veui-button>
+          <veui-button @click="() => this.$refs.form2.reset()" :loading="isValidating">重置</veui-button>
         </div>
       </veui-form>
     </section>
