@@ -19,15 +19,16 @@ exports.default = function (babel) {
         var src = node.source.value;
 
         var resolvedComponentName = null;
-        if (src !== 'veui' && src.indexOf(COMPONENTS_PATH) !== 0) {
-          if (src.indexOf(COMPONENTS_PATH) === 0) {
-            var componentPath = src.slice(0, COMPONENTS_PATH.length);
-            resolvedComponentName = getComponentName(componentPath);
-          } else if (src.charAt(0) !== '.' || file.opts.filename === 'unknown') {
-              return;
-            } else {
-                resolvedComponentName = resolveComponent(file.opts.filename, src);
-              }
+
+        if (src.indexOf(COMPONENTS_PATH) === 0) {
+          var componentPath = src.slice(COMPONENTS_PATH.length);
+          resolvedComponentName = getComponentName(componentPath);
+        } else if (src !== 'veui') {
+          if (src.charAt(0) !== '.' || file.opts.filename === 'unknown') {
+            return;
+          } else {
+              resolvedComponentName = resolveComponent(file.opts.filename, src);
+            }
         }
 
         node.specifiers.map(function (_ref2) {
@@ -102,7 +103,7 @@ function getModuleName(name) {
 }
 
 function resolveComponent(file, src) {
-  var pkg = _pkgDir2.default.sync(src);
+  var pkg = _pkgDir2.default.sync(file);
   if (!pkg || (0, _utils.getJSON)(_path2.default.join(pkg, 'package.json')).name !== 'veui') {
     return null;
   }

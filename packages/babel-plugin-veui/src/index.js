@@ -17,16 +17,15 @@ export default function (babel) {
         let src = node.source.value
 
         let resolvedComponentName = null
-        if (src !== 'veui' && src.indexOf(COMPONENTS_PATH) !== 0) {
 
-          // import Button from 'veui/components/Button'
-          // import Button from 'veui/components/Button'
-          if (src.indexOf(COMPONENTS_PATH) === 0) {
-            let componentPath = src.slice(0, COMPONENTS_PATH.length)
-            resolvedComponentName = getComponentName(componentPath)
-          }
+        // import Button from 'veui/components/Button'
+        // import Button from 'veui/components/Button'
+        if (src.indexOf(COMPONENTS_PATH) === 0) {
+          let componentPath = src.slice(COMPONENTS_PATH.length)
+          resolvedComponentName = getComponentName(componentPath)
+        } else if (src !== 'veui') {
           // cannot resolve when absolute path or current file path isn't available
-          else if (src.charAt(0) !== '.' || file.opts.filename === 'unknown') {
+          if (src.charAt(0) !== '.' || file.opts.filename === 'unknown') {
             return
           }
 
@@ -100,7 +99,7 @@ function getModuleName (name, transform = 'kebab-case') {
 }
 
 function resolveComponent (file, src) {
-  let pkg = pkgDir.sync(src)
+  let pkg = pkgDir.sync(file)
   if (!pkg || getJSON(path.join(pkg, 'package.json')).name !== 'veui') {
     return null
   }
