@@ -20,10 +20,10 @@ import Toast from './Toast'
 import Alert from './Alert'
 import ConfirmBox from './ConfirmBox'
 import AlertBox from './AlertBox'
-import SpecialDialog from './SpecialDialog'
+// import SpecialDialog from './SpecialDialog'
 import Tabs from './Tabs'
 import Switch from './Switch'
-import ButtonGroup from './ButtonGroup'
+// import ButtonGroup from './ButtonGroup'
 
 export default [
   {
@@ -136,11 +136,11 @@ export default [
     name: 'AlertBox',
     component: AlertBox
   },
-  {
-    path: '/special-dialog',
-    name: 'SpecialDialog',
-    component: SpecialDialog
-  },
+  // {
+  //   path: '/special-dialog',
+  //   name: 'SpecialDialog',
+  //   component: SpecialDialog
+  // },
   {
     path: '/tabs',
     name: 'Tabs',
@@ -165,10 +165,10 @@ export default [
     path: '/switch',
     name: 'Switch',
     component: Switch
-  },
-  {
-    path: '/buttonGroup',
-    name: 'ButtonGroup',
-    component: ButtonGroup
   }
+  // {
+  //   path: '/buttonGroup',
+  //   name: 'ButtonGroup',
+  //   component: ButtonGroup
+  // }
 ]

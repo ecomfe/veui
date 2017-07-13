@@ -7,8 +7,8 @@
     [
       "veui",
       {
-        "peerPackage": "veui-theme-dux",
-        "peerPath": "components",
+        "package": "veui-theme-dux",
+        "path": "components",
         "fileName": "${module}.less",
         "transform": "kebab-case"
       }

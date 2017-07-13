@@ -1,7 +1,7 @@
 <template>
 <aside :class="{expanded, 'veui-console': true}">
   <h2 @click="expanded = !expanded">
-    <icon @click.native.stop="logs = []" name="cross" label="Clear console"></icon>
+    <icon @click.native.stop="logs = []" name="ban" label="Clear console" flip="horizontal"></icon>
     <icon :name="expanded ? 'triangle-down' : 'triangle-up'" label="Toggle console"></icon>
     Console <small>({{logs.length}})</small>
   </h2>
@@ -14,6 +14,7 @@
 <script>
 import bus from './bus'
 import Icon from 'veui/components/Icon'
+import 'vue-awesome/icons/ban'
 
 export default {
   components: {
@@ -81,8 +82,8 @@ export default {
       margin-right: 5px;
     }
 
-    .fa-icon {
-      transform: translateY(2px);
+    .veui-icon {
+      vertical-align: middle;
     }
 
     small {
