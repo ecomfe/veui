@@ -207,6 +207,7 @@
     <section>
       <h2>使用 field 来支持表单验证，使用 name 来定位验证提示</h2>
       <veui-form
+        ref="form2"
         @submit="submit"
         @invalid="handleInvalid"
         :readonly="isValidating"
@@ -231,7 +232,7 @@
           <veui-input rows="3" type="textarea" v-model="storeData4.desc"></veui-input>
         </veui-field>
 
-        <veui-fieldset name="phoneSet" label="电话：">
+        <veui-fieldset name="phoneSet" label="电话：" :required="true">
           <veui-field field="phoneType" name="phoneType">
             <veui-select v-model="storeData4.phoneType" :options="storeData4.phoneTypeOptions"></veui-select>
           </veui-field>
@@ -245,7 +246,7 @@
           <veui-checkboxgroup type="checkbox" :items="storeData4.habitItems" v-model="storeData4.habit"></veui-checkboxgroup>
         </veui-field>
 
-        <veui-fieldset label="预期收入：" class="salary" tip="联合校验，下限必须小于上限">
+        <veui-fieldset label="预期收入：" class="salary" tip="联合校验，下限必须小于上限" :required="true">
           <veui-field field="start" name="start" :rules="numRequiredRule" class="start-field">
             <veui-input v-model="storeData4.start"></veui-input>
           </veui-field>
@@ -262,6 +263,7 @@
 
         <div class="operation">
           <veui-button ui="primary" :loading="isValidating" type="submit">提交</veui-button>
+          <veui-button @click="() => this.$refs.form2.reset()" :loading="isValidating">重置</veui-button>
         </div>
       </veui-form>
     </section>
@@ -279,7 +281,7 @@
           <veui-input v-model="storeData5.qindian"></veui-input>
         </veui-field>
 
-        <veui-fieldset v-for="(item, index) in storeData5.scheduleInfo" key="index">
+        <veui-fieldset v-for="(item, index) in storeData5.scheduleInfo" key="index" :required="true">
           <veui-field
             :field="`scheduleInfo[${index}].project`"
             :name="'projectName' + (index + 1)"

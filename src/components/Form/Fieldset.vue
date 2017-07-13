@@ -1,5 +1,5 @@
 <template>
-  <veui-field ref="field" class="veui-fieldset" :class="{'veui-fieldset-required': isRequired}" v-bind="attrs">
+  <veui-field ref="field" class="veui-fieldset" :class="{'veui-fieldset-required': required}" v-bind="attrs">
     <template v-if="$slots.label" slot="label"><slot name="label"></slot></template>
     <slot></slot>
   </veui-field>
@@ -17,17 +17,14 @@ export default {
   components: {
     'veui-field': Field
   },
-  data () {
-    return {
-      isRequired: false
-    }
-  },
   props: {
     label: String,
     name: String,
     tip: String,
     disabled: Boolean,
-    readonly: Boolean
+    readonly: Boolean,
+    // 因为会出现一行里边有必填和非必填共存，交给使用者决定显不显示星号
+    required: false
   },
   computed: {
     attrs () {
@@ -42,9 +39,6 @@ export default {
     realReadonly () {
       return this.readonly || get(this, '$refs.field.form.readonly')
     }
-  },
-  created () {
-    this.$on('updaterequired', (required) => { this.isRequired = required })
   }
 }
 </script>

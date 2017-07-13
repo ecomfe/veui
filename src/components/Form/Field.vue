@@ -116,6 +116,9 @@ export default {
       return get(this.form.data, this.field)
     },
     resetValue () {
+      // 清空错误消息，为什么要先做，因为有可能是个fieldset，可以清错误，但是没有值
+      this.validities = []
+
       if (!this.field) {
         return
       }
@@ -158,12 +161,11 @@ export default {
       this.name && this.form.$emit('interact', eventName, this.name)
     },
     hideValidity (fields) {
-      this.$set(this, 'validities', this.validities.filter(validity => validity.fields !== fields))
-    }
-  },
-  watch: {
-    isRequired (required) {
-      this.fieldset && this.fieldset.$emit('updaterequired', required)
+      if (!fields) {
+        this.validities = []
+      } else {
+        this.$set(this, 'validities', this.validities.filter(validity => validity.fields !== fields))
+      }
     }
   },
   created () {
@@ -175,7 +177,6 @@ export default {
 
     this.initialData = type.clone(this.getFieldValue())
     this.$on('interact', this.handleInteract)
-    this.fieldset && this.fieldset.$emit('updaterequired', this.isRequired)
   },
   beforeDestroy () {
     if (!this.field) {
