@@ -308,19 +308,11 @@
 </template>
 
 <script>
-import Form from '@/components/Form'
-import Fieldset from '@/components/Fieldset'
-import Field from '@/components/Field'
-import Label from '@/components/Label'
-import Span from '@/components/Span'
-import Input from '@/components/Input'
-import Button from '@/components/Button'
-import DatePicker from '@/components/DatePicker'
-import Uploader from '@/components/Uploader'
-import Select from '@/components/Select'
-import Checkbox from '@/components/Checkbox'
-import CheckboxGroup from '@/components/CheckboxGroup'
-import RadioboxGroup from '@/components/RadioboxGroup'
+import {
+  Form, Fieldset, Field, Label, Span, Input,
+  Button, DatePicker, Uploader, Select,
+  Checkbox, CheckboxGroup, RadioboxGroup
+} from 'veui'
 import moment from 'moment'
 import bus from '../bus'
 
@@ -617,7 +609,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../src/styles/theme-default/lib.less";
+@import "~veui-theme-dux/lib.less";
 
 .veui-form-demo {
   h2 {
