@@ -75,6 +75,9 @@ export default {
   },
 
   methods: {
+    submit () {
+      this.handleSubmit(null)
+    },
     handleSubmit (e) {
       let data = this.data
       return new Promise(resolve =>
