@@ -17,7 +17,7 @@
 import Input from './Input'
 import Dialog from './Dialog'
 import { pick, extend } from 'lodash'
-import { config } from '../managers'
+import config from '../managers/config'
 
 config.defaults({
   'promptbox.priority': 100

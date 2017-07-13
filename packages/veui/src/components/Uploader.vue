@@ -3,10 +3,10 @@
     <div class="veui-uploader-button-container">
       <label v-if="uploaderType === 'file' || (uploaderType === 'image' && needButton)"
         class="veui-button veui-uploader-input-label"
-        :class="{'veui-uploader-input-label-disabled': disabled}"
+        :class="{'veui-uploader-input-label-disabled': realDisabled}"
         ui="aux" ref="label">
         <icon class="veui-uploader-input-label-icon" name="upload"></icon><slot name="text">选择文件</slot>
-        <input hidden="hidden" type="file" ref="input" @change="onChange" :name="realName" :disabled="disabled" :accept="accept" multiple>
+        <input hidden="hidden" type="file" ref="input" @change="onChange" :name="realName" :disabled="realDisabled" :accept="accept" multiple>
       </label>
       <slot name="button"></slot>
       <span class="veui-uploader-tip"><slot name="tip"></slot></span>
@@ -74,8 +74,8 @@
       </li>
       <li v-if="uploaderType === 'image' && !needButton" key="input">
         <label class="veui-uploader-input-label-image"
-          :class="{'veui-uploader-input-label-disabled': disabled}"
-          ref="label"><input hidden type="file" ref="input" @change="onChange" :name="realName" :disabled="disabled" :accept="accept" multiple>
+          :class="{'veui-uploader-input-label-disabled': realDisabled}"
+          ref="label"><input hidden type="file" ref="input" @change="onChange" :name="realName" :disabled="realDisabled" :accept="accept" multiple>
         </label>
       </li>
     </transition-group>
@@ -95,7 +95,7 @@ import '../icons'
 import Button from './Button'
 import { endsWith, cloneDeep, filter, map, uniqueId, assign } from 'lodash'
 import { ui, input } from '../mixins'
-import { config } from '../managers'
+import config from '../managers/config'
 
 config.defaults({
   'uploader.requestMode': 'xhr',

@@ -55,7 +55,7 @@ import Icon from './Icon'
 import '../icons'
 import moment from 'moment'
 import { dropdown, input } from '../mixins'
-import { config } from '../managers'
+import config from '../managers/config'
 import { isNumber, pick, omit } from 'lodash'
 
 config.defaults({

@@ -16,7 +16,7 @@ import Tether from 'tether'
 import { assign, isObject, isString } from 'lodash'
 import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
-import { config } from '../managers'
+import config from '../managers/config'
 
 config.defaults({
   'overlay.baseZIndex': 200

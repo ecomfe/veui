@@ -23,6 +23,9 @@ export default {
       }
     }
   },
+  render () {
+    return ''
+  },
   mounted () {
     let table = this.table
     if (!table) {

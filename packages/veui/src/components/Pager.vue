@@ -5,7 +5,7 @@
         <span class="veui-page-total">共 {{ pageTotal }} 条</span>
         <span class="veui-page-size">每页显示<veui-select v-model="realPageSize"
             ui="link"
-            :options="optionalPageSizes"
+            :options="realPageSizes"
             @change="size => $emit('pagesizechange', size)">
           </veui-select>
         </span>
@@ -47,10 +47,6 @@ import Link from './Link'
 import Select from './Select'
 import Option from './Select/Option'
 
-const OPTIONAL_PAGE_SIZES = [
-  30, 60, 100, 200
-]
-
 const HREF_TPL_PLACEHOLDER = /:page\b/g
 
 /**
@@ -88,6 +84,12 @@ export default {
       type: Number,
       default: 30
     },
+    pageSizes: {
+      type: Array,
+      default: function () {
+        return [30, 50, 100]
+      }
+    },
     pageTotal: {
       type: Number,
       required: true
@@ -104,11 +106,7 @@ export default {
   },
   data () {
     return {
-      customPageSize: 0,
-      optionalPageSizes: OPTIONAL_PAGE_SIZES.map(size => ({
-        label: size,
-        value: size
-      }))
+      customPageSize: 0
     }
   },
   computed: {
@@ -134,6 +132,12 @@ export default {
         val = parseInt(val, 10)
         this.customPageSize = val === this.pageSize ? 0 : val
       }
+    },
+    realPageSizes () {
+      return this.pageSizes.map(size => ({
+        label: size,
+        value: size
+      }))
     },
     pageCount () {
       return Math.ceil(this.pageTotal / this.realPageSize)

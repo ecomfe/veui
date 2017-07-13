@@ -1,6 +1,6 @@
 <template>
 <div class="veui-calendar" @mouseleave="markEnd()">
-  <div v-for="(p, pIndex) in panels" class="veui-calendar-panel" :class="{ [`veui-calendar-${p.view}`]: true }">
+  <div v-for="(p, pIndex) in panels" :key="pIndex" class="veui-calendar-panel" :class="{ [`veui-calendar-${p.view}`]: true }">
     <div class="veui-calendar-head">
       <button type="button" v-if="pIndex === 0 || p.view !== 'days'" class="veui-calendar-prev" @click="step(false, p.view)" :disabled="disabled || readonly"><veui-icon name="angle-left"></veui-icon></button>
       <template v-if="p.view === 'days'">
@@ -20,11 +20,11 @@
         <template v-if="p.view === 'days'">
           <thead>
             <tr>
-              <th v-for="dayName in dayNames">{{ dayName }}</th>
+              <th v-for="dayName in dayNames" :key="dayName">{{ dayName }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="week in p.weeks">
+            <tr v-for="(week, index) in p.weeks" :key="index">
               <td v-for="day in week"
                 :key="`${day.year}-${day.month + 1}-${day.date}`"
                 :class="getDateClass(day, p)">
@@ -35,15 +35,15 @@
           </tbody>
         </template>
         <tbody v-else-if="p.view === 'months'">
-          <tr v-for="i in 3">
-            <td v-for="j in 4" :class="getMonthClass(p, i, j)">
+          <tr v-for="i in 3" :key="i">
+            <td v-for="j in 4" :class="getMonthClass(p, i, j)" :key="j">
               <button @click="selectMonth(pIndex, (i - 1) * 4 + j - 1)">{{ (i - 1) * 4 + j }} 月</button>
             </td>
           </tr>
         </tbody>
         <tbody v-else-if="p.view === 'years'">
-          <tr v-for="i in 3">
-            <td v-for="j in 4" :class="getYearClass(p, i, j)">
+          <tr v-for="i in 3" :key="i">
+            <td v-for="j in 4" :class="getYearClass(p, i, j)" :key="j">
               <button v-if="(i - 1) * 4 + j - 1 < 10" @click="selectYear(pIndex, p.year - p.year % 10 + (i - 1) * 4 + j - 1)">{{ p.year - p.year % 10 + (i - 1) * 4 + j - 1 }}</button>
             </td>
           </tr>
@@ -59,7 +59,7 @@
 import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/date'
 import { flattenDeep, findIndex } from 'lodash'
 import { input } from '../mixins'
-import { config } from '../managers'
+import config from '../managers/config'
 import Icon from './Icon'
 import '../icons'
 

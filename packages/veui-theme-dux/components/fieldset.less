@@ -3,8 +3,8 @@
 .veui-fieldset {
   clear: both;
 
-  & > .veui-field {
-    margin-bottom: 0;
+  &-required > .veui-form-label::after {
+    .veui-field-require();
   }
 
   &.veui-field-no-label::before,

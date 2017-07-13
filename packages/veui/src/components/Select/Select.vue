@@ -53,10 +53,10 @@
 
 <script>
 import Icon from '../Icon'
-import '../../icons'
 import Button from '../Button'
 import Option from './Option'
 import Overlay from '../Overlay'
+import '../../icons'
 import { input, dropdown } from '../../mixins'
 
 export default {

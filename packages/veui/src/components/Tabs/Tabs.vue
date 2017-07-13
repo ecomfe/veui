@@ -1,6 +1,6 @@
 <script>
 import Vue from 'vue'
-import VeuiLink from '../Link'
+import Link from '../Link'
 
 export default {
   name: 'veui-tabs',
@@ -41,7 +41,7 @@ export default {
                   ? <li class={{
                     'veui-tabs-item': true,
                     'veui-tabs-item-active': index === this.localIndex
-                  }}><VeuiLink to={tab.to} native={tab.native}>{ tab.label }</VeuiLink></li>
+                  }}><Link to={tab.to} native={tab.native}>{ tab.label }</Link></li>
                   : <li onClick={$event => this.setActive({ index })} class={{
                     'veui-tabs-item': true,
                     'veui-tabs-item-active': index === this.localIndex

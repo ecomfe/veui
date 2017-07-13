@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import { isBoolean, isFunction, includes, assign, zipObject, map, keys } from 'lodash'
-import { allSettled } from '../../utils/promise'
+import { isBoolean, isUndefined, isFunction, includes, assign, zipObject, map, keys } from 'lodash'
+import { getVnodes } from '../../utils/context'
 
 export default {
   name: 'veui-form',
@@ -75,26 +75,34 @@ export default {
   },
 
   methods: {
+    submit () {
+      this.handleSubmit(null)
+    },
     handleSubmit (e) {
       let data = this.data
-      return new Promise((resolve, reject) =>
+      return new Promise(resolve =>
         isFunction(this.beforeValidate)
-          ? resolve(this.beforeValidate.call(this.$vnode.context, data))
+          ? resolve(this.beforeValidate.call(getVnodes(this)[0].context, data))
           : resolve()
       )
-      .then(this.validate.bind(this))
-      .then(
-        () => new Promise((resolve, reject) =>
-          isFunction(this.afterValidate)
-            ? resolve(this.afterValidate.call(this.$vnode.context, data))
-            : resolve()
-        )
+      .then(res =>
+        this.isValid(res)
+          ? this.validate()
+          : res
       )
-      .then(
-        this.$emit.bind(this, 'submit', data, e),
-        err => {
-          this.$emit('invalid', err)
-        }
+      .then(res =>
+        this.isValid(res)
+          ? new Promise(resolve =>
+              isFunction(this.afterValidate)
+                ? resolve(this.afterValidate.call(getVnodes(this)[0].context, data))
+                : resolve()
+            )
+          : res
+      )
+      .then(res =>
+        this.isValid(res)
+          ? this.$emit('submit', data, e)
+          : this.$emit('invalid', res)
       )
     },
 
@@ -111,23 +119,21 @@ export default {
         )
       }
 
-      return allSettled(
+      return Promise.all(
         [
           ...targets.map(target => {
             let validity = target.validate()
             // utils/Validator 是同步的，检查一下不是 true 就好，返回其他的都当成错误信息
             if (!isBoolean(validity) || !validity) {
               // 没有name的无法描述，invalid的时候就不抛了
-              return Promise.reject(target.name ? { [target.name]: validity } : {})
+              return Promise.resolve(target.name ? { [target.name]: validity } : {})
             }
             return Promise.resolve(true)
           }),
 
           ...validators.map(({ handler, fields }) => {
             if (isFunction(handler) && fields) {
-              let defaultErr = zipObject(fields, [])
-
-              let validities = this.execValidator(handler, fields, defaultErr)
+              let validities = this.execValidator(handler, fields)
 
               // 异步校验交给返回的 Promise，对于同步校验，true 代表校验通过，false 代表不通过但是没有出错信息，其他当成 { fieldName1: errMsg, ... } 处理
               // 异步校验
@@ -135,34 +141,24 @@ export default {
                 return validities
               }
 
-              // 同步校验但是出错
-              if (!isBoolean(validities) || !validities) {
-                return Promise.reject(validities)
-              }
-              // 同步校验并且通过
               return Promise.resolve(validities)
-            } else {
-              // 没有回调或者校验项
-              // TODO: 补个warn？
-              return Promise.resolve(true)
             }
+            // 没有回调或者校验项
+            // TODO: 补个warn？
+            return Promise.resolve(true)
           })
         ]
       )
       .then(
         allRes => {
-          if (allRes.every(mixed => {
-            return 'val' in mixed
-          })) {
-            return Promise.resolve()
-          }
-
-          return Promise.reject(assign({}, ...allRes.filter(res => 'err' in res).map(res => res.err)))
+          return allRes.every(mixed => this.isValid(mixed))
+            ? Promise.resolve(true)
+            : Promise.resolve(assign({}, ...allRes.filter(mixed => !this.isValid(mixed))))
         }
       )
     },
 
-    execValidator (handler, fields, defaultErr) {
+    execValidator (handler, fields) {
       let targets = fields.map(name => this.fieldsMap[name])
       let validities = handler.apply(
         this,
@@ -172,22 +168,15 @@ export default {
       // 异步校验
       if (validities && isFunction(validities.then)) {
         return validities.then(
-          val => {
-            this.handleValidities(true, fields)
-            return { val }
-          },
-          err => {
-            let res = err || defaultErr
+          res => {
             this.handleValidities(res, fields)
-            return Promise.reject(res)
+            return this.isValid(res) || res
           }
         )
       }
 
-      let res = validities || defaultErr
-      this.handleValidities(res, fields)
-
-      return res
+      this.handleValidities(validities, fields)
+      return validities
     },
 
     handleInteract (eventName, name) {
@@ -195,14 +184,7 @@ export default {
       if (validators) {
         validators.forEach(({ handler, fields }) => {
           if (includes(fields, name) && isFunction(handler)) {
-            let defaultErr = zipObject(fields, [])
-            let validities = this.execValidator(handler, fields, defaultErr)
-
-            // 异步校验交给返回的 Promise，由于这里是 interact 的，所以不需要返回
-            if (!validities.then || !isFunction(validities.then)) {
-              let res = validities || defaultErr
-              this.handleValidities(res, fields)
-            }
+            this.execValidator(handler, fields)
           }
         })
       }
@@ -216,7 +198,7 @@ export default {
      */
     handleValidities (validities, fields) {
       let fieldStrings = fields.join(',')
-      if (isBoolean(validities) && validities) {
+      if (this.isValid(validities)) {
         fields.forEach(name => {
           let target = this.fieldsMap[name]
           let promotion = this.errorMap[fieldStrings]
@@ -242,6 +224,10 @@ export default {
           }
         })
       }
+    },
+
+    isValid (res) {
+      return isUndefined(res) || (isBoolean(res) && res)
     },
 
     reset () {

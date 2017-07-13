@@ -1,0 +1,33 @@
+{
+  "presets": [
+    ["env", { "modules": false }],
+    "stage-2"
+  ],
+  "plugins": [
+    [
+      "veui",
+      {
+        "peerPackage": "veui-theme-dux",
+        "peerPath": "components",
+        "fileName": "${module}.less",
+        "transform": "kebab-case"
+      }
+    ],
+    "lodash",
+    "transform-vue-jsx",
+    [
+      "transform-runtime",
+      {
+        "polyfill": false,
+        "regenerator": false
+      }
+    ]
+  ],
+  "comments": false,
+  "env": {
+    "test": {
+      "presets": ["env", "stage-2"],
+      "plugins": [ "istanbul" ]
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <div class="veui-field" :class="{'veui-field-invalid': !validity.valid, 'veui-field-no-label': !label, 'veui-field-no-tip': !tip}">
+  <div class="veui-field" :class="{'veui-field-invalid': !validity.valid, 'veui-field-no-label': !label, 'veui-field-no-tip': !tip, 'veui-field-required': isRequired}">
     <span v-if="label || $slots.label" class="veui-form-label">
       <slot name="label"><veui-label>{{ label }}</veui-label></slot>
     </span>
@@ -12,11 +12,13 @@
 <script>
 import Label from '../Label'
 import { type, rule } from '../../managers'
-import { isBoolean, assign, get, last } from 'lodash'
+import { isBoolean, get, last } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
 import '../../icons'
 import Vue from 'vue'
+const { computed: form } = getTypedAncestorTracker('form')
+const { computed: fieldset } = getTypedAncestorTracker('fieldset')
 
 export default {
   name: 'veui-field',
@@ -25,7 +27,6 @@ export default {
     'veui-icon': Icon,
     'veui-label': Label
   },
-  mixins: [getTypedAncestorTracker('form')],
   props: {
     label: String,
     name: String,
@@ -43,7 +44,7 @@ export default {
       initialData: null
     }
   },
-  computed: assign({
+  computed: {
     validity () {
       return this.validities[0] || {
         valid: true
@@ -66,6 +67,9 @@ export default {
         rule.initRules(rules)
       }
       return rules
+    },
+    isRequired () {
+      return this.localRules && this.localRules.some(perRule => perRule.name === 'required')
     },
     interactiveRulesMap () {
       let map = {}
@@ -97,17 +101,24 @@ export default {
       return map
     },
     realDisabled () {
-      return this.disabled || (this.fieldset && this.fieldset.realDisabled)
+      let {disabled, fieldset, form} = this
+      return disabled || (fieldset && fieldset.realDisabled) || (form && form.disabled)
     },
     realReadonly () {
-      return this.readonly || (this.fieldset && this.fieldset.realReadonly)
-    }
-  }),
+      let {readonly, fieldset, form} = this
+      return readonly || (fieldset && fieldset.realReadonly) || (form && form.readonly)
+    },
+    ...form,
+    ...fieldset
+  },
   methods: {
     getFieldValue () {
       return get(this.form.data, this.field)
     },
     resetValue () {
+      // 清空错误消息，为什么要先做，因为有可能是个fieldset，可以清错误，但是没有值
+      this.validities = []
+
       if (!this.field) {
         return
       }
@@ -131,10 +142,11 @@ export default {
     validate (rules = this.localRules) {
       let res = rule.validate(this.getFieldValue(), rules)
       let name = this.name || 'anonymous'
-      if (isBoolean(res) && res) {
-        this.hideValidity(name)
-      } else {
-        !this.validities.some(validity => validity.fields === name) && this.validities.unshift({
+      // 把之前同类型的清掉
+      this.hideValidity(name)
+      // 如果有新的错，放进去，这样可以更新错误消息
+      if (!isBoolean(res) || !res) {
+        this.validities.unshift({
           valid: false,
           message: res,
           fields: name
@@ -149,7 +161,11 @@ export default {
       this.name && this.form.$emit('interact', eventName, this.name)
     },
     hideValidity (fields) {
-      this.$set(this, 'validities', this.validities.filter(validity => validity.fields !== fields))
+      if (!fields) {
+        this.validities = []
+      } else {
+        this.$set(this, 'validities', this.validities.filter(validity => validity.fields !== fields))
+      }
     }
   },
   created () {
