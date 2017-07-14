@@ -11,7 +11,8 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "publish": "rm -rf ./components ./directives ./managers ./mixins ./styles ./plugins ./utils ./index.js ./icons.js"
+    "prepublishOnly": "cp -r ./src/* .",
+    "publish": "rm -rf ./components ./directives ./managers ./mixins ./plugins ./utils ./icons.js ./index.js"
   },
   "module": "index.js",
   "dependencies": {
@@ -29,7 +30,7 @@
     "babel-eslint": "^7.1.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.2",
     "babel-loader": "^6.2.10",
-    "babel-plugin-veui": "0.0.1",
+    "babel-plugin-veui": "0.2.0",
     "babel-plugin-istanbul": "^3.1.2",
     "babel-plugin-lodash": "^3.2.11",
     "babel-plugin-syntax-jsx": "^6.18.0",

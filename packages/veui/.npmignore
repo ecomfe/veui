@@ -1,3 +1,4 @@
+.babelrc
 .editorconfig
 .eslintrc.js
 .gitignore
@@ -11,5 +12,4 @@ node_modules
 src
 static
 test
-index.html
 publish.sh
