@@ -1,0 +1,69 @@
+@import "../lib.less";
+
+.veui-fieldset {
+  clear: both;
+
+  &-required > .veui-form-label::after {
+    .veui-field-require();
+  }
+
+  &.veui-field-no-label::before,
+  & > .veui-field-no-label::before {
+    width: auto;
+  }
+
+  & > [class*="veui"]:not([class*="veui-form-label"]):not([class*="veui-span"]) {
+    display: inline-block;
+  }
+
+  & > [class*="veui"]:not([class*="veui-form-label"]) {
+    & + [class*="veui"],
+    & + .veui-span {
+      margin-left: 10px;
+    }
+  }
+
+  &[ui~="alt"] {
+    .veui-shadow();
+
+    & > .veui-form-label,
+    & > .veui-field:first-child .veui-form-label {
+      padding-left: 10px;
+    }
+
+    & [class*="veui"][ui~="alt"] {
+      border: none;
+      box-shadow: none;
+    }
+
+    &,
+    & > .veui-form-label,
+    & > .veui-field > .veui-form-label {
+      background-color: @veui-gray-color-sup-3;
+      border-color: @veui-gray-color-sup-3;
+      color: @veui-text-color-normal;
+    }
+  }
+
+  &.veui-field-no-tip > .veui-field-no-tip:last-child .veui-field-error {
+    position: static;
+    display: inline-block;
+    margin-left: 10px;
+    height: 36px;
+    line-height: 36px;
+  }
+
+  & .veui-form-tip + .veui-field-error,
+  & .veui-field .veui-field-error,
+  & > .veui-field-no-tip .veui-field-error {
+    position: absolute;
+    display: block;
+    margin-left: 0;
+    height: @veui-field-gap;
+    line-height: @veui-field-gap;
+  }
+
+  & .veui-form-label ~ .veui-field-error {
+    margin-left: @veui-form-label-width;
+  }
+}

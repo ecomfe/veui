@@ -1,0 +1,12 @@
+.veui-dropdown-overflow {
+  &::after {
+    content: "";
+    .absolute(_, 1px, 3px);
+    .vertical-gradient(rgba(255, 255, 255, 0), #fff);
+    .border-bottom-radius(2px);
+    height: 24px;
+  }
+  &-scroll-end::after {
+    opacity: 0;
+  }
+}

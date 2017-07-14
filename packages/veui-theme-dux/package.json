@@ -1,0 +1,17 @@
+{
+  "name": "veui-theme-dux",
+  "version": "0.2.0",
+  "description": "DUX theme for VEUI.",
+  "main": "index.js",
+  "keywords": [
+    "veui",
+    "vue",
+    "baidu",
+    "less"
+  ],
+  "author": "ecomfe",
+  "license": "MIT",
+  "dependencies": {
+    "less-plugin-est": "^2.0.5"
+  }
+}

@@ -1,0 +1,106 @@
+@import "../lib.less";
+@import (reference) "../dropdown.less";
+@import (reference) "../input.less";
+
+.veui-datepicker {
+  &:extend(._veui-dropdown-button all);
+
+  .veui-field-invalid & .veui-button.veui-datepicker-button {
+    &:extend(._veui-input-invalid all);
+  }
+
+  position: relative;
+  display: inline-block;
+  width: 160px;
+
+  &-overlay {
+    &:extend(._veui-dropdown-overlay all);
+  }
+
+  &-empty {
+    .veui-button {
+      color: @veui-text-color-weak;
+    }
+  }
+
+  &-clear {
+    display: none;
+    .absolute(10px, 12px, _, _);
+    .size(16px);
+    background: #fff;
+    outline: none;
+    border: none;
+    padding: 0;
+    color: @veui-text-color-weak;
+    cursor: pointer;
+
+    &:hover {
+      color: @veui-text-color-normal;
+    }
+  }
+
+  &-clear:hover,
+  .veui-button:hover + &-clear {
+    display: block;
+  }
+
+  &-range {
+    width: 300px;
+
+    .veui-datepicker-label {
+      width: (300px - 12px * 4 - 16px * 2) / 2;
+    }
+  }
+
+  &-tilde {
+    display: inline-block;
+    line-height: 1;
+    vertical-align: middle;
+    width: 16px;
+    margin: 0 12px;
+  }
+
+  &-shortcuts {
+    height: 41px;
+    padding: 8px 10px;
+    border-top: 1px solid @veui-gray-color-sup-2;
+  }
+
+  &-shortcut {
+    height: 24px;
+    margin-right: 10px;
+    padding: 0 9px;
+    border: 1px solid transparent;
+    background: none;
+    font-size: @veui-font-size-small;
+    color: @veui-text-color-weak;
+    border-radius: 2px;
+    outline: none;
+
+    &:hover {
+      color: @veui-theme-color-primary;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &-selected {
+      border-color: @veui-theme-color-primary;
+      color: @veui-theme-color-primary;
+    }
+  }
+
+  &[ui~="alt"] {
+    .veui-button {
+      border-color: @veui-gray-color-sup-3;
+      background-color: @veui-gray-color-sup-3;
+    }
+
+    .veui-button:hover,
+    .veui-button:focus {
+      border-color: @veui-gray-color-sup-4;
+      background-color: @veui-gray-color-sup-4;
+    }
+  }
+}

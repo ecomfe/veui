@@ -1,0 +1,90 @@
+@import "../lib.less";
+
+.veui-table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+
+  &-cell {
+    display: inline-block;
+    line-height: 30px;
+  }
+
+  th,
+  td {
+    height: 54px;
+    padding: 12px;
+    color: @veui-gray-color-normal;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  th {
+    font-weight: @veui-font-weight-bold;
+  }
+
+  td {
+    border: 1px solid @veui-gray-color-sup-2;
+    border-style: solid none;
+  }
+
+  tfoot th {
+    border-top: none;
+  }
+
+  &[ui~="slim"] {
+    th,
+    td {
+      height: 48px;
+      .padding(9px, _);
+    }
+  }
+
+  &[ui~="alt"] {
+    thead th {
+      color: @veui-text-color-weak;
+    }
+
+    thead,
+    tfoot {
+      background-color: @veui-gray-color-sup-4;
+    }
+  }
+
+  td&-no-data {
+    text-align: center;
+  }
+
+  &-selected-row td {
+    background-color: @veui-theme-color-sup-4;
+  }
+
+  .veui-button + .veui-button {
+    margin-left: 30px;
+  }
+
+  &-header {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  &-sorter {
+    margin-left: 5px;
+    color: @veui-gray-color-sup-1;
+    vertical-align: middle;
+    cursor: pointer;
+
+    &-active {
+      color: @veui-gray-color-weak;
+    }
+  }
+
+  & &-column-center {
+    text-align: center;
+  }
+
+  & &-column-right {
+    text-align: right;
+    padding-right: 38px;
+  }
+}

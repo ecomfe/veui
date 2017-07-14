@@ -1,0 +1,73 @@
+@import "../lib.less";
+@import (reference) "../input.less";
+
+.veui-input,
+.veui-textarea {
+  .veui-field-invalid & {
+    &:extend(._veui-input-invalid all);
+  }
+
+  height: @veui-height-normal;
+  width: 300px;
+  line-height: 1;
+  vertical-align: middle;
+  border: 1px solid @veui-theme-color-primary;
+  border-radius: 2px;
+  border-color: @veui-gray-color-sup-1;
+  background-color: #fff;
+  font-size: @veui-font-size-normal;
+  box-shadow: 0 0.5px 2px 0 rgba(0, 0, 0, 0.1) inset;
+
+  &:hover {
+    border-color: @veui-theme-color-primary;
+  }
+
+  &:focus {
+    border-color: @veui-theme-color-primary;
+    .veui-shadow(glow, @veui-theme-color-primary);
+    outline: none;
+  }
+
+  &[readonly],
+  &:disabled {
+    background-color: @veui-gray-color-sup-3;
+    border-color: @veui-gray-color-sup-1;
+    color: @veui-text-color-weak;
+    .veui-shadow(none);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: @veui-gray-color-weak;
+  }
+}
+
+.veui-input {
+  padding: 0 11px;
+  &[ui~="large"] {
+    height: @veui-height-large;
+    font-size: @veui-font-size-large;
+  }
+
+  &[ui~="small"] {
+    height: @veui-height-small;
+    font-size: @veui-font-size-small;
+  }
+}
+
+.veui-textarea {
+  padding: 6.5px 12px;
+  line-height: 1.5;
+  resize: none;
+
+  &[rows] {
+    height: auto;
+  }
+
+  &.veui-textarea-resizable {
+    resize: both;
+  }
+}

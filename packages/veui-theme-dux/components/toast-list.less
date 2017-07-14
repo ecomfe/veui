@@ -1,0 +1,15 @@
+@import "../lib.less";
+
+.veui-toast-list {
+  .fixed(@veui-nav-bar-height + 15px, _, _, 50%);
+  transform: translateX(-50%);
+  background: none;
+
+  .veui-toast {
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

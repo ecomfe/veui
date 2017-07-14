@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="96px" height="96px" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.1 (35376) - http://www.bohemiancoding.com/sketch -->
+    <title>solid_ok</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-1056.000000, -96.000000)" fill="#000000">
+            <g id="solid_ok" transform="translate(1056.000000, 96.000000)">
+                <path d="M48,96 C21.490332,96 0,74.509668 0,48 C0,21.490332 21.490332,0 48,0 C74.509668,0 96,21.490332 96,48 C96,74.509668 74.509668,96 48,96 Z M34.2539935,46.3858082 C31.9171345,44.0363926 28.1181583,44.0262133 25.7687426,46.3630722 C23.4193268,48.6999311 23.4091475,52.4989074 25.7460065,54.8483231 L36.708298,65.8695186 C39.0692023,68.243109 42.915872,68.2254708 45.2549096,65.830329 L70.2926184,40.1920675 C72.607833,37.8213199 72.562815,34.0225968 70.1920674,31.7073818 C67.8213198,29.3921669 64.0225968,29.437185 61.7073816,31.8079325 L40.9230974,53.0907476 L34.2539935,46.3858082 Z" id="Combined-Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

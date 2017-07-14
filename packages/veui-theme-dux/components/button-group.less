@@ -1,0 +1,75 @@
+@import "../lib.less";
+
+.veui-button-group {
+  .veui-button {
+    /* border: 1px solid @veui-gray-color-sup-1; */
+
+    &:not(:first-child):not(:last-child):not(.veui-button-multiple) {
+      border-radius: 0;
+    }
+  }
+
+  &-horiztontal {
+    .veui-button:not(:last-child):not(.veui-button-multiple) {
+      border-right: none;
+    }
+
+    .veui-button {
+      &:first-child:not(.veui-button-multiple) {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      &:last-child {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+
+      &[ui~='link'] {
+        margin-right: 10px;
+      }
+
+      &.veui-button-multiple {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  &.veui-button-group-vertical {
+    .veui-button:not(:last-child):not(.veui-button-multiple) {
+      border-bottom: none;
+    }
+
+    .veui-button {
+      &:first-child {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      &:last-child {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+    }
+  }
+
+  &:hover,
+  &:active {
+    border-color: @veui-theme-color-hover;
+  }
+
+  .veui-button-active {
+    background-color: @veui-theme-color-primary;
+    color: #fff;
+    .veui-shadow();
+    border-color: @veui-theme-color-primary;
+
+    &:hover {
+      color: @veui-gray-color-sup-1;
+    }
+  }
+
+  .veui-button.veui-button-vertical {
+      display: block;
+  }
+}

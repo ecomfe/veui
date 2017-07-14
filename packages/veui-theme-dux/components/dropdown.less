@@ -1,0 +1,29 @@
+@import "../lib.less";
+@import (reference) "../dropdown.less";
+@import "../dropdown-overflow.less";
+
+.veui-dropdown {
+  &:extend(._veui-dropdown-button all);
+  display: inline-block;
+  width: 110px;
+
+  &-button {
+
+  }
+
+  &-options {
+    &:extend(._veui-dropdown-overlay all);
+    min-width: 110px;
+    max-height: 280px;
+    overflow-y: auto;
+    background-color: #fff;
+  }
+
+  &-option {
+    &:extend(._veui-dropdown-option all);
+  }
+
+  &[ui~="link"] &-button {
+    padding: 9px 12px;
+  }
+}

@@ -1,0 +1,49 @@
+@import "../lib.less";
+
+.veui-alert-box {
+  text-align: center;
+
+  .veui-dialog-content-head {
+    height: 30px;
+
+    &-title {
+      display: none;
+    }
+  }
+
+  &-title {
+    font-size: 18px;
+    font-weight: 400;
+    margin: 20px 0 0 0;
+  }
+
+  &-content {
+    margin-top: 15px;
+  }
+
+  .veui-dialog-content-foot {
+    padding: 30px 20px;
+    text-align: center;
+  }
+
+  .veui-dialog-content-body {
+    padding-top: 0;
+  }
+
+  &-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  &[ui~="success"] .veui-alert-box-icon {
+    color: @veui-success-color-primary;
+  }
+
+  &[ui~="info"] .veui-alert-box-icon {
+    color: @veui-theme-color-primary;
+  }
+
+  &[ui~="error"] .veui-alert-box-icon {
+    color: @veui-alert-color-primary;
+  }
+}
