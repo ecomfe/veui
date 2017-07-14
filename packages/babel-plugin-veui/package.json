@@ -4,7 +4,7 @@
   "description": "Import VEUI components with ease.",
   "main": "dist/index.js",
   "scripts": {
-    "build": "babel src --out-dir dist",
+    "build": "node ./build/components.js && babel src --out-dir dist",
     "test": "npm run build && ava",
     "prepare": "npm build"
   },

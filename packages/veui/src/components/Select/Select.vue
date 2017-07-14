@@ -40,7 +40,7 @@
                 v-bind="subOption"
                 :selected="subOption.value === value"
                 :key="subOption.value"
-                @select="handleSelect">
+                @select="handleSelect(subOption)">
                 <slot name="option" v-bind="subOption" :selected="option.value === value"></slot>
               </veui-option>
             </div>
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import Icon from '../Icon'
 import Button from '../Button'
 import Option from './Option'
@@ -88,6 +89,11 @@ export default {
     },
     options: Array
   },
+  data () {
+    return {
+      localValue: this.value
+    }
+  },
   computed: {
     labelMap () {
       return extractOptions(this.options, {})
@@ -100,19 +106,30 @@ export default {
     }
   },
   methods: {
-    handleSelect (option) {
-      if (option.disabled) {
+    handleSelect ({ disabled, value }) {
+      if (disabled) {
         return
       }
       this.expanded = false
-      this.$emit('change', option.value)
+      this.localValue = value
+      this.$emit('change', value)
+    }
+  },
+  watch: {
+    value (val) {
+      this.localValue = val
     }
   }
 }
 
 function extractOptions (options, map) {
   options.forEach(({ label, value, options }) => {
-    map[value] = label
+    if (value) {
+      if (map[value]) {
+        Vue.utils.warn(`Duplicate item value [${value}] for select options.`)
+      }
+      map[value] = label
+    }
     if (options) {
       extractOptions(options, map)
     }
