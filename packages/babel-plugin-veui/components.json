@@ -194,5 +194,9 @@
   {
     "name": "Uploader",
     "path": "Uploader.vue"
+  },
+  {
+    "name": "SearchBox",
+    "path": "SearchBox.vue"
   }
 ]
