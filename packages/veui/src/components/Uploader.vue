@@ -31,12 +31,12 @@
               <span :class="classType + '-name'"
                 :title="uiProps.indexOf('ellipsis') > -1 ? file.name : ''">{{file.name}}</span>
               <span :class="classType + '-size'">{{convertSizeUnit(file.size)}}</span>
-              <veui-button ui="link delete" @click="$emit('remove', file)"><icon name="cross"></icon></veui-button>
+              <veui-button ui="link delete" @click="$emit('remove', file)" :disabled="realDisabled"><icon name="cross"></icon></veui-button>
             </template>
             <template v-else-if="uploaderType === 'image'">
               <img :src="file.src" :alt="file.alt || ''">
               <div :class="classType + '-mask'">
-                <veui-button ui="link" @click="$emit('remove', file)">移除</veui-button>
+                <veui-button ui="link" @click="$emit('remove', file)" :disabled="realDisabled">移除</veui-button>
               </div>
             </template>
             <transition name="veui-uploader-fade">
