@@ -13,7 +13,7 @@
     </section>
     <section>
       <h2>路由模式：</h2>
-      <veui-tabs ui="default" :active.sync="$route.path">
+      <veui-tabs ui="default" :active.sync="$route.fullPath">
         <veui-tab label="Button" to="/tabs/button"><router-view></router-view></veui-tab>
         <veui-tab label="Input" to="/tabs/input"><router-view></router-view></veui-tab>
         <veui-tab label="Switch" to="/tabs/switch"><router-view></router-view></veui-tab>

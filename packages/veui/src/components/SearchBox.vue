@@ -2,21 +2,18 @@
   <div class="veui-search-box"
     :class="[{'veui-disabled': realDisabled, 'veui-readonly': realReadonly, 'veui-search-box-suggestion-expanded': expanded}]"
     :ui="ui"
-    @click="_handleClickBox"
+    @click="handleClickBox"
   >
     <veui-input
       ref="input"
-      :ui="ui"
       :name="realName"
       :readonly="realReadonly"
       :disabled="realDisabled"
-      :autofocus="autofocus"
-      :selectOnFocus="selectOnFocus"
-      :composition="composition"
+      v-bind="attrs"
       v-model="localValue"
-      @input="_handleInput"
+      @input="handleInput"
       @focus="inputFocus = true"
-      @blur="_handleBlur"
+      @blur="handleBlur"
     >
     </veui-input>
     <div class="veui-search-box-others"
@@ -77,15 +74,18 @@ export default {
   },
   props: {
     ui: String,
-    suggestions: Array,
-    ...pick(Input.props, [
+    suggestions: {
+      type: Array,
+      default: []
+    },
+    ...pick(Input.props,
       'autocomplete',
       'placeholder',
       'value',
       'autofocus',
       'selectOnFocus',
       'composition'
-    ])
+    )
   },
   data () {
     return {
@@ -96,47 +96,53 @@ export default {
     }
   },
   computed: {
+    attrs () {
+      return pick(this, 'ui', 'autocomplete', 'autofocus', 'selectOnFocus', 'composition')
+    },
     placeholderShown () {
       // 目前从Input组件上没法感知是否是输入法状态，暂时先focus的时候，隐藏placeholder
       // 等Input组件可以上透这种信息，再优化
       return !this.localValue && !this.inputFocus
+    },
+    realExpanded () {
+      return !this.hideSuggestion && this.suggestions.length
     }
   },
   watch: {
-    value (newValue) {
-      this.localValue = newValue
+    value (value) {
+      this.localValue = value
     },
-    hideSuggestion (newValue) {
-      this.expanded = !newValue && this.suggestions && this.suggestions.length > 0
-    },
-    suggestions (newValue) {
-      this.expanded = !this.hideSuggestion && newValue && newValue.length > 0
+    realExpanded (value) {
+      this.expanded = this.realExpanded
     }
   },
   methods: {
-    _handleInput (value, $event) {
+    handleInput (value, $event) {
       this.hideSuggestion = false
       this.$emit('input', value, $event)
     },
-    _handleClickBox () {
+    handleClickBox () {
       if (!this.realDisabled && !this.realReadonly) {
-        this.focusInput()
+        this.focus()
       }
     },
-    _handleBlur () {
+    handleBlur () {
       this.inputFocus = false
       // 目前还有一个问题，tab切换时input blur不会引起suggestion的隐藏
     },
-    focusInput () {
-      this.$refs.input.$el.focus()
+    focus () {
+      this.$refs.input.focus()
     },
     selectSuggestion (text) {
       this.hideSuggestion = true
       this.localValue = text
-      this.focusInput()
+      this.focus()
     },
     searchText ($event) {
       this.$emit('search', this.localValue, $event)
+    },
+    activate () { // for label activation
+      this.focus()
     }
   }
 }

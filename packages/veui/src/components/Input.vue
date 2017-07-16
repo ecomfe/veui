@@ -45,7 +45,10 @@ export default {
     },
     autocomplete: String,
     placeholder: String,
-    value: [String, Number],
+    value: {
+      type: [String, Number],
+      default: ''
+    },
     autofocus: Boolean,
     selectOnFocus: Boolean,
     composition: Boolean,
