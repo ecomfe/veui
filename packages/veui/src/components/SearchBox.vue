@@ -1,6 +1,7 @@
 <template>
   <div class="veui-search-box"
-    :class="[{'veui-disabled': realDisabled, 'veui-readonly': realReadonly, 'veui-search-box-suggestion-expanded': expanded}]"
+    :class="[{'veui-disabled': realDisabled, 'veui-readonly': realReadonly, 'veui-focus': inputFocus,
+      'veui-search-box-suggestion-expanded': expanded}]"
     :ui="ui"
     @click="handleClickBox"
   >
@@ -76,7 +77,9 @@ export default {
     ui: String,
     suggestions: {
       type: Array,
-      default: []
+      default () {
+        return []
+      }
     },
     ...pick(Input.props,
       'autocomplete',
@@ -105,7 +108,7 @@ export default {
       return !this.localValue && !this.inputFocus
     },
     realExpanded () {
-      return !this.hideSuggestion && this.suggestions.length
+      return !this.hideSuggestion && this.suggestions && this.suggestions.length
     }
   },
   watch: {
@@ -113,7 +116,7 @@ export default {
       this.localValue = value
     },
     realExpanded (value) {
-      this.expanded = this.realExpanded
+      this.expanded = !!this.realExpanded
     }
   },
   methods: {
