@@ -53,8 +53,8 @@ export class PromptManager extends SpecialDialog {
         ...options,
         content,
         title,
-        ok: resolve,
-        cancel: reject
+        ok: value => resolve({ cancelled: false, value }),
+        cancel: () => resolve({ cancelled: true })
       })
     })
   }

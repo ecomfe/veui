@@ -49,8 +49,8 @@ export class ConfirmManager extends SpecialDialog {
         ...options,
         content,
         title,
-        ok: resolve,
-        cancel: reject
+        ok: () => resolve({ cancelled: false }),
+        cancel: () => resolve({ cancelled: true })
       })
     })
   }
