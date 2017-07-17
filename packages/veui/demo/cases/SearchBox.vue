@@ -25,7 +25,7 @@
       <h2>Suggestion</h2>
       <p>
         <veui-search-box
-          v-model="value"
+          v-model="value2"
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions1"
@@ -116,6 +116,7 @@ export default {
     return {
       name: 'name',
       value: '测试值',
+      value2: '测试值',
       placeholder: '百度(placeholder)',
       suggestions1: [],
       suggestions2: [],
