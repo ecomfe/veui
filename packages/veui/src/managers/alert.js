@@ -39,29 +39,38 @@ export class AlertManager extends SpecialDialog {
   }
 
   success (content, title, options = {}) {
-    this.create({
-      content,
-      title,
-      type: 'success',
-      ...options
+    return new Promise(resolve => {
+      this.create({
+        ...options,
+        content,
+        title,
+        type: 'success',
+        ok: resolve
+      })
     })
   }
 
   info (content, title, options = {}) {
-    this.create({
-      content,
-      title,
-      type: 'info',
-      ...options
+    return new Promise(resolve => {
+      this.create({
+        ...options,
+        content,
+        title,
+        type: 'info',
+        ok: resolve
+      })
     })
   }
 
   error (content, title, options = {}) {
-    this.create({
-      content,
-      title,
-      type: 'error',
-      ...options
+    return new Promise(resolve => {
+      this.create({
+        ...options,
+        content,
+        title,
+        type: 'error',
+        ok: resolve
+      })
     })
   }
 }

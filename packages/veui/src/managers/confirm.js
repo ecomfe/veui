@@ -44,10 +44,14 @@ export class ConfirmManager extends SpecialDialog {
   }
 
   popup (content, title, options = {}) {
-    this.create({
-      content,
-      title,
-      ...options
+    return new Promise((resolve, reject) => {
+      this.create({
+        ...options,
+        content,
+        title,
+        ok: resolve,
+        cancel: reject
+      })
     })
   }
 }

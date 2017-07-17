@@ -38,19 +38,15 @@ export default {
   },
   methods: {
     popupAlerts () {
-      alertManager.success('成功了', '成功标题', {
-        ok () {
-          alert('祝贺你成功了！')
-        }
+      alertManager.success('成功了', '成功标题').then(() => {
+        alert('祝贺你成功了！')
       })
       alertManager.info('提示信息', '提示标题')
       alertManager.error('出错了', '出错标题')
     },
     popupConfirms () {
-      confirmManager.popup('真的要删除吗？删除之后不能恢复！', '确认一下', {
-        ok () {
-          alert('原来你真的想要删除！')
-        }
+      confirmManager.popup('真的要删除吗？删除之后不能恢复！', '确认一下').then(() => {
+        alert('原来你真的想要删除！')
       })
     },
     popupToasts () {
@@ -64,15 +60,9 @@ export default {
     popupPrompt () {
       promptManager.popup('content', 'title', {
         content: 'content',
-        title: 'title',
-        ok (value) {
-          alert(value)
-        }
-      })
+        title: 'title'
+      }).then(value => alert(value))
     }
   }
 }
 </script>
-
-<style lang="less">
-</style>
