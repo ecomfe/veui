@@ -29,13 +29,12 @@
           <veui-uploader uploaderType="image"
             action="/upload"
             request-mode="xhr"
-            ui="multiline vertical bottom-mask list-icon"
+            ui="multiline vertical bottom-mask list-icon button"
             :disabled="false"
             :max-count="1"
             :value="storeData1.avatar"
             :max-size="10"
             preview-image
-            needButton
             extention-types="jpg,jpeg,png"></veui-uploader>
           <!-- <p class="output">{{ outputData.avatar }}</p> -->
         </veui-field>
@@ -156,13 +155,12 @@
           <veui-uploader uploaderType="image"
             action="/upload"
             request-mode="xhr"
-            ui="multiline vertical bottom-mask list-icon"
+            ui="multiline vertical bottom-mask list-icon button"
             :disabled="false"
             :max-count="1"
             :value="storeData1.avatar"
             :max-size="10"
             preview-image
-            needButton
             extention-types="jpg,jpeg,png"></veui-uploader>
           <!-- <p class="output">{{ outputData.avatar }}</p> -->
         </veui-field>

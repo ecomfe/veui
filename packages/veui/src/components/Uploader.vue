@@ -1,7 +1,7 @@
 <template>
   <div class="veui-uploader" :ui="ui">
     <div class="veui-uploader-button-container">
-      <label v-if="uploaderType === 'file' || (uploaderType === 'image' && needButton)"
+      <label v-if="uploaderType === 'file' || (uploaderType === 'image' && ui.indexOf('button') > -1)"
         class="veui-button veui-uploader-input-label"
         :class="{'veui-uploader-input-label-disabled': realDisabled}"
         ui="aux" ref="label">
@@ -14,8 +14,8 @@
     <transition name="veui-uploader-warning">
       <div v-if="warning.typeInvalid || warning.sizeInvalid" class="veui-uploader-warning-container">
         <slot name="warning" :warning="warning">
-          <span v-if="warning.typeInvalid" class="veui-uploader-warning"><slot name="typeInvalidText">文件类型不符合要求！</slot></span>
-          <span v-if="warning.sizeInvalid" class="veui-uploader-warning"><slot name="sizeInvalidText">文件大小超过限制！</slot></span>
+          <span v-if="warning.typeInvalid" class="veui-uploader-warning"><slot name="type-invalid-text">文件类型不符合要求！</slot></span>
+          <span v-if="warning.sizeInvalid" class="veui-uploader-warning"><slot name="size-invalid-text">文件大小超过限制！</slot></span>
         </slot>
       </div>
     </transition>
@@ -43,7 +43,7 @@
               <div v-if="file.status === 'success'"
                 :class="classType + '-success'"
                 @click="updateFileList(file, {status: null})">
-                <span class="veui-uploader-success"><slot name="successText">上传成功！</slot></span>
+                <span class="veui-uploader-success"><slot name="success-text">上传成功！</slot></span>
                 <icon name="check-circle"></icon>
               </div>
             </transition>
@@ -54,7 +54,7 @@
             <veui-uploader-progress :type="uploadingContent" :loaded="file.loaded" :total="file.total"
               :class="uploaderType === 'image' ? classType + '-status' : ''"
               :convertSizeUnit="convertSizeUnit">
-              <slot name="uploadingText">上传中...</slot>
+              <slot name="uploading-text">上传中...</slot>
             </veui-uploader-progress>
             <veui-button v-if="uploaderType === 'file'" ui="link delete"
               @click="cancelFile(file)"><icon name="close"></icon></veui-button>
@@ -65,14 +65,14 @@
         <template v-else-if="file.status === 'failure'">
           <slot name="failure-content" :file="file">
             <div :class="classType + '-status'">
-              <span class="veui-uploader-failure"><slot name="failureText">上传失败！</slot>{{file.failureReason}}</span>
+              <span class="veui-uploader-failure"><slot name="failure-text">上传失败！</slot>{{file.failureReason}}</span>
             </div>
             <veui-button :ui="uploaderType === 'file' ? 'link' : 'aux operation'"
               @click="retry(file)">重试</veui-button>
           </slot>
         </template>
       </li>
-      <li v-if="uploaderType === 'image' && !needButton" key="input">
+      <li v-if="uploaderType === 'image' && ui.indexOf('button') === -1" key="input">
         <label class="veui-uploader-input-label-image"
           :class="{'veui-uploader-input-label-disabled': realDisabled}"
           ref="label"><input hidden type="file" ref="input" @change="onChange" :name="realName" :disabled="realDisabled" :accept="accept" multiple>
@@ -166,13 +166,9 @@ export default {
     },
     extentionTypes: [Array, String],
     accept: String,
-    needButton: {
-      type: Boolean,
-      default: false
-    },
     ui: String,
-    'max-count': Number,
-    'max-size': Number,
+    maxCount: Number,
+    maxSize: Number,
     payload: Object,
     uploadingContent: {
       type: String,

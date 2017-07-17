@@ -19,18 +19,17 @@
       @fail="onFailure">
       <template slot="tip">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
-    <h2>图片上传模式，用按钮上传文件needButton="true"，上传进度以进度条显示uploadingContent="progressBar"</h2>
+    <h2>图片上传模式，用按钮上传文件ui="button"，上传进度以进度条显示uploadingContent="progressBar"</h2>
     <veui-uploader uploaderType="image"
       name="file"
       action="/upload"
       v-model="files"
       :max-count="3"
       :max-size="10"
-      need-button
       extention-types="jpg,jpeg,gif"
       accept="image/jpg,image/jpeg,image/gif"
       :payload="payload"
-      ui="horizontal bottom-mask"
+      ui="horizontal bottom-mask button"
       uploading-content="progressBar"
       @remove="removeFile"
       @cancel="cancelUploading"
