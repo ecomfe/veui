@@ -45,8 +45,10 @@ export default {
       alertManager.error('出错了', '出错标题')
     },
     popupConfirms () {
-      confirmManager.popup('真的要删除吗？删除之后不能恢复！', '确认一下').then(() => {
-        alert('原来你真的想要删除！')
+      confirmManager.popup('真的要删除吗？删除之后不能恢复！', '确认一下').then(({ cancelled }) => {
+        if (!cancelled) {
+          alert('原来你真的想要删除！')
+        }
       })
     },
     popupToasts () {
@@ -61,7 +63,11 @@ export default {
       promptManager.popup('content', 'title', {
         content: 'content',
         title: 'title'
-      }).then(value => alert(value))
+      }).then(({ cancelled, value }) => {
+        if (!cancelled) {
+          alert(value)
+        }
+      })
     }
   }
 }
