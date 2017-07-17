@@ -108,7 +108,7 @@ export default {
       return !this.localValue && !this.inputFocus
     },
     realExpanded () {
-      return !this.hideSuggestion && this.suggestions && this.suggestions.length
+      return this.localValue && !this.hideSuggestion && this.suggestions && this.suggestions.length
     }
   },
   watch: {
