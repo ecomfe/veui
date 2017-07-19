@@ -83,7 +83,7 @@
      :id="iframeId" :name="iframeId" class="veui-uploader-hide"></iframe>
     <form v-if="requestMode === 'iframe'" ref="form" :action="`${action}?callback=parent.${callbackNamespace}['${callbackFuncName}']`" enctype="multipart/form-data"
       method="POST" :target="iframeId" class="veui-uploader-hide">
-      <input v-for="(value, key) in payload" :name="key" :value="value">
+      <input v-for="(value, key) in payload" :name="key" :value="value" :key="key">
       <input v-if="iframeMode === 'callback'" name="callback" :value="`parent.${callbackNamespace}['${callbackFuncName}']`">
     </form>
   </div>

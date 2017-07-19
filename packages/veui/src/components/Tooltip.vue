@@ -12,7 +12,7 @@ const POS_MAP = {
 }
 
 const TRIGGER_MAP = {
-  hover: 'mousemove'
+  hover: 'mouseenter'
 }
 
 export default {
@@ -39,6 +39,11 @@ export default {
     open: {
       type: Boolean,
       default: false
+    }
+  },
+  data () {
+    return {
+      localOpen: this.open
     }
   },
   computed: {
@@ -89,12 +94,34 @@ export default {
       }
     }
   },
+  watch: {
+    open (val) {
+      if (this.localOpen !== val) {
+        this.localOpen = val
+      }
+    },
+    localOpen (val) {
+      if (this.open !== val) {
+        this.$emit('update:open', val)
+      }
+    }
+  },
   methods: {
     openHandler () {
-      this.$emit('update:open', true)
+      this.localOpen = true
     },
     closeHandler () {
-      this.$emit('update:open', false)
+      this.localOpen = false
+    },
+    bindHandler () {
+      if (!this.custom) {
+        if (this.targetNode) {
+          if (!this.targetNode.__bindToolTip__) {
+            this.targetNode.addEventListener(this.localTrigger.open, this.openHandler, false)
+            this.targetNode.__bindToolTip__ = true
+          }
+        }
+      }
     }
   },
   render () {
@@ -109,7 +136,7 @@ export default {
     return (
       <veui-overlay
         target={this.targetNode}
-        open={this.open}
+        open={this.localOpen}
         options={this.overlay}
         overlayClass="veui-tooltip-box">
         <div class="veui-tooltip" ui={this.ui} {...{directives}}>
@@ -120,15 +147,11 @@ export default {
       </veui-overlay>
     )
   },
+  mounted () {
+    this.bindHandler()
+  },
   updated () {
-    if (!this.custom) {
-      if (this.targetNode) {
-        if (!this.targetNode.__bindToolTip__) {
-          this.targetNode.addEventListener(this.localTrigger.open, this.openHandler, false)
-          this.targetNode.__bindToolTip__ = true
-        }
-      }
-    }
+    this.bindHandler()
   },
   beforeDestroy () {
     if (!this.custom) {

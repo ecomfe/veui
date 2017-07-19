@@ -14,7 +14,10 @@
           <template scope="props" slot="foot"><strong>{{ total | currency }}</strong></template>
         </veui-table-column>
         <veui-table-column field="updateDate" title="更新时间" align="center">
-          <template scope="props">{{ props.item.updateDate | date }}</template>
+          <template scope="props">
+            <span :ref="`time-${props.item.id}`">{{ props.item.updateDate | date }}</span>
+            <veui-tooltip :target="`time-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
+          </template>
         </veui-table-column>
         <veui-table-column field="operation" title="操作">
           <template scope="props">
@@ -43,7 +46,7 @@
 <script>
 import moment from 'moment'
 import bus from '../bus'
-import { Button, CheckboxGroup, Table, Column } from 'veui'
+import { Button, CheckboxGroup, Table, Column, Tooltip } from 'veui'
 
 export default {
   name: 'table-demo',
@@ -51,6 +54,7 @@ export default {
     'veui-button': Button,
     'veui-table': Table,
     'veui-table-column': Column,
+    'veui-tooltip': Tooltip,
     'veui-checkboxgroup': CheckboxGroup
   },
   filters: {
@@ -59,6 +63,9 @@ export default {
     },
     date (value) {
       return moment(value).format('YYYY-MM-DD')
+    },
+    time (value) {
+      return moment(value).format('YYYY-MM-DD HH:mm:ss')
     }
   },
   data () {
