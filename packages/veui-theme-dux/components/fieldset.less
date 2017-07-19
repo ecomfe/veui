@@ -12,15 +12,8 @@
     width: auto;
   }
 
-  & > [class*="veui"]:not([class*="veui-form-label"]):not([class*="veui-span"]) {
-    display: inline-block;
-  }
-
-  & > [class*="veui"]:not([class*="veui-form-label"]) {
-    & + [class*="veui"],
-    & + .veui-span {
-      margin-left: 10px;
-    }
+  & > *:not([class*="veui-form-label"]) + * {
+    margin-left: 10px;
   }
 
   &[ui~="alt"] {
