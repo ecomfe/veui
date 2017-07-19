@@ -13,6 +13,9 @@
     color: @veui-text-color-weak;
     .veui-shadow(none);
 
+    .veui-search-box-icon {
+      cursor: not-allowed;
+    }
     .veui-search-box-icon-cross {
       display: none;
     }
@@ -135,34 +138,36 @@
         color: @veui-gray-color-strong;
       }
     }
-    &:not(.veui-search-box-suggestion-expanded) {
-      .veui-input:not(:active):not(:focus) + .veui-search-box-others,
-      &.veui-disabled .veui-search-box-others,
-      &.veui-readonly .veui-search-box-others {
-        &:not(.veui-search-box-placeholder-hide)  {
-          width: auto;
-          left: 50%;
-          transform: translateX(-50%);
-          .veui-search-box-icons {
-            position: static;
-            display: inline-block;
-            transform: none;
-          }
+    .veui-search-box-others {
+      &.veui-search-box-placeholder-hide {
+        .veui-search-box-placeholder {
+          display: none;
+        }
+      }
 
-          .veui-search-box-placeholder {
-            display: inline-block;
-          }
+      &:not(.veui-search-box-placeholder-hide)  {
+        width: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        .veui-search-box-icons {
+          position: static;
+          display: inline-block;
+          transform: none;
         }
 
-        &.veui-search-box-placeholder-hide {
-          .veui-search-box-placeholder {
-            display: none;
-          }
+        .veui-search-box-placeholder {
+          display: inline-block;
         }
       }
     }
     .veui-search-box-icon-cross {
       display: inline-block;
+    }
+    &.veui-disabled,
+    &.veui-readonly {
+      .veui-search-box-icon-cross {
+        display: none;
+      }
     }
     .veui-search-box-icon {
       color: @veui-gray-color-normal;
