@@ -4,13 +4,6 @@
   vertical-align: top;
   clear: both;
 
-  .veui-form-label {
-    display: inline-block;
-    height: @veui-height-normal;
-    width: @veui-form-label-width;
-    line-height: @veui-height-normal;
-  }
-
   &-required > .veui-form-label::after {
     .veui-field-require();
   }
@@ -21,13 +14,22 @@
     width: @veui-form-label-width;
   }
 
-  .veui-span {
-    display: inline-block;
-  }
-
-  & > *:not([class*="veui-form-label"]):not([class*="veui-span"]):not([class*="error"]) {
+  & > * {
     display: inline-block;
     vertical-align: top;
+  }
+
+  .veui-form-label {
+    display: inline-block;
+    height: @veui-height-normal;
+    width: @veui-form-label-width;
+    line-height: @veui-height-normal;
+    vertical-align: baseline;
+  }
+
+  .veui-span {
+    display: inline-block;
+    vertical-align: baseline;
   }
 
   &-error {
