@@ -165,8 +165,14 @@
     }
     &.veui-disabled,
     &.veui-readonly {
+      .veui-shadow(none);
+
       .veui-search-box-icon-cross {
         display: none;
+      }
+
+      .veui-search-box-icon {
+        color: @veui-gray-color-weak;
       }
     }
     .veui-search-box-icon {
