@@ -47,7 +47,7 @@
       extention-types="jpg,jpeg,gif"
       accept="image/jpg,image/jpeg,image/gif"
       :payload="payload"
-      ui="horizontal ellipsis"
+      ui="horizontal ellipsis button-primary"
       @remove="removeFile"
       @cancel="cancelUploading"
       @success="onSuccess"

@@ -4,21 +4,22 @@
       <label v-if="uploaderType === 'file' || (uploaderType === 'image' && ui.indexOf('button') > -1)"
         class="veui-button veui-uploader-input-label"
         :class="{'veui-uploader-input-label-disabled': realDisabled}"
-        @click="isReplacing = false"
-        ui="aux" ref="label">
-        <icon class="veui-uploader-input-label-icon"
-          name="upload"></icon><slot name="text" v-if="fileList.length < maxCount">选择文件</slot><slot name="replace-text" v-else>重新上传</slot>
+        @click="replacingFile = null"
+        :ui="buttonUI" ref="label">
+        <slot name="button-content" v-if="fileList.length < maxCount"><icon class="veui-uploader-input-label-icon"
+          name="upload"></icon>选择文件</slot>
+        <slot name="replace-button-content" v-else><icon class="veui-uploader-input-label-icon"
+          name="upload"></icon>重新上传</slot>
         <input :id="inputId" hidden type="file" ref="input" @change="onChange" :name="realName" :disabled="realDisabled" :accept="accept" :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
           @click.stop>
       </label>
-      <slot name="button"></slot>
       <span class="veui-uploader-tip"><slot name="tip"></slot></span>
     </div>
     <transition name="veui-uploader-warning">
       <div v-if="warning.typeInvalid || warning.sizeInvalid" class="veui-uploader-warning-container">
         <slot name="warning" :warning="warning">
-          <span v-if="warning.typeInvalid" class="veui-uploader-warning"><slot name="type-invalid-text">文件类型不符合要求！</slot></span>
-          <span v-if="warning.sizeInvalid" class="veui-uploader-warning"><slot name="size-invalid-text">文件大小超过限制！</slot></span>
+          <span v-if="warning.typeInvalid" class="veui-uploader-warning"><slot name="type-invalid">文件类型不符合要求！</slot></span>
+          <span v-if="warning.sizeInvalid" class="veui-uploader-warning"><slot name="size-invalid">文件大小超过限制！</slot></span>
         </slot>
       </div>
     </transition>
@@ -51,7 +52,7 @@
               <div v-if="file.status === 'success'"
                 :class="classType + '-success'"
                 @click="updateFileList(file, {status: null})">
-                <span class="veui-uploader-success"><slot name="success-text">上传成功！</slot></span>
+                <span class="veui-uploader-success"><slot name="success">上传成功！</slot></span>
                 <icon name="check-circle"></icon>
               </div>
             </transition>
@@ -62,7 +63,7 @@
             <veui-uploader-progress :type="uploadingContent" :loaded="file.loaded" :total="file.total"
               :class="uploaderType === 'image' ? classType + '-status' : ''"
               :convertSizeUnit="convertSizeUnit">
-              <slot name="uploading-text">上传中...</slot>
+              <slot name="uploading">上传中...</slot>
             </veui-uploader-progress>
             <veui-button v-if="uploaderType === 'file'" ui="link delete"
               @click="cancelFile(file)"><icon name="close"></icon></veui-button>
@@ -73,7 +74,7 @@
         <template v-else-if="file.status === 'failure'">
           <slot name="failure-content" :file="file">
             <div :class="classType + '-status'">
-              <span class="veui-uploader-failure"><slot name="failure-text">上传失败！</slot>{{file.failureReason}}</span>
+              <span class="veui-uploader-failure"><slot name="failure">上传失败！</slot>{{file.failureReason}}</span>
             </div>
             <veui-button :ui="uploaderType === 'file' ? 'link' : 'aux operation'"
               @click="retry(file)">重试</veui-button>
@@ -83,7 +84,7 @@
       <li v-if="uploaderType === 'image' && ui.indexOf('button') === -1" key="input">
         <label class="veui-uploader-input-label-image"
           :class="{'veui-uploader-input-label-disabled': realDisabled}"
-          @click="isReplacing = false"
+          @click="replacingFile = null"
           ref="label"><input :id="inputId" hidden type="file" ref="input" @change="onChange" :name="realName" :disabled="realDisabled" :accept="accept" :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
           @click.stop>
         </label>
@@ -91,7 +92,7 @@
     </transition-group>
     <iframe v-if="requestMode === 'iframe'" ref="iframe"
      :id="iframeId" :name="iframeId" class="veui-uploader-hide"></iframe>
-    <form v-if="requestMode === 'iframe'" ref="form" :action="queryUrl" enctype="multipart/form-data"
+    <form v-if="requestMode === 'iframe'" ref="form" :action="queryURL" enctype="multipart/form-data"
       method="POST" :target="iframeId" class="veui-uploader-hide">
       <input v-for="(value, key) in payload" :name="key" :value="value">
       <input v-if="iframeMode === 'callback'" name="callback" :value="`parent.${callbackNamespace}['${callbackFuncName}']`">
@@ -103,10 +104,10 @@
 import Icon from './Icon'
 import '../icons'
 import Button from './Button'
-import { endsWith, cloneDeep, filter, map, uniqueId, assign, extend, isNumber } from 'lodash'
+import { endsWith, cloneDeep, uniqueId, assign, isNumber } from 'lodash'
 import { ui, input } from '../mixins'
 import config from '../managers/config'
-import { queryStringify } from '../utils/helper'
+import { stringifyQuery } from '../utils/helper'
 
 config.defaults({
   'uploader.requestMode': 'xhr',
@@ -203,7 +204,6 @@ export default {
       iframeId: uniqueId('veui-uploader-iframe'),
       callbackFuncName: uniqueId('veuiUploaderCallback'),
       onMessage: null,
-      isReplacing: false,
       replacingFile: null,
       currentSubmitingFile: null
     }
@@ -218,31 +218,33 @@ export default {
     }
   },
   computed: {
+    buttonUI () {
+      // 提取ui中以‘button-’开头的部分作为主button的ui
+      let matched = this.ui.match(/button-\S+/g)
+      return matched ? matched.map(s => s.replace('button-', '')).join(' ') : 'aux'
+    },
     classType () {
       return 'veui-uploader-list-' + this.uploaderType
     },
     latestFile () {
       return this.fileList[this.fileList.length - 1]
     },
-    queryUrl () {
-      let queryString = queryStringify(extend(
+    queryURL () {
+      let queryString = stringifyQuery(assign(
         this.requestMode === 'iframe' && this.iframeMode === 'callback'
           ? {callback: `parent.${this.callbackNamespace}['${this.callbackFuncName}']`}
           : {},
         this.payload
       ))
       return `${this.action}${queryString ? '?' + queryString : ''}`
+    },
+    isReplacing () {
+      return !!this.replacingFile
     }
   },
   mounted () {
-    if (this.$slots.button && (this.uploaderType === 'file' || this.ui.indexOf('button') > -1)) {
-      let button = this.$slots.button[0].elm
-      let labelStyle = this.$refs.label.style
-      labelStyle.height = button.offsetHeight + 'px'
-      labelStyle.width = button.offsetWidth + 'px'
-      labelStyle.opacity = 0
-    }
     if (this.requestMode === 'xhr') return
+
     document.body.appendChild(this.$refs.iframe)
     document.body.appendChild(this.$refs.form)
 
@@ -283,7 +285,7 @@ export default {
       this.canceled = false
       let newFiles
       if (this.requestMode === 'xhr') {
-        newFiles = filter(this.$refs.input.files, file => {
+        newFiles = [...this.$refs.input.files].filter(file => {
           return this.validateFile(file)
         })
       } else {
@@ -312,10 +314,10 @@ export default {
         this.isReplacing = false
       } else {
         this.fileList = [
-          ...filter(this.fileList, file => {
+          ...this.fileList.filter(file => {
             return file.status !== 'failure'
           }),
-          ...map(newFiles, file => {
+          ...newFiles.map(file => {
             if (this.requestMode === 'xhr' && (this.uploaderType === 'image' || this.previewImage) && window.URL) {
               file.src = window.URL.createObjectURL(file)
             }
@@ -386,7 +388,7 @@ export default {
         formData.append(key, this.payload[key])
       }
 
-      xhr.open('POST', this.queryUrl, true)
+      xhr.open('POST', this.queryURL, true)
       for (let key in this.headers) {
         xhr.setRequestHeader(key, this.headers[key])
       }
@@ -394,7 +396,6 @@ export default {
       xhr.send(formData)
     },
     replaceFile (file) {
-      this.isReplacing = true
       this.replacingFile = file
     },
     submit (file = this.latestFile) {
