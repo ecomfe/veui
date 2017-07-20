@@ -196,12 +196,15 @@
       text-align: center;
       line-height: @image-size - 2px - 2 * @list-padding;
       position: relative;
-      button[ui~="operation"] {
+
+      button {
         position: absolute;
         min-width: 70px;
-        font-size: 12px;
         height: 30px;
-        bottom: 30px;
+      }
+      button[ui~="operation"] {
+        font-size: @veui-font-size-small;
+        bottom: 20%;
         left: ~"calc(50% - 35px)";
       }
     }
@@ -217,17 +220,26 @@
       height: ~"calc(100% - "2 * @list-padding~")";
       background-color: rgba(0, 0, 0, .5);
       text-align: center;
-      button {
-        vertical-align: middle;
+      .veui-button {
+        position: absolute;
+        cursor: pointer;
+        display: inline-block;
         background: none;
-        color: #fff !important;
+        color: #fff;
         font-size: @veui-font-size-normal;
         width: 100%;
+        left: 0;
       }
-      button:active,
-      button:hover {
+      .veui-button:active,
+      .veui-button:hover {
         background: none;
-        color: #fff !important;
+        color: #fff;
+      }
+      label {
+        top: ~"calc(50% - 19px)";
+      }
+      button {
+        top: ~"calc(50% + 5px)";
       }
     }
     &-status {
@@ -305,7 +317,18 @@
     left: @list-padding;
     width: ~"calc(100% - "2 * @list-padding~")";
     height: 30px;
-    line-height: 30px;
+    .veui-button {
+      top: 9px;
+    }
+    button {
+      width: 2em;
+      left: auto;
+      right: 15px;
+    }
+    label {
+      width: 4em;
+      left: 15px;
+    }
   }
   .veui-button[ui~="delete"] {
     color: @veui-alert-color-primary;

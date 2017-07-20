@@ -1,4 +1,4 @@
-import { includes, camelCase, get } from 'lodash'
+import { includes, camelCase, get, map, keys } from 'lodash'
 
 export function getTypedAncestorTracker (type, name = type) {
   return {
@@ -59,4 +59,8 @@ export function getModelEvent (vm) {
  */
 export function isEmpty (val) {
   return val == null || val === '' || (Array.isArray(val) && !val.length)
+}
+
+export function queryStringify (object) {
+  return map(keys(object), key => `${key}=${encodeURIComponent(object[key])}`).join('&')
 }

@@ -4,9 +4,12 @@
       <label v-if="uploaderType === 'file' || (uploaderType === 'image' && ui.indexOf('button') > -1)"
         class="veui-button veui-uploader-input-label"
         :class="{'veui-uploader-input-label-disabled': realDisabled}"
+        @click="isReplacing = false"
         ui="aux" ref="label">
-        <icon class="veui-uploader-input-label-icon" name="upload"></icon><slot name="text">选择文件</slot>
-        <input hidden="hidden" type="file" ref="input" @change="onChange" :name="realName" :disabled="realDisabled" :accept="accept" multiple>
+        <icon class="veui-uploader-input-label-icon"
+          name="upload"></icon><slot name="text" v-if="fileList.length < maxCount">选择文件</slot><slot name="replace-text" v-else>重新上传</slot>
+        <input :id="inputId" hidden type="file" ref="input" @change="onChange" :name="realName" :disabled="realDisabled" :accept="accept" :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
+          @click.stop>
       </label>
       <slot name="button"></slot>
       <span class="veui-uploader-tip"><slot name="tip"></slot></span>
@@ -36,6 +39,11 @@
             <template v-else-if="uploaderType === 'image'">
               <img :src="file.src" :alt="file.alt || ''">
               <div :class="classType + '-mask'">
+                <label :for="inputId"
+                  class="veui-button"
+                  :class="{'veui-uploader-input-label-disabled': realDisabled}"
+                  ui="link"
+                  @click.stop="replaceFile(file)">重新上传</label>
                 <veui-button ui="link" @click="$emit('remove', file)" :disabled="realDisabled">移除</veui-button>
               </div>
             </template>
@@ -75,13 +83,15 @@
       <li v-if="uploaderType === 'image' && ui.indexOf('button') === -1" key="input">
         <label class="veui-uploader-input-label-image"
           :class="{'veui-uploader-input-label-disabled': realDisabled}"
-          ref="label"><input hidden type="file" ref="input" @change="onChange" :name="realName" :disabled="realDisabled" :accept="accept" multiple>
+          @click="isReplacing = false"
+          ref="label"><input :id="inputId" hidden type="file" ref="input" @change="onChange" :name="realName" :disabled="realDisabled" :accept="accept" :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
+          @click.stop>
         </label>
       </li>
     </transition-group>
     <iframe v-if="requestMode === 'iframe'" ref="iframe"
      :id="iframeId" :name="iframeId" class="veui-uploader-hide"></iframe>
-    <form v-if="requestMode === 'iframe'" ref="form" :action="`${action}?callback=parent.${callbackNamespace}['${callbackFuncName}']`" enctype="multipart/form-data"
+    <form v-if="requestMode === 'iframe'" ref="form" :action="queryUrl" enctype="multipart/form-data"
       method="POST" :target="iframeId" class="veui-uploader-hide">
       <input v-for="(value, key) in payload" :name="key" :value="value">
       <input v-if="iframeMode === 'callback'" name="callback" :value="`parent.${callbackNamespace}['${callbackFuncName}']`">
@@ -93,9 +103,10 @@
 import Icon from './Icon'
 import '../icons'
 import Button from './Button'
-import { endsWith, cloneDeep, filter, map, uniqueId, assign } from 'lodash'
+import { endsWith, cloneDeep, filter, map, uniqueId, assign, extend, isNumber } from 'lodash'
 import { ui, input } from '../mixins'
 import config from '../managers/config'
+import { queryStringify } from '../utils/helper'
 
 config.defaults({
   'uploader.requestMode': 'xhr',
@@ -187,14 +198,23 @@ export default {
         typeInvalid: false,
         sizeInvalid: false
       },
+      // inputId用于图片里的重新上传的label的for
+      inputId: uniqueId('veui-uploader-input'),
       iframeId: uniqueId('veui-uploader-iframe'),
       callbackFuncName: uniqueId('veuiUploaderCallback'),
-      onMessage: null
+      onMessage: null,
+      isReplacing: false,
+      replacingFile: null,
+      currentSubmitingFile: null
     }
   },
   watch: {
     value (val) {
+      let currentSubmitingFileIndex = this.fileList.indexOf(this.currentSubmitingFile)
       this.fileList = cloneDeep(val)
+      if (currentSubmitingFileIndex > -1) {
+        this.currentSubmitingFile = this.fileList[currentSubmitingFileIndex]
+      }
     }
   },
   computed: {
@@ -203,10 +223,19 @@ export default {
     },
     latestFile () {
       return this.fileList[this.fileList.length - 1]
+    },
+    queryUrl () {
+      let queryString = queryStringify(extend(
+        this.requestMode === 'iframe' && this.iframeMode === 'callback'
+          ? {callback: `parent.${this.callbackNamespace}['${this.callbackFuncName}']`}
+          : {},
+        this.payload
+      ))
+      return `${this.action}${queryString ? '?' + queryString : ''}`
     }
   },
   mounted () {
-    if (this.$slots.button && (this.uploaderType === 'file' || this.needButton)) {
+    if (this.$slots.button && (this.uploaderType === 'file' || this.ui.indexOf('button') > -1)) {
       let button = this.$slots.button[0].elm
       let labelStyle = this.$refs.label.style
       labelStyle.height = button.offsetHeight + 'px'
@@ -216,6 +245,7 @@ export default {
     if (this.requestMode === 'xhr') return
     document.body.appendChild(this.$refs.iframe)
     document.body.appendChild(this.$refs.form)
+
     if (this.iframeMode === 'postmessage') {
       this.onMessage = event => {
         if (!event.source.frameElement || event.source.frameElement.id !== this.iframeId) return
@@ -226,7 +256,7 @@ export default {
           : location.origin || (location.protocol + '//' + location.host)
         if (actionOrigin !== event.origin) return
 
-        this.uploadCallback(this.parseData(event.data), this.latestFile)
+        this.uploadCallback(this.parseData(event.data), this.currentSubmitingFile)
       }
       window.addEventListener('message', this.onMessage)
     } else if (this.iframeMode === 'callback') {
@@ -235,7 +265,7 @@ export default {
       }
       window[this.callbackNamespace][this.callbackFuncName] = data => {
         if (this.canceled) return
-        this.uploadCallback(this.parseData(data), this.latestFile)
+        this.uploadCallback(this.parseData(data), this.currentSubmitingFile)
       }
     }
   },
@@ -265,27 +295,43 @@ export default {
 
       if (!newFiles.length) return
 
-      this.fileList = [
-        ...filter(this.fileList, file => {
-          return file.status !== 'failure'
-        }),
-        ...map(newFiles, file => {
-          if (this.requestMode === 'xhr' && (this.uploaderType === 'image' || this.previewImage)) {
-            if (window.URL) file.src = window.URL.createObjectURL(file)
-          }
-          file.toBeUploaded = true
-          return file
-        })
-      ]
+      if (this.isReplacing) {
+        // uploaderType=image时，点击重新上传进入此分支，替换掉原位置的文件replacingFile
+        let newFile = newFiles[0]
+        if (this.requestMode === 'xhr' && window.URL) {
+          newFile.src = window.URL.createObjectURL(newFile)
+        }
+        newFile.toBeUploaded = true
 
-      if (this.maxCount && this.fileList.length > this.maxCount) {
-        this.fileList = this.fileList.slice(-this.maxCount)
+        this.$set(this.fileList, this.fileList.indexOf(this.replacingFile), newFile)
+        this.replacingFile = null
+
+        if (this.requestMode === 'iframe' && this.autoUpload) this.submit(newFile)
+        if (this.requestMode === 'xhr' && this.autoUpload) this.upload(newFile)
+
+        this.isReplacing = false
+      } else {
+        this.fileList = [
+          ...filter(this.fileList, file => {
+            return file.status !== 'failure'
+          }),
+          ...map(newFiles, file => {
+            if (this.requestMode === 'xhr' && (this.uploaderType === 'image' || this.previewImage) && window.URL) {
+              file.src = window.URL.createObjectURL(file)
+            }
+            file.toBeUploaded = true
+            return file
+          })
+        ]
+
+        if (this.maxCount && this.fileList.length > this.maxCount) {
+          this.fileList = this.fileList.slice(-this.maxCount)
+        }
+
+        if (this.requestMode === 'iframe' && this.autoUpload) this.submit()
+        if (this.requestMode === 'xhr' && this.autoUpload) this.uploadFiles()
       }
-
       this.$emit('change', this.fileList)
-
-      if (this.requestMode === 'iframe' && this.autoUpload) this.submit()
-      if (this.requestMode === 'xhr' && this.autoUpload) this.uploadFiles()
       this.$refs.input.value = ''
     },
     validateFile (file) {
@@ -340,15 +386,20 @@ export default {
         formData.append(key, this.payload[key])
       }
 
-      xhr.open('POST', this.action, true)
+      xhr.open('POST', this.queryUrl, true)
       for (let key in this.headers) {
         xhr.setRequestHeader(key, this.headers[key])
       }
       xhr.withCredentials = this.withCredentials
       xhr.send(formData)
     },
-    submit () {
-      this.updateFileList(this.latestFile, {status: 'uploading'})
+    replaceFile (file) {
+      this.isReplacing = true
+      this.replacingFile = file
+    },
+    submit (file = this.latestFile) {
+      this.currentSubmitingFile = file
+      this.updateFileList(file, {status: 'uploading'})
       let form = this.$refs.form
       form.appendChild(this.$refs.input)
       form.submit()
@@ -363,6 +414,7 @@ export default {
         this.$emit('fail', data)
         this.onFailure(data, file)
       }
+      this.currentSubmitingFile = null
     },
     onSuccess (data, file) {
       assign(file, data)
@@ -384,7 +436,7 @@ export default {
       this.$emit('change', this.fileList)
     },
     retry (file) {
-      if (this.requestMode === 'iframe') this.submit()
+      if (this.requestMode === 'iframe') this.submit(file)
       else this.upload(file)
     },
     cancelFile (file) {
@@ -421,8 +473,8 @@ function getProgress () {
     props: ['loaded', 'total', 'type', 'uploadingText', 'convertSizeUnit'],
     computed: {
       percent () {
-        if (this.type !== 'text') {
-          return Math.ceil(this.loaded / this.total * 100) + '%'
+        if (this.type !== 'text' && isNumber(this.loaded) && isNumber(this.total)) {
+          return Math.ceil((this.loaded) / this.total * 100) + '%'
         }
         return ''
       },
@@ -431,7 +483,9 @@ function getProgress () {
           case 'text':
             return this.$slots.default
           case 'progressPercent':
-            return `${this.percent} ${this.convertSizeUnit(this.loaded)}/${this.convertSizeUnit(this.total)}`
+            return this.percent
+              ? `${this.percent} ${this.convertSizeUnit(this.loaded)}/${this.convertSizeUnit(this.total)}`
+              : ''
           case 'progressBar':
             return ''
         }
