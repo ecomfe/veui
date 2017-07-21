@@ -6,7 +6,7 @@
     </section>
     <section>
       <veui-table ui="slim alt" :data="data" :columnFilter="columns" keys="id" selectable
-        :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected="selected">
+        :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected.sync="selected">
         <veui-table-column field="id" title="数据 ID" sortable></veui-table-column>
         <veui-table-column field="desc" title="数据描述"></veui-table-column>
         <veui-table-column field="price" title="价格" sortable width="160" align="right">

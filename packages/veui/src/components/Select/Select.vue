@@ -22,16 +22,8 @@
       :options="overlay">
       <div ref="box" class="veui-select-options" :ui="ui" v-outside:button="close">
         <slot>
-          <template v-for="option in options">
-            <veui-option
-              v-if="option.value"
-              v-bind="option"
-              :selected="option.value === value"
-              :key="option.value"
-              @select="handleSelect(option)">
-                <slot name="option" v-bind="option" :selected="option.value === value"></slot>
-            </veui-option>
-            <div v-else-if="option.options" class="veui-select-option-group">
+          <template v-for="option in realOptions">
+            <div v-if="option.options" class="veui-select-option-group">
               <slot name="group-label" :label="option.label">
                 <div class="veui-select-group-label">{{ option.label }}</div>
               </slot>
@@ -44,6 +36,14 @@
                 <slot name="option" v-bind="subOption" :selected="option.value === value"></slot>
               </veui-option>
             </div>
+            <veui-option
+              v-else
+              v-bind="option"
+              :selected="option.value === value"
+              :key="option.value"
+              @select="handleSelect(option)">
+                <slot name="option" v-bind="option" :selected="option.value === value"></slot>
+            </veui-option>
           </template>
         </slot>
       </div>
@@ -87,6 +87,7 @@ export default {
       type: Boolean,
       default: false
     },
+    clearable: Boolean,
     options: Array
   },
   data () {
@@ -95,6 +96,15 @@ export default {
     }
   },
   computed: {
+    realOptions () {
+      if (this.clearable) {
+        return [
+          { label: this.placeholder, value: null },
+          ...this.options
+        ]
+      }
+      return this.options
+    },
     labelMap () {
       return extractOptions(this.options, {})
     },

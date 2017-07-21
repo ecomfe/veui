@@ -1,9 +1,11 @@
 ### 0.2.1
 
 * [+] 增加了 `SearchBox` 组件。
+* [+] 为 `Select` 组件增加了 `clearable` 属性，可以根据 `placeholder` 生成首选项以清除之前的选择。
 * [^] 修复 `Select` 组件有分组时子选项无法正常选择的问题。
 * [^] 优化了 `Button` 中元素的对齐方式。
 * [^] 修复了 `Tooltip` 组件在循环中绑定 `target` 的问题。
+* [^] 修复了 `Table` 组件 slot `no-data` 失效的问题。
 
 ### 0.2.0
 

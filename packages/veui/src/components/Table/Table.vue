@@ -50,7 +50,7 @@ export default {
   data () {
     return {
       columns: [],
-      localSelectedKeys: this.selected || []
+      localSelectedKeys: [...(this.selected || [])]
     }
   },
   computed: {

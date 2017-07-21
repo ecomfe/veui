@@ -3,7 +3,7 @@
     <h1><code>&lt;veui-select&gt;</code></h1>
     <section>
       <h2>默认样式：</h2>
-      <veui-select v-bind="attrs" v-model="defaultValue1"></veui-select>
+      <veui-select v-bind="attrs" v-model="defaultValue1" placeholder="全部" clearable></veui-select>
     </section>
     <section>
       <h2>显示已选图标样式：</h2>

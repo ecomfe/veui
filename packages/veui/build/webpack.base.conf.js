@@ -24,7 +24,6 @@ module.exports = {
     alias: {
       '@': resolve('src'),
       veui: resolve('src')
-
     }
   },
   module: {
