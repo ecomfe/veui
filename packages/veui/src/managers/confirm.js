@@ -38,16 +38,9 @@ export class ConfirmManager extends SpecialDialog {
     let ok = isFunction(options.ok) ? options.ok : noop
     let cancel = isFunction(options.cancel) ? options.cancel : noop
     return new Promise((resolve, reject) => {
-      let remove = () => this.removeComponent(component)
       let checkRemove = (isOk) => {
-        (isOk
-          ? Promise.resolve(ok({ remove }))
-          : Promise.resolve(cancel({ remove }))
-        ).then(result => {
-          if (result !== true) {
-            remove()
-          }
-
+        Promise.resolve(isOk ? ok() : cancel()).then(result => {
+          this.removeComponent(component)
           resolve(isOk)
         })
       }

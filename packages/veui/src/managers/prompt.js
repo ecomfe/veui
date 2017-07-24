@@ -40,17 +40,11 @@ export class PromptManager extends SpecialDialog {
   _show (options) {
     let ok = isFunction(options.ok) ? options.ok : noop
     let cancel = isFunction(options.cancel) ? options.cancel : noop
-    return new Promise((resolve, reject) => {
-      let remove = () => this.removeComponent(component)
-      let checkRemove = (isOk, value) => {
-        (isOk
-          ? Promise.resolve(ok({ remove, value }))
-          : Promise.resolve(cancel({ remove }))
-        ).then(result => {
-          if (result !== true) {
-            remove()
-          }
 
+    return new Promise((resolve, reject) => {
+      let checkRemove = (isOk, value) => {
+        Promise.resolve(isOk ? ok() : cancel()).then(result => {
+          this.removeComponent(component)
           isOk ? resolve({ isOk, value }) : resolve(isOk)
         })
       }

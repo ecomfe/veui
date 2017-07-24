@@ -149,10 +149,11 @@ export default {
     },
     popupAlerts () {
       alertManager.success('成功了', '成功标题', {
-        ok ({ remove }) {
+        ok () {
           alert('祝贺你成功了！但是这个对话框并不会马上关闭，而是在三秒之后隐藏')
-          setTimeout(remove, 3000)
-          return true
+          return new Promise(resolve => {
+            setTimeout(resolve, 3000)
+          })
         }
       })
       alertManager.info('提示信息', '提示标题')

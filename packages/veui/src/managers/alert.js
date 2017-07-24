@@ -39,13 +39,9 @@ export class AlertManager extends SpecialDialog {
       let component = this.create({
         ...options,
         ok: () => {
-          // 把 remove 方法传给 ok，方便用户自定义 remove 时机
-          Promise.resolve(ok({ remove: () => this.removeComponent(component) }))
+          Promise.resolve(ok())
             .then(result => {
-              if (result !== true) {
-                this.removeComponent(component)
-              }
-
+              this.removeComponent(component)
               resolve()
             })
         }
