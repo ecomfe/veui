@@ -1,7 +1,7 @@
 import SpecialDialog from './SpecialDialog'
 import AlertBox from '../components/AlertBox'
 import Vue from 'vue'
-import { isFunction } from 'lodash'
+import { isFunction, noop } from 'lodash'
 
 export class AlertManager extends SpecialDialog {
 
@@ -21,12 +21,7 @@ export class AlertManager extends SpecialDialog {
               ui: data.type
             },
             on: {
-              ok: () => {
-                this.removeComponent(component)
-                if (isFunction(data.ok)) {
-                  data.ok()
-                }
-              }
+              ok: data.ok
             }
           },
           [
@@ -38,38 +33,22 @@ export class AlertManager extends SpecialDialog {
     return component
   }
 
-  success (content, title, options = {}) {
+  _show (options) {
+    let ok = isFunction(options.ok) ? options.ok : noop
     return new Promise(resolve => {
-      this.create({
+      let component = this.create({
         ...options,
-        content,
-        title,
-        type: 'success',
-        ok: resolve
-      })
-    })
-  }
+        ok: () => {
+          // 把 remove 方法传给 ok，方便用户自定义 remove 时机
+          Promise.resolve(ok({ remove: () => this.removeComponent(component) }))
+            .then(result => {
+              if (result !== true) {
+                this.removeComponent(component)
+              }
 
-  info (content, title, options = {}) {
-    return new Promise(resolve => {
-      this.create({
-        ...options,
-        content,
-        title,
-        type: 'info',
-        ok: resolve
-      })
-    })
-  }
-
-  error (content, title, options = {}) {
-    return new Promise(resolve => {
-      this.create({
-        ...options,
-        content,
-        title,
-        type: 'error',
-        ok: resolve
+              resolve()
+            })
+        }
       })
     })
   }

@@ -1,7 +1,7 @@
 import SpecialDialog from './SpecialDialog'
 import ConfirmBox from '../components/ConfirmBox'
 import Vue from 'vue'
-import { isFunction } from 'lodash'
+import { isFunction, noop } from 'lodash'
 
 export class ConfirmManager extends SpecialDialog {
 
@@ -17,21 +17,12 @@ export class ConfirmManager extends SpecialDialog {
           {
             props: {
               open: data.open,
-              title: data.title
+              title: data.title,
+              ui: data.type
             },
             on: {
-              ok: () => {
-                this.removeComponent(component)
-                if (isFunction(data.ok)) {
-                  data.ok()
-                }
-              },
-              cancel: () => {
-                this.removeComponent(component)
-                if (isFunction(data.cancel)) {
-                  data.cancel()
-                }
-              }
+              ok: data.ok,
+              cancel: data.cancel
             }
           },
           [
@@ -43,14 +34,28 @@ export class ConfirmManager extends SpecialDialog {
     return component
   }
 
-  popup (content, title, options = {}) {
+  _show (options) {
+    let ok = isFunction(options.ok) ? options.ok : noop
+    let cancel = isFunction(options.cancel) ? options.cancel : noop
     return new Promise((resolve, reject) => {
-      this.create({
+      let remove = () => this.removeComponent(component)
+      let checkRemove = (isOk) => {
+        (isOk
+          ? Promise.resolve(ok({ remove }))
+          : Promise.resolve(cancel({ remove }))
+        ).then(result => {
+          if (result !== true) {
+            remove()
+          }
+
+          resolve(isOk)
+        })
+      }
+
+      let component = this.create({
         ...options,
-        content,
-        title,
-        ok: () => resolve({ cancelled: false }),
-        cancel: () => resolve({ cancelled: true })
+        ok: () => checkRemove(true),
+        cancel: () => checkRemove(false)
       })
     })
   }

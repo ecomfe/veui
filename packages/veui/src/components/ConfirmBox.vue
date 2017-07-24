@@ -31,7 +31,13 @@ export default {
     'veui-dialog': Dialog,
     'veui-button': Button
   },
-  props: pick(Dialog.props, ['open', 'title']),
+  props: {
+    ...pick(Dialog.props, ['open', 'title']),
+    ui: {
+      type: String,
+      default: 'reverse'
+    }
+  },
   data () {
     return {
       localOpen: this.open,
@@ -49,11 +55,9 @@ export default {
   },
   methods: {
     ok () {
-      this.localOpen = false
       this.$emit('ok')
     },
     cancel () {
-      this.localOpen = false
       this.$emit('cancel')
     }
   }
