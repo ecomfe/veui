@@ -5,7 +5,7 @@ function getMethod (name) {
   return alert[name].bind(alert)
 }
 
-let methods = ['success', 'info', 'error'].map(name => getMethod)
+let methods = ['success', 'info', 'error', 'warn'].map(name => getMethod)
 
 export default {
   install () {
