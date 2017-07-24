@@ -78,7 +78,6 @@ export default {
   },
   methods: {
     ok () {
-      this.localOpen = false
       this.$emit('ok')
     }
   }

@@ -75,11 +75,28 @@
       </veui-dialog>
       <veui-button ui="primary" @click="veryLongDialogVisible = true">超级长的内容区域</veui-button>
     </p>
+
+    <p>
+      <veui-button ui="primary" @click="popupAlerts">弹出一堆 AlertBox</veui-button>
+    </p>
+    <p>
+      <veui-button ui="primary" @click="popupConfirms">弹出 ConfirmBox</veui-button>
+    </p>
+    <p>
+      <veui-button ui="primary" @click="popupToasts">开始弹 toasts</veui-button>
+    </p>
+    <p>
+      <veui-button ui="primary" @click="popupPrompt">prompt</veui-button>
+    </p>
   </article>
 </template>
 <script>
 import { Dialog, Button, Icon } from 'veui'
 import 'veui/icons'
+import alertManager from 'veui/managers/alert'
+import confirmManager from 'veui/managers/confirm'
+import promptManager from 'veui/managers/prompt'
+import toastManager from 'veui/managers/toast'
 
 export default {
   name: 'dialog-demo',
@@ -129,6 +146,50 @@ export default {
     },
     handleCancel () {
       alert('点击了取消按钮')
+    },
+    popupAlerts () {
+      alertManager.success('成功了', '成功标题', {
+        ok () {
+          alert('祝贺你成功了！但是这个对话框并不会马上关闭，而是在三秒之后隐藏')
+          return new Promise(resolve => {
+            setTimeout(resolve, 3000)
+          })
+        }
+      })
+      alertManager.info('提示信息', '提示标题')
+      alertManager.error('出错了', '出错标题')
+      alertManager.warn('警告', '警告')
+    },
+    popupConfirms () {
+      confirmManager.warn('真的要删除吗？删除之后不能恢复！', '确认一下', {
+        ok () {
+          alert('阻止关闭')
+          return true
+        }
+      })
+        .then(isOk => {
+          if (isOk) {
+            alert('原来你真的想要删除！')
+          }
+        })
+    },
+    popupToasts () {
+      let counter = 1
+      setInterval(() => {
+        counter++
+        const type = ['error', 'info', 'success'][counter % 3]
+        toastManager[type](`${type}-${counter}`)
+      }, 1000)
+    },
+    popupPrompt () {
+      promptManager.info('content', 'title', {
+        content: 'content',
+        title: 'title'
+      }).then(({ isOk, value }) => {
+        if (isOk) {
+          alert(value)
+        }
+      })
     }
   }
 }
