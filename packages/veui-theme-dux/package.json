@@ -1,6 +1,6 @@
 {
   "name": "veui-theme-dux",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "DUX theme for VEUI.",
   "main": "index.js",
   "keywords": [

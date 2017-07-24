@@ -11,8 +11,10 @@
 
   @digit-size: 14px;
 
+  .clearfix();
+  display: inline-block;
   color: @veui-text-color-normal;
-  font-weight: normal;
+  font-weight: @veui-font-weight-normal;
 
   a {
     color: inherit;
@@ -24,35 +26,36 @@
     }
   }
 
-  .veui-wrapper {
-    .clearfix();
-  }
-
-  .veui-page-info {
+  &-info {
     float: left;
     margin-right: @button-gap-width;
     line-height: @digit-height;
   }
 
-  .veui-page-size {
+  &-total,
+  &-size {
+    display: inline-block;
+  }
+
+  &-size {
     margin-left: @button-gap-width;
   }
 
-  .veui-page-switch {
+  &-switch {
     float: left;
   }
 
   .veui-select {
     width: auto;
+    margin-top: -2px;
     margin-left: 8px;
-    vertical-align: text-top;
-    line-height: 1;
+    vertical-align: top;
 
     .veui-button {
+      .padding(0, _);
       white-space: nowrap;
       color: @veui-text-color-strong;
       font-weight: @veui-font-weight-extra-bold;
-      .padding(0, _);
 
       .veui-icon {
         float: left;
@@ -67,13 +70,13 @@
     }
   }
 
-  .veui-buttons {
+  &-buttons {
     float: left;
     margin-left: @button-gap-width;
   }
 
-  .veui-button-previous,
-  .veui-button-next {
+  &-previous,
+  &-next {
     position: relative;
     float: left;
     width: @button-width;
@@ -84,7 +87,7 @@
     border-radius: 2px;
   }
 
-  .veui-pages {
+  &-pages {
     float: left;
     margin: 0;
     padding: 0;
@@ -126,7 +129,7 @@
 
   .generate-responsive-page-digit-width(@length, @scale-ratio: 1) when (@length > 2) {
 
-    .veui-page-digit-length-@{length} {
+    .veui-pager-digit-length-@{length} {
       li {
         width: (@digit-width + @digit-width-delta * (@length - 2)) * @scale-ratio;
       }
@@ -139,12 +142,12 @@
 
   &,
   &[ui~="slim"] {
-    .veui-page-switch {
+    .veui-pager-switch {
       padding: 0 @button-width + @button-gap-width;
       position: relative;
     }
 
-    .veui-button-previous {
+    .veui-pager-previous {
       position: absolute;
       left: 0;
     }
@@ -152,29 +155,29 @@
 
   &[ui~="hetero"],
   &[ui~="full"] {
-    .veui-page-switch {
+    .veui-pager-switch {
       padding-left: 0;
     }
 
-    .veui-button-previous {
+    .veui-pager-previous {
       position: static;
       margin-right: 5px;
     }
   }
 
-  .veui-page-info {
+  &-info {
     display: none;
   }
 
   &[ui~="full"] {
-    .veui-page-info {
+    .veui-pager-info {
       display: block;
     }
   }
 
   &:not([ui~="slim"]) {
-    .veui-button-previous,
-    .veui-button-next {
+    .veui-pager-previous,
+    .veui-pager-next {
       .veui-button-alt();
       .veui-button-transition();
     }
@@ -183,7 +186,7 @@
   &[ui~="slim"] {
     @scale-ratio: 2 / 3;
 
-    .veui-page-switch {
+    .veui-pager-switch {
       padding: 0 (@button-height + @button-gap-width) * @scale-ratio;
 
       li {
@@ -198,8 +201,8 @@
       }
     }
 
-    .veui-button-previous,
-    .veui-button-next {
+    .veui-pager-previous,
+    .veui-pager-next {
       width: @button-height * @scale-ratio;
       height: @button-height * @scale-ratio;
       line-height: 1.5;
