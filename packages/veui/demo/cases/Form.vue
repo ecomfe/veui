@@ -93,16 +93,15 @@
             <veui-select v-model="storeData3.statusSelected" :options="storeData3.statusOptions"></veui-select>
           </veui-field>
 
-          <veui-field label="搜索项目：">
-            <veui-select v-model="storeData3.searchTypeSelected" :options="storeData3.searchTypeOptions"></veui-select>
+          <veui-field label="时间：">
+            <veui-datepicker range v-model="storeData3.range"></veui-datepicker>
           </veui-field>
         </veui-fieldset>
 
         <veui-fieldset class="right">
           <veui-field>
-            <veui-input placeholder="请输入搜索内容"></veui-input>
+            <veui-searchbox placeholder="请输入搜索内容"></veui-searchbox>
           </veui-field>
-          <veui-button ui="primary">搜索</veui-button>
         </veui-fieldset>
 
       </veui-form>
@@ -114,16 +113,15 @@
             <veui-select ui="alt" v-model="storeData3.statusSelected" :options="storeData3.statusOptions"></veui-select>
           </veui-field>
 
-          <veui-field label="搜索项目：">
-            <veui-select ui="alt" v-model="storeData3.searchTypeSelected" :options="storeData3.searchTypeOptions"></veui-select>
+          <veui-field label="时间：">
+            <veui-datepicker range ui="alt" v-model="storeData3.range"></veui-datepicker>
           </veui-field>
         </veui-fieldset>
 
         <veui-fieldset class="right">
           <veui-field>
-            <veui-input placeholder="请输入搜索内容"></veui-input>
+            <veui-searchbox ui="alt" placeholder="请输入搜索内容"></veui-searchbox>
           </veui-field>
-          <veui-button ui="primary">搜索</veui-button>
         </veui-fieldset>
 
       </veui-form>
@@ -311,7 +309,7 @@
 import {
   Form, Fieldset, Field, Label, Span, Input,
   Button, DatePicker, Uploader, Select,
-  Checkbox, CheckboxGroup, RadioboxGroup
+  Checkbox, CheckboxGroup, RadioboxGroup, Searchbox
 } from 'veui'
 import moment from 'moment'
 import bus from '../bus'
@@ -332,7 +330,8 @@ export default {
     'veui-select': Select,
     'veui-checkbox': Checkbox,
     'veui-checkboxgroup': CheckboxGroup,
-    'veui-radioboxgroup': RadioboxGroup
+    'veui-radioboxgroup': RadioboxGroup,
+    'veui-searchbox': Searchbox
   },
 
   data () {
@@ -422,25 +421,7 @@ export default {
             value: 4
           }
         ],
-        searchTypeSelected: 1,
-        searchTypeOptions: [
-          {
-            label: '项目1',
-            value: 1
-          },
-          {
-            label: '项目2',
-            value: 2
-          },
-          {
-            label: '项目3',
-            value: 3
-          },
-          {
-            label: '项目4',
-            value: 4
-          }
-        ]
+        range: [moment().toDate(), moment().add(3, 'month').toDate()]
       },
       storeData4: {
         name: '',
