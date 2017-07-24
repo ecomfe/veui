@@ -1,91 +1,91 @@
 <template>
   <article>
-    <h1><code>&lt;veui-search-box&gt;</code></h1>
+    <h1><code>&lt;veui-searchbox&gt;</code></h1>
     <section>
       <h2>普通</h2>
       <p>
-        <veui-search-box
+        <veui-searchbox
           :name="name"
           :placeholder="placeholder"
-          @search="log($event)"></veui-search-box>
+          @search="log($event)"></veui-searchbox>
       </p>
     </section>
     <section>
       <h2>禁用</h2>
       <p>
-        <veui-search-box
+        <veui-searchbox
           :value="value"
           :name="name"
           :placeholder="placeholder"
           :disabled="true"
-          @search="log($event)"></veui-search-box>
+          @search="log($event)"></veui-searchbox>
       </p>
     </section>
     <section>
       <h2>Suggestion</h2>
       <p>
-        <veui-search-box
+        <veui-searchbox
           v-model="value2"
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions1"
           @input="handleInput('1', $event)"
-          @search="log($event)"></veui-search-box>
+          @search="log($event)"></veui-searchbox>
       </p>
     </section>
     <section>
       <h2>小ui模式</h2>
       <p>
-        <veui-search-box
+        <veui-searchbox
           ui="small"
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions2"
           @input="handleInput('2', $event)"
-          @search="log($event)"></veui-search-box>
+          @search="log($event)"></veui-searchbox>
       </p>
     </section>
     <section>
       <h2>大ui模式</h2>
       <p>
-        <veui-search-box
+        <veui-searchbox
           ui="large"
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions3"
           @input="handleInput('3', $event)"
-          @search="log($event)"></veui-search-box>
+          @search="log($event)"></veui-searchbox>
       </p>
     </section>
     <section>
       <h2>全局搜索框</h2>
       <p>
-        <veui-search-box
+        <veui-searchbox
           ui="alt"
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions4"
           @input="handleInput('4', $event)"
-          @search="log($event)"></veui-search-box>
+          @search="log($event)"></veui-searchbox>
       </p>
     </section>
     <section>
       <h2>禁用全局搜索框</h2>
       <p>
-        <veui-search-box
+        <veui-searchbox
           ui="alt"
           :disabled="true"
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions5"
           @input="handleInput('5', $event)"
-          @search="log($event)"></veui-search-box>
+          @search="log($event)"></veui-searchbox>
       </p>
     </section>
     <section>
       <h2>自定义Suggestion样式1</h2>
       <p>
-        <veui-search-box
+        <veui-searchbox
           ui="alt"
           :name="name"
           :placeholder="placeholder"
@@ -96,7 +96,7 @@
             <span>{{ item.value }}</span>
             <icon name="eye"></icon>
           </template>
-        </veui-search-box>
+        </veui-searchbox>
       </p>
     </section>
   </article>
@@ -104,12 +104,12 @@
 
 <script>
 import bus from '../bus'
-import { SearchBox, Icon } from 'veui'
+import { Searchbox, Icon } from 'veui'
 
 export default {
-  name: 'demo-search-box',
+  name: 'demo-searchbox',
   components: {
-    'veui-search-box': SearchBox,
+    'veui-searchbox': Searchbox,
     Icon
   },
   data () {
@@ -153,7 +153,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

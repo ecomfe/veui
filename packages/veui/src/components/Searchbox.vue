@@ -1,7 +1,7 @@
 <template>
-  <div class="veui-search-box"
+  <div class="veui-searchbox"
     :class="{'veui-disabled': realDisabled, 'veui-readonly': realReadonly, 'veui-focus': inputFocus,
-      'veui-search-box-suggestion-expanded': expanded}"
+      'veui-searchbox-suggestion-expanded': expanded}"
     :ui="ui"
     @click="handleClickBox"
   >
@@ -17,21 +17,21 @@
       @blur="handleBlur"
     >
     </veui-input>
-    <div class="veui-search-box-others"
-        :class="{'veui-search-box-placeholder-hide': !placeholderShown}">
-      <div class="veui-search-box-placeholder">{{ placeholder }}</div>
-      <div class="veui-search-box-icons">
-        <button class="veui-search-box-icon veui-search-box-icon-cross"
+    <div class="veui-searchbox-others"
+        :class="{'veui-searchbox-placeholder-hide': !placeholderShown}">
+      <div class="veui-searchbox-placeholder">{{ placeholder }}</div>
+      <div class="veui-searchbox-icons">
+        <button class="veui-searchbox-icon veui-searchbox-icon-cross"
           :readonly="realReadonly"
           :disabled="realDisabled"
           v-if="localValue"
           @click.stop="localValue = ''">
           <icon name="cross-small"></icon>
         </button>
-        <button class="veui-search-box-icon veui-search-box-icon-search"
+        <button class="veui-searchbox-icon veui-searchbox-icon-search"
           :readonly="realReadonly"
           :disabled="realDisabled"
-          @click.stop="searchText">
+          @click.stop="search">
           <icon name="search"></icon>
         </button>
       </div>
@@ -40,12 +40,12 @@
       target="input"
       :options="overlay"
       :open="expanded">
-      <div class="veui-search-box-suggestion-overlay"
+      <div class="veui-searchbox-suggestion-overlay"
         ref="box"
         :ui="ui"
         v-outside:input="close">
         <template v-for="(item, index) in suggestions">
-          <div class="veui-search-box-suggestion-item"
+          <div class="veui-searchbox-suggestion-item"
             :key="index"
             @click="selectSuggestion(item.value)">
             <slot name="item" v-bind="item">
@@ -141,7 +141,7 @@ export default {
       this.localValue = text
       this.focus()
     },
-    searchText ($event) {
+    search ($event) {
       this.$emit('search', this.localValue, $event)
     },
     activate () { // for label activation

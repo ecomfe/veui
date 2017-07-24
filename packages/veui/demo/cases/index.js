@@ -24,7 +24,7 @@ import AlertBox from './AlertBox'
 import Tabs from './Tabs'
 import Switch from './Switch'
 // import ButtonGroup from './ButtonGroup'
-import SearchBox from './SearchBox'
+import Searchbox from './Searchbox'
 
 export default [
   {
@@ -169,8 +169,8 @@ export default [
   },
   {
     path: '/search-box',
-    name: 'SearchBox',
-    component: SearchBox
+    name: 'Searchbox',
+    component: Searchbox
   }
   // {
   //   path: '/buttonGroup',

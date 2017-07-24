@@ -124,8 +124,8 @@
     "path": "RadioboxGroup.vue"
   },
   {
-    "name": "SearchBox",
-    "path": "SearchBox.vue"
+    "name": "Searchbox",
+    "path": "Searchbox.vue"
   },
   {
     "name": "Option",
