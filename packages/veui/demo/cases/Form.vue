@@ -279,12 +279,11 @@
           <veui-input v-model="storeData5.qindian"></veui-input>
         </veui-field>
 
-        <veui-fieldset v-for="(item, index) in storeData5.scheduleInfo" :key="index" :required="true">
+        <veui-fieldset v-for="(item, index) in storeData5.scheduleInfo" :key="index" :required="true" :label="`项目排期-${index + 1}：`">
           <veui-field
             :field="`scheduleInfo[${index}].project`"
             :name="'projectName' + (index + 1)"
-            :rules="requiredRule"
-            :label="`项目排期-${index + 1}：`">
+            :rules="requiredRule">
             <veui-input placeholder="项目名称" v-model="item.project"></veui-input>
           </veui-field>
           <veui-field
