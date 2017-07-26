@@ -1,3 +1,8 @@
+### 0.2.2
+
+* [^] `SearchBox` 重命名为 `Searchbox`。**[Breaking change]**
+* [+] 增加 `$alert`、`$confirm`、`$prompt` 插件。
+
 ### 0.2.1
 
 * [+] 增加了 `SearchBox` 组件。
