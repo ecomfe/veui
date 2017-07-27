@@ -126,10 +126,4 @@ main {
   bottom: 0;
   left: @nav-width;
 }
-
-
-.fa-icon {
-  width: auto;
-  height: 1em;
-}
 </style>
