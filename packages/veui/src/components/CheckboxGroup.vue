@@ -1,17 +1,17 @@
 <template>
-  <div class="veui-checkboxgroup">
-    <checkbox
-      :ui="ui"
-      :name="localName"
-      v-for="(item, index) in items"
-      :key="index"
-      :true-value="item.value"
-      :disabled="item.disabled || realDisabled || realReadonly"
-      :checked="value.indexOf(item.value) !== -1"
-      @change="checked => handleChange(item.value, checked)">
-      <slot v-bind="item">{{ item.label }}</slot>
-    </checkbox>
-  </div>
+<div class="veui-checkboxgroup">
+  <checkbox
+    :ui="ui"
+    :name="localName"
+    v-for="(item, index) in items"
+    :key="index"
+    :true-value="item.value"
+    :disabled="item.disabled || realDisabled || realReadonly"
+    :checked="value.indexOf(item.value) !== -1"
+    @change="checked => handleChange(item.value, checked)">
+    <slot v-bind="item">{{ item.label }}</slot>
+  </checkbox>
+</div>
 </template>
 
 <script>

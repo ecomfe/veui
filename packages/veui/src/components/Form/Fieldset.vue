@@ -1,8 +1,8 @@
 <template>
-  <veui-field ref="field" class="veui-fieldset" :class="{'veui-fieldset-required': required}" v-bind="attrs">
-    <template v-if="$slots.label" slot="label"><slot name="label"></slot></template>
-    <slot></slot>
-  </veui-field>
+<veui-field ref="field" class="veui-fieldset" :class="{'veui-fieldset-required': required}" v-bind="attrs">
+  <template v-if="$slots.label" slot="label"><slot name="label"></slot></template>
+  <slot></slot>
+</veui-field>
 </template>
 
 <script>

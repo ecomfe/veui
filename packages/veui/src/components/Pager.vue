@@ -1,43 +1,43 @@
 <template>
-  <div class="veui-pager" :ui="ui">
-    <div class="veui-pager-info">
-      <div class="veui-pager-total">共 {{ realTotal }} 条</div>
-      <div class="veui-pager-size">
-        <span>每页显示</span>
-        <veui-select v-model="realPageSize"
-          ui="link"
-          :options="realPageSizes"
-          @change="size => $emit('pagesizechange', size)">
-        </veui-select>
-      </div>
-    </div>
-    <div class="veui-pager-switch">
-      <ul class="veui-pager-pages" :class="{['veui-pager-digit-length-' + pageDigitLength]: true}">
-        <li v-for="(item, index) in pageIndicatorSeries" :class="{
-          'veui-active': item.page === page
-        }" :key="index">
-          <veui-link :to="item.href" :native="native"
-            @click="handleRedirect(item.page, $event)">{{ item.text }}</veui-link>
-        </li>
-      </ul>
-      <div class="veui-pager-buttons">
-        <veui-link class="veui-pager-previous"
-          :class="{ 'veui-disabled': page === 1 }"
-          :to="page === 1 ? '' : pageNavHref.previous.href"
-          :native="native"
-          @click="handleRedirect(pageNavHref.previous.page, $event)">
-          <icon name="angle-left"></icon>
-        </veui-link>
-        <veui-link class="veui-pager-next"
-          :class="{ 'veui-disabled': page === pageCount || pageCount === 0 }"
-          :to="page === pageCount ? '' : pageNavHref.next.href"
-          :native="native"
-          @click="handleRedirect(pageNavHref.next.page, $event)">
-          <icon name="angle-right"></icon>
-        </veui-link>
-      </div>
+<div class="veui-pager" :ui="ui">
+  <div class="veui-pager-info">
+    <div class="veui-pager-total">共 {{ realTotal }} 条</div>
+    <div class="veui-pager-size">
+      <span>每页显示</span>
+      <veui-select v-model="realPageSize"
+        ui="link"
+        :options="realPageSizes"
+        @change="size => $emit('pagesizechange', size)">
+      </veui-select>
     </div>
   </div>
+  <div class="veui-pager-switch">
+    <ul class="veui-pager-pages" :class="{['veui-pager-digit-length-' + pageDigitLength]: true}">
+      <li v-for="(item, index) in pageIndicatorSeries" :class="{
+        'veui-active': item.page === page
+      }" :key="index">
+        <veui-link :to="item.href" :native="native"
+          @click="handleRedirect(item.page, $event)">{{ item.text }}</veui-link>
+      </li>
+    </ul>
+    <div class="veui-pager-buttons">
+      <veui-link class="veui-pager-previous"
+        :class="{ 'veui-disabled': page === 1 }"
+        :to="page === 1 ? '' : pageNavHref.previous.href"
+        :native="native"
+        @click="handleRedirect(pageNavHref.previous.page, $event)">
+        <icon name="angle-left"></icon>
+      </veui-link>
+      <veui-link class="veui-pager-next"
+        :class="{ 'veui-disabled': page === pageCount || pageCount === 0 }"
+        :to="page === pageCount ? '' : pageNavHref.next.href"
+        :native="native"
+        @click="handleRedirect(pageNavHref.next.page, $event)">
+        <icon name="angle-right"></icon>
+      </veui-link>
+    </div>
+  </div>
+</div>
 </template>
 
 <script>

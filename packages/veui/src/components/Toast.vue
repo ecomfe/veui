@@ -1,8 +1,8 @@
 <template>
-  <div :ui="ui" class="veui-toast" :class="`veui-toast-${type}`">
-    <veui-icon class="veui-toast-icon" :name="`${iconName}-circle`"></veui-icon>
-    <span class="veui-toast-message">{{ message }}</span>
-  </div>
+<div :ui="ui" class="veui-toast" :class="`veui-toast-${type}`">
+  <veui-icon class="veui-toast-icon" :name="`${iconName}-circle`"></veui-icon>
+  <span class="veui-toast-message">{{ message }}</span>
+</div>
 </template>
 
 <script>

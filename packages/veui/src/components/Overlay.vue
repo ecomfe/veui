@@ -1,14 +1,14 @@
 <template>
-  <div class="veui-overlay">
-    <div class="veui-overlay-box"
-      :class="overlayClass"
-      :ui="ui"
-      ref="box"
-      :style="{zIndex}"
-      v-show="localOpen">
-      <slot></slot>
-    </div>
+<div class="veui-overlay">
+  <div class="veui-overlay-box"
+    :class="overlayClass"
+    :ui="ui"
+    ref="box"
+    :style="{zIndex}"
+    v-show="localOpen">
+    <slot></slot>
   </div>
+</div>
 </template>
 
 <script>

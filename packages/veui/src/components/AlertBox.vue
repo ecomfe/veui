@@ -1,27 +1,27 @@
 <template>
-  <veui-dialog overlay-class="veui-alert-box"
-    :open.sync="localOpen"
-    :ui="localUi"
-    :closable="false"
-    :priority="priority">
+<veui-dialog overlay-class="veui-alert-box"
+  :open.sync="localOpen"
+  :ui="localUi"
+  :closable="false"
+  :priority="priority">
 
-    <veui-icon v-if="!!typeIconName"
-      class="veui-alert-box-icon"
-      :name="typeIconName">
-    </veui-icon>
+  <veui-icon v-if="!!typeIconName"
+    class="veui-alert-box-icon"
+    :name="typeIconName">
+  </veui-icon>
 
-    <h3 class="veui-alert-box-title">
-      <template v-if="!!title">{{ title }}</template>
-      <slot name="title" v-else>title</slot>
-    </h3>
-    <div class="veui-alert-box-content">
-      <slot>content</slot>
-    </div>
+  <h3 class="veui-alert-box-title">
+    <template v-if="!!title">{{ title }}</template>
+    <slot name="title" v-else>title</slot>
+  </h3>
+  <div class="veui-alert-box-content">
+    <slot>content</slot>
+  </div>
 
-    <template slot="foot">
-      <veui-button @click="ok()">知道了</veui-button>
-    </template>
-  </veui-dialog>
+  <template slot="foot">
+    <veui-button @click="ok()">知道了</veui-button>
+  </template>
+</veui-dialog>
 </template>
 
 <script>

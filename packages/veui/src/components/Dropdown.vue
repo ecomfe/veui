@@ -1,40 +1,40 @@
 <template>
-  <div :class="{
-    'veui-dropdown': true,
-    'veui-dropdown-expanded': expanded
-  }" :ui="ui">
-    <veui-button
-      class="veui-dropdown-button"
-      :ui="ui"
-      :disabled="disabled"
-      @click="expanded = !expanded"
-      slot="target"
-      ref="button">
-      <span class="veui-dropdown-label">
-        <slot name="label" :label="label">{{ label }}</slot>
-      </span>
-      <icon class="veui-dropdown-icon" :name="`${realIcon}-${expanded ? 'up' : 'down'}`"></icon>
-    </veui-button>
-    <veui-overlay
-      v-if="expanded"
-      target="button"
-      :open="expanded"
-      :options="overlay">
-      <div ref="box" class="veui-dropdown-options" v-outside:button="close">
-        <div v-for="option in options"
-          :key="option.value"
-          class="veui-dropdown-option"
-          :class="{
-            'veui-dropdown-option-disabled': option.disabled
-          }"
-          @click.stop="handleClick(option)">
-          <slot name="button" v-bind="option">
-            <span class="veui-dropdown-option-label">{{ option.label }}</span>
-          </slot>
-        </div>
+<div :class="{
+  'veui-dropdown': true,
+  'veui-dropdown-expanded': expanded
+}" :ui="ui">
+  <veui-button
+    class="veui-dropdown-button"
+    :ui="ui"
+    :disabled="disabled"
+    @click="expanded = !expanded"
+    slot="target"
+    ref="button">
+    <span class="veui-dropdown-label">
+      <slot name="label" :label="label">{{ label }}</slot>
+    </span>
+    <icon class="veui-dropdown-icon" :name="`${realIcon}-${expanded ? 'up' : 'down'}`"></icon>
+  </veui-button>
+  <veui-overlay
+    v-if="expanded"
+    target="button"
+    :open="expanded"
+    :options="overlay">
+    <div ref="box" class="veui-dropdown-options" v-outside:button="close">
+      <div v-for="option in options"
+        :key="option.value"
+        class="veui-dropdown-option"
+        :class="{
+          'veui-dropdown-option-disabled': option.disabled
+        }"
+        @click.stop="handleClick(option)">
+        <slot name="button" v-bind="option">
+          <span class="veui-dropdown-option-label">{{ option.label }}</span>
+        </slot>
       </div>
-    </veui-overlay>
-  </div>
+    </div>
+  </veui-overlay>
+</div>
 </template>
 
 <script>

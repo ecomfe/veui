@@ -1,7 +1,7 @@
 <template>
-  <div class="veui-tab" v-show="isActive">
-    <slot v-if="isInited || isActive"></slot>
-  </div>
+<div class="veui-tab" v-show="isActive">
+  <slot v-if="isInited || isActive"></slot>
+</div>
 </template>
 
 <script>

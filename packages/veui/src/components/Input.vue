@@ -1,28 +1,28 @@
 <template>
-  <input
-    v-if="type !== 'textarea'"
-    class="veui-input"
-    v-bind="attrs"
-    v-model="localValue"
-    ref="input"
-    @focus="$emit('focus', $event)"
-    @click="$emit('click', $event)"
-    @blur="$emit('blur', $event)"
-    @change="$emit('change', $event.target.value, $event)"
-    @input="handleInput"
-  >
-  <textarea
-    v-else
-    class="veui-textarea"
-    :class="{ 'veui-textarea-resizable': resizable }"
-    v-bind="attrs"
-    v-model="localValue"
-    ref="input"
-    @focus="$emit('focus', $event)"
-    @click="$emit('click', $event)"
-    @blur="$emit('blur', $event)"
-    @change="$emit('change', $event.target.value, $event)"
-    @input="handleInput"></textarea>
+<input
+  v-if="type !== 'textarea'"
+  class="veui-input"
+  v-bind="attrs"
+  v-model="localValue"
+  ref="input"
+  @focus="$emit('focus', $event)"
+  @click="$emit('click', $event)"
+  @blur="$emit('blur', $event)"
+  @change="$emit('change', $event.target.value, $event)"
+  @input="handleInput"
+>
+<textarea
+  v-else
+  class="veui-textarea"
+  :class="{ 'veui-textarea-resizable': resizable }"
+  v-bind="attrs"
+  v-model="localValue"
+  ref="input"
+  @focus="$emit('focus', $event)"
+  @click="$emit('click', $event)"
+  @blur="$emit('blur', $event)"
+  @change="$emit('change', $event.target.value, $event)"
+  @input="handleInput"></textarea>
 </template>
 
 <script>

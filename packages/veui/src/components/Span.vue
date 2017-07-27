@@ -1,5 +1,5 @@
 <template>
-  <span class="veui-span"><slot></slot></span>
+<span class="veui-span"><slot></slot></span>
 </template>
 
 <script>

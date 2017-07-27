@@ -1,15 +1,15 @@
 <template>
-  <span v-if="!to"><slot></slot></span>
-  <router-link v-else-if="$router && !native"
-    :to="to"
-    :replace="replace">
-    <slot></slot>
-  </router-link>
-  <a v-else
-    :href="to"
-    @click="handleRedirect">
-    <slot></slot>
-  </a>
+<span v-if="!to"><slot></slot></span>
+<router-link v-else-if="$router && !native"
+  :to="to"
+  :replace="replace">
+  <slot></slot>
+</router-link>
+<a v-else
+  :href="to"
+  @click="handleRedirect">
+  <slot></slot>
+</a>
 </template>
 <script>
 export default {

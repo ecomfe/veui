@@ -1,5 +1,5 @@
 <template>
-  <label class="veui-label" @click="findLabeledInput"><slot></slot></label>
+<label class="veui-label" @click="findLabeledInput"><slot></slot></label>
 </template>
 
 <script>

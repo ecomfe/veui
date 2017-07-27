@@ -1,13 +1,13 @@
 <template>
-  <li class="veui-breadcrumb-item">
-    <veui-link v-if="type === 'link'"
-      @click="$emit('redirect', $event)"
-      :to="to"
-      :replace="replace"
-      :native="native"><slot></slot></veui-link>
-    <span v-else><slot></slot></span>
-    <slot name="separator"></slot>
-  </li>
+<li class="veui-breadcrumb-item">
+  <veui-link v-if="type === 'link'"
+    @click="$emit('redirect', $event)"
+    :to="to"
+    :replace="replace"
+    :native="native"><slot></slot></veui-link>
+  <span v-else><slot></slot></span>
+  <slot name="separator"></slot>
+</li>
 </template>
 
 <script>
