@@ -32,7 +32,7 @@ export default {
               : ''
           }
           {
-            this._l(this.columns, col => (
+            this.columns.map(col => (
               <th class={col.align ? `veui-table-column-${col.align}` : ''}>
                 <div class="veui-table-cell">{col.renderHead.call(this._renderProxy, { col })}</div>
                 {

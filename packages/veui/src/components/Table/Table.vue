@@ -50,7 +50,7 @@ export default {
   data () {
     return {
       columns: [],
-      localSelectedKeys: [...(this.selected || [])]
+      localSelected: [...(this.selected || [])]
     }
   },
   computed: {
@@ -71,14 +71,14 @@ export default {
       return keys.map(String)
     },
     selectedItems () {
-      return (this.localSelectedKeys || []).reduce((selectedItems, key) => {
+      return (this.localSelected || []).reduce((selectedItems, key) => {
         selectedItems[key] = this.getItem(key)
         return selectedItems
       }, {})
     },
     selectStatus () {
       let keys = this.realKeys
-      let inter = intersection(keys, this.localSelectedKeys)
+      let inter = intersection(keys, this.localSelected)
       if (!inter.length) {
         return 'none'
       }
@@ -97,20 +97,20 @@ export default {
         let item = this.data[index]
         let key = this.realKeys[index]
         if (selected) {
-          this.localSelectedKeys.push(key)
+          this.localSelected.push(key)
         } else {
-          this.localSelectedKeys.splice(indexOf(this.localSelectedKeys, key), 1)
+          this.localSelected.splice(indexOf(this.localSelected, key), 1)
         }
         this.$emit('select', selected, item, this.selectedItems)
       } else {
         if (selected) {
-          this.localSelectedKeys = [...this.realKeys]
+          this.localSelected = [...this.realKeys]
         } else {
-          this.localSelectedKeys = []
+          this.localSelected = []
         }
         this.$emit('select', selected, this.selectedItems)
       }
-      this.$emit('update:selected', this.localSelectedKeys)
+      this.$emit('update:selected', this.localSelected)
     },
     getItem (key) {
       return this.data[indexOf(this.realKeys, key)]
@@ -121,11 +121,11 @@ export default {
   },
   watch: {
     selected (value) {
-      this.localSelectedKeys = value
+      this.localSelected = value
     },
     realKeys (value) {
-      this.localSelectedKeys = intersection(this.localSelectedKeys, value)
-      this.$emit('update:selected', this.localSelectedKeys)
+      this.localSelected = intersection(this.localSelected, value)
+      this.$emit('update:selected', this.localSelected)
     }
   }
 }

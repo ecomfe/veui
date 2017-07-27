@@ -44,24 +44,22 @@ export default {
   render () {
     return (
       <ul class="veui-breadcrumb">
-        {this.$slots.default || this._l(this.localRoutes, (route, index) => {
-          return (
-            <BreadcrumbItem to={route.to}
-              replace={route.replace}
-              type={route.type}
-              native={route.native}
-              onRedirect={event => this.fireRedirect(event, route, index)}>
-              {this.$scopedSlots.default({ route, router: route })}
-              {
-                index !== this.localRoutes.length - 1
-                  ? <span slot="separator" class="veui-breadcrumb-separator">
-                      {this.$scopedSlots.separator ? this.$scopedSlots.separator() : <Icon name="angle-right"></Icon>}
-                    </span>
-                  : null
-              }
-            </BreadcrumbItem>
-          )
-        })}
+        {this.$slots.default || this.localRoutes.map((route, index) => (
+          <BreadcrumbItem to={route.to}
+            replace={route.replace}
+            type={route.type}
+            native={route.native}
+            onRedirect={event => this.fireRedirect(event, route, index)}>
+            {this.$scopedSlots.default({ route, router: route })}
+            {
+              index !== this.localRoutes.length - 1
+                ? <span slot="separator" class="veui-breadcrumb-separator">
+                    {this.$scopedSlots.separator ? this.$scopedSlots.separator() : <Icon name="angle-right"></Icon>}
+                  </span>
+                : null
+            }
+          </BreadcrumbItem>
+        ))}
       </ul>
     )
   },
