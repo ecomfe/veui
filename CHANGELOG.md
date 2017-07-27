@@ -1,7 +1,9 @@
 ### 0.2.2
 
-* [^] `SearchBox` 重命名为 `Searchbox`。**[Breaking change]**
 * [+] 增加 `$alert`、`$confirm`、`$prompt` 插件。
+* [+] 增加 `RegionPicker` 组件。
+* [^] `SearchBox` 重命名为 `Searchbox`。**[Breaking change]**
+* [^] 去除 `Breadcrumb`、`Table`、`Tabs` 中对 Vue 内部函数的依赖。
 
 ### 0.2.1
 
