@@ -67,7 +67,10 @@ export default {
     open (value) {
       this.localOpen = value
       this.updateOverlayDOM()
-      this[OVERLAY_INSTANCE_KEY].toTop()
+      if (value) {
+        this[OVERLAY_INSTANCE_KEY].toTop()
+      }
+      this.$emit('update:open', value)
     },
     target () {
       this.findTargetNode()
