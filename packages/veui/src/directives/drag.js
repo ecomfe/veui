@@ -11,12 +11,11 @@ const a = document.createElement('a')
 const computedStyle = getComputedStyle(a)
 
 const TRANSFORM_ACCESSORS = []
-const TRANSLATE_ACCESSORS = ['translate']
+const TRANSLATE_ACCESSORS = ['translate'];
 
-checkAccessor('transform', TRANSFORM_ACCESSORS)
-checkAccessor('-ms-transform', TRANSFORM_ACCESSORS)
-checkAccessor('-moz-transform', TRANSFORM_ACCESSORS)
-checkAccessor('-webkit-transform', TRANSFORM_ACCESSORS)
+['transform', '-ms-transform', '-moz-transform', '-webkit-transform'].forEach(name => {
+  checkAccessor(name, TRANSFORM_ACCESSORS)
+})
 
 function getTransform (style) {
   for (let i = 0, il = TRANSFORM_ACCESSORS.length; i < il; ++i) {
