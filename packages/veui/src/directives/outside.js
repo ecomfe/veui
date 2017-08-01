@@ -1,4 +1,4 @@
-import { isFunction, uniqueId, remove, every, find, isNumber, isString, keys } from 'lodash'
+import { isFunction, uniqueId, remove, every, find, isNumber, isString, keys, noop } from 'lodash'
 import { getNodes } from '../utils/context'
 
 let handlerBindings = []
@@ -22,8 +22,6 @@ function getElementsByRefs (refs, context) {
   return elements
 }
 
-function empty () {}
-
 function parseParams (el, arg, modifiers, value, context) {
   let includeTargets
   let handler
@@ -45,7 +43,7 @@ function parseParams (el, arg, modifiers, value, context) {
     delay = delay ? parseInt(delay, 10) : 0
   } else {
     const normalizedValue = value || {}
-    handler = isFunction(normalizedValue.handler) ? normalizedValue.handler : empty
+    handler = isFunction(normalizedValue.handler) ? normalizedValue.handler : noop
 
     const refs = Array.isArray(normalizedValue.refs) ? normalizedValue.refs
       : (isString(normalizedValue.refs) ? normalizedValue.refs.split(',') : [normalizedValue.refs])
@@ -141,10 +139,15 @@ function unbindHover (el) {
   }
 }
 
-function refresh (el, { value, arg, modifiers }, vnode) {
+function clear (el) {
+  remove(handlerBindings, item => item[bindingKey].id === el[bindingKey].id)
+  unbindHover(el)
+}
+
+function refresh (el, { value, arg, modifiers, oldValue }, vnode) {
   const params = parseParams(el, arg, modifiers, value, vnode.context)
+  clear(el)
   if (params.trigger === 'click') {
-    unbindHover(el)
     el[bindingKey] = {
       id: uniqueId('veui-outside-'),
       handler: generate(el, params),
@@ -159,8 +162,5 @@ function refresh (el, { value, arg, modifiers }, vnode) {
 export default {
   bind: refresh,
   update: refresh,
-  unbind (el) {
-    remove(handlerBindings, item => item[bindingKey].id === el[bindingKey].id)
-    unbindHover(el)
-  }
+  unbind: clear
 }
