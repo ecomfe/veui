@@ -140,7 +140,7 @@ function unbindHover (el) {
 }
 
 function clear (el) {
-  remove(handlerBindings, item => item[bindingKey].id === el[bindingKey].id)
+  remove(handlerBindings, item => el[bindingKey] && item[bindingKey].id === el[bindingKey].id)
   unbindHover(el)
 }
 
