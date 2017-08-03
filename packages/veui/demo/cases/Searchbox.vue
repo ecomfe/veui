@@ -128,6 +128,7 @@ export default {
   },
   methods: {
     handleInput (num, value) {
+      console.log(num, value)
       if (value) {
         this[`suggestions${num}`] = [
           {

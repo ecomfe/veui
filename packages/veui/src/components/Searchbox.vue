@@ -15,6 +15,7 @@
       @input="handleInput"
       @focus="inputFocus = true"
       @blur="handleBlur"
+      @keyup.native.enter="search"
     >
     </veui-input>
     <div class="veui-searchbox-others"
@@ -25,7 +26,7 @@
           :readonly="realReadonly"
           :disabled="realDisabled"
           v-if="localValue"
-          @click.stop="localValue = ''">
+          @click.stop="clear">
           <icon name="cross-small"></icon>
         </button>
         <button class="veui-searchbox-icon veui-searchbox-icon-search"
@@ -146,6 +147,13 @@ export default {
     },
     activate () { // for label activation
       this.focus()
+    },
+    clear () {
+      // 清空的时候也应该触发input事件，保持v-model的同步
+      if (this.localValue !== '') {
+        this.localValue = ''
+        this.$emit('input', this.localValue)
+      }
     }
   }
 }

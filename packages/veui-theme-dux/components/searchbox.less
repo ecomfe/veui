@@ -27,7 +27,9 @@
     pointer-events: none;
     line-height: @veui-height-normal;
   }
-
+  .veui-input {
+    padding-right: 36px;
+  }
   &-placeholder {
     padding: 0 11px;
     color: @veui-gray-color-weak;
@@ -40,13 +42,13 @@
     position: absolute;
     right: 1em;
     top: 0;
+    bottom: 0;
   }
 
   button&-icon {
     outline: none;
     pointer-events: auto;
     color: @veui-gray-color-weak;
-    vertical-align: middle;
     border: none;
     padding: 0;
     width: auto;
@@ -56,6 +58,10 @@
     &-cross {
       display: none;
       margin-right: 8px;
+    }
+
+    .veui-icon {
+      vertical-align: middle;
     }
   }
 
@@ -131,6 +137,7 @@
     .veui-input {
       background-color: @veui-gray-color-sup-3;
       border-color: transparent;
+      padding-right: 56px;
       .veui-shadow(none);
       &:focus,
       &:active {
