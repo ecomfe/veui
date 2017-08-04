@@ -1,44 +1,17 @@
-import { noop, isArray, isObject } from 'lodash'
+import { noop, isArray, isObject, find } from 'lodash'
 import { getNodes } from '../utils/context'
 
-function checkAccessor (accessorName, arr) {
-  if (accessorName in computedStyle) {
-    arr.push(accessorName)
-  }
-}
+const computedStyle = getComputedStyle(document.body)
+const TRANSFORM_ACCESSOR = find(
+  ['transform', '-ms-transform', '-moz-transform', '-webkit-transform'],
+  accessor => (accessor in computedStyle)
+)
 
-const a = document.createElement('a')
-const computedStyle = getComputedStyle(a)
-
-const TRANSFORM_ACCESSORS = []
-const TRANSLATE_ACCESSORS = ['translate'];
-
-['transform', '-ms-transform', '-moz-transform', '-webkit-transform'].forEach(name => {
-  checkAccessor(name, TRANSFORM_ACCESSORS)
-})
-
-function getTransform (style) {
-  for (let i = 0, il = TRANSFORM_ACCESSORS.length; i < il; ++i) {
-    let transformStr = style[TRANSFORM_ACCESSORS[i]]
-    if (transformStr) {
-      return transformStr
-    }
-  }
-
-  return ''
-}
-
-function setTransform (elm, transformStr, { override = false }) {
-  elm.style[TRANSFORM_ACCESSORS[0]] = override
-    ? transformStr
-    : `${getTransform(getComputedStyle(elm))} ${transformStr}`
+function getComputedTransform (elm) {
+  return getComputedStyle(elm)[TRANSFORM_ACCESSOR]
 }
 
 class TranslateHandler {
-
-  initX = 0
-
-  initY = 0
 
   oldStyles = []
 
@@ -48,34 +21,63 @@ class TranslateHandler {
 
   elms = []
 
+  initStyles = []
+
+  initTransforms = []
+
+  tempStyle = [
+    // 禁掉文本选择
+    'user-select:none;-ms-user-select:none;-webkit-user-select:none;-moz-user-select:none;',
+    // 去掉动画
+    'transition:unset;',
+    'animation:unset;-ms-animation:unset;-webkit-animation:unset;-moz-animation:unset'
+  ].join('')
+
   constructor (refs, context) {
     this.refs = refs
     this.context = context
   }
 
   start () {
+    // oldStyles 仅初始化一次
     if (this.oldStyles.length === 0) {
       this.elms = this.refs.reduce((prev, cur) => {
         prev.push(...getNodes(cur, this.context))
         return prev
       }, [])
-      this.oldStyles = this.elms.map(elm => getTransform(getComputedStyle(elm)))
+      this.oldStyles = this.elms.map(elm => elm.getAttribute('style'))
     }
+
+    this.elms.forEach((elm, index) => {
+      let oldStyle = this.oldStyles[index]
+      this.initTransforms[index] = getComputedTransform(elm)
+      this.initStyles[index] = `${oldStyle};${this.tempStyle}`
+    })
   }
 
   drag ({ distanceX, distanceY }) {
-    this.setTranslate(this.initX + distanceX, this.initY + distanceY)
+    this.elms.forEach((elm, index) => {
+      let initStyle = this.initStyles[index]
+      let initTransform = this.initTransforms[index]
+      elm.setAttribute('style', `${initStyle};${TRANSFORM_ACCESSOR}:${initTransform} translate(${distanceX}px,${distanceY}px)`)
+    })
   }
 
   end ({ distanceX, distanceY }) {
-    this.initX += distanceX
-    this.initY += distanceY
-  }
-
-  setTranslate (x, y) {
     this.elms.forEach((elm, index) => {
       let oldStyle = this.oldStyles[index]
-      setTransform(elm, `${oldStyle} ${TRANSLATE_ACCESSORS[0]}(${x}px,${y}px)`, { override: true })
+      let initTransform = this.initTransforms[index]
+      elm.setAttribute('style', `${oldStyle};${TRANSFORM_ACCESSOR}:${initTransform} translate(${distanceX}px,${distanceY}px)`)
+    })
+    this.initTransforms = []
+    this.initStyles = []
+  }
+
+  destroy () {
+    // 恢复最初的样式
+    this.elms.forEach((elm, index) => {
+      let oldStyle = this.oldStyles[index]
+      elm.setAttribute('style', oldStyle)
     })
   }
 }
@@ -86,6 +88,7 @@ function clear (el) {
     return
   }
 
+  dragData.handler.destroy()
   el.removeEventListener('mousedown', dragData.mousedownHandler)
   el.dragData = null
 }
@@ -125,13 +128,14 @@ export default {
     if (params.type === 'translate') {
       handler = new TranslateHandler(params.targets, contextComponent)
     } else {
-      handler = { start: noop, drag: noop, end: noop }
+      handler = { start: noop, drag: noop, end: noop, destroy: noop }
     }
 
     const dragData = {
       dragging: false,
       initX: 0,
       initY: 0,
+      handler,
 
       mousedownHandler (event) {
         const { clientX, clientY } = event
