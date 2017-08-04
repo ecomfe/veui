@@ -117,27 +117,35 @@ function parseParams (el, { arg, value }) {
 /**
  * drag 指令基本使用方式如下：
  *
+ * ```html
  * <div v-drag></div>
+ * ```
  *
  * 在拖动过程中，drag 指令会依次向当前组件 context 发送 dragstart、drag、dragend 事件，
  * 并带上拖动距离作为参数，在当前组件中可以监听这些事件：
  *
+ * ```js
  * this.$on('dragstart', ({ event }) => { ... })
  * this.$on('drag', ({ event, distanceX, distanceY }) => { ... })
  * this.$on('dragend', ({ event, distanceX, distanceY }) => { ... })
+ * ```
  *
  * 在各个事件的回调函数中，可以对目标 DOM 元素进行操作，从而达到拖动等效果。
  *
  * drag 指令内部也提供了一个默认的拖动处理器，借助 translate 来移动目标元素。可以通过指令的 arg
  * 指定要使用的拖动处理器（目前仅支持 translate），通过 value 并借助 vue 的 refs 来指定目标元素：
  *
+ * ```html
  * <p ref="target1"></p>
  * <p ref="target2"></p>
  * <div v-drag:translate="['target1', 'target2']"></div>
+ * ```
  *
  * drag 指令也可以随时关闭 drag 功能，只需要传入值为 false 的 draggable 参数即可：
  *
+ * ```html
  * <div v-drag="{targets: ['target1', 'target2'], type: 'translate', draggable: false}"></div>
+ * ```
  *
  * 通过将 draggable 的值切换为 false，可以销毁之前设置的拖动处理器，将涉及到的 DOM 元素的样式都设置为原样。
  */
