@@ -26,7 +26,7 @@
           :readonly="realReadonly"
           :disabled="realDisabled"
           v-if="localValue"
-          @click.stop="clear">
+          @click.stop="localValue = ''">
           <icon name="cross-small"></icon>
         </button>
         <button class="veui-searchbox-icon veui-searchbox-icon-search"
@@ -118,12 +118,15 @@ export default {
     },
     realExpanded (value) {
       this.expanded = this.realExpanded
+    },
+    localValue (value) {
+      this.$emit('input', value)
     }
   },
   methods: {
-    handleInput (value, $event) {
+    handleInput () {
       this.hideSuggestion = false
-      this.$emit('input', value, $event)
+      // 感知输入法情况下处理placeholder逻辑暂时还没有
     },
     handleClickBox () {
       if (!this.realDisabled && !this.realReadonly) {
@@ -147,13 +150,6 @@ export default {
     },
     activate () { // for label activation
       this.focus()
-    },
-    clear () {
-      // 清空的时候也应该触发input事件，保持v-model的同步
-      if (this.localValue !== '') {
-        this.localValue = ''
-        this.$emit('input', this.localValue)
-      }
     }
   }
 }
