@@ -1,4 +1,4 @@
-import { noop, isArray, isObject, find } from 'lodash'
+import { noop, isArray, isObject, find, pick } from 'lodash'
 import { getNodes } from '../utils/context'
 
 let computedStyle = getComputedStyle(document.body)
@@ -29,6 +29,8 @@ class TranslateHandler {
 
   initPositions = []
 
+  axis = null
+
   tempStyle = [
     // 禁掉文本选择
     'user-select:none;-ms-user-select:none;-webkit-user-select:none;-moz-user-select:none;',
@@ -37,10 +39,11 @@ class TranslateHandler {
     'animation:unset;-ms-animation:unset;-webkit-animation:unset;-moz-animation:unset'
   ].join('')
 
-  constructor (refs, containment, context) {
-    this.refs = refs
+  constructor ({ targets, containment, axis }, context) {
+    this.refs = targets
     this.context = context
     this.containment = containment
+    this.axis = axis
   }
 
   start () {
@@ -74,6 +77,23 @@ class TranslateHandler {
   }
 
   move (distanceX, distanceY, prevStyles) {
+    // 统一转换成 { left: ..., top: ..., width: ..., height: ... } 形式的 rect
+    let constraint = null
+    if (this.containment && this.containment.nodeType) {
+      constraint = pick(this.containment.getBoundingClientRect(), ['top', 'left', 'right', 'bottom'])
+      constraint.width = constraint.right - constraint.left
+      constraint.height = constraint.bottom - constraint.top
+    } else if (this.containment === window) {
+      constraint = {
+        left: 0,
+        top: 0,
+        width: window.innerWidth,
+        height: window.innerHeight
+      }
+    } else {
+      constraint = this.containment
+    }
+
     this.elms.forEach((elm, index) => {
       let prevStyle = prevStyles[index]
       let initTransform = this.initTransforms[index]
@@ -83,19 +103,31 @@ class TranslateHandler {
       let realDistanceY = distanceY
       let offsetWidth = elm.offsetWidth
       let offsetHeight = elm.offsetHeight
-      if (this.containment) {
-        if (initPosition.top + realDistanceY <= this.containment.top) {
+      if (constraint) {
+        if (!this.axis || this.axis === 'y') {
           // 从上面超出范围了
-          realDistanceY = this.containment.top - initPosition.top
-        } else if (initPosition.top + offsetHeight + realDistanceY > this.containment.top + this.containment.height) {
+          if (initPosition.top + realDistanceY <= constraint.top) {
+            realDistanceY = constraint.top - initPosition.top
+          }
           // 从下面超出范围了
-          realDistanceY = this.containment.top + this.containment.height - (initPosition.top + offsetHeight)
-        } else if (initPosition.left + realDistanceX < this.containment.left) {
+          if (initPosition.top + offsetHeight + realDistanceY > constraint.top + constraint.height) {
+            realDistanceY = constraint.top + constraint.height - (initPosition.top + offsetHeight)
+          }
+        } else {
+          realDistanceY = 0
+        }
+
+        if (!this.axis || this.axis === 'x') {
           // 从左边超出范围了
-          realDistanceX = this.containment.left - initPosition.left
-        } else if (initPosition.left + offsetWidth + realDistanceX > this.containment.left + this.containment.width) {
+          if (initPosition.left + realDistanceX < constraint.left) {
+            realDistanceX = constraint.left - initPosition.left
+          }
           // 从右边超出范围了
-          realDistanceX = this.containment.left + this.containment.width - (initPosition.left + offsetWidth)
+          if (initPosition.left + offsetWidth + realDistanceX > constraint.left + constraint.width) {
+            realDistanceX = constraint.left + constraint.width - (initPosition.left + offsetWidth)
+          }
+        } else {
+          realDistanceX = 0
         }
       }
       elm.setAttribute('style', `${prevStyle};${TRANSFORM_ACCESSOR}:${initTransform} translate(${realDistanceX}px,${realDistanceY}px)`)
@@ -122,11 +154,12 @@ function clear (el) {
   el.dragData = null
 }
 
-function parseParams (el, { arg, value }) {
+function parseParams (el, { arg, value }, vnode) {
   let targets = []
   let type = null
   let draggable = true
   let containment = null
+  let axis = null
 
   if (isArray(value)) {
     targets.push(...value)
@@ -135,14 +168,30 @@ function parseParams (el, { arg, value }) {
     targets.push(...(value.targets || []))
     type = value.type
     draggable = value.draggable !== false
+
     containment = value.containment
+    if (containment !== window &&
+      (
+        !isObject(containment) ||
+        !containment.hasOwnProperty('top') ||
+        !containment.hasOwnProperty('left') ||
+        !containment.hasOwnProperty('width') ||
+        !containment.hasOwnProperty('height')
+      )
+    ) {
+      containment = getNodes(containment, vnode.context)
+      containment = containment && containment.length ? containment[0] : null
+    }
+
+    axis = value.axis
   }
 
   return {
     targets,
     type,
     draggable,
-    containment
+    containment,
+    axis
   }
 }
 
@@ -179,6 +228,25 @@ function parseParams (el, { arg, value }) {
  * <div v-drag="{targets: ['target1', 'target2'], type: 'translate', draggable: false}"></div>
  * ```
  *
+ * 可以通过传递 containment 参数来限制拖动的范围。
+ * containment 参数可以是结构为 `{ left: 0, top: 0, width: 100, height: 0}` 的对象：
+ *
+ * ```html
+ * <div v-drag:translate="{targets: ['content'], type: 'translate', containment: {left: 0, top: 0, width: 100, height: 100}}"></div>
+ * ```
+ *
+ * 也可以是一个 DOM 节点或者 ref 指向的节点：
+ *
+ * ```html
+ * <div v-drag:translate="{targets: ['content'], type: 'translate', containment: body}"></div>
+ * ```
+ *
+ * 可以通过传递 axis 参数来限定拖动的方向，x 表明在水平方向拖动，y 表示在垂直方向拖动：
+ *
+ * ```html
+ * <div v-drag:translate="{targets: ['content'], type: 'translate', axis: 'x'"></div>
+ * ```
+ *
  * 通过将 draggable 的值切换为 false，可以销毁之前设置的拖动处理器，将涉及到的 DOM 元素的样式都设置为原样。
  */
 export default {
@@ -186,14 +254,14 @@ export default {
     clear(el)
 
     const contextComponent = vnode.context
-    const params = parseParams(el, { arg, value })
+    const params = parseParams(el, { arg, value }, vnode)
     if (!params.draggable) {
       return
     }
 
     let handler = null
     if (params.type === 'translate') {
-      handler = new TranslateHandler(params.targets, params.containment, contextComponent)
+      handler = new TranslateHandler(params, contextComponent)
     } else {
       handler = { start: noop, drag: noop, end: noop, destroy: noop }
     }
