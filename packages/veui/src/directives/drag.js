@@ -1,7 +1,7 @@
 import { noop, isArray, isObject, find } from 'lodash'
 import { getNodes } from '../utils/context'
 
-const computedStyle = getComputedStyle(document.body)
+let computedStyle = getComputedStyle(document.body)
 const TRANSFORM_ACCESSOR = find(
   ['transform', '-ms-transform', '-moz-transform', '-webkit-transform'],
   accessor => (accessor in computedStyle)
@@ -13,17 +13,21 @@ function getComputedTransform (elm) {
 
 class TranslateHandler {
 
-  oldStyles = []
-
   refs = []
 
   context = null
+
+  containment = null
+
+  oldStyles = []
 
   elms = []
 
   initStyles = []
 
   initTransforms = []
+
+  initPositions = []
 
   tempStyle = [
     // 禁掉文本选择
@@ -33,9 +37,10 @@ class TranslateHandler {
     'animation:unset;-ms-animation:unset;-webkit-animation:unset;-moz-animation:unset'
   ].join('')
 
-  constructor (refs, context) {
+  constructor (refs, containment, context) {
     this.refs = refs
     this.context = context
+    this.containment = containment
   }
 
   start () {
@@ -52,25 +57,49 @@ class TranslateHandler {
       let oldStyle = this.oldStyles[index]
       this.initTransforms[index] = getComputedTransform(elm)
       this.initStyles[index] = `${oldStyle};${this.tempStyle}`
+
+      let rect = elm.getBoundingClientRect()
+      this.initPositions[index] = rect
     })
   }
 
   drag ({ distanceX, distanceY }) {
-    this.elms.forEach((elm, index) => {
-      let initStyle = this.initStyles[index]
-      let initTransform = this.initTransforms[index]
-      elm.setAttribute('style', `${initStyle};${TRANSFORM_ACCESSOR}:${initTransform} translate(${distanceX}px,${distanceY}px)`)
-    })
+    this.move(distanceX, distanceY, this.initStyles)
   }
 
   end ({ distanceX, distanceY }) {
-    this.elms.forEach((elm, index) => {
-      let oldStyle = this.oldStyles[index]
-      let initTransform = this.initTransforms[index]
-      elm.setAttribute('style', `${oldStyle};${TRANSFORM_ACCESSOR}:${initTransform} translate(${distanceX}px,${distanceY}px)`)
-    })
+    this.move(distanceX, distanceY, this.oldStyles)
     this.initTransforms = []
     this.initStyles = []
+  }
+
+  move (distanceX, distanceY, prevStyles) {
+    this.elms.forEach((elm, index) => {
+      let prevStyle = prevStyles[index]
+      let initTransform = this.initTransforms[index]
+      let initPosition = this.initPositions[index]
+
+      let realDistanceX = distanceX
+      let realDistanceY = distanceY
+      let offsetWidth = elm.offsetWidth
+      let offsetHeight = elm.offsetHeight
+      if (this.containment) {
+        if (initPosition.top + realDistanceY <= this.containment.top) {
+          // 从上面超出范围了
+          realDistanceY = this.containment.top - initPosition.top
+        } else if (initPosition.top + offsetHeight + realDistanceY > this.containment.top + this.containment.height) {
+          // 从下面超出范围了
+          realDistanceY = this.containment.top + this.containment.height - (initPosition.top + offsetHeight)
+        } else if (initPosition.left + realDistanceX < this.containment.left) {
+          // 从左边超出范围了
+          realDistanceX = this.containment.left - initPosition.left
+        } else if (initPosition.left + offsetWidth + realDistanceX > this.containment.left + this.containment.width) {
+          // 从右边超出范围了
+          realDistanceX = this.containment.left + this.containment.width - (initPosition.left + offsetWidth)
+        }
+      }
+      elm.setAttribute('style', `${prevStyle};${TRANSFORM_ACCESSOR}:${initTransform} translate(${realDistanceX}px,${realDistanceY}px)`)
+    })
   }
 
   destroy () {
@@ -83,7 +112,7 @@ class TranslateHandler {
 }
 
 function clear (el) {
-  const dragData = el.dragData
+  let dragData = el.dragData
   if (!dragData) {
     return
   }
@@ -94,9 +123,10 @@ function clear (el) {
 }
 
 function parseParams (el, { arg, value }) {
-  const targets = []
+  let targets = []
   let type = null
   let draggable = true
+  let containment = null
 
   if (isArray(value)) {
     targets.push(...value)
@@ -105,12 +135,14 @@ function parseParams (el, { arg, value }) {
     targets.push(...(value.targets || []))
     type = value.type
     draggable = value.draggable !== false
+    containment = value.containment
   }
 
   return {
     targets,
     type,
-    draggable
+    draggable,
+    containment
   }
 }
 
@@ -161,7 +193,7 @@ export default {
 
     let handler = null
     if (params.type === 'translate') {
-      handler = new TranslateHandler(params.targets, contextComponent)
+      handler = new TranslateHandler(params.targets, params.containment, contextComponent)
     } else {
       handler = { start: noop, drag: noop, end: noop, destroy: noop }
     }
