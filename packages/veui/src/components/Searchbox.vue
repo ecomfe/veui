@@ -15,6 +15,7 @@
       @input="handleInput"
       @focus="inputFocus = true"
       @blur="handleBlur"
+      @keyup.native.enter="search"
     >
     </veui-input>
     <div class="veui-searchbox-others"
@@ -117,12 +118,15 @@ export default {
     },
     realExpanded (value) {
       this.expanded = this.realExpanded
+    },
+    localValue (value) {
+      this.$emit('input', value)
     }
   },
   methods: {
-    handleInput (value, $event) {
+    handleInput () {
       this.hideSuggestion = false
-      this.$emit('input', value, $event)
+      // 感知输入法情况下处理placeholder逻辑暂时还没有
     },
     handleClickBox () {
       if (!this.realDisabled && !this.realReadonly) {
