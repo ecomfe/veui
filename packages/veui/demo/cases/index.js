@@ -25,6 +25,7 @@ import Tabs from './Tabs'
 import Switch from './Switch'
 // import ButtonGroup from './ButtonGroup'
 import Searchbox from './Searchbox'
+import RegionPicker from './RegionPicker'
 
 export default [
   {
@@ -168,9 +169,14 @@ export default [
     component: Switch
   },
   {
-    path: '/search-box',
+    path: '/searchbox',
     name: 'Searchbox',
     component: Searchbox
+  },
+  {
+    path: '/regionpicker',
+    name: 'RegionPicker',
+    component: RegionPicker
   }
   // {
   //   path: '/buttonGroup',

@@ -124,6 +124,10 @@
     "path": "RadioboxGroup.vue"
   },
   {
+    "name": "RegionPicker",
+    "path": "RegionPicker.vue"
+  },
+  {
     "name": "Searchbox",
     "path": "Searchbox.vue"
   },
