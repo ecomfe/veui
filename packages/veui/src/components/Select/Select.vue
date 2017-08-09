@@ -22,8 +22,8 @@
     :options="overlay">
     <div ref="box" class="veui-select-options" :ui="ui" v-outside:button="close">
       <slot>
-        <template v-for="option in realOptions">
-          <div v-if="option.options" class="veui-select-option-group">
+        <template v-for="(option, index) in realOptions">
+          <div v-if="option.options" class="veui-select-option-group" :key="`g-${index}`">
             <slot name="group-label" :label="option.label">
               <div class="veui-select-group-label">{{ option.label }}</div>
             </slot>

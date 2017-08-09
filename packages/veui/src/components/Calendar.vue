@@ -384,7 +384,7 @@ export default {
           this.year += sign
           break
         case 'years':
-          this.year += sign * 12
+          this.year += sign * 10
           break
       }
     },
