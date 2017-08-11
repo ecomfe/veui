@@ -2,6 +2,7 @@
 
 * [+] 增加 `$alert`、`$confirm`、`$prompt` 插件。
 * [+] 增加 `RegionPicker` 组件。
+* [+] 增加 `Steps` 组件。
 * [^] `SearchBox` 重命名为 `Searchbox`。**[Breaking change]**
 * [^] 去除 `Breadcrumb`、`Table`、`Tabs` 中对 Vue 内部函数的依赖。
 * [+] 为 `Overlay` 组件增加 `open.sync` 支持。

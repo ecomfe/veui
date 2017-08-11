@@ -199,7 +199,7 @@ export default {
             return
           }
 
-          if (!node.indeterminate || node.indeterminate && includeIndeterminate) {
+          if (includeIndeterminate || !node.indeterminate) {
             output.push(node.id)
           }
         }
