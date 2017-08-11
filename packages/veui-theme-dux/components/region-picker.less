@@ -57,6 +57,7 @@
       border-radius: 2px 2px 0;
       background-color: #fff;
       border-top: 1px solid @veui-gray-color-sup-4;
+      z-index: 1;
       .veui-shadow(strong);
 
       small {
@@ -65,48 +66,51 @@
         color: @veui-text-color-weak;
       }
 
+      &::before,
       &::after {
         content: "";
         display: block;
         position: absolute;
-        bottom: 0;
+        bottom: -5px;
         left: -8px;
         width: ~"calc(100% + 8px)";
-        height: 5px;
+        height: 10px;
         background-color: #fff;
-        z-index: 1;
       }
 
-      .tether-target-attached-bottom &,
-      .tether-out-of-bounds-bottom & {
-        margin: 0 0 -11px -8px;
+      &::after {
+        bottom: -10px;
+        left: 20px;
+      }
+
+      .tether-element-attached-bottom:not(.tether-out-of-bounds) + &-overlay &,
+      .tether-element-attached-bottom:not(.tether-out-of-bounds) + [data-tether-id] + &-overlay &, /* temporary hack */
+      .tether-element-attached-bottom.tether-abutted-top + &-overlay &,
+      .tether-element-attached-bottom.tether-abutted-top + [data-tether-id] + &-overlay & { /* temporary hack */
+        &::before {
+          top: -15px;
+          bottom: auto;
+        }
 
         &::after {
-          top: 0;
+          top: -20px;
           bottom: auto;
         }
       }
     }
   }
 
-  &-units-wrapper {
-    position: relative;
-    margin-left: -8px;
-    clear: left;
-  }
-
   &-units {
-    position: absolute;
     display: table;
-    top: -1px;
+    margin: 10px 0 0 -8px;
     background-color: #fff;
     border-top: 1px solid @veui-gray-color-sup-4;
+    z-index: 0;
     .veui-shadow(strong);
 
-    .tether-target-attached-bottom &,
-    .tether-out-of-bounds-bottom & {
-      top: auto;
-      bottom: 26px;
+    .tether-element-attached-bottom:not(.tether-out-of-bounds) &,
+    .tether-element-attached-bottom.tether-abutted-top & {
+      margin: 0 0 10px -8px;
     }
   }
 

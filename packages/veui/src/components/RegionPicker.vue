@@ -26,49 +26,55 @@
                 @mouseenter.native="toggleActive(group, true)">
                 <slot name="label" v-bind="group" :level="2">{{ group.label }}</slot>
               </veui-checkbox>
-              <veui-overlay v-if="group.children" :open.sync="group.active" :target="`group-${si}-${bi}-${gi}`"
-                overlayClass="veui-regionpicker-group-content" :options="overlay">
-                <div class="veui-regionpicker-group-overlay"
+              <veui-overlay v-if="group.children && group.active" :open.sync="group.active"
+                :target="`group-${si}-${bi}-${gi}`" :options="{
+                  attachment: 'top left',
+                  targetAttachment: 'bottom left',
+                  constraints
+                }">
+                <div class="veui-regionpicker-units"
+                  :ref="`layer-${si}-${bi}-${gi}`"
                   v-outside="{
                     handler: () => { toggleActive(group, false) },
-                    refs: `group-${si}-${bi}-${gi}`,
+                    refs: [`group-${si}-${bi}-${gi}`, `shadow-${si}-${bi}-${gi}`],
                     trigger: 'hover',
                     delay: 200
                   }">
-                  <div class="veui-regionpicker-group-shadow">
-                    <veui-checkbox :checked="group.selected" :indeterminate="group.indeterminate"
-                      :readonly="realReadonly" :disabled="realDisabled"
-                      @change="checked => toggleNode(group, checked)">
-                      <slot name="label" v-bind="group" :level="2">{{ group.label }}</slot>
-                    </veui-checkbox>
-                    <small v-if="group.children && group.children.length">
-                      ({{ group.solidCount }}/{{ group.children.length }})
-                    </small>
-                  </div>
-                  <div class="veui-regionpicker-units-wrapper">
-                    <div class="veui-regionpicker-units">
-                      <template v-for="ri in Math.ceil(group.children.length / 3)">
-                        <div class="veui-regionpicker-unit-row" :key="ri">
-                          <div v-for="(unit, ui) in group.children.slice(ri * 3 - 3, ri * 3)" class="veui-regionpicker-unit" :key="ui">
-                            <veui-checkbox :checked="unit.selected" :indeterminate="unit.indeterminate"
-                              :readonly="realReadonly" :disabled="realDisabled"
-                              @change="checked => toggleNode(unit, checked)">
-                              <slot name="label" v-bind="unit" :level="3">{{ unit.label }}</slot>
-                            </veui-checkbox>
-                          </div>
-                        </div>
-                      </template>
-                      <!-- <div v-for="(unit, ui) in group.children" class="veui-regionpicker-unit" :key="ui">
-                        <div class="veui-regionpicker-unit-title">
-                          <veui-checkbox :checked="unit.selected" :indeterminate="unit.indeterminate"
-                            :readonly="realReadonly" :disabled="realDisabled"
-                            @change="checked => toggleNode(unit, checked)">
-                            <slot name="label" v-bind="unit" :level="3">{{ unit.label }}</slot>
-                          </veui-checkbox>
-                        </div>
-                      </div> -->
+                  <template v-for="ri in Math.ceil(group.children.length / 3)">
+                    <div class="veui-regionpicker-unit-row" :key="ri">
+                      <div v-for="(unit, ui) in group.children.slice(ri * 3 - 3, ri * 3)" class="veui-regionpicker-unit" :key="ui">
+                        <veui-checkbox :checked="unit.selected" :indeterminate="unit.indeterminate"
+                          :readonly="realReadonly" :disabled="realDisabled"
+                          @change="checked => toggleNode(unit, checked)">
+                          <slot name="label" v-bind="unit" :level="3">{{ unit.label }}</slot>
+                        </veui-checkbox>
+                      </div>
                     </div>
-                  </div>
+                  </template>
+                </div>
+              </veui-overlay>
+              <veui-overlay v-if="group.children && group.active" :open.sync="group.active"
+                overlayClass="veui-regionpicker-group-shadow-overlay"
+                :target="`group-${si}-${bi}-${gi}`" :options="{
+                  attachment: 'top left',
+                  targetAttachment: 'top left'
+                }">
+                <div class="veui-regionpicker-group-shadow"
+                  :ref="`shadow-${si}-${bi}-${gi}`"
+                  v-outside="{
+                    handler: () => { toggleActive(group, false) },
+                    refs: [`group-${si}-${bi}-${gi}`, `layer-${si}-${bi}-${gi}`],
+                    trigger: 'hover',
+                    delay: 200
+                  }">
+                  <veui-checkbox :checked="group.selected" :indeterminate="group.indeterminate"
+                    :readonly="realReadonly" :disabled="realDisabled"
+                    @change="checked => toggleNode(group, checked)">
+                    <slot name="label" v-bind="group" :level="2">{{ group.label }}</slot>
+                  </veui-checkbox>
+                  <small v-if="group.children && group.children.length">
+                    ({{ group.solidCount }}/{{ group.children.length }})
+                  </small>
                 </div>
               </veui-overlay>
             </div>
@@ -142,20 +148,16 @@ export default {
     return {
       localDatasource,
       localSelected,
-      overlay: {
-        attachment: 'top left',
-        targetAttachment: 'top left',
-        constraints: [
-          {
-            to: 'scrollParent',
-            attachment: 'together'
-          },
-          {
-            to: 'window',
-            attachment: 'together'
-          }
-        ]
-      }
+      constraints: [
+        {
+          to: 'scrollParent',
+          attachment: 'together'
+        },
+        {
+          to: 'window',
+          attachment: 'together'
+        }
+      ]
     }
   },
   methods: {
