@@ -3,7 +3,9 @@
 .veui-steps {
   display: inline-block;
   @step-height: 30px;
-  @separator-length: 76px;
+  @full-height: 36px;
+  @separator-length-x: 76px;
+  @separator-length-y: 34px;
   @separator-width: 2px;
   @separator-gap: 12px;
   @border-width: 2px;
@@ -40,7 +42,7 @@
 
     &-content {
       padding-left: @step-height + 10px;
-      margin-right: @separator-gap * 2 + @separator-length;
+      margin-right: @separator-gap * 2 + @separator-length-x;
 
       h3 {
         margin: 0;
@@ -66,7 +68,7 @@
 
     &::after {
       @half-width: @separator-width / 2;
-      .size(@separator-length, @separator-width);
+      .size(@separator-length-x, @separator-width);
       content: "";
       position: absolute;
       top: ~"calc(50% - @{half-width})";
@@ -110,7 +112,6 @@
   }
 
   &[ui~="full"] .veui-steps-step {
-    @full-height: 36px;
     @half-height: @full-height / 2;
 
     &-content {
@@ -132,6 +133,28 @@
       display: block;
       margin-bottom: -4px;
       line-height: 20px;
+    }
+  }
+
+  &[ui~="vertical"] .veui-steps-step {
+    float: none;
+    margin-bottom: 50px;
+
+    &-content {
+      margin-right: 0;
+    }
+
+    &::after {
+      .size(@separator-width, @separator-length-y);
+      top: 38px;
+      left: (@step-height - @separator-width) / 2;
+    }
+  }
+
+  &[ui~="vertical"][ui~="full"] .veui-steps-step {
+    &::after {
+      top: 50px;
+      left: (@full-height - @separator-width) / 2;
     }
   }
 }
