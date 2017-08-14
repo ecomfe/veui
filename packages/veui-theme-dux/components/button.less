@@ -47,10 +47,6 @@
     }
   }
 
-  &.veui-button-loading {
-    cursor: default;
-  }
-
   &[ui~="aux"] {
     border-color: @veui-gray-color-sup-1;
     color: @veui-text-color-normal;
@@ -131,7 +127,6 @@
 
   &[ui~="link"] {
     min-width: auto;
-    height: auto;
     border: none;
     padding: 0;
     background: transparent;
@@ -212,6 +207,11 @@
     &[ui~="tiny"] {
       width: @veui-height-tiny;
     }
+  }
+
+  &.veui-button-loading {
+    cursor: default;
+    .box-shadow(none);
   }
 
   .veui-icon {
