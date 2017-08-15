@@ -35,7 +35,7 @@ export default {
   },
   data () {
     return {
-      current: 1,
+      current: 2,
       steps: [
         { label: 'Step 1', desc: '填写信息', to: '/Tabs' },
         { label: 'Step 2', desc: '验证身份' },
@@ -53,5 +53,12 @@ input[type="number"] {
   height: 30px;
   text-align: center;
   font-size: 14px;
+}
+.star {
+  vertical-align: text-top;
+
+  .veui-steps-step-link & {
+    border-bottom: 1px solid currentColor;
+  }
 }
 </style>

@@ -17,6 +17,15 @@
     text-decoration: none;
     margin-right: @separator-gap * 2 + @separator-length-x;
 
+    &-link {
+      text-decoration: none;
+      text-decoration-color: currentColor;
+
+      & .veui-steps-step-label {
+        text-decoration: underline;
+      }
+    }
+
     &-index {
       @half-height: @step-height / 2;
       position: absolute;
