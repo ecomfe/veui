@@ -1,7 +1,7 @@
 <template>
 <div class="veui-searchbox"
   :class="{'veui-disabled': realDisabled, 'veui-readonly': realReadonly, 'veui-focus': inputFocus,
-    'veui-searchbox-suggestion-expanded': expanded}"
+  'veui-searchbox-suggestion-expanded': expanded}"
   :ui="ui"
   @click="handleClickBox"
 >
@@ -15,10 +15,11 @@
     @input="handleInput"
     @focus="inputFocus = true"
     @blur="handleBlur"
+    @keyup.enter="search"
   >
   </veui-input>
   <div class="veui-searchbox-others"
-      :class="{'veui-searchbox-placeholder-hide': !placeholderShown}">
+    :class="{'veui-searchbox-placeholder-hide': !placeholderShown}">
     <div class="veui-searchbox-placeholder">{{ placeholder }}</div>
     <div class="veui-searchbox-icons">
       <button class="veui-searchbox-icon veui-searchbox-icon-cross"
@@ -153,4 +154,3 @@ export default {
   }
 }
 </script>
-
