@@ -23,6 +23,7 @@
     <div class="veui-searchbox-placeholder">{{ placeholder }}</div>
     <div class="veui-searchbox-icons">
       <button class="veui-searchbox-icon veui-searchbox-icon-cross"
+        type="button"
         :readonly="realReadonly"
         :disabled="realDisabled"
         v-if="localValue"
@@ -30,6 +31,7 @@
         <icon name="cross-small"></icon>
       </button>
       <button class="veui-searchbox-icon veui-searchbox-icon-search"
+        type="button"
         :readonly="realReadonly"
         :disabled="realDisabled"
         @click.stop="search">
