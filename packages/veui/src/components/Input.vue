@@ -10,6 +10,9 @@
   @blur="$emit('blur', $event)"
   @change="$emit('change', $event.target.value, $event)"
   @input="handleInput"
+  @keyup="$emit('keyup', $event)"
+  @keydown="$emit('keydown', $event)"
+  @keypress="$emit('keypress', $event)"
 >
 <textarea
   v-else
@@ -22,7 +25,11 @@
   @click="$emit('click', $event)"
   @blur="$emit('blur', $event)"
   @change="$emit('change', $event.target.value, $event)"
-  @input="handleInput"></textarea>
+  @input="handleInput"
+  @keyup="$emit('keyup', $event)"
+  @keydown="$emit('keydown', $event)"
+  @keypress="$emit('keypress', $event)"
+></textarea>
 </template>
 
 <script>
