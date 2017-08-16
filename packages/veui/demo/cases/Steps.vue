@@ -13,23 +13,31 @@
       <h2>多行样式：</h2>
       <veui-steps :steps="steps" :ui="`full${vertical ? ' vertical' : ''}`" :current="current - 1"></veui-steps>
     </section>
+    <section>
+      <h2>自定义模板：</h2>
+      <veui-steps :steps="steps" :ui="`full${vertical ? ' vertical' : ''}`" :current="current - 1">
+        <template slot="label" scope="step">{{ step.label }} <veui-icon class="star" name="star"></veui-icon></template>
+      </veui-steps>
+    </section>
   </article>
 </template>
 
 <script>
-import { Checkbox, Steps } from 'veui'
+import { Checkbox, Steps, Icon } from 'veui'
+import 'vue-awesome/icons/star'
 
 export default {
   name: 'steps-demo',
   components: {
     'veui-steps': Steps,
-    'veui-checkbox': Checkbox
+    'veui-checkbox': Checkbox,
+    'veui-icon': Icon
   },
   data () {
     return {
       current: 1,
       steps: [
-        { label: 'Step 1', desc: '填写信息' },
+        { label: 'Step 1', desc: '填写信息', to: '/Tabs' },
         { label: 'Step 2', desc: '验证身份' },
         { label: 'Step 3', desc: '注册成功' }
       ],

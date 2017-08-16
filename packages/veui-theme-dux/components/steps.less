@@ -10,16 +10,12 @@
   @separator-gap: 12px;
   @border-width: 2px;
 
-  ol {
-    .clearfix();
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
   &-step {
+    display: block;
     position: relative;
     float: left;
+    text-decoration: none;
+    margin-right: @separator-gap * 2 + @separator-length-x;
 
     &-index {
       @half-height: @step-height / 2;
@@ -42,7 +38,6 @@
 
     &-content {
       padding-left: @step-height + 10px;
-      margin-right: @separator-gap * 2 + @separator-length-x;
 
       h3 {
         margin: 0;
@@ -72,8 +67,9 @@
       content: "";
       position: absolute;
       top: ~"calc(50% - @{half-width})";
-      right: @separator-gap;
+      right: -@separator-gap - @separator-length-x;
       background-color: @veui-theme-color-primary;
+      z-index: -1;
     }
 
     &:last-child::after {
@@ -138,11 +134,8 @@
 
   &[ui~="vertical"] .veui-steps-step {
     float: none;
+    margin-right: 0;
     margin-bottom: 50px;
-
-    &-content {
-      margin-right: 0;
-    }
 
     &::after {
       .size(@separator-width, @separator-length-y);

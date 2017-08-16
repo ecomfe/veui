@@ -134,7 +134,7 @@ export default {
 
 function extractOptions (options, map) {
   options.forEach(({ label, value, options }) => {
-    if (value) {
+    if (value != null) {
       if (map[value]) {
         Vue.utils.warn(`Duplicate item value [${value}] for select options.`)
       }

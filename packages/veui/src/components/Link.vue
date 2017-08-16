@@ -1,5 +1,5 @@
 <template>
-<span v-if="!to"><slot></slot></span>
+<veui-element :is="fallback" v-if="!to"><slot></slot></veui-element>
 <router-link v-else-if="$router && !native"
   :to="to"
   :replace="replace">
@@ -12,8 +12,13 @@
 </a>
 </template>
 <script>
+import Element from './_Element'
+
 export default {
   name: 'veui-link',
+  components: {
+    'veui-element': Element
+  },
   props: {
     to: {
       type: String,
@@ -26,6 +31,10 @@ export default {
     native: {
       type: Boolean,
       default: false
+    },
+    fallback: {
+      type: String,
+      default: 'span'
     }
   },
   methods: {

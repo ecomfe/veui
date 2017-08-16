@@ -69,7 +69,11 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = omit(this.$props, ['selectOnFocus', 'fitContent', 'composition', 'resizable'])
+      let attrs = omit(this.$props,
+        'selectOnFocus', 'fitContent',
+        'composition', 'resizable',
+        ...(this.type === 'textarea' ? ['type'] : [])
+      )
       extend(attrs, {
         name: this.realName,
         disabled: this.realDisabled,

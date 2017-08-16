@@ -19,7 +19,6 @@ export default function (babel) {
         let resolvedComponentName = null
 
         // import Button from 'veui/components/Button'
-        // import Button from 'veui/components/Button'
         if (src.indexOf(COMPONENTS_PATH) === 0) {
           let componentPath = src.slice(COMPONENTS_PATH.length)
           resolvedComponentName = getComponentName(componentPath)
