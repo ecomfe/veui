@@ -152,10 +152,6 @@
     "path": "Span.vue"
   },
   {
-    "name": "Step",
-    "path": "Step.vue"
-  },
-  {
     "name": "Steps",
     "path": "Steps.vue"
   },
