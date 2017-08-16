@@ -16,6 +16,7 @@
         <veui-searchbox
           :value="value"
           :name="name"
+          :clearable="true"
           :placeholder="placeholder"
           :disabled="true"
           @search="log($event)"></veui-searchbox>
@@ -26,11 +27,13 @@
       <p>
         <veui-searchbox
           v-model="value2"
+          :clearable="true"
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions1"
           @input="handleInput('1', $event)"
-          @search="log($event)"></veui-searchbox>
+          @search="log($event)"
+          @select="log($event)"></veui-searchbox>
       </p>
     </section>
     <section>
@@ -99,6 +102,33 @@
         </veui-searchbox>
       </p>
     </section>
+    <section>
+      <h2>自定义Suggestion样式2</h2>
+      <p>
+        <veui-searchbox
+          ui="alt"
+          :name="name"
+          :placeholder="placeholder"
+          :suggestions="suggestions7"
+          @input="handleInput('7', $event)"
+          @search="log($event)">
+          <template slot="items" scope="props">
+            <div>
+              <h3>header</h3>
+              <template v-for="(item, index) in props.items">
+                <div class="veui-searchbox-suggestion-item"
+                  :key="index"
+                  @click="props.select(item.value + '.suffix')">
+                  <span>{{ item.value }}</span>
+                  <icon name="eye"></icon>
+                </div>
+              </template>
+              <h3>ender</h3>
+            </div>
+          </template>
+        </veui-searchbox>
+      </p>
+    </section>
   </article>
 </template>
 
@@ -123,7 +153,8 @@ export default {
       suggestions3: [],
       suggestions4: [],
       suggestions5: [],
-      suggestions6: []
+      suggestions6: [],
+      suggestions7: []
     }
   },
   methods: {

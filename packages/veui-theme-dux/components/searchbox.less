@@ -6,6 +6,12 @@
   position: relative;
   color: @veui-gray-color-strong;
 
+  &.veui-searchbox-clearable {
+    .veui-searchbox-icon-cross {
+      display: inline-block;
+    }
+  }
+
   &.veui-disabled,
   &.veui-readonly {
     background-color: @veui-gray-color-sup-3;
@@ -167,16 +173,10 @@
         }
       }
     }
-    .veui-searchbox-icon-cross {
-      display: inline-block;
-    }
+
     &.veui-disabled,
     &.veui-readonly {
       .veui-shadow(none);
-
-      .veui-searchbox-icon-cross {
-        display: none;
-      }
 
       .veui-searchbox-icon {
         color: @veui-gray-color-weak;

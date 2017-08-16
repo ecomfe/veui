@@ -1,7 +1,7 @@
 <template>
 <div class="veui-searchbox"
   :class="{'veui-disabled': realDisabled, 'veui-readonly': realReadonly, 'veui-focus': inputFocus,
-  'veui-searchbox-suggestion-expanded': expanded}"
+    'veui-searchbox-suggestion-expanded': expanded, 'veui-searchbox-clearable': clearable}"
   :ui="ui"
   @click="handleClickBox"
 >
@@ -47,15 +47,17 @@
       ref="box"
       :ui="ui"
       v-outside:input="close">
-      <template v-for="(item, index) in suggestions">
-        <div class="veui-searchbox-suggestion-item"
-          :key="index"
-          @click="selectSuggestion(item.value)">
-          <slot name="item" v-bind="item">
-            {{ item.value }}
-          </slot>
-        </div>
-      </template>
+      <slot name="items" :items="suggestions" :select="selectSuggestion">
+        <template v-for="(item, index) in suggestions">
+          <div class="veui-searchbox-suggestion-item"
+            :key="index"
+            @click="selectSuggestion(item.value)">
+            <slot name="item" v-bind="item">
+              {{ item.value }}
+            </slot>
+          </div>
+        </template>
+      </slot>
     </div>
   </veui-overlay>
 </div>
@@ -83,6 +85,10 @@ export default {
       default () {
         return []
       }
+    },
+    clearable: {
+      type: Boolean,
+      default: false
     },
     ...pick(Input.props,
       'autocomplete',
@@ -146,12 +152,16 @@ export default {
       this.hideSuggestion = true
       this.localValue = text
       this.focus()
+      this.$emit('select', this.localValue)
     },
     search ($event) {
       this.$emit('search', this.localValue, $event)
     },
     activate () { // for label activation
       this.focus()
+    },
+    close () {
+      this.hideSuggestion = true
     }
   }
 }
