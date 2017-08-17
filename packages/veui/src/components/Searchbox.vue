@@ -47,13 +47,13 @@
       ref="box"
       :ui="ui"
       v-outside:input="close">
-      <slot name="suggestions" :suggestions="suggestions" :select="selectSuggestion">
-        <template v-for="(suggestion, index) in suggestions">
+      <slot name="suggestions" :suggestions="realSuggestions" :select="selectSuggestion">
+        <template v-for="(suggestion, index) in realSuggestions">
           <div class="veui-searchbox-suggestion-item"
             :key="index"
             @click="selectSuggestion(suggestion)">
             <slot name="suggestion" v-bind="suggestion">
-              {{ suggestion.value }}
+              {{ suggestion.label }}
             </slot>
           </div>
         </template>
@@ -121,10 +121,18 @@ export default {
       return !this.localValue && !this.inputFocus
     },
     realExpanded () {
-      return !!(this.localValue && !this.hideSuggestion && this.suggestions && this.suggestions.length)
+      return !!(this.localValue && !this.hideSuggestion && this.realSuggestions && this.realSuggestions.length)
     },
     valueProperty () {
       return this.replaceOnSelect === false ? '' : (this.replaceOnSelect || 'value')
+    },
+    realSuggestions () {
+      return this.suggestions.map(item => {
+        if (typeof item === 'string') {
+          return { label: item, value: item }
+        }
+        return item
+      })
     }
   },
   watch: {

@@ -162,20 +162,32 @@ export default {
   methods: {
     handleInput (num, value) {
       console.log(num, value)
-      if (value) {
+      if (value && num < 3) {
         this[`suggestions${num}`] = [
           {
-            value
+            value,
+            label: value
           },
           {
-            value: '百度'
+            value: '百度',
+            label: '百度'
           },
           {
-            value: '百度贴吧'
+            value: '百度贴吧',
+            label: '百度贴吧'
           },
           {
-            value: '百度MVP'
+            value: '百度MVP',
+            label: '百度MVP'
           }
+        ]
+      } else if (value) {
+        this[`suggestions${num}`] = [
+          value,
+          '百度',
+          '百度贴吧',
+          '百度MVP',
+          '百度指数'
         ]
       } else {
         this[`suggestions${num}`] = null
