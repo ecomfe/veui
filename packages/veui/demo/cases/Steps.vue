@@ -56,9 +56,5 @@ input[type="number"] {
 }
 .star {
   vertical-align: text-top;
-
-  a.veui-steps-step-link & {
-    border-bottom: 1px solid currentColor;
-  }
 }
 </style>
