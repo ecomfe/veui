@@ -1,9 +1,12 @@
 ### 0.2.4
 
 * [^] 改善 `Button`、`Table` 组件的样式。
-* [^] 为 `Link` 组件增加 `fallback` prop，用于指定无链接时渲染的容器标签名。
-* [^] 为 `Steps` 添加路由支持。
-* [^] `Select` 组件选项值支持 `''`（空字符串）或 `0`。
+* [+] 为 `Link` 组件增加 `fallback` prop，用于指定无链接时渲染的容器标签名。
+* [+] 为 `Steps` 添加路由支持。
+* [^] `Select` 组件选项值现在支持 `''`（空字符串）或 `0`。
+* [+] 为 `Select` 组件添加未命名分组样式。
+* [+] 为 `Switch` 组件增加描述及默认 slot。
+* [+] 为 `Searchbox` 组件增加 `clearable` 属性，`suggestions` scoped slot 以及 `select` 事件，`suggestions` 支持字符串数组。
 
 ### 0.2.3
 

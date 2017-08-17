@@ -5,11 +5,14 @@
     'veui-switch-readonly': readonly,
     'veui-switch-disabled': disabled
   }" :ui="ui">
-  <input type="checkbox" v-bind="attrs" :disabled="disabled || readonly" @change="handleChange($event.target.checked)">
-  <span class="veui-switch-button">
-    <veui-icon name="cross" v-if="disabled"></veui-icon>
-    <veui-icon name="minus-thick" v-if="!disabled && readonly"></veui-icon>
-  </span>
+  <div class="veui-switch-switcher">
+    <input type="checkbox" v-bind="attrs" :disabled="disabled || readonly" @change="handleChange($event.target.checked)">
+    <span class="veui-switch-button">
+      <veui-icon name="cross" v-if="disabled"></veui-icon>
+      <veui-icon name="minus-thick" v-if="!disabled && readonly"></veui-icon>
+    </span>
+  </div>
+  <div class="veui-switch-label"><slot></slot></div>
 </label>
 </template>
 
