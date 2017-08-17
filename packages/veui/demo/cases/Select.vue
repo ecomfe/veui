@@ -63,12 +63,17 @@
         </template>
       </veui-select>
     </section>
+    <section>
+      <h2>分隔线样式：</h2>
+      <veui-select v-bind="optGroupAttrs" :options="groupedOpts" v-model="defaultValue9"></veui-select>
+    </section>
   </article>
 </template>
 
 <script>
 import bus from '../bus'
 import { Icon, Select, Option, Radiobox } from 'veui'
+import type from 'veui/managers/type'
 import 'vue-awesome/icons/eye'
 import 'vue-awesome/icons/gift'
 
@@ -93,6 +98,7 @@ export default {
       defaultValue6: null,
       defaultValue7: null,
       defaultValue8: '1-1',
+      defaultValue9: null,
       attrs: {
         name: 'age',
         readonly: false,
@@ -194,6 +200,17 @@ export default {
           }
         ]
       }
+    }
+  },
+  computed: {
+    groupedOpts () {
+      return type.clone(this.optGroupAttrs.options).map(group => {
+        delete group.label
+        return group
+      }).reduce((acc, cur) => {
+        acc.push(cur)
+        return acc
+      }, [])
     }
   },
   mounted () {

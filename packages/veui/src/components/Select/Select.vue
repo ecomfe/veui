@@ -23,9 +23,12 @@
     <div ref="box" class="veui-select-options" :ui="ui" v-outside:button="close">
       <slot>
         <template v-for="(option, index) in realOptions">
-          <div v-if="option.options" class="veui-select-option-group" :key="`g-${index}`">
-            <slot name="group-label" :label="option.label">
-              <div class="veui-select-group-label">{{ option.label }}</div>
+          <div v-if="option.options" :class="{
+            'veui-select-option-group': true,
+            'veui-select-option-group-unlabelled': !option.label
+          }" :key="`g-${index}`">
+            <slot v-if="option.label" name="group-label" :label="option.label">
+              <div class="veui-select-option-group-label">{{ option.label }}</div>
             </slot>
             <veui-option
               v-for="subOption in option.options"
