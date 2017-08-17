@@ -1,5 +1,5 @@
 <template>
-<div class="veui-checkboxgroup">
+<div class="veui-checkboxgroup" :ui="ui">
   <checkbox
     :ui="ui"
     :name="localName"

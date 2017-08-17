@@ -1,5 +1,5 @@
 <template>
-<div class="veui-radioboxgroup">
+<div class="veui-radioboxgroup" :ui="ui">
   <radiobox
     :ui="ui"
     :name="localName"
