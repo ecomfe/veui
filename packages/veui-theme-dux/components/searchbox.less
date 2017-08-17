@@ -6,6 +6,12 @@
   position: relative;
   color: @veui-gray-color-strong;
 
+  &.veui-searchbox-clearable {
+    .veui-searchbox-icon-close {
+      display: inline-block;
+    }
+  }
+
   &.veui-disabled,
   &.veui-readonly {
     background-color: @veui-gray-color-sup-3;
@@ -16,7 +22,7 @@
     .veui-searchbox-icon {
       cursor: not-allowed;
     }
-    .veui-searchbox-icon-cross {
+    .veui-searchbox-icon-close {
       display: none;
     }
   }
@@ -55,7 +61,7 @@
     height: auto;
     background-color: transparent;
 
-    &-cross {
+    &-close {
       display: none;
       margin-right: 8px;
     }
@@ -167,16 +173,10 @@
         }
       }
     }
-    .veui-searchbox-icon-cross {
-      display: inline-block;
-    }
+
     &.veui-disabled,
     &.veui-readonly {
       .veui-shadow(none);
-
-      .veui-searchbox-icon-cross {
-        display: none;
-      }
 
       .veui-searchbox-icon {
         color: @veui-gray-color-weak;
