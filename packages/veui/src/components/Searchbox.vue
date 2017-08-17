@@ -22,7 +22,7 @@
     :class="{'veui-searchbox-placeholder-hide': !placeholderShown}">
     <div class="veui-searchbox-placeholder">{{ placeholder }}</div>
     <div class="veui-searchbox-icons">
-      <button class="veui-searchbox-icon veui-searchbox-icon-cross"
+      <button class="veui-searchbox-icon veui-searchbox-icon-close"
         type="button"
         :readonly="realReadonly"
         :disabled="realDisabled"
@@ -47,13 +47,13 @@
       ref="box"
       :ui="ui"
       v-outside:input="close">
-      <slot name="items" :items="suggestions" :select="selectSuggestion">
-        <template v-for="(item, index) in suggestions">
+      <slot name="suggestions" :suggestions="suggestions" :select="selectSuggestion">
+        <template v-for="(suggestion, index) in suggestions">
           <div class="veui-searchbox-suggestion-item"
             :key="index"
-            @click="selectSuggestion(item.value)">
-            <slot name="item" v-bind="item">
-              {{ item.value }}
+            @click="selectSuggestion(suggestion)">
+            <slot name="suggestion" v-bind="suggestion">
+              {{ suggestion.value }}
             </slot>
           </div>
         </template>
@@ -90,6 +90,10 @@ export default {
       type: Boolean,
       default: false
     },
+    replaceOnSelect: {
+      type: [Boolean, String],
+      default: false
+    },
     ...pick(Input.props,
       'autocomplete',
       'placeholder',
@@ -118,6 +122,9 @@ export default {
     },
     realExpanded () {
       return !!(this.localValue && !this.hideSuggestion && this.suggestions && this.suggestions.length)
+    },
+    valueProperty () {
+      return this.replaceOnSelect === false ? '' : (this.replaceOnSelect || 'value')
     }
   },
   watch: {
@@ -148,11 +155,13 @@ export default {
     focus () {
       this.$refs.input.focus()
     },
-    selectSuggestion (text) {
+    selectSuggestion (suggestion) {
       this.hideSuggestion = true
-      this.localValue = text
+      if (this.replaceOnSelect !== false) {
+        this.localValue = suggestion[this.valueProperty]
+      }
       this.focus()
-      this.$emit('select', this.localValue)
+      this.$emit('select', suggestion)
     },
     search ($event) {
       this.$emit('search', this.localValue, $event)

@@ -16,9 +16,9 @@
         <veui-searchbox
           :value="value"
           :name="name"
-          :clearable="true"
+          clearable
           :placeholder="placeholder"
-          :disabled="true"
+          disabled
           @search="log($event)"></veui-searchbox>
       </p>
     </section>
@@ -27,7 +27,7 @@
       <p>
         <veui-searchbox
           v-model="value2"
-          :clearable="true"
+          clearable
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions1"
@@ -65,11 +65,13 @@
       <p>
         <veui-searchbox
           ui="alt"
+          replaceOnSelect
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions4"
           @input="handleInput('4', $event)"
-          @search="log($event)"></veui-searchbox>
+          @search="log($event)"
+          @select="log('select', $event)"></veui-searchbox>
       </p>
     </section>
     <section>
@@ -77,7 +79,7 @@
       <p>
         <veui-searchbox
           ui="alt"
-          :disabled="true"
+          disabled
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions5"
@@ -95,8 +97,8 @@
           :suggestions="suggestions6"
           @input="handleInput('6', $event)"
           @search="log($event)">
-          <template slot="item" scope="item">
-            <span>{{ item.value }}</span>
+          <template slot="suggestion" scope="suggestion">
+            <span>{{ suggestion.value }}</span>
             <icon name="eye"></icon>
           </template>
         </veui-searchbox>
@@ -112,14 +114,14 @@
           :suggestions="suggestions7"
           @input="handleInput('7', $event)"
           @search="log($event)">
-          <template slot="items" scope="props">
+          <template slot="suggestions" scope="props">
             <div>
               <h3>header</h3>
-              <template v-for="(item, index) in props.items">
+              <template v-for="(suggestion, index) in props.suggestions">
                 <div class="veui-searchbox-suggestion-item"
                   :key="index"
-                  @click="props.select(item.value + '.suffix')">
-                  <span>{{ item.value }}</span>
+                  @click="props.select(suggestion)">
+                  <span>{{ suggestion.value }}</span>
                   <icon name="eye"></icon>
                 </div>
               </template>
