@@ -1,0 +1,22 @@
+{
+  "name": "veui-loader",
+  "version": "0.2.3",
+  "description": "Webpack loader for VEUI.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webpack",
+    "loader",
+    "veui"
+  ],
+  "author": "Justineo (justice360@gmail.com)",
+  "license": "MIT",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.1",
+    "enhanced-resolve": "^3.4.1",
+    "loader-utils": "^1.1.0"
+  }
+}

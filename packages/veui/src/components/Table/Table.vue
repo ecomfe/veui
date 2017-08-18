@@ -13,9 +13,9 @@
 
 <script>
 import { map, intersection, isString, includes, indexOf, keys as objectKeys } from 'lodash'
-import Body from './_Body'
-import Head from './_Head'
-import Foot from './_Foot'
+import Body from './_TableBody'
+import Head from './_TableHead'
+import Foot from './_TableFoot'
 
 export default {
   name: 'veui-table',
