@@ -127,7 +127,7 @@ export default {
       return this.replaceOnSelect === false ? '' : (this.replaceOnSelect || 'value')
     },
     realSuggestions () {
-      if (!this.suggestions || this.suggestions.length === 0) {
+      if (!this.suggestions) {
         return []
       }
       return this.suggestions.map(item => {
