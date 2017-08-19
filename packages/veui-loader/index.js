@@ -7,7 +7,7 @@ const read = require('babel-loader/lib/utils/read')
 const resolve = require('enhanced-resolve/lib/node')
 
 function makeSyncResolver (options) {
-  return resolve.create.sync(options)
+  return resolve.create.sync(options.resolve)
 }
 
 module.exports = function (content) {
@@ -37,7 +37,7 @@ module.exports = function (content) {
       return content
     }
 
-    const resolveSync = makeSyncResolver(this)
+    const resolveSync = makeSyncResolver(this.options)
     babelrc.plugins = babelrc.plugins || []
     babelrc.plugins[index] = [
       'veui',
