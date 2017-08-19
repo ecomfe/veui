@@ -127,6 +127,9 @@ export default {
       return this.replaceOnSelect === false ? '' : (this.replaceOnSelect || 'value')
     },
     realSuggestions () {
+      if (!this.suggestions || this.suggestions.length === 0) {
+        return []
+      }
       return this.suggestions.map(item => {
         if (typeof item === 'string') {
           return { label: item, value: item }
