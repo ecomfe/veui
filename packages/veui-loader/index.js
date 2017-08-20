@@ -6,6 +6,7 @@ const resolveRc = require('babel-loader/lib/resolve-rc')
 const read = require('babel-loader/lib/utils/read')
 const resolve = require('enhanced-resolve/lib/node')
 
+// See https://github.com/webpack/enhanced-resolve/issues/46
 function makeSyncResolver (options) {
   return resolve.create.sync(options.resolve)
 }
