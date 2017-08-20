@@ -7,6 +7,7 @@
 * [+] 为 `Select` 组件添加未命名分组样式。
 * [+] 为 `Switch` 组件增加描述及默认 slot。
 * [+] 为 `Searchbox` 组件增加 `clearable` 属性，`suggestions` scoped slot 以及 `select` 事件，`suggestions` 支持字符串数组。
+* [^] 修正 `indeterminate` 状态 `Checkbox` 的浏览器兼容性。
 
 ### 0.2.3
 

@@ -21,8 +21,11 @@ function testIndeterminate () {
   let checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
   checkbox.indeterminate = true
+  document.body.appendChild(checkbox)
   checkbox.click()
-  return !checkbox.checked
+  let needPatch = !checkbox.checked
+  checkbox.parentNode.removeChild(checkbox)
+  return needPatch
 }
 
 // IE won't trigger change event for indeterminate checkboxes

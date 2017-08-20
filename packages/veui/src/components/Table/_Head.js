@@ -25,7 +25,7 @@ export default {
         <tr>
           {
             this.selectable
-              ? <th><div class="veui-table-cell"><veui-checkbox checked={this.selectStatus === 'all'}
+              ? <th><div class="veui-table-cell"><veui-checkbox checked={this.selectStatus !== 'none'}
                 disabled={!this.data.length}
                 indeterminate={this.selectStatus === 'partial'}
                 onChange={checked => { this.table.select(checked) }}/></div></th>
