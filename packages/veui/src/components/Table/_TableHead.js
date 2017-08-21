@@ -1,6 +1,6 @@
 import Checkbox from '../Checkbox'
 import Button from '../Button'
-import Sorter from './_Sorter'
+import Sorter from './_TableSorter'
 import { table } from '../../mixins'
 
 export default {

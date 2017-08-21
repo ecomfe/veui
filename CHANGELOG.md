@@ -1,5 +1,6 @@
 ### 0.2.4
 
+* [+] 增加 `veui-loader`，确保只在 Webpack 能够 resolve 样式文件时 `babel-plugin-veui` 才注入样式 `import` 语句。
 * [^] 改善 `Button`、`Table` 组件的样式。
 * [+] 为 `Link` 组件增加 `fallback` prop，用于指定无链接时渲染的容器标签名。
 * [+] 为 `Steps` 添加路由支持。

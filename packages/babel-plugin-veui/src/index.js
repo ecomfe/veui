@@ -6,6 +6,8 @@ import { kebabCase, camelCase, pascalCase, getJSON } from './utils'
 const COMPONENTS = getJSON(path.resolve(__dirname, '../components.json'))
 const COMPONENTS_PATH = 'veui/components/'
 
+let resolveCache = {}
+
 export default function (babel) {
   const { types: t } = babel;
 
@@ -54,24 +56,29 @@ export default function (babel) {
           })
           .filter(v => v)
           .forEach(name => {
-            path.insertAfter(
-              createImportStatement(t, opts.package, opts.path, name)
-            );
+            let { package: pack, path: packPath, request, resolve } = opts
+            let modulePath = packPath ? `${pack}/${packPath}/${name}` : `${pack}/${name}`
+
+            if (resolveCache[modulePath] === false) {
+              return
+            } else if (!(modulePath in resolveCache)) {
+              if (typeof resolve === 'function') {
+                try {
+                  let moduleFile = resolve({}, process.cwd(), modulePath)
+                  resolveCache[modulePath] = true
+                } catch (e) {
+                  resolveCache[modulePath] = false
+                }
+              }
+            }
+
+            if (resolveCache[modulePath]) {
+              path.insertAfter(t.importDeclaration([], t.stringLiteral(modulePath)))
+            }
           })
       }
     }
   };
-}
-
-function createImportStatement(t, pack, path, name) {
-  return t.importDeclaration(
-    [],
-    t.stringLiteral(
-      path
-      ? `${pack}/${path}/${name}`
-      : `${pack}/${name}`
-    )
-  )
 }
 
 function getPeerPath (name, template = '${module}.css') {

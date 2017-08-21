@@ -1,4 +1,4 @@
-import Row from './_Row'
+import Row from './_TableRow'
 import { table } from '../../mixins'
 
 export default {

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { isString, isObject, isNumber } from 'lodash'
-import ToastList from '../components/_ToastList'
+import ToastList from '../components/ToastList'
 
 let Container = Vue.extend(ToastList)
 

@@ -85,6 +85,7 @@
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0",
     "url-loader": "^0.5.7",
+    "veui-loader": "^0.2.3",
     "vue": "^2.3.0",
     "vue-awesome": "^2.3.1",
     "vue-loader": "^11.1.4",

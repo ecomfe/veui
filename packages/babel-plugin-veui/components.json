@@ -200,6 +200,10 @@
     "path": "Toast.vue"
   },
   {
+    "name": "ToastList",
+    "path": "ToastList.vue"
+  },
+  {
     "name": "Tooltip",
     "path": "Tooltip.vue"
   },
