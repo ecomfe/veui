@@ -112,42 +112,9 @@ export default {
     includeIndeterminate: Boolean
   },
   data () {
-    let localSelected = [...(this.selected || [])]
-    let selectedMap = localSelected.reduce((result, current) => {
-      result[current] = true
-      return result
-    }, {})
-
-    // { id, label, children, selected, indeterminate, parent }
-    let localDatasource = cloneDeep(this.datasource)
-    walk(localDatasource, {
-      enter ({ node, parent }) {
-        node.selected = false
-        node.solidCount = 0 // deteminately selected child count
-        node.softCount = 0 // indeterminately selected child count
-        node.indeterminate = false
-        node.parent = parent
-      },
-      exit ({ node, parent }) {
-        if (!node.id && !(node.children && node.children.length)) {
-          // invalid node
-          Vue.util.warn(`Invalid region tree node '${node.label}'. Provide \`id\`, \`children\` or both.`)
-          return
-        }
-
-        // get select state for self
-        if (node.id) {
-          // check select state from `selected`
-          node.selected = !!selectedMap[node.id]
-        }
-
-        // infer state from children
-        updateNode(node)
-      }
-    })
     return {
-      localDatasource,
-      localSelected,
+      localSelected: [...(this.selected || [])],
+      localDatasource: null,
       constraints: [
         {
           to: 'scrollParent',
@@ -160,7 +127,63 @@ export default {
       ]
     }
   },
+  computed: {
+    selectedMap () {
+      return this.localSelected.reduce((result, current) => {
+        result[current] = true
+        return result
+      }, {})
+    }
+  },
+  watch: {
+    selected (val) {
+      // change is triggered by toggleNode after user interaction
+      // reset the flag and do nothing because UI is already updated
+      if (this.fromUI) {
+        this.fromUI = false
+        return
+      }
+      this.localSelected = val
+      this.init()
+    },
+    datasource () {
+      this.init()
+    }
+  },
+  created () {
+    this.init()
+  },
   methods: {
+    init () {
+      // { id, label, children, selected, indeterminate, parent }
+      let localDatasource = cloneDeep(this.datasource)
+      walk(localDatasource, {
+        enter: ({ node, parent }) => {
+          node.selected = false
+          node.solidCount = 0 // deteminately selected child count
+          node.softCount = 0 // indeterminately selected child count
+          node.indeterminate = false
+          node.parent = parent
+        },
+        exit: ({ node, parent }) => {
+          if (!node.id && !(node.children && node.children.length)) {
+            // invalid node
+            Vue.util.warn(`Invalid region tree node '${node.label}'. Provide \`id\`, \`children\` or both.`)
+            return
+          }
+
+          // get select state for self
+          if (node.id) {
+            // check select state from `selected`
+            node.selected = !!this.selectedMap[node.id]
+          }
+
+          // infer state from children
+          updateNode(node)
+        }
+      })
+      this.localDatasource = localDatasource
+    },
     toggleActive (node, show) {
       // `active` is not observed yet
       Vue.set(node, 'active', show)
@@ -171,7 +194,7 @@ export default {
 
       // select/unselect all descendents
       walk(node, {
-        exit ({ node }) {
+        exit: ({ node }) => {
           let hasChildren = node.children && node.children.length
           node.indeterminate = false
           node.selected = checked
@@ -194,7 +217,7 @@ export default {
       let output = []
       let includeIndeterminate = this.includeIndeterminate
       walk(this.localDatasource, {
-        enter ({ node }) {
+        enter: ({ node }) => {
           if (!node.id || !node.selected) {
             return
           }
@@ -204,6 +227,7 @@ export default {
           }
         }
       })
+      this.fromUI = true
       this.$emit('select', output)
     }
   }

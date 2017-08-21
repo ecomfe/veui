@@ -1,5 +1,7 @@
 <template>
-<veui-element :is="fallback" v-if="!to"><slot></slot></veui-element>
+<component v-if="!to"
+  :is="fallback"
+  @click="handleRedirect"><slot></slot></component>
 <router-link v-else-if="$router && !native"
   :to="to"
   :replace="replace">
@@ -12,8 +14,6 @@
 </a>
 </template>
 <script>
-import Element from './_Element'
-
 export default {
   name: 'veui-link',
   components: {

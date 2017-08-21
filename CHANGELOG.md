@@ -9,6 +9,8 @@
 * [+] 为 `Switch` 组件增加描述及默认 slot。
 * [+] 为 `Searchbox` 组件增加 `clearable` 属性，`suggestions` scoped slot 以及 `select` 事件，`suggestions` 支持字符串数组。
 * [^] 修正 `indeterminate` 状态 `Checkbox` 的浏览器兼容性。
+* [^] `Table` 组件的 `select` 事件将在 `selected` prop 更新后触发，`select` 事件在全选时增加 `null` 值作为当前选择项的数据，参数列表修改为和单选时一致。**[Breaking change]**
+* [^] 修正 `RegionPicker` 无法响应外部 `selected` 变化的问题。
 
 ### 0.2.3
 

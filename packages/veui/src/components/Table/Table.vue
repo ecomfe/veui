@@ -93,24 +93,24 @@ export default {
   },
   methods: {
     select (selected, index) {
+      let item = null
       if (index !== undefined) {
-        let item = this.data[index]
+        item = this.data[index]
         let key = this.realKeys[index]
         if (selected) {
           this.localSelected.push(key)
         } else {
           this.localSelected.splice(indexOf(this.localSelected, key), 1)
         }
-        this.$emit('select', selected, item, this.selectedItems)
       } else {
         if (selected) {
           this.localSelected = [...this.realKeys]
         } else {
           this.localSelected = []
         }
-        this.$emit('select', selected, this.selectedItems)
       }
       this.$emit('update:selected', this.localSelected)
+      this.$emit('select', selected, item, this.selectedItems)
     },
     getItem (key) {
       return this.data[indexOf(this.realKeys, key)]
