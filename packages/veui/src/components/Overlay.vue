@@ -1,14 +1,14 @@
 <template>
-  <div class="veui-overlay">
-    <div class="veui-overlay-box"
-      :class="overlayClass"
-      :ui="ui"
-      ref="box"
-      :style="{zIndex}"
-      v-show="localOpen">
-      <slot></slot>
-    </div>
+<div class="veui-overlay">
+  <div class="veui-overlay-box"
+    :class="overlayClass"
+    :ui="ui"
+    ref="box"
+    :style="{zIndex}"
+    v-show="localOpen">
+    <slot></slot>
   </div>
+</div>
 </template>
 
 <script>
@@ -67,7 +67,10 @@ export default {
     open (value) {
       this.localOpen = value
       this.updateOverlayDOM()
-      this[OVERLAY_INSTANCE_KEY].toTop()
+      if (value) {
+        this[OVERLAY_INSTANCE_KEY].toTop()
+      }
+      this.$emit('update:open', value)
     },
     target () {
       this.findTargetNode()

@@ -1,12 +1,12 @@
 <template>
-  <div class="veui-option" :class="{
-    'veui-option-disabled': disabled,
-    'veui-option-selected': selected
-  }"
-    @click.stop="select">
-    <span class="veui-option-label"><slot>{{ label }}</slot></span>
-    <icon class="veui-option-checkmark" v-if="selected" name="check"></icon>
-  </div>
+<div class="veui-option" :class="{
+  'veui-option-disabled': disabled,
+  'veui-option-selected': selected
+}"
+  @click.stop="select">
+  <span class="veui-option-label"><slot>{{ label }}</slot></span>
+  <icon class="veui-option-checkmark" v-if="selected" name="check"></icon>
+</div>
 </template>
 
 <script>

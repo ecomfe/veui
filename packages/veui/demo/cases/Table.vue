@@ -5,21 +5,41 @@
       <veui-button ui="primary" @click="append">添加</veui-button>
     </section>
     <section>
-      <veui-table ui="slim alt" :data="data" :columnFilter="columns" keys="id" selectable
-        :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected="selected">
-        <veui-table-column field="id" title="数据 ID" sortable></veui-table-column>
+      <veui-table ui="alt" :data="data" :columnFilter="columns" keys="id" selectable
+        :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected.sync="selected">
+        <veui-table-column field="id" title="数据 ID" sortable>
+          <template scope="props" slot="foot"><strong>总计</strong></template>
+        </veui-table-column>
         <veui-table-column field="desc" title="数据描述"></veui-table-column>
         <veui-table-column field="price" title="价格" sortable width="160" align="right">
           <template scope="props">{{ props.item.price | currency }}</template>
           <template scope="props" slot="foot"><strong>{{ total | currency }}</strong></template>
         </veui-table-column>
         <veui-table-column field="updateDate" title="更新时间" align="center">
-          <template scope="props">{{ props.item.updateDate | date }}</template>
+          <template scope="props">
+            <span :ref="`time-${props.item.id}`">{{ props.item.updateDate | date }}</span>
+            <veui-tooltip :target="`time-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
+          </template>
         </veui-table-column>
         <veui-table-column field="operation" title="操作">
           <template scope="props">
             <veui-button ui="link" @click="log(props.item)">编辑</veui-button>
             <veui-button ui="link alert" @click="del(props.index)">删除</veui-button>
+          </template>
+        </veui-table-column>
+      </veui-table>
+    </section>
+    <section class="container">
+      <veui-table ui="embed" :data="data" :columnFilter="columns">
+        <veui-table-column field="id" title="数据 ID"></veui-table-column>
+        <veui-table-column field="desc" title="数据描述"></veui-table-column>
+        <veui-table-column field="price" title="价格" width="160" align="right">
+          <template scope="props">{{ props.item.price | currency }}</template>
+        </veui-table-column>
+        <veui-table-column field="updateDate" title="更新时间" align="right">
+          <template scope="props">
+            <span :ref="`time-${props.item.id}`">{{ props.item.updateDate | date }}</span>
+            <veui-tooltip :target="`time-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
           </template>
         </veui-table-column>
       </veui-table>
@@ -43,7 +63,7 @@
 <script>
 import moment from 'moment'
 import bus from '../bus'
-import { Button, CheckboxGroup, Table, Column } from 'veui'
+import { Button, CheckboxGroup, Table, Column, Tooltip } from 'veui'
 
 export default {
   name: 'table-demo',
@@ -51,6 +71,7 @@ export default {
     'veui-button': Button,
     'veui-table': Table,
     'veui-table-column': Column,
+    'veui-tooltip': Tooltip,
     'veui-checkboxgroup': CheckboxGroup
   },
   filters: {
@@ -59,6 +80,9 @@ export default {
     },
     date (value) {
       return moment(value).format('YYYY-MM-DD')
+    },
+    time (value) {
+      return moment(value).format('YYYY-MM-DD HH:mm:ss')
     }
   },
   data () {
@@ -133,10 +157,16 @@ label {
   margin-right: 10px;
 }
 
-table {
+.veui-table {
+  margin-bottom: 30px;
+
   tfoot strong {
     font-size: 16px;
     font-weight: 400;
   }
+}
+
+.container {
+  width: 640px;
 }
 </style>

@@ -4,10 +4,7 @@
   vertical-align: top;
   clear: both;
 
-  .veui-form-label {
-    display: inline-block;
-    height: @veui-height-normal;
-    width: @veui-form-label-width;
+  .veui-span {
     line-height: @veui-height-normal;
   }
 
@@ -21,18 +18,27 @@
     width: @veui-form-label-width;
   }
 
-  .veui-span {
-    display: inline-block;
-  }
-
-  & > [class*="veui"]:not([class*="veui-form-label"]):not([class*="veui-span"]):not([class*="error"]) {
+  & > * {
     display: inline-block;
     vertical-align: top;
   }
 
+  & > *:not([class*="veui-form-label"]) + * {
+    margin-left: 10px;
+  }
+
+  .veui-form-label {
+    height: @veui-height-normal;
+    width: @veui-form-label-width;
+    line-height: @veui-height-normal;
+  }
+
+  .veui-span {
+    line-height: @veui-height-normal;
+  }
+
   &-error {
     position: static;
-    display: inline-block;
     height: @veui-height-normal;
     line-height: @veui-height-normal;
     margin: 0 0 0 10px;

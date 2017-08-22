@@ -1,16 +1,14 @@
 @import "../lib.less";
 
 .veui-button {
-  padding: 8px 20px 9px;
+  padding: 0 20px;
   min-width: 70px;
-  height: @veui-height-normal;
   border: 1px solid @veui-theme-color-primary;
   background-color: #fff;
   color: @veui-theme-color-primary;
   border-radius: 2px;
   user-select: none;
   vertical-align: middle;
-  line-height: 1;
   .veui-button-transition();
 
   &:not(.veui-button-loading) {
@@ -47,10 +45,6 @@
       color: @veui-text-color-weak;
       .veui-shadow(none);
     }
-  }
-
-  &.veui-button-loading {
-    cursor: default;
   }
 
   &[ui~="aux"] {
@@ -133,7 +127,6 @@
 
   &[ui~="link"] {
     min-width: auto;
-    height: auto;
     border: none;
     padding: 0;
     background: transparent;
@@ -173,21 +166,22 @@
   }
 
   &[ui~="large"] {
-    height: @veui-height-large;
-    .padding(11px, _);
+    .centered-line(@veui-height-large);
     font-size: @veui-font-size-large;
+    .make-height(@veui-height-large);
   }
 
   &[ui~="small"] {
-    .padding(7px, _);
-    height: @veui-height-small;
+    .centered-line(@veui-height-small);
     font-size: @veui-font-size-small;
+    .make-height(@veui-height-small);
   }
 
   &[ui~="tiny"] {
     min-width: auto;
-    height: @veui-height-tiny;
-    padding: 5px 10px;
+    .centered-line(@veui-height-tiny);
+    .make-height(@veui-height-tiny);
+    padding: 0 10px;
     font-size: @veui-font-size-small;
   }
 
@@ -215,18 +209,33 @@
     }
   }
 
+  &.veui-button-loading {
+    cursor: default;
+    .box-shadow(none);
+  }
+
   .veui-icon {
     max-width: 1em;
-    vertical-align: text-top;
-
     & + .veui-button-loading-text {
       margin-left: 5px;
     }
   }
+
+  .make-height(@button-height) {
+    height: @button-height;
+    line-height: @button-height - 2px;
+
+    & > .veui-icon {
+      vertical-align: top;
+      @height: @button-height / 2 - 1;
+      margin-top: ~"calc(@{height} - 0.5em)";
+    }
+  }
+  .make-height(@veui-height-normal);
 }
 
 .veui-button-loading-text {
-  vertical-align: text-top;
+  vertical-align: top;
 
   [ui~="round"] > &,
   [ui~="square"] > & {

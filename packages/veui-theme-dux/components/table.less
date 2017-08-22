@@ -14,24 +14,26 @@
   td {
     height: 54px;
     padding: 12px;
-    color: @veui-gray-color-normal;
     text-align: left;
     white-space: nowrap;
   }
 
   th {
-    font-weight: @veui-font-weight-bold;
+    font-weight: @veui-font-weight-normal;
+    color: @veui-text-color-normal;
   }
 
   td {
     border: 1px solid @veui-gray-color-sup-2;
     border-style: solid none;
+    color: @veui-text-color-strong;
   }
 
   tfoot th {
     border-top: none;
   }
 
+  &[ui~="embed"],
   &[ui~="slim"] {
     th,
     td {
@@ -41,13 +43,22 @@
   }
 
   &[ui~="alt"] {
-    thead th {
-      color: @veui-text-color-weak;
-    }
-
     thead,
     tfoot {
       background-color: @veui-gray-color-sup-4;
+    }
+  }
+
+  &[ui~="embed"] {
+    th,
+    td {
+      &:first-child {
+        padding-left: 10px;
+      }
+
+      &:last-child {
+        padding-right: 10px;
+      }
     }
   }
 
@@ -55,8 +66,18 @@
     text-align: center;
   }
 
-  &-selected-row td {
-    background-color: @veui-theme-color-sup-4;
+  tr:hover {
+    td {
+      background-color: @veui-gray-color-sup-4;
+    }
+
+    .veui-table-no-data {
+      background-color: #fff;
+    }
+  }
+
+  .veui-button {
+    .centered-line(28px);
   }
 
   .veui-button + .veui-button {

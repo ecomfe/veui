@@ -1,36 +1,41 @@
 <template>
   <article>
     <h1><code>&lt;veui-pager&gt;</code></h1>
-    <div class="pager">
+    <section>
       <h2>四种版式</h2>
-      <veui-pager :page="page" :page-total="pageTotal" :to="to"></veui-pager>
+      <p><veui-pager :page="page" :total="total" :to="to"></veui-pager></p>
 
-      <veui-pager :page="page" :page-total="pageTotal" :to="to" ui="hetero"></veui-pager>
+      <p><veui-pager :page="page" :total="total" :to="to" ui="hetero"></veui-pager></p>
 
-      <veui-pager :page="page" :page-total="pageTotal" :page-sizes="pageSizes" :to="to" ui="full"></veui-pager>
+      <p><veui-pager :page="page" :total="total" :page-sizes="pageSizes" :to="to" ui="full"></veui-pager></p>
 
-      <veui-pager :page="page" :page-total="pageTotal" :to="to" ui="slim"></veui-pager>
-    </div>
+      <p><veui-pager :page="page" :total="total" :to="to" ui="slim"></veui-pager></p>
+    </section>
 
-    <div class="pager">
+    <section>
       <h2>目标位置模板</h2>
       <p><small>格式和 &lt;router-link&gt; 的 to prop 一样</small></p>
-      <veui-pager :page="page" :page-total="pageTotal" ui="advanced"
-        :to="{name: 'Pager', params: { page: ':page'}}"></veui-pager>
-    </div>
+      <p><veui-pager :page="page" :total="total" ui="advanced"
+        :to="{name: 'Pager', params: { page: ':page'}}"></veui-pager></p>
+    </section>
 
-    <div class="pager">
+    <section>
       <h2>原生跳转</h2>
-      <veui-pager :page="page" :page-total="pageTotal" :to="'#' + to" ui="advanced" :native="true"></veui-pager>
-    </div>
+      <p><veui-pager :page="page" :total="total" :to="'#' + to" ui="advanced" :native="true"></veui-pager></p>
+    </section>
 
-    <div class="pager">
+    <section>
       <h2>事件与阻止跳转</h2>
       <p><small>仅原生跳转可用</small></p>
-      <veui-pager :page="page" :page-total="pageTotal" :to="to" ui="advanced" :native="true"
-        @redirect="handlePageRedirect"></veui-pager>
+      <p><veui-pager :page="page" :total="total" :to="to" ui="advanced" :native="true"
+        @redirect="handlePageRedirect"></veui-pager></p>
       <div class="message">{{ fifthPagerMessage }}</div>
-    </div>
+    </section>
+
+    <section>
+      <h2>没有数据时</h2>
+      <p><veui-pager :page="1" :total="0" :to="'#' + to" ui="full" :native="true"></veui-pager></p>
+    </section>
   </article>
 </template>
 
@@ -46,7 +51,7 @@ export default {
   data () {
     return {
       page: parseInt(this.$route.params.page, 10) || 1,
-      pageTotal: 10101,
+      total: 10101,
       to: '/pager/:page',
       pageSizes: [30, 60, 100, 200],
       fifthPagerMessage: ''
@@ -74,7 +79,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.pager {
+section {
   margin-bottom: 4em;
 }
 .veui-pager {

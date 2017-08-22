@@ -1,7 +1,7 @@
 <template>
-  <form class="veui-form" @submit.prevent="handleSubmit">
-    <slot></slot>
-  </form>
+<form class="veui-form" @submit.prevent="handleSubmit">
+  <slot></slot>
+</form>
 </template>
 
 <script>

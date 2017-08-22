@@ -13,19 +13,23 @@
   &[ui~="inline"] {
     .clearfix();
 
+    & > * + * {
+        margin-left: 10px;
+    }
+
     .veui-fieldset,
     .veui-field {
       display: inline-block;
       margin-bottom: 0;
       clear: none;
 
-      & > .veui-form-label {
+      & > .veui-form-label,
+      &.veui-field-no-label::before {
         width: auto;
       }
 
-      & + .veui-fieldset,
-      & + .veui-field {
-        margin-left: 15px;
+      & + .veui-fieldset {
+        margin-left: 30px;
       }
     }
   }

@@ -4,29 +4,52 @@
   @gap: 2px;
 
   .metrics(@size: @veui-height-small) {
-    width: @size * 1.8;
-    height: @size;
-    border-radius: @size / 2;
+    .veui-switch {
+      &-switcher {
+        width: @size * 1.8;
+        height: @size;
+        border-radius: @size / 2;
+      }
 
-    .veui-switch-button {
-      .size(@size - @gap * 2);
-      .veui-icon {
-        .size(@size / 3 * 2);
+      &-button {
+        .size(@size - @gap * 2);
+        .veui-icon {
+          .size(@size / 3 * 2);
+        }
+      }
+
+      &-label {
+        line-height: @size;
       }
     }
-
     &.veui-switch-on .veui-switch-button {
       transform: translateX(@size * 0.8);
     }
   }
 
-  .metrics();
   display: inline-block;
-  background-color: @veui-gray-color-sup-1;
-  color: @veui-gray-color-sup-1;
   cursor: pointer;
-  user-select: none;
-  transition: background-color ease .2s;
+  font-size: @veui-font-size-normal;
+  .metrics();
+
+  &-switcher,
+  &-label {
+    vertical-align: middle;
+  }
+
+  &-label {
+    display: inline-block;
+    margin-left: 10px;
+  }
+
+  &-switcher {
+    display: inline-block;
+    background-color: @veui-gray-color-sup-1;
+    color: @veui-gray-color-sup-1;
+    user-select: none;
+    transition: background-color ease .2s;
+
+  }
 
   &-button {
     display: inline-block;
@@ -42,7 +65,7 @@
     }
   }
 
-  &-on {
+  &-on &-switcher {
     background-color: @veui-theme-color-primary;
     color: @veui-theme-color-primary;
   }
@@ -52,9 +75,12 @@
   }
 
   &-disabled {
+    cursor: not-allowed;
+  }
+
+  &-disabled &-switcher {
     background-color: @veui-gray-color-sup-1;
     color: @veui-gray-color-sup-1;
-    cursor: not-allowed;
   }
 
   &-disabled &-button {
@@ -63,10 +89,12 @@
 
   &[ui~="small"] {
     .metrics(@veui-height-tiny);
+    font-size: @veui-font-size-small;
   }
 
   &[ui~="large"] {
     .metrics(@veui-height-normal);
+    font-size: @veui-font-size-large;
   }
 
   input {

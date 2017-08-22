@@ -1,4 +1,4 @@
-import Row from './_Row'
+import Row from './_TableRow'
 import { table } from '../../mixins'
 
 export default {
@@ -17,11 +17,10 @@ export default {
   render () {
     return (
       <tbody>
-        {this.data.length ? this._l(this.data, (item, index) => {
-          return (
+        {this.data.length
+          ? this.data.map((item, index) => (
             <veui-table-row index={ index }></veui-table-row>
-          )
-        }) : <tr>
+          )) : <tr>
           <td class="veui-table-no-data" colspan={(this.selectable ? 1 : 0) + this.columns.length}>
             <div class="veui-table-cell">{this.$slots['no-data'] || '没有数据'}</div>
           </td>

@@ -16,7 +16,7 @@ export default {
         <tr>
           {this.table.selectable ? <th></th> : ''}
           {
-            this._l(this.columns, col => (
+            this.columns.map(col => (
               <th class={col.align ? `veui-table-column-${col.align}` : ''}>{col.renderFoot.call(this._renderProxy, { col })}</th>
             ))
           }

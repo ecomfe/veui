@@ -22,7 +22,7 @@
   }
 
   &-option-group {
-    .veui-select-group-label {
+    &-label {
       display: inline-block;
       .centered-line(@veui-height-normal);
       padding: 0 10px;
@@ -32,6 +32,18 @@
 
     .veui-option {
       padding-left: 20px;
+    }
+
+    &-unlabelled {
+      border-top: 1px solid @veui-gray-color-sup-2;
+
+      &:first-child {
+        border-top: none;
+      }
+
+      .veui-option {
+        padding-left: 10px;
+      }
     }
   }
 }

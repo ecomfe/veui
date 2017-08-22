@@ -1,4 +1,10 @@
 {
+  "scripts": {
+    "dev": "cd packages/veui && npm run dev",
+    "build-components": "cd packages/veui && npm run build && cd ../babel-plugin-veui && npm run components && cd ../..",
+    "build-plugin": "cd packages/babel-plugin-veui && npm run build && cd ../..",
+    "build": "cd packages/veui && npm run build && cd ../babel-plugin-veui && npm run build && cd ../.."
+  },
   "devDependencies": {
     "lerna": "^2.0.0-rc.5"
   }

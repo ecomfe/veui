@@ -45,7 +45,29 @@ exports.default = function (babel) {
         }).filter(function (v) {
           return v;
         }).forEach(function (name) {
-          path.insertAfter(createImportStatement(t, opts.package, opts.path, name));
+          var pack = opts.package,
+              packPath = opts.path,
+              request = opts.request,
+              resolve = opts.resolve;
+
+          var modulePath = packPath ? pack + '/' + packPath + '/' + name : pack + '/' + name;
+
+          if (resolveCache[modulePath] === false) {
+            return;
+          } else if (!(modulePath in resolveCache)) {
+            if (typeof resolve === 'function') {
+              try {
+                var moduleFile = resolve({}, process.cwd(), modulePath);
+                resolveCache[modulePath] = true;
+              } catch (e) {
+                resolveCache[modulePath] = false;
+              }
+            }
+          }
+
+          if (resolveCache[modulePath]) {
+            path.insertAfter(t.importDeclaration([], t.stringLiteral(modulePath)));
+          }
         });
       }
     }
@@ -71,9 +93,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var COMPONENTS = (0, _utils.getJSON)(_path2.default.resolve(__dirname, '../components.json'));
 var COMPONENTS_PATH = 'veui/components/';
 
-function createImportStatement(t, pack, path, name) {
-  return t.importDeclaration([], t.stringLiteral(path ? pack + '/' + path + '/' + name : pack + '/' + name));
-}
+var resolveCache = {};
 
 function getPeerPath(name) {
   var template = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '${module}.css';

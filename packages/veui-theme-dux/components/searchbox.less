@@ -1,0 +1,201 @@
+@import "../lib.less";
+@import (reference) "../dropdown.less";
+
+.veui-searchbox {
+  display: inline-block;
+  position: relative;
+  color: @veui-gray-color-strong;
+
+  &.veui-searchbox-clearable {
+    .veui-searchbox-icon-close {
+      display: inline-block;
+    }
+  }
+
+  &.veui-disabled,
+  &.veui-readonly {
+    background-color: @veui-gray-color-sup-3;
+    border-color: @veui-gray-color-sup-1;
+    color: @veui-text-color-weak;
+    .veui-shadow(none);
+
+    .veui-searchbox-icon {
+      cursor: not-allowed;
+    }
+    .veui-searchbox-icon-close {
+      display: none;
+    }
+  }
+
+  &-others {
+    position: absolute;
+    .absolute(0);
+    pointer-events: none;
+    line-height: @veui-height-normal;
+  }
+  .veui-input {
+    padding-right: 36px;
+  }
+  &-placeholder {
+    padding: 0 11px;
+    color: @veui-gray-color-weak;
+  }
+  &-placeholder-hide &-placeholder {
+    display: none;
+  }
+
+  &-icons {
+    position: absolute;
+    right: 1em;
+    top: 0;
+    bottom: 0;
+  }
+
+  button&-icon {
+    outline: none;
+    pointer-events: auto;
+    color: @veui-gray-color-weak;
+    border: none;
+    padding: 0;
+    width: auto;
+    height: auto;
+    background-color: transparent;
+
+    &-close {
+      display: none;
+      margin-right: 8px;
+    }
+
+    .veui-icon {
+      vertical-align: middle;
+    }
+  }
+
+  &:not(.veui-disabled):not(.veui-readonly) {
+    .veui-searchbox-icon:hover {
+      color: @veui-theme-color-primary;
+    }
+  }
+
+  &:not(.veui-disabled):not(.veui-readonly):not([ui~="alt"]):hover,
+  &&-suggestion-expanded {
+    input {
+      border-color: @veui-theme-color-primary;
+    }
+  }
+
+  &-suggestion-overlay {
+    &:extend(._veui-dropdown-overlay all);
+    min-width: 160px;
+    max-height: 280px;
+    overflow-y: auto;
+    background-color: #fff;
+
+    &[ui~="large"] {
+      .veui-searchbox-suggestion-item {
+        font-size: @veui-font-size-large;
+      }
+    }
+
+    &[ui~="small"] {
+      .veui-searchbox-suggestion-item {
+        font-size: @veui-font-size-small;
+      }
+    }
+  }
+
+  &-suggestion-item {
+    &:extend(._veui-dropdown-option all);
+  }
+
+  &[ui~="large"] {
+    height: @veui-height-large;
+    font-size: @veui-font-size-large;
+
+    .veui-searchbox-others {
+      line-height: @veui-height-large;
+    }
+
+    .veui-searchbox-suggestion-item {
+      height: @veui-height-large;
+      font-size: @veui-font-size-large;
+    }
+  }
+
+  &[ui~="small"] {
+    height: @veui-height-small;
+    font-size: @veui-font-size-small;
+
+    .veui-searchbox-others {
+      line-height: @veui-height-small;
+    }
+
+    .veui-searchbox-suggestion-item {
+      height: @veui-height-small;
+      font-size: @veui-font-size-small;
+    }
+  }
+
+  &[ui~="alt"] {
+    border-color: transparent;
+    color: @veui-gray-color-weak;
+    .veui-shadow();
+    .veui-input {
+      background-color: @veui-gray-color-sup-3;
+      border-color: transparent;
+      padding-right: 56px;
+      .veui-shadow(none);
+      &:focus,
+      &:active {
+        border-color: transparent;
+        color: @veui-gray-color-strong;
+      }
+    }
+    .veui-searchbox-others {
+      &.veui-searchbox-placeholder-hide {
+        .veui-searchbox-placeholder {
+          display: none;
+        }
+      }
+
+      &:not(.veui-searchbox-placeholder-hide)  {
+        width: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        .veui-searchbox-icons {
+          position: static;
+          display: inline-block;
+          transform: none;
+        }
+
+        .veui-searchbox-placeholder {
+          display: inline-block;
+        }
+      }
+    }
+
+    &.veui-disabled,
+    &.veui-readonly {
+      .veui-shadow(none);
+
+      .veui-searchbox-icon {
+        color: @veui-gray-color-weak;
+      }
+    }
+    .veui-searchbox-icon {
+      color: @veui-gray-color-normal;
+    }
+    &:not(.veui-disabled):not(.veui-readonly):hover {
+      .veui-input {
+        border-color: transparent;
+      }
+      .veui-searchbox-icon {
+        color: @veui-gray-color-strong;
+
+        &:hover {
+          color: @veui-theme-color-primary;
+        }
+      }
+    }
+  }
+}

@@ -1,28 +1,35 @@
 <template>
-  <input
-    v-if="type !== 'textarea'"
-    class="veui-input"
-    v-bind="attrs"
-    v-model="localValue"
-    ref="input"
-    @focus="$emit('focus', $event)"
-    @click="$emit('click', $event)"
-    @blur="$emit('blur', $event)"
-    @change="$emit('change', $event.target.value, $event)"
-    @input="handleInput"
-  >
-  <textarea
-    v-else
-    class="veui-textarea"
-    :class="{ 'veui-textarea-resizable': resizable }"
-    v-bind="attrs"
-    v-model="localValue"
-    ref="input"
-    @focus="$emit('focus', $event)"
-    @click="$emit('click', $event)"
-    @blur="$emit('blur', $event)"
-    @change="$emit('change', $event.target.value, $event)"
-    @input="handleInput"></textarea>
+<input
+  v-if="type !== 'textarea'"
+  class="veui-input"
+  v-bind="attrs"
+  v-model="localValue"
+  ref="input"
+  @focus="$emit('focus', $event)"
+  @click="$emit('click', $event)"
+  @blur="$emit('blur', $event)"
+  @change="$emit('change', $event.target.value, $event)"
+  @input="handleInput"
+  @keyup="$emit('keyup', $event)"
+  @keydown="$emit('keydown', $event)"
+  @keypress="$emit('keypress', $event)"
+>
+<textarea
+  v-else
+  class="veui-textarea"
+  :class="{ 'veui-textarea-resizable': resizable }"
+  v-bind="attrs"
+  v-model="localValue"
+  ref="input"
+  @focus="$emit('focus', $event)"
+  @click="$emit('click', $event)"
+  @blur="$emit('blur', $event)"
+  @change="$emit('change', $event.target.value, $event)"
+  @input="handleInput"
+  @keyup="$emit('keyup', $event)"
+  @keydown="$emit('keydown', $event)"
+  @keypress="$emit('keypress', $event)"
+></textarea>
 </template>
 
 <script>
@@ -45,7 +52,10 @@ export default {
     },
     autocomplete: String,
     placeholder: String,
-    value: [String, Number],
+    value: {
+      type: [String, Number],
+      default: ''
+    },
     autofocus: Boolean,
     selectOnFocus: Boolean,
     composition: Boolean,
@@ -59,7 +69,11 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = omit(this.$props, ['selectOnFocus', 'fitContent', 'composition', 'resizable'])
+      let attrs = omit(this.$props,
+        'selectOnFocus', 'fitContent',
+        'composition', 'resizable',
+        ...(this.type === 'textarea' ? ['type'] : [])
+      )
       extend(attrs, {
         name: this.realName,
         disabled: this.realDisabled,

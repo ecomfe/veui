@@ -1,0 +1,153 @@
+@import "../lib.less";
+
+.veui-steps {
+  display: inline-block;
+  @step-height: 30px;
+  @full-height: 36px;
+  @separator-length-x: 76px;
+  @separator-length-y: 34px;
+  @separator-width: 2px;
+  @separator-gap: 12px;
+  @border-width: 2px;
+
+  &-step {
+    display: block;
+    position: relative;
+    float: left;
+    text-decoration: none;
+    margin-right: @separator-gap * 2 + @separator-length-x;
+
+    &-index {
+      @half-height: @step-height / 2;
+      position: absolute;
+      top: ~"calc(50% - @{half-height})";
+      .size(@step-height);
+      border: @border-width solid @veui-theme-color-primary;
+      background-color: #fff;
+      text-align: center;
+      line-height: @step-height - @border-width * 2;
+      color: @veui-theme-color-primary;
+      font-size: @veui-font-size-large;
+      border-radius: 50%;
+
+      .veui-icon {
+        vertical-align: top;
+        margin-top: ~"calc(50% - 0.5em)";
+      }
+    }
+
+    &-content {
+      padding-left: @step-height + 10px;
+
+      h3 {
+        margin: 0;
+        font-size: @veui-font-size-large;
+        color: @veui-text-color-normal;
+      }
+    }
+
+    &:last-child &-content {
+      margin-right: 0;
+    }
+
+    &-label {
+      line-height: @step-height;
+    }
+
+    &-desc {
+      display: none;
+      margin: 0;
+      color: @veui-text-color-weak;
+      font-size: @veui-font-size-small;
+    }
+
+    &::after {
+      @half-width: @separator-width / 2;
+      .size(@separator-length-x, @separator-width);
+      content: "";
+      position: absolute;
+      top: ~"calc(50% - @{half-width})";
+      right: -@separator-gap - @separator-length-x;
+      background-color: @veui-theme-color-primary;
+      z-index: -1;
+    }
+
+    &:last-child::after {
+      display: none;
+    }
+  }
+
+  &-current {
+    .veui-steps-step-index {
+      background-color: @veui-theme-color-primary;
+      color: #fff;
+    }
+
+    .veui-steps-step-desc {
+      color: @veui-theme-color-primary;
+    }
+
+    .veui-steps-step::after {
+      background-color: @veui-gray-color-sup-1;
+    }
+
+    &,
+    & ~ .veui-steps-step {
+      &::after {
+        background-color: @veui-gray-color-sup-1;
+      }
+    }
+
+    & ~ .veui-steps-step {
+      .veui-steps-step-index {
+        background-color: @veui-gray-color-sup-1;
+        border-color: @veui-gray-color-sup-1;
+        color: #fff;
+      }
+    }
+  }
+
+  &[ui~="full"] .veui-steps-step {
+    @half-height: @full-height / 2;
+
+    &-content {
+      padding-left: @full-height + 10px;
+    }
+
+    &-index {
+      top: ~"calc(50% - @{half-height})";
+      .size(@full-height);
+      line-height: @full-height - @border-width * 2;
+    }
+
+    &-label {
+      line-height: 24px;
+      margin-top: -4px;
+    }
+
+    &-desc {
+      display: block;
+      margin-bottom: -4px;
+      line-height: 20px;
+    }
+  }
+
+  &[ui~="vertical"] .veui-steps-step {
+    float: none;
+    margin-right: 0;
+    margin-bottom: 50px;
+
+    &::after {
+      .size(@separator-width, @separator-length-y);
+      top: 38px;
+      left: (@step-height - @separator-width) / 2;
+    }
+  }
+
+  &[ui~="vertical"][ui~="full"] .veui-steps-step {
+    &::after {
+      top: 50px;
+      left: (@full-height - @separator-width) / 2;
+    }
+  }
+}

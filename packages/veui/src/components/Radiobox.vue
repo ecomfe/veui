@@ -1,9 +1,9 @@
 <template>
-  <label class="veui-radiobox" :ui="ui">
-    <input type="radio" v-bind="attrs" @change="$emit('change', $event.target.checked)">
-    <span class="veui-radiobox-box"></span>
-    <span><slot></slot></span>
-  </label>
+<label class="veui-radiobox" :ui="ui">
+  <input type="radio" v-bind="attrs" @change="$emit('change', $event.target.checked)">
+  <span class="veui-radiobox-box"></span>
+  <span><slot></slot></span>
+</label>
 </template>
 
 <script>

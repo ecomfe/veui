@@ -23,11 +23,50 @@ export default class SpecialDialog {
     document.body.appendChild(el)
     component.$mount(el)
     this.components.push(component)
+    return component
   }
 
   removeComponent (component) {
     remove(this.components, item => item === component)
     component.$destroy()
     component.$el.parentNode.removeChild(component.$el)
+  }
+
+  success (content, title, options = {}) {
+    return this._show({
+      ...options,
+      content,
+      title,
+      type: 'success'
+    })
+  }
+
+  _show () {}
+
+  info (content, title, options = {}) {
+    return this._show({
+      ...options,
+      content,
+      title,
+      type: 'info'
+    })
+  }
+
+  error (content, title, options = {}) {
+    return this._show({
+      ...options,
+      content,
+      title,
+      type: 'error'
+    })
+  }
+
+  warn (content, title, options = {}) {
+    return this._show({
+      ...options,
+      content,
+      title,
+      type: 'warning'
+    })
   }
 }

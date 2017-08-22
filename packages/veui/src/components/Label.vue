@@ -1,5 +1,5 @@
 <template>
-  <label class="veui-label" @click="findLabeledInput"><slot></slot></label>
+<label class="veui-label" @click="findLabeledInput"><slot></slot></label>
 </template>
 
 <script>
@@ -10,6 +10,9 @@ export default {
 
   methods: {
     findLabeledInput () {
+      if (window.getSelection().toString().length) {
+        return
+      }
       let ancestor = getTypedAncestor(this, 'field')
       if (ancestor) {
         let target = ancestor.$children.filter(child => child !== this)[0]

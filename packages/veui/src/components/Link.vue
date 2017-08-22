@@ -1,19 +1,24 @@
 <template>
-  <span v-if="!to"><slot></slot></span>
-  <router-link v-else-if="$router && !native"
-    :to="to"
-    :replace="replace">
-    <slot></slot>
-  </router-link>
-  <a v-else
-    :href="to"
-    @click="handleRedirect">
-    <slot></slot>
-  </a>
+<component v-if="!to"
+  :is="fallback"
+  @click="handleRedirect"><slot></slot></component>
+<router-link v-else-if="$router && !native"
+  :to="to"
+  :replace="replace">
+  <slot></slot>
+</router-link>
+<a v-else
+  :href="to"
+  @click="handleRedirect">
+  <slot></slot>
+</a>
 </template>
 <script>
 export default {
   name: 'veui-link',
+  components: {
+    'veui-element': Element
+  },
   props: {
     to: {
       type: String,
@@ -26,6 +31,10 @@ export default {
     native: {
       type: Boolean,
       default: false
+    },
+    fallback: {
+      type: String,
+      default: 'span'
     }
   },
   methods: {

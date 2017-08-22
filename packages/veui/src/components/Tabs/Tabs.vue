@@ -36,7 +36,7 @@ export default {
         <div class="veui-tabs-menu">
           <ul class="veui-tabs-list">
             {
-              this._l(this.tabs, (tab, index) => (
+              this.tabs.map((tab, index) => (
                 tab.to
                   ? <li class={{
                     'veui-tabs-item': true,

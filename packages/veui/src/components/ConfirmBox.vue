@@ -1,18 +1,18 @@
 <template>
-  <veui-dialog :open.sync="localOpen"
-    :priority="priority"
-    :closable="false"
-    ui="reverse"
-    overlay-class="veui-confirm-box">
-    <template slot="title">
-      <slot name="title">{{ title }}</slot>
-    </template>
-    <slot></slot>
-    <template slot="foot">
-      <veui-button ui="primary" @click="ok()">确定</veui-button>
-      <veui-button ui="aux" @click="cancel()">取消</veui-button>
-    </template>
-  </veui-dialog>
+<veui-dialog :open.sync="localOpen"
+  :priority="priority"
+  :closable="false"
+  ui="reverse"
+  overlay-class="veui-confirm-box">
+  <template slot="title">
+    <slot name="title">{{ title }}</slot>
+  </template>
+  <slot></slot>
+  <template slot="foot">
+    <veui-button ui="primary" @click="ok()">确定</veui-button>
+    <veui-button ui="aux" @click="cancel()">取消</veui-button>
+  </template>
+</veui-dialog>
 </template>
 
 <script>
@@ -31,7 +31,13 @@ export default {
     'veui-dialog': Dialog,
     'veui-button': Button
   },
-  props: pick(Dialog.props, ['open', 'title']),
+  props: {
+    ...pick(Dialog.props, ['open', 'title']),
+    ui: {
+      type: String,
+      default: 'reverse'
+    }
+  },
   data () {
     return {
       localOpen: this.open,
@@ -49,11 +55,9 @@ export default {
   },
   methods: {
     ok () {
-      this.localOpen = false
       this.$emit('ok')
     },
     cancel () {
-      this.localOpen = false
       this.$emit('cancel')
     }
   }

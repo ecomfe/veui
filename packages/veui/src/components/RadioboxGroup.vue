@@ -1,17 +1,17 @@
 <template>
-  <div class="veui-radioboxgroup">
-    <radiobox
-      :ui="ui"
-      :name="localName"
-      v-for="(item, index) in items"
-      :key="index"
-      :value="item.value"
-      :disabled="item.disabled || realDisabled || realReadonly"
-      :checked="item.value === value"
-      @change="checked => handleChange(item.value, checked)">
-      <slot v-bind="item">{{ item.label }}</slot>
-    </radiobox>
-  </div>
+<div class="veui-radioboxgroup" :ui="ui">
+  <radiobox
+    :ui="ui"
+    :name="localName"
+    v-for="(item, index) in items"
+    :key="index"
+    :value="item.value"
+    :disabled="item.disabled || realDisabled || realReadonly"
+    :checked="item.value === value"
+    @change="checked => handleChange(item.value, checked)">
+    <slot v-bind="item">{{ item.label }}</slot>
+  </radiobox>
+</div>
 </template>
 
 <script>

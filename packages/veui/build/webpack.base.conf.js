@@ -24,11 +24,16 @@ module.exports = {
     alias: {
       '@': resolve('src'),
       veui: resolve('src')
-
     }
   },
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        loader: 'veui-loader',
+        enforce: 'pre',
+        include: [resolve('src'), resolve('demo'), resolve('test')]
+      },
       {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',

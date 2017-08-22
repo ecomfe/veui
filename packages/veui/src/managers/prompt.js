@@ -1,7 +1,7 @@
 import SpecialDialog from './SpecialDialog'
 import PromptBox from '../components/PromptBox'
 import Vue from 'vue'
-import { isFunction } from 'lodash'
+import { isFunction, noop } from 'lodash'
 
 export class PromptManager extends SpecialDialog {
 
@@ -24,18 +24,8 @@ export class PromptManager extends SpecialDialog {
               value: data.value
             },
             on: {
-              ok: () => {
-                this.removeComponent(component)
-                if (isFunction(data.ok)) {
-                  data.ok(data.value)
-                }
-              },
-              cancel: () => {
-                this.removeComponent(component)
-                if (isFunction(data.cancel)) {
-                  data.cancel()
-                }
-              },
+              ok: () => data.ok(data.value),
+              cancel: data.cancel,
               input: (v) => {
                 data.value = v
               }
@@ -47,11 +37,23 @@ export class PromptManager extends SpecialDialog {
     return component
   }
 
-  popup (content, title, options = {}) {
-    this.create({
-      content,
-      title,
-      ...options
+  _show (options) {
+    let ok = isFunction(options.ok) ? options.ok : noop
+    let cancel = isFunction(options.cancel) ? options.cancel : noop
+
+    return new Promise((resolve, reject) => {
+      let checkRemove = (isOk, value) => {
+        Promise.resolve(isOk ? ok() : cancel()).then(result => {
+          this.removeComponent(component)
+          isOk ? resolve({ isOk, value }) : resolve(isOk)
+        })
+      }
+
+      let component = this.create({
+        ...options,
+        ok: value => checkRemove(true, value),
+        cancel: () => checkRemove(false)
+      })
     })
   }
 }

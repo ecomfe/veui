@@ -1,6 +1,6 @@
 import Checkbox from '../Checkbox'
 import Button from '../Button'
-import Sorter from './_Sorter'
+import Sorter from './_TableSorter'
 import { table } from '../../mixins'
 
 export default {
@@ -25,14 +25,14 @@ export default {
         <tr>
           {
             this.selectable
-              ? <th><div class="veui-table-cell"><veui-checkbox checked={this.selectStatus === 'all'}
+              ? <th><div class="veui-table-cell"><veui-checkbox checked={this.selectStatus !== 'none'}
                 disabled={!this.data.length}
                 indeterminate={this.selectStatus === 'partial'}
                 onChange={checked => { this.table.select(checked) }}/></div></th>
               : ''
           }
           {
-            this._l(this.columns, col => (
+            this.columns.map(col => (
               <th class={col.align ? `veui-table-column-${col.align}` : ''}>
                 <div class="veui-table-cell">{col.renderHead.call(this._renderProxy, { col })}</div>
                 {

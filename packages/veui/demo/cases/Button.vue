@@ -18,12 +18,12 @@
       <veui-button loading>保存</veui-button>
     </p>
     <p>
-      <veui-button ui="aux tiny">取消</veui-button>
-      <veui-button ui="aux small">取消</veui-button>
-      <veui-button ui="aux">取消</veui-button>
-      <veui-button ui="aux large">取消</veui-button>
-      <veui-button ui="aux" disabled>取消</veui-button>
-      <veui-button ui="aux" loading>取消</veui-button>
+      <veui-button ui="aux tiny"><icon name="cross-small"></icon> 取消</veui-button>
+      <veui-button ui="aux small"><icon name="cross-small"></icon> 取消</veui-button>
+      <veui-button ui="aux"><icon name="cross-small"></icon> 取消</veui-button>
+      <veui-button ui="aux large"><icon name="cross-small"></icon> 取消</veui-button>
+      <veui-button ui="aux" disabled><icon name="cross-small"></icon> 取消</veui-button>
+      <veui-button ui="aux" loading><icon name="cross-small"></icon> 取消</veui-button>
     </p>
     <p>
       <veui-button ui="alt tiny">取消</veui-button>

@@ -1,41 +1,41 @@
 <template>
-  <veui-overlay class="veui-dialog"
-    :open="localOpen"
-    :overlay-class="mergedOverlayClass"
-    :ui="ui"
-    ref="overlay"
-    :priority="priority">
-    <div class="veui-dialog-content"
-      :style="contentRectStyle"
-      @mousedown="focus"
-      ref="content">
-      <div class="veui-dialog-content-head"
-        :class="{ 'veui-dialog-draggable': draggable }"
-        ref="head"
-        v-drag>
-        <span class="veui-dialog-content-head-title"
-          v-if="localTitle"
-          v-text="localTitle">
-        </span>
-        <span class="veui-dialog-content-head-title"
-          v-else>
-          <slot name="title">弹窗标题</slot>
-        </span>
-        <a class="veui-dialog-content-head-close"
-          v-show="localClosable"
-          @click="hide">
-          <veui-icon name="cross"></veui-icon>
-        </a>
-      </div>
-      <div ref="body" class="veui-dialog-content-body"><slot></slot></div>
-      <div ref="foot" class="veui-dialog-content-foot">
-        <slot name="foot">
-          <veui-button ui="primary" @click="$emit('ok')">确定</veui-button>
-          <veui-button @click="$emit('cancel')">取消</veui-button>
-        </slot>
-      </div>
+<veui-overlay class="veui-dialog"
+  :open="localOpen"
+  :overlay-class="mergedOverlayClass"
+  :ui="ui"
+  ref="overlay"
+  :priority="priority">
+  <div class="veui-dialog-content"
+    :style="contentRectStyle"
+    @mousedown="focus"
+    ref="content">
+    <div class="veui-dialog-content-head"
+      :class="{ 'veui-dialog-draggable': draggable }"
+      ref="head"
+      v-drag>
+      <span class="veui-dialog-content-head-title"
+        v-if="localTitle"
+        v-text="localTitle">
+      </span>
+      <span class="veui-dialog-content-head-title"
+        v-else>
+        <slot name="title">弹窗标题</slot>
+      </span>
+      <a class="veui-dialog-content-head-close"
+        v-show="localClosable"
+        @click="hide">
+        <veui-icon name="cross"></veui-icon>
+      </a>
     </div>
-  </veui-overlay>
+    <div ref="body" class="veui-dialog-content-body"><slot></slot></div>
+    <div ref="foot" class="veui-dialog-content-foot">
+      <slot name="foot">
+        <veui-button ui="primary" @click="$emit('ok')">确定</veui-button>
+        <veui-button @click="$emit('cancel')">取消</veui-button>
+      </slot>
+    </div>
+  </div>
+</veui-overlay>
 </template>
 
 <script>

@@ -1,11 +1,11 @@
 <template>
-  <veui-overlay :open="true" overlay-class="veui-toast-list" :priority="priority">
-    <veui-toast v-for="(message, index) in messages"
-      v-bind="message"
-      :key="message.__message_id__"
-      @close="remove(message)">
-    </veui-toast>
-  </veui-overlay>
+<veui-overlay :open="true" overlay-class="veui-toast-list" :priority="priority">
+  <veui-toast v-for="(message, index) in messages"
+    v-bind="message"
+    :key="message.__message_id__"
+    @close="remove(message)">
+  </veui-toast>
+</veui-overlay>
 </template>
 
 <script>

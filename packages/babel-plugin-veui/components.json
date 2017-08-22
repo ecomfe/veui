@@ -124,6 +124,14 @@
     "path": "RadioboxGroup.vue"
   },
   {
+    "name": "RegionPicker",
+    "path": "RegionPicker.vue"
+  },
+  {
+    "name": "Searchbox",
+    "path": "Searchbox.vue"
+  },
+  {
     "name": "Option",
     "path": "Select/Option.vue"
   },
@@ -142,6 +150,10 @@
   {
     "name": "Span",
     "path": "Span.vue"
+  },
+  {
+    "name": "Steps",
+    "path": "Steps.vue"
   },
   {
     "name": "Switch",
@@ -186,6 +198,10 @@
   {
     "name": "Toast",
     "path": "Toast.vue"
+  },
+  {
+    "name": "ToastList",
+    "path": "ToastList.vue"
   },
   {
     "name": "Tooltip",

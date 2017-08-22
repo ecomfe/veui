@@ -24,7 +24,7 @@ export default {
     return {
       items: [
         { to: 'http://www.baidu.com', text: 'baidu', native: true },
-        { to: 'http://brandplus.baidu.com', text: '开放服务平台', type: 'text', native: true },
+        { to: '/steps', text: '步骤条组件' },
         { text: '监听跳转事件', native: true },
         { to: 'http://www.baidu.com', text: '阻止跳转事件', native: true },
         { to: 'http://www.baidu.com', text: 'replace', replace: true, native: true },

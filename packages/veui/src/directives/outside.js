@@ -1,4 +1,4 @@
-import { isFunction, uniqueId, remove, every, find, isNumber, isString, keys } from 'lodash'
+import { isFunction, uniqueId, remove, every, find, isNumber, isString, keys, assign, noop } from 'lodash'
 import { getNodes } from '../utils/context'
 
 let handlerBindings = []
@@ -10,10 +10,6 @@ document.addEventListener('click', e => {
   })
 }, true)
 
-function isContain (container, contained) {
-  return container === contained || container.contains(contained)
-}
-
 function getElementsByRefs (refs, context) {
   const elements = []
   refs.forEach((ref) => {
@@ -21,8 +17,6 @@ function getElementsByRefs (refs, context) {
   })
   return elements
 }
-
-function empty () {}
 
 function parseParams (el, arg, modifiers, value, context) {
   let includeTargets
@@ -45,7 +39,7 @@ function parseParams (el, arg, modifiers, value, context) {
     delay = delay ? parseInt(delay, 10) : 0
   } else {
     const normalizedValue = value || {}
-    handler = isFunction(normalizedValue.handler) ? normalizedValue.handler : empty
+    handler = isFunction(normalizedValue.handler) ? normalizedValue.handler : noop
 
     const refs = Array.isArray(normalizedValue.refs) ? normalizedValue.refs
       : (isString(normalizedValue.refs) ? normalizedValue.refs.split(',') : [normalizedValue.refs])
@@ -70,7 +64,7 @@ function parseParams (el, arg, modifiers, value, context) {
 function generate (el, { includeTargets, handler, trigger, delay }) {
   return function (e) {
     // click 模式，直接判断元素包含情况
-    if (e.type === trigger && every(includeTargets, element => !isContain(element, e.target))) {
+    if (e.type === trigger && every(includeTargets, element => !element.contains(e.target))) {
       handler(e)
     }
   }
@@ -79,39 +73,44 @@ function generate (el, { includeTargets, handler, trigger, delay }) {
 function bindHover (el, { includeTargets, handler, delay }) {
   unbindHover(el)
 
-  const bindingData = el[bindingKey] || {}
-  bindingData.includeTargets = includeTargets
-  bindingData.handler = handler
-  bindingData.delay = delay
-  bindingData.trigger = 'hover'
-  bindingData.hoverData = {
-    state: 'ready',
-    prevEvent: null,
-    timer: null
-  }
-  bindingData.mouseenterHandler = (event) => {
-    bindingData.hoverData.state = 'in'
-    bindingData.hoverData.prevEvent = event
-  }
-  bindingData.mouseleaveHandler = (event) => {
-    if (every(includeTargets, target => !isContain(target, event.target))) {
-      return
-    }
+  const bindingData = assign(
+    {},
+    el[bindingKey] || {},
+    {
+      includeTargets,
+      handler,
+      delay,
+      trigger: 'hover',
+      hoverData: {
+        state: 'ready',
+        prevEvent: null,
+        timer: null
+      },
+      mouseenterHandler: event => {
+        bindingData.hoverData.state = 'in'
+        bindingData.hoverData.prevEvent = event
+      },
+      mouseleaveHandler: event => {
+        if (every(includeTargets, target => !target.contains(event.target))) {
+          return
+        }
 
-    bindingData.hoverData.state = 'out'
-    bindingData.hoverData.prevEvent = event
+        bindingData.hoverData.state = 'out'
+        bindingData.hoverData.prevEvent = event
 
-    clearTimeout(bindingData.hoverData.timer)
-    bindingData.hoverData.timer = setTimeout(() => {
-      // 超时没移回，就要触发handler了
-      if (bindingData.hoverData.state === 'out') {
-        // 此处用最后一次记录的event对象
-        handler(bindingData.hoverData.prevEvent)
-        // 重置状态
-        bindingData.hoverData.state = 'ready'
+        clearTimeout(bindingData.hoverData.timer)
+        bindingData.hoverData.timer = setTimeout(() => {
+          // 超时没移回，就要触发handler了
+          if (bindingData.hoverData.state === 'out') {
+            // 此处用最后一次记录的event对象
+            handler(bindingData.hoverData.prevEvent)
+            // 重置状态
+            bindingData.hoverData.state = 'ready'
+          }
+        }, bindingData.delay)
       }
-    }, bindingData.delay)
-  }
+    }
+  )
 
   // 所有目标元素都绑定一遍事件
   bindHoverEvents(bindingData)
@@ -141,10 +140,15 @@ function unbindHover (el) {
   }
 }
 
-function refresh (el, { value, arg, modifiers }, vnode) {
+function clear (el) {
+  remove(handlerBindings, item => el[bindingKey] && item[bindingKey].id === el[bindingKey].id)
+  unbindHover(el)
+}
+
+function refresh (el, { value, arg, modifiers, oldValue }, vnode) {
   const params = parseParams(el, arg, modifiers, value, vnode.context)
+  clear(el)
   if (params.trigger === 'click') {
-    unbindHover(el)
     el[bindingKey] = {
       id: uniqueId('veui-outside-'),
       handler: generate(el, params),
@@ -159,8 +163,5 @@ function refresh (el, { value, arg, modifiers }, vnode) {
 export default {
   bind: refresh,
   update: refresh,
-  unbind (el) {
-    remove(handlerBindings, item => item[bindingKey].id === el[bindingKey].id)
-    unbindHover(el)
-  }
+  unbind: clear
 }
