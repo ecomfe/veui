@@ -1,6 +1,6 @@
 {
   "name": "veui",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Baidu Enterprise UI for Vue.js.",
   "author": "ecomfe",
   "scripts": {
@@ -18,7 +18,7 @@
   "dependencies": {
     "lodash": "^4.17.4",
     "tether": "^1.4.0",
-    "veui-theme-dux": "^0.2.3",
+    "veui-theme-dux": "^0.2.4",
     "vue-awesome": "^2.2.1"
   },
   "peerDependencies": {
@@ -35,7 +35,7 @@
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-plugin-transform-vue-jsx": "^3.4.2",
-    "babel-plugin-veui": "^0.2.3",
+    "babel-plugin-veui": "^0.2.4",
     "babel-preset-env": "^1.2.1",
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.22.0",
@@ -85,7 +85,7 @@
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0",
     "url-loader": "^0.5.7",
-    "veui-loader": "^0.2.3",
+    "veui-loader": "^0.2.4",
     "vue": "^2.3.0",
     "vue-awesome": "^2.3.1",
     "vue-loader": "^11.1.4",
