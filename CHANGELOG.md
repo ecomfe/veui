@@ -1,3 +1,7 @@
+### 0.2.5
+
+* [^] 修复 `RegionPicker` 浮层在特殊情况下显示上的问题。
+
 ### 0.2.4
 
 * [+] 增加 `veui-loader`，确保只在 Webpack 能够 resolve 样式文件时 `babel-plugin-veui` 才注入样式 `import` 语句。
