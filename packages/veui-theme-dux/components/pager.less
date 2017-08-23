@@ -85,6 +85,7 @@
     text-align: center;
     background-color: @veui-gray-color-sup-3;
     border-radius: 2px;
+    cursor: pointer;
   }
 
   &-pages {
@@ -102,8 +103,10 @@
       font-size: @digit-size;
       border-radius: 2px;
 
-      a {
+      a,
+      span {
         display: block;
+        cursor: pointer;
 
         &:hover {
           color: @veui-text-color-strong;
@@ -116,7 +119,8 @@
       }
     }
 
-    .veui-active a {
+    .veui-active a,
+    .veui-active span {
       color: @veui-text-color-strong;
       font-weight: @veui-font-weight-extra-bold;
       background-color: @veui-gray-color-sup-3;

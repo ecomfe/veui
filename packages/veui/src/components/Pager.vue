@@ -107,7 +107,7 @@ export default {
     },
     to: {
       type: [String, Object],
-      default: ':page'
+      default: ''
     },
     ui: String,
     native: {
