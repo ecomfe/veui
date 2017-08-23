@@ -1,10 +1,12 @@
 import Checkbox from '../Checkbox'
+import Radiobox from '../Radiobox'
 import { table } from '../../mixins'
 
 export default {
   name: 'veui-table-row',
   components: {
-    'veui-checkbox': Checkbox
+    'veui-checkbox': Checkbox,
+    'veui-radiobox': Radiobox
   },
   mixins: [table],
   props: {
@@ -18,6 +20,7 @@ export default {
       'data',
       { realColumns: 'columns' },
       'selectable',
+      'selectMode',
       'selectedItems',
       { realKeys: 'keys' }
     )
@@ -29,9 +32,16 @@ export default {
     return <tr class={{ 'veui-table-selected-row': checked }}>
       {
         this.selectable
-          ? <td><div class="veui-table-cell"><veui-checkbox checked={checked}
-              key={this.keys[index]} onChange={checked => { this.table.select(checked, index) }}/></div></td>
-          : ''
+          ? <td><div class="veui-table-cell">
+            {
+              this.selectMode === 'multiple'
+                ? <veui-checkbox checked={checked}
+                  onChange={checked => { this.table.select(checked, index) }}/>
+                : <veui-radiobox checked={checked}
+                  onChange={checked => { this.table.select(checked, index) }}/>
+            }
+            </div></td>
+          : null
       }
       {
         this.columns.map(col => (
