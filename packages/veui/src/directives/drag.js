@@ -1,4 +1,4 @@
-import { noop, isArray, isObject, find, pick } from 'lodash'
+import { noop, isObject, isFunction, find, pick, get } from 'lodash'
 import { getNodes } from '../utils/context'
 
 let computedStyle = getComputedStyle(document.body)
@@ -39,27 +39,26 @@ class TranslateHandler {
     'animation:unset;-ms-animation:unset;-webkit-animation:unset;-moz-animation:unset'
   ].join('')
 
-  constructor ({ targets, containment, axis }, context) {
-    this.refs = targets
+  constructor (options, context) {
+    this.$options = options
     this.context = context
-    this.containment = containment
-    this.axis = axis
   }
 
   start () {
     // oldStyles 仅初始化一次
     if (this.oldStyles.length === 0) {
-      this.elms = this.refs.reduce((prev, cur) => {
+      this.elms = this.$options.targets.reduce((prev, cur) => {
         prev.push(...getNodes(cur, this.context))
         return prev
       }, [])
-      this.oldStyles = this.elms.map(elm => elm.getAttribute('style'))
+      this.oldStyles = this.elms.map(elm => elm.getAttribute('style') || '')
     }
 
     this.elms.forEach((elm, index) => {
       let oldStyle = this.oldStyles[index]
-      this.initTransforms[index] = getComputedTransform(elm)
-      this.initStyles[index] = `${oldStyle};${this.tempStyle}`
+      let initTransform = getComputedTransform(elm)
+      this.initTransforms[index] = initTransform === 'none' ? '' : getComputedTransform(elm)
+      this.initStyles[index] = `${oldStyle ? oldStyle + ';' : ''};${this.tempStyle}`
 
       let rect = elm.getBoundingClientRect()
       this.initPositions[index] = rect
@@ -79,11 +78,11 @@ class TranslateHandler {
   move (distanceX, distanceY, prevStyles) {
     // 统一转换成 { left: ..., top: ..., width: ..., height: ... } 形式的 rect
     let constraint = null
-    if (this.containment && this.containment.nodeType) {
-      constraint = pick(this.containment.getBoundingClientRect(), ['top', 'left', 'right', 'bottom'])
+    if (this.$options.containment && this.$options.containment.nodeType) {
+      constraint = pick(this.$options.containment.getBoundingClientRect(), ['top', 'left', 'right', 'bottom'])
       constraint.width = constraint.right - constraint.left
       constraint.height = constraint.bottom - constraint.top
-    } else if (this.containment === window) {
+    } else if (this.$options.containment === window) {
       constraint = {
         left: 0,
         top: 0,
@@ -91,7 +90,7 @@ class TranslateHandler {
         height: window.innerHeight
       }
     } else {
-      constraint = this.containment
+      constraint = this.$options.containment
     }
 
     this.elms.forEach((elm, index) => {
@@ -104,7 +103,7 @@ class TranslateHandler {
       let offsetWidth = elm.offsetWidth
       let offsetHeight = elm.offsetHeight
       if (constraint) {
-        if (!this.axis || this.axis === 'y') {
+        if (!this.$options.axis || this.$options.axis === 'y') {
           // 从上面超出范围了
           if (initPosition.top + realDistanceY <= constraint.top) {
             realDistanceY = constraint.top - initPosition.top
@@ -117,7 +116,7 @@ class TranslateHandler {
           realDistanceY = 0
         }
 
-        if (!this.axis || this.axis === 'x') {
+        if (!this.$options.axis || this.$options.axis === 'x') {
           // 从左边超出范围了
           if (initPosition.left + realDistanceX < constraint.left) {
             realDistanceX = constraint.left - initPosition.left
@@ -154,44 +153,65 @@ function clear (el) {
   el.dragData = null
 }
 
-function parseParams (el, { arg, value }, vnode) {
+const AVAILABLE_TYPES = ['translate']
+function parseParams (el, { arg, value, modifiers }, vnode) {
+  // 解析 target
   let targets = []
-  let type = null
-  let draggable = true
-  let containment = null
-  let axis = null
-
-  if (isArray(value)) {
-    targets.push(...value)
-    type = arg
-  } else if (isObject(value)) {
-    targets.push(...(value.targets || []))
-    type = value.type
-    draggable = value.draggable !== false
-
-    containment = value.containment
-    if (containment !== window &&
-      (
-        !isObject(containment) ||
-        !containment.hasOwnProperty('top') ||
-        !containment.hasOwnProperty('left') ||
-        !containment.hasOwnProperty('width') ||
-        !containment.hasOwnProperty('height')
-      )
-    ) {
-      containment = getNodes(containment, vnode.context)
-      containment = containment && containment.length ? containment[0] : null
-    }
-
-    axis = value.axis
+  if (arg) {
+    targets = arg.split(',')
+  } else {
+    targets = get(value, 'targets', [])
   }
+
+  // 解析 type
+  let type = find(AVAILABLE_TYPES, t => modifiers[t])
+  // 如果 modifiers 里面没有 type，就到 value 里面去找
+  if (!type) {
+    type = get(value, 'type')
+  }
+
+  // 解析 draggable
+  let draggable = get(value, 'draggable', true)
+
+  // 解析 containment
+  let containment = get(value, 'containment')
+  if (containment !== window &&
+    (
+      !isObject(containment) ||
+      !containment.hasOwnProperty('top') ||
+      !containment.hasOwnProperty('left') ||
+      !containment.hasOwnProperty('width') ||
+      !containment.hasOwnProperty('height')
+    )
+  ) {
+    containment = getNodes(containment, vnode.context)
+    containment = get(containment, '[0]', null)
+  }
+
+  // 解析 axis
+  let axis = find(['x', 'y'], item => modifiers[item])
+  if (!axis) {
+    axis = get(value, 'axis')
+  }
+
+  // 解析 drag 系列回调函数
+  function parseDragFn (name) {
+    let fn = get(value, name, noop)
+    return isFunction(fn) ? fn : noop
+  }
+  let dragstart = parseDragFn('dragstart')
+  let drag = parseDragFn('drag')
+  let dragend = parseDragFn('dragend')
 
   return {
     targets,
     type,
     draggable,
     containment,
-    axis
+    axis,
+    dragstart,
+    drag,
+    dragend
   }
 }
 
@@ -254,7 +274,7 @@ export default {
     clear(el)
 
     const contextComponent = vnode.context
-    const params = parseParams(el, { arg, value }, vnode)
+    const params = parseParams(el, { arg, value, modifiers }, vnode)
     if (!params.draggable) {
       return
     }
