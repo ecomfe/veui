@@ -303,6 +303,7 @@ export default {
         dragData.initY = clientY
         contextComponent.$emit('dragstart', { event })
         handler.start({ event })
+        params.dragstart({ event })
 
         function selectStartHandler (e) {
           e.preventDefault()
@@ -314,13 +315,14 @@ export default {
             return
           }
 
-          let params = {
+          let dragParams = {
             distanceX: clientX - dragData.initX,
             distanceY: clientY - dragData.initY,
             event
           }
-          contextComponent.$emit('drag', params)
-          handler.drag(params)
+          contextComponent.$emit('drag', dragParams)
+          handler.drag(dragParams)
+          params.drag(dragParams)
         }
 
         function mouseupHandler (event) {
@@ -328,13 +330,14 @@ export default {
 
           let { clientX, clientY } = event
 
-          let params = {
+          let dragParams = {
             distanceX: clientX - dragData.initX,
             distanceY: clientY - dragData.initY,
             event
           }
-          contextComponent.$emit('dragend', params)
-          handler.end(params)
+          contextComponent.$emit('dragend', dragParams)
+          handler.end(dragParams)
+          params.dragend(dragParams)
 
           window.removeEventListener('mousemove', mouseMoveHandler)
           window.removeEventListener('mouseup', mouseupHandler)
