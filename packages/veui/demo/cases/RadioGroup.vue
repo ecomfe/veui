@@ -1,28 +1,28 @@
 <template>
   <article>
-    <h1><code>&lt;veui-radioboxgroup&gt;</code></h1>
+    <h1><code>&lt;veui-radio-group&gt;</code></h1>
     <p>
-      <veui-radioboxgroup :items="data1" name="111" v-model="picked1">
+      <veui-radio-group :items="data1" name="111" v-model="picked1">
         <template scope="props">{{ props.label }}</template>
-      </veui-radioboxgroup>
+      </veui-radio-group>
     </p>
     <p>value: {{ picked1 }}</p>
     <p>
-      <veui-radioboxgroup :items="data2" ui="small" v-model="picked2">
+      <veui-radio-group :items="data2" ui="small" v-model="picked2">
         <template scope="props">{{ props.label }}</template>
-      </veui-radioboxgroup>
+      </veui-radio-group>
     </p>
     <p>value: {{ picked2 }}</p>
   </article>
 </template>
 
 <script>
-import { RadioboxGroup } from 'veui'
+import { RadioGroup } from 'veui'
 
 export default {
-  name: 'radioboxgroup-demo',
+  name: 'radio-group-demo',
   components: {
-    'veui-radioboxgroup': RadioboxGroup
+    'veui-radio-group': RadioGroup
   },
   data () {
     return {

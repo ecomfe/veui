@@ -14,7 +14,7 @@
         </veui-field>
 
         <veui-field label="婚姻：" field="married">
-          <veui-radioboxgroup :items="storeData1.marryItems" v-model="storeData1.married"></veui-radioboxgroup>
+          <veui-radiogroup :items="storeData1.marryItems" v-model="storeData1.married"></veui-radiogroup>
         </veui-field>
 
         <veui-field label="爱好：" field="habit">
@@ -139,7 +139,7 @@
         </veui-field>
 
         <veui-field label="婚姻：" field="married">
-          <veui-radioboxgroup :items="storeData1.marryItems" v-model="storeData1.married"></veui-radioboxgroup>
+          <veui-radiogroup :items="storeData1.marryItems" v-model="storeData1.married"></veui-radiogroup>
         </veui-field>
 
         <veui-field label="爱好：" field="habit">
@@ -308,7 +308,7 @@
 import {
   Form, Fieldset, Field, Label, Span, Input,
   Button, DatePicker, Uploader, Select,
-  Checkbox, CheckboxGroup, RadioboxGroup, Searchbox
+  Checkbox, CheckboxGroup, RadioGroup, Searchbox
 } from 'veui'
 import moment from 'moment'
 import bus from '../bus'
@@ -329,7 +329,7 @@ export default {
     'veui-select': Select,
     'veui-checkbox': Checkbox,
     'veui-checkboxgroup': CheckboxGroup,
-    'veui-radioboxgroup': RadioboxGroup,
+    'veui-radiogroup': RadioGroup,
     'veui-searchbox': Searchbox
   },
 

@@ -4,7 +4,7 @@
     <label v-if="uploaderType === 'file' || (uploaderType === 'image' && needButton)"
       class="veui-button veui-uploader-input-label"
       :class="{'veui-uploader-input-label-disabled': realDisabled}"
-      ui="aux" ref="label">
+      ref="label">
       <icon class="veui-uploader-input-label-icon" name="upload"></icon><slot name="text">选择文件</slot>
       <input hidden="hidden" type="file" ref="input" @change="onChange" :name="realName" :disabled="realDisabled" :accept="accept" multiple>
     </label>
@@ -58,7 +58,7 @@
           </veui-uploader-progress>
           <veui-button v-if="uploaderType === 'file'" ui="link delete"
             @click="cancelFile(file)"><icon name="close"></icon></veui-button>
-          <veui-button v-else-if="uploaderType === 'image'" ui="aux operation"
+          <veui-button v-else-if="uploaderType === 'image'" ui="operation"
             @click="cancelFile(file)">取消</veui-button>
         </slot>
       </template>
@@ -67,7 +67,7 @@
           <div :class="classType + '-status'">
             <span class="veui-uploader-failure"><slot name="failureText">上传失败！</slot>{{file.failureReason}}</span>
           </div>
-          <veui-button :ui="uploaderType === 'file' ? 'link' : 'aux operation'"
+          <veui-button :ui="uploaderType === 'file' ? 'link' : 'operation'"
             @click="retry(file)">重试</veui-button>
         </slot>
       </template>

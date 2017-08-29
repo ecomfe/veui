@@ -6,7 +6,7 @@
   }">
   <veui-button
     class="veui-select-button"
-    :ui="buttonUI"
+    :ui="ui"
     :disabled="realDisabled || realReadonly"
     @click="expanded = !expanded"
     ref="button">

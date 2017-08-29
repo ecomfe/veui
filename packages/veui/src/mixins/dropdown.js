@@ -1,11 +1,6 @@
-import { intersection, throttle } from 'lodash'
+import { throttle } from 'lodash'
 import { outside } from '../directives'
-import config from '../managers/config'
 import { ui } from '../mixins'
-
-config.defaults({
-  'dropdown.buttonUI': 'aux'
-})
 
 export default {
   mixins: [ui],
@@ -28,15 +23,6 @@ export default {
           }
         ]
       }
-    }
-  },
-  computed: {
-    buttonUI () {
-      let defaultUI = config.get('dropdown.buttonUI')
-      if (!intersection(this.uiProps, ['primary', 'aux', 'alt', 'link']).length) {
-        return [...this.uiProps, defaultUI].join(' ')
-      }
-      return this.ui
     }
   },
   methods: {

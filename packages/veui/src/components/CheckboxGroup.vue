@@ -1,5 +1,5 @@
 <template>
-<div class="veui-checkboxgroup" :ui="ui">
+<div class="veui-checkbox-group" :ui="ui">
   <checkbox
     :ui="ui"
     :name="localName"
@@ -15,16 +15,16 @@
 </template>
 
 <script>
-import { input } from '../mixins'
-import Checkbox from './Checkbox'
+import { input, ui } from '../mixins'
 import { uniqueId, findIndex } from 'lodash'
+import Checkbox from './Checkbox'
 
 export default {
-  name: 'veui-boxgroup',
+  name: 'veui-checkbox-group',
   components: {
     'checkbox': Checkbox
   },
-  mixins: [input],
+  mixins: [input, ui],
   model: {
     event: 'change'
   },
@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     localName () {
-      return this.realName || uniqueId('veui-checkboxgroup-')
+      return this.realName || uniqueId('veui-checkbox-group-')
     }
   },
   methods: {

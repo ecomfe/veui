@@ -1,12 +1,12 @@
 import Checkbox from '../Checkbox'
-import Radiobox from '../Radiobox'
+import Radio from '../Radio'
 import { table } from '../../mixins'
 
 export default {
   name: 'veui-table-row',
   components: {
     'veui-checkbox': Checkbox,
-    'veui-radiobox': Radiobox
+    'veui-radio': Radio
   },
   mixins: [table],
   props: {
@@ -37,7 +37,7 @@ export default {
               this.selectMode === 'multiple'
                 ? <veui-checkbox checked={checked}
                   onChange={checked => { this.table.select(checked, index) }}/>
-                : <veui-radiobox checked={checked}
+                : <veui-radio checked={checked}
                   onChange={checked => { this.table.select(checked, index) }}/>
             }
             </div></td>

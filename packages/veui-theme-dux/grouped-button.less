@@ -1,0 +1,29 @@
+._veui-grouped-button {
+  &:hover {
+    border-color: @veui-theme-color-primary;
+  }
+
+  &:active {
+    background-color: @veui-theme-color-sup-6;
+    border-color: @veui-theme-color-sup-6;
+    color: #fff;
+  }
+
+  &.veui-button-selected {
+    border: 1px solid @veui-theme-color-secondary;
+    background-color: @veui-theme-color-secondary;
+    color: #fff;
+    z-index: 1;
+
+    &[ui~="alt"] {
+      &,
+      &:hover,
+      &:focus,
+      &:active {
+        color: @veui-theme-color-primary;
+        background-color: @veui-gray-color-sup-3;
+        border-color: @veui-gray-color-sup-3;
+      }
+    }
+  }
+}

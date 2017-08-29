@@ -3,18 +3,80 @@
 .veui-button {
   padding: 0 20px;
   min-width: 70px;
-  border: 1px solid @veui-theme-color-primary;
-  background-color: #fff;
-  color: @veui-theme-color-primary;
   border-radius: 2px;
   user-select: none;
   vertical-align: middle;
   .veui-button-transition();
+  background-color: #fff;
+  border: 1px solid @veui-gray-color-sup-1;
+  color: @veui-text-color-normal;
 
-  &:not(.veui-button-loading) {
-    &:focus {
-      .veui-shadow(glow, @veui-theme-color-primary);
+  &:hover,
+  &:active {
+    border-color: @veui-gray-color-sup-1;
+    color: @veui-text-color-strong;
+  }
+
+  &:hover {
+    background-color: #fff;
+  }
+
+  &:active {
+    background-color: @veui-gray-color-sup-4;
+  }
+
+  &:focus {
+    outline: none;
+    color: @veui-theme-color-primary;
+    .veui-shadow(none);
+  }
+
+  // use class here to give IE a better experience because
+  // we disabled the current <button> element to prevent
+  // user interaction with buttons while loading
+  &.veui-disabled,
+  &.veui-disabled[ui], {
+    &,
+    &:hover {
+      cursor: not-allowed;
+      border: none;
+      background-color: @veui-gray-color-sup-3;
+      color: @veui-text-color-weak;
+      .veui-shadow(none);
     }
+  }
+
+  &[ui~="primary"] {
+    background-color: @veui-theme-color-primary;
+    border-color: @veui-theme-color-primary;
+    color: #fff;
+    .veui-shadow();
+
+    &:hover,
+    &:active {
+      border-color: @veui-theme-color-hover;
+      background-color: @veui-theme-color-hover;
+      color: #fff;
+      .veui-shadow(strong);
+    }
+
+    &:active {
+      border-color: @veui-theme-color-active;
+      background-color: @veui-theme-color-active;
+      .veui-shadow(none);
+    }
+
+    &:focus {
+      border-color: @veui-theme-color-hover;
+      background-color: @veui-theme-color-hover;
+      color: #fff;
+      .veui-shadow(none);
+    }
+  }
+
+  &[ui~="secondary"] {
+    border-color: @veui-theme-color-primary;
+    color: @veui-theme-color-primary;
 
     &:hover,
     &:active {
@@ -30,87 +92,9 @@
       background-color: @veui-theme-color-sup-4;
       .veui-shadow(none);
     }
-  }
 
-  &:focus {
-    outline: none;
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-
-    &:not(.veui-button-loading) {
-      border: none;
-      background-color: @veui-gray-color-sup-3;
-      color: @veui-text-color-weak;
-      .veui-shadow(none);
-    }
-  }
-
-  &[ui~="aux"] {
-    border-color: @veui-gray-color-sup-1;
-    color: @veui-text-color-normal;
-
-    &:not(.veui-button-loading) {
-      &:focus {
-        color: @veui-theme-color-primary;
-        .veui-shadow(none);
-      }
-
-      &:hover,
-      &:active {
-        border-color: @veui-gray-color-sup-1;
-        color: @veui-text-color-strong;
-      }
-
-      &:hover {
-        background-color: #fff;
-      }
-
-      &:active {
-        background-color: @veui-gray-color-sup-4;
-      }
-
-      &:disabled,
-      &.veui-disabled {
-        background-color: @veui-gray-color-sup-3;
-        color: @veui-text-color-weak;
-      }
-    }
-  }
-
-  &[ui~="primary"] {
-    background-color: @veui-theme-color-primary;
-    color: #fff;
-    .veui-shadow();
-
-    &:not(.veui-button-loading) {
-      &:focus {
-        border-color: @veui-theme-color-hover;
-        background-color: @veui-theme-color-hover;
-        color: #fff;
-        .veui-shadow(none);
-      }
-
-      &:hover,
-      &:active {
-        border-color: @veui-theme-color-hover;
-        background-color: @veui-theme-color-hover;
-        color: #fff;
-        .veui-shadow(strong);
-      }
-
-      &:active {
-        border-color: @veui-theme-color-active;
-        background-color: @veui-theme-color-active;
-        .veui-shadow(none);
-      }
-
-      &:disabled {
-        background-color: @veui-gray-color-sup-1;
-        color: #fff;
-        .veui-shadow(none);
-      }
+    &:focus {
+      .veui-shadow(glow, @veui-theme-color-primary);
     }
   }
 
@@ -119,10 +103,7 @@
     border-color: @veui-gray-color-sup-3;
     color: @veui-text-color-normal;
     .veui-shadow();
-
-    &:not(.veui-button-loading) {
-      .veui-button-alt();
-    }
+    .veui-button-alt();
   }
 
   &[ui~="link"] {
@@ -156,12 +137,8 @@
       .veui-shadow(none);
     }
 
-    &:disabled:not(.veui-button-loading) {
-      &,
-      &:hover {
-        background: transparent;
-        color: @veui-text-color-weak;
-      }
+    &.veui-disabled {
+      background-color: transparent;
     }
   }
 
@@ -209,9 +186,13 @@
     }
   }
 
-  &.veui-button-loading {
-    cursor: default;
-    .box-shadow(none);
+  &-loading {
+    &,
+    &[ui] {
+      cursor: default;
+      .box-shadow(none);
+      pointer-events: none;
+    }
   }
 
   .veui-icon {
