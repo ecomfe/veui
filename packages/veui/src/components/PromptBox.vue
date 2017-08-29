@@ -20,7 +20,7 @@ import { pick, extend } from 'lodash'
 import config from '../managers/config'
 
 config.defaults({
-  'prompt-box.priority': 100
+  'promptbox.priority': 100
 })
 
 export default {
@@ -45,7 +45,7 @@ export default {
   data () {
     return {
       localOpen: this.open,
-      priority: config.get('prompt-box.priority'),
+      priority: config.get('promptbox.priority'),
       localValue: this.value
     }
   },
