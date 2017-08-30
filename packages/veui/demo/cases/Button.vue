@@ -10,20 +10,20 @@
       <veui-button ui="primary" loading>提交</veui-button>
     </p>
     <p>
-      <veui-button ui="tiny">保存</veui-button>
-      <veui-button ui="small">保存</veui-button>
-      <veui-button>保存</veui-button>
-      <veui-button ui="large">保存</veui-button>
-      <veui-button disabled>保存</veui-button>
-      <veui-button loading>保存</veui-button>
+      <veui-button ui="secondary tiny">保存</veui-button>
+      <veui-button ui="secondary small">保存</veui-button>
+      <veui-button ui="secondary">保存</veui-button>
+      <veui-button ui="secondary large">保存</veui-button>
+      <veui-button ui="secondary" disabled>保存</veui-button>
+      <veui-button ui="secondary" loading>保存</veui-button>
     </p>
     <p>
-      <veui-button ui="aux tiny"><icon name="cross-small"></icon> 取消</veui-button>
-      <veui-button ui="aux small"><icon name="cross-small"></icon> 取消</veui-button>
-      <veui-button ui="aux"><icon name="cross-small"></icon> 取消</veui-button>
-      <veui-button ui="aux large"><icon name="cross-small"></icon> 取消</veui-button>
-      <veui-button ui="aux" disabled><icon name="cross-small"></icon> 取消</veui-button>
-      <veui-button ui="aux" loading><icon name="cross-small"></icon> 取消</veui-button>
+      <veui-button ui="tiny"><icon name="cross-small"></icon> 取消</veui-button>
+      <veui-button ui="small"><icon name="cross-small"></icon> 取消</veui-button>
+      <veui-button><icon name="cross-small"></icon> 取消</veui-button>
+      <veui-button ui="large"><icon name="cross-small"></icon> 取消</veui-button>
+      <veui-button disabled><icon name="cross-small"></icon> 取消</veui-button>
+      <veui-button loading><icon name="cross-small"></icon> 取消</veui-button>
     </p>
     <p>
       <veui-button ui="alt tiny">取消</veui-button>
@@ -58,12 +58,12 @@
       <veui-button ui="round" loading><icon name="pen"></icon></veui-button>
     </p>
     <p>
-      <veui-button ui="aux square tiny"><icon name="search"></icon></veui-button>
-      <veui-button ui="aux square small"><icon name="search"></icon></veui-button>
-      <veui-button ui="aux square"><icon name="search"></icon></veui-button>
-      <veui-button ui="aux square large"><icon name="search"></icon></veui-button>
-      <veui-button ui="aux square" disabled><icon name="search"></icon></veui-button>
-      <veui-button ui="aux square" loading><icon name="search"></icon></veui-button>
+      <veui-button ui="square tiny"><icon name="search"></icon></veui-button>
+      <veui-button ui="square small"><icon name="search"></icon></veui-button>
+      <veui-button ui="square"><icon name="search"></icon></veui-button>
+      <veui-button ui="square large"><icon name="search"></icon></veui-button>
+      <veui-button ui="square" disabled><icon name="search"></icon></veui-button>
+      <veui-button ui="square" loading><icon name="search"></icon></veui-button>
     </p>
     <p>
       <veui-button ui="alt square tiny"><icon name="plus"></icon></veui-button>

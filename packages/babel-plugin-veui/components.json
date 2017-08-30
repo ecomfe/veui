@@ -28,6 +28,10 @@
     "path": "Calendar.vue"
   },
   {
+    "name": "CheckButtonGroup",
+    "path": "CheckButtonGroup.vue"
+  },
+  {
     "name": "Checkbox",
     "path": "Checkbox.vue"
   },
@@ -116,12 +120,16 @@
     "path": "PromptBox.vue"
   },
   {
-    "name": "Radiobox",
-    "path": "Radiobox.vue"
+    "name": "Radio",
+    "path": "Radio.vue"
   },
   {
-    "name": "RadioboxGroup",
-    "path": "RadioboxGroup.vue"
+    "name": "RadioButtonGroup",
+    "path": "RadioButtonGroup.vue"
+  },
+  {
+    "name": "RadioGroup",
+    "path": "RadioGroup.vue"
   },
   {
     "name": "RegionPicker",

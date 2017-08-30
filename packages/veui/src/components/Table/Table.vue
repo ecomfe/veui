@@ -12,7 +12,8 @@
 </template>
 
 <script>
-import { map, intersection, isString, includes, indexOf, keys as objectKeys } from 'lodash'
+import Vue from 'vue'
+import { map, intersection, isString, includes, indexOf, keys as objectKeys, flatten } from 'lodash'
 import Body from './_TableBody'
 import Head from './_TableHead'
 import Foot from './_TableFoot'
@@ -34,23 +35,30 @@ export default {
       }
     },
     keys: {
-      validator (value) {
-        if (!value) {
+      validator (val) {
+        if (!val) {
           return true
         }
-        return isString(value) || Array.isArray(value) && value.length === this.data.length
+        return isString(val) || Array.isArray(val) && val.length === this.data.length
       }
     },
     selectable: Boolean,
+    selectMode: {
+      type: String,
+      default: 'multiple',
+      validator (val) {
+        return val === 'single' || val === 'multiple'
+      }
+    },
     order: [String, Boolean],
     orderBy: String,
     columnFilter: Array,
-    selected: Array
+    selected: null
   },
   data () {
     return {
       columns: [],
-      localSelected: [...(this.selected || [])]
+      localSelected: [...(flatten([this.selected]))]
     }
   },
   computed: {
@@ -71,7 +79,7 @@ export default {
       return keys.map(String)
     },
     selectedItems () {
-      return (this.localSelected || []).reduce((selectedItems, key) => {
+      return flatten([this.localSelected]).reduce((selectedItems, key) => {
         selectedItems[key] = this.getItem(key)
         return selectedItems
       }, {})
@@ -98,7 +106,11 @@ export default {
         item = this.data[index]
         let key = this.realKeys[index]
         if (selected) {
-          this.localSelected.push(key)
+          if (this.selectMode === 'multiple') {
+            this.localSelected.push(key)
+          } else {
+            this.localSelected = key
+          }
         } else {
           this.localSelected.splice(indexOf(this.localSelected, key), 1)
         }
@@ -117,14 +129,29 @@ export default {
     },
     sort (field, order) {
       this.$emit('sort', field, order)
+    },
+    validateSelected (val = this.selected) {
+      if (this.selectMode === 'single' && Array.isArray(this.selected)) {
+        Vue.util.warn('`selected` should not be an array when `select-mode` is `single`.')
+        return false
+      } else if (this.selectMode === 'multiple' && !Array.isArray(this.selected)) {
+        Vue.util.warn('`selected` should be an array when `select-mode` is `multiple`.')
+        return false
+      }
+      return true
     }
   },
+  created () {
+    this.validateSelected()
+  },
   watch: {
-    selected (value) {
-      this.localSelected = value
+    selected (val) {
+      if (this.validateSelected(val)) {
+        this.localSelected = val
+      }
     },
-    realKeys (value) {
-      this.localSelected = intersection(this.localSelected, value)
+    realKeys (val) {
+      this.localSelected = intersection(this.localSelected, val)
       this.$emit('update:selected', this.localSelected)
     }
   }

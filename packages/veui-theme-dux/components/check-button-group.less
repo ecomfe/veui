@@ -1,0 +1,14 @@
+@import "../lib.less";
+@import (reference) "../grouped-button.less";
+
+.veui-check-button-group {
+  .veui-button {
+    &:extend(._veui-grouped-button all);
+    margin: 0 16px 0 0;
+    color: @veui-text-color-strong;
+  }
+
+  &.veui-button-group .veui-button {
+    border-radius: 2px;
+  }
+}

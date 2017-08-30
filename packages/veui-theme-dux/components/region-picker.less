@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-regionpicker {
+.veui-region-picker {
   @item-width: 116px;
   @row-size: 6;
   @padding-x: 20px;
@@ -83,10 +83,8 @@
         left: 20px;
       }
 
-      .tether-element-attached-bottom:not(.tether-out-of-bounds) + &-overlay &,
-      .tether-element-attached-bottom:not(.tether-out-of-bounds) + [data-tether-id] + &-overlay &, /* temporary hack */
-      .tether-element-attached-bottom.tether-abutted-top + &-overlay &,
-      .tether-element-attached-bottom.tether-abutted-top + [data-tether-id] + &-overlay & { /* temporary hack */
+      .tether-element-attached-bottom + &-overlay &,
+      .tether-element-attached-bottom + [data-tether-id] + &-overlay & { /* temporary hack */
         &::before {
           top: -15px;
           bottom: auto;
@@ -108,8 +106,7 @@
     z-index: 0;
     .veui-shadow(strong);
 
-    .tether-element-attached-bottom:not(.tether-out-of-bounds) &,
-    .tether-element-attached-bottom.tether-abutted-top & {
+    .tether-element-attached-bottom & {
       margin: 0 0 10px -8px;
     }
   }

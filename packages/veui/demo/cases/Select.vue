@@ -34,7 +34,7 @@
       <h2>Slot 样式 3：</h2>
       <veui-select v-bind="attrs" v-model="defaultValue1">
         <template slot="option" scope="props">
-          <radiobox :checked="props.selected">{{ props.label }}</radiobox>
+          <radio :checked="props.selected">{{ props.label }}</radio>
         </template>
       </veui-select>
     </section>
@@ -72,7 +72,7 @@
 
 <script>
 import bus from '../bus'
-import { Icon, Select, Option, Radiobox } from 'veui'
+import { Icon, Select, Option, Radio } from 'veui'
 import type from 'veui/managers/type'
 import 'vue-awesome/icons/eye'
 import 'vue-awesome/icons/gift'
@@ -82,7 +82,7 @@ export default {
   components: {
     'veui-select': Select,
     'veui-option': Option,
-    'radiobox': Radiobox,
+    'radio': Radio,
     'icon': Icon
   },
   data () {
