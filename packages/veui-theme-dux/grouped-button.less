@@ -1,11 +1,12 @@
 ._veui-grouped-button {
-  &:hover {
+  &:hover,
+  &.focus-ring {
     border-color: @veui-theme-color-primary;
   }
 
   &:active {
-    background-color: @veui-theme-color-sup-6;
-    border-color: @veui-theme-color-sup-6;
+    background-color: @veui-theme-color-sup-5;
+    border-color: @veui-theme-color-sup-5;
     color: #fff;
   }
 
@@ -15,15 +16,16 @@
     color: #fff;
     z-index: 1;
 
-    &[ui~="alt"] {
-      &,
-      &:hover,
-      &:focus,
-      &:active {
-        color: @veui-theme-color-primary;
-        background-color: @veui-gray-color-sup-3;
-        border-color: @veui-gray-color-sup-3;
-      }
+    &:hover,
+    &.focus-ring {
+      background-color: @veui-theme-color-sup-6;
+      border-color: @veui-theme-color-sup-6;
+    }
+
+    &:active {
+      background-color: @veui-theme-color-sup-5;
+      border-color: @veui-theme-color-sup-5;
+      color: #fff;
     }
   }
 }

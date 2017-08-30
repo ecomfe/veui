@@ -7,7 +7,7 @@
           <template scope="props">{{ props.label }}</template>
         </veui-radio-button-group>
       </p>
-      <p>value: {{ picked1 }}</p>
+      <p>已选：{{ picked1 }}</p>
     </section>
     <section>
       <p>
@@ -15,15 +15,7 @@
           <template scope="props">{{ props.label }}</template>
         </veui-radio-button-group>
       </p>
-      <p>value: {{ picked2 }}</p>
-    </section>
-    <section>
-      <p>
-        <veui-radio-button-group :items="data2" ui="tiny alt" v-model="picked2">
-          <template scope="props">{{ props.label }}</template>
-        </veui-radio-button-group>
-      </p>
-      <p>value: {{ picked2 }}</p>
+      <p>已选：{{ picked2 }}</p>
     </section>
   </article>
 </template>
@@ -39,7 +31,7 @@ export default {
   data () {
     return {
       picked1: 'euro',
-      picked2: 'Nakano Azusa',
+      picked2: 'qq',
       data1: [
         {
           value: 'pound', label: '£'

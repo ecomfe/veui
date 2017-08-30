@@ -14,7 +14,7 @@
       ]"></veui-checkboxgroup>
     </section>
     <section>
-      <veui-table ui="alt" :data="data" :columnFilter="columns" keys="id" selectable
+      <veui-table ui="alt" :data="data" :column-filter="columns" keys="id" selectable
         :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected.sync="selected1">
         <veui-table-column field="id" title="数据 ID" sortable>
           <template scope="props" slot="foot"><strong>总计</strong></template>
@@ -40,7 +40,7 @@
       <p>已选ID：{{ JSON.stringify(selected1) }}</p>
     </section>
     <section class="container">
-      <veui-table ui="embed" :data="data" :columnFilter="columns" keys="id"
+      <veui-table ui="embed" :data="data" :column-filter="columns" keys="id"
         selectable select-mode="single" :selected.sync="selected2">
         <veui-table-column field="id" title="数据 ID"></veui-table-column>
         <veui-table-column field="desc" title="数据描述"></veui-table-column>

@@ -19,6 +19,7 @@
 
   &:hover {
     background-color: #fff;
+    .veui-shadow(extend);
   }
 
   &:active {
@@ -27,6 +28,9 @@
 
   &:focus {
     outline: none;
+  }
+
+  &.focus-ring {
     color: @veui-theme-color-primary;
     .veui-shadow(none);
   }
@@ -39,7 +43,7 @@
     &,
     &:hover {
       cursor: not-allowed;
-      border: none;
+      border-color: transparent;
       background-color: @veui-gray-color-sup-3;
       color: @veui-text-color-weak;
       .veui-shadow(none);
@@ -66,7 +70,7 @@
       .veui-shadow(none);
     }
 
-    &:focus {
+    &.focus-ring {
       border-color: @veui-theme-color-hover;
       background-color: @veui-theme-color-hover;
       color: #fff;
@@ -93,7 +97,7 @@
       .veui-shadow(none);
     }
 
-    &:focus {
+    &.focus-ring {
       .veui-shadow(glow, @veui-theme-color-primary);
     }
   }
@@ -114,7 +118,8 @@
     color: @veui-theme-color-primary;
     .veui-shadow(none);
 
-    &:hover {
+    &:hover,
+    &.focus-ring {
       color: @veui-theme-color-hover;
     }
 
@@ -132,7 +137,7 @@
 
     &:hover,
     &:active,
-    &:focus {
+    &.focus-ring {
       background: none;
       .veui-shadow(none);
     }
