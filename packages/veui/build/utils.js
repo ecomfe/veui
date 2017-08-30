@@ -44,11 +44,14 @@ exports.cssLoaders = function (options) {
     }
   }
 
+  let lessLoaders = generateLoaders('less')
+  lessLoaders.splice(2, 0, {loader: 'postcss-loader'})
+
   // http://vuejs.github.io/vue-loader/en/configurations/extract-css.html
   return {
     css: generateLoaders(),
     postcss: generateLoaders(),
-    less: generateLoaders('less'),
+    less: lessLoaders,
     sass: generateLoaders('sass', { indentedSyntax: true }),
     scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),
