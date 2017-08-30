@@ -1,146 +1,23 @@
-import { noop, isObject, isFunction, find, pick, get } from 'lodash'
+import { noop, isObject, isFunction, find, get, keys, isString } from 'lodash'
 import { getNodes } from '../utils/context'
+import BaseHandler from './drag/BaseHandler'
+import TranslateHandler from './drag/TranslateHandler'
+import config from '../managers/config'
 
-let computedStyle = getComputedStyle(document.body)
-const TRANSFORM_ACCESSOR = find(
-  ['transform', '-ms-transform', '-moz-transform', '-webkit-transform'],
-  accessor => (accessor in computedStyle)
-)
+config.defaults({
+  'drag.prefix': '@'
+})
 
-function getComputedTransform (elm) {
-  return getComputedStyle(elm)[TRANSFORM_ACCESSOR]
+const HANDLERS = {}
+
+export function registerHandler (name, Handler) {
+  if (!(Handler.prototype instanceof BaseHandler)) {
+    throw new TypeError('The handler class must derive from `BaseHandler`.')
+  }
+  HANDLERS[name] = Handler
 }
 
-class TranslateHandler {
-
-  refs = []
-
-  context = null
-
-  containment = null
-
-  oldStyles = []
-
-  elms = []
-
-  initStyles = []
-
-  initTransforms = []
-
-  initPositions = []
-
-  axis = null
-
-  tempStyle = [
-    // 禁掉文本选择
-    'user-select:none;-ms-user-select:none;-webkit-user-select:none;-moz-user-select:none;',
-    // 去掉动画
-    'transition:unset;',
-    'animation:unset;-ms-animation:unset;-webkit-animation:unset;-moz-animation:unset'
-  ].join('')
-
-  constructor (options, context) {
-    this.$options = options
-    this.context = context
-  }
-
-  start () {
-    // oldStyles 仅初始化一次
-    if (this.oldStyles.length === 0) {
-      this.elms = this.$options.targets.reduce((prev, cur) => {
-        prev.push(...getNodes(cur, this.context))
-        return prev
-      }, [])
-      this.oldStyles = this.elms.map(elm => elm.getAttribute('style') || '')
-    }
-
-    this.elms.forEach((elm, index) => {
-      let oldStyle = this.oldStyles[index]
-      let initTransform = getComputedTransform(elm)
-      this.initTransforms[index] = initTransform === 'none' ? '' : getComputedTransform(elm)
-      this.initStyles[index] = `${oldStyle ? oldStyle + ';' : ''};${this.tempStyle}`
-
-      let rect = elm.getBoundingClientRect()
-      this.initPositions[index] = rect
-    })
-  }
-
-  drag ({ distanceX, distanceY }) {
-    this.move(distanceX, distanceY, this.initStyles)
-  }
-
-  end ({ distanceX, distanceY }) {
-    this.move(distanceX, distanceY, this.oldStyles)
-    this.initTransforms = []
-    this.initStyles = []
-  }
-
-  move (distanceX, distanceY, prevStyles) {
-    // 统一转换成 { left: ..., top: ..., width: ..., height: ... } 形式的 rect
-    let constraint = null
-    if (this.$options.containment && this.$options.containment.nodeType) {
-      constraint = pick(this.$options.containment.getBoundingClientRect(), ['top', 'left', 'right', 'bottom'])
-      constraint.width = constraint.right - constraint.left
-      constraint.height = constraint.bottom - constraint.top
-    } else if (this.$options.containment === window) {
-      constraint = {
-        left: 0,
-        top: 0,
-        width: window.innerWidth,
-        height: window.innerHeight
-      }
-    } else {
-      constraint = this.$options.containment
-    }
-
-    this.elms.forEach((elm, index) => {
-      let prevStyle = prevStyles[index]
-      let initTransform = this.initTransforms[index]
-      let initPosition = this.initPositions[index]
-
-      let realDistanceX = distanceX
-      let realDistanceY = distanceY
-      let offsetWidth = elm.offsetWidth
-      let offsetHeight = elm.offsetHeight
-      if (constraint) {
-        if (!this.$options.axis || this.$options.axis === 'y') {
-          // 从上面超出范围了
-          if (initPosition.top + realDistanceY <= constraint.top) {
-            realDistanceY = constraint.top - initPosition.top
-          }
-          // 从下面超出范围了
-          if (initPosition.top + offsetHeight + realDistanceY > constraint.top + constraint.height) {
-            realDistanceY = constraint.top + constraint.height - (initPosition.top + offsetHeight)
-          }
-        } else {
-          realDistanceY = 0
-        }
-
-        if (!this.$options.axis || this.$options.axis === 'x') {
-          // 从左边超出范围了
-          if (initPosition.left + realDistanceX < constraint.left) {
-            realDistanceX = constraint.left - initPosition.left
-          }
-          // 从右边超出范围了
-          if (initPosition.left + offsetWidth + realDistanceX > constraint.left + constraint.width) {
-            realDistanceX = constraint.left + constraint.width - (initPosition.left + offsetWidth)
-          }
-        } else {
-          realDistanceX = 0
-        }
-      }
-      elm.setAttribute('style', `${prevStyle};${TRANSFORM_ACCESSOR}:${initTransform} translate(${realDistanceX}px,${realDistanceY}px)`)
-    })
-  }
-
-  destroy () {
-    // 恢复最初的样式
-    this.elms.forEach((elm, index) => {
-      let oldStyle = this.oldStyles[index]
-      elm.setAttribute('style', oldStyle)
-    })
-  }
-}
+registerHandler('translate', TranslateHandler)
 
 function clear (el) {
   let dragData = el.dragData
@@ -153,7 +30,6 @@ function clear (el) {
   el.dragData = null
 }
 
-const AVAILABLE_TYPES = ['translate']
 function parseParams (el, { arg, value, modifiers }, vnode) {
   // 解析 target
   let targets = []
@@ -164,7 +40,7 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
   }
 
   // 解析 type
-  let type = find(AVAILABLE_TYPES, t => modifiers[t])
+  let type = find(keys(HANDLERS), t => modifiers[t])
   // 如果 modifiers 里面没有 type，就到 value 里面去找
   if (!type) {
     type = get(value, 'type')
@@ -175,15 +51,20 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
 
   // 解析 containment
   let containment = get(value, 'containment')
-  if (containment !== window &&
-    (
-      !isObject(containment) ||
-      !containment.hasOwnProperty('top') ||
-      !containment.hasOwnProperty('left') ||
-      !containment.hasOwnProperty('width') ||
-      !containment.hasOwnProperty('height')
-    )
-  ) {
+  // 如果 containment 不是特殊配置，也不是 object ，或者是 object ，
+  // 但是没有完整的 top 、 left 、 width 、 height 属性，
+  // 就要看看用 containment 能不能选出 DOM Element 了。
+  function isSpecialSyntax (value) {
+    return isString(value) && value.indexOf(config.get('drag.prefix')) === 0
+  }
+  function isRect (value) {
+    return isObject(containment) &&
+      containment.hasOwnProperty('top') &&
+      containment.hasOwnProperty('left') &&
+      containment.hasOwnProperty('width') &&
+      containment.hasOwnProperty('height')
+  }
+  if (!isSpecialSyntax(containment) && !isRect(containment)) {
     containment = getNodes(containment, vnode.context)
     containment = get(containment, '[0]', null)
   }
@@ -280,8 +161,9 @@ export default {
     }
 
     let handler = null
-    if (params.type === 'translate') {
-      handler = new TranslateHandler(params, contextComponent)
+    if (HANDLERS[params.type]) {
+      let Handler = HANDLERS[params.type]
+      handler = new Handler(params, contextComponent)
     } else {
       handler = { start: noop, drag: noop, end: noop, destroy: noop }
     }
