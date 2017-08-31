@@ -62,5 +62,5 @@ export function isEmpty (val) {
 }
 
 export function stringifyQuery (query) {
-  return Object.keys(query).map(key => `${key}=${encodeURIComponent(query[key])}`).join('&')
+  return Object.keys(query).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`).join('&')
 }
