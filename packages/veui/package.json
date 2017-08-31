@@ -106,5 +106,14 @@
   "browserslist": [
     "ie >= 9",
     "last 2 versions"
-  ]
+  ],
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {},
+      "cssnano": {
+        "autoprefixer": false,
+        "safe": true
+      }
+    }
+  }
 }
