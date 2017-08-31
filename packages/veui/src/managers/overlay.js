@@ -113,7 +113,7 @@ export class Tree {
       return result
     }
 
-    return curNode.iterateChildren(child => this.iterate({ curNode: child }))
+    return curNode.iterateChildren(child => this.iterate({ curNode: child, callback }))
   }
 
   insertNode (parentId, node, priority) {

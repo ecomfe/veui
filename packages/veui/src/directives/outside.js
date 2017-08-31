@@ -1,5 +1,6 @@
 import { isFunction, uniqueId, remove, every, find, isNumber, isString, keys, assign, noop } from 'lodash'
 import { getNodes } from '../utils/context'
+import { contains } from '../utils/dom'
 
 let handlerBindings = []
 const bindingKey = '__veui_outside__'
@@ -64,7 +65,7 @@ function parseParams (el, arg, modifiers, value, context) {
 function generate (el, { includeTargets, handler, trigger, delay }) {
   return function (e) {
     // click 模式，直接判断元素包含情况
-    if (e.type === trigger && every(includeTargets, element => !element.contains(e.target))) {
+    if (e.type === trigger && every(includeTargets, element => !contains(element, e.target))) {
       handler(e)
     }
   }
@@ -91,7 +92,7 @@ function bindHover (el, { includeTargets, handler, delay }) {
         bindingData.hoverData.prevEvent = event
       },
       mouseleaveHandler: event => {
-        if (every(includeTargets, target => !target.contains(event.target))) {
+        if (every(includeTargets, target => !contains(target, event.target))) {
           return
         }
 
@@ -99,7 +100,7 @@ function bindHover (el, { includeTargets, handler, delay }) {
         bindingData.hoverData.prevEvent = event
 
         clearTimeout(bindingData.hoverData.timer)
-        bindingData.hoverData.timer = setTimeout(() => {
+        let check = () => {
           // 超时没移回，就要触发handler了
           if (bindingData.hoverData.state === 'out') {
             // 此处用最后一次记录的event对象
@@ -107,7 +108,8 @@ function bindHover (el, { includeTargets, handler, delay }) {
             // 重置状态
             bindingData.hoverData.state = 'ready'
           }
-        }, bindingData.delay)
+        }
+        bindingData.hoverData.timer = bindingData.delay ? setTimeout(check, bindingData.delay) : check()
       }
     }
   )
