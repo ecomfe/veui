@@ -1,3 +1,5 @@
+@import "./lib.less";
+
 ._veui-grouped-button {
   &:hover,
   &.focus-ring {
@@ -26,6 +28,12 @@
       background-color: @veui-theme-color-sup-5;
       border-color: @veui-theme-color-sup-5;
       color: #fff;
+    }
+
+    &.veui-disabled {
+      background-color: @veui-gray-color-sup-1;
+      border-color: @veui-gray-color-sup-1;
+      color: @veui-text-color-weak;
     }
   }
 }

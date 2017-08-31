@@ -2,8 +2,11 @@
   <article>
     <h1><code>&lt;veui-radio-button-group&gt;</code></h1>
     <section>
+      <veui-checkbox v-model="disabled">禁用</veui-checkbox>
+    </section>
+    <section>
       <p>
-        <veui-radio-button-group ui="primary" :items="data1" name="111" v-model="picked1">
+        <veui-radio-button-group ui="primary" :items="data1" name="111" v-model="picked1" :disabled="disabled">
           <template scope="props">{{ props.label }}</template>
         </veui-radio-button-group>
       </p>
@@ -11,7 +14,7 @@
     </section>
     <section>
       <p>
-        <veui-radio-button-group :items="data2" ui="small" v-model="picked2">
+        <veui-radio-button-group :items="data2" ui="small" v-model="picked2" :disabled="disabled">
           <template scope="props">{{ props.label }}</template>
         </veui-radio-button-group>
       </p>
@@ -21,17 +24,19 @@
 </template>
 
 <script>
-import { RadioButtonGroup } from 'veui'
+import { RadioButtonGroup, Checkbox } from 'veui'
 
 export default {
   name: 'radio-button-group-demo',
   components: {
-    'veui-radio-button-group': RadioButtonGroup
+    'veui-radio-button-group': RadioButtonGroup,
+    'veui-checkbox': Checkbox
   },
   data () {
     return {
       picked1: 'euro',
       picked2: 'qq',
+      disabled: false,
       data1: [
         {
           value: 'pound', label: '£'
