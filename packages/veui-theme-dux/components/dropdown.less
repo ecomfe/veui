@@ -7,10 +7,6 @@
   display: inline-block;
   width: 110px;
 
-  &-button {
-
-  }
-
   &-options {
     &:extend(._veui-dropdown-overlay all);
     min-width: 110px;
@@ -24,6 +20,6 @@
   }
 
   &[ui~="link"] &-button {
-    padding: 9px 12px;
+    .padding(_, 12px);
   }
 }

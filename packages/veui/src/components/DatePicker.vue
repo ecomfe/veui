@@ -1,42 +1,42 @@
 <template>
-<div class="veui-datepicker" :ui="ui"
+<div class="veui-date-picker" :ui="ui"
   :class="{
-    'veui-datepicker-empty': !selected,
-    'veui-datepicker-range': range,
-    'veui-datepicker-expanded': expanded
+    'veui-date-picker-empty': !selected,
+    'veui-date-picker-range': range,
+    'veui-date-picker-expanded': expanded
   }">
-  <veui-button ref="button" class="veui-datepicker-button" :ui="buttonUI" :disabled="realDisabled || realReadonly" @click="expanded = !expanded">
+  <veui-button ref="button" class="veui-date-picker-button" :ui="ui" :disabled="realDisabled || realReadonly" @click="expanded = !expanded">
     <template v-if="range">
-      <span class="veui-datepicker-label">
+      <span class="veui-date-picker-label">
         <slot v-if="formatted" name="date" :formatted="formatted ? formatted[0] : null" :date="selected ? selected[0] : null">{{ formatted[0] }}</slot>
         <slot v-else name="placeholder-begin">开始时间</slot>
       </span>
-      <span class="veui-datepicker-tilde">~</span>
-      <span class="veui-datepicker-label">
+      <span class="veui-date-picker-tilde">~</span>
+      <span class="veui-date-picker-label">
         <slot v-if="formatted" name="date" :formatted="formatted ? formatted[1] : null" :date="selected ? selected[1] : null">{{ formatted[1] }}</slot>
         <slot v-else name="placeholder-end">结束时间</slot>
       </span>
     </template>
     <template v-else>
-      <span class="veui-datepicker-label">
+      <span class="veui-date-picker-label">
         <slot v-if="formatted" name="date" :date="formatted">{{ formatted }}</slot>
         <slot v-else name="placeholder">{{ placeholder }}</slot>
       </span>
     </template>
-    <veui-icon class="veui-datepicker-icon" name="calendar"></veui-icon>
+    <veui-icon class="veui-date-picker-icon" name="calendar"></veui-icon>
   </veui-button>
-  <button v-if="clearable" v-show="!!selected" class="veui-datepicker-clear" @click="clear">
+  <button v-if="clearable" v-show="!!selected" class="veui-date-picker-clear" @click="clear">
     <veui-icon name="cross"></veui-icon>
   </button>
   <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay">
-    <veui-calendar class="veui-datepicker-overlay" v-model="localSelected" v-bind="calendarProps" ref="cal"
+    <veui-calendar class="veui-date-picker-overlay" v-model="localSelected" v-bind="calendarProps" ref="cal"
       v-outside:button="close" @select="handleSelect" @selectstart="handleProgress" @selectprogress="handleProgress" :panel="realPanel">
       <template v-if="range && realShortcuts && realShortcuts.length">
-        <div class="veui-datepicker-shortcuts">
+        <div class="veui-date-picker-shortcuts">
           <button v-for="({from, to, label}, index) in realShortcuts" type="button" :key="index"
             :class="{
-              'veui-datepicker-shortcut': true,
-              'veui-datepicker-shortcut-selected': isShortcutSelected({from, to})
+              'veui-date-picker-shortcut': true,
+              'veui-date-picker-shortcut-selected': isShortcutSelected({from, to})
             }" @click="handleSelect([from, to])"
             @mouseenter="handleHoverShortcut([from, to])"
             @mouseleave="handleHoverShortcut()">{{ label }}</button>
@@ -65,7 +65,7 @@ config.defaults({
 let calendarProps = ['range', 'weekStart', 'fillMonth', 'disabledDate', 'dateClass']
 
 export default {
-  name: 'veui-datepicker',
+  name: 'veui-date-picker',
   components: {
     'veui-button': Button,
     'veui-overlay': Overlay,

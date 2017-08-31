@@ -1,16 +1,16 @@
 <template>
   <article>
-    <h1><code>&lt;veui-regionpicker&gt;</code></h1>
+    <h1><code>&lt;veui-region-picker&gt;</code></h1>
     <h3>品牌数据源</h3>
     <section><input type="text" v-model="selected"></section>
     <section>已选地区：{{ selected1.join(', ') || '无' }}</section>
     <section>
-      <veui-regionpicker :datasource="regions1" v-model="selected1"></veui-regionpicker>
+      <veui-region-picker :datasource="regions1" v-model="selected1"></veui-region-picker>
     </section>
     <h3>网盟数据源</h3>
     <section>已选地区：{{ selected2.join(', ') || '无' }}</section>
     <section>
-      <veui-regionpicker :datasource="regions2" v-model="selected2"></veui-regionpicker>
+      <veui-region-picker :datasource="regions2" v-model="selected2"></veui-region-picker>
     </section>
   </article>
 </template>
@@ -19,9 +19,9 @@
 import { RegionPicker } from 'veui'
 
 export default {
-  name: 'regionpicker-demo',
+  name: 'region-picker-demo',
   components: {
-    'veui-regionpicker': RegionPicker
+    'veui-region-picker': RegionPicker
   },
   data () {
     return {

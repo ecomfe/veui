@@ -11,20 +11,21 @@ import Calendar from './Calendar'
 import DatePicker from './DatePicker'
 import Select from './Select'
 import Dropdown from './Dropdown'
-import Radiobox from './Radiobox'
+import Radio from './Radio'
 import Checkbox from './Checkbox'
-import RadioboxGroup from './RadioboxGroup'
+import RadioGroup from './RadioGroup'
+import RadioButtonGroup from './RadioButtonGroup'
 import CheckboxGroup from './CheckboxGroup'
+import CheckButtonGroup from './CheckButtonGroup'
 import Tooltip from './Tooltip'
 import Toast from './Toast'
 import Alert from './Alert'
-import ConfirmBox from './ConfirmBox'
-import AlertBox from './AlertBox'
 import Tabs from './Tabs'
 import Switch from './Switch'
 import Searchbox from './Searchbox'
 import Steps from './Steps'
 import RegionPicker from './RegionPicker'
+import ButtonGroup from './ButtonGroup'
 
 export default [
   {
@@ -78,7 +79,7 @@ export default [
     component: Calendar
   },
   {
-    path: '/datepicker',
+    path: '/date-picker',
     name: 'DatePicker',
     component: DatePicker
   },
@@ -93,14 +94,19 @@ export default [
     component: Dropdown
   },
   {
-    path: '/radiobox',
-    name: 'Radiobox',
-    component: Radiobox
+    path: '/radio',
+    name: 'Radio',
+    component: Radio
   },
   {
-    path: '/radioboxgroup',
-    name: 'RadioboxGroup',
-    component: RadioboxGroup
+    path: '/radio-group',
+    name: 'RadioGroup',
+    component: RadioGroup
+  },
+  {
+    path: '/radio-button-group',
+    name: 'RadioButtonGroup',
+    component: RadioButtonGroup
   },
   {
     path: '/checkbox',
@@ -108,9 +114,14 @@ export default [
     component: Checkbox
   },
   {
-    path: '/checkboxgroup',
+    path: '/checkbox-group',
     name: 'CheckboxGroup',
     component: CheckboxGroup
+  },
+  {
+    path: '/check-button-group',
+    name: 'CheckButtonGroup',
+    component: CheckButtonGroup
   },
   {
     path: '/tooltip',
@@ -127,21 +138,6 @@ export default [
     name: 'Alert',
     component: Alert
   },
-  {
-    path: '/confirm-box',
-    name: 'ConfirmBox',
-    component: ConfirmBox
-  },
-  {
-    path: '/alert-box',
-    name: 'AlertBox',
-    component: AlertBox
-  },
-  // {
-  //   path: '/special-dialog',
-  //   name: 'SpecialDialog',
-  //   component: SpecialDialog
-  // },
   {
     path: '/tabs',
     name: 'Tabs',
@@ -178,13 +174,13 @@ export default [
     component: Steps
   },
   {
-    path: '/regionpicker',
+    path: '/region-picker',
     name: 'RegionPicker',
     component: RegionPicker
+  },
+  {
+    path: '/button-group',
+    name: 'ButtonGroup',
+    component: ButtonGroup
   }
-  // {
-  //   path: '/buttonGroup',
-  //   name: 'ButtonGroup',
-  //   component: ButtonGroup
-  // }
 ]

@@ -44,12 +44,18 @@
   // 2. field自己的错误（后边会处理fieldset、field都没有tip的情况，是这个的一种特殊场景）
   // 3. 最后一个不带field不带tip，error出在fieldset上
   & > .veui-field .veui-field-error,
-  & > :not(.veui-field-no-tip) + .veui-field-error {
+  & > .veui-field:not(.veui-field-no-tip) + .veui-field-error {
     position: absolute;
     display: block;
     margin-left: 0;
     height: @veui-field-gap;
     line-height: @veui-field-gap;
+  }
+
+  // field自己带label 和 error，这种情况error要缩进
+  & > .veui-field:not(.veui-field-no-label) ~ .veui-field-error,
+  & > .veui-field:not(.veui-field-no-tip) + .veui-field-error {
+    margin-left: @veui-form-label-width;
   }
 
   &.veui-field-no-tip > .veui-field-no-tip + .veui-field-error {
@@ -58,9 +64,5 @@
     margin-left: 10px;
     height: 36px;
     line-height: 36px;
-  }
-
-  & > :not(.veui-field-no-tip) + .veui-field-error {
-    margin-left: @veui-form-label-width;
   }
 }

@@ -1,6 +1,6 @@
 <template>
-<div class="veui-radioboxgroup" :ui="ui">
-  <radiobox
+<div class="veui-radio-group" :ui="ui">
+  <radio
     :ui="ui"
     :name="localName"
     v-for="(item, index) in items"
@@ -10,19 +10,19 @@
     :checked="item.value === value"
     @change="checked => handleChange(item.value, checked)">
     <slot v-bind="item">{{ item.label }}</slot>
-  </radiobox>
+  </radio>
 </div>
 </template>
 
 <script>
 import { input } from '../mixins'
-import Radiobox from './Radiobox'
+import Radio from './Radio'
 import { uniqueId } from 'lodash'
 
 export default {
-  name: 'veui-boxgroup',
+  name: 'veui-radio-group',
   components: {
-    'radiobox': Radiobox
+    'radio': Radio
   },
   mixins: [input],
   model: {
@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     localName () {
-      return this.realName || uniqueId('veui-radioboxgroup-')
+      return this.realName || uniqueId('veui-radio-group-')
     }
   },
   methods: {

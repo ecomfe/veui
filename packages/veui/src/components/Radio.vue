@@ -1,7 +1,7 @@
 <template>
-<label class="veui-radiobox" :ui="ui">
+<label class="veui-radio" :ui="ui">
   <input type="radio" v-bind="attrs" @change="$emit('change', $event.target.checked)">
-  <span class="veui-radiobox-box"></span>
+  <span class="veui-radio-box"></span>
   <span><slot></slot></span>
 </label>
 </template>
@@ -11,7 +11,7 @@ import { input } from '../mixins'
 import { pick } from 'lodash'
 
 export default {
-  name: 'veui-radiobox',
+  name: 'veui-radio',
   mixins: [input],
   props: {
     ui: String,

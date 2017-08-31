@@ -2,7 +2,6 @@
   "name": "veui-theme-dux",
   "version": "0.2.4",
   "description": "DUX theme for VEUI.",
-  "main": "index.js",
   "keywords": [
     "veui",
     "vue",
@@ -12,6 +11,7 @@
   "author": "ecomfe",
   "license": "MIT",
   "dependencies": {
-    "less-plugin-est": "^2.0.5"
+    "less-plugin-est": "^2.0.5",
+    "wicg-focus-ring": "^2.0.1"
   }
 }

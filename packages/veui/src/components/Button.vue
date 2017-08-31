@@ -1,5 +1,8 @@
 <template>
-<button class="veui-button" :class="{'veui-button-loading': loading}" v-bind.props="attrs" @click="$emit('click', $event)">
+<button class="veui-button" :class="{
+    'veui-button-loading': loading,
+    'veui-disabled': disabled
+  }" v-bind="attrs" @click="$emit('click', $event)">
   <template v-if="!loading"><slot></slot></template>
   <template v-else>
     <slot name="loading">
@@ -11,7 +14,7 @@
 </template>
 
 <script>
-import { assign } from 'lodash'
+import { omit } from 'lodash'
 import Icon from './Icon'
 import '../icons'
 
@@ -34,8 +37,7 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = assign({}, this.$props)
-      delete attrs.loading
+      let attrs = omit(this.$props, 'loading')
       attrs.disabled = this.disabled || this.loading
       return attrs
     }

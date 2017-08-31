@@ -1,3 +1,18 @@
+### 0.3.0
+
+* [^] 规范化所有公用组件文件名、组件 `name`（影响 `Vue.use` 方式引入）、组件 DOM 容器 `class` 的命名规则，所有非首位的大写字母在转换为小写后增加 `-` 进行分隔。修改清单见 [#122](https://github.com/ecomfe/veui/issues/122)。**[Breaking change]**
+* [^] `Pager` 组件 `to` 默认值修改为 `''`（空字符串），以进入 `Link` 的无跳转逻辑。**[Breaking change]**
+* [^] `Radiobox` 组件重命名为 `Radio`。**[Breaking change]**
+* [^] `RadioboxGroup` 组件重命名为 `RadioGroup`。**[Breaking change]**
+* [^] `Button` 组件的 `aux` 风格 `ui` 现在是默认样式，原有的默认样式更名为 `secondary`。**[Breaking change]**
+* [^] 为组件支持了 `:focus-ring` 的 polyfill，需要使用方自行引入。详见 [#121](https://github.com/ecomfe/veui/issues/121)**[Breaking change]**
+* [^] 修复 `RegionPicker` 浮层在特殊情况下显示上的问题。
+* [+] 为 `Table` 增加 `select-mode` prop，用于提供单选模式。
+* [^] 修复 `Dropdown` 在 `ui` 为 `link` 时的样式。
+* [+] 增加 `ButtonGroup` 组件。
+* [+] 增加 `RadioButtonGroup` 组件。
+* [+] 增加 `CheckButtonGroup` 组件。
+
 ### 0.2.4
 
 * [+] 增加 `veui-loader`，确保只在 Webpack 能够 resolve 样式文件时 `babel-plugin-veui` 才注入样式 `import` 语句。

@@ -5,8 +5,17 @@
       <veui-button ui="primary" @click="append">添加</veui-button>
     </section>
     <section>
-      <veui-table ui="alt" :data="data" :columnFilter="columns" keys="id" selectable
-        :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected.sync="selected">
+      <veui-checkboxgroup type="checkbox" v-model="columns" :items="[
+        { value: 'id', label: 'ID'},
+        { value: 'desc', label: '描述'},
+        { value: 'price', label: '价格'},
+        { value: 'updateDate', label: '更新时间'},
+        { value: 'operation', label: '操作'}
+      ]"></veui-checkboxgroup>
+    </section>
+    <section>
+      <veui-table ui="alt" :data="data" :column-filter="columns" keys="id" selectable
+        :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected.sync="selected1">
         <veui-table-column field="id" title="数据 ID" sortable>
           <template scope="props" slot="foot"><strong>总计</strong></template>
         </veui-table-column>
@@ -28,9 +37,11 @@
           </template>
         </veui-table-column>
       </veui-table>
+      <p>已选ID：{{ JSON.stringify(selected1) }}</p>
     </section>
     <section class="container">
-      <veui-table ui="embed" :data="data" :columnFilter="columns">
+      <veui-table ui="embed" :data="data" :column-filter="columns" keys="id"
+        selectable select-mode="single" :selected.sync="selected2">
         <veui-table-column field="id" title="数据 ID"></veui-table-column>
         <veui-table-column field="desc" title="数据描述"></veui-table-column>
         <veui-table-column field="price" title="价格" width="160" align="right">
@@ -43,19 +54,7 @@
           </template>
         </veui-table-column>
       </veui-table>
-    </section>
-    <section>
-      <veui-checkboxgroup type="checkbox" v-model="columns" :items="[
-        { value: 'id', label: 'ID'},
-        { value: 'desc', label: '描述'},
-        { value: 'price', label: '价格'},
-        { value: 'updateDate', label: '更新时间'},
-        { value: 'operation', label: '操作'}
-      ]"></veui-checkboxgroup>
-    </section>
-    <section>
-      已选ID：
-      {{ JSON.stringify(selected) }}
+      <p>已选ID：{{ JSON.stringify(selected2) }}</p>
     </section>
   </article>
 </template>
@@ -103,7 +102,8 @@ export default {
       columns: ['id', 'desc', 'price', 'updateDate', 'operation'],
       order: false,
       orderBy: null,
-      selected: ['3155', '3156']
+      selected1: ['3155', '3156'],
+      selected2: '3156'
     }
   },
   computed: {

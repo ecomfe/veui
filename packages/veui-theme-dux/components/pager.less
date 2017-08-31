@@ -85,6 +85,7 @@
     text-align: center;
     background-color: @veui-gray-color-sup-3;
     border-radius: 2px;
+    cursor: pointer;
   }
 
   &-pages {
@@ -102,21 +103,24 @@
       font-size: @digit-size;
       border-radius: 2px;
 
-      a {
+      a,
+      span {
         display: block;
+        cursor: pointer;
 
         &:hover {
           color: @veui-text-color-strong;
           font-weight: @veui-font-weight-extra-bold;
         }
 
-        &:focus {
+        &.focus-ring {
           color: @veui-theme-color-primary;
         }
       }
     }
 
-    .veui-active a {
+    .veui-active a,
+    .veui-active span {
       color: @veui-text-color-strong;
       font-weight: @veui-font-weight-extra-bold;
       background-color: @veui-gray-color-sup-3;
@@ -212,7 +216,7 @@
       background: transparent;
       .veui-button-transition();
 
-      &:focus {
+      &.focus-ring {
         color: @veui-theme-color-primary;
         .veui-shadow(none);
       }
