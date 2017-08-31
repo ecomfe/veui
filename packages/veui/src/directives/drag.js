@@ -149,6 +149,32 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
  * ```
  *
  * 通过将 draggable 的值切换为 false，可以销毁之前设置的拖动处理器，将涉及到的 DOM 元素的样式都设置为原样。
+ *
+ * drag 指令也支持自定义 Handler ：
+ *
+ * ```js
+ * import BaseHandler from 'veui/directives/drag/BaseHandler'
+ *
+ * export default class CustomHandler extends BaseHandler {
+ *   ...
+ * }
+ * ```
+ *
+ * 然后将自定义 Handler 注册到 drag 中去：
+ *
+ * ```js
+ * import { registerHandler } from 'veui/directives/drag'
+ *
+ * registerHandler('customHandler', CustomHandler)
+ * ```
+ *
+ * 在使用的时候，就可以把 type 参数设置为 `customHandler` 了：
+ *
+ * ```html
+ * <div v-drag:translate="{targets: ['content'], type: 'customHandler', axis: 'x'"></div>
+ * ```
+ *
+ * **注：** 自定义 Handler 必须继承自 `BaseHandler` 。
  */
 export default {
   componentUpdated (el, { modifiers, value, arg }, vnode) {
