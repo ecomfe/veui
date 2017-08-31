@@ -3,9 +3,7 @@
 module.exports = {
   "plugins": {
     // to edit target browsers: use "browserlist" field in package.json
-    "autoprefixer": {
-        browsers: ['ie >= 9', 'last 2 versions']
-    },
+    "autoprefixer": {},
     "cssnano": {
         autoprefixer: false,
         safe: true
