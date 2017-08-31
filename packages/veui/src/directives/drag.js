@@ -115,12 +115,12 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
  * 在各个事件的回调函数中，可以对目标 DOM 元素进行操作，从而达到拖动等效果。
  *
  * drag 指令内部也提供了一个默认的拖动处理器，借助 translate 来移动目标元素。可以通过指令的 arg
- * 指定要使用的拖动处理器（目前仅支持 translate），通过 value 并借助 vue 的 refs 来指定目标元素：
+ * 指定要使用的拖动处理器（目前仅支持 translate ），通过 value 并借助 vue 的 refs 来指定目标元素：
  *
  * ```html
  * <p ref="target1"></p>
  * <p ref="target2"></p>
- * <div v-drag:translate="['target1', 'target2']"></div>
+ * <div v-drag.translate="['target1', 'target2']"></div>
  * ```
  *
  * drag 指令也可以随时关闭 drag 功能，只需要传入值为 false 的 draggable 参数即可：
@@ -133,22 +133,30 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
  * containment 参数可以是结构为 `{ left: 0, top: 0, width: 100, height: 0}` 的对象：
  *
  * ```html
- * <div v-drag:translate="{targets: ['content'], type: 'translate', containment: {left: 0, top: 0, width: 100, height: 100}}"></div>
+ * <div v-drag.translate="{targets: ['content'], type: 'translate', containment: {left: 0, top: 0, width: 100, height: 100}}"></div>
  * ```
  *
  * 也可以是一个 DOM 节点或者 ref 指向的节点：
  *
  * ```html
- * <div v-drag:translate="{targets: ['content'], type: 'translate', containment: body}"></div>
+ * <div v-drag.translate="{targets: ['content'], type: 'translate', containment: body}"></div>
  * ```
  *
  * 可以通过传递 axis 参数来限定拖动的方向，x 表明在水平方向拖动，y 表示在垂直方向拖动：
  *
  * ```html
- * <div v-drag:translate="{targets: ['content'], type: 'translate', axis: 'x'"></div>
+ * <div v-drag.translate="{targets: ['content'], type: 'translate', axis: 'x'"></div>
  * ```
  *
  * 通过将 draggable 的值切换为 false，可以销毁之前设置的拖动处理器，将涉及到的 DOM 元素的样式都设置为原样。
+ *
+ * drag 指令的复杂参数可以通过 `value` 的方式传递，在一些简单场景下，也可以通过 modifier 、 arg 传递参数：
+ *
+ * ```html
+ * <div v-drag:ref1,ref2.translate.x="{...}"></div>
+ * ```
+ *
+ * 其中，`ref1,ref2` 对应 targets 参数， `translate` 对应 type 参数， `x` 对应 axis 参数。
  *
  * drag 指令也支持自定义 Handler ：
  *
@@ -171,7 +179,7 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
  * 在使用的时候，就可以把 type 参数设置为 `customHandler` 了：
  *
  * ```html
- * <div v-drag:translate="{targets: ['content'], type: 'customHandler', axis: 'x'"></div>
+ * <div v-drag.translate="{targets: ['content'], type: 'customHandler', axis: 'x'"></div>
  * ```
  *
  * **注：** 自定义 Handler 必须继承自 `BaseHandler` 。
