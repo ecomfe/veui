@@ -10,15 +10,15 @@
       <veui-button ui="primary" loading>提交</veui-button>
     </p>
     <p>
-      <veui-button ui="secondary tiny">保存</veui-button>
-      <veui-button ui="secondary small">保存</veui-button>
+      <veui-button ui="tiny">保存</veui-button>
+      <veui-button ui="small">保存</veui-button>
       <veui-button ui="secondary">保存</veui-button>
-      <veui-button ui="secondary large">保存</veui-button>
-      <veui-button ui="secondary" disabled>保存</veui-button>
-      <veui-button ui="secondary" loading>保存</veui-button>
+      <veui-button ui="large">保存</veui-button>
+      <veui-button disabled>保存</veui-button>
+      <veui-button loading>保存</veui-button>
     </p>
     <p>
-      <veui-button ui="tiny"><icon name="cross-small"></icon> 取消</veui-button>
+      <veui-button ui="tiny">取消</veui-button>
       <veui-button ui="small"><icon name="cross-small"></icon> 取消</veui-button>
       <veui-button><icon name="cross-small"></icon> 取消</veui-button>
       <veui-button ui="large"><icon name="cross-small"></icon> 取消</veui-button>

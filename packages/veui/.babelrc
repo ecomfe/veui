@@ -7,7 +7,7 @@
     [
       "veui",
       {
-        "package": "veui-theme-dux",
+        "package": "veui-theme-x",
         "path": "components",
         "fileName": "${module}.less",
         "transform": "kebab-case"

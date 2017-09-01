@@ -11,7 +11,9 @@
   "author": "ecomfe",
   "license": "MIT",
   "dependencies": {
-    "less-plugin-est": "^2.0.5",
+    "less-plugin-est": "^2.0.5"
+  },
+  "peerDependencies": {
     "wicg-focus-ring": "^2.0.1"
   }
 }

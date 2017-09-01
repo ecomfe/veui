@@ -589,8 +589,6 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-dux/lib.less";
-
 .veui-form-demo {
   h2 {
     margin-bottom: 40px;

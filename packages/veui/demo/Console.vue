@@ -54,7 +54,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-dux/common.less";
+@import "~less-plugin-est/src/all.less";
 
 @nav-width: 240px;
 @light-bg-color: #f6f9ff;
@@ -75,7 +75,7 @@ export default {
     background-color: @light-bg-color;
     font-size: 12px;
     font-weight: 600;
-    color: @veui-gray-color-normal;
+    color: #666;
     cursor: pointer;
 
     & > * {
@@ -114,13 +114,13 @@ export default {
         content: "";
         .absolute(0, _, 0, 0);
         width: 2px;
-        background-color: @veui-theme-color-primary;
+        background-color: #369;
       }
     }
   }
 
   small {
-    color: @veui-gray-color-weak;
+    color: #999;
   }
 
   &.expanded {
