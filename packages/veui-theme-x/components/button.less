@@ -1,0 +1,201 @@
+@import "../lib.less";
+
+.veui-button {
+  padding: 0 20px;
+  user-select: none;
+  vertical-align: middle;
+  .veui-button-transition();
+  border: 1px solid @veui-gray-color-5;
+  background-color: #fff;
+  color: @veui-text-color-normal;
+
+  &:hover,
+  &:active {
+    color: @veui-text-color-strong;
+  }
+
+  &:hover {
+    background-color: @veui-gray-color-8;
+  }
+
+  &:active {
+    background-color: @veui-gray-color-6;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &.focus-ring {
+    color: @veui-brand-color;
+  }
+
+  &[ui~="primary"] {
+    border-color: transparent;
+    background-color: @veui-brand-color;
+    color: #fff;
+
+    &:hover,
+    &.focus-ring {
+      background-color: @veui-brand-color-2;
+    }
+
+    &:active {
+      background-color: @veui-brand-color-1;
+    }
+  }
+
+  &[ui~="alt"] {
+    border-color: transparent;
+    background-color: @veui-gray-color-7;
+
+    &:hover {
+      background-color: @veui-gray-color-6;
+    }
+
+    &:active {
+      background-color: @veui-gray-color-5;
+    }
+
+    &.focus-ring {
+      color: @veui-brand-color;
+    }
+  }
+  &[ui~="large"] {
+    .centered-line(@veui-height-large);
+    font-size: @veui-font-size-large;
+    .make-height(@veui-height-large);
+  }
+
+  &[ui~="small"] {
+    .centered-line(@veui-height-small);
+    font-size: @veui-font-size-small;
+    .make-height(@veui-height-small);
+    .padding(_, 10px);
+  }
+
+  &[ui~="tiny"] {
+    min-width: auto;
+    .centered-line(@veui-height-tiny);
+    .make-height(@veui-height-tiny);
+    font-size: @veui-font-size-small;
+    .padding(_, 10px);
+  }
+
+  &[ui~="round"] {
+    border-radius: 50%;
+  }
+
+  &[ui~="round"],
+  &[ui~="square"] {
+    width: @veui-height-normal;
+    min-width: auto;
+    .padding(_, 0);
+    text-align: center;
+
+    &[ui~="large"] {
+      width: @veui-height-large;
+    }
+
+    &[ui~="small"] {
+      width: @veui-height-small;
+    }
+
+    &[ui~="tiny"] {
+      width: @veui-height-tiny;
+    }
+  }
+
+  // use class here to give IE a better experience because
+  // we disabled the current <button> element to prevent
+  // user interaction with buttons while loading
+  &.veui-disabled,
+  &.veui-disabled[ui], {
+    &,
+    &:hover {
+      cursor: not-allowed;
+      border-color: transparent;
+      background-color: @veui-gray-color-7;
+      color: @veui-text-color-aux;
+    }
+  }
+
+  &[ui~="link"] {
+    min-width: auto;
+    border: none;
+    padding: 0;
+    background: transparent;
+    color: @veui-brand-color;
+
+    &:hover,
+    &.focus-ring {
+      color: @veui-brand-color-2;
+    }
+
+    &:active {
+      color: @veui-brand-color-1;
+    }
+
+    &[ui~="alert"] {
+      color: @veui-alert-color;
+
+      &:hover,
+      &.focus-ring {
+        color: @veui-alert-color-2;
+      }
+
+      &:active {
+        color: @veui-alert-color-1;
+      }
+    }
+
+    &:hover,
+    &:active,
+    &.focus-ring {
+      background: none;
+    }
+
+    &.veui-disabled {
+      &,
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }
+
+  &-loading {
+    &,
+    &[ui] {
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  .veui-icon {
+    max-width: 1em;
+    & + .veui-button-loading-text {
+      margin-left: 5px;
+    }
+  }
+
+  .make-height(@button-height) {
+    height: @button-height;
+    line-height: @button-height - 2px;
+
+    & > .veui-icon {
+      vertical-align: top;
+      @height: @button-height / 2 - 1;
+      margin-top: ~"calc(@{height} - 0.5em)";
+    }
+  }
+  .make-height(@veui-height-normal);
+}
+
+.veui-button-loading-text {
+  vertical-align: top;
+
+  [ui~="round"] > &,
+  [ui~="square"] > & {
+    display: none;
+  }
+}
