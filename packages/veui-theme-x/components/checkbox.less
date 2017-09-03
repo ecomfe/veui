@@ -2,9 +2,10 @@
 
 .veui-checkbox {
   display: inline-block;
-  color: #333;
+  color: @veui-text-color-normal;
   font-size: @veui-font-size-normal;
   line-height: @veui-font-size-large;
+  cursor: pointer;
 
   input,
   .veui-icon {
@@ -13,11 +14,14 @@
 
   &-label {
     vertical-align: middle;
-    cursor: pointer;
   }
 
   .veui-field & {
     line-height: @veui-height-normal;
+  }
+
+  &:hover {
+    color: @veui-text-color-strong;
   }
 
   &-box {
@@ -27,7 +31,7 @@
     width: @veui-font-size-large;
     margin-right: 8px;
     border: 1px solid @veui-gray-color-2;
-    background-color: transparent;
+    background-color: #fff;
     font-size: @veui-font-size-normal;
     vertical-align: middle;
   }

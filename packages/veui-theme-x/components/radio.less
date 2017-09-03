@@ -2,8 +2,9 @@
 
 .veui-radio {
   display: inline-block;
-  color: #333;
+  color: @veui-text-color-normal;
   font-size: @veui-font-size-normal;
+  cursor: pointer;
 
   input,
   .veui-icon {
@@ -12,7 +13,10 @@
 
   &-label {
     vertical-align: middle;
-    cursor: pointer;
+  }
+
+  &:hover {
+    color: @veui-text-color-strong;
   }
 
   &-box {
@@ -21,7 +25,7 @@
     height: @veui-font-size-large;
     width: @veui-font-size-large;
     border: 1px solid @veui-gray-color-2;
-    background-color: transparent;
+    background-color: #fff;
     margin-right: 8px;
     border-radius: 50%;
     vertical-align: middle;
@@ -49,7 +53,7 @@
   &.veui-disabled {
     cursor: not-allowed;
 
-    .veui-checkbox-label {
+    .veui-radio-label {
       color: @veui-text-color-weak;
     }
   }
