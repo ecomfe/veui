@@ -37,22 +37,84 @@ h6 {
   font-weight: @veui-font-weight-bold;
 }
 
-a {
-  color: @veui-brand-color-3;
-
-  &:hover {
-    color: @veui-brand-color-2;
-  }
-
-  &:active {
-    color: @veui-brand-color-1;
-  }
-}
-
 input,
 button,
 textarea {
   font: inherit;
   font-weight: inherit;
   color: inherit;
+}
+
+a,
+.veui-button[ui~="link"] {
+  color: @veui-link-color-normal;
+
+  &[ui~="primary"] {
+    color: @veui-link-color-strong;
+  }
+
+  &:hover,
+  &.focus-ring {
+    color: @veui-link-color-hover;
+  }
+
+  &:active {
+    color: @veui-link-color-active;
+  }
+
+  &[ui~="aux"] {
+    color: @veui-text-color-weak;
+
+    &:hover,
+    &.focus-ring {
+      color: @veui-text-color-normal;
+      text-decoration: underline;
+    }
+
+    &:active {
+      color: @veui-alert-color-1;
+    }
+  }
+
+  &[ui~="alert"] {
+    color: @veui-alert-color;
+
+    &:hover,
+    &.focus-ring {
+      color: @veui-alert-color-2;
+      text-decoration: underline;
+    }
+
+    &:active {
+      color: @veui-alert-color-1;
+    }
+  }
+
+  &[ui~="success"] {
+    color: @veui-success-color;
+
+    &:hover,
+    &.focus-ring {
+      color: @veui-success-color-2;
+      text-decoration: underline;
+    }
+
+    &:active {
+      color: @veui-success-color-1;
+    }
+  }
+
+  &[ui~="warning"] {
+    color: @veui-warning-color;
+
+    &:hover,
+    &.focus-ring {
+      color: @veui-warning-color-2;
+      text-decoration: underline;
+    }
+
+    &:active {
+      color: @veui-warning-color-1;
+    }
+  }
 }

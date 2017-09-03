@@ -2,6 +2,7 @@
   <article>
     <h1><code>&lt;veui-button&gt;</code></h1>
     <p>
+      <veui-button ui="primary micro">提交</veui-button>
       <veui-button ui="primary tiny">提交</veui-button>
       <veui-button ui="primary small">提交</veui-button>
       <veui-button ui="primary">提交</veui-button>
@@ -10,6 +11,7 @@
       <veui-button ui="primary" loading>提交</veui-button>
     </p>
     <p>
+      <veui-button ui="micro">保存</veui-button>
       <veui-button ui="tiny">保存</veui-button>
       <veui-button ui="small">保存</veui-button>
       <veui-button ui="secondary">保存</veui-button>
@@ -18,7 +20,8 @@
       <veui-button loading>保存</veui-button>
     </p>
     <p>
-      <veui-button ui="tiny">取消</veui-button>
+      <veui-button ui="micro"><icon name="cross-small"></icon> 取消</veui-button>
+      <veui-button ui="tiny"><icon name="cross-small"></icon> 取消</veui-button>
       <veui-button ui="small"><icon name="cross-small"></icon> 取消</veui-button>
       <veui-button><icon name="cross-small"></icon> 取消</veui-button>
       <veui-button ui="large"><icon name="cross-small"></icon> 取消</veui-button>
@@ -26,6 +29,7 @@
       <veui-button loading><icon name="cross-small"></icon> 取消</veui-button>
     </p>
     <p>
+      <veui-button ui="alt micro">取消</veui-button>
       <veui-button ui="alt tiny">取消</veui-button>
       <veui-button ui="alt small">取消</veui-button>
       <veui-button ui="alt">取消</veui-button>
@@ -34,6 +38,7 @@
       <veui-button ui="alt" loading>取消</veui-button>
     </p>
     <p>
+      <veui-button ui="link micro">编辑</veui-button>
       <veui-button ui="link tiny">编辑</veui-button>
       <veui-button ui="link small">编辑</veui-button>
       <veui-button ui="link">编辑</veui-button>
@@ -42,6 +47,7 @@
       <veui-button ui="link" loading>编辑</veui-button>
     </p>
     <p>
+      <veui-button ui="round primary micro"><icon name="check"></icon></veui-button>
       <veui-button ui="round primary tiny"><icon name="check"></icon></veui-button>
       <veui-button ui="round primary small"><icon name="check"></icon></veui-button>
       <veui-button ui="round primary"><icon name="check"></icon></veui-button>
@@ -50,6 +56,7 @@
       <veui-button ui="round primary" loading><icon name="check"></icon></veui-button>
     </p>
     <p>
+      <veui-button ui="round micro"><icon name="pen"></icon></veui-button>
       <veui-button ui="round tiny"><icon name="pen"></icon></veui-button>
       <veui-button ui="round small"><icon name="pen"></icon></veui-button>
       <veui-button ui="round"><icon name="pen"></icon></veui-button>
@@ -58,6 +65,7 @@
       <veui-button ui="round" loading><icon name="pen"></icon></veui-button>
     </p>
     <p>
+      <veui-button ui="square micro"><icon name="search"></icon></veui-button>
       <veui-button ui="square tiny"><icon name="search"></icon></veui-button>
       <veui-button ui="square small"><icon name="search"></icon></veui-button>
       <veui-button ui="square"><icon name="search"></icon></veui-button>
@@ -66,6 +74,7 @@
       <veui-button ui="square" loading><icon name="search"></icon></veui-button>
     </p>
     <p>
+      <veui-button ui="alt square micro"><icon name="plus"></icon></veui-button>
       <veui-button ui="alt square tiny"><icon name="plus"></icon></veui-button>
       <veui-button ui="alt square small"><icon name="plus"></icon></veui-button>
       <veui-button ui="alt square"><icon name="plus"></icon></veui-button>

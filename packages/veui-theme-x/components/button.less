@@ -75,9 +75,16 @@
   }
 
   &[ui~="tiny"] {
-    min-width: auto;
     .centered-line(@veui-height-tiny);
+    font-size: @veui-font-size-small;
     .make-height(@veui-height-tiny);
+    .padding(_, 10px);
+  }
+
+  &[ui~="micro"] {
+    min-width: auto;
+    .centered-line(@veui-height-micro);
+    .make-height(@veui-height-micro);
     font-size: @veui-font-size-small;
     .padding(_, 10px);
   }
@@ -104,6 +111,10 @@
     &[ui~="tiny"] {
       width: @veui-height-tiny;
     }
+
+    &[ui~="micro"] {
+      width: @veui-height-micro;
+    }
   }
 
   // use class here to give IE a better experience because
@@ -125,35 +136,22 @@
     border: none;
     padding: 0;
     background: transparent;
-    color: @veui-brand-color;
+    // color: @veui-brand-color;
 
-    &:hover,
-    &.focus-ring {
-      color: @veui-brand-color-2;
-    }
+    // &:hover,
+    // &.focus-ring {
+    //   color: @veui-brand-color-2;
+    // }
 
-    &:active {
-      color: @veui-brand-color-1;
-    }
+    // &:active {
+    //   color: @veui-brand-color-1;
+    // }
 
-    &[ui~="alert"] {
-      color: @veui-alert-color;
-
-      &:hover,
-      &.focus-ring {
-        color: @veui-alert-color-2;
-      }
-
-      &:active {
-        color: @veui-alert-color-1;
-      }
-    }
-
-    &:hover,
-    &:active,
-    &.focus-ring {
-      background: none;
-    }
+    // &:hover,
+    // &:active,
+    // &.focus-ring {
+    //   background: none;
+    // }
 
     &.veui-disabled {
       &,
