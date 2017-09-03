@@ -15,6 +15,13 @@
     background-color: @veui-gray-color-5;
   }
 
+  &.veui-disabled {
+    &,
+    &:hover {
+      .border-color(_, #fff);
+    }
+  }
+
   &.veui-disabled.veui-button-selected {
     background-color: @veui-gray-color-5;
     color: @veui-text-color-weak;
