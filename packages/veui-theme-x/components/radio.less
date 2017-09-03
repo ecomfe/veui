@@ -1,0 +1,80 @@
+@import "../lib.less";
+
+.veui-radio {
+  display: inline-block;
+  color: #333;
+  font-size: @veui-font-size-normal;
+
+  input,
+  .veui-icon {
+    display: none;
+  }
+
+  &-label {
+    vertical-align: middle;
+    cursor: pointer;
+  }
+
+  &-box {
+    display: inline-block;
+    position: relative;
+    height: @veui-font-size-large;
+    width: @veui-font-size-large;
+    border: 1px solid @veui-gray-color-2;
+    background-color: transparent;
+    margin-right: 8px;
+    border-radius: 50%;
+    vertical-align: middle;
+    font-size: @veui-font-size-normal;
+  }
+
+  &:hover &-box {
+    border-color: @veui-gray-color-1;
+  }
+
+  & :checked + &-box {
+    border-color: @veui-gray-color-1;
+
+    &::before {
+      content: "";
+      display: block;
+      .size(@veui-font-size-large);
+      background-color: @veui-gray-color-1;
+      border-radius: 50%;
+      .absolute(50%, 50%);
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+  }
+
+  &.veui-disabled {
+    cursor: not-allowed;
+
+    .veui-checkbox-label {
+      color: @veui-text-color-weak;
+    }
+  }
+
+  & :disabled + &-box {
+    border-color: @veui-gray-color-5;
+    background-color: @veui-gray-color-7;
+
+    &::before {
+      background-color: @veui-gray-color-5;
+    }
+  }
+
+  &[ui~="small"] {
+    font-size: @veui-font-size-small;
+  }
+
+  &[ui~="small"] &-box {
+    margin-right: 6px;
+    font-size: @veui-font-size-small;
+    height: @veui-font-size-small;
+    width: @veui-font-size-small;
+
+    &::before {
+      .size(@veui-font-size-small);
+    }
+  }
+}

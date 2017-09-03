@@ -1,10 +1,13 @@
 <template>
-<label class="veui-checkbox" :ui="ui">
+<label :class="{
+    'veui-checkbox': true,
+    'veui-disabled': realReadonly || realDisabled
+  }" :ui="ui">
   <input ref="box" type="checkbox" v-bind="attrs" @change="handleChange($event.target.checked)">
   <span class="veui-checkbox-box">
     <icon v-if="checked || localIndeterminate" :name="`${localIndeterminate ? 'minus' : 'check'}-thick`"></icon>
   </span>
-  <span><slot></slot></span>
+  <span class="veui-checkbox-label"><slot></slot></span>
 </label>
 </template>
 
