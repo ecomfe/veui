@@ -1,4 +1,4 @@
-import { find, pick, assign } from 'lodash'
+import { find, pick, assign, isEqual } from 'lodash'
 import BaseHandler from './BaseHandler'
 import { getNodes } from '../../utils/context'
 import config from '../../managers/config'
@@ -9,13 +9,13 @@ const TRANSFORM_ACCESSOR = find(
   accessor => (accessor in computedStyle)
 )
 
+const TRANSFORM_REGEXP = new RegExp(';*transform:.*?;', 'g')
+
 function getComputedTransform (elm) {
   return getComputedStyle(elm)[TRANSFORM_ACCESSOR]
 }
 
 export default class TranslateHandler extends BaseHandler {
-  oldStyles = []
-
   elms = []
 
   initialStyles = []
@@ -24,6 +24,10 @@ export default class TranslateHandler extends BaseHandler {
 
   initialPositions = []
 
+  totalDistanceX = 0
+
+  totalDistanceY = 0
+
   tempStyle = `
     user-select:none;-ms-user-select:none;-webkit-user-select:none;-moz-user-select:none;
     transition:unset;
@@ -31,27 +35,32 @@ export default class TranslateHandler extends BaseHandler {
   `
 
   setOptions (options) {
+    if (isEqual(this.options, options)) {
+      return
+    }
+
     super.setOptions(options)
     this.options = assign(this.options, pick(options, ['targets', 'containment', 'axis']))
+    this.elms = []
   }
 
   start () {
     super.start()
 
-    // oldStyles 仅初始化一次
-    if (this.oldStyles.length === 0) {
+    if (!this.elms || !this.elms.length) {
       this.elms = this.options.targets.reduce((prev, cur) => {
         prev.push(...getNodes(cur, this.context))
         return prev
       }, [])
-      this.oldStyles = this.elms.map(elm => elm.getAttribute('style') || '')
     }
 
     this.elms.forEach((elm, index) => {
-      let oldStyle = this.oldStyles[index]
       let initialTransform = getComputedTransform(elm)
-      this.initialTransforms[index] = initialTransform === 'none' ? '' : getComputedTransform(elm)
-      this.initialStyles[index] = `${oldStyle};${this.tempStyle}`
+      this.initialTransforms[index] = initialTransform === 'none' ? '' : initialTransform
+
+      let elmStyle = elm.getAttribute('style') || ''
+      this.initialStyles[index] = elmStyle.replace(TRANSFORM_REGEXP, ';')
+      elm.setAttribute('style', elmStyle + ';' + this.tempStyle)
 
       let rect = elm.getBoundingClientRect()
       this.initialPositions[index] = rect
@@ -61,19 +70,18 @@ export default class TranslateHandler extends BaseHandler {
   drag ({ distanceX, distanceY }) {
     super.drag()
 
-    this.move(distanceX, distanceY, this.initialStyles)
+    this.move(distanceX, distanceY, this.tempStyle)
   }
 
   end ({ distanceX, distanceY }) {
     super.end()
 
-    this.move(distanceX, distanceY, this.oldStyles)
+    this.move(distanceX, distanceY)
     this.initialTransforms = []
     this.initialStyles = []
   }
 
-  // TODO：在移动过程中其他地方可能会添加进 style，移动完成后必须保证这部分 style 不被丢掉
-  move (distanceX, distanceY, prevStyles) {
+  move (distanceX, distanceY, extraStyle = '') {
     // 统一转换成 { left: ..., top: ..., width: ..., height: ... } 形式的 rect
     let options = this.options
     let constraint = null
@@ -93,8 +101,8 @@ export default class TranslateHandler extends BaseHandler {
     }
 
     this.elms.forEach((elm, index) => {
-      let prevStyle = prevStyles[index]
-      let initialTransform = this.initialTransforms[index]
+      let initialStyle = this.initialStyles[index] || ''
+      let initialTransform = this.initialTransforms[index] || ''
       let initialPosition = this.initialPositions[index]
 
       let realDistanceX = distanceX
@@ -128,15 +136,19 @@ export default class TranslateHandler extends BaseHandler {
           realDistanceX = 0
         }
       }
-      elm.setAttribute('style', `${prevStyle};${TRANSFORM_ACCESSOR}:${initialTransform} translate(${realDistanceX}px,${realDistanceY}px)`)
+      elm.setAttribute('style', `${initialStyle};${extraStyle};${TRANSFORM_ACCESSOR}:${initialTransform} translate(${realDistanceX}px,${realDistanceY}px);`)
+
+      this.totalDistanceX = realDistanceX
+      this.totalDistanceY = realDistanceY
     })
   }
 
-  destroy () {
+  reset () {
     // 恢复最初的样式
-    this.elms.forEach((elm, index) => {
-      let oldStyle = this.oldStyles[index]
-      elm.setAttribute('style', oldStyle)
+    this.elms.forEach(elm => {
+      let initialTransform = getComputedTransform(elm)
+      let transformStyle = initialTransform === 'none' ? '' : initialTransform + ` translate(${-this.totalDistanceX}px,${-this.totalDistanceY}px);`
+      elm.setAttribute('style', elm.getAttribute('style').replace(TRANSFORM_REGEXP, ';') + `;${TRANSFORM_ACCESSOR}:${transformStyle}`)
     })
   }
 }

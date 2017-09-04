@@ -75,14 +75,18 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
     axis = get(value, 'axis')
   }
 
-  // 解析 drag 系列回调函数
-  function parseDragFn (name) {
+  function parseFn (name) {
     let fn = get(value, name, noop)
     return isFunction(fn) ? fn : noop
   }
-  let dragstart = parseDragFn('dragstart')
-  let drag = parseDragFn('drag')
-  let dragend = parseDragFn('dragend')
+
+  // 解析 drag 系列回调函数
+  let dragstart = parseFn('dragstart')
+  let drag = parseFn('drag')
+  let dragend = parseFn('dragend')
+
+  // ready 回调
+  let ready = parseFn('ready')
 
   return {
     targets,
@@ -92,7 +96,8 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
     axis,
     dragstart,
     drag,
-    dragend
+    dragend,
+    ready
   }
 }
 
@@ -145,10 +150,10 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
  * 可以通过传递 axis 参数来限定拖动的方向，x 表明在水平方向拖动，y 表示在垂直方向拖动：
  *
  * ```html
- * <div v-drag.translate="{targets: ['content'], type: 'translate', axis: 'x'"></div>
+ * <div v-drag.translate="{targets: ['content'], type: 'translate', axis: 'x', ready: (handle) => { ... }}"></div>
  * ```
- *
- * 通过将 draggable 的值切换为 false，可以销毁之前设置的拖动处理器，将涉及到的 DOM 元素的样式都设置为原样。
+ * `ready` 参数是一个回调函数，当 drag 指令准备就绪后会调用该函数，并传回一个句柄 `handle` ，句柄上提供了 `reset` 方法，可以将 targets 元素
+ * 的视觉重置为 drag 之前的的效果。
  *
  * drag 指令的复杂参数可以通过 `value` 的方式传递，在一些简单场景下，也可以通过 modifier 、 arg 传递参数：
  *
@@ -197,8 +202,10 @@ export default {
         let Handler = HANDLERS[params.type]
         handler = new Handler(params, contextComponent)
       } else {
-        handler = { start: noop, drag: noop, end: noop, destroy: noop, setOptions: noop }
+        handler = new BaseHandler(params, contextComponent)
       }
+
+      params.ready({ reset: () => handler.reset() })
 
       let dragData = {
         dragging: false,
