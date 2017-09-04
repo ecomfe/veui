@@ -18,7 +18,7 @@
   "dependencies": {
     "lodash": "^4.17.4",
     "tether": "^1.4.0",
-    "vue-awesome": "^2.2.1",
+    "vue-awesome": "^2.3.1",
     "veui-theme-x": "^0.2.4"
   },
   "peerDependencies": {
@@ -88,7 +88,6 @@
     "url-loader": "^0.5.7",
     "veui-loader": "^0.2.4",
     "vue": "^2.3.0",
-    "vue-awesome": "^2.3.1",
     "vue-loader": "^11.1.4",
     "vue-router": "^2.2.0",
     "vue-style-loader": "^2.0.0",

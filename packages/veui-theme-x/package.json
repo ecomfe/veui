@@ -15,5 +15,6 @@
   },
   "peerDependencies": {
     "wicg-focus-ring": "^2.0.1"
-  }
+  },
+  "devDependencies": {}
 }

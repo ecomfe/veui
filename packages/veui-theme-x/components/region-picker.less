@@ -33,7 +33,7 @@
       margin: 16px 0;
       width: @item-width;
 
-      &:after {
+      &::after {
         content: "：";
         line-height: 1;
       }
@@ -90,7 +90,7 @@
       }
 
       .tether-element-attached-bottom + &-overlay &,
-      .tether-element-attached-bottom + [data-tether-id] + &-overlay & { /* temporary hack */
+      .tether-element-attached-bottom + [data-tether-id] + &-overlay & {
         &::before {
           top: -15px;
           bottom: auto;
