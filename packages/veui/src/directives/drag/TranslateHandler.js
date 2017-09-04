@@ -1,4 +1,4 @@
-import { find, pick } from 'lodash'
+import { find, pick, assign } from 'lodash'
 import BaseHandler from './BaseHandler'
 import { getNodes } from '../../utils/context'
 import config from '../../managers/config'
@@ -14,11 +14,6 @@ function getComputedTransform (elm) {
 }
 
 export default class TranslateHandler extends BaseHandler {
-
-  refs = []
-
-  containment = null
-
   oldStyles = []
 
   elms = []
@@ -29,15 +24,20 @@ export default class TranslateHandler extends BaseHandler {
 
   initialPositions = []
 
-  axis = null
-
   tempStyle = `
     user-select:none;-ms-user-select:none;-webkit-user-select:none;-moz-user-select:none;
     transition:unset;
     animation:unset;-ms-animation:unset;-webkit-animation:unset;-moz-animation:unset
   `
 
+  setOptions (options) {
+    super.setOptions(options)
+    this.options = assign(this.options, pick(options, ['targets', 'containment', 'axis']))
+  }
+
   start () {
+    super.start()
+
     // oldStyles 仅初始化一次
     if (this.oldStyles.length === 0) {
       this.elms = this.options.targets.reduce((prev, cur) => {
@@ -59,15 +59,20 @@ export default class TranslateHandler extends BaseHandler {
   }
 
   drag ({ distanceX, distanceY }) {
+    super.drag()
+
     this.move(distanceX, distanceY, this.initialStyles)
   }
 
   end ({ distanceX, distanceY }) {
+    super.end()
+
     this.move(distanceX, distanceY, this.oldStyles)
     this.initialTransforms = []
     this.initialStyles = []
   }
 
+  // TODO：在移动过程中其他地方可能会添加进 style，移动完成后必须保证这部分 style 不被丢掉
   move (distanceX, distanceY, prevStyles) {
     // 统一转换成 { left: ..., top: ..., width: ..., height: ... } 形式的 rect
     let options = this.options
