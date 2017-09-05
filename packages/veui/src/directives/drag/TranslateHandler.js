@@ -9,8 +9,6 @@ const TRANSFORM_ACCESSOR = find(
   accessor => (accessor in computedStyle)
 )
 
-const TRANSFORM_REGEXP = new RegExp(`;*${TRANSFORM_ACCESSOR}:.*?;`, 'g')
-
 function getComputedTransform (elm) {
   return getComputedStyle(elm)[TRANSFORM_ACCESSOR]
 }
