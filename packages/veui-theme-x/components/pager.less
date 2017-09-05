@@ -1,0 +1,239 @@
+@import "../lib.less";
+
+.veui-pager {
+  @button-width: 36px;
+  @button-height: 30px;
+  @button-gap-width: 15px;
+
+  @digit-width: 28px;
+  @digit-width-delta: 6px;
+  @digit-height: 30px;
+
+  @digit-size: 14px;
+
+  .clearfix();
+  display: inline-block;
+  color: @veui-text-color-normal;
+  font-weight: @veui-font-weight-normal;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &-info {
+    float: left;
+    margin-right: @button-gap-width;
+    line-height: @digit-height;
+  }
+
+  &-total,
+  &-size {
+    display: inline-block;
+  }
+
+  &-size {
+    margin-left: @button-gap-width;
+  }
+
+  &-switch {
+    float: left;
+  }
+
+  .veui-select {
+    width: auto;
+    margin-top: -2px;
+    margin-left: 8px;
+    vertical-align: top;
+
+    .veui-button {
+      .padding(0, _);
+      white-space: nowrap;
+      color: @veui-text-color-strong;
+      font-weight: @veui-font-weight-extra-bold;
+
+      .veui-icon {
+        float: left;
+      }
+    }
+
+    .veui-select-label {
+      max-width: none;
+      width: auto;
+      float: left;
+      margin-right: 5px;
+    }
+  }
+
+  &-buttons {
+    float: left;
+    margin-left: @button-gap-width;
+
+    .veui-disabled {
+      color: @veui-text-color-weak;
+      cursor: not-allowed;
+    }
+
+    .focus-ring {
+      color: @veui-brand-color;
+    }
+
+    a:active {
+      background-color: @veui-gray-color-5;
+    }
+  }
+
+  &-previous,
+  &-next {
+    position: relative;
+    float: left;
+    width: @button-width;
+    height: @button-height;
+    line-height: @button-width - 2px;
+    text-align: center;
+    background-color: @veui-gray-color-7;
+    cursor: pointer;
+  }
+
+  &-pages {
+    float: left;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      float: left;
+      width: @digit-width;
+      height: @digit-height;
+      text-align: center;
+      line-height: @digit-height;
+      font-size: @digit-size;
+
+      a,
+      span {
+        display: block;
+        cursor: pointer;
+
+        &:hover {
+          color: @veui-text-color-strong;
+          font-weight: @veui-font-weight-extra-bold;
+        }
+
+        &.focus-ring {
+          color: @veui-link-color-active;
+        }
+      }
+    }
+
+    .veui-active a,
+    .veui-active span {
+      color: @veui-text-color-strong;
+      font-weight: @veui-font-weight-extra-bold;
+      background-color: @veui-gray-color-7;
+    }
+
+    span {
+      color: @veui-link-color-weak;
+    }
+  }
+
+  .generate-responsive-page-digit-width(@length, @scale-ratio: 1) when (@length > 2) {
+
+    .veui-pager-digit-length-@{length} {
+      li {
+        width: (@digit-width + @digit-width-delta * (@length - 2)) * @scale-ratio;
+      }
+    }
+
+    .generate-responsive-page-digit-width(@length - 1, @scale-ratio);
+  }
+
+  .generate-responsive-page-digit-width(4);
+
+  &,
+  &[ui~="slim"] {
+    .veui-pager-switch {
+      padding: 0 @button-width + @button-gap-width;
+      position: relative;
+    }
+
+    .veui-pager-previous {
+      position: absolute;
+      left: 0;
+    }
+  }
+
+  &[ui~="hetero"],
+  &[ui~="full"] {
+    .veui-pager-switch {
+      padding-left: 0;
+    }
+
+    .veui-pager-previous {
+      position: static;
+      margin-right: 1px;
+    }
+  }
+
+  &-info {
+    display: none;
+  }
+
+  &[ui~="full"] {
+    .veui-pager-info {
+      display: block;
+    }
+  }
+
+  &:not([ui~="slim"]) {
+    .veui-pager-previous,
+    .veui-pager-next {
+      .veui-button-transition();
+    }
+  }
+
+  &[ui~="slim"] {
+    @scale-ratio: 2 / 3;
+
+    .veui-pager-switch {
+      padding: 0 (@button-height + @button-gap-width) * @scale-ratio;
+
+      li {
+        width: @digit-width * @scale-ratio;
+        height: @digit-height * @scale-ratio;
+        line-height: @digit-height * @scale-ratio;
+        font-size: 13px;
+      }
+
+      .veui-active a {
+        background: transparent;
+      }
+    }
+
+    .veui-pager-previous,
+    .veui-pager-next {
+      width: @button-height * @scale-ratio;
+      height: @button-height * @scale-ratio;
+      line-height: 1.5;
+      border: 1px solid @veui-gray-color-5;
+      background: transparent;
+      .veui-button-transition();
+
+      &.veui-disabled {
+        background-color: @veui-gray-color-7;
+        border-color: @veui-gray-color-7;
+      }
+
+      .veui-icon {
+        width: @button-height * .4;
+        .veui-position-center()
+      }
+    }
+
+    .generate-responsive-page-digit-width(4, .8);
+  }
+}
