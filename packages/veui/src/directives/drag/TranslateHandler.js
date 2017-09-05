@@ -5,7 +5,7 @@ import config from '../../managers/config'
 
 let computedStyle = getComputedStyle(document.body)
 const TRANSFORM_ACCESSOR = find(
-  ['transform', '-ms-transform', '-moz-transform', '-webkit-transform'],
+  ['transform', 'msTransform', 'MozTransform', 'webkitTransform'],
   accessor => (accessor in computedStyle)
 )
 
