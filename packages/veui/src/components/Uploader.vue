@@ -362,15 +362,15 @@ export default {
 
       let isValid = false
       for (let i = 0; i < accept.length; i++) {
-        let acceptPattern = accept[i].toLowerCase().replace('.', '')
-        if (acceptPattern === extension) {
+        let acceptExtention = accept[i].split(/[./]/)[1].toLowerCase()
+
+        if (acceptExtention === extension) {
           isValid = true
           break
         }
 
-        if (acceptPattern.slice(-1)[0] === '*') {
-          let extensionType = acceptPattern.split('/')[0]
-          let targetExtensions = this.extentionTypes[extensionType]
+        if (acceptExtention === '*' && accept[i].indexOf('/') > -1) {
+          let targetExtensions = this.extentionTypes[accept[i].split('/')[0].toLowerCase()]
           if (targetExtensions && targetExtensions.hasOwnProperty(extension)) {
             isValid = true
             break
