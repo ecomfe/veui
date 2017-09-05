@@ -3,8 +3,7 @@
     <div class="veui-uploader-button-container" v-if="uploaderType === 'file'">
       <label class="veui-button veui-uploader-input-label"
         :class="{'veui-uploader-input-label-disabled': realDisabled || (fileList.length >= maxCount)}"
-        @click="replacingFile = null"
-        :ui="buttonUI" ref="label">
+        @click="replacingFile = null" ref="label">
         <slot name="button-content"><icon class="veui-uploader-input-label-icon"
           name="upload"></icon>选择文件</slot>
         <input :id="inputId" hidden type="file" ref="input"
@@ -220,13 +219,6 @@ export default {
     }
   },
   computed: {
-    buttonUI () {
-      if (!this.ui) return 'aux'
-
-      // 提取ui中以‘button-’开头的部分作为主button的ui
-      let matched = this.ui.match(/button-\S+/g)
-      return matched ? matched.map(s => s.replace('button-', '')).join(' ') : 'aux'
-    },
     listClass () {
       return `veui-uploader-list${this.uploaderType === 'image' ? '-image' : ''}`
     },
