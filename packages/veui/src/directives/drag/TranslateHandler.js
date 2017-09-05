@@ -26,6 +26,10 @@ export default class TranslateHandler extends BaseHandler {
 
   totalDistanceY = 0
 
+  // 是否被拖动过。
+  // 只有被拖动过，才记录总的拖动距离
+  isDragged = false
+
   tempStyle = `
     user-select:none;-ms-user-select:none;-webkit-user-select:none;-moz-user-select:none;
     transition:unset;
@@ -72,6 +76,8 @@ export default class TranslateHandler extends BaseHandler {
       let initialTransform = this.initialTransforms[index] || ''
       elm.style[TRANSFORM_ACCESSOR] = `${initialTransform} translate(${realDistanceX}px,${realDistanceY}px)`
     })
+
+    this.isDragged = true
   }
 
   end ({ distanceX, distanceY }) {
@@ -82,9 +88,16 @@ export default class TranslateHandler extends BaseHandler {
       let initialTransform = this.initialTransforms[index] || ''
       elm.setAttribute('style', initialStyle)
       elm.style[TRANSFORM_ACCESSOR] = `${initialTransform} translate(${realDistanceX}px,${realDistanceY}px)`
+
+      if (this.isDragged) {
+        this.totalDistanceX = realDistanceX
+        this.totalDistanceY = realDistanceY
+      }
     })
+
     this.initialTransforms = []
     this.initialStyles = []
+    this.isDragged = false
   }
 
   move (distanceX, distanceY, render) {
@@ -142,9 +155,6 @@ export default class TranslateHandler extends BaseHandler {
       }
 
       render(elm, index, realDistanceX, realDistanceY)
-
-      this.totalDistanceX = realDistanceX
-      this.totalDistanceY = realDistanceY
     })
   }
 
