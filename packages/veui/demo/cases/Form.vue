@@ -35,7 +35,7 @@
             :value="storeData1.avatar"
             :max-size="10"
             preview-image
-            extention-types="jpg,jpeg,png"></veui-uploader>
+            accept=".jpg,.jpeg,.png"></veui-uploader>
           <!-- <p class="output">{{ outputData.avatar }}</p> -->
         </veui-field>
 
@@ -158,8 +158,7 @@
             :max-count="1"
             :value="storeData1.avatar"
             :max-size="10"
-            preview-image
-            extention-types="jpg,jpeg,png"></veui-uploader>
+            accept=".jpg,.jpeg,.png"></veui-uploader>
           <!-- <p class="output">{{ outputData.avatar }}</p> -->
         </veui-field>
       </veui-form>
@@ -385,7 +384,7 @@ export default {
         habit,
         habitItems,
         birthday: new Date(),
-        avatar: [{ src: 'https://www.baidu.com/img/bd_logo1.png' }]
+        avatar: 'https://www.baidu.com/img/bd_logo1.png'
       },
       storeData2: {
         lastName: '',
