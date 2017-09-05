@@ -6,6 +6,8 @@
   @preview-size: 32px;
   @image-size: 140px;
   @list-padding: 2px;
+  @double-padding: 2 * @list-padding;
+
   .disabled() {
     border: none;
     background-color: @veui-gray-color-sup-3;
@@ -225,7 +227,7 @@
       margin: 0 10px 5px 0;
       border: 1px dashed @veui-gray-color-sup-2;
       text-align: center;
-      line-height: @image-size - 2px - 2 * @list-padding;
+      line-height: @image-size - 2px - @double-padding;
       position: relative;
       button[ui~="operation"] {
         position: absolute;
@@ -245,8 +247,8 @@
       position: absolute;
       top: @list-padding;
       left: @list-padding;
-      width: ~"calc(100% - "2 * @list-padding~")";
-      height: ~"calc(100% - "2 * @list-padding~")";
+      width: ~"calc(100% - @{double-padding})";
+      height: ~"calc(100% - @{double-padding})";
       background-color: rgba(0, 0, 0, .5);
 
       .veui-button {
@@ -347,7 +349,7 @@
     top: auto;
     bottom: @list-padding;
     left: @list-padding;
-    width: ~"calc(100% - "2 * @list-padding~")";
+    width: ~"calc(100% - @{double-padding})";
     height: 30px;
     line-height: 30px;
     .veui-button {
