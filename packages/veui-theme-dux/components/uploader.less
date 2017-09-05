@@ -3,8 +3,9 @@
 .veui-uploader {
   @width: 300px;
   @icon-size: 16px;
+  @preview-size: 32px;
   @image-size: 140px;
-
+  @list-padding: 2px;
   .disabled() {
     border: none;
     background-color: @veui-gray-color-sup-3;
@@ -12,7 +13,7 @@
     box-shadow: none;
   }
 
-  width: 400px;
+  width: @width;
   overflow: hidden;
 
   &-button-container {
@@ -20,11 +21,11 @@
     margin-bottom: 20px;
     overflow: hidden;
     .veui-uploader-tip {
-      margin-top: 8px;
       display: inline-block;
+      vertical-align: middle;
+      margin-top: 8px;
     }
   }
-
   &-input-label {
     cursor: pointer;
     display: inline-block;
@@ -32,13 +33,12 @@
     margin-right: 1em;
     box-sizing: border-box;
     float: left;
-
     &-icon {
       margin-right: 5px;
     }
   }
 
-  .veui-uploader-input-label-disabled,
+  &-input-label-disabled,
   .veui-button.veui-uploader-input-label-disabled {
     cursor: not-allowed;
     .disabled();
@@ -60,23 +60,23 @@
       position: absolute;
     }
     &::before {
-      border-top: 2px solid @veui-gray-color-normal;
-      top: ~"calc(50% - 1px)";
-      left: ~"calc(50% - 25px)";
-      width: 50px;
+      border-top: 4px solid @veui-gray-color-sup-1;
+      top: ~"calc(50% - 2px)";
+      left: @image-size / 2 - @list-padding - 1px - 30px;
+      width: 60px;
     }
     &::after {
-      border-left: 2px solid @veui-gray-color-normal;
-      top: ~"calc(50% - 25px)";
-      left: ~"calc(50% - 1px)";
-      height: 50px;
+      border-left: 4px solid @veui-gray-color-sup-1;
+      top: @image-size / 2 - @list-padding - 1px - 30px;
+      left: ~"calc(50% - 2px)";
+      height: 60px;
     }
 
     &:hover {
-      background: @veui-gray-color-sup-4;
+      background: @veui-gray-color-sup-3;
     }
     &:active {
-      background: @veui-gray-color-sup-2;
+      background: @veui-gray-color-sup-1;
     }
   }
 
@@ -119,14 +119,20 @@
       background-color: #fff;
       color: @veui-success-color-primary;
     }
+    .veui-uploader-progress {
+      &-bar,
+      &-bar-full {
+        left: ~"calc(50% - 35px)";
+        max-width: 70px;
+      }
+    }
   }
-
   &-list {
     width: @width;
+    color: @veui-theme-color-primary;
     li {
       position: relative;
-      padding: 8px 4px;
-      width: @width;
+      padding: 9px 4px;
     }
     li:hover {
       background-color: @veui-gray-color-sup-3;
@@ -143,9 +149,10 @@
       overflow: hidden;
       width: ~"calc(100% - 3em)";
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
     &-name-status {
-      width: ~"calc(100% - 9em)";
+      width: ~"calc(100% - 7em)";
     }
     &-status {
       display: inline-block;
@@ -155,7 +162,7 @@
     &-success {
       svg {
         position: relative;
-        top: 0px;
+        top: 2px;
       }
     }
 
@@ -164,6 +171,11 @@
       height: 20px;
       line-height: 20px;
       float: right;
+      &.retry {
+        svg {
+          display: none;
+        }
+      }
     }
 
     .veui-uploader-progress {
@@ -173,26 +185,55 @@
       vertical-align: middle;
     }
   }
+  &-list-icon {
+    display: none;
+  }
+  &-list-preview {
+    height: @preview-size;
+    padding: 4px !important;
+    &-container {
+      display: inline-block;
+      vertical-align: middle;
+      width: @preview-size;
+      height: @preview-size;
+      line-height: @preview-size;
+      font-size: 0;
+      text-align: center;
+      background-color: #fff;
+      margin-right: 8px;
+    }
+
+    .veui-uploader-list-name {
+      width: ~"calc(70% - "@preview-size~")";
+    }
+    .veui-uploader-progress {
+      width: ~"calc(100% - 3em)";
+      top: (@preview-size - 14px) / 2;
+
+      & + button {
+        top: (@preview-size - @icon-size) / 2;
+      }
+    }
+  }
   &-list-image {
     li {
       overflow: hidden;
       width: @image-size;
       height: @image-size;
-      padding: 0;
+      padding: @list-padding;
       box-sizing: border-box;
       margin: 0 10px 5px 0;
-      border: 1px solid @veui-gray-color-sup-2;
+      border: 1px dashed @veui-gray-color-sup-2;
       text-align: center;
-      line-height: @image-size - 2px;
+      line-height: @image-size - 2px - 2 * @list-padding;
       position: relative;
-
-      .veui-button {
+      button[ui~="operation"] {
         position: absolute;
-        width: 70px;
-        height: 28px;
-        line-height: 28px;
-        font-size: @veui-font-size-small;
-        top: ~"calc(50% + 10px)";
+        min-width: 70px;
+        font-size: 12px;
+        height: 30px;
+        line-height: 30px;
+        bottom: 30px;
         left: ~"calc(50% - 35px)";
       }
     }
@@ -202,40 +243,31 @@
     &-mask {
       display: none;
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: @list-padding;
+      left: @list-padding;
+      width: ~"calc(100% - "2 * @list-padding~")";
+      height: ~"calc(100% - "2 * @list-padding~")";
+      background-color: rgba(0, 0, 0, .5);
 
       .veui-button {
-        display: inline-block;
-        background: rgba(0, 0, 0, 0.8);
+        cursor: pointer;
+        vertical-align: middle;
+        background: none;
         color: #fff;
         font-size: @veui-font-size-normal;
-        &:hover {
-          background: rgba(0, 0, 0, 0.8);
-        }
       }
       .veui-button:active,
       .veui-button:hover {
+        background: none;
         color: #fff;
       }
-      label.veui-button {
-        cursor: pointer;
-        top: ~"calc(50% - 14px)";
-        left: ~"calc(50% - 44px)";
-        width: 88px;
-      }
-      .veui-button.remove {
-        width: 24px;
-        height: 24px;
-        top: 0;
-        right: 0;
-        left: auto;
+      .remove {
+        margin-left: 20px;
         svg {
-          margin-top: 6px;
+          display: none;
         }
       }
+      .veui-button:disabled,
       .veui-button.veui-uploader-input-label-disabled {
         background: none;
         &:hover {
@@ -243,7 +275,6 @@
         }
       }
     }
-
     &-status {
       margin-top: 10%;
       height: 40%;
@@ -265,15 +296,29 @@
       }
     }
     .veui-uploader-progress {
-      &-bar,
-      &-bar-full {
-        left: ~"calc(50% - 35px)";
-        max-width: 70px;
-      }
+      display: block;
     }
   }
+
+  .veui-button[ui~="remove"] {
+    color: @veui-alert-color-primary;
+    font-size: @icon-size;
+    min-width: @icon-size;
+    width: @icon-size;
+    visibility: hidden;
+    svg {
+      margin-top: 2px;
+    }
+    &:disabled {
+      .disabled();
+    }
+  }
+
   &-tip {
     color: @veui-gray-color-weak;
+  }
+  &-uploading {
+    color: @veui-theme-color-primary;
   }
   &-failure {
     color: @veui-alert-color-primary;
@@ -284,33 +329,47 @@
   &-hide {
     display: none;
   }
-
   &[ui~="horizontal"] {
     width: 100%;
-    .veui-uploader-list,
-    .veui-uploader-list-image {
+    .veui-uploader-list {
+      width: 100%;
       li {
         float: left;
+        width: @width;
         margin-right: 10px;
       }
     }
+    .veui-uploader-list-image li {
+      float: left;
+    }
   }
-
-  .veui-button[ui~="remove"] {
-    color: @veui-gray-color-strong;
-    font-size: @icon-size;
-    min-width: @icon-size;
-    width: @icon-size;
-    visibility: hidden;
-    line-height: 20px;
-    height: 20px;
-    float: right;
-
-    svg {
-      margin-top: 2px;
+  &[ui~="bottom-mask"] &-list-image-mask {
+    top: auto;
+    bottom: @list-padding;
+    left: @list-padding;
+    width: ~"calc(100% - "2 * @list-padding~")";
+    height: 30px;
+    line-height: 30px;
+    .veui-button {
+      display: inline-block;
+      height: 30px;
+      line-height: 30px;
+      vertical-align: top;
     }
   }
 
+  &-warning-enter,
+  &-warning-leave-active {
+    margin: 0;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    line-height: 0;
+  }
+  &-warning-enter-active,
+  &-warning-leave-active {
+    transition: all .6s ease;
+  }
   &-list-enter,
   &-list-leave-active {
     opacity: 0;
@@ -331,6 +390,7 @@
     display: block;
     position: relative;
     line-height: 20px;
+    color: @veui-theme-color-primary;
 
     &-bar,
     &-bar-full {
@@ -340,10 +400,10 @@
       width: 100%;
     }
     &-bar {
-      background-color: @veui-gray-color-normal;
+      background-color: @veui-theme-color-primary;
       &-full {
         z-index: -1;
-        background-color: @veui-gray-color-sup-3;
+        background-color: @veui-gray-color-sup-4;
       }
     }
   }

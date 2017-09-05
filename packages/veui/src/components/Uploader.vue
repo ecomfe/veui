@@ -23,6 +23,7 @@
           || uploaderType === 'image' && (!file.status || file.status === 'success')">
           <slot name="file-content" :file="file">
             <template v-if="uploaderType === 'file'">
+              <icon name="pin" class="veui-uploader-list-icon"></icon>
               <span class="veui-uploader-list-name"
                 :class="{'veui-uploader-list-name-status': file.status === 'success' || file.status === 'failure'}"
                 :title="file.name">{{file.name}}</span>
@@ -30,7 +31,7 @@
               <span v-if="file.status === 'failure'" class="veui-uploader-failure"><slot name="failure">上传失败</slot></span>
               <veui-button v-if="file.status !== 'failure'"
                 ui="link remove" @click="$emit('remove', file)" :disabled="realDisabled"><icon name="cross"></icon></veui-button>
-              <veui-button v-else ui="link" @click="retry(file)">重试</veui-button>
+              <veui-button v-else ui="link" @click="retry(file)" class="retry"><icon name="redo"></icon>重试</veui-button>
             </template>
             <template v-else>
               <img :src="file.src" :alt="file.alt || ''">
@@ -40,7 +41,7 @@
                   :class="{'veui-uploader-input-label-disabled': realDisabled}"
                   ui="link"
                   @click.stop="replaceFile(file)">重新上传</label>
-                <veui-button ui="link" @click="$emit('remove', file)" :disabled="realDisabled" class="remove"><icon name="cross"></icon></veui-button>
+                <veui-button ui="link" @click="$emit('remove', file)" :disabled="realDisabled" class="remove"><icon name="cross"></icon>移除</veui-button>
               </div>
             </template>
             <transition name="veui-uploader-fade">
@@ -61,7 +62,7 @@
             </veui-uploader-progress>
             <veui-button v-if="uploaderType === 'file'" ui="link remove"
               @click="cancelFile(file)"><icon name="cross"></icon></veui-button>
-            <veui-button v-else ui="aux"
+            <veui-button v-else ui="aux operation"
               @click="cancelFile(file)">取消</veui-button>
           </slot>
         </template>
@@ -70,7 +71,7 @@
             <div :class="listClass + '-status'">
               <span class="veui-uploader-failure"><slot name="failure">错误！</slot>{{file.failureReason}}</span>
             </div>
-            <veui-button ui="aux" @click="retry(file)">重试</veui-button>
+            <veui-button ui="aux operation" @click="retry(file)">重试</veui-button>
           </slot>
         </template>
       </li>
