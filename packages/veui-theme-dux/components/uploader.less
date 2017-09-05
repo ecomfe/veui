@@ -190,33 +190,6 @@
   &-list-icon {
     display: none;
   }
-  &-list-preview {
-    height: @preview-size;
-    padding: 4px !important;
-    &-container {
-      display: inline-block;
-      vertical-align: middle;
-      width: @preview-size;
-      height: @preview-size;
-      line-height: @preview-size;
-      font-size: 0;
-      text-align: center;
-      background-color: #fff;
-      margin-right: 8px;
-    }
-
-    .veui-uploader-list-name {
-      width: ~"calc(70% - "@preview-size~")";
-    }
-    .veui-uploader-progress {
-      width: ~"calc(100% - 3em)";
-      top: (@preview-size - 14px) / 2;
-
-      & + button {
-        top: (@preview-size - @icon-size) / 2;
-      }
-    }
-  }
   &-list-image {
     li {
       overflow: hidden;
