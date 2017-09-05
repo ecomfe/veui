@@ -9,8 +9,6 @@ const TRANSFORM_ACCESSOR = find(
   accessor => (accessor in computedStyle)
 )
 
-const TRANSFORM_REGEXP = new RegExp(`;*${TRANSFORM_ACCESSOR}:.*?;`, 'g')
-
 function getComputedTransform (elm) {
   return getComputedStyle(elm)[TRANSFORM_ACCESSOR]
 }
@@ -59,7 +57,7 @@ export default class TranslateHandler extends BaseHandler {
       this.initialTransforms[index] = initialTransform === 'none' ? '' : initialTransform
 
       let elmStyle = elm.getAttribute('style') || ''
-      this.initialStyles[index] = elmStyle.replace(TRANSFORM_REGEXP, ';')
+      this.initialStyles[index] = elmStyle
       elm.setAttribute('style', elmStyle + ';' + this.tempStyle)
 
       let rect = elm.getBoundingClientRect()
@@ -70,18 +68,26 @@ export default class TranslateHandler extends BaseHandler {
   drag ({ distanceX, distanceY }) {
     super.drag()
 
-    this.move(distanceX, distanceY, this.tempStyle)
+    this.move(distanceX, distanceY, (elm, index, realDistanceX, realDistanceY) => {
+      let initialTransform = this.initialTransforms[index] || ''
+      elm.style[TRANSFORM_ACCESSOR] = `${initialTransform} translate(${realDistanceX}px,${realDistanceY}px)`
+    })
   }
 
   end ({ distanceX, distanceY }) {
     super.end()
 
-    this.move(distanceX, distanceY)
+    this.move(distanceX, distanceY, (elm, index, realDistanceX, realDistanceY) => {
+      let initialStyle = this.initialStyles[index] || ''
+      let initialTransform = this.initialTransforms[index] || ''
+      elm.setAttribute('style', initialStyle)
+      elm.style[TRANSFORM_ACCESSOR] = `${initialTransform} translate(${realDistanceX}px,${realDistanceY}px)`
+    })
     this.initialTransforms = []
     this.initialStyles = []
   }
 
-  move (distanceX, distanceY, extraStyle = '') {
+  move (distanceX, distanceY, render) {
     // 统一转换成 { left: ..., top: ..., width: ..., height: ... } 形式的 rect
     let options = this.options
     let constraint = null
@@ -101,8 +107,6 @@ export default class TranslateHandler extends BaseHandler {
     }
 
     this.elms.forEach((elm, index) => {
-      let initialStyle = this.initialStyles[index] || ''
-      let initialTransform = this.initialTransforms[index] || ''
       let initialPosition = this.initialPositions[index]
 
       let realDistanceX = distanceX
@@ -136,7 +140,8 @@ export default class TranslateHandler extends BaseHandler {
           realDistanceX = 0
         }
       }
-      elm.setAttribute('style', `${initialStyle};${extraStyle};${TRANSFORM_ACCESSOR}:${initialTransform} translate(${realDistanceX}px,${realDistanceY}px);`)
+
+      render(elm, index, realDistanceX, realDistanceY)
 
       this.totalDistanceX = realDistanceX
       this.totalDistanceY = realDistanceY
@@ -147,8 +152,11 @@ export default class TranslateHandler extends BaseHandler {
     // 恢复最初的样式
     this.elms.forEach(elm => {
       let initialTransform = getComputedTransform(elm)
-      let transformStyle = initialTransform === 'none' ? '' : initialTransform + ` translate(${-this.totalDistanceX}px,${-this.totalDistanceY}px);`
-      elm.setAttribute('style', elm.getAttribute('style').replace(TRANSFORM_REGEXP, ';') + `;${TRANSFORM_ACCESSOR}:${transformStyle}`)
+      let transformStyle = initialTransform === 'none' ? '' : initialTransform + ` translate(${-this.totalDistanceX}px,${-this.totalDistanceY}px)`
+      elm.style[TRANSFORM_ACCESSOR] = transformStyle
     })
+
+    this.totalDistanceX = 0
+    this.totalDistanceY = 0
   }
 }
