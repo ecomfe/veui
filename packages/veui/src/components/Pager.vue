@@ -3,7 +3,7 @@
   <div class="veui-pager-info">
     <div class="veui-pager-total">共 {{ realTotal }} 条</div>
     <div class="veui-pager-size">
-      <span>每页显示</span>
+      <span>每页条数</span>
       <veui-select v-model="realPageSize"
         ui="link"
         :options="realPageSizes"
