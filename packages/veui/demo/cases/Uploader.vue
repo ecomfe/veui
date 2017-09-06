@@ -2,38 +2,38 @@
   <article class="veui-uploader-demo">
     <h1><code>&lt;veui-uploader&gt;</code></h1>
     <h2>图片上传模式，上传进度以文字百分比显示</h2>
-    <veui-uploader uploaderType="image"
+    <veui-uploader type="image"
       name="file"
       action="/upload"
       v-model="files"
       :max-count="3"
-      :max-size="10"
+      max-size="10mb"
       accept=".jpg,.jpeg,.gif"
       ui="horizontal"
       :payload="payload"
-      uploading-content="progressPercent"
+      progress="number"
       @remove="removeFile"
       @cancel="cancelUploading"
       @success="onSuccess"
       @fail="onFailure">
-      <template slot="tip">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
+      <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
     <h2>图片上传模式，上传进度以进度条显示</h2>
-    <veui-uploader uploaderType="image"
+    <veui-uploader type="image"
       name="file"
       action="/upload"
       v-model="files"
       :max-count="3"
-      :max-size="10"
+      max-size="10mb"
       accept=".jpg,.jpeg,.gif"
       :payload="payload"
       ui="horizontal bottom-mask"
-      uploading-content="progressBar"
+      progress="bar"
       @remove="removeFile"
       @cancel="cancelUploading"
       @success="onSuccess"
       @fail="onFailure">
-      <template slot="tip">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
+      <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
     <h2>文件上传模式</h2>
     <veui-uploader
@@ -41,16 +41,16 @@
       action="/upload"
       v-model="files"
       :max-count="3"
-      :max-size="10"
+      max-size="10mb"
       accept=".jpg,.jpeg,.gif"
       :payload="payload"
       ui="horizontal button-primary"
-      uploading-content="progressPercent"
+      progress="number"
       @remove="removeFile"
       @cancel="cancelUploading"
       @success="onSuccess"
       @fail="onFailure">
-      <template slot="tip">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
+      <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
     <h2>文件上传模式，通过iframe上传</h2>
     <veui-uploader
@@ -59,26 +59,25 @@
       request-mode="iframe"
       v-model="filesIframe"
       :max-count="1"
-      :max-size="10"
+      max-size="10mb"
       accept="image/*"
       :payload="payload"
       @remove="removeFileIframe"
       @cancel="cancelUploadingIframe"
       @success="onSuccess"
       @fail="onFailure">
-      <template slot="tip">可上传所有类型图片，大小在10M以内，只能上传1张图</template>
+      <template slot="desc">可上传所有类型图片，大小在10M以内，只能上传1张图</template>
     </veui-uploader>
   </article>
 </template>
 <script>
-import { Uploader, Button } from 'veui'
+import { Uploader } from 'veui'
 import { ui } from 'veui/mixins'
 
 export default {
   name: 'uploader-demo',
   components: {
-    'veui-uploader': Uploader,
-    'veui-button': Button
+    'veui-uploader': Uploader
   },
   data: function () {
     return {

@@ -26,15 +26,14 @@
         </veui-field>
 
         <veui-field label="头像：" field="avatar">
-          <veui-uploader uploaderType="image"
+          <veui-uploader type="image"
             action="/upload"
             request-mode="xhr"
-            ui="multiline vertical bottom-mask list-icon button"
+            ui="vertical bottom-mask list-icon button"
             :disabled="false"
             :max-count="1"
-            :value="storeData1.avatar"
-            :max-size="10"
-            preview-image
+            v-model="storeData1.avatar"
+            max-size="10mb"
             accept=".jpg,.jpeg,.png"></veui-uploader>
           <!-- <p class="output">{{ outputData.avatar }}</p> -->
         </veui-field>
@@ -150,14 +149,14 @@
         </veui-field>
 
         <veui-field label="头像：" field="avatar">
-          <veui-uploader uploaderType="image"
+          <veui-uploader type="image"
             action="/upload"
             request-mode="xhr"
-            ui="multiline vertical bottom-mask list-icon button"
+            ui="vertical bottom-mask list-icon button"
             :disabled="false"
             :max-count="1"
-            :value="storeData1.avatar"
-            :max-size="10"
+            v-model="storeData1.avatar"
+            max-size="10mb"
             accept=".jpg,.jpeg,.png"></veui-uploader>
           <!-- <p class="output">{{ outputData.avatar }}</p> -->
         </veui-field>

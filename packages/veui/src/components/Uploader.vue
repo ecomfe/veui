@@ -1,36 +1,38 @@
 <template>
   <div class="veui-uploader" :ui="ui" ref="main">
-    <div class="veui-uploader-button-container" v-if="uploaderType === 'file'">
+    <div class="veui-uploader-button-container" v-if="type === 'file'">
       <label class="veui-button veui-uploader-input-label"
-        :class="{'veui-uploader-input-label-disabled': realDisabled || (fileList.length >= maxCount)}"
+        :class="{'veui-uploader-input-label-disabled': realDisabled || (fileList.length >= maxCount)
+         || (requestMode === 'iframe' && isSubmiting)}"
         @click="replacingFile = null" ref="label">
-        <slot name="button-content"><icon class="veui-uploader-input-label-icon"
+        <slot name="button-label"><icon class="veui-uploader-input-label-icon"
           name="upload"></icon>选择文件</slot>
         <input :id="inputId" hidden type="file" ref="input"
           @change="onChange"
           :name="realName"
-          :disabled="realDisabled || (fileList.length >= maxCount)"
+          :disabled="realDisabled || (fileList.length >= maxCount)
+           || (requestMode === 'iframe' && isSubmiting)"
           :accept="accept"
           :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
           @click.stop>
       </label>
-      <span class="veui-uploader-tip"><slot name="tip"></slot></span>
+      <span class="veui-uploader-tip"><slot name="desc"></slot></span>
     </div>
     <ul :class="listClass">
       <li v-for="(file, index) in fileList" :key="index">
-        <template v-if="(uploaderType === 'file' && file.status !== 'uploading')
-          || uploaderType === 'image' && (!file.status || file.status === 'success')">
-          <slot name="file-content" :file="file">
-            <template v-if="uploaderType === 'file'">
+        <template v-if="(type === 'file' && file.status !== 'uploading')
+          || type === 'image' && (!file.status || file.status === 'success')">
+          <slot name="file" :file="file">
+            <template v-if="type === 'file'">
               <icon name="pin" class="veui-uploader-list-icon"></icon>
               <span class="veui-uploader-list-name"
                 :class="{'veui-uploader-list-name-status': file.status === 'success' || file.status === 'failure'}"
                 :title="file.name">{{file.name}}</span>
-              <span v-if="file.status === 'success'" class="veui-uploader-success"><slot name="success">上传成功！</slot></span>
-              <span v-if="file.status === 'failure'" class="veui-uploader-failure"><slot name="failure">上传失败</slot></span>
+              <span v-if="file.status === 'success'" class="veui-uploader-success"><slot name="success-label">上传成功！</slot></span>
+              <span v-if="file.status === 'failure'" class="veui-uploader-failure"><slot name="failure-label">上传失败</slot></span>
               <veui-button v-if="file.status !== 'failure'"
                 ui="link remove" @click="$emit('remove', file)" :disabled="realDisabled"><icon name="cross"></icon></veui-button>
-              <veui-button v-else ui="link" @click="retry(file)" class="retry"><icon name="redo"></icon>重试</veui-button>
+              <veui-button v-else ui="link" @click="retry(file)" :class="listClass + '-retry'"><icon name="redo"></icon>重试</veui-button>
             </template>
             <template v-else>
               <img :src="file.src" :alt="file.alt || ''">
@@ -40,56 +42,56 @@
                   :class="{'veui-uploader-input-label-disabled': realDisabled}"
                   ui="link"
                   @click.stop="replaceFile(file)">重新上传</label>
-                <veui-button ui="link" @click="$emit('remove', file)" :disabled="realDisabled" class="remove"><icon name="cross"></icon>移除</veui-button>
+                <veui-button ui="link" @click="$emit('remove', file)" :disabled="realDisabled" :class="listClass + '-mask-remove'"><icon name="cross"></icon>移除</veui-button>
               </div>
             </template>
             <transition name="veui-uploader-fade">
-              <div v-if="uploaderType === 'image' && file.status === 'success'"
+              <div v-if="type === 'image' && file.status === 'success'"
                 :class="listClass + '-success'"
                 @click="updateFileList(file, {status: null})">
-                <span class="veui-uploader-success"><slot name="success"><icon name="check"></icon>完成</slot></span>
+                <span class="veui-uploader-success"><slot name="success-label"><icon name="check"></icon>完成</slot></span>
               </div>
             </transition>
           </slot>
         </template>
         <template v-else-if="file.status === 'uploading'">
-          <slot name="uploading-content" :file="file">
-            <veui-uploader-progress :type="uploadingContent" :loaded="file.loaded" :total="file.total"
-              :class="uploaderType === 'image' ? listClass + '-status' : ''"
+          <slot name="uploading" :file="file">
+            <veui-uploader-progress :type="progress" :loaded="file.loaded" :total="file.total"
+              :class="type === 'image' ? listClass + '-status' : ''"
               :convertSizeUnit="convertSizeUnit">
-              <slot name="uploading">上传中...</slot>
+              <slot name="uploading-label">上传中...</slot>
             </veui-uploader-progress>
-            <veui-button v-if="uploaderType === 'file'" ui="link remove"
+            <veui-button v-if="type === 'file'" ui="link remove"
               @click="cancelFile(file)"><icon name="cross"></icon></veui-button>
             <veui-button v-else ui="aux operation"
               @click="cancelFile(file)">取消</veui-button>
           </slot>
         </template>
-        <template v-else-if="file.status === 'failure' && uploaderType === 'image'">
-          <slot name="failure-content" :file="file">
+        <template v-else-if="file.status === 'failure' && type === 'image'">
+          <slot name="failure" :file="file">
             <div :class="listClass + '-status'">
-              <span class="veui-uploader-failure"><slot name="failure">错误！</slot>{{file.failureReason}}</span>
+              <span class="veui-uploader-failure"><slot name="failure-label">错误！</slot>{{file.failureReason}}</span>
             </div>
             <veui-button ui="aux operation" @click="retry(file)">重试</veui-button>
           </slot>
         </template>
       </li>
-      <li v-if="uploaderType === 'image'" key="input"
+      <li v-if="type === 'image'" key="input"
         v-show="!maxCount || fileList.length < maxCount">
         <label class="veui-uploader-input-label-image"
-          :class="{'veui-uploader-input-label-disabled': realDisabled}"
+          :class="{'veui-uploader-input-label-disabled': realDisabled || (requestMode === 'iframe' && isSubmiting)}"
           @click="replacingFile = null"
           ref="label"><input :id="inputId" hidden type="file" ref="input"
             @change="onChange"
             :name="realName"
-            :disabled="realDisabled"
+            :disabled="realDisabled || (requestMode === 'iframe' && isSubmiting)"
             :accept="accept"
             :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
             @click.stop>
         </label>
       </li>
     </ul>
-    <span class="veui-uploader-tip" v-if="uploaderType === 'image'"><slot name="tip"></slot></span>
+    <span class="veui-uploader-tip" v-if="type === 'image'"><slot name="desc"></slot></span>
     <iframe v-if="requestMode === 'iframe' && isSubmiting" ref="iframe"
      :id="iframeId" :name="iframeId" class="veui-uploader-hide"></iframe>
     <form v-if="requestMode === 'iframe' && isSubmiting" ref="form" :action="queryURL" enctype="multipart/form-data"
@@ -129,7 +131,7 @@ export default {
     value: {
       type: [Array, String]
     },
-    uploaderType: {
+    type: {
       type: String,
       default: 'file'
     },
@@ -171,7 +173,7 @@ export default {
         return config.get('uploader.callbackNamespace')
       }
     },
-    extentionTypes: {
+    extensions: {
       type: Object,
       default () {
         return {
@@ -184,9 +186,9 @@ export default {
     accept: String,
     ui: String,
     maxCount: Number,
-    maxSize: Number,
+    maxSize: [Number, String],
     payload: Object,
-    uploadingContent: {
+    progress: {
       type: String,
       default: 'text'
     },
@@ -220,7 +222,7 @@ export default {
   },
   computed: {
     listClass () {
-      return `veui-uploader-list${this.uploaderType === 'image' ? '-image' : ''}`
+      return `veui-uploader-list${this.type === 'image' ? '-image' : ''}`
     },
     latestFile () {
       return this.fileList[this.fileList.length - 1]
@@ -304,7 +306,7 @@ export default {
       if (!newFiles.length) return
 
       if (this.isReplacing) {
-        // uploaderType=image时，点击重新上传进入此分支，替换掉原位置的文件replacingFile
+        // type=image时，点击重新上传进入此分支，替换掉原位置的文件replacingFile
         let newFile = newFiles[0]
         if (this.requestMode === 'xhr' && window.URL) {
           newFile.src = window.URL.createObjectURL(newFile)
@@ -324,7 +326,7 @@ export default {
             return file.status !== 'failure'
           }),
           ...newFiles.map(file => {
-            if (this.requestMode === 'xhr' && this.uploaderType === 'image' && window.URL) {
+            if (this.requestMode === 'xhr' && this.type === 'image' && window.URL) {
               file.src = window.URL.createObjectURL(file)
             }
             file.toBeUploaded = true
@@ -355,32 +357,48 @@ export default {
     validateFileType (filename) {
       if (!this.accept) return true
 
-      let accept = this.accept.split(/,\s*/)
-
       let extension = filename.split('.')
       extension = extension[extension.length - 1].toLowerCase()
 
-      let isValid = false
-      for (let i = 0; i < accept.length; i++) {
-        let acceptExtention = accept[i].split(/[./]/)[1].toLowerCase()
+      return this.accept.split(/,\s*/).some(item => {
+        let acceptExtention = item.split(/[./]/)[1].toLowerCase()
 
-        if (acceptExtention === extension) {
-          isValid = true
-          break
-        }
+        if (acceptExtention === extension) return true
 
-        if (acceptExtention === '*' && accept[i].indexOf('/') > -1) {
-          let targetExtensions = this.extentionTypes[accept[i].split('/')[0].toLowerCase()]
+        if (acceptExtention === '*' && item.indexOf('/') > -1) {
+          let targetExtensions = this.extensions[item.split('/')[0].toLowerCase()]
           if (targetExtensions && targetExtensions.hasOwnProperty(extension)) {
-            isValid = true
-            break
+            return true
           }
         }
-      }
-      return isValid
+        return false
+      })
     },
     validateFileSize (fileSize) {
-      return !this.maxSize || !fileSize || fileSize <= this.maxSize * 1024 * 1024
+      let floatValue
+      let unit
+
+      if (isNumber(this.maxSize)) {
+        floatValue = this.maxSize
+        unit = 'b'
+      } else {
+        let parseSizeRegExp = /^(\d+(?:\.\d+)?)(b|kb|mb|gb)?$/i
+        let results = parseSizeRegExp.exec(this.maxSize)
+
+        if (!results) return true
+
+        floatValue = parseFloat(results[1])
+        unit = (results[2] || 'b').toLowerCase()
+      }
+
+      let maxSizeByte = {
+        b: 1,
+        kb: 1 << 10,
+        mb: 1 << 20,
+        gb: 1 << 30
+      }[unit] * floatValue
+
+      return fileSize <= maxSizeByte
     },
     uploadFiles () {
       this.fileList.forEach(file => {
@@ -394,9 +412,9 @@ export default {
       file.xhr = xhr
 
       xhr.upload.onprogress = e => {
-        switch (this.uploadingContent) {
-          case 'progressPercent':
-          case 'progressBar':
+        switch (this.progress) {
+          case 'number':
+          case 'bar':
             file.loaded = e.loaded
             file.total = e.total
             this.updateFileList(file)
@@ -522,17 +540,17 @@ function getProgress () {
         switch (this.type) {
           case 'text':
             return this.$slots.default
-          case 'progressPercent':
+          case 'number':
             return this.percent
               ? `${this.percent} ${this.convertSizeUnit(this.loaded)}/${this.convertSizeUnit(this.total)}`
               : ''
-          case 'progressBar':
+          case 'bar':
             return ''
         }
       }
     },
     render () {
-      let bar = this.type === 'progressBar'
+      let bar = this.type === 'bar'
         ? [<div class="veui-uploader-progress-bar" style={{ width: this.percent || '0%' }}></div>,
           <div class="veui-uploader-progress-bar-full"></div>]
         : ''
