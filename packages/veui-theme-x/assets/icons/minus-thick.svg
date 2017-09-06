@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="96px" height="96px" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.1 (35376) - http://www.bohemiancoding.com/sketch -->
+    <title>minus_c</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="dux_icon_96" transform="translate(-1440.000000, -1440.000000)" fill="#000000">
+            <g id="minus_c" transform="translate(1440.000000, 1440.000000)">
+                <path d="M21,54 L75,54 C79.9705627,54 84,49.9705627 84,45 C84,40.0294373 79.9705627,36 75,36 L21,36 C16.0294373,36 12,40.0294373 12,45 C12,49.9705627 16.0294373,54 21,54 Z" id="Line"></path>
+            </g>
+        </g>
+    </g>
+</svg>
