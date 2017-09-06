@@ -1,0 +1,115 @@
+@import '../variables.less';
+@import "~less-plugin-est/src/util.less";
+
+.veui-tabs {
+    padding-bottom: 1px;
+
+    ul, li {
+        list-style: none;
+    }
+
+    &-menu {
+        border-bottom: 1px solid @veui-gray-color-6;
+    }
+
+    &-list {
+        .clearfix();
+        padding: 0;
+        margin: 0;
+        margin-bottom: -1px;
+    }
+
+    &-item {
+        float: left;
+        margin: 0 35px;
+
+        > a,
+        > span {
+            cursor: pointer;
+            padding: 0 10px;
+            line-height: 2.5;
+            display: inline-block;
+            text-decoration: none;
+            outline: none;
+            position: relative;
+            margin-left: -10px;
+
+            &::after {
+                content: ' ';
+                position: absolute;
+                left: 10px;
+                bottom: 0;
+                width: ~"calc(100% - 20px)";
+                height: 2px;
+            }
+        }
+
+        &:hover {
+            > a,
+            > span {
+                &::after {
+                    background-color: @veui-gray-color-3;
+                }
+            }
+        }
+
+        &-active, 
+        &:active {
+            > a,
+            > span {
+                &::after {
+                    background-color: @veui-gray-color-1;
+                }
+            }
+        }
+
+        &:first-child {
+            margin-left: 0!important;
+        }
+
+        &:last-child {
+            margin-right: 0!important;
+        }
+    }
+
+    &[ui~="large"] &-item {
+        font-size: @veui-font-size-large;
+        margin: 0 35px;
+    }
+
+    &[ui~="small"] & {
+        &-item {
+            margin: 0 25px;
+        }
+
+        &-menu {
+            border-bottom: none;
+        }
+    }
+
+    &[ui~="tiny"] & {
+        &-menu {
+            border-bottom: none;
+        }
+
+        &-item {
+            margin: 0 20px;
+            position: relative;
+
+            &::before {
+                content: ' ';
+                display: inline-block;
+                width: 1px;
+                height: 14px;
+                background-color: @veui-gray-color-6;
+                top: 10px;
+                left: -20px;
+                position: absolute;
+            }
+
+            &:first-child::before {
+                display: none;
+            }
+        }
+    }
+}
