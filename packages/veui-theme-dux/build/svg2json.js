@@ -8,7 +8,7 @@ const svgo = new Svgo({
 })
 
 const icons = {}
-const svgDir = path.resolve(__dirname, '../../veui-theme-x/assets/icons/')
+const svgDir = path.resolve(__dirname, '../assets/icons/')
 const extPattern = /\.svg$/
 
 fs.readdirSync(svgDir).forEach(file => {
@@ -38,4 +38,4 @@ fs.readdirSync(svgDir).forEach(file => {
   })
 })
 
-fs.writeFileSync(path.resolve(__dirname, '../../veui-theme-x/assets/icons.json'), JSON.stringify(icons, null, '  '))
+fs.writeFileSync(path.resolve(__dirname, '../assets/icons.json'), JSON.stringify(icons, null, '  '))
