@@ -1,5 +1,13 @@
 @import "../lib.less";
 
+.make-margin(@margin) {
+  margin-left: @margin;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
 .veui-tabs {
   padding-bottom: 1px;
 
@@ -21,7 +29,7 @@
 
   &-item {
     float: left;
-    margin: 0 35px;
+    .make-margin(70px);
 
     & > a,
     & > span {
@@ -60,24 +68,16 @@
         }
       }
     }
-
-    &:first-child {
-      margin-left: 0!important;
-    }
-
-    &:last-child {
-      margin-right: 0!important;
-    }
   }
 
   &[ui~="large"] &-item {
     font-size: @veui-font-size-large;
-    margin: 0 35px;
+    .make-margin(70px);
   }
 
   &[ui~="small"] & {
     &-item {
-      margin: 0 25px;
+      .make-margin(50px);
     }
 
     &-menu {
@@ -91,7 +91,7 @@
     }
 
     &-item {
-      margin: 0 20px;
+      .make-margin(40px);
       position: relative;
 
       &::before {
