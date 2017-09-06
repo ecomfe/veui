@@ -1,10 +1,10 @@
-@import '../variables.less';
-@import "~less-plugin-est/src/util.less";
+@import "../lib.less";
 
 .veui-tabs {
     padding-bottom: 1px;
 
-    ul, li {
+    ul,
+    li {
         list-style: none;
     }
 
@@ -23,8 +23,8 @@
         float: left;
         margin: 0 35px;
 
-        > a,
-        > span {
+        & > a,
+        & > span {
             cursor: pointer;
             padding: 0 10px;
             line-height: 2.5;
@@ -35,18 +35,16 @@
             margin-left: -10px;
 
             &::after {
-                content: ' ';
-                position: absolute;
-                left: 10px;
-                bottom: 0;
+                content: "";
+                .absolute(_, _, 0, 10px);
                 width: ~"calc(100% - 20px)";
                 height: 2px;
             }
         }
 
         &:hover {
-            > a,
-            > span {
+            & > a,
+            & > span {
                 &::after {
                     background-color: @veui-gray-color-3;
                 }
@@ -55,8 +53,8 @@
 
         &-active, 
         &:active {
-            > a,
-            > span {
+            & > a,
+            & > span {
                 &::after {
                     background-color: @veui-gray-color-1;
                 }
@@ -97,14 +95,12 @@
             position: relative;
 
             &::before {
-                content: ' ';
+                content: "";
                 display: inline-block;
                 width: 1px;
                 height: 14px;
                 background-color: @veui-gray-color-6;
-                top: 10px;
-                left: -20px;
-                position: absolute;
+                .absolute(10px, _, _, -20px);
             }
 
             &:first-child::before {
