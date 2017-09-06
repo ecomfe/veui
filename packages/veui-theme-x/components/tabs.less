@@ -40,7 +40,6 @@
       text-decoration: none;
       outline: none;
       position: relative;
-      margin-left: -10px;
 
       &::after {
         content: "";
@@ -61,6 +60,13 @@
         &::after {
           background-color: @veui-gray-color-1;
         }
+      }
+    }
+
+    &:first-child {
+      & > a,
+      & > span {
+        margin-left: -10px;
       }
     }
   }
@@ -95,7 +101,7 @@
         width: 1px;
         height: 14px;
         background-color: @veui-gray-color-6;
-        .absolute(10px, _, _, -25px);
+        .absolute(10px, _, _, -20px);
       }
 
       &:first-child::before {
