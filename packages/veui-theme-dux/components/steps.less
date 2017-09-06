@@ -12,11 +12,9 @@
 
   &-step {
     display: block;
-    position: relative;
     float: left;
     text-decoration: none;
     margin-right: @separator-gap * 2 + @separator-length-x;
-    z-index: 0;
 
     &-index {
       @half-height: @step-height / 2;
@@ -70,7 +68,7 @@
       top: ~"calc(50% - @{half-width})";
       right: -@separator-gap - @separator-length-x;
       background-color: @veui-theme-color-primary;
-      z-index: -1;
+      pointer-events: none;
     }
 
     &:last-child::after {

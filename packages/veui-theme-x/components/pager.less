@@ -42,6 +42,42 @@
 
   &-switch {
     float: left;
+
+    .veui-active a {
+      color: @veui-text-color-strong;
+    }
+
+    .veui-pager-buttons a,
+    .veui-pager-buttons span,
+    .veui-active a {
+      background-color: @veui-gray-color-7;
+      font-weight: @veui-font-weight-extra-bold;
+      .veui-button-transition();
+      &:hover {
+        background-color: @veui-gray-color-6;
+        color: @veui-text-color-strong;
+        font-weight: @veui-font-weight-extra-bold;
+      }
+
+      &.focus-ring {
+        color: @veui-brand-color;
+        font-weight: @veui-font-weight-extra-bold;
+      }
+
+      &:active {
+        background-color: @veui-gray-color-5;
+      }
+
+      &.veui-disabled {
+        &,
+        &:hover,
+        &.focus-ring,
+        &:active {
+          background-color: @veui-gray-color-7;
+          color: @veui-text-color-weak;
+        }
+      }
+    }
   }
 
   .veui-select {
@@ -72,19 +108,6 @@
   &-buttons {
     float: left;
     margin-left: @button-gap-width;
-
-    .veui-disabled {
-      color: @veui-text-color-weak;
-      cursor: not-allowed;
-    }
-
-    .focus-ring {
-      color: @veui-brand-color;
-    }
-
-    a:active {
-      background-color: @veui-gray-color-5;
-    }
   }
 
   &-previous,
@@ -95,8 +118,6 @@
     height: @button-height;
     line-height: @button-width - 2px;
     text-align: center;
-    background-color: @veui-gray-color-7;
-    cursor: pointer;
   }
 
   &-pages {
@@ -127,13 +148,6 @@
           color: @veui-link-color-active;
         }
       }
-    }
-
-    .veui-active a,
-    .veui-active span {
-      color: @veui-text-color-strong;
-      font-weight: @veui-font-weight-extra-bold;
-      background-color: @veui-gray-color-7;
     }
 
     span {
@@ -189,13 +203,6 @@
     }
   }
 
-  &:not([ui~="slim"]) {
-    .veui-pager-previous,
-    .veui-pager-next {
-      .veui-button-transition();
-    }
-  }
-
   &[ui~="slim"] {
     @scale-ratio: 2 / 3;
 
@@ -206,11 +213,17 @@
         width: @digit-width * @scale-ratio;
         height: @digit-height * @scale-ratio;
         line-height: @digit-height * @scale-ratio;
-        font-size: 13px;
+        font-size: @veui-font-size-small;
       }
 
       .veui-active a {
         background: transparent;
+        font-weight: @veui-font-weight-bold;
+      }
+
+      a:hover {
+        color: @veui-text-color-strong;
+        font-weight: @veui-font-weight-normal;
       }
     }
 
@@ -221,11 +234,23 @@
       line-height: 1.5;
       border: 1px solid @veui-gray-color-5;
       background: transparent;
-      .veui-button-transition();
+
+      &:hover {
+        color: @veui-text-color-strong;
+        background-color: @veui-gray-color-8;
+      }
+
+      &:active {
+        background-color: @veui-gray-color-6;
+      }
 
       &.veui-disabled {
-        background-color: @veui-gray-color-7;
-        border-color: @veui-gray-color-7;
+        &,
+        &:hover,
+        &:active {
+          background-color: @veui-gray-color-7;
+          border-color: transparent;
+        }
       }
 
       .veui-icon {
