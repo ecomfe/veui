@@ -42,10 +42,10 @@ export default {
                     'veui-tabs-item': true,
                     'veui-tabs-item-active': index === this.localIndex
                   }}><Link to={tab.to} native={tab.native}>{ tab.label }</Link></li>
-                  : <li onClick={$event => this.setActive({ index })} class={{
+                  : <li class={{
                     'veui-tabs-item': true,
                     'veui-tabs-item-active': index === this.localIndex
-                  }}>{ tab.label }</li>
+                  }}><span onClick={$event => this.setActive({ index })}>{ tab.label }</span></li>
               ))
             }
           </ul>
