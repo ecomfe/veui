@@ -2,7 +2,7 @@
   <veui-overlay class="veui-dialog"
     :open="localOpen"
     :overlay-class="mergedOverlayClass"
-    :ui="uiProps.join(' ')"
+    :ui="ui"
     ref="overlay"
     :priority="priority">
     <div class="veui-dialog-content"
@@ -45,7 +45,7 @@ import Button from './Button'
 import { ui } from '../mixins'
 import { drag } from '../directives'
 import Icon from './Icon'
-import '../icons'
+import '../icons/cross'
 
 export default {
   name: 'veui-dialog',

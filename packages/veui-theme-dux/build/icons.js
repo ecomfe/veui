@@ -2,6 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const icons = require('../assets/icons.json');
 
-const ICON_PATH = path.resolve(__dirname, '../assets/icons.js');
-fs.writeFileSync(ICON_PATH, `/* eslint-disable */\nexport default ${JSON.stringify(icons)}\n`);
+Object.keys(icons).forEach(name => {
+  let code = icons[name];
+  fs.writeFileSync(
+    path.resolve(__dirname, `../icons/${name}.js`),
+    `import { Icon } from 'veui'\nexport default ${JSON.stringify(code)}\n`
+  );
+});
+
 console.log(Object.keys(icons).length + ' icon modules generated.');

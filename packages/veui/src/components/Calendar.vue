@@ -61,7 +61,10 @@ import { flattenDeep, findIndex } from 'lodash'
 import { input } from '../mixins'
 import config from '../managers/config'
 import Icon from './Icon'
-import '../icons'
+import '../icons/angle-left'
+import '../icons/angle-down'
+import '../icons/angle-down'
+import '../icons/angle-right'
 
 config.defaults({
   'calendar.weekStart': 1
