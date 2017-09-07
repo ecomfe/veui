@@ -37,3 +37,7 @@ export function transformName (name, transform = false) {
 export function getJSON (path) {
   return JSON.parse(fs.readFileSync(path, 'utf8'))
 }
+
+export function warn (msg) {
+  console.warn(`[VEUI] ${msg}`)
+}

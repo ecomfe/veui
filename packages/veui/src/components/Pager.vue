@@ -102,10 +102,6 @@ export default {
     total: {
       type: Number
     },
-    // @deprecated
-    pageTotal: {
-      type: Number
-    },
     to: {
       type: [String, Object],
       default: ''
@@ -131,12 +127,7 @@ export default {
       }
     },
     realTotal () {
-      // backward compatibility
-      return this.total != null
-        ? this.total
-        : this.pageTotal != null
-          ? this.pageTotal
-          : 0
+      return this.total || 0
     },
     pageNavHref () {
       return {
