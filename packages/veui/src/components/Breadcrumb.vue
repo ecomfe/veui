@@ -11,29 +11,15 @@ export default {
       default () {
         return []
       }
-    },
-
-    /**
-     * @deprecated
-     **/
-    routers: {
-      type: Array,
-      default () {
-        return []
-      }
     }
   },
   data () {
     return {
-      localRoutes: this.routes.length ? this.routes : this.routers
+      localRoutes: [...this.routes]
     }
   },
   watch: {
     routes (value) {
-      this.localRoutes = value
-      this.checkLocalRoutes()
-    },
-    routers (value) {
       this.localRoutes = value
       this.checkLocalRoutes()
     }
