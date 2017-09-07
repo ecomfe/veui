@@ -15,7 +15,7 @@ import { type, rule } from '../../managers'
 import { isBoolean, get, last } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
-import '../../icons'
+import '../../icons/exclamation-circle'
 import Vue from 'vue'
 const { computed: form } = getTypedAncestorTracker('form')
 const { computed: fieldset } = getTypedAncestorTracker('fieldset')

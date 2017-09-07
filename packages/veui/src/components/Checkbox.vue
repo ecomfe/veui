@@ -13,7 +13,8 @@
 
 <script>
 import Icon from './Icon'
-import '../icons'
+import '../icons/minus-thick'
+import '../icons/check-thick'
 import { input } from '../mixins'
 import { pick } from 'lodash'
 import { patchIndeterminate } from '../utils/dom'

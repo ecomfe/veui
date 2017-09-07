@@ -8,6 +8,9 @@
     "baidu",
     "less"
   ],
+  "scripts": {
+    "icons": "node build/svg2json.js && node build/icons.js"
+  },
   "author": "ecomfe",
   "license": "MIT",
   "dependencies": {
@@ -15,5 +18,8 @@
   },
   "peerDependencies": {
     "wicg-focus-ring": "^2.0.1"
+  },
+  "devDependencies": {
+    "svgo": "^0.7.2"
   }
 }

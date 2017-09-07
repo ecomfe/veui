@@ -60,7 +60,8 @@ import Icon from '../Icon'
 import Button from '../Button'
 import Option from './Option'
 import Overlay from '../Overlay'
-import '../../icons'
+import '../../icons/triangle-up'
+import '../../icons/triangle-down'
 import { input, dropdown } from '../../mixins'
 
 export default {

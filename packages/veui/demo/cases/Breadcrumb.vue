@@ -45,3 +45,10 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+  .veui-icon {
+    position: relative;
+    top: 2px;
+  }
+</style>

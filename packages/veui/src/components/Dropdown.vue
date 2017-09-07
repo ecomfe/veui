@@ -39,7 +39,7 @@
 
 <script>
 import Icon from './Icon'
-import '../icons'
+import '../icons/veui-dropdown-icon'
 import Button from './Button'
 import Overlay from './Overlay'
 import { ui, dropdown } from '../mixins'

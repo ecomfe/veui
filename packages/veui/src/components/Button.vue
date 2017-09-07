@@ -16,7 +16,7 @@
 <script>
 import { omit } from 'lodash'
 import Icon from './Icon'
-import '../icons'
+import '../icons/loading'
 
 export default {
   name: 'veui-button',

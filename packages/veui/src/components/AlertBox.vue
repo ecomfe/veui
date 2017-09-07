@@ -29,7 +29,9 @@ import { pick, find, includes } from 'lodash'
 import Dialog from './Dialog'
 import Button from './Button'
 import Icon from './Icon'
-import '../icons'
+import '../icons/check-circle'
+import '../icons/info-circle'
+import '../icons/cross-circle'
 import config from '../managers/config'
 
 config.defaults({

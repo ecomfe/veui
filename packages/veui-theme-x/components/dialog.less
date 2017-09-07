@@ -1,0 +1,109 @@
+@import "../lib.less";
+
+.veui-dialog {
+  display: none;
+
+  &-box {
+    position: fixed;
+
+    &[ui~="reverse"] {
+      .veui-dialog-content {
+        &-head {
+          background: #fff;
+        }
+
+        &-head-title,
+        &-head-close {
+          color: @veui-text-color-strong;
+        }
+      }
+    }
+  }
+
+  &-draggable {
+    cursor: all-scroll;
+  }
+
+  &-content {
+    background: #fff;
+    box-shadow: 0 0 4px fadeOut(@veui-gray-color-3, 60%);
+    position: absolute;
+    width: 400px;
+    max-height: 100vh;
+    overflow-y: auto;
+
+    &-head,
+    &-body,
+    &-foot {
+      padding: 0 20px;
+    }
+
+    &-head {
+      .centered-line(40px);
+      background: @veui-brand-color;
+    }
+
+    &-head-title {
+      font-weight: @veui-font-weight-normal;
+      color: #fff;
+      font-size: @veui-font-size-large;
+    }
+
+    &-body {
+      padding-top: 30px;
+    }
+
+    &-foot {
+      .padding(20px);
+      text-align: center;
+    }
+
+    &-foot .veui-button {
+      min-width: 94px;
+      margin-right: 12px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    &-head-close,
+    &-head-close:hover {
+      color: #fff;
+      float: right;
+      .size(16px);
+      .centered-line(16px);
+      text-align: center;
+      font-size: @veui-font-size-large;
+      margin-right: 12px;
+      cursor: pointer;
+    }
+  }
+
+  // 默认居中
+  &-box,
+  &-content {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &-box[ui~="top"],
+  &-box[ui~="top"] .veui-dialog-content {
+    top: 38.2%;
+    left: 50%;
+    transform: translate(-50%, -38.2%);
+  }
+
+  &-box-mask {
+    background-color: fade(@veui-gray-color-1, 50);
+    overflow: auto;
+
+    // 提升优先级，覆盖样式
+    &,
+    &[ui~="top"] {
+      .fixed(0);
+      transform: none;
+    }
+  }
+}

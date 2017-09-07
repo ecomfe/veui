@@ -1,7 +1,7 @@
 <script>
 import BreadcrumbItem from './BreadcrumbItem'
 import Icon from './Icon'
-import '../icons'
+import '../icons/angle-right'
 
 export default {
   name: 'veui-breadcrumb',

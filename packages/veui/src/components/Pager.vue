@@ -42,7 +42,8 @@
 
 <script>
 import Icon from './Icon'
-import '../icons'
+import '../icons/angle-left'
+import '../icons/angle-right'
 import Link from './Link'
 import Select from './Select'
 import Option from './Select/Option'

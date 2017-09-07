@@ -1,38 +1,50 @@
 <template>
   <article class="demo-dialog">
     <h1><code>&lt;veui-dialog&gt;</code></h1>
-     <p>
+    <p>
       <veui-dialog :modal="true"
         overlay-class="test"
         :open="modalDialogVisible"
         @update:open="(value) => modalDialogVisible = value"></veui-dialog>
       <veui-button ui="primary"
-        @click="modalDialogVisible = !modalDialogVisible">模态</veui-button>
+        @click="modalDialogVisible = !modalDialogVisible">open a model dialog box</veui-button>
 
       <veui-dialog :modal="false"
         :open="nonModalDialogVisible"
         @update:open="(value) => nonModalDialogVisible = value"></veui-dialog>
       <veui-button ui="primary"
-        @click="nonModalDialogVisible = !nonModalDialogVisible">非模态</veui-button>
+        @click="nonModalDialogVisible = !nonModalDialogVisible">open a modeless dialog box</veui-button>
     </p>
     <p>
       <veui-dialog :draggable="true"
         :modal="false"
-        :open="draggableDialog1Visible"
-        @update:open="(value) => draggableDialog1Visible = value"
+        :open.sync="draggableDialog1Visible"
         ui="center"
         title="第一个可拖拽的"></veui-dialog>
-      <veui-button ui="primary" @click="draggableDialog1Visible = !draggableDialog1Visible">可拖拽</veui-button>
+      <veui-button ui="primary" @click="draggableDialog1Visible = !draggableDialog1Visible">open the first draggable dialog box</veui-button>
 
-       <veui-dialog :draggable="true"
+      <veui-dialog :draggable="true"
         :modal="false"
         :open="draggableDialog2Visible"
         title="第二个可拖拽的"
         @update:open="(value) => draggableDialog2Visible = value"
         ui="reverse top"></veui-dialog>
-      <veui-button ui="primary" @click="draggableDialog2Visible = !draggableDialog2Visible">可拖拽</veui-button>
+      <veui-button ui="primary" @click="draggableDialog2Visible = !draggableDialog2Visible">open the second draggable dialog box</veui-button>
+
+      <veui-dialog :draggable="true"
+        :modal="false"
+        :open="draggableDialog3Visible"
+        title="resetable dialog box"
+        @update:open="(value) => ($refs.resetDialog.resetPosition(), draggableDialog3Visible = value)"
+        ui="reverse top"
+        ref="resetDialog">
+        <template slot="foot">
+          <veui-button @click="() => $refs.resetDialog.resetPosition()" ui="alt">reset position</veui-button>
+        </template>
+      </veui-dialog>
+      <veui-button ui="alt" @click="draggableDialog3Visible = !draggableDialog3Visible">draggable dialog box with reset button</veui-button>
     </p>
-     <p>
+    <p>
       <veui-dialog :open="operationDialogVisible"
         @update:open="(value) => operationDialogVisible = value"
         @ok="handleOk"
@@ -77,6 +89,9 @@
     </p>
 
     <p>
+      <veui-button @click="popupAlert('info', 'you\'ve got a new message', 'message')">info box</veui-button>
+      <veui-button @click="popupAlert('error', 'you\'ve got an error', 'error')">error box</veui-button>
+      <veui-button @click="popupAlert('success', 'congratulations! everything is ok!', 'success')">success box</veui-button>
       <veui-button ui="primary" @click="popupAlerts">弹出一堆 AlertBox</veui-button>
     </p>
     <p>
@@ -112,6 +127,7 @@ export default {
 
       draggableDialog1Visible: false,
       draggableDialog2Visible: false,
+      draggableDialog3Visible: false,
 
       operationDialogVisible: false,
 
@@ -141,6 +157,9 @@ export default {
     }
   },
   methods: {
+    popupAlert (type, content, title) {
+      alertManager[type](content, title)
+    },
     handleOk () {
       alert('点击了确定按钮')
     },

@@ -7,7 +7,8 @@
 
 <script>
 import Icon from '../Icon'
-import '../../icons'
+import '../../icons/sort-asc'
+import '../../icons/sort-desc'
 
 export default {
   name: 'veui-table-sorter',
