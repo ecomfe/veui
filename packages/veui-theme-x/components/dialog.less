@@ -12,10 +12,7 @@
           background: #fff;
         }
 
-        &-head-title {
-          color: @veui-text-color-strong;
-        }
-
+        &-head-title,
         &-head-close {
           color: @veui-text-color-strong;
         }
@@ -54,7 +51,6 @@
 
     &-body {
       padding-top: 30px;
-      box-sizing: border-box;
     }
 
     &-foot {
@@ -64,7 +60,7 @@
 
     &-foot .veui-button {
       min-width: 94px;
-      .margin(_, 20px, _, _);
+      margin-right: 12px;
 
       &:last-child {
         margin-right: 0;
@@ -79,13 +75,14 @@
       .centered-line(16px);
       text-align: center;
       font-size: @veui-font-size-large;
-      .margin(12px, _, _, _);
+      margin-right: 12px;
       cursor: pointer;
     }
   }
 
-  &-box[ui~="center"],
-  &-box[ui~="center"] .veui-dialog-content {
+  // 默认居中
+  &-box,
+  &-content {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -95,7 +92,7 @@
   &-box[ui~="top"] .veui-dialog-content {
     top: 38.2%;
     left: 50%;
-    transform: translate(-50%, -61.8%);
+    transform: translate(-50%, -38.2%);
   }
 
   &-box-mask {
@@ -103,7 +100,7 @@
     overflow: auto;
 
     // 提升优先级，覆盖样式
-    &[ui~="center"],
+    &,
     &[ui~="top"] {
       .fixed(0);
       transform: none;

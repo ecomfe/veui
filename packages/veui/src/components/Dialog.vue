@@ -2,7 +2,7 @@
   <veui-overlay class="veui-dialog"
     :open="localOpen"
     :overlay-class="mergedOverlayClass"
-    :ui="realUI"
+    :ui="uiProps.join(' ')"
     ref="overlay"
     :priority="priority">
     <div class="veui-dialog-content"
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { isObject, isString, extend, some, contains } from 'lodash'
+import { isObject, isString, extend } from 'lodash'
 import Overlay from './Overlay'
 import Button from './Button'
 import { ui } from '../mixins'
@@ -127,10 +127,6 @@ export default {
       klass['veui-dialog-box-mask'] = this.modal
 
       return klass
-    },
-    realUI () {
-      return !some(this.uiProps, item => contains(['center', 'top'], item))
-        ? [...this.uiProps, 'center'].join(' ') : this.uiProps.join(' ')
     }
   },
   methods: {
