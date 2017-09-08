@@ -376,9 +376,7 @@ export default {
       })
     },
     validateFileSize (fileSize) {
-      if (!this.maxSize) return true
-
-      return fileSize <= bytes.parse(this.maxSize)
+      return !this.maxSize || fileSize <= bytes.parse(this.maxSize)
     },
     uploadFiles () {
       this.fileList.forEach(file => {
