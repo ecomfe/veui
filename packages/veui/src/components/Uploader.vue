@@ -109,6 +109,7 @@ import { cloneDeep, uniqueId, assign, isNumber, isArray } from 'lodash'
 import { ui, input } from '../mixins'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
+import bytes from 'bytes'
 
 config.defaults({
   'uploader.requestMode': 'xhr',
@@ -375,30 +376,9 @@ export default {
       })
     },
     validateFileSize (fileSize) {
-      let floatValue
-      let unit
+      if (!this.maxSize) return true
 
-      if (isNumber(this.maxSize)) {
-        floatValue = this.maxSize
-        unit = 'b'
-      } else {
-        let parseSizeRegExp = /^(\d+(?:\.\d+)?)(b|kb|mb|gb)?$/i
-        let results = parseSizeRegExp.exec(this.maxSize)
-
-        if (!results) return true
-
-        floatValue = parseFloat(results[1])
-        unit = (results[2] || 'b').toLowerCase()
-      }
-
-      let maxSizeByte = {
-        b: 1,
-        kb: 1 << 10,
-        mb: 1 << 20,
-        gb: 1 << 30
-      }[unit] * floatValue
-
-      return fileSize <= maxSizeByte
+      return fileSize <= bytes.parse(this.maxSize)
     },
     uploadFiles () {
       this.fileList.forEach(file => {
@@ -507,11 +487,7 @@ export default {
       this.$refs.label.appendChild(this.$refs.input)
     },
     convertSizeUnit (size) {
-      if (!size) return ''
-      if (typeof size === 'string' && /\w+$/.test(size)) return size
-      return size > 1024 * 1024
-        ? (size / 1024 / 1024).toFixed(1) + 'M'
-        : Math.ceil(size / 1024) + 'KB'
+      return bytes(size, {decimalPlaces: 1})
     },
     parseData (data) {
       if (typeof data === 'object') return data

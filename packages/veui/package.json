@@ -19,7 +19,8 @@
     "lodash": "^4.17.4",
     "tether": "^1.4.0",
     "veui-theme-dux": "^0.2.4",
-    "vue-awesome": "^2.2.1"
+    "vue-awesome": "^2.2.1",
+    "bytes": "^3.0.0"
   },
   "peerDependencies": {
     "vue": "^2.2.2"
