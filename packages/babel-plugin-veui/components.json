@@ -116,6 +116,10 @@
     "path": "Pager.vue"
   },
   {
+    "name": "Progress",
+    "path": "Progress.vue"
+  },
+  {
     "name": "PromptBox",
     "path": "PromptBox.vue"
   },

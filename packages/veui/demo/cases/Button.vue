@@ -88,7 +88,10 @@
 <script>
 import bus from '../bus'
 import { Button, Icon } from 'veui'
-import 'veui/icons'
+import 'veui/icons/cross-small'
+import 'veui/icons/pen'
+import 'veui/icons/search'
+import 'veui/icons/plus'
 
 export default {
   name: 'button-demo',

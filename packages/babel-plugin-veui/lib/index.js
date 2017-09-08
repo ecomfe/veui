@@ -19,16 +19,39 @@ exports.default = function (babel) {
         var src = node.source.value;
 
         var resolvedComponentName = null;
+        var resolvedIcon = null;
 
-        if (src.indexOf(COMPONENTS_PATH) === 0) {
-          var componentPath = src.slice(COMPONENTS_PATH.length);
+        if (src.indexOf(COMPONENTS_PATH + '/') === 0) {
+          var componentPath = src.slice(COMPONENTS_PATH.length + 1);
           resolvedComponentName = getComponentName(componentPath);
+        } else if (src === ICONS_PATH || src.indexOf(ICONS_PATH + '/') === 0) {
+          resolvedIcon = src === ICONS_PATH ? 'index' : src.replace(ICONS_PATH + '/', '');
         } else if (src !== 'veui') {
           if (src.charAt(0) !== '.' || file.opts.filename === 'unknown') {
             return;
           } else {
+              resolvedIcon = resolveIcon(file.opts.filename, src);
               resolvedComponentName = resolveComponent(file.opts.filename, src);
             }
+        }
+
+        var pack = opts.package,
+            _opts$path = opts.path,
+            packPath = _opts$path === undefined ? 'components' : _opts$path,
+            _opts$icons = opts.icons,
+            icons = _opts$icons === undefined ? 'icons' : _opts$icons,
+            resolve = opts.resolve;
+
+        if (resolvedIcon != null) {
+          var iconPath = (0, _path.join)(pack, icons, resolvedIcon);
+          if (assurePath(iconPath, resolve)) {
+            node.source.value = iconPath;
+          } else {
+            path.remove();
+            (0, _utils.warn)('no icon found for path [' + iconPath + '], from module [' + file.opts.filename + ']');
+          }
+
+          return;
         }
 
         node.specifiers.map(function (_ref2) {
@@ -45,27 +68,9 @@ exports.default = function (babel) {
         }).filter(function (v) {
           return v;
         }).forEach(function (name) {
-          var pack = opts.package,
-              packPath = opts.path,
-              request = opts.request,
-              resolve = opts.resolve;
+          var modulePath = (0, _path.join)(pack, packPath, name);
 
-          var modulePath = packPath ? pack + '/' + packPath + '/' + name : pack + '/' + name;
-
-          if (resolveCache[modulePath] === false) {
-            return;
-          } else if (!(modulePath in resolveCache)) {
-            if (typeof resolve === 'function') {
-              try {
-                var moduleFile = resolve({}, process.cwd(), modulePath);
-                resolveCache[modulePath] = true;
-              } catch (e) {
-                resolveCache[modulePath] = false;
-              }
-            }
-          }
-
-          if (resolveCache[modulePath]) {
+          if (assurePath(modulePath, resolve)) {
             path.insertAfter(t.importDeclaration([], t.stringLiteral(modulePath)));
           }
         });
@@ -91,9 +96,29 @@ var _utils = require('./utils');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var COMPONENTS = (0, _utils.getJSON)(_path2.default.resolve(__dirname, '../components.json'));
-var COMPONENTS_PATH = 'veui/components/';
+var COMPONENTS_DIRNAME = 'components';
+var COMPONENTS_PATH = 'veui/' + COMPONENTS_DIRNAME;
+var ICONS_DIRNAME = 'icons';
+var ICONS_PATH = 'veui/' + ICONS_DIRNAME;
 
 var resolveCache = {};
+
+function assurePath(modulePath, resolve) {
+  if (resolveCache[modulePath] === false) {
+    return;
+  } else if (!(modulePath in resolveCache)) {
+    if (typeof resolve === 'function') {
+      try {
+        resolve({}, process.cwd(), modulePath);
+        resolveCache[modulePath] = true;
+      } catch (e) {
+        resolveCache[modulePath] = false;
+      }
+    }
+  }
+
+  return resolveCache[modulePath];
+}
 
 function getPeerPath(name) {
   var template = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '${module}.css';
@@ -122,22 +147,38 @@ function getModuleName(name) {
   }
 }
 
+function resolveIcon(file, src) {
+  var icon = resolveRelative(file, src, ICONS_DIRNAME);
+  if (icon === '') {
+    icon = 'index';
+  }
+  return icon;
+}
+
 function resolveComponent(file, src) {
+  return getComponentName(resolveRelative(file, src, COMPONENTS_DIRNAME));
+}
+
+function resolveRelative(file, src, dir) {
   var pkg = _pkgDir2.default.sync(file);
   if (!pkg || (0, _utils.getJSON)(_path2.default.join(pkg, 'package.json')).name !== 'veui') {
     return null;
   }
 
-  var componentsPath = _path2.default.join(pkg, 'components');
-  if (!_fs2.default.existsSync(componentsPath)) {
-    componentsPath = _path2.default.join(pkg, 'src/components');
-    if (!_fs2.default.existsSync(componentsPath)) {
-      return;
+  var dirPath = _path2.default.join(pkg, dir);
+  if (!_fs2.default.existsSync(dirPath)) {
+    dirPath = _path2.default.join(pkg, 'src/' + dir);
+    if (!_fs2.default.existsSync(dirPath)) {
+      return null;
     }
   }
 
-  var relativePath = _path2.default.relative(componentsPath, _path2.default.resolve(_path2.default.dirname(file), src));
-  return getComponentName(relativePath);
+  var absPath = _path2.default.resolve(_path2.default.dirname(file), src);
+
+  if (absPath.indexOf(dirPath + '/') !== 0) {
+    return null;
+  }
+  return _path2.default.relative(dirPath, absPath);
 }
 
 function getComponentName(componentPath) {

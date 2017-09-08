@@ -63,7 +63,6 @@ import config from '../managers/config'
 import Icon from './Icon'
 import '../icons/angle-left'
 import '../icons/angle-down'
-import '../icons/angle-down'
 import '../icons/angle-right'
 
 config.defaults({

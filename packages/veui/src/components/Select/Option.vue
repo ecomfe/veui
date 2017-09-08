@@ -11,7 +11,7 @@
 
 <script>
 import Icon from '../Icon'
-import '../../icons/veui-option-checkmark'
+import '../../icons/check'
 
 export default {
   name: 'veui-option',

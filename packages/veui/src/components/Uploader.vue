@@ -57,7 +57,7 @@
             <slot name="uploadingText">上传中...</slot>
           </veui-uploader-progress>
           <veui-button v-if="uploaderType === 'file'" ui="link delete"
-            @click="cancelFile(file)"><icon name="close"></icon></veui-button>
+            @click="cancelFile(file)"><icon name="cross"></icon></veui-button>
           <veui-button v-else-if="uploaderType === 'image'" ui="operation"
             @click="cancelFile(file)">取消</veui-button>
         </slot>
@@ -94,7 +94,6 @@ import Icon from './Icon'
 import '../icons/upload'
 import '../icons/cross'
 import '../icons/check-circle'
-import '../icons/close'
 import Button from './Button'
 import { endsWith, cloneDeep, filter, map, uniqueId, assign } from 'lodash'
 import { ui, input } from '../mixins'

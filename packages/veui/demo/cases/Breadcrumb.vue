@@ -3,16 +3,19 @@
     <h1><code>&lt;veui-breadcrumb&gt;</code></h1>
     <p>
       <veui-breadcrumb :routes="items" @redirect="handleRedirect">
-        <template scope="scope">{{ scope.router.text }}</template>
+        <template scope="scope"><em>{{ scope.route.text }}</em></template>
         <template slot="separator" scope="scope"><veui-icon name="angle-double-right"></veui-icon></template>
       </veui-breadcrumb>
+    </p>
+    <p>
+      <veui-breadcrumb :routes="items" @redirect="handleRedirect"></veui-breadcrumb>
     </p>
   </article>
 </template>
 
 <script>
 import { Breadcrumb, Icon } from 'veui'
-import 'veui/icons'
+import 'veui/icons/angle-double-right'
 
 export default {
   name: 'breadcrumb-demo',
@@ -45,10 +48,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less" scoped>
-  .veui-icon {
-    position: relative;
-    top: 2px;
-  }
-</style>

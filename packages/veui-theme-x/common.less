@@ -49,8 +49,13 @@ textarea {
   cursor: not-allowed !important;
 }
 
+a {
+  text-decoration: none;
+}
+
 a,
-.veui-button[ui~="link"] {
+[ui~="link"] {
+  cursor: pointer;
   color: @veui-link-color-normal;
 
   &[ui~="primary"] {

@@ -8,6 +8,7 @@ exports.camelCase = camelCase;
 exports.pascalCase = pascalCase;
 exports.transformName = transformName;
 exports.getJSON = getJSON;
+exports.warn = warn;
 
 var _fs = require('fs');
 
@@ -54,4 +55,8 @@ function transformName(name) {
 
 function getJSON(path) {
   return JSON.parse(_fs2.default.readFileSync(path, 'utf8'));
+}
+
+function warn(msg) {
+  console.warn('[VEUI] ' + msg);
 }

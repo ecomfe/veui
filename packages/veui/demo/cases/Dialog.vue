@@ -107,7 +107,6 @@
 </template>
 <script>
 import { Dialog, Button, Icon } from 'veui'
-import 'veui/icons'
 import alertManager from 'veui/managers/alert'
 import confirmManager from 'veui/managers/confirm'
 import promptManager from 'veui/managers/prompt'

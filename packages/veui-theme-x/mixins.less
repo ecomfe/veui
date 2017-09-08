@@ -6,9 +6,9 @@
   transition-duration: 0.2s;
 }
 
-.veui-position-center() {
-  .absolute(50%, 50%);
-  transform: translate(-50%, -50%);
+.veui-position-center(@x: 50%, @y: @x) {
+  .absolute(@x, _, _, @y);
+  transform: translate(-@x, -@y);
 }
 
 .veui-field-require() {

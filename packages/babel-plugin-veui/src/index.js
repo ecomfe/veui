@@ -28,7 +28,7 @@ export default function (babel) {
           // import Button from 'veui/components/Button'
           let componentPath = src.slice(COMPONENTS_PATH.length + 1)
           resolvedComponentName = getComponentName(componentPath)
-        } else if (src === ICONS_PATH || src.indexOf(`${ICONS_PATH}/` === 0)) {
+        } else if (src === ICONS_PATH || src.indexOf(`${ICONS_PATH}/`) === 0) {
           // import 'veui/icons' → import 'veui-theme-x/icons'
           // import 'veui/icons/loading' →  import 'veui-theme-x/icons/loading'
           resolvedIcon = src === ICONS_PATH ? 'index' : src.replace(`${ICONS_PATH}/`, '')
@@ -54,7 +54,7 @@ export default function (babel) {
             node.source.value = iconPath
           } else {
             path.remove()
-            warn(`no icon found for path [${iconPath}]`)
+            warn(`no icon found for path [${iconPath}], from module [${file.opts.filename}]`)
           }
 
           return
@@ -131,8 +131,8 @@ function getModuleName (name, transform = 'kebab-case') {
   }
 }
 
-// 'src/components/Select/Option.vue', '../icons/check' → 'check'
-// 'src/components/Select/Option.vue', '../icons' → 'index'
+// 'veui/src/components/Select/Option.vue', '../icons/check' → 'check'
+// 'veui/src/components/Select/Option.vue', '../icons' → 'index'
 function resolveIcon (file, src) {
   let icon = resolveRelative(file, src, ICONS_DIRNAME)
   if (icon === '') {
@@ -141,12 +141,12 @@ function resolveIcon (file, src) {
   return icon
 }
 
-// 'src/components/Option.vue', '../Icon.vue' → 'Icon'
+// 'veui/src/components/Option.vue', '../Icon.vue' → 'Icon'
 function resolveComponent (file, src) {
   return getComponentName(resolveRelative(file, src, COMPONENTS_DIRNAME))
 }
 
-// 'src/components/Select/Option.vue', '../Icon.vue', 'components' → 'Icon.vue'
+// 'veui/src/components/Select/Option.vue', '../Icon.vue', 'components' → 'Icon.vue'
 function resolveRelative (file, src, dir) {
   // make sure relative paths resolved to somewhere inside veui
   let pkg = pkgDir.sync(file)
@@ -154,15 +154,21 @@ function resolveRelative (file, src, dir) {
     return null
   }
 
+  // veui/${dir} or veui/src/${dir}
   let dirPath = path.join(pkg, dir) // runtime
   if (!fs.existsSync(dirPath)) {
     dirPath = path.join(pkg, `src/${dir}`) // dev
     if (!fs.existsSync(dirPath)) {
-      return
+      return null
     }
   }
 
-  return path.relative(dirPath, path.resolve(path.dirname(file), src))
+  let absPath = path.resolve(path.dirname(file), src)
+
+  if (absPath.indexOf(`${dirPath}/`) !== 0) {
+    return null
+  }
+  return path.relative(dirPath, absPath)
 }
 
 // 'Icon.vue' → 'Icon'
