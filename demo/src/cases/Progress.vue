@@ -43,7 +43,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 section {
   margin-bottom: 30px;
 }
