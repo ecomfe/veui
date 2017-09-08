@@ -19,6 +19,7 @@
 * [+] 增加 `ButtonGroup` 组件。
 * [+] 增加 `RadioButtonGroup` 组件。
 * [+] 增加 `CheckButtonGroup` 组件。
+* [+] 增加 `Progress` 组件（限 `theme-x`）。
 
 ### 0.2.4
 
