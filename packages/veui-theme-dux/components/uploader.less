@@ -1,11 +1,13 @@
 @import "../lib.less";
 
 .veui-uploader {
-  @width: 292px;
+  @width: 300px;
   @icon-size: 16px;
   @preview-size: 32px;
   @image-size: 140px;
   @list-padding: 2px;
+  @double-padding: 2 * @list-padding;
+
   .disabled() {
     border: none;
     background-color: @veui-gray-color-sup-3;
@@ -15,9 +17,16 @@
 
   width: @width;
   overflow: hidden;
+
   &-button-container {
     position: relative;
     margin-bottom: 20px;
+    overflow: hidden;
+    .veui-uploader-tip {
+      display: inline-block;
+      vertical-align: middle;
+      margin-top: 8px;
+    }
   }
   &-input-label {
     cursor: pointer;
@@ -25,17 +34,21 @@
     color: @veui-text-color-strong;
     margin-right: 1em;
     box-sizing: border-box;
+    float: left;
     &-icon {
       margin-right: 5px;
     }
-    &-disabled {
-      cursor: default !important;
-      .disabled()!important;
-      &:hover {
-        .disabled()!important;
-      }
+  }
+
+  &-input-label-disabled,
+  .veui-button.veui-uploader-input-label-disabled {
+    cursor: not-allowed;
+    .disabled();
+    &:hover {
+      .disabled();
     }
   }
+
   &-input-label-image {
     position: relative;
     display: block;
@@ -60,9 +73,16 @@
       left: ~"calc(50% - 2px)";
       height: 60px;
     }
+
+    &:hover {
+      background: @veui-gray-color-sup-3;
+    }
+    &:active {
+      background: @veui-gray-color-sup-1;
+    }
   }
 
-  &-list-file,
+  &-list,
   &-list-image {
     padding: 0;
     margin: 0;
@@ -101,35 +121,41 @@
       background-color: #fff;
       color: @veui-success-color-primary;
     }
+    .veui-uploader-progress {
+      &-bar,
+      &-bar-full {
+        left: ~"calc(50% - 35px)";
+        max-width: 70px;
+      }
+    }
   }
-  &-list-file {
+  &-list {
+    width: @width;
     color: @veui-theme-color-primary;
     li {
       position: relative;
       padding: 9px 4px;
-      box-sizing: content-box;
     }
     li:hover {
       background-color: @veui-gray-color-sup-3;
       .veui-button[ui~="link"] {
         background-color: @veui-gray-color-sup-3;
       }
-      .veui-button[ui~="delete"] {
+      .veui-button[ui~="remove"] {
         visibility: visible;
       }
     }
-    &-name,
-    &-size {
-      display: inline-block;
-      vertical-align: middle;
-    }
     &-name {
+      display: inline-block;
       overflow: hidden;
-      width: 70%;
+      width: ~"calc(100% - 3em)";
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: top;
+      line-height: 20px;
     }
-    &-size {
-      color: @veui-gray-color-weak;
-      width: ~"calc(30% - 2em)";
+    &-name-status {
+      width: ~"calc(100% - 7em)";
     }
     &-status {
       display: inline-block;
@@ -143,45 +169,27 @@
       }
     }
 
-    .veui-uploader-progress {
-      width: ~"calc(100% - 3em)";
-      top: 0;
-      & + button {
-        float: right;
-        position: relative;
-        right: 5px;
+    .veui-button {
+      vertical-align: top;
+      height: 20px;
+      line-height: 20px;
+      float: right;
+    }
+    &-retry {
+      svg {
+        display: none;
       }
+    }
+
+    .veui-uploader-progress {
+      display: inline-block;
+      width: ~"calc(100% - 6em)";
+      height: 20px;
+      vertical-align: middle;
     }
   }
   &-list-icon {
     display: none;
-  }
-  &-list-preview {
-    height: @preview-size;
-    padding: 4px !important;
-    &-container {
-      display: inline-block;
-      vertical-align: middle;
-      width: @preview-size;
-      height: @preview-size;
-      line-height: @preview-size;
-      font-size: 0;
-      text-align: center;
-      background-color: #fff;
-      margin-right: 8px;
-    }
-
-    .veui-uploader-list-file-name {
-      width: ~"calc(70% - "@preview-size~")";
-    }
-    .veui-uploader-progress {
-      width: ~"calc(100% - 3em)";
-      top: (@preview-size - 14px) / 2;
-
-      & + button {
-        top: (@preview-size - @icon-size) / 2;
-      }
-    }
   }
   &-list-image {
     li {
@@ -193,13 +201,14 @@
       margin: 0 10px 5px 0;
       border: 1px dashed @veui-gray-color-sup-2;
       text-align: center;
-      line-height: @image-size - 2px - 2 * @list-padding;
+      line-height: @image-size - 2px - @double-padding;
       position: relative;
       button[ui~="operation"] {
         position: absolute;
         min-width: 70px;
         font-size: 12px;
         height: 30px;
+        line-height: 30px;
         bottom: 30px;
         left: ~"calc(50% - 35px)";
       }
@@ -212,20 +221,34 @@
       position: absolute;
       top: @list-padding;
       left: @list-padding;
-      width: ~"calc(100% - "2 * @list-padding~")";
-      height: ~"calc(100% - "2 * @list-padding~")";
+      width: ~"calc(100% - @{double-padding})";
+      height: ~"calc(100% - @{double-padding})";
       background-color: rgba(0, 0, 0, .5);
-      text-align: center;
-      button {
+
+      .veui-button {
+        cursor: pointer;
         vertical-align: middle;
         background: none;
-        color: #fff !important;
+        color: #fff;
         font-size: @veui-font-size-normal;
       }
-      button:active,
-      button:hover {
+      .veui-button:active,
+      .veui-button:hover {
         background: none;
-        color: #fff !important;
+        color: #fff;
+      }
+      &-remove {
+        margin-left: 20px;
+        svg {
+          display: none;
+        }
+      }
+      .veui-button:disabled,
+      .veui-button.veui-uploader-input-label-disabled {
+        background: none;
+        &:hover {
+          background: none;
+        }
       }
     }
     &-status {
@@ -236,27 +259,39 @@
       }
     }
     &-success {
-      padding-top: 50px;
-      line-height: 1;
+      padding: 0;
+      line-height: @image-size - 2px;
       span {
         display: block;
-        margin-bottom: 10px;
+        vertical-align: middle;
       }
       svg {
         font-size: @icon-size;
+        vertical-align: text-bottom;
+        margin-right: 5px;
       }
     }
     .veui-uploader-progress {
       display: block;
     }
   }
-  &-warning-container {
-    margin: 20px 0 5px 5px;
-    overflow: hidden;
+
+  .veui-button[ui~="remove"] {
+    color: @veui-alert-color-primary;
+    font-size: @icon-size;
+    min-width: @icon-size;
+    width: @icon-size;
+    visibility: hidden;
+    svg {
+      margin-top: 2px;
+    }
+    &:disabled {
+      .disabled();
+    }
   }
+
   &-tip {
     color: @veui-gray-color-weak;
-    margin-left: 3px;
   }
   &-uploading {
     color: @veui-theme-color-primary;
@@ -267,21 +302,12 @@
   &-success {
     color: @veui-success-color-primary;
   }
-  &-warning {
-    color: @veui-warning-color-primary;
-  }
   &-hide {
     display: none;
   }
-  &[ui~="ellipsis"] &-list-file-name {
-    text-overflow: ellipsis;
-  }
-  &[ui~="multiline"] &-list-file-name {
-    word-break: break-all;
-  }
   &[ui~="horizontal"] {
     width: 100%;
-    .veui-uploader-list-file {
+    .veui-uploader-list {
       width: 100%;
       li {
         float: left;
@@ -293,24 +319,19 @@
       float: left;
     }
   }
-  &[ui~="list-icon"] &-list-icon {
-    display: inline;
-    margin-right: 3px;
-  }
   &[ui~="bottom-mask"] &-list-image-mask {
     top: auto;
     bottom: @list-padding;
     left: @list-padding;
-    width: ~"calc(100% - "2 * @list-padding~")";
+    width: ~"calc(100% - @{double-padding})";
     height: 30px;
     line-height: 30px;
-  }
-  .veui-button[ui~="delete"] {
-    color: @veui-alert-color-primary;
-    font-size: @icon-size;
-    min-width: @icon-size;
-    width: @icon-size;
-    visibility: hidden;
+    .veui-button {
+      display: inline-block;
+      height: 30px;
+      line-height: 30px;
+      vertical-align: top;
+    }
   }
 
   &-warning-enter,
@@ -342,27 +363,23 @@
   }
 
   &-progress {
-    display: inline-block;
+    display: block;
     position: relative;
-    line-height: 1.2;
+    line-height: 20px;
     color: @veui-theme-color-primary;
 
     &-bar,
     &-bar-full {
-      display: inline-block;
       position: absolute;
-      left: ~"calc(50% - 35px)";
-      top: 50%;
-      height: 6px;
-      max-width: 70px !important;
-      border-radius: 3px;
+      height: 4px;
+      top: ~"calc(50% - 2px)";
+      width: 100%;
     }
     &-bar {
       background-color: @veui-theme-color-primary;
       &-full {
         z-index: -1;
-        width: 70px;
-        background-color: @veui-gray-color-sup-3;
+        background-color: @veui-gray-color-sup-4;
       }
     }
   }

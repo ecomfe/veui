@@ -60,3 +60,7 @@ export function getModelEvent (vm) {
 export function isEmpty (val) {
   return val == null || val === '' || (Array.isArray(val) && !val.length)
 }
+
+export function stringifyQuery (query) {
+  return Object.keys(query).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`).join('&')
+}

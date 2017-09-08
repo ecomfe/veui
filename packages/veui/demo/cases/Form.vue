@@ -26,17 +26,15 @@
         </veui-field>
 
         <veui-field label="头像：" field="avatar">
-          <veui-uploader uploaderType="image"
+          <veui-uploader type="image"
             action="/upload"
             request-mode="xhr"
-            ui="multiline vertical bottom-mask list-icon"
+            ui="vertical bottom-mask list-icon button"
             :disabled="false"
             :max-count="1"
-            :value="storeData1.avatar"
-            :max-size="10"
-            preview-image
-            needButton
-            extention-types="jpg,jpeg,png"></veui-uploader>
+            v-model="storeData1.avatar"
+            max-size="10mb"
+            accept=".jpg,.jpeg,.png"></veui-uploader>
           <!-- <p class="output">{{ outputData.avatar }}</p> -->
         </veui-field>
 
@@ -151,17 +149,15 @@
         </veui-field>
 
         <veui-field label="头像：" field="avatar">
-          <veui-uploader uploaderType="image"
+          <veui-uploader type="image"
             action="/upload"
             request-mode="xhr"
-            ui="multiline vertical bottom-mask list-icon"
+            ui="vertical bottom-mask list-icon button"
             :disabled="false"
             :max-count="1"
-            :value="storeData1.avatar"
-            :max-size="10"
-            preview-image
-            needButton
-            extention-types="jpg,jpeg,png"></veui-uploader>
+            v-model="storeData1.avatar"
+            max-size="10mb"
+            accept=".jpg,.jpeg,.png"></veui-uploader>
           <!-- <p class="output">{{ outputData.avatar }}</p> -->
         </veui-field>
       </veui-form>
@@ -387,7 +383,7 @@ export default {
         habit,
         habitItems,
         birthday: new Date(),
-        avatar: [{ src: 'https://www.baidu.com/img/bd_logo1.png' }]
+        avatar: 'https://www.baidu.com/img/bd_logo1.png'
       },
       storeData2: {
         lastName: '',
