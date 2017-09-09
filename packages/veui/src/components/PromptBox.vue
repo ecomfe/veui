@@ -1,5 +1,5 @@
 <template>
-<veui-dialog class="veui-prompt-box"
+<veui-dialog overlay-class="veui-prompt-box"
   :ui="ui"
   :open.sync="localOpen"
   :priority="priority"
