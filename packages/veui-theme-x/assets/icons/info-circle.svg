@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
-    <title>tip</title>
+<svg width="96px" height="96px" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.1 (35376) - http://www.bohemiancoding.com/sketch -->
+    <title>solid_tips</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="组件-对话框-邓科" transform="translate(-333.000000, -1839.000000)" fill="#3998FC">
-            <g id="创建提醒弹窗" transform="translate(173.000000, 1809.000000)">
-                <g id="tip" transform="translate(160.000000, 30.000000)">
-                    <g id="Combined-Shape">
-                        <path d="M15,29 C22.7319865,29 29,22.7319865 29,15 C29,7.2680135 22.7319865,1 15,1 C7.2680135,1 1,7.2680135 1,15 C1,22.7319865 7.2680135,29 15,29 Z M15,30 C6.71572875,30 0,23.2842712 0,15 C0,6.71572875 6.71572875,0 15,0 C23.2842712,0 30,6.71572875 30,15 C30,23.2842712 23.2842712,30 15,30 Z M14,13 L14,21 L16,21 L16,13 L14,13 Z M14,9 L14,11 L16,11 L16,9 L14,9 Z" fill-rule="nonzero"></path>
-                    </g>
-                </g>
+        <g id="Desktop-HD" transform="translate(-288.000000, -96.000000)" fill="#000000">
+            <g id="solid_tips" transform="translate(288.000000, 96.000000)">
+                <path d="M48,96 C21.490332,96 0,74.509668 0,48 C0,21.490332 21.490332,0 48,0 C74.509668,0 96,21.490332 96,48 C96,74.509668 74.509668,96 48,96 Z M42,66 C42,69.3368112 44.6862915,72 48,72 C51.3368111,72 54,69.3137082 54,66 C54,62.6631888 51.3137085,60 48,60 C44.6631889,60 42,62.6862918 42,66 Z M42,29.9988449 L42,48.0011551 C42,51.3377001 44.6862915,54 48,54 C51.3368111,54 54,51.3142256 54,48.0011551 L54,29.9988449 C54,26.6622999 51.3137085,24 48,24 C44.6631889,24 42,26.6857744 42,29.9988449 Z" id="Combined-Shape" transform="translate(48.000000, 48.000000) scale(1, -1) translate(-48.000000, -48.000000) "></path>
             </g>
         </g>
     </g>

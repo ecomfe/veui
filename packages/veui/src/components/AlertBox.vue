@@ -29,9 +29,9 @@ import { pick, find, includes } from 'lodash'
 import Dialog from './Dialog'
 import Button from './Button'
 import Icon from './Icon'
-import '../icons/check-circle'
-import '../icons/info-circle'
-import '../icons/cross-circle'
+import '../icons/check-circle-o'
+import '../icons/info-circle-o'
+import '../icons/cross-circle-o'
 import config from '../managers/config'
 
 config.defaults({
@@ -64,9 +64,9 @@ export default {
     },
     typeIconName () {
       return {
-        success: 'check-circle',
-        info: 'info-circle',
-        error: 'cross-circle'
+        success: 'check-circle-o',
+        info: 'info-circle-o',
+        error: 'cross-circle-o'
       }[this.type]
     }
   },
