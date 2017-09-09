@@ -13,7 +13,7 @@
     <span class="veui-dropdown-label">
       <slot name="label" :label="label">{{ label }}</slot>
     </span>
-    <icon class="veui-dropdown-icon" :name="`${realIcon}-${expanded ? 'up' : 'down'}`"></icon>
+    <icon class="veui-dropdown-icon" :name="`angle-${expanded ? 'up' : 'down'}`"></icon>
   </veui-button>
   <veui-overlay
     v-if="expanded"
@@ -39,14 +39,11 @@
 
 <script>
 import Icon from './Icon'
-import '../icons/triangle-up'
-import '../icons/triangle-down'
 import '../icons/angle-up'
 import '../icons/angle-down'
 import Button from './Button'
 import Overlay from './Overlay'
 import { ui, dropdown } from '../mixins'
-import { includes } from 'lodash'
 
 export default {
   name: 'veui-dropdown',
@@ -78,17 +75,6 @@ export default {
           }
         ]
       }
-    }
-  },
-  computed: {
-    realIcon () {
-      if (this.icon) {
-        return this.icon
-      }
-      if (includes(this.uiProps, 'link')) {
-        return 'triangle'
-      }
-      return 'angle'
     }
   },
   methods: {

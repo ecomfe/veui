@@ -14,7 +14,7 @@
   th,
   td {
     .veui-make-table-row-height();
-    .padding(_, 10px);
+    .padding(_, 16px);
     text-align: left;
     white-space: nowrap;
   }
@@ -24,7 +24,7 @@
   }
 
   td {
-    border: 1px solid @veui-gray-color-6;
+    border: 1px solid @veui-gray-color-7;
     border-style: solid none;
   }
 
@@ -33,7 +33,14 @@
   }
 
   td&-no-data {
+    height: 300px;
     text-align: center;
+  }
+
+  .veui-table-selected-row {
+    td {
+      background-color: @veui-gray-color-9;
+    }
   }
 
   tr:hover {
@@ -73,5 +80,18 @@
   & &-column-right {
     text-align: right;
     padding-right: 38px;
+  }
+
+  &[ui~="slim"] {
+    th,
+    td {
+      .veui-make-table-row-height(@veui-font-size-normal, 8px);
+    }
+  }
+
+  &[ui~="alt"] thead {
+    th {
+      background-color: @veui-gray-color-8;
+    }
   }
 }

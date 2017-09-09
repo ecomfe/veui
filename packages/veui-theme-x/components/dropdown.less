@@ -1,0 +1,56 @@
+@import "../lib.less";
+@import (reference) "../dropdown.less";
+
+.veui-dropdown {
+  &:extend(._veui-dropdown-button all);
+  display: inline-block;
+  min-width: 110px;
+
+  &-options {
+    &:extend(._veui-dropdown-overlay all);
+    min-width: 110px;
+    max-height: 280px;
+    overflow-y: auto;
+    background-color: #fff;
+  }
+
+  &-option {
+    &:extend(._veui-dropdown-option all);
+  }
+
+  &[ui~="link"] {
+    min-width: auto;
+
+    & .veui-dropdown-label {
+      width: auto;
+      max-width: none;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    .veui-button {
+      .size(auto);
+      line-height: @veui-line-height-normal;
+
+      &:not(:disabled) {
+        color: @veui-brand-color;
+
+        &:hover,
+        &.focus-ring {
+          color: @veui-brand-color-2;
+        }
+
+        &:active {
+          color: @veui-brand-color-1;
+        }
+
+      }
+
+      & > .veui-icon {
+        float: none;
+        margin-top: 0;
+        vertical-align: middle;
+      }
+    }
+  }
+}

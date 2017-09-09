@@ -15,7 +15,7 @@
     </section>
     <section>
       <h2>Slot 样式：</h2>
-      <veui-select v-bind="attrs" v-model="defaultValue3">
+      <veui-select v-bind="attrs" v-model="defaultValue3" ui="alt">
         <template slot="option" scope="props">
           <span>{{ props.label }}</span>
         </template>

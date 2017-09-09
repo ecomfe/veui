@@ -2,7 +2,7 @@
 @import "./variables.less";
 
 .veui-button-transition() {
-  transition-property: border-color, background-color, color, box-shadow;
+  transition-property: border-color, background-color, color;
   transition-duration: 0.2s;
 }
 
@@ -18,6 +18,10 @@
   color: @veui-alert-color-primary;
 }
 
-.veui-make-table-row-height(@font-size: @veui-font-size-normal, @lines: 1) {
-  height: 13px * 2 + @font-size * @lines * 2;
+.veui-make-table-row-height(@font-size: @veui-font-size-normal, @half-lead: 13px, @lines: 1) {
+  height: @half-lead * 2 + @font-size * @lines * 2;
+}
+
+.veui-overlay-shadow() {
+  box-shadow: 0 1px 4px fadeout(#000, 80%);
 }

@@ -13,7 +13,7 @@
     <span class="veui-select-label">
       <slot name="label" :label="label">{{ label }}</slot>
     </span>
-    <icon class="veui-select-icon" :name="`triangle-${expanded ? 'up' : 'down'}`"></icon>
+    <icon class="veui-select-icon" :name="`angle-${expanded ? 'up' : 'down'}`"></icon>
   </veui-button>
   <veui-overlay
     v-if="expanded"

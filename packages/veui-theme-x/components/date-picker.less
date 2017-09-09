@@ -1,0 +1,104 @@
+@import "../lib.less";
+@import (reference) "../dropdown.less";
+@import (reference) "../input.less";
+
+.veui-date-picker {
+  &:extend(._veui-dropdown-button all);
+
+  .veui-field-invalid & .veui-button.veui-date-picker-button {
+    &:extend(._veui-input-invalid all);
+  }
+
+  position: relative;
+  display: inline-block;
+  width: 160px;
+
+  &-overlay {
+    &:extend(._veui-dropdown-overlay all);
+  }
+
+  &-empty {
+    .veui-button {
+      color: @veui-text-color-weak;
+
+      &.veui-disabled {
+        color: @veui-text-color-aux;
+      }
+    }
+  }
+
+  &-clear {
+    display: none;
+    .absolute(10px, 12px, _, _);
+    .size(16px);
+    background: #fff;
+    outline: none;
+    border: none;
+    padding: 0;
+    color: @veui-text-color-weak;
+    cursor: pointer;
+
+    &:hover {
+      color: @veui-text-color-normal;
+    }
+  }
+
+  &-clear:hover,
+  .veui-button:hover + &-clear {
+    display: block;
+  }
+
+  &-range {
+    width: 300px;
+
+    .veui-date-picker-label {
+      width: (300px - 12px * 4 - 16px * 2) / 2;
+    }
+  }
+
+  &-tilde {
+    display: inline-block;
+    overflow: hidden;
+    width: 16px;
+    margin: 0 12px;
+  }
+
+  &-shortcuts {
+    height: 41px;
+    padding: 8px 10px;
+    border-top: 1px solid @veui-gray-color-6;
+  }
+
+  &-shortcut {
+    .veui-button-transition();
+    .centered-line(24px);
+    margin-right: 10px;
+    padding: 0 10px;
+    border: none;
+    background: none;
+    font-size: @veui-font-size-small;
+    color: @veui-text-color-normal;
+    outline: none;
+
+    &:hover {
+      background-color: @veui-gray-color-6;
+    }
+
+    &.focus-ring {
+      color: @veui-brand-color;
+    }
+
+    &:active {
+      background-color: @veui-gray-color-5;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &-selected {
+      background-color: @veui-gray-color-7;
+      color: @veui-text-color-strong;
+    }
+  }
+}

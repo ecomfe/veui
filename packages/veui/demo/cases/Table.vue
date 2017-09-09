@@ -40,7 +40,7 @@
       <p>已选ID：{{ JSON.stringify(selected1) }}</p>
     </section>
     <section class="container">
-      <veui-table ui="embed" :data="data" :column-filter="columns" keys="id"
+      <veui-table ui="slim" :data="data" :column-filter="columns" keys="id"
         selectable select-mode="single" :selected.sync="selected2">
         <veui-table-column field="id" title="数据 ID"></veui-table-column>
         <veui-table-column field="desc" title="数据描述"></veui-table-column>

@@ -1,0 +1,92 @@
+@import "./lib.less";
+
+._veui-dropdown-overlay {
+  border: 1px solid @veui-gray-color-6;
+  margin: 3px 0;
+  .veui-overlay-shadow();
+}
+
+._veui-dropdown-button {
+  &-button {
+    width: 100%;
+    .padding(_, 12px);
+    text-align: left;
+  }
+
+  &-label {
+    display: inline-block;
+    max-width: ~"calc(100% - 28px)";
+    width: 100%;
+    .ellipsis();
+  }
+
+  &-icon {
+    float: right;
+  }
+
+  &-button[ui~="primary"]:not(.veui-button-loading):disabled {
+    background-color: @veui-gray-color-7;
+    border-color: transparent;
+    color: @veui-text-color-weak;
+  }
+
+  &-expanded &-button:not([ui~="link"]) {
+    &,
+    &:hover,
+    &.focus-ring {
+      color: @veui-text-color-strong;
+      background-color: @veui-gray-color-8;
+    }
+  }
+
+  &-expanded &-button[ui~="primary"]:not([ui~="link"]) {
+    &,
+    &:hover,
+    &.focus-ring {
+      background-color: @veui-brand-color-2;
+      color: #fff;
+    }
+
+    &:active {
+      background-color: @veui-brand-color-1;
+    }
+  }
+
+  &-expanded &-button[ui~="alt"] {
+    &,
+    &:hover,
+    &.focus-ring {
+      background-color: @veui-gray-color-6;
+    }
+  }
+}
+
+._veui-dropdown-option {
+  .veui-button-transition();
+  .centered-line(36px);
+  padding: 0 10px;
+  color: @veui-text-color-normal;
+  cursor: pointer;
+
+  &:hover {
+    background-color: @veui-gray-color-8;
+  }
+
+  &:active {
+    background-color: @veui-gray-color-6;
+  }
+
+  &-selected {
+    color: @veui-text-color-strong;
+  }
+
+  &-disabled {
+    background-color: #fff;
+    color: @veui-text-color-weak;
+    cursor: not-allowed;
+  }
+
+  &-label {
+    margin-right: 10px;
+  }
+}
