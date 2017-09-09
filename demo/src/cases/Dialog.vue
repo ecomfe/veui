@@ -3,33 +3,62 @@
     <h1><code>&lt;veui-dialog&gt;</code></h1>
     <p>
       <veui-dialog :modal="true"
-        overlay-class="test"
+        overlay-class="test demo-dialog-standard-dialog"
         :open="modalDialogVisible"
-        @update:open="(value) => modalDialogVisible = value"></veui-dialog>
+        title="Dialog Title"
+        @update:open="(value) => modalDialogVisible = value">
+        <p>content area</p>
+        <template slot="foot">
+          <veui-button ui="primary" @click="modalDialogVisible = false">OK</veui-button>
+          <veui-button @click="modalDialogVisible = false">CANCEL</veui-button>
+        </template>
+      </veui-dialog>
       <veui-button ui="primary"
-        @click="modalDialogVisible = !modalDialogVisible">open a model dialog box</veui-button>
+        @click="modalDialogVisible = !modalDialogVisible">Open a model dialog box</veui-button>
 
       <veui-dialog :modal="false"
         :open="nonModalDialogVisible"
-        @update:open="(value) => nonModalDialogVisible = value"></veui-dialog>
+        title="Dialog Title"
+        @update:open="(value) => nonModalDialogVisible = value">
+        The content of the Dialog. You can use the default slot to override it.
+        <template slot="foot">
+          <veui-button ui="primary" @click="nonModalDialogVisible = false">OK</veui-button>
+          <veui-button @click="nonModalDialogVisible = false">CANCEL</veui-button>
+        </template>
+      </veui-dialog>
       <veui-button ui="primary"
-        @click="nonModalDialogVisible = !nonModalDialogVisible">open a modeless dialog box</veui-button>
+        @click="nonModalDialogVisible = !nonModalDialogVisible">Open a modeless dialog box</veui-button>
     </p>
     <p>
       <veui-dialog :draggable="true"
         :modal="false"
         :open.sync="draggableDialog1Visible"
         ui="center"
-        title="第一个可拖拽的"></veui-dialog>
-      <veui-button ui="primary" @click="draggableDialog1Visible = !draggableDialog1Visible">open the first draggable dialog box</veui-button>
+        title="First">
+        You can drag the dialog box in the viewport.
+        <template slot="foot">
+          <veui-button ui="primary" @click="draggableDialog1Visible = false">OK</veui-button>
+          <veui-button @click="draggableDialog1Visible = false">CANCEL</veui-button>
+        </template>
+      </veui-dialog>
+      <veui-button ui="primary" @click="draggableDialog1Visible = !draggableDialog1Visible">Open the first draggable dialog box</veui-button>
 
       <veui-dialog :draggable="true"
         :modal="false"
         :open="draggableDialog2Visible"
-        title="第二个可拖拽的"
+        title="Second"
         @update:open="(value) => draggableDialog2Visible = value"
-        ui="reverse top"></veui-dialog>
-      <veui-button ui="primary" @click="draggableDialog2Visible = !draggableDialog2Visible">open the second draggable dialog box</veui-button>
+        ui="reverse top">
+        <p>Drag the current dialog box to the right and open the first draggable dialog.</p>
+        <p>Keep the two dialog have some parts overlapped.</p>
+        <p>You'll see the first draggable dialog is higher than the second one.</p>
+        <p>You can bring the second dialog to the top layer by clicking the second dialog.</p>
+        <template slot="foot">
+          <veui-button ui="primary" @click="draggableDialog2Visible = false">OK</veui-button>
+          <veui-button @click="draggableDialog2Visible = false">CANCEL</veui-button>
+        </template>
+      </veui-dialog>
+      <veui-button ui="primary" @click="draggableDialog2Visible = !draggableDialog2Visible">Open the second draggable dialog box</veui-button>
 
       <veui-dialog :draggable="true"
         :modal="false"
@@ -221,6 +250,21 @@ export default {
 
   .veui-button {
     margin-right: 10px;
+  }
+
+  &-standard-dialog .veui-dialog-content {
+    width: 540px;
+
+    &-body {
+      border: 1px dashed #999;
+      height: 280px;
+
+      p {
+        color: #999;
+        text-align: center;
+        margin-top: 120px;
+      }
+    }
   }
 }
 </style>
