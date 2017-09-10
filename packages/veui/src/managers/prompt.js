@@ -21,7 +21,8 @@ export class PromptManager extends SpecialDialog {
               title: data.title,
               ui: data.type,
               content: data.content,
-              value: data.value
+              value: data.value,
+              overlayClass: data.overlayClass
             },
             on: {
               ok: () => data.ok(data.value),

@@ -3,7 +3,7 @@
   :priority="priority"
   :closable="false"
   ui="reverse"
-  overlay-class="veui-confirm-box">
+  :overlay-class="realOverlayClass">
   <template slot="title">
     <slot name="title">{{ title }}</slot>
   </template>
@@ -20,6 +20,7 @@ import { pick } from 'lodash'
 import Dialog from './Dialog'
 import Button from './Button'
 import config from '../managers/config'
+import { normalizeCSSClass } from '../utils/helper'
 
 config.defaults({
   'confirmbox.priority': 100
@@ -32,7 +33,7 @@ export default {
     'veui-button': Button
   },
   props: {
-    ...pick(Dialog.props, ['open', 'title']),
+    ...pick(Dialog.props, ['open', 'title', 'overlayClass']),
     ui: {
       type: String,
       default: 'reverse'
@@ -43,6 +44,14 @@ export default {
       localOpen: this.open,
       localTitle: this.title,
       priority: config.get('confirmbox.priority')
+    }
+  },
+  computed: {
+    realOverlayClass () {
+      return {
+        ...normalizeCSSClass(this.overlayClass),
+        'veui-confirm-box': true
+      }
     }
   },
   watch: {

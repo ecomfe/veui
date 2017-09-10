@@ -123,7 +123,7 @@
     </p>
 
     <p>
-      <veui-button @click="popupAlert('info', 'you\'ve got a new message', 'Message')">Information Box</veui-button>
+      <veui-button @click="popupAlert('info', 'you\'ve got a new message', 'Message')">Info Box</veui-button>
       <veui-button @click="popupAlert('error', 'you\'ve got an error', 'Error')">Error Box</veui-button>
       <veui-button @click="popupAlert('success', 'Congratulations! Everything is ok!', 'Success')">Success Box</veui-button>
       <veui-button ui="primary" @click="popupAlerts">Open a stack of AlertBox</veui-button>
@@ -205,7 +205,7 @@ export default {
           })
         }
       })
-      alertManager.info('The task has been completed thirty percent.', 'Information')
+      alertManager.info('The task has been completed thirty percent.', 'Info')
       alertManager.error('Something went wrong!', 'Error')
       alertManager.warn('The name is invalid.', 'Warn')
     },

@@ -1,5 +1,5 @@
 <template>
-<veui-dialog overlay-class="veui-prompt-box"
+<veui-dialog :overlay-class="realOverlayClass"
   :ui="ui"
   :open.sync="localOpen"
   :priority="priority"
@@ -18,6 +18,7 @@ import Input from './Input'
 import Dialog from './Dialog'
 import { pick, extend } from 'lodash'
 import config from '../managers/config'
+import { normalizeCSSClass } from '../utils/helper'
 
 config.defaults({
   'promptbox.priority': 100
@@ -30,7 +31,7 @@ export default {
     'veui-dialog': Dialog
   },
   props: extend(
-    pick(Dialog.props, ['open', 'title', 'ui']),
+    pick(Dialog.props, ['open', 'title', 'ui', 'overlayClass']),
     {
       content: {
         type: String,
@@ -47,6 +48,14 @@ export default {
       localOpen: this.open,
       priority: config.get('promptbox.priority'),
       localValue: this.value
+    }
+  },
+  computed: {
+    realOverlayClass () {
+      return {
+        ...normalizeCSSClass(this.overlayClass),
+        'veui-prompt-box': true
+      }
     }
   },
   watch: {

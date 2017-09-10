@@ -39,13 +39,14 @@
 </template>
 
 <script>
-import { isObject, isString, extend } from 'lodash'
+import { isObject, isString } from 'lodash'
 import Overlay from './Overlay'
 import Button from './Button'
 import { ui } from '../mixins'
 import { drag } from '../directives'
 import Icon from './Icon'
 import '../icons/cross'
+import { normalizeCSSClass } from '../utils/helper'
 
 export default {
   name: 'veui-dialog',
@@ -114,19 +115,11 @@ export default {
   },
   computed: {
     mergedOverlayClass () {
-      const klass = {}
-      if (isString(this.overlayClass)) {
-        this.overlayClass.split(/\s+/).forEach(cls => {
-          klass[cls] = true
-        })
-      } else {
-        extend(klass, this.overlayClass)
+      return {
+        ...normalizeCSSClass(this.overlayClass),
+        'veui-dialog-box': true,
+        'veui-dialog-box-mask': this.modal
       }
-
-      klass['veui-dialog-box'] = true
-      klass['veui-dialog-box-mask'] = this.modal
-
-      return klass
     }
   },
   methods: {
