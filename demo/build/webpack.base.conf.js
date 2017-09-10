@@ -22,9 +22,10 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      // '@': resolve('node_modules/veui')
-      '@': 'veui'
-    }
+      '@': 'veui/src',
+      'veui': 'veui/src'
+    },
+    symlinks: false
   },
   module: {
     rules: [

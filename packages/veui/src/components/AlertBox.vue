@@ -1,5 +1,5 @@
 <template>
-<veui-dialog overlay-class="veui-alert-box"
+<veui-dialog :overlay-class="realOverlayClass"
   :open.sync="localOpen"
   :ui="localUi"
   :closable="false"
@@ -33,6 +33,7 @@ import '../icons/check-circle-o'
 import '../icons/info-circle-o'
 import '../icons/cross-circle-o'
 import config from '../managers/config'
+import { normalizeCSSClass } from '../utils/helper'
 
 config.defaults({
   'alertbox.priority': 100
@@ -40,7 +41,7 @@ config.defaults({
 
 export default {
   name: 'veui-alert-box',
-  props: pick(Dialog.props, ['open', 'title', 'ui']),
+  props: pick(Dialog.props, ['open', 'title', 'ui', 'overlayClass']),
   components: {
     'veui-dialog': Dialog,
     'veui-button': Button,
@@ -68,6 +69,12 @@ export default {
         info: 'info-circle-o',
         error: 'cross-circle-o'
       }[this.type]
+    },
+    realOverlayClass () {
+      return {
+        ...normalizeCSSClass(this.overlayClass),
+        'veui-alert-box': true
+      }
     }
   },
   watch: {
