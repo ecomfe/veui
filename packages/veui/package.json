@@ -16,13 +16,14 @@
   "dependencies": {
     "lodash": "^4.17.4",
     "tether": "^1.4.0",
-    "vue-awesome": "^2.3.1",
-    "veui-theme-x": "^0.2.4"
+    "vue-awesome": "^2.3.1"
   },
   "peerDependencies": {
     "vue": "^2.2.2"
   },
   "devDependencies": {
+    "veui-theme-x": "^0.2.4",
+    "veui-theme-dux": "^0.2.4",
     "autoprefixer": "^6.7.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",
