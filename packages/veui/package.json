@@ -4,6 +4,8 @@
   "description": "Baidu Enterprise UI for Vue.js.",
   "author": "ecomfe",
   "scripts": {
+    "dev": "node build/dev-server.js",
+    "build": "node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
@@ -20,6 +22,8 @@
     "vue": "^2.2.2"
   },
   "devDependencies": {
+    "veui-theme-x": "^0.2.4",
+    "veui-theme-dux": "^0.2.4",
     "autoprefixer": "^6.7.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",

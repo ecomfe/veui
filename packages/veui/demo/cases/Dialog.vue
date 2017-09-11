@@ -145,7 +145,6 @@ import alertManager from 'veui/managers/alert'
 import confirmManager from 'veui/managers/confirm'
 import promptManager from 'veui/managers/prompt'
 import toastManager from 'veui/managers/toast'
-
 export default {
   name: 'dialog-demo',
   components: {
@@ -157,20 +156,14 @@ export default {
     return {
       modalDialogVisible: false,
       nonModalDialogVisible: false,
-
       draggableDialog1Visible: false,
       draggableDialog2Visible: false,
       draggableDialog3Visible: false,
-
       operationDialogVisible: false,
-
       customTextTitleDialogVisible: false,
       customIconTitleDialogVisible: false,
-
       contentAutoHeightDialogVisible: false,
-
       dynamicContent: '',
-
       test: '123'
     }
   },
@@ -246,18 +239,14 @@ export default {
   .svg {
     width: 20px;
   }
-
   .veui-button {
     margin-right: 10px;
   }
-
   &-standard-dialog .veui-dialog-content {
     width: 540px;
-
     &-body {
       border: 1px dashed #999;
       height: 280px;
-
       p {
         color: #999;
         text-align: center;
