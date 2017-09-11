@@ -11,7 +11,7 @@
 
   position: relative;
   display: inline-block;
-  width: 160px;
+  width: 210px;
 
   &-overlay {
     &:extend(._veui-dropdown-overlay all);
@@ -29,7 +29,7 @@
 
   &-clear {
     display: none;
-    .absolute(10px, 12px, _, _);
+    .absolute(10px, 10px, _, _);
     .size(16px);
     background: #fff;
     outline: none;
@@ -41,32 +41,31 @@
     &:hover {
       color: @veui-text-color-normal;
     }
-  }
 
-  &-clear:hover,
-  .veui-button:hover + &-clear {
-    display: block;
-  }
-
-  &-range {
-    width: 300px;
-
-    .veui-date-picker-label {
-      width: (300px - 12px * 4 - 16px * 2) / 2;
+    .veui-icon {
+      display: block;
     }
+  }
+
+  &-range &-label {
+    width: auto;
   }
 
   &-tilde {
     display: inline-block;
     overflow: hidden;
-    width: 16px;
-    margin: 0 12px;
+    margin: 0 3px;
   }
 
   &-shortcuts {
     height: 41px;
     padding: 8px 10px;
-    border-top: 1px solid @veui-gray-color-6;
+    border-bottom: 1px solid @veui-gray-color-6;
+
+    .veui-calendar-panel + & {
+      border-top: 1px solid @veui-gray-color-6;
+      border-bottom: none;
+    }
   }
 
   &-shortcut {
@@ -99,6 +98,25 @@
     &-selected {
       background-color: @veui-gray-color-7;
       color: @veui-text-color-strong;
+    }
+  }
+
+  &:hover &-clear {
+    display: block;
+  }
+
+  &:hover {
+    .veui-date-picker-clear,
+    .veui-button:not(.veui-disabled) {
+      background-color: @veui-gray-color-8;
+      color: @veui-text-color-strong;
+    }
+  }
+
+  &[ui~="alt"]:hover {
+    .veui-date-picker-clear,
+    .veui-button:not(.veui-disabled) {
+      background-color: @veui-gray-color-6;
     }
   }
 }

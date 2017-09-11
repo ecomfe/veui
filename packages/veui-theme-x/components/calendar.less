@@ -2,23 +2,13 @@
 
 .veui-calendar {
   display: inline-block;
-  position: relative;
   overflow: hidden;
   border: 1px solid @veui-gray-color-6;
   background-color: #fff;
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 36px;
-    left: 0;
-    right: 0;
-    height: 0;
-    border-bottom: 1px solid @veui-gray-color-6;
-  }
-
   &-panel {
     display: inline-block;
+    position: relative;
 
     & + & {
       .veui-calendar-head {
@@ -28,6 +18,16 @@
       .veui-calendar-body {
         border-left: 1px solid #fff;
       }
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 36px;
+      left: 0;
+      right: 0;
+      height: 0;
+      border-bottom: 1px solid @veui-gray-color-6;
     }
   }
 

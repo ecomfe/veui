@@ -1,5 +1,6 @@
 <template>
 <div class="veui-calendar" @mouseleave="markEnd()">
+  <slot name="before"></slot>
   <div v-for="(p, pIndex) in panels" :key="pIndex" class="veui-calendar-panel" :class="{ [`veui-calendar-${p.view}`]: true }">
     <div class="veui-calendar-head">
       <button type="button" v-if="pIndex === 0 || p.view !== 'days'" class="veui-calendar-prev" @click="step(false, p.view)" :disabled="disabled || readonly"><veui-icon name="angle-left"></veui-icon></button>
@@ -51,7 +52,7 @@
       </table>
     </div>
   </div>
-  <slot></slot>
+  <slot name="after"></slot>
 </div>
 </template>
 

@@ -9,13 +9,13 @@
 ._veui-dropdown-button {
   &-button {
     width: 100%;
-    .padding(_, 12px);
+    .padding(_, 10px);
     text-align: left;
   }
 
   &-label {
     display: inline-block;
-    max-width: ~"calc(100% - 28px)";
+    max-width: ~"calc(100% - 24px)";
     width: 100%;
     .ellipsis();
   }
@@ -63,7 +63,9 @@
 
 ._veui-dropdown-option {
   .veui-button-transition();
-  .centered-line(36px);
+  .centered-line(@veui-height-normal);
+  .ellipsis();
+  width: 100%;
   padding: 0 10px;
   color: @veui-text-color-normal;
   cursor: pointer;
