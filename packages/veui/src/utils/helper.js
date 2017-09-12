@@ -85,3 +85,7 @@ export function normalizeCSSClass (klasses) {
   }
   return klassObj
 }
+
+export function getConfigKey (name) {
+  return name.replace(/^veui|-*/g, '')
+}

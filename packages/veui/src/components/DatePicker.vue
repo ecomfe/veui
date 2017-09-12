@@ -23,15 +23,15 @@
         <slot v-else name="placeholder">{{ placeholder }}</slot>
       </span>
     </template>
-    <veui-icon class="veui-date-picker-icon" name="calendar"></veui-icon>
+    <veui-icon class="veui-date-picker-icon" :name="icons.calendar"></veui-icon>
   </veui-button>
   <button v-if="clearable" v-show="!!selected" class="veui-date-picker-clear" @click="clear">
-    <veui-icon name="cross"></veui-icon>
+    <veui-icon :name="icons.clear"></veui-icon>
   </button>
   <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay">
     <veui-calendar class="veui-date-picker-overlay" v-model="localSelected" v-bind="calendarProps" ref="cal"
       v-outside:button="close" @select="handleSelect" @selectstart="handleProgress" @selectprogress="handleProgress" :panel="realPanel">
-      <template v-if="range && realShortcuts && realShortcuts.length">
+      <template :slot="shortcutsPosition" v-if="range && realShortcuts && realShortcuts.length">
         <div class="veui-date-picker-shortcuts">
           <button v-for="({from, to, label}, index) in realShortcuts" type="button" :key="index"
             :class="{
@@ -52,15 +52,14 @@ import Button from './Button'
 import Overlay from './Overlay'
 import Calendar from './Calendar'
 import Icon from './Icon'
-import '../icons/calendar'
-import '../icons/cross'
 import moment from 'moment'
-import { dropdown, input } from '../mixins'
+import { dropdown, input, icons } from '../mixins'
 import config from '../managers/config'
 import { isNumber, pick, omit } from 'lodash'
 
 config.defaults({
-  'datepicker.shortcuts': []
+  'datepicker.shortcuts': [],
+  'datepicker.shortcutsPosition': 'before'
 })
 
 let calendarProps = ['range', 'weekStart', 'fillMonth', 'disabledDate', 'dateClass']
@@ -73,7 +72,7 @@ export default {
     'veui-calendar': Calendar,
     'veui-icon': Icon
   },
-  mixins: [dropdown, input],
+  mixins: [dropdown, input, icons],
   model: {
     prop: 'selected',
     event: 'select'
@@ -101,6 +100,10 @@ export default {
       default () {
         return config.get('datepicker.shortcuts')
       }
+    },
+    shortcutsPosition: {
+      type: String,
+      default: config.get('datepicker.shortcutsPosition')
     },
     ...pick(Calendar.props, calendarProps)
   },

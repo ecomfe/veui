@@ -5,7 +5,7 @@
       class="veui-button veui-uploader-input-label"
       :class="{'veui-uploader-input-label-disabled': realDisabled}"
       ref="label">
-      <icon class="veui-uploader-input-label-icon" name="upload"></icon><slot name="text">选择文件</slot>
+      <icon class="veui-uploader-input-label-icon" :name="icons.upload"></icon><slot name="text">选择文件</slot>
       <input hidden="hidden" type="file" ref="input" @change="onChange" :name="realName" :disabled="realDisabled" :accept="accept" multiple>
     </label>
     <slot name="button"></slot>
@@ -44,7 +44,7 @@
               :class="classType + '-success'"
               @click="updateFileList(file, {status: null})">
               <span class="veui-uploader-success"><slot name="successText">上传成功！</slot></span>
-              <icon name="check-circle"></icon>
+              <icon :name="icons.success"></icon>
             </div>
           </transition>
         </slot>
@@ -57,7 +57,7 @@
             <slot name="uploadingText">上传中...</slot>
           </veui-uploader-progress>
           <veui-button v-if="uploaderType === 'file'" ui="link delete"
-            @click="cancelFile(file)"><icon name="cross"></icon></veui-button>
+            @click="cancelFile(file)"><icon :name="icons.clear"></icon></veui-button>
           <veui-button v-else-if="uploaderType === 'image'" ui="operation"
             @click="cancelFile(file)">取消</veui-button>
         </slot>
@@ -91,12 +91,9 @@
 
 <script>
 import Icon from './Icon'
-import '../icons/upload'
-import '../icons/cross'
-import '../icons/check-circle'
 import Button from './Button'
 import { endsWith, cloneDeep, filter, map, uniqueId, assign } from 'lodash'
-import { ui, input } from '../mixins'
+import { ui, input, icons } from '../mixins'
 import config from '../managers/config'
 
 config.defaults({
@@ -112,7 +109,7 @@ export default {
     'veui-button': Button,
     'veui-uploader-progress': getProgress()
   },
-  mixins: [ui, input],
+  mixins: [ui, input, icons],
   model: {
     event: 'change'
   },

@@ -18,8 +18,7 @@ export default {
           },
           {
             to: 'window',
-            attachment: 'together',
-            pin: true
+            attachment: 'together'
           }
         ]
       }

@@ -3,7 +3,8 @@
 *此版本包含多个 breaking change，升级前请仔细阅读下列说明。*
 
 * [+] **增加了统一 UI 样式包，暂定名 `veui-theme-x`**。
-* [^] 规范化所有公用组件文件名、组件 `name`（影响 `Vue.use` 方式引入）、组件 DOM 容器 `class` 的命名规则，所有非首位的大写字母在转换为小写后增加 `-` 进行分隔。修改清单见 [#122](https://github.com/ecomfe/veui/issues/122)。**[Breaking change]**
+* [^] 将所有图标移入样式包分别管理。
+* [^] 规范化所有公用组件文件名、组件 `name`、组件 DOM 容器 `class` 的命名规则，所有非首位的大写字母在转换为小写后增加 `-` 进行分隔。修改清单见 [#122](https://github.com/ecomfe/veui/issues/122)。**[Breaking change]**
 * [-] 移除了 `BreadCrumb` 组件的 prop `routers`。**[Breaking change]**
 * [^] `Pager` 组件 `to` 默认值修改为 `''`（空字符串），以进入 `Link` 的无跳转逻辑。**[Breaking change]**
 * [-] 移除了 `Pager` 组件的 prop `pageTotal`。**[Breaking change]**
@@ -19,6 +20,7 @@
 * [+] 增加 `ButtonGroup` 组件。
 * [+] 增加 `RadioButtonGroup` 组件。
 * [+] 增加 `CheckButtonGroup` 组件。
+* [+] 增加 `Sorter` 组件。
 * [+] 增加 `Progress` 组件（限 `theme-x`）。
 
 ### 0.2.4

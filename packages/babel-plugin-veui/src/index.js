@@ -1,13 +1,11 @@
 import fs from 'fs'
 import { default as path, join } from 'path'
 import pkgDir from 'pkg-dir'
-import { kebabCase, camelCase, pascalCase, getJSON, warn } from './utils'
+import { kebabCase, camelCase, pascalCase, getJSON, normalize } from './utils'
 
 const COMPONENTS = getJSON(path.resolve(__dirname, '../components.json'))
 const COMPONENTS_DIRNAME = 'components'
-const COMPONENTS_PATH = `veui/${COMPONENTS_DIRNAME}`
-const ICONS_DIRNAME = 'icons'
-const ICONS_PATH = `veui/${ICONS_DIRNAME}`
+const COMPONENTS_PATH = normalize(`veui/${COMPONENTS_DIRNAME}`)
 
 let resolveCache = {}
 
@@ -19,73 +17,68 @@ export default function (babel) {
     visitor: {
       ImportDeclaration (path, { opts, file }) {
         let node = path.node
-        let src = node.source.value
+        let src = normalize(node.source.value)
 
         let resolvedComponentName = null
-        let resolvedIcon = null
-
-        if (src.indexOf(`${COMPONENTS_PATH}/`) === 0) {
+        let normalizedPath = normalize(`${COMPONENTS_PATH}/`)
+        if (src.indexOf(normalizedPath) === 0) {
           // import Button from 'veui/components/Button'
-          let componentPath = src.slice(COMPONENTS_PATH.length + 1)
+          let componentPath = src.slice(normalizedPath.length)
           resolvedComponentName = getComponentName(componentPath)
-        } else if (src === ICONS_PATH || src.indexOf(`${ICONS_PATH}/`) === 0) {
-          // import 'veui/icons' → import 'veui-theme-x/icons'
-          // import 'veui/icons/loading' →  import 'veui-theme-x/icons/loading'
-          resolvedIcon = src === ICONS_PATH ? 'index' : src.replace(`${ICONS_PATH}/`, '')
         } else if (src !== 'veui') {
-          // cannot resolve when absolute path or current file path isn't available
           if (src.charAt(0) !== '.' || file.opts.filename === 'unknown') {
+            // cannot resolve when absolute path or current file path isn't available
             return
-          }
-
-          // relative path like './Select/Select' or '../icons/loading'
-          else {
-            resolvedIcon = resolveIcon(file.opts.filename, src)
+          } else {
+            // relative path like './Select/Select'
             resolvedComponentName = resolveComponent(file.opts.filename, src)
           }
         }
 
-        let { package: pack, path: packPath = 'components', icons = 'icons', resolve } = opts
+        let {
+          modules = [], package: pack, path: packPath = 'components',
+          transform, fileName, resolve
+        } = opts
 
-        // try to find an icon
-        if (resolvedIcon != null) {
-          let iconPath = join(pack, icons, resolvedIcon)
-          if (assurePath(iconPath, resolve)) {
-            node.source.value = iconPath
-          } else {
-            path.remove()
-            warn(`no icon found for path [${iconPath}], from module [${file.opts.filename}]`)
-          }
-
-          return
+        if (pack && fileName) {
+          modules.push({ package: pack, path: packPath, transform, fileName })
         }
 
-        // no icon found, start to resolve components
-        node.specifiers
-          .map(({ type, imported }) => {
-            let name
-            if (imported) {
-              name = imported.name === 'default'
-                ? resolvedComponentName          // import { default as Whatever } from './Select' → Select
-                                                 // import { default as Whatever } from 'veui/components/Select' → Select
-                : isComponentName(imported.name)
-                  ? imported.name                // import { Select } from 'veui' → Select
-                  : null                         // import { Whatever } from 'veui' → null
-            } else if (type === 'ImportDefaultSpecifier') {
-              name = resolvedComponentName       // import Select from './Select' → null
-                                                 // import Select from 'veui/components/Select' → null
-                                                 // import Select from 'veui' → null
-            }
-            return getPeerPath(getModuleName(name, opts.transform), opts.fileName)
-          })
-          .filter(v => v)
-          .forEach(name => {
-            let modulePath = join(pack, packPath, name);
+        modules.forEach(({
+          package: pack, path: packPath = 'components',
+          transform, fileName
+        }) => {
+          // no icon found, start to resolve components
+          node.specifiers
+            .map(({ type, imported }) => {
+              let name
+              if (imported) {
+                name = imported.name === 'default'
+                  // import { default as Whatever } from './Select' → Select
+                  // import { default as Whatever } from 'veui/components/Select' → Select
+                  ? resolvedComponentName
+                  : isComponentName(imported.name)
+                    // import { Select } from 'veui' → Select
+                    ? imported.name
+                    // import { Whatever } from 'veui' → null
+                    : null
+              } else if (type === 'ImportDefaultSpecifier') {
+                // import Select from './Select' → null
+                // import Select from 'veui/components/Select' → null
+                // import Select from 'veui' → null
+                name = resolvedComponentName
+              }
+              return getPeerPath(getModuleName(name, transform), fileName)
+            })
+            .filter(v => v)
+            .forEach(name => {
+              let modulePath = join(pack, packPath, name)
 
-            if (assurePath(modulePath, resolve)) {
-              path.insertAfter(t.importDeclaration([], t.stringLiteral(modulePath)))
-            }
-          })
+              if (assurePath(modulePath, resolve)) {
+                path.insertAfter(t.importDeclaration([], t.stringLiteral(modulePath)))
+              }
+            })
+        })
       }
     }
   }
@@ -108,12 +101,14 @@ function assurePath (modulePath, resolve) {
   return resolveCache[modulePath]
 }
 
+/* eslint-disable no-template-curly-in-string */
 function getPeerPath (name, template = '${module}.css') {
   if (!name) {
     return null
   }
   return template.replace(/\$\{module\}/g, name)
 }
+/* eslint-enable no-template-curly-in-string */
 
 function getModuleName (name, transform = 'kebab-case') {
   if (!name) {
@@ -126,19 +121,10 @@ function getModuleName (name, transform = 'kebab-case') {
       return camelCase(name)
     case 'PascalCase':
       return pascalCase(name)
+    case false:
     default:
       return name
   }
-}
-
-// 'veui/src/components/Select/Option.vue', '../icons/check' → 'check'
-// 'veui/src/components/Select/Option.vue', '../icons' → 'index'
-function resolveIcon (file, src) {
-  let icon = resolveRelative(file, src, ICONS_DIRNAME)
-  if (icon === '') {
-    icon = 'index'
-  }
-  return icon
 }
 
 // 'veui/src/components/Option.vue', '../Icon.vue' → 'Icon'
@@ -157,7 +143,7 @@ function resolveRelative (file, src, dir) {
   // veui/${dir} or veui/src/${dir}
   let dirPath = path.join(pkg, dir) // runtime
   if (!fs.existsSync(dirPath)) {
-    dirPath = path.join(pkg, `src/${dir}`) // dev
+    dirPath = path.join(pkg, 'src', dir) // dev
     if (!fs.existsSync(dirPath)) {
       return null
     }
@@ -165,7 +151,7 @@ function resolveRelative (file, src, dir) {
 
   let absPath = path.resolve(path.dirname(file), src)
 
-  if (absPath.indexOf(`${dirPath}/`) !== 0) {
+  if (absPath.indexOf(normalize(`${dirPath}/`)) !== 0) {
     return null
   }
   return path.relative(dirPath, absPath)

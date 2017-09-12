@@ -1,4 +1,6 @@
 export { default as ui } from './ui'
 export { default as input } from './input'
 export { default as dropdown } from './dropdown'
+export { default as form } from './form'
 export { default as table } from './table'
+export { default as icons } from './icons'

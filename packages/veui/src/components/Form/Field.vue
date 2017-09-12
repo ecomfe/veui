@@ -5,24 +5,26 @@
   </span>
   <slot></slot>
   <span v-if="tip" class="veui-form-tip">{{ tip }}</span>
-  <p v-if="!validity.valid && !!validity.message" class="veui-field-error" :title="validity.message"><veui-icon name="exclamation-circle"></veui-icon>{{ validity.message }}</p>
+  <p v-if="!validity.valid && !!validity.message" class="veui-field-error" :title="validity.message"><veui-icon :name="icons.alert"></veui-icon>{{ validity.message }}</p>
 </div>
 </template>
 
 <script>
 import Label from '../Label'
 import { type, rule } from '../../managers'
+import { icons } from '../../mixins'
 import { isBoolean, get, last } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
-import '../../icons/exclamation-circle'
 import Vue from 'vue'
+
 const { computed: form } = getTypedAncestorTracker('form')
 const { computed: fieldset } = getTypedAncestorTracker('fieldset')
 
 export default {
   name: 'veui-field',
   uiTypes: ['field', 'form-container'],
+  mixins: [icons],
   components: {
     'veui-icon': Icon,
     'veui-label': Label
