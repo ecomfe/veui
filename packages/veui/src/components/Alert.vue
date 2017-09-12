@@ -1,7 +1,7 @@
 <template>
 <div v-if="localOpen" class="veui-alert" :ui="ui" :class="`veui-alert-${type}`">
   <slot name="content">
-    <veui-icon class="veui-alert-icon" :name="iconName"></veui-icon>
+    <veui-icon class="veui-alert-icon" :name="icons[type]"></veui-icon>
     <slot>
       <span v-if="isMultiple" class="veui-alert-message veui-alert-message-multiple">{{ message[index] }}</span>
       <span v-else class="veui-alert-message">{{ message }}</span>
@@ -10,15 +10,15 @@
     <template v-else-if="isMultiple">
       <span class="veui-alert-close">
         <button :disabled="isFirst" @click="switchMessage(-1)">
-          <veui-icon name="angle-left"></veui-icon>
+          <veui-icon :name="icons.prev"></veui-icon>
         </button>
         <button :disabled="isLast" @click="switchMessage(1)">
-          <veui-icon name="angle-right"></veui-icon>
+          <veui-icon :name="icons.next"></veui-icon>
         </button>
       </span>
     </template>
     <button v-else class="veui-alert-close" @click="close">
-      <veui-icon name="cross"></veui-icon>
+      <veui-icon :name="icons.close"></veui-icon>
     </button>
   </slot>
 </div>
@@ -26,24 +26,12 @@
 
 <script>
 import Icon from './Icon'
-import '../icons/check-circle'
-import '../icons/exclamation-circle'
-import '../icons/info-circle'
-import '../icons/cross-circle'
-import '../icons/angle-left'
-import '../icons/angle-right'
-import '../icons/cross'
 import { isArray } from 'lodash'
-
-const TYPE_MAP = {
-  success: 'check-circle',
-  warning: 'exclamation-circle',
-  info: 'info-circle',
-  error: 'cross-circle'
-}
+import { icons } from '../mixins'
 
 export default {
   name: 'alert',
+  mixins: [icons],
   components: {
     'veui-icon': Icon
   },
@@ -72,9 +60,6 @@ export default {
     }
   },
   computed: {
-    iconName () {
-      return TYPE_MAP[this.type]
-    },
     isMultiple () {
       return isArray(this.message)
     },

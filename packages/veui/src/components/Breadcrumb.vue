@@ -1,10 +1,11 @@
 <script>
 import BreadcrumbItem from './BreadcrumbItem'
 import Icon from './Icon'
-import '../icons/angle-right'
+import { icons } from '../mixins'
 
 export default {
   name: 'veui-breadcrumb',
+  mixins: [icons],
   props: {
     routes: {
       type: Array,
@@ -40,7 +41,7 @@ export default {
             {
               index !== this.localRoutes.length - 1
                 ? <span slot="separator" class="veui-breadcrumb-separator">
-                    {this.$scopedSlots.separator ? this.$scopedSlots.separator() : <Icon name="angle-right"></Icon>}
+                    {this.$scopedSlots.separator ? this.$scopedSlots.separator() : <Icon name={this.icons.next}></Icon>}
                   </span>
                 : null
             }

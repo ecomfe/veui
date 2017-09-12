@@ -7,9 +7,17 @@
     [
       "veui",
       {
-        "package": "veui-theme-x",
-        "fileName": "${module}.less",
-        "transform": "kebab-case"
+        "modules": [
+          {
+            "package": "veui-theme-x",
+            "fileName": "${module}.less"
+          },
+          {
+            "package": "veui-theme-x",
+            "fileName": "${module}.js",
+            "transform": false
+          }
+        ]
       }
     ],
     "lodash",

@@ -52,10 +52,8 @@ import Button from './Button'
 import Overlay from './Overlay'
 import Calendar from './Calendar'
 import Icon from './Icon'
-import '../icons/calendar'
-import '../icons/cross'
 import moment from 'moment'
-import { dropdown, input } from '../mixins'
+import { dropdown, input, icons } from '../mixins'
 import config from '../managers/config'
 import { isNumber, pick, omit } from 'lodash'
 
@@ -74,7 +72,7 @@ export default {
     'veui-calendar': Calendar,
     'veui-icon': Icon
   },
-  mixins: [dropdown, input],
+  mixins: [dropdown, input, icons],
   model: {
     prop: 'selected',
     event: 'select'
@@ -112,12 +110,7 @@ export default {
   data () {
     return {
       picking: null,
-      localSelected: this.selected,
-      icons: {
-        calendar: 'calendar',
-        clear: 'cross',
-        ...config.get('datepicker.icons')
-      }
+      localSelected: this.selected
     }
   },
   computed: {

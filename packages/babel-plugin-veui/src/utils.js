@@ -3,7 +3,7 @@ import fs from 'fs'
 export function kebabCase (str) {
   return str
     .replace(/[-_ ]+|([A-Z])/g, (whole, ch) => {
-        return ch ? `-${ch.toLowerCase()}` : '-'
+      return ch ? `-${ch.toLowerCase()}` : '-'
     })
     .replace(/^-/g, '')
     .replace(/-+/g, '-')

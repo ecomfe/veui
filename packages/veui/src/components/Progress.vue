@@ -13,7 +13,7 @@
   </svg>
   <div v-if="desc" class="veui-progress-desc">
     <slot v-bind="{ percent, value, state }">
-      <veui-icon name="check" v-if="type === 'circular' && localState === 'success'"></veui-icon>
+      <veui-icon :name="icons.success" v-if="type === 'circular' && localState === 'success'"></veui-icon>
       <span class="veui-progress-desc-text">
         <template v-if="localState === 'success'">完成</template>
         <template v-else-if="localState === 'alert'">错误</template>
@@ -25,17 +25,16 @@
 </template>
 
 <script>
-import { ui } from '../mixins'
+import { ui, icons } from '../mixins'
 import { includes } from 'lodash'
 import Icon from './Icon'
-import '../icons/check'
 
 const RADIUS_NORMAL = 60
 const RADIUS_TINY = 13
 
 export default {
   name: 'veui-progress',
-  mixins: [ui],
+  mixins: [ui, icons],
   components: {
     'veui-icon': Icon
   },

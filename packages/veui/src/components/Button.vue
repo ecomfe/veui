@@ -6,7 +6,7 @@
   <template v-if="!loading"><slot></slot></template>
   <template v-else>
     <slot name="loading">
-      <icon name="loading" spin></icon>
+      <veui-icon :name="icons.loading" spin></veui-icon>
       <span class="veui-button-loading-text">加载中…</span>
     </slot>
   </template>
@@ -16,12 +16,13 @@
 <script>
 import { omit } from 'lodash'
 import Icon from './Icon'
-import '../icons/loading'
+import { icons } from '../mixins'
 
 export default {
   name: 'veui-button',
+  mixins: [icons],
   components: {
-    Icon
+    'veui-icon': Icon
   },
   props: {
     ui: String,

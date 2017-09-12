@@ -15,7 +15,7 @@
 
 <script>
 import { Breadcrumb, Icon } from 'veui'
-import 'veui/icons/angle-double-right'
+// import 'veui/icons/angle-double-right'
 
 export default {
   name: 'breadcrumb-demo',

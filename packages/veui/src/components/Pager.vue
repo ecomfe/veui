@@ -26,14 +26,14 @@
         :to="page === 1 ? '' : pageNavHref.previous.href"
         :native="native"
         @click="handleRedirect(pageNavHref.previous.page, $event)">
-        <icon name="angle-left"></icon>
+        <icon :name="icons.prev"></icon>
       </veui-link>
       <veui-link class="veui-pager-next"
         :class="{ 'veui-disabled': page === pageCount || pageCount === 0 }"
         :to="page === pageCount ? '' : pageNavHref.next.href"
         :native="native"
         @click="handleRedirect(pageNavHref.next.page, $event)">
-        <icon name="angle-right"></icon>
+        <icon :name="icons.next"></icon>
       </veui-link>
     </div>
   </div>
@@ -42,12 +42,11 @@
 
 <script>
 import Icon from './Icon'
-import '../icons/angle-left'
-import '../icons/angle-right'
 import Link from './Link'
 import Select from './Select'
 import Option from './Select/Option'
 import config from '../managers/config'
+import { icons } from '../mixins'
 
 config.defaults({
   'pager.pageSize': 30,
@@ -76,6 +75,7 @@ const moreIndicatorOffsetLength = 5
 
 export default {
   name: 'veui-pager',
+  mixins: [icons],
   components: {
     Icon,
     'veui-link': Link,

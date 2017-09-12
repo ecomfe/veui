@@ -23,7 +23,7 @@
         <a class="veui-dialog-content-head-close"
           v-show="localClosable"
           @click="hide">
-          <veui-icon name="cross"></veui-icon>
+          <veui-icon :name="icons.close"></veui-icon>
         </a>
       </div>
       <div ref="body" class="veui-dialog-content-body"><slot></slot></div>
@@ -42,10 +42,9 @@
 import { isObject, isString } from 'lodash'
 import Overlay from './Overlay'
 import Button from './Button'
-import { ui } from '../mixins'
+import { ui, icons } from '../mixins'
 import { drag } from '../directives'
 import Icon from './Icon'
-import '../icons/cross'
 import { normalizeCSSClass } from '../utils/helper'
 
 export default {
@@ -56,7 +55,7 @@ export default {
     'veui-icon': Icon
   },
   directives: { drag },
-  mixins: [ui],
+  mixins: [ui, icons],
   props: {
     ui: String,
     modal: {
