@@ -16,12 +16,12 @@ exports.default = function (babel) {
             file = _ref.file;
 
         var node = path.node;
-        var src = (0, _path.normalize)(node.source.value);
+        var src = (0, _utils.normalize)(node.source.value);
 
         var resolvedComponentName = null;
-
-        if (src.indexOf((0, _path.normalize)(COMPONENTS_PATH + '/')) === 0) {
-          var componentPath = src.slice(COMPONENTS_PATH.length + 1);
+        var normalizedPath = (0, _utils.normalize)(COMPONENTS_PATH + '/');
+        if (src.indexOf(normalizedPath) === 0) {
+          var componentPath = src.slice(normalizedPath.length);
           resolvedComponentName = getComponentName(componentPath);
         } else if (src !== 'veui') {
           if (src.charAt(0) !== '.' || file.opts.filename === 'unknown') {
@@ -96,7 +96,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var COMPONENTS = (0, _utils.getJSON)(_path2.default.resolve(__dirname, '../components.json'));
 var COMPONENTS_DIRNAME = 'components';
-var COMPONENTS_PATH = (0, _path.normalize)('veui/' + COMPONENTS_DIRNAME);
+var COMPONENTS_PATH = (0, _utils.normalize)('veui/' + COMPONENTS_DIRNAME);
 
 var resolveCache = {};
 
@@ -166,7 +166,7 @@ function resolveRelative(file, src, dir) {
 
   var absPath = _path2.default.resolve(_path2.default.dirname(file), src);
 
-  if (absPath.indexOf((0, _path.normalize)(dirPath + '/')) !== 0) {
+  if (absPath.indexOf((0, _utils.normalize)(dirPath + '/')) !== 0) {
     return null;
   }
   return _path2.default.relative(dirPath, absPath);

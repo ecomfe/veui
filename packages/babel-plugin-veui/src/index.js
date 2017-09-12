@@ -1,7 +1,7 @@
 import fs from 'fs'
-import { default as path, join, normalize } from 'path'
+import { default as path, join } from 'path'
 import pkgDir from 'pkg-dir'
-import { kebabCase, camelCase, pascalCase, getJSON } from './utils'
+import { kebabCase, camelCase, pascalCase, getJSON, normalize } from './utils'
 
 const COMPONENTS = getJSON(path.resolve(__dirname, '../components.json'))
 const COMPONENTS_DIRNAME = 'components'
@@ -20,10 +20,10 @@ export default function (babel) {
         let src = normalize(node.source.value)
 
         let resolvedComponentName = null
-
-        if (src.indexOf(normalize(`${COMPONENTS_PATH}/`)) === 0) {
+        let normalizedPath = normalize(`${COMPONENTS_PATH}/`)
+        if (src.indexOf(normalizedPath) === 0) {
           // import Button from 'veui/components/Button'
-          let componentPath = src.slice(COMPONENTS_PATH.length + 1)
+          let componentPath = src.slice(normalizedPath.length)
           resolvedComponentName = getComponentName(componentPath)
         } else if (src !== 'veui') {
           if (src.charAt(0) !== '.' || file.opts.filename === 'unknown') {
