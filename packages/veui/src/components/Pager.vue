@@ -5,7 +5,6 @@
     <div class="veui-pager-size">
       <span>每页条数</span>
       <veui-select v-model="realPageSize"
-        ui="link"
         :options="realPageSizes"
         @change="size => $emit('pagesizechange', size)">
       </veui-select>

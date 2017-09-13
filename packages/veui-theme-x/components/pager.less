@@ -1,9 +1,9 @@
 @import "../lib.less";
 
 .veui-pager {
-  @button-width: 36px;
+  @button-width: 30px;
   @button-height: 30px;
-  @button-gap-width: 15px;
+  @button-gap-width: 6px;
 
   @digit-width: 28px;
   @digit-width-delta: 6px;
@@ -14,7 +14,7 @@
   .clearfix();
   display: inline-block;
   color: @veui-text-color-normal;
-  font-weight: @veui-font-weight-normal;
+  // font-weight: @veui-font-weight-normal;
 
   a {
     color: inherit;
@@ -37,7 +37,7 @@
   }
 
   &-size {
-    margin-left: @button-gap-width;
+    .margin(_, 10px, _, 20px);
   }
 
   &-switch {
@@ -46,54 +46,67 @@
     .veui-active a {
       color: @veui-text-color-strong;
     }
+  }
 
-    .veui-pager-buttons a,
-    .veui-pager-buttons span,
-    .veui-active a {
-      background-color: @veui-gray-color-7;
-      font-weight: @veui-font-weight-extra-bold;
+  .veui-active a {
+    background-color: @veui-gray-color-7;
+  }
+
+  &-buttons {
+    a {
       .veui-button-transition();
-      &:hover {
-        background-color: @veui-gray-color-6;
-        color: @veui-text-color-strong;
-        font-weight: @veui-font-weight-extra-bold;
-      }
+    }
+  }
 
-      &.focus-ring {
-        color: @veui-brand-color;
-        font-weight: @veui-font-weight-extra-bold;
-      }
+  &-buttons a,
+  &-buttons span {
+    border: 1px solid @veui-gray-color-5;
+    background: transparent;
 
+    &:hover {
+      color: @veui-text-color-strong;
+      background-color: @veui-gray-color-8;
+    }
+
+    &.focus-ring {
+      color: @veui-brand-color;
+    }
+
+    &:active {
+      background-color: @veui-gray-color-6;
+    }
+
+    &.veui-disabled {
+      &,
+      &:hover,
       &:active {
-        background-color: @veui-gray-color-5;
+        background-color: @veui-gray-color-7;
+        border-color: transparent;
+        color: @veui-text-color-aux;
       }
+    }
 
-      &.veui-disabled {
-        &,
-        &:hover,
-        &.focus-ring,
-        &:active {
-          background-color: @veui-gray-color-7;
-          color: @veui-text-color-weak;
-        }
-      }
+    .veui-icon {
+      .veui-position-center()
     }
   }
 
   .veui-select {
-    width: auto;
-    margin-top: -2px;
-    margin-left: 8px;
+    min-width: auto;
+    margin-top: -1px;
+    margin-left: 10px;
     vertical-align: top;
 
     .veui-button {
       .padding(0, _);
+      height: @button-height;
+      line-height: @button-height - 2px;
       white-space: nowrap;
       color: @veui-text-color-strong;
-      font-weight: @veui-font-weight-extra-bold;
 
       .veui-icon {
-        float: left;
+        @height: @button-height / 2 - 1px;
+        margin-top: ~"calc(@{height} - 0.5em)";
       }
     }
 
@@ -141,7 +154,6 @@
 
         &:hover {
           color: @veui-text-color-strong;
-          font-weight: @veui-font-weight-extra-bold;
         }
 
         &.focus-ring {
@@ -188,8 +200,8 @@
     }
 
     .veui-pager-previous {
-      position: static;
-      margin-right: 1px;
+      position: relative;
+      margin-right: @button-gap-width;
     }
   }
 
@@ -215,16 +227,6 @@
         line-height: @digit-height * @scale-ratio;
         font-size: @veui-font-size-small;
       }
-
-      .veui-active a {
-        background: transparent;
-        font-weight: @veui-font-weight-bold;
-      }
-
-      a:hover {
-        color: @veui-text-color-strong;
-        font-weight: @veui-font-weight-normal;
-      }
     }
 
     .veui-pager-previous,
@@ -232,31 +234,6 @@
       width: @button-height * @scale-ratio;
       height: @button-height * @scale-ratio;
       line-height: 1.5;
-      border: 1px solid @veui-gray-color-5;
-      background: transparent;
-
-      &:hover {
-        color: @veui-text-color-strong;
-        background-color: @veui-gray-color-8;
-      }
-
-      &:active {
-        background-color: @veui-gray-color-6;
-      }
-
-      &.veui-disabled {
-        &,
-        &:hover,
-        &:active {
-          background-color: @veui-gray-color-7;
-          border-color: transparent;
-        }
-      }
-
-      .veui-icon {
-        width: @button-height * .4;
-        .veui-position-center()
-      }
     }
 
     .generate-responsive-page-digit-width(4, .8);

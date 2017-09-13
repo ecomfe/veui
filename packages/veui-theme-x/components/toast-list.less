@@ -6,5 +6,18 @@
   .veui-toast {
     left: 50%;
     transform: translateX(-50%);
+
+    &-enter,
+    &-leave-to {
+      opacity: 0;
+    }
+
+    &-enter {
+      transform: translate(-50%, -100%);
+    }
+
+    &-leave-to {
+      transform: translate(-50%, 100%);
+    }
   }
 }
