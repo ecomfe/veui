@@ -1,11 +1,11 @@
 import fs from 'fs'
 import { default as path, join } from 'path'
 import pkgDir from 'pkg-dir'
-import { kebabCase, camelCase, pascalCase, getJSON } from './utils'
+import { kebabCase, camelCase, pascalCase, getJSON, normalize } from './utils'
 
 const COMPONENTS = getJSON(path.resolve(__dirname, '../components.json'))
 const COMPONENTS_DIRNAME = 'components'
-const COMPONENTS_PATH = `veui/${COMPONENTS_DIRNAME}`
+const COMPONENTS_PATH = normalize(`veui/${COMPONENTS_DIRNAME}`)
 
 let resolveCache = {}
 
@@ -17,13 +17,13 @@ export default function (babel) {
     visitor: {
       ImportDeclaration (path, { opts, file }) {
         let node = path.node
-        let src = node.source.value
+        let src = normalize(node.source.value)
 
         let resolvedComponentName = null
-
-        if (src.indexOf(`${COMPONENTS_PATH}/`) === 0) {
+        let normalizedPath = normalize(`${COMPONENTS_PATH}/`)
+        if (src.indexOf(normalizedPath) === 0) {
           // import Button from 'veui/components/Button'
-          let componentPath = src.slice(COMPONENTS_PATH.length + 1)
+          let componentPath = src.slice(normalizedPath.length)
           resolvedComponentName = getComponentName(componentPath)
         } else if (src !== 'veui') {
           if (src.charAt(0) !== '.' || file.opts.filename === 'unknown') {
@@ -143,7 +143,7 @@ function resolveRelative (file, src, dir) {
   // veui/${dir} or veui/src/${dir}
   let dirPath = path.join(pkg, dir) // runtime
   if (!fs.existsSync(dirPath)) {
-    dirPath = path.join(pkg, `src/${dir}`) // dev
+    dirPath = path.join(pkg, 'src', dir) // dev
     if (!fs.existsSync(dirPath)) {
       return null
     }
@@ -151,7 +151,7 @@ function resolveRelative (file, src, dir) {
 
   let absPath = path.resolve(path.dirname(file), src)
 
-  if (absPath.indexOf(`${dirPath}/`) !== 0) {
+  if (absPath.indexOf(normalize(`${dirPath}/`)) !== 0) {
     return null
   }
   return path.relative(dirPath, absPath)

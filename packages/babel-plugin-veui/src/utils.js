@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 export function kebabCase (str) {
   return str
@@ -38,6 +39,6 @@ export function getJSON (path) {
   return JSON.parse(fs.readFileSync(path, 'utf8'))
 }
 
-export function warn (msg) {
-  console.warn(`[VEUI] ${msg}`)
+export function normalize (filePath) {
+  return filePath.replace(/[/\\]/g, path.sep)
 }

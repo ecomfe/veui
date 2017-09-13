@@ -8,11 +8,15 @@ exports.camelCase = camelCase;
 exports.pascalCase = pascalCase;
 exports.transformName = transformName;
 exports.getJSON = getJSON;
-exports.warn = warn;
+exports.normalize = normalize;
 
 var _fs = require('fs');
 
 var _fs2 = _interopRequireDefault(_fs);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -57,6 +61,6 @@ function getJSON(path) {
   return JSON.parse(_fs2.default.readFileSync(path, 'utf8'));
 }
 
-function warn(msg) {
-  console.warn('[VEUI] ' + msg);
+function normalize(filePath) {
+  return filePath.replace(/[/\\]/g, _path2.default.sep);
 }

@@ -1,5 +1,5 @@
 <template>
-<veui-icon class="veui-sorter" @click.native="sort">
+<veui-icon class="veui-sorter" :class="stateClass" @click.native="sort">
   <veui-icon :class="{ 'veui-sorter-active': order === 'asc' }" :name="icons.asc"></veui-icon>
   <veui-icon :class="{ 'veui-sorter-active': order === 'desc' }" :name="icons.desc"></veui-icon>
 </veui-icon>
@@ -17,6 +17,14 @@ export default {
   },
   props: {
     order: [String, Boolean]
+  },
+  computed: {
+    stateClass () {
+      if (this.order) {
+        return `veui-sorter-${this.order}`
+      }
+      return 'veui-sorter-unordered'
+    }
   },
   methods: {
     sort () {
