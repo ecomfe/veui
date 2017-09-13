@@ -9,12 +9,12 @@
     <template v-if="range">
       <span class="veui-date-picker-label">
         <slot v-if="formatted" name="date" :formatted="formatted ? formatted[0] : null" :date="selected ? selected[0] : null">{{ formatted[0] }}</slot>
-        <slot v-else name="placeholder-begin">开始时间</slot>
+        <slot v-else name="placeholder-begin">{{ placeholderBegin }}</slot>
       </span>
       <span class="veui-date-picker-tilde">~</span>
       <span class="veui-date-picker-label">
         <slot v-if="formatted" name="date" :formatted="formatted ? formatted[1] : null" :date="selected ? selected[1] : null">{{ formatted[1] }}</slot>
-        <slot v-else name="placeholder-end">结束时间</slot>
+        <slot v-else name="placeholder-end">{{ placeholderEnd }}</slot>
       </span>
     </template>
     <template v-else>
@@ -58,9 +58,12 @@ import config from '../managers/config'
 import { isNumber, pick, omit } from 'lodash'
 
 config.defaults({
-  'datepicker.shortcuts': [],
-  'datepicker.shortcutsPosition': 'before'
-})
+  shortcuts: [],
+  shortcutsPosition: 'before',
+  placeholder: '选择时间',
+  placeholderBegin: '开始时间',
+  placeholderEnd: '结束时间'
+}, 'datepicker')
 
 let calendarProps = ['range', 'weekStart', 'fillMonth', 'disabledDate', 'dateClass']
 
@@ -89,7 +92,21 @@ export default {
     clearable: Boolean,
     placeholder: {
       type: String,
-      default: '选择时间'
+      default () {
+        return config.get('datepicker.placeholder')
+      }
+    },
+    placeholderBegin: {
+      type: String,
+      default () {
+        return config.get('datepicker.placeholderBegin')
+      }
+    },
+    placeholderEnd: {
+      type: String,
+      default () {
+        return config.get('datepicker.placeholderEnd')
+      }
     },
     format: {
       type: String,
@@ -103,7 +120,9 @@ export default {
     },
     shortcutsPosition: {
       type: String,
-      default: config.get('datepicker.shortcutsPosition')
+      default () {
+        return config.get('datepicker.shortcutsPosition')
+      }
     },
     ...pick(Calendar.props, calendarProps)
   },

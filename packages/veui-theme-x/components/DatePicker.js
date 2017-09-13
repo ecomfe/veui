@@ -3,8 +3,11 @@ import '../icons/cross'
 import config from 'veui/managers/config'
 
 config.defaults({
-  'datepicker.icons': {
+  icons: {
     calendar: 'calendar',
     clear: 'cross'
-  }
-})
+  },
+  placeholder: '选择时间',
+  placeholderBegin: '开始选择时间段',
+  placeholderEnd: ''
+}, 'datepicker')

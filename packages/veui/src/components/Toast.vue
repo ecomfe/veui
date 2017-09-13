@@ -1,8 +1,10 @@
 <template>
-<div :ui="ui" class="veui-toast" :class="`veui-toast-${type}`">
-  <veui-icon class="veui-toast-icon" :name="icons[type]"></veui-icon>
-  <span class="veui-toast-message">{{ message }}</span>
-</div>
+<transition name="veui-toast">
+  <div :ui="ui" class="veui-toast" :class="`veui-toast-${type}`">
+    <veui-icon class="veui-toast-icon" :name="icons[type]"></veui-icon>
+    <span class="veui-toast-message">{{ message }}</span>
+  </div>
+</transition>
 </template>
 
 <script>
@@ -31,6 +33,8 @@ export default {
     this.timer = setTimeout(() => {
       this.$emit('close')
     }, this.duration)
+
+    this.$emit('ready', this.$el.offsetHeight)
   },
   beforeDestroy () {
     clearTimeout(this.timer)
