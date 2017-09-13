@@ -89,3 +89,7 @@ export function normalizeCSSClass (klasses) {
 export function getConfigKey (name) {
   return name.replace(/^veui|-*/g, '')
 }
+
+export function stringifyQuery (query) {
+  return Object.keys(query).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`).join('&')
+}

@@ -78,7 +78,7 @@ app.use('/uploadiframe', function (req, res) {
       window.parent.postMessage(JSON.stringify({status: '${Math.random() > 0.5 ? 'success' : 'failure'}',
         name: 'abcdefg${Math.random()}.gif', fileUid: 'file${Math.random()}',
         size: '250kb',
-        src: 'http://audi4simages.audi.cn/upload/car/SA31004170222486/F01-5761ce7b-28b0-437b-9de4-442d64d53b88_280x210.jpg'}), '*');
+        src: 'http://nodejs.cn/static/images/logo.svg'}), '*');
       </script>`)
   }, 1500)
 })

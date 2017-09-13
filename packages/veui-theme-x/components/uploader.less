@@ -1,0 +1,372 @@
+@import "../lib.less";
+
+.veui-uploader {
+  @width: 300px;
+  @icon-size: 16px;
+  @image-size: 140px;
+
+  .disabled() {
+    border: none;
+    background-color: @veui-gray-color-7;
+    color: @veui-text-color-weak;
+    box-shadow: none;
+  }
+
+  width: 400px;
+  overflow: hidden;
+
+  &-button-container {
+    position: relative;
+    margin-bottom: 20px;
+    overflow: hidden;
+    .veui-uploader-tip {
+      margin-top: 8px;
+      display: inline-block;
+    }
+  }
+
+  &-input-label {
+    cursor: pointer;
+    display: inline-block;
+    color: @veui-text-color-strong;
+    margin-right: 1em;
+    box-sizing: border-box;
+    float: left;
+
+    &-icon {
+      margin-right: 5px;
+    }
+  }
+
+  .veui-uploader-input-label-disabled,
+  .veui-button.veui-uploader-input-label-disabled {
+    cursor: not-allowed;
+    .disabled();
+    &:hover {
+      .disabled();
+    }
+  }
+
+  &-input-label-image {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+
+    &::before,
+    &::after, {
+      content: '';
+      position: absolute;
+    }
+    &::before {
+      border-top: 2px solid @veui-gray-color-2;
+      top: ~"calc(50% - 1px)";
+      left: ~"calc(50% - 25px)";
+      width: 50px;
+    }
+    &::after {
+      border-left: 2px solid @veui-gray-color-2;
+      top: ~"calc(50% - 25px)";
+      left: ~"calc(50% - 1px)";
+      height: 50px;
+    }
+
+    &:hover {
+      background: @veui-gray-color-8;
+    }
+    &:active {
+      background: @veui-gray-color-6;
+    }
+  }
+
+  &-list,
+  &-list-image {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    overflow: hidden;
+    img {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      vertical-align: middle;
+    }
+    &-status {
+      line-height: 1.2;
+      & > span {
+        display: inline-block;
+        vertical-align: middle;
+        word-break: break-all;
+      }
+      &::after {
+        content: '';
+        height: 100%;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+    &-success {
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 9px 4px;
+      display: block;
+      background-color: #fff;
+      color: @veui-success-color;
+    }
+  }
+
+  &-list {
+    width: @width;
+    li {
+      position: relative;
+      padding: 4px;
+      margin: 0 10px 5px 0;
+      width: @width;
+    }
+    li:hover {
+      background-color: @veui-gray-color-8;
+      .veui-button[ui~="link"] {
+        background-color: @veui-gray-color-8;
+      }
+      .veui-button[ui~="remove"] {
+        visibility: visible;
+      }
+    }
+    &-name {
+      display: inline-block;
+      vertical-align: top;
+      overflow: hidden;
+      width: ~"calc(100% - 3em)";
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      line-height: 20px;
+    }
+    &-name-status {
+      width: ~"calc(100% - 9em)";
+    }
+    &-status {
+      display: inline-block;
+      width: ~"calc(100% - 3em)";
+      height: 100%;
+    }
+    &-success {
+      svg {
+        position: relative;
+        top: 0px;
+      }
+    }
+    &-icon {
+      width: 12px;
+      height: 12px;
+      margin: 4px 5px 0 0;
+      vertical-align: top;
+    }
+
+    .veui-button {
+      vertical-align: top;
+      height: 20px;
+      line-height: 20px;
+      float: right;
+      &.veui-uploader-list-retry {
+        color: @veui-gray-color-1;
+        svg {
+          margin: 0 5px 0 0;
+          vertical-align: baseline;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .veui-uploader-progress {
+      display: inline-block;
+      width: ~"calc(100% - 6em)";
+      height: 20px;
+      vertical-align: middle;
+    }
+  }
+  &-list-image {
+    li {
+      overflow: hidden;
+      width: @image-size;
+      height: @image-size;
+      padding: 0;
+      box-sizing: border-box;
+      margin: 0 10px 5px 0;
+      border: 1px solid @veui-gray-color-5;
+      text-align: center;
+      line-height: @image-size - 2px;
+      position: relative;
+
+      .veui-button[ui~="operation"] {
+        position: absolute;
+        width: 70px;
+        height: 28px;
+        line-height: 28px;
+        font-size: @veui-font-size-small;
+        top: ~"calc(50% + 10px)";
+        left: ~"calc(50% - 35px)";
+      }
+    }
+    li:hover &-mask {
+      display: block;
+    }
+    &-mask {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+
+      .veui-button {
+        position: absolute;
+        display: inline-block;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        font-size: @veui-font-size-normal;
+        &:hover {
+          background: rgba(0, 0, 0, 0.8);
+        }
+      }
+      .veui-button:active,
+      .veui-button:hover {
+        color: #fff;
+      }
+      label.veui-button {
+        cursor: pointer;
+        top: ~"calc(50% - 14px)";
+        left: ~"calc(50% - 44px)";
+        width: 88px;
+        height: 28px;
+        line-height: 28px;
+      }
+      &-remove {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        top: 0;
+        right: 0;
+        left: auto;
+        overflow: hidden;
+        .veui-icon {
+          margin-top: 5px;
+        }
+      }
+      .veui-button.veui-uploader-input-label-disabled {
+        background: none;
+        &:hover {
+          background: none;
+        }
+      }
+    }
+
+    &-status {
+      margin-top: 10%;
+      height: 40%;
+      & > span {
+        max-width: 90%;
+      }
+    }
+    &-success {
+      padding: 0;
+      line-height: @image-size - 2px;
+      span {
+        display: block;
+        vertical-align: middle;
+      }
+      svg {
+        font-size: @icon-size;
+        vertical-align: text-bottom;
+        margin-right: 5px;
+      }
+    }
+    .veui-uploader-progress {
+      &-bar,
+      &-bar-full {
+        left: ~"calc(50% - 35px)";
+        max-width: 70px;
+      }
+    }
+  }
+  &-tip {
+    color: @veui-gray-color-3;
+  }
+  &-failure {
+    color: @veui-alert-color;
+  }
+  &-success {
+    color: @veui-success-color;
+  }
+  &-hide {
+    display: none;
+  }
+
+  &[ui~="horizontal"] {
+    width: 100%;
+    .veui-uploader-list,
+    .veui-uploader-list-image {
+      li {
+        float: left;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .veui-button[ui~="remove"] {
+    color: @veui-gray-color-2;
+    font-size: @icon-size;
+    min-width: @icon-size;
+    width: @icon-size;
+    visibility: hidden;
+    line-height: 20px;
+    height: 20px;
+    float: right;
+
+    svg {
+      margin-top: 2px;
+    }
+  }
+
+  &-list-enter,
+  &-list-leave-active {
+    opacity: 0;
+  }
+  &-list-enter-active,
+  &-list-leave-active {
+    transition: all .6s ease;
+  }
+  &-list-move {
+    transition: transform 1s;
+  }
+  &-fade-leave-active {
+    opacity: 0;
+    transition: all .6s ease;
+  }
+
+  &-progress {
+    display: block;
+    position: relative;
+    line-height: 20px;
+
+    &-bar,
+    &-bar-full {
+      position: absolute;
+      height: 4px;
+      top: ~"calc(50% - 2px)";
+      width: 100%;
+    }
+    &-bar {
+      background-color: @veui-gray-color-2;
+      &-full {
+        z-index: -1;
+        background-color: @veui-gray-color-5;
+      }
+    }
+  }
+}
