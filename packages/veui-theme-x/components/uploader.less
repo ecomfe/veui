@@ -6,7 +6,7 @@
   @image-size: 140px;
 
   .disabled() {
-    border: none;
+    border-color: transparent;
     background-color: @veui-gray-color-7;
     color: @veui-text-color-weak;
     box-shadow: none;
@@ -26,12 +26,10 @@
   }
 
   &-input-label {
-    cursor: pointer;
-    display: inline-block;
+    float: left;
     color: @veui-text-color-strong;
     margin-right: 1em;
-    box-sizing: border-box;
-    float: left;
+    cursor: pointer;
 
     &-icon {
       margin-right: 5px;
@@ -50,8 +48,7 @@
   &-input-label-image {
     position: relative;
     display: block;
-    width: 100%;
-    height: 100%;
+    .size(100%);
     cursor: pointer;
 
     &::before,
@@ -86,6 +83,7 @@
     margin: 0;
     list-style: none;
     overflow: hidden;
+
     img {
       width: auto;
       height: auto;
@@ -93,51 +91,54 @@
       max-height: 100%;
       vertical-align: middle;
     }
+
     &-status {
       line-height: 1.2;
+
       & > span {
         display: inline-block;
         vertical-align: middle;
         word-break: break-all;
       }
+
       &::after {
-        content: '';
+        content: "";
         height: 100%;
         display: inline-block;
         vertical-align: middle;
       }
     }
     &-success {
-      cursor: pointer;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      .absolute(0);
       padding: 9px 4px;
-      display: block;
       background-color: #fff;
       color: @veui-success-color;
+      cursor: pointer;
     }
   }
 
   &-list {
     width: @width;
+
     li {
       position: relative;
       padding: 4px;
       margin: 0 10px 5px 0;
       width: @width;
     }
+
     li:hover {
       background-color: @veui-gray-color-8;
+
       .veui-button[ui~="link"] {
         background-color: @veui-gray-color-8;
       }
+
       .veui-button[ui~="remove"] {
         visibility: visible;
       }
     }
+
     &-name {
       display: inline-block;
       vertical-align: top;
@@ -147,35 +148,38 @@
       white-space: nowrap;
       line-height: 20px;
     }
+
     &-name-status {
       width: ~"calc(100% - 9em)";
     }
+
     &-status {
       display: inline-block;
       width: ~"calc(100% - 3em)";
       height: 100%;
     }
+
     &-success {
-      svg {
+      .veui-icon {
         position: relative;
-        top: 0px;
+        top: 0;
       }
     }
+
     &-icon {
-      width: 12px;
-      height: 12px;
+      .size(12px);
       margin: 4px 5px 0 0;
       vertical-align: top;
     }
 
     .veui-button {
-      vertical-align: top;
-      height: 20px;
-      line-height: 20px;
       float: right;
+      .centered-line(20px);
+
       &.veui-uploader-list-retry {
         color: @veui-gray-color-1;
-        svg {
+
+        .veui-icon {
           margin: 0 5px 0 0;
           vertical-align: baseline;
           font-size: 12px;
@@ -193,73 +197,69 @@
   &-list-image {
     li {
       overflow: hidden;
-      width: @image-size;
-      height: @image-size;
-      padding: 0;
-      box-sizing: border-box;
+      .size(@image-size);
       margin: 0 10px 5px 0;
+      padding: 0;
       border: 1px solid @veui-gray-color-5;
       text-align: center;
       line-height: @image-size - 2px;
       position: relative;
 
       .veui-button[ui~="operation"] {
-        position: absolute;
+        .absolute(~"calc(50% + 10px)", _, _, ~"calc(50% - 35px)");
         width: 70px;
-        height: 28px;
-        line-height: 28px;
+        .centered-line(28px);
         font-size: @veui-font-size-small;
-        top: ~"calc(50% + 10px)";
-        left: ~"calc(50% - 35px)";
       }
     }
+
     li:hover &-mask {
       display: block;
     }
+
     &-mask {
       display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      .absolute(0);
 
       .veui-button {
         position: absolute;
-        display: inline-block;
-        background: rgba(0, 0, 0, 0.8);
+        background-color: fadeout(#000, 20%);
         color: #fff;
         font-size: @veui-font-size-normal;
         &:hover {
-          background: rgba(0, 0, 0, 0.8);
+          background-color: fadeout(#000, 20%);
+        }
+
+        &:hover,
+        &.active {
+          color: #fff;
         }
       }
-      .veui-button:active,
-      .veui-button:hover {
-        color: #fff;
-      }
+
       label.veui-button {
         cursor: pointer;
         top: ~"calc(50% - 14px)";
         left: ~"calc(50% - 44px)";
         width: 88px;
-        height: 28px;
-        line-height: 28px;
+        .centered-line(28px);
       }
+
       &-remove {
-        width: 24px;
-        height: 24px;
+        .size(24px);
         line-height: 24px;
         top: 0;
         right: 0;
         left: auto;
         overflow: hidden;
+
         .veui-icon {
           margin-top: 5px;
         }
       }
+
       .veui-button.veui-uploader-input-label-disabled {
         background: none;
+
         &:hover {
           background: none;
         }
@@ -269,18 +269,22 @@
     &-status {
       margin-top: 10%;
       height: 40%;
+
       & > span {
         max-width: 90%;
       }
     }
+
     &-success {
       padding: 0;
       line-height: @image-size - 2px;
+
       span {
         display: block;
         vertical-align: middle;
       }
-      svg {
+
+      .veui-icon {
         font-size: @icon-size;
         vertical-align: text-bottom;
         margin-right: 5px;
@@ -294,21 +298,26 @@
       }
     }
   }
+
   &-tip {
     color: @veui-gray-color-3;
   }
+
   &-failure {
     color: @veui-alert-color;
   }
+
   &-success {
     color: @veui-success-color;
   }
+
   &-hide {
     display: none;
   }
 
   &[ui~="horizontal"] {
     width: 100%;
+
     .veui-uploader-list,
     .veui-uploader-list-image {
       li {
@@ -319,16 +328,15 @@
   }
 
   .veui-button[ui~="remove"] {
+    float: right;
     color: @veui-gray-color-2;
     font-size: @icon-size;
     min-width: @icon-size;
     width: @icon-size;
     visibility: hidden;
-    line-height: 20px;
-    height: 20px;
-    float: right;
+    .centered-line(20px);
 
-    svg {
+    .veui-icon {
       margin-top: 2px;
     }
   }
@@ -337,16 +345,19 @@
   &-list-leave-active {
     opacity: 0;
   }
+
   &-list-enter-active,
   &-list-leave-active {
-    transition: all .6s ease;
+    transition: all .3s ease;
   }
+
   &-list-move {
-    transition: transform 1s;
+    transition: transform .3s;
   }
+
   &-fade-leave-active {
     opacity: 0;
-    transition: all .6s ease;
+    transition: all .3s ease;
   }
 
   &-progress {
@@ -361,8 +372,10 @@
       top: ~"calc(50% - 2px)";
       width: 100%;
     }
+
     &-bar {
       background-color: @veui-gray-color-2;
+
       &-full {
         z-index: -1;
         background-color: @veui-gray-color-5;
