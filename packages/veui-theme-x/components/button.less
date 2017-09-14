@@ -136,23 +136,12 @@
     min-width: auto;
     border: none;
     padding: 0;
-    background: transparent;
-    // color: @veui-brand-color;
 
-    // &:hover,
-    // &.focus-ring {
-    //   color: @veui-brand-color-2;
-    // }
-
-    // &:active {
-    //   color: @veui-brand-color-1;
-    // }
-
-    // &:hover,
-    // &:active,
-    // &.focus-ring {
-    //   background: none;
-    // }
+    &,
+    &:hover,
+    &:active {
+      background-color: transparent;
+    }
 
     &.veui-disabled {
       &,
@@ -183,7 +172,7 @@
 
     & > .veui-icon {
       vertical-align: top;
-      @height: @button-height / 2 - 1;
+      @height: @button-height / 2 - 1px;
       margin-top: ~"calc(@{height} - 0.5em)";
     }
   }

@@ -38,6 +38,15 @@
       <veui-button ui="alt" loading>取消</veui-button>
     </p>
     <p>
+      <veui-button ui="link primary micro">创建</veui-button>
+      <veui-button ui="link primary tiny">创建</veui-button>
+      <veui-button ui="link primary small">创建</veui-button>
+      <veui-button ui="link primary">创建</veui-button>
+      <veui-button ui="link primary large">创建</veui-button>
+      <veui-button ui="link primary" disabled>创建</veui-button>
+      <veui-button ui="link primary" loading>创建</veui-button>
+    </p>
+    <p>
       <veui-button ui="link micro">编辑</veui-button>
       <veui-button ui="link tiny">编辑</veui-button>
       <veui-button ui="link small">编辑</veui-button>
