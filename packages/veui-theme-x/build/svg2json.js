@@ -48,7 +48,7 @@ fs.readdirSync(svgDir).forEach(file => {
         }
 
         if (attrs.fillRule && attrs.fillRule.toLowerCase() !== 'nonzero') {
-          path.fillRule = attrs.fillRule
+          path['fill-rule'] = attrs.fillRule
         }
 
         return path
