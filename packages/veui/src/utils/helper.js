@@ -62,15 +62,15 @@ export function isEmpty (val) {
 }
 
 /**
- * VUE 里面有三种设置 CSS class 的方式：
+ * VUE 里面有三种设置 class 的方式：
  * 1. 字符串
  * 2. 字符串数组
  * 3. object
- * 此处统一将这些形式的 CSS class 转换成 object 形式的
+ * 此处统一将这些形式的 class 转换成 object 形式的
  *
  * @param {string|Array.<string>|object} klasses
  */
-export function normalizeCSSClass (klasses) {
+export function normalizeClass (klasses) {
   let klassObj = {}
   if (isString(klasses)) {
     klasses.split(/\s+/).forEach((klass) => {

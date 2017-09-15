@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
-    <title>tip</title>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.1 (44463) - http://www.bohemiancoding.com/sketch -->
+    <title>信息16</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="组件-对话框-邓科" transform="translate(-333.000000, -1839.000000)" fill="#3998FC">
-            <g id="创建提醒弹窗" transform="translate(173.000000, 1809.000000)">
-                <g id="tip" transform="translate(160.000000, 30.000000)">
-                    <g id="Combined-Shape">
-                        <path d="M15,29 C22.7319865,29 29,22.7319865 29,15 C29,7.2680135 22.7319865,1 15,1 C7.2680135,1 1,7.2680135 1,15 C1,22.7319865 7.2680135,29 15,29 Z M15,30 C6.71572875,30 0,23.2842712 0,15 C0,6.71572875 6.71572875,0 15,0 C23.2842712,0 30,6.71572875 30,15 C30,23.2842712 23.2842712,30 15,30 Z M14,13 L14,21 L16,21 L16,13 L14,13 Z M14,9 L14,11 L16,11 L16,9 L14,9 Z" fill-rule="nonzero"></path>
-                    </g>
-                </g>
-            </g>
+    <g id="【未公示】" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="【供序章用规范】组件-图标-魏博嘉" transform="translate(-360.000000, -1438.000000)" fill-rule="nonzero" fill="#333333">
+            <path d="M368,1439 C364.134418,1439 361,1442.13442 361,1446 C361,1449.86541 364.134515,1453 368,1453 C371.865315,1453 375,1449.86532 375,1446 C375,1442.13452 371.865413,1439 368,1439 Z M368,1438 C372.4176,1438 376,1441.58213 376,1446 C376,1450.4176 372.4176,1454 368,1454 C363.582133,1454 360,1450.4176 360,1446 C360,1441.58213 363.582133,1438 368,1438 Z M367,1444.86667 L367,1449.86667 L369,1449.86667 L369,1444.86667 L367,1444.86667 Z M368,1443.86667 C368.552285,1443.86667 369,1443.41895 369,1442.86667 C369,1442.31438 368.552285,1441.86667 368,1441.86667 C367.447715,1441.86667 367,1442.31438 367,1442.86667 C367,1443.41895 367.447715,1443.86667 368,1443.86667 Z" id="信息16"></path>
         </g>
     </g>
 </svg>

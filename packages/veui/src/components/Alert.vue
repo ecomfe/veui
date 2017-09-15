@@ -7,16 +7,14 @@
       <span v-else class="veui-alert-message">{{ message }}</span>
     </slot>
     <veui-button v-if="closeText" class="veui-alert-close veui-alert-close-text" ui="link primary" @click="close">{{ closeText }}</veui-button>
-    <template v-else-if="isMultiple">
-      <span class="veui-alert-close">
-        <button :disabled="isFirst" @click="switchMessage(-1)">
-          <veui-icon :name="icons.prev"></veui-icon>
-        </button>
-        <button :disabled="isLast" @click="switchMessage(1)">
-          <veui-icon :name="icons.next"></veui-icon>
-        </button>
-      </span>
-    </template>
+    <span class="veui-alert-nav" v-else-if="isMultiple">
+      <veui-button ui="link" :disabled="isFirst" @click="switchMessage(-1)">
+        <veui-icon :name="icons.prev"></veui-icon>
+      </veui-button>
+      <veui-button ui="link" :disabled="isLast" @click="switchMessage(1)">
+        <veui-icon :name="icons.next"></veui-icon>
+      </veui-button>
+    </span>
     <veui-button v-else class="veui-alert-close" ui="link" @click="close">
       <veui-icon :name="icons.close"></veui-icon>
     </veui-button>

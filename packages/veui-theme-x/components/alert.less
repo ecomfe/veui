@@ -42,22 +42,41 @@
   .make-state-message(info);
   .make-state-message(error);
 
+  &-nav,
   &-close {
     .absolute(50%, 20px, _, _);
     transform: translateY(-50%);
+  }
 
-    &.veui-alert-close-text {
-      color: @veui-brand-color;
-      .veui-button-transition();
+  &-nav {
+    .veui-button:first-child {
+      margin-right: 10px;
+    }
+  }
 
-      &:hover,
-      &.focus-ring {
-        color: @veui-brand-color-2;
-      }
+  &-close.veui-button,
+  &-nav .veui-button {
+    .veui-icon {
+      font-size: @veui-font-size-small;
+    }
 
-      &:active {
-        color: @veui-brand-color-1;
-      }
+    &:hover,
+    &.focus-ring,
+    &:active {
+      color: @veui-gray-color-1;
+    }
+  }
+
+  .veui-alert-close-text {
+    color: @veui-brand-color;
+
+    &:hover,
+    &.focus-ring {
+      color: @veui-brand-color-2;
+    }
+
+    &:active {
+      color: @veui-brand-color-1;
     }
   }
 }

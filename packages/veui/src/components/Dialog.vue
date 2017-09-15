@@ -1,7 +1,10 @@
 <template>
   <veui-overlay class="veui-dialog"
     :open="localOpen"
-    :overlay-class="mergedOverlayClass"
+    :overlay-class="mergeOverlayClass({
+      'veui-dialog-box': true,
+      'veui-dialog-box-mask': modal
+    })"
     :ui="ui"
     ref="overlay"
     :priority="priority">
@@ -39,13 +42,11 @@
 </template>
 
 <script>
-import { isObject, isString } from 'lodash'
 import Overlay from './Overlay'
 import Button from './Button'
-import { ui, icons } from '../mixins'
+import { ui, icons, overlay } from '../mixins'
 import { drag } from '../directives'
 import Icon from './Icon'
-import { normalizeCSSClass } from '../utils/helper'
 
 export default {
   name: 'veui-dialog',
@@ -55,7 +56,7 @@ export default {
     'veui-icon': Icon
   },
   directives: { drag },
-  mixins: [ui, icons],
+  mixins: [ui, icons, overlay],
   props: {
     ui: String,
     modal: {
@@ -77,12 +78,6 @@ export default {
     draggable: {
       type: Boolean,
       default: false
-    },
-    overlayClass: {
-      validator (value) {
-        return isObject(value) || isString(value)
-      },
-      default: null
     },
     priority: Number
   },
@@ -110,15 +105,6 @@ export default {
     },
     closable (value) {
       this.localClosable = value
-    }
-  },
-  computed: {
-    mergedOverlayClass () {
-      return {
-        ...normalizeCSSClass(this.overlayClass),
-        'veui-dialog-box': true,
-        'veui-dialog-box-mask': this.modal
-      }
     }
   },
   methods: {

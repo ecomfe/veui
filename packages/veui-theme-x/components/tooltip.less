@@ -1,0 +1,141 @@
+@import "../lib.less";
+
+.veui-tooltip {
+  @raw-height: @veui-height-normal;
+  @padding-y: (@raw-height - @veui-line-height-normal * @veui-font-size-normal) / 2;
+  @gap: 8px;
+  @bg: fadeout(@veui-gray-color-1, 20%);
+  @arrow-size: 8px;
+  @arrow-side: @arrow-size / sqrt(2);
+  @arrow-indent: 10px;
+
+  position: relative;
+  padding: @padding-y 10px;
+  background-color: @bg;
+  color: #fff;
+  line-height: @veui-line-height-normal;
+  border-radius: 1px;
+  .veui-overlay-shadow();
+
+  &::before,
+  &::after {
+    content: "";
+    color: @bg;
+    transform-origin: 50% 100%;
+    top: 50%;
+    left: 50%;
+    .triangle(top, @arrow-side, currentColor, side);
+  }
+
+  &::before {
+    display: none;
+  }
+
+  .make-direction(top) {
+    &::before,
+    &::after {
+      top: 0;
+    }
+  }
+  .make-direction(right) {
+    &::before,
+    &::after {
+      right: -@arrow-size / 2;
+      left: auto;
+      transform: rotate(90deg);
+    }
+  }
+  .make-direction(bottom) {
+    &::before,
+    &::after {
+      bottom: 0;
+      top: auto;
+      transform: rotate(180deg);
+    }
+  }
+  .make-direction(left) {
+    &::before,
+    &::after {
+      left: 0;
+      transform: rotate(270deg);
+    }
+  }
+
+  .tether-element-attached-top.tether-target-attached-bottom & {
+    margin-top: @gap;
+    .make-direction(top);
+  }
+
+  .tether-element-attached-right.tether-target-attached-left & {
+    margin-right: @gap;
+    .make-direction(right);
+  }
+
+  .tether-element-attached-bottom.tether-target-attached-top & {
+    margin-bottom: @gap;
+    .make-direction(bottom);
+  }
+
+  .tether-element-attached-left.tether-target-attached-right & {
+    margin-left: @gap;
+    .make-direction(left);
+  }
+
+
+  .make-align(top) {
+    &::before,
+    &::after {
+      top: @arrow-indent + @arrow-size / 2;
+    }
+  }
+  .make-align(right) {
+    &::before,
+    &::after {
+      right: @arrow-indent + @arrow-size / 2;
+      left: auto;
+    }
+  }
+  .make-align(bottom) {
+    &::before,
+    &::after {
+      top: auto;
+      bottom: @arrow-indent + @arrow-size / 2;
+    }
+  }
+  .make-align(left) {
+    &::before,
+    &::after {
+      left: @arrow-indent + @arrow-size / 2;
+    }
+  }
+  .tether-element-attached-top.tether-target-attached-top & {
+    .make-align(top);
+  }
+
+  .tether-element-attached-right.tether-target-attached-right & {
+    .make-align(right);
+  }
+
+  .tether-element-attached-bottom.tether-target-attached-bottom & {
+    .make-align(bottom);
+  }
+
+  .tether-element-attached-left.tether-target-attached-left & {
+    .make-align(left);
+  }
+
+  &[ui~="alt"] {
+    background-color: #fff;
+    color: @veui-text-color-normal;
+
+    &::before {
+      display: block;
+      color: #000;
+      z-index: -1;
+    }
+
+    &::after {
+      color: #fff;
+    }
+  }
+}

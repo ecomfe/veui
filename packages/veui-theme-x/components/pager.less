@@ -149,7 +149,9 @@
 
       a,
       span {
-        display: block;
+        display: inline-block;
+        min-width: @button-width;
+        .padding(_, 6px);
         cursor: pointer;
 
         &:hover {

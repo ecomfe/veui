@@ -161,7 +161,7 @@ label {
   margin-bottom: 30px;
 
   tfoot strong {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
   }
 }

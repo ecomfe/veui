@@ -28,7 +28,7 @@
   <button v-if="clearable" v-show="!!selected" class="veui-date-picker-clear" @click="clear">
     <veui-icon :name="icons.clear"></veui-icon>
   </button>
-  <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay">
+  <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay" :overlay-class="overlayClass">
     <veui-calendar class="veui-date-picker-overlay" v-model="localSelected" v-bind="calendarProps" ref="cal"
       v-outside:button="close" @select="handleSelect" @selectstart="handleProgress" @selectprogress="handleProgress" :panel="realPanel">
       <template :slot="shortcutsPosition" v-if="range && realShortcuts && realShortcuts.length">
@@ -53,7 +53,7 @@ import Overlay from './Overlay'
 import Calendar from './Calendar'
 import Icon from './Icon'
 import moment from 'moment'
-import { dropdown, input, icons } from '../mixins'
+import { dropdown, input, icons, overlay } from '../mixins'
 import config from '../managers/config'
 import { isNumber, pick, omit } from 'lodash'
 
@@ -75,7 +75,7 @@ export default {
     'veui-calendar': Calendar,
     'veui-icon': Icon
   },
-  mixins: [dropdown, input, icons],
+  mixins: [dropdown, input, icons, overlay],
   model: {
     prop: 'selected',
     event: 'select'

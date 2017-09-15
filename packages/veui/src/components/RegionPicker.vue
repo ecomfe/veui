@@ -27,6 +27,7 @@
                 <slot name="label" v-bind="group" :level="2">{{ group.label }}</slot>
               </veui-checkbox>
               <veui-overlay v-if="group.children && group.active" :open.sync="group.active"
+                :overlay-class="overlayClass"
                 :target="`group-${si}-${bi}-${gi}`" :options="{
                   attachment: 'top left',
                   targetAttachment: 'bottom left',
@@ -54,7 +55,7 @@
                 </div>
               </veui-overlay>
               <veui-overlay v-if="group.children && group.active" :open.sync="group.active"
-                overlayClass="veui-region-picker-group-shadow-overlay"
+                :overlayClass="mergeOverlayClass('veui-region-picker-group-shadow-overlay')"
                 :target="`group-${si}-${bi}-${gi}`" :options="{
                   attachment: 'top left',
                   targetAttachment: 'top left'
@@ -89,7 +90,7 @@
 <script>
 import Checkbox from './Checkbox'
 import Overlay from './Overlay'
-import { input } from '../mixins'
+import { input, overlay } from '../mixins'
 import { outside } from '../directives'
 import { cloneDeep, pick } from 'lodash'
 import Vue from 'vue'
@@ -101,7 +102,7 @@ export default {
     'veui-overlay': Overlay
   },
   directives: { outside },
-  mixins: [input],
+  mixins: [input, overlay],
   model: {
     prop: 'selected',
     event: 'select'

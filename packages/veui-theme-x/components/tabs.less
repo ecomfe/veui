@@ -29,7 +29,7 @@
 
   &-item {
     float: left;
-    .make-margin(70px);
+    .make-margin(60px);
 
     & > a,
     & > span {
@@ -53,7 +53,7 @@
       }
     }
 
-    &-active, 
+    &-active,
     &:active {
       & > a,
       & > span {
@@ -73,12 +73,12 @@
 
   &[ui~="large"] &-item {
     font-size: @veui-font-size-large;
-    .make-margin(70px);
+    .make-margin(60px);
   }
 
   &[ui~="small"] & {
     &-item {
-      .make-margin(50px);
+      .make-margin(40px);
     }
 
     &-menu {
@@ -92,7 +92,7 @@
     }
 
     &-item {
-      .make-margin(40px);
+      .make-margin(20px);
       position: relative;
 
       &::before {
@@ -101,7 +101,7 @@
         width: 1px;
         height: 14px;
         background-color: @veui-gray-color-6;
-        .absolute(10px, _, _, -20px);
+        .absolute(10px, _, _, -10px);
       }
 
       &:first-child::before {

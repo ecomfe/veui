@@ -11,7 +11,7 @@
 * [^] `Radiobox` 组件重命名为 `Radio`。**[Breaking change]**
 * [^] `RadioboxGroup` 组件重命名为 `RadioGroup`。**[Breaking change]**
 * [^] `Button` 组件的 `aux` 风格 `ui` 现在是默认样式，原有的默认样式更名为 `secondary`。**[Breaking change]**
-* [^] 为组件支持了 `:focus-ring` 的 polyfill，需要使用方自行引入。详见 [#121](https://github.com/ecomfe/veui/issues/121)**[Breaking change]**
+* [^] 为组件支持了 `:focus-ring` 的 polyfill，需要使用方自行引入。详见 [#121](https://github.com/ecomfe/veui/issues/121)。**[Breaking change]**
 * [^] 优化了 `Uploader` 组件的部分 prop、slot 的命名。详见 [#133](https://github.com/ecomfe/veui/issues/133)。**[Breaking change]**
 * [+] `Uploader` 的 prop `maxSize` 现在支持形如 `'100KB'` 的字符串作为值。
 * [^] 修复 `RegionPicker` 浮层在特殊情况下显示上的问题。
@@ -22,6 +22,7 @@
 * [+] 增加 `CheckButtonGroup` 组件。
 * [+] 增加 `Sorter` 组件。
 * [+] 增加 `Progress` 组件（限 `theme-x`）。
+* [+] 所有有单一浮层逻辑的组件，新增 prop `overlay-class`，最终渲染到 `Overlay` 实例的 DOM `class` 上，方便外部区分浮层归属。
 
 ### 0.2.4
 

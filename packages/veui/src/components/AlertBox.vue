@@ -1,5 +1,5 @@
 <template>
-<veui-dialog :overlay-class="realOverlayClass"
+<veui-dialog :overlay-class="mergeOverlayClass('veui-alert-box')"
   :open.sync="localOpen"
   :ui="localUi"
   :closable="false"
@@ -30,8 +30,7 @@ import Dialog from './Dialog'
 import Button from './Button'
 import Icon from './Icon'
 import config from '../managers/config'
-import { icons } from '../mixins'
-import { normalizeCSSClass } from '../utils/helper'
+import { icons, overlay } from '../mixins'
 
 config.defaults({
   'alertbox.priority': 100
@@ -39,8 +38,8 @@ config.defaults({
 
 export default {
   name: 'veui-alert-box',
-  mixins: [icons],
-  props: pick(Dialog.props, ['open', 'title', 'ui', 'overlayClass']),
+  mixins: [icons, overlay],
+  props: pick(Dialog.props, ['open', 'title', 'ui']),
   components: {
     'veui-dialog': Dialog,
     'veui-button': Button,
@@ -61,12 +60,6 @@ export default {
     },
     type () {
       return find(this.uis, ui => includes(['success', 'error', 'info'], ui))
-    },
-    realOverlayClass () {
-      return {
-        ...normalizeCSSClass(this.overlayClass),
-        'veui-alert-box': true
-      }
     }
   },
   watch: {

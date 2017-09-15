@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="96px" height="96px" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.1 (35376) - http://www.bohemiancoding.com/sketch -->
-    <title>ok_s</title>
+<svg width="7px" height="6px" viewBox="0 0 7 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.1 (44463) - http://www.bohemiancoding.com/sketch -->
+    <title>对勾12</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Desktop-HD" transform="translate(-1632.000000, -1248.000000)" fill="#000000">
-            <g id="ok_s" transform="translate(1632.000000, 1248.000000)">
-                <path d="M28.5800783,46.1987339 C26.1909835,43.6692265 22.2036685,43.5553996 19.6741611,45.9444945 C17.1446537,48.3335894 17.0308268,52.3209043 19.4199217,54.8504117 L34.0363103,70.3258392 C36.5380747,72.9746376 40.7584443,72.955326 43.2358633,70.2837432 L76.6194744,34.283743 C78.9853206,31.7324776 78.8350086,27.7463713 76.2837432,25.3805254 C73.7324778,23.0146794 69.7463712,23.1649916 67.3805256,25.716257 L38.5742002,56.7802331 L28.5800783,46.1987339 Z" id="Path-4-Copy-10"></path>
-            </g>
-        </g>
+    <g id="【未公示】" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon id="对勾12" fill="#333333" points="2.56637138 6 0 3.18906343 0.978364882 2.13392002 2.56637138 3.88334103 5.97568577 0 7 1.08210253"></polygon>
     </g>
 </svg>

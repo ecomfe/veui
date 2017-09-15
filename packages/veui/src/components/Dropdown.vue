@@ -19,7 +19,8 @@
     v-if="expanded"
     target="button"
     :open="expanded"
-    :options="overlay">
+    :options="overlay"
+    :overlayClass="overlayClass">
     <div ref="box" class="veui-dropdown-options" v-outside:button="close">
       <div v-for="option in options"
         :key="option.value"
@@ -41,7 +42,7 @@
 import Icon from './Icon'
 import Button from './Button'
 import Overlay from './Overlay'
-import { ui, dropdown, icons } from '../mixins'
+import { ui, dropdown, icons, overlay } from '../mixins'
 
 export default {
   name: 'veui-dropdown',
@@ -50,7 +51,7 @@ export default {
     'veui-button': Button,
     'veui-overlay': Overlay
   },
-  mixins: [ui, dropdown, icons],
+  mixins: [ui, dropdown, icons, overlay],
   props: {
     ui: String,
     label: String,

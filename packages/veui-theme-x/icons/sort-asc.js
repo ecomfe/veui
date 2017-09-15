@@ -1,11 +1,11 @@
 import Icon from 'veui/components/Icon'
 Icon.register({
   "sort-asc": {
-    "width": 96,
-    "height": 96,
+    "width": "12",
+    "height": "12",
     "paths": [
       {
-        "d": "M70.26 25.8A6 6 0 0 1 66 36.02H30a6 6 0 0 1-4.24-10.24l18-18.03a6 6 0 0 1 8.49 0l18 18.03z"
+        "d": "M12-4.03l-.61.6-2.42-3.06V12h-.99V0h.99L12 4z"
       }
     ]
   }

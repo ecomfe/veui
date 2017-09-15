@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="96px" height="96px" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.1 (35376) - http://www.bohemiancoding.com/sketch -->
-    <title>del</title>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.1 (44463) - http://www.bohemiancoding.com/sketch -->
+    <title>关闭14</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Desktop-HD" transform="translate(-288.000000, -1248.000000)" fill="#000000">
-            <g id="del" transform="translate(288.000000, 1248.000000)">
-                <path d="M56.4852814,48 L81.9374274,22.547854 C84.297357,20.1879242 84.284271,16.4020202 81.9411252,14.0588745 C79.5816438,11.6993928 75.797334,11.7173845 73.4521458,14.0625727 L48,39.5147186 L22.547854,14.0625727 C20.2026658,11.7173845 16.4183563,11.6993928 14.0588745,14.0588745 C11.7157288,16.4020202 11.7026428,20.1879242 14.0625727,22.547854 L39.5147186,48 L14.0625727,73.4521458 C11.7026428,75.812076 11.7157288,79.59798 14.0588745,81.9411252 C16.4183563,84.3006072 20.2026658,84.2826156 22.547854,81.9374274 L48,56.4852814 L73.4521458,81.9374274 C75.797334,84.2826156 79.5816438,84.3006072 81.9411252,81.9411252 C84.284271,79.59798 84.297357,75.812076 81.9374274,73.4521458 L56.4852814,48 Z" id="Combined-Shape"></path>
-            </g>
-        </g>
+    <g id="【未公示】" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M6,5.14285714 L0.857142857,8.8817842e-16 L1.35447209e-14,0.857142857 L5.14285714,6 L1.42108547e-14,11.1428571 L0.857142857,12 L6,6.85714286 L11.1428571,12 L12,11.1428571 L6.85714286,6 L12,0.857142857 L11.1428571,0 L6,5.14285714 Z" id="关闭14" fill="#333333"></path>
     </g>
 </svg>
