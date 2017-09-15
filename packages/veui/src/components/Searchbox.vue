@@ -8,6 +8,7 @@
   <veui-input
     ref="input"
     :name="realName"
+    :style="{paddingRight: `${inputRightPadding}px`}"
     :readonly="realReadonly"
     :disabled="realDisabled"
     v-bind="attrs"
@@ -28,15 +29,19 @@
         :disabled="realDisabled"
         v-if="localValue"
         @click.stop="localValue = ''">
-        <icon name="cross-small"></icon>
+        <icon :name="icons.clear"></icon>
       </button>
       <button class="veui-searchbox-icon veui-searchbox-icon-search"
+        ref="search"
         type="button"
         :readonly="realReadonly"
         :disabled="realDisabled"
         @click.stop="search">
-        <icon name="search"></icon>
-      </button>
+        <icon :name="icons.search"></icon>
+        <veui-button :ui="ui"
+          :readonly="realReadonly"
+          :disabled="realDisabled">搜索</veui-button>
+        </button>
     </div>
   </div>
   <veui-overlay
@@ -65,19 +70,21 @@
 </template>
 
 <script>
-import { input, dropdown, overlay } from '../mixins'
+import { input, dropdown, overlay, icons } from '../mixins'
 import { pick } from 'lodash'
 import Input from './Input'
 import Icon from './Icon'
 import Overlay from './Overlay'
+import Button from './Button'
 
 export default {
   name: 'veui-searchbox',
-  mixins: [input, dropdown, overlay],
+  mixins: [input, dropdown, overlay, icons],
   components: {
     'veui-input': Input,
     Icon,
-    'veui-overlay': Overlay
+    'veui-overlay': Overlay,
+    'veui-button': Button
   },
   props: {
     ui: String,
@@ -109,7 +116,8 @@ export default {
       localValue: this.value,
       // 默认设成false，input focus事件由input控件触发
       inputFocus: false,
-      hideSuggestion: true
+      hideSuggestion: true,
+      inputRightPadding: 0
     }
   },
   computed: {
@@ -184,6 +192,10 @@ export default {
     close () {
       this.hideSuggestion = true
     }
+  },
+  mounted () {
+    const $search = this.$refs.search
+    this.inputRightPadding = $search.clientWidth + 8 + (this.clearable ? $search.clientHeight / 2 : 0)
   }
 }
 </script>

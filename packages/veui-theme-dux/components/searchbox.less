@@ -12,6 +12,12 @@
     }
   }
 
+  &-icon-search {
+    .veui-button {
+      display: none;
+    }
+  }
+
   &.veui-disabled,
   &.veui-readonly {
     background-color: @veui-gray-color-sup-3;
@@ -33,9 +39,7 @@
     pointer-events: none;
     line-height: @veui-height-normal;
   }
-  .veui-input {
-    padding-right: 36px;
-  }
+
   &-placeholder {
     padding: 0 11px;
     color: @veui-gray-color-weak;
@@ -46,7 +50,7 @@
 
   &-icons {
     position: absolute;
-    right: 1em;
+    right: 0;
     top: 0;
     bottom: 0;
   }
@@ -64,6 +68,12 @@
     &-close {
       display: none;
       margin-right: 8px;
+    }
+
+    &-search {
+      .veui-icon {
+        padding-right: 1em;
+      }
     }
 
     .veui-icon {
@@ -162,6 +172,7 @@
         width: auto;
         left: 50%;
         transform: translateX(-50%);
+        white-space: nowrap;
         .veui-searchbox-icons {
           position: static;
           display: inline-block;
