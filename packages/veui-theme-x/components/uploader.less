@@ -51,22 +51,10 @@
     .size(100%);
     cursor: pointer;
 
-    &::before,
-    &::after, {
-      content: "";
-      position: absolute;
-    }
-    &::before {
-      border-top: 2px solid @veui-gray-color-2;
-      top: ~"calc(50% - 1px)";
-      left: ~"calc(50% - 25px)";
-      width: 50px;
-    }
-    &::after {
-      border-left: 2px solid @veui-gray-color-2;
-      top: ~"calc(50% - 25px)";
-      left: ~"calc(50% - 1px)";
-      height: 50px;
+    .veui-icon {
+      font-size: 50px;
+      vertical-align: middle;
+      color: @veui-gray-color-2;
     }
 
     &:hover {
@@ -125,6 +113,7 @@
       padding: 4px;
       margin: 0 10px 5px 0;
       width: @width;
+      color: @veui-gray-color-2;
     }
 
     li:hover {
@@ -149,8 +138,12 @@
       line-height: 20px;
     }
 
-    &-name-status {
+    &-name-success {
       width: ~"calc(100% - 9em)";
+    }
+
+    &-name-failure {
+      width: ~"calc(100% - 11em)";
     }
 
     &-status {
@@ -175,13 +168,15 @@
     .veui-button {
       float: right;
       .centered-line(20px);
+      vertical-align: top;
 
       &.veui-uploader-list-retry {
+        float: none;
+        margin-left: 10px;
         color: @veui-gray-color-1;
 
         .veui-icon {
-          margin: 0 5px 0 0;
-          vertical-align: baseline;
+          margin: 4px 6px 0 0;
           font-size: 12px;
         }
       }
@@ -220,6 +215,7 @@
     &-mask {
       display: none;
       .absolute(0);
+      background-color: fadeout(#000, 90%);
 
       .veui-button {
         position: absolute;
@@ -330,14 +326,12 @@
   .veui-button[ui~="remove"] {
     float: right;
     color: @veui-gray-color-2;
-    font-size: @icon-size;
-    min-width: @icon-size;
-    width: @icon-size;
     visibility: hidden;
     .centered-line(20px);
 
     .veui-icon {
-      margin-top: 2px;
+      font-size: 10px;
+      margin-top: 4px;
     }
   }
 

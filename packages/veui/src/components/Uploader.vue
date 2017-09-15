@@ -26,13 +26,14 @@
             <template v-if="type === 'file'">
               <icon :name="icons.file" class="veui-uploader-list-icon"></icon>
               <span class="veui-uploader-list-name"
-                :class="{'veui-uploader-list-name-status': file.status === 'success' || file.status === 'failure'}"
+                :class="{'veui-uploader-list-name-success': file.status === 'success',
+                  'veui-uploader-list-name-failure': file.status === 'failure'
+                }"
                 :title="file.name">{{file.name}}</span>
               <span v-if="file.status === 'success'" class="veui-uploader-success"><slot name="success-label">上传成功！</slot></span>
               <span v-if="file.status === 'failure'" class="veui-uploader-failure"><slot name="failure-label">上传失败</slot></span>
-              <veui-button v-if="file.status !== 'failure'"
-                ui="link remove" @click="$emit('remove', file)" :disabled="realDisabled"><icon :name="icons.clear"></icon></veui-button>
-              <veui-button v-else ui="link" @click="retry(file)" :class="listClass + '-retry'"><icon :name="icons.redo"></icon>重试</veui-button>
+              <veui-button v-if="file.status === 'failure'" ui="link" @click="retry(file)" :class="listClass + '-retry'"><icon :name="icons.redo"></icon>重试</veui-button>
+              <veui-button ui="link remove" @click="$emit('remove', file)" :disabled="realDisabled"><icon :name="icons.clear"></icon></veui-button>
             </template>
             <template v-else>
               <img :src="file.src" :alt="file.alt || ''">
@@ -88,6 +89,7 @@
             :accept="accept"
             :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
             @click.stop>
+            <icon :name="icons.add"></icon>
         </label>
       </li>
     </ul>
@@ -380,8 +382,7 @@ export default {
     },
     uploadFiles () {
       this.fileList.forEach(file => {
-        if (!file.toBeUploaded) return
-        this.upload(file)
+        if (file.toBeUploaded) this.upload(file)
       })
     },
     upload (file) {
@@ -405,6 +406,7 @@ export default {
       }
       xhr.onerror = () => {
         this.onFailure({}, file)
+        this.$emit('fail')
       }
       let formData = new FormData()
       formData.append(this.name, file)
