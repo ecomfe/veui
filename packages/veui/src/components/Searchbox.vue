@@ -117,6 +117,7 @@ export default {
       // 默认设成false，input focus事件由input控件触发
       inputFocus: false,
       hideSuggestion: true,
+      // 该值是为了修复覆盖在input右边的一些按钮的宽度。
       inputRightPadding: 0
     }
   },
@@ -195,7 +196,14 @@ export default {
   },
   mounted () {
     const $search = this.$refs.search
-    this.inputRightPadding = $search.clientWidth + 8 + (this.clearable ? $search.clientHeight / 2 : 0)
+    let fontSize = window.getComputedStyle($search).fontSize
+    fontSize = +(fontSize.substring(0, fontSize.length - 2))
+    // 各个字段端详细解释一下：
+    // fontSize：用来估摸一个clear的icon按钮的宽度
+    // 8: css写的clear-icon的右边距
+    // -3: 粗略估算 cross-small icon本身的左留白
+    // 10: input的左padding
+    this.inputRightPadding = $search.clientWidth + 10 + (this.clearable ? (fontSize + 8 - 3) : 0)
   }
 }
 </script>
