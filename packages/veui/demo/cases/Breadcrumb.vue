@@ -4,7 +4,7 @@
     <p>
       <veui-breadcrumb :routes="items" @redirect="handleRedirect">
         <template scope="scope"><em>{{ scope.route.text }}</em></template>
-        <template slot="separator" scope="scope"><veui-icon name="angle-double-right"></veui-icon></template>
+        <template slot="separator" scope="scope">/</template>
       </veui-breadcrumb>
     </p>
     <p>
@@ -15,7 +15,6 @@
 
 <script>
 import { Breadcrumb, Icon } from 'veui'
-import 'veui-theme-x/icons/angle-double-right'
 
 export default {
   name: 'breadcrumb-demo',

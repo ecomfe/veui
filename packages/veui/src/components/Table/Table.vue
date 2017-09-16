@@ -13,7 +13,7 @@
 
 <script>
 import Vue from 'vue'
-import { map, intersection, isString, includes, indexOf, keys as objectKeys, flatten } from 'lodash'
+import { map, intersection, isString, includes, indexOf, keys as objectKeys } from 'lodash'
 import Body from './_TableBody'
 import Head from './_TableHead'
 import Foot from './_TableFoot'
@@ -58,10 +58,13 @@ export default {
   data () {
     return {
       columns: [],
-      localSelected: [...(flatten([this.selected]))]
+      localSelected: normalizeArray(this.selected)
     }
   },
   computed: {
+    realSelected () {
+      return this.selectMode === 'multiple' ? this.localSelected : this.localSelected[0]
+    },
     realColumns () {
       if (!this.columnFilter) {
         return this.columns
@@ -79,7 +82,7 @@ export default {
       return keys.map(String)
     },
     selectedItems () {
-      return flatten([this.localSelected]).reduce((selectedItems, key) => {
+      return this.localSelected.reduce((selectedItems, key) => {
         selectedItems[key] = this.getItem(key)
         return selectedItems
       }, {})
@@ -109,7 +112,7 @@ export default {
           if (this.selectMode === 'multiple') {
             this.localSelected.push(key)
           } else {
-            this.localSelected = key
+            this.localSelected = [key]
           }
         } else {
           this.localSelected.splice(indexOf(this.localSelected, key), 1)
@@ -121,7 +124,7 @@ export default {
           this.localSelected = []
         }
       }
-      this.$emit('update:selected', this.localSelected)
+      this.$emit('update:selected', this.realSelected)
       this.$emit('select', selected, item, this.selectedItems)
     },
     getItem (key) {
@@ -147,13 +150,17 @@ export default {
   watch: {
     selected (val) {
       if (this.validateSelected(val)) {
-        this.localSelected = val
+        this.localSelected = normalizeArray(val)
       }
     },
     realKeys (val) {
       this.localSelected = intersection(this.localSelected, val)
-      this.$emit('update:selected', this.localSelected)
+      this.$emit('update:selected', this.realSelected)
     }
   }
+}
+
+function normalizeArray (val) {
+  return Array.isArray(val) ? val : [val]
 }
 </script>

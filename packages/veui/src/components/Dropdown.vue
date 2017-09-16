@@ -24,6 +24,7 @@
     <div ref="box" class="veui-dropdown-options" v-outside:button="close">
       <div v-for="option in options"
         :key="option.value"
+        :ui="ui"
         class="veui-dropdown-option"
         :class="{
           'veui-dropdown-option-disabled': option.disabled

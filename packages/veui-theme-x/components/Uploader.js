@@ -1,8 +1,8 @@
 import '../icons/upload'
 import '../icons/cross'
 import '../icons/check'
-import '../icons/pin'
-import '../icons/redo'
+import '../icons/clip'
+import '../icons/refresh'
 import '../icons/plus-huge'
 import config from 'veui/managers/config'
 
@@ -11,8 +11,8 @@ config.defaults({
     upload: 'upload',
     clear: 'cross',
     success: 'check',
-    redo: 'redo',
-    file: 'pin',
+    redo: 'refresh',
+    file: 'clip',
     add: 'plus-huge'
   }
 })

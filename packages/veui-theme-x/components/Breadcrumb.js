@@ -1,8 +1,8 @@
-import '../icons/angle-right'
+import '../icons/angle-right-small'
 import config from 'veui/managers/config'
 
 config.defaults({
   'breadcrumb.icons': {
-    next: 'angle-right'
+    next: 'angle-right-small'
   }
 })

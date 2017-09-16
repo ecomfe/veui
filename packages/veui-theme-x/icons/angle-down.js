@@ -1,11 +1,11 @@
 import Icon from 'veui/components/Icon'
 Icon.register({
   "angle-down": {
-    "width": "96",
-    "height": "96",
+    "width": "14",
+    "height": "14",
     "paths": [
       {
-        "d": "M67.76 31.76a6 6 0 0 1 8.48 8.48l-24 24a6 6 0 0 1-8.48 0l-24-24a6 6 0 0 1 8.48-8.48L48 51.5l19.76-19.75z",
+        "d": "M7.13 10.84l-.47.47L1 5.66l.94-.95 4.72 4.72 4.71-4.72.94.95-5.18 5.18z",
         "fill-rule": "evenodd"
       }
     ]

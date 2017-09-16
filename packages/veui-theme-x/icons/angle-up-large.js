@@ -1,0 +1,12 @@
+import Icon from 'veui/components/Icon'
+Icon.register({
+  "angle-up-large": {
+    "width": "20",
+    "height": "20",
+    "paths": [
+      {
+        "d": "M18.95 15.46l.99-1-9.99-9.98L0 14.43l.99 1 8.96-8.97z"
+      }
+    ]
+  }
+})

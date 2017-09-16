@@ -2,11 +2,10 @@ import Icon from 'veui/components/Icon'
 Icon.register({
   "arrow-right": {
     "width": "12",
-    "height": "10",
+    "height": "12",
     "paths": [
       {
-        "d": "M11.02 5.58h.2V4.34h-.1l.14-.15-4-4-.88.88 3.28 3.27H0v1.24h9.73L6.37 8.93l.88.88 4-4-.23-.23z",
-        "fill-rule": "evenodd"
+        "d": "M12 6.5l-3.5 4-.82-.8 2.82-3.2H0v-1h12v1zm0-1h-1.5L7.68 2.3l.82-.8 3.5 4z"
       }
     ]
   }

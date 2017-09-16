@@ -21,7 +21,7 @@
     :open="expanded"
     :options="overlay"
     :overlay-class="overlayClass">
-    <div ref="box" class="veui-select-options" :ui="ui" v-outside:button="close">
+    <div ref="box" class="veui-select-options" v-outside:button="close">
       <slot>
         <template v-for="(option, index) in realOptions">
           <div v-if="option.options" :class="{
@@ -34,6 +34,7 @@
             <veui-option
               v-for="subOption in option.options"
               v-bind="subOption"
+              :ui="ui"
               :selected="subOption.value === value"
               :key="subOption.value"
               @select="handleSelect(subOption)">
@@ -43,6 +44,7 @@
           <veui-option
             v-else
             v-bind="option"
+            :ui="ui"
             :selected="option.value === value"
             :key="option.value"
             @select="handleSelect(option)">

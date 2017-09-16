@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="8px" height="8px" viewBox="0 0 8 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 46.1 (44463) - http://www.bohemiancoding.com/sketch -->
     <title>关闭12</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="【未公示】" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <path d="M4.83333333,4 L8,0.833333333 L7.16666667,3.19320696e-16 L4,3.16666667 L0.833333333,5.70099523e-14 L4.4408921e-16,0.833333333 L3.16666667,4 L-3.55271368e-15,7.16666667 L0.833333333,8 L4,4.83333333 L7.16666667,8 L8,7.16666667 L4.83333333,4 Z" id="关闭12" fill="#333333"></path>
+        <g id="【供序章用规范】组件-图标-魏博嘉" transform="translate(-160.000000, -392.000000)" fill="#333333">
+            <g id="关闭12" transform="translate(160.000000, 392.000000)">
+                <path d="M6.83333333,6 L10,2.83333333 L9.16666667,2 L6,5.16666667 L2.83333333,2 L2,2.83333333 L5.16666667,6 L2,9.16666667 L2.83333333,10 L6,6.83333333 L9.16666667,10 L10,9.16666667 L6.83333333,6 Z"></path>
+            </g>
+        </g>
     </g>
 </svg>

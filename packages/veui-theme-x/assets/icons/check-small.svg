@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="7px" height="6px" viewBox="0 0 7 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 46.1 (44463) - http://www.bohemiancoding.com/sketch -->
     <title>对勾12</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="【未公示】" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <polygon id="对勾12" fill="#333333" points="2.56637138 6 0 3.18906343 0.978364882 2.13392002 2.56637138 3.88334103 5.97568577 0 7 1.08210253"></polygon>
+        <g id="【供序章用规范】组件-图标-魏博嘉" transform="translate(-160.000000, -642.000000)" fill="#333333">
+            <g id="对勾12" transform="translate(160.000000, 642.000000)">
+                <polygon points="5.06637138 9 2.5 6.18906343 3.47836488 5.13392002 5.06637138 6.88334103 8.47568577 3 9.5 4.08210253"></polygon>
+            </g>
+        </g>
     </g>
 </svg>

@@ -2,7 +2,7 @@
 <aside :class="{expanded, 'veui-console': true}">
   <h2 @click="expanded = !expanded">
     <icon @click.native.stop="logs = []" name="ban" label="Clear console" flip="horizontal"></icon>
-    <icon :name="expanded ? 'triangle-down' : 'triangle-up'" label="Toggle console"></icon>
+    <icon :name="expanded ? 'angle-down' : 'angle-up'" label="Toggle console"></icon>
     Console <small>({{logs.length}})</small>
   </h2>
   <section class="output" ref="logList">
@@ -15,8 +15,8 @@
 import bus from './bus'
 import Icon from 'veui/components/Icon'
 import 'vue-awesome/icons/ban'
-import 'veui-theme-x/icons/triangle-up'
-import 'veui-theme-x/icons/triangle-down'
+import 'veui-theme-x/icons/angle-up'
+import 'veui-theme-x/icons/angle-down'
 
 export default {
   components: {
