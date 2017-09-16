@@ -6,7 +6,7 @@ Icon.register({
     "paths": [
       {
         "d": "M5.44 11L0 5.09l1.01-1.04L5.44 8.9l8.5-8.9L15 1.07z",
-        "fillRule": "evenodd"
+        "fill-rule": "evenodd"
       }
     ]
   }

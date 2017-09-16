@@ -40,10 +40,12 @@
       <h2>小ui模式</h2>
       <p>
         <veui-searchbox
-          ui="small"
+          ui="primary small"
+          clearable
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions2"
+          replaceOnSelect
           @input="handleInput('2', $event)"
           @search="log($event)"></veui-searchbox>
       </p>
@@ -52,7 +54,7 @@
       <h2>大ui模式</h2>
       <p>
         <veui-searchbox
-          ui="large"
+          ui="primary large"
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions3"
@@ -64,7 +66,7 @@
       <h2>全局搜索框</h2>
       <p>
         <veui-searchbox
-          ui="alt"
+          ui="primary"
           replaceOnSelect
           :name="name"
           :placeholder="placeholder"
@@ -78,7 +80,7 @@
       <h2>禁用全局搜索框</h2>
       <p>
         <veui-searchbox
-          ui="alt"
+          ui="alt primary"
           disabled
           :name="name"
           :placeholder="placeholder"
@@ -108,7 +110,6 @@
       <h2>自定义Suggestion样式2</h2>
       <p>
         <veui-searchbox
-          ui="alt"
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions7"
