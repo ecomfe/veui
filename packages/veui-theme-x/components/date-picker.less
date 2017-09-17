@@ -42,6 +42,7 @@
     padding: 0;
     color: @veui-text-color-weak;
     cursor: pointer;
+    .veui-button-transition();
 
     &:hover {
       color: @veui-text-color-normal;
@@ -111,17 +112,35 @@
   }
 
   &:hover {
-    .veui-date-picker-clear,
-    .veui-button:not(.veui-disabled) {
-      background-color: @veui-gray-color-8;
-      color: @veui-text-color-strong;
+    .veui-date-picker {
+      &-button:not(.veui-disabled),
+      &-clear {
+        background-color: @veui-gray-color-8;
+        color: @veui-text-color-strong;
+      }
+    }
+  }
+
+  &:hover &-button:not(.veui-disabled):active {
+    &,
+    & + .veui-date-picker-clear {
+      background-color: @veui-gray-color-6;
     }
   }
 
   &[ui~="alt"]:hover {
-    .veui-date-picker-clear,
-    .veui-button:not(.veui-disabled) {
-      background-color: @veui-gray-color-6;
+    .veui-date-picker {
+      &-button:not(.veui-disabled),
+      &-clear {
+        background-color: @veui-gray-color-6;
+      }
+    }
+  }
+
+  &[ui~="alt"]:hover &-button:not(.veui-disabled):active {
+    &,
+    & + .veui-date-picker-clear {
+      background-color: @veui-gray-color-5;
     }
   }
 }
