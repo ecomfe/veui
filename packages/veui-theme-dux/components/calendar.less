@@ -2,27 +2,24 @@
 
 .veui-calendar {
   display: inline-block;
-  position: relative;
   overflow: hidden;
   border: 1px solid @veui-gray-color-sup-2;
   border-radius: 4px;
   background-color: #fff;
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 36px;
-    left: 0;
-    right: 0;
-    height: 0;
-    border-bottom: 1px solid @veui-gray-color-sup-2;
-  }
-
   &-panel {
     display: inline-block;
+    position: relative;
 
     & + & {
       margin-left: 10px;
+    }
+
+    &::before {
+      content: "";
+      .absolute(36px, -10px, _, 0);
+      height: 0;
+      border-bottom: 1px solid @veui-gray-color-sup-2;
     }
   }
 

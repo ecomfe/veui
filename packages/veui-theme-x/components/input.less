@@ -1,0 +1,72 @@
+@import "../lib.less";
+@import (reference) "../input.less";
+
+.veui-input,
+.veui-textarea {
+
+  .make-line-height(@height) {
+    height: @height;
+    line-height: @height - 2px;
+  }
+
+  .veui-field-invalid & {
+    &:extend(._veui-input-invalid all);
+  }
+
+  .make-line-height(@veui-height-normal);
+  width: @veui-width-normal;
+  padding: 0 10px;
+  vertical-align: middle;
+  border: 1px solid @veui-gray-color-5;
+  background-color: #fff;
+  color: @veui-text-color-normal;
+
+  &:hover {
+    border-color: @veui-gray-color-3;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: @veui-gray-color-3;
+    color: @veui-text-color-strong;
+  }
+
+  &:read-only,
+  &:disabled {
+    background-color: @veui-gray-color-8;
+    border-color: @veui-gray-color-5;
+    color: @veui-text-color-weak;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: @veui-text-color-weak;
+  }
+
+  &[ui~="large"] {
+    .make-line-height(@veui-height-large);
+    font-size: @veui-font-size-large;
+  }
+
+  &[ui~="small"] {
+    .make-line-height(@veui-height-small);
+    font-size: @veui-font-size-small;
+  }
+}
+
+.veui-textarea {
+  padding: 6.5px 10px;
+  line-height: 1.5;
+  resize: none;
+
+  &[rows] {
+    height: auto;
+  }
+
+  &-resizable {
+    resize: both;
+  }
+}

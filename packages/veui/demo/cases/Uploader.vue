@@ -53,7 +53,7 @@
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
     <h2>文件上传模式，通过iframe上传</h2>
-    <veui-uploader
+    <veui-uploader ref="iframeUploader"
       name="file"
       action="/uploadiframe"
       request-mode="iframe"
@@ -65,7 +65,8 @@
       @remove="removeFileIframe"
       @cancel="cancelUploadingIframe"
       @success="onSuccess"
-      @fail="onFailure">
+      @fail="onFailure"
+      @change="mockResult">
       <template slot="desc">可上传所有类型图片，大小在10M以内，只能上传1张图</template>
     </veui-uploader>
   </article>
@@ -132,6 +133,14 @@ export default {
     },
     cancelUploadingIframe () {
       this.filesIframe = ''
+    },
+    mockResult () {
+      setTimeout(() => {
+        this.$refs.iframeUploader.uploadCallback({
+          status: 'success',
+          name: 'demo-file.jpg'
+        }, this.$refs.iframeUploader.currentSubmitingFile)
+      }, 1000)
     }
   }
 }

@@ -2,7 +2,7 @@
   <article>
     <h1><code>&lt;veui-tooltip&gt;</code></h1>
     <p>
-      <veui-button ui="primary" @click="ui = ui ? '' : 'light'">切换皮肤</veui-button>
+      <veui-button ui="primary" @click="ui = ui ? '' : 'alt'">切换皮肤</veui-button>
     </p>
     <p>
       <div class="demo-wrap">

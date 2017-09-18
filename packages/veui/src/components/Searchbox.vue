@@ -42,7 +42,8 @@
   <veui-overlay
     target="input"
     :options="overlay"
-    :open="expanded">
+    :open="expanded"
+    :overlay-class="overlayClass">
     <div class="veui-searchbox-suggestion-overlay"
       ref="box"
       :ui="ui"
@@ -64,7 +65,7 @@
 </template>
 
 <script>
-import { input, dropdown } from '../mixins'
+import { input, dropdown, overlay } from '../mixins'
 import { pick } from 'lodash'
 import Input from './Input'
 import Icon from './Icon'
@@ -72,7 +73,7 @@ import Overlay from './Overlay'
 
 export default {
   name: 'veui-searchbox',
-  mixins: [input, dropdown],
+  mixins: [input, dropdown, overlay],
   components: {
     'veui-input': Input,
     Icon,

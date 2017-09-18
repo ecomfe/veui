@@ -14,7 +14,7 @@
     </section>
     <section>
       <p>
-        <veui-check-button-group :items="data2" ui="small" v-model="picked2" :disabled="disabled">
+        <veui-check-button-group :items="data2" ui="small alt" v-model="picked2" :disabled="disabled">
           <template scope="props">{{ props.label }}</template>
         </veui-check-button-group>
       </p>

@@ -1,6 +1,7 @@
 <script>
 import Overlay from './Overlay'
 import { outside } from '../directives'
+import { overlay } from '../mixins'
 import { getNodes } from '../utils/context'
 import { isString } from 'lodash'
 
@@ -18,6 +19,7 @@ const TRIGGER_MAP = {
 export default {
   name: 'veui-tooltip',
   directives: { outside },
+  mixins: [overlay],
   components: {
     'veui-overlay': Overlay
   },
@@ -138,7 +140,7 @@ export default {
         target={this.targetNode}
         open={this.localOpen}
         options={this.overlay}
-        overlayClass="veui-tooltip-box">
+        overlayClass={this.mergeOverlayClass('veui-tooltip-box')}>
         <div class="veui-tooltip" ui={this.ui} {...{directives}}>
           <div class="veui-tooltip-content">
             { this.$slots.default }

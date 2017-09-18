@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="10px" viewBox="0 0 12 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.1 (44463) - http://www.bohemiancoding.com/sketch -->
+    <title>箭头</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="【未公示】" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="【供序章用规范】组件-图标-魏博嘉" transform="translate(-160.000000, -842.000000)" fill="#333333">
+            <g id="箭头" transform="translate(160.000000, 842.000000)">
+                <path d="M6.20850987,10.3914705 L6.20850987,10.5921308 L4.96945366,10.5921308 L4.96945366,10.4816511 L4.82101334,10.6300914 L0.81989479,6.6289729 L1.69603984,5.75282785 L4.96945366,9.02624167 L4.96945366,-0.630091446 L6.20850987,-0.630091446 L6.20850987,9.10049983 L9.56414305,5.74486664 L10.4402881,6.62101169 L6.43916955,10.6221302 L6.20850987,10.3914705 Z" id="箭头14" transform="translate(5.630091, 5.000000) scale(-1, 1) rotate(90.000000) translate(-5.630091, -5.000000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

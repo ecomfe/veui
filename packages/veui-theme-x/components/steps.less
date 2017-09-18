@@ -1,0 +1,269 @@
+@import "../lib.less";
+
+.veui-steps {
+  display: inline-block;
+  @step-height: 30px;
+  @full-height: 30px;
+  @separator-length-x: 120px;
+  @separator-length-y: 60px;
+  @separator-width: 1px;
+  @separator-gap-x: 20px;
+  @separator-gap-y: 10px;
+  @border-width: 1px;
+  @full-line-height: @veui-line-height-normal * @veui-font-size-normal;
+  @label-font-size: @veui-font-size-large;
+  @desc-font-size: @veui-font-size-small;
+
+  &-step {
+    display: block;
+    float: left;
+    text-decoration: none;
+    position: relative;
+    margin-right: @separator-gap-x * 2 + @separator-length-x;
+
+    &-index {
+      @half-height: @step-height / 2;
+      position: absolute;
+      top: ~"calc(50% - @{half-height})";
+      .size(@step-height);
+      border: @border-width solid @veui-success-color;
+      text-align: center;
+      line-height: @step-height - @border-width * 2;
+      color: @veui-success-color;
+      font-size: @veui-font-size-large;
+      border-radius: 50%;
+
+      .veui-icon {
+        vertical-align: top;
+        margin-top: ~"calc(50% - 0.5em)";
+      }
+    }
+
+    &-content {
+      padding-left: @step-height + 10px;
+    }
+
+    &:last-child &-content {
+      margin-right: 0;
+    }
+
+    &-label {
+      margin: 0;
+      font-size: @label-font-size;
+      color: @veui-text-color-normal;
+      line-height: @step-height;
+      font-weight: @veui-font-weight-normal;
+    }
+
+    &-desc {
+      display: none;
+      margin: 0;
+      color: @veui-text-color-weak;
+      font-size: @desc-font-size;
+    }
+
+    &::after {
+      @half-width: @separator-width / 2;
+      .size(@separator-length-x, @separator-width);
+      content: "";
+      position: absolute;
+      top: ~"calc(50% - @{half-width})";
+      right: -@separator-gap-x - @separator-length-x;
+      background-color: @veui-gray-color-2;
+      pointer-events: none;
+    }
+
+    &:last-child::after {
+      display: none;
+    }
+
+    a&:hover,
+    a&.focus-ring {
+      .veui-steps-step {
+        &-label {
+          color: @veui-text-color-strong;
+        }
+
+        &-index {
+          border-color: @veui-success-color-2;
+          color: @veui-success-color-2;
+        }
+      }
+    }
+  }
+
+  &-current {
+    .veui-steps-step-index {
+      border-color: transparent;
+      background-color: @veui-gray-color-2;
+      color: #fff;
+    }
+
+    .veui-steps-step::after {
+      background-color: @veui-gray-color-5;
+    }
+
+    &,
+    & ~ .veui-steps-step {
+      &::after {
+        background-color: @veui-gray-color-5;
+      }
+    }
+
+    & ~ .veui-steps-step {
+      .veui-steps-step-index {
+        background-color: @veui-gray-color-5;
+        border-color: transparent;
+        color: #fff;
+      }
+    }
+
+    a&:hover,
+    a&.focus-ring {
+      .veui-steps-step-index {
+        background-color: @veui-gray-color-1;
+        border-color: transparent;
+        color: #fff;
+      }
+    }
+
+    & ~ a.veui-steps-step:hover,
+    & ~ a.veui-steps-step.focus-ring {
+      .veui-steps-step-index {
+        background-color: @veui-gray-color-4;
+        border-color: transparent;
+        color: #fff;
+      }
+    }
+  }
+
+  &[ui~="full"] .veui-steps-step {
+    @half-height: @full-height / 2;
+
+    &-content {
+      padding-left: @full-height + 10px;
+    }
+
+    &-index {
+      top: ~"calc(50% - @{half-height})";
+      .size(@full-height);
+      line-height: @full-height - @border-width * 2;
+    }
+
+    &-label,
+    &-desc {
+      display: block;
+      line-height: @full-line-height;
+    }
+  }
+
+  &[ui~="vertical"] .veui-steps-step {
+    float: none;
+    margin-right: 0;
+    margin-bottom: @separator-length-y + @separator-gap-y * 2;
+
+    &::after {
+      .size(@separator-width, @separator-length-y);
+      top: @step-height + @separator-gap-y;
+      left: (@step-height - @separator-width) / 2;
+    }
+  }
+
+  &[ui~="vertical"][ui~="full"] .veui-steps-step {
+    margin-bottom: @separator-gap-y * 2 - @full-line-height - @full-line-height + @full-height + @separator-length-y;
+
+    &::after {
+      top: @separator-gap-y + (@full-line-height + @full-line-height + @full-height) / 2;
+      left: (@full-height - @separator-width) / 2;
+    }
+  }
+
+  &[ui~="small"] {
+    @step-height: 20px;
+    @full-height: 20px;
+    @separator-length-x: 60px;
+    @separator-length-y: 40px;
+    @separator-gap-x: 20px;
+    @separator-gap-y: 10px;
+    @full-line-height: @veui-line-height-normal * @veui-font-size-normal;
+    @label-font-size: @veui-font-size-normal;
+    @desc-font-size: @veui-font-size-small;
+
+    .veui-steps {
+      &-step {
+        margin-right: @separator-gap-x * 2 + @separator-length-x;
+
+        &-index {
+          @half-height: @step-height / 2;
+          top: ~"calc(50% - @{half-height})";
+          .size(@step-height);
+          line-height: @step-height - @border-width * 2;
+          font-size: @veui-font-size-normal;
+
+          .veui-icon {
+            font-size: 2em / 3;
+          }
+        }
+
+        &-content {
+          padding-left: @step-height + 10px;
+        }
+
+        &-label {
+          margin: 0;
+          font-size: @label-font-size;
+          line-height: @step-height;
+        }
+
+        &-desc {
+          font-size: @desc-font-size;
+        }
+
+        &::after {
+          @half-width: @separator-width / 2;
+          .size(@separator-length-x, @separator-width);
+          top: ~"calc(50% - @{half-width})";
+          right: -@separator-gap-x - @separator-length-x;
+        }
+      }
+    }
+
+    &[ui~="full"] .veui-steps-step {
+      @half-height: @full-height / 2;
+
+      &-content {
+        padding-left: @full-height + 10px;
+      }
+
+      &-index {
+        top: ~"calc(50% - @{half-height})";
+        .size(@full-height);
+        line-height: @full-height - @border-width * 2;
+      }
+
+      &-label,
+      &-desc {
+        line-height: @full-line-height;
+      }
+    }
+
+    &[ui~="vertical"] .veui-steps-step {
+      margin-bottom: @separator-length-y + @separator-gap-y * 2;
+
+      &::after {
+        .size(@separator-width, @separator-length-y);
+        top: @step-height + @separator-gap-y;
+        left: (@step-height - @separator-width) / 2;
+      }
+    }
+
+    &[ui~="vertical"][ui~="full"] .veui-steps-step {
+      margin-bottom: @separator-gap-y * 2 - @full-line-height - @full-line-height + @full-height + @separator-length-y;
+
+      &::after {
+        top: @separator-gap-y + (@full-line-height * @full-line-height + @full-height) / 2;
+        left: (@full-height - @separator-width) / 2;
+      }
+    }
+  }
+}

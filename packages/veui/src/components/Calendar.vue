@@ -1,11 +1,12 @@
 <template>
 <div class="veui-calendar" @mouseleave="markEnd()">
+  <slot name="before"></slot>
   <div v-for="(p, pIndex) in panels" :key="pIndex" class="veui-calendar-panel" :class="{ [`veui-calendar-${p.view}`]: true }">
     <div class="veui-calendar-head">
-      <button type="button" v-if="pIndex === 0 || p.view !== 'days'" class="veui-calendar-prev" @click="step(false, p.view)" :disabled="disabled || readonly"><veui-icon name="angle-left"></veui-icon></button>
+      <button type="button" v-if="pIndex === 0 || p.view !== 'days'" class="veui-calendar-prev" @click="step(false, p.view)" :disabled="disabled || readonly"><veui-icon :name="icons.prev"></veui-icon></button>
       <template v-if="p.view === 'days'">
-        <button class="veui-calendar-select" @click="setView(pIndex, 'years')" :disabled="disabled || readonly"><b>{{ p.year }}</b> 年 <veui-icon name="angle-down"></veui-icon></button>
-        <button class="veui-calendar-select" @click="setView(pIndex, 'months')" :disabled="disabled || readonly"><b>{{ p.month + 1 }}</b> 月 <veui-icon name="angle-down"></veui-icon></button>
+        <button class="veui-calendar-select" @click="setView(pIndex, 'years')" :disabled="disabled || readonly"><b>{{ p.year }}</b> 年 <veui-icon :name="icons.expand"></veui-icon></button>
+        <button class="veui-calendar-select" @click="setView(pIndex, 'months')" :disabled="disabled || readonly"><b>{{ p.month + 1 }}</b> 月 <veui-icon :name="icons.expand"></veui-icon></button>
       </template>
       <template v-if="p.view === 'months'">
         <span class="veui-calendar-label"><b>{{ p.year }}</b> 年</span>
@@ -13,7 +14,7 @@
       <template v-if="p.view === 'years'">
         <span class="veui-calendar-label"><b>{{ p.year - p.year % 10 }}–{{ p.year - p.year % 10 + 9 }}</b> 年</span>
       </template>
-      <button v-if="pIndex === panels.length - 1 || p.view !== 'days'" class="veui-calendar-next" @click="step(true, p.view)" :disabled="disabled || readonly"><veui-icon name="angle-right"></veui-icon></button>
+      <button v-if="pIndex === panels.length - 1 || p.view !== 'days'" class="veui-calendar-next" @click="step(true, p.view)" :disabled="disabled || readonly"><veui-icon :name="icons.next"></veui-icon></button>
     </div>
     <div class="veui-calendar-body" :class="{ 'veui-calendar-multiple-range': multiple && range }">
       <table>
@@ -29,7 +30,7 @@
                 :key="`${day.year}-${day.month + 1}-${day.date}`"
                 :class="getDateClass(day, p)">
                 <button v-if="fillMonth && panel === 1 || day.month === p.month" @click="selectDay(pIndex, day)"
-                  @mouseenter="markEnd(day)" @focus="markEnd(day)" :disabled="disabled || readonly || day.isDisabled">{{ day.date }}</button>
+                  @mouseenter="markEnd(day)" @focus="markEnd(day)" :disabled="realDisabled || realReadonly || day.isDisabled">{{ day.date }}</button>
               </td>
             </tr>
           </tbody>
@@ -51,17 +52,16 @@
       </table>
     </div>
   </div>
-  <slot></slot>
+  <slot name="after"></slot>
 </div>
 </template>
 
 <script>
 import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/date'
 import { flattenDeep, findIndex } from 'lodash'
-import { input } from '../mixins'
+import { input, icons } from '../mixins'
 import config from '../managers/config'
 import Icon from './Icon'
-import '../icons'
 
 config.defaults({
   'calendar.weekStart': 1
@@ -78,7 +78,7 @@ let monthNames = [
 
 export default {
   name: 'veui-calendar',
-  mixins: [input],
+  mixins: [input, icons],
   model: {
     prop: 'selected',
     event: 'select'
@@ -142,7 +142,8 @@ export default {
       month: current.getMonth(),
       views,
       monthNames,
-      picking: null
+      picking: null,
+      pickingRanges: null
     }
   },
   computed: {
@@ -289,6 +290,7 @@ export default {
       if (!this.picking) {
         this.picking = [selected]
         this.$emit('selectstart', this.picking)
+        this.markEnd(day)
         return
       }
 
@@ -304,14 +306,18 @@ export default {
 
       // multiple ranges selection
       this.picking = null
-      let result = mergeRange(this.localSelected, picking)
-      this.$emit('select', result)
+      let ranges = [...this.pickingRanges]
+      this.pickingRanges = null
+      this.$emit('select', ranges)
     },
     markEnd (day) {
       if (this.range && this.picking) {
         let marked = day ? new Date(day.year, day.month, day.date) : null
         this.$set(this.picking, 1, marked)
-        this.$emit('selectprogress', this.picking)
+        if (this.multiple) {
+          this.pickingRanges = mergeRange(this.picking, this.localSelected)
+        }
+        this.$emit('selectprogress', this.pickingRanges || this.picking)
       }
     },
     setView (i, value) {
@@ -339,17 +345,21 @@ export default {
       }
       if (!this.range) {
         if (!this.multiple) {
+          // single day
           return isSameDay(this.localSelected, day)
         }
+        // multiple single days
         return (this.localSelected || []).some(d => isSameDay(d, day))
       }
       if (!this.multiple) {
+        // single range
         let range = this.picking || this.localSelected
         return isSameDay(range[0], day) || isSameDay(range[1], day)
       }
-      return this.localSelected.some(selected => {
+      // multiple ranges
+      return (this.pickingRanges || this.localSelected || []).some(selected => {
         return isSameDay(selected[0], day) || isSameDay(selected[1], day)
-      }) || this.picking && isSameDay(this.picking[0], day)
+      })
     },
     getRangePosition (day) {
       if (!this.range) {
@@ -357,10 +367,13 @@ export default {
       }
 
       if (!this.multiple) {
+        // single range
         let range = this.picking || this.localSelected
         return getRangePosition(day, range)
       }
-      let ranges = [this.picking, ...this.localSelected]
+
+      // multiple ranges
+      let ranges = this.pickingRanges || this.localSelected || []
       let position = false
       for (let i = 0, j = ranges.length; i < j; i++) {
         position = getRangePosition(day, ranges[i])

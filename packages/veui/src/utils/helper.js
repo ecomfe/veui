@@ -1,4 +1,4 @@
-import { includes, camelCase, get } from 'lodash'
+import { includes, camelCase, get, isString, isArray, isObject, assign } from 'lodash'
 
 export function getTypedAncestorTracker (type, name = type) {
   return {
@@ -59,6 +59,35 @@ export function getModelEvent (vm) {
  */
 export function isEmpty (val) {
   return val == null || val === '' || (Array.isArray(val) && !val.length)
+}
+
+/**
+ * VUE 里面有三种设置 class 的方式：
+ * 1. 字符串
+ * 2. 字符串数组
+ * 3. object
+ * 此处统一将这些形式的 class 转换成 object 形式的
+ *
+ * @param {string|Array.<string>|object} klasses
+ */
+export function normalizeClass (klasses) {
+  let klassObj = {}
+  if (isString(klasses)) {
+    klasses.split(/\s+/).forEach((klass) => {
+      klassObj[klass] = true
+    })
+  } else if (isArray(klasses)) {
+    klasses.forEach((klass) => {
+      klassObj[klass] = true
+    })
+  } else if (isObject(klasses)) {
+    assign(klassObj, klasses)
+  }
+  return klassObj
+}
+
+export function getConfigKey (name) {
+  return name.replace(/^veui|-*/g, '')
 }
 
 export function stringifyQuery (query) {

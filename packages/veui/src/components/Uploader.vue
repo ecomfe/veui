@@ -6,7 +6,7 @@
          || (requestMode === 'iframe' && isSubmiting)}"
         @click="replacingFile = null" ref="label">
         <slot name="button-label"><icon class="veui-uploader-input-label-icon"
-          name="upload"></icon>选择文件</slot>
+          :name="icons.upload"></icon>选择文件</slot>
         <input :id="inputId" hidden type="file" ref="input"
           @change="onChange"
           :name="realName"
@@ -24,32 +24,33 @@
           || type === 'image' && (!file.status || file.status === 'success')">
           <slot name="file" :file="file">
             <template v-if="type === 'file'">
-              <icon name="pin" class="veui-uploader-list-icon"></icon>
+              <icon :name="icons.file" class="veui-uploader-list-icon"></icon>
               <span class="veui-uploader-list-name"
-                :class="{'veui-uploader-list-name-status': file.status === 'success' || file.status === 'failure'}"
+                :class="{'veui-uploader-list-name-success': file.status === 'success',
+                  'veui-uploader-list-name-failure': file.status === 'failure'
+                }"
                 :title="file.name">{{file.name}}</span>
               <span v-if="file.status === 'success'" class="veui-uploader-success"><slot name="success-label">上传成功！</slot></span>
               <span v-if="file.status === 'failure'" class="veui-uploader-failure"><slot name="failure-label">上传失败</slot></span>
-              <veui-button v-if="file.status !== 'failure'"
-                ui="link remove" @click="$emit('remove', file)" :disabled="realDisabled"><icon name="cross"></icon></veui-button>
-              <veui-button v-else ui="link" @click="retry(file)" :class="listClass + '-retry'"><icon name="redo"></icon>重试</veui-button>
+              <veui-button v-if="file.status === 'failure'" ui="link" @click="retry(file)" :class="listClass + '-retry'"><icon :name="icons.redo"></icon>重试</veui-button>
+              <veui-button ui="link remove" @click="$emit('remove', file)" :disabled="realDisabled"><icon :name="icons.clear"></icon></veui-button>
             </template>
             <template v-else>
               <img :src="file.src" :alt="file.alt || ''">
-              <div :class="listClass + '-mask'">
+              <div v-if="!realDisabled" :class="listClass + '-mask'">
                 <label :for="inputId"
                   class="veui-button"
                   :class="{'veui-uploader-input-label-disabled': realDisabled}"
                   ui="link"
                   @click.stop="replaceFile(file)">重新上传</label>
-                <veui-button ui="link" @click="$emit('remove', file)" :disabled="realDisabled" :class="listClass + '-mask-remove'"><icon name="cross"></icon>移除</veui-button>
+                <veui-button ui="link" @click="$emit('remove', file)" :disabled="realDisabled" :class="listClass + '-mask-remove'"><icon :name="icons.clear"></icon>移除</veui-button>
               </div>
             </template>
             <transition name="veui-uploader-fade">
               <div v-if="type === 'image' && file.status === 'success'"
                 :class="listClass + '-success'"
                 @click="updateFileList(file, {status: null})">
-                <span class="veui-uploader-success"><slot name="success-label"><icon name="check"></icon>完成</slot></span>
+                <span class="veui-uploader-success"><slot name="success-label"><icon :name="icons.success"></icon>完成</slot></span>
               </div>
             </transition>
           </slot>
@@ -62,7 +63,7 @@
               <slot name="uploading-label">上传中...</slot>
             </veui-uploader-progress>
             <veui-button v-if="type === 'file'" ui="link remove"
-              @click="cancelFile(file)"><icon name="cross"></icon></veui-button>
+              @click="cancelFile(file)"><icon :name="icons.clear"></icon></veui-button>
             <veui-button v-else ui="aux operation"
               @click="cancelFile(file)">取消</veui-button>
           </slot>
@@ -88,6 +89,7 @@
             :accept="accept"
             :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
             @click.stop>
+            <icon :name="icons.add"></icon>
         </label>
       </li>
     </ul>
@@ -103,10 +105,10 @@
 </template>
 
 <script>
-import Icon from './Icon'
 import Button from './Button'
+import Icon from './Icon'
 import { cloneDeep, uniqueId, assign, isNumber, isArray } from 'lodash'
-import { ui, input } from '../mixins'
+import { ui, input, icons } from '../mixins'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
 import bytes from 'bytes'
@@ -124,7 +126,7 @@ export default {
     'veui-button': Button,
     'veui-uploader-progress': getProgress()
   },
-  mixins: [ui, input],
+  mixins: [ui, input, icons],
   model: {
     event: 'change'
   },
@@ -380,8 +382,7 @@ export default {
     },
     uploadFiles () {
       this.fileList.forEach(file => {
-        if (!file.toBeUploaded) return
-        this.upload(file)
+        if (file.toBeUploaded) this.upload(file)
       })
     },
     upload (file) {
@@ -405,6 +406,7 @@ export default {
       }
       xhr.onerror = () => {
         this.onFailure({}, file)
+        this.$emit('fail')
       }
       let formData = new FormData()
       formData.append(this.name, file)

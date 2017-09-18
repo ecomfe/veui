@@ -45,7 +45,8 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-dux/lib.less";
+@import "~less-plugin-est/src/all.less";
+@import "~veui-theme-x/common.less";
 
 @nav-width: 240px;
 @light-bg-color: #f6f9ff;
@@ -83,7 +84,7 @@ export default {
       display: block;
       width: 100%;
       padding: 0 24px;
-      color: @veui-text-color-strong;
+      color: #333;
       text-decoration: none;
     }
 
@@ -116,20 +117,20 @@ export default {
       display: block;
       padding: .5em 24px;
       text-decoration: none;
-      color: @veui-gray-color-weak;
+      color: #999;
       outline: none;
       line-height: 2;
 
       &:hover {
-        font-weight: @veui-font-weight-bold;
+        font-weight: 500;
       }
     }
   }
 
   .router-link-active {
-    color: @veui-theme-color-primary;
+    color: #3998fc;
     background-color: @light-bg-color;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   footer {
@@ -143,7 +144,7 @@ export default {
       width: 100%;
       padding-left: 24px;
       line-height: 45px;
-      color: @veui-text-color-weak;
+      color: #999;
       text-decoration: none;
     }
 

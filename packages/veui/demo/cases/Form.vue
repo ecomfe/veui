@@ -29,7 +29,7 @@
           <veui-uploader type="image"
             action="/upload"
             request-mode="xhr"
-            ui="vertical bottom-mask list-icon button"
+            ui="vertical"
             :disabled="false"
             :max-count="1"
             v-model="storeData1.avatar"
@@ -152,7 +152,7 @@
           <veui-uploader type="image"
             action="/upload"
             request-mode="xhr"
-            ui="vertical bottom-mask list-icon button"
+            ui="vertical"
             :disabled="false"
             :max-count="1"
             v-model="storeData1.avatar"
@@ -585,8 +585,6 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-dux/lib.less";
-
 .veui-form-demo {
   h2 {
     margin-bottom: 40px;

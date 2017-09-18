@@ -1,0 +1,29 @@
+@import "./lib.less";
+
+._veui-grouped-button {
+  &.veui-button-selected {
+    background-color: @veui-gray-color-6;
+    color: @veui-text-color-strong;
+    z-index: 1;
+
+    &.focus-ring {
+      color: @veui-brand-color;
+    }
+  }
+
+  &[ui~="alt"].veui-button-selected {
+    background-color: @veui-gray-color-5;
+  }
+
+  &.veui-disabled {
+    &,
+    &:hover {
+      .border-color(_, #fff);
+    }
+  }
+
+  &.veui-disabled.veui-button-selected {
+    background-color: @veui-gray-color-5;
+    color: @veui-text-color-weak;
+  }
+}

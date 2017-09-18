@@ -9,12 +9,12 @@
     <template v-if="range">
       <span class="veui-date-picker-label">
         <slot v-if="formatted" name="date" :formatted="formatted ? formatted[0] : null" :date="selected ? selected[0] : null">{{ formatted[0] }}</slot>
-        <slot v-else name="placeholder-begin">开始时间</slot>
+        <slot v-else name="placeholder-begin">{{ placeholderBegin }}</slot>
       </span>
       <span class="veui-date-picker-tilde">~</span>
       <span class="veui-date-picker-label">
         <slot v-if="formatted" name="date" :formatted="formatted ? formatted[1] : null" :date="selected ? selected[1] : null">{{ formatted[1] }}</slot>
-        <slot v-else name="placeholder-end">结束时间</slot>
+        <slot v-else name="placeholder-end">{{ placeholderEnd }}</slot>
       </span>
     </template>
     <template v-else>
@@ -23,15 +23,15 @@
         <slot v-else name="placeholder">{{ placeholder }}</slot>
       </span>
     </template>
-    <veui-icon class="veui-date-picker-icon" name="calendar"></veui-icon>
+    <veui-icon class="veui-date-picker-icon" :name="icons.calendar"></veui-icon>
   </veui-button>
   <button v-if="clearable" v-show="!!selected" class="veui-date-picker-clear" @click="clear">
-    <veui-icon name="cross"></veui-icon>
+    <veui-icon :name="icons.clear"></veui-icon>
   </button>
-  <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay">
+  <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay" :overlay-class="overlayClass">
     <veui-calendar class="veui-date-picker-overlay" v-model="localSelected" v-bind="calendarProps" ref="cal"
       v-outside:button="close" @select="handleSelect" @selectstart="handleProgress" @selectprogress="handleProgress" :panel="realPanel">
-      <template v-if="range && realShortcuts && realShortcuts.length">
+      <template :slot="shortcutsPosition" v-if="range && realShortcuts && realShortcuts.length">
         <div class="veui-date-picker-shortcuts">
           <button v-for="({from, to, label}, index) in realShortcuts" type="button" :key="index"
             :class="{
@@ -52,15 +52,18 @@ import Button from './Button'
 import Overlay from './Overlay'
 import Calendar from './Calendar'
 import Icon from './Icon'
-import '../icons'
 import moment from 'moment'
-import { dropdown, input } from '../mixins'
+import { dropdown, input, icons, overlay } from '../mixins'
 import config from '../managers/config'
 import { isNumber, pick, omit } from 'lodash'
 
 config.defaults({
-  'datepicker.shortcuts': []
-})
+  shortcuts: [],
+  shortcutsPosition: 'before',
+  placeholder: '选择时间',
+  placeholderBegin: '开始时间',
+  placeholderEnd: '结束时间'
+}, 'datepicker')
 
 let calendarProps = ['range', 'weekStart', 'fillMonth', 'disabledDate', 'dateClass']
 
@@ -72,7 +75,7 @@ export default {
     'veui-calendar': Calendar,
     'veui-icon': Icon
   },
-  mixins: [dropdown, input],
+  mixins: [dropdown, input, icons, overlay],
   model: {
     prop: 'selected',
     event: 'select'
@@ -89,7 +92,21 @@ export default {
     clearable: Boolean,
     placeholder: {
       type: String,
-      default: '选择时间'
+      default () {
+        return config.get('datepicker.placeholder')
+      }
+    },
+    placeholderBegin: {
+      type: String,
+      default () {
+        return config.get('datepicker.placeholderBegin')
+      }
+    },
+    placeholderEnd: {
+      type: String,
+      default () {
+        return config.get('datepicker.placeholderEnd')
+      }
     },
     format: {
       type: String,
@@ -99,6 +116,12 @@ export default {
       type: Array,
       default () {
         return config.get('datepicker.shortcuts')
+      }
+    },
+    shortcutsPosition: {
+      type: String,
+      default () {
+        return config.get('datepicker.shortcutsPosition')
       }
     },
     ...pick(Calendar.props, calendarProps)

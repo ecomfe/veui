@@ -62,7 +62,12 @@
   &-shortcuts {
     height: 41px;
     padding: 8px 10px;
-    border-top: 1px solid @veui-gray-color-sup-2;
+    border-bottom: 1px solid @veui-gray-color-sup-2;
+
+    .veui-calendar-panel + & {
+      border-top: 1px solid @veui-gray-color-sup-2;
+      border-bottom: none;
+    }
   }
 
   &-shortcut {

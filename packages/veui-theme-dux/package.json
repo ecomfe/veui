@@ -8,10 +8,19 @@
     "baidu",
     "less"
   ],
+  "scripts": {
+    "icons": "node build/svg2json.js && node build/icons.js"
+  },
   "author": "ecomfe",
   "license": "MIT",
   "dependencies": {
-    "less-plugin-est": "^2.0.5",
+    "less-plugin-est": "^2.0.5"
+  },
+  "peerDependencies": {
+    "veui": "0.2.4",
     "wicg-focus-ring": "^2.0.1"
+  },
+  "devDependencies": {
+    "svgo": "^0.7.2"
   }
 }

@@ -161,10 +161,7 @@ export class Tree {
           })
 
           const children = targetGroup.children
-          const lastIndex = children.length - 1
-          children[targetIndex] = children[lastIndex]
-          children[lastIndex] = node
-
+          children.push(...children.splice(targetIndex, 1))
           this.generateTreeZIndex(node.id)
         }
       }

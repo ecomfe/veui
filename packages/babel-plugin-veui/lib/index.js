@@ -16,58 +16,62 @@ exports.default = function (babel) {
             file = _ref.file;
 
         var node = path.node;
-        var src = node.source.value;
+        var src = (0, _utils.normalize)(node.source.value);
 
         var resolvedComponentName = null;
-
-        if (src.indexOf(COMPONENTS_PATH) === 0) {
-          var componentPath = src.slice(COMPONENTS_PATH.length);
+        var normalizedPath = (0, _utils.normalize)(COMPONENTS_PATH + '/');
+        if (src.indexOf(normalizedPath) === 0) {
+          var componentPath = src.slice(normalizedPath.length);
           resolvedComponentName = getComponentName(componentPath);
         } else if (src !== 'veui') {
           if (src.charAt(0) !== '.' || file.opts.filename === 'unknown') {
             return;
           } else {
-              resolvedComponentName = resolveComponent(file.opts.filename, src);
-            }
+            resolvedComponentName = resolveComponent(file.opts.filename, src);
+          }
         }
 
-        node.specifiers.map(function (_ref2) {
-          var type = _ref2.type,
-              imported = _ref2.imported;
+        var _opts$modules = opts.modules,
+            modules = _opts$modules === undefined ? [] : _opts$modules,
+            pack = opts.package,
+            _opts$path = opts.path,
+            packPath = _opts$path === undefined ? 'components' : _opts$path,
+            transform = opts.transform,
+            fileName = opts.fileName,
+            resolve = opts.resolve;
 
-          var name = void 0;
-          if (imported) {
-            name = imported.name === 'default' ? resolvedComponentName : isComponentName(imported.name) ? imported.name : null;
-          } else if (type === 'ImportDefaultSpecifier') {
-            name = resolvedComponentName;
-          }
-          return getPeerPath(getModuleName(name, opts.transform), opts.fileName);
-        }).filter(function (v) {
-          return v;
-        }).forEach(function (name) {
-          var pack = opts.package,
-              packPath = opts.path,
-              request = opts.request,
-              resolve = opts.resolve;
 
-          var modulePath = packPath ? pack + '/' + packPath + '/' + name : pack + '/' + name;
+        if (pack && fileName) {
+          modules.push({ package: pack, path: packPath, transform: transform, fileName: fileName });
+        }
 
-          if (resolveCache[modulePath] === false) {
-            return;
-          } else if (!(modulePath in resolveCache)) {
-            if (typeof resolve === 'function') {
-              try {
-                var moduleFile = resolve({}, process.cwd(), modulePath);
-                resolveCache[modulePath] = true;
-              } catch (e) {
-                resolveCache[modulePath] = false;
-              }
+        modules.forEach(function (_ref2) {
+          var pack = _ref2.package,
+              _ref2$path = _ref2.path,
+              packPath = _ref2$path === undefined ? 'components' : _ref2$path,
+              transform = _ref2.transform,
+              fileName = _ref2.fileName;
+
+          node.specifiers.map(function (_ref3) {
+            var type = _ref3.type,
+                imported = _ref3.imported;
+
+            var name = void 0;
+            if (imported) {
+              name = imported.name === 'default' ? resolvedComponentName : isComponentName(imported.name) ? imported.name : null;
+            } else if (type === 'ImportDefaultSpecifier') {
+              name = resolvedComponentName;
             }
-          }
+            return getPeerPath(getModuleName(name, transform), fileName);
+          }).filter(function (v) {
+            return v;
+          }).forEach(function (name) {
+            var modulePath = (0, _path.join)(pack, packPath, name);
 
-          if (resolveCache[modulePath]) {
-            path.insertAfter(t.importDeclaration([], t.stringLiteral(modulePath)));
-          }
+            if (assurePath(modulePath, resolve)) {
+              path.insertAfter(t.importDeclaration([], t.stringLiteral(modulePath)));
+            }
+          });
         });
       }
     }
@@ -91,9 +95,27 @@ var _utils = require('./utils');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var COMPONENTS = (0, _utils.getJSON)(_path2.default.resolve(__dirname, '../components.json'));
-var COMPONENTS_PATH = 'veui/components/';
+var COMPONENTS_DIRNAME = 'components';
+var COMPONENTS_PATH = (0, _utils.normalize)('veui/' + COMPONENTS_DIRNAME);
 
 var resolveCache = {};
+
+function assurePath(modulePath, resolve) {
+  if (resolveCache[modulePath] === false) {
+    return;
+  } else if (!(modulePath in resolveCache)) {
+    if (typeof resolve === 'function') {
+      try {
+        resolve({}, process.cwd(), modulePath);
+        resolveCache[modulePath] = true;
+      } catch (e) {
+        resolveCache[modulePath] = false;
+      }
+    }
+  }
+
+  return resolveCache[modulePath];
+}
 
 function getPeerPath(name) {
   var template = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '${module}.css';
@@ -103,6 +125,7 @@ function getPeerPath(name) {
   }
   return template.replace(/\$\{module\}/g, name);
 }
+
 
 function getModuleName(name) {
   var transform = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'kebab-case';
@@ -117,35 +140,44 @@ function getModuleName(name) {
       return (0, _utils.camelCase)(name);
     case 'PascalCase':
       return (0, _utils.pascalCase)(name);
+    case false:
     default:
       return name;
   }
 }
 
 function resolveComponent(file, src) {
+  return getComponentName(resolveRelative(file, src, COMPONENTS_DIRNAME));
+}
+
+function resolveRelative(file, src, dir) {
   var pkg = _pkgDir2.default.sync(file);
   if (!pkg || (0, _utils.getJSON)(_path2.default.join(pkg, 'package.json')).name !== 'veui') {
     return null;
   }
 
-  var componentsPath = _path2.default.join(pkg, 'components');
-  if (!_fs2.default.existsSync(componentsPath)) {
-    componentsPath = _path2.default.join(pkg, 'src/components');
-    if (!_fs2.default.existsSync(componentsPath)) {
-      return;
+  var dirPath = _path2.default.join(pkg, dir);
+  if (!_fs2.default.existsSync(dirPath)) {
+    dirPath = _path2.default.join(pkg, 'src', dir);
+    if (!_fs2.default.existsSync(dirPath)) {
+      return null;
     }
   }
 
-  var relativePath = _path2.default.relative(componentsPath, _path2.default.resolve(_path2.default.dirname(file), src));
-  return getComponentName(relativePath);
+  var absPath = _path2.default.resolve(_path2.default.dirname(file), src);
+
+  if (absPath.indexOf((0, _utils.normalize)(dirPath + '/')) !== 0) {
+    return null;
+  }
+  return _path2.default.relative(dirPath, absPath);
 }
 
 function getComponentName(componentPath) {
   if (!componentPath) {
     return null;
   }
-  var component = COMPONENTS.find(function (_ref3) {
-    var path = _ref3.path;
+  var component = COMPONENTS.find(function (_ref4) {
+    var path = _ref4.path;
 
     return path === componentPath || path.split('.')[0] === componentPath;
   });
@@ -154,8 +186,8 @@ function getComponentName(componentPath) {
 }
 
 function isComponentName(componentName) {
-  return !!COMPONENTS.find(function (_ref4) {
-    var name = _ref4.name;
+  return !!COMPONENTS.find(function (_ref5) {
+    var name = _ref5.name;
     return name === componentName;
   });
 }

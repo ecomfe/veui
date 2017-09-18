@@ -1,5 +1,5 @@
 <template>
-<icon fill-rule="evenodd" class="veui-icon" v-bind="$props"><slot></slot></icon>
+<icon class="veui-icon" v-bind="$props"><slot></slot></icon>
 </template>
 <script>
 import Icon from 'vue-awesome/components/Icon'
