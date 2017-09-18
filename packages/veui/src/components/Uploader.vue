@@ -33,17 +33,17 @@
               <span v-if="file.status === 'success'" class="veui-uploader-success"><slot name="success-label">上传成功！</slot></span>
               <span v-if="file.status === 'failure'" class="veui-uploader-failure"><slot name="failure-label">上传失败</slot></span>
               <veui-button v-if="file.status === 'failure'" ui="link" @click="retry(file)" :class="listClass + '-retry'"><icon :name="icons.redo"></icon>重试</veui-button>
-              <veui-button ui="link remove" @click="$emit('remove', file)" :disabled="realDisabled"><icon :name="icons.clear"></icon></veui-button>
+              <veui-button ui="link remove" @click="removeFile(file)" :disabled="realDisabled"><icon :name="icons.clear"></icon></veui-button>
             </template>
             <template v-else>
               <img :src="file.src" :alt="file.alt || ''">
-              <div :class="listClass + '-mask'">
+              <div v-if="!realDisabled" :class="listClass + '-mask'">
                 <label :for="inputId"
                   class="veui-button"
                   :class="{'veui-uploader-input-label-disabled': realDisabled}"
                   ui="link"
                   @click.stop="replaceFile(file)">重新上传</label>
-                <veui-button ui="link" @click="$emit('remove', file)" :disabled="realDisabled" :class="listClass + '-mask-remove'"><icon :name="icons.clear"></icon>移除</veui-button>
+                <veui-button ui="link" @click="removeFile(file)" :disabled="realDisabled" :class="listClass + '-mask-remove'"><icon :name="icons.clear"></icon>移除</veui-button>
               </div>
             </template>
             <transition name="veui-uploader-fade">
@@ -477,10 +477,26 @@ export default {
       if (this.requestMode === 'iframe') this.submit(file)
       else this.upload(file)
     },
+    removeFile (file) {
+      if (this.maxCount === 1) {
+        this.fileList = []
+        this.$emit('change', '')
+      } else {
+        this.fileList.splice(this.fileList.indexOf(file), 1)
+        this.$emit('change', this.fileList)
+      }
+
+      this.$emit('remove', file)
+    },
     cancelFile (file) {
-      if (this.requestMode === 'iframe') this.canceled = true
-      this.$emit('cancel', file)
-      this.reset()
+      if (this.requestMode === 'iframe') {
+        this.canceled = true
+        this.isSubmiting = false
+      }
+
+      if (file.xhr) file.xhr.abort()
+
+      this.removeFile(file)
     },
     reset () {
       this.$refs.input.value = ''
