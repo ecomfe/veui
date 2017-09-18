@@ -315,6 +315,9 @@ export default {
         let marked = day ? new Date(day.year, day.month, day.date) : null
         this.$set(this.picking, 1, marked)
         if (this.multiple) {
+          if (!marked) {
+            this.$set(this.picking, 1, this.picking[0])
+          }
           this.pickingRanges = mergeRange(this.picking, this.localSelected)
         }
         this.$emit('selectprogress', this.pickingRanges || this.picking)
