@@ -208,12 +208,12 @@
         :beforeValidate="beforeValidate"
         :afterValidate="afterValidate">
 
-        <veui-field field="name" name="name1" rules="required" label="姓名：" tip="必填，默认提交时校验">
+        <veui-field disabled field="name" name="name1" label="姓名：" tip="disabled 值提交时会过滤">
           <veui-input v-model="storeData4.name"></veui-input>
         </veui-field>
 
-        <veui-field field="name" name="name2" :rules="dynamicNameRule" label="姓名（动态）：" tip="blur时校验必填，提交时校验长度，只是个示例">
-          <veui-input placeholder="长度不能短于2" v-model="storeData4.name"></veui-input>
+        <veui-field field="name1" name="name2" label="姓名1：" tip="在 field 上边 disabled，提交时才会过滤掉，该项在 input 上 disalbed">
+          <veui-input disabled placeholder="长度不能短于2" v-model="storeData4.name1"></veui-input>
         </veui-field>
 
         <veui-field field="age" name="age1" :rules="ageRule" label="年龄：">
@@ -226,7 +226,7 @@
 
         <veui-fieldset name="phoneSet" label="电话：" :required="true">
           <veui-field field="phoneType" name="phoneType">
-            <veui-select v-model="storeData4.phoneType" :options="storeData4.phoneTypeOptions"></veui-select>
+            <veui-select v-model="storeData4.phoneType" :options="storeData4Options.phoneTypeOptions"></veui-select>
           </veui-field>
 
           <veui-field field="phone" name="phone" :rules="numRequiredRule">
@@ -235,7 +235,7 @@
         </veui-fieldset>
 
         <veui-field field="habit" name="habit" :rules="habitRule" label="爱好：" tip="至少选择三个">
-          <veui-checkboxgroup type="checkbox" :items="storeData4.habitItems" v-model="storeData4.habit"></veui-checkboxgroup>
+          <veui-checkboxgroup type="checkbox" :items="storeData4Options.habitItems" v-model="storeData4.habit"></veui-checkboxgroup>
         </veui-field>
 
         <veui-fieldset label="预期收入：" class="salary" tip="联合校验，下限必须小于上限" :required="true">
@@ -417,17 +417,20 @@ export default {
         range: [moment().toDate(), moment().add(3, 'month').toDate()]
       },
       storeData4: {
-        name: '',
+        name: 'liyunteng1',
+        name1: 'liyunteng2',
         age: null,
         desc: '',
         habit,
-        habitItems,
         phone: '18888888888',
         phoneType,
-        phoneTypeOptions,
         start: null,
         end: null,
         protocol: ''
+      },
+      storeData4Options: {
+        habitItems,
+        phoneTypeOptions
       },
       requiredRule: [
         {

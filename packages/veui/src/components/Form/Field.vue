@@ -184,7 +184,7 @@ export default {
   },
   created () {
     this.form.fields.push(this)
-    // 如果是 fieldset 或者没写field，初始值和校验都没有意义
+    // 如果是 fieldset 或者没写 field，初始值和校验都没有意义
     if (!this.field) {
       return
     }
