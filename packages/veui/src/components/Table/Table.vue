@@ -53,7 +53,11 @@ export default {
     order: [String, Boolean],
     orderBy: String,
     columnFilter: Array,
-    selected: null
+    selected: {
+      default() {
+        return []
+      }
+    }
   },
   data () {
     return {
@@ -63,7 +67,7 @@ export default {
   },
   computed: {
     realSelected () {
-      return this.selectMode === 'multiple' ? this.localSelected : this.localSelected[0]
+      return this.selectMode === 'multiple' ? this.localSelected : (this.localSelected[0] || null)
     },
     realColumns () {
       if (!this.columnFilter) {
@@ -161,6 +165,10 @@ export default {
 }
 
 function normalizeArray (val) {
+  if (val == null) {
+    return []
+  }
+
   return Array.isArray(val) ? val : [val]
 }
 </script>
