@@ -16,7 +16,7 @@
     @input="handleInput"
     @focus="inputFocus = true"
     @blur="handleBlur"
-    @keyup.enter="search"
+    @keyup.enter.prevent="search"
   >
   </veui-input>
   <div class="veui-searchbox-others"

@@ -13,7 +13,7 @@
 import Label from '../Label'
 import { type, rule } from '../../managers'
 import { icons } from '../../mixins'
-import { isBoolean, get, last } from 'lodash'
+import { isBoolean, get, last, includes } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
 import Vue from 'vue'
@@ -143,15 +143,18 @@ export default {
     },
     validate (rules = this.localRules) {
       let res = rule.validate(this.getFieldValue(), rules)
-      let name = this.name || 'anonymous'
       // 把之前同类型的清掉
-      this.hideValidity(name)
+      this.hideValidity('native:*')
       // 如果有新的错，放进去，这样可以更新错误消息
       if (!isBoolean(res) || !res) {
-        this.validities.unshift({
-          valid: false,
-          message: res,
-          fields: name
+        res.forEach(({message, name}) => {
+          if (name) {
+            this.validities.unshift({
+              valid: false,
+              message,
+              fields: `native:${name}`
+            })
+          }
         })
       }
       return res
@@ -166,7 +169,16 @@ export default {
       if (!fields) {
         this.validities = []
       } else {
-        this.$set(this, 'validities', this.validities.filter(validity => validity.fields !== fields))
+        let validities = this.validities
+        if (fields === 'native:*') {
+          validities = this.validities.filter(validity => !includes(validity.fields, 'native:'))
+        } else {
+          validities = this.validities.filter(validity => Array.isArray(fields)
+            ? !includes(fields, validity)
+            : validity.fields !== fields
+          )
+        }
+        this.$set(this, 'validities', validities)
       }
     }
   },

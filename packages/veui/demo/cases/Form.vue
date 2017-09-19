@@ -34,8 +34,7 @@
             :max-count="1"
             v-model="storeData1.avatar"
             max-size="10mb"
-            accept=".jpg,.jpeg,.png"></veui-uploader>
-          <!-- <p class="output">{{ outputData.avatar }}</p> -->
+            accept="jpg,jpeg,png"></veui-uploader>
         </veui-field>
 
         <div class="operation">
@@ -157,8 +156,7 @@
             :max-count="1"
             v-model="storeData1.avatar"
             max-size="10mb"
-            accept=".jpg,.jpeg,.png"></veui-uploader>
-          <!-- <p class="output">{{ outputData.avatar }}</p> -->
+            accept="jpg,jpeg,png"></veui-uploader>
         </veui-field>
       </veui-form>
       <h2>行内禁用或只读</h2>
@@ -231,7 +229,7 @@
             <veui-select v-model="storeData4.phoneType" :options="storeData4.phoneTypeOptions"></veui-select>
           </veui-field>
 
-          <veui-field field="phone" name="phone" rules="numeric required">
+          <veui-field field="phone" name="phone" :rules="numRequiredRule">
             <veui-input v-model="storeData4.phone"></veui-input>
           </veui-field>
         </veui-fieldset>
@@ -514,19 +512,20 @@ export default {
         },
         {
           fields: ['phone'],
-          handler (phone) {
+          validate (phone) {
             return new Promise(function (resolve) {
               setTimeout(function () {
                 let res
                 if (phone === '18888888888') {
                   res = {
-                    phoneSet: '该手机已被注册'
+                    phone: '该手机已被注册'
                   }
                 }
                 return resolve(res)
               }, 3000)
             })
-          }
+          },
+          triggers: ['input']
         }
       ],
       beforeValidate () {
@@ -548,6 +547,8 @@ export default {
       },
       qindianValidator: [
         {
+          // 冗余写法示范，仅仅不会出错，请不要这么使用
+          // 可以将 submit 换成更有意义的事件
           fields: ['qindian', 'qindian'],
           handler (qindian) {
             if (qindian !== 'Evan You') {
@@ -585,6 +586,8 @@ export default {
 </script>
 
 <style lang="less">
+@import "~veui-theme-x/lib.less";
+
 .veui-form-demo {
   h2 {
     margin-bottom: 40px;

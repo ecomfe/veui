@@ -31,8 +31,8 @@
     &,
     & > .veui-form-label,
     & > .veui-field > .veui-form-label {
-      background-color: @veui-gray-color-3;
-      border-color: @veui-gray-color-3;
+      background-color: @veui-gray-color-7;
+      border-color: @veui-gray-color-7;
       color: @veui-text-color-normal;
     }
   }
@@ -43,11 +43,7 @@
   // 3. 最后一个不带field不带tip，error出在fieldset上
   & > .veui-field .veui-field-error,
   & > .veui-field:not(.veui-field-no-tip) + .veui-field-error {
-    position: absolute;
-    display: block;
-    margin-left: 0;
-    height: @veui-field-gap;
-    line-height: @veui-field-gap;
+    .veui-field-gap-error();
   }
 
   // field自己带label 和 error，这种情况error要缩进
@@ -56,11 +52,12 @@
     margin-left: @veui-form-label-width;
   }
 
-  &.veui-field-no-tip > .veui-field-no-tip + .veui-field-error {
+  &.veui-field-no-tip > .veui-field-no-tip > .veui-field-error {
     position: static;
     display: inline-block;
     margin-left: 10px;
-    height: 36px;
-    line-height: 36px;
+    height: @veui-height-normal;
+    line-height: @veui-height-normal;
+    font-size: inherit;
   }
 }

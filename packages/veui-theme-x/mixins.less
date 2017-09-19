@@ -14,8 +14,17 @@
 .veui-field-require() {
   content: "*";
   float: right;
-  margin-right: 8px;
+  margin-right: 9px;
   color: @veui-alert-color;
+}
+
+.veui-field-gap-error() {
+  position: absolute;
+  display: block;
+  margin: 0;
+  height: @veui-field-gap;
+  line-height: @veui-field-gap;
+  font-size: 12px;
 }
 
 .veui-make-table-row-height(@font-size: @veui-font-size-normal, @half-lead: 13px, @lines: 1) {

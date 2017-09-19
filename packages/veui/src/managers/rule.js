@@ -7,6 +7,7 @@ import max from './rules/max'
 import min from './rules/min'
 import numeric from './rules/numeric'
 import pattern from './rules/pattern'
+import {isObject} from 'lodash'
 
 const replaceRe = /%\{ruleValue\}/g
 
@@ -30,23 +31,25 @@ export class Rule {
       return true
     }
 
-    let err
     rules = Array.isArray(rules) ? rules : [rules]
-    return rules.some(rule => {
+    let results = rules.map(rule => {
       let validator = this.ruleValidators[rule.name]
       if (!validator.validate(val, rule.value)) {
-        err = (rule.message || validator.message).replace(replaceRe, rule.value)
-        // 代表有错
-        return true
+        return {
+          name: rule.name,
+          message: (rule.message || validator.message).replace(replaceRe, rule.value)
+        }
       }
       // 代表没错
-      return false
+      return true
     })
-    ? err
-    : true
+    return results.some(res => isObject(res))
+      ? results
+      : true
   }
 
   initRules (rules) {
+    // 根据优先级排一下显示顺序
     rules.sort((x, y) => {
       return this.ruleValidators[x.name].priority >= this.ruleValidators[y.name].priority
     })

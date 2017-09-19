@@ -4,6 +4,7 @@
   display: inline-block;
   color: @veui-text-color-normal;
   font-size: @veui-font-size-normal;
+  line-height: @veui-font-size-large;
   cursor: pointer;
 
   input,
@@ -12,7 +13,16 @@
   }
 
   &-label {
-    vertical-align: middle;
+    vertical-align: top;
+    display: inline-block;
+  }
+
+  .veui-field & {
+    line-height: @veui-height-normal;
+
+    .veui-radio-box {
+      vertical-align: text-top;
+    }
   }
 
   &:hover {
@@ -28,7 +38,7 @@
     background-color: #fff;
     margin-right: 8px;
     border-radius: 50%;
-    vertical-align: middle;
+    vertical-align: top;
     font-size: @veui-font-size-normal;
   }
 
@@ -69,6 +79,7 @@
 
   &[ui~="small"] {
     font-size: @veui-font-size-small;
+    line-height: @veui-font-size-small;
   }
 
   &[ui~="small"] &-box {

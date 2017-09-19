@@ -13,11 +13,16 @@
   }
 
   &-label {
-    vertical-align: middle;
+    vertical-align: top;
+    display: inline-block;
   }
 
   .veui-field & {
     line-height: @veui-height-normal;
+
+    .veui-checkbox-box {
+      vertical-align: text-top;
+    }
   }
 
   &:hover {
@@ -33,7 +38,7 @@
     border: 1px solid @veui-gray-color-2;
     background-color: #fff;
     font-size: @veui-font-size-large;
-    vertical-align: middle;
+    vertical-align: top;
   }
 
   &:hover &-box {
@@ -79,10 +84,6 @@
     height: @veui-font-size-small;
     width: @veui-font-size-small;
     font-size: @veui-font-size-small;
-
-    & + span {
-      font-size: @veui-font-size-small;
-    }
   }
 }
 

@@ -54,7 +54,7 @@ export default {
     orderBy: String,
     columnFilter: Array,
     selected: {
-      default() {
+      default () {
         return []
       }
     }
