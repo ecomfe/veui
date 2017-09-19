@@ -2,7 +2,7 @@
   <div class="veui-uploader" :ui="ui" ref="main">
     <div class="veui-uploader-button-container" v-if="type === 'file'">
       <label class="veui-button veui-uploader-input-label"
-        :class="{'veui-uploader-input-label-disabled': realDisabled || (fileList.length >= maxCount)
+        :class="{'veui-uploader-input-label-disabled': realUneditable || (fileList.length >= maxCount)
          || (requestMode === 'iframe' && isSubmiting)}"
         @click="replacingFile = null" ref="label">
         <slot name="button-label"><icon class="veui-uploader-input-label-icon"
@@ -10,7 +10,7 @@
         <input :id="inputId" hidden type="file" ref="input"
           @change="onChange"
           :name="realName"
-          :disabled="realDisabled || (fileList.length >= maxCount)
+          :disabled="realUneditable || (fileList.length >= maxCount)
            || (requestMode === 'iframe' && isSubmiting)"
           :accept="accept"
           :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
@@ -33,17 +33,17 @@
               <span v-if="file.status === 'success'" class="veui-uploader-success"><slot name="success-label">上传成功！</slot></span>
               <span v-if="file.status === 'failure'" class="veui-uploader-failure"><slot name="failure-label">上传失败</slot></span>
               <veui-button v-if="file.status === 'failure'" ui="link" @click="retry(file)" :class="listClass + '-retry'"><icon :name="icons.redo"></icon>重试</veui-button>
-              <veui-button ui="link remove" @click="removeFile(file)" :disabled="realDisabled"><icon :name="icons.clear"></icon></veui-button>
+              <veui-button ui="link remove" @click="removeFile(file)" :disabled="realUneditable"><icon :name="icons.clear"></icon></veui-button>
             </template>
             <template v-else>
               <img :src="file.src" :alt="file.alt || ''">
-              <div v-if="!realDisabled" :class="listClass + '-mask'">
+              <div v-if="!realDisabled && !realReadonly" :class="listClass + '-mask'">
                 <label :for="inputId"
                   class="veui-button"
-                  :class="{'veui-uploader-input-label-disabled': realDisabled}"
+                  :class="{'veui-uploader-input-label-disabled': realUneditable}"
                   ui="link"
                   @click.stop="replaceFile(file)">重新上传</label>
-                <veui-button ui="link" @click="removeFile(file)" :disabled="realDisabled" :class="listClass + '-mask-remove'"><icon :name="icons.clear"></icon>移除</veui-button>
+                <veui-button ui="link" @click="removeFile(file)" :disabled="realUneditable" :class="listClass + '-mask-remove'"><icon :name="icons.clear"></icon>移除</veui-button>
               </div>
             </template>
             <transition name="veui-uploader-fade">
@@ -80,12 +80,12 @@
       <li v-if="type === 'image'" key="input"
         v-show="!maxCount || fileList.length < maxCount">
         <label class="veui-uploader-input-label-image"
-          :class="{'veui-uploader-input-label-disabled': realDisabled || (requestMode === 'iframe' && isSubmiting)}"
+          :class="{'veui-uploader-input-label-disabled': realUneditable || (requestMode === 'iframe' && isSubmiting)}"
           @click="replacingFile = null"
           ref="label"><input :id="inputId" hidden type="file" ref="input"
             @change="onChange"
             :name="realName"
-            :disabled="realDisabled || (requestMode === 'iframe' && isSubmiting)"
+            :disabled="realUneditable || (requestMode === 'iframe' && isSubmiting)"
             :accept="accept"
             :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
             @click.stop>
@@ -241,10 +241,15 @@ export default {
     },
     isReplacing () {
       return !!this.replacingFile
+    },
+    realUneditable () {
+      return this.realDisabled || this.realReadonly
     }
   },
   mounted () {
-    if (this.requestMode === 'xhr') return
+    if (this.requestMode === 'xhr') {
+      return
+    }
 
     document.body.appendChild(this.$refs.iframe)
     document.body.appendChild(this.$refs.form)
@@ -252,15 +257,18 @@ export default {
 
     if (this.iframeMode === 'postmessage') {
       this.onMessage = event => {
-        if (!event.source.frameElement || event.source.frameElement.id !== this.iframeId) return
-        if (this.canceled) return
+        if (!event.source.frameElement || event.source.frameElement.id !== this.iframeId || this.canceled) {
+          return
+        }
+
         // 支持action为绝对路径或相对路径，ie9里的location没有origin
         let actionOrigin = /^https?:\/\//.test(this.action)
           ? this.action.match(/^https?:\/\/[^/]*/)[0]
           : location.origin || (location.protocol + '//' + location.host)
-        if (actionOrigin !== event.origin) return
 
-        this.uploadCallback(this.parseData(event.data), this.currentSubmitingFile)
+        if (actionOrigin === event.origin) {
+          this.uploadCallback(this.parseData(event.data), this.currentSubmitingFile)
+        }
       }
       window.addEventListener('message', this.onMessage)
     } else if (this.iframeMode === 'callback') {
@@ -268,13 +276,17 @@ export default {
         window[this.callbackNamespace] = {}
       }
       window[this.callbackNamespace][this.callbackFuncName] = data => {
-        if (this.canceled) return
-        this.uploadCallback(this.parseData(data), this.currentSubmitingFile)
+        if (!this.canceled) {
+          this.uploadCallback(this.parseData(data), this.currentSubmitingFile)
+        }
       }
     }
   },
   beforeDestroy () {
-    if (this.requestMode === 'xhr') return
+    if (this.requestMode === 'xhr') {
+      return
+    }
+
     window.removeEventListener('message', this.onMessage)
 
     if (this.iframeMode === 'callback') {
@@ -302,11 +314,15 @@ export default {
       } else {
         let name = this.$refs.input.value
         let size = this.$refs.input.files && this.$refs.input.files[0].size
-        if (!this.validateFile({name, size})) return
+        if (!this.validateFile({name, size})) {
+          return
+        }
         newFiles = [{status: 'uploading', name}]
       }
 
-      if (!newFiles.length) return
+      if (!newFiles.length) {
+        return
+      }
 
       if (this.isReplacing) {
         // type=image时，点击重新上传进入此分支，替换掉原位置的文件replacingFile
@@ -319,8 +335,12 @@ export default {
         this.$set(this.fileList, this.fileList.indexOf(this.replacingFile), newFile)
         this.replacingFile = null
 
-        if (this.requestMode === 'iframe' && this.autoUpload) this.submit(newFile)
-        if (this.requestMode === 'xhr' && this.autoUpload) this.upload(newFile)
+        if (this.requestMode === 'iframe' && this.autoUpload) {
+          this.submit(newFile)
+        }
+        if (this.requestMode === 'xhr' && this.autoUpload) {
+          this.upload(newFile)
+        }
 
         this.isReplacing = false
       } else {
@@ -341,8 +361,12 @@ export default {
           this.fileList = this.fileList.slice(-this.maxCount)
         }
 
-        if (this.requestMode === 'iframe' && this.autoUpload) this.submit()
-        if (this.requestMode === 'xhr' && this.autoUpload) this.uploadFiles()
+        if (this.requestMode === 'iframe' && this.autoUpload) {
+          this.submit()
+        }
+        if (this.requestMode === 'xhr' && this.autoUpload) {
+          this.uploadFiles()
+        }
       }
 
       this.$emit('change', this.maxCount === 1 ? (this.fileList[0].src || this.fileList[0].name) : this.fileList)
@@ -358,7 +382,9 @@ export default {
       return typeValidation && sizeValidation
     },
     validateFileType (filename) {
-      if (!this.accept) return true
+      if (!this.accept) {
+        return true
+      }
 
       let extension = filename.split('.')
       extension = extension[extension.length - 1].toLowerCase()
@@ -366,7 +392,9 @@ export default {
       return this.accept.split(/,\s*/).some(item => {
         let acceptExtention = item.split(/[./]/)[1].toLowerCase()
 
-        if (acceptExtention === extension) return true
+        if (acceptExtention === extension) {
+          return true
+        }
 
         if (acceptExtention === '*' && item.indexOf('/') > -1) {
           let targetExtensions = this.extensions[item.split('/')[0].toLowerCase()]
@@ -382,7 +410,9 @@ export default {
     },
     uploadFiles () {
       this.fileList.forEach(file => {
-        if (file.toBeUploaded) this.upload(file)
+        if (file.toBeUploaded) {
+          this.upload(file)
+        }
       })
     },
     upload (file) {
@@ -469,18 +499,23 @@ export default {
       this.updateFileList(file)
     },
     updateFileList (file, options) {
-      if (options) assign(file, options)
+      if (options) {
+        assign(file, options)
+      }
       this.$set(this.fileList, this.fileList.indexOf(file), file)
       this.$emit('change', this.maxCount === 1 ? (this.fileList[0].src || this.fileList[0].name) : this.fileList)
     },
     retry (file) {
-      if (this.requestMode === 'iframe') this.submit(file)
-      else this.upload(file)
+      if (this.requestMode === 'iframe') {
+        this.submit(file)
+      } else {
+        this.upload(file)
+      }
     },
     removeFile (file) {
       if (this.maxCount === 1) {
         this.fileList = []
-        this.$emit('change', '')
+        this.$emit('change', null)
       } else {
         this.fileList.splice(this.fileList.indexOf(file), 1)
         this.$emit('change', this.fileList)
@@ -494,7 +529,9 @@ export default {
         this.isSubmiting = false
       }
 
-      if (file.xhr) file.xhr.abort()
+      if (file.xhr) {
+        file.xhr.abort()
+      }
 
       this.removeFile(file)
     },
@@ -506,7 +543,9 @@ export default {
       return bytes(size, {decimalPlaces: 1})
     },
     parseData (data) {
-      if (typeof data === 'object') return data
+      if (typeof data === 'object') {
+        return data
+      }
       if (typeof data === 'string') {
         try {
           return JSON.parse(data)
