@@ -8,7 +8,6 @@
   <veui-input
     ref="input"
     :name="realName"
-    :style="{paddingRight: `${inputRightPadding}px`}"
     :readonly="realReadonly"
     :disabled="realDisabled"
     v-bind="attrs"
@@ -16,7 +15,7 @@
     @input="handleInput"
     @focus="inputFocus = true"
     @blur="handleBlur"
-    @keyup.enter="search"
+    @keydown.enter.prevent="search"
   >
   </veui-input>
   <div class="veui-searchbox-others"
@@ -29,26 +28,21 @@
         :disabled="realDisabled"
         v-if="localValue"
         @click.stop="localValue = ''">
-        <icon :name="icons.clear"></icon>
+        <icon name="cross-small"></icon>
       </button>
       <button class="veui-searchbox-icon veui-searchbox-icon-search"
-        ref="search"
         type="button"
         :readonly="realReadonly"
         :disabled="realDisabled"
         @click.stop="search">
-        <icon :name="icons.search"></icon>
-        <veui-button :ui="ui"
-          :readonly="realReadonly"
-          :disabled="realDisabled">搜索</veui-button>
-        </button>
+        <icon name="search"></icon>
+      </button>
     </div>
   </div>
   <veui-overlay
     target="input"
     :options="overlay"
-    :open="expanded"
-    :overlay-class="overlayClass">
+    :open="expanded">
     <div class="veui-searchbox-suggestion-overlay"
       ref="box"
       :ui="ui"
@@ -70,21 +64,19 @@
 </template>
 
 <script>
-import { input, dropdown, overlay, icons } from '../mixins'
+import { input, dropdown } from '../mixins'
 import { pick } from 'lodash'
 import Input from './Input'
 import Icon from './Icon'
 import Overlay from './Overlay'
-import Button from './Button'
 
 export default {
   name: 'veui-searchbox',
-  mixins: [input, dropdown, overlay, icons],
+  mixins: [input, dropdown],
   components: {
     'veui-input': Input,
     Icon,
-    'veui-overlay': Overlay,
-    'veui-button': Button
+    'veui-overlay': Overlay
   },
   props: {
     ui: String,
@@ -116,9 +108,7 @@ export default {
       localValue: this.value,
       // 默认设成false，input focus事件由input控件触发
       inputFocus: false,
-      hideSuggestion: true,
-      // 该值是为了修复覆盖在input右边的一些按钮的宽度。
-      inputRightPadding: 0
+      hideSuggestion: true
     }
   },
   computed: {
@@ -193,17 +183,6 @@ export default {
     close () {
       this.hideSuggestion = true
     }
-  },
-  mounted () {
-    const $search = this.$refs.search
-    let fontSize = window.getComputedStyle($search).fontSize
-    fontSize = +(fontSize.substring(0, fontSize.length - 2))
-    // 各个字段端详细解释一下：
-    // fontSize：用来估摸一个clear的icon按钮的宽度
-    // 8: css写的clear-icon的右边距
-    // -3: 粗略估算 cross-small icon本身的左留白
-    // 10: input的左padding
-    this.inputRightPadding = $search.clientWidth + 10 + (this.clearable ? (fontSize + 8 - 3) : 0)
   }
 }
 </script>
