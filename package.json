@@ -7,5 +7,9 @@
   },
   "devDependencies": {
     "lerna": "^2.0.0-rc.5"
-  }
+  },
+  "browserslist": [
+    "ie >= 9",
+    "last 2 versions"
+  ]
 }
