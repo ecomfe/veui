@@ -1,7 +1,10 @@
 {
-  "autoprefixer": {},
-  "cssnano": {
-    "autoprefixer": false,
-    "safe": true
+  "plugins": {
+    "autoprefixer": {
+    },
+    "cssnano": {
+      "autoprefixer": false,
+      "safe": true
+    }
   }
 }
