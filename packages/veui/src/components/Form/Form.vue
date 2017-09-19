@@ -6,7 +6,7 @@
 
 <script>
 import Vue from 'vue'
-import { isBoolean, isUndefined, isFunction, includes, assign, zipObject, map, keys, debounce } from 'lodash'
+import { isBoolean, isUndefined, isFunction, includes, assign, zipObject, map, keys, debounce, omit } from 'lodash'
 import { getVnodes } from '../../utils/context'
 
 export default {
@@ -94,7 +94,8 @@ export default {
       this.handleSubmit(null)
     },
     handleSubmit (e) {
-      let data = this.data
+      // 把 field 上边 disabled 的项去掉
+      let data = omit(this.data, this.fields.filter(field => field.realDisabled).map(({field}) => field))
       return new Promise(resolve =>
         isFunction(this.beforeValidate)
           ? resolve(this.beforeValidate.call(getVnodes(this)[0].context, data))
@@ -122,11 +123,11 @@ export default {
     },
 
     validate (names) {
-      // fieldset 可以有 name，但是不会有 field 属性
-      let targets = (this.fields || []).filter(item => item.field)
+      // fieldset 可以有 name，但是不会有 field 属性，也不要校验 disabled 的
+      let targets = (this.fields || []).filter(item => item.field && !item.realDisabled)
       let validators = this.validators || []
       if (Array.isArray(names) && names.length) {
-        targets = targets.filter(target => includes(names, target.name))
+        targets = targets.filter(target => includes(names, target.name) && !target.realDisabled)
         validators = validators.filter(
           validator => validator.fields && validator.fields.some(
             fieldName => includes(names, fieldName)
