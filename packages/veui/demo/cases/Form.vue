@@ -586,7 +586,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-dux/lib.less";
+@import "~veui-theme-x/lib.less";
 
 .veui-form-demo {
   h2 {
