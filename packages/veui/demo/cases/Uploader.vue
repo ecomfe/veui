@@ -12,8 +12,6 @@
       ui="horizontal"
       :payload="payload"
       progress="number"
-      @remove="removeFile"
-      @cancel="cancelUploading"
       @success="onSuccess"
       @fail="onFailure">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
@@ -29,8 +27,6 @@
       :payload="payload"
       ui="horizontal bottom-mask"
       progress="bar"
-      @remove="removeFile"
-      @cancel="cancelUploading"
       @success="onSuccess"
       @fail="onFailure">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
@@ -46,8 +42,6 @@
       :payload="payload"
       ui="horizontal button-primary"
       progress="number"
-      @remove="removeFile"
-      @cancel="cancelUploading"
       @success="onSuccess"
       @fail="onFailure">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
@@ -62,8 +56,6 @@
       max-size="10mb"
       accept="image/*"
       :payload="payload"
-      @remove="removeFileIframe"
-      @cancel="cancelUploadingIframe"
       @success="onSuccess"
       @fail="onFailure"
       @change="mockResult">
@@ -119,27 +111,14 @@ export default {
     onFailure (data) {
       console.log(data)
     },
-    removeFile (file) {
-      this.files = this.files.filter(item => {
-        return item.name !== file.name
-      })
-    },
-    removeFileIframe (file) {
-      this.filesIframe = ''
-    },
-    cancelUploading (file) {
-      file.xhr.abort()
-      this.removeFile(file)
-    },
-    cancelUploadingIframe () {
-      this.filesIframe = ''
-    },
     mockResult () {
       setTimeout(() => {
-        this.$refs.iframeUploader.uploadCallback({
-          status: 'success',
-          name: 'demo-file.jpg'
-        }, this.$refs.iframeUploader.currentSubmitingFile)
+        if (this.filesIframe) {
+          this.$refs.iframeUploader.uploadCallback({
+            status: 'success',
+            name: 'demo-file.jpg'
+          }, this.$refs.iframeUploader.currentSubmitingFile)
+        }
       }, 1000)
     }
   }
