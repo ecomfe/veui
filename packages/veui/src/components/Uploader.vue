@@ -37,7 +37,7 @@
             </template>
             <template v-else>
               <img :src="file.src" :alt="file.alt || ''">
-              <div v-if="!realDisabled && !realReadonly" :class="listClass + '-mask'">
+              <div v-if="!realUneditable" :class="listClass + '-mask'">
                 <label :for="inputId"
                   class="veui-button"
                   :class="{'veui-uploader-input-label-disabled': realUneditable}"
