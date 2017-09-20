@@ -17,8 +17,7 @@
     "less-plugin-est": "^2.0.5"
   },
   "peerDependencies": {
-    "veui": "0.2.4",
-    "wicg-focus-ring": "^2.0.1"
+    "veui": "0.2.4"
   },
   "devDependencies": {
     "svgo": "^0.7.2",
