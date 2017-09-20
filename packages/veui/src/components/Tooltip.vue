@@ -4,6 +4,7 @@ import { outside } from '../directives'
 import { overlay } from '../mixins'
 import { getNodes } from '../utils/context'
 import { isString } from 'lodash'
+import config from '../managers/config'
 
 const POS_MAP = {
   left: 'right',
@@ -15,6 +16,10 @@ const POS_MAP = {
 const TRIGGER_MAP = {
   hover: 'mouseenter'
 }
+
+config.defaults({
+  'tooltip.hideDelay': 300
+})
 
 export default {
   name: 'veui-tooltip',
@@ -34,9 +39,9 @@ export default {
       type: String,
       default: 'hover'
     },
-    delay: {
+    hideDelay: {
       type: Number,
-      default: 300
+      default: config.get('tooltip.hideDelay')
     },
     custom: {
       type: Boolean,
@@ -97,7 +102,7 @@ export default {
         handler: this.closeHandler,
         refs: this.targetNode,
         trigger: this.localTrigger.close,
-        delay: this.delay
+        delay: this.hideDelay
       }
     }
   },
