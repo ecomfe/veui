@@ -34,7 +34,7 @@ export default {
       type: String,
       default: 'hover'
     },
-    delay: {
+    disappearDelay: {
       type: Number,
       default: 300
     },
@@ -97,7 +97,7 @@ export default {
         handler: this.closeHandler,
         refs: this.targetNode,
         trigger: this.localTrigger.close,
-        delay: this.delay
+        delay: this.disappearDelay
       }
     }
   },
