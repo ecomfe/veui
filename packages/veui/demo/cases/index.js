@@ -26,6 +26,7 @@ import Searchbox from './Searchbox'
 import Steps from './Steps'
 import RegionPicker from './RegionPicker'
 import ButtonGroup from './ButtonGroup'
+import Progress from './Progress'
 
 export default [
   {
@@ -182,5 +183,10 @@ export default [
     path: '/button-group',
     name: 'ButtonGroup',
     component: ButtonGroup
+  },
+  {
+    path: '/progress',
+    name: 'Progress',
+    component: Progress
   }
 ]

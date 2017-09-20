@@ -1,5 +1,5 @@
 <template>
-<veui-dialog class="veui-prompt-box"
+<veui-dialog :overlay-class="mergeOverlayClass('veui-prompt-box')"
   :ui="ui"
   :open.sync="localOpen"
   :priority="priority"
@@ -18,6 +18,7 @@ import Input from './Input'
 import Dialog from './Dialog'
 import { pick, extend } from 'lodash'
 import config from '../managers/config'
+import { overlay } from '../mixins'
 
 config.defaults({
   'promptbox.priority': 100
@@ -29,6 +30,7 @@ export default {
     'veui-input': Input,
     'veui-dialog': Dialog
   },
+  mixins: [overlay],
   props: extend(
     pick(Dialog.props, ['open', 'title', 'ui']),
     {

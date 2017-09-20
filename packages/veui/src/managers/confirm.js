@@ -18,7 +18,8 @@ export class ConfirmManager extends SpecialDialog {
             props: {
               open: data.open,
               title: data.title,
-              ui: data.type
+              ui: data.type,
+              overlayClass: data.overlayClass
             },
             on: {
               ok: data.ok,

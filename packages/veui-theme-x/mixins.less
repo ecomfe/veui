@@ -1,0 +1,36 @@
+@import "~less-plugin-est/src/all.less";
+@import "./variables.less";
+
+.veui-button-transition() {
+  transition-property: border-color, background-color, color;
+  transition-duration: 0.2s;
+}
+
+.veui-position-center(@x: 50%, @y: @x) {
+  .absolute(@x, _, _, @y);
+  transform: translate(-@x, -@y);
+}
+
+.veui-field-require() {
+  content: "*";
+  float: right;
+  margin-right: 9px;
+  color: @veui-alert-color;
+}
+
+.veui-field-gap-error() {
+  position: absolute;
+  display: block;
+  margin: 0;
+  height: @veui-field-gap;
+  line-height: @veui-field-gap;
+  font-size: 12px;
+}
+
+.veui-make-table-row-height(@font-size: @veui-font-size-normal, @half-lead: 13px, @lines: 1) {
+  height: @half-lead * 2 + @font-size * @lines * 2;
+}
+
+.veui-overlay-shadow() {
+  box-shadow: 0 1px 4px fadeout(#000, 80%);
+}

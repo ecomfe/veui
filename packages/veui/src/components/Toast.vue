@@ -1,23 +1,19 @@
 <template>
-<div :ui="ui" class="veui-toast" :class="`veui-toast-${type}`">
-  <veui-icon class="veui-toast-icon" :name="`${iconName}-circle`"></veui-icon>
-  <span class="veui-toast-message">{{ message }}</span>
-</div>
+<transition name="veui-toast">
+  <div :ui="ui" class="veui-toast" :class="`veui-toast-${type}`">
+    <veui-icon class="veui-toast-icon" :name="icons[type]"></veui-icon>
+    <span class="veui-toast-message">{{ message }}</span>
+  </div>
+</transition>
 </template>
 
 <script>
 import Icon from './Icon'
-import '../icons'
-
-const ICON_MAP = {
-  success: 'check',
-  warning: 'exclamation',
-  info: 'info',
-  error: 'cross'
-}
+import { icons } from '../mixins'
 
 export default {
   name: 'toast',
+  mixins: [icons],
   components: {
     'veui-icon': Icon
   },
@@ -33,15 +29,12 @@ export default {
       default: 3000
     }
   },
-  computed: {
-    iconName () {
-      return ICON_MAP[this.type]
-    }
-  },
   mounted () {
     this.timer = setTimeout(() => {
       this.$emit('close')
     }, this.duration)
+
+    this.$emit('ready', this.$el.offsetHeight)
   },
   beforeDestroy () {
     clearTimeout(this.timer)

@@ -1,17 +1,19 @@
 <template>
-<label class="veui-checkbox" :ui="ui">
+<label :class="{
+    'veui-checkbox': true,
+    'veui-disabled': realReadonly || realDisabled
+  }" :ui="ui">
   <input ref="box" type="checkbox" v-bind="attrs" @change="handleChange($event.target.checked)">
   <span class="veui-checkbox-box">
-    <icon v-if="checked || localIndeterminate" :name="`${localIndeterminate ? 'minus' : 'check'}-thick`"></icon>
+    <icon v-if="checked || localIndeterminate" :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"></icon>
   </span>
-  <span><slot></slot></span>
+  <span class="veui-checkbox-label"><slot></slot></span>
 </label>
 </template>
 
 <script>
 import Icon from './Icon'
-import '../icons'
-import { input } from '../mixins'
+import { input, icons } from '../mixins'
 import { pick } from 'lodash'
 import { patchIndeterminate } from '../utils/dom'
 
@@ -20,7 +22,7 @@ export default {
   components: {
     Icon
   },
-  mixins: [input],
+  mixins: [input, icons],
   model: {
     prop: 'checked',
     event: 'change'

@@ -180,7 +180,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-dux/lib.less";
+@import "~less-plugin-est/src/all.less";
 
 .demo-overlay-box {
   box-shadow: 1px 1px 6px fadeOut(#000, 80%);
@@ -190,7 +190,7 @@ export default {
 
 .demo-overlay {
   .row {
-    background: @veui-gray-color-sup-4;
+    background: #f8f8f8;
     padding: 10px 15px 10px 5px;
     margin-bottom: 120px;
     .clearfix();
@@ -206,7 +206,7 @@ export default {
     margin-left: 400px;
     height: 160px;
     overflow: scroll;
-    border: 1px solid @veui-gray-color-sup-1;
+    border: 1px solid #dbdbdb;
 
     .scroll-content {
       width: 2000px;
@@ -220,7 +220,7 @@ export default {
   }
 
   .target {
-    background: @veui-success-color-primary;
+    background: #6c9;
     width: 100px;
     height: 80px;
   }

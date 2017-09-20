@@ -1,0 +1,247 @@
+@import "../lib.less";
+
+.veui-pager {
+  @button-width: 30px;
+  @button-height: 30px;
+  @button-gap-width: 6px;
+
+  @digit-width: 28px;
+  @digit-width-delta: 6px;
+  @digit-height: 30px;
+
+  @digit-size: 14px;
+
+  .clearfix();
+  display: inline-block;
+  color: @veui-text-color-normal;
+  // font-weight: @veui-font-weight-normal;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &-info {
+    float: left;
+    margin-right: @button-gap-width;
+    line-height: @digit-height;
+  }
+
+  &-total,
+  &-size {
+    display: inline-block;
+  }
+
+  &-size {
+    .margin(_, 10px, _, 20px);
+  }
+
+  &-switch {
+    float: left;
+
+    .veui-active a {
+      color: @veui-text-color-strong;
+    }
+  }
+
+  .veui-active a {
+    background-color: @veui-gray-color-7;
+  }
+
+  &-buttons {
+    a {
+      .veui-button-transition();
+    }
+  }
+
+  &-buttons a,
+  &-buttons span {
+    border: 1px solid @veui-gray-color-5;
+    background: transparent;
+
+    &:hover {
+      color: @veui-text-color-strong;
+      background-color: @veui-gray-color-8;
+    }
+
+    &.focus-ring {
+      color: @veui-brand-color;
+    }
+
+    &:active {
+      background-color: @veui-gray-color-6;
+    }
+
+    &.veui-disabled {
+      &,
+      &:hover,
+      &:active {
+        background-color: @veui-gray-color-7;
+        border-color: transparent;
+        color: @veui-text-color-aux;
+      }
+    }
+
+    .veui-icon {
+      .veui-position-center()
+    }
+  }
+
+  .veui-select {
+    min-width: auto;
+    margin-top: -1px;
+    margin-left: 10px;
+    vertical-align: top;
+
+    .veui-button {
+      .padding(0, _);
+      height: @button-height;
+      line-height: @button-height - 2px;
+      white-space: nowrap;
+      color: @veui-text-color-strong;
+
+      .veui-icon {
+        @height: @button-height / 2 - 1px;
+        margin-top: ~"calc(@{height} - 0.5em)";
+      }
+    }
+
+    .veui-select-label {
+      max-width: none;
+      width: auto;
+      float: left;
+      margin-right: 5px;
+    }
+  }
+
+  &-buttons {
+    float: left;
+    margin-left: @button-gap-width;
+  }
+
+  &-previous,
+  &-next {
+    position: relative;
+    float: left;
+    width: @button-width;
+    height: @button-height;
+    line-height: @button-width - 2px;
+    text-align: center;
+  }
+
+  &-pages {
+    float: left;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      float: left;
+      width: @digit-width;
+      height: @digit-height;
+      text-align: center;
+      line-height: @digit-height;
+      font-size: @digit-size;
+
+      a,
+      span {
+        display: inline-block;
+        min-width: @button-width;
+        .padding(_, 6px);
+        cursor: pointer;
+
+        &:hover {
+          color: @veui-text-color-strong;
+        }
+
+        &.focus-ring {
+          color: @veui-link-color-active;
+        }
+      }
+    }
+
+    span {
+      color: @veui-link-color-weak;
+    }
+  }
+
+  .generate-responsive-page-digit-width(@length, @scale-ratio: 1) when (@length > 2) {
+
+    .veui-pager-digit-length-@{length} {
+      li {
+        width: (@digit-width + @digit-width-delta * (@length - 2)) * @scale-ratio;
+      }
+    }
+
+    .generate-responsive-page-digit-width(@length - 1, @scale-ratio);
+  }
+
+  .generate-responsive-page-digit-width(4);
+
+  &,
+  &[ui~="slim"] {
+    .veui-pager-switch {
+      padding: 0 @button-width + @button-gap-width;
+      position: relative;
+    }
+
+    .veui-pager-previous {
+      position: absolute;
+      left: 0;
+    }
+  }
+
+  &[ui~="hetero"],
+  &[ui~="full"] {
+    .veui-pager-switch {
+      padding-left: 0;
+    }
+
+    .veui-pager-previous {
+      position: relative;
+      margin-right: @button-gap-width;
+    }
+  }
+
+  &-info {
+    display: none;
+  }
+
+  &[ui~="full"] {
+    .veui-pager-info {
+      display: block;
+    }
+  }
+
+  &[ui~="slim"] {
+    @scale-ratio: 2 / 3;
+
+    .veui-pager-switch {
+      padding: 0 (@button-height + @button-gap-width) * @scale-ratio;
+
+      li {
+        width: @digit-width * @scale-ratio;
+        height: @digit-height * @scale-ratio;
+        line-height: @digit-height * @scale-ratio;
+        font-size: @veui-font-size-small;
+      }
+    }
+
+    .veui-pager-previous,
+    .veui-pager-next {
+      width: @button-height * @scale-ratio;
+      height: @button-height * @scale-ratio;
+      line-height: 1.5;
+    }
+
+    .veui-icon {
+      height: @digit-height * @scale-ratio / 2;
+    }
+
+    .generate-responsive-page-digit-width(4, .8);
+  }
+}

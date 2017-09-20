@@ -5,7 +5,8 @@
 </template>
 
 <script>
-import { isBoolean, isUndefined, isFunction, includes, assign, zipObject, map, keys } from 'lodash'
+import Vue from 'vue'
+import { isBoolean, isUndefined, isFunction, includes, assign, zipObject, map, keys, debounce, omit } from 'lodash'
 import { getVnodes } from '../../utils/context'
 
 export default {
@@ -13,11 +14,19 @@ export default {
   uiTypes: ['form', 'form-container'],
 
   props: {
-    // 假设 validator 的 fields 为 ['a,b,c']，triggers 如下，最后生成的结果如下
-    // ['change', 'blur,input,xxx', 'submit'] => a(change), b(blur,input,xxx), c(submit)
-    // ['blur']                               => a(blur), b(submit), c(submit)
-    // 'blur,input'                           => a(blur,input), b(blur,input), c(blur,input)
-    // 'blur'                                 => a(blur), b(blur), c(blur)
+    /**
+     * 假设 validator 的 fields 为 ['a,b,c']，triggers 如下，最后生成的结果如下
+     * ['change', 'blur,input,xxx', 'submit'] => a(change), b(blur,input,xxx), c(submit)
+     * ['blur']                               => a(blur), b(submit), c(submit)
+     * 'blur,input'                           => a(blur,input), b(blur,input), c(blur,input)
+     * 'blur'                                 => a(blur), b(blur), c(blur)
+     *
+     * validator的返回值说明：
+     * 1. undefined/true 同步校验成功，清空前置同类错误
+     * 2. false 同步校验失败，无错误消息
+     * 3. Promise resolve(true) 异步校验成功，清空前置同类错误
+     * 4. Promise resolve(errObject) 同步校验失败，errOjbect为错误消息
+     */
     validators: Array,
     beforeValidate: Function,
     afterValidate: Function,
@@ -43,9 +52,10 @@ export default {
     interactiveValidatorsMap () {
       let map = {}
       if (this.validators) {
-        this.validators.forEach(({ handler, triggers, fields }) => {
+        this.validators.forEach(({ validate, handler, triggers, fields }) => {
+          let fn = validate || handler
           // 没有 trigger 代表 submit 检查，这里只存交互的
-          if (!isFunction(handler) || !fields || !triggers) {
+          if (!isFunction(fn) || !fields || !triggers) {
             return
           }
 
@@ -57,10 +67,15 @@ export default {
                 return
               }
 
+              let debounceFn = debounce(() => {
+                this.execValidator(fn, fields)
+              }, 300)
               let item = {
                 fields,
-                handler
+                validate: debounceFn,
+                handler: debounceFn
               }
+
               if (map[event]) {
                 map[event].push(item)
               } else {
@@ -79,7 +94,8 @@ export default {
       this.handleSubmit(null)
     },
     handleSubmit (e) {
-      let data = this.data
+      // 把 field 上边 disabled 的项去掉
+      let data = omit(this.data, this.fields.filter(field => field.realDisabled).map(({field}) => field))
       return new Promise(resolve =>
         isFunction(this.beforeValidate)
           ? resolve(this.beforeValidate.call(getVnodes(this)[0].context, data))
@@ -107,11 +123,11 @@ export default {
     },
 
     validate (names) {
-      // fieldset 可以有 name，但是不会有 field 属性
-      let targets = (this.fields || []).filter(item => item.field)
+      // fieldset 可以有 name，但是不会有 field 属性，也不要校验 disabled 的
+      let targets = (this.fields || []).filter(item => item.field && !item.realDisabled)
       let validators = this.validators || []
       if (Array.isArray(names) && names.length) {
-        targets = targets.filter(target => includes(names, target.name))
+        targets = targets.filter(target => includes(names, target.name) && !target.realDisabled)
         validators = validators.filter(
           validator => validator.fields && validator.fields.some(
             fieldName => includes(names, fieldName)
@@ -131,9 +147,10 @@ export default {
             return Promise.resolve(true)
           }),
 
-          ...validators.map(({ handler, fields }) => {
-            if (isFunction(handler) && fields) {
-              let validities = this.execValidator(handler, fields)
+          ...validators.map(({ validate, handler, fields }) => {
+            let fn = validate || handler
+            if (isFunction(fn) && fields) {
+              let validities = this.execValidator(fn, fields)
 
               // 异步校验交给返回的 Promise，对于同步校验，true 代表校验通过，false 代表不通过但是没有出错信息，其他当成 { fieldName1: errMsg, ... } 处理
               // 异步校验
@@ -158,14 +175,14 @@ export default {
       )
     },
 
-    execValidator (handler, fields) {
+    execValidator (validate, fields) {
       let targets = fields.map(name => this.fieldsMap[name])
-      let validities = handler.apply(
+      let validities = validate.apply(
         this,
         targets.map(target => target && target.getFieldValue())
       )
 
-      // 异步校验
+      // 异步校验，详细返回值说明请看prop.validators
       if (validities && isFunction(validities.then)) {
         return validities.then(
           res => {
@@ -182,9 +199,10 @@ export default {
     handleInteract (eventName, name) {
       let validators = this.interactiveValidatorsMap[eventName]
       if (validators) {
-        validators.forEach(({ handler, fields }) => {
-          if (includes(fields, name) && isFunction(handler)) {
-            this.execValidator(handler, fields)
+        validators.forEach(({ validate, handler, fields }) => {
+          let fn = validate || handler
+          if (includes(fields, name) && isFunction(fn)) {
+            fn()
           }
         })
       }
@@ -194,40 +212,57 @@ export default {
      * 处理validator产生的校验信息
      *
      * @param  {Boolean|Object} validities true或者出错的Object
-     * @param  {Array} [fields] 校验的field集合
+     * @param  {Array} [fields] 校验的 field 的 name 集合，可能是fieldset
      */
     handleValidities (validities, fields) {
-      let fieldStrings = fields.join(',')
+      // 加个前缀避免单 field 冲突
+      let validityName = `validator:${fields.join(',')}`
       if (this.isValid(validities)) {
         fields.forEach(name => {
-          let target = this.fieldsMap[name]
-          let promotion = this.errorMap[fieldStrings]
-          if (promotion) {
-            target = this.fieldsMap[promotion]
-            delete this.errorMap[fieldStrings]
+          // 找到真正显示错误的地方
+          let vectors = this.errorMap[validityName]
+
+          if (vectors && vectors.length) {
+            vectors.forEach(vector => {
+              let target = this.fieldsMap[vector]
+              target && target.hideValidity(validityName)
+            })
+            delete this.errorMap[validityName]
           }
-          target && target.hideValidity(fieldStrings)
         })
       } else {
         keys(validities).forEach(name => {
+          let vectors = this.errorMap[validityName] || []
           let target = this.fieldsMap[name]
-          if (target && !target.validities.some(validity => validity.fields === fieldStrings)) {
-            target.validities.unshift({
-              valid: false,
-              message: validities[target.name],
-              fields: fieldStrings
-            })
-            // 防止使用 fieldset 定位错误之后，上边找不到
-            if (!includes(fields, target.name)) {
-              this.errorMap[fieldStrings] = target.name
+
+          let validity = {
+            valid: false,
+            message: validities[target.name],
+            fields: validityName
+          }
+          // 看下是否之前这个校验规则出过错，没出过错就直接塞进去
+          if (target && !target.validities.some(validity => validity.fields === validityName)) {
+            target.validities.unshift(validity)
+            // 防止使用 fieldset 定位错误之后，上边找不到，所以都要记住
+            if (!includes(vectors, target.name)) {
+              this.errorMap[validityName] = [
+                ...(this.errorMap[validityName] || []),
+                target.name
+              ]
             }
+          } else {
+            // 之前出过错，要把这个 validities 更新一下
+            Vue.set(target, 'validities', [
+              validity,
+              ...target.validities.filter(validity => validity.fields === validityName)
+            ])
           }
         })
       }
     },
 
     isValid (res) {
-      return isUndefined(res) || (isBoolean(res) && res)
+      return isUndefined(res) || isBoolean(res) && res
     },
 
     reset () {

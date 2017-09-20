@@ -89,7 +89,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-dux/lib.less";
+@import "~less-plugin-est/src/all.less";
 
 .form-row {
   margin-bottom: 10px;

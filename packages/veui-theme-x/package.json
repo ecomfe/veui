@@ -1,0 +1,26 @@
+{
+  "name": "veui-theme-x",
+  "version": "0.3.0",
+  "description": "X theme for VEUI.",
+  "keywords": [
+    "veui",
+    "vue",
+    "baidu",
+    "less"
+  ],
+  "scripts": {
+    "icons": "node build/svg2json.js && node build/icons.js"
+  },
+  "author": "ecomfe",
+  "license": "MIT",
+  "dependencies": {
+    "less-plugin-est": "^2.0.5"
+  },
+  "peerDependencies": {
+    "veui": "0.2.4"
+  },
+  "devDependencies": {
+    "svgo": "^0.7.2",
+    "svgson": "^2.1.0"
+  }
+}

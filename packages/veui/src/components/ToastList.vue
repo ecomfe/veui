@@ -1,9 +1,13 @@
 <template>
-<veui-overlay :open="true" overlay-class="veui-toast-list" :priority="priority">
+<veui-overlay :open="true" :overlay-class="mergeOverlayClass('veui-toast-list')" :priority="priority">
   <veui-toast v-for="(message, index) in messages"
-    v-bind="message"
     :key="message.__message_id__"
-    @close="remove(message)">
+    :type="message.type"
+    :message="message.message"
+    :duration="message.duration"
+    @close="remove(message)"
+    @ready="updateHeight(message, index, $event)"
+    :style="`top: ${message.top}px`">
   </veui-toast>
 </veui-overlay>
 </template>
@@ -13,6 +17,7 @@ import Overlay from './Overlay'
 import Toast from './Toast'
 import { assign, findIndex, uniqueId } from 'lodash'
 import config from '../managers/config'
+import { overlay } from '../mixins'
 
 config.defaults({
   'toast.priority': 101
@@ -20,6 +25,7 @@ config.defaults({
 
 export default {
   name: 'toast-list',
+  mixins: [overlay],
   components: {
     'veui-overlay': Overlay,
     'veui-toast': Toast
@@ -32,14 +38,31 @@ export default {
   },
   methods: {
     add (message) {
-      this.messages.unshift(assign({}, message, {
+      this.messages.unshift(assign({ height: 0, top: 0 }, message, {
         __message_id__: uniqueId('veui-toast-')
       }))
     },
     remove (message) {
-      this.messages.splice(findIndex(this.messages, msg => {
+      let index = findIndex(this.messages, msg => {
         return msg.__message_id__ === message.__message_id__
-      }), 1)
+      })
+      this.messages.splice(index, 1)
+      this.updateLayout()
+    },
+    updateHeight (message, index, height) {
+      message.height = height
+      this.updateLayout()
+    },
+    updateLayout () {
+      this.messages.forEach((msg, i) => {
+        if (i === 0) {
+          msg.top = 0
+          return
+        }
+
+        let prev = this.messages[i - 1]
+        msg.top = prev.top + prev.height + 10
+      })
     }
   }
 }

@@ -1,45 +1,39 @@
 <template>
 <div v-if="localOpen" class="veui-alert" :ui="ui" :class="`veui-alert-${type}`">
   <slot name="content">
-    <veui-icon class="veui-alert-icon" :name="iconName"></veui-icon>
+    <veui-icon class="veui-alert-icon" :name="icons[type]"></veui-icon>
     <slot>
       <span v-if="isMultiple" class="veui-alert-message veui-alert-message-multiple">{{ message[index] }}</span>
       <span v-else class="veui-alert-message">{{ message }}</span>
     </slot>
-    <button v-if="closeText" class="veui-alert-close veui-alert-close-text" @click="close">{{ closeText }}</button>
-    <template v-else-if="isMultiple">
-      <span class="veui-alert-close">
-        <button :disabled="isFirst" @click="switchMessage(-1)">
-          <veui-icon name="angle-left"></veui-icon>
-        </button>
-        <button :disabled="isLast" @click="switchMessage(1)">
-          <veui-icon name="angle-right"></veui-icon>
-        </button>
-      </span>
-    </template>
-    <button v-else class="veui-alert-close" @click="close">
-      <veui-icon name="cross"></veui-icon>
-    </button>
+    <veui-button v-if="closeText" class="veui-alert-close veui-alert-close-text" ui="link primary" @click="close">{{ closeText }}</veui-button>
+    <span class="veui-alert-nav" v-else-if="isMultiple">
+      <veui-button ui="link" :disabled="isFirst" @click="switchMessage(-1)">
+        <veui-icon :name="icons.prev"></veui-icon>
+      </veui-button>
+      <veui-button ui="link" :disabled="isLast" @click="switchMessage(1)">
+        <veui-icon :name="icons.next"></veui-icon>
+      </veui-button>
+    </span>
+    <veui-button v-else class="veui-alert-close" ui="link" @click="close">
+      <veui-icon :name="icons.close"></veui-icon>
+    </veui-button>
   </slot>
 </div>
 </template>
 
 <script>
 import Icon from './Icon'
-import '../icons'
+import Button from './Button'
 import { isArray } from 'lodash'
-
-const TYPE_MAP = {
-  success: 'check-circle',
-  warning: 'exclamation-circle',
-  info: 'info-circle',
-  error: 'cross-circle'
-}
+import { icons } from '../mixins'
 
 export default {
   name: 'alert',
+  mixins: [icons],
   components: {
-    'veui-icon': Icon
+    'veui-icon': Icon,
+    'veui-button': Button
   },
   props: {
     ui: String,
@@ -66,9 +60,6 @@ export default {
     }
   },
   computed: {
-    iconName () {
-      return TYPE_MAP[this.type]
-    },
     isMultiple () {
       return isArray(this.message)
     },

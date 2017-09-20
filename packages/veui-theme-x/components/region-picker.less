@@ -1,0 +1,141 @@
+@import "../lib.less";
+
+.veui-region-picker {
+  @item-width: 116px;
+  @row-size: 6;
+  @padding-x: 20px;
+  width: @item-width * @row-size + @padding-x * 2 + 2px;
+  border: 1px solid @veui-gray-color-5;
+
+  &-section {
+    border-top: 1px solid @veui-gray-color-5;
+
+    &:first-child {
+      border-top: none;
+    }
+
+    &-title {
+      .centered-line(40px);
+      padding-left: 20px;
+    }
+  }
+
+  &-branch {
+    padding: 0 @padding-x;
+
+    &:hover {
+      background-color: @veui-gray-color-8;
+    }
+
+    &-title {
+      float: left;
+      margin: 16px 0;
+      width: @item-width;
+
+      &::after {
+        content: "：";
+        line-height: 1;
+      }
+    }
+
+    &-content {
+      overflow: hidden;
+    }
+  }
+
+  &-group {
+    float: left;
+    margin: 16px 0;
+
+    &-title {
+      width: @item-width;
+    }
+
+    &-overlay {
+      position: relative;
+    }
+
+    &-shadow {
+      float: left;
+      margin: -11px 0 0 -8px;
+      padding: 10px 8px;
+      border-radius: 2px 2px 0;
+      background-color: #fff;
+      border-top: 1px solid @veui-gray-color-8;
+      z-index: 1;
+      .veui-overlay-shadow();
+
+      small {
+        margin-left: 10px;
+        font-size: @veui-font-size-normal;
+        color: @veui-text-color-weak;
+      }
+
+      &::before,
+      &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        bottom: -5px;
+        left: -8px;
+        width: ~"calc(100% + 8px)";
+        height: 10px;
+        background-color: #fff;
+      }
+
+      &::after {
+        bottom: -10px;
+        left: 20px;
+      }
+
+      .tether-element-attached-bottom + &-overlay &,
+      .tether-element-attached-bottom + [data-tether-id] + &-overlay & {
+        &::before {
+          top: -15px;
+          bottom: auto;
+        }
+
+        &::after {
+          top: -20px;
+          bottom: auto;
+        }
+      }
+    }
+  }
+
+  &-units {
+    display: table;
+    margin: 10px 0 0 -8px;
+    background-color: #fff;
+    border-top: 1px solid @veui-gray-color-8;
+    z-index: 0;
+    .veui-overlay-shadow();
+
+    .tether-element-attached-bottom & {
+      margin: 0 0 10px -8px;
+    }
+  }
+
+  &-unit-row {
+    display: table-row;
+    margin: 10px 8px;
+  }
+
+  &-unit {
+    display: table-cell;
+    padding: 10px 20px 10px 8px;
+    .ellipsis();
+
+    &:first-child {
+      padding-left: 20px;
+    }
+
+    &-row:first-child & {
+      padding-top: 20px;
+    }
+
+    &-row:last-child & {
+      padding-bottom: 20px;
+    }
+  }
+}

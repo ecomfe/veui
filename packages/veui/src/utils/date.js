@@ -63,11 +63,15 @@ export function isInRange (day, range) {
   return false
 }
 
+function compareDate (d1, d2) {
+  return d1 - d2
+}
+
 export function mergeRange (r1, r2) {
-  let dates1 = flatten(r1)
-  let dates2 = flatten(r2)
+  let dates1 = flatten(r1).sort(compareDate)
+  let dates2 = flatten(r2).sort(compareDate)
   let dates = [...dates1, ...dates2]
-    .sort((a, b) => a - b)
+    .sort(compareDate)
     .map((date, i) => {
       if (isInRange(date, dates1) && isInRange(date, dates2)) {
         return addDays(date, i % 2 ? -1 : 1)

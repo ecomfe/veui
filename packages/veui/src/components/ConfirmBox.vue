@@ -3,7 +3,7 @@
   :priority="priority"
   :closable="false"
   ui="reverse"
-  overlay-class="veui-confirm-box">
+  :overlay-class="mergeOverlayClass('veui-confirm-box')">
   <template slot="title">
     <slot name="title">{{ title }}</slot>
   </template>
@@ -20,6 +20,7 @@ import { pick } from 'lodash'
 import Dialog from './Dialog'
 import Button from './Button'
 import config from '../managers/config'
+import { overlay } from '../mixins'
 
 config.defaults({
   'confirmbox.priority': 100
@@ -31,6 +32,7 @@ export default {
     'veui-dialog': Dialog,
     'veui-button': Button
   },
+  mixins: [overlay],
   props: {
     ...pick(Dialog.props, ['open', 'title']),
     ui: {

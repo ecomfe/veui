@@ -5,24 +5,26 @@
   </span>
   <slot></slot>
   <span v-if="tip" class="veui-form-tip">{{ tip }}</span>
-  <p v-if="!validity.valid && !!validity.message" class="veui-field-error" :title="validity.message"><veui-icon name="exclamation-circle"></veui-icon>{{ validity.message }}</p>
+  <p v-if="!validity.valid && !!validity.message" class="veui-field-error" :title="validity.message"><veui-icon :name="icons.alert"></veui-icon>{{ validity.message }}</p>
 </div>
 </template>
 
 <script>
 import Label from '../Label'
 import { type, rule } from '../../managers'
-import { isBoolean, get, last } from 'lodash'
+import { icons } from '../../mixins'
+import { isBoolean, get, last, includes } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
-import '../../icons'
 import Vue from 'vue'
+
 const { computed: form } = getTypedAncestorTracker('form')
 const { computed: fieldset } = getTypedAncestorTracker('fieldset')
 
 export default {
   name: 'veui-field',
   uiTypes: ['field', 'form-container'],
+  mixins: [icons],
   components: {
     'veui-icon': Icon,
     'veui-label': Label
@@ -141,15 +143,18 @@ export default {
     },
     validate (rules = this.localRules) {
       let res = rule.validate(this.getFieldValue(), rules)
-      let name = this.name || 'anonymous'
       // 把之前同类型的清掉
-      this.hideValidity(name)
+      this.hideValidity('native:*')
       // 如果有新的错，放进去，这样可以更新错误消息
       if (!isBoolean(res) || !res) {
-        this.validities.unshift({
-          valid: false,
-          message: res,
-          fields: name
+        res.forEach(({message, name}) => {
+          if (name) {
+            this.validities.unshift({
+              valid: false,
+              message,
+              fields: `native:${name}`
+            })
+          }
         })
       }
       return res
@@ -164,13 +169,22 @@ export default {
       if (!fields) {
         this.validities = []
       } else {
-        this.$set(this, 'validities', this.validities.filter(validity => validity.fields !== fields))
+        let validities = this.validities
+        if (fields === 'native:*') {
+          validities = this.validities.filter(validity => !includes(validity.fields, 'native:'))
+        } else {
+          validities = this.validities.filter(validity => Array.isArray(fields)
+            ? !includes(fields, validity)
+            : validity.fields !== fields
+          )
+        }
+        this.$set(this, 'validities', validities)
       }
     }
   },
   created () {
     this.form.fields.push(this)
-    // 如果是 fieldset 或者没写field，初始值和校验都没有意义
+    // 如果是 fieldset 或者没写 field，初始值和校验都没有意义
     if (!this.field) {
       return
     }

@@ -4,16 +4,31 @@ export default class BaseHandler {
 
   context = null
 
+  isDragging = false
+
   constructor (options, context) {
-    this.options = options
+    this.setOptions(options)
     this.context = context
   }
 
-  start () {}
+  start () {
+    this.isDragging = true
+  }
 
   drag () {}
 
-  end () {}
+  end () {
+    this.isDragging = false
+  }
 
   destroy () {}
+
+  setOptions (options) {
+    if (this.isDragging) {
+      throw new Error('Do not set `options` while dragging.')
+    }
+    this.options = options
+  }
+
+  reset () {}
 }

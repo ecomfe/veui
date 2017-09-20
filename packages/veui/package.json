@@ -1,13 +1,11 @@
 {
   "name": "veui",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "Baidu Enterprise UI for Vue.js.",
   "author": "ecomfe",
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
-    "icons": "node build/svg2json.js && node build/icons.js",
-    "svg2json": "node build/svg2json.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
@@ -18,9 +16,9 @@
   "dependencies": {
     "lodash": "^4.17.4",
     "tether": "^1.4.0",
-    "veui-theme-dux": "^0.2.4",
-    "vue-awesome": "^2.2.1",
-    "bytes": "^3.0.0"
+    "bytes": "^3.0.0",
+    "vue-awesome": "^2.3.1",
+    "wicg-focus-ring": "^2.0.1"
   },
   "peerDependencies": {
     "vue": "^2.2.2"
@@ -36,7 +34,7 @@
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-plugin-transform-vue-jsx": "^3.4.2",
-    "babel-plugin-veui": "^0.2.4",
+    "babel-plugin-veui": "^0.3.0",
     "babel-preset-env": "^1.2.1",
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.22.0",
@@ -87,9 +85,10 @@
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0",
     "url-loader": "^0.5.7",
-    "veui-loader": "^0.2.4",
+    "veui-loader": "^0.3.0",
+    "veui-theme-dux": "^0.3.0",
+    "veui-theme-x": "^0.3.0",
     "vue": "^2.3.0",
-    "vue-awesome": "^2.3.1",
     "vue-loader": "^11.1.4",
     "vue-router": "^2.2.0",
     "vue-style-loader": "^2.0.0",
@@ -98,7 +97,8 @@
     "webpack-bundle-analyzer": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.16.1",
-    "webpack-merge": "^2.6.1"
+    "webpack-merge": "^2.6.1",
+    "wicg-focus-ring": "^2.0.1"
   },
   "engines": {
     "node": ">= 4.0.0",
@@ -107,14 +107,5 @@
   "browserslist": [
     "ie >= 9",
     "last 2 versions"
-  ],
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {},
-      "cssnano": {
-        "autoprefixer": false,
-        "safe": true
-      }
-    }
-  }
+  ]
 }

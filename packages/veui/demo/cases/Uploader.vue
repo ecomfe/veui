@@ -12,8 +12,6 @@
       ui="horizontal"
       :payload="payload"
       progress="number"
-      @remove="removeFile"
-      @cancel="cancelUploading"
       @success="onSuccess"
       @fail="onFailure">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
@@ -29,8 +27,6 @@
       :payload="payload"
       ui="horizontal bottom-mask"
       progress="bar"
-      @remove="removeFile"
-      @cancel="cancelUploading"
       @success="onSuccess"
       @fail="onFailure">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
@@ -46,14 +42,12 @@
       :payload="payload"
       ui="horizontal button-primary"
       progress="number"
-      @remove="removeFile"
-      @cancel="cancelUploading"
       @success="onSuccess"
       @fail="onFailure">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
     <h2>文件上传模式，通过iframe上传</h2>
-    <veui-uploader
+    <veui-uploader ref="iframeUploader"
       name="file"
       action="/uploadiframe"
       request-mode="iframe"
@@ -62,10 +56,9 @@
       max-size="10mb"
       accept="image/*"
       :payload="payload"
-      @remove="removeFileIframe"
-      @cancel="cancelUploadingIframe"
       @success="onSuccess"
-      @fail="onFailure">
+      @fail="onFailure"
+      @change="mockResult">
       <template slot="desc">可上传所有类型图片，大小在10M以内，只能上传1张图</template>
     </veui-uploader>
   </article>
@@ -118,20 +111,15 @@ export default {
     onFailure (data) {
       console.log(data)
     },
-    removeFile (file) {
-      this.files = this.files.filter(item => {
-        return item.name !== file.name
-      })
-    },
-    removeFileIframe (file) {
-      this.filesIframe = ''
-    },
-    cancelUploading (file) {
-      file.xhr.abort()
-      this.removeFile(file)
-    },
-    cancelUploadingIframe () {
-      this.filesIframe = ''
+    mockResult () {
+      setTimeout(() => {
+        if (this.filesIframe) {
+          this.$refs.iframeUploader.uploadCallback({
+            status: 'success',
+            name: 'demo-file.jpg'
+          }, this.$refs.iframeUploader.currentSubmitingFile)
+        }
+      }, 1000)
     }
   }
 }

@@ -8,7 +8,8 @@
   "devDependencies": {
     "lerna": "^2.0.0-rc.5"
   },
-  "dependencies": {
-    "wicg-focus-ring": "^2.0.1"
-  }
+  "browserslist": [
+    "ie >= 9",
+    "last 2 versions"
+  ]
 }

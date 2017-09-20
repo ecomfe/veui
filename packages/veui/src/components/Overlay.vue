@@ -13,10 +13,11 @@
 
 <script>
 import Tether from 'tether'
-import { assign, isObject, isString } from 'lodash'
+import { assign } from 'lodash'
 import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
 import config from '../managers/config'
+import { overlay } from '../mixins'
 
 config.defaults({
   'overlay.baseZIndex': 200
@@ -29,14 +30,9 @@ const OVERLAY_INSTANCE_KEY = '__veui_overlay_instance_key__'
 export default {
   name: 'veui-overlay',
   uiTypes: ['overlay'],
+  mixins: [overlay],
   props: {
     ui: String,
-    overlayClass: {
-      validator (value) {
-        return isObject(value) || isString(value)
-      },
-      default: null
-    },
     open: {
       type: Boolean,
       default: false

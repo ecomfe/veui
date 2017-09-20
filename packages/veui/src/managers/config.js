@@ -1,12 +1,13 @@
 import { keys } from 'lodash'
 import type from './type'
 
-function set (obj, key, value, isOverride) {
+function set (obj, key, value, ns, override) {
   if (typeof key === 'object') {
-    isOverride = value
+    override = ns
+    ns = value
     value = key
     keys(value).forEach(key => {
-      set(obj, key, value[key], isOverride)
+      set(obj, key, value[key], ns, override)
     })
     return
   }
@@ -15,8 +16,9 @@ function set (obj, key, value, isOverride) {
     return
   }
 
-  if (!(key in obj) || isOverride) {
-    obj[key] = value
+  if (!(key in obj) || override) {
+    let k = ns ? `${ns}.${key}` : key
+    obj[k] = value
   }
 }
 

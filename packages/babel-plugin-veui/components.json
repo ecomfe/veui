@@ -116,6 +116,10 @@
     "path": "Pager.vue"
   },
   {
+    "name": "Progress",
+    "path": "Progress.vue"
+  },
+  {
     "name": "PromptBox",
     "path": "PromptBox.vue"
   },
@@ -154,6 +158,10 @@
   {
     "name": "Select",
     "path": "Select/index.js"
+  },
+  {
+    "name": "Sorter",
+    "path": "Sorter.vue"
   },
   {
     "name": "Span",

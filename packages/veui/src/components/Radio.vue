@@ -1,8 +1,11 @@
 <template>
-<label class="veui-radio" :ui="ui">
+<label :class="{
+    'veui-radio': true,
+    'veui-disabled': realReadonly || realDisabled
+  }" :ui="ui">
   <input type="radio" v-bind="attrs" @change="$emit('change', $event.target.checked)">
   <span class="veui-radio-box"></span>
-  <span><slot></slot></span>
+  <span class="veui-radio-label"><slot></slot></span>
 </label>
 </template>
 

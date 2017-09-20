@@ -1,9 +1,10 @@
 import fs from 'fs'
+import path from 'path'
 
 export function kebabCase (str) {
   return str
     .replace(/[-_ ]+|([A-Z])/g, (whole, ch) => {
-        return ch ? `-${ch.toLowerCase()}` : '-'
+      return ch ? `-${ch.toLowerCase()}` : '-'
     })
     .replace(/^-/g, '')
     .replace(/-+/g, '-')
@@ -36,4 +37,8 @@ export function transformName (name, transform = false) {
 
 export function getJSON (path) {
   return JSON.parse(fs.readFileSync(path, 'utf8'))
+}
+
+export function normalize (filePath) {
+  return filePath.replace(/[/\\]/g, path.sep)
 }

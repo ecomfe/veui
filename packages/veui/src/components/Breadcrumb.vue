@@ -1,22 +1,13 @@
 <script>
 import BreadcrumbItem from './BreadcrumbItem'
 import Icon from './Icon'
-import '../icons'
+import { icons } from '../mixins'
 
 export default {
   name: 'veui-breadcrumb',
+  mixins: [icons],
   props: {
     routes: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
-
-    /**
-     * @deprecated
-     **/
-    routers: {
       type: Array,
       default () {
         return []
@@ -25,15 +16,11 @@ export default {
   },
   data () {
     return {
-      localRoutes: this.routes.length ? this.routes : this.routers
+      localRoutes: [...this.routes]
     }
   },
   watch: {
     routes (value) {
-      this.localRoutes = value
-      this.checkLocalRoutes()
-    },
-    routers (value) {
       this.localRoutes = value
       this.checkLocalRoutes()
     }
@@ -50,11 +37,11 @@ export default {
             type={route.type}
             native={route.native}
             onRedirect={event => this.fireRedirect(event, route, index)}>
-            {this.$scopedSlots.default({ route, router: route })}
+            {this.$scopedSlots.default ? this.$scopedSlots.default({ route }) : route.text}
             {
               index !== this.localRoutes.length - 1
                 ? <span slot="separator" class="veui-breadcrumb-separator">
-                    {this.$scopedSlots.separator ? this.$scopedSlots.separator() : <Icon name="angle-right"></Icon>}
+                    {this.$scopedSlots.separator ? this.$scopedSlots.separator() : <Icon name={this.icons.next}></Icon>}
                   </span>
                 : null
             }
