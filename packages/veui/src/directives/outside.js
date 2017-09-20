@@ -139,6 +139,7 @@ function unbindHover (el) {
   if (bindingData && bindingData.trigger === 'hover') {
     unbindHoverEvents(bindingData)
     el[bindingKey] = null
+    clearTimeout(bindingData.hoverData.timer)
   }
 }
 
