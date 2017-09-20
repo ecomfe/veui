@@ -34,6 +34,10 @@ export default {
       type: String,
       default: 'hover'
     },
+    delay: {
+      type: Number,
+      default: 300
+    },
     custom: {
       type: Boolean,
       default: false
@@ -92,7 +96,8 @@ export default {
       return {
         handler: this.closeHandler,
         refs: this.targetNode,
-        trigger: this.localTrigger.close
+        trigger: this.localTrigger.close,
+        delay: this.delay
       }
     }
   },
