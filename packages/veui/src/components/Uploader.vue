@@ -2,21 +2,23 @@
   <div class="veui-uploader" :ui="ui" ref="main">
     <div class="veui-uploader-button-container" v-if="type === 'file'">
       <label class="veui-button veui-uploader-input-label"
-        :class="{'veui-uploader-input-label-disabled': realUneditable || (fileList.length >= maxCount)
-         || (requestMode === 'iframe' && isSubmiting)}"
+        :class="{'veui-uploader-input-label-disabled': realUneditable || (requestMode === 'iframe' && isSubmiting)}"
         @click="replacingFile = null" ref="label">
         <slot name="button-label"><icon class="veui-uploader-input-label-icon"
           :name="icons.upload"></icon>选择文件</slot>
         <input :id="inputId" hidden type="file" ref="input"
           @change="onChange"
           :name="realName"
-          :disabled="realUneditable || (fileList.length >= maxCount)
-           || (requestMode === 'iframe' && isSubmiting)"
+          :disabled="realUneditable || (requestMode === 'iframe' && isSubmitingInput)"
           :accept="accept"
           :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
           @click.stop>
       </label>
-      <span class="veui-uploader-tip"><slot name="desc"></slot></span>
+      <span v-if="$slots.desc" class="veui-uploader-tip"><slot name="desc"></slot></span>
+      <span class="veui-uploader-error">
+        <template v-if="error.typeInvalid"><slot name="type-error">文件的类型不符合要求！</slot></template>
+        <template v-if="error.sizeInvalid"><slot name="size-error">文件的大小不符合要求！</slot></template>
+      </span>
     </div>
     <ul :class="listClass">
       <li v-for="(file, index) in fileList" :key="index">
@@ -31,9 +33,12 @@
                 }"
                 :title="file.name">{{file.name}}</span>
               <span v-if="file.status === 'success'" class="veui-uploader-success"><slot name="success-label">上传成功！</slot></span>
-              <span v-if="file.status === 'failure'" class="veui-uploader-failure"><slot name="failure-label">上传失败</slot></span>
+              <span v-if="file.status === 'failure'" class="veui-uploader-failure" :ref="`fileFailure${index}`">
+                <slot name="failure-label">上传失败</slot>
+              </span>
               <veui-button v-if="file.status === 'failure'" ui="link" @click="retry(file)" :class="listClass + '-retry'"><icon :name="icons.redo"></icon>重试</veui-button>
               <veui-button ui="link remove" @click="removeFile(file)" :disabled="realUneditable"><icon :name="icons.clear"></icon></veui-button>
+              <veui-tooltip position='top' :target="`fileFailure${index}`">{{ file.failureReason }}</veui-tooltip>
             </template>
             <template v-else>
               <img :src="file.src" :alt="file.alt || ''">
@@ -74,6 +79,8 @@
               <span class="veui-uploader-failure"><slot name="failure-label">错误！</slot>{{file.failureReason}}</span>
             </div>
             <veui-button ui="aux operation" @click="retry(file)">重试</veui-button>
+            <veui-button ui="link" @click="removeFile(file)"
+              :class="`${listClass}-mask-remove ${listClass}-mask-remove-failure`"><icon :name="icons.clear"></icon>移除</veui-button>
           </slot>
         </template>
       </li>
@@ -85,7 +92,7 @@
           ref="label"><input :id="inputId" hidden type="file" ref="input"
             @change="onChange"
             :name="realName"
-            :disabled="realUneditable || (requestMode === 'iframe' && isSubmiting)"
+            :disabled="realUneditable || (requestMode === 'iframe' && isSubmitingInput)"
             :accept="accept"
             :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
             @click.stop>
@@ -93,7 +100,11 @@
         </label>
       </li>
     </ul>
-    <span class="veui-uploader-tip" v-if="type === 'image'"><slot name="desc"></slot></span>
+    <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"></slot></span>
+    <span class="veui-uploader-error" v-if="type === 'image'">
+      <template v-if="error.typeInvalid"><slot name="type-error">文件的类型不符合要求！</slot></template>
+      <template v-if="error.sizeInvalid"><slot name="size-error">文件的大小不符合要求！</slot></template>
+    </span>
     <iframe v-if="requestMode === 'iframe' && isSubmiting" ref="iframe"
      :id="iframeId" :name="iframeId" class="veui-uploader-hide"></iframe>
     <form v-if="requestMode === 'iframe' && isSubmiting" ref="form" :action="queryURL" enctype="multipart/form-data"
@@ -107,6 +118,7 @@
 <script>
 import Button from './Button'
 import Icon from './Icon'
+import Tooltip from './Tooltip'
 import { cloneDeep, uniqueId, assign, isNumber, isArray } from 'lodash'
 import { ui, input, icons } from '../mixins'
 import config from '../managers/config'
@@ -124,6 +136,7 @@ export default {
   components: {
     Icon,
     'veui-button': Button,
+    'veui-tooltip': Tooltip,
     'veui-uploader-progress': getProgress()
   },
   mixins: [ui, input, icons],
@@ -211,7 +224,14 @@ export default {
       onMessage: null,
       replacingFile: null,
       currentSubmitingFile: null,
-      isSubmiting: true
+      // isSubmiting 控制form与iframe是否存在
+      isSubmiting: false,
+      // isSubmitingInput 控制input是否禁用
+      isSubmitingInput: false,
+      error: {
+        sizeInvalid: false,
+        typeInvalid: false
+      }
     }
   },
   watch: {
@@ -250,10 +270,6 @@ export default {
     if (this.requestMode === 'xhr') {
       return
     }
-
-    document.body.appendChild(this.$refs.iframe)
-    document.body.appendChild(this.$refs.form)
-    this.isSubmiting = false
 
     if (this.iframeMode === 'postmessage') {
       this.onMessage = event => {
@@ -305,6 +321,11 @@ export default {
     },
     onChange () {
       this.canceled = false
+
+      this.error = {
+        sizeInvalid: false,
+        typeInvalid: false
+      }
 
       let newFiles
       if (this.requestMode === 'xhr') {
@@ -370,14 +391,13 @@ export default {
       }
 
       this.$emit('change', this.maxCount === 1 ? (this.fileList[0].src || this.fileList[0].name) : this.fileList)
-      this.$refs.input.value = ''
     },
-    validateFile (file) {
-      let typeValidation = this.validateFileType(file.name)
-      !typeValidation && this.$emit('invalid', '文件类型不符合要求！')
+    validateFile ({name, size}) {
+      let typeValidation = this.validateFileType(name)
+      this.error.typeInvalid = !typeValidation
 
-      let sizeValidation = this.validateFileSize(file.size)
-      !sizeValidation && this.$emit('invalid', '文件大小超过限制！')
+      let sizeValidation = this.validateFileSize(size)
+      this.error.sizeInvalid = !sizeValidation
 
       return typeValidation && sizeValidation
     },
@@ -406,7 +426,7 @@ export default {
       })
     },
     validateFileSize (fileSize) {
-      return !this.maxSize || fileSize <= bytes.parse(this.maxSize)
+      return !this.maxSize || !fileSize || fileSize <= bytes.parse(this.maxSize)
     },
     uploadFiles () {
       this.fileList.forEach(file => {
@@ -463,16 +483,20 @@ export default {
 
       this.$nextTick(() => {
         let form = this.$refs.form
+
         document.body.appendChild(this.$refs.iframe)
         document.body.appendChild(form)
 
         form.appendChild(this.$refs.input)
         form.submit()
+        this.isSubmitingInput = true
+
         this.reset()
       })
     },
     uploadCallback (data, file) {
       this.isSubmiting = false
+      this.isSubmitingInput = false
 
       this.convertResponse(data) || data
       if (data.status === 'success') {
@@ -527,6 +551,7 @@ export default {
       if (this.requestMode === 'iframe') {
         this.canceled = true
         this.isSubmiting = false
+        this.isSubmitingInput = false
       }
 
       if (file.xhr) {

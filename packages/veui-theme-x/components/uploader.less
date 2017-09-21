@@ -17,19 +17,19 @@
 
   &-button-container {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     overflow: hidden;
-    .veui-uploader-tip {
+    .veui-uploader-tip,
+    .veui-uploader-error {
       margin-top: 8px;
-      display: inline-block;
     }
   }
 
   &-input-label {
     float: left;
     color: @veui-text-color-strong;
-    margin-right: 1em;
     cursor: pointer;
+    margin: 0 1em 8px 0;
 
     &-icon {
       margin-right: 5px;
@@ -190,6 +190,8 @@
     }
   }
   &-list-image {
+    float: left;
+
     li {
       overflow: hidden;
       .size(@image-size);
@@ -217,6 +219,9 @@
       .absolute(0);
       background-color: fadeout(#000, 90%);
 
+      &-failure {
+        background-color: none;
+      }
       .veui-button {
         position: absolute;
         background-color: fadeout(#000, 20%);
@@ -231,6 +236,7 @@
           color: #fff;
         }
       }
+
 
       label.veui-button {
         cursor: pointer;
@@ -286,6 +292,16 @@
         margin-right: 5px;
       }
     }
+
+    &-mask-remove.veui-uploader-list-image-mask-remove-failure {
+      position: absolute;
+      display: none;
+    }
+
+    li:hover &-mask-remove-failure {
+      display: inline;
+    }
+
     .veui-uploader-progress {
       &-bar,
       &-bar-full {
@@ -295,10 +311,21 @@
     }
   }
 
-  &-tip {
-    color: @veui-gray-color-3;
+  &-error {
+    display: inline-block;
   }
 
+  &-tip {
+    color: @veui-gray-color-3;
+    display: inline-block;
+
+    & + .veui-uploader-error {
+      display: block;
+      clear: both;
+    }
+  }
+
+  &-error,
   &-failure {
     color: @veui-alert-color;
   }

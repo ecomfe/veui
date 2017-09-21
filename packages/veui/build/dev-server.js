@@ -78,7 +78,8 @@ app.use('/uploadiframe', function (req, res) {
       window.parent.postMessage(JSON.stringify({status: '${Math.random() > 0.5 ? 'success' : 'failure'}',
         name: 'abcdefg${Math.random()}.gif', fileUid: 'file${Math.random()}',
         size: '250kb',
-        src: 'http://nodejs.cn/static/images/logo.svg'}), '*');
+        src: 'http://nodejs.cn/static/images/logo.svg',
+        reason: '图片尺寸不对！'}), '*');
       </script>`)
   }, 1500)
 })

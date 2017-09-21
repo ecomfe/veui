@@ -54,12 +54,12 @@
       v-model="filesIframe"
       :max-count="1"
       max-size="10mb"
-      accept="image/*"
+      accept=".jpg,.jpeg,.gif"
       :payload="payload"
       @success="onSuccess"
       @fail="onFailure"
       @change="mockResult">
-      <template slot="desc">可上传所有类型图片，大小在10M以内，只能上传1张图</template>
+      <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，只能上传1张图</template>
     </veui-uploader>
   </article>
 </template>
