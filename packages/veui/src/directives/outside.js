@@ -1,4 +1,4 @@
-import { isFunction, uniqueId, remove, every, find, isNumber, isString, keys, assign, noop } from 'lodash'
+import { isFunction, uniqueId, remove, every, find, isNumber, isString, keys, assign, noop, isEqual, pick } from 'lodash'
 import { getNodes } from '../utils/context'
 import { contains } from '../utils/dom'
 
@@ -150,6 +150,15 @@ function clear (el) {
 
 function refresh (el, { value, arg, modifiers, oldValue }, vnode) {
   const params = parseParams(el, arg, modifiers, value, vnode.context)
+
+  // 真正发生了变化，才重刷
+  let fields = params.trigger === 'click'
+    ? ['includeTargets', 'trigger']
+    : ['includeTargets', 'trigger', 'delay']
+  if (isEqual(pick(el[bindingKey], fields), pick(params, fields))) {
+    return
+  }
+
   clear(el)
   if (params.trigger === 'click') {
     el[bindingKey] = {
