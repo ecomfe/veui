@@ -1,3 +1,8 @@
+### 0.3.1
+
+* [+] `Tooltip` 增加延时显示/隐藏的 prop `showDelay`、`hideDelay`。
+* [^] 修复不引入 `ButtonGroup` 时，`CheckButtonGroup` 和 `RadioButtonGroup` 部分样式丢失的问题。
+
 ### 0.3.0
 
 *此版本包含多个 breaking change，升级前请仔细阅读下列说明。*
@@ -14,6 +19,7 @@
 * [^] 为组件支持了 `:focus-ring` 的 polyfill，需要使用方自行引入。详见 [#121](https://github.com/ecomfe/veui/issues/121)。**[Breaking change]**
 * [^] 优化了 `Uploader` 组件的部分 prop、slot 的命名。详见 [#133](https://github.com/ecomfe/veui/issues/133)。**[Breaking change]**
 * [+] `Uploader` 的 prop `maxSize` 现在支持形如 `'100KB'` 的字符串作为值。
+* [^] `Uploader` 的 prop `accept` 现在需要按规范书写，。详见[此处](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Limiting_accepted_file_types)。**[Breaking change]**
 * [^] 修复 `RegionPicker` 浮层在特殊情况下显示上的问题。
 * [+] 为 `Table` 增加 `select-mode` prop，用于提供单选模式。
 * [^] 修复 `Dropdown` 在 `ui` 为 `link` 时的样式。
