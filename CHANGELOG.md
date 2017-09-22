@@ -1,6 +1,11 @@
+### 0.3.2
+
+* [^] 修正 `Calendar` 单元格的文字颜色、背景色相关样式。
+* [^] 修复上个版本完善 `outside` 指令时引入的问题。
+
 ### 0.3.1
 
-* [+] `Tooltip` 增加延时显示/隐藏的 prop `showDelay`、`hideDelay`。
+* [+] `Tooltip` 增加延时隐藏的 prop `hideDelay`。
 * [^] 修复不引入 `ButtonGroup` 时，`CheckButtonGroup` 和 `RadioButtonGroup` 部分样式丢失的问题。
 
 ### 0.3.0
