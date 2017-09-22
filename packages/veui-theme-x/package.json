@@ -17,7 +17,7 @@
     "less-plugin-est": "^2.0.5"
   },
   "peerDependencies": {
-    "veui": "0.2.4"
+    "veui": "^0.3.2"
   },
   "devDependencies": {
     "svgo": "^0.7.2",
