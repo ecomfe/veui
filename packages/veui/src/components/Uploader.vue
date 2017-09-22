@@ -436,6 +436,8 @@ export default {
       })
     },
     upload (file) {
+      this.reset()
+
       this.updateFileList(file, {status: 'uploading'})
       let xhr = new XMLHttpRequest()
       file.xhr = xhr
