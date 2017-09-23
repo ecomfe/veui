@@ -7,11 +7,11 @@
         <slot name="button-label"><icon class="veui-uploader-input-label-icon"
           :name="icons.upload"></icon>选择文件</slot>
         <input :id="inputId" hidden type="file" ref="input"
-          @change="onChange"
+          @change="handleNewFiles"
           :name="realName"
-          :disabled="realUneditable || (requestMode === 'iframe' && isSubmitingInput)"
+          :disabled="realUneditable || (requestMode === 'iframe' && disabledWhenSubmiting)"
           :accept="accept"
-          :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
+          :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
           @click.stop>
       </label>
       <span v-if="$slots.desc" class="veui-uploader-tip"><slot name="desc"></slot></span>
@@ -90,11 +90,11 @@
           :class="{'veui-uploader-input-label-disabled': realUneditable || (requestMode === 'iframe' && isSubmiting)}"
           @click="replacingFile = null"
           ref="label"><input :id="inputId" hidden type="file" ref="input"
-            @change="onChange"
+            @change="handleNewFiles"
             :name="realName"
-            :disabled="realUneditable || (requestMode === 'iframe' && isSubmitingInput)"
+            :disabled="realUneditable || (requestMode === 'iframe' && disabledWhenSubmiting)"
             :accept="accept"
-            :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
+            :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
             @click.stop>
             <icon :name="icons.add"></icon>
         </label>
@@ -221,13 +221,12 @@ export default {
       inputId: uniqueId('veui-uploader-input'),
       iframeId: uniqueId('veui-uploader-iframe'),
       callbackFuncName: uniqueId('veuiUploaderCallback'),
-      onMessage: null,
       replacingFile: null,
       currentSubmitingFile: null,
       // isSubmiting 控制form与iframe是否存在
       isSubmiting: false,
-      // isSubmitingInput 控制input是否禁用
-      isSubmitingInput: false,
+      // disabledWhenSubmiting 控制input在submit时是否禁用
+      disabledWhenSubmiting: false,
       error: {
         sizeInvalid: false,
         typeInvalid: false
@@ -272,7 +271,7 @@ export default {
     }
 
     if (this.iframeMode === 'postmessage') {
-      this.onMessage = event => {
+      this.handlePostmessage = event => {
         if (!event.source.frameElement || event.source.frameElement.id !== this.iframeId || this.canceled) {
           return
         }
@@ -286,7 +285,7 @@ export default {
           this.uploadCallback(this.parseData(event.data), this.currentSubmitingFile)
         }
       }
-      window.addEventListener('message', this.onMessage)
+      window.addEventListener('message', this.handlePostmessage)
     } else if (this.iframeMode === 'callback') {
       if (!window[this.callbackNamespace]) {
         window[this.callbackNamespace] = {}
@@ -303,10 +302,10 @@ export default {
       return
     }
 
-    window.removeEventListener('message', this.onMessage)
-
     if (this.iframeMode === 'callback') {
       window[this.callbackNamespace][this.callbackFuncName] = null
+    } else if (this.iframeMode === 'postmessage') {
+      window.removeEventListener('message', this.handlePostmessage)
     }
   },
   methods: {
@@ -319,7 +318,7 @@ export default {
         name: value
       })] : []
     },
-    onChange () {
+    handleNewFiles () {
       this.canceled = false
 
       this.error = {
@@ -458,7 +457,7 @@ export default {
       }
       xhr.onerror = () => {
         this.onFailure({}, file)
-        this.$emit('fail')
+        this.$emit('failure')
       }
       let formData = new FormData()
       formData.append(this.name, file)
@@ -491,33 +490,33 @@ export default {
 
         form.appendChild(this.$refs.input)
         form.submit()
-        this.isSubmitingInput = true
+        this.disabledWhenSubmiting = true
 
         this.reset()
       })
     },
     uploadCallback (data, file) {
       this.isSubmiting = false
-      this.isSubmitingInput = false
+      this.disabledWhenSubmiting = false
 
       this.convertResponse(data) || data
       if (data.status === 'success') {
+        this.showSuccessResult(data, file)
         this.$emit('success', data)
-        this.onSuccess(data, file)
       } else if (data.status === 'failure') {
-        this.$emit('fail', data)
         this.onFailure(data, file)
+        this.$emit('failure', data)
       }
       this.currentSubmitingFile = null
     },
-    onSuccess (data, file) {
+    showSuccessResult (data, file) {
       assign(file, data)
       file.status = 'success'
       file.xhr = null
       file.toBeUploaded = null
       this.updateFileList(file)
     },
-    onFailure (data, file) {
+    showFailureResult (data, file) {
       file.status = 'failure'
       file.xhr = null
       file.toBeUploaded = null
@@ -553,7 +552,7 @@ export default {
       if (this.requestMode === 'iframe') {
         this.canceled = true
         this.isSubmiting = false
-        this.isSubmitingInput = false
+        this.disabledWhenSubmiting = false
       }
 
       if (file.xhr) {
@@ -577,7 +576,7 @@ export default {
         try {
           return JSON.parse(data)
         } catch (error) {
-          this.$emit('fail', {error})
+          this.$emit('failure', {error})
         }
       }
     }
