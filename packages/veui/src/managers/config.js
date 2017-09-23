@@ -27,12 +27,12 @@ export class ConfigManager {
     this.store = {}
   }
 
-  set (...args) {
-    set(this.store, ...args, true)
+  set (obj, key, value, ns) {
+    set(this.store, obj, key, value, ns, true)
   }
 
-  defaults (...args) {
-    set(this.store, ...args, false)
+  defaults (obj, key, value, ns) {
+    set(this.store, obj, key, value, ns, false)
   }
 
   get (key) {

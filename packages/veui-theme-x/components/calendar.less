@@ -6,6 +6,10 @@
   border: 1px solid @veui-gray-color-6;
   background-color: #fff;
 
+  button {
+    .veui-button-transition();
+  }
+
   &-panel {
     display: inline-block;
     position: relative;
@@ -58,6 +62,10 @@
       &.focus-ring {
         background-color: @veui-brand-color-10;
         color: @veui-text-color-strong;
+      }
+
+      &:active {
+        background-color: @veui-brand-color-9;
       }
 
       &:disabled {
