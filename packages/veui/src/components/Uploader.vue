@@ -524,6 +524,9 @@ export default {
       file.xhr = null
       file.toBeUploaded = null
       this.updateFileList(file)
+      setTimeout(() => {
+        this.updateFileList(file, {status: null})
+      }, 300)
     },
     showFailureResult (data, file) {
       file.status = 'failure'
