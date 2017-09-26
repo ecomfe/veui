@@ -20,9 +20,9 @@
       </label>
       <span v-if="$slots.desc" class="veui-uploader-tip"><slot name="desc"></slot></span>
       <span class="veui-uploader-error">
-        <template v-if="error.typeInvalid"><slot name="type-error"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
-        <template v-if="error.sizeInvalid"><slot name="size-error"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>
-        <template v-if="error.countOverflow"><slot name="count-error"><icon :name="icons.alert"></icon>文件的数量超过限制</slot></template>
+        <template v-if="error.typeInvalid"><slot name="type-invalid"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
+        <template v-if="error.sizeInvalid"><slot name="size-invalid"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>
+        <template v-if="error.countOverflow"><slot name="count-overflow"><icon :name="icons.alert"></icon>文件的数量超过限制</slot></template>
       </span>
     </div>
     <ul :class="listClass">
@@ -107,9 +107,9 @@
     </ul>
     <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"></slot></span>
     <span class="veui-uploader-error" v-if="type === 'image'">
-      <template v-if="error.typeInvalid"><slot name="type-error"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
-      <template v-if="error.sizeInvalid"><slot name="size-error"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>
-      <template v-if="error.countOverflow"><slot name="count-error"><icon :name="icons.alert"></icon>文件的数量超过限制</slot></template>
+      <template v-if="error.typeInvalid"><slot name="type-invalid"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
+      <template v-if="error.sizeInvalid"><slot name="size-invalid"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>
+      <template v-if="error.countOverflow"><slot name="count-overflow"><icon :name="icons.alert"></icon>文件的数量超过限制</slot></template>
     </span>
     <iframe v-if="requestMode === 'iframe' && isSubmiting" ref="iframe"
      :id="iframeId" :name="iframeId" class="veui-uploader-hide"></iframe>
