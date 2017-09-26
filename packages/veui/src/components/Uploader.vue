@@ -2,22 +2,27 @@
   <div class="veui-uploader" :ui="ui" ref="main">
     <div class="veui-uploader-button-container" v-if="type === 'file'">
       <label class="veui-button veui-uploader-input-label"
-        :class="{'veui-uploader-input-label-disabled': realUneditable || (requestMode === 'iframe' && isSubmiting)}"
+        :class="{'veui-uploader-input-label-disabled': realUneditable ||
+          (maxCount > 1 && fileList.length >= maxCount) ||
+          (requestMode === 'iframe' && isSubmiting)}"
         @click="replacingFile = null" ref="label">
         <slot name="button-label"><icon class="veui-uploader-input-label-icon"
           :name="icons.upload"></icon>选择文件</slot>
         <input :id="inputId" hidden type="file" ref="input"
           @change="handleNewFiles"
           :name="realName"
-          :disabled="realUneditable || (requestMode === 'iframe' && disabledWhenSubmiting)"
+          :disabled="realUneditable ||
+            (maxCount > 1 && fileList.length >= maxCount) ||
+            (requestMode === 'iframe' && disabledWhenSubmiting)"
           :accept="accept"
           :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
           @click.stop>
       </label>
       <span v-if="$slots.desc" class="veui-uploader-tip"><slot name="desc"></slot></span>
       <span class="veui-uploader-error">
-        <template v-if="error.typeInvalid"><slot name="type-error"><icon :name="icons.alert"></icon>文件的类型不符合要求！</slot></template>
-        <template v-if="error.sizeInvalid"><slot name="size-error"><icon :name="icons.alert"></icon>文件的大小不符合要求！</slot></template>
+        <template v-if="error.typeInvalid"><slot name="type-error"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
+        <template v-if="error.sizeInvalid"><slot name="size-error"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>
+        <template v-if="error.countOverflow"><slot name="count-error"><icon :name="icons.alert"></icon>文件的数量超过限制</slot></template>
       </span>
     </div>
     <ul :class="listClass">
@@ -102,8 +107,9 @@
     </ul>
     <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"></slot></span>
     <span class="veui-uploader-error" v-if="type === 'image'">
-      <template v-if="error.typeInvalid"><slot name="type-error"><icon :name="icons.alert"></icon>文件的类型不符合要求！</slot></template>
-      <template v-if="error.sizeInvalid"><slot name="size-error"><icon :name="icons.alert"></icon>文件的大小不符合要求！</slot></template>
+      <template v-if="error.typeInvalid"><slot name="type-error"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
+      <template v-if="error.sizeInvalid"><slot name="size-error"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>
+      <template v-if="error.countOverflow"><slot name="count-error"><icon :name="icons.alert"></icon>文件的数量超过限制</slot></template>
     </span>
     <iframe v-if="requestMode === 'iframe' && isSubmiting" ref="iframe"
      :id="iframeId" :name="iframeId" class="veui-uploader-hide"></iframe>
@@ -225,7 +231,8 @@ export default {
       disabledWhenSubmiting: false,
       error: {
         sizeInvalid: false,
-        typeInvalid: false
+        typeInvalid: false,
+        countOverflow: false
       }
     }
   },
@@ -319,7 +326,8 @@ export default {
 
       this.error = {
         sizeInvalid: false,
-        typeInvalid: false
+        typeInvalid: false,
+        countOverflow: false
       }
 
       let newFiles
@@ -360,6 +368,11 @@ export default {
 
         this.isReplacing = false
       } else {
+        if (this.maxCount !== 1 && (this.fileList.length + newFiles.length) > this.maxCount) {
+          this.error.countOverflow = true
+          return
+        }
+
         this.fileList = [
           ...this.fileList.filter(file => {
             return file.status !== 'failure'
@@ -373,8 +386,8 @@ export default {
           })
         ]
 
-        if (this.maxCount && this.fileList.length > this.maxCount) {
-          this.fileList = this.fileList.slice(-this.maxCount)
+        if (this.maxCount === 1) {
+          this.fileList = this.fileList.slice(-1)
         }
 
         if (this.requestMode === 'iframe' && this.autoUpload) {
@@ -452,7 +465,7 @@ export default {
         this.uploadCallback(this.parseData(xhr.responseText), file)
       }
       xhr.onerror = () => {
-        this.onFailure({}, file)
+        this.showFailureResult({}, file)
         this.$emit('failure')
       }
       let formData = new FormData()
@@ -500,7 +513,7 @@ export default {
         this.showSuccessResult(data, file)
         this.$emit('success', data)
       } else if (data.status === 'failure') {
-        this.onFailure(data, file)
+        this.showFailureResult(data, file)
         this.$emit('failure', data)
       }
       this.currentSubmitingFile = null
@@ -534,6 +547,8 @@ export default {
       }
     },
     removeFile (file) {
+      this.error.countOverflow = false
+
       if (this.maxCount === 1) {
         this.fileList = []
         this.$emit('change', null)
