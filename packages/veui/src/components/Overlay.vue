@@ -116,19 +116,21 @@ export default {
       }
 
       if (this.targetNode) {
+        let options = assign({}, this.options, {
+          element: this.$refs.box,
+          target: this.targetNode
+        })
+
+        if (!this.tether) {
+          this.tether = new Tether(options)
+        } else {
+          this.tether.setOptions(options)
+        }
+
         // 修改 tether 的 options 的时候，有可能 tether 的容器元素还没显示出来，
         // 所以保险起见，统一 nextTick 触发一下 tether 的重新计算
         this.$nextTick(() => {
-          let options = assign({}, this.options, {
-            element: this.$refs.box,
-            target: this.targetNode
-          })
-
-          if (!this.tether) {
-            this.tether = new Tether(options)
-          } else {
-            this.tether.setOptions(options)
-          }
+          this.tether.position()
         })
       }
 
