@@ -16,8 +16,8 @@
       </label>
       <span v-if="$slots.desc" class="veui-uploader-tip"><slot name="desc"></slot></span>
       <span class="veui-uploader-error">
-        <template v-if="error.typeInvalid"><slot name="type-error">文件的类型不符合要求！</slot></template>
-        <template v-if="error.sizeInvalid"><slot name="size-error">文件的大小不符合要求！</slot></template>
+        <template v-if="error.typeInvalid"><slot name="type-error"><icon :name="icons.alert"></icon>文件的类型不符合要求！</slot></template>
+        <template v-if="error.sizeInvalid"><slot name="size-error"><icon :name="icons.alert"></icon>文件的大小不符合要求！</slot></template>
       </span>
     </div>
     <ul :class="listClass">
@@ -102,8 +102,8 @@
     </ul>
     <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"></slot></span>
     <span class="veui-uploader-error" v-if="type === 'image'">
-      <template v-if="error.typeInvalid"><slot name="type-error">文件的类型不符合要求！</slot></template>
-      <template v-if="error.sizeInvalid"><slot name="size-error">文件的大小不符合要求！</slot></template>
+      <template v-if="error.typeInvalid"><slot name="type-error"><icon :name="icons.alert"></icon>文件的类型不符合要求！</slot></template>
+      <template v-if="error.sizeInvalid"><slot name="size-error"><icon :name="icons.alert"></icon>文件的大小不符合要求！</slot></template>
     </span>
     <iframe v-if="requestMode === 'iframe' && isSubmiting" ref="iframe"
      :id="iframeId" :name="iframeId" class="veui-uploader-hide"></iframe>
@@ -119,7 +119,7 @@
 import Button from './Button'
 import Icon from './Icon'
 import Tooltip from './Tooltip'
-import { cloneDeep, uniqueId, assign, isNumber, isArray } from 'lodash'
+import { cloneDeep, uniqueId, assign, isNumber, isArray, last } from 'lodash'
 import { ui, input, icons } from '../mixins'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
@@ -190,13 +190,9 @@ export default {
       }
     },
     extensions: {
-      type: Object,
+      type: Array,
       default () {
-        return {
-          image: {
-            'jpg': true, 'jpeg': true, 'gif': true, 'bmp': true, 'tif': true, 'tiff': true, 'png': true
-          }
-        }
+        return ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'tif', 'tiff', 'webp', 'apng', 'svg']
       }
     },
     accept: String,
@@ -405,21 +401,21 @@ export default {
         return true
       }
 
-      let extension = filename.split('.')
-      extension = extension[extension.length - 1].toLowerCase()
+      let extension = last(filename.split('.')).toLowerCase()
 
       return this.accept.split(/,\s*/).some(item => {
-        let acceptExtention = item.split(/[./]/)[1].toLowerCase()
+        let acceptExtention = last(item.split(/[./]/)).toLowerCase()
 
-        if (acceptExtention === extension) {
+        if (acceptExtention === extension ||
+          // 对于类似'application/msword'这样的mimetype与扩展名对不上的情形跳过校验
+          (acceptExtention !== '*' && item.indexOf('/'))) {
           return true
         }
 
-        if (acceptExtention === '*' && item.indexOf('/') > -1) {
-          let targetExtensions = this.extensions[item.split('/')[0].toLowerCase()]
-          if (targetExtensions && targetExtensions.hasOwnProperty(extension)) {
-            return true
-          }
+        if (acceptExtention === '*' &&
+          item.indexOf('/') > -1 &&
+          this.extensions.indexOf(extension) > -1) {
+          return true
         }
         return false
       })
@@ -450,7 +446,7 @@ export default {
             this.updateFileList(file)
             break
         }
-        this.$emit('progress', e)
+        this.$emit('progress', file, e)
       }
       xhr.onload = () => {
         this.uploadCallback(this.parseData(xhr.responseText), file)
