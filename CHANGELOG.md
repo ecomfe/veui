@@ -2,6 +2,7 @@
 
 * [^] 修复 `config` 模块参数重载错误的问题。
 * [^] 修复 `Uploader` 禁用 `input` 导致上传失败的问题。
+* [+] 为调用了 `Overlay` 组件的元素增加了指定 `overlay-options` 的功能。
 
 ### 0.3.2
 
