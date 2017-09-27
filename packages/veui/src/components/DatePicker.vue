@@ -28,7 +28,7 @@
   <button v-if="clearable" v-show="!!selected" class="veui-date-picker-clear" @click="clear">
     <veui-icon :name="icons.clear"></veui-icon>
   </button>
-  <veui-overlay v-if="expanded" target="button" :open="expanded" :options="overlay" :overlay-class="overlayClass">
+  <veui-overlay v-if="expanded" target="button" :open="expanded" :options="realOverlayOptions" :overlay-class="overlayClass">
     <veui-calendar class="veui-date-picker-overlay" v-model="localSelected" v-bind="calendarProps" ref="cal"
       v-outside:button="close" @select="handleSelect" @selectstart="handleProgress" @selectprogress="handleProgress" :panel="realPanel">
       <template :slot="shortcutsPosition" v-if="range && realShortcuts && realShortcuts.length">

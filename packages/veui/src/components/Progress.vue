@@ -1,5 +1,5 @@
 <template>
-<div class="veui-progress" :class="clazz" :ui="ui">
+<div class="veui-progress" :class="klass" :ui="ui">
   <div v-if="type === 'bar'" class="veui-progress-rail">
     <div class="veui-progress-meter" :style="{
       transform: `translateX(${percent}%)`
@@ -71,7 +71,7 @@ export default {
     }
   },
   computed: {
-    clazz () {
+    klass () {
       return {
         'veui-progress-state-complete': this.value === this.max,
         [`veui-progress-${this.type}`]: true,

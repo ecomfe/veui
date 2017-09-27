@@ -17,7 +17,7 @@ import { assign } from 'lodash'
 import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
 import config from '../managers/config'
-import { overlay } from '../mixins'
+import { getClassPropDef } from '../utils/helper'
 
 config.defaults({
   'overlay.baseZIndex': 200
@@ -30,8 +30,8 @@ const OVERLAY_INSTANCE_KEY = '__veui_overlay_instance_key__'
 export default {
   name: 'veui-overlay',
   uiTypes: ['overlay'],
-  mixins: [overlay],
   props: {
+    overlayClass: getClassPropDef(),
     ui: String,
     open: {
       type: Boolean,
@@ -116,7 +116,7 @@ export default {
       }
 
       if (this.targetNode) {
-        const options = assign({}, this.options, {
+        let options = assign({}, this.options, {
           element: this.$refs.box,
           target: this.targetNode
         })
@@ -129,7 +129,9 @@ export default {
 
         // 修改 tether 的 options 的时候，有可能 tether 的容器元素还没显示出来，
         // 所以保险起见，统一 nextTick 触发一下 tether 的重新计算
-        this.$nextTick(() => this.tether.position())
+        this.$nextTick(() => {
+          this.tether.position()
+        })
       }
 
       this.updateNode()

@@ -56,7 +56,9 @@
     </section>
     <section>
       <h2>Slot 分组样式 2：</h2>
-      <veui-select v-bind="optGroupAttrs" v-model="defaultValue8">
+      <veui-select v-bind="optGroupAttrs" v-model="defaultValue8" :overlay-options="{
+          position: 'bottom right'
+        }">
         <template slot="option" scope="props">
           <span class="veui-option-label-text">{{ props.label }}</span>
           <icon name="gift"></icon>

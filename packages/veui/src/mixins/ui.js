@@ -1,4 +1,7 @@
 export default {
+  props: {
+    ui: String
+  },
   computed: {
     uiProps () {
       if (!this.ui || !this.ui.trim()) {

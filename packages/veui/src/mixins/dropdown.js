@@ -1,16 +1,13 @@
 import { throttle } from 'lodash'
 import { outside } from '../directives'
-import { ui } from '../mixins'
 
 export default {
-  mixins: [ui],
   directives: { outside },
   data () {
     return {
       expanded: false,
-      overlay: {
-        attachment: 'top left',
-        targetAttachment: 'bottom left',
+      localOverlayOptions: {
+        position: 'bottom left',
         constraints: [
           {
             to: 'scrollParent',

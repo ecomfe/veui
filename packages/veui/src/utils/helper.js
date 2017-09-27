@@ -93,3 +93,42 @@ export function getConfigKey (name) {
 export function stringifyQuery (query) {
   return Object.keys(query).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`).join('&')
 }
+
+const CLASS_PROP_DEF = {
+  validator (value) {
+    return isObject(value) || isString(value)
+  },
+  default: null
+}
+
+export function getClassPropDef () {
+  return { ...CLASS_PROP_DEF }
+}
+
+const OPPOSITE = {
+  top: 'bottom',
+  right: 'left',
+  bottom: 'top',
+  left: 'right'
+}
+
+export function resolveOverlayPosition (position) {
+  if (!position) {
+    return {}
+  }
+
+  let [side, align] = position.split(/\s+/)
+  let targetAttachment
+  let attachment
+  if (side === 'top' || side === 'bottom') {
+    targetAttachment = `${side} ${align || 'center'}`
+    attachment = `${OPPOSITE[side]} ${align || 'center'}`
+  } else {
+    targetAttachment = `${align || 'middle'} ${side}`
+    attachment = `${align || 'middle'} ${OPPOSITE[side]}`
+  }
+  return {
+    targetAttachment,
+    attachment
+  }
+}

@@ -19,7 +19,7 @@
     v-if="expanded"
     target="button"
     :open="expanded"
-    :options="overlay"
+    :options="realOverlayOptions"
     :overlay-class="overlayClass">
     <div ref="box" class="veui-select-options" v-outside:button="close">
       <slot>
@@ -63,11 +63,11 @@ import Icon from '../Icon'
 import Button from '../Button'
 import Option from './Option'
 import Overlay from '../Overlay'
-import { input, dropdown, icons, overlay } from '../../mixins'
+import { input, icons, overlay, dropdown } from '../../mixins'
 
 export default {
   name: 'veui-select',
-  mixins: [input, dropdown, icons, overlay],
+  mixins: [input, icons, overlay, dropdown],
   model: {
     event: 'change'
   },

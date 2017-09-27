@@ -3,15 +3,9 @@ import Overlay from './Overlay'
 import { outside } from '../directives'
 import { overlay } from '../mixins'
 import { getNodes } from '../utils/context'
+import { resolveOverlayPosition } from '../utils/helper'
 import { isString } from 'lodash'
 import config from '../managers/config'
-
-const POS_MAP = {
-  left: 'right',
-  right: 'left',
-  top: 'bottom',
-  bottom: 'top'
-}
 
 const TRIGGER_MAP = {
   hover: 'mouseenter'
@@ -73,26 +67,12 @@ export default {
       return getNodes(this.target, this.$vnode.context)[0]
     },
     overlay () {
-      let attachment
-      let targetAttachment
-      let position = this.position.split(' ')
-      let placement = position[0] || 'top'
-      let align = position[1] || 'center'
-      if (placement === 'left' || placement === 'right') {
-        attachment = `${align} ${POS_MAP[placement]}`
-        targetAttachment = `${align} ${placement}`
-      } else {
-        attachment = `${POS_MAP[placement]} ${align}`
-        targetAttachment = `${placement} ${align}`
-      }
       return {
-        attachment: attachment,
-        targetAttachment: targetAttachment,
+        ...resolveOverlayPosition(this.position),
         constraints: [
           {
             to: 'window',
-            attachment: 'together',
-            pin: true
+            attachment: 'together'
           }
         ]
       }
