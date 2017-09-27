@@ -13,7 +13,7 @@
       :payload="payload"
       progress="number"
       @success="onSuccess"
-      @fail="onFailure">
+      @failure="onFailure">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
     <h2>图片上传模式，上传进度以进度条显示</h2>
@@ -28,7 +28,7 @@
       ui="horizontal bottom-mask"
       progress="bar"
       @success="onSuccess"
-      @fail="onFailure">
+      @failure="onFailure">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
     <h2>文件上传模式</h2>
@@ -43,7 +43,7 @@
       ui="horizontal button-primary"
       progress="number"
       @success="onSuccess"
-      @fail="onFailure">
+      @failure="onFailure">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
     <h2>文件上传模式，通过iframe上传</h2>
@@ -54,12 +54,12 @@
       v-model="filesIframe"
       :max-count="1"
       max-size="10mb"
-      accept="image/*"
+      accept=".jpg,.jpeg,.gif"
       :payload="payload"
       @success="onSuccess"
-      @fail="onFailure"
+      @failure="onFailure"
       @change="mockResult">
-      <template slot="desc">可上传所有类型图片，大小在10M以内，只能上传1张图</template>
+      <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，只能上传1张图</template>
     </veui-uploader>
   </article>
 </template>

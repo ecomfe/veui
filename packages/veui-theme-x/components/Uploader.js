@@ -4,6 +4,7 @@ import '../icons/check'
 import '../icons/clip'
 import '../icons/refresh'
 import '../icons/plus-huge'
+import '../icons/exclamation-circle-o'
 import config from 'veui/managers/config'
 
 config.defaults({
@@ -13,6 +14,7 @@ config.defaults({
     success: 'check',
     redo: 'refresh',
     file: 'clip',
-    add: 'plus-huge'
+    add: 'plus-huge',
+    alert: 'exclamation-circle-o'
   }
 })

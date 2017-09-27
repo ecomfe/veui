@@ -2,21 +2,28 @@
   <div class="veui-uploader" :ui="ui" ref="main">
     <div class="veui-uploader-button-container" v-if="type === 'file'">
       <label class="veui-button veui-uploader-input-label"
-        :class="{'veui-uploader-input-label-disabled': realUneditable || (fileList.length >= maxCount)
-         || (requestMode === 'iframe' && isSubmiting)}"
+        :class="{'veui-uploader-input-label-disabled': realUneditable ||
+          (maxCount > 1 && fileList.length >= maxCount) ||
+          (requestMode === 'iframe' && isSubmiting)}"
         @click="replacingFile = null" ref="label">
         <slot name="button-label"><icon class="veui-uploader-input-label-icon"
           :name="icons.upload"></icon>选择文件</slot>
         <input :id="inputId" hidden type="file" ref="input"
-          @change="onChange"
+          @change="handleNewFiles"
           :name="realName"
-          :disabled="realUneditable || (fileList.length >= maxCount)
-           || (requestMode === 'iframe' && isSubmiting)"
+          :disabled="realUneditable ||
+            (maxCount > 1 && fileList.length >= maxCount) ||
+            (requestMode === 'iframe' && disabledWhenSubmiting)"
           :accept="accept"
-          :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
+          :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
           @click.stop>
       </label>
-      <span class="veui-uploader-tip"><slot name="desc"></slot></span>
+      <span v-if="$slots.desc" class="veui-uploader-tip"><slot name="desc"></slot></span>
+      <span class="veui-uploader-error">
+        <template v-if="error.typeInvalid"><slot name="type-invalid"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
+        <template v-if="error.sizeInvalid"><slot name="size-invalid"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>
+        <template v-if="error.countOverflow"><slot name="count-overflow"><icon :name="icons.alert"></icon>文件的数量超过限制</slot></template>
+      </span>
     </div>
     <ul :class="listClass">
       <li v-for="(file, index) in fileList" :key="index">
@@ -31,9 +38,12 @@
                 }"
                 :title="file.name">{{file.name}}</span>
               <span v-if="file.status === 'success'" class="veui-uploader-success"><slot name="success-label">上传成功！</slot></span>
-              <span v-if="file.status === 'failure'" class="veui-uploader-failure"><slot name="failure-label">上传失败</slot></span>
+              <span v-if="file.status === 'failure'" class="veui-uploader-failure" :ref="`fileFailure${index}`">
+                <slot name="failure-label">上传失败</slot>
+              </span>
               <veui-button v-if="file.status === 'failure'" ui="link" @click="retry(file)" :class="listClass + '-retry'"><icon :name="icons.redo"></icon>重试</veui-button>
               <veui-button ui="link remove" @click="removeFile(file)" :disabled="realUneditable"><icon :name="icons.clear"></icon></veui-button>
+              <veui-tooltip position='top' :target="`fileFailure${index}`">{{ file.failureReason }}</veui-tooltip>
             </template>
             <template v-else>
               <img :src="file.src" :alt="file.alt || ''">
@@ -74,6 +84,8 @@
               <span class="veui-uploader-failure"><slot name="failure-label">错误！</slot>{{file.failureReason}}</span>
             </div>
             <veui-button ui="aux operation" @click="retry(file)">重试</veui-button>
+            <veui-button ui="link" @click="removeFile(file)"
+              :class="`${listClass}-mask-remove ${listClass}-mask-remove-failure`"><icon :name="icons.clear"></icon>移除</veui-button>
           </slot>
         </template>
       </li>
@@ -83,17 +95,22 @@
           :class="{'veui-uploader-input-label-disabled': realUneditable || (requestMode === 'iframe' && isSubmiting)}"
           @click="replacingFile = null"
           ref="label"><input :id="inputId" hidden type="file" ref="input"
-            @change="onChange"
+            @change="handleNewFiles"
             :name="realName"
-            :disabled="realUneditable || (requestMode === 'iframe' && isSubmiting)"
+            :disabled="realUneditable || (requestMode === 'iframe' && disabledWhenSubmiting)"
             :accept="accept"
-            :multiple="(maxCount > 1 || maxCount === undefined) && !isReplacing"
+            :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
             @click.stop>
             <icon :name="icons.add"></icon>
         </label>
       </li>
     </ul>
-    <span class="veui-uploader-tip" v-if="type === 'image'"><slot name="desc"></slot></span>
+    <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"></slot></span>
+    <span class="veui-uploader-error" v-if="type === 'image'">
+      <template v-if="error.typeInvalid"><slot name="type-invalid"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
+      <template v-if="error.sizeInvalid"><slot name="size-invalid"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>
+      <template v-if="error.countOverflow"><slot name="count-overflow"><icon :name="icons.alert"></icon>文件的数量超过限制</slot></template>
+    </span>
     <iframe v-if="requestMode === 'iframe' && isSubmiting" ref="iframe"
      :id="iframeId" :name="iframeId" class="veui-uploader-hide"></iframe>
     <form v-if="requestMode === 'iframe' && isSubmiting" ref="form" :action="queryURL" enctype="multipart/form-data"
@@ -107,7 +124,8 @@
 <script>
 import Button from './Button'
 import Icon from './Icon'
-import { cloneDeep, uniqueId, assign, isNumber, isArray } from 'lodash'
+import Tooltip from './Tooltip'
+import { cloneDeep, uniqueId, assign, isNumber, isArray, last } from 'lodash'
 import { ui, input, icons } from '../mixins'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
@@ -124,6 +142,7 @@ export default {
   components: {
     Icon,
     'veui-button': Button,
+    'veui-tooltip': Tooltip,
     'veui-uploader-progress': getProgress()
   },
   mixins: [ui, input, icons],
@@ -177,13 +196,9 @@ export default {
       }
     },
     extensions: {
-      type: Object,
+      type: Array,
       default () {
-        return {
-          image: {
-            'jpg': true, 'jpeg': true, 'gif': true, 'bmp': true, 'tif': true, 'tiff': true, 'png': true
-          }
-        }
+        return ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'tif', 'tiff', 'webp', 'apng', 'svg']
       }
     },
     accept: String,
@@ -208,10 +223,17 @@ export default {
       inputId: uniqueId('veui-uploader-input'),
       iframeId: uniqueId('veui-uploader-iframe'),
       callbackFuncName: uniqueId('veuiUploaderCallback'),
-      onMessage: null,
       replacingFile: null,
       currentSubmitingFile: null,
-      isSubmiting: true
+      // isSubmiting 控制form与iframe是否存在
+      isSubmiting: false,
+      // disabledWhenSubmiting 控制input在submit时是否禁用
+      disabledWhenSubmiting: false,
+      error: {
+        sizeInvalid: false,
+        typeInvalid: false,
+        countOverflow: false
+      }
     }
   },
   watch: {
@@ -251,12 +273,8 @@ export default {
       return
     }
 
-    document.body.appendChild(this.$refs.iframe)
-    document.body.appendChild(this.$refs.form)
-    this.isSubmiting = false
-
     if (this.iframeMode === 'postmessage') {
-      this.onMessage = event => {
+      this.handlePostmessage = event => {
         if (!event.source.frameElement || event.source.frameElement.id !== this.iframeId || this.canceled) {
           return
         }
@@ -270,7 +288,7 @@ export default {
           this.uploadCallback(this.parseData(event.data), this.currentSubmitingFile)
         }
       }
-      window.addEventListener('message', this.onMessage)
+      window.addEventListener('message', this.handlePostmessage)
     } else if (this.iframeMode === 'callback') {
       if (!window[this.callbackNamespace]) {
         window[this.callbackNamespace] = {}
@@ -287,10 +305,10 @@ export default {
       return
     }
 
-    window.removeEventListener('message', this.onMessage)
-
     if (this.iframeMode === 'callback') {
       window[this.callbackNamespace][this.callbackFuncName] = null
+    } else if (this.iframeMode === 'postmessage') {
+      window.removeEventListener('message', this.handlePostmessage)
     }
   },
   methods: {
@@ -303,8 +321,14 @@ export default {
         name: value
       })] : []
     },
-    onChange () {
+    handleNewFiles () {
       this.canceled = false
+
+      this.error = {
+        sizeInvalid: false,
+        typeInvalid: false,
+        countOverflow: false
+      }
 
       let newFiles
       if (this.requestMode === 'xhr') {
@@ -344,6 +368,11 @@ export default {
 
         this.isReplacing = false
       } else {
+        if (this.maxCount !== 1 && (this.fileList.length + newFiles.length) > this.maxCount) {
+          this.error.countOverflow = true
+          return
+        }
+
         this.fileList = [
           ...this.fileList.filter(file => {
             return file.status !== 'failure'
@@ -357,8 +386,8 @@ export default {
           })
         ]
 
-        if (this.maxCount && this.fileList.length > this.maxCount) {
-          this.fileList = this.fileList.slice(-this.maxCount)
+        if (this.maxCount === 1) {
+          this.fileList = this.fileList.slice(-1)
         }
 
         if (this.requestMode === 'iframe' && this.autoUpload) {
@@ -370,14 +399,13 @@ export default {
       }
 
       this.$emit('change', this.maxCount === 1 ? (this.fileList[0].src || this.fileList[0].name) : this.fileList)
-      this.$refs.input.value = ''
     },
-    validateFile (file) {
-      let typeValidation = this.validateFileType(file.name)
-      !typeValidation && this.$emit('invalid', '文件类型不符合要求！')
+    validateFile ({name, size}) {
+      let typeValidation = this.validateFileType(name)
+      this.error.typeInvalid = !typeValidation
 
-      let sizeValidation = this.validateFileSize(file.size)
-      !sizeValidation && this.$emit('invalid', '文件大小超过限制！')
+      let sizeValidation = this.validateFileSize(size)
+      this.error.sizeInvalid = !sizeValidation
 
       return typeValidation && sizeValidation
     },
@@ -386,27 +414,27 @@ export default {
         return true
       }
 
-      let extension = filename.split('.')
-      extension = extension[extension.length - 1].toLowerCase()
+      let extension = last(filename.split('.')).toLowerCase()
 
       return this.accept.split(/,\s*/).some(item => {
-        let acceptExtention = item.split(/[./]/)[1].toLowerCase()
+        let acceptExtention = last(item.split(/[./]/)).toLowerCase()
 
-        if (acceptExtention === extension) {
+        if (acceptExtention === extension ||
+          // 对于类似'application/msword'这样的mimetype与扩展名对不上的情形跳过校验
+          (acceptExtention !== '*' && item.indexOf('/'))) {
           return true
         }
 
-        if (acceptExtention === '*' && item.indexOf('/') > -1) {
-          let targetExtensions = this.extensions[item.split('/')[0].toLowerCase()]
-          if (targetExtensions && targetExtensions.hasOwnProperty(extension)) {
-            return true
-          }
+        if (acceptExtention === '*' &&
+          item.indexOf('/') > -1 &&
+          this.extensions.indexOf(extension) > -1) {
+          return true
         }
         return false
       })
     },
     validateFileSize (fileSize) {
-      return !this.maxSize || fileSize <= bytes.parse(this.maxSize)
+      return !this.maxSize || !fileSize || fileSize <= bytes.parse(this.maxSize)
     },
     uploadFiles () {
       this.fileList.forEach(file => {
@@ -416,6 +444,8 @@ export default {
       })
     },
     upload (file) {
+      this.reset()
+
       this.updateFileList(file, {status: 'uploading'})
       let xhr = new XMLHttpRequest()
       file.xhr = xhr
@@ -429,14 +459,14 @@ export default {
             this.updateFileList(file)
             break
         }
-        this.$emit('progress', e)
+        this.$emit('progress', file, e)
       }
       xhr.onload = () => {
         this.uploadCallback(this.parseData(xhr.responseText), file)
       }
       xhr.onerror = () => {
-        this.onFailure({}, file)
-        this.$emit('fail')
+        this.showFailureResult({}, file)
+        this.$emit('failure')
       }
       let formData = new FormData()
       formData.append(this.name, file)
@@ -463,35 +493,42 @@ export default {
 
       this.$nextTick(() => {
         let form = this.$refs.form
+
         document.body.appendChild(this.$refs.iframe)
         document.body.appendChild(form)
 
         form.appendChild(this.$refs.input)
         form.submit()
+        this.disabledWhenSubmiting = true
+
         this.reset()
       })
     },
     uploadCallback (data, file) {
       this.isSubmiting = false
+      this.disabledWhenSubmiting = false
 
       this.convertResponse(data) || data
       if (data.status === 'success') {
+        this.showSuccessResult(data, file)
         this.$emit('success', data)
-        this.onSuccess(data, file)
       } else if (data.status === 'failure') {
-        this.$emit('fail', data)
-        this.onFailure(data, file)
+        this.showFailureResult(data, file)
+        this.$emit('failure', data)
       }
       this.currentSubmitingFile = null
     },
-    onSuccess (data, file) {
+    showSuccessResult (data, file) {
       assign(file, data)
       file.status = 'success'
       file.xhr = null
       file.toBeUploaded = null
       this.updateFileList(file)
+      setTimeout(() => {
+        this.updateFileList(file, {status: null})
+      }, 300)
     },
-    onFailure (data, file) {
+    showFailureResult (data, file) {
       file.status = 'failure'
       file.xhr = null
       file.toBeUploaded = null
@@ -513,6 +550,8 @@ export default {
       }
     },
     removeFile (file) {
+      this.error.countOverflow = false
+
       if (this.maxCount === 1) {
         this.fileList = []
         this.$emit('change', null)
@@ -527,6 +566,7 @@ export default {
       if (this.requestMode === 'iframe') {
         this.canceled = true
         this.isSubmiting = false
+        this.disabledWhenSubmiting = false
       }
 
       if (file.xhr) {
@@ -550,7 +590,7 @@ export default {
         try {
           return JSON.parse(data)
         } catch (error) {
-          this.$emit('fail', {error})
+          this.$emit('failure', {error})
         }
       }
     }
