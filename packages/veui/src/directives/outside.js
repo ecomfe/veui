@@ -1,15 +1,22 @@
-import { isFunction, uniqueId, remove, every, find, isNumber, isString, keys, assign, noop, isEqual, pick } from 'lodash'
+import { isFunction, uniqueId, remove, find, isNumber, isString, keys, noop, isEqual, pick } from 'lodash'
 import { getNodes } from '../utils/context'
 import { contains } from '../utils/dom'
 
-let handlerBindings = []
-const bindingKey = '__veui_outside__'
-
+let clickHandlerBindings = []
+const clickBindingKey = '__veui_click_outside__'
 document.addEventListener('click', e => {
-  handlerBindings.forEach(item => {
-    item[bindingKey] && item[bindingKey].handler(e)
+  clickHandlerBindings.forEach(item => {
+    item[clickBindingKey] && item[clickBindingKey].handler(e)
   })
 }, true)
+
+let hoverHandlerBindings = []
+const hoverBindingKey = '__veui_hover_outside__'
+document.addEventListener('mouseout', e => {
+  hoverHandlerBindings.forEach(item => {
+    item[hoverBindingKey] && item[hoverBindingKey].handler(e)
+  })
+})
 
 function getElementsByRefs (refs, context) {
   const elements = []
@@ -20,7 +27,7 @@ function getElementsByRefs (refs, context) {
 }
 
 function parseParams (el, arg, modifiers, value, context) {
-  let includeTargets
+  let refs
   let handler
   let trigger
   // delay 表示如果鼠标移动到 includeTargets 元素之外多少秒之后，才会触发 handler
@@ -31,8 +38,7 @@ function parseParams (el, arg, modifiers, value, context) {
   if (isFunction(value)) {
     handler = value
 
-    const refs = arg ? arg.split(',') : []
-    includeTargets = [el, ...getElementsByRefs(refs, context)]
+    refs = arg ? arg.split(',') : []
 
     trigger = modifiers.hover ? 'hover' : 'click'
 
@@ -42,9 +48,8 @@ function parseParams (el, arg, modifiers, value, context) {
     const normalizedValue = value || {}
     handler = isFunction(normalizedValue.handler) ? normalizedValue.handler : noop
 
-    const refs = Array.isArray(normalizedValue.refs) ? normalizedValue.refs
+    refs = Array.isArray(normalizedValue.refs) ? normalizedValue.refs
       : (isString(normalizedValue.refs) ? normalizedValue.refs.split(',') : [normalizedValue.refs])
-    includeTargets = [el, ...getElementsByRefs(refs, context)]
 
     trigger = normalizedValue.trigger === 'hover' ? 'hover' : 'click'
 
@@ -55,97 +60,51 @@ function parseParams (el, arg, modifiers, value, context) {
   }
 
   return {
-    includeTargets,
+    refs,
     handler,
     trigger,
     delay
   }
 }
 
-function generate (el, { includeTargets, handler, trigger, delay }) {
-  return function (e) {
-    // click 模式，直接判断元素包含情况
-    if (e.type === trigger && every(includeTargets, element => !contains(element, e.target))) {
-      handler(e)
-    }
-  }
-}
-
-function bindHover (el, { includeTargets, handler, delay }) {
-  unbindHover(el)
-
-  const bindingData = assign(
-    {},
-    el[bindingKey] || {},
-    {
-      includeTargets,
-      handler,
-      delay,
-      trigger: 'hover',
-      hoverData: {
-        state: 'ready',
-        prevEvent: null,
-        timer: null
-      },
-      mouseenterHandler: event => {
-        bindingData.hoverData.state = 'in'
-        bindingData.hoverData.prevEvent = event
-      },
-      mouseleaveHandler: event => {
-        if (every(includeTargets, target => !contains(target, event.target))) {
-          return
-        }
-
-        bindingData.hoverData.state = 'out'
-        bindingData.hoverData.prevEvent = event
-
-        clearTimeout(bindingData.hoverData.timer)
-        let check = () => {
-          // 超时没移回，就要触发handler了
-          if (bindingData.hoverData.state === 'out') {
-            // 此处用最后一次记录的event对象
-            handler(bindingData.hoverData.prevEvent)
-            // 重置状态
-            bindingData.hoverData.state = 'ready'
-          }
-        }
-        bindingData.hoverData.timer = bindingData.delay ? setTimeout(check, bindingData.delay) : check()
+function generate (el, { handler, trigger, delay, refs }, context) {
+  if (trigger === 'click') {
+    return function (e) {
+      // click 模式，直接判断元素包含情况
+      let includeTargets = [el, ...getElementsByRefs(refs, context)]
+      if (e.type === trigger && !includeTargets.some(element => contains(element, e.target))) {
+        handler(e)
       }
     }
-  )
+  }
 
-  // 所有目标元素都绑定一遍事件
-  bindHoverEvents(bindingData)
-
-  el[bindingKey] = bindingData
-}
-
-function bindHoverEvents (bindingData) {
-  bindingData.includeTargets.forEach((target) => {
-    target.addEventListener('mouseenter', bindingData.mouseenterHandler)
-    target.addEventListener('mouseleave', bindingData.mouseleaveHandler)
-  })
-}
-
-function unbindHoverEvents (bindingData) {
-  bindingData.includeTargets.forEach((target) => {
-    target.removeEventListener('mouseenter', bindingData.mouseenterHandler)
-    target.removeEventListener('mouseleave', bindingData.mouseleaveHandler)
-  })
-}
-
-function unbindHover (el) {
-  const bindingData = el[bindingKey]
-  if (bindingData && bindingData.trigger === 'hover') {
-    unbindHoverEvents(bindingData)
-    el[bindingKey] = null
-    clearTimeout(bindingData.hoverData.timer)
+  if (trigger === 'hover') {
+    return function (e) {
+      let includeTargets = [el, ...getElementsByRefs(refs, context)]
+      if (includeTargets.some(target => contains(target, e.target)) &&
+        !includeTargets.some(target => contains(target, e.relatedTarget))
+      ) {
+        if (delay) {
+          el[hoverBindingKey].timer = setTimeout(() => handler(e), delay)
+        } else {
+          handler(e)
+        }
+      }
+    }
   }
 }
 
 function clear (el) {
-  remove(handlerBindings, item => el[bindingKey] && item[bindingKey].id === el[bindingKey].id)
-  unbindHover(el)
+  if (el[clickBindingKey]) {
+    remove(clickHandlerBindings, item => item[clickBindingKey].id === el[clickBindingKey].id)
+    el[clickBindingKey] = null
+  }
+
+  if (el[hoverBindingKey]) {
+    remove(hoverHandlerBindings, item => item[hoverBindingKey].id === el[hoverBindingKey].id)
+    clearTimeout(el[hoverBindingKey].timer)
+    el[hoverBindingKey] = null
+  }
 }
 
 function refresh (el, { value, arg, modifiers, oldValue }, vnode) {
@@ -153,27 +112,35 @@ function refresh (el, { value, arg, modifiers, oldValue }, vnode) {
 
   // 真正发生了变化，才重刷
   let fields = params.trigger === 'click'
-    ? ['includeTargets', 'trigger']
-    : ['includeTargets', 'trigger', 'delay']
-  if (isEqual(pick(el[bindingKey], fields), pick(params, fields))) {
+    ? ['refs', 'trigger']
+    : ['refs', 'trigger', 'delay']
+  if (isEqual(pick(el[params.trigger === 'click' ? clickBindingKey : hoverBindingKey], fields), pick(params, fields))) {
     return
   }
 
   clear(el)
   if (params.trigger === 'click') {
-    el[bindingKey] = {
+    el[clickBindingKey] = {
       id: uniqueId('veui-outside-'),
-      handler: generate(el, params),
-      trigger: 'click'
+      handler: generate(el, params, vnode.context),
+      trigger: 'click',
+      refs: params.refs
     }
-    handlerBindings.push(el)
+    clickHandlerBindings.push(el)
   } else if (params.trigger === 'hover') {
-    bindHover(el, params)
+    el[hoverBindingKey] = {
+      id: uniqueId('veui-outside-'),
+      handler: generate(el, params, vnode.context),
+      trigger: 'hover',
+      delay: params.delay,
+      refs: params.refs
+    }
+    hoverHandlerBindings.push(el)
   }
 }
 
 export default {
   bind: refresh,
-  componentUpdated: refresh,
+  update: refresh,
   unbind: clear
 }
