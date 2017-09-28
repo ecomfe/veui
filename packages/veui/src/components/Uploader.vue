@@ -51,9 +51,8 @@
                 <label :for="inputId"
                   class="veui-button"
                   :class="{'veui-uploader-input-label-disabled': realUneditable}"
-                  ui="link"
                   @click.stop="replaceFile(file)">重新上传</label>
-                <veui-button ui="link" @click="removeFile(file)" :disabled="realUneditable" :class="listClass + '-mask-remove'"><icon :name="icons.clear"></icon>移除</veui-button>
+                <veui-button @click="removeFile(file)" :disabled="realUneditable" :class="listClass + '-mask-remove'"><icon :name="icons.clear"></icon>移除</veui-button>
               </div>
             </template>
             <transition name="veui-uploader-fade">
