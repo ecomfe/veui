@@ -141,6 +141,6 @@ function refresh (el, { value, arg, modifiers, oldValue }, vnode) {
 
 export default {
   bind: refresh,
-  update: refresh,
+  componentUpdated: refresh,
   unbind: clear
 }
