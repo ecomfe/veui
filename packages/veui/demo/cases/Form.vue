@@ -198,6 +198,10 @@
           </veui-field>
           <veui-span>万</veui-span>
         </veui-fieldset>
+
+        <veui-field ui="small" field="protocol" name="protocol" label="协议：">
+          <veui-radio ui="small" :checked="false">我已阅读并同意工作协议</veui-radio>
+        </veui-field>
       </veui-form>
     </section>
     <section>
@@ -307,7 +311,7 @@ import {
   Form, Fieldset, Field, Label, Span, Input,
   Button, DatePicker, Uploader, Select,
   Checkbox, CheckboxGroup, RadioGroup, Searchbox,
-  RegionPicker
+  RegionPicker, Radio
 } from 'veui'
 import moment from 'moment'
 import bus from '../bus'
@@ -2407,6 +2411,7 @@ export default {
     'veui-select': Select,
     'veui-checkbox': Checkbox,
     'veui-checkboxgroup': CheckboxGroup,
+    'veui-radio': Radio,
     'veui-radiogroup': RadioGroup,
     'veui-searchbox': Searchbox,
     'veui-region-picker': RegionPicker
