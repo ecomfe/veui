@@ -1,5 +1,5 @@
 <template>
-<veui-field ref="field" class="veui-fieldset" :class="{'veui-fieldset-required': required}" v-bind="attrs">
+<veui-field :ui="ui" ref="field" class="veui-fieldset" :class="{'veui-fieldset-required': required}" v-bind="attrs">
   <template v-if="$slots.label" slot="label"><slot name="label"></slot></template>
   <slot></slot>
 </veui-field>
@@ -18,6 +18,7 @@ export default {
     'veui-field': Field
   },
   props: {
+    ui: String,
     label: String,
     name: String,
     tip: String,

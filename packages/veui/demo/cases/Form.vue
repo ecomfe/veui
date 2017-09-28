@@ -13,8 +13,8 @@
           <veui-select :options="storeData1.sexItems" v-model="storeData1.sex"></veui-select>
         </veui-field>
 
-        <veui-field label="婚姻：" field="married">
-          <veui-radiogroup :items="storeData1.marryItems" v-model="storeData1.married"></veui-radiogroup>
+        <veui-field ui="small" label="婚姻：" field="married">
+          <veui-radiogroup ui="small" :items="storeData1.marryItems" v-model="storeData1.married"></veui-radiogroup>
         </veui-field>
 
         <veui-field label="爱好：" field="habit">
@@ -50,13 +50,13 @@
       <h2>行内多组件表单</h2>
       <veui-form>
 
-        <veui-fieldset class="two-name" label="姓名：">
+        <veui-fieldset ui="large" class="two-name" label="姓名：">
           <veui-field>
-            <veui-input placeholder="姓" v-model="storeData2.lastName"></veui-input>
+            <veui-input ui="large" placeholder="姓" v-model="storeData2.lastName"></veui-input>
           </veui-field>
 
           <veui-field>
-            <veui-input placeholder="名" v-model="storeData2.firstName"></veui-input>
+            <veui-input ui="large" placeholder="名" v-model="storeData2.firstName"></veui-input>
           </veui-field>
         </veui-fieldset>
 
@@ -143,8 +143,8 @@
           <veui-radiogroup :items="storeData1.marryItems" v-model="storeData1.married"></veui-radiogroup>
         </veui-field>
 
-        <veui-field label="爱好：" field="habit">
-          <veui-checkboxgroup type="checkbox" :items="storeData1.habitItems" v-model="storeData1.habit"></veui-checkboxgroup>
+        <veui-field ui="small" label="爱好：" field="habit">
+          <veui-checkboxgroup ui="small" type="checkbox" :items="storeData1.habitItems" v-model="storeData1.habit"></veui-checkboxgroup>
         </veui-field>
 
         <veui-field label="生日：" field="birthday">
