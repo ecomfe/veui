@@ -13,17 +13,17 @@ $ npm i --save veui
 $ npm i --save-dev babel-plugin-veui veui-loader
 ```
 
-To use default theme `dux` you have to install it too.
+To use default theme `x` you have to install it too.
 
 ```sh
-$ npm i --save veui-theme-dux
+$ npm i --save veui-theme-x
 ```
 
 ## Configuration
 
 First, scaffold your project using `vue-cli` with template `webpack`.
 
-To use default theme `dux`, make sure to add these plugins in `.babelrc`:
+To use default theme `x`, make sure to add these plugins in `.babelrc`:
 
 ```json
 {
@@ -31,10 +31,17 @@ To use default theme `dux`, make sure to add these plugins in `.babelrc`:
     [
       "veui",
       {
-        "package": "veui-theme-dux",
-        "path": "components",
-        "fileName": "${module}.less",
-        "transform": "kebab-case"
+        "modules": [
+          {
+            "package": "veui-theme-x",
+            "fileName": "${module}.less"
+          },
+          {
+            "package": "veui-theme-x",
+            "fileName": "${module}.js",
+            "transform": false
+          }
+        ]
       }
     ],
     "lodash",
@@ -95,3 +102,5 @@ And then you should be able to see the demo via `http://localhost:8080/`.
 Evergreen browsers, IE9 and above.
 
 ## FAQ
+
+TBD.
