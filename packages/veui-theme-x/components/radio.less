@@ -12,7 +12,8 @@
     display: none;
   }
 
-  &-label {
+  &-label,
+  &-box {
     vertical-align: top;
     display: inline-block;
   }
@@ -30,7 +31,6 @@
   }
 
   &-box {
-    display: inline-block;
     position: relative;
     height: @veui-font-size-large;
     width: @veui-font-size-large;
@@ -38,7 +38,6 @@
     background-color: #fff;
     margin-right: 8px;
     border-radius: 50%;
-    vertical-align: top;
     font-size: @veui-font-size-normal;
   }
 
@@ -80,6 +79,14 @@
   &[ui~="small"] {
     font-size: @veui-font-size-small;
     line-height: @veui-font-size-small;
+  }
+
+  .veui-field[ui~="small"] > &[ui~="small"] {
+    line-height: @veui-height-small;
+
+    .veui-radio-box {
+      vertical-align: -2px;
+    }
   }
 
   &[ui~="small"] &-box {

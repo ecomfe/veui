@@ -12,7 +12,8 @@
     display: none;
   }
 
-  &-label {
+  &-label,
+  &-box {
     vertical-align: top;
     display: inline-block;
   }
@@ -30,7 +31,6 @@
   }
 
   &-box {
-    display: inline-block;
     position: relative;
     height: @veui-font-size-large;
     width: @veui-font-size-large;
@@ -38,7 +38,6 @@
     border: 1px solid @veui-gray-color-2;
     background-color: #fff;
     font-size: @veui-font-size-large;
-    vertical-align: top;
   }
 
   &:hover &-box {
@@ -77,6 +76,14 @@
   &[ui~="small"] {
     font-size: @veui-font-size-small;
     line-height: @veui-font-size-small;
+  }
+
+  .veui-field[ui~="small"] > &[ui~="small"] {
+    line-height: @veui-height-small;
+
+    .veui-checkbox-box {
+      vertical-align: -2px;
+    }
   }
 
   &[ui~="small"] &-box {

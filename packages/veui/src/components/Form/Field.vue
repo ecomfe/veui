@@ -1,5 +1,5 @@
 <template>
-<div class="veui-field" :class="{'veui-field-invalid': !validity.valid, 'veui-field-no-label': !label, 'veui-field-no-tip': !tip, 'veui-field-required': isRequired}">
+<div :ui="ui" class="veui-field" :class="{'veui-field-invalid': !validity.valid, 'veui-field-no-label': !label, 'veui-field-no-tip': !tip, 'veui-field-required': isRequired}">
   <span v-if="label || $slots.label" class="veui-form-label">
     <slot name="label"><veui-label>{{ label }}</veui-label></slot>
   </span>
@@ -30,6 +30,7 @@ export default {
     'veui-label': Label
   },
   props: {
+    ui: String,
     label: String,
     name: String,
     tip: String,
