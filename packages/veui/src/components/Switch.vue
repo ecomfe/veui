@@ -2,15 +2,11 @@
 <label :class="{
     'veui-switch': true,
     'veui-switch-on': localChecked === trueValue,
-    'veui-switch-readonly': realReadonly,
-    'veui-switch-disabled': realDisabled
+    'veui-switch-disabled': realDisabled || realReadonly
   }" :ui="ui">
   <div class="veui-switch-switcher">
     <input type="checkbox" v-bind="attrs" :disabled="realDisabled || realReadonly" @change="handleChange($event.target.checked)">
-    <span class="veui-switch-button">
-      <veui-icon name="cross" v-if="disabled"></veui-icon>
-      <veui-icon name="minus-thick" v-if="!disabled && readonly"></veui-icon>
-    </span>
+    <span class="veui-switch-button"></span>
   </div>
   <div class="veui-switch-label"><slot></slot></div>
 </label>

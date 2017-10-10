@@ -218,28 +218,32 @@
   }
 
   &[ui~="slim"] {
-    @scale-ratio: 2 / 3;
+    @scale: 2 / 3;
 
     .veui-pager-switch {
-      padding: 0 (@button-height + @button-gap-width) * @scale-ratio;
+      padding: 0 (@button-height + @button-gap-width) * @scale;
 
       li {
-        width: @digit-width * @scale-ratio;
-        height: @digit-height * @scale-ratio;
-        line-height: @digit-height * @scale-ratio;
+        width: @digit-width * @scale;
+        height: @digit-height * @scale;
+        line-height: @digit-height * @scale;
         font-size: @veui-font-size-small;
+
+        a {
+          min-width: @button-width * @scale;
+        }
       }
     }
 
     .veui-pager-previous,
     .veui-pager-next {
-      width: @button-height * @scale-ratio;
-      height: @button-height * @scale-ratio;
+      width: @button-height * @scale;
+      height: @button-height * @scale;
       line-height: 1.5;
     }
 
     .veui-icon {
-      height: @digit-height * @scale-ratio / 2;
+      height: @digit-height * @scale / 2;
     }
 
     .generate-responsive-page-digit-width(4, .8);

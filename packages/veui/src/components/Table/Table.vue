@@ -50,14 +50,14 @@ export default {
         return val === 'single' || val === 'multiple'
       }
     },
-    order: [String, Boolean],
-    orderBy: String,
-    columnFilter: Array,
     selected: {
       default () {
         return []
       }
-    }
+    },
+    order: [String, Boolean],
+    orderBy: String,
+    columnFilter: Array
   },
   data () {
     return {

@@ -1,24 +1,38 @@
-import { keys } from 'lodash'
+import { isObject } from 'lodash'
 import type from './type'
 
-function set (obj, key, value, ns, override) {
-  if (typeof key === 'object') {
-    override = ns
+function set (obj, key, value, ns, override, merge) {
+  if (isObject(key)) {
     ns = value
     value = key
-    keys(value).forEach(key => {
-      set(obj, key, value[key], ns, override)
+    Object.keys(value).forEach(k => {
+      set(obj, k, value[k], ns, override, merge)
     })
     return
   }
 
   if (typeof key !== 'string') {
-    return
+    throw new Error('`Config key must be a string value.')
   }
 
-  if (!(key in obj) || override) {
-    let k = ns ? `${ns}.${key}` : key
-    obj[k] = value
+  let k = ns ? `${ns}.${key}` : key
+  if (!(k in obj) || override || merge) {
+    if (!merge) {
+      if (!(k in obj) || override) {
+        obj[k] = value
+      }
+      return
+    }
+
+    if (!isObject(obj[k]) || !isObject(value)) {
+      throw new Error('`config.merge` only handles objects.')
+    }
+
+    Object.keys(value).forEach(key => {
+      if (!(key in obj[k]) || override) {
+        obj[k][key] = value[key]
+      }
+    })
   }
 }
 
@@ -27,12 +41,20 @@ export class ConfigManager {
     this.store = {}
   }
 
-  set (obj, key, value, ns) {
-    set(this.store, obj, key, value, ns, true)
+  set (key, value, ns) {
+    set(this.store, key, value, ns, true, false)
   }
 
-  defaults (obj, key, value, ns) {
-    set(this.store, obj, key, value, ns, false)
+  defaults (key, value, ns) {
+    set(this.store, key, value, ns, false, false)
+  }
+
+  merge (key, value, ns) {
+    set(this.store, key, value, ns, true, true)
+  }
+
+  mergeDefaults (key, value, ns) {
+    set(this.store, key, value, ns, false, true)
   }
 
   get (key) {

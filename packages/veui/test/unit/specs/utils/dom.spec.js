@@ -1,7 +1,7 @@
-import {closest} from '@/utils/dom'
+import { closest } from '@/utils/dom'
 
 describe('utils/dom', () => {
-  it('closest', () => {
+  it('should find the closest parent as expected', () => {
     let root = document.createElement('div')
     root.innerHTML = `<div class="tip">点此
       <a class="btn" href="/login">

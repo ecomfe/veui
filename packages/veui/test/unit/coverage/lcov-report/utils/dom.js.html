@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for utils/dom.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">utils/</a> dom.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">19.44% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>7/36</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">25.93% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>7/27</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">14.29% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">19.44% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>7/36</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export function closest (element, selectors) {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (element.closest) {
+<span class="cstat-no" title="statement not covered" >    return element.closest(selectors)</span>
+  }
+&nbsp;
+  // Polyfill from https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
+  let matches = (element.document || element.ownerDocument).querySelectorAll(selectors)
+  let i
+&nbsp;
+  do {
+    i = matches.length
+    while (--i &gt;= 0 &amp;&amp; matches.item(i) !== element) {}
+  } while ((i &lt; 0) &amp;&amp; (element = element.parentElement))
+&nbsp;
+  return element
+}
+&nbsp;
+let needIndeterminatePatch = null
+&nbsp;
+function testIndeterminate () <span class="fstat-no" title="function not covered" >{</span>
+  let checkbox = <span class="cstat-no" title="statement not covered" >document.createElement('input')</span>
+<span class="cstat-no" title="statement not covered" >  checkbox.type = 'checkbox'</span>
+<span class="cstat-no" title="statement not covered" >  checkbox.indeterminate = true</span>
+<span class="cstat-no" title="statement not covered" >  document.body.appendChild(checkbox)</span>
+<span class="cstat-no" title="statement not covered" >  checkbox.click()</span>
+  let needPatch = <span class="cstat-no" title="statement not covered" >!checkbox.checked</span>
+<span class="cstat-no" title="statement not covered" >  checkbox.parentNode.removeChild(checkbox)</span>
+<span class="cstat-no" title="statement not covered" >  return needPatch</span>
+}
+&nbsp;
+// IE won't trigger change event for indeterminate checkboxes
+// Problem see http://stackoverflow.com/questions/33523130/ie-does-not-fire-change-event-on-indeterminate-checkbox-when-you-click-on-it
+// A more thorough compatibility fix here:
+export function patchIndeterminate (element) <span class="fstat-no" title="function not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >  if (needIndeterminatePatch == null) {</span>
+<span class="cstat-no" title="statement not covered" >    needIndeterminatePatch = testIndeterminate()</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (!needIndeterminatePatch ||</span>
+    !element.tagName || element.tagName.toLowerCase() !== 'input' ||
+    !element.type || element.type.toLowerCase() !== 'checkbox') {
+<span class="cstat-no" title="statement not covered" >    return</span>
+  }
+&nbsp;
+  // The indeterminate status will already be changed when click event is dispatched
+  // so listen to mousedown events for all associated labels
+  let indeterminate
+  let label = <span class="cstat-no" title="statement not covered" >closest(element, 'label')</span>
+  let target = <span class="cstat-no" title="statement not covered" >label || element</span>
+  let targets = <span class="cstat-no" title="statement not covered" >label ? [label] : []</span>
+<span class="cstat-no" title="statement not covered" >  if (element.id) {</span>
+<span class="cstat-no" title="statement not covered" >    targets = [target, ...document.querySelectorAll(`label[for="${element.id}"]`)]</span>
+  }
+<span class="cstat-no" title="statement not covered" >  targets.forEach(target =&gt; <span class="fstat-no" title="function not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >    target.addEventListener('mousedown', function () <span class="fstat-no" title="function not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >      indeterminate = element.indeterminate</span>
+    })
+  })
+&nbsp;
+  // Click on labels will also trigger change events for checkboxes
+<span class="cstat-no" title="statement not covered" >  element.addEventListener('click', function () <span class="fstat-no" title="function not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >    if (!indeterminate) {</span>
+<span class="cstat-no" title="statement not covered" >      return</span>
+    }
+<span class="cstat-no" title="statement not covered" >    element.checked = !element.checked</span>
+    let event = <span class="cstat-no" title="statement not covered" >document.createEvent('HTMLEvents')</span>
+<span class="cstat-no" title="statement not covered" >    event.initEvent('change', true, false)</span>
+<span class="cstat-no" title="statement not covered" >    element.dispatchEvent(event)</span>
+  }, false)
+}
+&nbsp;
+/**
+ * 判断两个元素是否存在父子关系。
+ * IE9 的 SVGSVGElement 上没有 contains 方法，做下 hack 。
+ *
+ * @param {Element} parentElem 父元素
+ * @param {Element} childElem 子元素
+ * @return {boolean}
+ */
+export function contains (parentElem, childElem) <span class="fstat-no" title="function not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >  return parentElem.contains</span>
+    ? parentElem.contains(childElem)
+    : document.body.contains.call(parentElem, childElem)
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Oct 10 2017 14:42:46 GMT+0800 (CST)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

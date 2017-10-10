@@ -1,0 +1,104 @@
+@import "../lib.less";
+
+.veui-switch {
+  @gap: 2px;
+  @height-large: 30px;
+  @height-normal: 24px;
+  @height-small: 18px;
+  @aspect-ratio: 50px / @height-normal;
+
+  .metrics(@size: @height-normal) {
+    .veui-switch {
+      &-switcher {
+        width: @size * @aspect-ratio;
+        height: @size;
+        border-radius: @size / 2;
+      }
+
+      &-button {
+        .size(@size - @gap * 2);
+        .veui-icon {
+          .size(@size / 3 * 2);
+        }
+      }
+
+      &-label {
+        line-height: @size;
+      }
+    }
+    &.veui-switch-on .veui-switch-button {
+      transform: translateX(@size * (@aspect-ratio - 1));
+    }
+  }
+
+  display: inline-block;
+  cursor: pointer;
+  .metrics();
+
+  &-switcher,
+  &-label {
+    vertical-align: middle;
+  }
+
+  &-label {
+    display: inline-block;
+    margin-left: 10px;
+  }
+
+  &-switcher {
+    display: inline-block;
+    background-color: @veui-gray-color-4;
+    user-select: none;
+    transition: background-color ease .2s;
+  }
+
+  &-button {
+    display: inline-block;
+    position: relative;
+    margin: @gap;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform ease .2s;
+
+    .veui-icon {
+      .absolute(50%, _, _, 50%);
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &-on &-switcher {
+    background-color: @veui-brand-color;
+  }
+
+  &-readonly {
+    cursor: default;
+  }
+
+  &-disabled {
+    cursor: not-allowed;
+  }
+
+  &-disabled &-switcher {
+    background-color: @veui-gray-color-5;
+  }
+
+  &-on&-disabled &-switcher {
+    background-color: @veui-brand-color-8;
+  }
+
+  &-disabled &-button {
+    background-color: @veui-gray-color-4;
+  }
+
+  &[ui~="small"] {
+    .metrics(@height-small);
+  }
+
+  &[ui~="large"] {
+    .metrics(@height-large);
+  }
+
+  input {
+    display: none;
+  }
+}
