@@ -46,7 +46,7 @@
   </div>
   <veui-overlay
     target="input"
-    :options="overlay"
+    :options="realOverlayOptions"
     :open="expanded"
     :overlay-class="overlayClass">
     <div class="veui-searchbox-suggestion-overlay"
