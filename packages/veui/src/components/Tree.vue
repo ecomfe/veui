@@ -92,11 +92,6 @@ export default {
       default: false
     }
   },
-  data () {
-    return {
-      scrollClass: 'veui-tree-scroll'
-    }
-  },
   computed: {
     itemClasses () {
       return this.options.map(option => {
