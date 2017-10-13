@@ -9,6 +9,7 @@
 
       <p><veui-pager :page="page" :total="total" :page-sizes="pageSizes" :to="to" ui="full" :page-size.sync="pageSize"></veui-pager></p>
       <p style="margin-top: -4em"><veui-pager :page="page" :total="total" :page-sizes="pageSizes" :to="to" ui="full" :page-size.sync="pageSize"></veui-pager></p>
+      <p style="margin-top: -4em"><veui-pager :page="page" :total="total" :page-sizes="pageSizes" :to="to" ui="full" :page-size="30"></veui-pager></p>
 
       <p><veui-pager :page="page" :total="total" :to="to" ui="slim"></veui-pager></p>
     </section>
