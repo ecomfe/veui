@@ -202,6 +202,16 @@ export default {
       return this.pageCount.toString(10).length
     }
   },
+  watch: {
+    pageSize (val) {
+      // Caller update pagesize -> reset/override user's custom pagesize
+      this.customPageSize = 0
+    },
+    realPageSize (val) {
+      // User updated pageSize -> Tell caller the modification
+      this.$emit('update:pageSize', val)
+    }
+  },
   methods: {
     handleRedirect (page, event) {
       this.$emit('redirect', {page, event})

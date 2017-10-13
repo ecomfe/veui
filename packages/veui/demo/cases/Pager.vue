@@ -7,7 +7,8 @@
 
       <p><veui-pager :page="page" :total="total" :to="to" ui="hetero"></veui-pager></p>
 
-      <p><veui-pager :page="page" :total="total" :page-sizes="pageSizes" :to="to" ui="full"></veui-pager></p>
+      <p><veui-pager :page="page" :total="total" :page-sizes="pageSizes" :to="to" ui="full" :page-size.sync="pageSize"></veui-pager></p>
+      <p style="margin-top: -4em"><veui-pager :page="page" :total="total" :page-sizes="pageSizes" :to="to" ui="full" :page-size.sync="pageSize"></veui-pager></p>
 
       <p><veui-pager :page="page" :total="total" :to="to" ui="slim"></veui-pager></p>
     </section>
@@ -53,6 +54,7 @@ export default {
       page: parseInt(this.$route.params.page, 10) || 1,
       total: 10101,
       to: '/pager/:page',
+      pageSize: 30,
       pageSizes: [30, 60, 100, 200],
       fifthPagerMessage: ''
     }
@@ -80,10 +82,10 @@ export default {
 
 <style lang="less" scoped>
 section {
-  margin-bottom: 4em;
+  margin-bottom: 3em;
 }
 .veui-pager {
-  margin: 1em 0 4em;
+  margin: 1em 0 3em;
 }
 
 .message {
