@@ -1,0 +1,57 @@
+@import "../lib.less";
+
+.veui-tree {
+  @item-height: 36px;
+  @item-indent-gap: 18px;
+  @item-icon-size: 14px;
+  @item-icon-gap: 4px;
+
+  &,
+  &-item-group {
+    .reset-list-style();
+    padding: 0;
+    margin: 0;
+  }
+
+  &-item {
+    .centered-line(@item-height);
+    .clearfix();
+
+    &-expand-switcher,
+    &-label {
+      float: left;
+    }
+
+    &-expand-switcher {
+      .centered-line(@item-icon-size);
+      vertical-align: top;
+      margin-right: @item-icon-gap;
+      cursor: pointer;
+
+      @height: @item-height / 2;
+      margin-top: ~"calc(@{height} - 0.5em)";
+
+      .veui-icon {
+        .size(@item-icon-size);
+      }
+    }
+
+    &-expanded &-expand-switcher {
+      transform: rotateZ(90deg);
+    }
+
+    &-group {
+      display: none;
+      padding-left: @item-indent-gap;
+    }
+
+    &-expanded + &-group {
+      display: block;
+    }
+
+    // 如果前面没有图标，就把图标位置让出来。
+    &-label:first-child {
+      margin-left: @item-indent-gap;
+    }
+  }
+}

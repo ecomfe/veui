@@ -28,6 +28,7 @@ import RegionPicker from './RegionPicker'
 import ButtonGroup from './ButtonGroup'
 import Progress from './Progress'
 import Carousel from './Carousel'
+import Transfer from './Transfer'
 
 export default [
   {
@@ -111,11 +112,6 @@ export default [
     component: Pager
   },
   {
-    path: '/progress',
-    name: 'Progress',
-    component: Progress
-  },
-  {
     path: '/radio',
     name: 'Radio',
     component: Radio
@@ -194,5 +190,15 @@ export default [
     path: '/uploader',
     name: 'Uploader',
     component: Uploader
+  },
+  {
+    path: '/progress',
+    name: 'Progress',
+    component: Progress
+  },
+  {
+    path: '/transfer',
+    name: 'Transfer',
+    component: Transfer
   }
 ]

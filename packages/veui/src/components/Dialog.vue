@@ -15,16 +15,9 @@
         :class="{ 'veui-dialog-draggable': draggable }"
         ref="head"
         v-drag:content.translate="{ draggable, containment: '@window', ready: dragReady }">
-        <span class="veui-dialog-content-head-title"
-          v-if="localTitle"
-          v-text="localTitle">
-        </span>
-        <span class="veui-dialog-content-head-title"
-          v-else>
-          <slot name="title">弹窗标题</slot>
-        </span>
+        <span class="veui-dialog-content-head-title"><slot name="title">{{ title }}</slot></span>
         <a class="veui-dialog-content-head-close"
-          v-show="localClosable"
+          v-show="closable"
           @click="hide">
           <veui-icon :name="icons.close"></veui-icon>
         </a>
@@ -83,28 +76,12 @@ export default {
   },
   data () {
     return {
-      localOpen: this.open,
-      localWidth: this.width,
-      localClosable: this.closable,
-      localHeight: this.height,
-      localTitle: this.title || null
+      localOpen: this.open
     }
   },
   watch: {
-    title (value) {
-      this.localTitle = value
-    },
     open (value) {
       this.localOpen = value
-    },
-    width (value) {
-      this.localWidth = value
-    },
-    height (value) {
-      this.localHeight = value
-    },
-    closable (value) {
-      this.localClosable = value
     }
   },
   methods: {

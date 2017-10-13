@@ -72,6 +72,10 @@
     "path": "Fieldset.js"
   },
   {
+    "name": "FilterPanel",
+    "path": "FilterPanel.vue"
+  },
+  {
     "name": "Field",
     "path": "Form/Field.vue"
   },
@@ -226,6 +230,30 @@
   {
     "name": "Tooltip",
     "path": "Tooltip.vue"
+  },
+  {
+    "name": "Transfer",
+    "path": "Transfer/Transfer.vue"
+  },
+  {
+    "name": "Transfer",
+    "path": "Transfer"
+  },
+  {
+    "name": "Transfer",
+    "path": "Transfer/index.js"
+  },
+  {
+    "name": "Tree",
+    "path": "Tree/Tree.vue"
+  },
+  {
+    "name": "Tree",
+    "path": "Tree"
+  },
+  {
+    "name": "Tree",
+    "path": "Tree/index.js"
   },
   {
     "name": "Uploader",
