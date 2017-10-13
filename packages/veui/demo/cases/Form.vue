@@ -70,9 +70,9 @@
           </veui-field>
         </veui-fieldset>
 
-        <veui-fieldset class="salary" tip="使用 <veui-span> 来插入中间非组件内容">
+        <veui-fieldset class="salary">
           <template slot="label">
-            <veui-label>预期收入：</veui-label>💰
+            <veui-label>预期收入：</veui-label> <veui-icon name="money"></veui-icon>
           </template>
           <veui-field>
             <veui-input v-model="storeData2.start"></veui-input>
@@ -82,6 +82,9 @@
             <veui-input v-model="storeData2.end"></veui-input>
           </veui-field>
           <veui-span>万</veui-span>
+          <template slot="tip">
+            <veui-icon name="indent"></veui-icon> 使用 &lt;veui-span&gt; 来插入中间非组件内容
+          </template>
         </veui-fieldset>
       </veui-form>
     </section>
@@ -311,10 +314,12 @@ import {
   Form, Fieldset, Field, Label, Span, Input,
   Button, DatePicker, Uploader, Select,
   Checkbox, CheckboxGroup, RadioGroup, Searchbox,
-  RegionPicker, Radio
+  RegionPicker, Radio, Icon
 } from 'veui'
 import moment from 'moment'
 import bus from '../bus'
+import 'vue-awesome/icons/money'
+import 'vue-awesome/icons/indent'
 
 const REGIONS_BRAND = [
   {
@@ -2414,7 +2419,8 @@ export default {
     'veui-radio': Radio,
     'veui-radiogroup': RadioGroup,
     'veui-searchbox': Searchbox,
-    'veui-region-picker': RegionPicker
+    'veui-region-picker': RegionPicker,
+    'veui-icon': Icon
   },
 
   data () {
@@ -2693,6 +2699,12 @@ export default {
   }
 
   margin-bottom: 50px;
+
+  .veui-field {
+    .veui-icon {
+      margin-bottom: -2px;
+    }
+  }
 
   .veui-form[ui~="inline"] + .veui-form[ui~="inline"] {
     margin-top: 30px;
