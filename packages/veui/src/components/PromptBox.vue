@@ -4,7 +4,6 @@
   :open.sync="localOpen"
   :priority="priority"
   :closable="false"
-  :width="340"
   @ok="$emit('ok')"
   @cancel="$emit('cancel')">
   <template slot="title"><slot name="title">{{ title }}</slot></template>
