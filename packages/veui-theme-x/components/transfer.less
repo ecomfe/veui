@@ -1,0 +1,134 @@
+@import "../lib.less";
+
+.veui-transfer {
+  .clearfix();
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: middle;
+  .clearfix();
+
+  @item-height: 36px;
+  .center-icon(@line-height: @item-height) {
+    @height: (@line-height) / 2;
+    margin-top: ~"calc(@{height} - .5em)";
+    vertical-align: top;
+  }
+
+  .veui-search-select-panel {
+    float: left;
+  }
+
+  &-candidate-panel {
+    margin-right: 20px;
+  }
+
+  .veui-tree-item {
+    padding: 0 20px;
+    cursor: pointer;
+    color: @veui-text-color-normal;
+
+    &-right {
+      float: right;
+      line-height: 1;
+      .center-icon();
+      display: none;
+    }
+
+    &-label {
+      display: inline-block;
+      .ellipsis();
+      max-width: 150px;
+    }
+
+    &:hover .veui-tree-item-right {
+      display: block;
+    }
+
+    &:hover {
+      background: @veui-gray-color-8;
+    }
+
+    &:active {
+      background: @veui-gray-color-6;
+    }
+
+    &.selected .veui-tree-item-label {
+      color: @veui-text-color-weak;
+    }
+  }
+
+  .veui-search-select-panel-content-main-scroll-vertical .veui-tree-item-right {
+    margin-right: -14px;
+  }
+
+  .veui-search-select-panel-one-depth .veui-tree-item-label {
+    margin-left: 0;
+  }
+
+  &-select-all,
+  &-remove-all {
+    float: right;
+  }
+
+  &-selected-flat {
+    width: 350px;
+
+    &-option-separator {
+      display: inline-block;
+      line-height: 1;
+      overflow: hidden;
+      .size(1em);
+      .center-icon();
+    }
+
+    &-remove {
+      float: right;
+      .center-icon();
+    }
+
+    .veui-tree-item {
+      line-height: 22px;
+      height: auto;
+      padding: 7px 40px 7px 20px;
+      position: relative;
+    }
+
+    .veui-transfer-selected-flat-option-separator {
+      .center-icon(22px);
+    }
+
+    .veui-transfer-selected-flat-remove {
+      position: absolute;
+      right: 20px;
+      margin: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      display: none;
+    }
+    .veui-tree-item:hover .veui-transfer-selected-flat-remove {
+      display: block;
+    }
+  }
+
+  .veui-search-select-panel-content-main-scroll-vertical .veui-transfer-selected-flat .veui-transfer-selected-flat-remove {
+    right: 4px;
+  }
+
+  &-disabled {
+    .veui-tree-item:hover,
+    .veui-tree-item:active {
+      cursor: not-allowed;
+      background: none;
+    }
+
+    .veui-tree-item-label,
+    .veui-tree-item-right,
+    .veui-transfer-selected-flat-item {
+      color: @veui-text-color-aux;
+    }
+  }
+}
+
+.veui-field-invalid .veui-transfer .veui-input {
+  border-color: @veui-gray-color-5;
+}

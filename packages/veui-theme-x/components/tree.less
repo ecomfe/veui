@@ -1,0 +1,44 @@
+@import "../lib.less";
+
+.veui-tree {
+  @item-height: 36px;
+
+  &,
+  &-item-group {
+    .reset-list-style();
+    padding: 0;
+    margin: 0;
+  }
+
+  &-item {
+    .centered-line(@item-height);
+  }
+
+  &-item-expand-switcher {
+    overflow: hidden;
+    display: inline-block;
+    .centered-line(1em);
+    vertical-align: top;
+    margin-right: 4px;
+    cursor: pointer;
+
+    @height: @item-height / 2;
+    margin-top: ~"calc(@{height} - 0.5em)";
+
+    &.expanded {
+      transform: rotateZ(90deg);
+    }
+  }
+
+  &-item-group {
+    display: none;
+
+    &.expanded {
+      display: block;
+    }
+  }
+
+  &-item-label:first-child {
+    margin-left: 18px;
+  }
+}

@@ -230,5 +230,17 @@
   {
     "name": "Uploader",
     "path": "Uploader.vue"
+  },
+  {
+    "name": "Transfer",
+    "path": "Transfer.vue"
+  },
+  {
+    "name": "Tree",
+    "path": "Tree.vue"
+  },
+  {
+    "name": "SearchSelectPanel",
+    "path": "SearchSelectPanel.vue"
   }
 ]
