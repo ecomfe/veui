@@ -173,9 +173,7 @@ export default {
     selectedPlaceholder: String,
     selectedShowMode: {
       type: String,
-      default () {
-        return 'tree'
-      }
+      default: 'tree'
     }
   },
   model: {

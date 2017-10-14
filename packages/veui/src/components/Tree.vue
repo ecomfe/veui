@@ -3,8 +3,8 @@
     <li v-for="(option, index) in options" :key="option.value" v-show="!option.hidden">
       <div class="veui-tree-item"
         :class="itemClasses[index]"
-        ref="items"
-        @click="select(option, [], index, depth)">
+        @click="select(option, [], index, depth)"
+        :style="{paddingLeft: itemPaddingLeft + 'px'}">
         <slot name="item" :option="option" :index="index" :depth="depth">
           <span class="veui-tree-item-expand-switcher"
             :class="{expanded: option.expanded}"
@@ -58,7 +58,6 @@
 
 <script>
 import Icon from './Icon'
-import { each } from 'lodash'
 import { icons } from '../mixins'
 
 export default {
@@ -76,15 +75,15 @@ export default {
     },
     offsetLeft: {
       type: Number,
-      default () {
-        return 18
-      }
+      default: 18
+    },
+    initOffsetLeft: {
+      type: Number,
+      default: 20
     },
     depth: {
       type: Number,
-      default () {
-        return 1
-      }
+      default: 1
     },
     // 点击整个 item 区域，是否触发展开/收起
     itemExpandable: {
@@ -106,7 +105,7 @@ export default {
       })
     },
     itemPaddingLeft () {
-      return (this.depth - 1) * this.offsetLeft
+      return this.initOffsetLeft + (this.depth - 1) * this.offsetLeft
     }
   },
   methods: {
@@ -127,22 +126,7 @@ export default {
       if (this.itemExpandable && option.children && option.children.length) {
         option.expanded ? this.collapse(option, index, depth) : this.expand(option, index, depth)
       }
-    },
-    setItemsPaddingLeft () {
-      this.$nextTick(() => {
-        each(this.$refs.items, item => {
-          if (!item.style.paddingLeft) {
-            item.style.paddingLeft = (parseFloat(getComputedStyle(item).paddingLeft) + this.itemPaddingLeft) + 'px'
-          }
-        })
-      })
     }
-  },
-  mounted () {
-    this.setItemsPaddingLeft()
-  },
-  updated () {
-    this.setItemsPaddingLeft()
   }
 }
 </script>
