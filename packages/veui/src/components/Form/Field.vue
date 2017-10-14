@@ -4,7 +4,7 @@
     <slot name="label"><veui-label>{{ label }}</veui-label></slot>
   </span>
   <slot></slot>
-  <span v-if="tip" class="veui-form-tip">{{ tip }}</span>
+  <span v-if="tip || $slots.tip" class="veui-form-tip"><slot name="tip">{{ tip }}</slot></span>
   <p v-if="!validity.valid && !!validity.message" class="veui-field-error" :title="validity.message"><veui-icon :name="icons.alert"></veui-icon>{{ validity.message }}</p>
 </div>
 </template>
