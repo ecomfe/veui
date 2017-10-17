@@ -42,7 +42,6 @@
     color: @veui-alert-color;
 
     .veui-icon {
-      vertical-align: -2px;
       margin-right: 7px;
     }
   }
@@ -62,6 +61,16 @@
     margin-left: @veui-form-label-width;
   }
 
+  .veui-form-label,
+  .veui-field-error,
+  .veui-form-tip,
+  .veui-span {
+    .veui-icon {
+      vertical-align: top;
+      margin-top: ~"calc(@{veui-height-normal} / 2 - .5em)";
+    }
+  }
+
   &[ui~="small"] {
     font-size: @veui-font-size-small;
 
@@ -70,6 +79,10 @@
     .veui-form-tip,
     .veui-span {
       line-height: @veui-height-small;
+
+      .veui-icon {
+        margin-top: ~"calc(@{veui-height-small} / 2 - .5em)";
+      }
     }
 
     .veui-form-label,
@@ -87,6 +100,10 @@
     .veui-form-tip,
     .veui-span {
       line-height: @veui-height-large;
+
+      .veui-icon {
+        margin-top: ~"calc(@{veui-height-large} / 2 - .5em)";
+      }
     }
 
     .veui-form-label,
