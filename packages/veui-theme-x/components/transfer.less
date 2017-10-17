@@ -22,47 +22,79 @@
     margin-right: 20px;
   }
 
-  .veui-tree-item {
-    padding: 0 20px;
-    cursor: pointer;
-    color: @veui-text-color-normal;
+  .veui-tree {
+    position: relative;
 
-    &-right {
-      float: right;
-      line-height: 1;
-      .center-icon();
-      display: none;
+    &-item {
+      padding: 0 20px;
+      cursor: pointer;
+      color: @veui-text-color-normal;
+
+      &::before {
+        content: "";
+        position: absolute;
+        display: block;
+        left: 0;
+        right: 0;
+        height: @item-height;
+      }
+
+      &:hover::before {
+        background: @veui-gray-color-8;
+      }
+
+      &:active::before {
+        background: @veui-gray-color-6;
+      }
+
+      &-label {
+        width: ~"calc(100% - 18px)";
+      }
+
+      .veui-transfer-item-label,
+      &-expand-switcher {
+        position: relative;
+        z-index: 1;
+      }
+
+      &-selected .veui-tree-item-label {
+        color: @veui-text-color-weak;
+      }
     }
+  }
 
-    &-label {
-      display: inline-block;
-      .ellipsis();
-      max-width: 150px;
-    }
+  &-item-text {
+    .ellipsis();
+    max-width: 150px;
+    float: left;
+  }
 
-    &:hover .veui-tree-item-right {
+  &-item-label {
+    .clearfix();
+  }
+
+  &-candidate-icon-selected,
+  &-candidate-icon-unselected,
+  &-selected-icon-remove {
+    float: right;
+    .center-icon();
+    display: none;
+  }
+
+  &-selected-icon-remove {
+    .size(12px);
+  }
+
+  .veui-tree-item:hover {
+    .veui-transfer-candidate-icon-selected,
+    .veui-transfer-candidate-icon-unselected,
+    .veui-transfer-selected-icon-remove {
       display: block;
     }
-
-    &:hover {
-      background: @veui-gray-color-8;
-    }
-
-    &:active {
-      background: @veui-gray-color-6;
-    }
-
-    &.selected .veui-tree-item-label {
-      color: @veui-text-color-weak;
-    }
   }
 
-  .veui-search-select-panel-content-main-scroll-vertical .veui-tree-item-right {
-    margin-right: -14px;
-  }
-
-  .veui-search-select-panel-one-depth .veui-tree-item-label {
-    margin-left: 0;
+  &-candidate-item-label-selected {
+    color: @veui-text-color-aux;
   }
 
   &-select-all,
@@ -71,6 +103,24 @@
   }
 
   &-selected-flat {
+    min-width: 350px;
+
+    .veui-tree-item {
+      position: relative;
+
+      &::before {
+        content: none;
+      }
+
+      &:hover {
+        background: @veui-gray-color-8;
+      }
+
+      &:active {
+        background: @veui-gray-color-6;
+      }
+    }
+
     &-option-separator {
       display: inline-block;
       line-height: 1;
@@ -79,9 +129,12 @@
       .center-icon();
     }
 
-    &-remove {
-      float: right;
-      .center-icon();
+    .veui-transfer-selected-icon-remove {
+      position: absolute;
+      top: 50%;
+      right: -20px;
+      transform: translateY(-50%);
+      margin: 0;
     }
 
     .veui-tree-item {
@@ -91,25 +144,9 @@
       position: relative;
     }
 
-    .veui-transfer-selected-flat-option-separator {
+    &-option-separator {
       .center-icon(22px);
     }
-
-    .veui-transfer-selected-flat-remove {
-      position: absolute;
-      right: 20px;
-      margin: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      display: none;
-    }
-    .veui-tree-item:hover .veui-transfer-selected-flat-remove {
-      display: block;
-    }
-  }
-
-  .veui-search-select-panel-content-main-scroll-vertical .veui-transfer-selected-flat .veui-transfer-selected-flat-remove {
-    right: 4px;
   }
 
   &-disabled {
@@ -120,13 +157,24 @@
     }
 
     .veui-tree-item-label,
-    .veui-tree-item-right,
-    .veui-transfer-selected-flat-item {
+    .veui-transfer-item-label {
       color: @veui-text-color-aux;
     }
   }
-}
 
-.veui-field-invalid .veui-transfer .veui-input {
-  border-color: @veui-gray-color-5;
+  .veui-search-select-panel-scroll-vertical {
+    .veui-transfer-candidate-icon-selected,
+    .veui-transfer-candidate-icon-unselected,
+    .veui-transfer-selected-icon-remove {
+      margin-right: -14px;
+    }
+
+    .veui-transfer-selected-flat .veui-transfer-selected-icon-remove {
+      right: -18px;
+    }
+  }
+
+  .veui-field-invalid & .veui-input {
+    border-color: @veui-gray-color-5;
+  }
 }

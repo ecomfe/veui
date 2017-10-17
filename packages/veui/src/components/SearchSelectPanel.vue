@@ -1,23 +1,16 @@
 <template>
-  <!--
-    veui-search-select-panel-one-depth 树形结构只有一级的时候加上的 class 。
-    veui-search-select-panel-multi-depth 树形结构有多级的时候加上的 class 。
-    目前用于去掉一级树形结构时，每一个 item 前面多余的 padding 。
-  -->
-  <div class="veui-search-select-panel"
-    :class="{'veui-search-select-panel-multi-depth': isMultiDepth, 'veui-search-select-panel-one-depth': !isMultiDepth}">
+  <div class="veui-search-select-panel">
     <h3 class="veui-search-select-panel-title">
-      <slot name="title">标题</slot>
+      <slot name="head">标题</slot>
     </h3>
     <div class="veui-search-select-panel-content">
       <veui-searchbox v-model="keyword"
         v-if="searchable"
         :placeholder="placeholder"></veui-searchbox>
       <div class="veui-search-select-panel-content-main"
-        v-if="options.length"
+        v-if="datasource.length"
         ref="main">
-        <slot name="main"
-          :options="showMode === 'tree' ? options : flattenOptions"
+        <slot :options="showMode === 'tree' ? datasource : flattenOptions"
           :show-mode="showMode"></slot>
       </div>
       <div class="veui-search-select-panel-no-data" v-else>
@@ -31,7 +24,7 @@
 import Searchbox from './Searchbox'
 import Tree from './Tree'
 import Icon from './Icon'
-import { includes, debounce, contains, find, reduce, get } from 'lodash'
+import { includes, debounce, reduce } from 'lodash'
 import { normalizeClass } from '../utils/helper'
 import { icons } from '../mixins'
 
@@ -44,7 +37,7 @@ export default {
   },
   mixins: [icons],
   props: {
-    options: {
+    datasource: {
       type: Array,
       default () {
         return []
@@ -64,7 +57,7 @@ export default {
     showMode: {
       default: 'tree',
       validate (value) {
-        return contains(['tree', 'flat'], value)
+        return includes(['tree', 'flat'], value)
       }
     }
   },
@@ -74,9 +67,6 @@ export default {
     }
   },
   computed: {
-    isMultiDepth () {
-      return !!find(this.options, option => !option.hidden && option.children && option.children.length)
-    },
     flattenOptions () {
       let walk = (option, path, paths) => {
         if (!option.children || !option.children.length) {
@@ -90,7 +80,7 @@ export default {
       }
 
       let paths = []
-      this.options.forEach(option => {
+      this.datasource.forEach(option => {
         let itemPaths = []
         walk(option, [], itemPaths)
         paths.push(...itemPaths)
@@ -100,9 +90,12 @@ export default {
   },
   created () {
     this.search()
+    this.debounceSearch = debounce(function () {
+      this.search()
+    }, 200)
   },
   watch: {
-    options () {
+    datasource () {
       this.search()
     },
     keyword () {
@@ -116,35 +109,32 @@ export default {
       }
 
       let walk = (options) => {
-        let hasSomeOptionVisible = false
+        let isAllVisible = true
         options.forEach((option, index) => {
-          let isSelfVisible = this.filter(this.keyword, option, index, options, this.options)
+          let isSelfVisible = this.filter(this.keyword, option, index, options, this.datasource)
           let isChildrenVisible = option.children && option.children.length && walk(option.children)
           this.$set(option, 'hidden', !isSelfVisible && !isChildrenVisible)
 
-          if (!option.hidden) {
-            hasSomeOptionVisible = true
+          if (option.hidden) {
+            isAllVisible = false
           }
         })
 
-        return hasSomeOptionVisible
+        return isAllVisible
       }
 
-      walk(this.options)
+      walk(this.datasource)
     },
-    debounceSearch: debounce(function () {
-      this.search()
-    }, 200),
-    // 如果 main 区域出现滚动条，则在该元素上面设置一个 css class ，
+    // 如果 main 区域出现滚动条，则在该元素上面设置一个 class ，
     // 目前主要为了让 item 右侧的图标的位置不会因为滚动条的出现而发生变动。
     setScrollClass () {
       this.$nextTick(() => {
-        let element = get(this, '$refs.main')
+        let element = this.$refs.main
         if (!element) {
           return
         }
 
-        let klass = 'veui-search-select-panel-content-main-scroll-vertical'
+        let klass = 'veui-search-select-panel-scroll-vertical'
         let contentHeight = parseFloat(getComputedStyle(element).height)
         let classObj = normalizeClass(element.className)
         classObj[klass] = element.scrollHeight > contentHeight
@@ -163,6 +153,9 @@ export default {
   },
   updated () {
     this.setScrollClass()
+  },
+  beforeDestroy () {
+    this.debounceSearch.cancel()
   }
 }
 </script>

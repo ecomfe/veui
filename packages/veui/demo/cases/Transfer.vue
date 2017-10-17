@@ -3,17 +3,17 @@
     <h1><code>&lt;veui-tree&gt;</code></h1>
 
     <h2>点击左侧图标展开收起</h2>
-    <veui-tree :options="treeDatasource1"></veui-tree>
+    <veui-tree :datasource="treeDatasource1"></veui-tree>
 
     <h2>点击整行展开收起</h2>
-    <veui-tree :options="treeDatasource2" item-expandable></veui-tree>
+    <veui-tree :datasource="treeDatasource2" row-toggable></veui-tree>
 
     <h1><code>&lt;veui-searchselectpanel&gt;</code></h1>
 
-    <veui-searchselectpanel :options="treeDatasource1">
+    <veui-searchselectpanel :datasource="treeDatasource1" class="veui-select-panel-demo1">
       <template slot="title">列表</template>
-      <template slot="main" scope="props">
-        <veui-tree :options="props.options">
+      <template scope="props">
+        <veui-tree :datasource="props.options">
           <template slot="item-label" scope="props">
             <slot name="tree-item-label" v-bind="props">{{ props.option.label }}</slot>
           </template>
@@ -24,12 +24,10 @@
     <h1><code>&lt;veui-transfer&gt;</code></h1>
 
     <h2>多级树形结构</h2>
-    <p>
-      <veui-transfer :datasource="datasource1" v-model="selected1">
-        <template slot="candidate-title">备选列表（{{ datasource1LeafCount }}）</template>
-        <template slot="selected-title">已选列表（{{ selected1.length }}）</template>
-      </veui-transfer>
-    </p>
+    <veui-transfer :datasource="datasource1" v-model="selected1">
+      <template slot="candidate-title">备选列表（{{ datasource1LeafCount }}）</template>
+      <template slot="selected-title">已选列表（{{ selected1.length }}）</template>
+    </veui-transfer>
 
     <h2>单级结构</h2>
     <p>
@@ -41,7 +39,7 @@
 
     <h2>多级树形结构，右侧扁平</h2>
     <p>
-      <veui-transfer :datasource="datasource3" v-model="selected3" selected-show-mode="FLAT">
+      <veui-transfer :datasource="datasource3" v-model="selected3" selected-show-mode="flat">
         <template slot="candidate-title">备选列表（{{ datasource1LeafCount }}）</template>
         <template slot="selected-title">已选列表（{{ selected3.length }}）</template>
       </veui-transfer>
@@ -57,7 +55,7 @@
 
     <h2>多级树形结构，禁用</h2>
     <p>
-      <veui-transfer :datasource="datasource5" v-model="selected5" selected-show-mode="FLAT" disabled>
+      <veui-transfer :datasource="datasource5" v-model="selected5" selected-show-mode="flat" disabled>
         <template slot="candidate-title">备选列表（{{ datasource1LeafCount }}）</template>
         <template slot="selected-title">已选列表（{{ selected5.length }}）</template>
       </veui-transfer>
@@ -2252,6 +2250,12 @@ export default {
   .operation {
     padding-left: 120px;
     margin-bottom: 100px;
+  }
+
+  .veui-select-panel-demo1 {
+    .veui-tree {
+      padding: 0 20px;
+    }
   }
 }
 </style>

@@ -3,6 +3,6 @@ import config from 'veui/managers/config'
 
 config.defaults({
   'tree.icons': {
-    expand: 'angle-right'
+    collapsed: 'angle-right'
   }
 })

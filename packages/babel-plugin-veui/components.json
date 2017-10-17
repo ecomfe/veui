@@ -144,6 +144,10 @@
     "path": "RegionPicker.vue"
   },
   {
+    "name": "SearchSelectPanel",
+    "path": "SearchSelectPanel.vue"
+  },
+  {
     "name": "Searchbox",
     "path": "Searchbox.vue"
   },
@@ -228,10 +232,6 @@
     "path": "Tooltip.vue"
   },
   {
-    "name": "Uploader",
-    "path": "Uploader.vue"
-  },
-  {
     "name": "Transfer",
     "path": "Transfer.vue"
   },
@@ -240,7 +240,7 @@
     "path": "Tree.vue"
   },
   {
-    "name": "SearchSelectPanel",
-    "path": "SearchSelectPanel.vue"
+    "name": "Uploader",
+    "path": "Uploader.vue"
   }
 ]

@@ -7,9 +7,9 @@ import config from 'veui/managers/config'
 config.defaults({
   'transfer.icons': {
     check: 'check',
-    toRight: 'arrow-right',
+    select: 'arrow-right',
     remove: 'cross',
-    expand: 'angle-right',
-    flatSeparator: 'angle-right'
+    collapsed: 'angle-right',
+    separator: 'angle-right'
   }
 })

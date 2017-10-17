@@ -1,44 +1,51 @@
 <template>
   <div class="veui-transfer" :class="{'veui-transfer-disabled': !isSelectable}">
-    <veui-search-select-panel :options="candidateOptions"
+    <veui-search-select-panel :datasource="candidateOptions"
       :searchable="searchable"
-      @select="select"
+      @click="select"
       :filter="filter"
       class="veui-transfer-candidate-panel"
       :placeholder="candidatePlaceholder"
-      ref="candidatePanel">
+      ref="candidate">
 
-      <template slot="title">
-        <slot name="candidate-title">head</slot>
-        <veui-button ui="link"
-          class="veui-transfer-select-all"
-          @click="selectAll"
-          :disabled="!isSelectable">全选</veui-button>
+      <template slot="head">
+        <slot name="candidate-head">
+          <slot name="candidate-title">备选列表</slot>
+          <veui-button ui="link"
+            class="veui-transfer-select-all"
+            @click="selectAll"
+            :disabled="!isSelectable">全选</veui-button>
+        </slot>
       </template>
 
-      <template slot="main" scope="props">
+      <template scope="props">
         <veui-tree v-if="$scopedSlots['candidate-item']"
-          :options="props.options"
-          @select="select"
-          @expand="$refs.candidatePanel.setScrollClass()"
-          @collapse="$refs.candidatePanel.setScrollClass()">
-          <template slot="item" scope="props">
-            <slot name="candidate-item" v-bind="props"></slot>
+          :datasource="props.options"
+          @click="select"
+          @expand="$refs.candidate.setScrollClass()"
+          @collapse="$refs.candidate.setScrollClass()">
+          <template slot="item" scope="item">
+            <slot name="candidate-item" v-bind="item"></slot>
           </template>
         </veui-tree>
         <veui-tree v-else
-          :options="props.options"
-          @select="select"
-          @expand="$refs.candidatePanel.setScrollClass()"
-          @collapse="$refs.candidatePanel.setScrollClass()">
+          :datasource="props.options"
+          @click="select"
+          @expand="$refs.candidate.setScrollClass()"
+          @collapse="$refs.candidate.setScrollClass()">
           <template slot="item-label" scope="props">
-            <slot name="candidate-item-label" v-bind="props">{{ props.option.label }}</slot>
-          </template>
-          <template slot="item-right" scope="props">
-            <slot name="candidate-item-right" v-bind="props">
-              <veui-icon :name="icons.toRight" v-if="!isSelected(props.option)"></veui-icon>
-              <veui-icon :name="icons.check" v-else></veui-icon>
-            </slot>
+            <div class="veui-transfer-item-label" :class="{'veui-transfer-candidate-item-label-selected': isSelected(props.option)}">
+              <span class="veui-transfer-item-text">
+                <slot name="candidate-item-label" v-bind="props">{{ props.option.label }}</slot>
+              </span>
+
+              <veui-icon class="veui-transfer-candidate-icon-unselected"
+                :name="icons.select"
+                v-if="!isSelected(props.option)"></veui-icon>
+              <veui-icon class="veui-transfer-candidate-icon-selected"
+                :name="icons.check"
+                v-else></veui-icon>
+            </div>
           </template>
         </veui-tree>
       </template>
@@ -49,79 +56,76 @@
 
     </veui-search-select-panel>
 
-    <veui-search-select-panel :options="selectedOptions"
+    <veui-search-select-panel :datasource="selectedOptions"
       :searchable="searchable"
       :filter="filter"
       class="veui-transfer-selected-panel"
+      :class="{'veui-transfer-selected-flat': selectedShowMode === 'flat'}"
       :placeholder="selectedPlaceholder"
       :show-mode="selectedShowMode"
-      ref="selectedPanel">
+      ref="selected">
 
-      <template slot="title">
-        <slot name="selected-title">head</slot>
-        <veui-button ui="link"
-          class="veui-transfer-remove-all"
-          @click="removeAll"
-          :disabled="!isSelectable">删除全部</veui-button>
+      <template slot="head">
+        <slot name="selected-head">
+          <slot name="selected-title">已选列表</slot>
+          <veui-button ui="link"
+            class="veui-transfer-remove-all"
+            @click="removeAll"
+            :disabled="!isSelectable">删除全部</veui-button>
+        </slot>
       </template>
 
-      <template slot="main" scope="props">
+      <template scope="props">
         <template v-if="selectedShowMode === 'tree'">
           <veui-tree v-if="$scopedSlots['selected-item']"
             class="veui-transfer-selected-tree"
-            :options="props.options"
-            @select="remove"
-            @expand="$refs.selectedPanel.setScrollClass()"
-            @collapse="$refs.selectedPanel.setScrollClass()">
-            <template slot="item" scope="props">
-              <slot name="selected-item" v-bind="props"></slot>
+            :datasource="props.options"
+            @click="remove"
+            @expand="$refs.selected.setScrollClass()"
+            @collapse="$refs.selected.setScrollClass()">
+            <template slot="item" scope="item">
+              <slot name="selected-item" v-bind="item"></slot>
             </template>
           </veui-tree>
           <veui-tree v-else
-            :options="props.options"
-            @select="remove"
+            :datasource="props.options"
+            @click="remove"
             class="veui-transfer-selected-tree"
-            @expand="$refs.selectedPanel.setScrollClass()"
-            @collapse="$refs.selectedPanel.setScrollClass()">
+            @expand="$refs.selected.setScrollClass()"
+            @collapse="$refs.selected.setScrollClass()">
             <template slot="item-label" scope="props">
-              <slot name="selected-item-label" v-bind="props">{{ props.option.label }}</slot>
-            </template>
-            <template slot="item-right" scope="props">
-              <slot name="selected-item-right" v-bind="props">
-                <veui-icon :name="icons.remove"></veui-icon>
-              </slot>
+              <div class="veui-transfer-item-label">
+                <span class="veui-transfer-item-text">
+                  <slot name="selected-item-label" v-bind="props">{{ props.option.label }}</slot>
+                </span>
+                <veui-icon v-if="icons.remove"
+                  :name="icons.remove"
+                  class="veui-transfer-selected-icon-remove"></veui-icon>
+              </div>
             </template>
           </veui-tree>
         </template>
-        <veui-tree class="veui-transfer-selected-flat"
+        <veui-tree
           v-else
-          :options="props.options"
-          @select="(options) => remove(options[options.length - 1], options.slice(0, options.length - 1).reverse())"
-          @expand="$refs.selectedPanel.setScrollClass()"
-          @collapse="$refs.selectedPanel.setScrollClass()">
+          :datasource="props.options"
+          @click="(options) => remove(options[options.length - 1], options.slice(0, options.length - 1).reverse())"
+          @expand="$refs.selected.setScrollClass()"
+          @collapse="$refs.selected.setScrollClass()">
           <template slot="item" scope="props">
-            <div class="veui-transfer-selected-flat-item" v-show="!props.option[props.option.length - 1].hidden">
-              <template v-for="(opt, index) in props.option">
-                <span :key="opt.value" class="veui-transfer-selected-flat-option-label">
-                  <slot name="selected-flat-item-option-label"
-                    :option="opt"
-                    :index="index"
-                    :depth="props.index"
-                    :options="props.option">{{ opt.label }}</slot>
-                </span>
-                <span :key="opt.value" class="veui-transfer-selected-flat-option-separator"
-                  v-if="index < props.option.length - 1">
-                  <slot name="selected-flat-item-option-separator"
-                    :option="opt"
-                    :index="index"
-                    :depth="props.index"
-                    :options="props.option"><veui-icon :name="icons.flatSeparator"></veui-icon></slot>
-                </span>
-              </template>
-              <slot name="selected-flat-item-right" v-bind="props">
-                <veui-icon class="veui-transfer-selected-flat-remove" :name="icons.remove"></veui-icon>
-              </slot>
-            </div>
+            <slot name="selected-item" v-bind="props">
+              <div class="veui-transfer-item-label"
+                v-show="!props.option[props.option.length - 1].hidden">
+                <template v-for="(opt, index) in props.option">
+                  <span :key="opt.value" class="veui-transfer-selected-flat-option-label">{{ opt.label }}</span>
+                  <span :key="opt.value"
+                    class="veui-transfer-selected-flat-option-separator"
+                    v-if="index < props.option.length - 1">
+                    <veui-icon :name="icons.separator"></veui-icon>
+                  </span>
+                </template>
+                <veui-icon class="veui-transfer-selected-icon-remove" :name="icons.remove"></veui-icon>
+              </div>
+            </slot>
           </template>
         </veui-tree>
       </template>
@@ -137,7 +141,7 @@
 import SearchSelectPanel from './SearchSelectPanel'
 import Tree from './Tree'
 import Button from './Button'
-import { cloneDeep, some, isEqual, find, forEach, forEachRight, difference, get } from 'lodash'
+import { cloneDeep, isEqual, find, forEachRight, difference, get } from 'lodash'
 import Icon from './Icon'
 import input from 'veui/mixins/input'
 import { icons } from '../mixins'
@@ -366,7 +370,7 @@ export default {
     },
     // 更新祖先节点中的选择标记（ selected 、 allCount 、 partCount ）
     markParentsChain (parents) {
-      forEach(parents, parent => {
+      parents.forEach(parent => {
         let allCount = 0
         let partCount = 0
         parent.children.forEach(child => {
@@ -463,7 +467,7 @@ export default {
             partCount += 1
           }
         } else {
-          this.setLeafSelected(option, some(this.selected, v => v === option.value))
+          this.setLeafSelected(option, this.selected.some(v => v === option.value))
           allCount += option.selected ? 1 : 0
         }
       })
