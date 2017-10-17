@@ -1,6 +1,6 @@
 <template>
   <div class="veui-transfer" :class="{'veui-transfer-disabled': !isSelectable}">
-    <veui-selectpanel :datasource="candidateOptions"
+    <veui-select-panel :datasource="candidateOptions"
       :searchable="searchable"
       @click="select"
       :filter="filter"
@@ -54,9 +54,9 @@
         <slot name="candidate-no-data">没有备选项</slot>
       </template>
 
-    </veui-selectpanel>
+    </veui-select-panel>
 
-    <veui-selectpanel :datasource="selectedOptions"
+    <veui-select-panel :datasource="selectedOptions"
       :searchable="searchable"
       :filter="filter"
       class="veui-transfer-selected-panel"
@@ -133,7 +133,7 @@
       <template slot="no-data">
         <slot name="selected-no-data">请从左侧选择</slot>
       </template>
-    </veui-selectpanel>
+    </veui-select-panel>
   </div>
 </template>
 
@@ -149,7 +149,7 @@ import { icons } from '../mixins'
 export default {
   name: 'veui-transfer',
   components: {
-    'veui-selectpanel': SelectPanel,
+    'veui-select-panel': SelectPanel,
     'veui-icon': Icon,
     'veui-tree': Tree,
     'veui-button': Button
