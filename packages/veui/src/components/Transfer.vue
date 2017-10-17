@@ -1,6 +1,6 @@
 <template>
   <div class="veui-transfer" :class="{'veui-transfer-disabled': !isSelectable}">
-    <veui-search-select-panel :datasource="candidateOptions"
+    <veui-selectpanel :datasource="candidateOptions"
       :searchable="searchable"
       @click="select"
       :filter="filter"
@@ -54,9 +54,9 @@
         <slot name="candidate-no-data">没有备选项</slot>
       </template>
 
-    </veui-search-select-panel>
+    </veui-selectpanel>
 
-    <veui-search-select-panel :datasource="selectedOptions"
+    <veui-selectpanel :datasource="selectedOptions"
       :searchable="searchable"
       :filter="filter"
       class="veui-transfer-selected-panel"
@@ -133,12 +133,12 @@
       <template slot="no-data">
         <slot name="selected-no-data">请从左侧选择</slot>
       </template>
-    </veui-search-select-panel>
+    </veui-selectpanel>
   </div>
 </template>
 
 <script>
-import SearchSelectPanel from './SearchSelectPanel'
+import SelectPanel from './SelectPanel'
 import Tree from './Tree'
 import Button from './Button'
 import { cloneDeep, isEqual, find, forEachRight, difference, get } from 'lodash'
@@ -149,7 +149,7 @@ import { icons } from '../mixins'
 export default {
   name: 'veui-transfer',
   components: {
-    'veui-search-select-panel': SearchSelectPanel,
+    'veui-selectpanel': SelectPanel,
     'veui-icon': Icon,
     'veui-tree': Tree,
     'veui-button': Button

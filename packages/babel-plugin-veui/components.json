@@ -144,8 +144,8 @@
     "path": "RegionPicker.vue"
   },
   {
-    "name": "SearchSelectPanel",
-    "path": "SearchSelectPanel.vue"
+    "name": "SelectPanel",
+    "path": "SelectPanel.vue"
   },
   {
     "name": "Searchbox",

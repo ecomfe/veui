@@ -8,9 +8,9 @@
     <h2>点击整行展开收起</h2>
     <veui-tree :datasource="treeDatasource2" row-toggable></veui-tree>
 
-    <h1><code>&lt;veui-searchselectpanel&gt;</code></h1>
+    <h1><code>&lt;veui-selectpanel&gt;</code></h1>
 
-    <veui-searchselectpanel :datasource="treeDatasource1" class="veui-select-panel-demo1">
+    <veui-selectpanel :datasource="treeDatasource1" class="veui-select-panel-demo1">
       <template slot="title">列表</template>
       <template scope="props">
         <veui-tree :datasource="props.options">
@@ -19,7 +19,7 @@
           </template>
         </veui-tree>
       </template>
-    </veui-searchselectpanel>
+    </veui-selectpanel>
 
     <h1><code>&lt;veui-transfer&gt;</code></h1>
 
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { Transfer, Form, Fieldset, Field, Button, Tree, SearchSelectPanel } from 'veui'
+import { Transfer, Form, Fieldset, Field, Button, Tree, SelectPanel } from 'veui'
 import { cloneDeep } from 'lodash'
 
 export default {
@@ -92,7 +92,7 @@ export default {
     'veui-field': Field,
     'veui-button': Button,
     'veui-tree': Tree,
-    'veui-searchselectpanel': SearchSelectPanel
+    'veui-selectpanel': SelectPanel
   },
   data () {
     let areas = [

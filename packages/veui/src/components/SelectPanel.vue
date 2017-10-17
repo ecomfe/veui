@@ -1,19 +1,19 @@
 <template>
-  <div class="veui-search-select-panel">
-    <h3 class="veui-search-select-panel-title">
+  <div class="veui-select-panel">
+    <h3 class="veui-select-panel-title">
       <slot name="head">标题</slot>
     </h3>
-    <div class="veui-search-select-panel-content">
+    <div class="veui-select-panel-content">
       <veui-searchbox v-model="keyword"
         v-if="searchable"
         :placeholder="placeholder"></veui-searchbox>
-      <div class="veui-search-select-panel-content-main"
+      <div class="veui-select-panel-content-main"
         v-if="datasource.length"
         ref="main">
         <slot :options="showMode === 'tree' ? datasource : flattenOptions"
           :show-mode="showMode"></slot>
       </div>
-      <div class="veui-search-select-panel-no-data" v-else>
+      <div class="veui-select-panel-no-data" v-else>
         <slot name="no-data">没数据</slot>
       </div>
     </div>
@@ -29,7 +29,7 @@ import { normalizeClass } from '../utils/helper'
 import { icons } from '../mixins'
 
 export default {
-  name: 'veui-search-select-panel',
+  name: 'veui-select-panel',
   components: {
     'veui-searchbox': Searchbox,
     'veui-tree': Tree,
@@ -134,7 +134,7 @@ export default {
           return
         }
 
-        let klass = 'veui-search-select-panel-scroll-vertical'
+        let klass = 'veui-select-panel-scroll-vertical'
         let contentHeight = parseFloat(getComputedStyle(element).height)
         let classObj = normalizeClass(element.className)
         classObj[klass] = element.scrollHeight > contentHeight
