@@ -89,25 +89,25 @@ function generate (el, { handler, trigger, delay, refs }, context) {
           handler(e)
         }
       }
-    } else {
-      let hoverDelayData = {
-        state: 'ready' // 'ready' | 'out' | 'in'
-      }
-      return function (e) {
-        let includeTargets = [el, ...getElementsByRefs(refs, context)]
-        let isTargetIn = includeTargets.some(target => contains(target, e.target))
-        let isRelatedTargetIn = includeTargets.some(target => contains(target, e.relatedTarget))
-        if (isTargetIn && !isRelatedTargetIn) {
-          hoverDelayData.state = 'out'
+    }
 
-          el[hoverBindingKey].timer = setTimeout(() => {
-            if (hoverDelayData.state === 'out') {
-              handler(e)
-            }
-          }, delay)
-        } else if (!isTargetIn && isRelatedTargetIn) {
-          hoverDelayData.state = 'in'
-        }
+    let hoverDelayData = {
+      state: 'ready' // 'ready' | 'out' | 'in'
+    }
+    return function (e) {
+      let includeTargets = [el, ...getElementsByRefs(refs, context)]
+      let isTargetIn = includeTargets.some(target => contains(target, e.target))
+      let isRelatedTargetIn = includeTargets.some(target => contains(target, e.relatedTarget))
+      if (isTargetIn && !isRelatedTargetIn) {
+        hoverDelayData.state = 'out'
+
+        el[hoverBindingKey].timer = setTimeout(() => {
+          if (hoverDelayData.state === 'out') {
+            handler(e)
+          }
+        }, delay)
+      } else if (!isTargetIn && isRelatedTargetIn) {
+        hoverDelayData.state = 'in'
       }
     }
   }
