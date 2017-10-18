@@ -10,8 +10,7 @@
       <div class="veui-select-panel-content-main"
         v-if="datasource.length"
         ref="main">
-        <slot :options="showMode === 'tree' ? datasource : flattenOptions"
-          :show-mode="showMode"></slot>
+        <slot :options="datasource"></slot>
       </div>
       <div class="veui-select-panel-no-data" v-else>
         <slot name="no-data">没数据</slot>
@@ -24,8 +23,7 @@
 import Searchbox from './Searchbox'
 import Tree from './Tree'
 import Icon from './Icon'
-import { includes, debounce, reduce } from 'lodash'
-import { normalizeClass } from '../utils/helper'
+import { includes, debounce } from 'lodash'
 import { icons } from '../mixins'
 
 export default {
@@ -53,39 +51,11 @@ export default {
         return includes(item.label, keyword)
       }
     },
-    placeholder: String,
-    showMode: {
-      default: 'tree',
-      validate (value) {
-        return includes(['tree', 'flat'], value)
-      }
-    }
+    placeholder: String
   },
   data () {
     return {
       keyword: ''
-    }
-  },
-  computed: {
-    flattenOptions () {
-      let walk = (option, path, paths) => {
-        if (!option.children || !option.children.length) {
-          paths.push([...path, option])
-          return
-        }
-
-        option.children.forEach(child => {
-          walk(child, [...path, option], paths)
-        })
-      }
-
-      let paths = []
-      this.datasource.forEach(option => {
-        let itemPaths = []
-        walk(option, [], itemPaths)
-        paths.push(...itemPaths)
-      })
-      return paths
     }
   },
   created () {
@@ -124,35 +94,7 @@ export default {
       }
 
       walk(this.datasource)
-    },
-    // 如果 main 区域出现滚动条，则在该元素上面设置一个 class ，
-    // 目前主要为了让 item 右侧的图标的位置不会因为滚动条的出现而发生变动。
-    setScrollClass () {
-      this.$nextTick(() => {
-        let element = this.$refs.main
-        if (!element) {
-          return
-        }
-
-        let klass = 'veui-select-panel-scroll-vertical'
-        let contentHeight = parseFloat(getComputedStyle(element).height)
-        let classObj = normalizeClass(element.className)
-        classObj[klass] = element.scrollHeight > contentHeight
-
-        element.className = reduce(classObj, (result, value, key) => {
-          if (value) {
-            result.push(key)
-          }
-          return result
-        }, []).join(' ')
-      })
     }
-  },
-  mounted () {
-    this.setScrollClass()
-  },
-  updated () {
-    this.setScrollClass()
   },
   beforeDestroy () {
     this.debounceSearch.cancel()

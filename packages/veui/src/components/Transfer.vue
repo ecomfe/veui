@@ -21,18 +21,14 @@
       <template scope="props">
         <veui-tree v-if="$scopedSlots['candidate-item']"
           :datasource="props.options"
-          @click="select"
-          @expand="$refs.candidate.setScrollClass()"
-          @collapse="$refs.candidate.setScrollClass()">
+          @click="select">
           <template slot="item" scope="item">
             <slot name="candidate-item" v-bind="item"></slot>
           </template>
         </veui-tree>
         <veui-tree v-else
           :datasource="props.options"
-          @click="select"
-          @expand="$refs.candidate.setScrollClass()"
-          @collapse="$refs.candidate.setScrollClass()">
+          @click="select">
           <template slot="item-label" scope="props">
             <div class="veui-transfer-item-label" :class="{'veui-transfer-candidate-item-label-selected': isSelected(props.option)}">
               <span class="veui-transfer-item-text">
@@ -62,7 +58,6 @@
       class="veui-transfer-selected-panel"
       :class="{'veui-transfer-selected-flat': selectedShowMode === 'flat'}"
       :placeholder="selectedPlaceholder"
-      :show-mode="selectedShowMode"
       ref="selected">
 
       <template slot="head">
@@ -80,9 +75,7 @@
           <veui-tree v-if="$scopedSlots['selected-item']"
             class="veui-transfer-selected-tree"
             :datasource="props.options"
-            @click="remove"
-            @expand="$refs.selected.setScrollClass()"
-            @collapse="$refs.selected.setScrollClass()">
+            @click="remove">
             <template slot="item" scope="item">
               <slot name="selected-item" v-bind="item"></slot>
             </template>
@@ -90,9 +83,7 @@
           <veui-tree v-else
             :datasource="props.options"
             @click="remove"
-            class="veui-transfer-selected-tree"
-            @expand="$refs.selected.setScrollClass()"
-            @collapse="$refs.selected.setScrollClass()">
+            class="veui-transfer-selected-tree">
             <template slot="item-label" scope="props">
               <div class="veui-transfer-item-label">
                 <span class="veui-transfer-item-text">
@@ -107,10 +98,8 @@
         </template>
         <veui-tree
           v-else
-          :datasource="props.options"
-          @click="(options) => remove(options[options.length - 1], options.slice(0, options.length - 1).reverse())"
-          @expand="$refs.selected.setScrollClass()"
-          @collapse="$refs.selected.setScrollClass()">
+          :datasource="selectedFlattenOptions"
+          @click="(options) => remove(options[options.length - 1], options.slice(0, options.length - 1).reverse())">
           <template slot="item" scope="props">
             <slot name="selected-item" v-bind="props">
               <div class="veui-transfer-item-label"
@@ -141,10 +130,11 @@
 import SelectPanel from './SelectPanel'
 import Tree from './Tree'
 import Button from './Button'
-import { cloneDeep, isEqual, find, forEachRight, difference, get } from 'lodash'
+import { cloneDeep, isEqual, find, forEachRight, difference, get, includes, reduce, each } from 'lodash'
 import Icon from './Icon'
 import input from 'veui/mixins/input'
 import { icons } from '../mixins'
+import { normalizeClass } from '../utils/helper'
 
 export default {
   name: 'veui-transfer',
@@ -177,7 +167,10 @@ export default {
     selectedPlaceholder: String,
     selectedShowMode: {
       type: String,
-      default: 'tree'
+      default: 'tree',
+      validate (value) {
+        return includes(['tree', 'flat'], value)
+      }
     }
   },
   model: {
@@ -199,6 +192,26 @@ export default {
   computed: {
     isSelectable () {
       return !this.realDisabled && !this.realReadonly
+    },
+    selectedFlattenOptions () {
+      let walk = (option, path, paths) => {
+        if (!option.children || !option.children.length) {
+          paths.push([...path, option])
+          return
+        }
+
+        option.children.forEach(child => {
+          walk(child, [...path, option], paths)
+        })
+      }
+
+      let paths = []
+      this.selectedOptions.forEach(option => {
+        let itemPaths = []
+        walk(option, [], itemPaths)
+        paths.push(...itemPaths)
+      })
+      return paths
     }
   },
   watch: {
@@ -478,7 +491,35 @@ export default {
       }
 
       return { allCount, partCount }
+    },
+
+    // 如果 main 区域出现滚动条，则在该元素上面设置一个 class ，
+    // 目前主要为了让 item 右侧的图标的位置不会因为滚动条的出现而发生变动。
+    setScrollClass () {
+      this.$nextTick(() => {
+        let elements = this.$el.querySelectorAll('.veui-select-panel-content-main')
+
+        each(elements, element => {
+          let klass = 'veui-select-panel-scroll-vertical'
+          let contentHeight = parseFloat(getComputedStyle(element).height)
+          let classObj = normalizeClass(element.className)
+          classObj[klass] = element.scrollHeight > contentHeight
+
+          element.className = reduce(classObj, (result, value, key) => {
+            if (value) {
+              result.push(key)
+            }
+            return result
+          }, []).join(' ')
+        })
+      })
     }
+  },
+  mounted () {
+    this.setScrollClass()
+  },
+  updated () {
+    this.setScrollClass()
   }
 }
 </script>
