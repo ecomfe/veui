@@ -1,18 +1,18 @@
 <template>
-  <div class="veui-select-panel">
-    <h3 class="veui-select-panel-title">
+  <div class="veui-filter-panel">
+    <h3 class="veui-filter-panel-title">
       <slot name="head">标题</slot>
     </h3>
-    <div class="veui-select-panel-content">
+    <div class="veui-filter-panel-content">
       <veui-searchbox v-model="keyword"
         v-if="searchable"
         :placeholder="placeholder"></veui-searchbox>
-      <div class="veui-select-panel-content-main"
+      <div class="veui-filter-panel-content-main"
         v-if="datasource.length"
         ref="main">
         <slot :options="datasource"></slot>
       </div>
-      <div class="veui-select-panel-no-data" v-else>
+      <div class="veui-filter-panel-no-data" v-else>
         <slot name="no-data">没数据</slot>
       </div>
     </div>
@@ -27,7 +27,7 @@ import { includes, debounce } from 'lodash'
 import { icons } from '../mixins'
 
 export default {
-  name: 'veui-select-panel',
+  name: 'veui-filter-panel',
   components: {
     'veui-searchbox': Searchbox,
     'veui-tree': Tree,

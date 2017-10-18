@@ -1,6 +1,6 @@
 <template>
   <div class="veui-transfer" :class="{'veui-transfer-disabled': !isSelectable}">
-    <veui-select-panel :datasource="candidateOptions"
+    <veui-filter-panel :datasource="candidateOptions"
       :searchable="searchable"
       @click="select"
       :filter="filter"
@@ -50,9 +50,9 @@
         <slot name="candidate-no-data">没有备选项</slot>
       </template>
 
-    </veui-select-panel>
+    </veui-filter-panel>
 
-    <veui-select-panel :datasource="selectedOptions"
+    <veui-filter-panel :datasource="selectedOptions"
       :searchable="searchable"
       :filter="filter"
       class="veui-transfer-selected-panel"
@@ -122,12 +122,12 @@
       <template slot="no-data">
         <slot name="selected-no-data">请从左侧选择</slot>
       </template>
-    </veui-select-panel>
+    </veui-filter-panel>
   </div>
 </template>
 
 <script>
-import SelectPanel from './SelectPanel'
+import FilterPanel from './FilterPanel'
 import Tree from './Tree'
 import Button from './Button'
 import { cloneDeep, isEqual, find, forEachRight, difference, get, includes, reduce, each } from 'lodash'
@@ -139,7 +139,7 @@ import { normalizeClass } from '../utils/helper'
 export default {
   name: 'veui-transfer',
   components: {
-    'veui-select-panel': SelectPanel,
+    'veui-filter-panel': FilterPanel,
     'veui-icon': Icon,
     'veui-tree': Tree,
     'veui-button': Button
@@ -497,10 +497,10 @@ export default {
     // 目前主要为了让 item 右侧的图标的位置不会因为滚动条的出现而发生变动。
     setScrollClass () {
       this.$nextTick(() => {
-        let elements = this.$el.querySelectorAll('.veui-select-panel-content-main')
+        let elements = this.$el.querySelectorAll('.veui-filter-panel-content-main')
 
         each(elements, element => {
-          let klass = 'veui-select-panel-scroll-vertical'
+          let klass = 'veui-transfer-panel-scroll-vertical'
           let contentHeight = parseFloat(getComputedStyle(element).height)
           let classObj = normalizeClass(element.className)
           classObj[klass] = element.scrollHeight > contentHeight
