@@ -79,15 +79,34 @@ function generate (el, { handler, trigger, delay, refs }, context) {
   }
 
   if (trigger === 'hover') {
-    return function (e) {
-      let includeTargets = [el, ...getElementsByRefs(refs, context)]
-      if (includeTargets.some(target => contains(target, e.target)) &&
-        !includeTargets.some(target => contains(target, e.relatedTarget))
-      ) {
-        if (delay) {
-          el[hoverBindingKey].timer = setTimeout(() => handler(e), delay)
-        } else {
+    if (!delay) {
+      return function (e) {
+        let includeTargets = [el, ...getElementsByRefs(refs, context)]
+        // 从 includeTargets 区域移到外面去了，果断触发 handler
+        if (includeTargets.some(target => contains(target, e.target)) &&
+          !includeTargets.some(target => contains(target, e.relatedTarget))
+        ) {
           handler(e)
+        }
+      }
+    } else {
+      let hoverDelayData = {
+        state: 'ready' // 'ready' | 'out' | 'in'
+      }
+      return function (e) {
+        let includeTargets = [el, ...getElementsByRefs(refs, context)]
+        let isTargetIn = includeTargets.some(target => contains(target, e.target))
+        let isRelatedTargetIn = includeTargets.some(target => contains(target, e.relatedTarget))
+        if (isTargetIn && !isRelatedTargetIn) {
+          hoverDelayData.state = 'out'
+
+          el[hoverBindingKey].timer = setTimeout(() => {
+            if (hoverDelayData.state === 'out') {
+              handler(e)
+            }
+          }, delay)
+        } else if (!isTargetIn && isRelatedTargetIn) {
+          hoverDelayData.state = 'in'
         }
       }
     }
