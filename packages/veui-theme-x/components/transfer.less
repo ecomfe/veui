@@ -5,7 +5,6 @@
   display: inline-block;
   overflow: hidden;
   vertical-align: middle;
-  .clearfix();
 
   @item-height: 36px;
   .center-icon(@line-height: @item-height) {
@@ -22,9 +21,11 @@
     margin-right: 20px;
   }
 
-  .veui-tree {
+  .veui-filter-panel-content-main {
     position: relative;
+  }
 
+  .veui-tree {
     &-item {
       padding: 0 20px;
       cursor: pointer;
@@ -51,8 +52,8 @@
         width: ~"calc(100% - 18px)";
       }
 
-      .veui-transfer-item-label,
-      &-expand-switcher {
+      .veui-transfer-item-text,
+      .veui-icon {
         position: relative;
         z-index: 1;
       }
@@ -129,19 +130,11 @@
       .center-icon();
     }
 
-    .veui-transfer-selected-icon-remove {
-      position: absolute;
-      top: 50%;
-      right: -20px;
-      transform: translateY(-50%);
-      margin: 0;
-    }
-
     .veui-tree-item {
       line-height: 22px;
       height: auto;
       position: relative;
-      padding: 0 40px 0 20px;
+      padding: 0 54px 0 20px;
     }
 
     .veui-transfer-item-label {
@@ -151,6 +144,16 @@
     &-option-separator {
       .center-icon(22px);
     }
+  }
+
+  .veui-tree-item .veui-transfer-selected-icon-remove {
+    position: absolute;
+  }
+  &-selected-icon-remove {
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    right: 20px;
   }
 
   &-disabled {
@@ -163,18 +166,6 @@
     .veui-tree-item-label,
     .veui-transfer-item-label {
       color: @veui-text-color-aux;
-    }
-  }
-
-  &-panel-scroll-vertical {
-    .veui-transfer-candidate-icon-selected,
-    .veui-transfer-candidate-icon-unselected,
-    .veui-transfer-selected-icon-remove {
-      margin-right: -14px;
-    }
-
-    .veui-transfer-selected-flat .veui-transfer-selected-icon-remove {
-      right: -18px;
     }
   }
 

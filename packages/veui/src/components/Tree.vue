@@ -24,7 +24,7 @@
         @click="handleClick(option, ...arguments)"
         @expand="handleExpand"
         @collapse="handleCollapse"
-        :itemClick="itemClick">
+        :item-click="itemClick">
         <template slot="item" scope="props">
           <slot name="item" v-bind="props">
             <span class="veui-tree-item-expand-switcher"
@@ -107,7 +107,7 @@ export default {
       this.$emit('expand', option, index, depth)
     },
     handleCollapse (option, index, depth) {
-      this.$emit('expand', option, index, depth)
+      this.$emit('collapse', option, index, depth)
     }
   }
 }

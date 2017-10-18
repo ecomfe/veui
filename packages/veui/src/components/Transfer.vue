@@ -130,11 +130,10 @@
 import FilterPanel from './FilterPanel'
 import Tree from './Tree'
 import Button from './Button'
-import { cloneDeep, isEqual, find, forEachRight, difference, get, includes, reduce, each } from 'lodash'
+import { cloneDeep, isEqual, find, forEachRight, difference, get, includes } from 'lodash'
 import Icon from './Icon'
 import input from 'veui/mixins/input'
 import { icons } from '../mixins'
-import { normalizeClass } from '../utils/helper'
 
 export default {
   name: 'veui-transfer',
@@ -491,35 +490,7 @@ export default {
       }
 
       return { allCount, partCount }
-    },
-
-    // 如果 main 区域出现滚动条，则在该元素上面设置一个 class ，
-    // 目前主要为了让 item 右侧的图标的位置不会因为滚动条的出现而发生变动。
-    setScrollClass () {
-      this.$nextTick(() => {
-        let elements = this.$el.querySelectorAll('.veui-filter-panel-content-main')
-
-        each(elements, element => {
-          let klass = 'veui-transfer-panel-scroll-vertical'
-          let contentHeight = parseFloat(getComputedStyle(element).height)
-          let classObj = normalizeClass(element.className)
-          classObj[klass] = element.scrollHeight > contentHeight
-
-          element.className = reduce(classObj, (result, value, key) => {
-            if (value) {
-              result.push(key)
-            }
-            return result
-          }, []).join(' ')
-        })
-      })
     }
-  },
-  mounted () {
-    this.setScrollClass()
-  },
-  updated () {
-    this.setScrollClass()
   }
 }
 </script>
