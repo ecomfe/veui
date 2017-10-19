@@ -1,8 +1,7 @@
 <template>
   <ul :class="{'veui-tree-item-group': depth > 1, 'veui-tree': depth === 1}">
     <li v-for="(option, index) in datasource"
-      :key="option.value"
-      v-show="!option.hidden">
+      :key="option.value">
       <div class="veui-tree-item"
         :class="itemClasses[index]"
         @click="click(option, [], index, depth)">
