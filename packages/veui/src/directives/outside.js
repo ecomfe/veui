@@ -67,12 +67,22 @@ function parseParams (el, arg, modifiers, value, context) {
   }
 }
 
+/**
+ * 判断 element 在 DOM 树结构上是否被包含在 elements 里面
+ *
+ * @param {Element} element 待判断的元素
+ * @param {Array.<Element>} elements 元素范围
+ */
+function isElementIn (element, elements) {
+  return elements.some(elm => contains(elm, element))
+}
+
 function generate (el, { handler, trigger, delay, refs }, context) {
   if (trigger === 'click') {
     return function (e) {
       // click 模式，直接判断元素包含情况
       let includeTargets = [el, ...getElementsByRefs(refs, context)]
-      if (e.type === trigger && !includeTargets.some(element => contains(element, e.target))) {
+      if (e.type === trigger && !isElementIn(e.target, includeTargets)) {
         handler(e)
       }
     }
@@ -80,12 +90,11 @@ function generate (el, { handler, trigger, delay, refs }, context) {
 
   if (trigger === 'hover') {
     if (!delay) {
-      return function (e) {
+      // 如果没有设置 delay 参数，只要检查到鼠标移到 includeTargets 外面去了，就果断触发 outside handler 。
+      return function handleOutsideWithoutDelay (e) {
         let includeTargets = [el, ...getElementsByRefs(refs, context)]
         // 从 includeTargets 区域移到外面去了，果断触发 handler
-        if (includeTargets.some(target => contains(target, e.target)) &&
-          !includeTargets.some(target => contains(target, e.relatedTarget))
-        ) {
+        if (isElementIn(e.target, includeTargets) && !isElementIn(e.relatedTarget, includeTargets)) {
           handler(e)
         }
       }
@@ -94,10 +103,13 @@ function generate (el, { handler, trigger, delay, refs }, context) {
     let hoverDelayData = {
       state: 'ready' // 'ready' | 'out' | 'in'
     }
-    return function (e) {
+    // 如果设置了 delay ，在鼠标移出 includeTargets 之后设个计时器，并且标明已经移出去了（ `out` ）。
+    // 如果鼠标在计时器计时结束之前，移回了 includeTargets ，就把标记改为 `in` 。
+    // 如果鼠标在计时器计时结束时，还没有移回 includeTargets 内，对应的标记位还会是 `out` ，此时就可以出发 outside handler 了。
+    return function handleOutsideWithDelay (e) {
       let includeTargets = [el, ...getElementsByRefs(refs, context)]
-      let isTargetIn = includeTargets.some(target => contains(target, e.target))
-      let isRelatedTargetIn = includeTargets.some(target => contains(target, e.relatedTarget))
+      let isTargetIn = isElementIn(e.target, includeTargets)
+      let isRelatedTargetIn = isElementIn(e.relatedTarget, includeTargets)
       if (isTargetIn && !isRelatedTargetIn) {
         hoverDelayData.state = 'out'
 
