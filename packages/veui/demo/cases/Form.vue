@@ -2700,12 +2700,6 @@ export default {
 
   margin-bottom: 50px;
 
-  .veui-field {
-    .veui-icon {
-      margin-bottom: -2px;
-    }
-  }
-
   .veui-form[ui~="inline"] + .veui-form[ui~="inline"] {
     margin-top: 30px;
   }
