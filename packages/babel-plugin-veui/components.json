@@ -28,6 +28,10 @@
     "path": "Calendar.vue"
   },
   {
+    "name": "Carousel",
+    "path": "Carousel.vue"
+  },
+  {
     "name": "CheckButtonGroup",
     "path": "CheckButtonGroup.vue"
   },
