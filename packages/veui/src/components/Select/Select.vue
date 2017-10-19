@@ -48,7 +48,7 @@
             :selected="option.value === value"
             :key="option.value"
             @select="handleSelect(option)">
-              <slot name="option" v-bind="option" :selected="option.value === value"></slot>
+            <slot name="option" v-bind="option" :selected="option.value === value"></slot>
           </veui-option>
         </template>
       </slot>
