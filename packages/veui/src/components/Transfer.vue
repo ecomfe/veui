@@ -3,6 +3,7 @@
     <veui-filter-panel :datasource="candidateOptions"
       :searchable="searchable"
       @click="select"
+      @aftersearch="filteredCandidateOptions = arguments[0]"
       :filter="filter"
       class="veui-transfer-candidate-panel"
       :placeholder="candidatePlaceholder"
@@ -58,7 +59,8 @@
       class="veui-transfer-selected-panel"
       :class="{'veui-transfer-selected-flat': selectedShowMode === 'flat'}"
       :placeholder="selectedPlaceholder"
-      ref="selected">
+      ref="selected"
+      @aftersearch="filteredSelectedOptions = arguments[0]">
 
       <template slot="head">
         <slot name="selected-head">
@@ -181,7 +183,10 @@ export default {
       candidateOptions: cloneDeep(this.datasource),
       selectedOptions: [],
       rootAllCount: 0,
-      rootPartCount: 0
+      rootPartCount: 0,
+
+      filteredCandidateOptions: [],
+      filteredSelectedOptions: []
     }
   },
   created () {
@@ -315,6 +320,8 @@ export default {
         return
       }
 
+      option = this.findOptionByValue(this.candidateOptions, option.value)
+
       if (this.hasChild(option)) {
         this.setOptionCount(option, option.children.length, 0)
       } else {
@@ -322,10 +329,11 @@ export default {
       }
 
       this.markParentsChain(parents)
-
       this.selectAllChildren(option, true)
-
       this.setSelectedOptions(this.cloneSelectedOptions(this.parseSelectedOptionsState()))
+
+      this.syncSelect(this.candidateOptions, this.filteredCandidateOptions)
+
       this.emitSelect()
     },
 
@@ -490,6 +498,42 @@ export default {
       }
 
       return { allCount, partCount }
+    },
+    findOptionByValue (options, value) {
+      let targetOption
+      find(options, option => {
+        if (option.value === value) {
+          targetOption = option
+        } else if (option.children && option.children.length) {
+          targetOption = this.findOptionByValue(option.children, value)
+        }
+
+        return targetOption
+      })
+      return targetOption
+    },
+    findParents (options, parents) {
+    },
+    syncSelect (fromOptions, toOptions) {
+      let set = (fromOption, toOption, key) => {
+        if (fromOption.hasOwnProperty(key)) {
+          this.$set(toOption, key, fromOption[key])
+        }
+      }
+      find(fromOptions, (fromOption, index) => {
+        if (!toOptions[index]) {
+          return true
+        }
+
+        let toOption = toOptions[index]
+        set(fromOption, toOption, 'allCount')
+        set(fromOption, toOption, 'partCount')
+        set(fromOption, toOption, 'selected')
+
+        if (this.hasChild(fromOption) && this.hasChild(toOption)) {
+          this.syncSelect(fromOption.children, toOption.children)
+        }
+      })
     }
   }
 }

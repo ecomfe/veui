@@ -7,6 +7,8 @@
       <veui-searchbox v-model="keyword"
         v-if="searchable"
         ui="small"
+        @search="debounceSearch"
+        @input="searchOnInput && debounceSearch()"
         :placeholder="placeholder"></veui-searchbox>
       <div class="veui-filter-panel-content-main"
         v-if="datasource.length"
@@ -24,7 +26,7 @@
 import Searchbox from './Searchbox'
 import Tree from './Tree'
 import Icon from './Icon'
-import { includes, debounce, cloneDeep, omit } from 'lodash'
+import { includes, debounce, omit } from 'lodash'
 import { icons } from '../mixins'
 
 export default {
@@ -46,6 +48,10 @@ export default {
       type: Boolean,
       default: true
     },
+    searchOnInput: {
+      type: Boolean,
+      default: true
+    },
     filter: {
       type: Function,
       default (keyword, item) {
@@ -57,23 +63,18 @@ export default {
   data () {
     return {
       keyword: '',
-      filteredDatasource: cloneDeep(this.datasource)
+      filteredDatasource: []
     }
   },
   created () {
     this.search()
 
     let me = this
-    this.debounceSearch = debounce(function () {
-      me.search()
-    }, 200)
+    this.debounceSearch = debounce(() => me.search(), 200)
   },
   watch: {
     datasource () {
       this.search()
-    },
-    keyword () {
-      this.debounceSearch()
     }
   },
   methods: {
@@ -103,6 +104,7 @@ export default {
       let filteredDatasource = []
       walk(this.datasource, filteredDatasource)
       this.filteredDatasource = filteredDatasource
+      this.$emit('aftersearch', this.filteredDatasource)
     }
   },
   beforeDestroy () {
