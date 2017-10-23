@@ -6,6 +6,7 @@
 * [^] `Uploader` 本地校验失败的 slot 名修改为 `type-invalid` 及 `size-invalid`。**[Breaking change]**
 * [+] 为调用了 `Overlay` 组件的元素增加了指定 `overlay-options` 的功能。
 * [^] 修复了 `RegionPicker` 浮层有时会闪动的问题。
+* [+] 新增了 `Carousel` 组件。
 
 ### 0.3.2
 
