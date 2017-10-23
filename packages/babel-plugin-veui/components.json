@@ -1,5 +1,9 @@
 [
   {
+    "name": "",
+    "path": ".DS_Store"
+  },
+  {
     "name": "Alert",
     "path": "Alert.vue"
   },
@@ -72,6 +76,10 @@
     "path": "Fieldset.js"
   },
   {
+    "name": "FilterPanel",
+    "path": "FilterPanel.vue"
+  },
+  {
     "name": "Field",
     "path": "Form/Field.vue"
   },
@@ -142,10 +150,6 @@
   {
     "name": "RegionPicker",
     "path": "RegionPicker.vue"
-  },
-  {
-    "name": "FilterPanel",
-    "path": "FilterPanel.vue"
   },
   {
     "name": "Searchbox",
@@ -237,7 +241,7 @@
   },
   {
     "name": "Tree",
-    "path": "Tree.vue"
+    "path": "Tree/Tree.vue"
   },
   {
     "name": "Uploader",

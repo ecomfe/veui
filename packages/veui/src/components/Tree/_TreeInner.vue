@@ -3,7 +3,7 @@
     <li v-for="(option, index) in datasource"
       :key="option.value">
       <div class="veui-tree-item"
-        :class="itemClasses[index]"
+        :class="{'veui-tree-item-expanded': expandMap[option.value] && expandMap[option.value].expanded}"
         @click="click(option, [], index, depth)">
         <slot name="item" :option="option" :index="index" :depth="depth">
           <span class="veui-tree-item-expand-switcher"
@@ -17,13 +17,14 @@
         </slot>
       </div>
 
-      <veui-tree v-if="option.children && option.children.length"
+      <veui-tree-inner v-if="option.children && option.children.length"
         :datasource="option.children"
         :depth="depth + 1"
         @click="handleChildClick(option, ...arguments)"
-        @expand="handleChildExpand"
-        @collapse="handleChildCollapse"
-        :item-click="itemClick">
+        @toggle="handChildToggle"
+        :expand-map="expandMap"
+        :item-click="itemClick"
+        :icons="icons">
         <template slot="item" scope="props">
           <slot name="item" v-bind="props">
             <span class="veui-tree-item-expand-switcher"
@@ -36,31 +37,29 @@
             </div>
           </slot>
         </template>
-      </veui-tree>
+      </veui-tree-inner>
 
     </li>
   </ul>
 </template>
 
 <script>
-import Icon from './Icon'
-import { icons } from '../mixins'
+import Icon from '../Icon'
 import { includes } from 'lodash'
 
 export default {
-  name: 'veui-tree',
+  name: 'veui-tree-inner',
   components: {
     'veui-icon': Icon
   },
-  mixins: [icons],
   props: {
+    icons: Object,
     datasource: {
       type: Array,
       default () {
         return []
       }
     },
-    // 内部使用
     depth: {
       type: Number,
       default: 1
@@ -72,21 +71,12 @@ export default {
       validate (value) {
         return includes(['toggle', 'none'], value)
       }
-    }
-  },
-  computed: {
-    itemClasses () {
-      return this.datasource.map(option => {
-        return {
-          'veui-tree-item-expanded': option.expanded
-        }
-      })
-    }
+    },
+    expandMap: Object
   },
   methods: {
     toggle (option, index, depth) {
-      this.$set(option, 'expanded', !option.expanded)
-      this.$emit(option.expanded ? 'collapse' : 'expand', option, index, depth)
+      this.$emit('toggle', option, index, depth)
     },
     click (option, parents, index, depth) {
       this.$emit('click', option, parents, index, depth)
@@ -95,14 +85,11 @@ export default {
         this.toggle(option, index, depth)
       }
     },
+    handChildToggle (option, index, depth) {
+      this.$emit('toggle', option, index, depth)
+    },
     handleChildClick (parentOption, currentOption, parents, index, depth) {
       this.$emit('click', currentOption, [...parents, parentOption], index, depth)
-    },
-    handleChildExpand (option, index, depth) {
-      this.$emit('expand', option, index, depth)
-    },
-    handleChildCollapse (option, index, depth) {
-      this.$emit('collapse', option, index, depth)
     }
   }
 }
