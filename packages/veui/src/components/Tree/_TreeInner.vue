@@ -3,7 +3,7 @@
     <li v-for="(option, index) in datasource"
       :key="option.value">
       <div class="veui-tree-item"
-        :class="{'veui-tree-item-expanded': expandMap[option.value] && expandMap[option.value].expanded}"
+        :class="{'veui-tree-item-expanded': option.expanded}"
         @click="click(option, [], index, depth)">
         <slot name="item" :option="option" :index="index" :depth="depth">
           <span class="veui-tree-item-expand-switcher"
@@ -22,7 +22,6 @@
         :depth="depth + 1"
         @click="handleChildClick(option, ...arguments)"
         @toggle="handChildToggle"
-        :expand-map="expandMap"
         :item-click="itemClick"
         :icons="icons">
         <template slot="item" scope="props">
@@ -71,8 +70,7 @@ export default {
       validate (value) {
         return includes(['toggle', 'none'], value)
       }
-    },
-    expandMap: Object
+    }
   },
   methods: {
     toggle (option, index, depth) {

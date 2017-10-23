@@ -1,7 +1,6 @@
 <template>
-  <veui-tree-inner :datasource="datasource"
+  <veui-tree-inner :datasource="localDatasource"
     :item-click="itemClick"
-    :expand-map="expandMap"
     :icons="icons"
     @toggle="toggle"
     @click="handleItemClick"
@@ -10,9 +9,8 @@
       <slot name="item" v-bind="props"></slot>
     </template>
   </veui-tree-inner>
-  <veui-tree-inner :datasource="datasource"
+  <veui-tree-inner :datasource="localDatasource"
     :item-click="itemClick"
-    :expand-map="expandMap"
     :icons="icons"
     @toggle="toggle"
     @click="handleItemClick"
@@ -21,9 +19,8 @@
       <slot name="item-label" v-bind="props"></slot>
     </template>
   </veui-tree-inner>
-  <veui-tree-inner :datasource="datasource"
+  <veui-tree-inner :datasource="localDatasource"
     :item-click="itemClick"
-    :expand-map="expandMap"
     :icons="icons"
     @toggle="toggle"
     @click="handleItemClick"
@@ -32,7 +29,7 @@
 
 <script>
 import TreeInner from './_TreeInner'
-import { includes, remove, clone, each } from 'lodash'
+import { includes, remove, clone, omit, filter, uniq } from 'lodash'
 import { icons } from '../../mixins'
 
 export default {
@@ -66,7 +63,7 @@ export default {
   },
   data () {
     return {
-      expandMap: {}
+      localDatasource: []
     }
   },
   created () {
@@ -83,37 +80,30 @@ export default {
   methods: {
     parseExpands (expands = this.expands) {
       let walk = (options, expands) => {
-        options.forEach(option => {
+        return options.map(option => {
+          let localOption = omit(option, 'children')
           if (option.children && option.children.length) {
-            if (!this.expandMap[option.value]) {
-              this.$set(this.expandMap, option.value, {})
-            }
-
             let expanded = !!remove(expands, value => value === option.value).length
-            this.$set(
-              this.expandMap[option.value],
-              'expanded',
-              expanded
-            )
-
-            walk(option.children, expands)
+            localOption.expanded = expanded
+            localOption.children = walk(option.children, expands)
           }
+          return localOption
         })
       }
-      walk(this.datasource, clone(expands))
+      this.localDatasource = walk(this.datasource, clone(expands))
     },
     toggle (option, index, depth) {
-      this.expandMap[option.value].expanded = !this.expandMap[option.value].expanded
+      option.expanded = !option.expanded
 
-      let keys = []
-      each(this.expandMap, ({ expanded }, key) => {
-        if (expanded) {
-          keys.push(key)
-        }
-      })
-      this.$emit('update:expands', keys)
+      let expands = option.expanded
+        ? uniq([...this.expands, option.value])
+        : filter(
+          this.expands,
+          value => value !== option.value
+        )
+      this.$emit('update:expands', expands)
 
-      if (this.expandMap[option.value].expanded) {
+      if (option.expanded) {
         this.$emit('expand', option, index, depth)
       } else {
         this.$emit('collapse', option, index, depth)
