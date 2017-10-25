@@ -30,8 +30,9 @@ function parseParams (el, arg, modifiers, value, context) {
   let refs
   let handler
   let trigger
-  // delay 表示如果鼠标移动到 includeTargets 元素之外多少秒之后，才会触发 handler
+  // delay 表示如果鼠标移动到 includeTargets 元素之外多少毫秒之后，才会触发 handler
   let delay
+  let excludeSelf = false
 
   // 如果 value 是 Function 的话，其余参数就尽量从 modifier、arg 里面去解析
   // 否则从value里面去解析
@@ -45,7 +46,7 @@ function parseParams (el, arg, modifiers, value, context) {
     delay = find(keys(modifiers), key => isNumber(parseInt(key, 10)) && modifiers[key])
     delay = delay ? parseInt(delay, 10) : 0
   } else {
-    const normalizedValue = value || {}
+    let normalizedValue = value || {}
     handler = isFunction(normalizedValue.handler) ? normalizedValue.handler : noop
 
     refs = Array.isArray(normalizedValue.refs) ? normalizedValue.refs
@@ -57,13 +58,16 @@ function parseParams (el, arg, modifiers, value, context) {
     if (isNaN(delay)) {
       delay = 0
     }
+
+    excludeSelf = !!normalizedValue.excludeSelf
   }
 
   return {
     refs,
     handler,
     trigger,
-    delay
+    delay,
+    excludeSelf
   }
 }
 
@@ -77,11 +81,11 @@ function isElementIn (element, elements) {
   return elements.some(elm => contains(elm, element))
 }
 
-function generate (el, { handler, trigger, delay, refs }, context) {
+function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) {
   if (trigger === 'click') {
     return function (e) {
       // click 模式，直接判断元素包含情况
-      let includeTargets = [el, ...getElementsByRefs(refs, context)]
+      let includeTargets = [...(excludeSelf ? [] : [el]), ...getElementsByRefs(refs, context)]
       if (e.type === trigger && !isElementIn(e.target, includeTargets)) {
         handler(e)
       }
@@ -92,7 +96,7 @@ function generate (el, { handler, trigger, delay, refs }, context) {
     if (!delay) {
       // 如果没有设置 delay 参数，只要检查到鼠标移到 includeTargets 外面去了，就果断触发 outside handler 。
       return function handleOutsideWithoutDelay (e) {
-        let includeTargets = [el, ...getElementsByRefs(refs, context)]
+        let includeTargets = [...(excludeSelf ? [] : [el]), ...getElementsByRefs(refs, context)]
         // 从 includeTargets 区域移到外面去了，果断触发 handler
         if (isElementIn(e.target, includeTargets) && !isElementIn(e.relatedTarget, includeTargets)) {
           handler(e)
@@ -107,7 +111,7 @@ function generate (el, { handler, trigger, delay, refs }, context) {
     // 如果鼠标在计时器计时结束之前，移回了 includeTargets ，就把标记改为 `in` 。
     // 如果鼠标在计时器计时结束时，还没有移回 includeTargets 内，对应的标记位还会是 `out` ，此时就可以触发 outside handler 了。
     return function handleOutsideWithDelay (e) {
-      let includeTargets = [el, ...getElementsByRefs(refs, context)]
+      let includeTargets = [...(excludeSelf ? [] : [el]), ...getElementsByRefs(refs, context)]
       let isTargetIn = isElementIn(e.target, includeTargets)
       let isRelatedTargetIn = isElementIn(e.relatedTarget, includeTargets)
       if (isTargetIn && !isRelatedTargetIn) {
@@ -142,10 +146,12 @@ function refresh (el, { value, arg, modifiers, oldValue }, vnode) {
   const params = parseParams(el, arg, modifiers, value, vnode.context)
 
   // 真正发生了变化，才重刷
-  let fields = params.trigger === 'click'
-    ? ['refs', 'trigger']
-    : ['refs', 'trigger', 'delay']
-  if (isEqual(pick(el[params.trigger === 'click' ? clickBindingKey : hoverBindingKey], fields), pick(params, fields))) {
+  let isClick = params.trigger === 'click'
+  let fields = isClick
+    ? ['refs', 'trigger', 'excludeSelf']
+    : ['refs', 'trigger', 'delay', 'excludeSelf']
+  let prevParams = pick(el[isClick ? clickBindingKey : hoverBindingKey], fields)
+  if (isEqual(prevParams, pick(params, fields))) {
     return
   }
 

@@ -113,6 +113,12 @@
       <veui-input ui="big" v-model="number" composition @change="log('change')" ref="number" @focus.native="numberOpen = true" @blur.native="numberOpen = false"></veui-input>
       <veui-tooltip position="top" :ui="ui" target="number" :custom="true" :open.sync="numberOpen">你focus到了</veui-tooltip>
     </p>
+
+    <p>
+      <div style="margin-bottom:10px;">排除自己</div>
+      <veui-button ref="exclude">target</veui-button>
+      <veui-tooltip position="top" target="exclude" trigger="hover" exclude-self :hide-delay="0">你focus到了</veui-tooltip>
+    </p>
   </article>
 </template>
 

@@ -44,6 +44,10 @@ export default {
     open: {
       type: Boolean,
       default: false
+    },
+    excludeSelf: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -82,7 +86,8 @@ export default {
         handler: this.closeHandler,
         refs: this.targetNode,
         trigger: this.localTrigger.close,
-        delay: this.hideDelay
+        delay: this.hideDelay,
+        excludeSelf: this.excludeSelf
       }
     }
   },
