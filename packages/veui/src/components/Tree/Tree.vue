@@ -66,15 +66,16 @@ export default {
       localDatasource: []
     }
   },
-  created () {
-    this.parseExpands()
-  },
   watch: {
     expands () {
       this.parseExpands()
     },
-    datasource () {
-      this.parseExpands()
+    datasource: {
+      handler () {
+        this.parseExpands()
+      },
+      deep: true,
+      immediate: true
     }
   },
   methods: {

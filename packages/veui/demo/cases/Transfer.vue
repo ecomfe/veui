@@ -1,12 +1,13 @@
 <template>
   <article class="veui-transfer-demo">
-    <h1><code>&lt;veui-tree&gt;</code></h1>
+    <!--<h1><code>&lt;veui-tree&gt;</code></h1>
 
     <h2>点击左侧图标展开收起</h2>
-    <veui-tree :datasource="treeDatasource1"></veui-tree>
+    <p>当前展开：{{ expands1 }}</p>
+    <veui-tree :datasource="treeDatasource1" :expands.sync="expands1"></veui-tree>
 
     <h2>点击整行展开收起</h2>
-    <veui-tree :datasource="treeDatasource2" row-toggable></veui-tree>
+    <veui-tree :datasource="treeDatasource2" item-click="toggle"></veui-tree>
 
     <h1><code>&lt;veui-filter-panel&gt;</code></h1>
 
@@ -35,7 +36,7 @@
         <template slot="candidate-title">备选列表</template>
         <template slot="selected-title">已选列表</template>
       </veui-transfer>
-    </p>
+    </p>-->
 
     <h2>多级树形结构，右侧扁平</h2>
     <p>
@@ -45,7 +46,7 @@
       </veui-transfer>
     </p>
 
-    <h2>单级结构，禁用</h2>
+    <!-- <h2>单级结构，禁用</h2>
     <p>
       <veui-transfer :datasource="datasource4" v-model="selected4" disabled>
         <template slot="candidate-title">备选列表（3）</template>
@@ -75,7 +76,7 @@
       <div class="operation">
         <veui-button ui="primary" type="submit">提交</veui-button>
       </div>
-    </veui-form>
+    </veui-form> -->
   </article>
 </template>
 
@@ -2191,6 +2192,7 @@ export default {
     return {
       treeDatasource1: cloneDeep(areas),
       treeDatasource2: cloneDeep(areas),
+      expands1: ['10000', '1000'],
 
       selected1: [],
       datasource1: cloneDeep(areas),

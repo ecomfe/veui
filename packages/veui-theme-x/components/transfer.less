@@ -106,12 +106,17 @@
   &-selected-flat {
     min-width: 350px;
 
-    .veui-tree-item {
-      position: relative;
+    &-items {
+      .reset-list-style();
+      margin: 0;
+      padding: 0;
+      color: @veui-text-color-normal;
+    }
 
-      &::before {
-        content: none;
-      }
+    &-item {
+      padding: 0 20px;
+      cursor: pointer;
+      position: relative;
 
       &:hover {
         background: @veui-gray-color-8;
@@ -119,6 +124,14 @@
 
       &:active {
         background: @veui-gray-color-6;
+      }
+
+      &-label {
+        padding: 7px 0;
+      }
+
+      &-hidden {
+        display: none;
       }
     }
 
@@ -130,30 +143,14 @@
       .center-icon();
     }
 
-    .veui-tree-item {
-      line-height: 22px;
-      height: auto;
-      position: relative;
-      padding: 0 54px 0 20px;
-    }
-
-    .veui-transfer-item-label {
-      padding: 7px 0;
-    }
-
     &-option-separator {
       .center-icon(22px);
     }
-  }
 
-  .veui-tree-item .veui-transfer-selected-icon-remove {
-    position: absolute;
-  }
-  &-selected-icon-remove {
-    top: 50%;
-    transform: translateY(-50%);
-    margin: 0;
-    right: 20px;
+    &-icon-remove {
+      .absolute(50%, 20px, _, _);
+      transform: translateY(-50%);
+    }
   }
 
   &-disabled {

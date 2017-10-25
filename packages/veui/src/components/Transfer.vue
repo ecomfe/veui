@@ -3,8 +3,7 @@
     <veui-filter-panel :datasource="candidateOptions"
       :searchable="searchable"
       @click="select"
-      @aftersearch="filteredCandidateOptions = arguments[0]"
-      :filter="filter"
+      :filter="candidateFilter"
       class="veui-transfer-candidate-panel"
       :placeholder="candidatePlaceholder"
       ref="candidate">
@@ -22,6 +21,7 @@
       <template scope="props">
         <veui-tree v-if="$scopedSlots['candidate-item']"
           :datasource="props.options"
+          :expands.sync="candidateExpands"
           @click="select">
           <template slot="item" scope="item">
             <slot name="candidate-item" v-bind="item"></slot>
@@ -29,16 +29,18 @@
         </veui-tree>
         <veui-tree v-else
           :datasource="props.options"
+          :expands.sync="candidateExpands"
           @click="select">
           <template slot="item-label" scope="props">
-            <div class="veui-transfer-item-label" :class="{'veui-transfer-candidate-item-label-selected': isSelected(props.option)}">
+            <div class="veui-transfer-item-label"
+              :class="{'veui-transfer-candidate-item-label-selected': props.option.visuallySelected}">
               <span class="veui-transfer-item-text">
                 <slot name="candidate-item-label" v-bind="props">{{ props.option.label }}</slot>
               </span>
 
               <veui-icon class="veui-transfer-candidate-icon-unselected"
                 :name="icons.select"
-                v-if="!isSelected(props.option)"></veui-icon>
+                v-if="!props.option.visuallySelected"></veui-icon>
               <veui-icon class="veui-transfer-candidate-icon-selected"
                 :name="icons.check"
                 v-else></veui-icon>
@@ -53,14 +55,13 @@
 
     </veui-filter-panel>
 
-    <veui-filter-panel :datasource="selectedOptions"
+    <veui-filter-panel :datasource="selectedShowMode === 'flat' ? selectedFlattenOptions : selectedOptions"
       :searchable="searchable"
-      :filter="filter"
+      :filter="selectedFilter"
       class="veui-transfer-selected-panel"
       :class="{'veui-transfer-selected-flat': selectedShowMode === 'flat'}"
       :placeholder="selectedPlaceholder"
-      ref="selected"
-      @aftersearch="filteredSelectedOptions = arguments[0]">
+      ref="selected">
 
       <template slot="head">
         <slot name="selected-head">
@@ -77,6 +78,7 @@
           <veui-tree v-if="$scopedSlots['selected-item']"
             class="veui-transfer-selected-tree"
             :datasource="props.options"
+            :expands.sync="selectedExpands"
             @click="remove">
             <template slot="item" scope="item">
               <slot name="selected-item" v-bind="item"></slot>
@@ -84,6 +86,7 @@
           </veui-tree>
           <veui-tree v-else
             :datasource="props.options"
+            :expands.sync="selectedExpands"
             @click="remove"
             class="veui-transfer-selected-tree">
             <template slot="item-label" scope="props">
@@ -98,27 +101,28 @@
             </template>
           </veui-tree>
         </template>
-        <veui-tree
-          v-else
-          :datasource="selectedFlattenOptions"
-          @click="(options) => remove(options[options.length - 1], options.slice(0, options.length - 1).reverse())">
-          <template slot="item" scope="props">
-            <slot name="selected-item" v-bind="props">
-              <div class="veui-transfer-item-label"
-                v-show="!props.option[props.option.length - 1].hidden">
-                <template v-for="(opt, index) in props.option">
+        <ul v-else class="veui-transfer-selected-flat-items">
+          <li v-for="(options, index) in props.options"
+            :key="options[options.length - 1].value"
+            class="veui-transfer-selected-flat-item"
+            :class="{'veui-transfer-selected-flat-item-hidden': options[options.length - 1].hidden}"
+            @click="remove(options[options.length - 1], options.slice(0, options.length - 1).reverse())">
+            <slot name="selected-item" :option="options" :index="index">
+              <div class="veui-transfer-selected-flat-item-label">
+                <template v-for="(opt, index) in options">
                   <span :key="opt.value" class="veui-transfer-selected-flat-option-label">{{ opt.label }}</span>
                   <span :key="opt.value"
                     class="veui-transfer-selected-flat-option-separator"
-                    v-if="index < props.option.length - 1">
+                    v-if="index < options.length - 1">
                     <veui-icon :name="icons.separator"></veui-icon>
                   </span>
                 </template>
-                <veui-icon class="veui-transfer-selected-icon-remove" :name="icons.remove"></veui-icon>
+                <veui-icon class="veui-transfer-selected-flat-icon-remove" :name="icons.remove"></veui-icon>
               </div>
-            </slot>
-          </template>
-        </veui-tree>
+              </slot>
+            </li>
+          </ul>
+        </ul>
       </template>
 
       <template slot="no-data">
@@ -132,10 +136,14 @@
 import FilterPanel from './FilterPanel'
 import Tree from './Tree'
 import Button from './Button'
-import { cloneDeep, isEqual, find, forEachRight, difference, get, includes } from 'lodash'
+import { cloneDeep, isEqual, find, difference, includes, omit, uniq, remove, get } from 'lodash'
 import Icon from './Icon'
 import input from 'veui/mixins/input'
 import { icons } from '../mixins'
+
+function defaultFilter (type, keyword, option, datasource) {
+  return includes(option.label, keyword)
+}
 
 export default {
   name: 'veui-transfer',
@@ -157,7 +165,10 @@ export default {
       type: Boolean,
       default: true
     },
-    filter: Function,
+    filter: {
+      type: Function,
+      default: defaultFilter
+    },
     selected: {
       type: Array,
       default () {
@@ -185,55 +196,80 @@ export default {
       rootAllCount: 0,
       rootPartCount: 0,
 
-      filteredCandidateOptions: [],
-      filteredSelectedOptions: []
+      candidateExpands: [],
+      selectedExpands: [],
+
+      selectedFlattenOptions: []
     }
   },
   created () {
     this.correct()
-    this.setSelectedOptions(this.cloneSelectedOptions(this.parseSelectedOptionsState()))
+    this.setSelectedOptions(this.cloneSelectedOptions())
   },
   computed: {
     isSelectable () {
       return !this.realDisabled && !this.realReadonly
-    },
-    selectedFlattenOptions () {
-      let walk = (option, path, paths) => {
-        if (!option.children || !option.children.length) {
-          paths.push([...path, option])
-          return
-        }
-
-        option.children.forEach(child => {
-          walk(child, [...path, option], paths)
-        })
-      }
-
-      let paths = []
-      this.selectedOptions.forEach(option => {
-        let itemPaths = []
-        walk(option, [], itemPaths)
-        paths.push(...itemPaths)
-      })
-      return paths
     }
   },
   watch: {
+    selectedOptions: {
+      handler (selectedOptions) {
+        let walk = (option, path, paths) => {
+          if (!option.children || !option.children.length) {
+            paths.push([...path, option])
+            return
+          }
+
+          option.children.forEach(child => {
+            walk(child, [...path, option], paths)
+          })
+        }
+
+        let paths = []
+        selectedOptions.forEach(option => {
+          let itemPaths = []
+          walk(option, [], itemPaths)
+          paths.push(...itemPaths)
+        })
+
+        paths.forEach((path, index) => {
+          let option = get(this.selectedFlattenOptions, [index, 'items'])
+          if (
+            !option ||
+            !path.length === option.length ||
+            path.some((pathItem, index) => option[index].value !== pathItem.value)
+          ) {
+            this.selectedFlattenOptions[index] = { items: path }
+          }
+        })
+        this.selectedFlattenOptions.splice(paths.length, this.selectedFlattenOptions.length - paths.length)
+      },
+      deep: true,
+      immediate: true
+    },
     datasource (v, oldV) {
       if (!isEqual(v, oldV)) {
         this.candidateOptions = cloneDeep(v)
         this.correct()
-        this.setSelectedOptions(this.cloneSelectedOptions(this.parseSelectedOptionsState()))
+        this.setSelectedOptions(this.cloneSelectedOptions())
       }
     },
     selected (v, oldV) {
       if (difference(v, oldV).length || difference(v, this.getSelectedValuesFromSelectedOptions()).length) {
         this.correct()
-        this.setSelectedOptions(this.cloneSelectedOptions(this.parseSelectedOptionsState()))
+        this.setSelectedOptions(this.cloneSelectedOptions())
       }
     }
   },
   methods: {
+    candidateFilter (keyword, option) {
+      return this.filter('candidate', keyword, option, this.candidateOptions)
+    },
+    selectedFilter (keyword, option) {
+      let isFlat = this.selectedShowMode === 'flat'
+      option = isFlat ? option.items[option.items.length - 1] : option
+      return this.filter('selected', keyword, option, isFlat ? this.selectedFlattenOptions : this.selectedOptions)
+    },
     // 判断节点是否被选中：
     // 1、如果是叶子节点，直接根据 selected 属性判断。
     // 2、如果是非叶子节点，则该节点下所有子级节点都全部选择了，当前节点才算被选中了。
@@ -275,7 +311,7 @@ export default {
         })
       }
       walk(this.candidateOptions)
-      this.setSelectedOptions(this.cloneSelectedOptions(this.parseSelectedOptionsState()))
+      this.setSelectedOptions(this.cloneSelectedOptions())
       this.emitSelect()
     },
     removeAll () {
@@ -315,24 +351,25 @@ export default {
     // 6、从之前选中的节点树中（ this.selectedOptions ）中解析出每个节点的状态（目前只有展开/收起状态 expanded ）。
     // 7、从 this.candidateOptions 中剥离出选中的节点及其父节点，并与6步中解析出的状态进行合并，得到新的 this.selectedOptions 。
     // 8、抛出 select 事件，带上一维的选中的节点的 value 值数组。
-    select (option, parents) {
+    select (option) {
       if (!this.isSelectable) {
         return
       }
 
-      option = this.findOptionByValue(this.candidateOptions, option.value)
+      let chain = this.findChain(this.candidateOptions, option.value)
+      option = chain[chain.length - 1]
+      let parents = chain.slice(0, chain.length - 1).reverse()
 
       if (this.hasChild(option)) {
         this.setOptionCount(option, option.children.length, 0)
       } else {
         this.setLeafSelected(option, true)
       }
+      this.$set(option, 'visuallySelected', true)
 
       this.markParentsChain(parents)
       this.selectAllChildren(option, true)
-      this.setSelectedOptions(this.cloneSelectedOptions(this.parseSelectedOptionsState()))
-
-      this.syncSelect(this.candidateOptions, this.filteredCandidateOptions)
+      this.setSelectedOptions(this.cloneSelectedOptions())
 
       this.emitSelect()
     },
@@ -356,33 +393,27 @@ export default {
     // 8、从之前选中的节点树中（ this.selectedOptions ）中解析出每个节点的状态（目前只有展开/收起状态 expanded ）。
     // 9、从 this.candidateOptions 中剥离出选中的节点及其父节点，并与8步中解析出的状态进行合并，得到新的 this.selectedOptions 。
     // 10、抛出 select 事件，带上一维的选中的节点的 value 值数组。
-    remove (option, parents) {
+    remove (option) {
       if (!this.isSelectable) {
         return
       }
 
-      let candidateLayerOptions = this.candidateOptions
-      let candidateParents = []
-      forEachRight(parents, parent => {
-        let candidateParent = find(candidateLayerOptions, ({ value }) => value === parent.value)
-        if (candidateParent) {
-          candidateParents.unshift(candidateParent)
-          candidateLayerOptions = candidateParent.children
-        }
-      })
+      // 先找到在 this.candidateOptions 里面对应的 option 和 parents 数组
+      let chain = this.findChain(this.candidateOptions, option.value)
+      option = chain[chain.length - 1]
+      let parents = chain.slice(0, chain.length - 1).reverse()
 
-      let candidateOption = find(candidateLayerOptions, ({ value }) => value === option.value)
-      if (this.hasChild(candidateOption)) {
-        this.setOptionCount(candidateOption, 0, 0)
+      if (this.hasChild(option)) {
+        this.setOptionCount(option, 0, 0)
       } else {
-        this.setLeafSelected(candidateOption, false)
+        this.setLeafSelected(option, false)
       }
+      this.$set(option, 'visuallySelected', false)
 
-      this.markParentsChain(candidateParents)
+      this.markParentsChain(parents)
+      this.selectAllChildren(option, false)
 
-      this.selectAllChildren(candidateOption, false)
-
-      this.setSelectedOptions(this.cloneSelectedOptions(this.parseSelectedOptionsState()))
+      this.setSelectedOptions(this.cloneSelectedOptions())
       this.emitSelect()
     },
     setSelectedOptions (options) {
@@ -405,6 +436,7 @@ export default {
           }
         })
         this.setOptionCount(parent, allCount, partCount)
+        this.$set(parent, 'visuallySelected', this.isSelected(parent))
       })
     },
     checkOwnProperty (obj, property) {
@@ -429,36 +461,47 @@ export default {
     hasChild (option) {
       return option.children && option.children.length
     },
-    // 目前主要用于保持右侧展开收起状态
-    parseSelectedOptionsState (options = this.selectedOptions, stateMap = {}) {
-      options.forEach(option => {
-        stateMap[option.value] = {
-          expanded: option.expanded
-        }
-
-        if (this.hasChild(option)) {
-          this.parseSelectedOptionsState(option.children, stateMap)
-        }
-      })
-      return stateMap
-    },
     // 从 this.candidateOptions 中深克隆一份 selectedOptions 。
-    cloneSelectedOptions (stateMap = {}, options = this.candidateOptions) {
-      let selectedOptions = []
-      options.forEach(option => {
-        if (option.allCount || option.partCount || option.selected) {
-          let selectedOption = {
-            label: option.label,
-            value: option.value
+    cloneSelectedOptions () {
+      let walk = (candidateOptions, selectedOptions) => {
+        let newSelectedOptions = []
+        candidateOptions.forEach(candidateOption => {
+          if (
+            candidateOption.allCount ||
+            candidateOption.partCount ||
+            candidateOption.selected
+          ) {
+            let relatedSelectedOption = find(
+              selectedOptions,
+              selectedOption => selectedOption.value === candidateOption.value
+            )
+
+            let newSelectedOption = omit(candidateOption, 'children')
+            if (this.hasChild(candidateOption)) {
+              newSelectedOption.children = walk(
+                candidateOption.children,
+                relatedSelectedOption && relatedSelectedOption.children
+              )
+
+              // 如果右侧没有相同的 option ，说明当前这个 option 是新选中的。
+              // 对于新选中的 option ，要保持左侧的展开收起状态。
+              if (!relatedSelectedOption) {
+                let expanded = includes(this.candidateExpands, newSelectedOption.value)
+                if (expanded) {
+                  this.selectedExpands.push(newSelectedOption.value)
+                  uniq(this.selectedExpands)
+                } else {
+                  remove(this.selectedExpands, newSelectedOption.value)
+                }
+              }
+            }
+
+            newSelectedOptions.push(newSelectedOption)
           }
-          if (this.hasChild(option)) {
-            selectedOption.children = this.cloneSelectedOptions(stateMap, option.children)
-            selectedOption.expanded = get(stateMap, [selectedOption.value, 'expanded'])
-          }
-          selectedOptions.push(selectedOption)
-        }
-      })
-      return selectedOptions
+        })
+        return newSelectedOptions
+      }
+      return walk(this.candidateOptions, this.selectedOptions)
     },
     selectAllChildren (option, selected) {
       if (this.hasChild(option)) {
@@ -469,6 +512,8 @@ export default {
           } else {
             this.setLeafSelected(child, selected)
           }
+
+          this.$set(child, 'visuallySelected', this.isSelected(child))
         })
       }
     },
@@ -512,9 +557,34 @@ export default {
       })
       return targetOption
     },
-    findParents (options, parents) {
+    findChain (options, value) {
+      let walk = (options, chain = []) => {
+        let currentChain = []
+        let result = options.some(option => {
+          if (option.value === value) {
+            currentChain.push(option)
+            return true
+          }
+
+          if (this.hasChild(option)) {
+            currentChain.push(option)
+            return walk(option.children, currentChain)
+          }
+        })
+
+        // 找到了目标 value ，说明这条链路是正确的
+        if (result) {
+          chain.push(...currentChain)
+        }
+
+        return result
+      }
+
+      let chain = []
+      walk(options, chain)
+      return chain
     },
-    syncSelect (fromOptions, toOptions) {
+    syncFields (fromOptions, toOptions, fields) {
       let set = (fromOption, toOption, key) => {
         if (fromOption.hasOwnProperty(key)) {
           this.$set(toOption, key, fromOption[key])
@@ -526,12 +596,12 @@ export default {
         }
 
         let toOption = toOptions[index]
-        set(fromOption, toOption, 'allCount')
-        set(fromOption, toOption, 'partCount')
-        set(fromOption, toOption, 'selected')
+        fields.forEach(field => {
+          set(fromOption, toOption, field)
+        })
 
         if (this.hasChild(fromOption) && this.hasChild(toOption)) {
-          this.syncSelect(fromOption.children, toOption.children)
+          this.syncFields(fromOption.children, toOption.children, fields)
         }
       })
     }

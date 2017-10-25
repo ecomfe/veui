@@ -7,9 +7,9 @@
       <veui-searchbox v-model="keyword"
         v-if="searchable"
         ui="small"
+        :placeholder="placeholder"
         @search="debounceSearch"
-        @input="searchOnInput && debounceSearch()"
-        :placeholder="placeholder"></veui-searchbox>
+        @input="searchOnInput && debounceSearch()"></veui-searchbox>
       <div class="veui-filter-panel-content-main"
         v-if="datasource.length"
         ref="main">
@@ -26,7 +26,7 @@
 import Searchbox from './Searchbox'
 import Tree from './Tree'
 import Icon from './Icon'
-import { includes, debounce, omit } from 'lodash'
+import { includes, debounce, cloneDeep } from 'lodash'
 import { icons } from '../mixins'
 
 export default {
@@ -67,14 +67,17 @@ export default {
     }
   },
   created () {
-    this.search()
-
     let me = this
     this.debounceSearch = debounce(() => me.search(), 200)
   },
   watch: {
-    datasource () {
-      this.search()
+    datasource: {
+      handler () {
+        this.filteredDatasource = cloneDeep(this.datasource)
+        this.search()
+      },
+      deep: true,
+      immediate: true
     }
   },
   methods: {
@@ -86,25 +89,16 @@ export default {
       let walk = (options, filteredOptions) => {
         let hasVisibleOption = false
         options.forEach((option, index) => {
-          let filteredChildren = []
           let isSelfVisible = this.filter(this.keyword, option, index, options, this.datasource)
-          let isChildrenVisible = option.children && option.children.length && walk(option.children, filteredChildren)
+          let isChildrenVisible = option.children && option.children.length && walk(option.children, filteredOptions[index].children)
 
-          if (isSelfVisible || isChildrenVisible) {
-            hasVisibleOption = true
-            filteredOptions.push({
-              ...omit(option, 'children'),
-              children: filteredChildren
-            })
-          }
+          hasVisibleOption = isSelfVisible || isChildrenVisible
+          this.$set(filteredOptions[index], 'hidden', !hasVisibleOption)
         })
         return hasVisibleOption
       }
 
-      let filteredDatasource = []
-      walk(this.datasource, filteredDatasource)
-      this.filteredDatasource = filteredDatasource
-      this.$emit('aftersearch', this.filteredDatasource)
+      walk(this.datasource, this.filteredDatasource)
     }
   },
   beforeDestroy () {
