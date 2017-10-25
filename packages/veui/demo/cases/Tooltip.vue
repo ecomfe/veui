@@ -117,7 +117,7 @@
     <p>
       <div style="margin-bottom:10px;">排除自己</div>
       <veui-button ref="exclude">target</veui-button>
-      <veui-tooltip position="top" target="exclude" trigger="hover" exclude-self :hide-delay="0">你focus到了</veui-tooltip>
+      <veui-tooltip position="top" target="exclude" trigger="hover" interactive :hide-delay="0">你focus到了</veui-tooltip>
     </p>
   </article>
 </template>

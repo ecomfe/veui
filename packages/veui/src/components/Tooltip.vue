@@ -45,9 +45,9 @@ export default {
       type: Boolean,
       default: false
     },
-    excludeSelf: {
+    interactive: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   data () {
@@ -87,7 +87,7 @@ export default {
         refs: this.targetNode,
         trigger: this.localTrigger.close,
         delay: this.hideDelay,
-        excludeSelf: this.excludeSelf
+        excludeSelf: !this.interactive
       }
     }
   },
