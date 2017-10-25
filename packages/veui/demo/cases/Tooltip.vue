@@ -54,7 +54,7 @@
           </div>
         </div>
       </div>
-      <veui-tooltip :position="position" :ui="ui" :target="target" trigger="hover" :open.sync="open">当前是hover事件</veui-tooltip>
+      <veui-tooltip :position="position" :ui="ui" :target="target" trigger="hover">当前是hover事件</veui-tooltip>
     </p>
     <p>
       <div class="demo-wrap">
@@ -106,7 +106,7 @@
           </div>
         </div>
       </div>
-      <veui-tooltip :position="clickPosition" :ui="ui" :target="clickTarget" trigger="click" :open.sync="clickOpen">当前是click事件</veui-tooltip>
+      <veui-tooltip :position="clickPosition" :ui="ui" :target="clickTarget" trigger="click">当前是click事件</veui-tooltip>
     </p>
     <p>
       <div style="margin-bottom:10px;">自定义事件</div>
@@ -157,12 +157,10 @@ export default {
     show (obj) {
       this.position = obj.position
       this.target = obj.target
-      this.open = true
     },
     clickShow (obj) {
       this.clickPosition = obj.clickPosition
       this.clickTarget = obj.clickTarget
-      this.clickOpen = true
     }
   }
 }

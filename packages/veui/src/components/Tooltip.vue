@@ -89,6 +89,9 @@ export default {
         delay: this.hideDelay,
         excludeSelf: !this.interactive
       }
+    },
+    realOpen () {
+      return this.localOpen && !!this.targetNode
     }
   },
   watch: {
@@ -101,6 +104,9 @@ export default {
       if (this.open !== val) {
         this.$emit('update:open', val)
       }
+    },
+    target () {
+      this.localOpen = true
     }
   },
   methods: {
@@ -133,7 +139,7 @@ export default {
     return (
       <veui-overlay
         target={this.targetNode}
-        open={this.localOpen}
+        open={this.realOpen}
         options={this.overlay}
         overlayClass={this.mergeOverlayClass('veui-tooltip-box')}>
         <div class="veui-tooltip" ui={this.ui} {...{directives}}>

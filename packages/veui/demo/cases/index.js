@@ -29,6 +29,7 @@ import ButtonGroup from './ButtonGroup'
 import Progress from './Progress'
 import Carousel from './Carousel'
 import Transfer from './Transfer'
+import Schedule from './Schedule'
 
 export default [
   {
@@ -50,11 +51,6 @@ export default [
     path: '/button-group',
     name: 'ButtonGroup',
     component: ButtonGroup
-  },
-  {
-    path: '/overlay',
-    name: 'Overlay',
-    component: Overlay
   },
   {
     path: '/calendar',
@@ -107,9 +103,19 @@ export default [
     component: Input
   },
   {
+    path: '/overlay',
+    name: 'Overlay',
+    component: Overlay
+  },
+  {
     path: '/pager/:page?',
     name: 'Pager',
     component: Pager
+  },
+  {
+    path: '/progress',
+    name: 'Progress',
+    component: Progress
   },
   {
     path: '/radio',
@@ -130,6 +136,11 @@ export default [
     path: '/region-picker',
     name: 'RegionPicker',
     component: RegionPicker
+  },
+  {
+    path: '/schedule',
+    name: 'Schedule',
+    component: Schedule
   },
   {
     path: '/searchbox',
@@ -187,18 +198,13 @@ export default [
     component: Tooltip
   },
   {
-    path: '/uploader',
-    name: 'Uploader',
-    component: Uploader
-  },
-  {
-    path: '/progress',
-    name: 'Progress',
-    component: Progress
-  },
-  {
     path: '/transfer',
     name: 'Transfer',
     component: Transfer
+  },
+  {
+    path: '/uploader',
+    name: 'Uploader',
+    component: Uploader
   }
 ]
