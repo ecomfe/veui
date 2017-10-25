@@ -148,6 +148,10 @@
     "path": "RegionPicker.vue"
   },
   {
+    "name": "Schedule",
+    "path": "Schedule.vue"
+  },
+  {
     "name": "Searchbox",
     "path": "Searchbox.vue"
   },

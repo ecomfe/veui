@@ -1,0 +1,140 @@
+@import "../lib.less";
+
+.veui-schedule {
+  width: 653px;
+  border: 1px solid @veui-gray-color-5;
+
+  &-body {
+    .clearfix();
+    padding: 20px 10px 20px 20px;
+    background-color: @veui-gray-color-8;
+  }
+
+  &-head {
+    &-hour {
+      float: right;
+      color: @veui-text-color-weak;
+      margin-bottom: 10px;
+      font-size: @veui-font-size-small;
+
+      &-item {
+        float: left;
+        .size(46px, 12px);
+        text-align: center;
+      }
+    }
+
+    &-day {
+      float: left;
+      clear: right;
+      margin-right: 10px;
+      color: @veui-text-color-weak;
+
+      &-item {
+        line-height: 23px;
+
+        .veui-checkbox[ui~="small"] {
+          .veui-checkbox {
+            &-box {
+              margin-right: 10px;
+            }
+
+            &-label {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &-detail {
+    position: relative;
+    float: left;
+  }
+
+  &-table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    cursor: pointer;
+
+    col {
+      width: 23px;
+    }
+
+    td {
+      height: 23px;
+      padding: 0;
+      text-align: center;
+    }
+
+    &-interaction {
+      button {
+        .absolute(0, _, _, 0);
+        .size(22px);
+        background: none;
+        border: none;
+        background-color: #fff;
+        outline: none;
+        .veui-button-transition();
+
+        &:hover,
+        &.focus-ring {
+          background-color: @veui-brand-color-10;
+        }
+
+        &:hover:active,
+        &.veui-schedule-selected {
+          background-color: @veui-brand-color-8;
+        }
+
+        &.veui-schedule-selected {
+          &:hover,
+          &.focus-ring {
+            background-color: @veui-brand-color-7;
+          }
+
+          &:hover:active {
+            background-color: @veui-brand-color-6;
+          }
+        }
+
+        &::after {
+          // for browsers lacking `pointer-events` support
+          content: "";
+          .absolute(0, _, _, 0);
+          width: 23px;
+          height: 23px;
+          z-index: 1;
+          background-color: #fff;
+          opacity: .001;
+        }
+      }
+
+      td {
+        position: relative;
+        border: 1px solid @veui-gray-color-6;
+
+        &.veui-schedule-selected + .veui-schedule-selected::after {
+          content: "";
+          .absolute(0, _, _, -1px);
+          .size(1px, 22px);
+          background-color: @veui-brand-color-8;
+        }
+      }
+    }
+
+    &-selected {
+      pointer-events: none; // for Firefox
+      .absolute(0, _, _, 0);
+      font-size: @veui-font-size-small;
+      color: @veui-text-color-normal;
+
+      td {
+        padding-top: 1px;
+        border-color: transparent;
+        white-space: nowrap;
+      }
+    }
+  }
+}
