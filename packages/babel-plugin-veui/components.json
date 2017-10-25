@@ -244,6 +244,14 @@
     "path": "Tree/Tree.vue"
   },
   {
+    "name": "Tree",
+    "path": "Tree"
+  },
+  {
+    "name": "Tree",
+    "path": "Tree/index.js"
+  },
+  {
     "name": "Uploader",
     "path": "Uploader.vue"
   }
