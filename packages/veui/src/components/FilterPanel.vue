@@ -92,8 +92,9 @@ export default {
           let isSelfVisible = this.filter(this.keyword, option, index, options, this.datasource)
           let isChildrenVisible = option.children && option.children.length && walk(option.children, filteredOptions[index].children)
 
-          hasVisibleOption = isSelfVisible || isChildrenVisible
-          this.$set(filteredOptions[index], 'hidden', !hasVisibleOption)
+          let isHidden = !isSelfVisible && !isChildrenVisible
+          hasVisibleOption = hasVisibleOption || !isHidden
+          this.$set(filteredOptions[index], 'hidden', isHidden)
         })
         return hasVisibleOption
       }

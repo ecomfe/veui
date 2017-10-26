@@ -19,40 +19,45 @@
     </template>
 
     <template scope="props">
-      <template v-if="showMode === 'tree'">
-        <veui-tree v-if="$scopedSlots['selected-item']"
-          class="veui-transfer-selected-tree"
-          :datasource="props.options"
-          :expands.sync="localExpands"
-          @click="remove">
-          <template slot="item" scope="item">
-            <slot name="selected-item" v-bind="item"></slot>
-          </template>
-        </veui-tree>
-        <veui-tree v-else
-          :datasource="props.options"
-          :expands.sync="localExpands"
-          @click="remove"
-          class="veui-transfer-selected-tree">
-          <template slot="item-label" scope="props">
-            <div class="veui-transfer-item-label">
-              <span class="veui-transfer-item-text">
-                <slot name="selected-item-label" v-bind="props">{{ props.option.label }}</slot>
+      <veui-tree
+        :datasource="props.options"
+        :expands.sync="localExpands"
+        @click="remove"
+        class="veui-transfer-selected-tree"
+        v-if="showMode === 'tree'">
+        <template slot="item" scope="props">
+          <slot name="item" v-bind="props">
+            <div class="veui-transfer-selected-item"
+              :class="{'veui-transfer-selected-item-hidden': props.option.hidden}">
+
+              <!-- 控制展开收起的图标 -->
+              <span class="veui-tree-item-expand-switcher"
+                v-if="props.option.children && props.option.children.length"
+                @click.stop="toggle(props.option)">
+                <veui-icon :name="icons.collapsed"></veui-icon>
               </span>
-              <veui-icon v-if="icons.remove"
-                :name="icons.remove"
-                class="veui-transfer-selected-icon-remove"></veui-icon>
+
+              <div class="veui-transfer-item-label">
+                <span class="veui-transfer-item-text">
+                  <slot name="item-label" v-bind="props">{{ props.option.label }}</slot>
+                </span>
+
+                <veui-icon
+                  class="veui-transfer-selected-icon-remove"
+                  :name="icons.remove"></veui-icon>
+              </div>
+
             </div>
-          </template>
-        </veui-tree>
-      </template>
+          </slot>
+        </template>
+      </veui-tree>
       <ul v-else class="veui-transfer-selected-flat-items">
         <li v-for="(options, index) in props.options"
           :key="options.items[options.items.length - 1].value"
           class="veui-transfer-selected-flat-item"
           :class="{'veui-transfer-selected-flat-item-hidden': options.hidden}"
           @click="remove(options.items[options.items.length - 1], options.items.slice(0, options.items.length - 1).reverse())">
-          <slot name="selected-item" :option="options.items" :index="index">
+          <slot name="item" :option="options.items" :index="index">
             <div class="veui-transfer-selected-flat-item-label">
               <template v-for="(opt, index) in options.items">
                 <span :key="opt.value" class="veui-transfer-selected-flat-option-label">{{ opt.label }}</span>
@@ -80,7 +85,7 @@ import FilterPanel from '../FilterPanel'
 import Icon from '../Icon'
 import Button from '../Button'
 import Tree from '../Tree'
-import { get, clone } from 'lodash'
+import { get, clone, isEqual } from 'lodash'
 
 export default {
   name: 'veui-selected-panel',
@@ -108,8 +113,10 @@ export default {
   },
   watch: {
     expands: {
-      handler () {
-        this.localExpands = clone(this.expands)
+      handler (val, oldVal) {
+        if (!isEqual(val, oldVal)) {
+          this.localExpands = clone(this.expands)
+        }
       },
       immediate: true
     },
@@ -165,6 +172,16 @@ export default {
         option,
         isFlat ? this.flattenOptions : this.datasource
       )
+    },
+    toggle (option) {
+      let expands = clone(this.localExpands)
+      let index = expands.indexOf(option.value)
+      if (index > -1) {
+        expands.splice(index, 1)
+      } else {
+        expands.push(option.value)
+      }
+      this.$emit('update:expands', expands)
     },
     removeAll () {
       this.$emit('removeall')

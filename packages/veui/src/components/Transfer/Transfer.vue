@@ -1,175 +1,8 @@
-<template>
-  <div class="veui-transfer" :class="{'veui-transfer-disabled': !isSelectable}">
-    <veui-candidate-panel
-      :datasource="candidateOptions"
-      :searchable="searchable"
-      :filter="filter"
-      :placeholder="candidatePlaceholder"
-      :is-selectable="isSelectable"
-      :icons="icons"
-      :expands="candidateExpands"
-      @select="select"
-      @selectall="selectAll">
-    </veui-candidate-panel>
-
-    <veui-selected-panel
-      :datasource="selectedOptions"
-      :show-mode="selectedShowMode"
-      :searchable="searchable"
-      :filter="filter"
-      :placeholder="selectedPlaceholder"
-      :is-selectable="isSelectable"
-      :expands.sync="selectedExpands"
-      :icons="icons"
-      @remove="remove"
-      @removeall="removeAll">
-    </veui-selected-panel>
-    <!-- <veui-filter-panel :datasource="candidateOptions"
-      :searchable="searchable"
-      @click="select"
-      :filter="candidateFilter"
-      class="veui-transfer-candidate-panel"
-      :placeholder="candidatePlaceholder"
-      ref="candidate">
-
-      <template slot="head">
-        <slot name="candidate-head">
-          <slot name="candidate-title">备选列表</slot>
-          <veui-button ui="link"
-            class="veui-transfer-select-all"
-            @click="selectAll"
-            :disabled="!isSelectable">全选</veui-button>
-        </slot>
-      </template>
-
-      <template scope="props">
-        <veui-tree v-if="$scopedSlots['candidate-item']"
-          :datasource="props.options"
-          :expands.sync="candidateExpands"
-          @click="select">
-          <template slot="item" scope="item">
-            <slot name="candidate-item" v-bind="item"></slot>
-          </template>
-        </veui-tree>
-        <veui-tree v-else
-          :datasource="props.options"
-          :expands.sync="candidateExpands"
-          @click="select">
-
-          <template slot="item" scope="props">
-            <div class="veui-transfer-candidate-item"
-              :class="{'veui-transfer-candidate-item-hidden': props.option.hidden}">
-              <span class="veui-tree-item-expand-switcher"
-                v-if="props.option.children && props.option.children.length"
-                @click.stop="toggle('candidate', props.option)">
-                <veui-icon :name="icons.collapsed"></veui-icon>
-              </span>
-              <div class="veui-transfer-item-label"
-                :class="{'veui-transfer-candidate-item-label-selected': props.option.visuallySelected}">
-                <span class="veui-transfer-item-text">
-                  <slot name="candidate-item-label" v-bind="props">{{ props.option.label }}</slot>
-                </span>
-
-                <veui-icon class="veui-transfer-candidate-icon-unselected"
-                  :name="icons.select"
-                  v-if="!props.option.visuallySelected"></veui-icon>
-                <veui-icon class="veui-transfer-candidate-icon-selected"
-                  :name="icons.check"
-                  v-else></veui-icon>
-              </div>
-            </div>
-          </template>
-
-        </veui-tree>
-      </template>
-
-      <template slot="no-data">
-        <slot name="candidate-no-data">没有备选项</slot>
-      </template>
-
-    </veui-filter-panel> -->
-
-    <!-- <veui-filter-panel :datasource="selectedShowMode === 'flat' ? selectedFlattenOptions : selectedOptions"
-      :searchable="searchable"
-      :filter="selectedFilter"
-      class="veui-transfer-selected-panel"
-      :class="{'veui-transfer-selected-flat': selectedShowMode === 'flat'}"
-      :placeholder="selectedPlaceholder"
-      ref="selected">
-
-      <template slot="head">
-        <slot name="selected-head">
-          <slot name="selected-title">已选列表</slot>
-          <veui-button ui="link"
-            class="veui-transfer-remove-all"
-            @click="removeAll"
-            :disabled="!isSelectable">删除全部</veui-button>
-        </slot>
-      </template>
-
-      <template scope="props">
-        <template v-if="selectedShowMode === 'tree'">
-          <veui-tree v-if="$scopedSlots['selected-item']"
-            class="veui-transfer-selected-tree"
-            :datasource="props.options"
-            :expands.sync="selectedExpands"
-            @click="remove">
-            <template slot="item" scope="item">
-              <slot name="selected-item" v-bind="item"></slot>
-            </template>
-          </veui-tree>
-          <veui-tree v-else
-            :datasource="props.options"
-            :expands.sync="selectedExpands"
-            @click="remove"
-            class="veui-transfer-selected-tree">
-            <template slot="item-label" scope="props">
-              <div class="veui-transfer-item-label">
-                <span class="veui-transfer-item-text">
-                  <slot name="selected-item-label" v-bind="props">{{ props.option.label }}</slot>
-                </span>
-                <veui-icon v-if="icons.remove"
-                  :name="icons.remove"
-                  class="veui-transfer-selected-icon-remove"></veui-icon>
-              </div>
-            </template>
-          </veui-tree>
-        </template>
-        <ul v-else class="veui-transfer-selected-flat-items">
-          <li v-for="(options, index) in props.options"
-            :key="options.items[options.items.length - 1].value"
-            class="veui-transfer-selected-flat-item"
-            :class="{'veui-transfer-selected-flat-item-hidden': options.hidden}"
-            @click="remove(options.items[options.items.length - 1], options.items.slice(0, options.items.length - 1).reverse())">
-            <slot name="selected-item" :option="options.items" :index="index">
-              <div class="veui-transfer-selected-flat-item-label">
-                <template v-for="(opt, index) in options.items">
-                  <span :key="opt.value" class="veui-transfer-selected-flat-option-label">{{ opt.label }}</span>
-                  <span :key="opt.value"
-                    class="veui-transfer-selected-flat-option-separator"
-                    v-if="index < options.items.length - 1">
-                    <veui-icon :name="icons.separator"></veui-icon>
-                  </span>
-                </template>
-                <veui-icon class="veui-transfer-selected-flat-icon-remove" :name="icons.remove"></veui-icon>
-              </div>
-            </slot>
-          </li>
-        </ul>
-      </template>
-
-      <template slot="no-data">
-        <slot name="selected-no-data">请从左侧选择</slot>
-      </template>
-    </veui-filter-panel> -->
-  </div>
-</template>
-
 <script>
 import FilterPanel from '../FilterPanel'
 import Tree from '../Tree'
 import Button from '../Button'
-import { cloneDeep, isEqual, find, difference, includes, omit, uniq, remove, get } from 'lodash'
+import { cloneDeep, isEqual, find, difference, includes, omit, uniq, remove } from 'lodash'
 import Icon from '../Icon'
 import { icons, input } from '../../mixins'
 import CandidatePanel from './_CandidatePanel'
@@ -248,41 +81,6 @@ export default {
     }
   },
   watch: {
-    selectedOptions: {
-      handler (selectedOptions) {
-        let walk = (option, path, paths) => {
-          if (!option.children || !option.children.length) {
-            paths.push([...path, option])
-            return
-          }
-
-          option.children.forEach(child => {
-            walk(child, [...path, option], paths)
-          })
-        }
-
-        let paths = []
-        selectedOptions.forEach(option => {
-          let itemPaths = []
-          walk(option, [], itemPaths)
-          paths.push(...itemPaths)
-        })
-
-        paths.forEach((path, index) => {
-          let option = get(this.selectedFlattenOptions, [index, 'items'])
-          if (
-            !option ||
-            !path.length === option.length ||
-            path.some((pathItem, index) => option[index].value !== pathItem.value)
-          ) {
-            this.selectedFlattenOptions[index] = { items: path }
-          }
-        })
-        this.selectedFlattenOptions.splice(paths.length, this.selectedFlattenOptions.length - paths.length)
-      },
-      deep: true,
-      immediate: true
-    },
     datasource (v, oldV) {
       if (!isEqual(v, oldV)) {
         this.candidateOptions = cloneDeep(v)
@@ -589,19 +387,6 @@ export default {
 
       return { allCount, partCount }
     },
-    findOptionByValue (options, value) {
-      let targetOption
-      find(options, option => {
-        if (option.value === value) {
-          targetOption = option
-        } else if (option.children && option.children.length) {
-          targetOption = this.findOptionByValue(option.children, value)
-        }
-
-        return targetOption
-      })
-      return targetOption
-    },
     findChain (options, value) {
       let walk = (options, chain = []) => {
         let currentChain = []
@@ -628,28 +413,98 @@ export default {
       let chain = []
       walk(options, chain)
       return chain
-    },
-    syncFields (fromOptions, toOptions, fields) {
-      let set = (fromOption, toOption, key) => {
-        if (fromOption.hasOwnProperty(key)) {
-          this.$set(toOption, key, fromOption[key])
-        }
-      }
-      find(fromOptions, (fromOption, index) => {
-        if (!toOptions[index]) {
-          return true
-        }
-
-        let toOption = toOptions[index]
-        fields.forEach(field => {
-          set(fromOption, toOption, field)
-        })
-
-        if (this.hasChild(fromOption) && this.hasChild(toOption)) {
-          this.syncFields(fromOption.children, toOption.children, fields)
-        }
-      })
     }
+  },
+  render (createElement) {
+    function generateHead (type) {
+      let head = this.$slots[`${type}-head`]
+        ? createElement('template', { slot: 'head' }, this.$slots[`${type}-head`])
+        : null
+      let title = !head && this.$slots[`${type}-title`]
+        ? createElement('template', { slot: 'title' }, this.$slots[`${type}-title`])
+        : null
+      return [head, title]
+    }
+
+    function generateItem (type) {
+      let item = this.$scopedSlots[`${type}-item`]
+        ? props => this.$scopedSlots[`${type}-item`](props)
+        : null
+      let itemLabel = !item && this.$scopedSlots[`${type}-item-label`]
+        ? props => this.$scopedSlots[`${type}-item-label`](props)
+        : null
+      return {
+        item,
+        'item-label': itemLabel
+      }
+    }
+
+    return createElement(
+      'div',
+      {
+        class: {
+          'veui-transfer': true,
+          'veui-transfer-disabled': !this.isSelectable
+        }
+      },
+      [
+        createElement(
+          CandidatePanel,
+          {
+            props: {
+              datasource: this.candidateOptions,
+              searchable: this.searchable,
+              filter: this.filter,
+              placeholder: this.candidatePlaceholder,
+              isSelectable: this.isSelectable,
+              icons: this.icons,
+              expands: this.candidateExpands
+            },
+            on: {
+              'update:expands': (val) => {
+                this.candidateExpands = val
+              },
+              select: (...args) => {
+                this.select(...args)
+              },
+              selectall: (...args) => {
+                this.selectAll(...args)
+              }
+            },
+            scopedSlots: generateItem.call(this, 'candidate')
+          },
+          [...generateHead.call(this, 'candidate')]
+        ),
+        createElement(
+          SelectedPanel,
+          {
+            props: {
+              datasource: this.selectedOptions,
+              showMode: this.selectedShowMode,
+              searchable: this.searchable,
+              filter: this.filter,
+              placeholder: this.selectedPlaceholder,
+              isSelectable: this.isSelectable,
+              expands: this.selectedExpands,
+              icons: this.icons
+            },
+            on: {
+              'update:expands': (val) => {
+                this.selectedExpands = val
+              },
+              remove: (...args) => {
+                this.remove(...args)
+              },
+              removeall: (...args) => {
+                this.removeAll(...args)
+              }
+            },
+            scopedSlots: generateItem.call(this, 'selected')
+          },
+          [...generateHead.call(this, 'selected')]
+        )
+      ]
+    )
   }
 }
 </script>

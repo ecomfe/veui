@@ -1,89 +1,105 @@
 @import "../lib.less";
 
 .veui-transfer {
+  @item-height: 36px;
+  @item-indent-gap: 18px;
+  @item-text-max-width: 150px;
+
+  @panel-gap: 20px;
+  @panel-inner-horizontal-gap: 20px;
+
+  @flat-panel-min-width: 350px;
+  @flat-item-line-height: 22px;
+  @flat-item-right-gap: 20px;
+
+  @remove-icon-size: 12px;
+
   .clearfix();
   display: inline-block;
   overflow: hidden;
   vertical-align: middle;
 
-  @item-height: 36px;
+  // 让 icon 居中
   .center-icon(@line-height: @item-height) {
     @height: (@line-height) / 2;
     margin-top: ~"calc(@{height} - .5em)";
     vertical-align: top;
   }
 
+  // 俩 panel 都左浮动
   .veui-filter-panel {
     float: left;
   }
 
+  // tree item 有 centered-line(36px) 的样式，此处不需要，覆盖掉
   .veui-tree-item {
     height: auto;
     line-height: unset;
   }
 
   &-candidate-panel {
-    margin-right: 20px;
+    margin-right: @panel-gap;
   }
 
   .veui-filter-panel-content-main {
     position: relative;
   }
 
-  &-candidate {
-    &-item {
-      padding: 0 20px;
-      cursor: pointer;
-      color: @veui-text-color-normal;
-      .centered-line(@item-height);
+  &-candidate-item,
+  &-selected-item {
+    padding: 0 @panel-inner-horizontal-gap;
+    cursor: pointer;
+    color: @veui-text-color-normal;
+    .centered-line(@item-height);
 
-      &::before {
-        content: "";
-        position: absolute;
+    &::before {
+      content: "";
+      position: absolute;
+      display: block;
+      left: 0;
+      right: 0;
+      height: @item-height;
+    }
+
+    &:hover::before {
+      background: @veui-gray-color-8;
+    }
+
+    &:active::before {
+      background: @veui-gray-color-6;
+    }
+
+    .veui-transfer-item-text,
+    .veui-icon {
+      position: relative;
+      z-index: 1;
+    }
+
+    &-hidden {
+      display: none;
+    }
+  }
+
+  &-candidate-item {
+    &:hover {
+      .veui-transfer-candidate-icon-selected,
+      .veui-transfer-candidate-icon-unselected {
         display: block;
-        left: 0;
-        right: 0;
-        height: @item-height;
-      }
-
-      &:hover::before {
-        background: @veui-gray-color-8;
-      }
-
-      &:active::before {
-        background: @veui-gray-color-6;
-      }
-
-      &:hover {
-        .veui-transfer-candidate-icon-selected,
-        .veui-transfer-candidate-icon-unselected {
-          display: block;
-        }
-      }
-
-      &-label {
-        width: ~"calc(100% - 18px)";
-      }
-
-      .veui-transfer-item-text,
-      .veui-icon {
-        position: relative;
-        z-index: 1;
-      }
-
-      &-selected .veui-tree-item-label {
-        color: @veui-text-color-weak;
-      }
-
-      &-hidden {
-        display: none;
       }
     }
+
+    &-label-selected {
+      color: @veui-text-color-aux;
+    }
+  }
+
+  &-selected-item:hover &-selected-icon-remove {
+    display: block;
   }
 
   &-item-text {
     .ellipsis();
-    max-width: 150px;
+    max-width: @item-text-max-width;
     float: left;
   }
 
@@ -91,7 +107,7 @@
     .clearfix();
 
     &:first-child {
-      margin-left: 18px;
+      margin-left: @item-indent-gap;
     }
   }
 
@@ -104,11 +120,7 @@
   }
 
   &-selected-icon-remove {
-    .size(12px);
-  }
-
-  &-candidate-item-label-selected {
-    color: @veui-text-color-aux;
+    .size(@remove-icon-size);
   }
 
   &-select-all,
@@ -117,7 +129,7 @@
   }
 
   &-selected-flat {
-    min-width: 350px;
+    min-width: @flat-panel-min-width;
 
     &-items {
       .reset-list-style();
@@ -127,7 +139,7 @@
     }
 
     &-item {
-      padding: 0 20px;
+      padding: 0 @panel-inner-horizontal-gap;
       cursor: pointer;
       position: relative;
 
@@ -140,7 +152,12 @@
       }
 
       &-label {
-        padding: 7px 0;
+        @padding-vertical: (@item-height - @flat-item-line-height) / 2;
+        padding: @padding-vertical @flat-item-right-gap @padding-vertical 0;
+      }
+
+      &-hidden {
+        display: none;
       }
     }
 
@@ -153,15 +170,33 @@
     }
 
     &-option-separator {
-      .center-icon(22px);
+      .center-icon(@flat-item-line-height);
     }
 
     &-icon-remove {
-      .absolute(50%, 20px, _, _);
+      .absolute(50%, @panel-inner-horizontal-gap, _, _);
       transform: translateY(-50%);
+      display: none;
+      .size(@remove-icon-size);
+    }
+
+    &-item:hover &-icon-remove {
+      display: block;
     }
   }
 
+  // disabled 之后的样式
+  &-disabled &-candidate-item,
+  &-disabled &-selected-item {
+    cursor: not-allowed;
+  }
+  &-disabled &-item-text,
+  &-disabled &-candidate-icon-unselected,
+  &-disabled &-selected-icon-remove {
+    color: @veui-text-color-aux;
+  }
+
+  // 要去掉表单中 invalid 时对 veui-input 设置的红色边框
   .veui-field-invalid & .veui-input {
     border-color: @veui-gray-color-5;
   }

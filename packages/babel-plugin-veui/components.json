@@ -237,7 +237,15 @@
   },
   {
     "name": "Transfer",
-    "path": "Transfer.vue"
+    "path": "Transfer/Transfer.vue"
+  },
+  {
+    "name": "Transfer",
+    "path": "Transfer"
+  },
+  {
+    "name": "Transfer",
+    "path": "Transfer/index.js"
   },
   {
     "name": "Tree",
