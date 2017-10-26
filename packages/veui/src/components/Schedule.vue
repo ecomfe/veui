@@ -1,60 +1,61 @@
 <template>
 <div class="veui-schedule">
-<div class="veui-schedule-header">
+  <div class="veui-schedule-header">
 
-</div>
-<div class="veui-schedule-body">
-  <div class="veui-schedule-head-hour">
-    <div class="veui-schedule-head-hour-item" v-for="i in 13" :key="i">{{ `${(i - 1) * 2}:00` }}</div>
   </div>
-  <div class="veui-schedule-head-day">
-    <div class="veui-schedule-head-day-item" v-for="i in 7" :key="i"><veui-checkbox ui="small">{{ `${dayNames[i - 1]}` }}</veui-checkbox></div>
-  </div>
-  <div class="veui-schedule-detail" @mouseleave="markEnd()">
-    <table class="veui-schedule-table veui-schedule-table-interaction">
-      <colgroup>
-        <col v-for="i in 24" :key="i"></col>
-      </colgroup>
-      <tr v-for="(day, i) in hourlyStates" :key="i">
-        <td v-for="(hour, j) in day" :key="j" :class="{ 'veui-schedule-selected': hour.isSelected }">
-          <button :disabled="realDisabled || hour.isDisabled"
-            :class="{ 'veui-schedule-selected': hour.isSelected }"
-            :ref="`${week[i]}-${j}`"
-            @mousedown="startPicking(i, j)"
-            @mouseenter="handleHover(i, j)"
-            @mouseup="pick()"><slot name="hour" :day="week[i]" :hour="j"></slot></button>
-        </td>
-      </tr>
-    </table>
-    <table class="veui-schedule-table veui-schedule-table-selected">
-      <colgroup>
-        <col v-for="i in 24" :key="i"></col>
-      </colgroup>
-      <tr v-for="(day, i) in hourlyStates" :key="i">
-        <template v-for="(hour, j) in day">
-          <td v-if="!hour.isSelected || hour.isStart" :key="j"
-            :colspan="hour.isStart && hour.span > 1 ? hour.span : false">
-            <slot name="label" :from="hour.from" :to="hour.end">
-            {{
-              hour.isWhole
-                ? '全天'
-                : hour.isStart && hour.span > 2
-                  ? `${hour.start}:00–${hour.end + 1}:00`
-                : ''
-            }}
-            </slot>
+  <div class="veui-schedule-body">
+    <div class="veui-schedule-head-hour">
+      <div class="veui-schedule-head-hour-item" v-for="i in 13" :key="i">{{ `${(i - 1) * 2}:00` }}</div>
+    </div>
+    <div class="veui-schedule-head-day">
+      <div class="veui-schedule-head-day-item" v-for="i in 7" :key="i"><veui-checkbox ui="small">{{ `${dayNames[i - 1]}` }}</veui-checkbox></div>
+    </div>
+    <div class="veui-schedule-detail" v-outside.mouseup="() => markEnd()">
+      <table class="veui-schedule-table veui-schedule-table-interaction">
+        <colgroup>
+          <col v-for="i in 24" :key="i"></col>
+        </colgroup>
+        <tr v-for="(day, i) in hourlyStates" :key="i">
+          <td v-for="(hour, j) in day" :key="j" :class="{ 'veui-schedule-selected': hour.isSelected }">
+            <button :disabled="realDisabled || hour.isDisabled"
+              :class="{ 'veui-schedule-selected': hour.isSelected }"
+              :ref="`${week[i]}-${j}`"
+              @mousedown="handleMousedown(i, j)"
+              @mouseenter="handleHover(i, j)"
+              @mouseup="pick()"><slot name="hour" :day="week[i]" :hour="j"></slot></button>
           </td>
-        </template>
-      </tr>
-    </table>
-    <veui-tooltip :target="currentRef" position="right" trigger="hover" :open.sync="tipOpen" :hideDelay="0">
-      <slot name="tooltip">{{ currentLabel }}</slot>
-    </veui-tooltip>
+        </tr>
+      </table>
+      <table class="veui-schedule-table veui-schedule-table-selected">
+        <colgroup>
+          <col v-for="i in 24" :key="i"></col>
+        </colgroup>
+        <tr v-for="(day, i) in hourlyStates" :key="i">
+          <template v-for="(hour, j) in day">
+            <td v-if="!hour.isSelected || hour.isStart" :key="j"
+              :colspan="hour.isStart && hour.span > 1 ? hour.span : false">
+              <slot name="label" :from="hour.from" :to="hour.end">
+              {{
+                hour.isWhole
+                  ? '全天'
+                  : hour.isStart && hour.span > 2
+                    ? `${hour.start}:00–${hour.end + 1}:00`
+                  : ''
+              }}
+              </slot>
+            </td>
+          </template>
+        </tr>
+      </table>
+      <veui-tooltip :target="currentRef" position="right" trigger="hover"
+        :delay="0" :interactive="false" ui="small">
+        <slot name="tooltip">{{ currentLabel }}</slot>
+      </veui-tooltip>
+    </div>
   </div>
-</div>
-<div class="veui-schedule-footer">
+  <div class="veui-schedule-footer">
 
-</div>
+  </div>
 </div>
 </template>
 
@@ -64,6 +65,7 @@ import { input } from '../mixins'
 import { type } from '../managers'
 import { merge } from '../utils/range'
 import config from '../managers/config'
+import { outside } from '../directives'
 import Checkbox from './Checkbox'
 import Tooltip from './Tooltip'
 
@@ -78,6 +80,7 @@ let dayNames = [
 export default {
   name: 'veui-schedule',
   mixins: [input],
+  directives: { outside },
   model: {
     prop: 'selected',
     event: 'select'
@@ -118,8 +121,7 @@ export default {
       week: [1, 2, 3, 4, 5, 6, 0],
       pickingStart: null,
       pickingEnd: null,
-      current: null,
-      tipOpen: false
+      current: null
     }
   },
   computed: {
@@ -160,7 +162,7 @@ export default {
       if (!current) {
         return null
       }
-      return `${current.state.start}:00–${current.state.end + 1}:00`
+      return `${current.hour}:00–${current.hour + 1}:00`
     }
   },
   methods: {
@@ -215,23 +217,6 @@ export default {
         dayIndex, hour
       }
     },
-    handleHover (dayIndex, hour) {
-      let hourState = this.hourlyStates[dayIndex][hour]
-      if (hourState.isSelected && hourState.span > 0 && hourState.span < 3) {
-        this.current = {
-          day: this.week[dayIndex],
-          hour: hourState.end,
-          state: hourState
-        }
-
-        // manually open the tip because it's possible that the
-        // button triggers this is not current positioning target
-        this.tipOpen = true
-      } else {
-        this.current = null
-      }
-      this.markEnd(dayIndex, hour)
-    },
     markEnd (dayIndex, hour) {
       if (!this.pickingStart) {
         return
@@ -243,6 +228,21 @@ export default {
       this.pickingEnd = {
         dayIndex, hour
       }
+    },
+    updateCurrent (dayIndex, hour) {
+      this.current = {
+        day: this.week[dayIndex],
+        hour,
+        state: this.hourlyStates[dayIndex][hour]
+      }
+    },
+    handleMousedown (dayIndex, hour) {
+      this.startPicking(dayIndex, hour)
+      this.updateCurrent(dayIndex, hour)
+    },
+    handleHover (dayIndex, hour) {
+      this.markEnd(dayIndex, hour)
+      this.updateCurrent(dayIndex, hour)
     },
     pick () {
       if (this.pickingStart) {
