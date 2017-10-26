@@ -70,6 +70,7 @@ import FilterPanel from '../FilterPanel'
 import Tree from '../Tree'
 import Button from '../Button'
 import Icon from '../Icon'
+import { isEqual, clone } from 'lodash'
 
 export default {
   name: 'veui-candidate-panel',
@@ -88,18 +89,39 @@ export default {
     expands: Array,
     icons: Object
   },
+  data () {
+    return {
+      localExpands: []
+    }
+  },
+  watch: {
+    expands: {
+      handler (val, oldVal) {
+        if (!isEqual(val, oldVal)) {
+          this.localExpands = clone(this.expands)
+        }
+      },
+      immediate: true
+    },
+    localExpands (val, oldVal) {
+      if (!isEqual(val, oldVal)) {
+        this.$emit('update:expands', val)
+      }
+    }
+  },
   methods: {
     realFilter (keyword, option) {
       return this.filter('candidate', keyword, option, this.datasource)
     },
     toggle (option) {
-      let expands = this.expands
+      let expands = clone(this.localExpands)
       let index = expands.indexOf(option.value)
       if (index > -1) {
         expands.splice(index, 1)
       } else {
         expands.push(option.value)
       }
+      this.localExpands = expands
     },
     selectAll () {
       this.$emit('selectall')

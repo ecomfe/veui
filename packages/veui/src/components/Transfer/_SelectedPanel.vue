@@ -120,8 +120,10 @@ export default {
       },
       immediate: true
     },
-    localExpands (val) {
-      this.$emit('update:expands', val)
+    localExpands (val, oldVal) {
+      if (!isEqual(val, oldVal)) {
+        this.$emit('update:expands', val)
+      }
     },
     datasource: {
       handler (selectedOptions) {
@@ -181,7 +183,7 @@ export default {
       } else {
         expands.push(option.value)
       }
-      this.$emit('update:expands', expands)
+      this.localExpands = expands
     },
     removeAll () {
       this.$emit('removeall')
