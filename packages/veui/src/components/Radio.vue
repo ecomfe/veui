@@ -3,7 +3,7 @@
     'veui-radio': true,
     'veui-disabled': realReadonly || realDisabled
   }" :ui="ui">
-  <input type="radio" v-bind="attrs" @change="$emit('change', $event.target.checked)">
+  <input type="radio" v-bind="attrs" v-model="localChecked">
   <span class="veui-radio-box"></span>
   <span class="veui-radio-label"><slot></slot></span>
 </label>
@@ -25,12 +25,27 @@ export default {
     prop: 'checked',
     event: 'change'
   },
+  data () {
+    return {
+      localChecked: this.checked
+    }
+  },
   computed: {
     attrs () {
       let attrs = pick(this.$props, 'checked')
       attrs.name = this.realName
       attrs.disabled = this.realDisabled || this.realReadonly
       return attrs
+    }
+  },
+  watch: {
+    checked (value) {
+      this.localChecked = value
+    },
+    localChecked (value) {
+      if (this.checked !== value) {
+        this.$emit('change', value)
+      }
     }
   }
 }
