@@ -417,26 +417,41 @@ export default {
   },
   render (createElement) {
     function generateHead (type) {
-      let head = this.$slots[`${type}-head`]
-        ? createElement('template', { slot: 'head' }, this.$slots[`${type}-head`])
+      let headSlotName = `${type}-head`
+      let head = this.$slots[headSlotName]
+        ? createElement('template', { slot: 'head' }, this.$slots[headSlotName])
         : null
-      let title = !head && this.$slots[`${type}-title`]
-        ? createElement('template', { slot: 'title' }, this.$slots[`${type}-title`])
+
+      let titleSlotName = `${type}-title`
+      let title = !head && this.$slots[titleSlotName]
+        ? createElement('template', { slot: 'title' }, this.$slots[titleSlotName])
         : null
+
       return [head, title]
     }
 
     function generateItem (type) {
-      let item = this.$scopedSlots[`${type}-item`]
-        ? props => this.$scopedSlots[`${type}-item`](props)
+      let itemSlotName = `${type}-item`
+      let item = this.$scopedSlots[itemSlotName]
+        ? props => this.$scopedSlots[itemSlotName](props)
         : null
-      let itemLabel = !item && this.$scopedSlots[`${type}-item-label`]
-        ? props => this.$scopedSlots[`${type}-item-label`](props)
+
+      let itemLabelSlotName = `${type}-item-label`
+      let itemLabel = !item && this.$scopedSlots[itemLabelSlotName]
+        ? props => this.$scopedSlots[itemLabelSlotName](props)
         : null
+
       return {
         item,
         'item-label': itemLabel
       }
+    }
+
+    function generateNoData (type) {
+      let slotName = `${type}-no-data`
+      return this.$slots[slotName]
+        ? createElement('template', { slot: 'no-data' }, this.$slots[slotName])
+        : null
     }
 
     return createElement(
@@ -473,7 +488,7 @@ export default {
             },
             scopedSlots: generateItem.call(this, 'candidate')
           },
-          [...generateHead.call(this, 'candidate')]
+          [...generateHead.call(this, 'candidate'), generateNoData.call(this, 'candidate')]
         ),
         createElement(
           SelectedPanel,
@@ -501,7 +516,7 @@ export default {
             },
             scopedSlots: generateItem.call(this, 'selected')
           },
-          [...generateHead.call(this, 'selected')]
+          [...generateHead.call(this, 'selected'), generateNoData.call(this, 'selected')]
         )
       ]
     )
