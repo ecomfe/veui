@@ -2,7 +2,7 @@
 import FilterPanel from '../FilterPanel'
 import Tree from '../Tree'
 import Button from '../Button'
-import { cloneDeep, isEqual, find, difference, includes, omit, uniq, remove } from 'lodash'
+import { isEqual, find, difference, includes, omit, uniq, remove, isString } from 'lodash'
 import Icon from '../Icon'
 import { icons, input } from '../../mixins'
 import CandidatePanel from './_CandidatePanel'
@@ -52,6 +52,12 @@ export default {
       validate (value) {
         return includes(['tree', 'flat'], value)
       }
+    },
+    keys: {
+      type: [String, Function],
+      default () {
+        return (source) => source.value
+      }
     }
   },
   model: {
@@ -60,7 +66,7 @@ export default {
   },
   data () {
     return {
-      candidateOptions: cloneDeep(this.datasource),
+      candidateOptions: [],
       selectedOptions: [],
       rootAllCount: 0,
       rootPartCount: 0,
@@ -76,15 +82,37 @@ export default {
   computed: {
     isSelectable () {
       return !this.realDisabled && !this.realReadonly
+    },
+    realKeys () {
+      if (isString(this.keys)) {
+        return (source) => source[this.keys]
+      }
+
+      return this.keys
     }
   },
   watch: {
-    datasource (v, oldV) {
-      if (!isEqual(v, oldV)) {
-        this.candidateOptions = cloneDeep(v)
-        this.correct()
-        this.setSelectedOptions(this.cloneSelectedOptions())
-      }
+    datasource: {
+      handler (v, oldV) {
+        if (!isEqual(v, oldV)) {
+          let walk = (datasource, options) => {
+            datasource.forEach((source, index) => {
+              let option = omit(source, 'children')
+              option.value = this.realKeys(source)
+              if (this.hasChild(source)) {
+                this.$set(option, 'children', [])
+                walk(source.children, option.children)
+              }
+              this.$set(options, index, option)
+            })
+          }
+          walk(this.datasource, this.candidateOptions)
+
+          this.correct()
+          this.setSelectedOptions(this.cloneSelectedOptions())
+        }
+      },
+      immediate: true
     },
     selected (v, oldV) {
       if (difference(v, oldV).length || difference(v, this.getSelectedValuesFromSelectedOptions()).length) {

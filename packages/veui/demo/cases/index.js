@@ -112,11 +112,6 @@ export default [
     component: Pager
   },
   {
-    path: '/progress',
-    name: 'Progress',
-    component: Progress
-  },
-  {
     path: '/radio',
     name: 'Radio',
     component: Radio
