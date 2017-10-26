@@ -1,6 +1,30 @@
 <template>
   <div class="veui-transfer" :class="{'veui-transfer-disabled': !isSelectable}">
-    <veui-filter-panel :datasource="candidateOptions"
+    <veui-candidate-panel
+      :datasource="candidateOptions"
+      :searchable="searchable"
+      :filter="filter"
+      :placeholder="candidatePlaceholder"
+      :is-selectable="isSelectable"
+      :icons="icons"
+      :expands="candidateExpands"
+      @select="select"
+      @selectall="selectAll">
+    </veui-candidate-panel>
+
+    <veui-selected-panel
+      :datasource="selectedOptions"
+      :show-mode="selectedShowMode"
+      :searchable="searchable"
+      :filter="filter"
+      :placeholder="selectedPlaceholder"
+      :is-selectable="isSelectable"
+      :expands.sync="selectedExpands"
+      :icons="icons"
+      @remove="remove"
+      @removeall="removeAll">
+    </veui-selected-panel>
+    <!-- <veui-filter-panel :datasource="candidateOptions"
       :searchable="searchable"
       @click="select"
       :filter="candidateFilter"
@@ -31,21 +55,31 @@
           :datasource="props.options"
           :expands.sync="candidateExpands"
           @click="select">
-          <template slot="item-label" scope="props">
-            <div class="veui-transfer-item-label"
-              :class="{'veui-transfer-candidate-item-label-selected': props.option.visuallySelected}">
-              <span class="veui-transfer-item-text">
-                <slot name="candidate-item-label" v-bind="props">{{ props.option.label }}</slot>
-              </span>
 
-              <veui-icon class="veui-transfer-candidate-icon-unselected"
-                :name="icons.select"
-                v-if="!props.option.visuallySelected"></veui-icon>
-              <veui-icon class="veui-transfer-candidate-icon-selected"
-                :name="icons.check"
-                v-else></veui-icon>
+          <template slot="item" scope="props">
+            <div class="veui-transfer-candidate-item"
+              :class="{'veui-transfer-candidate-item-hidden': props.option.hidden}">
+              <span class="veui-tree-item-expand-switcher"
+                v-if="props.option.children && props.option.children.length"
+                @click.stop="toggle('candidate', props.option)">
+                <veui-icon :name="icons.collapsed"></veui-icon>
+              </span>
+              <div class="veui-transfer-item-label"
+                :class="{'veui-transfer-candidate-item-label-selected': props.option.visuallySelected}">
+                <span class="veui-transfer-item-text">
+                  <slot name="candidate-item-label" v-bind="props">{{ props.option.label }}</slot>
+                </span>
+
+                <veui-icon class="veui-transfer-candidate-icon-unselected"
+                  :name="icons.select"
+                  v-if="!props.option.visuallySelected"></veui-icon>
+                <veui-icon class="veui-transfer-candidate-icon-selected"
+                  :name="icons.check"
+                  v-else></veui-icon>
+              </div>
             </div>
           </template>
+
         </veui-tree>
       </template>
 
@@ -53,9 +87,9 @@
         <slot name="candidate-no-data">没有备选项</slot>
       </template>
 
-    </veui-filter-panel>
+    </veui-filter-panel> -->
 
-    <veui-filter-panel :datasource="selectedShowMode === 'flat' ? selectedFlattenOptions : selectedOptions"
+    <!-- <veui-filter-panel :datasource="selectedShowMode === 'flat' ? selectedFlattenOptions : selectedOptions"
       :searchable="searchable"
       :filter="selectedFilter"
       class="veui-transfer-selected-panel"
@@ -103,43 +137,43 @@
         </template>
         <ul v-else class="veui-transfer-selected-flat-items">
           <li v-for="(options, index) in props.options"
-            :key="options[options.length - 1].value"
+            :key="options.items[options.items.length - 1].value"
             class="veui-transfer-selected-flat-item"
-            :class="{'veui-transfer-selected-flat-item-hidden': options[options.length - 1].hidden}"
-            @click="remove(options[options.length - 1], options.slice(0, options.length - 1).reverse())">
-            <slot name="selected-item" :option="options" :index="index">
+            :class="{'veui-transfer-selected-flat-item-hidden': options.hidden}"
+            @click="remove(options.items[options.items.length - 1], options.items.slice(0, options.items.length - 1).reverse())">
+            <slot name="selected-item" :option="options.items" :index="index">
               <div class="veui-transfer-selected-flat-item-label">
-                <template v-for="(opt, index) in options">
+                <template v-for="(opt, index) in options.items">
                   <span :key="opt.value" class="veui-transfer-selected-flat-option-label">{{ opt.label }}</span>
                   <span :key="opt.value"
                     class="veui-transfer-selected-flat-option-separator"
-                    v-if="index < options.length - 1">
+                    v-if="index < options.items.length - 1">
                     <veui-icon :name="icons.separator"></veui-icon>
                   </span>
                 </template>
                 <veui-icon class="veui-transfer-selected-flat-icon-remove" :name="icons.remove"></veui-icon>
               </div>
-              </slot>
-            </li>
-          </ul>
+            </slot>
+          </li>
         </ul>
       </template>
 
       <template slot="no-data">
         <slot name="selected-no-data">请从左侧选择</slot>
       </template>
-    </veui-filter-panel>
+    </veui-filter-panel> -->
   </div>
 </template>
 
 <script>
-import FilterPanel from './FilterPanel'
-import Tree from './Tree'
-import Button from './Button'
+import FilterPanel from '../FilterPanel'
+import Tree from '../Tree'
+import Button from '../Button'
 import { cloneDeep, isEqual, find, difference, includes, omit, uniq, remove, get } from 'lodash'
-import Icon from './Icon'
-import input from 'veui/mixins/input'
-import { icons } from '../mixins'
+import Icon from '../Icon'
+import { icons, input } from '../../mixins'
+import CandidatePanel from './_CandidatePanel'
+import SelectedPanel from './_SelectedPanel'
 
 function defaultFilter (type, keyword, option, datasource) {
   return includes(option.label, keyword)
@@ -151,7 +185,9 @@ export default {
     'veui-filter-panel': FilterPanel,
     'veui-icon': Icon,
     'veui-tree': Tree,
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-candidate-panel': CandidatePanel,
+    'veui-selected-panel': SelectedPanel
   },
   mixins: [input, icons],
   props: {
@@ -262,6 +298,15 @@ export default {
     }
   },
   methods: {
+    toggle (type, option) {
+      let expands = this[`${type}Expands`]
+      let index = expands.indexOf(option.value)
+      if (index > -1) {
+        expands.splice(index, 1)
+      } else {
+        expands.push(option.value)
+      }
+    },
     candidateFilter (keyword, option) {
       return this.filter('candidate', keyword, option, this.candidateOptions)
     },

@@ -70,6 +70,13 @@ export default {
     expands () {
       this.parseExpands()
     },
+    // expands: {
+    //   handler () {
+    //     this.parseExpands()
+    //   },
+    //   deep: true,
+    //   immediate: true
+    // },
     datasource: {
       handler () {
         this.parseExpands()
