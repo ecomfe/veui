@@ -66,9 +66,7 @@ export default {
       rootPartCount: 0,
 
       candidateExpands: [],
-      selectedExpands: [],
-
-      selectedFlattenOptions: []
+      selectedExpands: []
     }
   },
   created () {
@@ -96,23 +94,6 @@ export default {
     }
   },
   methods: {
-    toggle (type, option) {
-      let expands = this[`${type}Expands`]
-      let index = expands.indexOf(option.value)
-      if (index > -1) {
-        expands.splice(index, 1)
-      } else {
-        expands.push(option.value)
-      }
-    },
-    candidateFilter (keyword, option) {
-      return this.filter('candidate', keyword, option, this.candidateOptions)
-    },
-    selectedFilter (keyword, option) {
-      let isFlat = this.selectedShowMode === 'flat'
-      option = isFlat ? option.items[option.items.length - 1] : option
-      return this.filter('selected', keyword, option, isFlat ? this.selectedFlattenOptions : this.selectedOptions)
-    },
     // 判断节点是否被选中：
     // 1、如果是叶子节点，直接根据 selected 属性判断。
     // 2、如果是非叶子节点，则该节点下所有子级节点都全部选择了，当前节点才算被选中了。
@@ -151,6 +132,8 @@ export default {
           } else {
             this.setLeafSelected(option, true)
           }
+
+          this.$set(option, 'visuallySelected', true)
         })
       }
       walk(this.candidateOptions)
@@ -170,6 +153,8 @@ export default {
           } else {
             this.setLeafSelected(option, false)
           }
+
+          this.$set(option, 'visuallySelected', false)
         })
       }
       walk(this.candidateOptions)

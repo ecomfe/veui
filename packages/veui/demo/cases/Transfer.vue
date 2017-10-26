@@ -1,6 +1,6 @@
 <template>
   <article class="veui-transfer-demo">
-    <h1><code>&lt;veui-tree&gt;</code></h1>
+    <!-- <h1><code>&lt;veui-tree&gt;</code></h1>
 
     <h2>点击左侧图标展开收起</h2>
     <p>当前展开：{{ expands1 }}</p>
@@ -22,7 +22,7 @@
       </template>
     </veui-filter-panel>
 
-    <h1><code>&lt;veui-transfer&gt;</code></h1>
+    <h1><code>&lt;veui-transfer&gt;</code></h1> -->
 
     <h2>多级树形结构</h2>
     <veui-transfer :datasource="datasource1" v-model="selected1">
@@ -30,7 +30,7 @@
       <template slot="selected-title">已选列表（{{ selected1.length }}）</template>
     </veui-transfer>
 
-    <h2>单级结构</h2>
+    <!-- <h2>单级结构</h2>
     <p>
       <veui-transfer :datasource="datasource2" v-model="selected2">
         <template slot="candidate-title">备选列表</template>
@@ -76,7 +76,7 @@
       <div class="operation">
         <veui-button ui="primary" type="submit">提交</veui-button>
       </div>
-    </veui-form>
+    </veui-form>-->
   </article>
 </template>
 
