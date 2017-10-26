@@ -3,9 +3,9 @@
     'veui-checkbox': true,
     'veui-disabled': realReadonly || realDisabled
   }" :ui="ui">
-  <input ref="box" type="checkbox" v-bind="attrs" @change="handleChange($event.target.checked)">
+  <input ref="box" type="checkbox" v-bind="attrs" :checked="localChecked" @click="handleClick">
   <span class="veui-checkbox-box">
-    <icon v-if="checked || localIndeterminate" :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"></icon>
+    <icon v-if="localChecked || localIndeterminate" :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"></icon>
   </span>
   <span class="veui-checkbox-label"><slot></slot></span>
 </label>
@@ -42,6 +42,7 @@ export default {
   },
   data () {
     return {
+      localChecked: this.checked,
       localIndeterminate: this.indeterminate
     }
   },
@@ -54,19 +55,32 @@ export default {
     }
   },
   methods: {
-    handleChange (checked) {
-      this.localIndeterminate = false
-      this.$emit('update:indeterminate', false)
-      this.$emit('change', checked ? this.trueValue : this.falseValue)
-    },
     activate () {
-      this.handleChange(!this.checked)
+      this.localChecked = !this.localChecked
+    },
+    handleClick () {
+      this.localChecked = this.localIndeterminate ? false : !this.localChecked
+      this.localIndeterminate = false
     }
   },
   watch: {
     indeterminate (value) {
       this.localIndeterminate = value
+    },
+    checked (value) {
+      this.localChecked = value
+    },
+    localIndeterminate (value) {
       this.$refs.box.indeterminate = value
+      if (this.indeterminate !== value) {
+        this.$emit('update:indeterminate', false)
+      }
+    },
+    localChecked (value) {
+      this.localIndeterminate = false
+      if (this.checked !== value) {
+        this.$emit('change', value ? this.trueValue : this.falseValue)
+      }
     }
   },
   mounted () {
