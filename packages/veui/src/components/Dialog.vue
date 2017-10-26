@@ -15,14 +15,7 @@
         :class="{ 'veui-dialog-draggable': draggable }"
         ref="head"
         v-drag:content.translate="{ draggable, containment: '@window', ready: dragReady }">
-        <span class="veui-dialog-content-head-title"
-          v-if="title != null"
-          v-text="title">
-        </span>
-        <span class="veui-dialog-content-head-title"
-          v-else>
-          <slot name="title">弹窗标题</slot>
-        </span>
+        <span class="veui-dialog-content-head-title"><slot name="title">{{ title }}</slot></span>
         <a class="veui-dialog-content-head-close"
           v-show="closable"
           @click="hide">

@@ -1,9 +1,5 @@
 [
   {
-    "name": "",
-    "path": ".DS_Store"
-  },
-  {
     "name": "Alert",
     "path": "Alert.vue"
   },
