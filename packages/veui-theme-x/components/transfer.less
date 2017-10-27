@@ -16,8 +16,6 @@
 
   .clearfix();
   display: inline-block;
-  overflow: hidden;
-  vertical-align: middle;
 
   // 让 icon 居中
   .center-icon(@line-height: @item-height) {
@@ -31,10 +29,9 @@
     float: left;
   }
 
-  // tree item 有 centered-line(36px) 的样式，此处不需要，覆盖掉
+  // tree item 有 centered-line(36px) 的样式，此处要覆盖掉 height
   .veui-tree-item {
     height: auto;
-    line-height: unset;
   }
 
   &-candidate-panel {

@@ -1,5 +1,5 @@
 <template>
-  <veui-tree-inner :datasource="localDatasource"
+  <veui-tree-node :datasource="localDatasource"
     :item-click="itemClick"
     :icons="icons"
     @toggle="toggle"
@@ -8,8 +8,8 @@
     <template slot="item" scope="props">
       <slot name="item" v-bind="props"></slot>
     </template>
-  </veui-tree-inner>
-  <veui-tree-inner :datasource="localDatasource"
+  </veui-tree-node>
+  <veui-tree-node :datasource="localDatasource"
     :item-click="itemClick"
     :icons="icons"
     @toggle="toggle"
@@ -18,24 +18,24 @@
     <template slot="item-label" scope="props">
       <slot name="item-label" v-bind="props"></slot>
     </template>
-  </veui-tree-inner>
-  <veui-tree-inner :datasource="localDatasource"
+  </veui-tree-node>
+  <veui-tree-node :datasource="localDatasource"
     :item-click="itemClick"
     :icons="icons"
     @toggle="toggle"
     @click="handleItemClick"
-    v-else></veui-tree-inner>
+    v-else></veui-tree-node>
 </template>
 
 <script>
-import TreeInner from './_TreeInner'
+import TreeNode from './_TreeNode'
 import { includes, remove, clone, omit, filter, uniq } from 'lodash'
 import { icons } from '../../mixins'
 
 export default {
   name: 'veui-tree',
   components: {
-    'veui-tree-inner': TreeInner
+    'veui-tree-node': TreeNode
   },
   mixins: [icons],
   props: {
@@ -70,13 +70,6 @@ export default {
     expands () {
       this.parseExpands()
     },
-    // expands: {
-    //   handler () {
-    //     this.parseExpands()
-    //   },
-    //   deep: true,
-    //   immediate: true
-    // },
     datasource: {
       handler () {
         this.parseExpands()
@@ -111,14 +104,10 @@ export default {
         )
       this.$emit('update:expands', expands)
 
-      if (option.expanded) {
-        this.$emit('expand', option, index, depth)
-      } else {
-        this.$emit('collapse', option, index, depth)
-      }
+      this.$emit(option.expanded ? 'expand' : 'collapse', option, index, depth)
     },
-    handleItemClick (option, parents, index, depth) {
-      this.$emit('click', option, parents, index, depth)
+    handleItemClick (...args) {
+      this.$emit('click', ...args)
     }
   }
 }

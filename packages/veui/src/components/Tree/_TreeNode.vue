@@ -17,7 +17,7 @@
         </slot>
       </div>
 
-      <veui-tree-inner v-if="option.children && option.children.length"
+      <veui-tree-node v-if="option.children && option.children.length"
         :datasource="option.children"
         :depth="depth + 1"
         @click="handleChildClick(option, ...arguments)"
@@ -36,7 +36,7 @@
             </div>
           </slot>
         </template>
-      </veui-tree-inner>
+      </veui-tree-node>
 
     </li>
   </ul>
@@ -47,7 +47,7 @@ import Icon from '../Icon'
 import { includes } from 'lodash'
 
 export default {
-  name: 'veui-tree-inner',
+  name: 'veui-tree-node',
   components: {
     'veui-icon': Icon
   },
