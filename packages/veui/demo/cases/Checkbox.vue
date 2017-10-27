@@ -5,6 +5,9 @@
       <veui-checkbox>未绑定数据</veui-checkbox>
     </p>
     <p>
+      <veui-checkbox v-model="current" true-value="已选" false-value="未选">当前数据：</veui-checkbox> {{ current }}
+    </p>
+    <p>
       <veui-checkbox v-model="picked1">正常状态</veui-checkbox>
     </p>
     <p>
@@ -53,6 +56,7 @@ export default {
   },
   data () {
     return {
+      current: '已选',
       picked1: false,
       picked2: false,
       picked3: true,

@@ -5,7 +5,6 @@
     :name="localName"
     v-for="(item, index) in items"
     :key="index"
-    :true-value="item.value"
     :disabled="item.disabled || realDisabled || realReadonly"
     :checked="value.indexOf(item.value) !== -1"
     @change="checked => handleChange(item.value, checked)">

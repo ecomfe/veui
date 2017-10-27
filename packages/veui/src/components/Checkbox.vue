@@ -3,9 +3,9 @@
     'veui-checkbox': true,
     'veui-disabled': realReadonly || realDisabled
   }" :ui="ui">
-  <input ref="box" type="checkbox" v-bind="attrs" :checked="localChecked" @click="handleClick">
+  <input ref="box" type="checkbox" v-bind="attrs" @change="handleChange">
   <span class="veui-checkbox-box">
-    <icon v-if="localChecked || localIndeterminate" :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"></icon>
+    <icon v-if="isChecked || localIndeterminate" :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"></icon>
   </span>
   <span class="veui-checkbox-label"><slot></slot></span>
 </label>
@@ -14,7 +14,6 @@
 <script>
 import Icon from './Icon'
 import { input, icons } from '../mixins'
-import { pick } from 'lodash'
 import { patchIndeterminate } from '../utils/dom'
 
 export default {
@@ -37,7 +36,10 @@ export default {
       type: null,
       default: false
     },
-    checked: null,
+    checked: {
+      type: null,
+      default: false
+    },
     indeterminate: Boolean
   },
   data () {
@@ -48,19 +50,31 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = pick(this.$props, 'checked')
-      attrs.name = this.realName
-      attrs.disabled = this.realDisabled || this.realReadonly
+      let attrs = {
+        name: this.realName,
+        disabled: this.realDisabled || this.realReadonly,
+        checked: this.isChecked
+      }
       return attrs
+    },
+    isChecked () {
+      return this.localChecked === this.trueValue
     }
   },
   methods: {
     activate () {
-      this.localChecked = !this.localChecked
+      this.toggleChecked()
     },
-    handleClick () {
-      this.localChecked = this.localIndeterminate ? false : !this.localChecked
-      this.localIndeterminate = false
+    handleChange () {
+      if (this.localIndeterminate) {
+        this.localChecked = this.falseValue
+        this.localIndeterminate = false
+      } else {
+        this.toggleChecked()
+      }
+    },
+    toggleChecked () {
+      this.localChecked = this.isChecked ? this.falseValue : this.trueValue
     }
   },
   watch: {
@@ -77,9 +91,8 @@ export default {
       }
     },
     localChecked (value) {
-      this.localIndeterminate = false
       if (this.checked !== value) {
-        this.$emit('change', value ? this.trueValue : this.falseValue)
+        this.$emit('change', value)
       }
     }
   },
