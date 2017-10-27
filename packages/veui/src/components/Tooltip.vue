@@ -141,7 +141,10 @@ export default {
         target={this.targetNode}
         open={this.realOpen}
         options={this.overlay}
-        overlayClass={this.mergeOverlayClass('veui-tooltip-box')}>
+        overlayClass={this.mergeOverlayClass({
+          'veui-tooltip-box': true,
+          'veui-tooltip-box-transparent': !this.interactive
+        })}>
         <div class="veui-tooltip" ui={this.ui} {...{directives}}>
           <div class="veui-tooltip-content">
             { this.$slots.default }
