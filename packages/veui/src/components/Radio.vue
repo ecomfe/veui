@@ -3,7 +3,7 @@
     'veui-radio': true,
     'veui-disabled': realReadonly || realDisabled
   }" :ui="ui">
-  <input type="radio" v-bind="attrs" v-model="localChecked">
+  <input type="radio" v-bind="attrs" @change="localChecked = $event.target.checked">
   <span class="veui-radio-box"></span>
   <span class="veui-radio-label"><slot></slot></span>
 </label>
@@ -16,14 +16,17 @@ import { pick } from 'lodash'
 export default {
   name: 'veui-radio',
   mixins: [input],
-  props: {
-    ui: String,
-    value: null,
-    checked: Boolean
-  },
   model: {
     prop: 'checked',
     event: 'change'
+  },
+  props: {
+    ui: String,
+    value: {
+      type: null,
+      default: true
+    },
+    checked: null
   },
   data () {
     return {
