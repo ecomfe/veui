@@ -11,7 +11,6 @@
 
 <script>
 import { input } from '../mixins'
-import { pick } from 'lodash'
 
 export default {
   name: 'veui-radio',
@@ -35,10 +34,11 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = pick(this.$props, 'checked')
-      attrs.name = this.realName
-      attrs.disabled = this.realDisabled || this.realReadonly
-      return attrs
+      return {
+        checked: this.localChecked,
+        name: this.realName,
+        disabled: this.realDisabled || this.realReadonly
+      }
     }
   },
   watch: {

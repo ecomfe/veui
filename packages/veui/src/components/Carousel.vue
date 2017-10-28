@@ -131,7 +131,6 @@ export default {
       if (!this.autoplay) {
         return
       }
-      console.log('restart')
       this.__veui_carousel_timer__ = setInterval(() => {
         this.step(1)
       }, this.interval)

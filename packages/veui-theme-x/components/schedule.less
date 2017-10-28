@@ -4,6 +4,70 @@
   width: 653px;
   border: 1px solid @veui-gray-color-5;
 
+  &-header {
+    overflow: hidden;
+    padding: 10px 20px;
+    font-size: @veui-font-size-small;
+    line-height: 24px;
+  }
+
+  &-header {
+    border-bottom: 1px solid @veui-gray-color-5;
+  }
+
+  &-shortcuts {
+    float: left;
+  }
+
+  &-shortcut {
+    height: 24px;
+    margin-left: 10px;
+    padding: 0 10px;
+    border: none;
+    background-color: transparent;
+    color: @veui-text-color-normal;
+    outline: none;
+    .veui-button-transition();
+
+    &:first-child {
+      margin-left: -10px;
+    }
+
+    &-selected {
+      background-color: @veui-gray-color-7;
+      color: @veui-text-color-strong;
+    }
+  }
+
+  &-legend {
+    float: right;
+
+    &-item {
+      margin-left: 20px;
+      color: @veui-text-color-weak;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &::before {
+        content: "";
+        display: inline-block;
+        margin-right: 8px;
+        .size(8px);
+      }
+    }
+
+    &-available::before {
+      border: 1px solid @veui-gray-color-5;
+      background-color: #fff;
+    }
+
+    &-selected::before {
+      background-color: @veui-brand-color-8;
+    }
+  }
+
   &-body {
     .clearfix();
     padding: 20px 10px 20px 20px;
@@ -72,30 +136,30 @@
       button {
         .absolute(0, _, _, 0);
         .size(22px);
-        background: none;
         border: none;
-        background-color: #fff;
+        background-color: currentColor;
+        color: #fff;
         outline: none;
         .veui-button-transition();
 
         &:hover,
         &.focus-ring {
-          background-color: @veui-brand-color-10;
+          color: @veui-brand-color-10;
         }
 
         &:hover:active,
         &.veui-schedule-selected {
-          background-color: @veui-brand-color-8;
+          color: @veui-brand-color-8;
         }
 
         &.veui-schedule-selected {
           &:hover,
           &.focus-ring {
-            background-color: @veui-brand-color-7;
+            color: @veui-brand-color-7;
           }
 
           &:hover:active {
-            background-color: @veui-brand-color-6;
+            color: @veui-brand-color-6;
           }
         }
 
@@ -115,11 +179,11 @@
         position: relative;
         border: 1px solid @veui-gray-color-6;
 
-        &.veui-schedule-selected + .veui-schedule-selected::after {
+        &.veui-schedule-selected + .veui-schedule-selected button::before {
           content: "";
           .absolute(0, _, _, -1px);
           .size(1px, 22px);
-          background-color: @veui-brand-color-8;
+          background-color: currentColor;
         }
       }
     }
