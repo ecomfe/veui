@@ -1,14 +1,44 @@
 <template>
 <div class="veui-schedule">
   <div class="veui-schedule-header">
-
+    <slot name="header">
+      <slot name="shortcuts" v-if="shortcuts && shortcuts.length">
+        <div class="veui-schedule-shortcuts">
+          <template v-if="shortcutsDisplay === 'expand'">
+            <button v-for="({ label }, i) in shortcuts" :key="i"
+              @click="selectShortcut(i)"
+              :class="{
+                'veui-schedule-shortcut': true,
+                'veui-schedule-shortcut-selected': shortcutChecked[i]
+              }">{{ label }}</button>
+          </template>
+          <template v-else>
+            <veui-dropdown ui="link" label="默认时段" :options="shortcutOptions"
+              @click="selectShortcut"></veui-dropdown>
+          </template>
+        </div>
+      </slot>
+      <slot name="legend">
+        <div class="veui-schedule-legend">
+          <span v-for="(status, i) in statuses" :key="i"
+            class="veui-schedule-legend-item" :class="`veui-schedule-legend-${status.name}`">
+            <slot name="legend-label" v-bind="status">{{ status.label }}</slot>
+          </span>
+        </div>
+      </slot>
+    </slot>
   </div>
   <div class="veui-schedule-body">
     <div class="veui-schedule-head-hour">
       <div class="veui-schedule-head-hour-item" v-for="i in 13" :key="i">{{ `${(i - 1) * 2}:00` }}</div>
     </div>
     <div class="veui-schedule-head-day">
-      <div class="veui-schedule-head-day-item" v-for="i in 7" :key="i"><veui-checkbox ui="small">{{ `${dayNames[i - 1]}` }}</veui-checkbox></div>
+      <div class="veui-schedule-head-day-item" v-for="i in 7" :key="i">
+        <veui-checkbox ui="small" :indeterminate="dayChecked[i - 1].indeterminate"
+          :checked="dayChecked[i - 1].checked" @change="toggleDay(week[i - 1], $event)">
+          {{ `${dayNames[i - 1]}` }}
+        </veui-checkbox>
+      </div>
     </div>
     <div class="veui-schedule-detail" v-outside.mouseup="() => markEnd()">
       <table class="veui-schedule-table veui-schedule-table-interaction">
@@ -18,7 +48,7 @@
         <tr v-for="(day, i) in hourlyStates" :key="i">
           <td v-for="(hour, j) in day" :key="j" :class="{ 'veui-schedule-selected': hour.isSelected }">
             <button :disabled="realDisabled || hour.isDisabled"
-              :class="{ 'veui-schedule-selected': hour.isSelected }"
+              :class="mergeClass({ 'veui-schedule-selected': hour.isSelected }, week[i], j)"
               :ref="`${week[i]}-${j}`"
               @mousedown="handleMousedown(i, j)"
               @mouseenter="handleHover(i, j)"
@@ -53,21 +83,19 @@
       </veui-tooltip>
     </div>
   </div>
-  <div class="veui-schedule-footer">
-
-  </div>
 </div>
 </template>
 
 <script>
-import { find } from 'lodash'
+import { includes, find, isFunction, cloneDeep, mapValues, isEqual } from 'lodash'
 import { input } from '../mixins'
-import { type } from '../managers'
 import { merge } from '../utils/range'
 import config from '../managers/config'
 import { outside } from '../directives'
+import { normalizeClass, keepOwn } from '../utils/helper'
 import Checkbox from './Checkbox'
 import Tooltip from './Tooltip'
+import Dropdown from './Dropdown'
 
 config.defaults({
   shortcuts: []
@@ -87,7 +115,8 @@ export default {
   },
   components: {
     'veui-checkbox': Checkbox,
-    'veui-tooltip': Tooltip
+    'veui-tooltip': Tooltip,
+    'veui-dropdown': Dropdown
   },
   props: {
     selected: {
@@ -113,11 +142,24 @@ export default {
       default () {
         return config.get('schedule.shortcuts')
       }
+    },
+    shortcutsDisplay: {
+      type: String,
+      default: 'expand',
+      validator (value) {
+        return includes(['expand', 'collapse'], value)
+      }
+    },
+    statuses: {
+      type: Array,
+      default () {
+        return config.get('schedule.statuses')
+      }
     }
   },
   data () {
     return {
-      localSelected: type.clone(this.selected),
+      localSelected: cloneDeep(this.selected),
       week: [1, 2, 3, 4, 5, 6, 0],
       pickingStart: null,
       pickingEnd: null,
@@ -128,8 +170,22 @@ export default {
     dayNames () {
       return [...dayNames]
     },
+    dayChecked () {
+      return this.week.map(day => {
+        let [firstRange] = this.realSelected[day] || []
+        return {
+          checked: !!firstRange,
+          indeterminate: firstRange && (firstRange[0] !== 0 || firstRange[1] !== 23)
+        }
+      })
+    },
+    shortcutChecked () {
+      return this.realShortcuts.map(shortcut => {
+        return isEqual(keepOwn(shortcut.selected), keepOwn(this.realSelected))
+      })
+    },
     hourlyStates () {
-      return [...this.week].reduce((days, day) => {
+      return this.week.reduce((days, day) => {
         days.push([...Array(24)].map((v, i) => i).reduce((hours, hour) => {
           hours.push({
             disabled: typeof this.disabledHour === 'function' ? this.disabledHour(day, hour) : false,
@@ -150,6 +206,9 @@ export default {
       let days = [...this.week].splice(dayRange[0], dayRange[1] - dayRange[0] + 1)
       return this.mergeRange(days, hourRange)
     },
+    realSelected () {
+      return this.pickingSelected || this.localSelected
+    },
     currentRef () {
       let current = this.current
       if (!current) {
@@ -163,9 +222,29 @@ export default {
         return null
       }
       return `${current.hour}:00–${current.hour + 1}:00`
+    },
+    realShortcuts () {
+      return this.shortcuts.map(({ label, selected }) => {
+        return {
+          label,
+          selected: mapValues(selected, day => day === true ? [[0, 23]] : day)
+        }
+      })
+    },
+    shortcutOptions () {
+      return this.shortcuts.map(({ label }, i) => ({ label, value: i }))
     }
   },
   methods: {
+    mergeClass (classes, day, hour) {
+      let extra = isFunction(this.hourClass)
+        ? this.hourClass(day, hour)
+        : this.hourClass
+      return {
+        ...normalizeClass(classes),
+        ...normalizeClass(extra)
+      }
+    },
     getSelectState (day, hour) {
       let selected = this.pickingSelected || this.localSelected
       let daySelectState = selected ? selected[day] : null
@@ -202,12 +281,13 @@ export default {
         } else {
           selected[day] = merge(daySelected, range)
         }
-        if (selected[day] && !selected[day].length) {
-          delete selected[day]
+
+        if (!selected[day] || !selected[day].length) {
+          this.$delete(selected, day)
         }
 
         return selected
-      }, type.clone(this.localSelected) || {})
+      }, cloneDeep(this.localSelected) || {})
     },
     startPicking (dayIndex, hour) {
       this.pickingStart = {
@@ -248,6 +328,17 @@ export default {
       if (this.pickingStart) {
         this.localSelected = this.pickingSelected
         this.pickingStart = this.pickingEnd = null
+        this.$emit('select', this.localSelected)
+      }
+    },
+    selectShortcut (i) {
+      this.localSelected = this.realShortcuts[i].selected
+    },
+    toggleDay (day, checked) {
+      if (checked) {
+        this.$set(this.localSelected, day, [[0, 23]])
+      } else {
+        this.$delete(this.localSelected, day)
       }
     }
   }

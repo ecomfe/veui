@@ -50,12 +50,11 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = {
+      return {
         name: this.realName,
         disabled: this.realDisabled || this.realReadonly,
         checked: this.isChecked
       }
-      return attrs
     },
     isChecked () {
       return this.localChecked === this.trueValue
