@@ -21,7 +21,7 @@
         :datasource="option.children"
         :depth="depth + 1"
         @click="handleChildClick(option, ...arguments)"
-        @toggle="handChildToggle"
+        @toggle="handleChildToggle"
         :item-click="itemClick"
         :icons="icons">
         <template slot="item" scope="props">
@@ -73,21 +73,21 @@ export default {
     }
   },
   methods: {
-    toggle (option, index, depth) {
-      this.$emit('toggle', option, index, depth)
+    toggle (...args) {
+      this.$emit('toggle', ...args)
     },
-    click (option, parents, index, depth) {
-      this.$emit('click', option, parents, index, depth)
+    click (option, parents, ...extraArgs) {
+      this.$emit('click', option, parents, ...extraArgs)
 
       if (this.itemClick === 'toggle' && option.children && option.children.length) {
-        this.toggle(option, index, depth)
+        this.toggle(option, ...extraArgs)
       }
     },
-    handChildToggle (option, index, depth) {
-      this.$emit('toggle', option, index, depth)
+    handleChildToggle (...args) {
+      this.$emit('toggle', ...args)
     },
-    handleChildClick (parentOption, currentOption, parents, index, depth) {
-      this.$emit('click', currentOption, [...parents, parentOption], index, depth)
+    handleChildClick (parentOption, currentOption, parents, ...extraArgs) {
+      this.$emit('click', currentOption, [...parents, parentOption], ...extraArgs)
     }
   }
 }
