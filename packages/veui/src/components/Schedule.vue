@@ -79,7 +79,7 @@
       </table>
       <veui-tooltip :target="currentRef" position="right" trigger="hover"
         :delay="0" :interactive="false" ui="small">
-        <slot name="tooltip">{{ currentLabel }}</slot>
+        <slot name="tooltip" v-bind="current">{{ currentLabel }}</slot>
       </veui-tooltip>
     </div>
   </div>
@@ -312,8 +312,7 @@ export default {
     updateCurrent (dayIndex, hour) {
       this.current = {
         day: this.week[dayIndex],
-        hour,
-        state: this.hourlyStates[dayIndex][hour]
+        hour
       }
     },
     handleMousedown (dayIndex, hour) {

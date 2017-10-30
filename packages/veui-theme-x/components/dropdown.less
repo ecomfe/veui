@@ -33,8 +33,6 @@
       line-height: @veui-line-height-normal;
 
       &:not(:disabled) {
-        color: @veui-brand-color;
-
         &:hover,
         &.focus-ring {
           color: @veui-brand-color-2;
@@ -51,6 +49,10 @@
         margin-top: 0;
         vertical-align: middle;
       }
+    }
+
+    &[ui~="primary"]:not(:disabled) {
+      color: @veui-brand-color;
     }
   }
 }
