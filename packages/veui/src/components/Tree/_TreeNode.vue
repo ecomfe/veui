@@ -17,7 +17,7 @@
         </slot>
       </div>
 
-      <veui-tree-node v-if="option.children && option.children.length"
+      <veui-tree-node v-if="option.expanded && option.children && option.children.length"
         :datasource="option.children"
         :depth="depth + 1"
         @click="handleChildClick(option, ...arguments)"
