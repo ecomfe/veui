@@ -364,8 +364,6 @@ export default {
         if (this.requestMode === 'xhr' && this.autoUpload) {
           this.upload(newFile)
         }
-
-        this.isReplacing = false
       } else {
         if (this.maxCount !== 1 && (this.fileList.length + newFiles.length) > this.maxCount) {
           this.error.countOverflow = true
