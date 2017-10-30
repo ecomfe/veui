@@ -194,7 +194,6 @@ export default {
     //
     // 接收的参数为：
     //  option ：当前被选中的节点
-    //  parents ：当前被选中节点的祖先节点数组（第一个元素是离 option 最近的祖先节点）
     //
     // 注意： parents 来自于 this.candidateOptions ，内部的节点数据和 this.candidateOptions 中的节点数据是相等的。
     //
@@ -234,7 +233,6 @@ export default {
     //
     // 接收的参数为：
     //  option :待移除的节点
-    //  parents ：待移除节点的祖先节点数组（第一个元素是离 option 最近的祖先节点）
     //
     // 注意：parents 来自于 this.selectedOptions ，内部的节点数据和 this.candidateOptions 中的节点数据是完全不相等的。
     //
@@ -391,6 +389,8 @@ export default {
           this.setLeafSelected(option, this.selected.some(v => v === option.value))
           allCount += option.selected ? 1 : 0
         }
+
+        this.$set(option, 'visuallySelected', this.isSelected(option))
       })
 
       if (options === this.candidateOptions) {
