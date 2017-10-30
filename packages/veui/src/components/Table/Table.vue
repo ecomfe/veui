@@ -108,7 +108,6 @@ export default {
   },
   methods: {
     select (selected, index) {
-      debugger
       let item = null
       if (index !== undefined) {
         item = this.data[index]
