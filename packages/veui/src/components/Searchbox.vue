@@ -17,6 +17,7 @@
     @focus="inputFocus = true"
     @blur="handleBlur"
     @keyup.enter.prevent="search"
+    autocomplete="off"
   >
   </veui-input>
   <div class="veui-searchbox-others"
@@ -48,6 +49,7 @@
     target="input"
     :options="realOverlayOptions"
     :open="expanded"
+    v-if="expanded"
     :overlay-class="overlayClass">
     <div class="veui-searchbox-suggestion-overlay"
       ref="box"
@@ -153,7 +155,7 @@ export default {
       this.localValue = value
     },
     realExpanded (value) {
-      this.expanded = this.realExpanded
+      this.expanded = value
     },
     localValue (value) {
       this.$emit('input', value)
