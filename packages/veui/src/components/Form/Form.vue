@@ -1,5 +1,5 @@
 <template>
-<form class="veui-form" @submit.prevent="handleSubmit">
+<form class="veui-form" @submit.prevent="handleSubmit" @reset.prevent="reset(null)">
   <slot></slot>
 </form>
 </template>
@@ -265,8 +265,11 @@ export default {
       return isUndefined(res) || isBoolean(res) && res
     },
 
-    reset () {
-      this.fields.forEach(target => {
+    reset (names) {
+      let fields = names
+        ? this.fields.filter(field => includes(names, field.name))
+        : this.fields
+      fields.forEach(target => {
         target.resetValue()
       })
     }

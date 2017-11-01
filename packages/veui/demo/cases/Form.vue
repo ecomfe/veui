@@ -42,7 +42,7 @@
         </veui-field>
 
         <div class="operation">
-          <veui-button @click="() => this.$refs.form1.reset()">重置</veui-button>
+          <veui-button type="reset">重置</veui-button>
         </div>
       </veui-form>
     </section>
