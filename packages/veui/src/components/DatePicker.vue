@@ -25,7 +25,7 @@
     </template>
     <veui-icon class="veui-date-picker-icon" :name="icons.calendar"></veui-icon>
   </veui-button>
-  <button v-if="clearable" v-show="!!selected" class="veui-date-picker-clear" @click="clear">
+  <button type="button" v-if="clearable" v-show="!!selected" class="veui-date-picker-clear" @click="clear">
     <veui-icon :name="icons.clear"></veui-icon>
   </button>
   <veui-overlay v-if="expanded" target="button" :open="expanded" :options="realOverlayOptions" :overlay-class="overlayClass">

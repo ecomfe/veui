@@ -19,7 +19,7 @@
   <nav v-else-if="indicator !== 'none'" :class="{
       [`veui-carousel-indicator-${indicator}s`]: true
     }">
-    <button v-for="(item, i) in datasource" :key="i"
+    <button type="button" v-for="(item, i) in datasource" :key="i"
       :class="{
         'veui-carousel-indicator-item': true,
         'veui-carousel-indicator-item-current': localIndex === i
@@ -28,12 +28,12 @@
       @mouseenter="select(i, 'hover')"
     >{{ item.label || `第 ${i + 1} 页` }}</button>
   </nav>
-  <button class="veui-carousel-control veui-carousel-control-prev"
+  <button type="button" class="veui-carousel-control veui-carousel-control-prev"
     @click="step(-1)"
     :disabled="!wrap && localIndex === 0">
     <veui-icon :name="icons.prev"></veui-icon>
   </button>
-  <button class="veui-carousel-control veui-carousel-control-next"
+  <button type="button" class="veui-carousel-control veui-carousel-control-next"
     @click="step(1)"
     :disabled="!wrap && localIndex === count - 1">
     <veui-icon :name="icons.next"></veui-icon>

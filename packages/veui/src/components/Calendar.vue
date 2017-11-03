@@ -5,8 +5,8 @@
     <div class="veui-calendar-head">
       <button type="button" v-if="pIndex === 0 || p.view !== 'days'" class="veui-calendar-prev" @click="step(false, p.view)" :disabled="disabled || readonly"><veui-icon :name="icons.prev"></veui-icon></button>
       <template v-if="p.view === 'days'">
-        <button class="veui-calendar-select" @click="setView(pIndex, 'years')" :disabled="disabled || readonly"><b>{{ p.year }}</b> 年 <veui-icon :name="icons.expand"></veui-icon></button>
-        <button class="veui-calendar-select" @click="setView(pIndex, 'months')" :disabled="disabled || readonly"><b>{{ p.month + 1 }}</b> 月 <veui-icon :name="icons.expand"></veui-icon></button>
+        <button type="button" class="veui-calendar-select" @click="setView(pIndex, 'years')" :disabled="disabled || readonly"><b>{{ p.year }}</b> 年 <veui-icon :name="icons.expand"></veui-icon></button>
+        <button type="button" class="veui-calendar-select" @click="setView(pIndex, 'months')" :disabled="disabled || readonly"><b>{{ p.month + 1 }}</b> 月 <veui-icon :name="icons.expand"></veui-icon></button>
       </template>
       <template v-if="p.view === 'months'">
         <span class="veui-calendar-label"><b>{{ p.year }}</b> 年</span>
@@ -14,7 +14,7 @@
       <template v-if="p.view === 'years'">
         <span class="veui-calendar-label"><b>{{ p.year - p.year % 10 }}–{{ p.year - p.year % 10 + 9 }}</b> 年</span>
       </template>
-      <button v-if="pIndex === panels.length - 1 || p.view !== 'days'" class="veui-calendar-next" @click="step(true, p.view)" :disabled="disabled || readonly"><veui-icon :name="icons.next"></veui-icon></button>
+      <button type="button" v-if="pIndex === panels.length - 1 || p.view !== 'days'" class="veui-calendar-next" @click="step(true, p.view)" :disabled="disabled || readonly"><veui-icon :name="icons.next"></veui-icon></button>
     </div>
     <div class="veui-calendar-body" :class="{ 'veui-calendar-multiple-range': multiple && range }">
       <table>
@@ -29,7 +29,7 @@
               <td v-for="day in week"
                 :key="`${day.year}-${day.month + 1}-${day.date}`"
                 :class="getDateClass(day, p)">
-                <button v-if="fillMonth && panel === 1 || day.month === p.month" @click="selectDay(pIndex, day)"
+                <button type="button" v-if="fillMonth && panel === 1 || day.month === p.month" @click="selectDay(pIndex, day)"
                   @mouseenter="markEnd(day)" @focus="markEnd(day)" :disabled="realDisabled || realReadonly || day.isDisabled">{{ day.date }}</button>
               </td>
             </tr>
@@ -38,14 +38,14 @@
         <tbody v-else-if="p.view === 'months'">
           <tr v-for="i in 3" :key="i">
             <td v-for="j in 4" :class="getMonthClass(p, i, j)" :key="j">
-              <button @click="selectMonth(pIndex, (i - 1) * 4 + j - 1)">{{ (i - 1) * 4 + j }} 月</button>
+              <button type="button" @click="selectMonth(pIndex, (i - 1) * 4 + j - 1)">{{ (i - 1) * 4 + j }} 月</button>
             </td>
           </tr>
         </tbody>
         <tbody v-else-if="p.view === 'years'">
           <tr v-for="i in 3" :key="i">
             <td v-for="j in 4" :class="getYearClass(p, i, j)" :key="j">
-              <button v-if="(i - 1) * 4 + j - 1 < 10" @click="selectYear(pIndex, p.year - p.year % 10 + (i - 1) * 4 + j - 1)">{{ p.year - p.year % 10 + (i - 1) * 4 + j - 1 }}</button>
+              <button type="button" v-if="(i - 1) * 4 + j - 1 < 10" @click="selectYear(pIndex, p.year - p.year % 10 + (i - 1) * 4 + j - 1)">{{ p.year - p.year % 10 + (i - 1) * 4 + j - 1 }}</button>
             </td>
           </tr>
         </tbody>

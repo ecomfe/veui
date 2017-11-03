@@ -5,7 +5,7 @@
       <slot name="shortcuts" v-if="shortcuts && shortcuts.length">
         <div class="veui-schedule-shortcuts">
           <template v-if="shortcutsDisplay === 'expand'">
-            <button v-for="({ label }, i) in shortcuts" :key="i"
+            <button type="button" v-for="({ label }, i) in shortcuts" :key="i"
               @click="selectShortcut(i)"
               :class="{
                 'veui-schedule-shortcut': true,
@@ -47,7 +47,7 @@
         </colgroup>
         <tr v-for="(day, i) in hourlyStates" :key="i">
           <td v-for="(hour, j) in day" :key="j" :class="{ 'veui-schedule-selected': hour.isSelected }">
-            <button :disabled="realDisabled || hour.isDisabled"
+            <button type="button" :disabled="realDisabled || hour.isDisabled"
               :class="mergeClass({ 'veui-schedule-selected': hour.isSelected }, week[i], j)"
               :ref="`${week[i]}-${j}`"
               @mousedown="handleMousedown(i, j)"
