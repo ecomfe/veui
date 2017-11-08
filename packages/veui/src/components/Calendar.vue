@@ -29,7 +29,7 @@
               <td v-for="day in week"
                 :key="`${day.year}-${day.month + 1}-${day.date}`"
                 :class="getDateClass(day, p)">
-                <button type="button" v-if="fillMonth && panel === 1 || day.month === p.month" @click="selectDay(pIndex, day)"
+                <button type="button" v-if="fillMonth && panel === 1 || day.month === p.month" @click="selectDay(day)"
                   @mouseenter="markEnd(day)" @focus="markEnd(day)" :disabled="realDisabled || realReadonly || day.isDisabled">{{ day.date }}</button>
               </td>
             </tr>
@@ -259,10 +259,12 @@ export default {
           ? year === this.localSelected.getFullYear() : false
       }
     },
-    selectDay (i, day) {
-      // switch month in days view
-      this.year = day.year - Math.floor((day.month - i) / 12)
-      this.month = (day.month - i + 12) % 12
+    selectDay (day) {
+      // switch month in days view if dates in previous/next months are visible
+      if (this.fillMonth && this.panel === 1) {
+        this.year = day.year
+        this.month = day.month
+      }
 
       let selected = new Date(day.year, day.month, day.date)
       if (!this.range) {
