@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import warn from '../../utils/warn'
 import { map, intersection, isString, includes, indexOf, keys as objectKeys } from 'lodash'
 import Body from './_TableBody'
 import Head from './_TableHead'
@@ -139,10 +139,10 @@ export default {
     },
     validateSelected (val = this.selected) {
       if (this.selectMode === 'single' && Array.isArray(this.selected)) {
-        Vue.util.warn('`selected` should not be an array when `select-mode` is `single`.')
+        warn('`selected` should not be an array when `select-mode` is `single`.')
         return false
       } else if (this.selectMode === 'multiple' && !Array.isArray(this.selected)) {
-        Vue.util.warn('`selected` should be an array when `select-mode` is `multiple`.')
+        warn('`selected` should be an array when `select-mode` is `multiple`.')
         return false
       }
       return true

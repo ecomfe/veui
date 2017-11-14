@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { isString, isObject, isNumber } from 'lodash'
 import ToastList from '../components/ToastList'
+import warn from '../utils/warn'
 
 let Container = Vue.extend(ToastList)
 
@@ -29,7 +30,7 @@ export class ToastManager {
     } else if (isObject(option)) {
       this.container.add(option)
     } else {
-      Vue.util.warn('Invalid arguments for Toasts.')
+      warn('Invalid arguments for Toasts.')
     }
   }
 
