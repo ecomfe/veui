@@ -1,5 +1,5 @@
 <script>
-import Vue from 'vue'
+import warn from '../../utils/warn'
 import Link from '../Link'
 
 export default {
@@ -74,7 +74,7 @@ export default {
 
         this.tabs.push(tab)
       } else {
-        Vue.util.warn(`Invalid tab name: [${tab.name}]`)
+        warn(`Invalid tab name: [${tab.name}]`)
       }
     },
 

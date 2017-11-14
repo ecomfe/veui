@@ -94,6 +94,7 @@ import { input, overlay } from '../mixins'
 import { outside } from '../directives'
 import { cloneDeep, pick } from 'lodash'
 import Vue from 'vue'
+import warn from '../utils/warn'
 
 export default {
   name: 'veui-region-picker',
@@ -169,7 +170,7 @@ export default {
         exit: ({ node, parent }) => {
           if (!node.id && !(node.children && node.children.length)) {
             // invalid node
-            Vue.util.warn(`Invalid region tree node '${node.label}'. Provide \`id\`, \`children\` or both.`)
+            warn(`Invalid region tree node '${node.label}'. Provide \`id\`, \`children\` or both.`)
             return
           }
 

@@ -58,12 +58,12 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import Icon from '../Icon'
 import Button from '../Button'
 import Option from './Option'
 import Overlay from '../Overlay'
 import { input, icons, overlay, dropdown } from '../../mixins'
+import warn from '../../utils/warn'
 
 export default {
   name: 'veui-select',
@@ -141,7 +141,7 @@ function extractOptions (options, map) {
   options.forEach(({ label, value, options }) => {
     if (value != null) {
       if (map[value]) {
-        Vue.utils.warn(`Duplicate item value [${value}] for select options.`)
+        warn(`Duplicate item value [${value}] for select options.`)
       }
       map[value] = label
     }
