@@ -46,7 +46,7 @@ export default {
 
 <style lang="less">
 @import "~less-plugin-est/src/all.less";
-@import "~veui-theme-x/common.less";
+@import "~veui-theme-one/common.less";
 
 @nav-width: 240px;
 @light-bg-color: #f6f9ff;

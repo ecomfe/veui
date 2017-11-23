@@ -15,8 +15,13 @@ export default function (babel) {
   return {
     name: 'veui',
     visitor: {
-      ImportDeclaration (path, { opts, file }) {
-        let node = path.node
+      ImportDeclaration(path, { opts, file }) {
+        let { modules = [], package: pack, path: packPath = 'components', transform, fileName, resolve} = opts
+        if (!resolve) {
+          return
+        }
+
+        let { node } = path
         let src = normalize(node.source.value)
 
         let resolvedComponentName = null
@@ -35,19 +40,11 @@ export default function (babel) {
           }
         }
 
-        let {
-          modules = [], package: pack, path: packPath = 'components',
-          transform, fileName, resolve
-        } = opts
-
         if (pack && fileName) {
-          modules.push({ package: pack, path: packPath, transform, fileName })
+          modules.push({ package: pack, path: packPath, transform, fileName})
         }
 
-        modules.forEach(({
-          package: pack, path: packPath = 'components',
-          transform, fileName
-        }) => {
+        modules.forEach(({package: pack, path: packPath = 'components', transform, fileName}) => {
           // no icon found, start to resolve components
           node.specifiers
             .map(({ type, imported }) => {
@@ -73,12 +70,59 @@ export default function (babel) {
             .filter(v => v)
             .forEach(name => {
               let modulePath = join(pack, packPath, name)
-
               if (assurePath(modulePath, resolve)) {
                 path.insertAfter(t.importDeclaration([], t.stringLiteral(modulePath)))
+                path.getSibling(path.key + 1).stop()
               }
             })
         })
+
+        // import { Button } from 'veui'
+        // → import Button from 'veui/components/Button.vue'
+        //
+        // import { Form, Field, Icon as VeuiIcon, default as veui } from 'veui'
+        // → import Form from 'veui/components/Form/Form.vue'
+        // → import Field from 'veui/components/Field.js'
+        // → import VeuiIcon from 'veui/components/Icon.vue'
+        // → import veui from 'veui'
+        //
+        // DOES NOT TRANSFORM:
+        // import * as veui from 'veui'
+        // import veui from 'veui'
+        if (src === 'veui') {
+          if (node.specifiers.length === 1 && (node.specifiers[0].type === 'ImportDefaultSpecifier'
+            || node.specifiers[0].type === 'ImportNamespaceSpecifier')) {
+            return
+          }
+
+          node.specifiers.forEach(({ type, imported, local }) => {
+            if (imported.name === 'default') {
+              path.insertBefore(
+                t.importDeclaration(
+                  [
+                    t.importDefaultSpecifier(t.identifier(local.name))
+                  ],
+                  t.stringLiteral(src)
+                )
+              )
+              path.getSibling(path.key - 1).stop()
+            } else {
+              let componentSrc = getComponentPath(imported.name)
+              let name = local.name || imported.name
+              path.insertBefore(
+                t.importDeclaration(
+                  [
+                    t.importDefaultSpecifier(t.identifier(name))
+                  ],
+                  t.stringLiteral(componentSrc)
+                )
+              )
+              path.getSibling(path.key - 1).stop()
+            }
+          })
+
+          path.remove()
+        }
       }
     }
   }
@@ -167,6 +211,15 @@ function getComponentName (componentPath) {
   })
 
   return component ? component.name : null
+}
+
+// 'Icon' → 'veui/components/Icon.vue'
+function getComponentPath (componentName) {
+  let entry = COMPONENTS.find(({ name }) => name === componentName)
+  if (!entry) {
+    return null
+  }
+  return `veui/components/${entry.path}`
 }
 
 function isComponentName (componentName) {

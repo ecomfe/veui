@@ -2,7 +2,7 @@ import test from 'ava'
 import { transformFileSync } from 'babel-core'
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
-import plugin from '../dist'
+import plugin from '../lib'
 
 test(t => {
   let { code } = transformFileSync(resolve(__dirname, './fixtures/veui/components/source.js'), {
@@ -11,10 +11,20 @@ test(t => {
       [
         plugin,
         {
-          package: 'veui-theme-dux',
-          path: 'components',
-          fileName: '${module}.less',
-          transform: 'kebab-case'
+          modules: [
+            {
+              package: 'veui-theme-one',
+              fileName: '${module}.less'
+            },
+            {
+              package: 'veui-theme-one',
+              fileName: '${module}.js',
+              transform: false
+            }
+          ],
+          resolve () {
+            return true
+          }
         }
       ]
     ]

@@ -30,7 +30,13 @@
                 :key="`${day.year}-${day.month + 1}-${day.date}`"
                 :class="getDateClass(day, p)">
                 <button type="button" v-if="fillMonth && panel === 1 || day.month === p.month" @click="selectDay(day)"
-                  @mouseenter="markEnd(day)" @focus="markEnd(day)" :disabled="realDisabled || realReadonly || day.isDisabled">{{ day.date }}</button>
+                  @mouseenter="markEnd(day)" @focus="markEnd(day)" :disabled="realDisabled || realReadonly || day.isDisabled">
+                  <slot name="date" v-bind="{
+                    year: day.year,
+                    month: day.month,
+                    date: day.date
+                  }">{{ day.date }}</slot>
+                </button>
               </td>
             </tr>
           </tbody>

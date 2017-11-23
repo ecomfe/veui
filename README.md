@@ -16,14 +16,14 @@ $ npm i --save-dev babel-plugin-veui veui-loader
 To use default theme `x` you have to install it too.
 
 ```sh
-$ npm i --save veui-theme-x
+$ npm i --save veui-theme-one
 ```
 
 ## Configuration
 
 First, scaffold your project using `vue-cli` with template `webpack`.
 
-To use default theme `x`, make sure to add these plugins in `.babelrc`:
+To use default theme `one`, make sure to add these plugins in `.babelrc`:
 
 ```json
 {
@@ -33,11 +33,11 @@ To use default theme `x`, make sure to add these plugins in `.babelrc`:
       {
         "modules": [
           {
-            "package": "veui-theme-x",
+            "package": "veui-theme-one",
             "fileName": "${module}.less"
           },
           {
-            "package": "veui-theme-x",
+            "package": "veui-theme-one",
             "fileName": "${module}.js",
             "transform": false
           }

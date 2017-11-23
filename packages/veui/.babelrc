@@ -9,11 +9,11 @@
       {
         "modules": [
           {
-            "package": "veui-theme-x",
+            "package": "veui-theme-one",
             "fileName": "${module}.less"
           },
           {
-            "package": "veui-theme-x",
+            "package": "veui-theme-one",
             "fileName": "${module}.js",
             "transform": false
           }
