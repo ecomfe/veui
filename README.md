@@ -13,7 +13,7 @@ $ npm i --save veui
 $ npm i --save-dev babel-plugin-veui veui-loader
 ```
 
-To use default theme `x` you have to install it too.
+To use default theme `one` you have to install it too.
 
 ```sh
 $ npm i --save veui-theme-one
