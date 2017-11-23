@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>add copy@2x</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-3" transform="translate(0.000000, -127.000000)" fill-rule="nonzero" fill="#000000">
+            <g id="add-copy" transform="translate(0.000000, 127.000000)">
+                <path d="M24,48 C10.745166,48 0,37.254834 0,24 C0,10.745166 10.745166,0 24,0 C37.254834,0 48,10.745166 48,24 C48,37.254834 37.254834,48 24,48 Z M24,44 C35.045695,44 44,35.045695 44,24 C44,12.954305 35.045695,4 24,4 C12.954305,4 4,12.954305 4,24 C4,35.045695 12.954305,44 24,44 Z" id="Oval-20-Copy-5"></path>
+                <path d="M15,25.5 L34,25.5 C35.1045695,25.5 36,24.6045695 36,23.5 C36,22.3954305 35.1045695,21.5 34,21.5 L15,21.5 C13.8954305,21.5 13,22.3954305 13,23.5 C13,24.6045695 13.8954305,25.5 15,25.5 Z" id="Path-18"></path>
+                <path d="M22.5,14 L22.5,33 C22.5,34.1045695 23.3954305,35 24.5,35 C25.6045695,35 26.5,34.1045695 26.5,33 L26.5,14 C26.5,12.8954305 25.6045695,12 24.5,12 C23.3954305,12 22.5,12.8954305 22.5,14 Z" id="Path-18-Copy"></path>
+            </g>
+        </g>
+    </g>
+</svg>
