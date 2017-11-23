@@ -1,11 +1,11 @@
 <template>
-  <div class="veui-tab" v-show="isActive">
-    <slot v-if="isInited || isActive"></slot>
-  </div>
+<div class="veui-tab" v-show="isActive">
+  <slot v-if="isInited || isActive"></slot>
+</div>
 </template>
 
 <script>
-import { pick, includes } from 'lodash'
+import { pick, includes, uniqueId } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import { getNodes } from '../../utils/context'
 
@@ -28,7 +28,7 @@ export default {
       default: ''
     },
     native: Boolean,
-    deletable: {
+    removable: {
       type: Boolean,
       default: false
     }
@@ -49,6 +49,12 @@ export default {
   watch: {
     isActive (val) {
       this.isInited = true
+    },
+    removable (val) {
+      this.tabs.items[this.index].removable = val
+    },
+    disabled (val) {
+      this.tabs.item[this.index].disabled = val
     }
   },
   methods: {
@@ -56,8 +62,8 @@ export default {
       if (!patch) {
         this.index = this.tabs.items.length
         this.tabs.add({
-          ...pick(this, 'label', 'disabled', 'to', 'native', 'deletable'),
-          name: this.name || this.to
+          ...pick(this, 'label', 'disabled', 'to', 'native', 'removable'),
+          name: this.name || this.to || uniqueId()
         })
       } else {
         let parent = getNodes(this.$parent)[0]

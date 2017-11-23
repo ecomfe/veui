@@ -1,60 +1,60 @@
 <template>
-  <div class="veui-tabs" :ui="ui">
-    <div class="veui-tabs-menu" ref="menu">
-      <div class="veui-tabs-list">
-        <template v-for="(tab, index) in items">
-          <div :key="tab.name" v-if="tab.to" class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
-            'veui-tabs-item-disabled': tab.disabled,
-            'veui-tabs-item-active': index === localIndex
-          }">
-            <slot name="tab-item" v-bind="tab">
-              <veui-link :to="tab.to" :native="tab.native">{{ tab.label }}</veui-link>
-              <icon :name="`cross-${(ui || '').indexOf('large') ? 'large' : 'small'}`" v-if="tab.deletable" @click.native="$emit('remove', tab)"></icon>
-            </slot>
-          </div>
-          <div :key="tab.name" v-else class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
-            'veui-tabs-item-disabled': tab.disabled,
-            'veui-tabs-item-active': index === localIndex
-          }">
-            <slot name="tab-item" v-bind="tab">
-              <span @click="!tab.disabled && setActive({index})">{{ tab.label }}</span>
-              <slot name="tab-item-extra" v-bind="tab">
-                <icon :name="`cross-${(ui || '').indexOf('large') !== -1 ? 'large' : 'small'}`"
-                  v-if="tab.deletable"
-                  @click.native="$emit('remove', tab)"></icon>
-              </slot>
-            </slot>
-          </div>
-        </template>
-        <object v-if="addable" ref="resizeHandler" @load="registerResizeHanlder" type="text/html" data="about:blank"></object>
-      </div>
-      <slot name="tabs-extra" v-if="!$slots.tabsExtra && addable">
-        <div class="veui-tabs-extra" ref="extra" :class="{'veui-tabs-extra-overflow': menuOverflow}">
-          <div class="veui-tabs-operator" @click="$emit('add')">
-            <icon name="plus-circle-o"></icon><slot name="tabs-extra-text"><span>添加TAB</span></slot>
-          </div>
-          <div class="veui-tabs-scroller" v-if="menuOverflow">
-            <span class="left-arrow" @click="scroll('left')"><icon :name="`angle-left-${(ui || '').indexOf('large') !== -1 ? 'large' : 'small'}`"></icon></span>
-            <span class="right-arrow" @click="scroll('right')"><icon :name="`angle-right-${(ui || '').indexOf('large') !== -1 ? 'large' : 'small'}`"></icon></span>
-          </div>
+<div class="veui-tabs" :ui="ui">
+  <div class="veui-tabs-menu" ref="menu">
+    <div class="veui-tabs-list">
+      <template v-for="(tab, index) in items">
+        <div :key="tab.name" v-if="tab.to" class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
+          'veui-tabs-item-disabled': tab.disabled,
+          'veui-tabs-item-active': index === localIndex
+        }">
+          <slot name="tab-item" v-bind="tab">
+            <veui-link :to="tab.to" :native="tab.native">{{ tab.label }}</veui-link>
+            <icon :name="`cross-${(ui || '').split(' ').indexOf('large') ? 'large' : 'small'}`" v-if="tab.removable" @click.native="$emit('remove', tab)"></icon>
+          </slot>
         </div>
-      </slot>
+        <div :key="tab.name" v-else class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
+          'veui-tabs-item-disabled': tab.disabled,
+          'veui-tabs-item-active': index === localIndex
+        }">
+          <slot name="tab-item" v-bind="tab">
+            <span @click="!tab.disabled && setActive({index})">{{ tab.label }}</span>
+            <slot name="tab-item-extra" v-bind="tab">
+              <icon :name="`cross-${(ui || '').split(' ').indexOf('large') !== -1 ? 'large' : 'small'}`"
+                v-if="tab.removable"
+                @click.native="$emit('remove', tab)"></icon>
+            </slot>
+          </slot>
+        </div>
+      </template>
+      <object v-if="addable" ref="resizeHandler" @load="registerResizeHanlder" type="text/html" data="about:blank"></object>
     </div>
-    <slot class="veui-tabs-panel"></slot>
+    <slot name="tabs-extra" v-if="!$slots.tabsExtra && addable">
+      <div class="veui-tabs-extra" ref="extra" :class="{'veui-tabs-extra-overflow': menuOverflow}">
+        <div class="veui-tabs-operator" @click="$emit('add')">
+          <icon name="plus-circle-o"></icon><slot name="tabs-extra-text"><span>添加TAB</span></slot>
+        </div>
+        <div class="veui-tabs-scroller" v-if="menuOverflow">
+          <span class="veui-tabs-scroller-left" @click="scroll('left')"><icon :name="`angle-left-${(ui || '').split(' ').indexOf('large') !== -1 ? 'large' : 'small'}`"></icon></span>
+          <span class="veui-tabs-scroller-right" @click="scroll('right')"><icon :name="`angle-right-${(ui || '').split(' ').indexOf('large') !== -1 ? 'large' : 'small'}`"></icon></span>
+        </div>
+      </div>
+    </slot>
   </div>
+  <slot class="veui-tabs-panel"></slot>
+</div>
 </template>
 
 <script>
 import Link from '../Link'
 import Icon from '../Icon'
 import { includes, get, uniqueId, findIndex } from 'lodash'
-import 'veui-theme-x/icons/cross-small'
-import 'veui-theme-x/icons/cross-large'
-import 'veui-theme-x/icons/plus-circle-o'
-import 'veui-theme-x/icons/angle-left-small'
-import 'veui-theme-x/icons/angle-left-large'
-import 'veui-theme-x/icons/angle-right-small'
-import 'veui-theme-x/icons/angle-right-large'
+import 'veui-theme-one/icons/cross-small'
+import 'veui-theme-one/icons/cross-large'
+import 'veui-theme-one/icons/plus-circle-o'
+import 'veui-theme-one/icons/angle-left-small'
+import 'veui-theme-one/icons/angle-left-large'
+import 'veui-theme-one/icons/angle-right-small'
+import 'veui-theme-one/icons/angle-right-large'
 
 export default {
   name: 'veui-tabs',
@@ -129,7 +129,7 @@ export default {
         this.localActive = ''
       }
 
-      this.$nextTick(() => this.updateIndex())
+      this.updateIndex()
     },
 
     patchIndex (oldIndex, newIndex) {
@@ -219,7 +219,8 @@ export default {
     }
   },
   destroyed () {
-    this.$refs.resizeHandler.contentDocument.defaultView.removeEventListener('resize')
+    let view = get(this, '$refs.resizeHandler.contentDocument.defaultView')
+    view && view.removeEventListener('resize')
   }
 }
 </script>

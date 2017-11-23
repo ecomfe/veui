@@ -31,7 +31,7 @@
     </section>
     <section>
       <h2>路由模式：</h2>
-      <veui-tabs :active.sync="$route.fullPath">
+      <veui-tabs :active="$route.fullPath">
         <veui-tab label="Button" to="/tabs/button"><router-view></router-view></veui-tab>
         <veui-tab label="Input" to="/tabs/input"><router-view></router-view></veui-tab>
         <veui-tab label="Progress" to="/tabs/progress"><router-view></router-view></veui-tab>
@@ -63,7 +63,7 @@
       <veui-tabs ui="large" :active.sync="active1" :index.sync="index2" addable @add="addTab0" @remove="removeTab0">
         <veui-tab :label="tab.label"
           :name="tab.name"
-          deletable
+          removable
           :key="tab.name"
           v-for="(tab, index) in tabs0"><p>Tab {{ tab.name }}</p>
         </veui-tab>
@@ -75,11 +75,11 @@
       <veui-button @click="addTab1">添加 TAB</veui-button>
       <veui-tabs :active.sync="active2" :index.sync="index3">
         <template slot="tab-item-extra" scope="props">
-          <icon name="cross-small" v-if="props.deletable" @click.native="removeTab1(props)"></icon>
+          <icon name="cross-small" v-if="props.removable" @click.native="removeTab1(props)"></icon>
         </template>
         <veui-tab :label="tab.label"
           :name="tab.name"
-          deletable
+          removable
           :key="tab.name"
           v-for="(tab, index) in tabs1"><p>Tab {{ tab.name }}</p>
         </veui-tab>
