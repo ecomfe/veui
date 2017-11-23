@@ -5,11 +5,13 @@
 </template>
 
 <script>
-import { pick } from 'lodash'
+import { pick, includes, uniqueId } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
+import { getNodes } from '../../utils/context'
 
 export default {
   name: 'veui-tab',
+  uiTypes: ['tab'],
   mixins: [getTypedAncestorTracker('tabs')],
   props: {
     label: {
@@ -17,12 +19,19 @@ export default {
       required: true
     },
     name: String,
-    disabled: Boolean,
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     to: {
       type: String,
       default: ''
     },
-    native: Boolean
+    native: Boolean,
+    removable: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
@@ -40,15 +49,43 @@ export default {
   watch: {
     isActive (val) {
       this.isInited = true
+    },
+    removable (val) {
+      this.tabs.items[this.index].removable = val
+    },
+    disabled (val) {
+      this.tabs.item[this.index].disabled = val
+    }
+  },
+  methods: {
+    register (patch) {
+      if (!patch) {
+        this.index = this.tabs.items.length
+        this.tabs.add({
+          ...pick(this, 'label', 'disabled', 'to', 'native', 'removable'),
+          name: this.name || this.to || uniqueId()
+        })
+      } else {
+        let parent = getNodes(this.$parent)[0]
+        let vdom = getNodes(this)[0]
+        let oldIndex = this.index
+        this.index = Array.prototype.filter.call(
+          parent.children,
+          ele => includes(ele.className.split(' '), 'veui-tab')
+        ).indexOf(vdom)
+        this.tabs.patchIndex(oldIndex, this.index)
+      }
     }
   },
   created () {
-    // TODO: 如果要支持可删除tab，需要修改实现
-    this.index = this.tabs.tabs.length
-    this.tabs.add({
-      ...pick(this, 'label', 'disabled', 'to', 'native'),
-      name: this.name || this.to
-    })
+    // for ssr
+    this.register()
+  },
+  mounted () {
+    this.register(true)
+  },
+  destroyed () {
+    this.tabs.remove(this.index)
   }
 }
 </script>
