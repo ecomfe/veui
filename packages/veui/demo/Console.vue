@@ -15,8 +15,8 @@
 import bus from './bus'
 import Icon from 'veui/components/Icon'
 import 'vue-awesome/icons/ban'
-import 'veui-theme-x/icons/angle-up'
-import 'veui-theme-x/icons/angle-down'
+import 'veui-theme-one/icons/angle-up'
+import 'veui-theme-one/icons/angle-down'
 
 export default {
   components: {

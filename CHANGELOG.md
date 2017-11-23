@@ -1,5 +1,6 @@
 ### 0.3.4
 
+* [^] 主题包 `veui-theme-x` 重命名为正式名称 `veui-theme-one`。**[Breaking change]**
 * [+] 新增 `Tree` 组件。
 * [+] 新增 `FilterPanel` 组件。
 * [+] 新增 `Transfer` 组件。
@@ -7,7 +8,11 @@
 * [+] `outside` 指令新增 `excludeSelf` 参数，使判断仅对 `refs` 生效。
 * [+] `outside` 指令新增 `mousedown`、`mouseup` 的支持。
 * [+] `Tooltip` 组件新增 `interactive` prop，控制浮层是否可交互。
+* [+] `Calendar` 组件新增 scoped slot `date`。
 * [^] `Checkbox` 和 `Radio` 组件现在可以在未绑定数据时进行交互。
+* [^] 修复 `Calendar` 组件在选择范围时错误切换视图的问题。
+* [^] 修复 Chrome 62 起给按钮默认添加圆角的问题。
+* [+] 为 `babel-plugin-veui` 增加了类似 `babel-plugin-lodash` 的功能，以减小打包体积。
 
 ### 0.3.3
 

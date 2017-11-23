@@ -14,8 +14,21 @@ exports.default = function (babel) {
       ImportDeclaration: function ImportDeclaration(path, _ref) {
         var opts = _ref.opts,
             file = _ref.file;
+        var _opts$modules = opts.modules,
+            modules = _opts$modules === undefined ? [] : _opts$modules,
+            pack = opts.package,
+            _opts$path = opts.path,
+            packPath = _opts$path === undefined ? 'components' : _opts$path,
+            transform = opts.transform,
+            fileName = opts.fileName,
+            resolve = opts.resolve;
+
+        if (!resolve) {
+          return;
+        }
 
         var node = path.node;
+
         var src = (0, _utils.normalize)(node.source.value);
 
         var resolvedComponentName = null;
@@ -30,16 +43,6 @@ exports.default = function (babel) {
             resolvedComponentName = resolveComponent(file.opts.filename, src);
           }
         }
-
-        var _opts$modules = opts.modules,
-            modules = _opts$modules === undefined ? [] : _opts$modules,
-            pack = opts.package,
-            _opts$path = opts.path,
-            packPath = _opts$path === undefined ? 'components' : _opts$path,
-            transform = opts.transform,
-            fileName = opts.fileName,
-            resolve = opts.resolve;
-
 
         if (pack && fileName) {
           modules.push({ package: pack, path: packPath, transform: transform, fileName: fileName });
@@ -67,12 +70,36 @@ exports.default = function (babel) {
             return v;
           }).forEach(function (name) {
             var modulePath = (0, _path.join)(pack, packPath, name);
-
             if (assurePath(modulePath, resolve)) {
               path.insertAfter(t.importDeclaration([], t.stringLiteral(modulePath)));
+              path.getSibling(path.key + 1).stop();
             }
           });
         });
+
+        if (src === 'veui') {
+          if (node.specifiers.length === 1 && (node.specifiers[0].type === 'ImportDefaultSpecifier' || node.specifiers[0].type === 'ImportNamespaceSpecifier')) {
+            return;
+          }
+
+          node.specifiers.forEach(function (_ref4) {
+            var type = _ref4.type,
+                imported = _ref4.imported,
+                local = _ref4.local;
+
+            if (imported.name === 'default') {
+              path.insertBefore(t.importDeclaration([t.importDefaultSpecifier(t.identifier(local.name))], t.stringLiteral(src)));
+              path.getSibling(path.key - 1).stop();
+            } else {
+              var componentSrc = getComponentPath(imported.name);
+              var name = local.name || imported.name;
+              path.insertBefore(t.importDeclaration([t.importDefaultSpecifier(t.identifier(name))], t.stringLiteral(componentSrc)));
+              path.getSibling(path.key - 1).stop();
+            }
+          });
+
+          path.remove();
+        }
       }
     }
   };
@@ -176,8 +203,8 @@ function getComponentName(componentPath) {
   if (!componentPath) {
     return null;
   }
-  var component = COMPONENTS.find(function (_ref4) {
-    var path = _ref4.path;
+  var component = COMPONENTS.find(function (_ref5) {
+    var path = _ref5.path;
 
     return path === componentPath || path.split('.')[0] === componentPath;
   });
@@ -185,9 +212,20 @@ function getComponentName(componentPath) {
   return component ? component.name : null;
 }
 
+function getComponentPath(componentName) {
+  var entry = COMPONENTS.find(function (_ref6) {
+    var name = _ref6.name;
+    return name === componentName;
+  });
+  if (!entry) {
+    return null;
+  }
+  return 'veui/components/' + entry.path;
+}
+
 function isComponentName(componentName) {
-  return !!COMPONENTS.find(function (_ref5) {
-    var name = _ref5.name;
+  return !!COMPONENTS.find(function (_ref7) {
+    var name = _ref7.name;
     return name === componentName;
   });
 }

@@ -145,7 +145,7 @@ import alertManager from 'veui/managers/alert'
 import confirmManager from 'veui/managers/confirm'
 import promptManager from 'veui/managers/prompt'
 import toastManager from 'veui/managers/toast'
-import 'veui-theme-x/icons/calendar'
+import 'veui-theme-one/icons/calendar'
 
 export default {
   name: 'dialog-demo',
