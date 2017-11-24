@@ -1,6 +1,6 @@
 {
   "name": "veui-loader",
-  "version": "0.3.3",
+  "version": "1.0.0-alpha.2",
   "description": "Webpack loader for VEUI.",
   "main": "lib/index.js",
   "scripts": {
@@ -20,9 +20,9 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.1",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "baebl-plugin-veui": "1.0.0-alpha.2",
     "babel-preset-env": "^1.6.0",
     "babel-preset-stage-2": "^6.24.1",
+    "baebl-plugin-veui": "1.0.0-alpha.2",
     "enhanced-resolve": "^3.4.1",
     "loader-utils": "^1.1.0"
   }

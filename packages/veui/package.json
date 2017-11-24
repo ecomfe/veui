@@ -1,6 +1,6 @@
 {
   "name": "veui",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Baidu Enterprise UI for Vue.js.",
   "author": "ecomfe",
   "scripts": {
@@ -85,9 +85,9 @@
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0",
     "url-loader": "^0.5.7",
-    "veui-loader": "^0.3.3",
-    "veui-theme-dux": "^0.3.3",
-    "veui-theme-one": "^1.0.0-alpha.1",
+    "veui-loader": "^1.0.0-alpha.2",
+    "veui-theme-dux": "^1.0.0-alpha.2",
+    "veui-theme-one": "^1.0.0-alpha.2",
     "vue": "^2.3.0",
     "vue-loader": "^13.3.0",
     "vue-router": "^2.2.0",
