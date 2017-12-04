@@ -30,7 +30,7 @@ export default {
     },
     target: {
       validate (v) {
-        return v === undefined || isValidNodesResolver(v)
+        return isValidNodesResolver(v)
       }
     },
     trigger: {
