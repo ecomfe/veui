@@ -2,18 +2,18 @@
 <div class="veui-carousel">
   <div class="veui-carousel-viewport" @mouseenter="handleEnter" @mouseleave="handleLeave">
   <transition-group name="veui-carousel-item" class="veui-carousel-items" tag="ol">
-    <slot v-bind="item" :index="i">
-      <li v-for="(item, i) in datasource" v-show="localIndex === i" :key="i"
-        :class="{
-          'veui-carousel-item': true,
-          'veui-carousel-item-current': localIndex === i
-        }"
-        :style="{
-          'background-image': `url(${item.src})`
-        }">
+    <li v-for="(item, i) in datasource" v-show="localIndex === i" :key="i"
+      :class="{
+        'veui-carousel-item': true,
+        'veui-carousel-item-current': localIndex === i
+      }"
+      :style="{
+        'background-image': `url(${item.src})`
+      }">
+      <slot v-bind="item" :index="i">
         <img :src="item.src" :alt="item.alt">
-      </li>
-    </slot>
+      </slot>
+    </li>
   </transition-group>
   <div v-if="indicator === 'number'" class="veui-carousel-indicator-numbers">{{ localIndex + 1 }}<span class="veui-carousel-indicator-numbers-separator"></span>{{ count }}</div>
   <nav v-else-if="indicator !== 'none'" :class="{

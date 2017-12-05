@@ -2,7 +2,7 @@
 import Overlay from './Overlay'
 import { outside } from '../directives'
 import { overlay } from '../mixins'
-import { getNodes } from '../utils/context'
+import { getNodes, isValidNodesResolver } from '../utils/context'
 import { resolveOverlayPosition } from '../utils/helper'
 import { isString } from 'lodash'
 import config from '../managers/config'
@@ -28,7 +28,11 @@ export default {
       type: String,
       default: 'top'
     },
-    target: String,
+    target: {
+      validate (v) {
+        return isValidNodesResolver(v)
+      }
+    },
     trigger: {
       type: String,
       default: 'hover'
