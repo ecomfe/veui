@@ -41,8 +41,8 @@ export default {
             {
               index !== this.localRoutes.length - 1
                 ? <span slot="separator" class="veui-breadcrumb-separator">
-                    {this.$scopedSlots.separator ? this.$scopedSlots.separator() : <Icon name={this.icons.next}></Icon>}
-                  </span>
+                  {this.$scopedSlots.separator ? this.$scopedSlots.separator() : <Icon name={this.icons.next}></Icon>}
+                </span>
                 : null
             }
           </BreadcrumbItem>

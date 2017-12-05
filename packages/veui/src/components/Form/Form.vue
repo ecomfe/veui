@@ -99,27 +99,25 @@ export default {
       return new Promise(resolve =>
         isFunction(this.beforeValidate)
           ? resolve(this.beforeValidate.call(getVnodes(this)[0].context, data))
-          : resolve()
-      )
-      .then(res =>
-        this.isValid(res)
-          ? this.validate()
-          : res
-      )
-      .then(res =>
-        this.isValid(res)
-          ? new Promise(resolve =>
+          : resolve())
+        .then(res =>
+          this.isValid(res)
+            ? this.validate()
+            : res
+        )
+        .then(res =>
+          this.isValid(res)
+            ? new Promise(resolve =>
               isFunction(this.afterValidate)
                 ? resolve(this.afterValidate.call(getVnodes(this)[0].context, data))
-                : resolve()
-            )
-          : res
-      )
-      .then(res =>
-        this.isValid(res)
-          ? this.$emit('submit', data, e)
-          : this.$emit('invalid', res)
-      )
+                : resolve())
+            : res
+        )
+        .then(res =>
+          this.isValid(res)
+            ? this.$emit('submit', data, e)
+            : this.$emit('invalid', res)
+        )
     },
 
     validate (names) {
@@ -166,13 +164,13 @@ export default {
           })
         ]
       )
-      .then(
-        allRes => {
-          return allRes.every(mixed => this.isValid(mixed))
-            ? Promise.resolve(true)
-            : Promise.resolve(assign({}, ...allRes.filter(mixed => !this.isValid(mixed))))
-        }
-      )
+        .then(
+          allRes => {
+            return allRes.every(mixed => this.isValid(mixed))
+              ? Promise.resolve(true)
+              : Promise.resolve(assign({}, ...allRes.filter(mixed => !this.isValid(mixed))))
+          }
+        )
     },
 
     execValidator (validate, fields) {

@@ -9,8 +9,5 @@ module.exports = {
       : config.dev.cssSourceMap,
     extract: isProduction
   }),
-  preLoaders: {
-    js: 'veui-loader'
-  },
   preserveWhitespace: false
 }

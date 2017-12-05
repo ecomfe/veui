@@ -1,6 +1,6 @@
 import Button from './Button'
 import Table from './Table'
-import Pager from './Pager'
+import Pagination from './Pagination'
 import Uploader from './Uploader'
 import Dialog from './Dialog'
 import Overlay from './Overlay'
@@ -108,9 +108,9 @@ export default [
     component: Overlay
   },
   {
-    path: '/pager/:page?',
-    name: 'Pager',
-    component: Pager
+    path: '/pagination/:page?',
+    name: 'Pagination',
+    component: Pagination
   },
   {
     path: '/progress',

@@ -29,9 +29,22 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.vue$/,
         loader: 'veui-loader',
         enforce: 'pre',
+        options: {
+          modules: [
+            {
+              package: 'veui-theme-one',
+              fileName: '${module}.less'
+            },
+            {
+              package: 'veui-theme-one',
+              fileName: '${module}.js',
+              transform: false
+            }
+          ]
+        },
         include: [resolve('src'), resolve('demo'), resolve('test')]
       },
       {

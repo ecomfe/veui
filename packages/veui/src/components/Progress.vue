@@ -76,11 +76,11 @@ export default {
         'veui-progress-state-complete': this.value === this.max,
         [`veui-progress-${this.type}`]: true,
         ...this.localState
-            ? { [`veui-progress-state-${this.localState}`]: true }
-            : {},
+          ? { [`veui-progress-state-${this.localState}`]: true }
+          : {},
         ...this.indeterminate
-            ? { 'veui-progress-indeterminate': true }
-            : {}
+          ? { 'veui-progress-indeterminate': true }
+          : {}
       }
     },
     ratio () {

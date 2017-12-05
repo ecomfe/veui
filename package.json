@@ -1,8 +1,9 @@
 {
   "scripts": {
     "dev": "cd packages/veui && npm run dev",
-    "build-components": "cd packages/veui && npm run build && cd ../babel-plugin-veui && npm run components && cd ../..",
+    "build-components": "cd packages/veui && npm run components && npm run build && cd ../..",
     "build-plugin": "cd packages/babel-plugin-veui && npm run build && cd ../..",
+    "build-loader": "cd packages/veui-loader && npm run build && cd ../..",
     "build": "cd packages/veui && npm run build && cd ../babel-plugin-veui && npm run build && cd ../.."
   },
   "devDependencies": {
@@ -11,5 +12,15 @@
   "browserslist": [
     "ie >= 9",
     "last 2 versions"
-  ]
+  ],
+  "dependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^4.12.1",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-friendly-formatter": "^2.0.7",
+    "eslint-loader": "^1.6.1",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "eslint-plugin-vue": "^2.0.1"
+  }
 }

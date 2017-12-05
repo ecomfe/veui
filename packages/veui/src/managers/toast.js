@@ -6,7 +6,6 @@ import warn from '../utils/warn'
 let Container = Vue.extend(ToastList)
 
 export class ToastManager {
-
   constructor () {
     this.container = new Container()
   }

@@ -40,7 +40,7 @@ export default {
                 : <veui-radio checked={checked}
                   onChange={checked => { this.table.select(checked, index) }}/>
             }
-            </div></td>
+          </div></td>
           : null
       }
       {
