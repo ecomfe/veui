@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import { pick, includes, uniqueId } from 'lodash'
+import { pick, find, findIndex, uniqueId, includes } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
-import { getNodes } from '../../utils/context'
+import { getVnodes } from '../../utils/context'
 
 export default {
   name: 'veui-tab',
@@ -34,58 +34,48 @@ export default {
     }
   },
   data () {
+    let uid = uniqueId('veui-tab-')
     return {
-      index: null,
+      id: uid,
       isInited: false
     }
   },
   computed: {
     isActive () {
-      return this.name
-        ? this.tabs.localActive === this.name
-        : this.tabs.localIndex === this.index
-    }
-  },
-  watch: {
-    isActive (val) {
-      this.isInited = true
-    },
-    removable (val) {
-      this.tabs.items[this.index].removable = val
-    },
-    disabled (val) {
-      this.tabs.item[this.index].disabled = val
-    }
-  },
-  methods: {
-    register (patch) {
-      if (!patch) {
-        this.index = this.tabs.items.length
-        this.tabs.add({
-          ...pick(this, 'label', 'disabled', 'to', 'native', 'removable'),
-          name: this.name || this.to || uniqueId()
-        })
-      } else {
-        let parent = getNodes(this.$parent)[0]
-        let vdom = getNodes(this)[0]
-        let oldIndex = this.index
-        this.index = Array.prototype.filter.call(
-          parent.children,
-          ele => includes(ele.className.split(' '), 'veui-tab')
-        ).indexOf(vdom)
-        this.tabs.patchIndex(oldIndex, this.index)
-      }
+      return this.id === this.tabs.activeId
     }
   },
   created () {
-    // for ssr
-    this.register()
-  },
-  mounted () {
-    this.register(true)
+    let vdom = getVnodes(this)[0]
+    // index 只是用于每次渲染时插入到 tabs 的顺序
+    let index = findIndex(
+      [...this.$parent.$slots.default].filter(vnode => {
+        return vnode.componentOptions && includes(vnode.componentOptions.Ctor.options.uiTypes, 'tab')
+      }),
+      vnode => vnode === vdom
+    )
+
+    this.tabs.add({
+      ...pick(this, 'id', 'label', 'disabled', 'to', 'native', 'removable'),
+      name: this.name || this.to || this.id,
+      index
+    });
+
+    ['label', 'removable', 'disabled', 'name', 'to'].forEach(prop => {
+      this.$watch(prop, val => {
+        find(this.tabs.items, item => item.id === this.id)[prop] = val
+      })
+    })
+
+    if (!this.isInited) {
+      let unWatchIsActive = this.$watch('isActive', () => {
+        this.isInited = true
+        unWatchIsActive()
+      })
+    }
   },
   destroyed () {
-    this.tabs.remove(this.index)
+    this.tabs.remove(null, this.id)
   }
 }
 </script>

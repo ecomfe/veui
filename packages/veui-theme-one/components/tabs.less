@@ -2,7 +2,6 @@
 
 .veui-tabs {
   position: relative;
-  padding-bottom: 1px;
 
   .make-margin(@margin) {
     margin-left: @margin;
@@ -13,9 +12,17 @@
   }
 
   &-menu {
-    border-bottom: 1px solid @veui-gray-color-6;
     overflow: hidden;
     white-space: nowrap;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: ~"calc(2.5em - 1px)";
+      width: 100%;
+      border-bottom: 1px solid @veui-gray-color-6;
+    }
   }
 
   &-list {
@@ -76,6 +83,7 @@
         .absolute(_, _, 0, 10px);
         width: ~"calc(100% - 20px)";
         height: 2px;
+        z-index: 1;
       }
 
       &:hover::after {
@@ -117,9 +125,17 @@
     padding-left: 60px;
     background-color: #fff;
 
+    .veui-tabs-list:empty + & {
+      padding-left: 0;
+    }
+
     &.veui-tabs-extra-overflow {
+      height: 2.5em;
       position: absolute;
-      right: 0;;
+      right: 0;
+      top: 0;
+      border-bottom: 1px solid @veui-gray-color-6;
+      z-index: 2;
     }
   }
 
@@ -137,7 +153,7 @@
   &-operator {
     .veui-icon {
       vertical-align: top;
-      margin-top: ~"calc(@{veui-height-normal} / 2 - .5em)";
+      margin-top: ~"calc(@{veui-height-normal} / 2 - .5em - 1px)";
       user-select: none;
     }
   }
@@ -146,21 +162,16 @@
     display: inline-block;
     line-height: 2.5;
     margin-left: 30px;
-    vertical-align: top;
 
     &-left,
     &-right {
       display: inline-block;
       .make-margin(5px);
-      width: 36px;
+      .size(2 * @veui-font-size-normal);
       background-color: @veui-gray-color-8;
       text-align: center;
       cursor: pointer;
       user-select: none;
-
-      .veui-icon {
-        vertical-align: middle;
-      }
 
       &:hover {
         background-color: @veui-gray-color-5;
@@ -173,20 +184,37 @@
   }
 
   &[ui~="large"] & {
-    &-item {
+    &-menu::after,
+    &-extra,
+    &-item,
+    &-operator {
       font-size: @veui-font-size-large;
+    }
+
+    &-item {
       .make-margin(60px);
     }
 
     &-operator {
       padding: 0 10px;
-      font-size: @veui-font-size-large;
     }
 
     &-item,
     &-operator {
       .veui-icon {
-        margin-top: ~"calc(@{veui-height-large} / 2 - .5em)";
+        margin-top: ~"calc(@{veui-height-large} / 2 - .5em - 1px)";
+      }
+    }
+
+    &-scroller {
+      &-left,
+      &-right {
+        .size(2 * @veui-font-size-large);
+
+        .veui-icon {
+          font-size: @veui-font-size-normal;
+          vertical-align: text-top;
+        }
       }
     }
   }

@@ -26,16 +26,20 @@
           </slot>
         </div>
       </template>
-      <object v-if="addable" ref="resizeHandler" @load="registerResizeHanlder" type="text/html" data="about:blank"></object>
+      <object v-if="!$slots.tabsExtra && items.length" ref="resizeHandler" @load="registerResizeHanlder" type="text/html" data="about:blank"></object>
     </div>
-    <slot name="tabs-extra" v-if="!$slots.tabsExtra && addable">
-      <div class="veui-tabs-extra" ref="extra" :class="{'veui-tabs-extra-overflow': menuOverflow}">
-        <div class="veui-tabs-operator" @click="$emit('add')">
+    <slot name="tabs-extra" >
+      <div v-if="!$slots.tabsExtra"
+        class="veui-tabs-extra" ref="extra"
+        :class="{'veui-tabs-extra-overflow': menuOverflow}">
+        <div v-if="addable"
+          class="veui-tabs-operator"
+          @click="$emit('add')">
           <icon name="plus-circle-o"></icon><slot name="tabs-extra-text"><span>添加TAB</span></slot>
         </div>
         <div class="veui-tabs-scroller" v-if="menuOverflow">
-          <span class="veui-tabs-scroller-left" @click="scroll('left')"><icon :name="`angle-left-${(ui || '').split(' ').indexOf('large') !== -1 ? 'large' : 'small'}`"></icon></span>
-          <span class="veui-tabs-scroller-right" @click="scroll('right')"><icon :name="`angle-right-${(ui || '').split(' ').indexOf('large') !== -1 ? 'large' : 'small'}`"></icon></span>
+          <span class="veui-tabs-scroller-left" @click="scroll('left')"><icon :name="`angle-left${(ui || '').split(' ').indexOf('large') !== -1 ? '' : '-small'}`"></icon></span>
+          <span class="veui-tabs-scroller-right" @click="scroll('right')"><icon :name="`angle-right${(ui || '').split(' ').indexOf('large') !== -1 ? '' : '-small'}`"></icon></span>
         </div>
       </div>
     </slot>
@@ -45,9 +49,10 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import Link from '../Link'
 import Icon from '../Icon'
-import { includes, get, uniqueId, findIndex } from 'lodash'
+import { get } from 'lodash'
 import 'veui-theme-one/icons/cross-small'
 import 'veui-theme-one/icons/cross-large'
 import 'veui-theme-one/icons/plus-circle-o'
@@ -85,38 +90,54 @@ export default {
       items: [],
       localIndex: null,
       localActive: '',
+      activeId: '',
       menuOverflow: false
     }
   },
   computed: {
+    tabUids () {
+      return this.items.map(item => item.id)
+    },
     tabNames () {
       return this.items.map(item => item.name)
     }
   },
   methods: {
     add (tab) {
-      let names = this.items.map(tab => tab.name)
-      let tabIndex = names.length
+      let tabIndex = this.items.length
+      let domBaseIndex = tab.index
 
-      if (!tab.name || names.indexOf(tab.name) !== -1) {
-        tab.name = uniqueId('veui-tabs-item-')
+      if (this.tabNames.indexOf(tab.name) !== -1) {
+        Vue.util.warn('Tab name duplicated')
       }
 
-      if (tab.name === this.active || !this.localActive) {
-        this.localActive = tab.name
+      // 如果还没有找到选中的 tab，优先查看配置的 name，因为 index 有默认值
+      if (
+        !this.activeId &&
+        (tab.name === this.active || (this.localIndex == null && !this.active)) ||
+        (tabIndex === this.index || (this.localIndex == null && !this.active))
+      ) {
         this.localIndex = tabIndex
-      }
-
-      if (tabIndex === this.index || this.localIndex == null) {
         this.localActive = tab.name
-        this.localIndex = tabIndex
+        this.activeId = tab.id
       }
 
-      this.items.push(tab)
+      if (domBaseIndex >= tabIndex) {
+        this.items.push(tab)
+      } else {
+        this.items.splice(domBaseIndex, 0, tab)
+
+        // 这种情况要更新一下 index
+        this.localIndex = this.tabUids.indexOf(this.activeId)
+      }
     },
 
-    remove (index) {
+    // 参数兼容一下以前的接口
+    remove (index, id) {
       let items = this.items
+      if (id) {
+        index = this.tabUids.indexOf(id)
+      }
       items.splice(index, 1)
 
       if (items.length) {
@@ -124,34 +145,12 @@ export default {
           this.localIndex = this.localIndex - 1
         }
         this.localActive = this.items[this.localIndex].name
+        this.activeId = this.items[this.localIndex].id
       } else {
         this.localIndex = null
         this.localActive = ''
+        this.activeId = ''
       }
-
-      this.updateIndex()
-    },
-
-    patchIndex (oldIndex, newIndex) {
-      let item = this.items[this.localIndex]
-
-      if (oldIndex && newIndex) {
-        this.items.splice(newIndex, 0, this.items.splice(oldIndex, 1)[0])
-        this.updateIndex()
-      }
-
-      this.localIndex = this.items.indexOf(item)
-    },
-
-    updateIndex () {
-      this.$children.forEach(component => {
-        if (includes(get(component, '$options.uiTypes', []), 'tab')) {
-          component.index = findIndex(
-            this.items,
-            item => item.name === component.name || item.name === component.to
-          )
-        }
-      })
     },
 
     setActive ({active, index}) {
@@ -159,6 +158,7 @@ export default {
 
       this.localIndex = index !== undefined ? index : values.indexOf(active)
       this.localActive = active !== undefined ? active : values[index]
+      this.activeId = this.items[this.localIndex].id
 
       if (this.menuOverflow) {
         let {menu, extra} = this.$refs
@@ -199,17 +199,21 @@ export default {
       if (val === this.localActive) {
         return
       }
-      this.setActive({
-        active: val
-      })
+      this.$nextTick(() =>
+        this.setActive({
+          active: val
+        })
+      )
     },
     index (val) {
       if (val === this.localIndex) {
         return
       }
-      this.setActive({
-        index: val
-      })
+      this.$nextTick(() =>
+        this.setActive({
+          index: val
+        })
+      )
     },
     localIndex (val) {
       this.$emit('update:index', val)

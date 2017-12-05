@@ -149,9 +149,12 @@ export default {
     },
     addTab1 () {
       let label = uniqueId('默认')
-      this.tabs1.push({
+      let index = this.tabs1.push({
         label,
         name: label
+      })
+      this.$nextTick(() => {
+        this.index3 = index - 1
       })
     },
     removeTab0 ({name}) {
