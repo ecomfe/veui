@@ -4,7 +4,6 @@ import Vue from 'vue'
 import { isFunction, noop } from 'lodash'
 
 export class ConfirmManager extends SpecialDialog {
-
   constructor () {
     super(ConfirmBox)
   }

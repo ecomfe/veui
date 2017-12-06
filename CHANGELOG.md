@@ -1,3 +1,42 @@
+### 1.0.0-alpha.4
+
+#### ⚠️ 非兼容性变更
+
+* [^] 重构了 `babel-plugin-veui` 及 `veui-loader` 的逻辑，以支持服务端渲染时首屏样式的抽取。
+
+  > ##### 迁移指南
+  >
+  > * 删除 `build/vue-loader.conf.js` 中 `preLoaders` 中的 `veui-loader` 配置；
+  >
+  > * 将 `.babelrc` 中的 `veui` 插件配置删除，整个只保留字符串 `'veui'`；
+  > * 在 `build/webpack.base.conf.js` 中，重新配置 `veui-loader`：
+  >
+  > ```js
+  > {
+  >   test: /\.vue$/,
+  >   loader: 'veui-loader',
+  >   enforce: 'pre',
+  >   options: {
+  >     modules: [
+  >       {
+  >         package: 'veui-theme-one',
+  >         fileName: '${module}.less'
+  >       },
+  >       {
+  >         package: 'veui-theme-one',
+  >         fileName: '${module}.js',
+  >         transform: false
+  >       }
+  >     ]
+  >   },
+  >   include: [resolve('veui'), resolve('vue-awesome')]
+  > }
+  > ```
+
+#### 🐞 问题修复
+
+* [^] 修正了 `Carousel` 组件 slot 的位置。
+
 ### 1.0.0-alpha.3
 
 #### 🐞 问题修复

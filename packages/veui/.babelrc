@@ -4,22 +4,7 @@
     "stage-2"
   ],
   "plugins": [
-    [
-      "veui",
-      {
-        "modules": [
-          {
-            "package": "veui-theme-one",
-            "fileName": "${module}.less"
-          },
-          {
-            "package": "veui-theme-one",
-            "fileName": "${module}.js",
-            "transform": false
-          }
-        ]
-      }
-    ],
+    "veui",
     "lodash",
     "transform-vue-jsx",
     [

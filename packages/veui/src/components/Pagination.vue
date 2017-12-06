@@ -1,5 +1,5 @@
 <template>
-<div class="veui-pager" :ui="ui">
+<div class="veui-pagination veui-pager" :ui="ui">
   <div class="veui-pager-info">
     <div class="veui-pager-total">共 {{ realTotal }} 条</div>
     <div class="veui-pager-size">
@@ -48,6 +48,8 @@ import config from '../managers/config'
 import { icons } from '../mixins'
 
 config.defaults({
+  'pagination.pageSize': 30,
+  'pagination.pageSizes': [30, 50, 100],
   'pager.pageSize': 30,
   'pager.pageSizes': [30, 50, 100]
 })
@@ -73,7 +75,7 @@ const aroundIndicatorLength = 2
 const moreIndicatorOffsetLength = 5
 
 export default {
-  name: 'veui-pager',
+  name: 'veui-pagination',
   mixins: [icons],
   components: {
     Icon,
@@ -89,13 +91,13 @@ export default {
     pageSize: {
       type: Number,
       default () {
-        return config.get('pager.pageSize')
+        return config.get('pagination.pageSize') || config.get('pager.pageSize')
       }
     },
     pageSizes: {
       type: Array,
       default () {
-        return config.get('pager.pageSizes')
+        return config.get('pagination.pageSizes') || config.get('pager.pageSizes')
       }
     },
     total: {

@@ -5,30 +5,12 @@ import { resolve } from 'path'
 import plugin from '../lib'
 
 test(t => {
-  let { code } = transformFileSync(resolve(__dirname, './fixtures/veui/components/source.js'), {
+  let { code } = transformFileSync(resolve(__dirname, './fixtures/source.js'), {
     babelrc: false,
     plugins: [
-      [
-        plugin,
-        {
-          modules: [
-            {
-              package: 'veui-theme-one',
-              fileName: '${module}.less'
-            },
-            {
-              package: 'veui-theme-one',
-              fileName: '${module}.js',
-              transform: false
-            }
-          ],
-          resolve () {
-            return true
-          }
-        }
-      ]
+      plugin
     ]
   })
 
-  t.is(code, readFileSync(resolve(__dirname, './fixtures/veui/expected.js'), 'utf8'))
+  t.is(code, readFileSync(resolve(__dirname, './fixtures/expected.js'), 'utf8'))
 })

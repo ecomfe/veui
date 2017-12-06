@@ -30,9 +30,9 @@ export default {
                 {
                   this.selectMode === 'multiple'
                     ? <veui-checkbox checked={this.selectStatus !== 'none'}
-                        disabled={!this.data.length}
-                        indeterminate={this.selectStatus === 'partial'}
-                        onChange={checked => { this.table.select(checked) }}/>
+                      disabled={!this.data.length}
+                      indeterminate={this.selectStatus === 'partial'}
+                      onChange={checked => { this.table.select(checked) }}/>
                     : null
                 }</div></th>
               : null
@@ -44,9 +44,9 @@ export default {
                 {
                   col.sortable
                     ? <veui-sorter
-                        order={this.table.orderBy === col.field ? this.table.order : false}
-                        onSort={order => { this.$emit('sort', col.field, order) }}>
-                      </veui-sorter>
+                      order={this.table.orderBy === col.field ? this.table.order : false}
+                      onSort={order => { this.$emit('sort', col.field, order) }}>
+                    </veui-sorter>
                     : null
                 }
               </th>

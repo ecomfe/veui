@@ -4,7 +4,6 @@ import Vue from 'vue'
 import { isFunction, noop } from 'lodash'
 
 export class PromptManager extends SpecialDialog {
-
   constructor () {
     super(PromptBox)
   }

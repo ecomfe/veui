@@ -27,6 +27,8 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     // fix unused var error for JSX custom tags
-    'vue/jsx-uses-vars': 2
+    'vue/jsx-uses-vars': 2,
+    'no-multi-spaces': ['error', { ignoreEOLComments: true }],
+    'no-template-curly-in-string': 0
   }
 }

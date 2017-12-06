@@ -1,5 +1,4 @@
 export default class BaseHandler {
-
   options = {}
 
   context = null
