@@ -23,27 +23,14 @@ $ npm i --save veui-theme-one
 
 First, scaffold your project using `vue-cli` with template `webpack`.
 
-To use default theme `one`, make sure to add these plugins in `.babelrc`:
+### Babel plugins
+
+To bundle VEUI correctly, you need to add the following configs into your `.babelrc` file in addition to the existing `presets`:
 
 ```json
 {
   "plugins": [
-    [
-      "veui",
-      {
-        "modules": [
-          {
-            "package": "veui-theme-one",
-            "fileName": "${module}.less"
-          },
-          {
-            "package": "veui-theme-one",
-            "fileName": "${module}.js",
-            "transform": false
-          }
-        ]
-      }
-    ],
+    "veui",
     "lodash",
     "transform-vue-jsx",
     [
@@ -57,26 +44,31 @@ To use default theme `one`, make sure to add these plugins in `.babelrc`:
 }
 ```
 
-To make sure Webpack dynamically loads style modules correctly, make sure to configure `veui-loader` in the workflow as follows:
+### webpack Loaders
+
+To use the default theme `veui-theme-one`, make sure to configure `veui-loader` in the workflow as follows:
 
 In `build/webpack.base.conf.js`, prepend this rule:
 
 ```js
 {
-  test: /\.js$/,
+  test: /\.vue$/,
   loader: 'veui-loader',
   enforce: 'pre',
-  include: [resolve('src'), resolve('demo'), resolve('test')]
-}
-```
-
-In `build/vue-loader.conf.js`, add a pre-loader:
-
-```
-{
-  preLoaders: {
-    js: 'veui-loader'
-  }
+  options: {
+    modules: [
+      {
+        package: 'veui-theme-one',
+        fileName: '${module}.less'
+      },
+      {
+        package: 'veui-theme-one',
+        fileName: '${module}.js',
+        transform: false
+      }
+    ]
+  },
+  include: [resolve('veui'), resolve('vue-awesome')]
 }
 ```
 
@@ -92,6 +84,7 @@ After cloning the repo, run
 
 ```sh
 $ lerna bootstrap
+$ npm install
 $ npm run dev
 ```
 
