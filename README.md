@@ -44,7 +44,7 @@ To bundle VEUI correctly, you need to add the following configs into your `.babe
 }
 ```
 
-### webpack Loaders
+### webpack loaders
 
 To use the default theme `veui-theme-one`, make sure to configure `veui-loader` in the workflow as follows:
 
@@ -68,7 +68,17 @@ In `build/webpack.base.conf.js`, prepend this rule:
       }
     ]
   },
-  include: [resolve('veui'), resolve('vue-awesome')]
+  include: [resolve('veui')]
+}
+```
+
+And you should include `veui` and `vue-awesome` in the configs for `babel-loader`:
+
+```js
+{
+  test: /\.js$/,
+  loader: 'babel-loader',
+  include: [resolve('node_modules/veui'), resolve('node_modules/vue-awesome')]
 }
 ```
 
