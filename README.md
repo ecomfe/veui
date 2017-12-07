@@ -82,19 +82,12 @@ And you should include `veui` and `vue-awesome` in the configs for `babel-loader
 }
 ```
 
-## Development
+## Contribution
 
-Install `lerna`:
-
-```sh
-$ npm i -g lerna
-```
-
-After cloning the repo, run
+To develop `veui` locally you need to clone this repo and run the following in `veui`'s root directory:
 
 ```sh
-$ lerna bootstrap
-$ npm install
+$ npm run bootstrap
 $ npm run dev
 ```
 
