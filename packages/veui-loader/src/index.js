@@ -231,10 +231,10 @@ function resolveComponent (file) {
 /**
  * Convert a component relative path to a component name according to
  * VEUI's component list.
+ * 'Icon.vue' → 'Icon'
  * @param {string} componentPath Component path
- * @returns {string} Component name
+ * @returns {?string} Component name (`null` if not a VEUI component)
  */
-// 'Icon.vue' → 'Icon'
 function getComponentName (componentPath) {
   if (!componentPath) {
     return null
