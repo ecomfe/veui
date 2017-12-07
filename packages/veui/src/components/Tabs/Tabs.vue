@@ -1,7 +1,7 @@
 <template>
 <div class="veui-tabs" :ui="ui">
   <div class="veui-tabs-menu" ref="menu">
-    <div class="veui-tabs-list">
+    <div class="veui-tabs-list" :class="{'veui-tabs-list-empty': items.length === 0}">
       <template v-for="(tab, index) in items">
         <div :key="tab.name" v-if="tab.to" class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
           'veui-tabs-item-disabled': tab.disabled,
@@ -26,7 +26,7 @@
           </slot>
         </div>
       </template>
-      <object v-if="!$slots.tabsExtra && items.length" ref="resizeHandler" @load="registerResizeHanlder" type="text/html" data="about:blank"></object>
+      <object ref="resizeHandler" @load="registerResizeHanlder" type="text/html" data="about:blank"></object>
     </div>
     <slot name="tabs-extra" >
       <div v-if="!$slots.tabsExtra"
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import warn from '../../utils/warn'
 import Link from '../Link'
 import Icon from '../Icon'
 import { get } from 'lodash'
@@ -108,7 +108,7 @@ export default {
       let domBaseIndex = tab.index
 
       if (this.tabNames.indexOf(tab.name) !== -1) {
-        Vue.util.warn('Tab name duplicated')
+        warn('Tab name duplicated')
       }
 
       // 如果还没有找到选中的 tab，优先查看配置的 name，因为 index 有默认值
@@ -132,12 +132,12 @@ export default {
       }
     },
 
-    // 参数兼容一下以前的接口
-    remove (index, id) {
+    removeById (id) {
+      this.remove(this.tabUids.indexOf(id))
+    },
+
+    remove (index) {
       let items = this.items
-      if (id) {
-        index = this.tabUids.indexOf(id)
-      }
       items.splice(index, 1)
 
       if (items.length) {

@@ -75,7 +75,7 @@ export default {
     }
   },
   destroyed () {
-    this.tabs.remove(null, this.id)
+    this.tabs.removeById(this.id)
   }
 }
 </script>
