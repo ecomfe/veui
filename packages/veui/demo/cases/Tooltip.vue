@@ -54,7 +54,7 @@
           </div>
         </div>
       </div>
-      <veui-tooltip :position="position" :ui="ui" :target="target" trigger="hover">当前是hover事件</veui-tooltip>
+      <veui-tooltip :position="position" :ui="ui" :target="target" :overlayOptions="overlayOptions" trigger="hover">当前是hover事件</veui-tooltip>
     </p>
     <p>
       <div class="demo-wrap">
@@ -138,7 +138,15 @@ export default {
       open: false,
       clickOpen: false,
       number: '12345678910987654321',
-      numberOpen: false
+      numberOpen: false,
+      overlayOptions: {
+        constraints: [
+          {
+            pin: true,
+            to: 'window'
+          }
+        ]
+      }
     }
   },
   components: {
