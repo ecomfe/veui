@@ -68,7 +68,7 @@ In `build/webpack.base.conf.js`, prepend this rule:
       }
     ]
   },
-  include: [resolve('veui')]
+  include: [resolve('node_modules/veui')]
 }
 ```
 
