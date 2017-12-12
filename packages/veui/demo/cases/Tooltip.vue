@@ -54,7 +54,7 @@
           </div>
         </div>
       </div>
-      <veui-tooltip :position="position" :ui="ui" :target="target" :overlayOptions="overlayOptions" trigger="hover">当前是hover事件</veui-tooltip>
+      <veui-tooltip :position="position" :ui="ui" :target="target" :overlay-options="overlayOptions" trigger="hover">当前是hover事件</veui-tooltip>
     </p>
     <p>
       <div class="demo-wrap">
