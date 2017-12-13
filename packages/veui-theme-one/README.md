@@ -1,4 +1,4 @@
-# `veui-theme-one`
+# veui-theme-one
 
 Baidu One Design theme for VEUI.
 

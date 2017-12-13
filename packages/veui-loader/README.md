@@ -1,4 +1,4 @@
-# `veui-loader`
+# veui-loader
 
 This webpack loader helps you to automatically load theme modules at build time.
 

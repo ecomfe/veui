@@ -1,4 +1,4 @@
-# `babel-plugin-veui`
+# babel-plugin-veui
 
 This Babel plugin enables you to wrtie simpler `import` statements by converting such statements:
 
