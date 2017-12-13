@@ -1,8 +1,8 @@
 <template>
 <div class="veui-tabs" :ui="ui">
   <div class="veui-tabs-menu" ref="menu">
-    <div class="veui-tabs-list" :class="{'veui-tabs-list-empty': items.length === 0}" ref="resizeContainer" v-resize:resizer.afterend="(e) => resizeHandler(e)">
-      <div class="veui-tabs-list-resizer" ref="resizer">
+    <div class="veui-tabs-list" :class="{'veui-tabs-list-empty': items.length === 0}" ref="resizeContainer" v-resize="(e) => resizeHandler(e)">
+      <div class="veui-tabs-list-resizer">
         <template v-for="(tab, index) in items">
           <div :key="tab.name" v-if="tab.to" class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
             'veui-tabs-item-disabled': tab.disabled,
