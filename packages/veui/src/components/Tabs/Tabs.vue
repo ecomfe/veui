@@ -179,15 +179,17 @@ export default {
       let {menu, extra} = this.$refs
       let menuWidth = menu.getBoundingClientRect().width
       let containerWidth = el.getBoundingClientRect().width
+      let marignWidth = parseInt(getComputedStyle(menu).marginRight, 10)
       let stickyWidth = extra.getBoundingClientRect().width
 
-      this.menuOverflow = menuWidth < containerWidth + stickyWidth
+      this.menuOverflow = menuWidth < (containerWidth - marignWidth + stickyWidth)
       if (!this.menuOverflow) {
-        menu.style.paddingRight = 0
+        // 本来用 padding 就完事了，ie9 不让 -  -
+        menu.style.marginRight = 0
       } else {
         // 需要 menuOverflow 对 dom 进行更新
         this.$nextTick(() => {
-          menu.style.paddingRight = extra.getBoundingClientRect().width + 'px'
+          menu.style.marginRight = extra.getBoundingClientRect().width + 'px'
         })
       }
     },
