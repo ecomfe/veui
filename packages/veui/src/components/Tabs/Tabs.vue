@@ -1,32 +1,33 @@
 <template>
 <div class="veui-tabs" :ui="ui">
   <div class="veui-tabs-menu" ref="menu">
-    <div class="veui-tabs-list" :class="{'veui-tabs-list-empty': items.length === 0}">
-      <template v-for="(tab, index) in items">
-        <div :key="tab.name" v-if="tab.to" class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
-          'veui-tabs-item-disabled': tab.disabled,
-          'veui-tabs-item-active': index === localIndex
-        }">
-          <slot name="tab-item" v-bind="tab">
-            <veui-link :to="tab.to" :native="tab.native">{{ tab.label }}</veui-link>
-            <icon :name="`cross-${(ui || '').split(' ').indexOf('large') ? 'large' : 'small'}`" v-if="tab.removable" @click.native="$emit('remove', tab)"></icon>
-          </slot>
-        </div>
-        <div :key="tab.name" v-else class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
-          'veui-tabs-item-disabled': tab.disabled,
-          'veui-tabs-item-active': index === localIndex
-        }">
-          <slot name="tab-item" v-bind="tab">
-            <span @click="!tab.disabled && setActive({index})">{{ tab.label }}</span>
-            <slot name="tab-item-extra" v-bind="tab">
-              <icon :name="`cross-${(ui || '').split(' ').indexOf('large') !== -1 ? 'large' : 'small'}`"
-                v-if="tab.removable"
-                @click.native="$emit('remove', tab)"></icon>
+    <div class="veui-tabs-list" :class="{'veui-tabs-list-empty': items.length === 0}" ref="resizeContainer" v-resize:resizer.afterend="(e) => resizeHandler(e)">
+      <div class="veui-tabs-list-resizer" ref="resizer">
+        <template v-for="(tab, index) in items">
+          <div :key="tab.name" v-if="tab.to" class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
+            'veui-tabs-item-disabled': tab.disabled,
+            'veui-tabs-item-active': index === localIndex
+          }">
+            <slot name="tab-item" v-bind="tab">
+              <veui-link :to="tab.to" :native="tab.native">{{ tab.label }}</veui-link>
+              <icon :name="`cross-${(ui || '').split(' ').indexOf('large') ? 'large' : 'small'}`" v-if="tab.removable" @click.native="$emit('remove', tab)"></icon>
             </slot>
-          </slot>
-        </div>
-      </template>
-      <object ref="resizeHandler" @load="registerResizeHanlder" type="text/html" data="about:blank"></object>
+          </div>
+          <div :key="tab.name" v-else class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
+            'veui-tabs-item-disabled': tab.disabled,
+            'veui-tabs-item-active': index === localIndex
+          }">
+            <slot name="tab-item" v-bind="tab">
+              <span @click="!tab.disabled && setActive({index})">{{ tab.label }}</span>
+              <slot name="tab-item-extra" v-bind="tab">
+                <icon :name="`cross-${(ui || '').split(' ').indexOf('large') !== -1 ? 'large' : 'small'}`"
+                  v-if="tab.removable"
+                  @click.native="$emit('remove', tab)"></icon>
+              </slot>
+            </slot>
+          </div>
+        </template>
+      </div>
     </div>
     <slot name="tabs-extra" >
       <div v-if="!$slots.tabsExtra"
@@ -52,7 +53,7 @@
 import warn from '../../utils/warn'
 import Link from '../Link'
 import Icon from '../Icon'
-import { get } from 'lodash'
+import { resize } from '../../directives'
 import 'veui-theme-one/icons/cross-small'
 import 'veui-theme-one/icons/cross-large'
 import 'veui-theme-one/icons/plus-circle-o'
@@ -67,6 +68,9 @@ export default {
   components: {
     'veui-link': Link,
     Icon
+  },
+  directives: {
+    resize
   },
   props: {
     ui: {
@@ -171,23 +175,21 @@ export default {
       }
     },
 
-    registerResizeHanlder (e) {
-      let handler = e.target
-      handler.contentDocument.defaultView.addEventListener('resize', () => {
-        let {menu, extra} = this.$refs
-        let menuWidth = menu.getBoundingClientRect().width
-        let handlerWidth = handler.getBoundingClientRect().width
-        let stickyWidth = extra.getBoundingClientRect().width
+    resizeHandler (el) {
+      let {menu, extra} = this.$refs
+      let menuWidth = menu.getBoundingClientRect().width
+      let containerWidth = el.getBoundingClientRect().width
+      let stickyWidth = extra.getBoundingClientRect().width
 
-        this.menuOverflow = menuWidth < handlerWidth + stickyWidth
-        if (!this.menuOverflow) {
-          menu.style.paddingRight = 0
-        } else {
-          this.$nextTick(() => {
-            menu.style.paddingRight = extra.getBoundingClientRect().width + 'px'
-          })
-        }
-      })
+      this.menuOverflow = menuWidth < containerWidth + stickyWidth
+      if (!this.menuOverflow) {
+        menu.style.paddingRight = 0
+      } else {
+        // 需要 menuOverflow 对 dom 进行更新
+        this.$nextTick(() => {
+          menu.style.paddingRight = extra.getBoundingClientRect().width + 'px'
+        })
+      }
     },
 
     scroll (direction) {
@@ -199,21 +201,29 @@ export default {
       if (val === this.localActive) {
         return
       }
-      this.$nextTick(() =>
-        this.setActive({
-          active: val
+      // 可能有 add/remove 操作
+      this.$nextTick(() => {
+        // 需要检查是否超长
+        this.resizeHandler(this.$refs.resizeContainer)
+        this.$nextTick(() => {
+          this.setActive({
+            active: val
+          })
         })
-      )
+      })
     },
     index (val) {
       if (val === this.localIndex) {
         return
       }
-      this.$nextTick(() =>
-        this.setActive({
-          index: val
+      this.$nextTick(() => {
+        this.resizeHandler(this.$refs.resizeContainer)
+        this.$nextTick(() => {
+          this.setActive({
+            index: val
+          })
         })
-      )
+      })
     },
     localIndex (val) {
       this.$emit('update:index', val)
@@ -221,10 +231,6 @@ export default {
     localActive (val) {
       this.$emit('update:active', val)
     }
-  },
-  destroyed () {
-    let view = get(this, '$refs.resizeHandler.contentDocument.defaultView')
-    view && view.removeEventListener('resize')
   }
 }
 </script>
