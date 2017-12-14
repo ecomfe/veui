@@ -71,11 +71,13 @@
                   <veui-checkbox :checked="group.selected" :indeterminate="group.indeterminate"
                     :readonly="realReadonly" :disabled="realDisabled"
                     @change="checked => toggleNode(group, checked)">
-                    <slot name="label" v-bind="group" :level="2">{{ group.label }}</slot>
+                    <slot name="label" v-bind="group" :overlay="true" :level="2">
+                      {{ group.label }}
+                      <small v-if="group.children && group.children.length">
+                        ({{ group.solidCount }}/{{ group.children.length }})
+                      </small>
+                    </slot>
                   </veui-checkbox>
-                  <small v-if="group.children && group.children.length">
-                    ({{ group.solidCount }}/{{ group.children.length }})
-                  </small>
                 </div>
               </veui-overlay>
             </div>
