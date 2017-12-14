@@ -3,7 +3,7 @@ import BaseHandler from './BaseHandler'
 import { getNodes } from '../../utils/context'
 import config from '../../managers/config'
 
-let computedStyle = getComputedStyle(document.body)
+let computedStyle = process.env.VUE_ENV === 'server' ? function () {} : getComputedStyle(document.body)
 const TRANSFORM_ACCESSOR = find(
   ['transform', 'msTransform', 'MozTransform', 'webkitTransform'],
   accessor => (accessor in computedStyle)
