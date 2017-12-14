@@ -19,19 +19,33 @@
           您关闭了
           <template slot="foot"></template>
       </veui-dialog>
+
+      <veui-alert type="error" :message="messages" :index.sync="messageIndex">
+        <template slot="nav" scope="props">
+          <veui-button ui="link" :disabled="props.isFirst" @click="messageIndex--">
+            <veui-icon name="angle-left"></veui-icon>
+          </veui-button>
+          <span class="nav-counter">{{ messageIndex + 1 }} / {{ messages.length }}</span>
+          <veui-button ui="link" :disabled="props.isLast" @click="messageIndex++">
+            <veui-icon name="angle-right"></veui-icon>
+          </veui-button>
+        </template>
+      </veui-alert>
     </p>
   </article>
 </template>
 
 <script>
 import bus from '../bus'
-import { Alert, Dialog } from 'veui'
+import { Alert, Dialog, Button, Icon } from 'veui'
 
 export default {
   name: 'alert',
   components: {
     'veui-alert': Alert,
-    'veui-dialog': Dialog
+    'veui-dialog': Dialog,
+    'veui-button': Button,
+    'veui-icon': Icon
   },
   data () {
     return {
@@ -42,7 +56,8 @@ export default {
         '我是消息3',
         '我是消息4',
         '我是消息5'
-      ]
+      ],
+      messageIndex: 0
     }
   },
   methods: {
@@ -66,5 +81,9 @@ p {
 }
 .veui-alert.limit-width {
   width: 350px;
+}
+
+.nav-counter {
+  margin-right: 10px;
 }
 </style>
