@@ -3,7 +3,7 @@
   <div v-for="(section, si) in localDatasource" class="veui-region-picker-section" :key="si">
     <div class="veui-region-picker-section-title">
       <veui-checkbox :checked="section.selected" :indeterminate="section.indeterminate"
-        :readonly="realReadonly" :disabled="realDisabled"
+        :readonly="realReadonly" :disabled="realDisabled || section.disabled"
         @change="checked => toggleNode(section, checked)">
         <slot name="label" v-bind="section" :level="0">{{ section.label }}</slot>
       </veui-checkbox>
@@ -12,7 +12,7 @@
       <div v-for="(branch, bi) in section.children" class="veui-region-picker-branch" :key="bi">
         <div class="veui-region-picker-branch-title">
           <veui-checkbox :checked="branch.selected" :indeterminate="branch.indeterminate"
-            :readonly="realReadonly" :disabled="realDisabled"
+            :readonly="realReadonly" :disabled="realDisabled || branch.disabled"
             @change="checked => toggleNode(branch, checked)">
             <slot name="label" v-bind="branch" :level="1">{{ branch.label }}</slot>
           </veui-checkbox>
@@ -21,7 +21,7 @@
           <div v-for="(group, gi) in branch.children" class="veui-region-picker-group" :key="gi">
             <div class="veui-region-picker-group-title">
               <veui-checkbox :ref="`group-${si}-${bi}-${gi}`" :checked="group.selected"
-                :readonly="realReadonly" :disabled="realDisabled"
+                :readonly="realReadonly" :disabled="realDisabled || group.disabled"
                 :indeterminate="group.indeterminate" @change="checked => toggleNode(group, checked)"
                 @mouseenter.native="toggleActive(group, true)">
                 <slot name="label" v-bind="group" :level="2">{{ group.label }}</slot>
@@ -165,7 +165,11 @@ export default {
           node.solidCount = 0 // deteminately selected child count
           node.softCount = 0 // indeterminately selected child count
           node.indeterminate = false
-          node.parent = parent
+
+          if (parent) {
+            node.parent = parent
+            node.disabled = node.disabled || parent.disabled
+          }
         },
         exit: ({ node, parent }) => {
           if (!node.id && !(node.children && node.children.length)) {
@@ -187,6 +191,9 @@ export default {
       this.localDatasource = localDatasource
     },
     toggleActive (node, show) {
+      if (node.disabled) {
+        return
+      }
       // `active` is not observed yet
       Vue.set(node, 'active', show)
     },
@@ -197,22 +204,30 @@ export default {
       // select/unselect all descendents
       walk(node, {
         exit: ({ node }) => {
+          if (node.disabled) {
+            return
+          }
           let hasChildren = node.children && node.children.length
-          node.indeterminate = false
-          node.selected = checked
           if (hasChildren) {
-            node.softCount = node.solidCount = checked ? node.children.length : 0
+            let enabledChildren = node.children.filter(({ disabled }) => !disabled)
+            node.softCount = enabledChildren.filter(({ selected }) => selected).length
+            node.solidCount = enabledChildren.filter(({ selected, indeterminate }) => selected && !indeterminate).length
+            node.selected = node.softCount > 0
+            node.indeterminate = node.solidCount !== node.children.length && node.softCount !== 0
+          } else {
+            node.indeterminate = false
+            node.selected = checked
           }
         }
       })
 
       // inform ancesters
       let parent = node
-      let prev = { selected, indeterminate }
+      let prev
       do {
+        prev = prev ? pick(parent, 'selected', 'indeterminate') : { selected, indeterminate }
         updateNode(parent, prev)
         parent = parent.parent
-        prev = pick(parent, 'selected', 'indeterminate')
       } while (parent)
 
       // collect selected result
