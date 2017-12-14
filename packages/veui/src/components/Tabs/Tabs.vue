@@ -112,7 +112,7 @@ export default {
       let domBaseIndex = tab.index
 
       if (this.tabNames.indexOf(tab.name) !== -1) {
-        warn('Tab name duplicated')
+        warn('Duplicate tab name.')
       }
 
       // 如果还没有找到选中的 tab，优先查看配置的 name，因为 index 有默认值
@@ -196,6 +196,17 @@ export default {
 
     scroll (direction) {
       this.$refs.menu.scrollLeft += direction === 'right' ? 100 : -100
+    },
+
+    adaptToSetActive (activation) {
+      // 可能有 add/remove 操作
+      this.$nextTick(() => {
+        // 需要检查是否超长
+        this.resizeHandler(this.$refs.resizeContainer)
+        this.$nextTick(() => {
+          this.setActive(activation)
+        })
+      })
     }
   },
   watch: {
@@ -203,28 +214,16 @@ export default {
       if (val === this.localActive) {
         return
       }
-      // 可能有 add/remove 操作
-      this.$nextTick(() => {
-        // 需要检查是否超长
-        this.resizeHandler(this.$refs.resizeContainer)
-        this.$nextTick(() => {
-          this.setActive({
-            active: val
-          })
-        })
+      this.adaptToSetActive({
+        active: val
       })
     },
     index (val) {
       if (val === this.localIndex) {
         return
       }
-      this.$nextTick(() => {
-        this.resizeHandler(this.$refs.resizeContainer)
-        this.$nextTick(() => {
-          this.setActive({
-            index: val
-          })
-        })
+      this.adaptToSetActive({
+        index: val
       })
     },
     localIndex (val) {
