@@ -10,14 +10,18 @@
 
     <veui-button v-if="closeText" class="veui-alert-close veui-alert-close-text" ui="link primary" @click="close">{{ closeText }}</veui-button>
     <span class="veui-alert-nav" v-else-if="isMultiple">
-      <slot name="nav" :is-first="isFirst" :is-last="isLast" :index="localIndex">
-        <veui-button ui="link" :disabled="isFirst" @click="switchMessage(-1)">
-          <veui-icon :name="icons.prev"></veui-icon>
-        </veui-button>
-        <veui-button ui="link" :disabled="isLast" @click="switchMessage(1)">
-          <veui-icon :name="icons.next"></veui-icon>
-        </veui-button>
-      </slot>
+      <veui-button ui="link" :disabled="isFirst" @click="switchMessage(-1)">
+        <veui-icon :name="icons.prev"></veui-icon>
+      </veui-button>
+      <slot
+        name="nav-text"
+        :is-first="isFirst"
+        :is-last="isLast"
+        :index="localIndex"
+      ></slot>
+      <veui-button ui="link" :disabled="isLast" @click="switchMessage(1)">
+        <veui-icon :name="icons.next"></veui-icon>
+      </veui-button>
     </span>
     <veui-button v-else class="veui-alert-close" ui="link" @click="close">
       <veui-icon :name="icons.close"></veui-icon>
