@@ -67,11 +67,13 @@ export default {
       })
     })
 
-    if (!this.isInited) {
+    if (!this.isActive) {
       let unWatchIsActive = this.$watch('isActive', () => {
         this.isInited = true
         unWatchIsActive()
       })
+    } else {
+      this.isInited = true
     }
   },
   destroyed () {
