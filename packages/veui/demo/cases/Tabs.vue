@@ -75,7 +75,7 @@
       <veui-button @click="addTab1">添加 TAB</veui-button>
       <veui-tabs :active.sync="active2" :index.sync="index3">
         <template slot="tab-item-extra" scope="props">
-          <icon name="cross-small" v-if="props.removable" @click.native="removeTab1(props)"></icon>
+          <icon name="cross-small" v-if="props.removable && tabs1.length > 1" @click.native="removeTab1(props)"></icon>
         </template>
         <veui-tab :label="tab.label"
           :name="tab.name"
@@ -91,10 +91,10 @@
       <p>当前序号 <code>{{index4 + 1}}</code></p>
       <veui-button @click="insertVisiable = !insertVisiable">{{ insertVisiable ? '隐藏' : '显示' }}中间一个可切换 TAB</veui-button>
       <veui-tabs ui="large" :active.sync="active3" :index.sync="index4">
-        <veui-tab label="DuerOS" name="os"><p>陆奇</p></veui-tab>
-        <veui-tab label="无人车" name="car"><p>吴恩达</p></veui-tab>
-        <veui-tab label="人脸识别" name="face" v-if="insertVisiable"><p>李云腾</p></veui-tab>
-        <veui-tab label="语音识别" name="sound"><p>Robin</p></veui-tab>
+        <veui-tab label="DuerOS" name="os"><p>os</p></veui-tab>
+        <veui-tab label="无人车" name="car"><p>car</p></veui-tab>
+        <veui-tab label="人脸识别" name="face" v-if="insertVisiable"><p>face</p></veui-tab>
+        <veui-tab label="语音识别" name="sound"><p>sound</p></veui-tab>
       </veui-tabs>
     </section>
   </article>
@@ -143,16 +143,15 @@ export default {
         label,
         name: label
       })
-      this.$nextTick(() => {
-        this.index2 = index - 1
-      })
+      this.index2 = index - 1
     },
     addTab1 () {
       let label = uniqueId('默认')
-      this.tabs1.push({
+      let index = this.tabs1.push({
         label,
         name: label
       })
+      this.index3 = index - 1
     },
     removeTab0 ({name}) {
       this.tabs0.splice(findIndex(this.tabs0, tab => tab.name === name), 1)
