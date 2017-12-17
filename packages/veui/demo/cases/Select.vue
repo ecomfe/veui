@@ -59,7 +59,7 @@
       <veui-select v-bind="optGroupAttrs" v-model="defaultValue8" :overlay-options="{
           position: 'bottom right'
         }">
-        <template slot="option" scope="props">
+        <template slot="optionLabel" scope="props">
           <span class="veui-option-label-text">{{ props.label }}</span>
           <icon name="gift"></icon>
         </template>

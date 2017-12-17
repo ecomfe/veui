@@ -38,7 +38,8 @@
               :selected="subOption.value === value"
               :key="subOption.value"
               @select="handleSelect(subOption)">
-              <slot name="option" v-bind="subOption" :selected="option.value === value"></slot>
+              <slot v-if="$scopedSlots.option" name="option" v-bind="subOption" :selected="option.value === value"></slot>
+              <slot v-if="$scopedSlots.optionLabel" name="optionLabel" v-bind="subOption" :selected="option.value === value"></slot>
             </veui-option>
           </div>
           <veui-option
@@ -48,7 +49,8 @@
             :selected="option.value === value"
             :key="option.value"
             @select="handleSelect(option)">
-            <slot name="option" v-bind="option" :selected="option.value === value"></slot>
+            <slot v-if="$scopedSlots.option" name="option" v-bind="option" :selected="option.value === value"></slot>
+            <slot v-if="$scopedSlots.optionLabel" name="optionLabel"  v-bind="option" :selected="option.value === value"></slot>
           </veui-option>
         </template>
       </slot>
