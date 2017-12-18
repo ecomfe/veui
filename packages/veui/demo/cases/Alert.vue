@@ -25,13 +25,15 @@
 
 <script>
 import bus from '../bus'
-import { Alert, Dialog } from 'veui'
+import { Alert, Dialog, Button, Icon } from 'veui'
 
 export default {
   name: 'alert',
   components: {
     'veui-alert': Alert,
-    'veui-dialog': Dialog
+    'veui-dialog': Dialog,
+    'veui-button': Button,
+    'veui-icon': Icon
   },
   data () {
     return {
@@ -42,7 +44,8 @@ export default {
         '我是消息3',
         '我是消息4',
         '我是消息5'
-      ]
+      ],
+      messageIndex: 0
     }
   },
   methods: {
