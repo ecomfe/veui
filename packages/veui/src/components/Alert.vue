@@ -6,7 +6,10 @@
     <span v-if="isMultiple" class="veui-alert-message veui-alert-message-multiple">
       <slot :index="localIndex">{{ message[localIndex] }}</slot>
     </span>
-    <span v-else class="veui-alert-message"><slot>{{ message }}</slot></span>
+    <span v-else class="veui-alert-message">
+      <slot v-if="$scopedSlots.default" :message="message">{{ message }}</slot>
+      <slot v-else>{{ message }}</slot>
+    </span>
 
     <veui-button v-if="closeText" class="veui-alert-close veui-alert-close-text" ui="link primary" @click="close">{{ closeText }}</veui-button>
     <span class="veui-alert-nav" v-else-if="isMultiple">

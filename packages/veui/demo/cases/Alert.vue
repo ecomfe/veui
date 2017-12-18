@@ -70,8 +70,4 @@ p {
 .veui-alert.limit-width {
   width: 350px;
 }
-
-.nav-counter {
-  margin-right: 10px;
-}
 </style>
