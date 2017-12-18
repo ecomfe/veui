@@ -1,5 +1,9 @@
 ## 待定
 
+### ⚠️ 非兼容性变更
+* [^] `select/Option`新增整个 OptionItem 级别的默认slot，原默认slot更改为`slot[name=label]`
+* [^] `select/Option`原`slot[name=option]`更新对齐到`select/Option#slot[name=default]`；新增`slot[name=option-label]`对齐到`select/Option#slot[name=label]`
+
 ### 💡 主要变更
 
 * [+] 新增 `resize` 指令。
