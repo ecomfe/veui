@@ -17,7 +17,7 @@
       <h2>Slot[name=option-label] 样式：</h2>
       <veui-select v-bind="attrs" v-model="defaultValue3" ui="alt">
         <template slot="option-label" scope="props">
-          <span class="veui-option-custom">{{ props.label }}</span>
+          <span class="veui-option-custom-label">{{ props.label }}</span>
         </template>
       </veui-select>
     </section>
@@ -55,7 +55,7 @@
       </veui-select>
     </section>
     <section>
-      <h2>Slot 分组样式 2：</h2>
+      <h2>Slot[name=option-label] 分组样式 2：</h2>
       <veui-select v-bind="optGroupAttrs" v-model="defaultValue8" :overlay-options="{
           position: 'bottom right'
         }">
@@ -239,6 +239,21 @@ export default {
 
   .veui-icon {
     margin-left: 5px;
+  }
+}
+.veui-option-custom {
+  position: relative;
+  padding-left: 10px;
+  &::after {
+    content: '❤️';
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%);
+  }
+
+  &-label {
+    color: rgb(80, 170, 39);
   }
 }
 </style>
