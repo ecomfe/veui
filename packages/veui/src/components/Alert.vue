@@ -13,12 +13,7 @@
       <veui-button ui="link" :disabled="isFirst" @click="switchMessage(-1)">
         <veui-icon :name="icons.prev"></veui-icon>
       </veui-button>
-      <slot
-        name="nav-text"
-        :is-first="isFirst"
-        :is-last="isLast"
-        :index="localIndex"
-      ></slot>
+      <span>{{ localIndex + 1 }}/{{ message.length }}</span>
       <veui-button ui="link" :disabled="isLast" @click="switchMessage(1)">
         <veui-icon :name="icons.next"></veui-icon>
       </veui-button>

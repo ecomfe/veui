@@ -19,18 +19,6 @@
           您关闭了
           <template slot="foot"></template>
       </veui-dialog>
-
-      <veui-alert type="error" :message="messages" :index.sync="messageIndex">
-        <template slot="nav" scope="props">
-          <veui-button ui="link" :disabled="props.isFirst" @click="messageIndex--">
-            <veui-icon name="angle-left"></veui-icon>
-          </veui-button>
-          <span class="nav-counter">{{ messageIndex + 1 }} / {{ messages.length }}</span>
-          <veui-button ui="link" :disabled="props.isLast" @click="messageIndex++">
-            <veui-icon name="angle-right"></veui-icon>
-          </veui-button>
-        </template>
-      </veui-alert>
     </p>
   </article>
 </template>
