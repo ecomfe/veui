@@ -4,7 +4,7 @@
     <veui-icon class="veui-alert-icon" :name="icons[type]"></veui-icon>
 
     <span v-if="isMultiple" class="veui-alert-message veui-alert-message-multiple">
-      <slot :index="localIndex">{{ message[localIndex] }}</slot>
+      <slot :index="localIndex" :message="message[localIndex]">{{ message[localIndex] }}</slot>
     </span>
     <span v-else class="veui-alert-message">
       <slot v-if="$scopedSlots.default" :message="message">{{ message }}</slot>
