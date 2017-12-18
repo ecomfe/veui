@@ -1,8 +1,7 @@
 ## 待定
 
 ### ⚠️ 非兼容性变更
-* [^] `select/Option`新增整个 OptionItem 级别的默认slot，原默认slot更改为`slot[name=label]`
-* [^] `select/Option`原`slot[name=option]`更新对齐到`select/Option#slot[name=default]`；新增`slot[name=option-label]`对齐到`select/Option#slot[name=label]`
+* [^] 为 `Select` 用名为 `option-label` 的 scoped slot 替代了原来的 `option`。原来的 `option` 现在为整个选项的内容，包括文本和图标等。
 
 ### 💡 主要变更
 
