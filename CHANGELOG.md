@@ -1,5 +1,8 @@
 ## 待定
 
+### ⚠️ 非兼容性变更
+* [^] 为 `Select` 用名为 `option-label` 的 scoped slot 替代了原来的 `option`。原来的 `option` 现在为整个选项的内容，包括文本和图标等。
+
 ### 💡 主要变更
 
 * [+] 新增 `resize` 指令。
