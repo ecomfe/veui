@@ -16,7 +16,7 @@
     @input="handleInput"
     @focus="inputFocus = true"
     @blur="handleBlur"
-    @keyup.enter.prevent="search"
+    @keypress.enter.prevent="search"
     autocomplete="off"
   >
   </veui-input>
