@@ -13,7 +13,7 @@
 
 <script>
 import Tether from 'tether'
-import { assign } from 'lodash'
+import { assign, includes, get } from 'lodash'
 import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
 import config from '../managers/config'
@@ -146,7 +146,7 @@ export default {
     },
 
     isOverlay (componentInstance) {
-      return componentInstance.$options.uiTypes && componentInstance.$options.uiTypes[0] === 'overlay'
+      return includes(get(componentInstance, '$options.uiTypes', []), 'overlay')
     },
 
     focus () {
