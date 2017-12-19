@@ -156,7 +156,7 @@ export default {
     viewMonth () {
       return `${this.year}/${this.month}`
     },
-    localSelected () {
+    realSelected () {
       return this.selected ? this.selected : (this.multiple ? [] : null)
     },
     panels () {
@@ -253,16 +253,16 @@ export default {
       let month = (i - 1) * 4 + j - 1
       return {
         'veui-calendar-today': month === this.today.getMonth() && panel.year === this.today.getFullYear(),
-        'veui-calendar-selected': (this.localSelected && !this.multiple && !this.range)
-          ? (month === this.localSelected.getMonth() && panel.year === this.localSelected.getFullYear()) : false
+        'veui-calendar-selected': (this.realSelected && !this.multiple && !this.range)
+          ? (month === this.realSelected.getMonth() && panel.year === this.realSelected.getFullYear()) : false
       }
     },
     getYearClass (panel, i, j) {
       let year = panel.year - panel.year % 10 + (i - 1) * 4 + j - 1
       return {
         'veui-calendar-today': year === this.today.getFullYear(),
-        'veui-calendar-selected': (this.localSelected && !this.multiple && !this.range)
-          ? year === this.localSelected.getFullYear() : false
+        'veui-calendar-selected': (this.realSelected && !this.multiple && !this.range)
+          ? year === this.realSelected.getFullYear() : false
       }
     },
     selectDay (day) {
@@ -281,7 +281,7 @@ export default {
         }
 
         // multiple single days selection
-        let result = [...this.localSelected]
+        let result = [...this.realSelected]
         let pos = findIndex(result, date => {
           return isSameDay(date, selected)
         })
@@ -326,7 +326,7 @@ export default {
           if (!marked) {
             this.$set(this.picking, 1, this.picking[0])
           }
-          this.pickingRanges = mergeRange(this.picking, this.localSelected)
+          this.pickingRanges = mergeRange(this.picking, this.realSelected)
         }
         this.$emit('selectprogress', this.pickingRanges || this.picking)
       }
@@ -351,24 +351,24 @@ export default {
       this.setView('days')
     },
     isSelected (day) {
-      if (!this.localSelected && !this.picking) {
+      if (!this.realSelected && !this.picking) {
         return false
       }
       if (!this.range) {
         if (!this.multiple) {
           // single day
-          return isSameDay(this.localSelected, day)
+          return isSameDay(this.realSelected, day)
         }
         // multiple single days
-        return (this.localSelected || []).some(d => isSameDay(d, day))
+        return (this.realSelected || []).some(d => isSameDay(d, day))
       }
       if (!this.multiple) {
         // single range
-        let range = this.picking || this.localSelected
+        let range = this.picking || this.realSelected
         return isSameDay(range[0], day) || isSameDay(range[1], day)
       }
       // multiple ranges
-      return (this.pickingRanges || this.localSelected || []).some(selected => {
+      return (this.pickingRanges || this.realSelected || []).some(selected => {
         return isSameDay(selected[0], day) || isSameDay(selected[1], day)
       })
     },
@@ -379,12 +379,12 @@ export default {
 
       if (!this.multiple) {
         // single range
-        let range = this.picking || this.localSelected
+        let range = this.picking || this.realSelected
         return getRangePosition(day, range)
       }
 
       // multiple ranges
-      let ranges = this.pickingRanges || this.localSelected || []
+      let ranges = this.pickingRanges || this.realSelected || []
       let position = false
       for (let i = 0, j = ranges.length; i < j; i++) {
         position = getRangePosition(day, ranges[i])
@@ -424,6 +424,9 @@ export default {
           month: this.month
         })
       }
+    },
+    selected (val) {
+      this.picking = this.pickingRanges = null
     }
   }
 }
