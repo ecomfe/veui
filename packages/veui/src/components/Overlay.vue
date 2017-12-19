@@ -146,7 +146,7 @@ export default {
     },
 
     isOverlay (componentInstance) {
-      return componentInstance.uiTypes && componentInstance.uiTypes[0] === 'overlay'
+      return componentInstance.$options.uiTypes && componentInstance.$options.uiTypes[0] === 'overlay'
     },
 
     focus () {
