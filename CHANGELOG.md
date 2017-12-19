@@ -8,14 +8,14 @@
 
 * [+] 新增 `resize` 指令。
 * [^] `Tabs` 组件中的 `Tab` 元素不再需要强制配置 `name` 属性。
-* [+] Alert 组件显示多条 message 时，增加`当前消息索引/总消息数`的展示。
+* [+] `Alert` 组件显示多条消息时，增加当前消息索引/总消息数的展示。
+* [^] 调整 `Alert` 组件默认 slot 范围，同时新增默认 scoped slot。
 
 ### 🐞 问题修复
 
 * [^] 修复 `Tabs` 组件中 `Tab` 元素的渲染顺序和属性同步问题。
 * [^] 修复 `Searchbox` 组件在按 <kbd>enter</kbd> 后自动触发表单提交的问题。
-* [^] 调整 Alert 组件 default slot 范围，同时新增 default scopedSlot ，以便接收 `multiple` 模式下当前 message 对应的 index 。
-* [^] 修复 Overlay.vue 中始终找不到父级 overlay 的 bug 。
+* [^] 修复 `Overlay` 组件中判断组件类型错误的问题。
 
 ## 1.0.0-alpha.4
 
