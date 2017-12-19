@@ -15,6 +15,7 @@
 * [^] 修复 `Tabs` 组件中 `Tab` 元素的渲染顺序和属性同步问题。
 * [^] 修复 `Searchbox` 组件在按 <kbd>enter</kbd> 后自动触发表单提交的问题。
 * [^] 调整 Alert 组件 default slot 范围，同时新增 default scopedSlot ，以便接收 `multiple` 模式下当前 message 对应的 index 。
+* [^] 修复 Overlay.vue 中始终找不到父级 overlay 的 bug 。
 
 ## 1.0.0-alpha.4
 
