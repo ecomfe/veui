@@ -10,7 +10,7 @@
           :name="icons.upload"></icon>选择文件</slot>
         <input :id="inputId" hidden type="file" ref="input"
           @change="handleNewFiles"
-          :name="name || realName"
+          :name="name"
           :disabled="realUneditable ||
             (maxCount > 1 && fileList.length >= maxCount) ||
             (requestMode === 'iframe' && disabledWhenSubmiting)"
@@ -95,7 +95,7 @@
           @click="replacingFile = null"
           ref="label"><input :id="inputId" hidden type="file" ref="input"
             @change="handleNewFiles"
-            :name="name || realName"
+            :name="name"
             :disabled="realUneditable || (requestMode === 'iframe' && disabledWhenSubmiting)"
             :accept="accept"
             :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
