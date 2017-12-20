@@ -10,7 +10,7 @@
           :name="icons.upload"></icon>选择文件</slot>
         <input :id="inputId" hidden type="file" ref="input"
           @change="handleNewFiles"
-          :name="realName"
+          :name="name || realName"
           :disabled="realUneditable ||
             (maxCount > 1 && fileList.length >= maxCount) ||
             (requestMode === 'iframe' && disabledWhenSubmiting)"
@@ -95,7 +95,7 @@
           @click="replacingFile = null"
           ref="label"><input :id="inputId" hidden type="file" ref="input"
             @change="handleNewFiles"
-            :name="realName"
+            :name="name || realName"
             :disabled="realUneditable || (requestMode === 'iframe' && disabledWhenSubmiting)"
             :accept="accept"
             :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
@@ -335,7 +335,7 @@ export default {
           return this.validateFile(file)
         })
       } else {
-        let name = this.$refs.input.value
+        let name = this.$refs.input.value.replace('C:\\fakepath\\', '')
         let size = this.$refs.input.files && this.$refs.input.files[0].size
         if (!this.validateFile({name, size})) {
           return
