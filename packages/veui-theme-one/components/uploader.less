@@ -53,8 +53,8 @@
 
     .veui-icon {
       font-size: 50px;
-      vertical-align: middle;
       color: @veui-gray-color-2;
+      .veui-position-center();
     }
 
     &:hover {
@@ -77,7 +77,7 @@
       height: auto;
       max-width: 100%;
       max-height: 100%;
-      vertical-align: middle;
+      .veui-position-center();
     }
 
     &-status {
@@ -199,7 +199,6 @@
       padding: 0;
       border: 1px solid @veui-gray-color-5;
       text-align: center;
-      line-height: @image-size - 2px;
       position: relative;
 
       .veui-button[ui~="operation"] {
@@ -239,7 +238,6 @@
         }
       }
 
-
       label.veui-button {
         cursor: pointer;
         top: ~"calc(50% - 14px)";
@@ -249,7 +247,7 @@
         line-height: 26px;
       }
 
-      &-remove {
+      .veui-button&-remove {
         .size(24px);
         line-height: 24px;
         top: 0;

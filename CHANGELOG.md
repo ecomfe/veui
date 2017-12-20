@@ -18,6 +18,7 @@
 * [^] 修复 `Overlay` 组件中判断组件类型错误的问题。
 * [^] `Calendar` 组件在时间段选择过程中，如果 `selected` 发生变更，现在会自动清除半选状态。
 * [^] 修复 `veui-loader` 在 Windows 下生成路径错误的问题。
+* [^] 修复 `Uploader` 组件文件名没有去掉fakepath前缀的问题，以及直接使用realName导致自己的name被field的name覆盖的问题。
 
 ## 1.0.0-alpha.4
 
