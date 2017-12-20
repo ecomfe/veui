@@ -1,9 +1,19 @@
 @import "./lib.less";
 
 ._veui-grouped-button {
+  position: relative;
+
   &:hover,
   &.focus-ring {
     border-color: @veui-theme-color-primary;
+    z-index: 2;
+  }
+
+  &[ui~="alt"] {
+    &:hover,
+    &.focus-ring {
+      border-color: transparent;
+    }
   }
 
   &:active {
@@ -22,6 +32,7 @@
     &.focus-ring {
       background-color: @veui-theme-color-sup-6;
       border-color: @veui-theme-color-sup-6;
+      color: #fff;
     }
 
     &:active {

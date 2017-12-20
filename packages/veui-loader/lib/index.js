@@ -89,7 +89,7 @@ function patchComponent(content, component, options, resolve) {
 
   return Object.keys(parts).reduce(function (content, type) {
     return parts[type].reduce(function (content, peerPath) {
-      return patchType(content, type, peerPath);
+      return patchType(content, type, (0, _utils.normalize)(peerPath));
     }, content);
   }, content);
 }

@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import pkgDir from 'pkg-dir'
 import loaderUtils from 'loader-utils'
-import { kebabCase, camelCase, pascalCase, getJSON } from './utils'
+import { kebabCase, camelCase, pascalCase, getJSON, normalize } from './utils'
 import resolve from 'enhanced-resolve/lib/node'
 
 const COMPONENTS = getJSON(path.resolve(__dirname, '../components.json'))
@@ -114,19 +114,20 @@ const RE_SCRIPT = /<script(?:\s+[^>]*)?>/i
  * @returns {string} The patched content
  */
 function patchType (content, type, peerPath) {
+  let normalizedPath = normalize(peerPath)
   switch (type) {
     case 'script':
       content = content.replace(RE_SCRIPT, match => {
-        return `${match}\nimport '${peerPath}'\n`
+        return `${match}\nimport '${normalizedPath}'\n`
       })
       break
     case 'style':
       let langStr = ''
-      let ext = getExtname(peerPath)
+      let ext = getExtname(normalizedPath)
       if (ext !== 'css') {
         langStr = `lang="${ext}" `
       }
-      content += `\n<style ${langStr}src="${peerPath}"></style>\n`
+      content += `\n<style ${langStr}src="${normalizedPath}"></style>\n`
       break
     default:
       break
