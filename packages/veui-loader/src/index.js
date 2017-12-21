@@ -114,7 +114,7 @@ const RE_SCRIPT = /<script(?:\s+[^>]*)?>/i
  * @returns {string} The patched content
  */
 function patchType (content, type, peerPath) {
-  let normalizedPath = normalize(peerPath)
+  let normalizedPath = normalize(peerPath).replace(/\\/g, '\\\\')
   switch (type) {
     case 'script':
       content = content.replace(RE_SCRIPT, match => {
