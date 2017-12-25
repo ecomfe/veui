@@ -13,8 +13,8 @@ export class Type {
     ]
   }
 
-  clone (val, runtimeConfigs) {
-    return cloneDeepWith(val, cloneBuiltIn.bind(this, runtimeConfigs))
+  clone (val) {
+    return cloneDeepWith(val, cloneBuiltIn.bind(this))
   }
 
   register (newConfig) {
@@ -31,8 +31,8 @@ export class Type {
   }
 }
 
-function cloneBuiltIn (runtimeConfigs = [], val) {
-  let config = find([...runtimeConfigs, ...this.configs], config => isType(config.type, val))
+function cloneBuiltIn (val) {
+  let config = find(this.configs, config => isType(config.type, val))
   if (config) {
     return config.clone(val)
   }
