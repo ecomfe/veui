@@ -1,13 +1,13 @@
 import { cloneDeepWith, find } from 'lodash'
-import { isType, getTypeByInstance } from '../utils/lang'
+import { isType } from '../utils/lang'
 
 export class Type {
   constructor () {
     this.configs = [
       {
-        type: Date,
+        type: Function,
         clone (val) {
-          return new Date(val.getTime())
+          return val
         }
       }
     ]
@@ -22,8 +22,8 @@ export class Type {
       return
     }
 
-    let config = find(this.configs, config => isType(config.type, newConfig.type))
-    if (config) {
+    let config = find(this.configs, config => config.type === newConfig.type)
+    if (!config) {
       this.configs.push(newConfig)
     } else {
       config.clone = newConfig.clone
@@ -32,7 +32,7 @@ export class Type {
 }
 
 function cloneBuiltIn (val) {
-  let config = find(this.configs, config => isType(getTypeByInstance(val), config.type))
+  let config = find(this.configs, config => isType(config.type, val))
   if (config) {
     return config.clone(val)
   }

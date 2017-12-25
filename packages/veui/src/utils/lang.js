@@ -6,11 +6,11 @@ export function getTypeByInstance (obj) {
   }
 }
 
-export function getType (fn) {
-  const match = fn && fn.toString().match(/^\s*function (\w+)/)
+export function getType (type) {
+  const match = type && type.toString().match(/^\s*function (\w+)/)
   return match ? match[1] : ''
 }
 
-export function isType (type, fn) {
-  return getType(fn) === getType(type)
+export function isType (type, obj) {
+  return getType(type) === getTypeByInstance(obj)
 }
