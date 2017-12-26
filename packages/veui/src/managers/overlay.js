@@ -194,7 +194,7 @@ export class Tree {
     const node = this.nodeMap[startNodeId].node
     const parentNode = node.parent
 
-    let prevNode
+    let prevNode = parentNode
     let isEncountered = false
     let baseZIndex
     parentNode.iterateChildren((child) => {
