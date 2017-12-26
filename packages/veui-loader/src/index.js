@@ -55,25 +55,31 @@ function patchComponent (content, component, options, resolve) {
     return content
   }
 
-  let parts = modules.reduce((acc, {
-    package: pack,
-    path: packPath = COMPONENTS_DIRNAME,
-    transform,
-    fileName
-  }) => {
-    let peerComponent = getPeerFilename(component, {
-      transform,
-      template: fileName
-    })
-    let peerPath = path.join(pack, packPath, peerComponent)
-    if (assurePath(peerPath, resolve)) {
-      pushPart(acc, peerPath)
+  let parts = modules.reduce(
+    (
+      acc,
+      {
+        package: pack,
+        path: packPath = COMPONENTS_DIRNAME,
+        transform,
+        fileName
+      }
+    ) => {
+      let peerComponent = getPeerFilename(component, {
+        transform,
+        template: fileName
+      })
+      let peerPath = path.join(pack, packPath, peerComponent)
+      if (assurePath(peerPath, resolve)) {
+        pushPart(acc, peerPath)
+      }
+      return acc
+    },
+    {
+      script: [],
+      style: []
     }
-    return acc
-  }, {
-    script: [],
-    style: []
-  })
+  )
 
   return Object.keys(parts).reduce((content, type) => {
     return parts[type].reduce((content, peerPath) => {
@@ -101,7 +107,10 @@ function pushPart (parts, file) {
  * @returns {string} File extension
  */
 function getExtname (file) {
-  return path.extname(file).replace(/\./g, '').toLowerCase()
+  return path
+    .extname(file)
+    .replace(/\./g, '')
+    .toLowerCase()
 }
 
 const RE_SCRIPT = /<script(?:\s+[^>]*)?>/i
@@ -177,10 +186,10 @@ function assurePath (modulePath, resolve) {
  * @param {string} options.template File name template
  * @returns {string} Peer module file name
  */
-function getPeerFilename (name, {
-  transform = 'kebab-case',
-  template = '${module}.css'
-}) {
+function getPeerFilename (
+  name,
+  { transform = 'kebab-case', template = '${module}.css' }
+) {
   if (!name) {
     return null
   }

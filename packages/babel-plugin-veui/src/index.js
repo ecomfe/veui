@@ -29,8 +29,11 @@ export default function (babel) {
         // import * as veui from 'veui'
         // import veui from 'veui'
         if (src === 'veui') {
-          if (node.specifiers.length === 1 && (node.specifiers[0].type === 'ImportDefaultSpecifier' ||
-            node.specifiers[0].type === 'ImportNamespaceSpecifier')) {
+          if (
+            node.specifiers.length === 1 &&
+            (node.specifiers[0].type === 'ImportDefaultSpecifier' ||
+              node.specifiers[0].type === 'ImportNamespaceSpecifier')
+          ) {
             return
           }
 
@@ -38,9 +41,7 @@ export default function (babel) {
             if (imported.name === 'default') {
               path.insertBefore(
                 t.importDeclaration(
-                  [
-                    t.importDefaultSpecifier(t.identifier(local.name))
-                  ],
+                  [t.importDefaultSpecifier(t.identifier(local.name))],
                   t.stringLiteral(src)
                 )
               )
@@ -50,9 +51,7 @@ export default function (babel) {
               let name = local.name || imported.name
               path.insertBefore(
                 t.importDeclaration(
-                  [
-                    t.importDefaultSpecifier(t.identifier(name))
-                  ],
+                  [t.importDefaultSpecifier(t.identifier(name))],
                   t.stringLiteral(componentSrc)
                 )
               )
