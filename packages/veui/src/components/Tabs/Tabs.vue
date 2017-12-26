@@ -4,26 +4,20 @@
     <div class="veui-tabs-list" :class="{'veui-tabs-list-empty': items.length === 0}" ref="resizeContainer" v-resize="(e) => resizeHandler(e)">
       <div class="veui-tabs-list-resizer">
         <template v-for="(tab, index) in items">
-          <div :key="tab.name" v-if="tab.to" class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
+          <div :key="tab.name" class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
             'veui-tabs-item-disabled': tab.disabled,
             'veui-tabs-item-active': index === localIndex
           }">
-            <slot name="tab-item" v-bind="tab">
-              <veui-link :to="tab.to" :native="tab.native">{{ tab.label }}</veui-link>
-              <icon :name="`cross-${(ui || '').split(' ').indexOf('large') ? 'large' : 'small'}`" v-if="tab.removable" @click.native="$emit('remove', tab)"></icon>
-            </slot>
-          </div>
-          <div :key="tab.name" v-else class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
-            'veui-tabs-item-disabled': tab.disabled,
-            'veui-tabs-item-active': index === localIndex
-          }">
-            <slot name="tab-item" v-bind="tab">
-              <span @click="!tab.disabled && setActive({index})">{{ tab.label }}</span>
-              <slot name="tab-item-extra" v-bind="tab">
-                <icon :name="`cross-${(ui || '').split(' ').indexOf('large') !== -1 ? 'large' : 'small'}`"
-                  v-if="tab.removable"
-                  @click.native="$emit('remove', tab)"></icon>
-              </slot>
+            <slot name="tab-item" v-bind="tab" :index="index">
+              <veui-link v-if="tab.to" class="veui-tabs-item-label" :to="tab.to" :native="tab.native">{{ tab.label }}</veui-link>
+              <button v-else class="veui-tabs-item-label" type="button" @click="!tab.disabled && setActive({index})">{{ tab.label }}</button>
+              <button type="button" class="veui-tabs-item-remove"
+                @click="$emit('remove', tab)">
+                <slot name="tab-item-extra" v-bind="tab">
+                  <icon :name="icons.remove"
+                  v-if="tab.removable"></icon>
+                </slot>
+              </button>
             </slot>
           </div>
         </template>
@@ -33,14 +27,14 @@
       <div v-if="!$slots.tabsExtra"
         class="veui-tabs-extra" ref="extra"
         :class="{'veui-tabs-extra-overflow': menuOverflow}">
-        <div v-if="addable"
+        <button type="button" v-if="addable"
           class="veui-tabs-operator"
           @click="$emit('add')">
-          <icon name="plus-circle-o"></icon><slot name="tabs-extra-text"><span>添加TAB</span></slot>
-        </div>
+          <icon :name="icons.add"></icon><slot name="tabs-extra-text"><span>添加TAB</span></slot>
+        </button>
         <div class="veui-tabs-scroller" v-if="menuOverflow">
-          <span class="veui-tabs-scroller-left" @click="scroll('left')"><icon :name="`angle-left${(ui || '').split(' ').indexOf('large') !== -1 ? '' : '-small'}`"></icon></span>
-          <span class="veui-tabs-scroller-right" @click="scroll('right')"><icon :name="`angle-right${(ui || '').split(' ').indexOf('large') !== -1 ? '' : '-small'}`"></icon></span>
+          <button type="button" class="veui-tabs-scroller-left" @click="scroll('left')"><icon :name="icons.prev"></icon></button>
+          <button type="button" class="veui-tabs-scroller-right" @click="scroll('right')"><icon :name="icons.next"></icon></button>
         </div>
       </div>
     </slot>
@@ -54,17 +48,12 @@ import warn from '../../utils/warn'
 import Link from '../Link'
 import Icon from '../Icon'
 import { resize } from '../../directives'
-import 'veui-theme-one/icons/cross-small'
-import 'veui-theme-one/icons/cross-large'
-import 'veui-theme-one/icons/plus-circle-o'
-import 'veui-theme-one/icons/angle-left-small'
-import 'veui-theme-one/icons/angle-left-large'
-import 'veui-theme-one/icons/angle-right-small'
-import 'veui-theme-one/icons/angle-right-large'
+import { icons } from '../../mixins'
 
 export default {
   name: 'veui-tabs',
   uiTypes: ['tabs'],
+  mixins: [icons],
   components: {
     'veui-link': Link,
     Icon
