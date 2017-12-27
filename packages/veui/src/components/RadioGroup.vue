@@ -7,7 +7,7 @@
     :key="index"
     :value="item.value"
     :disabled="item.disabled || realDisabled || realReadonly"
-    :checked="item.value === value"
+    :checked="item.value === localValue"
     @change="checked => handleChange(item.value, checked)">
     <slot v-bind="item">{{ item.label }}</slot>
   </radio>
@@ -33,14 +33,25 @@ export default {
     items: Array,
     value: null
   },
+  data () {
+    return {
+      localValue: this.value
+    }
+  },
   computed: {
     localName () {
       return this.realName || uniqueId('veui-radio-group-')
     }
   },
+  watch: {
+    value (val) {
+      this.localValue = val;
+    }
+  },
   methods: {
     handleChange (value, checked) {
       if (checked) {
+        this.localValue = value;
         this.$emit('change', value)
       }
     }
