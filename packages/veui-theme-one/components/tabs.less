@@ -14,7 +14,11 @@
     margin-left: @margin;
 
     &:first-child {
-      margin-left: 0;
+      margin-left: -10px;
+    }
+
+    &:last-child {
+      margin-right: -10px;
     }
   }
 
@@ -41,7 +45,7 @@
 
   &-item {
     display: inline-block;
-    .make-margin(60px);
+    .make-margin(50px);
 
     & > &-remove {
       visibility: hidden;
@@ -84,12 +88,14 @@
     }
 
     &:not(.veui-tabs-item-disabled) > &-label {
+      color: @veui-text-color-strong;
+
       &::after {
         content: "";
-        .absolute(_, _, 0, 10px);
-        width: ~"calc(100% - 20px)";
+        .absolute(_, 10px, 0, 10px);
         height: 2px;
         z-index: 1;
+        transition: background-color .2s;
       }
 
       &:hover::after {
@@ -192,7 +198,7 @@
     }
 
     &-item {
-      .make-margin(60px);
+      .make-margin(50px);
     }
 
     &-operator {
@@ -219,7 +225,7 @@
 
   &[ui~="small"] & {
     &-item {
-      .make-margin(40px);
+      .make-margin(30px);
     }
 
     &-menu {
@@ -230,11 +236,19 @@
   &[ui~="tiny"] & {
     &-menu {
       border-bottom: none;
+
+      &::after {
+        display: none;
+      }
     }
 
     &-item {
-      .make-margin(20px);
+      .make-margin(21px);
       position: relative;
+
+      &-label::after {
+        height: 1px;
+      }
 
       &::before {
         content: "";
@@ -242,7 +256,7 @@
         width: 1px;
         height: 14px;
         background-color: @veui-gray-color-6;
-        .absolute(10px, _, _, -10px);
+        .absolute(10px, _, _, -11px);
       }
 
       &:first-child::before {
