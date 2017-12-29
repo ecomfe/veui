@@ -32,7 +32,7 @@
           @click="$emit('add')">
           <icon :name="icons.add"></icon><slot name="tabs-extra-text"><span>添加TAB</span></slot>
         </button>
-        <div class="veui-tabs-scroller" v-if="menuOverflow">
+        <div class="veui-tabs-scroller" v-if="menuOverflow" ref="scroller">
           <button type="button" class="veui-tabs-scroller-left" @click="scroll('left')"><icon :name="icons.prev"></icon></button>
           <button type="button" class="veui-tabs-scroller-right" @click="scroll('right')"><icon :name="icons.next"></icon></button>
         </div>
@@ -165,22 +165,24 @@ export default {
     },
 
     resizeHandler (el) {
-      let {menu, extra} = this.$refs
-      let menuWidth = menu.getBoundingClientRect().width
-      let containerWidth = el.getBoundingClientRect().width
-      let marignWidth = parseInt(getComputedStyle(menu).marginRight, 10)
-      let stickyWidth = extra.getBoundingClientRect().width
+      let {menu, extra, scroller} = this.$refs
+      let menuWidth = menu.offsetWidth
+      let containerWidth = el.offsetWidth
+      let stickyWidth = extra.offsetWidth
 
-      this.menuOverflow = menuWidth < (containerWidth - marignWidth + stickyWidth)
-      if (!this.menuOverflow) {
-        // 本来用 padding 就完事了，ie9 不让 -  -
-        menu.style.marginRight = 0
-      } else {
-        // 需要 menuOverflow 对 dom 进行更新
-        this.$nextTick(() => {
-          menu.style.marginRight = extra.getBoundingClientRect().width + 'px'
-        })
-      }
+      let factor = this.menuOverflow
+        ? -(scroller.offsetWidth + parseInt(getComputedStyle(scroller).marginLeft, 10))
+        : stickyWidth
+      this.menuOverflow = menuWidth < (containerWidth + factor)
+      // 需要 menuOverflow 对 dom 进行更新
+      this.$nextTick(() => {
+        if (!this.menuOverflow) {
+          // 本来用 padding 就完事了，ie9 不让 -  -
+          menu.style.marginRight = 0
+        } else {
+          menu.style.marginRight = extra.offsetWidth + 'px'
+        }
+      })
     },
 
     scroll (direction) {
