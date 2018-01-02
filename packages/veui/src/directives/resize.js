@@ -28,7 +28,13 @@ function attach (el, { value, arg, modifiers, oldValue }, vnode, oldVnode) {
     let target = arg && vnode.context.$refs[arg] ? vnode.context.$refs[arg] : el
     target.insertAdjacentElement(pos, obj)
 
-    obj.contentDocument.defaultView.onresize = partial(value, el)
+    if (obj.contentDocument) {
+      obj.contentDocument.defaultView.onresize = partial(value, el)
+    } else {
+      obj.onload = () => {
+        obj.contentDocument.defaultView.onresize = partial(value, el)
+      }
+    }
     return
   }
   if (value.toString() !== oldValue.toString()) {
