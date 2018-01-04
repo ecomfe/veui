@@ -69,13 +69,13 @@ export default {
       this.localOpen = value
     },
     index: {
-      handler (v) {
-        this.localIndex = v
+      handler (value) {
+        this.localIndex = value
       },
       immediate: true
     },
-    localIndex (v) {
-      this.$emit('update:index', v)
+    localIndex (value) {
+      this.$emit('update:index', value)
     }
   },
   computed: {

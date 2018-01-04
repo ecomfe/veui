@@ -45,7 +45,7 @@
                     <div class="veui-region-picker-unit-row" :key="ri">
                       <div v-for="(unit, ui) in group.children.slice(ri * 3 - 3, ri * 3)" class="veui-region-picker-unit" :key="ui">
                         <veui-checkbox :checked="unit.selected" :indeterminate="unit.indeterminate"
-                          :readonly="realReadonly" :disabled="realDisabled"
+                          :readonly="realReadonly" :disabled="realDisabled || unit.disabled"
                           @change="checked => toggleNode(unit, checked)">
                           <slot name="label" v-bind="unit" :level="3">{{ unit.label }}</slot>
                         </veui-checkbox>
@@ -69,7 +69,7 @@
                     delay: 200
                   }">
                   <veui-checkbox :checked="group.selected" :indeterminate="group.indeterminate"
-                    :readonly="realReadonly" :disabled="realDisabled"
+                    :readonly="realReadonly" :disabled="realDisabled || group.disabled"
                     @change="checked => toggleNode(group, checked)">
                     <slot name="label" v-bind="group" :overlay="true" :level="2">
                       {{ group.label }}

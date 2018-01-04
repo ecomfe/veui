@@ -63,11 +63,11 @@ export default {
     }
   },
   watch: {
-    open (v) {
-      this.localOpen = v
+    open (value) {
+      this.localOpen = value
     },
-    localOpen (v) {
-      this.$emit('update:open', v)
+    localOpen (value) {
+      this.$emit('update:open', value)
     }
   },
   methods: {

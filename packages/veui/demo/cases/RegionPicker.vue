@@ -482,7 +482,8 @@ const REGIONS_BRAND = [
             children: [
               {
                 id: '144',
-                label: '丹东'
+                label: '丹东',
+                disabled: true
               },
               {
                 id: '145',
