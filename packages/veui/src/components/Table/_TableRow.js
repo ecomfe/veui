@@ -45,7 +45,7 @@ export default {
       }
       {
         this.columns.map(col => (
-          <td class={col.align ? `veui-table-column-${col.align}` : ''}><div class="veui-table-cell">{col.renderBody({ item, col, index })}</div></td>
+          <td class={col.align ? `veui-table-column-${col.align}` : ''}><div class="veui-table-cell">{col.renderBody({ ...item, item, index })}</div></td>
         ))
       }
     </tr>

@@ -1,4 +1,4 @@
-import { isString, isObject, includes, every, isArray } from 'lodash'
+import { isString, isObject, includes, every, isArray, findIndex } from 'lodash'
 
 function isVnode (vnode) {
   return isObject(vnode) && vnode.componentOptions
@@ -12,7 +12,12 @@ function isVnode (vnode) {
  */
 export function isValidNodesResolver (v) {
   function isValid (item) {
-    return isString(item) || item.$vnode || includes([1, 3], item.nodeType) || isVnode(item)
+    return (
+      isString(item) ||
+      item.$vnode ||
+      includes([1, 3], item.nodeType) ||
+      isVnode(item)
+    )
   }
 
   return isValid(v) || (isArray(v) && every(v, isValid))
@@ -57,13 +62,35 @@ export function getVnodes (ref, context) {
     vnodes = ref.map(item => {
       if (item.$vnode) {
         return item.$vnode
-      } else if (isVnode(item) ||
-        item.nodeType === 1 ||
-        item.nodeType === 3) {
+      } else if (isVnode(item) || item.nodeType === 1 || item.nodeType === 3) {
         // vnode节点、dom元素节点和文本节点
         return item
       }
     })
   }
   return vnodes || []
+}
+
+/**
+ * 获取一个组件实例在给定的 VNode 列表中是某个类型的第几个
+ * @param {*} current 查找的组件实例
+ * @param {*} type 特定类型
+ * @param {*} vnodes
+ */
+export function getIndexOfType (current, type, vnodes = 'default') {
+  let currentVNode = getVnodes(current)[0]
+  let parent = current.$parent
+  if (!parent || !parent.$slots[vnodes]) {
+    return -1
+  }
+  // 只是用于每次渲染时插入到当前位置的顺序
+  findIndex(
+    [...parent.$slots[vnodes]].filter(vnode => {
+      return (
+        vnode.componentOptions &&
+        includes(vnode.componentOptions.Ctor.options.uiTypes, type)
+      )
+    }),
+    vnode => vnode === currentVNode
+  )
 }

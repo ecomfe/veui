@@ -1,10 +1,10 @@
 <template>
   <article>
     <h1><code>&lt;veui-tooltip&gt;</code></h1>
-    <p>
+    <section>
       <veui-button ui="primary" @click="ui = ui ? '' : 'alt'">切换皮肤</veui-button>
-    </p>
-    <p>
+    </section>
+    <section>
       <div class="demo-wrap">
         <div style="margin-bottom:10px;">hover事件</div>
         <div class="box">
@@ -54,9 +54,9 @@
           </div>
         </div>
       </div>
-      <veui-tooltip :position="position" :ui="ui" :target="target" :overlay-options="overlayOptions" trigger="hover">当前是hover事件</veui-tooltip>
-    </p>
-    <p>
+      <veui-tooltip :position="position" :ui="ui" :target="target" :open.sync="open" :overlay-options="overlayOptions" trigger="hover">当前是hover事件</veui-tooltip>
+    </section>
+    <section>
       <div class="demo-wrap">
         <div style="margin-bottom:10px;">click事件</div>
         <div class="box">
@@ -106,19 +106,19 @@
           </div>
         </div>
       </div>
-      <veui-tooltip :position="clickPosition" :ui="ui" :target="clickTarget" trigger="click">当前是click事件</veui-tooltip>
-    </p>
-    <p>
+      <veui-tooltip :position="clickPosition" :ui="ui" :target="clickTarget" :open.sync="clickOpen" trigger="click">当前是click事件</veui-tooltip>
+    </section>
+    <section>
       <div style="margin-bottom:10px;">自定义事件</div>
       <veui-input ui="big" v-model="number" composition @change="log('change')" ref="number" @focus.native="numberOpen = true" @blur.native="numberOpen = false"></veui-input>
       <veui-tooltip position="top" :ui="ui" target="number" :custom="true" :open.sync="numberOpen">你focus到了</veui-tooltip>
-    </p>
+    </section>
 
-    <p>
+    <section>
       <div style="margin-bottom:10px;">排除自己</div>
       <veui-button ref="exclude">target</veui-button>
       <veui-tooltip position="top" target="exclude" trigger="hover" :interactive="false" :hide-delay="0">你focus到了</veui-tooltip>
-    </p>
+    </section>
   </article>
 </template>
 
@@ -165,20 +165,23 @@ export default {
     show (obj) {
       this.position = obj.position
       this.target = obj.target
+      this.open = true
     },
     clickShow (obj) {
       this.clickPosition = obj.clickPosition
       this.clickTarget = obj.clickTarget
+      this.clickOpen = true
     }
   }
 }
 </script>
 
 <style scoped>
-p {
+section {
   user-select: none;
   margin: 30px 0;
 }
+
 .demo-wrap {
   width: 500px;
   height: 300px;

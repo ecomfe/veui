@@ -1,8 +1,8 @@
 <template>
 <table class="veui-table" :ui="ui">
   <colgroup>
-    <col v-if="selectable" width="60"></col>
-    <col v-for="(col, index) in realColumns" :width="col.width" :key="index"></col>
+    <col v-if="selectable" width="60"/>
+    <col v-for="(col, index) in realColumns" :width="col.width" :key="index"/>
   </colgroup>
   <table-head @sort="sort"></table-head>
   <table-body><template slot="no-data"><slot name="no-data">没有数据</slot></template></table-body>

@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import { pick, find, findIndex, uniqueId, includes } from 'lodash'
+import { pick, find, uniqueId } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
-import { getVnodes } from '../../utils/context'
+import { getIndexOfType } from '../../utils/context'
 
 export default {
   name: 'veui-tab',
@@ -46,22 +46,17 @@ export default {
     }
   },
   created () {
-    let vdom = getVnodes(this)[0]
-    // index 只是用于每次渲染时插入到 tabs 的顺序
-    let index = findIndex(
-      [...this.$parent.$slots.default].filter(vnode => {
-        return vnode.componentOptions && includes(vnode.componentOptions.Ctor.options.uiTypes, 'tab')
-      }),
-      vnode => vnode === vdom
-    )
+    let index = getIndexOfType(this, 'tab')
+
+    const props = ['label', 'disabled', 'to', 'native', 'removable']
 
     this.tabs.add({
-      ...pick(this, 'id', 'label', 'disabled', 'to', 'native', 'removable'),
+      ...pick(this, ...props, 'id'),
       name: this.name || this.to || this.id,
       index
-    });
+    })
 
-    ['label', 'removable', 'disabled', 'name', 'to'].forEach(prop => {
+    props.forEach(prop => {
       this.$watch(prop, val => {
         find(this.tabs.items, item => item.id === this.id)[prop] = val
       })

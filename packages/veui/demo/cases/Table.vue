@@ -17,17 +17,17 @@
       <veui-table ui="alt" :data="data" :column-filter="columns" keys="id" selectable
         :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected.sync="selected1">
         <veui-table-column field="id" title="数据 ID" sortable>
-          <template scope="props" slot="foot"><strong>总计</strong></template>
+          <template scope slot="foot"><strong>总计</strong></template>
         </veui-table-column>
         <veui-table-column field="desc" title="数据描述"></veui-table-column>
         <veui-table-column field="price" title="价格" sortable width="160" align="right">
           <template scope="props">{{ props.item.price | currency }}</template>
-          <template scope="props" slot="foot"><strong>{{ total | currency }}</strong></template>
+          <template scope slot="foot"><strong>{{ total | currency }}</strong></template>
         </veui-table-column>
         <veui-table-column field="updateDate" title="更新时间" align="center">
           <template scope="props">
-            <span :ref="`time-${props.item.id}`">{{ props.item.updateDate | date }}</span>
-            <veui-tooltip :target="`time-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
+            <span :ref="`time-a-${props.item.id}`">{{ props.item.updateDate | date }}</span>
+            <veui-tooltip :target="`time-a-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
           </template>
         </veui-table-column>
         <veui-table-column field="operation" title="操作">
@@ -49,8 +49,8 @@
         </veui-table-column>
         <veui-table-column field="updateDate" title="更新时间" align="right">
           <template scope="props">
-            <span :ref="`time-${props.item.id}`">{{ props.item.updateDate | date }}</span>
-            <veui-tooltip :target="`time-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
+            <span :ref="`time-b-${props.item.id}`">{{ props.item.updateDate | date }}</span>
+            <veui-tooltip :target="`time-b-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
           </template>
         </veui-table-column>
       </veui-table>

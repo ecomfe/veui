@@ -82,8 +82,8 @@ export default {
     return {
       items: [],
       localIndex: null,
-      localActive: '',
-      activeId: '',
+      localActive: null,
+      activeId: null,
       menuOverflow: false
     }
   },
@@ -141,8 +141,8 @@ export default {
         this.activeId = this.items[this.localIndex].id
       } else {
         this.localIndex = null
-        this.localActive = ''
-        this.activeId = ''
+        this.localActive = null
+        this.activeId = null
       }
     },
 

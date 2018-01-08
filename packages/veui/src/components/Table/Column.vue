@@ -35,10 +35,10 @@ export default {
       hasFoot: !!slots.foot,
       renderBody: slots.default
         ? data => slots.default(data)
-        : ({col, item}) => item[col.field],
+        : (item) => item[this.field],
       renderHead: slots.head
         ? data => slots.head(data)
-        : ({col, item}) => col.title,
+        : () => this.title,
       renderFoot: slots.foot
         ? data => slots.foot(data)
         : () => {}
