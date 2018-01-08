@@ -104,11 +104,12 @@ export default {
         warn('Duplicate tab name.')
       }
 
-      // 如果还没有找到选中的 tab，优先查看配置的 name，因为 index 有默认值
+      // 如果还没有找到选中的 tab，优先查看配置的 name
+      // 因为 index 有默认值，而 tab.name 会 fallback 到 id 上边，所以 active 不指定不会误判断
       if (
         !this.activeId &&
-        (tab.name === this.active || (this.localIndex == null && !this.active)) ||
-        (tabIndex === this.index || (this.localIndex == null && !this.active))
+        tab.name === this.active ||
+        (tabIndex === this.index && !this.active)
       ) {
         this.localIndex = tabIndex
         this.localActive = tab.name
