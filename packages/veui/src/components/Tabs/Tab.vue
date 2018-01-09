@@ -34,9 +34,8 @@ export default {
     }
   },
   data () {
-    let uid = uniqueId('veui-tab-')
     return {
-      id: uid,
+      id: uniqueId('veui-tab-'),
       isInited: false
     }
   },

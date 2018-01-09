@@ -4,9 +4,9 @@
     <col v-if="selectable" width="60"/>
     <col v-for="(col, index) in realColumns" :width="col.width" :key="index"/>
   </colgroup>
-  <table-head @sort="sort"></table-head>
+  <table-head @sort="sort"/>
   <table-body><template slot="no-data"><slot name="no-data">没有数据</slot></template></table-body>
-  <slot name="foot"><table-foot v-if="hasFoot"></table-foot></slot>
+  <slot name="foot"><table-foot/></slot>
   <slot></slot>
 </table>
 </template>
@@ -66,6 +66,9 @@ export default {
     }
   },
   computed: {
+    columnIds () {
+      return this.columns.map(col => col.id)
+    },
     realSelected () {
       return this.selectMode === 'multiple' ? this.localSelected : (this.localSelected[0] || null)
     },
@@ -101,12 +104,21 @@ export default {
         return 'all'
       }
       return 'partial'
-    },
-    hasFoot () {
-      return this.$slots.foot || this.columns.some(col => col.hasFoot)
     }
   },
   methods: {
+    add (col) {
+      let length = this.columns.length
+      let index = col.index
+      if (index >= length) {
+        this.columns.push(col)
+      } else {
+        this.columns.splice(index, 0, col)
+      }
+    },
+    removeById (id) {
+      this.columns.splice(this.columnIds.indexOf(id), 1)
+    },
     select (selected, index) {
       let item = null
       if (index !== undefined) {
@@ -146,6 +158,9 @@ export default {
         return false
       }
       return true
+    },
+    hasFoot () {
+      return this.$slots.foot || this.columns.some(col => col.hasFoot())
     }
   },
   created () {

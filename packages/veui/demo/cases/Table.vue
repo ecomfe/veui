@@ -5,8 +5,12 @@
       <veui-button ui="primary" @click="append">添加</veui-button>
     </section>
     <section>
+      <veui-checkbox v-model="showGroup">显示数据分组</veui-checkbox>
+    </section>
+    <section>
       <veui-checkboxgroup type="checkbox" v-model="columns" :items="[
         { value: 'id', label: 'ID'},
+        { value: 'group', label: '分组', disabled: true},
         { value: 'desc', label: '描述'},
         { value: 'price', label: '价格'},
         { value: 'updateDate', label: '更新时间'},
@@ -14,15 +18,18 @@
       ]"></veui-checkboxgroup>
     </section>
     <section>
-      <veui-table ui="alt" :data="data" :column-filter="columns" keys="id" selectable
+      <veui-table ui="alt bordered" :data="data" :column-filter="columns" keys="id" selectable
         :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected.sync="selected1">
         <veui-table-column field="id" title="数据 ID" sortable>
-          <template scope slot="foot"><strong>总计</strong></template>
+          <template slot="head"><strong>数据 <span style="color: #3998fc">ID</span></strong></template>
+          <template slot="foot"><strong>总计</strong></template>
+        </veui-table-column>
+        <veui-table-column v-if="showGroup" field="group" title="数据分组" :span="groupSpan">
         </veui-table-column>
         <veui-table-column field="desc" title="数据描述"></veui-table-column>
         <veui-table-column field="price" title="价格" sortable width="160" align="right">
           <template scope="props">{{ props.item.price | currency }}</template>
-          <template scope slot="foot"><strong>{{ total | currency }}</strong></template>
+          <template slot="foot"><strong>{{ total | currency }}</strong></template>
         </veui-table-column>
         <veui-table-column field="updateDate" title="更新时间" align="center">
           <template scope="props">
@@ -62,7 +69,7 @@
 <script>
 import moment from 'moment'
 import bus from '../bus'
-import { Button, CheckboxGroup, Table, Column, Tooltip } from 'veui'
+import { Button, Checkbox, CheckboxGroup, Table, Column, Tooltip } from 'veui'
 
 export default {
   name: 'table-demo',
@@ -71,6 +78,7 @@ export default {
     'veui-table': Table,
     'veui-table-column': Column,
     'veui-tooltip': Tooltip,
+    'veui-checkbox': Checkbox,
     'veui-checkboxgroup': CheckboxGroup
   },
   filters: {
@@ -86,24 +94,33 @@ export default {
   },
   data () {
     return {
+      showGroup: true,
       data: [
         {
-          id: '3154', desc: '数据描述1', price: 1024, updateDate: '20131117'
+          id: '3154', desc: '数据描述1', price: 1024, updateDate: '20131117', group: '1577'
         },
         {
-          id: '3155', desc: '数据描述2', price: 598, updateDate: '20140214'
+          id: '3155', desc: '数据描述2', price: 598, updateDate: '20140214', group: '1577'
         },
         {
-          id: '3156', desc: '数据描述3', price: 820, updateDate: '20170610'
+          id: '3156', desc: '数据描述3', price: 820, updateDate: '20170610', group: '1578'
+        },
+        {
+          id: '3157', desc: '数据描述4', price: 736, updateDate: '20180109', group: '1578'
         }
       ],
-      nextId: 3157,
+      nextId: 3158,
       nextIndex: 4,
-      columns: ['id', 'desc', 'price', 'updateDate', 'operation'],
+      columns: ['id', 'group', 'desc', 'price', 'updateDate', 'operation'],
       order: false,
       orderBy: null,
       selected1: ['3155', '3156'],
-      selected2: '3156'
+      selected2: '3156',
+      groupSpan (i) {
+        return {
+          row: i % 2 ? 0 : 2
+        }
+      }
     }
   },
   computed: {
@@ -123,6 +140,7 @@ export default {
     append () {
       let item = {
         id: this.nextId,
+        group: Math.floor(this.nextId / 2),
         desc: `数据描述${this.nextIndex}`,
         price: Math.floor(Math.random() * 1280),
         updateDate: moment(Date.now() + Math.floor(Math.random() * 1e10)).format('YYYYMMDD')
