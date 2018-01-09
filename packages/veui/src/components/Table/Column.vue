@@ -16,7 +16,7 @@ export default {
     order: [String, Boolean],
     align: {
       type: String,
-      validate (val) {
+      validator (val) {
         if (val && val !== 'left' && val !== 'right' && val !== 'center') {
           return false
         }

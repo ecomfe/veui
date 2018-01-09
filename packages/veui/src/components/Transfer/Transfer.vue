@@ -49,7 +49,7 @@ export default {
     selectedShowMode: {
       type: String,
       default: 'tree',
-      validate (value) {
+      validator (value) {
         return includes(['tree', 'flat'], value)
       }
     },
