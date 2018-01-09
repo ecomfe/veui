@@ -89,4 +89,16 @@
       background-color: @veui-gray-color-8;
     }
   }
+
+  &[ui~="bordered"] td {
+    border-style: solid;
+
+    &:first-child {
+      border-left: none;
+    }
+
+    &:last-child {
+      border-right: none;
+    }
+  }
 }

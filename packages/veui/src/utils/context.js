@@ -73,9 +73,10 @@ export function getVnodes (ref, context) {
 
 /**
  * 获取一个组件实例在给定的 VNode 列表中是某个类型的第几个
- * @param {*} current 查找的组件实例
- * @param {*} type 特定类型
- * @param {*} vnodes
+ * @param {VueComponent} current 查找的组件实例
+ * @param {String} type 特定类型
+ * @param {Array<VNode>|String} vnodes VNode 列表，为字符串时代表 slot 名称
+ * @returns {Number} 该实例所在位置的索引，找不到返回 -1
  */
 export function getIndexOfType (current, type, vnodes = 'default') {
   let currentVNode = getVnodes(current)[0]
@@ -83,8 +84,9 @@ export function getIndexOfType (current, type, vnodes = 'default') {
   if (!parent || !parent.$slots[vnodes]) {
     return -1
   }
+
   // 只是用于每次渲染时插入到当前位置的顺序
-  findIndex(
+  return findIndex(
     [...parent.$slots[vnodes]].filter(vnode => {
       return (
         vnode.componentOptions &&

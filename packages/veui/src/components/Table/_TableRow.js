@@ -44,9 +44,26 @@ export default {
           : null
       }
       {
-        this.columns.map(col => (
-          <td class={col.align ? `veui-table-column-${col.align}` : ''}><div class="veui-table-cell">{col.renderBody({ ...item, item, index })}</div></td>
-        ))
+        this.columns.map(col => {
+          let data = {
+            attrs: {}
+          }
+          if (typeof col.span === 'function') {
+            let { col: colspan, row: rowspan } = col.span(index)
+            if (colspan < 1 || rowspan < 1) {
+              return null
+            }
+            if (colspan > 1) {
+              data.attrs.colspan = colspan
+            }
+            if (rowspan > 1) {
+              data.attrs.rowspan = rowspan
+            }
+          }
+          return <td class={col.align ? `veui-table-column-${col.align}` : null} {...data}>
+            <div class="veui-table-cell">{col.renderBody({ ...item, item, index })}</div>
+          </td>
+        })
       }
     </tr>
   }
