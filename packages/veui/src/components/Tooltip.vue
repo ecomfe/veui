@@ -28,8 +28,8 @@ export default {
       default: 'top'
     },
     target: {
-      validate (val) {
-        return isValidNodesResolver(val)
+      validator (v) {
+        return isValidNodesResolver(v)
       }
     },
     trigger: {

@@ -112,7 +112,7 @@ export default {
     weekStart: {
       type: Number,
       default: config.get('calendar.weekStart'),
-      validate (val) {
+      validator (val) {
         return val >= 0 && val <= 6
       }
     },

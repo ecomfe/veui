@@ -49,7 +49,7 @@ export default {
     itemClick: {
       type: String,
       default: 'none',
-      validate (value) {
+      validator (value) {
         return includes(['toggle', 'none'], value)
       }
     },
