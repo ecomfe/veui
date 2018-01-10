@@ -15,7 +15,7 @@
     </section>
     <section>
       <h2>时间段选择 <small>(<code>range</code>)</small></h2>
-      <veui-calendar v-model="selected2" range :panel="2" :is-disabled-date="isDisabled"/>
+      <veui-calendar v-model="selected2" range :panel="2" :disabled-date="isDisabled"/>
     </section>
     <section>
       <h2>多时间段选择带 scoped slot <small>(<code>multiple</code> &amp; <code>range</code>)</small></h2>

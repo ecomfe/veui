@@ -342,12 +342,13 @@ export default {
       }
     },
     selectMonth (i, month) {
+      // yearDiff = ⌊(currentMonth + monthDiff) / 12⌋
+      this.year += Math.floor((this.month + month - this.panels[i].month) / 12)
       this.month = (month - i + 12) % 12
-      this.year += Math.floor((month - i) / 12)
       this.setView('days')
     },
     selectYear (i, year) {
-      this.year = year - Math.floor((this.panels[i].month - i) / 12)
+      this.year = year + Math.floor((this.panels[i].month - i) / 12)
       this.setView('days')
     },
     isSelected (day) {
