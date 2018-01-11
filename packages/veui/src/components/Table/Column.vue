@@ -18,20 +18,10 @@ export default {
     align: {
       type: String,
       validator (val) {
-        if (val && val !== 'left' && val !== 'right' && val !== 'center') {
-          return false
-        }
+        return !val || val === 'left' || val === 'right' || val === 'center'
       }
     },
-    span: {
-      type: Function,
-      default () {
-        return {
-          row: 1,
-          col: 1
-        }
-      }
-    }
+    span: Function
   },
   data () {
     return {
