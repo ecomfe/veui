@@ -13,38 +13,44 @@
       :payload="payload"
       progress="number"
       @success="onSuccess"
-      @failure="onFailure">
+      @failure="onFailure"
+      @change="handleChange('files')"
+      @statuschange="handleStatusChange">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
     <h2>图片上传模式，上传进度以进度条显示</h2>
     <veui-uploader type="image"
       name="file"
       action="/upload"
-      v-model="files"
+      v-model="files1"
       :max-count="3"
       max-size="10mb"
       accept=".jpg,.jpeg,.gif"
       :payload="payload"
-      ui="horizontal bottom-mask"
+      ui="horizontal"
       progress="bar"
       @success="onSuccess"
-      @failure="onFailure">
+      @failure="onFailure"
+      @change="handleChange('files1')"
+      @statuschange="handleStatusChange">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
     <h2>文件上传模式</h2>
     <veui-uploader
       name="file"
       action="/upload"
-      v-model="files"
+      v-model="files2"
       :max-count="3"
       max-size="10mb"
       accept=".jpg,.jpeg,.gif"
       :payload="payload"
-      ui="horizontal button-primary"
+      ui="horizontal"
       progress="number"
       @success="onSuccess"
-      @failure="onFailure">
-      <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
+      @failure="onFailure"
+      @change="handleChange('files2')"
+      @statuschange="handleStatusChange">
+      <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，只能上传3张图</template>
     </veui-uploader>
     <h2>文件上传模式，通过iframe上传</h2>
     <veui-uploader ref="iframeUploader"
@@ -56,9 +62,11 @@
       max-size="10mb"
       accept=".jpg,.jpeg,.gif"
       :payload="payload"
+      :convert-response="convertResponse"
       @success="onSuccess"
       @failure="onFailure"
-      @change="mockResult">
+      @change="handleChange('filesIframe')"
+      @statuschange="handleStatusChange">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，只能上传1张图</template>
     </veui-uploader>
   </article>
@@ -66,6 +74,7 @@
 <script>
 import { Uploader } from 'veui'
 import { ui } from 'veui/mixins'
+import { assign } from 'lodash'
 
 export default {
   name: 'uploader-demo',
@@ -73,21 +82,21 @@ export default {
     'veui-uploader': Uploader
   },
   data: function () {
+    let files = [
+      {
+        name: 'demo-file1.jpg',
+        src: 'https://www.baidu.com/img/bd_logo1.png'
+      },
+      {
+        name: 'demo-file2.gif',
+        src: 'http://nodejs.cn/static/images/logo.svg'
+      }
+    ]
+
     return {
-      files: [
-        {
-          name: 'demo-file1.jpg',
-          fileUid: '123456',
-          size: '200kb',
-          src: 'https://www.baidu.com/img/bd_logo1.png'
-        },
-        {
-          name: 'demo-file2.gif',
-          fileUid: '222333',
-          size: '350kb',
-          src: 'http://nodejs.cn/static/images/logo.svg'
-        }
-      ],
+      files,
+      files1: files.slice(0),
+      files2: files.slice(0),
       filesIframe: 'http://nodejs.cn/static/images/logo.svg',
       payload: {
         year: '2017',
@@ -95,31 +104,24 @@ export default {
       }
     }
   },
-  computed: {
-    uiPropsIframe () {
-      if (!this.uiIframe || !this.uiIframe.trim()) {
-        return []
-      }
-      return this.uiIframe.trim().split(/\s+/)
-    }
-  },
   mixins: [ui],
   methods: {
     onSuccess (data) {
-      console.log(data)
+      console.log('Success event: ', data)
     },
     onFailure (data) {
-      console.log(data)
+      console.log('Failure event: ', data)
     },
-    mockResult () {
-      setTimeout(() => {
-        if (this.filesIframe) {
-          this.$refs.iframeUploader.uploadCallback({
-            status: 'success',
-            name: 'demo-file.jpg'
-          }, this.$refs.iframeUploader.currentSubmitingFile)
-        }
-      }, 1000)
+    handleChange (name) {
+      console.log('Change event: ', this[name])
+    },
+    handleStatusChange (status) {
+      console.log('Total status is: ', status)
+    },
+    convertResponse (data) {
+      return assign({
+        status: data.code ? 'failure' : 'success'
+      }, data.result)
     }
   }
 }

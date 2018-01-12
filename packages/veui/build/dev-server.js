@@ -73,22 +73,35 @@ devMiddleware.waitUntilValid(function () {
 // Uploader test url
 app.use('/uploadiframe', function (req, res) {
   setTimeout(() => {
+    let code = Math.random() > 0.5 ? 0 : 1
+    let result = {
+      code,
+      result: {
+        name: `abcdefg${Math.random()}.gif`,
+        src: 'http://nodejs.cn/static/images/logo.svg'
+      }
+    }
+    if (code) {
+      result.result.reason = '图片尺寸不对！'
+    }
+    result = JSON.stringify(result)
+
     res.writeHead(200, {'Content-Type': 'text/html'})
-    res.end(`<script>
-      window.parent.postMessage(JSON.stringify({status: '${Math.random() > 0.5 ? 'success' : 'failure'}',
-        name: 'abcdefg${Math.random()}.gif', fileUid: 'file${Math.random()}',
-        size: '250kb',
-        src: 'http://nodejs.cn/static/images/logo.svg',
-        reason: '图片尺寸不对！'}), '*');
-      </script>`)
+    res.end(`<script>window.parent.postMessage(${result}, '*');</script>`)
   }, 1500)
 })
+
 app.use('/upload', function (req, res) {
   setTimeout(() => {
-    res.json({
-      status: Math.random() > 0.5 ? 'success' : 'failure',
-      reason: '文件重复上传'
-    })
+    let code = Math.random() > 0.5 ? 0 : 1
+    let result = {
+      status: code ? 'failure' : 'success',
+      extraInfo: `file${Math.random()}`
+    }
+    if (code) {
+      result.reason = '图片尺寸不对'
+    }
+    res.json(result)
   }, 1500)
 })
 
