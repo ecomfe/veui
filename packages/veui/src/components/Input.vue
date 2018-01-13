@@ -14,9 +14,8 @@
   @keydown="$emit('keydown', $event)"
   @keypress="$emit('keypress', $event)"
 >
-<textarea
+<veui-textarea
   v-else
-  class="veui-textarea"
   :class="{ 'veui-textarea-resizable': resizable }"
   v-bind="attrs"
   v-model="localValue"
@@ -29,18 +28,22 @@
   @keyup="$emit('keyup', $event)"
   @keydown="$emit('keydown', $event)"
   @keypress="$emit('keypress', $event)"
-></textarea>
+></veui-textarea>
 </template>
 
 <script>
 import { input } from '../mixins'
-import { omit, includes, extend } from 'lodash'
+import { omit, includes } from 'lodash'
+import Textarea from './Textarea'
 
 const TYPE_LIST = ['text', 'password', 'hidden', 'textarea']
 
 export default {
   name: 'veui-input',
   mixins: [input],
+  components: {
+    'veui-textarea': Textarea
+  },
   props: {
     ui: String,
     type: {
@@ -56,6 +59,7 @@ export default {
       type: [String, Number],
       default: ''
     },
+    rows: [String, Number],
     autofocus: Boolean,
     selectOnFocus: Boolean,
     composition: Boolean,
@@ -69,17 +73,16 @@ export default {
   },
   computed: {
     attrs () {
-      let attrs = omit(this.$props,
-        'selectOnFocus', 'fitContent',
-        'composition', 'resizable',
-        ...(this.type === 'textarea' ? ['type'] : [])
-      )
-      extend(attrs, {
+      return {
+        ...omit(this.$props,
+          'selectOnFocus', 'fitContent',
+          'composition', 'resizable',
+          ...(this.type === 'textarea' ? ['type'] : ['rows'])
+        ),
         name: this.realName,
         disabled: this.realDisabled,
         readonly: this.realReadonly
-      })
-      return attrs
+      }
     }
   },
   watch: {
