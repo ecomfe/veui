@@ -1,7 +1,3 @@
-### 🐞 问题修复
-
-* [^] 修复 `Schedule` 选了 shortcuts 之后不更新 model 值的问题。
-
 ## 1.0.0-alpha.7
 
 ### ⚠️ 非兼容性变更
@@ -18,6 +14,7 @@
 ### 🐞 问题修复
 
 * [^] 修复 `Schedule` 组件状态未与 `selected` prop 同步的问题。
+* [^] 修复 `Schedule` 选了 shortcuts 之后不更新 model 值的问题。
 * [^] `Column` 组件的默认 scoped slot 传入的参数现在会将列表项的数据展开，不需要多加一层 `item` 进行访问（与其它类似数据源的组件一致，需注意数据源对象中不能使用 `item`/`index` 作为属性名）。
 * [^] 修复 `Tooltip` 组件在 `target` 变化时会自动显示的问题。
 
