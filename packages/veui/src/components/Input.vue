@@ -24,7 +24,6 @@
   @click="$emit('click', $event)"
   @blur="$emit('blur', $event)"
   @change="$emit('change', $event.target.value, $event)"
-  @input="handleInput"
   @keyup="$emit('keyup', $event)"
   @keydown="$emit('keydown', $event)"
   @keypress="$emit('keypress', $event)"
@@ -75,9 +74,8 @@ export default {
     attrs () {
       return {
         ...omit(this.$props,
-          'selectOnFocus', 'fitContent',
-          'composition', 'resizable',
-          ...(this.type === 'textarea' ? ['type'] : ['rows'])
+          'selectOnFocus', 'fitContent', 'resizable',
+          ...(this.type === 'textarea' ? ['type'] : ['rows', 'composition'])
         ),
         name: this.realName,
         disabled: this.realDisabled,
@@ -86,8 +84,13 @@ export default {
     }
   },
   watch: {
-    value (newVal) {
-      this.localValue = newVal
+    value (val) {
+      this.localValue = val
+    },
+    localValue (val) {
+      if (this.type === 'textarea' && this.value !== val) {
+        this.$emit('input', val)
+      }
     }
   },
   methods: {

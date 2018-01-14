@@ -17,8 +17,8 @@
           <veui-radiogroup ui="small" :items="storeData1.marryItems" v-model="storeData1.married"></veui-radiogroup>
         </veui-field>
 
-        <veui-field label="爱好：" field="habit">
-          <veui-checkboxgroup type="checkbox" :items="storeData1.habitItems" v-model="storeData1.habit"></veui-checkboxgroup>
+        <veui-field label="爱好：" field="hobby">
+          <veui-checkboxgroup type="checkbox" :items="storeData1.hobbyItems" v-model="storeData1.hobby"></veui-checkboxgroup>
         </veui-field>
 
         <veui-field label="生日：" field="birthday">
@@ -146,8 +146,8 @@
           <veui-radiogroup :items="storeData1.marryItems" v-model="storeData1.married"></veui-radiogroup>
         </veui-field>
 
-        <veui-field ui="small" label="爱好：" field="habit">
-          <veui-checkboxgroup ui="small" type="checkbox" :items="storeData1.habitItems" v-model="storeData1.habit"></veui-checkboxgroup>
+        <veui-field ui="small" label="爱好：" field="hobby">
+          <veui-checkboxgroup ui="small" type="checkbox" :items="storeData1.hobbyItems" v-model="storeData1.hobby"></veui-checkboxgroup>
         </veui-field>
 
         <veui-field label="生日：" field="birthday">
@@ -245,8 +245,8 @@
           </veui-field>
         </veui-fieldset>
 
-        <veui-field field="habit" name="habit" :rules="habitRule" label="爱好：" tip="至少选择三个">
-          <veui-checkboxgroup type="checkbox" :items="storeData4Options.habitItems" v-model="storeData4.habit"></veui-checkboxgroup>
+        <veui-field field="hobby" name="hobby" :rules="hobbyRule" label="爱好：" tip="至少选择三个">
+          <veui-checkboxgroup type="checkbox" :items="storeData4Options.hobbyItems" v-model="storeData4.hobby"></veui-checkboxgroup>
         </veui-field>
 
         <veui-fieldset label="预期收入：" class="salary" tip="联合校验，下限必须小于上限" :required="true">
@@ -2424,8 +2424,8 @@ export default {
   },
 
   data () {
-    let habit = ['🏸']
-    let habitItems = [
+    let hobby = ['🏸']
+    let hobbyItems = [
       {
         value: '⚽️', label: '足球'
       },
@@ -2476,16 +2476,16 @@ export default {
             value: '女', label: '女'
           }
         ],
-        habit,
-        habitItems,
+        hobby,
+        hobbyItems,
         birthday: new Date(),
         avatar: 'https://www.baidu.com/img/bd_logo1.png'
       },
       storeData2: {
         lastName: '',
         firstName: '',
-        habit,
-        habitItems,
+        hobby,
+        hobbyItems,
         phone: '18888888888',
         phoneType,
         phoneTypeOptions,
@@ -2519,7 +2519,7 @@ export default {
         name1: 'liyunteng2',
         age: null,
         desc: '',
-        habit,
+        hobby,
         phone: '18888888888',
         phoneType,
         start: null,
@@ -2527,7 +2527,7 @@ export default {
         protocol: ''
       },
       storeData4Options: {
-        habitItems,
+        hobbyItems,
         phoneTypeOptions
       },
       requiredRule: [
@@ -2585,7 +2585,7 @@ export default {
           triggers: 'change'
         }
       ],
-      habitRule: [
+      hobbyRule: [
         {
           name: 'minLength',
           value: 3,

@@ -1,4 +1,5 @@
 @import "../lib.less";
+@import (reference) "../input.less";
 
 .veui-textarea {
   display: inline-block;
@@ -13,6 +14,10 @@
   line-height: @veui-height-normal;
   transition: border-color .2s, color .2s;
   color: @veui-text-color-normal;
+
+  .veui-field-invalid & {
+    &:extend(._veui-input-invalid all);
+  }
 
   &-rows {
     height: auto;

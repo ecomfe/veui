@@ -14,9 +14,17 @@
     </div>
   </div>
   <textarea ref="input" class="veui-textarea-input" v-model="localValue" :style="lineNumber ? {
-    width: `calc(100% - ${lineNumberWidth}px)`
-  } : null" v-bind="attrs"
-  @scroll="sync" @focus="focused = true" @blur="focused = false"></textarea>
+      width: `calc(100% - ${lineNumberWidth}px)`
+    } : null" v-bind="attrs"
+    @focus="handleFocus"
+    @blur="handleBlur"
+    @click="$emit('click', $event)"
+    @change="$emit('change', $event.target.value, $event)"
+    @input="handleInput"
+    @keyup="$emit('keyup', $event)"
+    @keydown="$emit('keydown', $event)"
+    @keypress="$emit('keypress', $event)"
+    @scroll="syncScroll"></textarea>
 </div>
 </template>
 
@@ -76,20 +84,20 @@ export default {
     }
   },
   watch: {
-    localValue (val) {
-      if (this.value !== val) {
-        this.$emit('input', val)
-      }
-      this.sync()
-    },
     value (val) {
-      if (this.localValue !== val) {
-        this.localValue = val
-      }
+      this.localValue = val
     }
   },
   methods: {
-    sync () {
+    handleFocus (e) {
+      this.focused = true
+      this.$emit('focus', e)
+    },
+    handleBlur (e) {
+      this.focused = false
+      this.$emit('blur', e)
+    },
+    syncScroll () {
       if (!this.lineNumber) {
         return
       }
@@ -100,6 +108,23 @@ export default {
       this.$nextTick(() => {
         measurer.scrollTop = input.scrollTop
       })
+    },
+    handleInput ($event) {
+      // 分3种情况
+      // 1. 感知输入法，触发原生 input 事件就必须向上继续抛出
+      // 2. 不感知输入法
+      //  2.1 vue 底层会对原生 input 的 v-model 做忽略输入法组合态处理，所以 localValue 和 $event.target.value 不同步，只有当 localValue 产生变化时才向上继续抛出
+      //  2.2 在 localValue 没有变化的情况下，原则上不抛出
+      if (this.composition || !this.composition && this.localValue !== this.value) {
+        this.$emit('input', $event.target.value, $event)
+      }
+      this.syncScroll()
+    },
+    focus () {
+      this.$refs.input.focus()
+    },
+    activate () {
+      this.$refs.input.focus()
     }
   }
 }
