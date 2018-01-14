@@ -337,6 +337,7 @@ export default {
     },
     selectShortcut (i) {
       this.localSelected = this.realShortcuts[i].selected
+      this.$emit('select', this.localSelected)
     },
     toggleDay (day, checked) {
       if (checked) {
