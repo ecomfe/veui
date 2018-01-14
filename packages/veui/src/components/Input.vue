@@ -1,32 +1,22 @@
 <template>
 <input
   v-if="type !== 'textarea'"
-  class="veui-input"
-  v-bind="attrs"
-  v-model="localValue"
   ref="input"
-  @focus="$emit('focus', $event)"
-  @click="$emit('click', $event)"
-  @blur="$emit('blur', $event)"
-  @change="$emit('change', $event.target.value, $event)"
+  class="veui-input"
+  v-model="localValue"
+  v-bind="attrs"
+  v-on="listeners"
   @input="handleInput"
-  @keyup="$emit('keyup', $event)"
-  @keydown="$emit('keydown', $event)"
-  @keypress="$emit('keypress', $event)"
+  @change="$emit('change', $event.target.value, $event)"
 >
 <veui-textarea
   v-else
-  :class="{ 'veui-textarea-resizable': resizable }"
-  v-bind="attrs"
-  v-model="localValue"
   ref="input"
-  @focus="$emit('focus', $event)"
-  @click="$emit('click', $event)"
-  @blur="$emit('blur', $event)"
+  :class="{ 'veui-textarea-resizable': resizable }"
+  v-model="localValue"
+  v-bind="attrs"
+  v-on="listeners"
   @change="$emit('change', $event.target.value, $event)"
-  @keyup="$emit('keyup', $event)"
-  @keydown="$emit('keydown', $event)"
-  @keypress="$emit('keypress', $event)"
 ></veui-textarea>
 </template>
 
@@ -66,8 +56,19 @@ export default {
     fitContent: Boolean
   },
   data () {
+    let listeners = [
+      'click', 'focus', 'blur',
+      'keyup', 'keydown', 'keypress'
+    ].reduce((acc, type) => {
+      acc[type] = event => {
+        this.$emit(type, event)
+      }
+      return acc
+    }, {})
+
     return {
-      localValue: this.value
+      localValue: this.value,
+      listeners
     }
   },
   computed: {

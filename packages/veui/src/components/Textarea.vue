@@ -15,16 +15,15 @@
   </div>
   <textarea ref="input" class="veui-textarea-input" v-model="localValue" :style="lineNumber ? {
       width: `calc(100% - ${lineNumberWidth}px)`
-    } : null" v-bind="attrs"
+    } : null"
+    v-bind="attrs"
+    v-on="listeners"
     @focus="handleFocus"
     @blur="handleBlur"
-    @click="$emit('click', $event)"
-    @change="$emit('change', $event.target.value, $event)"
     @input="handleInput"
-    @keyup="$emit('keyup', $event)"
-    @keydown="$emit('keydown', $event)"
-    @keypress="$emit('keypress', $event)"
-    @scroll="syncScroll"></textarea>
+    @scroll="syncScroll"
+    @change="$emit('change', $event.target.value, $event)"
+  ></textarea>
 </div>
 </template>
 
@@ -51,9 +50,16 @@ export default {
     fitContent: Boolean
   },
   data () {
+    let listeners = ['click', 'keyup', 'keydown', 'keypress'].reduce((acc, type) => {
+      acc[type] = event => {
+        this.$emit(type, event)
+      }
+      return acc
+    }, {})
     return {
       localValue: this.value,
-      focused: false
+      focused: false,
+      listeners
     }
   },
   computed: {
