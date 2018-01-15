@@ -228,6 +228,10 @@
     "path": "Tabs/index.js"
   },
   {
+    "name": "Textarea",
+    "path": "Textarea.vue"
+  },
+  {
     "name": "Toast",
     "path": "Toast.vue"
   },

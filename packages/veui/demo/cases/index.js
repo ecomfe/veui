@@ -30,6 +30,7 @@ import Progress from './Progress'
 import Carousel from './Carousel'
 import Transfer from './Transfer'
 import Schedule from './Schedule'
+import Textarea from './Textarea'
 
 export default [
   {
@@ -186,6 +187,11 @@ export default [
         component: Progress
       }
     ]
+  },
+  {
+    path: '/textarea',
+    name: 'Textarea',
+    component: Textarea
   },
   {
     path: '/toast',

@@ -1,8 +1,7 @@
 @import "../lib.less";
 @import (reference) "../input.less";
 
-.veui-input,
-.veui-textarea {
+.veui-input {
 
   .make-line-height(@height) {
     height: @height;
@@ -20,6 +19,7 @@
   border: 1px solid @veui-gray-color-5;
   background-color: #fff;
   color: @veui-text-color-normal;
+  transition: border-color .2s, color .2s;
 
   &:hover {
     border-color: @veui-gray-color-3;
@@ -54,19 +54,5 @@
   &[ui~="small"] {
     .make-line-height(@veui-height-small);
     font-size: @veui-font-size-small;
-  }
-}
-
-.veui-textarea {
-  padding: 6.5px 10px;
-  line-height: 1.5;
-  resize: none;
-
-  &[rows] {
-    height: auto;
-  }
-
-  &-resizable {
-    resize: both;
   }
 }

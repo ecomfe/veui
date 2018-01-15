@@ -1,46 +1,38 @@
 <template>
 <input
   v-if="type !== 'textarea'"
+  ref="input"
   class="veui-input"
-  v-bind="attrs"
   v-model="localValue"
-  ref="input"
-  @focus="$emit('focus', $event)"
-  @click="$emit('click', $event)"
-  @blur="$emit('blur', $event)"
-  @change="$emit('change', $event.target.value, $event)"
+  v-bind="attrs"
+  v-on="listeners"
   @input="handleInput"
-  @keyup="$emit('keyup', $event)"
-  @keydown="$emit('keydown', $event)"
-  @keypress="$emit('keypress', $event)"
+  @change="$emit('change', $event.target.value, $event)"
 >
-<textarea
+<veui-textarea
   v-else
-  class="veui-textarea"
-  :class="{ 'veui-textarea-resizable': resizable }"
-  v-bind="attrs"
-  v-model="localValue"
   ref="input"
-  @focus="$emit('focus', $event)"
-  @click="$emit('click', $event)"
-  @blur="$emit('blur', $event)"
+  :class="{ 'veui-textarea-resizable': resizable }"
+  v-model="localValue"
+  v-bind="attrs"
+  v-on="listeners"
   @change="$emit('change', $event.target.value, $event)"
-  @input="handleInput"
-  @keyup="$emit('keyup', $event)"
-  @keydown="$emit('keydown', $event)"
-  @keypress="$emit('keypress', $event)"
-></textarea>
+></veui-textarea>
 </template>
 
 <script>
 import { input } from '../mixins'
-import { omit, includes, extend } from 'lodash'
+import { omit, includes } from 'lodash'
+import Textarea from './Textarea'
 
 const TYPE_LIST = ['text', 'password', 'hidden', 'textarea']
 
 export default {
   name: 'veui-input',
   mixins: [input],
+  components: {
+    'veui-textarea': Textarea
+  },
   props: {
     ui: String,
     type: {
@@ -56,6 +48,7 @@ export default {
       type: [String, Number],
       default: ''
     },
+    rows: [String, Number],
     autofocus: Boolean,
     selectOnFocus: Boolean,
     composition: Boolean,
@@ -63,28 +56,42 @@ export default {
     fitContent: Boolean
   },
   data () {
+    let listeners = [
+      'click', 'focus', 'blur',
+      'keyup', 'keydown', 'keypress'
+    ].reduce((acc, type) => {
+      acc[type] = event => {
+        this.$emit(type, event)
+      }
+      return acc
+    }, {})
+
     return {
-      localValue: this.value
+      localValue: this.value,
+      listeners
     }
   },
   computed: {
     attrs () {
-      let attrs = omit(this.$props,
-        'selectOnFocus', 'fitContent',
-        'composition', 'resizable',
-        ...(this.type === 'textarea' ? ['type'] : [])
-      )
-      extend(attrs, {
+      return {
+        ...omit(this.$props,
+          'selectOnFocus', 'fitContent', 'resizable',
+          ...(this.type === 'textarea' ? ['type'] : ['rows', 'composition'])
+        ),
         name: this.realName,
         disabled: this.realDisabled,
         readonly: this.realReadonly
-      })
-      return attrs
+      }
     }
   },
   watch: {
-    value (newVal) {
-      this.localValue = newVal
+    value (val) {
+      this.localValue = val
+    },
+    localValue (val) {
+      if (this.type === 'textarea' && this.value !== val) {
+        this.$emit('input', val)
+      }
     }
   },
   methods: {
