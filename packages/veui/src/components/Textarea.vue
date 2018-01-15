@@ -13,9 +13,10 @@
       <div class="veui-textarea-measurer-line-content" aria-hidden="true">{{ line }}</div>
     </div>
   </div>
-  <textarea ref="input" class="veui-textarea-input" v-model="localValue" :style="lineNumber ? {
-      width: `calc(100% - ${lineNumberWidth}px)`
-    } : null"
+  <textarea ref="input" class="veui-textarea-input" v-model="localValue" :style="{
+      width: lineNumber ? `calc(100% - ${lineNumberWidth}px)` : null,
+      height: autoresize && height ? `${height}px` : null
+    }"
     v-bind="attrs"
     v-on="listeners"
     @focus="handleFocus"
@@ -47,7 +48,7 @@ export default {
     selectOnFocus: Boolean,
     composition: Boolean,
     resizable: Boolean,
-    fitContent: Boolean
+    autoresize: Boolean
   },
   data () {
     let listeners = ['click', 'keyup', 'keydown', 'keypress'].reduce((acc, type) => {
@@ -59,6 +60,7 @@ export default {
     return {
       localValue: this.value,
       focused: false,
+      height: 0,
       listeners
     }
   },
@@ -115,6 +117,14 @@ export default {
         measurer.scrollTop = input.scrollTop
       })
     },
+    syncHeight () {
+      if (this.autoresize) {
+        this.height = 0
+        this.$nextTick(() => {
+          this.height = this.$refs.input.scrollHeight
+        })
+      }
+    },
     handleInput ($event) {
       // 分3种情况
       // 1. 感知输入法，触发原生 input 事件就必须向上继续抛出
@@ -124,6 +134,7 @@ export default {
       if (this.composition || !this.composition && this.localValue !== this.value) {
         this.$emit('input', $event.target.value, $event)
       }
+      this.syncHeight()
       this.syncScroll()
     },
     focus () {
@@ -132,6 +143,9 @@ export default {
     activate () {
       this.$refs.input.focus()
     }
+  },
+  mounted () {
+    this.syncHeight()
   }
 }
 </script>
