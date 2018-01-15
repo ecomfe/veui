@@ -124,7 +124,7 @@
 import Button from './Button'
 import Icon from './Icon'
 import Tooltip from './Tooltip'
-import { cloneDeep, uniqueId, assign, isNumber, isArray, last, pick, omit } from 'lodash'
+import { cloneDeep, uniqueId, assign, isNumber, isArray, last, pick, omit, includes } from 'lodash'
 import { ui, input, icons } from '../mixins'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
@@ -200,7 +200,10 @@ export default {
     },
     dataType: {
       type: String,
-      default: 'json'
+      default: 'json',
+      validator (value) {
+        return includes(['json', 'text'], value)
+      }
     },
     extensions: {
       type: Array,
@@ -265,7 +268,7 @@ export default {
         // 处理外部直接增加文件的情形
         .concat(cloneDeep(this.pureFileList.slice(successIndex)))
     },
-    totalStatus (val) {
+    status (val) {
       if (val) {
         this.$emit('statuschange', val)
       }
@@ -293,9 +296,9 @@ export default {
     realUneditable () {
       return this.realDisabled || this.realReadonly
     },
-    totalStatus () {
+    status () {
       if (!this.fileList.length) {
-        return null
+        return 'empty'
       }
 
       if (this.fileList.some(file => file.status === 'uploading')) {
@@ -400,17 +403,10 @@ export default {
           newFile.toBeUploaded = true
         }
 
-        this.$set(this.fileList, this.fileList.indexOf(this.replacingFile), newFile)
+        let replacingIndex = this.fileList.indexOf(this.replacingFile)
+        this.removeFile(this.replacingFile)
+        this.fileList.splice(replacingIndex, 0, newFile)
         this.replacingFile = null
-
-        this.pureFileList.splice(this.getIndexInPureList(newFile), 1)
-        if (this.maxCount === 1) {
-          this.$emit('change', this.pureFileList.length
-            ? this.pureFileList[0].src || this.pureFileList[0].name
-            : null)
-        } else {
-          this.$emit('change', this.pureFileList)
-        }
 
         if (this.requestMode === 'iframe' && this.autoUpload) {
           this.submit(newFile)
