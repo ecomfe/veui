@@ -94,6 +94,9 @@ export default {
   watch: {
     value (val) {
       this.localValue = val
+    },
+    localValue (val) {
+      this.syncHeight()
     }
   },
   methods: {
@@ -134,7 +137,6 @@ export default {
       if (this.composition || !this.composition && this.localValue !== this.value) {
         this.$emit('input', $event.target.value, $event)
       }
-      this.syncHeight()
       this.syncScroll()
     },
     focus () {
