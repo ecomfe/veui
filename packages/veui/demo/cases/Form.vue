@@ -2572,12 +2572,12 @@ export default {
         {
           name: 'required',
           value: true,
-          triggers: 'blur,input'
+          triggers: 'input'
         },
         {
           name: 'numeric',
           value: true,
-          triggers: 'blur,input'
+          triggers: 'input'
         },
         {
           name: 'maxLength',
