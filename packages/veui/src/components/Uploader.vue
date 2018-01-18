@@ -124,7 +124,7 @@
 import Button from './Button'
 import Icon from './Icon'
 import Tooltip from './Tooltip'
-import { cloneDeep, uniqueId, assign, isNumber, isArray, last } from 'lodash'
+import { cloneDeep, uniqueId, assign, isNumber, isArray, last, pick, omit, includes } from 'lodash'
 import { ui, input, icons } from '../mixins'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
@@ -149,6 +149,10 @@ export default {
     event: 'change'
   },
   props: {
+    name: {
+      type: String,
+      default: 'file'
+    },
     value: {
       type: [Array, String]
     },
@@ -194,6 +198,13 @@ export default {
         return config.get('uploader.callbackNamespace')
       }
     },
+    dataType: {
+      type: String,
+      default: 'json',
+      validator (value) {
+        return includes(['json', 'text'], value)
+      }
+    },
     extensions: {
       type: Array,
       default () {
@@ -224,6 +235,8 @@ export default {
   data () {
     return {
       fileList: this.genFileList(this.value),
+      // pureFileList只有已经上传成功了文件，每个文件只保留name、src以及后端返回数据
+      pureFileList: this.genFileList(this.value),
       canceled: false,
       // inputId用于图片里的重新上传的label的for
       inputId: uniqueId('veui-uploader-input'),
@@ -244,10 +257,27 @@ export default {
   },
   watch: {
     value (val) {
-      let currentSubmitingFileIndex = this.fileList.indexOf(this.currentSubmitingFile)
-      this.fileList = this.genFileList(val)
-      if (currentSubmitingFileIndex > -1) {
-        this.currentSubmitingFile = this.fileList[currentSubmitingFileIndex]
+      this.pureFileList = this.genFileList(val)
+
+      let successIndex = 0
+      this.fileList = this.fileList
+        .map(file => {
+          if (file.status === 'success' || !file.status) {
+            // 处理外部直接减少文件的情形
+            if (successIndex + 1 > this.pureFileList.length) {
+              return null
+            }
+            return assign(file, this.pureFileList[successIndex++])
+          }
+          return file
+        })
+        .filter(file => !!file)
+        // 处理外部直接增加文件的情形
+        .concat(cloneDeep(this.pureFileList.slice(successIndex)))
+    },
+    status (val) {
+      if (val) {
+        this.$emit('statuschange', val)
       }
     }
   },
@@ -273,6 +303,21 @@ export default {
     realUneditable () {
       return this.realDisabled || this.realReadonly
     },
+    status () {
+      if (!this.fileList.length) {
+        return 'empty'
+      }
+
+      if (this.fileList.some(file => file.status === 'uploading')) {
+        return 'uploading'
+      }
+
+      if (this.fileList.some(file => file.status === 'failure')) {
+        return 'failure'
+      }
+
+      return 'success'
+    },
     realAutoupload () {
       return this.autoupload && this.autoUpload
     }
@@ -284,7 +329,10 @@ export default {
 
     if (this.iframeMode === 'postmessage') {
       this.handlePostmessage = event => {
-        if (!event.source.frameElement || event.source.frameElement.id !== this.iframeId || this.canceled) {
+        if (!event.source ||
+          !event.source.frameElement ||
+          event.source.frameElement.id !== this.iframeId ||
+          this.canceled) {
           return
         }
 
@@ -362,10 +410,12 @@ export default {
         let newFile = newFiles[0]
         if (this.requestMode === 'xhr' && window.URL) {
           newFile.src = window.URL.createObjectURL(newFile)
+          newFile.toBeUploaded = true
         }
-        newFile.toBeUploaded = true
 
-        this.$set(this.fileList, this.fileList.indexOf(this.replacingFile), newFile)
+        let replacingIndex = this.fileList.indexOf(this.replacingFile)
+        this.removeFile(this.replacingFile)
+        this.fileList.splice(replacingIndex, 0, newFile)
         this.replacingFile = null
 
         if (this.requestMode === 'iframe' && this.realAutoupload) {
@@ -404,8 +454,6 @@ export default {
           this.uploadFiles()
         }
       }
-
-      this.$emit('change', this.maxCount === 1 ? (this.fileList[0].src || this.fileList[0].name) : this.fileList)
     },
     validateFile ({name, size}) {
       let typeValidation = this.validateFileType(name)
@@ -515,39 +563,56 @@ export default {
       this.isSubmiting = false
       this.disabledWhenSubmiting = false
 
-      this.convertResponse(data) || data
+      data = this.convertResponse(data) || data
       if (data.status === 'success') {
         this.showSuccessResult(data, file)
-        this.$emit('success', data)
+        this.$emit('success', this.getPureFile(file, data))
       } else if (data.status === 'failure') {
         this.showFailureResult(data, file)
-        this.$emit('failure', data)
+        this.$emit('failure', this.getPureFile(file, data))
       }
       this.currentSubmitingFile = null
     },
     showSuccessResult (data, file) {
-      assign(file, data)
-      file.status = 'success'
       file.xhr = null
       file.toBeUploaded = null
-      this.updateFileList(file)
+      this.updateFileList(file, data, true)
       setTimeout(() => {
         this.updateFileList(file, {status: null})
       }, 300)
     },
     showFailureResult (data, file) {
-      file.status = 'failure'
       file.xhr = null
       file.toBeUploaded = null
       file.failureReason = data.reason || ''
-      this.updateFileList(file)
+      this.updateFileList(file, data)
     },
-    updateFileList (file, options) {
-      if (options) {
-        assign(file, options)
+    updateFileList (file, properties, toEmit = false) {
+      if (properties) {
+        assign(file, properties)
       }
+
       this.$set(this.fileList, this.fileList.indexOf(file), file)
-      this.$emit('change', this.maxCount === 1 ? (this.fileList[0].src || this.fileList[0].name) : this.fileList)
+
+      if (toEmit) {
+        this.pureFileList.splice(this.getIndexInPureList(file),
+          0,
+          this.getPureFile(file, properties))
+
+        this.$emit('change', this.maxCount === 1
+          ? (this.pureFileList[0].src || this.pureFileList[0].name)
+          : this.pureFileList)
+      }
+    },
+    getPureFile (file, properties) {
+      return assign(pick(file, ['name', 'src']), omit(properties, 'status'))
+    },
+    getIndexInPureList (file) {
+      let initialIndex = this.fileList.indexOf(file)
+      return initialIndex - this.fileList
+        .slice(0, initialIndex)
+        .filter(f => f.status === 'uploading' || f.status === 'failure')
+        .length
     },
     retry (file) {
       if (this.requestMode === 'iframe') {
@@ -563,8 +628,12 @@ export default {
         this.fileList = []
         this.$emit('change', null)
       } else {
+        if (file.status === 'success' || !file.status) {
+          this.pureFileList.splice(this.getIndexInPureList(file), 1)
+        }
         this.fileList.splice(this.fileList.indexOf(file), 1)
-        this.$emit('change', this.fileList)
+
+        this.$emit('change', this.pureFileList)
       }
 
       this.$emit('remove', file)
@@ -593,11 +662,17 @@ export default {
       if (typeof data === 'object') {
         return data
       }
+
       if (typeof data === 'string') {
-        try {
-          return JSON.parse(data)
-        } catch (error) {
-          this.$emit('failure', {error})
+        if (this.dataType === 'json') {
+          try {
+            return JSON.parse(data)
+          } catch (error) {
+            this.$emit('failure', {error})
+            return {status: 'failure'}
+          }
+        } else if (this.dataType === 'text') {
+          return data
         }
       }
     }

@@ -3,6 +3,7 @@
 ### ⚠️ 非兼容性变更
 
 * [^] `Column` 组件的 scoped slot `head` 和 `foot` 现在变更为 slot。
+* [^] `Uploader`组件的prop `convertResponse` 现在需要return变更后的data
 
 ### 💡 主要变更
 
@@ -10,6 +11,10 @@
 * [+] `Column` 组件新增 prop `span`，用来指定行/列方向合并单元格的逻辑。
 * [+] `Table` 组件新增 prop `key-field`，指明用哪一个 field 作为表格数据的键。当 `Table` 为 `selectable` 时，可以用来指定选择列纵向合并单元格的逻辑需要参照的列，以及选择逻辑返回的值来自哪一列。
 * [+] 优化 `Column` 组件注册到 `Table` 的逻辑，支持在模板中通过 `v-for`、`v-if` 等动态配置，并且将注册过程移入 `created` 生命周期以支持服务端渲染。
+* [^] `Uploader` 组件的value不再包含正在上传中或上传失败的文件，不再包含status等内部变量
+* [+] `Uploader` 组件增加 `statuschange` 事件，emit所有文件的总状态，用于表单提交的时候校验是否还有文件正在上传或上传失败
+* [+] `Uploader` 组件增加prop `dataType`，用于指明ajax的responseText或者iframe模式的回调的字符串是json还是普通text
+* [+] `Uploader` 组件给prop `name` 增加默认值 `file`
 
 ### 🐞 问题修复
 
