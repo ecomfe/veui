@@ -242,7 +242,7 @@ export class Tree {
     const parentNode = parent.node
     parentNode.appendChild(node, priority)
 
-    this.generateTreeZIndex(node.id)
+    this.generateTreeZIndex()
   }
 
   /**
@@ -254,7 +254,6 @@ export class Tree {
    */
   createNode ({ parentId = this.rootNode.id, priority } = {}) {
     const node = new Node()
-    node.zIndex = this.baseZIndex
 
     const nodeId = node.id
     const instance = new Vue({
@@ -285,7 +284,7 @@ export class Tree {
 
           const children = targetGroup.children
           children.push(...children.splice(targetIndex, 1))
-          this.generateTreeZIndex(node.id)
+          this.generateTreeZIndex()
         }
       }
     })
@@ -317,42 +316,32 @@ export class Tree {
     node.remove()
     this.nodeMap[realParentId].node.appendChild(node, priority)
 
-    this.generateTreeZIndex(node.id)
+    this.generateTreeZIndex()
   }
 
   /**
    * 从指定节点开始，刷一遍 zIndex 值
+   * 为了不产生奇怪的 zIndex 值，整体刷一遍
    *
    * @private
-   * @param {string} startNodeId 指定节点 id
    */
-  generateTreeZIndex (startNodeId) {
-    const node = this.nodeMap[startNodeId].node
-    const parentNode = node.parent
+  generateTreeZIndex () {
+    let baseZIndex = this.baseZIndex
 
-    let prevNode = parentNode
-    let isEncountered = false
-    let baseZIndex
-    parentNode.iterateChildren((child) => {
-      if (!isEncountered && child === node) {
-        isEncountered = true
-        baseZIndex = (prevNode && prevNode.zIndex
-          ? (prevNode.zIndex + 1) : null) || this.baseZIndex
-      }
+    this.iterate({
+      callback: child => {
+        if (child === this.rootNode) {
+          return
+        }
 
-      if (isEncountered) {
-        this.iterate({
-          curNode: child,
-          callback: (curNode) => {
-            const instance = this.nodeMap[curNode.id].instance
-            curNode.zIndex = baseZIndex++
-            instance.$emit('zindexchange', curNode.zIndex)
-          }
-        })
-      }
+        const instance = this.nodeMap[child.id].instance
+        let zIndex = baseZIndex++
+        let isEqual = child.zIndex === zIndex
+        child.zIndex = zIndex
 
-      if (!isEncountered) {
-        prevNode = child
+        if (!isEqual) {
+          instance.$emit('zindexchange', child.zIndex)
+        }
       }
     })
   }

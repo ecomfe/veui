@@ -220,7 +220,14 @@ export default {
       type: String,
       default: 'text'
     },
+    /**
+     * @deprecated
+     */
     autoUpload: {
+      type: Boolean,
+      default: true
+    },
+    autoupload: {
       type: Boolean,
       default: true
     }
@@ -310,6 +317,9 @@ export default {
       }
 
       return 'success'
+    },
+    realAutoupload () {
+      return this.autoupload && this.autoUpload
     }
   },
   mounted () {
@@ -408,10 +418,10 @@ export default {
         this.fileList.splice(replacingIndex, 0, newFile)
         this.replacingFile = null
 
-        if (this.requestMode === 'iframe' && this.autoUpload) {
+        if (this.requestMode === 'iframe' && this.realAutoupload) {
           this.submit(newFile)
         }
-        if (this.requestMode === 'xhr' && this.autoUpload) {
+        if (this.requestMode === 'xhr' && this.realAutoupload) {
           this.upload(newFile)
         }
       } else {
@@ -437,10 +447,10 @@ export default {
           this.fileList = this.fileList.slice(-1)
         }
 
-        if (this.requestMode === 'iframe' && this.autoUpload) {
+        if (this.requestMode === 'iframe' && this.realAutoupload) {
           this.submit()
         }
-        if (this.requestMode === 'xhr' && this.autoUpload) {
+        if (this.requestMode === 'xhr' && this.realAutoupload) {
           this.uploadFiles()
         }
       }

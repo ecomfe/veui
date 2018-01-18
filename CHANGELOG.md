@@ -7,6 +7,7 @@
 
 ### 💡 主要变更
 
+* [+] 新增 `Textarea` 组件。
 * [+] `Column` 组件新增 prop `span`，用来指定行/列方向合并单元格的逻辑。
 * [+] `Table` 组件新增 prop `key-field`，指明用哪一个 field 作为表格数据的键。当 `Table` 为 `selectable` 时，可以用来指定选择列纵向合并单元格的逻辑需要参照的列，以及选择逻辑返回的值来自哪一列。
 * [+] 优化 `Column` 组件注册到 `Table` 的逻辑，支持在模板中通过 `v-for`、`v-if` 等动态配置，并且将注册过程移入 `created` 生命周期以支持服务端渲染。
@@ -18,6 +19,7 @@
 ### 🐞 问题修复
 
 * [^] 修复 `Schedule` 组件状态未与 `selected` prop 同步的问题。
+* [^] 修复 `Schedule` 选了 shortcuts 之后不更新 model 值的问题。
 * [^] `Column` 组件的默认 scoped slot 传入的参数现在会将列表项的数据展开，不需要多加一层 `item` 进行访问（与其它类似数据源的组件一致，需注意数据源对象中不能使用 `item`/`index` 作为属性名）。
 * [^] 修复 `Tooltip` 组件在 `target` 变化时会自动显示的问题。
 

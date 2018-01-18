@@ -42,6 +42,20 @@ export default {
   data () {
     return {
       inputs: [],
+      /**
+       * 多个规则同时校验会根据规则的优先级进行排序，显示优先级最高的错误。
+       * 但是如果中间有交互式的检查，交互顺序会打破优先级的排序。
+       * 比如配置了 input 和 change 时校验两个不同级别的规则，
+       * 输入了两种规则都不匹配的值：
+       * 1. 会在输入过程显示 input 指定的错误消息；
+       * 2. 失去焦点显示 change 指定的错误消息；
+       * 3. 提交时显示级别高的那个错误消息；
+       * 4. 单次交互校验内部多规则遵从优先级排序
+       *
+       * fields 复数命名主要是兼容 validator 的多 field 错误显示
+       *
+       * @type {Array<fields, message, valid>}
+       */
       validities: [],
       handlers: {},
       initialData: null
@@ -142,21 +156,23 @@ export default {
         : this.form.data
       Vue.set(parentValue, name, type.clone(this.initialData))
     },
-    validate (rules = this.localRules) {
-      let res = rule.validate(this.getFieldValue(), rules)
-      // 把之前同类型的清掉
-      this.hideValidity('native:*')
-      // 如果有新的错，放进去，这样可以更新错误消息
+    validate (rules) {
+      let res = rule.validate(this.getFieldValue(), rules || this.localRules)
+      // 分两种调用
+      // 1. 交互式，只清涉及的 rule
+      // 2. 完整提交检查，全清
+      this.hideValidity(rules ? rules.map(rule => `native:${rule.name}`) : [])
+
       if (!isBoolean(res) || !res) {
-        res.forEach(({message, name}) => {
-          if (name) {
-            this.validities.unshift({
+        this.validities.unshift(
+          // 去掉一些自定义格式不对的 rule，容易排查
+          ...res.filter(({name}) => name)
+            .map(({message, name}) => ({
               valid: false,
               message,
               fields: `native:${name}`
-            })
-          }
-        })
+            }))
+        )
       }
       return res
     },
@@ -167,16 +183,17 @@ export default {
       this.name && this.form.$emit('interact', eventName, this.name)
     },
     hideValidity (fields) {
-      if (!fields) {
+      if (!fields || !fields.length) {
         this.validities = []
       } else {
         let validities = this.validities
+        // 提供一个仅清除本地检查的方法
         if (fields === 'native:*') {
           validities = this.validities.filter(validity => !includes(validity.fields, 'native:'))
         } else {
           validities = this.validities.filter(validity => Array.isArray(fields)
-            ? !includes(fields, validity)
-            : validity.fields !== fields
+            ? !includes(fields, validity.fields)
+            : fields !== validity.fields
           )
         }
         this.$set(this, 'validities', validities)
