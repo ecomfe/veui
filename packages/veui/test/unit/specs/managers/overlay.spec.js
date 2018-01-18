@@ -336,6 +336,25 @@ describe('managers/overlay', () => {
         expect(tree.rootNode.childrenGroup[0].children[1].id).to.equal(nodeHandle1.id)
         expect(tree.rootNode.childrenGroup[0].children[0].id).to.equal(nodeHandle2.id)
       })
+
+      it('should generate the correct zIndex value', () => {
+        let tree = new Tree()
+        tree.setBaseZIndex(200)
+
+        let nodeHandle1 = tree.createNode({ priority: 1 })
+        let nodeHandle2 = tree.createNode({ priority: 1 })
+        let nodeHandle3 = tree.createNode({ priority: 1 })
+
+        nodeHandle3.appendTo(nodeHandle1.id)
+        expect(tree.nodeMap[nodeHandle1.id].node.zIndex).to.equal(200)
+        expect(tree.nodeMap[nodeHandle2.id].node.zIndex).to.equal(202)
+        expect(tree.nodeMap[nodeHandle3.id].node.zIndex).to.equal(201)
+
+        nodeHandle1.toTop()
+        expect(tree.nodeMap[nodeHandle1.id].node.zIndex).to.equal(201)
+        expect(tree.nodeMap[nodeHandle2.id].node.zIndex).to.equal(200)
+        expect(tree.nodeMap[nodeHandle3.id].node.zIndex).to.equal(202)
+      })
     })
   })
 })

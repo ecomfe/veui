@@ -63,6 +63,7 @@ export default {
     open (value) {
       this.localOpen = value
       this.updateOverlayDOM()
+      this.updateNode()
       if (value) {
         this[OVERLAY_INSTANCE_KEY].toTop()
       }
@@ -73,7 +74,15 @@ export default {
     },
     targetNode () {
       this.updateOverlayDOM()
+      this.updateNode()
     }
+  },
+  created () {
+    // 初始化时，updateNode 依赖 created 在组件树中的执行顺序：
+    // 先父后子
+    // 而 mounted 执行顺序是先子后父，所以 updateNode 只能放在
+    // created 里面。
+    this.updateNode()
   },
   mounted () {
     const box = this.$refs.box
@@ -133,8 +142,6 @@ export default {
           this.tether.position()
         })
       }
-
-      this.updateNode()
     },
 
     findTargetNode () {
