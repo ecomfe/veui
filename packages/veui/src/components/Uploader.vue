@@ -476,7 +476,7 @@ export default {
 
         if (acceptExtention === extension ||
           // 对于类似'application/msword'这样的mimetype与扩展名对不上的情形跳过校验
-          (acceptExtention !== '*' && item.indexOf('/'))) {
+          (acceptExtention !== '*' && item.indexOf('/') > -1)) {
           return true
         }
 
