@@ -37,7 +37,7 @@
     }
 
     &:hover,
-    &.focus-ring {
+    &.focus-visible {
       background-color: fadeout(#000, 60%);
     }
   }
@@ -127,7 +127,7 @@
       &-current {
         &,
         &:hover,
-        &.focus-ring {
+        &.focus-visible {
           background-color: #fff;
           box-shadow: 0 0 4px fadeout(#000, 80%);
         }
@@ -180,7 +180,7 @@
       }
 
       &:hover,
-      &.focus-ring,
+      &.focus-visible,
       &-current,
       &-current:hover {
         color: #fff;
@@ -215,7 +215,7 @@
       &-indicator-item {
         &-current,
         &:hover,
-        &.focus-ring {
+        &.focus-visible {
           background-color: @veui-gray-color-1;
         }
       }

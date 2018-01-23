@@ -37,7 +37,7 @@ export default {
             type={route.type}
             native={route.native}
             onRedirect={event => this.fireRedirect(event, route, index)}>
-            {this.$scopedSlots.default ? this.$scopedSlots.default({ route }) : route.text}
+            {this.$scopedSlots.default ? this.$scopedSlots.default({ route }) : (route.label || route.text)}
             {
               index !== this.localRoutes.length - 1
                 ? <span slot="separator" class="veui-breadcrumb-separator">

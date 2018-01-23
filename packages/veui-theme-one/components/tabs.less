@@ -62,7 +62,7 @@
       }
 
       &:hover,
-      &.focus-ring {
+      &.focus-visible {
         color: @veui-text-color-normal;
       }
 
@@ -73,7 +73,7 @@
 
     &-remove:focus,
     &:hover > &-remove,
-    &-label.focus-ring > &-remove {
+    &-label.focus-visible > &-remove {
       visibility: visible;
     }
 
@@ -179,7 +179,7 @@
       outline: none;
 
       &:hover,
-      &.focus-ring {
+      &.focus-visible {
         background-color: @veui-gray-color-5;
       }
 

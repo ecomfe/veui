@@ -2,10 +2,24 @@
 
 ### ⚠️ 非兼容性变更
 
+* [^] 将对 `wicg-focus-ring@2.x` 的依赖更新为 `focus-visible` + `classlist-polyfill`，并且移入了 `veui-theme-one` 的 `dependencies`。使用 `veui-theme-one` 且需兼容 IE9 的项目需要同时引入这两个模块。同时 `veui-theme-one` 中的 `.focus-ring` 也均已升级为 `.focus-visible`。
+
+  > #### 迁移指南
+  >
+  > * 在主模块中删除 `import 'wicg-focus-ring'；
+  > * 安装上述包，将引入语句替换为：
+  >
+  >   ```js
+  >   import 'classlist-polyfill'
+  >   import 'focus-visible'
+  >   ```
+
 * [^] `Column` 组件的 scoped slot `head` 和 `foot` 现在变更为 slot。
+* [-] 删除 `veui-theme-dux`。
 
 ### 💡 主要变更
 
+* [^] `Breadcrumb` 组件 `routes` 数据项的文本域重命名为 `label`，保留了 `text` 的用法进行兼容。
 * [+] 新增 `Textarea` 组件。
 * [+] `Column` 组件新增 prop `span`，用来指定行/列方向合并单元格的逻辑。
 * [^] `Column` 组件的默认 scoped slot 传入的参数现在会将列表项的数据展开，不需要多加一层 `item` 进行访问（与其它类似数据源的组件一致，需注意数据源对象中不能使用 `item`/`index` 作为属性名）。
