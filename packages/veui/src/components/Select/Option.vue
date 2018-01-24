@@ -44,6 +44,13 @@ export default {
         this.$emit('select', this.value)
       }
     }
+  },
+  mounted () {
+    if (this.selected) {
+      this.$nextTick(() => {
+        this.$el.scrollIntoView()
+      })
+    }
   }
 }
 </script>
