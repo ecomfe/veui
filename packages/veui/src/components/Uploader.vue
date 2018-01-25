@@ -186,7 +186,10 @@ export default {
         return config.get('uploader.iframeMode')
       }
     },
-    convertResponse: Function,
+    convertResponse: {
+      type: Function,
+      default: config.get('uploader.convertResponse') || function () {}
+    },
     callbackNamespace: {
       type: String,
       default () {
@@ -315,11 +318,6 @@ export default {
     },
     realAutoupload () {
       return this.autoupload && this.autoUpload
-    },
-    localConvertResponse () {
-      return this.convertResponse ||
-        config.get('uploader.convertResponse') ||
-        function () {}
     }
   },
   mounted () {
@@ -563,7 +561,7 @@ export default {
       this.isSubmiting = false
       this.disabledWhenSubmiting = false
 
-      data = this.localConvertResponse(data) || data
+      data = this.convertResponse(data) || data
       if (data.status === 'success') {
         this.showSuccessResult(data, file)
         this.$emit('success', this.getPureFile(file, data))
