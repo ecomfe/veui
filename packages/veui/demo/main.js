@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import 'wicg-focus-ring'
+import 'classlist-polyfill'
+import 'focus-visible'
 
 Vue.config.productionTip = false
 

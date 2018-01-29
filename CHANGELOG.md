@@ -14,6 +14,7 @@
   >   import 'focus-visible'
   >   ```
 
+* [^] 去除了 `veui-theme-one` 中 `Alert` 组件默认的上下 `margin`。
 * [^] `Column` 组件的 scoped slot `head` 和 `foot` 现在变更为 slot。
 * [-] 删除 `veui-theme-dux`。
 * [-] 删除 `Field` 组件 prop `rules` 默认可选表单校验规则 `maxByte` 和 `minByte`。
@@ -31,6 +32,7 @@
 * [+] `Uploader` 组件 prop `name` 现在有默认值 `file`。
 * [+] `Field` 组件优化交互式校验规则显示顺序。
 * [+] `Field` prop `rules` 校验规则的出错消息支持传入函数。
+* [^] `Select` 组件被选中的选项现在会在浮层展开时自动滚动到可视范围。
 
 ### 🐞 问题修复
 
@@ -41,6 +43,7 @@
 * [^] 修复 `Uploader` 组件 `accept` prop 判断后缀的错误。
 * [^] 修复 `resize` 指令在 `target` 元素被移动过后丢失目标 `document` 的问题。
 * [^] 修复大小比较规则的提示信息。
+* [^] 修复使用 Popper 风格设置浮层 `position` 时解析不正确的问题。
 
 ## 1.0.0-alpha.6
 

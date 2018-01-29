@@ -112,20 +112,35 @@ const OPPOSITE = {
   left: 'right'
 }
 
+const ALIGN_HORIZONGAL = {
+  left: 'left',
+  start: 'left',
+  right: 'right',
+  end: 'right'
+}
+
+const ALIGN_VERTICAL = {
+  top: 'top',
+  start: 'top',
+  bottom: 'bottom',
+  end: 'bottom'
+}
+
 export function resolveOverlayPosition (position) {
   if (!position) {
     return {}
   }
 
-  let [side, align] = position.split(/\s+/)
+  let [side, align] = position.split(/[-\s]+/)
+  side = side === 'auto' ? 'bottom' : side
   let targetAttachment
   let attachment
   if (side === 'top' || side === 'bottom') {
-    targetAttachment = `${side} ${align || 'center'}`
-    attachment = `${OPPOSITE[side]} ${align || 'center'}`
+    targetAttachment = `${side} ${ALIGN_HORIZONGAL[align] || 'center'}`
+    attachment = `${OPPOSITE[side]} ${ALIGN_HORIZONGAL[align] || 'center'}`
   } else {
-    targetAttachment = `${align || 'middle'} ${side}`
-    attachment = `${align || 'middle'} ${OPPOSITE[side]}`
+    targetAttachment = `${ALIGN_VERTICAL[align] || 'middle'} ${side}`
+    attachment = `${ALIGN_VERTICAL[align] || 'middle'} ${OPPOSITE[side]}`
   }
   return {
     targetAttachment,

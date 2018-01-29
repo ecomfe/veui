@@ -67,6 +67,11 @@ export default {
 p {
   margin: 30px;
 }
+
+.veui-alert {
+  margin: 30px 0;
+}
+
 .veui-alert.limit-width {
   width: 350px;
 }

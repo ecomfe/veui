@@ -54,8 +54,12 @@
     }
   }
 
-  .veui-button + .veui-button {
-    margin-left: 30px;
+  .veui-button,
+  .veui-link {
+    & + .veui-button,
+    & + .veui-link {
+      margin-left: 30px;
+    }
   }
 
   &-header {

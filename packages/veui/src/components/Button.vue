@@ -33,7 +33,6 @@ export default {
       default: 'button'
     },
     value: String,
-    autofocus: Boolean,
     loading: Boolean
   },
   computed: {
@@ -41,6 +40,11 @@ export default {
       let attrs = omit(this.$props, 'loading')
       attrs.disabled = this.disabled || this.loading
       return attrs
+    }
+  },
+  methods: {
+    focus () {
+      this.$el.focus()
     }
   }
 }

@@ -19,7 +19,7 @@
   </div>
 
   <template slot="foot">
-    <veui-button @click="ok()">知道了</veui-button>
+    <veui-button ref="ok" @click="$emit('ok')">知道了</veui-button>
   </template>
 </veui-dialog>
 </template>
@@ -70,10 +70,8 @@ export default {
       this.$emit('update:open', value)
     }
   },
-  methods: {
-    ok () {
-      this.$emit('ok')
-    }
+  mounted () {
+    this.$refs.ok.focus()
   }
 }
 </script>

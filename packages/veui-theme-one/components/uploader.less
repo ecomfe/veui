@@ -19,6 +19,7 @@
     position: relative;
     margin-bottom: 12px;
     overflow: hidden;
+
     .veui-uploader-tip,
     .veui-uploader-error {
       margin-top: 8px;
@@ -40,6 +41,7 @@
   .veui-button.veui-uploader-input-label-disabled {
     cursor: not-allowed;
     .disabled();
+
     &:hover {
       .disabled();
     }
@@ -60,6 +62,7 @@
     &:hover {
       background: @veui-gray-color-8;
     }
+
     &:active {
       background: @veui-gray-color-6;
     }
@@ -96,6 +99,7 @@
         vertical-align: middle;
       }
     }
+
     &-success {
       .absolute(0);
       padding: 9px 4px;
@@ -189,6 +193,7 @@
       vertical-align: middle;
     }
   }
+
   &-list-image {
     float: left;
 
@@ -221,6 +226,7 @@
       &-failure {
         background-color: none;
       }
+
       .veui-button {
         padding: 0;
         position: absolute;
@@ -228,6 +234,7 @@
         border: 1px solid fadeout(#fff, 80%);
         color: #fff;
         font-size: @veui-font-size-normal;
+
         &:hover {
           background-color: fadeout(#000, 20%);
         }
