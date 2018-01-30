@@ -16,6 +16,7 @@
 
 * [^] `Column` 组件的 scoped slot `head` 和 `foot` 现在变更为 slot。
 * [-] 删除 `veui-theme-dux`。
+* [-] 删除 `Field` 组件 prop `rules` 默认可选表单校验规则 `maxByte` 和 `minByte`。
 
 ### 💡 主要变更
 
@@ -28,6 +29,8 @@
 * [+] `Uploader` 组件增加 `statuschange` 事件，用于表单提交的时候校验是否还有文件正在上传或上传失败。
 * [+] `Uploader` 组件增加 prop `dataType`，用于指明回调的内容的格式。
 * [+] `Uploader` 组件 prop `name` 现在有默认值 `file`。
+* [+] `Field` 组件优化交互式校验规则显示顺序。
+* [+] `Field` prop `rules` 校验规则的出错消息支持传入函数。
 
 ### 🐞 问题修复
 
@@ -36,6 +39,7 @@
 * [^] 修复 `Tooltip` 组件在 `target` 变化时会自动显示的问题。
 * [^] `Uploader` 组件的 `value` 不再包含正在上传中或上传失败的文件，不再包含 `status`等内部变量。
 * [^] 修复 `Uploader` 组件 `accept` prop 判断后缀的错误。
+* [^] 修复 `resize` 指令在 `target` 元素被移动过后丢失目标 `document` 的问题。
 * [^] 修复大小比较规则的提示信息。
 
 ## 1.0.0-alpha.6

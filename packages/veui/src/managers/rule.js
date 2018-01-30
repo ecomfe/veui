@@ -1,13 +1,11 @@
 import required from './rules/required'
 import maxLength from './rules/maxLength'
 import minLength from './rules/minLength'
-import maxByte from './rules/maxByte'
-import minByte from './rules/minByte'
 import max from './rules/max'
 import min from './rules/min'
 import numeric from './rules/numeric'
 import pattern from './rules/pattern'
-import {isObject} from 'lodash'
+import {isObject, isFunction} from 'lodash'
 
 const replaceRe = /%\{ruleValue\}/g
 
@@ -17,8 +15,6 @@ export class Rule {
       required,
       maxLength,
       minLength,
-      maxByte,
-      minByte,
       max,
       min,
       numeric,
@@ -37,7 +33,9 @@ export class Rule {
       if (!validator.validate(val, rule.value)) {
         return {
           name: rule.name,
-          message: (rule.message || validator.message).replace(replaceRe, rule.value)
+          message: isFunction(rule.message)
+            ? rule.message(rule.value)
+            : ((rule.message || validator.message) + '').replace(replaceRe, rule.value)
         }
       }
       // 代表没错
