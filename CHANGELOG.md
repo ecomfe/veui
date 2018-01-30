@@ -7,7 +7,7 @@
   > #### 迁移指南
   >
   > * 在主模块中删除 `import 'wicg-focus-ring'；
-  > * 安装上述包，将引入语句替换为：
+  > * 安装上述包后，将引入语句替换为：
   >
   >   ```js
   >   import 'classlist-polyfill'
@@ -21,12 +21,12 @@
 
 ### 💡 主要变更
 
-* [^] `Breadcrumb` 组件 `routes` 数据项的文本域重命名为 `label`，保留了 `text` 的用法进行兼容。
 * [+] 新增 `Textarea` 组件。
 * [+] `Column` 组件新增 prop `span`，用来指定行/列方向合并单元格的逻辑。
 * [^] `Column` 组件的默认 scoped slot 传入的参数现在会将列表项的数据展开，不需要多加一层 `item` 进行访问（与其它类似数据源的组件一致，需注意数据源对象中不能使用 `item`/`index` 作为属性名）。
 * [+] `Table` 组件新增 prop `key-field`，指明用哪一个 field 作为表格数据的键。当 `Table` 为 `selectable` 时，可以用来指定选择列纵向合并单元格的逻辑需要参照的列，以及选择逻辑返回的值来自哪一列。
 * [+] 优化 `Column` 组件注册到 `Table` 的逻辑，支持在模板中通过 `v-for`、`v-if` 等动态配置，并且将注册过程移入 `created` 生命周期以支持服务端渲染。
+* [^] `Breadcrumb` 组件 `routes` 数据项的文本域重命名为 `label`，保留了 `text` 的用法进行兼容。
 * [+] `Uploader` 组件增加 `statuschange` 事件，用于表单提交的时候校验是否还有文件正在上传或上传失败。
 * [+] `Uploader` 组件增加 prop `dataType`，用于指明回调的内容的格式。
 * [+] `Uploader` 组件 prop `name` 现在有默认值 `file`。
