@@ -188,9 +188,7 @@ export default {
     },
     convertResponse: {
       type: Function,
-      default () {
-        return config.get('uploader.convertResponse')
-      }
+      default: config.get('uploader.convertResponse') || function () {}
     },
     callbackNamespace: {
       type: String,
