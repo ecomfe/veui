@@ -82,3 +82,21 @@ export function contains (parentElem, childElem) {
     ? parentElem.contains(childElem)
     : document.body.contains.call(parentElem, childElem)
 }
+
+/**
+ * 获取离指定元素最近的可滚动的父级元素
+ *
+ * @param {Element} elem 指定元素
+ * @param {Boolean} includeSelf 是否在自身可滚动时直接返回，默认为 `false`
+ * @return {Element} 最近的可滚动父级元素
+ */
+export function getScrollParent (elem, includeSelf = false) {
+  if (!elem) {
+    return null
+  }
+  let current = includeSelf ? elem : elem.parentNode
+  if (current.scrollHeight > current.clientHeight) {
+    return current
+  }
+  return getScrollParent(current, false)
+}
