@@ -1,9 +1,6 @@
-// import fs from 'fs'
-import path from 'path'
-// import pkgDir from 'pkg-dir'
-import { getJSON, normalize } from './utils'
+import { normalize } from './utils'
+import COMPONENTS from 'veui/components.json'
 
-const COMPONENTS = getJSON(path.resolve(__dirname, '../components.json'))
 const COMPONENTS_DIRNAME = 'components'
 
 export default function (babel) {
@@ -16,18 +13,6 @@ export default function (babel) {
         let { node } = path
         let src = normalize(node.source.value)
 
-        // import { Button } from 'veui'
-        // → import Button from 'veui/components/Button.vue'
-        //
-        // import { Form, Field, Icon as VeuiIcon, default as veui } from 'veui'
-        // → import Form from 'veui/components/Form/Form.vue'
-        // → import Field from 'veui/components/Field.js'
-        // → import VeuiIcon from 'veui/components/Icon.vue'
-        // → import veui from 'veui'
-        //
-        // DOES NOT TRANSFORM:
-        // import * as veui from 'veui'
-        // import veui from 'veui'
         if (src === 'veui') {
           if (
             node.specifiers.length === 1 &&

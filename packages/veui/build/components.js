@@ -23,5 +23,4 @@ let mappings = dir
   }, [])
   .filter(({ name }) => name !== 'index' && name.charAt(0) !== '_')
 
-fs.writeFileSync(path.resolve(__dirname, '../../babel-plugin-veui/components.json'), JSON.stringify(mappings, null, '  '), 'utf8')
-fs.writeFileSync(path.resolve(__dirname, '../../veui-loader/components.json'), JSON.stringify(mappings, null, '  '), 'utf8')
+fs.writeFileSync(path.resolve(__dirname, '../components.json'), JSON.stringify(mappings, null, '  '), 'utf8')

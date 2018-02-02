@@ -4,8 +4,8 @@ import pkgDir from 'pkg-dir'
 import loaderUtils from 'loader-utils'
 import { kebabCase, camelCase, pascalCase, getJSON, normalize } from './utils'
 import resolve from 'enhanced-resolve/lib/node'
+import COMPONENTS from 'veui/components.json'
 
-const COMPONENTS = getJSON(path.resolve(__dirname, '../components.json'))
 const COMPONENTS_DIRNAME = 'components'
 const EXT_TYPES = {
   SCRIPT: ['js'],

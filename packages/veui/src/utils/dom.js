@@ -95,6 +95,9 @@ export function getScrollParent (elem, includeSelf = false) {
     return null
   }
   let current = includeSelf ? elem : elem.parentNode
+  if (!current) {
+    return null
+  }
   if (current.scrollHeight > current.clientHeight) {
     return current
   }

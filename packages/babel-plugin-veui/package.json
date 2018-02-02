@@ -16,6 +16,9 @@
   ],
   "author": "Justineo (justice360@gmail.com)",
   "license": "MIT",
+  "dependencies": {
+    "veui": "^1.0.0-alpha.7"
+  },
   "devDependencies": {
     "ava": "^0.20.0",
     "babel-cli": "^6.24.1",

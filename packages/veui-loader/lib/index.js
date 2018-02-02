@@ -37,9 +37,12 @@ var _node = require('enhanced-resolve/lib/node');
 
 var _node2 = _interopRequireDefault(_node);
 
+var _components = require('veui/components.json');
+
+var _components2 = _interopRequireDefault(_components);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var COMPONENTS = (0, _utils.getJSON)(_path2.default.resolve(__dirname, '../components.json'));
 var COMPONENTS_DIRNAME = 'components';
 var EXT_TYPES = {
   SCRIPT: ['js'],
@@ -201,7 +204,7 @@ function getComponentName(componentPath) {
   if (!componentPath) {
     return null;
   }
-  var component = COMPONENTS.find(function (_ref3) {
+  var component = _components2.default.find(function (_ref3) {
     var path = _ref3.path;
 
     return path === componentPath || path.split('.')[0] === componentPath;

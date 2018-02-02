@@ -44,19 +44,18 @@ exports.default = function (babel) {
   };
 };
 
-var _path = require('path');
-
-var _path2 = _interopRequireDefault(_path);
-
 var _utils = require('./utils');
+
+var _components = require('veui/components.json');
+
+var _components2 = _interopRequireDefault(_components);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var COMPONENTS = (0, _utils.getJSON)(_path2.default.resolve(__dirname, '../components.json'));
 var COMPONENTS_DIRNAME = 'components';
 
 function getComponentPath(componentName) {
-  var entry = COMPONENTS.find(function (_ref2) {
+  var entry = _components2.default.find(function (_ref2) {
     var name = _ref2.name;
     return name === componentName;
   });
