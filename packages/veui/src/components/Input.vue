@@ -16,7 +16,7 @@
   v-model="localValue"
   v-bind="attrs"
   v-on="listeners"
-  @change="$emit('change', $event.target.value, $event)"
+  @change="handleTextareaChange"
 ></veui-textarea>
 </template>
 
@@ -104,6 +104,9 @@ export default {
       if (this.composition || !this.composition && this.localValue !== this.value) {
         this.$emit('input', $event.target.value, $event)
       }
+    },
+    handleTextareaChange (value, event) {
+      this.$emit('change', value, event)
     },
     focus () {
       this.$refs.input.focus()
