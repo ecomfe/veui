@@ -20,7 +20,7 @@ import { pick } from 'lodash'
 import Dialog from './Dialog'
 import Button from './Button'
 import config from '../managers/config'
-import { overlay } from '../mixins'
+import overlay from '../mixins/overlay'
 
 config.defaults({
   'confirmbox.priority': 100

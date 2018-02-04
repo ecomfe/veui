@@ -68,7 +68,10 @@ import Icon from '../Icon'
 import Button from '../Button'
 import Option from './Option'
 import Overlay from '../Overlay'
-import { input, icons, overlay, dropdown } from '../../mixins'
+import input from '../../mixins/input'
+import icons from '../../mixins/icons'
+import overlay from '../../mixins/overlay'
+import dropdown from '../../mixins/dropdown'
 import warn from '../../utils/warn'
 
 export default {

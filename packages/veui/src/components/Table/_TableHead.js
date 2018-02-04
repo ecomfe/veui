@@ -1,7 +1,7 @@
 import Checkbox from '../Checkbox'
 import Button from '../Button'
 import Sorter from '../Sorter'
-import { table } from '../../mixins'
+import table from '../../mixins/table'
 
 export default {
   name: 'veui-table-head',

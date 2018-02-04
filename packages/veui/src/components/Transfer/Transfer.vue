@@ -2,11 +2,12 @@
 import FilterPanel from '../FilterPanel'
 import Tree from '../Tree'
 import Button from '../Button'
-import { isEqual, find, difference, includes, omit, uniq, remove, isString } from 'lodash'
 import Icon from '../Icon'
-import { icons, input } from '../../mixins'
 import CandidatePanel from './_CandidatePanel'
 import SelectedPanel from './_SelectedPanel'
+import { isEqual, find, difference, includes, omit, uniq, remove, isString } from 'lodash'
+import icons from '../../mixins/icons'
+import input from '../../mixins/input'
 
 function defaultFilter (type, keyword, option, datasource) {
   return includes(option.label, keyword)

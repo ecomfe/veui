@@ -45,7 +45,7 @@ import Link from './Link'
 import Select from './Select'
 import Option from './Select/Option'
 import config from '../managers/config'
-import { icons } from '../mixins'
+import icons from '../mixins/icons'
 
 config.defaults({
   'pagination.pageSize': 30,

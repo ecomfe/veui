@@ -1,6 +1,6 @@
 <script>
 import { uniqueId, pick } from 'lodash'
-import { table } from '../../mixins'
+import table from '../../mixins/table'
 import { getIndexOfType } from '../../utils/context'
 
 export default {

@@ -25,7 +25,8 @@
 </template>
 
 <script>
-import { ui, icons } from '../mixins'
+import ui from '../mixins/ui'
+import icons from '../mixins/icons'
 import { includes } from 'lodash'
 import Icon from './Icon'
 

@@ -13,7 +13,8 @@
 
 <script>
 import Icon from './Icon'
-import { input, icons } from '../mixins'
+import input from '../mixins/input'
+import icons from '../mixins/icons'
 import { patchIndeterminate } from '../utils/dom'
 
 export default {

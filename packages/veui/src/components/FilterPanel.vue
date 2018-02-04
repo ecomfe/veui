@@ -26,8 +26,8 @@
 import Searchbox from './Searchbox'
 import Tree from './Tree'
 import Icon from './Icon'
+import icons from '../mixins/icons'
 import { includes, debounce, cloneDeep } from 'lodash'
-import { icons } from '../mixins'
 
 export default {
   name: 'veui-filter-panel',

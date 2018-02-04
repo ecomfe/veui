@@ -37,8 +37,10 @@
 <script>
 import Overlay from './Overlay'
 import Button from './Button'
-import { ui, icons, overlay } from '../mixins'
-import { drag } from '../directives'
+import ui from '../mixins/ui'
+import icons from '../mixins/icons'
+import overlay from '../mixins/overlay'
+import drag from '../directives/drag'
 import Icon from './Icon'
 
 export default {

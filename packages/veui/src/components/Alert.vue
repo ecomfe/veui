@@ -32,7 +32,7 @@
 import Icon from './Icon'
 import Button from './Button'
 import { isArray } from 'lodash'
-import { icons } from '../mixins'
+import icons from '../mixins/icons'
 
 export default {
   name: 'alert',

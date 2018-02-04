@@ -47,8 +47,8 @@
 import warn from '../../utils/warn'
 import Link from '../Link'
 import Icon from '../Icon'
-import { resize } from '../../directives'
-import { icons } from '../../mixins'
+import resize from '../../directives/resize'
+import icons from '../../mixins/icons'
 
 export default {
   name: 'veui-tabs',

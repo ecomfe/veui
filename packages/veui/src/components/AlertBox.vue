@@ -30,7 +30,8 @@ import Dialog from './Dialog'
 import Button from './Button'
 import Icon from './Icon'
 import config from '../managers/config'
-import { icons, overlay } from '../mixins'
+import icons from '../mixins/icons'
+import overlay from '../mixins/overlay'
 
 config.defaults({
   'alertbox.priority': 100

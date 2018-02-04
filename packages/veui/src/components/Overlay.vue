@@ -5,7 +5,7 @@
     :ui="ui"
     ref="box"
     :style="{zIndex}"
-    v-show="localOpen">
+    v-show="open">
     <slot></slot>
   </div>
 </div>
@@ -25,18 +25,13 @@ config.defaults({
 
 overlayManager.setBaseZIndex(config.get('overlay.baseZIndex'))
 
-const OVERLAY_INSTANCE_KEY = '__veui_overlay_instance_key__'
-
 export default {
   name: 'veui-overlay',
   uiTypes: ['overlay'],
   props: {
     overlayClass: getClassPropDef(),
     ui: String,
-    open: {
-      type: Boolean,
-      default: false
-    },
+    open: Boolean,
     target: {
       default: null
     },
@@ -52,22 +47,19 @@ export default {
     return {
       zIndex: 0,
       appendBody: false,
-      localOpen: this.open,
       targetNode: null,
-
-      // 把 id 放 data 上面方便 debug
-      overlayNodeId: null
+      source: null
     }
   },
   watch: {
     open (value) {
-      this.localOpen = value
       this.updateOverlayDOM()
       this.updateNode()
       if (value) {
-        this[OVERLAY_INSTANCE_KEY].toTop()
+        let node = this.overlayNode
+        node.source = document ? document.activeElement : null
+        node.toTop()
       }
-      this.$emit('update:open', value)
     },
     target () {
       this.findTargetNode()
@@ -88,24 +80,28 @@ export default {
     const box = this.$refs.box
     document.body.appendChild(box)
 
+    // 初始时如果打开，记录触发来源；
+    // 否则在 open 变为 true 时再记录
+    if (this.open) {
+      this.overlayNode.source = document.activeElement
+    }
+
     this.findTargetNode()
     this.updateOverlayDOM()
   },
   methods: {
-
     // 更新 zindex 树
     updateNode () {
-      if (!this[OVERLAY_INSTANCE_KEY]) {
-        this[OVERLAY_INSTANCE_KEY] = overlayManager.createNode({
+      if (!this.overlayNode) {
+        this.overlayNode = overlayManager.createNode({
           parentId: this.findParentOverlayId(),
           priority: this.priority
         })
-        this[OVERLAY_INSTANCE_KEY].$on('zindexchange', (zIndex) => {
+        this.overlayNode.$on('zindexchange', zIndex => {
           this.zIndex = zIndex
         })
-        this.overlayNodeId = this[OVERLAY_INSTANCE_KEY].id
       } else {
-        this[OVERLAY_INSTANCE_KEY].appendTo(this.findParentOverlayId(), this.priority)
+        this.overlayNode.appendTo(this.findParentOverlayId(), this.priority)
       }
     },
 
@@ -113,14 +109,14 @@ export default {
       let cur = this.$vnode.context
       while (cur) {
         if (cur && this.isOverlay(cur)) {
-          return cur[OVERLAY_INSTANCE_KEY].id
+          return cur.overlayNode.id
         }
         cur = cur.$parent
       }
     },
 
     updateOverlayDOM () {
-      if (!this.localOpen) {
+      if (!this.open) {
         return
       }
 
@@ -157,18 +153,17 @@ export default {
     },
 
     focus () {
-      this[OVERLAY_INSTANCE_KEY].toTop()
+      this.overlayNode.toTop()
     }
   },
   beforeDestroy () {
     this.tether && this.tether.destroy()
     this.tether = null
 
-    if (this[OVERLAY_INSTANCE_KEY]) {
-      this[OVERLAY_INSTANCE_KEY].$off()
-      this[OVERLAY_INSTANCE_KEY].remove()
-      this[OVERLAY_INSTANCE_KEY] = null
-    }
+    let node = this.overlayNode
+    node.$off()
+    node.remove()
+    this.overlayNode = null
 
     this.$refs.box.parentNode.removeChild(this.$refs.box)
   }

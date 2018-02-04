@@ -65,7 +65,8 @@
 <script>
 import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/date'
 import { flattenDeep, findIndex } from 'lodash'
-import { input, icons } from '../mixins'
+import icons from '../mixins/icons'
+import input from '../mixins/input'
 import config from '../managers/config'
 import Icon from './Icon'
 

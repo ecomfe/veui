@@ -17,7 +17,7 @@ import Input from './Input'
 import Dialog from './Dialog'
 import { pick, extend } from 'lodash'
 import config from '../managers/config'
-import { overlay } from '../mixins'
+import overlay from '../mixins/overlay'
 
 config.defaults({
   'promptbox.priority': 100

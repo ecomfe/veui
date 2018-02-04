@@ -1,7 +1,7 @@
 import { find } from 'lodash'
 import Checkbox from '../Checkbox'
 import Radio from '../Radio'
-import { table } from '../../mixins'
+import table from '../../mixins/table'
 
 export default {
   name: 'veui-table-row',

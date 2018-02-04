@@ -15,7 +15,7 @@
 
 <script>
 import Icon from '../Icon'
-import { icons } from '../../mixins'
+import icons from '../../mixins/icons'
 import { getScrollParent } from '../../utils/dom'
 
 export default {
