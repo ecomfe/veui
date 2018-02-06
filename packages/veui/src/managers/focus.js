@@ -51,15 +51,21 @@ class FocusContext {
   }
 
   destroy () {
-    if (this.trap) {
-      this.ward.removeEventListener('focus', this.outsideHandler, true)
+    let { trap, source, ward } = this
+    if (trap) {
+      ward.removeEventListener('focus', this.outsideHandler, true)
     }
-    if (this.source && typeof this.source.focus === 'function') {
-      this.source.focus()
+    if (source && typeof source.focus === 'function') {
       this.source = null
+
+      // restore focus in a macro task to prevent
+      // triggering events on the original focus
+      setTimeout(() => {
+        source.focus()
+      }, 0)
     }
-    if (this.ward) {
-      this.ward.parentElement.removeChild(this.ward)
+    if (ward) {
+      ward.parentElement.removeChild(ward)
     }
     this.preferred = null
     this.root = null
