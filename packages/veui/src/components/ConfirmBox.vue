@@ -1,8 +1,9 @@
 <template>
-<veui-dialog :open.sync="localOpen"
+<veui-dialog ui="reverse"
+  :open.sync="localOpen"
   :priority="priority"
   :closable="false"
-  ui="reverse"
+  escapable
   :overlay-class="mergeOverlayClass('veui-confirm-box')">
   <template slot="title">
     <slot name="title">{{ title }}</slot>

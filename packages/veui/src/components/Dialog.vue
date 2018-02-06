@@ -11,7 +11,8 @@
     :modal="modal"
     :priority="priority">
     <div class="veui-dialog-content"
-      @mousedown="focus">
+      @mousedown="focus"
+      @keydown.esc="handleEscape">
       <div class="veui-dialog-content-head"
         :class="{ 'veui-dialog-draggable': draggable }"
         v-drag:content.translate="{ draggable, containment: '@window', ready: dragReady }">
@@ -69,6 +70,10 @@ export default {
       type: Boolean,
       default: true
     },
+    escapable: {
+      type: Boolean,
+      default: false
+    },
     draggable: {
       type: Boolean,
       default: false
@@ -78,6 +83,11 @@ export default {
   data () {
     return {
       localOpen: this.open
+    }
+  },
+  computed: {
+    realEscapable () {
+      return this.closable || this.escapable
     }
   },
   watch: {
@@ -105,6 +115,13 @@ export default {
       }
 
       this.dragHandle.reset()
+    },
+    handleEscape (e) {
+      if (this.realEscapable) {
+        this.localOpen = false
+        e.stopPropagation()
+        this.$emit('escape')
+      }
     }
   }
 }

@@ -4,6 +4,7 @@
 
 * [+] 增加了焦点管理模块。
 * [+] `Overlay` 组件增加 `autofocus` 和 `modal` 两个 prop，分别用来指定浮层是否需要抢占焦点、以及是否将后续焦点移动限制在浮层内。
+* [+] `Dialog` 组件增加 `escapable` prop，允许对话框通过按下 <kbd>esc</kbd> 键关闭。
 
 ### 🐞 问题修复
 

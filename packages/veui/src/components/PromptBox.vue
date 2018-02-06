@@ -5,7 +5,9 @@
   :priority="priority"
   :closable="false"
   @ok="submit"
-  @cancel="$emit('cancel')">
+  escapable
+  @escape="cancel"
+  @cancel="cancel">
   <template slot="title"><slot name="title">{{ title }}</slot></template>
   <p class="veui-prompt-box-info">{{ content }}</p>
   <veui-input autofocus v-model="localValue" class="veui-prompt-box-input" @keydown.enter="submit"></veui-input>
@@ -67,6 +69,9 @@ export default {
   methods: {
     submit () {
       this.$emit('ok')
+    },
+    cancel () {
+      this.$emit('cancel')
     }
   }
 }
