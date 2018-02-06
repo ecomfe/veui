@@ -4,11 +4,11 @@
   :open.sync="localOpen"
   :priority="priority"
   :closable="false"
-  @ok="$emit('ok')"
+  @ok="submit"
   @cancel="$emit('cancel')">
   <template slot="title"><slot name="title">{{ title }}</slot></template>
   <p class="veui-prompt-box-info">{{ content }}</p>
-  <veui-input v-model="localValue" class="veui-prompt-box-input"></veui-input>
+  <veui-input autofocus v-model="localValue" class="veui-prompt-box-input" @keydown.enter="submit"></veui-input>
 </veui-dialog>
 </template>
 
@@ -62,6 +62,11 @@ export default {
     },
     localValue (value) {
       this.$emit('input', value)
+    }
+  },
+  methods: {
+    submit () {
+      this.$emit('ok')
     }
   }
 }

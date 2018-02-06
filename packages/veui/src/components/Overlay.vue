@@ -16,6 +16,7 @@ import Tether from 'tether'
 import { assign, includes, get } from 'lodash'
 import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
+import focusManager from '../managers/focus'
 import config from '../managers/config'
 import { getClassPropDef } from '../utils/helper'
 
@@ -41,7 +42,9 @@ export default {
         return {}
       }
     },
-    priority: Number
+    priority: Number,
+    autofocus: Boolean,
+    modal: Boolean
   },
   data () {
     return {
@@ -57,8 +60,11 @@ export default {
       this.updateNode()
       if (value) {
         let node = this.overlayNode
-        node.source = document ? document.activeElement : null
         node.toTop()
+
+        this.initFocus()
+      } else {
+        this.destroyFocus()
       }
     },
     target () {
@@ -80,10 +86,8 @@ export default {
     const box = this.$refs.box
     document.body.appendChild(box)
 
-    // 初始时如果打开，记录触发来源；
-    // 否则在 open 变为 true 时再记录
     if (this.open) {
-      this.overlayNode.source = document.activeElement
+      this.initFocus()
     }
 
     this.findTargetNode()
@@ -154,6 +158,28 @@ export default {
 
     focus () {
       this.overlayNode.toTop()
+    },
+
+    initFocus () {
+      if (!this.autofocus) {
+        return
+      }
+
+      if (!this.focusContext) {
+        this.focusContext = focusManager.createContext(this.$refs.box, {
+          source: document.activeElement,
+          trap: this.modal
+        })
+      } else {
+        focusManager.toTop(this.focusContext)
+      }
+    },
+
+    destroyFocus () {
+      if (this.focusContext) {
+        focusManager.remove(this.focusContext)
+        this.focusContext = null
+      }
     }
   },
   beforeDestroy () {
@@ -164,6 +190,8 @@ export default {
     node.$off()
     node.remove()
     this.overlayNode = null
+
+    this.destroyFocus()
 
     this.$refs.box.parentNode.removeChild(this.$refs.box)
   }

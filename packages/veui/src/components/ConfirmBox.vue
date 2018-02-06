@@ -10,7 +10,7 @@
   <slot></slot>
   <template slot="foot">
     <veui-button ui="primary" @click="ok()">确定</veui-button>
-    <veui-button @click="cancel()">取消</veui-button>
+    <veui-button autofocus @click="cancel()">取消</veui-button>
   </template>
 </veui-dialog>
 </template>

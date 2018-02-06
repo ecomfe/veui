@@ -19,7 +19,7 @@
   </div>
 
   <template slot="foot">
-    <veui-button ref="ok" @click="$emit('ok')">知道了</veui-button>
+    <veui-button autofocus ref="ok" @click="$emit('ok')">知道了</veui-button>
   </template>
 </veui-dialog>
 </template>

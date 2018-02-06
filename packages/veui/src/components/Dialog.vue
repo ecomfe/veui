@@ -7,6 +7,8 @@
     })"
     :ui="ui"
     ref="overlay"
+    autofocus
+    :modal="modal"
     :priority="priority">
     <div class="veui-dialog-content"
       @mousedown="focus"
@@ -16,22 +18,21 @@
         ref="head"
         v-drag:content.translate="{ draggable, containment: '@window', ready: dragReady }">
         <span class="veui-dialog-content-head-title"><slot name="title">{{ title }}</slot></span>
-        <a class="veui-dialog-content-head-close"
-          v-show="closable"
-          @click="hide">
+        <button class="veui-dialog-content-head-close"
+          v-if="closable"
+          @click="localOpen = false">
           <veui-icon :name="icons.close"></veui-icon>
-        </a>
+        </button>
       </div>
       <div ref="body" class="veui-dialog-content-body"><slot></slot></div>
       <div ref="foot" class="veui-dialog-content-foot">
         <slot name="foot">
           <veui-button ui="primary" @click="$emit('ok')">确定</veui-button>
-          <veui-button @click="$emit('cancel')">取消</veui-button>
+          <veui-button autofocus ref="cancel" @click="$emit('cancel')">取消</veui-button>
         </slot>
       </div>
     </div>
-  </div>
-</veui-overlay>
+  </veui-overlay>
 </template>
 
 <script>
@@ -82,15 +83,16 @@ export default {
     }
   },
   watch: {
-    open (value) {
-      this.localOpen = value
+    open (val) {
+      this.localOpen = val
+    },
+    localOpen (val) {
+      if (this.open !== val) {
+        this.$emit('update:open', this.localOpen)
+      }
     }
   },
   methods: {
-    hide () {
-      this.localOpen = false
-      this.$emit('update:open', this.localOpen)
-    },
     focus () {
       if (this.$refs.overlay) {
         this.$refs.overlay.focus()

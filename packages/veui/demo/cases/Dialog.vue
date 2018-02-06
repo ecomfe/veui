@@ -10,7 +10,7 @@
         <p>content area</p>
         <template slot="foot">
           <veui-button ui="primary" @click="modalDialogVisible = false">OK</veui-button>
-          <veui-button @click="modalDialogVisible = false">CANCEL</veui-button>
+          <veui-button autofocus @click="modalDialogVisible = false">CANCEL</veui-button>
         </template>
       </veui-dialog>
       <veui-button ui="primary"
@@ -23,7 +23,7 @@
         The content of the Dialog. You can use the default slot to override it.
         <template slot="foot">
           <veui-button ui="primary" @click="nonModalDialogVisible = false">OK</veui-button>
-          <veui-button @click="nonModalDialogVisible = false">CANCEL</veui-button>
+          <veui-button autofocus @click="nonModalDialogVisible = false">CANCEL</veui-button>
         </template>
       </veui-dialog>
       <veui-button ui="primary"
@@ -38,7 +38,7 @@
         You can drag the dialog box in the viewport.
         <template slot="foot">
           <veui-button ui="primary" @click="draggableDialog1Visible = false">OK</veui-button>
-          <veui-button @click="draggableDialog1Visible = false">CANCEL</veui-button>
+          <veui-button autofocus @click="draggableDialog1Visible = false">CANCEL</veui-button>
         </template>
       </veui-dialog>
       <veui-button ui="primary" @click="draggableDialog1Visible = !draggableDialog1Visible">Open the first draggable dialog box</veui-button>
@@ -55,7 +55,7 @@
         <p>You can bring the second dialog to the top layer by clicking the second dialog.</p>
         <template slot="foot">
           <veui-button ui="primary" @click="draggableDialog2Visible = false">OK</veui-button>
-          <veui-button @click="draggableDialog2Visible = false">CANCEL</veui-button>
+          <veui-button autofocus @click="draggableDialog2Visible = false">CANCEL</veui-button>
         </template>
       </veui-dialog>
       <veui-button ui="primary" @click="draggableDialog2Visible = !draggableDialog2Visible">Open the second draggable dialog box</veui-button>
@@ -91,7 +91,7 @@
         You can change the dialog title text by setting the `title` prop or passing in the `title` slot parameter.
         <template slot="foot">
           <veui-button ui="primary" @click="customTextTitleDialogVisible = false">OK</veui-button>
-          <veui-button @click="customTextTitleDialogVisible = false">CANCEL</veui-button>
+          <veui-button autofocus @click="customTextTitleDialogVisible = false">CANCEL</veui-button>
         </template>
       </veui-dialog>
       <veui-button ui="primary" @click="customTextTitleDialogVisible = true">Custom Title</veui-button>
@@ -101,7 +101,7 @@
         <template slot="title">Custom Title With ICON <icon class="svg" name="calendar"></icon></template>
         <template slot="foot">
           <veui-button ui="primary" @click="customIconTitleDialogVisible = false">OK</veui-button>
-          <veui-button @click="customIconTitleDialogVisible = false">CANCEL</veui-button>
+          <veui-button autofocus @click="customIconTitleDialogVisible = false">CANCEL</veui-button>
         </template>
         You can add icons to title by the `title slot`.
       </veui-dialog>
@@ -116,7 +116,7 @@
         <div v-html="dynamicContent"></div>
         <template slot="foot">
           <veui-button ui="primary" @click="contentAutoHeightDialogVisible = false">OK</veui-button>
-          <veui-button @click="contentAutoHeightDialogVisible = false">CANCEL</veui-button>
+          <veui-button autofocus @click="contentAutoHeightDialogVisible = false">CANCEL</veui-button>
         </template>
       </veui-dialog>
       <veui-button ui="primary" @click="contentAutoHeightDialogVisible = true">Adaptive Content Height</veui-button>
@@ -135,7 +135,7 @@
       <veui-button ui="primary" @click="popupToasts">Open Toasts</veui-button>
     </p>
     <p>
-      <veui-button ui="primary" @click="popupPrompt">Open Prompt</veui-button>
+      <veui-button ref="p" ui="primary" @click="popupPrompt">Open Prompt</veui-button>
     </p>
   </article>
 </template>
@@ -228,7 +228,7 @@ export default {
     popupPrompt () {
       promptManager.info('Please tell us your age:', 'Prompt').then(({ isOk, value }) => {
         if (isOk) {
-          alert(value)
+          console.log(value)
         }
       })
     }
