@@ -19,7 +19,7 @@
   </div>
 
   <template slot="foot">
-    <veui-button autofocus ref="ok" @click="$emit('ok')">知道了</veui-button>
+    <veui-button autofocus @click="$emit('ok')">知道了</veui-button>
   </template>
 </veui-dialog>
 </template>
@@ -70,9 +70,6 @@ export default {
     localOpen (value) {
       this.$emit('update:open', value)
     }
-  },
-  mounted () {
-    this.$refs.ok.focus()
   }
 }
 </script>

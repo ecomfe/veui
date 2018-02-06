@@ -11,11 +11,9 @@
     :modal="modal"
     :priority="priority">
     <div class="veui-dialog-content"
-      @mousedown="focus"
-      ref="content">
+      @mousedown="focus">
       <div class="veui-dialog-content-head"
         :class="{ 'veui-dialog-draggable': draggable }"
-        ref="head"
         v-drag:content.translate="{ draggable, containment: '@window', ready: dragReady }">
         <span class="veui-dialog-content-head-title"><slot name="title">{{ title }}</slot></span>
         <button class="veui-dialog-content-head-close"
@@ -24,11 +22,11 @@
           <veui-icon :name="icons.close"></veui-icon>
         </button>
       </div>
-      <div ref="body" class="veui-dialog-content-body"><slot></slot></div>
-      <div ref="foot" class="veui-dialog-content-foot">
+      <div class="veui-dialog-content-body"><slot></slot></div>
+      <div class="veui-dialog-content-foot">
         <slot name="foot">
           <veui-button ui="primary" @click="$emit('ok')">确定</veui-button>
-          <veui-button autofocus ref="cancel" @click="$emit('cancel')">取消</veui-button>
+          <veui-button autofocus @click="$emit('cancel')">取消</veui-button>
         </slot>
       </div>
     </div>
