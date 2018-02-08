@@ -11,6 +11,7 @@
     :modal="modal"
     :priority="priority">
     <div class="veui-dialog-content"
+      ref="content"
       @mousedown="focus"
       @keydown.esc="handleEscape">
       <div class="veui-dialog-content-head"

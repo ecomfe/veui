@@ -29,8 +29,6 @@ class FocusContext {
    * 2. focus `root` by default
    */
   init () {
-    let { root } = this
-    root.tabIndex = -1
     this.focusFirst()
 
     if (this.trap) {
