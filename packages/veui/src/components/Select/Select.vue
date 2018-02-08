@@ -130,13 +130,13 @@ export default {
     }
   },
   methods: {
-    handleSelect ({ disabled, value }) {
-      if (disabled) {
+    handleSelect (option) {
+      if (option.disabled) {
         return
       }
       this.expanded = false
-      this.localValue = value
-      this.$emit('change', value)
+      this.localValue = option.value
+      this.$emit('change', option.value, option)
     }
   },
   watch: {
