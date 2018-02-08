@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     buttonUI () {
-      let allowed = ['alt', 'tiny', 'small', 'large']
+      let allowed = ['alt', 'micro', 'tiny', 'small', 'large']
       return this.uiProps.filter(ui => includes(allowed, ui)).join(' ')
     }
   },

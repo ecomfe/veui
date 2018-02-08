@@ -10,4 +10,9 @@ Object.keys(icons).forEach(name => {
   )
 })
 
+fs.writeFileSync(
+  path.resolve(__dirname, `../icons/index.js`),
+  Object.keys(icons).map(name => `import './${name}'`).join('\n')
+)
+
 console.log(Object.keys(icons).length + ' icon modules generated.')

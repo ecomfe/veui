@@ -16,6 +16,9 @@
     <section>
       <veui-button-group ui="alt tiny" :items="items4" :disabled="disabled"></veui-button-group>
     </section>
+    <section>
+      <veui-button-group ui="alt micro" :items="items4" :disabled="disabled"></veui-button-group>
+    </section>
   </article>
 </template>
 

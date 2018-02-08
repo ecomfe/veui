@@ -31,6 +31,7 @@ import Carousel from './Carousel'
 import Transfer from './Transfer'
 import Schedule from './Schedule'
 import Textarea from './Textarea'
+import Icon from './Icon'
 
 export default [
   {
@@ -212,5 +213,10 @@ export default [
     path: '/uploader',
     name: 'Uploader',
     component: Uploader
+  },
+  {
+    path: '/icon',
+    name: 'Icon',
+    component: Icon
   }
 ]

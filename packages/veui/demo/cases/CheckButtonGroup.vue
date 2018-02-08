@@ -20,22 +20,37 @@
       </p>
       <p>value: {{ picked2 }}</p>
     </section>
+    <section>
+      <p>
+        <veui-check-button-group :items="data3" ui="micro" v-model="picked3" :disabled="disabled">
+          <template scope="props">
+            <veui-icon :name="props.icon" />
+          </template>
+        </veui-check-button-group>
+      </p>
+      <p>value: {{ picked3 }}</p>
+    </section>
   </article>
 </template>
 
 <script>
-import { CheckButtonGroup, Checkbox } from 'veui'
+import { CheckButtonGroup, Checkbox, Icon } from 'veui'
+import 'veui-theme-one/icons/check'
+import 'veui-theme-one/icons/cross'
+import 'veui-theme-one/icons/refresh'
 
 export default {
   name: 'check-button-group-demo',
   components: {
     'veui-check-button-group': CheckButtonGroup,
-    'veui-checkbox': Checkbox
+    'veui-checkbox': Checkbox,
+    'veui-icon': Icon
   },
   data () {
     return {
       picked1: ['Hirasawa Yui', 'Akiyama Mio'],
       picked2: [],
+      picked3: [],
       disabled: false,
       data1: [
         {
@@ -57,6 +72,17 @@ export default {
         },
         {
           value: 'Nakano Azusa', label: 'Nakano Azusa'
+        }
+      ],
+      data3: [
+        {
+          value: 'check', icon: 'check'
+        },
+        {
+          value: 'cross', icon: 'cross'
+        },
+        {
+          value: 'refresh', icon: 'refresh'
         }
       ]
     }
