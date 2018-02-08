@@ -19,7 +19,7 @@
   </div>
 
   <template slot="foot">
-    <veui-button ref="ok" @click="$emit('ok')">知道了</veui-button>
+    <veui-button autofocus @click="$emit('ok')">知道了</veui-button>
   </template>
 </veui-dialog>
 </template>
@@ -30,7 +30,8 @@ import Dialog from './Dialog'
 import Button from './Button'
 import Icon from './Icon'
 import config from '../managers/config'
-import { icons, overlay } from '../mixins'
+import icons from '../mixins/icons'
+import overlay from '../mixins/overlay'
 
 config.defaults({
   'alertbox.priority': 100
@@ -69,9 +70,6 @@ export default {
     localOpen (value) {
       this.$emit('update:open', value)
     }
-  },
-  mounted () {
-    this.$refs.ok.focus()
   }
 }
 </script>

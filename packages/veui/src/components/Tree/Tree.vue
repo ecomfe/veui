@@ -30,7 +30,7 @@
 <script>
 import TreeNode from './_TreeNode'
 import { includes, remove, clone, omit, filter, uniq } from 'lodash'
-import { icons } from '../../mixins'
+import icons from '../../mixins/icons'
 
 export default {
   name: 'veui-tree',

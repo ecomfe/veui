@@ -15,6 +15,7 @@
   "author": "ecomfe",
   "license": "MIT",
   "dependencies": {
+    "focus-visible": "^4.0.1",
     "less-plugin-est": "^2.0.5"
   },
   "peerDependencies": {

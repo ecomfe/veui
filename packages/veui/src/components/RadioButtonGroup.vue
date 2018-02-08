@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import { input, ui } from '../mixins'
+import ui from '../mixins/ui'
+import input from '../mixins/input'
 import { includes } from 'lodash'
 import Button from './Button'
 

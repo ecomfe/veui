@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { input } from '../mixins'
+import input from '../mixins/input'
 import Radio from './Radio'
 import { uniqueId } from 'lodash'
 

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import confirm from '../managers/confirm'
 
 function getMethod (name) {
-  return alert[name].bind(confirm)
+  return confirm[name].bind(confirm)
 }
 
 let methods = ['success', 'info', 'error', 'warn'].map(name => getMethod)

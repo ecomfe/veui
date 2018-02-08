@@ -4,11 +4,13 @@
   :open.sync="localOpen"
   :priority="priority"
   :closable="false"
-  @ok="$emit('ok')"
-  @cancel="$emit('cancel')">
+  @ok="submit"
+  escapable
+  @escape="cancel"
+  @cancel="cancel">
   <template slot="title"><slot name="title">{{ title }}</slot></template>
   <p class="veui-prompt-box-info">{{ content }}</p>
-  <veui-input v-model="localValue" class="veui-prompt-box-input"></veui-input>
+  <veui-input autofocus v-model="localValue" class="veui-prompt-box-input" @keydown.enter="submit"></veui-input>
 </veui-dialog>
 </template>
 
@@ -17,7 +19,7 @@ import Input from './Input'
 import Dialog from './Dialog'
 import { pick, extend } from 'lodash'
 import config from '../managers/config'
-import { overlay } from '../mixins'
+import overlay from '../mixins/overlay'
 
 config.defaults({
   'promptbox.priority': 100
@@ -62,6 +64,14 @@ export default {
     },
     localValue (value) {
       this.$emit('input', value)
+    }
+  },
+  methods: {
+    submit () {
+      this.$emit('ok')
+    },
+    cancel () {
+      this.$emit('cancel')
     }
   }
 }

@@ -43,7 +43,9 @@
 import Icon from './Icon'
 import Button from './Button'
 import Overlay from './Overlay'
-import { dropdown, icons, overlay } from '../mixins'
+import dropdown from '../mixins/dropdown'
+import icons from '../mixins/icons'
+import overlay from '../mixins/overlay'
 
 export default {
   name: 'veui-dropdown',

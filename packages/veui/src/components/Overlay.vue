@@ -5,7 +5,7 @@
     :ui="ui"
     ref="box"
     :style="{zIndex}"
-    v-show="localOpen">
+    v-show="open">
     <slot></slot>
   </div>
 </div>
@@ -16,6 +16,7 @@ import Tether from 'tether'
 import { assign, includes, get } from 'lodash'
 import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
+import focusManager from '../managers/focus'
 import config from '../managers/config'
 import { getClassPropDef } from '../utils/helper'
 
@@ -25,18 +26,13 @@ config.defaults({
 
 overlayManager.setBaseZIndex(config.get('overlay.baseZIndex'))
 
-const OVERLAY_INSTANCE_KEY = '__veui_overlay_instance_key__'
-
 export default {
   name: 'veui-overlay',
   uiTypes: ['overlay'],
   props: {
     overlayClass: getClassPropDef(),
     ui: String,
-    open: {
-      type: Boolean,
-      default: false
-    },
+    open: Boolean,
     target: {
       default: null
     },
@@ -46,28 +42,30 @@ export default {
         return {}
       }
     },
-    priority: Number
+    priority: Number,
+    autofocus: Boolean,
+    modal: Boolean
   },
   data () {
     return {
       zIndex: 0,
       appendBody: false,
-      localOpen: this.open,
       targetNode: null,
-
-      // 把 id 放 data 上面方便 debug
-      overlayNodeId: null
+      source: null
     }
   },
   watch: {
     open (value) {
-      this.localOpen = value
       this.updateOverlayDOM()
       this.updateNode()
       if (value) {
-        this[OVERLAY_INSTANCE_KEY].toTop()
+        let node = this.overlayNode
+        node.toTop()
+
+        this.initFocus()
+      } else {
+        this.destroyFocus()
       }
-      this.$emit('update:open', value)
     },
     target () {
       this.findTargetNode()
@@ -88,24 +86,26 @@ export default {
     const box = this.$refs.box
     document.body.appendChild(box)
 
+    if (this.open) {
+      this.initFocus()
+    }
+
     this.findTargetNode()
     this.updateOverlayDOM()
   },
   methods: {
-
     // 更新 zindex 树
     updateNode () {
-      if (!this[OVERLAY_INSTANCE_KEY]) {
-        this[OVERLAY_INSTANCE_KEY] = overlayManager.createNode({
+      if (!this.overlayNode) {
+        this.overlayNode = overlayManager.createNode({
           parentId: this.findParentOverlayId(),
           priority: this.priority
         })
-        this[OVERLAY_INSTANCE_KEY].$on('zindexchange', (zIndex) => {
+        this.overlayNode.$on('zindexchange', zIndex => {
           this.zIndex = zIndex
         })
-        this.overlayNodeId = this[OVERLAY_INSTANCE_KEY].id
       } else {
-        this[OVERLAY_INSTANCE_KEY].appendTo(this.findParentOverlayId(), this.priority)
+        this.overlayNode.appendTo(this.findParentOverlayId(), this.priority)
       }
     },
 
@@ -113,14 +113,14 @@ export default {
       let cur = this.$vnode.context
       while (cur) {
         if (cur && this.isOverlay(cur)) {
-          return cur[OVERLAY_INSTANCE_KEY].id
+          return cur.overlayNode.id
         }
         cur = cur.$parent
       }
     },
 
     updateOverlayDOM () {
-      if (!this.localOpen) {
+      if (!this.open) {
         return
       }
 
@@ -157,18 +157,41 @@ export default {
     },
 
     focus () {
-      this[OVERLAY_INSTANCE_KEY].toTop()
+      this.overlayNode.toTop()
+    },
+
+    initFocus () {
+      if (!this.autofocus) {
+        return
+      }
+
+      if (!this.focusContext) {
+        this.focusContext = focusManager.createContext(this.$refs.box, {
+          source: document.activeElement,
+          trap: this.modal
+        })
+      } else {
+        focusManager.toTop(this.focusContext)
+      }
+    },
+
+    destroyFocus () {
+      if (this.focusContext) {
+        focusManager.remove(this.focusContext)
+        this.focusContext = null
+      }
     }
   },
   beforeDestroy () {
     this.tether && this.tether.destroy()
     this.tether = null
 
-    if (this[OVERLAY_INSTANCE_KEY]) {
-      this[OVERLAY_INSTANCE_KEY].$off()
-      this[OVERLAY_INSTANCE_KEY].remove()
-      this[OVERLAY_INSTANCE_KEY] = null
-    }
+    let node = this.overlayNode
+    node.$off()
+    node.remove()
+    this.overlayNode = null
+
+    this.destroyFocus()
 
     this.$refs.box.parentNode.removeChild(this.$refs.box)
   }

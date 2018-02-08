@@ -14,7 +14,8 @@
 </template>
 
 <script>
-import { input, ui } from '../mixins'
+import input from '../mixins/input'
+import ui from '../mixins/ui'
 import { uniqueId, findIndex } from 'lodash'
 import Checkbox from './Checkbox'
 

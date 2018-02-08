@@ -72,12 +72,15 @@
 </template>
 
 <script>
-import { input, dropdown, overlay, icons } from '../mixins'
-import { pick } from 'lodash'
+import input from '../mixins/input'
+import dropdown from '../mixins/dropdown'
+import overlay from '../mixins/overlay'
+import icons from '../mixins/icons'
 import Input from './Input'
 import Icon from './Icon'
 import Overlay from './Overlay'
 import Button from './Button'
+import { pick } from 'lodash'
 
 export default {
   name: 'veui-searchbox',

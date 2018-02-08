@@ -1,7 +1,7 @@
 <script>
 import BreadcrumbItem from './BreadcrumbItem'
 import Icon from './Icon'
-import { icons } from '../mixins'
+import icons from '../mixins/icons'
 
 export default {
   name: 'veui-breadcrumb',

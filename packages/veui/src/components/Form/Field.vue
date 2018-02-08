@@ -11,8 +11,9 @@
 
 <script>
 import Label from '../Label'
-import { type, rule } from '../../managers'
-import { icons } from '../../mixins'
+import type from '../../managers/type'
+import rule from '../../managers/rule'
+import icons from '../../mixins/icons'
 import { isBoolean, get, last, includes } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'

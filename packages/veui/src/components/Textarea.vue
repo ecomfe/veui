@@ -30,7 +30,7 @@
 
 <script>
 import { pick } from 'lodash'
-import { input } from '../mixins'
+import input from '../mixins/input'
 
 export default {
   name: 'veui-textarea',

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { input } from '../mixins'
+import input from '../mixins/input'
 import { omit, includes } from 'lodash'
 import Textarea from './Textarea'
 

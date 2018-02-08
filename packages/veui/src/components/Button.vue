@@ -16,7 +16,7 @@
 <script>
 import { omit } from 'lodash'
 import Icon from './Icon'
-import { icons } from '../mixins'
+import icons from '../mixins/icons'
 
 export default {
   name: 'veui-button',

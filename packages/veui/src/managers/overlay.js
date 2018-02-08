@@ -147,11 +147,9 @@ class Node {
    * @public
    */
   getChildrenCount () {
-    let counter = 0
-    this.childrenGroup.forEach((group) => {
-      counter += group.children.length
-    })
-    return counter
+    return this.childrenGroup.reduce((count, group) => {
+      return count + group.children.length
+    }, 0)
   }
 }
 
@@ -255,17 +253,17 @@ export class Tree {
   createNode ({ parentId = this.rootNode.id, priority } = {}) {
     const node = new Node()
 
-    const nodeId = node.id
+    const id = node.id
     const instance = new Vue({
       data () {
         return {
-          id: nodeId
+          id
         }
       },
       methods: {
         remove: () => {
           node.remove()
-          this.nodeMap[nodeId] = null
+          this.nodeMap[id] = null
         },
         appendTo: (parentId, priority) => {
           this.nodeMap[node.id] = { node, instance }
@@ -288,7 +286,7 @@ export class Tree {
         }
       }
     })
-    this.nodeMap[nodeId] = { node, instance }
+    this.nodeMap[id] = { node, instance }
     this.insertNode(parentId, node, priority)
     Vue.nextTick(() => {
       instance.$emit('zindexchange', node.zIndex)

@@ -17,7 +17,7 @@ import Overlay from './Overlay'
 import Toast from './Toast'
 import { assign, findIndex, uniqueId } from 'lodash'
 import config from '../managers/config'
-import { overlay } from '../mixins'
+import overlay from '../mixins/overlay'
 
 config.defaults({
   'toast.priority': 101

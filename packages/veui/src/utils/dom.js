@@ -103,3 +103,37 @@ export function getScrollParent (elem, includeSelf = false) {
   }
   return getScrollParent(current, false)
 }
+
+/**
+ * 将焦点移入指定元素内的第一个可聚焦的元素
+ *
+ * @param {Element} elem 需要查找的指定元素
+ * @param {Boolean=} ignoreAutofocus 是否忽略 autofocus
+ * @returns {Boolean} 是否找到可聚焦的元素
+ */
+export function focusIn (elem, ignoreAutofocus) {
+  if (!ignoreAutofocus) {
+    let auto = elem.querySelector('[autofocus]')
+    if (auto) {
+      auto.focus()
+      return true
+    }
+  }
+
+  let focusable = `
+    a[href]:not([tabindex='-1']),
+    area[href]:not([tabindex='-1']),
+    input:not([disabled]):not([tabindex='-1']),
+    select:not([disabled]):not([tabindex='-1']),
+    textarea:not([disabled]):not([tabindex='-1']),
+    button:not([disabled]):not([tabindex='-1']),
+    iframe:not([tabindex='-1']),
+    [tabindex]:not([tabindex='-1']),
+    [contentEditable=true]:not([tabindex='-1'])`
+  let first = elem.querySelector(focusable)
+  if (first) {
+    first.focus()
+    return true
+  }
+  return false
+}

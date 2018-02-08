@@ -1,8 +1,9 @@
 <template>
-<veui-dialog :open.sync="localOpen"
+<veui-dialog ui="reverse"
+  :open.sync="localOpen"
   :priority="priority"
   :closable="false"
-  ui="reverse"
+  escapable
   :overlay-class="mergeOverlayClass('veui-confirm-box')">
   <template slot="title">
     <slot name="title">{{ title }}</slot>
@@ -10,7 +11,7 @@
   <slot></slot>
   <template slot="foot">
     <veui-button ui="primary" @click="ok()">确定</veui-button>
-    <veui-button @click="cancel()">取消</veui-button>
+    <veui-button autofocus @click="cancel()">取消</veui-button>
   </template>
 </veui-dialog>
 </template>
@@ -20,7 +21,7 @@ import { pick } from 'lodash'
 import Dialog from './Dialog'
 import Button from './Button'
 import config from '../managers/config'
-import { overlay } from '../mixins'
+import overlay from '../mixins/overlay'
 
 config.defaults({
   'confirmbox.priority': 100

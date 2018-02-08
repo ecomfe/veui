@@ -92,8 +92,9 @@
 <script>
 import Checkbox from './Checkbox'
 import Overlay from './Overlay'
-import { input, overlay } from '../mixins'
-import { outside } from '../directives'
+import input from '../mixins/input'
+import overlay from '../mixins/overlay'
+import outside from '../directives/outside'
 import { cloneDeep, pick } from 'lodash'
 import Vue from 'vue'
 import warn from '../utils/warn'

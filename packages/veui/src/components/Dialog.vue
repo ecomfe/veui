@@ -7,38 +7,41 @@
     })"
     :ui="ui"
     ref="overlay"
+    autofocus
+    :modal="modal"
     :priority="priority">
     <div class="veui-dialog-content"
+      ref="content"
       @mousedown="focus"
-      ref="content">
+      @keydown.esc="handleEscape">
       <div class="veui-dialog-content-head"
         :class="{ 'veui-dialog-draggable': draggable }"
-        ref="head"
         v-drag:content.translate="{ draggable, containment: '@window', ready: dragReady }">
         <span class="veui-dialog-content-head-title"><slot name="title">{{ title }}</slot></span>
-        <a class="veui-dialog-content-head-close"
-          v-show="closable"
-          @click="hide">
+        <button class="veui-dialog-content-head-close"
+          v-if="closable"
+          @click="localOpen = false">
           <veui-icon :name="icons.close"></veui-icon>
-        </a>
+        </button>
       </div>
-      <div ref="body" class="veui-dialog-content-body"><slot></slot></div>
-      <div ref="foot" class="veui-dialog-content-foot">
+      <div class="veui-dialog-content-body"><slot></slot></div>
+      <div class="veui-dialog-content-foot">
         <slot name="foot">
           <veui-button ui="primary" @click="$emit('ok')">确定</veui-button>
-          <veui-button @click="$emit('cancel')">取消</veui-button>
+          <veui-button autofocus @click="$emit('cancel')">取消</veui-button>
         </slot>
       </div>
     </div>
-  </div>
-</veui-overlay>
+  </veui-overlay>
 </template>
 
 <script>
 import Overlay from './Overlay'
 import Button from './Button'
-import { ui, icons, overlay } from '../mixins'
-import { drag } from '../directives'
+import ui from '../mixins/ui'
+import icons from '../mixins/icons'
+import overlay from '../mixins/overlay'
+import drag from '../directives/drag'
 import Icon from './Icon'
 
 export default {
@@ -68,6 +71,10 @@ export default {
       type: Boolean,
       default: true
     },
+    escapable: {
+      type: Boolean,
+      default: false
+    },
     draggable: {
       type: Boolean,
       default: false
@@ -79,16 +86,22 @@ export default {
       localOpen: this.open
     }
   },
+  computed: {
+    realEscapable () {
+      return this.closable || this.escapable
+    }
+  },
   watch: {
-    open (value) {
-      this.localOpen = value
+    open (val) {
+      this.localOpen = val
+    },
+    localOpen (val) {
+      if (this.open !== val) {
+        this.$emit('update:open', this.localOpen)
+      }
     }
   },
   methods: {
-    hide () {
-      this.localOpen = false
-      this.$emit('update:open', this.localOpen)
-    },
     focus () {
       if (this.$refs.overlay) {
         this.$refs.overlay.focus()
@@ -103,6 +116,13 @@ export default {
       }
 
       this.dragHandle.reset()
+    },
+    handleEscape (e) {
+      if (this.realEscapable) {
+        this.localOpen = false
+        e.stopPropagation()
+        this.$emit('escape')
+      }
     }
   }
 }

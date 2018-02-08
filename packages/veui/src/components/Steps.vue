@@ -22,7 +22,7 @@
 <script>
 import Icon from './Icon'
 import Link from './Link'
-import { icons } from '../mixins'
+import icons from '../mixins/icons'
 
 export default {
   name: 'veui-steps',

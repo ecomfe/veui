@@ -88,10 +88,10 @@
 
 <script>
 import { includes, find, isFunction, cloneDeep, mapValues, isEqual } from 'lodash'
-import { input } from '../mixins'
+import input from '../mixins/input'
+import outside from '../directives/outside'
 import { merge } from '../utils/range'
 import config from '../managers/config'
-import { outside } from '../directives'
 import { normalizeClass, keepOwn } from '../utils/helper'
 import Checkbox from './Checkbox'
 import Tooltip from './Tooltip'
