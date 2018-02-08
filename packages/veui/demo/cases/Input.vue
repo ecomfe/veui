@@ -54,6 +54,32 @@
         </div>
       </div>
 
+      <div class="form-row five-sizes">
+        <div class="form-key">5 种大小：</div>
+        <div class="form-value">
+          <p>
+            <label>micro</label>
+            <veui-input ui="micro" v-model="key"></veui-input>
+          </p>
+          <p>
+            <label>tiny</label>
+            <veui-input ui="tiny" v-model="key"></veui-input>
+          </p>
+          <p>
+            <label>small</label>
+            <veui-input ui="small" v-model="key"></veui-input>
+          </p>
+          <p>
+            <label>normal</label>
+            <veui-input v-model="key"></veui-input>
+          </p>
+          <p>
+            <label>large</label>
+            <veui-input ui="large" v-model="key"></veui-input>
+          </p>
+        </div>
+      </div>
+
     </section>
   </article>
 </template>
@@ -125,5 +151,14 @@ export default {
 
 .hidden-tips {
   line-height: 42px;
+}
+
+.five-sizes {
+  p > label {
+    text-transform: capitalize;
+    display: inline-block;
+    width: 60px;
+    color: #999;
+  }
 }
 </style>

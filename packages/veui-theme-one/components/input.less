@@ -55,4 +55,15 @@
     .make-line-height(@veui-height-small);
     font-size: @veui-font-size-small;
   }
+
+  &[ui~="tiny"] {
+    .make-line-height(@veui-height-tiny);
+    font-size: @veui-font-size-small;
+  }
+
+  &[ui~="micro"] {
+    .make-line-height(@veui-height-micro);
+    font-size: @veui-font-size-small;
+    padding: 0 4px;
+  }
 }
