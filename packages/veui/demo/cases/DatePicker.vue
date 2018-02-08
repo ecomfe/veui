@@ -3,7 +3,11 @@
     <h1><code>&lt;veui-date-picker&gt;</code></h1>
     <section>
       <h2>普通</h2>
-      <p><veui-date-picker v-model="selected1"></veui-date-picker></p>
+      <p>
+        <veui-date-picker v-model="selected1"></veui-date-picker>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <veui-date-picker ui="micro" v-model="selected1"></veui-date-picker>
+      </p>
     </section>
     <section>
       <h2>禁用</h2>

@@ -54,6 +54,32 @@
         </div>
       </div>
 
+      <div class="form-row five-sizes">
+        <div class="form-key">5 种大小：</div>
+        <div class="form-value">
+          <p>
+            <label>micro</label>
+            <veui-input ui="micro" v-model="poem"></veui-input>
+          </p>
+          <p>
+            <label>tiny</label>
+            <veui-input ui="tiny" v-model="poem"></veui-input>
+          </p>
+          <p>
+            <label>small</label>
+            <veui-input ui="small" v-model="poem"></veui-input>
+          </p>
+          <p>
+            <label>normal</label>
+            <veui-input v-model="poem"></veui-input>
+          </p>
+          <p>
+            <label>large</label>
+            <veui-input ui="large" v-model="poem"></veui-input>
+          </p>
+        </div>
+      </div>
+
     </section>
   </article>
 </template>
@@ -77,7 +103,8 @@ export default {
       hiddenValue: '隐藏值',
       textarea1: '1. 使用rows\n2. 固定3行高度\n3. 不包括padding',
       textarea2: '设置高度，同时可缩放',
-      textarea3: '默认高度'
+      textarea3: '默认高度',
+      poem: '兩岸猿聲啼不住，輕舟已過萬重山'
     }
   },
   methods: {
@@ -125,5 +152,14 @@ export default {
 
 .hidden-tips {
   line-height: 42px;
+}
+
+.five-sizes {
+  p > label {
+    text-transform: capitalize;
+    display: inline-block;
+    width: 60px;
+    color: #999;
+  }
 }
 </style>

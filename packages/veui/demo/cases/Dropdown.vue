@@ -6,6 +6,11 @@
         ui="primary"
         label="操作操作操作操作操作操作"
         :options="options"></veui-dropdown>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <veui-dropdown
+        ui="primary micro"
+        label="操作操作操作操作操作操作"
+        :options="options"></veui-dropdown>
     </p>
     <p>
       <veui-dropdown
