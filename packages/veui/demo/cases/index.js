@@ -100,6 +100,11 @@ export default [
     component: Form
   },
   {
+    path: '/icon',
+    name: 'Icon',
+    component: Icon
+  },
+  {
     path: '/input',
     name: 'Input',
     component: Input
@@ -213,10 +218,5 @@ export default [
     path: '/uploader',
     name: 'Uploader',
     component: Uploader
-  },
-  {
-    path: '/icon',
-    name: 'Icon',
-    component: Icon
   }
 ]
