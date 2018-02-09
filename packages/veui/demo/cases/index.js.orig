@@ -101,6 +101,11 @@ export default [
     component: Form
   },
   {
+    path: '/icon',
+    name: 'Icon',
+    component: Icon
+  },
+  {
     path: '/input',
     name: 'Input',
     component: Input
@@ -214,6 +219,8 @@ export default [
     path: '/uploader',
     name: 'Uploader',
     component: Uploader
+<<<<<<< HEAD
+=======
   },
   {
     path: '/icon',
@@ -224,5 +231,6 @@ export default [
     path: '/slider',
     name: 'Slider',
     component: Slider
+>>>>>>> 8bdb0e3... Add Slider component
   }
 ]

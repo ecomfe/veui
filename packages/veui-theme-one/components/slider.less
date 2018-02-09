@@ -1,0 +1,40 @@
+@import "../lib.less";
+
+.veui-slider {
+  @slider-height: 12px;
+
+  position: relative;
+  margin-right: 10px;
+  user-select: none;
+
+  &-track {
+    &-default {
+      height: @slider-height;
+      // border-top: 4px solid @veui-text-color-weak;
+
+      svg {
+        display: block;
+        line {
+          stroke: @veui-text-color-weak;
+          stroke-width: 6px;
+        }
+      }
+    }
+  }
+
+  &-trigger {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    &-default {
+      margin-top: -2px;
+      width: 0;
+      height: 0;
+      border: solid transparent;
+      border-left-width: 8px;
+      border-right-width: 8px;
+      border-bottom: @slider-height solid fadeout(@veui-info-color-2, 5%);
+    }
+  }
+}

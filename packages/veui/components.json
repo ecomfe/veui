@@ -180,6 +180,10 @@
     "path": "Select/index.js"
   },
   {
+    "name": "Slider",
+    "path": "Slider.vue"
+  },
+  {
     "name": "Sorter",
     "path": "Sorter.vue"
   },
