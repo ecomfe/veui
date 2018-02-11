@@ -8,7 +8,9 @@
   escapable
   @escape="cancel"
   @cancel="cancel">
-  <template slot="title"><slot name="title">{{ title }}</slot></template>
+  <template slot="title">
+    <slot name="title">{{ title }}</slot>
+  </template>
   <p class="veui-prompt-box-info">{{ content }}</p>
   <veui-input autofocus v-model="localValue" class="veui-prompt-box-input" @keydown.enter="submit"></veui-input>
 </veui-dialog>

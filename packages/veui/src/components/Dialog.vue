@@ -12,6 +12,7 @@
     :priority="priority">
     <div class="veui-dialog-content"
       ref="content"
+      tabindex="-1"
       @mousedown="focus"
       @keydown.esc="handleEscape">
       <div class="veui-dialog-content-head"
