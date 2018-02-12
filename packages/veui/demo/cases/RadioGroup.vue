@@ -26,7 +26,7 @@ export default {
   },
   data () {
     return {
-      picked1: 'Akiyama Mio',
+      picked1: null,
       picked2: 'Nakano Azusa',
       data1: [
         {
