@@ -2,7 +2,7 @@
 <button class="veui-button" :class="{
     'veui-button-loading': loading,
     'veui-disabled': disabled
-  }" v-bind="attrs" @click="$emit('click', $event)">
+  }" v-bind="attrs" v-on="listeners">
   <template v-if="!loading"><slot></slot></template>
   <template v-else>
     <slot name="loading">
@@ -17,6 +17,8 @@
 import { omit } from 'lodash'
 import Icon from './Icon'
 import icons from '../mixins/icons'
+
+const EVENTS = ['mousedown', 'mouseup', 'click', 'keydown', 'keyup', 'keypress', 'focus']
 
 export default {
   name: 'veui-button',
@@ -40,6 +42,14 @@ export default {
       let attrs = omit(this.$props, 'loading')
       attrs.disabled = this.disabled || this.loading
       return attrs
+    },
+    listeners () {
+      return EVENTS.reduce((listeners, type) => {
+        listeners[type] = e => {
+          this.$emit(type, e)
+        }
+        return listeners
+      }, {})
     }
   },
   methods: {

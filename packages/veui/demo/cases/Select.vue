@@ -69,12 +69,27 @@
       <h2>分隔线样式：</h2>
       <veui-select v-bind="optGroupAttrs" :options="groupedOpts" v-model="defaultValue9"></veui-select>
     </section>
+    <section>
+      <h2>内联组件嵌套：</h2>
+      <veui-select v-model="defaultValue10">
+        <veui-option-group label="字母">
+          <veui-option value="A" label="选项 A"/>
+          <veui-option value="B" label="选项 B"/>
+          <veui-option value="C" label="选项 C"/>
+        </veui-option-group>
+        <veui-option-group label="数字">
+          <veui-option value="1" label="选项 1"/>
+          <veui-option value="2" label="选项 2"/>
+          <veui-option value="3" label="选项 3"/>
+        </veui-option-group>
+      </veui-select>
+    </section>
   </article>
 </template>
 
 <script>
 import bus from '../bus'
-import { Icon, Select, Option, Radio } from 'veui'
+import { Icon, Select, Option, OptionGroup, Radio } from 'veui'
 import type from 'veui/managers/type'
 import 'vue-awesome/icons/eye'
 import 'vue-awesome/icons/gift'
@@ -84,6 +99,7 @@ export default {
   components: {
     'veui-select': Select,
     'veui-option': Option,
+    'veui-option-group': OptionGroup,
     'radio': Radio,
     'icon': Icon
   },
@@ -101,6 +117,7 @@ export default {
       defaultValue7: null,
       defaultValue8: '1-1',
       defaultValue9: null,
+      defaultValue10: null,
       attrs: {
         name: 'age',
         readonly: false,

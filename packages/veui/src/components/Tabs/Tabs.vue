@@ -89,10 +89,10 @@ export default {
   },
   computed: {
     tabUids () {
-      return this.items.map(item => item.id)
+      return this.items.map(({ id }) => id)
     },
     tabNames () {
-      return this.items.map(item => item.name)
+      return this.items.map(({ name }) => name)
     }
   },
   methods: {

@@ -8,6 +8,7 @@
     class="veui-select-button"
     :ui="ui"
     :disabled="realDisabled || realReadonly"
+    @keydown.down.up.prevent="expanded = true"
     @click="expanded = !expanded"
     ref="button">
     <span class="veui-select-label">
@@ -16,66 +17,47 @@
     <icon class="veui-select-icon" :name="icons[expanded ? 'collapse' : 'expand']"></icon>
   </veui-button>
   <veui-overlay
-    v-if="expanded"
+    v-if="options && expanded || !options"
+    v-show="expanded"
     target="button"
     :open="expanded"
+    autofocus
+    modal
     :options="realOverlayOptions"
     :overlay-class="overlayClass">
-    <div ref="box" class="veui-select-options" v-outside:button="close">
-      <slot>
-        <template v-for="(option, index) in realOptions">
-          <div v-if="option.options" :class="{
-            'veui-select-option-group': true,
-            'veui-select-option-group-unlabelled': !option.label
-          }" :key="`g-${index}`">
-            <slot v-if="option.label" name="group-label" :label="option.label">
-              <div class="veui-select-option-group-label">{{ option.label }}</div>
-            </slot>
-            <veui-option
-              v-for="subOption in option.options"
-              v-bind="subOption"
-              :ui="ui"
-              :selected="subOption.value === value"
-              :key="subOption.value"
-              @select="handleSelect(subOption)">
-              <slot v-if="$scopedSlots.option" name="option" v-bind="subOption" :selected="option.value === value"></slot>
-              <template v-if="$scopedSlots['option-label']" slot="label">
-                <slot name="option-label" v-bind="subOption" :selected="option.value === value"></slot>
-              </template>
-            </veui-option>
-          </div>
-          <veui-option
-            v-else
-            v-bind="option"
-            :ui="ui"
-            :selected="option.value === value"
-            :key="option.value"
-            @select="handleSelect(option)">
-            <slot v-if="$scopedSlots.option" name="option" v-bind="option" :selected="option.value === value"></slot>
-            <template v-if="$scopedSlots['option-label']" slot="label">
-              <slot name="option-label" v-bind="option" :selected="option.value === value"></slot>
-            </template>
-          </veui-option>
-        </template>
-      </slot>
+    <div
+      ref="box"
+      class="veui-select-options"
+      v-outside:button="close"
+      tabindex="-1"
+      @keydown.esc.stop="expanded = false"
+      @keydown.down.prevent="navigate()"
+      @keydown.up.prevent="navigate(false)">
+      <veui-option-group :options="options" ref="options">
+        <slot></slot>
+      </veui-option-group>
     </div>
   </veui-overlay>
 </div>
 </template>
 
 <script>
+import { findIndex } from 'lodash'
 import Icon from '../Icon'
 import Button from '../Button'
 import Option from './Option'
+import OptionGroup from './OptionGroup'
 import Overlay from '../Overlay'
 import input from '../../mixins/input'
 import icons from '../../mixins/icons'
 import overlay from '../../mixins/overlay'
 import dropdown from '../../mixins/dropdown'
 import warn from '../../utils/warn'
+import { getFocusable } from '../../utils/dom'
 
 export default {
   name: 'veui-select',
+  uiTypes: ['select'],
   mixins: [input, icons, overlay, dropdown],
   model: {
     event: 'change'
@@ -84,6 +66,7 @@ export default {
     Icon,
     'veui-button': Button,
     'veui-option': Option,
+    'veui-option-group': OptionGroup,
     'veui-overlay': Overlay
   },
   props: {
@@ -126,27 +109,50 @@ export default {
       if (this.value === null) {
         return this.placeholder
       }
-      return this.labelMap[this.value]
+      if (this.labelMap) {
+        return this.labelMap[this.value]
+      }
+      let option = this.$refs.options.find(this.value)
+      return option ? option.label : ''
     }
   },
   methods: {
-    handleSelect (option) {
-      if (option.disabled) {
+    handleSelect (value) {
+      this.expanded = false
+      this.localValue = value
+    },
+    navigate (forward = true) {
+      let focusable = getFocusable(this.$refs.box)
+      let length = focusable.length
+      if (!length) {
         return
       }
-      this.expanded = false
-      this.localValue = option.value
-      this.$emit('change', option.value, option)
+
+      let index = findIndex(focusable, elem => elem === document.activeElement)
+      if (index === -1) {
+        focusable[0].focus()
+        return
+      }
+
+      focusable[(index + length + (forward ? 1 : -1)) % length].focus()
     }
   },
   watch: {
     value (val) {
       this.localValue = val
+    },
+    localValue (val) {
+      if (this.value !== val) {
+        this.$emit('change', val)
+      }
     }
   }
 }
 
 function extractOptions (options, map) {
+  if (!options) {
+    return null
+  }
   options.forEach(({ label, value, options }) => {
     if (value != null) {
       if (map[value]) {

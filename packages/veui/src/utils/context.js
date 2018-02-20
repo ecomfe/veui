@@ -71,6 +71,13 @@ export function getVnodes (ref, context) {
   return vnodes || []
 }
 
+export function getUITypes (vnode) {
+  if (!vnode) {
+    return null
+  }
+  return vnode.componentOptions.Ctor.options.uiTypes
+}
+
 /**
  * 获取一个组件实例在给定的 VNode 列表中是某个类型的第几个
  * @param {VueComponent} current 查找的组件实例
@@ -90,7 +97,7 @@ export function getIndexOfType (current, type, vnodes = 'default') {
     [...parent.$slots[vnodes]].filter(vnode => {
       return (
         vnode.componentOptions &&
-        includes(vnode.componentOptions.Ctor.options.uiTypes, type)
+        includes(getUITypes(vnode), type)
       )
     }),
     vnode => vnode === currentVNode

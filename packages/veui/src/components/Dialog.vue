@@ -6,14 +6,12 @@
       'veui-dialog-box-mask': modal
     })"
     :ui="ui"
-    ref="overlay"
     autofocus
     :modal="modal"
     :priority="priority">
     <div class="veui-dialog-content"
       ref="content"
       tabindex="-1"
-      @mousedown="focus"
       @keydown.esc="handleEscape">
       <div class="veui-dialog-content-head"
         :class="{ 'veui-dialog-draggable': draggable }"
@@ -103,11 +101,6 @@ export default {
     }
   },
   methods: {
-    focus () {
-      if (this.$refs.overlay) {
-        this.$refs.overlay.focus()
-      }
-    },
     dragReady (handle) {
       this.dragHandle = handle
     },

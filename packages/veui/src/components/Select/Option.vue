@@ -1,31 +1,37 @@
 <template>
-<div class="veui-option"
+<button class="veui-option"
   :ui="ui"
   :class="{
     'veui-option-disabled': disabled,
     'veui-option-selected': selected
   }"
-  @click.stop="select">
+  :autofocus="selected"
+  @click.stop="selectOption">
   <slot>
     <span class="veui-option-label"><slot name="label">{{ label }}</slot></span>
     <icon class="veui-option-checkmark" v-if="selected" :name="icons.checked"></icon>
   </slot>
-</div>
+</button>
 </template>
 
 <script>
 import Icon from '../Icon'
 import icons from '../../mixins/icons'
+import menu from '../../mixins/menu'
+import select from '../../mixins/select'
 import { getScrollParent } from '../../utils/dom'
 
 export default {
   name: 'veui-option',
-  mixins: [icons],
+  mixins: [icons, menu, select],
   components: {
     Icon
   },
   props: {
-    label: [String, Number],
+    label: {
+      type: [String, Number],
+      required: true
+    },
     value: {
       required: true
     },
@@ -33,16 +39,17 @@ export default {
       type: Boolean,
       default: false
     },
-    selected: {
-      type: Boolean,
-      default: false
-    },
     ui: String
   },
+  computed: {
+    selected () {
+      return this.value === this.select.value
+    }
+  },
   methods: {
-    select () {
+    selectOption () {
       if (!this.disabled) {
-        this.$emit('select', this.value)
+        this.select.handleSelect(this.value)
       }
     }
   },

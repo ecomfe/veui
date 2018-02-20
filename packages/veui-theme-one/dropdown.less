@@ -69,11 +69,17 @@
   .veui-button-transition();
   .centered-line(@veui-height-normal);
   .ellipsis();
+  display: block;
   width: 100%;
+  background-color: #fff;
+  border: none;
   padding: 0 10px;
   color: @veui-text-color-normal;
+  text-align: left;
+  outline: none;
   cursor: pointer;
 
+  &.focus-visible,
   &:hover {
     background-color: @veui-gray-color-8;
   }

@@ -33,8 +33,6 @@
     "eslint-plugin-node": "^5.1.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
-    "lerna": "^2.5.1",
-    "node-dir": "^0.1.17",
-    "pkg-dir": "^2.0.0"
+    "lerna": "^2.5.1"
   }
 }
