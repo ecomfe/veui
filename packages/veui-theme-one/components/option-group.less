@@ -1,0 +1,27 @@
+@import "../lib.less";
+
+.veui-option-group {
+  &-label {
+    display: inline-block;
+    .centered-line(@veui-height-normal);
+    padding: 0 10px;
+    font-size: @veui-font-size-small;
+    color: @veui-text-color-weak;
+  }
+
+  .veui-option {
+    padding-left: 20px;
+  }
+
+  &-unlabelled {
+    border-top: 1px solid @veui-gray-color-6;
+
+    &:first-child {
+      border-top: none;
+    }
+
+    .veui-option {
+      padding-left: 10px;
+    }
+  }
+}
