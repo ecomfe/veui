@@ -1,3 +1,27 @@
+## 1.0.0-alpha.9
+
+### 💡 主要变更
+
+### 🐞 问题修复
+
+* [^] 对话框现在可以整体获取焦点，避免点击无焦点区域后接收不到键盘事件的问题。
+* [^] 修正了 `PromptBox` 默认样式。
+
+## 1.0.0-alpha.8
+
+### 💡 主要变更
+
+* [+] 增加了焦点管理模块。
+* [+] `Overlay` 组件增加 `autofocus` 和 `modal` 两个 prop，分别用来指定浮层是否需要抢占焦点、以及是否将后续焦点移动限制在浮层内。
+* [+] `Dialog` 组件增加 `escapable` prop，允许对话框通过按下 <kbd>esc</kbd> 键关闭。
+* [+] 为 `AlertBox`、`ConfirmBox`、`PromptBox` 增加了键盘交互（[#216](https://github.com/ecomfe/veui/issues/216)）。
+* [+] 增加了 `Input` 组件的 `tiny` 及 `micro` 尺寸样式。
+
+### 🐞 问题修复
+
+* [^] 修复了 `Select` 组件下拉菜单展开后自动将选中项滚动到可视范围时可能引起页面滚动的问题。
+* [^] `babel-plugin-veui` 及 `veui-loader` 内不再冗余生成组件列表，组件列表信息随 `veui` 包发布。
+
 ## 1.0.0-alpha.7
 
 ### ⚠️ 非兼容性变更
@@ -37,8 +61,7 @@
 ### 🐞 问题修复
 
 * [^] 修复 `Schedule` 组件状态未与 `selected` prop 同步的问题。
-* [^] 修复 `Schedule` 选了 shortcuts 之后不更新 model 值的问题。
-* [^] `Column` 组件的默认 scoped slot 传入的参数现在会将列表项的数据展开，不需要多加一层 `item` 进行访问（与其它类似数据源的组件一致，需注意数据源对象中不能使用 `item`/`index` 作为属性名）。
+* [^] 修复 `Tabs` 组件在仅指定 `active` 时会导致无法切换的问题。
 * [^] 修复 `Tooltip` 组件在 `target` 变化时会自动显示的问题。
 * [^] `Uploader` 组件的 `value` 不再包含正在上传中或上传失败的文件，不再包含 `status`等内部变量。
 * [^] 修复 `Uploader` 组件 `accept` prop 判断后缀的错误。
