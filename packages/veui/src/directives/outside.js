@@ -58,7 +58,7 @@ function parseParams (el, arg, modifiers, value, context) {
 
     refs = arg ? arg.split(',') : []
 
-    trigger = find(TRIGGER_TYPES, typ => typ in modifiers) || 'click'
+    trigger = find(TRIGGER_TYPES, triggerType => triggerType in modifiers) || 'click'
 
     delay = find(keys(modifiers), key => isNumber(parseInt(key, 10)) && modifiers[key])
     delay = delay ? parseInt(delay, 10) : 0
