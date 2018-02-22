@@ -90,8 +90,8 @@ export default class TranslateHandler extends BaseHandler {
       elm.style[TRANSFORM_ACCESSOR] = `${initialTransform} translate(${realDistanceX}px,${realDistanceY}px)`
 
       if (this.isDragged) {
-        this.totalDistanceX = realDistanceX
-        this.totalDistanceY = realDistanceY
+        this.totalDistanceX += realDistanceX
+        this.totalDistanceY += realDistanceY
       }
     })
 
