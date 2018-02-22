@@ -5,7 +5,7 @@
     @toggle="toggle"
     @click="handleItemClick"
     v-if="this.$scopedSlots.item">
-    <template slot="item" scope="props">
+    <template slot="item" slot-scope="props">
       <slot name="item" v-bind="props"></slot>
     </template>
   </veui-tree-node>
@@ -15,7 +15,7 @@
     @toggle="toggle"
     @click="handleItemClick"
     v-else-if="this.$scopedSlots['item-label']">
-    <template slot="item-label" scope="props">
+    <template slot="item-label" slot-scope="props">
       <slot name="item-label" v-bind="props"></slot>
     </template>
   </veui-tree-node>

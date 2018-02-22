@@ -1,14 +1,14 @@
 <template>
-<div :class="{
-  'veui-dropdown': true,
-  'veui-dropdown-expanded': expanded
-}" :ui="ui">
+<div class="veui-dropdown" :ui="ui"
+  :class="{
+    'veui-dropdown-expanded': expanded
+  }">
   <veui-button
     class="veui-dropdown-button"
     :ui="ui"
     :disabled="disabled"
+    @keydown.down.up.prevent="expanded = true"
     @click="expanded = !expanded"
-    slot="target"
     ref="button">
     <span class="veui-dropdown-label">
       <slot name="label" :label="label">{{ label }}</slot>
@@ -16,24 +16,22 @@
     <icon class="veui-dropdown-icon" :name="icons[expanded ? 'collapse': 'expand']"></icon>
   </veui-button>
   <veui-overlay
-    v-if="expanded"
+    v-if="options && expanded || !options"
+    v-show="expanded"
     target="button"
     :open="expanded"
+    autofocus
+    modal
     :options="realOverlayOptions"
     :overlay-class="overlayClass">
-    <div ref="box" class="veui-dropdown-options" v-outside:button="close">
-      <div v-for="option in options"
-        :key="option.value"
-        :ui="ui"
-        class="veui-dropdown-option"
-        :class="{
-          'veui-dropdown-option-disabled': option.disabled
-        }"
-        @click.stop="handleClick(option)">
-        <slot name="button" v-bind="option">
-          <span class="veui-dropdown-option-label">{{ option.label }}</span>
-        </slot>
-      </div>
+    <div
+      ref="box"
+      class="veui-dropdown-options"
+      v-outside:button="close"
+      tabindex="-1">
+      <veui-option-group :options="options" ref="options">
+        <slot></slot>
+      </veui-option-group>
     </div>
   </veui-overlay>
 </div>
@@ -43,18 +41,21 @@
 import Icon from './Icon'
 import Button from './Button'
 import Overlay from './Overlay'
-import dropdown from '../mixins/dropdown'
+import OptionGroup from './Select/OptionGroup'
 import icons from '../mixins/icons'
 import overlay from '../mixins/overlay'
+import dropdown from '../mixins/dropdown'
 
 export default {
   name: 'veui-dropdown',
+  uiTypes: ['select'],
   components: {
     'icon': Icon,
     'veui-button': Button,
-    'veui-overlay': Overlay
+    'veui-overlay': Overlay,
+    'veui-option-group': OptionGroup
   },
-  mixins: [dropdown, icons, overlay],
+  mixins: [icons, overlay, dropdown],
   props: {
     ui: String,
     label: String,
@@ -62,16 +63,14 @@ export default {
       type: Boolean,
       default: false
     },
-    icon: String,
     options: Array
   },
   methods: {
-    handleClick (option) {
-      if (option.disabled) {
-        return
-      }
+    handleSelect (value) {
       this.expanded = false
-      this.$emit('click', option.value)
+      if (value != null) {
+        this.$emit('click', value)
+      }
     }
   }
 }

@@ -32,9 +32,7 @@ export default {
       type: [String, Number],
       required: true
     },
-    value: {
-      required: true
-    },
+    value: null,
     disabled: {
       type: Boolean,
       default: false
@@ -43,12 +41,13 @@ export default {
   },
   computed: {
     selected () {
-      return this.value === this.select.value
+      return this.value != null && this.value === this.select.value
     }
   },
   methods: {
     selectOption () {
       if (!this.disabled) {
+        this.$emit('click')
         this.select.handleSelect(this.value)
       }
     }

@@ -30,11 +30,21 @@
       class="veui-select-options"
       v-outside:button="close"
       tabindex="-1"
+      :ui="ui"
       @keydown.esc.stop="expanded = false"
       @keydown.down.prevent="navigate()"
       @keydown.up.prevent="navigate(false)">
       <veui-option-group :options="options" ref="options">
         <slot></slot>
+        <template v-if="$scopedSlots['group-label']" slot="label" slot-scope="group">
+          <slot name="group-label" v-bind="group">{{ group.label }}</slot>
+        </template>
+        <template v-if="$scopedSlots.option" slot="option" slot-scope="option">
+          <slot name="option" v-bind="option"></slot>
+        </template>
+        <template v-if="$scopedSlots['option-label']" slot="option-label" slot-scope="option">
+          <slot name="option-label" v-bind="option"></slot>
+        </template>
       </veui-option-group>
     </div>
   </veui-overlay>
@@ -77,10 +87,6 @@ export default {
       default: '请选择'
     },
     multiple: {
-      type: Boolean,
-      default: false
-    },
-    checkmark: {
       type: Boolean,
       default: false
     },

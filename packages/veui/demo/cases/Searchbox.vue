@@ -99,7 +99,7 @@
           :suggestions="suggestions6"
           @input="handleInput('6', $event)"
           @search="log($event)">
-          <template slot="suggestion" scope="suggestion">
+          <template slot="suggestion" slot-scope="suggestion">
             <span>{{ suggestion.value }}</span>
             <icon name="eye"></icon>
           </template>
@@ -115,7 +115,7 @@
           :suggestions="suggestions7"
           @input="handleInput('7', $event)"
           @search="log($event)">
-          <template slot="suggestions" scope="props">
+          <template slot="suggestions" slot-scope="props">
             <div>
               <h3>header</h3>
               <template v-for="(suggestion, index) in props.suggestions">

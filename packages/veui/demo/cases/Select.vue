@@ -16,7 +16,7 @@
     <section>
       <h2>Slot[name=option-label] 样式：</h2>
       <veui-select v-bind="attrs" v-model="defaultValue3" ui="alt">
-        <template slot="option-label" scope="props">
+        <template slot="option-label" slot-scope="props">
           <span class="veui-option-custom-label">{{ props.label }}</span>
         </template>
       </veui-select>
@@ -24,7 +24,7 @@
     <section>
       <h2>Slot 样式 2：</h2>
       <veui-select v-bind="attrs" v-model="defaultValue4">
-        <template slot="option" scope="props">
+        <template slot="option" slot-scope="props">
           <span class="veui-option-label-text">{{ props.label }}</span>
           <icon name="eye"></icon>
         </template>
@@ -33,7 +33,7 @@
     <section>
       <h2>Slot 样式 3：</h2>
       <veui-select v-bind="attrs" v-model="defaultValue1">
-        <template slot="option" scope="props">
+        <template slot="option" slot-scope="props">
           <radio :checked="props.selected">{{ props.label }}</radio>
         </template>
       </veui-select>
@@ -49,19 +49,19 @@
     <section>
       <h2>Slot 分组样式 1：</h2>
       <veui-select v-bind="optGroupAttrs" v-model="defaultValue7">
-        <template slot="option" scope="props">
+        <template slot="option" slot-scope="props">
           <div class="veui-option-custom">{{ props.label }}</div>
         </template>
       </veui-select>
     </section>
     <section>
-      <h2>Slot[name=option-label] 分组样式 2：</h2>
+      <h2>Slot[name=option] 分组样式 2：</h2>
       <veui-select v-bind="optGroupAttrs" v-model="defaultValue8" :overlay-options="{
           position: 'bottom right'
         }">
-        <template slot="option-label" scope="props">
+        <template slot="option" slot-scope="props">
           <span class="veui-option-label-text veui-option-custom-label">{{ props.label }}</span>
-          <icon name="gift"></icon>
+          <icon name="gift"/>
         </template>
       </veui-select>
     </section>

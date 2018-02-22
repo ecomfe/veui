@@ -18,14 +18,14 @@
       </slot>
     </template>
 
-    <template scope="props">
+    <template slot-scope="props">
       <veui-tree
         :datasource="props.options"
         :expands.sync="localExpands"
         @click="remove"
         class="veui-transfer-selected-tree"
         v-if="showMode === 'tree'">
-        <template slot="item" scope="props">
+        <template slot="item" slot-scope="props">
           <slot name="item" v-bind="props">
             <div class="veui-transfer-selected-item"
               :class="{'veui-transfer-selected-item-hidden': props.option.hidden}">

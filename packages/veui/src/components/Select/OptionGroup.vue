@@ -3,9 +3,9 @@
   'veui-option-group': true,
   'veui-option-group-unlabelled': !label
 }">
-  <slot v-if="label" name="group-label" :label="label">
-    <div class="veui-option-group-label">{{ label }}</div>
-  </slot>
+  <div v-if="label" class="veui-option-group-label">
+    <slot name="label" :label="label">{{ label }}</slot>
+  </div>
   <template v-if="options">
     <template
       v-for="(option, i) in options">
@@ -16,14 +16,24 @@
         :key="option.value">
         <slot v-if="$scopedSlots.option" name="option" v-bind="option" :selected="option.value === value"></slot>
         <template v-if="$scopedSlots['option-label']" slot="label">
-          <slot name="option-label" v-bind="option" :selected="option.value === value"></slot>
+          <slot name="option-label" v-bind="option" :selected="option.value === value">{{ option.label }}</slot>
         </template>
       </veui-option>
       <veui-option-group
         v-else
         v-bind="option"
         :ui="ui"
-        :key="i"/>
+        :key="i">
+        <template v-if="$scopedSlots.label" slot="label" slot-scope="group">
+          <slot name="label" v-bind="group">{{ group.label }}</slot>
+        </template>
+        <template v-if="$scopedSlots.option" slot="option" slot-scope="option">
+          <slot name="option" v-bind="option"></slot>
+        </template>
+        <template v-if="$scopedSlots['option-label']" slot="option-label" slot-scope="option">
+          <slot name="option-label" v-bind="option"></slot>
+        </template>
+      </veui-option-group>
     </template>
   </template>
   <template v-else>
@@ -59,7 +69,7 @@ export default {
   },
   computed: {
     value () {
-      this.select.value
+      return this.select.value
     },
     itemIds () {
       return this.items.map(({ id }) => id)

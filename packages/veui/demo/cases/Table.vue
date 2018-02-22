@@ -33,17 +33,17 @@
         </veui-table-column>
         <veui-table-column field="desc" title="数据描述"></veui-table-column>
         <veui-table-column field="price" title="价格" sortable width="160" align="right">
-          <template scope="props">{{ props.item.price | currency }}</template>
+          <template slot-scope="props">{{ props.item.price | currency }}</template>
           <template slot="foot"><strong>{{ total | currency }}</strong></template>
         </veui-table-column>
         <veui-table-column field="updateDate" title="更新时间" align="center">
-          <template scope="props">
+          <template slot-scope="props">
             <span :ref="`time-a-${props.item.id}`">{{ props.item.updateDate | date }}</span>
             <veui-tooltip :target="`time-a-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
           </template>
         </veui-table-column>
         <veui-table-column field="operation" title="操作">
-          <template scope="props">
+          <template slot-scope="props">
             <veui-button ui="link" @click="log(props.item)">编辑</veui-button>
             <veui-button ui="link alert" @click="del(props.index)">删除</veui-button>
           </template>
@@ -59,10 +59,10 @@
         </veui-table-column>
         <veui-table-column field="desc" title="数据描述"></veui-table-column>
         <veui-table-column field="price" title="价格" width="160" align="right">
-          <template scope="props">{{ props.item.price | currency }}</template>
+          <template slot-scope="props">{{ props.item.price | currency }}</template>
         </veui-table-column>
         <veui-table-column field="updateDate" title="更新时间" align="right">
-          <template scope="props">
+          <template slot-scope="props">
             <span :ref="`time-b-${props.item.id}`">{{ props.item.updateDate | date }}</span>
             <veui-tooltip :target="`time-b-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
           </template>

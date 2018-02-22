@@ -16,13 +16,13 @@
       </slot>
     </template>
 
-    <template scope="props">
+    <template slot-scope="props">
       <veui-tree
         :datasource="props.options"
         :expands.sync="expands"
         @click="select">
 
-        <template slot="item" scope="props">
+        <template slot="item" slot-scope="props">
           <slot name="item" v-bind="props">
             <div class="veui-transfer-candidate-item"
               :class="{'veui-transfer-candidate-item-hidden': props.option.hidden}">

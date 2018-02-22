@@ -3,8 +3,8 @@
     <h1><code>&lt;veui-breadcrumb&gt;</code></h1>
     <p>
       <veui-breadcrumb :routes="items" @redirect="handleRedirect">
-        <template scope="scope"><em>{{ scope.route.text }}</em></template>
-        <template slot="separator" scope="scope">/</template>
+        <template slot-scope="scope"><em>{{ scope.route.text }}</em></template>
+        <template slot="separator" slot-scope="scope">/</template>
       </veui-breadcrumb>
     </p>
     <p>

@@ -24,7 +24,7 @@
         @toggle="handleChildToggle"
         :item-click="itemClick"
         :icons="icons">
-        <template slot="item" scope="props">
+        <template slot="item" slot-scope="props">
           <slot name="item" v-bind="props">
             <span class="veui-tree-item-expand-switcher"
               v-if="props.option.children && props.option.children.length"

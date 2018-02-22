@@ -22,8 +22,16 @@
     <p>
       <veui-dropdown
         ui="link"
-        label="操作"
-        :options="options"></veui-dropdown>
+        label="操作">
+        <veui-option-group label="提交">
+          <veui-option value="save" label="保存"/>
+          <veui-option value="publish" label="发布"/>
+        </veui-option-group>
+        <veui-option-group label="操作">
+          <veui-option value="undo" label="撤销"/>
+          <veui-option value="redo" label="重复"/>
+        </veui-option-group>
+      </veui-dropdown>
     </p>
     <p>
       <veui-dropdown
@@ -37,33 +45,38 @@
 
 <script>
 import bus from '../bus'
-import { Dropdown } from 'veui'
+import { Dropdown, Option, OptionGroup } from 'veui'
 
 export default {
   name: 'dropdown-demo',
   components: {
-    'veui-dropdown': Dropdown
+    'veui-dropdown': Dropdown,
+    'veui-option-group': OptionGroup,
+    'veui-option': Option
   },
   data () {
     return {
       options: [
         {
-          label: '新建新建新建新建新建新建新建'
+          label: '新建新建新建新建新建新建新建',
+          value: 'create'
         },
         {
           label: '编辑',
+          value: 'edit',
           disabled: true
         },
         {
-          label: '删除'
+          label: '删除',
+          value: 'remove'
         }
       ]
     }
   },
   mounted () {
     this.$children.forEach(child => {
-      child.$on('click', () => {
-        bus.$emit('log', child.$el.getAttribute('ui'))
+      child.$on('click', val => {
+        bus.$emit('log', val)
       })
     })
   }

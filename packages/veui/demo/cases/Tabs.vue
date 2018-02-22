@@ -74,7 +74,7 @@
       <p>当前序号 <code>{{index3 != null ? index3 + 1 : '已删光'}}</code></p>
       <veui-button @click="addTab1">添加 TAB</veui-button>
       <veui-tabs :active.sync="active2" :index.sync="index3">
-        <template slot="tab-item-extra" scope="props">
+        <template slot="tab-item-extra" slot-scope="props">
           <icon name="cross-small" v-if="props.removable && tabs1.length > 1" @click.native="removeTab1(props)"></icon>
         </template>
         <veui-tab :label="tab.label"
