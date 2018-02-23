@@ -65,7 +65,7 @@
           :name="tab.name"
           removable
           :key="tab.name"
-          v-for="(tab, index) in tabs0"><p>Tab {{ tab.name }}</p>
+          v-for="tab in tabs0"><p>Tab {{ tab.name }}</p>
         </veui-tab>
       </veui-tabs>
     </section>
@@ -81,7 +81,7 @@
           :name="tab.name"
           removable
           :key="tab.name"
-          v-for="(tab, index) in tabs1"><p>Tab {{ tab.name }}</p>
+          v-for="tab in tabs1"><p>Tab {{ tab.name }}</p>
         </veui-tab>
       </veui-tabs>
     </section>

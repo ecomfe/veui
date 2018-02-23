@@ -10,7 +10,11 @@
       <veui-dropdown
         ui="primary micro"
         label="操作操作操作操作操作操作"
-        :options="options"></veui-dropdown>
+        :options="options">
+        <template slot="option-label" slot-scope="{ label }">
+          👉 {{ label }}
+        </template>
+      </veui-dropdown>
     </p>
     <p>
       <veui-dropdown
@@ -24,7 +28,7 @@
         ui="link"
         label="操作">
         <veui-option-group label="提交">
-          <veui-option value="save" label="保存"/>
+          <veui-option @click="log('save')" label="保存"/>
           <veui-option value="publish" label="发布"/>
         </veui-option-group>
         <veui-option-group label="操作">
@@ -79,6 +83,11 @@ export default {
         bus.$emit('log', val)
       })
     })
+  },
+  methods: {
+    log (val) {
+      bus.$emit('log', val)
+    }
   }
 }
 </script>

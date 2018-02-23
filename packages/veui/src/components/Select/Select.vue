@@ -37,7 +37,7 @@
       <veui-option-group :options="options" ref="options">
         <slot></slot>
         <template v-if="$scopedSlots['group-label']" slot="label" slot-scope="group">
-          <slot name="group-label" v-bind="group">{{ group.label }}</slot>
+          <slot name="group-label" v-bind="group"></slot>
         </template>
         <template v-if="$scopedSlots.option" slot="option" slot-scope="option">
           <slot name="option" v-bind="option"></slot>
@@ -52,23 +52,22 @@
 </template>
 
 <script>
-import { findIndex } from 'lodash'
 import Icon from '../Icon'
 import Button from '../Button'
 import Option from './Option'
 import OptionGroup from './OptionGroup'
 import Overlay from '../Overlay'
 import input from '../../mixins/input'
+import select from '../../mixins/select'
 import icons from '../../mixins/icons'
 import overlay from '../../mixins/overlay'
 import dropdown from '../../mixins/dropdown'
 import warn from '../../utils/warn'
-import { getFocusable } from '../../utils/dom'
 
 export default {
   name: 'veui-select',
   uiTypes: ['select'],
-  mixins: [input, icons, overlay, dropdown],
+  mixins: [input, icons, overlay, dropdown, select],
   model: {
     event: 'change'
   },
@@ -126,21 +125,6 @@ export default {
     handleSelect (value) {
       this.expanded = false
       this.localValue = value
-    },
-    navigate (forward = true) {
-      let focusable = getFocusable(this.$refs.box)
-      let length = focusable.length
-      if (!length) {
-        return
-      }
-
-      let index = findIndex(focusable, elem => elem === document.activeElement)
-      if (index === -1) {
-        focusable[0].focus()
-        return
-      }
-
-      focusable[(index + length + (forward ? 1 : -1)) % length].focus()
     }
   },
   watch: {
