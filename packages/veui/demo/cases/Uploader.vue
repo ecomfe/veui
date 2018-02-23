@@ -73,7 +73,7 @@
 </template>
 <script>
 import { Uploader } from 'veui'
-import { ui } from 'veui/mixins'
+import ui from 'veui/mixins/ui'
 import { assign } from 'lodash'
 
 export default {

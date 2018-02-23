@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     columnIds () {
-      return this.columns.map(col => col.id)
+      return this.columns.map(({ id }) => id)
     },
     realSelected () {
       return this.selectMode === 'multiple' ? this.localSelected : (this.localSelected[0] || null)

@@ -65,7 +65,7 @@
           :name="tab.name"
           removable
           :key="tab.name"
-          v-for="(tab, index) in tabs0"><p>Tab {{ tab.name }}</p>
+          v-for="tab in tabs0"><p>Tab {{ tab.name }}</p>
         </veui-tab>
       </veui-tabs>
     </section>
@@ -74,14 +74,14 @@
       <p>当前序号 <code>{{index3 != null ? index3 + 1 : '已删光'}}</code></p>
       <veui-button @click="addTab1">添加 TAB</veui-button>
       <veui-tabs :active.sync="active2" :index.sync="index3">
-        <template slot="tab-item-extra" scope="props">
+        <template slot="tab-item-extra" slot-scope="props">
           <icon name="cross-small" v-if="props.removable && tabs1.length > 1" @click.native="removeTab1(props)"></icon>
         </template>
         <veui-tab :label="tab.label"
           :name="tab.name"
           removable
           :key="tab.name"
-          v-for="(tab, index) in tabs1"><p>Tab {{ tab.name }}</p>
+          v-for="tab in tabs1"><p>Tab {{ tab.name }}</p>
         </veui-tab>
       </veui-tabs>
     </section>

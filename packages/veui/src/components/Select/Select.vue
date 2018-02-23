@@ -8,6 +8,7 @@
     class="veui-select-button"
     :ui="ui"
     :disabled="realDisabled || realReadonly"
+    @keydown.down.up.prevent="expanded = true"
     @click="expanded = !expanded"
     ref="button">
     <span class="veui-select-label">
@@ -16,48 +17,35 @@
     <icon class="veui-select-icon" :name="icons[expanded ? 'collapse' : 'expand']"></icon>
   </veui-button>
   <veui-overlay
-    v-if="expanded"
+    v-if="options && expanded || !options"
+    v-show="expanded"
     target="button"
     :open="expanded"
+    autofocus
+    modal
     :options="realOverlayOptions"
     :overlay-class="overlayClass">
-    <div ref="box" class="veui-select-options" v-outside:button="close">
-      <slot>
-        <template v-for="(option, index) in realOptions">
-          <div v-if="option.options" :class="{
-            'veui-select-option-group': true,
-            'veui-select-option-group-unlabelled': !option.label
-          }" :key="`g-${index}`">
-            <slot v-if="option.label" name="group-label" :label="option.label">
-              <div class="veui-select-option-group-label">{{ option.label }}</div>
-            </slot>
-            <veui-option
-              v-for="subOption in option.options"
-              v-bind="subOption"
-              :ui="ui"
-              :selected="subOption.value === value"
-              :key="subOption.value"
-              @select="handleSelect(subOption)">
-              <slot v-if="$scopedSlots.option" name="option" v-bind="subOption" :selected="option.value === value"></slot>
-              <template v-if="$scopedSlots['option-label']" slot="label">
-                <slot name="option-label" v-bind="subOption" :selected="option.value === value"></slot>
-              </template>
-            </veui-option>
-          </div>
-          <veui-option
-            v-else
-            v-bind="option"
-            :ui="ui"
-            :selected="option.value === value"
-            :key="option.value"
-            @select="handleSelect(option)">
-            <slot v-if="$scopedSlots.option" name="option" v-bind="option" :selected="option.value === value"></slot>
-            <template v-if="$scopedSlots['option-label']" slot="label">
-              <slot name="option-label" v-bind="option" :selected="option.value === value"></slot>
-            </template>
-          </veui-option>
+    <div
+      ref="box"
+      class="veui-select-options"
+      v-outside:button="close"
+      tabindex="-1"
+      :ui="ui"
+      @keydown.esc.stop="expanded = false"
+      @keydown.down.prevent="navigate()"
+      @keydown.up.prevent="navigate(false)">
+      <veui-option-group :options="options" ref="options">
+        <slot></slot>
+        <template v-if="$scopedSlots['group-label']" slot="label" slot-scope="group">
+          <slot name="group-label" v-bind="group"></slot>
         </template>
-      </slot>
+        <template v-if="$scopedSlots.option" slot="option" slot-scope="option">
+          <slot name="option" v-bind="option"></slot>
+        </template>
+        <template v-if="$scopedSlots['option-label']" slot="option-label" slot-scope="option">
+          <slot name="option-label" v-bind="option"></slot>
+        </template>
+      </veui-option-group>
     </div>
   </veui-overlay>
 </div>
@@ -67,8 +55,10 @@
 import Icon from '../Icon'
 import Button from '../Button'
 import Option from './Option'
+import OptionGroup from './OptionGroup'
 import Overlay from '../Overlay'
 import input from '../../mixins/input'
+import select from '../../mixins/select'
 import icons from '../../mixins/icons'
 import overlay from '../../mixins/overlay'
 import dropdown from '../../mixins/dropdown'
@@ -76,7 +66,8 @@ import warn from '../../utils/warn'
 
 export default {
   name: 'veui-select',
-  mixins: [input, icons, overlay, dropdown],
+  uiTypes: ['select'],
+  mixins: [input, icons, overlay, dropdown, select],
   model: {
     event: 'change'
   },
@@ -84,6 +75,7 @@ export default {
     Icon,
     'veui-button': Button,
     'veui-option': Option,
+    'veui-option-group': OptionGroup,
     'veui-overlay': Overlay
   },
   props: {
@@ -94,10 +86,6 @@ export default {
       default: '请选择'
     },
     multiple: {
-      type: Boolean,
-      default: false
-    },
-    checkmark: {
       type: Boolean,
       default: false
     },
@@ -126,27 +114,35 @@ export default {
       if (this.value === null) {
         return this.placeholder
       }
-      return this.labelMap[this.value]
+      if (this.labelMap) {
+        return this.labelMap[this.value]
+      }
+      let option = this.$refs.options.find(this.value)
+      return option ? option.label : ''
     }
   },
   methods: {
-    handleSelect (option) {
-      if (option.disabled) {
-        return
-      }
+    handleSelect (value) {
       this.expanded = false
-      this.localValue = option.value
-      this.$emit('change', option.value, option)
+      this.localValue = value
     }
   },
   watch: {
     value (val) {
       this.localValue = val
+    },
+    localValue (val) {
+      if (this.value !== val) {
+        this.$emit('change', val)
+      }
     }
   }
 }
 
 function extractOptions (options, map) {
+  if (!options) {
+    return null
+  }
   options.forEach(({ label, value, options }) => {
     if (value != null) {
       if (map[value]) {

@@ -7,7 +7,7 @@
     <section>
       <p>
         <veui-radio-button-group :items="data1" name="111" v-model="picked1" :disabled="disabled">
-          <template scope="props">{{ props.label }}</template>
+          <template slot-scope="props">{{ props.label }}</template>
         </veui-radio-button-group>
       </p>
       <p>已选：{{ picked1 }}</p>
@@ -15,7 +15,7 @@
     <section>
       <p>
         <veui-radio-button-group :items="data2" ui="small alt" v-model="picked2" :disabled="disabled">
-          <template scope="props">{{ props.label }}</template>
+          <template slot-scope="props">{{ props.label }}</template>
         </veui-radio-button-group>
       </p>
       <p>已选：{{ picked2 }}</p>

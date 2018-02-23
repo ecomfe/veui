@@ -7,7 +7,7 @@
     <section>
       <p>
         <veui-check-button-group :items="data1" v-model="picked1" :disabled="disabled">
-          <template scope="props">{{ props.label }}</template>
+          <template slot-scope="props">{{ props.label }}</template>
         </veui-check-button-group>
       </p>
       <p>value: {{ picked1 }}</p>
@@ -15,7 +15,7 @@
     <section>
       <p>
         <veui-check-button-group :items="data2" ui="small alt" v-model="picked2" :disabled="disabled">
-          <template scope="props">{{ props.label }}</template>
+          <template slot-scope="props">{{ props.label }}</template>
         </veui-check-button-group>
       </p>
       <p>value: {{ picked2 }}</p>
@@ -23,7 +23,7 @@
     <section>
       <p>
         <veui-check-button-group :items="data3" ui="micro" v-model="picked3" :disabled="disabled">
-          <template scope="props">
+          <template slot-scope="props">
             <veui-icon :name="props.icon" />
           </template>
         </veui-check-button-group>
