@@ -1,45 +1,52 @@
 <template>
-<div class="veui-slider" :style="sliderStyle">
+<div class="veui-slider">
   <!-- 条 -->
-  <div class="veui-slider-track" @click="handleTrackClick">
+  <div class="veui-slider-track" @click="handleTrackClick" ref="track">
     <slot name="track"><div class="veui-slider-track-default">
-      <svg :width="width" :height="4" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <line :stroke-dasharray="lineDashArray" x1="0" y1="0" :x2="width" y2="0"></line>
-      </svg>
+      <div class="veui-slider-track-default-bg"></div>
+      <div class="veui-slider-track-default-marks" v-if="stepMarks">
+        <div v-for="mark in stepMarks" :key="mark" :style="{
+          left: `${mark * 100}%`
+        }"></div>
+      </div>
+      <div class="veui-slider-track-default-fg" :style="{
+        width: `${ratio * 100}%`
+      }"></div>
     </div></slot>
   </div>
   <!-- 块 -->
-  <div class="veui-slider-trigger" v-drag:translate.x="{
-    dragstart: handleTriggerDragStart,
-    drag: handleTriggerDrag
-  }" :style="triggerStyle">
-    <slot name="trigger"><div class="veui-slider-trigger-default"></div></slot>
+  <div class="veui-slider-thumb" ref="thumb"
+  @mouseenter="handleThumbMouseEnter"
+  @mouseleave="handleThumbMouseLeave"
+  v-drag:x="{
+    dragstart: handleThumbDragStart,
+    drag: handleThumbDrag,
+    dragend: handleThumbDragEnd
+  }" :style="{
+    left: `${ratio * 100}%`
+  }">
+    <slot name="thumb"><div class="veui-slider-thumb-default"></div></slot>
   </div>
+  <!-- 提示 -->
+  <slot name="tip" target="thumb" :open="showTip">
+    <veui-tooltip target="thumb" :open="showTip" custom ref="tip">{{ Math.round(realValue * 100) / 100 }}</veui-tooltip>
+  </slot>
 </div>
 </template>
 
 <script>
-import { drag } from '../directives'
 import { clamp } from 'lodash'
+import drag from '../directives/drag'
+import input from '../mixins/input'
+import Tooltip from './Tooltip'
 
 export default {
-  name: 'Slider',
+  name: 'veui-slider',
+  components: {
+    'veui-tooltip': Tooltip
+  },
+  mixins: [input],
   props: {
-    direction: {
-      type: String,
-      default: 'horizontal'
-    },
-
-    // 理想情况下不传宽度，用css控制，但是涉及到监听容器宽度变换，有点复杂
-    width: {
-      type: Number,
-      default: 280
-    },
-    triggerWidth: {
-      type: Number,
-      default: 16
-    },
-
     value: Number,
     min: {
       type: Number,
@@ -53,63 +60,88 @@ export default {
       type: Number,
       default: 0
     },
-    disabled: Boolean
+    mark: Boolean
   },
   directives: {
     drag
   },
   data () {
     return {
+      localValue: null,
       isDragging: false,
-      dragInitValue: 0
+      isThumbHover: false
+    }
+  },
+  watch: {
+    value (val) {
+      this.localValue = val
+    },
+    localValue (val) {
+      if (this.$refs.tip) {
+        this.$refs.tip.relocate()
+      }
+      if (this.value !== val) {
+        this.$emit('input', val)
+      }
     }
   },
   computed: {
-    halfTriggerWidth () {
-      return this.triggerWidth / 2
-    },
-    sliderStyle () {
-      return {
-        width: `${this.width}px`
-      }
-    },
-    triggerStyle () {
-      let triggerX = clamp(this.ratio * this.width, 0, this.width)
-      return {
-        width: `${this.triggerWidth}px`,
-        left: `${-1 * this.halfTriggerWidth}px`,
-        transform: `translateX(${triggerX}px)`
-      }
+    realValue () {
+      // 一开始 value 没有变化没有触发 localValue watch function
+      return this.localValue || this.value
     },
     ratio () {
-      return (this.value - this.min) / (this.max - this.min)
+      return (this.realValue - this.min) / (this.max - this.min)
     },
-    lineDashArray () {
-      if (this.step) {
-        let a = this.step / (this.max - this.min) * this.width
-        return [a - 1, 1].join()
+    stepMarks () {
+      let {min, min: val, max, step, mark} = this
+      if (!step || step < 0 || min >= max || !mark) {
+        return
       }
-      return ''
+      let marks = []
+      while (val <= max) {
+        let pos = (val - min) / (max - min)
+        if (pos > 0 && pos < 1) {
+          marks.push(pos)
+        }
+        val += step
+      }
+      return marks
+    },
+    showTip () {
+      return this.isDragging || this.isThumbHover
     }
   },
   methods: {
     handleTrackClick ({offsetX}) {
-      let ratio = offsetX / this.width
+      let trackWidth = this.$refs.track.offsetWidth
+      this.updateValueByRatio(offsetX / trackWidth)
+    },
+    handleThumbMouseEnter () {
+      this.isThumbHover = true
+    },
+    handleThumbMouseLeave () {
+      this.isThumbHover = false
+    },
+    handleThumbDragStart () {
+      // console.log('dragstart')
+      this.isDragging = true
+      this.previousRatio = this.ratio
+      this.trackWidth = this.$refs.track.offsetWidth
+    },
+    handleThumbDrag ({distanceX}) {
+      let ratio = this.previousRatio + distanceX / this.trackWidth
       this.updateValueByRatio(ratio)
     },
-    handleTriggerDragStart () {
-      this._previousRatio = this.ratio
-    },
-    handleTriggerDrag ({distanceX}) {
-      let ratio = this._previousRatio + distanceX / this.width
-      this.updateValueByRatio(ratio)
+    handleThumbDragEnd () {
+      this.isDragging = false
     },
     updateValueByRatio (ratio) {
       let value = clamp(this.min + (this.max - this.min) * ratio, this.min, this.max)
-      if (this.step) {
-        value = Math.round(value / this.step) * this.step
+      if (this.step > 0) {
+        value = Math.floor(value / this.step) * this.step
       }
-      this.$emit('update:value', value)
+      this.localValue = value
     }
   }
 }

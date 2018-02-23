@@ -28,6 +28,12 @@ export default {
   methods: {
     mergeOverlayClass (klass) {
       return { ...normalizeClass(this.overlayClass), ...normalizeClass(klass) }
+    },
+    relocate () {
+      if (!this.$refs.overlay) {
+        throw new Error('Can not find tip overlay to relocate')
+      }
+      this.$refs.overlay.relocate()
     }
   }
 }

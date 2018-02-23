@@ -1,40 +1,70 @@
 @import "../lib.less";
+@import (reference) "../input.less";
 
 .veui-slider {
-  @slider-height: 12px;
+  @default-slider-height: @veui-height-normal;
+  @default-progress-height: 4px;
+  @default-thumb-height: 14px;
+  @default-mark-height: @default-progress-height + 3px * 2;
 
   position: relative;
-  margin-right: 10px;
   user-select: none;
+  overflow: visible;
 
   &-track {
     &-default {
-      height: @slider-height;
-      // border-top: 4px solid @veui-text-color-weak;
+      @top: (@default-slider-height - @default-progress-height) / 2;
+      // Slider 高度靠 default track 撑起来，如果替换了 track slot 就高度自适应了
+      height: @default-slider-height;
+      padding-top: @top;
+      position: relative;
 
-      svg {
-        display: block;
-        line {
-          stroke: @veui-text-color-weak;
-          stroke-width: 6px;
+      &-bg,
+      &-fg {
+        height: @default-progress-height;
+        border-radius: @default-progress-height / 2;
+      }
+
+      &-bg {
+        background-color: @veui-gray-color-5;
+      }
+
+      &-fg {
+        height: @default-progress-height;
+        background-color: @veui-brand-color;
+        position: absolute;
+        top: @top;
+      }
+
+      &-marks {
+        width: 100%;
+        position: absolute;
+        top: @top - 3px;
+        div {
+          height: @default-mark-height;
+          border-left: 1px solid @veui-gray-color-5;
+          position: absolute;
         }
       }
     }
   }
 
-  &-trigger {
+  &-thumb {
     position: absolute;
-    top: 0;
     left: 0;
+    // track/thumb slot 高度变化需要调整 thumb 的位置
+    top: (@default-slider-height - @default-thumb-height) / 2;
+    // 利用 translateX 左偏移一半，实现 thumb 宽度自适应
+    transform: translateX(-50%);
 
     &-default {
-      margin-top: -2px;
-      width: 0;
-      height: 0;
-      border: solid transparent;
-      border-left-width: 8px;
-      border-right-width: 8px;
-      border-bottom: @slider-height solid fadeout(@veui-info-color-2, 5%);
+      width: @default-thumb-height;
+      height: @default-thumb-height;
+      border: 2px solid @veui-brand-color;
+      border-radius: 100%;
+      background-color: #fff;
+      // box-shadow: 0 1px 4px fadeout(#fff, 20%);
     }
   }
+
 }

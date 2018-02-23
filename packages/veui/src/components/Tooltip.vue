@@ -142,6 +142,7 @@ export default {
     }
     return (
       <veui-overlay
+        ref="overlay"
         target={this.targetNode}
         open={this.realOpen}
         options={this.realOverlayOptions}
