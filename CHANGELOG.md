@@ -1,10 +1,36 @@
 ## 1.0.0-alpha.9
 
+### ⚠️ 非兼容性变更
+
+* [^] 将对 Vue 的依赖更新到 `^2.5.13`。这使得使用 scoped slot 时，`scope` 需要改写为 `slot-scope`。由于 VEUI 内部已经使用 `slot-scope`，所以该版本无法与 `vue@2.5.0` 之前的版本一同使用。
+
+  > #### 迁移指南
+  >
+  > 请检查项目中所有用到
+  >
+  > ```html
+  > <template slot="..." scope="...">...</template>
+  > ```
+  >
+  > 的地方，统一替换为：
+  >
+  > ```html
+  > <template slot="..." slot-scope="...">...</template>
+  > ```
+  >
+  > 同时，由于 `vue@2.5.3` 修改了 slot 的逻辑，所以当代码中存在使用
+  >
+  > ```html
+  > <template slot="..."></template>
+  > ```
+  >
+  > 的写法来将 slot 内容置空时，现在会自动使用定义 slot 时备用内容填充而非置空，暂时的方法是使用一个零宽空格（`&#8203;`）来填充。
+
 ### 💡 主要变更
 
 * [+] 新增 `OptionGroup` 组件。
-* [+] `Select` 组件支持直接组件内嵌写法。
-* [+] `Select` 组件支持键盘导航。
+* [+] `Select`、`Dropdown` 组件支持直接组件内嵌写法。
+* [+] `Select`、`Dropdown` 组件支持键盘导航。
 
 ### 🐞 问题修复
 
