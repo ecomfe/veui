@@ -15,16 +15,17 @@
     </div></slot>
   </div>
   <!-- 块 -->
-  <div class="veui-slider-thumb" ref="thumb"
+  <div class="veui-slider-thumb" ref="thumb" tabindex="0"
   @mouseenter="handleThumbMouseEnter"
   @mouseleave="handleThumbMouseLeave"
-  v-drag:x="{
+  v-drag="{
+    axis: 'x',
     dragstart: handleThumbDragStart,
     drag: handleThumbDrag,
     dragend: handleThumbDragEnd
   }" :style="{
     left: `${ratio * 100}%`
-  }" tabindex="0">
+  }">
     <slot name="thumb"><div class="veui-slider-thumb-default"></div></slot>
   </div>
   <!-- 提示 -->
@@ -59,7 +60,10 @@ export default {
     },
     step: {
       type: Number,
-      default: 0
+      default: 0,
+      validator (val) {
+        return val >= 0
+      }
     },
     mark: Boolean
   },
@@ -76,7 +80,7 @@ export default {
   watch: {
     value: {
       handler (val) {
-        this.localValue = val
+        this.localValue = this.getAdjustedValue(val)
       },
       immediate: true
     },
@@ -95,7 +99,7 @@ export default {
     },
     stepMarks () {
       let {min, min: val, max, step, mark} = this
-      if (!step || step < 0 || min >= max || !mark) {
+      if (!step || min >= max || !mark) {
         return
       }
       let marks = []
@@ -136,11 +140,14 @@ export default {
       this.isDragging = false
     },
     updateValueByRatio (ratio) {
-      let value = clamp(this.min + (this.max - this.min) * ratio, this.min, this.max)
+      this.localValue = this.getAdjustedValue(this.min + (this.max - this.min) * ratio)
+    },
+    getAdjustedValue (val) {
+      val = clamp(val, this.min, this.max)
       if (this.step > 0) {
-        value = Math.floor(value / this.step) * this.step
+        val = Math.floor(val / this.step) * this.step
       }
-      this.localValue = value
+      return val
     }
   }
 }

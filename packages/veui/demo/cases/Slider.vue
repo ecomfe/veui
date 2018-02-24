@@ -52,7 +52,7 @@ export default {
   data () {
     return {
       value1: 0.2,
-      value2: 30,
+      value2: 333,
       value3: 100
     }
   }
