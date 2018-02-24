@@ -31,6 +31,7 @@
               </button>
               <slot name="tab-item-extra" v-bind="tab">
                 <button v-if="tab.removable" type="button" class="veui-tabs-item-remove"
+                  aria-label="删除"
                   @click="$emit('remove', tab)">
                     <icon :name="icons.remove"/>
                 </button>
@@ -46,10 +47,11 @@
         :class="{'veui-tabs-extra-overflow': menuOverflow}">
         <button type="button" v-if="addable"
           class="veui-tabs-operator"
+          aria-label="添加"
           @click="$emit('add')">
-          <icon :name="icons.add"></icon><slot name="tabs-extra-text"><span>添加TAB</span></slot>
+          <icon :name="icons.add"></icon><slot name="tabs-extra-text"><span>添加 Tab</span></slot>
         </button>
-        <div class="veui-tabs-scroller" v-if="menuOverflow" ref="scroller">
+        <div class="veui-tabs-scroller" v-if="menuOverflow" ref="scroller" aria-hidden="true">
           <button type="button" class="veui-tabs-scroller-left" @click="scroll('left')"><icon :name="icons.prev"></icon></button>
           <button type="button" class="veui-tabs-scroller-right" @click="scroll('right')"><icon :name="icons.next"></icon></button>
         </div>
