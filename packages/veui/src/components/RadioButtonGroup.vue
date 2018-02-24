@@ -1,5 +1,6 @@
 <template>
-<div class="veui-radio-button-group veui-button-group"
+<div
+  class="veui-radio-button-group veui-button-group"
   :ui="ui"
   role="radiogroup"
   :aria-readonly="String(realReadonly)"

@@ -2,7 +2,8 @@
 <label :class="{
     'veui-radio': true,
     'veui-disabled': realReadonly || realDisabled
-  }" :ui="ui">
+  }"
+  :ui="ui">
   <input type="radio" v-bind="attrs" @change="localChecked = $event.target.checked">
   <span class="veui-radio-box"></span>
   <span class="veui-radio-label"><slot></slot></span>
@@ -14,6 +15,7 @@ import input from '../mixins/input'
 
 export default {
   name: 'veui-radio',
+  inheritAttrs: false,
   mixins: [input],
   model: {
     prop: 'checked',
@@ -37,7 +39,8 @@ export default {
       return {
         checked: this.localChecked,
         name: this.realName,
-        disabled: this.realDisabled || this.realReadonly
+        disabled: this.realDisabled || this.realReadonly,
+        ...this.$attrs
       }
     }
   },
