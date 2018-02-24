@@ -17,7 +17,7 @@
         :class="{ 'veui-dialog-draggable': draggable }"
         v-drag:content.translate="{ draggable, containment: '@window', ready: dragReady }">
         <span class="veui-dialog-content-head-title"><slot name="title">{{ title }}</slot></span>
-        <button class="veui-dialog-content-head-close"
+        <button type="button" class="veui-dialog-content-head-close"
           v-if="closable"
           @click="localOpen = false">
           <veui-icon :name="icons.close"></veui-icon>

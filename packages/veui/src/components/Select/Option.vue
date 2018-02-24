@@ -1,5 +1,7 @@
 <template>
-<button class="veui-option"
+<button
+  type="button"
+  class="veui-option"
   :ui="ui"
   :class="{
     'veui-option-disabled': disabled,
