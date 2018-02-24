@@ -1,13 +1,21 @@
 <template>
 <div class="veui-tabs" :ui="ui">
-  <div class="veui-tabs-menu" ref="menu">
+  <div class="veui-tabs-menu" ref="menu" role="tablist">
     <div class="veui-tabs-list" :class="{'veui-tabs-list-empty': items.length === 0}" ref="resizeContainer" v-resize="(e) => resizeHandler(e)">
       <div class="veui-tabs-list-resizer">
         <template v-for="(tab, index) in items">
-          <div :key="tab.name" class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
-            'veui-tabs-item-disabled': tab.disabled,
-            'veui-tabs-item-active': index === localIndex
-          }">
+          <div
+            :key="tab.name"
+            :ref="`tab-${tab.name}`"
+            :class="{
+              'veui-tabs-item': true,
+              'veui-tabs-item-disabled': tab.disabled,
+              'veui-tabs-item-active': index === localIndex
+            }"
+            role="tab"
+            :aria-selected="String(index === localIndex)"
+            :aria-setsize="items.length"
+            :aria-posinset="index + 1">
             <slot name="tab-item" v-bind="tab" :index="index">
               <veui-link v-if="tab.to" class="veui-tabs-item-label" :to="tab.to" :native="tab.native">{{ tab.label }}</veui-link>
               <button v-else class="veui-tabs-item-label" type="button" @click="!tab.disabled && setActive({index})">{{ tab.label }}</button>
