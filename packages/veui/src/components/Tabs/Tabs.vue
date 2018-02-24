@@ -11,21 +11,30 @@
               'veui-tabs-item': true,
               'veui-tabs-item-disabled': tab.disabled,
               'veui-tabs-item-active': index === localIndex
-            }"
-            role="tab"
-            :aria-selected="String(index === localIndex)"
-            :aria-setsize="items.length"
-            :aria-posinset="index + 1">
+            }">
             <slot name="tab-item" v-bind="tab" :index="index">
-              <veui-link v-if="tab.to" class="veui-tabs-item-label" :to="tab.to" :native="tab.native">{{ tab.label }}</veui-link>
-              <button v-else class="veui-tabs-item-label" type="button" @click="!tab.disabled && setActive({index})">{{ tab.label }}</button>
-              <button type="button" class="veui-tabs-item-remove"
-                @click="$emit('remove', tab)">
-                <slot name="tab-item-extra" v-bind="tab">
-                  <icon :name="icons.remove"
-                  v-if="tab.removable"></icon>
-                </slot>
+              <veui-link
+                v-if="tab.to"
+                class="veui-tabs-item-label"
+                v-bind="ariaAttrs[index]"
+                :to="tab.to"
+                :native="tab.native">
+                {{ tab.label }}
+              </veui-link>
+              <button
+                v-else
+                class="veui-tabs-item-label"
+                v-bind="ariaAttrs[index]"
+                type="button"
+                @click="!tab.disabled && setActive({index})">
+                {{ tab.label }}
               </button>
+              <slot name="tab-item-extra" v-bind="tab">
+                <button v-if="tab.removable" type="button" class="veui-tabs-item-remove"
+                  @click="$emit('remove', tab)">
+                    <icon :name="icons.remove"/>
+                </button>
+              </slot>
             </slot>
           </div>
         </template>
@@ -101,6 +110,16 @@ export default {
     },
     tabNames () {
       return this.items.map(({ name }) => name)
+    },
+    ariaAttrs () {
+      return this.items.map((tab, index) => {
+        return {
+          role: 'tab',
+          ariaSelected: String(index === this.localIndex),
+          ariaSetsize: this.items.length,
+          ariaPosinset: index + 1
+        }
+      })
     }
   },
   methods: {

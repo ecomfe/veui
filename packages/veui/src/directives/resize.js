@@ -9,6 +9,7 @@ function attach (el, { value, arg, modifiers, oldValue }, vnode, oldVnode) {
     obj.setAttribute('id', id)
     obj.setAttribute('type', 'text/html')
     obj.setAttribute('data', 'about:blank')
+    obj.setAttribute('tabindex', '-1')
     assign(obj.style, {
       overflow: 'hidden',
       position: 'absolute',

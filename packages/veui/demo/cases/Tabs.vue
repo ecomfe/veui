@@ -75,7 +75,9 @@
       <veui-button @click="addTab1">添加 TAB</veui-button>
       <veui-tabs :active.sync="active2" :index.sync="index3">
         <template slot="tab-item-extra" slot-scope="props">
-          <icon name="cross-small" v-if="props.removable && tabs1.length > 1" @click.native="removeTab1(props)"></icon>
+          <button type="button" class="veui-tabs-item-remove" @click="removeTab1(props)">
+            <icon name="cross-small" v-if="props.removable && tabs1.length > 1"></icon>
+          </button>
         </template>
         <veui-tab :label="tab.label"
           :name="tab.name"
