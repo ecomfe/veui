@@ -20,7 +20,8 @@
         <span class="veui-dialog-content-head-title"><slot name="title">{{ title }}</slot></span>
         <button type="button" class="veui-dialog-content-head-close"
           v-if="closable"
-          @click="localOpen = false">
+          @click="localOpen = false"
+          aria-label="关闭">
           <veui-icon :name="icons.close"></veui-icon>
         </button>
       </div>
