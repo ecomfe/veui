@@ -7,7 +7,8 @@
   @ok="submit"
   escapable
   @escape="cancel"
-  @cancel="cancel">
+  @cancel="cancel"
+  role="alertdialog">
   <template slot="title">
     <slot name="title">{{ title }}</slot>
   </template>

@@ -12,7 +12,8 @@
     <div class="veui-dialog-content"
       ref="content"
       tabindex="-1"
-      @keydown.esc="handleEscape">
+      @keydown.esc="handleEscape"
+      v-bind="attrs">
       <div class="veui-dialog-content-head"
         :class="{ 'veui-dialog-draggable': draggable }"
         v-drag:content.translate="{ draggable, containment: '@window', ready: dragReady }">
@@ -50,6 +51,7 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
+  inheritAttrs: false,
   directives: { drag },
   mixins: [ui, icons, overlay],
   props: {
@@ -86,6 +88,13 @@ export default {
     }
   },
   computed: {
+    attrs () {
+      return {
+        role: 'dialog',
+        'aria-modal': String(this.modal),
+        ...this.$attrs
+      }
+    },
     realEscapable () {
       return this.closable || this.escapable
     }
