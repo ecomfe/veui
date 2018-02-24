@@ -60,8 +60,8 @@
           <slot name="item" :option="options.items" :index="index">
             <div class="veui-transfer-selected-flat-item-label">
               <template v-for="(opt, index) in options.items">
-                <span :key="opt.value" class="veui-transfer-selected-flat-option-label">{{ opt.label }}</span>
-                <span :key="opt.value"
+                <span :key="'l-' + opt.value" class="veui-transfer-selected-flat-option-label">{{ opt.label }}</span>
+                <span :key="'s-' + opt.value"
                   class="veui-transfer-selected-flat-option-separator"
                   v-if="index < options.items.length - 1">
                   <veui-icon :name="icons.separator"></veui-icon>
