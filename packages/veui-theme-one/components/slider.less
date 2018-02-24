@@ -57,13 +57,20 @@
     // 利用 translateX 左偏移一半，实现 thumb 宽度自适应
     transform: translateX(-50%);
 
+    &:focus {
+      outline: none;
+    }
+
+    &.focus-visible {
+      outline: red solid 1px;
+    }
+
     &-default {
       width: @default-thumb-height;
       height: @default-thumb-height;
       border: 2px solid @veui-brand-color;
       border-radius: 100%;
       background-color: #fff;
-      // box-shadow: 0 1px 4px fadeout(#fff, 20%);
     }
   }
 

@@ -24,12 +24,13 @@
     dragend: handleThumbDragEnd
   }" :style="{
     left: `${ratio * 100}%`
-  }">
+  }" tabindex="0">
     <slot name="thumb"><div class="veui-slider-thumb-default"></div></slot>
   </div>
   <!-- 提示 -->
   <slot name="tip" target="thumb" :open="showTip">
-    <veui-tooltip target="thumb" :open="showTip" custom ref="tip">{{ Math.round(realValue * 100) / 100 }}</veui-tooltip>
+    <veui-tooltip target="thumb" :open="showTip" custom ref="tip">{{
+      Math.round(localValue * 100) / 100 }}</veui-tooltip>
   </slot>
 </div>
 </template>
@@ -73,8 +74,11 @@ export default {
     }
   },
   watch: {
-    value (val) {
-      this.localValue = val
+    value: {
+      handler (val) {
+        this.localValue = val
+      },
+      immediate: true
     },
     localValue (val) {
       if (this.$refs.tip) {
@@ -86,12 +90,8 @@ export default {
     }
   },
   computed: {
-    realValue () {
-      // 一开始 value 没有变化没有触发 localValue watch function
-      return this.localValue || this.value
-    },
     ratio () {
-      return (this.realValue - this.min) / (this.max - this.min)
+      return (this.localValue - this.min) / (this.max - this.min)
     },
     stepMarks () {
       let {min, min: val, max, step, mark} = this
@@ -124,7 +124,6 @@ export default {
       this.isThumbHover = false
     },
     handleThumbDragStart () {
-      // console.log('dragstart')
       this.isDragging = true
       this.previousRatio = this.ratio
       this.trackWidth = this.$refs.track.offsetWidth
