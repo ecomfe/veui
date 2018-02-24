@@ -117,9 +117,9 @@ export default {
       return this.items.map((tab, index) => {
         return {
           role: 'tab',
-          ariaSelected: String(index === this.localIndex),
-          ariaSetsize: this.items.length,
-          ariaPosinset: index + 1
+          'aria-selected': String(index === this.localIndex),
+          'aria-setsize': this.items.length,
+          'aria-posinset': index + 1
         }
       })
     }
