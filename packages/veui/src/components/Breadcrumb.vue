@@ -30,7 +30,7 @@ export default {
   },
   render () {
     return (
-      <ul class="veui-breadcrumb">
+      <ul class="veui-breadcrumb" role="navigation">
         {this.$slots.default || this.localRoutes.map((route, index) => (
           <BreadcrumbItem to={route.to}
             replace={route.replace}

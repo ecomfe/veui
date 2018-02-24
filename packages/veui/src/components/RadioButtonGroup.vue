@@ -1,5 +1,9 @@
 <template>
-<div class="veui-radio-button-group veui-button-group" :ui="ui">
+<div class="veui-radio-button-group veui-button-group"
+  :ui="ui"
+  role="radiogroup"
+  :aria-readonly="String(realReadonly)"
+  :aria-disabled="String(realDisabled)">
   <veui-button
     :class="{
       'veui-button-selected': item.value === value
@@ -8,7 +12,9 @@
     v-for="(item, index) in items"
     :key="index"
     :disabled="item.disabled || realDisabled || realReadonly"
-    @click="handleChange(item.value)">
+    @click="handleChange(item.value)"
+    role="radio"
+    :aria-selected="String(item.value === value)">
     <slot v-bind="item">{{ item.label }}</slot>
   </veui-button>
 </div>

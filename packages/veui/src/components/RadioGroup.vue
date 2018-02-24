@@ -1,5 +1,10 @@
 <template>
-<div class="veui-radio-group" :ui="ui">
+<div
+  class="veui-radio-group"
+  :ui="ui"
+  role="radiogroup"
+  :aria-readonly="String(realReadonly)"
+  :aria-disabled="String(realDisabled)">
   <radio
     :ui="ui"
     :name="localName"
@@ -8,7 +13,9 @@
     :value="item.value"
     :disabled="item.disabled || realDisabled || realReadonly"
     :checked="item.value === value"
-    @change="checked => handleChange(item.value, checked)">
+    @change="checked => handleChange(item.value, checked)"
+    :aria-posinset="index + 1"
+    :aria-setsize="items.length">
     <slot v-bind="item">{{ item.label }}</slot>
   </radio>
 </div>

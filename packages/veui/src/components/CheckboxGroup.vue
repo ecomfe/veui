@@ -1,5 +1,11 @@
 <template>
-<div class="veui-checkbox-group" :ui="ui">
+<div
+  class="veui-checkbox-group"
+  :ui="ui"
+  role="listbox"
+  aria-multiselectable="true"
+  :aria-readonly="String(realReadonly)"
+  :aria-disabled="String(realDisabled)">
   <checkbox
     :ui="ui"
     :name="localName"
@@ -7,7 +13,11 @@
     :key="index"
     :disabled="item.disabled || realDisabled || realReadonly"
     :checked="value.indexOf(item.value) !== -1"
-    @change="checked => handleChange(item.value, checked)">
+    @change="checked => handleChange(item.value, checked)"
+    role="option"
+    :aria-selected="String(value.indexOf(item.value) !== -1)"
+    :aria-posinset="index + 1"
+    :aria-setsize="items.length">
     <slot v-bind="item">{{ item.label }}</slot>
   </checkbox>
 </div>
