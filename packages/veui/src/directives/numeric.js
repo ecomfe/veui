@@ -1,16 +1,9 @@
-import { find, get, keys, includes } from 'lodash'
+import { find, get, noop, isFunction } from 'lodash'
 import config from '../managers/config'
-import { getTypedAncestor } from '../utils/helper'
-import { getUITypes } from '../utils/context'
 
-const numericDefaults = {
-  'numeric.step': 1,
-  'numeric.bigStep': 10,
-  'numeric.smallStep': 0.1,
-  'numeric.precision': 2
-}
-
-config.defaults(numericDefaults)
+config.defaults({
+  'numeric.step': 1
+})
 
 function clear (el) {
   let numericData = el.numericData
@@ -29,38 +22,21 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
     axis = get(value, 'axis', 'y')
   }
 
-  // 解析其他配置
-  return keys(numericDefaults).reduce(function (ret, key) {
-    let k = key.substring(key.indexOf('.') + 1)
-    ret[k] = get(value, k, numericDefaults[key])
-    return ret
-  }, {
-    axis
-  })
-}
-
-/**
- * 从 vnode 获得 input component
- * v-numeric 用于 Input Component 及其子节点, Input Element
- *
- * @param {Vnode} vnode
- */
-function getInput (vnode) {
-  if (vnode.componentOptions) {
-    // component
-    if (includes(getUITypes(vnode), 'input')) {
-      return vnode.componentInstance
-    }
-    return getTypedAncestor(vnode.componentInstance, 'input')
+  function parseFn (name) {
+    let fn = get(value, name, noop)
+    return isFunction(fn) ? fn : noop
   }
 
-  let elm = vnode.elm
-  if (elm && elm.tagName.toLowerCase() === 'input') {
-    return elm
-  } else if (vnode.context) {
-    return getInput(vnode.context.$vnode)
+  // 解析回调函数
+  let update = parseFn('update')
+
+  let step = get(value, 'step', config.get('numeric.step'))
+
+  return {
+    axis,
+    step,
+    update
   }
-  return null
 }
 
 function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
@@ -84,9 +60,9 @@ function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
 
       let increase = options.step
       if (altKey) {
-        increase = options.smallStep
+        increase *= 0.1
       } else if (shiftKey) {
-        increase = options.bigStep
+        increase *= 10
       }
 
       switch (true) {
@@ -111,42 +87,7 @@ function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
         return
       }
 
-      let input = getInput(vnode) || {}
-      let val = input.value
-      if (val === undefined) {
-        return
-      }
-
-      let digits
-      let unit
-      if (typeof val === 'string') {
-        let matched = val.match(/^(\d+(?:\.\d+)?)(.*)$/)
-        if (!matched) {
-          return
-        }
-        [digits, unit] = matched.slice(1)
-        digits = parseFloat(digits)
-        if (isNaN(digits)) {
-          return
-        }
-      } else if (typeof val === 'number') {
-        digits = val
-      } else {
-        return
-      }
-
-      // 因为加 0.1 所以处理一下，否则会出现 0.30000000000000004
-      let precision = Math.pow(10, options.precision)
-      let newVal = Math.round((digits + increase) * precision) / precision
-      if (unit !== undefined) {
-        newVal += unit
-      }
-      if (input.localValue !== undefined) {
-        // TODO: Input Component localValue 非 textarea 不触发 input
-        input.localValue = newVal
-      } else {
-        input.value = newVal
-      }
+      options.update(increase)
     }
   }
 

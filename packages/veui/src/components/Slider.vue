@@ -17,8 +17,7 @@
   <!-- 块 -->
   <div class="veui-slider-thumb" ref="thumb" tabindex="0" v-numeric.x="{
     step: keyboardChangeStep,
-    bigStep: keyboardChangeStep * 10,
-    smallStep: keyboardChangeStep * 0.1
+    update: handleThumbNumericUpdage
   }"
   @mouseenter="handleThumbMouseEnter"
   @mouseleave="handleThumbMouseLeave"
@@ -157,6 +156,10 @@ export default {
         val = Math.floor(val / this.step) * this.step
       }
       return val
+    },
+    handleThumbNumericUpdage (delta) {
+      console.log(delta)
+      this.localValue += delta
     }
   }
 }

@@ -57,7 +57,10 @@
       <div class="form-row">
         <div class="form-key">宽度：</div>
         <div class="form-value">
-          <veui-input ui="small" v-numeric.y="{smallStep: 0}" v-model="width" @focus="log('focus')"></veui-input>
+          <veui-input ui="small" v-numeric.y="{
+            smallStep: 0,
+            update: handleThumbNumericUpdage
+          }" v-model="width" @focus="log('focus')"></veui-input>
           <veui-input v-model="width" readonly></veui-input>
           <veui-input ui="large" v-model="width" disabled></veui-input>
         </div>
@@ -124,6 +127,37 @@ export default {
   methods: {
     log (item) {
       bus.$emit('log', item)
+    },
+    handleThumbNumericUpdage (delta) {
+      let val = this.width
+
+      let digits
+      let unit
+      if (typeof val === 'string') {
+        let matched = val.match(/^(\d+(?:\.\d+)?)(.*)$/)
+        if (!matched) {
+          return
+        }
+        [digits, unit] = matched.slice(1)
+        digits = parseFloat(digits)
+        if (isNaN(digits)) {
+          return
+        }
+      } else if (typeof val === 'number') {
+        digits = val
+      } else {
+        return
+      }
+
+      delta = Math.ceil(Math.abs(delta)) * Math.sign(delta)
+
+      // 因为加 0.1 所以处理一下，否则会出现 0.30000000000000004
+      let newVal = Math.round((digits + delta) * 10) / 10
+      if (unit !== undefined) {
+        newVal += unit
+      }
+
+      this.width = newVal
     }
   }
 }
