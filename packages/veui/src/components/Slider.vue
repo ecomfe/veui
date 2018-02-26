@@ -53,7 +53,7 @@ export default {
   },
   mixins: [input],
   props: {
-    value: Number,
+    value: true,
     min: {
       type: Number,
       default: 0
@@ -69,7 +69,16 @@ export default {
         return val >= 0
       }
     },
-    mark: Boolean
+    mark: Boolean,
+
+    parser: {
+      type: Function,
+      default: val => val
+    },
+    formatter: {
+      type: Function,
+      default: val => val
+    }
   },
   directives: {
     drag, numeric
@@ -84,7 +93,7 @@ export default {
   watch: {
     value: {
       handler (val) {
-        this.localValue = this.getAdjustedValue(val)
+        this.localValue = this.getAdjustedValue(this.parser(val))
       },
       immediate: true
     },
@@ -92,8 +101,8 @@ export default {
       if (this.$refs.tip) {
         this.$refs.tip.relocate()
       }
-      if (this.value !== val) {
-        this.$emit('input', val)
+      if (this.parser(this.value) !== val) {
+        this.$emit('input', this.formatter(val))
       }
     }
   },
@@ -158,7 +167,6 @@ export default {
       return val
     },
     handleThumbNumericUpdage (delta) {
-      console.log(delta)
       this.localValue += delta
     }
   }
