@@ -15,7 +15,11 @@
     </div></slot>
   </div>
   <!-- 块 -->
-  <div class="veui-slider-thumb" ref="thumb" tabindex="0"
+  <div class="veui-slider-thumb" ref="thumb" tabindex="0" v-numeric.x="{
+    step: keyboardChangeStep,
+    bigStep: keyboardChangeStep * 10,
+    smallStep: keyboardChangeStep * 0.1
+  }"
   @mouseenter="handleThumbMouseEnter"
   @mouseleave="handleThumbMouseLeave"
   v-drag="{
@@ -39,6 +43,7 @@
 <script>
 import { clamp } from 'lodash'
 import drag from '../directives/drag'
+import numeric from '../directives/numeric'
 import input from '../mixins/input'
 import Tooltip from './Tooltip'
 
@@ -68,7 +73,7 @@ export default {
     mark: Boolean
   },
   directives: {
-    drag
+    drag, numeric
   },
   data () {
     return {
@@ -114,12 +119,16 @@ export default {
     },
     showTip () {
       return this.isDragging || this.isThumbHover
+    },
+    keyboardChangeStep () {
+      return this.step || (this.max - this.min) / 10
     }
   },
   methods: {
     handleTrackClick ({offsetX}) {
       let trackWidth = this.$refs.track.offsetWidth
       this.updateValueByRatio(offsetX / trackWidth)
+      this.$refs.thumb.focus()
     },
     handleThumbMouseEnter () {
       this.isThumbHover = true

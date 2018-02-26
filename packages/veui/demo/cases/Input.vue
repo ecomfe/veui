@@ -54,6 +54,15 @@
         </div>
       </div>
 
+      <div class="form-row">
+        <div class="form-key">宽度：</div>
+        <div class="form-value">
+          <veui-input ui="small" v-numeric.y="{smallStep: 0}" v-model="width" @focus="log('focus')"></veui-input>
+          <veui-input v-model="width" readonly></veui-input>
+          <veui-input ui="large" v-model="width" disabled></veui-input>
+        </div>
+      </div>
+
       <div class="form-row five-sizes">
         <div class="form-key">5 种大小：</div>
         <div class="form-value">
@@ -87,11 +96,15 @@
 <script>
 import bus from '../bus'
 import { Input } from 'veui'
+import numeric from 'veui/directives/numeric'
 
 export default {
   name: 'text-input',
   components: {
     'veui-input': Input
+  },
+  directives: {
+    numeric
   },
   data () {
     return {
@@ -104,7 +117,8 @@ export default {
       textarea1: '1. 使用rows\n2. 固定3行高度\n3. 不包括padding',
       textarea2: '设置高度，同时可缩放',
       textarea3: '默认高度',
-      poem: '兩岸猿聲啼不住，輕舟已過萬重山'
+      poem: '兩岸猿聲啼不住，輕舟已過萬重山',
+      width: '1024px'
     }
   },
   methods: {
