@@ -1,5 +1,5 @@
 <template>
-<div class="veui-slider">
+<div class="veui-slider" v-bind="attrs">
   <!-- 条 -->
   <div class="veui-slider-track" @click="handleTrackClick" ref="track">
     <slot name="track"><div class="veui-slider-track-default">
@@ -21,6 +21,8 @@
   }"
   @mouseenter="handleThumbMouseEnter"
   @mouseleave="handleThumbMouseLeave"
+  @focus="handleThumbFocus"
+  @blur="handleThumbBlur"
   v-drag="{
     axis: 'x',
     dragstart: handleThumbDragStart,
@@ -87,7 +89,8 @@ export default {
     return {
       localValue: null,
       isDragging: false,
-      isThumbHover: false
+      isThumbHover: false,
+      isFocus: false
     }
   },
   watch: {
@@ -126,14 +129,27 @@ export default {
       return marks
     },
     showTip () {
-      return this.isDragging || this.isThumbHover
+      return this.isDragging || this.isThumbHover || this.isFocus
     },
     keyboardChangeStep () {
       return this.step || (this.max - this.min) / 10
+    },
+    noInteractive () {
+      return this.disabled || this.readonly
+    },
+    attrs () {
+      return {
+        name: this.realName,
+        disabled: this.realDisabled,
+        readonly: this.realReadonly
+      }
     }
   },
   methods: {
     handleTrackClick ({offsetX}) {
+      if (this.noInteractive) {
+        return
+      }
       let trackWidth = this.$refs.track.offsetWidth
       this.updateValueByRatio(offsetX / trackWidth)
       this.$refs.thumb.focus()
@@ -145,11 +161,17 @@ export default {
       this.isThumbHover = false
     },
     handleThumbDragStart () {
+      if (this.noInteractive) {
+        return
+      }
       this.isDragging = true
       this.previousRatio = this.ratio
       this.trackWidth = this.$refs.track.offsetWidth
     },
     handleThumbDrag ({distanceX}) {
+      if (this.noInteractive) {
+        return
+      }
       let ratio = this.previousRatio + distanceX / this.trackWidth
       this.updateValueByRatio(ratio)
     },
@@ -167,7 +189,20 @@ export default {
       return val
     },
     handleThumbNumericUpdage (delta) {
+      if (this.noInteractive) {
+        return
+      }
       this.localValue += delta
+    },
+    handleThumbFocus () {
+      if (this.disabled) {
+        this.$refs.thumb.blur()
+        return
+      }
+      this.isFocus = true
+    },
+    handleThumbBlur () {
+      this.isFocus = false
     }
   }
 }

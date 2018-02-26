@@ -74,4 +74,24 @@
     }
   }
 
+  &[disabled],
+  &[readonly] {
+    .veui-slider-track {
+      &-default {
+        &-bg {
+          background-color: @veui-gray-color-7;
+        }
+        &-fg {
+          background-color: @veui-brand-color-7;
+        }
+      }
+    }
+
+    .veui-slider-thumb {
+      &-default {
+        border-color: @veui-brand-color-7;
+      }
+    }
+  }
+
 }

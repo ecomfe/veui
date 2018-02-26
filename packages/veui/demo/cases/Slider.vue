@@ -4,6 +4,8 @@
 
     <section>
         <veui-slider v-model="value1"></veui-slider>
+        <veui-slider v-model="value1" readonly></veui-slider>
+        <veui-slider v-model="value1" disabled></veui-slider>
         <div class="desc">Range: 0~1, Value: {{ value1 }}</div>
     </section>
 
@@ -52,7 +54,7 @@ export default {
     return {
       value1: 0.2,
       value2: 333,
-      value3: 'hsl(0, 100%, 100%)'
+      value3: 'hsl(10, 100%, 100%)'
     }
   },
   methods: {
