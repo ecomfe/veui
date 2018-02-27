@@ -4,16 +4,18 @@
 
     <section>
         <veui-slider v-model="value1"></veui-slider>
-        <veui-slider v-model="value1" readonly></veui-slider>
-        <veui-slider v-model="value1" disabled></veui-slider>
+        <veui-slider v-model="value1" readonly>
+          <!-- 隐藏 tip -->
+          <div slot="tip"></div>
+        </veui-slider>
+        <veui-slider v-model="value1" disabled>
+          <div slot="tip"></div>
+        </veui-slider>
         <div class="desc">Range: 0~1, Value: {{ value1 }}</div>
     </section>
 
     <section>
-        <veui-slider v-model="value2" :min="0" :max="100" :step="8" mark>
-          <!-- 没有 tip -->
-          <div slot="tip"></div>
-        </veui-slider>
+        <veui-slider v-model="value2" :min="0" :max="100" :step="8" mark></veui-slider>
         <div class="desc">Range: 0~100, Step: 8, Value: {{ value2 }}</div>
     </section>
 

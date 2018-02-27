@@ -36,7 +36,9 @@
   <!-- 提示 -->
   <slot name="tip" target="thumb" :open="showTip">
     <veui-tooltip target="thumb" :open="showTip" custom ref="tip">{{
-      Math.round(localValue * 100) / 100 }}</veui-tooltip>
+      // 如果是数字就处理一下精度，否则会出现很多零
+      typeof value === 'number' ? Math.round(value * 100) / 100 : value
+    }}</veui-tooltip>
   </slot>
 </div>
 </template>
@@ -100,13 +102,19 @@ export default {
       },
       immediate: true
     },
-    localValue (val) {
-      if (this.$refs.tip) {
-        this.$refs.tip.relocate()
-      }
-      if (this.parser(this.value) !== val) {
-        this.$emit('input', this.formatter(val))
-      }
+    localValue: {
+      handler (val) {
+        if (this.$refs.tip) {
+          // 要用 nextTick，否则有 step 的 thumb 的 tip 定位到了前一个位置
+          this.$nextTick(() => {
+            this.$refs.tip.relocate()
+          })
+        }
+        if (this.parser(this.value) !== val) {
+          this.$emit('input', this.formatter(val))
+        }
+      },
+      immediate: true
     }
   },
   computed: {
