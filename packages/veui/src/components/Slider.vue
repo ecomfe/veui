@@ -18,7 +18,7 @@
   </div>
 
   <!-- 块 -->
-  <div v-for="(localValue, index) in localValues" :key="`thumb${index}`"
+  <div v-for="(_, index) in localValues" :key="`thumb${index}`"
     class="veui-slider-thumb" ref="thumb" tabindex="0"
     :style="{
       left: `${ratios[index] * 100}%`
@@ -37,20 +37,18 @@
       drag: (...args) => handleThumbDrag(index, ...args),
       dragend: (...args) => handleThumbDragEnd(index, ...args)
     }">
-    <slot name="thumb" :index="index" :focus="isThumbFocus[index]"
-      :hover="isThumbHover[index]" :dragging="isThumbDragging[index]">
+    <slot name="thumb" :index="index" :focus="currentThumbFocusIndex === index"
+      :hover="currentThumbHoverIndex === index" :dragging="currentThumbDraggingIndex === index">
       <div class="veui-slider-thumb-default"></div>
     </slot>
   </div>
 
   <!-- 提示 -->
-  <!-- <template v-for="(localValue, index) in localValues" v-if="!notip"> -->
-    <slot name="tip" :target="tooltipTarget" :open="showTips[currentIndex]">
-      <veui-tooltip :target="tooltipTarget" :open="showTips[currentIndex]" custom ref="tip">
-        <slot name="tip-label">{{ getValue(currentIndex) }}</slot>
-      </veui-tooltip>
-    </slot>
-  <!-- </template> -->
+  <slot name="tip" :target="tooltipTarget" :open="activeTooltipIndex >= 0" v-if="!notip">
+    <veui-tooltip :target="tooltipTarget" :open="activeTooltipIndex >= 0" custom ref="tip">
+      <slot name="tip-label">{{ tooltipLabel }}</slot>
+    </veui-tooltip>
+  </slot>
 
 </div>
 </template>
@@ -102,17 +100,17 @@ export default {
     return {
       localValues: [],
 
-      isThumbDragging: [],
-      isThumbHover: [],
-      isThumbFocus: [],
-
-      currentIndex: -1
+      currentThumbFocusIndex: -1,
+      currentThumbDraggingIndex: -1,
+      currentThumbHoverIndex: -1
     }
   },
   watch: {
     value: {
       handler (val) {
-        this.localValues = [].concat(val).map(val => this.getAdjustedValue(this.parser(val)))
+        this.localValues = [].concat(val)
+          .map(val => this.getAdjustedValue(this.parser(val)))
+          .sort((a, b) => a > b ? 1 : -1)
       },
       immediate: true
     },
@@ -138,10 +136,20 @@ export default {
       let {min, max} = this
       return this.localValues.map(val => (val - min) / (max - min))
     },
-    showTips () {
-      return this.localValues.map((val, index) => (
-        this.isThumbDragging[index] || this.isThumbHover[index] || this.isThumbFocus[index]
-      ))
+
+    activeTooltipIndex () {
+      if (this.currentThumbFocusIndex >= 0) {
+        return this.currentThumbFocusIndex
+      } else if (this.currentThumbHoverIndex >= 0) {
+        return this.currentThumbHoverIndex
+      }
+      return -1
+    },
+    tooltipTarget () {
+      return this.getThumbRefByIndex(this.activeTooltipIndex)
+    },
+    tooltipLabel () {
+      return this.getValueByIndex(this.activeTooltipIndex)
     },
 
     stepMarks () {
@@ -172,13 +180,28 @@ export default {
         readonly: this.realReadonly
       }
     },
+    localValueBoundary () {
+      let {currentThumbFocusIndex, min, max, ratios} = this
+      let len = this.localValues.length
+      if (len === 1) {
+        return { min, max }
+      }
+      let prevIndex = currentThumbFocusIndex - 1
+      let nextIndex = currentThumbFocusIndex + 1
+      let minLocalValue = prevIndex < 0 ? min : ratios[prevIndex] * (max - min) + min
+      let maxLocalValue = nextIndex > len - 1 ? max : ratios[nextIndex] * (max - min) + min
+      return {
+        min: minLocalValue,
+        max: maxLocalValue
+      }
+    },
     progressStyle () {
+      let ratios = this.ratios
       let left = 0
       let width
-      if (this.ratios.length === 1) {
-        width = `${this.ratios[0] * 100}%`
+      if (ratios.length === 1) {
+        width = `${ratios[0] * 100}%`
       } else {
-        let ratios = this.ratios.sort((a, b) => a > b ? 1 : -1)
         left = `${ratios[0] * 100}%`
         width = `${(ratios[ratios.length - 1] - ratios[0]) * 100}%`
       }
@@ -186,9 +209,6 @@ export default {
         left,
         width
       }
-    },
-    tooltipTarget () {
-      return this.currentIndex >= 0 && this.$refs.thumb && this.$refs.thumb[this.currentIndex]
     }
   },
   methods: {
@@ -202,17 +222,16 @@ export default {
     },
 
     handleThumbMouseEnter (index) {
-      this.$set(this.isThumbHover, index, true)
+      this.currentThumbHoverIndex = index
     },
     handleThumbMouseLeave (index) {
-      this.$set(this.isThumbHover, index, false)
+      this.currentThumbHoverIndex = -1
     },
     handleThumbDragStart (index) {
       if (this.noInteractive) {
         return
       }
-      this.currentIndex = index
-      this.$set(this.isThumbDragging, index, true)
+      this.currentThumbDraggingIndex = index
       this.previousRatio = this.ratios[index]
       this.trackWidth = this.$refs.track.offsetWidth
     },
@@ -224,26 +243,23 @@ export default {
       this.updateValueByRatio(ratio, index)
     },
     handleThumbDragEnd (index) {
-      this.currentIndex = -1
-      this.$set(this.isThumbDragging, index, false)
+      this.currentThumbDraggingIndex = -1
     },
     handleThumbNudgeUpdage (index, delta) {
       if (this.noInteractive) {
         return
       }
-      this.$set(this.localValues, index, this.localValues[index] + delta)
+      this.$set(this.localValues, index, this.getAdjustedValue(this.localValues[index] + delta))
     },
     handleThumbFocus (index) {
       if (this.disabled) {
         this.$refs.thumb[index].blur()
         return
       }
-      this.$set(this.isThumbFocus, index, true)
-      this.currentIndex = index
+      this.currentThumbFocusIndex = index
     },
     handleThumbBlur (index) {
-      this.$set(this.isThumbFocus, index, false)
-      this.currentIndex = -1
+      this.currentThumbFocusIndex = -1
     },
 
     updateValueByRatio (ratio, index = 0) {
@@ -251,17 +267,21 @@ export default {
       this.$set(this.localValues, index, val)
     },
     getAdjustedValue (val) {
-      val = clamp(val, this.min, this.max)
+      let {min, max} = this.localValueBoundary
+      val = clamp(val, min, max)
       if (this.step > 0) {
         val = Math.floor(val / this.step) * this.step
       }
       return val
     },
 
-    getValue (index) {
+    getValueByIndex (index) {
       let val = isArray(this.value) ? this.value[index] : this.value
       // 如果是数字就处理一下精度，否则会出现很多零
       return typeof val === 'number' ? Math.round(val * 100) / 100 : val
+    },
+    getThumbRefByIndex (index) {
+      return this.$refs.thumb && this.$refs.thumb[index]
     }
   }
 }
