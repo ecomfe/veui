@@ -56,13 +56,13 @@
 
     &:focus {
       outline: none;
+    }
+
+    &:focus,
+    &.focus-visible {
       .veui-slider-thumb-default {
         border-color: @veui-brand-color-1;
       }
-    }
-
-    &.focus-visible {
-      outline: @veui-warning-color-1 solid 1px;
     }
 
     &-default {
