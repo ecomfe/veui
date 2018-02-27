@@ -2,17 +2,17 @@ import { find, get, noop, isFunction } from 'lodash'
 import config from '../managers/config'
 
 config.defaults({
-  'numeric.step': 1
+  'nudge.step': 1
 })
 
 function clear (el) {
-  let numericData = el.numericData
-  if (!numericData) {
+  let nudgeData = el.__nudgeData__
+  if (!nudgeData) {
     return
   }
 
-  el.removeEventListener('keydown', numericData.keydownHandler)
-  el.numericData = null
+  el.removeEventListener('keydown', nudgeData.keydownHandler)
+  el.__nudgeData__ = null
 }
 
 function parseParams (el, { arg, value, modifiers }, vnode) {
@@ -30,7 +30,7 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
   // 解析回调函数
   let update = parseFn('update')
 
-  let step = get(value, 'step', config.get('numeric.step'))
+  let step = get(value, 'step', config.get('nudge.step'))
 
   return {
     axis,
@@ -42,21 +42,21 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
 function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
   const params = parseParams(el, { arg, value, modifiers }, vnode)
 
-  if (el.numericData) {
-    el.numericData.setOptions(params)
+  if (el.__nudgeData__) {
+    el.__nudgeData__.setOptions(params)
     return
   }
 
-  let numericData = {
+  let nudgeData = {
     options: {},
 
     setOptions (options) {
-      numericData.options = options
+      nudgeData.options = options
     },
 
     keydownHandler (event) {
       let {key, altKey, shiftKey} = event
-      let options = numericData.options
+      let options = nudgeData.options
 
       let increase = options.step
       if (altKey) {
@@ -68,13 +68,11 @@ function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
       switch (true) {
         case options.axis === 'x' && key === 'ArrowRight':
         case options.axis === 'y' && key === 'ArrowUp':
-          event.preventDefault()
           increase *= 1
           break
 
         case options.axis === 'x' && key === 'ArrowLeft':
         case options.axis === 'y' && key === 'ArrowDown':
-          event.preventDefault()
           increase *= -1
           break
 
@@ -87,12 +85,13 @@ function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
         return
       }
 
+      event.preventDefault()
       options.update(increase)
     }
   }
 
-  el.addEventListener('keydown', numericData.keydownHandler)
-  el.numericData = numericData
+  el.addEventListener('keydown', nudgeData.keydownHandler)
+  el.__nudgeData__ = nudgeData
 }
 
 export default {

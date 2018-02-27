@@ -15,9 +15,9 @@
     </div></slot>
   </div>
   <!-- 块 -->
-  <div class="veui-slider-thumb" ref="thumb" tabindex="0" v-numeric.x="{
+  <div class="veui-slider-thumb" ref="thumb" tabindex="0" v-nudge.x="{
     step: keyboardChangeStep,
-    update: handleThumbNumericUpdage
+    update: handleThumbNudgeUpdage
   }"
   @mouseenter="handleThumbMouseEnter"
   @mouseleave="handleThumbMouseLeave"
@@ -44,7 +44,7 @@
 <script>
 import { clamp } from 'lodash'
 import drag from '../directives/drag'
-import numeric from '../directives/numeric'
+import nudge from '../directives/nudge'
 import input from '../mixins/input'
 import Tooltip from './Tooltip'
 
@@ -83,7 +83,7 @@ export default {
     }
   },
   directives: {
-    drag, numeric
+    drag, nudge
   },
   data () {
     return {
@@ -188,7 +188,7 @@ export default {
       }
       return val
     },
-    handleThumbNumericUpdage (delta) {
+    handleThumbNudgeUpdage (delta) {
       if (this.noInteractive) {
         return
       }

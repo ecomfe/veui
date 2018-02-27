@@ -57,9 +57,9 @@
       <div class="form-row">
         <div class="form-key">宽度：</div>
         <div class="form-value">
-          <veui-input ui="small" v-numeric.y="{
+          <veui-input ui="small" v-nudge.y="{
             smallStep: 0,
-            update: handleThumbNumericUpdage
+            update: handleThumbNudgeUpdage
           }" v-model="width" @focus="log('focus')"></veui-input>
           <veui-input v-model="width" readonly></veui-input>
           <veui-input ui="large" v-model="width" disabled></veui-input>
@@ -99,7 +99,7 @@
 <script>
 import bus from '../bus'
 import { Input } from 'veui'
-import numeric from 'veui/directives/numeric'
+import nudge from 'veui/directives/nudge'
 
 export default {
   name: 'text-input',
@@ -107,7 +107,7 @@ export default {
     'veui-input': Input
   },
   directives: {
-    numeric
+    nudge
   },
   data () {
     return {
@@ -128,7 +128,7 @@ export default {
     log (item) {
       bus.$emit('log', item)
     },
-    handleThumbNumericUpdage (delta) {
+    handleThumbNudgeUpdage (delta) {
       let val = this.width
 
       let digits
