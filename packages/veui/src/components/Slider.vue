@@ -169,6 +169,7 @@ export default {
       return marks
     },
     keyboardChangeStep () {
+      // 如果没有指定 step ，就算一个
       return this.step || (this.max - this.min) / 10
     },
     noInteractive () {
