@@ -2,17 +2,22 @@
 <div class="veui-slider" v-bind="attrs">
   <!-- 条 -->
   <div class="veui-slider-track" @click="handleTrackClick" ref="track">
-    <slot name="track"><div class="veui-slider-track-default">
-      <div class="veui-slider-track-default-bg"></div>
-      <div class="veui-slider-track-default-marks" v-if="stepMarks">
-        <div v-for="mark in stepMarks" :key="mark" :style="{
-          left: `${mark * 100}%`
-        }"></div>
+    <slot name="track">
+      <div class="veui-slider-track-default">
+        <div class="veui-slider-track-default-wrapper">
+          <div class="veui-slider-track-default-bg"></div>
+          <div class="veui-slider-track-default-marks" v-if="stepMarks">
+            <div v-for="mark in stepMarks" :key="mark" :style="{
+              left: `${mark * 100}%`
+            }"></div>
+          </div>
+          <div class="veui-slider-track-default-fg" :style="{
+            width: `${ratio * 100}%`
+          }"></div>
+        </div>
+        <!-- /veui-slider-track-default -->
       </div>
-      <div class="veui-slider-track-default-fg" :style="{
-        width: `${ratio * 100}%`
-      }"></div>
-    </div></slot>
+    </slot>
   </div>
   <!-- 块 -->
   <div class="veui-slider-thumb" ref="thumb" tabindex="0" v-nudge.x="{
@@ -35,10 +40,12 @@
   </div>
   <!-- 提示 -->
   <slot name="tip" target="thumb" :open="showTip">
-    <veui-tooltip target="thumb" :open="showTip" custom ref="tip">{{
-      // 如果是数字就处理一下精度，否则会出现很多零
-      typeof value === 'number' ? Math.round(value * 100) / 100 : value
-    }}</veui-tooltip>
+    <veui-tooltip target="thumb" :open="showTip" custom ref="tip">
+      <slot name="tip-label">{{
+        // 如果是数字就处理一下精度，否则会出现很多零
+        typeof value === 'number' ? Math.round(value * 100) / 100 : value
+      }}</slot>
+    </veui-tooltip>
   </slot>
 </div>
 </template>
@@ -149,7 +156,8 @@ export default {
       return {
         name: this.realName,
         disabled: this.realDisabled,
-        readonly: this.realReadonly
+        readonly: this.realReadonly,
+        focus: this.isFocus
       }
     }
   },

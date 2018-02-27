@@ -4,18 +4,20 @@
 
     <section>
         <veui-slider v-model="value1"></veui-slider>
-        <veui-slider v-model="value1" readonly>
+        <veui-slider v-model="value1" readonly ui="small">
           <!-- 隐藏 tip -->
           <div slot="tip"></div>
         </veui-slider>
-        <veui-slider v-model="value1" disabled>
-          <div slot="tip"></div>
+        <veui-slider v-model="value1" disabled ui="tiny">
+          <span slot="tip-label">{{ value1.toFixed(2) }}</span>
         </veui-slider>
         <div class="desc">Range: 0~1, Value: {{ value1 }}</div>
     </section>
 
     <section>
-        <veui-slider v-model="value2" :min="0" :max="100" :step="8" mark></veui-slider>
+        <veui-slider ui="micro" v-model="value2" :min="0" :max="100" :step="8" mark>
+          <span slot="tip-label">{{ value2 }}%</span>
+        </veui-slider>
         <div class="desc">Range: 0~100, Step: 8, Value: {{ value2 }}</div>
     </section>
 
@@ -77,6 +79,7 @@ section {
 }
 
 .veui-slider {
+  margin: 10px 0;
   background: repeating-linear-gradient(135deg, #fff 0px, #fff 10px, #f7f7f7 11px, #f7f7f7 12px, #fff 13px, #fff 14px);
 }
 
