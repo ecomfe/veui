@@ -4,10 +4,7 @@
 
     <section>
         <veui-slider v-model="value1"></veui-slider>
-        <veui-slider v-model="value1" readonly ui="small">
-          <!-- 隐藏 tip -->
-          <div slot="tip"></div>
-        </veui-slider>
+        <veui-slider v-model="value1" readonly ui="small" notip></veui-slider>
         <veui-slider v-model="value1" disabled ui="tiny">
           <span slot="tip-label">{{ value1.toFixed(2) }}</span>
         </veui-slider>
@@ -18,6 +15,7 @@
         <veui-slider ui="micro" v-model="value2" :min="0" :max="100" :step="8" mark>
           <span slot="tip-label">{{ value2 }}%</span>
         </veui-slider>
+        <veui-slider ui="micro" disabled v-model="value2" :min="0" :max="100" :step="8" mark></veui-slider>
         <div class="desc">Range: 0~100, Step: 8, Value: {{ value2 }}</div>
     </section>
 

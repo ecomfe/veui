@@ -39,7 +39,7 @@
     <slot name="thumb"><div class="veui-slider-thumb-default"></div></slot>
   </div>
   <!-- 提示 -->
-  <slot name="tip" target="thumb" :open="showTip">
+  <slot name="tip" target="thumb" :open="showTip" v-if="!notip">
     <veui-tooltip target="thumb" :open="showTip" custom ref="tip">
       <slot name="tip-label">{{
         // 如果是数字就处理一下精度，否则会出现很多零
@@ -81,6 +81,7 @@ export default {
       }
     },
     mark: Boolean,
+    notip: Boolean,
 
     parser: {
       type: Function,
