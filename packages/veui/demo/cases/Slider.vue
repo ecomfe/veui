@@ -26,23 +26,27 @@
 
     <section>
         <veui-slider v-model="value3" :min="0" :max="360" :step="1" :parser="parseColorHue" :formatter="formatColorHue">
-          <div slot="track" style="width: 100%; height: 20px;
-            background: linear-gradient(to right, hsl(0, 100%, 50%) 0%, hsl(60, 100%, 50%) 16.67%, hsl(120, 100%, 50%) 33.33%, hsl(180, 100%, 50%) 50%, hsl(240, 100%, 50%) 66.67%, hsl(300, 100%, 50%) 83.33%, hsl(360, 100%, 50%) 100%)"></div>
-          <div slot="thumb" style="margin-top: 6px">
+          <div slot="track" style="width: 100%; height: 20px;" :style="{background: colorGradient}"></div>
+          <div slot="thumb" style="margin-top: 6px" slot-scope="{ thumbIndex }" :key="`thumb_${thumbIndex}`">
             <div style="width: 16px; height: 12px">
               <svg width="16" height="12" viewBox="0 0 16 12">
                 <polygon points="8,0 16,12 0,12"/>
               </svg>
             </div>
           </div>
-          <template slot="tip" slot-scope="{ open }">
+          <template slot="tip" slot-scope="{ open, activeIndex }">
             <div v-show="open" class="custom-tip" :style="{
-              left: `${parseColorHue(value3) / 360 * 100}%`,
-              backgroundColor: value3
+              left: `${(activeIndex >= 0 ? parseColorHue(value3[activeIndex]) : 0) / 360 * 100}%`,
+              backgroundColor: value3[activeIndex]
             }"></div>
           </template>
         </veui-slider>
-        <div class="desc">Range: 0~255, Step: 1, Value: <span :style="{ color: value3 }">{{ value3 }}</span></div>
+        <div class="desc">Range: 0~255, Step: 1, Value: <br> [
+          <span v-for="(val, index) in value3" :key="`colorValue${index}`">
+            "<span :style="{ color: val }">{{ val }}</span>"
+            <span v-if="index < value3.length - 1">,</span>
+          </span>
+        ]</div>
     </section>
 
   </article>
@@ -61,8 +65,16 @@ export default {
     return {
       value1: 0.2,
       value2: 333,
-      value3: 'hsl(10, 100%, 100%)',
+      value3: (new Array(5)).fill(1).map((_, i) => `hsl(${(i + 1) * 60}, 100%, 50%)`),
       value4: [22, 66]
+    }
+  },
+  computed: {
+    colorGradient () {
+      let colors = (new Array(7)).fill(1).map(function (_, index) {
+        return `hsl(${60 * index}, 100%, 50%) ${100 / 6 * index}%`
+      })
+      return `linear-gradient(to right, ${colors.join(',')})`
     }
   },
   methods: {

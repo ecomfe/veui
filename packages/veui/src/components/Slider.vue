@@ -37,14 +37,14 @@
       drag: (...args) => handleThumbDrag(index, ...args),
       dragend: (...args) => handleThumbDragEnd(index, ...args)
     }">
-    <slot name="thumb" :index="index" :focus="currentThumbFocusIndex === index"
+    <slot name="thumb" :index="index" :focus="currentThumbFocusIndex === index" :thumbIndex="index"
       :hover="currentThumbHoverIndex === index" :dragging="currentThumbDraggingIndex === index">
       <div class="veui-slider-thumb-default"></div>
     </slot>
   </div>
 
   <!-- 提示 -->
-  <slot name="tip" :target="tooltipTarget" :open="activeTooltipIndex >= 0" v-if="!notip">
+  <slot name="tip" :target="tooltipTarget" :open="activeTooltipIndex >= 0" :activeIndex="activeTooltipIndex" v-if="!notip">
     <veui-tooltip :target="tooltipTarget" :open="activeTooltipIndex >= 0" custom ref="tip">
       <slot name="tip-label">{{ tooltipLabel }}</slot>
     </veui-tooltip>
@@ -125,7 +125,8 @@ export default {
         }
         let value = [].concat(this.value).map(val => this.parser(val))
         if (!isEqual(value, localValues)) {
-          this.$emit('input', this.formatter(localValues.length > 1 ? localValues : localValues[0]))
+          localValues = localValues.map(this.formatter)
+          this.$emit('input', localValues.length > 1 ? localValues : localValues[0])
         }
       },
       immediate: true
@@ -249,7 +250,9 @@ export default {
       if (this.noInteractive) {
         return
       }
-      this.$set(this.localValues, index, this.getAdjustedValue(this.localValues[index] + delta))
+      let {min, max} = this.localValueBoundary
+      let val = this.getAdjustedValue(this.localValues[index] + delta, min, max)
+      this.$set(this.localValues, index, val)
     },
     handleThumbFocus (index) {
       if (this.disabled) {
@@ -263,11 +266,11 @@ export default {
     },
 
     updateValueByRatio (ratio, index = 0) {
-      let val = this.getAdjustedValue(this.min + (this.max - this.min) * ratio)
+      let {min, max} = this.localValueBoundary
+      let val = this.getAdjustedValue(this.min + (this.max - this.min) * ratio, min, max)
       this.$set(this.localValues, index, val)
     },
-    getAdjustedValue (val) {
-      let {min, max} = this.localValueBoundary
+    getAdjustedValue (val, min = this.min, max = this.max) {
       val = clamp(val, min, max)
       if (this.step > 0) {
         val = Math.floor(val / this.step) * this.step

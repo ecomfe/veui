@@ -145,7 +145,9 @@ export default {
     },
 
     relocate () {
-      this.tether.position()
+      if (this.tether) {
+        this.tether.position()
+      }
     },
 
     findTargetNode () {
