@@ -20,6 +20,11 @@
     </section>
 
     <section>
+        <veui-slider v-model="value4" :min="0" :max="100"></veui-slider>
+        <div class="desc">Range: 0~100, Value: {{ value4 }}</div>
+    </section>
+
+    <section>
         <veui-slider v-model="value3" :min="0" :max="360" :step="1" :parser="parseColorHue" :formatter="formatColorHue">
           <div slot="track" style="width: 100%; height: 20px;
             background: linear-gradient(to right, hsl(0, 100%, 50%) 0%, hsl(60, 100%, 50%) 16.67%, hsl(120, 100%, 50%) 33.33%, hsl(180, 100%, 50%) 50%, hsl(240, 100%, 50%) 66.67%, hsl(300, 100%, 50%) 83.33%, hsl(360, 100%, 50%) 100%)"></div>
@@ -37,7 +42,7 @@
             }"></div>
           </template>
         </veui-slider>
-        <div class="desc">Range: 0~255, Step: 1, Value: {{ value3 }}</div>
+        <div class="desc">Range: 0~255, Step: 1, Value: <span :style="{ color: value3 }">{{ value3 }}</span></div>
     </section>
 
   </article>
@@ -56,7 +61,8 @@ export default {
     return {
       value1: 0.2,
       value2: 333,
-      value3: 'hsl(10, 100%, 100%)'
+      value3: 'hsl(10, 100%, 100%)',
+      value4: [22, 66]
     }
   },
   methods: {

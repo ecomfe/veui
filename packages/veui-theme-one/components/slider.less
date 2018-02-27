@@ -54,6 +54,9 @@
 
     &:focus {
       outline: none;
+      .veui-slider-thumb-default {
+        border-color: @veui-brand-color-1;
+      }
     }
 
     &.focus-visible {
@@ -120,14 +123,6 @@
     .veui-slider-thumb {
       &-default {
         border-color: @veui-gray-color-4;
-      }
-    }
-  }
-
-  &[focus] {
-    .veui-slider-thumb {
-      &-default {
-        border-color: @veui-brand-color-1;
       }
     }
   }
