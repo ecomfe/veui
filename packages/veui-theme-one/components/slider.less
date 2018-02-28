@@ -20,6 +20,7 @@
       }
 
       &-bg,
+      &-sp,
       &-fg {
         height: @default-progress-height;
         border-radius: @default-progress-height / 2;
@@ -29,10 +30,18 @@
         background-color: @veui-gray-color-5;
       }
 
+      &-sp,
       &-fg {
-        background-color: @veui-brand-color;
         position: absolute;
         top: 0;
+      }
+
+      &-sp {
+        background-color: @veui-brand-color-8;
+      }
+
+      &-fg {
+        background-color: @veui-brand-color;
       }
 
       &-marks {

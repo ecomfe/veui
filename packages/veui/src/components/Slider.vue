@@ -11,6 +11,7 @@
               left: `${mark * 100}%`
             }"></div>
           </div>
+          <div class="veui-slider-track-default-sp" :style="secondardProgressStyle"></div>
           <div class="veui-slider-track-default-fg" :style="progressStyle"></div>
         </div>
       </div>
@@ -44,7 +45,7 @@
   </div>
 
   <!-- 提示 -->
-  <slot name="tip" :target="tooltipTarget" :open="activeTooltipIndex >= 0" :activeIndex="activeTooltipIndex" v-if="!notip">
+  <slot name="tip" :target="tooltipTarget" :open="activeTooltipIndex >= 0" :activeIndex="activeTooltipIndex">
     <veui-tooltip :target="tooltipTarget" :open="activeTooltipIndex >= 0" custom ref="tip">
       <slot name="tip-label">{{ tooltipLabel }}</slot>
     </veui-tooltip>
@@ -68,6 +69,10 @@ export default {
   mixins: [input],
   props: {
     value: true,
+    secondaryProgress: {
+      default: 0
+    },
+
     min: {
       type: Number,
       default: 0
@@ -82,7 +87,6 @@ export default {
       validator: val => val >= 0
     },
     mark: Boolean,
-    notip: Boolean,
 
     parser: {
       type: Function,
@@ -198,19 +202,15 @@ export default {
       }
     },
     progressStyle () {
-      let ratios = this.ratios
-      let left = 0
-      let width
-      if (ratios.length === 1) {
-        width = `${ratios[0] * 100}%`
-      } else {
-        left = `${ratios[0] * 100}%`
-        width = `${(ratios[ratios.length - 1] - ratios[0]) * 100}%`
-      }
-      return {
-        left,
-        width
-      }
+      return this.getProgressStyle(this.ratios)
+    },
+
+    localSecondaryProgress () {
+      let {min, max} = this
+      return [].concat(this.secondaryProgress).map(progress => (progress - min) / (max - min))
+    },
+    secondardProgressStyle () {
+      return this.getProgressStyle(this.localSecondaryProgress)
     }
   },
   methods: {
@@ -286,6 +286,21 @@ export default {
     },
     getThumbRefByIndex (index) {
       return this.$refs.thumb && this.$refs.thumb[index]
+    },
+
+    getProgressStyle (ratios) {
+      let left = 0
+      let width
+      if (ratios.length === 1) {
+        width = `${ratios[0] * 100}%`
+      } else {
+        left = `${ratios[0] * 100}%`
+        width = `${(ratios[ratios.length - 1] - ratios[0]) * 100}%`
+      }
+      return {
+        left,
+        width
+      }
     }
   }
 }
