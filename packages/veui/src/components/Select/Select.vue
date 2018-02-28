@@ -34,7 +34,7 @@
       @keydown.esc.stop="expanded = false"
       @keydown.down.prevent="navigate()"
       @keydown.up.prevent="navigate(false)">
-      <veui-option-group :options="options" ref="options">
+      <veui-option-group :options="realOptions" ref="options">
         <slot></slot>
         <template v-if="$scopedSlots['group-label']" slot="label" slot-scope="group">
           <slot name="group-label" v-bind="group"></slot>
