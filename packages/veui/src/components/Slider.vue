@@ -37,7 +37,9 @@
       dragstart: (...args) => handleThumbDragStart(index, ...args),
       drag: (...args) => handleThumbDrag(index, ...args),
       dragend: (...args) => handleThumbDragEnd(index, ...args)
-    }">
+    }"
+    role="slider" v-bind="thumbAttrs[index]"
+  >
     <slot name="thumb" :index="index" :focus="currentThumbFocusIndex === index" :thumbIndex="index"
       :hover="currentThumbHoverIndex === index" :dragging="currentThumbDraggingIndex === index">
       <div class="veui-slider-thumb-default"></div>
@@ -187,19 +189,7 @@ export default {
       }
     },
     localValueBoundary () {
-      let {currentThumbFocusIndex, min, max, ratios} = this
-      let len = this.localValues.length
-      if (len === 1) {
-        return { min, max }
-      }
-      let prevIndex = currentThumbFocusIndex - 1
-      let nextIndex = currentThumbFocusIndex + 1
-      let minLocalValue = prevIndex < 0 ? min : ratios[prevIndex] * (max - min) + min
-      let maxLocalValue = nextIndex > len - 1 ? max : ratios[nextIndex] * (max - min) + min
-      return {
-        min: minLocalValue,
-        max: maxLocalValue
-      }
+      return this.getLocalValueBoundary(this.currentThumbFocusIndex)
     },
     progressStyle () {
       return this.getProgressStyle(this.ratios)
@@ -211,6 +201,17 @@ export default {
     },
     secondardProgressStyle () {
       return this.getProgressStyle(this.localSecondaryProgress)
+    },
+    thumbAttrs () {
+      return this.localValues.map((value, index) => {
+        let {min, max} = this.getLocalValueBoundary(index)
+        return {
+          'aria-valuemin': this.reduceDecimal(min),
+          'aria-valuemax': this.reduceDecimal(max),
+          'aria-valuenow': this.reduceDecimal(value),
+          'aria-valuetext': this.formatter(this.reduceDecimal(value))
+        }
+      })
     }
   },
   methods: {
@@ -281,6 +282,9 @@ export default {
 
     getValueByIndex (index) {
       let val = isArray(this.value) ? this.value[index] : this.value
+      return this.reduceDecimal(val)
+    },
+    reduceDecimal (val) {
       // 如果是数字就处理一下精度，否则会出现很多零
       return typeof val === 'number' ? Math.round(val * 100) / 100 : val
     },
@@ -288,6 +292,21 @@ export default {
       return this.$refs.thumb && this.$refs.thumb[index]
     },
 
+    getLocalValueBoundary (thumbIndex) {
+      let {min, max, ratios} = this
+      let len = this.localValues.length
+      if (len === 1) {
+        return { min, max }
+      }
+      let prevIndex = thumbIndex - 1
+      let nextIndex = thumbIndex + 1
+      let minLocalValue = prevIndex < 0 ? min : ratios[prevIndex] * (max - min) + min
+      let maxLocalValue = nextIndex > len - 1 ? max : ratios[nextIndex] * (max - min) + min
+      return {
+        min: minLocalValue,
+        max: maxLocalValue
+      }
+    },
     getProgressStyle (ratios) {
       let left = 0
       let width
