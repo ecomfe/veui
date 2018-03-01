@@ -1,0 +1,141 @@
+@import "../lib.less";
+@import (reference) "../input.less";
+
+.veui-slider {
+  @default-progress-height: 4px;
+  @default-thumb-height: 14px;
+  @default-mark-top-offset: 3px;
+  @default-mark-height: @default-progress-height + @default-mark-top-offset * 2;
+
+  width: 100%;
+  min-width: @veui-width-normal;
+  position: relative;
+  user-select: none;
+  overflow: visible;
+
+  &-track {
+    &-default {
+      &-wrapper {
+        position: relative;
+      }
+
+      &-bg,
+      &-sp,
+      &-fg {
+        height: @default-progress-height;
+        border-radius: @default-progress-height / 2;
+      }
+
+      &-bg {
+        background-color: @veui-gray-color-5;
+      }
+
+      &-sp,
+      &-fg {
+        position: absolute;
+        top: 0;
+      }
+
+      &-sp {
+        background-color: @veui-brand-color-8;
+      }
+
+      &-fg {
+        background-color: @veui-brand-color;
+      }
+
+      &-marks {
+        width: 100%;
+        position: absolute;
+        top: -1 * @default-mark-top-offset;
+        div {
+          height: @default-mark-height;
+          border-left: 1px solid @veui-gray-color-5;
+          position: absolute;
+        }
+      }
+    }
+  }
+
+  &-thumb {
+    position: absolute;
+    left: 0;
+    // 利用 translateX 左偏移一半，实现 thumb 宽度自适应
+    transform: translateX(-50%);
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus,
+    &.focus-visible {
+      .veui-slider-thumb-default {
+        border-color: @veui-brand-color-1;
+      }
+    }
+
+    &-default {
+      width: @default-thumb-height;
+      height: @default-thumb-height;
+      border: 2px solid @veui-brand-color;
+      border-radius: 100%;
+      background-color: #fff;
+    }
+  }
+
+  .slider-size(@slider-height) {
+    .veui-slider {
+      &-track {
+        &-default {
+          // Slider 高度靠 default track 撑起来，如果替换了 track slot 就高度自适应了
+          height: @slider-height;
+          padding-top: (@slider-height - @default-progress-height) / 2;
+        }
+      }
+      &-thumb {
+        // track/thumb slot 高度变化需要调整 thumb 的位置
+        top: (@slider-height - @default-thumb-height) / 2;
+      }
+    }
+  }
+
+  .slider-size(@veui-height-normal);
+  &[ui~="large"] {
+    .slider-size(@veui-height-large);
+  }
+  &[ui~="small"] {
+    .slider-size(@veui-height-small);
+  }
+  &[ui~="tiny"] {
+    .slider-size(@veui-height-tiny);
+  }
+  &[ui~="micro"] {
+    .slider-size(@veui-height-micro);
+  }
+
+  &.veui-disabled,
+  &.veui-readonly {
+    .veui-slider-track {
+      &-default {
+        &-bg {
+          background-color: @veui-gray-color-6;
+        }
+        &-fg {
+          background-color: @veui-gray-color-4;
+        }
+        &-marks {
+          div {
+            border-color: @veui-gray-color-6;
+          }
+        }
+      }
+    }
+
+    .veui-slider-thumb {
+      &-default {
+        border-color: @veui-gray-color-4;
+      }
+    }
+  }
+
+}

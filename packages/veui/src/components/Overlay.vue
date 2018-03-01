@@ -144,6 +144,12 @@ export default {
       }
     },
 
+    relocate () {
+      if (this.tether) {
+        this.tether.position()
+      }
+    },
+
     findTargetNode () {
       if (this.target) {
         this.targetNode = getNodes(this.target, this.$vnode.context)[0]

@@ -54,6 +54,18 @@
         </div>
       </div>
 
+      <div class="form-row">
+        <div class="form-key">宽度：</div>
+        <div class="form-value">
+          <veui-input ui="small" v-nudge.y="{
+            smallStep: 0,
+            update: handleThumbNudgeUpdage
+          }" v-model="width" @focus="log('focus')"></veui-input>
+          <veui-input v-model="width" readonly></veui-input>
+          <veui-input ui="large" v-model="width" disabled></veui-input>
+        </div>
+      </div>
+
       <div class="form-row five-sizes">
         <div class="form-key">5 种大小：</div>
         <div class="form-value">
@@ -87,11 +99,15 @@
 <script>
 import bus from '../bus'
 import { Input } from 'veui'
+import nudge from 'veui/directives/nudge'
 
 export default {
   name: 'text-input',
   components: {
     'veui-input': Input
+  },
+  directives: {
+    nudge
   },
   data () {
     return {
@@ -104,12 +120,44 @@ export default {
       textarea1: '1. 使用rows\n2. 固定3行高度\n3. 不包括padding',
       textarea2: '设置高度，同时可缩放',
       textarea3: '默认高度',
-      poem: '兩岸猿聲啼不住，輕舟已過萬重山'
+      poem: '兩岸猿聲啼不住，輕舟已過萬重山',
+      width: '1024px'
     }
   },
   methods: {
     log (item) {
       bus.$emit('log', item)
+    },
+    handleThumbNudgeUpdage (delta) {
+      let val = this.width
+
+      let digits
+      let unit
+      if (typeof val === 'string') {
+        let matched = val.match(/^(\d+(?:\.\d+)?)(.*)$/)
+        if (!matched) {
+          return
+        }
+        [digits, unit] = matched.slice(1)
+        digits = parseFloat(digits)
+        if (isNaN(digits)) {
+          return
+        }
+      } else if (typeof val === 'number') {
+        digits = val
+      } else {
+        return
+      }
+
+      delta = Math.ceil(Math.abs(delta)) * Math.sign(delta)
+
+      // 因为加 0.1 所以处理一下，否则会出现 0.30000000000000004
+      let newVal = Math.round((digits + delta) * 10) / 10
+      if (unit !== undefined) {
+        newVal += unit
+      }
+
+      this.width = newVal
     }
   }
 }

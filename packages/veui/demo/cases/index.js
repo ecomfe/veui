@@ -32,6 +32,7 @@ import Transfer from './Transfer'
 import Schedule from './Schedule'
 import Textarea from './Textarea'
 import Icon from './Icon'
+import Slider from './Slider'
 
 export default [
   {
@@ -158,6 +159,11 @@ export default [
     path: '/select',
     name: 'Select',
     component: Select
+  },
+  {
+    path: '/slider',
+    name: 'Slider',
+    component: Slider
   },
   {
     path: '/steps',
