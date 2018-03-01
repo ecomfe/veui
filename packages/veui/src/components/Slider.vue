@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { clamp, isArray, isEqual } from 'lodash'
+import { clamp, isArray, isEqual, identity } from 'lodash'
 import drag from '../directives/drag'
 import nudge from '../directives/nudge'
 import input from '../mixins/input'
@@ -90,13 +90,13 @@ export default {
     },
     mark: Boolean,
 
-    parser: {
+    parse: {
       type: Function,
-      default: val => val
+      default: identity
     },
-    formatter: {
+    format: {
       type: Function,
-      default: val => val
+      default: identity
     }
   },
   directives: {
@@ -115,7 +115,7 @@ export default {
     value: {
       handler (val) {
         this.localValues = [].concat(val)
-          .map(val => this.getAdjustedValue(this.parser(val)))
+          .map(val => this.getAdjustedValue(this.parse(val)))
           .sort((a, b) => a > b ? 1 : -1)
       },
       immediate: true
@@ -125,13 +125,12 @@ export default {
         if (this.$refs.tip) {
           // 要用 nextTick，否则有 step 的 thumb 的 tip 定位到了前一个位置
           this.$nextTick(() => {
-            // this.$refs.tip.forEach(tip => tip.relocate())
             this.$refs.tip.relocate()
           })
         }
-        let value = [].concat(this.value).map(val => this.parser(val))
+        let value = [].concat(this.value).map(val => this.parse(val))
         if (!isEqual(value, localValues)) {
-          localValues = localValues.map(this.formatter)
+          localValues = localValues.map(this.format)
           this.$emit('input', localValues.length > 1 ? localValues : localValues[0])
         }
       },
@@ -209,7 +208,7 @@ export default {
           'aria-valuemin': this.reduceDecimal(min),
           'aria-valuemax': this.reduceDecimal(max),
           'aria-valuenow': this.reduceDecimal(value),
-          'aria-valuetext': this.formatter(this.reduceDecimal(value))
+          'aria-valuetext': this.format(this.reduceDecimal(value))
         }
       })
     }

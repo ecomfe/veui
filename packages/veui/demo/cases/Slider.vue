@@ -27,7 +27,7 @@
     </section>
 
     <section>
-        <veui-slider v-model="value3" :min="0" :max="360" :step="1" :parser="parseColorHue" :formatter="formatColorHue">
+        <veui-slider v-model="value3" :min="0" :max="360" :step="1" :parse="parseColorHue" :format="formatColorHue">
           <div slot="track" style="width: 100%; height: 20px;" :style="{background: colorGradient}"></div>
           <div slot="thumb" style="margin-top: 6px" slot-scope="{ thumbIndex }" :key="`thumb_${thumbIndex}`">
             <div style="width: 16px; height: 12px">
