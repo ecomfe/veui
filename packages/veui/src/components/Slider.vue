@@ -19,7 +19,7 @@
   </div>
 
   <!-- 块 -->
-  <div v-for="(_, index) in localValues" :key="`thumb${index}`"
+  <div v-for="(_, index) in new Array(thumbCount)" :key="`thumb${index}`"
     class="veui-slider-thumb" ref="thumb" tabindex="0"
     :style="{
       left: `${ratios[index] * 100}%`
@@ -32,16 +32,14 @@
       step: keyboardChangeStep,
       update: (...args) => handleThumbNudgeUpdage(index, ...args)
     }"
-    v-drag="{
-      axis: 'x',
-      dragstart: (...args) => handleThumbDragStart(index, ...args),
-      drag: (...args) => handleThumbDrag(index, ...args),
-      dragend: (...args) => handleThumbDragEnd(index, ...args)
-    }"
+    v-drag="thumbDragOptions[index]"
     role="slider" v-bind="thumbAttrs[index]"
   >
-    <slot name="thumb" :index="index" :focus="currentThumbFocusIndex === index" :thumbIndex="index"
-      :hover="currentThumbHoverIndex === index" :dragging="currentThumbDraggingIndex === index">
+    <slot name="thumb" :index="index"
+      :focus="currentThumbFocusIndex === index"
+      :hover="currentThumbHoverIndex === index"
+      :dragging="currentThumbDraggingIndex === index"
+    >
       <div class="veui-slider-thumb-default"></div>
     </slot>
   </div>
@@ -109,7 +107,9 @@ export default {
 
       currentThumbFocusIndex: -1,
       currentThumbDraggingIndex: -1,
-      currentThumbHoverIndex: -1
+      currentThumbHoverIndex: -1,
+
+      thumbCount: 0
     }
   },
   watch: {
@@ -122,17 +122,23 @@ export default {
       immediate: true
     },
     localValues: {
-      handler (localValues) {
+      handler (newVal, oldVal = []) {
+        if (newVal.length !== oldVal.length) {
+          // 解耦 localValue 和 localValue.length，防止依赖 localValue 长度的 drag options 在拖动时改变
+          this.thumbCount = newVal.length
+        }
+
         if (this.$refs.tip) {
           // 要用 nextTick，否则有 step 的 thumb 的 tip 定位到了前一个位置
           this.$nextTick(() => {
             this.$refs.tip.relocate()
           })
         }
+
         let value = [].concat(this.value).map(val => this.parse(val))
-        if (!isEqual(value, localValues)) {
-          localValues = localValues.map(this.format)
-          this.$emit('input', localValues.length > 1 ? localValues : localValues[0])
+        if (!isEqual(value, newVal)) {
+          newVal = newVal.map(this.format)
+          this.$emit('input', newVal.length > 1 ? newVal : newVal[0])
         }
       },
       immediate: true
@@ -217,6 +223,14 @@ export default {
           'aria-valuetext': this.format(this.reduceDecimal(value))
         }
       })
+    },
+    thumbDragOptions () {
+      return (new Array(this.thumbCount)).fill(1).map((_, index) => ({
+        axis: 'x',
+        dragstart: (...args) => this.handleThumbDragStart(index, ...args),
+        drag: (...args) => this.handleThumbDrag(index, ...args),
+        dragend: (...args) => this.handleThumbDragEnd(index, ...args)
+      }))
     }
   },
   methods: {
