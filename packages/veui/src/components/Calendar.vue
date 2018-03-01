@@ -1,27 +1,84 @@
 <template>
-<div class="veui-calendar" @mouseleave="markEnd()">
+<div
+  class="veui-calendar"
+  role="application"
+  aria-label="日历"
+  @mouseleave="markEnd()">
   <slot name="before"></slot>
-  <div v-for="(p, pIndex) in panels" :key="pIndex" class="veui-calendar-panel" :class="{ [`veui-calendar-${p.view}`]: true }">
-    <div class="veui-calendar-head">
-      <button type="button" v-if="pIndex === 0 || p.view !== 'days'" class="veui-calendar-prev" @click="step(false, p.view)" :disabled="disabled || readonly"><veui-icon :name="icons.prev"></veui-icon></button>
+  <div
+    v-for="(p, pIndex) in panels"
+    :key="pIndex"
+    :class="['veui-calendar-panel', `veui-calendar-${p.view}`]">
+    <div class="veui-calendar-head" :aria-hidden="String(pIndex > 0)">
+      <button
+        type="button"
+        ref="prev"
+        :class="{
+          'veui-calendar-prev': true,
+          'veui-calendar-invisible': pIndex !== 0 && p.view === 'days'
+        }"
+        :disabled="disabled || readonly"
+        @click="step(false, p.view)"
+        :aria-hidden="String(pIndex > 0)"
+        :aria-label="getStepLabel(p.view, 'prev')"
+        :aria-controls="`${id}:panel-title:${pIndex}`">
+        <veui-icon :name="icons.prev"/>
+      </button>
       <template v-if="p.view === 'days'">
-        <button type="button" class="veui-calendar-select" @click="setView(pIndex, 'years')" :disabled="disabled || readonly"><b>{{ p.year }}</b> 年 <veui-icon :name="icons.expand"></veui-icon></button>
-        <button type="button" class="veui-calendar-select" @click="setView(pIndex, 'months')" :disabled="disabled || readonly"><b>{{ p.month + 1 }}</b> 月 <veui-icon :name="icons.expand"></veui-icon></button>
+        <button
+          type="button"
+          ref="year-select"
+          class="veui-calendar-select"
+          :disabled="disabled || readonly"
+          @click="setView(pIndex, 'years')"
+          :aria-label="`选择年份，现在是 ${p.year} 年`">
+          <b>{{ p.year }}</b> 年 <veui-icon :name="icons.expand"/>
+        </button>
+        <button
+          type="button"
+          ref="month-select"
+          :id="`${id}:panel-title:${pIndex}`"
+          class="veui-calendar-select"
+          :disabled="disabled || readonly"
+          @click="setView(pIndex, 'months')"
+          :aria-label="`选择月份，现在是 ${p.month + 1} 月`">
+          <b>{{ p.month + 1 }}</b> 月 <veui-icon :name="icons.expand"/>
+        </button>
       </template>
-      <template v-if="p.view === 'months'">
-        <span class="veui-calendar-label"><b>{{ p.year }}</b> 年</span>
+      <template v-else-if="p.view === 'months'">
+        <span
+          class="veui-calendar-label"
+          :id="`${id}:panel-title:${pIndex}`">
+          <b>{{ p.year }}</b> 年
+        </span>
       </template>
-      <template v-if="p.view === 'years'">
-        <span class="veui-calendar-label"><b>{{ p.year - p.year % 10 }}–{{ p.year - p.year % 10 + 9 }}</b> 年</span>
+      <template v-else-if="p.view === 'years'">
+        <span
+          class="veui-calendar-label"
+          :id="`${id}:panel-title:${pIndex}`">
+          <b>{{ p.year - p.year % 10 }}–{{ p.year - p.year % 10 + 9 }}</b> 年
+        </span>
       </template>
-      <button type="button" v-if="pIndex === panels.length - 1 || p.view !== 'days'" class="veui-calendar-next" @click="step(true, p.view)" :disabled="disabled || readonly"><veui-icon :name="icons.next"></veui-icon></button>
+      <button
+        type="button"
+        ref="next"
+        :class="{
+          'veui-calendar-next': true,
+          'veui-calendar-invisible': pIndex !== panels.length - 1 && p.view === 'days'
+        }"
+        :disabled="disabled || readonly"
+        @click="step(true, p.view)"
+        :aria-label="getStepLabel(p.view, 'next')"
+        :aria-controls="`${id}:panel-title:${pIndex}`">
+        <veui-icon :name="icons.next"/>
+      </button>
     </div>
-    <div class="veui-calendar-body" :class="{ 'veui-calendar-multiple-range': multiple && range }">
+    <div ref="body" class="veui-calendar-body" :class="{ 'veui-calendar-multiple-range': multiple && range }">
       <table>
         <template v-if="p.view === 'days'">
           <thead>
             <tr>
-              <th v-for="dayName in dayNames" :key="dayName">{{ dayName }}</th>
+              <th v-for="(dayName, index) in dayNames" :key="index" :aria-label="dayFullNames[index]">{{ dayName }}</th>
             </tr>
           </thead>
           <tbody>
@@ -29,8 +86,18 @@
               <td v-for="day in week"
                 :key="`${day.year}-${day.month + 1}-${day.date}`"
                 :class="getDateClass(day, p)">
-                <button type="button" v-if="fillMonth && panel === 1 || day.month === p.month" @click="selectDay(day)"
-                  @mouseenter="markEnd(day)" @focus="markEnd(day)" :disabled="realDisabled || realReadonly || day.isDisabled">
+                <button
+                  type="button"
+                  v-if="fillMonth && panel === 1 || day.month === p.month" @click="selectDay(day)"
+                  :disabled="realDisabled || realReadonly || day.isDisabled"
+                  @mouseenter="markEnd(day)"
+                  @focus="markEnd(day)"
+                  @keydown.up.prevent="moveFocus(p.view, -7)"
+                  @keydown.right.prevent="moveFocus(p.view, 1)"
+                  @keydown.down.prevent="moveFocus(p.view, 7)"
+                  @keydown.left.prevent="moveFocus(p.view, -1)"
+                  :aria-label="getLocaleString(day)"
+                  :tabindex="day.isFocus ? null : '-1'">
                   <slot name="date" v-bind="{
                     year: day.year,
                     month: day.month,
@@ -44,14 +111,33 @@
         <tbody v-else-if="p.view === 'months'">
           <tr v-for="i in 3" :key="i">
             <td v-for="j in 4" :class="getMonthClass(p, i, j)" :key="j">
-              <button type="button" @click="selectMonth(pIndex, (i - 1) * 4 + j - 1)">{{ (i - 1) * 4 + j }} 月</button>
+              <button
+                type="button"
+                @click="selectMonth(pIndex, (i - 1) * 4 + j - 1)"
+                @keydown.up.prevent="moveFocus(p.view, -4)"
+                @keydown.right.prevent="moveFocus(p.view, 1)"
+                @keydown.down.prevent="moveFocus(p.view, 4)"
+                @keydown.left.prevent="moveFocus(p.view, -1)"
+                :tabindex="i === 1 && j === 1 ? null : '-1'">
+                {{ (i - 1) * 4 + j }} 月
+              </button>
             </td>
           </tr>
         </tbody>
         <tbody v-else-if="p.view === 'years'">
           <tr v-for="i in 3" :key="i">
             <td v-for="j in 4" :class="getYearClass(p, i, j)" :key="j">
-              <button type="button" v-if="(i - 1) * 4 + j - 1 < 10" @click="selectYear(pIndex, p.year - p.year % 10 + (i - 1) * 4 + j - 1)">{{ p.year - p.year % 10 + (i - 1) * 4 + j - 1 }}</button>
+              <button
+                type="button"
+                v-if="(i - 1) * 4 + j - 1 < 10"
+                @click="selectYear(pIndex, p.year - p.year % 10 + (i - 1) * 4 + j - 1)"
+                @keydown.up.prevent="moveFocus(p.view, getYearOffset(i, j, false))"
+                @keydown.right.prevent="moveFocus(p.view, 1)"
+                @keydown.down.prevent="moveFocus(p.view, getYearOffset(i, j, true))"
+                @keydown.left.prevent="moveFocus(p.view, -1)"
+                :tabindex="i === 1 && j === 1 ? null : '-1'">
+                {{ p.year - p.year % 10 + (i - 1) * 4 + j - 1 }}
+              </button>
             </td>
           </tr>
         </tbody>
@@ -64,7 +150,9 @@
 
 <script>
 import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/date'
-import { flattenDeep, findIndex } from 'lodash'
+import { closest, focusIn } from '../utils/dom'
+import { sign, isPositive } from '../utils/math'
+import { flattenDeep, findIndex, uniqueId } from 'lodash'
 import icons from '../mixins/icons'
 import input from '../mixins/input'
 import config from '../managers/config'
@@ -74,14 +162,41 @@ config.defaults({
   'calendar.weekStart': 1
 })
 
-let dayNames = [
+const CELL_SELECTOR = {
+  days: '.veui-calendar-day',
+  months: '.veui-calendar-month',
+  years: '.veui-calendar-year'
+}
+
+/**
+ *  展开写，后面可能要拆出去放到语言包
+ */
+
+const DAY_NAMES = [
   '一', '二', '三', '四', '五', '六', '日'
 ]
 
-let monthNames = [
+const DAY_FULL_NAMES = [
+  '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'
+]
+
+const MONTH_NAMES = [
   '一月', '二月', '三月', '四月', '五月', '六月',
   '七月', '八月', '九月', '十月', '十一月', '十二月'
 ]
+
+const STEP_LABELS = {
+  prev: {
+    days: '上个月',
+    months: '上一年',
+    years: '上十年'
+  },
+  next: {
+    days: '下个月',
+    months: '下一年',
+    years: '下十年'
+  }
+}
 
 export default {
   name: 'veui-calendar',
@@ -144,11 +259,14 @@ export default {
 
     let current = this.getDefaultDate()
 
+    let id = uniqueId('veui-calendar-')
+
     return {
       year: current.getFullYear(),
       month: current.getMonth(),
       views,
-      monthNames,
+      id,
+      monthNames: MONTH_NAMES,
       picking: null,
       pickingRanges: null
     }
@@ -173,6 +291,13 @@ export default {
         let daysInPreviousMonth = getDaysInMonth(year, month - 1)
         let weekCount = Math.ceil((offset + daysInMonth) / 7)
         let weeks = []
+
+        // 默认 focus 入口顺序：
+        // 选中日 -> 当天 -> 本月第一天
+        let selectedDay = null
+        let today = null
+        let firstDay = null
+
         for (let i = 0; i < weekCount; i++) {
           if (!weeks[i]) {
             weeks[i] = []
@@ -203,9 +328,33 @@ export default {
               day.isToday = isSameDay(day, this.today)
               day.isSelected = this.isSelected(day)
               day.rangePosition = this.getRangePosition(day)
+
+              if (!firstDay) {
+                firstDay = day
+              }
+
+              // 如果本月已找到选中的日子就无需再处理了
+              if (!selectedDay) {
+                if (day.isSelected) {
+                  day.isFocus = true
+                  selectedDay = day
+                } else if (!today && day.isToday) {
+                  today = day
+                }
+              }
             }
           }
         }
+
+        // 如果本月没有选中的日期时再选择当天或第一天
+        if (!selectedDay) {
+          if (today) {
+            today.isFocus = true
+          } else {
+            firstDay.isFocus = true
+          }
+        }
+
         panels.push({
           year,
           month,
@@ -216,11 +365,23 @@ export default {
       return panels
     },
     dayNames () {
-      let names = [...dayNames]
+      let names = [...DAY_NAMES]
+      return names.splice(this.weekStart - 1).concat(names)
+    },
+    dayFullNames () {
+      let names = [...DAY_FULL_NAMES]
       return names.splice(this.weekStart - 1).concat(names)
     }
   },
   methods: {
+    getLocaleString (day) {
+      return fromDateData(day).toLocaleDateString('zh-CN', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    },
     getDateClass (day, panel) {
       let extraClass = {}
       switch (typeof this.dateClass) {
@@ -241,6 +402,7 @@ export default {
             }, {})
       }
       return {
+        'veui-calendar-day': day.month === panel.month,
         'veui-calendar-aux': day.month !== panel.month,
         'veui-calendar-today': day.isToday,
         'veui-calendar-selected': day.isSelected,
@@ -253,18 +415,33 @@ export default {
     getMonthClass (panel, i, j) {
       let month = (i - 1) * 4 + j - 1
       return {
+        'veui-calendar-month': true,
         'veui-calendar-today': month === this.today.getMonth() && panel.year === this.today.getFullYear(),
         'veui-calendar-selected': (this.realSelected && !this.multiple && !this.range)
           ? (month === this.realSelected.getMonth() && panel.year === this.realSelected.getFullYear()) : false
       }
     },
     getYearClass (panel, i, j) {
-      let year = panel.year - panel.year % 10 + (i - 1) * 4 + j - 1
+      let offset = (i - 1) * 4 + j - 1
+      let year = panel.year - panel.year % 10 + offset
       return {
+        'veui-calendar-year': offset < 10,
         'veui-calendar-today': year === this.today.getFullYear(),
         'veui-calendar-selected': (this.realSelected && !this.multiple && !this.range)
           ? year === this.realSelected.getFullYear() : false
       }
+    },
+    getStepLabel (view, type) {
+      return STEP_LABELS[type][view]
+    },
+    getYearOffset (i, j, isNext) {
+      return isNext
+        ? (i === 2 && j > 2)
+          ? 6
+          : (i === 3 ? 2 : 4)
+        : i === 1
+          ? (j < 3 ? -2 : -6)
+          : -4
     },
     selectDay (day) {
       // switch month in days view if dates in previous/next months are visible
@@ -332,9 +509,90 @@ export default {
         this.$emit('selectprogress', this.pickingRanges || this.picking)
       }
     },
+    moveFocus (view, delta, offset = null) {
+      // 不走数据流了，直接查找 DOM 元素最简单
+      let selector = CELL_SELECTOR[view]
+      let cells = [...this.$el.querySelectorAll(selector)]
+
+      // 查一下当前聚焦元素的偏移量，归一化以后再处理
+      if (offset === null) {
+        let current = document.activeElement
+        if (!current) {
+          return
+        }
+
+        let pos = findIndex(cells, cell => cell === closest(current, selector))
+        if (pos === -1) {
+          return
+        }
+
+        offset = pos
+      }
+
+      let nextIndex = offset + delta
+      let target = cells[nextIndex]
+
+      // 如果目标格子存在，尝试 focus 一下
+      // 如果已经禁用，就按方向向前/后找到最近的一个未禁用的
+      if (target) {
+        let button = target.querySelector('button')
+        let buttons = cells.map(cell => cell.querySelector('button'))
+        do {
+          if (!button.disabled) {
+            button.focus()
+            return
+          } else {
+            nextIndex += sign(delta)
+            button = buttons[nextIndex]
+          }
+        } while (button)
+
+        // 按方向取本月目标格子均为禁用，尝试移动一天
+        delta += sign(delta)
+      }
+
+      // 目标格子不在当前视图，需要翻页
+      //
+      // 对于月视图：
+      // * 往前翻页偏移量要加入进入视图的月的天数
+      // * 往后翻页偏移量要减去离开视图的月的天数
+      //
+      // 对于年/十年视图，直接增减 12/10 即可
+      let inc = isPositive(delta)
+      let year
+      let month
+      if (view === 'days' && inc) {
+        year = this.panels[0].year
+        month = this.panels[0].month
+      }
+      this.step(inc, view)
+      if (view === 'days' && !inc) {
+        year = this.panels[0].year
+        month = this.panels[0].month
+      }
+      this.$nextTick(() => {
+        let count = view === 'days'
+          ? getDaysInMonth(year, month)
+          : view === 'months'
+            ? 12
+            : 10
+        this.moveFocus(view, delta, offset - sign(delta) * count)
+      })
+    },
+    setFocus (part, index) {
+      this.$nextTick(() => {
+        let ref = this.$refs[part][index]
+        if (ref) {
+          ref.focus()
+        }
+      })
+    },
     setView (i, value) {
       if (value) {
         this.$set(this.views, i, value)
+        this.$nextTick(() => {
+          focusIn(this.$refs.body[i])
+        })
       } else {
         value = i
         this.views.forEach((view, i) => {
@@ -347,10 +605,12 @@ export default {
       this.year += Math.floor((this.month + month - this.panels[i].month) / 12)
       this.month = (month - i + 12) % 12
       this.setView('days')
+      this.setFocus('month-select', i)
     },
     selectYear (i, year) {
       this.year = year + Math.floor((this.panels[i].month - i) / 12)
       this.setView('days')
+      this.setFocus('year-select', i)
     },
     isSelected (day) {
       if (!this.realSelected && !this.picking) {
