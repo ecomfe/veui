@@ -18,7 +18,7 @@
     "bytes": "^3.0.0",
     "lodash": "^4.17.4",
     "tether": "^1.4.0",
-    "vue-awesome": "^2.3.1"
+    "vue-awesome": "^2.3.5"
   },
   "peerDependencies": {
     "vue": "^2.5.13"
