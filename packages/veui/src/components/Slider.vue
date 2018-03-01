@@ -1,5 +1,5 @@
 <template>
-<div class="veui-slider" v-bind="attrs">
+<div class="veui-slider" v-bind="sliderAttrs" :class="sliderClasses">
   <!-- 条 -->
   <div class="veui-slider-track" @click="handleTrackClick" ref="track">
     <slot name="track">
@@ -72,6 +72,7 @@ export default {
   props: {
     value: true,
     secondaryProgress: {
+      type: [Number, Array],
       default: 0
     },
 
@@ -146,7 +147,8 @@ export default {
     activeTooltipIndex () {
       if (this.currentThumbFocusIndex >= 0) {
         return this.currentThumbFocusIndex
-      } else if (this.currentThumbHoverIndex >= 0) {
+      }
+      if (this.currentThumbHoverIndex >= 0) {
         return this.currentThumbHoverIndex
       }
       return -1
@@ -180,11 +182,15 @@ export default {
     noInteractive () {
       return this.disabled || this.readonly
     },
-    attrs () {
+    sliderAttrs () {
       return {
-        name: this.realName,
-        disabled: this.realDisabled,
-        readonly: this.realReadonly
+        name: this.realName
+      }
+    },
+    sliderClasses () {
+      return {
+        'veui-disabled': this.realDisabled,
+        'veui-readonly': this.realReadonly
       }
     },
     localValueBoundary () {
