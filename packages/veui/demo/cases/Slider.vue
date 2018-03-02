@@ -29,7 +29,7 @@
     <section>
         <veui-slider v-model="value3" :min="0" :max="360" :step="1" :parse="parseColorHue" :format="formatColorHue">
           <div slot="track" style="width: 100%; height: 20px;" :style="{background: colorGradient}"></div>
-          <div slot="thumb" style="margin-top: 6px" slot-scope="{ thumbIndex }" :key="`thumb_${thumbIndex}`">
+          <div slot="thumb" style="margin-top: 6px" slot-scope="{ index }" :key="`thumb_${index}`">
             <div style="width: 16px; height: 12px">
               <svg width="16" height="12" viewBox="0 0 16 12">
                 <polygon points="8,0 16,12 0,12"/>
