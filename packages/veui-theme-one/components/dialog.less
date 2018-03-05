@@ -4,7 +4,7 @@
   display: none;
 
   &-box {
-    position: fixed;
+    .fixed(0);
   }
 
   &-draggable {
@@ -85,18 +85,12 @@
   }
 
   // 默认居中
-  &-box,
   &-content {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    .veui-position-center();
   }
 
-  &-box[ui~="top"],
   &-box[ui~="top"] .veui-dialog-content {
-    top: 38.2%;
-    left: 50%;
-    transform: translate(-50%, -38.2%);
+    .veui-position-center(@y: 38.2%);
   }
 
   &-box-mask {
