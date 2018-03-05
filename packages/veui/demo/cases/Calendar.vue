@@ -49,7 +49,7 @@ export default {
       selected3: [[new Date(2017, 3, 12), new Date(2017, 3, 18)], [new Date(2017, 3, 22), new Date(2017, 3, 24)]],
       selected4: [new Date(2016, 11, 19), new Date(2016, 11, 25)],
       isDisabled (day) {
-        return !(day.getDate() % 5)
+        return !(day.getDate() % 5) || day.getDate() === 1
       },
       dateClass (day) {
         if ((day.getDay() + 1) % 7 < 2) {
