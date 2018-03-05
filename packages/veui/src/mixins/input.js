@@ -18,10 +18,10 @@ export default {
       return (this.formField && this.formField.name) || this.name
     },
     realDisabled () {
-      return this.disabled || (this.formField && this.formField.realDisabled)
+      return Boolean(this.disabled || (this.formField && this.formField.realDisabled))
     },
     realReadonly () {
-      return this.readonly || (this.formField && this.formField.realReadonly)
+      return Boolean(this.readonly || (this.formField && this.formField.realReadonly))
     },
     ...getTypedAncestorTracker('field', 'formField').computed
   },

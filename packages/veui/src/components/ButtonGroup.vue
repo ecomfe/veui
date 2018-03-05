@@ -1,11 +1,21 @@
 <template>
-<div :class="{
+<div
+  :class="{
     'veui-button-group': true,
     'veui-button-group-disabled': disabled
-  }" :ui="ui">
+  }"
+  :ui="ui"
+  role="group"
+  :aria-disabled="disabled">
   <slot>
-    <veui-button v-for="(item, index) in items" :key="index" :ui="ui"
-      :disabled="disabled || item.disabled" @click="handleClick(item, index)">
+    <veui-button
+      v-for="(item, index) in items"
+      :key="index"
+      :ui="ui"
+      :disabled="disabled || item.disabled"
+      @click="handleClick(item, index)"
+      :aria-posinset="index + 1"
+      :aria-setsize="items.length">
       <slot v-bind="item" :index="index">{{ item.label }}</slot>
     </veui-button>
   </slot>

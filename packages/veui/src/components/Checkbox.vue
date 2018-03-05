@@ -2,7 +2,8 @@
 <label :class="{
     'veui-checkbox': true,
     'veui-disabled': realReadonly || realDisabled
-  }" :ui="ui">
+  }"
+  :ui="ui">
   <input ref="box" type="checkbox" v-bind="attrs" @change="handleChange">
   <span class="veui-checkbox-box">
     <icon v-if="isChecked || localIndeterminate" :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"></icon>
@@ -19,6 +20,7 @@ import { patchIndeterminate } from '../utils/dom'
 
 export default {
   name: 'veui-checkbox',
+  inheritAttrs: false,
   components: {
     Icon
   },
@@ -54,7 +56,8 @@ export default {
       return {
         name: this.realName,
         disabled: this.realDisabled || this.realReadonly,
-        checked: this.isChecked
+        checked: this.isChecked,
+        ...this.$attrs
       }
     },
     isChecked () {

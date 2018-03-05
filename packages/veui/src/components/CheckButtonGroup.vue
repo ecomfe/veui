@@ -1,5 +1,10 @@
 <template>
-<div class="veui-check-button-group veui-button-group" :ui="ui">
+<div class="veui-check-button-group veui-button-group"
+  :ui="ui"
+  role="listbox"
+  aria-multiselectable="true"
+  :aria-readonly="String(realReadonly)"
+  :aria-disabled="String(realDisabled)">
   <veui-button
     :class="{
       'veui-button-selected': value.indexOf(item.value) !== -1
@@ -8,7 +13,11 @@
     v-for="(item, index) in items"
     :key="index"
     :disabled="item.disabled || realDisabled || realReadonly"
-    @click="handleChange(item.value)">
+    @click="handleChange(item.value)"
+    role="option"
+    :aria-selected="String(value.indexOf(item.value) !== -1)"
+    :aria-posinset="index + 1"
+    :aria-setsize="items.length">
     <slot v-bind="item">{{ item.label }}</slot>
   </veui-button>
 </div>
