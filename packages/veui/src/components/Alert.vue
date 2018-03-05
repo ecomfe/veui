@@ -1,5 +1,6 @@
 <template>
-<div v-if="localOpen" class="veui-alert" :ui="ui" :class="`veui-alert-${type}`">
+<div v-if="localOpen" class="veui-alert" :ui="ui" :class="`veui-alert-${type}`"
+  role="alert" aria-expanded="true">
   <slot name="content">
     <veui-icon class="veui-alert-icon" :name="icons[type]"></veui-icon>
 

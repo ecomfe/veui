@@ -4,7 +4,8 @@
   :priority="priority"
   :closable="false"
   escapable
-  :overlay-class="mergeOverlayClass('veui-confirm-box')">
+  :overlay-class="mergeOverlayClass('veui-confirm-box')"
+  role="alertdialog">
   <template slot="title">
     <slot name="title">{{ title }}</slot>
   </template>

@@ -3,7 +3,8 @@
   :open.sync="localOpen"
   :ui="localUi"
   :closable="false"
-  :priority="priority">
+  :priority="priority"
+  role="alertdialog">
   <veui-icon v-if="icons[type]"
     class="veui-alert-box-icon"
     :name="icons[type]">
