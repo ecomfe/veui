@@ -39,3 +39,13 @@
   box-shadow: 0 1px 4px fadeout(#000, 80%);
 }
 
+// https://stackoverflow.com/questions/27000492/css3-transform-property-working-differently-in-internet-explorer
+.veui-center-by-translate(@right-percent: 50%, @bottom-percent: 50%) {
+  right: @right-percent;
+  bottom: @bottom-percent;
+  transform: translate(@right-percent, @bottom-percent);
+
+  // 排除 top/left 干扰
+  top: auto;
+  left: auto;
+}
