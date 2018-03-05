@@ -1,23 +1,41 @@
 <template>
 <div class="veui-tabs" :ui="ui">
-  <div class="veui-tabs-menu" ref="menu">
+  <div class="veui-tabs-menu" ref="menu" role="tablist">
     <div class="veui-tabs-list" :class="{'veui-tabs-list-empty': items.length === 0}" ref="resizeContainer" v-resize="(e) => resizeHandler(e)">
       <div class="veui-tabs-list-resizer">
         <template v-for="(tab, index) in items">
-          <div :key="tab.name" class="veui-tabs-item" :ref="`tab-${tab.name}`" :class="{
-            'veui-tabs-item-disabled': tab.disabled,
-            'veui-tabs-item-active': index === localIndex
-          }">
+          <div
+            :key="tab.name"
+            :ref="`tab-${tab.name}`"
+            :class="{
+              'veui-tabs-item': true,
+              'veui-tabs-item-disabled': tab.disabled,
+              'veui-tabs-item-active': index === localIndex
+            }">
             <slot name="tab-item" v-bind="tab" :index="index">
-              <veui-link v-if="tab.to" class="veui-tabs-item-label" :to="tab.to" :native="tab.native">{{ tab.label }}</veui-link>
-              <button v-else class="veui-tabs-item-label" type="button" @click="!tab.disabled && setActive({index})">{{ tab.label }}</button>
-              <button type="button" class="veui-tabs-item-remove"
-                @click="$emit('remove', tab)">
-                <slot name="tab-item-extra" v-bind="tab">
-                  <icon :name="icons.remove"
-                  v-if="tab.removable"></icon>
-                </slot>
+              <veui-link
+                v-if="tab.to"
+                class="veui-tabs-item-label"
+                v-bind="ariaAttrs[index]"
+                :to="tab.to"
+                :native="tab.native">
+                {{ tab.label }}
+              </veui-link>
+              <button
+                v-else
+                class="veui-tabs-item-label"
+                v-bind="ariaAttrs[index]"
+                type="button"
+                @click="!tab.disabled && setActive({index})">
+                {{ tab.label }}
               </button>
+              <slot name="tab-item-extra" v-bind="tab">
+                <button v-if="tab.removable" type="button" class="veui-tabs-item-remove"
+                  aria-label="删除"
+                  @click="$emit('remove', tab)">
+                    <icon :name="icons.remove"/>
+                </button>
+              </slot>
             </slot>
           </div>
         </template>
@@ -29,10 +47,11 @@
         :class="{'veui-tabs-extra-overflow': menuOverflow}">
         <button type="button" v-if="addable"
           class="veui-tabs-operator"
+          aria-label="添加"
           @click="$emit('add')">
-          <icon :name="icons.add"></icon><slot name="tabs-extra-text"><span>添加TAB</span></slot>
+          <icon :name="icons.add"></icon><slot name="tabs-extra-text"><span>添加 Tab</span></slot>
         </button>
-        <div class="veui-tabs-scroller" v-if="menuOverflow" ref="scroller">
+        <div class="veui-tabs-scroller" v-if="menuOverflow" ref="scroller" aria-hidden="true">
           <button type="button" class="veui-tabs-scroller-left" @click="scroll('left')"><icon :name="icons.prev"></icon></button>
           <button type="button" class="veui-tabs-scroller-right" @click="scroll('right')"><icon :name="icons.next"></icon></button>
         </div>
@@ -93,6 +112,16 @@ export default {
     },
     tabNames () {
       return this.items.map(({ name }) => name)
+    },
+    ariaAttrs () {
+      return this.items.map((tab, index) => {
+        return {
+          role: 'tab',
+          'aria-selected': String(index === this.localIndex),
+          'aria-setsize': this.items.length,
+          'aria-posinset': index + 1
+        }
+      })
     }
   },
   methods: {
