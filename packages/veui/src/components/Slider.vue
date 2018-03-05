@@ -1,5 +1,5 @@
 <template>
-<div class="veui-slider" v-bind="sliderAttrs" :class="sliderClasses">
+<div class="veui-slider" v-bind="sliderAttrs" :class="sliderClasses" role="application">
   <!-- 条 -->
   <div class="veui-slider-track" @click="handleTrackClick" ref="track">
     <slot name="track">
