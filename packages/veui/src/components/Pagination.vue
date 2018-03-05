@@ -21,16 +21,16 @@
     </ul>
     <div class="veui-pager-buttons">
       <veui-link class="veui-pager-previous"
-        :class="{ 'veui-disabled': page === 1 }"
         :to="page === 1 ? '' : pageNavHref.previous.href"
         :native="native"
+        :disabled="page === 1"
         @click="handleRedirect(pageNavHref.previous.page, $event)">
         <icon :name="icons.prev"></icon>
       </veui-link>
       <veui-link class="veui-pager-next"
-        :class="{ 'veui-disabled': page === pageCount || pageCount === 0 }"
         :to="page === pageCount ? '' : pageNavHref.next.href"
         :native="native"
+        :disabled="page === pageCount || pageCount === 0"
         @click="handleRedirect(pageNavHref.next.page, $event)">
         <icon :name="icons.next"></icon>
       </veui-link>
