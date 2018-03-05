@@ -3,7 +3,7 @@
   class="veui-link"
   :class="klass"
   :is="fallback"
-  @click="handleRedirect"><slot :disabled="disabled"></slot></component>
+  @click="handleRedirect"><slot></slot></component>
 <router-link v-else-if="$router && !native"
   class="veui-link"
   :class="klass"
