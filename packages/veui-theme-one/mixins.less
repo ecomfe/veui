@@ -1,6 +1,17 @@
 @import "~less-plugin-est/src/all.less";
 @import "./variables.less";
 
+// https://github.com/twbs/bootstrap/blob/e43f97304eac2b276c755267e29de70ae2ac7afd/scss/mixins/_screen-reader.scss#L6-L15
+.veui-invisible() {
+  position: absolute;
+  .size(1px);
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .veui-button-transition() {
   transition-property: border-color, background-color, color, opacity;
   transition-duration: .2s;

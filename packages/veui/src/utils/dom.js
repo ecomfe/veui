@@ -129,10 +129,11 @@ export function getFocusable (elem) {
  * 将焦点移入指定元素内的第一个可聚焦的元素
  *
  * @param {Element} elem 需要查找的指定元素
+ * @param {number=} index 聚焦元素在可聚焦元素的位置
  * @param {Boolean=} ignoreAutofocus 是否忽略 autofocus
  * @returns {Boolean} 是否找到可聚焦的元素
  */
-export function focusIn (elem, ignoreAutofocus) {
+export function focusIn (elem, index = 0, ignoreAutofocus) {
   if (!ignoreAutofocus) {
     let auto = elem.querySelector('[autofocus]')
     if (auto) {
@@ -140,10 +141,21 @@ export function focusIn (elem, ignoreAutofocus) {
       return true
     }
   }
-  let first = elem.querySelector(FOCUSABLE_SELECTOR)
-  if (first) {
-    first.focus()
-    return true
+
+  if (index === 0) {
+    let first = elem.querySelector(FOCUSABLE_SELECTOR)
+    if (first) {
+      first.focus()
+      return true
+    }
   }
-  return false
+
+  let focusable = [...elem.querySelectorAll(FOCUSABLE_SELECTOR)]
+  let count = focusable.length
+  if (!count) {
+    return false
+  }
+
+  focusable[(index + count) % count].focus()
+  return true
 }

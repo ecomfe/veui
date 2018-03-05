@@ -5,7 +5,13 @@
     'veui-date-picker-range': range,
     'veui-date-picker-expanded': expanded
   }">
-  <veui-button ref="button" class="veui-date-picker-button" :ui="ui" :disabled="realDisabled || realReadonly" @click="expanded = !expanded">
+  <veui-button
+    ref="button"
+    class="veui-date-picker-button"
+    :ui="ui"
+    :disabled="realDisabled || realReadonly"
+    @click="expanded = !expanded"
+    @keydown.down.up.prevent="expanded = true">
     <template v-if="range">
       <span class="veui-date-picker-label">
         <slot v-if="formatted" name="date" :formatted="formatted ? formatted[0] : null" :date="selected ? selected[0] : null">{{ formatted[0] }}</slot>
@@ -25,12 +31,29 @@
     </template>
     <veui-icon class="veui-date-picker-icon" :name="icons.calendar"></veui-icon>
   </veui-button>
-  <button type="button" v-if="clearable" v-show="!!selected" class="veui-date-picker-clear" @click="clear">
+  <button v-if="clearable && !!selected" type="button" class="veui-date-picker-clear veui-sr-only" @click="clear">
     <veui-icon :name="icons.clear"></veui-icon>
   </button>
-  <veui-overlay v-if="expanded" target="button" :open="expanded" :options="realOverlayOptions" :overlay-class="overlayClass">
-    <veui-calendar class="veui-date-picker-overlay" v-model="localSelected" v-bind="calendarProps" ref="cal"
-      v-outside:button="close" @select="handleSelect" @selectstart="handleProgress" @selectprogress="handleProgress" :panel="realPanel">
+  <veui-overlay
+    v-if="expanded"
+    target="button"
+    :open="expanded"
+    :options="realOverlayOptions"
+    :overlay-class="overlayClass"
+    autofocus
+    modal>
+    <veui-calendar
+      class="veui-date-picker-overlay"
+      v-model="localSelected"
+      v-bind="calendarProps"
+      ref="cal"
+      v-outside:button="close"
+      @select="handleSelect"
+      @selectstart="handleProgress"
+      @selectprogress="handleProgress"
+      :panel="realPanel"
+      tabindex="-1"
+      @keydown.esc.native="close">
       <template :slot="shortcutsPosition" v-if="range && realShortcuts && realShortcuts.length">
         <div class="veui-date-picker-shortcuts">
           <button v-for="({from, to, label}, index) in realShortcuts" type="button" :key="index"
