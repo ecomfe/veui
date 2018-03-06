@@ -22,9 +22,6 @@
 <script>
 export default {
   name: 'veui-link',
-  components: {
-    'veui-element': Element
-  },
   props: {
     to: {
       type: String,
