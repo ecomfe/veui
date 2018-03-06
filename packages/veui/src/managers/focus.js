@@ -11,13 +11,20 @@ class FocusContext {
    * @param {=Element} preferred Where we should start searching for focusable elements
    */
   constructor (root, { source, trap = false, preferred }) {
+    if (!root) {
+      throw new Error('Root must be specified to create a FocusContext instance.')
+    }
+
     this.root = root
     this.source = source
     this.trap = trap
     this.preferred = preferred
 
-    this.outsideHandler = () => {
-      this.focusFirst(true)
+    this.outsideStartHandler = () => {
+      this.focusAt(-2, true)
+    }
+    this.outsideEndHandler = () => {
+      this.focusAt(1, true)
     }
 
     this.init()
@@ -29,29 +36,37 @@ class FocusContext {
    * 2. focus `root` by default
    */
   init () {
-    this.focusFirst()
+    this.focusAt()
 
     if (this.trap) {
-      let ward = document.createElement('div')
-      ward.tabIndex = 0
-      ward.addEventListener('focus', this.outsideHandler, true)
-      this.root.appendChild(ward)
-      this.ward = ward
+      let before = document.createElement('div')
+      before.tabIndex = 0
+      let after = before.cloneNode()
+
+      before.addEventListener('focus', this.outsideStartHandler, true)
+      after.addEventListener('focus', this.outsideEndHandler, true)
+
+      this.root.insertBefore(before, this.root.firstChild)
+      this.root.appendChild(after)
+
+      this.wardBefore = before
+      this.wardAfter = after
     }
   }
 
-  focusFirst (ignoreFocus) {
+  focusAt (index = 0, ignoreAutofocus) {
     Vue.nextTick(() => {
-      if (!focusIn(this.preferred || this.root, ignoreFocus)) {
+      if (!focusIn(this.preferred || this.root, index, ignoreAutofocus)) {
         this.root.focus()
       }
     })
   }
 
   destroy () {
-    let { trap, source, ward } = this
+    let { trap, source, wardBefore, wardAfter } = this
     if (trap) {
-      ward.removeEventListener('focus', this.outsideHandler, true)
+      wardBefore.removeEventListener('focus', this.outsideStartHandler, true)
+      wardAfter.removeEventListener('focus', this.outsideEndHandler, true)
     }
     if (source && typeof source.focus === 'function') {
       this.source = null
@@ -62,9 +77,8 @@ class FocusContext {
         source.focus()
       }, 0)
     }
-    if (ward) {
-      ward.parentElement.removeChild(ward)
-    }
+    this.root.removeChild(wardBefore)
+    this.root.removeChild(wardAfter)
     this.preferred = null
     this.root = null
   }

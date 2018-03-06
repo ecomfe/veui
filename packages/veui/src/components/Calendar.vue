@@ -15,7 +15,7 @@
         ref="prev"
         :class="{
           'veui-calendar-prev': true,
-          'veui-calendar-invisible': pIndex !== 0 && p.view === 'days'
+          'veui-sr-only': pIndex !== 0 && p.view === 'days'
         }"
         :disabled="disabled || readonly"
         @click="step(false, p.view)"
@@ -64,7 +64,7 @@
         ref="next"
         :class="{
           'veui-calendar-next': true,
-          'veui-calendar-invisible': pIndex !== panels.length - 1 && p.view === 'days'
+          'veui-sr-only': pIndex !== panels.length - 1 && p.view === 'days'
         }"
         :disabled="disabled || readonly"
         @click="step(true, p.view)"
@@ -96,6 +96,7 @@
                   @keydown.right.prevent="moveFocus(p.view, 1)"
                   @keydown.down.prevent="moveFocus(p.view, 7)"
                   @keydown.left.prevent="moveFocus(p.view, -1)"
+                  :autofocus="day.isFocus"
                   :aria-label="getLocaleString(day)"
                   :tabindex="day.isFocus ? null : '-1'">
                   <slot name="date" v-bind="{

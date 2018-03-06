@@ -33,7 +33,6 @@
   }
 
   &-clear {
-    display: none;
     .absolute(10px, 10px, _, _);
     .size(16px);
     background: #fff;
@@ -44,8 +43,18 @@
     cursor: pointer;
     .veui-button-transition();
 
+    .veui-date-picker:hover &,
+    &.focus-visible {
+      .size(16px);
+      clip: auto;
+    }
+
     &:hover {
       color: @veui-text-color-normal;
+    }
+
+    &.focus-visible {
+      color: @veui-brand-color;
     }
 
     .veui-icon {
