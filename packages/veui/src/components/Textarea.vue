@@ -5,24 +5,18 @@
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
   }" :ui="ui">
-  <div v-if="lineNumber" ref="measurer" class="veui-textarea-measurer">
-    <div class="veui-textarea-measurer-line" v-for="(line, index) in lines" :key="index">
-      <div class="veui-textarea-measurer-line-number" :style="{
-        width: `${lineNumberWidth}px`
-      }">{{ index + 1 }}</div>
-      <div class="veui-textarea-measurer-line-content" aria-hidden="true">{{ line }}</div>
-    </div>
-  </div>
+  <div v-if="lineNumber" ref="measurer" class="veui-textarea-measurer"></div>
   <textarea ref="input" class="veui-textarea-input" v-model="localValue" :style="{
       width: lineNumber ? `calc(100% - ${lineNumberWidth}px)` : null,
-      height: autoresize && height ? `${height}px` : null
+      // autoresize 的时候 hidden 一下，避免闪现一下滚动条。
+      overflow: autoresize ? 'hidden' : 'auto'
     }"
     v-bind="attrs"
     v-on="listeners"
     @focus="handleFocus"
     @blur="handleBlur"
     @input="handleInput"
-    @scroll="syncScroll"
+    @scroll="syncScrollAndHeight(true)"
     @change="$emit('change', $event.target.value, $event)"
   ></textarea>
 </div>
@@ -94,9 +88,6 @@ export default {
   watch: {
     value (val) {
       this.localValue = val
-    },
-    localValue (val) {
-      this.syncHeight()
     }
   },
   methods: {
@@ -108,25 +99,13 @@ export default {
       this.focused = false
       this.$emit('blur', e)
     },
-    syncScroll () {
-      if (!this.lineNumber) {
-        return
+    getLineHeight (elem) {
+      let computedStyle = getComputedStyle(elem)
+      let lineHeight = parseFloat(computedStyle.lineHeight)
+      if (isNaN(lineHeight)) {
+        lineHeight = parseFloat(computedStyle.fontSize) * 1.2
       }
-      let {
-        input,
-        measurer
-      } = this.$refs
-      this.$nextTick(() => {
-        measurer.scrollTop = input.scrollTop
-      })
-    },
-    syncHeight () {
-      if (this.autoresize) {
-        this.height = 0
-        this.$nextTick(() => {
-          this.height = this.$refs.input.scrollHeight
-        })
-      }
+      return lineHeight
     },
     handleInput ($event) {
       // 分3种情况
@@ -137,17 +116,66 @@ export default {
       if (this.composition || !this.composition && this.localValue !== this.value) {
         this.$emit('input', $event.target.value, $event)
       }
-      this.syncScroll()
     },
     focus () {
       this.$refs.input.focus()
     },
     activate () {
       this.$refs.input.focus()
+    },
+    generateMeasureHTML () {
+      return this.lines.map((line, index) => {
+        return [
+          /* eslint-disable indent */
+          '<div class="veui-textarea-measurer-line">',
+            '<div ',
+              'class="veui-textarea-measurer-line-number"',
+              `style="width:${this.lineNumberWidth}px">${index + 1}</div>`,
+            '<div ',
+              'class="veui-textarea-measurer-line-content"',
+              'aria-hidden="true"',
+              `style="width:${this.$refs.input.clientWidth}px">${line}</div>`,
+          '</div>'
+          /* eslint-enable indent */
+        ].join('')
+      }).join('')
+    },
+    /**
+     * 同步 measure 和 textarea 的 scrollHeight 和 scrollTop
+     *
+     * @param {boolean} isCustomScroll 是由滚动事件直接触发
+     */
+    syncScrollAndHeight (isFromScrollEvent = false) {
+      let { input, measurer } = this.$refs
+      if (!input || !measurer) {
+        return
+      }
+
+      if (this.autoresize) {
+        // IE9 下面，首次获取到的 scrollHeight 是 line-height
+        input.style.height = `${Math.max(input.clientHeight, input.scrollHeight)}px`
+      }
+
+      // 如果当前在最后一行，按 enter 键的时候，会触发滚动条 scrollTop 变化，
+      // 但是 chrome 并不会将 scrollTop 滚动到最大值处，所以这里帮一把。
+      if (
+        !isFromScrollEvent &&
+        input.scrollHeight - input.scrollTop - input.clientHeight < this.getLineHeight(input)
+      ) {
+        input.scrollTop = input.scrollHeight - input.clientHeight
+      }
+
+      // 在这里自己去生成 html 内容，主要是为了方便设置 scrollTop ，
+      // 不然在高度不够的情况下，设置的 scrollTop 会被浏览器重置为一个“最大值”。
+      measurer.innerHTML = this.generateMeasureHTML()
+      measurer.scrollTop = input.scrollTop
     }
   },
+  updated () {
+    this.syncScrollAndHeight()
+  },
   mounted () {
-    this.syncHeight()
+    this.syncScrollAndHeight()
   }
 }
 </script>
