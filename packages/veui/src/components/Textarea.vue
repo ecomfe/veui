@@ -5,15 +5,20 @@
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
   }" :ui="ui">
-  <div v-if="lineNumber" ref="measurer" class="veui-textarea-measurer">
+  <div ref="measurer" class="veui-textarea-measurer">
     <div class="veui-textarea-measurer-line" v-for="(line, index) in lines" :key="index">
       <div
         class="veui-textarea-measurer-line-number"
         :style="{width: `${lineNumberWidth}px`}">{{ index + 1 }}</div>
-      <div ref="measurerContent" class="veui-textarea-measurer-line-content" aria-hidden="true">{{ line }}</div>
+      <div
+        ref="measurerContent"
+        class="veui-textarea-measurer-line-content"
+        aria-hidden="true"
+        :style="{width: `${measurerContentWidth}px`}">{{ line }}</div>
     </div>
   </div>
   <textarea ref="input" class="veui-textarea-input" v-model="localValue" :style="{
+      maxWidth: lineNumber ? null : '100%',
       width: lineNumber ? `calc(100% - ${lineNumberWidth}px)` : null,
       // autoresize 的时候 hidden 一下，避免闪现一下滚动条。
       overflow: autoresize ? 'hidden' : 'auto'
@@ -62,7 +67,8 @@ export default {
       localValue: this.value,
       focused: false,
       height: 0,
-      listeners
+      listeners,
+      measurerContentWidth: 0
     }
   },
   computed: {
@@ -95,6 +101,16 @@ export default {
   watch: {
     value (val) {
       this.localValue = val
+    },
+    localValue: {
+      handler () {
+        this.$nextTick(() => {
+          if (this.$refs.input) {
+            this.measurerContentWidth = this.$refs.input.clientWidth
+          }
+        })
+      },
+      immediate: true
     }
   },
   methods: {
@@ -130,6 +146,9 @@ export default {
     activate () {
       this.$refs.input.focus()
     },
+    getMeasurersHeight () {
+      return this.$refs.measurerContent.reduce((prev, elem) => prev + elem.offsetHeight, 0)
+    },
     /**
      * 同步 measure 和 textarea 的 scrollHeight 和 scrollTop
      *
@@ -137,29 +156,24 @@ export default {
      */
     syncScrollAndHeight (isFromScrollEvent = false) {
       let { input, measurer } = this.$refs
-      if (!input || !measurer) {
+      if (!input) {
         return
       }
 
+      let inputLineHeight = this.getLineHeight(input)
       if (this.autoresize) {
-        // IE9 下面，首次获取到的 scrollHeight 是 line-height
-        input.style.height = `${Math.max(input.clientHeight, input.scrollHeight)}px`
+        input.style.height = `${this.getMeasurersHeight()}px`
       }
 
       // 如果当前在最后一行，按 enter 键的时候，会触发滚动条 scrollTop 变化，
       // 但是 chrome 并不会将 scrollTop 滚动到最大值处，所以这里帮一把。
       if (
         !isFromScrollEvent &&
-        input.scrollHeight - input.scrollTop - input.clientHeight < this.getLineHeight(input)
+        input.scrollHeight - input.scrollTop - input.clientHeight < inputLineHeight
       ) {
         input.scrollTop = input.scrollHeight - input.clientHeight
       }
 
-      // 事先同步一下宽度值，以便 measurer content 区域的换行情况和 textarea 保持一致。
-      const inputWidth = input.clientWidth
-      this.$refs.measurerContent.forEach(elem => {
-        elem.style.width = `${inputWidth}px`
-      })
       measurer.scrollTop = input.scrollTop
     }
   },
