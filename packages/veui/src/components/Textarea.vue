@@ -143,7 +143,7 @@ export default {
     /**
      * 同步 measure 和 textarea 的 scrollHeight 和 scrollTop
      *
-     * @param {boolean} isCustomScroll 是由滚动事件直接触发
+     * @param {boolean} isFromScrollEvent 是否由滚动事件直接触发
      */
     syncScrollAndHeight (isFromScrollEvent = false) {
       let { input, measurer } = this.$refs
