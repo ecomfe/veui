@@ -5,7 +5,14 @@
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
   }" :ui="ui">
-  <div v-if="lineNumber" ref="measurer" class="veui-textarea-measurer"></div>
+  <div v-if="lineNumber" ref="measurer" class="veui-textarea-measurer">
+    <div class="veui-textarea-measurer-line" v-for="(line, index) in lines" :key="index">
+      <div
+        class="veui-textarea-measurer-line-number"
+        :style="{width: `${lineNumberWidth}px`}">{{ index + 1 }}</div>
+      <div ref="measurerContent" class="veui-textarea-measurer-line-content" aria-hidden="true">{{ line }}</div>
+    </div>
+  </div>
   <textarea ref="input" class="veui-textarea-input" v-model="localValue" :style="{
       width: lineNumber ? `calc(100% - ${lineNumberWidth}px)` : null,
       // autoresize 的时候 hidden 一下，避免闪现一下滚动条。
@@ -123,23 +130,6 @@ export default {
     activate () {
       this.$refs.input.focus()
     },
-    generateMeasureHTML () {
-      return this.lines.map((line, index) => {
-        return [
-          /* eslint-disable indent */
-          '<div class="veui-textarea-measurer-line">',
-            '<div ',
-              'class="veui-textarea-measurer-line-number"',
-              `style="width:${this.lineNumberWidth}px">${index + 1}</div>`,
-            '<div ',
-              'class="veui-textarea-measurer-line-content"',
-              'aria-hidden="true"',
-              `style="width:${this.$refs.input.clientWidth}px">${line}</div>`,
-          '</div>'
-          /* eslint-enable indent */
-        ].join('')
-      }).join('')
-    },
     /**
      * 同步 measure 和 textarea 的 scrollHeight 和 scrollTop
      *
@@ -165,9 +155,11 @@ export default {
         input.scrollTop = input.scrollHeight - input.clientHeight
       }
 
-      // 在这里自己去生成 html 内容，主要是为了方便设置 scrollTop ，
-      // 不然在高度不够的情况下，设置的 scrollTop 会被浏览器重置为一个“最大值”。
-      measurer.innerHTML = this.generateMeasureHTML()
+      // 事先同步一下宽度值，以便 measurer content 区域的换行情况和 textarea 保持一致。
+      const inputWidth = input.clientWidth
+      this.$refs.measurerContent.forEach(elem => {
+        elem.style.width = `${inputWidth}px`
+      })
       measurer.scrollTop = input.scrollTop
     }
   },
