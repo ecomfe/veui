@@ -20,6 +20,7 @@
   <textarea ref="input" class="veui-textarea-input" v-model="localValue" :style="{
       maxWidth: lineNumber ? null : '100%',
       width: lineNumber ? `calc(100% - ${lineNumberWidth}px)` : null,
+      height: inputHeight ? inputHeight : null,
       // autoresize 的时候 hidden 一下，避免闪现一下滚动条。
       overflow: autoresize ? 'hidden' : 'auto'
     }"
@@ -28,7 +29,7 @@
     @focus="handleFocus"
     @blur="handleBlur"
     @input="handleInput"
-    @scroll="syncScrollAndHeight(true)"
+    @scroll="handleScroll"
     @change="$emit('change', $event.target.value, $event)"
   ></textarea>
 </div>
@@ -68,7 +69,9 @@ export default {
       focused: false,
       height: 0,
       listeners,
-      measurerContentWidth: 0
+      measurerContentWidth: 0,
+      measurerContentHeight: 0,
+      scrollTop: 0
     }
   },
   computed: {
@@ -96,6 +99,13 @@ export default {
     },
     lineNumberWidth () {
       return this.digits * 8 + 12
+    },
+    inputHeight () {
+      if (this.autoresize) {
+        return `${this.measurerContentHeight}px`
+      }
+
+      return null
     }
   },
   watch: {
@@ -107,6 +117,10 @@ export default {
         this.$nextTick(() => {
           if (this.$refs.input) {
             this.measurerContentWidth = this.$refs.input.clientWidth
+
+            if (this.autoresize) {
+              this.measurerContentHeight = this.getMeasurersHeight()
+            }
           }
         })
       },
@@ -139,6 +153,14 @@ export default {
       if (this.composition || !this.composition && this.localValue !== this.value) {
         this.$emit('input', $event.target.value, $event)
       }
+
+      this.$nextTick(() => {
+        let { input } = this.$refs
+        let inputLineHeight = this.getLineHeight(input)
+        if (input.scrollHeight - input.clientHeight - input.scrollTop < inputLineHeight) {
+          this.scrollTop = input.scrollHeight - input.clientHeight
+        }
+      })
     },
     focus () {
       this.$refs.input.focus()
@@ -149,39 +171,23 @@ export default {
     getMeasurersHeight () {
       return this.$refs.measurerContent.reduce((prev, elem) => prev + elem.offsetHeight, 0)
     },
-    /**
-     * 同步 measure 和 textarea 的 scrollHeight 和 scrollTop
-     *
-     * @param {boolean} isFromScrollEvent 是否由滚动事件直接触发
-     */
-    syncScrollAndHeight (isFromScrollEvent = false) {
+    handleScroll () {
+      this.scrollTop = this.$refs.input.scrollTop
+      // render 里面没有依赖 scrollTop ，单独改 scrollTop 并不会触发 updated hook ，
+      // 所以手动去同步一下 scrollTop
+      this.syncScroll()
+    },
+    syncScroll () {
       let { input, measurer } = this.$refs
-      if (!input) {
-        return
-      }
-
-      let inputLineHeight = this.getLineHeight(input)
-      if (this.autoresize) {
-        input.style.height = `${this.getMeasurersHeight()}px`
-      }
-
-      // 如果当前在最后一行，按 enter 键的时候，会触发滚动条 scrollTop 变化，
-      // 但是 chrome 并不会将 scrollTop 滚动到最大值处，所以这里帮一把。
-      if (
-        !isFromScrollEvent &&
-        input.scrollHeight - input.scrollTop - input.clientHeight < inputLineHeight
-      ) {
-        input.scrollTop = input.scrollHeight - input.clientHeight
-      }
-
-      measurer.scrollTop = input.scrollTop
+      measurer.scrollTop = this.scrollTop
+      input.scrollTop = this.scrollTop
     }
   },
   updated () {
-    this.syncScrollAndHeight()
+    this.$nextTick(() => this.syncScroll())
   },
   mounted () {
-    this.syncScrollAndHeight()
+    this.scrollTop = this.$refs.input.scrollTop
   }
 }
 </script>
