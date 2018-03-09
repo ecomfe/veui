@@ -5,24 +5,31 @@
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
   }" :ui="ui">
-  <div v-if="lineNumber" ref="measurer" class="veui-textarea-measurer">
+  <div ref="measurer" class="veui-textarea-measurer">
     <div class="veui-textarea-measurer-line" v-for="(line, index) in lines" :key="index">
-      <div class="veui-textarea-measurer-line-number" :style="{
-        width: `${lineNumberWidth}px`
-      }">{{ index + 1 }}</div>
-      <div class="veui-textarea-measurer-line-content" aria-hidden="true">{{ line }}</div>
+      <div
+        class="veui-textarea-measurer-line-number"
+        :style="{width: `${lineNumberWidth}px`}">{{ index + 1 }}</div>
+      <div
+        ref="measurerContent"
+        class="veui-textarea-measurer-line-content"
+        aria-hidden="true"
+        :style="{width: `${measurerContentWidth}px`}">{{ line }}</div>
     </div>
   </div>
   <textarea ref="input" class="veui-textarea-input" v-model="localValue" :style="{
+      maxWidth: lineNumber ? null : '100%',
       width: lineNumber ? `calc(100% - ${lineNumberWidth}px)` : null,
-      height: autoresize && height ? `${height}px` : null
+      height: inputHeight ? inputHeight : null,
+      // autoresize 的时候 hidden 一下，避免闪现一下滚动条。
+      overflow: autoresize ? 'hidden' : 'auto'
     }"
     v-bind="attrs"
     v-on="listeners"
     @focus="handleFocus"
     @blur="handleBlur"
     @input="handleInput"
-    @scroll="syncScroll"
+    @scroll="handleScroll"
     @change="$emit('change', $event.target.value, $event)"
   ></textarea>
 </div>
@@ -61,7 +68,10 @@ export default {
       localValue: this.value,
       focused: false,
       height: 0,
-      listeners
+      listeners,
+      measurerContentWidth: 0,
+      measurerContentHeight: 0,
+      scrollTop: 0
     }
   },
   computed: {
@@ -89,14 +99,32 @@ export default {
     },
     lineNumberWidth () {
       return this.digits * 8 + 12
+    },
+    inputHeight () {
+      if (this.autoresize) {
+        return `${this.measurerContentHeight}px`
+      }
+
+      return null
     }
   },
   watch: {
     value (val) {
       this.localValue = val
     },
-    localValue (val) {
-      this.syncHeight()
+    localValue: {
+      handler () {
+        this.$nextTick(() => {
+          if (this.$refs.input) {
+            this.measurerContentWidth = this.$refs.input.clientWidth
+
+            if (this.autoresize) {
+              this.measurerContentHeight = this.getMeasurersHeight()
+            }
+          }
+        })
+      },
+      immediate: true
     }
   },
   methods: {
@@ -108,25 +136,13 @@ export default {
       this.focused = false
       this.$emit('blur', e)
     },
-    syncScroll () {
-      if (!this.lineNumber) {
-        return
+    getLineHeight (elem) {
+      let computedStyle = getComputedStyle(elem)
+      let lineHeight = parseFloat(computedStyle.lineHeight)
+      if (isNaN(lineHeight)) {
+        lineHeight = parseFloat(computedStyle.fontSize) * 1.2
       }
-      let {
-        input,
-        measurer
-      } = this.$refs
-      this.$nextTick(() => {
-        measurer.scrollTop = input.scrollTop
-      })
-    },
-    syncHeight () {
-      if (this.autoresize) {
-        this.height = 0
-        this.$nextTick(() => {
-          this.height = this.$refs.input.scrollHeight
-        })
-      }
+      return lineHeight
     },
     handleInput ($event) {
       // 分3种情况
@@ -137,17 +153,41 @@ export default {
       if (this.composition || !this.composition && this.localValue !== this.value) {
         this.$emit('input', $event.target.value, $event)
       }
-      this.syncScroll()
+
+      this.$nextTick(() => {
+        let { input } = this.$refs
+        let inputLineHeight = this.getLineHeight(input)
+        if (input.scrollHeight - input.clientHeight - input.scrollTop < inputLineHeight) {
+          this.scrollTop = input.scrollHeight - input.clientHeight
+        }
+      })
     },
     focus () {
       this.$refs.input.focus()
     },
     activate () {
       this.$refs.input.focus()
+    },
+    getMeasurersHeight () {
+      return this.$refs.measurerContent.reduce((prev, elem) => prev + elem.offsetHeight, 0)
+    },
+    handleScroll () {
+      this.scrollTop = this.$refs.input.scrollTop
+      // render 里面没有依赖 scrollTop ，单独改 scrollTop 并不会触发 updated hook ，
+      // 所以手动去同步一下 scrollTop
+      this.syncScroll()
+    },
+    syncScroll () {
+      let { input, measurer } = this.$refs
+      measurer.scrollTop = this.scrollTop
+      input.scrollTop = this.scrollTop
     }
   },
+  updated () {
+    this.$nextTick(() => this.syncScroll())
+  },
   mounted () {
-    this.syncHeight()
+    this.scrollTop = this.$refs.input.scrollTop
   }
 }
 </script>
