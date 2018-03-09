@@ -3,10 +3,6 @@
 .veui-dialog {
   display: none;
 
-  &-box {
-    .fixed(0);
-  }
-
   &-draggable {
     cursor: all-scroll;
   }
@@ -85,10 +81,12 @@
   }
 
   // 默认居中
+  &-box,
   &-content {
     .veui-position-center();
   }
 
+  &-box[ui~="top"],
   &-box[ui~="top"] .veui-dialog-content {
     .veui-position-center(@y: 38.2%);
   }
