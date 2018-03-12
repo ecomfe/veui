@@ -67,6 +67,8 @@ class FocusContext {
     if (trap) {
       wardBefore.removeEventListener('focus', this.outsideStartHandler, true)
       wardAfter.removeEventListener('focus', this.outsideEndHandler, true)
+      this.root.removeChild(wardBefore)
+      this.root.removeChild(wardAfter)
     }
     if (source && typeof source.focus === 'function') {
       this.source = null
@@ -77,8 +79,6 @@ class FocusContext {
         source.focus()
       }, 0)
     }
-    this.root.removeChild(wardBefore)
-    this.root.removeChild(wardAfter)
     this.preferred = null
     this.root = null
   }

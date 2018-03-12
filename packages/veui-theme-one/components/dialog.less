@@ -3,18 +3,32 @@
 .veui-dialog {
   display: none;
 
+  &-box {
+    .fixed(0);
+
+    &:not(&-mask) {
+      pointer-events: none;
+    }
+  }
+
   &-draggable {
     cursor: all-scroll;
   }
 
   &-content {
+    .veui-position-center();
+    .veui-overlay-shadow();
     background: #fff;
     position: absolute;
     width: 400px;
     max-height: 100vh;
     overflow-y: auto;
     outline: none;
-    .veui-overlay-shadow();
+    pointer-events: auto;
+
+    .veui-dialog-box[ui~="top"] & {
+      .veui-position-center(@y: 38.2%);
+    }
 
     &-head,
     &-foot {
@@ -78,17 +92,6 @@
         margin-right: 0;
       }
     }
-  }
-
-  // 默认居中
-  &-box,
-  &-content {
-    .veui-position-center();
-  }
-
-  &-box[ui~="top"],
-  &-box[ui~="top"] .veui-dialog-content {
-    .veui-position-center(@y: 38.2%);
   }
 
   &-box-mask {
