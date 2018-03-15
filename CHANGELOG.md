@@ -4,6 +4,7 @@
 
 * [^] 去除了 `Link` 组件中错误注册组件的代码。
 * [^] 修复了关闭非 `modal` 的 `Dialog` 时 `FocusManager` 报错的问题。
+* [^] 修复了 `Textarea` 组件在 IE9 下的兼容性问题。
 
 ## 1.0.0-alpha.9
 

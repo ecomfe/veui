@@ -58,7 +58,7 @@ import Option from './Option'
 import OptionGroup from './OptionGroup'
 import Overlay from '../Overlay'
 import input from '../../mixins/input'
-import select from '../../mixins/select'
+import keySelect from '../../mixins/key-select'
 import icons from '../../mixins/icons'
 import overlay from '../../mixins/overlay'
 import dropdown from '../../mixins/dropdown'
@@ -67,7 +67,7 @@ import warn from '../../utils/warn'
 export default {
   name: 'veui-select',
   uiTypes: ['select'],
-  mixins: [input, icons, overlay, dropdown, select],
+  mixins: [input, icons, overlay, dropdown, keySelect],
   model: {
     event: 'change'
   },
