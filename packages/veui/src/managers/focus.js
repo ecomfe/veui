@@ -36,8 +36,6 @@ class FocusContext {
    * 2. focus `root` by default
    */
   init () {
-    this.focusAt()
-
     if (this.trap) {
       let before = document.createElement('div')
       before.tabIndex = 0
@@ -52,6 +50,9 @@ class FocusContext {
       this.wardBefore = before
       this.wardAfter = after
     }
+
+    // skip wardBefore if trapping
+    this.focusAt(this.trap ? 1 : 0)
   }
 
   focusAt (index = 0, ignoreAutofocus) {
