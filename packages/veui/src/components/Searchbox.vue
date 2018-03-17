@@ -128,8 +128,8 @@ export default {
   data () {
     return {
       localValue: this.value,
-      // 默认设成false，input focus事件由input控件触发
       localSuggestions: this.suggestions,
+      // 默认设成false，input focus事件由input控件触发
       inputFocus: false,
       // 强制隐藏推荐列表
       forceHide: true,
