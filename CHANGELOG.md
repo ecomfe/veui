@@ -2,7 +2,7 @@
 
 ### 💡 主要变更
 
-* [+] `Searchbox` 组件增加 `suggestTrigger` prop，用来指定推荐列表的弹出时机；增加 `suggest` 事件，当需要显示推荐列表时触发。
+* [+] `Searchbox` 组件增加 `suggest-trigger` prop，用来指定推荐列表的弹出时机；增加 `suggest` 事件，当需要显示推荐列表时触发。
 
 ### 🐞 问题修复
 

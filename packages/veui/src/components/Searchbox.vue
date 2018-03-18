@@ -51,8 +51,8 @@
   <veui-overlay
     target="input"
     :options="realOverlayOptions"
-    :open="expanded"
-    v-if="expanded"
+    :open="realExpanded"
+    v-if="realExpanded"
     :overlay-class="overlayClass">
     <div class="veui-searchbox-suggestion-overlay"
       ref="box"
@@ -131,8 +131,6 @@ export default {
       localSuggestions: this.suggestions,
       // 默认设成false，input focus事件由input控件触发
       inputFocus: false,
-      // 强制隐藏推荐列表
-      forceHide: true,
       // 该值是为了修复覆盖在input右边的一些按钮的宽度。
       inputRightPadding: 0
     }
@@ -147,7 +145,7 @@ export default {
       return !this.localValue && !this.inputFocus
     },
     realExpanded () {
-      return !!(!this.forceHide && this.realSuggestions && this.realSuggestions.length)
+      return !!(this.expanded && this.realSuggestions && this.realSuggestions.length)
     },
     valueProperty () {
       return this.replaceOnSelect === false ? '' : (this.replaceOnSelect || 'value')
@@ -177,9 +175,6 @@ export default {
     value (value) {
       this.localValue = value
     },
-    realExpanded (value) {
-      this.expanded = value
-    },
     localValue (value) {
       this.$emit('input', value)
       if (this.isFocusSuggestMode || this.isInputSuggestMode) {
@@ -193,7 +188,7 @@ export default {
   methods: {
     handleInput () {
       if (this.isFocusSuggestMode || this.isInputSuggestMode) {
-        this.canShowSuggestions()
+        this.allowSuggest()
       }
       // 感知输入法情况下处理placeholder逻辑暂时还没有
     },
@@ -209,7 +204,7 @@ export default {
     focus () {
       this.$refs.input.focus()
       if (this.isFocusSuggestMode) {
-        this.canShowSuggestions()
+        this.allowSuggest()
         this.$emit('suggest', this.localValue)
       }
     },
@@ -219,44 +214,37 @@ export default {
       }
       this.focus()
       this.$emit('select', suggestion)
-      this.forceHideSuggestions()
+      this.prohibitSuggest()
     },
     search ($event) {
       this.$emit('search', this.localValue, $event)
       if (this.isSubmitSuggestMode) {
-        this.canShowSuggestions()
+        this.allowSuggest()
         this.$emit('suggest', this.localValue)
       }
     },
     clear ($event) {
       this.localValue = ''
-      // 貌似如果是 submitMode 的话，clear 用户期望的就是清空，并且隐藏推荐列表
-      if (this.isSubmitSuggestMode) {
-        this.forceHideSuggestions()
-      }
     },
     activate () { // for label activation
       this.focus()
     },
     outsideInput () {
-      console.log('outsideInput')
       if (this.isInputSuggestMode || this.isFocusSuggestMode) {
-        console.log('hide')
-        this.forceHideSuggestions()
+        this.prohibitSuggest()
       }
     },
     outsideSelf () {
-      console.log('outsideSelf')
       if (this.isSubmitSuggestMode) {
-        this.forceHideSuggestions()
+        this.prohibitSuggest()
       }
     },
-    forceHideSuggestions () {
-      this.forceHide = true
+    prohibitSuggest () {
+      this.expanded = false
       this.localSuggestions = []
     },
-    canShowSuggestions () {
-      this.forceHide = false
+    allowSuggest () {
+      this.expanded = true
     }
   },
   mounted () {
