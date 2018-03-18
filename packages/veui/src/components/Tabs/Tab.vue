@@ -1,6 +1,6 @@
 <template>
 <div class="veui-tab" v-show="isActive" role="tabpanel" :aria-hidden="String(!isActive)">
-  <slot v-if="isInited || isActive"></slot>
+  <slot v-if="isInited || isActive"/>
 </div>
 </template>
 

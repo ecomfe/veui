@@ -6,7 +6,7 @@
     ref="box"
     :style="{zIndex}"
     v-show="open">
-    <slot></slot>
+    <slot/>
   </div>
 </div>
 </template>

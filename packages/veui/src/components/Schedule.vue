@@ -52,7 +52,7 @@
               :ref="`${week[i]}-${j}`"
               @mousedown="handleMousedown(i, j)"
               @mouseenter="handleHover(i, j)"
-              @mouseup="pick()"><slot name="hour" :day="week[i]" :hour="j"></slot></button>
+              @mouseup="pick()"><slot name="hour" :day="week[i]" :hour="j"/></button>
           </td>
         </tr>
       </table>

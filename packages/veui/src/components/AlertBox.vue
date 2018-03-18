@@ -14,7 +14,7 @@
     <slot name="title" v-else>title</slot>
   </h3>
   <div class="veui-alert-box-content">
-    <slot></slot>
+    <slot/>
   </div>
   <template slot="foot">
     <veui-button autofocus @click="$emit('ok')">知道了</veui-button>

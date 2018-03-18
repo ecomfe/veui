@@ -3,20 +3,20 @@
   :class="klass"
   :is="fallback"
   :ui="ui"
-  @click="handleRedirect"><slot></slot></component>
+  @click="handleRedirect"><slot/></component>
 <router-link v-else-if="$router && !native"
   :class="klass"
   :to="to"
   :ui="ui"
   :replace="replace">
-  <slot></slot>
+  <slot/>
 </router-link>
 <a v-else
   :class="klass"
   :href="to"
   :ui="ui"
   @click="handleRedirect">
-  <slot></slot>
+  <slot/>
 </a>
 </template>
 

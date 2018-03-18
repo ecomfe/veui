@@ -13,7 +13,7 @@
     <span class="veui-dropdown-label">
       <slot name="label" :label="label">{{ label }}</slot>
     </span>
-    <icon class="veui-dropdown-icon" :name="icons[expanded ? 'collapse': 'expand']"></icon>
+    <veui-icon class="veui-dropdown-icon" :name="icons[expanded ? 'collapse': 'expand']"/>
   </veui-button>
   <veui-overlay
     v-if="options && expanded || !options"
@@ -34,15 +34,15 @@
       @keydown.down.prevent="navigate()"
       @keydown.up.prevent="navigate(false)">
       <veui-option-group :options="options" ref="options">
-        <slot></slot>
+        <slot/>
         <template v-if="$scopedSlots['group-label']" slot="label" slot-scope="group">
-          <slot name="group-label" v-bind="group"></slot>
+          <slot name="group-label" v-bind="group"/>
         </template>
         <template v-if="$scopedSlots.option" slot="option" slot-scope="option">
-          <slot name="option" v-bind="option"></slot>
+          <slot name="option" v-bind="option"/>
         </template>
         <template v-if="$scopedSlots['option-label']" slot="option-label" slot-scope="option">
-          <slot name="option-label" v-bind="option"></slot>
+          <slot name="option-label" v-bind="option"/>
         </template>
       </veui-option-group>
     </div>
@@ -64,7 +64,7 @@ export default {
   name: 'veui-dropdown',
   uiTypes: ['select'],
   components: {
-    'icon': Icon,
+    'veui-icon': Icon,
     'veui-button': Button,
     'veui-overlay': Overlay,
     'veui-option-group': OptionGroup

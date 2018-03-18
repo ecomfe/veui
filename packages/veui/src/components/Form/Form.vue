@@ -4,7 +4,7 @@
   class="veui-form"
   @submit.prevent="handleSubmit"
   @reset.prevent="reset(null)">
-  <slot></slot>
+  <slot/>
 </form>
 </template>
 

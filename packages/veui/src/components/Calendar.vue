@@ -5,7 +5,7 @@
   role="application"
   aria-label="日历"
   @mouseleave="markEnd()">
-  <slot name="before"></slot>
+  <slot name="before"/>
   <div
     v-for="(p, pIndex) in panels"
     :key="pIndex"
@@ -146,7 +146,7 @@
       </table>
     </div>
   </div>
-  <slot name="after"></slot>
+  <slot name="after"/>
 </div>
 </template>
 

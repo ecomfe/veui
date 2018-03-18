@@ -13,7 +13,7 @@
   </svg>
   <div v-if="desc" class="veui-progress-desc">
     <slot v-bind="{ percent, value, state }">
-      <veui-icon :name="icons.success" v-if="type === 'circular' && localState === 'success'"></veui-icon>
+      <veui-icon :name="icons.success" v-if="type === 'circular' && localState === 'success'"/>
       <span class="veui-progress-desc-text">
         <template v-if="localState === 'success'">完成</template>
         <template v-else-if="localState === 'alert'">错误</template>

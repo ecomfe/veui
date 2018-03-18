@@ -6,9 +6,9 @@
   :ui="ui">
   <input ref="box" type="checkbox" v-bind="attrs" @change="handleChange">
   <span class="veui-checkbox-box">
-    <icon v-if="isChecked || localIndeterminate" :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"></icon>
+    <veui-icon v-if="isChecked || localIndeterminate" :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"/>
   </span>
-  <span class="veui-checkbox-label"><slot></slot></span>
+  <span class="veui-checkbox-label"><slot/></span>
 </label>
 </template>
 
@@ -22,7 +22,7 @@ export default {
   name: 'veui-checkbox',
   inheritAttrs: false,
   components: {
-    Icon
+    'veui-icon': Icon
   },
   mixins: [ui, input],
   model: {

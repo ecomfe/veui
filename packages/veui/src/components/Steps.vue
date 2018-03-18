@@ -6,7 +6,7 @@
     <slot v-bind="step" :index="index">
       <div class="veui-steps-step-index">
         <slot name="index" v-bind="step" :index="index">
-          <veui-icon v-if="index < current" :name="icons.success"></veui-icon>
+          <veui-icon v-if="index < current" :name="icons.success"/>
           <template v-else>{{ index + 1 }}</template>
         </slot>
       </div>

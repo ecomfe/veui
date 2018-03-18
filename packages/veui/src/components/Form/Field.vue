@@ -12,7 +12,7 @@
   <span v-if="label || $slots.label" class="veui-form-label">
     <slot name="label"><veui-label>{{ label }}</veui-label></slot>
   </span>
-  <slot></slot>
+  <slot/>
   <span v-if="tip || $slots.tip" class="veui-form-tip"><slot name="tip">{{ tip }}</slot></span>
   <p
     v-if="!validity.valid && !!validity.message"

@@ -9,7 +9,7 @@
   <template slot="title">
     <slot name="title">{{ title }}</slot>
   </template>
-  <slot></slot>
+  <slot/>
   <template slot="foot">
     <veui-button ui="primary" @click="ok()">确定</veui-button>
     <veui-button autofocus @click="cancel()">取消</veui-button>

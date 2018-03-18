@@ -18,7 +18,7 @@
           :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
           @click.stop>
       </label>
-      <span v-if="$slots.desc" class="veui-uploader-tip"><slot name="desc"></slot></span>
+      <span v-if="$slots.desc" class="veui-uploader-tip"><slot name="desc"/></span>
       <span class="veui-uploader-error">
         <template v-if="error.typeInvalid"><slot name="type-invalid"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
         <template v-if="error.sizeInvalid"><slot name="size-invalid"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>
@@ -104,7 +104,7 @@
         </label>
       </li>
     </ul>
-    <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"></slot></span>
+    <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"/></span>
     <span class="veui-uploader-error" v-if="type === 'image'">
       <template v-if="error.typeInvalid"><slot name="type-invalid"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
       <template v-if="error.sizeInvalid"><slot name="size-invalid"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>

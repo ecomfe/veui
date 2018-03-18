@@ -22,10 +22,10 @@
           v-if="closable"
           @click="localOpen = false"
           aria-label="关闭">
-          <veui-icon :name="icons.close"></veui-icon>
+          <veui-icon :name="icons.close"/>
         </button>
       </div>
-      <div class="veui-dialog-content-body"><slot></slot></div>
+      <div class="veui-dialog-content-body"><slot/></div>
       <div class="veui-dialog-content-foot">
         <slot name="foot">
           <veui-button ui="primary" @click="$emit('ok')">确定</veui-button>

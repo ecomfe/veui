@@ -31,12 +31,12 @@
   <button type="button" class="veui-carousel-control veui-carousel-control-prev"
     @click="step(-1)"
     :disabled="!wrap && localIndex === 0">
-    <veui-icon :name="icons.prev"></veui-icon>
+    <veui-icon :name="icons.prev"/>
   </button>
   <button type="button" class="veui-carousel-control veui-carousel-control-next"
     @click="step(1)"
     :disabled="!wrap && localIndex === count - 1">
-    <veui-icon :name="icons.next"></veui-icon>
+    <veui-icon :name="icons.next"/>
   </button>
   </div>
 </div>

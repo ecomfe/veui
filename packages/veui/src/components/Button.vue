@@ -3,10 +3,10 @@
     'veui-button-loading': loading,
     'veui-disabled': disabled
   }" v-bind="attrs" v-on="listeners">
-  <template v-if="!loading"><slot></slot></template>
+  <template v-if="!loading"><slot/></template>
   <template v-else>
     <slot name="loading">
-      <veui-icon :name="icons.loading" spin></veui-icon>
+      <veui-icon :name="icons.loading" spin/>
       <span class="veui-button-loading-text">加载中…</span>
     </slot>
   </template>

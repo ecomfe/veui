@@ -7,7 +7,7 @@
   :ui="ui">
   <input type="radio" v-bind="attrs" @change="localChecked = $event.target.checked">
   <span class="veui-radio-box"></span>
-  <span class="veui-radio-label"><slot></slot></span>
+  <span class="veui-radio-label"><slot/></span>
 </label>
 </template>
 

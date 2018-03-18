@@ -7,7 +7,7 @@
   <table-head @sort="sort"/>
   <table-body><template slot="no-data"><slot name="no-data">没有数据</slot></template></table-body>
   <slot name="foot"><table-foot/></slot>
-  <slot></slot>
+  <slot/>
 </table>
 </template>
 
