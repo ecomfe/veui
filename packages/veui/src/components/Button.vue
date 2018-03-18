@@ -16,18 +16,17 @@
 <script>
 import { omit } from 'lodash'
 import Icon from './Icon'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 
 const EVENTS = ['mousedown', 'mouseup', 'click', 'keydown', 'keyup', 'keypress', 'focus']
 
 export default {
   name: 'veui-button',
-  mixins: [icons],
+  mixins: [ui],
   components: {
     'veui-icon': Icon
   },
   props: {
-    ui: String,
     disabled: Boolean,
     name: String,
     type: {

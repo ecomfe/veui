@@ -1,5 +1,5 @@
 <template>
-<div class="veui-carousel">
+<div class="veui-carousel" :ui="ui">
   <div class="veui-carousel-viewport" @mouseenter="handleEnter" @mouseleave="handleLeave">
   <transition-group name="veui-carousel-item" class="veui-carousel-items" tag="ol">
     <li v-for="(item, i) in datasource" v-show="localIndex === i" :key="i"
@@ -45,11 +45,11 @@
 <script>
 import { includes } from 'lodash'
 import Icon from './Icon'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 
 export default {
   name: 'veui-carousel',
-  mixins: [icons],
+  mixins: [ui],
   components: {
     'veui-icon': Icon
   },

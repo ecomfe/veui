@@ -23,10 +23,7 @@ export default {
     'veui-link': Link
   },
   props: {
-    to: {
-      type: String,
-      default: ''
-    },
+    to: String,
     // TODO: 提供replace这个属性缺少实际use case？
     replace: Boolean,
     type: {

@@ -22,6 +22,7 @@ import { pick } from 'lodash'
 import Dialog from './Dialog'
 import Button from './Button'
 import config from '../managers/config'
+import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 
 config.defaults({
@@ -34,14 +35,8 @@ export default {
     'veui-dialog': Dialog,
     'veui-button': Button
   },
-  mixins: [overlay],
-  props: {
-    ...pick(Dialog.props, ['open', 'title']),
-    ui: {
-      type: String,
-      default: 'reverse'
-    }
-  },
+  mixins: [ui, overlay],
+  props: pick(Dialog.props, ['open', 'title']),
   data () {
     return {
       localOpen: this.open,

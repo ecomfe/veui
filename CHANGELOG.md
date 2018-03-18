@@ -4,15 +4,22 @@
 
 * [^] `AlertBox` 组件，之前只能通过 `ui` prop 传递类型信息（ `success`/`error`/`info` ），现在和 `Toast` 保持风格统一，使用 `type` prop 传递类型信息。
 
+  > #### 迁移指南
+  >
+  > 所有直接使用 `AlertBox` 的情况下，需要将如 `ui="success"` 修改为 `type="success"` 的方式进行指定。
+
 ### 💡 主要变更
 
 * [+] `Searchbox` 组件增加 `suggest-trigger` prop，用来指定推荐列表的弹出时机；增加 `suggest` 事件，当需要显示推荐列表时触发。
-* [+] `Field.rules` 配置项增加 `priority` 的配置，用来覆盖当前内置的规则优先级。
+* [+] `Field` 的 `rules` 中增加 `priority` 的配置，用来覆盖当前内置的规则优先级。
+* [^] 将 `icons` mixin 并入 `ui`,
+* [+] 支持配置 `ui` prop 项的元数据，以支持进一步校验及根据 `ui` 值配置图标。
 
 ### 🐞 问题修复
 
 * [^] 去除了 `Link` 组件中错误注册组件的代码。
 * [^] 修复了关闭非 `modal` 的 `Dialog` 时 `FocusManager` 报错的问题。
+* [^] 修复了 `FocusManager` 在 `trap` 模式下会自动聚焦最后一个元素的问题。
 * [^] 修复了 `Textarea` 组件在 IE9 下的兼容性问题。
 * [^] 修复了 `Field` 组件使用 `slot` 时 `class` 判断遗漏的问题。
 * [^] 修复了 `pattern`/`numeric` 校验规则的优先级，使 `pattern` 置于 `numeric` 之后。

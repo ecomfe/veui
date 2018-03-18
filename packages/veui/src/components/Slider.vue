@@ -1,5 +1,8 @@
 <template>
-<div class="veui-slider" v-bind="sliderAttrs" :class="sliderClasses" role="application">
+<div
+  :class="sliderClasses"
+  :ui="ui"
+  role="application">
   <!-- 条 -->
   <div class="veui-slider-track" @click="handleTrackClick" ref="track">
     <slot name="track">
@@ -58,6 +61,7 @@
 import { clamp, isArray, isEqual, identity } from 'lodash'
 import drag from '../directives/drag'
 import nudge from '../directives/nudge'
+import ui from '../mixins/ui'
 import input from '../mixins/input'
 import Tooltip from './Tooltip'
 
@@ -66,7 +70,7 @@ export default {
   components: {
     'veui-tooltip': Tooltip
   },
-  mixins: [input],
+  mixins: [ui, input],
   props: {
     value: true,
     secondaryProgress: {
@@ -145,11 +149,17 @@ export default {
     }
   },
   computed: {
+    sliderClasses () {
+      return {
+        'veui-slider': true,
+        'veui-disabled': this.realDisabled,
+        'veui-readonly': this.realReadonly
+      }
+    },
     ratios () {
       let {min, max} = this
       return this.localValues.map(val => (val - min) / (max - min))
     },
-
     activeTooltipIndex () {
       if (this.currentThumbFocusIndex >= 0) {
         return this.currentThumbFocusIndex
@@ -165,7 +175,6 @@ export default {
     tooltipLabel () {
       return this.getValueByIndex(this.activeTooltipIndex)
     },
-
     stepMarks () {
       let {min, min: val, max, step, mark} = this
       if (!step || min >= max || !mark) {
@@ -187,17 +196,6 @@ export default {
     },
     noInteractive () {
       return this.disabled || this.readonly
-    },
-    sliderAttrs () {
-      return {
-        name: this.realName
-      }
-    },
-    sliderClasses () {
-      return {
-        'veui-disabled': this.realDisabled,
-        'veui-readonly': this.realReadonly
-      }
     },
     localValueBoundary () {
       return this.getLocalValueBoundary(this.currentThumbFocusIndex)

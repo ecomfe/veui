@@ -40,7 +40,6 @@
 import Overlay from './Overlay'
 import Button from './Button'
 import ui from '../mixins/ui'
-import icons from '../mixins/icons'
 import overlay from '../mixins/overlay'
 import drag from '../directives/drag'
 import Icon from './Icon'
@@ -54,9 +53,8 @@ export default {
   },
   inheritAttrs: false,
   directives: { drag },
-  mixins: [ui, icons, overlay],
+  mixins: [ui, overlay],
   props: {
-    ui: String,
     modal: {
       type: Boolean,
       default: true

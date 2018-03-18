@@ -1,5 +1,5 @@
 <template>
-<div class="veui-steps">
+<div class="veui-steps" :ui="ui">
   <veui-link v-for="(step, index) in steps" class="veui-steps-step" :class="{
       'veui-steps-current': index === current
     }" :to="step.to" fallback="div" :key="index" @click="$emit('click', index)">
@@ -22,11 +22,11 @@
 <script>
 import Icon from './Icon'
 import Link from './Link'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 
 export default {
   name: 'veui-steps',
-  mixins: [icons],
+  mixins: [ui],
   components: {
     'veui-icon': Icon,
     'veui-link': Link

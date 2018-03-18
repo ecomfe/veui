@@ -2,6 +2,7 @@
   <veui-tree-node :datasource="localDatasource"
     :item-click="itemClick"
     :icons="icons"
+    :ui="ui"
     @toggle="toggle"
     @click="handleItemClick"
     v-if="this.$scopedSlots.item">
@@ -12,6 +13,7 @@
   <veui-tree-node :datasource="localDatasource"
     :item-click="itemClick"
     :icons="icons"
+    :ui="ui"
     @toggle="toggle"
     @click="handleItemClick"
     v-else-if="this.$scopedSlots['item-label']">
@@ -22,6 +24,7 @@
   <veui-tree-node :datasource="localDatasource"
     :item-click="itemClick"
     :icons="icons"
+    :ui="ui"
     @toggle="toggle"
     @click="handleItemClick"
     v-else></veui-tree-node>
@@ -30,14 +33,14 @@
 <script>
 import TreeNode from './_TreeNode'
 import { includes, remove, clone, omit, filter, uniq } from 'lodash'
-import icons from '../../mixins/icons'
+import ui from '../../mixins/ui'
 
 export default {
   name: 'veui-tree',
   components: {
     'veui-tree-node': TreeNode
   },
-  mixins: [icons],
+  mixins: [ui],
   props: {
     datasource: {
       type: Array,

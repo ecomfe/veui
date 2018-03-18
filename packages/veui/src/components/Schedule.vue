@@ -1,5 +1,5 @@
 <template>
-<div class="veui-schedule">
+<div class="veui-schedule" :ui="ui">
   <div class="veui-schedule-header">
     <slot name="header">
       <slot name="shortcuts" v-if="shortcuts && shortcuts.length">
@@ -43,7 +43,7 @@
     <div class="veui-schedule-detail" v-outside.mouseup="() => markEnd()">
       <table class="veui-schedule-table veui-schedule-table-interaction">
         <colgroup>
-          <col v-for="i in 24" :key="i"></col>
+          <col v-for="i in 24" :key="i">
         </colgroup>
         <tr v-for="(day, i) in hourlyStates" :key="i">
           <td v-for="(hour, j) in day" :key="j" :class="{ 'veui-schedule-selected': hour.isSelected }">
@@ -58,7 +58,7 @@
       </table>
       <table class="veui-schedule-table veui-schedule-table-selected">
         <colgroup>
-          <col v-for="i in 24" :key="i"></col>
+          <col v-for="i in 24" :key="i">
         </colgroup>
         <tr v-for="(day, i) in hourlyStates" :key="i">
           <template v-for="(hour, j) in day">
@@ -88,6 +88,7 @@
 
 <script>
 import { includes, find, isFunction, cloneDeep, mapValues, isEqual } from 'lodash'
+import ui from '../mixins/ui'
 import input from '../mixins/input'
 import outside from '../directives/outside'
 import { merge } from '../utils/range'
@@ -107,7 +108,7 @@ let dayNames = [
 
 export default {
   name: 'veui-schedule',
-  mixins: [input],
+  mixins: [ui, input],
   directives: { outside },
   model: {
     prop: 'selected',

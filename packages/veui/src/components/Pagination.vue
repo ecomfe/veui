@@ -16,7 +16,7 @@
         'veui-active': item.page === page
       }" :key="index">
         <veui-link :to="item.href" :native="native"
-          @click="handleRedirect(item.page, $event)">{{ item.text }}</veui-link>
+            @click="handleRedirect(item.page, $event)">{{ item.text }}</veui-link>
       </li>
     </ul>
     <div class="veui-pager-buttons">
@@ -45,7 +45,7 @@ import Link from './Link'
 import Select from './Select'
 import Option from './Select/Option'
 import config from '../managers/config'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 
 config.defaults({
   'pagination.pageSize': 30,
@@ -76,7 +76,7 @@ const moreIndicatorOffsetLength = 5
 
 export default {
   name: 'veui-pagination',
-  mixins: [icons],
+  mixins: [ui],
   components: {
     Icon,
     'veui-link': Link,
@@ -107,7 +107,6 @@ export default {
       type: [String, Object],
       default: ''
     },
-    ui: String,
     native: {
       type: Boolean,
       default: false

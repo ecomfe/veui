@@ -12,14 +12,16 @@
  */
 import Field from './Field'
 import { get, pick, extend } from 'lodash'
+import ui from '../../mixins/ui'
+
 export default {
   name: 'veui-fieldset',
   uiTypes: ['fieldset', 'form-container'],
+  mixins: [ui],
   components: {
     'veui-field': Field
   },
   props: {
-    ui: String,
     label: String,
     name: String,
     tip: String,

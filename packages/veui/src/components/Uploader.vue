@@ -127,7 +127,6 @@ import Tooltip from './Tooltip'
 import { cloneDeep, uniqueId, assign, isNumber, isArray, last, pick, omit, includes } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import icons from '../mixins/icons'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
 import bytes from 'bytes'
@@ -146,7 +145,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-uploader-progress': getProgress()
   },
-  mixins: [ui, input, icons],
+  mixins: [ui, input],
   model: {
     event: 'change'
   },
@@ -212,7 +211,6 @@ export default {
       }
     },
     accept: String,
-    ui: String,
     maxCount: Number,
     maxSize: [Number, String],
     payload: Object,

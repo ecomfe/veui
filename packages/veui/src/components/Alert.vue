@@ -33,17 +33,16 @@
 import Icon from './Icon'
 import Button from './Button'
 import { isArray } from 'lodash'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 
 export default {
   name: 'alert',
-  mixins: [icons],
+  mixins: [ui],
   components: {
     'veui-icon': Icon,
     'veui-button': Button
   },
   props: {
-    ui: String,
     type: {
       type: String,
       default: 'success'

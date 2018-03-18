@@ -15,7 +15,7 @@
 <script>
 import Icon from './Icon'
 import input from '../mixins/input'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 import { patchIndeterminate } from '../utils/dom'
 
 export default {
@@ -24,13 +24,12 @@ export default {
   components: {
     Icon
   },
-  mixins: [input, icons],
+  mixins: [ui, input],
   model: {
     prop: 'checked',
     event: 'change'
   },
   props: {
-    ui: String,
     trueValue: {
       type: null,
       default: true

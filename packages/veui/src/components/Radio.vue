@@ -1,5 +1,6 @@
 <template>
-<label :class="{
+<label
+  :class="{
     'veui-radio': true,
     'veui-disabled': realReadonly || realDisabled
   }"
@@ -11,18 +12,18 @@
 </template>
 
 <script>
+import ui from '../mixins/ui'
 import input from '../mixins/input'
 
 export default {
   name: 'veui-radio',
   inheritAttrs: false,
-  mixins: [input],
+  mixins: [ui, input],
   model: {
     prop: 'checked',
     event: 'change'
   },
   props: {
-    ui: String,
     value: {
       type: null,
       default: true

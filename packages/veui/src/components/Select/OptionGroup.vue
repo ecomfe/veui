@@ -1,8 +1,10 @@
 <template>
-<div :class="{
-  'veui-option-group': true,
-  'veui-option-group-unlabelled': !label
-}">
+<div
+  :class="{
+    'veui-option-group': true,
+    'veui-option-group-unlabelled': !label
+  }"
+  :ui="ui">
   <div v-if="label" class="veui-option-group-label">
     <slot name="label" :label="label">{{ label }}</slot>
   </div>
@@ -12,9 +14,9 @@
       <veui-option
         v-if="!option.options"
         v-bind="option"
-        :ui="ui"
+        :ui="inheritedUi"
         :key="option.value">
-        <slot v-if="$scopedSlots.option" name="option" v-bind="option" :selected="option.value === value"></slot>
+        <slot v-if="$scopedSlots.option" name="option" v-bind="option" :selected="option.value === value"/>
         <template v-if="$scopedSlots['option-label']" slot="label">
           <slot name="option-label" v-bind="option" :selected="option.value === value">{{ option.label }}</slot>
         </template>
@@ -22,22 +24,22 @@
       <veui-option-group
         v-else
         v-bind="option"
-        :ui="ui"
+        :ui="inheritedUi"
         :key="i">
         <template v-if="$scopedSlots.label" slot="label" slot-scope="group">
           <slot name="label" v-bind="group">{{ group.label }}</slot>
         </template>
         <template v-if="$scopedSlots.option" slot="option" slot-scope="option">
-          <slot name="option" v-bind="option"></slot>
+          <slot name="option" v-bind="option"/>
         </template>
         <template v-if="$scopedSlots['option-label']" slot="option-label" slot-scope="option">
-          <slot name="option-label" v-bind="option"></slot>
+          <slot name="option-label" v-bind="option"/>
         </template>
       </veui-option-group>
     </template>
   </template>
   <template v-else>
-    <slot></slot>
+    <slot/>
   </template>
 </div>
 

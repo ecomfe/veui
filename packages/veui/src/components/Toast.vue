@@ -9,16 +9,15 @@
 
 <script>
 import Icon from './Icon'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 
 export default {
   name: 'toast',
-  mixins: [icons],
+  mixins: [ui],
   components: {
     'veui-icon': Icon
   },
   props: {
-    ui: String,
     type: {
       type: String,
       default: 'success'

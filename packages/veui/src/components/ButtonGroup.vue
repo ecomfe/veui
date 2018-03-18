@@ -11,7 +11,7 @@
     <veui-button
       v-for="(item, index) in items"
       :key="index"
-      :ui="ui"
+      :ui="inheritedUi"
       :disabled="disabled || item.disabled"
       @click="handleClick(item, index)"
       :aria-posinset="index + 1"
@@ -24,14 +24,15 @@
 
 <script>
 import Button from './Button'
+import ui from '../mixins/ui'
 
 export default {
   name: 'veui-button-group',
   components: {
     'veui-button': Button
   },
+  mixins: [ui],
   props: {
-    ui: String,
     items: {
       type: Array,
       default () {

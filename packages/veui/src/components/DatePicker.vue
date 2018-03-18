@@ -47,6 +47,7 @@
       v-model="localSelected"
       v-bind="calendarProps"
       ref="cal"
+      :ui="inheritedUi"
       v-outside:button="close"
       @select="handleSelect"
       @selectstart="handleProgress"
@@ -78,7 +79,7 @@ import Icon from './Icon'
 import moment from 'moment'
 import dropdown from '../mixins/dropdown'
 import input from '../mixins/input'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import config from '../managers/config'
 import { isNumber, pick, omit } from 'lodash'
@@ -101,13 +102,12 @@ export default {
     'veui-calendar': Calendar,
     'veui-icon': Icon
   },
-  mixins: [dropdown, input, icons, overlay],
+  mixins: [ui, dropdown, input, overlay],
   model: {
     prop: 'selected',
     event: 'select'
   },
   props: {
-    ui: String,
     selected: {
       type: [Array, Date],
       default () {

@@ -18,14 +18,14 @@
 
 <script>
 import Icon from '../Icon'
-import icons from '../../mixins/icons'
+import ui from '../../mixins/ui'
 import menu from '../../mixins/menu'
 import select from '../../mixins/select'
 import { getScrollParent } from '../../utils/dom'
 
 export default {
   name: 'veui-option',
-  mixins: [icons, menu, select],
+  mixins: [ui, menu, select],
   components: {
     Icon
   },
@@ -38,8 +38,7 @@ export default {
     disabled: {
       type: Boolean,
       default: false
-    },
-    ui: String
+    }
   },
   computed: {
     selected () {

@@ -1,17 +1,17 @@
 <template>
-<veui-icon class="veui-sorter" :class="stateClass" @click.native="sort">
-  <veui-icon :class="{ 'veui-sorter-active': order === 'asc' }" :name="icons.asc"></veui-icon>
-  <veui-icon :class="{ 'veui-sorter-active': order === 'desc' }" :name="icons.desc"></veui-icon>
+<veui-icon :ui="ui" :class="klass" @click.native="sort">
+  <veui-icon :class="{ 'veui-sorter-active': order === 'asc' }" :name="icons.asc"/>
+  <veui-icon :class="{ 'veui-sorter-active': order === 'desc' }" :name="icons.desc"/>
 </veui-icon>
 </template>
 
 <script>
 import Icon from './Icon'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 
 export default {
   name: 'veui-sorter',
-  mixins: [icons],
+  mixins: [ui],
   components: {
     'veui-icon': Icon
   },
@@ -24,6 +24,12 @@ export default {
         return `veui-sorter-${this.order}`
       }
       return 'veui-sorter-unordered'
+    },
+    klass () {
+      return {
+        'veui-sorter': true,
+        [this.stateClass]: true
+      }
     }
   },
   methods: {

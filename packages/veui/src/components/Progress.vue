@@ -26,8 +26,6 @@
 
 <script>
 import ui from '../mixins/ui'
-import icons from '../mixins/icons'
-import { includes } from 'lodash'
 import Icon from './Icon'
 
 const RADIUS_NORMAL = 60
@@ -35,12 +33,11 @@ const RADIUS_TINY = 13
 
 export default {
   name: 'veui-progress',
-  mixins: [ui, icons],
+  mixins: [ui],
   components: {
     'veui-icon': Icon
   },
   props: {
-    ui: String,
     type: {
       type: String,
       default: 'bar'
@@ -94,7 +91,7 @@ export default {
       return 2 * Math.PI * this.radius
     },
     radius () {
-      return includes(this.uiProps, 'tiny') ? RADIUS_TINY : RADIUS_NORMAL
+      return this.uiProps.size === 'tiny' ? RADIUS_TINY : RADIUS_NORMAL
     }
   },
   watch: {

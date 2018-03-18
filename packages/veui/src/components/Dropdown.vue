@@ -55,7 +55,7 @@ import Icon from './Icon'
 import Button from './Button'
 import Overlay from './Overlay'
 import OptionGroup from './Select/OptionGroup'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import dropdown from '../mixins/dropdown'
 import keySelect from '../mixins/key-select'
@@ -69,9 +69,8 @@ export default {
     'veui-overlay': Overlay,
     'veui-option-group': OptionGroup
   },
-  mixins: [icons, overlay, dropdown, keySelect],
+  mixins: [ui, overlay, dropdown, keySelect],
   props: {
-    ui: String,
     label: String,
     disabled: {
       type: Boolean,

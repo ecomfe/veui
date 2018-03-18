@@ -1,7 +1,7 @@
 <template>
 <veui-dialog :overlay-class="mergeOverlayClass('veui-alert-box')"
   :open.sync="localOpen"
-  :ui="localUi"
+  :ui="ui"
   :closable="false"
   :priority="priority"
   role="alertdialog">
@@ -14,7 +14,7 @@
     <slot name="title" v-else>title</slot>
   </h3>
   <div class="veui-alert-box-content">
-    <slot>content</slot>
+    <slot></slot>
   </div>
   <template slot="foot">
     <veui-button autofocus @click="$emit('ok')">知道了</veui-button>
@@ -28,7 +28,7 @@ import Dialog from './Dialog'
 import Button from './Button'
 import Icon from './Icon'
 import config from '../managers/config'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 
 config.defaults({
@@ -37,10 +37,11 @@ config.defaults({
 
 export default {
   name: 'veui-alert-box',
-  mixins: [icons, overlay],
+  mixins: [ui, overlay],
   props: {
-    ...pick(Dialog.props, ['open', 'title', 'ui']),
+    ...pick(Dialog.props, ['open', 'title']),
     type: {
+      type: String,
       validator (val) {
         return includes(['success', 'error', 'info'], val)
       },
@@ -59,11 +60,8 @@ export default {
     }
   },
   computed: {
-    uis () {
-      return [...(this.ui || '').split(/\s+/), 'reverse', this.type]
-    },
-    localUi () {
-      return this.uis.join(' ')
+    type () {
+      return this.uiProps.type
     }
   },
   watch: {

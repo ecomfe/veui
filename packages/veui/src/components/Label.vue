@@ -1,13 +1,15 @@
 <template>
-<label class="veui-label" @click="findLabeledInput"><slot></slot></label>
+<label class="veui-label" :ui="ui" @click="findLabeledInput"><slot></slot></label>
 </template>
 
 <script>
 import { isFunction, get, includes } from 'lodash'
 import { getTypedAncestor } from '../utils/helper'
+import ui from '../mixins/ui'
+
 export default {
   name: 'veui-label',
-
+  mixins: [ui],
   methods: {
     findLabeledInput () {
       if (window.getSelection().toString().length) {

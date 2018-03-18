@@ -34,12 +34,11 @@ export default {
   components: {
     'checkbox': Checkbox
   },
-  mixins: [input, ui],
+  mixins: [ui, input],
   model: {
     event: 'change'
   },
   props: {
-    ui: String,
     items: Array,
     value: Array
   },

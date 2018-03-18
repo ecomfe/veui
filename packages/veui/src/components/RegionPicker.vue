@@ -1,5 +1,5 @@
 <template>
-<div class="veui-region-picker">
+<div class="veui-region-picker" :ui="ui">
   <div v-for="(section, si) in localDatasource" class="veui-region-picker-section" :key="si">
     <div class="veui-region-picker-section-title">
       <veui-checkbox :checked="section.selected" :indeterminate="section.indeterminate"
@@ -92,6 +92,7 @@
 <script>
 import Checkbox from './Checkbox'
 import Overlay from './Overlay'
+import ui from '../mixins/ui'
 import input from '../mixins/input'
 import overlay from '../mixins/overlay'
 import outside from '../directives/outside'
@@ -106,7 +107,7 @@ export default {
     'veui-overlay': Overlay
   },
   directives: { outside },
-  mixins: [input, overlay],
+  mixins: [ui, input, overlay],
   model: {
     prop: 'selected',
     event: 'select'

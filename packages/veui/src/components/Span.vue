@@ -1,9 +1,12 @@
 <template>
-<span class="veui-span"><slot></slot></span>
+<span class="veui-span" :ui="ui"><slot/></span>
 </template>
 
 <script>
+import ui from '../mixins/ui'
+
 export default {
-  name: 'veui-span'
+  name: 'veui-span',
+  mixins: [ui]
 }
 </script>
