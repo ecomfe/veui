@@ -4,6 +4,8 @@
     'veui-searchbox-suggestion-expanded': expanded, 'veui-searchbox-clearable': clearable}"
   :ui="ui"
   @click="handleClickBox"
+  ref="self"
+  v-outside:self="outsideSelf"
 >
   <veui-input
     ref="input"
@@ -18,6 +20,7 @@
     @blur="handleBlur"
     @keypress.enter.prevent="search"
     autocomplete="off"
+    v-outside:input="outsideInput"
   >
   </veui-input>
   <div class="veui-searchbox-others"
@@ -29,7 +32,7 @@
         :readonly="realReadonly"
         :disabled="realDisabled"
         v-if="localValue"
-        @click.stop="localValue = ''">
+        @click.stop="clear">
         <icon :name="icons.clear"></icon>
       </button>
       <button class="veui-searchbox-icon veui-searchbox-icon-search"
@@ -48,13 +51,12 @@
   <veui-overlay
     target="input"
     :options="realOverlayOptions"
-    :open="expanded"
-    v-if="expanded"
+    :open="realExpanded"
+    v-if="realExpanded"
     :overlay-class="overlayClass">
     <div class="veui-searchbox-suggestion-overlay"
       ref="box"
-      :ui="ui"
-      v-outside:input="close">
+      :ui="ui">
       <slot name="suggestions" :suggestions="realSuggestions" :select="selectSuggestion">
         <template v-for="(suggestion, index) in realSuggestions">
           <div class="veui-searchbox-suggestion-item"
@@ -80,7 +82,7 @@ import Input from './Input'
 import Icon from './Icon'
 import Overlay from './Overlay'
 import Button from './Button'
-import { pick } from 'lodash'
+import { pick, includes } from 'lodash'
 
 export default {
   name: 'veui-searchbox',
@@ -107,6 +109,13 @@ export default {
       type: [Boolean, String],
       default: false
     },
+    suggestTrigger: {
+      type: String,
+      default: 'input',
+      validator (val) {
+        return includes(['focus', 'input', 'submit'], val)
+      }
+    },
     ...pick(Input.props,
       'autocomplete',
       'placeholder',
@@ -119,9 +128,9 @@ export default {
   data () {
     return {
       localValue: this.value,
+      localSuggestions: this.suggestions,
       // 默认设成false，input focus事件由input控件触发
       inputFocus: false,
-      hideSuggestion: true,
       // 该值是为了修复覆盖在input右边的一些按钮的宽度。
       inputRightPadding: 0
     }
@@ -136,37 +145,51 @@ export default {
       return !this.localValue && !this.inputFocus
     },
     realExpanded () {
-      return !!(this.localValue && !this.hideSuggestion && this.realSuggestions && this.realSuggestions.length)
+      return !!(this.expanded && this.realSuggestions && this.realSuggestions.length)
     },
     valueProperty () {
       return this.replaceOnSelect === false ? '' : (this.replaceOnSelect || 'value')
     },
     realSuggestions () {
-      if (!this.suggestions) {
+      if (!this.localSuggestions) {
         return []
       }
-      return this.suggestions.map(item => {
+      return this.localSuggestions.map(item => {
         if (typeof item === 'string') {
           return { label: item, value: item }
         }
         return item
       })
+    },
+    isFocusSuggestMode () {
+      return this.suggestTrigger === 'focus'
+    },
+    isInputSuggestMode () {
+      return this.suggestTrigger === 'input'
+    },
+    isSubmitSuggestMode () {
+      return this.suggestTrigger === 'submit'
     }
   },
   watch: {
     value (value) {
       this.localValue = value
     },
-    realExpanded (value) {
-      this.expanded = value
-    },
     localValue (value) {
       this.$emit('input', value)
+      if (this.isFocusSuggestMode || this.isInputSuggestMode) {
+        this.$emit('suggest', this.localValue)
+      }
+    },
+    suggestions (value) {
+      this.localSuggestions = value
     }
   },
   methods: {
     handleInput () {
-      this.hideSuggestion = false
+      if (this.isFocusSuggestMode || this.isInputSuggestMode) {
+        this.allowSuggest()
+      }
       // 感知输入法情况下处理placeholder逻辑暂时还没有
     },
     handleClickBox () {
@@ -180,23 +203,48 @@ export default {
     },
     focus () {
       this.$refs.input.focus()
+      if (this.isFocusSuggestMode) {
+        this.allowSuggest()
+        this.$emit('suggest', this.localValue)
+      }
     },
     selectSuggestion (suggestion) {
-      this.hideSuggestion = true
       if (this.replaceOnSelect !== false) {
         this.localValue = suggestion[this.valueProperty]
       }
       this.focus()
       this.$emit('select', suggestion)
+      this.disallowSuggest()
     },
     search ($event) {
       this.$emit('search', this.localValue, $event)
+      if (this.isSubmitSuggestMode) {
+        this.allowSuggest()
+        this.$emit('suggest', this.localValue)
+      }
+    },
+    clear ($event) {
+      this.localValue = ''
     },
     activate () { // for label activation
       this.focus()
     },
-    close () {
-      this.hideSuggestion = true
+    outsideInput () {
+      if (this.isInputSuggestMode || this.isFocusSuggestMode) {
+        this.disallowSuggest()
+      }
+    },
+    outsideSelf () {
+      if (this.isSubmitSuggestMode) {
+        this.disallowSuggest()
+      }
+    },
+    disallowSuggest () {
+      this.expanded = false
+      this.localSuggestions = []
+    },
+    allowSuggest () {
+      this.expanded = true
     }
   },
   mounted () {

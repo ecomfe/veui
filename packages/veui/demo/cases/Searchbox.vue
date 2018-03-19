@@ -23,7 +23,7 @@
       </p>
     </section>
     <section>
-      <h2>Suggestion</h2>
+      <h2>Suggestion(submit async)</h2>
       <p>
         <veui-searchbox
           v-model="value2"
@@ -31,35 +31,42 @@
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions1"
-          @input="handleInput('1', $event)"
+          suggest-trigger="submit"
+          @suggest="asyncHandleSuggest('1', $event)"
           @search="log($event)"
-          @select="log($event)"></veui-searchbox>
+          @select="value2 = $event.label"></veui-searchbox>
       </p>
     </section>
     <section>
-      <h2>小ui模式</h2>
+      <h2>小ui模式(focus)</h2>
       <p>
         <veui-searchbox
           ui="primary small"
           clearable
+          v-model="value3"
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions2"
           replaceOnSelect
-          @input="handleInput('2', $event)"
-          @search="log($event)"></veui-searchbox>
+          suggest-trigger="focus"
+          @suggest="handleSuggest('2', $event)"
+          @search="log($event)"
+          @select="value3 = $event.label"></veui-searchbox>
       </p>
     </section>
     <section>
-      <h2>大ui模式</h2>
+      <h2>大ui模式(input)</h2>
       <p>
         <veui-searchbox
           ui="primary large"
           :name="name"
+          v-model="value4"
           :placeholder="placeholder"
           :suggestions="suggestions3"
-          @input="handleInput('3', $event)"
-          @search="log($event)"></veui-searchbox>
+          suggest-trigger="input"
+          @suggest="handleSuggest('3', $event)"
+          @search="log($event)"
+          @select="value4 = $event.label"></veui-searchbox>
       </p>
     </section>
     <section>
@@ -71,7 +78,7 @@
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions4"
-          @input="handleInput('4', $event)"
+          @input="handleSuggest('4', $event)"
           @search="log($event)"
           @select="log('select', $event)"></veui-searchbox>
       </p>
@@ -85,7 +92,7 @@
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions5"
-          @input="handleInput('5', $event)"
+          @input="handleSuggest('5', $event)"
           @search="log($event)"></veui-searchbox>
       </p>
     </section>
@@ -97,7 +104,7 @@
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions6"
-          @input="handleInput('6', $event)"
+          @input="handleSuggest('6', $event)"
           @search="log($event)">
           <template slot="suggestion" slot-scope="suggestion">
             <span>{{ suggestion.value }}</span>
@@ -113,7 +120,7 @@
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions7"
-          @input="handleInput('7', $event)"
+          @input="handleSuggest('7', $event)"
           @search="log($event)">
           <template slot="suggestions" slot-scope="props">
             <div>
@@ -150,6 +157,8 @@ export default {
       name: 'name',
       value: '测试值',
       value2: '测试值',
+      value3: '测试值',
+      value4: '测试值',
       placeholder: '百度(placeholder)',
       suggestions1: [],
       suggestions2: [],
@@ -161,9 +170,9 @@ export default {
     }
   },
   methods: {
-    handleInput (num, value) {
+    handleSuggest (num, value) {
       console.log(num, value)
-      if (value && num < 3) {
+      if (value && num) {
         this[`suggestions${num}`] = [
           {
             value,
@@ -182,17 +191,48 @@ export default {
             label: '百度MVP'
           }
         ]
-      } else if (value) {
+      } else {
         this[`suggestions${num}`] = [
-          value,
+          '',
           '百度',
           '百度贴吧',
           '百度MVP',
           '百度指数'
         ]
-      } else {
-        this[`suggestions${num}`] = null
       }
+    },
+    asyncHandleSuggest (num, value) {
+      setTimeout(() => {
+        if (value && num < 3) {
+          this[`suggestions${num}`] = [
+            {
+              value,
+              label: value
+            },
+            {
+              value: '百度',
+              label: '百度'
+            },
+            {
+              value: '百度贴吧',
+              label: '百度贴吧'
+            },
+            {
+              value: '百度MVP',
+              label: '百度MVP'
+            }
+          ]
+        } else {
+          this[`suggestions${num}`] = [
+            '',
+            '百度',
+            '百度贴吧',
+            '百度MVP',
+            '百度指数'
+          ]
+        }
+      }, 1000)
+      console.log(num, value)
     },
     log (item) {
       bus.$emit('log', item)
