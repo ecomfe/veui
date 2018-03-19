@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { pick, find, includes } from 'lodash'
+import { pick, includes } from 'lodash'
 import Dialog from './Dialog'
 import Button from './Button'
 import Icon from './Icon'
@@ -38,7 +38,15 @@ config.defaults({
 export default {
   name: 'veui-alert-box',
   mixins: [icons, overlay],
-  props: pick(Dialog.props, ['open', 'title', 'ui']),
+  props: {
+    ...pick(Dialog.props, ['open', 'title', 'ui']),
+    type: {
+      validator (val) {
+        return includes(['success', 'error', 'info'], val)
+      },
+      default: 'success'
+    }
+  },
   components: {
     'veui-dialog': Dialog,
     'veui-button': Button,
@@ -52,13 +60,10 @@ export default {
   },
   computed: {
     uis () {
-      return [...(this.ui || '').split(/\s+/), 'reverse']
+      return [...(this.ui || '').split(/\s+/), 'reverse', this.type]
     },
     localUi () {
       return this.uis.join(' ')
-    },
-    type () {
-      return find(this.uis, ui => includes(['success', 'error', 'info'], ui))
     }
   },
   watch: {

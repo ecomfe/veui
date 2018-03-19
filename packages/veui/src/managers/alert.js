@@ -1,7 +1,7 @@
 import SpecialDialog from './SpecialDialog'
 import AlertBox from '../components/AlertBox'
 import Vue from 'vue'
-import { isFunction, noop } from 'lodash'
+import { isFunction, noop, pick } from 'lodash'
 
 export class AlertManager extends SpecialDialog {
   constructor () {
@@ -14,12 +14,7 @@ export class AlertManager extends SpecialDialog {
         return h(
           this.type,
           {
-            props: {
-              open: data.open,
-              title: data.title,
-              ui: data.type,
-              overlayClass: data.overlayClass
-            },
+            props: pick(data, ['open', 'title', 'type', 'overlayClass']),
             on: {
               ok: data.ok
             }
