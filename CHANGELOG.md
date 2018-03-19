@@ -10,6 +10,10 @@
 * [^] 修复了关闭非 `modal` 的 `Dialog` 时 `FocusManager` 报错的问题。
 * [^] 修复了 `Textarea` 组件在 IE9 下的兼容性问题。
 
+### ⚠️ 非兼容性变更
+
+* [^] `AlertBox` 组件，之前只能通过 `ui` prop 传递类型信息（ `success`/`error`/`info` ），现在和 `Toast` 保持风格统一，使用 `type` prop 传递类型信息。
+
 ## 1.0.0-alpha.9
 
 ### ⚠️ 非兼容性变更
