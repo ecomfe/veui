@@ -214,7 +214,7 @@ export default {
       }
       this.focus()
       this.$emit('select', suggestion)
-      this.prohibitSuggest()
+      this.disallowSuggest()
     },
     search ($event) {
       this.$emit('search', this.localValue, $event)
@@ -231,15 +231,15 @@ export default {
     },
     outsideInput () {
       if (this.isInputSuggestMode || this.isFocusSuggestMode) {
-        this.prohibitSuggest()
+        this.disallowSuggest()
       }
     },
     outsideSelf () {
       if (this.isSubmitSuggestMode) {
-        this.prohibitSuggest()
+        this.disallowSuggest()
       }
     },
-    prohibitSuggest () {
+    disallowSuggest () {
       this.expanded = false
       this.localSuggestions = []
     },
