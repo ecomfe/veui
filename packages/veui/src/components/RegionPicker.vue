@@ -178,7 +178,7 @@ export default {
         exit: ({ node, parent }) => {
           if (!node.id && !(node.children && node.children.length)) {
             // invalid node
-            warn(`Invalid region tree node '${node.label}'. Provide \`id\`, \`children\` or both.`)
+            warn(`[veui-region-picker] Invalid region tree node '${node.label}'. Provide \`id\`, \`children\` or both.`)
             return
           }
 

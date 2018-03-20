@@ -3,8 +3,8 @@ import '../icons/sort-desc'
 import config from 'veui/managers/config'
 
 config.defaults({
-  'sorter.icons': {
+  icons: {
     asc: 'sort-asc',
     desc: 'sort-desc'
   }
-})
+}, 'sorter')

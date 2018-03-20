@@ -218,6 +218,9 @@ export default {
     clear (e) {
       this.$emit('select', null)
       this.expanded = false
+      this.$nextTick(() => {
+        this.$refs.button.focus()
+      })
     },
     close () {
       this.expanded = false

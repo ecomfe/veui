@@ -9,5 +9,13 @@ config.defaults({
   },
   placeholder: '选择时间',
   placeholderBegin: '开始选择时间段',
-  placeholderEnd: ''
+  placeholderEnd: '',
+  ui: {
+    style: {
+      values: ['alt']
+    },
+    size: {
+      values: ['large', 'small', 'tiny', 'micro']
+    }
+  }
 }, 'datepicker')

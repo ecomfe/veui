@@ -147,7 +147,7 @@ function extractOptions (options, map) {
   options.forEach(({ label, value, options }) => {
     if (value != null) {
       if (map[value]) {
-        warn(`Duplicate item value [${value}] for select options.`)
+        warn(`[veui-select] Duplicate item value [${value}] for select options.`)
       }
       map[value] = label
     }

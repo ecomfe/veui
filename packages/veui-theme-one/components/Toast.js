@@ -5,10 +5,10 @@ import '../icons/cross-circle-o'
 import config from 'veui/managers/config'
 
 config.defaults({
-  'toast.icons': {
+  icons: {
     success: 'check-circle-o',
     warning: 'exclamation-circle-o',
     info: 'info-circle-o',
     error: 'cross-circle-o'
   }
-})
+}, 'toast')

@@ -48,6 +48,7 @@
         width: 100%;
         position: absolute;
         top: -1 * @default-mark-top-offset;
+
         div {
           height: @default-mark-height;
           border-left: 1px solid @veui-gray-color-5;
@@ -92,6 +93,7 @@
           padding-top: (@slider-height - @default-progress-height) / 2;
         }
       }
+
       &-thumb {
         // track/thumb slot 高度变化需要调整 thumb 的位置
         top: (@slider-height - @default-thumb-height) / 2;
@@ -100,15 +102,19 @@
   }
 
   .slider-size(@veui-height-normal);
+
   &[ui~="large"] {
     .slider-size(@veui-height-large);
   }
+
   &[ui~="small"] {
     .slider-size(@veui-height-small);
   }
+
   &[ui~="tiny"] {
     .slider-size(@veui-height-tiny);
   }
+
   &[ui~="micro"] {
     .slider-size(@veui-height-micro);
   }
@@ -120,9 +126,11 @@
         &-bg {
           background-color: @veui-gray-color-6;
         }
+
         &-fg {
           background-color: @veui-gray-color-4;
         }
+
         &-marks {
           div {
             border-color: @veui-gray-color-6;
@@ -137,5 +145,4 @@
       }
     }
   }
-
 }

@@ -33,8 +33,8 @@
   }
 
   &-clear {
-    .absolute(10px, 10px, _, _);
-    .size(16px);
+    .absolute(~"calc(50% - .5em - 1px)", 10px, _, _);
+    .size(~"calc(1em + 2px)");
     background: #fff;
     outline: none;
     border: none;
@@ -45,7 +45,7 @@
 
     .veui-date-picker:hover &,
     &.focus-visible {
-      .size(16px);
+      .size(~"calc(1em + 2px)");
       clip: auto;
     }
 
@@ -151,5 +151,21 @@
     & + .veui-date-picker-clear {
       background-color: @veui-gray-color-5;
     }
+  }
+
+  &[ui~="large"] {
+    width: 232px;
+  }
+
+  &[ui~="large"] &-clear {
+    font-size: @veui-font-size-large;
+  }
+
+  &[ui~="tiny"] &-clear {
+    font-size: @veui-font-size-small;
+  }
+
+  &[ui~="micro"] &-clear {
+    font-size: @veui-font-size-small;
   }
 }

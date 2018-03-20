@@ -126,7 +126,7 @@ export default {
       let domBaseIndex = tab.index
 
       if (this.tabNames.indexOf(tab.name) !== -1) {
-        warn('Duplicate tab name.')
+        warn('[veui-tabs] Duplicate tab name.')
       }
 
       // 如果还没有找到选中的 tab，优先查看配置的 name

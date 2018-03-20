@@ -4,9 +4,9 @@ import '../icons/angle-right'
 import config from 'veui/managers/config'
 
 config.defaults({
-  'calendar.icons': {
+  icons: {
     prev: 'angle-left',
     next: 'angle-right',
-    expand: 'angle-down-small',
+    expand: 'angle-down-small'
   }
-})
+}, 'calendar')

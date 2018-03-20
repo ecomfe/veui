@@ -8,7 +8,7 @@ import '../icons/cross'
 import config from 'veui/managers/config'
 
 config.defaults({
-  'alert.icons': {
+  icons: {
     success: 'check-circle-o',
     warning: 'exclamation-circle-o',
     info: 'info-circle-o',
@@ -17,4 +17,4 @@ config.defaults({
     next: 'angle-right',
     close: 'cross'
   }
-})
+}, 'alert')

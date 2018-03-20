@@ -3,8 +3,13 @@ import '../icons/angle-right'
 import config from 'veui/managers/config'
 
 config.defaults({
-  'pagination.icons': {
+  icons: {
     prev: 'angle-left',
     next: 'angle-right'
+  },
+  ui: {
+    style: {
+      values: ['slim', 'hetero', 'full']
+    }
   }
-})
+}, 'pagination')

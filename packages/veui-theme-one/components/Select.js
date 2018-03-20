@@ -3,8 +3,13 @@ import '../icons/angle-down-small'
 import config from 'veui/managers/config'
 
 config.defaults({
-  'select.icons': {
+  icons: {
     expand: 'angle-down-small',
     collapse: 'angle-up-small'
+  },
+  ui: {
+    size: {
+      values: ['large', 'small', 'tiny', 'micro']
+    }
   }
-})
+}, 'select')

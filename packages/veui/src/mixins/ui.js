@@ -10,9 +10,11 @@ export default {
   computed: {
     uiProps () {
       let ui = (this.ui || '').trim()
+
       if (!ui) {
         return {}
       }
+
       let tokens = compact(uniq(ui.split(/\s+/)))
       let { uiConfig = {} } = this
       return tokens.reduce((result, token) => {
@@ -22,7 +24,7 @@ export default {
         })
         if (name) {
           if (result[name]) {
-            warn(`Duplicated \`${name}\` value for [${this.$options.name}]'s \`ui\` prop: [${result[name]}], [${token}].`)
+            warn(`[${this.$options.name}] Duplicated \`${name}\` value for \`ui\`: [${result[name]}], [${token}].`)
           }
           result[name] = token
         }

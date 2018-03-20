@@ -8,7 +8,7 @@ import '../icons/exclamation-circle-o'
 import config from 'veui/managers/config'
 
 config.defaults({
-  'uploader.icons': {
+  icons: {
     upload: 'upload',
     clear: 'cross',
     success: 'check',
@@ -16,5 +16,10 @@ config.defaults({
     file: 'clip',
     add: 'plus-huge',
     alert: 'exclamation-circle-o'
+  },
+  ui: {
+    direction: {
+      values: ['horizontal']
+    }
   }
-})
+}, 'uploader')

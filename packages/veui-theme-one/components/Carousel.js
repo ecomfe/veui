@@ -3,8 +3,16 @@ import '../icons/angle-right'
 import config from 'veui/managers/config'
 
 config.defaults({
-  'carousel.icons': {
+  icons: {
     prev: 'angle-left',
     next: 'angle-right'
+  },
+  ui: {
+    style: {
+      values: ['loose']
+    },
+    size: {
+      values: ['large', 'small']
+    }
   }
-})
+}, 'carousel')

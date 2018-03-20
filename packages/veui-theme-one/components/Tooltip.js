@@ -1,13 +1,12 @@
-import '../icons/exclamation-circle-o'
 import config from 'veui/managers/config'
 
 config.defaults({
-  icons: {
-    alert: 'exclamation-circle-o'
-  },
   ui: {
+    style: {
+      values: ['alt']
+    },
     size: {
       values: ['large', 'small']
     }
   }
-}, 'field')
+}, 'tooltip')
