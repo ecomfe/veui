@@ -1,11 +1,11 @@
 import '../icons/calendar'
-import '../icons/cross-circle-o'
+import '../icons/cross'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
     calendar: 'calendar',
-    clear: 'cross-circle-o'
+    clear: 'cross'
   },
   placeholder: '选择时间',
   placeholderBegin: '开始选择时间段',

@@ -1,7 +1,7 @@
 <template>
   <article>
     <h1><code>&lt;veui-alert&gt;</code></h1>
-    <p>
+    <section>
       <div>固定提示</div>
       <veui-alert type="success" message="恭喜你，你的请求已成功处理" @update:open="close"></veui-alert>
       <veui-alert class="limit-width" type="success" message="恭喜你，你的请求已成功处理" @update:open="close"></veui-alert>
@@ -19,7 +19,7 @@
           您关闭了
           <template slot="foot"></template>
       </veui-dialog>
-    </p>
+    </section>
   </article>
 </template>
 
@@ -64,7 +64,7 @@ export default {
 </script>
 
 <style scoped>
-p {
+section {
   margin: 30px;
 }
 
