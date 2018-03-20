@@ -345,6 +345,7 @@ export default {
       } else {
         this.$delete(this.localSelected, day)
       }
+      this.$emit('select', this.localSelected)
     }
   }
 }
