@@ -1,5 +1,9 @@
 ## 1.0.0-alpha.10
 
+### ⚠️ 非兼容性变更
+
+* [^] `AlertBox` 组件，之前只能通过 `ui` prop 传递类型信息（ `success`/`error`/`info` ），现在和 `Toast` 保持风格统一，使用 `type` prop 传递类型信息。
+
 ### 💡 主要变更
 
 * [+] `Searchbox` 组件增加 `suggest-trigger` prop，用来指定推荐列表的弹出时机；增加 `suggest` 事件，当需要显示推荐列表时触发。
