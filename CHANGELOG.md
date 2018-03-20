@@ -6,7 +6,11 @@
 
   > #### 迁移指南
   >
-  > 所有直接使用 `AlertBox` 的情况下，需要将如 `ui="success"` 修改为 `type="success"` 的方式进行指定。
+  > 对于非如下两种情况的用户，本次变更并不产生影响。
+  >
+  > 1. 所有直接使用 `AlertBox` 的情况下，需要将如 `ui="success"` 修改为 `type="success"` 的方式进行指定。
+  >
+  > 2. 对于主题包的作者，需要将原来针对如 `[ui~="success"]` 编写的样式，修改为 `.veui-alert-box-success。`
 
 ### 💡 主要变更
 

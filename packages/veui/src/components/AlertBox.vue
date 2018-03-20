@@ -1,7 +1,9 @@
 <template>
-<veui-dialog :overlay-class="mergeOverlayClass('veui-alert-box')"
+<veui-dialog :overlay-class="mergeOverlayClass({
+    'veui-alert-box': true,
+    [`veui-alert-box-${type}`]: true
+  })"
   :open.sync="localOpen"
-  :ui="ui"
   :closable="false"
   :priority="priority"
   role="alertdialog">
@@ -57,11 +59,6 @@ export default {
     return {
       localOpen: this.open,
       priority: config.get('alertbox.priority')
-    }
-  },
-  computed: {
-    type () {
-      return this.uiProps.type
     }
   },
   watch: {
