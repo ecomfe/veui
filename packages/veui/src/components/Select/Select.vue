@@ -65,6 +65,7 @@ import ui from '../../mixins/ui'
 import overlay from '../../mixins/overlay'
 import dropdown from '../../mixins/dropdown'
 import warn from '../../utils/warn'
+import '../../config/uiTypes'
 
 export default {
   name: 'veui-select',

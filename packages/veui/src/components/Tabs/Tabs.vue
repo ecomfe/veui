@@ -68,6 +68,7 @@ import Link from '../Link'
 import Icon from '../Icon'
 import resize from '../../directives/resize'
 import ui from '../../mixins/ui'
+import '../../config/uiTypes'
 
 export default {
   name: 'veui-tabs',
