@@ -5,9 +5,9 @@
     @click="$emit('redirect', $event)"
     :to="to"
     :replace="replace"
-    :native="native"><slot></slot></veui-link>
-  <span v-else class="veui-breadcrumb-item-current"><slot></slot></span>
-  <slot name="separator"></slot>
+    :native="native"><slot/></veui-link>
+  <span v-else class="veui-breadcrumb-item-current"><slot/></span>
+  <slot name="separator"/>
 </li>
 </template>
 
@@ -23,10 +23,7 @@ export default {
     'veui-link': Link
   },
   props: {
-    to: {
-      type: String,
-      default: ''
-    },
+    to: String,
     // TODO: 提供replace这个属性缺少实际use case？
     replace: Boolean,
     type: {

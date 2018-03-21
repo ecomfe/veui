@@ -37,13 +37,13 @@
 
 <script>
 import { pick } from 'lodash'
+import ui from '../mixins/ui'
 import input from '../mixins/input'
 
 export default {
   name: 'veui-textarea',
-  mixins: [input],
+  mixins: [ui, input],
   props: {
-    ui: String,
     placeholder: String,
     value: {
       type: String,

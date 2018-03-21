@@ -66,9 +66,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less">
-.alert-box-demo {
-
-}
-</style>

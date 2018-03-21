@@ -1,28 +1,29 @@
 <template>
-<label :class="{
+<label
+  :class="{
     'veui-radio': true,
     'veui-disabled': realReadonly || realDisabled
   }"
   :ui="ui">
   <input type="radio" v-bind="attrs" @change="localChecked = $event.target.checked">
   <span class="veui-radio-box"></span>
-  <span class="veui-radio-label"><slot></slot></span>
+  <span class="veui-radio-label"><slot/></span>
 </label>
 </template>
 
 <script>
+import ui from '../mixins/ui'
 import input from '../mixins/input'
 
 export default {
   name: 'veui-radio',
   inheritAttrs: false,
-  mixins: [input],
+  mixins: [ui, input],
   model: {
     prop: 'checked',
     event: 'change'
   },
   props: {
-    ui: String,
     value: {
       type: null,
       default: true

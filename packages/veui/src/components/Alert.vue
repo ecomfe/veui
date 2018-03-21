@@ -2,7 +2,7 @@
 <div v-if="localOpen" class="veui-alert" :ui="ui" :class="`veui-alert-${type}`"
   role="alert" aria-expanded="true">
   <slot name="content">
-    <veui-icon class="veui-alert-icon" :name="icons[type]"></veui-icon>
+    <veui-icon class="veui-alert-icon" :name="icons[type]"/>
 
     <span v-if="isMultiple" class="veui-alert-message veui-alert-message-multiple">
       <slot :index="localIndex" :message="message[localIndex]">{{ message[localIndex] }}</slot>
@@ -15,15 +15,15 @@
     <veui-button v-if="closeText" class="veui-alert-close veui-alert-close-text" ui="link primary" @click="close">{{ closeText }}</veui-button>
     <span class="veui-alert-nav" v-else-if="isMultiple">
       <veui-button ui="link" :disabled="isFirst" @click="switchMessage(-1)">
-        <veui-icon :name="icons.prev"></veui-icon>
+        <veui-icon :name="icons.prev"/>
       </veui-button>
       <span>{{ localIndex + 1 }}/{{ message.length }}</span>
       <veui-button ui="link" :disabled="isLast" @click="switchMessage(1)">
-        <veui-icon :name="icons.next"></veui-icon>
+        <veui-icon :name="icons.next"/>
       </veui-button>
     </span>
     <veui-button v-else class="veui-alert-close" ui="link" @click="close">
-      <veui-icon :name="icons.close"></veui-icon>
+      <veui-icon :name="icons.close"/>
     </veui-button>
   </slot>
 </div>
@@ -33,17 +33,16 @@
 import Icon from './Icon'
 import Button from './Button'
 import { isArray } from 'lodash'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 
 export default {
   name: 'alert',
-  mixins: [icons],
+  mixins: [ui],
   components: {
     'veui-icon': Icon,
     'veui-button': Button
   },
   props: {
-    ui: String,
     type: {
       type: String,
       default: 'success'

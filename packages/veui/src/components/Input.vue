@@ -3,6 +3,7 @@
   v-if="type !== 'textarea'"
   ref="input"
   class="veui-input"
+  :ui="ui"
   v-model="localValue"
   v-bind="attrs"
   v-on="listeners"
@@ -13,6 +14,7 @@
   v-else
   ref="input"
   :class="{ 'veui-textarea-resizable': resizable }"
+  :ui="ui"
   v-model="localValue"
   v-bind="attrs"
   v-on="listeners"
@@ -21,6 +23,7 @@
 </template>
 
 <script>
+import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { omit, includes } from 'lodash'
 import Textarea from './Textarea'
@@ -29,12 +32,11 @@ const TYPE_LIST = ['text', 'password', 'hidden', 'textarea']
 
 export default {
   name: 'veui-input',
-  mixins: [input],
+  mixins: [ui, input],
   components: {
     'veui-textarea': Textarea
   },
   props: {
-    ui: String,
     type: {
       type: String,
       default: 'text',

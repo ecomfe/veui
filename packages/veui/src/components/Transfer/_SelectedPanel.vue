@@ -34,7 +34,7 @@
               <span class="veui-tree-item-expand-switcher"
                 v-if="props.option.children && props.option.children.length"
                 @click.stop="toggle(props.option)">
-                <veui-icon :name="icons.collapsed"></veui-icon>
+                <veui-icon :name="icons.collapsed"/>
               </span>
 
               <div class="veui-transfer-item-label">
@@ -44,7 +44,7 @@
 
                 <veui-icon
                   class="veui-transfer-selected-icon-remove"
-                  :name="icons.remove"></veui-icon>
+                  :name="icons.remove"/>
               </div>
 
             </div>
@@ -64,10 +64,10 @@
                 <span :key="'s-' + opt.value"
                   class="veui-transfer-selected-flat-option-separator"
                   v-if="index < options.items.length - 1">
-                  <veui-icon :name="icons.separator"></veui-icon>
+                  <veui-icon :name="icons.separator"/>
                 </span>
               </template>
-              <veui-icon class="veui-transfer-selected-flat-icon-remove" :name="icons.remove"></veui-icon>
+              <veui-icon class="veui-transfer-selected-flat-icon-remove" :name="icons.remove"/>
             </div>
           </slot>
         </li>

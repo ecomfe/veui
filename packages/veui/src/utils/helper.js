@@ -87,7 +87,7 @@ export function normalizeClass (klasses) {
 }
 
 export function getConfigKey (name) {
-  return name.replace(/^veui|-*/g, '')
+  return name.replace(/^veui|-*/g, '').toLowerCase()
 }
 
 export function stringifyQuery (query) {

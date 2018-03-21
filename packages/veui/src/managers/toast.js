@@ -29,7 +29,7 @@ export class ToastManager {
     } else if (isObject(option)) {
       this.container.add(option)
     } else {
-      warn('Invalid arguments for Toasts.')
+      warn('[toast-manager] Invalid arguments for Toasts.')
     }
   }
 

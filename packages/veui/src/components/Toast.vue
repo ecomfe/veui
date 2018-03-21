@@ -1,7 +1,7 @@
 <template>
 <transition name="veui-toast">
   <div :ui="ui" class="veui-toast" :class="`veui-toast-${type}`">
-    <veui-icon class="veui-toast-icon" :name="icons[type]"></veui-icon>
+    <veui-icon class="veui-toast-icon" :name="icons[type]"/>
     <span class="veui-toast-message">{{ message }}</span>
   </div>
 </transition>
@@ -9,16 +9,15 @@
 
 <script>
 import Icon from './Icon'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 
 export default {
   name: 'toast',
-  mixins: [icons],
+  mixins: [ui],
   components: {
     'veui-icon': Icon
   },
   props: {
-    ui: String,
     type: {
       type: String,
       default: 'success'

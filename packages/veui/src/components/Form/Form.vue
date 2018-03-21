@@ -1,17 +1,22 @@
 <template>
-<form class="veui-form" @submit.prevent="handleSubmit" @reset.prevent="reset(null)">
-  <slot></slot>
+<form
+  :ui="ui"
+  class="veui-form"
+  @submit.prevent="handleSubmit"
+  @reset.prevent="reset(null)">
+  <slot/>
 </form>
 </template>
 
 <script>
-import Vue from 'vue'
 import { isBoolean, isUndefined, isFunction, includes, assign, zipObject, map, keys, debounce, omit } from 'lodash'
 import { getVnodes } from '../../utils/context'
+import ui from '../../mixins/ui'
 
 export default {
   name: 'veui-form',
   uiTypes: ['form', 'form-container'],
+  mixins: [ui],
 
   props: {
     /**
@@ -250,7 +255,7 @@ export default {
             }
           } else {
             // 之前出过错，要把这个 validities 更新一下
-            Vue.set(target, 'validities', [
+            this.$set(target, 'validities', [
               validity,
               ...target.validities.filter(validity => validity.fields === validityName)
             ])

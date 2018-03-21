@@ -9,7 +9,7 @@
     :class="{
       'veui-button-selected': item.value === value
     }"
-    :ui="buttonUI"
+    :ui="inheritedUi"
     v-for="(item, index) in items"
     :key="index"
     :disabled="item.disabled || realDisabled || realReadonly"
@@ -24,7 +24,6 @@
 <script>
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import { includes } from 'lodash'
 import Button from './Button'
 
 export default {
@@ -37,15 +36,8 @@ export default {
     event: 'change'
   },
   props: {
-    ui: String,
     items: Array,
     value: null
-  },
-  computed: {
-    buttonUI () {
-      let allowed = ['alt', 'tiny', 'small', 'large']
-      return this.uiProps.filter(ui => includes(allowed, ui)).join(' ')
-    }
   },
   methods: {
     handleChange (val) {

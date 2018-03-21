@@ -1,5 +1,6 @@
 <script>
 import Overlay from './Overlay'
+import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import outside from '../directives/outside'
 import { getNodes, isValidNodesResolver } from '../utils/context'
@@ -17,12 +18,11 @@ config.defaults({
 export default {
   name: 'veui-tooltip',
   directives: { outside },
-  mixins: [overlay],
+  mixins: [ui, overlay],
   components: {
     'veui-overlay': Overlay
   },
   props: {
-    ui: String,
     position: {
       type: String,
       default: 'top'

@@ -5,10 +5,15 @@ import '../icons/angle-right'
 import config from 'veui/managers/config'
 
 config.defaults({
-  'tabs.icons': {
+  icons: {
     remove: 'cross',
     add: 'plus-circle-o',
     prev: 'angle-left',
     next: 'angle-right'
+  },
+  ui: {
+    size: {
+      values: ['large', 'small', 'tiny']
+    }
   }
-})
+}, 'tabs')

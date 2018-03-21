@@ -6,7 +6,7 @@ import Icon from '../Icon'
 import CandidatePanel from './_CandidatePanel'
 import SelectedPanel from './_SelectedPanel'
 import { isEqual, find, difference, includes, omit, uniq, remove, isString } from 'lodash'
-import icons from '../../mixins/icons'
+import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 
 function defaultFilter (type, keyword, option, datasource) {
@@ -23,7 +23,7 @@ export default {
     'veui-candidate-panel': CandidatePanel,
     'veui-selected-panel': SelectedPanel
   },
-  mixins: [input, icons],
+  mixins: [ui, input],
   props: {
     datasource: {
       type: Array,
@@ -429,16 +429,16 @@ export default {
       return chain
     }
   },
-  render (createElement) {
+  render (h) {
     function generateHead (type) {
       let headSlotName = `${type}-head`
       let head = this.$slots[headSlotName]
-        ? createElement('template', { slot: 'head' }, this.$slots[headSlotName])
+        ? h('template', { slot: 'head' }, this.$slots[headSlotName])
         : null
 
       let titleSlotName = `${type}-title`
       let title = !head && this.$slots[titleSlotName]
-        ? createElement('template', { slot: 'title' }, this.$slots[titleSlotName])
+        ? h('template', { slot: 'title' }, this.$slots[titleSlotName])
         : null
 
       return [head, title]
@@ -464,20 +464,23 @@ export default {
     function generateNoData (type) {
       let slotName = `${type}-no-data`
       return this.$slots[slotName]
-        ? createElement('template', { slot: 'no-data' }, this.$slots[slotName])
+        ? h('template', { slot: 'no-data' }, this.$slots[slotName])
         : null
     }
 
-    return createElement(
+    return h(
       'div',
       {
         class: {
           'veui-transfer': true,
           'veui-transfer-disabled': !this.isSelectable
+        },
+        props: {
+          ui: this.ui
         }
       },
       [
-        createElement(
+        h(
           CandidatePanel,
           {
             props: {
@@ -504,7 +507,7 @@ export default {
           },
           [...generateHead.call(this, 'candidate'), generateNoData.call(this, 'candidate')]
         ),
-        createElement(
+        h(
           SelectedPanel,
           {
             props: {

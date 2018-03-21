@@ -6,7 +6,7 @@
     ref="box"
     :style="{zIndex}"
     v-show="open">
-    <slot></slot>
+    <slot/>
   </div>
 </div>
 </template>
@@ -18,6 +18,7 @@ import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
 import focusManager from '../managers/focus'
 import config from '../managers/config'
+import ui from '../mixins/ui'
 import { getClassPropDef } from '../utils/helper'
 
 config.defaults({
@@ -29,9 +30,9 @@ overlayManager.setBaseZIndex(config.get('overlay.baseZIndex'))
 export default {
   name: 'veui-overlay',
   uiTypes: ['overlay'],
+  mixins: [ui],
   props: {
     overlayClass: getClassPropDef(),
-    ui: String,
     open: Boolean,
     target: {
       default: null

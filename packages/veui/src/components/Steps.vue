@@ -1,12 +1,12 @@
 <template>
-<div class="veui-steps">
+<div class="veui-steps" :ui="ui">
   <veui-link v-for="(step, index) in steps" class="veui-steps-step" :class="{
       'veui-steps-current': index === current
     }" :to="step.to" fallback="div" :key="index" @click="$emit('click', index)">
     <slot v-bind="step" :index="index">
       <div class="veui-steps-step-index">
         <slot name="index" v-bind="step" :index="index">
-          <veui-icon v-if="index < current" :name="icons.success"></veui-icon>
+          <veui-icon v-if="index < current" :name="icons.success"/>
           <template v-else>{{ index + 1 }}</template>
         </slot>
       </div>
@@ -22,11 +22,11 @@
 <script>
 import Icon from './Icon'
 import Link from './Link'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 
 export default {
   name: 'veui-steps',
-  mixins: [icons],
+  mixins: [ui],
   components: {
     'veui-icon': Icon,
     'veui-link': Link

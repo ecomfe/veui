@@ -9,7 +9,7 @@
     :class="{
       'veui-button-selected': value.indexOf(item.value) !== -1
     }"
-    :ui="buttonUI"
+    :ui="inheritedUi"
     v-for="(item, index) in items"
     :key="index"
     :disabled="item.disabled || realDisabled || realReadonly"
@@ -34,20 +34,13 @@ export default {
   components: {
     'veui-button': Button
   },
-  mixins: [input, ui],
+  mixins: [ui, input],
   model: {
     event: 'change'
   },
   props: {
-    ui: String,
     items: Array,
     value: Array
-  },
-  computed: {
-    buttonUI () {
-      let allowed = ['alt', 'micro', 'tiny', 'small', 'large']
-      return this.uiProps.filter(ui => includes(allowed, ui)).join(' ')
-    }
   },
   methods: {
     handleChange (val) {

@@ -29,10 +29,10 @@
         <slot v-else name="placeholder">{{ placeholder }}</slot>
       </span>
     </template>
-    <veui-icon class="veui-date-picker-icon" :name="icons.calendar"></veui-icon>
+    <veui-icon class="veui-date-picker-icon" :name="icons.calendar"/>
   </veui-button>
   <button v-if="clearable && !!selected" type="button" class="veui-date-picker-clear veui-sr-only" @click="clear">
-    <veui-icon :name="icons.clear"></veui-icon>
+    <veui-icon :name="icons.clear"/>
   </button>
   <veui-overlay
     v-if="expanded"
@@ -47,6 +47,7 @@
       v-model="localSelected"
       v-bind="calendarProps"
       ref="cal"
+      :ui="inheritedUi"
       v-outside:button="close"
       @select="handleSelect"
       @selectstart="handleProgress"
@@ -78,7 +79,7 @@ import Icon from './Icon'
 import moment from 'moment'
 import dropdown from '../mixins/dropdown'
 import input from '../mixins/input'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import config from '../managers/config'
 import { isNumber, pick, omit } from 'lodash'
@@ -101,13 +102,12 @@ export default {
     'veui-calendar': Calendar,
     'veui-icon': Icon
   },
-  mixins: [dropdown, input, icons, overlay],
+  mixins: [ui, dropdown, input, overlay],
   model: {
     prop: 'selected',
     event: 'select'
   },
   props: {
-    ui: String,
     selected: {
       type: [Array, Date],
       default () {
@@ -218,6 +218,9 @@ export default {
     clear (e) {
       this.$emit('select', null)
       this.expanded = false
+      this.$nextTick(() => {
+        this.$refs.button.focus()
+      })
     },
     close () {
       this.expanded = false

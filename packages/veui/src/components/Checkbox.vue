@@ -6,31 +6,30 @@
   :ui="ui">
   <input ref="box" type="checkbox" v-bind="attrs" @change="handleChange">
   <span class="veui-checkbox-box">
-    <icon v-if="isChecked || localIndeterminate" :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"></icon>
+    <veui-icon v-if="isChecked || localIndeterminate" :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"/>
   </span>
-  <span class="veui-checkbox-label"><slot></slot></span>
+  <span class="veui-checkbox-label"><slot/></span>
 </label>
 </template>
 
 <script>
 import Icon from './Icon'
 import input from '../mixins/input'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 import { patchIndeterminate } from '../utils/dom'
 
 export default {
   name: 'veui-checkbox',
   inheritAttrs: false,
   components: {
-    Icon
+    'veui-icon': Icon
   },
-  mixins: [input, icons],
+  mixins: [ui, input],
   model: {
     prop: 'checked',
     event: 'change'
   },
   props: {
-    ui: String,
     trueValue: {
       type: null,
       default: true

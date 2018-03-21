@@ -22,10 +22,10 @@
           v-if="closable"
           @click="localOpen = false"
           aria-label="关闭">
-          <veui-icon :name="icons.close"></veui-icon>
+          <veui-icon :name="icons.close"/>
         </button>
       </div>
-      <div class="veui-dialog-content-body"><slot></slot></div>
+      <div class="veui-dialog-content-body"><slot/></div>
       <div class="veui-dialog-content-foot">
         <slot name="foot">
           <veui-button ui="primary" @click="$emit('ok')">确定</veui-button>
@@ -40,7 +40,6 @@
 import Overlay from './Overlay'
 import Button from './Button'
 import ui from '../mixins/ui'
-import icons from '../mixins/icons'
 import overlay from '../mixins/overlay'
 import drag from '../directives/drag'
 import Icon from './Icon'
@@ -54,9 +53,8 @@ export default {
   },
   inheritAttrs: false,
   directives: { drag },
-  mixins: [ui, icons, overlay],
+  mixins: [ui, overlay],
   props: {
-    ui: String,
     modal: {
       type: Boolean,
       default: true

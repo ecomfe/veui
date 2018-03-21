@@ -1,27 +1,31 @@
 <template>
 <component v-if="!to"
-  class="veui-link"
   :class="klass"
   :is="fallback"
-  @click="handleRedirect"><slot></slot></component>
+  :ui="ui"
+  @click="handleRedirect"><slot/></component>
 <router-link v-else-if="$router && !native"
-  class="veui-link"
   :class="klass"
   :to="to"
+  :ui="ui"
   :replace="replace">
-  <slot></slot>
+  <slot/>
 </router-link>
 <a v-else
-  class="veui-link"
   :class="klass"
   :href="to"
+  :ui="ui"
   @click="handleRedirect">
-  <slot></slot>
+  <slot/>
 </a>
 </template>
+
 <script>
+import ui from '../mixins/ui'
+
 export default {
   name: 'veui-link',
+  mixins: [ui],
   props: {
     to: {
       type: String,
@@ -38,6 +42,7 @@ export default {
   computed: {
     klass () {
       return {
+        'veui-link': true,
         'veui-disabled': this.disabled
       }
     }

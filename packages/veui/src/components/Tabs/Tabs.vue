@@ -33,7 +33,7 @@
                 <button v-if="tab.removable" type="button" class="veui-tabs-item-remove"
                   aria-label="删除"
                   @click="$emit('remove', tab)">
-                    <icon :name="icons.remove"/>
+                    <veui-icon :name="icons.remove"/>
                 </button>
               </slot>
             </slot>
@@ -49,16 +49,16 @@
           class="veui-tabs-operator"
           aria-label="添加"
           @click="$emit('add')">
-          <icon :name="icons.add"></icon><slot name="tabs-extra-text"><span>添加 Tab</span></slot>
+          <veui-icon :name="icons.add"/><slot name="tabs-extra-text"><span>添加 Tab</span></slot>
         </button>
         <div class="veui-tabs-scroller" v-if="menuOverflow" ref="scroller" aria-hidden="true">
-          <button type="button" class="veui-tabs-scroller-left" @click="scroll('left')"><icon :name="icons.prev"></icon></button>
-          <button type="button" class="veui-tabs-scroller-right" @click="scroll('right')"><icon :name="icons.next"></icon></button>
+          <button type="button" class="veui-tabs-scroller-left" @click="scroll('left')"><veui-icon :name="icons.prev"/></button>
+          <button type="button" class="veui-tabs-scroller-right" @click="scroll('right')"><veui-icon :name="icons.next"/></button>
         </div>
       </div>
     </slot>
   </div>
-  <slot class="veui-tabs-panel"></slot>
+  <slot class="veui-tabs-panel"/>
 </div>
 </template>
 
@@ -67,24 +67,20 @@ import warn from '../../utils/warn'
 import Link from '../Link'
 import Icon from '../Icon'
 import resize from '../../directives/resize'
-import icons from '../../mixins/icons'
+import ui from '../../mixins/ui'
 
 export default {
   name: 'veui-tabs',
   uiTypes: ['tabs'],
-  mixins: [icons],
+  mixins: [ui],
   components: {
     'veui-link': Link,
-    Icon
+    'veui-icon': Icon
   },
   directives: {
     resize
   },
   props: {
-    ui: {
-      type: String,
-      default: 'default'
-    },
     active: {
       type: String
     },
@@ -130,7 +126,7 @@ export default {
       let domBaseIndex = tab.index
 
       if (this.tabNames.indexOf(tab.name) !== -1) {
-        warn('Duplicate tab name.')
+        warn('[veui-tabs] Duplicate tab name.')
       }
 
       // 如果还没有找到选中的 tab，优先查看配置的 name

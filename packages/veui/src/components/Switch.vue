@@ -1,19 +1,22 @@
 <template>
-<label :class="{
+<label
+  :class="{
     'veui-switch': true,
     'veui-switch-on': localChecked === trueValue,
     'veui-switch-disabled': realDisabled || realReadonly
-  }" :ui="ui">
+  }"
+  :ui="ui">
   <div class="veui-switch-switcher">
     <input type="checkbox" v-bind="attrs" :disabled="realDisabled || realReadonly" @change="handleChange($event.target.checked)">
     <span class="veui-switch-button"></span>
   </div>
-  <div class="veui-switch-label"><slot></slot></div>
+  <div class="veui-switch-label"><slot/></div>
 </label>
 </template>
 
 <script>
 import Icon from './Icon'
+import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { pick } from 'lodash'
 
@@ -22,13 +25,12 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [input],
+  mixins: [ui, input],
   model: {
     prop: 'checked',
     event: 'change'
   },
   props: {
-    ui: String,
     trueValue: {
       type: null,
       default: true

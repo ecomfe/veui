@@ -1,5 +1,5 @@
 <template>
-  <div class="veui-filter-panel">
+  <div class="veui-filter-panel" :ui="ui">
     <h3 class="veui-filter-panel-title">
       <slot name="head">标题</slot>
     </h3>
@@ -13,7 +13,7 @@
       <div class="veui-filter-panel-content-main"
         v-if="datasource.length"
         ref="main">
-        <slot :options="filteredDatasource"></slot>
+        <slot :options="filteredDatasource"/>
       </div>
       <div class="veui-filter-panel-no-data" v-else>
         <slot name="no-data">没数据</slot>
@@ -26,7 +26,7 @@
 import Searchbox from './Searchbox'
 import Tree from './Tree'
 import Icon from './Icon'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 import { includes, debounce, cloneDeep } from 'lodash'
 
 export default {
@@ -36,7 +36,7 @@ export default {
     'veui-tree': Tree,
     'veui-icon': Icon
   },
-  mixins: [icons],
+  mixins: [ui],
   props: {
     datasource: {
       type: Array,

@@ -31,7 +31,7 @@
               <span class="veui-tree-item-expand-switcher"
                 v-if="props.option.children && props.option.children.length"
                 @click.stop="toggle(props.option)">
-                <veui-icon :name="icons.collapsed"></veui-icon>
+                <veui-icon :name="icons.collapsed"/>
               </span>
 
               <div class="veui-transfer-item-label"
@@ -44,12 +44,12 @@
                 <veui-icon
                   class="veui-transfer-candidate-icon-unselected"
                   :name="icons.select"
-                  v-if="!props.option.visuallySelected"></veui-icon>
+                  v-if="!props.option.visuallySelected"/>
                 <!-- 选中的时候， hover 上去应该展示的图标 -->
                 <veui-icon
                   class="veui-transfer-candidate-icon-selected"
                   :name="icons.check"
-                  v-else></veui-icon>
+                  v-else/>
               </div>
             </div>
           </slot>

@@ -12,7 +12,7 @@
   <span v-if="label || $slots.label" class="veui-form-label">
     <slot name="label"><veui-label>{{ label }}</veui-label></slot>
   </span>
-  <slot></slot>
+  <slot/>
   <span v-if="tip || $slots.tip" class="veui-form-tip"><slot name="tip">{{ tip }}</slot></span>
   <p
     v-if="!validity.valid && !!validity.message"
@@ -26,7 +26,7 @@
 import Label from '../Label'
 import type from '../../managers/type'
 import rule from '../../managers/rule'
-import icons from '../../mixins/icons'
+import ui from '../../mixins/ui'
 import { isBoolean, get, last, includes } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
@@ -38,13 +38,12 @@ const { computed: fieldset } = getTypedAncestorTracker('fieldset')
 export default {
   name: 'veui-field',
   uiTypes: ['field', 'form-container'],
-  mixins: [icons],
+  mixins: [ui],
   components: {
     'veui-icon': Icon,
     'veui-label': Label
   },
   props: {
-    ui: String,
     label: String,
     name: String,
     tip: String,

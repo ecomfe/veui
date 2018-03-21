@@ -18,7 +18,7 @@
           :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
           @click.stop>
       </label>
-      <span v-if="$slots.desc" class="veui-uploader-tip"><slot name="desc"></slot></span>
+      <span v-if="$slots.desc" class="veui-uploader-tip"><slot name="desc"/></span>
       <span class="veui-uploader-error">
         <template v-if="error.typeInvalid"><slot name="type-invalid"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
         <template v-if="error.sizeInvalid"><slot name="size-invalid"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>
@@ -42,7 +42,7 @@
                 <slot name="failure-label">上传失败</slot>
               </span>
               <veui-button v-if="file.status === 'failure'" ui="link" @click="retry(file)" :class="listClass + '-retry'"><icon :name="icons.redo"></icon>重试</veui-button>
-              <veui-button ui="link remove" @click="removeFile(file)" :disabled="realUneditable"><icon :name="icons.clear"></icon></veui-button>
+              <veui-button class="veui-uploader-button-remove" ui="link" @click="removeFile(file)" :disabled="realUneditable"><icon :name="icons.clear"></icon></veui-button>
               <veui-tooltip position='top' :target="`fileFailure${index}`">{{ file.failureReason }}</veui-tooltip>
             </template>
             <template v-else>
@@ -52,7 +52,7 @@
                   class="veui-button"
                   :class="{'veui-uploader-input-label-disabled': realUneditable}"
                   @click.stop="replaceFile(file)">重新上传</label>
-                <veui-button @click="removeFile(file)" :disabled="realUneditable" :class="listClass + '-mask-remove'"><icon :name="icons.clear"></icon>移除</veui-button>
+                <veui-button @click="removeFile(file)" :disabled="realUneditable" :class="`${listClass}-mask-remove`"><icon :name="icons.clear"></icon>移除</veui-button>
               </div>
             </template>
             <transition name="veui-uploader-fade">
@@ -71,7 +71,8 @@
               :convertSizeUnit="convertSizeUnit">
               <slot name="uploading-label">上传中...</slot>
             </veui-uploader-progress>
-            <veui-button v-if="type === 'file'" ui="link remove"
+            <veui-button v-if="type === 'file'" ui="link"
+              class="veui-uploader-button-remove"
               @click="cancelFile(file)"><icon :name="icons.clear"></icon></veui-button>
             <veui-button v-else ui="aux operation"
               @click="cancelFile(file)">取消</veui-button>
@@ -104,7 +105,7 @@
         </label>
       </li>
     </ul>
-    <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"></slot></span>
+    <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"/></span>
     <span class="veui-uploader-error" v-if="type === 'image'">
       <template v-if="error.typeInvalid"><slot name="type-invalid"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
       <template v-if="error.sizeInvalid"><slot name="size-invalid"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>
@@ -127,7 +128,6 @@ import Tooltip from './Tooltip'
 import { cloneDeep, uniqueId, assign, isNumber, isArray, last, pick, omit, includes } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import icons from '../mixins/icons'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
 import bytes from 'bytes'
@@ -146,7 +146,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-uploader-progress': getProgress()
   },
-  mixins: [ui, input, icons],
+  mixins: [ui, input],
   model: {
     event: 'change'
   },
@@ -212,7 +212,6 @@ export default {
       }
     },
     accept: String,
-    ui: String,
     maxCount: Number,
     maxSize: [Number, String],
     payload: Object,

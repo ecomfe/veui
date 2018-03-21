@@ -77,7 +77,7 @@
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
 import overlay from '../mixins/overlay'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 import Input from './Input'
 import Icon from './Icon'
 import Overlay from './Overlay'
@@ -86,7 +86,7 @@ import { pick, includes } from 'lodash'
 
 export default {
   name: 'veui-searchbox',
-  mixins: [input, dropdown, overlay, icons],
+  mixins: [ui, input, dropdown, overlay],
   components: {
     'veui-input': Input,
     Icon,
@@ -94,7 +94,6 @@ export default {
     'veui-button': Button
   },
   props: {
-    ui: String,
     suggestions: {
       type: Array,
       default () {

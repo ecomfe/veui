@@ -3,7 +3,12 @@ import '../icons/cross'
 import config from 'veui/managers/config'
 
 config.defaults({
-  'dialog.icons': {
+  icons: {
     close: 'cross'
+  },
+  ui: {
+    position: {
+      values: ['top']
+    }
   }
-})
+}, 'dialog')

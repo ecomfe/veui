@@ -7,12 +7,13 @@
   <table-head @sort="sort"/>
   <table-body><template slot="no-data"><slot name="no-data">没有数据</slot></template></table-body>
   <slot name="foot"><table-foot/></slot>
-  <slot></slot>
+  <slot/>
 </table>
 </template>
 
 <script>
 import warn from '../../utils/warn'
+import ui from '../../mixins/ui'
 import { map, intersection, isString, includes, indexOf, keys as objectKeys, find } from 'lodash'
 import Body from './_TableBody'
 import Head from './_TableHead'
@@ -21,13 +22,13 @@ import Foot from './_TableFoot'
 export default {
   name: 'veui-table',
   uiTypes: ['table'],
+  mixins: [ui],
   components: {
     'table-body': Body,
     'table-head': Head,
     'table-foot': Foot
   },
   props: {
-    ui: String,
     data: {
       type: Array,
       default () {

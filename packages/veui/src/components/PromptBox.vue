@@ -20,8 +20,9 @@
 <script>
 import Input from './Input'
 import Dialog from './Dialog'
-import { pick, extend } from 'lodash'
+import { pick } from 'lodash'
 import config from '../managers/config'
+import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 
 config.defaults({
@@ -34,20 +35,18 @@ export default {
     'veui-input': Input,
     'veui-dialog': Dialog
   },
-  mixins: [overlay],
-  props: extend(
-    pick(Dialog.props, ['open', 'title', 'ui']),
-    {
-      content: {
-        type: String,
-        default: '请输入'
-      },
-      value: {
-        type: String,
-        default: ''
-      }
+  mixins: [ui, overlay],
+  props: {
+    ...pick(Dialog.props, ['open', 'title']),
+    content: {
+      type: String,
+      default: '请输入'
+    },
+    value: {
+      type: String,
+      default: ''
     }
-  ),
+  },
   data () {
     return {
       localOpen: this.open,

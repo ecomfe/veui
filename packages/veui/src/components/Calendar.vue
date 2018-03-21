@@ -1,10 +1,11 @@
 <template>
 <div
   class="veui-calendar"
+  :ui="ui"
   role="application"
   aria-label="日历"
   @mouseleave="markEnd()">
-  <slot name="before"></slot>
+  <slot name="before"/>
   <div
     v-for="(p, pIndex) in panels"
     :key="pIndex"
@@ -145,7 +146,7 @@
       </table>
     </div>
   </div>
-  <slot name="after"></slot>
+  <slot name="after"/>
 </div>
 </template>
 
@@ -154,7 +155,7 @@ import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/da
 import { closest, focusIn } from '../utils/dom'
 import { sign, isPositive } from '../utils/math'
 import { flattenDeep, findIndex, uniqueId } from 'lodash'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 import input from '../mixins/input'
 import config from '../managers/config'
 import Icon from './Icon'
@@ -201,7 +202,7 @@ const STEP_LABELS = {
 
 export default {
   name: 'veui-calendar',
-  mixins: [input, icons],
+  mixins: [ui, input],
   model: {
     prop: 'selected',
     event: 'select'

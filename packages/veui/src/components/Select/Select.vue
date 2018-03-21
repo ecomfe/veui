@@ -1,9 +1,11 @@
 <template>
-<div class="veui-select" :ui="ui"
+<div
   :class="{
+    'veui-select': true,
     'veui-select-empty': value === null,
     'veui-select-expanded': expanded
-  }">
+  }"
+  :ui="ui">
   <veui-button
     class="veui-select-button"
     :ui="ui"
@@ -14,7 +16,7 @@
     <span class="veui-select-label">
       <slot name="label" :label="label">{{ label }}</slot>
     </span>
-    <icon class="veui-select-icon" :name="icons[expanded ? 'collapse' : 'expand']"></icon>
+    <icon class="veui-select-icon" :name="icons[expanded ? 'collapse' : 'expand']"/>
   </veui-button>
   <veui-overlay
     v-if="options && expanded || !options"
@@ -34,16 +36,16 @@
       @keydown.esc.stop="expanded = false"
       @keydown.down.prevent="navigate()"
       @keydown.up.prevent="navigate(false)">
-      <veui-option-group :options="realOptions" ref="options">
-        <slot></slot>
+      <veui-option-group :options="realOptions" :ui="ui" ref="options">
+        <slot/>
         <template v-if="$scopedSlots['group-label']" slot="label" slot-scope="group">
-          <slot name="group-label" v-bind="group"></slot>
+          <slot name="group-label" v-bind="group"/>
         </template>
         <template v-if="$scopedSlots.option" slot="option" slot-scope="option">
-          <slot name="option" v-bind="option"></slot>
+          <slot name="option" v-bind="option"/>
         </template>
         <template v-if="$scopedSlots['option-label']" slot="option-label" slot-scope="option">
-          <slot name="option-label" v-bind="option"></slot>
+          <slot name="option-label" v-bind="option"/>
         </template>
       </veui-option-group>
     </div>
@@ -59,7 +61,7 @@ import OptionGroup from './OptionGroup'
 import Overlay from '../Overlay'
 import input from '../../mixins/input'
 import keySelect from '../../mixins/key-select'
-import icons from '../../mixins/icons'
+import ui from '../../mixins/ui'
 import overlay from '../../mixins/overlay'
 import dropdown from '../../mixins/dropdown'
 import warn from '../../utils/warn'
@@ -67,7 +69,7 @@ import warn from '../../utils/warn'
 export default {
   name: 'veui-select',
   uiTypes: ['select'],
-  mixins: [input, icons, overlay, dropdown, keySelect],
+  mixins: [ui, input, overlay, dropdown, keySelect],
   model: {
     event: 'change'
   },
@@ -79,7 +81,6 @@ export default {
     'veui-overlay': Overlay
   },
   props: {
-    ui: String,
     value: null,
     placeholder: {
       type: String,
@@ -146,7 +147,7 @@ function extractOptions (options, map) {
   options.forEach(({ label, value, options }) => {
     if (value != null) {
       if (map[value]) {
-        warn(`Duplicate item value [${value}] for select options.`)
+        warn(`[veui-select] Duplicate item value [${value}] for select options.`)
       }
       map[value] = label
     }

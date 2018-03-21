@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import ui from '../mixins/ui'
 import input from '../mixins/input'
 import Radio from './Radio'
 import { uniqueId } from 'lodash'
@@ -31,12 +32,11 @@ export default {
   components: {
     'radio': Radio
   },
-  mixins: [input],
+  mixins: [ui, input],
   model: {
     event: 'change'
   },
   props: {
-    ui: String,
     items: Array,
     value: null
   },

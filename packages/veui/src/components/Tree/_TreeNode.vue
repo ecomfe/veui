@@ -9,7 +9,7 @@
           <span class="veui-tree-item-expand-switcher"
             v-if="option.children && option.children.length"
             @click.stop="toggle(option, index, depth)">
-            <veui-icon :name="icons.collapsed"></veui-icon>
+            <veui-icon :name="icons.collapsed"/>
           </span>
           <div class="veui-tree-item-label">
             <slot name="item-label" :option="option" :index="index" :depth="depth">{{ option.label }}</slot>
@@ -29,7 +29,7 @@
             <span class="veui-tree-item-expand-switcher"
               v-if="props.option.children && props.option.children.length"
               @click.stop="toggle(props.option, props.index, depth + 1)">
-              <veui-icon :name="icons.collapsed"></veui-icon>
+              <veui-icon :name="icons.collapsed"/>
             </span>
             <div class="veui-tree-item-label">
               <slot name="item-label" v-bind="props">{{ props.option.label }}</slot>

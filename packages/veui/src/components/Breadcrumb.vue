@@ -1,11 +1,11 @@
 <script>
 import BreadcrumbItem from './BreadcrumbItem'
 import Icon from './Icon'
-import icons from '../mixins/icons'
+import ui from '../mixins/ui'
 
 export default {
   name: 'veui-breadcrumb',
-  mixins: [icons],
+  mixins: [ui],
   props: {
     routes: {
       type: Array,
