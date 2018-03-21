@@ -89,9 +89,9 @@
 
         <veui-fieldset label="预期收入：">
           <veui-field field="salary" name="salary">
-            <veui-slider v-model="storeData4.salary" :min="1" :max="10" :step="0.5"></veui-slider>
+            <veui-slider v-model="storeData2.salary" :min="1" :max="10" :step="0.5"></veui-slider>
           </veui-field>
-          <veui-span>{{storeData4.salary[0].toFixed(1)}}~{{storeData4.salary[1].toFixed(1)}}万</veui-span>
+          <veui-span>{{storeData2.salary[0].toFixed(1)}}~{{storeData2.salary[1].toFixed(1)}}万</veui-span>
         </veui-fieldset>
 
       </veui-form>
@@ -2499,7 +2499,8 @@ export default {
         phoneType,
         phoneTypeOptions,
         start: null,
-        end: null
+        end: null,
+        salary: [2, 5]
       },
       storeData3: {
         statusSelected: 1,
@@ -2533,8 +2534,7 @@ export default {
         phoneType,
         start: null,
         end: null,
-        protocol: '',
-        salary: [2, 5]
+        protocol: ''
       },
       storeData4Options: {
         hobbyItems,

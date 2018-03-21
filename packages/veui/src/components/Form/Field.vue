@@ -1,11 +1,24 @@
 <template>
-<div :ui="ui" class="veui-field" :class="{'veui-field-invalid': !validity.valid, 'veui-field-no-label': !label, 'veui-field-no-tip': !tip, 'veui-field-required': isRequired}">
+<div
+  :ui="ui"
+  :class="{
+    'veui-field': true,
+    'veui-field-invalid': !validity.valid,
+    'veui-field-no-label': !label && !$slots.label,
+    'veui-field-no-tip': !tip && !$slots.tip,
+    'veui-field-required': isRequired
+  }"
+>
   <span v-if="label || $slots.label" class="veui-form-label">
     <slot name="label"><veui-label>{{ label }}</veui-label></slot>
   </span>
   <slot></slot>
   <span v-if="tip || $slots.tip" class="veui-form-tip"><slot name="tip">{{ tip }}</slot></span>
-  <p v-if="!validity.valid && !!validity.message" class="veui-field-error" :title="validity.message"><veui-icon :name="icons.alert"></veui-icon>{{ validity.message }}</p>
+  <p
+    v-if="!validity.valid && !!validity.message"
+    class="veui-field-error"
+    :title="validity.message"
+  ><veui-icon :name="icons.alert"/>{{ validity.message }}</p>
 </div>
 </template>
 
