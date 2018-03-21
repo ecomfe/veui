@@ -2,6 +2,7 @@
 import { uniqueId, pick } from 'lodash'
 import table from '../../mixins/table'
 import { getIndexOfType } from '../../utils/context'
+import '../../config/uiTypes'
 
 export default {
   name: 'veui-table-column',

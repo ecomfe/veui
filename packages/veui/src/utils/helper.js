@@ -13,8 +13,7 @@ export function getTypedAncestorTracker (type, name = type) {
 export function getTypedAncestor (component, type) {
   let current = component.$parent
   while (current) {
-    let { uiTypes } = current.$options
-    if (uiTypes && includes(uiTypes, type)) {
+    if (isType(current, type)) {
       return current
     }
     current = current.$parent
@@ -23,17 +22,28 @@ export function getTypedAncestor (component, type) {
 }
 
 /**
+ * 判断组件实例是否是某个类型
+ *
+ * @param {Vue} vm 组件实例
+ * @param {string} type 类型
+ * @returns {boolean} 组件实例是否是指定的类型
+ */
+export function isType (vm, type) {
+  return includes(get(vm, '$options.uiTypes', []), type)
+}
+
+/**
  * 检查组件是否是指定type或根的顶级type类型
  *
- * @param  {Component}  vm          组件实例
- * @param  {string}     type        组件uiType
- * @param  {string}     [scopeType] 指定查找的父组件uiTypes范围
- * @return {Boolean}                检查结果
+ * @param {Vue} vm 组件实例
+ * @param {string} type 组件uiType
+ * @param {string=} scopeType 指定查找的父组件uiTypes范围
+ * @return {boolean} 检查结果
  */
 export function isTopMostOfType (vm, type, scopeType) {
   let parent = vm.$parent
-  while (parent && !includes(get(parent, '$options.uiTypes'), type)) {
-    if (scopeType && includes(get(parent, '$options.uiTypes'), scopeType)) {
+  while (parent && !isType(parent, type)) {
+    if (scopeType && isType(parent, scopeType)) {
       parent = null
       break
     }
@@ -54,21 +64,21 @@ export function getModelEvent (vm) {
 /**
  * 表单中空输入
  *
- * @param  {Mixed}  val 输入值
- * @return {Boolean}     是否空输入
+ * @param {*} val 输入值
+ * @return {boolean} 是否空输入
  */
 export function isEmpty (val) {
   return val == null || val === '' || (Array.isArray(val) && !val.length)
 }
 
 /**
- * VUE 里面有三种设置 class 的方式：
+ * Vue 里面有三种设置 class 的方式：
  * 1. 字符串
  * 2. 字符串数组
  * 3. object
  * 此处统一将这些形式的 class 转换成 object 形式的
  *
- * @param {string|Array.<string>|object} klasses
+ * @param {string|Array.<string>|Object} klasses
  */
 export function normalizeClass (klasses) {
   let klassObj = {}

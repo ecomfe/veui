@@ -59,6 +59,7 @@ import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import dropdown from '../mixins/dropdown'
 import keySelect from '../mixins/key-select'
+import '../config/uiTypes'
 
 export default {
   name: 'veui-dropdown',

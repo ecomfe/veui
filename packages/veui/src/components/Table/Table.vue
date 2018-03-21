@@ -18,6 +18,7 @@ import { map, intersection, isString, includes, indexOf, keys as objectKeys, fin
 import Body from './_TableBody'
 import Head from './_TableHead'
 import Foot from './_TableFoot'
+import '../../config/uiTypes'
 
 export default {
   name: 'veui-table',

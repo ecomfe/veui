@@ -13,6 +13,7 @@
 import Field from './Field'
 import { get, pick, extend } from 'lodash'
 import ui from '../../mixins/ui'
+import '../../config/uiTypes'
 
 export default {
   name: 'veui-fieldset',

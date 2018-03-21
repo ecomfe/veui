@@ -13,13 +13,14 @@
 
 <script>
 import Tether from 'tether'
-import { assign, includes, get } from 'lodash'
+import { assign } from 'lodash'
 import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
 import focusManager from '../managers/focus'
 import config from '../managers/config'
 import ui from '../mixins/ui'
-import { getClassPropDef } from '../utils/helper'
+import { getClassPropDef, isType } from '../utils/helper'
+import '../config/uiTypes'
 
 config.defaults({
   'overlay.baseZIndex': 200
@@ -160,7 +161,7 @@ export default {
     },
 
     isOverlay (componentInstance) {
-      return includes(get(componentInstance, '$options.uiTypes', []), 'overlay')
+      return isType(componentInstance, 'overlay')
     },
 
     focus () {

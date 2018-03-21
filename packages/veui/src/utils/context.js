@@ -71,7 +71,7 @@ export function getVnodes (ref, context) {
   return vnodes || []
 }
 
-export function getUITypes (vnode) {
+function getUITypes (vnode) {
   if (!vnode) {
     return null
   }

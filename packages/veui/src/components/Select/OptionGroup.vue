@@ -50,6 +50,7 @@ import Option from './Option'
 import ui from '../../mixins/ui'
 import menu from '../../mixins/menu'
 import select from '../../mixins/select'
+import '../../config/uiTypes'
 
 export default {
   name: 'veui-option-group',
