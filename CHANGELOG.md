@@ -7,12 +7,16 @@
 ### 💡 主要变更
 
 * [+] `Searchbox` 组件增加 `suggest-trigger` prop，用来指定推荐列表的弹出时机；增加 `suggest` 事件，当需要显示推荐列表时触发。
+* [+] `Field.rules` 配置项增加 `priority` 的配置，用来覆盖当前内置的规则优先级。
 
 ### 🐞 问题修复
 
 * [^] 去除了 `Link` 组件中错误注册组件的代码。
 * [^] 修复了关闭非 `modal` 的 `Dialog` 时 `FocusManager` 报错的问题。
 * [^] 修复了 `Textarea` 组件在 IE9 下的兼容性问题。
+* [^] 修复了 `Field` 组件使用 `slot` 时 `class` 判断遗漏的问题。
+* [^] 修复了 `pattern`/`numeric` 校验规则的优先级，使 `pattern` 置于 `numeric` 之后。
+* [^] 去除了 `rule` 校验失败信息中包含部分校验成功的无用信息。
 
 ## 1.0.0-alpha.9
 

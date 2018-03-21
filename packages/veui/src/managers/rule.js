@@ -41,15 +41,18 @@ export class Rule {
       // 代表没错
       return true
     })
-    return results.some(res => isObject(res))
-      ? results
-      : true
+
+    // 只返回出错的就好
+    results = results.filter(res => isObject(res))
+    return results.length ? results : true
   }
 
   initRules (rules) {
     // 根据优先级排一下显示顺序
     rules.sort((x, y) => {
-      return this.ruleValidators[x.name].priority >= this.ruleValidators[y.name].priority
+      let priorityX = x.priority || this.ruleValidators[x.name].priority
+      let priorityY = y.priority || this.ruleValidators[y.name].priority
+      return priorityX >= priorityY
     })
   }
 

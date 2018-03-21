@@ -6,6 +6,6 @@ export default {
       ? ruleValue.test(val)
       : new RegExp(ruleValue).test(val)
   },
-  msg: '格式不符合要求',
-  priority: 10
+  message: '格式不符合要求',
+  priority: 50
 }
