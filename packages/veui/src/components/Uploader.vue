@@ -6,8 +6,8 @@
           (maxCount > 1 && fileList.length >= maxCount) ||
           (requestMode === 'iframe' && isSubmiting)}"
         @click="replacingFile = null" ref="label">
-        <slot name="button-label"><icon class="veui-uploader-input-label-icon"
-          :name="icons.upload"></icon>选择文件</slot>
+        <slot name="button-label"><veui-icon class="veui-uploader-input-label-icon"
+          :name="icons.upload"/>选择文件</slot>
         <input :id="inputId" hidden type="file" ref="input"
           @change="handleNewFiles"
           :name="name"
@@ -20,9 +20,9 @@
       </label>
       <span v-if="$slots.desc" class="veui-uploader-tip"><slot name="desc"/></span>
       <span class="veui-uploader-error">
-        <template v-if="error.typeInvalid"><slot name="type-invalid"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
-        <template v-if="error.sizeInvalid"><slot name="size-invalid"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>
-        <template v-if="error.countOverflow"><slot name="count-overflow"><icon :name="icons.alert"></icon>文件的数量超过限制</slot></template>
+        <template v-if="error.typeInvalid"><slot name="type-invalid"><veui-icon :name="icons.alert"/>文件的类型不符合要求</slot></template>
+        <template v-if="error.sizeInvalid"><slot name="size-invalid"><veui-icon :name="icons.alert"/>文件的大小不符合要求</slot></template>
+        <template v-if="error.countOverflow"><slot name="count-overflow"><veui-icon :name="icons.alert"/>文件的数量超过限制</slot></template>
       </span>
     </div>
     <ul :class="listClass">
@@ -31,7 +31,7 @@
           || type === 'image' && (!file.status || file.status === 'success')">
           <slot name="file" :file="file">
             <template v-if="type === 'file'">
-              <icon :name="icons.file" class="veui-uploader-list-icon"></icon>
+              <veui-icon :name="icons.file" class="veui-uploader-list-icon"/>
               <span class="veui-uploader-list-name"
                 :class="{'veui-uploader-list-name-success': file.status === 'success',
                   'veui-uploader-list-name-failure': file.status === 'failure'
@@ -41,8 +41,8 @@
               <span v-if="file.status === 'failure'" class="veui-uploader-failure" :ref="`fileFailure${index}`">
                 <slot name="failure-label">上传失败</slot>
               </span>
-              <veui-button v-if="file.status === 'failure'" ui="link" @click="retry(file)" :class="listClass + '-retry'"><icon :name="icons.redo"></icon>重试</veui-button>
-              <veui-button class="veui-uploader-button-remove" ui="link" @click="removeFile(file)" :disabled="realUneditable"><icon :name="icons.clear"></icon></veui-button>
+              <veui-button v-if="file.status === 'failure'" ui="link" @click="retry(file)" :class="listClass + '-retry'"><veui-icon :name="icons.redo"/>重试</veui-button>
+              <veui-button class="veui-uploader-button-remove" ui="link" @click="removeFile(file)" :disabled="realUneditable"><veui-icon :name="icons.clear"/></veui-button>
               <veui-tooltip position='top' :target="`fileFailure${index}`">{{ file.failureReason }}</veui-tooltip>
             </template>
             <template v-else>
@@ -52,14 +52,14 @@
                   class="veui-button"
                   :class="{'veui-uploader-input-label-disabled': realUneditable}"
                   @click.stop="replaceFile(file)">重新上传</label>
-                <veui-button @click="removeFile(file)" :disabled="realUneditable" :class="`${listClass}-mask-remove`"><icon :name="icons.clear"></icon>移除</veui-button>
+                <veui-button @click="removeFile(file)" :disabled="realUneditable" :class="`${listClass}-mask-remove`"><veui-icon :name="icons.clear"/>移除</veui-button>
               </div>
             </template>
             <transition name="veui-uploader-fade">
               <div v-if="type === 'image' && file.status === 'success'"
                 :class="listClass + '-success'"
                 @click="updateFileList(file, {status: null})">
-                <span class="veui-uploader-success"><slot name="success-label"><icon :name="icons.success"></icon>完成</slot></span>
+                <span class="veui-uploader-success"><slot name="success-label"><veui-icon :name="icons.success"/>完成</slot></span>
               </div>
             </transition>
           </slot>
@@ -73,7 +73,7 @@
             </veui-uploader-progress>
             <veui-button v-if="type === 'file'" ui="link"
               class="veui-uploader-button-remove"
-              @click="cancelFile(file)"><icon :name="icons.clear"></icon></veui-button>
+              @click="cancelFile(file)"><veui-icon :name="icons.clear"/></veui-button>
             <veui-button v-else ui="aux operation"
               @click="cancelFile(file)">取消</veui-button>
           </slot>
@@ -85,7 +85,7 @@
             </div>
             <veui-button ui="aux operation" @click="retry(file)">重试</veui-button>
             <veui-button ui="link" @click="removeFile(file)"
-              :class="`${listClass}-mask-remove ${listClass}-mask-remove-failure`"><icon :name="icons.clear"></icon>移除</veui-button>
+              :class="`${listClass}-mask-remove ${listClass}-mask-remove-failure`"><veui-icon :name="icons.clear"/>移除</veui-button>
           </slot>
         </template>
       </li>
@@ -101,15 +101,15 @@
             :accept="accept"
             :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
             @click.stop>
-            <icon :name="icons.add"></icon>
+            <veui-icon :name="icons.add"/>
         </label>
       </li>
     </ul>
     <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"/></span>
     <span class="veui-uploader-error" v-if="type === 'image'">
-      <template v-if="error.typeInvalid"><slot name="type-invalid"><icon :name="icons.alert"></icon>文件的类型不符合要求</slot></template>
-      <template v-if="error.sizeInvalid"><slot name="size-invalid"><icon :name="icons.alert"></icon>文件的大小不符合要求</slot></template>
-      <template v-if="error.countOverflow"><slot name="count-overflow"><icon :name="icons.alert"></icon>文件的数量超过限制</slot></template>
+      <template v-if="error.typeInvalid"><slot name="type-invalid"><veui-icon :name="icons.alert"/>文件的类型不符合要求</slot></template>
+      <template v-if="error.sizeInvalid"><slot name="size-invalid"><veui-icon :name="icons.alert"/>文件的大小不符合要求</slot></template>
+      <template v-if="error.countOverflow"><slot name="count-overflow"><veui-icon :name="icons.alert"/>文件的数量超过限制</slot></template>
     </span>
     <iframe v-if="requestMode === 'iframe' && isSubmiting" ref="iframe"
      :id="iframeId" :name="iframeId" class="veui-uploader-hide"></iframe>
@@ -141,7 +141,7 @@ config.defaults({
 export default {
   name: 'veui-uploader',
   components: {
-    Icon,
+    'veui-icon': Icon,
     'veui-button': Button,
     'veui-tooltip': Tooltip,
     'veui-uploader-progress': getProgress()

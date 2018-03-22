@@ -25,14 +25,14 @@
         :native="native"
         :disabled="page === 1"
         @click="handleRedirect(pageNavHref.previous.page, $event)">
-        <icon :name="icons.prev"></icon>
+        <veui-icon :name="icons.prev"/>
       </veui-link>
       <veui-link class="veui-pager-next"
         :to="page === pageCount ? '' : pageNavHref.next.href"
         :native="native"
         :disabled="page === pageCount || pageCount === 0"
         @click="handleRedirect(pageNavHref.next.page, $event)">
-        <icon :name="icons.next"></icon>
+        <veui-icon :name="icons.next"/>
       </veui-link>
     </div>
   </div>
@@ -78,7 +78,7 @@ export default {
   name: 'veui-pagination',
   mixins: [ui],
   components: {
-    Icon,
+    'veui-icon': Icon,
     'veui-link': Link,
     'veui-select': Select,
     'veui-option': Option
