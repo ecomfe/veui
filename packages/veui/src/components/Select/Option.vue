@@ -11,7 +11,7 @@
   @click.stop="selectOption">
   <slot>
     <span class="veui-option-label"><slot name="label">{{ label }}</slot></span>
-    <icon class="veui-option-checkmark" v-if="selected" :name="icons.checked"></icon>
+    <veui-icon class="veui-option-checkmark" v-if="selected" :name="icons.checked"/>
   </slot>
 </button>
 </template>
@@ -27,7 +27,7 @@ export default {
   name: 'veui-option',
   mixins: [ui, menu, select],
   components: {
-    Icon
+    'veui-icon': Icon
   },
   props: {
     label: {

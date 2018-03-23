@@ -7,7 +7,15 @@ config.defaults({
   },
   ui: {
     size: {
-      values: ['tiny']
+      values: ['tiny'],
+      data: {
+        default: {
+          radius: 60
+        },
+        tiny: {
+          radius: 13
+        }
+      }
     }
   }
 }, 'progress')

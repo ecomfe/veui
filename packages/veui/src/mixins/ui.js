@@ -1,7 +1,7 @@
 import { getConfigKey } from '../utils/helper'
 import warn from '../utils/warn'
 import config from '../managers/config'
-import { compact, uniq, find, includes, get, assign, filter } from 'lodash'
+import { compact, uniq, find, includes, get, merge, filter } from 'lodash'
 
 export default {
   props: {
@@ -10,11 +10,6 @@ export default {
   computed: {
     uiProps () {
       let ui = (this.ui || '').trim()
-
-      if (!ui) {
-        return {}
-      }
-
       let tokens = compact(uniq(ui.split(/\s+/)))
       let { uiConfig = {} } = this
       return tokens.reduce((result, token) => {
@@ -29,20 +24,25 @@ export default {
           result[name] = token
         }
         return result
-      }, {})
+      }, Object.keys(uiConfig).reduce((result, prop) => {
+        result[prop] = 'default'
+        return result
+      }, {}))
     },
     uiConfig () {
       return this.getComponentConfig('ui')
     },
-    icons () {
-      let icons = this.getComponentConfig('icons')
+    uiData () {
       let { uiConfig = {}, uiProps } = this
-
-      let uiIcons = Object.keys(uiProps).reduce((result, name) => {
-        let icons = get(uiConfig[name], 'data.icons', {})
-        assign(result, icons[uiProps[name]])
+      return Object.keys(uiProps).reduce((result, name) => {
+        let data = get(uiConfig[name], ['data', uiProps[name]], {})
+        merge(result, data)
         return result
       }, {})
+    },
+    icons () {
+      let icons = this.getComponentConfig('icons')
+      let uiIcons = this.uiData.icons || {}
 
       return {
         ...icons,

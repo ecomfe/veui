@@ -33,7 +33,7 @@
         :disabled="realDisabled"
         v-if="localValue"
         @click.stop="clear">
-        <icon :name="icons.clear"></icon>
+        <veui-icon :name="icons.clear"/>
       </button>
       <button class="veui-searchbox-icon veui-searchbox-icon-search"
         ref="search"
@@ -41,7 +41,7 @@
         :readonly="realReadonly"
         :disabled="realDisabled"
         @click.stop="search">
-        <icon :name="icons.search"></icon>
+        <veui-icon :name="icons.search"/>
         <veui-button :ui="ui"
           :readonly="realReadonly"
           :disabled="realDisabled">搜索</veui-button>
@@ -89,7 +89,7 @@ export default {
   mixins: [ui, input, dropdown, overlay],
   components: {
     'veui-input': Input,
-    Icon,
+    'veui-icon': Icon,
     'veui-overlay': Overlay,
     'veui-button': Button
   },
