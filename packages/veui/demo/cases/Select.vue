@@ -71,7 +71,7 @@
     </section>
     <section>
       <h2>内联组件嵌套：</h2>
-      <veui-select v-model="defaultValue10">
+      <veui-select v-model="defaultValue10" clearable>
         <veui-option-group label="字母">
           <veui-option value="A" label="选项 A"/>
           <veui-option value="B" label="选项 B"/>
@@ -123,6 +123,7 @@ export default {
         readonly: false,
         disabled: false,
         selecticon: false,
+        clearable: true,
         options: [
           {
             label: '下拉选项1',
@@ -148,6 +149,7 @@ export default {
         readonly: false,
         disabled: false,
         selecticon: false,
+        clearable: true,
         options: [
           {
             label: '下拉选项1',

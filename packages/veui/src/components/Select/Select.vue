@@ -36,7 +36,8 @@
       @keydown.esc.stop="expanded = false"
       @keydown.down.prevent="navigate()"
       @keydown.up.prevent="navigate(false)">
-      <veui-option-group :options="realOptions" :ui="ui" ref="options">
+      <veui-option v-if="clearable" :value="null" :label="placeholder"/>
+      <veui-option-group :options="options" :ui="ui" ref="options">
         <slot/>
         <template v-if="$scopedSlots['group-label']" slot="label" slot-scope="group">
           <slot name="group-label" v-bind="group"/>
@@ -100,15 +101,6 @@ export default {
     }
   },
   computed: {
-    realOptions () {
-      if (this.clearable) {
-        return [
-          { label: this.placeholder, value: null },
-          ...this.options
-        ]
-      }
-      return this.options
-    },
     labelMap () {
       return extractOptions(this.options, {})
     },
