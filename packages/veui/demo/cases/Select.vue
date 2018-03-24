@@ -3,7 +3,9 @@
     <h1><code>&lt;veui-select&gt;</code></h1>
     <section>
       <h2>默认样式：</h2>
-      <veui-select v-bind="attrs" v-model="defaultValue1" placeholder="全部" clearable></veui-select>
+      <veui-select v-bind="attrs" v-model="defaultValue1" placeholder="全部" clearable :filter="filter">
+        <div slot="before"><veui-input class="filter" ui="tiny" v-model="keyword"/></div>
+      </veui-select>
     </section>
     <section>
       <h2>显示已选图标样式：</h2>
@@ -34,7 +36,7 @@
       <h2>Slot 样式 3：</h2>
       <veui-select v-bind="attrs" v-model="defaultValue1">
         <template slot="option" slot-scope="props">
-          <radio :checked="props.selected">{{ props.label }}</radio>
+          <veui-radio :checked="props.selected">{{ props.label }}</veui-radio>
         </template>
       </veui-select>
     </section>
@@ -61,7 +63,7 @@
         }">
         <template slot="option" slot-scope="props">
           <span class="veui-option-label-text veui-option-custom-label">{{ props.label }}</span>
-          <icon name="gift"/>
+          <veui-icon name="gift"/>
         </template>
       </veui-select>
     </section>
@@ -89,7 +91,7 @@
 
 <script>
 import bus from '../bus'
-import { Icon, Select, Option, OptionGroup, Radio } from 'veui'
+import { Icon, Select, Option, OptionGroup, Radio, Input } from 'veui'
 import type from 'veui/managers/type'
 import 'vue-awesome/icons/eye'
 import 'vue-awesome/icons/gift'
@@ -100,11 +102,16 @@ export default {
     'veui-select': Select,
     'veui-option': Option,
     'veui-option-group': OptionGroup,
-    'radio': Radio,
-    'icon': Icon
+    'veui-radio': Radio,
+    'veui-icon': Icon,
+    'veui-input': Input
   },
   data () {
     return {
+      filter: ({ label }) => {
+        return label.indexOf(this.keyword) !== -1
+      },
+      keyword: '',
       disabled: true,
       selected: true,
       icon: true,
@@ -126,19 +133,19 @@ export default {
         clearable: true,
         options: [
           {
-            label: '下拉选项1',
+            label: '下拉选项111',
             value: 1
           },
           {
-            label: '下拉选项下拉选项下拉选项22',
+            label: '下拉选项下拉选项下拉选项112',
             value: 2
           },
           {
-            label: '下拉选项3',
+            label: '下拉选项122',
             value: 3
           },
           {
-            label: '下拉选项4',
+            label: '下拉选项222',
             value: 4
           }
         ]
@@ -260,6 +267,7 @@ export default {
     margin-left: 5px;
   }
 }
+
 .veui-option-custom {
   position: relative;
   padding-left: 10px;
@@ -274,5 +282,10 @@ export default {
   &-label {
     color: rgb(80, 170, 39);
   }
+}
+
+.filter {
+  width: ~"calc(100% - 10px)";
+  margin: 5px;
 }
 </style>
