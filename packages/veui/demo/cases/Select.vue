@@ -28,7 +28,7 @@
       <veui-select v-bind="attrs" v-model="defaultValue4">
         <template slot="option" slot-scope="props">
           <span class="veui-option-label-text">{{ props.label }}</span>
-          <icon name="eye"></icon>
+          <veui-icon name="eye"/>
         </template>
       </veui-select>
     </section>
@@ -38,6 +38,21 @@
         <template slot="option" slot-scope="props">
           <veui-radio :checked="props.selected">{{ props.label }}</veui-radio>
         </template>
+      </veui-select>
+    </section>
+    <section>
+      <h2>多级样式：</h2>
+      <veui-select v-model="hero">
+        <veui-option-group label="漫威" position="popout">
+          <veui-option value="spiderman" label="蜘蛛侠"/>
+          <veui-option value="ironman" label="钢铁侠"/>
+          <veui-option value="hulk" label="绿巨人"/>
+        </veui-option-group>
+        <veui-option-group label="DC" position="popout">
+          <veui-option value="superman" label="超人"/>
+          <veui-option value="batman" label="蝙蝠侠"/>
+          <veui-option value="wonderwoman" label="神奇女侠"/>
+        </veui-option-group>
       </veui-select>
     </section>
     <section style="margin-top:500px;">
@@ -112,6 +127,7 @@ export default {
         return label.indexOf(this.keyword) !== -1
       },
       keyword: '',
+      hero: null,
       disabled: true,
       selected: true,
       icon: true,
@@ -129,7 +145,6 @@ export default {
         name: 'age',
         readonly: false,
         disabled: false,
-        selecticon: false,
         clearable: true,
         options: [
           {
