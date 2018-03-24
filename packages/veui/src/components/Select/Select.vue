@@ -36,8 +36,9 @@
       @keydown.esc.stop="expanded = false"
       @keydown.down.prevent="navigate()"
       @keydown.up.prevent="navigate(false)">
+      <slot name="before"/>
       <veui-option v-if="clearable" :value="null" :label="placeholder"/>
-      <veui-option-group :options="options" :ui="ui" ref="options">
+      <veui-option-group :options="realOptions" :ui="ui" ref="options">
         <slot/>
         <template v-if="$scopedSlots['group-label']" slot="label" slot-scope="group">
           <slot name="group-label" v-bind="group"/>
@@ -49,6 +50,7 @@
           <slot name="option-label" v-bind="option"/>
         </template>
       </veui-option-group>
+      <slot name="after"/>
     </div>
   </veui-overlay>
 </div>
@@ -66,6 +68,7 @@ import ui from '../../mixins/ui'
 import overlay from '../../mixins/overlay'
 import dropdown from '../../mixins/dropdown'
 import warn from '../../utils/warn'
+import { cloneDeep } from 'lodash'
 import '../../config/uiTypes'
 
 export default {
@@ -93,7 +96,8 @@ export default {
       default: false
     },
     clearable: Boolean,
-    options: Array
+    options: Array,
+    filter: Function
   },
   data () {
     return {
@@ -113,6 +117,16 @@ export default {
       }
       let option = this.$refs.options.find(this.value)
       return option ? option.label : ''
+    },
+    realOptions () {
+      if (typeof this.filter !== 'function') {
+        return this.options
+      }
+      let filtered = cloneDeep(this.options)
+      walk(filtered, option => {
+        option.hidden = !this.filter(option)
+      })
+      return filtered
     }
   },
   methods: {
@@ -133,19 +147,27 @@ export default {
   }
 }
 
-function extractOptions (options, map) {
-  if (!options) {
-    return null
+function walk (options, callback) {
+  if (!options || typeof callback !== 'function') {
+    return
   }
-  options.forEach(({ label, value, options }) => {
+  options.forEach(option => {
+    callback(option)
+
+    let options = option.children || option.options
+    if (Array.isArray(options)) {
+      walk(options, callback)
+    }
+  })
+}
+
+function extractOptions (options, map) {
+  walk(options, ({ label, value, options, children }) => {
     if (value != null) {
       if (map[value]) {
         warn(`[veui-select] Duplicate item value [${value}] for select options.`)
       }
       map[value] = label
-    }
-    if (options) {
-      extractOptions(options, map)
     }
   })
   return map

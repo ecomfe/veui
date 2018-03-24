@@ -12,8 +12,10 @@
     <template
       v-for="(option, i) in options">
       <veui-option
+        v-show="!option.hidden"
         v-if="!option.options"
-        v-bind="option"
+        v-bind="{ label: option.label, value: option.value }"
+        :tabindex="option.hidden ? -1 : false"
         :ui="inheritedUi"
         :key="option.value">
         <slot v-if="$scopedSlots.option" name="option" v-bind="option" :selected="option.value === value"/>
