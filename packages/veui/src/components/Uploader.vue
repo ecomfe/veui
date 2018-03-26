@@ -29,7 +29,7 @@
       <li v-for="(file, index) in fileList" :key="index">
         <template v-if="(type === 'file' && file.status !== 'uploading')
           || type === 'image' && (!file.status || file.status === 'success')">
-          <slot name="file" :file="file">
+          <slot name="file" :file="getScopeValue(index, file)">
             <template v-if="type === 'file'">
               <veui-icon :name="icons.file" class="veui-uploader-list-icon"/>
               <span class="veui-uploader-list-name"
@@ -53,7 +53,7 @@
                   :class="{'veui-uploader-input-label-disabled': realUneditable}"
                   @click.stop="replaceFile(file)">重新上传</label>
                 <veui-button @click="removeFile(file)" :disabled="realUneditable" :class="listClass + '-mask-remove'"><veui-icon :name="icons.clear"></veui-icon>移除</veui-button>
-                <slot name="extra-operation" v-bind="{index, image: file}"></slot>
+                <slot name="extra-operation" v-bind="getScopeValue(index, file)"></slot>
               </div>
             </template>
             <transition name="veui-uploader-fade">
@@ -66,7 +66,7 @@
           </slot>
         </template>
         <template v-else-if="file.status === 'uploading'">
-          <slot name="uploading" :file="file">
+          <slot name="uploading" :file="getScopeValue(index, file)">
             <veui-uploader-progress :type="progress" :loaded="file.loaded" :total="file.total"
               :class="type === 'image' ? listClass + '-status' : ''"
               :convertSizeUnit="convertSizeUnit">
@@ -80,7 +80,7 @@
           </slot>
         </template>
         <template v-else-if="file.status === 'failure' && type === 'image'">
-          <slot name="failure" :file="file">
+          <slot name="failure" :file="getScopeValue(index, file)">
             <div :class="listClass + '-status'">
               <span class="veui-uploader-failure"><slot name="failure-label">错误！</slot>{{file.failureReason}}</span>
             </div>
@@ -115,7 +115,7 @@
               <slot name="button-label">选择文件</slot>
             </template>
         </label>
-        <slot name="extra-operation"></slot>
+        <slot name="extra-operation"/>
       </li>
     </ul>
     <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"/></span>
@@ -689,6 +689,9 @@ export default {
           return data
         }
       }
+    },
+    getScopeValue (index, file) {
+      return assign({index}, file)
     }
   }
 }

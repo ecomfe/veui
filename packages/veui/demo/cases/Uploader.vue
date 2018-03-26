@@ -55,7 +55,7 @@
       <template slot="extra-operation" scope="file">
         <veui-button class="veui-uploader-demo-extra-operation-button"
           @click="openTooltip(file)"
-          :ref="`addImage${file.image ? file.index : ''}`">输入图片地址</veui-button>
+          :ref="`add-image${file.index !== undefined ? '-' + file.index : ''}`">输入图片地址</veui-button>
       </template>
     </veui-uploader>
     <veui-tooltip :target="tooltipTarget" :open="tooltipOpen" trigger="click">
@@ -161,10 +161,10 @@ export default {
     openTooltip (file) {
       this.currentImage = file
       this.tooltipOpen = true
-      this.tooltipTarget = `addImage${file.image ? file.index : ''}`
+      this.tooltipTarget = `add-image${file.index !== undefined ? '-' + file.index : ''}`
     },
     addImage () {
-      if (this.currentImage.image) {
+      if (this.currentImage.index !== undefined) {
         this.$set(this.filesExtra, this.currentImage.index, {src: this.imageSrc})
       } else {
         this.filesExtra.push({src: this.imageSrc})
