@@ -137,7 +137,7 @@ export function focusIn (elem, index = 0, ignoreAutofocus) {
   if (!ignoreAutofocus) {
     let auto = elem.querySelector('[autofocus]')
     if (auto) {
-      auto.focus()
+      focus(auto)
       return true
     }
   }
@@ -145,7 +145,7 @@ export function focusIn (elem, index = 0, ignoreAutofocus) {
   if (index === 0) {
     let first = elem.querySelector(FOCUSABLE_SELECTOR)
     if (first) {
-      first.focus()
+      focus(first)
       return true
     }
   }
@@ -156,6 +156,32 @@ export function focusIn (elem, index = 0, ignoreAutofocus) {
     return false
   }
 
-  focusable[(index + count) % count].focus()
+  focus(focusable[(index + count) % count])
   return true
+}
+
+/**
+ * 通过程序 focus 时手动添加 `.focus-visible` 类，弥补当前 polyfill 的不足。
+ * 在不支持 `classList` 的浏览器下啥都不做，因为 polyfill 依赖了 `classList` polyfill。
+ * 如果不引 `classList`，本来就不能工作，也就无需添加类。
+ * 如果 `focus-visible` polyfill 修改了行为，也就不需要进行这样的处理了。
+ *
+ * @param {HTMLElement} elem
+ */
+function focus (elem) {
+  if (!elem) {
+    return
+  }
+
+  elem.focus()
+  if (!elem.classList) {
+    return
+  }
+
+  let handler = () => {
+    elem.classList.remove('focus-visible')
+    elem.removeEventListener('blur', handler, false)
+  }
+  elem.addEventListener('blur', handler, false)
+  elem.classList.add('focus-visible')
 }
