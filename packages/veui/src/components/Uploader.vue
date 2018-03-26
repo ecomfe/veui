@@ -242,6 +242,13 @@ export default {
     autoupload: {
       type: Boolean,
       default: true
+    },
+    order: {
+      type: String,
+      default: 'asc',
+      validator (value) {
+        return includes(['asc', 'desc'], value)
+      }
     }
   },
   data () {
@@ -453,7 +460,7 @@ export default {
           return file
         })
 
-        this.fileList = this.type === 'file'
+        this.fileList = this.order === 'desc'
           ? [...newFiles, ...currentFiles]
           : [...currentFiles, ...newFiles]
 
