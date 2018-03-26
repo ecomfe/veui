@@ -1,4 +1,4 @@
-import { pick, uniqueId } from 'lodash'
+import { pick, uniqueId, get } from 'lodash'
 import { getTypedAncestorTracker } from '../utils/helper'
 import { getIndexOfType } from '../utils/context'
 import '../config/uiTypes'
@@ -11,13 +11,19 @@ export default {
     }
   },
   computed: getTypedAncestorTracker('menu').computed,
+  methods: {
+    getLabelNaive () {
+      return get(this, '$vnode.componentOptions.children[0].text', '')
+    }
+  },
   created () {
     if (!this.menu) {
       return
     }
     let index = getIndexOfType(this, 'menu-item')
     this.menu.add({
-      ...pick(this, 'value', 'label', 'items', 'id'),
+      ...pick(this, 'value', 'items', 'id'),
+      label: this.label || this.getLabelNaive(),
       index
     })
   },

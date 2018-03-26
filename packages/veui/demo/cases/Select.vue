@@ -43,15 +43,27 @@
     <section>
       <h2>多级样式：</h2>
       <veui-select v-model="hero">
-        <veui-option-group label="漫威" position="popout">
-          <veui-option value="spiderman" label="蜘蛛侠"/>
-          <veui-option value="ironman" label="钢铁侠"/>
-          <veui-option value="hulk" label="绿巨人"/>
+        <veui-option-group label="中国" position="popout">
+          <veui-option-group label="互联网" position="popout">
+            <veui-option value="baidu" label="百度"/>
+            <veui-option value="alibaba" label="阿里巴巴"/>
+            <veui-option value="tencent" label="腾讯"/>
+          </veui-option-group>
+          <veui-option-group label="通信" position="popout">
+            <veui-option value="telecom" label="中国电信"/>
+            <veui-option value="mobile" label="中国移动"/>
+          </veui-option-group>
         </veui-option-group>
-        <veui-option-group label="DC" position="popout">
-          <veui-option value="superman" label="超人"/>
-          <veui-option value="batman" label="蝙蝠侠"/>
-          <veui-option value="wonderwoman" label="神奇女侠"/>
+        <veui-option-group label="美国" position="popout">
+          <veui-option-group label="互联网" position="popout">
+            <veui-option value="google" label="Google"/>
+            <veui-option value="facebook" label="Facebook"/>
+            <veui-option value="twitter" label="Twitter"/>
+          </veui-option-group>
+          <veui-option-group label="通信" position="popout">
+            <veui-option value="atnt" label="AT&T"/>
+            <veui-option value="verizon" label="Verizon"/>
+          </veui-option-group>
         </veui-option-group>
       </veui-select>
     </section>

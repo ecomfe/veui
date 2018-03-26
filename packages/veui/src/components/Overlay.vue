@@ -134,6 +134,7 @@ export default {
 
         if (!this.tether) {
           this.tether = new Tether(options)
+          this.tether.on('repositioned', () => { this.$emit('locate') })
         } else {
           this.tether.setOptions(options)
         }

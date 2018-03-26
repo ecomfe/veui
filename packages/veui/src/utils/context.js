@@ -7,7 +7,7 @@ function isVnode (vnode) {
 /**
  * 判断是否指定值是否能够传入 getNodes 以获取 DOM nodes 。
  *
- * @param {string|VueComponent|Node|Array<string>|Array<VueComponent>|Array<Node>} v 待判断的值
+ * @param {string|Vue|Node|Array<string>|Array<Vue>|Array<Node>} v 待判断的值
  * @return {boolean}
  */
 export function isValidNodesResolver (v) {
@@ -30,7 +30,7 @@ export function isValidNodesResolver (v) {
  * 3、如果ref直接就是文本节点或者元素节点，就返回ref。
  * 4、否则返回空数组
  *
- * @param {string|VueComponent|Node|Array<string>|Array<VueComponent>|Array<Node>} ref 目标节点标识
+ * @param {string|Vue|Node|Array<string>|Array<Vue>|Array<Node>} ref 目标节点标识
  * @param {VueContext=} context 组件上下文，在ref为字符串的时候必传
  * @return {Node}
  */
@@ -80,7 +80,7 @@ function getUITypes (vnode) {
 
 /**
  * 获取一个组件实例在给定的 VNode 列表中是某个类型的第几个
- * @param {VueComponent} current 查找的组件实例
+ * @param {Vue} current 查找的组件实例
  * @param {String} type 特定类型
  * @param {Array<VNode>|String} vnodes VNode 列表，为字符串时代表 slot 名称
  * @returns {Number} 该实例所在位置的索引，找不到返回 -1

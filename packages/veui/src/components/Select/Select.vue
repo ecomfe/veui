@@ -16,7 +16,7 @@
     <span class="veui-select-label">
       <slot name="label" :label="label">{{ label }}</slot>
     </span>
-    <icon class="veui-select-icon" :name="icons[expanded ? 'collapse' : 'expand']"/>
+    <veui-icon class="veui-select-icon" :name="icons[expanded ? 'collapse' : 'expand']"/>
   </veui-button>
   <veui-overlay
     v-if="options && expanded || !options"
@@ -26,16 +26,20 @@
     autofocus
     modal
     :options="realOverlayOptions"
-    :overlay-class="overlayClass">
+    :overlay-class="overlayClass"
+    @locate="handleRelocate">
     <div
       ref="box"
       class="veui-select-options"
-      v-outside:button="close"
+      v-outside="{
+        handler: close,
+        refs: outsideRefs
+      }"
       tabindex="-1"
       :ui="ui"
-      @keydown.esc.stop="expanded = false"
-      @keydown.down.prevent="navigate()"
-      @keydown.up.prevent="navigate(false)">
+      @keydown.esc.stop.prevent="expanded = false"
+      @keydown.up.stop.prevent="navigate(false)"
+      @keydown.down.stop.prevent="navigate()">
       <slot name="before"/>
       <veui-option v-if="clearable" :value="null" :label="placeholder"/>
       <veui-option-group :options="realOptions" :ui="ui" ref="options">
@@ -68,6 +72,7 @@ import ui from '../../mixins/ui'
 import overlay from '../../mixins/overlay'
 import dropdown from '../../mixins/dropdown'
 import warn from '../../utils/warn'
+import { walk } from '../../utils/data'
 import { cloneDeep } from 'lodash'
 import '../../config/uiTypes'
 
@@ -79,7 +84,7 @@ export default {
     event: 'change'
   },
   components: {
-    Icon,
+    'veui-icon': Icon,
     'veui-button': Button,
     'veui-option': Option,
     'veui-option-group': OptionGroup,
@@ -101,7 +106,8 @@ export default {
   },
   data () {
     return {
-      localValue: this.value
+      localValue: this.value,
+      outsideRefs: ['button']
     }
   },
   computed: {
@@ -112,7 +118,7 @@ export default {
       if (this.value === null) {
         return this.placeholder
       }
-      if (this.labelMap) {
+      if (this.options) {
         return this.labelMap[this.value]
       }
       let option = this.$refs.options.find(this.value)
@@ -133,6 +139,9 @@ export default {
     handleSelect (value) {
       this.expanded = false
       this.localValue = value
+    },
+    handleRelocate () {
+      this.$refs.options.relocateDeep()
     }
   },
   watch: {
@@ -147,20 +156,6 @@ export default {
   }
 }
 
-function walk (options, callback) {
-  if (!options || typeof callback !== 'function') {
-    return
-  }
-  options.forEach(option => {
-    callback(option)
-
-    let options = option.children || option.options
-    if (Array.isArray(options)) {
-      walk(options, callback)
-    }
-  })
-}
-
 function extractOptions (options, map) {
   walk(options, ({ label, value, options, children }) => {
     if (value != null) {
@@ -169,7 +164,7 @@ function extractOptions (options, map) {
       }
       map[value] = label
     }
-  })
+  }, ['options', 'children'])
   return map
 }
 </script>

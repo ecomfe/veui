@@ -1,16 +1,32 @@
 @import "../lib.less";
+@import (reference) "../dropdown.less";
 
 .veui-option-group {
   &-label {
-    display: inline-block;
+    display: block;
     .centered-line(@veui-height-normal);
     padding: 0 10px;
+  }
+
+  &-label:not(&-button) {
     font-size: @veui-font-size-small;
     color: @veui-text-color-weak;
   }
 
   .veui-option {
     padding-left: 20px;
+  }
+
+  &-button {
+    &:extend(._veui-dropdown-option all);
+  }
+
+  &-expanded &-button {
+    background-color: @veui-gray-color-8;
+
+    &:active {
+      background-color: @veui-gray-color-6;
+    }
   }
 
   &-unlabelled {
@@ -23,5 +39,15 @@
     .veui-option {
       padding-left: 10px;
     }
+  }
+
+  &-box .veui-select-options {
+    margin: -1px 5px;
+  }
+
+  &-expandable {
+    @half-height: @veui-height-normal / 2;
+    float: right;
+    margin-top: ~"calc(@{half-height} - .5em)";
   }
 }
