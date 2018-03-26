@@ -122,7 +122,7 @@ const OPPOSITE = {
   left: 'right'
 }
 
-const ALIGN_HORIZONGAL = {
+const ALIGN_HORIZONTAL = {
   left: 'left',
   start: 'left',
   right: 'right',
@@ -146,8 +146,8 @@ export function resolveOverlayPosition (position) {
   let targetAttachment
   let attachment
   if (side === 'top' || side === 'bottom') {
-    targetAttachment = `${side} ${ALIGN_HORIZONGAL[align] || 'center'}`
-    attachment = `${OPPOSITE[side]} ${ALIGN_HORIZONGAL[align] || 'center'}`
+    targetAttachment = `${side} ${ALIGN_HORIZONTAL[align] || 'center'}`
+    attachment = `${OPPOSITE[side]} ${ALIGN_HORIZONTAL[align] || 'center'}`
   } else {
     targetAttachment = `${ALIGN_VERTICAL[align] || 'middle'} ${side}`
     attachment = `${ALIGN_VERTICAL[align] || 'middle'} ${OPPOSITE[side]}`

@@ -116,6 +116,10 @@
     "path": "Option.js"
   },
   {
+    "name": "OptionGroup",
+    "path": "OptionGroup.js"
+  },
+  {
     "name": "Overlay",
     "path": "Overlay.vue"
   },

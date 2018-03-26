@@ -2,6 +2,8 @@
 <button
   type="button"
   class="veui-option"
+  v-show="!hidden"
+  :tabindex="hidden ? -1 : false"
   :ui="ui"
   :class="{
     'veui-option-disabled': disabled,
@@ -31,11 +33,14 @@ export default {
   },
   props: {
     label: {
-      type: [String, Number],
-      required: true
+      type: [String, Number]
     },
     value: null,
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    hidden: {
       type: Boolean,
       default: false
     }
@@ -49,6 +54,11 @@ export default {
     selectOption () {
       if (!this.disabled) {
         this.$emit('click')
+        let menu = this.menu
+        while (menu) {
+          menu.close()
+          menu = menu.menu
+        }
         this.select.handleSelect(this.value)
       }
     }
