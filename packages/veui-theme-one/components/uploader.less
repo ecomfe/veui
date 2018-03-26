@@ -212,6 +212,15 @@
         .centered-line(28px);
         font-size: @veui-font-size-small;
       }
+
+      label.veui-button {
+        cursor: pointer;
+        .veui-position-center();
+        width: 88px;
+        height: 28px;
+        line-height: 26px;
+        padding: 0;
+      }
     }
 
     li:hover &-mask {
@@ -243,15 +252,6 @@
         &.active {
           color: #fff;
         }
-      }
-
-      label.veui-button {
-        cursor: pointer;
-        top: ~"calc(50% - 14px)";
-        left: ~"calc(50% - 44px)";
-        width: 88px;
-        height: 28px;
-        line-height: 26px;
       }
 
       .veui-button&-remove {

@@ -52,7 +52,8 @@
                   class="veui-button"
                   :class="{'veui-uploader-input-label-disabled': realUneditable}"
                   @click.stop="replaceFile(file)">重新上传</label>
-                <veui-button @click="removeFile(file)" :disabled="realUneditable" :class="`${listClass}-mask-remove`"><veui-icon :name="icons.clear"/>移除</veui-button>
+                <veui-button @click="removeFile(file)" :disabled="realUneditable" :class="listClass + '-mask-remove'"><veui-icon :name="icons.clear"></veui-icon>移除</veui-button>
+                <slot name="extra-operation" v-bind="{index, image: file}"></slot>
               </div>
             </template>
             <transition name="veui-uploader-fade">
@@ -91,8 +92,16 @@
       </li>
       <li v-if="type === 'image'" key="input"
         v-show="!maxCount || fileList.length < maxCount">
-        <label class="veui-uploader-input-label-image"
-          :class="{'veui-uploader-input-label-disabled': realUneditable || (requestMode === 'iframe' && isSubmiting)}"
+        <label :class="{
+            'veui-uploader-input-label-image': !$scopedSlots['extra-operation'],
+            'veui-uploader-input-label-disabled': !$scopedSlots['extra-operation'] &&
+              (realUneditable || isSubmiting),
+            'veui-button': $scopedSlots['extra-operation'],
+            'veui-uploader-input-label-disabled': $scopedSlots['extra-operation'] &&
+              (realUneditable ||
+              (maxCount > 1 && fileList.length >= maxCount) ||
+              isSubmiting)
+          }"
           @click="replacingFile = null"
           ref="label"><input :id="inputId" hidden type="file" ref="input"
             @change="handleNewFiles"
@@ -101,8 +110,12 @@
             :accept="accept"
             :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
             @click.stop>
-            <veui-icon :name="icons.add"/>
+            <veui-icon v-if="!$scopedSlots['extra-operation']" :name="icons.add"></veui-icon>
+            <template v-else>
+              <slot name="button-label">选择文件</slot>
+            </template>
         </label>
+        <slot name="extra-operation"></slot>
       </li>
     </ul>
     <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"/></span>
@@ -429,18 +442,20 @@ export default {
           return
         }
 
-        this.fileList = [
-          ...this.fileList.filter(file => {
-            return file.status !== 'failure'
-          }),
-          ...newFiles.map(file => {
-            if (this.requestMode === 'xhr' && this.type === 'image' && window.URL) {
-              file.src = window.URL.createObjectURL(file)
-            }
-            file.toBeUploaded = true
-            return file
-          })
-        ]
+        let currentFiles = this.fileList.filter(file => file.status !== 'failure')
+
+        let needImageSrc = this.requestMode === 'xhr' && this.type === 'image' && window.URL
+        newFiles = newFiles.map(file => {
+          if (needImageSrc) {
+            file.src = window.URL.createObjectURL(file)
+          }
+          file.toBeUploaded = true
+          return file
+        })
+
+        this.fileList = this.type === 'file'
+          ? [...newFiles, ...currentFiles]
+          : [...currentFiles, ...newFiles]
 
         if (this.maxCount === 1) {
           this.fileList = this.fileList.slice(-1)

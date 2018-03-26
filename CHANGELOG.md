@@ -28,6 +28,8 @@
 * [^] 将 `Progress` 组件硬编码在组件代码中的尺寸解耦到 `veui-theme-one` 中，现在组件可以从主题包的 JS 模块中注入预定义的样式参数。
 * [+] 为 `Input` 增加了 `before`/`after` slot，提供扩展的空间。
 * [+] 新增了 `NumberInput` 组件。
+* [+] `Uploader` 组件的 `image` 模式增加 `scoped-slot`：`extra-operation`。
+* [^] `Uploader` 组件调整了新上传文件的插入顺序，按照最新上传的文件离上传按钮最近的原则，`file` 模式下最新添加的文件插入在最前面。
 
 ### 🐞 问题修复
 
