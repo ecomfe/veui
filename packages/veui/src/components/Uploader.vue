@@ -691,7 +691,7 @@ export default {
       }
     },
     getScopeValue (index, file) {
-      return assign({index}, file)
+      return {index, ...file}
     }
   }
 }
