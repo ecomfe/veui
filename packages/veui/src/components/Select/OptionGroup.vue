@@ -68,47 +68,43 @@ export default {
       ? this.options.map((option, i) => {
         return option.options
           ? <veui-option-group
-            {...{
-              props: {
-                ...option,
-                ui: this.inheritedUi
-              }
-            }}
+            ui={this.inheritedUi}
+            label={option.label}
+            options={option.options}
             key={i}
-            scopedSlots={
-              {
-                label: this.$scopedSlots.label
-                  ? group => {
-                    return this.$scopedSlots.label(group) || group.label
-                  }
-                  : null,
-                option: this.$scopedSlots.option
-                  ? option => {
-                    return this.$scopedSlots.label(option)
-                  }
-                  : null,
-                'option-label': this.$scopedSlots['option-label']
-                  ? option => {
-                    return this.$scopedSlots.label(option)
-                  }
-                  : null
-              }
-            }>
+            scopedSlots={{
+              'group-label': this.$scopedSlots['group-label']
+                ? group => this.$scopedSlots['group-label'](group) || group.label
+                : null,
+              option: this.$scopedSlots.option
+                ? option => this.$scopedSlots.option(option)
+                : null,
+              'option-label': this.$scopedSlots['option-label']
+                ? option => {
+                  debugger
+                  return this.$scopedSlots['option-label'](option)
+                }
+                : null
+            }}>
           </veui-option-group>
           : <veui-option
-            {...{
-              props: {
-                ...option,
-                ui: this.inheritedUi
-              }
-            }}
-            key={i}
-            slots={
+            ui={this.inheritedUi}
+            label={option.label}
+            value={option.value}
+            hidden={option.hidden}
+            key={i}>
+            {
+              this.$scopedSlots.option
+                ? this.$scopedSlots.option(option)
+                : null
+            }
+            <template slot="label">
               {
-                default: this.$scopedSlots.option,
-                label: this.$scopedSlots['option-label'] || option.label
+                this.$scopedSlots['option-label']
+                  ? this.$scopedSlots['option-label'](option)
+                  : null
               }
-            }>
+            </template>
           </veui-option>
       })
       : this.$slots.default

@@ -181,7 +181,9 @@ function focus (elem) {
   let handler = () => {
     elem.classList.remove('focus-visible')
     elem.removeEventListener('blur', handler, false)
+    elem.removeEventListener('mouseleave', handler, false)
   }
   elem.addEventListener('blur', handler, false)
+  elem.addEventListener('mouseleave', handler, false)
   elem.classList.add('focus-visible')
 }
