@@ -71,6 +71,7 @@ export default {
             ui={this.inheritedUi}
             label={option.label}
             options={option.options}
+            position={option.position}
             key={i}
             scopedSlots={{
               'group-label': this.$scopedSlots['group-label']

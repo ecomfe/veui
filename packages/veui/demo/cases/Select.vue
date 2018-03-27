@@ -187,6 +187,7 @@ export default {
         options: [
           {
             label: '下拉选项1',
+            position: 'popout',
             options: [
               {
                 label: '子选项1',
