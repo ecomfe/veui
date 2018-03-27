@@ -1,65 +1,3 @@
-<template>
-<div
-  :class="{
-    'veui-select': true,
-    'veui-select-empty': value === null,
-    'veui-select-expanded': expanded
-  }"
-  :ui="ui">
-  <veui-button
-    class="veui-select-button"
-    :ui="ui"
-    :disabled="realDisabled || realReadonly"
-    @keydown.down.up.prevent="expanded = true"
-    @click="expanded = !expanded"
-    ref="button">
-    <span class="veui-select-label">
-      <slot name="label" :label="label">{{ label }}</slot>
-    </span>
-    <veui-icon class="veui-select-icon" :name="icons[expanded ? 'collapse' : 'expand']"/>
-  </veui-button>
-  <veui-overlay
-    v-if="options && expanded || !options"
-    v-show="expanded"
-    target="button"
-    :open="expanded"
-    autofocus
-    modal
-    :options="realOverlayOptions"
-    :overlay-class="overlayClass"
-    @locate="handleRelocate">
-    <div
-      ref="box"
-      class="veui-select-options"
-      v-outside="{
-        handler: close,
-        refs: outsideRefs
-      }"
-      tabindex="-1"
-      :ui="ui"
-      @keydown.esc.stop.prevent="expanded = false"
-      @keydown.up.stop.prevent="navigate(false)"
-      @keydown.down.stop.prevent="navigate()">
-      <slot name="before"/>
-      <veui-option v-if="clearable" :value="null" :label="placeholder"/>
-      <veui-option-group :options="realOptions" :ui="ui" ref="options">
-        <slot/>
-        <template v-if="$scopedSlots['group-label']" slot="label" slot-scope="group">
-          <slot name="group-label" v-bind="group"/>
-        </template>
-        <template v-if="$scopedSlots.option" slot="option" slot-scope="option">
-          <slot name="option" v-bind="option"/>
-        </template>
-        <template v-if="$scopedSlots['option-label']" slot="option-label" slot-scope="option">
-          <slot name="option-label" v-bind="option"/>
-        </template>
-      </veui-option-group>
-      <slot name="after"/>
-    </div>
-  </veui-overlay>
-</div>
-</template>
-
 <script>
 import Icon from '../Icon'
 import Button from '../Button'
@@ -135,6 +73,122 @@ export default {
       return filtered
     }
   },
+  render () {
+    return <div
+      class={{
+        'veui-select': true,
+        'veui-select-empty': this.value === null,
+        'veui-select-expanded': this.expanded
+      }}
+      ui={this.ui}>
+      <veui-button
+        ref="button"
+        class="veui-select-button"
+        ui={this.ui}
+        disabled={this.realDisabled || this.realReadonly}
+        onKeydown={this.handleButtonKeydown}
+        onClick={this.handleButtonClick}>
+        <span class="veui-select-label">
+          {
+            this.$scopedSlots.label ? this.$scopedSlots.label({ label: this.label }) : this.label
+          }
+        </span>
+        <veui-icon
+          class="veui-select-icon"
+          name={this.icons[this.expanded ? 'collapse' : 'expand']}/>
+      </veui-button>
+      {
+        this.options && this.expanded || !this.options
+          ? <veui-overlay
+            v-show={this.expanded}
+            target="button"
+            open={this.expanded}
+            autofocus
+            modal
+            options={this.realOverlayOptions}
+            overlay-class={this.overlayClass}
+            onLocate={this.handleRelocate}>
+            <div
+              ref="box"
+              class="veui-select-options"
+              {...{
+                directives: [{
+                  name: 'outside',
+                  value: {
+                    refs: this.outsideRefs,
+                    handler: this.close
+                  }
+                }]
+              }}
+              tabindex="-1"
+              ui={this.ui}
+              onKeydown={this.handleKeydown}>
+              {this.$slots.before}
+              {
+                this.clearable
+                  ? <veui-option value={null} label={this.placeholder}/>
+                  : null
+              }
+              <veui-option-group
+                ref="options"
+                options={this.realOptions}
+                ui={this.ui}
+                scopedSlots={{
+                  label: this.$scopedSlots['group-label']
+                    ? group => this.$scopedSlots['group-label'](group)
+                    : null,
+                  option: this.$scopedSlots.option
+                    ? option => this.$scopedSlots.option(option)
+                    : null,
+                  'option-label': this.$scopedSlots['option-label']
+                    ? option => this.$scopedSlots['option-label'](option)
+                    : null
+                }}>
+                {this.$slots.default}
+              </veui-option-group>
+              {this.$slots.after}
+            </div>
+          </veui-overlay>
+          : null
+      }
+    </div>
+
+  //   <div
+  //     ref="box"
+  //     class="veui-select-options"
+  //     v-outside="{
+  //       handler: close,
+  //       refs: outsideRefs
+  //     }"
+  //     tabindex="-1"
+  //     :ui="ui"
+  //     @keydown.esc.stop.prevent="expanded = false"
+  //     @keydown.up.stop.prevent="navigate(false)"
+  //     @keydown.down.stop.prevent="navigate()">
+  //     <slot name="before"/>
+  //     <veui-option v-if="clearable" :value="null" :label="placeholder"/>
+  //     <veui-option-group :options="realOptions" :ui="ui" ref="options">
+  //       <slot/>
+  //       <template v-if="$scopedSlots['group-label']">
+  //         <template slot="label" slot-scope="group">
+  //           <slot name="group-label" v-bind="group"/>
+  //         </template>
+  //       </template>
+  //       <template v-if="$scopedSlots.option">
+  //         <template slot="option" slot-scope="option">
+  //           <slot name="option" v-bind="option"/>
+  //         </template>
+  //       </template>
+  //       <template v-if="$scopedSlots['option-label']">
+  //         <template slot="option-label" slot-scope="option">
+  //           <slot name="option-label" v-bind="option"/>
+  //         </template>
+  //       </template>
+  //     </veui-option-group>
+  //     <slot name="after"/>
+  //   </div>
+  // </veui-overlay>
+  },
   methods: {
     handleSelect (value) {
       this.expanded = false
@@ -142,6 +196,40 @@ export default {
     },
     handleRelocate () {
       this.$refs.options.relocateDeep()
+    },
+    handleButtonClick () {
+      this.expanded = !this.expanded
+    },
+    handleButtonKeydown (e) {
+      if (e.key === 'Up' || e.key === 'ArrowUp' || e.key === 'Down' || e.key === 'ArrowDown') {
+        this.expanded = true
+      }
+    },
+    handleKeydown (e) {
+      let passive = false
+      switch (e.key) {
+        case 'Esc':
+        case 'Escape':
+        case 'Left':
+        case 'ArrowLeft':
+          this.expanded = false
+          break
+        case 'Up':
+        case 'ArrowUp':
+          this.navigate(false)
+          break
+        case 'Down':
+        case 'ArrowDown':
+          this.navigate()
+          break
+        default:
+          passive = true
+          break
+      }
+      if (!passive) {
+        e.stopPropagation()
+        e.preventDefault()
+      }
     }
   },
   watch: {
