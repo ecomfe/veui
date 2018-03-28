@@ -17,6 +17,32 @@ export default {
       }
 
       focusable[(index + length + (forward ? 1 : -1)) % length].focus()
+    },
+    handleKeydown (e) {
+      let passive = false
+      switch (e.key) {
+        case 'Esc':
+        case 'Escape':
+        case 'Left':
+        case 'ArrowLeft':
+          this.expanded = false
+          break
+        case 'Up':
+        case 'ArrowUp':
+          this.navigate(false)
+          break
+        case 'Down':
+        case 'ArrowDown':
+          this.navigate()
+          break
+        default:
+          passive = true
+          break
+      }
+      if (!passive) {
+        e.stopPropagation()
+        e.preventDefault()
+      }
     }
   }
 }
