@@ -152,42 +152,6 @@ export default {
           : null
       }
     </div>
-
-  //   <div
-  //     ref="box"
-  //     class="veui-select-options"
-  //     v-outside="{
-  //       handler: close,
-  //       refs: outsideRefs
-  //     }"
-  //     tabindex="-1"
-  //     :ui="ui"
-  //     @keydown.esc.stop.prevent="expanded = false"
-  //     @keydown.up.stop.prevent="navigate(false)"
-  //     @keydown.down.stop.prevent="navigate()">
-  //     <slot name="before"/>
-  //     <veui-option v-if="clearable" :value="null" :label="placeholder"/>
-  //     <veui-option-group :options="realOptions" :ui="ui" ref="options">
-  //       <slot/>
-  //       <template v-if="$scopedSlots['group-label']">
-  //         <template slot="label" slot-scope="group">
-  //           <slot name="group-label" v-bind="group"/>
-  //         </template>
-  //       </template>
-  //       <template v-if="$scopedSlots.option">
-  //         <template slot="option" slot-scope="option">
-  //           <slot name="option" v-bind="option"/>
-  //         </template>
-  //       </template>
-  //       <template v-if="$scopedSlots['option-label']">
-  //         <template slot="option-label" slot-scope="option">
-  //           <slot name="option-label" v-bind="option"/>
-  //         </template>
-  //       </template>
-  //     </veui-option-group>
-  //     <slot name="after"/>
-  //   </div>
-  // </veui-overlay>
   },
   methods: {
     handleSelect (value) {
@@ -203,30 +167,6 @@ export default {
     handleButtonKeydown (e) {
       if (e.key === 'Up' || e.key === 'ArrowUp' || e.key === 'Down' || e.key === 'ArrowDown') {
         this.expanded = true
-      }
-    },
-    handleKeydown (e) {
-      let passive = false
-      switch (e.key) {
-        case 'Esc':
-        case 'Escape':
-        case 'Left':
-        case 'ArrowLeft':
-          this.expanded = false
-          break
-        case 'Up':
-        case 'ArrowUp':
-          this.navigate(false)
-          break
-        case 'Down':
-        case 'ArrowDown':
-          this.navigate()
-          break
-        default:
-          passive = true
-          break
-      }
-      if (!passive) {
         e.stopPropagation()
         e.preventDefault()
       }
