@@ -1,110 +1,93 @@
 <template>
-  <article>
+  <article class="input-demo">
     <h1><code>&lt;veui-input&gt;</code></h1>
-    <section class="form-block">
-      <div class="form-row">
-        <div class="form-key">描述：</div>
-        <div class="form-value">
-          <veui-input ui="small" v-model="key" composition @change="log('change')"></veui-input>
-          <veui-input v-model="key" compositionn readonly></veui-input>
-          <veui-input ui="large" compositionn v-model="key" :disabled="true"></veui-input>
-        </div>
-      </div>
+    <veui-form>
+      <section class="five-sizes">
+        <h3>5 种大小：</h3>
+        <veui-field ui="micro" label="micro">
+          <veui-input ui="micro" v-model="poem"></veui-input>
+        </veui-field>
+        <veui-field ui="tiny" label="tiny">
+          <veui-input ui="tiny" v-model="poem"></veui-input>
+        </veui-field>
+        <veui-field ui="small" label="small">
+          <veui-input ui="small" v-model="poem"></veui-input>
+        </veui-field>
+        <veui-field label="normal">
+          <veui-input v-model="poem"></veui-input>
+        </veui-field>
+        <veui-field ui="large" label="large">
+          <veui-input ui="large" v-model="poem"></veui-input>
+        </veui-field>
+      </section>
 
-      <div class="form-row">
-        <div class="form-key">姓名：</div>
-        <div class="form-value">
-          <veui-input ui="small" v-model="name" @focus="log('focus')"></veui-input>
-          <veui-input v-model="name" readonly></veui-input>
-          <veui-input ui="large" v-model="name" disabled></veui-input>
-        </div>
-      </div>
+      <section>
+        <h3>事件及功能展示</h3>
+        <veui-field label="描述：">
+            <veui-input v-model="key" composition @change="log('change')"></veui-input>
+            <veui-input v-model="key" compositionn readonly></veui-input>
+            <veui-input compositionn v-model="key" :disabled="true"></veui-input>
+        </veui-field>
 
-      <div class="form-row">
-        <div class="form-key">手机：</div>
-        <div class="form-value">
-          <veui-input ui="small" v-model="phone" select-on-focus @blur="log('blur')"></veui-input>
-          <veui-input v-model="phone" readonly></veui-input>
-          <veui-input ui="large" v-model="phone" disabled></veui-input>
-        </div>
-      </div>
+        <veui-field label="姓名：">
+            <veui-input v-model="name" @focus="log('focus')"></veui-input>
+            <veui-input v-model="name" readonly></veui-input>
+            <veui-input v-model="name" disabled></veui-input>
+        </veui-field>
 
-      <div class="form-row">
-        <div class="form-key">密码：</div>
-        <div class="form-value">
-          <veui-input ui="small" v-model="password" type="password" autofocus placeholder="请输入密码" @click="log('click')"></veui-input>
-          <veui-input v-model="password" type="password" placeholder="请输入密码" readonly></veui-input>
-          <veui-input ui="large" v-model="password" type="password" placeholder="请输入密码" disabled></veui-input>
-        </div>
-      </div>
+        <veui-field label="手机：">
+            <veui-input v-model="phone" select-on-focus @blur="log('blur')"></veui-input>
+            <veui-input v-model="phone" readonly></veui-input>
+            <veui-input v-model="phone" disabled></veui-input>
+        </veui-field>
 
-      <div class="form-row">
-        <div class="form-key">隐藏：</div>
-        <div class="form-value">
-          <span class="hidden-tips">这里有一个隐藏的&nbsp;input</span><veui-input v-model="hiddenValue" type="hidden"></veui-input>
-        </div>
-      </div>
+        <veui-field label="密码：">
+            <veui-input v-model="password" type="password" autofocus placeholder="请输入密码" @click="log('click')"></veui-input>
+            <veui-input v-model="password" type="password" placeholder="请输入密码" readonly></veui-input>
+            <veui-input v-model="password" type="password" placeholder="请输入密码" disabled></veui-input>
+        </veui-field>
 
-      <div class="form-row">
-        <div class="form-key">多行：</div>
-        <div class="form-value">
-          <veui-input type="textarea" v-model="textarea1" rows=3 @input="log"></veui-input>
-          <veui-input type="textarea" v-model="textarea2" resizable readonly></veui-input>
-          <veui-input type="textarea" v-model="textarea3" disabled></veui-input>
-        </div>
-      </div>
+        <veui-field label="隐藏：">
+            <veui-span>这里有一个隐藏的&nbsp;input</veui-span><veui-input v-model="hiddenValue" type="hidden"></veui-input>
+        </veui-field>
+      </section>
 
-      <div class="form-row">
-        <div class="form-key">宽度：</div>
-        <div class="form-value">
-          <veui-input ui="small" v-nudge.y="{
-            smallStep: 0,
-            update: handleThumbNudgeUpdage
-          }" v-model="width" @focus="log('focus')"></veui-input>
-          <veui-input v-model="width" readonly></veui-input>
-          <veui-input ui="large" v-model="width" disabled></veui-input>
-        </div>
-      </div>
+      <section>
+        <h3>方向键操作</h3>
+        <veui-field label="宽度：">
+            <veui-input v-nudge.y="{
+              smallStep: 0,
+              update: handleThumbNudgeUpdate
+            }" v-model="width" @focus="log('focus')"></veui-input>
+            <veui-input v-model="width" readonly></veui-input>
+            <veui-input v-model="width" disabled></veui-input>
+        </veui-field>
+      </section>
 
-      <div class="form-row five-sizes">
-        <div class="form-key">5 种大小：</div>
-        <div class="form-value">
-          <p>
-            <label>micro</label>
-            <veui-input ui="micro" v-model="poem"></veui-input>
-          </p>
-          <p>
-            <label>tiny</label>
-            <veui-input ui="tiny" v-model="poem"></veui-input>
-          </p>
-          <p>
-            <label>small</label>
-            <veui-input ui="small" v-model="poem"></veui-input>
-          </p>
-          <p>
-            <label>normal</label>
-            <veui-input v-model="poem"></veui-input>
-          </p>
-          <p>
-            <label>large</label>
-            <veui-input ui="large" v-model="poem"></veui-input>
-          </p>
-        </div>
-      </div>
-
-    </section>
+      <section>
+        <h3>Textarea 模式 （@Deprecated 请移步 <a href="#/textarea">Veui-Textarea</a>）</h3>
+        <veui-field label="多行：">
+            <veui-input class="auto-height" type="textarea" v-model="textarea1" rows=5 @input="log"/>
+            <veui-input class="fixed-height" type="textarea" v-model="textarea2" readonly/>
+            <veui-input type="textarea" v-model="textarea3" disabled/>
+        </veui-field>
+      </section>
+    </veui-form>
   </article>
 </template>
 
 <script>
 import bus from '../bus'
-import { Input } from 'veui'
+import { Input, Field, Form, Span } from 'veui'
 import nudge from 'veui/directives/nudge'
 
 export default {
   name: 'text-input',
   components: {
-    'veui-input': Input
+    'veui-input': Input,
+    'veui-field': Field,
+    'veui-form': Form,
+    'veui-span': Span
   },
   directives: {
     nudge
@@ -117,8 +100,8 @@ export default {
       phone: '13800138000',
       password: null,
       hiddenValue: '隐藏值',
-      textarea1: '1. 使用rows\n2. 固定3行高度\n3. 不包括padding',
-      textarea2: '设置高度，同时可缩放',
+      textarea1: '1. 使用rows\n2. 固定5行高度\n3. 不包括padding',
+      textarea2: '设置高度',
       textarea3: '默认高度',
       poem: '兩岸猿聲啼不住，輕舟已過萬重山',
       width: '1024px'
@@ -128,7 +111,7 @@ export default {
     log (item) {
       bus.$emit('log', item)
     },
-    handleThumbNudgeUpdage (delta) {
+    handleThumbNudgeUpdate (delta) {
       let val = this.width
 
       let digits
@@ -166,48 +149,45 @@ export default {
 <style lang="less">
 @import "~less-plugin-est/src/all.less";
 
-.form-row {
-  margin-bottom: 10px;
-  .clearfix();
-}
+.input-demo {
+  section {
+    margin-bottom: 40px;
+  }
 
-.form-key {
-  line-height: 42px;
-  float: left;
-}
+  .veui-form {
+    .veui-field {
+      margin-bottom: 5px;
 
-.form-value {
-  float: left;
+      & > .veui-form-label {
+        width: 50px;
+      }
+    }
+  }
 
   .veui-input,
   .veui-textarea {
     width: 280px;
-    margin-right: 10px;
   }
 
   .veui-textarea {
     vertical-align: top;
 
-    &:nth-child(1) {
+    &.auto-height {
       height: auto;
     }
 
-    &:nth-child(2) {
-      height: 100px;
+    &.fixed-height {
+      height: 200px;
     }
   }
-}
 
-.hidden-tips {
-  line-height: 42px;
-}
-
-.five-sizes {
-  p > label {
-    text-transform: capitalize;
-    display: inline-block;
-    width: 60px;
-    color: #999;
+  .five-sizes {
+    .veui-form-label {
+      text-transform: capitalize;
+      display: inline-block;
+      width: 60px;
+      color: #999;
+    }
   }
 }
 </style>

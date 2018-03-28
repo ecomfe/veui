@@ -52,9 +52,7 @@ export default {
     lineNumber: Boolean,
     rows: [Number, String],
     autofocus: Boolean,
-    selectOnFocus: Boolean,
     composition: Boolean,
-    resizable: Boolean,
     autoresize: Boolean
   },
   data () {

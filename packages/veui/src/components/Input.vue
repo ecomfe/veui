@@ -1,20 +1,32 @@
 <template>
-<input
+<div
   v-if="type !== 'textarea'"
-  ref="input"
-  class="veui-input"
+  :class="{
+    'veui-input': true,
+    'veui-input-focused': focused,
+    'veui-input-hidden': type === 'hidden',
+    'veui-readonly': realReadonly,
+    'veui-disabled': realDisabled
+  }"
   :ui="ui"
-  v-model="localValue"
-  v-bind="attrs"
-  v-on="listeners"
-  @input="handleInput"
-  @change="$emit('change', $event.target.value, $event)"
 >
+  <slot name="before"></slot>
+  <input
+    ref="input"
+    class="veui-input-input"
+    v-model="localValue"
+    v-bind="attrs"
+    v-on="listeners"
+    @focus="handleFocus"
+    @blur="handleBlur"
+    @input="handleInput"
+    @change="$emit('change', $event.target.value, $event)"
+  >
+  <slot name="after"></slot>
+</div>
 <veui-textarea
   v-else
   ref="input"
-  :class="{ 'veui-textarea-resizable': resizable }"
-  :ui="ui"
   v-model="localValue"
   v-bind="attrs"
   v-on="listeners"
@@ -23,24 +35,29 @@
 </template>
 
 <script>
-import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { omit, includes } from 'lodash'
 import Textarea from './Textarea'
+import warn from '../utils/warn'
 
 const TYPE_LIST = ['text', 'password', 'hidden', 'textarea']
 
 export default {
   name: 'veui-input',
-  mixins: [ui, input],
+  mixins: [input],
   components: {
     'veui-textarea': Textarea
   },
   props: {
+    ui: String,
     type: {
       type: String,
       default: 'text',
       validator (val) {
+        if (val === 'textarea') {
+          warn('[veui-input] `type` value `textarea` is deprecated and will be removed in the next version.' +
+            ' Use `veui-textarea` component instead.')
+        }
         return includes(TYPE_LIST, val)
       }
     },
@@ -50,18 +67,24 @@ export default {
       type: [String, Number],
       default: ''
     },
-    rows: [String, Number],
     autofocus: Boolean,
     selectOnFocus: Boolean,
     composition: Boolean,
-    resizable: Boolean,
-    fitContent: Boolean
+    /**
+     * @deprecated
+     */
+    lineNumber: Boolean,
+    /**
+     * @deprecated
+     */
+    rows: [String, Number],
+    /**
+     * @deprecated
+     */
+    autoresize: Boolean
   },
   data () {
-    let listeners = [
-      'click', 'focus', 'blur',
-      'keyup', 'keydown', 'keypress'
-    ].reduce((acc, type) => {
+    let listeners = ['click', 'keyup', 'keydown', 'keypress'].reduce((acc, type) => {
       acc[type] = event => {
         this.$emit(type, event)
       }
@@ -70,6 +93,7 @@ export default {
 
     return {
       localValue: this.value,
+      focused: false,
       listeners
     }
   },
@@ -77,8 +101,10 @@ export default {
     attrs () {
       return {
         ...omit(this.$props,
-          'selectOnFocus', 'fitContent', 'resizable',
-          ...(this.type === 'textarea' ? ['type'] : ['rows', 'composition'])
+          'selectOnFocus',
+          ...(this.type === 'textarea'
+            ? ['type', 'composition', 'autocomplete']
+            : ['lineNumber', 'rows', 'autoresize'])
         ),
         name: this.realName,
         disabled: this.realDisabled,
@@ -110,6 +136,14 @@ export default {
     handleTextareaChange (value, event) {
       this.$emit('change', value, event)
     },
+    handleFocus (e) {
+      this.focused = true
+      this.$emit('focus', e)
+    },
+    handleBlur (e) {
+      this.focused = false
+      this.$emit('blur', e)
+    },
     focus () {
       this.$refs.input.focus()
     },
@@ -125,9 +159,6 @@ export default {
       }
       if (this.selectOnFocus) {
         this.$on('focus', (e) => e.target.select())
-      }
-      if (this.fitContent) {
-        // TODO
       }
     }
   }

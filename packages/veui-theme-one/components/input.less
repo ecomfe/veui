@@ -2,44 +2,73 @@
 @import (reference) "../input.less";
 
 .veui-input {
-
   .make-line-height(@height) {
     height: @height;
     line-height: @height - 2px;
+  }
+
+  overflow: hidden;
+  display: inline-block;
+  position: relative;
+  .make-line-height(@veui-height-normal);
+  width: @veui-width-normal;
+  border: 1px solid @veui-gray-color-5;
+  background-color: #fff;
+  color: @veui-text-color-normal;
+  transition: border-color .2s, color .2s;
+
+  &-hidden {
+    display: none;
+  }
+
+  &-input {
+    float: left;
+    position: relative;
+    width: 100%;
+    padding: 0 10px;
+
+    // 和外部容器的高度保持一致
+    height: 100%;
+    min-height: inherit;
+    max-height: inherit;
+
+    border: none;
+    outline: none;
+    vertical-align: top;
+    z-index: 1;
   }
 
   .veui-field-invalid & {
     &:extend(._veui-input-invalid all);
   }
 
-  .make-line-height(@veui-height-normal);
-  width: @veui-width-normal;
-  padding: 0 10px;
-  vertical-align: middle;
-  border: 1px solid @veui-gray-color-5;
-  background-color: #fff;
-  color: @veui-text-color-normal;
-  transition: border-color .2s, color .2s;
-
-  &:hover {
+  &:hover,
+  &-focused {
     border-color: @veui-gray-color-3;
   }
 
-  &:focus {
-    outline: none;
-    border-color: @veui-gray-color-3;
+  &-focused {
     color: @veui-text-color-strong;
   }
 
-  &:read-only,
-  &:disabled {
-    background-color: @veui-gray-color-8;
-    border-color: @veui-gray-color-5;
-    color: @veui-text-color-weak;
+  &.veui-readonly,
+  &.veui-disabled {
+    &,
+    &:hover {
+      border-color: @veui-gray-color-5;
+      color: @veui-text-color-weak;
+    }
+
+    & .veui-input-input {
+      background-color: @veui-gray-color-8;
+    }
   }
 
-  &:disabled {
-    cursor: not-allowed;
+  &.veui-disabled {
+    &,
+    & .veui-input-input {
+      cursor: not-allowed;
+    }
   }
 
   &::placeholder {
@@ -64,6 +93,5 @@
   &[ui~="micro"] {
     .make-line-height(@veui-height-micro);
     font-size: @veui-font-size-small;
-    // padding: 0 4px;
   }
 }
