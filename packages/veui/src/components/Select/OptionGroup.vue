@@ -82,7 +82,6 @@ export default {
                 : null,
               'option-label': this.$scopedSlots['option-label']
                 ? option => {
-                  debugger
                   return this.$scopedSlots['option-label'](option)
                 }
                 : null
