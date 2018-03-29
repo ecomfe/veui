@@ -18,7 +18,7 @@ export default {
           return includes(values, token)
         })
         if (name) {
-          if (result[name]) {
+          if (result[name] && result[name] !== 'default') {
             warn(`[${this.$options.name}] Duplicated \`${name}\` value for \`ui\`: [${result[name]}], [${token}].`)
           }
           result[name] = token

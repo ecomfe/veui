@@ -3,7 +3,7 @@
     <h1><code>&lt;veui-icon&gt;</code></h1>
     <div class="icons">
       <div class="icon" v-for="icon in icons" :key="icon">
-        <div class="svg"><veui-icon :name="icon" /></div>
+        <div class="svg"><veui-icon :name="icon"/></div>
         <div class="name">{{ icon }}</div>
       </div>
     </div>
@@ -19,7 +19,7 @@ export default {
   name: 'icon-demo',
   data () {
     return {
-      icons: Object.keys(Icon.components.Icon.icons).sort((a, b) => a > b ? 1 : -1)
+      icons: Object.keys(Icon.components.FaIcon.icons).sort((a, b) => a > b ? 1 : -1)
     }
   },
   components: {
@@ -36,10 +36,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.icons {
-
-}
-
 .icon {
   @grid-size: 100px;
 
