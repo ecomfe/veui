@@ -33,6 +33,7 @@ import Schedule from './Schedule'
 import Textarea from './Textarea'
 import Icon from './Icon'
 import Slider from './Slider'
+import NumberInput from './NumberInput'
 
 export default [
   {
@@ -109,6 +110,11 @@ export default [
     path: '/input',
     name: 'Input',
     component: Input
+  },
+  {
+    path: '/number-input',
+    name: 'NumberInput',
+    component: NumberInput
   },
   {
     path: '/overlay',

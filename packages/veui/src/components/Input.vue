@@ -38,9 +38,11 @@
 import input from '../mixins/input'
 import { omit, includes } from 'lodash'
 import Textarea from './Textarea'
+import { getListeners } from '../utils/helper'
 import warn from '../utils/warn'
 
-const TYPE_LIST = ['text', 'password', 'hidden', 'textarea']
+const EVENTS = ['click', 'keyup', 'keydown', 'keypress']
+const TYPE_LIST = ['text', 'password', 'number', 'hidden', 'textarea']
 
 export default {
   name: 'veui-input',
@@ -84,17 +86,9 @@ export default {
     autoresize: Boolean
   },
   data () {
-    let listeners = ['click', 'keyup', 'keydown', 'keypress'].reduce((acc, type) => {
-      acc[type] = event => {
-        this.$emit(type, event)
-      }
-      return acc
-    }, {})
-
     return {
       localValue: this.value,
-      focused: false,
-      listeners
+      focused: false
     }
   },
   computed: {
@@ -110,6 +104,9 @@ export default {
         disabled: this.realDisabled,
         readonly: this.realReadonly
       }
+    },
+    listeners () {
+      return getListeners(this.type !== 'textarea' ? EVENTS : ['focus', 'blur', ...EVENTS], this)
     }
   },
   watch: {

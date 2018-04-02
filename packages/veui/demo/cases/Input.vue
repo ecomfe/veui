@@ -53,14 +53,19 @@
       </section>
 
       <section>
-        <h3>方向键操作</h3>
-        <veui-field label="宽度：">
-            <veui-input v-nudge.y="{
-              smallStep: 0,
+        <h3>After Slot / 方向键操作指令 v-nudge </h3>
+        <veui-field label="价格：">
+            <veui-input class="input-nudge" v-nudge.y="{
               update: handleThumbNudgeUpdate
-            }" v-model="width" @focus="log('focus')"></veui-input>
-            <veui-input v-model="width" readonly></veui-input>
-            <veui-input v-model="width" disabled></veui-input>
+            }" v-model="price" @focus="log('focus')">
+              <span class="input-after-slot" slot="after">元</span>
+            </veui-input>
+            <veui-input class="input-nudge" v-model="price" readonly>
+              <span class="input-after-slot" slot="after">元</span>
+            </veui-input>
+            <veui-input class="input-nudge" v-model="price" disabled>
+              <span class="input-after-slot" slot="after">元</span>
+            </veui-input>
         </veui-field>
       </section>
 
@@ -104,7 +109,7 @@ export default {
       textarea2: '设置高度',
       textarea3: '默认高度',
       poem: '兩岸猿聲啼不住，輕舟已過萬重山',
-      width: '1024px'
+      price: '1024'
     }
   },
   methods: {
@@ -112,7 +117,7 @@ export default {
       bus.$emit('log', item)
     },
     handleThumbNudgeUpdate (delta) {
-      let val = this.width
+      let val = this.price
 
       let digits
       let unit
@@ -132,15 +137,13 @@ export default {
         return
       }
 
-      delta = Math.ceil(Math.abs(delta)) * Math.sign(delta)
-
       // 因为加 0.1 所以处理一下，否则会出现 0.30000000000000004
       let newVal = Math.round((digits + delta) * 10) / 10
       if (unit !== undefined) {
         newVal += unit
       }
 
-      this.width = newVal
+      this.price = newVal
     }
   }
 }
@@ -184,10 +187,23 @@ export default {
   .five-sizes {
     .veui-form-label {
       text-transform: capitalize;
-      display: inline-block;
       width: 60px;
       color: #999;
     }
+  }
+
+  .input-nudge {
+    position: relative;
+
+    input {
+      padding-right: 20px;
+    }
+  }
+
+  .input-after-slot {
+    position: absolute;
+    right: 5px;
+    z-index: 1;
   }
 }
 </style>

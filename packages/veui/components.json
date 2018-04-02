@@ -112,6 +112,10 @@
     "path": "Link.vue"
   },
   {
+    "name": "NumberInput",
+    "path": "NumberInput.vue"
+  },
+  {
     "name": "Option",
     "path": "Option.js"
   },

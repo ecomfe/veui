@@ -66,13 +66,13 @@ function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
       }
 
       switch (true) {
-        case options.axis === 'x' && key === 'ArrowRight':
-        case options.axis === 'y' && key === 'ArrowUp':
+        case options.axis === 'x' && (key === 'ArrowRight' || key === 'Right'):
+        case options.axis === 'y' && (key === 'ArrowUp' || key === 'Up'):
           increase *= 1
           break
 
-        case options.axis === 'x' && key === 'ArrowLeft':
-        case options.axis === 'y' && key === 'ArrowDown':
+        case options.axis === 'x' && (key === 'ArrowLeft' || key === 'Left'):
+        case options.axis === 'y' && (key === 'ArrowDown' || key === 'Down'):
           increase *= -1
           break
 
@@ -92,6 +92,7 @@ function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
 
   el.addEventListener('keydown', nudgeData.keydownHandler)
   el.__nudgeData__ = nudgeData
+  el.__nudgeData__.setOptions(params)
 }
 
 export default {
