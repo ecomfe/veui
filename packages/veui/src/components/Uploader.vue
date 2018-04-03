@@ -27,7 +27,7 @@
     </div>
     <ul :class="listClass">
       <li v-for="(file, index) in fileList" :key="index">
-        <template v-if="(type === 'file' && file.status !== 'uploading')
+        <div v-if="(type === 'file' && file.status !== 'uploading')
           || type === 'image' && (!file.status || file.status === 'success')">
           <slot name="file" :file="file">
             <template v-if="type === 'file'">
@@ -63,8 +63,8 @@
               </div>
             </transition>
           </slot>
-        </template>
-        <template v-else-if="file.status === 'uploading'">
+        </div>
+        <div v-else-if="file.status === 'uploading'">
           <slot name="uploading" :file="file">
             <veui-uploader-progress :type="progress" :loaded="file.loaded" :total="file.total"
               :class="type === 'image' ? listClass + '-status' : ''"
@@ -77,8 +77,8 @@
             <veui-button v-else ui="aux operation"
               @click="cancelFile(file)">取消</veui-button>
           </slot>
-        </template>
-        <template v-else-if="file.status === 'failure' && type === 'image'">
+        </div>
+        <div v-else-if="file.status === 'failure' && type === 'image'">
           <slot name="failure" :file="file">
             <div :class="listClass + '-status'">
               <span class="veui-uploader-failure"><slot name="failure-label">错误！</slot>{{file.failureReason}}</span>
@@ -87,7 +87,8 @@
             <veui-button ui="link" @click="removeFile(file)"
               :class="`${listClass}-mask-remove ${listClass}-mask-remove-failure`"><veui-icon :name="icons.clear"/>移除</veui-button>
           </slot>
-        </template>
+        </div>
+        <slot name="extra-content"></slot>
       </li>
       <li v-if="type === 'image'" key="input"
         v-show="!maxCount || fileList.length < maxCount">
