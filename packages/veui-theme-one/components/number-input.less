@@ -18,33 +18,47 @@
     border-width: 0 0 0 1px;
 
     .veui-icon {
-      position: absolute;
-      top: 50%;
-      left: 50%;
+      .veui-position-center();
       margin-top: 0;
-      transform: translate(-50%, -50%);
+    }
+  }
+
+  .veui-button&-step-up:not(.veui-disabled):not(.veui-readonly) {
+    &:hover,
+    &:active {
+      & + .veui-number-input-step-down {
+        border-top-color: @veui-gray-color-5;
+      }
     }
   }
 
   .veui-button&-step-down {
     bottom: 0;
-    border-width: 1px 0 0 1px;
+    border-top-width: 1px;
+    border-top-color: transparent;
+
+    &:not(.veui-disabled):not(.veui-readonly) {
+      &:hover,
+      &:active {
+        border-top-color: @veui-gray-color-5;
+      }
+    }
   }
 
   &[ui~="tiny"] {
-    .veui-button.veui-number-input-step-up,
-    .veui-button.veui-number-input-step-down {
+    .veui-number-input-step-up,
+    .veui-number-input-step-down {
       .veui-icon {
-        transform: translate(-50%, -50%) scale(.8)
+        transform: translate(50%, 50%) scale(.8)
       }
     }
   }
 
   &[ui~="micro"] {
-    .veui-button.veui-number-input-step-up,
-    .veui-button.veui-number-input-step-down {
+    .veui-number-input-step-up,
+    .veui-number-input-step-down {
       .veui-icon {
-        transform: translate(-50%, -50%) scale(.6)
+        transform: translate(50%, 50%) scale(.6)
       }
     }
   }

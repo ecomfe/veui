@@ -1,5 +1,5 @@
 <template>
-  <article class="input-demo">
+  <article>
     <h1><code>&lt;veui-input&gt;</code></h1>
     <veui-form>
       <section class="five-sizes">
@@ -149,21 +149,19 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "~less-plugin-est/src/all.less";
 
-.input-demo {
-  section {
-    margin-bottom: 40px;
-  }
+section {
+  margin-bottom: 40px;
+}
 
-  .veui-form {
-    .veui-field {
-      margin-bottom: 5px;
+.veui-form {
+  & /deep/ .veui-field {
+    margin-bottom: 5px;
 
-      & > .veui-form-label {
-        width: 50px;
-      }
+    & > .veui-form-label {
+      width: 50px;
     }
   }
 
@@ -183,27 +181,28 @@ export default {
       height: 200px;
     }
   }
+}
 
-  .five-sizes {
-    .veui-form-label {
-      text-transform: capitalize;
-      width: 60px;
-      color: #999;
-    }
+
+.five-sizes {
+  & /deep/ .veui-form-label {
+    text-transform: capitalize;
+    width: 60px;
+    color: #999;
   }
+}
 
-  .input-nudge {
-    position: relative;
+.input-nudge {
+  position: relative;
 
-    input {
-      padding-right: 20px;
-    }
+  input {
+    padding-right: 20px;
   }
+}
 
-  .input-after-slot {
-    position: absolute;
-    right: 5px;
-    z-index: 1;
-  }
+.input-after-slot {
+  position: absolute;
+  right: 5px;
+  z-index: 1;
 }
 </style>

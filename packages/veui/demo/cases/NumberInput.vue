@@ -1,5 +1,5 @@
 <template>
-  <article class="number-input-demo">
+  <article>
     <h1><code>&lt;veui-number-input&gt;</code></h1>
     <section>
       <veui-form>
@@ -17,6 +17,9 @@
         </veui-field>
         <veui-field label="Large：" ui="large" tip="基准值每次加 10">
           <veui-number-input ui="large" v-model="number4" :step="10"></veui-number-input>
+        </veui-field>
+        <veui-field label="Disabled：">
+          <veui-number-input readonly v-model="number5"></veui-number-input>
         </veui-field>
       </veui-form>
     </section>
@@ -39,19 +42,18 @@ export default {
       number1: null,
       number2: null,
       number3: null,
-      number4: null
+      number4: null,
+      number5: 1024
     }
   }
 }
 </script>
 
-<style lang="less">
-.number-input-demo {
-  .veui-form {
-    .veui-form-label {
-      width: 60px;
-      color: #999;
-    }
+<style lang="less" scoped>
+.veui-form {
+  & /deep/ .veui-form-label {
+    width: 80px;
+    color: #999;
   }
 }
 </style>

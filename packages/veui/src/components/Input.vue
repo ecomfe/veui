@@ -42,7 +42,7 @@ import { getListeners } from '../utils/helper'
 import warn from '../utils/warn'
 
 const EVENTS = ['click', 'keyup', 'keydown', 'keypress']
-const TYPE_LIST = ['text', 'password', 'number', 'hidden', 'textarea']
+const TYPE_LIST = ['text', 'password', 'hidden', 'textarea']
 
 export default {
   name: 'veui-input',

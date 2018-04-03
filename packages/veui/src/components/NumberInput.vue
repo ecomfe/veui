@@ -7,15 +7,32 @@
     type="text"
     v-model="localValue"
     v-on="listeners"
+    v-bind="attrs"
     @blur="handleBlur"
-    class="veui-number-input"
+    :class="{
+      'veui-number-input': true,
+      'veui-readonly': realReadonly,
+      'veui-disabled': realDisabled
+    }"
   >
     <template slot="before">
       <slot name="before"></slot>
     </template>
     <template slot="after">
-      <veui-button class="veui-number-input-step-up" @click="handleStep(1)"><veui-icon :name="icons.increase"></veui-icon></veui-button>
-      <veui-button class="veui-number-input-step-down" @click="handleStep(-1)"><veui-icon :name="icons.decrease"></veui-icon></veui-button>
+      <veui-button
+        class="veui-number-input-step-up"
+        @click="handleStep(1)"
+        :disabled="realReadonly || realDisabled"
+      >
+        <veui-icon :name="icons.increase"></veui-icon>
+      </veui-button>
+      <veui-button
+        class="veui-number-input-step-down"
+        @click="handleStep(-1)"
+        :disabled="realReadonly || realDisabled"
+      >
+        <veui-icon :name="icons.decrease"></veui-icon>
+      </veui-button>
       <slot name="after"></slot>
     </template>
   </veui-input>
@@ -65,25 +82,25 @@ export default {
     }
   },
   watch: {
-    localValue (v) {
-      if (v == null) {
+    localValue (val) {
+      if (val == null) {
         this.$emit('input', null)
         return
       }
 
-      v = parseFloat(v)
-      if (v !== parseFloat(this.value)) {
-        this.$emit('input', isNaN(v) ? null : +v.toFixed(this.fixedDigits))
+      val = parseFloat(val)
+      if (val !== parseFloat(this.value)) {
+        this.$emit('input', isNaN(val) ? null : +val.toFixed(this.fixedDigits))
       }
     },
-    value (v) {
-      if (v == null) {
+    value (val) {
+      if (val == null) {
         this.localValue = null
         return
       }
 
-      if (parseFloat(v) !== parseFloat(this.value)) {
-        this.localValue = v.toFixed(this.fixedDigits)
+      if (parseFloat(val) !== parseFloat(this.value)) {
+        this.localValue = val.toFixed(this.fixedDigits)
       }
     }
   },
@@ -102,8 +119,8 @@ export default {
         return
       }
 
-      let v = parseFloat(this.localValue)
-      let val = isNaN(v) ? null : v.toFixed(this.fixedDigits)
+      let val = parseFloat(this.localValue)
+      val = isNaN(val) ? null : val.toFixed(this.fixedDigits)
       this.localValue = val
       this.$emit('blur', val)
     },
