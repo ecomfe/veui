@@ -45,7 +45,7 @@ import ui from '../mixins/ui'
 import input from '../mixins/input'
 import Icon from './Icon'
 import { getListeners } from '../utils/helper'
-import { add, round, truncDecimal } from '../utils/math'
+import { sign, add, round } from '../utils/math'
 import { isInteger, isNaN } from 'lodash'
 import nudge from 'veui/directives/nudge'
 
@@ -73,7 +73,7 @@ export default {
       type: Number,
       default: 0,
       validator (val) {
-        return val >= 0 && val <= 100 && isInteger(val)
+        return val >= 0 && val <= 20 && isInteger(val)
       }
     }
   },
@@ -127,19 +127,18 @@ export default {
     },
     handleThumbNudgeUpdate (delta) {
       // 精度下限修正
-      if (truncDecimal(delta, this.decimalPlace) === 0) {
-        delta = Math.sign(delta) * this.step
+      if (Math.pow(10, -this.decimalPlace) > Math.abs(delta)) {
+        delta = sign(delta) * this.step
       }
 
-      let val
-      val = this.localValue == null ? 0 : parseFloat(this.localValue)
+      let val = this.localValue == null ? 0 : parseFloat(this.localValue)
 
       if (isNaN(val)) {
         this.localValue = null
         return
       }
 
-      this.localValue = this.calcDisplayValue(add(val, delta))
+      this.localValue = this.calcDisplayValue(add(val, delta, this.decimalPlace))
     },
     handleStep (sign) {
       this.handleThumbNudgeUpdate(this.step * sign)
