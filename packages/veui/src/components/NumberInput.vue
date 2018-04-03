@@ -45,6 +45,7 @@ import ui from '../mixins/ui'
 import input from '../mixins/input'
 import Icon from './Icon'
 import { getListeners } from '../utils/helper'
+import { add, round, truncDecimal } from '../utils/math'
 import { isInteger, isNaN } from 'lodash'
 import nudge from 'veui/directives/nudge'
 
@@ -68,11 +69,11 @@ export default {
       type: Number,
       default: 1
     },
-    fixedDigits: {
+    decimalPlace: {
       type: Number,
       default: 0,
-      validator (v) {
-        return v >= 0 && isInteger(v)
+      validator (val) {
+        return val >= 0 && val <= 100 && isInteger(val)
       }
     }
   },
@@ -90,7 +91,7 @@ export default {
 
       val = parseFloat(val)
       if (val !== parseFloat(this.value)) {
-        this.$emit('input', isNaN(val) ? null : +val.toFixed(this.fixedDigits))
+        this.$emit('input', isNaN(val) ? null : +this.calcDisplayValue(val))
       }
     },
     value (val) {
@@ -100,7 +101,7 @@ export default {
       }
 
       if (parseFloat(val) !== parseFloat(this.value)) {
-        this.localValue = val.toFixed(this.fixedDigits)
+        this.localValue = this.calcDisplayValue(val)
       }
     }
   },
@@ -120,31 +121,31 @@ export default {
       }
 
       let val = parseFloat(this.localValue)
-      val = isNaN(val) ? null : val.toFixed(this.fixedDigits)
+      val = isNaN(val) ? null : this.calcDisplayValue(val)
       this.localValue = val
       this.$emit('blur', val)
     },
     handleThumbNudgeUpdate (delta) {
-      let val
-      if (this.localValue == null) {
-        val = 0
-      } else {
-        val = parseFloat(this.localValue)
+      // 精度下限修正
+      if (truncDecimal(delta, this.decimalPlace) === 0) {
+        delta = Math.sign(delta) * this.step
       }
+
+      let val
+      val = this.localValue == null ? 0 : parseFloat(this.localValue)
 
       if (isNaN(val)) {
         this.localValue = null
         return
       }
 
-      // 因为加 0.1 所以处理一下，否则会出现 0.30000000000000004
-      let newVal = Math.round((val + delta) * 10) / 10
-      newVal = newVal.toFixed(this.fixedDigits)
-
-      this.localValue = newVal
+      this.localValue = this.calcDisplayValue(add(val, delta))
     },
     handleStep (sign) {
       this.handleThumbNudgeUpdate(this.step * sign)
+    },
+    calcDisplayValue (val) {
+      return round(val, this.decimalPlace).toFixed(this.decimalPlace)
     }
   }
 }

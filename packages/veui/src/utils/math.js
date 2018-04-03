@@ -36,3 +36,37 @@ export function sign (num) {
 export function isPositive (num) {
   return num > 0 || is(num, 0)
 }
+
+/**
+ * 因为加 0.1 所以处理一下，否则会出现 0.30000000000000004
+ *
+ * @param {number} a （被）加数
+ * @param {number} b 加数
+ * @returns {number}  结果
+ */
+export function add (a, b) {
+  return Math.round((a + b) * 10) / 10
+}
+
+/**
+ * 真·四舍五入
+ *
+ * @param {number} num 目标数值
+ * @param {number} decimals 精确小数位个数
+ * @returns {number}  结果
+ */
+export function round (num, decimals) {
+  return Number(Math.round(num + 'e' + decimals) + 'e-' + decimals)
+}
+
+/**
+ * 截断至小数位后几位
+ *
+ * @param  {number} num 目标数值
+ * @param  {number} decimals 保留小数位
+ * @returns {number}  结果
+ */
+export function truncDecimal (num, decimals) {
+  let match = num.toString().match(new RegExp(`(\\d+\\.\\d{${decimals}})(\\d)`))
+  return match ? parseFloat(match[1]) : num
+}

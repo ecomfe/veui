@@ -7,13 +7,13 @@
           <veui-number-input ui="micro" v-model="number"></veui-number-input>
         </veui-field>
         <veui-field label="Tiny：" ui="tiny" tip="精确到小数点后 1 位">
-          <veui-number-input ui="tiny" v-model="number1" :fixed-digits="1"></veui-number-input>
+          <veui-number-input ui="tiny" v-model="number1" :decimal-place="1"></veui-number-input>
         </veui-field>
         <veui-field label="Small：" ui="small" tip="精确到小数点后 2 位">
-          <veui-number-input ui="small" v-model="number2" :fixed-digits="2"></veui-number-input>
+          <veui-number-input ui="small" v-model="number2" :decimal-place="2"></veui-number-input>
         </veui-field>
         <veui-field label="Normal：" tip="基准值每次加 0.1">
-          <veui-number-input v-model="number3" :step="0.1" :fixed-digits="1"></veui-number-input>
+          <veui-number-input v-model="number3" :step="0.1" :decimal-place="1"></veui-number-input>
         </veui-field>
         <veui-field label="Large：" ui="large" tip="基准值每次加 10">
           <veui-number-input ui="large" v-model="number4" :step="10"></veui-number-input>
