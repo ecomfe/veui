@@ -55,6 +55,7 @@
                 <veui-button @click="removeFile(file)" :disabled="realUneditable" :class="listClass + '-mask-remove'"><veui-icon :name="icons.clear"></veui-icon>移除</veui-button>
                 <slot name="extra-operation" v-bind="getScopeValue(index, file)"></slot>
               </div>
+              <slot name="extra-info" v-bind="getScopeValue(index, file)"></slot>
             </template>
             <transition name="veui-uploader-fade">
               <div v-if="type === 'image' && file.status === 'success'"
