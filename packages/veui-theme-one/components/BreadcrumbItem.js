@@ -5,4 +5,4 @@ config.defaults({
   icons: {
     next: 'angle-right-small'
   }
-}, 'breadcrumb')
+}, 'breadcrumbitem')

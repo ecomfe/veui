@@ -4,6 +4,12 @@
   float: left;
   color: @veui-text-color-strong;
 
+  &:last-child {
+    .veui-breadcrumb-separator {
+      display: none;
+    }
+  }
+
   &-current {
     font-weight: @veui-font-weight-bold;
   }
