@@ -31,7 +31,7 @@
           || type === 'image' && (!file.status || file.status === 'success')">
           <slot name="file" :file="getScopeValue(index, file)">
             <template v-if="type === 'file'">
-              <slot name="item-before" v-bind="getScopeValue(index, file)"></slot>
+              <slot name="file-before" v-bind="getScopeValue(index, file)"/>
               <div class="veui-uploader-list-container">
                 <veui-icon :name="icons.file" class="veui-uploader-list-icon"/>
                 <span class="veui-uploader-list-name"
@@ -47,10 +47,10 @@
                 <veui-button class="veui-uploader-button-remove" ui="link" @click="removeFile(file)" :disabled="realUneditable"><veui-icon :name="icons.clear"/></veui-button>
                 <veui-tooltip position='top' :target="`fileFailure${index}`">{{ file.failureReason }}</veui-tooltip>
               </div>
-              <slot name="item-after" v-bind="getScopeValue(index, file)"></slot>
+              <slot name="file-after" v-bind="getScopeValue(index, file)"/>
             </template>
             <template v-else>
-              <slot name="item-before" v-bind="getScopeValue(index, file)"></slot>
+              <slot name="file-before" v-bind="getScopeValue(index, file)"/>
               <div class="veui-uploader-list-image-container">
                 <img :src="file.src" :alt="file.alt || ''">
                 <div v-if="!realUneditable" :class="listClass + '-mask'">
@@ -59,7 +59,7 @@
                     :class="{'veui-uploader-input-label-disabled': realUneditable}"
                     @click.stop="replaceFile(file)">重新上传</label>
                   <veui-button @click="removeFile(file)" :disabled="realUneditable" :class="listClass + '-mask-remove'"><veui-icon :name="icons.clear"></veui-icon>移除</veui-button>
-                  <slot name="extra-operation" v-bind="getScopeValue(index, file)"></slot>
+                  <slot name="extra-operation" v-bind="getScopeValue(index, file)"/>
                 </div>
                 <transition name="veui-uploader-fade">
                   <div v-if="file.status === 'success'"
@@ -69,7 +69,7 @@
                   </div>
                 </transition>
               </div>
-              <slot name="item-after" v-bind="getScopeValue(index, file)"></slot>
+              <slot name="file-after" v-bind="getScopeValue(index, file)"/>
             </template>
           </slot>
         </template>
