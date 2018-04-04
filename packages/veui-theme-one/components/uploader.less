@@ -75,6 +75,11 @@
     list-style: none;
     overflow: hidden;
 
+    li {
+      margin: 0 10px 5px 0;
+      position: relative;
+    }
+
     img {
       width: auto;
       height: auto;
@@ -112,15 +117,14 @@
   &-list {
     width: @width;
 
-    li {
+    &-container {
       position: relative;
       padding: 4px;
-      margin: 0 10px 5px 0;
       width: @width;
       color: @veui-gray-color-2;
     }
 
-    li:hover {
+    &-container:hover {
       background-color: @veui-gray-color-8;
 
       .veui-button[ui~="link"] {
@@ -197,10 +201,9 @@
   &-list-image {
     float: left;
 
-    li {
+    &-container {
       overflow: hidden;
       .size(@image-size);
-      margin: 0 10px 5px 0;
       padding: 0;
       border: 1px solid @veui-gray-color-5;
       text-align: center;
@@ -212,9 +215,18 @@
         .centered-line(28px);
         font-size: @veui-font-size-small;
       }
+
+      label.veui-button {
+        cursor: pointer;
+        .veui-position-center();
+        width: 88px;
+        height: 28px;
+        line-height: 26px;
+        padding: 0;
+      }
     }
 
-    li:hover &-mask {
+    &-container:hover &-mask {
       display: block;
     }
 
@@ -243,15 +255,6 @@
         &.active {
           color: #fff;
         }
-      }
-
-      label.veui-button {
-        cursor: pointer;
-        top: ~"calc(50% - 14px)";
-        left: ~"calc(50% - 44px)";
-        width: 88px;
-        height: 28px;
-        line-height: 26px;
       }
 
       .veui-button&-remove {
@@ -305,7 +308,7 @@
       display: none;
     }
 
-    li:hover &-mask-remove-failure {
+    &-container:hover &-mask-remove-failure {
       display: inline;
     }
 
