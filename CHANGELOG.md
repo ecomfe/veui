@@ -10,7 +10,9 @@
   >
   > 1. 所有直接使用 `AlertBox` 的情况下，需要将如 `ui="success"` 修改为 `type="success"` 的方式进行指定。
   >
-  > 2. 对于主题包的作者，需要将原来针对如 `[ui~="success"]` 编写的样式，修改为 `.veui-alert-box-success。`
+  > 2. 对于主题包的作者，需要将原来针对如 `[ui~="success"]` 编写的样式，修改为 `.veui-alert-box-success`。
+
+* [-] **[预告]** `Input` 组件的 `type` prop 将在下个版本去除对 `textarea` 的支持，请使用 `Textarea` 组件代替。
 
 ### 💡 主要变更
 
@@ -24,6 +26,8 @@
 * [^] 将 `icons` mixin 并入 `ui`,
 * [+] 支持配置 `ui` prop 项的元数据，以支持进一步校验及根据 `ui` 值配置图标。
 * [^] 将 `Progress` 组件硬编码在组件代码中的尺寸解耦到 `veui-theme-one` 中，现在组件可以从主题包的 JS 模块中注入预定义的样式参数。
+* [+] 为 `Input` 增加了 `before`/`after` slot，提供扩展的空间。
+* [+] 新增了 `NumberInput` 组件。
 
 ### 🐞 问题修复
 
@@ -34,6 +38,7 @@
 * [^] 修复了 `Field` 组件使用 `slot` 时 `class` 判断遗漏的问题。
 * [^] 修复了 `pattern`/`numeric` 校验规则的优先级，使 `pattern` 置于 `numeric` 之后。
 * [^] 去除了 `rule` 校验失败信息中包含部分校验成功的无用信息。
+* [^] 去除了 `Input` 部分过时的 prop。
 
 ## 1.0.0-alpha.9
 

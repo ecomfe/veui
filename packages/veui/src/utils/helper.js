@@ -173,3 +173,12 @@ export function keepOwn (obj) {
   }
   return obj
 }
+
+export function getListeners (events, vm) {
+  return events.reduce(function (listeners, type) {
+    listeners[type] = (...args) => {
+      vm.$emit(type, ...args)
+    }
+    return listeners
+  }, {})
+}

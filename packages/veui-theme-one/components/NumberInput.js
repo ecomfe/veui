@@ -1,13 +1,15 @@
-import '../icons/exclamation-circle-o'
+import '../icons/angle-up'
+import '../icons/angle-down'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    alert: 'exclamation-circle-o'
+    increase: 'angle-up',
+    decrease: 'angle-down'
   },
   ui: {
     size: {
       values: ['large', 'small', 'tiny', 'micro']
     }
   }
-}, 'field')
+}, 'numberinput')

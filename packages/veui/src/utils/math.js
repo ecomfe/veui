@@ -36,3 +36,26 @@ export function sign (num) {
 export function isPositive (num) {
   return num > 0 || is(num, 0)
 }
+
+/**
+ * 处理浮点数精度问题
+ *
+ * @param {number} a （被）加数
+ * @param {number} b 加数
+ * @param {number} [decimals=0] 精确小数位个数
+ * @returns {number}  结果
+ */
+export function add (a, b, decimals = 0) {
+  return round((a + b) * Math.pow(10, decimals)) / Math.pow(10, decimals)
+}
+
+/**
+ * 真·四舍五入
+ *
+ * @param {number} num 目标数值
+ * @param {number} decimals 精确小数位个数
+ * @returns {number}  结果
+ */
+export function round (num, decimals = 0) {
+  return Number(Math.round(num + 'e' + decimals) + 'e-' + decimals)
+}

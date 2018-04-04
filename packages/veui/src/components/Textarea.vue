@@ -39,6 +39,9 @@
 import { pick } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import { getListeners } from '../utils/helper'
+
+const EVENTS = ['click', 'keyup', 'keydown', 'keypress']
 
 export default {
   name: 'veui-textarea',
@@ -52,29 +55,23 @@ export default {
     lineNumber: Boolean,
     rows: [Number, String],
     autofocus: Boolean,
-    selectOnFocus: Boolean,
     composition: Boolean,
-    resizable: Boolean,
     autoresize: Boolean
   },
   data () {
-    let listeners = ['click', 'keyup', 'keydown', 'keypress'].reduce((acc, type) => {
-      acc[type] = event => {
-        this.$emit(type, event)
-      }
-      return acc
-    }, {})
     return {
       localValue: this.value,
       focused: false,
       height: 0,
-      listeners,
       measurerContentWidth: 0,
       measurerContentHeight: 0,
       scrollTop: 0
     }
   },
   computed: {
+    listeners () {
+      return getListeners(EVENTS)
+    },
     normalizedRows () {
       let rows = Number(this.rows)
       return isNaN(rows) ? null : rows

@@ -1,0 +1,65 @@
+@import "../lib.less";
+
+.veui-number-input {
+  position: relative;
+
+  &.veui-input {
+    width: 110px;
+  }
+
+  .veui-button&-step-up,
+  .veui-button&-step-down {
+    position: absolute;
+    right: 0;
+    width: 28px;
+    height: 50%;
+    padding: 0;
+    z-index: 1;
+    border-width: 0 0 0 1px;
+
+    .veui-icon {
+      .veui-position-center();
+      margin-top: 0;
+    }
+  }
+
+  .veui-button&-step-up:not(.veui-disabled):not(.veui-readonly) {
+    &:hover,
+    &:active {
+      & + .veui-number-input-step-down {
+        border-top-color: @veui-gray-color-5;
+      }
+    }
+  }
+
+  .veui-button&-step-down {
+    bottom: 0;
+    border-top-width: 1px;
+    border-top-color: transparent;
+
+    &:not(.veui-disabled):not(.veui-readonly) {
+      &:hover,
+      &:active {
+        border-top-color: @veui-gray-color-5;
+      }
+    }
+  }
+
+  &[ui~="tiny"] {
+    .veui-number-input-step-up,
+    .veui-number-input-step-down {
+      .veui-icon {
+        transform: translate(50%, 50%) scale(.8)
+      }
+    }
+  }
+
+  &[ui~="micro"] {
+    .veui-number-input-step-up,
+    .veui-number-input-step-down {
+      .veui-icon {
+        transform: translate(50%, 50%) scale(.6)
+      }
+    }
+  }
+}
