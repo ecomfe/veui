@@ -158,6 +158,7 @@ import input from '../mixins/input'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
 import bytes from 'bytes'
+import warn from '../utils/warn'
 
 config.defaults({
   'uploader.requestMode': 'xhr',
@@ -251,7 +252,10 @@ export default {
      */
     autoUpload: {
       type: Boolean,
-      default: true
+      default: true,
+      validator () {
+        warn('[veui-uploader] `auto-upload` is deprecated and will be removed in the next version. Use `autoupload` instead.')
+      }
     },
     autoupload: {
       type: Boolean,

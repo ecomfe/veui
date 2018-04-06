@@ -16,23 +16,23 @@
 
 ### 💡 主要变更
 
+* [+] 新增了 `NumberInput` 组件。
+* [+] 为 `Input` 增加了 `before`/`after` slot，提供扩展的空间。
 * [+] 为 `Select` 增加了 `filter` prop，用来过滤下拉内容。
 * [+] 为 `OptionGroup` 增加了 `position` prop，用来指定在弹出菜单中显示。
 * [+] 为 `Option` 增加了 `hidden` prop。
 * [+] 为 `Overlay` 增加了 `locate` 事件，在位置发生变化时触发（时机为 `tether` 的 `reposition` 事件）。
-* [^] 为 `uiTypes` 定制了选项合并策略，并修正了 `Select` 组件在 `uiTypes` 中声明的 `input` 被 mixin 中加入的 `select` 覆盖的问题。
 * [+] `Searchbox` 组件增加 `suggest-trigger` prop，用来指定推荐列表的弹出时机；增加 `suggest` 事件，当需要显示推荐列表时触发。
 * [+] `Field` 的 `rules` 中增加 `priority` 的配置，用来覆盖当前内置的规则优先级。
 * [^] 将 `icons` mixin 并入 `ui`,
 * [+] 支持配置 `ui` prop 项的元数据，以支持进一步校验及根据 `ui` 值配置图标。
 * [^] 将 `Progress` 组件硬编码在组件代码中的尺寸解耦到 `veui-theme-one` 中，现在组件可以从主题包的 JS 模块中注入预定义的样式参数。
-* [+] 为 `Input` 增加了 `before`/`after` slot，提供扩展的空间。
-* [+] 新增了 `NumberInput` 组件。
-* [+] `Uploader` 组件的 `image` 模式在图片的遮罩层上增加 `scoped-slot`：`extra-operation`；在文件的前面增加 `scoped-slot`：`file-before`，后面增加 `scoped-slot`：`file-after`。
+* [+] `Uploader` 组件的 `image` 模式在图片的遮罩层上增加 scoped-slot `extra-operation`；在上传项目前后分别增加 `file-before` 和 `file-after` 两个 scoped slot。
 * [^] `Uploader` 组件增加 prop `order`，配置新上传文件的插入顺序。
 
 ### 🐞 问题修复
 
+* [^] 为 `uiTypes` 定制了选项合并策略，并修正了 `Select` 组件在 `uiTypes` 中声明的 `input` 被 mixin 中加入的 `select` 覆盖的问题。
 * [^] 去除了 `Link` 组件中错误注册组件的代码。
 * [^] 修复了关闭非 `modal` 的 `Dialog` 时 `FocusManager` 报错的问题。
 * [^] 修复了 `FocusManager` 在 `trap` 模式下会自动聚焦最后一个元素的问题。
