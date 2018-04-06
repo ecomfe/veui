@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { clamp, isArray, isEqual, identity } from 'lodash'
+import { fill, clamp, isArray, isEqual, identity } from 'lodash'
 import drag from '../directives/drag'
 import nudge from '../directives/nudge'
 import ui from '../mixins/ui'
@@ -223,7 +223,7 @@ export default {
       })
     },
     thumbDragOptions () {
-      return (new Array(this.thumbCount)).fill(1).map((_, index) => ({
+      return fill(new Array(this.thumbCount), true).map((_, index) => ({
         axis: 'x',
         dragstart: (...args) => this.handleThumbDragStart(index, ...args),
         drag: (...args) => this.handleThumbDrag(index, ...args),

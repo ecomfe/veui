@@ -1,11 +1,13 @@
 <script>
 import BreadcrumbItem from './BreadcrumbItem'
-import Icon from './Icon'
 import ui from '../mixins/ui'
 
 export default {
   name: 'veui-breadcrumb',
   mixins: [ui],
+  components: {
+    'veui-breadcrumb-item': BreadcrumbItem
+  },
   props: {
     routes: {
       type: Array,
@@ -30,24 +32,30 @@ export default {
   },
   render () {
     return (
-      <ul class="veui-breadcrumb" role="navigation">
-        {this.$slots.default || this.localRoutes.map((route, index) => (
-          <BreadcrumbItem to={route.to}
-            replace={route.replace}
-            type={route.type}
-            native={route.native}
-            onRedirect={event => this.fireRedirect(event, route, index)}>
-            {this.$scopedSlots.default ? this.$scopedSlots.default({ route }) : (route.label || route.text)}
-            {
-              index !== this.localRoutes.length - 1
-                ? <span slot="separator" class="veui-breadcrumb-separator">
-                  {this.$scopedSlots.separator ? this.$scopedSlots.separator() : <Icon name={this.icons.next}></Icon>}
-                </span>
-                : null
-            }
-          </BreadcrumbItem>
-        ))}
-      </ul>
+      <ol class="veui-breadcrumb" role="navigation">
+        {
+          this.$slots.default || this.localRoutes.map((route, index) => (
+            <veui-breadcrumb-item to={route.to}
+              replace={route.replace}
+              type={route.type}
+              native={route.native}
+              onRedirect={event => this.fireRedirect(event, route, index)}>
+              {
+                this.$scopedSlots.default
+                  ? this.$scopedSlots.default({ route, ...route })
+                  : (route.label || route.text)
+              }
+              <template slot="separator">
+                {
+                  this.$scopedSlots.separator
+                    ? this.$scopedSlots.separator()
+                    : null
+                }
+              </template>
+            </veui-breadcrumb-item>
+          )) || this.$slots.default
+        }
+      </ol>
     )
   },
   methods: {

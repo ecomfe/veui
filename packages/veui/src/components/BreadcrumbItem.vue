@@ -7,20 +7,28 @@
     :replace="replace"
     :native="native"><slot/></veui-link>
   <span v-else class="veui-breadcrumb-item-current"><slot/></span>
-  <slot name="separator"/>
+  <span class="veui-breadcrumb-separator">
+    <slot name="separator">
+      <veui-icon :name="icons.next"/>
+    </slot>
+  </span>
 </li>
 </template>
 
 <script>
 import { includes } from 'lodash'
+import ui from '../mixins/ui'
 import Link from './Link'
+import Icon from './Icon'
 
 const ALLOWED_LINK_TYPES = ['link', 'text']
 
 export default {
   name: 'veui-breadcrumb-item',
+  mixins: [ui],
   components: {
-    'veui-link': Link
+    'veui-link': Link,
+    'veui-icon': Icon
   },
   props: {
     to: String,
