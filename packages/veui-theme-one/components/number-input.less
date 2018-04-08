@@ -53,15 +53,23 @@
     }
   }
 
-  .veui-field-invalid & {
-    &:extend(._veui-input-invalid all);
-  }
-
   &:hover,
   &-focused {
     &,
-    & .veui-button:not(.veui-disabled):not(.veui-readonly) {
+    .veui-number-input-step-up:not(.veui-disabled):not(.veui-readonly),
+    .veui-number-input-step-down:not(.veui-disabled):not(.veui-readonly) {
       border-color: @veui-gray-color-3;
+    }
+  }
+
+  .veui-field-invalid &:not(.veui-disabled):not(.veui-readonly) {
+    &:extend(._veui-input-invalid all);
+
+    .veui-button.veui-number-input-step-up,
+    .veui-button.veui-number-input-step-down,
+    .veui-button.veui-number-input-step-up:hover + .veui-number-input-step-down::after,
+    .veui-button.veui-number-input-step-down:hover::after {
+      border-color: @veui-alert-color;
     }
   }
 

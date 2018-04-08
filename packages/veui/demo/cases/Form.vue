@@ -268,6 +268,13 @@
           <veui-span>万</veui-span>
         </veui-fieldset>
 
+        <veui-field label="收入下限：" field="floor" name="floor" :rules="[
+          {name: 'required', value: true},
+          {name: 'min', value: 3500, message: '最低收入不小于 3500'}
+        ]">
+          <veui-number-input v-model="storeData4.floor"></veui-number-input>
+        </veui-field>
+
         <veui-field field="protocol" name="protocol" :rules="protocolRequiredRule" label="协议：">
           <veui-checkbox falseValue="" v-model="storeData4.protocol">我已阅读并同意工作协议</veui-checkbox>
         </veui-field>
@@ -322,7 +329,7 @@ import {
   Form, Fieldset, Field, Label, Span, Input,
   Button, DatePicker, Uploader, Select,
   Checkbox, CheckboxGroup, RadioGroup, Searchbox,
-  RegionPicker, Radio, Icon, Slider
+  RegionPicker, Radio, Icon, Slider, NumberInput
 } from 'veui'
 import moment from 'moment'
 import bus from '../bus'
@@ -2414,6 +2421,7 @@ export default {
   components: {
     'veui-span': Span,
     'veui-input': Input,
+    'veui-number-input': NumberInput,
     'veui-button': Button,
     'veui-form': Form,
     'veui-fieldset': Fieldset,
@@ -2534,7 +2542,8 @@ export default {
         phoneType,
         start: null,
         end: null,
-        protocol: ''
+        protocol: '',
+        floor: 3499
       },
       storeData4Options: {
         hobbyItems,
