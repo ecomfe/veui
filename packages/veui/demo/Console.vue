@@ -1,12 +1,14 @@
 <template>
-<aside :class="{expanded, 'veui-console': true}">
+<aside :class="{
+  expanded, 'veui-console': true
+}">
   <h2 @click="expanded = !expanded">
     <icon @click.native.stop="logs = []" name="ban" label="Clear console" flip="horizontal"></icon>
     <icon :name="expanded ? 'angle-down' : 'angle-up'" label="Toggle console"></icon>
     Console <small>({{logs.length}})</small>
   </h2>
   <section class="output" ref="logList">
-    <pre class="log" v-for="(log, index) in logs" :key="index"><template v-if="log != null"><div v-if="log instanceof String">{{log}}</div><div class="line" v-else v-for="line in log" v-html="format(line)"></div></template><template v-else v-html="format(log)"></template></pre>
+    <pre class="log" v-for="(log, index) in logs" :key="`log-${index}`"><template v-if="log != null"><div v-if="(log instanceof String)">{{ log }}</div><div class="line" v-else v-for="(line, index) in log" v-html="format(line)" :key="`line-${index}`"></div></template><template v-else v-html="format(log)"></template></pre>
   </section>
 </aside>
 </template>

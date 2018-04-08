@@ -106,10 +106,8 @@
         v-show="!maxCount || fileList.length < maxCount">
         <div class="veui-uploader-list-image-container">
           <label :class="{
-              'veui-uploader-input-label-image': !$scopedSlots['extra-operation'],
-              'veui-uploader-input-label-disabled': !$scopedSlots['extra-operation'] &&
-                (realUneditable || isSubmiting),
               'veui-button': $scopedSlots['extra-operation'],
+              'veui-uploader-input-label-image': !$scopedSlots['extra-operation'],
               'veui-uploader-input-label-disabled': $scopedSlots['extra-operation'] &&
                 (realUneditable ||
                 (maxCount > 1 && fileList.length >= maxCount) ||

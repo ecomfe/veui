@@ -2,20 +2,18 @@
 
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
   parserOptions: {
-    sourceType: 'module',
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true
-    }
+    parser: 'babel-eslint',
+    sourceType: 'module'
   },
-  env: {
-    browser: true
-  },
-  // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-  extends: ['standard'],
+  extends: [
+    // https://github.com/vuejs/eslint-plugin-vue#bulb-rules
+    'plugin:vue/essential',
+    // https://github.com/standard/standard/blob/master/docs/RULES-en.md
+    'standard'
+  ],
   // required to lint *.vue files
-  plugins: ['vue', 'html', 'prettier'],
+  plugins: ['vue', 'prettier'],
   // add your custom rules here
   rules: {
     // allow paren-less arrow functions
@@ -27,6 +25,8 @@ module.exports = {
     // fix unused var error for JSX custom tags
     'vue/jsx-uses-vars': 2,
     'no-multi-spaces': ['error', { ignoreEOLComments: true }],
-    'no-template-curly-in-string': 0
+    'no-template-curly-in-string': 0,
+    // to many false positives
+    'vue/no-side-effects-in-computed-properties': 0
   }
 }

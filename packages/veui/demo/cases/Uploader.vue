@@ -52,7 +52,7 @@
       @statuschange="handleStatusChange"
       class="veui-uploader-demo-extra-operation">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
-      <template slot="extra-operation" scope="file">
+      <template slot="extra-operation" slot-scope="file">
         <veui-button class="veui-uploader-demo-extra-operation-button"
           @click="openTooltip(file)"
           :ref="`add-image${file.index !== undefined ? '-' + file.index : ''}`">输入图片地址</veui-button>
