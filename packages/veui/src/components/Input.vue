@@ -87,7 +87,6 @@ export default {
   },
   data () {
     return {
-      localValue: this.value,
       focused: false
     }
   },
@@ -110,8 +109,11 @@ export default {
     }
   },
   watch: {
-    value (val) {
-      this.localValue = val
+    value: {
+      handler (val) {
+        this.localValue = val
+      },
+      immediate: true
     },
     localValue (val) {
       if (this.type === 'textarea' && this.value !== val) {
