@@ -11,7 +11,7 @@
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
     "prepublishOnly": "cp -r ./src/* .",
-    "publish": "rm -rf ./components ./directives ./managers ./mixins ./plugins ./utils ./icons.js ./index.js"
+    "publish": "rm -rf ./common ./components ./directives ./managers ./mixins ./plugins ./utils ./icons.js ./index.js"
   },
   "module": "index.js",
   "dependencies": {
