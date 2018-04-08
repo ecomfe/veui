@@ -183,7 +183,6 @@ section {
   }
 }
 
-
 .five-sizes {
   & /deep/ .veui-form-label {
     text-transform: capitalize;

@@ -23,19 +23,21 @@
 
   <!-- 块 -->
   <div v-for="(_, index) in new Array(thumbCount)" :key="`thumb${index}`"
-    class="veui-slider-thumb" ref="thumb" tabindex="0"
+    class="veui-slider-thumb" ref="thumb" :tabindex="realDisabled ? false : '0'"
     :style="{
       left: `${ratios[index] * 100}%`
     }"
-    @mouseenter="handleThumbMouseEnter(index, $event)"
-    @mouseleave="handleThumbMouseLeave(index, $event)"
-    @focus="handleThumbFocus(index, $event)"
-    @blur="handleThumbBlur(index, $event)"
+    @mouseenter="handleThumbMouseEnter(index)"
+    @mouseleave="handleThumbMouseLeave(index)"
+    @focus="handleThumbFocus(index)"
+    @mousedown="handleThumbFocus(index)"
+    @blur="handleThumbBlur(index)"
+    v-outside.mousedown="() => handleThumbBlur(index)"
+    v-drag="thumbDragOptions[index]"
     v-nudge.x="{
       step: keyboardChangeStep,
       update: (...args) => handleThumbNudgeUpdage(index, ...args)
     }"
-    v-drag="thumbDragOptions[index]"
     role="slider" v-bind="thumbAttrs[index]"
   >
     <slot name="thumb" :index="index"
@@ -61,6 +63,7 @@
 import { fill, clamp, isArray, isEqual, identity } from 'lodash'
 import drag from '../directives/drag'
 import nudge from '../directives/nudge'
+import outside from '../directives/outside'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import Tooltip from './Tooltip'
@@ -71,6 +74,11 @@ export default {
     'veui-tooltip': Tooltip
   },
   mixins: [ui, input],
+  directives: {
+    drag,
+    nudge,
+    outside
+  },
   props: {
     value: true,
     secondaryProgress: {
@@ -101,9 +109,6 @@ export default {
       type: Function,
       default: identity
     }
-  },
-  directives: {
-    drag, nudge
   },
   data () {
     return {
@@ -274,10 +279,6 @@ export default {
       this.$set(this.localValues, index, val)
     },
     handleThumbFocus (index) {
-      if (this.disabled) {
-        this.$refs.thumb[index].blur()
-        return
-      }
       this.currentThumbFocusIndex = index
     },
     handleThumbBlur (index) {

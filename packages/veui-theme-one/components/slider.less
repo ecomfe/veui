@@ -63,12 +63,12 @@
     left: 0;
     // 利用 translateX 左偏移一半，实现 thumb 宽度自适应
     transform: translateX(-50%);
+    cursor: pointer;
 
     &:focus {
       outline: none;
     }
 
-    &:focus,
     &.focus-visible {
       .veui-slider-thumb-default {
         border-color: @veui-brand-color-1;

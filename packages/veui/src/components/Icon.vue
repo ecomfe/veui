@@ -12,7 +12,9 @@ export default {
     FaIcon
   },
   props: FaIcon.props,
+  /* eslint-disable vue/no-shared-component-data */
   data: FaIcon.data,
+  /* eslint-enable vue/no-shared-component-data */
   computed: FaIcon.computed,
   register: FaIcon.register
 }
