@@ -200,7 +200,7 @@ export default {
       return this.step || (this.max - this.min) / 10
     },
     noInteractive () {
-      return this.disabled || this.readonly
+      return this.realDisabled || this.realReadonly
     },
     localValueBoundary () {
       return this.getLocalValueBoundary(this.currentThumbFocusIndex)
