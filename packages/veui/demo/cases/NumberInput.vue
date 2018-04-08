@@ -18,8 +18,11 @@
         <veui-field label="Large：" ui="large" tip="基准值每次加 10">
           <veui-number-input ui="large" v-model="number4" :step="10"></veui-number-input>
         </veui-field>
+        <veui-field label="DecimalPlace = -1：" tip="不处理精度问题">
+          <veui-number-input v-model="number5" :decimal-place="-1"></veui-number-input>
+        </veui-field>
         <veui-field label="Disabled：">
-          <veui-number-input readonly v-model="number5"></veui-number-input>
+          <veui-number-input readonly v-model="number6"></veui-number-input>
         </veui-field>
       </veui-form>
     </section>
@@ -43,7 +46,8 @@ export default {
       number2: null,
       number3: null,
       number4: null,
-      number5: 1024
+      number5: null,
+      number6: 1024
     }
   }
 }
@@ -52,7 +56,7 @@ export default {
 <style lang="less" scoped>
 .veui-form {
   & /deep/ .veui-form-label {
-    width: 80px;
+    width: 130px;
     color: #999;
   }
 }

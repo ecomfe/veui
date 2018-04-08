@@ -82,8 +82,7 @@ export default {
   data () {
     return {
       localValue: this.value,
-      lastChangedValue: this.value,
-      changed: false
+      lastChangedValue: this.value
     }
   },
   watch: {
@@ -165,14 +164,19 @@ export default {
       this.$emit('blur', ...args)
     },
     handleThumbNudgeUpdate (delta) {
-      // 精度下限修正
-      if (Math.pow(10, -this.decimalPlace) > Math.abs(delta)) {
-        delta = sign(delta) * this.step
+      if (this.decimalPlace !== -1) {
+        // 精度下限修正
+        if (Math.pow(10, -this.decimalPlace) > Math.abs(delta)) {
+          delta = sign(delta) * this.step
+        }
       }
 
       let parsedVal = parseFloat(this.localValue)
       let val = this.localValue == null || isNaN(parsedVal) ? 0 : parsedVal
-      let localValue = this.calcDisplayValue(add(val, delta, this.decimalPlace))
+      let addedVal = this.decimalPlace === -1
+        ? val + delta
+        : add(val, delta, this.decimalPlace)
+      let localValue = this.calcDisplayValue(addedVal)
 
       this.localValue = localValue
       this.$emit('input', +localValue)
@@ -183,6 +187,9 @@ export default {
       this.handleThumbNudgeUpdate(this.step * sign)
     },
     calcDisplayValue (val) {
+      if (this.decimalPlace === -1) {
+        return val.toString()
+      }
       return round(val, this.decimalPlace).toFixed(this.decimalPlace)
     }
   }
