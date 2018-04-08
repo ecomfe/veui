@@ -48,7 +48,7 @@ import input from '../mixins/input'
 import Icon from './Icon'
 import { getListeners } from '../utils/helper'
 import { sign, add, round } from '../utils/math'
-import { isInteger, isNaN } from 'lodash'
+import { isInteger, isNaN, pick } from 'lodash'
 import nudge from 'veui/directives/nudge'
 
 const EVENTS = ['focus', 'click', 'keyup', 'keypress']
@@ -75,6 +75,7 @@ export default {
       type: Number,
       default: 0,
       validator (val) {
+        // -1 代表不处理精度
         return val === -1 || val >= 0 && val <= 20 && isInteger(val)
       }
     }
@@ -104,7 +105,12 @@ export default {
       return getListeners(EVENTS, this)
     },
     attrs () {
-      return this.$props
+      return {
+        ...pick(this.$props, ['autofocus', 'selectOnFocus', 'autocomplete', 'placeholder']),
+        name: this.realName,
+        disabled: this.realDisabled,
+        readonly: this.realReadonly
+      }
     },
     isLocalEmpty () {
       return this.localValue == null || this.localValue === ''
@@ -142,7 +148,10 @@ export default {
     },
     handleChange (...args) {
       if (
-        (isNaN(parseFloat(this.localValue)) || this.isLocalEmpty) && this.lastChangedValue == null ||
+        // 两种情况不需要 change
+        // 1. 无效值，并且上一次 change 的值也为空
+        // 2. 都不为空，但是 format 之后和上一次 change 的值相同
+        isNaN(parseFloat(this.localValue)) && this.lastChangedValue == null ||
         !this.isLocalEmpty && this.lastChangedValue != null &&
           this.calcDisplayValue(this.lastChangedValue) === this.calcDisplayValue(parseFloat(this.localValue))
       ) {
@@ -152,16 +161,16 @@ export default {
       this.$emit('change', this.value, args[1])
       this.lastChangedValue = this.value
     },
-    handleBlur (...args) {
+    handleBlur ($event) {
       if (this.isLocalEmpty) {
-        this.$emit('blur', ...args)
+        this.$emit('blur', $event)
         return
       }
 
       let val = parseFloat(this.localValue)
       val = isNaN(val) ? null : this.calcDisplayValue(val)
       this.localValue = val
-      this.$emit('blur', ...args)
+      this.$emit('blur', $event)
     },
     handleThumbNudgeUpdate (delta) {
       if (this.decimalPlace !== -1) {

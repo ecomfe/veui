@@ -1,4 +1,5 @@
 @import "../lib.less";
+@import (reference) "../input.less";
 
 .veui-number-input {
   position: relative;
@@ -28,7 +29,7 @@
     &:hover,
     &:active {
       & + .veui-number-input-step-down::after {
-        border-bottom-color: @veui-gray-color-5;
+        border-bottom-color: @veui-gray-color-3;
       }
     }
   }
@@ -38,10 +39,7 @@
 
     &::after {
       content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
+      .absolute(0, 0, _);
       border-bottom: 1px solid transparent;
     }
 
@@ -49,9 +47,21 @@
       &:hover,
       &:active {
         &::after {
-          border-bottom-color: @veui-gray-color-5;
+          border-bottom-color: @veui-gray-color-3;
         }
       }
+    }
+  }
+
+  .veui-field-invalid & {
+    &:extend(._veui-input-invalid all);
+  }
+
+  &:hover,
+  &-focused {
+    &,
+    & .veui-button:not(.veui-disabled):not(.veui-readonly) {
+      border-color: @veui-gray-color-3;
     }
   }
 
