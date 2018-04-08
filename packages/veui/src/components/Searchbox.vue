@@ -254,8 +254,7 @@ export default {
     // fontSize：用来估摸一个clear的icon按钮的宽度
     // 8: css写的clear-icon的右边距
     // -3: 粗略估算 cross-small icon本身的左留白
-    // 10: input的左padding
-    this.inputRightPadding = $search.clientWidth + 10 + (this.clearable ? (fontSize + 8 - 3) : 0)
+    this.inputRightPadding = $search.clientWidth + (this.clearable ? (fontSize + 8 - 3) : 0)
   }
 }
 </script>
