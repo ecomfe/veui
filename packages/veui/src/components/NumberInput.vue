@@ -9,6 +9,8 @@
     v-on="listeners"
     v-bind="attrs"
     @blur="handleBlur"
+    @input="handleInput"
+    @change="handleChange"
     :class="{
       'veui-number-input': true,
       'veui-readonly': realReadonly,
@@ -73,35 +75,28 @@ export default {
       type: Number,
       default: 0,
       validator (val) {
-        return val >= 0 && val <= 20 && isInteger(val)
+        return val === -1 || val >= 0 && val <= 20 && isInteger(val)
       }
     }
   },
   data () {
     return {
-      localValue: this.value
+      localValue: this.value,
+      lastChangedValue: this.value,
+      changed: false
     }
   },
   watch: {
-    localValue (val) {
-      if (val == null) {
-        this.$emit('input', null)
-        return
-      }
-
-      val = parseFloat(val)
-      if (val !== parseFloat(this.value)) {
-        this.$emit('input', isNaN(val) ? null : +this.calcDisplayValue(val))
-      }
-    },
     value (val) {
-      if (val == null) {
+      if (val == null && !this.isLocalEmpty) {
         this.localValue = null
+        this.lastChangedValue = null
         return
       }
 
-      if (parseFloat(val) !== parseFloat(this.value)) {
+      if (val != null && parseFloat(val) !== parseFloat(this.value)) {
         this.localValue = this.calcDisplayValue(val)
+        this.lastChangedValue = val
       }
     }
   },
@@ -111,19 +106,63 @@ export default {
     },
     attrs () {
       return this.$props
+    },
+    isLocalEmpty () {
+      return this.localValue == null || this.localValue === ''
     }
   },
   methods: {
-    handleBlur () {
-      if (this.localValue == null) {
-        this.$emit('blur', null)
+    handleInput (val, $event) {
+      // 处理清空
+      if (this.value != null && val === '') {
+        this.$emit('input', null, $event)
+        return
+      }
+
+      // 处理 input 无效值或等价值
+      let parsedVal = parseFloat(val)
+      let parsedOldVal = parseFloat(this.value)
+
+      // 等价或首次输入无效值
+      if (isNaN(parsedVal) && isNaN(parsedOldVal) ||
+        this.calcDisplayValue(parsedVal) === this.calcDisplayValue(parsedOldVal)
+      ) {
+        // 留给 blur 处理
+        return
+      }
+
+      // 存在旧值的情况下输入非数字，直接拒绝 dom 上的修改，保持原有值
+      if (isNaN(parsedVal) && this.value != null) {
+        this.$nextTick(() => {
+          this.localValue = this.calcDisplayValue(parsedOldVal)
+        })
+        return
+      }
+
+      this.$emit('input', +this.calcDisplayValue(parsedVal), $event)
+    },
+    handleChange (...args) {
+      if (
+        (isNaN(parseFloat(this.localValue)) || this.isLocalEmpty) && this.lastChangedValue == null ||
+        !this.isLocalEmpty && this.lastChangedValue != null &&
+          this.calcDisplayValue(this.lastChangedValue) === this.calcDisplayValue(parseFloat(this.localValue))
+      ) {
+        return
+      }
+
+      this.$emit('change', this.value, args[1])
+      this.lastChangedValue = this.value
+    },
+    handleBlur (...args) {
+      if (this.isLocalEmpty) {
+        this.$emit('blur', ...args)
         return
       }
 
       let val = parseFloat(this.localValue)
       val = isNaN(val) ? null : this.calcDisplayValue(val)
       this.localValue = val
-      this.$emit('blur', val)
+      this.$emit('blur', ...args)
     },
     handleThumbNudgeUpdate (delta) {
       // 精度下限修正
@@ -131,14 +170,14 @@ export default {
         delta = sign(delta) * this.step
       }
 
-      let val = this.localValue == null ? 0 : parseFloat(this.localValue)
+      let parsedVal = parseFloat(this.localValue)
+      let val = this.localValue == null || isNaN(parsedVal) ? 0 : parsedVal
+      let localValue = this.calcDisplayValue(add(val, delta, this.decimalPlace))
 
-      if (isNaN(val)) {
-        this.localValue = null
-        return
-      }
-
-      this.localValue = this.calcDisplayValue(add(val, delta, this.decimalPlace))
+      this.localValue = localValue
+      this.$emit('input', +localValue)
+      this.$emit('change', +localValue)
+      this.lastChangedValue = +localValue
     },
     handleStep (sign) {
       this.handleThumbNudgeUpdate(this.step * sign)

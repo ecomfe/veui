@@ -195,7 +195,7 @@ section {
 .input-nudge {
   position: relative;
 
-  input {
+  /deep/ input {
     padding-right: 20px;
   }
 }

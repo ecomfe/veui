@@ -26,21 +26,30 @@
   .veui-button&-step-up:not(.veui-disabled):not(.veui-readonly) {
     &:hover,
     &:active {
-      & + .veui-number-input-step-down {
-        border-top-color: @veui-gray-color-5;
+      & + .veui-number-input-step-down::after {
+        border-bottom-color: @veui-gray-color-5;
       }
     }
   }
 
   .veui-button&-step-down {
     bottom: 0;
-    border-top-width: 1px;
-    border-top-color: transparent;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      border-bottom: 1px solid transparent;
+    }
 
     &:not(.veui-disabled):not(.veui-readonly) {
       &:hover,
       &:active {
-        border-top-color: @veui-gray-color-5;
+        &::after {
+          border-bottom-color: @veui-gray-color-5;
+        }
       }
     }
   }
