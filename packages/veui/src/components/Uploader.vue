@@ -251,8 +251,11 @@ export default {
     autoUpload: {
       type: Boolean,
       default: true,
-      validator () {
-        warn('[veui-uploader] `auto-upload` is deprecated and will be removed in the next version. Use `autoupload` instead.')
+      validator (val) {
+        if (val === false) {
+          warn('[veui-uploader] `auto-upload` is deprecated and will be removed in the next version. Use `autoupload` instead.')
+        }
+        return true
       }
     },
     autoupload: {
