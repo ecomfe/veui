@@ -12,7 +12,7 @@
 import { isBoolean, isUndefined, isFunction, includes, assign, zipObject, map, keys, debounce, omit } from 'lodash'
 import { getVnodes } from '../../utils/context'
 import ui from '../../mixins/ui'
-import '../../config/uiTypes'
+import '../../common/uiTypes'
 
 export default {
   name: 'veui-form',

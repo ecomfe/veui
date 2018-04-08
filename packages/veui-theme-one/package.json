@@ -20,7 +20,7 @@
     "less-plugin-est": "^2.0.5"
   },
   "peerDependencies": {
-    "veui": "1.0.0-alpha.10"
+    "veui": "1.0.0-alpha.11"
   },
   "devDependencies": {
     "stylelint": "^8.4.0",

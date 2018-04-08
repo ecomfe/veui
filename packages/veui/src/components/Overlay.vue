@@ -20,7 +20,7 @@ import focusManager from '../managers/focus'
 import config from '../managers/config'
 import ui from '../mixins/ui'
 import { getClassPropDef, isType } from '../utils/helper'
-import '../config/uiTypes'
+import '../common/uiTypes'
 
 config.defaults({
   'overlay.baseZIndex': 200

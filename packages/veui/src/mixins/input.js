@@ -1,5 +1,5 @@
 import { getTypedAncestorTracker, isTopMostOfType } from '../utils/helper'
-import '../config/uiTypes'
+import '../common/uiTypes'
 
 export default {
   uiTypes: ['input'],

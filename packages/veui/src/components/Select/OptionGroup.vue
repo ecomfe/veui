@@ -9,7 +9,7 @@ import menu from '../../mixins/menu'
 import select from '../../mixins/select'
 import keySelect from '../../mixins/key-select'
 import outside from '../../directives/outside'
-import '../../config/uiTypes'
+import '../../common/uiTypes'
 import { walk } from '../../utils/data'
 import { pull } from 'lodash'
 

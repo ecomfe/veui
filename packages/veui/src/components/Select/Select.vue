@@ -12,7 +12,7 @@ import dropdown from '../../mixins/dropdown'
 import warn from '../../utils/warn'
 import { walk } from '../../utils/data'
 import { cloneDeep } from 'lodash'
-import '../../config/uiTypes'
+import '../../common/uiTypes'
 
 export default {
   name: 'veui-select',

@@ -31,7 +31,7 @@ import { isBoolean, get, last, includes } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
 import Vue from 'vue'
-import '../../config/uiTypes'
+import '../../common/uiTypes'
 
 const { computed: form } = getTypedAncestorTracker('form')
 const { computed: fieldset } = getTypedAncestorTracker('fieldset')
