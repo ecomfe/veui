@@ -2,21 +2,17 @@
 @import (reference) "../input.less";
 
 .veui-number-input {
-  position: relative;
-
-  &.veui-input {
-    width: 110px;
-    padding-right: 28px;
+  &-controls {
+    width: 28px;
+    height: 100%;
   }
 
   .veui-button&-step-up,
   .veui-button&-step-down {
-    position: absolute;
-    right: 0;
-    width: 28px;
-    height: 50%;
+    display: block;
+    position: relative;
+    .size(100%, 50%);
     padding: 0;
-    z-index: 1;
     border-width: 0 0 0 1px;
 
     .veui-icon {
@@ -25,7 +21,12 @@
     }
   }
 
+  &-focused.veui-input {
+    border-color: @veui-gray-color-3;
+  }
+
   .veui-button&-step-up:not(.veui-disabled):not(.veui-readonly) {
+    &.focus-visible,
     &:hover,
     &:active {
       & + .veui-number-input-step-down::after {
@@ -44,6 +45,7 @@
     }
 
     &:not(.veui-disabled):not(.veui-readonly) {
+      &.focus-visible,
       &:hover,
       &:active {
         &::after {

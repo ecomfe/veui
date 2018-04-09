@@ -18,23 +18,34 @@
   transition: border-color .2s, color .2s;
 
   &-hidden {
-    display: none;
+    display: none !important;
+  }
+
+  &-before {
+    float: left;
+    height: 100%;
+  }
+
+  &-after {
+    float: right;
+    height: 100%;
+  }
+
+  &-main {
+    overflow: hidden;
+    height: 100%;
   }
 
   &-input {
-    float: left;
-    position: relative;
+    display: block;
+    overflow: hidden;
     width: 100%;
-    padding: 0 10px;
-
-    // 和外部容器的高度保持一致
     height: 100%;
-    min-height: inherit;
-    max-height: inherit;
-
     border: none;
     outline: none;
-    z-index: 1;
+    padding: 0 10px;
+    background-color: transparent;
+    text-overflow: ellipsis;
   }
 
   .veui-field-invalid & {
@@ -52,14 +63,12 @@
 
   &.veui-readonly,
   &.veui-disabled {
+    background-color: @veui-gray-color-8;
+
     &,
     &:hover {
       border-color: @veui-gray-color-5;
       color: @veui-text-color-weak;
-    }
-
-    & .veui-input-input {
-      background-color: @veui-gray-color-8;
     }
   }
 

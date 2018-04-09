@@ -10,19 +10,25 @@
   }"
   :ui="ui"
 >
-  <slot name="before"></slot>
-  <input
-    ref="input"
-    class="veui-input-input"
-    v-model="localValue"
-    v-bind="attrs"
-    v-on="listeners"
-    @focus="handleFocus"
-    @blur="handleBlur"
-    @input="handleInput"
-    @change="$emit('change', $event.target.value, $event)"
-  >
-  <slot name="after"></slot>
+  <template v-if="$slots.before">
+    <div class="veui-input-before"><slot name="before"></slot></div>
+  </template>
+  <template v-if="$slots.after">
+    <div class="veui-input-after"><slot name="after"></slot></div>
+  </template>
+  <div class="veui-input-main">
+    <input
+      ref="input"
+      class="veui-input-input"
+      v-model="localValue"
+      v-bind="attrs"
+      v-on="listeners"
+      @focus="handleFocus"
+      @blur="handleBlur"
+      @input="handleInput"
+      @change="$emit('change', $event.target.value, $event)"
+    >
+  </div>
 </div>
 <veui-textarea
   v-else
@@ -101,7 +107,8 @@ export default {
         ),
         name: this.realName,
         disabled: this.realDisabled,
-        readonly: this.realReadonly
+        readonly: this.realReadonly,
+        ...this.$attrs
       }
     },
     listeners () {

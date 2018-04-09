@@ -5,36 +5,51 @@
     }"
     :ui="ui"
     type="text"
+    ref="input"
     v-model="localValue"
     v-on="listeners"
     v-bind="attrs"
     @blur="handleBlur"
     @input="handleInput"
     @change="handleChange"
+    @focus="handleFocus"
+    @focus.native="$refs.input.focus()"
+    @keydown="handleKeydown"
+    @focusin.native="focused = true"
+    @focusout.native="focused = false"
+    :tabindex="inputFocusable ? '0' : '-1'"
     :class="{
       'veui-number-input': true,
       'veui-readonly': realReadonly,
-      'veui-disabled': realDisabled
+      'veui-disabled': realDisabled,
+      'veui-number-input-focused': focused
     }"
   >
     <template slot="before">
       <slot name="before"></slot>
     </template>
     <template slot="after">
-      <veui-button
-        class="veui-number-input-step-up"
-        @click="handleStep(1)"
-        :disabled="realReadonly || realDisabled"
-      >
-        <veui-icon :name="icons.increase"></veui-icon>
-      </veui-button>
-      <veui-button
-        class="veui-number-input-step-down"
-        @click="handleStep(-1)"
-        :disabled="realReadonly || realDisabled"
-      >
-        <veui-icon :name="icons.decrease"></veui-icon>
-      </veui-button>
+      <div class="veui-number-input-controls">
+        <veui-button
+          ref="inc"
+          class="veui-number-input-step-up"
+          @click="handleStep(1)"
+          :disabled="realReadonly || realDisabled"
+          :tabindex="controlFocusable ? '0' : '-1'"
+        >
+          <veui-icon :name="icons.increase"/>
+        </veui-button>
+        <veui-button
+          class="veui-number-input-step-down"
+          @click="handleStep(-1)"
+          @focus="inputFocusable = false"
+          @blur="enableInputFocus"
+          :disabled="realReadonly || realDisabled"
+          :tabindex="controlFocusable ? '0' : '-1'"
+        >
+          <veui-icon :name="icons.decrease"/>
+        </veui-button>
+      </div>
       <slot name="after"></slot>
     </template>
   </veui-input>
@@ -51,7 +66,7 @@ import { sign, add, round } from '../utils/math'
 import { isInteger, isNaN, pick } from 'lodash'
 import nudge from 'veui/directives/nudge'
 
-const EVENTS = ['focus', 'click', 'keyup', 'keypress']
+const EVENTS = ['focus', 'blur', 'click', 'keyup', 'keypress']
 
 export default {
   name: 'veui-number-input',
@@ -83,7 +98,11 @@ export default {
   data () {
     return {
       localValue: this.value,
-      lastChangedValue: this.value
+      lastChangedValue: this.value,
+      focused: false,
+      forward: true,
+      inputFocusable: true,
+      controlFocusable: true
     }
   },
   watch: {
@@ -122,7 +141,45 @@ export default {
       return this.localValue == null || this.localValue === ''
     }
   },
+  mounted () {
+    this.handleGlobalKeydown = ({ key }) => {
+      if (key === 'Shift') {
+        this.forward = false
+      }
+    }
+    this.handleGlobalKeyup = ({ key }) => {
+      if (key === 'Shift') {
+        this.forward = true
+      }
+    }
+    document.addEventListener('keydown', this.handleGlobalKeydown)
+    document.addEventListener('keyup', this.handleGlobalKeyup)
+  },
+  destroyed () {
+    document.removeEventListener('keydown', this.handleGlobalKeydown)
+    document.removeEventListener('keyup', this.handleGlobalKeyup)
+  },
   methods: {
+    handleKeydown ($event) {
+      switch ($event.key) {
+        case 'Tab':
+          if (this.forward) {
+            this.$refs.inc.focus()
+            $event.preventDefault()
+          }
+          break
+        default:
+          break
+      }
+    },
+    handleFocus ($event) {
+      if (this.forward) {
+        this.enableControlFocus()
+      } else {
+        this.controlFocusable = false
+      }
+      this.inputFocusable = false
+    },
     handleInput (val, $event) {
       // 处理清空
       if (this.value != null && val === '') {
@@ -168,6 +225,8 @@ export default {
       this.lastChangedValue = this.value
     },
     handleBlur ($event) {
+      this.enableInputFocus()
+
       if (this.isLocalEmpty) {
         this.$emit('blur', $event)
         return
@@ -206,6 +265,16 @@ export default {
         return val.toString()
       }
       return round(val, this.decimalPlace).toFixed(this.decimalPlace)
+    },
+    enableInputFocus () {
+      setTimeout(() => {
+        this.inputFocusable = true
+      }, 0)
+    },
+    enableControlFocus () {
+      setTimeout(() => {
+        this.controlFocusable = true
+      }, 0)
     }
   }
 }

@@ -190,18 +190,4 @@ section {
     color: #999;
   }
 }
-
-.input-nudge {
-  position: relative;
-
-  /deep/ input {
-    padding-right: 20px;
-  }
-}
-
-.input-after-slot {
-  position: absolute;
-  right: 5px;
-  z-index: 1;
-}
 </style>
