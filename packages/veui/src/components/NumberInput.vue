@@ -87,16 +87,22 @@ export default {
     }
   },
   watch: {
-    value (val) {
+    value (val, oldVal) {
+      // 这里主要处理 set 进来的情况
+      // 1. 输入框内有值，set null
+      // 2. set 的值和输入框内的值不一样
       if (val == null && !this.isLocalEmpty) {
         this.localValue = null
         this.lastChangedValue = null
         return
       }
 
-      if (val != null && parseFloat(val) !== parseFloat(this.value)) {
-        this.localValue = this.calcDisplayValue(val)
-        this.lastChangedValue = val
+      // set 进来也要 format 到精度范围内，所以要 $emit('input') 同步回去
+      let localValue = this.calcDisplayValue(val)
+      if (val != null && localValue !== this.calcDisplayValue(this.localValue)) {
+        this.localValue = localValue
+        this.$emit('input', +localValue)
+        this.lastChangedValue = +localValue
       }
     }
   },

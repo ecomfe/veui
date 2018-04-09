@@ -132,16 +132,16 @@ export default {
         this.$emit('input', $event.target.value, $event)
       }
     },
-    handleTextareaChange (value, event) {
-      this.$emit('change', value, event)
+    handleTextareaChange (value, $event) {
+      this.$emit('change', value, $event)
     },
-    handleFocus (e) {
+    handleFocus ($event) {
       this.focused = true
-      this.$emit('focus', e)
+      this.$emit('focus', $event)
     },
-    handleBlur (e) {
+    handleBlur ($event) {
       this.focused = false
-      this.$emit('blur', e)
+      this.$emit('blur', $event)
     },
     focus () {
       this.$refs.input.focus()
@@ -157,7 +157,7 @@ export default {
         // this.$on('focus', handlePlaceHolder)
       }
       if (this.selectOnFocus) {
-        this.$on('focus', (e) => e.target.select())
+        this.$on('focus', ($event) => $event.target.select())
       }
     }
   }
