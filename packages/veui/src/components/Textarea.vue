@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     listeners () {
-      return getListeners(EVENTS)
+      return getListeners(EVENTS, this)
     },
     normalizedRows () {
       let rows = Number(this.rows)
