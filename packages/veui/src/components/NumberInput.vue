@@ -35,8 +35,8 @@
           ref="inc"
           class="veui-number-input-step-up"
           @click="handleStep(1)"
-          :disabled="realReadonly || realDisabled"
-          :tabindex="controlFocusable ? '0' : '-1'"
+          :disabled="!editable"
+          :tabindex="editable ? (controlFocusable ? '0' : '-1') : false"
         >
           <veui-icon :name="icons.increase"/>
         </veui-button>
@@ -45,8 +45,8 @@
           @click="handleStep(-1)"
           @focus="inputFocusable = false"
           @blur="enableInputFocus"
-          :disabled="realReadonly || realDisabled"
-          :tabindex="controlFocusable ? '0' : '-1'"
+          :disabled="!editable"
+          :tabindex="editable ? (controlFocusable ? '0' : '-1') : false"
         >
           <veui-icon :name="icons.decrease"/>
         </veui-button>
@@ -145,6 +145,9 @@ export default {
       return this.realDisabled
         ? false
         : this.inputFocusable ? '0' : '-1'
+    },
+    editable () {
+      return !this.realDisabled && !this.realReadonly
     }
   },
   mounted () {
@@ -169,7 +172,7 @@ export default {
     handleKeydown ($event) {
       switch ($event.key) {
         case 'Tab':
-          if (this.forward) {
+          if (this.forward && this.editable) {
             this.$refs.inc.focus()
             $event.preventDefault()
           }
@@ -256,6 +259,10 @@ export default {
       this.$emit('blur', $event)
     },
     handleThumbNudgeUpdate (delta) {
+      if (!this.editable) {
+        return
+      }
+
       if (this.decimalPlace !== -1) {
         // 精度下限修正
         if (Math.pow(10, -this.decimalPlace) > Math.abs(delta)) {
