@@ -15,9 +15,10 @@
     @focus="handleFocus"
     @focus.native="$refs.input.focus()"
     @keydown="handleKeydown"
+    @keyup="handleKeyup"
     @focusin.native="focused = true"
     @focusout.native="focused = false"
-    :tabindex="inputFocusable ? '0' : '-1'"
+    :tabindex="tabindex"
     :class="{
       'veui-number-input': true,
       'veui-readonly': realReadonly,
@@ -139,6 +140,11 @@ export default {
     },
     isLocalEmpty () {
       return this.localValue == null || this.localValue === ''
+    },
+    tabindex () {
+      return this.realDisabled
+        ? false
+        : this.inputFocusable ? '0' : '-1'
     }
   },
   mounted () {
@@ -167,6 +173,18 @@ export default {
             this.$refs.inc.focus()
             $event.preventDefault()
           }
+          break
+        case 'Shift':
+          this.controlFocusable = false
+          break
+        default:
+          break
+      }
+    },
+    handleKeyup ($event) {
+      switch ($event.key) {
+        case 'Shift':
+          this.enableControlFocus()
           break
         default:
           break
