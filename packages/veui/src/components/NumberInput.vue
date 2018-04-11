@@ -35,7 +35,7 @@
           ref="inc"
           class="veui-number-input-step-up"
           @click="handleStep(1)"
-          :disabled="!editable"
+          :disabled="!editable || reachMaxLimit"
           :tabindex="editable ? (controlFocusable ? '0' : '-1') : false"
         >
           <veui-icon :name="icons.increase"/>
@@ -45,7 +45,7 @@
           @click="handleStep(-1)"
           @focus="inputFocusable = false"
           @blur="enableInputFocus"
-          :disabled="!editable"
+          :disabled="!editable || reachMinLimit"
           :tabindex="editable ? (controlFocusable ? '0' : '-1') : false"
         >
           <veui-icon :name="icons.decrease"/>
@@ -64,10 +64,11 @@ import input from '../mixins/input'
 import Icon from './Icon'
 import { getListeners } from '../utils/helper'
 import { sign, add, round } from '../utils/math'
-import { isInteger, isNaN, pick } from 'lodash'
+import warn from '../utils/warn'
+import { isInteger, isNaN, pick, get, find } from 'lodash'
 import nudge from 'veui/directives/nudge'
 
-const EVENTS = ['focus', 'blur', 'click', 'keyup', 'keypress']
+const EVENTS = ['focus', 'blur', 'click', 'keyup', 'keydown', 'keypress']
 
 export default {
   name: 'veui-number-input',
@@ -94,7 +95,9 @@ export default {
         // -1 代表不处理精度
         return val === -1 || val >= 0 && val <= 20 && isInteger(val)
       }
-    }
+    },
+    max: Number,
+    min: Number
   },
   data () {
     return {
@@ -107,6 +110,8 @@ export default {
     }
   },
   watch: {
+    // value 和 localValue 仅在能正确 parse 及上下限限制内时保持同步，
+    // value 只关心有效的数字值，localValue 是一个展示的中间状态
     value (val, oldVal) {
       // 这里主要处理 set 进来的情况
       // 1. 输入框内有值，set null
@@ -117,11 +122,15 @@ export default {
         return
       }
 
-      // set 进来也要 format 到精度范围内，所以要 $emit('input') 同步回去
       let localValue = this.calcDisplayValue(val)
-      if (val != null && localValue !== this.calcDisplayValue(this.localValue)) {
+      if (val != null && localValue !== this.calcDisplayValue(parseFloat(this.localValue))) {
         this.localValue = localValue
-        this.$emit('input', +localValue)
+
+        if (+localValue !== val) {
+          // set 进来也要 format 到精度范围内，如果不在精度内，要 $emit('input') 同步回去
+          this.$emit('input', +localValue)
+        }
+
         this.lastChangedValue = +localValue
       }
     }
@@ -148,6 +157,34 @@ export default {
     },
     editable () {
       return !this.realDisabled && !this.realReadonly
+    },
+    realMax () {
+      let max = this.max
+      if (get(this, 'formField.localRules.length')) {
+        return get(find(this.formField.localRules, ({ name }) => name === 'max'), 'value') || max
+      }
+      return max
+    },
+    realMin () {
+      let min = this.min
+      if (get(this, 'formField.localRules.length')) {
+        return get(find(this.formField.localRules, ({ name }) => name === 'min'), 'value') || min
+      }
+      return min
+    },
+    reachMaxLimit () {
+      return this.realMax != null && this.value >= this.realMax
+    },
+    reachMinLimit () {
+      return this.realMin != null && this.value <= this.realMin
+    }
+  },
+  created () {
+    if (this.realMax < this.realMin) {
+      warn('[veui-number-input] `max` value must be greater than `min` value')
+    }
+    if (this.value > this.realMax || this.value < this.realMin) {
+      warn('[veui-number-input] `value` must be greater than `min` value or less than `max` value')
     }
   },
   mounted () {
@@ -208,36 +245,45 @@ export default {
         return
       }
 
-      // 处理 input 无效值或等价值
       let parsedVal = parseFloat(val)
       let parsedOldVal = parseFloat(this.value)
 
-      // 等价或首次输入无效值
-      if (isNaN(parsedVal) && isNaN(parsedOldVal) ||
-        this.calcDisplayValue(parsedVal) === this.calcDisplayValue(parsedOldVal)
+      // 1. 等价或首次输入无效值
+      // 2. 存在旧值的情况下输入无效值
+      if (this.calcDisplayValue(parsedVal) === this.calcDisplayValue(parsedOldVal) ||
+        isNaN(parsedVal) && this.value != null
       ) {
-        // 留给 blur 处理
-        return
-      }
-
-      // 存在旧值的情况下输入非数字，直接拒绝 dom 上的修改，保持原有值
-      if (isNaN(parsedVal) && this.value != null) {
-        this.$nextTick(() => {
-          this.localValue = this.calcDisplayValue(parsedOldVal)
-        })
+        // 不同步，保留原来的有效值，等 change 和 blur 处理
         return
       }
 
       this.$emit('input', +this.calcDisplayValue(parsedVal), $event)
     },
     handleChange (...args) {
+      // change 产生的值有 5 种类型
+      // 1. null 或 ''，表示清空
+      // 2. 无效值
+      // 3. 跨越上限
+      // 4. 跨越精度
+      // 5. 正常
+
+      // 存在 6 种情况不需要 change
+      // 1. 无效值，但上一次 change 的值不为空
+      // 2. 无效值，并且上一次 change 的值为空
+      // 3. 都为空
+      // 4. 都不为空但 format 之后和上一次 change 的值相同
+      // 5. 经过精度精确后和上一次 change 的值相同
+      // 6. 经过上下限重置后和上一次 change 的值相同
+
+      // 处理 1，需要重置值
+      if (!this.isLocalEmpty && isNaN(parseFloat(this.localValue)) && this.lastChangedValue != null) {
+        this.localValue = this.calcDisplayValue(this.lastChangedValue)
+        return
+      }
+
+      // 处理 2-6
       if (
-        // 两种情况不需要 change
-        // 1. 无效值，并且上一次 change 的值也为空
-        // 2. 都不为空，但是 format 之后和上一次 change 的值相同
-        isNaN(parseFloat(this.localValue)) && this.lastChangedValue == null ||
-        !this.isLocalEmpty && this.lastChangedValue != null &&
-          this.calcDisplayValue(this.lastChangedValue) === this.calcDisplayValue(parseFloat(this.localValue))
+        this.calcDisplayValue(this.lastChangedValue) === this.calcDisplayValue(parseFloat(this.localValue))
       ) {
         return
       }
@@ -249,17 +295,18 @@ export default {
       this.enableInputFocus()
 
       if (this.isLocalEmpty) {
-        this.$emit('blur', $event)
         return
       }
 
-      let val = parseFloat(this.localValue)
-      val = isNaN(val) ? null : this.calcDisplayValue(val)
+      // 处理产生 change 但是 format 后需要更新展示的情况，例如 null => +1s (change) => 1 (blur)
+      let val = this.calcDisplayValue(parseFloat(this.localValue))
       this.localValue = val
-      this.$emit('blur', $event)
     },
     handleThumbNudgeUpdate (delta) {
-      if (!this.editable) {
+      if (!this.editable ||
+        this.reachMaxLimit && sign(delta) > 0 ||
+        this.reachMinLimit && sign(delta) < 0
+      ) {
         return
       }
 
@@ -270,8 +317,19 @@ export default {
         }
       }
 
-      let parsedVal = parseFloat(this.localValue)
-      let val = this.localValue == null || isNaN(parsedVal) ? 0 : parsedVal
+      let val = this.value
+      if (val != null) {
+        // 超过上下限后操作，直接越值
+        if (this.value > this.realMax && sign(delta) < 0) {
+          val = this.realMax
+        } else if (this.value < this.realMin && sign(delta) > 0) {
+          val = this.realMin
+        }
+      } else {
+        // 如果原来没有值，默认从 0 开始
+        val = 0
+      }
+
       let addedVal = this.decimalPlace === -1
         ? val + delta
         : add(val, delta, this.decimalPlace)
@@ -279,17 +337,40 @@ export default {
 
       this.localValue = localValue
       this.$emit('input', +localValue)
-      this.$emit('change', +localValue)
-      this.lastChangedValue = +localValue
+
+      if (this.lastChangedValue !== +localValue) {
+        this.$emit('change', +localValue)
+        this.lastChangedValue = +localValue
+      }
     },
     handleStep (sign) {
       this.handleThumbNudgeUpdate(this.step * sign)
     },
+    filterLimitValue (val) {
+      // 仅处理上下限问题
+      if (isNaN(val) || val == null || val === '') {
+        return val
+      }
+
+      if (this.realMax && val > this.realMax) {
+        return this.realMax
+      }
+
+      if (this.realMin && val < this.realMin) {
+        return this.realMin
+      }
+
+      return val
+    },
     calcDisplayValue (val) {
+      if (isNaN(val) || val == null || val === '') {
+        return null
+      }
+
       if (this.decimalPlace === -1) {
         return val.toString()
       }
-      return round(val, this.decimalPlace).toFixed(this.decimalPlace)
+      return round(this.filterLimitValue(val), this.decimalPlace).toFixed(this.decimalPlace)
     },
     enableInputFocus () {
       setTimeout(() => {
