@@ -18,6 +18,10 @@
   >
   > 同时，更建议使用 `RadioGroup` 组件来实现单选组，因为它会有更简单的 API 和可访问性。
 
+### 💡 主要变更
+
+* [+] `NumberInput` 新增 `max`/`min` prop，优先从直接父组件 `Field` 的 prop `rule` 中继承 `max`/`min` rule 的值。
+
 ### 🐞 问题修复
 
 * [^] 修复了 `Textarea` 触发事件时没有正确处理 `this` 的问题。

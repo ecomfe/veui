@@ -58,13 +58,13 @@
             <veui-input class="input-nudge" v-nudge.y="{
               update: handleThumbNudgeUpdate
             }" v-model="price" @focus="log('focus')">
-              <span class="input-after-slot" slot="after">元</span>
+              <template slot="after">元</template>
             </veui-input>
             <veui-input class="input-nudge" v-model="price" readonly>
-              <span class="input-after-slot" slot="after">元</span>
+              <template slot="after">元</template>
             </veui-input>
             <veui-input class="input-nudge" v-model="price" disabled>
-              <span class="input-after-slot" slot="after">元</span>
+              <template slot="after">元</template>
             </veui-input>
         </veui-field>
       </section>
@@ -180,6 +180,10 @@ section {
     &.fixed-height {
       height: 200px;
     }
+  }
+
+  /deep/ .veui-input-after {
+    padding-right: 5px;
   }
 }
 
