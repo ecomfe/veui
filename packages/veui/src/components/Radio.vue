@@ -20,7 +20,7 @@ export default {
   inheritAttrs: false,
   mixins: [ui, input],
   model: {
-    prop: 'checked',
+    prop: 'model',
     event: 'change'
   },
   props: {
@@ -28,7 +28,8 @@ export default {
       type: null,
       default: true
     },
-    checked: null
+    checked: Boolean,
+    model: null
   },
   data () {
     return {
@@ -46,13 +47,26 @@ export default {
     }
   },
   watch: {
-    checked (value) {
-      this.localChecked = value
+    checked (val) {
+      this.localChecked = val
     },
-    localChecked (value) {
-      if (this.checked !== value) {
-        this.$emit('change', value)
-      }
+    localChecked: {
+      handler (val) {
+        if (this.checked !== val) {
+          this.$emit('update:checked', val)
+        }
+
+        if (val) {
+          this.$emit('change', this.value)
+        }
+      },
+      immediate: true
+    },
+    model: {
+      handler (val) {
+        this.localChecked = val === null ? false : this.value === val
+      },
+      immediate: true
     }
   }
 }

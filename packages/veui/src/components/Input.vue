@@ -11,10 +11,10 @@
   :ui="ui"
 >
   <template v-if="$slots.before">
-    <div class="veui-input-before"><slot name="before"></slot></div>
+    <div class="veui-input-before"><slot name="before"/></div>
   </template>
   <template v-if="$slots.after">
-    <div class="veui-input-after"><slot name="after"></slot></div>
+    <div class="veui-input-after"><slot name="after"/></div>
   </template>
   <div class="veui-input-main">
     <input
@@ -37,7 +37,7 @@
   v-bind="attrs"
   v-on="listeners"
   @change="handleTextareaChange"
-></veui-textarea>
+/>
 </template>
 
 <script>
@@ -47,7 +47,7 @@ import Textarea from './Textarea'
 import { getListeners } from '../utils/helper'
 import warn from '../utils/warn'
 
-const EVENTS = ['click', 'keyup', 'keydown', 'keypress']
+const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
 const TYPE_LIST = ['text', 'password', 'hidden', 'textarea']
 
 export default {
@@ -112,7 +112,7 @@ export default {
       }
     },
     listeners () {
-      return getListeners(this.type !== 'textarea' ? EVENTS : ['focus', 'blur', ...EVENTS], this)
+      return getListeners(EVENTS, this)
     }
   },
   watch: {
@@ -144,11 +144,9 @@ export default {
     },
     handleFocus ($event) {
       this.focused = true
-      this.$emit('focus', $event)
     },
     handleBlur ($event) {
       this.focused = false
-      this.$emit('blur', $event)
     },
     focus () {
       this.$refs.input.focus()
