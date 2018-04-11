@@ -5,7 +5,7 @@
   role="radiogroup"
   :aria-readonly="String(realReadonly)"
   :aria-disabled="String(realDisabled)">
-  <radio
+  <veui-radio
     :ui="ui"
     :name="localName"
     v-for="(item, index) in items"
@@ -17,7 +17,7 @@
     :aria-posinset="index + 1"
     :aria-setsize="items.length">
     <slot v-bind="item">{{ item.label }}</slot>
-  </radio>
+  </veui-radio>
 </div>
 </template>
 
@@ -30,7 +30,7 @@ import { uniqueId } from 'lodash'
 export default {
   name: 'veui-radio-group',
   components: {
-    'radio': Radio
+    'veui-radio': Radio
   },
   mixins: [ui, input],
   model: {

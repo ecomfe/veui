@@ -1,46 +1,62 @@
 <template>
   <article>
     <h1><code>&lt;veui-radio&gt;</code></h1>
-    <p>
-      <veui-radio name="a" value="normal" v-model="a1">正常状态</veui-radio>
-    </p>
-    <p>
-      <veui-radio name="a" value="small" ui="small" v-model="a2">正常状态</veui-radio>
-    </p>
-    <p>
-      <veui-radio checked>选中状态</veui-radio>
-    </p>
-    <p>
+    <section>
+      <h3><code>v-model</code></h3>
+      <p><veui-button ui="small" @click="size = size === 'normal' ? 'small' : 'normal'">Toggle</veui-button></p>
+      <p>
+        <veui-radio value="normal" name="size" v-model="size">正常状态</veui-radio>
+        <veui-radio value="small" checked ui="small" name="size" v-model="size">正常状态（小）</veui-radio>
+      </p>
+      <p>Size: {{ size }}</p>
+    </section>
+    <section>
+      <h3><code>:checked.sync</code></h3>
+      <p><veui-button ui="small" @click="checked = !checked">Toggle</veui-button></p>
+      <p><veui-radio :checked.sync="checked">绑定状态：{{ checked }}</veui-radio></p>
+    </section>
+    <section>
       <veui-radio ui="small" checked>选中状态</veui-radio>
-    </p>
-    <p>
-      <veui-radio checked disabled>选中无效状态</veui-radio>
-    </p>
-    <p>
-      <veui-radio ui="small" checked disabled>选中无效状态</veui-radio>
-    </p>
-    <p>
-      <veui-radio disabled>未选无效状态</veui-radio>
-    </p>
-    <p>
-      <veui-radio ui="small" disabled>未选无效状态</veui-radio>
-    </p>
+    </section>
+    <section>
+      <veui-radio checked disabled>选中禁用状态</veui-radio>
+    </section>
+    <section>
+      <veui-radio ui="small" checked disabled>选中禁用状态</veui-radio>
+    </section>
+    <section>
+      <veui-radio disabled>未选禁用状态</veui-radio>
+    </section>
+    <section>
+      <veui-radio ui="small" disabled>未选禁用状态</veui-radio>
+    </section>
   </article>
 </template>
 
 <script>
-import { Radio } from 'veui'
+import { Radio, Button } from 'veui'
 
 export default {
   name: 'radio-demo',
   components: {
-    'veui-radio': Radio
+    'veui-radio': Radio,
+    'veui-button': Button
   },
   data () {
     return {
-      a1: false,
-      a2: false
+      size: null,
+      checked: false
     }
   }
 }
 </script>
+
+<style lang="less" scoped>
+.veui-radio {
+  margin-right: 10px;
+}
+
+section {
+  margin-bottom: 60px;
+}
+</style>

@@ -1,8 +1,25 @@
 ## 1.0.0-alpha.12
 
+### ⚠️ 非兼容性变更
+
+* [^] 修改了 `Radio` 组件的 `v-model` 语义，现在机制和 Vue.js 对原生 `<input type="radio">` 的处理保持一致。
+
+  > #### 迁移指南
+  >
+  > 此版本前的 `Radio` 组件的 `v-model` 对应 `checked` 属性，但由于之前的版本中存在多个同 `name` 的 `Radio` 组件时，被取消选中的单选框并不会响应数据变化，导致实际 `v-model` 并不完全可用。新版本修复了这个问题，并把逻辑和 Vue.js 对原生元素的处理方式进行了对齐。
+  >
+  > ```html
+  > <veui-radio value="html" name="lang" v-model="lang"/>
+  > <veui-radio value="css" name="lang" v-model="lang"/>
+  > <veui-radio value="javascript" name="lang" v-model="lang"/>
+  > ```
+  >
+  > 通过将多个 `Radio` 组件的 `v-model` 绑定到同一个数据项，即可完成数据的双向绑定。注意，仍然建议使用 `name` 属性来正确表达分组。这将会影响元素的可访问性。
+
 ### 🐞 问题修复
 
 * [^] 修复了 `Textarea` 触发事件时没有正确处理 `this` 的问题。
+* [^] 修复了 `NumberInput` 在只读状态下可以用键盘上下键调整值的问题。
 
 ## 1.0.0-alpha.11
 
