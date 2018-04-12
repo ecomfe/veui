@@ -7,9 +7,9 @@
     <p><veui-checkbox v-model="autoplay"><code>autoplay</code></veui-checkbox></p>
     <p><veui-checkbox v-model="wrap"><code>wrap</code></veui-checkbox></p>
     <p><veui-checkbox v-model="pauseOnHover"><code>pause-on-hover</code></veui-checkbox></p>
-    <p><veui-radio-group v-model="trigger" :items="triggers"></veui-radio-group></p>
-    <p><veui-radio-group v-model="size" :items="sizes"></veui-radio-group></p>
-    <p><veui-radio-group v-model="indicator" :items="indicators"></veui-radio-group></p>
+    <p><veui-radio-group v-model="trigger" :items="triggers"/></p>
+    <p><veui-radio-group v-model="size" :items="sizes"/></p>
+    <p><veui-radio-group v-model="indicator" :items="indicators"/></p>
     <section>
       <veui-carousel :datasource="items" :index.sync="index" :ui="ui" :interval="interval" :pause-on-hover="pauseOnHover"
         :switch-trigger="trigger" :wrap="wrap" :indicator="indicator" :autoplay="autoplay"></veui-carousel>
