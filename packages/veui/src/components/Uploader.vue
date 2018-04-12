@@ -364,13 +364,13 @@ export default {
     realAutoupload () {
       return this.autoupload && this.autoUpload
     },
-    list () {
+    files () {
       return this.fileList.map(file => {
         return {...pick(file, ['name', 'src', 'status']), ...file._extra}
       })
     },
     pureFileList () {
-      return this.list.filter(file => file.status === 'success' || !file.status)
+      return this.files.filter(file => file.status === 'success' || !file.status)
         .map(file => omit(file, 'status'))
     }
   },
@@ -574,14 +574,14 @@ export default {
             this.updateFileList(file)
             break
         }
-        this.$emit('progress', this.list[index], index, e)
+        this.$emit('progress', this.files[index], index, e)
       }
       xhr.onload = () => {
         this.uploadCallback(this.parseData(xhr.responseText), file)
       }
       xhr.onerror = () => {
         this.showFailureResult({}, file)
-        this.$emit('failure', this.list[index], index)
+        this.$emit('failure', this.files[index], index)
       }
       let formData = new FormData()
       formData.append(this.name, file)
@@ -627,10 +627,10 @@ export default {
       data = this.convertResponse(data) || data
       if (data.status === 'success') {
         this.showSuccessResult(data, file)
-        this.$emit('success', this.list[index], index)
+        this.$emit('success', this.files[index], index)
       } else if (data.status === 'failure') {
         this.showFailureResult(data, file)
-        this.$emit('failure', this.list[index], index)
+        this.$emit('failure', this.files[index], index)
       }
       this.currentSubmitingFile = null
     },
@@ -697,7 +697,7 @@ export default {
       this.$emit('change', value)
 
       if (!this.isReplacing) {
-        this.$emit('remove', this.list[index], index)
+        this.$emit('remove', this.files[index], index)
       }
     },
     cancelFile (file) {
