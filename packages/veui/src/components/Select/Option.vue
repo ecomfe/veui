@@ -10,6 +10,8 @@
     'veui-option-selected': selected
   }"
   :autofocus="selected"
+  :role="role"
+  :aria-selected="String(selected)"
   @click.stop="selectOption">
   <slot>
     <span class="veui-option-label"><slot name="label">{{ label }}</slot></span>
@@ -24,6 +26,7 @@ import ui from '../../mixins/ui'
 import menu from '../../mixins/menu'
 import select from '../../mixins/select'
 import { getScrollParent } from '../../utils/dom'
+import { isType } from '../../utils/helper'
 
 export default {
   name: 'veui-option',
@@ -48,6 +51,9 @@ export default {
   computed: {
     selected () {
       return this.value != null && this.value === this.select.value
+    },
+    role () {
+      return isType(this.select, 'input') ? 'option' : 'menuitem'
     }
   },
   methods: {

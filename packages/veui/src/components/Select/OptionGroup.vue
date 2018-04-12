@@ -11,6 +11,7 @@ import keySelect from '../../mixins/key-select'
 import outside from '../../directives/outside'
 import '../../common/uiTypes'
 import { walk } from '../../utils/data'
+import { isType } from '../../utils/helper'
 import { pull } from 'lodash'
 
 export default {
@@ -61,11 +62,15 @@ export default {
     },
     canPopOut () {
       return !!(this.position === 'popout' && this.items && this.items.length && this.label)
+    },
+    popoutRole () {
+      return isType(this.select, 'input') ? 'listbox' : 'menu'
     }
   },
   render () {
     let content = this.options
-      ? this.options.map((option, i) => {
+      ? this.options.map((opt, i) => {
+        let option = { ...opt, selected: opt.value === this.value }
         return option.options
           ? <veui-option-group
             ui={this.inheritedUi}
@@ -121,6 +126,7 @@ export default {
               'veui-option-group-label': true,
               'veui-option-group-button': this.canPopOut
             }}
+            aria-haspopout={this.canPopOut ? this.popoutRole : null}
             {...this.canPopOut
               ? {
                 on: {
@@ -167,6 +173,8 @@ export default {
               ref="box"
               class="veui-select-options"
               tabindex="-1"
+              role={this.popoutRole}
+              aria-expanded={String(this.expanded)}
               ui={this.ui}
               {...{
                 directives: [{

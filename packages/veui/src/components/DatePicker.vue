@@ -10,6 +10,9 @@
     class="veui-date-picker-button"
     :ui="ui"
     :disabled="realDisabled || realReadonly"
+    :aria-disabled="realDisabled"
+    :aria-readonly="realReadonly"
+    aria-haspopup="dialog"
     @click="expanded = !expanded"
     @keydown.down.up.prevent="expanded = true">
     <template v-if="range">
@@ -42,31 +45,33 @@
     :overlay-class="overlayClass"
     autofocus
     modal>
-    <veui-calendar
-      class="veui-date-picker-overlay"
-      v-model="localSelected"
-      v-bind="calendarProps"
-      ref="cal"
-      :ui="inheritedUi"
-      v-outside:button="close"
-      @select="handleSelect"
-      @selectstart="handleProgress"
-      @selectprogress="handleProgress"
-      :panel="realPanel"
-      tabindex="-1"
-      @keydown.esc.native="close">
-      <template :slot="shortcutsPosition" v-if="range && realShortcuts && realShortcuts.length">
-        <div class="veui-date-picker-shortcuts">
-          <button v-for="({from, to, label}, index) in realShortcuts" type="button" :key="index"
-            :class="{
-              'veui-date-picker-shortcut': true,
-              'veui-date-picker-shortcut-selected': isShortcutSelected({from, to})
-            }" @click="handleSelect([from, to])"
-            @mouseenter="handleHoverShortcut([from, to])"
-            @mouseleave="handleHoverShortcut()">{{ label }}</button>
-        </div>
-      </template>
-    </veui-calendar>
+    <div role="dialog">
+      <veui-calendar
+        class="veui-date-picker-overlay"
+        v-model="localSelected"
+        v-bind="calendarProps"
+        ref="cal"
+        :ui="inheritedUi"
+        v-outside:button="close"
+        @select="handleSelect"
+        @selectstart="handleProgress"
+        @selectprogress="handleProgress"
+        :panel="realPanel"
+        tabindex="-1"
+        @keydown.esc.native="close">
+        <template :slot="shortcutsPosition" v-if="range && realShortcuts && realShortcuts.length">
+          <div class="veui-date-picker-shortcuts">
+            <button v-for="({from, to, label}, index) in realShortcuts" type="button" :key="index"
+              :class="{
+                'veui-date-picker-shortcut': true,
+                'veui-date-picker-shortcut-selected': isShortcutSelected({from, to})
+              }" @click="handleSelect([from, to])"
+              @mouseenter="handleHoverShortcut([from, to])"
+              @mouseleave="handleHoverShortcut()">{{ label }}</button>
+          </div>
+        </template>
+      </veui-calendar>
+    </div>
   </veui-overlay>
 </div>
 </template>
