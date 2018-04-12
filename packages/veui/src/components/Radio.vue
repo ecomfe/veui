@@ -47,8 +47,11 @@ export default {
     }
   },
   watch: {
-    checked (val) {
-      this.localChecked = val
+    checked: {
+      handler (val) {
+        this.localChecked = val
+      },
+      immediate: true
     },
     localChecked: {
       handler (val) {
@@ -64,7 +67,9 @@ export default {
     },
     model: {
       handler (val) {
-        this.localChecked = val === null ? false : this.value === val
+        if (val != null) {
+          this.localChecked = val === null ? false : this.value === val
+        }
       },
       immediate: true
     }

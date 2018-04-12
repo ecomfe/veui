@@ -4,6 +4,8 @@
   :ui="ui"
   role="application"
   aria-label="日历"
+  :aria-disabled="realDisabled"
+  :aria-readonly="realReadonly"
   @mouseleave="markEnd()">
   <slot name="before"/>
   <div
