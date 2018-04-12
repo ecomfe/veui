@@ -33,7 +33,7 @@ export default {
   },
   data () {
     return {
-      localChecked: this.checked
+      localChecked: this.model === this.value ? true : this.checked
     }
   },
   computed: {
