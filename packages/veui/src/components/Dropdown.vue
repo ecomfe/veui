@@ -8,8 +8,7 @@
     :ui="ui"
     :disabled="disabled"
     aria-haspopup="menu"
-    :aria-disabled="String(this.realDisabled)"
-    :aria-readonly="String(this.realReadonly)"
+    :aria-disabled="String(this.disabled)"
     @keydown.down.up.prevent="expanded = true"
     @click="expanded = !expanded"
     ref="button">
