@@ -1,21 +1,26 @@
 <template>
 <div class="veui-carousel" :ui="ui">
   <div class="veui-carousel-viewport" @mouseenter="handleEnter" @mouseleave="handleLeave">
-  <transition-group name="veui-carousel-item" class="veui-carousel-items" tag="ol">
-    <li v-for="(item, i) in datasource" v-show="localIndex === i" :key="i"
-      :class="{
-        'veui-carousel-item': true,
-        'veui-carousel-item-current': localIndex === i
-      }"
-      :style="{
-        'background-image': `url(${item.src})`
-      }">
-      <slot v-bind="item" :index="i">
-        <img class="veui-sr-only" :src="item.src" :alt="item.alt">
-      </slot>
-    </li>
-  </transition-group>
-  <div v-if="indicator === 'number'" class="veui-carousel-indicator-numbers">{{ localIndex + 1 }}<span class="veui-carousel-indicator-numbers-separator"></span>{{ count }}</div>
+    <transition-group name="veui-carousel-item" class="veui-carousel-items" tag="ol">
+      <li
+        v-for="(item, i) in datasource"
+        v-show="localIndex === i"
+        ref="item"
+        :key="i"
+        :class="{
+          'veui-carousel-item': true,
+          'veui-carousel-item-current': localIndex === i
+        }"
+        :style="{
+          'background-image': `url(${item.src})`
+        }"
+        tabindex="0">
+        <slot v-bind="item" :index="i">
+          <img class="veui-sr-only" :src="item.src" :alt="item.alt">
+        </slot>
+      </li>
+    </transition-group>
+    <div v-if="indicator === 'number'" class="veui-carousel-indicator-numbers">{{ localIndex + 1 }}<span class="veui-carousel-indicator-numbers-separator"></span>{{ count }}</div>
     <nav v-else-if="indicator !== 'none'" :class="{
         [`veui-carousel-indicator-${indicator}s`]: true
       }">
@@ -123,6 +128,12 @@ export default {
     select (index, event) {
       if (event !== this.switchTrigger) {
         return
+      }
+
+      if (event === 'click') {
+        setTimeout(() => {
+          this.$refs.item[this.localIndex].focus()
+        }, 0)
       }
 
       this.localIndex = index
