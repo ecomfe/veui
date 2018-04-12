@@ -550,9 +550,9 @@ export default {
       return !this.maxSize || !fileSize || fileSize <= bytes.parse(this.maxSize)
     },
     uploadFiles () {
-      this.fileList.forEach((file, index) => {
+      this.fileList.forEach(file => {
         if (file.toBeUploaded) {
-          this.upload(file, index)
+          this.upload(file)
         }
       })
     },
@@ -574,7 +574,7 @@ export default {
             this.updateFileList(file)
             break
         }
-        this.$emit('progress', file, index, e)
+        this.$emit('progress', this.list[index], index, e)
       }
       xhr.onload = () => {
         this.uploadCallback(this.parseData(xhr.responseText), file)
