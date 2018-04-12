@@ -153,7 +153,7 @@
 import Button from './Button'
 import Icon from './Icon'
 import Tooltip from './Tooltip'
-import { cloneDeep, uniqueId, assign, isNumber, last, pick, omit, includes } from 'lodash'
+import { cloneDeep, uniqueId, assign, isNumber, last, pick, omit, includes, isEmpty } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import config from '../managers/config'
@@ -185,7 +185,7 @@ export default {
       default: 'file'
     },
     value: {
-      type: [Array, String]
+      type: [Array, String, Object]
     },
     type: {
       type: String,
@@ -274,8 +274,15 @@ export default {
     }
   },
   data () {
+    let initialValueType
+    if (Array.isArray(this.value)) {
+      initialValueType = 'array'
+    } else {
+      initialValueType = (!this.value || typeof this.value === 'string') ? 'string' : 'object'
+    }
+
     return {
-      isInitialValueArray: Array.isArray(this.value),
+      initialValueType,
       fileList: this.genFileList(this.value),
       canceled: false,
       // inputId用于图片里的重新上传的label的for
@@ -298,7 +305,7 @@ export default {
   watch: {
     value (val) {
       let temp = val
-      if (!val || typeof val === 'string') {
+      if (!Array.isArray(val)) {
         temp = this.genFileList(val)
       }
 
@@ -429,10 +436,15 @@ export default {
       if (Array.isArray(value)) {
         return cloneDeep(value)
       }
-      return value ? [assign(this.fileList ? this.fileList[0] : {}, {
-        src: value,
-        name: value
-      })] : []
+
+      if (typeof value === 'string') {
+        return [assign(this.fileList ? this.fileList[0] : {}, {
+          src: value,
+          name: value
+        })]
+      }
+
+      return isEmpty(value) ? [] : [cloneDeep(value)]
     },
     handleNewFiles () {
       this.canceled = false
@@ -660,9 +672,7 @@ export default {
       this.$set(this.fileList, this.fileList.indexOf(file), file)
 
       if (toEmit) {
-        this.$emit('change', this.maxCount === 1 && !this.isInitialValueArray
-          ? (this.pureFileList[0].src || this.pureFileList[0].name)
-          : this.pureFileList)
+        this.$emit('change', this.getValue(false))
       }
     },
     getPureFile (file, properties) {
@@ -686,15 +696,12 @@ export default {
       this.error.countOverflow = false
 
       let index = this.fileList.indexOf(file)
-      let value = null
       if (this.maxCount === 1) {
         this.fileList = []
-        value = this.isInitialValueArray ? [] : null
       } else {
         this.fileList.splice(this.fileList.indexOf(file), 1)
-        value = this.pureFileList
       }
-      this.$emit('change', value)
+      this.$emit('change', this.getValue(true))
 
       if (!this.isReplacing) {
         this.$emit('remove', this.files[index], index)
@@ -740,6 +747,31 @@ export default {
     },
     getScopeValue (index, file) {
       return {index, ...file}
+    },
+    getValue (isEmptyValue) {
+      if (this.maxCount !== 1) {
+        return this.pureFileList
+      }
+
+      if (isEmptyValue) {
+        switch (this.initialValueType) {
+          case 'string':
+            return null
+          case 'object':
+            return {}
+          case 'array':
+            return []
+        }
+      } else {
+        switch (this.initialValueType) {
+          case 'string':
+            return this.pureFileList[0].src || this.pureFileList[0].name
+          case 'object':
+            return this.pureFileList[0]
+          case 'array':
+            return this.pureFileList
+        }
+      }
     }
   }
 }

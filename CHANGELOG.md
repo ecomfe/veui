@@ -21,7 +21,7 @@
 ### 💡 主要变更
 
 * [+] `NumberInput` 新增 `max`/`min` prop，优先从直接父组件 `Field` 的 prop `rule` 中继承 `max`/`min` rule 的值。
-* [^] `Uploader` 组件在 `maxCount` 的值是 1 的情况下，支持 `value` 是数组的形式。
+* [^] `Uploader` 组件在 `maxCount` 的值是 1 的情况下，支持 `value` 是数组或对象的形式。
 * [^] `Uploader` 组件的事件 `success`、`failure`、`remove` 增加参数：当前处理文件的序号。
 * [^] `Uploader` 组件在重新上传的时候不再触发 `remove` 事件。
 
