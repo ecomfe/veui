@@ -4,7 +4,9 @@
     <section>
       <veui-form>
         <veui-field label="Micro：" ui="micro">
-          <veui-number-input ui="micro" v-model="number"/>
+          <veui-number-input ui="micro" v-model="number">
+            <template slot="before">Value:</template>
+          </veui-number-input>
         </veui-field>
         <veui-field label="Tiny：" ui="tiny" tip="精确到小数点后 1 位">
           <veui-number-input ui="tiny" v-model="number1" :decimal-place="1"/>

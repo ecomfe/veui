@@ -8,7 +8,7 @@
   }
 
   overflow: hidden;
-  display: inline-block;
+  display: inline-table;
   position: relative;
   .make-line-height(@veui-height-normal);
   width: @veui-width-normal;
@@ -21,19 +21,16 @@
     display: none !important;
   }
 
-  &-before {
-    float: left;
-    height: 100%;
-  }
-
+  &-before,
+  &-main,
   &-after {
-    float: right;
+    display: table-cell;
+    vertical-align: top;
     height: 100%;
   }
 
   &-main {
-    overflow: hidden;
-    height: 100%;
+    width: 100%;
   }
 
   &-input {

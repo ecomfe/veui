@@ -1,8 +1,8 @@
 <template>
   <article>
     <h1><code>&lt;veui-carousel&gt;</code></h1>
-    <p><code>index</code>: <input type="number" v-model.number="index" min="0" :max="items.length - 1"></p>
-    <p><code>interval</code>: <input type="number" v-model.number="interval" min="0"></p>
+    <p><code>index</code>: <veui-number-input ui="tiny" v-model="index" :min="0" :max="items.length - 1"/></p>
+    <p><code>interval</code>: <veui-number-input ui="tiny" v-model="interval" :min="0" :step="1000"/></p>
     <p><veui-checkbox v-model="loose"><code>ui="loose"</code></veui-checkbox></p>
     <p><veui-checkbox v-model="autoplay"><code>autoplay</code></veui-checkbox></p>
     <p><veui-checkbox v-model="wrap"><code>wrap</code></veui-checkbox></p>
@@ -18,14 +18,15 @@
 </template>
 
 <script>
-import { Carousel, Checkbox, RadioGroup } from 'veui'
+import { Carousel, Checkbox, RadioGroup, NumberInput } from 'veui'
 
 export default {
   name: 'carousel-demo',
   components: {
     'veui-carousel': Carousel,
     'veui-checkbox': Checkbox,
-    'veui-radio-group': RadioGroup
+    'veui-radio-group': RadioGroup,
+    'veui-number-input': NumberInput
   },
   data () {
     return {

@@ -13,9 +13,6 @@
   <template v-if="$slots.before">
     <div class="veui-input-before"><slot name="before"/></div>
   </template>
-  <template v-if="$slots.after">
-    <div class="veui-input-after"><slot name="after"/></div>
-  </template>
   <div class="veui-input-main">
     <input
       ref="input"
@@ -29,6 +26,9 @@
       @change="$emit('change', $event.target.value, $event)"
     >
   </div>
+  <template v-if="$slots.after">
+    <div class="veui-input-after"><slot name="after"/></div>
+  </template>
 </div>
 <veui-textarea
   v-else

@@ -12,13 +12,8 @@
     @blur="handleBlur"
     @input="handleInput"
     @change="handleChange"
-    @focus="handleFocus"
-    @focus.native="$refs.input.focus()"
-    @keydown="handleKeydown"
-    @keyup="handleKeyup"
     @focusin.native="focused = true"
     @focusout.native="focused = false"
-    :tabindex="tabindex"
     :class="{
       'veui-number-input': true,
       'veui-readonly': realReadonly,
@@ -27,7 +22,7 @@
     }"
   >
     <template slot="before">
-      <slot name="before"></slot>
+      <slot name="before"/>
     </template>
     <template slot="after">
       <div class="veui-number-input-controls">
@@ -36,22 +31,19 @@
           class="veui-number-input-step-up"
           @click="handleStep(1)"
           :disabled="!editable || reachMaxLimit"
-          :tabindex="editable ? (controlFocusable ? '0' : '-1') : false"
         >
           <veui-icon :name="icons.increase"/>
         </veui-button>
         <veui-button
+          ref="dec"
           class="veui-number-input-step-down"
           @click="handleStep(-1)"
-          @focus="inputFocusable = false"
-          @blur="enableInputFocus"
           :disabled="!editable || reachMinLimit"
-          :tabindex="editable ? (controlFocusable ? '0' : '-1') : false"
         >
           <veui-icon :name="icons.decrease"/>
         </veui-button>
       </div>
-      <slot name="after"></slot>
+      <slot name="after"/>
     </template>
   </veui-input>
 </template>
@@ -109,6 +101,45 @@ export default {
       controlFocusable: true
     }
   },
+  computed: {
+    listeners () {
+      return getListeners(EVENTS, this)
+    },
+    attrs () {
+      return {
+        ...pick(this.$props, ['autofocus', 'selectOnFocus', 'autocomplete', 'placeholder']),
+        name: this.realName,
+        disabled: this.realDisabled,
+        readonly: this.realReadonly
+      }
+    },
+    isLocalEmpty () {
+      return this.localValue == null || this.localValue === ''
+    },
+    editable () {
+      return !this.realDisabled && !this.realReadonly
+    },
+    realMax () {
+      let max = this.max
+      if (get(this, 'formField.localRules.length')) {
+        return get(find(this.formField.localRules, ({ name }) => name === 'max'), 'value') || max
+      }
+      return max
+    },
+    realMin () {
+      let min = this.min
+      if (get(this, 'formField.localRules.length')) {
+        return get(find(this.formField.localRules, ({ name }) => name === 'min'), 'value') || min
+      }
+      return min
+    },
+    reachMaxLimit () {
+      return this.realMax != null && this.value >= this.realMax
+    },
+    reachMinLimit () {
+      return this.realMin != null && this.value <= this.realMin
+    }
+  },
   watch: {
     // value 和 localValue 仅在能正确 parse 及上下限限制内时保持同步，
     // value 只关心有效的数字值，localValue 是一个展示的中间状态
@@ -135,109 +166,15 @@ export default {
       }
     }
   },
-  computed: {
-    listeners () {
-      return getListeners(EVENTS, this)
-    },
-    attrs () {
-      return {
-        ...pick(this.$props, ['autofocus', 'selectOnFocus', 'autocomplete', 'placeholder']),
-        name: this.realName,
-        disabled: this.realDisabled,
-        readonly: this.realReadonly
-      }
-    },
-    isLocalEmpty () {
-      return this.localValue == null || this.localValue === ''
-    },
-    tabindex () {
-      return this.realDisabled
-        ? false
-        : this.inputFocusable ? '0' : '-1'
-    },
-    editable () {
-      return !this.realDisabled && !this.realReadonly
-    },
-    realMax () {
-      let max = this.max
-      if (get(this, 'formField.localRules.length')) {
-        return get(find(this.formField.localRules, ({ name }) => name === 'max'), 'value') || max
-      }
-      return max
-    },
-    realMin () {
-      let min = this.min
-      if (get(this, 'formField.localRules.length')) {
-        return get(find(this.formField.localRules, ({ name }) => name === 'min'), 'value') || min
-      }
-      return min
-    },
-    reachMaxLimit () {
-      return this.realMax != null && this.value >= this.realMax
-    },
-    reachMinLimit () {
-      return this.realMin != null && this.value <= this.realMin
-    }
-  },
   created () {
     if (this.realMax < this.realMin) {
-      warn('[veui-number-input] `max` value must be greater than `min` value')
+      warn('[veui-number-input] `max` value must not be less than `min` value.')
     }
     if (this.value > this.realMax || this.value < this.realMin) {
-      warn('[veui-number-input] `value` must be greater than `min` value or less than `max` value')
+      warn('[veui-number-input] `value` must not be less than `min` value and not greater than `max` value.')
     }
-  },
-  mounted () {
-    this.handleGlobalKeydown = ({ key }) => {
-      if (key === 'Shift') {
-        this.forward = false
-      }
-    }
-    this.handleGlobalKeyup = ({ key }) => {
-      if (key === 'Shift') {
-        this.forward = true
-      }
-    }
-    document.addEventListener('keydown', this.handleGlobalKeydown)
-    document.addEventListener('keyup', this.handleGlobalKeyup)
-  },
-  destroyed () {
-    document.removeEventListener('keydown', this.handleGlobalKeydown)
-    document.removeEventListener('keyup', this.handleGlobalKeyup)
   },
   methods: {
-    handleKeydown ($event) {
-      switch ($event.key) {
-        case 'Tab':
-          if (this.forward && this.editable) {
-            this.$refs.inc.focus()
-            $event.preventDefault()
-          }
-          break
-        case 'Shift':
-          this.controlFocusable = false
-          break
-        default:
-          break
-      }
-    },
-    handleKeyup ($event) {
-      switch ($event.key) {
-        case 'Shift':
-          this.enableControlFocus()
-          break
-        default:
-          break
-      }
-    },
-    handleFocus ($event) {
-      if (this.forward) {
-        this.enableControlFocus()
-      } else {
-        this.controlFocusable = false
-      }
-      this.inputFocusable = false
-    },
     handleInput (val, $event) {
       // 处理清空
       if (this.value != null && val === '') {
@@ -292,8 +229,6 @@ export default {
       this.lastChangedValue = this.value
     },
     handleBlur ($event) {
-      this.enableInputFocus()
-
       if (this.isLocalEmpty) {
         return
       }
@@ -371,16 +306,6 @@ export default {
         return val.toString()
       }
       return round(this.filterLimitValue(val), this.decimalPlace).toFixed(this.decimalPlace)
-    },
-    enableInputFocus () {
-      setTimeout(() => {
-        this.inputFocusable = true
-      }, 0)
-    },
-    enableControlFocus () {
-      setTimeout(() => {
-        this.controlFocusable = true
-      }, 0)
     }
   }
 }
