@@ -1,22 +1,34 @@
 <template>
-<div class="veui-pagination veui-pager" :ui="ui">
+<div
+  class="veui-pagination veui-pager"
+  role="navigation"
+  :aria-label="`选择分页，当前为第 ${page} 页，共 ${pageCount} 页`"
+  :ui="ui">
   <div class="veui-pager-info">
     <div class="veui-pager-total">共 {{ realTotal }} 条</div>
     <div class="veui-pager-size">
       <span>每页条数</span>
       <veui-select v-model="realPageSize"
         :options="realPageSizes"
+        :aria-label="`选择每页显示条数，目前为 ${realPageSize} 条`"
         @change="size => $emit('pagesizechange', size)">
       </veui-select>
     </div>
   </div>
   <div class="veui-pager-switch">
-    <ul class="veui-pager-pages" :class="{['veui-pager-digit-length-' + pageDigitLength]: true}">
-      <li v-for="(item, index) in pageIndicatorSeries" :class="{
-        'veui-active': item.page === page
-      }" :key="index">
-        <veui-link :to="item.href" :native="native"
-            @click="handleRedirect(item.page, $event)">{{ item.text }}</veui-link>
+    <ul class="veui-pager-pages" :class="{[`veui-pager-digit-length-${pageDigitLength}`]: true}">
+      <li
+        v-for="(item, index) in pageIndicatorSeries"
+        :class="{
+          'veui-active': item.page === page
+        }"
+        :key="index">
+        <veui-link
+          :to="item.href"
+          :native="native"
+          :aria-current="item.page === page ? 'page' : null"
+          :aria-label="`第 ${item.page} 页${item.page === page ? '，当前页' : ''}`"
+          @click="handleRedirect(item.page, $event)">{{ item.text }}</veui-link>
       </li>
     </ul>
     <div class="veui-pager-buttons">
@@ -24,6 +36,7 @@
         :to="page === 1 ? '' : pageNavHref.previous.href"
         :native="native"
         :disabled="page === 1"
+        aria-label="上一页"
         @click="handleRedirect(pageNavHref.previous.page, $event)">
         <veui-icon :name="icons.prev"/>
       </veui-link>
@@ -31,6 +44,7 @@
         :to="page === pageCount ? '' : pageNavHref.next.href"
         :native="native"
         :disabled="page === pageCount || pageCount === 0"
+        aria-label="下一页"
         @click="handleRedirect(pageNavHref.next.page, $event)">
         <veui-icon :name="icons.next"/>
       </veui-link>

@@ -3,11 +3,13 @@
   :class="klass"
   :is="fallback"
   :ui="ui"
+  :aria-disabled="String(disabled)"
   @click="handleRedirect"><slot/></component>
 <router-link v-else-if="$router && !native"
   :class="klass"
   :to="to"
   :ui="ui"
+  :aria-disabled="String(disabled)"
   :replace="replace">
   <slot/>
 </router-link>
@@ -15,6 +17,7 @@
   :class="klass"
   :href="to"
   :ui="ui"
+  :aria-disabled="String(disabled)"
   @click="handleRedirect">
   <slot/>
 </a>
