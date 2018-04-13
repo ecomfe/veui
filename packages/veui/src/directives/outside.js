@@ -134,6 +134,7 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
       if (isTargetIn && !isRelatedTargetIn) {
         hoverDelayData.state = 'out'
 
+        clearTimeout(el[bindingKey].timer)
         el[bindingKey].timer = setTimeout(() => {
           if (hoverDelayData.state === 'out') {
             handler(e)
