@@ -2,10 +2,20 @@
 
 ### ⚠️ 非兼容性变更
 
+* [^] `Uploader` 组件在 `maxCount` 的值是 `1` 的情况下，`value` 的默认类型从字符串改成对象，可以通过设置 prop `compat` 为 `true` 将 `value` 的类型设置为字符串兼容旧版本。
 * [^] 修改了 `Radio` 组件的 `v-model` 语义，现在机制和 Vue.js 对原生 `<input type="radio">` 的处理保持一致。
-* [^] `Uploader` 组件在 `maxCount` 的值是 1 的情况下，`value` 的默认类型从字符串改成对象，可以通过设置 prop `compat` 为 true 将 `value` 的类型设置为字符串兼容旧版本。
 
   > #### 迁移指南
+  >
+  > ##### `Uploader` 组件
+  >
+  > `Uploader` 在 `max-count` 为 `1` 时的 `value` prop 数据类型修改为对象，和多文件时的数组项相同。需要兼容原字符串数据格式时，需要设置 `compat` prop 为 `true`：
+  >
+  > ```html
+  > <veui-uploader compat .../>
+  > ```
+  >
+  > ##### `Radio` 组件
   >
   > 此版本前的 `Radio` 组件的 `v-model` 对应 `checked` 属性，但由于之前的版本中存在多个同 `name` 的 `Radio` 组件时，被取消选中的单选框并不会响应数据变化，导致实际 `v-model` 并不完全可用。新版本在使用 `v-model` 的场景下修复了这个问题，并把逻辑和 Vue.js 对原生元素的处理方式进行了对齐。
   >
@@ -24,11 +34,14 @@
 * [+] `NumberInput` 新增 `max`/`min` prop，优先从直接父组件 `Field` 的 prop `rule` 中继承 `max`/`min` rule 的值。
 * [^] `Uploader` 组件的事件 `success`、`failure`、`remove` 增加参数：当前处理文件的序号。
 * [^] `Uploader` 组件在重新上传的时候不再触发 `remove` 事件。
+* [^] 将 `Progress` 组件的 `precision` prop 重命名为和 `NumberInput` 一致的 `decimal-place`。`precision` 将在未来版本被移除。
+* [^] 增加了 `Select`、`Dropdown`、`Carousel`、`Pagination` 及 `Progress` 等组件的 WAI-ARIA 支持。
 
 ### 🐞 问题修复
 
 * [^] 修复了 `Textarea` 触发事件时没有正确处理 `this` 的问题。
 * [^] 修复了 `NumberInput` 在只读状态下可以用键盘上下键调整值的问题。
+* [^] 修复了 `outside` 指令设置 `delay` 时未清除定时器的问题。
 
 ## 1.0.0-alpha.11
 
@@ -171,7 +184,7 @@
 * [+] 优化 `Column` 组件注册到 `Table` 的逻辑，支持在模板中通过 `v-for`、`v-if` 等动态配置，并且将注册过程移入 `created` 生命周期以支持服务端渲染。
 * [^] `Breadcrumb` 组件 `routes` 数据项的文本域重命名为 `label`，保留了 `text` 的用法进行兼容。
 * [+] `Uploader` 组件增加 `statuschange` 事件，用于表单提交的时候校验是否还有文件正在上传或上传失败。
-* [+] `Uploader` 组件增加 prop `dataType`，用于指明回调的内容的格式。
+* [+] `Uploader` 组件增加 prop `data-type`，用于指明回调的内容的格式。
 * [+] `Uploader` 组件 prop `name` 现在有默认值 `file`。
 * [+] `Field` 组件优化交互式校验规则显示顺序。
 * [+] `Field` prop `rules` 校验规则的出错消息支持传入函数。
@@ -384,7 +397,7 @@
 * [^] 修复了 `Table` 组件在选择时会修改未添加 `.sync` 的 `selected` prop 的问题。
 * [+] 增加了 `Pager` 每页显示数和默认选项的全局配置。
 * [+] 修复了 `Pager` 在没有数据时下一页按钮没有禁用的问题。
-* [^] 重命名 `Pager` 的 `pageTotal` prop 为 `total`，旧名称仍然兼容，未来版本可能删除。
+* [^] 重命名 `Pager` 的 `page-total` prop 为 `total`，旧名称仍然兼容，未来版本可能删除。
 
 ## 0.2.0
 

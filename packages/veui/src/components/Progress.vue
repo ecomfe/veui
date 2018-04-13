@@ -1,5 +1,13 @@
 <template>
-<div class="veui-progress" :class="klass" :ui="ui">
+<div
+  class="veui-progress"
+  role="progressbar"
+  :aria-valuemax="max"
+  :aria-valuemin="min"
+  :aria-valuenow="value"
+  :aria-valuetext="desc ? valueText : null"
+  :class="klass"
+  :ui="ui">
   <div v-if="type === 'bar'" class="veui-progress-rail">
     <div class="veui-progress-meter" :style="{
       transform: `translateX(${percent}%)`
@@ -14,11 +22,7 @@
   <div v-if="desc" class="veui-progress-desc">
     <slot v-bind="{ percent, value, state }">
       <veui-icon :name="icons.success" v-if="type === 'circular' && localState === 'success'"/>
-      <span class="veui-progress-desc-text">
-        <template v-if="localState === 'success'">完成</template>
-        <template v-else-if="localState === 'alert'">错误</template>
-        <template v-else>{{ percent.toFixed(precision) }}%</template>
-      </span>
+      <span class="veui-progress-desc-text">{{ valueText }}</span>
     </slot>
   </div>
 </div>
@@ -48,9 +52,15 @@ export default {
       type: Number,
       default: 0
     },
+    /**
+     * @deprecated
+     */
     precision: {
       type: Number,
       default: 0
+    },
+    decimalPlace: {
+      type: Number
     },
     min: {
       type: Number,
@@ -98,6 +108,18 @@ export default {
     },
     halfStroke () {
       return this.stroke / 2
+    },
+    dm () {
+      return (this.decimalPlace != null ? this.decimalPlace : this.precision) || 0
+    },
+    valueText () {
+      if (this.localState === 'success') {
+        return '完成'
+      } else if (this.localState === 'alert') {
+        return '错误'
+      } else {
+        return this.percent.toFixed(this.decimalPlace) + '%'
+      }
     }
   },
   watch: {
