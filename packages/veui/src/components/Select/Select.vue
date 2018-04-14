@@ -134,15 +134,9 @@ export default {
                 options={this.realOptions}
                 ui={this.ui}
                 scopedSlots={{
-                  label: this.$scopedSlots['group-label']
-                    ? group => this.$scopedSlots['group-label'](group)
-                    : null,
-                  option: this.$scopedSlots.option
-                    ? option => this.$scopedSlots.option(option)
-                    : null,
-                  'option-label': this.$scopedSlots['option-label']
-                    ? option => this.$scopedSlots['option-label'](option)
-                    : null
+                  label: this.$scopedSlots['group-label'] || null,
+                  option: this.$scopedSlots.option || null,
+                  'option-label': this.$scopedSlots['option-label'] || null
                 }}>
                 {this.$slots.default}
               </veui-option-group>

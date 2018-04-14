@@ -77,14 +77,8 @@ export default {
               'group-label': this.$scopedSlots['group-label']
                 ? group => this.$scopedSlots['group-label'](group) || group.label
                 : null,
-              option: this.$scopedSlots.option
-                ? option => this.$scopedSlots.option(option)
-                : null,
-              'option-label': this.$scopedSlots['option-label']
-                ? option => {
-                  return this.$scopedSlots['option-label'](option)
-                }
-                : null
+              option: this.$scopedSlots.option || null,
+              'option-label': this.$scopedSlots['option-label'] || null
             }}>
           </veui-option-group>
           : <veui-option
