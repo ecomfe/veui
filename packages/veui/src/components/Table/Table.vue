@@ -19,6 +19,7 @@ import Body from './_TableBody'
 import Head from './_TableHead'
 import Foot from './_TableFoot'
 import '../../common/uiTypes'
+import { isArrayContentEqual } from '../../utils/lang'
 
 export default {
   name: 'veui-table',
@@ -162,7 +163,6 @@ export default {
           this.localSelected = []
         }
       }
-      this.$emit('update:selected', this.realSelected)
       this.$emit('select', selected, item, this.selectedItems)
     },
     getItems (key) {
@@ -200,7 +200,11 @@ export default {
     },
     realKeys (val) {
       this.localSelected = intersection(this.localSelected, val)
-      this.$emit('update:selected', this.realSelected)
+    },
+    realSelected (val, oldVal) {
+      if (!isArrayContentEqual(val, oldVal)) {
+        this.$emit('update:selected', val)
+      }
     }
   }
 }
