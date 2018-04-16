@@ -19,7 +19,7 @@ import Body from './_TableBody'
 import Head from './_TableHead'
 import Foot from './_TableFoot'
 import '../../common/uiTypes'
-import { isArrayContentEqual } from '../../utils/lang'
+import { isEqualSet } from '../../utils/lang'
 
 export default {
   name: 'veui-table',
@@ -202,7 +202,7 @@ export default {
       this.localSelected = intersection(this.localSelected, val)
     },
     realSelected (val, oldVal) {
-      if (!isArrayContentEqual(val, oldVal)) {
+      if (!isEqualSet(val, oldVal)) {
         this.$emit('update:selected', val)
       }
     }
