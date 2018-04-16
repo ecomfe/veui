@@ -131,7 +131,7 @@ export default {
       files1: files.slice(0),
       files2: files.slice(0),
       filesExtra: files.slice(0),
-      filesIframe: 'http://nodejs.cn/static/images/logo.svg',
+      filesIframe: {name: 'demo-file.txt', src: 'http://www.baidu.com'},
       payload: {
         year: '2017',
         month: '4'

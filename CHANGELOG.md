@@ -3,6 +3,7 @@
 ### ⚠️ 非兼容性变更
 
 * [^] 修改了 `Radio` 组件的 `v-model` 语义，现在机制和 Vue.js 对原生 `<input type="radio">` 的处理保持一致。
+* [^] `Uploader` 组件在 `maxCount` 的值是 1 的情况下，`value` 的默认类型从字符串改成对象，可以通过设置 prop `compat` 为 true 将 `value` 的类型设置为字符串兼容旧版本。
 
   > #### 迁移指南
   >
@@ -21,6 +22,8 @@
 ### 💡 主要变更
 
 * [+] `NumberInput` 新增 `max`/`min` prop，优先从直接父组件 `Field` 的 prop `rule` 中继承 `max`/`min` rule 的值。
+* [^] `Uploader` 组件的事件 `success`、`failure`、`remove` 增加参数：当前处理文件的序号。
+* [^] `Uploader` 组件在重新上传的时候不再触发 `remove` 事件。
 
 ### 🐞 问题修复
 

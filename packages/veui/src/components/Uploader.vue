@@ -43,7 +43,7 @@
                 <span v-if="file.status === 'failure'" class="veui-uploader-failure" :ref="`fileFailure${index}`">
                   <slot name="failure-label">上传失败</slot>
                 </span>
-                <veui-button v-if="file.status === 'failure'" ui="link" @click="retry(file)" :class="listClass + '-retry'"><veui-icon :name="icons.redo"/>重试</veui-button>
+                <veui-button v-if="file.status === 'failure'" ui="link" @click="retry(file)" :class="`${listClass}-retry`"><veui-icon :name="icons.redo"/>重试</veui-button>
                 <veui-button class="veui-uploader-button-remove" ui="link" @click="removeFile(file)" :disabled="realUneditable"><veui-icon :name="icons.clear"/></veui-button>
                 <veui-tooltip position='top' :target="`fileFailure${index}`">{{ file.failureReason }}</veui-tooltip>
               </div>
@@ -53,18 +53,17 @@
               <slot name="file-before" v-bind="getScopeValue(index, file)"/>
               <div class="veui-uploader-list-image-container">
                 <img :src="file.src" :alt="file.alt || ''">
-                <div v-if="!realUneditable" :class="listClass + '-mask'">
+                <div v-if="!realUneditable" :class="`${listClass}-mask`">
                   <label :for="inputId"
                     class="veui-button"
                     :class="{'veui-uploader-input-label-disabled': realUneditable}"
                     @click.stop="replaceFile(file)">重新上传</label>
-                  <veui-button @click="removeFile(file)" :disabled="realUneditable" :class="listClass + '-mask-remove'"><veui-icon :name="icons.clear"></veui-icon>移除</veui-button>
+                  <veui-button @click="removeFile(file)" :disabled="realUneditable" :class="`${listClass}-mask-remove`"><veui-icon :name="icons.clear"></veui-icon>移除</veui-button>
                   <slot name="extra-operation" v-bind="getScopeValue(index, file)"/>
                 </div>
                 <transition name="veui-uploader-fade">
                   <div v-if="file.status === 'success'"
-                    :class="listClass + '-success'"
-                    @click="updateFileList(file, {status: null})">
+                    :class="`${listClass}-success`">
                     <span class="veui-uploader-success"><slot name="success-label"><veui-icon :name="icons.success"/>完成</slot></span>
                   </div>
                 </transition>
@@ -75,9 +74,10 @@
         </template>
         <template v-else-if="file.status === 'uploading'">
           <slot name="uploading" :file="getScopeValue(index, file)">
-            <div :class="listClass + '-container'">
+            <slot name="file-before" v-bind="getScopeValue(index, file)"/>
+            <div :class="`${listClass}-container`">
               <veui-uploader-progress :type="progress" :loaded="file.loaded" :total="file.total"
-                :class="type === 'image' ? listClass + '-status' : ''"
+                :class="type === 'image' ? `${listClass}-status` : ''"
                 :convertSizeUnit="convertSizeUnit">
                 <slot name="uploading-label">上传中...</slot>
               </veui-uploader-progress>
@@ -87,18 +87,21 @@
               <veui-button v-else ui="aux operation"
                 @click="cancelFile(file)">取消</veui-button>
             </div>
+            <slot name="file-after" v-bind="getScopeValue(index, file)"/>
           </slot>
         </template>
         <template v-else-if="file.status === 'failure' && type === 'image'">
           <slot name="failure" :file="getScopeValue(index, file)">
-            <div :class="listClass + '-container'">
-              <div :class="listClass + '-status'">
+            <slot name="file-before" v-bind="getScopeValue(index, file)"/>
+            <div :class="`${listClass}-container`">
+              <div :class="`${listClass}-status`">
                 <span class="veui-uploader-failure"><slot name="failure-label">错误！</slot>{{file.failureReason}}</span>
               </div>
               <veui-button ui="aux operation" @click="retry(file)">重试</veui-button>
               <veui-button ui="link" @click="removeFile(file)"
                 :class="`${listClass}-mask-remove ${listClass}-mask-remove-failure`"><veui-icon :name="icons.clear"/>移除</veui-button>
             </div>
+            <slot name="file-after" v-bind="getScopeValue(index, file)"/>
           </slot>
         </template>
       </li>
@@ -150,7 +153,7 @@
 import Button from './Button'
 import Icon from './Icon'
 import Tooltip from './Tooltip'
-import { cloneDeep, uniqueId, assign, isNumber, isArray, last, pick, omit, includes } from 'lodash'
+import { cloneDeep, uniqueId, assign, isNumber, last, pick, omit, includes, isEmpty } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import config from '../managers/config'
@@ -182,7 +185,7 @@ export default {
       default: 'file'
     },
     value: {
-      type: [Array, String]
+      type: [Array, String, Object]
     },
     type: {
       type: String,
@@ -268,13 +271,15 @@ export default {
       validator (value) {
         return includes(['asc', 'desc'], value)
       }
+    },
+    compat: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
       fileList: this.genFileList(this.value),
-      // pureFileList只有已经上传成功了文件，每个文件只保留name、src以及后端返回数据
-      pureFileList: this.genFileList(this.value),
       canceled: false,
       // inputId用于图片里的重新上传的label的for
       inputId: uniqueId('veui-uploader-input'),
@@ -295,23 +300,26 @@ export default {
   },
   watch: {
     value (val) {
-      this.pureFileList = this.genFileList(val)
+      let temp = val
+      if (!Array.isArray(val)) {
+        temp = this.genFileList(val)
+      }
 
       let successIndex = 0
       this.fileList = this.fileList
         .map(file => {
           if (file.status === 'success' || !file.status) {
             // 处理外部直接减少文件的情形
-            if (successIndex + 1 > this.pureFileList.length) {
+            if (successIndex + 1 > temp.length) {
               return null
             }
-            return assign(file, this.pureFileList[successIndex++])
+            return assign(file, temp[successIndex++])
           }
           return file
         })
         .filter(file => !!file)
         // 处理外部直接增加文件的情形
-        .concat(cloneDeep(this.pureFileList.slice(successIndex)))
+        .concat(cloneDeep(temp.slice(successIndex)))
     },
     status (val) {
       if (val) {
@@ -358,6 +366,15 @@ export default {
     },
     realAutoupload () {
       return this.autoupload && this.autoUpload
+    },
+    files () {
+      return this.fileList.map(file => {
+        return {...pick(file, ['name', 'src', 'status']), ...file._extra}
+      })
+    },
+    pureFileList () {
+      return this.files.filter(file => file.status === 'success' || !file.status)
+        .map(file => omit(file, 'status'))
     }
   },
   mounted () {
@@ -408,13 +425,22 @@ export default {
   },
   methods: {
     genFileList (value) {
-      if (this.maxCount !== 1 && isArray(value)) {
+      if (!value) {
+        return []
+      }
+
+      if (Array.isArray(value)) {
         return cloneDeep(value)
       }
-      return value ? [assign(this.fileList ? this.fileList[0] : {}, {
-        src: value,
-        name: value
-      })] : []
+
+      if (typeof value === 'string') {
+        return [assign(this.fileList ? this.fileList[0] : {}, {
+          src: value,
+          name: value
+        })]
+      }
+
+      return isEmpty(value) ? [] : [cloneDeep(value)]
     },
     handleNewFiles () {
       this.canceled = false
@@ -541,7 +567,9 @@ export default {
     upload (file) {
       this.reset()
 
-      this.updateFileList(file, {status: 'uploading'})
+      let index = this.fileList.indexOf(file)
+
+      this.updateFileList(file, 'uploading')
       let xhr = new XMLHttpRequest()
       file.xhr = xhr
 
@@ -554,14 +582,14 @@ export default {
             this.updateFileList(file)
             break
         }
-        this.$emit('progress', file, e)
+        this.$emit('progress', this.files[index], index, e)
       }
       xhr.onload = () => {
         this.uploadCallback(this.parseData(xhr.responseText), file)
       }
       xhr.onerror = () => {
         this.showFailureResult({}, file)
-        this.$emit('failure')
+        this.$emit('failure', this.files[index], index)
       }
       let formData = new FormData()
       formData.append(this.name, file)
@@ -582,7 +610,7 @@ export default {
     },
     submit (file = this.latestFile) {
       this.currentSubmitingFile = file
-      this.updateFileList(file, {status: 'uploading'})
+      this.updateFileList(file, 'uploading')
 
       this.isSubmiting = true
 
@@ -602,46 +630,45 @@ export default {
     uploadCallback (data, file) {
       this.isSubmiting = false
       this.disabledWhenSubmiting = false
+      let index = this.fileList.indexOf(file)
 
       data = this.convertResponse(data) || data
       if (data.status === 'success') {
         this.showSuccessResult(data, file)
-        this.$emit('success', this.getPureFile(file, data))
+        this.$emit('success', this.files[index], index)
       } else if (data.status === 'failure') {
         this.showFailureResult(data, file)
-        this.$emit('failure', this.getPureFile(file, data))
+        this.$emit('failure', this.files[index], index)
       }
       this.currentSubmitingFile = null
     },
     showSuccessResult (data, file) {
       file.xhr = null
       file.toBeUploaded = null
-      this.updateFileList(file, data, true)
+      this.updateFileList(file, 'success', data, true)
       setTimeout(() => {
-        this.updateFileList(file, {status: null})
+        this.updateFileList(file, null)
       }, 300)
     },
     showFailureResult (data, file) {
       file.xhr = null
       file.toBeUploaded = null
       file.failureReason = data.reason || ''
-      this.updateFileList(file, data)
+      this.updateFileList(file, 'failure', data)
     },
-    updateFileList (file, properties, toEmit = false) {
-      if (properties) {
-        assign(file, properties)
+    updateFileList (file, status, properties, toEmit = false) {
+      if (status !== undefined) {
+        file.status = status
       }
 
+      if (properties) {
+        assign(file, properties)
+        file._extra = omit(properties, ['status', 'name', 'src'])
+      }
       this.$set(this.fileList, this.fileList.indexOf(file), file)
 
       if (toEmit) {
-        this.pureFileList.splice(this.getIndexInPureList(file),
-          0,
-          this.getPureFile(file, properties))
-
-        this.$emit('change', this.maxCount === 1
-          ? (this.pureFileList[0].src || this.pureFileList[0].name)
-          : this.pureFileList)
+        this.$emit('change', this.getValue(false))
       }
     },
     getPureFile (file, properties) {
@@ -664,19 +691,17 @@ export default {
     removeFile (file) {
       this.error.countOverflow = false
 
+      let index = this.fileList.indexOf(file)
       if (this.maxCount === 1) {
         this.fileList = []
-        this.$emit('change', null)
       } else {
-        if (file.status === 'success' || !file.status) {
-          this.pureFileList.splice(this.getIndexInPureList(file), 1)
-        }
         this.fileList.splice(this.fileList.indexOf(file), 1)
-
-        this.$emit('change', this.pureFileList)
       }
+      this.$emit('change', this.getValue(true))
 
-      this.$emit('remove', file)
+      if (!this.isReplacing) {
+        this.$emit('remove', this.files[index], index)
+      }
     },
     cancelFile (file) {
       if (this.requestMode === 'iframe') {
@@ -718,6 +743,19 @@ export default {
     },
     getScopeValue (index, file) {
       return {index, ...file}
+    },
+    getValue (isEmptyValue) {
+      if (this.maxCount !== 1) {
+        return this.pureFileList
+      }
+
+      if (isEmptyValue) {
+        return null
+      }
+
+      return this.compat
+        ? this.pureFileList[0].src || this.pureFileList[0].name
+        : this.pureFileList[0]
     }
   }
 }
