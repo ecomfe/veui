@@ -271,18 +271,14 @@ export default {
       validator (value) {
         return includes(['asc', 'desc'], value)
       }
+    },
+    compat: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
-    let initialValueType
-    if (Array.isArray(this.value)) {
-      initialValueType = 'array'
-    } else {
-      initialValueType = (!this.value || typeof this.value === 'string') ? 'string' : 'object'
-    }
-
     return {
-      initialValueType,
       fileList: this.genFileList(this.value),
       canceled: false,
       // inputId用于图片里的重新上传的label的for
@@ -754,24 +750,12 @@ export default {
       }
 
       if (isEmptyValue) {
-        switch (this.initialValueType) {
-          case 'string':
-            return null
-          case 'object':
-            return {}
-          case 'array':
-            return []
-        }
-      } else {
-        switch (this.initialValueType) {
-          case 'string':
-            return this.pureFileList[0].src || this.pureFileList[0].name
-          case 'object':
-            return this.pureFileList[0]
-          case 'array':
-            return this.pureFileList
-        }
+        return null
       }
+
+      return this.compat
+        ? this.pureFileList[0].src || this.pureFileList[0].name
+        : this.pureFileList[0]
     }
   }
 }
