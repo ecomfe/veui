@@ -8,6 +8,7 @@
   :ui="ui"
   @click="handleClickBox"
   ref="self"
+  role="searchbox"
 >
   <veui-input
     ref="input"
@@ -24,6 +25,10 @@
     <div slot="after" class="veui-searchbox-action"
       ref="search"
       @click.stop="search"
+      aria-label="搜索"
+      :aria-disabled="realDisabled"
+      :aria-readonly="realReadonly"
+      aria-haspopup="listbox"
     >
       <button
         type="button"
@@ -47,6 +52,8 @@
     :overlay-class="overlayClass">
     <div class="veui-searchbox-suggestion-overlay"
       ref="box"
+      role="listbox"
+      :aria-expanded="String(realExpanded)"
       :ui="ui">
       <slot name="suggestions" :suggestions="realSuggestions" :select="selectSuggestion">
         <template v-for="(suggestion, index) in realSuggestions">
