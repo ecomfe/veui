@@ -30,7 +30,7 @@
         </veui-field>
 
         <veui-field label="姓名：">
-            <veui-input v-model="name" @focus="log('focus')"></veui-input>
+            <veui-input v-model="name" @focus="log('focus')" clearable></veui-input>
             <veui-input v-model="name" readonly></veui-input>
             <veui-input v-model="name" disabled></veui-input>
         </veui-field>
@@ -55,26 +55,22 @@
       <section>
         <h3>After Slot / 方向键操作指令 v-nudge </h3>
         <veui-field label="价格：">
-            <veui-input class="input-nudge" v-nudge.y="{
-              update: handleThumbNudgeUpdate
-            }" v-model="price" @focus="log('focus')">
+            <veui-input
+              clearable
+              class="input-nudge"
+              v-nudge.y="{
+                update: handleThumbNudgeUpdate
+              }"
+              v-model="price" @focus="log('focus')"
+            >
               <template slot="after">元</template>
             </veui-input>
-            <veui-input class="input-nudge" v-model="price" readonly>
+            <veui-input class="input-nudge" v-model="price" clearable readonly>
               <template slot="after">元</template>
             </veui-input>
             <veui-input class="input-nudge" v-model="price" disabled>
               <template slot="after">元</template>
             </veui-input>
-        </veui-field>
-      </section>
-
-      <section>
-        <h3>Textarea 模式 （@Deprecated 请移步 <a href="#/textarea">Veui-Textarea</a>）</h3>
-        <veui-field label="多行：">
-            <veui-input class="auto-height" type="textarea" v-model="textarea1" rows=5 @input="log"/>
-            <veui-input class="fixed-height" type="textarea" v-model="textarea2" readonly/>
-            <veui-input type="textarea" v-model="textarea3" disabled/>
         </veui-field>
       </section>
     </veui-form>
@@ -105,9 +101,6 @@ export default {
       phone: '13800138000',
       password: null,
       hiddenValue: '隐藏值',
-      textarea1: '1. 使用rows\n2. 固定5行高度\n3. 不包括padding',
-      textarea2: '设置高度',
-      textarea3: '默认高度',
       poem: '兩岸猿聲啼不住，輕舟已過萬重山',
       price: '1024'
     }
