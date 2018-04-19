@@ -1,6 +1,5 @@
 <template>
 <div
-  v-if="type !== 'textarea'"
   :class="{
     'veui-input': true,
     'veui-input-focused': focused,
@@ -13,7 +12,13 @@
   <template v-if="$slots.before">
     <div class="veui-input-before"><slot name="before"/></div>
   </template>
-  <div class="veui-input-main">
+  <label class="veui-input-main">
+    <span
+      @selectstart.prevent="() => false"
+      class="veui-input-placeholder"
+      v-if="isOldVersion && type !== 'hidden'"
+      v-show="placeholderVisible"
+    >{{ placeholder }}</span>
     <input
       ref="input"
       class="veui-input-input"
@@ -25,36 +30,39 @@
       @input="handleInput"
       @change="$emit('change', $event.target.value, $event)"
     >
-  </div>
+  </label>
+  <span
+    v-if="clearable"
+    v-show="editable && !placeholderVisible"
+    class="veui-input-clear"
+  >
+    <button type="button"
+      aria-label="清除"
+      class="veui-input-clear-button"
+      @click.stop="clear"
+    ><veui-icon :name="icons.remove"/></button>
+  </span>
   <template v-if="$slots.after">
     <div class="veui-input-after"><slot name="after"/></div>
   </template>
 </div>
-<veui-textarea
-  v-else
-  ref="input"
-  v-model="localValue"
-  v-bind="attrs"
-  v-on="listeners"
-  @change="handleTextareaChange"
-/>
 </template>
 
 <script>
 import input from '../mixins/input'
+import ui from '../mixins/ui'
 import { omit, includes } from 'lodash'
-import Textarea from './Textarea'
+import Icon from './Icon'
 import { getListeners } from '../utils/helper'
-import warn from '../utils/warn'
 
 const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
-const TYPE_LIST = ['text', 'password', 'hidden', 'textarea']
+const TYPE_LIST = ['text', 'password', 'hidden']
 
 export default {
   name: 'veui-input',
-  mixins: [input],
+  mixins: [input, ui],
   components: {
-    'veui-textarea': Textarea
+    'veui-icon': Icon
   },
   props: {
     ui: String,
@@ -62,10 +70,6 @@ export default {
       type: String,
       default: 'text',
       validator (val) {
-        if (val === 'textarea') {
-          warn('[veui-input] `type` value `textarea` is deprecated and will be removed in the next version.' +
-            ' Use `veui-textarea` component instead.')
-        }
         return includes(TYPE_LIST, val)
       }
     },
@@ -78,33 +82,19 @@ export default {
     autofocus: Boolean,
     selectOnFocus: Boolean,
     composition: Boolean,
-    /**
-     * @deprecated
-     */
-    lineNumber: Boolean,
-    /**
-     * @deprecated
-     */
-    rows: [String, Number],
-    /**
-     * @deprecated
-     */
-    autoresize: Boolean
+    clearable: Boolean
   },
   data () {
     return {
-      focused: false
+      focused: false,
+      localValue: this.value,
+      compositionValue: this.value
     }
   },
   computed: {
     attrs () {
       return {
-        ...omit(this.$props,
-          'selectOnFocus',
-          ...(this.type === 'textarea'
-            ? ['type', 'composition', 'autocomplete']
-            : ['lineNumber', 'rows', 'autoresize'])
-        ),
+        ...omit(this.$props, 'selectOnFocus', 'composition', 'value', 'clearable'),
         name: this.realName,
         disabled: this.realDisabled,
         readonly: this.realReadonly,
@@ -113,18 +103,22 @@ export default {
     },
     listeners () {
       return getListeners(EVENTS, this)
+    },
+    isOldVersion () {
+      return !('placeholder' in document.createElement('input'))
+    },
+    editable () {
+      return !this.realDisabled && !this.realReadonly
+    },
+    placeholderVisible () {
+      return this.compositionValue == null || this.compositionValue === ''
     }
   },
   watch: {
-    value: {
-      handler (val) {
+    value (val) {
+      if (val !== this.localValue) {
         this.localValue = val
-      },
-      immediate: true
-    },
-    localValue (val) {
-      if (this.type === 'textarea' && this.value !== val) {
-        this.$emit('input', val)
+        this.compositionValue = val
       }
     }
   },
@@ -138,9 +132,7 @@ export default {
       if (this.composition || !this.composition && this.localValue !== this.value) {
         this.$emit('input', $event.target.value, $event)
       }
-    },
-    handleTextareaChange (value, $event) {
-      this.$emit('change', value, $event)
+      this.compositionValue = $event.target.value
     },
     handleFocus ($event) {
       this.focused = true
@@ -153,17 +145,17 @@ export default {
     },
     activate () {
       this.$refs.input.focus()
+    },
+    clear () {
+      this.localValue = ''
+      this.compositionValue = ''
+      this.$refs.input.focus()
+      this.$emit('input', '')
     }
   },
   mounted () {
-    if (this.type !== 'hidden') {
-      if (this.placeholder && !('placeholder' in document.createElement('input'))) {
-        // TODO
-        // this.$on('focus', handlePlaceHolder)
-      }
-      if (this.selectOnFocus) {
-        this.$on('focus', ($event) => $event.target.select())
-      }
+    if (this.type !== 'hidden' && this.selectOnFocus) {
+      this.$on('focus', $event => $event.target.select())
     }
   }
 }

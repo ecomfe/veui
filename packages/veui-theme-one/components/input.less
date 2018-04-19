@@ -1,6 +1,8 @@
 @import "../lib.less";
 @import (reference) "../input.less";
 
+@left-padding: 10px;
+
 .veui-input {
   .make-line-height(@height) {
     height: @height;
@@ -23,6 +25,7 @@
 
   &-before,
   &-main,
+  &-clear,
   &-after {
     display: table-cell;
     vertical-align: top;
@@ -40,9 +43,39 @@
     height: 100%;
     border: none;
     outline: none;
-    padding: 0 10px;
+    padding: 0 @left-padding;
     background-color: transparent;
     text-overflow: ellipsis;
+  }
+
+  &-clear {
+    padding-right: 12px;
+
+    button {
+      width: 1em;
+      height: 1em;
+      padding: 0;
+      vertical-align: ~"calc(-50% + .5em)";
+      vertical-align: ~"-3px\9\0";
+      border: none;
+      background-color: transparent;
+      color: @veui-text-color-normal;
+      outline: none;
+      cursor: unset;
+
+      &.focus-visible {
+        color: @veui-text-color-strong;
+      }
+    }
+
+    .veui-icon {
+      cursor: pointer;
+      vertical-align: top;
+
+      &:hover {
+        color: @veui-text-color-strong;
+      }
+    }
   }
 
   .veui-field-invalid & {
@@ -76,8 +109,14 @@
     }
   }
 
-  &::placeholder {
-    color: @veui-text-color-weak;
+  &-placeholder {
+    position: absolute;
+    padding-left: @left-padding;
+    color: @veui-text-color-weak !important;
+  }
+
+  &-input::placeholder {
+    color: @veui-text-color-weak !important;
   }
 
   &[ui~="large"] {
