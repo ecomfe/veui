@@ -17,7 +17,7 @@
       @selectstart.prevent="() => false"
       class="veui-input-placeholder"
       v-if="isOldVersion && type !== 'hidden'"
-      v-show="placeholderVisible"
+      v-show="placeholderShown"
     >{{ placeholder }}</span>
     <input
       ref="input"
@@ -33,7 +33,7 @@
   </label>
   <span
     v-if="clearable"
-    v-show="editable && !placeholderVisible"
+    v-show="editable && !placeholderShown"
     class="veui-input-clear"
   >
     <button type="button"
@@ -110,7 +110,7 @@ export default {
     editable () {
       return !this.realDisabled && !this.realReadonly
     },
-    placeholderVisible () {
+    placeholderShown () {
       return this.compositionValue == null || this.compositionValue === ''
     }
   },
