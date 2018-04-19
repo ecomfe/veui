@@ -1,9 +1,9 @@
 @import "../lib.less";
 @import (reference) "../input.less";
 
-@left-padding: 10px;
-
 .veui-input {
+  @left-padding: 10px;
+
   .make-line-height(@height) {
     height: @height;
     line-height: @height - 2px;
@@ -51,7 +51,7 @@
   &-clear {
     padding-right: 12px;
 
-    button {
+    &-button {
       width: 1em;
       height: 1em;
       padding: 0;
