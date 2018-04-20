@@ -96,27 +96,29 @@ export class FocusManager {
    */
   stack = []
 
+  /**
+   * Latest interaction is triggered by pointer or keyboard
+   */
+  trigger = 'pointer'
+
   triggerHandlers = {
     keydown: () => {
       this.trigger = 'keyboard'
     },
     mousedown: () => {
       this.trigger = 'pointer'
-    },
-    touchstart: () => {
-      this.trigger = 'pointer'
     }
   }
 
   initTriggerHandlers () {
     keys(this.triggerHandlers).forEach(type => {
-      document.addEventListener(type, this.triggerHandlers[type], false)
+      document.addEventListener(type, this.triggerHandlers[type], true)
     })
   }
 
   destroyTriggerHandlers () {
     keys(this.triggerHandlers).forEach(type => {
-      document.removeEventListener(type, this.triggerHandlers[type], false)
+      document.removeEventListener(type, this.triggerHandlers[type], true)
     })
   }
 
