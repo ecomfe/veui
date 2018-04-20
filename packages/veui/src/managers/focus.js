@@ -1,4 +1,4 @@
-import { remove, findIndex } from 'lodash'
+import { remove, findIndex, keys } from 'lodash'
 import { focusIn } from '../utils/dom'
 import Vue from 'vue'
 
@@ -6,16 +6,18 @@ class FocusContext {
   /**
    *
    * @param {Element} root Root element for focus context
+   * @param {FocusManager} env FocusManager instance that creates this context
    * @param {=Element} source Previous focused element
    * @param {=Boolean} trap Whether focus should be trapped inside root
    * @param {=Element} preferred Where we should start searching for focusable elements
    */
-  constructor (root, { source, trap = false, preferred }) {
+  constructor (root, env, { source, trap = false, preferred }) {
     if (!root) {
       throw new Error('Root must be specified to create a FocusContext instance.')
     }
 
     this.root = root
+    this.env = env
     this.source = source
     this.trap = trap
     this.preferred = preferred
@@ -71,14 +73,15 @@ class FocusContext {
       this.root.removeChild(wardBefore)
       this.root.removeChild(wardAfter)
     }
-    if (source && typeof source.focus === 'function') {
+    if (source) {
       this.source = null
-
       // restore focus in a macro task to prevent
       // triggering events on the original focus
-      setTimeout(() => {
-        source.focus()
-      }, 0)
+      if (typeof source.focus === 'function' && this.env.trigger !== 'pointer') {
+        setTimeout(() => {
+          source.focus()
+        }, 0)
+      }
     }
     this.preferred = null
     this.root = null
@@ -93,8 +96,36 @@ export class FocusManager {
    */
   stack = []
 
+  triggerHandlers = {
+    keydown: () => {
+      this.trigger = 'keyboard'
+    },
+    mousedown: () => {
+      this.trigger = 'pointer'
+    },
+    touchstart: () => {
+      this.trigger = 'pointer'
+    }
+  }
+
+  initTriggerHandlers () {
+    keys(this.triggerHandlers).forEach(type => {
+      document.addEventListener(type, this.triggerHandlers[type], false)
+    })
+  }
+
+  destroyTriggerHandlers () {
+    keys(this.triggerHandlers).forEach(type => {
+      document.removeEventListener(type, this.triggerHandlers[type], false)
+    })
+  }
+
   createContext (root, options = {}) {
-    let context = new FocusContext(root, options)
+    if (!this.stack.length) {
+      this.initTriggerHandlers()
+    }
+
+    let context = new FocusContext(root, this, options)
     this.stack.push(context)
     return context
   }
@@ -122,6 +153,9 @@ export class FocusManager {
   remove (context) {
     this.detach(context)
     context.destroy()
+    if (!this.stack.length) {
+      this.destroyTriggerHandlers()
+    }
   }
 }
 
