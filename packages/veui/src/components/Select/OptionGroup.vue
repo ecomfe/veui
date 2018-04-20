@@ -33,7 +33,7 @@ export default {
       type: String,
       default: 'inline',
       validator (val) {
-        return ['inline', 'popout'].indexOf(val) !== -1
+        return ['inline', 'popout', 'popup'].indexOf(val) !== -1
       }
     }
   },
@@ -61,9 +61,10 @@ export default {
       return this.items.map(({ id }) => id)
     },
     canPopOut () {
-      return !!(this.position === 'popout' && this.items && this.items.length && this.label)
+      return !!((this.position === 'popup' || this.position === 'popout') &&
+        this.items && this.items.length && this.label)
     },
-    popoutRole () {
+    popupRole () {
       return isType(this.select, 'input') ? 'listbox' : 'menu'
     }
   },
@@ -126,7 +127,7 @@ export default {
               'veui-option-group-label': true,
               'veui-option-group-button': this.canPopOut
             }}
-            aria-haspopout={this.canPopOut ? this.popoutRole : null}
+            aria-haspopup={this.canPopOut ? this.popupRole : null}
             {...this.canPopOut
               ? {
                 on: {
@@ -173,7 +174,7 @@ export default {
               ref="box"
               class="veui-select-options"
               tabindex="-1"
-              role={this.popoutRole}
+              role={this.popupRole}
               aria-expanded={String(this.expanded)}
               ui={this.ui}
               {...{

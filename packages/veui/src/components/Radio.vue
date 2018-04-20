@@ -5,7 +5,11 @@
     'veui-disabled': realReadonly || realDisabled
   }"
   :ui="ui">
-  <input type="radio" v-bind="attrs" @change="localChecked = $event.target.checked">
+  <input
+    type="radio"
+    v-bind="attrs"
+    @change="localChecked = $event.target.checked"
+    v-on="listeners">
   <span class="veui-radio-box"></span>
   <span class="veui-radio-label"><slot/></span>
 </label>
@@ -14,6 +18,9 @@
 <script>
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import { getListeners } from '../utils/helper'
+
+const EVENTS = ['keyup', 'keydown', 'keypress', 'focus', 'blur']
 
 export default {
   name: 'veui-radio',
@@ -44,6 +51,9 @@ export default {
         disabled: this.realDisabled || this.realReadonly,
         ...this.$attrs
       }
+    },
+    listeners () {
+      return getListeners(EVENTS, this)
     }
   },
   watch: {
@@ -55,9 +65,7 @@ export default {
     },
     localChecked: {
       handler (val) {
-        if (this.checked !== val) {
-          this.$emit('update:checked', val)
-        }
+        this.$emit('update:checked', val)
 
         if (val) {
           this.$emit('change', this.value)

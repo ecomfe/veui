@@ -41,9 +41,7 @@ export default {
   },
   methods: {
     handleChange (val) {
-      if (this.val !== val) {
-        this.$emit('change', val)
-      }
+      this.$emit('change', val)
     }
   }
 }

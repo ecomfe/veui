@@ -149,7 +149,7 @@ export default {
     clear () {
       this.localValue = ''
       this.compositionValue = ''
-      this.$refs.input.focus()
+      this.focus()
       this.$emit('input', '')
     }
   },

@@ -685,13 +685,11 @@ export default {
     }
   },
   watch: {
-    month (val, oldVal) {
-      if (val !== oldVal) {
-        this.$emit('viewchange', {
-          year: this.year,
-          month: this.month
-        })
-      }
+    month (val) {
+      this.$emit('viewchange', {
+        year: this.year,
+        month: this.month
+      })
     },
     selected (val) {
       this.picking = this.pickingRanges = null

@@ -27,7 +27,7 @@
     :ui="ui"
     @toggle="toggle"
     @click="handleItemClick"
-    v-else></veui-tree-node>
+    v-else/>
 </template>
 
 <script>

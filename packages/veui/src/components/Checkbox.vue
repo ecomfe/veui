@@ -4,9 +4,16 @@
     'veui-disabled': realReadonly || realDisabled
   }"
   :ui="ui">
-  <input ref="box" type="checkbox" v-bind="attrs" @change="handleChange">
+  <input
+    ref="box"
+    type="checkbox"
+    v-bind="attrs"
+    @change="handleChange"
+    v-on="listeners">
   <span class="veui-checkbox-box">
-    <veui-icon v-if="isChecked || localIndeterminate" :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"/>
+    <veui-icon
+      v-if="isChecked || localIndeterminate"
+      :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"/>
   </span>
   <span class="veui-checkbox-label"><slot/></span>
 </label>
@@ -16,7 +23,10 @@
 import Icon from './Icon'
 import input from '../mixins/input'
 import ui from '../mixins/ui'
+import { getListeners } from '../utils/helper'
 import { patchIndeterminate } from '../utils/dom'
+
+const EVENTS = ['keyup', 'keydown', 'keypress', 'focus', 'blur']
 
 export default {
   name: 'veui-checkbox',
@@ -61,6 +71,9 @@ export default {
     },
     isChecked () {
       return this.localChecked === this.trueValue
+    },
+    listeners () {
+      return getListeners(EVENTS, this)
     }
   },
   methods: {
@@ -93,9 +106,7 @@ export default {
       }
     },
     localChecked (value) {
-      if (this.checked !== value) {
-        this.$emit('change', value)
-      }
+      this.$emit('change', value)
     }
   },
   mounted () {

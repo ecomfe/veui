@@ -103,9 +103,7 @@ export default {
       this.localOpen = val
     },
     localOpen (val) {
-      if (this.open !== val) {
-        this.$emit('update:open', this.localOpen)
-      }
+      this.$emit('update:open', this.localOpen)
     }
   },
   methods: {

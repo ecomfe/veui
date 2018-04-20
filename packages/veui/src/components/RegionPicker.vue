@@ -122,10 +122,6 @@ export default {
       localSelected: [...(this.selected || [])],
       localDatasource: null,
       constraints: [
-        // {
-        //   to: 'scrollParent',
-        //   attachment: 'together'
-        // },
         {
           to: 'window',
           attachment: 'together'

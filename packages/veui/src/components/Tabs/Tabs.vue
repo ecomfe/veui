@@ -33,7 +33,7 @@
                 <button v-if="tab.removable" type="button" class="veui-tabs-item-remove"
                   aria-label="删除"
                   @click="$emit('remove', tab)">
-                    <veui-icon :name="icons.remove"/>
+                  <veui-icon :name="icons.remove"/>
                 </button>
               </slot>
             </slot>

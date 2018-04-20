@@ -34,7 +34,7 @@
       role="menu"
       :ui="ui"
       :aria-expanded="String(expanded)"
-      @keydown.esc.stop="expanded = false"
+      @keydown.esc.stop="close"
       @keydown.down.prevent="navigate()"
       @keydown.up.prevent="navigate(false)">
       <veui-option-group :options="options" ref="options">
