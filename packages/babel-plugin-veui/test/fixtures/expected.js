@@ -8,3 +8,5 @@ import veui from 'veui';
 
 import Switch from 'veui/components/Switch';
 import { default as Whatever, zig } from 'veui/components/Calendar';
+import VeuiDropdown from 'veui/components/Dropdown.vue';
+import VButtonGroup from 'veui/components/ButtonGroup.vue';

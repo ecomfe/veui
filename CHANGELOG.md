@@ -32,6 +32,27 @@
 
 ### 💡 主要变更
 
+* [+] `babel-plugin-veui` 支持在 `import` 时为组件添加前缀，方便直接使用快捷写法定义组件的 `components` 选项。默认支持 `veui-` 和 `v-` 两种前缀。
+
+  > ```vue
+  > <template>
+  > <div>
+  >   <veui-button>确定 <v-icon name="check"></veui-button>
+  > </div>
+  > </template>
+  > <script>
+  > import { VeuiButton, VIcon } from 'veui'
+  >
+  > export default {
+  >   name: 'my-component',
+  >   components: {
+  >     VeuiButton,
+  >     VIcon
+  >   }
+  > }
+  > </script>
+  > ```
+
 * [+] `NumberInput` 新增 `max`/`min` prop，优先从直接父组件 `Field` 的 prop `rule` 中继承 `max`/`min` rule 的值。
 * [^] `Uploader` 组件的事件 `success`、`failure`、`remove` 增加参数：当前处理文件的序号。
 * [^] `Uploader` 组件在重新上传的时候不再触发 `remove` 事件。
