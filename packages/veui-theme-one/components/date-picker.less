@@ -21,6 +21,10 @@
     .veui-button {
       color: @veui-text-color-weak;
 
+      &.focus-visible {
+        color: @veui-brand-color;
+      }
+
       &.veui-disabled {
         color: @veui-text-color-aux;
       }
@@ -135,6 +139,10 @@
     & + .veui-date-picker-clear {
       background-color: @veui-gray-color-6;
     }
+  }
+
+  &[ui~="alt"] &-clear {
+    background-color: @veui-gray-color-7;
   }
 
   &[ui~="alt"]:hover {

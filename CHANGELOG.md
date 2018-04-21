@@ -3,19 +3,18 @@
 ### ⚠️ 非兼容性变更
 
 * [^] `Uploader` 组件在 `maxCount` 的值是 `1` 的情况下，`value` 的默认类型从字符串改成对象，可以通过设置 prop `compat` 为 `true` 将 `value` 的类型设置为字符串兼容旧版本。
-* [^] 修改了 `Radio` 组件的 `v-model` 语义，现在机制和 Vue.js 对原生 `<input type="radio">` 的处理保持一致。
 
   > #### 迁移指南
-  >
-  > ##### `Uploader` 组件
   >
   > `Uploader` 在 `max-count` 为 `1` 时的 `value` prop 数据类型修改为对象，和多文件时的数组项相同。需要兼容原字符串数据格式时，需要设置 `compat` prop 为 `true`：
   >
   > ```html
   > <veui-uploader compat .../>
   > ```
-  >
-  > ##### `Radio` 组件
+
+* [^] 修改了 `Radio` 组件的 `v-model` 语义，现在机制和 Vue.js 对原生 `<input type="radio">` 的处理保持一致。
+
+  > #### 迁移指南
   >
   > 此版本前的 `Radio` 组件的 `v-model` 对应 `checked` 属性，但由于之前的版本中存在多个同 `name` 的 `Radio` 组件时，被取消选中的单选框并不会响应数据变化，导致实际 `v-model` 并不完全可用。新版本在使用 `v-model` 的场景下修复了这个问题，并把逻辑和 Vue.js 对原生元素的处理方式进行了对齐。
   >
@@ -28,6 +27,8 @@
   > 通过将多个 `Radio` 组件的 `v-model` 绑定到同一个数据项，即可完成数据的双向绑定。注意，仍然建议使用 `name` 属性来正确表达分组。这将会影响元素的可访问性。
   >
   > 同时，更建议使用 `RadioGroup` 组件来实现单选组，因为它会有更简单的 API 和可访问性。
+
+* [^] 将 `OptionGroup` 的 `position` 属性的 `popout` 值重命名为了 `popup`（与 `aria-haspopup` 保持一致）。将在下个版本移除对 `popout` 的支持。
 
 ### 💡 主要变更
 
