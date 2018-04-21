@@ -94,12 +94,9 @@ export function getIndexOfType (current, type, vnodes = 'default') {
 
   // 只是用于每次渲染时插入到当前位置的顺序
   return findIndex(
-    [...parent.$slots[vnodes]].filter(vnode => {
-      return (
-        vnode.componentOptions &&
-        includes(getUITypes(vnode), type)
-      )
-    }),
+    [...parent.$slots[vnodes]].filter(
+      vnode => vnode.componentOptions && includes(getUITypes(vnode), type)
+    ),
     vnode => vnode === currentVNode
   )
 }

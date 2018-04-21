@@ -23,9 +23,7 @@ export function walk (array, callback, alias = 'children') {
 }
 
 function getChildrenByAlias (obj, alias) {
-  let keys = typeof alias === 'string'
-    ? [alias]
-    : alias
+  let keys = typeof alias === 'string' ? [alias] : alias
 
   let key = find(keys, key => {
     return Array.isArray(obj[key])

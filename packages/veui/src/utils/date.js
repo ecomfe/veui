@@ -45,9 +45,11 @@ export function isSameDay (src, target) {
   }
   let srcData = toDateData(src)
   let targetData = toDateData(target)
-  return srcData.date === targetData.date &&
+  return (
+    srcData.date === targetData.date &&
     srcData.month === targetData.month &&
     srcData.year === targetData.year
+  )
 }
 
 export function isInRange (day, range) {

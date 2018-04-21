@@ -10,7 +10,7 @@ export class AlertManager extends SpecialDialog {
 
   createComponent (data) {
     const component = new Vue({
-      render: (h) => {
+      render: h => {
         return h(
           this.type,
           {
@@ -19,9 +19,7 @@ export class AlertManager extends SpecialDialog {
               ok: data.ok
             }
           },
-          [
-            h('template', { slot: 'default' }, data.content)
-          ]
+          [h('template', { slot: 'default' }, data.content)]
         )
       }
     })
@@ -34,11 +32,10 @@ export class AlertManager extends SpecialDialog {
       let component = this.create({
         ...options,
         ok: () => {
-          Promise.resolve(ok())
-            .then(result => {
-              this.removeComponent(component)
-              resolve()
-            })
+          Promise.resolve(ok()).then(result => {
+            this.removeComponent(component)
+            resolve()
+          })
         }
       })
     })

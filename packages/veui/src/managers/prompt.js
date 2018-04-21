@@ -11,27 +11,24 @@ export class PromptManager extends SpecialDialog {
   createComponent (data) {
     data.value = data.value || ''
     const component = new Vue({
-      render: (h) => {
-        return h(
-          this.type,
-          {
-            props: {
-              open: data.open,
-              title: data.title,
-              ui: data.type,
-              content: data.content,
-              value: data.value,
-              overlayClass: data.overlayClass
-            },
-            on: {
-              ok: () => data.ok(data.value),
-              cancel: data.cancel,
-              input: (v) => {
-                data.value = v
-              }
+      render: h => {
+        return h(this.type, {
+          props: {
+            open: data.open,
+            title: data.title,
+            ui: data.type,
+            content: data.content,
+            value: data.value,
+            overlayClass: data.overlayClass
+          },
+          on: {
+            ok: () => data.ok(data.value),
+            cancel: data.cancel,
+            input: val => {
+              data.value = val
             }
           }
-        )
+        })
       }
     })
     return component

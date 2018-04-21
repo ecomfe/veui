@@ -12,22 +12,31 @@ export default {
       let ui = (this.ui || '').trim()
       let tokens = compact(uniq(ui.split(/\s+/)))
       let { uiConfig = {} } = this
-      return tokens.reduce((result, token) => {
-        let name = find(Object.keys(uiConfig), name => {
-          let { values = [] } = uiConfig[name]
-          return includes(values, token)
-        })
-        if (name) {
-          if (result[name] && result[name] !== 'default') {
-            warn(`[${this.$options.name}] Duplicated \`${name}\` value for \`ui\`: [${result[name]}], [${token}].`)
+      return tokens.reduce(
+        (result, token) => {
+          let name = find(Object.keys(uiConfig), name => {
+            let { values = [] } = uiConfig[name]
+            return includes(values, token)
+          })
+          if (name) {
+            if (result[name] && result[name] !== 'default') {
+              warn(
+                `[${
+                  this.$options.name
+                }] Duplicated \`${name}\` value for \`ui\`: [${
+                  result[name]
+                }], [${token}].`
+              )
+            }
+            result[name] = token
           }
-          result[name] = token
-        }
-        return result
-      }, Object.keys(uiConfig).reduce((result, prop) => {
-        result[prop] = 'default'
-        return result
-      }, {}))
+          return result
+        },
+        Object.keys(uiConfig).reduce((result, prop) => {
+          result[prop] = 'default'
+          return result
+        }, {})
+      )
     },
     uiConfig () {
       return this.getComponentConfig('ui')

@@ -25,5 +25,8 @@ export function isEqualSet (arr1, arr2) {
   let uniqArr1 = uniq(arr1)
   let uniqArr2 = uniq(arr2)
 
-  return uniqArr1.length === uniqArr2.length && union(arr1, arr2).length === uniqArr1.length
+  return (
+    uniqArr1.length === uniqArr2.length &&
+    union(arr1, arr2).length === uniqArr1.length
+  )
 }

@@ -1,4 +1,15 @@
-import { noop, isObject, isFunction, find, get, keys, isString, isEqual, difference, omit } from 'lodash'
+import {
+  noop,
+  isObject,
+  isFunction,
+  find,
+  get,
+  keys,
+  isString,
+  isEqual,
+  difference,
+  omit
+} from 'lodash'
 import { getNodes } from '../utils/context'
 import BaseHandler from './drag/BaseHandler'
 import TranslateHandler from './drag/TranslateHandler'
@@ -58,11 +69,13 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
     return isString(value) && value.indexOf(config.get('drag.prefix')) === 0
   }
   function isRect (value) {
-    return isObject(containment) &&
+    return (
+      isObject(containment) &&
       containment.hasOwnProperty('top') &&
       containment.hasOwnProperty('left') &&
       containment.hasOwnProperty('width') &&
       containment.hasOwnProperty('height')
+    )
   }
   if (!isSpecialSyntax(containment) && !isRect(containment)) {
     containment = getNodes(containment, vnode.context)
@@ -107,7 +120,8 @@ function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
   const oldParams = el.dragOldParams
   // 如果参数没发生变化，就不要刷新了
   if (
-    difference(get(params, 'targets', []), get(oldParams, 'targets', [])).length === 0 &&
+    difference(get(params, 'targets', []), get(oldParams, 'targets', []))
+      .length === 0 &&
     isEqual(omit(params, 'targets'), omit(oldParams, 'targets'))
   ) {
     return

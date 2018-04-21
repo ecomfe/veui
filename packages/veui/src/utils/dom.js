@@ -4,13 +4,15 @@ export function closest (element, selectors) {
   }
 
   // Polyfill from https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
-  let matches = (element.document || element.ownerDocument).querySelectorAll(selectors)
+  let matches = (element.document || element.ownerDocument).querySelectorAll(
+    selectors
+  )
   let i
 
   do {
     i = matches.length
     while (--i >= 0 && matches.item(i) !== element) {}
-  } while ((i < 0) && (element = element.parentElement))
+  } while (i < 0 && (element = element.parentElement))
 
   return element
 }
@@ -36,9 +38,13 @@ export function patchIndeterminate (element) {
     needIndeterminatePatch = testIndeterminate()
   }
 
-  if (!needIndeterminatePatch ||
-    !element.tagName || element.tagName.toLowerCase() !== 'input' ||
-    !element.type || element.type.toLowerCase() !== 'checkbox') {
+  if (
+    !needIndeterminatePatch ||
+    !element.tagName ||
+    element.tagName.toLowerCase() !== 'input' ||
+    !element.type ||
+    element.type.toLowerCase() !== 'checkbox'
+  ) {
     return
   }
 
@@ -49,7 +55,10 @@ export function patchIndeterminate (element) {
   let target = label || element
   let targets = label ? [label] : []
   if (element.id) {
-    targets = [target, ...document.querySelectorAll(`label[for="${element.id}"]`)]
+    targets = [
+      target,
+      ...document.querySelectorAll(`label[for="${element.id}"]`)
+    ]
   }
   targets.forEach(target => {
     target.addEventListener('mousedown', function () {
@@ -58,15 +67,19 @@ export function patchIndeterminate (element) {
   })
 
   // Click on labels will also trigger change events for checkboxes
-  element.addEventListener('click', function () {
-    if (!indeterminate) {
-      return
-    }
-    element.checked = !element.checked
-    let event = document.createEvent('HTMLEvents')
-    event.initEvent('change', true, false)
-    element.dispatchEvent(event)
-  }, false)
+  element.addEventListener(
+    'click',
+    function () {
+      if (!indeterminate) {
+        return
+      }
+      element.checked = !element.checked
+      let event = document.createEvent('HTMLEvents')
+      event.initEvent('change', true, false)
+      element.dispatchEvent(event)
+    },
+    false
+  )
 }
 
 /**

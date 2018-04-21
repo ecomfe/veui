@@ -1,4 +1,13 @@
-import { includes, camelCase, get, isString, isArray, isObject, assign, keys } from 'lodash'
+import {
+  includes,
+  camelCase,
+  get,
+  isString,
+  isArray,
+  isObject,
+  assign,
+  keys
+} from 'lodash'
 
 export function getTypedAncestorTracker (type, name = type) {
   return {
@@ -83,11 +92,11 @@ export function isEmpty (val) {
 export function normalizeClass (klasses) {
   let klassObj = {}
   if (isString(klasses)) {
-    klasses.split(/\s+/).forEach((klass) => {
+    klasses.split(/\s+/).forEach(klass => {
       klassObj[klass] = true
     })
   } else if (isArray(klasses)) {
-    klasses.forEach((klass) => {
+    klasses.forEach(klass => {
       klassObj[klass] = true
     })
   } else if (isObject(klasses)) {
@@ -101,7 +110,9 @@ export function getConfigKey (name) {
 }
 
 export function stringifyQuery (query) {
-  return Object.keys(query).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`).join('&')
+  return Object.keys(query)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
+    .join('&')
 }
 
 const CLASS_PROP_DEF = {

@@ -5,7 +5,7 @@ import max from './rules/max'
 import min from './rules/min'
 import numeric from './rules/numeric'
 import pattern from './rules/pattern'
-import {isObject, isFunction} from 'lodash'
+import { isObject, isFunction } from 'lodash'
 
 const replaceRe = /%\{ruleValue\}/g
 
@@ -35,7 +35,10 @@ export class Rule {
           name: rule.name,
           message: isFunction(rule.message)
             ? rule.message(rule.value)
-            : ((rule.message || validator.message) + '').replace(replaceRe, rule.value)
+            : ((rule.message || validator.message) + '').replace(
+              replaceRe,
+              rule.value
+            )
         }
       }
       // 代表没错

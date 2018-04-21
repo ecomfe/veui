@@ -13,7 +13,9 @@ class FocusContext {
    */
   constructor (root, env, { source, trap = false, preferred }) {
     if (!root) {
-      throw new Error('Root must be specified to create a FocusContext instance.')
+      throw new Error(
+        'Root must be specified to create a FocusContext instance.'
+      )
     }
 
     this.root = root

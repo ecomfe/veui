@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dev": "cd packages/veui && npm run dev",
+    "test": "lerna run test",
     "build-components": "cd packages/veui && npm run components && npm run build && cd ../..",
     "build-plugin": "cd packages/babel-plugin-veui && npm run build && cd ../..",
     "build-loader": "cd packages/veui-loader && npm run build && cd ../..",

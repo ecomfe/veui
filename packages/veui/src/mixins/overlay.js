@@ -1,4 +1,8 @@
-import { normalizeClass, getClassPropDef, resolveOverlayPosition } from '../utils/helper'
+import {
+  normalizeClass,
+  getClassPropDef,
+  resolveOverlayPosition
+} from '../utils/helper'
 import { omit } from 'lodash'
 
 export default {
@@ -19,10 +23,13 @@ export default {
     realOverlayOptions () {
       let options = { ...this.localOverlayOptions, ...this.overlayOptions }
       let { position } = options
-      return omit({
-        ...options,
-        ...resolveOverlayPosition(position)
-      }, 'position')
+      return omit(
+        {
+          ...options,
+          ...resolveOverlayPosition(position)
+        },
+        'position'
+      )
     }
   },
   methods: {

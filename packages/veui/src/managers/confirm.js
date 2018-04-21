@@ -10,7 +10,7 @@ export class ConfirmManager extends SpecialDialog {
 
   createComponent (data) {
     const component = new Vue({
-      render: (h) => {
+      render: h => {
         return h(
           this.type,
           {
@@ -25,9 +25,7 @@ export class ConfirmManager extends SpecialDialog {
               cancel: data.cancel
             }
           },
-          [
-            h('template', { slot: 'default' }, data.content)
-          ]
+          [h('template', { slot: 'default' }, data.content)]
         )
       }
     })
@@ -38,7 +36,7 @@ export class ConfirmManager extends SpecialDialog {
     let ok = isFunction(options.ok) ? options.ok : noop
     let cancel = isFunction(options.cancel) ? options.cancel : noop
     return new Promise((resolve, reject) => {
-      let checkRemove = (isOk) => {
+      let checkRemove = isOk => {
         Promise.resolve(isOk ? ok() : cancel()).then(result => {
           this.removeComponent(component)
           resolve(isOk)

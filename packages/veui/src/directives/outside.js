@@ -1,4 +1,15 @@
-import { isFunction, uniqueId, remove, find, isNumber, isString, keys, noop, isEqual, pick } from 'lodash'
+import {
+  isFunction,
+  uniqueId,
+  remove,
+  find,
+  isNumber,
+  isString,
+  keys,
+  noop,
+  isEqual,
+  pick
+} from 'lodash'
 import { getNodes } from '../utils/context'
 import { contains } from '../utils/dom'
 
@@ -28,16 +39,20 @@ function initBindingType (type) {
   let key = getBindingKey(type)
   let event = SPECIAL_EVENT_MAP[type] || type
 
-  document.addEventListener(event, e => {
-    handlerBindings[type].forEach(item => {
-      item[key] && item[key].handler(e)
-    })
-  }, true)
+  document.addEventListener(
+    event,
+    e => {
+      handlerBindings[type].forEach(item => {
+        item[key] && item[key].handler(e)
+      })
+    },
+    true
+  )
 }
 
 function getElementsByRefs (refs, context) {
   const elements = []
-  refs.forEach((ref) => {
+  refs.forEach(ref => {
     elements.push(...getNodes(ref, context))
   })
   return elements
@@ -58,16 +73,25 @@ function parseParams (el, arg, modifiers, value, context) {
 
     refs = arg ? arg.split(',') : []
 
-    trigger = find(TRIGGER_TYPES, triggerType => triggerType in modifiers) || 'click'
+    trigger =
+      find(TRIGGER_TYPES, triggerType => triggerType in modifiers) || 'click'
 
-    delay = find(keys(modifiers), key => isNumber(parseInt(key, 10)) && modifiers[key])
+    delay = find(
+      keys(modifiers),
+      key => isNumber(parseInt(key, 10)) && modifiers[key]
+    )
     delay = delay ? parseInt(delay, 10) : 0
   } else {
     let normalizedValue = value || {}
-    handler = isFunction(normalizedValue.handler) ? normalizedValue.handler : noop
+    handler = isFunction(normalizedValue.handler)
+      ? normalizedValue.handler
+      : noop
 
-    refs = Array.isArray(normalizedValue.refs) ? normalizedValue.refs
-      : (isString(normalizedValue.refs) ? normalizedValue.refs.split(',') : [normalizedValue.refs])
+    refs = Array.isArray(normalizedValue.refs)
+      ? normalizedValue.refs
+      : isString(normalizedValue.refs)
+        ? normalizedValue.refs.split(',')
+        : [normalizedValue.refs]
 
     trigger = normalizedValue.trigger || 'click'
 
@@ -102,7 +126,10 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
   if (trigger !== 'hover') {
     return function (e) {
       // 非移动触发的受控模式下，直接判断元素包含情况
-      let includeTargets = [...(excludeSelf ? [] : [el]), ...getElementsByRefs(refs, context)]
+      let includeTargets = [
+        ...(excludeSelf ? [] : [el]),
+        ...getElementsByRefs(refs, context)
+      ]
       if (e.type === trigger && !isElementIn(e.target, includeTargets)) {
         handler(e)
       }
@@ -111,9 +138,15 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
     if (!delay) {
       // 如果没有设置 delay 参数，只要检查到鼠标移到 includeTargets 外面去了，就同步触发 outside handler 。
       return function handleOutsideSync (e) {
-        let includeTargets = [...(excludeSelf ? [] : [el]), ...getElementsByRefs(refs, context)]
+        let includeTargets = [
+          ...(excludeSelf ? [] : [el]),
+          ...getElementsByRefs(refs, context)
+        ]
         // 从 includeTargets 区域移到外面去了，果断触发 handler
-        if (isElementIn(e.target, includeTargets) && !isElementIn(e.relatedTarget, includeTargets)) {
+        if (
+          isElementIn(e.target, includeTargets) &&
+          !isElementIn(e.relatedTarget, includeTargets)
+        ) {
           handler(e)
         }
       }
@@ -128,7 +161,10 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
     // 如果鼠标在计时器计时结束之前，移回了 includeTargets ，就把标记改为 `in` 。
     // 如果鼠标在计时器计时结束时，还没有移回 includeTargets 内，对应的标记位还会是 `out` ，此时就可以触发 outside handler 了。
     return function handleOutsideAsync (e) {
-      let includeTargets = [...(excludeSelf ? [] : [el]), ...getElementsByRefs(refs, context)]
+      let includeTargets = [
+        ...(excludeSelf ? [] : [el]),
+        ...getElementsByRefs(refs, context)
+      ]
       let isTargetIn = isElementIn(e.target, includeTargets)
       let isRelatedTargetIn = isElementIn(e.relatedTarget, includeTargets)
       if (isTargetIn && !isRelatedTargetIn) {
@@ -167,8 +203,10 @@ function refresh (el, { value, arg, modifiers, oldValue }, vnode) {
 
   // 真正发生了变化，才重刷
   let fields = [
-    'refs', 'trigger', 'excludeSelf',
-    ...trigger === 'hover' ? ['delay'] : []
+    'refs',
+    'trigger',
+    'excludeSelf',
+    ...(trigger === 'hover' ? ['delay'] : [])
   ]
 
   let prevParams = pick(el[key], fields)
@@ -184,7 +222,7 @@ function refresh (el, { value, arg, modifiers, oldValue }, vnode) {
     trigger,
     refs,
     excludeSelf,
-    ...trigger === 'hover' ? { delay } : {}
+    ...(trigger === 'hover' ? { delay } : {})
   }
   addBinding(trigger, el)
 }

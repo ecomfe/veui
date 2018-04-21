@@ -220,7 +220,9 @@ export class Tree {
       return result
     }
 
-    return curNode.iterateChildren(child => this.iterate({ curNode: child, callback }))
+    return curNode.iterateChildren(child =>
+      this.iterate({ curNode: child, callback })
+    )
   }
 
   /**

@@ -38,16 +38,27 @@ export default {
     if (box.scrollHeight > box.offsetHeight) {
       box.classList.add('veui-dropdown-overflow')
 
-      this.__overlay_scroll_handler__ = throttle(() => {
-        box.classList.toggle('veui-dropdown-overflow-scroll-end', box.scrollTop + box.offsetHeight >= box.scrollHeight)
-      }, 200, { leading: true })
+      this.__overlay_scroll_handler__ = throttle(
+        () => {
+          box.classList.toggle(
+            'veui-dropdown-overflow-scroll-end',
+            box.scrollTop + box.offsetHeight >= box.scrollHeight
+          )
+        },
+        200,
+        { leading: true }
+      )
 
       box.addEventListener('scroll', this.__overlay_scroll_handler__, false)
     }
   },
   destroy () {
     if (this.__overlay_scroll_handler__) {
-      this.$refs.box.removeEventListener('scroll', this.__overlay_scroll_handler__, false)
+      this.$refs.box.removeEventListener(
+        'scroll',
+        this.__overlay_scroll_handler__,
+        false
+      )
     }
   }
 }

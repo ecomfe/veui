@@ -55,7 +55,7 @@ function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
     },
 
     keydownHandler (event) {
-      let {key, altKey, shiftKey} = event
+      let { key, altKey, shiftKey } = event
       let options = nudgeData.options
 
       let increase = options.step
