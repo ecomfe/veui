@@ -1,6 +1,8 @@
-# VEUI ![](https://travis-ci.org/ecomfe/veui.svg?branch=dev)
+# VEUI
 
-> Baidu Enterprise UI for Vue.js.
+![](https://travis-ci.org/ecomfe/veui.svg?branch=dev)
+
+Enterprise UI components for Vue.js. Based on ONE DESIGN from Baidu, Inc.
 
 *This is a work in progress.*
 
