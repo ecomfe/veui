@@ -32,7 +32,12 @@ export default function (babel) {
               )
               path.getSibling(path.key - 1).stop()
             } else {
-              let componentSrc = getComponentPath(imported.name)
+              let realName = getComponentName(imported.name)
+
+              let componentSrc = getComponentPath(realName)
+              if (!componentSrc) {
+                throw new Error(`[${realName}] is not a valid component in VEUI.`)
+              }
               let name = local.name || imported.name
               path.insertBefore(
                 t.importDeclaration(
@@ -49,6 +54,13 @@ export default function (babel) {
       }
     }
   }
+}
+
+const VAR_PATTERN = /(?:V(?:eui)?)?([A-Z][a-zA-Z]*)/
+
+function getComponentName (importedName) {
+  let [, name] = importedName.match(VAR_PATTERN)
+  return name || null
 }
 
 // 'Icon' → 'veui/components/Icon.vue'
