@@ -1,4 +1,4 @@
-# VEUI
+# VEUI ![](https://travis-ci.org/ecomfe/veui.svg?branch=dev)
 
 > Baidu Enterprise UI for Vue.js.
 
