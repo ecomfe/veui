@@ -21,27 +21,29 @@
     @focus="handleInputFocus"
     autocomplete="off"
     v-outside:input="disallowSuggest"
+    :aria-haspopup="canInputListbox ? 'listbox' : 'false'"
   >
     <div slot="after" class="veui-searchbox-action"
       ref="search"
       @click.stop="search"
-      aria-label="搜索"
-      :aria-disabled="realDisabled"
-      :aria-readonly="realReadonly"
-      aria-haspopup="listbox"
     >
       <button
         type="button"
         class="veui-searchbox-action-icon"
         :readonly="realReadonly"
         :disabled="realDisabled"
+        aria-label="搜索"
+        :aria-haspopup="canSubmitListbox ? 'listbox' : 'false'"
       >
         <veui-icon :name="icons.search"/>
       </button>
       <veui-button :ui="ui"
         class="veui-searchbox-action-button"
         :readonly="realReadonly"
-        :disabled="realDisabled">搜索</veui-button>
+        :disabled="realDisabled"
+        aria-label="搜索"
+        aria-haspopup="canSubmitListbox ? 'listbox' : 'false'"
+      >搜索</veui-button>
     </div>
   </veui-input>
   <veui-overlay
@@ -103,10 +105,13 @@ export default {
       default: false
     },
     suggestTrigger: {
-      type: String,
+      type: [String, Array],
       default: 'input',
       validator (val) {
-        return includes(['focus', 'input', 'submit'], val)
+        if (!Array.isArray(val)) {
+          val = [val]
+        }
+        return val.every(i => includes(['focus', 'input', 'submit'], i))
       }
     },
     ...pick(Input.props,
@@ -146,14 +151,26 @@ export default {
         return item
       })
     },
-    isFocusSuggestMode () {
-      return this.suggestTrigger === 'focus'
+    suggestTriggers () {
+      if (Array.isArray(this.suggestTrigger)) {
+        return this.suggestTrigger
+      }
+      return [this.suggestTrigger]
     },
-    isInputSuggestMode () {
-      return this.suggestTrigger === 'input'
+    hasFocusSuggestMode () {
+      return includes(this.suggestTriggers, 'focus')
     },
-    isSubmitSuggestMode () {
-      return this.suggestTrigger === 'submit'
+    hasInputSuggestMode () {
+      return includes(this.suggestTriggers, 'input')
+    },
+    hasSubmitSuggestMode () {
+      return includes(this.suggestTriggers, 'submit')
+    },
+    canInputListbox () {
+      return this.hasFocusSuggestMode || this.hasInputSuggestMode
+    },
+    canSubmitListbox () {
+      return this.hasSubmitSuggestMode
     }
   },
   watch: {
@@ -163,7 +180,7 @@ export default {
     localValue (value) {
       this.$emit('input', value)
       this.handleInput()
-      if (this.isFocusSuggestMode || this.isInputSuggestMode) {
+      if (this.hasFocusSuggestMode || this.hasInputSuggestMode) {
         this.$emit('suggest', this.localValue)
       }
     },
@@ -173,7 +190,7 @@ export default {
   },
   methods: {
     handleInput () {
-      if (this.isFocusSuggestMode || this.isInputSuggestMode) {
+      if (this.hasFocusSuggestMode || this.hasInputSuggestMode) {
         this.allowSuggest()
       }
     },
@@ -186,7 +203,7 @@ export default {
       this.$refs.input.focus()
     },
     handleInputFocus () {
-      if (this.isFocusSuggestMode) {
+      if (this.hasFocusSuggestMode) {
         this.allowSuggest()
         this.$emit('suggest', this.localValue)
       }
@@ -206,10 +223,10 @@ export default {
     },
     search ($event) {
       this.$emit('search', this.localValue, $event)
-      if (this.isSubmitSuggestMode) {
+      if (this.hasSubmitSuggestMode) {
         this.allowSuggest()
         this.$emit('suggest', this.localValue)
-      } else if (this.isInputSuggestMode || this.isFocusSuggestMode) {
+      } else if (this.hasInputSuggestMode || this.hasFocusSuggestMode) {
         this.disallowSuggest()
       }
     },
