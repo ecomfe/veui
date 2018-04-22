@@ -21,6 +21,7 @@
   &-box {
     vertical-align: top;
     display: inline-block;
+    transition: color .3s;
   }
 
   .veui-field > & {
@@ -31,10 +32,14 @@
     }
   }
 
-  & :focus ~ &-box,
-  & :focus ~ &-label,
+  & .focus-visible ~ &-box,
+  & .focus-visible ~ &-label,
   &:hover {
     color: @veui-text-color-strong;
+  }
+
+  & .focus-visible ~ &-box {
+    box-shadow: 0 0 0 2px @veui-gray-color-5;
   }
 
   &-box {
@@ -45,6 +50,16 @@
     border: 1px solid @veui-gray-color-2;
     background-color: #fff;
     font-size: @veui-font-size-large;
+    transition: box-shadow .3s;
+
+    & > .veui-icon {
+      display: block;
+      color: @veui-gray-color-1;
+      .absolute(50%, 50%);
+      transform: translate(-50%, -50%) scale(.8);
+      opacity: 0;
+      transition: transform .3s, opacity .3s;
+    }
   }
 
   &:hover &-box {
@@ -56,10 +71,8 @@
     border-color: @veui-gray-color-1;
 
     & > .veui-icon {
-      display: block;
-      color: @veui-gray-color-1;
-      .absolute(50%, 50%);
-      transform: translate(-50%, -50%);
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
     }
   }
 

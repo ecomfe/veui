@@ -10,7 +10,9 @@
     <input type="checkbox" v-bind="attrs" :disabled="realDisabled || realReadonly" @change="handleChange($event.target.checked)">
     <span class="veui-switch-button"></span>
   </div>
-  <div class="veui-switch-label"><slot/></div>
+  <template v-if="$slots.default">
+    <div class="veui-switch-label"><slot/></div>
+  </template>
 </label>
 </template>
 

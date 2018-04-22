@@ -65,7 +65,9 @@ export default {
     },
     localChecked: {
       handler (val) {
-        this.$emit('update:checked', val)
+        if (this.checked !== val) {
+          this.$emit('update:checked', val)
+        }
 
         if (val) {
           this.$emit('change', this.value)

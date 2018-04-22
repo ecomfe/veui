@@ -12,7 +12,6 @@
     v-on="listeners">
   <span class="veui-checkbox-box">
     <veui-icon
-      v-if="isChecked || localIndeterminate"
       :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"/>
   </span>
   <span class="veui-checkbox-label"><slot/></span>
@@ -93,20 +92,22 @@ export default {
     }
   },
   watch: {
-    indeterminate (value) {
-      this.localIndeterminate = value
+    indeterminate (val) {
+      this.localIndeterminate = val
     },
-    checked (value) {
-      this.localChecked = value
+    checked (val) {
+      this.localChecked = val
     },
-    localIndeterminate (value) {
-      this.$refs.box.indeterminate = value
-      if (this.indeterminate !== value) {
+    localIndeterminate (val) {
+      this.$refs.box.indeterminate = val
+      if (this.indeterminate !== val) {
         this.$emit('update:indeterminate', false)
       }
     },
-    localChecked (value) {
-      this.$emit('change', value)
+    localChecked (val) {
+      if (this.checked !== val) {
+        this.$emit('change', val)
+      }
     }
   },
   mounted () {
