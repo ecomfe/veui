@@ -14,6 +14,22 @@ class Node {
   parent = null
 
   /**
+   * 前一个节点
+   *
+   * @public
+   * @type Node
+   */
+  previousSibling = null;
+
+  /**
+   * 后一个节点
+   *
+   * @public
+   * @type Node
+   */
+  nextSibling = null;
+
+  /**
    * 子节点按照 priority 的分组，结构示例：
    * [
    *   {
@@ -53,20 +69,82 @@ class Node {
   }
 
   /**
-   * 迭代本节点的直接子节点
+   * 所有 children 的头部
    *
    * @public
-   * @param {Function} callback 迭代回调函数，如果返回真值，就会终止迭代
+   * @type {Node}
    */
-  iterateChildren (callback) {
+  get head () {
     for (let i = 0, il = this.childrenGroup.length; i < il; i++) {
       const group = this.childrenGroup[i]
-      for (let j = 0, jl = group.children.length; j < jl; j++) {
-        const child = group.children[j]
-        if (callback(child, j, group)) {
-          return child
+      if (group.children.length) {
+        return group.children[0]
+      }
+    }
+  }
+
+  /**
+   * 所有 children 的尾部
+   *
+   * @public
+   * @type {Node}
+   */
+  get tail () {
+    for (let i = this.childrenGroup.length - 1; i >= 0; i--) {
+      const group = this.childrenGroup[i]
+      if (group.children.length) {
+        return group.children[group.children.length - 1]
+      }
+    }
+  }
+
+  /**
+   * 修复 child 节点的“前”兄弟节点信息
+   *
+   * @private
+   * @param {Node} child child
+   * @param {number} groupIndex 分组索引
+   * @param {=Array} children 分组下所有的 children
+   */
+  connectToPreviousSibling (child, groupIndex, children) {
+    let previousSibling
+    if (children && children.length > 1) {
+      previousSibling = children[children.length - 2]
+    } else if (groupIndex > 0) {
+      for (let j = groupIndex - 1; j >= 0; j--) {
+        const children = this.childrenGroup[j].children
+        if (children.length) {
+          previousSibling = children[children.length - 1]
+          break
         }
       }
+    }
+
+    child.previousSibling = previousSibling
+    if (previousSibling) {
+      previousSibling.nextSibling = child
+    }
+  }
+
+  /**
+   * 修复 child 节点的“后”兄弟节点信息
+   *
+   * @param {Node} child child
+   * @param {number} groupIndex 分组索引
+   */
+  connectToNextSibling (child, groupIndex) {
+    let nextSibling
+    for (let j = groupIndex + 1; j < this.childrenGroup.length; j++) {
+      const children = this.childrenGroup[j].children
+      if (children.length) {
+        nextSibling = children[0]
+        break
+      }
+    }
+
+    child.nextSibling = nextSibling
+    if (nextSibling) {
+      nextSibling.previousSibling = child
     }
   }
 
@@ -76,38 +154,50 @@ class Node {
    * @public
    * @param {Node} child 待追加的子节点
    * @param {number} priority 优先级顺序值，越大，相应的子节点就分配在越靠后的 children group 中。
+   * @return {Object} 新插入位置的索引信息
    */
   appendChild (child, priority = 1) {
-    let index = null
+    let groupIndex = -1
     let isInserted = false
+    let childIndex = 0
     find(this.childrenGroup, (group, i) => {
       if (group.priority === priority) {
         group.children.push(child)
         isInserted = true
+        this.connectToPreviousSibling(child, i, group.children)
+        this.connectToNextSibling(child, i)
+        childIndex = group.children.length - 1
+        groupIndex = i
         return true
       }
 
       if (group.priority > priority) {
-        index = i
+        groupIndex = i
         return true
       }
     })
 
     if (!isInserted) {
-      if (index === null) {
+      if (groupIndex === -1) {
         this.childrenGroup.push({
           children: [child],
           priority
         })
+        this.connectToPreviousSibling(child, this.childrenGroup.length - 1)
+        groupIndex = 0
       } else {
-        this.childrenGroup.splice(index, 0, {
+        this.childrenGroup.splice(groupIndex, 0, {
           children: [child],
           priority
         })
+        this.connectToNextSibling(child, groupIndex)
+        this.connectToPreviousSibling(child, groupIndex)
       }
     }
 
     child.parent = this
+
+    return { groupIndex, childIndex }
   }
 
   /**
@@ -115,16 +205,72 @@ class Node {
    *
    * @private
    * @param {string} id 节点 id
+   * @return {Object} 被移除的节点的索引信息
    */
   removeChildById (id) {
+    let previousBrokenNode
+    let nextBrokenNode
+    let groupIndex
+    let childIndex
+
     for (let i = 0, il = this.childrenGroup.length; i < il; i++) {
       const group = this.childrenGroup[i]
-      remove(group.children, child => {
+
+      const removedNodes = remove(group.children, (child, index) => {
         if (child.id === id) {
           child.parent = null
+          child.previousSibling = null
+          child.nextSibling = null
+
+          // 找到上一个被破坏掉 nextSibling 的节点
+          if (index > 0) {
+            previousBrokenNode = group.children[index - 1]
+          } else {
+            for (let j = i - 1; j >= 0; j++) {
+              const children = this.childrenGroup[j]
+              if (children.length) {
+                previousBrokenNode = children[children.length - 1]
+                break
+              }
+            }
+          }
+
+          // 找到下一个被破坏掉 previousSibling 的节点
+          if (index < group.children.length - 1) {
+            nextBrokenNode = group.children[index + 1]
+          } else {
+            for (let j = i + 1; j < this.childrenGroup.length; j++) {
+              const children = this.childrenGroup[j]
+              if (children.length) {
+                nextBrokenNode = children[0]
+                break
+              }
+            }
+          }
+
+          groupIndex = i
+          childIndex = index
+
           return true
         }
       })
+
+      if (removedNodes.length === 1) {
+        break
+      }
+    }
+
+    if (previousBrokenNode) {
+      this.connectToNextSibling(previousBrokenNode, groupIndex)
+    }
+
+    if (nextBrokenNode) {
+      this.connectToPreviousSibling(nextBrokenNode, groupIndex)
+    }
+
+    return {
+      groupIndex,
+      childIndex
     }
   }
 
@@ -132,13 +278,14 @@ class Node {
    * 从父级节点移除当前节点
    *
    * @public
+   * @return {Object} 索引信息
    */
   remove () {
     if (!this.parent) {
       return
     }
 
-    this.parent.removeChildById(this.id)
+    return this.parent.removeChildById(this.id)
   }
 
   /**
@@ -151,6 +298,24 @@ class Node {
       return count + group.children.length
     }, 0)
   }
+
+  /**
+   * 获取指定 child 节点所在的分组
+   *
+   * @param {string} targetChildId child id
+   * @return {Object}
+   */
+  getChildGroup (targetChildId) {
+    for (let i = 0, il = this.childrenGroup.length; i < il; i++) {
+      const group = this.childrenGroup[i]
+      for (let j = 0, jl = group.children.length; j < jl; j++) {
+        const child = group.children[j]
+        if (child.id === targetChildId) {
+          return group
+        }
+      }
+    }
+  }
 }
 
 /**
@@ -162,6 +327,8 @@ export class Tree {
    *
    * rootNode: {
    *   parent: null,
+   *   nextSibling: null,
+   *   previousSibling: null,
    *   childrenGroup: [
    *     {
    *        priority: 1,
@@ -215,14 +382,11 @@ export class Tree {
    * @param {Function} callback 迭代回调
    */
   iterate ({ curNode = this.rootNode, callback } = {}) {
-    const result = callback(curNode)
-    if (result) {
-      return result
+    for (let cur = curNode; cur; cur = cur.nextSibling) {
+      if (callback(cur) || cur.head && this.iterate({ curNode: cur.head, callback })) {
+        return true
+      }
     }
-
-    return curNode.iterateChildren(child =>
-      this.iterate({ curNode: child, callback })
-    )
   }
 
   /**
@@ -242,7 +406,7 @@ export class Tree {
     const parentNode = parent.node
     parentNode.appendChild(node, priority)
 
-    this.generateTreeZIndex()
+    this.generateTreeZIndex(node)
   }
 
   /**
@@ -272,19 +436,11 @@ export class Tree {
           this.moveNode(node, parentId, priority)
         },
         toTop: () => {
-          let targetGroup
-          let targetIndex
-          node.parent.iterateChildren((child, index, group) => {
-            if (child === node) {
-              targetGroup = group
-              targetIndex = index
-              return true
-            }
-          })
-
-          const children = targetGroup.children
-          children.push(...children.splice(targetIndex, 1))
-          this.generateTreeZIndex()
+          const targetGroup = node.parent.getChildGroup(node.id)
+          const priority = targetGroup.priority
+          const parentId = node.parent.id
+          node.remove()
+          this.moveNode(node, parentId, priority)
         }
       }
     })
@@ -314,33 +470,53 @@ export class Tree {
     }
 
     node.remove()
-    this.nodeMap[realParentId].node.appendChild(node, priority)
+    parentNode.appendChild(node, priority)
 
-    this.generateTreeZIndex()
+    // 这里不知道是往前移动了，还是往后移动了，不好做判断，干脆整个跑一遍生成 zindex
+    this.generateTreeZIndex(this.rootNode)
   }
 
   /**
    * 从指定节点开始，刷一遍 zIndex 值
    * 为了不产生奇怪的 zIndex 值，整体刷一遍
    *
+   * @param {Node} node 当前指定的节点
    * @private
    */
-  generateTreeZIndex () {
-    let baseZIndex = this.baseZIndex
+  generateTreeZIndex (node) {
+    const findPreviousNode = node => {
+      if (node.previousSibling) {
+        // 找到左兄弟节点的最右侧最深的叶子节点
+        let cur = node.previousSibling
+        let target
+        do {
+          target = cur
+          cur = cur.tail
+        } while (cur)
+        return target || node.previousSibling
+      }
+
+      // 左侧没有兄弟节点了，那么父节点就是遍历时候的上一个节点
+      return node.parent
+    }
+
+    const previousNode = node ? findPreviousNode(node) : this.rootNode
+    let baseZIndex = previousNode && previousNode.zIndex ? (previousNode.zIndex + 1) : this.baseZIndex
 
     this.iterate({
-      callback: child => {
-        if (child === this.rootNode) {
+      curNode: node,
+      callback: cur => {
+        if (cur === this.rootNode) {
           return
         }
 
-        const instance = this.nodeMap[child.id].instance
+        const instance = this.nodeMap[cur.id].instance
         let zIndex = baseZIndex++
-        let isEqual = child.zIndex === zIndex
-        child.zIndex = zIndex
+        let isEqual = cur.zIndex === zIndex
+        cur.zIndex = zIndex
 
         if (!isEqual) {
-          instance.$emit('zindexchange', child.zIndex)
+          instance.$emit('zindexchange', cur.zIndex)
         }
       }
     })
