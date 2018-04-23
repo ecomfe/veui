@@ -438,9 +438,13 @@ export class Tree {
         toTop: () => {
           const targetGroup = node.parent.getChildGroup(node.id)
           const priority = targetGroup.priority
-          const parentId = node.parent.id
+          const parentNode = node.parent
+
+          const previousNode = this.findPreviousNode(node)
           node.remove()
-          this.moveNode(node, parentId, priority)
+          parentNode.appendChild(node, priority)
+
+          this.generateTreeZIndex(previousNode)
         }
       }
     })
@@ -476,31 +480,30 @@ export class Tree {
     this.generateTreeZIndex(this.rootNode)
   }
 
+  findPreviousNode (node) {
+    if (node.previousSibling) {
+      // 找到左兄弟节点的最右侧最深的叶子节点
+      let cur = node.previousSibling
+      let target
+      do {
+        target = cur
+        cur = cur.tail
+      } while (cur)
+      return target || node.previousSibling
+    }
+
+    // 左侧没有兄弟节点了，那么父节点就是遍历时候的上一个节点
+    return node.parent
+  }
+
   /**
    * 从指定节点开始，刷一遍 zIndex 值
-   * 为了不产生奇怪的 zIndex 值，整体刷一遍
    *
    * @param {Node} node 当前指定的节点
    * @private
    */
   generateTreeZIndex (node) {
-    const findPreviousNode = node => {
-      if (node.previousSibling) {
-        // 找到左兄弟节点的最右侧最深的叶子节点
-        let cur = node.previousSibling
-        let target
-        do {
-          target = cur
-          cur = cur.tail
-        } while (cur)
-        return target || node.previousSibling
-      }
-
-      // 左侧没有兄弟节点了，那么父节点就是遍历时候的上一个节点
-      return node.parent
-    }
-
-    const previousNode = node ? findPreviousNode(node) : this.rootNode
+    const previousNode = node ? this.findPreviousNode(node) : this.rootNode
     let baseZIndex = previousNode && previousNode.zIndex ? (previousNode.zIndex + 1) : this.baseZIndex
 
     this.iterate({
