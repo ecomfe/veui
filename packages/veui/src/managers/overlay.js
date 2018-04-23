@@ -171,9 +171,9 @@ class Node {
     let childIndex
 
     for (let i = 0, il = this.childrenGroup.length; i < il; i++) {
-      const group = this.childrenGroup[i]
+      let group = this.childrenGroup[i]
 
-      const removedNodes = remove(group.children, (child, index) => {
+      let removedNodes = remove(group.children, (child, index) => {
         if (child.id === id) {
           child.parent = null
           child.previousNode = null
@@ -229,9 +229,9 @@ class Node {
    */
   getChildIndex (targetChildId) {
     for (let i = 0, il = this.childrenGroup.length; i < il; i++) {
-      const group = this.childrenGroup[i]
+      let group = this.childrenGroup[i]
       for (let j = 0, jl = group.children.length; j < jl; j++) {
-        const child = group.children[j]
+        let child = group.children[j]
         if (child.id === targetChildId) {
           return { groupIndex: i, childIndex: j }
         }
@@ -396,12 +396,12 @@ export class Tree {
    * @return {Object} “句柄”
    */
   insertNode (parentId, node, priority) {
-    const parent = this.nodeMap[parentId]
+    let parent = this.nodeMap[parentId]
     if (!parent) {
       return
     }
 
-    const parentNode = parent.node
+    let parentNode = parent.node
     this.appendChild(parentNode, node, priority)
 
     this.generateTreeZIndex(node)
@@ -415,10 +415,10 @@ export class Tree {
    * @param {number} priority 优先级顺序值
    */
   createNode ({ parentId = this.rootNode.id, priority } = {}) {
-    const node = new Node()
+    let node = new Node()
 
-    const id = node.id
-    const instance = new Vue({
+    let id = node.id
+    let instance = new Vue({
       data () {
         return {
           id
@@ -434,12 +434,12 @@ export class Tree {
           this.moveNode(node, parentId, priority)
         },
         toTop: () => {
-          const { groupIndex } = node.parent.getChildIndex(node.id)
-          const targetGroup = node.parent.childrenGroup[groupIndex]
-          const priority = targetGroup.priority
-          const parentNode = node.parent
+          let { groupIndex } = node.parent.getChildIndex(node.id)
+          let targetGroup = node.parent.childrenGroup[groupIndex]
+          let priority = targetGroup.priority
+          let parentNode = node.parent
 
-          const previousNode = node.previousNode
+          let previousNode = node.previousNode
           this.remove(node)
           this.appendChild(parentNode, node, priority)
 
@@ -465,9 +465,9 @@ export class Tree {
    * @param {number} priority 优先级顺序值
    */
   moveNode (node, parentId, priority) {
-    const realParentId = parentId || this.rootNode.id
-    const parentNode = this.nodeMap[realParentId].node
-    const curParentNode = node.parent
+    let realParentId = parentId || this.rootNode.id
+    let parentNode = this.nodeMap[realParentId].node
+    let curParentNode = node.parent
     if (parentNode === curParentNode) {
       return
     }
@@ -590,7 +590,7 @@ export class Tree {
    * @private
    */
   generateTreeZIndex (node) {
-    const previousNode = node ? this.findPreviousNode(node) : this.rootNode
+    let previousNode = node ? this.findPreviousNode(node) : this.rootNode
     let baseZIndex = previousNode && previousNode.zIndex ? (previousNode.zIndex + 1) : this.baseZIndex
 
     this.iterate({
@@ -600,7 +600,7 @@ export class Tree {
           return
         }
 
-        const instance = this.nodeMap[cur.id].instance
+        let instance = this.nodeMap[cur.id].instance
         let zIndex = baseZIndex++
         let isEqual = cur.zIndex === zIndex
         cur.zIndex = zIndex
