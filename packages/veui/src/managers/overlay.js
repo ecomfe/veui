@@ -426,7 +426,7 @@ export class Tree {
       },
       methods: {
         remove: () => {
-          node.remove()
+          this.remove(node)
           this.nodeMap[id] = null
         },
         appendTo: (parentId, priority) => {
