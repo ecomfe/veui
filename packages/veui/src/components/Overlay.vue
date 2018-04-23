@@ -50,7 +50,7 @@ export default {
   },
   data () {
     return {
-      zIndex: undefined,
+      zIndex: null,
       appendBody: false,
       targetNode: null,
       source: null
@@ -97,7 +97,7 @@ export default {
   },
   computed: {
     realOpen () {
-      return this.zIndex !== undefined && this.open
+      return this.zIndex !== null && this.open
     }
   },
   methods: {
