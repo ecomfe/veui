@@ -8,7 +8,6 @@
   :ui="ui"
   @click="handleClickBox"
   ref="self"
-  role="searchbox"
 >
   <veui-input
     ref="input"
@@ -21,7 +20,8 @@
     @focus="handleInputFocus"
     autocomplete="off"
     v-outside:input="disallowSuggest"
-    :aria-haspopup="canInputListbox ? 'listbox' : 'false'"
+    role="searchbox"
+    :aria-haspopup="inputPopup"
   >
     <div slot="after" class="veui-searchbox-action"
       ref="search"
@@ -30,19 +30,17 @@
       <button
         type="button"
         class="veui-searchbox-action-icon"
-        :readonly="realReadonly"
         :disabled="realDisabled"
         aria-label="搜索"
-        :aria-haspopup="canSubmitListbox ? 'listbox' : 'false'"
+        :aria-haspopup="submitPopup"
       >
         <veui-icon :name="icons.search"/>
       </button>
       <veui-button :ui="ui"
         class="veui-searchbox-action-button"
-        :readonly="realReadonly"
         :disabled="realDisabled"
         aria-label="搜索"
-        aria-haspopup="canSubmitListbox ? 'listbox' : 'false'"
+        :aria-haspopup="submitPopup"
       >搜索</veui-button>
     </div>
   </veui-input>
@@ -166,11 +164,11 @@ export default {
     hasSubmitSuggestMode () {
       return includes(this.suggestTriggers, 'submit')
     },
-    canInputListbox () {
-      return this.hasFocusSuggestMode || this.hasInputSuggestMode
+    inputPopup () {
+      return (this.hasFocusSuggestMode || this.hasInputSuggestMode) ? 'listbox' : null
     },
-    canSubmitListbox () {
-      return this.hasSubmitSuggestMode
+    submitPopup () {
+      return this.hasSubmitSuggestMode ? 'listbox' : null
     }
   },
   watch: {

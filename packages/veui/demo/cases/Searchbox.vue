@@ -47,7 +47,7 @@
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions2"
-          replaceOnSelect
+          replace-on-select
           suggest-trigger="focus"
           @suggest="handleSuggest('2', $event)"
           @search="log($event)"
@@ -64,7 +64,7 @@
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestionsis"
-          replaceOnSelect
+          replace-on-select
           :suggest-trigger="['input', 'submit']"
           @suggest="handleSuggest('is', $event)"
           @search="log($event)"
@@ -91,7 +91,7 @@
       <p>
         <veui-searchbox
           ui="primary"
-          replaceOnSelect
+          replace-on-select
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions4"
