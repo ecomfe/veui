@@ -12,11 +12,13 @@
     width: 100%;
     vertical-align: top;
     background-color: transparent;
+    overflow: visible;
   }
 
   &-action {
     color: @veui-text-color-normal;
     white-space: nowrap;
+    margin: -1px -1px -1px 0;
     &-icon {
       outline: none;
       border: none;
@@ -43,6 +45,9 @@
     border-color: @veui-gray-color-5;
     color: @veui-text-color-aux;
 
+    .veui-searchbox-action {
+      margin: 0;
+    }
     .veui-searchbox-action,
     .veui-searchbox-action-icon {
       cursor: not-allowed;
