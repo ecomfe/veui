@@ -1,53 +1,49 @@
 <template>
 <div class="veui-searchbox"
-  :class="{'veui-disabled': realDisabled, 'veui-readonly': realReadonly, 'veui-focus': inputFocus,
-    'veui-searchbox-suggestion-expanded': expanded, 'veui-searchbox-clearable': clearable}"
+  :class="{
+    'veui-searchbox-suggestion-expanded': expanded,
+    'veui-disabled': realDisabled,
+    'veui-readonly': realReadonly
+  }"
   :ui="ui"
   @click="handleClickBox"
   ref="self"
-  v-outside:self="outsideSelf"
 >
   <veui-input
     ref="input"
     :name="realName"
-    :style="{paddingRight: `${inputRightPadding}px`}"
     :readonly="realReadonly"
     :disabled="realDisabled"
     v-bind="attrs"
     v-model="localValue"
-    @input="handleInput"
-    @focus="inputFocus = true"
-    @blur="handleBlur"
     @keypress.enter.prevent="search"
+    @focus="handleInputFocus"
     autocomplete="off"
-    v-outside:input="outsideInput"
+    v-outside:input="disallowSuggest"
+    role="searchbox"
+    :aria-haspopup="inputPopup"
   >
-  </veui-input>
-  <div class="veui-searchbox-others"
-    :class="{'veui-searchbox-placeholder-hide': !placeholderShown}">
-    <div class="veui-searchbox-placeholder">{{ placeholder }}</div>
-    <div class="veui-searchbox-icons">
-      <button class="veui-searchbox-icon veui-searchbox-icon-close"
+    <div slot="after" class="veui-searchbox-action"
+      ref="search"
+      @click.stop="search"
+    >
+      <button
         type="button"
-        :readonly="realReadonly"
+        class="veui-searchbox-action-icon"
         :disabled="realDisabled"
-        v-if="localValue"
-        @click.stop="clear">
-        <veui-icon :name="icons.clear"/>
-      </button>
-      <button class="veui-searchbox-icon veui-searchbox-icon-search"
-        ref="search"
-        type="button"
-        :readonly="realReadonly"
-        :disabled="realDisabled"
-        @click.stop="search">
+        aria-label="搜索"
+        :aria-haspopup="submitPopup"
+      >
         <veui-icon :name="icons.search"/>
-        <veui-button :ui="ui"
-          :readonly="realReadonly"
-          :disabled="realDisabled">搜索</veui-button>
-        </button>
+      </button>
+      <veui-button :ui="ui"
+        class="veui-searchbox-action-button"
+        :disabled="realDisabled"
+        aria-label="搜索"
+        :aria-haspopup="submitPopup"
+      >搜索</veui-button>
     </div>
-  </div>
+  </veui-input>
   <veui-overlay
     target="input"
     :options="realOverlayOptions"
@@ -56,6 +52,8 @@
     :overlay-class="overlayClass">
     <div class="veui-searchbox-suggestion-overlay"
       ref="box"
+      role="listbox"
+      :aria-expanded="String(realExpanded)"
       :ui="ui">
       <slot name="suggestions" :suggestions="realSuggestions" :select="selectSuggestion">
         <template v-for="(suggestion, index) in realSuggestions">
@@ -100,19 +98,18 @@ export default {
         return []
       }
     },
-    clearable: {
-      type: Boolean,
-      default: false
-    },
     replaceOnSelect: {
       type: [Boolean, String],
       default: false
     },
     suggestTrigger: {
-      type: String,
+      type: [String, Array],
       default: 'input',
       validator (val) {
-        return includes(['focus', 'input', 'submit'], val)
+        if (!Array.isArray(val)) {
+          val = [val]
+        }
+        return val.every(i => includes(['focus', 'input', 'submit'], i))
       }
     },
     ...pick(Input.props,
@@ -121,27 +118,19 @@ export default {
       'value',
       'autofocus',
       'selectOnFocus',
-      'composition'
+      'composition',
+      'clearable'
     )
   },
   data () {
     return {
       localValue: this.value,
-      localSuggestions: this.suggestions,
-      // 默认设成false，input focus事件由input控件触发
-      inputFocus: false,
-      // 该值是为了修复覆盖在input右边的一些按钮的宽度。
-      inputRightPadding: 0
+      localSuggestions: this.suggestions
     }
   },
   computed: {
     attrs () {
-      return pick(this, 'ui', 'autocomplete', 'autofocus', 'selectOnFocus', 'composition')
-    },
-    placeholderShown () {
-      // 目前从Input组件上没法感知是否是输入法状态，暂时先focus的时候，隐藏placeholder
-      // 等Input组件可以上透这种信息，再优化
-      return !this.localValue && !this.inputFocus
+      return pick(this, 'ui', 'autocomplete', 'autofocus', 'selectOnFocus', 'composition', 'clearable', 'placeholder')
     },
     realExpanded () {
       return !!(this.expanded && this.realSuggestions && this.realSuggestions.length)
@@ -160,14 +149,26 @@ export default {
         return item
       })
     },
-    isFocusSuggestMode () {
-      return this.suggestTrigger === 'focus'
+    suggestTriggers () {
+      if (Array.isArray(this.suggestTrigger)) {
+        return this.suggestTrigger
+      }
+      return [this.suggestTrigger]
     },
-    isInputSuggestMode () {
-      return this.suggestTrigger === 'input'
+    hasFocusSuggestMode () {
+      return includes(this.suggestTriggers, 'focus')
     },
-    isSubmitSuggestMode () {
-      return this.suggestTrigger === 'submit'
+    hasInputSuggestMode () {
+      return includes(this.suggestTriggers, 'input')
+    },
+    hasSubmitSuggestMode () {
+      return includes(this.suggestTriggers, 'submit')
+    },
+    inputPopup () {
+      return (this.hasFocusSuggestMode || this.hasInputSuggestMode) ? 'listbox' : null
+    },
+    submitPopup () {
+      return this.hasSubmitSuggestMode ? 'listbox' : null
     }
   },
   watch: {
@@ -176,7 +177,8 @@ export default {
     },
     localValue (value) {
       this.$emit('input', value)
-      if (this.isFocusSuggestMode || this.isInputSuggestMode) {
+      this.handleInput()
+      if (this.hasFocusSuggestMode || this.hasInputSuggestMode) {
         this.$emit('suggest', this.localValue)
       }
     },
@@ -186,23 +188,20 @@ export default {
   },
   methods: {
     handleInput () {
-      if (this.isFocusSuggestMode || this.isInputSuggestMode) {
+      if (this.hasFocusSuggestMode || this.hasInputSuggestMode) {
         this.allowSuggest()
       }
-      // 感知输入法情况下处理placeholder逻辑暂时还没有
     },
     handleClickBox () {
       if (!this.realDisabled && !this.realReadonly) {
         this.focus()
       }
     },
-    handleBlur () {
-      this.inputFocus = false
-      // 目前还有一个问题，tab切换时input blur不会引起suggestion的隐藏
-    },
     focus () {
       this.$refs.input.focus()
-      if (this.isFocusSuggestMode) {
+    },
+    handleInputFocus () {
+      if (this.hasFocusSuggestMode) {
         this.allowSuggest()
         this.$emit('suggest', this.localValue)
       }
@@ -213,30 +212,24 @@ export default {
       }
       this.focus()
       this.$emit('select', suggestion)
-      this.disallowSuggest()
+      // 选择 select 的情况会有可能
+      //  触发 localValue 改变 => watcher => handleInput => allowSuggest
+      // 所以在下一个 nextTick 强制隐藏 suggest
+      this.$nextTick(() => {
+        this.disallowSuggest()
+      })
     },
     search ($event) {
       this.$emit('search', this.localValue, $event)
-      if (this.isSubmitSuggestMode) {
+      if (this.hasSubmitSuggestMode) {
         this.allowSuggest()
         this.$emit('suggest', this.localValue)
+      } else if (this.hasInputSuggestMode || this.hasFocusSuggestMode) {
+        this.disallowSuggest()
       }
-    },
-    clear ($event) {
-      this.localValue = ''
     },
     activate () { // for label activation
       this.focus()
-    },
-    outsideInput () {
-      if (this.isInputSuggestMode || this.isFocusSuggestMode) {
-        this.disallowSuggest()
-      }
-    },
-    outsideSelf () {
-      if (this.isSubmitSuggestMode) {
-        this.disallowSuggest()
-      }
     },
     disallowSuggest () {
       this.expanded = false
@@ -245,16 +238,6 @@ export default {
     allowSuggest () {
       this.expanded = true
     }
-  },
-  mounted () {
-    const $search = this.$refs.search
-    let fontSize = window.getComputedStyle($search).fontSize
-    fontSize = +(fontSize.substring(0, fontSize.length - 2))
-    // 各个字段端详细解释一下：
-    // fontSize：用来估摸一个clear的icon按钮的宽度
-    // 8: css写的clear-icon的右边距
-    // -3: 粗略估算 cross-small icon本身的左留白
-    this.inputRightPadding = $search.clientWidth + (this.clearable ? (fontSize + 8 - 3) : 0)
   }
 }
 </script>

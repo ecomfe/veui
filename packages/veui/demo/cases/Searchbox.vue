@@ -47,11 +47,28 @@
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions2"
-          replaceOnSelect
+          replace-on-select
           suggest-trigger="focus"
           @suggest="handleSuggest('2', $event)"
           @search="log($event)"
           @select="value3 = $event.label"></veui-searchbox>
+      </p>
+    </section>
+    <section>
+      <h2>小ui模式2(input, submit)</h2>
+      <p>
+        <veui-searchbox
+          ui="primary small"
+          clearable
+          v-model="valueis"
+          :name="name"
+          :placeholder="placeholder"
+          :suggestions="suggestionsis"
+          replace-on-select
+          :suggest-trigger="['input', 'submit']"
+          @suggest="handleSuggest('is', $event)"
+          @search="log($event)"
+          @select="valueis = $event.label"></veui-searchbox>
       </p>
     </section>
     <section>
@@ -74,7 +91,7 @@
       <p>
         <veui-searchbox
           ui="primary"
-          replaceOnSelect
+          replace-on-select
           :name="name"
           :placeholder="placeholder"
           :suggestions="suggestions4"
@@ -159,6 +176,7 @@ export default {
       value2: '测试值',
       value3: '测试值',
       value4: '测试值',
+      valueis: '测试值',
       placeholder: '百度(placeholder)',
       suggestions1: [],
       suggestions2: [],
@@ -166,7 +184,8 @@ export default {
       suggestions4: [],
       suggestions5: [],
       suggestions6: [],
-      suggestions7: []
+      suggestions7: [],
+      suggestionsis: []
     }
   },
   methods: {
