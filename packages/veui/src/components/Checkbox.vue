@@ -11,8 +11,12 @@
     @change="handleChange"
     v-on="listeners">
   <span class="veui-checkbox-box">
-    <veui-icon
-      :name="icons[localIndeterminate ? 'indeterminate' : 'checked']"/>
+    <transition name="veui-checkbox-icon">
+      <veui-icon v-if="localChecked && localIndeterminate" :name="icons.indeterminate"/>
+    </transition>
+    <transition name="veui-checkbox-icon">
+      <veui-icon v-if="localChecked && !localIndeterminate" :name="icons.checked"/>
+    </transition>
   </span>
   <span class="veui-checkbox-label"><slot/></span>
 </label>

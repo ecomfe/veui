@@ -39,6 +39,7 @@
   > ```
 
 * [^] 将 `OptionGroup` 的 `position` 属性的 `popout` 值重命名为了 `popup`（与 `aria-haspopup` 保持一致）。将在下个版本移除对 `popout` 的支持。
+* [^] 将 `Progress` 组件的 `precision` prop 重命名为和 `NumberInput` 一致的 `decimal-place`。`precision` 将在正式版移除。
 
 ### 💡 主要变更
 
@@ -67,7 +68,6 @@
 * [+] `Input` 新增 `clearable` prop，提供清除输入内容的功能；补充 `placeholder` prop 对 IE9 的支持。
 * [^] `Uploader` 组件的事件 `success`、`failure`、`remove` 增加参数：当前处理文件的序号。
 * [^] `Uploader` 组件在重新上传的时候不再触发 `remove` 事件。
-* [^] 将 `Progress` 组件的 `precision` prop 重命名为和 `NumberInput` 一致的 `decimal-place`。`precision` 将在未来版本被移除。
 * [^] 增加了 `Select`、`Dropdown`、`Carousel`、`Pagination` 及 `Progress` 等组件的 WAI-ARIA 支持。
 
 ### 🐞 问题修复

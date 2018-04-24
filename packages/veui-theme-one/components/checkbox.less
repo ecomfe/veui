@@ -13,10 +13,6 @@
     opacity: 0;
   }
 
-  .veui-icon {
-    display: none;
-  }
-
   &-label,
   &-box {
     vertical-align: top;
@@ -52,14 +48,18 @@
     font-size: @veui-font-size-large;
     transition: box-shadow .3s;
 
-    & > .veui-icon {
-      display: block;
+    .veui-icon {
       color: @veui-gray-color-1;
       .absolute(50%, 50%);
-      transform: translate(-50%, -50%) scale(.8);
-      opacity: 0;
+      transform: translate(-50%, -50%) scale(1);
       transition: transform .3s, opacity .3s;
     }
+  }
+
+  &-icon-enter,
+  &-icon-leave-to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.8);
   }
 
   &:hover &-box {
@@ -69,11 +69,6 @@
   & :checked + &-box,
   & :indeterminate + &-box {
     border-color: @veui-gray-color-1;
-
-    & > .veui-icon {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
   }
 
   &.veui-disabled {
