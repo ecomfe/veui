@@ -557,6 +557,10 @@ export class Tree {
       return head
     }
 
+    if (node === this.rootNode) {
+      return null
+    }
+
     ({ groupIndex, childIndex } = this.normalizeIndex(node, groupIndex, childIndex))
 
     let children = node.parent.childrenGroup[groupIndex].children
