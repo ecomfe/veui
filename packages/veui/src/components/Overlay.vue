@@ -5,7 +5,7 @@
     :ui="ui"
     ref="box"
     :style="{zIndex}"
-    v-show="open">
+    v-show="realOpen">
     <slot/>
   </div>
 </div>
@@ -50,7 +50,7 @@ export default {
   },
   data () {
     return {
-      zIndex: 0,
+      zIndex: null,
       appendBody: false,
       targetNode: null,
       source: null
@@ -94,6 +94,11 @@ export default {
 
     this.findTargetNode()
     this.updateOverlayDOM()
+  },
+  computed: {
+    realOpen () {
+      return this.zIndex !== null && this.open
+    }
   },
   methods: {
     // 更新 zindex 树

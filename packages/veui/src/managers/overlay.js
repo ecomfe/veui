@@ -1,4 +1,4 @@
-import { remove, uniqueId, find } from 'lodash'
+import { remove, uniqueId, last, findLast, find } from 'lodash'
 import Vue from 'vue'
 
 /**
@@ -12,6 +12,22 @@ class Node {
    * @type Node
    */
   parent = null
+
+  /**
+   * 在前序遍历中的前一个节点
+   *
+   * @public
+   * @type Node
+   */
+  previousNode = null;
+
+  /**
+   * 在前序遍历中的后一个节点
+   *
+   * @public
+   * @type Node
+   */
+  nextNode = null;
 
   /**
    * 子节点按照 priority 的分组，结构示例：
@@ -53,21 +69,47 @@ class Node {
   }
 
   /**
-   * 迭代本节点的直接子节点
+   * 找到第一个 children 不为空的分组
    *
    * @public
-   * @param {Function} callback 迭代回调函数，如果返回真值，就会终止迭代
+   * @param {boolean} [fromLast] 是否倒着找
+   * @param {number} [fromGroupIndex] 从指定索引处开始找
+   * @return {Object}
    */
-  iterateChildren (callback) {
-    for (let i = 0, il = this.childrenGroup.length; i < il; i++) {
-      const group = this.childrenGroup[i]
-      for (let j = 0, jl = group.children.length; j < jl; j++) {
-        const child = group.children[j]
-        if (callback(child, j, group)) {
-          return child
-        }
+  findFirstNotEmptyGroup (
+    fromLast = false,
+    fromGroupIndex = fromLast ? this.childrenGroup.length - 1 : 0
+  ) {
+    let callback = group => {
+      if (group.children.length) {
+        return true
       }
     }
+    return fromLast
+      ? findLast(this.childrenGroup, callback, fromGroupIndex)
+      : find(this.childrenGroup, callback, fromGroupIndex)
+  }
+
+  /**
+   * 所有 children 的头部
+   *
+   * @public
+   * @type {Node}
+   */
+  get head () {
+    let group = this.findFirstNotEmptyGroup()
+    return group && group.children[0]
+  }
+
+  /**
+   * 所有 children 的尾部
+   *
+   * @public
+   * @type {Node}
+   */
+  get tail () {
+    let group = this.findFirstNotEmptyGroup(true)
+    return group && last(group.children)
   }
 
   /**
@@ -76,31 +118,36 @@ class Node {
    * @public
    * @param {Node} child 待追加的子节点
    * @param {number} priority 优先级顺序值，越大，相应的子节点就分配在越靠后的 children group 中。
+   * @return {Object} 新插入位置的索引信息
    */
   appendChild (child, priority = 1) {
-    let index = null
+    let groupIndex = -1
     let isInserted = false
+    let childIndex = 0
     find(this.childrenGroup, (group, i) => {
       if (group.priority === priority) {
         group.children.push(child)
         isInserted = true
+        childIndex = group.children.length - 1
+        groupIndex = i
         return true
       }
 
       if (group.priority > priority) {
-        index = i
+        groupIndex = i
         return true
       }
     })
 
     if (!isInserted) {
-      if (index === null) {
+      if (groupIndex === -1) {
         this.childrenGroup.push({
           children: [child],
           priority
         })
+        groupIndex = this.childrenGroup.length - 1
       } else {
-        this.childrenGroup.splice(index, 0, {
+        this.childrenGroup.splice(groupIndex, 0, {
           children: [child],
           priority
         })
@@ -108,6 +155,8 @@ class Node {
     }
 
     child.parent = this
+
+    return { groupIndex, childIndex }
   }
 
   /**
@@ -115,16 +164,35 @@ class Node {
    *
    * @private
    * @param {string} id 节点 id
+   * @return {Object} 被移除的节点的索引信息
    */
   removeChildById (id) {
+    let groupIndex
+    let childIndex
+
     for (let i = 0, il = this.childrenGroup.length; i < il; i++) {
-      const group = this.childrenGroup[i]
-      remove(group.children, child => {
+      let group = this.childrenGroup[i]
+
+      let removedNodes = remove(group.children, (child, index) => {
         if (child.id === id) {
           child.parent = null
+          child.previousNode = null
+
+          groupIndex = i
+          childIndex = index
+
           return true
         }
       })
+
+      if (removedNodes.length === 1) {
+        break
+      }
+    }
+
+    return {
+      groupIndex,
+      childIndex
     }
   }
 
@@ -132,13 +200,14 @@ class Node {
    * 从父级节点移除当前节点
    *
    * @public
+   * @return {Object} 索引信息
    */
   remove () {
     if (!this.parent) {
       return
     }
 
-    this.parent.removeChildById(this.id)
+    return this.parent.removeChildById(this.id)
   }
 
   /**
@@ -151,6 +220,24 @@ class Node {
       return count + group.children.length
     }, 0)
   }
+
+  /**
+   * 获取指定 child 节点的索引信息
+   *
+   * @param {string} targetChildId child id
+   * @return {Object}
+   */
+  getChildIndex (targetChildId) {
+    for (let i = 0, il = this.childrenGroup.length; i < il; i++) {
+      let group = this.childrenGroup[i]
+      for (let j = 0, jl = group.children.length; j < jl; j++) {
+        let child = group.children[j]
+        if (child.id === targetChildId) {
+          return { groupIndex: i, childIndex: j }
+        }
+      }
+    }
+  }
 }
 
 /**
@@ -162,6 +249,7 @@ export class Tree {
    *
    * rootNode: {
    *   parent: null,
+   *   previousNode: null,
    *   childrenGroup: [
    *     {
    *        priority: 1,
@@ -215,14 +303,87 @@ export class Tree {
    * @param {Function} callback 迭代回调
    */
   iterate ({ curNode = this.rootNode, callback } = {}) {
-    const result = callback(curNode)
-    if (result) {
-      return result
+    let cur = curNode
+    do {
+      if (callback(cur)) {
+        break
+      }
+      cur = cur.nextNode
+    } while (cur)
+  }
+
+  /**
+   * 修复指定节点的 previousNode 和 nextNode 信息
+   *
+   * @private
+   * @param {Node} [node] 待修复的节点
+   * @param {number} [groupIndex] 待修复节点所在的分组，在父节点的 childrenGroup 中的索引位置
+   * @param {number} [childIndex] 待修复节点在自身分组中的索引位置
+   * @param {number} [fixDirection] 修复方向，1 -> 只修复 previous ，2 -> 只修复 next ，3 -> 都修复
+   */
+  fixLink ({ node, groupIndex, childIndex, fixDirection = 3 } = {}) {
+    if (fixDirection === 1 || fixDirection === 3) {
+      let previousNode = this.findPreviousNode(node, groupIndex, childIndex)
+      previousNode.nextNode = node
+      node.previousNode = previousNode
     }
 
-    return curNode.iterateChildren(child =>
-      this.iterate({ curNode: child, callback })
-    )
+    if (fixDirection === 2 || fixDirection === 3) {
+      let nextNode = this.findNextNode(node, groupIndex, childIndex)
+      if (nextNode) {
+        nextNode.previousNode = node
+      }
+      node.nextNode = nextNode
+    }
+  }
+
+  /**
+   * 包裹一层 Node#appendChild 方法，加上了修复前后节点的功能。
+   *
+   * @private
+   * @param {Node} [parentNode] 父节点
+   * @param {Node} [node] 待插入节点
+   * @param {number} [priority] priority
+   * @return {Object} 插入节点的索引信息
+   */
+  appendChild (parentNode, node, priority) {
+    let { groupIndex, childIndex } = parentNode.appendChild(node, priority)
+    this.fixLink({ node, groupIndex, childIndex })
+
+    let tail = node.tail
+    if (tail) {
+      this.fixLink({
+        node: tail,
+        groupIndex: node.childrenGroup.length - 1,
+        childIndex: last(node.childrenGroup).children.length - 1,
+        fixDirection: 2
+      })
+    }
+
+    return { groupIndex, childIndex }
+  }
+
+  /**
+   * 包一层 Node#remove ，提供清除前后节点信息的功能
+   *
+   * @private
+   * @param {Node} [node] 待移除节点
+   * @return {Object} 索引信息
+   */
+  remove (node) {
+    let previousBrokenNode = node.previousNode
+    let nextBrokenNode = node.nextNode
+
+    let { groupIndex, childIndex } = node.remove()
+
+    if (previousBrokenNode) {
+      this.fixLink({ node: previousBrokenNode, fixDirection: 2 })
+    }
+    if (nextBrokenNode) {
+      this.fixLink({ node: nextBrokenNode, fixDirection: 1 })
+    }
+
+    return { groupIndex, childIndex }
   }
 
   /**
@@ -232,31 +393,32 @@ export class Tree {
    * @param {string} parentId 父节点 id
    * @param {Node} node 待插入子节点
    * @param {number} priority 优先级顺序值
+   * @return {Object} “句柄”
    */
   insertNode (parentId, node, priority) {
-    const parent = this.nodeMap[parentId]
+    let parent = this.nodeMap[parentId]
     if (!parent) {
       return
     }
 
-    const parentNode = parent.node
-    parentNode.appendChild(node, priority)
+    let parentNode = parent.node
+    this.appendChild(parentNode, node, priority)
 
-    this.generateTreeZIndex()
+    this.generateTreeZIndex(node)
   }
 
   /**
-   * 创建一个节点，并将其插入到树种
+   * 创建一个节点，并将其插入到树中
    *
    * @public
    * @param {string} parentId 父节点 id
    * @param {number} priority 优先级顺序值
    */
   createNode ({ parentId = this.rootNode.id, priority } = {}) {
-    const node = new Node()
+    let node = new Node()
 
-    const id = node.id
-    const instance = new Vue({
+    let id = node.id
+    let instance = new Vue({
       data () {
         return {
           id
@@ -264,7 +426,7 @@ export class Tree {
       },
       methods: {
         remove: () => {
-          node.remove()
+          this.remove(node)
           this.nodeMap[id] = null
         },
         appendTo: (parentId, priority) => {
@@ -272,19 +434,16 @@ export class Tree {
           this.moveNode(node, parentId, priority)
         },
         toTop: () => {
-          let targetGroup
-          let targetIndex
-          node.parent.iterateChildren((child, index, group) => {
-            if (child === node) {
-              targetGroup = group
-              targetIndex = index
-              return true
-            }
-          })
+          let { groupIndex } = node.parent.getChildIndex(node.id)
+          let targetGroup = node.parent.childrenGroup[groupIndex]
+          let priority = targetGroup.priority
+          let parentNode = node.parent
 
-          const children = targetGroup.children
-          children.push(...children.splice(targetIndex, 1))
-          this.generateTreeZIndex()
+          let previousNode = node.previousNode
+          this.remove(node)
+          this.appendChild(parentNode, node, priority)
+
+          this.generateTreeZIndex(previousNode)
         }
       }
     })
@@ -306,41 +465,152 @@ export class Tree {
    * @param {number} priority 优先级顺序值
    */
   moveNode (node, parentId, priority) {
-    const realParentId = parentId || this.rootNode.id
-    const parentNode = this.nodeMap[realParentId].node
-    const curParentNode = node.parent
+    let realParentId = parentId || this.rootNode.id
+    let parentNode = this.nodeMap[realParentId].node
+    let curParentNode = node.parent
     if (parentNode === curParentNode) {
       return
     }
 
-    node.remove()
-    this.nodeMap[realParentId].node.appendChild(node, priority)
+    this.remove(node)
+    this.appendChild(parentNode, node, priority)
 
-    this.generateTreeZIndex()
+    // 这里不知道是往前移动了，还是往后移动了，不好做判断，干脆整个跑一遍生成 zindex
+    this.generateTreeZIndex(this.rootNode)
+  }
+
+  /**
+   * normalize 一下 index 信息
+   *
+   * @private
+   * @param {Node} node
+   * @param {number=} groupIndex
+   * @param {number=} childIndex
+   * @return {Object}
+   */
+  normalizeIndex (node, groupIndex, childIndex) {
+    if (groupIndex === undefined) {
+      ({ groupIndex, childIndex } = node.parent.getChildIndex(node.id))
+    }
+
+    let children = node.parent.childrenGroup[groupIndex].children
+    if (childIndex === undefined) {
+      childIndex = children.indexOf(node)
+    }
+
+    return { groupIndex, childIndex }
+  }
+
+  /**
+   * 找到指定节点的前一个节点
+   *
+   * @private
+   * @param {Node} [node] 当前节点
+   * @param {number=} [groupIndex] 当前节点的分组索引
+   * @param {number=} [childIndex] 当前节点在分组中的位置
+   * @return {Node}
+   */
+  findPreviousNode (node, groupIndex, childIndex = -1) {
+    if (node === this.rootNode) {
+      return
+    }
+
+    ({ groupIndex, childIndex } = this.normalizeIndex(node, groupIndex, childIndex))
+
+    let targetNode
+    if (childIndex > 0) {
+      let previousSibling = node.parent.childrenGroup[groupIndex].children[childIndex - 1]
+      let curTail = previousSibling
+      do {
+        targetNode = curTail
+        curTail = curTail.tail
+      } while (curTail)
+
+      return targetNode
+    }
+
+    // 到前面的分组看看
+    if (groupIndex > 0) {
+      findLast(node.parent.childrenGroup.slice(0, groupIndex), (group) => {
+        if (group.children.length) {
+          targetNode = last(group.children)
+          return true
+        }
+      })
+    }
+
+    return targetNode || node.parent
+  }
+
+  /**
+   * 找到指定节点的下一个节点
+   *
+   * @private
+   * @param {Node} [node] 当前节点
+   * @param {number=} [groupIndex] 当前节点的分组索引
+   * @param {number=} [childIndex] 当前节点在分组中的位置
+   * @return {Node}
+   */
+  findNextNode (node, groupIndex, childIndex) {
+    let head = node.head
+    if (head) {
+      return head
+    }
+
+    if (node === this.rootNode) {
+      return null
+    }
+
+    ({ groupIndex, childIndex } = this.normalizeIndex(node, groupIndex, childIndex))
+
+    let children = node.parent.childrenGroup[groupIndex].children
+    if (childIndex < children.length - 1) {
+      return children[childIndex + 1]
+    }
+
+    let cur = node
+    while (cur.parent) {
+      let { groupIndex, childIndex } = cur.parent.getChildIndex(cur.id)
+      let loopChildren = cur.parent.childrenGroup[groupIndex].children
+      if (childIndex < loopChildren.length - 1) {
+        return loopChildren[childIndex + 1]
+      }
+
+      let group = cur.parent.findFirstNotEmptyGroup(false, groupIndex + 1)
+      if (group && group.children.length) {
+        return group.children[0]
+      }
+
+      cur = cur.parent
+    }
+
+    return null
   }
 
   /**
    * 从指定节点开始，刷一遍 zIndex 值
-   * 为了不产生奇怪的 zIndex 值，整体刷一遍
    *
+   * @param {Node} node 当前指定的节点
    * @private
    */
-  generateTreeZIndex () {
-    let baseZIndex = this.baseZIndex
+  generateTreeZIndex (node) {
+    let previousNode = node ? this.findPreviousNode(node) : this.rootNode
+    let baseZIndex = previousNode && previousNode.zIndex ? (previousNode.zIndex + 1) : this.baseZIndex
 
     this.iterate({
-      callback: child => {
-        if (child === this.rootNode) {
+      curNode: node,
+      callback: cur => {
+        if (cur === this.rootNode) {
           return
         }
 
-        const instance = this.nodeMap[child.id].instance
+        let instance = this.nodeMap[cur.id].instance
         let zIndex = baseZIndex++
-        let isEqual = child.zIndex === zIndex
-        child.zIndex = zIndex
+        let isEqual = cur.zIndex === zIndex
+        cur.zIndex = zIndex
 
         if (!isEqual) {
-          instance.$emit('zindexchange', child.zIndex)
+          instance.$emit('zindexchange', cur.zIndex)
         }
       }
     })

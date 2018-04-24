@@ -113,31 +113,6 @@ describe('managers/overlay', () => {
         expect(node.getChildrenCount()).to.equal(2)
       })
     })
-
-    describe('#iterateChildren', () => {
-      it('should iterate children', () => {
-        let node = (new Tree()).rootNode
-        let children = [(new Tree()).rootNode, (new Tree()).rootNode]
-        node.appendChild(children[0])
-        node.appendChild(children[1])
-
-        node.iterateChildren((child) => {
-          expect(children.shift()).to.equal(child)
-        })
-      })
-
-      it('should iterate children with different priority in order', () => {
-        let node = (new Tree()).rootNode
-        let children = [(new Tree()).rootNode, (new Tree()).rootNode, (new Tree()).rootNode]
-        node.appendChild(children[0], 3)
-        node.appendChild(children[2], 10)
-        node.appendChild(children[1], 4)
-
-        node.iterateChildren((child) => {
-          expect(children.shift()).to.equal(child)
-        })
-      })
-    })
   })
 
   describe('Tree', () => {
