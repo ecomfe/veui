@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-veui",
-  "version": "1.0.0-alpha.11",
+  "version": "1.0.0-alpha.12",
   "description": "Import VEUI components with ease.",
   "main": "lib/index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "author": "Justineo (justice360@gmail.com)",
   "license": "MIT",
   "dependencies": {
-    "veui": "^1.0.0-alpha.11"
+    "veui": "^1.0.0-alpha.12"
   },
   "devDependencies": {
     "ava": "^0.20.0",
