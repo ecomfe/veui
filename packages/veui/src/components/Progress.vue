@@ -31,6 +31,7 @@
 <script>
 import ui from '../mixins/ui'
 import Icon from './Icon'
+import warn from '../utils/warn'
 
 const RADIUS_DEFAULT = 60
 const STROKE_DEFAULT = 2
@@ -57,7 +58,12 @@ export default {
      */
     precision: {
       type: Number,
-      default: 0
+      default: 0,
+      validator (val) {
+        if (val !== 0) {
+          warn('[veui-progress] `precision` is deprecated and will be removed in `1.0.0`. Use `decimal-place` instead.')
+        }
+      }
     },
     decimalPlace: {
       type: Number

@@ -2,7 +2,7 @@
 
 ### ⚠️ 非兼容性变更
 
-* [^] `Uploader` 组件在 `maxCount` 的值是 `1` 的情况下，`value` 的默认类型从字符串改成对象，可以通过设置 prop `compat` 为 `true` 将 `value` 的类型设置为字符串兼容旧版本。
+* [^] `Uploader` 组件在 `maxCount` 的值是 `1` 的情况下，`value` 的默认类型从字符串改成对象，可以通过设置 prop `compat` 为 `true` 将 `value` 的类型设置为字符串兼容旧版本。`compat` 模式未来不会移除，但不建议使用。
 
   > #### 迁移指南
   >
@@ -35,11 +35,11 @@
   > 使用 `Textarea` 组件进行替代：
   >
   > ```html
-  > <veui-textarea v-model="value"/>
+  > <veui-textarea v-model="value" .../>
   > ```
 
-* [^] 将 `OptionGroup` 的 `position` 属性的 `popout` 值重命名为了 `popup`（与 `aria-haspopup` 保持一致）。将在下个版本移除对 `popout` 的支持。
-* [^] 将 `Progress` 组件的 `precision` prop 重命名为和 `NumberInput` 一致的 `decimal-place`。`precision` 将在正式版移除。
+* [^] 将 `OptionGroup` 的 `position` 属性的 `popout` 值重命名为了 `popup`（与 `aria-haspopup` 保持一致）。将在 `1.0.0` 移除对 `popout` 的支持。
+* [^] 将 `Progress` 组件的 `precision` prop 重命名为和 `NumberInput` 一致的 `decimal-place`。`precision` 将在 `1.0.0` 移除。
 
 ### 💡 主要变更
 
@@ -302,6 +302,8 @@
   >   include: [resolve('veui'), resolve('vue-awesome')]
   > }
   > ```
+
+* [^] 将 `Pager` 组件重命名为 `Pagination`。暂时保留兼容，`Pager` 将在 `1.0.0` 移除。
 
 ### 🐞 问题修复
 

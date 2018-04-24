@@ -255,8 +255,9 @@ export default {
       type: Boolean,
       default: true,
       validator (val) {
+        // TODO: remove support in 1.0.0
         if (val === false) {
-          warn('[veui-uploader] `auto-upload` is deprecated and will be removed in the next version. Use `autoupload` instead.')
+          warn('[veui-uploader] `auto-upload` is deprecated and will be removed in `1.0.0`. Use `autoupload` instead.')
         }
         return true
       }

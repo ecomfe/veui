@@ -12,6 +12,7 @@ import outside from '../../directives/outside'
 import '../../common/uiTypes'
 import { walk } from '../../utils/data'
 import { isType } from '../../utils/helper'
+import warn from '../../utils/warn'
 import { pull } from 'lodash'
 
 export default {
@@ -33,6 +34,9 @@ export default {
       type: String,
       default: 'inline',
       validator (val) {
+        if (val === 'popout') {
+          warn('[veui-option-group] `popout` is a deprecated value for `position` and will be removed in `v1.0.0`. Use `popup` component instead.')
+        }
         return ['inline', 'popout', 'popup'].indexOf(val) !== -1
       }
     }
