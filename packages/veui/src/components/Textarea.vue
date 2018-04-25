@@ -2,6 +2,7 @@
 <div class="veui-textarea" :class="{
     'veui-textarea-focused': focused,
     'veui-textarea-rows': normalizedRows > 0,
+    'veui-input-invalid': fieldInvalid && isTopMostInput,
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
   }" :ui="ui">

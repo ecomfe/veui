@@ -472,6 +472,7 @@ export default {
       'div',
       {
         class: {
+          'veui-input-invalid': this.fieldInvalid && this.isTopMostInput,
           'veui-transfer': true,
           'veui-transfer-disabled': !this.isSelectable
         },

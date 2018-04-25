@@ -126,6 +126,7 @@
   }
 
   &-selected-flat {
+    width: @flat-panel-min-width;
     min-width: @flat-panel-min-width;
 
     &-items {
@@ -192,8 +193,8 @@
     color: @veui-text-color-aux;
   }
 
-  // 要去掉表单中 invalid 时对 veui-input 设置的红色边框
-  .veui-field-invalid & .veui-input {
-    border-color: @veui-gray-color-5;
+  .veui-input-invalid& + .veui-field-error {
+    .veui-field-gap-error();
+    margin-left: @veui-form-label-width;
   }
 }

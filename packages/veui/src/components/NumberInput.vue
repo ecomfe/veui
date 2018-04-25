@@ -16,6 +16,7 @@
     @focusout.native="focused = false"
     :class="{
       'veui-number-input': true,
+      'veui-input-invalid': fieldInvalid && isTopMostInput,
       'veui-readonly': realReadonly,
       'veui-disabled': realDisabled,
       'veui-number-input-focused': focused
