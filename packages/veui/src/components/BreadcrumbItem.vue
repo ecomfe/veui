@@ -31,7 +31,7 @@ export default {
     'veui-icon': Icon
   },
   props: {
-    to: String,
+    to: [String, Object],
     // TODO: 提供replace这个属性缺少实际use case？
     replace: Boolean,
     type: {

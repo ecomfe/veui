@@ -31,7 +31,7 @@ export default {
   mixins: [ui],
   props: {
     to: {
-      type: String,
+      type: [String, Object],
       default: ''
     },
     replace: Boolean,

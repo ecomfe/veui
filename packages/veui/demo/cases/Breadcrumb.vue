@@ -1,22 +1,22 @@
 <template>
   <article>
     <h1><code>&lt;veui-breadcrumb&gt;</code></h1>
-    <p>
+    <section>
       <veui-breadcrumb :routes="items" @redirect="handleRedirect">
         <template slot-scope="route"><em>{{ route.label }}</em></template>
         <template slot="separator" slot-scope="scope">/</template>
       </veui-breadcrumb>
-    </p>
-    <p>
+    </section>
+    <section>
       <veui-breadcrumb :routes="items" @redirect="handleRedirect"/>
-    </p>
-    <p>
+    </section>
+    <section>
       <veui-breadcrumb>
         <veui-breadcrumb-item to="/">首页</veui-breadcrumb-item>
-        <veui-breadcrumb-item to="/breadcrumb">面包屑</veui-breadcrumb-item>
+        <veui-breadcrumb-item :to="{ name: 'Breadcrumb' }">面包屑</veui-breadcrumb-item>
         <veui-breadcrumb-item type="text">我在这里</veui-breadcrumb-item>
       </veui-breadcrumb>
-    </p>
+    </section>
   </article>
 </template>
 
@@ -55,3 +55,9 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+section {
+  margin-bottom: 20px;
+}
+</style>
