@@ -1,7 +1,7 @@
 import Overlay from '@/components/Overlay'
 import Vue from 'vue'
 
-describe('managers/overlay', () => {
+describe('components/Overlay', () => {
   it('should put the layer root node directly below the body.', (done) => {
     const div = document.createElement('div')
     document.body.appendChild(div)
