@@ -351,13 +351,17 @@ export class Tree {
     this.fixLink({ node, groupIndex, childIndex })
 
     let tail = node.tail
-    if (tail) {
-      this.fixLink({
-        node: tail,
-        groupIndex: node.childrenGroup.length - 1,
-        childIndex: last(node.childrenGroup).children.length - 1,
-        fixDirection: 2
-      })
+    while (tail) {
+      let nextTail = tail.tail
+      if (!nextTail) {
+        this.fixLink({
+          node: tail,
+          groupIndex: node.childrenGroup.length - 1,
+          childIndex: last(node.childrenGroup).children.length - 1,
+          fixDirection: 2
+        })
+      }
+      tail = nextTail
     }
 
     return { groupIndex, childIndex }
@@ -379,7 +383,7 @@ export class Tree {
     if (previousBrokenNode) {
       this.fixLink({ node: previousBrokenNode, fixDirection: 2 })
     }
-    if (nextBrokenNode) {
+    if (nextBrokenNode && nextBrokenNode.parent !== node) {
       this.fixLink({ node: nextBrokenNode, fixDirection: 1 })
     }
 
@@ -511,7 +515,7 @@ export class Tree {
    * @return {Node}
    */
   findPreviousNode (node, groupIndex, childIndex = -1) {
-    if (node === this.rootNode) {
+    if (node === this.rootNode || !node.parent) {
       return
     }
 
@@ -557,7 +561,7 @@ export class Tree {
       return head
     }
 
-    if (node === this.rootNode) {
+    if (node === this.rootNode || !node.parent) {
       return null
     }
 

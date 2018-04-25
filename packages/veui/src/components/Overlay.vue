@@ -57,7 +57,7 @@ export default {
     }
   },
   watch: {
-    open (value) {
+    realOpen (value) {
       this.updateOverlayDOM()
       this.updateNode()
       if (value) {

@@ -98,6 +98,17 @@ describe('managers/overlay', () => {
         child1.remove()
         expect(node.getChildrenCount()).to.equal(0)
       })
+
+      it('should remove a node in subtree that is not under the rootNode.', () => {
+        let tree = new Tree()
+
+        let nodeHandle1 = tree.createNode({ priority: 1 })
+        let nodeHandle2 = tree.createNode({ priority: 1, parentId: nodeHandle1.id })
+        let nodeHandle3 = tree.createNode({ priority: 1, parentId: nodeHandle2.id })
+
+        nodeHandle2.remove()
+        expect(() => nodeHandle3.remove()).to.not.throw()
+      })
     })
 
     describe('#getChildrenCount', () => {
@@ -329,6 +340,25 @@ describe('managers/overlay', () => {
         expect(tree.nodeMap[nodeHandle1.id].node.zIndex).to.equal(201)
         expect(tree.nodeMap[nodeHandle2.id].node.zIndex).to.equal(200)
         expect(tree.nodeMap[nodeHandle3.id].node.zIndex).to.equal(202)
+      })
+
+      it('should fix the tail.', () => {
+        let tree = new Tree()
+
+        let nodeHandle1 = tree.createNode({ priority: 1 })
+        let nodeHandle2 = tree.createNode({ priority: 1 })
+        let nodeHandle3 = tree.createNode({ parentId: nodeHandle1.id, priority: 1 })
+        let nodeHandle4 = tree.createNode({ parentId: nodeHandle1.id, priority: 1 })
+        let nodeHandle5 = tree.createNode({ parentId: nodeHandle4.id, priority: 1 })
+        let nodeHandle6 = tree.createNode({ parentId: nodeHandle4.id, priority: 1 })
+
+        nodeHandle1.toTop()
+        expect(tree.nodeMap[nodeHandle2.id].node.zIndex).to.equal(100)
+        expect(tree.nodeMap[nodeHandle1.id].node.zIndex).to.equal(101)
+        expect(tree.nodeMap[nodeHandle3.id].node.zIndex).to.equal(102)
+        expect(tree.nodeMap[nodeHandle4.id].node.zIndex).to.equal(103)
+        expect(tree.nodeMap[nodeHandle5.id].node.zIndex).to.equal(104)
+        expect(tree.nodeMap[nodeHandle6.id].node.zIndex).to.equal(105)
       })
     })
   })
