@@ -14,10 +14,13 @@
       <veui-dialog
           title="提示"
           :open="open"
-          @update:open="open = !open"
+          @update:open="(value) => open = value"
           :draggable="true">
           您关闭了
-          <template slot="foot"></template>
+          <template slot="foot">
+            <veui-button ui="primary" @click="open = false">确定</veui-button>
+            <veui-button autofocus @click="open = false">取消</veui-button>
+          </template>
       </veui-dialog>
     </section>
   </article>
