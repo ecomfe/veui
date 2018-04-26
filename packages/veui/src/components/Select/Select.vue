@@ -79,7 +79,7 @@ export default {
         'veui-select': true,
         'veui-select-empty': this.value === null,
         'veui-select-expanded': this.expanded,
-        'veui-input-invalid': this.fieldInvalid && this.isTopMostInput
+        'veui-input-invalid': this.realInvalid
       }}
       ui={this.ui}>
       <veui-button

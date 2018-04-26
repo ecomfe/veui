@@ -4,7 +4,7 @@
     'veui-input': true,
     'veui-input-focused': focused,
     'veui-input-hidden': type === 'hidden',
-    'veui-input-invalid': fieldInvalid && isTopMostInput,
+    'veui-input-invalid': realInvalid,
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
   }"

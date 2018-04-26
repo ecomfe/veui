@@ -1,7 +1,7 @@
 <template>
 <div class="veui-date-picker" :ui="ui"
   :class="{
-    'veui-input-invalid': fieldInvalid && isTopMostInput,
+    'veui-input-invalid': realInvalid,
     'veui-date-picker-empty': !selected,
     'veui-date-picker-range': range,
     'veui-date-picker-expanded': expanded
