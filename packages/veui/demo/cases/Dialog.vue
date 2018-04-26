@@ -132,6 +132,10 @@
       <veui-button ui="primary" @click="popupConfirms">Open ConfirmBox</veui-button>
     </p>
     <p>
+      <veui-button @click="popupToasts('info')" >Info Toast</veui-button>
+      <veui-button @click="popupToasts('warn')" >Warn Toast</veui-button>
+      <veui-button @click="popupToasts('error')" >Error Toast</veui-button>
+      <veui-button @click="popupToasts('success')" >Success Toast</veui-button>
       <veui-button ui="primary" @click="popupToasts">Open Toasts</veui-button>
     </p>
     <p>
@@ -221,13 +225,23 @@ export default {
           }
         })
     },
-    popupToasts () {
-      let counter = 1
-      setInterval(() => {
-        counter++
-        const type = ['error', 'info', 'success'][counter % 3]
-        toastManager[type](`${type}-${counter}`)
-      }, 1000)
+    popupToasts (type) {
+      if (type && toastManager[type]) {
+        toastManager[type](`${type} message`)
+      } else {
+        let index = 0
+        let timer = setInterval(
+          () => {
+            const type = ['warn', 'error', 'info', 'success'][index]
+            toastManager[type](`${type}-${index + 1}`)
+
+            if (++index > 3) {
+              clearTimeout(timer)
+            }
+          },
+          1000
+        )
+      }
     },
     popupPrompt () {
       promptManager.info('Please tell us your age:', 'Prompt').then(({ isOk, value }) => {
