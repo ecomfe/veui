@@ -110,16 +110,16 @@
 
     <p>
       <veui-dialog :open="contentAutoHeightDialogVisible"
-        @update:open="(value) => contentAutoHeightDialogVisible = value"
+        @update:open="toggleAdaptiveDialog"
         title="Adaptive Content Height">
         <p>The following increaming content string will incream the content height slowly:</p>
         <div v-html="dynamicContent"></div>
         <template slot="foot">
-          <veui-button ui="primary" @click="contentAutoHeightDialogVisible = false">OK</veui-button>
-          <veui-button autofocus @click="contentAutoHeightDialogVisible = false">CANCEL</veui-button>
+          <veui-button ui="primary" @click="toggleAdaptiveDialog(false)">OK</veui-button>
+          <veui-button autofocus @click="toggleAdaptiveDialog(false)">CANCEL</veui-button>
         </template>
       </veui-dialog>
-      <veui-button ui="primary" @click="contentAutoHeightDialogVisible = true">Adaptive Content Height</veui-button>
+      <veui-button ui="primary" @click="toggleAdaptiveDialog(true)">Adaptive Content Height</veui-button>
     </p>
 
     <p>
@@ -166,19 +166,8 @@ export default {
       customIconTitleDialogVisible: false,
       contentAutoHeightDialogVisible: false,
       dynamicContent: '',
-      test: '123'
-    }
-  },
-  created () {
-    setInterval(() => {
-      this.dynamicContent += `${Date.now()}<br>`
-    }, 1000)
-  },
-  watch: {
-    contentAutoHeightDialogVisible (value) {
-      if (value) {
-        this.dynamicContent = ''
-      }
+      test: '123',
+      adaptiveDialogTimer: null
     }
   },
   methods: {
@@ -190,6 +179,21 @@ export default {
     },
     handleCancel () {
       alert('The `cancel` button was clicked!')
+    },
+    toggleAdaptiveDialog (visible) {
+      this.contentAutoHeightDialogVisible = visible
+
+      if (this.contentAutoHeightDialogVisible) {
+        this.adaptiveDialogTimer = setInterval(
+          () => {
+            this.dynamicContent += `${Date.now()}<br>`
+          },
+          1000
+        )
+      } else {
+        clearTimeout(this.adaptiveDialogTimer)
+        this.dynamicContent = ''
+      }
     },
     popupAlerts () {
       alertManager.success('The task was successfully completed!', 'Success', {
