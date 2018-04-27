@@ -3,10 +3,10 @@
     <h1><code>&lt;veui-dialog&gt;</code></h1>
     <p>
       <veui-dialog
-        :modal="true"
         overlay-class="test demo-dialog-standard-dialog"
         :open.sync="modalDialogVisible"
-        title="Dialog Title">
+        title="Dialog Title"
+        modal>
         <p>content area</p>
         <template slot="foot">
           <veui-button ui="primary" @click="modalDialogVisible = false">OK</veui-button>
@@ -14,7 +14,7 @@
         </template>
       </veui-dialog>
       <veui-button ui="primary"
-        @click="modalDialogVisible = !modalDialogVisible">Open a model dialog box</veui-button>
+        @click="modalDialogVisible = !modalDialogVisible">Open a modal dialog box</veui-button>
 
       <veui-dialog
         :modal="false"
