@@ -13,9 +13,8 @@
       <veui-alert class="limit-width" type="error" message="错误，请检查并修改后再进行操作" @update:open="close"></veui-alert>
       <veui-dialog
           title="提示"
-          :open="open"
-          @update:open="(value) => open = value"
-          :draggable="true">
+          :open.sync="open"
+          draggable>
           您关闭了
           <template slot="foot">
             <veui-button ui="primary" @click="open = false">确定</veui-button>

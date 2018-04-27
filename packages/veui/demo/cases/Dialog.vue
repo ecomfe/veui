@@ -2,11 +2,11 @@
   <article class="demo-dialog">
     <h1><code>&lt;veui-dialog&gt;</code></h1>
     <p>
-      <veui-dialog :modal="true"
+      <veui-dialog
+        :modal="true"
         overlay-class="test demo-dialog-standard-dialog"
-        :open="modalDialogVisible"
-        title="Dialog Title"
-        @update:open="(value) => modalDialogVisible = value">
+        :open.sync="modalDialogVisible"
+        title="Dialog Title">
         <p>content area</p>
         <template slot="foot">
           <veui-button ui="primary" @click="modalDialogVisible = false">OK</veui-button>
@@ -16,10 +16,10 @@
       <veui-button ui="primary"
         @click="modalDialogVisible = !modalDialogVisible">Open a model dialog box</veui-button>
 
-      <veui-dialog :modal="false"
-        :open="nonModalDialogVisible"
-        title="Dialog Title"
-        @update:open="(value) => nonModalDialogVisible = value">
+      <veui-dialog
+        :modal="false"
+        :open.sync="nonModalDialogVisible"
+        title="Dialog Title">
         The content of the Dialog. You can use the default slot to override it.
         <template slot="foot">
           <veui-button ui="primary" @click="nonModalDialogVisible = false">OK</veui-button>
@@ -30,11 +30,12 @@
         @click="nonModalDialogVisible = !nonModalDialogVisible">Open a modeless dialog box</veui-button>
     </p>
     <p>
-      <veui-dialog :draggable="true"
+      <veui-dialog
         :modal="false"
         :open.sync="draggableDialog1Visible"
         ui="center"
-        title="First">
+        title="First"
+        draggable>
         You can drag the dialog box in the viewport.
         <template slot="foot">
           <veui-button ui="primary" @click="draggableDialog1Visible = false">OK</veui-button>
@@ -43,12 +44,12 @@
       </veui-dialog>
       <veui-button ui="primary" @click="draggableDialog1Visible = !draggableDialog1Visible">Open the first draggable dialog box</veui-button>
 
-      <veui-dialog :draggable="true"
+      <veui-dialog
         :modal="false"
-        :open="draggableDialog2Visible"
+        :open.sync="draggableDialog2Visible"
         title="Second"
-        @update:open="(value) => draggableDialog2Visible = value"
-        ui="reverse top">
+        ui="reverse top"
+        draggable>
         <p>Drag the current dialog box to the right and open the first draggable dialog.</p>
         <p>Keep the two dialog have some parts overlapped.</p>
         <p>You'll see the first draggable dialog is higher than the second one.</p>
@@ -60,13 +61,14 @@
       </veui-dialog>
       <veui-button ui="primary" @click="draggableDialog2Visible = !draggableDialog2Visible">Open the second draggable dialog box</veui-button>
 
-      <veui-dialog :draggable="true"
+      <veui-dialog
         :modal="false"
         :open="draggableDialog3Visible"
         title="Reset Position"
         @update:open="(value) => ($refs.resetDialog.resetPosition(), draggableDialog3Visible = value)"
         ui="reverse top"
-        ref="resetDialog">
+        ref="resetDialog"
+        draggable>
         Click the `reset` button to put the dialog to the initial position.
         <template slot="foot">
           <veui-button @click="() => $refs.resetDialog.resetPosition()" ui="alt">Reset</veui-button>
@@ -75,8 +77,8 @@
       <veui-button ui="alt" @click="draggableDialog3Visible = !draggableDialog3Visible">Draggable dialog box with reset button</veui-button>
     </p>
     <p>
-      <veui-dialog :open="operationDialogVisible"
-        @update:open="(value) => operationDialogVisible = value"
+      <veui-dialog
+        :open.sync="operationDialogVisible"
         @ok="handleOk"
         @cancel="handleCancel"
         title="The Built-in Button">
@@ -85,8 +87,8 @@
       <veui-button ui="primary" @click="operationDialogVisible = true">The Built-in Button</veui-button>
     </p>
     <p>
-      <veui-dialog :open="customTextTitleDialogVisible"
-        @update:open="(value) => customTextTitleDialogVisible = value"
+      <veui-dialog
+        :open.sync="customTextTitleDialogVisible"
         title="Custom Title">
         You can change the dialog title text by setting the `title` prop or passing in the `title` slot parameter.
         <template slot="foot">
@@ -96,8 +98,8 @@
       </veui-dialog>
       <veui-button ui="primary" @click="customTextTitleDialogVisible = true">Custom Title</veui-button>
 
-      <veui-dialog :open="customIconTitleDialogVisible"
-        @update:open="(value) => customIconTitleDialogVisible = value">
+      <veui-dialog
+        :open.sync="customIconTitleDialogVisible">
         <template slot="title">Custom Title With ICON <icon class="svg" name="calendar"></icon></template>
         <template slot="foot">
           <veui-button ui="primary" @click="customIconTitleDialogVisible = false">OK</veui-button>
@@ -109,17 +111,17 @@
     </p>
 
     <p>
-      <veui-dialog :open="contentAutoHeightDialogVisible"
-        @update:open="toggleAdaptiveDialog"
+      <veui-dialog
+        :open.sync="contentAutoHeightDialogVisible">
         title="Adaptive Content Height">
         <p>The following increaming content string will incream the content height slowly:</p>
         <div v-html="dynamicContent"></div>
         <template slot="foot">
-          <veui-button ui="primary" @click="toggleAdaptiveDialog(false)">OK</veui-button>
-          <veui-button autofocus @click="toggleAdaptiveDialog(false)">CANCEL</veui-button>
+          <veui-button ui="primary" @click="contentAutoHeightDialogVisible = false">OK</veui-button>
+          <veui-button autofocus @click="contentAutoHeightDialogVisible = false">CANCEL</veui-button>
         </template>
       </veui-dialog>
-      <veui-button ui="primary" @click="toggleAdaptiveDialog(true)">Adaptive Content Height</veui-button>
+      <veui-button ui="primary" @click="contentAutoHeightDialogVisible = true">Adaptive Content Height</veui-button>
     </p>
 
     <p>
@@ -132,10 +134,10 @@
       <veui-button ui="primary" @click="popupConfirms">Open ConfirmBox</veui-button>
     </p>
     <p>
-      <veui-button @click="popupToasts('info')" >Info Toast</veui-button>
-      <veui-button @click="popupToasts('warn')" >Warn Toast</veui-button>
-      <veui-button @click="popupToasts('error')" >Error Toast</veui-button>
-      <veui-button @click="popupToasts('success')" >Success Toast</veui-button>
+      <veui-button @click="popupToasts('info')">Info Toast</veui-button>
+      <veui-button @click="popupToasts('warn')">Warn Toast</veui-button>
+      <veui-button @click="popupToasts('error')">Error Toast</veui-button>
+      <veui-button @click="popupToasts('success')">Success Toast</veui-button>
       <veui-button ui="primary" @click="popupToasts">Open Toasts</veui-button>
     </p>
     <p>
@@ -174,20 +176,9 @@ export default {
       adaptiveDialogTimer: null
     }
   },
-  methods: {
-    popupAlert (type, content, title) {
-      alertManager[type](content, title)
-    },
-    handleOk () {
-      alert('The `OK` button was clicked!')
-    },
-    handleCancel () {
-      alert('The `cancel` button was clicked!')
-    },
-    toggleAdaptiveDialog (visible) {
-      this.contentAutoHeightDialogVisible = visible
-
-      if (this.contentAutoHeightDialogVisible) {
+  watch: {
+    contentAutoHeightDialogVisible (value) {
+      if (value) {
         this.adaptiveDialogTimer = setInterval(
           () => {
             this.dynamicContent += `${Date.now()}<br>`
@@ -198,6 +189,17 @@ export default {
         clearTimeout(this.adaptiveDialogTimer)
         this.dynamicContent = ''
       }
+    }
+  },
+  methods: {
+    popupAlert (type, content, title) {
+      alertManager[type](content, title)
+    },
+    handleOk () {
+      alert('The `OK` button was clicked!')
+    },
+    handleCancel () {
+      alert('The `cancel` button was clicked!')
     },
     popupAlerts () {
       alertManager.success('The task was successfully completed!', 'Success', {
