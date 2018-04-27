@@ -63,9 +63,8 @@
 
       <veui-dialog
         :modal="false"
-        :open="draggableDialog3Visible"
+        :open.sync="draggableDialog3Visible"
         title="Reset Position"
-        @update:open="(value) => ($refs.resetDialog.resetPosition(), draggableDialog3Visible = value)"
         ui="reverse top"
         ref="resetDialog"
         draggable>
@@ -188,6 +187,11 @@ export default {
       } else {
         clearTimeout(this.adaptiveDialogTimer)
         this.dynamicContent = ''
+      }
+    },
+    draggableDialog3Visible (value) {
+      if (!value) {
+        this.$refs.resetDialog.resetPosition()
       }
     }
   },
