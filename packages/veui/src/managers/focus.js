@@ -1,6 +1,5 @@
 import { remove, findIndex, keys } from 'lodash'
 import { focusIn } from '../utils/dom'
-import Vue from 'vue'
 
 class FocusContext {
   /**
@@ -60,11 +59,11 @@ class FocusContext {
   }
 
   focusAt (index = 0, ignoreAutofocus) {
-    Vue.nextTick(() => {
+    setTimeout(() => {
       if (!focusIn(this.preferred || this.root, index, ignoreAutofocus)) {
         this.root.focus()
       }
-    })
+    }, 0)
   }
 
   destroy () {
@@ -77,8 +76,7 @@ class FocusContext {
     }
     if (source) {
       this.source = null
-      // restore focus in a macro task to prevent
-      // triggering events on the original focus
+
       if (typeof source.focus === 'function' && this.env.trigger !== 'pointer') {
         setTimeout(() => {
           source.focus()

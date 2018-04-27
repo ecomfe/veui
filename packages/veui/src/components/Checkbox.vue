@@ -93,6 +93,9 @@ export default {
     },
     toggleChecked () {
       this.localChecked = this.isChecked ? this.falseValue : this.trueValue
+    },
+    focus () {
+      this.$refs.box.focus()
     }
   },
   watch: {

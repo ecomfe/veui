@@ -1,4 +1,5 @@
 import {
+  invert,
   isFunction,
   uniqueId,
   remove,
@@ -13,11 +14,14 @@ import {
 import { getNodes } from '../utils/context'
 import { contains } from '../utils/dom'
 
-const SPECIAL_EVENT_MAP = {
-  hover: 'mouseout'
+const TRIGGER_EVENT_MAP = {
+  hover: 'mouseout',
+  focus: 'focusin'
 }
 
-const TRIGGER_TYPES = ['click', 'mousedown', 'mouseup', 'hover']
+const EVENT_TRIGGER_MAP = invert(TRIGGER_EVENT_MAP)
+
+const TRIGGER_TYPES = ['click', 'mousedown', 'mouseup', 'hover', 'focus']
 
 let handlerBindings = {}
 
@@ -37,7 +41,7 @@ function addBinding (type, binding) {
 
 function initBindingType (type) {
   let key = getBindingKey(type)
-  let event = SPECIAL_EVENT_MAP[type] || type
+  let event = TRIGGER_EVENT_MAP[type] || type
 
   document.addEventListener(
     event,
@@ -59,48 +63,46 @@ function getElementsByRefs (refs, context) {
 }
 
 function parseParams (el, arg, modifiers, value, context) {
-  let refs
+  let refs = arg ? arg.split(',') : []
   let handler
-  let trigger
+  let trigger = find(TRIGGER_TYPES, triggerType => triggerType in modifiers) || 'click'
   // delay 表示如果鼠标移动到 includeTargets 元素之外多少毫秒之后，才会触发 handler
-  let delay
-  let excludeSelf = false
+  let delay = find(
+    keys(modifiers),
+    key => isNumber(parseInt(key, 10)) && modifiers[key]
+  )
+  let excludeSelf = !!modifiers.excludeSelf
 
   // 如果 value 是 Function 的话，其余参数就尽量从 modifier、arg 里面去解析
   // 否则从value里面去解析
   if (isFunction(value)) {
     handler = value
-
-    refs = arg ? arg.split(',') : []
-
-    trigger =
-      find(TRIGGER_TYPES, triggerType => triggerType in modifiers) || 'click'
-
-    delay = find(
-      keys(modifiers),
-      key => isNumber(parseInt(key, 10)) && modifiers[key]
-    )
-    delay = delay ? parseInt(delay, 10) : 0
   } else {
     let normalizedValue = value || {}
     handler = isFunction(normalizedValue.handler)
       ? normalizedValue.handler
       : noop
 
-    refs = Array.isArray(normalizedValue.refs)
-      ? normalizedValue.refs
-      : isString(normalizedValue.refs)
-        ? normalizedValue.refs.split(',')
-        : [normalizedValue.refs]
-
-    trigger = normalizedValue.trigger || 'click'
-
-    delay = parseInt(normalizedValue.delay, 10)
-    if (isNaN(delay)) {
-      delay = 0
+    if (normalizedValue.refs) {
+      refs = Array.isArray(normalizedValue.refs)
+        ? normalizedValue.refs
+        : isString(normalizedValue.refs)
+          ? normalizedValue.refs.split(',')
+          : [normalizedValue.refs]
     }
 
-    excludeSelf = !!normalizedValue.excludeSelf
+    trigger = normalizedValue.trigger || trigger || 'click'
+
+    if ('delay' in normalizedValue) {
+      delay = parseInt(normalizedValue.delay, 10)
+      if (isNaN(delay)) {
+        delay = 0
+      }
+    }
+
+    if ('excludeSelf' in normalizedValue) {
+      excludeSelf = !!normalizedValue.excludeSelf
+    }
   }
 
   return {
@@ -130,7 +132,7 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
         ...(excludeSelf ? [] : [el]),
         ...getElementsByRefs(refs, context)
       ]
-      if (e.type === trigger && !isElementIn(e.target, includeTargets)) {
+      if ((EVENT_TRIGGER_MAP[e.type] || e.type) === trigger && !isElementIn(e.target, includeTargets)) {
         handler(e)
       }
     }

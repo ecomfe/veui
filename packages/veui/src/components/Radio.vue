@@ -6,6 +6,7 @@
   }"
   :ui="ui">
   <input
+    ref="box"
     type="radio"
     v-bind="attrs"
     @change="localChecked = $event.target.checked"
@@ -82,6 +83,11 @@ export default {
         }
       },
       immediate: true
+    }
+  },
+  methods: {
+    focus () {
+      this.$refs.box.focus()
     }
   }
 }
