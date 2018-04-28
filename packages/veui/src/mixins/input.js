@@ -28,6 +28,9 @@ export default {
         this.readonly || (this.formField && this.formField.realReadonly)
       )
     },
+    realInvalid () {
+      return this.formField && !this.formField.validity.valid && this.isTopMostInput
+    },
     ...getTypedAncestorTracker('field', 'formField').computed
   },
   created () {
