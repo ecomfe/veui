@@ -60,7 +60,7 @@ export default {
   },
   data () {
     return {
-      localValue: this.value,
+      localValue: this.value || '',
       focused: false,
       height: 0,
       measurerContentWidth: 0,
@@ -107,7 +107,7 @@ export default {
   },
   watch: {
     value (val) {
-      this.localValue = val
+      this.localValue = val || ''
     },
     localValue: {
       handler () {
