@@ -12,10 +12,10 @@
     v-for="(item, index) in items"
     :key="index"
     :disabled="item.disabled || realDisabled || realReadonly"
-    :checked="value.indexOf(item.value) !== -1"
+    :checked="localValue.indexOf(item.value) !== -1"
     @change="checked => handleChange(item.value, checked)"
     role="option"
-    :aria-selected="String(value.indexOf(item.value) !== -1)"
+    :aria-selected="String(localValue.indexOf(item.value) !== -1)"
     :aria-posinset="index + 1"
     :aria-setsize="items.length">
     <slot v-bind="item">{{ item.label }}</slot>
@@ -42,6 +42,16 @@ export default {
     items: Array,
     value: Array
   },
+  data () {
+    return {
+      localValue: null
+    }
+  },
+  watch: {
+    value (val) {
+      this.localValue = val || []
+    }
+  },
   computed: {
     localName () {
       return this.realName || uniqueId('veui-checkbox-group-')
@@ -50,11 +60,11 @@ export default {
   methods: {
     handleChange (value, checked) {
       if (checked) {
-        this.value.push(value)
+        this.localValue.push(value)
       } else {
-        this.value.splice(findIndex(this.value, item => item === value), 1)
+        this.localValue.splice(findIndex(this.localValue, item => item === value), 1)
       }
-      this.$emit('change', this.value)
+      this.$emit('change', this.localValue)
     }
   }
 }

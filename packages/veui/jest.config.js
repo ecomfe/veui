@@ -15,20 +15,20 @@ module.exports = {
   verbose: true,
   collectCoverage: false,
   collectCoverageFrom: ['src/**/*.{js,vue}'],
-  coverageThreshold: {
-    'src/**/*.js': {
-      branches: 90,
-      functions: 90,
-      lines: 90,
-      statements: 90
-    },
-    'src/**/*.vue': {
-      branches: 40,
-      functions: 50,
-      lines: 50,
-      statements: 50
-    }
-  },
+  // coverageThreshold: {
+  //   'src/**/*.js': {
+  //     branches: 90,
+  //     functions: 90,
+  //     lines: 90,
+  //     statements: 90
+  //   },
+  //   'src/**/*.vue': {
+  //     branches: 40,
+  //     functions: 50,
+  //     lines: 50,
+  //     statements: 50
+  //   }
+  // },
   coverageDirectory: '<rootDir>/test/unit/coverage',
   coverageReporters: ['lcov', 'text-summary'],
   moduleFileExtensions: ['js', 'vue', 'jsx'],

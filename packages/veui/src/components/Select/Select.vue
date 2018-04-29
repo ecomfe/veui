@@ -39,7 +39,10 @@ export default {
       default: false
     },
     clearable: Boolean,
-    options: Array,
+    options: {
+      type: Array,
+      required: true
+    },
     filter: Function
   },
   data () {
