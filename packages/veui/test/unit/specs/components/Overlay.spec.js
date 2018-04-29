@@ -15,7 +15,7 @@ describe('components/Overlay', () => {
 
     setTimeout(() => {
       const overlay = vm.$children[0].$vnode.componentInstance
-      expect(overlay.$refs.box).to.equal(document.body.querySelector('.veui-overlay-box'))
+      expect(overlay.$refs.box).toBe(document.body.querySelector('.veui-overlay-box'))
 
       vm.$destroy()
       done()
@@ -35,7 +35,7 @@ describe('components/Overlay', () => {
 
     setTimeout(() => {
       const overlay = vm.$children[0].$vnode.componentInstance
-      expect(overlay.$refs.box.innerHTML).to.equal('content')
+      expect(overlay.$refs.box.innerHTML).toBe('content')
       vm.$destroy()
       done()
     })
@@ -59,8 +59,8 @@ describe('components/Overlay', () => {
     setTimeout(() => {
       const parent = document.querySelector('.parent-overlay').__vue__
       const child = document.querySelector('.child-overlay').__vue__
-      expect(+parent.$refs.box.style.zIndex).to.equal(200)
-      expect(+child.$refs.box.style.zIndex).to.equal(201)
+      expect(+parent.$refs.box.style.zIndex).toBe(200)
+      expect(+child.$refs.box.style.zIndex).toBe(201)
       vm.$destroy()
       done()
     })
