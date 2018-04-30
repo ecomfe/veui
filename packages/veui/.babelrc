@@ -21,6 +21,9 @@
     },
     "production": {
       "plugins": ["lodash"]
+    },
+    "development": {
+      "plugins": ["lodash"]
     }
   }
 }
