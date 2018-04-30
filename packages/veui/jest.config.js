@@ -1,14 +1,3 @@
-const transformIgnoredModules = [
-  'moment',
-  'core-js',
-  'babel-runtime',
-  'lodash',
-  'tether',
-  'de-indent',
-  'bytes',
-  'vue'
-]
-
 module.exports = {
   bail: true,
   verbose: true,
@@ -42,7 +31,7 @@ module.exports = {
     '^vue$': '<rootDir>/node_modules/vue/dist/vue.common.js'
   },
   transformIgnorePatterns: [
-    '<rootDir>/node_modules/(' + transformIgnoredModules.join('|') + ')/'
+    '<rootDir>/node_modules/(?!vue-awesome/)'
   ],
   transform: {
     '^.+\\.js$': 'babel-jest',
