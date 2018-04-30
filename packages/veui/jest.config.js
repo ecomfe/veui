@@ -2,12 +2,11 @@ const transformIgnoredModules = [
   'moment',
   'core-js',
   'babel-runtime',
-  'regenerator-runtime',
   'lodash',
-  'vue',
   'tether',
   'de-indent',
-  'bytes'
+  'bytes',
+  'vue'
 ]
 
 module.exports = {
