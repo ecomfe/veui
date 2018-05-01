@@ -59,3 +59,13 @@ export function add (a, b, decimals = 0) {
 export function round (num, decimals = 0) {
   return Number(Math.round(num + 'e' + decimals) + 'e-' + decimals)
 }
+
+/**
+ * 以 10 为底数取对数
+ *
+ * @param {number} num 真数
+ * @returns {number} 对数
+ */
+export function log10 (num) {
+  return Math.log10 ? Math.log10(num) : Math.log(num) * Math.LOG10E
+}

@@ -20,6 +20,7 @@
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { getListeners } from '../utils/helper'
+import { focus } from '../utils/dom'
 
 const EVENTS = ['keyup', 'keydown', 'keypress', 'focus', 'blur']
 
@@ -86,8 +87,12 @@ export default {
     }
   },
   methods: {
-    focus () {
-      this.$refs.box.focus()
+    focus ({ visible = false }) {
+      if (visible) {
+        focus(this.$refs.box)
+      } else {
+        this.$refs.box.focus()
+      }
     }
   }
 }

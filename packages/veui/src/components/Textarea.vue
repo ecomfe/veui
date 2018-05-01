@@ -40,6 +40,7 @@ import { pick } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { getListeners } from '../utils/helper'
+import { log10 } from '../utils/math'
 
 const EVENTS = ['click', 'keyup', 'keydown', 'keypress']
 
@@ -89,9 +90,6 @@ export default {
       return this.localValue.split('\n').map(line => line || `\u200b${line}`)
     },
     digits () {
-      const log10 = Math.log10 || function (x) {
-        return Math.log(x) * Math.LOG10E
-      }
       return Math.floor(log10(this.lines.length)) + 1
     },
     lineNumberWidth () {
