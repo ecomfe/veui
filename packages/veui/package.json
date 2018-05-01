@@ -68,6 +68,9 @@
     "css-loader": "^0.26.1",
     "less": "^2.7.2",
     "less-plugin-est": "^2.0.5",
+    "ora": "^1.1.0",
+    "copy-webpack-plugin": "^4.0.1",
+    "optimize-css-assets-webpack-plugin": "^1.3.0",
     "less-loader": "^4.0.3"
   },
   "engines": {
