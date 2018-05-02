@@ -133,7 +133,7 @@ export default {
       if (event === 'click') {
         setTimeout(() => {
           this.$refs.item[this.localIndex].focus()
-        }, 0)
+        })
       }
 
       this.localIndex = index

@@ -63,7 +63,7 @@ class FocusContext {
       if (!focusIn(this.preferred || this.root, index, ignoreAutofocus)) {
         this.root.focus()
       }
-    }, 0)
+    })
   }
 
   destroy () {
@@ -80,7 +80,7 @@ class FocusContext {
       if (typeof source.focus === 'function' && this.env.trigger !== 'pointer') {
         setTimeout(() => {
           source.focus()
-        }, 0)
+        })
       }
     }
     this.preferred = null

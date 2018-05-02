@@ -329,7 +329,7 @@ export default {
       if (contains(this.$el, relatedTarget)) {
         setTimeout(() => {
           focusBefore(target)
-        }, 0)
+        })
         return
       }
 
@@ -341,7 +341,7 @@ export default {
       let last = this.focusPath.pop()
       setTimeout(() => {
         this.focusPath.push(last)
-      }, 0)
+      })
     },
     focusDown () {
       let { children } = this.focusNode
@@ -360,7 +360,7 @@ export default {
         this.toggleActive(this.focusNode, false)
       }
 
-      this.focusPath = [...focusPath].slice(0, -1)
+      this.focusPath = focusPath.slice(0, -1)
     },
     focusStep (forward = true) {
       if (this.focusPath.length === 3) {
@@ -377,7 +377,7 @@ export default {
         if (box && typeof box.focus === 'function') {
           box.focus({ visible: true })
         }
-      }, 0)
+      })
     },
     focusGroup (group, shadow = false) {
       this.toggleActive(group, shadow)
