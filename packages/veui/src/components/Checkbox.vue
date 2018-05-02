@@ -12,10 +12,10 @@
     v-on="listeners">
   <span class="veui-checkbox-box">
     <transition name="veui-checkbox-icon">
-      <veui-icon v-if="localChecked && localIndeterminate" :name="icons.indeterminate"/>
+      <veui-icon v-if="localIndeterminate" :name="icons.indeterminate"/>
     </transition>
     <transition name="veui-checkbox-icon">
-      <veui-icon v-if="localChecked && !localIndeterminate" :name="icons.checked"/>
+      <veui-icon v-if="isChecked && !localIndeterminate" :name="icons.checked"/>
     </transition>
   </span>
   <span class="veui-checkbox-label"><slot/></span>
