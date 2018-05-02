@@ -1,51 +1,145 @@
 <template>
-<div class="veui-region-picker" :ui="ui">
-  <div v-for="(section, si) in localDatasource" class="veui-region-picker-section" :key="si">
+<div
+  class="veui-region-picker"
+  :ui="ui"
+  role="tree"
+  aria-multiselectable="true"
+  aria-label="地域选择，按 Tab 键在同一层级内导航，按左右箭头键切换层级">
+  <div
+    data-id="x"
+    class="veui-sr-only"
+    tabindex="0"
+    @focus="initFocus"></div>
+  <div
+    v-for="(section, si) in localDatasource"
+    class="veui-region-picker-section"
+    role="treeitem"
+    aria-level="1"
+    :aria-expanded="String(localDatasource.length > 0)"
+    :aria-setsize="localDatasource.length"
+    :aria-posinset="si + 1"
+    :aria-checked="section.indeterminate ? 'mixed' : String(section.selected)"
+    :aria-selected="section.id != null && section.selected && (includeIndeterminate || !section.indeterminate)"
+    :key="si">
     <div class="veui-region-picker-section-title">
-      <veui-checkbox :checked="section.selected" :indeterminate="section.indeterminate"
-        :readonly="realReadonly" :disabled="realDisabled || section.disabled"
+      <veui-checkbox
+        :ref="`node-${si}`"
+        :checked="section.selected"
+        :indeterminate="section.indeterminate"
+        :readonly="realReadonly"
+        :disabled="realDisabled || section.disabled"
+        tabindex="-1"
+        @keydown.right.prevent="focusDown"
+        @keydown.down.prevent="focusStep()"
+        @keydown.up.prevent="focusStep(false)"
         @change="checked => toggleNode(section, checked)">
         <slot name="label" v-bind="section" :level="0">{{ section.label }}</slot>
       </veui-checkbox>
     </div>
-    <div v-if="section.children" class="veui-region-picker-section-content">
-      <div v-for="(branch, bi) in section.children" class="veui-region-picker-branch" :key="bi">
+    <div
+      v-if="section.children"
+      class="veui-region-picker-section-content">
+      <div
+        v-for="(branch, bi) in section.children"
+        class="veui-region-picker-branch"
+        role="treeitem"
+        aria-level="2"
+        :aria-expanded="String(section.children.length > 0)"
+        :aria-setsize="section.children.length"
+        :aria-posinset="bi + 1"
+        :aria-checked="branch.indeterminate ? 'mixed' : String(branch.selected)"
+        :aria-selected="branch.id != null && branch.selected && (includeIndeterminate || !branch.indeterminate)"
+        :key="bi">
         <div class="veui-region-picker-branch-title">
-          <veui-checkbox :checked="branch.selected" :indeterminate="branch.indeterminate"
-            :readonly="realReadonly" :disabled="realDisabled || branch.disabled"
+          <veui-checkbox
+            :ref="`node-${si}-${bi}`"
+            :checked="branch.selected"
+            :indeterminate="branch.indeterminate"
+            :readonly="realReadonly"
+            :disabled="realDisabled || branch.disabled"
+            tabindex="-1"
+            @keydown.left.prevent="focusUp"
+            @keydown.right.prevent="focusDown"
+            @keydown.down.prevent="focusStep"
+            @keydown.up.prevent="focusStep(false)"
             @change="checked => toggleNode(branch, checked)">
             <slot name="label" v-bind="branch" :level="1">{{ branch.label }}</slot>
           </veui-checkbox>
         </div>
-        <div v-if="branch.children" class="veui-region-picker-branch-content">
-          <div v-for="(group, gi) in branch.children" class="veui-region-picker-group" :key="gi">
+        <div
+          v-if="branch.children"
+          class="veui-region-picker-branch-content">
+          <div
+            v-for="(group, gi) in branch.children"
+            class="veui-region-picker-group"
+            role="treeitem"
+            aria-level="3"
+            :aria-expanded="String(branch.children.length > 0)"
+            :aria-setsize="branch.children.length"
+            :aria-posinset="gi + 1"
+            :aria-checked="group.indeterminate ? 'mixed' : String(group.selected)"
+            :aria-selected="group.id != null && group.selected && (includeIndeterminate || !group.indeterminate)"
+            :aria-owns="`${id}-shadow ${id}-units`"
+            :key="gi">
             <div class="veui-region-picker-group-title">
-              <veui-checkbox :ref="`group-${si}-${bi}-${gi}`" :checked="group.selected"
-                :readonly="realReadonly" :disabled="realDisabled || group.disabled"
-                :indeterminate="group.indeterminate" @change="checked => toggleNode(group, checked)"
-                @mouseenter.native="toggleActive(group, true)">
+              <veui-checkbox
+                :ref="`node-${si}-${bi}-${gi}`"
+                :checked="group.selected"
+                :readonly="realReadonly"
+                :disabled="realDisabled || group.disabled"
+                :indeterminate="group.indeterminate"
+                tabindex="-1"
+                @change="checked => toggleNode(group, checked)"
+                @mouseenter.native="toggleActive(group, true)"
+                @keydown.left.prevent="focusUp"
+                @keydown.right.prevent="focusGroup(group, true)"
+                @keydown.down.prevent="focusStep"
+                @keydown.up.prevent="focusStep(false)">
                 <slot name="label" v-bind="group" :level="2">{{ group.label }}</slot>
               </veui-checkbox>
-              <veui-overlay v-if="group.children && group.active" :open.sync="group.active"
+              <veui-overlay
+                v-if="group.children && group.active"
+                :open.sync="group.active"
                 :overlay-class="overlayClass"
-                :target="`group-${si}-${bi}-${gi}`" :options="{
+                :target="`node-${si}-${bi}-${gi}`"
+                :options="{
                   attachment: 'top left',
                   targetAttachment: 'bottom left',
                   constraints
                 }">
                 <div class="veui-region-picker-units"
+                  :id="`${id}-units`"
                   :ref="`layer-${si}-${bi}-${gi}`"
                   v-outside="{
                     handler: () => { toggleActive(group, false) },
-                    refs: [`group-${si}-${bi}-${gi}`, `shadow-${si}-${bi}-${gi}`],
+                    refs: [`node-${si}-${bi}-${gi}`, `shadow-${si}-${bi}-${gi}`],
                     trigger: 'hover',
                     delay: 200
                   }">
                   <template v-for="ri in Math.ceil(group.children.length / 3)">
                     <div class="veui-region-picker-unit-row" :key="ri">
-                      <div v-for="(unit, ui) in group.children.slice(ri * 3 - 3, ri * 3)" class="veui-region-picker-unit" :key="ui">
-                        <veui-checkbox :checked="unit.selected" :indeterminate="unit.indeterminate"
-                          :readonly="realReadonly" :disabled="realDisabled || unit.disabled"
+                      <div
+                        v-for="(unit, ui) in group.children.slice(ri * 3 - 3, ri * 3)"
+                        class="veui-region-picker-unit"
+                        role="treeitem"
+                        aria-level="4"
+                        :aria-expanded="String(group.children.length > 0)"
+                        :aria-setsize="group.children.length"
+                        :aria-posinset="ri * 3 + ui - 2"
+                        :aria-checked="String(unit.selected)"
+                        :aria-selected="unit.id != null && unit.selected"
+                        :key="ui">
+                        <veui-checkbox
+                          :ref="`node-${si}-${bi}-${gi}-${ri * 3 - 3 + ui}`"
+                          :checked="unit.selected"
+                          :indeterminate="unit.indeterminate"
+                          :readonly="realReadonly"
+                          :disabled="realDisabled || unit.disabled"
+                          tabindex="-1"
+                          aria-haspopup="tree"
+                          @keydown.left.prevent="focusUp"
+                          @keydown.down.prevent="focusStep"
+                          @keydown.up.prevent="focusStep(false)"
                           @change="checked => toggleNode(unit, checked)">
                           <slot name="label" v-bind="unit" :level="3">{{ unit.label }}</slot>
                         </veui-checkbox>
@@ -54,22 +148,42 @@
                   </template>
                 </div>
               </veui-overlay>
-              <veui-overlay v-if="group.children && group.active" :open.sync="group.active"
+              <veui-overlay
+                v-if="group.children && group.active"
+                :open.sync="group.active"
                 :overlayClass="mergeOverlayClass('veui-region-picker-group-shadow-overlay')"
-                :target="`group-${si}-${bi}-${gi}`" :options="{
+                :target="`node-${si}-${bi}-${gi}`"
+                :options="{
                   attachment: 'top left',
                   targetAttachment: 'top left'
                 }">
                 <div class="veui-region-picker-group-shadow"
+                  :id="`${id}-shadow`"
                   :ref="`shadow-${si}-${bi}-${gi}`"
+                  role="treeitem"
+                  aria-level="3"
+                  :aria-expanded="String(branch.children.length > 0)"
+                  :aria-setsize="branch.children.length"
+                  :aria-posinset="gi + 1"
+                  :aria-checked="group.indeterminate ? 'mixed' : String(group.selected)"
+                  :aria-selected="group.id != null && group.selected && (includeIndeterminate || !group.indeterminate)"
+                  :aria-owns="`${id}-units`"
                   v-outside="{
                     handler: () => { toggleActive(group, false) },
-                    refs: [`group-${si}-${bi}-${gi}`, `layer-${si}-${bi}-${gi}`],
+                    refs: [`node-${si}-${bi}-${gi}`, `layer-${si}-${bi}-${gi}`],
                     trigger: 'hover',
                     delay: 200
                   }">
-                  <veui-checkbox :checked="group.selected" :indeterminate="group.indeterminate"
-                    :readonly="realReadonly" :disabled="realDisabled || group.disabled"
+                  <veui-checkbox
+                    :ref="`shadow-checker-${si}-${bi}-${gi}`"
+                    :checked="group.selected"
+                    :indeterminate="group.indeterminate"
+                    :readonly="realReadonly"
+                    tabindex="-1"
+                    @keydown.left.prevent="focusGroup(group)"
+                    @keydown.right.prevent="focusDown"
+                    @keydown.down.prevent="focusStep"
+                    @keydown.up.prevent="focusStep(false)"
                     @change="checked => toggleNode(group, checked)">
                     <slot name="label" v-bind="group" :overlay="true" :level="2">
                       {{ group.label }}
@@ -96,9 +210,10 @@ import ui from '../mixins/ui'
 import input from '../mixins/input'
 import overlay from '../mixins/overlay'
 import outside from '../directives/outside'
-import { cloneDeep, pick } from 'lodash'
-import Vue from 'vue'
 import warn from '../utils/warn'
+import { contains, focusBefore } from '../utils/dom'
+import { uniqueId, get, cloneDeep, pick } from 'lodash'
+import Vue from 'vue'
 
 export default {
   name: 'veui-region-picker',
@@ -126,7 +241,9 @@ export default {
           to: 'window',
           attachment: 'together'
         }
-      ]
+      ],
+      focusPath: [0],
+      id: uniqueId('veui-region-picker-')
     }
   },
   computed: {
@@ -135,6 +252,19 @@ export default {
         result[current] = true
         return result
       }, {})
+    },
+    nodePath () {
+      return this.focusPath.join(',children,').split(',')
+    },
+    focusNode () {
+      return get(this.localDatasource, this.nodePath)
+    },
+    focusSiblings () {
+      let { nodePath } = this
+      if (nodePath.length <= 1) {
+        return this.localDatasource
+      }
+      return get(this.localDatasource, this.nodePath.slice(0, -1))
     }
   },
   watch: {
@@ -150,6 +280,11 @@ export default {
     },
     datasource () {
       this.init()
+    },
+    focusPath (val, oldVal) {
+      let prefix = oldVal.length === 4 && val.length === 3
+        ? 'shadow-checker' : 'node'
+      this.focusByPath(prefix)
     }
   },
   created () {
@@ -189,6 +324,64 @@ export default {
         }
       })
       this.localDatasource = localDatasource
+    },
+    initFocus ({ target, relatedTarget }) {
+      if (contains(this.$el, relatedTarget)) {
+        setTimeout(() => {
+          focusBefore(target)
+        })
+        return
+      }
+
+      if (this.focusPath.length < 4) {
+        this.focusByPath()
+        return
+      }
+
+      let last = this.focusPath.pop()
+      setTimeout(() => {
+        this.focusPath.push(last)
+      })
+    },
+    focusDown () {
+      let { children } = this.focusNode
+      if (!children || !children.length) {
+        return
+      }
+      this.focusPath.push(0)
+    },
+    focusUp () {
+      let { focusPath } = this
+      if (focusPath.length <= 1) {
+        return
+      }
+
+      if (focusPath.length === 3) {
+        this.toggleActive(this.focusNode, false)
+      }
+
+      this.focusPath = focusPath.slice(0, -1)
+    },
+    focusStep (forward = true) {
+      if (this.focusPath.length === 3) {
+        this.toggleActive(this.focusNode, false)
+      }
+      let count = this.focusSiblings.length
+      let index = this.focusPath[this.focusPath.length - 1]
+      this.$set(this.focusPath, this.focusPath.length - 1, (count + index + (forward ? 1 : -1)) % count)
+    },
+    focusByPath (prefix = 'node') {
+      setTimeout(() => {
+        let box = this.$refs[`${prefix}-${this.focusPath.join('-')}`]
+        box = Array.isArray(box) ? box[0] : box
+        if (box && typeof box.focus === 'function') {
+          box.focus({ visible: true })
+        }
+      })
+    },
+    focusGroup (group, shadow = false) {
+      this.toggleActive(group, shadow)
+      this.focusByPath(shadow ? 'shadow-checker' : 'node')
     },
     toggleActive (node, show) {
       if (node.disabled) {

@@ -6,6 +6,7 @@
   }"
   :ui="ui">
   <input
+    ref="box"
     type="radio"
     v-bind="attrs"
     @change="localChecked = $event.target.checked"
@@ -19,6 +20,7 @@
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { getListeners } from '../utils/helper'
+import { focus } from '../utils/dom'
 
 const EVENTS = ['keyup', 'keydown', 'keypress', 'focus', 'blur']
 
@@ -82,6 +84,15 @@ export default {
         }
       },
       immediate: true
+    }
+  },
+  methods: {
+    focus ({ visible = false }) {
+      if (visible) {
+        focus(this.$refs.box)
+      } else {
+        this.$refs.box.focus()
+      }
     }
   }
 }
