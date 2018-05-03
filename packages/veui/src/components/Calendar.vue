@@ -156,6 +156,7 @@
 import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/date'
 import { closest, focusIn } from '../utils/dom'
 import { sign, isPositive } from '../utils/math'
+import { normalizeClass } from '../utils/helper'
 import { flattenDeep, findIndex, uniqueId } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
@@ -249,7 +250,7 @@ export default {
       }
     },
     dateClass: {
-      type: [String, Object, Function],
+      type: [String, Array, Object, Function],
       default: function () {
         return {}
       }
@@ -389,24 +390,10 @@ export default {
       })
     },
     getDateClass (day, panel) {
-      let extraClass = {}
-      switch (typeof this.dateClass) {
-        case 'function':
-          extraClass = this.dateClass(fromDateData(day))
-          break
-        case 'object':
-          extraClass = {
-            ...this.dateClass
-          }
-          break
-        case 'string':
-          extraClass = this.dateClass
-            .split(/\s+/)
-            .filter(c => c)
-            .reduce((result, current) => {
-              result[current] = true
-            }, {})
-      }
+      let extraClass = typeof this.dateClass === 'function'
+        ? this.dateClass(fromDateData(day))
+        : this.dateClass
+
       return {
         'veui-calendar-day': day.month === panel.month,
         'veui-calendar-aux': day.month !== panel.month,
@@ -415,7 +402,7 @@ export default {
         'veui-calendar-in-range': day.rangePosition === 'within',
         'veui-calendar-range-start': day.rangePosition === 'start',
         'veui-calendar-range-end': day.rangePosition === 'end',
-        ...extraClass
+        ...normalizeClass(extraClass)
       }
     },
     getMonthClass (panel, i, j) {
