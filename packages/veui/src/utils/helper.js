@@ -3,7 +3,6 @@ import {
   camelCase,
   get,
   isString,
-  isArray,
   isObject,
   assign,
   keys
@@ -87,7 +86,7 @@ export function isEmpty (val) {
  * 3. object
  * 此处统一将这些形式的 class 转换成 object 形式的
  *
- * @param {string|Array.<string>|Object} klasses
+ * @param {string|Array<string>|Object<string, boolean>} klasses
  */
 export function normalizeClass (klasses) {
   let klassObj = {}
@@ -95,7 +94,7 @@ export function normalizeClass (klasses) {
     klasses.split(/\s+/).forEach(klass => {
       klassObj[klass] = true
     })
-  } else if (isArray(klasses)) {
+  } else if (Array.isArray(klasses)) {
     klasses.forEach(klass => {
       klassObj[klass] = true
     })
