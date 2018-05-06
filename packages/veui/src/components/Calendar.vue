@@ -468,7 +468,7 @@ export default {
       // range selection
       if (!this.picking) {
         this.picking = [selected]
-        this.$emit('selectstart', this.picking)
+        this.$emit('selectstart', selected)
         this.markEnd(day)
         return
       }

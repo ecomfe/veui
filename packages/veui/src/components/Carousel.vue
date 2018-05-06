@@ -11,39 +11,42 @@
           'veui-carousel-item': true,
           'veui-carousel-item-current': localIndex === i
         }"
-        :style="{
-          'background-image': `url(${item.src})`
-        }"
         tabindex="0">
         <slot v-bind="item" :index="i">
-          <img class="veui-sr-only" :src="item.src" :alt="item.alt">
+          <div
+            class="veui-carousel-item-image"
+            :style="{
+              'background-image': `url(${item.src})`
+            }">
+            <img class="veui-sr-only" :src="item.src" :alt="item.alt">
+          </div>
         </slot>
       </li>
     </transition-group>
-    <div v-if="indicator === 'number'" class="veui-carousel-indicator-numbers">{{ localIndex + 1 }}<span class="veui-carousel-indicator-numbers-separator"></span>{{ count }}</div>
-    <nav v-else-if="indicator !== 'none'" :class="{
-        [`veui-carousel-indicator-${indicator}s`]: true
-      }">
-      <button type="button" v-for="(item, i) in datasource" :key="i"
-        :class="{
-          'veui-carousel-indicator-item': true,
-          'veui-carousel-indicator-item-current': localIndex === i
-        }"
-        @click="select(i, 'click')"
-        @mouseenter="select(i, 'hover')"
-      >{{ item.label || `第 ${i + 1} 页` }}</button>
-    </nav>
-    <button type="button" class="veui-carousel-control veui-carousel-control-prev"
-      @click="step(-1)"
-      :disabled="!wrap && localIndex === 0">
-      <veui-icon :name="icons.prev" label="上一页"/>
-    </button>
-    <button type="button" class="veui-carousel-control veui-carousel-control-next"
-      @click="step(1)"
-      :disabled="!wrap && localIndex === count - 1">
-      <veui-icon :name="icons.next" label="下一页"/>
-    </button>
   </div>
+  <div v-if="indicator === 'number'" class="veui-carousel-indicator-numbers">{{ localIndex + 1 }}<span class="veui-carousel-indicator-numbers-separator"></span>{{ count }}</div>
+  <nav v-else-if="indicator !== 'none'" :class="{
+      [`veui-carousel-indicator-${indicator}s`]: true
+    }">
+    <button type="button" v-for="(item, i) in datasource" :key="i"
+      :class="{
+        'veui-carousel-indicator-item': true,
+        'veui-carousel-indicator-item-current': localIndex === i
+      }"
+      @click="select(i, 'click')"
+      @mouseenter="select(i, 'hover')"
+    >{{ item.label || `第 ${i + 1} 页` }}</button>
+  </nav>
+  <button type="button" class="veui-carousel-control veui-carousel-control-prev"
+    @click="step(-1)"
+    :disabled="!wrap && localIndex === 0">
+    <veui-icon :name="icons.prev" label="上一页"/>
+  </button>
+  <button type="button" class="veui-carousel-control veui-carousel-control-next"
+    @click="step(1)"
+    :disabled="!wrap && localIndex === count - 1">
+    <veui-icon :name="icons.next" label="下一页"/>
+  </button>
   <div class="veui-sr-only" aria-live="polite" aria-atomic="true">当前是第 {{ localIndex + 1 }} 页，共 {{ datasource.length }} 页</div>
 </div>
 </template>

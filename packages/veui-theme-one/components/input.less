@@ -19,6 +19,10 @@
   color: @veui-text-color-normal;
   transition: border-color .3s, color .3s;
 
+  &-autofill {
+    background-color: #faffbd;
+  }
+
   .veui-field > & {
     display: inline-table;
   }
@@ -117,10 +121,8 @@
     position: absolute;
     padding-left: @left-padding;
     color: @veui-text-color-weak !important;
-  }
-
-  &-input::placeholder {
-    color: @veui-text-color-weak !important;
+    pointer-events: none;
+    cursor: text;
   }
 
   &[ui~="large"] {
