@@ -7,9 +7,8 @@ config.defaults({
     calendar: 'calendar',
     clear: 'cross'
   },
-  placeholder: '选择时间',
-  placeholderBegin: '开始选择时间段',
-  placeholderEnd: '',
+  placeholder: '开始选择时间',
+  rangePlaceholder: '开始选择时间段',
   ui: {
     style: {
       values: ['alt']

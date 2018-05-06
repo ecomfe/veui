@@ -18,19 +18,32 @@
     @keydown.down.up.prevent="expanded = true">
     <template v-if="range">
       <span class="veui-date-picker-label">
-        <slot v-if="formatted" name="date" :formatted="formatted ? formatted[0] : null" :date="selected ? selected[0] : null">{{ formatted[0] }}</slot>
-        <slot v-else name="placeholder-begin">{{ placeholderBegin }}</slot>
+        <slot
+          v-if="selected && selected[0]"
+          name="selected"
+          position="from"
+          v-bind="toDateData(selected[0])"
+          :formatted="formatted ? formatted[0] : null">{{ formatted[0] }}</slot>
+        <slot v-else name="placeholder">{{ realPlaceholder }}</slot>
       </span>
       <span class="veui-date-picker-tilde">~</span>
       <span class="veui-date-picker-label">
-        <slot v-if="formatted" name="date" :formatted="formatted ? formatted[1] : null" :date="selected ? selected[1] : null">{{ formatted[1] }}</slot>
-        <slot v-else name="placeholder-end">{{ placeholderEnd }}</slot>
+        <slot
+          v-if="selected && selected[1]"
+          name="selected"
+          position="to"
+          v-bind="toDateData(selected[1])"
+          :formatted="formatted ? formatted[1] : null">{{ formatted[1] }}</slot>
       </span>
     </template>
     <template v-else>
       <span class="veui-date-picker-label">
-        <slot v-if="formatted" name="date" :date="formatted">{{ formatted }}</slot>
-        <slot v-else name="placeholder">{{ placeholder }}</slot>
+        <slot
+          v-if="selected"
+          name="selected"
+          v-bind="toDateData(selected)"
+          :formatted="formatted">{{ formatted }}</slot>
+        <slot v-else name="placeholder">{{ realPlaceholder }}</slot>
       </span>
     </template>
     <veui-icon class="veui-date-picker-icon" :name="icons.calendar"/>
@@ -71,6 +84,9 @@
               @mouseleave="handleHoverShortcut()">{{ label }}</button>
           </div>
         </template>
+        <template v-if="$scopedSlots.date" slot="date" slot-scope="date">
+          <slot name="date" v-bind="date"/>
+        </template>
       </veui-calendar>
     </div>
   </veui-overlay>
@@ -88,17 +104,20 @@ import input from '../mixins/input'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import config from '../managers/config'
+import { toDateData } from '../utils/date'
 import { isNumber, pick, omit } from 'lodash'
 
 config.defaults({
   shortcuts: [],
   shortcutsPosition: 'before',
   placeholder: '选择时间',
-  placeholderBegin: '开始时间',
-  placeholderEnd: '结束时间'
+  rangePlaceholder: '选择时间段'
 }, 'datepicker')
 
-let calendarProps = ['range', 'weekStart', 'fillMonth', 'disabledDate', 'dateClass']
+const CALENDAR_PROPS = [
+  'range', 'panel', 'weekStart', 'fillMonth',
+  'today', 'disabledDate', 'dateClass'
+]
 
 export default {
   name: 'veui-date-picker',
@@ -120,28 +139,10 @@ export default {
         return null
       }
     },
-    panel: Number,
     clearable: Boolean,
-    placeholder: {
-      type: String,
-      default () {
-        return config.get('datepicker.placeholder')
-      }
-    },
-    placeholderBegin: {
-      type: String,
-      default () {
-        return config.get('datepicker.placeholderBegin')
-      }
-    },
-    placeholderEnd: {
-      type: String,
-      default () {
-        return config.get('datepicker.placeholderEnd')
-      }
-    },
+    placeholder: String,
     format: {
-      type: String,
+      type: [String, Function],
       default: 'YYYY-MM-DD'
     },
     shortcuts: {
@@ -156,7 +157,7 @@ export default {
         return config.get('datepicker.shortcutsPosition')
       }
     },
-    ...pick(Calendar.props, calendarProps)
+    ...pick(Calendar.props, CALENDAR_PROPS)
   },
   data () {
     return {
@@ -179,7 +180,13 @@ export default {
       return this.formatDate(selected)
     },
     calendarProps () {
-      return pick(this, calendarProps)
+      return pick(this, CALENDAR_PROPS)
+    },
+    realPlaceholder () {
+      return this.placeholder ||
+        (this.range
+          ? config.get('datepicker.rangePlaceholder')
+          : config.get('datepicker.placeholder'))
     },
     realPanel () {
       return this.panel || (this.range ? 2 : 1)
@@ -188,7 +195,7 @@ export default {
       if (!this.shortcuts) {
         return null
       }
-      return this.shortcuts.map(({from = 0, to, label}) => {
+      return this.shortcuts.map(({from = 0, to = 0, label}) => {
         from = this.getDateByOffset(from)
         to = this.getDateByOffset(to)
         if (from > to) {
@@ -211,7 +218,16 @@ export default {
       if (!date) {
         return ''
       }
+      if (typeof this.format === 'function') {
+        return this.format(date)
+      }
       return moment(date).format(this.format)
+    },
+    toDateData (date) {
+      if (!date) {
+        return {}
+      }
+      return toDateData(date)
     },
     handleSelect (selected) {
       this.$emit('select', selected)
@@ -219,7 +235,7 @@ export default {
       this.expanded = false
     },
     handleProgress (picking) {
-      this.picking = picking
+      this.picking = Array.isArray(picking) ? picking : [picking]
     },
     clear (e) {
       this.$emit('select', null)
