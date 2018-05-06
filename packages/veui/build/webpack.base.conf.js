@@ -64,7 +64,13 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('demo'), resolve('test'), resolve('node_modules/vue-awesome')]
+        include: [
+          resolve('src'),
+          resolve('demo'),
+          resolve('test'),
+          resolve('node_modules/vue-awesome'),
+          resolve('node_modules/resize-detector')
+        ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

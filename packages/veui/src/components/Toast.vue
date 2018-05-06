@@ -10,6 +10,9 @@
 <script>
 import Icon from './Icon'
 import ui from '../mixins/ui'
+import { includes } from 'lodash'
+
+const TYPE_LIST = ['success', 'warning', 'info', 'error']
 
 export default {
   name: 'toast',
@@ -20,7 +23,10 @@ export default {
   props: {
     type: {
       type: String,
-      default: 'success'
+      default: 'success',
+      validator (val) {
+        return includes(TYPE_LIST, val)
+      }
     },
     message: String,
     duration: {
