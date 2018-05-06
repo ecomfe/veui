@@ -16,6 +16,8 @@
 * [+] `DatePicker` 组件的 `format` prop 现在可以传入函数，签名为 `function(Date): string`。
 * [+] `DatePicker` 组件的 `shortcuts` 配置中，`to` 字段新增默认值 `0`。
 * [+] `Input` 组件新增 WebKit 自动填充状态的判断，优化样式。
+* [+] `Tabs` 新增动画效果，新增 `block` ui。`Tab` 新增 `status` prop。
+* [^] `resize` 指令底层升级，增加 debounce 优化。
 
 ### 🐞 问题修复
 
@@ -23,6 +25,7 @@
 * [^] 修复了 `Textarea` 组件初始 `value` 为 `null` 时的问题。
 * [^] 修复了 `Input` 组件在 SSR 时报错的问题。
 * [^] `input` 类型组件的错误状态通过组件数据进行传递，而不仅仅依赖于外层 `Field` 的 `class`。
+* [^] 修复了 `Tab` 使用路由模式时设置 `name` prop 会出错的问题。
 
 ## 1.0.0-alpha.12
 
