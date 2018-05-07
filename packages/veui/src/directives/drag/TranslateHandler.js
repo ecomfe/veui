@@ -7,6 +7,7 @@ let computedStyle =
   process.env.VUE_ENV === 'server'
     ? function () {}
     : getComputedStyle(document.body)
+
 const TRANSFORM_ACCESSOR = find(
   ['transform', 'msTransform', 'MozTransform', 'webkitTransform'],
   accessor => accessor in computedStyle

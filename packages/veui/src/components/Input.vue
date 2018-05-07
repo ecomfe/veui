@@ -124,7 +124,9 @@ export default {
   },
   methods: {
     handleInput ($event) {
-      this.autofill = !!this.$el.querySelector(':-webkit-autofill')
+      try {
+        this.autofill = !!this.$el.querySelector(':-webkit-autofill')
+      } catch (e) {}
 
       // 分3种情况
       // 1. 感知输入法，触发原生 input 事件就必须向上继续抛出

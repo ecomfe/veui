@@ -22,7 +22,7 @@ import input from '../mixins/input'
 import { getListeners } from '../utils/helper'
 import { focus } from '../utils/dom'
 
-const EVENTS = ['keyup', 'keydown', 'keypress', 'focus', 'blur']
+const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
 
 export default {
   name: 'veui-radio',
