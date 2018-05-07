@@ -1,15 +1,15 @@
-import {mount} from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import DatePicker from '@/components/DatePicker'
 
 describe('components/DatePicker', () => {
-  it('should handle selected prop with `null` value.', (done) => {
+  it('should handle selected prop with `null` value.', done => {
     const wrapper = mount(DatePicker, {
       propsData: {
         selected: null
       }
     })
 
-    wrapper.vm.$on('select', (val) => {
+    wrapper.vm.$on('select', val => {
       expect(val instanceof Date).toBe(true)
       done()
     })

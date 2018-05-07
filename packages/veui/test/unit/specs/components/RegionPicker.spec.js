@@ -2,15 +2,17 @@ import RegionPicker from '@/components/RegionPicker'
 import Vue from 'vue'
 
 describe('components/RegionPicker', () => {
-  it('should handle selected prop with `null` value.', (done) => {
+  it('should handle selected prop with `null` value.', done => {
     new Vue({
       data () {
         return {
-          datasource: [{id: '1'}]
+          datasource: [{ id: '1' }]
         }
       },
       mounted () {
-        this.$el.querySelector('.veui-checkbox input').dispatchEvent(new Event('change'))
+        this.$el
+          .querySelector('.veui-checkbox input')
+          .dispatchEvent(new Event('change'))
       },
       methods: {
         handleSelect (val) {
@@ -22,7 +24,7 @@ describe('components/RegionPicker', () => {
         return (
           <RegionPicker
             datasource={this.datasource}
-            onSelect={(val) => this.handleSelect(val)}
+            onSelect={val => this.handleSelect(val)}
           />
         )
       }

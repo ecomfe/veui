@@ -1,15 +1,15 @@
-import {mount} from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import Radio from '@/components/Radio'
 
 describe('components/Radio', () => {
-  it('should handle value prop with `null` value.', (done) => {
+  it('should handle value prop with `null` value.', done => {
     const wrapper = mount(Radio, {
       propsData: {
         value: null
       }
     })
 
-    wrapper.vm.$on('change', (val) => {
+    wrapper.vm.$on('change', val => {
       expect(val).toBe(null)
       done()
     })

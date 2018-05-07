@@ -1,4 +1,4 @@
-import {mount} from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import NumberInput from '@/components/NumberInput'
 
 describe('components/NumberInput', () => {
