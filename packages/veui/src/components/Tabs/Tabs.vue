@@ -365,6 +365,7 @@ export default {
           })
           this.$nextTick(() => {
             listContainer.style.transform = `translate(${this.maxTranslate}px)`
+            listContainer.style['-ms-transform'] = `translate(${this.maxTranslate}px)`
           })
         }
       }
@@ -414,6 +415,7 @@ export default {
             if (!this.menuOverflow) {
               this.currentTranslate = 0
               listContainer.$el.style.transform = 'translate(0)'
+              listContainer.$el.style['-ms-transform'] = 'translate(0)'
               // 本来用 padding 就完事了，ie9 不让 -  -
               menu.style.marginRight = 0
             } else if (this.menuOverflow) {
@@ -523,11 +525,16 @@ export default {
         this.currentTranslate = limited[direction]
         this.$nextTick(() => {
           listContainer.style.transform = `translate(${limited[direction]}px)`
+          listContainer.style['-ms-transform'] = `translate(${limited[direction]}px)`
         })
         return
       }
 
-      let matrix = getComputedStyle(listContainer).transform.slice(7).split(',').map(v => +v.trim())
+      let matrix = (
+        '-ms-transform' in document.documentElement.style
+          ? getComputedStyle(listContainer).msTransform
+          : getComputedStyle(listContainer).transform
+      ).slice(7).split(',').map(v => +v.trim())
       let currentTranslate = matrix[4] + localTranslate
       currentTranslate = inRange(
         currentTranslate,
@@ -537,6 +544,7 @@ export default {
       this.currentTranslate = currentTranslate
       this.$nextTick(() => {
         listContainer.style.transform = `translate(${currentTranslate}px)`
+        listContainer.style['-ms-transform'] = `translate(${currentTranslate}px)`
       })
     },
 
@@ -557,6 +565,15 @@ export default {
     },
 
     bindTransition (el, cb) {
+      let transitionsSupported = ('transition' in document.documentElement.style) ||
+        ('WebkitTransition' in document.documentElement.style)
+      if (!transitionsSupported) {
+        setTimeout(() => {
+          cb()
+        }, 0)
+        return
+      }
+
       let end = $event => {
         $event.stopPropagation()
         cb($event)
@@ -568,6 +585,7 @@ export default {
     translateTabs (tabs, translateValue) {
       tabs.forEach(tab => {
         tab.style.transform = `translate(${translateValue}px)`
+        tab.style['-ms-transform'] = `translate(${translateValue}px)`
       })
     },
 
@@ -576,7 +594,9 @@ export default {
         return
       }
 
-      if (!includes((this.ui || '').split(/\s+/), 'block')) {
+      let transitionsSupported = ('transition' in document.documentElement.style) ||
+        ('WebkitTransition' in document.documentElement.style)
+      if (!transitionsSupported || !includes((this.ui || '').split(/\s+/), 'block')) {
         done()
         this.$nextTick(() => {
           this.removing = false
@@ -604,6 +624,7 @@ export default {
             this.translateTabs(fixedTabs, 0)
             this.currentTranslate = fixedTranslate
             this.$refs.listContainer.$el.style.transform = `translate(${fixedTranslate}px)`
+            this.$refs.listContainer.$el.style['-ms-transform'] = `translate(${fixedTranslate}px)`
           }
 
           // 要先调用 done 把 dom 去掉，计算位置的时候才是对的
