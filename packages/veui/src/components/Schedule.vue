@@ -35,7 +35,7 @@
     <div class="veui-schedule-head-day">
       <div class="veui-schedule-head-day-item" v-for="i in 7" :key="i">
         <veui-checkbox ui="small" :indeterminate="dayChecked[i - 1].indeterminate"
-          :checked="dayChecked[i - 1].checked" @change="toggleDay(week[i - 1], $event)">
+          :checked="dayChecked[i - 1].checked" @click="toggleDay(week[i - 1], !dayChecked[i - 1].checked)">
           {{ `${dayNames[i - 1]}` }}
         </veui-checkbox>
       </div>

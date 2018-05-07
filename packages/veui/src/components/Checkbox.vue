@@ -30,7 +30,7 @@ import ui from '../mixins/ui'
 import { getListeners } from '../utils/helper'
 import { patchIndeterminate, focus } from '../utils/dom'
 
-const EVENTS = ['keyup', 'keydown', 'keypress', 'focus', 'blur']
+const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
 
 export default {
   name: 'veui-checkbox',
@@ -76,23 +76,21 @@ export default {
     }
   },
   watch: {
-    checked: {
-      handler (val) {
-        this.localChecked = val
-      },
-      immediate: true
+    checked (val) {
+      this.localChecked = val
     },
-    localChecked: {
-      handler (val) {
-        if (this.checked !== val) {
-          this.$emit('update:checked', val)
-        }
-
-        this.$emit('change', val ? this.trueValue : this.falseValue)
+    localChecked  (val) {
+      if (this.checked !== val) {
+        this.$emit('update:checked', val)
       }
+
+      this.$emit('change', val ? this.trueValue : this.falseValue)
     },
     model: {
       handler (val) {
+        if (typeof val === 'undefined') {
+          return
+        }
         this.localChecked = val === this.trueValue
       },
       immediate: true
