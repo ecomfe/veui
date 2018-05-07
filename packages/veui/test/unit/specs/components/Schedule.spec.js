@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Schedule from '@/components/Schedule'
 
 describe('components/Schedule', () => {
-  it('should handle selected prop with `null` value.', (done) => {
+  it('should handle selected prop with `null` value.', done => {
     new Vue({
       mounted () {
         const button = this.$el.querySelector('.veui-schedule-detail button')
@@ -16,7 +16,9 @@ describe('components/Schedule', () => {
         }
       },
       render () {
-        return (<Schedule selected={null} onSelect={(val) => this.handleSelect(val)} />)
+        return (
+          <Schedule selected={null} onSelect={val => this.handleSelect(val)} />
+        )
       }
     }).$mount()
   })
