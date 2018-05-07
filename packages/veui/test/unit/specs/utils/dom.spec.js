@@ -12,9 +12,9 @@ describe('utils/dom', () => {
 
     let span = root.querySelector('span')
 
-    expect(closest(span, 'span').className).to.equal('text')
-    expect(closest(span, 'a').className).to.equal('btn')
-    expect(closest(span, 'div').className).to.equal('tip')
-    expect(closest(span, 'nav')).to.be.a('null')
+    expect(closest(span, 'span').className).toBe('text')
+    expect(closest(span, 'a').className).toBe('btn')
+    expect(closest(span, 'div').className).toBe('tip')
+    expect(closest(span, 'nav')).toBe(null)
   })
 })

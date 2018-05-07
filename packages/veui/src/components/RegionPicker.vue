@@ -228,7 +228,10 @@ export default {
     event: 'select'
   },
   props: {
-    datasource: Array,
+    datasource: {
+      type: Array,
+      required: true
+    },
     selected: Array,
     includeIndeterminate: Boolean
   },

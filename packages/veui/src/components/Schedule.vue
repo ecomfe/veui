@@ -160,7 +160,7 @@ export default {
   },
   data () {
     return {
-      localSelected: cloneDeep(this.selected),
+      localSelected: null,
       week: [1, 2, 3, 4, 5, 6, 0],
       pickingStart: null,
       pickingEnd: null,
@@ -168,8 +168,11 @@ export default {
     }
   },
   watch: {
-    selected (val) {
-      this.localSelected = cloneDeep(val)
+    selected: {
+      handler (val) {
+        this.localSelected = val ? cloneDeep(val) : []
+      },
+      immediate: true
     }
   },
   computed: {

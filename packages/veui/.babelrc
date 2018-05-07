@@ -5,7 +5,6 @@
   ],
   "plugins": [
     "veui",
-    "lodash",
     "transform-vue-jsx",
     [
       "transform-runtime",
@@ -18,8 +17,13 @@
   "comments": false,
   "env": {
     "test": {
-      "presets": ["env", "stage-2"],
-      "plugins": ["istanbul"]
+      "presets": ["env", "stage-2"]
+    },
+    "production": {
+      "plugins": ["lodash"]
+    },
+    "development": {
+      "plugins": ["lodash"]
     }
   }
 }

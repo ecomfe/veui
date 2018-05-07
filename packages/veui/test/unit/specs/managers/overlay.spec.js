@@ -7,20 +7,20 @@ describe('managers/overlay', () => {
       it('should create an instance of Node', () => {
         let node = (new Tree()).rootNode
 
-        expect(node.hasOwnProperty('parent')).to.equal(true)
-        expect(node.hasOwnProperty('childrenGroup')).to.equal(true)
-        expect(node.hasOwnProperty('id')).to.equal(true)
-        expect(node.hasOwnProperty('zIndex')).to.equal(true)
+        expect(node.hasOwnProperty('parent')).toBe(true)
+        expect(node.hasOwnProperty('childrenGroup')).toBe(true)
+        expect(node.hasOwnProperty('id')).toBe(true)
+        expect(node.hasOwnProperty('zIndex')).toBe(true)
       })
     })
 
     describe('#appendChild', () => {
       it('should append child', () => {
         let node = (new Tree()).rootNode
-        expect(node.childrenGroup.length).to.equal(0)
+        expect(node.childrenGroup.length).toBe(0)
         node.appendChild((new Tree()).rootNode)
-        expect(node.childrenGroup.length).to.equal(1)
-        expect(node.childrenGroup[0].children.length).to.equal(1)
+        expect(node.childrenGroup.length).toBe(1)
+        expect(node.childrenGroup[0].children.length).toBe(1)
       })
 
       it('should append the current node to the last position of the group\'s last children', () => {
@@ -29,8 +29,8 @@ describe('managers/overlay', () => {
         let child2 = (new Tree()).rootNode
         node.appendChild(child1)
         node.appendChild(child2)
-        expect(node.childrenGroup[0].children[0]).to.equal(child1)
-        expect(node.childrenGroup[0].children[1]).to.equal(child2)
+        expect(node.childrenGroup[0].children[0]).toBe(child1)
+        expect(node.childrenGroup[0].children[1]).toBe(child2)
       })
 
       it('should place the node with different priority in different group', () => {
@@ -39,8 +39,8 @@ describe('managers/overlay', () => {
         let child2 = (new Tree()).rootNode
         node.appendChild(child1, 1)
         node.appendChild(child2, 2)
-        expect(node.childrenGroup[0].children[0]).to.equal(child1)
-        expect(node.childrenGroup[1].children[0]).to.equal(child2)
+        expect(node.childrenGroup[0].children[0]).toBe(child1)
+        expect(node.childrenGroup[1].children[0]).toBe(child2)
       })
 
       it('should insert the node with bigger priority at the right position', () => {
@@ -49,8 +49,8 @@ describe('managers/overlay', () => {
         let child2 = (new Tree()).rootNode
         node.appendChild(child1, 1)
         node.appendChild(child2, 2)
-        expect(node.childrenGroup[0].children[0]).to.equal(child1)
-        expect(node.childrenGroup[1].children[0]).to.equal(child2)
+        expect(node.childrenGroup[0].children[0]).toBe(child1)
+        expect(node.childrenGroup[1].children[0]).toBe(child2)
       })
 
       it('should insert the node with smaller priority at the left position', () => {
@@ -59,8 +59,8 @@ describe('managers/overlay', () => {
         let child2 = (new Tree()).rootNode
         node.appendChild(child1, 2)
         node.appendChild(child2, 1)
-        expect(node.childrenGroup[1].children[0]).to.equal(child1)
-        expect(node.childrenGroup[0].children[0]).to.equal(child2)
+        expect(node.childrenGroup[1].children[0]).toBe(child1)
+        expect(node.childrenGroup[0].children[0]).toBe(child2)
       })
 
       it('should record the group\'s priority', () => {
@@ -69,8 +69,8 @@ describe('managers/overlay', () => {
         let child2 = (new Tree()).rootNode
         node.appendChild(child1, 1)
         node.appendChild(child2, 2)
-        expect(node.childrenGroup[0].priority).to.equal(1)
-        expect(node.childrenGroup[1].priority).to.equal(2)
+        expect(node.childrenGroup[0].priority).toBe(1)
+        expect(node.childrenGroup[1].priority).toBe(2)
       })
     })
 
@@ -79,11 +79,11 @@ describe('managers/overlay', () => {
         let node = (new Tree()).rootNode
         let child1 = (new Tree()).rootNode
 
-        expect(node.getChildrenCount()).to.equal(0)
+        expect(node.getChildrenCount()).toBe(0)
         node.appendChild(child1)
-        expect(node.getChildrenCount()).to.equal(1)
+        expect(node.getChildrenCount()).toBe(1)
         node.removeChildById(child1.id)
-        expect(node.getChildrenCount()).to.equal(0)
+        expect(node.getChildrenCount()).toBe(0)
       })
     })
 
@@ -92,11 +92,11 @@ describe('managers/overlay', () => {
         let node = (new Tree()).rootNode
         let child1 = (new Tree()).rootNode
 
-        expect(node.getChildrenCount()).to.equal(0)
+        expect(node.getChildrenCount()).toBe(0)
         node.appendChild(child1)
-        expect(node.getChildrenCount()).to.equal(1)
+        expect(node.getChildrenCount()).toBe(1)
         child1.remove()
-        expect(node.getChildrenCount()).to.equal(0)
+        expect(node.getChildrenCount()).toBe(0)
       })
 
       it('should remove a node in subtree that is not under the rootNode.', () => {
@@ -107,7 +107,7 @@ describe('managers/overlay', () => {
         let nodeHandle3 = tree.createNode({ priority: 1, parentId: nodeHandle2.id })
 
         nodeHandle2.remove()
-        expect(() => nodeHandle3.remove()).to.not.throw()
+        expect(() => nodeHandle3.remove()).not.toThrow()
       })
     })
 
@@ -117,11 +117,11 @@ describe('managers/overlay', () => {
         let child1 = (new Tree()).rootNode
         let child2 = (new Tree()).rootNode
 
-        expect(node.getChildrenCount()).to.equal(0)
+        expect(node.getChildrenCount()).toBe(0)
         node.appendChild(child1)
-        expect(node.getChildrenCount()).to.equal(1)
+        expect(node.getChildrenCount()).toBe(1)
         node.appendChild(child2, 1)
-        expect(node.getChildrenCount()).to.equal(2)
+        expect(node.getChildrenCount()).toBe(2)
       })
     })
   })
@@ -130,9 +130,9 @@ describe('managers/overlay', () => {
     describe('#constructor', () => {
       it('should create a Tree instance', () => {
         let tree = new Tree()
-        expect(tree.hasOwnProperty('rootNode')).to.equal(true)
-        expect(tree.hasOwnProperty('nodeMap')).to.equal(true)
-        expect(tree.hasOwnProperty('baseZIndex')).to.equal(true)
+        expect(tree.hasOwnProperty('rootNode')).toBe(true)
+        expect(tree.hasOwnProperty('nodeMap')).toBe(true)
+        expect(tree.hasOwnProperty('baseZIndex')).toBe(true)
       })
     })
 
@@ -141,10 +141,10 @@ describe('managers/overlay', () => {
         let tree = new Tree()
         let nodeHandle = tree.createNode()
 
-        expect(nodeHandle.hasOwnProperty('id')).to.equal(true)
-        expect(isFunction(nodeHandle.remove)).to.equal(true)
-        expect(isFunction(nodeHandle.appendTo)).to.equal(true)
-        expect(isFunction(nodeHandle.toTop)).to.equal(true)
+        expect(nodeHandle.hasOwnProperty('id')).toBe(true)
+        expect(isFunction(nodeHandle.remove)).toBe(true)
+        expect(isFunction(nodeHandle.appendTo)).toBe(true)
+        expect(isFunction(nodeHandle.toTop)).toBe(true)
       })
     })
 
@@ -152,9 +152,9 @@ describe('managers/overlay', () => {
       it('should set the base zIndex of the tree', () => {
         let tree = new Tree()
         tree.setBaseZIndex(201)
-        expect(tree.baseZIndex).to.equal(201)
+        expect(tree.baseZIndex).toBe(201)
         tree.setBaseZIndex(202)
-        expect(tree.baseZIndex).to.equal(202)
+        expect(tree.baseZIndex).toBe(202)
       })
     })
 
@@ -173,10 +173,10 @@ describe('managers/overlay', () => {
         tree.iterate({
           callback (child) {
             counter++
-            expect(childIdList.shift()).to.equal(child.id)
+            expect(childIdList.shift()).toBe(child.id)
           }
         })
-        expect(counter).to.equal(total)
+        expect(counter).toBe(total)
       })
 
       it('should stop iteration white return true in callback', () => {
@@ -195,29 +195,29 @@ describe('managers/overlay', () => {
             return counter === 1
           }
         })
-        expect(counter).to.equal(1)
+        expect(counter).toBe(1)
       })
     })
 
     describe('#createNode', () => {
       it('should create a node and append it to parent', () => {
         let tree = new Tree()
-        expect(tree.nodeMap[tree.rootNode.id].node.getChildrenCount()).to.equal(0)
+        expect(tree.nodeMap[tree.rootNode.id].node.getChildrenCount()).toBe(0)
 
         tree.createNode()
-        expect(tree.nodeMap[tree.rootNode.id].node.getChildrenCount()).to.equal(1)
+        expect(tree.nodeMap[tree.rootNode.id].node.getChildrenCount()).toBe(1)
 
         tree.createNode()
-        expect(tree.nodeMap[tree.rootNode.id].node.getChildrenCount()).to.equal(2)
+        expect(tree.nodeMap[tree.rootNode.id].node.getChildrenCount()).toBe(2)
 
         tree.createNode({priority: 5})
-        expect(tree.nodeMap[tree.rootNode.id].node.getChildrenCount()).to.equal(3)
+        expect(tree.nodeMap[tree.rootNode.id].node.getChildrenCount()).toBe(3)
 
         let nodeHandle = tree.createNode({priority: 2})
-        expect(tree.nodeMap[tree.rootNode.id].node.getChildrenCount()).to.equal(4)
+        expect(tree.nodeMap[tree.rootNode.id].node.getChildrenCount()).toBe(4)
 
         tree.createNode({priority: 5, parentId: nodeHandle.id})
-        expect(tree.nodeMap[tree.rootNode.id].node.getChildrenCount()).to.equal(4)
+        expect(tree.nodeMap[tree.rootNode.id].node.getChildrenCount()).toBe(4)
       })
 
       it('should receive `zindexchange` event', (done) => {
@@ -243,29 +243,29 @@ describe('managers/overlay', () => {
       it('should generate zIndex for tree', () => {
         let tree = new Tree()
         let nodeHandle = tree.createNode()
-        expect(tree.nodeMap[nodeHandle.id].node.zIndex).to.equal(tree.baseZIndex)
+        expect(tree.nodeMap[nodeHandle.id].node.zIndex).toBe(tree.baseZIndex)
       })
 
       it('should generate bigger zIndex for the latter node', () => {
         let tree = new Tree()
         let nodeHandle = tree.createNode({ parentId: tree.rootNode.id })
-        expect(tree.nodeMap[nodeHandle.id].node.zIndex).to.equal(tree.baseZIndex)
+        expect(tree.nodeMap[nodeHandle.id].node.zIndex).toBe(tree.baseZIndex)
 
         let nodeHandle1 = tree.createNode({ parentId: nodeHandle.id })
-        expect(tree.nodeMap[nodeHandle1.id].node.zIndex).to.equal(tree.baseZIndex + 1)
+        expect(tree.nodeMap[nodeHandle1.id].node.zIndex).toBe(tree.baseZIndex + 1)
 
         let nodeHandle2 = tree.createNode({ parentId: nodeHandle.id })
-        expect(tree.nodeMap[nodeHandle2.id].node.zIndex).to.equal(tree.baseZIndex + 2)
+        expect(tree.nodeMap[nodeHandle2.id].node.zIndex).toBe(tree.baseZIndex + 2)
 
         let nodeHandle3 = tree.createNode({ parentId: nodeHandle.id, priority: 2 })
-        expect(tree.nodeMap[nodeHandle3.id].node.zIndex).to.equal(tree.baseZIndex + 3)
+        expect(tree.nodeMap[nodeHandle3.id].node.zIndex).toBe(tree.baseZIndex + 3)
 
         let nodeHandle4 = tree.createNode({ parentId: nodeHandle.id, priority: 6 })
-        expect(tree.nodeMap[nodeHandle4.id].node.zIndex).to.equal(tree.baseZIndex + 4)
+        expect(tree.nodeMap[nodeHandle4.id].node.zIndex).toBe(tree.baseZIndex + 4)
 
         let nodeHandle5 = tree.createNode({ parentId: nodeHandle.id, priority: 3 })
-        expect(tree.nodeMap[nodeHandle5.id].node.zIndex).to.equal(tree.baseZIndex + 4)
-        expect(tree.nodeMap[nodeHandle4.id].node.zIndex).to.equal(tree.baseZIndex + 5)
+        expect(tree.nodeMap[nodeHandle5.id].node.zIndex).toBe(tree.baseZIndex + 4)
+        expect(tree.nodeMap[nodeHandle4.id].node.zIndex).toBe(tree.baseZIndex + 5)
       })
     })
   })
@@ -274,11 +274,11 @@ describe('managers/overlay', () => {
     describe('#remove', () => {
       it('should remove self from parent', () => {
         let tree = new Tree()
-        expect(tree.rootNode.getChildrenCount()).to.equal(0)
+        expect(tree.rootNode.getChildrenCount()).toBe(0)
         let nodeHandle = tree.createNode()
-        expect(tree.rootNode.getChildrenCount()).to.equal(1)
+        expect(tree.rootNode.getChildrenCount()).toBe(1)
         nodeHandle.remove()
-        expect(tree.rootNode.getChildrenCount()).to.equal(0)
+        expect(tree.rootNode.getChildrenCount()).toBe(0)
       })
     })
 
@@ -291,21 +291,21 @@ describe('managers/overlay', () => {
         let index = 0
         tree.iterate({
           callback (cur) {
-            expect(cur.id).to.equal(nodeHandles1[index].id)
+            expect(cur.id).toBe(nodeHandles1[index].id)
             index++
           }
         })
-        expect(index).to.equal(nodeHandles1.length)
+        expect(index).toBe(nodeHandles1.length)
 
         nodeHandles1[1].appendTo(nodeHandles1[2].id)
         index = 0
         tree.iterate({
           callback (cur) {
-            expect(cur.id).to.equal(nodeHandles2[index].id)
+            expect(cur.id).toBe(nodeHandles2[index].id)
             index++
           }
         })
-        expect(index).to.equal(nodeHandles2.length)
+        expect(index).toBe(nodeHandles2.length)
       })
     })
 
@@ -315,12 +315,12 @@ describe('managers/overlay', () => {
         let nodeHandle1 = tree.createNode({ priority: 1 })
         let nodeHandle2 = tree.createNode({ priority: 1 })
 
-        expect(tree.rootNode.childrenGroup[0].children[0].id).to.equal(nodeHandle1.id)
-        expect(tree.rootNode.childrenGroup[0].children[1].id).to.equal(nodeHandle2.id)
+        expect(tree.rootNode.childrenGroup[0].children[0].id).toBe(nodeHandle1.id)
+        expect(tree.rootNode.childrenGroup[0].children[1].id).toBe(nodeHandle2.id)
 
         nodeHandle1.toTop()
-        expect(tree.rootNode.childrenGroup[0].children[1].id).to.equal(nodeHandle1.id)
-        expect(tree.rootNode.childrenGroup[0].children[0].id).to.equal(nodeHandle2.id)
+        expect(tree.rootNode.childrenGroup[0].children[1].id).toBe(nodeHandle1.id)
+        expect(tree.rootNode.childrenGroup[0].children[0].id).toBe(nodeHandle2.id)
       })
 
       it('should generate the correct zIndex value', () => {
@@ -332,14 +332,14 @@ describe('managers/overlay', () => {
         let nodeHandle3 = tree.createNode({ priority: 1 })
 
         nodeHandle3.appendTo(nodeHandle1.id)
-        expect(tree.nodeMap[nodeHandle1.id].node.zIndex).to.equal(200)
-        expect(tree.nodeMap[nodeHandle2.id].node.zIndex).to.equal(202)
-        expect(tree.nodeMap[nodeHandle3.id].node.zIndex).to.equal(201)
+        expect(tree.nodeMap[nodeHandle1.id].node.zIndex).toBe(200)
+        expect(tree.nodeMap[nodeHandle2.id].node.zIndex).toBe(202)
+        expect(tree.nodeMap[nodeHandle3.id].node.zIndex).toBe(201)
 
         nodeHandle1.toTop()
-        expect(tree.nodeMap[nodeHandle1.id].node.zIndex).to.equal(201)
-        expect(tree.nodeMap[nodeHandle2.id].node.zIndex).to.equal(200)
-        expect(tree.nodeMap[nodeHandle3.id].node.zIndex).to.equal(202)
+        expect(tree.nodeMap[nodeHandle1.id].node.zIndex).toBe(201)
+        expect(tree.nodeMap[nodeHandle2.id].node.zIndex).toBe(200)
+        expect(tree.nodeMap[nodeHandle3.id].node.zIndex).toBe(202)
       })
 
       it('should fix the tail.', () => {
@@ -353,12 +353,12 @@ describe('managers/overlay', () => {
         let nodeHandle6 = tree.createNode({ parentId: nodeHandle4.id, priority: 1 })
 
         nodeHandle1.toTop()
-        expect(tree.nodeMap[nodeHandle2.id].node.zIndex).to.equal(100)
-        expect(tree.nodeMap[nodeHandle1.id].node.zIndex).to.equal(101)
-        expect(tree.nodeMap[nodeHandle3.id].node.zIndex).to.equal(102)
-        expect(tree.nodeMap[nodeHandle4.id].node.zIndex).to.equal(103)
-        expect(tree.nodeMap[nodeHandle5.id].node.zIndex).to.equal(104)
-        expect(tree.nodeMap[nodeHandle6.id].node.zIndex).to.equal(105)
+        expect(tree.nodeMap[nodeHandle2.id].node.zIndex).toBe(100)
+        expect(tree.nodeMap[nodeHandle1.id].node.zIndex).toBe(101)
+        expect(tree.nodeMap[nodeHandle3.id].node.zIndex).toBe(102)
+        expect(tree.nodeMap[nodeHandle4.id].node.zIndex).toBe(103)
+        expect(tree.nodeMap[nodeHandle5.id].node.zIndex).toBe(104)
+        expect(tree.nodeMap[nodeHandle6.id].node.zIndex).toBe(105)
       })
     })
   })
