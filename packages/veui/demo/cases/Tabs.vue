@@ -6,107 +6,61 @@
       <p>当前标签 <code>{{active0}}</code></p>
       <p>当前序号 <code>{{index0 + 1}}</code></p>
       <veui-tabs ui="large" :active.sync="active0" :index.sync="index0">
-        <veui-tab label="回答问题" name="answers"></veui-tab>
-        <veui-tab label="文章评论" name="articles"></veui-tab>
-        <veui-tab label="分享朋友圈" name="shares"></veui-tab>
+        <veui-tab label="回答问题" name="answers"/>
+        <veui-tab label="文章评论" name="articles"/>
+        <veui-tab label="分享朋友圈" name="shares"/>
       </veui-tabs>
 
       <veui-tabs :active.sync="active0" :index.sync="index0">
-        <veui-tab label="回答问题" name="answers"></veui-tab>
-        <veui-tab label="文章评论" name="articles"></veui-tab>
-        <veui-tab label="分享朋友圈" name="shares"></veui-tab>
+        <veui-tab label="回答问题" name="answers"/>
+        <veui-tab label="文章评论" name="articles"/>
+        <veui-tab label="分享朋友圈" name="shares"/>
       </veui-tabs>
 
       <veui-tabs ui="small" :active.sync="active0" :index.sync="index0">
-        <veui-tab label="回答问题" name="answers"></veui-tab>
-        <veui-tab label="文章评论" name="articles"></veui-tab>
-        <veui-tab label="分享朋友圈" name="shares" status="success"></veui-tab>
+        <veui-tab label="回答问题" name="answers"/>
+        <veui-tab label="文章评论" name="articles"/>
+        <veui-tab label="分享朋友圈" name="shares" status="success"/>
       </veui-tabs>
 
       <veui-tabs ui="tiny" :active.sync="active0" :index.sync="index0">
-        <veui-tab label="回答问题" name="answers" status="info"></veui-tab>
-        <veui-tab label="文章评论" name="articles"></veui-tab>
-        <veui-tab label="分享朋友圈" name="shares"></veui-tab>
+        <veui-tab label="回答问题" name="answers" status="info"/>
+        <veui-tab label="文章评论" name="articles"/>
+        <veui-tab label="分享朋友圈" name="shares"/>
       </veui-tabs>
     </section>
     <section>
       <h2>边框样式：</h2>
       <veui-tabs ui="block" :active.sync="active0" :index.sync="index0">
-        <veui-tab label="回答问题" name="answers"></veui-tab>
-        <veui-tab label="文章评论" name="articles" status="error"></veui-tab>
-        <veui-tab label="分享朋友圈" name="shares"></veui-tab>
+        <veui-tab label="回答问题" name="answers"/>
+        <veui-tab label="文章评论" name="articles" status="error"/>
+        <veui-tab label="分享朋友圈" name="shares"/>
       </veui-tabs>
       <veui-tabs ui="block large" :active.sync="active0" :index.sync="index0">
-        <veui-tab label="回答问题" name="answers" status="warning"></veui-tab>
-        <veui-tab label="文章评论" name="articles"></veui-tab>
-        <veui-tab label="分享朋友圈" name="shares"></veui-tab>
+        <veui-tab label="回答问题" name="answers" status="warning"/>
+        <veui-tab label="文章评论" name="articles"/>
+        <veui-tab label="分享朋友圈" name="shares"/>
       </veui-tabs>
     </section>
     <section>
       <h2>溢出样式：</h2>
       <veui-tabs :index="0">
-        <veui-tab label="Tab1"></veui-tab>
-        <veui-tab label="This is Tab2 with long long long long text"></veui-tab>
-        <veui-tab label="Tab3"></veui-tab>
-        <veui-tab label="Tab4"></veui-tab>
-        <veui-tab label="Tab5"></veui-tab>
-        <veui-tab label="Tab6"></veui-tab>
-        <veui-tab label="Tab7"></veui-tab>
-        <veui-tab label="Tab8"></veui-tab>
-        <veui-tab label="Tab9"></veui-tab>
-        <veui-tab label="Tab10"></veui-tab>
-        <veui-tab label="Tab11"></veui-tab>
-        <veui-tab label="Tab12"></veui-tab>
-        <veui-tab label="Tab13"></veui-tab>
-        <veui-tab label="Tab14"></veui-tab>
-        <veui-tab label="Tab15"></veui-tab>
-        <veui-tab label="Tab16"></veui-tab>
-        <veui-tab label="Tab17"></veui-tab>
-        <veui-tab label="Tab18"></veui-tab>
-        <veui-tab label="Tab19"></veui-tab>
-        <veui-tab label="Tab20"></veui-tab>
-        <veui-tab label="Tab21"></veui-tab>
-        <veui-tab label="Tab22"></veui-tab>
-        <veui-tab label="Tab23"></veui-tab>
-        <veui-tab label="Tab24"></veui-tab>
-        <veui-tab label="Tab25"></veui-tab>
-        <veui-tab label="Tab26"></veui-tab>
-        <veui-tab label="Tab27"></veui-tab>
-        <veui-tab label="Tab28"></veui-tab>
-        <veui-tab label="Tab29"></veui-tab>
-        <veui-tab label="Tab30"></veui-tab>
+        <veui-tab
+          v-for="n in 30"
+          :key="n"
+          :label="n === 2
+            ? 'This is Tab2 with long long long long text'
+            : `Tab${n}`"
+        />
       </veui-tabs>
       <veui-tabs ui="block" :index="0">
-        <veui-tab label="Tab1"></veui-tab>
-        <veui-tab label="This is Tab2 with long long long long text"></veui-tab>
-        <veui-tab label="Tab3"></veui-tab>
-        <veui-tab label="Tab4"></veui-tab>
-        <veui-tab label="Tab5"></veui-tab>
-        <veui-tab label="Tab6"></veui-tab>
-        <veui-tab label="Tab7"></veui-tab>
-        <veui-tab label="Tab8"></veui-tab>
-        <veui-tab label="Tab9"></veui-tab>
-        <veui-tab label="Tab10"></veui-tab>
-        <veui-tab label="Tab11"></veui-tab>
-        <veui-tab label="Tab12"></veui-tab>
-        <veui-tab label="Tab13"></veui-tab>
-        <veui-tab label="Tab14"></veui-tab>
-        <veui-tab label="Tab15"></veui-tab>
-        <veui-tab label="Tab16"></veui-tab>
-        <veui-tab label="Tab17"></veui-tab>
-        <veui-tab label="Tab18"></veui-tab>
-        <veui-tab label="Tab19"></veui-tab>
-        <veui-tab label="Tab20"></veui-tab>
-        <veui-tab label="Tab21"></veui-tab>
-        <veui-tab label="Tab22"></veui-tab>
-        <veui-tab label="Tab23"></veui-tab>
-        <veui-tab label="Tab24"></veui-tab>
-        <veui-tab label="Tab25"></veui-tab>
-        <veui-tab label="Tab26"></veui-tab>
-        <veui-tab label="Tab27"></veui-tab>
-        <veui-tab label="Tab28"></veui-tab>
-        <veui-tab label="Tab29"></veui-tab>
-        <veui-tab label="Tab30"></veui-tab>
+        <veui-tab
+          v-for="n in 30"
+          :key="n"
+          :label="n === 2
+            ? 'This is Tab2 with long long long long text'
+            : `Tab${n}`"
+        />
       </veui-tabs>
     </section>
     <section>
@@ -128,9 +82,9 @@
     <section>
       <h2>路由模式：</h2>
       <veui-tabs :active="$route.fullPath">
-        <veui-tab label="Button" to="/tabs/button"><router-view></router-view></veui-tab>
-        <veui-tab label="Input" to="/tabs/input"><router-view></router-view></veui-tab>
-        <veui-tab label="Progress" to="/tabs/progress"><router-view></router-view></veui-tab>
+        <veui-tab label="Button" to="/tabs/button"><router-view/></veui-tab>
+        <veui-tab label="Input" to="/tabs/input"><router-view/></veui-tab>
+        <veui-tab label="Progress" to="/tabs/progress"><router-view/></veui-tab>
       </veui-tabs>
     </section>
     <section class="inner-ui">

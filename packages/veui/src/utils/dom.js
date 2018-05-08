@@ -209,6 +209,7 @@ export function focusBefore (elem) {
 export function focusAfter (elem) {
   return focusNav(elem, 1)
 }
+
 /**
  * 通过程序 focus 时手动添加 `.focus-visible` 类，弥补当前 polyfill 的不足。
  * 在不支持 `classList` 的浏览器下啥都不做，因为 polyfill 依赖了 `classList` polyfill。
@@ -235,4 +236,37 @@ export function focus (elem) {
   elem.addEventListener('blur', handler, false)
   elem.addEventListener('mouseleave', handler, false)
   elem.classList.add('focus-visible')
+}
+
+let transformKey
+
+function getTransformKey () {
+  if (transformKey) {
+    return transformKey
+  }
+
+  transformKey = '-ms-transform' in document.documentElement.style
+    ? 'msTransform'
+    : 'transform'
+  return transformKey
+}
+
+/**
+ * 获取变换矩阵
+ *
+ * @param {HTMLElement} el 目标元素
+ * @return {string} matrix 信息
+ */
+export function getTransform (el) {
+  return getComputedStyle(el)[getTransformKey()]
+}
+
+/**
+ * 设置 transform
+ *
+ * @param {HTMLElement} el 目标元素
+ * @param {string} value 变换值
+ */
+export function setTransform (el, value) {
+  el.style[getTransformKey()] = value
 }
