@@ -61,7 +61,7 @@ export default {
     const props = ['label', 'disabled', 'to', 'native', 'removable', 'status']
 
     if (this.to && this.name) {
-      warn('`[veui-tab]` prop `name` is useless in route mode with prop `to`')
+      warn('[veui-tab] prop `name` will be ignored when prop `to` is set.')
     }
 
     this.tabs.add({

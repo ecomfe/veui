@@ -42,7 +42,7 @@
           }"
           @click="$event => {
             if ($event.target === $refs[`tab-${tab.name}`][0] && !tab.disabled) {
-              setActive({index})
+              setActive({ index })
             }
           }"
         >
@@ -60,12 +60,12 @@
               class="veui-tabs-item-label"
               v-bind="ariaAttrs[index]"
               type="button"
-              @click="!tab.disabled && setActive({index})"
+              @click="!tab.disabled && setActive({ index })"
             >{{ tab.label }}</button>
             <slot name="tab-item-status" v-bind="tab" :index="index">
               <span
                 class="veui-tabs-item-status"
-                @click="!tab.disabled && setActive({index})"
+                @click="!tab.disabled && setActive({ index })"
               >
                 <veui-icon
                   v-if="tab.status"
@@ -105,14 +105,14 @@
           <button
             type="button"
             class="veui-tabs-scroller-left"
-            @click="scroll({direction: 'left'})"
+            @click="scroll({ direction: 'left' })"
             :disabled="leftLimited">
             <veui-icon :name="icons.prev"/>
           </button>
           <button
             type="button"
             class="veui-tabs-scroller-right"
-            @click="scroll({direction: 'right'})"
+            @click="scroll({ direction: 'right' })"
             :disabled="rightLimited">
             <veui-icon :name="icons.next"/>
           </button>
@@ -125,13 +125,14 @@
 </template>
 
 <script>
-import {assign, inRange, includes} from 'lodash'
+import { assign, inRange, includes } from 'lodash'
 import warn from '../../utils/warn'
 import Link from '../Link'
 import Icon from '../Icon'
 import resize from '../../directives/resize'
 import ui from '../../mixins/ui'
 import '../../common/uiTypes'
+import { setTransform, getTransform } from '../../utils/dom'
 
 export default {
   name: 'veui-tabs',
@@ -183,7 +184,8 @@ export default {
       menuMoving: false,
       conMoving: false,
       itemMoving: false,
-      removing: false
+      removing: false,
+      transitionSupported: null
     }
   },
   computed: {
@@ -250,6 +252,11 @@ export default {
       this.$nextTick(() => {
         let tabItem = this.getTab(tab.name)
         tabItem.style.width = tabItem.offsetWidth + 'px'
+
+        if (!this.transitionSupported) {
+          return
+        }
+
         let end = $event => {
           $event.stopPropagation()
         }
@@ -327,13 +334,13 @@ export default {
       this.activeId = this.localActive != null ? this.items[this.localIndex].id : null
 
       if (this.menuOverflow && this.localActive) {
-        this.scroll({itemName: this.localActive})
+        this.scroll({ itemName: this.localActive })
       }
     },
 
     storeBoundingSize (menuRightStable) {
       // 记录 resize 后的一些边界
-      let {menu, listContainer, extra} = this.$refs
+      let { menu, listContainer, extra } = this.$refs
       let tabConClientWidth = listContainer.$el.clientWidth
       let menuClientWidth = menu.clientWidth
       let extraWidth = extra.offsetWidth
@@ -341,7 +348,7 @@ export default {
         this.menuClientWidth !== menuClientWidth ||
         this.extraWidth !== extraWidth
       ) {
-        let {left, right} = menu.getBoundingClientRect()
+        let { left, right } = menu.getBoundingClientRect()
         assign(this, {
           extraWidth,
           tabConClientWidth,
@@ -356,7 +363,7 @@ export default {
     fixResizeOverflow () {
       if (this.menuOverflow) {
         let listContainer = this.$refs.listContainer.$el
-        let {right} = listContainer.getBoundingClientRect()
+        let { right } = listContainer.getBoundingClientRect()
         if (this.menuRight > right) {
           this.currentTranslate = this.maxTranslate
           this.conMoving = true
@@ -364,15 +371,14 @@ export default {
             this.conMoving = false
           })
           this.$nextTick(() => {
-            listContainer.style.transform = `translate(${this.maxTranslate}px)`
-            listContainer.style['-ms-transform'] = `translate(${this.maxTranslate}px)`
+            setTransform(listContainer, `translate(${this.maxTranslate}px)`)
           })
         }
       }
     },
 
     listResizeHandler () {
-      let {menu, extra, scroller, listContainer} = this.$refs
+      let { menu, extra, scroller, listContainer } = this.$refs
       if (!listContainer || this.switching) {
         // 销毁阶段
         return
@@ -414,8 +420,7 @@ export default {
             let extraWidth = extra.getBoundingClientRect().width
             if (!this.menuOverflow) {
               this.currentTranslate = 0
-              listContainer.$el.style.transform = 'translate(0)'
-              listContainer.$el.style['-ms-transform'] = 'translate(0)'
+              setTransform(listContainer.$el, 'translate(0)')
               // 本来用 padding 就完事了，ie9 不让 -  -
               menu.style.marginRight = 0
             } else if (this.menuOverflow) {
@@ -443,7 +448,7 @@ export default {
      * @param  {string} direction left 或者 right，整体横向滚动方向
      * @param  {string} itemName  滚动至 tab 的 name，优先级比 direction 高
      */
-    scroll ({direction, itemName}) {
+    scroll ({ direction, itemName }) {
       let listContainer = this.$refs.listContainer.$el
       this.conMoving = true
       this.bindTransition(listContainer, () => {
@@ -456,7 +461,7 @@ export default {
         right: this.maxTranslate
       }
       // 标志 tab 的边界值
-      let flag = {left: null, right: null}
+      let flag = { left: null, right: null }
       // 本次滚动偏移值，带方向
       let localTranslate
       // 本次最大滚动偏移值，带方向，防止边框连续排列的美观性，统一向上取整，让边框隐藏在视区外
@@ -468,7 +473,7 @@ export default {
       if (!direction && !itemName) {
         return
       } else if (itemName) {
-        let {left, right} = this.getTab(itemName).getBoundingClientRect()
+        let { left, right } = this.getTab(itemName).getBoundingClientRect()
 
         if (left < this.menuLeft) {
           localTranslate = this.menuLeft - left
@@ -482,9 +487,9 @@ export default {
       } else if (direction === 'left') {
         this.items.some((item, index) => {
           let tab = this.getTab(item.name)
-          let {marginLeft, marginRight} = getComputedStyle(tab)
-          let {left, right} = tab.getBoundingClientRect()
-          assign(flag, {left, right})
+          let { marginLeft, marginRight } = getComputedStyle(tab)
+          let { left, right } = tab.getBoundingClientRect()
+          assign(flag, { left, right })
 
           // 记录向左滚动极限距离
           if (index === 0) {
@@ -502,9 +507,9 @@ export default {
       } else if (direction === 'right') {
         this.items.slice().reverse().some((item, index) => {
           let tab = this.getTab(item.name)
-          let {marginLeft, marginRight} = getComputedStyle(tab)
-          let {left, right} = tab.getBoundingClientRect()
-          assign(flag, {left, right})
+          let { marginLeft, marginRight } = getComputedStyle(tab)
+          let { left, right } = tab.getBoundingClientRect()
+          assign(flag, { left, right })
 
           // 记录向右滚动极限距离
           if (index === 0) {
@@ -524,17 +529,12 @@ export default {
       if (overflow) {
         this.currentTranslate = limited[direction]
         this.$nextTick(() => {
-          listContainer.style.transform = `translate(${limited[direction]}px)`
-          listContainer.style['-ms-transform'] = `translate(${limited[direction]}px)`
+          setTransform(listContainer, `translate(${limited[direction]}px)`)
         })
         return
       }
 
-      let matrix = (
-        '-ms-transform' in document.documentElement.style
-          ? getComputedStyle(listContainer).msTransform
-          : getComputedStyle(listContainer).transform
-      ).slice(7).split(',').map(v => +v.trim())
+      let matrix = getTransform(listContainer).slice(7).split(',').map(v => +v.trim())
       let currentTranslate = matrix[4] + localTranslate
       currentTranslate = inRange(
         currentTranslate,
@@ -543,8 +543,7 @@ export default {
       ) ? limited[direction] : currentTranslate
       this.currentTranslate = currentTranslate
       this.$nextTick(() => {
-        listContainer.style.transform = `translate(${currentTranslate}px)`
-        listContainer.style['-ms-transform'] = `translate(${currentTranslate}px)`
+        setTransform(listContainer, `translate(${currentTranslate}px)`)
       })
     },
 
@@ -565,9 +564,7 @@ export default {
     },
 
     bindTransition (el, cb) {
-      let transitionsSupported = ('transition' in document.documentElement.style) ||
-        ('WebkitTransition' in document.documentElement.style)
-      if (!transitionsSupported) {
+      if (!this.transitionSupported) {
         setTimeout(() => {
           cb()
         }, 0)
@@ -582,11 +579,8 @@ export default {
       el.addEventListener('transitionend', end)
     },
 
-    translateTabs (tabs, translateValue) {
-      tabs.forEach(tab => {
-        tab.style.transform = `translate(${translateValue}px)`
-        tab.style['-ms-transform'] = `translate(${translateValue}px)`
-      })
+    translateTabs (tabs, distance) {
+      tabs.forEach(tab => setTransform(tab, `translate(${distance}px)`))
     },
 
     leave (el, done) {
@@ -594,9 +588,7 @@ export default {
         return
       }
 
-      let transitionsSupported = ('transition' in document.documentElement.style) ||
-        ('WebkitTransition' in document.documentElement.style)
-      if (!transitionsSupported || !includes((this.ui || '').split(/\s+/), 'block')) {
+      if (!this.transitionSupported || !includes((this.ui || '').split(/\s+/), 'block')) {
         done()
         this.$nextTick(() => {
           this.removing = false
@@ -623,8 +615,7 @@ export default {
           if (fixedTranslate != null) {
             this.translateTabs(fixedTabs, 0)
             this.currentTranslate = fixedTranslate
-            this.$refs.listContainer.$el.style.transform = `translate(${fixedTranslate}px)`
-            this.$refs.listContainer.$el.style['-ms-transform'] = `translate(${fixedTranslate}px)`
+            setTransform(this.$refs.listContainer.$el, `translate(${fixedTranslate}px)`)
           }
 
           // 要先调用 done 把 dom 去掉，计算位置的时候才是对的
@@ -649,12 +640,12 @@ export default {
 
       let transitionWidth = 0
       if (this.menuOverflow) {
-        let {menu, listContainer} = this.$refs
+        let { menu, listContainer } = this.$refs
         let conRight = listContainer.$el.getBoundingClientRect().right
         let elWidth = el.getBoundingClientRect().width
         let overflowWidth = conRight - this.menuRight
         let currentTranslate = Math.abs(this.currentTranslate)
-        let translateValue
+        let distance
         switch (true) {
           // 右侧溢出部分足够填充移除元素
           case overflowWidth > elWidth:
@@ -663,16 +654,16 @@ export default {
           // 左侧溢出部分足够填充移除元素
           case overflowWidth < elWidth && currentTranslate > elWidth:
             transitionWidth = null
-            translateValue = elWidth
+            distance = elWidth
             fixedTabs = this.items.filter((item, index) => index < el.dataset.index)
-              .map(({name}) => this.getTab(name))
+              .map(({ name }) => this.getTab(name))
             fixedTranslate = elWidth - currentTranslate
             break
           // 左右都不足以单独填充移除元素
           case overflowWidth < elWidth && currentTranslate < elWidth:
             transitionWidth = 0
-            translateValue = currentTranslate
-            fixedTabs = this.items.map(({name}) => this.getTab(name))
+            distance = currentTranslate
+            fixedTabs = this.items.map(({ name }) => this.getTab(name))
             fixedTranslate = 0
             // 左右合并之后如果足以填充移除元素，可以暂时不关注溢出状态
             // 但是不足就要先移动右侧来填补中间的空白，然后再主动 resize
@@ -690,11 +681,11 @@ export default {
         }
 
         // 左侧的动画
-        if (translateValue != null) {
+        if (distance != null) {
           this.$nextTick(() => {
             this.translateTabs(
               [...fixedTabs, el],
-              translateValue
+              distance
             )
           })
         }
@@ -733,6 +724,8 @@ export default {
     }
   },
   mounted () {
+    this.transitionSupported = 'transition' in document.documentElement.style
+
     // 让子组件渲染完毕
     this.$nextTick(() => {
       let menu = this.$refs.menu
