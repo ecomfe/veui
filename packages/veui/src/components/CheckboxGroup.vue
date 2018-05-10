@@ -40,11 +40,16 @@ export default {
   },
   props: {
     items: Array,
-    value: Array
+    value: {
+      type: Array,
+      default () {
+        return []
+      }
+    }
   },
   data () {
     return {
-      localValue: null
+      localValue: this.value
     }
   },
   watch: {
