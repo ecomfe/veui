@@ -9,7 +9,7 @@ describe('components/Radio', () => {
       }
     })
 
-    wrapper.vm.$on('change', val => {
+    wrapper.vm.$on('input', val => {
       expect(val).toBe(null)
       done()
     })
