@@ -18,7 +18,7 @@
     :aria-selected="String(localValue.indexOf(item.value) !== -1)"
     :aria-posinset="index + 1"
     :aria-setsize="items.length">
-    <slot v-bind="item">{{ item.label }}</slot>
+    <slot v-bind="item" :index="index">{{ item.label }}</slot>
   </veui-button>
 </div>
 </template>

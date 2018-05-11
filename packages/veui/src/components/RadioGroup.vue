@@ -14,7 +14,7 @@
     :model="value"
     :disabled="item.disabled || realDisabled || realReadonly"
     :checked="item.value === value"
-    @change="model => handleChange(item.value, model)"
+    @change="checked => handleChange(checked, item.value)"
     :aria-posinset="index + 1"
     :aria-setsize="items.length">
     <slot v-bind="item" :index="index">{{ item.label }}</slot>
@@ -47,8 +47,7 @@ export default {
     }
   },
   methods: {
-    handleChange (value, model) {
-      let checked = value === model
+    handleChange (checked, value) {
       if (checked) {
         this.$emit('change', value)
       }

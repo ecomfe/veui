@@ -7,7 +7,7 @@
   :aria-disabled="String(realDisabled)">
   <veui-button
     :class="{
-      'veui-button-selected': item.value === value
+      'veui-button-selected': item.value === localValue
     }"
     :ui="inheritedUi"
     v-for="(item, index) in items"
@@ -15,8 +15,8 @@
     :disabled="item.disabled || realDisabled || realReadonly"
     @click="handleChange(item.value)"
     role="radio"
-    :aria-selected="String(item.value === value)">
-    <slot v-bind="item">{{ item.label }}</slot>
+    :aria-selected="String(item.value === localValue)">
+    <slot v-bind="item" :index="index">{{ item.label }}</slot>
   </veui-button>
 </div>
 </template>
@@ -39,8 +39,20 @@ export default {
     items: Array,
     value: null
   },
+  data () {
+    return {
+      localValue: this.value
+    }
+  },
+  watch: {
+    value (val) {
+      this.localValue = val
+    }
+  },
   methods: {
     handleChange (val) {
+      this.localValue = val
+
       if (this.value !== val) {
         this.$emit('change', val)
       }

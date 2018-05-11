@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { fill, clamp, isArray, isEqual, identity } from 'lodash'
+import { fill, clamp, isEqual, identity } from 'lodash'
 import drag from '../directives/drag'
 import nudge from '../directives/nudge'
 import outside from '../directives/outside'
@@ -299,7 +299,7 @@ export default {
     },
 
     getValueByIndex (index) {
-      let val = isArray(this.value) ? this.value[index] : this.value
+      let val = Array.isArray(this.value) ? this.value[index] : this.value
       return this.reduceDecimal(val)
     },
     reduceDecimal (val) {

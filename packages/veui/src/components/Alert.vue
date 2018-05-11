@@ -32,7 +32,6 @@
 <script>
 import Icon from './Icon'
 import Button from './Button'
-import { isArray } from 'lodash'
 import ui from '../mixins/ui'
 
 export default {
@@ -80,7 +79,7 @@ export default {
   },
   computed: {
     isMultiple () {
-      return isArray(this.message)
+      return Array.isArray(this.message)
     },
     isFirst () {
       return this.localIndex <= 0

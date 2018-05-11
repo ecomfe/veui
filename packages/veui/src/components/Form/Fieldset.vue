@@ -11,7 +11,7 @@
  * fieldset 和 field 的区别是 fieldset 只能用来做 ui 上的排列和显示 tip，合并显示 error
  */
 import Field from './Field'
-import { get, pick, extend } from 'lodash'
+import { get, pick, assign } from 'lodash'
 import ui from '../../mixins/ui'
 import '../../common/uiTypes'
 
@@ -36,7 +36,7 @@ export default {
   },
   computed: {
     attrs () {
-      return extend(pick(this.$props, ['label', 'name', 'tip']), {
+      return assign(pick(this.$props, ['label', 'name', 'tip']), {
         disabled: this.realDisabled,
         readonly: this.realReadonly
       })
