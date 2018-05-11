@@ -18,6 +18,7 @@
 * [+] `Input` 组件新增 WebKit 自动填充状态的判断，优化样式。
 * [+] `Tabs` 新增动画效果，新增 `block` ui。`Tab` 新增 `status` prop。
 * [^] `resize` 指令底层升级，增加 debounce 优化。
+* [+] `RadioGroup` 和 `CheckboxGroup` 组件的默认 scoped slot 参数增加 `index` 表示选项序号。
 
 ### 🐞 问题修复
 
