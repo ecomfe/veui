@@ -2,7 +2,7 @@
 <label
   :class="{
     'veui-switch': true,
-    'veui-switch-on': localChecked === trueValue,
+    'veui-switch-on': localChecked,
     'veui-switch-disabled': realDisabled || realReadonly
   }"
   :ui="ui">
@@ -29,7 +29,7 @@ export default {
   },
   mixins: [ui, input],
   model: {
-    prop: 'checked',
+    prop: 'model',
     event: 'change'
   },
   props: {
@@ -41,7 +41,8 @@ export default {
       type: null,
       default: false
     },
-    checked: null
+    checked: Boolean,
+    model: null
   },
   data () {
     return {
@@ -52,19 +53,33 @@ export default {
     attrs () {
       return {
         ...pick(this.$props, 'name', 'readonly', 'indeterminate'),
-        checked: this.localChecked === this.trueValue
+        checked: this.localChecked
       }
     }
   },
   watch: {
     checked (val) {
       this.localChecked = val
+    },
+    localChecked  (val) {
+      if (this.checked !== val) {
+        this.$emit('update:checked', val)
+      }
+    },
+    model: {
+      handler (val) {
+        if (typeof val === 'undefined') {
+          return
+        }
+        this.localChecked = val === this.trueValue
+      },
+      immediate: true
     }
   },
   methods: {
     handleChange (checked) {
-      this.localChecked = checked ? this.trueValue : this.falseValue
-      this.$emit('change', this.localChecked)
+      this.localChecked = checked
+      this.$emit('change', checked ? this.trueValue : this.falseValue)
     }
   }
 }
