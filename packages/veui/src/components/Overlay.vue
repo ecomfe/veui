@@ -85,8 +85,8 @@ export default {
     this.updateNode()
   },
   mounted () {
-    const box = this.$refs.box
-    document.body.appendChild(box)
+    this.overlayBox = this.$refs.box
+    document.body.appendChild(this.overlayBox)
 
     if (this.open) {
       this.initFocus()
@@ -133,7 +133,7 @@ export default {
 
       if (this.targetNode) {
         let options = assign({}, this.options, {
-          element: this.$refs.box,
+          element: this.overlayBox,
           target: this.targetNode
         })
 
@@ -180,7 +180,7 @@ export default {
       }
 
       if (!this.focusContext) {
-        this.focusContext = focusManager.createContext(this.$refs.box, {
+        this.focusContext = focusManager.createContext(this.overlayBox, {
           source: document.activeElement,
           trap: this.modal
         })
@@ -196,7 +196,7 @@ export default {
       }
     }
   },
-  beforeDestroy () {
+  destroyed () {
     this.tether && this.tether.destroy()
     this.tether = null
 
@@ -207,7 +207,8 @@ export default {
 
     this.destroyFocus()
 
-    this.$refs.box.parentNode.removeChild(this.$refs.box)
+    this.overlayBox.parentNode.removeChild(this.overlayBox)
+    this.$box = null
   }
 }
 </script>
