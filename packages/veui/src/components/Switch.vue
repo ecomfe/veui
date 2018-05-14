@@ -29,8 +29,7 @@ export default {
   },
   mixins: [ui, input],
   model: {
-    prop: 'model',
-    event: 'change'
+    prop: 'model'
   },
   props: {
     trueValue: {
@@ -65,6 +64,8 @@ export default {
       if (this.checked !== val) {
         this.$emit('update:checked', val)
       }
+
+      this.$emit('input', val ? this.trueValue : this.falseValue)
     },
     model: {
       handler (val) {
@@ -79,7 +80,7 @@ export default {
   methods: {
     handleChange (checked) {
       this.localChecked = checked
-      this.$emit('change', checked ? this.trueValue : this.falseValue)
+      this.$emit('change', checked)
     }
   }
 }
