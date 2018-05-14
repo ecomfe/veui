@@ -52,7 +52,7 @@ export default {
     attrs () {
       return {
         ...pick(this.$props, 'name', 'readonly', 'indeterminate'),
-        checked: this.localChecked
+        checked: this.localChecked === this.trueValue
       }
     }
   },
