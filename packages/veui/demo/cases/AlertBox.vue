@@ -2,7 +2,7 @@
   <article class="alert-box-demo">
     <h1><code>&lt;veui-alert-box&gt;</code></h1>
     <p>
-      <veui-button ui="primary"
+      <veui-button type="primary"
         @click="alertBoxOpen = true">
         open alert box
       </veui-button>
@@ -13,33 +13,33 @@
     </p>
 
     <p>
-      <veui-button ui="primary"
+      <veui-button type="primary"
         @click="alertSuccessBoxOpen = true">
         open success alert box
       </veui-button>
-      <veui-alert-box :open.sync="alertSuccessBoxOpen" ui="success">
+      <veui-alert-box :open.sync="alertSuccessBoxOpen" type="success">
         <template slot="title">创建条目成功</template>
         恭喜你，您的资料已经提交成功！
       </veui-alert-box>
     </p>
 
     <p>
-      <veui-button ui="primary"
+      <veui-button type="primary"
         @click="alertInfoBoxOpen = true">
         open info alert box
       </veui-button>
-      <veui-alert-box :open.sync="alertInfoBoxOpen" ui="info">
+      <veui-alert-box :open.sync="alertInfoBoxOpen" type="info">
         <template slot="title">创建条目提醒</template>
         请完善你的资料，保证内容真实。
       </veui-alert-box>
     </p>
 
     <p>
-      <veui-button ui="primary"
+      <veui-button type="primary"
         @click="alertErrorBoxOpen = true">
         open error alert box
       </veui-button>
-      <veui-alert-box :open.sync="alertErrorBoxOpen" ui="error">
+      <veui-alert-box :open.sync="alertErrorBoxOpen" type="error">
         <template slot="title">创建条目失败</template>
         请完善你的资料，保证内容真实。
       </veui-alert-box>
