@@ -208,7 +208,7 @@ export default {
     this.destroyFocus()
 
     this.overlayBox.parentNode.removeChild(this.overlayBox)
-    this.$box = null
+    this.overlayBox = null
   }
 }
 </script>
