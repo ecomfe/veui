@@ -88,7 +88,7 @@ export default {
     this.overlayBox = this.$refs.box
     document.body.appendChild(this.overlayBox)
 
-    if (this.open) {
+    if (this.realOpen) {
       this.initFocus()
     }
 
@@ -127,7 +127,7 @@ export default {
     },
 
     updateOverlayDOM () {
-      if (!this.open) {
+      if (!this.realOpen) {
         return
       }
 
