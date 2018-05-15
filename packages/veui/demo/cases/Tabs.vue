@@ -82,9 +82,15 @@
     <section>
       <h2>路由模式：</h2>
       <veui-tabs :active="$route.fullPath">
-        <veui-tab label="Button" to="/tabs/button"><router-view/></veui-tab>
-        <veui-tab label="Input" to="/tabs/input"><router-view/></veui-tab>
-        <veui-tab label="Progress" to="/tabs/progress"><router-view/></veui-tab>
+        <veui-tab label="Button" to="/tabs/button"/>
+        <veui-tab label="Input" to="/tabs/input"/>
+        <veui-tab label="Progress" to="/tabs/progress"/>
+        <veui-tab label="跳转到 Progress" to="/progress"/>
+        <veui-tab label="包点东西" to="/tabs/switch">
+          <h3>-------- Tabs 里头的 switch 开始 --------</h3>
+          <router-view v-if="$route.fullPath === '/tabs/switch'"/>
+          <h3>-------- Tabs 里头的 switch 结束 --------</h3>
+        </veui-tab>
       </veui-tabs>
     </section>
     <section class="inner-ui">
@@ -171,7 +177,7 @@
       <p>当前序号 <code>{{index6 + 1}}</code></p>
       <veui-button
         :disabled="tabIfRemoving"
-        @click="toggleInsertVisiable"
+        @click="insertVisiable = !insertVisiable"
       >{{ insertVisiable ? '隐藏' : '显示' }}中间一个可切换 TAB</veui-button>
       <veui-tabs ui="large" :active.sync="active5" :index.sync="index6">
         <veui-tab label="DuerOS" name="os"><p>os</p></veui-tab>
@@ -179,7 +185,7 @@
         <veui-tab label="人脸识别" name="face" v-if="insertVisiable"><p>face</p></veui-tab>
         <veui-tab label="语音识别" name="sound"><p>sound</p></veui-tab>
       </veui-tabs>
-      <veui-tabs ui="large block" :active.sync="active5" :index.sync="index6" @removeend="handleInsertButton">
+      <veui-tabs ui="large block" :active.sync="active5" :index.sync="index6">
         <veui-tab label="DuerOS" name="os"><p>os</p></veui-tab>
         <veui-tab label="无人车" name="car"><p>car</p></veui-tab>
         <veui-tab label="人脸识别" name="face" v-if="insertVisiable"><p>face</p></veui-tab>
@@ -243,15 +249,6 @@ export default {
     }
   },
   methods: {
-    handleInsertButton () {
-      this.tabIfRemoving = false
-    },
-    toggleInsertVisiable () {
-      this.insertVisiable = !this.insertVisiable
-      if (!this.insertVisiable) {
-        this.tabIfRemoving = true
-      }
-    },
     addTab0 () {
       if (this.tabs0.length >= this.totalTabs0) {
         return
