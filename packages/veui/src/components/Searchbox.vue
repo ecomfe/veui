@@ -30,7 +30,7 @@
       <button
         type="button"
         class="veui-searchbox-action-icon"
-        :disabled="realDisabled"
+        :disabled="realDisabled || realReadonly"
         aria-label="搜索"
         :aria-haspopup="submitPopup"
       >
@@ -38,7 +38,7 @@
       </button>
       <veui-button :ui="ui"
         class="veui-searchbox-action-button"
-        :disabled="realDisabled"
+        :disabled="realDisabled || realReadonly"
         aria-label="搜索"
         :aria-haspopup="submitPopup"
       >搜索</veui-button>
