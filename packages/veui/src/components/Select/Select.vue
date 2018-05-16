@@ -34,10 +34,6 @@ export default {
       type: String,
       default: '请选择'
     },
-    multiple: {
-      type: Boolean,
-      default: false
-    },
     clearable: Boolean,
     options: Array,
     filter: Function

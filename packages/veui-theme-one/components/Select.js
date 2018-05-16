@@ -10,6 +10,9 @@ config.defaults({
   ui: {
     size: {
       values: ['large', 'small', 'tiny', 'micro']
+    },
+    style: {
+      values: ['alt']
     }
   }
 }, 'select')
