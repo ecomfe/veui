@@ -63,6 +63,7 @@ export default {
         if (val !== 0) {
           warn('[veui-progress] `precision` is deprecated and will be removed in `1.0.0`. Use `decimal-place` instead.')
         }
+        return true
       }
     },
     decimalPlace: {
