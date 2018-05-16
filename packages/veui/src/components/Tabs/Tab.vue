@@ -1,6 +1,8 @@
 <template>
 <div class="veui-tab" v-show="isActive" role="tabpanel" :aria-hidden="String(!isActive)">
-  <slot v-if="isInited || isActive"/>
+  <slot v-if="isInited || isActive">
+    <router-view v-if="to && to === $route.fullPath"/>
+  </slot>
 </div>
 </template>
 

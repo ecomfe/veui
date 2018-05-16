@@ -17,6 +17,7 @@
 * [+] `DatePicker` 组件的 `shortcuts` 配置中，`to` 字段新增默认值 `0`。
 * [+] `Input` 组件新增 WebKit 自动填充状态的判断，优化样式。
 * [+] `Tabs` 新增动画效果，新增 `block` ui。`Tab` 新增 `status` prop。
+* [^] `Tab` 在路由模式下会自动渲染 `<router-view>`。
 * [^] `resize` 指令底层升级，增加 debounce 优化。
 * [+] `RadioGroup`、`CheckboxGroup`、`RadioButtonGroup` 及 `CheckButtonGroup` 组件的默认 scoped slot 参数增加 `index` 表示选项序号。
 

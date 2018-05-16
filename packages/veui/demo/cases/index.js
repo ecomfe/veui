@@ -203,6 +203,10 @@ export default [
       {
         path: 'progress',
         component: Progress
+      },
+      {
+        path: 'switch',
+        component: Switch
       }
     ]
   },
