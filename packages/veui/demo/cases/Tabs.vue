@@ -83,7 +83,7 @@
       <h2>路由模式：</h2>
       <veui-tabs :active="$route.fullPath">
         <veui-tab label="Button" to="/tabs/button"/>
-        <veui-tab label="Input" to="/tabs/input"/>
+        <veui-tab label="Input" to="input"/>
         <veui-tab label="Progress" to="/tabs/progress"/>
         <veui-tab label="跳转到 Progress" to="/progress"/>
         <veui-tab label="包点东西" to="/tabs/switch">
@@ -156,8 +156,11 @@
       <p>当前序号 <code>{{index5 != null ? index5 + 1 : '已删光'}}</code></p>
       <veui-button class="add-btn" @click="addTab3">添加 TAB</veui-button>
       <veui-tabs :active.sync="active4" :index.sync="index5" ui="block">
-        <template v-if="props.removable && tabs3.length > 1" slot="tab-item-extra" slot-scope="props">
-          <button type="button" class="veui-tabs-item-remove" @click="removeTab3(props)">
+        <template slot="tab-item-extra" slot-scope="props">
+          <button v-if="props.removable && tabs3.length > 1"
+            type="button"
+            class="veui-tabs-item-remove"
+            @click="removeTab3(props)">
             <icon name="cross-small"></icon>
           </button>
         </template>
@@ -167,7 +170,12 @@
           :name="tab.name"
           :status="tab.status"
           :key="tab.name"
-          v-for="tab in tabs3"><p>Tab {{ tab.name }}</p>
+          v-for="tab in tabs3">
+          <p v-if="tab.label ==='弄一个很长的在中间试试'">
+            弄一个很高的在中间试试
+            <br v-for="n in 10" :key="n">
+          </p>
+          <p v-else>Tab {{ tab.name }}</p>
         </veui-tab>
       </veui-tabs>
     </section>

@@ -21,11 +21,12 @@
       <transition-group
         tag="div"
         :class="{
-          'veui-tabs-list-resizer': true,
-          'veui-tabs-list-resizer-moving': conMoving
+          'veui-tabs-list-wrapper': true,
+          'veui-tabs-list-wrapper-moving': conMoving
         }"
         ref="listContainer"
-        name="tab-list"
+        name="veui-tab"
+        @before-leave="beforeLeave"
         @leave="leave"
         @after-leave="afterLeave"
       >
@@ -266,10 +267,6 @@ export default {
           tabItem.querySelector('.veui-tabs-item-remove').addEventListener('transitionend', end)
         }
       })
-
-      if (this.inited) {
-        this.$nextTick(() => this.listResizeHandler())
-      }
     },
 
     removeById (id) {
@@ -297,24 +294,27 @@ export default {
         return
       }
 
-      items.splice(index, 1)
-
-      if (items.length) {
-        let temp = this.localIndex
-        // 删激活中的第一个要往后找，删当前激活后边的，index 都不需要改
-        if (!(index === 0 && index === this.localIndex) && index <= this.localIndex) {
-          this.localIndex = this.localIndex - 1
-        }
-        // 删当前激活的，要更新激活信息
-        if (index === temp) {
-          this.localActive = this.items[this.localIndex].name
-          this.activeId = this.items[this.localIndex].id
+      let needFixed = false
+      if (items.length > 1) {
+        needFixed = (index === this.localIndex && index === 0) || index < this.localIndex
+        if (index === this.localIndex) {
+          let item = items[this.localIndex - 1] || items[this.localIndex + 1]
+          this.localIndex = items.indexOf(item)
+          this.localActive = item.name
+          this.activeId = item.id
         }
       } else {
         this.localIndex = null
         this.localActive = null
         this.activeId = null
       }
+
+      this.$nextTick(() => {
+        items.splice(index, 1)
+        if (needFixed) {
+          this.localIndex -= 1
+        }
+      })
     },
 
     setActive ({active, index}) {
@@ -634,7 +634,7 @@ export default {
       tabs.forEach(tab => setTransform(tab, `translate(${distance}px)`))
     },
 
-    leave (el) {
+    beforeLeave (el) {
       if (!this.inited || !this.transitionSupported || this.uiProps.style !== 'block') {
         return
       }
@@ -642,6 +642,13 @@ export default {
       this.menuMoving = true
       this.conMoving = true
       this.itemMoving = true
+    },
+
+    leave (el) {
+      if (!this.inited || !this.transitionSupported || this.uiProps.style !== 'block') {
+        return
+      }
+
       // 若产生子元素局部动画，要把局部的状态收敛到父元素上
       this.fixedTranslate = null
       this.fixedTabs = null
@@ -713,12 +720,14 @@ export default {
         })
       }
     },
+
     afterLeave () {
-      if (!this.transitionSupported || this.uiProps.style !== 'block') {
+      if (!this.inited || !this.transitionSupported || this.uiProps.style !== 'block') {
         this.$nextTick(() => {
           this.removing = false
           this.listResizeHandler()
         })
+        return
       }
 
       // 动画结束后收敛 transform
