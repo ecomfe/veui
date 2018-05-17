@@ -37,5 +37,6 @@ module.exports = {
     '^.+\\.js$': 'babel-jest',
     '.*\\.vue$': 'vue-jest',
     '.*\\.svg$': '<rootDir>/build/svg-icon-jest'
-  }
+  },
+  setupFiles: ['./test/unit/env.js']
 }

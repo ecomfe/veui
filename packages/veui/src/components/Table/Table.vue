@@ -202,7 +202,7 @@ export default {
       this.localSelected = intersection(this.localSelected, val)
     },
     realSelected (val, oldVal) {
-      if (!isEqualSet(val, oldVal)) {
+      if (val === oldVal || !isEqualSet(val, oldVal)) {
         this.$emit('update:selected', val)
       }
     }
