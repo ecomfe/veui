@@ -35,8 +35,7 @@ describe('components/Select/OptionGroup', () => {
           done()
         })
       },
-      template: `
-        <veui-select :options="options"></veui-select>`
+      template: `<veui-select :options="options"></veui-select>`
     })
   })
 })
