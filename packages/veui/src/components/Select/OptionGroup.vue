@@ -96,6 +96,7 @@ export default {
             label={option.label}
             value={option.value}
             hidden={option.hidden}
+            disabled={option.disabled}
             key={i}>
             {
               this.$scopedSlots.option
