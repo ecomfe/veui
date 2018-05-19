@@ -113,4 +113,37 @@ describe('components/Table', () => {
         </veui-table>`
     })
   })
+
+  it('should emit `select` event before `update:selected` event.', done => {
+    create({
+      data () {
+        return {
+          data: [
+            {
+              field1: 'haha',
+              field2: 11
+            }
+          ],
+          isSelectEmitted: false
+        }
+      },
+      mounted () {
+        const checkboxList = this.$el.querySelectorAll('td input[type="checkbox"]')
+        checkboxList[0].dispatchEvent(new MouseEvent('click'))
+      },
+      methods: {
+        handleSelect () {
+          this.isSelectEmitted = true
+        },
+        handleUpdateSelected () {
+          expect(this.isSelectEmitted).toBe(true)
+          done()
+        }
+      },
+      template: `
+        <veui-table :data="data" selectable @select="handleSelect" @update:selected="handleUpdateSelected">
+          <veui-table-column field="field1"></veui-table-column>
+        </veui-table>`
+    })
+  })
 })
