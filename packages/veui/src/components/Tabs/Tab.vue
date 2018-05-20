@@ -1,7 +1,7 @@
 <template>
 <div class="veui-tab" v-show="isActive" role="tabpanel" :aria-hidden="String(!isActive)">
   <slot v-if="isInited || isActive">
-    <router-view v-if="to && realTo === $route.fullPath"/>
+    <router-view v-if="to && $route && realTo === $route.fullPath"/>
   </slot>
 </div>
 </template>
@@ -57,7 +57,11 @@ export default {
       return this.id === this.tabs.activeId
     },
     realTo () {
-      return this.to ? this.$router.resolve(this.to).route.fullPath : null
+      if (!this.to) {
+        return null
+      }
+
+      return this.$router ? this.$router.resolve(this.to).route.fullPath : this.to
     }
   },
   created () {

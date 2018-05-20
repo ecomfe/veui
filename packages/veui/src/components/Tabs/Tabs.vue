@@ -212,6 +212,9 @@ export default {
     maxTranslate () {
       return this.menuClientWidth - this.tabConClientWidth
     },
+    needTransition () {
+      return this.inited && this.transitionSupported && this.uiProps.style === 'block'
+    },
     ariaAttrs () {
       return this.items.map((tab, index) => {
         return {
@@ -635,7 +638,7 @@ export default {
     },
 
     beforeLeave (el) {
-      if (!this.inited || !this.transitionSupported || this.uiProps.style !== 'block') {
+      if (!this.needTransition) {
         return
       }
 
@@ -645,7 +648,7 @@ export default {
     },
 
     leave (el) {
-      if (!this.inited || !this.transitionSupported || this.uiProps.style !== 'block') {
+      if (!this.needTransition) {
         return
       }
 
@@ -722,7 +725,7 @@ export default {
     },
 
     afterLeave () {
-      if (!this.inited || !this.transitionSupported || this.uiProps.style !== 'block') {
+      if (!this.needTransition) {
         this.$nextTick(() => {
           this.removing = false
           this.listResizeHandler()
