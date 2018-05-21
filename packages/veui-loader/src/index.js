@@ -98,9 +98,9 @@ async function patchComponent (content, component, options, resolve) {
     }
   )
 
-  for (let item of [...parts.script, ...parts.style]) {
+  await Promise.all([...parts.script, ...parts.style].map(async item => {
     item.valid = await assurePath(item.path, resolve)
-  }
+  }))
 
   return Object.keys(parts).reduce((content, type) => {
     return parts[type]
