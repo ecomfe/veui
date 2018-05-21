@@ -10,7 +10,7 @@
     "unit": "jest --coverage --forceExit",
     "unit-debug": "jest --no-cache --watch --forceExit",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "test": "npm run unit",
+    "test": "cd ../.. && npm run build-plugin && npm run build-loader && cd packages/veui && npm run unit",
     "prepublishOnly": "cp -r ./src/* .",
     "publish": "rm -rf ./common ./components ./directives ./managers ./mixins ./plugins ./utils ./icons.js ./index.js"
   },
@@ -25,6 +25,13 @@
   "peerDependencies": {
     "vue": "^2.5.16"
   },
+  "keywords": [
+    "vue",
+    "ui",
+    "components",
+    "veui",
+    "baidu"
+  ],
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.15",
     "babel-core": "^6.22.1",

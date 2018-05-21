@@ -10,6 +10,7 @@
 
 ### 💡 主要变更
 
+* [^] `veui-loader` 支持 webpack 4，resolve 路径逻辑调整为异步。
 * [+] 为 `RegionPicker` 添加了键盘导航和 WAI-ARIA 支持。
 * [+] `BreadcrumbItem` 和 `Link` 组件的 `to` prop 支持使用 `Object` 格式（以传递具名路由对象）。
 * [+] `DatePicker` 组件增加 `today` prop，和 `Calendar` 对应 `prop` 一致。
@@ -20,6 +21,7 @@
 * [^] `Tab` 在路由模式下会自动渲染 `<router-view>`。
 * [^] `resize` 指令底层升级，增加 debounce 优化。
 * [+] `RadioGroup`、`CheckboxGroup`、`RadioButtonGroup` 及 `CheckButtonGroup` 组件的默认 scoped slot 参数增加 `index` 表示选项序号。
+* [^] `numeric` 校验规则现在禁止多余的 `0` 开头的字符串值。
 
 ### 🐞 问题修复
 
@@ -29,6 +31,7 @@
 * [^] 修复了 `Input` 组件在 SSR 时报错的问题。
 * [^] `input` 类型组件的错误状态通过组件数据进行传递，而不仅仅依赖于外层 `Field` 的 `class`。
 * [^] 修复了 `Tab` 使用路由模式时设置 `name` prop 会出错的问题。
+* [^] 修复了 `Table` 的 `update:selected` 事件有时未正确抛出的问题。
 
 ## 1.0.0-alpha.12
 
