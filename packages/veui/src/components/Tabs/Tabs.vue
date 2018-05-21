@@ -511,6 +511,10 @@ export default {
           // 减少 tab 留白和滚动误差带来的影响，三分之二宽度在视窗内才不会被保留在下个视窗中
           if (left >
             (this.menuLeft - (tab.offsetWidth + parseFloat(marginLeft) + parseFloat(marginRight)) / 3)) {
+            if (index === 0) {
+              // 第一个就满足条件，说明边界离第一个很近，往左只能在第一个的内部滚了
+              former = -1
+            }
             return true
           }
 
@@ -518,10 +522,10 @@ export default {
           return false
         })
 
-        // 视窗太窄
         if (former != null) {
+          // 视窗太窄或者只需要滚动一点点
           if (former === -1) {
-            // 并且视窗在第一个
+            // 视窗在第一个或者只需要滚动一点点
             localTranslate = localMaxTranslate
           } else {
             // 视窗在中间
@@ -555,6 +559,10 @@ export default {
           // 同向左滚动
           if (right <
             (this.menuRightStable + (tab.offsetWidth + parseFloat(marginLeft) + parseFloat(marginRight)) / 3)) {
+            if (index === 0) {
+              // 最后一个就满足条件，说明边界离最后一个很近，往右只能在最后一个的内部滚了
+              former = this.items.length
+            }
             return true
           }
 
@@ -562,10 +570,10 @@ export default {
           return false
         })
 
-        // 视窗太窄
         if (former != null) {
+          // 视窗太窄或者只需要滚动一点点
           if (former === this.items.length) {
-            // 并且视窗在最后一个
+            // 视窗在最后一个或者只需要滚动一点点
             localTranslate = localMaxTranslate
           } else {
             // 视窗在中间
