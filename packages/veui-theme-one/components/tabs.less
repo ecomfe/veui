@@ -9,7 +9,6 @@
   position: relative;
 
   &-menu button {
-    .veui-button-transition();
     background: none;
     border: none;
     padding: 0;
@@ -43,12 +42,12 @@
     vertical-align: top;
     z-index: 1;
 
-    &-resizer-moving {
+    &-wrapper-moving {
       transition: transform .5s ease-in-out;
     }
   }
 
-  &-list-resizer {
+  &-list-wrapper {
     display: inline-block;
     padding: 0;
     margin: 0;
@@ -394,11 +393,11 @@
       }
 
       &-moving.veui-tabs-item-removable,
-      &.tab-list-leave-active {
+      &.veui-tab-leave-active {
         transition: width .5s ease-in-out, transform .5s ease-in-out, padding-right .5s;
       }
 
-      &.tab-list-leave-active {
+      &.veui-tab-leave-active {
         z-index: -1;
       }
 

@@ -1,7 +1,7 @@
 <template>
 <div class="veui-tab" v-show="isActive" role="tabpanel" :aria-hidden="String(!isActive)">
   <slot v-if="isInited || isActive">
-    <router-view v-if="to && to === $route.fullPath"/>
+    <router-view v-if="to && $route && realTo === $route.fullPath"/>
   </slot>
 </div>
 </template>
@@ -55,6 +55,13 @@ export default {
   computed: {
     isActive () {
       return this.id === this.tabs.activeId
+    },
+    realTo () {
+      if (!this.to) {
+        return null
+      }
+
+      return this.$router ? this.$router.resolve(this.to).route.fullPath : this.to
     }
   },
   created () {
@@ -68,7 +75,7 @@ export default {
 
     this.tabs.add({
       ...pick(this, ...props, 'id'),
-      name: this.to || this.name || this.id,
+      name: this.realTo || this.name || this.id,
       index
     })
 
