@@ -3,7 +3,6 @@ import path from 'path'
 import pkgDir from 'pkg-dir'
 import loaderUtils from 'loader-utils'
 import { kebabCase, camelCase, pascalCase, getJSON, normalize } from './utils'
-import resolve from 'enhanced-resolve/lib/node'
 import COMPONENTS from 'veui/components.json'
 
 const COMPONENTS_DIRNAME = 'components'
@@ -19,15 +18,35 @@ let resolveCache = {}
  * @param {string} content Raw file content of .vue file
  * @returns {string} Content of patched .vue file
  */
-export default function (content) {
+export default async function (content) {
+  let callback = this.async()
   const loaderOptions = loaderUtils.getOptions(this) || {}
   let component = resolveComponent(this.resourcePath)
   if (!component) {
-    return content
+    callback(null, content)
+    return
   }
 
-  const resolve = makeSyncResolver(this.options)
-  return patchComponent(content, component, loaderOptions, resolve)
+  try {
+    let result = await patchComponent(content, component, loaderOptions, path => {
+      return new Promise((resolve) => {
+        try {
+          this.resolve(this.rootContext || this.options.context, path, (err, result) => {
+            if (err) {
+              resolve(false)
+              return
+            }
+            resolve(true)
+          })
+        } catch (e) {
+          resolve(false)
+        }
+      })
+    })
+    callback(null, result)
+  } catch (e) {
+    callback(e)
+  }
 }
 
 /**
@@ -35,10 +54,10 @@ export default function (content) {
  * @param {string} content .vue file content
  * @param {string} component Component name
  * @param {Object} options veui-theme-loader options
- * @param {Object} resolve webpack resolve function to see if target peer exists
+ * @param {function} resolve webpack resolve function to see if target peer exists
  * @returns {string} The patched content
  */
-function patchComponent (content, component, options, resolve) {
+async function patchComponent (content, component, options, resolve) {
   let {
     modules = [],
     package: pack,
@@ -70,9 +89,7 @@ function patchComponent (content, component, options, resolve) {
         template: fileName
       })
       let peerPath = path.join(pack, packPath, peerComponent)
-      if (assurePath(peerPath, resolve)) {
-        pushPart(acc, peerPath)
-      }
+      pushPart(acc, { path: peerPath })
       return acc
     },
     {
@@ -81,20 +98,26 @@ function patchComponent (content, component, options, resolve) {
     }
   )
 
+  for (let item of [...parts.script, ...parts.style]) {
+    item.valid = await assurePath(item.path, resolve)
+  }
+
   return Object.keys(parts).reduce((content, type) => {
-    return parts[type].reduce((content, peerPath) => {
-      return patchType(content, type, peerPath)
-    }, content)
+    return parts[type]
+      .filter(({ valid }) => valid)
+      .reduce((content, { path }) => {
+        return patchType(content, type, path)
+      }, content)
   }, content)
 }
 
 /**
  * Push peer file dependency into collected parts.
  * @param {Object} parts Collected parts containing scripts and styles
- * @param {string} file The file to be appended
+ * @param {Object} file The file to be appended
  */
 function pushPart (parts, file) {
-  let ext = getExtname(file)
+  let ext = getExtname(file.path)
   let type = Object.keys(EXT_TYPES).find(key => {
     return EXT_TYPES[key].includes(ext)
   })
@@ -146,29 +169,18 @@ function patchType (content, type, peerPath) {
 }
 
 /**
- * Create a synchronous resolver.
- * See https://github.com/webpack/enhanced-resolve/issues/46
- * @param {Object} options webpack loader options
- * @returns {Object} The synchronous resolver
- */
-function makeSyncResolver (options) {
-  return resolve.create.sync(options.resolve)
-}
-
-/**
  * To test the target peer path exists or not.
  * @param {string} modulePath Peer module path
- * @param {Object} resolve webpack module resolver
+ * @param {function} resolve webpack module resolver
  * @returns {boolean} If the target peer path exists
  */
-function assurePath (modulePath, resolve) {
+async function assurePath (modulePath, resolve) {
   if (resolveCache[modulePath] === false) {
     return
   } else if (!(modulePath in resolveCache)) {
     if (typeof resolve === 'function') {
       try {
-        resolve({}, process.cwd(), modulePath)
-        resolveCache[modulePath] = true
+        resolveCache[modulePath] = await resolve(modulePath)
       } catch (e) {
         resolveCache[modulePath] = false
       }

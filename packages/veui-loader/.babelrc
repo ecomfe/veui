@@ -1,16 +1,30 @@
 {
   "presets": [
-    "env",
-    "stage-2"
+    [
+      "env",
+      {
+        "targets": {
+          "node": "4.0"
+        }
+      }
+    ]
   ],
   "plugins": [
-    "add-module-exports"
+    [
+      "transform-runtime",
+      {
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": true,
+        "moduleName": "babel-runtime"
+      }
+    ]
   ],
   "comments": false,
   "env": {
     "test": {
-      "presets": ["env", "stage-2"],
-      "plugins": [ "istanbul" ]
+      "presets": ["env"],
+      "plugins": ["istanbul"]
     }
   }
 }
