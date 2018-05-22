@@ -89,8 +89,7 @@ export default {
                 : null,
               option: this.$scopedSlots.option || null,
               'option-label': this.$scopedSlots['option-label'] || null
-            }}>
-          </veui-option-group>
+            }}/>
           : <veui-option
             ui={this.inheritedUi}
             label={option.label}

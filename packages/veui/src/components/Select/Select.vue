@@ -11,7 +11,7 @@ import overlay from '../../mixins/overlay'
 import dropdown from '../../mixins/dropdown'
 import warn from '../../utils/warn'
 import { walk } from '../../utils/data'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, mapValues } from 'lodash'
 import '../../common/uiTypes'
 
 export default {
@@ -45,8 +45,17 @@ export default {
     }
   },
   computed: {
-    labelMap () {
+    optionMap () {
       return extractOptions(this.options, {})
+    },
+    labelMap () {
+      return mapValues(this.optionMap, 'label')
+    },
+    selectedOption () {
+      if (this.value === null) {
+        return null
+      }
+      return this.optionMap[this.value]
     },
     label () {
       if (this.value === null) {
@@ -91,7 +100,7 @@ export default {
         <span class="veui-select-label">
           {
             this.$scopedSlots.label
-              ? this.$scopedSlots.label({ label: this.label })
+              ? this.$scopedSlots.label(this.selectedOption || {})
               : this.label
           }
         </span>
@@ -183,12 +192,13 @@ export default {
 }
 
 function extractOptions (options, map) {
-  walk(options, ({ label, value, options, children }) => {
+  walk(options, (option) => {
+    let { value } = option
     if (value != null) {
       if (map[value]) {
         warn(`[veui-select] Duplicate item value [${value}] for select options.`)
       }
-      map[value] = label
+      map[value] = option
     }
   }, ['options', 'children'])
   return map
