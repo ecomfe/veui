@@ -3,6 +3,7 @@
 ### ⚠️ 非兼容性变更
 
 * [^] `Checkbox`、`Switch` 组件新增 prop `model`，对应 `v-model`。`checked` prop 不再对应 `v-model`，而是支持 `.sync`。
+* [^] `Checkbox`、`Radio`、`Switch` 组件新增 `input` 事件用于 `v-model`。`change` 事件参数抛出当前的 `checked` 值，仅在用户切换时触发。
 * [^] `Calendar` 组件的 `selectstart` 事件抛出的参数格式从 `[Date]` 修改为 `Date`，表示选择的起始日期，去除多余的数组。
 * [^] 移除 `DatePicker` 组件的 `placeholderBegin`、`placeholderEnd` prop 及相应的 slot `placeholder-begin`、`placeholder-end`，以及全局配置 `datepicker.placeholderBegin`、`datepicker.placeholderEnd`。取而代之的是，增加配置项 `datepicker.rangePlaceholder`，并总是响应外部设置的 `placeholder` prop。默认状态下，会根据 `range` prop 来显示 `datepicker.placeholder` 或 `datepicker.rangePlaceholder` 的值。
 * [^] `DatePicker` 组件的 `date` scoped slot 现在会透传给内部的 `Calendar` 的同名 scoped slot，不再表示已选择日期区域。原来已选择位置的 scoped slot 重命名为 `selected`，为范围选择时；类型为 `Date` 的 `date` 字段废弃，取而代之的是三个类型为 `number` 的字段：`year`、`month`（`0` 表示一月）、`date`；增加参数字段 `position`，起止日期分别对应 `from` 和 `to`。
@@ -17,11 +18,14 @@
 * [+] `DatePicker` 组件的 `format` prop 现在可以传入函数，签名为 `function(Date): string`。
 * [+] `DatePicker` 组件的 `shortcuts` 配置中，`to` 字段新增默认值 `0`。
 * [+] `Input` 组件新增 WebKit 自动填充状态的判断，优化样式。
-* [+] `Tabs` 新增动画效果，新增 `block` ui。`Tab` 新增 `status` prop。
-* [^] `Tab` 在路由模式下会自动渲染 `<router-view>`。
-* [^] `resize` 指令底层升级，增加 debounce 优化。
+* [+] `Tabs` 新增 ui 值 `block`，并带动画效果。
+* [+] `Tab` 组件新增 `status` prop。
+* [^] `Tab` 组件在路由模式下会自动渲染 `<router-view>`。
+* [*] `Tab` 组件的 prop `to` 现在可以使用相对路径。
+* [^] `resize` 指令底层升级，切换到 `resize-detecor`，并增加 debounce 优化。
 * [+] `RadioGroup`、`CheckboxGroup`、`RadioButtonGroup` 及 `CheckButtonGroup` 组件的默认 scoped slot 参数增加 `index` 表示选项序号。
 * [^] `numeric` 校验规则现在禁止多余的 `0` 开头的字符串值。
+* [^] `Select` 组件的 scoped slot `label` 现在作用域绑定到完整的已选中的 `options` 项，而非 `{ label }`。
 
 ### 🐞 问题修复
 
@@ -32,6 +36,8 @@
 * [^] `input` 类型组件的错误状态通过组件数据进行传递，而不仅仅依赖于外层 `Field` 的 `class`。
 * [^] 修复了 `Tab` 使用路由模式时设置 `name` prop 会出错的问题。
 * [^] 修复了 `Table` 的 `update:selected` 事件有时未正确抛出的问题。
+* [^] 修复了 `Progress` 组件 prop 校验的问题。
+* [^] 修复了 `OptionGroup` 组件未将 `disabled` 传递给 `Option` 组件的问题。
 
 ## 1.0.0-alpha.12
 
