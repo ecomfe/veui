@@ -52,19 +52,19 @@ export default {
       return mapValues(this.optionMap, 'label')
     },
     selectedOption () {
-      if (this.value === null) {
+      if (this.localValue == null) {
         return null
       }
-      return this.optionMap[this.value]
+      return this.optionMap[this.localValue]
     },
     label () {
-      if (this.value === null) {
+      if (this.localValue == null) {
         return this.placeholder
       }
       if (this.options) {
-        return this.labelMap[this.value]
+        return this.labelMap[this.localValue]
       }
-      let option = this.$refs.options.find(this.value)
+      let option = this.$refs.options.find(this.localValue)
       return option ? option.label : ''
     },
     realOptions () {
@@ -82,7 +82,7 @@ export default {
     return <div
       class={{
         'veui-select': true,
-        'veui-select-empty': this.value === null,
+        'veui-select-empty': this.localValue == null,
         'veui-select-expanded': this.expanded,
         'veui-input-invalid': this.realInvalid
       }}

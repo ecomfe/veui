@@ -182,7 +182,6 @@ export default {
         name: 'name',
         readonly: false,
         disabled: false,
-        selecticon: false,
         clearable: true,
         options: [
           {
