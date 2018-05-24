@@ -67,6 +67,12 @@
         </veui-option-group>
       </veui-select>
     </section>
+    <section>
+      <h2>带搜索框</h2>
+      <veui-select v-model="license" :filter="filter" :options="options">
+        <div slot="before"><veui-input class="filter" ui="tiny" v-model="keyword"/></div>
+      </veui-select>
+    </section>
     <section style="margin-top:500px;">
       <h2>默认分组样式：</h2>
       <veui-select v-bind="optGroupAttrs" v-model="defaultValue5"></veui-select>
@@ -139,6 +145,21 @@ export default {
         return label.indexOf(this.keyword) !== -1
       },
       keyword: '',
+      license: null,
+      options: [
+        {
+          label: 'MIT License',
+          value: 'mit'
+        },
+        {
+          label: 'BSD License',
+          value: 'bsd'
+        },
+        {
+          label: 'Apache License 2.0',
+          value: 'apache2'
+        }
+      ],
       hero: null,
       disabled: true,
       selected: true,
