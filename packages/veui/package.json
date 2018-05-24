@@ -3,6 +3,10 @@
   "version": "1.0.0-alpha.13",
   "description": "Baidu Enterprise UI for Vue.js.",
   "author": "ecomfe",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ecomfe/veui.git"
+  },
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
