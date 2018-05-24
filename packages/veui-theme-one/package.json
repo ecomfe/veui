@@ -2,10 +2,8 @@
   "name": "veui-theme-one",
   "version": "1.0.0-alpha.13",
   "description": "One Design theme for VEUI.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ecomfe/veui.git"
-  },
+  "repository": "ecomfe/veui",
+  "license": "MIT",
   "keywords": [
     "veui",
     "vue",
@@ -16,8 +14,6 @@
     "icons": "node build/svg2json.js && node build/icons.js",
     "lint": "stylelint **/*.less --syntax=less"
   },
-  "author": "ecomfe",
-  "license": "MIT",
   "dependencies": {
     "classlist-polyfill": "^1.2.0",
     "focus-visible": "^4.1.0",

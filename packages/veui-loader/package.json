@@ -3,10 +3,8 @@
   "version": "1.0.0-alpha.13",
   "description": "webpack loader for VEUI.",
   "main": "lib/index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ecomfe/veui.git"
-  },
+  "repository": "ecomfe/veui",
+  "license": "MIT",
   "scripts": {
     "build": "babel src --out-dir lib",
     "test": "npm run build && ava test/index.js",
@@ -17,8 +15,6 @@
     "loader",
     "veui"
   ],
-  "author": "Justineo (justice360@gmail.com)",
-  "license": "MIT",
   "dependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.26.0",
