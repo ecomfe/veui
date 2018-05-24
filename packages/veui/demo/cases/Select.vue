@@ -41,7 +41,7 @@
       </veui-select>
     </section>
     <section>
-      <h2>多级样式：</h2>
+      <h2>内联样式：</h2>
       <veui-select v-model="hero">
         <veui-option-group label="中国" position="popup">
           <veui-option-group label="互联网" position="popup">
@@ -68,9 +68,28 @@
       </veui-select>
     </section>
     <section>
-      <h2>带搜索框</h2>
-      <veui-select v-model="license" :filter="filter" :options="options">
-        <div slot="before"><veui-input class="filter" ui="tiny" v-model="keyword"/></div>
+      <h2>内联样式 2：</h2>
+      <veui-select v-model="phone">
+        <veui-option-group label="国产">
+          <veui-option value="xiaomi" label="小米"/>
+          <veui-option value="oppo" label="OPPO"/>
+          <veui-option value="vivo" label="vivo"/>
+          <veui-option value="smartisan" label="坚果"/>
+        </veui-option-group>
+        <veui-option-group label="非国产" position="popup">
+          <veui-option-group label="美国" position="popup">
+            <veui-option value="apple" label="Apple"/>
+            <veui-option value="google" label="Google"/>
+          </veui-option-group>
+          <veui-option-group label="日本" position="popup">
+            <veui-option value="sharp" label="夏普"/>
+            <veui-option value="sony" label="索尼"/>
+          </veui-option-group>
+          <veui-option-group label="韩国" position="popup">
+            <veui-option value="samsung" label="三星"/>
+            <veui-option value="lg" label="LG"/>
+          </veui-option-group>
+        </veui-option-group>
       </veui-select>
     </section>
     <section style="margin-top:500px;">
@@ -105,7 +124,7 @@
       <veui-select v-bind="optGroupAttrs" :options="groupedOpts" v-model="defaultValue9"></veui-select>
     </section>
     <section>
-      <h2>内联组件嵌套：</h2>
+      <h2>内联样式 3：</h2>
       <veui-select v-model="defaultValue10" clearable>
         <veui-option-group label="字母">
           <veui-option value="A" label="选项 A"/>
@@ -145,21 +164,7 @@ export default {
         return label.indexOf(this.keyword) !== -1
       },
       keyword: '',
-      license: null,
-      options: [
-        {
-          label: 'MIT License',
-          value: 'mit'
-        },
-        {
-          label: 'BSD License',
-          value: 'bsd'
-        },
-        {
-          label: 'Apache License 2.0',
-          value: 'apache2'
-        }
-      ],
+      phone: null,
       hero: null,
       disabled: true,
       selected: true,
