@@ -5,8 +5,8 @@
     "build-components": "cd packages/veui && npm run components && npm run build && cd ../..",
     "build-plugin": "cd packages/babel-plugin-veui && npm run build && cd ../..",
     "build-loader": "cd packages/veui-loader && npm run build && cd ../..",
-    "build": "cd packages/veui && npm run build && cd ../babel-plugin-veui && npm run build && cd ../..",
-    "bootstrap": "npm i && lerna bootstrap"
+    "build": "lerna run build",
+    "bootstrap": "npm i && lerna bootstrap && npm run build-plugin && npm run build-loader"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
