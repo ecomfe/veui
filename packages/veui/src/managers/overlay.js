@@ -356,8 +356,8 @@ export class Tree {
       if (!nextTail) {
         this.fixLink({
           node: tail,
-          groupIndex: node.childrenGroup.length - 1,
-          childIndex: last(node.childrenGroup).children.length - 1,
+          groupIndex: tail.parent.childrenGroup.length - 1,
+          childIndex: last(tail.parent.childrenGroup).children.length - 1,
           fixDirection: 2
         })
       }
