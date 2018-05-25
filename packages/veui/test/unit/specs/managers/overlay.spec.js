@@ -421,6 +421,29 @@ describe('managers/overlay', () => {
         expect(tree.nodeMap[nodeHandle5.id].node.zIndex).toBe(104)
         expect(tree.nodeMap[nodeHandle6.id].node.zIndex).toBe(105)
       })
+
+      it('should properly set the tail node\'s next node.', () => {
+        let tree = new Tree()
+
+        let nodeHandle2 = tree.createNode()
+        let nodeHandle3 = tree.createNode({ parentId: nodeHandle2.id })
+        let nodeHandle4 = tree.createNode({ parentId: nodeHandle3.id })
+        tree.createNode({
+          parentId: nodeHandle4.id,
+          priority: 1
+        })
+        tree.createNode({
+          parentId: nodeHandle4.id,
+          priority: 1
+        })
+        let nodeHandle7 = tree.createNode({
+          parentId: nodeHandle4.id,
+          priority: 1
+        })
+
+        nodeHandle2.toTop()
+        expect(tree.nodeMap[nodeHandle7.id].node.nextNode).toBe(null)
+      })
     })
   })
 })
