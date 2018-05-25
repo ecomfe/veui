@@ -10,10 +10,6 @@ export default {
         position: 'bottom left',
         constraints: [
           {
-            to: 'scrollParent',
-            attachment: 'together'
-          },
-          {
             to: 'window',
             attachment: 'together'
           }
