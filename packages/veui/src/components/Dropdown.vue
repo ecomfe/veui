@@ -29,7 +29,10 @@
     <div
       ref="box"
       class="veui-dropdown-options"
-      v-outside:button="close"
+      v-outside="{
+        outsideRefs: ['button'],
+        handler: close
+      }"
       tabindex="-1"
       role="menu"
       :ui="ui"
@@ -82,6 +85,11 @@ export default {
       default: false
     },
     options: Array
+  },
+  data () {
+    return {
+      outsideRefs: ['button']
+    }
   },
   methods: {
     handleSelect (value) {
