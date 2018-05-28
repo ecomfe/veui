@@ -8,10 +8,5 @@ config.defaults({
     success: 'check-circle-o-large',
     info: 'info-circle-o-large',
     error: 'cross-circle-o-large'
-  },
-  ui: {
-    type: {
-      values: ['success', 'error', 'info']
-    }
   }
 }, 'alertbox')
