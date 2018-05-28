@@ -48,7 +48,7 @@
                 <!-- 选中的时候， hover 上去应该展示的图标 -->
                 <veui-icon
                   class="veui-transfer-candidate-icon-selected"
-                  :name="icons.check"
+                  :name="icons.checked"
                   v-else/>
               </div>
             </div>

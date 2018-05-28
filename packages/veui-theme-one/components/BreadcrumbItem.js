@@ -3,6 +3,6 @@ import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    next: 'angle-right-small'
+    separator: 'angle-right-small'
   }
 }, 'breadcrumbitem')

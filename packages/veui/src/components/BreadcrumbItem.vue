@@ -9,7 +9,7 @@
   <span v-else class="veui-breadcrumb-item-current"><slot/></span>
   <span class="veui-breadcrumb-separator">
     <slot name="separator">
-      <veui-icon :name="icons.next"/>
+      <veui-icon :name="icons.separator"/>
     </slot>
   </span>
 </li>

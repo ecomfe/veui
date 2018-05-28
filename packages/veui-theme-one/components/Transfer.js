@@ -6,7 +6,7 @@ import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    check: 'check',
+    checked: 'check',
     select: 'arrow-right',
     remove: 'cross',
     collapsed: 'angle-right',
