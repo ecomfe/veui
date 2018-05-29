@@ -173,7 +173,7 @@ export default {
     return {
       name: 'name',
       value: '测试值',
-      value2: '测试值',
+      value2: null,
       value3: '测试值',
       value4: '测试值',
       valueis: '测试值',

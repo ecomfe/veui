@@ -172,18 +172,18 @@ export default {
     }
   },
   watch: {
-    value (value) {
-      this.localValue = value
+    value (val) {
+      this.localValue = val
     },
-    localValue (value) {
-      this.$emit('input', value)
+    localValue (val) {
+      this.$emit('input', val)
       this.handleInput()
       if (this.hasFocusSuggestMode || this.hasInputSuggestMode) {
         this.$emit('suggest', this.localValue)
       }
     },
-    suggestions (value) {
-      this.localSuggestions = value
+    suggestions (val) {
+      this.localSuggestions = val
     }
   },
   methods: {

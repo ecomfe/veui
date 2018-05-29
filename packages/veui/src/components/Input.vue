@@ -30,6 +30,8 @@
       @focus="handleFocus"
       @blur="handleBlur"
       @input="handleInput"
+      @compositionupdate="handleComposition"
+      @compositionend="handleCompositionEnd"
       @change="$emit('change', $event.target.value, $event)"
     >
   </label>
@@ -89,8 +91,8 @@ export default {
   data () {
     return {
       focused: false,
-      localValue: this.value,
-      compositionValue: this.value,
+      localValue: this.value == null ? '' : this.value,
+      compositionValue: null,
       autofill: false
     }
   },
@@ -111,15 +113,13 @@ export default {
       return !this.realDisabled && !this.realReadonly
     },
     placeholderShown () {
-      return this.compositionValue == null || this.compositionValue === ''
+      // compositionValue 不会是数字 0
+      return !this.compositionValue && (this.value == null || this.value === '')
     }
   },
   watch: {
     value (val) {
-      if (val !== this.localValue) {
-        this.localValue = val
-        this.compositionValue = val
-      }
+      this.localValue = val == null ? '' : val
     }
   },
   methods: {
@@ -128,15 +128,20 @@ export default {
         this.autofill = !!this.$el.querySelector(':-webkit-autofill')
       } catch (e) {}
 
-      // 分3种情况
+      // 分2种情况
       // 1. 感知输入法，触发原生 input 事件就必须向上继续抛出
-      // 2. 不感知输入法
-      //  2.1 vue 底层会对原生 input 的 v-model 做忽略输入法组合态处理，所以 localValue 和 $event.target.value 不同步，只有当 localValue 产生变化时才向上继续抛出
-      //  2.2 在 localValue 没有变化的情况下，原则上不抛出
-      if (this.composition || !this.composition && this.localValue !== this.value) {
+      // 2. 不感知输入法，在没有输入法状态的值的情况下需要向上抛出
+      //
+      // compositionupdate -> compositionend -> input
+      if (this.composition || !this.compositionValue) {
         this.$emit('input', $event.target.value, $event)
       }
-      this.compositionValue = $event.target.value
+    },
+    handleComposition ($event) {
+      this.compositionValue = $event.data
+    },
+    handleCompositionEnd () {
+      this.compositionValue = ''
     },
     handleFocus ($event) {
       this.focused = true

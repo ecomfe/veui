@@ -5,50 +5,50 @@
       <section class="five-sizes">
         <h3>5 种大小：</h3>
         <veui-field ui="micro" label="micro">
-          <veui-input ui="micro" v-model="poem"></veui-input>
+          <veui-input ui="micro" v-model="poem"/>
         </veui-field>
         <veui-field ui="tiny" label="tiny">
-          <veui-input ui="tiny" v-model="poem"></veui-input>
+          <veui-input ui="tiny" v-model="poem"/>
         </veui-field>
         <veui-field ui="small" label="small">
-          <veui-input ui="small" v-model="poem"></veui-input>
+          <veui-input ui="small" v-model="poem"/>
         </veui-field>
         <veui-field label="normal">
-          <veui-input v-model="poem"></veui-input>
+          <veui-input v-model="poem"/>
         </veui-field>
         <veui-field ui="large" label="large">
-          <veui-input ui="large" v-model="poem"></veui-input>
+          <veui-input ui="large" v-model="poem"/>
         </veui-field>
       </section>
 
       <section>
         <h3>事件及功能展示</h3>
         <veui-field label="描述：">
-            <veui-input v-model="key" composition @change="log('change')"></veui-input>
-            <veui-input v-model="key" compositionn readonly></veui-input>
-            <veui-input compositionn v-model="key" :disabled="true"></veui-input>
+            <veui-input v-model="key" composition @change="log('change')" placeholder="默认不感知输入法，这里感知"/>
+            <veui-input v-model="key" compositionn readonly placeholder="默认不感知输入法，这里感知"/>
+            <veui-input compositionn v-model="key" :disabled="true" placeholder="默认不感知输入法，这里感知"/>
         </veui-field>
 
         <veui-field label="姓名：">
-            <veui-input v-model="name" @focus="log('focus')" clearable></veui-input>
-            <veui-input v-model="name" readonly></veui-input>
-            <veui-input v-model="name" disabled></veui-input>
+            <veui-input v-model="name" @focus="log('focus')" clearable placeholder="李云腾"/>
+            <veui-input v-model="name" readonly placeholder="李云腾"/>
+            <veui-input v-model="name" disabled placeholder="李云腾"/>
         </veui-field>
 
         <veui-field label="手机：">
-            <veui-input v-model="phone" select-on-focus @blur="log('blur')"></veui-input>
-            <veui-input v-model="phone" readonly></veui-input>
-            <veui-input v-model="phone" disabled></veui-input>
+            <veui-input v-model="phone" select-on-focus @blur="log('blur')"/>
+            <veui-input v-model="phone" readonly/>
+            <veui-input v-model="phone" disabled/>
         </veui-field>
 
         <veui-field label="密码：">
-            <veui-input v-model="password" type="password" autofocus placeholder="请输入密码" @click="log('click')"></veui-input>
-            <veui-input v-model="password" type="password" placeholder="请输入密码" readonly></veui-input>
-            <veui-input v-model="password" type="password" placeholder="请输入密码" disabled></veui-input>
+            <veui-input v-model="password" type="password" autofocus placeholder="请输入密码" @click="log('click')"/>
+            <veui-input v-model="password" type="password" placeholder="请输入密码" readonly/>
+            <veui-input v-model="password" type="password" placeholder="请输入密码" disabled/>
         </veui-field>
 
         <veui-field label="隐藏：">
-            <veui-span>这里有一个隐藏的&nbsp;input</veui-span><veui-input v-model="hiddenValue" type="hidden"></veui-input>
+            <veui-span>这里有一个隐藏的&nbsp;input</veui-span><veui-input v-model="hiddenValue" type="hidden"/>
         </veui-field>
       </section>
 
@@ -95,9 +95,8 @@ export default {
   },
   data () {
     return {
-      key: '默认忽略输入法，此处不忽略',
-      age: null,
-      name: '李云腾',
+      key: null,
+      name: null,
       phone: '13800138000',
       password: null,
       hiddenValue: '隐藏值',
