@@ -20,7 +20,7 @@
       :stroke-dasharray="circumference" :stroke-dashoffset="circumference * (1 - ratio)"></circle>
   </svg>
   <div v-if="desc" class="veui-progress-desc">
-    <slot v-bind="{ percent, realValue, status }">
+    <slot v-bind="{ percent, value: realValue, status }">
       <veui-icon :name="icons.success" v-if="type === 'circular' && localStatus === 'success'"/>
       <span class="veui-progress-desc-text">{{ valueText }}</span>
     </slot>
