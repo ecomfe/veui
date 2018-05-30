@@ -79,11 +79,23 @@ export default {
       default: 1
     },
     status: String,
+    /**
+     * @deprecated
+     */
+    state: {
+      type: String,
+      validator (val) {
+        if (val != null) {
+          warn('[veui-progress] `state` is deprecated and will be removed in `1.0.0`. Use `status` instead.')
+        }
+        return true
+      }
+    },
     autoSucceed: [Boolean, Number]
   },
   data () {
     return {
-      localStatus: this.status
+      localStatus: this.status || this.state
     }
   },
   computed: {
@@ -157,6 +169,12 @@ export default {
     setStatus (status) {
       this.localStatus = status
       this.$emit('update:status', status)
+      this.$emit('update:state', status)
+    }
+  },
+  created () {
+    if (this.max <= this.min) {
+      warn('[veui-progress] `max` must be larger than `min`.')
     }
   },
   destroy () {
