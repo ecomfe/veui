@@ -4,6 +4,10 @@
 
 * [^] `Progress` 组件的 `state` prop 更名为 `status`。
 
+### 💡 主要变更
+
+* [^] `RegionPicker` 的 `datasource` prop 中的 `id` 字段重命名为 `value`，但 `id` 依然保留，优先使用 `value`。
+
 ### 🐞 问题修复
 
 * [^] 修复了更多在计算浮层层级过程中有时会导致死循环的场景。

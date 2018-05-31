@@ -6,7 +6,6 @@
   aria-multiselectable="true"
   aria-label="地域选择，按 Tab 键在同一层级内导航，按左右箭头键切换层级">
   <div
-    data-id="x"
     class="veui-sr-only"
     tabindex="0"
     @focus="initFocus"></div>
@@ -185,7 +184,7 @@
                     @keydown.down.prevent="focusStep"
                     @keydown.up.prevent="focusStep(false)"
                     @change="checked => toggleNode(group, checked)">
-                    <slot name="label" v-bind="group" :overlay="true" :level="2">
+                    <slot name="label" v-bind="group" overlay :level="2">
                       {{ group.label }}
                       <small v-if="group.children && group.children.length">
                         ({{ group.solidCount }}/{{ group.children.length }})
@@ -295,7 +294,7 @@ export default {
   },
   methods: {
     init () {
-      // { id, label, children, selected, indeterminate, parent }
+      // { id|value, label, children, selected, indeterminate, parent }
       let localDatasource = cloneDeep(this.datasource)
       walk(localDatasource, {
         enter: ({ node, parent }) => {
@@ -303,6 +302,11 @@ export default {
           node.solidCount = 0 // deteminately selected child count
           node.softCount = 0 // indeterminately selected child count
           node.indeterminate = false
+
+          // make `value` & `id` both acceptable
+          if ('value' in node) {
+            node.id = node.value
+          }
 
           if (parent) {
             node.parent = parent
@@ -312,7 +316,7 @@ export default {
         exit: ({ node, parent }) => {
           if (!node.id && !(node.children && node.children.length)) {
             // invalid node
-            warn(`[veui-region-picker] Invalid region tree node '${node.label}'. Provide \`id\`, \`children\` or both.`)
+            warn(`[veui-region-picker] Invalid region tree node '${node.label}'. Provide \`value\`, \`children\` or both.`)
             return
           }
 
