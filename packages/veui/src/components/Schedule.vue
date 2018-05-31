@@ -4,7 +4,7 @@
     <slot name="header">
       <slot name="shortcuts" v-if="shortcuts && shortcuts.length">
         <div class="veui-schedule-shortcuts">
-          <template v-if="shortcutsDisplay === 'expand'">
+          <template v-if="shortcutsDisplay === 'inline'">
             <button type="button" v-for="({ label }, i) in shortcuts" :key="i"
               @click="selectShortcut(i)"
               :class="{
@@ -92,6 +92,7 @@ import ui from '../mixins/ui'
 import input from '../mixins/input'
 import outside from '../directives/outside'
 import { merge } from '../utils/range'
+import warn from '../utils/warn'
 import config from '../managers/config'
 import { normalizeClass, keepOwn } from '../utils/helper'
 import Checkbox from './Checkbox'
@@ -105,6 +106,11 @@ config.defaults({
 let dayNames = [
   '一', '二', '三', '四', '五', '六', '日'
 ]
+
+function warnDeprecated (oldVal, newVal) {
+  warn('[veui-schedule] `shortcuts-display` value `' + oldVal + '` is renamed to `' +
+    newVal + '` and will be removed in `1.0.0`. Use `' + newVal + '` instead.')
+}
 
 export default {
   name: 'veui-schedule',
@@ -127,7 +133,7 @@ export default {
       }
     },
     hourClass: {
-      type: [String, Object, Function],
+      type: [String, Array, Object, Function],
       default: function () {
         return {}
       }
@@ -146,9 +152,14 @@ export default {
     },
     shortcutsDisplay: {
       type: String,
-      default: 'expand',
+      default: 'inline',
       validator (value) {
-        return includes(['expand', 'collapse'], value)
+        if (value === 'expand') {
+          warnDeprecated('expand', 'inline')
+        } else if (value === 'collapse') {
+          warnDeprecated('collapse', 'popup')
+        }
+        return includes(['expand', 'collapse', 'inline', 'popup'], value)
       }
     },
     statuses: {
