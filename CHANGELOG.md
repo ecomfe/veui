@@ -4,6 +4,7 @@
 
 * [^] `Progress` 组件的 `state` prop 更名为 `status`。`state` 将在 `1.0.0` 移除。
 * [^] `Schedule` 组件的 `shortcuts-display` prop 值 `expand`/`collapse` 分别更名为 `inline`/`popup`。旧的值将在 `1.0.0` 移除。
+* [^] `Schedule` 组件的 `header` slot 更名为 `header-content`，新 `header` slot 现在包括顶部内容的整个容器。
 
 ### 💡 主要变更
 

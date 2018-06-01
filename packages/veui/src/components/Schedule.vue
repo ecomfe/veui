@@ -1,33 +1,38 @@
 <template>
 <div class="veui-schedule" :ui="ui">
-  <div class="veui-schedule-header">
-    <slot name="header">
-      <slot name="shortcuts" v-if="shortcuts && shortcuts.length">
-        <div class="veui-schedule-shortcuts">
-          <template v-if="shortcutsDisplay === 'inline'">
-            <button type="button" v-for="({ label }, i) in shortcuts" :key="i"
-              @click="selectShortcut(i)"
-              :class="{
-                'veui-schedule-shortcut': true,
-                'veui-schedule-shortcut-selected': shortcutChecked[i]
-              }">{{ label }}</button>
-          </template>
-          <template v-else>
-            <veui-dropdown ui="link" label="默认时段" :options="shortcutOptions"
-              @click="selectShortcut"></veui-dropdown>
-          </template>
-        </div>
+  <slot name="header">
+    <div class="veui-schedule-header">
+      <slot name="header-content">
+        <slot name="shortcuts" v-if="shortcuts && shortcuts.length">
+          <div class="veui-schedule-shortcuts">
+            <template v-if="shortcutsDisplay === 'inline'">
+              <button type="button" v-for="({ label }, i) in shortcuts" :key="i"
+                @click="selectShortcut(i)"
+                :class="{
+                  'veui-schedule-shortcut': true,
+                  'veui-schedule-shortcut-selected': shortcutChecked[i]
+                }">{{ label }}</button>
+            </template>
+            <template v-else>
+              <veui-dropdown
+                ui="link"
+                label="默认时段"
+                :options="shortcutOptions"
+                @click="selectShortcut"/>
+            </template>
+          </div>
+        </slot>
+        <slot name="legend">
+          <div class="veui-schedule-legend">
+            <span v-for="(status, i) in statuses" :key="i"
+              class="veui-schedule-legend-item" :class="`veui-schedule-legend-${status.value || status.name}`">
+              <slot name="legend-label" v-bind="status">{{ status.label }}</slot>
+            </span>
+          </div>
+        </slot>
       </slot>
-      <slot name="legend">
-        <div class="veui-schedule-legend">
-          <span v-for="(status, i) in statuses" :key="i"
-            class="veui-schedule-legend-item" :class="`veui-schedule-legend-${status.name}`">
-            <slot name="legend-label" v-bind="status">{{ status.label }}</slot>
-          </span>
-        </div>
-      </slot>
-    </slot>
-  </div>
+    </div>
+  </slot>
   <div class="veui-schedule-body">
     <div class="veui-schedule-head-hour">
       <div class="veui-schedule-head-hour-item" v-for="i in 13" :key="i">{{ `${(i - 1) * 2}:00` }}</div>
