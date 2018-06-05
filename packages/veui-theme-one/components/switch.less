@@ -18,9 +18,9 @@
       &-button {
         .size(@size - @gap * 2);
 
-        .veui-icon {
-          .size(@size / 3 * 2);
-        }
+        // .veui-icon {
+        //   .size(@size / 3 * 2);
+        // }
       }
 
       &-label {
@@ -28,7 +28,7 @@
       }
     }
 
-    &.veui-switch-on .veui-switch-button {
+    :checked + .veui-switch-switcher .veui-switch-button {
       transform: translateX(@size * (@aspect-ratio - 1));
     }
   }
@@ -55,11 +55,11 @@
     transition: background-color .3s, box-shadow .3s;
   }
 
-  &.veui-focused &-switcher {
+  .focus-visible + &-switcher {
     box-shadow: 0 0 0 2px @veui-gray-color-6;
   }
 
-  &-on.veui-focused &-switcher {
+  :checked.focus-visible + &-switcher {
     box-shadow: 0 0 0 2px @veui-brand-color-8;
   }
 
@@ -71,13 +71,13 @@
     border-radius: 50%;
     transition: transform ease .3s;
 
-    .veui-icon {
-      .absolute(50%, _, _, 50%);
-      transform: translate(-50%, -50%);
-    }
+    // .veui-icon {
+    //   .absolute(50%, _, _, 50%);
+    //   transform: translate(-50%, -50%);
+    // }
   }
 
-  &-on &-switcher {
+  :checked + &-switcher {
     background-color: @veui-brand-color;
   }
 

@@ -23,7 +23,7 @@
 import { Switch } from 'veui'
 
 export default {
-  name: 'Switch',
+  name: 'switch-demo',
   components: {
     'veui-switch': Switch
   },
