@@ -8,7 +8,8 @@
 
 ### 💡 主要变更
 
-* [^] `RegionPicker` 的 `datasource` prop 中的 `id` 字段重命名为 `value`，但 `id` 依然保留，优先使用 `value`。
+* [^] `RegionPicker` 组件的 `datasource` prop 中的 `id` 字段重命名为 `value`，但 `id` 依然保留，优先使用 `value`。
+* [^] 优化 `Switch` 组件的可访问性。
 
 ### 🐞 问题修复
 

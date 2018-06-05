@@ -3,15 +3,23 @@
   :class="{
     'veui-switch': true,
     'veui-switch-on': localChecked,
-    'veui-switch-disabled': realDisabled || realReadonly
+    'veui-readonly': realReadonly,
+    'veui-disabled': realDisabled,
+    'veui-focused': focused
   }"
   :ui="ui">
   <div class="veui-switch-switcher">
-    <input type="checkbox" v-bind="attrs" :disabled="realDisabled || realReadonly" @change="handleChange($event.target.checked)">
+    <input
+      type="checkbox"
+      v-bind="attrs"
+      :disabled="realDisabled || realReadonly"
+      @change="handleChange($event.target.checked)"
+      @focus="focused = true"
+      @blur="focused = false">
     <span class="veui-switch-button"></span>
   </div>
   <template v-if="$slots.default">
-    <div class="veui-switch-label"><slot/></div>
+    <div class="veui-switch-label" :id="id"><slot/></div>
   </template>
 </label>
 </template>
@@ -45,7 +53,8 @@ export default {
   },
   data () {
     return {
-      localChecked: this.checked
+      localChecked: this.checked,
+      focused: false
     }
   },
   computed: {
