@@ -182,6 +182,12 @@ export default class TranslateHandler extends BaseHandler {
         } else {
           realDistanceX = 0
         }
+      } else {
+        if (options.axis === 'y') {
+          realDistanceX = 0
+        } else if (options.axis === 'x') {
+          realDistanceY = 0
+        }
       }
 
       render(elm, index, realDistanceX, realDistanceY)
