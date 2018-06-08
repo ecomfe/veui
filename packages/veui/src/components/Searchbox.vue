@@ -45,6 +45,7 @@
     </div>
   </veui-input>
   <veui-overlay
+    ref="overlay"
     target="input"
     :options="realOverlayOptions"
     :open="realExpanded"
@@ -184,6 +185,13 @@ export default {
     },
     suggestions (val) {
       this.localSuggestions = val
+    },
+    realSuggestions () {
+      if (this.realExpanded) {
+        this.$nextTick(() => {
+          this.relocate()
+        })
+      }
     }
   },
   methods: {

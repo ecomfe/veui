@@ -38,7 +38,7 @@ export default {
     },
     relocate () {
       if (!this.$refs.overlay) {
-        throw new Error('Can not find tip overlay to relocate')
+        throw new Error('Can not find [this.$refs.overlay] to relocate')
       }
       this.$refs.overlay.relocate()
     }
