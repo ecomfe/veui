@@ -4,7 +4,6 @@ import pkgDir from 'pkg-dir'
 import loaderUtils from 'loader-utils'
 import { kebabCase, camelCase, pascalCase, getJSON, normalize } from './utils'
 import COMPONENTS from 'veui/components.json'
-import { sep } from 'path'
 
 const COMPONENTS_DIRNAME = 'components'
 const EXT_TYPES = {
@@ -263,7 +262,7 @@ function getComponentName (componentPath) {
     return null
   }
   let component = COMPONENTS.find(({ path }) => {
-    path = path.replace(/[/\\]/g, sep)
+    path = normalize(path)
     return path === componentPath || path.split('.')[0] === componentPath
   })
 
