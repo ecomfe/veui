@@ -4,7 +4,6 @@ import {
   uniqueId,
   remove,
   find,
-  isNumber,
   isString,
   keys,
   noop,
@@ -67,10 +66,14 @@ function parseParams (el, arg, modifiers, value, context) {
   let handler
   let trigger = find(TRIGGER_TYPES, triggerType => triggerType in modifiers) || 'click'
   // delay 表示如果鼠标移动到 includeTargets 元素之外多少毫秒之后，才会触发 handler
-  let delay = find(
-    keys(modifiers),
-    key => isNumber(parseInt(key, 10)) && modifiers[key]
-  )
+  let delay = 0
+  find(keys(modifiers), key => {
+    let keyInt = parseInt(key, 10)
+    if (!isNaN(keyInt) && modifiers[key]) {
+      delay = keyInt
+      return true
+    }
+  })
   let excludeSelf = !!modifiers.excludeSelf
 
   // 如果 value 是 Function 的话，其余参数就尽量从 modifier、arg 里面去解析
@@ -94,10 +97,7 @@ function parseParams (el, arg, modifiers, value, context) {
     trigger = normalizedValue.trigger || trigger || 'click'
 
     if ('delay' in normalizedValue) {
-      delay = parseInt(normalizedValue.delay, 10)
-      if (isNaN(delay)) {
-        delay = 0
-      }
+      delay = parseInt(normalizedValue.delay, 10) || 0
     }
 
     if ('excludeSelf' in normalizedValue) {
