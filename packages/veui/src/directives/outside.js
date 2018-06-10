@@ -68,9 +68,8 @@ function parseParams (el, arg, modifiers, value, context) {
   // delay 表示如果鼠标移动到 includeTargets 元素之外多少毫秒之后，才会触发 handler
   let delay = 0
   find(keys(modifiers), key => {
-    let keyInt = parseInt(key, 10)
-    if (!isNaN(keyInt) && modifiers[key]) {
-      delay = keyInt
+    if (/^(0|[1-9]\d*)$/.test(key) && modifiers[key]) {
+      delay = parseInt(key, 10)
       return true
     }
   })
