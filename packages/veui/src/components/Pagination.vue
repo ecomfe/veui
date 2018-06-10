@@ -10,6 +10,7 @@
       <span>每页条数</span>
       <veui-select v-model="realPageSize"
         :options="realPageSizes"
+        overlay-class="veui-pagination-select-overlay"
         :aria-label="`选择每页显示条数，目前为 ${realPageSize} 条`"
         @change="size => $emit('pagesizechange', size)">
       </veui-select>

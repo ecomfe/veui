@@ -18,7 +18,7 @@
       <h2>目标位置模板</h2>
       <p><small>格式和 &lt;router-link&gt; 的 to prop 一样</small></p>
       <p><veui-pagination :page="page" :total="total" ui="advanced"
-        :to="{name: 'Pager', params: { page: ':page'}}"></veui-pagination></p>
+        :to="{name: 'Pagination', params: { page: ':page'}}"></veui-pagination></p>
     </section>
 
     <section>
@@ -31,7 +31,7 @@
       <p><small>仅原生跳转可用</small></p>
       <p><veui-pagination :page="page" :total="total" :to="to" ui="advanced" :native="true"
         @redirect="handlePageRedirect"></veui-pagination></p>
-      <div class="message">{{ fifthPagerMessage }}</div>
+      <div class="message">{{ fifthPaginationMessage }}</div>
     </section>
 
     <section>
@@ -57,13 +57,13 @@ export default {
       to: '/pagination/:page',
       pageSize: 30,
       pageSizes: [30, 60, 100, 200],
-      fifthPagerMessage: ''
+      fifthPaginationMessage: ''
     }
   },
   methods: {
     handlePageRedirect ({page, event}) {
       event.preventDefault()
-      this.fifthPagerMessage = `已阻止你跳转到第${page}页`
+      this.fifthPaginationMessage = `已阻止你跳转到第${page}页`
     }
   },
   mounted () {
