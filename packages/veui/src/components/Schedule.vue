@@ -54,10 +54,16 @@
           <td v-for="(hour, j) in day" :key="j" :class="{ 'veui-schedule-selected': hour.isSelected }">
             <button type="button" :disabled="realDisabled || hour.isDisabled"
               :class="mergeClass({ 'veui-schedule-selected': hour.isSelected }, week[i], j)"
-              :ref="`${week[i]}-${j}`"
+              :ref="`hour-${week[i]}-${j}`"
               @mousedown="handleMousedown(i, j)"
               @mouseenter="handleHover(i, j)"
-              @mouseup="pick()"><slot name="hour" :day="week[i]" :hour="j"/></button>
+              @mouseup="pick"
+              @keydown.space.enter="handleMousedown(i, j)"
+              @keyup.space.enter="pick"
+              @keydown.up.prevent="moveFocus((i + 6) % 7, j)"
+              @keydown.right.prevent="moveFocus(i, (j + 25) % 24)"
+              @keydown.down.prevent="moveFocus((i + 1) % 7, j)"
+              @keydown.left.prevent="moveFocus(i, (j + 23) % 24)"><slot name="hour" :day="week[i]" :hour="j"/></button>
           </td>
         </tr>
       </table>
@@ -239,7 +245,7 @@ export default {
       if (!current) {
         return null
       }
-      return `${current.day}-${current.hour}`
+      return `hour-${current.day}-${current.hour}`
     },
     currentLabel () {
       let current = this.current
@@ -366,6 +372,15 @@ export default {
         this.$delete(this.localSelected, day)
       }
       this.$emit('select', this.localSelected)
+    },
+    moveFocus (dayIndex, hour) {
+      let day = this.week[dayIndex]
+      this.handleHover(dayIndex, hour)
+
+      let el = (this.$refs[`hour-${day}-${hour}`] || [])[0]
+      if (el && typeof el.focus === 'function') {
+        el.focus()
+      }
     }
   }
 }
