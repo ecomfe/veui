@@ -101,6 +101,7 @@
                   @keydown.left.prevent="moveFocus(p.view, -1)"
                   :autofocus="day.isFocus"
                   :aria-label="getLocaleString(day)"
+                  :aria-current="day.isToday ? 'date' : null"
                   :tabindex="day.isFocus ? null : '-1'">
                   <slot name="date" v-bind="{
                     year: day.year,

@@ -1,8 +1,16 @@
 <template>
 <div class="veui-steps" :ui="ui">
-  <veui-link v-for="(step, index) in steps" class="veui-steps-step" :class="{
+  <veui-link
+    v-for="(step, index) in steps"
+    class="veui-steps-step"
+    :class="{
       'veui-steps-current': index === current
-    }" :to="step.to" fallback="div" :key="index" @click="$emit('click', index)">
+    }"
+    :to="step.to"
+    :key="index"
+    :aria-current="index === current ? 'step' : null"
+    fallback="div"
+    @click="$emit('click', index)">
     <slot v-bind="step" :index="index">
       <div class="veui-steps-step-index">
         <slot name="index" v-bind="step" :index="index">
