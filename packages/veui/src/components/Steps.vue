@@ -1,5 +1,8 @@
 <template>
-<div class="veui-steps" :ui="ui">
+<div
+  class="veui-steps"
+  :ui="ui"
+  role="list">
   <veui-link
     v-for="(step, index) in steps"
     class="veui-steps-step"
@@ -8,8 +11,12 @@
     }"
     :to="step.to"
     :key="index"
-    :aria-current="index === current ? 'step' : null"
     fallback="div"
+    role="listitem"
+    :aria-current="index === current ? 'step' : null"
+    :aria-label="`步骤 ${index}`"
+    :aria-posinset="String(index + 1)"
+    :aria-setsize="String(steps.length)"
     @click="$emit('click', index)">
     <slot v-bind="step" :index="index">
       <div class="veui-steps-step-index">
@@ -19,8 +26,12 @@
         </slot>
       </div>
       <div class="veui-steps-step-content" v-if="step.label">
-        <h3 class="veui-steps-step-label"><slot name="label" v-bind="step" :index="index">{{ step.label }}</slot></h3>
-        <p v-if="step.desc" class="veui-steps-step-desc"><slot name="desc" v-bind="step" :index="index">{{ step.desc }}</slot></p>
+        <h3 class="veui-steps-step-label">
+          <slot name="label" v-bind="step" :index="index">{{ step.label }}</slot>
+        </h3>
+        <p v-if="step.desc" class="veui-steps-step-desc">
+          <slot name="desc" v-bind="step" :index="index">{{ step.desc }}</slot>
+        </p>
       </div>
     </slot>
   </veui-link>
