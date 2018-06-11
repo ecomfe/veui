@@ -68,9 +68,9 @@ function parseParams (el, arg, modifiers, value, context) {
   // delay 表示如果鼠标移动到 includeTargets 元素之外多少毫秒之后，才会触发 handler
   let delay = 0
   find(keys(modifiers), key => {
-    let keyInt = parseInt(key, 10)
-    if (!isNaN(keyInt) && modifiers[key]) {
-      delay = keyInt
+    let keyNum = Number(key)
+    if (!isNaN(keyNum) && keyNum >= 0 && modifiers[key]) {
+      delay = keyNum
       return true
     }
   })
@@ -97,7 +97,8 @@ function parseParams (el, arg, modifiers, value, context) {
     trigger = normalizedValue.trigger || trigger || 'click'
 
     if ('delay' in normalizedValue) {
-      delay = parseInt(normalizedValue.delay, 10) || 0
+      let delayNum = Number(normalizedValue.delay) || 0
+      delay = delayNum >= 0 ? delayNum : 0
     }
 
     if ('excludeSelf' in normalizedValue) {
