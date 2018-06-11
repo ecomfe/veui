@@ -148,12 +148,10 @@
       line-height: @digit-height;
       font-size: @digit-size;
 
-      a,
-      span {
+      .veui-link {
         display: inline-block;
         min-width: @button-width;
         .padding(_, 6px);
-        cursor: pointer;
 
         &:hover {
           color: @veui-text-color-strong;
@@ -162,6 +160,10 @@
         &.focus-visible {
           color: @veui-link-color-active;
         }
+      }
+
+      span.veui-link {
+        cursor: default;
       }
     }
 

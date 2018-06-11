@@ -25,7 +25,7 @@
         }"
         :key="index">
         <veui-link
-          :to="item.href"
+          :to="item.page === page ? null : item.href"
           :native="native"
           :aria-current="item.page === page ? 'page' : null"
           :aria-label="`第 ${item.page} 页${item.page === page ? '，当前页' : ''}`"
@@ -230,7 +230,9 @@ export default {
   },
   methods: {
     handleRedirect (page, event) {
-      this.$emit('redirect', {page, event})
+      if (page !== this.page) {
+        this.$emit('redirect', {page, event})
+      }
     },
 
     getPageIndicator (page, isMore = false) {
