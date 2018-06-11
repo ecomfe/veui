@@ -1,5 +1,11 @@
 <template>
-<div class="veui-schedule" :ui="ui">
+<div
+  class="veui-schedule"
+  :ui="ui"
+  role="application"
+  aria-label="时段选择"
+  :aria-disabled="realDisabled"
+  :aria-readonly="realReadonly">
   <slot name="header">
     <div class="veui-schedule-header">
       <slot name="header-content">
@@ -17,13 +23,14 @@
               <veui-dropdown
                 ui="link"
                 label="默认时段"
+                aria-label="选择预设时段"
                 :options="shortcutOptions"
                 @click="selectShortcut"/>
             </template>
           </div>
         </slot>
         <slot name="legend">
-          <div class="veui-schedule-legend">
+          <div class="veui-schedule-legend" aria-hidden="true">
             <span v-for="(status, i) in statuses" :key="i"
               class="veui-schedule-legend-item" :class="`veui-schedule-legend-${status.value || status.name}`">
               <slot name="legend-label" v-bind="status">{{ status.label }}</slot>
@@ -39,9 +46,13 @@
     </div>
     <div class="veui-schedule-head-day">
       <div class="veui-schedule-head-day-item" v-for="i in 7" :key="i">
-        <veui-checkbox ui="small" :indeterminate="dayChecked[i - 1].indeterminate"
-          :checked="dayChecked[i - 1].checked" @change="toggleDay(week[i - 1], !dayChecked[i - 1].checked)">
-          {{ `${dayNames[i - 1]}` }}
+        <veui-checkbox
+          ui="small"
+          :indeterminate="dayChecked[i - 1].indeterminate"
+          :checked="dayChecked[i - 1].checked"
+          :aria-label="`选择星期${dayNames[i - 1]}全天`"
+          @change="toggleDay(week[i - 1], !dayChecked[i - 1].checked)">
+          {{ dayNames[i - 1] }}
         </veui-checkbox>
       </div>
     </div>
@@ -55,6 +66,8 @@
             <button type="button" :disabled="realDisabled || hour.isDisabled"
               :class="mergeClass({ 'veui-schedule-selected': hour.isSelected }, week[i], j)"
               :ref="`hour-${week[i]}-${j}`"
+              :tabindex="i === 0 && j === 0 ? '0' : '-1'"
+              :aria-label="getDayLabel(i, j, hour)"
               @mousedown="handleMousedown(i, j)"
               @mouseenter="handleHover(i, j)"
               @mouseup="pick"
@@ -114,7 +127,7 @@ config.defaults({
   shortcuts: []
 }, 'schedule')
 
-let dayNames = [
+const DAY_NAMES = [
   '一', '二', '三', '四', '五', '六', '日'
 ]
 
@@ -199,7 +212,7 @@ export default {
   },
   computed: {
     dayNames () {
-      return [...dayNames]
+      return [...DAY_NAMES]
     },
     dayChecked () {
       return this.week.map(day => {
@@ -381,6 +394,10 @@ export default {
       if (el && typeof el.focus === 'function') {
         el.focus()
       }
+    },
+    getDayLabel (dayIndex, hour, state) {
+      let dayName = DAY_NAMES[dayIndex]
+      return `星期${dayName}，${hour}:00–${hour + 1}:00，${state.isSelected ? '已选择' : '未选择'}`
     }
   }
 }
