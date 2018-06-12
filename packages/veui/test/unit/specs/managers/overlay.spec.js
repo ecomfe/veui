@@ -445,5 +445,17 @@ describe('managers/overlay', () => {
         expect(tree.nodeMap[nodeHandle7.id].node.nextNode).toBe(null)
       })
     })
+
+    it('should properly fix the broken nodes\' previous node.', () => {
+      let tree = new Tree()
+
+      let nodeHandle2 = tree.createNode()
+      tree.createNode({ parentId: nodeHandle2.id })
+      tree.createNode({ parentId: nodeHandle2.id })
+      let nodeHandle3 = tree.createNode({ parentId: nodeHandle2.id })
+      let nodeHandle4 = tree.createNode({ priority: 100 })
+
+      expect(tree.nodeMap[nodeHandle4.id].node.previousNode).toBe(tree.nodeMap[nodeHandle3.id].node)
+    })
   })
 })

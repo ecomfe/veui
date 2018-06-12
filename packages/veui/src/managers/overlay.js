@@ -537,7 +537,8 @@ export class Tree {
     if (groupIndex > 0) {
       findLast(node.parent.childrenGroup.slice(0, groupIndex), (group) => {
         if (group.children.length) {
-          targetNode = last(group.children)
+          let lastChild = last(group.children)
+          targetNode = lastChild.tail || lastChild
           return true
         }
       })
