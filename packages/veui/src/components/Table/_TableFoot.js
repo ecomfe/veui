@@ -14,10 +14,10 @@ export default {
     return (
       <tfoot>
         <tr>
-          {this.table.selectable ? <th></th> : ''}
+          {this.table.selectable ? <th></th> : null}
           {
             this.columns.map(col => (
-              <th class={col.align ? `veui-table-column-${col.align}` : ''}>{col.renderFoot()}</th>
+              <th class={col.align ? `veui-table-column-${col.align}` : null}>{col.renderFoot()}</th>
             ))
           }
         </tr>

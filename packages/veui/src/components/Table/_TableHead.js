@@ -26,20 +26,29 @@ export default {
         <tr>
           {
             this.selectable
-              ? <th><div class="veui-table-cell">
+              ? <th scope="col" role="columnheader"><div class="veui-table-cell">
                 {
                   this.selectMode === 'multiple'
                     ? <veui-checkbox checked={this.selectStatus !== 'none'}
                       disabled={!this.data.length}
                       indeterminate={this.selectStatus === 'partial'}
-                      onChange={checked => { this.table.select(checked) }}/>
+                      onChange={checked => { this.table.select(checked) }}
+                      aria-label={this.checked ? '全部移除' : '全部添加'}/>
                     : null
                 }</div></th>
               : null
           }
           {
             this.columns.map(col => (
-              <th class={col.align ? `veui-table-column-${col.align}` : null}>
+              <th
+                class={col.align ? `veui-table-column-${col.align}` : null}
+                scope="col"
+                role="columnheader"
+                aria-sort={
+                  this.table.orderBy === col.field && this.table.order
+                    ? `${this.table.order}ending`
+                    : false
+                }>
                 <div class="veui-table-cell">{col.renderHead()}</div>
                 {
                   col.sortable
@@ -55,5 +64,13 @@ export default {
         </tr>
       </thead>
     )
+  },
+  methods: {
+    getAriaSort (order) {
+      if (!order) {
+        return null
+      }
+      return order === 'asc' ? 'ascending' : 'descending'
+    }
   }
 }

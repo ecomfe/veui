@@ -61,7 +61,13 @@ export default {
         return []
       }
     },
-    order: [String, Boolean],
+    order: {
+      type: [String, Boolean],
+      default: false,
+      validator (val) {
+        return val === false || includes(['asc', 'desc'], val)
+      }
+    },
     orderBy: String,
     columnFilter: Array
   },

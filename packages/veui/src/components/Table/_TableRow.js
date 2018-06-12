@@ -44,13 +44,17 @@ export default {
     return <tr class={{ 'veui-table-selected-row': checked }}>
       {
         this.selectable && data
-          ? <td {...data}><div class="veui-table-cell">
+          ? <td role="cell" {...data}><div class="veui-table-cell">
             {
               this.selectMode === 'multiple'
-                ? <veui-checkbox checked={checked}
-                  onChange={checked => { this.table.select(checked, index) }}/>
-                : <veui-radio checked={checked}
-                  onChange={checked => { this.table.select(checked, index) }}/>
+                ? <veui-checkbox
+                  checked={checked}
+                  onChange={checked => { this.table.select(checked, index) }}
+                  aria-label={checked ? '移除本行' : '添加本行'}/>
+                : <veui-radio
+                  checked={checked}
+                  onChange={checked => { this.table.select(checked, index) }}
+                  aria-label="选择本行"/>
             }
           </div></td>
           : null
@@ -59,7 +63,10 @@ export default {
         this.columns.map(col => {
           let data = this.getCellSpan(col)
           return data
-            ? <td class={col.align ? `veui-table-column-${col.align}` : null} {...data}>
+            ? <td
+              class={col.align ? `veui-table-column-${col.align}` : null}
+              role="cell"
+              {...data}>
               <div class="veui-table-cell">{col.renderBody({ ...item, item, index })}</div>
             </td>
             : null
