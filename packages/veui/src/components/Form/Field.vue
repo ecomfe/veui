@@ -9,16 +9,16 @@
     'veui-field-required': isRequired
   }"
 >
-  <span v-if="label || $slots.label" class="veui-form-label">
+  <div v-if="label || $slots.label" class="veui-form-label">
     <slot name="label"><veui-label>{{ label }}</veui-label></slot>
-  </span>
+  </div>
   <slot/>
-  <span v-if="tip || $slots.tip" class="veui-form-tip"><slot name="tip">{{ tip }}</slot></span>
-  <p
+  <div v-if="tip || $slots.tip" class="veui-form-tip"><slot name="tip">{{ tip }}</slot></div>
+  <div
     v-if="!validity.valid && !!validity.message"
     class="veui-field-error"
     :title="validity.message"
-  ><veui-icon :name="icons.alert"/>{{ validity.message }}</p>
+  ><veui-icon :name="icons.alert"/>{{ validity.message }}</div>
 </div>
 </template>
 
