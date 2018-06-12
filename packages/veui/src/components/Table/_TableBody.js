@@ -19,9 +19,12 @@ export default {
       <tbody>
         {
           this.data.length
-            ? this.data.map((item, index) => <veui-table-row index={ index }></veui-table-row>)
+            ? this.data.map((item, index) => <veui-table-row index={index}/>)
             : <tr>
-              <td class="veui-table-no-data" colspan={(this.selectable ? 1 : 0) + this.columns.length}>
+              <td
+                class="veui-table-no-data"
+                colspan={(this.selectable ? 1 : 0) + this.columns.length}
+                role="cell">
                 <div class="veui-table-cell">{this.$slots['no-data'] || '没有数据'}</div>
               </td>
             </tr>
