@@ -64,13 +64,5 @@ export default {
         </tr>
       </thead>
     )
-  },
-  methods: {
-    getAriaSort (order) {
-      if (!order) {
-        return null
-      }
-      return order === 'asc' ? 'ascending' : 'descending'
-    }
   }
 }
