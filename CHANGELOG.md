@@ -9,7 +9,9 @@
 ### 💡 主要变更
 
 * [^] `RegionPicker` 组件的 `datasource` prop 中的 `id` 字段重命名为 `value`，但 `id` 依然保留，优先使用 `value`。
-* [^] 优化 `Switch` 组件的可访问性。
+* [^] 优化了 `outside` 指令解析数字值的逻辑。
+* [^] 为 `Pagination` 组件内的 `Select` 组件新增了 `overlay-class` 定义，方便自定义样式。
+* [^] 优化了 `Switch`、`Steps`、`Schedule`、`Table`、`Fieldset` 等组件的可访问性，实现了键盘交互。
 
 ### 🐞 问题修复
 
@@ -17,6 +19,7 @@
 * [^] 去除了 `dropdown` mixin 中 多余的默认 `overlay-options` 约束条件，修正某些场景下的浮层展开的默认方向。
 * [^] 修复了 `Input` 组件初始值为 `null` 时使用输入法会失效的问题。
 * [^] 现在 `Searchbox` 组件在 `suggestions` 变化时会自动更新浮层位置。
+* [^] 修复了点击 `Label` 组件激活同 `Field` 下的输入组件时，没有考虑组件禁用/只读状态的问题。
 
 ## 1.0.0-alpha.13
 

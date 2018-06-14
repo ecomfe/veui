@@ -1,5 +1,5 @@
 <template>
-<label class="veui-label" :ui="ui" @click="findLabeledInput"><slot/></label>
+<label class="veui-label" :ui="ui" @click="activateInput"><slot/></label>
 </template>
 
 <script>
@@ -11,7 +11,14 @@ export default {
   name: 'veui-label',
   mixins: [ui],
   methods: {
-    findLabeledInput () {
+    /**
+     * Why not implement this in the `Field` component?
+     *
+     * Basically it should, but this make it hard if we overwrite `label` slot
+     * when we are using a `Field` that we have to manually handle `click` events
+     * and then call `activate` method for the `Field`.
+     */
+    activateInput () {
       if (window.getSelection().toString().length) {
         return
       }

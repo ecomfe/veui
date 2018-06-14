@@ -153,6 +153,9 @@ export default {
       this.$refs.input.focus()
     },
     activate () {
+      if (this.realDisabled || this.realReadonly) {
+        return
+      }
       this.$refs.input.focus()
     },
     clear () {
