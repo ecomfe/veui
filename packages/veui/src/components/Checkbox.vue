@@ -106,6 +106,9 @@ export default {
   },
   methods: {
     activate () {
+      if (this.realDisabled || this.realReadonly) {
+        return
+      }
       this.toggleChecked()
     },
     handleChange () {

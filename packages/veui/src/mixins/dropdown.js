@@ -22,6 +22,9 @@ export default {
       this.expanded = false
     },
     activate () {
+      if (this.realDisabled || this.realReadonly) {
+        return
+      }
       this.expanded = true
     }
   },

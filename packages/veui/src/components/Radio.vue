@@ -96,6 +96,12 @@ export default {
       } else {
         this.$refs.box.focus()
       }
+    },
+    activate () {
+      if (this.realDisabled || this.realReadonly) {
+        return
+      }
+      this.localChecked = true
     }
   }
 }

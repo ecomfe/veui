@@ -86,6 +86,12 @@ export default {
     handleChange (checked) {
       this.localChecked = checked
       this.$emit('change', checked)
+    },
+    activate () {
+      if (this.realDisabled || this.realReadonly) {
+        return
+      }
+      this.localChecked = !this.localChecked
     }
   }
 }

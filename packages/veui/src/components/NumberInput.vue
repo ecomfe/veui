@@ -307,6 +307,9 @@ export default {
         return val.toString()
       }
       return round(this.filterLimitValue(val), this.decimalPlace).toFixed(this.decimalPlace)
+    },
+    activate () {
+      this.$ref.input.activate()
     }
   }
 }

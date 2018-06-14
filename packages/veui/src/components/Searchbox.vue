@@ -237,6 +237,9 @@ export default {
       }
     },
     activate () { // for label activation
+      if (this.realDisabled || this.realReadonly) {
+        return
+      }
       this.focus()
     },
     disallowSuggest () {
