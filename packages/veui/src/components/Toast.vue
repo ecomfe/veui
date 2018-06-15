@@ -1,6 +1,10 @@
 <template>
 <transition name="veui-toast">
-  <div :ui="ui" class="veui-toast" :class="`veui-toast-${type}`">
+  <div
+    :ui="ui"
+    class="veui-toast"
+    :class="`veui-toast-${type}`"
+    role="alert">
     <veui-icon class="veui-toast-icon" :name="icons[type]"/>
     <span class="veui-toast-message">{{ message }}</span>
   </div>
