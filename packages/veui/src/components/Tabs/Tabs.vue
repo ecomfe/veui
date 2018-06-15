@@ -265,9 +265,13 @@ export default {
         let end = $event => {
           $event.stopPropagation()
         }
-        tabItem.querySelector('.veui-tabs-item-label').addEventListener('transitionend', end)
-        if (tab.removable) {
-          tabItem.querySelector('.veui-tabs-item-remove').addEventListener('transitionend', end)
+        let label = tabItem.querySelector('.veui-tabs-item-label')
+        let remove = tabItem.querySelector('.veui-tabs-item-remove')
+        if (label) {
+          label.addEventListener('transitionend', end)
+        }
+        if (tab.removable && remove) {
+          remove.addEventListener('transitionend', end)
         }
       })
     },
