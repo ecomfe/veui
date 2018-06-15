@@ -5,7 +5,7 @@
         :class="{'veui-uploader-input-label-disabled': realUneditable ||
           (maxCount > 1 && fileList.length >= maxCount) ||
           (requestMode === 'iframe' && isSubmiting)}"
-        @click="replacingFile = null" ref="label">
+        @click="handleClick" ref="label">
         <slot name="button-label"><veui-icon class="veui-uploader-input-label-icon"
           :name="icons.upload"/>选择文件</slot>
         <input :id="inputId" hidden type="file" ref="input"
@@ -116,7 +116,7 @@
                 (maxCount > 1 && fileList.length >= maxCount) ||
                 isSubmiting)
             }"
-            @click="replacingFile = null"
+            @click="handleClick"
             ref="label"><input :id="inputId" hidden type="file" ref="input"
               @change="handleNewFiles"
               :name="name"
@@ -425,6 +425,10 @@ export default {
     }
   },
   methods: {
+    handleClick () {
+      this.replacingFile = null
+      this.reset()
+    },
     genFileList (value) {
       if (!value) {
         return []
@@ -566,8 +570,6 @@ export default {
       })
     },
     upload (file) {
-      this.reset()
-
       let index = this.fileList.indexOf(file)
 
       this.updateFileList(file, 'uploading')
@@ -624,8 +626,6 @@ export default {
         form.appendChild(this.$refs.input)
         form.submit()
         this.disabledWhenSubmiting = true
-
-        this.reset()
       })
     },
     uploadCallback (data, file) {
