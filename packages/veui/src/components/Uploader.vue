@@ -610,6 +610,7 @@ export default {
     },
     replaceFile (file) {
       this.replacingFile = file
+      this.reset()
     },
     submit (file = this.latestFile) {
       this.currentSubmitingFile = file
