@@ -67,4 +67,46 @@ describe('components/Overlay', () => {
       done()
     })
   })
+
+  it('should cover the previous\'s overlay\'s child overlay.', done => {
+    new Vue({
+      data () {
+        return {
+          parentVisible: false,
+          childVisible: false,
+          nextVisible: false
+        }
+      },
+      render () {
+        return (
+          <div>
+            <Overlay ref="parent" open={this.parentVisible}>
+              <Overlay ref="child" open={this.childVisible} />
+            </Overlay>
+            <Overlay ref="next" open={this.nextVisible}></Overlay>
+          </div>
+        )
+      },
+      mounted () {
+        setTimeout(() => {
+          this.parentVisible = true
+
+          setTimeout(() => {
+            this.nextVisible = true
+
+            setTimeout(() => {
+              this.childVisible = true
+
+              setTimeout(() => {
+                expect(this.$refs.parent.zIndex).toBe(200)
+                expect(this.$refs.child.zIndex).toBe(201)
+                expect(this.$refs.next.zIndex).toBe(202)
+                done()
+              })
+            })
+          })
+        })
+      }
+    }).$mount()
+  })
 })
