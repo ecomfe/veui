@@ -117,7 +117,7 @@ export default {
     },
 
     findParentOverlayId () {
-      let cur = this.$vnode.context
+      let cur = this.$parent
       while (cur) {
         if (cur && this.isOverlay(cur)) {
           return cur.overlayNode.id
