@@ -101,8 +101,14 @@
           </template>
         </tr>
       </table>
-      <veui-tooltip :target="currentRef" position="right" trigger="hover"
-        :delay="0" :interactive="false" ui="small" open>
+      <veui-tooltip
+        :target="currentRef"
+        position="right"
+        trigger="hover"
+        :delay="0"
+        :interactive="false"
+        ui="small"
+        open>
         <slot name="tooltip" v-bind="current">{{ currentLabel }}</slot>
       </veui-tooltip>
     </div>

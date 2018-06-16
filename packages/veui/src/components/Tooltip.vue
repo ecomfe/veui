@@ -23,13 +23,14 @@ export default {
     'veui-overlay': Overlay
   },
   props: {
+    domId: String,
     position: {
       type: String,
       default: 'top'
     },
     target: {
-      validator (v) {
-        return isValidNodesResolver(v)
+      validator (val) {
+        return isValidNodesResolver(val)
       }
     },
     trigger: {
@@ -150,7 +151,11 @@ export default {
           'veui-tooltip-box': true,
           'veui-tooltip-box-transparent': !this.interactive
         })}>
-        <div class="veui-tooltip" ui={this.ui} {...{directives}}>
+        <div
+          class="veui-tooltip"
+          ui={this.ui}
+          role="tooltip"
+          {...{directives}}>
           <div class="veui-tooltip-content">
             { this.$slots.default }
           </div>
