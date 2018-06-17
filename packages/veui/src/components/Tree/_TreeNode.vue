@@ -5,14 +5,14 @@
       <div class="veui-tree-item"
         :class="{'veui-tree-item-expanded': option.expanded}"
         @click="click(option, [], index, depth)">
-        <slot name="item" :option="option" :index="index" :depth="depth">
+        <slot name="item" :item="option" :index="index" :depth="depth">
           <span class="veui-tree-item-expand-switcher"
             v-if="option.children && option.children.length"
             @click.stop="toggle(option, index, depth)">
             <veui-icon :name="icons.collapsed"/>
           </span>
           <div class="veui-tree-item-label">
-            <slot name="item-label" :option="option" :index="index" :depth="depth">{{ option.label }}</slot>
+            <slot name="item-label" :item="option" :index="index" :depth="depth">{{ option.label }}</slot>
           </div>
         </slot>
       </div>
@@ -27,12 +27,12 @@
         <template slot="item" slot-scope="props">
           <slot name="item" v-bind="props">
             <span class="veui-tree-item-expand-switcher"
-              v-if="props.option.children && props.option.children.length"
-              @click.stop="toggle(props.option, props.index, depth + 1)">
+              v-if="props.item.children && props.item.children.length"
+              @click.stop="toggle(props.item, props.index, depth + 1)">
               <veui-icon :name="icons.collapsed"/>
             </span>
             <div class="veui-tree-item-label">
-              <slot name="item-label" v-bind="props">{{ props.option.label }}</slot>
+              <slot name="item-label" v-bind="props">{{ props.item.label }}</slot>
             </div>
           </slot>
         </template>
