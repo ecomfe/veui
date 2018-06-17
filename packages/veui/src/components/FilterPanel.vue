@@ -13,7 +13,7 @@
       <div class="veui-filter-panel-content-main"
         v-if="datasource.length"
         ref="main">
-        <slot :options="filteredDatasource"/>
+        <slot :items="filteredDatasource"/>
       </div>
       <div class="veui-filter-panel-no-data" v-else>
         <slot name="no-data">没数据</slot>
