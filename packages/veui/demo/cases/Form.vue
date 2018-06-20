@@ -253,7 +253,7 @@
           </veui-field>
         </veui-fieldset>
 
-        <veui-field field="hobby" name="hobby" :rules="hobbyRule" label="爱好：" tip="至少选择三个">
+        <veui-field field="hobby" name="hobby" :rules="hobbyRule" label="爱好：" tip="选择则至少选三个">
           <veui-checkboxgroup type="checkbox" :items="storeData4Options.hobbyItems" v-model="storeData4.hobby"></veui-checkboxgroup>
         </veui-field>
 

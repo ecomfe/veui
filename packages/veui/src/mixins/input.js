@@ -1,5 +1,6 @@
 import { getTypedAncestorTracker, isTopMostOfType } from '../utils/helper'
 import '../common/uiTypes'
+import { includes } from 'lodash'
 
 export default {
   uiTypes: ['input'],
@@ -43,8 +44,9 @@ export default {
   methods: {
     realEmit (originalEmit, eventName, data, event) {
       originalEmit.apply(this, Array.prototype.slice.call(arguments, 1))
-      // 过滤掉 vue 内部 hook 的事件，不需要往上处理
-      if (eventName.indexOf('hook:') !== 0) {
+      // 过滤掉 vue 内部 hook 和 .sync 的 update 事件，不需要往上处理
+      let [prefix, name] = eventName.split(':')
+      if (!name || !includes(['hook', 'update'], prefix)) {
         this.formField.$emit('interact', eventName)
       }
     }

@@ -21,7 +21,7 @@ export default {
 
   props: {
     /**
-     * 假设 validator 的 fields 为 ['a,b,c']，triggers 如下，最后生成的结果如下
+     * 假设 validator 的 fields 为 ['a','b','c']，triggers 如下，最后生成的结果如下
      * ['change', 'blur,input,xxx', 'submit'] => a(change), b(blur,input,xxx), c(submit)
      * ['blur']                               => a(blur), b(submit), c(submit)
      * 'blur,input'                           => a(blur,input), b(blur,input), c(blur,input)
