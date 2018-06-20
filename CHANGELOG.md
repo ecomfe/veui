@@ -2,12 +2,12 @@
 
 ### ⚠️ 非兼容性变更
 
-* [^] 调整 `FilterPanel` 组件和 `Tree` 组件的对外接口参数名，统一将 `options/option` 更名为 `items/item`。
+* [^] 调整 `FilterPanel` 组件和 `Tree` 组件的对外接口参数名，统一将 `options`/`option` 更名为 `items`/`item`。
 
 ### 🐞 问题修复
 
-* [^] 修复了 `Uploader` 组件 iframe 模式里上传失败后重试时没有上传文件的 bug。
-* [^] 修复了 `Overlay` 组件中寻找最近父级浮层时，可能跨过太多层级的 bug。
+* [^] 修复了 `Uploader` 组件 `iframe` 模式中上传失败后重试时没有上传文件的问题。
+* [^] 修复了 `Overlay` 组件中寻找最近父级浮层时，可能跨过太多层级的问题。
 * [^] 修复了 `FilterPanel` 组件在不展示搜索框的时候，内容区域高度不正确的问题。
 * [^] 修复了 `Field` 组件内部输入组件交互时数据同步导致校验不正确的问题。
 * [^] 修复了 `Tabs` 组件使用 `label` slot 时的事件绑定问题。
