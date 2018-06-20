@@ -191,10 +191,11 @@ export default {
       return res
     },
     handleInteract (eventName) {
+      // 需要让对应的 data 更新完值之后，再去 validate，都要 nextTick 来保证
       if (this.interactiveRulesMap[eventName]) {
-        this.validate(this.interactiveRulesMap[eventName])
+        this.$nextTick(() => this.validate(this.interactiveRulesMap[eventName]))
       }
-      this.name && this.form.$emit('interact', eventName, this.name)
+      this.name && this.$nextTick(() => this.form.$emit('interact', eventName, this.name))
     },
     hideValidity (fields) {
       if (!fields || !fields.length) {
