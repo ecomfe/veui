@@ -44,32 +44,27 @@ describe('components/Overlay', () => {
   })
 
   it('should generate proper zIndex when the two overlays have parent-child relationship.', done => {
-    const div = document.createElement('div')
-    document.body.appendChild(div)
-
     const vm = new Vue({
-      el: div,
       render () {
         return (
-          <Overlay class="parent-overlay">
-            <Overlay class="child-overlay" />
+          <Overlay class="parent-overlay" ref="parent">
+            <Overlay class="child-overlay" ref="child" />
           </Overlay>
         )
+      },
+      mounted () {
+        expect(+this.$refs.parent.overlayBox.style.zIndex).toBe(200)
+        expect(+this.$refs.child.overlayBox.style.zIndex).toBe(201)
+        vm.$destroy()
+        done()
       }
     })
 
-    setTimeout(() => {
-      const parent = document.querySelector('.parent-overlay').__vue__
-      const child = document.querySelector('.child-overlay').__vue__
-      expect(+parent.$refs.box.style.zIndex).toBe(200)
-      expect(+child.$refs.box.style.zIndex).toBe(201)
-      vm.$destroy()
-      done()
-    })
+    vm.$mount()
   })
 
   it('should cover the previous\'s overlay\'s child overlay.', done => {
-    new Vue({
+    const vm = new Vue({
       data () {
         return {
           parentVisible: false,
@@ -101,6 +96,7 @@ describe('components/Overlay', () => {
                 expect(this.$refs.parent.zIndex).toBe(200)
                 expect(this.$refs.child.zIndex).toBe(201)
                 expect(this.$refs.next.zIndex).toBe(202)
+                vm.$destroy()
                 done()
               })
             })
