@@ -106,10 +106,10 @@ export default {
       if (!this.overlayNode) {
         this.overlayNode = overlayManager.createNode({
           parentId: this.findParentOverlayId(),
-          priority: this.priority
-        })
-        this.overlayNode.$on('zindexchange', zIndex => {
-          this.zIndex = zIndex
+          priority: this.priority,
+          zIndexChangeCallback: zIndex => {
+            this.zIndex = zIndex
+          }
         })
       } else {
         this.overlayNode.appendTo(this.findParentOverlayId(), this.priority)
@@ -201,7 +201,6 @@ export default {
     this.tether = null
 
     let node = this.overlayNode
-    node.$off()
     node.remove()
     this.overlayNode = null
 

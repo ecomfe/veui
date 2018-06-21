@@ -111,7 +111,7 @@
 
     <p>
       <veui-dialog
-        :open.sync="contentAutoHeightDialogVisible">
+        :open.sync="contentAutoHeightDialogVisible"
         title="Adaptive Content Height">
         <p>The following increaming content string will incream the content height slowly:</p>
         <div v-html="dynamicContent"></div>

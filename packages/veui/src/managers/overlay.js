@@ -1,5 +1,4 @@
-import { remove, uniqueId, last, findLast, find } from 'lodash'
-import Vue from 'vue'
+import { remove, uniqueId, last, findLast, find, noop } from 'lodash'
 
 /**
  * 节点，每一个节点会拥有自己的 zIndex 值
@@ -273,7 +272,8 @@ export class Tree {
   nodeMap = {
     [this.rootNode.id]: {
       node: this.rootNode,
-      instance: null
+      instance: null,
+      zIndexChangeCallback: noop
     }
   }
 
@@ -418,44 +418,37 @@ export class Tree {
    * @param {string} parentId 父节点 id
    * @param {number} priority 优先级顺序值
    */
-  createNode ({ parentId = this.rootNode.id, priority } = {}) {
+  createNode ({ parentId = this.rootNode.id, priority, zIndexChangeCallback = noop } = {}) {
     let node = new Node()
 
     let id = node.id
-    let instance = new Vue({
-      data () {
-        return {
-          id
-        }
+    let instance = {
+      id,
+      remove: () => {
+        this.remove(node)
+        this.nodeMap[id] = null
       },
-      methods: {
-        remove: () => {
-          this.remove(node)
-          this.nodeMap[id] = null
-        },
-        appendTo: (parentId, priority) => {
-          this.nodeMap[node.id] = { node, instance }
-          this.moveNode(node, parentId, priority)
-        },
-        toTop: () => {
-          let { groupIndex } = node.parent.getChildIndex(node.id)
-          let targetGroup = node.parent.childrenGroup[groupIndex]
-          let priority = targetGroup.priority
-          let parentNode = node.parent
+      appendTo: (parentId, priority) => {
+        this.nodeMap[node.id] = { node, instance, zIndexChangeCallback }
+        this.moveNode(node, parentId, priority)
+      },
+      toTop: () => {
+        let { groupIndex } = node.parent.getChildIndex(node.id)
+        let targetGroup = node.parent.childrenGroup[groupIndex]
+        let priority = targetGroup.priority
+        let parentNode = node.parent
 
-          let previousNode = node.previousNode
-          this.remove(node)
-          this.appendChild(parentNode, node, priority)
+        let previousNode = node.previousNode
+        this.remove(node)
+        this.appendChild(parentNode, node, priority)
 
-          this.generateTreeZIndex(previousNode)
-        }
+        this.generateTreeZIndex(previousNode)
       }
-    })
-    this.nodeMap[id] = { node, instance }
+    }
+
+    this.nodeMap[id] = { node, instance, zIndexChangeCallback }
     this.insertNode(parentId, node, priority)
-    Vue.nextTick(() => {
-      instance.$emit('zindexchange', node.zIndex)
-    })
+    zIndexChangeCallback(node.zIndex)
 
     return instance
   }
@@ -609,13 +602,12 @@ export class Tree {
           return
         }
 
-        let instance = this.nodeMap[cur.id].instance
         let zIndex = baseZIndex++
         let isEqual = cur.zIndex === zIndex
         cur.zIndex = zIndex
 
         if (!isEqual) {
-          instance.$emit('zindexchange', cur.zIndex)
+          this.nodeMap[cur.id].zIndexChangeCallback(cur.zIndex)
         }
       }
     })

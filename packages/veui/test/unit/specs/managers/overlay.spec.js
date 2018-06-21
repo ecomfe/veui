@@ -240,21 +240,24 @@ describe('managers/overlay', () => {
 
       it('should receive `zindexchange` event', done => {
         let tree = new Tree()
-        let nodeHandle = tree.createNode()
-        nodeHandle.$on('zindexchange', zIndex => {
-          if (zIndex !== 100) {
-            return done(new Error('expect zIndex to be 100'))
+        let nodeHandle = tree.createNode({
+          zIndexChangeCallback: zIndex => {
+            if (zIndex !== 100) {
+              return done(new Error('expect zIndex to be 100'))
+            }
+            done()
           }
-          done()
         })
 
         tree
-          .createNode({ parentId: nodeHandle.id })
-          .$on('zindexchange', zIndex => {
-            if (zIndex !== 101) {
-              return done(new Error('expect zIndex to be 101'))
+          .createNode({
+            parentId: nodeHandle.id,
+            zIndexChangeCallback: zIndex => {
+              if (zIndex !== 101) {
+                return done(new Error('expect zIndex to be 101'))
+              }
+              done()
             }
-            done()
           })
       })
     })
