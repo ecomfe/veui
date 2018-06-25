@@ -71,7 +71,6 @@ export default {
        * @type {Array<fields, message, valid>}
        */
       validities: [],
-      handlers: {},
       initialData: null
     }
   },

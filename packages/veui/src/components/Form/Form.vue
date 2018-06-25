@@ -44,8 +44,7 @@ export default {
   data () {
     return {
       fields: [],
-      errorMap: {},
-      handlers: {}
+      errorMap: {}
     }
   },
 
