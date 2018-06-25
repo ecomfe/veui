@@ -119,7 +119,12 @@ export default {
   },
   watch: {
     value (val) {
-      this.localValue = val == null ? '' : val
+      if (val == null) {
+        this.localValue = ''
+        this.$emit('input', '')
+      } else {
+        this.localValue = val
+      }
     }
   },
   methods: {

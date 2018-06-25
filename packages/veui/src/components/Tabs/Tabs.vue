@@ -8,7 +8,7 @@
     'veui-tabs-right-limited': rightLimited
   }"
   :ui="ui"
-  v-resize="listResizeHandler"
+  v-resize.debounce="listResizeHandler"
 >
   <div :class="{
       'veui-tabs-menu': true,

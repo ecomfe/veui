@@ -1,20 +1,48 @@
 import { addListener, removeListener } from 'resize-detector'
-import { debounce } from 'lodash'
+import { debounce, throttle, isObject, assign } from 'lodash'
 
-function attach (el, { value, oldValue }) {
-  if (!oldValue) {
-    let fn = debounce(value, 150)
-    el.__veui_resize_handler__ = fn
-    addListener(el, fn)
-    return
+const modeMap = {
+  debounce,
+  throttle
+}
+
+function attach (el, { value, oldValue, arg = 150, modifiers }) {
+  let options = {
+    delay: arg,
+    mode: Object.keys(modifiers)[0],
+    handler: value
+  }
+  if (isObject(value)) {
+    assign(options, value)
   }
 
-  if (oldValue && value.toString() !== oldValue.toString()) {
-    let fn = el.__veui_resize_handler__
-    removeListener(el, fn)
-    fn = debounce(value, 150)
-    el.__veui_resize_handler__ = fn
-    addListener(el, fn)
+  let fn = modeMap[options.mode]
+  let cb = fn ? fn(options.handler, options.delay) : options.handler
+
+  if (!oldValue) {
+    el.__veui_resize_handler__ = cb
+    addListener(el, cb)
+  } else {
+    let oldOptions = {
+      delay: 150,
+      mode: null,
+      handler: oldValue
+    }
+
+    if (isObject(oldValue)) {
+      assign(oldOptions, oldValue)
+    }
+
+    let changed = oldValue.delay !== options.delay ||
+      oldValue.mode !== options.mode ||
+      oldValue.handler !== options.handler
+
+    if (changed) {
+      let oldCb = el.__veui_resize_handler__
+      removeListener(el, oldCb)
+      el.__veui_resize_handler__ = cb
+      addListener(el, cb)
+    }
   }
 }
 
