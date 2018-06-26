@@ -4,6 +4,10 @@
 
 * [^] 调整 `FilterPanel` 组件和 `Tree` 组件的对外接口参数名，统一将 `options`/`option` 更名为 `items`/`item`。
 
+### 💡 主要变更
+
+* [+] `Uploader` 组件新增 prop `upload`，`requestMode` 新增可选值 `custom`，设置为该值时，支持通过 `upload` 函数自定义上传过程。
+
 ### 🐞 问题修复
 
 * [^] 修复了 `Uploader` 组件 `iframe` 模式中上传失败后重试时没有上传文件的问题。

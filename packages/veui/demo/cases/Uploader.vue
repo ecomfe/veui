@@ -20,8 +20,8 @@
     </veui-uploader>
     <h2>图片上传模式，上传进度以进度条显示</h2>
     <veui-uploader type="image"
+      request-mode="custom"
       name="file"
-      action="/upload"
       v-model="files1"
       :max-count="3"
       max-size="10mb"
@@ -32,7 +32,9 @@
       @success="onSuccess"
       @failure="onFailure"
       @change="handleChange('files1')"
-      @statuschange="handleStatusChange">
+      @statuschange="handleStatusChange"
+      :upload="upload"
+      :autoupload="false">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
     <h2>图片上传模式，增加额外操作按钮可以直接输入图片地址</h2>
@@ -139,7 +141,31 @@ export default {
       currentImage: null,
       imageSrc: null,
       tooltipTarget: null,
-      tooltipOpen: false
+      tooltipOpen: false,
+      upload (file, onload, onprogress, onerror) {
+        // onload(data: Object, file: Object)`
+        // onprogress(file: Object, event)
+        // onerror(file: Object, event)
+        let xhr = new XMLHttpRequest()
+        file.xhr = xhr
+
+        xhr.upload.onprogress = e => onprogress(file, e)
+        xhr.onload = () => onload(JSON.parse(xhr.responseText), file)
+        xhr.onerror = e => onerror(file, e)
+
+        let formData = new FormData()
+        formData.append(this.name, file)
+
+        for (let key in this.payload) {
+          formData.append(key, this.payload[key])
+        }
+
+        xhr.open('POST', '/upload', true)
+        for (let key in this.headers) {
+          xhr.setRequestHeader(key, this.headers[key])
+        }
+        xhr.send(formData)
+      }
     }
   },
   mixins: [ui],

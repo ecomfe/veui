@@ -159,7 +159,6 @@ import input from '../mixins/input'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
 import bytes from 'bytes'
-import warn from '../utils/warn'
 
 config.defaults({
   'uploader.requestMode': 'xhr',
@@ -191,10 +190,7 @@ export default {
       type: String,
       default: 'file'
     },
-    action: {
-      type: String,
-      required: true
-    },
+    action: String,
     headers: {
       type: Object,
       default () {
@@ -215,6 +211,9 @@ export default {
       type: String,
       default () {
         return config.get('uploader.iframeMode')
+      },
+      validator (value) {
+        return includes(['xhr', 'iframe', 'custom'], value)
       }
     },
     convertResponse: {
@@ -248,20 +247,6 @@ export default {
       type: String,
       default: 'text'
     },
-    /**
-     * @deprecated
-     */
-    autoUpload: {
-      type: Boolean,
-      default: true,
-      validator (val) {
-        // TODO: remove support in 1.0.0
-        if (val === false) {
-          warn('[veui-uploader] `auto-upload` is deprecated and will be removed in `1.0.0`. Use `autoupload` instead.')
-        }
-        return true
-      }
-    },
     autoupload: {
       type: Boolean,
       default: true
@@ -276,6 +261,9 @@ export default {
     compat: {
       type: Boolean,
       default: false
+    },
+    upload: {
+      type: Function
     }
   },
   data () {
@@ -365,9 +353,6 @@ export default {
 
       return 'success'
     },
-    realAutoupload () {
-      return this.autoupload && this.autoUpload
-    },
     files () {
       return this.fileList.map(file => {
         return {...pick(file, ['name', 'src', 'status']), ...file._extra}
@@ -379,49 +364,45 @@ export default {
     }
   },
   mounted () {
-    if (this.requestMode === 'xhr') {
-      return
-    }
+    if (this.requestMode === 'iframe') {
+      if (this.iframeMode === 'postmessage') {
+        this.handlePostmessage = event => {
+          if (!event.source ||
+            !event.source.frameElement ||
+            event.source.frameElement.id !== this.iframeId ||
+            this.canceled) {
+            return
+          }
 
-    if (this.iframeMode === 'postmessage') {
-      this.handlePostmessage = event => {
-        if (!event.source ||
-          !event.source.frameElement ||
-          event.source.frameElement.id !== this.iframeId ||
-          this.canceled) {
-          return
+          // 支持action为绝对路径或相对路径，ie9里的location没有origin
+          let actionOrigin = /^https?:\/\//.test(this.action)
+            ? this.action.match(/^https?:\/\/[^/]*/)[0]
+            : location.origin || (location.protocol + '//' + location.host)
+
+          if (actionOrigin === event.origin) {
+            this.uploadCallback(this.parseData(event.data), this.currentSubmitingFile)
+          }
         }
-
-        // 支持action为绝对路径或相对路径，ie9里的location没有origin
-        let actionOrigin = /^https?:\/\//.test(this.action)
-          ? this.action.match(/^https?:\/\/[^/]*/)[0]
-          : location.origin || (location.protocol + '//' + location.host)
-
-        if (actionOrigin === event.origin) {
-          this.uploadCallback(this.parseData(event.data), this.currentSubmitingFile)
+        window.addEventListener('message', this.handlePostmessage)
+      } else if (this.iframeMode === 'callback') {
+        if (!window[this.callbackNamespace]) {
+          window[this.callbackNamespace] = {}
         }
-      }
-      window.addEventListener('message', this.handlePostmessage)
-    } else if (this.iframeMode === 'callback') {
-      if (!window[this.callbackNamespace]) {
-        window[this.callbackNamespace] = {}
-      }
-      window[this.callbackNamespace][this.callbackFuncName] = data => {
-        if (!this.canceled) {
-          this.uploadCallback(this.parseData(data), this.currentSubmitingFile)
+        window[this.callbackNamespace][this.callbackFuncName] = data => {
+          if (!this.canceled) {
+            this.uploadCallback(this.parseData(data), this.currentSubmitingFile)
+          }
         }
       }
     }
   },
   beforeDestroy () {
-    if (this.requestMode === 'xhr') {
-      return
-    }
-
-    if (this.iframeMode === 'callback') {
-      window[this.callbackNamespace][this.callbackFuncName] = null
-    } else if (this.iframeMode === 'postmessage') {
-      window.removeEventListener('message', this.handlePostmessage)
+    if (this.requestMode === 'iframe') {
+      if (this.iframeMode === 'callback') {
+        window[this.callbackNamespace][this.callbackFuncName] = null
+      } else if (this.iframeMode === 'postmessage') {
+        window.removeEventListener('message', this.handlePostmessage)
+      }
     }
   },
   methods: {
@@ -457,7 +438,7 @@ export default {
       }
 
       let newFiles
-      if (this.requestMode === 'xhr') {
+      if (this.requestMode !== 'iframe') {
         newFiles = [...this.$refs.input.files].filter(file => {
           return this.validateFile(file)
         })
@@ -477,22 +458,24 @@ export default {
       if (this.isReplacing) {
         // type=image时，点击重新上传进入此分支，替换掉原位置的文件replacingFile
         let newFile = newFiles[0]
-        if (this.requestMode === 'xhr' && window.URL) {
+        newFile.toBeUploaded = true
+        if (this.requestMode !== 'iframe' && window.URL) {
           newFile.src = window.URL.createObjectURL(newFile)
-          newFile.toBeUploaded = true
         }
+        this.$nextTick(() => {
+          let replacingIndex = this.fileList.indexOf(this.replacingFile)
+          this.removeFile(this.replacingFile)
+          this.fileList.splice(replacingIndex, 0, null)
+          this.$set(this.fileList, replacingIndex, newFile)
+          this.replacingFile = null
 
-        let replacingIndex = this.fileList.indexOf(this.replacingFile)
-        this.removeFile(this.replacingFile)
-        this.fileList.splice(replacingIndex, 0, newFile)
-        this.replacingFile = null
-
-        if (this.requestMode === 'iframe' && this.realAutoupload) {
-          this.submit(newFile)
-        }
-        if (this.requestMode === 'xhr' && this.realAutoupload) {
-          this.upload(newFile)
-        }
+          if (this.requestMode === 'iframe' && this.autoupload) {
+            this.submit(newFile)
+          }
+          if (this.requestMode !== 'iframe' && this.autoupload) {
+            this.uploadFile(newFile)
+          }
+        })
       } else {
         if (this.maxCount !== 1 && (this.fileList.length + newFiles.length) > this.maxCount) {
           this.error.countOverflow = true
@@ -501,7 +484,7 @@ export default {
 
         let currentFiles = this.fileList.filter(file => file.status !== 'failure')
 
-        let needImageSrc = this.requestMode === 'xhr' && this.type === 'image' && window.URL
+        let needImageSrc = this.requestMode !== 'iframe' && this.type === 'image' && window.URL
         newFiles = newFiles.map(file => {
           if (needImageSrc) {
             file.src = window.URL.createObjectURL(file)
@@ -518,10 +501,10 @@ export default {
           this.fileList = this.fileList.slice(-1)
         }
 
-        if (this.requestMode === 'iframe' && this.realAutoupload) {
+        if (this.requestMode === 'iframe' && this.autoupload) {
           this.submit()
         }
-        if (this.requestMode === 'xhr' && this.realAutoupload) {
+        if (this.requestMode !== 'iframe' && this.autoupload) {
           this.uploadFiles()
         }
       }
@@ -565,48 +548,57 @@ export default {
     uploadFiles () {
       this.fileList.forEach(file => {
         if (file.toBeUploaded) {
-          this.upload(file)
+          this.uploadFile(file)
         }
       })
     },
-    upload (file) {
+    onprogress (file, e) {
       let index = this.fileList.indexOf(file)
-
+      switch (this.progress) {
+        case 'number':
+        case 'bar':
+          file.loaded = e.loaded
+          file.total = e.total
+          this.updateFileList(file)
+          break
+      }
+      this.$emit('progress', this.files[index], index, e)
+    },
+    onload (data, file) {
+      this.uploadCallback(data, file)
+    },
+    onerror (file, e) {
+      let index = this.fileList.indexOf(file)
+      this.showFailureResult({}, file)
+      this.$emit('failure', this.files[index], index)
+    },
+    uploadFile (file) {
       this.updateFileList(file, 'uploading')
-      let xhr = new XMLHttpRequest()
-      file.xhr = xhr
 
-      xhr.upload.onprogress = e => {
-        switch (this.progress) {
-          case 'number':
-          case 'bar':
-            file.loaded = e.loaded
-            file.total = e.total
-            this.updateFileList(file)
-            break
+      if (this.requestMode === 'xhr' && !this.upload) {
+        let xhr = new XMLHttpRequest()
+        file.xhr = xhr
+
+        xhr.upload.onprogress = e => this.onprogress(file, e)
+        xhr.onload = () => this.onload(this.parseData(xhr.responseText), file)
+        xhr.onerror = e => this.onerror(file, e)
+
+        let formData = new FormData()
+        formData.append(this.name, file)
+
+        for (let key in this.payload) {
+          formData.append(key, this.payload[key])
         }
-        this.$emit('progress', this.files[index], index, e)
-      }
-      xhr.onload = () => {
-        this.uploadCallback(this.parseData(xhr.responseText), file)
-      }
-      xhr.onerror = () => {
-        this.showFailureResult({}, file)
-        this.$emit('failure', this.files[index], index)
-      }
-      let formData = new FormData()
-      formData.append(this.name, file)
 
-      for (let key in this.payload) {
-        formData.append(key, this.payload[key])
+        xhr.open('POST', this.queryURL, true)
+        for (let key in this.headers) {
+          xhr.setRequestHeader(key, this.headers[key])
+        }
+        xhr.withCredentials = this.withCredentials
+        xhr.send(formData)
+      } else if (this.requestMode === 'custom' && this.upload) {
+        this.upload(file, this.onload, this.onprogress, this.onerror)
       }
-
-      xhr.open('POST', this.queryURL, true)
-      for (let key in this.headers) {
-        xhr.setRequestHeader(key, this.headers[key])
-      }
-      xhr.withCredentials = this.withCredentials
-      xhr.send(formData)
     },
     replaceFile (file) {
       this.replacingFile = file
@@ -687,7 +679,7 @@ export default {
       if (this.requestMode === 'iframe') {
         this.submit(file)
       } else {
-        this.upload(file)
+        this.uploadFile(file)
       }
     },
     removeFile (file) {
@@ -699,7 +691,10 @@ export default {
       } else {
         this.fileList.splice(this.fileList.indexOf(file), 1)
       }
-      this.$emit('change', this.getValue(true))
+
+      if (!file.toBeUploaded) {
+        this.$emit('change', this.getValue(true))
+      }
 
       if (!this.isReplacing) {
         this.$emit('remove', this.files[index], index)
