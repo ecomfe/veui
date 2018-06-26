@@ -3,7 +3,7 @@
 ### ⚠️ 非兼容性变更
 
 * [^] 调整 `FilterPanel` 组件和 `Tree` 组件的对外接口参数名，统一将 `options`/`option` 更名为 `items`/`item`。
-* [^] 调整 `resize` 指令的默认模式为最细粒度回调，新增 `throttle` 模式，原默认模式需要注明 `debounce`。
+* [^] 调整 `resize` 指令的默认每次都触发回调，增加 `throttle`/`debounce`/`leading` 三个 modifier。
 
 ### 🐞 问题修复
 
