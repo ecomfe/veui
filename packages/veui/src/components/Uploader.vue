@@ -205,15 +205,15 @@ export default {
       type: String,
       default () {
         return config.get('uploader.requestMode')
+      },
+      validator (value) {
+        return includes(['xhr', 'iframe', 'custom'], value)
       }
     },
     iframeMode: {
       type: String,
       default () {
         return config.get('uploader.iframeMode')
-      },
-      validator (value) {
-        return includes(['xhr', 'iframe', 'custom'], value)
       }
     },
     convertResponse: {
@@ -597,7 +597,7 @@ export default {
         xhr.withCredentials = this.withCredentials
         xhr.send(formData)
       } else if (this.requestMode === 'custom' && this.upload) {
-        this.upload(file, this.onload, this.onprogress, this.onerror)
+        this.upload.call(null, file, this.onload, this.onprogress, this.onerror)
       }
     },
     replaceFile (file) {

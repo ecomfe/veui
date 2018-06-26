@@ -33,8 +33,7 @@
       @failure="onFailure"
       @change="handleChange('files1')"
       @statuschange="handleStatusChange"
-      :upload="upload"
-      :autoupload="false">
+      :upload="upload">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
     </veui-uploader>
     <h2>图片上传模式，增加额外操作按钮可以直接输入图片地址</h2>
@@ -142,7 +141,7 @@ export default {
       imageSrc: null,
       tooltipTarget: null,
       tooltipOpen: false,
-      upload (file, onload, onprogress, onerror) {
+      upload: (file, onload, onprogress, onerror) => {
         // onload(data: Object, file: Object)`
         // onprogress(file: Object, event)
         // onerror(file: Object, event)
@@ -152,18 +151,10 @@ export default {
         xhr.upload.onprogress = e => onprogress(file, e)
         xhr.onload = () => onload(JSON.parse(xhr.responseText), file)
         xhr.onerror = e => onerror(file, e)
-
         let formData = new FormData()
-        formData.append(this.name, file)
-
-        for (let key in this.payload) {
-          formData.append(key, this.payload[key])
-        }
+        formData.append('file', file)
 
         xhr.open('POST', '/upload', true)
-        for (let key in this.headers) {
-          xhr.setRequestHeader(key, this.headers[key])
-        }
         xhr.send(formData)
       }
     }
