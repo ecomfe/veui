@@ -1,5 +1,5 @@
 import { addListener, removeListener } from 'resize-detector'
-import { debounce, throttle, isObject, assign } from 'lodash'
+import { debounce, throttle, isObject, assign, isEqual, find } from 'lodash'
 
 const modeMap = {
   debounce,
@@ -7,35 +7,36 @@ const modeMap = {
 }
 
 function attach (el, { value, oldValue, arg = 150, modifiers }) {
+  let mode = find(Object.keys(modeMap), mode => modifiers[mode])
   let options = {
     delay: arg,
-    mode: Object.keys(modifiers)[0],
-    handler: value
+    mode,
+    handler: value,
+    leading: modifiers.leading
   }
   if (isObject(value)) {
     assign(options, value)
   }
 
   let fn = modeMap[options.mode]
-  let cb = fn ? fn(options.handler, options.delay) : options.handler
+  let cb = fn ? fn(options.handler, options.delay, options.leading) : options.handler
 
   if (!oldValue) {
     el.__veui_resize_handler__ = cb
     addListener(el, cb)
   } else {
     let oldOptions = {
-      delay: 150,
-      mode: null,
-      handler: oldValue
+      delay: arg,
+      mode,
+      handler: oldValue,
+      leading: modifiers.leading
     }
 
     if (isObject(oldValue)) {
       assign(oldOptions, oldValue)
     }
 
-    let changed = oldValue.delay !== options.delay ||
-      oldValue.mode !== options.mode ||
-      oldValue.handler !== options.handler
+    let changed = isEqual(oldValue, options)
 
     if (changed) {
       let oldCb = el.__veui_resize_handler__
