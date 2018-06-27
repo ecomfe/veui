@@ -26,7 +26,7 @@ config.defaults({
   'overlay.baseZIndex': 200
 })
 
-overlayManager.setBaseZIndex(config.get('overlay.baseZIndex'))
+overlayManager.setBaseOrder(config.get('overlay.baseZIndex'))
 
 export default {
   name: 'veui-overlay',
@@ -107,8 +107,8 @@ export default {
         this.overlayNode = overlayManager.createNode({
           parentId: this.findParentOverlayId(),
           priority: this.priority,
-          zIndexChangeCallback: zIndex => {
-            this.zIndex = zIndex
+          orderChangeCallback: order => {
+            this.zIndex = order
           }
         })
       } else {
