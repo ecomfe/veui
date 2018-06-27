@@ -78,6 +78,7 @@
     li {
       margin: 0 10px 5px 0;
       position: relative;
+      transition: all .5s;
     }
 
     img {
@@ -360,7 +361,7 @@
     .veui-uploader-list,
     .veui-uploader-list-image {
       li {
-        float: left;
+        display: inline-block;
         margin-right: 10px;
       }
     }
@@ -378,18 +379,12 @@
     }
   }
 
-  &-list-enter,
-  &-list-leave-active {
+  &-list-transition-enter,
+  &-list-transition-leave-to {
     opacity: 0;
   }
-
-  &-list-enter-active,
-  &-list-leave-active {
-    transition: all .3s ease;
-  }
-
-  &-list-move {
-    transition: transform .3s;
+  .veui-uploader-list-transition-leave-active {
+    position: absolute;
   }
 
   &-fade-leave-active {

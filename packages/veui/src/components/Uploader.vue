@@ -25,8 +25,8 @@
         <template v-if="error.countOverflow"><slot name="count-overflow"><veui-icon :name="icons.alert"/>文件的数量超过限制</slot></template>
       </span>
     </div>
-    <ul :class="listClass">
-      <li v-for="(file, index) in fileList" :key="index">
+    <transition-group :class="listClass" tag="ul" name="veui-uploader-list-transition">
+      <li v-for="(file, index) in fileList" :key="`${file.name}-${file.src}`">
         <template v-if="(type === 'file' && file.status !== 'uploading')
           || type === 'image' && (!file.status || file.status === 'success')">
           <slot name="file" :file="getScopeValue(index, file)">
@@ -132,7 +132,7 @@
           <slot name="extra-operation"/>
         </div>
       </li>
-    </ul>
+    </transition-group>
     <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"/></span>
     <span class="veui-uploader-error" v-if="type === 'image'">
       <template v-if="error.typeInvalid"><slot name="type-invalid"><veui-icon :name="icons.alert"/>文件的类型不符合要求</slot></template>
@@ -159,6 +159,7 @@ import input from '../mixins/input'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
 import bytes from 'bytes'
+import warn from '../utils/warn'
 
 config.defaults({
   'uploader.requestMode': 'xhr',
@@ -214,6 +215,20 @@ export default {
       type: String,
       default () {
         return config.get('uploader.iframeMode')
+      }
+    },
+    /**
+     * @deprecated
+     */
+    autoUpload: {
+      type: Boolean,
+      default: true,
+      validator (val) {
+        // TODO: remove support in 1.0.0
+        if (val === false) {
+          warn('[veui-uploader] `auto-upload` is deprecated and will be removed in `1.0.0`. Use `autoupload` instead.')
+        }
+        return true
       }
     },
     convertResponse: {
@@ -353,6 +368,9 @@ export default {
 
       return 'success'
     },
+    realAutoupload () {
+      return this.autoupload && this.autoUpload
+    },
     files () {
       return this.fileList.map(file => {
         return {...pick(file, ['name', 'src', 'status']), ...file._extra}
@@ -462,20 +480,19 @@ export default {
         if (this.requestMode !== 'iframe' && window.URL) {
           newFile.src = window.URL.createObjectURL(newFile)
         }
-        this.$nextTick(() => {
-          let replacingIndex = this.fileList.indexOf(this.replacingFile)
-          this.removeFile(this.replacingFile)
-          this.fileList.splice(replacingIndex, 0, null)
-          this.$set(this.fileList, replacingIndex, newFile)
-          this.replacingFile = null
 
-          if (this.requestMode === 'iframe' && this.autoupload) {
-            this.submit(newFile)
-          }
-          if (this.requestMode !== 'iframe' && this.autoupload) {
-            this.uploadFile(newFile)
-          }
-        })
+        let replacingIndex = this.fileList.indexOf(this.replacingFile)
+        this.removeFile(this.replacingFile)
+        this.fileList.splice(replacingIndex, 0, null)
+        this.$set(this.fileList, replacingIndex, newFile)
+        this.replacingFile = null
+
+        if (this.requestMode === 'iframe' && this.realAutoupload) {
+          this.submit(newFile)
+        }
+        if (this.requestMode !== 'iframe' && this.realAutoupload) {
+          this.uploadFile(newFile)
+        }
       } else {
         if (this.maxCount !== 1 && (this.fileList.length + newFiles.length) > this.maxCount) {
           this.error.countOverflow = true
@@ -501,10 +518,10 @@ export default {
           this.fileList = this.fileList.slice(-1)
         }
 
-        if (this.requestMode === 'iframe' && this.autoupload) {
+        if (this.requestMode === 'iframe' && this.realAutoupload) {
           this.submit()
         }
-        if (this.requestMode !== 'iframe' && this.autoupload) {
+        if (this.requestMode !== 'iframe' && this.realAutoupload) {
           this.uploadFiles()
         }
       }
@@ -552,24 +569,24 @@ export default {
         }
       })
     },
-    onprogress (file, e) {
+    onprogress (file, properties) {
       let index = this.fileList.indexOf(file)
       switch (this.progress) {
         case 'number':
         case 'bar':
-          file.loaded = e.loaded
-          file.total = e.total
+          file.loaded = properties.loaded
+          file.total = properties.total
           this.updateFileList(file)
           break
       }
-      this.$emit('progress', this.files[index], index, e)
+      this.$emit('progress', this.files[index], index, this.requestMode === 'xhr' ? properties : null)
     },
     onload (data, file) {
       this.uploadCallback(data, file)
     },
-    onerror (file, e) {
+    onerror (file, properties) {
       let index = this.fileList.indexOf(file)
-      this.showFailureResult({}, file)
+      this.showFailureResult(properties || {}, file)
       this.$emit('failure', this.files[index], index)
     },
     uploadFile (file) {
