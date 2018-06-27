@@ -7,10 +7,12 @@
 ### 💡 主要变更
 
 * [+] `Uploader` 组件新增 prop `upload`，`requestMode` 新增可选值 `custom`，设置为该值时，支持通过 `upload` 函数自定义上传过程。
+* [+] `Uploader` 组件增加 `transition-group` 动画。
 
 ### 🐞 问题修复
 
 * [^] 修复了 `Uploader` 组件 `iframe` 模式中上传失败后重试时没有上传文件的问题。
+* [^] 修复了 `Uploader` 组件初始化后丢失 `name` 和 `src` 以外的自定义属性丢失的问题。
 * [^] 修复了 `Overlay` 组件中寻找最近父级浮层时，可能跨过太多层级的问题。
 * [^] 修复了 `FilterPanel` 组件在不展示搜索框的时候，内容区域高度不正确的问题。
 * [^] 修复了 `Field` 组件内部输入组件交互时数据同步导致校验不正确的问题。

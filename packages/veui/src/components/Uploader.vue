@@ -434,7 +434,7 @@ export default {
       }
 
       if (Array.isArray(value)) {
-        return cloneDeep(value)
+        return value.map(file => this.getNewFile(file))
       }
 
       if (typeof value === 'string') {
@@ -444,7 +444,16 @@ export default {
         })]
       }
 
-      return isEmpty(value) ? [] : [cloneDeep(value)]
+      return isEmpty(value) ? [] : [this.getNewFile(value)]
+    },
+    getNewFile (file) {
+      let newFile = {}
+
+      let extraInfo = omit(file, ['name', 'src'])
+      if (!isEmpty(extraInfo)) {
+        newFile._extra = cloneDeep(extraInfo)
+      }
+      return assign(newFile, pick(file, ['name', 'src']))
     },
     handleNewFiles () {
       this.canceled = false

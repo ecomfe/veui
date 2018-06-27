@@ -119,11 +119,13 @@ export default {
     let files = [
       {
         name: 'demo-file1.jpg',
-        src: 'https://www.baidu.com/img/bd_logo1.png'
+        src: 'https://www.baidu.com/img/bd_logo1.png',
+        extraInfo: 123
       },
       {
         name: 'demo-file2.gif',
-        src: 'http://nodejs.cn/static/images/logo.svg'
+        src: 'http://nodejs.cn/static/images/logo.svg',
+        extraInfo: 128
       }
     ]
 
@@ -143,8 +145,8 @@ export default {
       tooltipOpen: false,
       upload: (file, onload, onprogress, onerror) => {
         // onload(data: Object, file: Object)`
-        // onprogress(file: Object, event)
-        // onerror(file: Object, event)
+        // onprogress(file: Object, properties: Object({loaded, total}))
+        // onerror(file: Object, properties: Object({reason}))
         let xhr = new XMLHttpRequest()
         file.xhr = xhr
 
