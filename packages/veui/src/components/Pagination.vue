@@ -231,7 +231,7 @@ export default {
   methods: {
     handleRedirect (page, event) {
       if (page !== this.page) {
-        this.$emit('redirect', {page, event})
+        this.$emit('redirect', page, event)
       }
     },
 

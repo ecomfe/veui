@@ -17,7 +17,7 @@
     :aria-label="`步骤 ${index}`"
     :aria-posinset="String(index + 1)"
     :aria-setsize="String(steps.length)"
-    @click="$emit('click', index)">
+    @click="$emit('click', index, $event)">
     <slot v-bind="step" :index="index">
       <div class="veui-steps-step-index">
         <slot name="index" v-bind="step" :index="index">
