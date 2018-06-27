@@ -2,13 +2,18 @@
 
 ### ⚠️ 非兼容性变更
 
+* [^] `Pagination` 组件的 `redirect` 事件回调参数从 `({ page, event })` 调整为 `(page, event)`。
 * [^] 调整 `FilterPanel` 组件和 `Tree` 组件的对外接口参数名，统一将 `options`/`option` 更名为 `items`/`item`。
 * [^] 调整 `resize` 指令的默认每次都触发回调，增加 `throttle`/`debounce`/`leading` 三个 modifier。
 
 ### 💡 主要变更
 
-* [+] `Uploader` 组件新增 prop `upload`，`requestMode` 新增可选值 `custom`，设置为该值时，支持通过 `upload` 函数自定义上传过程。
-* [+] `Uploader` 组件增加 `transition-group` 动画。
+* [+] `Uploader` 组件增加自定义上传模式。`request-mode` 新增可选值 `custom`，设置为该值时，支持通过新增的 prop `upload` 自定义上传函数。
+* [+] `Uploader` 组件增加切换动画。
+
+### 💡 主要变更
+
+* [+] `Steps` 组件的 `click` 事件回调参数增加原生事件对象 `event`，现为 `(index, event)`。
 
 ### 🐞 问题修复
 
@@ -19,6 +24,7 @@
 * [^] 修复了 `Field` 组件内部输入组件交互时数据同步导致校验不正确的问题。
 * [^] 修复了 `Tabs` 组件使用 `label` slot 时的事件绑定问题。
 * [^] 修复了 `Input` 组件父级设置值为 `null` 后，仅格式化本地值为 `''`，未同步 `''` 至父级的问题。
+* [^] 去除了 `Steps` 组件的多余外边距。
 
 ## 1.0.0-alpha.14
 
