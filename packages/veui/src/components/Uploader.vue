@@ -381,6 +381,11 @@ export default {
         .map(file => omit(file, 'status'))
     }
   },
+  created () {
+    if (this.requestMode !== 'custom' && !this.action) {
+      warn('[veui-uploader] `action` is required when `request-mode` is not `custom`.')
+    }
+  },
   mounted () {
     if (this.requestMode === 'iframe') {
       if (this.iframeMode === 'postmessage') {
