@@ -1,7 +1,7 @@
 import { remove, uniqueId, last, findLast, find, noop } from 'lodash'
 
 /**
- * 节点，每一个节点会拥有自己的 zIndex 值
+ * 节点，每一个节点会拥有自己的 order 值
  */
 class Node {
   /**
@@ -18,7 +18,7 @@ class Node {
    * @public
    * @type Node
    */
-  previousNode = null;
+  previous = null;
 
   /**
    * 在前序遍历中的后一个节点
@@ -26,7 +26,7 @@ class Node {
    * @public
    * @type Node
    */
-  nextNode = null;
+  next = null;
 
   /**
    * 子节点按照 priority 的分组，结构示例：
@@ -56,12 +56,12 @@ class Node {
   id = null
 
   /**
-   * zIndex 值
+   * order 值
    *
    * @public
    * @type number
    */
-  zIndex = null
+  order = null
 
   constructor () {
     this.id = uniqueId('overlay-node-id-')
@@ -175,7 +175,7 @@ class Node {
       let removedNodes = remove(group.children, (child, index) => {
         if (child.id === id) {
           child.parent = null
-          child.previousNode = null
+          child.previous = null
 
           groupIndex = i
           childIndex = index
@@ -240,15 +240,15 @@ class Node {
 }
 
 /**
- * 用于计算 zIndex 的树
+ * 用于计算 order 的树
  */
 export class Tree {
   /**
    * 数据结构：
    *
-   * rootNode: {
+   * root: {
    *   parent: null,
-   *   previousNode: null,
+   *   previous: null,
    *   childrenGroup: [
    *     {
    *        priority: 1,
@@ -256,12 +256,12 @@ export class Tree {
    *     }
    *   ],
    *   id: 'overlay-node-id-1',
-   *   zIndex: 200
+   *   order: 200
    * }
    *
    * @type Node
    */
-  rootNode = new Node()
+  root = new Node()
 
   /**
    * 节点 id 到节点实例和节点句柄的映射，主要方便根据节点 id 获取到节点的详细内容。
@@ -270,29 +270,29 @@ export class Tree {
    * @type Object
    */
   nodeMap = {
-    [this.rootNode.id]: {
-      node: this.rootNode,
+    [this.root.id]: {
+      node: this.root,
       instance: null,
-      zIndexChangeCallback: noop
+      orderChangeCallback: noop
     }
   }
 
   /**
-   * 基准 zIndex
+   * 基准 order
    *
    * @private
    * @type number
    */
-  baseZIndex = 100
+  baseOrder = 100
 
   /**
-   * 设置基准 zIndex
+   * 设置基准 order
    *
    * @public
-   * @param {number} zIndex 基准 zIndex
+   * @param {number} [order] 基准 order
    */
-  setBaseZIndex (zIndex) {
-    this.baseZIndex = zIndex
+  setBaseOrder (order) {
+    this.baseOrder = order
   }
 
   /**
@@ -302,18 +302,18 @@ export class Tree {
    * @param {Node} curNode 起始节点
    * @param {Function} callback 迭代回调
    */
-  iterate ({ curNode = this.rootNode, callback } = {}) {
+  iterate ({ curNode = this.root, callback } = {}) {
     let cur = curNode
     do {
       if (callback(cur)) {
         break
       }
-      cur = cur.nextNode
+      cur = cur.next
     } while (cur)
   }
 
   /**
-   * 修复指定节点的 previousNode 和 nextNode 信息
+   * 修复指定节点的 previous 和 next 信息
    *
    * @private
    * @param {Node} [node] 待修复的节点
@@ -323,17 +323,17 @@ export class Tree {
    */
   fixLink ({ node, groupIndex, childIndex, fixDirection = 3 } = {}) {
     if (fixDirection === 1 || fixDirection === 3) {
-      let previousNode = this.findPreviousNode(node, groupIndex, childIndex)
-      previousNode.nextNode = node
-      node.previousNode = previousNode
+      let previous = this.findPreviousNode(node, groupIndex, childIndex)
+      previous.next = node
+      node.previous = previous
     }
 
     if (fixDirection === 2 || fixDirection === 3) {
-      let nextNode = this.findNextNode(node, groupIndex, childIndex)
-      if (nextNode) {
-        nextNode.previousNode = node
+      let next = this.findNextNode(node, groupIndex, childIndex)
+      if (next) {
+        next.previous = node
       }
-      node.nextNode = nextNode
+      node.next = next
     }
   }
 
@@ -341,13 +341,13 @@ export class Tree {
    * 包裹一层 Node#appendChild 方法，加上了修复前后节点的功能。
    *
    * @private
-   * @param {Node} [parentNode] 父节点
+   * @param {Node} [parent] 父节点
    * @param {Node} [node] 待插入节点
    * @param {number} [priority] priority
    * @return {Object} 插入节点的索引信息
    */
-  appendChild (parentNode, node, priority) {
-    let { groupIndex, childIndex } = parentNode.appendChild(node, priority)
+  appendChild (parent, node, priority) {
+    let { groupIndex, childIndex } = parent.appendChild(node, priority)
     this.fixLink({ node, groupIndex, childIndex })
 
     let tail = node.tail
@@ -375,8 +375,8 @@ export class Tree {
    * @return {Object} 索引信息
    */
   remove (node) {
-    let previousBrokenNode = node.previousNode
-    let nextBrokenNode = node.nextNode
+    let previousBrokenNode = node.previous
+    let nextBrokenNode = node.next
 
     let { groupIndex, childIndex } = node.remove()
 
@@ -408,7 +408,7 @@ export class Tree {
     let parentNode = parent.node
     this.appendChild(parentNode, node, priority)
 
-    this.generateTreeZIndex(node)
+    this.generateTreeOrder(node)
   }
 
   /**
@@ -418,7 +418,7 @@ export class Tree {
    * @param {string} parentId 父节点 id
    * @param {number} priority 优先级顺序值
    */
-  createNode ({ parentId = this.rootNode.id, priority, zIndexChangeCallback = noop } = {}) {
+  createNode ({ parentId = this.root.id, priority, orderChangeCallback = noop } = {}) {
     let node = new Node()
 
     let id = node.id
@@ -429,26 +429,26 @@ export class Tree {
         this.nodeMap[id] = null
       },
       appendTo: (parentId, priority) => {
-        this.nodeMap[node.id] = { node, instance, zIndexChangeCallback }
+        this.nodeMap[node.id] = { node, instance, orderChangeCallback }
         this.moveNode(node, parentId, priority)
       },
       toTop: () => {
         let { groupIndex } = node.parent.getChildIndex(node.id)
         let targetGroup = node.parent.childrenGroup[groupIndex]
         let priority = targetGroup.priority
-        let parentNode = node.parent
+        let parent = node.parent
 
-        let previousNode = node.previousNode
+        let previous = node.previous
         this.remove(node)
-        this.appendChild(parentNode, node, priority)
+        this.appendChild(parent, node, priority)
 
-        this.generateTreeZIndex(previousNode)
+        this.generateTreeOrder(previous)
       }
     }
 
-    this.nodeMap[id] = { node, instance, zIndexChangeCallback }
+    this.nodeMap[id] = { node, instance, orderChangeCallback }
     this.insertNode(parentId, node, priority)
-    zIndexChangeCallback(node.zIndex)
+    orderChangeCallback(node.order)
 
     return instance
   }
@@ -462,18 +462,18 @@ export class Tree {
    * @param {number} priority 优先级顺序值
    */
   moveNode (node, parentId, priority) {
-    let realParentId = parentId || this.rootNode.id
-    let parentNode = this.nodeMap[realParentId].node
-    let curParentNode = node.parent
-    if (parentNode === curParentNode) {
+    let realParentId = parentId || this.root.id
+    let parent = this.nodeMap[realParentId].node
+    let curParent = node.parent
+    if (parent === curParent) {
       return
     }
 
     this.remove(node)
-    this.appendChild(parentNode, node, priority)
+    this.appendChild(parent, node, priority)
 
-    // 这里不知道是往前移动了，还是往后移动了，不好做判断，干脆整个跑一遍生成 zindex
-    this.generateTreeZIndex(this.rootNode)
+    // 这里不知道是往前移动了，还是往后移动了，不好做判断，干脆整个跑一遍生成 order
+    this.generateTreeOrder(this.root)
   }
 
   /**
@@ -508,7 +508,7 @@ export class Tree {
    * @return {Node}
    */
   findPreviousNode (node, groupIndex, childIndex = -1) {
-    if (node === this.rootNode || !node.parent) {
+    if (node === this.root || !node.parent) {
       return
     }
 
@@ -555,7 +555,7 @@ export class Tree {
       return head
     }
 
-    if (node === this.rootNode || !node.parent) {
+    if (node === this.root || !node.parent) {
       return null
     }
 
@@ -586,28 +586,28 @@ export class Tree {
   }
 
   /**
-   * 从指定节点开始，刷一遍 zIndex 值
+   * 从指定节点开始，刷一遍 order 值
    *
    * @param {Node} node 当前指定的节点
    * @private
    */
-  generateTreeZIndex (node) {
-    let previousNode = node ? this.findPreviousNode(node) : this.rootNode
-    let baseZIndex = previousNode && previousNode.zIndex ? (previousNode.zIndex + 1) : this.baseZIndex
+  generateTreeOrder (node) {
+    let previous = node ? this.findPreviousNode(node) : this.root
+    let baseOrder = previous && previous.order ? (previous.order + 1) : this.baseOrder
 
     this.iterate({
       curNode: node,
       callback: cur => {
-        if (cur === this.rootNode) {
+        if (cur === this.root) {
           return
         }
 
-        let zIndex = baseZIndex++
-        let isEqual = cur.zIndex === zIndex
-        cur.zIndex = zIndex
+        let order = baseOrder++
+        let isEqual = cur.order === order
+        cur.order = order
 
         if (!isEqual) {
-          this.nodeMap[cur.id].zIndexChangeCallback(cur.zIndex)
+          this.nodeMap[cur.id].orderChangeCallback(cur.order)
         }
       }
     })
