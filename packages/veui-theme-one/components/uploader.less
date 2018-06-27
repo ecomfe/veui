@@ -52,6 +52,7 @@
     display: block;
     .size(100%);
     cursor: pointer;
+    transition: background-color .2s;
 
     .veui-icon {
       font-size: 50px;
@@ -78,6 +79,7 @@
     li {
       margin: 0 10px 5px 0;
       position: relative;
+      transition: transform .2s;
     }
 
     img {
@@ -122,6 +124,7 @@
       padding: 4px;
       width: @width;
       color: @veui-gray-color-2;
+      transition: background-color .2s;
     }
 
     &-container:hover {
@@ -132,7 +135,7 @@
       }
 
       .veui-uploader-button-remove {
-        visibility: visible;
+        opacity: 1;
       }
     }
 
@@ -227,11 +230,12 @@
     }
 
     &-container:hover &-mask {
-      display: block;
+      opacity: 1;
     }
 
     &-mask {
-      display: none;
+      opacity: 0;
+      transition: opacity .2s;
       .absolute(0);
       background-color: fadeout(#000, 90%);
 
@@ -360,7 +364,7 @@
     .veui-uploader-list,
     .veui-uploader-list-image {
       li {
-        float: left;
+        display: inline-block;
         margin-right: 10px;
       }
     }
@@ -369,8 +373,9 @@
   & &-button-remove {
     float: right;
     color: @veui-gray-color-2;
-    visibility: hidden;
+    opacity: 0;
     .centered-line(20px);
+    transition: opacity .2s;
 
     .veui-icon {
       font-size: 10px;
@@ -378,23 +383,17 @@
     }
   }
 
-  &-list-enter,
-  &-list-leave-active {
+  &-list-transition-enter,
+  &-list-transition-leave-to {
     opacity: 0;
   }
-
-  &-list-enter-active,
-  &-list-leave-active {
-    transition: all .3s ease;
-  }
-
-  &-list-move {
-    transition: transform .3s;
+  .veui-uploader-list-transition-leave-active {
+    position: absolute;
   }
 
   &-fade-leave-active {
     opacity: 0;
-    transition: all .3s ease;
+    transition: opacity .2s ease;
   }
 
   &-progress {
