@@ -1,5 +1,6 @@
 import { addListener, removeListener } from 'resize-detector'
 import { debounce, throttle, isObject, assign, isEqual, find } from 'lodash'
+import { parseTimingArg } from '../utils/helper'
 
 const modeMap = {
   debounce,
@@ -8,7 +9,7 @@ const modeMap = {
 
 function attach (el, { value, oldValue, modifiers }) {
   let mode = find(Object.keys(modeMap), mode => modifiers[mode])
-  let wait = find(Object.keys(modifiers), wait => !isNaN(parseInt(wait, 10))) || 150
+  let wait = parseTimingArg(modifiers, 150)
   let options = {
     wait,
     mode,

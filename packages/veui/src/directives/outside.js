@@ -5,13 +5,13 @@ import {
   remove,
   find,
   isString,
-  keys,
   noop,
   isEqual,
   pick
 } from 'lodash'
 import { getNodes } from '../utils/context'
 import { contains } from '../utils/dom'
+import { parseTimingArg } from '../utils/helper'
 
 const TRIGGER_EVENT_MAP = {
   hover: 'mouseout',
@@ -66,14 +66,7 @@ function parseParams (el, arg, modifiers, value, context) {
   let handler
   let trigger = find(TRIGGER_TYPES, triggerType => triggerType in modifiers) || 'click'
   // delay 表示如果鼠标移动到 includeTargets 元素之外多少毫秒之后，才会触发 handler
-  let delay = 0
-  find(keys(modifiers), key => {
-    let keyNum = Number(key)
-    if (!isNaN(keyNum) && keyNum >= 0 && modifiers[key]) {
-      delay = keyNum
-      return true
-    }
-  })
+  let delay = parseTimingArg(modifiers, 0)
   let excludeSelf = !!modifiers.excludeSelf
 
   // 如果 value 是 Function 的话，其余参数就尽量从 modifier、arg 里面去解析
