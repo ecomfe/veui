@@ -25,7 +25,7 @@
         <template v-if="error.countOverflow"><slot name="count-overflow"><veui-icon :name="icons.alert"/>文件的数量超过限制</slot></template>
       </span>
     </div>
-    <transition-group :class="listClass" tag="ul" name="veui-uploader-list-transition">
+    <transition-group :class="listClass" tag="ul" name="veui-uploader-list">
       <li v-for="(file, index) in fileList" :key="`${file.name}-${file.src}`">
         <template v-if="(type === 'file' && file.status !== 'uploading')
           || type === 'image' && (!file.status || file.status === 'success')">

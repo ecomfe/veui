@@ -372,6 +372,7 @@
 
   & &-button-remove {
     float: right;
+    margin-right: 4px;
     color: @veui-gray-color-2;
     opacity: 0;
     .centered-line(20px);
@@ -383,11 +384,12 @@
     }
   }
 
-  &-list-transition-enter,
-  &-list-transition-leave-to {
+  &-list-enter,
+  &-list-leave-to {
     opacity: 0;
   }
-  .veui-uploader-list-transition-leave-active {
+
+  & &-list-leave-active {
     position: absolute;
   }
 
