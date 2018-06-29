@@ -24,7 +24,6 @@
 
 <script>
 import Searchbox from './Searchbox'
-import Tree from './Tree'
 import Icon from './Icon'
 import ui from '../mixins/ui'
 import { includes, debounce, cloneDeep } from 'lodash'
@@ -33,7 +32,6 @@ export default {
   name: 'veui-filter-panel',
   components: {
     'veui-searchbox': Searchbox,
-    'veui-tree': Tree,
     'veui-icon': Icon
   },
   mixins: [ui],
