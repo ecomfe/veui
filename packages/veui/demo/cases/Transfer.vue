@@ -14,9 +14,9 @@
     <veui-filter-panel :datasource="treeDatasource1" class="veui-select-panel-demo1">
       <template slot="title">列表</template>
       <template slot-scope="props">
-        <veui-tree :datasource="props.options">
+        <veui-tree :datasource="props.items">
           <template slot="item-label" slot-scope="props">
-            <slot name="tree-item-label" v-bind="props">{{ props.option.label }}</slot>
+            <slot name="tree-item-label" v-bind="props">{{ props.item.label }}</slot>
           </template>
         </veui-tree>
       </template>

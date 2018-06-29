@@ -18,33 +18,33 @@
 
     <template slot-scope="props">
       <veui-tree
-        :datasource="props.options"
+        :datasource="props.items"
         :expands.sync="expands"
         @click="select">
 
         <template slot="item" slot-scope="props">
           <slot name="item" v-bind="props">
             <div class="veui-transfer-candidate-item"
-              :class="{'veui-transfer-candidate-item-hidden': props.option.hidden}">
+              :class="{'veui-transfer-candidate-item-hidden': props.item.hidden}">
 
               <!-- 控制展开收起的图标 -->
               <span class="veui-tree-item-expand-switcher"
-                v-if="props.option.children && props.option.children.length"
-                @click.stop="toggle(props.option)">
+                v-if="props.item.children && props.item.children.length"
+                @click.stop="toggle(props.item)">
                 <veui-icon :name="icons.collapsed"/>
               </span>
 
               <div class="veui-transfer-item-label"
-                :class="{'veui-transfer-candidate-item-label-selected': props.option.visuallySelected}">
+                :class="{'veui-transfer-candidate-item-label-selected': props.item.visuallySelected}">
                 <span class="veui-transfer-item-text">
-                  <slot name="item-label" v-bind="props">{{ props.option.label }}</slot>
+                  <slot name="item-label" v-bind="props">{{ props.item.label }}</slot>
                 </span>
 
                 <!-- 未选中的时候， hover 上去应该展示的图标 -->
                 <veui-icon
                   class="veui-transfer-candidate-icon-unselected"
                   :name="icons.select"
-                  v-if="!props.option.visuallySelected"/>
+                  v-if="!props.item.visuallySelected"/>
                 <!-- 选中的时候， hover 上去应该展示的图标 -->
                 <veui-icon
                   class="veui-transfer-candidate-icon-selected"

@@ -20,7 +20,7 @@
 
     <template slot-scope="props">
       <veui-tree
-        :datasource="props.options"
+        :datasource="props.items"
         :expands.sync="localExpands"
         @click="remove"
         class="veui-transfer-selected-tree"
@@ -28,18 +28,18 @@
         <template slot="item" slot-scope="props">
           <slot name="item" v-bind="props">
             <div class="veui-transfer-selected-item"
-              :class="{'veui-transfer-selected-item-hidden': props.option.hidden}">
+              :class="{'veui-transfer-selected-item-hidden': props.item.hidden}">
 
               <!-- 控制展开收起的图标 -->
               <span class="veui-tree-item-expand-switcher"
-                v-if="props.option.children && props.option.children.length"
-                @click.stop="toggle(props.option)">
+                v-if="props.item.children && props.item.children.length"
+                @click.stop="toggle(props.item)">
                 <veui-icon :name="icons.collapsed"/>
               </span>
 
               <div class="veui-transfer-item-label">
                 <span class="veui-transfer-item-text">
-                  <slot name="item-label" v-bind="props">{{ props.option.label }}</slot>
+                  <slot name="item-label" v-bind="props">{{ props.item.label }}</slot>
                 </span>
 
                 <veui-icon
@@ -52,7 +52,7 @@
         </template>
       </veui-tree>
       <ul v-else class="veui-transfer-selected-flat-items">
-        <li v-for="(options, index) in props.options"
+        <li v-for="(options, index) in props.items"
           :key="options.items[options.items.length - 1].value"
           class="veui-transfer-selected-flat-item"
           :class="{'veui-transfer-selected-flat-item-hidden': options.hidden}"
