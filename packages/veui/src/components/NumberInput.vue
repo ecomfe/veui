@@ -288,11 +288,11 @@ export default {
         return val
       }
 
-      if (this.realMax && val > this.realMax) {
+      if (this.realMax != null && val > this.realMax) {
         return this.realMax
       }
 
-      if (this.realMin && val < this.realMin) {
+      if (this.realMin != null && val < this.realMin) {
         return this.realMin
       }
 
