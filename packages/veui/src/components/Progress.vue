@@ -150,12 +150,19 @@ export default {
       if (this.status && this.status !== 'success') {
         return
       }
+
+      if (this.status === 'success' && val < this.max) {
+        this.setStatus(null)
+        return
+      }
+
       if (this.autoSucceed != null) {
-        if (this.autoSucceed === true) {
+        if (this.autoSucceed === true || this.autoSucceed === 0) {
           this.setStatus(val === this.max ? 'success' : null)
           return
+        } else if (this.autoSucceed === false) {
+          return
         }
-
         this.timer = setTimeout(() => {
           this.setStatus(val === this.max ? 'success' : null)
         }, this.autoSucceed)
