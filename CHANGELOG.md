@@ -10,9 +10,6 @@
 
 * [+] `Uploader` 组件增加自定义上传模式。`request-mode` 新增可选值 `custom`，设置为该值时，支持通过新增的 prop `upload` 自定义上传函数。
 * [+] `Uploader` 组件增加切换动画。
-
-### 💡 主要变更
-
 * [+] `Steps` 组件的 `click` 事件回调参数增加原生事件对象 `event`，现为 `(index, event)`。
 
 ### 🐞 问题修复
@@ -25,6 +22,9 @@
 * [^] 修复了 `Tabs` 组件使用 `label` slot 时的事件绑定问题。
 * [^] 修复了 `Input` 组件父级设置值为 `null` 后，仅格式化本地值为 `''`，未同步 `''` 至父级的问题。
 * [^] 去除了 `Steps` 组件的多余外边距。
+* [^] 去除了 `Progress` 组件多余的内边距。
+* [^] 修正了 `Progress` 组件的 `auto-succeed` prop 的逻辑。
+* [^] 修正了 `NumberInput` 组件的 `min`/`max` prop 有时失效的问题。
 
 ## 1.0.0-alpha.14
 
