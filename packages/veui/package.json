@@ -21,7 +21,7 @@
     "lodash": "^4.17.4",
     "resize-detector": "^0.1.6",
     "tether": "^1.4.0",
-    "vue-awesome": "^2.3.5"
+    "vue-awesome": "^2.3.8"
   },
   "peerDependencies": {
     "vue": "^2.5.16"

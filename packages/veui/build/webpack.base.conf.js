@@ -2,6 +2,7 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+var veuiLoaderOptions = require('./veui-loader-options')
 var webpack = require('webpack')
 
 function resolve (dir) {
@@ -32,19 +33,7 @@ module.exports = {
         test: /\.vue$/,
         loader: 'veui-loader',
         enforce: 'pre',
-        options: {
-          modules: [
-            {
-              package: 'veui-theme-one',
-              fileName: '${module}.less'
-            },
-            {
-              package: 'veui-theme-one',
-              fileName: '${module}.js',
-              transform: false
-            }
-          ]
-        },
+        options: veuiLoaderOptions,
         include: [resolve('src'), resolve('demo'), resolve('test')]
       },
       {

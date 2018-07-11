@@ -31,11 +31,11 @@ module.exports = {
     '^vue$': '<rootDir>/node_modules/vue/dist/vue.common.js'
   },
   transformIgnorePatterns: [
-    '<rootDir>/node_modules/(?!vue-awesome/)'
+    '<rootDir>/node_modules/(?!vue-awesome|resize-detector|veui-theme-one/)'
   ],
   transform: {
     '^.+\\.js$': 'babel-jest',
-    '.*\\.vue$': 'vue-jest',
+    '.*\\.vue$': '<rootDir>/test/veui-jest',
     '.*\\.svg$': '<rootDir>/build/svg-icon-jest'
   },
   setupFiles: ['./test/unit/env.js']
