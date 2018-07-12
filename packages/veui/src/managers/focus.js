@@ -1,4 +1,4 @@
-import { remove, findIndex, keys } from 'lodash'
+import { remove, findIndex, keys, last } from 'lodash'
 import { focusIn } from '../utils/dom'
 
 class FocusContext {
@@ -6,9 +6,9 @@ class FocusContext {
    *
    * @param {Element} root Root element for focus context
    * @param {FocusManager} env FocusManager instance that creates this context
-   * @param {=Element} source Previous focused element
-   * @param {=Boolean} trap Whether focus should be trapped inside root
-   * @param {=Element} preferred Where we should start searching for focusable elements
+   * @param {Element=|FocusContext} source Previous focused element or FocusContext
+   * @param {Boolean=} trap Whether focus should be trapped inside root
+   * @param {Element=} preferred Where we should start searching for focusable elements
    */
   constructor (root, env, { source, trap = false, preferred }) {
     if (!root) {
@@ -60,10 +60,19 @@ class FocusContext {
 
   focusAt (index = 0, ignoreAutofocus) {
     setTimeout(() => {
-      if (!focusIn(this.preferred || this.root, index, ignoreAutofocus)) {
+      let target = this.preferred || this.root
+      if (target && !focusIn(target, index, ignoreAutofocus)) {
         this.root.focus()
       }
     })
+  }
+
+  toTop () {
+    this.env.toTop(this)
+  }
+
+  focus () {
+    this.focusAt(this.trap ? 1 : 0)
   }
 
   destroy () {
@@ -77,7 +86,7 @@ class FocusContext {
     if (source) {
       this.source = null
 
-      if (typeof source.focus === 'function' && this.env.trigger !== 'pointer') {
+      if (this.env.trigger !== 'pointer' && typeof source.focus === 'function') {
         setTimeout(() => {
           source.focus()
         })
@@ -134,6 +143,7 @@ export class FocusManager {
 
   toTop (context) {
     this.detach(context)
+    context.source = last(this.stack)
     this.stack.push(context)
   }
 

@@ -16,7 +16,7 @@ let resolveCache = {}
 /**
  * webpack loader to load theme modules for VEUI components
  * @param {string} content Raw file content of .vue file
- * @returns {string} Content of patched .vue file
+ * @returns {Promise<string>} A promise that resolved with the content of patched .vue file
  */
 export default async function (content) {
   let callback = this.async()
@@ -29,7 +29,7 @@ export default async function (content) {
 
   try {
     let result = await patchComponent(content, component, loaderOptions, path => {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         try {
           this.resolve(this.rootContext || this.options.context, path, (err, result) => {
             if (err) {
@@ -50,14 +50,67 @@ export default async function (content) {
 }
 
 /**
+ * Synchronously transform the module with a given resolveSync function.
+ *
+ * @param {string} content Module content
+ * @param {string} file Module file path
+ * @param {Object} options veui-loader options
+ * @param {Function} resolveSync Resolves module path to file path
+ */
+export function processSync (content, file, options, resolveSync) {
+  let component = resolveComponent(file)
+  if (!component) {
+    return content
+  }
+
+  return patchComponentSync(content, component, options, resolveSync)
+}
+
+/**
  * Patch the original .vue file with additional peer modules.
  * @param {string} content .vue file content
  * @param {string} component Component name
- * @param {Object} options veui-theme-loader options
+ * @param {Object} options veui-loader options
  * @param {function} resolve webpack resolve function to see if target peer exists
- * @returns {string} The patched content
+ * @returns {Promise<string>} A promise that resolved with the patched content
  */
 async function patchComponent (content, component, options, resolve) {
+  let parts = getParts(component, options)
+
+  await Promise.all([...parts.script, ...parts.style].map(async module => {
+    module.valid = await assurePath(module.path, resolve)
+  }))
+
+  return patchContent(content, parts)
+}
+
+/**
+ * Patch the original .vue file with additional peer modules.
+ * @param {string} content .vue file content
+ * @param {string} component Component name
+ * @param {Object} options veui-loader options
+ * @param {function} resolveSync custom synchronous resolve function to see if target peer exists
+ * @returns {string} The patched content
+ */
+function patchComponentSync (content, component, options, resolveSync) {
+  let parts = getParts(component, options)
+  let modules = [...parts.script, ...parts.style]
+
+  modules.forEach(module => {
+    module.valid = assurePathSync(module.path, resolveSync)
+  })
+
+  return patchContent(content, parts)
+}
+
+/**
+ * Extract potentially dependent parts for a component
+ *
+ * @param {string} component Component name
+ * @param {Object} options veui-loader options
+ * @returns {Object} Extracted parts metadata
+ */
+function getParts (component, options) {
   let {
     modules = [],
     package: pack,
@@ -70,11 +123,7 @@ async function patchComponent (content, component, options, resolve) {
     modules.push({ package: pack, path: packPath, transform, fileName })
   }
 
-  if (!modules.length) {
-    return content
-  }
-
-  let parts = modules.reduce(
+  return modules.reduce(
     (
       acc,
       {
@@ -97,11 +146,15 @@ async function patchComponent (content, component, options, resolve) {
       style: []
     }
   )
+}
 
-  await Promise.all([...parts.script, ...parts.style].map(async item => {
-    item.valid = await assurePath(item.path, resolve)
-  }))
-
+/**
+ * Patch content with extracted parts metadata
+ *
+ * @param {string} content Module content
+ * @param {Object} parts Extracted parts metadata
+ */
+function patchContent (content, parts) {
   return Object.keys(parts).reduce((content, type) => {
     return parts[type]
       .filter(({ valid }) => valid)
@@ -172,7 +225,7 @@ function patchType (content, type, peerPath) {
  * To test the target peer path exists or not.
  * @param {string} modulePath Peer module path
  * @param {function} resolve webpack module resolver
- * @returns {boolean} If the target peer path exists
+ * @returns {Promise<boolean>} A promise resolved with true if the target peer path exists
  */
 async function assurePath (modulePath, resolve) {
   if (resolveCache[modulePath] === false) {
@@ -181,6 +234,28 @@ async function assurePath (modulePath, resolve) {
     if (typeof resolve === 'function') {
       try {
         resolveCache[modulePath] = await resolve(modulePath)
+      } catch (e) {
+        resolveCache[modulePath] = false
+      }
+    }
+  }
+
+  return resolveCache[modulePath]
+}
+
+/**
+ * To test the target peer path exists or not synchronously.
+ * @param {string} modulePath Peer module path
+ * @param {function} resolveSync webpack module resolver
+ * @returns {boolean} True if the target peer path exists
+ */
+function assurePathSync (modulePath, resolveSync) {
+  if (resolveCache[modulePath] === false) {
+    return
+  } else if (!(modulePath in resolveCache)) {
+    if (typeof resolveSync === 'function') {
+      try {
+        resolveCache[modulePath] = resolveSync(modulePath)
       } catch (e) {
         resolveCache[modulePath] = false
       }

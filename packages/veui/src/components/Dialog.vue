@@ -1,5 +1,7 @@
 <template>
-  <veui-overlay class="veui-dialog"
+  <veui-overlay
+    ref="overlay"
+    class="veui-dialog"
     :open="localOpen"
     :overlay-class="mergeOverlayClass({
       'veui-dialog-box': true,
@@ -12,6 +14,7 @@
     <div class="veui-dialog-content"
       ref="content"
       tabindex="-1"
+      @mousedown="focus"
       @keydown.esc="handleEscape"
       v-bind="attrs">
       <div class="veui-dialog-content-head"
@@ -20,16 +23,16 @@
         <span class="veui-dialog-content-head-title"><slot name="title">{{ title }}</slot></span>
         <button type="button" class="veui-dialog-content-head-close"
           v-if="closable"
-          @click="localOpen = false"
+          @click="cancel"
           aria-label="关闭">
           <veui-icon :name="icons.close"/>
         </button>
       </div>
-      <div class="veui-dialog-content-body"><slot/></div>
+      <div class="veui-dialog-content-body"><slot :close="close"/></div>
       <div class="veui-dialog-content-foot">
-        <slot name="foot">
-          <veui-button ui="primary" @click="$emit('ok')">确定</veui-button>
-          <veui-button autofocus @click="$emit('cancel')">取消</veui-button>
+        <slot name="foot" :close="close">
+          <veui-button ui="primary" @click="close('ok')">确定</veui-button>
+          <veui-button autofocus @click="cancel">取消</veui-button>
         </slot>
       </div>
     </div>
@@ -73,13 +76,14 @@ export default {
     },
     escapable: {
       type: Boolean,
-      default: false
+      default: true
     },
     draggable: {
       type: Boolean,
       default: false
     },
-    priority: Number
+    priority: Number,
+    beforeClose: Function
   },
   data () {
     return {
@@ -93,9 +97,6 @@ export default {
         'aria-modal': String(this.modal),
         ...this.$attrs
       }
-    },
-    realEscapable () {
-      return this.closable || this.escapable
     }
   },
   watch: {
@@ -114,16 +115,39 @@ export default {
     },
     resetPosition () {
       if (!this.dragHandle) {
-        throw new Error('The dialog is not ready for drag')
+        throw new Error('The dialog is not ready for drag.')
       }
 
       this.dragHandle.reset()
     },
-    handleEscape (e) {
-      if (this.realEscapable) {
+    focus () {
+      let { overlay } = this.$refs
+      if (overlay) {
+        overlay.focus()
+      }
+    },
+    close (type) {
+      if (typeof type !== 'string') {
+        type = 'cancel'
+      }
+      if (typeof this.beforeClose === 'function') {
+        Promise.resolve(this.beforeClose(type)).then(result => {
+          if (result !== false) {
+            this.localOpen = false
+          }
+        })
+      } else {
         this.localOpen = false
+      }
+      this.$emit(type)
+    },
+    cancel () {
+      this.close('cancel')
+    },
+    handleEscape (e) {
+      if (this.escapable) {
         e.stopPropagation()
-        this.$emit('escape')
+        this.cancel()
       }
     }
   }
