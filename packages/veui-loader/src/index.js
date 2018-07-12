@@ -104,7 +104,7 @@ function patchComponentSync (content, component, options, resolveSync) {
 }
 
 /**
- * Extract parts from
+ * Extract potentially dependent parts for a component
  *
  * @param {string} component Component name
  * @param {Object} options veui-loader options
