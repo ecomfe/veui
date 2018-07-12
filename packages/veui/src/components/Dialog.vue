@@ -11,17 +11,23 @@
     autofocus
     :modal="modal"
     :priority="priority">
-    <div class="veui-dialog-content"
+    <div
+      class="veui-dialog-content"
       ref="content"
       tabindex="-1"
       @mousedown="focus"
       @keydown.esc="handleEscape"
       v-bind="attrs">
-      <div class="veui-dialog-content-head"
+      <div
+        class="veui-dialog-content-head"
         :class="{ 'veui-dialog-draggable': draggable }"
         v-drag:content.translate="{ draggable, containment: '@window', ready: dragReady }">
-        <span class="veui-dialog-content-head-title"><slot name="title">{{ title }}</slot></span>
-        <button type="button" class="veui-dialog-content-head-close"
+        <h3 class="veui-dialog-content-head-title">
+          <slot name="title">{{ title }}</slot>
+        </h3>
+        <button
+          type="button"
+          class="veui-dialog-content-head-close"
           v-if="closable"
           @click="cancel"
           aria-label="关闭">

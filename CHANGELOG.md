@@ -2,10 +2,54 @@
 
 ### ⚠️ 非兼容性变更
 
+* [+] `Dialog` 组件现在默认会在点击默认的按钮及按下 <kbd>esc</kbd> 键时关闭并通过 `.sync` 修饰符同步外部数据。并且新增 `before-close` 函数 prop 来处理需要阻止对话框关闭的情况。增加 `default`/`foot` slot 的 slot 参数 `close`，用来在重写组件 slot 时调用关闭逻辑。
+
+  > #### 迁移指南
+  >
+  > 对于重写 `foot` slot 处理关闭逻辑的使用方式，不会受新逻辑影响。
+  >
+  > 对于监听 `ok`/`cancel` 事件并直接关闭对话框时，亦不受此改动影响。当需要阻止对话框关闭时，需要使用新增的 `before-close` 函数 prop。
+  >
+  > `before-close` prop 对应的函数类型为 `function(type: string): boolean=|Promise<boolean=>`，`type` 将会是 `Dialog` 组件关闭操作的类型，默认情况下会有 `ok` 与 `cancel`。返回值可以是一个 `boolean`，也可以是一个 resolve `boolean` 的 `Promise`，用来处理可能需要异步决定对话框关闭状态的情况。返回值为 `false` 时将阻止对话框关闭。例如，如果我们要异步处理 `ok`，而对 `cancel` 直接关闭，可以按如下方式处理：
+  >
+  > ```html
+  > <veui-dialog :open.sync="dialogOpen" :before-close="submit">...</veui-dialog>
+  > ```
+  >
+  > ```js
+  > methods: {
+  >   submit (type) {
+  >     if (type === 'ok') {
+  >       return axios.post('/item/create', {/* ... */})
+  >         .then(({ id, error }) => {
+  >           if (error) {
+  >             this.showError(error)
+  >             return false
+  >           }
+  >           return true
+  >         })
+  >     }
+  >     return true
+  >   },
+  >   // ...
+  > }
+  > ```
+  >
+  > 对于需要重写 slot（例如添加底部按钮等）的情况，可以使用新增的 slot 参数 `close`，类型为 `function(type: string): void`，使用者只需要在合适的时机自行调用 `close` 函数即可，`type` 默认支持 `ok`/`cancel` 并会透传到 `before-close` 的流程中。例如：
+  >
+  > ```html
+  > <veui-dialog :open.sync="dialogOpen" :before-close="submit">
+  >   ...
+  >   <template slot="foot" slot-scope="{ close }"><button @click="close">OK</button></template>
+  > </veui-dialog>
+  > ```
+
 * [^] `Pagination` 组件的 `redirect` 事件回调参数从 `({ page, event })` 调整为 `(page, event)`。
 * [^] 调整 `FilterPanel` 组件和 `Tree` 组件的对外接口参数名，统一将 `options`/`option` 更名为 `items`/`item`。
 * [^] 调整 `resize` 指令的默认每次都触发回调，增加 `throttle`/`debounce`/`leading` 三个 modifier。
-* [^] 调整 `rule` 出错信息变量模板匹配语法为 `${ruleValue}`，原语法将在下个版本移除。
+* [^] 通过 `prompt` manager 以指令式调用输入弹框功能时，现在返回的 `Promise` 在确认提交与取消时 `resolve` 的值分别是字符串和 `null`，与原生全局 `prompt` 方法一致（原来是 `{ isOk: true, value }` 与 `false`）。
+* [^] `Button` 组件加载中的文本修改为 default slot 的内容。
+* [^] 调整 `rule` 出错信息变量模板匹配语法从 `%{ruleValue}` 修为 `${ruleValue}`，旧语法将在 `1.0.0` 移除。
 
 ### 💡 主要变更
 
@@ -26,6 +70,7 @@
 * [^] 去除了 `Progress` 组件多余的内边距。
 * [^] 修正了 `Progress` 组件的 `auto-succeed` prop 的逻辑。
 * [^] 修正了 `NumberInput` 组件的 `min`/`max` prop 有时失效的问题。
+* [^] 修正了 `alert`/`confirm`/`prompt` plugin 不能正常工作的问题。
 
 ## 1.0.0-alpha.14
 

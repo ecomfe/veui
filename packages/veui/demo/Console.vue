@@ -21,6 +21,7 @@ import 'veui-theme-one/icons/angle-up'
 import 'veui-theme-one/icons/angle-down'
 
 export default {
+  name: 'veui-console',
   components: {
     Icon
   },

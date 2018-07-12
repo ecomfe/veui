@@ -1,18 +1,18 @@
 <template>
-<veui-dialog ui="reverse"
+<veui-dialog
+  :ui="ui"
+  :overlay-class="mergeOverlayClass('veui-confirm-box')"
   :open.sync="localOpen"
   :priority="priority"
   :closable="false"
-  escapable
-  :overlay-class="mergeOverlayClass('veui-confirm-box')"
+  :before-close="beforeClose"
   role="alertdialog">
   <template slot="title">
     <slot name="title">{{ title }}</slot>
   </template>
   <slot/>
-  <template slot="foot">
-    <veui-button ui="primary" @click="ok()">确定</veui-button>
-    <veui-button autofocus @click="cancel()">取消</veui-button>
+  <template v-if="$slots.foot || $scopedSlots.foot" slot="foot" slot-scope="scope">
+    <slot name="foot" v-bind="scope"/>
   </template>
 </veui-dialog>
 </template>
@@ -36,7 +36,7 @@ export default {
     'veui-button': Button
   },
   mixins: [ui, overlay],
-  props: pick(Dialog.props, ['open', 'title']),
+  props: pick(Dialog.props, ['open', 'title', 'beforeClose']),
   data () {
     return {
       localOpen: this.open,
@@ -50,14 +50,6 @@ export default {
     },
     localOpen (value) {
       this.$emit('update:open', value)
-    }
-  },
-  methods: {
-    ok () {
-      this.$emit('ok')
-    },
-    cancel () {
-      this.$emit('cancel')
     }
   }
 }

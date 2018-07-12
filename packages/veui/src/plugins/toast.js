@@ -5,12 +5,14 @@ function getMethod (name) {
   return toast[name].bind(toast)
 }
 
-let methods = ['success', 'warn', 'info', 'error', 'add', 'remove'].map(
-  name => getMethod
-)
+const METHODS = ['success', 'info', 'error', 'warn', 'add', 'remove']
+  .reduce((methods, name) => {
+    methods[name] = getMethod(name)
+    return methods
+  }, {})
 
 export default {
   install () {
-    Vue.prototype.$toast = methods
+    Vue.prototype.$toast = METHODS
   }
 }

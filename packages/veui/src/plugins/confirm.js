@@ -5,10 +5,14 @@ function getMethod (name) {
   return confirm[name].bind(confirm)
 }
 
-let methods = ['success', 'info', 'error', 'warn'].map(name => getMethod)
+const METHODS = ['success', 'info', 'error', 'warn']
+  .reduce((methods, name) => {
+    methods[name] = getMethod(name)
+    return methods
+  }, {})
 
 export default {
   install () {
-    Vue.prototype.$confirm = methods
+    Vue.prototype.$confirm = METHODS
   }
 }

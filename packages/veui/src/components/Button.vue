@@ -7,7 +7,7 @@
   <template v-else>
     <slot name="loading">
       <veui-icon :name="icons.loading" spin/>
-      <span class="veui-button-loading-text">加载中…</span>
+      <span class="veui-button-loading-text"><slot/></span>
     </slot>
   </template>
 </button>

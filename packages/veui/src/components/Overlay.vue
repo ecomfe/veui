@@ -172,6 +172,7 @@ export default {
 
     focus () {
       this.overlayNode.toTop()
+      this.focusContext.toTop()
     },
 
     initFocus () {
