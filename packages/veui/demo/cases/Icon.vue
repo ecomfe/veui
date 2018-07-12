@@ -19,7 +19,7 @@ export default {
   name: 'icon-demo',
   data () {
     return {
-      icons: Object.keys(Icon.components.FaIcon.icons).sort((a, b) => a > b ? 1 : -1)
+      icons: Object.keys(Icon.icons).sort((a, b) => a > b ? 1 : -1)
     }
   },
   components: {

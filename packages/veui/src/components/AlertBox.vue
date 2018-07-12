@@ -1,11 +1,16 @@
 <template>
-<veui-dialog :overlay-class="mergeOverlayClass({
+<veui-dialog
+  :ui="ui"
+  :overlay-class="mergeOverlayClass({
     'veui-alert-box': true,
     [`veui-alert-box-${type}`]: true
   })"
   :open.sync="localOpen"
   :closable="false"
+  :escapable="false"
   :priority="priority"
+  :before-close="beforeClose"
+  @ok="$emit('ok')"
   role="alertdialog">
   <veui-icon v-if="icons[type]"
     class="veui-alert-box-icon"
@@ -18,8 +23,8 @@
   <div class="veui-alert-box-content">
     <slot/>
   </div>
-  <template slot="foot">
-    <veui-button autofocus @click="$emit('ok')">知道了</veui-button>
+  <template slot="foot" slot-scope="{ close }">
+    <veui-button autofocus @click="close('ok')">知道了</veui-button>
   </template>
 </veui-dialog>
 </template>
@@ -41,11 +46,11 @@ export default {
   name: 'veui-alert-box',
   mixins: [ui, overlay],
   props: {
-    ...pick(Dialog.props, ['open', 'title']),
+    ...pick(Dialog.props, ['open', 'title', 'beforeClose']),
     type: {
       type: String,
       validator (val) {
-        return includes(['success', 'error', 'info'], val)
+        return includes(['success', 'error', 'info', 'warning'], val)
       },
       default: 'success'
     }

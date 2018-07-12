@@ -1,19 +1,26 @@
 <template>
-<veui-dialog :overlay-class="mergeOverlayClass('veui-prompt-box')"
+<veui-dialog
   :ui="ui"
+  :overlay-class="mergeOverlayClass('veui-prompt-box')"
   :open.sync="localOpen"
   :priority="priority"
   :closable="false"
+  :before-close="beforeClose"
   @ok="submit"
-  escapable
-  @escape="cancel"
   @cancel="cancel"
   role="alertdialog">
   <template slot="title">
     <slot name="title">{{ title }}</slot>
   </template>
-  <p class="veui-prompt-box-info">{{ content }}</p>
-  <veui-input autofocus v-model="localValue" class="veui-prompt-box-input" @keydown.enter="submit"></veui-input>
+  <p class="veui-prompt-box-info">
+    <slot/>
+  </p>
+  <div>
+    <veui-input autofocus v-model="localValue" class="veui-prompt-box-input" @keydown.enter="submit"/>
+  </div>
+  <template slot="foot">
+    <slot name="foot"/>
+  </template>
 </veui-dialog>
 </template>
 
@@ -37,7 +44,7 @@ export default {
   },
   mixins: [ui, overlay],
   props: {
-    ...pick(Dialog.props, ['open', 'title']),
+    ...pick(Dialog.props, ['open', 'title', 'beforeClose']),
     content: {
       type: String,
       default: '请输入'
@@ -73,6 +80,7 @@ export default {
       this.$emit('ok')
     },
     cancel () {
+      this.localValue = ''
       this.$emit('cancel')
     }
   }

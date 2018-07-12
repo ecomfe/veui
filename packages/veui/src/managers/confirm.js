@@ -1,25 +1,16 @@
-import SpecialDialog from './SpecialDialog'
+import SimpleDialog from './SimpleDialog'
 import ConfirmBox from '../components/ConfirmBox'
 import Vue from 'vue'
-import { isFunction, noop } from 'lodash'
+import { pick, isFunction, noop } from 'lodash'
 
-export class ConfirmManager extends SpecialDialog {
-  constructor () {
-    super(ConfirmBox)
-  }
-
+export class ConfirmManager extends SimpleDialog {
   createComponent (data) {
     const component = new Vue({
       render: h => {
         return h(
-          this.type,
+          ConfirmBox,
           {
-            props: {
-              open: data.open,
-              title: data.title,
-              ui: data.type,
-              overlayClass: data.overlayClass
-            },
+            props: pick(data, ['open', 'title', 'type', 'overlayClass', 'beforeClose']),
             on: {
               ok: data.ok,
               cancel: data.cancel
@@ -35,9 +26,9 @@ export class ConfirmManager extends SpecialDialog {
   _show (options) {
     let ok = isFunction(options.ok) ? options.ok : noop
     let cancel = isFunction(options.cancel) ? options.cancel : noop
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       let checkRemove = isOk => {
-        Promise.resolve(isOk ? ok() : cancel()).then(result => {
+        Promise.resolve(isOk ? ok() : cancel()).then(() => {
           this.removeComponent(component)
           resolve(isOk)
         })

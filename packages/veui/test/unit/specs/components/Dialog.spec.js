@@ -31,6 +31,7 @@ describe('components/Dialog', () => {
         expect(this.open).toBe(false)
 
         this.open = true
+
         await wait(0)
         dialog.$refs.content
           .querySelector('.veui-dialog-content-head button:last-child')
@@ -40,7 +41,7 @@ describe('components/Dialog', () => {
         expect(this.open).toBe(false)
         done()
       },
-      template: '<veui-dialog ref="dialog" :open.sync="open"/>'
+      template: '<veui-dialog ref="dialog" closable :open.sync="open"/>'
     }).$mount()
   })
 

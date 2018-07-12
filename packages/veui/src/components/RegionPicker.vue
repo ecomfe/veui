@@ -382,7 +382,7 @@ export default {
         let box = this.$refs[`${prefix}-${this.focusPath.join('-')}`]
         box = Array.isArray(box) ? box[0] : box
         if (box && typeof box.focus === 'function') {
-          box.focus({ visible: true })
+          box.focus()
         }
       })
     },

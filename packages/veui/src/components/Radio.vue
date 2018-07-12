@@ -20,7 +20,6 @@
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { getListeners } from '../utils/helper'
-import { focus } from '../utils/dom'
 
 const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
 
@@ -90,12 +89,8 @@ export default {
       this.localChecked = $event.target.checked
       this.$emit('change', this.localChecked)
     },
-    focus ({ visible = false }) {
-      if (visible) {
-        focus(this.$refs.box)
-      } else {
-        this.$refs.box.focus()
-      }
+    focus () {
+      this.$refs.box.focus()
     },
     activate () {
       if (this.realDisabled || this.realReadonly) {

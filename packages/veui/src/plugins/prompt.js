@@ -5,10 +5,14 @@ function getMethod (name) {
   return prompt[name].bind(prompt)
 }
 
-let methods = ['success', 'info', 'error', 'warn'].map(name => getMethod)
+const METHODS = ['success', 'info', 'error', 'warn']
+  .reduce((methods, name) => {
+    methods[name] = getMethod(name)
+    return methods
+  }, {})
 
 export default {
   install () {
-    Vue.prototype.$prompt = methods
+    Vue.prototype.$prompt = METHODS
   }
 }

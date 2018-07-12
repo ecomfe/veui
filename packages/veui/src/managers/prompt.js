@@ -1,34 +1,27 @@
-import SpecialDialog from './SpecialDialog'
+import SimpleDialog from './SimpleDialog'
 import PromptBox from '../components/PromptBox'
 import Vue from 'vue'
-import { isFunction, noop } from 'lodash'
+import { pick, isFunction, noop } from 'lodash'
 
-export class PromptManager extends SpecialDialog {
-  constructor () {
-    super(PromptBox)
-  }
-
+export class PromptManager extends SimpleDialog {
   createComponent (data) {
     data.value = data.value || ''
     const component = new Vue({
       render: h => {
-        return h(this.type, {
-          props: {
-            open: data.open,
-            title: data.title,
-            ui: data.type,
-            content: data.content,
-            value: data.value,
-            overlayClass: data.overlayClass
-          },
-          on: {
-            ok: () => data.ok(data.value),
-            cancel: data.cancel,
-            input: val => {
-              data.value = val
+        return h(
+          PromptBox,
+          {
+            props: pick(data, ['open', 'title', 'type', 'value', 'overlayClass', 'beforeClose']),
+            on: {
+              ok: () => data.ok(data.value),
+              cancel: data.cancel,
+              input: val => {
+                data.value = val
+              }
             }
-          }
-        })
+          },
+          [h('template', { slot: 'default' }, data.content)]
+        )
       }
     })
     return component
@@ -38,18 +31,18 @@ export class PromptManager extends SpecialDialog {
     let ok = isFunction(options.ok) ? options.ok : noop
     let cancel = isFunction(options.cancel) ? options.cancel : noop
 
-    return new Promise((resolve, reject) => {
-      let checkRemove = (isOk, value) => {
-        Promise.resolve(isOk ? ok() : cancel()).then(result => {
+    return new Promise(resolve => {
+      let checkRemove = value => {
+        Promise.resolve(value != null ? ok() : cancel()).then(() => {
           this.removeComponent(component)
-          isOk ? resolve({ isOk, value }) : resolve(isOk)
+          resolve(value)
         })
       }
 
       let component = this.create({
         ...options,
-        ok: value => checkRemove(true, value),
-        cancel: () => checkRemove(false)
+        ok: value => checkRemove(value || ''),
+        cancel: () => checkRemove(null)
       })
     })
   }

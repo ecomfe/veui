@@ -1,14 +1,18 @@
 import Vue from 'vue'
 import alert from '../managers/alert'
 
-function getMethod (name) {
-  return alert[name].bind(alert)
+function getMethod (type) {
+  return alert[type].bind(alert)
 }
 
-let methods = ['success', 'info', 'error', 'warn'].map(name => getMethod)
+const METHODS = ['success', 'info', 'error', 'warn']
+  .reduce((methods, name) => {
+    methods[name] = getMethod(name)
+    return methods
+  }, {})
 
 export default {
   install () {
-    Vue.prototype.$alert = methods
+    Vue.prototype.$alert = METHODS
   }
 }
