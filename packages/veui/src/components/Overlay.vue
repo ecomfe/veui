@@ -1,7 +1,7 @@
 <template>
 <div class="veui-overlay">
   <div class="veui-overlay-box"
-    :class="overlayClass"
+    :class="realOverlayClass"
     :ui="ui"
     ref="box"
     :style="{zIndex}"
@@ -19,11 +19,12 @@ import overlayManager from '../managers/overlay'
 import focusManager from '../managers/focus'
 import config from '../managers/config'
 import ui from '../mixins/ui'
-import { getClassPropDef, isType } from '../utils/helper'
+import { getClassPropDef, mergeClasses, isType } from '../utils/helper'
 import '../common/uiTypes'
 
 config.defaults({
-  'overlay.baseZIndex': 200
+  'overlay.baseZIndex': 200,
+  'overlay.overlayClass': {}
 })
 
 overlayManager.setBaseOrder(config.get('overlay.baseZIndex'))
@@ -63,7 +64,6 @@ export default {
       if (value) {
         let node = this.overlayNode
         node.toTop()
-
         this.initFocus()
       } else {
         this.destroyFocus()
@@ -98,6 +98,9 @@ export default {
   computed: {
     realOpen () {
       return this.zIndex !== null && this.open
+    },
+    realOverlayClass () {
+      return mergeClasses(this.overlayClass, config.get('overlay.overlayClass'))
     }
   },
   methods: {
@@ -185,8 +188,6 @@ export default {
           source: document.activeElement,
           trap: this.modal
         })
-      } else {
-        focusManager.toTop(this.focusContext)
       }
     },
 

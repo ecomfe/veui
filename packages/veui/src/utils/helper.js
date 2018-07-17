@@ -104,6 +104,10 @@ export function normalizeClass (klasses) {
   return klassObj
 }
 
+export function mergeClasses (...klasses) {
+  return assign({}, ...klasses.map(normalizeClass))
+}
+
 export function getConfigKey (name) {
   return name.replace(/^veui|-*/g, '').toLowerCase()
 }

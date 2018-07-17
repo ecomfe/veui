@@ -1,5 +1,5 @@
 import {
-  normalizeClass,
+  mergeClasses,
   getClassPropDef,
   resolveOverlayPosition
 } from '../utils/helper'
@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     mergeOverlayClass (klass) {
-      return { ...normalizeClass(this.overlayClass), ...normalizeClass(klass) }
+      return mergeClasses(this.overlayClass, klass)
     },
     relocate () {
       if (!this.$refs.overlay) {
