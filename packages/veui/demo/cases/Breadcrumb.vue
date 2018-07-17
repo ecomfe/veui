@@ -1,10 +1,11 @@
 <template>
   <article>
     <h1><code>&lt;veui-breadcrumb&gt;</code></h1>
+    <section><veui-button @click="next">Switch separator</veui-button></section>
     <section>
       <veui-breadcrumb :routes="items" @redirect="handleRedirect">
         <template slot-scope="route"><em>{{ route.label }}</em></template>
-        <template slot="separator" slot-scope="scope">/</template>
+        <template slot="separator" slot-scope="_">{{ sep }}</template>
       </veui-breadcrumb>
     </section>
     <section>
@@ -21,17 +22,20 @@
 </template>
 
 <script>
-import { Breadcrumb, BreadcrumbItem, Icon } from 'veui'
+import { Button, Breadcrumb, BreadcrumbItem, Icon } from 'veui'
 
 export default {
   name: 'breadcrumb-demo',
   components: {
+    'veui-button': Button,
     'veui-breadcrumb': Breadcrumb,
     'veui-breadcrumb-item': BreadcrumbItem,
     'veui-icon': Icon
   },
   data () {
     return {
+      index: 0,
+      seps: ['/', '👉', '➡️', '➜', '➞', '☞'],
       items: [
         { to: 'http://www.baidu.com', label: 'baidu', native: true },
         { to: '/steps', label: '步骤条组件' },
@@ -43,7 +47,15 @@ export default {
       ]
     }
   },
+  computed: {
+    sep () {
+      return this.seps[this.index]
+    }
+  },
   methods: {
+    next () {
+      this.index = (this.index + 1) % this.seps.length
+    },
     handleRedirect (event, router, index) {
       if (index === 2) {
         alert('redirect event')
