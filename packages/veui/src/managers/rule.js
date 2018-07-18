@@ -13,8 +13,10 @@ import { isObject, isFunction } from 'lodash'
  * @deprecated
  * @type {RegExp}
  */
-const oldReplaceRe = /%\{ruleValue\}/g
-const replaceRe = /\$\{ruleValue\}/g
+const oldRuleValueRe = /%\{ruleValue\}/g
+
+const ruleValueRe = /\$\{ruleValue\}/g
+const valueRe = /\$\{value\}/g
 
 export class Rule {
   constructor () {
@@ -42,11 +44,13 @@ export class Rule {
         return {
           name: rule.name,
           message: isFunction(realMessage)
-            ? realMessage(rule.value)
-            : (realMessage + '').replace(
-              replaceRe.test(realMessage) ? replaceRe : oldReplaceRe,
-              rule.value
-            )
+            ? realMessage(rule.value, val)
+            : (realMessage + '')
+              .replace(
+                ruleValueRe.test(realMessage) ? ruleValueRe : oldRuleValueRe,
+                rule.value
+              )
+              .replace(valueRe, val)
         }
       }
       // 代表没错
