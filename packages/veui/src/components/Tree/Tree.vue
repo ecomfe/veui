@@ -83,31 +83,31 @@ export default {
   },
   methods: {
     parseExpands (expands = this.expands) {
-      let walk = (options, expands) => {
-        return options.map(option => {
-          let localOption = omit(option, 'children')
-          if (option.children && option.children.length) {
-            let expanded = !!remove(expands, value => value === option.value).length
+      let walk = (items, expands) => {
+        return items.map(item => {
+          let localOption = omit(item, 'children')
+          if (item.children && item.children.length) {
+            let expanded = !!remove(expands, value => value === item.value).length
             localOption.expanded = expanded
-            localOption.children = walk(option.children, expands)
+            localOption.children = walk(item.children, expands)
           }
           return localOption
         })
       }
       this.localDatasource = walk(this.datasource, clone(expands))
     },
-    toggle (option, index, depth) {
-      option.expanded = !option.expanded
+    toggle (item, index, depth) {
+      item.expanded = !item.expanded
 
-      let expands = option.expanded
-        ? uniq([...this.expands, option.value])
+      let expands = item.expanded
+        ? uniq([...this.expands, item.value])
         : filter(
           this.expands,
-          value => value !== option.value
+          value => value !== item.value
         )
       this.$emit('update:expands', expands)
 
-      this.$emit(option.expanded ? 'expand' : 'collapse', option, index, depth)
+      this.$emit(item.expanded ? 'expand' : 'collapse', item, index, depth)
     },
     handleItemClick (...args) {
       this.$emit('click', ...args)

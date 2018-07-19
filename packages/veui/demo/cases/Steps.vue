@@ -15,7 +15,11 @@
     </section>
     <section>
       <h2>小型样式：</h2>
-      <veui-steps :steps="steps" :current="current - 1" :ui="`small ${vertical ? 'vertical' : ''}`"></veui-steps>
+      <veui-steps :steps="steps" :current="current - 1" :ui="`small${vertical ? ' vertical' : ''}`"></veui-steps>
+    </section>
+    <section>
+      <h2>多行小型样式：</h2>
+      <veui-steps :steps="steps" :current="current - 1" :ui="`small full${vertical ? ' vertical' : ''}`"></veui-steps>
     </section>
     <section>
       <h2>自定义模板：</h2>
