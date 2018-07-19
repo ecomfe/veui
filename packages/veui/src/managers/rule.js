@@ -7,7 +7,16 @@ import numeric from './rules/numeric'
 import pattern from './rules/pattern'
 import { isObject, isFunction } from 'lodash'
 
-const replaceRe = /%\{ruleValue\}/g
+/**
+ * 变量匹配正则
+ *
+ * @deprecated
+ * @type {RegExp}
+ */
+const oldRuleValueRe = /%\{ruleValue\}/g
+
+const ruleValueRe = /\$\{ruleValue\}/g
+const valueRe = /\$\{value\}/g
 
 export class Rule {
   constructor () {
@@ -31,14 +40,17 @@ export class Rule {
     let results = rules.map(rule => {
       let validator = this.ruleValidators[rule.name]
       if (!validator.validate(val, rule.value)) {
+        let realMessage = rule.message || validator.message
         return {
           name: rule.name,
-          message: isFunction(rule.message)
-            ? rule.message(rule.value)
-            : ((rule.message || validator.message) + '').replace(
-              replaceRe,
-              rule.value
-            )
+          message: isFunction(realMessage)
+            ? realMessage(rule.value, val)
+            : (realMessage + '')
+              .replace(
+                ruleValueRe.test(realMessage) ? ruleValueRe : oldRuleValueRe,
+                rule.value
+              )
+              .replace(valueRe, val)
         }
       }
       // 代表没错

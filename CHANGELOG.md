@@ -5,6 +5,7 @@
 * [^] `Pagination` 组件的 `redirect` 事件回调参数从 `({ page, event })` 调整为 `(page, event)`。
 * [^] 调整 `FilterPanel` 组件和 `Tree` 组件的对外接口参数名，统一将 `options`/`option` 更名为 `items`/`item`。
 * [^] 调整 `resize` 指令的默认每次都触发回调，增加 `throttle`/`debounce`/`leading` 三个 modifier。
+* [^] 调整 `rule` 出错信息变量模板匹配语法为 `${ruleValue}`，原语法将在下个版本移除。
 
 ### 💡 主要变更
 
