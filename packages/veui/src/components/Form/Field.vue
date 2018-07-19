@@ -194,7 +194,10 @@ export default {
       if (this.interactiveRulesMap[eventName]) {
         this.$nextTick(() => this.validate(this.interactiveRulesMap[eventName]))
       }
-      this.name && this.$nextTick(() => this.form.$emit('interact', eventName, this.name))
+
+      if (this.name) {
+        this.$nextTick(() => this.form.$emit('interact', eventName, this.name))
+      }
     },
     hideValidity (fields) {
       if (!fields || !fields.length) {
