@@ -595,7 +595,7 @@ export default {
       }
       this.$emit('progress', this.files[index], index, this.requestMode === 'xhr' ? properties : null)
     },
-    onload (data, file) {
+    onload (file, data) {
       this.uploadCallback(data, file)
     },
     onerror (file, properties) {
@@ -628,7 +628,11 @@ export default {
         xhr.withCredentials = this.withCredentials
         xhr.send(formData)
       } else if (this.requestMode === 'custom' && this.upload) {
-        this.upload.call(null, file, this.onload, this.onprogress, this.onerror)
+        this.upload.call(null, file, {
+          onload: this.onload,
+          onprogress: this.onprogress,
+          onerror: this.onerror
+        })
       }
     },
     replaceFile (file) {
