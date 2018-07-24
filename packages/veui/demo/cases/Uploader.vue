@@ -143,15 +143,15 @@ export default {
       imageSrc: null,
       tooltipTarget: null,
       tooltipOpen: false,
-      upload: (file, onload, onprogress, onerror) => {
-        // onload(data: Object, file: Object)`
-        // onprogress(file: Object, properties: Object({loaded, total}))
-        // onerror(file: Object, properties: Object({reason}))
+      upload: (file, {onload, onprogress, onerror}) => {
+        // onload(file: Object, data: Object)
+        // onprogress(file: Object, progress: Object({loaded, total}))
+        // onerror(file: Object, error: Object({reason}))
         let xhr = new XMLHttpRequest()
         file.xhr = xhr
 
         xhr.upload.onprogress = e => onprogress(file, e)
-        xhr.onload = () => onload(JSON.parse(xhr.responseText), file)
+        xhr.onload = () => onload(file, JSON.parse(xhr.responseText))
         xhr.onerror = e => onerror(file, e)
         let formData = new FormData()
         formData.append('file', file)

@@ -583,24 +583,24 @@ export default {
         }
       })
     },
-    onprogress (file, properties) {
+    onprogress (file, progress) {
       let index = this.fileList.indexOf(file)
       switch (this.progress) {
         case 'number':
         case 'bar':
-          file.loaded = properties.loaded
-          file.total = properties.total
+          file.loaded = progress.loaded
+          file.total = progress.total
           this.updateFileList(file)
           break
       }
-      this.$emit('progress', this.files[index], index, this.requestMode === 'xhr' ? properties : null)
+      this.$emit('progress', this.files[index], index, this.requestMode === 'xhr' ? progress : null)
     },
-    onload (data, file) {
+    onload (file, data) {
       this.uploadCallback(data, file)
     },
-    onerror (file, properties) {
+    onerror (file, error) {
       let index = this.fileList.indexOf(file)
-      this.showFailureResult(properties || {}, file)
+      this.showFailureResult(error || {}, file)
       this.$emit('failure', this.files[index], index)
     },
     uploadFile (file) {
@@ -611,7 +611,7 @@ export default {
         file.xhr = xhr
 
         xhr.upload.onprogress = e => this.onprogress(file, e)
-        xhr.onload = () => this.onload(this.parseData(xhr.responseText), file)
+        xhr.onload = () => this.onload(file, this.parseData(xhr.responseText))
         xhr.onerror = e => this.onerror(file, e)
 
         let formData = new FormData()
@@ -628,7 +628,11 @@ export default {
         xhr.withCredentials = this.withCredentials
         xhr.send(formData)
       } else if (this.requestMode === 'custom' && this.upload) {
-        this.upload.call(null, file, this.onload, this.onprogress, this.onerror)
+        this.upload.call(null, file, {
+          onload: this.onload,
+          onprogress: this.onprogress,
+          onerror: this.onerror
+        })
       }
     },
     replaceFile (file) {
