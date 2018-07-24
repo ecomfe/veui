@@ -2,18 +2,18 @@
 <div v-if="localOpen" class="veui-alert" :ui="ui" :class="`veui-alert-${type}`"
   role="alert" aria-expanded="true">
   <slot name="content">
-    <veui-icon class="veui-alert-icon" :name="icons[type]"/>
+    <div class="veui-alert-state">
+      <veui-icon class="veui-alert-icon" :name="icons[type]"/>
+    </div>
 
-    <span v-if="isMultiple" class="veui-alert-message veui-alert-message-multiple">
+    <div v-if="isMultiple" class="veui-alert-message veui-alert-message-multiple">
       <slot :index="localIndex" :message="message[localIndex]">{{ message[localIndex] }}</slot>
-    </span>
-    <span v-else class="veui-alert-message">
-      <slot v-if="$scopedSlots.default" :message="message">{{ message }}</slot>
-      <slot v-else>{{ message }}</slot>
-    </span>
+    </div>
+    <div v-else class="veui-alert-message">
+      <slot :message="message">{{ message }}</slot>
+    </div>
 
-    <veui-button v-if="closeText" class="veui-alert-close veui-alert-close-text" ui="link primary" @click="close">{{ closeText }}</veui-button>
-    <span class="veui-alert-nav" v-else-if="isMultiple">
+    <div class="veui-alert-nav" v-if="isMultiple">
       <veui-button ui="link" :disabled="isFirst" @click="switchMessage(-1)">
         <veui-icon :name="icons.prev"/>
       </veui-button>
@@ -21,10 +21,14 @@
       <veui-button ui="link" :disabled="isLast" @click="switchMessage(1)">
         <veui-icon :name="icons.next"/>
       </veui-button>
-    </span>
-    <veui-button v-else class="veui-alert-close" ui="link" @click="close">
-      <veui-icon :name="icons.close"/>
-    </veui-button>
+    </div>
+
+    <div class="veui-alert-close" v-if="closable">
+      <veui-button v-if="realCloseLabel" class="veui-alert-close-text" ui="link primary" @click="close">{{ realCloseLabel }}</veui-button>
+      <veui-button v-else ui="link" @click="close">
+        <veui-icon :name="icons.close"/>
+      </veui-button>
+    </div>
   </slot>
 </div>
 </template>
@@ -33,6 +37,7 @@
 import Icon from './Icon'
 import Button from './Button'
 import ui from '../mixins/ui'
+import warn from '../utils/warn'
 
 export default {
   name: 'alert',
@@ -47,7 +52,16 @@ export default {
       default: 'success'
     },
     message: [String, Array],
-    closeText: String,
+    closable: Boolean,
+    closeLabel: String,
+    closeText: {
+      type: String,
+      validator (val) {
+        if (val != null) {
+          warn('[veui-alert] `close-text` is deprecated and will be removed in `1.0.0`. Use `close-label` instead.')
+        }
+      }
+    },
     open: {
       type: Boolean,
       default: true
@@ -61,6 +75,20 @@ export default {
     return {
       localOpen: this.open,
       localIndex: 0
+    }
+  },
+  computed: {
+    realCloseLabel () {
+      return this.closeLabel || this.closeText
+    },
+    isMultiple () {
+      return Array.isArray(this.message)
+    },
+    isFirst () {
+      return this.localIndex <= 0
+    },
+    isLast () {
+      return this.localIndex >= this.message.length - 1
     }
   },
   watch: {
@@ -77,21 +105,11 @@ export default {
       this.$emit('update:index', value)
     }
   },
-  computed: {
-    isMultiple () {
-      return Array.isArray(this.message)
-    },
-    isFirst () {
-      return this.localIndex <= 0
-    },
-    isLast () {
-      return this.localIndex >= this.message.length - 1
-    }
-  },
   methods: {
     close () {
       this.localOpen = false
       this.$emit('update:open', false)
+      this.$emit('close')
     },
     switchMessage (step) {
       if ((step > 0 && this.isLast) || (step < 0 && this.isFirst)) {
