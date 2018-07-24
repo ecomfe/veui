@@ -145,8 +145,8 @@ export default {
       tooltipOpen: false,
       upload: (file, {onload, onprogress, onerror}) => {
         // onload(file: Object, data: Object)
-        // onprogress(file: Object, properties: Object({loaded, total}))
-        // onerror(file: Object, properties: Object({reason}))
+        // onprogress(file: Object, progress: Object({loaded, total}))
+        // onerror(file: Object, error: Object({reason}))
         let xhr = new XMLHttpRequest()
         file.xhr = xhr
 
