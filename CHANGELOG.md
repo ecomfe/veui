@@ -49,6 +49,8 @@
 * [^] 通过 `prompt` manager 以指令式调用输入弹框功能时，现在返回的 `Promise` 在确认提交与取消时 `resolve` 的值分别是字符串和 `null`，与原生全局 `prompt` 方法一致（原来是 `{ isOk: true, value }` 与 `false`）。
 * [^] `Button` 组件加载中的文本修改为默认 slot 的内容。
 * [^] 调整 `rule` 出错信息变量模板匹配语法从 `%{ruleValue}` 修为 `${ruleValue}`，旧语法将在 `1.0.0` 移除。
+* [^] `Alert` 组件新增 `closable` prop，默认为 `false`，显式指定后才会显示关闭按钮/文本，而非原来的始终显示关闭按钮/文本。
+* [^] `Alert` 组件的 `close-text` prop 更名为 `close-label`，`close-text` 将在 `1.0.0` 移除。
 
 ### 💡 主要变更
 
@@ -56,6 +58,7 @@
 * [+] `Uploader` 组件增加切换动画。
 * [+] `Steps` 组件的 `click` 事件回调参数增加原生事件对象 `event`，现为 `(index, event)`。
 * [+] `Overlay` 组件浮层根元素上现在增加了对 `overlay.overlayClass` 全局配置项对应类名的输出。
+* [+] `Switch` 组件现在会透传与 `Checkbox` 组件一致的原生 DOM 事件。
 
 ### 🐞 问题修复
 
@@ -70,6 +73,7 @@
 * [^] 去除了 `Progress` 组件多余的内边距。
 * [^] 修正了 `Progress` 组件的 `auto-succeed` prop 的逻辑。
 * [^] 修正了 `NumberInput` 组件的 `min`/`max` prop 有时失效的问题。
+* [^] 修正了 `Alert` 组件多消息导航和关闭按钮不会同时显示的问题。
 * [^] 修正了 `alert`/`confirm`/`prompt` plugin 不能正常工作的问题。
 
 ## 1.0.0-alpha.14

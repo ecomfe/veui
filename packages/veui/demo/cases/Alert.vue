@@ -3,38 +3,51 @@
     <h1><code>&lt;veui-alert&gt;</code></h1>
     <section>
       <div>固定提示</div>
-      <veui-alert type="success" message="恭喜你，你的请求已成功处理" @update:open="close"></veui-alert>
-      <veui-alert class="limit-width" type="success" message="恭喜你，你的请求已成功处理" @update:open="close"></veui-alert>
-      <veui-alert type="warning" message="警告，进行检查，有风险信息存在" @update:open="close"></veui-alert>
-      <veui-alert class="limit-width" type="warning" :message="messages" @update:open="close"></veui-alert>
-      <veui-alert type="info" message="提醒，这个消息需要注意" @update:open="close"></veui-alert>
-      <veui-alert class="limit-width" type="info" message="提醒，这个消息需要注意" @update:open="close" close-text="不再提示"></veui-alert>
-      <veui-alert type="error" message="错误，请检查并修改后再进行操作" @update:open="close"></veui-alert>
-      <veui-alert class="limit-width" type="error" message="错误，请检查并修改后再进行操作" @update:open="close"></veui-alert>
-      <veui-dialog
-          title="提示"
-          :open.sync="open"
-          draggable>
-          您关闭了
-          <template slot="foot">
-            <veui-button ui="primary" @click="open = false">确定</veui-button>
-            <veui-button autofocus @click="open = false">取消</veui-button>
-          </template>
-      </veui-dialog>
+      <veui-alert
+        type="success"
+        message="恭喜你，你的请求已成功处理"
+        closable/>
+      <veui-alert
+        class="limit-width"
+        type="success"
+        message="恭喜你，你的请求已成功处理"
+        closable
+        close-label="关闭"/>
+      <veui-alert
+        type="warning"
+        message="警告，进行检查，有风险信息存在"/>
+      <veui-alert
+        class="limit-width"
+        type="warning"
+        :message="messages"
+        closable/>
+      <veui-alert
+        type="info"
+        message="提醒，这个消息需要注意"/>
+      <veui-alert
+        class="limit-width"
+        type="info"
+        message="提醒，这个消息需要注意"
+        close-label="不再提示"/>
+      <veui-alert
+        type="error"
+        message="错误，请检查并修改后再进行操作"/>
+      <veui-alert
+        class="limit-width"
+        type="error"
+        message="错误，请检查并修改后再进行操作"/>
     </section>
   </article>
 </template>
 
 <script>
 import bus from '../bus'
-import { Alert, Dialog, Button, Icon } from 'veui'
+import { Alert, Icon } from 'veui'
 
 export default {
   name: 'alert',
   components: {
     'veui-alert': Alert,
-    'veui-dialog': Dialog,
-    'veui-button': Button,
     'veui-icon': Icon
   },
   data () {
