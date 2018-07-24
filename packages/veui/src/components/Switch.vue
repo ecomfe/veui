@@ -11,7 +11,8 @@
     type="checkbox"
     v-bind="attrs"
     :disabled="realDisabled || realReadonly"
-    @change="handleChange($event.target.checked)">
+    @change="handleChange($event.target.checked)"
+    v-on="listeners">
   <div class="veui-switch-switcher">
     <div class="veui-switch-button"></div>
   </div>
@@ -26,6 +27,9 @@ import Icon from './Icon'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { pick } from 'lodash'
+import { getListeners } from '../utils/helper'
+
+const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
 
 export default {
   name: 'veui-switch',
@@ -56,9 +60,12 @@ export default {
   computed: {
     attrs () {
       return {
-        ...pick(this.$props, 'name', 'readonly', 'indeterminate'),
+        ...pick(this.$props, 'name', 'readonly'),
         checked: this.localChecked
       }
+    },
+    listeners () {
+      return getListeners(EVENTS, this)
     }
   },
   watch: {
