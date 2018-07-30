@@ -14,12 +14,12 @@
       <veui-checkboxgroup type="checkbox" v-model="columns" :items="[
         { value: 'typeId', label: '类型 ID'},
         { value: 'id', label: '数据 ID'},
-        { value: 'group', label: '数据分组', disabled: true},
+        { value: 'group', label: '数据分组'},
         { value: 'desc', label: '数据描述'},
         { value: 'price', label: '价格'},
         { value: 'updateDate', label: '更新时间'},
         { value: 'operation', label: '操作'}
-      ]"></veui-checkboxgroup>
+      ]"/>
     </section>
     <section>
       <veui-table ui="alt bordered" :data="data" :column-filter="columns" :key-field="selectSpanRow ? 'group' : 'id'" selectable
@@ -31,7 +31,7 @@
         <veui-table-column field="typeId" title="类型 ID" :span="typeSpan"/>
         <veui-table-column v-if="showGroup" field="group" title="数据分组" :span="groupSpan">
         </veui-table-column>
-        <veui-table-column field="desc" title="数据描述"></veui-table-column>
+        <veui-table-column field="desc" title="数据描述"/>
         <veui-table-column field="price" title="价格" sortable width="160" align="right">
           <template slot-scope="props">{{ props.item.price | currency }}</template>
           <template slot="foot"><strong>{{ total | currency }}</strong></template>
@@ -54,10 +54,10 @@
     <section class="container">
       <veui-table ui="slim bordered" :data="data" :column-filter="columns" :key-field="selectSpanRow ? 'group' : 'id'"
         selectable select-mode="single" :selected.sync="selected2">
-        <veui-table-column field="id" title="数据 ID"></veui-table-column>
+        <veui-table-column field="id" title="数据 ID"/>
         <veui-table-column v-if="showGroup" field="group" title="数据分组" :span="groupSpan">
         </veui-table-column>
-        <veui-table-column field="desc" title="数据描述"></veui-table-column>
+        <veui-table-column field="desc" title="数据描述"/>
         <veui-table-column field="price" title="价格" width="160" align="right">
           <template slot-scope="props">{{ props.item.price | currency }}</template>
         </veui-table-column>
@@ -67,6 +67,7 @@
             <veui-tooltip :target="`time-b-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
           </template>
         </veui-table-column>
+        <!-- <template slot="foot">An awesome table foot!</template> -->
       </veui-table>
       <p>已选ID：{{ JSON.stringify(selected2) }}</p>
     </section>

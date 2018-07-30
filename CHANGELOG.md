@@ -59,6 +59,8 @@
 * [+] `Steps` 组件的 `click` 事件回调参数增加原生事件对象 `event`，现为 `(index, event)`。
 * [+] `Overlay` 组件浮层根元素上现在增加了对 `overlay.overlayClass` 全局配置项对应类名的输出。
 * [+] `Switch` 组件现在会透传与 `Checkbox` 组件一致的原生 DOM 事件。
+* [+] `Toast` 组件增加 prop `open`，支持 `.sync`。
+* [+] `Toast` 组件增加 slot `default`。
 
 ### 🐞 问题修复
 
@@ -75,6 +77,7 @@
 * [^] 修正了 `NumberInput` 组件的 `min`/`max` prop 有时失效的问题。
 * [^] 修正了 `Alert` 组件多消息导航和关闭按钮不会同时显示的问题。
 * [^] 修正了 `alert`/`confirm`/`prompt` plugin 不能正常工作的问题。
+* [^] 修复了 `Table` 组件 `foot` slot 的渲染。
 
 ## 1.0.0-alpha.14
 

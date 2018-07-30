@@ -1,6 +1,7 @@
 <template>
 <veui-overlay :open="true" :overlay-class="mergeOverlayClass('veui-toast-list')" :priority="priority">
   <veui-toast v-for="(message, index) in messages"
+    open
     :key="message.__message_id__"
     :type="message.type"
     :message="message.message"
