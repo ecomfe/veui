@@ -2,7 +2,19 @@
 
 ### ⚠️ 非兼容性变更
 
-* [+] `Dialog` 组件现在默认会在点击默认的按钮及按下 <kbd>esc</kbd> 键时关闭并通过 `.sync` 修饰符同步外部数据。并且新增 `before-close` 函数 prop 来处理需要阻止对话框关闭的情况。增加 `default`/`foot` slot 的 slot 参数 `close`，用来在重写组件 slot 时调用关闭逻辑。
+* [^] 因为 `less@2` 依赖的包存在安全漏洞，故此次升级将对 `less` 的依赖升级到了 `^3.8.0`，对 `less-plugin-est` 的依赖升级到了 `^3.0.0`。
+
+  > #### 迁移指南
+  >
+  > 1. 更新 `less` 与 `less-plugin-est` 的版本；
+  > 2. 如果使用 `vue-cli` 的 `webpack` 模板初始化项目，请按如下方式修改 `build/utils.js` 文件：
+  >
+  >  ```diff
+  >  -    less: generateLoaders('less'),
+  >  +    less: generateLoaders('less', { javascriptEnabled: true }),
+  >  ```
+
+* [^] `Dialog` 组件现在默认会在点击默认的按钮及按下 <kbd>esc</kbd> 键时关闭并通过 `.sync` 修饰符同步外部数据。并且新增 `before-close` 函数 prop 来处理需要阻止对话框关闭的情况。增加 `default`/`foot` slot 的 slot 参数 `close`，用来在重写组件 slot 时调用关闭逻辑。
 
   > #### 迁移指南
   >
@@ -61,6 +73,7 @@
 * [+] `Switch` 组件现在会透传与 `Checkbox` 组件一致的原生 DOM 事件。
 * [+] `Toast` 组件增加 prop `open`，支持 `.sync`。
 * [+] `Toast` 组件增加 slot `default`。
+* [+] `Toast` 组件增加全局配置 `toast.duration`。
 
 ### 🐞 问题修复
 

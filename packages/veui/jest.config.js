@@ -38,5 +38,6 @@ module.exports = {
     '.*\\.vue$': '<rootDir>/test/veui-jest',
     '.*\\.svg$': '<rootDir>/build/svg-icon-jest'
   },
-  setupFiles: ['./test/unit/env.js']
+  setupFiles: ['./test/unit/env.js'],
+  testURL: 'http://localhost' // https://github.com/facebook/jest/issues/6766
 }
