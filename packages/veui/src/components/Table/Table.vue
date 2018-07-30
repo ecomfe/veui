@@ -2,11 +2,11 @@
 <table class="veui-table" :ui="ui">
   <colgroup>
     <col v-if="selectable" width="60"/>
-    <col v-for="(col, index) in realColumns" :width="col.width" :key="index"/>
+    <col v-for="col in realColumns" :width="col.width" :key="col.field"/>
   </colgroup>
   <table-head @sort="sort"/>
   <table-body><template slot="no-data"><slot name="no-data">没有数据</slot></template></table-body>
-  <slot name="foot"><table-foot/></slot>
+  <table-foot v-if="hasFoot"><slot name="foot"></slot></table-foot>
   <slot/>
 </table>
 </template>
@@ -14,7 +14,7 @@
 <script>
 import warn from '../../utils/warn'
 import ui from '../../mixins/ui'
-import { map, intersection, isString, includes, indexOf, keys as objectKeys, find } from 'lodash'
+import { map, intersection, includes, indexOf, keys as objectKeys, find } from 'lodash'
 import Body from './_TableBody'
 import Head from './_TableHead'
 import Foot from './_TableFoot'
@@ -37,17 +37,8 @@ export default {
         return []
       }
     },
-    keys: {
-      validator (val) {
-        if (!val) {
-          return true
-        }
-        return isString(val) || Array.isArray(val) && val.length === this.data.length
-      }
-    },
-    keyField: {
-      type: String
-    },
+    keys: [String, Array],
+    keyField: String,
     selectable: Boolean,
     selectMode: {
       type: String,
@@ -131,6 +122,9 @@ export default {
         return 'all'
       }
       return 'partial'
+    },
+    hasFoot () {
+      return this.$slots.foot || this.columns.some(col => col.hasFoot())
     }
   },
   methods: {
@@ -190,9 +184,6 @@ export default {
         return false
       }
       return true
-    },
-    hasFoot () {
-      return this.$slots.foot || this.columns.some(col => col.hasFoot())
     }
   },
   created () {

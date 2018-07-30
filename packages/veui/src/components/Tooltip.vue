@@ -23,7 +23,6 @@ export default {
     'veui-overlay': Overlay
   },
   props: {
-    domId: String,
     position: {
       type: String,
       default: 'top'
@@ -78,7 +77,10 @@ export default {
         close = trigger[1] || trigger[0]
       }
       open = TRIGGER_MAP[open] || open
-      return {open, close}
+      return {
+        open,
+        close
+      }
     },
     targetNode () {
       return getNodes(this.target, this.$vnode.context)[0]

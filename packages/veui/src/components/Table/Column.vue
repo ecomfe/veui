@@ -41,7 +41,7 @@ export default {
       ...pick(this, ...props, 'id'),
       index,
       hasFoot: () => {
-        return !!this.$scopedSlots.foot
+        return !!this.$slots.foot
       },
       renderBody: item => {
         if (this.$scopedSlots.default) {

@@ -81,7 +81,8 @@ export default {
       }
 
       if (typeof col.span === 'function') {
-        let { col: colspan = 1, row: rowspan = 1 } = col.span(this.index)
+        let { data: dataItems, index } = this
+        let { col: colspan = 1, row: rowspan = 1 } = col.span(index, dataItems[index])
         if (colspan < 1 || rowspan < 1) {
           return null
         }
