@@ -1,6 +1,11 @@
 <template>
-<div v-if="localOpen" class="veui-alert" :ui="ui" :class="`veui-alert-${type}`"
-  role="alert" aria-expanded="true">
+<div
+  v-if="localOpen"
+  class="veui-alert"
+  :ui="ui"
+  :class="`veui-alert-${type}`"
+  role="alert" aria-expanded="true"
+>
   <slot name="content">
     <div class="veui-alert-state">
       <veui-icon class="veui-alert-icon" :name="icons[type]"/>
@@ -14,18 +19,41 @@
     </div>
 
     <div class="veui-alert-nav" v-if="isMultiple">
-      <veui-button ui="link" :disabled="isFirst" @click="switchMessage(-1)">
+      <veui-button
+        ui="link"
+        :disabled="isFirst"
+        @click="switchMessage(-1)"
+        aria-label="上一条"
+      >
         <veui-icon :name="icons.prev"/>
       </veui-button>
-      <span>{{ localIndex + 1 }}/{{ message.length }}</span>
-      <veui-button ui="link" :disabled="isLast" @click="switchMessage(1)">
+      <span
+        class="veui-alert-nav-indicator"
+        :aria-label="`第 ${localIndex + 1} 条，共 ${message.length} 条`"
+      >{{ localIndex + 1 }}/{{ message.length }}</span>
+      <veui-button
+        ui="link"
+        :disabled="isLast"
+        @click="switchMessage(1)"
+        aria-label="下一条"
+      >
         <veui-icon :name="icons.next"/>
       </veui-button>
     </div>
 
     <div class="veui-alert-close" v-if="closable">
-      <veui-button v-if="realCloseLabel" class="veui-alert-close-text" ui="link primary" @click="close">{{ realCloseLabel }}</veui-button>
-      <veui-button v-else ui="link" @click="close">
+      <veui-button
+        v-if="realCloseLabel"
+        class="veui-alert-close-text"
+        ui="link primary"
+        @click="close"
+      >{{ realCloseLabel }}</veui-button>
+      <veui-button
+        v-else
+        ui="link"
+        @click="close"
+        aria-label="关闭"
+      >
         <veui-icon :name="icons.close"/>
       </veui-button>
     </div>

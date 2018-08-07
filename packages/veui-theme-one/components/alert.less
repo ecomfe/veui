@@ -6,12 +6,12 @@
   @info: @veui-info-color;
   @error: @veui-alert-color;
 
+  position: relative;
   padding: 10px 20px;
   color: @veui-text-color-normal;
-  overflow: hidden;
   display: table;
   width: 100%;
-  position: relative;
+  line-height: @veui-line-height-normal;
 
   &-state,
   &-message,
@@ -51,12 +51,17 @@
   &-message {
     width: 100%;
     height: 100%;
-    line-height: @veui-line-height-normal;
   }
 
   &-nav {
-    span {
+    &-indicator {
       .margin(_, 8px);
+    }
+
+    .veui-button,
+    &-indicator {
+      vertical-align: top;
+      height: ~"calc(1em * @{veui-line-height-normal})";
     }
   }
 
@@ -72,10 +77,10 @@
 
     .veui-button {
       height: auto;
-      line-height: 1;
+      line-height: @veui-line-height-normal;
 
       .veui-icon {
-        margin-top: auto;
+        margin-top: (@veui-font-size-normal * @veui-line-height-normal / @veui-font-size-small - 1) * .5em;
       }
 
       &:hover,
@@ -86,7 +91,13 @@
     }
   }
 
-  .veui-alert-close-text {
+  &-close {
+    .veui-button {
+      float: left;
+    }
+  }
+
+  &-close-text {
     color: @veui-brand-color;
 
     &:hover,
