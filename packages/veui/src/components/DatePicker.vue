@@ -115,7 +115,7 @@ config.defaults({
 }, 'datepicker')
 
 const CALENDAR_PROPS = [
-  'range', 'panel', 'weekStart', 'fillMonth',
+  'range', 'weekStart', 'fillMonth',
   'today', 'disabledDate', 'dateClass'
 ]
 
@@ -133,6 +133,7 @@ export default {
     event: 'select'
   },
   props: {
+    panel: Number,
     selected: {
       type: [Array, Date],
       default () {
