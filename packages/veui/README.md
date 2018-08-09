@@ -12,7 +12,7 @@ Enterprise UI components for Vue.js. Based on ONE DESIGN from Baidu, Inc.
 
 ```sh
 $ npm i --save veui
-$ npm i --save-dev babel-plugin-veui veui-loader
+$ npm i --save-dev babel-preset-veui veui-loader
 ```
 
 To use default theme `one` you have to install it too.
@@ -27,21 +27,12 @@ First, scaffold your project using `vue-cli` with template `webpack`.
 
 ### Babel plugins
 
-To bundle VEUI correctly, you need to add the following configs into your `.babelrc` file in addition to the existing `presets`:
+VEUI requires some Babel plugins to be transpiled correctly. We've provided a preset which contains all presets and plugins needed to transpile VEUI, you just need to add the following configs into your `.babelrc` file in addition to the existing `presets`:
 
 ```json
 {
-  "plugins": [
-    "veui",
-    "lodash",
-    "transform-vue-jsx",
-    [
-      "transform-runtime",
-      {
-        "polyfill": false,
-        "regenerator": false
-      }
-    ]
+  "presets": [
+    "veui"
   ]
 }
 ```

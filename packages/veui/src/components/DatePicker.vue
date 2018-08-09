@@ -98,14 +98,24 @@ import Button from './Button'
 import Overlay from './Overlay'
 import Calendar from './Calendar'
 import Icon from './Icon'
-import moment from 'moment'
 import dropdown from '../mixins/dropdown'
 import input from '../mixins/input'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import config from '../managers/config'
 import { toDateData } from '../utils/date'
-import { isNumber, pick, omit } from 'lodash'
+import { isNumber, pick, omit, keys } from 'lodash'
+import format from 'date-fns/format'
+import startOfDay from 'date-fns/start_of_day'
+import startOfWeek from 'date-fns/start_of_week'
+import startOfMonth from 'date-fns/start_of_month'
+import startOfQuarter from 'date-fns/start_of_quarter'
+import startOfYear from 'date-fns/start_of_year'
+import addDays from 'date-fns/add_days'
+import addWeeks from 'date-fns/add_weeks'
+import addMonths from 'date-fns/add_months'
+import addQuarters from 'date-fns/add_quarters'
+import addYears from 'date-fns/add_years'
 
 config.defaults({
   shortcuts: [],
@@ -222,7 +232,7 @@ export default {
       if (typeof this.format === 'function') {
         return this.format(date)
       }
-      return moment(date).format(this.format)
+      return format(date, this.format)
     },
     toDateData (date) {
       if (!date) {
@@ -251,24 +261,13 @@ export default {
     },
     getDateByOffset (offset) {
       offset = isNumber(offset) ? { days: offset } : offset
-
-      // set locale data according to current prop
-      // and reset later
-      let locale = moment.locale()
-      let dow = moment.localeData().firstDayOfWeek()
-      moment.updateLocale(locale, {
-        week: {
-          dow: this.weekStart
-        }
-      })
-      let startOf = offset.startOf || 'day'
-      let base = moment().startOf(startOf)
-      moment.updateLocale(locale, {
-        week: {
-          dow
-        }
-      })
-      return base.add(omit(offset, 'startOf')).toDate()
+      return add(
+        startOf(
+          this.today, offset.startOf || 'day',
+          { weekStartsOn: this.weekStart }
+        ),
+        omit(offset, 'startOf')
+      )
     },
     isShortcutSelected ({ from, to }) {
       let selected = this.picking || this.localSelected
@@ -289,5 +288,39 @@ export default {
       this.localSelected = value
     }
   }
+}
+
+function startOf (base, startOf, { weekStartsOn }) {
+  switch (startOf) {
+    case 'day':
+      return startOfDay(base)
+    case 'week':
+      return startOfWeek(base, { weekStartsOn })
+    case 'month':
+      return startOfMonth(base)
+    case 'quarter':
+      return startOfQuarter(base)
+    case 'year':
+      return startOfYear(base)
+    default:
+      throw new Error('Invalid argument for `startOf`.')
+  }
+}
+
+const ADD_FN_MAP = {
+  days: addDays,
+  weeks: addWeeks,
+  months: addMonths,
+  quarters: addQuarters,
+  years: addYears
+}
+
+function add (base, offset) {
+  return keys(offset).reduce((acc, key) => {
+    if (key in ADD_FN_MAP && offset[key] !== 0) {
+      return ADD_FN_MAP[key](acc, offset[key])
+    }
+    return acc
+  }, base)
 }
 </script>

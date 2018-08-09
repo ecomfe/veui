@@ -1,5 +1,10 @@
 ## 1.0.0-alpha.16
 
+### 💡 主要变更
+
+* [+] 增加了 `babel-preset-veui`，简化了引入 VEUI 一起进行转译所需的步骤。
+* [^] 引入 `date-fns` 替换了对 `moment` 的依赖。
+
 ### 🐞 问题修复
 
 * [^] 修复了 `DatePicker` 组件 `panel` prop 默认值错误的问题。
