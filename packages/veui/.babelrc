@@ -1,20 +1,7 @@
 {
   "presets": [
-    ["env", { "modules": false }],
-    "stage-2"
+    "veui"
   ],
-  "plugins": [
-    "veui",
-    "transform-vue-jsx",
-    [
-      "transform-runtime",
-      {
-        "polyfill": false,
-        "regenerator": false
-      }
-    ]
-  ],
-  "comments": false,
   "env": {
     "test": {
       "presets": ["env", "stage-2"]
