@@ -1,16 +1,25 @@
 {
-  "presets": [
-    "veui"
-  ],
+  "comments": false,
   "env": {
     "test": {
-      "presets": ["env", "stage-2"]
+      "presets": ["env", "stage-2"],
+      "plugins": [
+        "veui",
+        "transform-vue-jsx",
+        [
+          "transform-runtime",
+          {
+            "polyfill": false,
+            "regenerator": false
+          }
+        ]
+      ]
     },
     "production": {
-      "plugins": ["lodash"]
+      "presets": ["veui"]
     },
     "development": {
-      "plugins": ["lodash"]
+      "presets": ["veui"]
     }
   }
 }
