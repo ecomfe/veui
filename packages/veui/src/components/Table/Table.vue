@@ -1,5 +1,6 @@
 <template>
 <table class="veui-table" :ui="ui">
+  <slot/>
   <colgroup>
     <col v-if="selectable" width="60"/>
     <col v-for="col in realColumns" :width="col.width" :key="col.field"/>
@@ -7,7 +8,6 @@
   <table-head @sort="sort"/>
   <table-body><template slot="no-data"><slot name="no-data">没有数据</slot></template></table-body>
   <table-foot v-if="hasFoot"><slot name="foot"></slot></table-foot>
-  <slot/>
 </table>
 </template>
 
