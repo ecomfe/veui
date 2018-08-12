@@ -9,6 +9,7 @@ Enterprise UI components for Vue.js. Based on ONE DESIGN from Baidu, Inc.
 Four packages are included in this repo:
 
 * [`veui`](./packages/veui)
+* [`babel-preset-veui`](./packages/babel-preset-veui)
 * [`babel-plugin-veui`](./packages/babel-plugin-veui)
 * [`veui-loader`](./packages/veui-loader)
 * [`veui-theme-one`](./packages/veui-theme-one)
