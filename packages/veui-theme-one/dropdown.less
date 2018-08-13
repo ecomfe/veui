@@ -4,6 +4,40 @@
   border: 1px solid @veui-gray-color-6;
   margin: 3px 0;
   .veui-overlay-shadow();
+
+  &.veui-dropdown-overflow {
+    &::before,
+    &::after {
+      content: "";
+      height: 20px;
+      pointer-events: none;
+      transition: opacity .2s;
+    }
+
+    &::before {
+      .absolute(3px, 1px, 0);
+      .vertical-gradient(#fff, transparent);
+    }
+
+    &::after {
+      .absolute(_, 1px, 3px);
+      .vertical-gradient(transparent, #fff);
+    }
+
+    &-scroll {
+      &-start {
+        &::before {
+          opacity: 0;
+        }
+      }
+
+      &-end {
+        &::after {
+          opacity: 0;
+        }
+      }
+    }
+  }
 }
 
 ._veui-dropdown-button {

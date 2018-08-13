@@ -1,4 +1,4 @@
-import { findIndex } from 'lodash'
+import { findIndex, uniq } from 'lodash'
 
 export function closest (element, selectors) {
   if (element.closest) {
@@ -254,4 +254,30 @@ export function getTransform (el) {
  */
 export function setTransform (el, value) {
   el.style[getTransformKey()] = value
+}
+
+/**
+ * 切换指定元素的某个类名
+ *
+ * @param {HTMLElement} el 目标元素
+ * @param {string} className 需要切换的类名
+ * @param {boolean} forceValue 强制添加/删除，为 true 则添加，为 false 则删除
+ */
+export function toggleClass (el, className, forceValue) {
+  let klass = el.getAttribute('class')
+  let klasses = uniq(klass.trim().split(/\s+/))
+  let index = findIndex(klasses, k => k === className)
+  if (index !== -1) {
+    if (forceValue === true) {
+      return
+    }
+    klasses.splice(index, 1)
+    el.setAttribute('class', klasses.join(' '))
+    return
+  }
+
+  if (forceValue === false) {
+    return
+  }
+  el.setAttribute('class', klasses.concat([className]).join(' '))
 }
