@@ -261,14 +261,18 @@ export function setTransform (el, value) {
  *
  * @param {HTMLElement} el 目标元素
  * @param {string} className 需要切换的类名
- * @param {boolean} forceValue 强制添加/删除，为 true 则添加，为 false 则删除
+ * @param {boolean} force 强制添加/删除，为 true 则添加，为 false 则删除
  */
-export function toggleClass (el, className, forceValue) {
+export function toggleClass (el, className, force) {
+  if (el.classList) {
+    return el.classList.toggle(className, force)
+  }
+
   let klass = el.getAttribute('class')
   let klasses = uniq(klass.trim().split(/\s+/))
   let index = findIndex(klasses, k => k === className)
   if (index !== -1) {
-    if (forceValue === true) {
+    if (force === true) {
       return
     }
     klasses.splice(index, 1)
@@ -276,7 +280,7 @@ export function toggleClass (el, className, forceValue) {
     return
   }
 
-  if (forceValue === false) {
+  if (force === false) {
     return
   }
   el.setAttribute('class', klasses.concat([className]).join(' '))

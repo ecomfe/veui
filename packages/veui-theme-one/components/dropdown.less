@@ -5,6 +5,51 @@
   &:extend(._veui-dropdown-button all);
   display: inline-block;
   min-width: 110px;
+  max-width: 210px;
+
+  &-split &-command {
+    width: ~"calc(100% - 36px)";
+    margin-right: -1px;
+  }
+
+  &-split &-label {
+    max-width: none;
+  }
+
+  &-split &-button {
+    position: relative;
+    width: 36px;
+    padding: 0;
+    text-align: center;
+
+    .veui-icon {
+      float: none;
+    }
+
+    &::before,
+    &::after, {
+      content: "";
+      display: inline-block;
+    }
+
+    &[ui~="primary"]::before {
+      .absolute(_, _, 50%, -1.5px);
+      transform: translateY(50%);
+      width: 1px;
+      height: 1em;
+      background-color: #fff;
+      opacity: .5;
+      transition: opacity .2s, transform .2s;
+    }
+  }
+
+  &-split&-expanded[ui~="primary"],
+  &-split[ui~="primary"]:hover, {
+    .veui-dropdown-button::before {
+      opacity: 0;
+      transform: translateY(50%) scaleY(.01);
+    }
+  }
 
   &-options {
     &:extend(._veui-dropdown-overlay all);

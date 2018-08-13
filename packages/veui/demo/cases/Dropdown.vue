@@ -4,12 +4,13 @@
     <p>
       <veui-dropdown
         ui="primary"
-        label="操作操作操作操作操作操作"
+        label="操作"
+        split
         :options="options"></veui-dropdown>
-      &nbsp;&nbsp;&nbsp;&nbsp;
       <veui-dropdown
         ui="primary micro"
         label="操作操作操作操作操作操作"
+        trigger="hover"
         :options="options">
         <template slot="option-label" slot-scope="{ label }">
           👉 {{ label }}
@@ -17,6 +18,12 @@
       </veui-dropdown>
     </p>
     <p>
+      <veui-dropdown
+        ui="small"
+        label="操作操作操作操作操作操作"
+        trigger="hover"
+        split
+        :options="options"/>
       <veui-dropdown
         ui="primary"
         label="操作操作操作操作操作操作"
@@ -97,4 +104,7 @@ p {
   margin: 10px 0;
 }
 
+.veui-dropdown {
+  margin-right: 20px;
+}
 </style>
