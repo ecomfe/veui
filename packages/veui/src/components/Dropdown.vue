@@ -1,18 +1,28 @@
 <template>
 <div class="veui-dropdown" :ui="ui"
   :class="{
-    'veui-dropdown-expanded': expanded
+    'veui-dropdown-expanded': expanded,
+    'veui-dropdown-split': split
   }">
+  <veui-button
+    v-if="split"
+    class="veui-dropdown-command"
+    @click="$emit('click')"
+    :ui="ui">
+    <span class="veui-dropdown-label">
+      <slot name="label" :label="label">{{ label }}</slot>
+    </span>
+  </veui-button>
   <veui-button
     class="veui-dropdown-button"
     :ui="ui"
     :disabled="disabled"
     aria-haspopup="menu"
     :aria-disabled="String(this.disabled)"
+    v-on="toggleHandlers"
     @keydown.down.up.prevent="expanded = true"
-    @click="expanded = !expanded"
     ref="button">
-    <span class="veui-dropdown-label">
+    <span class="veui-dropdown-label" v-if="!split">
       <slot name="label" :label="label">{{ label }}</slot>
     </span>
     <veui-icon class="veui-dropdown-icon" :name="icons[expanded ? 'collapse': 'expand']"/>
@@ -30,8 +40,10 @@
       ref="box"
       class="veui-dropdown-options"
       v-outside="{
-        outsideRefs: ['button'],
-        handler: close
+        refs: outsideRefs,
+        handler: close,
+        trigger,
+        delay: 300
       }"
       tabindex="-1"
       role="menu"
@@ -67,6 +79,17 @@ import overlay from '../mixins/overlay'
 import dropdown from '../mixins/dropdown'
 import keySelect from '../mixins/key-select'
 import '../common/uiTypes'
+import { includes } from 'lodash'
+
+const EVENT_MAP = {
+  hover: 'mouseenter',
+  click: 'click'
+}
+
+const MODE_MAP = {
+  hover: 'expand',
+  click: 'toggle'
+}
 
 export default {
   name: 'veui-dropdown',
@@ -80,18 +103,39 @@ export default {
   mixins: [ui, overlay, dropdown, keySelect],
   props: {
     label: String,
-    disabled: {
-      type: Boolean,
-      default: false
+    disabled: Boolean,
+    options: Array,
+    trigger: {
+      type: String,
+      default: 'click',
+      validator (val) {
+        return includes(['focus', 'hover', 'click'], val)
+      }
     },
-    options: Array
+    split: Boolean,
+    memoize: Boolean
   },
   data () {
     return {
       outsideRefs: ['button']
     }
   },
+  computed: {
+    toggleHandlers () {
+      return {
+        [EVENT_MAP[this.trigger]]: this.handleToggle
+      }
+    }
+  },
   methods: {
+    handleToggle () {
+      let mode = MODE_MAP[this.trigger]
+      if (mode === 'toggle') {
+        this.expanded = !this.expanded
+      } else if (mode === 'expand') {
+        this.expanded = true
+      }
+    },
     handleSelect (value) {
       this.expanded = false
       if (value != null) {

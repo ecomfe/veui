@@ -19,7 +19,10 @@ import Icon from './Icon'
 import ui from '../mixins/ui'
 import { getListeners } from '../utils/helper'
 
-const EVENTS = ['mousedown', 'mouseup', 'click', 'keydown', 'keyup', 'keypress', 'focus', 'blur']
+const EVENTS = [
+  'mousedown', 'mouseup', 'mouseenter', 'mouseleave',
+  'click', 'keydown', 'keyup', 'keypress', 'focus', 'blur'
+]
 
 export default {
   name: 'veui-button',

@@ -1,3 +1,11 @@
+## 1.0.0-alpha.17
+
+### 💡 主要变更
+
+* [+] `Dropdown` 组件增加了 `trigger` prop，来指定何时展开下拉框。
+* [+] `Dropdown` 组件增加了 `split` prop，来允许拆分指令按钮与下拉切换按钮。
+* [+] `Button` 组件增加了 `mouseenter`/`mouseleave` 事件。
+
 ## 1.0.0-alpha.16
 
 ### 💡 主要变更
