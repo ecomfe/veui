@@ -1,6 +1,9 @@
 <template>
-<div class="veui-dropdown" :ui="ui"
+<div
+  ref="main"
+  :ui="ui"
   :class="{
+    'veui-dropdown': true,
     'veui-dropdown-expanded': expanded,
     'veui-dropdown-split': split
   }">
@@ -30,7 +33,7 @@
   <veui-overlay
     v-if="options && expanded || !options"
     v-show="expanded"
-    target="button"
+    target="main"
     :open="expanded"
     autofocus
     modal
