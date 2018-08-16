@@ -30,16 +30,18 @@
         <veui-button
           ref="inc"
           class="veui-number-input-step-up"
-          @click="handleStep(1)"
+          @click="increase"
           :disabled="!editable || reachMaxLimit"
+          v-longpress.repeat="increase"
         >
           <veui-icon :name="icons.increase"/>
         </veui-button>
         <veui-button
           ref="dec"
           class="veui-number-input-step-down"
-          @click="handleStep(-1)"
+          @click="decrease"
           :disabled="!editable || reachMinLimit"
+          v-longpress.repeat="decrease"
         >
           <veui-icon :name="icons.decrease"/>
         </veui-button>
@@ -60,6 +62,7 @@ import { sign, add, round } from '../utils/math'
 import warn from '../utils/warn'
 import { isInteger, isNaN, pick, get, find } from 'lodash'
 import nudge from 'veui/directives/nudge'
+import longpress from 'veui/directives/longpress'
 
 const EVENTS = ['focus', 'blur', 'click', 'keyup', 'keydown', 'keypress']
 
@@ -67,7 +70,8 @@ export default {
   name: 'veui-number-input',
   mixins: [input, ui],
   directives: {
-    nudge
+    nudge,
+    longpress
   },
   components: {
     'veui-icon': Icon,
@@ -281,6 +285,12 @@ export default {
     },
     handleStep (sign) {
       this.handleThumbNudgeUpdate(this.step * sign)
+    },
+    increase () {
+      this.handleStep(1)
+    },
+    decrease () {
+      this.handleStep(-1)
     },
     filterLimitValue (val) {
       // 仅处理上下限问题

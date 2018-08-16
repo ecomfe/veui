@@ -1,5 +1,6 @@
 import { find, get, noop, isFunction } from 'lodash'
 import config from '../managers/config'
+import { getNumberArg } from '../utils/helper'
 
 config.defaults({
   'nudge.step': 1
@@ -15,7 +16,7 @@ function clear (el) {
   el.__nudgeData__ = null
 }
 
-function parseParams (el, { arg, value, modifiers }, vnode) {
+function parseParams ({ value, modifiers }) {
   // 解析 axis
   let axis = find(['x', 'y'], item => modifiers[item])
   if (!axis) {
@@ -23,6 +24,10 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
   }
 
   function parseFn (name) {
+    if (isFunction(value)) {
+      return value
+    }
+
     let fn = get(value, name, noop)
     return isFunction(fn) ? fn : noop
   }
@@ -30,7 +35,7 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
   // 解析回调函数
   let update = parseFn('update')
 
-  let step = get(value, 'step', config.get('nudge.step'))
+  let step = get(value, 'step') || getNumberArg(modifiers, config.get('nudge.step'))
 
   return {
     axis,
@@ -39,8 +44,8 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
   }
 }
 
-function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
-  const params = parseParams(el, { arg, value, modifiers }, vnode)
+function refresh (el, { modifiers, value, arg }) {
+  const params = parseParams({ arg, value, modifiers })
 
   if (el.__nudgeData__) {
     el.__nudgeData__.setOptions(params)
@@ -56,9 +61,9 @@ function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
 
     keydownHandler (event) {
       let { key, altKey, shiftKey } = event
-      let options = nudgeData.options
+      let { step, axis, update } = nudgeData.options
 
-      let increase = options.step
+      let increase = step
       if (altKey) {
         increase *= 0.1
       } else if (shiftKey) {
@@ -66,13 +71,13 @@ function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
       }
 
       switch (true) {
-        case options.axis === 'x' && (key === 'ArrowRight' || key === 'Right'):
-        case options.axis === 'y' && (key === 'ArrowUp' || key === 'Up'):
+        case axis === 'x' && (key === 'ArrowRight' || key === 'Right'):
+        case axis === 'y' && (key === 'ArrowUp' || key === 'Up'):
           increase *= 1
           break
 
-        case options.axis === 'x' && (key === 'ArrowLeft' || key === 'Left'):
-        case options.axis === 'y' && (key === 'ArrowDown' || key === 'Down'):
+        case axis === 'x' && (key === 'ArrowLeft' || key === 'Left'):
+        case axis === 'y' && (key === 'ArrowDown' || key === 'Down'):
           increase *= -1
           break
 
@@ -86,7 +91,7 @@ function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
       }
 
       event.preventDefault()
-      options.update(increase)
+      update(increase)
     }
   }
 
