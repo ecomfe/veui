@@ -197,7 +197,7 @@ export function getListeners (events, vm) {
   }, {})
 }
 
-export function parseTimingArg (modifiers, defaultTime) {
+export function getNumberArg (modifiers, defaultTime) {
   let timing
   find(Object.keys(modifiers), key => {
     let keyNum = Number(key)

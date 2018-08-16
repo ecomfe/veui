@@ -2,9 +2,11 @@
 
 ### 💡 主要变更
 
+* [+] 增加 `longpress` 指令。
 * [+] `Dropdown` 组件增加了 `trigger` prop，来指定何时展开下拉框。
 * [+] `Dropdown` 组件增加了 `split` prop，来允许拆分指令按钮与下拉切换按钮。
 * [+] `Button` 组件增加了 `mouseenter`/`mouseleave` 事件。
+* [+] `NumberInput` 组件支持长按调整值。
 
 ## 1.0.0-alpha.16
 
