@@ -277,17 +277,15 @@ export default {
     },
 
     removeById (id) {
-      this.remove(this.tabUids.indexOf(id))
-    },
+      let index = this.tabUids.indexOf(id)
 
-    remove (index) {
       if (index < 0) {
         return
       }
 
       // 外部控制有可能会多次进入，把任务往后推
       if (this.removing) {
-        setTimeout(() => this.remove(index), 500)
+        setTimeout(() => this.removeById(id), 100)
         return
       }
       this.removing = true
