@@ -18,6 +18,10 @@
         :before-close="beforeClose"
         title="Dialog Title">
         The content of the Dialog. You can use the default slot to override it.
+        <template slot="foot" slot-scope="{ close }">
+          <veui-button ui="primary" :loading="loading" @click="close('ok')">OK</veui-button>
+          <veui-button autofocus @click="close">CANCEL</veui-button>
+        </template>
       </veui-dialog>
       <veui-button ui="primary"
         @click="nonModalDialogVisible = !nonModalDialogVisible">Open a modeless dialog box</veui-button>
@@ -178,9 +182,18 @@ export default {
       dynamicContent: '',
       test: '123',
       adaptiveDialogTimer: null,
-      beforeClose: () => {
+      loading: false,
+      beforeClose: (type) => {
+        if (type === 'cancel') {
+          return
+        }
+
+        this.loading = true
         return new Promise(resolve => {
-          setTimeout(() => resolve(), 2000)
+          setTimeout(() => {
+            resolve()
+            this.loading = false
+          }, 2000)
         })
       }
     }

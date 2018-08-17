@@ -16,6 +16,9 @@ config.defaults({
           radius: 13
         }
       }
+    },
+    layout: {
+      values: ['fluid']
     }
   }
 }, 'progress')

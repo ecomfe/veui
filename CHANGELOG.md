@@ -1,5 +1,9 @@
 ## 1.0.0-alpha.17
 
+### ⚠️ 非兼容性变更
+
+* [^] `Dialog` 组件预设 `ui` 值 `top` 更名为 `high`。
+
 ### 💡 主要变更
 
 * [+] 增加 `longpress` 指令。
@@ -7,6 +11,7 @@
 * [+] `Dropdown` 组件增加了 `split` prop，来允许拆分指令按钮与下拉切换按钮。
 * [+] `Button` 组件增加了 `mouseenter`/`mouseleave` 事件。
 * [+] `NumberInput` 组件支持长按调整值。
+* [+] `Progress` 组件增加了预设 `ui` 值 `fluid`，自适应容器宽度。
 
 ## 1.0.0-alpha.16
 

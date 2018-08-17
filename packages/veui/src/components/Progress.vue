@@ -8,6 +8,12 @@
   :aria-valuetext="desc ? valueText : null"
   :class="klass"
   :ui="ui">
+  <div v-if="desc" class="veui-progress-desc">
+    <slot v-bind="{ percent, value: realValue, status }">
+      <veui-icon :name="icons.success" v-if="type === 'circular' && localStatus === 'success'"/>
+      <span class="veui-progress-desc-text">{{ valueText }}</span>
+    </slot>
+  </div>
   <div v-if="type === 'bar'" class="veui-progress-rail">
     <div class="veui-progress-meter" :style="{
       transform: `translateX(${percent}%)`
@@ -17,14 +23,8 @@
     :width="(radius + halfStroke) * 2" :height="(radius + halfStroke) * 2">
     <circle class="veui-progress-rail" :cx="radius + halfStroke" :cy="radius + halfStroke" :r="radius" fill="none" :stroke-width="stroke"></circle>
     <circle class="veui-progress-meter" :cx="radius + halfStroke" :cy="radius + halfStroke" :r="radius" fill="none" :stroke-width="stroke"
-      :stroke-dasharray="circumference" :stroke-dashoffset="circumference * (1 - ratio)"></circle>
+      :stroke-dasharray="circumference | fixed" :stroke-dashoffset="circumference * (1 - ratio) | fixed"></circle>
   </svg>
-  <div v-if="desc" class="veui-progress-desc">
-    <slot v-bind="{ percent, value: realValue, status }">
-      <veui-icon :name="icons.success" v-if="type === 'circular' && localStatus === 'success'"/>
-      <span class="veui-progress-desc-text">{{ valueText }}</span>
-    </slot>
-  </div>
 </div>
 </template>
 
@@ -42,6 +42,11 @@ export default {
   mixins: [ui],
   components: {
     'veui-icon': Icon
+  },
+  filters: {
+    fixed (val) {
+      return Math.round(val * 100) / 100
+    }
   },
   props: {
     type: {
