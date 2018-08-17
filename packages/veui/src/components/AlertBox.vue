@@ -18,7 +18,7 @@
   </veui-icon>
   <h3 class="veui-alert-box-title">
     <template v-if="title">{{ title }}</template>
-    <slot name="title" v-else>title</slot>
+    <slot name="title" v-else/>
   </h3>
   <div class="veui-alert-box-content">
     <slot/>

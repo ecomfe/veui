@@ -10,7 +10,8 @@
   @cancel="cancel"
   role="alertdialog">
   <template slot="title">
-    <slot name="title">{{ title }}</slot>
+    <template v-if="title">{{ title }}</template>
+    <slot name="title" v-else/>
   </template>
   <p class="veui-prompt-box-info">
     <slot/>

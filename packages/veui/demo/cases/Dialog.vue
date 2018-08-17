@@ -15,6 +15,7 @@
       <veui-dialog
         :modal="false"
         :open.sync="nonModalDialogVisible"
+        ui="auto"
         :before-close="beforeClose"
         title="Dialog Title">
         The content of the Dialog. You can use the default slot to override it.
@@ -45,7 +46,7 @@
         :modal="false"
         :open.sync="draggableDialog2Visible"
         title="Second"
-        ui="reverse top"
+        ui="reverse high large"
         draggable>
         <p>Drag the current dialog box to the right and open the first draggable dialog.</p>
         <p>Keep the two dialog have some parts overlapped.</p>
@@ -58,7 +59,7 @@
         :modal="false"
         :open.sync="draggableDialog3Visible"
         title="Reset Position"
-        ui="reverse top"
+        ui="reverse high small"
         ref="resetDialog"
         draggable>
         Click the `reset` button to put the dialog to the initial position.

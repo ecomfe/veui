@@ -34,7 +34,7 @@ describe('components/Dialog', () => {
 
         await wait(0)
         dialog.$refs.content
-          .querySelector('.veui-dialog-content-head button:last-child')
+          .querySelector('.veui-dialog-content-head-close')
           .dispatchEvent(new Event('click'))
 
         await wait(0)

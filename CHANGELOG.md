@@ -12,6 +12,7 @@
 * [+] `Button` 组件增加了 `mouseenter`/`mouseleave` 事件。
 * [+] `NumberInput` 组件支持长按调整值。
 * [+] `Progress` 组件增加了预设 `ui` 值 `fluid`，自适应容器宽度。
+* [+] `Dialog` 组件增加了预设 `ui` 值 `small`/`large`/`auto`，用于指定预设宽度。
 
 ## 1.0.0-alpha.16
 
