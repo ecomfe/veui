@@ -20,13 +20,14 @@
     .veui-overlay-shadow();
     background: #fff;
     position: absolute;
-    width: 400px;
-    max-height: 100vh;
+    min-width: 400px;
+    max-width: ~"calc(100vw - 40px)";
+    max-height: ~"calc(100vh - 40px)";
     overflow-y: auto;
     outline: none;
     pointer-events: auto;
 
-    .veui-dialog-box[ui~="top"] & {
+    .veui-dialog-box[ui~="high"] & {
       .veui-position-center(@y: 38.2%);
     }
 
@@ -101,7 +102,7 @@
 
     // 提升优先级，覆盖样式
     &,
-    &[ui~="top"] {
+    &[ui~="high"] {
       .fixed(0);
       transform: none;
     }
