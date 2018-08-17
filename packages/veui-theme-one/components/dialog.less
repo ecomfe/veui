@@ -20,12 +20,23 @@
     .veui-overlay-shadow();
     background: #fff;
     position: absolute;
-    min-width: 400px;
-    max-width: ~"calc(100vw - 40px)";
+    width: 400px;
     max-height: ~"calc(100vh - 40px)";
     overflow-y: auto;
     outline: none;
     pointer-events: auto;
+
+    [ui~="small"] & {
+      width: 350px;
+    }
+
+    [ui~="large"] & {
+      width: 540px;
+    }
+
+    [ui~="auto"] & {
+      width: auto;
+    }
 
     .veui-dialog-box[ui~="high"] & {
       .veui-position-center(@y: 38.2%);
@@ -78,11 +89,15 @@
 
     &-body {
       padding-top: 0;
-      .margin(10px, 20px, 0, 20px);
+      .margin(20px, 20px, 0);
+    }
+
+    &-head + &-body {
+      margin-top: 10px;
     }
 
     &-foot {
-      .padding(20px);
+      padding: 30px 20px 20px;
       text-align: center;
     }
 

@@ -19,21 +19,22 @@
       @keydown.esc="handleEscape"
       v-bind="attrs">
       <div
+        v-if="title || $slots.title"
         class="veui-dialog-content-head"
         :class="{ 'veui-dialog-draggable': draggable }"
         v-drag:content.translate="{ draggable, containment: '@window', ready: dragReady }">
         <h3 class="veui-dialog-content-head-title">
           <slot name="title">{{ title }}</slot>
         </h3>
-        <button
-          type="button"
-          class="veui-dialog-content-head-close"
-          v-if="closable"
-          @click="cancel"
-          aria-label="关闭">
-          <veui-icon :name="icons.close"/>
-        </button>
       </div>
+      <button
+        type="button"
+        class="veui-dialog-content-head-close"
+        v-if="closable"
+        @click="cancel"
+        aria-label="关闭">
+        <veui-icon :name="icons.close"/>
+      </button>
       <div class="veui-dialog-content-body"><slot :close="close"/></div>
       <div class="veui-dialog-content-foot">
         <slot name="foot" :close="close">
