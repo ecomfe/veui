@@ -1,9 +1,9 @@
-import SimpleDialog from './SimpleDialog'
+import SimpleDialogManager from './simple-dialog'
 import AlertBox from '../components/AlertBox'
 import Vue from 'vue'
 import { isFunction, noop, pick } from 'lodash'
 
-export class AlertManager extends SimpleDialog {
+export class AlertManager extends SimpleDialogManager {
   createComponent (data) {
     const component = new Vue({
       render: h => {

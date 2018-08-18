@@ -31,6 +31,14 @@ export default class SimpleDialog {
     throw new Error('SimpleDialog\'s [_show] method must be implemented.')
   }
 
+  show (content, title, options = {}) {
+    return this._show({
+      ...options,
+      content,
+      title
+    })
+  }
+
   success (content, title, options = {}) {
     return this._show({
       ...options,

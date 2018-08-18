@@ -46,7 +46,7 @@ export class ToastManager {
     }
   }
 
-  _show (message, type) {
+  show (message, type) {
     let option = message
     if (isString(message)) {
       option = {
@@ -58,19 +58,19 @@ export class ToastManager {
   }
 
   success (message) {
-    this._show(message, 'success')
+    this.show(message, 'success')
   }
 
   warn (message) {
-    this._show(message, 'warning')
+    this.show(message, 'warning')
   }
 
   info (message) {
-    this._show(message, 'info')
+    this.show(message, 'info')
   }
 
   error (message) {
-    this._show(message, 'error')
+    this.show(message, 'error')
   }
 }
 

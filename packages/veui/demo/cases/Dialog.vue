@@ -154,7 +154,17 @@ import alertManager from 'veui/managers/alert'
 import confirmManager from 'veui/managers/confirm'
 import promptManager from 'veui/managers/prompt'
 import toastManager from 'veui/managers/toast'
+import alert from 'veui/plugins/alert'
+import confirm from 'veui/plugins/confirm'
+import prompt from 'veui/plugins/prompt'
+import toast from 'veui/plugins/toast'
+import Vue from 'vue'
 import 'veui-theme-one/icons/calendar'
+
+Vue.use(alert)
+Vue.use(confirm)
+Vue.use(prompt)
+Vue.use(toast)
 
 export default {
   name: 'dialog-demo',
@@ -224,15 +234,15 @@ export default {
       alertManager[type](content, title)
     },
     handleOk () {
-      alert('The `OK` button was clicked!')
+      this.$toast('The `OK` button was clicked!')
     },
     handleCancel () {
-      alert('The `cancel` button was clicked!')
+      this.$alert('The `cancel` button was clicked!')
     },
     popupAlerts () {
       alertManager.success('The task was successfully completed!', 'Success', {
         ok () {
-          alert('This alert box will be closed after 3 seconds.')
+          this.$alert('This alert box will be closed after 3 seconds.')
           return new Promise(resolve => {
             setTimeout(resolve, 3000)
           })
@@ -260,7 +270,7 @@ export default {
         }
       })
         .then(ok => {
-          alert(`You chose [${ok ? 'ok' : 'cancel'}]`)
+          this.$alert(`You chose [${ok ? 'ok' : 'cancel'}]`)
         })
     },
     popupToasts (type) {
