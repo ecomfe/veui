@@ -1,4 +1,4 @@
-import SimpleDialog from './SimpleDialog'
+import SimpleDialog from './simple-dialog'
 import PromptBox from '../components/PromptBox'
 import Vue from 'vue'
 import { pick, isFunction, noop } from 'lodash'
