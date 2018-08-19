@@ -1,13 +1,16 @@
 <template>
 <div class="veui-overlay">
-  <div class="veui-overlay-box"
-    :class="realOverlayClass"
-    :ui="ui"
-    ref="box"
-    :style="{zIndex}"
-    v-show="realOpen">
-    <slot/>
-  </div>
+  <transition name="veui-overlay">
+    <div
+      class="veui-overlay-box"
+      :class="realOverlayClass"
+      :ui="ui"
+      ref="box"
+      :style="{zIndex}"
+      v-show="realOpen">
+      <slot/>
+    </div>
+  </transition>
 </div>
 </template>
 
@@ -57,6 +60,14 @@ export default {
       source: null
     }
   },
+  computed: {
+    realOpen () {
+      return this.zIndex !== null && this.open
+    },
+    realOverlayClass () {
+      return mergeClasses(this.overlayClass, config.get('overlay.overlayClass'))
+    }
+  },
   watch: {
     realOpen (value) {
       this.updateOverlayDOM()
@@ -94,14 +105,6 @@ export default {
 
     this.findTargetNode()
     this.updateOverlayDOM()
-  },
-  computed: {
-    realOpen () {
-      return this.zIndex !== null && this.open
-    },
-    realOverlayClass () {
-      return mergeClasses(this.overlayClass, config.get('overlay.overlayClass'))
-    }
   },
   methods: {
     // 更新 zindex 树
@@ -188,6 +191,8 @@ export default {
           source: document.activeElement,
           trap: this.modal
         })
+
+        this.lastSource = document.activeElement
       }
     },
 
