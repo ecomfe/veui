@@ -4,7 +4,7 @@ import { remove } from 'lodash'
 export default class SimpleDialog {
   components = []
 
-  createComponent (data) {
+  createComponent () {
     const component = new Vue({
       render: h => h()
     })
@@ -24,7 +24,11 @@ export default class SimpleDialog {
   removeComponent (component) {
     remove(this.components, item => item === component)
     component.$destroy()
-    component.$el.parentNode.removeChild(component.$el)
+
+    let { $el } = component
+    if ($el && $el.parentNode) {
+      $el.parentNode.removeChild($el)
+    }
   }
 
   _show () {

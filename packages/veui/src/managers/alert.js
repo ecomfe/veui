@@ -10,7 +10,10 @@ export class AlertManager extends SimpleDialogManager {
         return h(
           AlertBox,
           {
-            props: pick(data, ['open', 'title', 'type', 'overlayClass', 'beforeClose']),
+            props: {
+              ...pick(data, ['open', 'title', 'type', 'overlayClass']),
+              beforeClose: () => false
+            },
             on: {
               ok: data.ok
             }

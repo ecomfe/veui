@@ -11,7 +11,10 @@ export class PromptManager extends SimpleDialog {
         return h(
           PromptBox,
           {
-            props: pick(data, ['open', 'title', 'type', 'value', 'overlayClass', 'beforeClose']),
+            props: {
+              ...pick(data, ['open', 'title', 'type', 'value', 'overlayClass']),
+              beforeClose: () => false
+            },
             on: {
               ok: () => data.ok(data.value),
               cancel: data.cancel,

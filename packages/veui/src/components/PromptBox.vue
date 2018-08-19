@@ -6,6 +6,7 @@
   :priority="priority"
   :closable="false"
   :before-close="beforeClose"
+  ref="dialog"
   @ok="submit"
   @cancel="cancel"
   role="alertdialog">
@@ -17,7 +18,7 @@
     <slot/>
   </p>
   <div>
-    <veui-input autofocus v-model="localValue" class="veui-prompt-box-input" @keydown.enter="submit"/>
+    <veui-input autofocus v-model="localValue" class="veui-prompt-box-input" @keydown.enter="submit(true)"/>
   </div>
   <template slot="foot">
     <slot name="foot"/>
@@ -77,8 +78,11 @@ export default {
     }
   },
   methods: {
-    submit () {
+    submit (close) {
       this.$emit('ok')
+      if (close) {
+        this.$refs.dialog.close('ok')
+      }
     },
     cancel () {
       this.localValue = ''

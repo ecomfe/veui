@@ -73,7 +73,7 @@
       <veui-dialog
         :open.sync="operationDialogVisible"
         @ok="handleOk"
-        @before-close="handleCancel"
+        @cancel="handleCancel"
         title="The Built-in Button">
         The two built-in buttons emit their own event when clicked.
       </veui-dialog>
@@ -241,10 +241,12 @@ export default {
     },
     popupAlerts () {
       alertManager.success('The task was successfully completed!', 'Success', {
-        ok () {
+        ok: () => {
           this.$alert('This alert box will be closed after 3 seconds.')
           return new Promise(resolve => {
-            setTimeout(resolve, 3000)
+            setTimeout(() => {
+              resolve()
+            }, 3000)
           })
         }
       })
@@ -254,14 +256,14 @@ export default {
     },
     popupConfirms () {
       confirmManager.warn('Do you really want to delete it?', 'Confirm', {
-        ok () {
+        ok: () => {
           return new Promise(resolve => {
             setTimeout(() => {
               resolve()
             }, 1000)
           })
         },
-        cancel () {
+        cancel: () => {
           return new Promise(resolve => {
             setTimeout(() => {
               resolve()

@@ -10,7 +10,10 @@ export class ConfirmManager extends SimpleDialog {
         return h(
           ConfirmBox,
           {
-            props: pick(data, ['open', 'title', 'type', 'overlayClass', 'beforeClose']),
+            props: {
+              ...pick(data, ['open', 'title', 'type', 'overlayClass']),
+              beforeClose: () => false
+            },
             on: {
               ok: data.ok,
               cancel: data.cancel

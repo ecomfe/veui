@@ -6,6 +6,8 @@
   :priority="priority"
   :closable="false"
   :before-close="beforeClose"
+  @ok="$emit('ok')"
+  @cancel="$emit('cancel')"
   role="alertdialog">
   <template slot="title">
     <template v-if="title">{{ title }}</template>
