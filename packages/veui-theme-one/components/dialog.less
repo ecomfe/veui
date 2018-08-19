@@ -25,6 +25,8 @@
     overflow-y: auto;
     outline: none;
     pointer-events: auto;
+    transition: transform .2s;
+    transform-origin: 50% 50%;
 
     [ui~="small"] & {
       width: 350px;
@@ -121,5 +123,10 @@
       .fixed(0);
       transform: none;
     }
+  }
+
+  .veui-overlay-enter &-content,
+  .veui-overlay-leave-to &-content {
+    transform: translate(50%, ~"calc(50% - 30px)");
   }
 }
