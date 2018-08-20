@@ -1,6 +1,8 @@
 <template>
 <div class="veui-overlay">
-  <transition name="veui-overlay">
+  <transition
+    name="veui-overlay"
+    @after-leave="$emit('afterclose')">
     <div
       class="veui-overlay-box"
       :class="realOverlayClass"

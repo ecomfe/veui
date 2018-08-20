@@ -9,6 +9,7 @@
   ref="dialog"
   @ok="submit"
   @cancel="cancel"
+  @afterclose="$emit('afterclose')"
   role="alertdialog">
   <template slot="title">
     <template v-if="title">{{ title }}</template>

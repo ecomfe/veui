@@ -5,14 +5,19 @@ import { pick, isFunction, noop } from 'lodash'
 
 export class PromptManager extends SimpleDialog {
   createComponent (data) {
+    const manager = this
     data.value = data.value || ''
-    const component = new Vue({
-      render: h => {
+    return new Vue({
+      data: {
+        open: false
+      },
+      render (h) {
         return h(
           PromptBox,
           {
             props: {
-              ...pick(data, ['open', 'title', 'type', 'value', 'overlayClass']),
+              ...pick(data, ['title', 'type', 'value', 'overlayClass']),
+              open: this.open,
               beforeClose: () => false
             },
             on: {
@@ -20,14 +25,19 @@ export class PromptManager extends SimpleDialog {
               cancel: data.cancel,
               input: val => {
                 data.value = val
+              },
+              afterclose: () => {
+                manager.removeComponent(this)
               }
             }
           },
           [h('template', { slot: 'default' }, data.content)]
         )
+      },
+      mounted () {
+        this.open = true
       }
     })
-    return component
   }
 
   _show (options) {
@@ -37,7 +47,7 @@ export class PromptManager extends SimpleDialog {
     return new Promise(resolve => {
       let checkRemove = value => {
         Promise.resolve(value != null ? ok() : cancel()).then(() => {
-          this.removeComponent(component)
+          component.open = false
           resolve(value)
         })
       }

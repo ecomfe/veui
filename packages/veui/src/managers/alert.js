@@ -5,24 +5,34 @@ import { isFunction, noop, pick } from 'lodash'
 
 export class AlertManager extends SimpleDialogManager {
   createComponent (data) {
-    const component = new Vue({
-      render: h => {
+    let manager = this
+    return new Vue({
+      data: {
+        open: false
+      },
+      render (h) {
         return h(
           AlertBox,
           {
             props: {
-              ...pick(data, ['open', 'title', 'type', 'overlayClass']),
+              ...pick(data, ['title', 'type', 'overlayClass']),
+              open: this.open,
               beforeClose: () => false
             },
             on: {
-              ok: data.ok
+              ok: data.ok,
+              afterclose: () => {
+                manager.removeComponent(this)
+              }
             }
           },
           [h('template', { slot: 'default' }, data.content)]
         )
+      },
+      mounted () {
+        this.open = true
       }
     })
-    return component
   }
 
   _show (options) {
@@ -32,7 +42,7 @@ export class AlertManager extends SimpleDialogManager {
         ...options,
         ok: () => {
           Promise.resolve(ok()).then(() => {
-            this.removeComponent(component)
+            component.open = false
             resolve()
           })
         }

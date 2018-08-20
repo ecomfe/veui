@@ -11,6 +11,7 @@
   :priority="priority"
   :before-close="beforeClose"
   @ok="$emit('ok')"
+  @afterclose="$emit('afterclose')"
   role="alertdialog">
   <veui-icon v-if="icons[type]"
     class="veui-alert-box-icon"

@@ -5,25 +5,35 @@ import { pick, isFunction, noop } from 'lodash'
 
 export class ConfirmManager extends SimpleDialog {
   createComponent (data) {
-    const component = new Vue({
-      render: h => {
+    const manager = this
+    return new Vue({
+      data: {
+        open: false
+      },
+      render (h) {
         return h(
           ConfirmBox,
           {
             props: {
-              ...pick(data, ['open', 'title', 'type', 'overlayClass']),
+              ...pick(data, ['title', 'type', 'overlayClass']),
+              open: this.open,
               beforeClose: () => false
             },
             on: {
               ok: data.ok,
-              cancel: data.cancel
+              cancel: data.cancel,
+              afterclose: () => {
+                manager.removeComponent(this)
+              }
             }
           },
           [h('template', { slot: 'default' }, data.content)]
         )
+      },
+      mounted () {
+        this.open = true
       }
     })
-    return component
   }
 
   _show (options) {
@@ -32,7 +42,7 @@ export class ConfirmManager extends SimpleDialog {
     return new Promise(resolve => {
       let checkRemove = isOk => {
         Promise.resolve(isOk ? ok() : cancel()).then(() => {
-          this.removeComponent(component)
+          component.open = false
           resolve(isOk)
         })
       }

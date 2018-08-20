@@ -8,6 +8,7 @@
   :before-close="beforeClose"
   @ok="$emit('ok')"
   @cancel="$emit('cancel')"
+  @afterclose="$emit('afterclose')"
   role="alertdialog">
   <template slot="title">
     <template v-if="title">{{ title }}</template>

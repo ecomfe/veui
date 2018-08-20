@@ -10,7 +10,8 @@
     :ui="ui"
     autofocus
     :modal="modal"
-    :priority="priority">
+    :priority="priority"
+    @afterclose="$emit('afterclose')">
     <div
       class="veui-dialog-content"
       ref="content"

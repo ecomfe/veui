@@ -12,7 +12,6 @@ export default class SimpleDialog {
   }
 
   create (data) {
-    data.open = true
     const component = this.createComponent(data)
     const el = document.createElement('div')
     document.body.appendChild(el)
