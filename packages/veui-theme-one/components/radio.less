@@ -20,7 +20,7 @@
   &-box {
     vertical-align: top;
     display: inline-block;
-    transition: color .3s;
+    transition: color @veui-transition-duration;
   }
 
   .veui-field > & {
@@ -50,7 +50,7 @@
     margin-right: 8px;
     border-radius: 50%;
     font-size: @veui-font-size-normal;
-    transition: box-shadow .3s;
+    transition: box-shadow @veui-transition-duration;
 
     &::before {
       content: "";
@@ -60,7 +60,7 @@
       border-radius: 50%;
       .absolute(50%, 50%);
       transform: translate(-50%, -50%) scale(0);
-      transition: transform .3s;
+      transition: transform @veui-transition-duration;
     }
   }
 

@@ -13,6 +13,7 @@
 * [+] `NumberInput` 组件支持长按调整值。
 * [+] `Progress` 组件增加了预设 `ui` 值 `fluid`，自适应容器宽度。
 * [+] `Dialog` 组件增加了预设 `ui` 值 `small`/`large`/`auto`，用于指定预设宽度。
+* [+] 为 `Overlay`/`Dialog`/`AlertBox`/`ConfirmBox`/`PromptBox` 组件增加了 `afterclose` 事件。
 
 ### 🐞 问题修复
 

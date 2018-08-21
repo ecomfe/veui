@@ -32,7 +32,6 @@
   </veui-button>
   <veui-overlay
     v-if="options && expanded || !options"
-    v-show="expanded"
     target="main"
     :open="expanded"
     autofocus

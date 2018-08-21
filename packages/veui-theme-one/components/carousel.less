@@ -68,7 +68,7 @@
   &-item {
     .absolute(0);
     overflow: hidden;
-    transition: opacity .3s;
+    transition: opacity @veui-transition-duration;
     outline: none;
 
     &-image {
@@ -182,7 +182,7 @@
       border: none;
       background: none;
       color: fadeout(#fff, 50%);
-      transition: color .3s;
+      transition: color @veui-transition-duration;
 
       &:focus {
         outline: none;

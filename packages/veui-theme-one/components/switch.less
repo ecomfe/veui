@@ -52,7 +52,7 @@
     display: inline-block;
     background-color: @veui-gray-color-4;
     user-select: none;
-    transition: background-color .3s, box-shadow .3s;
+    transition: background-color @veui-transition-duration, box-shadow @veui-transition-duration;
   }
 
   .focus-visible + &-switcher {
@@ -69,7 +69,7 @@
     margin: @gap;
     background-color: #fff;
     border-radius: 50%;
-    transition: transform ease .3s;
+    transition: transform ease @veui-transition-duration;
 
     // .veui-icon {
     //   .absolute(50%, _, _, 50%);

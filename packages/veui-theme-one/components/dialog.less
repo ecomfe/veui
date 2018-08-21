@@ -1,6 +1,9 @@
 @import "../lib.less";
 
 .veui-dialog {
+  @golden-ratio: 38.2%;
+  @transition-offset: 10px;
+
   display: none;
 
   &-box {
@@ -25,7 +28,7 @@
     overflow-y: auto;
     outline: none;
     pointer-events: auto;
-    transition: transform .2s;
+    transition: transform @veui-transition-duration;
     transform-origin: 50% 50%;
 
     [ui~="small"] & {
@@ -41,7 +44,7 @@
     }
 
     .veui-dialog-box[ui~="high"] & {
-      .veui-position-center(@y: 38.2%);
+      .veui-position-center(@y: @golden-ratio);
     }
 
     &-head,
@@ -127,6 +130,12 @@
 
   .veui-overlay-enter &-content,
   .veui-overlay-leave-to &-content {
-    transform: translate(50%, ~"calc(50% - 30px)");
+    transform: translate(50%, ~"calc(50% - @{transition-offset})");
+  }
+
+  .veui-overlay-enter[ui~="high"] &-content,
+  .veui-overlay-leave-to[ui~="high"] &-content {
+    @ratio: 100% - @golden-ratio;
+    transform: translate(50%, ~"calc(@{ratio} - @{transition-offset})");
   }
 }

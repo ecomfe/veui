@@ -17,7 +17,7 @@
   &-box {
     vertical-align: top;
     display: inline-block;
-    transition: color .3s;
+    transition: color @veui-transition-duration;
   }
 
   .veui-field > & {
@@ -46,13 +46,13 @@
     border: 1px solid @veui-gray-color-2;
     background-color: #fff;
     font-size: @veui-font-size-large;
-    transition: box-shadow .3s;
+    transition: box-shadow @veui-transition-duration;
 
     .veui-icon {
       color: @veui-gray-color-1;
       .absolute(50%, 50%);
       transform: translate(-50%, -50%) scale(1);
-      transition: transform .3s, opacity .3s;
+      transition: transform @veui-transition-duration, opacity @veui-transition-duration;
     }
   }
 

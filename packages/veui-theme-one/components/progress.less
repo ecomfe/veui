@@ -7,7 +7,7 @@
   display: inline-block;
   position: relative;
   color: @veui-text-color-weak;
-  transition: color .3s;
+  transition: color @veui-transition-duration;
 
   &[ui~="fluid"] {
     width: 100%;
@@ -38,7 +38,7 @@
       .size(100%);
       margin-left: -100%;
       background-color: @veui-gray-color-2;
-      transition: transform .3s, background-color .3s;
+      transition: transform @veui-transition-duration, background-color @veui-transition-duration;
     }
   }
 
@@ -56,7 +56,7 @@
 
     .veui-progress-meter {
       stroke: @veui-gray-color-2;
-      transition: stroke-dashoffset .3s;
+      transition: stroke-dashoffset @veui-transition-duration;
     }
   }
 
