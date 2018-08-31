@@ -215,7 +215,7 @@ export default {
 
     this.destroyFocus()
 
-    this.overlayBox.parentNode.removeChild(this.overlayBox)
+    this.$el.appendChild(this.overlayBox)
     this.overlayBox = null
   }
 }

@@ -109,54 +109,52 @@ export default {
           name={this.icons[this.expanded ? 'collapse' : 'expand']}/>
       </veui-button>
       {
-        this.options && this.expanded || !this.options
-          ? <veui-overlay
-            v-show={this.expanded}
-            target="button"
-            open={this.expanded}
-            autofocus
-            modal
-            options={this.realOverlayOptions}
-            overlay-class={this.overlayClass}
-            onLocate={this.handleRelocate}>
-            <div
-              ref="box"
-              class="veui-select-options"
-              {...{
-                directives: [{
-                  name: 'outside',
-                  value: {
-                    refs: this.outsideRefs,
-                    handler: this.close
-                  }
-                }]
-              }}
-              tabindex="-1"
-              role="listbox"
-              aria-expanded={String(this.expanded)}
+        <veui-overlay
+          v-show={this.expanded}
+          target="button"
+          open={this.expanded}
+          autofocus
+          modal
+          options={this.realOverlayOptions}
+          overlay-class={this.overlayClass}
+          onLocate={this.handleRelocate}>
+          <div
+            ref="box"
+            class="veui-select-options"
+            {...{
+              directives: [{
+                name: 'outside',
+                value: {
+                  refs: this.outsideRefs,
+                  handler: this.close
+                }
+              }]
+            }}
+            tabindex="-1"
+            role="listbox"
+            aria-expanded={String(this.expanded)}
+            ui={this.ui}
+            onKeydown={this.handleKeydown}>
+            {this.$slots.before}
+            {
+              this.clearable
+                ? <veui-option value={null} label={this.placeholder}/>
+                : null
+            }
+            <veui-option-group
+              ref="options"
+              options={this.realOptions}
               ui={this.ui}
-              onKeydown={this.handleKeydown}>
-              {this.$slots.before}
-              {
-                this.clearable
-                  ? <veui-option value={null} label={this.placeholder}/>
-                  : null
-              }
-              <veui-option-group
-                ref="options"
-                options={this.realOptions}
-                ui={this.ui}
-                scopedSlots={{
-                  label: this.$scopedSlots['group-label'] || null,
-                  option: this.$scopedSlots.option || null,
-                  'option-label': this.$scopedSlots['option-label'] || null
-                }}>
-                {this.$slots.default}
-              </veui-option-group>
-              {this.$slots.after}
-            </div>
-          </veui-overlay>
-          : null
+              scopedSlots={{
+                label: this.$scopedSlots['group-label'] || null,
+                option: this.$scopedSlots.option || null,
+                'option-label': this.$scopedSlots['option-label'] || null
+              }}>
+              {this.$slots.default}
+            </veui-option-group>
+            {this.$slots.after}
+          </div>
+        </veui-overlay>
       }
     </div>
   },

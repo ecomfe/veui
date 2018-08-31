@@ -57,8 +57,6 @@
     max-height: 280px;
     overflow-y: auto;
     background-color: #fff;
-    transition: transform @veui-transition-duration;
-    transform-origin: 50% 0;
   }
 
   &-option {
@@ -100,10 +98,5 @@
     &[ui~="primary"]:not(:disabled) {
       color: @veui-brand-color;
     }
-  }
-
-  .veui-overlay-enter &-options,
-  .veui-overlay-leave-to &-options {
-    transform: scaleY(0);
   }
 }

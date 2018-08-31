@@ -31,7 +31,6 @@
     <veui-icon class="veui-dropdown-icon" :name="icons[expanded ? 'collapse': 'expand']"/>
   </veui-button>
   <veui-overlay
-    v-if="options && expanded || !options"
     target="main"
     :open="expanded"
     autofocus

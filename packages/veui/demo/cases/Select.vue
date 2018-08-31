@@ -323,12 +323,12 @@ export default {
 
 .veui-option-custom {
   position: relative;
-  padding-left: 10px;
+  padding-left: 24px;
   &::after {
     content: '❤️';
     position: absolute;
     top: 50%;
-    left: -10px;
+    left: 0;
     transform: translateY(-50%);
   }
 
