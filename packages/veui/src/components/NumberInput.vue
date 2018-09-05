@@ -5,6 +5,7 @@
     }"
     :ui="ui"
     type="text"
+    inputmode="numeric"
     ref="input"
     v-model="localValue"
     v-on="listeners"
