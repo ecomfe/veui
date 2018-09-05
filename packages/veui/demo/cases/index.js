@@ -34,6 +34,7 @@ import Textarea from './Textarea'
 import Icon from './Icon'
 import Slider from './Slider'
 import NumberInput from './NumberInput'
+import Grid from './Grid'
 
 export default [
   {
@@ -100,6 +101,11 @@ export default [
     path: '/form',
     name: 'Form',
     component: Form
+  },
+  {
+    path: '/grid',
+    name: 'Grid',
+    component: Grid
   },
   {
     path: '/icon',
