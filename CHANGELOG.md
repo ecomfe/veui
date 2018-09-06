@@ -3,6 +3,7 @@
 ### ⚠️ 非兼容性变更
 
 * [^] `Dialog` 组件预设 `ui` 值 `top` 更名为 `high`。
+* [^] `Button` 组件再 `loading` 状态下将保留 slot 内容，不再强行设置为 `'加载中……'`。
 
 ### 💡 主要变更
 
@@ -14,10 +15,12 @@
 * [+] `Progress` 组件增加了预设 `ui` 值 `fluid`，自适应容器宽度。
 * [+] `Dialog` 组件增加了预设 `ui` 值 `small`/`large`/`auto`，用于指定预设宽度。
 * [+] 为 `Overlay`/`Dialog`/`AlertBox`/`ConfirmBox`/`PromptBox` 组件增加了 `afterclose` 事件。
+* [^] 调整了 `alert`/`confirm`/`prompt`/`toast` 插件的接口，现在 `$alert`/`$confirm`/`$prompt`/`$toast` 均可直接作为函数调用。
 
 ### 🐞 问题修复
 
 * [^] 修复 `Tabs` 组件移除标签时可能产生的问题。
+* [^] 修正 `ConfirmBox` 没有正确触发事件的问题。
 
 ## 1.0.0-alpha.16
 
