@@ -24,7 +24,7 @@ export default {
       return {
         ...flex
           ? {
-            display: 'flex'
+            display: ['-webkit-box', '-ms-flexbox', 'flex']
           }
           : {},
         'margin-right': `-${gutter / 2}px`,
