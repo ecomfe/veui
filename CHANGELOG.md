@@ -12,6 +12,7 @@
 * [+] `Dropdown` 组件增加了 `split` prop，来允许拆分指令按钮与下拉切换按钮。
 * [+] `Button` 组件增加了 `mouseenter`/`mouseleave` 事件。
 * [+] `NumberInput` 组件支持长按调整值。
+* [+] 增加了 `GridContainer`/`GridRow`/`GridColumn` 组件。
 * [+] `Progress` 组件增加了预设 `ui` 值 `fluid`，自适应容器宽度。
 * [+] `Dialog` 组件增加了预设 `ui` 值 `small`/`large`/`auto`，用于指定预设宽度。
 * [+] 为 `Overlay`/`Dialog`/`AlertBox`/`ConfirmBox`/`PromptBox` 组件增加了 `afterclose` 事件。
