@@ -96,6 +96,26 @@
     "path": "Form/index.js"
   },
   {
+    "name": "GridColumn",
+    "path": "Grid/GridColumn.vue"
+  },
+  {
+    "name": "GridContainer",
+    "path": "Grid/GridContainer.vue"
+  },
+  {
+    "name": "GridRow",
+    "path": "Grid/GridRow.vue"
+  },
+  {
+    "name": "GridColumn",
+    "path": "GridColumn.js"
+  },
+  {
+    "name": "GridRow",
+    "path": "GridRow.js"
+  },
+  {
     "name": "Icon",
     "path": "Icon.vue"
   },
