@@ -20,7 +20,7 @@
     "less-plugin-est": "^3.0.0"
   },
   "peerDependencies": {
-    "veui": "1.0.0-alpha.16"
+    "veui": "1.0.0-alpha.17"
   },
   "devDependencies": {
     "babel-plugin-lodash": "^3.2.11",

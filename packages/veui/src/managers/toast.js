@@ -47,14 +47,18 @@ export class ToastManager {
   }
 
   show (message, type) {
-    let option = message
-    if (isString(message)) {
-      option = {
-        message
-      }
+    let options = {}
+    if (isObject(message)) {
+      options = {...options, ...message}
+    } else if (isString(message)) {
+      options.message = message
     }
-    option.type = type
-    this.add(option)
+    if (isObject(type)) {
+      options = {...options, ...type}
+    } else if (isString(type)) {
+      options.type = type
+    }
+    this.add(options)
   }
 
   success (message) {

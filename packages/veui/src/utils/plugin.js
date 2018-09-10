@@ -19,3 +19,11 @@ export function makeContextualPopupApi (name, manager, method = 'show') {
     }
   }
 }
+
+export function makePopupApi (name, manager, method = 'show') {
+  return {
+    install (Vue) {
+      Vue.prototype[`$${name}`] = manager[method].bind(manager)
+    }
+  }
+}
