@@ -5,7 +5,8 @@ import {
   isString,
   isObject,
   assign,
-  find
+  find,
+  keys
 } from 'lodash'
 
 export function getTypedAncestorTracker (type, name = type) {
@@ -113,7 +114,7 @@ export function getConfigKey (name) {
 }
 
 export function stringifyQuery (query) {
-  return Object.keys(query)
+  return keys(query)
     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
     .join('&')
 }
@@ -178,7 +179,7 @@ export function keepOwn (obj) {
       return obj.map(val => keepOwn(val))
     }
 
-    return Object.keys(obj).reduce((acc, key) => {
+    return keys(obj).reduce((acc, key) => {
       if (key !== '__ob__') {
         acc[key] = keepOwn(obj[key])
       }
@@ -199,7 +200,7 @@ export function getListeners (events, vm) {
 
 export function getNumberArg (modifiers, defaultTime) {
   let timing
-  find(Object.keys(modifiers), key => {
+  find(keys(modifiers), key => {
     let keyNum = Number(key)
     if (!isNaN(keyNum) && keyNum >= 0 && modifiers[key]) {
       timing = keyNum

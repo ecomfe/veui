@@ -19,7 +19,7 @@
       <veui-icon v-if="localChecked && !localIndeterminate" :name="icons.checked"/>
     </transition>
   </span>
-  <span class="veui-checkbox-label"><slot/></span>
+  <span v-if="$slots.default" class="veui-checkbox-label"><slot/></span>
 </label>
 </template>
 

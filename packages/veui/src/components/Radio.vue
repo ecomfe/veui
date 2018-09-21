@@ -12,7 +12,7 @@
     @change="handleChange"
     v-on="listeners">
   <span class="veui-radio-box"></span>
-  <span class="veui-radio-label"><slot/></span>
+  <span v-if="$slots.default" class="veui-radio-label"><slot/></span>
 </label>
 </template>
 

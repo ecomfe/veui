@@ -134,7 +134,10 @@ export default {
       files1: files.slice(0),
       files2: files.slice(0),
       filesExtra: files.slice(0),
-      filesIframe: {name: 'demo-file.txt', src: 'http://www.baidu.com'},
+      filesIframe: {
+        name: 'demo-file.txt',
+        src: 'http://www.baidu.com'
+      },
       payload: {
         year: '2017',
         month: '4'
@@ -187,9 +190,9 @@ export default {
     },
     addImage () {
       if (this.currentImage.index !== undefined) {
-        this.$set(this.filesExtra, this.currentImage.index, {src: this.imageSrc})
+        this.$set(this.filesExtra, this.currentImage.index, { src: this.imageSrc })
       } else {
-        this.filesExtra.push({src: this.imageSrc})
+        this.filesExtra.push({ src: this.imageSrc })
       }
       this.currentImage = null
       this.imageSrc = null

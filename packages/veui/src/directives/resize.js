@@ -1,5 +1,5 @@
 import { addListener, removeListener } from 'resize-detector'
-import { debounce, throttle, isObject, assign, isEqual, find } from 'lodash'
+import { debounce, throttle, isObject, assign, isEqual, find, keys } from 'lodash'
 import { getNumberArg } from '../utils/helper'
 
 const modeMap = {
@@ -8,7 +8,7 @@ const modeMap = {
 }
 
 function attach (el, { value, oldValue, modifiers }) {
-  let mode = find(Object.keys(modeMap), mode => modifiers[mode])
+  let mode = find(keys(modeMap), mode => modifiers[mode])
   let wait = getNumberArg(modifiers, 150)
   let options = {
     wait,

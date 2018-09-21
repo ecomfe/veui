@@ -1,3 +1,15 @@
+## 1.0.0-alpha.18
+
+### ⚠️ 非兼容性变更
+
+* 对 Vue-Awesome 的依赖升级到 `3.1.2`。如果之前有在项目中直接使用 `vue-awesome@2` 的，需要升级到最新版，否则无法混用 VEUI 与 VueAwesome 的图标。
+* `Breadcrumb` 组件的 `default` 作用域插槽重命名为 `item`，因为 Vue 实际的 fallback 逻辑，所以避免使用同名的 slot 和 scoped slot。
+
+### 💡 主要变更
+
+* 增加主题包为组件部件指定 `ui` 的功能。
+* `Breadcrumb` 组件的 scoped slot `item`（原 `default`）新增参数 `index`。
+
 ## 1.0.0-alpha.17
 
 ### ⚠️ 非兼容性变更

@@ -2,17 +2,18 @@
 <div class="veui-textarea" :class="{
     'veui-textarea-focused': focused,
     'veui-textarea-rows': normalizedRows > 0,
+    'veui-textarea-line-numbered': lineNumber,
     'veui-input-invalid': realInvalid,
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
   }" :ui="ui">
-  <div ref="measurer" class="veui-textarea-measurer">
+  <div ref="measurer" v-if="measure" class="veui-textarea-measurer">
     <div class="veui-textarea-measurer-line" v-for="(line, index) in lines" :key="index">
       <div
+        v-if="lineNumber"
         class="veui-textarea-measurer-line-number"
         :style="{width: `${lineNumberWidth}px`}">{{ index + 1 }}</div>
       <div
-        ref="measurerContent"
         class="veui-textarea-measurer-line-content"
         aria-hidden="true"
         :style="{width: `${measurerContentWidth}px`}">{{ line }}</div>
@@ -21,7 +22,7 @@
   <textarea ref="input" class="veui-textarea-input" v-model="localValue" :style="{
       maxWidth: lineNumber ? null : '100%',
       width: lineNumber ? `calc(100% - ${lineNumberWidth}px)` : null,
-      height: inputHeight ? inputHeight : null,
+      height: contentHeight || null,
       // autoresize 的时候 hidden 一下，避免闪现一下滚动条。
       overflow: autoresize ? 'hidden' : 'auto'
     }"
@@ -86,6 +87,9 @@ export default {
         readonly: this.realReadonly
       }
     },
+    measure () {
+      return this.lineNumber || this.autoresize
+    },
     lines () {
       // use a zero-width space to prevent empty element from being collapsed
       return this.localValue.split('\n').map(line => line || `\u200b${line}`)
@@ -96,7 +100,7 @@ export default {
     lineNumberWidth () {
       return this.digits * 8 + 12
     },
-    inputHeight () {
+    contentHeight () {
       if (this.autoresize) {
         return `${this.measurerContentHeight}px`
       }
@@ -110,6 +114,9 @@ export default {
     },
     localValue: {
       handler () {
+        if (!this.measure) {
+          return
+        }
         this.$nextTick(() => {
           if (this.$refs.input) {
             this.measurerContentWidth = this.$refs.input.clientWidth
@@ -168,9 +175,12 @@ export default {
       this.$refs.input.focus()
     },
     getMeasurersHeight () {
-      return this.$refs.measurerContent.reduce((prev, elem) => prev + elem.offsetHeight, 0)
+      return this.$refs.measurer.offsetHeight
     },
     handleScroll () {
+      if (!this.measure) {
+        return
+      }
       this.scrollTop = this.$refs.input.scrollTop
       // render 里面没有依赖 scrollTop ，单独改 scrollTop 并不会触发 updated hook ，
       // 所以手动去同步一下 scrollTop
@@ -178,8 +188,10 @@ export default {
     },
     syncScroll () {
       let { input, measurer } = this.$refs
-      measurer.scrollTop = this.scrollTop
       input.scrollTop = this.scrollTop
+      if (measurer) {
+        measurer.scrollTop = this.scrollTop
+      }
     }
   },
   updated () {

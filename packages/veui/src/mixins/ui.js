@@ -8,6 +8,9 @@ export default {
     ui: String
   },
   computed: {
+    uiParts () {
+      return this.getComponentConfig('parts') || ''
+    },
     uiProps () {
       let ui = (this.ui || '').trim()
       let tokens = compact(uniq(ui.split(/\s+/)))
@@ -15,7 +18,10 @@ export default {
       return tokens.reduce(
         (result, token) => {
           let name = find(Object.keys(uiConfig), name => {
-            let { values = [] } = uiConfig[name]
+            let { boolean = false, values = [] } = uiConfig[name]
+            if (boolean) {
+              return token === name
+            }
             return includes(values, token)
           })
           if (name) {
@@ -28,12 +34,22 @@ export default {
                 }], [${token}].`
               )
             }
-            result[name] = token
+            let { boolean } = uiConfig[name]
+            if (boolean) {
+              result[name] = true
+            } else {
+              result[name] = token
+            }
           }
           return result
         },
-        Object.keys(uiConfig).reduce((result, prop) => {
-          result[prop] = 'default'
+        Object.keys(uiConfig).reduce((result, name) => {
+          let prop = uiConfig[name]
+          if (prop.boolean) {
+            result[name] = false
+          } else {
+            result[name] = prop.default || 'default'
+          }
           return result
         }, {})
       )

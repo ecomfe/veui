@@ -1,11 +1,11 @@
-import { isObject } from 'lodash'
+import { isObject, keys } from 'lodash'
 import type from './type'
 
 function set (obj, key, value, ns, override, merge) {
   if (isObject(key)) {
     ns = value
     value = key
-    Object.keys(value).forEach(k => {
+    keys(value).forEach(k => {
       set(obj, k, value[k], ns, override, merge)
     })
     return
@@ -28,7 +28,7 @@ function set (obj, key, value, ns, override, merge) {
       throw new Error('`config.merge` only handles objects.')
     }
 
-    Object.keys(value).forEach(key => {
+    keys(value).forEach(key => {
       if (!(key in obj[k]) || override) {
         obj[k][key] = value[key]
       }

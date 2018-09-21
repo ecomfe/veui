@@ -1,7 +1,19 @@
 <template>
 <veui-icon :ui="ui" :class="klass" @click.native="sort">
-  <veui-icon :class="{ 'veui-sorter-active': order === 'asc' }" :name="icons.asc"/>
-  <veui-icon :class="{ 'veui-sorter-active': order === 'desc' }" :name="icons.desc"/>
+  <veui-icon
+    :class="{
+      'veui-sorter-icon-asc': true,
+      'veui-sorter-active': order === 'asc',
+      'veui-sorter-inactive': order === 'desc'
+    }"
+    :name="icons.asc"/>
+  <veui-icon
+    :class="{
+      'veui-sorter-icon-desc': true,
+      'veui-sorter-active': order === 'desc',
+      'veui-sorter-inactive': order === 'asc'
+    }"
+    :name="icons.desc"/>
 </veui-icon>
 </template>
 
