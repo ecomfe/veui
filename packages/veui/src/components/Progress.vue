@@ -14,16 +14,37 @@
       <span class="veui-progress-desc-text">{{ valueText }}</span>
     </slot>
   </div>
-  <div v-if="type === 'bar'" class="veui-progress-rail">
-    <div class="veui-progress-meter" :style="{
-      transform: `translateX(${percent}%)`
-    }"></div>
+  <div
+    v-if="type === 'bar'"
+    class="veui-progress-rail">
+    <div class="veui-progress-meter"
+      :style="{
+        transform: indeterminate ? null : `translateX(${percent}%)`
+      }"></div>
   </div>
-  <svg v-else-if="type === 'circular'" class="veui-progress-circle"
-    :width="(radius + halfStroke) * 2" :height="(radius + halfStroke) * 2">
-    <circle class="veui-progress-rail" :cx="radius + halfStroke" :cy="radius + halfStroke" :r="radius" fill="none" :stroke-width="stroke"></circle>
-    <circle class="veui-progress-meter" :cx="radius + halfStroke" :cy="radius + halfStroke" :r="radius" fill="none" :stroke-width="stroke"
-      :stroke-dasharray="circumference | fixed" :stroke-dashoffset="circumference * (1 - ratio) | fixed"></circle>
+  <svg
+    v-else-if="type === 'circular'"
+    class="veui-progress-circle"
+    :width="width"
+    :height="width"
+    :viewBox="`0 0 ${width} ${width}`">
+    <circle
+      class="veui-progress-rail"
+      :cx="halfWidth"
+      :cy="halfWidth"
+      :r="getLength(radius)"
+      fill="none"
+      :stroke-width="getLength(stroke)"></circle>
+    <circle
+      class="veui-progress-meter"
+      :cx="halfWidth"
+      :cy="halfWidth"
+      :r="getLength(radius)"
+      fill="none"
+      :stroke-width="getLength(stroke)"
+      :stroke-dasharray="getLength(circumference)"
+      :stroke-dashoffset="getLength(circumference * (1 - ratio))"
+      :stroke-linecap="strokeLinecap"></circle>
   </svg>
 </div>
 </template>
@@ -36,17 +57,13 @@ import { clamp } from 'lodash'
 
 const RADIUS_DEFAULT = 60
 const STROKE_DEFAULT = 2
+const STROKE_LINECAP = null
 
 export default {
   name: 'veui-progress',
   mixins: [ui],
   components: {
     'veui-icon': Icon
-  },
-  filters: {
-    fixed (val) {
-      return Math.round(val * 100) / 100
-    }
   },
   props: {
     type: {
@@ -110,6 +127,7 @@ export default {
     klass () {
       return {
         'veui-progress-status-complete': this.realValue === this.max,
+        'veui-progress-has-desc': this.desc,
         [`veui-progress-${this.type}`]: true,
         ...this.localStatus
           ? { [`veui-progress-status-${this.localStatus}`]: true }
@@ -136,6 +154,15 @@ export default {
     },
     halfStroke () {
       return this.stroke / 2
+    },
+    strokeLinecap () {
+      return this.uiData.strokeLinecap || STROKE_LINECAP
+    },
+    width () {
+      return this.halfWidth * 2
+    },
+    halfWidth () {
+      return this.getLength(this.radius + this.halfStroke)
     },
     dm () {
       return (this.decimalPlace != null ? this.decimalPlace : this.precision) || 0
@@ -182,6 +209,9 @@ export default {
       this.localStatus = status
       this.$emit('update:status', status)
       this.$emit('update:state', status)
+    },
+    getLength (val) {
+      return `${Math.round(val * 100) / 100}`
     }
   },
   created () {

@@ -24,5 +24,8 @@
   "browserslist": [
     "ie >= 9",
     "last 2 versions"
-  ]
+  ],
+  "dependencies": {
+    "vue-awesome": "^3.1.3"
+  }
 }

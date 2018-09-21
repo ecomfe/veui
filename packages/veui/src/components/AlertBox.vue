@@ -17,7 +17,7 @@
     class="veui-alert-box-icon"
     :name="icons[type]">
   </veui-icon>
-  <h3 class="veui-alert-box-title">
+  <h3 v-if="title || $slots.title" class="veui-alert-box-title">
     <template v-if="title">{{ title }}</template>
     <slot name="title" v-else/>
   </h3>
@@ -25,7 +25,7 @@
     <slot/>
   </div>
   <template slot="foot" slot-scope="{ close }">
-    <veui-button autofocus @click="close('ok')">知道了</veui-button>
+    <veui-button :ui="uiParts.ok" autofocus @click="close('ok')">知道了</veui-button>
   </template>
 </veui-dialog>
 </template>

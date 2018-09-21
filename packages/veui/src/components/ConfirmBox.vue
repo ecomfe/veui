@@ -10,7 +10,7 @@
   @cancel="$emit('cancel')"
   @afterclose="$emit('afterclose')"
   role="alertdialog">
-  <template slot="title">
+  <template v-if="title || $slots.title" slot="title">
     <template v-if="title">{{ title }}</template>
     <slot name="title" v-else/>
   </template>

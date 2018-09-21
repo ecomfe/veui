@@ -26,7 +26,6 @@ fs.readdirSync(svgDir).forEach(file => {
       let { width, height, viewBox } = attrs
       if (!(width && height)) {
         if (!viewBox) {
-          console.error(svg)
           console.error(file, `doesn't contain a valid size declaration.`)
         }
 
@@ -34,7 +33,6 @@ fs.readdirSync(svgDir).forEach(file => {
       }
 
       if (!(width && height)) {
-        console.error(svg)
         console.error(file, `doesn't contain a valid size declaration.`)
       }
 
@@ -44,7 +42,7 @@ fs.readdirSync(svgDir).forEach(file => {
         }
 
         let path = {
-          d: attrs.d,
+          d: attrs.d
         }
 
         if (attrs.fillRule && attrs.fillRule.toLowerCase() !== 'nonzero') {

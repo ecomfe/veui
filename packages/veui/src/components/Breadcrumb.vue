@@ -42,7 +42,7 @@ export default {
               onRedirect={event => this.fireRedirect(event, route, index)}>
               {
                 this.$scopedSlots.default
-                  ? this.$scopedSlots.default({ route, ...route })
+                  ? this.$scopedSlots.default({ route, ...route, index })
                   : (route.label || route.text)
               }
               <template slot="separator">

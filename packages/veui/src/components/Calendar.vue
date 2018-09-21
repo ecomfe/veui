@@ -284,6 +284,13 @@ export default {
     realSelected () {
       return this.selected ? this.selected : (this.multiple ? [] : null)
     },
+    realPicking () {
+      let [from, to] = this.picking || []
+      if (to && to - from < 0) {
+        return [to, from]
+      }
+      return this.picking
+    },
     panels () {
       let panels = []
       for (let i = 0; i < this.panel; i++) {
@@ -400,9 +407,9 @@ export default {
         'veui-calendar-aux': day.month !== panel.month,
         'veui-calendar-today': day.isToday,
         'veui-calendar-selected': day.isSelected,
-        'veui-calendar-in-range': day.rangePosition === 'within',
-        'veui-calendar-range-start': day.rangePosition === 'start',
-        'veui-calendar-range-end': day.rangePosition === 'end',
+        'veui-calendar-in-range': day.rangePosition && day.rangePosition.within,
+        'veui-calendar-range-start': day.rangePosition && day.rangePosition.start,
+        'veui-calendar-range-end': day.rangePosition && day.rangePosition.end,
         ...normalizeClass(extraClass)
       }
     },
@@ -635,7 +642,7 @@ export default {
 
       if (!this.multiple) {
         // single range
-        let range = this.picking || this.realSelected
+        let range = this.realPicking || this.realSelected
         return getRangePosition(day, range)
       }
 
@@ -690,15 +697,14 @@ function getRangePosition (day, range) {
     return false
   }
   let date = new Date(day.year, day.month, day.date)
-  if ((range[0] - date) * (range[1] - date) < 0) {
-    return 'within'
+  let within = (range[0] - date) * (range[1] - date) <= 0
+  if (!within) {
+    return false
   }
-  if (range[0] - date === 0) {
-    return 'start'
+  return {
+    within,
+    start: range[0] - date === 0,
+    end: range[1] - date === 0
   }
-  if (range[1] - date === 0) {
-    return 'end'
-  }
-  return false
 }
 </script>
