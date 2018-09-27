@@ -31,7 +31,7 @@ export class Rule {
     }
   }
 
-  validate (val, rules) {
+  validate (val, rules, formData) {
     if (!rules || !rules.length) {
       return true
     }
@@ -39,7 +39,7 @@ export class Rule {
     rules = Array.isArray(rules) ? rules : [rules]
     let results = rules.map(rule => {
       let validator = this.ruleValidators[rule.name]
-      if (!validator.validate(val, rule.value)) {
+      if (!validator.validate(val, rule.value, formData)) {
         let realMessage = rule.message || validator.message
         return {
           name: rule.name,
