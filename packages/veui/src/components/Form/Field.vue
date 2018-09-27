@@ -170,7 +170,7 @@ export default {
       Vue.set(parentValue, name, type.clone(this.initialData))
     },
     validate (rules) {
-      let res = rule.validate(this.getFieldValue(), rules || this.localRules)
+      let res = rule.validate(this.getFieldValue(), rules || this.localRules, this.form.data)
       // 分两种调用
       // 1. 交互式，只清涉及的 rule
       // 2. 完整提交检查，全清
