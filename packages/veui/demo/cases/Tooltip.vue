@@ -111,7 +111,7 @@
     <section>
       <div style="margin-bottom:10px;">自定义事件</div>
       <veui-input ui="big" v-model="number" composition @change="log('change')" ref="number" @focus.native="numberOpen = true" @blur.native="numberOpen = false"></veui-input>
-      <veui-tooltip position="top" :ui="ui" target="number" :custom="true" :open.sync="numberOpen">你focus到了</veui-tooltip>
+      <veui-tooltip position="top" :ui="ui" target="number" trigger="custom" :open.sync="numberOpen">你focus到了</veui-tooltip>
     </section>
 
     <section>
@@ -139,14 +139,7 @@ export default {
       clickOpen: false,
       number: '12345678910987654321',
       numberOpen: false,
-      overlayOptions: {
-        constraints: [
-          {
-            pin: true,
-            to: 'window'
-          }
-        ]
-      }
+      overlayOptions: {}
     }
   },
   components: {

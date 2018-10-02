@@ -72,7 +72,7 @@
 
         <veui-fieldset class="salary">
           <template slot="label">
-            <veui-label>预期收入：</veui-label> <veui-icon name="money"/>
+            <veui-label>预期收入：</veui-label> <veui-icon name="money-bill-alt"/>
           </template>
           <veui-field>
             <veui-input v-model="storeData2.start"/>
@@ -333,7 +333,7 @@ import {
 } from 'veui'
 import moment from 'moment'
 import bus from '../bus'
-import 'vue-awesome/icons/money'
+import 'vue-awesome/icons/money-bill-alt'
 import 'vue-awesome/icons/indent'
 
 const REGIONS_BRAND = [

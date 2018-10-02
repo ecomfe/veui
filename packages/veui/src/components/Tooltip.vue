@@ -5,6 +5,7 @@ import overlay from '../mixins/overlay'
 import outside from '../directives/outside'
 import { getNodes, isValidNodesResolver } from '../utils/context'
 import { isString } from 'lodash'
+import warn from '../utils/warn'
 import config from '../managers/config'
 
 const TRIGGER_MAP = {
@@ -69,6 +70,9 @@ export default {
   },
   computed: {
     localTrigger () {
+      if (this.trigger === 'custom') {
+        return {}
+      }
       let open
       let close
       if (isString(this.trigger)) {
@@ -124,7 +128,7 @@ export default {
       this.localOpen = false
     },
     bindHandler () {
-      if (!this.custom) {
+      if (!this.custom && this.trigger !== 'custom') {
         if (this.targetNode) {
           if (!this.targetNode.__bindToolTip__) {
             this.targetNode.addEventListener(this.localTrigger.open, this.openHandler, false)
@@ -136,7 +140,7 @@ export default {
   },
   render () {
     let directives = []
-    if (!this.custom) {
+    if (!this.custom && this.trigger !== 'custom') {
       directives.push({
         name: 'outside',
         value: this.outsideOptions,
@@ -165,6 +169,11 @@ export default {
       </veui-overlay>
     )
   },
+  created () {
+    if (this.custom) {
+      warn('[veui-tooltip] `custom` is deprecated and will be removed in `1.0.0`. Use `trigger: \'custom\'` instead.')
+    }
+  },
   mounted () {
     this.bindHandler()
   },
@@ -172,7 +181,7 @@ export default {
     this.bindHandler()
   },
   beforeDestroy () {
-    if (!this.custom) {
+    if (!this.custom && this.trigger !== 'custom') {
       this.targetNode && this.targetNode.removeEventListener(this.localTrigger.open, this.openHandler, false)
     }
   }

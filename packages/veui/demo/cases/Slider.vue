@@ -3,7 +3,7 @@
     <h1><code>&lt;veui-slider&gt;</code></h1>
 
     <section>
-        <veui-slider v-model="value1"></veui-slider>
+        <veui-slider v-model="value1"/>
         <veui-slider v-model="value1" readonly ui="small">
           <div slot="tip" style="position: absolute">&#8203;</div>
         </veui-slider>
@@ -14,15 +14,15 @@
     </section>
 
     <section>
-        <veui-slider ui="micro" v-model="value2" :min="0" :max="100" :step="8" mark>
+        <veui-slider ui="micro" v-model="value2" :min="10" :max="100" :step="7" mark>
           <span slot="tip-label">{{ value2 }}%</span>
         </veui-slider>
-        <veui-slider ui="micro" disabled v-model="value2" :min="0" :max="100" :step="8" mark></veui-slider>
+        <veui-slider ui="micro" disabled v-model="value2" :min="10" :max="100" :step="7" mark/>
         <div class="desc">Range: 0~100, Step: 8, Value: {{ value2 }}</div>
     </section>
 
     <section>
-        <veui-slider v-model="value4" :min="0" :max="100"></veui-slider>
+        <veui-slider v-model="value4" :min="0" :max="100"/>
         <div class="desc">Range: 0~100, Value: {{ value4 }}</div>
     </section>
 
