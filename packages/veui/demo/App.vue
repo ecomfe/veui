@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <nav id="main-nav">
-      <h1><a href="https://github.com/ecomfe/veui">VEUI components</a><icon name="github" scale="6"></icon></h1>
+      <h1><a href="https://github.com/ecomfe/veui">VEUI components</a><icon name="brands/github" scale="6"></icon></h1>
       <ul>
         <li v-for="(route, index) in routes" :key="index"><router-link :to='route'>{{route.name}}</router-link></li>
       </ul>
@@ -19,7 +19,7 @@ import routes from './cases'
 import Console from './Console'
 import Icon from '@/components/Icon'
 import 'vue-awesome/icons/ban'
-import 'vue-awesome/icons/github'
+import 'vue-awesome/icons/brands/github'
 
 Icon.register({
   baidu: {

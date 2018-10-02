@@ -71,10 +71,11 @@ export default {
     }
   },
   watch: {
-    realOpen (value) {
-      this.updateOverlayDOM()
+    realOpen (val) {
+      this.toggleLocator(val)
+      this.updateLocator()
       this.updateNode()
-      if (value) {
+      if (val) {
         let node = this.overlayNode
         node.toTop()
         this.initFocus()
@@ -86,7 +87,7 @@ export default {
       this.findTargetNode()
     },
     targetNode () {
-      this.updateOverlayDOM()
+      this.updateLocator()
       this.updateNode()
     }
   },
@@ -106,7 +107,14 @@ export default {
     }
 
     this.findTargetNode()
-    this.updateOverlayDOM()
+    this.updateLocator()
+  },
+  updated () {
+    this.$nextTick(() => {
+      if (this.realOpen) {
+        this.relocate()
+      }
+    })
   },
   methods: {
     // 更新 zindex 树
@@ -134,7 +142,7 @@ export default {
       }
     },
 
-    updateOverlayDOM () {
+    updateLocator () {
       if (!this.realOpen) {
         return
       }
@@ -151,12 +159,6 @@ export default {
         } else {
           this.tether.setOptions(options)
         }
-
-        // 修改 tether 的 options 的时候，有可能 tether 的容器元素还没显示出来，
-        // 所以保险起见，统一 nextTick 触发一下 tether 的重新计算
-        this.$nextTick(() => {
-          this.tether.position()
-        })
       }
     },
 
@@ -203,11 +205,25 @@ export default {
         focusManager.remove(this.focusContext)
         this.focusContext = null
       }
+    },
+
+    toggleLocator (enable) {
+      if (!this.tether) {
+        return
+      }
+      this.tether[enable ? 'enable' : 'disable']()
+    },
+
+    destroyLocator () {
+      if (!this.tether) {
+        return
+      }
+      this.tether.destroy()
+      this.tether = null
     }
   },
   destroyed () {
-    this.tether && this.tether.destroy()
-    this.tether = null
+    this.destroyLocator()
 
     let node = this.overlayNode
     node.remove()

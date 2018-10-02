@@ -36,7 +36,7 @@
       >
         <veui-icon :name="icons.search"/>
       </button>
-      <veui-button :ui="ui"
+      <veui-button :ui="`${inheritedUi} ${uiParts.button}`"
         class="veui-searchbox-action-button"
         :disabled="realDisabled || realReadonly"
         aria-label="搜索"
@@ -55,7 +55,7 @@
       ref="box"
       role="listbox"
       :aria-expanded="String(realExpanded)"
-      :ui="ui">
+      :ui="inheritedUi">
       <slot name="suggestions" :suggestions="realSuggestions" :select="selectSuggestion">
         <template v-for="(suggestion, index) in realSuggestions">
           <div class="veui-searchbox-suggestion-item"

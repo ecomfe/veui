@@ -4,6 +4,7 @@
 
 * 对 Vue-Awesome 的依赖升级到 `3.1.2`。如果之前有在项目中直接使用 `vue-awesome@2` 的，需要升级到最新版，否则无法混用 VEUI 与 VueAwesome 的图标。
 * `Breadcrumb` 组件的 `default` 作用域插槽重命名为 `item`，因为 Vue 实际的 fallback 逻辑，所以避免使用同名的 slot 和 scoped slot。
+* `Tooltip` 组件的 `custom` prop 被废弃，将在 `1.0.0` 移除。替代方式为：将 `trigger` prop 指定为 `custom` 来使用自定义逻辑控制打开及关闭。
 
 ### 💡 主要变更
 
