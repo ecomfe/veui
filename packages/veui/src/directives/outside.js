@@ -61,7 +61,7 @@ function getElementsByRefs (refs, context) {
   return elements
 }
 
-function parseParams (el, arg, modifiers, value, context) {
+function parseParams (el, arg, modifiers, value) {
   let refs = arg ? arg.split(',') : []
   let handler
   let trigger = find(TRIGGER_TYPES, triggerType => triggerType in modifiers) || 'click'
@@ -192,7 +192,7 @@ function clear (el) {
   })
 }
 
-function refresh (el, { value, arg, modifiers, oldValue }, vnode) {
+function refresh (el, { value, arg, modifiers }, vnode) {
   const params = parseParams(el, arg, modifiers, value, vnode.context)
   let { trigger, refs, excludeSelf, delay } = params
   let key = getBindingKey(trigger)
