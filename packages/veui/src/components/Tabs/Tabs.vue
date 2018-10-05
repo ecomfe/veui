@@ -66,11 +66,11 @@
             >{{ tab.label }}</button>
             <slot name="tab-item-status" v-bind="tab" :index="index">
               <span
+                v-if="tab.status"
                 class="veui-tabs-item-status"
                 @click="!tab.disabled && setActive({ index })"
               >
                 <veui-icon
-                  v-if="tab.status"
                   :class="`veui-tabs-item-status-${tab.status}`"
                   :name="icons[tab.status]"
                 />
@@ -101,7 +101,7 @@
           </slot>
         </button>
         <slot name="tabs-extra-tip">
-          <span class="veui-tabs-extra-tip">{{ tip }}</span>
+          <span v-if="tip" class="veui-tabs-extra-tip">{{ tip }}</span>
         </slot>
         <div class="veui-tabs-scroller" v-if="menuOverflow" ref="scroller" aria-hidden="true">
           <button
