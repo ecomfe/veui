@@ -5,11 +5,16 @@
 * 对 Vue-Awesome 的依赖升级到 `3.1.2`。如果之前有在项目中直接使用 `vue-awesome@2` 的，需要升级到最新版，否则无法混用 VEUI 与 VueAwesome 的图标。
 * `Breadcrumb` 组件的 `default` 作用域插槽重命名为 `item`，因为 Vue 实际的 fallback 逻辑，所以避免使用同名的 slot 和 scoped slot。
 * `Tooltip` 组件的 `custom` prop 被废弃，将在 `1.0.0` 移除。替代方式为：将 `trigger` prop 指定为 `custom` 来使用自定义逻辑控制打开及关闭。
+* `Pagination` 组件内部所有的 `class` 中的 `pager` 被更名为 `pagination`。如果在样式代码中进行过定制，请进行全局替换。
 
 ### 💡 主要变更
 
 * 增加主题包为组件部件指定 `ui` 的功能。
 * `Breadcrumb` 组件的 scoped slot `item`（原 `default`）新增参数 `index`。
+
+### 🐞 问题修复
+
+* [^] 修复 `Slider` 组件在有 `step` 时的选择逻辑，由向下选取点改为就近取点，且修正了 `min` 值非 `0` 时的逻辑。
 
 ## 1.0.0-alpha.17
 

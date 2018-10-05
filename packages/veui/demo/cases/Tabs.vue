@@ -141,7 +141,7 @@
       <veui-tabs :active.sync="active3" :index.sync="index4">
         <template v-if="props.removable && tabs2.length > 1" slot="tab-item-extra" slot-scope="props">
           <button type="button" class="veui-tabs-item-remove" @click="removeTab2(props)">
-            <icon name="cross-small"></icon>
+            <icon name="cross-small"/>
           </button>
         </template>
         <veui-tab
@@ -161,7 +161,7 @@
             type="button"
             class="veui-tabs-item-remove"
             @click="removeTab3(props)">
-            <icon name="cross-small"></icon>
+            <icon name="cross-small"/>
           </button>
         </template>
         <veui-tab

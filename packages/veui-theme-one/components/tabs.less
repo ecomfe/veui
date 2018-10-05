@@ -41,10 +41,6 @@
     max-width: 100%;
     vertical-align: top;
     z-index: 1;
-
-    &-wrapper-moving {
-      transition: transform .5s ease-in-out;
-    }
   }
 
   &-list-wrapper {
@@ -52,6 +48,10 @@
     padding: 0;
     margin: 0;
     transform: translate(0);
+
+    &-moving {
+      transition: transform .5s ease-in-out;
+    }
   }
 
   .make-margin-left(@margin) {

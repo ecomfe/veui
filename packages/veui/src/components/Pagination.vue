@@ -1,14 +1,15 @@
 <template>
 <div
-  class="veui-pagination veui-pager"
+  class="veui-pagination"
   role="navigation"
   :aria-label="`选择分页，当前为第 ${page} 页，共 ${pageCount} 页`"
   :ui="ui">
-  <div class="veui-pager-info">
-    <div class="veui-pager-total">共 {{ realTotal }} 条</div>
-    <div class="veui-pager-size">
+  <div class="veui-pagination-info">
+    <div class="veui-pagination-total">共 {{ realTotal }} 条</div>
+    <div class="veui-pagination-size">
       <span>每页条数</span>
       <veui-select v-model="realPageSize"
+        :ui="uiParts.pageSize"
         :options="realPageSizes"
         overlay-class="veui-pagination-select-overlay"
         :aria-label="`选择每页显示条数，目前为 ${realPageSize} 条`"
@@ -16,11 +17,20 @@
       </veui-select>
     </div>
   </div>
-  <div class="veui-pager-switch">
-    <ul class="veui-pager-pages" :class="{[`veui-pager-digit-length-${pageDigitLength}`]: true}">
+  <div class="veui-pagination-switch">
+    <veui-link class="veui-pagination-prev"
+      :to="page === 1 ? '' : pageNavHref.prev.href"
+      :native="native"
+      :disabled="page === 1"
+      aria-label="上一页"
+      @click="handleRedirect(pageNavHref.prev.page, $event)">
+      <veui-icon :name="icons.prev"/>
+    </veui-link>
+    <ul class="veui-pagination-pages" :class="{[`veui-pagination-digit-length-${pageDigitLength}`]: true}">
       <li
         v-for="(item, index) in pageIndicatorSeries"
         :class="{
+          'veui-pagination-page': true,
           'veui-active': item.page === page
         }"
         :key="index">
@@ -32,24 +42,14 @@
           @click="handleRedirect(item.page, $event)">{{ item.text }}</veui-link>
       </li>
     </ul>
-    <div class="veui-pager-buttons">
-      <veui-link class="veui-pager-previous"
-        :to="page === 1 ? '' : pageNavHref.previous.href"
-        :native="native"
-        :disabled="page === 1"
-        aria-label="上一页"
-        @click="handleRedirect(pageNavHref.previous.page, $event)">
-        <veui-icon :name="icons.prev"/>
-      </veui-link>
-      <veui-link class="veui-pager-next"
-        :to="page === pageCount ? '' : pageNavHref.next.href"
-        :native="native"
-        :disabled="page === pageCount || pageCount === 0"
-        aria-label="下一页"
-        @click="handleRedirect(pageNavHref.next.page, $event)">
-        <veui-icon :name="icons.next"/>
-      </veui-link>
-    </div>
+    <veui-link class="veui-pagination-next"
+      :to="page === pageCount ? '' : pageNavHref.next.href"
+      :native="native"
+      :disabled="page === pageCount || pageCount === 0"
+      aria-label="下一页"
+      @click="handleRedirect(pageNavHref.next.page, $event)">
+      <veui-icon :name="icons.next"/>
+    </veui-link>
   </div>
 </div>
 </template>
@@ -146,7 +146,7 @@ export default {
     },
     pageNavHref () {
       return {
-        previous: this.getPageIndicator(Math.max(1, this.page - 1)),
+        prev: this.getPageIndicator(Math.max(1, this.page - 1)),
         next: this.getPageIndicator(Math.min(this.pageCount, this.page + 1))
       }
     },

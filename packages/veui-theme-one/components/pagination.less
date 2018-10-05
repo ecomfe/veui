@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-pager {
+.veui-pagination {
   @button-width: 30px;
   @button-height: 30px;
   @button-gap-width: 6px;
@@ -55,17 +55,43 @@
     background-color: @veui-gray-color-7;
   }
 
-  &-buttons {
-    float: left;
-    margin-left: @button-gap-width;
+  .veui-select {
+    min-width: auto;
+    margin-top: -1px;
+    margin-left: 10px;
+    vertical-align: top;
 
-    a {
-      .veui-button-transition();
+    .veui-button {
+      .padding(0, _);
+      height: @button-height;
+      line-height: @button-height - 2px;
+      white-space: nowrap;
+      color: @veui-text-color-strong;
+
+      .veui-icon {
+        @height: @button-height / 2 - 1px;
+        margin-top: ~"calc(@{height} - 0.5em)";
+      }
+    }
+
+    .veui-select-label {
+      max-width: none;
+      width: auto;
+      float: left;
+      margin-right: 5px;
     }
   }
 
-  &-buttons a,
-  &-buttons span {
+  &-prev,
+  &-next {
+    .veui-button-transition();
+
+    position: relative;
+    float: left;
+    width: @button-width;
+    height: @button-height;
+    line-height: @button-width - 2px;
+    text-align: center;
     border: 1px solid @veui-gray-color-5;
     background: transparent;
 
@@ -97,41 +123,12 @@
     }
   }
 
-  .veui-select {
-    min-width: auto;
-    margin-top: -1px;
-    margin-left: 10px;
-    vertical-align: top;
-
-    .veui-button {
-      .padding(0, _);
-      height: @button-height;
-      line-height: @button-height - 2px;
-      white-space: nowrap;
-      color: @veui-text-color-strong;
-
-      .veui-icon {
-        @height: @button-height / 2 - 1px;
-        margin-top: ~"calc(@{height} - 0.5em)";
-      }
-    }
-
-    .veui-select-label {
-      max-width: none;
-      width: auto;
-      float: left;
-      margin-right: 5px;
-    }
+  &-prev {
+    margin-right: @button-gap-width;
   }
 
-  &-previous,
   &-next {
-    position: relative;
-    float: left;
-    width: @button-width;
-    height: @button-height;
-    line-height: @button-width - 2px;
-    text-align: center;
+    margin-left: @button-gap-width;
   }
 
   &-pages {
@@ -173,7 +170,7 @@
   }
 
   .generate-responsive-page-digit-width(@length, @scale-ratio: 1) when (@length > 2) {
-    .veui-pager-digit-length-@{length} {
+    .veui-pagination-digit-length-@{length} {
       li {
         width: (@digit-width + @digit-width-delta * (@length - 2)) * @scale-ratio;
       }
@@ -184,33 +181,28 @@
 
   .generate-responsive-page-digit-width(4);
 
-  &,
-  &[ui~="slim"] {
-    .veui-pager-switch {
-      padding: 0 @button-width + @button-gap-width;
-      position: relative;
-    }
-
-    .veui-pager-previous {
-      position: absolute;
-      left: 0;
-    }
-  }
-
   &[ui~="hetero"],
   &[ui~="full"] {
-    .veui-pager-switch {
-      padding-left: 0;
+    .veui-pagination-switch {
+      position: relative;
     }
 
-    .veui-pager-previous {
-      position: relative;
-      margin-right: @button-gap-width;
+    .veui-pagination-pages {
+      margin-right: @button-width + @button-gap-width * 2;
+    }
+
+    .veui-pagination-prev {
+      position: absolute;
+      right: @button-width;
+    }
+
+    .veui-pagination-next {
+      margin-left: 0;
     }
   }
 
   &[ui~="full"] {
-    .veui-pager-info {
+    .veui-pagination-info {
       display: block;
     }
   }
@@ -218,9 +210,7 @@
   &[ui~="slim"] {
     @scale: 2 / 3;
 
-    .veui-pager-switch {
-      padding: 0 (@button-height + @button-gap-width) * @scale;
-
+    .veui-pagination-switch {
       li {
         width: @digit-width * @scale;
         height: @digit-height * @scale;
@@ -233,8 +223,8 @@
       }
     }
 
-    .veui-pager-previous,
-    .veui-pager-next {
+    .veui-pagination-prev,
+    .veui-pagination-next {
       width: @button-height * @scale;
       height: @button-height * @scale;
       line-height: 1.5;
