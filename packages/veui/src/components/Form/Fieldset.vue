@@ -1,6 +1,6 @@
 <template>
 <veui-field
-  :ui="ui"
+  :ui="realUi"
   ref="field"
   class="veui-fieldset"
   :class="{

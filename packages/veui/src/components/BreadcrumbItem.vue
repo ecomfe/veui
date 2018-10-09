@@ -1,7 +1,7 @@
 <template>
 <li class="veui-breadcrumb-item">
   <veui-link v-if="type === 'link'"
-    ui="link primary"
+    :ui="uiParts.link || 'link primary'"
     @click="$emit('redirect', $event)"
     :to="to"
     :replace="replace"

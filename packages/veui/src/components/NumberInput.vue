@@ -3,7 +3,7 @@
       step,
       update: handleThumbNudgeUpdate
     }"
-    :ui="ui"
+    :ui="realUi"
     type="text"
     inputmode="numeric"
     ref="input"

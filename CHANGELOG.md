@@ -6,11 +6,13 @@
 * `Breadcrumb` 组件的 `default` 作用域插槽重命名为 `item`，因为 Vue 实际的 fallback 逻辑，所以避免使用同名的 slot 和 scoped slot。
 * `Tooltip` 组件的 `custom` prop 被废弃，将在 `1.0.0` 移除。替代方式为：将 `trigger` prop 指定为 `custom` 来使用自定义逻辑控制打开及关闭。
 * `Pagination` 组件内部所有的 `class` 中的 `pager` 被更名为 `pagination`。如果在样式代码中进行过定制，请进行全局替换。
+* `Uploader` 组件的 `progress` prop 的 `'number'` 取值被替换为 `'percent'` 及 `'detail'`，分别表示显示百分比及显示进度详情。进度详情将以 <code>\`${loaded}KB/${total}KB\`</code> 的形式输出。
 
 ### 💡 主要变更
 
-* 增加主题包为组件部件指定 `ui` 的功能。
+* 增加主题包为组件部件指定 `ui` 的功能，同时组件现在将自动继承父组件中可继承的 `ui` 字段，并更新了 `veui-theme-one` 中所有相应的部分。
 * `Breadcrumb` 组件的 scoped slot `item`（原 `default`）新增参数 `index`。
+* `Button` 组件增加 `ui` 选项 `dark`。
 
 ### 🐞 问题修复
 

@@ -21,5 +21,15 @@ config.defaults({
     direction: {
       values: ['horizontal']
     }
+  },
+  parts: {
+    retryFileDone: 'link micro',
+    clearFileDone: 'link square micro',
+    cancelFile: 'link square micro',
+    cancelImage: 'small',
+    retryImageSuccess: 'dark',
+    clearImageSuccess: 'dark square micro',
+    retryImageFailure: 'small',
+    clearImageFailure: 'link square micro'
   }
 }, 'uploader')

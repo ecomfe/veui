@@ -1,8 +1,13 @@
 <template>
-<button class="veui-button" :class="{
+<button
+  :class="{
+    'veui-button': true,
     'veui-button-loading': loading,
     'veui-disabled': disabled
-  }" v-bind="attrs" v-on="listeners">
+  }"
+  :ui="realUi"
+  v-bind="attrs"
+  v-on="listeners">
   <template v-if="!loading"><slot/></template>
   <template v-else>
     <slot name="loading">

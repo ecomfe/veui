@@ -159,7 +159,7 @@ export default {
         })}>
         <div
           class="veui-tooltip"
-          ui={this.ui}
+          ui={this.realUi}
           role="tooltip"
           {...{directives}}>
           <div class="veui-tooltip-content">

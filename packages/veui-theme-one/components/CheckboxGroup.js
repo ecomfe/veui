@@ -3,7 +3,8 @@ import config from 'veui/managers/config'
 config.defaults({
   ui: {
     size: {
-      values: ['small']
+      values: ['small'],
+      inherit: true
     }
   }
 }, 'checkboxgroup')

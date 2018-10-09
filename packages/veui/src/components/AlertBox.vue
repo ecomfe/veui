@@ -1,6 +1,6 @@
 <template>
 <veui-dialog
-  :ui="ui"
+  :ui="realUi"
   :overlay-class="mergeOverlayClass({
     'veui-alert-box': true,
     [`veui-alert-box-${type}`]: true

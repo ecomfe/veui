@@ -1,7 +1,7 @@
 <template>
 <div
   ref="main"
-  :ui="ui"
+  :ui="realUi"
   :class="{
     'veui-dropdown': true,
     'veui-dropdown-expanded': expanded,
@@ -10,15 +10,13 @@
   <veui-button
     v-if="split"
     class="veui-dropdown-command"
-    @click="$emit('click')"
-    :ui="ui">
+    @click="$emit('click')">
     <span class="veui-dropdown-label">
       <slot name="label" :label="label">{{ label }}</slot>
     </span>
   </veui-button>
   <veui-button
     class="veui-dropdown-button"
-    :ui="ui"
     :disabled="disabled"
     aria-haspopup="menu"
     :aria-disabled="String(this.disabled)"
@@ -48,7 +46,6 @@
       }"
       tabindex="-1"
       role="menu"
-      :ui="ui"
       :aria-expanded="String(expanded)"
       @keydown.esc.stop="close"
       @keydown.down.prevent="navigate()"

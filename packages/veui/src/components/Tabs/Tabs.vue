@@ -7,7 +7,7 @@
     'veui-tabs-left-limited': leftLimited,
     'veui-tabs-right-limited': rightLimited
   }"
-  :ui="ui"
+  :ui="realUi"
   v-resize.debounce="listResizeHandler"
 >
   <div :class="{

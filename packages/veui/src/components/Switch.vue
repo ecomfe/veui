@@ -6,7 +6,7 @@
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
   }"
-  :ui="ui">
+  :ui="realUi">
   <input
     type="checkbox"
     v-bind="attrs"

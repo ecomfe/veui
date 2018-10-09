@@ -1,5 +1,5 @@
 <template>
-<div class="veui-carousel" :ui="ui">
+<div class="veui-carousel" :ui="realUi">
   <div class="veui-carousel-viewport" @mouseenter="handleEnter" @mouseleave="handleLeave">
     <transition-group name="veui-carousel-item" class="veui-carousel-items" tag="ol">
       <li

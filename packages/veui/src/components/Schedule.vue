@@ -1,7 +1,7 @@
 <template>
 <div
   class="veui-schedule"
-  :ui="ui"
+  :ui="realUi"
   role="application"
   aria-label="时段选择"
   :aria-disabled="realDisabled"
@@ -21,7 +21,7 @@
             </template>
             <template v-else>
               <veui-dropdown
-                ui="link"
+                :ui="uiParts.shortcuts"
                 label="默认时段"
                 aria-label="选择预设时段"
                 :options="shortcutOptions"
@@ -47,7 +47,7 @@
     <div class="veui-schedule-head-day">
       <div class="veui-schedule-head-day-item" v-for="i in 7" :key="i">
         <veui-checkbox
-          ui="small"
+          :ui="uiParts.dayPicker"
           :indeterminate="dayChecked[i - 1].indeterminate"
           :checked="dayChecked[i - 1].checked"
           :aria-label="`选择星期${dayNames[i - 1]}全天`"
@@ -107,7 +107,7 @@
         trigger="hover"
         :delay="0"
         :interactive="false"
-        ui="small"
+        :ui="uiParts.tooltip"
         open>
         <slot name="tooltip" v-bind="current">{{ currentLabel }}</slot>
       </veui-tooltip>

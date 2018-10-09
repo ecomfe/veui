@@ -1,7 +1,7 @@
 <template>
 <div
   class="veui-calendar"
-  :ui="ui"
+  :ui="realUi"
   role="application"
   aria-label="日历"
   :aria-disabled="realDisabled"

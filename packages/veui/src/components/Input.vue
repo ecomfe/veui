@@ -9,7 +9,7 @@
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
   }"
-  :ui="ui"
+  :ui="realUi"
 >
   <template v-if="$slots.before">
     <div class="veui-input-before"><slot name="before"/></div>

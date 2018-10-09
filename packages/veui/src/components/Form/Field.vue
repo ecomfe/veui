@@ -1,6 +1,6 @@
 <template>
 <div
-  :ui="ui"
+  :ui="realUi"
   :class="{
     'veui-field': true,
     'veui-field-invalid': !validity.valid,

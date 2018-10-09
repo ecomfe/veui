@@ -1,6 +1,6 @@
 <template>
 <form
-  :ui="ui"
+  :ui="realUi"
   class="veui-form"
   @submit.prevent="handleSubmit"
   @reset.prevent="reset(null)">

@@ -1,6 +1,6 @@
 <template>
 <veui-dialog
-  :ui="ui"
+  :ui="realUi"
   :overlay-class="mergeOverlayClass('veui-prompt-box')"
   :open.sync="localOpen"
   :priority="priority"

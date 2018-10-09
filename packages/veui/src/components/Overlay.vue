@@ -6,7 +6,7 @@
     <div
       class="veui-overlay-box"
       :class="realOverlayClass"
-      :ui="ui"
+      :ui="realUi"
       ref="box"
       :style="{zIndex}"
       v-show="realOpen">

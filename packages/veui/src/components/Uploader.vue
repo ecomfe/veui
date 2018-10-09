@@ -1,5 +1,5 @@
 <template>
-  <div class="veui-uploader" :ui="ui" ref="main">
+  <div class="veui-uploader" :ui="realUi" ref="main">
     <div class="veui-uploader-button-container" v-if="type === 'file'">
       <label class="veui-button veui-uploader-input-label"
         :class="{'veui-uploader-input-label-disabled': realUneditable ||
@@ -26,7 +26,7 @@
       </span>
     </div>
     <transition-group :class="listClass" tag="ul" name="veui-uploader-list">
-      <li v-for="(file, index) in fileList" :key="`${file.name}-${file.src}`">
+      <li v-for="(file, index) in fileList" :key="`${file.name}-${file.src}-${index}`">
         <template v-if="(type === 'file' && file.status !== 'uploading')
           || type === 'image' && (!file.status || file.status === 'success')">
           <slot name="file" :file="getScopeValue(index, file)">
@@ -43,8 +43,8 @@
                 <span v-if="file.status === 'failure'" class="veui-uploader-failure" :ref="`fileFailure${index}`">
                   <slot name="failure-label">上传失败</slot>
                 </span>
-                <veui-button v-if="file.status === 'failure'" ui="link" @click="retry(file)" :class="`${listClass}-retry`"><veui-icon :name="icons.redo"/>重试</veui-button>
-                <veui-button class="veui-uploader-button-remove" ui="link" @click="removeFile(file)" :disabled="realUneditable"><veui-icon :name="icons.clear"/></veui-button>
+                <veui-button v-if="file.status === 'failure'" :ui="uiParts.retryFileDone" @click="retry(file)" :class="`${listClass}-retry`"><veui-icon :name="icons.redo"/>重试</veui-button>
+                <veui-button class="veui-uploader-button-remove" :ui="uiParts.clearFileDone" @click="removeFile(file)" :disabled="realUneditable"><veui-icon :name="icons.clear"/></veui-button>
                 <veui-tooltip position='top' :target="`fileFailure${index}`">{{ file.failureReason }}</veui-tooltip>
               </div>
               <slot name="file-after" v-bind="getScopeValue(index, file)"/>
@@ -55,10 +55,15 @@
                 <img :src="file.src" :alt="file.alt || ''">
                 <div v-if="!realUneditable" :class="`${listClass}-mask`">
                   <label :for="inputId"
+                    :ui="uiParts.retryImageSuccess"
                     class="veui-button"
                     :class="{'veui-uploader-input-label-disabled': realUneditable}"
                     @click.stop="replaceFile(file)">重新上传</label>
-                  <veui-button @click="removeFile(file)" :disabled="realUneditable" :class="`${listClass}-mask-remove`"><veui-icon :name="icons.clear"></veui-icon>移除</veui-button>
+                  <veui-button
+                    :ui="uiParts.clearImageSuccess"
+                    @click="removeFile(file)"
+                    :disabled="realUneditable"
+                    :class="`${listClass}-mask-remove`"><veui-icon :name="icons.clear" label="移除"/></veui-button>
                   <slot name="extra-operation" v-bind="getScopeValue(index, file)"/>
                 </div>
                 <transition name="veui-uploader-fade">
@@ -77,14 +82,18 @@
             <slot name="file-before" v-bind="getScopeValue(index, file)"/>
             <div :class="`${listClass}-container`">
               <veui-uploader-progress :type="progress" :loaded="file.loaded" :total="file.total"
-                :class="type === 'image' ? `${listClass}-status` : ''"
+                :class="type === 'image' ? `${listClass}-status` : null"
                 :convertSizeUnit="convertSizeUnit">
                 <slot name="uploading-label">上传中...</slot>
               </veui-uploader-progress>
-              <veui-button v-if="type === 'file'" ui="link"
+              <veui-button
+                v-if="type === 'file'"
+                :ui="uiParts.cancelFile"
                 class="veui-uploader-button-remove"
                 @click="cancelFile(file)"><veui-icon :name="icons.clear"/></veui-button>
-              <veui-button v-else ui="aux operation"
+              <veui-button
+                v-else
+                :ui="uiParts.cancelImage"
                 @click="cancelFile(file)">取消</veui-button>
             </div>
             <slot name="file-after" v-bind="getScopeValue(index, file)"/>
@@ -97,9 +106,13 @@
               <div :class="`${listClass}-status`">
                 <span class="veui-uploader-failure"><slot name="failure-label">错误！</slot>{{file.failureReason}}</span>
               </div>
-              <veui-button ui="aux operation" @click="retry(file)">重试</veui-button>
-              <veui-button ui="link" @click="removeFile(file)"
-                :class="`${listClass}-mask-remove ${listClass}-mask-remove-failure`"><veui-icon :name="icons.clear"/>移除</veui-button>
+              <veui-button
+                :ui="uiParts.retryImageFailure"
+                @click="retry(file)">重试</veui-button>
+              <veui-button
+                :ui="uiParts.clearImageFailure"
+                @click="removeFile(file)"
+                :class="`${listClass}-mask-remove ${listClass}-mask-remove-failure`"><veui-icon :name="icons.clear" label="移除"/></veui-button>
             </div>
             <slot name="file-after" v-bind="getScopeValue(index, file)"/>
           </slot>
@@ -586,7 +599,8 @@ export default {
     onprogress (file, progress) {
       let index = this.fileList.indexOf(file)
       switch (this.progress) {
-        case 'number':
+        case 'percent':
+        case 'detail':
         case 'bar':
           file.loaded = progress.loaded
           file.total = progress.total
@@ -677,7 +691,7 @@ export default {
       this.updateFileList(file, 'success', data, true)
       setTimeout(() => {
         this.updateFileList(file, null)
-      }, 300)
+      }, 2000)
     },
     showFailureResult (data, file) {
       file.xhr = null
@@ -806,9 +820,11 @@ function getProgress () {
         switch (this.type) {
           case 'text':
             return this.$slots.default
-          case 'number':
+          case 'percent':
             return this.percent
-              ? `${this.percent} ${this.convertSizeUnit(this.loaded)}/${this.convertSizeUnit(this.total)}`
+          case 'detail':
+            return this.percent
+              ? `${this.convertSizeUnit(this.loaded)}/${this.convertSizeUnit(this.total)}`
               : ''
           case 'bar':
             return ''

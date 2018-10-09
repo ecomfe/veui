@@ -86,11 +86,10 @@ export default {
         'veui-select-expanded': this.expanded,
         'veui-input-invalid': this.realInvalid
       }}
-      ui={this.ui}>
+      ui={this.realUi}>
       <veui-button
         ref="button"
         class="veui-select-button"
-        ui={this.ui}
         aria-haspopup="listbox"
         aria-disabled={String(this.realDisabled)}
         aria-readonly={String(this.realReadonly)}
@@ -133,7 +132,7 @@ export default {
             tabindex="-1"
             role="listbox"
             aria-expanded={String(this.expanded)}
-            ui={this.ui}
+            ui={this.realUi}
             onKeydown={this.handleKeydown}>
             {this.$slots.before}
             {
@@ -144,7 +143,7 @@ export default {
             <veui-option-group
               ref="options"
               options={this.realOptions}
-              ui={this.ui}
+              ui={this.realUi}
               scopedSlots={{
                 label: this.$scopedSlots['group-label'] || null,
                 option: this.$scopedSlots.option || null,

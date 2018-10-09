@@ -3,7 +3,7 @@
   class="veui-pagination"
   role="navigation"
   :aria-label="`选择分页，当前为第 ${page} 页，共 ${pageCount} 页`"
-  :ui="ui">
+  :ui="realUi">
   <div class="veui-pagination-info">
     <div class="veui-pagination-total">共 {{ realTotal }} 条</div>
     <div class="veui-pagination-size">

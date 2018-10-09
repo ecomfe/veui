@@ -7,7 +7,7 @@
       'veui-dialog-box': true,
       'veui-dialog-box-mask': modal
     })"
-    :ui="ui"
+    :ui="realUi"
     autofocus
     :modal="modal"
     :priority="priority"

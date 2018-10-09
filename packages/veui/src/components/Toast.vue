@@ -2,7 +2,7 @@
 <transition name="veui-toast">
   <div
     v-if="open"
-    :ui="ui"
+    :ui="realUi"
     class="veui-toast"
     :class="`veui-toast-${type}`"
     role="alert">

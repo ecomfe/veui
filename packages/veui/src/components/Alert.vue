@@ -2,7 +2,7 @@
 <div
   v-if="localOpen"
   class="veui-alert"
-  :ui="ui"
+  :ui="realUi"
   :class="`veui-alert-${type}`"
   role="alert" aria-expanded="true"
 >
@@ -20,7 +20,7 @@
 
     <div class="veui-alert-nav" v-if="isMultiple">
       <veui-button
-        ui="link"
+        :ui="uiParts.prev || 'link'"
         :disabled="isFirst"
         @click="switchMessage(-1)"
         aria-label="上一条"
@@ -32,7 +32,7 @@
         :aria-label="`第 ${localIndex + 1} 条，共 ${message.length} 条`"
       >{{ localIndex + 1 }}/{{ message.length }}</span>
       <veui-button
-        ui="link"
+        :ui="uiParts.next || 'link'"
         :disabled="isLast"
         @click="switchMessage(1)"
         aria-label="下一条"
@@ -45,12 +45,12 @@
       <veui-button
         v-if="realCloseLabel"
         class="veui-alert-close-text"
-        ui="link primary"
+        :ui="uiParts.close || 'link primary'"
         @click="close"
       >{{ realCloseLabel }}</veui-button>
       <veui-button
         v-else
-        ui="link"
+        :ui="uiParts.closeLabel || 'link'"
         @click="close"
         aria-label="关闭"
       >

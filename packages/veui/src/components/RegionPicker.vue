@@ -1,7 +1,7 @@
 <template>
 <div
   class="veui-region-picker"
-  :ui="ui"
+  :ui="realUi"
   role="tree"
   aria-multiselectable="true"
   aria-label="地域选择，按 Tab 键在同一层级内导航，按左右箭头键切换层级">

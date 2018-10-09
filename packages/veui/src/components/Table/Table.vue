@@ -1,5 +1,5 @@
 <template>
-<table class="veui-table" :ui="ui">
+<table class="veui-table" :ui="realUi">
   <slot/>
   <colgroup>
     <col v-if="selectable" width="60"/>

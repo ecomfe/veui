@@ -74,7 +74,6 @@
     padding: 0;
     margin: 0;
     list-style: none;
-    overflow: hidden;
 
     li {
       margin: 0 10px 5px 0;
@@ -108,31 +107,30 @@
     }
 
     &-success {
-      .absolute(0);
+      .absolute(-1px);
       padding: 9px 4px;
       background-color: #fff;
+      border: 1px solid @veui-gray-color-5;
       color: @veui-success-color;
       cursor: pointer;
     }
   }
 
   &-list {
-    width: @width;
-
     &-container {
       position: relative;
-      padding: 4px;
       width: @width;
+      padding: 3px 4px;
+      max-width: @width;
       color: @veui-gray-color-2;
       transition: background-color @veui-transition-duration;
+      text-align: right;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     &-container:hover {
       background-color: @veui-gray-color-8;
-
-      .veui-button[ui~="link"] {
-        background-color: @veui-gray-color-8;
-      }
 
       .veui-uploader-button-remove {
         opacity: 1;
@@ -140,13 +138,12 @@
     }
 
     &-name {
-      display: inline-block;
-      vertical-align: top;
-      overflow: hidden;
-      width: ~"calc(100% - 3em)";
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      line-height: 20px;
+      .ellipsis();
+      float: left;
+      max-width: ~"calc(100% - 3em)";
+      line-height: 22px;
+      text-align: left;
+      vertical-align: middle;
     }
 
     &-name-success {
@@ -154,12 +151,12 @@
     }
 
     &-name-failure {
-      width: ~"calc(100% - 11em)";
+      width: ~"calc(100% - 12em)";
     }
 
     &-status {
       display: inline-block;
-      width: ~"calc(100% - 3em)";
+      max-width: ~"calc(100% - 3em)";
       height: 100%;
     }
 
@@ -171,33 +168,30 @@
     }
 
     &-icon {
-      .size(12px);
-      margin: 4px 5px 0 0;
-      vertical-align: top;
+      font-size: 12px;
+      margin: 5px 8px 0 0;
+      float: left;
     }
 
-    .veui-button {
-      float: right;
-      .centered-line(20px);
-      vertical-align: top;
+    &-retry {
+      margin-right: 6px;
+      margin-left: 10px;
 
-      &.veui-uploader-list-retry {
-        float: none;
-        margin-left: 10px;
-        color: @veui-gray-color-1;
+      &.veui-button[ui~="micro"] {
+        font-size: @veui-font-size-normal;
+      }
 
-        .veui-icon {
-          margin: 4px 6px 0 0;
-          font-size: 12px;
-        }
+      .veui-icon {
+        margin: 4px 6px 0 0;
+        font-size: 12px;
       }
     }
 
     .veui-uploader-progress {
-      display: inline-block;
-      width: ~"calc(100% - 6em)";
-      height: 20px;
-      vertical-align: middle;
+      float: left;
+      text-align: left;
+      line-height: 22px;
+      margin-right: 10px;
     }
   }
 
@@ -205,19 +199,12 @@
     float: left;
 
     &-container {
-      overflow: hidden;
+      .clearfix();
       .size(@image-size);
       padding: 0;
       border: 1px solid @veui-gray-color-5;
       text-align: center;
       position: relative;
-
-      .veui-button[ui~="operation"] {
-        .absolute(~"calc(50% + 10px)", _, _, ~"calc(50% - 35px)");
-        width: 70px;
-        .centered-line(28px);
-        font-size: @veui-font-size-small;
-      }
 
       label.veui-button {
         cursor: pointer;
@@ -243,35 +230,8 @@
         background-color: none;
       }
 
-      .veui-button {
-        padding: 0;
-        position: absolute;
-        background-color: fadeout(#000, 20%);
-        border: 1px solid fadeout(#fff, 80%);
-        color: #fff;
-        font-size: @veui-font-size-normal;
-
-        &:hover {
-          background-color: fadeout(#000, 20%);
-        }
-
-        &:hover,
-        &.active {
-          color: #fff;
-        }
-      }
-
       .veui-button&-remove {
-        .size(24px);
-        line-height: 24px;
-        top: 0;
-        right: 0;
-        left: auto;
-        overflow: hidden;
-
-        .veui-icon {
-          margin-top: 4px;
-        }
+        .absolute(-1px, -1px, _, _);
       }
 
       .veui-button.veui-uploader-input-label-disabled {
@@ -348,10 +308,13 @@
   &-error,
   &-failure {
     color: @veui-alert-color;
+    vertical-align: middle;
+    cursor: help;
   }
 
   &-success {
     color: @veui-success-color;
+    vertical-align: middle;
   }
 
   &-hide {
@@ -363,25 +326,25 @@
 
     .veui-uploader-list,
     .veui-uploader-list-image {
+      .clearfix();
+
       li {
-        display: inline-block;
+        float: left;
         margin-right: 10px;
       }
+    }
+
+    .veui-uploader-list-container {
+      width: auto;
     }
   }
 
   & &-button-remove {
-    float: right;
-    margin-right: 4px;
+    margin-right: -1px;
     color: @veui-gray-color-2;
     opacity: 0;
-    .centered-line(20px);
+    vertical-align: middle;
     transition: opacity @veui-transition-duration;
-
-    .veui-icon {
-      font-size: 10px;
-      margin-top: 5px;
-    }
   }
 
   &-list-enter,

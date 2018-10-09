@@ -78,7 +78,6 @@ export default {
         let option = { ...opt, selected: opt.value === this.value }
         return option.options
           ? <veui-option-group
-            ui={this.inheritedUi}
             label={option.label}
             options={option.options}
             position={option.position}
@@ -91,7 +90,6 @@ export default {
               'option-label': this.$scopedSlots['option-label'] || null
             }}/>
           : <veui-option
-            ui={this.inheritedUi}
             label={option.label}
             value={option.value}
             hidden={option.hidden}
@@ -121,7 +119,7 @@ export default {
         'veui-option-group-unlabelled': !this.label,
         'veui-option-group-expanded': this.expanded
       }}
-      ui={this.ui}
+      ui={this.realUi}
       ref="label">
       {
         this.label
@@ -180,7 +178,7 @@ export default {
               tabindex="-1"
               role={this.popupRole}
               aria-expanded={String(this.expanded)}
-              ui={this.ui}
+              ui={this.realUi}
               {...{
                 directives: [{
                   name: 'outside',

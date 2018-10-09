@@ -7,7 +7,7 @@
   :aria-valuenow="realValue"
   :aria-valuetext="desc ? valueText : null"
   :class="klass"
-  :ui="ui">
+  :ui="realUi">
   <div v-if="desc" class="veui-progress-desc">
     <slot v-bind="{ percent, value: realValue, status }">
       <veui-icon :name="icons.success" v-if="type === 'circular' && localStatus === 'success'"/>
