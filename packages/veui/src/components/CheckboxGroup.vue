@@ -1,13 +1,12 @@
 <template>
 <div
   class="veui-checkbox-group"
-  :ui="ui"
+  :ui="realUi"
   role="listbox"
   aria-multiselectable="true"
   :aria-readonly="String(realReadonly)"
   :aria-disabled="String(realDisabled)">
-  <checkbox
-    :ui="ui"
+  <veui-checkbox
     :name="localName"
     v-for="(item, index) in items"
     :key="index"
@@ -19,7 +18,7 @@
     :aria-posinset="index + 1"
     :aria-setsize="items.length">
     <slot v-bind="item" :index="index">{{ item.label }}</slot>
-  </checkbox>
+  </veui-checkbox>
 </div>
 </template>
 
@@ -32,7 +31,7 @@ import Checkbox from './Checkbox'
 export default {
   name: 'veui-checkbox-group',
   components: {
-    'checkbox': Checkbox
+    'veui-checkbox': Checkbox
   },
   mixins: [ui, input],
   model: {

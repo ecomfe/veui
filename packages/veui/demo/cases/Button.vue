@@ -91,6 +91,24 @@
       <veui-button ui="alt square" disabled><icon name="cross"></icon></veui-button>
       <veui-button ui="alt square" loading><icon name="cross"></icon></veui-button>
     </p>
+    <p>
+      <veui-button ui="dark micro">取消</veui-button>
+      <veui-button ui="dark tiny">取消</veui-button>
+      <veui-button ui="dark small">取消</veui-button>
+      <veui-button ui="dark">取消</veui-button>
+      <veui-button ui="dark large">取消</veui-button>
+      <veui-button ui="dark" disabled>取消</veui-button>
+      <veui-button ui="dark" loading>取消</veui-button>
+    </p>
+    <p>
+      <veui-button ui="dark square micro"><icon name="search"></icon></veui-button>
+      <veui-button ui="dark square tiny"><icon name="search"></icon></veui-button>
+      <veui-button ui="dark square small"><icon name="search"></icon></veui-button>
+      <veui-button ui="dark square"><icon name="search"></icon></veui-button>
+      <veui-button ui="dark square large"><icon name="search"></icon></veui-button>
+      <veui-button ui="dark square" disabled><icon name="search"></icon></veui-button>
+      <veui-button ui="dark square" loading><icon name="search"></icon></veui-button>
+    </p>
   </article>
 </template>
 

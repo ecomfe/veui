@@ -1,7 +1,7 @@
 <template>
 <div
   class="veui-radio-button-group veui-button-group"
-  :ui="ui"
+  :ui="realUi"
   role="radiogroup"
   :aria-readonly="String(realReadonly)"
   :aria-disabled="String(realDisabled)">
@@ -9,7 +9,6 @@
     :class="{
       'veui-button-selected': item.value === localValue
     }"
-    :ui="inheritedUi"
     v-for="(item, index) in items"
     :key="index"
     :disabled="item.disabled || realDisabled || realReadonly"

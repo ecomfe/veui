@@ -4,7 +4,7 @@
     'veui-checkbox': true,
     'veui-disabled': realReadonly || realDisabled
   }"
-  :ui="ui">
+  :ui="realUi">
   <input
     ref="box"
     type="checkbox"

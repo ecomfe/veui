@@ -6,7 +6,7 @@
     'veui-input-invalid': realInvalid,
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
-  }" :ui="ui">
+  }" :ui="realUi">
   <div ref="measurer" v-if="measure" class="veui-textarea-measurer">
     <div class="veui-textarea-measurer-line" v-for="(line, index) in lines" :key="index">
       <div

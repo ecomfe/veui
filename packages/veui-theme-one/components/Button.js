@@ -7,7 +7,7 @@ config.defaults({
   },
   ui: {
     style: {
-      values: ['alt', 'primary']
+      values: ['alt', 'primary', 'dark']
     },
     role: {
       values: ['link']

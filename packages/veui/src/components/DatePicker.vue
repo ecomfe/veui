@@ -1,5 +1,5 @@
 <template>
-<div class="veui-date-picker" :ui="ui"
+<div class="veui-date-picker" :ui="realUi"
   :class="{
     'veui-input-invalid': realInvalid,
     'veui-date-picker-empty': !selected,
@@ -9,7 +9,6 @@
   <veui-button
     ref="button"
     class="veui-date-picker-button"
-    :ui="ui"
     :disabled="realDisabled || realReadonly"
     :aria-disabled="realDisabled"
     :aria-readonly="realReadonly"
@@ -64,7 +63,7 @@
       v-model="localSelected"
       v-bind="calendarProps"
       ref="cal"
-      :ui="inheritedUi"
+      :ui="uiParts.calendar"
       v-outside:button="close"
       @select="handleSelect"
       @selectstart="handleProgress"

@@ -1,7 +1,7 @@
 <template>
 <div
   :class="sliderClasses"
-  :ui="ui"
+  :ui="realUi"
   role="application">
   <!-- 条 -->
   <div class="veui-slider-track" @click="handleTrackClick" ref="track">

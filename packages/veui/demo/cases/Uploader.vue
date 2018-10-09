@@ -11,7 +11,7 @@
       accept=".jpg,.jpeg,.gif"
       ui="horizontal"
       :payload="payload"
-      progress="number"
+      progress="percent"
       @success="onSuccess"
       @failure="onFailure"
       @change="handleChange('files')"
@@ -54,7 +54,9 @@
       class="extra-operation">
       <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
       <template slot="extra-operation" slot-scope="file">
-        <veui-button class="extra-operation-button"
+        <veui-button
+          :ui="file.src ? 'dark' : null"
+          class="extra-operation-button"
           @click="openTooltip(file)"
           :ref="`add-image${file.index !== undefined ? '-' + file.index : ''}`">输入图片地址</veui-button>
       </template>
@@ -75,7 +77,7 @@
       accept=".jpg,.jpeg,.gif"
       :payload="payload"
       ui="horizontal"
-      progress="number"
+      progress="detail"
       @success="onSuccess"
       @failure="onFailure"
       @change="handleChange('files2')"

@@ -4,14 +4,13 @@
     'veui-button-group': true,
     'veui-button-group-disabled': disabled
   }"
-  :ui="ui"
+  :ui="realUi"
   role="group"
   :aria-disabled="disabled">
   <slot>
     <veui-button
       v-for="(item, index) in items"
       :key="index"
-      :ui="inheritedUi"
       :disabled="disabled || item.disabled"
       @click="handleClick(item, index)"
       :aria-posinset="index + 1"

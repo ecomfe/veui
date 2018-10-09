@@ -1,5 +1,5 @@
 <template>
-<veui-icon :ui="ui" :class="klass" @click.native="sort">
+<veui-icon :ui="realUi" :class="klass" @click.native="sort">
   <veui-icon
     :class="{
       'veui-sorter-icon-asc': true,

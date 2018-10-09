@@ -4,7 +4,7 @@
   class="veui-option"
   v-show="!hidden"
   :tabindex="hidden ? -1 : false"
-  :ui="ui"
+  :ui="realUi"
   :class="{
     'veui-option-disabled': disabled,
     'veui-option-selected': selected

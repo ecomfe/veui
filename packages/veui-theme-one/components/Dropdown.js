@@ -9,10 +9,12 @@ config.defaults({
   },
   ui: {
     style: {
-      values: ['primary']
+      values: ['primary'],
+      inherit: true
     },
     role: {
-      values: ['link']
+      values: ['link'],
+      inherit: true
     }
   }
 }, 'dropdown')

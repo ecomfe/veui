@@ -1,12 +1,11 @@
 <template>
 <div
   class="veui-radio-group"
-  :ui="ui"
+  :ui="realUi"
   role="radiogroup"
   :aria-readonly="String(realReadonly)"
   :aria-disabled="String(realDisabled)">
   <veui-radio
-    :ui="ui"
     :name="localName"
     v-for="(item, index) in items"
     :key="index"

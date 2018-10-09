@@ -1,6 +1,6 @@
 <template>
 <div class="veui-check-button-group veui-button-group"
-  :ui="ui"
+  :ui="realUi"
   role="listbox"
   aria-multiselectable="true"
   :aria-readonly="String(realReadonly)"
@@ -9,7 +9,6 @@
     :class="{
       'veui-button-selected': localValue.indexOf(item.value) !== -1
     }"
-    :ui="inheritedUi"
     v-for="(item, index) in items"
     :key="index"
     :disabled="item.disabled || realDisabled || realReadonly"

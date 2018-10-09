@@ -2,7 +2,7 @@
   <veui-tree-node :datasource="localDatasource"
     :item-click="itemClick"
     :icons="icons"
-    :ui="ui"
+    :ui="realUi"
     @toggle="toggle"
     @click="handleItemClick"
     v-if="this.$scopedSlots.item">
@@ -13,7 +13,7 @@
   <veui-tree-node :datasource="localDatasource"
     :item-click="itemClick"
     :icons="icons"
-    :ui="ui"
+    :ui="realUi"
     @toggle="toggle"
     @click="handleItemClick"
     v-else-if="this.$scopedSlots['item-label']">
@@ -24,7 +24,7 @@
   <veui-tree-node :datasource="localDatasource"
     :item-click="itemClick"
     :icons="icons"
-    :ui="ui"
+    :ui="realUi"
     @toggle="toggle"
     @click="handleItemClick"
     v-else/>

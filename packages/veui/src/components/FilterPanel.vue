@@ -1,12 +1,12 @@
 <template>
-  <div class="veui-filter-panel" :ui="ui">
+  <div class="veui-filter-panel" :ui="realUi">
     <h3 class="veui-filter-panel-title">
       <slot name="head">标题</slot>
     </h3>
     <div class="veui-filter-panel-content">
       <veui-searchbox v-model="keyword"
         v-if="searchable"
-        ui="small"
+        :ui="uiParts.search"
         :placeholder="placeholder"
         @search="debounceSearch"
         @input="searchOnInput && debounceSearch()"></veui-searchbox>

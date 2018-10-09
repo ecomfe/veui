@@ -1,7 +1,7 @@
 <template>
 <div
   class="veui-steps"
-  :ui="ui"
+  :ui="realUi"
   role="list">
   <veui-link
     v-for="(step, index) in steps"

@@ -102,7 +102,7 @@ app.use('/upload', function (req, res) {
       result.reason = '图片尺寸不对'
     }
     res.json(result)
-  }, 1500)
+  }, 5000)
 })
 
 module.exports = app.listen(port, function (err) {

@@ -62,6 +62,20 @@
     }
   }
 
+  @dark-color: #000;
+
+  &[ui~="dark"] {
+    border-color: transparent;
+    background-color: fadeout(@dark-color, 30%);
+    color: #fff;
+
+    &:hover,
+    &:active,
+    &.focus-visible {
+      background-color: fadeout(@dark-color, 20%);
+    }
+  }
+
   &[ui~="large"] {
     .centered-line(@veui-height-large);
     font-size: @veui-font-size-large;

@@ -7,7 +7,8 @@ config.defaults({
   },
   ui: {
     size: {
-      values: ['large', 'small']
+      values: ['large', 'small'],
+      inherit: true
     }
   }
 }, 'searchbox')
