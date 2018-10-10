@@ -245,8 +245,12 @@ export default {
       }
     },
     convertResponse: {
-      type: Function,
-      default: config.get('uploader.convertResponse') || function () {}
+      default () {
+        return config.get('uploader.convertResponse')
+      },
+      validator (value) {
+        return typeof value === 'function'
+      }
     },
     callbackNamespace: {
       type: String,
@@ -675,7 +679,7 @@ export default {
       this.disabledWhenSubmiting = false
       let index = this.fileList.indexOf(file)
 
-      data = this.convertResponse(data) || data
+      data = this.convertResponse ? this.convertResponse(data) : data
       if (data.status === 'success') {
         this.showSuccessResult(data, file)
         this.$emit('success', this.files[index], index)
