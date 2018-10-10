@@ -39,7 +39,7 @@
       <div class="veui-dialog-content-body"><slot :close="close"/></div>
       <div class="veui-dialog-content-foot">
         <slot name="foot" :close="close">
-          <veui-button :ui="uiParts.ok || 'primary'" @click="close('ok')">确定</veui-button>
+          <veui-button :ui="uiParts.ok" @click="close('ok')">确定</veui-button>
           <veui-button :ui="uiParts.cancel" autofocus @click="cancel">取消</veui-button>
         </slot>
       </div>

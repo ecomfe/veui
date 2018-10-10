@@ -10,5 +10,8 @@ config.defaults({
     position: {
       values: ['top']
     }
+  },
+  parts: {
+    ok: 'primary'
   }
 }, 'dialog')
