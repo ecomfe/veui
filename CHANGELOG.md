@@ -7,6 +7,7 @@
 * `Tooltip` 组件的 `custom` prop 被废弃，将在 `1.0.0` 移除。替代方式为：将 `trigger` prop 指定为 `custom` 来使用自定义逻辑控制打开及关闭。
 * `Pagination` 组件内部所有的 `class` 中的 `pager` 被更名为 `pagination`。如果在样式代码中进行过定制，请进行全局替换。
 * `Uploader` 组件的 `progress` prop 的 `'number'` 取值被替换为 `'percent'` 及 `'detail'`，分别表示显示百分比及显示进度详情。进度详情将以 <code>\`${loaded}KB/${total}KB\`</code> 的形式输出。
+* `Uploader` 组件的 prop `convert-response` 函数必须返回转换后的数据对象。
 
 ### 💡 主要变更
 
@@ -17,6 +18,7 @@
 ### 🐞 问题修复
 
 * [^] 修复 `Slider` 组件在有 `step` 时的选择逻辑，由向下选取点改为就近取点，且修正了 `min` 值非 `0` 时的逻辑。
+* [^] 修复 `Uploader` 组件无法正确获取全局配置的 `uploader.convertResponse` 函数的问题。
 
 ## 1.0.0-alpha.17
 
