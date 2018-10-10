@@ -16,5 +16,11 @@ config.defaults({
     prev: 'angle-left',
     next: 'angle-right',
     close: 'cross'
+  },
+  parts: {
+    prev: 'link',
+    next: 'link',
+    close: 'link primary',
+    closeLabel: 'link'
   }
 }, 'alert')
