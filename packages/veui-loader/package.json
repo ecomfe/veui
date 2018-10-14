@@ -1,6 +1,6 @@
 {
   "name": "veui-loader",
-  "version": "1.0.0-alpha.17",
+  "version": "1.0.0-alpha.18",
   "description": "webpack loader for VEUI.",
   "main": "lib/index.js",
   "repository": "ecomfe/veui",
@@ -20,17 +20,17 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.1",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-veui": "^1.0.0-alpha.17",
+    "babel-plugin-veui": "^1.0.0-alpha.18",
     "babel-preset-env": "^1.6.0",
     "loader-utils": "^1.1.0",
     "pkg-dir": "^2.0.0",
-    "veui": "^1.0.0-alpha.17"
+    "veui": "^1.0.0-alpha.18"
   },
   "devDependencies": {
     "ava": "^0.20.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "raw-loader": "^0.5.1",
-    "veui-theme-one": "^1.0.0-alpha.17",
+    "veui-theme-one": "^1.0.0-alpha.18",
     "webpack": "^3.11.0"
   }
 }
