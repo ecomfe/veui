@@ -14,6 +14,7 @@
 * 增加主题包为组件部件指定 `ui` 的功能，同时组件现在将自动继承父组件中可继承的 `ui` 字段，并更新了 `veui-theme-one` 中所有相应的部分。
 * `Breadcrumb` 组件的 scoped slot `item`（原 `default`）新增参数 `index`。
 * `Button` 组件增加 `ui` 选项 `dark`。
+* `rule` 的 `validate` 方法现在可以传入额外的上下文的数据，比如在 `Field` 验证时传入整个 `Form` 的 `data`。
 
 ### 🐞 问题修复
 

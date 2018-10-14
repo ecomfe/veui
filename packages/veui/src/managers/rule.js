@@ -5,6 +5,7 @@ import max from './rules/max'
 import min from './rules/min'
 import numeric from './rules/numeric'
 import pattern from './rules/pattern'
+import type from './type'
 import { isObject, isFunction } from 'lodash'
 
 /**
@@ -31,15 +32,16 @@ export class Rule {
     }
   }
 
-  validate (val, rules, formData) {
+  validate (val, rules, context) {
     if (!rules || !rules.length) {
       return true
     }
 
     rules = Array.isArray(rules) ? rules : [rules]
+    let contextData = type.clone(context)
     let results = rules.map(rule => {
       let validator = this.ruleValidators[rule.name]
-      if (!validator.validate(val, rule.value, formData)) {
+      if (!validator.validate(val, rule.value, contextData)) {
         let realMessage = rule.message || validator.message
         return {
           name: rule.name,
