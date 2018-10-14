@@ -112,6 +112,10 @@
     "path": "GridColumn.js"
   },
   {
+    "name": "GridContainer",
+    "path": "GridContainer.js"
+  },
+  {
     "name": "GridRow",
     "path": "GridRow.js"
   },

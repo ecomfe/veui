@@ -18,6 +18,7 @@
 
 ### 🐞 问题修复
 
+* [^] 修正 `GridContainer` 没有正确发布的问题。
 * [^] 修复 `Slider` 组件在有 `step` 时的选择逻辑，由向下选取点改为就近取点，且修正了 `min` 值非 `0` 时的逻辑。
 * [^] 修复 `Uploader` 组件无法正确获取全局配置的 `uploader.convertResponse` 函数的问题。
 
