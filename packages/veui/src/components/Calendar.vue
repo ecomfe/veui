@@ -3,7 +3,7 @@
   class="veui-calendar"
   :ui="realUi"
   role="application"
-  aria-label="日历"
+  :aria-label="t('calendar')"
   :aria-disabled="realDisabled"
   :aria-readonly="realReadonly"
   @mouseleave="markEnd()">
@@ -34,8 +34,8 @@
           class="veui-calendar-select"
           :disabled="disabled || readonly"
           @click="setView(pIndex, 'years')"
-          :aria-label="`选择年份，现在是 ${p.year} 年`">
-          <b>{{ p.year }}</b> 年 <veui-icon :name="icons.expand"/>
+          :aria-label="t('selectYear', { year: p.year })">
+          <b>{{ t('year', { year: p.year }) }}</b> <veui-icon :name="icons.expand"/>
         </button>
         <button
           type="button"
@@ -44,22 +44,22 @@
           class="veui-calendar-select"
           :disabled="disabled || readonly"
           @click="setView(pIndex, 'months')"
-          :aria-label="`选择月份，现在是 ${p.month + 1} 月`">
-          <b>{{ p.month + 1 }}</b> 月 <veui-icon :name="icons.expand"/>
+          :aria-label="t('selectMonth', { month: p.month + 1 })">
+          <b>{{ t(`month`, { month: p.month + 1 }) || t(`monthsLong[${p.month}]`) }}</b> <veui-icon :name="icons.expand"/>
         </button>
       </template>
       <template v-else-if="p.view === 'months'">
         <span
           class="veui-calendar-label"
           :id="`${id}:panel-title:${pIndex}`">
-          <b>{{ p.year }}</b> 年
+          <b>{{ t('year', { year: p.year }) }}</b>
         </span>
       </template>
       <template v-else-if="p.view === 'years'">
         <span
           class="veui-calendar-label"
           :id="`${id}:panel-title:${pIndex}`">
-          <b>{{ p.year - p.year % 10 }}–{{ p.year - p.year % 10 + 9 }}</b> 年
+          <b>{{ t('year', { year: p.year - p.year % 10 }) }}</b>–<b>{{ t('year', { year: p.year - p.year % 10 + 9 }) }}</b>
         </span>
       </template>
       <button
@@ -81,7 +81,7 @@
         <template v-if="p.view === 'days'">
           <thead>
             <tr>
-              <th v-for="(dayName, index) in dayNames" :key="index" :aria-label="dayFullNames[index]">{{ dayName }}</th>
+              <th v-for="index in 7" :key="index" :aria-label="getDayFullNames()[index - 1]">{{ getDayNames()[index - 1] }}</th>
             </tr>
           </thead>
           <tbody>
@@ -91,18 +91,19 @@
                 :class="getDateClass(day, p)">
                 <button
                   type="button"
-                  v-if="fillMonth && panel === 1 || day.month === p.month" @click="selectDay(day)"
+                  v-if="fillMonth && panel === 1 || day.month === p.month"
                   :disabled="realDisabled || realReadonly || day.isDisabled"
+                  :autofocus="day.isFocus"
+                  :aria-label="getLocaleString(day)"
+                  :aria-current="day.isToday ? 'date' : null"
+                  :tabindex="day.isFocus ? null : '-1'"
+                  @click="selectDay(day)"
                   @mouseenter="markEnd(day)"
                   @focus="markEnd(day)"
                   @keydown.up.prevent="moveFocus(p.view, -7)"
                   @keydown.right.prevent="moveFocus(p.view, 1)"
                   @keydown.down.prevent="moveFocus(p.view, 7)"
-                  @keydown.left.prevent="moveFocus(p.view, -1)"
-                  :autofocus="day.isFocus"
-                  :aria-label="getLocaleString(day)"
-                  :aria-current="day.isToday ? 'date' : null"
-                  :tabindex="day.isFocus ? null : '-1'">
+                  @keydown.left.prevent="moveFocus(p.view, -1)">
                   <slot name="date" v-bind="{
                     year: day.year,
                     month: day.month,
@@ -124,7 +125,7 @@
                 @keydown.down.prevent="moveFocus(p.view, 4)"
                 @keydown.left.prevent="moveFocus(p.view, -1)"
                 :tabindex="i === 1 && j === 1 ? null : '-1'">
-                {{ (i - 1) * 4 + j }} 月
+                {{ t('month', { month: (i - 1) * 4 + j }) || t(`monthsShort[${(i - 1) * 4 + j - 1}]`) }}
               </button>
             </td>
           </tr>
@@ -158,9 +159,10 @@ import { getDaysInMonth, fromDateData, isSameDay, mergeRange } from '../utils/da
 import { closest, focusIn } from '../utils/dom'
 import { sign, isPositive } from '../utils/math'
 import { normalizeClass } from '../utils/helper'
-import { flattenDeep, findIndex, uniqueId } from 'lodash'
+import { flattenDeep, findIndex, uniqueId, upperFirst } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import Icon from './Icon'
 
@@ -174,39 +176,15 @@ const CELL_SELECTOR = {
   years: '.veui-calendar-year'
 }
 
-/**
- *  展开写，后面可能要拆出去放到语言包
- */
-
-const DAY_NAMES = [
-  '一', '二', '三', '四', '五', '六', '日'
-]
-
-const DAY_FULL_NAMES = [
-  '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'
-]
-
-const MONTH_NAMES = [
-  '一月', '二月', '三月', '四月', '五月', '六月',
-  '七月', '八月', '九月', '十月', '十一月', '十二月'
-]
-
-const STEP_LABELS = {
-  prev: {
-    days: '上个月',
-    months: '上一年',
-    years: '上十年'
-  },
-  next: {
-    days: '下个月',
-    months: '下一年',
-    years: '下十年'
-  }
+const STEP_MAP = {
+  days: 'month',
+  months: 'year',
+  years: 'decade'
 }
 
 export default {
   name: 'veui-calendar',
-  mixins: [ui, input],
+  mixins: [ui, input, i18n],
   model: {
     prop: 'selected',
     event: 'select'
@@ -272,7 +250,6 @@ export default {
       month: current.getMonth(),
       views,
       id,
-      monthNames: MONTH_NAMES,
       picking: null,
       pickingRanges: null
     }
@@ -378,19 +355,19 @@ export default {
         })
       }
       return panels
-    },
-    dayNames () {
-      let names = [...DAY_NAMES]
-      return names.splice(this.weekStart - 1).concat(names)
-    },
-    dayFullNames () {
-      let names = [...DAY_FULL_NAMES]
-      return names.splice(this.weekStart - 1).concat(names)
     }
   },
   methods: {
+    getDayNames () {
+      let names = [...this.t('daysShort')]
+      return names.splice(this.weekStart - 1).concat(names)
+    },
+    getDayFullNames () {
+      let names = [...this.t('daysLong')]
+      return names.splice(this.weekStart - 1).concat(names)
+    },
     getLocaleString (day) {
-      return fromDateData(day).toLocaleDateString('zh-CN', {
+      return fromDateData(day).toLocaleDateString(this.getLocale(), {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -433,7 +410,7 @@ export default {
       }
     },
     getStepLabel (view, type) {
-      return STEP_LABELS[type][view]
+      return this.t(`${type}${upperFirst(STEP_MAP[view])}`)
     },
     getYearOffset (i, j, isNext) {
       return isNext

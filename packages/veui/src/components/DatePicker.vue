@@ -48,7 +48,7 @@
     <veui-icon class="veui-date-picker-icon" :name="icons.calendar"/>
   </veui-button>
   <button v-if="clearable && !!selected" type="button" class="veui-date-picker-clear veui-sr-only" @click="clear">
-    <veui-icon :name="icons.clear"/>
+    <veui-icon :name="icons.clear" label="清除"/>
   </button>
   <veui-overlay
     target="button"

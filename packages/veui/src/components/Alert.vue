@@ -23,19 +23,22 @@
         :ui="uiParts.prev"
         :disabled="isFirst"
         @click="switchMessage(-1)"
-        aria-label="上一条"
+        :aria-label="t('prev')"
       >
         <veui-icon :name="icons.prev"/>
       </veui-button>
       <span
         class="veui-alert-nav-indicator"
-        :aria-label="`第 ${localIndex + 1} 条，共 ${message.length} 条`"
+        :aria-label="t('indicator', {
+          index: localIndex + 1,
+          total: message.length
+        })"
       >{{ localIndex + 1 }}/{{ message.length }}</span>
       <veui-button
         :ui="uiParts.next"
         :disabled="isLast"
         @click="switchMessage(1)"
-        aria-label="下一条"
+        :aria-label="t('next')"
       >
         <veui-icon :name="icons.next"/>
       </veui-button>
@@ -52,7 +55,7 @@
         v-else
         :ui="uiParts.closeLabel"
         @click="close"
-        aria-label="关闭"
+        :aria-label="t('close')"
       >
         <veui-icon :name="icons.close"/>
       </veui-button>
@@ -65,11 +68,12 @@
 import Icon from './Icon'
 import Button from './Button'
 import ui from '../mixins/ui'
+import i18n from '../mixins/i18n'
 import warn from '../utils/warn'
 
 export default {
   name: 'alert',
-  mixins: [ui],
+  mixins: [ui, i18n],
   components: {
     'veui-icon': Icon,
     'veui-button': Button

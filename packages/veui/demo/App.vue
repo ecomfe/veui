@@ -1,16 +1,17 @@
 <template>
   <div id="app">
     <nav id="main-nav">
-      <h1><a href="https://github.com/ecomfe/veui">VEUI components</a><icon name="brands/github" scale="6"></icon></h1>
+      <h1><a href="https://github.com/ecomfe/veui">VEUI components</a><veui-icon name="brands/github" scale="6"/></h1>
       <ul>
         <li v-for="(route, index) in routes" :key="index"><router-link :to='route'>{{route.name}}</router-link></li>
       </ul>
-      <footer><a href="https://www.baidu.com/" target="_blank">© {{year}} Baidu, Inc.</a><icon name="baidu" scale="8"></icon></footer>
+      <footer><a href="https://www.baidu.com/" target="_blank">© {{year}} Baidu, Inc.</a><veui-icon name="baidu" scale="8"/></footer>
     </nav>
+    <veui-select id="locale" v-model="locale" :options="locales"/>
     <main id="content">
       <router-view></router-view>
     </main>
-    <console id="console"></console>
+    <v-console id="console"></v-console>
   </div>
 </template>
 
@@ -18,8 +19,15 @@
 import routes from './cases'
 import Console from './Console'
 import Icon from '@/components/Icon'
+import Select from '@/components/Select'
+import i18n from '@/managers/i18n'
 import 'vue-awesome/icons/ban'
 import 'vue-awesome/icons/brands/github'
+
+const LOCALES = [
+  { label: '简体中文', value: 'zh-Hans' },
+  { label: '英语（美国）', value: 'en-US' }
+]
 
 Icon.register({
   baidu: {
@@ -32,13 +40,21 @@ Icon.register({
 export default {
   name: 'app',
   components: {
-    Console,
-    Icon
+    'v-console': Console,
+    'veui-icon': Icon,
+    'veui-select': Select
   },
   data () {
     return {
       routes,
-      year: (new Date()).getFullYear()
+      year: (new Date()).getFullYear(),
+      locales: LOCALES,
+      locale: i18n.locale
+    }
+  },
+  watch: {
+    locale (val) {
+      i18n.locale = val
     }
   }
 }
@@ -190,5 +206,13 @@ main {
   right: 0;
   bottom: 0;
   left: @nav-width;
+}
+
+#locale {
+  position: fixed;
+  top: 1.2em;
+  right: 4em;
+  width: 135px;
+  z-index: 2;
 }
 </style>
