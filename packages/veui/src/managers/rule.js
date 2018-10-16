@@ -16,8 +16,8 @@ import { isObject, isFunction } from 'lodash'
  */
 const oldRuleValueRe = /%\{ruleValue\}/g
 
-const ruleValueRe = /\$\{ruleValue\}/g
-const valueRe = /\$\{value\}/g
+const ruleValueRe = /\$?\{ruleValue\}/g
+const valueRe = /\$?\{value\}/g
 
 export class Rule {
   constructor () {

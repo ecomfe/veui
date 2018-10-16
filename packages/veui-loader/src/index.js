@@ -116,11 +116,21 @@ function getParts (component, options) {
     package: pack,
     path: packPath = COMPONENTS_DIRNAME,
     transform,
-    fileName
+    fileName,
+    locale
   } = options
 
   if (pack && fileName) {
     modules.push({ package: pack, path: packPath, transform, fileName })
+  }
+
+  if (locale) {
+    if (!Array.isArray(locale)) {
+      locale = [locale]
+    }
+    modules = modules.concat(locale.filter(l => typeof l === 'string').map(l => {
+      return { package: 'veui', path: `locale/${l}`, transform: false, fileName: '{module}.js' }
+    }))
   }
 
   return modules.reduce(
