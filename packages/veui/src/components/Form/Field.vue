@@ -138,6 +138,9 @@ export default {
       let {readonly, fieldset, form} = this
       return readonly || (fieldset && fieldset.realReadonly) || (form && form.readonly)
     },
+    realField () {
+      return this.field || this.name
+    },
     ...form,
     ...fieldset
   },

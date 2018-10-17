@@ -35,14 +35,14 @@ export default {
     ...getTypedAncestorTracker('field', 'formField').computed
   },
   created () {
-    if (!this.isTopMostInput || !this.formField || !this.formField.field) {
+    if (!this.isTopMostInput || !this.formField || !this.formField.realField) {
       return
     }
 
     this.$emit = this.realEmit.bind(this, this.$emit)
   },
   methods: {
-    realEmit (originalEmit, eventName, data, event) {
+    realEmit (originalEmit, eventName) {
       originalEmit.apply(this, Array.prototype.slice.call(arguments, 1))
       // 过滤掉 vue 内部 hook 和 .sync 的 update 事件，不需要往上处理
       let [prefix, name] = eventName.split(':')
