@@ -106,7 +106,6 @@
 <script>
 import { Uploader, Button, Tooltip, Input, Span } from 'veui'
 import ui from 'veui/mixins/ui'
-import { assign } from 'lodash'
 
 export default {
   name: 'uploader-demo',
@@ -181,9 +180,10 @@ export default {
       console.log('Total status is: ', status)
     },
     convertResponse (data) {
-      return assign({
-        status: data.code ? 'failure' : 'success'
-      }, data.result)
+      return {
+        status: data.code ? 'failure' : 'success',
+        ...data.result
+      }
     },
     openTooltip (file) {
       this.currentImage = file
