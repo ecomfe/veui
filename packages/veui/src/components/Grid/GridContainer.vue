@@ -1,22 +1,19 @@
 <template>
 <div
   class="veui-grid-container"
-  :style="{
-    'padding-right': `${gutter / 2 + margin}px`,
-    'padding-left': `${gutter / 2 + margin}px`
-  }"
+  :style="style"
 ><slot/></div>
 </template>
 
 <script>
 import config from '../../managers/config'
 
-const DEFAULT_OPTIONS = {
+config.defaults({
   columns: 12,
   gutter: 30,
   margin: 0,
   flex: false
-}
+}, 'gridcontainer')
 
 export default {
   name: 'veui-grid-container',
@@ -26,7 +23,9 @@ export default {
     },
     columns: {
       type: Number,
-      default: config.get('gridcontainer.columns') || DEFAULT_OPTIONS.columns,
+      default () {
+        return config.get('gridcontainer.columns')
+      },
       validator (val) {
         return val > 0
       }
@@ -34,8 +33,7 @@ export default {
     gutter: {
       type: Number,
       default () {
-        let gutter = config.get('gridcontainer.gutter')
-        return gutter == null ? DEFAULT_OPTIONS.gutter : gutter
+        return config.get('gridcontainer.gutter')
       },
       validator (val) {
         return val >= 0
@@ -44,8 +42,7 @@ export default {
     margin: {
       type: Number,
       default () {
-        let margin = config.get('gridcontainer.margin')
-        return margin == null ? DEFAULT_OPTIONS.margin : margin
+        return config.get('gridcontainer.margin')
       },
       validator (val) {
         return val >= 0
@@ -53,16 +50,26 @@ export default {
     },
     flex: {
       type: Boolean,
-      default: config.get('gridcontainer.flex')
+      default () {
+        return config.get('gridcontainer.flex')
+      }
+    }
+  },
+  computed: {
+    style () {
+      let { margin } = this
+      return {
+        ...margin
+          ? { 'padding-right': `${margin}px`, 'padding-left': `${margin}px` } : {}
+      }
     }
   },
   provide () {
-    let { columns, gutter, width, flex } = this
+    let { columns, gutter, flex } = this
 
     return {
       columns,
       gutter,
-      width,
       flex
     }
   }
