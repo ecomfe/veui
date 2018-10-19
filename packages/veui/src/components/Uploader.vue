@@ -390,7 +390,7 @@ export default {
     },
     files () {
       return this.fileList.map(file => {
-        return {...pick(file, ['name', 'src', 'status']), ...file._extra}
+        return { ...pick(file, ['name', 'src', 'status']), ...file._extra }
       })
     },
     pureFileList () {
@@ -471,9 +471,9 @@ export default {
     getNewFile (file) {
       let newFile = {}
 
-      let extraInfo = omit(file, ['name', 'src'])
-      if (!isEmpty(extraInfo)) {
-        newFile._extra = cloneDeep(extraInfo)
+      let extra = omit(file, ['name', 'src'])
+      if (!isEmpty(extra)) {
+        newFile._extra = cloneDeep(extra)
       }
       return assign(newFile, pick(file, ['name', 'src']))
     },
@@ -680,10 +680,20 @@ export default {
       let index = this.fileList.indexOf(file)
 
       data = this.convertResponse ? this.convertResponse(data) : data
-      if (data.status === 'success') {
+
+      if (data.status || data.reason) {
+        warn('[veui-uploader] `status` and `reason` in response data are deprecated. Use `success` and `message` instead. Suppor for old fields will be removed in 1.0.0.')
+      }
+
+      /* Adapting legacy schema */
+      if (data.success == null && data.status) {
+        data.success = data.status === 'success'
+      }
+
+      if (data.success) {
         this.showSuccessResult(data, file)
         this.$emit('success', this.files[index], index)
-      } else if (data.status === 'failure') {
+      } else {
         this.showFailureResult(data, file)
         this.$emit('failure', this.files[index], index)
       }
@@ -700,7 +710,7 @@ export default {
     showFailureResult (data, file) {
       file.xhr = null
       file.toBeUploaded = null
-      file.failureReason = data.reason || ''
+      file.failureReason = data.message || data.reason || ''
       this.updateFileList(file, 'failure', data)
     },
     updateFileList (file, status, properties, toEmit = false) {
@@ -710,16 +720,13 @@ export default {
 
       if (properties) {
         assign(file, properties)
-        file._extra = omit(properties, ['status', 'name', 'src'])
+        file._extra = omit(properties, ['success', 'status', 'reason', 'message', 'name', 'src'])
       }
       this.$set(this.fileList, this.fileList.indexOf(file), file)
 
       if (toEmit) {
         this.$emit('change', this.getValue(false))
       }
-    },
-    getPureFile (file, properties) {
-      return assign(pick(file, ['name', 'src']), omit(properties, 'status'))
     },
     getIndexInPureList (file) {
       let initialIndex = this.fileList.indexOf(file)
@@ -784,7 +791,7 @@ export default {
             return JSON.parse(data)
           } catch (error) {
             this.$emit('failure', {error})
-            return {status: 'failure'}
+            return { status: 'failure' }
           }
         } else if (this.dataType === 'text') {
           return data
@@ -792,7 +799,7 @@ export default {
       }
     },
     getScopeValue (index, file) {
-      return {index, ...file}
+      return { index, ...file }
     },
     getValue (isEmptyValue) {
       if (this.maxCount !== 1) {
