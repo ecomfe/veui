@@ -2,11 +2,11 @@ module.exports = {
   modules: [
     {
       package: 'veui-theme-one',
-      fileName: '${module}.less'
+      fileName: '{module}.less'
     },
     {
       package: 'veui-theme-one',
-      fileName: '${module}.js',
+      fileName: '{module}.js',
       transform: false
     }
   ]
