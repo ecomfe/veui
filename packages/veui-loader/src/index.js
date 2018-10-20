@@ -14,7 +14,7 @@ const EXT_TYPES = {
 let resolveCache = {}
 
 /**
- * webpack loader to load theme modules for VEUI components
+ * webpack loader to load theme/locale modules for VEUI components
  * @param {string} content Raw file content of .vue file
  * @returns {Promise<string>} A promise that resolved with the content of patched .vue file
  */
@@ -31,7 +31,7 @@ export default async function (content) {
     let result = await patchComponent(content, component, loaderOptions, path => {
       return new Promise(resolve => {
         try {
-          this.resolve(this.rootContext || this.options.context, path, (err, result) => {
+          this.resolve(this.rootContext || this.options.context, path, err => {
             if (err) {
               resolve(false)
               return
@@ -275,7 +275,7 @@ function assurePathSync (modulePath, resolveSync) {
  */
 function getPeerFilename (
   name,
-  { transform = 'kebab-case', template = '${module}.css' }
+  { transform = 'kebab-case', template = '{module}.css' }
 ) {
   if (!name) {
     return null
@@ -296,7 +296,7 @@ function getPeerFilename (
       break
   }
 
-  return template.replace(/\$\{module\}/g, name)
+  return template.replace(/\$?\{module\}/g, name)
 }
 
 /**
