@@ -2,7 +2,7 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
-var veuiLoaderOptions = require('veui-theme-one/veui-loader-options')
+var veuiLoaderOptions = require('./veui-loader.conf')
 var webpack = require('webpack')
 
 function resolve (dir) {

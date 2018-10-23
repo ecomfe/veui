@@ -128,9 +128,9 @@ function getParts (component, options) {
     if (!Array.isArray(locale)) {
       locale = [locale]
     }
-    modules = modules.concat(locale.filter(l => typeof l === 'string').map(l => {
+    modules = locale.filter(l => typeof l === 'string').map(l => {
       return { package: 'veui', path: `locale/${l}`, transform: false, fileName: '{module}.js' }
-    }))
+    }).concat(modules)
   }
 
   return modules.reduce(
@@ -166,11 +166,10 @@ function getParts (component, options) {
  */
 function patchContent (content, parts) {
   return Object.keys(parts).reduce((content, type) => {
-    return parts[type]
+    let paths = parts[type]
       .filter(({ valid }) => valid)
-      .reduce((content, { path }) => {
-        return patchType(content, type, path)
-      }, content)
+      .map(({ path }) => path)
+    return patchType(content, type, paths)
   }, content)
 }
 
@@ -205,24 +204,28 @@ const RE_SCRIPT = /<script(?:\s+[^>]*)?>/i
  * Patch file content according to a given type.
  * @param {string} content Original content
  * @param {string} type Peer type, can be `script` or `style`
- * @param {string} peerPath Peer module path
+ * @param {Array<string>} peerPaths Peer module paths
  * @returns {string} The patched content
  */
-function patchType (content, type, peerPath) {
-  let normalizedPath = normalize(peerPath).replace(/\\/g, '\\\\')
+function patchType (content, type, peerPaths) {
+  let normalizedPaths = peerPaths.map(path => normalize(path).replace(/\\/g, '\\\\'))
   switch (type) {
     case 'script':
+      let scriptImports = normalizedPaths.map(path => `import '${path}'\n`)
       content = content.replace(RE_SCRIPT, match => {
-        return `${match}\nimport '${normalizedPath}'\n`
+        return `${match}\n${scriptImports.join('')}`
       })
       break
     case 'style':
-      let langStr = ''
-      let ext = getExtname(normalizedPath)
-      if (ext !== 'css') {
-        langStr = `lang="${ext}" `
-      }
-      content += `\n<style ${langStr}src="${normalizedPath}"></style>\n`
+      let styleImports = normalizedPaths.map(path => {
+        let langStr = ''
+        let ext = getExtname(path)
+        if (ext !== 'css') {
+          langStr = `lang="${ext}" `
+        }
+        return `<style ${langStr}src="${path}"></style>\n`
+      })
+      content += styleImports.join('')
       break
     default:
       break

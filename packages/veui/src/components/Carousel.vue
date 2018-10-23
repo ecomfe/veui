@@ -35,19 +35,21 @@
       }"
       @click="select(i, 'click')"
       @mouseenter="select(i, 'hover')"
-    >{{ item.label || `第 ${i + 1} 页` }}</button>
+    >{{ item.label || t('pageIndex', { index: i + 1 }) }}</button>
   </nav>
   <button type="button" class="veui-carousel-control veui-carousel-control-prev"
     @click="step(-1)"
     :disabled="!wrap && localIndex === 0">
-    <veui-icon :name="icons.prev" label="上一页"/>
+    <veui-icon :name="icons.prev" :label="t('prev')"/>
   </button>
   <button type="button" class="veui-carousel-control veui-carousel-control-next"
     @click="step(1)"
     :disabled="!wrap && localIndex === count - 1">
-    <veui-icon :name="icons.next" label="下一页"/>
+    <veui-icon :name="icons.next" :label="t('next')"/>
   </button>
-  <div class="veui-sr-only" aria-live="polite" aria-atomic="true">当前是第 {{ localIndex + 1 }} 页，共 {{ datasource.length }} 页</div>
+  <div class="veui-sr-only" aria-live="polite" aria-atomic="true">
+    {{ t('detail', { index: localIndex + 1, total: datasource.length }) }}
+    </div>
 </div>
 </template>
 
@@ -55,10 +57,11 @@
 import { includes } from 'lodash'
 import Icon from './Icon'
 import ui from '../mixins/ui'
+import i18n from '../mixins/i18n'
 
 export default {
   name: 'veui-carousel',
-  mixins: [ui],
+  mixins: [ui, i18n],
   components: {
     'veui-icon': Icon
   },
