@@ -31,7 +31,7 @@
         </slot>
         <slot name="legend">
           <div class="veui-schedule-legend" aria-hidden="true">
-            <span v-for="(status, i) in statuses" :key="i"
+            <span v-for="(status, i) in getStatuses()" :key="i"
               class="veui-schedule-legend-item" :class="`veui-schedule-legend-${status.value || status.name}`">
               <slot name="legend-label" v-bind="status">{{ status.label }}</slot>
             </span>
@@ -120,6 +120,7 @@
 import { includes, find, isFunction, cloneDeep, mapValues, isEqual } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import i18n from '../mixins/i18n'
 import outside from '../directives/outside'
 import { merge } from '../utils/range'
 import warn from '../utils/warn'
@@ -144,7 +145,7 @@ function warnDeprecated (oldVal, newVal) {
 
 export default {
   name: 'veui-schedule',
-  mixins: [ui, input],
+  mixins: [ui, input, i18n],
   directives: { outside },
   model: {
     prop: 'selected',
@@ -192,12 +193,7 @@ export default {
         return includes(['expand', 'collapse', 'inline', 'popup'], value)
       }
     },
-    statuses: {
-      type: Array,
-      default () {
-        return config.get('schedule.statuses')
-      }
-    }
+    statuses: Array
   },
   data () {
     return {
@@ -404,6 +400,12 @@ export default {
     getDayLabel (dayIndex, hour, state) {
       let dayName = DAY_NAMES[dayIndex]
       return `星期${dayName}，${hour}:00–${hour + 1}:00，${state.isSelected ? '已选择' : '未选择'}`
+    },
+    getStatuses () {
+      return this.statuses || [
+        { value: 'selected', label: this.t('selectedRanges') },
+        { value: 'available', label: this.t('availableRanges') }
+      ]
     }
   }
 }

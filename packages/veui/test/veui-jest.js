@@ -1,7 +1,7 @@
 const fs = require('fs')
 const crypto = require('crypto')
 const process = require('vue-jest').process
-const loaderOptions = require('veui-theme-one/veui-loader-options')
+const loaderOptions = require('../build/veui-loader.conf')
 const processSync = require('veui-loader').processSync
 
 function resolveSync (modulePath) {

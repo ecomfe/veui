@@ -99,7 +99,9 @@ import dropdown from '../mixins/dropdown'
 import input from '../mixins/input'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
+import i18n from '../mixins/i18n'
 import config from '../managers/config'
+import i18nManager from '../managers/i18n'
 import { toDateData } from '../utils/date'
 import { isNumber, pick, omit, keys } from 'lodash'
 import format from 'date-fns/format'
@@ -117,8 +119,8 @@ import addYears from 'date-fns/add_years'
 config.defaults({
   shortcuts: [],
   shortcutsPosition: 'before',
-  placeholder: '选择时间',
-  rangePlaceholder: '选择时间段'
+  placeholder: i18nManager.get('selectDate'),
+  rangePlaceholder: i18nManager.get('selectDateRange')
 }, 'datepicker')
 
 const CALENDAR_PROPS = [
@@ -134,7 +136,7 @@ export default {
     'veui-calendar': Calendar,
     'veui-icon': Icon
   },
-  mixins: [ui, dropdown, input, overlay],
+  mixins: [ui, dropdown, input, overlay, i18n],
   model: {
     prop: 'selected',
     event: 'select'

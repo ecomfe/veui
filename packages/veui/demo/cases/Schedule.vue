@@ -3,7 +3,7 @@
     <h1><code>&lt;veui-schedule&gt;</code></h1>
     <section>
       <veui-schedule v-model="selected" :hourClass="hourClass"
-        :shortcuts="shortcuts" shortcuts-display="collapse" :statuses="statuses"></veui-schedule>
+        :shortcuts="shortcuts" shortcuts-display="popup"></veui-schedule>
     </section>
   </article>
 </template>
@@ -62,20 +62,6 @@ export default {
             0: true,
             6: true
           }
-        }
-      ],
-      statuses: [
-        {
-          label: '已投放',
-          name: 'selected'
-        },
-        {
-          label: '推荐时段',
-          name: 'weekend'
-        },
-        {
-          label: '未投放',
-          name: 'available'
         }
       ]
     }

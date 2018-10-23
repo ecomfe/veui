@@ -1,5 +1,4 @@
 module.exports = {
-  locale: ['en-US', 'zh-Hans'],
   modules: [
     {
       package: 'veui-theme-one',
