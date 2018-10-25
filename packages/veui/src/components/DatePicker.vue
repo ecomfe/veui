@@ -154,12 +154,7 @@ export default {
       type: [String, Function],
       default: 'YYYY-MM-DD'
     },
-    shortcuts: {
-      type: Array,
-      default () {
-        return config.get('datepicker.shortcuts')
-      }
-    },
+    shortcuts: Array,
     shortcutsPosition: {
       type: String,
       default () {
@@ -201,10 +196,11 @@ export default {
       return this.panel || (this.range ? 2 : 1)
     },
     realShortcuts () {
-      if (!this.shortcuts) {
+      let shortcuts = this.shortcuts || config.get('datepicker.shortcuts')
+      if (!shortcuts) {
         return null
       }
-      return this.shortcuts.map(({from = 0, to = 0, label}) => {
+      return shortcuts.map(({from = 0, to = 0, label}) => {
         from = this.getDateByOffset(from)
         to = this.getDateByOffset(to)
         if (from > to) {
