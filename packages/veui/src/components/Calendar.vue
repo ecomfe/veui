@@ -163,6 +163,7 @@ import { flattenDeep, findIndex, uniqueId, upperFirst } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
+import i18nManager from '../managers/i18n'
 import config from '../managers/config'
 import Icon from './Icon'
 
@@ -211,7 +212,6 @@ export default {
     },
     weekStart: {
       type: Number,
-      default: config.get('calendar.weekStart'),
       validator (val) {
         return val >= 0 && val <= 6
       }
@@ -255,6 +255,9 @@ export default {
     }
   },
   computed: {
+    realWeekStart () {
+      return this.weekStart != null ? this.weekStart : config.get('calendar.weekStart')
+    },
     viewMonth () {
       return `${this.year}/${this.month}`
     },
@@ -276,7 +279,7 @@ export default {
         let view = this.views[i]
 
         let firstDayInMonth = new Date(year, month)
-        let offset = (firstDayInMonth.getDay() + 7 - this.weekStart) % 7
+        let offset = (firstDayInMonth.getDay() + 7 - this.realWeekStart) % 7
         let daysInMonth = getDaysInMonth(year, month)
         let daysInPreviousMonth = getDaysInMonth(year, month - 1)
         let weekCount = Math.ceil((offset + daysInMonth) / 7)
@@ -355,19 +358,25 @@ export default {
         })
       }
       return panels
+    },
+    daysShort () {
+      return this.t('daysShort')
+    },
+    daysLong () {
+      return this.t('daysLong')
     }
   },
   methods: {
     getDayNames () {
-      let names = [...this.t('daysShort')]
-      return names.splice(this.weekStart - 1).concat(names)
+      let names = [...this.daysShort]
+      return names.splice(this.realWeekStart - 1).concat(names)
     },
     getDayFullNames () {
-      let names = [...this.t('daysLong')]
-      return names.splice(this.weekStart - 1).concat(names)
+      let names = [...this.daysLong]
+      return names.splice(this.realWeekStart - 1).concat(names)
     },
     getLocaleString (day) {
-      return fromDateData(day).toLocaleDateString(this.getLocale(), {
+      return fromDateData(day).toLocaleDateString(i18nManager.locale, {
         weekday: 'long',
         year: 'numeric',
         month: 'long',

@@ -22,8 +22,8 @@
             <template v-else>
               <veui-dropdown
                 :ui="uiParts.shortcuts"
-                label="默认时段"
-                aria-label="选择预设时段"
+                :label="t('preset')"
+                :aria-label="t('selectPreset')"
                 :options="shortcutOptions"
                 @click="selectShortcut"/>
             </template>
@@ -31,7 +31,7 @@
         </slot>
         <slot name="legend">
           <div class="veui-schedule-legend" aria-hidden="true">
-            <span v-for="(status, i) in getStatuses()" :key="i"
+            <span v-for="(status, i) in realStatuses" :key="i"
               class="veui-schedule-legend-item" :class="`veui-schedule-legend-${status.value || status.name}`">
               <slot name="legend-label" v-bind="status">{{ status.label }}</slot>
             </span>
@@ -50,7 +50,7 @@
           :ui="uiParts.dayPicker"
           :indeterminate="dayChecked[i - 1].indeterminate"
           :checked="dayChecked[i - 1].checked"
-          :aria-label="`选择星期${dayNames[i - 1]}全天`"
+          :aria-label="getDayLabel(i - 1)"
           @change="toggleDay(week[i - 1], !dayChecked[i - 1].checked)">
           {{ dayNames[i - 1] }}
         </veui-checkbox>
@@ -67,7 +67,7 @@
               :class="mergeClass({ 'veui-schedule-selected': hour.isSelected }, week[i], j)"
               :ref="`hour-${week[i]}-${j}`"
               :tabindex="i === 0 && j === 0 ? '0' : '-1'"
-              :aria-label="getDayLabel(i, j, hour)"
+              :aria-label="getHourLabel(i, j, hour)"
               @mousedown="handleMousedown(i, j)"
               @mouseenter="handleHover(i, j)"
               @mouseup="pick"
@@ -91,7 +91,7 @@
               <slot name="label" :from="hour.from" :to="hour.end">
               {{
                 hour.isWhole
-                  ? '全天'
+                  ? t('entireDay')
                   : hour.isStart && hour.span > 2
                     ? `${hour.start}:00–${hour.end + 1}:00`
                   : ''
@@ -131,12 +131,12 @@ import Tooltip from './Tooltip'
 import Dropdown from './Dropdown'
 
 config.defaults({
+  statuses: [
+    { name: 'selected', label: '@@schedule.selectedRanges' },
+    { name: 'available', label: '@@schedule.availableRanges' }
+  ],
   shortcuts: []
 }, 'schedule')
-
-const DAY_NAMES = [
-  '一', '二', '三', '四', '五', '六', '日'
-]
 
 function warnDeprecated (oldVal, newVal) {
   warn('[veui-schedule] `shortcuts-display` value `' + oldVal + '` is renamed to `' +
@@ -175,12 +175,7 @@ export default {
         return false
       }
     },
-    shortcuts: {
-      type: Array,
-      default () {
-        return config.get('schedule.shortcuts')
-      }
-    },
+    shortcuts: Array,
     shortcutsDisplay: {
       type: String,
       default: 'inline',
@@ -213,8 +208,11 @@ export default {
     }
   },
   computed: {
+    realStatuses () {
+      return this.statuses || config.get('schedule.statuses')
+    },
     dayNames () {
-      return [...DAY_NAMES]
+      return [...this.t('daysAbbr')]
     },
     dayChecked () {
       return this.week.map(day => {
@@ -270,7 +268,8 @@ export default {
       return `${current.hour}:00–${current.hour + 1}:00`
     },
     realShortcuts () {
-      return this.shortcuts.map(({ label, selected }) => {
+      let shortcuts = this.shortcuts || config.get('schedule.shortcuts')
+      return shortcuts.map(({ label, selected }) => {
         return {
           label,
           selected: mapValues(selected, day => day === true ? [[0, 23]] : day)
@@ -278,7 +277,7 @@ export default {
       })
     },
     shortcutOptions () {
-      return this.shortcuts.map(({ label }, i) => ({ label, value: i }))
+      return this.realShortcuts.map(({ label }, i) => ({ label, value: i }))
     }
   },
   methods: {
@@ -397,15 +396,17 @@ export default {
         el.focus()
       }
     },
-    getDayLabel (dayIndex, hour, state) {
-      let dayName = DAY_NAMES[dayIndex]
-      return `星期${dayName}，${hour}:00–${hour + 1}:00，${state.isSelected ? '已选择' : '未选择'}`
+    getHourLabel (dayIndex, hour, state) {
+      let dayName = this.t('daysLong')[dayIndex]
+      return this.t('hourLabel', {
+        dayName,
+        timeRange: `${hour}:00–${hour + 1}:00`,
+        status: state.isSelected ? this.t('selected') : this.t('available')
+      })
     },
-    getStatuses () {
-      return this.statuses || [
-        { value: 'selected', label: this.t('selectedRanges') },
-        { value: 'available', label: this.t('availableRanges') }
-      ]
+    getDayLabel (dayIndex) {
+      let dayName = this.t('daysLong')[dayIndex]
+      return this.t('dayLabel', { dayName })
     }
   }
 }
