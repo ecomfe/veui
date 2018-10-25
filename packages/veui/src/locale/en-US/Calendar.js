@@ -8,6 +8,7 @@ i18n.register(
     selectMonth: `Select month, currently {month}`,
     year: '{year}',
     month: null,
+    date: '{date}',
     monthsShort: [
       'Jan',
       'Feb',
@@ -51,7 +52,8 @@ i18n.register(
     prevDecade: 'Previous decade',
     nextMonth: 'Next month',
     nextYear: 'Next year',
-    nextDecade: 'Next decade'
+    nextDecade: 'Next decade',
+    dateLabel: '{day}, {month} {date}, {year}'
   },
   {
     ns: 'calendar'

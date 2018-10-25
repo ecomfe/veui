@@ -8,6 +8,7 @@ i18n.register(
     selectMonth: `选择月份，现在是 {month} 月`,
     year: '{year} 年',
     month: '{month} 月',
+    date: '{date} 日',
     monthsShort: null,
     monthsLong: null,
     daysShort: ['一', '二', '三', '四', '五', '六', '日'],
@@ -25,7 +26,8 @@ i18n.register(
     prevDecade: '上十年',
     nextMonth: '下个月',
     nextYear: '下一年',
-    nextDecade: '下十年'
+    nextDecade: '下十年',
+    dateLabel: '{year} {month} {date}，{day}'
   },
   {
     ns: 'calendar'

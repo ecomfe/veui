@@ -45,7 +45,7 @@
           :disabled="disabled || readonly"
           @click="setView(pIndex, 'months')"
           :aria-label="t('selectMonth', { month: p.month + 1 })">
-          <b>{{ t(`month`, { month: p.month + 1 }) || t(`monthsLong[${p.month}]`) }}</b> <veui-icon :name="icons.expand"/>
+          <b>{{ t('month', { month: p.month + 1 }) || t(`monthsLong[${p.month}]`) }}</b> <veui-icon :name="icons.expand"/>
         </button>
       </template>
       <template v-else-if="p.view === 'months'">
@@ -163,7 +163,6 @@ import { flattenDeep, findIndex, uniqueId, upperFirst } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
-import i18nManager from '../managers/i18n'
 import config from '../managers/config'
 import Icon from './Icon'
 
@@ -376,11 +375,13 @@ export default {
       return names.splice(this.realWeekStart - 1).concat(names)
     },
     getLocaleString (day) {
-      return fromDateData(day).toLocaleDateString(i18nManager.locale, {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      let { year, month, date } = day
+      let d = fromDateData(day)
+      return this.t('dateLabel', {
+        year: this.t('year', { year }),
+        month: this.t('month', { month: month + 1 }) || this.t(`monthsLong[${month}]`),
+        date: this.t('date', { date }),
+        day: this.t(`daysLong[${d.getDay()}]`)
       })
     },
     getDateClass (day, panel) {
