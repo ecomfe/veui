@@ -1,66 +1,98 @@
-import { isObject, keys } from 'lodash'
-import type from './type'
-
-function set (obj, key, value, ns, override, merge) {
-  if (isObject(key)) {
-    ns = value
-    value = key
-    keys(value).forEach(k => {
-      set(obj, k, value[k], ns, override, merge)
-    })
-    return
-  }
-
-  if (typeof key !== 'string') {
-    throw new Error('`Config key must be a string value.')
-  }
-
-  let k = ns ? `${ns}.${key}` : key
-  if (!(k in obj) || override || merge) {
-    if (!merge) {
-      if (!(k in obj) || override) {
-        obj[k] = value
-      }
-      return
-    }
-
-    if (!isObject(obj[k]) || !isObject(value)) {
-      throw new Error('`config.merge` only handles objects.')
-    }
-
-    keys(value).forEach(key => {
-      if (!(key in obj[k]) || override) {
-        obj[k][key] = value[key]
-      }
-    })
-  }
-}
+import { isObject, keys, startsWith, forEach } from 'lodash'
+import Vue from 'vue'
+import i18n from './i18n'
 
 export class ConfigManager {
-  constructor () {
-    this.store = {}
+  store = new Vue({
+    data: {
+      store: {},
+      watchers: {}
+    },
+    methods: {
+      setConfig (obj, key, val, ns, override) {
+        if (isObject(key)) {
+          ns = val
+          val = key
+          keys(val).forEach(k => {
+            this.setConfig(obj, k, val[k], ns, override)
+          })
+          return
+        }
+
+        if (typeof key !== 'string') {
+          throw new Error('`Config key must be a string value.')
+        }
+
+        let k = ns ? `${ns}.${key}` : key
+        if (!(k in obj) || override) {
+          this.setConfigItem(obj, k, val)
+        }
+      },
+      setConfigItem (obj, key, val) {
+        Vue.set(obj, key, val)
+
+        let relatedWatcherKeys = keys(this.watchers).filter(k => startsWith(k, key))
+        relatedWatcherKeys.forEach(watcherKey => this.unwatch(watcherKey))
+
+        this.transformValue(obj, key, null)
+      },
+      transformValue (context, key, path) {
+        let watcherKey = path ? `${path}.${key}` : key
+        let val = context[key]
+
+        let watcher = this.watchers[watcherKey]
+        if (typeof val === 'string') {
+          if (startsWith(val, '@@')) {
+            let i18nKey = val.substring(2)
+            if (watcher && watcher.key !== i18nKey) {
+              // already watched another i18n key before, unwatch it
+              watcher.unwatch()
+            }
+            this.watchers[watcherKey] = {
+              key: i18nKey,
+              unwatch: i18n.watch(i18nKey, val => {
+                context[key] = val
+              })
+            }
+            context[key] = i18n.get(i18nKey)
+          }
+        } else if (isObject(val) || Array.isArray(val)) {
+          // recursively replace pointers
+          forEach(val, (_, k) => {
+            this.transformValue(val, k, watcherKey)
+          })
+        }
+      },
+      unwatch (key) {
+        let watcher = this.watchers[key]
+        if (watcher) {
+          watcher.unwatch()
+          delete this.watchers[key]
+        }
+      },
+      set (key, val, ns) {
+        this.setConfig(this.store, key, val, ns, true)
+      },
+      defaults (key, val, ns) {
+        this.setConfig(this.store, key, val, ns, false)
+      },
+      get (key) {
+        return this.store[key]
+      }
+    }
+  })
+
+  set (key, val, ns) {
+    this.store.set(key, val, ns)
   }
 
-  set (key, value, ns) {
-    set(this.store, key, value, ns, true, false)
+  defaults (key, val, ns) {
+    this.store.defaults(key, val, ns)
   }
 
-  defaults (key, value, ns) {
-    set(this.store, key, value, ns, false, false)
-  }
-
-  merge (key, value, ns) {
-    set(this.store, key, value, ns, true, true)
-  }
-
-  mergeDefaults (key, value, ns) {
-    set(this.store, key, value, ns, false, true)
-  }
-
-  get (key) {
-    return type.clone(this.store[key])
+  get (path) {
+    return this.store.get(path)
   }
 }
 
-const instance = new ConfigManager()
-export default instance
+export default new ConfigManager()
