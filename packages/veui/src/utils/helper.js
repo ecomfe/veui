@@ -8,6 +8,7 @@ import {
   find,
   keys
 } from 'lodash'
+import Vue from 'vue'
 
 export function getTypedAncestorTracker (type, name = type) {
   return {
@@ -208,4 +209,26 @@ export function getNumberArg (modifiers, defaultTime) {
     }
   })
   return timing != null ? timing : defaultTime
+}
+
+const RE_INDEX = /\d+/
+export function deepSet (obj, path, val) {
+  let segments = path.split(/[[\].]/).map(s => {
+    return s.match(RE_INDEX) ? Number(s) : s
+  }).filter(s => s !== '')
+  let context = obj
+  segments.forEach((s, index) => {
+    if (index === segments.length - 1) {
+      Vue.set(context, s, val)
+      return
+    }
+    if (!(s in context)) {
+      if (typeof segments[index + 1] === 'number') {
+        Vue.set(context, s, [])
+      } else {
+        Vue.set(context, s, {})
+      }
+    }
+    context = context[s]
+  })
 }

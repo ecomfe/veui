@@ -48,7 +48,7 @@
     <veui-icon class="veui-date-picker-icon" :name="icons.calendar"/>
   </veui-button>
   <button v-if="clearable && !!selected" type="button" class="veui-date-picker-clear veui-sr-only" @click="clear">
-    <veui-icon :name="icons.clear" label="清除"/>
+    <veui-icon :name="icons.clear" :label="t('clear')"/>
   </button>
   <veui-overlay
     target="button"
@@ -101,7 +101,6 @@ import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
-import i18nManager from '../managers/i18n'
 import { toDateData } from '../utils/date'
 import { isNumber, pick, omit, keys } from 'lodash'
 import format from 'date-fns/format'
@@ -119,8 +118,8 @@ import addYears from 'date-fns/add_years'
 config.defaults({
   shortcuts: [],
   shortcutsPosition: 'before',
-  placeholder: i18nManager.get('selectDate'),
-  rangePlaceholder: i18nManager.get('selectDateRange')
+  placeholder: '@@datepicker.selectDate',
+  rangePlaceholder: '@@datepicker.selectRange'
 }, 'datepicker')
 
 const CALENDAR_PROPS = [
