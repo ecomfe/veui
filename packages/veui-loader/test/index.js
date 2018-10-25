@@ -26,6 +26,14 @@ const SPECS = [
         `\n<style lang="less" src="veui-theme-one/components/button.less"></style>\n`
       ]
     }
+  },
+  {
+    entry: '../../veui/src/components/Calendar.vue',
+    expect: {
+      include: [
+        `\nimport 'veui/locale/en-US/Calendar.js'\n`
+      ]
+    }
   }
 ]
 
@@ -39,16 +47,18 @@ SPECS.forEach(({ entry, expect }) => {
       },
       resolve: {
         alias: {
-          'veui-theme-one': resolve('../../veui-theme-one')
+          'veui-theme-one': resolve('../../veui-theme-one'),
+          'veui': resolve('../../veui/src')
         }
       },
       module: {
         rules: [
           {
             test: /\.vue$/,
-            loader: './lib/index',
+            loader: './lib',
             enforce: 'pre',
             options: {
+              locale: ['en-US'],
               modules: [
                 {
                   package: 'veui-theme-one',

@@ -1,11 +1,20 @@
 const fs = require('fs')
+const path = require('path')
 const crypto = require('crypto')
 const process = require('vue-jest').process
 const loaderOptions = require('../build/veui-loader.conf')
 const processSync = require('veui-loader').processSync
 
+const SRC_PATH = path.join(__dirname, '..', 'src')
+
 function resolveSync (modulePath) {
-  return require.resolve(modulePath)
+  modulePath = modulePath.replace(/^veui(?=[\\/])/, SRC_PATH)
+
+  try {
+    return require.resolve(modulePath)
+  } catch (e) {
+    return null
+  }
 }
 
 module.exports = {
