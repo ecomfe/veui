@@ -242,11 +242,11 @@ function patchType (content, type, peerPaths) {
  */
 async function assurePath (modulePath, resolve) {
   if (resolveCache[modulePath] === false) {
-    return
+    return false
   } else if (!(modulePath in resolveCache)) {
     if (typeof resolve === 'function') {
       try {
-        resolveCache[modulePath] = await resolve(modulePath)
+        resolveCache[modulePath] = !!await resolve(modulePath)
       } catch (e) {
         resolveCache[modulePath] = false
       }
@@ -264,11 +264,11 @@ async function assurePath (modulePath, resolve) {
  */
 function assurePathSync (modulePath, resolveSync) {
   if (resolveCache[modulePath] === false) {
-    return
+    return false
   } else if (!(modulePath in resolveCache)) {
     if (typeof resolveSync === 'function') {
       try {
-        resolveCache[modulePath] = resolveSync(modulePath)
+        resolveCache[modulePath] = !!resolveSync(modulePath)
       } catch (e) {
         resolveCache[modulePath] = false
       }
