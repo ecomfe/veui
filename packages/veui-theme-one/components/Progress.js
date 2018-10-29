@@ -21,4 +21,4 @@ config.defaults({
       values: ['fluid']
     }
   }
-}, 'schedule')
+}, 'progress')

@@ -7,7 +7,7 @@
         <veui-searchbox
           :name="name"
           :placeholder="placeholder"
-          @search="log($event)"></veui-searchbox>
+          @search="log($event)"/>
       </p>
     </section>
     <section>
@@ -19,7 +19,7 @@
           clearable
           :placeholder="placeholder"
           disabled
-          @search="log($event)"></veui-searchbox>
+          @search="log($event)"/>
       </p>
     </section>
     <section>
@@ -34,7 +34,7 @@
           suggest-trigger="submit"
           @suggest="asyncHandleSuggest('1', $event)"
           @search="log($event)"
-          @select="value2 = $event.label"></veui-searchbox>
+          @select="value2 = $event.label"/>
       </p>
     </section>
     <section>
@@ -51,7 +51,7 @@
           suggest-trigger="focus"
           @suggest="handleSuggest('2', $event)"
           @search="log($event)"
-          @select="value3 = $event.label"></veui-searchbox>
+          @select="value3 = $event.label"/>
       </p>
     </section>
     <section>
@@ -68,7 +68,7 @@
           :suggest-trigger="['input', 'submit']"
           @suggest="handleSuggest('is', $event)"
           @search="log($event)"
-          @select="valueis = $event.label"></veui-searchbox>
+          @select="valueis = $event.label"/>
       </p>
     </section>
     <section>
@@ -83,7 +83,7 @@
           suggest-trigger="input"
           @suggest="handleSuggest('3', $event)"
           @search="log($event)"
-          @select="value4 = $event.label"></veui-searchbox>
+          @select="value4 = $event.label"/>
       </p>
     </section>
     <section>
@@ -97,7 +97,7 @@
           :suggestions="suggestions4"
           @input="handleSuggest('4', $event)"
           @search="log($event)"
-          @select="log('select', $event)"></veui-searchbox>
+          @select="log('select', $event)"/>
       </p>
     </section>
     <section>
@@ -110,7 +110,7 @@
           :placeholder="placeholder"
           :suggestions="suggestions5"
           @input="handleSuggest('5', $event)"
-          @search="log($event)"></veui-searchbox>
+          @search="log($event)"/>
       </p>
     </section>
     <section>

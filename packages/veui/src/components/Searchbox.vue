@@ -31,17 +31,16 @@
         type="button"
         class="veui-searchbox-action-icon"
         :disabled="realDisabled || realReadonly"
-        aria-label="搜索"
         :aria-haspopup="submitPopup"
       >
-        <veui-icon :name="icons.search"/>
+        <veui-icon :name="icons.search" :label="t('search')"/>
       </button>
       <veui-button :ui="uiParts.button"
         class="veui-searchbox-action-button"
         :disabled="realDisabled || realReadonly"
-        aria-label="搜索"
+        :aria-label="t('search')"
         :aria-haspopup="submitPopup"
-      >搜索</veui-button>
+      >{{ t('search') }}</veui-button>
     </div>
   </veui-input>
   <veui-overlay
@@ -76,6 +75,7 @@ import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
 import overlay from '../mixins/overlay'
 import ui from '../mixins/ui'
+import i18n from '../mixins/i18n'
 import Input from './Input'
 import Icon from './Icon'
 import Overlay from './Overlay'
@@ -84,7 +84,7 @@ import { pick, includes } from 'lodash'
 
 export default {
   name: 'veui-searchbox',
-  mixins: [ui, input, dropdown, overlay],
+  mixins: [ui, input, dropdown, overlay, i18n],
   components: {
     'veui-input': Input,
     'veui-icon': Icon,

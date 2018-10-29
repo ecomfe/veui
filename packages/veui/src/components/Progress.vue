@@ -51,6 +51,7 @@
 
 <script>
 import ui from '../mixins/ui'
+import i18n from '../mixins/i18n'
 import Icon from './Icon'
 import warn from '../utils/warn'
 import { clamp } from 'lodash'
@@ -61,7 +62,7 @@ const STROKE_LINECAP = null
 
 export default {
   name: 'veui-progress',
-  mixins: [ui],
+  mixins: [ui, i18n],
   components: {
     'veui-icon': Icon
   },
@@ -169,9 +170,9 @@ export default {
     },
     valueText () {
       if (this.localStatus === 'success') {
-        return '完成'
+        return this.t('done')
       } else if (this.localStatus === 'alert') {
-        return '错误'
+        return this.t('error')
       } else {
         return this.percent.toFixed(this.decimalPlace) + '%'
       }

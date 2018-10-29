@@ -35,7 +35,7 @@
           :disabled="!editable || reachMaxLimit"
           v-longpress.repeat="increase"
         >
-          <veui-icon :name="icons.increase"/>
+          <veui-icon :name="icons.increase" :label="t('increase', { value: step })"/>
         </veui-button>
         <veui-button
           ref="dec"
@@ -44,7 +44,7 @@
           :disabled="!editable || reachMinLimit"
           v-longpress.repeat="decrease"
         >
-          <veui-icon :name="icons.decrease"/>
+          <veui-icon :name="icons.decrease" :label="t('decrease', { value: step })"/>
         </veui-button>
       </div>
       <slot name="after"/>
@@ -57,6 +57,7 @@ import Input from './Input'
 import Button from './Button'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import i18n from '../mixins/i18n'
 import Icon from './Icon'
 import { getListeners } from '../utils/helper'
 import { sign, add, round } from '../utils/math'
@@ -69,7 +70,7 @@ const EVENTS = ['focus', 'blur', 'click', 'keyup', 'keydown', 'keypress']
 
 export default {
   name: 'veui-number-input',
-  mixins: [input, ui],
+  mixins: [input, ui, i18n],
   directives: {
     nudge,
     longpress

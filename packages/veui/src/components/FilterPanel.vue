@@ -1,7 +1,7 @@
 <template>
   <div class="veui-filter-panel" :ui="realUi">
     <h3 class="veui-filter-panel-title">
-      <slot name="head">标题</slot>
+      <slot name="head"></slot>
     </h3>
     <div class="veui-filter-panel-content">
       <veui-searchbox v-model="keyword"
@@ -16,7 +16,7 @@
         <slot :items="filteredDatasource"/>
       </div>
       <div class="veui-filter-panel-no-data" v-else>
-        <slot name="no-data">没数据</slot>
+        <slot name="no-data">{{ t('noData') }}</slot>
       </div>
     </div>
   </div>
@@ -26,6 +26,7 @@
 import Searchbox from './Searchbox'
 import Icon from './Icon'
 import ui from '../mixins/ui'
+import i18n from '../mixins/i18n'
 import { includes, debounce, cloneDeep } from 'lodash'
 
 export default {
@@ -34,7 +35,7 @@ export default {
     'veui-searchbox': Searchbox,
     'veui-icon': Icon
   },
-  mixins: [ui],
+  mixins: [ui, i18n],
   props: {
     datasource: {
       type: Array,

@@ -7,7 +7,8 @@ config.defaults({
   },
   ui: {
     size: {
-      values: ['large', 'small', 'tiny', 'micro']
+      values: ['large', 'small', 'tiny', 'micro'],
+      inherit: true
     }
   }
 }, 'input')
