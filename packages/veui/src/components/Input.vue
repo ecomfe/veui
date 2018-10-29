@@ -41,7 +41,7 @@
     class="veui-input-clear"
   >
     <button type="button"
-      aria-label="清除"
+      :aria-label="t('clear')"
       class="veui-input-clear-button"
       @click.stop="clear"
     ><veui-icon :name="icons.remove"/></button>
@@ -55,6 +55,7 @@
 <script>
 import input from '../mixins/input'
 import ui from '../mixins/ui'
+import i18n from '../mixins/i18n'
 import { omit, includes } from 'lodash'
 import Icon from './Icon'
 import { getListeners } from '../utils/helper'
@@ -64,7 +65,7 @@ const TYPE_LIST = ['text', 'password', 'hidden']
 
 export default {
   name: 'veui-input',
-  mixins: [input, ui],
+  mixins: [input, ui, i18n],
   components: {
     'veui-icon': Icon
   },

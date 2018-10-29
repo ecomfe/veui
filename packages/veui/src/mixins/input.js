@@ -30,7 +30,9 @@ export default {
       )
     },
     realInvalid () {
-      return this.formField && !this.formField.validity.valid && this.isTopMostInput
+      return (
+        this.formField && !this.formField.validity.valid && this.isTopMostInput
+      )
     },
     ...getTypedAncestorTracker('field', 'formField').computed
   },

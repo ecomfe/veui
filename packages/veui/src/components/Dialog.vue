@@ -33,14 +33,14 @@
         class="veui-dialog-content-head-close"
         v-if="closable"
         @click="cancel"
-        aria-label="关闭">
+        :aria-label="t('close')">
         <veui-icon :name="icons.close"/>
       </button>
       <div class="veui-dialog-content-body"><slot :close="close"/></div>
       <div class="veui-dialog-content-foot">
         <slot name="foot" :close="close">
-          <veui-button :ui="uiParts.ok" @click="close('ok')">确定</veui-button>
-          <veui-button :ui="uiParts.cancel" autofocus @click="cancel">取消</veui-button>
+          <veui-button :ui="uiParts.ok" @click="close('ok')">{{ t('ok') }}</veui-button>
+          <veui-button :ui="uiParts.cancel" autofocus @click="cancel">{{ t('cancel') }}</veui-button>
         </slot>
       </div>
     </div>
@@ -51,6 +51,7 @@
 import Overlay from './Overlay'
 import Button from './Button'
 import ui from '../mixins/ui'
+import i18n from '../mixins/i18n'
 import overlay from '../mixins/overlay'
 import drag from '../directives/drag'
 import Icon from './Icon'
@@ -64,7 +65,7 @@ export default {
   },
   inheritAttrs: false,
   directives: { drag },
-  mixins: [ui, overlay],
+  mixins: [ui, overlay, i18n],
   props: {
     modal: {
       type: Boolean,

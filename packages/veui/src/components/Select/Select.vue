@@ -4,6 +4,7 @@ import Button from '../Button'
 import Option from './Option'
 import OptionGroup from './OptionGroup'
 import Overlay from '../Overlay'
+import config from '../../managers/config'
 import input from '../../mixins/input'
 import keySelect from '../../mixins/key-select'
 import ui from '../../mixins/ui'
@@ -13,6 +14,10 @@ import warn from '../../utils/warn'
 import { walk } from '../../utils/data'
 import { cloneDeep, mapValues } from 'lodash'
 import '../../common/uiTypes'
+
+config.defaults({
+  placeholder: '@@select.placeholder'
+}, 'select')
 
 export default {
   name: 'veui-select',
@@ -30,10 +35,7 @@ export default {
   },
   props: {
     value: null,
-    placeholder: {
-      type: String,
-      default: '请选择'
-    },
+    placeholder: String,
     clearable: Boolean,
     options: Array,
     filter: Function
@@ -57,9 +59,12 @@ export default {
       }
       return this.optionMap[this.localValue]
     },
+    realPlaceholder () {
+      return this.placeholder == null ? config.get('select.placeholder') : this.placeholder
+    },
     label () {
       if (this.localValue == null) {
-        return this.placeholder
+        return this.realPlaceholder
       }
       if (this.options) {
         return this.labelMap[this.localValue]
@@ -137,7 +142,7 @@ export default {
             {this.$slots.before}
             {
               this.clearable
-                ? <veui-option value={null} label={this.placeholder}/>
+                ? <veui-option value={null} label={this.realPlaceholder}/>
                 : null
             }
             <veui-option-group

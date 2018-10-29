@@ -4,7 +4,7 @@
   :ui="realUi"
   role="tree"
   aria-multiselectable="true"
-  aria-label="地域选择，按 Tab 键在同一层级内导航，按左右箭头键切换层级">
+  :aria-label="t('description')">
   <div
     class="veui-sr-only"
     tabindex="0"
@@ -206,6 +206,7 @@ import Checkbox from './Checkbox'
 import Overlay from './Overlay'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import i18n from '../mixins/i18n'
 import overlay from '../mixins/overlay'
 import outside from '../directives/outside'
 import warn from '../utils/warn'
@@ -220,7 +221,7 @@ export default {
     'veui-overlay': Overlay
   },
   directives: { outside },
-  mixins: [ui, input, overlay],
+  mixins: [ui, input, overlay, i18n],
   model: {
     prop: 'selected',
     event: 'select'

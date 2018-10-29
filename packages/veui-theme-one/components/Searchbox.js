@@ -5,7 +5,13 @@ config.defaults({
   icons: {
     search: 'search'
   },
+  parts: {
+    button: 'primary'
+  },
   ui: {
+    style: {
+      values: ['primary']
+    },
     size: {
       values: ['large', 'small'],
       inherit: true
