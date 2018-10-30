@@ -7,7 +7,7 @@
           (requestMode === 'iframe' && isSubmiting)}"
         @click="handleClick" ref="label">
         <slot name="button-label"><veui-icon class="veui-uploader-input-label-icon"
-          :name="icons.upload"/>选择文件</slot>
+          :name="icons.upload"/>{{ t('selectFile') }}</slot>
         <input :id="inputId" hidden type="file" ref="input"
           @change="handleNewFiles"
           :name="name"
@@ -20,9 +20,9 @@
       </label>
       <span v-if="$slots.desc" class="veui-uploader-tip"><slot name="desc"/></span>
       <span class="veui-uploader-error">
-        <template v-if="error.typeInvalid"><slot name="type-invalid"><veui-icon :name="icons.alert"/>文件的类型不符合要求</slot></template>
-        <template v-if="error.sizeInvalid"><slot name="size-invalid"><veui-icon :name="icons.alert"/>文件的大小不符合要求</slot></template>
-        <template v-if="error.countOverflow"><slot name="count-overflow"><veui-icon :name="icons.alert"/>文件的数量超过限制</slot></template>
+        <template v-if="error.typeInvalid"><slot name="type-invalid"><veui-icon :name="icons.alert"/>{{ t('fileTypeInvalid') }}</slot></template>
+        <template v-if="error.sizeInvalid"><slot name="size-invalid"><veui-icon :name="icons.alert"/>{{ t('fileSizeInvalid') }}</slot></template>
+        <template v-if="error.countOverflow"><slot name="count-overflow"><veui-icon :name="icons.alert"/>{{ t('tooManyFiles') }}</slot></template>
       </span>
     </div>
     <transition-group :class="listClass" tag="ul" name="veui-uploader-list">
@@ -39,11 +39,11 @@
                     'veui-uploader-list-name-failure': file.status === 'failure'
                   }"
                   :title="file.name">{{file.name}}</span>
-                <span v-if="file.status === 'success'" class="veui-uploader-success"><slot name="success-label">上传成功！</slot></span>
+                <span v-if="file.status === 'success'" class="veui-uploader-success"><slot name="success-label">{{ t('uploadSuccess') }}</slot></span>
                 <span v-if="file.status === 'failure'" class="veui-uploader-failure" :ref="`fileFailure${index}`">
-                  <slot name="failure-label">上传失败</slot>
+                  <slot name="failure-label">{{ t('uploadFailure') }}</slot>
                 </span>
-                <veui-button v-if="file.status === 'failure'" :ui="uiParts.retryFileDone" @click="retry(file)" :class="`${listClass}-retry`"><veui-icon :name="icons.redo"/>重试</veui-button>
+                <veui-button v-if="file.status === 'failure'" :ui="uiParts.retryFileDone" @click="retry(file)" :class="`${listClass}-retry`"><veui-icon :name="icons.redo" :label="t('retry')"/></veui-button>
                 <veui-button class="veui-uploader-button-remove" :ui="uiParts.clearFileDone" @click="removeFile(file)" :disabled="realUneditable"><veui-icon :name="icons.clear"/></veui-button>
                 <veui-tooltip position='top' :target="`fileFailure${index}`">{{ file.failureReason }}</veui-tooltip>
               </div>
@@ -58,7 +58,7 @@
                     :ui="uiParts.retryImageSuccess"
                     class="veui-button"
                     :class="{'veui-uploader-input-label-disabled': realUneditable}"
-                    @click.stop="replaceFile(file)">重新上传</label>
+                    @click.stop="replaceFile(file)">{{ t('replace') }}</label>
                   <veui-button
                     :ui="uiParts.clearImageSuccess"
                     @click="removeFile(file)"
@@ -69,7 +69,7 @@
                 <transition name="veui-uploader-fade">
                   <div v-if="file.status === 'success'"
                     :class="`${listClass}-success`">
-                    <span class="veui-uploader-success"><slot name="success-label"><veui-icon :name="icons.success"/>完成</slot></span>
+                    <span class="veui-uploader-success"><slot name="success-label"><veui-icon :name="icons.success"/>{{ t('complete') }}</slot></span>
                   </div>
                 </transition>
               </div>
@@ -84,7 +84,7 @@
               <veui-uploader-progress :type="progress" :loaded="file.loaded" :total="file.total"
                 :class="type === 'image' ? `${listClass}-status` : null"
                 :convertSizeUnit="convertSizeUnit">
-                <slot name="uploading-label">上传中...</slot>
+                <slot name="uploading-label">{{ t('uploading') }}</slot>
               </veui-uploader-progress>
               <veui-button
                 v-if="type === 'file'"
@@ -94,7 +94,7 @@
               <veui-button
                 v-else
                 :ui="uiParts.cancelImage"
-                @click="cancelFile(file)">取消</veui-button>
+                @click="cancelFile(file)">{{ t('cancel') }}</veui-button>
             </div>
             <slot name="file-after" v-bind="getScopeValue(index, file)"/>
           </slot>
@@ -104,15 +104,15 @@
             <slot name="file-before" v-bind="getScopeValue(index, file)"/>
             <div :class="`${listClass}-container`">
               <div :class="`${listClass}-status`">
-                <span class="veui-uploader-failure"><slot name="failure-label">错误！</slot>{{file.failureReason}}</span>
+                <span class="veui-uploader-failure"><slot name="failure-label">{{ t('error') }}</slot>{{file.failureReason}}</span>
               </div>
               <veui-button
                 :ui="uiParts.retryImageFailure"
-                @click="retry(file)">重试</veui-button>
+                @click="retry(file)">{{ t('retry') }}</veui-button>
               <veui-button
                 :ui="uiParts.clearImageFailure"
                 @click="removeFile(file)"
-                :class="`${listClass}-mask-remove ${listClass}-mask-remove-failure`"><veui-icon :name="icons.clear" label="移除"/></veui-button>
+                :class="`${listClass}-mask-remove ${listClass}-mask-remove-failure`"><veui-icon :name="icons.clear" :label="t('remove')"/></veui-button>
             </div>
             <slot name="file-after" v-bind="getScopeValue(index, file)"/>
           </slot>
@@ -139,7 +139,7 @@
               @click.stop>
               <veui-icon v-if="!$scopedSlots['extra-operation']" :name="icons.add"></veui-icon>
               <template v-else>
-                <slot name="button-label">选择文件</slot>
+                <slot name="button-label">{{ t('selectFile') }}</slot>
               </template>
           </label>
           <slot name="extra-operation"/>
@@ -148,9 +148,9 @@
     </transition-group>
     <span class="veui-uploader-tip" v-if="$slots.desc && type === 'image'"><slot name="desc"/></span>
     <span class="veui-uploader-error" v-if="type === 'image'">
-      <template v-if="error.typeInvalid"><slot name="type-invalid"><veui-icon :name="icons.alert"/>文件的类型不符合要求</slot></template>
-      <template v-if="error.sizeInvalid"><slot name="size-invalid"><veui-icon :name="icons.alert"/>文件的大小不符合要求</slot></template>
-      <template v-if="error.countOverflow"><slot name="count-overflow"><veui-icon :name="icons.alert"/>文件的数量超过限制</slot></template>
+      <template v-if="error.typeInvalid"><slot name="type-invalid"><veui-icon :name="icons.alert"/>{{ t('fileTypeInvalid') }}</slot></template>
+      <template v-if="error.sizeInvalid"><slot name="size-invalid"><veui-icon :name="icons.alert"/>{{ t('fileSizeInvalid') }}</slot></template>
+      <template v-if="error.countOverflow"><slot name="count-overflow"><veui-icon :name="icons.alert"/>{{ t('tooManyFiles') }}</slot></template>
     </span>
     <iframe v-if="requestMode === 'iframe' && isSubmiting" ref="iframe"
      :id="iframeId" :name="iframeId" class="veui-uploader-hide"></iframe>
@@ -169,6 +169,7 @@ import Tooltip from './Tooltip'
 import { cloneDeep, uniqueId, assign, isNumber, last, pick, omit, includes, isEmpty } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
 import bytes from 'bytes'
@@ -188,7 +189,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-uploader-progress': getProgress()
   },
-  mixins: [ui, input],
+  mixins: [ui, input, i18n],
   model: {
     event: 'change'
   },

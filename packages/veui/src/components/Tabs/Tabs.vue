@@ -78,7 +78,7 @@
             </slot>
             <slot name="tab-item-extra" v-bind="tab" :index="index">
               <button v-if="tab.removable" type="button" class="veui-tabs-item-remove"
-                aria-label="删除"
+                :aria-label="t('remove')"
                 :disabled="removing"
                 @click="$emit('remove', tab)">
                   <veui-icon :name="icons.remove"/>
@@ -92,12 +92,12 @@
       <div class="veui-tabs-extra" ref="extra">
         <button type="button" v-if="addable"
           class="veui-tabs-operator"
-          aria-label="添加"
+          :aria-label="t('add')"
           :disabled="max != null && items.length >= max || removing"
           @click="$emit('add')">
           <veui-icon :name="icons.add"/>
           <slot name="tabs-extra-label">
-            <span class="veui-tabs-extra-label">添加 Tab</span>
+            <span class="veui-tabs-extra-label">{{ t('addTab') }}</span>
           </slot>
         </button>
         <slot name="tabs-extra-tip">
@@ -133,13 +133,14 @@ import Link from '../Link'
 import Icon from '../Icon'
 import resize from '../../directives/resize'
 import ui from '../../mixins/ui'
+import i18n from '../../mixins/i18n'
 import '../../common/uiTypes'
 import { setTransform, getTransform } from '../../utils/dom'
 
 export default {
   name: 'veui-tabs',
   uiTypes: ['tabs'],
-  mixins: [ui],
+  mixins: [ui, i18n],
   components: {
     'veui-link': Link,
     'veui-icon': Icon

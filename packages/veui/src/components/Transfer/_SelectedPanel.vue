@@ -10,11 +10,11 @@
 
     <template slot="head">
       <slot name="head">
-        <slot name="title">已选列表</slot>
+        <slot name="title">{{ t('transfer.selected') }}</slot>
         <veui-button ui="link"
           class="veui-transfer-remove-all"
           @click="removeAll"
-          :disabled="!isSelectable">删除全部</veui-button>
+          :disabled="!isSelectable">{{ t('transfer.deselectAll') }}</veui-button>
       </slot>
     </template>
 
@@ -34,7 +34,9 @@
               <span class="veui-tree-item-expand-switcher"
                 v-if="props.item.children && props.item.children.length"
                 @click.stop="toggle(props.item)">
-                <veui-icon :name="icons.collapsed"/>
+                <veui-icon
+                  :name="icons.collapsed"
+                  :label="t(props.expanded ? 'transfer.collapse' : 'transfer.expand')"/>
               </span>
 
               <div class="veui-transfer-item-label">
@@ -67,7 +69,9 @@
                   <veui-icon :name="icons.separator"/>
                 </span>
               </template>
-              <veui-icon class="veui-transfer-selected-flat-icon-remove" :name="icons.remove"/>
+              <veui-icon
+                class="veui-transfer-selected-flat-icon-remove"
+                :name="icons.remove"/>
             </div>
           </slot>
         </li>
@@ -85,10 +89,12 @@ import FilterPanel from '../FilterPanel'
 import Icon from '../Icon'
 import Button from '../Button'
 import Tree from '../Tree'
+import i18n from '../../mixins/i18n'
 import { get, clone, isEqual } from 'lodash'
 
 export default {
-  name: 'veui-selected-panel',
+  name: 'veui_selected-panel',
+  mixins: [i18n],
   components: {
     'veui-filter-panel': FilterPanel,
     'veui-icon': Icon,

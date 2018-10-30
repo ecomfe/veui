@@ -14,7 +14,7 @@
     fallback="div"
     role="listitem"
     :aria-current="index === current ? 'step' : null"
-    :aria-label="`步骤 ${index}`"
+    :aria-label="t('step', { index: index + 1 })"
     :aria-posinset="String(index + 1)"
     :aria-setsize="String(steps.length)"
     @click="$emit('click', index, $event)">
@@ -42,10 +42,11 @@
 import Icon from './Icon'
 import Link from './Link'
 import ui from '../mixins/ui'
+import i18n from '../mixins/i18n'
 
 export default {
   name: 'veui-steps',
-  mixins: [ui],
+  mixins: [ui, i18n],
   components: {
     'veui-icon': Icon,
     'veui-link': Link

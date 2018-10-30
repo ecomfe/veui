@@ -111,6 +111,9 @@ export function mergeClasses (...klasses) {
 }
 
 export function getConfigKey (name) {
+  if (name.indexOf('veui_') === 0) {
+    return ''
+  }
   return name.replace(/^veui|-*/g, '').toLowerCase()
 }
 

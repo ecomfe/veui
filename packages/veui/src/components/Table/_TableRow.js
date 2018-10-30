@@ -2,14 +2,15 @@ import { find } from 'lodash'
 import Checkbox from '../Checkbox'
 import Radio from '../Radio'
 import table from '../../mixins/table'
+import i18n from '../../mixins/i18n'
 
 export default {
-  name: 'veui-table-row',
+  name: 'veui_table-row',
   components: {
     'veui-checkbox': Checkbox,
     'veui-radio': Radio
   },
-  mixins: [table],
+  mixins: [table, i18n],
   props: {
     index: {
       type: Number,
@@ -50,11 +51,11 @@ export default {
                 ? <veui-checkbox
                   checked={checked}
                   onChange={checked => { this.table.select(checked, index) }}
-                  aria-label={checked ? '移除本行' : '添加本行'}/>
+                  aria-label={this.t(checked ? 'table.deselectRow' : 'table.selectRow')}/>
                 : <veui-radio
                   checked={checked}
                   onChange={checked => { this.table.select(checked, index) }}
-                  aria-label="选择本行"/>
+                  aria-label={this.t('table.selectRow')}/>
             }
           </div></td>
           : null
