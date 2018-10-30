@@ -34,8 +34,12 @@
   > { "success": false, "message": "..." }
   > ```
 
+* 移除了 `managers/config` 的 `merge` 与 `mergeDefaults` 方法，现在对于 `Object` 类型的配置项需要提供完整值。
+
 ### 💡 主要变更
 
+* 新增了 I18N 支持，并添加了组件级别对应的 `zh-Hans` 与 `en-US` locale。
+* `managers/config` 模块的配置现在为响应式数据，支持在组件渲染后进行全局修改。
 * `Field` 组件对应的数据字段名现在默认优先取 `name` prop，且可以被 `field` prop 覆盖。
 * `rule` 模板占位符由 `${...}` 变更为 `{...}`，以方便在模板字符串中进行书写。老语法仍然保持兼容。
 

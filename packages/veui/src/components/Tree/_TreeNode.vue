@@ -47,7 +47,7 @@ import Icon from '../Icon'
 import { includes } from 'lodash'
 
 export default {
-  name: '_veui-tree-node',
+  name: 'veui-tree-node',
   components: {
     'veui-icon': Icon
   },

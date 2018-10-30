@@ -3,7 +3,7 @@ import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 
 export default {
-  name: 'veui_table-body',
+  name: 'veui-table-body',
   components: {
     'veui-table-row': Row
   },
@@ -26,7 +26,7 @@ export default {
                 class="veui-table-no-data"
                 colspan={(this.selectable ? 1 : 0) + this.columns.length}
                 role="cell">
-                <div class="veui-table-cell">{this.$slots['no-data'] || this.t('table.noData')}</div>
+                <div class="veui-table-cell">{this.$slots['no-data'] || this.t('@table.noData')}</div>
               </td>
             </tr>
         }

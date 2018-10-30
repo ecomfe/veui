@@ -5,7 +5,7 @@ import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 
 export default {
-  name: 'veui_table-row',
+  name: 'veui-table-row',
   components: {
     'veui-checkbox': Checkbox,
     'veui-radio': Radio
@@ -51,11 +51,11 @@ export default {
                 ? <veui-checkbox
                   checked={checked}
                   onChange={checked => { this.table.select(checked, index) }}
-                  aria-label={this.t(checked ? 'table.deselectRow' : 'table.selectRow')}/>
+                  aria-label={this.t(checked ? '@table.deselectRow' : '@table.selectRow')}/>
                 : <veui-radio
                   checked={checked}
                   onChange={checked => { this.table.select(checked, index) }}
-                  aria-label={this.t('table.selectRow')}/>
+                  aria-label={this.t('@table.selectRow')}/>
             }
           </div></td>
           : null
