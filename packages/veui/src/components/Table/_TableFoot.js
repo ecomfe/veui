@@ -1,7 +1,7 @@
 import table from '../../mixins/table'
 
 export default {
-  name: 'veui-table-foot',
+  name: 'veui_table-foot',
   mixins: [table],
   computed: {
     ...table.mapTableData(

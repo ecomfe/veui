@@ -6,7 +6,7 @@
     <col v-for="col in realColumns" :width="col.width" :key="col.field"/>
   </colgroup>
   <table-head @sort="sort"/>
-  <table-body><template slot="no-data"><slot name="no-data">没有数据</slot></template></table-body>
+  <table-body><template slot="no-data"><slot name="no-data">{{ t('noData') }}</slot></template></table-body>
   <table-foot v-if="hasFoot"><slot name="foot"></slot></table-foot>
 </table>
 </template>
@@ -14,6 +14,7 @@
 <script>
 import warn from '../../utils/warn'
 import ui from '../../mixins/ui'
+import i18n from '../../mixins/i18n'
 import { map, intersection, includes, indexOf, keys as objectKeys, find } from 'lodash'
 import Body from './_TableBody'
 import Head from './_TableHead'
@@ -24,7 +25,7 @@ import { isEqualSet } from '../../utils/lang'
 export default {
   name: 'veui-table',
   uiTypes: ['table'],
-  mixins: [ui],
+  mixins: [ui, i18n],
   components: {
     'table-body': Body,
     'table-head': Head,

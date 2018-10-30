@@ -2,15 +2,16 @@ import Checkbox from '../Checkbox'
 import Button from '../Button'
 import Sorter from '../Sorter'
 import table from '../../mixins/table'
+import i18n from '../../mixins/i18n'
 
 export default {
-  name: 'veui-table-head',
+  name: 'veui_table-head',
   components: {
     'veui-checkbox': Checkbox,
     'veui-button': Button,
     'veui-sorter': Sorter
   },
-  mixins: [table],
+  mixins: [table, i18n],
   computed: {
     ...table.mapTableData(
       'data',
@@ -26,16 +27,20 @@ export default {
         <tr>
           {
             this.selectable
-              ? <th scope="col" role="columnheader"><div class="veui-table-cell">
-                {
-                  this.selectMode === 'multiple'
-                    ? <veui-checkbox checked={this.selectStatus !== 'none'}
-                      disabled={!this.data.length}
-                      indeterminate={this.selectStatus === 'partial'}
-                      onChange={checked => { this.table.select(checked) }}
-                      aria-label={this.checked ? '全部移除' : '全部添加'}/>
-                    : null
-                }</div></th>
+              ? (
+                <th scope="col" role="columnheader">
+                  <div class="veui-table-cell">
+                    {
+                      this.selectMode === 'multiple'
+                        ? <veui-checkbox checked={this.selectStatus !== 'none'}
+                          disabled={!this.data.length}
+                          indeterminate={this.selectStatus === 'partial'}
+                          onChange={checked => { this.table.select(checked) }}
+                          aria-label={this.t(this.checked ? 'table.unselectAll' : 'table.selectAll')}/>
+                        : null
+                    }</div>
+                </th>
+              )
               : null
           }
           {

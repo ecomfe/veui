@@ -32,10 +32,7 @@
 
     <h2>单级结构</h2>
     <p>
-      <veui-transfer :datasource="datasource2" v-model="selected2">
-        <template slot="candidate-title">备选列表</template>
-        <template slot="selected-title">已选列表</template>
-      </veui-transfer>
+      <veui-transfer :datasource="datasource2" v-model="selected2"/>
     </p>
 
     <h2>多级树形结构，右侧扁平</h2>
