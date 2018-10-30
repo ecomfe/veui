@@ -10,11 +10,11 @@
 
     <template slot="head">
       <slot name="head">
-        <slot name="title">{{ t('transfer.selected') }}</slot>
+        <slot name="title">{{ t('@transfer.selected') }}</slot>
         <veui-button ui="link"
           class="veui-transfer-remove-all"
           @click="removeAll"
-          :disabled="!isSelectable">{{ t('transfer.deselectAll') }}</veui-button>
+          :disabled="!isSelectable">{{ t('@transfer.deselectAll') }}</veui-button>
       </slot>
     </template>
 
@@ -36,7 +36,7 @@
                 @click.stop="toggle(props.item)">
                 <veui-icon
                   :name="icons.collapsed"
-                  :label="t(props.expanded ? 'transfer.collapse' : 'transfer.expand')"/>
+                  :label="t(props.expanded ? '@transfer.collapse' : '@transfer.expand')"/>
               </span>
 
               <div class="veui-transfer-item-label">
@@ -79,7 +79,7 @@
     </template>
 
     <template slot="no-data">
-      <slot name="no-data">请从左侧选择</slot>
+      <slot name="no-data">{{ t('@transfer.select') }}</slot>
     </template>
   </veui-filter-panel>
 </template>
@@ -93,7 +93,7 @@ import i18n from '../../mixins/i18n'
 import { get, clone, isEqual } from 'lodash'
 
 export default {
-  name: 'veui_selected-panel',
+  name: 'veui-selected-panel',
   mixins: [i18n],
   components: {
     'veui-filter-panel': FilterPanel,

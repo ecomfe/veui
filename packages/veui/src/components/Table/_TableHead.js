@@ -5,7 +5,7 @@ import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 
 export default {
-  name: 'veui_table-head',
+  name: 'veui-table-head',
   components: {
     'veui-checkbox': Checkbox,
     'veui-button': Button,
@@ -36,7 +36,7 @@ export default {
                           disabled={!this.data.length}
                           indeterminate={this.selectStatus === 'partial'}
                           onChange={checked => { this.table.select(checked) }}
-                          aria-label={this.t(this.checked ? 'table.unselectAll' : 'table.selectAll')}/>
+                          aria-label={this.t(this.checked ? '@table.unselectAll' : '@table.selectAll')}/>
                         : null
                     }</div>
                 </th>

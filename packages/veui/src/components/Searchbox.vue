@@ -38,7 +38,6 @@
       <veui-button :ui="uiParts.button"
         class="veui-searchbox-action-button"
         :disabled="realDisabled || realReadonly"
-        :aria-label="t('search')"
         :aria-haspopup="submitPopup"
       >{{ t('search') }}</veui-button>
     </div>
