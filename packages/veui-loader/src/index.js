@@ -117,23 +117,33 @@ function getParts (component, options) {
     path: packPath = COMPONENTS_DIRNAME,
     transform,
     fileName,
-    locale
+    locale,
+    global = []
   } = options
 
   if (pack && fileName) {
     modules.push({ package: pack, path: packPath, transform, fileName })
   }
 
-  if (locale) {
+  if (locale !== false) {
+    if (!locale) {
+      locale = 'zh-Hans'
+    }
+
     if (!Array.isArray(locale)) {
       locale = [locale]
     }
-    modules = locale.filter(l => typeof l === 'string').map(l => {
+    locale = locale.filter(l => typeof l === 'string')
+    modules = locale.map(l => {
       return { package: 'veui', path: `locale/${l}`, transform: false, fileName: '{module}.js' }
     }).concat(modules)
+
+    global = locale.map(l => {
+      return { path: `veui/locale/${l}/common` }
+    }).concat(global)
   }
 
-  return modules.reduce(
+  let a = modules.reduce(
     (
       acc,
       {
@@ -152,10 +162,14 @@ function getParts (component, options) {
       return acc
     },
     {
-      script: [],
+      script: [...global],
       style: []
     }
   )
+
+  console.log(a.script)
+
+  return a
 }
 
 /**

@@ -1,4 +1,5 @@
 import { isType, getTypeByInstance } from '../../utils/lang'
+import i18n from '../i18n'
 
 export default {
   validate (val, ruleValue) {
@@ -6,6 +7,8 @@ export default {
       ? ruleValue.test(val)
       : new RegExp(ruleValue).test(val)
   },
-  message: '格式不符合要求',
+  message (value, ruleValue) {
+    return i18n.get('rules.pattern', { value, ruleValue })
+  },
   priority: 50
 }
