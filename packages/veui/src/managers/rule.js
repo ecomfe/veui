@@ -1,3 +1,5 @@
+import Vue from 'vue'
+import { isObject, isFunction } from 'lodash'
 import required from './rules/required'
 import maxLength from './rules/maxLength'
 import minLength from './rules/minLength'
@@ -6,7 +8,6 @@ import min from './rules/min'
 import numeric from './rules/numeric'
 import pattern from './rules/pattern'
 import type from './type'
-import { isObject, isFunction } from 'lodash'
 
 /**
  * 变量匹配正则
@@ -21,15 +22,17 @@ const valueRe = /\$?\{value\}/g
 
 export class Rule {
   constructor () {
-    this.ruleValidators = {
-      required,
-      maxLength,
-      minLength,
-      max,
-      min,
-      numeric,
-      pattern
-    }
+    this.ruleValidators = new Vue({
+      data: {
+        required,
+        maxLength,
+        minLength,
+        max,
+        min,
+        numeric,
+        pattern
+      }
+    })
   }
 
   validate (val, rules, context) {

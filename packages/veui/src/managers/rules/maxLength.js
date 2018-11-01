@@ -1,9 +1,12 @@
 import { isEmpty } from '../../utils/helper'
+import i18n from '../i18n'
 
 export default {
   validate (val, ruleValue) {
     return !isEmpty(val) ? val.length <= ruleValue : true
   },
-  message: '字符长度不能超过${ruleValue}',
+  message (value, ruleValue) {
+    return i18n.get('rules.maxLength', { value, ruleValue })
+  },
   priority: 100
 }
