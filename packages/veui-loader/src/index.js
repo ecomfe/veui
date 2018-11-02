@@ -28,21 +28,30 @@ export default async function (content) {
   }
 
   try {
-    let result = await patchComponent(content, component, loaderOptions, path => {
-      return new Promise(resolve => {
-        try {
-          this.resolve(this.rootContext || this.options.context, path, err => {
-            if (err) {
-              resolve(false)
-              return
-            }
-            resolve(true)
-          })
-        } catch (e) {
-          resolve(false)
-        }
-      })
-    })
+    let result = await patchComponent(
+      content,
+      component,
+      loaderOptions,
+      path => {
+        return new Promise(resolve => {
+          try {
+            this.resolve(
+              this.rootContext || this.options.context,
+              path,
+              err => {
+                if (err) {
+                  resolve(false)
+                  return
+                }
+                resolve(true)
+              }
+            )
+          } catch (e) {
+            resolve(false)
+          }
+        })
+      }
+    )
     callback(null, result)
   } catch (e) {
     callback(e)
@@ -77,9 +86,11 @@ export function processSync (content, file, options, resolveSync) {
 async function patchComponent (content, component, options, resolve) {
   let parts = getParts(component, options)
 
-  await Promise.all([...parts.script, ...parts.style].map(async module => {
-    module.valid = await assurePath(module.path, resolve)
-  }))
+  await Promise.all(
+    [...parts.script, ...parts.style].map(async module => {
+      module.valid = await assurePath(module.path, resolve)
+    })
+  )
 
   return patchContent(content, parts)
 }
@@ -134,16 +145,25 @@ function getParts (component, options) {
       locale = [locale]
     }
     locale = locale.filter(l => typeof l === 'string')
-    modules = locale.map(l => {
-      return { package: 'veui', path: `locale/${l}`, transform: false, fileName: '{module}.js' }
-    }).concat(modules)
+    modules = locale
+      .map(l => {
+        return {
+          package: 'veui',
+          path: `locale/${l}`,
+          transform: false,
+          fileName: '{module}.js'
+        }
+      })
+      .concat(modules)
 
-    global = locale.map(l => {
-      return { path: `veui/locale/${l}/common` }
-    }).concat(global)
+    global = locale
+      .map(l => {
+        return { path: `veui/locale/${l}/common.js` }
+      })
+      .concat(global)
   }
 
-  let a = modules.reduce(
+  return modules.reduce(
     (
       acc,
       {
@@ -166,10 +186,6 @@ function getParts (component, options) {
       style: []
     }
   )
-
-  console.log(a.script)
-
-  return a
 }
 
 /**
@@ -180,9 +196,7 @@ function getParts (component, options) {
  */
 function patchContent (content, parts) {
   return Object.keys(parts).reduce((content, type) => {
-    let paths = parts[type]
-      .filter(({ valid }) => valid)
-      .map(({ path }) => path)
+    let paths = parts[type].filter(({ valid }) => valid).map(({ path }) => path)
     return patchType(content, type, paths)
   }, content)
 }
@@ -222,7 +236,9 @@ const RE_SCRIPT = /<script(?:\s+[^>]*)?>/i
  * @returns {string} The patched content
  */
 function patchType (content, type, peerPaths) {
-  let normalizedPaths = peerPaths.map(path => normalize(path).replace(/\\/g, '\\\\'))
+  let normalizedPaths = peerPaths.map(path =>
+    normalize(path).replace(/\\/g, '\\\\')
+  )
   switch (type) {
     case 'script':
       let scriptImports = normalizedPaths.map(path => `import '${path}'\n`)
@@ -260,7 +276,7 @@ async function assurePath (modulePath, resolve) {
   } else if (!(modulePath in resolveCache)) {
     if (typeof resolve === 'function') {
       try {
-        resolveCache[modulePath] = !!await resolve(modulePath)
+        resolveCache[modulePath] = !!(await resolve(modulePath))
       } catch (e) {
         resolveCache[modulePath] = false
       }

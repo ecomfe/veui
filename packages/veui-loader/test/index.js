@@ -22,6 +22,8 @@ const SPECS = [
     entry: '../../veui/src/components/Button.vue',
     expect: {
       include: [
+        `\nimport 'veui/locale/en-US/common.js'\n`,
+        `\nimport 'veui-theme-one/components/Button.js'\n`,
         `\nimport 'veui-theme-one/components/Button.js'\n`,
         `\n<style lang="less" src="veui-theme-one/components/button.less"></style>\n`
       ]
@@ -31,6 +33,8 @@ const SPECS = [
     entry: '../../veui/src/components/Calendar.vue',
     expect: {
       include: [
+        `\nimport 'veui/locale/en-US/common.js'\n`,
+        `\nimport 'veui/locale/en-US/Calendar.js'\n`,
         `\nimport 'veui/locale/en-US/Calendar.js'\n`
       ]
     }
