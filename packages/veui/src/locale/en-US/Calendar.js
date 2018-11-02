@@ -4,8 +4,8 @@ i18n.register(
   'en-US',
   {
     calendar: 'Calendar',
-    selectYear: `Select year, currently {year}`,
-    selectMonth: `Select month, currently {month}`,
+    selectYear: 'Select year, currently {year}',
+    selectMonth: 'Select month, currently {month}',
     year: '{year}',
     month: null,
     date: '{date}',

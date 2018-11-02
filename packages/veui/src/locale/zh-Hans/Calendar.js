@@ -4,8 +4,8 @@ i18n.register(
   'zh-Hans',
   {
     calendar: '日历',
-    selectYear: `选择年份，现在是 {year} 年`,
-    selectMonth: `选择月份，现在是 {month} 月`,
+    selectYear: '选择年份，现在是 {year} 年',
+    selectMonth: '选择月份，现在是 {month} 月',
     year: '{year} 年',
     month: '{month} 月',
     date: '{date} 日',
