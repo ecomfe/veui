@@ -1,10 +1,5 @@
-.babelrc
-.editorconfig
-.eslintrc.js
-.gitignore
-.npmignore
-.postcssrc.js
-.travis.yml
+.*
+*.config.js
 build
 config
 demo
