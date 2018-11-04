@@ -12,7 +12,7 @@
     <section>
       <veui-region-picker :datasource="regions2" v-model="selected2"></veui-region-picker>
     </section>
-  </article>
+</article>
 </template>
 
 <script>

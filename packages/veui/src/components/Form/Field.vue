@@ -146,17 +146,17 @@ export default {
   },
   methods: {
     getFieldValue () {
-      return get(this.form.data, this.field)
+      return get(this.form.data, this.realField)
     },
     resetValue () {
       // 清空错误消息，为什么要先做，因为有可能是个fieldset，可以清错误，但是没有值
       this.validities = []
 
-      if (!this.field) {
+      if (!this.realField) {
         return
       }
 
-      let path = this.field.split('.')
+      let path = this.realField.split('.')
       let name = last(path)
       let parentPath
       let match = /(\w+)\[(\d+)\]/.exec(name)
@@ -223,7 +223,7 @@ export default {
   created () {
     this.form.fields.push(this)
     // 如果是 fieldset 或者没写 field，初始值和校验都没有意义
-    if (!this.field) {
+    if (!this.realField) {
       return
     }
 
@@ -231,7 +231,7 @@ export default {
     this.$on('interact', this.handleInteract)
   },
   beforeDestroy () {
-    if (!this.field) {
+    if (!this.realField) {
       return
     }
 
