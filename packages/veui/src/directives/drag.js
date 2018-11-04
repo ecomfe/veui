@@ -114,7 +114,7 @@ function parseParams (el, { arg, value, modifiers }, vnode) {
   }
 }
 
-function refresh (el, { modifiers, value, oldValue, arg }, vnode) {
+function refresh (el, { modifiers, value, arg }, vnode) {
   const params = parseParams(el, { arg, value, modifiers }, vnode)
 
   const oldParams = el.dragOldParams

@@ -76,9 +76,11 @@ export default {
   },
   computed: {
     validity () {
-      return this.validities[0] || {
-        valid: true
-      }
+      return (
+        this.validities[0] || {
+          valid: true
+        }
+      )
     },
     localRules () {
       if (!this.rules) {
@@ -90,16 +92,22 @@ export default {
         rules = type.clone(this.rules)
         rule.initRules(rules)
       } else {
-        rules = this.rules.trim().split(/\s+/).map(perRule => ({
-          name: perRule,
-          value: true
-        }))
+        rules = this.rules
+          .trim()
+          .split(/\s+/)
+          .map(perRule => ({
+            name: perRule,
+            value: true
+          }))
         rule.initRules(rules)
       }
       return rules
     },
     isRequired () {
-      return this.localRules && this.localRules.some(perRule => perRule.name === 'required')
+      return (
+        this.localRules &&
+        this.localRules.some(perRule => perRule.name === 'required')
+      )
     },
     interactiveRulesMap () {
       let map = {}
@@ -131,12 +139,20 @@ export default {
       return map
     },
     realDisabled () {
-      let {disabled, fieldset, form} = this
-      return disabled || (fieldset && fieldset.realDisabled) || (form && form.disabled)
+      let { disabled, fieldset, form } = this
+      return (
+        disabled ||
+        (fieldset && fieldset.realDisabled) ||
+        (form && form.disabled)
+      )
     },
     realReadonly () {
-      let {readonly, fieldset, form} = this
-      return readonly || (fieldset && fieldset.realReadonly) || (form && form.readonly)
+      let { readonly, fieldset, form } = this
+      return (
+        readonly ||
+        (fieldset && fieldset.realReadonly) ||
+        (form && form.readonly)
+      )
     },
     realField () {
       return this.field || this.name
@@ -173,7 +189,11 @@ export default {
       Vue.set(parentValue, name, type.clone(this.initialData))
     },
     validate (rules) {
-      let res = rule.validate(this.getFieldValue(), rules || this.localRules, this.form.data)
+      let res = rule.validate(
+        this.getFieldValue(),
+        rules || this.localRules,
+        this.form.data
+      )
       // 分两种调用
       // 1. 交互式，只清涉及的 rule
       // 2. 完整提交检查，全清
@@ -182,12 +202,11 @@ export default {
       if (!isBoolean(res) || !res) {
         this.validities.unshift(
           // 去掉一些自定义格式不对的 rule，容易排查
-          ...res.filter(({name}) => name)
-            .map(({message, name}) => ({
-              valid: false,
-              message,
-              fields: `native:${name}`
-            }))
+          ...res.filter(({ name }) => name).map(({ message, name }) => ({
+            valid: false,
+            message,
+            fields: `native:${name}`
+          }))
         )
       }
       return res
@@ -209,11 +228,15 @@ export default {
         let validities = this.validities
         // 提供一个仅清除本地检查的方法
         if (fields === 'native:*') {
-          validities = this.validities.filter(validity => !includes(validity.fields, 'native:'))
+          validities = this.validities.filter(
+            validity => !includes(validity.fields, 'native:')
+          )
         } else {
-          validities = this.validities.filter(validity => Array.isArray(fields)
-            ? !includes(fields, validity.fields)
-            : fields !== validity.fields
+          validities = this.validities.filter(
+            validity =>
+              Array.isArray(fields)
+                ? !includes(fields, validity.fields)
+                : fields !== validity.fields
           )
         }
         this.$set(this, 'validities', validities)

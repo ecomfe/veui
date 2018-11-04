@@ -5,7 +5,7 @@ import { isFunction, noop, pick } from 'lodash'
 
 export class AlertManager extends SimpleDialogManager {
   createComponent (data) {
-    let manager = this
+    const manager = this
     return new Vue({
       data: {
         open: false
