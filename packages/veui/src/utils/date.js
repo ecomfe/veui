@@ -1,4 +1,3 @@
-import { flatten } from 'lodash'
 import { includes, merge } from './range'
 
 export function getDaysInMonth (year, month) {
@@ -56,10 +55,16 @@ export function isInRange (day, range) {
   return includes(range.map(toDate), toDate(day))
 }
 
-export function mergeRange (r1, r2) {
-  r1 = flatten(r1).map(toDate)
-  r2 = flatten(r2).map(toDate)
-  return merge(r1, r2, { inc: addDays })
+function prepareRanges (range) {
+  if (!Array.isArray(range[0])) {
+    range = [range]
+  }
+
+  return range.map(r => r.map(toDate).sort((d1, d2) => d1 - d2))
+}
+
+export function mergeRange (r1, r2, mode = 'xor') {
+  return merge(prepareRanges(r1), prepareRanges(r2), { inc: addDays, mode })
 }
 
 const ONE_DAY = 24 * 60 * 60 * 1000
