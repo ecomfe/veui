@@ -250,7 +250,8 @@ export default {
       views,
       id,
       picking: null,
-      pickingRanges: null
+      pickingRanges: null,
+      mergeMode: 'xor'
     }
   },
   computed: {
@@ -462,6 +463,7 @@ export default {
 
       // range selection
       if (!this.picking) {
+        this.mergeMode = day.rangePosition.within ? 'substract' : 'union'
         this.picking = [selected]
         this.$emit('selectstart', selected)
         this.markEnd(day)
@@ -492,7 +494,7 @@ export default {
           if (!marked) {
             this.$set(this.picking, 1, this.picking[0])
           }
-          this.pickingRanges = mergeRange(this.picking, this.realSelected)
+          this.pickingRanges = mergeRange(this.realSelected, this.picking, this.mergeMode)
         }
         this.$emit('selectprogress', this.pickingRanges || this.picking)
       }

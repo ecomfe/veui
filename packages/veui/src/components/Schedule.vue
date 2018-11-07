@@ -196,7 +196,8 @@ export default {
       week: [1, 2, 3, 4, 5, 6, 0],
       pickingStart: null,
       pickingEnd: null,
-      current: null
+      current: null,
+      mergeMode: 'xor'
     }
   },
   watch: {
@@ -324,7 +325,7 @@ export default {
         if (!daySelected) {
           selected[day] = [range]
         } else {
-          selected[day] = merge(daySelected, range)
+          selected[day] = merge(daySelected, range, { mode: this.mergeMode })
         }
 
         if (!selected[day] || !selected[day].length) {
@@ -361,6 +362,7 @@ export default {
       }
     },
     handleMousedown (dayIndex, hour) {
+      this.mergeMode = this.hourlyStates[dayIndex][hour].isSelected ? 'substract' : 'union'
       this.startPicking(dayIndex, hour)
       this.updateCurrent(dayIndex, hour)
     },
