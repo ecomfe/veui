@@ -35,6 +35,7 @@ import Icon from './Icon'
 import Slider from './Slider'
 import NumberInput from './NumberInput'
 import Grid from './Grid'
+import Link from './Link'
 
 export default [
   {
@@ -116,6 +117,11 @@ export default [
     path: '/input',
     name: 'Input',
     component: Input
+  },
+  {
+    path: '/link',
+    name: 'Link',
+    component: Link
   },
   {
     path: '/number-input',
