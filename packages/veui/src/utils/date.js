@@ -42,6 +42,12 @@ export function isSameDay (src, target) {
   if (!src || !target) {
     return false
   }
+  if (typeof src === 'number' && typeof target === 'number') {
+    return src === target
+  }
+  if (src instanceof Date && target instanceof Date) {
+    return src.getTime() === target.getTime()
+  }
   let srcData = toDateData(src)
   let targetData = toDateData(target)
   return (
