@@ -51,6 +51,7 @@
 
 * [^] 修正了 `GridContainer` 的左右边距计算。
 * [^] 修正了 `Link` 组件在默认模式下 `disabled` 未起效的问题。
+* [^] 修正了 `Uploader` 组件 `remove` 事件的回调参数 `file` 提供了错误的文件的问题。
 
 ## 1.0.0-alpha.18
 
