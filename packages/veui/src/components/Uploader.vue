@@ -747,18 +747,18 @@ export default {
       this.error.countOverflow = false
 
       let index = this.fileList.indexOf(file)
+      if (!this.isReplacing) {
+        this.$emit('remove', this.files[index], index)
+      }
+
       if (this.maxCount === 1) {
         this.fileList = []
       } else {
-        this.fileList.splice(this.fileList.indexOf(file), 1)
+        this.fileList.splice(index, 1)
       }
 
       if (!file.toBeUploaded) {
         this.$emit('change', this.getValue(true))
-      }
-
-      if (!this.isReplacing) {
-        this.$emit('remove', this.files[index], index)
       }
     },
     cancelFile (file) {
