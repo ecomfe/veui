@@ -12,5 +12,8 @@ test(t => {
     ]
   })
 
-  t.is(code, readFileSync(resolve(__dirname, './fixtures/expected.js'), 'utf8'))
+  let expect = readFileSync(resolve(__dirname, './fixtures/expected.js'), 'utf8')
+  expect = expect.replace(/\r\n/gm, '\n')
+  code = code.replace(/\r\n/gm, '\n')
+  t.is(code, expect)
 })

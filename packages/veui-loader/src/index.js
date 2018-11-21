@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import pkgDir from 'pkg-dir'
+import slash from 'slash'
 import loaderUtils from 'loader-utils'
 import { kebabCase, camelCase, pascalCase, getJSON, normalize } from './utils'
 import COMPONENTS from 'veui/components.json'
@@ -177,7 +178,7 @@ function getParts (component, options) {
         transform,
         template: fileName
       })
-      let peerPath = path.join(pack, packPath, peerComponent)
+      let peerPath = slash(path.join(pack, packPath, peerComponent))
       pushPart(acc, { path: peerPath })
       return acc
     },
@@ -237,7 +238,7 @@ const RE_SCRIPT = /<script(?:\s+[^>]*)?>/i
  */
 function patchType (content, type, peerPaths) {
   let normalizedPaths = peerPaths.map(path =>
-    normalize(path).replace(/\\/g, '\\\\')
+    slash(normalize(path))
   )
   switch (type) {
     case 'script':
