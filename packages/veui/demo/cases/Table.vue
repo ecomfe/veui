@@ -22,7 +22,7 @@
       ]"/>
     </section>
     <section>
-      <veui-table ui="alt bordered" :data="data" :column-filter="columns" :key-field="selectSpanRow ? 'group' : 'id'" selectable
+      <veui-table ui="alt bordered custom" scroll="150" :data="data" :column-filter="columns" :key-field="selectSpanRow ? 'group' : 'id'" selectable
         :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected.sync="selected1">
         <veui-table-column field="id" title="数据 ID" sortable>
           <template slot="head"><strong>数据 <span style="color: #3998fc">ID</span></strong></template>

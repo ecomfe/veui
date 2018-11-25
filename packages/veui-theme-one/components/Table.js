@@ -9,7 +9,7 @@ config.defaults({
       boolean: true
     },
     bordered: {
-      bolean: true
+      boolean: true
     }
   }
 }, 'table')
