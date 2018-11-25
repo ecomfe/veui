@@ -40,6 +40,8 @@ export default {
             } else {
               result[name] = token
             }
+          } else {
+            result.$unknown.push(token)
           }
           return result
         },
@@ -51,7 +53,9 @@ export default {
             result[name] = prop.default || 'default'
           }
           return result
-        }, {})
+        }, {
+          $unknown: []
+        })
       )
     },
     uiConfig () {
@@ -59,7 +63,7 @@ export default {
     },
     uiData () {
       let { uiConfig = {}, uiProps } = this
-      return keys(uiProps).reduce((result, name) => {
+      return keys(uiProps).filter(name => name !== '$unknown').reduce((result, name) => {
         let data = get(uiConfig[name], ['data', uiProps[name]], {})
         merge(result, data)
         return result
@@ -79,25 +83,29 @@ export default {
         return this.ui
       }
 
-      return pickBy(this.uiProps, (val, key) => {
+      return pickBy(this.uiProps, (_, key) => {
         let uiProp = this.uiConfig[key]
-        return !!uiProp.inherit
+        return uiProp && uiProp.inherit
       })
     },
     realUi () {
       // merge ui & $parent's inheritedUi
       let { uiProps = {} } = this
       let overrides = pickBy(uiProps, (val, key) => {
-        return val !== 'default' || val === true
+        return key !== '$unknown' && (val !== 'default' || val === true)
       })
       let { inheritedUiProps = {} } = this.$parent || {}
       let props = { ...inheritedUiProps, ...overrides }
-      return keys(props).map(key => {
-        if (props[key] === true) {
-          return key
-        }
-        return props[key]
-      }).filter(val => val !== 'default').join(' ') || null
+      return keys(props)
+        .map(key => {
+          if (props[key] === true) {
+            return key
+          }
+          return props[key]
+        })
+        .filter(val => val !== 'default' && val !== false)
+        .concat(uiProps.$unknown)
+        .join(' ') || null
     }
   },
   methods: {
