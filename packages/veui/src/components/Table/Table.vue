@@ -1,24 +1,47 @@
 <template>
-<table class="veui-table" :ui="realUi">
-  <slot/>
-  <colgroup>
-    <col v-if="selectable" width="60"/>
-    <col v-for="col in realColumns" :width="col.width" :key="col.field"/>
-  </colgroup>
-  <table-head @sort="sort"/>
-  <table-body><template slot="no-data"><slot name="no-data">{{ t('noData') }}</slot></template></table-body>
-  <table-foot v-if="hasFoot"><slot name="foot"></slot></table-foot>
-</table>
+<div class="veui-table" :ui="realUi">
+  <div v-if="realScroll.y" class="veui-table-fixed-header" aria-hidden="true">
+    <table>
+      <colgroup gutter/>
+      <table-head @sort="sort"/>
+    </table>
+  </div>
+  <div
+    class="veui-table-main"
+    ref="main"
+    :style="{
+      maxHeight: realScroll.y
+    }"
+  >
+    <table>
+      <slot/>
+      <colgroup/>
+      <table-head v-if="!realScroll.y" @sort="sort"/>
+      <table-body><template slot="no-data"><slot name="no-data">{{ t('noData') }}</slot></template></table-body>
+      <table-foot v-if="!realScroll.y && hasFoot"><slot name="foot"/></table-foot>
+    </table>
+  </div>
+  <div v-if="realScroll.y" class="veui-table-fixed-footer" aria-hidden="true">
+    <table>
+      <colgroup gutter/>
+      <table-foot v-if="hasFoot"><slot name="foot"/></table-foot>
+    </table>
+  </div>
+</div>
 </template>
 
 <script>
 import warn from '../../utils/warn'
+import { normalizeLength } from '../../utils/helper'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
-import { map, intersection, includes, indexOf, keys as objectKeys, find } from 'lodash'
+import resize from '../../directives/resize'
+import { map, mapValues, intersection, includes, indexOf, keys as objectKeys, find } from 'lodash'
 import Body from './_TableBody'
 import Head from './_TableHead'
 import Foot from './_TableFoot'
+import ColGroup from './_ColGroup'
+import { getElementScrollbarWidth } from '../../utils/browser'
 import '../../common/uiTypes'
 import { isEqualSet } from '../../utils/lang'
 
@@ -29,7 +52,11 @@ export default {
   components: {
     'table-body': Body,
     'table-head': Head,
-    'table-foot': Foot
+    'table-foot': Foot,
+    'col-group': ColGroup
+  },
+  directives: {
+    resize
   },
   props: {
     data: {
@@ -38,6 +65,7 @@ export default {
         return []
       }
     },
+    scroll: [Number, String, Object],
     keys: [String, Array],
     keyField: String,
     selectable: Boolean,
@@ -66,7 +94,8 @@ export default {
   data () {
     return {
       columns: [],
-      localSelected: normalizeArray(this.selected)
+      localSelected: normalizeArray(this.selected),
+      gutterWidth: 0
     }
   },
   computed: {
@@ -81,6 +110,18 @@ export default {
         return this.columns
       }
       return this.columns.filter(col => includes(this.columnFilter, col.field))
+    },
+    realScroll () {
+      let { scroll } = this
+      if (typeof scroll === 'number' || typeof scroll === 'string') {
+        return {
+          y: normalizeLength(scroll)
+        }
+      }
+      return mapValues(scroll || {}, normalizeLength)
+    },
+    columnWidths () {
+      return this.realColumns.map(({ width }) => normalizeLength(width))
     },
     realKeys () {
       if (this.keyField) {
@@ -185,10 +226,23 @@ export default {
         return false
       }
       return true
+    },
+    updateLayout () {
+      this.gutterWidth = getElementScrollbarWidth(this.$refs.main)
     }
   },
   created () {
     this.validateSelected()
+  },
+  mounted () {
+    if (this.maxHeight) {
+      this.updateLayout()
+    }
+  },
+  updated () {
+    if (this.maxHeight) {
+      this.updateLayout()
+    }
   },
   watch: {
     selected (val) {

@@ -1,15 +1,37 @@
 @import "../lib.less";
 
 .veui-table {
-  table-layout: fixed;
-  width: 100%;
-  border-collapse: collapse;
   color: @veui-text-color-normal;
+
+  table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
+
+  &-fixed-header {
+    position: relative;
+    margin-bottom: -1px;
+    border-bottom: 1px solid @veui-gray-color-7;
+  }
+
+  &-fixed-footer {
+    margin-top: -1px;
+    border-top: 1px solid @veui-gray-color-7;
+  }
+
+  &-fixed-header + &-main {
+    overflow: auto;
+  }
 
   &-cell {
     display: inline-block;
     line-height: 2;
     vertical-align: middle;
+  }
+
+  &-row-selector {
+    width: 60px;
   }
 
   th,
@@ -31,6 +53,7 @@
 
   tfoot th {
     border-top: none;
+    border-bottom: 1px solid @veui-gray-color-7;
   }
 
   td&-no-data {
