@@ -3,6 +3,8 @@ import warn from '../utils/warn'
 import config from '../managers/config'
 import { compact, uniq, find, includes, get, merge, keys, pickBy } from 'lodash'
 
+const UNKNOWN_KEY = '$unknown'
+
 export default {
   props: {
     ui: String
@@ -41,7 +43,7 @@ export default {
               result[name] = token
             }
           } else {
-            result.$unknown.push(token)
+            result[UNKNOWN_KEY].push(token)
           }
           return result
         },
@@ -54,7 +56,7 @@ export default {
           }
           return result
         }, {
-          $unknown: []
+          [UNKNOWN_KEY]: []
         })
       )
     },
@@ -63,7 +65,7 @@ export default {
     },
     uiData () {
       let { uiConfig = {}, uiProps } = this
-      return keys(uiProps).filter(name => name !== '$unknown').reduce((result, name) => {
+      return keys(uiProps).filter(name => name !== UNKNOWN_KEY).reduce((result, name) => {
         let data = get(uiConfig[name], ['data', uiProps[name]], {})
         merge(result, data)
         return result
@@ -92,7 +94,7 @@ export default {
       // merge ui & $parent's inheritedUi
       let { uiProps = {} } = this
       let overrides = pickBy(uiProps, (val, key) => {
-        return key !== '$unknown' && (val !== 'default' || val === true)
+        return key !== UNKNOWN_KEY && (val !== 'default' || val === true)
       })
       let { inheritedUiProps = {} } = this.$parent || {}
       let props = { ...inheritedUiProps, ...overrides }
@@ -104,7 +106,7 @@ export default {
           return props[key]
         })
         .filter(val => val !== 'default' && val !== false)
-        .concat(uiProps.$unknown)
+        .concat(uiProps[UNKNOWN_KEY])
         .join(' ') || null
     }
   },
