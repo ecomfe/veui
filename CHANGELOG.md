@@ -45,6 +45,7 @@
 * `Field` 组件对应的数据字段名现在默认优先取 `name` prop，且可以被 `field` prop 覆盖。
 * `rule` 模板占位符由 `${...}` 变更为 `{...}`，以方便在模板字符串中进行书写。老语法仍然保持兼容。
 * `Calendar`、`DatePicker` 与 `Schedule` 的范围合并逻辑现在默认为“智能”模式，当用户从已选项开始选择范围时，将从整体已选范围中去除当前选区；当从未选项开始选择时，则将当前选区并入整体。
+* `Table` 组件形状 prop `scroll`，用来限定内容滚动区域的最大高度，设置时会使得表格的头/脚固定。
 * `Link` 组件新增 prop `rel`、`target`，当 `target` 为 `_blank` 时自动为 `rel` 增加 `noopener` 值，以增强安全性。
 
 ### 🐞 问题修复
@@ -52,6 +53,7 @@
 * [^] 修正了 `GridContainer` 的左右边距计算。
 * [^] 修正了 `Link` 组件在默认模式下 `disabled` 未起效的问题。
 * [^] 修正了 `Uploader` 组件 `remove` 事件的回调参数 `file` 提供了错误的文件的问题。
+* [^] 修正了未注册的 `ui` 值不能直接输出的问题（[#378](https://github.com/ecomfe/veui/issues/378)）。
 
 ## 1.0.0-alpha.18
 
