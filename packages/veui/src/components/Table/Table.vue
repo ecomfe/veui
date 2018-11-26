@@ -1,8 +1,8 @@
 <template>
 <div class="veui-table" :ui="realUi">
-  <div v-if="realScroll.y" class="veui-table-fixed-header" aria-hidden="true">
+  <div v-if="scrollableY" class="veui-table-fixed-header" aria-hidden="true">
     <table>
-      <colgroup gutter/>
+      <col-group gutter/>
       <table-head @sort="sort"/>
     </table>
   </div>
@@ -10,20 +10,20 @@
     class="veui-table-main"
     ref="main"
     :style="{
-      maxHeight: realScroll.y
+      maxHeight: scrollableY ? realScroll.y : null
     }"
   >
     <table>
       <slot/>
-      <colgroup/>
-      <table-head v-if="!realScroll.y" @sort="sort"/>
+      <col-group/>
+      <table-head v-if="!scrollableY" @sort="sort"/>
       <table-body><template slot="no-data"><slot name="no-data">{{ t('noData') }}</slot></template></table-body>
-      <table-foot v-if="!realScroll.y && hasFoot"><slot name="foot"/></table-foot>
+      <table-foot v-if="!scrollableY && hasFoot"><slot name="foot"/></table-foot>
     </table>
   </div>
-  <div v-if="realScroll.y" class="veui-table-fixed-footer" aria-hidden="true">
+  <div v-if="scrollableY" class="veui-table-fixed-footer" aria-hidden="true">
     <table>
-      <colgroup gutter/>
+      <col-group gutter/>
       <table-foot v-if="hasFoot"><slot name="foot"/></table-foot>
     </table>
   </div>
@@ -167,6 +167,9 @@ export default {
     },
     hasFoot () {
       return this.$slots.foot || this.columns.some(col => col.hasFoot())
+    },
+    scrollableY () {
+      return this.realScroll.y && this.data.length
     }
   },
   methods: {
