@@ -10,6 +10,7 @@ export default {
     ...table.mapTableData(
       { realColumns: 'columns' },
       'selectable',
+      'expandable',
       'columnWidths',
       'gutterWidth'
     )
@@ -17,7 +18,8 @@ export default {
   render () {
     return (
       <colgroup>
-        {this.selectable ? <col class="veui-table-row-selector" /> : null}
+        {this.selectable ? <col class="veui-table-col-select" /> : null}
+        {this.expandable ? <col class="veui-table-col-expand" /> : null}
         {this.columns.map((col, i) => (
           <col
             style={{
