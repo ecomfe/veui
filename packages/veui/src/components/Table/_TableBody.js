@@ -15,7 +15,7 @@ export default {
       'selectable',
       'expandable',
       'keyField',
-      'keys',
+      { realKeys: 'keys' },
       { localExpanded: 'expanded' },
       { realColumns: 'columns' },
       { viewColumnCount: 'columnCount' }
