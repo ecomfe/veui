@@ -71,6 +71,42 @@
       </veui-table>
       <p>已选ID：{{ JSON.stringify(selected2) }}</p>
     </section>
+    <section class="container">
+      <veui-table :data="data" :column-filter="columns" key-field="id" selectable expandable>
+        <veui-table-column field="id" title="数据 ID"/>
+        <veui-table-column field="desc" title="数据描述"/>
+        <veui-table-column field="price" title="价格" width="160" align="right">
+          <template slot-scope="props">{{ props.item.price | currency }}</template>
+        </veui-table-column>
+        <veui-table-column field="updateDate" title="更新时间" align="right">
+          <template slot-scope="props">
+            <span :ref="`time-b-${props.item.id}`">{{ props.item.updateDate | date }}</span>
+            <veui-tooltip :target="`time-b-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
+          </template>
+        </veui-table-column>
+        <template slot="sub-row" slot-scope="{ desc }">{{ desc }}</template>
+      </veui-table>
+    </section>
+    <section class="container">
+      <veui-table :data="data" :column-filter="columns" key-field="id" expandable>
+        <veui-table-column field="id" title="数据 ID">
+          <template slot="sub-row" slot-scope="{ id }">
+            <em>{{ id }}</em>
+          </template>
+        </veui-table-column>
+        <veui-table-column field="desc" title="数据描述"/>
+        <veui-table-column field="price" title="价格" width="160" align="right">
+          <template slot-scope="props">{{ props.item.price | currency }}</template>
+        </veui-table-column>
+        <veui-table-column field="updateDate" title="更新时间" align="right">
+          <template slot-scope="props">
+            <span :ref="`time-b-${props.item.id}`">{{ props.item.updateDate | date }}</span>
+            <veui-tooltip :target="`time-b-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
+          </template>
+        </veui-table-column>
+        <template slot="foot">An awesome table foot!</template>
+      </veui-table>
+    </section>
   </article>
 </template>
 
@@ -106,16 +142,68 @@ export default {
       selectSpanRow: true,
       data: [
         {
-          id: '3154', desc: '数据描述1', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+          id: '3154',
+          desc: '数据描述1',
+          price: 1024,
+          updateDate: '20131117',
+          group: '1577',
+          typeId: '788',
+          children: [
+            {
+              id: '31541', desc: '数据描述1-1', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+            },
+            {
+              id: '31542', desc: '数据描述1-2', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+            }
+          ]
         },
         {
-          id: '3155', desc: '数据描述2', price: 598, updateDate: '20140214', group: '1577', typeId: '788'
+          id: '3155',
+          desc: '数据描述2',
+          price: 598,
+          updateDate: '20140214',
+          group: '1577',
+          typeId: '788',
+          children: [
+            {
+              id: '31551', desc: '数据描述2-1', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+            },
+            {
+              id: '31552', desc: '数据描述2-2', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+            }
+          ]
         },
         {
-          id: '3156', desc: '数据描述3', price: 820, updateDate: '20170610', group: '1578', typeId: '788'
+          id: '3156',
+          desc: '数据描述3',
+          price: 820,
+          updateDate: '20170610',
+          group: '1578',
+          typeId: '788',
+          children: [
+            {
+              id: '31561', desc: '数据描述3-1', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+            },
+            {
+              id: '31562', desc: '数据描述3-2', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+            }
+          ]
         },
         {
-          id: '3157', desc: '数据描述4', price: 736, updateDate: '20180109', group: '1578', typeId: '788'
+          id: '3157',
+          desc: '数据描述4',
+          price: 736,
+          updateDate: '20180109',
+          group: '1578',
+          typeId: '788',
+          children: [
+            {
+              id: '31571', desc: '数据描述4-1', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+            },
+            {
+              id: '31572', desc: '数据描述4-2', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+            }
+          ]
         }
       ],
       nextId: 3158,

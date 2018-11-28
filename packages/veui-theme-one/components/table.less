@@ -30,8 +30,12 @@
     vertical-align: middle;
   }
 
-  &-row-selector {
+  &-col-select {
     width: 60px;
+  }
+
+  &-col-expand {
+    width: 24px;
   }
 
   th,
@@ -40,6 +44,7 @@
     .padding(_, 16px);
     text-align: left;
     white-space: nowrap;
+    transition: background-color @veui-transition-duration;
   }
 
   th {
@@ -59,12 +64,6 @@
   td&-no-data {
     height: 300px;
     text-align: center;
-  }
-
-  .veui-table-selected-row {
-    td {
-      background-color: @veui-gray-color-9;
-    }
   }
 
   tr:hover {
@@ -104,6 +103,64 @@
     font-size: @veui-font-size-small;
   }
 
+  & &-cell-expand {
+    padding: 0 0 0 10px;
+    text-align: center;
+
+    & + th,
+    & + td {
+      padding-left: 10px;
+    }
+  }
+
+  &-cell-expand {
+    button {
+      .size(1em);
+      background: none;
+      outline: none;
+      border: none;
+      padding: 0;
+      color: @veui-text-color-weak;
+      cursor: pointer;
+      vertical-align: middle;
+      .veui-button-transition();
+
+      &:hover,
+      &.focus-visible {
+        color: @veui-brand-color;
+      }
+
+      &:active {
+        color: @veui-brand-color-1;
+      }
+
+      .veui-icon {
+        display: block;
+      }
+    }
+  }
+
+  &-sub-row {
+    td {
+      background-color: @veui-gray-color-8;
+    }
+
+    &:hover .veui-table-cell-expand {
+      background-color: #fff;
+    }
+  }
+
+  &-sub-row &-cell-expand {
+    position: relative;
+    background-color: #fff;
+
+    &::before {
+      content: "";
+      .absolute(-1px, 0, _);
+      border-top: 1px solid #fff;
+    }
+  }
+
   &[ui~="slim"] {
     th,
     td {
@@ -126,6 +183,14 @@
 
     &:last-child {
       border-right: none;
+    }
+  }
+
+  &-expander {
+    transition: transform @veui-transition-duration;
+
+    &-collapse {
+      transform: rotateZ(90deg);
     }
   }
 }

@@ -37,17 +37,27 @@ export default {
 
     const props = ['title', 'field', 'sortable', 'width', 'align', 'span']
 
+    let renderBody = item => {
+      let defaultRow = this.$scopedSlots.default
+      if (defaultRow) {
+        return defaultRow(item)
+      }
+      return item[this.field]
+    }
+
     this.table.add({
       ...pick(this, ...props, 'id'),
       index,
       hasFoot: () => {
         return !!this.$slots.foot
       },
-      renderBody: item => {
-        if (this.$scopedSlots.default) {
-          return this.$scopedSlots.default(item)
+      renderBody,
+      renderSubRow: item => {
+        let expandRow = this.$scopedSlots['sub-row']
+        if (expandRow) {
+          return expandRow(item)
         }
-        return item[this.field]
+        return renderBody(item)
       },
       renderHead: () => {
         return this.$slots.head || this.title

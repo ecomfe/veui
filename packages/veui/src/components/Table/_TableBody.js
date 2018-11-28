@@ -1,6 +1,7 @@
 import Row from './_TableRow'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
+import { flatMap } from 'lodash'
 
 export default {
   name: 'veui-table-body',
@@ -12,19 +13,46 @@ export default {
     ...table.mapTableData(
       'data',
       'selectable',
-      { realColumns: 'columns' }
+      'expandable',
+      'keyField',
+      'keys',
+      { localExpanded: 'expanded' },
+      { realColumns: 'columns' },
+      { viewColumnCount: 'columnCount' }
     )
   },
   render () {
+    let subRow = this.table.$scopedSlots['sub-row']
+
     return (
       <tbody>
         {
           this.data.length
-            ? this.data.map((_, index) => <veui-table-row index={index}/>)
+            ? flatMap(this.data, (item, index) => {
+              let key = this.keyField
+                ? item[this.keyField]
+                : this.keys[index]
+              let expanded = this.expanded.indexOf(key) !== -1
+              let rows = [<veui-table-row index={index} expanded={expanded}/>]
+
+              if (this.expandable && expanded) {
+                if (subRow) {
+                  rows.push(<veui-table-row>{subRow({ ...item, index })}</veui-table-row>)
+                } else {
+                  rows = rows.concat((item.children || []).map(item => {
+                    return (
+                      <veui-table-row item={item} index={index}/>
+                    )
+                  }))
+                }
+              }
+
+              return rows
+            })
             : <tr>
               <td
                 class="veui-table-no-data"
-                colspan={(this.selectable ? 1 : 0) + this.columns.length}
+                colspan={this.columnCount}
                 role="cell">
                 <div class="veui-table-cell">{this.$slots['no-data'] || this.t('@table.noData')}</div>
               </td>

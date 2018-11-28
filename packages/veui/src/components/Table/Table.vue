@@ -35,8 +35,7 @@ import warn from '../../utils/warn'
 import { normalizeLength } from '../../utils/helper'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
-import resize from '../../directives/resize'
-import { map, mapValues, intersection, includes, indexOf, keys as objectKeys, find } from 'lodash'
+import { map, mapValues, intersection, includes, keys as objectKeys, find } from 'lodash'
 import Body from './_TableBody'
 import Head from './_TableHead'
 import Foot from './_TableFoot'
@@ -55,9 +54,6 @@ export default {
     'table-foot': Foot,
     'col-group': ColGroup
   },
-  directives: {
-    resize
-  },
   props: {
     data: {
       type: Array,
@@ -69,6 +65,7 @@ export default {
     keys: [String, Array],
     keyField: String,
     selectable: Boolean,
+    expandable: Boolean,
     selectMode: {
       type: String,
       default: 'multiple',
@@ -77,6 +74,12 @@ export default {
       }
     },
     selected: {
+      default () {
+        return []
+      }
+    },
+    expanded: {
+      type: Array,
       default () {
         return []
       }
@@ -95,6 +98,7 @@ export default {
     return {
       columns: [],
       localSelected: normalizeArray(this.selected),
+      localExpanded: [...this.expanded],
       gutterWidth: 0
     }
   },
@@ -122,6 +126,9 @@ export default {
     },
     columnWidths () {
       return this.realColumns.map(({ width }) => normalizeLength(width))
+    },
+    viewColumnCount () {
+      return this.columns.length + (this.selectable ? 1 : 0) + (this.expandable ? 1 : 0)
     },
     realKeys () {
       if (this.keyField) {
@@ -189,9 +196,7 @@ export default {
       let item = null
       if (index !== undefined) {
         item = this.data[index]
-        let key = this.keyField
-          ? item[this.keyField]
-          : this.realKeys[index]
+        let key = this.getKeyByIndex(index)
         if (selected) {
           if (this.selectMode === 'multiple') {
             this.localSelected.push(key)
@@ -199,7 +204,7 @@ export default {
             this.localSelected = [key]
           }
         } else {
-          this.localSelected.splice(indexOf(this.localSelected, key), 1)
+          this.localSelected.splice(this.localSelected.indexOf(key), 1)
         }
       } else {
         if (selected) {
@@ -210,12 +215,26 @@ export default {
       }
       this.$emit('select', selected, item, this.selectedItems)
     },
+    expand (expanded, index) {
+      let key = this.getKeyByIndex(index)
+      if (expanded) {
+        this.localExpanded.push(key)
+      } else {
+        this.localExpanded.splice(this.localExpanded.indexOf(key), 1)
+      }
+    },
+    getKeyByIndex (index) {
+      let item = this.data[index]
+      return this.keyField
+        ? item[this.keyField]
+        : this.realKeys[index]
+    },
     getItems (key) {
       if (this.keyField) {
         let items = this.data.filter(item => item[this.keyField] === key)
         return items.length === 1 ? items[0] : items
       }
-      return this.data[indexOf(this.realKeys, key)]
+      return this.data[this.realKeys.indexOf(key)]
     },
     sort (field, order) {
       this.$emit('sort', field, order)
@@ -251,6 +270,14 @@ export default {
     selected (val) {
       if (this.validateSelected(val)) {
         this.localSelected = normalizeArray(val)
+      }
+    },
+    expanded (val) {
+      this.localExpanded = val
+    },
+    localExpanded (val, oldVal) {
+      if (val === oldVal || !isEqualSet(val, oldVal)) {
+        this.$emit('update:expanded', val)
       }
     },
     realKeys (val) {

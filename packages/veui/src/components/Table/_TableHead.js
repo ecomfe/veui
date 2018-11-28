@@ -18,7 +18,9 @@ export default {
       'selectable',
       'selectMode',
       'selectStatus',
-      { realColumns: 'columns' }
+      'expandable',
+      { realColumns: 'columns' },
+      { viewColumnCount: 'columnCount' }
     )
   },
   render () {
@@ -28,7 +30,7 @@ export default {
           {
             this.selectable
               ? (
-                <th scope="col" role="columnheader">
+                <th scope="col" role="columnheader" class="veui-table-cell-select">
                   <div class="veui-table-cell">
                     {
                       this.selectMode === 'multiple'
@@ -43,6 +45,7 @@ export default {
               )
               : null
           }
+          {this.expandable ? <th class="veui-table-cell-expand"></th> : null}
           {
             this.columns.map(col => (
               <th
