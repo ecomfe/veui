@@ -26,13 +26,6 @@ export default {
   model: {
     event: 'change'
   },
-  components: {
-    'veui-icon': Icon,
-    'veui-button': Button,
-    'veui-option': Option,
-    'veui-option-group': OptionGroup,
-    'veui-overlay': Overlay
-  },
   props: {
     value: null,
     placeholder: String,
@@ -92,7 +85,7 @@ export default {
         'veui-input-invalid': this.realInvalid
       }}
       ui={this.realUi}>
-      <veui-button
+      <Button
         ref="button"
         class="veui-select-button"
         aria-haspopup="listbox"
@@ -108,12 +101,12 @@ export default {
               : this.label
           }
         </span>
-        <veui-icon
+        <Icon
           class="veui-select-icon"
           name={this.icons[this.expanded ? 'collapse' : 'expand']}/>
-      </veui-button>
+      </Button>
       {
-        <veui-overlay
+        <Overlay
           v-show={this.expanded}
           target="button"
           open={this.expanded}
@@ -142,10 +135,10 @@ export default {
             {this.$slots.before}
             {
               this.clearable
-                ? <veui-option value={null} label={this.realPlaceholder}/>
+                ? <Option value={null} label={this.realPlaceholder}/>
                 : null
             }
-            <veui-option-group
+            <OptionGroup
               ref="options"
               options={this.realOptions}
               ui={this.realUi}
@@ -155,10 +148,10 @@ export default {
                 'option-label': this.$scopedSlots['option-label'] || null
               }}>
               {this.$slots.default}
-            </veui-option-group>
+            </OptionGroup>
             {this.$slots.after}
           </div>
-        </veui-overlay>
+        </Overlay>
       }
     </div>
   },

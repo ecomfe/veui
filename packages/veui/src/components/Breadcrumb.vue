@@ -5,9 +5,6 @@ import ui from '../mixins/ui'
 export default {
   name: 'veui-breadcrumb',
   mixins: [ui],
-  components: {
-    'veui-breadcrumb-item': BreadcrumbItem
-  },
   props: {
     routes: {
       type: Array,
@@ -35,7 +32,7 @@ export default {
       <ol class="veui-breadcrumb" role="navigation">
         {
           this.$slots.default || this.localRoutes.map((route, index) => (
-            <veui-breadcrumb-item to={route.to}
+            <BreadcrumbItem to={route.to}
               replace={route.replace}
               type={route.type}
               native={route.native}
@@ -52,7 +49,7 @@ export default {
                     : null
                 }
               </template>
-            </veui-breadcrumb-item>
+            </BreadcrumbItem>
           )) || this.$slots.default
         }
       </ol>
