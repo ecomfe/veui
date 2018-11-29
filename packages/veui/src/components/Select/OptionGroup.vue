@@ -19,11 +19,6 @@ export default {
   name: 'veui-option-group',
   uiTypes: ['menu'],
   mixins: [ui, menu, select, overlay, keySelect],
-  components: {
-    'veui-option': Option,
-    'veui-overlay': Overlay,
-    'veui-icon': Icon
-  },
   directives: {
     outside
   },
@@ -77,37 +72,42 @@ export default {
       ? this.options.map((opt, i) => {
         let option = { ...opt, selected: opt.value === this.value }
         return option.options
-          ? <veui-option-group
-            label={option.label}
-            options={option.options}
-            position={option.position}
-            key={i}
-            scopedSlots={{
-              'group-label': this.$scopedSlots['group-label']
-                ? group => this.$scopedSlots['group-label'](group) || group.label
-                : null,
-              option: this.$scopedSlots.option || null,
-              'option-label': this.$scopedSlots['option-label'] || null
-            }}/>
-          : <veui-option
-            label={option.label}
-            value={option.value}
-            hidden={option.hidden}
-            disabled={option.disabled}
-            key={i}>
-            {
-              this.$scopedSlots.option
-                ? this.$scopedSlots.option(option)
-                : null
-            }
-            <template slot="label">
+          ? (
+            <OptionGroup
+              label={option.label}
+              options={option.options}
+              position={option.position}
+              key={i}
+              scopedSlots={{
+                'group-label': this.$scopedSlots['group-label']
+                  ? group => this.$scopedSlots['group-label'](group) || group.label
+                  : null,
+                option: this.$scopedSlots.option || null,
+                'option-label': this.$scopedSlots['option-label'] || null
+              }}
+            />
+          )
+          : (
+            <Option
+              label={option.label}
+              value={option.value}
+              hidden={option.hidden}
+              disabled={option.disabled}
+              key={i}>
               {
-                this.$scopedSlots['option-label']
-                  ? this.$scopedSlots['option-label'](option)
+                this.$scopedSlots.option
+                  ? this.$scopedSlots.option(option)
                   : null
               }
-            </template>
-          </veui-option>
+              <template slot="label">
+                {
+                  this.$scopedSlots['option-label']
+                    ? this.$scopedSlots['option-label'](option)
+                    : null
+                }
+              </template>
+            </Option>
+          )
       })
       : this.$slots.default
 
@@ -156,7 +156,7 @@ export default {
             </span>
             {
               this.canPopOut
-                ? <veui-icon class="veui-option-group-expandable" name={this.icons.expandable}/>
+                ? <Icon class="veui-option-group-expandable" name={this.icons.expandable}/>
                 : null
             }
           </LabelTag>
@@ -164,36 +164,38 @@ export default {
       }
       {
         this.canPopOut
-          ? <veui-overlay
-            ref="overlay"
-            target="button"
-            open={this.expanded}
-            options={this.realOverlayOptions}
-            overlayClass={this.mergeOverlayClass('veui-option-group-box')}
-            autofocus
-            modal>
-            <div
-              ref="box"
-              class="veui-option-group-options"
-              tabindex="-1"
-              role={this.popupRole}
-              aria-expanded={String(this.expanded)}
-              ui={this.realUi}
-              {...{
-                directives: [{
-                  name: 'outside',
-                  value: {
-                    refs: this.outsideRefs,
-                    handler: () => {
-                      this.expanded = false
+          ? (
+            <Overlay
+              ref="overlay"
+              target="button"
+              open={this.expanded}
+              options={this.realOverlayOptions}
+              overlayClass={this.mergeOverlayClass('veui-option-group-box')}
+              autofocus
+              modal>
+              <div
+                ref="box"
+                class="veui-option-group-options"
+                tabindex="-1"
+                role={this.popupRole}
+                aria-expanded={String(this.expanded)}
+                ui={this.realUi}
+                {...{
+                  directives: [{
+                    name: 'outside',
+                    value: {
+                      refs: this.outsideRefs,
+                      handler: () => {
+                        this.expanded = false
+                      }
                     }
-                  }
-                }]
-              }}
-              onKeydown={this.handleKeydown}>
-              {content}
-            </div>
-          </veui-overlay>
+                  }]
+                }}
+                onKeydown={this.handleKeydown}>
+                {content}
+              </div>
+            </Overlay>
+          )
           : content
       }
     </div>

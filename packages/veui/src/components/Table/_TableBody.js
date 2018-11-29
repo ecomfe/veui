@@ -5,9 +5,6 @@ import { flatMap } from 'lodash'
 
 export default {
   name: 'veui-table-body',
-  components: {
-    'veui-table-row': Row
-  },
   mixins: [table, i18n],
   computed: {
     ...table.mapTableData(
@@ -33,15 +30,15 @@ export default {
                 ? item[this.keyField]
                 : this.keys[index]
               let expanded = this.expanded.indexOf(key) !== -1
-              let rows = [<veui-table-row index={index} expanded={expanded}/>]
+              let rows = [<Row index={index} expanded={expanded}/>]
 
               if (this.expandable && expanded) {
                 if (subRow) {
-                  rows.push(<veui-table-row>{subRow({ ...item, index })}</veui-table-row>)
+                  rows.push(<Row>{subRow({ ...item, index })}</Row>)
                 } else {
                   rows = rows.concat((item.children || []).map(item => {
                     return (
-                      <veui-table-row item={item} index={index}/>
+                      <Row item={item} index={index}/>
                     )
                   }))
                 }

@@ -1,8 +1,4 @@
 <script>
-import FilterPanel from '../FilterPanel'
-import Tree from '../Tree'
-import Button from '../Button'
-import Icon from '../Icon'
 import CandidatePanel from './_CandidatePanel'
 import SelectedPanel from './_SelectedPanel'
 import { isEqual, find, difference, includes, omit, uniq, remove, isString } from 'lodash'
@@ -15,14 +11,6 @@ function defaultFilter (type, keyword, option, datasource) {
 
 export default {
   name: 'veui-transfer',
-  components: {
-    'veui-filter-panel': FilterPanel,
-    'veui-icon': Icon,
-    'veui-tree': Tree,
-    'veui-button': Button,
-    'veui-candidate-panel': CandidatePanel,
-    'veui-selected-panel': SelectedPanel
-  },
   mixins: [ui, input],
   props: {
     datasource: {

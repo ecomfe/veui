@@ -1,19 +1,12 @@
 import { find } from 'lodash'
 import Checkbox from '../Checkbox'
 import Radio from '../Radio'
-import Button from '../Button'
 import Icon from '../Icon'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 
 export default {
   name: 'veui-table-row',
-  components: {
-    'veui-checkbox': Checkbox,
-    'veui-radio': Radio,
-    'veui-button': Button,
-    'veui-icon': Icon
-  },
   mixins: [table, i18n],
   props: {
     index: Number,
@@ -76,14 +69,18 @@ export default {
           ? <td role="cell" {...data}><div class="veui-table-cell">
             {
               this.selectMode === 'multiple'
-                ? <veui-checkbox
-                  checked={checked}
-                  onChange={checked => { this.table.select(checked, index) }}
-                  aria-label={this.t(checked ? '@table.deselectRow' : '@table.selectRow')}/>
-                : <veui-radio
-                  checked={checked}
-                  onChange={checked => { this.table.select(checked, index) }}
-                  aria-label={this.t('@table.selectRow')}/>
+                ? (
+                  <Checkbox
+                    checked={checked}
+                    onChange={checked => { this.table.select(checked, index) }}
+                    aria-label={this.t(checked ? '@table.deselectRow' : '@table.selectRow')}/>
+                )
+                : (
+                  <Radio
+                    checked={checked}
+                    onChange={checked => { this.table.select(checked, index) }}
+                    aria-label={this.t('@table.selectRow')}/>
+                )
             }
           </div></td>
           : null
@@ -98,7 +95,7 @@ export default {
                     aria-label={this.t(this.expanded ? '@table.collapseRow' : '@table.expandRow')}
                     onClick={() => { this.table.expand(!this.expanded, index) }}>
                     <transition name="veui-table-expander">
-                      <veui-icon
+                      <Icon
                         class={`veui-table-expander veui-table-expander-${this.expanded ? 'collapse' : 'expand'}`}
                         name={this.expanded ? this.icons.collapse : this.icons.expand}/>
                     </transition>
