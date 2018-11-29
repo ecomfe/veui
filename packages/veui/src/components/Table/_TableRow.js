@@ -95,7 +95,7 @@ export default {
               (item.children || []).length
                 ? (
                   <button
-                    label={this.t(this.expanded ? '@table.collapseRow' : '@table.expandRow')}
+                    aria-label={this.t(this.expanded ? '@table.collapseRow' : '@table.expandRow')}
                     onClick={() => { this.table.expand(!this.expanded, index) }}>
                     <transition name="veui-table-expander">
                       <veui-icon
