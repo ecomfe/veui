@@ -2,7 +2,7 @@
 
 ### ⚠️ 非兼容性变更
 
-* `Uploader` 组件上传请求响应经过 `convert-response` 函数转换后，需要提供给组件执行后续操作的数据结构有所调整。目前仍然兼容老版本格式，但将在 `1.0.0` 移除。
+* [^] `Uploader` 组件上传请求响应经过 `convert-response` 函数转换后，需要提供给组件执行后续操作的数据结构有所调整。目前仍然兼容老版本格式，但将在 `1.0.0` 移除。
 
   > #### 迁移指南
   >
@@ -34,20 +34,20 @@
   > { "success": false, "message": "..." }
   > ```
 
-* 移除了 `managers/config` 的 `merge` 与 `mergeDefaults` 方法，现在对于 `Object` 类型的配置项需要提供完整值。
+* [-] 移除了 `managers/config` 的 `merge` 与 `mergeDefaults` 方法，现在对于 `Object` 类型的配置项需要提供完整值。
 
 ### 💡 主要变更
 
-* 新增了 I18N 支持，外置了所有文案，并添加了组件级别对应的 `zh-Hans` 与 `en-US` locale。
-* `veui-loader` 新增支持通过 `locale` 选项配置要自动引入的语言包。
-* `veui-loader` 新增支持通过 `global` 选项配置全局引入的模块。
-* `managers/config` 模块的配置现在为响应式数据，支持在组件渲染后进行全局修改。
-* `Field` 组件对应的数据字段名现在默认优先取 `name` prop，且可以被 `field` prop 覆盖。
-* `rule` 模板占位符由 `${...}` 变更为 `{...}`，以方便在模板字符串中进行书写。老语法仍然保持兼容。
-* `Calendar`、`DatePicker` 与 `Schedule` 的范围合并逻辑现在默认为“智能”模式，当用户从已选项开始选择范围时，将从整体已选范围中去除当前选区；当从未选项开始选择时，则将当前选区并入整体。
-* `Table` 组件新增 prop `scroll`，用来限定内容滚动区域的最大高度，设置时会使得表格的头/脚固定。
-* `Table` 组件新增 prop `expandable` 与 `expanded`，用来支持行展开。
-* `Link` 组件新增 prop `rel`、`target`，当 `target` 为 `_blank` 时自动为 `rel` 增加 `noopener` 值，以增强安全性。
+* [+] 新增了 I18N 支持，外置了所有文案，并添加了组件级别对应的 `zh-Hans` 与 `en-US` locale。
+* [+] `veui-loader` 新增支持通过 `locale` 选项配置要自动引入的语言包。
+* [+] `veui-loader` 新增支持通过 `global` 选项配置全局引入的模块。
+* [^] `managers/config` 模块的配置现在为响应式数据，支持在组件渲染后进行全局修改。
+* [^] `Field` 组件对应的数据字段名现在默认优先取 `name` prop，且可以被 `field` prop 覆盖。
+* [^] `rule` 模板占位符由 `${...}` 变更为 `{...}`，以方便在模板字符串中进行书写。老语法仍然保持兼容。
+* [^] `Calendar`、`DatePicker` 与 `Schedule` 的范围合并逻辑现在默认为“智能”模式，当用户从已选项开始选择范围时，将从整体已选范围中去除当前选区；当从未选项开始选择时，则将当前选区并入整体。
+* [+] `Table` 组件新增 prop `scroll`，用来限定内容滚动区域的最大高度，设置时会使得表格的头/脚固定。
+* [+] `Table` 组件新增 prop `expandable` 与 `expanded`，用来支持行展开。
+* [^] `Link` 组件新增 prop `rel`、`target`，当 `target` 为 `_blank` 时自动为 `rel` 增加 `noopener` 值，以增强安全性。
 
 ### 🐞 问题修复
 
@@ -60,19 +60,19 @@
 
 ### ⚠️ 非兼容性变更
 
-* 对 Vue-Awesome 的依赖升级到 `3.1.2`。如果之前有在项目中直接使用 `vue-awesome@2` 的，需要升级到最新版，否则无法混用 VEUI 与 VueAwesome 的图标。
-* `Breadcrumb` 组件的 `default` 作用域插槽重命名为 `item`，因为 Vue 实际的 fallback 逻辑，所以避免使用同名的 slot 和 scoped slot。
-* `Tooltip` 组件的 `custom` prop 被废弃，将在 `1.0.0` 移除。替代方式为：将 `trigger` prop 指定为 `custom` 来使用自定义逻辑控制打开及关闭。
-* `Pagination` 组件内部所有的 `class` 中的 `pager` 被更名为 `pagination`。如果在样式代码中进行过定制，请进行全局替换。
-* `Uploader` 组件的 `progress` prop 的 `'number'` 取值被替换为 `'percent'` 及 `'detail'`，分别表示显示百分比及显示进度详情。进度详情将以 <code>\`${loaded}KB/${total}KB\`</code> 的形式输出。
-* `Uploader` 组件的 prop `convert-response` 函数必须返回转换后的数据对象。
+* [^] 对 Vue-Awesome 的依赖升级到 `3.1.2`。如果之前有在项目中直接使用 `vue-awesome@2` 的，需要升级到最新版，否则无法混用 VEUI 与 VueAwesome 的图标。
+* [^] `Breadcrumb` 组件的 `default` 作用域插槽重命名为 `item`，因为 Vue 实际的 fallback 逻辑，所以避免使用同名的 slot 和 scoped slot。
+* [^] `Tooltip` 组件的 `custom` prop 被废弃，将在 `1.0.0` 移除。替代方式为：将 `trigger` prop 指定为 `custom` 来使用自定义逻辑控制打开及关闭。
+* [^] `Pagination` 组件内部所有的 `class` 中的 `pager` 被更名为 `pagination`。如果在样式代码中进行过定制，请进行全局替换。
+* [^] `Uploader` 组件的 `progress` prop 的 `'number'` 取值被替换为 `'percent'` 及 `'detail'`，分别表示显示百分比及显示进度详情。进度详情将以 <code>\`${loaded}KB/${total}KB\`</code> 的形式输出。
+* [^] `Uploader` 组件的 prop `convert-response` 函数必须返回转换后的数据对象。
 
 ### 💡 主要变更
 
-* 增加主题包为组件部件指定 `ui` 的功能，同时组件现在将自动继承父组件中可继承的 `ui` 字段，并更新了 `veui-theme-one` 中所有相应的部分。
-* `Breadcrumb` 组件的 scoped slot `item`（原 `default`）新增参数 `index`。
-* `Button` 组件增加 `ui` 选项 `dark`。
-* `rule` 的 `validate` 方法现在可以传入额外的上下文的数据，比如在 `Field` 验证时传入整个 `Form` 的 `data`。
+* [^] 增加主题包为组件部件指定 `ui` 的功能，同时组件现在将自动继承父组件中可继承的 `ui` 字段，并更新了 `veui-theme-one` 中所有相应的部分。
+* [+] `Breadcrumb` 组件的 scoped slot `item`（原 `default`）新增参数 `index`。
+* [+] `Button` 组件增加 `ui` 选项 `dark`。
+* [^] `rule` 的 `validate` 方法现在可以传入额外的上下文的数据，比如在 `Field` 验证时传入整个 `Form` 的 `data`。
 
 ### 🐞 问题修复
 

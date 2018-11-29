@@ -7,7 +7,9 @@ i18n.register(
     selectAll: '选中全部',
     unselectAll: '取消选中全部',
     selectRow: '选中本行',
-    deselectRow: '取消选中本行'
+    deselectRow: '取消选中本行',
+    expandRow: '展开本行',
+    collapseRow: '收起本行'
   },
   {
     ns: 'table'

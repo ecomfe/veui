@@ -7,7 +7,9 @@ i18n.register(
     selectAll: 'Select all',
     unselectAll: 'Unselect all',
     selectRow: 'Select row',
-    deselectRow: 'Deselect row'
+    deselectRow: 'Deselect row',
+    expandRow: 'Expand row',
+    collapseRow: 'Collapse row'
   },
   {
     ns: 'table'
