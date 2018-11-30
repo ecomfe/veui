@@ -11,7 +11,7 @@
     "less"
   ],
   "scripts": {
-    "icons": "node build/svg2json.js && node build/icons.js",
+    "icons": "node -r esm build/svg2json.js && node -r esm build/icons.js",
     "lint": "stylelint **/*.less --syntax=less"
   },
   "dependencies": {
@@ -27,9 +27,13 @@
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-preset-env": "^1.2.1",
     "babel-preset-stage-2": "^6.22.0",
+    "esm": "^3.0.84",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.2",
+    "stringify-object": "^3.3.0",
     "stylelint": "^8.4.0",
     "stylelint-config-standard": "^18.0.0",
-    "svgo": "^0.7.2",
-    "svgson": "^2.1.0"
+    "svgo": "^1.1.1",
+    "svgson": "^3.0.0"
   }
 }

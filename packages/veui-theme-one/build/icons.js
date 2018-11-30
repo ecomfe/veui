@@ -1,18 +1,34 @@
-const fs = require('fs')
-const path = require('path')
-const icons = require('../assets/icons.json')
+import fs from 'fs'
+import path from 'path'
+import mkdirp from 'mkdirp'
+import rimraf from 'rimraf'
+import stringify from 'stringify-object'
+import icons from '../assets/icons.json'
 
-Object.keys(icons).forEach(name => {
-  let code = { [name]: icons[name] }
+const MODULE_TPL = fs.readFileSync(
+  path.resolve(__dirname, './icon.tpl'),
+  'utf8'
+)
+const ICON_PATH = path.resolve(__dirname, '../icons')
+rimraf.sync(ICON_PATH)
+
+let indexModule = ''
+let names = Object.keys(icons)
+names.forEach(function (name) {
+  let icon = {}
+  icon[name] = icons[name]
+  let filePath = path.join(ICON_PATH, `${name}.js`)
+  let dirname = path.dirname(filePath)
+
+  if (!fs.existsSync(dirname)) {
+    mkdirp.sync(dirname)
+  }
   fs.writeFileSync(
-    path.resolve(__dirname, `../icons/${name}.js`),
-    `import Icon from 'veui/components/Icon'\nIcon.register(${JSON.stringify(code, null, '  ')})\n`
+    filePath,
+    MODULE_TPL.replace('${icon}', stringify(icon).replace(/\t/g, '  '))
   )
+  indexModule += `import './${name}'\n`
 })
 
-fs.writeFileSync(
-  path.resolve(__dirname, `../icons/index.js`),
-  Object.keys(icons).map(name => `import './${name}'`).join('\n')
-)
-
-console.log(Object.keys(icons).length + ' icon modules generated.')
+fs.writeFileSync(ICON_PATH + '/index.js', indexModule)
+console.log(names.length + ' icon modules generated.')

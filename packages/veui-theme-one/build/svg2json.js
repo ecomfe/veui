@@ -1,62 +1,89 @@
-const fs = require('fs')
-const path = require('path')
-const svgson = require('svgson')
-const Svgo = require('svgo')
+import fs from 'fs'
+import path from 'path'
+import svgson, { stringify } from 'svgson'
+import Svgo from 'svgo'
 const svgo = new Svgo({
   multipass: true,
   floatPrecision: 2
 })
 
 const icons = {}
-const svgDir = path.resolve(__dirname, '../assets/icons/')
-const EXT_PATTERN = /\.svg$/
+const SVG_DIR = path.resolve(__dirname, '../assets/icons/')
+const ICON_PATTERN = /^(.+)\.svg$/
 
-fs.readdirSync(svgDir).forEach(file => {
-  if (!EXT_PATTERN.test(file)) {
-    return
-  }
-  svgo.optimize(fs.readFileSync(path.resolve(svgDir, file), 'utf8'), ({ error, data }) => {
+Promise.all(
+  fs.readdirSync(SVG_DIR).map(async file => {
+    console.log(`Converting ${file}...`)
+    if (!ICON_PATTERN.test(file)) {
+      return
+    }
+    let fileData = fs.readFileSync(path.resolve(SVG_DIR, file), 'utf8')
+    let { error, data } = await svgo.optimize(fileData)
     if (error) {
-      return console.error(file, error)
+      console.error(file, error)
+      return
     }
 
-    svgson(data, {
-      svgo: false
-    }, ({ attrs, childs }) => {
-      let { width, height, viewBox } = attrs
-      if (!(width && height)) {
-        if (!viewBox) {
-          console.error(file, `doesn't contain a valid size declaration.`)
-        }
-
-        [width, height] = (viewBox.match(/0 0 (\d+) (\d+)/) || []).map(size => parseInt(size, 10))
-      }
-
-      if (!(width && height)) {
+    let { attributes, children } = await svgson(data)
+    let { width, height, viewBox } = attributes
+    if (!(width && height)) {
+      if (!viewBox) {
         console.error(file, `doesn't contain a valid size declaration.`)
       }
 
-      let paths = childs.map(({ name, attrs }) => {
-        if (name !== 'path') {
+      [width, height] = (viewBox.match(/0 0 (\d+) (\d+)/) || []).map(size => parseInt(size, 10))
+    }
+
+    if (!(width && height)) {
+      console.error(file, `doesn't contain a valid size declaration.`)
+    }
+
+    let icon
+    let paths
+    if (children.every(({ name }) => name === 'path')) {
+      paths = children.map(({ name, attributes }) => {
+        if (name !== 'path' || attributes.fill === 'none') {
           return false
         }
 
-        let path = {
-          d: attrs.d
+        let path = { ...attributes }
+
+        if (attributes.fillRule && attributes.fillRule.toLowerCase() !== 'nonzero') {
+          path['fill-rule'] = attributes.fillRule
         }
 
-        if (attrs.fillRule && attrs.fillRule.toLowerCase() !== 'nonzero') {
-          path['fill-rule'] = attrs.fillRule
-        }
+        delete path.fill
 
         return path
       }).filter(path => path)
-
-      icons[file.replace(EXT_PATTERN, '')] = {
-        width, height, paths
+      icon = {
+        paths
       }
-    })
-  })
-})
+    } else {
+      let raw = children.map(child => {
+        return stringify(child)
+      }).join('')
+      icon = {
+        raw
+      }
+    }
 
-fs.writeFileSync(path.resolve(__dirname, '../assets/icons.json'), JSON.stringify(icons, null, '  '))
+    let [match, name] = file.match(ICON_PATTERN) || []
+    if (!match) {
+      return
+    }
+
+    if (icons[name]) {
+      console.warn(file, `is duplicated.`)
+      return
+    }
+    icons[name] = {
+      ...icon,
+      width,
+      height
+    }
+  })
+).then(() => {
+  fs.writeFileSync(path.resolve(__dirname, '../assets/icons.json'), JSON.stringify(icons, null, '  '))
+  console.log(`Generated ${Object.keys(icons).length} icons.`)
+})
