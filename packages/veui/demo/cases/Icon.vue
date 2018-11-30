@@ -62,7 +62,6 @@ export default {
     margin-top: .6em;
     color: #333;
     font-size: .8em;
-    text-transform: capitalize;
   }
 }
 </style>
