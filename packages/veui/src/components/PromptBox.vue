@@ -1,25 +1,36 @@
 <template>
 <veui-dialog
+  ref="dialog"
   :ui="realUi"
   :overlay-class="mergeOverlayClass('veui-prompt-box')"
   :open.sync="localOpen"
   :priority="priority"
   :closable="false"
   :before-close="beforeClose"
-  ref="dialog"
+  role="alertdialog"
   @ok="submit"
   @cancel="cancel"
   @afterclose="$emit('afterclose')"
-  role="alertdialog">
+>
   <template slot="title">
-    <template v-if="title">{{ title }}</template>
-    <slot name="title" v-else/>
+    <template v-if="title">
+      {{ title }}
+    </template>
+    <slot
+      v-else
+      name="title"
+    />
   </template>
   <p class="veui-prompt-box-info">
     <slot/>
   </p>
   <div>
-    <veui-input autofocus v-model="localValue" class="veui-prompt-box-input" @keydown.enter="submit(true)"/>
+    <veui-input
+      v-model="localValue"
+      autofocus
+      class="veui-prompt-box-input"
+      @keydown.enter="submit(true)"
+    />
   </div>
   <template slot="foot">
     <slot name="foot"/>

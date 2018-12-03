@@ -4,22 +4,35 @@
     'veui-checkbox': true,
     'veui-disabled': realReadonly || realDisabled
   }"
-  :ui="realUi">
+  :ui="realUi"
+>
   <input
     ref="box"
     type="checkbox"
     v-bind="attrs"
     @change="handleChange"
-    v-on="listeners">
+    v-on="listeners"
+  >
   <span class="veui-checkbox-box">
     <transition name="veui-checkbox-icon">
-      <veui-icon v-if="localIndeterminate" :name="icons.indeterminate"/>
+      <veui-icon
+        v-if="localIndeterminate"
+        :name="icons.indeterminate"
+      />
     </transition>
     <transition name="veui-checkbox-icon">
-      <veui-icon v-if="localChecked && !localIndeterminate" :name="icons.checked"/>
+      <veui-icon
+        v-if="localChecked && !localIndeterminate"
+        :name="icons.checked"
+      />
     </transition>
   </span>
-  <span v-if="$slots.default" class="veui-checkbox-label"><slot/></span>
+  <span
+    v-if="$slots.default"
+    class="veui-checkbox-label"
+  >
+    <slot/>
+  </span>
 </label>
 </template>
 
@@ -34,11 +47,11 @@ const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
 
 export default {
   name: 'veui-checkbox',
-  inheritAttrs: false,
   components: {
     'veui-icon': Icon
   },
   mixins: [ui, input],
+  inheritAttrs: false,
   model: {
     prop: 'model'
   },
@@ -104,6 +117,11 @@ export default {
       }
     }
   },
+  mounted () {
+    let box = this.$refs.box
+    box.indeterminate = this.localIndeterminate
+    patchIndeterminate(box)
+  },
   methods: {
     activate () {
       if (this.realDisabled || this.realReadonly) {
@@ -126,11 +144,6 @@ export default {
     focus () {
       this.$refs.box.focus()
     }
-  },
-  mounted () {
-    let box = this.$refs.box
-    box.indeterminate = this.localIndeterminate
-    patchIndeterminate(box)
   }
 }
 </script>

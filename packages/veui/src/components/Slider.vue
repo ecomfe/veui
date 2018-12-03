@@ -2,48 +2,74 @@
 <div
   :class="sliderClasses"
   :ui="realUi"
-  role="application">
+  role="application"
+>
   <!-- 条 -->
-  <div class="veui-slider-track" @click="handleTrackClick" ref="track">
+  <div
+    ref="track"
+    class="veui-slider-track"
+    @click="handleTrackClick"
+  >
     <slot name="track">
       <div class="veui-slider-track-default">
         <div class="veui-slider-track-default-wrapper">
-          <div class="veui-slider-track-default-bg"></div>
-          <div class="veui-slider-track-default-marks" v-if="stepMarks">
-            <div v-for="mark in stepMarks" class="veui-slider-track-default-mark" :key="mark" :style="{
-              left: `${mark * 100}%`
-            }"></div>
+          <div class="veui-slider-track-default-bg"/>
+          <div
+            v-if="stepMarks"
+            class="veui-slider-track-default-marks"
+          >
+            <div
+              v-for="mark in stepMarks"
+              :key="mark"
+              class="veui-slider-track-default-mark"
+              :style="{
+                left: `${mark * 100}%`
+              }"
+            />
           </div>
-          <div class="veui-slider-track-default-sp" :style="secondardProgressStyle"></div>
-          <div class="veui-slider-track-default-fg" :style="progressStyle"></div>
+          <div
+            class="veui-slider-track-default-sp"
+            :style="secondardProgressStyle"
+          />
+          <div
+            class="veui-slider-track-default-fg"
+            :style="progressStyle"
+          />
         </div>
       </div>
     </slot>
   </div>
 
   <!-- 块 -->
-  <div v-for="(_, index) in new Array(thumbCount)" :key="`thumb${index}`"
-    class="veui-slider-thumb" ref="thumb" :tabindex="realDisabled ? null : '0'"
-    :style="{
-      left: `${ratios[index] * 100}%`
-    }"
-    @mouseenter="handleThumbMouseEnter(index)"
-    @focus="handleThumbFocus(index)"
-    @blur="handleThumbBlur(index)"
+  <div
+    v-for="(_, index) in new Array(thumbCount)"
+    :key="`thumb${index}`"
+    ref="thumb"
     v-outside.hover="() => handleThumbMouseLeave(index)"
     v-drag="thumbDragOptions[index]"
     v-nudge.x="{
       step: keyboardChangeStep,
       update: (...args) => handleThumbNudgeUpdage(index, ...args)
     }"
-    role="slider" v-bind="thumbAttrs[index]"
+    class="veui-slider-thumb"
+    :tabindex="realDisabled ? null : '0'"
+    :style="{
+      left: `${ratios[index] * 100}%`
+    }"
+    role="slider"
+    v-bind="thumbAttrs[index]"
+    @mouseenter="handleThumbMouseEnter(index)"
+    @focus="handleThumbFocus(index)"
+    @blur="handleThumbBlur(index)"
   >
-    <slot name="thumb" :index="index"
+    <slot
+      name="thumb"
+      :index="index"
       :focus="currentThumbFocusIndex === index"
       :hover="currentThumbHoverIndex === index"
       :dragging="currentThumbDraggingIndex === index"
     >
-      <div class="veui-slider-thumb-default"></div>
+      <div class="veui-slider-thumb-default"/>
     </slot>
   </div>
 
@@ -52,17 +78,20 @@
     name="tip"
     :target="tooltipTarget"
     :open="activeTooltipIndex >= 0"
-    :activeIndex="activeTooltipIndex">
+    :activeIndex="activeTooltipIndex"
+  >
     <veui-tooltip
+      ref="tip"
       :target="tooltipTarget"
       :open="activeTooltipIndex >= 0"
       trigger="custom"
-      ref="tip"
-      :interactive="false">
-      <slot name="tip-label">{{ tooltipLabel }}</slot>
+      :interactive="false"
+    >
+      <slot name="tip-label">
+        {{ tooltipLabel }}
+      </slot>
     </veui-tooltip>
   </slot>
-
 </div>
 </template>
 
@@ -80,14 +109,14 @@ export default {
   components: {
     'veui-tooltip': Tooltip
   },
-  mixins: [ui, input],
   directives: {
     drag,
     nudge,
     outside
   },
+  mixins: [ui, input],
   props: {
-    value: true,
+    value: null,
     secondaryProgress: {
       type: [Number, Array],
       default: 0
@@ -127,46 +156,6 @@ export default {
       latestIndex: -1,
 
       thumbCount: 0
-    }
-  },
-  watch: {
-    value: {
-      handler (val) {
-        this.localValues = [].concat(val)
-          .map(val => this.getAdjustedValue(this.parse(val)))
-          .sort((a, b) => a > b ? 1 : -1)
-      },
-      immediate: true
-    },
-    localValues: {
-      handler (newVal, oldVal = []) {
-        if (newVal.length !== oldVal.length) {
-          // 解耦 localValue 和 localValue.length，防止依赖 localValue 长度的 drag options 在拖动时改变
-          this.thumbCount = newVal.length
-        }
-
-        if (this.$refs.tip) {
-          // 要用 nextTick，否则有 step 的 thumb 的 tip 定位到了前一个位置
-          this.$nextTick(() => {
-            this.$refs.tip.relocate()
-          })
-        }
-
-        let value = [].concat(this.value).map(val => this.parse(val))
-        if (!isEqual(value, newVal)) {
-          newVal = newVal.map(this.format)
-          this.$emit('input', newVal.length > 1 ? newVal : newVal[0])
-        }
-      },
-      immediate: true
-    },
-    activeTooltipIndex: {
-      handler (val) {
-        if (val !== -1) {
-          this.latestIndex = val
-        }
-      },
-      immediate: true
     }
   },
   computed: {
@@ -250,6 +239,46 @@ export default {
         drag: (...args) => this.handleThumbDrag(index, ...args),
         dragend: (...args) => this.handleThumbDragEnd(index, ...args)
       }))
+    }
+  },
+  watch: {
+    value: {
+      handler (val) {
+        this.localValues = [].concat(val)
+          .map(val => this.getAdjustedValue(this.parse(val)))
+          .sort((a, b) => a > b ? 1 : -1)
+      },
+      immediate: true
+    },
+    localValues: {
+      handler (newVal, oldVal = []) {
+        if (newVal.length !== oldVal.length) {
+          // 解耦 localValue 和 localValue.length，防止依赖 localValue 长度的 drag options 在拖动时改变
+          this.thumbCount = newVal.length
+        }
+
+        if (this.$refs.tip) {
+          // 要用 nextTick，否则有 step 的 thumb 的 tip 定位到了前一个位置
+          this.$nextTick(() => {
+            this.$refs.tip.relocate()
+          })
+        }
+
+        let value = [].concat(this.value).map(val => this.parse(val))
+        if (!isEqual(value, newVal)) {
+          newVal = newVal.map(this.format)
+          this.$emit('input', newVal.length > 1 ? newVal : newVal[0])
+        }
+      },
+      immediate: true
+    },
+    activeTooltipIndex: {
+      handler (val) {
+        if (val !== -1) {
+          this.latestIndex = val
+        }
+      },
+      immediate: true
     }
   },
   methods: {

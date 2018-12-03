@@ -4,19 +4,26 @@
   :ui="realUi"
   role="radiogroup"
   :aria-readonly="String(realReadonly)"
-  :aria-disabled="String(realDisabled)">
+  :aria-disabled="String(realDisabled)"
+>
   <veui-radio
-    :name="localName"
     v-for="(item, index) in items"
     :key="index"
+    :name="localName"
     :value="item.value"
     :model="value"
     :disabled="item.disabled || realDisabled || realReadonly"
     :checked="item.value === value"
-    @change="checked => handleChange(checked, item.value)"
     :aria-posinset="index + 1"
-    :aria-setsize="items.length">
-    <slot v-bind="item" :index="index">{{ item.label }}</slot>
+    :aria-setsize="items.length"
+    @change="checked => handleChange(checked, item.value)"
+  >
+    <slot
+      v-bind="item"
+      :index="index"
+    >
+      {{ item.label }}
+    </slot>
   </veui-radio>
 </div>
 </template>

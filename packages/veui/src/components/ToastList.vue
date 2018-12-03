@@ -1,15 +1,20 @@
 <template>
-<veui-overlay :open="true" :overlay-class="mergeOverlayClass('veui-toast-list')" :priority="priority">
-  <veui-toast v-for="(message, index) in messages"
-    open
+<veui-overlay
+  :open="true"
+  :overlay-class="mergeOverlayClass('veui-toast-list')"
+  :priority="priority"
+>
+  <veui-toast
+    v-for="(message, index) in messages"
     :key="message.__message_id__"
+    open
     :type="message.type"
     :message="message.message"
     :duration="message.duration"
+    :style="`top: ${message.top}px`"
     @close="remove(message)"
     @ready="updateHeight(message, index, $event)"
-    :style="`top: ${message.top}px`">
-  </veui-toast>
+  />
 </veui-overlay>
 </template>
 
@@ -26,11 +31,11 @@ config.defaults({
 
 export default {
   name: 'toast-list',
-  mixins: [overlay],
   components: {
     'veui-overlay': Overlay,
     'veui-toast': Toast
   },
+  mixins: [overlay],
   data () {
     return {
       messages: [],

@@ -6,92 +6,119 @@
   :aria-label="t('calendar')"
   :aria-disabled="realDisabled"
   :aria-readonly="realReadonly"
-  @mouseleave="markEnd()">
+  @mouseleave="markEnd()"
+>
   <slot name="before"/>
   <div
     v-for="(p, pIndex) in panels"
     :key="pIndex"
-    :class="['veui-calendar-panel', `veui-calendar-${p.view}`]">
-    <div class="veui-calendar-head" :aria-hidden="String(pIndex > 0)">
+    :class="['veui-calendar-panel', `veui-calendar-${p.view}`]"
+  >
+    <div
+      class="veui-calendar-head"
+      :aria-hidden="String(pIndex > 0)"
+    >
       <button
-        type="button"
         ref="prev"
+        type="button"
         :class="{
           'veui-calendar-prev': true,
           'veui-sr-only': pIndex !== 0 && p.view === 'days'
         }"
         :disabled="disabled || readonly"
-        @click="step(false, p.view)"
         :aria-hidden="String(pIndex > 0)"
         :aria-label="getStepLabel(p.view, 'prev')"
-        :aria-controls="`${id}:panel-title:${pIndex}`">
+        :aria-controls="`${id}:panel-title:${pIndex}`"
+        @click="step(false, p.view)"
+      >
         <veui-icon :name="icons.prev"/>
       </button>
       <template v-if="p.view === 'days'">
         <button
-          type="button"
           ref="year-select"
+          type="button"
           class="veui-calendar-select"
           :disabled="disabled || readonly"
+          :aria-label="t('selectYear', { year: p.year })"
           @click="setView(pIndex, 'years')"
-          :aria-label="t('selectYear', { year: p.year })">
+        >
           <b>{{ t('year', { year: p.year }) }}</b> <veui-icon :name="icons.expand"/>
         </button>
         <button
-          type="button"
-          ref="month-select"
           :id="`${id}:panel-title:${pIndex}`"
+          ref="month-select"
+          type="button"
           class="veui-calendar-select"
           :disabled="disabled || readonly"
+          :aria-label="t('selectMonth', { month: p.month + 1 })"
           @click="setView(pIndex, 'months')"
-          :aria-label="t('selectMonth', { month: p.month + 1 })">
-          <b>{{ t('month', { month: p.month + 1 }) || t(`monthsLong[${p.month}]`) }}</b> <veui-icon :name="icons.expand"/>
+        >
+          <b>{{ t('month', { month: p.month + 1 }) || t(`monthsLong[${p.month}]`) }}</b>
+          <veui-icon :name="icons.expand"/>
         </button>
       </template>
       <template v-else-if="p.view === 'months'">
         <span
+          :id="`${id}:panel-title:${pIndex}`"
           class="veui-calendar-label"
-          :id="`${id}:panel-title:${pIndex}`">
+        >
           <b>{{ t('year', { year: p.year }) }}</b>
         </span>
       </template>
       <template v-else-if="p.view === 'years'">
         <span
+          :id="`${id}:panel-title:${pIndex}`"
           class="veui-calendar-label"
-          :id="`${id}:panel-title:${pIndex}`">
+        >
           <b>{{ t('year', { year: p.year - p.year % 10 }) }}</b>–<b>{{ t('year', { year: p.year - p.year % 10 + 9 }) }}</b>
         </span>
       </template>
       <button
-        type="button"
         ref="next"
+        type="button"
         :class="{
           'veui-calendar-next': true,
           'veui-sr-only': pIndex !== panels.length - 1 && p.view === 'days'
         }"
         :disabled="disabled || readonly"
-        @click="step(true, p.view)"
         :aria-label="getStepLabel(p.view, 'next')"
-        :aria-controls="`${id}:panel-title:${pIndex}`">
+        :aria-controls="`${id}:panel-title:${pIndex}`"
+        @click="step(true, p.view)"
+      >
         <veui-icon :name="icons.next"/>
       </button>
     </div>
-    <div ref="body" class="veui-calendar-body" :class="{ 'veui-calendar-multiple-range': multiple && range }">
+    <div
+      ref="body"
+      class="veui-calendar-body"
+      :class="{ 'veui-calendar-multiple-range': multiple && range }"
+    >
       <table>
         <template v-if="p.view === 'days'">
           <thead>
             <tr>
-              <th v-for="index in 7" :key="index" :aria-label="getDayFullNames()[index - 1]">{{ getDayNames()[index - 1] }}</th>
+              <th
+                v-for="index in 7"
+                :key="index"
+                :aria-label="getDayFullNames()[index - 1]"
+              >
+                {{ getDayNames()[index - 1] }}
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(week, index) in p.weeks" :key="index">
-              <td v-for="day in week"
+            <tr
+              v-for="(week, index) in p.weeks"
+              :key="index"
+            >
+              <td
+                v-for="day in week"
                 :key="`${day.year}-${day.month + 1}-${day.date}`"
-                :class="getDateClass(day, p)">
+                :class="getDateClass(day, p)"
+              >
                 <button
-                  type="button"
                   v-if="fillMonth && panel === 1 || day.month === p.month"
+                  type="button"
                   :disabled="realDisabled || realReadonly || day.isDisabled"
                   :autofocus="day.isFocus"
                   :aria-label="getLocaleString(day)"
@@ -103,45 +130,67 @@
                   @keydown.up.prevent="moveFocus(p.view, -7)"
                   @keydown.right.prevent="moveFocus(p.view, 1)"
                   @keydown.down.prevent="moveFocus(p.view, 7)"
-                  @keydown.left.prevent="moveFocus(p.view, -1)">
-                  <slot name="date" v-bind="{
-                    year: day.year,
-                    month: day.month,
-                    date: day.date
-                  }">{{ day.date }}</slot>
+                  @keydown.left.prevent="moveFocus(p.view, -1)"
+                >
+                  <slot
+                    name="date"
+                    v-bind="{
+                      year: day.year,
+                      month: day.month,
+                      date: day.date
+                    }"
+                  >
+                    {{ day.date }}
+                  </slot>
                 </button>
               </td>
             </tr>
           </tbody>
         </template>
         <tbody v-else-if="p.view === 'months'">
-          <tr v-for="i in 3" :key="i">
-            <td v-for="j in 4" :class="getMonthClass(p, i, j)" :key="j">
+          <tr
+            v-for="i in 3"
+            :key="i"
+          >
+            <td
+              v-for="j in 4"
+              :key="j"
+              :class="getMonthClass(p, i, j)"
+            >
               <button
                 type="button"
+                :tabindex="i === 1 && j === 1 ? null : '-1'"
                 @click="selectMonth(pIndex, (i - 1) * 4 + j - 1)"
                 @keydown.up.prevent="moveFocus(p.view, -4)"
                 @keydown.right.prevent="moveFocus(p.view, 1)"
                 @keydown.down.prevent="moveFocus(p.view, 4)"
                 @keydown.left.prevent="moveFocus(p.view, -1)"
-                :tabindex="i === 1 && j === 1 ? null : '-1'">
+              >
                 {{ t('month', { month: (i - 1) * 4 + j }) || t(`monthsShort[${(i - 1) * 4 + j - 1}]`) }}
               </button>
             </td>
           </tr>
         </tbody>
         <tbody v-else-if="p.view === 'years'">
-          <tr v-for="i in 3" :key="i">
-            <td v-for="j in 4" :class="getYearClass(p, i, j)" :key="j">
+          <tr
+            v-for="i in 3"
+            :key="i"
+          >
+            <td
+              v-for="j in 4"
+              :key="j"
+              :class="getYearClass(p, i, j)"
+            >
               <button
-                type="button"
                 v-if="(i - 1) * 4 + j - 1 < 10"
+                type="button"
+                :tabindex="i === 1 && j === 1 ? null : '-1'"
                 @click="selectYear(pIndex, p.year - p.year % 10 + (i - 1) * 4 + j - 1)"
                 @keydown.up.prevent="moveFocus(p.view, getYearOffset(i, j, false))"
                 @keydown.right.prevent="moveFocus(p.view, 1)"
                 @keydown.down.prevent="moveFocus(p.view, getYearOffset(i, j, true))"
                 @keydown.left.prevent="moveFocus(p.view, -1)"
-                :tabindex="i === 1 && j === 1 ? null : '-1'">
+              >
                 {{ p.year - p.year % 10 + (i - 1) * 4 + j - 1 }}
               </button>
             </td>
@@ -184,13 +233,13 @@ const STEP_MAP = {
 
 export default {
   name: 'veui-calendar',
+  components: {
+    'veui-icon': Icon
+  },
   mixins: [ui, input, i18n],
   model: {
     prop: 'selected',
     event: 'select'
-  },
-  components: {
-    'veui-icon': Icon
   },
   props: {
     panel: {
@@ -364,6 +413,17 @@ export default {
     },
     daysLong () {
       return this.t('daysLong')
+    }
+  },
+  watch: {
+    month (val) {
+      this.$emit('viewchange', {
+        year: this.year,
+        month: this.month
+      })
+    },
+    selected (val) {
+      this.picking = this.pickingRanges = null
     }
   },
   methods: {
@@ -666,17 +726,6 @@ export default {
     },
     getDefaultDate () {
       return flattenDeep([this.selected])[0] || this.today
-    }
-  },
-  watch: {
-    month (val) {
-      this.$emit('viewchange', {
-        year: this.year,
-        month: this.month
-      })
-    },
-    selected (val) {
-      this.picking = this.pickingRanges = null
     }
   }
 }

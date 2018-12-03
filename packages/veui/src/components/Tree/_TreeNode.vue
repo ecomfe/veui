@@ -1,49 +1,80 @@
 <template>
-  <ul :class="{'veui-tree-item-group': depth > 1, 'veui-tree': depth === 1}">
-    <li v-for="(option, index) in datasource"
-      :key="option.value">
-      <div
-        :class="{
-          'veui-tree-item': true,
-          'veui-tree-item-expanded': option.expanded,
-          'veui-tree-item-clickable': clickable
-        }"
-        @click="click(option, [], index, depth)">
-        <slot name="item" :item="option" :index="index" :depth="depth">
-          <span class="veui-tree-item-expand-switcher"
-            v-if="option.children && option.children.length"
-            @click.stop="toggle(option, index, depth)">
+<ul :class="{'veui-tree-item-group': depth > 1, 'veui-tree': depth === 1}">
+  <li
+    v-for="(option, index) in datasource"
+    :key="option.value"
+  >
+    <div
+      :class="{
+        'veui-tree-item': true,
+        'veui-tree-item-expanded': option.expanded,
+        'veui-tree-item-clickable': clickable
+      }"
+      @click="click(option, [], index, depth)"
+    >
+      <slot
+        name="item"
+        :item="option"
+        :index="index"
+        :depth="depth"
+      >
+        <span
+          v-if="option.children && option.children.length"
+          class="veui-tree-item-expand-switcher"
+          @click.stop="toggle(option, index, depth)"
+        >
+          <veui-icon :name="icons.collapsed"/>
+        </span>
+        <div class="veui-tree-item-label">
+          <slot
+            name="item-label"
+            :item="option"
+            :index="index"
+            :depth="depth"
+          >
+            {{ option.label }}
+          </slot>
+        </div>
+      </slot>
+    </div>
+
+    <veui-tree-node
+      v-if="option.expanded && option.children && option.children.length"
+      :datasource="option.children"
+      :depth="depth + 1"
+      :item-click="itemClick"
+      :icons="icons"
+      @click="handleChildClick(option, ...arguments)"
+      @toggle="handleChildToggle"
+    >
+      <template
+        slot="item"
+        slot-scope="props"
+      >
+        <slot
+          name="item"
+          v-bind="props"
+        >
+          <span
+            v-if="props.item.children && props.item.children.length"
+            class="veui-tree-item-expand-switcher"
+            @click.stop="toggle(props.item, props.index, depth + 1)"
+          >
             <veui-icon :name="icons.collapsed"/>
           </span>
           <div class="veui-tree-item-label">
-            <slot name="item-label" :item="option" :index="index" :depth="depth">{{ option.label }}</slot>
+            <slot
+              name="item-label"
+              v-bind="props"
+            >
+              {{ props.item.label }}
+            </slot>
           </div>
         </slot>
-      </div>
-
-      <veui-tree-node v-if="option.expanded && option.children && option.children.length"
-        :datasource="option.children"
-        :depth="depth + 1"
-        @click="handleChildClick(option, ...arguments)"
-        @toggle="handleChildToggle"
-        :item-click="itemClick"
-        :icons="icons">
-        <template slot="item" slot-scope="props">
-          <slot name="item" v-bind="props">
-            <span class="veui-tree-item-expand-switcher"
-              v-if="props.item.children && props.item.children.length"
-              @click.stop="toggle(props.item, props.index, depth + 1)">
-              <veui-icon :name="icons.collapsed"/>
-            </span>
-            <div class="veui-tree-item-label">
-              <slot name="item-label" v-bind="props">{{ props.item.label }}</slot>
-            </div>
-          </slot>
-        </template>
-      </veui-tree-node>
-
-    </li>
-  </ul>
+      </template>
+    </veui-tree-node>
+  </li>
+</ul>
 </template>
 
 <script>

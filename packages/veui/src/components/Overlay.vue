@@ -2,14 +2,16 @@
 <div class="veui-overlay">
   <transition
     name="veui-overlay"
-    @after-leave="$emit('afterclose')">
+    @after-leave="$emit('afterclose')"
+  >
     <div
+      v-show="realOpen"
+      ref="box"
       class="veui-overlay-box"
       :class="realOverlayClass"
       :ui="realUi"
-      ref="box"
       :style="{zIndex}"
-      v-show="realOpen">
+    >
       <slot/>
     </div>
   </transition>
@@ -42,6 +44,7 @@ export default {
     overlayClass: getClassPropDef(),
     open: Boolean,
     target: {
+      type: [String, Object],
       default: null
     },
     options: {
@@ -115,6 +118,18 @@ export default {
         this.relocate()
       }
     })
+  },
+  destroyed () {
+    this.destroyLocator()
+
+    let node = this.overlayNode
+    node.remove()
+    this.overlayNode = null
+
+    this.destroyFocus()
+
+    this.$el.appendChild(this.overlayBox)
+    this.overlayBox = null
   },
   methods: {
     // 更新 zindex 树
@@ -221,18 +236,6 @@ export default {
       this.tether.destroy()
       this.tether = null
     }
-  },
-  destroyed () {
-    this.destroyLocator()
-
-    let node = this.overlayNode
-    node.remove()
-    this.overlayNode = null
-
-    this.destroyFocus()
-
-    this.$el.appendChild(this.overlayBox)
-    this.overlayBox = null
   }
 }
 </script>

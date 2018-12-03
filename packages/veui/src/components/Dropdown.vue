@@ -6,27 +6,46 @@
     'veui-dropdown': true,
     'veui-dropdown-expanded': expanded,
     'veui-dropdown-split': split
-  }">
+  }"
+>
   <veui-button
     v-if="split"
     class="veui-dropdown-command"
-    @click="$emit('click')">
+    @click="$emit('click')"
+  >
     <span class="veui-dropdown-label">
-      <slot name="label" :label="label">{{ label }}</slot>
+      <slot
+        name="label"
+        :label="label"
+      >
+        {{ label }}
+      </slot>
     </span>
   </veui-button>
   <veui-button
+    ref="button"
     class="veui-dropdown-button"
     :disabled="disabled"
     aria-haspopup="menu"
-    :aria-disabled="String(this.disabled)"
+    :aria-disabled="String(disabled)"
     v-on="toggleHandlers"
     @keydown.down.up.prevent="expanded = true"
-    ref="button">
-    <span class="veui-dropdown-label" v-if="!split">
-      <slot name="label" :label="label">{{ label }}</slot>
+  >
+    <span
+      v-if="!split"
+      class="veui-dropdown-label"
+    >
+      <slot
+        name="label"
+        :label="label"
+      >
+        {{ label }}
+      </slot>
     </span>
-    <veui-icon class="veui-dropdown-icon" :name="icons[expanded ? 'collapse' : 'expand']"/>
+    <veui-icon
+      class="veui-dropdown-icon"
+      :name="icons[expanded ? 'collapse' : 'expand']"
+    />
   </veui-button>
   <veui-overlay
     target="main"
@@ -34,32 +53,58 @@
     autofocus
     modal
     :options="realOverlayOptions"
-    :overlay-class="overlayClass">
+    :overlay-class="overlayClass"
+  >
     <div
       ref="box"
-      class="veui-dropdown-options"
       v-outside="{
         refs: outsideRefs,
         handler: close,
         trigger,
         delay: 300
       }"
+      class="veui-dropdown-options"
       tabindex="-1"
       role="menu"
       :aria-expanded="String(expanded)"
       @keydown.esc.stop="close"
       @keydown.down.prevent="navigate()"
-      @keydown.up.prevent="navigate(false)">
-      <veui-option-group :options="options" ref="options">
+      @keydown.up.prevent="navigate(false)"
+    >
+      <veui-option-group
+        ref="options"
+        :options="options"
+      >
         <slot/>
-        <template v-if="$scopedSlots['group-label']" slot="label" slot-scope="group">
-          <slot name="group-label" v-bind="group"/>
+        <template
+          v-if="$scopedSlots['group-label']"
+          slot="label"
+          slot-scope="group"
+        >
+          <slot
+            name="group-label"
+            v-bind="group"
+          />
         </template>
-        <template v-if="$scopedSlots.option" slot="option" slot-scope="option">
-          <slot name="option" v-bind="option"/>
+        <template
+          v-if="$scopedSlots.option"
+          slot="option"
+          slot-scope="option"
+        >
+          <slot
+            name="option"
+            v-bind="option"
+          />
         </template>
-        <template v-if="$scopedSlots['option-label']" slot="option-label" slot-scope="option">
-          <slot name="option-label" v-bind="option"/>
+        <template
+          v-if="$scopedSlots['option-label']"
+          slot="option-label"
+          slot-scope="option"
+        >
+          <slot
+            name="option-label"
+            v-bind="option"
+          />
         </template>
       </veui-option-group>
     </div>

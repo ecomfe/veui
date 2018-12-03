@@ -29,9 +29,6 @@ export default {
       id: uniqueId('veui-table-column-')
     }
   },
-  render () {
-    return null
-  },
   created () {
     let index = getIndexOfType(this, 'table-column')
 
@@ -69,6 +66,9 @@ export default {
   },
   destroyed () {
     this.table.removeById(this.id)
+  },
+  render () {
+    return null
   }
 }
 </script>

@@ -27,6 +27,24 @@ export default {
   created () {
     this.checkLocalRoutes()
   },
+  methods: {
+
+    /**
+     * 默认将最后一个route的type设置为text
+     */
+    checkLocalRoutes () {
+      if (this.localRoutes.length) {
+        const last = this.localRoutes[this.localRoutes.length - 1]
+        if (!last.type) {
+          last.type = 'text'
+        }
+      }
+    },
+
+    fireRedirect (event, route, index) {
+      this.$emit('redirect', event, route, index)
+    }
+  },
   render () {
     return (
       <ol class="veui-breadcrumb" role="navigation">
@@ -54,24 +72,6 @@ export default {
         }
       </ol>
     )
-  },
-  methods: {
-
-    /**
-     * 默认将最后一个route的type设置为text
-     */
-    checkLocalRoutes () {
-      if (this.localRoutes.length) {
-        const last = this.localRoutes[this.localRoutes.length - 1]
-        if (!last.type) {
-          last.type = 'text'
-        }
-      }
-    },
-
-    fireRedirect (event, route, index) {
-      this.$emit('redirect', event, route, index)
-    }
   }
 }
 </script>

@@ -12,6 +12,10 @@ function defaultFilter (type, keyword, option, datasource) {
 export default {
   name: 'veui-transfer',
   mixins: [ui, input],
+  model: {
+    prop: 'selected',
+    event: 'select'
+  },
   props: {
     datasource: {
       type: Array,
@@ -49,10 +53,6 @@ export default {
       }
     }
   },
-  model: {
-    prop: 'selected',
-    event: 'select'
-  },
   data () {
     return {
       candidateOptions: [],
@@ -63,10 +63,6 @@ export default {
       candidateExpands: [],
       selectedExpands: []
     }
-  },
-  created () {
-    this.correct()
-    this.setSelectedOptions(this.cloneSelectedOptions())
   },
   computed: {
     isSelectable () {
@@ -109,6 +105,10 @@ export default {
         this.setSelectedOptions(this.cloneSelectedOptions())
       }
     }
+  },
+  created () {
+    this.correct()
+    this.setSelectedOptions(this.cloneSelectedOptions())
   },
   methods: {
     // 判断节点是否被选中：

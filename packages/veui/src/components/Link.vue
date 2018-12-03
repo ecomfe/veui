@@ -1,11 +1,16 @@
 <template>
-<component v-if="!to"
-  :class="klass"
+<component
   :is="fallback"
+  v-if="!to"
+  :class="klass"
   :ui="realUi"
   :aria-disabled="disabled"
-  @click="handleRedirect"><slot/></component>
-<router-link v-else-if="$router && !native"
+  @click="handleRedirect"
+>
+  <slot/>
+</component>
+<router-link
+  v-else-if="$router && !native"
   :class="klass"
   :to="to"
   :rel="realRel"
@@ -14,17 +19,20 @@
   :aria-disabled="disabled"
   :replace="replace"
   v-bind="disabled ? { event: null } : {}"
-  @click.native="handleNativeClick">
+  @click.native="handleNativeClick"
+>
   <slot/>
 </router-link>
-<a v-else
+<a
+  v-else
   :class="klass"
   :href="to"
   :rel="realRel"
   :target="target"
   :ui="realUi"
   :aria-disabled="disabled"
-  @click="handleRedirect">
+  @click="handleRedirect"
+>
   <slot/>
 </a>
 </template>

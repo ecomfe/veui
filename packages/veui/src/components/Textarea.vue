@@ -1,25 +1,47 @@
 <template>
-<div class="veui-textarea" :class="{
+<div
+  class="veui-textarea"
+  :class="{
     'veui-textarea-focused': focused,
     'veui-textarea-rows': normalizedRows > 0,
     'veui-textarea-line-numbered': lineNumber,
     'veui-input-invalid': realInvalid,
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
-  }" :ui="realUi">
-  <div ref="measurer" v-if="measure" class="veui-textarea-measurer">
-    <div class="veui-textarea-measurer-line" v-for="(line, index) in lines" :key="index">
+  }"
+  :ui="realUi"
+>
+  <div
+    v-if="measure"
+    ref="measurer"
+    class="veui-textarea-measurer"
+  >
+    <div
+      v-for="(line, index) in lines"
+      :key="index"
+      class="veui-textarea-measurer-line"
+    >
       <div
         v-if="lineNumber"
         class="veui-textarea-measurer-line-number"
-        :style="{width: `${lineNumberWidth}px`}">{{ index + 1 }}</div>
+        :style="{width: `${lineNumberWidth}px`}"
+      >
+        {{ index + 1 }}
+      </div>
       <div
         class="veui-textarea-measurer-line-content"
         aria-hidden="true"
-        :style="{width: `${measurerContentWidth}px`}">{{ line }}</div>
+        :style="{width: `${measurerContentWidth}px`}"
+      >
+        {{ line }}
+      </div>
     </div>
   </div>
-  <textarea ref="input" class="veui-textarea-input" v-model="localValue" :style="{
+  <textarea
+    ref="input"
+    v-model="localValue"
+    class="veui-textarea-input"
+    :style="{
       maxWidth: lineNumber ? null : '100%',
       width: lineNumber ? `calc(100% - ${lineNumberWidth}px)` : null,
       height: contentHeight || null,
@@ -33,7 +55,7 @@
     @input="handleInput"
     @scroll="handleScroll"
     @change="$emit('change', $event.target.value, $event)"
-  ></textarea>
+  />
 </div>
 </template>
 
@@ -130,6 +152,12 @@ export default {
       immediate: true
     }
   },
+  updated () {
+    this.$nextTick(() => this.syncScroll())
+  },
+  mounted () {
+    this.scrollTop = this.$refs.input.scrollTop
+  },
   methods: {
     handleFocus (e) {
       this.focused = true
@@ -193,12 +221,6 @@ export default {
         measurer.scrollTop = this.scrollTop
       }
     }
-  },
-  updated () {
-    this.$nextTick(() => this.syncScroll())
-  },
-  mounted () {
-    this.scrollTop = this.$refs.input.scrollTop
   }
 }
 </script>

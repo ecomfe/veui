@@ -7,34 +7,48 @@
   :aria-valuenow="realValue"
   :aria-valuetext="desc ? valueText : null"
   :class="klass"
-  :ui="realUi">
-  <div v-if="desc" class="veui-progress-desc">
+  :ui="realUi"
+>
+  <div
+    v-if="desc"
+    class="veui-progress-desc"
+  >
     <slot v-bind="{ percent, value: realValue, status }">
-      <veui-icon :name="icons.success" v-if="type === 'circular' && localStatus === 'success'"/>
-      <span class="veui-progress-desc-text">{{ valueText }}</span>
+      <veui-icon
+        v-if="type === 'circular' && localStatus === 'success'"
+        :name="icons.success"
+      />
+      <span class="veui-progress-desc-text">
+        {{ valueText }}
+      </span>
     </slot>
   </div>
   <div
     v-if="type === 'bar'"
-    class="veui-progress-rail">
-    <div class="veui-progress-meter"
+    class="veui-progress-rail"
+  >
+    <div
+      class="veui-progress-meter"
       :style="{
         transform: indeterminate ? null : `translateX(${percent}%)`
-      }"></div>
+      }"
+    />
   </div>
   <svg
     v-else-if="type === 'circular'"
     class="veui-progress-circle"
     :width="width"
     :height="width"
-    :viewBox="`0 0 ${width} ${width}`">
+    :viewBox="`0 0 ${width} ${width}`"
+  >
     <circle
       class="veui-progress-rail"
       :cx="halfWidth"
       :cy="halfWidth"
       :r="getLength(radius)"
       fill="none"
-      :stroke-width="getLength(stroke)"></circle>
+      :stroke-width="getLength(stroke)"
+    />
     <circle
       class="veui-progress-meter"
       :cx="halfWidth"
@@ -44,7 +58,8 @@
       :stroke-width="getLength(stroke)"
       :stroke-dasharray="getLength(circumference)"
       :stroke-dashoffset="getLength(circumference * (1 - ratio))"
-      :stroke-linecap="strokeLinecap"></circle>
+      :stroke-linecap="strokeLinecap"
+    />
   </svg>
 </div>
 </template>
@@ -62,10 +77,10 @@ const STROKE_LINECAP = null
 
 export default {
   name: 'veui-progress',
-  mixins: [ui, i18n],
   components: {
     'veui-icon': Icon
   },
+  mixins: [ui, i18n],
   props: {
     type: {
       type: String,
@@ -205,6 +220,11 @@ export default {
       this.localStatus = val
     }
   },
+  created () {
+    if (this.max <= this.min) {
+      warn('[veui-progress] `max` must be larger than `min`.')
+    }
+  },
   methods: {
     setStatus (status) {
       this.localStatus = status
@@ -213,11 +233,6 @@ export default {
     },
     getLength (val) {
       return `${Math.round(val * 100) / 100}`
-    }
-  },
-  created () {
-    if (this.max <= this.min) {
-      warn('[veui-progress] `max` must be larger than `min`.')
     }
   },
   destroy () {

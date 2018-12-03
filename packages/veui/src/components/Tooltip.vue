@@ -19,10 +19,10 @@ config.defaults({
 export default {
   name: 'veui-tooltip',
   directives: { outside },
-  mixins: [ui, overlay],
   components: {
     'veui-overlay': Overlay
   },
+  mixins: [ui, overlay],
   props: {
     position: {
       type: String,
@@ -120,6 +120,22 @@ export default {
       this.localOverlayOptions.position = val
     }
   },
+  created () {
+    if (this.custom) {
+      warn('[veui-tooltip] `custom` is deprecated and will be removed in `1.0.0`. Use `trigger: \'custom\'` instead.')
+    }
+  },
+  mounted () {
+    this.bindHandler()
+  },
+  updated () {
+    this.bindHandler()
+  },
+  beforeDestroy () {
+    if (!this.custom && this.trigger !== 'custom') {
+      this.targetNode && this.targetNode.removeEventListener(this.localTrigger.open, this.openHandler, false)
+    }
+  },
   methods: {
     openHandler () {
       this.localOpen = true
@@ -168,22 +184,6 @@ export default {
         </div>
       </veui-overlay>
     )
-  },
-  created () {
-    if (this.custom) {
-      warn('[veui-tooltip] `custom` is deprecated and will be removed in `1.0.0`. Use `trigger: \'custom\'` instead.')
-    }
-  },
-  mounted () {
-    this.bindHandler()
-  },
-  updated () {
-    this.bindHandler()
-  },
-  beforeDestroy () {
-    if (!this.custom && this.trigger !== 'custom') {
-      this.targetNode && this.targetNode.removeEventListener(this.localTrigger.open, this.openHandler, false)
-    }
   }
 }
 </script>

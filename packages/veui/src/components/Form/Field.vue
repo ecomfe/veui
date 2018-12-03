@@ -9,16 +9,30 @@
     'veui-field-required': isRequired
   }"
 >
-  <div v-if="label || $slots.label" class="veui-form-label">
-    <slot name="label"><veui-label>{{ label }}</veui-label></slot>
+  <div
+    v-if="label || $slots.label"
+    class="veui-form-label"
+  >
+    <slot name="label">
+      <veui-label>{{ label }}</veui-label>
+    </slot>
   </div>
   <slot/>
-  <div v-if="tip || $slots.tip" class="veui-form-tip"><slot name="tip">{{ tip }}</slot></div>
+  <div
+    v-if="tip || $slots.tip"
+    class="veui-form-tip"
+  >
+    <slot name="tip">
+      {{ tip }}
+    </slot>
+  </div>
   <div
     v-if="!validity.valid && !!validity.message"
     class="veui-field-error"
     :title="validity.message"
-  ><veui-icon :name="icons.alert"/>{{ validity.message }}</div>
+  >
+    <veui-icon :name="icons.alert"/>{{ validity.message }}
+  </div>
 </div>
 </template>
 
@@ -39,11 +53,11 @@ const { computed: fieldset } = getTypedAncestorTracker('fieldset')
 export default {
   name: 'veui-field',
   uiTypes: ['field', 'form-container'],
-  mixins: [ui],
   components: {
     'veui-icon': Icon,
     'veui-label': Label
   },
+  mixins: [ui],
   props: {
     label: String,
     name: String,
@@ -160,6 +174,23 @@ export default {
     ...form,
     ...fieldset
   },
+  created () {
+    this.form.fields.push(this)
+    // 如果是 fieldset 或者没写 field，初始值和校验都没有意义
+    if (!this.realField) {
+      return
+    }
+
+    this.initialData = type.clone(this.getFieldValue())
+    this.$on('interact', this.handleInteract)
+  },
+  beforeDestroy () {
+    if (!this.realField) {
+      return
+    }
+
+    this.form.fields.splice(this.form.fields.indexOf(this), 1)
+  },
   methods: {
     getFieldValue () {
       return get(this.form.data, this.realField)
@@ -242,23 +273,6 @@ export default {
         this.$set(this, 'validities', validities)
       }
     }
-  },
-  created () {
-    this.form.fields.push(this)
-    // 如果是 fieldset 或者没写 field，初始值和校验都没有意义
-    if (!this.realField) {
-      return
-    }
-
-    this.initialData = type.clone(this.getFieldValue())
-    this.$on('interact', this.handleInteract)
-  },
-  beforeDestroy () {
-    if (!this.realField) {
-      return
-    }
-
-    this.form.fields.splice(this.form.fields.indexOf(this), 1)
   }
 }
 </script>

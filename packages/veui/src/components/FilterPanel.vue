@@ -1,30 +1,41 @@
 <template>
-  <div class="veui-filter-panel" :ui="realUi">
-    <h3 class="veui-filter-panel-title">
-      <slot name="head"></slot>
-    </h3>
-    <div class="veui-filter-panel-content">
-      <veui-searchbox v-model="keyword"
-        v-if="searchable"
-        :ui="uiParts.search"
-        :placeholder="placeholder"
-        @search="debounceSearch"
-        @input="searchOnInput && debounceSearch()"></veui-searchbox>
-      <div class="veui-filter-panel-content-main"
-        v-if="datasource.length"
-        ref="main">
-        <slot :items="filteredDatasource"/>
-      </div>
-      <div class="veui-filter-panel-no-data" v-else>
-        <slot name="no-data">{{ t('noData') }}</slot>
-      </div>
+<div
+  class="veui-filter-panel"
+  :ui="realUi"
+>
+  <h3 class="veui-filter-panel-title">
+    <slot name="head"/>
+  </h3>
+  <div class="veui-filter-panel-content">
+    <veui-searchbox
+      v-if="searchable"
+      v-model="keyword"
+      :ui="uiParts.search"
+      :placeholder="placeholder"
+      @search="debounceSearch"
+      @input="searchOnInput && debounceSearch()"
+    />
+    <div
+      v-if="datasource.length"
+      ref="main"
+      class="veui-filter-panel-content-main"
+    >
+      <slot :items="filteredDatasource"/>
+    </div>
+    <div
+      v-else
+      class="veui-filter-panel-no-data"
+    >
+      <slot name="no-data">
+        {{ t('noData') }}
+      </slot>
     </div>
   </div>
+</div>
 </template>
 
 <script>
 import Searchbox from './Searchbox'
-import Icon from './Icon'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import { includes, debounce, cloneDeep } from 'lodash'
@@ -32,8 +43,7 @@ import { includes, debounce, cloneDeep } from 'lodash'
 export default {
   name: 'veui-filter-panel',
   components: {
-    'veui-searchbox': Searchbox,
-    'veui-icon': Icon
+    'veui-searchbox': Searchbox
   },
   mixins: [ui, i18n],
   props: {
@@ -65,10 +75,6 @@ export default {
       filteredDatasource: []
     }
   },
-  created () {
-    let me = this
-    this.debounceSearch = debounce(() => me.search(), 200)
-  },
   watch: {
     datasource: {
       handler () {
@@ -78,6 +84,13 @@ export default {
       deep: true,
       immediate: true
     }
+  },
+  created () {
+    let me = this
+    this.debounceSearch = debounce(() => me.search(), 200)
+  },
+  beforeDestroy () {
+    this.debounceSearch.cancel()
   },
   methods: {
     search () {
@@ -100,9 +113,6 @@ export default {
 
       walk(this.datasource, this.filteredDatasource)
     }
-  },
-  beforeDestroy () {
-    this.debounceSearch.cancel()
   }
 }
 </script>

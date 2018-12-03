@@ -1,50 +1,72 @@
 <template>
-  <veui-overlay
-    ref="overlay"
-    class="veui-dialog"
-    :open="localOpen"
-    :overlay-class="mergeOverlayClass({
-      'veui-dialog-box': true,
-      'veui-dialog-box-mask': modal
-    })"
-    :ui="realUi"
-    autofocus
-    :modal="modal"
-    :priority="priority"
-    @afterclose="$emit('afterclose')">
+<veui-overlay
+  ref="overlay"
+  class="veui-dialog"
+  :open="localOpen"
+  :overlay-class="mergeOverlayClass({
+    'veui-dialog-box': true,
+    'veui-dialog-box-mask': modal
+  })"
+  :ui="realUi"
+  autofocus
+  :modal="modal"
+  :priority="priority"
+  @afterclose="$emit('afterclose')"
+>
+  <div
+    ref="content"
+    class="veui-dialog-content"
+    tabindex="-1"
+    v-bind="attrs"
+    @mousedown="focus"
+    @keydown.esc="handleEscape"
+  >
     <div
-      class="veui-dialog-content"
-      ref="content"
-      tabindex="-1"
-      @mousedown="focus"
-      @keydown.esc="handleEscape"
-      v-bind="attrs">
-      <div
-        v-if="title || $slots.title"
-        class="veui-dialog-content-head"
-        :class="{ 'veui-dialog-draggable': draggable }"
-        v-drag:content.translate="{ draggable, containment: '@window', ready: dragReady }">
-        <h3 class="veui-dialog-content-head-title">
-          <slot name="title">{{ title }}</slot>
-        </h3>
-      </div>
-      <button
-        type="button"
-        class="veui-dialog-content-head-close"
-        v-if="closable"
-        @click="cancel"
-        :aria-label="t('close')">
-        <veui-icon :name="icons.close"/>
-      </button>
-      <div class="veui-dialog-content-body"><slot :close="close"/></div>
-      <div class="veui-dialog-content-foot">
-        <slot name="foot" :close="close">
-          <veui-button :ui="uiParts.ok" @click="close('ok')">{{ t('ok') }}</veui-button>
-          <veui-button :ui="uiParts.cancel" autofocus @click="cancel">{{ t('cancel') }}</veui-button>
+      v-if="title || $slots.title"
+      v-drag:content.translate="{ draggable, containment: '@window', ready: dragReady }"
+      class="veui-dialog-content-head"
+      :class="{ 'veui-dialog-draggable': draggable }"
+    >
+      <h3 class="veui-dialog-content-head-title">
+        <slot name="title">
+          {{ title }}
         </slot>
-      </div>
+      </h3>
     </div>
-  </veui-overlay>
+    <button
+      v-if="closable"
+      type="button"
+      class="veui-dialog-content-head-close"
+      :aria-label="t('close')"
+      @click="cancel"
+    >
+      <veui-icon :name="icons.close"/>
+    </button>
+    <div class="veui-dialog-content-body">
+      <slot :close="close"/>
+    </div>
+    <div class="veui-dialog-content-foot">
+      <slot
+        name="foot"
+        :close="close"
+      >
+        <veui-button
+          :ui="uiParts.ok"
+          @click="close('ok')"
+        >
+          {{ t('ok') }}
+        </veui-button>
+        <veui-button
+          :ui="uiParts.cancel"
+          autofocus
+          @click="cancel"
+        >
+          {{ t('cancel') }}
+        </veui-button>
+      </slot>
+    </div>
+  </div>
+</veui-overlay>
 </template>
 
 <script>
@@ -63,9 +85,9 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  inheritAttrs: false,
   directives: { drag },
   mixins: [ui, overlay, i18n],
+  inheritAttrs: false,
   props: {
     modal: {
       type: Boolean,

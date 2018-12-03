@@ -76,6 +76,35 @@ export default {
       return filtered
     }
   },
+  watch: {
+    value (val) {
+      this.localValue = val
+    },
+    localValue (val) {
+      if (this.value !== val) {
+        this.$emit('change', val)
+      }
+    }
+  },
+  methods: {
+    handleSelect (value) {
+      this.expanded = false
+      this.localValue = value
+    },
+    handleRelocate () {
+      this.$refs.options.relocateDeep()
+    },
+    handleButtonClick () {
+      this.expanded = !this.expanded
+    },
+    handleButtonKeydown (e) {
+      if (e.key === 'Up' || e.key === 'ArrowUp' || e.key === 'Down' || e.key === 'ArrowDown') {
+        this.expanded = true
+        e.stopPropagation()
+        e.preventDefault()
+      }
+    }
+  },
   render () {
     return <div
       class={{
@@ -154,35 +183,6 @@ export default {
         </Overlay>
       }
     </div>
-  },
-  methods: {
-    handleSelect (value) {
-      this.expanded = false
-      this.localValue = value
-    },
-    handleRelocate () {
-      this.$refs.options.relocateDeep()
-    },
-    handleButtonClick () {
-      this.expanded = !this.expanded
-    },
-    handleButtonKeydown (e) {
-      if (e.key === 'Up' || e.key === 'ArrowUp' || e.key === 'Down' || e.key === 'ArrowDown') {
-        this.expanded = true
-        e.stopPropagation()
-        e.preventDefault()
-      }
-    }
-  },
-  watch: {
-    value (val) {
-      this.localValue = val
-    },
-    localValue (val) {
-      if (this.value !== val) {
-        this.$emit('change', val)
-      }
-    }
   }
 }
 

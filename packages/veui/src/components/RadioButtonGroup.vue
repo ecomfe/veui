@@ -4,18 +4,25 @@
   :ui="realUi"
   role="radiogroup"
   :aria-readonly="String(realReadonly)"
-  :aria-disabled="String(realDisabled)">
+  :aria-disabled="String(realDisabled)"
+>
   <veui-button
+    v-for="(item, index) in items"
+    :key="index"
     :class="{
       'veui-button-selected': item.value === localValue
     }"
-    v-for="(item, index) in items"
-    :key="index"
     :disabled="item.disabled || realDisabled || realReadonly"
-    @click="handleChange(item.value)"
     role="radio"
-    :aria-selected="String(item.value === localValue)">
-    <slot v-bind="item" :index="index">{{ item.label }}</slot>
+    :aria-selected="String(item.value === localValue)"
+    @click="handleChange(item.value)"
+  >
+    <slot
+      v-bind="item"
+      :index="index"
+    >
+      {{ item.label }}
+    </slot>
   </veui-button>
 </div>
 </template>

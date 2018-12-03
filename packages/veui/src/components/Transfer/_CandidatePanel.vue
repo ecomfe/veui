@@ -1,72 +1,97 @@
 <template>
-  <veui-filter-panel
-    class="veui-transfer-candidate-panel"
-    :datasource="datasource"
-    :searchable="searchable"
-    :filter="realFilter"
-    :placeholder="placeholder">
-
-    <template slot="head">
-      <slot name="head">
-        <slot name="title">{{ t('@transfer.available') }}</slot>
-        <veui-button ui="link"
-          class="veui-transfer-select-all"
-          @click="selectAll"
-          :disabled="!isSelectable">{{ t('@transfer.selectAll') }}</veui-button>
+<veui-filter-panel
+  class="veui-transfer-candidate-panel"
+  :datasource="datasource"
+  :searchable="searchable"
+  :filter="realFilter"
+  :placeholder="placeholder"
+>
+  <template slot="head">
+    <slot name="head">
+      <slot name="title">
+        {{ t('@transfer.available') }}
       </slot>
-    </template>
+      <veui-button
+        ui="link"
+        class="veui-transfer-select-all"
+        :disabled="!isSelectable"
+        @click="selectAll"
+      >
+        {{ t('@transfer.selectAll') }}
+      </veui-button>
+    </slot>
+  </template>
 
-    <template slot-scope="{ items }">
-      <veui-tree
-        :datasource="items"
-        :expands.sync="expands"
-        @click="select">
+  <template slot-scope="{ items }">
+    <veui-tree
+      :datasource="items"
+      :expands.sync="expands"
+      @click="select"
+    >
+      <template
+        slot="item"
+        slot-scope="props"
+      >
+        <slot
+          name="item"
+          v-bind="props"
+        >
+          <div
+            class="veui-transfer-candidate-item"
+            :class="{'veui-transfer-candidate-item-hidden': props.item.hidden}"
+          >
+            <!-- 控制展开收起的图标 -->
+            <span
+              v-if="props.item.children && props.item.children.length"
+              class="veui-tree-item-expand-switcher"
+              @click.stop="toggle(props.item)"
+            >
+              <veui-icon
+                :name="props.expanded ? icons.collapse : icons.expand"
+                :label="t(props.expanded ? '@transfer.collapse' : '@transfer.expand')"
+              />
+            </span>
 
-        <template slot="item" slot-scope="props">
-          <slot name="item" v-bind="props">
-            <div class="veui-transfer-candidate-item"
-              :class="{'veui-transfer-candidate-item-hidden': props.item.hidden}">
-
-              <!-- 控制展开收起的图标 -->
-              <span class="veui-tree-item-expand-switcher"
-                v-if="props.item.children && props.item.children.length"
-                @click.stop="toggle(props.item)">
-                <veui-icon
-                  :name="props.expanded ? icons.collapse : icons.expand"
-                  :label="t(props.expanded ? '@transfer.collapse' : '@transfer.expand')"/>
+            <div
+              class="veui-transfer-item-label"
+              :class="{
+                'veui-transfer-candidate-item-label-selected': props.item.visuallySelected
+              }"
+            >
+              <span class="veui-transfer-item-text">
+                <slot
+                  name="item-label"
+                  v-bind="props"
+                >
+                  {{ props.item.label }}
+                </slot>
               </span>
 
-              <div class="veui-transfer-item-label"
-                :class="{
-                  'veui-transfer-candidate-item-label-selected': props.item.visuallySelected
-                }">
-                <span class="veui-transfer-item-text">
-                  <slot name="item-label" v-bind="props">{{ props.item.label }}</slot>
-                </span>
-
-                <!-- 未选中的时候， hover 上去应该展示的图标 -->
-                <veui-icon
-                  v-if="!props.item.visuallySelected"
-                  class="veui-transfer-candidate-icon-unselected"
-                  :name="icons.select"/>
-                <!-- 选中的时候， hover 上去应该展示的图标 -->
-                <veui-icon
-                  v-else
-                  class="veui-transfer-candidate-icon-selected"
-                  :name="icons.checked"/>
-              </div>
+              <!-- 未选中的时候， hover 上去应该展示的图标 -->
+              <veui-icon
+                v-if="!props.item.visuallySelected"
+                class="veui-transfer-candidate-icon-unselected"
+                :name="icons.select"
+              />
+              <!-- 选中的时候， hover 上去应该展示的图标 -->
+              <veui-icon
+                v-else
+                class="veui-transfer-candidate-icon-selected"
+                :name="icons.checked"
+              />
             </div>
-          </slot>
-        </template>
+          </div>
+        </slot>
+      </template>
+    </veui-tree>
+  </template>
 
-      </veui-tree>
-    </template>
-
-    <template slot="no-data">
-      <slot name="no-data">{{ t('@transfer.noData') }}</slot>
-    </template>
-
-  </veui-filter-panel>
+  <template slot="no-data">
+    <slot name="no-data">
+      {{ t('@transfer.noData') }}
+    </slot>
+  </template>
+</veui-filter-panel>
 </template>
 
 <script>
@@ -79,13 +104,13 @@ import { isEqual, clone } from 'lodash'
 
 export default {
   name: 'veui-candidate-panel',
-  mixins: [i18n],
   components: {
     'veui-filter-panel': FilterPanel,
     'veui-tree': Tree,
     'veui-button': Button,
     'veui-icon': Icon
   },
+  mixins: [i18n],
   props: {
     datasource: Array,
     searchable: Boolean,

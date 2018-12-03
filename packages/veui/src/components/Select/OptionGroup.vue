@@ -18,10 +18,10 @@ import { pull } from 'lodash'
 export default {
   name: 'veui-option-group',
   uiTypes: ['menu'],
-  mixins: [ui, menu, select, overlay, keySelect],
   directives: {
     outside
   },
+  mixins: [ui, menu, select, overlay, keySelect],
   props: {
     label: String,
     options: Array,
@@ -65,6 +65,52 @@ export default {
     },
     popupRole () {
       return isType(this.select, 'input') ? 'listbox' : 'menu'
+    }
+  },
+  watch: {
+    expanded (val) {
+      let box = this.$refs.box
+      let parent = this.menu || this.select
+      while (parent) {
+        if (val) {
+          parent.outsideRefs.push(box)
+        } else {
+          pull(parent.outsideRefs, box)
+        }
+        parent = parent.menu || parent.select
+      }
+    }
+  },
+  methods: {
+    add (item) {
+      let length = this.items.length
+      let index = item.index
+      if (index >= length) {
+        this.items.push(item)
+      } else {
+        this.items.splice(index, 0, item)
+      }
+    },
+    removeById (id) {
+      this.items.splice(this.itemIds.indexOf(id), 1)
+    },
+    find (val) {
+      return findItemByValue(this.items, val)
+    },
+    relocate () {
+      if (this.canPopOut && this.expanded) {
+        this.$refs.overlay.relocate()
+      }
+    },
+    relocateDeep () {
+      walk(this, child => {
+        if (child.$options.name === this.$options.name) {
+          child.relocate()
+        }
+      }, '$children')
+    },
+    close () {
+      this.expanded = false
     }
   },
   render () {
@@ -199,52 +245,6 @@ export default {
           : content
       }
     </div>
-  },
-  watch: {
-    expanded (val) {
-      let box = this.$refs.box
-      let parent = this.menu || this.select
-      while (parent) {
-        if (val) {
-          parent.outsideRefs.push(box)
-        } else {
-          pull(parent.outsideRefs, box)
-        }
-        parent = parent.menu || parent.select
-      }
-    }
-  },
-  methods: {
-    add (item) {
-      let length = this.items.length
-      let index = item.index
-      if (index >= length) {
-        this.items.push(item)
-      } else {
-        this.items.splice(index, 0, item)
-      }
-    },
-    removeById (id) {
-      this.items.splice(this.itemIds.indexOf(id), 1)
-    },
-    find (val) {
-      return findItemByValue(this.items, val)
-    },
-    relocate () {
-      if (this.canPopOut && this.expanded) {
-        this.$refs.overlay.relocate()
-      }
-    },
-    relocateDeep () {
-      walk(this, child => {
-        if (child.$options.name === this.$options.name) {
-          child.relocate()
-        }
-      }, '$children')
-    },
-    close () {
-      this.expanded = false
-    }
   }
 }
 

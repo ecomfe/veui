@@ -1,5 +1,7 @@
 <template>
-<div class="veui-tabs"
+<div
+  v-resize.debounce="listResizeHandler"
+  class="veui-tabs"
   :class="{
     'veui-tabs-overflow': menuOverflow,
     'veui-tabs-addable': addable,
@@ -8,67 +10,78 @@
     'veui-tabs-right-limited': rightLimited
   }"
   :ui="realUi"
-  v-resize.debounce="listResizeHandler"
 >
-  <div :class="{
+  <div
+    ref="menu"
+    :class="{
       'veui-tabs-menu': true,
       'veui-tabs-menu-moving': menuMoving
     }"
-    ref="menu"
     role="tablist"
   >
     <div class="veui-tabs-list">
       <transition-group
+        ref="listContainer"
         tag="div"
         :class="{
           'veui-tabs-list-wrapper': true,
           'veui-tabs-list-wrapper-moving': conMoving
         }"
-        ref="listContainer"
         name="veui-tab"
         @before-leave="beforeLeave"
         @leave="leave"
         @after-leave="afterLeave"
       >
         <div
-          v-bind:data-index="index"
-          v-for="(tab, index) in items"
+          v-for="(tab, i) in items"
           :key="tab.name"
           :ref="`tab-${tab.name}`"
+          :data-index="i"
           :class="{
             'veui-tabs-item': true,
             'veui-tabs-item-disabled': tab.disabled,
             'veui-tabs-item-removable': tab.removable,
-            'veui-tabs-item-active': index === localIndex,
+            'veui-tabs-item-active': i === localIndex,
             'veui-tabs-item-moving': itemMoving
           }"
           @click="$event => {
             if ($event.target === $refs[`tab-${tab.name}`][0] && !tab.disabled) {
-              setActive({ index })
+              setActive({ i })
             }
           }"
         >
-          <slot name="tab-item" v-bind="tab" :index="index">
+          <slot
+            name="tab-item"
+            v-bind="tab"
+            :index="i"
+          >
             <veui-link
               v-if="tab.to"
               class="veui-tabs-item-label"
-              v-bind="ariaAttrs[index]"
+              v-bind="ariaAttrs[i]"
               :to="tab.to"
-              :native="tab.native">
+              :native="tab.native"
+            >
               {{ tab.label }}
             </veui-link>
             <button
               v-else
               class="veui-tabs-item-label"
-              v-bind="ariaAttrs[index]"
+              v-bind="ariaAttrs[i]"
               type="button"
-              @click="!tab.disabled && setActive({ index })"
-            >{{ tab.label }}</button>
-            <slot name="tab-item-status" v-bind="tab" :index="index">
+              @click="!tab.disabled && setActive({ index: i })"
+            >
+              {{ tab.label }}
+            </button>
+            <slot
+              name="tab-item-status"
+              v-bind="tab"
+              :index="i"
+            >
               <span
                 v-if="tab.status"
                 class="veui-tabs-item-status"
-                @click="!tab.disabled && setActive({ index })"
+                @click="!tab.disabled && setActive({ index: i })"
               >
                 <veui-icon
                   :class="`veui-tabs-item-status-${tab.status}`"
@@ -76,46 +89,74 @@
                 />
               </span>
             </slot>
-            <slot name="tab-item-extra" v-bind="tab" :index="index">
-              <button v-if="tab.removable" type="button" class="veui-tabs-item-remove"
+            <slot
+              name="tab-item-extra"
+              v-bind="tab"
+              :index="i"
+            >
+              <button
+                v-if="tab.removable"
+                type="button"
+                class="veui-tabs-item-remove"
                 :aria-label="t('remove')"
                 :disabled="removing"
-                @click="$emit('remove', tab)">
-                  <veui-icon :name="icons.remove"/>
+                @click="$emit('remove', tab)"
+              >
+                <veui-icon :name="icons.remove"/>
               </button>
             </slot>
           </slot>
         </div>
       </transition-group>
     </div>
-    <slot name="tabs-extra" >
-      <div class="veui-tabs-extra" ref="extra">
-        <button type="button" v-if="addable"
+    <slot name="tabs-extra">
+      <div
+        ref="extra"
+        class="veui-tabs-extra"
+      >
+        <button
+          v-if="addable"
+          type="button"
           class="veui-tabs-operator"
           :aria-label="t('add')"
           :disabled="max != null && items.length >= max || removing"
-          @click="$emit('add')">
+          @click="$emit('add')"
+        >
           <veui-icon :name="icons.add"/>
           <slot name="tabs-extra-label">
-            <span class="veui-tabs-extra-label">{{ t('addTab') }}</span>
+            <span class="veui-tabs-extra-label">
+              {{ t('addTab') }}
+            </span>
           </slot>
         </button>
         <slot name="tabs-extra-tip">
-          <span v-if="tip" class="veui-tabs-extra-tip">{{ tip }}</span>
+          <span
+            v-if="tip"
+            class="veui-tabs-extra-tip"
+          >
+            {{ tip }}
+          </span>
         </slot>
-        <div class="veui-tabs-scroller" v-if="menuOverflow" ref="scroller" aria-hidden="true">
+        <div
+          v-if="menuOverflow"
+          ref="scroller"
+          class="veui-tabs-scroller"
+          aria-hidden="true"
+        >
           <button
             type="button"
             class="veui-tabs-scroller-left"
+            :disabled="leftLimited"
             @click="scroll({ direction: 'left' })"
-            :disabled="leftLimited">
+          >
             <veui-icon :name="icons.prev"/>
           </button>
           <button
             type="button"
             class="veui-tabs-scroller-right"
+            :disabled="rightLimited"
             @click="scroll({ direction: 'right' })"
-            :disabled="rightLimited">
+          >
             <veui-icon :name="icons.next"/>
           </button>
         </div>
@@ -140,7 +181,6 @@ import { setTransform, getTransform } from '../../utils/dom'
 export default {
   name: 'veui-tabs',
   uiTypes: ['tabs'],
-  mixins: [ui, i18n],
   components: {
     'veui-link': Link,
     'veui-icon': Icon
@@ -148,6 +188,7 @@ export default {
   directives: {
     resize
   },
+  mixins: [ui, i18n],
   props: {
     active: {
       type: String
@@ -226,6 +267,47 @@ export default {
         }
       })
     }
+  },
+  watch: {
+    active (val) {
+      if (val === this.localActive) {
+        return
+      }
+      this.adaptToSetActive({
+        active: val
+      })
+    },
+    index (val) {
+      if (val === this.localIndex) {
+        return
+      }
+      this.adaptToSetActive({
+        index: val
+      })
+    },
+    localIndex (val) {
+      this.$emit('update:index', val)
+    },
+    localActive (val) {
+      this.$emit('update:active', val)
+    }
+  },
+  mounted () {
+    this.transitionSupported = 'transition' in document.documentElement.style
+
+    // 让子组件渲染完毕
+    this.$nextTick(() => {
+      let menu = this.$refs.menu
+      this.storeBoundingSize()
+      this.listResizeHandler()
+      this.inited = true
+      if (this.menuOverflow) {
+        menu.style.marginRight = this.$refs.extra.offsetWidth
+        this.$nextTick(() => {
+          this.storeBoundingSize()
+        })
+      }
+    })
   },
   methods: {
     add (tab) {
@@ -767,47 +849,6 @@ export default {
         }
       })
     }
-  },
-  watch: {
-    active (val) {
-      if (val === this.localActive) {
-        return
-      }
-      this.adaptToSetActive({
-        active: val
-      })
-    },
-    index (val) {
-      if (val === this.localIndex) {
-        return
-      }
-      this.adaptToSetActive({
-        index: val
-      })
-    },
-    localIndex (val) {
-      this.$emit('update:index', val)
-    },
-    localActive (val) {
-      this.$emit('update:active', val)
-    }
-  },
-  mounted () {
-    this.transitionSupported = 'transition' in document.documentElement.style
-
-    // 让子组件渲染完毕
-    this.$nextTick(() => {
-      let menu = this.$refs.menu
-      this.storeBoundingSize()
-      this.listResizeHandler()
-      this.inited = true
-      if (this.menuOverflow) {
-        menu.style.marginRight = this.$refs.extra.offsetWidth
-        this.$nextTick(() => {
-          this.storeBoundingSize()
-        })
-      }
-    })
   }
 }
 </script>

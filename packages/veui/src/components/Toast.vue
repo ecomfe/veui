@@ -5,9 +5,15 @@
     :ui="realUi"
     class="veui-toast"
     :class="`veui-toast-${type}`"
-    role="alert">
-    <veui-icon class="veui-toast-icon" :name="icons[type]"/>
-    <span class="veui-toast-message"><slot>{{ message }}</slot></span>
+    role="alert"
+  >
+    <veui-icon
+      class="veui-toast-icon"
+      :name="icons[type]"
+    />
+    <span class="veui-toast-message">
+      <slot>{{ message }}</slot>
+    </span>
   </div>
 </transition>
 </template>
@@ -26,10 +32,10 @@ const TYPE_LIST = ['success', 'warning', 'info', 'error']
 
 export default {
   name: 'toast',
-  mixins: [ui],
   components: {
     'veui-icon': Icon
   },
+  mixins: [ui],
   props: {
     type: {
       type: String,

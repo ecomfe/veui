@@ -1,55 +1,62 @@
 <template>
-  <veui-input v-nudge.y="{
-      step,
-      update: handleThumbNudgeUpdate
-    }"
-    :ui="realUi"
-    type="text"
-    inputmode="numeric"
-    ref="input"
-    v-model="localValue"
-    v-on="listeners"
-    v-bind="attrs"
-    @blur="handleBlur"
-    @input="handleInput"
-    @change="handleChange"
-    @focusin.native="focused = true"
-    @focusout.native="focused = false"
-    :class="{
-      'veui-number-input': true,
-      'veui-input-invalid': realInvalid,
-      'veui-readonly': realReadonly,
-      'veui-disabled': realDisabled,
-      'veui-number-input-focused': focused
-    }"
-  >
-    <template slot="before">
-      <slot name="before"/>
-    </template>
-    <template slot="after">
-      <div class="veui-number-input-controls">
-        <veui-button
-          ref="inc"
-          class="veui-number-input-step-up"
-          @click="increase"
-          :disabled="!editable || reachMaxLimit"
-          v-longpress.repeat="increase"
-        >
-          <veui-icon :name="icons.increase" :label="t('increase', { value: step })"/>
-        </veui-button>
-        <veui-button
-          ref="dec"
-          class="veui-number-input-step-down"
-          @click="decrease"
-          :disabled="!editable || reachMinLimit"
-          v-longpress.repeat="decrease"
-        >
-          <veui-icon :name="icons.decrease" :label="t('decrease', { value: step })"/>
-        </veui-button>
-      </div>
-      <slot name="after"/>
-    </template>
-  </veui-input>
+<veui-input
+  ref="input"
+  v-model="localValue"
+  v-nudge.y="{
+    step,
+    update: handleThumbNudgeUpdate
+  }"
+  :ui="realUi"
+  type="text"
+  inputmode="numeric"
+  v-bind="attrs"
+  :class="{
+    'veui-number-input': true,
+    'veui-input-invalid': realInvalid,
+    'veui-readonly': realReadonly,
+    'veui-disabled': realDisabled,
+    'veui-number-input-focused': focused
+  }"
+  v-on="listeners"
+  @blur="handleBlur"
+  @input="handleInput"
+  @change="handleChange"
+  @focusin.native="focused = true"
+  @focusout.native="focused = false"
+>
+  <template slot="before">
+    <slot name="before"/>
+  </template>
+  <template slot="after">
+    <div class="veui-number-input-controls">
+      <veui-button
+        ref="inc"
+        v-longpress.repeat="increase"
+        class="veui-number-input-step-up"
+        :disabled="!editable || reachMaxLimit"
+        @click="increase"
+      >
+        <veui-icon
+          :name="icons.increase"
+          :label="t('increase', { value: step })"
+        />
+      </veui-button>
+      <veui-button
+        ref="dec"
+        v-longpress.repeat="decrease"
+        class="veui-number-input-step-down"
+        :disabled="!editable || reachMinLimit"
+        @click="decrease"
+      >
+        <veui-icon
+          :name="icons.decrease"
+          :label="t('decrease', { value: step })"
+        />
+      </veui-button>
+    </div>
+    <slot name="after"/>
+  </template>
+</veui-input>
 </template>
 
 <script>
@@ -70,7 +77,6 @@ const EVENTS = ['focus', 'blur', 'click', 'keyup', 'keydown', 'keypress']
 
 export default {
   name: 'veui-number-input',
-  mixins: [input, ui, i18n],
   directives: {
     nudge,
     longpress
@@ -80,6 +86,7 @@ export default {
     'veui-input': Input,
     'veui-button': Button
   },
+  mixins: [input, ui, i18n],
   props: {
     ui: String,
     value: Number,
