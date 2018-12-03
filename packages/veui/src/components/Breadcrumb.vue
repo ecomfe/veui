@@ -46,7 +46,7 @@ export default {
                 {
                   this.$scopedSlots.separator
                     ? this.$scopedSlots.separator()
-                    : null
+                    : this.$slots.separator
                 }
               </template>
             </BreadcrumbItem>
