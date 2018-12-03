@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>base/bag</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="base/bag" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <rect class="fillColor" id="Rectangle" stroke="#000000" stroke-width="4" x="2" y="14" width="44" height="32" rx="4"></rect>
+        <path class="noFill" d="M9,14 C12.3333333,6 17.3333333,2 24,2 C30.6666667,2 35.6666667,6 39,14" id="Path-38" stroke="#000000" stroke-width="4"></path>
+
+      <g class="innerStrokeColor">
+        <path d="M14,22 L14,23" id="Path-37" stroke="#000000" stroke-width="4"></path>
+        <path d="M34,22 L34,23" id="Path-37" stroke="#000000" stroke-width="4"></path>
+      </g>
+    </g>
+</svg>

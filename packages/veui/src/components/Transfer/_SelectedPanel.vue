@@ -18,9 +18,9 @@
       </slot>
     </template>
 
-    <template slot-scope="props">
+    <template slot-scope="{ items }">
       <veui-tree
-        :datasource="props.items"
+        :datasource="items"
         :expands.sync="localExpands"
         @click="remove"
         class="veui-transfer-selected-tree"
@@ -35,7 +35,7 @@
                 v-if="props.item.children && props.item.children.length"
                 @click.stop="toggle(props.item)">
                 <veui-icon
-                  :name="icons.collapsed"
+                  :name="props.expanded ? icons.collapse : icons.expand"
                   :label="t(props.expanded ? '@transfer.collapse' : '@transfer.expand')"/>
               </span>
 
@@ -54,7 +54,7 @@
         </template>
       </veui-tree>
       <ul v-else class="veui-transfer-selected-flat-items">
-        <li v-for="(options, index) in props.items"
+        <li v-for="(options, index) in items"
           :key="options.items[options.items.length - 1].value"
           class="veui-transfer-selected-flat-item"
           :class="{'veui-transfer-selected-flat-item-hidden': options.hidden}"

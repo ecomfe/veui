@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/people</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/people" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path class="noStroke fillColor" d="M29,29 L29,46 C29,47.1045695 28.1045695,48 27,48 L21,48 C19.8954305,48 19,47.1045695 19,46 L19,29 C19,27.8954305 18.1045695,27 17,27 C15.8954305,27 15,26.1045695 15,25 L15,12 C15,10.8954305 15.8954305,10 17,10 L31,10 C32.1045695,10 33,10.8954305 33,12 L33,25 C33,26.1045695 32.1045695,27 31,27 C29.8954305,27 29,27.8954305 29,29 Z M24,0 C25.6568542,-3.04359188e-16 27,1.34314575 27,3 L27,5 C27,6.65685425 25.6568542,8 24,8 C22.3431458,8 21,6.65685425 21,5 L21,3 C21,1.34314575 22.3431458,3.04359188e-16 24,0 Z" id="people" fill="#000000" fill-rule="nonzero"></path>
+    </g>
+</svg>

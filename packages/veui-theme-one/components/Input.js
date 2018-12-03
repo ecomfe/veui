@@ -1,9 +1,9 @@
-import '../icons/cross-small'
+import 'veui-theme-one-icons/times'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    remove: 'cross-small'
+    remove: 'times'
   },
   ui: {
     size: {

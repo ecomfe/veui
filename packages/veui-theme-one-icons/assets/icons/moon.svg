@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/moon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/moon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path class="fillColor" d="M28.4580137,2.45193762 C22.4410337,4.02064112 18,9.49169106 18,16 C18,23.7319865 24.2680135,30 32,30 C38.5083089,30 43.9793589,25.5589663 45.5480624,19.5419863 C45.8443556,20.9816411 46,22.4726442 46,24 C46,36.1502645 36.1502645,46 24,46 C11.8497355,46 2,36.1502645 2,24 C2,11.8497355 11.8497355,2 24,2 C25.5273558,2 27.0183589,2.15564442 28.4580137,2.45193762 Z" id="Combined-Shape" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

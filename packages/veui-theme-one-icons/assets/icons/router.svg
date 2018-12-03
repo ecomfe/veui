@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="48px" viewBox="0 0 50 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>hardware/router</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="hardware/router" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <polygon class="fillColor" id="Path-194" stroke="#000000" stroke-width="4" points="9 26 2 40 48 40 41 26"></polygon>
+        <path d="M11,2 L11,18" id="Path-195" stroke="#000000" stroke-width="4"></path>
+        <path d="M29,2 L29,18" id="Path-195-Copy-2" stroke="#000000" stroke-width="4"></path>
+        <path d="M20,2 L20,18" id="Path-195-Copy" stroke="#000000" stroke-width="4"></path>
+        <path d="M38,2 L38,18" id="Path-195-Copy-3" stroke="#000000" stroke-width="4"></path>
+        <polygon class="fillColor" id="Path-196" stroke="#000000" stroke-width="4" points="2 40 2 46 48 46 48 40"></polygon>
+    </g>
+</svg>

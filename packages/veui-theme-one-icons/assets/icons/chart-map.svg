@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>charts/chart-map</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="charts/chart-map" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <polygon class="fillColor" id="Path-224" stroke="#000000" stroke-width="4" points="2 12 16 4 30 12 46 4 46 36 30 44 16 36 2 44"></polygon>
+        <path class="innerStrokeColor" d="M16,4 L16,36" id="Path-225" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor innerFillColor" d="M30,35 C32.6666667,29.139426 34,25.4727593 34,24 C34,21.790861 32.209139,20 30,20 C27.790861,20 26,21.790861 26,24 C26,25.4727593 27.3333333,29.139426 30,35 Z" id="Oval" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

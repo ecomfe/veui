@@ -1,11 +1,11 @@
-import '../icons/calendar'
-import '../icons/cross'
+import 'veui-theme-one-icons/calendar'
+import 'veui-theme-one-icons/times'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
     calendar: 'calendar',
-    clear: 'cross'
+    clear: 'times'
   },
   ui: {
     style: {

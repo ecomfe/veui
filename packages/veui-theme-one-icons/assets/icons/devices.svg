@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>others/devices</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/devices" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(2.000000, 2.000000)">
+            <polygon id="Rectangle-2" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="10 0 44 0 44 44 20 44 20 12 10 12"></polygon>
+            <rect id="Rectangle-2-Copy" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" x="0" y="12" width="20" height="32"></rect>
+            <circle id="Oval-2" fill="#000000" cx="10" cy="38" r="2"></circle>
+        </g>
+    </g>
+</svg>

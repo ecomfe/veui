@@ -1,11 +1,11 @@
-import '../icons/minus-small'
-import '../icons/check-small'
+import 'veui-theme-one-icons/minus'
+import 'veui-theme-one-icons/check'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    indeterminate: 'minus-small',
-    checked: 'check-small'
+    indeterminate: 'minus',
+    checked: 'check'
   },
   ui: {
     size: {

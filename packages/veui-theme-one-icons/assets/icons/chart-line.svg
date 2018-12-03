@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>charts/chart-line</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="charts/chart-line" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <polyline id="Path-206" stroke="#000000" stroke-width="4" points="2 2 2 46 46 46"></polyline>
+        <polyline id="Path-217" stroke="#000000" stroke-width="4" points="10 38 15 23 24 28 28 12 39 21 46 2"></polyline>
+    </g>
+</svg>

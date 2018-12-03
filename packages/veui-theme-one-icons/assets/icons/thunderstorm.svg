@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>weather/thunderstorm</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="weather/thunderstorm" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8,29.0010986 C4.35665989,26.2644796 2,21.9074535 2,17 C2,8.71572875 8.71572875,2 17,2 C23.9267933,2 29.7569769,6.69514477 31.481679,13.0765628 C32.8387832,12.3880399 34.3740758,12 36,12 C41.5228475,12 46,16.4771525 46,22 C46,26.1006381 43.5318096,29.6247994 40,31.1679126" id="Combined-Shape-Copy-3" stroke="#000000" stroke-width="4"></path>
+        <polygon id="Path-30" class="fillColor" stroke="#000000" stroke-width="4" points="19 20 15 33 22 34 19 46 32 31 24 29 30 20"></polygon>
+    </g>
+</svg>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>hardware/calculator</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="hardware/calculator" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect class="fillColor" id="Rectangle" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" x="7" y="2" width="34" height="44"></rect>
+        <path class="innerStrokeColor" d="M7,12 L41,12" id="Path-192" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+        <rect class="noStroke innerFillColor" id="Rectangle-54" fill="#000000" x="13" y="18" width="6" height="6" rx="1"></rect>
+        <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-3" fill="#000000" x="13" y="26" width="6" height="6" rx="1"></rect>
+        <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-5" fill="#000000" x="13" y="34" width="6" height="6" rx="1"></rect>
+        <rect class="noStroke innerFillColor" id="Rectangle-54-Copy" fill="#000000" x="21" y="18" width="6" height="6" rx="1"></rect>
+        <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-4" fill="#000000" x="21" y="26" width="6" height="6" rx="1"></rect>
+        <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-6" fill="#000000" x="21" y="34" width="6" height="6" rx="1"></rect>
+        <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-2" fill="#000000" x="29" y="18" width="6" height="6" rx="1"></rect>
+        <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-7" fill="#000000" x="29" y="26" width="6" height="14" rx="1"></rect>
+    </g>
+</svg>

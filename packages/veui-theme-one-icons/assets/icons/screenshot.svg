@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/screenshot</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/screenshot" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <polyline id="Rectangle-9" stroke="#000000" stroke-width="4" points="2 26 2 2 46 2 46 26"></polyline>
+        <circle class="fillColor" id="Oval-10" stroke="#000000" stroke-width="4" cx="8" cy="40" r="6"></circle>
+        <path d="M36,12 C20.3905243,33.26633 13.8047379,42.6805435 12.2426407,44.2426407 C9.89949494,46.5857864 6.10050506,46.5857864 3.75735931,44.2426407" id="Oval-10" stroke="#000000" stroke-width="4"></path>
+        <circle class="fillColor" id="Oval-10-Copy" stroke="#000000" stroke-width="4" cx="40" cy="40" r="6"></circle>
+        <path d="M44.2426407,44.2426407 C41.8994949,46.5857864 38.1005051,46.5857864 35.7573593,44.2426407 C34.1952621,42.6805435 27.6094757,33.26633 12,12" id="Oval-10-Copy" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/female</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/female" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <circle class="fillColor" id="Oval" stroke="#000000" stroke-width="4" cx="20" cy="28" r="15"></circle>
+        <path d="M31,17 L44,4" id="Path-330" stroke="#000000" stroke-width="4"></path>
+        <polyline id="Path-331" stroke="#000000" stroke-width="4" points="32 4 44 4 44 16"></polyline>
+    </g>
+</svg>

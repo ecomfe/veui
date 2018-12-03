@@ -1,4 +1,4 @@
-import '../icons/search'
+import 'veui-theme-one-icons/search'
 import config from 'veui/managers/config'
 
 config.defaults({

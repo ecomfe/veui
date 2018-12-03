@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>editors/h3</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="editors/h3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5,9 L5,39" id="Path-273" stroke="#000000" stroke-width="4"></path>
+        <path d="M23,9 L23,39" id="Path-273-Copy" stroke="#000000" stroke-width="4"></path>
+        <path d="M5,23 L23,23" id="Path-274" stroke="#000000" stroke-width="4"></path>
+        <path d="M2,9 L8,9" id="Path-275" stroke="#000000" stroke-width="4"></path>
+        <path d="M2,39 L8,39" id="Path-275-Copy-2" stroke="#000000" stroke-width="4"></path>
+        <path d="M20,9 L26,9" id="Path-275-Copy" stroke="#000000" stroke-width="4"></path>
+        <path d="M20,39 L26,39" id="Path-275-Copy-3" stroke="#000000" stroke-width="4"></path>
+        <path d="M32,9 L46,9 L36,21 C41,21 46,26 46,31 C46,36 42,39 39,39 C35.6666667,39 33.3333333,38 32,36" id="Path-279" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

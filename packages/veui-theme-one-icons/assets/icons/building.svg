@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/building</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/building" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect class="fillColor" id="Rectangle" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" x="6" y="2" width="28" height="44"></rect>
+        <rect class="fillColor" id="Rectangle-Copy" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" x="26" y="30" width="16" height="16"></rect>
+        <path d="M2,46 L46,46" id="Path-337" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path class="innerStrokeColor" d="M26,38 L42,38" id="Path-338" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+        <rect class="noStroke innerFillColor" id="Rectangle-2" fill="#000000" x="12" y="8" width="6" height="6"></rect>
+        <rect class="noStroke innerFillColor" id="Rectangle-2-Copy-2" fill="#000000" x="12" y="18" width="6" height="6"></rect>
+        <rect class="noStroke innerFillColor" id="Rectangle-2-Copy-4" fill="#000000" x="12" y="28" width="6" height="6"></rect>
+        <rect class="noStroke innerFillColor" id="Rectangle-2-Copy" fill="#000000" x="22" y="8" width="6" height="6"></rect>
+        <rect class="noStroke innerFillColor" id="Rectangle-2-Copy-3" fill="#000000" x="22" y="18" width="6" height="6"></rect>
+    </g>
+</svg>

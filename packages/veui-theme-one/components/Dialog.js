@@ -1,10 +1,10 @@
-import '../icons/cross'
+import 'veui-theme-one-icons/times'
 
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    close: 'cross'
+    close: 'times'
   },
   ui: {
     position: {

@@ -27,6 +27,7 @@
       vertical-align: top;
       margin-right: @item-icon-gap;
       cursor: pointer;
+      transition: transform @veui-transition-duration;
 
       @height: @item-height / 2;
       margin-top: ~"calc(@{height} - 0.5em)";
@@ -52,6 +53,10 @@
     // 如果前面没有图标，就把图标位置让出来。
     &-label:first-child {
       margin-left: @item-indent-gap;
+    }
+
+    &-clickable {
+      cursor: pointer;
     }
   }
 }

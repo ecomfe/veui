@@ -1,10 +1,10 @@
-import '../icons/sort-asc'
-import '../icons/sort-desc'
+import 'veui-theme-one-icons/sort-up'
+import 'veui-theme-one-icons/sort-down'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    asc: 'sort-asc',
-    desc: 'sort-desc'
+    asc: 'sort-up',
+    desc: 'sort-down'
   }
 }, 'sorter')

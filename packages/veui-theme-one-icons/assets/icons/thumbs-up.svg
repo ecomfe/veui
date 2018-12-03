@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/thumbs-up</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/thumbs-up" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path class="fillColor" d="M6,2 L37.8464128,2 C39.6959628,2 41.304327,3.26802923 41.735962,5.06650819 L45.815962,22.0665082 C46.3315153,24.2146469 45.0080433,26.3739959 42.8599046,26.8895492 C42.5541632,26.9629271 42.2408362,27 41.9264128,27 L27,27 L27,33 C27,39 24,42 20,42 L13,23 L6,23 C3.790861,23 2,21.209139 2,19 L2,6 C2,3.790861 3.790861,2 6,2 Z" id="Path-451" stroke="#000000" stroke-width="4" transform="translate(23.963665, 22.000000) scale(1, -1) translate(-23.963665, -22.000000) "></path>
+        <path class="innerStrokeColor" d="M13,42 L13,21" id="Path-452" stroke="#000000" stroke-width="4" transform="translate(13.000000, 31.500000) scale(1, -1) translate(-13.000000, -31.500000) "></path>
+    </g>
+</svg>

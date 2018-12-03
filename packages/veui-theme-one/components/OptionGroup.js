@@ -1,8 +1,8 @@
-import '../icons/angle-right-small'
+import 'veui-theme-one-icons/chevron-right'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    expandable: 'angle-right-small'
+    expandable: 'chevron-right'
   }
 }, 'optiongroup')

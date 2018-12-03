@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/handheld</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/handheld" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <rect class="fillColor" id="Rectangle-6" stroke="#000000" stroke-width="4" x="5" y="24" width="38" height="22"></rect>
+        <rect id="Rectangle-6-Copy" stroke="#000000" stroke-width="4" x="5" y="2" width="38" height="22"></rect>
+        <path class="innerStrokeColor" d="M16,30 L16,40" id="Path-21" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M11,35 L21,35" id="Path-21-Copy-2" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M32,30 L32,31" id="Path-21-Copy-3" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M32,39 L32,40" id="Path-21-Copy-4" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M36,35 L37,35" id="Path-21-Copy-5" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M27,35 L28,35" id="Path-21-Copy-6" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

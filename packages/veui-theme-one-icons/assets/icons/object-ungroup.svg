@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>editors/ungroup</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="editors/ungroup" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <rect class="fillColor" id="Rectangle" stroke="#000000" stroke-width="4" x="2" y="2" width="8" height="8"></rect>
+        <rect class="fillColor" id="Rectangle-Copy-2" stroke="#000000" stroke-width="4" x="38" y="38" width="8" height="8"></rect>
+        <rect class="fillColor" id="Rectangle-Copy-4" stroke="#000000" stroke-width="4" x="2" y="24" width="8" height="8"></rect>
+        <rect class="fillColor" id="Rectangle-Copy-5" stroke="#000000" stroke-width="4" x="16" y="38" width="8" height="8"></rect>
+        <rect class="fillColor" id="Rectangle-Copy" stroke="#000000" stroke-width="4" x="24" y="2" width="8" height="8"></rect>
+        <rect class="fillColor" id="Rectangle-Copy-3" stroke="#000000" stroke-width="4" x="38" y="16" width="8" height="8"></rect>
+        <path d="M10,6 L24,6" id="Path-252" stroke="#000000" stroke-width="4"></path>
+        <path d="M24,42 L38,42" id="Path-252-Copy-2" stroke="#000000" stroke-width="4"></path>
+        <polyline id="Path-252-Copy" stroke="#000000" stroke-width="4" points="10 28 28 28 28 10"></polyline>
+        <polyline id="Path-252-Copy-3" stroke="#000000" stroke-width="4" points="20 38 20 20 38 20"></polyline>
+        <path d="M6,10 L6,24" id="Path-253" stroke="#000000" stroke-width="4"></path>
+        <path d="M42,24 L42,38" id="Path-253-Copy" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

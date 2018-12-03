@@ -1,10 +1,10 @@
+import 'veui-theme-one-icons/chevron-right'
 import config from 'veui/managers/config'
-import '../icons/angle-right'
 
 config.defaults({
   icons: {
-    expand: 'angle-right',
-    collapse: 'angle-right'
+    expand: 'chevron-right',
+    collapse: 'chevron-right'
   },
   ui: {
     slim: {

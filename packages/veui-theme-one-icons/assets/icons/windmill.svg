@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/windmill</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/windmill" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path class="fillColor" d="M24,24 C30.0751322,24 35,19.0751322 35,13 C35,6.92486775 30.0751322,2 24,2 L24,24 Z" id="Oval" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path class="fillColor" d="M24,24 L46,24 C46,30.0751322 41.0751322,35 35,35 C28.9248678,35 24,30.0751322 24,24 Z" id="Oval-Copy" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path class="fillColor" d="M2,24 C2,17.9248678 6.92486775,13 13,13 C19.0751322,13 24,17.9248678 24,24 L2,24 Z" id="Oval-Copy-2" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path class="fillColor" d="M24,46 C17.9248678,46 13,41.0751322 13,35 C13,28.9248678 17.9248678,24 24,24 L24,46 Z" id="Oval" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+    </g>
+</svg>

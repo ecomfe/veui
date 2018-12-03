@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/history</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/history" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <polyline id="Path-12" stroke="#000000" stroke-width="4" points="4 5 4 13 12 13"></polyline>
+        <path d="M2,24 C2,36.1502645 11.8497355,46 24,46 C36.1502645,46 46,36.1502645 46,24 C46,11.8497355 36.1502645,2 24,2 C15.8577782,2 8.74865576,6.42322431 4.94444739,12.9978583" id="Oval-3" stroke="#000000" stroke-width="4"></path>
+        <polyline id="Path-13" stroke="#000000" stroke-width="4" points="24 13 24 24 34 34"></polyline>
+    </g>
+</svg>

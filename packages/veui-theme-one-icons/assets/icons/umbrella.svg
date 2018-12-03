@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/umbrella</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/umbrella" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path class="fillColor" d="M46,24 C46,11.8497355 36.1502645,2 24,2 C11.8497355,2 2,11.8497355 2,24 L46,24 Z" id="Oval-40" stroke="#000000" stroke-width="4"></path>
+        <path d="M24,24 L24,40 C24,43.3137085 26.6862915,46 30,46 C33.3137085,46 36,43.3137085 36,40" id="Oval" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

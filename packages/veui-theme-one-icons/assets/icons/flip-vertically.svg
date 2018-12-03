@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>editors/flip-vertically</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="editors/flip-vertically" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2,24 L46,24" id="Path-256" stroke="#000000" stroke-width="4"></path>
+        <polygon class="fillColor" id="Path-257" stroke="#000000" stroke-width="4" points="9 2 9 16 38 16"></polygon>
+        <polygon class="fillColor" id="Path-257-Copy" stroke="#000000" stroke-width="4" points="9 46 9 32 38 32"></polygon>
+    </g>
+</svg>

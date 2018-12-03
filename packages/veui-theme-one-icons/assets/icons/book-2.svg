@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="49px" viewBox="0 0 48 49" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/book-2</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/book-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <polyline class="fillColor" id="Path-442" stroke="#000000" stroke-width="4" points="8 7 2 7 2 47 46 47 46 7 40 7"></polyline>
+        <polygon class="innerFillColor" id="Path-440" stroke="#000000" stroke-width="4" points="8 3 24 7 40 3 40 43 24 47 8 43"></polygon>
+        <path d="M24,7 L24,47" id="Path-441" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M14,13 L18,14" id="Path-443" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M34,13 L30,14 L34,13 Z" id="Path-443-Copy-4" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M14,21 L18,22" id="Path-443-Copy" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M34,21 L30,22 L34,21 Z" id="Path-443-Copy-5" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M14,29 L18,30" id="Path-443-Copy-2" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M34,29 L30,30 L34,29 Z" id="Path-443-Copy-6" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M14,37 L18,38" id="Path-443-Copy-3" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M34,37 L30,38 L34,37 Z" id="Path-443-Copy-7" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

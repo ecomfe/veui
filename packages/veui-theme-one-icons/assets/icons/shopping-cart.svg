@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/shopping-cart</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/shopping-cart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polyline id="Path-385" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="2 4 10 4 10 12"></polyline>
+        <polygon class="fillColor" id="Path-386" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="10 12 46 12 38 34 10 34"></polygon>
+        <circle class="noStroke fillColor" id="Oval" fill="#000000" cx="12" cy="44" r="4"></circle>
+        <circle class="noStroke fillColor" id="Oval-Copy" fill="#000000" cx="38" cy="44" r="4"></circle>
+    </g>
+</svg>

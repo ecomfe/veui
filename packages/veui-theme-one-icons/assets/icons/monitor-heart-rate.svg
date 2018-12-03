@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/monitor-toolbox</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/monitor-toolbox" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect class="fillColor" id="Rectangle" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" x="2" y="10" width="44" height="36"></rect>
+        <polyline class="innerStrokeColor" id="Path-433" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="10 29 15 29 20 38 27 17 30 29 38 29"></polyline>
+        <path d="M12,2 L36,2" id="Path-434" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+    </g>
+</svg>

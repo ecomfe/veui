@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/ship</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/ship" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <polygon class="fillColor" id="Rectangle-11" stroke="#000000" stroke-width="4" points="6 20 24 13 42 20 36 36 12 36"></polygon>
+        <polyline id="Path-28" stroke="#000000" stroke-width="4" points="3 43 6 46 9 43 12 46 15 43 18 46 21 43 24 46 27 43 30 46 33 43 36 46 39 43 42 46 45 43"></polyline>
+        <polyline id="Path-29" stroke="#000000" stroke-width="4" points="13 16 13 7 35 7 35 16"></polyline>
+        <path d="M24,7 L24,2" id="Path-30" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

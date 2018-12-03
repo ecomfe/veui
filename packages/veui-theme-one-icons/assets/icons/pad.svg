@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="38px" viewBox="0 0 48 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="hardware/pad" transform="translate(0.000000, -5.000000)">
+            <rect class="fillColor" id="Rectangle" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" x="2" y="7" width="44" height="34"></rect>
+            <rect class="innerFillColor" id="Rectangle-54" fill="#000000" x="10" y="13" width="4" height="4" rx="1"></rect>
+            <rect class="innerFillColor" id="Rectangle-54-Copy-3" fill="#000000" x="10" y="20" width="4" height="4" rx="1"></rect>
+            <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-8" fill="#000000" x="10" y="31" width="4" height="4" rx="1"></rect>
+            <rect class="noStroke innerFillColor" id="Rectangle-54-Copy" fill="#000000" x="18" y="13" width="4" height="4" rx="1"></rect>
+            <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-4" fill="#000000" x="18" y="20" width="4" height="4" rx="1"></rect>
+            <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-9" fill="#000000" x="18" y="31" width="4" height="4" rx="1"></rect>
+            <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-2" fill="#000000" x="26" y="13" width="4" height="4" rx="1"></rect>
+            <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-5" fill="#000000" x="34" y="13" width="4" height="4" rx="1"></rect>
+            <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-7" fill="#000000" x="26" y="20" width="4" height="4" rx="1"></rect>
+            <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-11" fill="#000000" x="34" y="20" width="4" height="4" rx="1"></rect>
+            <rect class="noStroke innerFillColor" id="Rectangle-54-Copy-10" fill="#000000" x="26" y="31" width="4" height="4" rx="1"></rect>
+        </g>
+    </g>
+</svg>

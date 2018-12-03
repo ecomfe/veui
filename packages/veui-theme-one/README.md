@@ -1,6 +1,6 @@
 # veui-theme-one
 
-Baidu One Design theme for VEUI.
+Theme ONE DESIGN of VEUI.
 
 ## Installation
 

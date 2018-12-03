@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>charts/chart-histogram</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="charts/chart-histogram" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <polyline id="Path-206" stroke="#000000" stroke-width="4" points="2 2 2 46 46 46"></polyline>
+        <path d="M10,34 L10,38" id="Path-207" stroke="#000000" stroke-width="4"></path>
+        <path d="M18,26 L18,38" id="Path-208" stroke="#000000" stroke-width="4"></path>
+        <path d="M26,18 L26,38" id="Path-209" stroke="#000000" stroke-width="4"></path>
+        <path d="M34,2 L34,38" id="Path-210" stroke="#000000" stroke-width="4"></path>
+        <path d="M42,10 L42,38" id="Path-211" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>
