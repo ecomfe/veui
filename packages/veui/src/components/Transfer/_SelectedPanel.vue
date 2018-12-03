@@ -1,87 +1,128 @@
 <template>
-  <veui-filter-panel
-    :datasource="showMode === 'flat' ? flattenOptions : datasource"
-    :searchable="searchable"
-    :filter="realFilter"
-    class="veui-transfer-selected-panel"
-    :class="{'veui-transfer-selected-flat': showMode === 'flat'}"
-    :placeholder="placeholder"
-    ref="selected">
-
-    <template slot="head">
-      <slot name="head">
-        <slot name="title">{{ t('@transfer.selected') }}</slot>
-        <veui-button ui="link"
-          class="veui-transfer-remove-all"
-          @click="removeAll"
-          :disabled="!isSelectable">{{ t('@transfer.deselectAll') }}</veui-button>
+<veui-filter-panel
+  ref="selected"
+  :datasource="showMode === 'flat' ? flattenOptions : datasource"
+  :searchable="searchable"
+  :filter="realFilter"
+  class="veui-transfer-selected-panel"
+  :class="{'veui-transfer-selected-flat': showMode === 'flat'}"
+  :placeholder="placeholder"
+>
+  <template slot="head">
+    <slot name="head">
+      <slot name="title">
+        {{ t('@transfer.selected') }}
       </slot>
-    </template>
+      <veui-button
+        ui="link"
+        class="veui-transfer-remove-all"
+        :disabled="!isSelectable"
+        @click="removeAll"
+      >
+        {{ t('@transfer.deselectAll') }}
+      </veui-button>
+    </slot>
+  </template>
 
-    <template slot-scope="{ items }">
-      <veui-tree
-        :datasource="items"
-        :expands.sync="localExpands"
-        @click="remove"
-        class="veui-transfer-selected-tree"
-        v-if="showMode === 'tree'">
-        <template slot="item" slot-scope="props">
-          <slot name="item" v-bind="props">
-            <div class="veui-transfer-selected-item"
-              :class="{'veui-transfer-selected-item-hidden': props.item.hidden}">
+  <template slot-scope="{ items }">
+    <veui-tree
+      v-if="showMode === 'tree'"
+      :datasource="items"
+      :expands.sync="localExpands"
+      class="veui-transfer-selected-tree"
+      @click="remove"
+    >
+      <template
+        slot="item"
+        slot-scope="props"
+      >
+        <slot
+          name="item"
+          v-bind="props"
+        >
+          <div
+            class="veui-transfer-selected-item"
+            :class="{'veui-transfer-selected-item-hidden': props.item.hidden}"
+          >
+            <!-- 控制展开收起的图标 -->
+            <span
+              v-if="props.item.children && props.item.children.length"
+              class="veui-tree-item-expand-switcher"
+              @click.stop="toggle(props.item)"
+            >
+              <veui-icon
+                :name="props.expanded ? icons.collapse : icons.expand"
+                :label="t(props.expanded ? '@transfer.collapse' : '@transfer.expand')"
+              />
+            </span>
 
-              <!-- 控制展开收起的图标 -->
-              <span class="veui-tree-item-expand-switcher"
-                v-if="props.item.children && props.item.children.length"
-                @click.stop="toggle(props.item)">
-                <veui-icon
-                  :name="props.expanded ? icons.collapse : icons.expand"
-                  :label="t(props.expanded ? '@transfer.collapse' : '@transfer.expand')"/>
+            <div class="veui-transfer-item-label">
+              <span class="veui-transfer-item-text">
+                <slot
+                  name="item-label"
+                  v-bind="props"
+                >
+                  {{ props.item.label }}
+                </slot>
               </span>
 
-              <div class="veui-transfer-item-label">
-                <span class="veui-transfer-item-text">
-                  <slot name="item-label" v-bind="props">{{ props.item.label }}</slot>
-                </span>
-
-                <veui-icon
-                  class="veui-transfer-selected-icon-remove"
-                  :name="icons.remove"/>
-              </div>
-
-            </div>
-          </slot>
-        </template>
-      </veui-tree>
-      <ul v-else class="veui-transfer-selected-flat-items">
-        <li v-for="(options, index) in items"
-          :key="options.items[options.items.length - 1].value"
-          class="veui-transfer-selected-flat-item"
-          :class="{'veui-transfer-selected-flat-item-hidden': options.hidden}"
-          @click="remove(options.items[options.items.length - 1], options.items.slice(0, options.items.length - 1).reverse())">
-          <slot name="item" :option="options.items" :index="index">
-            <div class="veui-transfer-selected-flat-item-label">
-              <template v-for="(opt, index) in options.items">
-                <span :key="'l-' + opt.value" class="veui-transfer-selected-flat-option-label">{{ opt.label }}</span>
-                <span :key="'s-' + opt.value"
-                  class="veui-transfer-selected-flat-option-separator"
-                  v-if="index < options.items.length - 1">
-                  <veui-icon :name="icons.separator"/>
-                </span>
-              </template>
               <veui-icon
-                class="veui-transfer-selected-flat-icon-remove"
-                :name="icons.remove"/>
+                class="veui-transfer-selected-icon-remove"
+                :name="icons.remove"
+              />
             </div>
-          </slot>
-        </li>
-      </ul>
-    </template>
+          </div>
+        </slot>
+      </template>
+    </veui-tree>
+    <ul
+      v-else
+      class="veui-transfer-selected-flat-items"
+    >
+      <li
+        v-for="(options, index) in items"
+        :key="options.items[options.items.length - 1].value"
+        class="veui-transfer-selected-flat-item"
+        :class="{'veui-transfer-selected-flat-item-hidden': options.hidden}"
+        @click="remove(options.items[options.items.length - 1], options.items.slice(0, options.items.length - 1).reverse())"
+      >
+        <slot
+          name="item"
+          :option="options.items"
+          :index="index"
+        >
+          <div class="veui-transfer-selected-flat-item-label">
+            <template v-for="(opt, i) in options.items">
+              <span
+                :key="'l-' + opt.value"
+                class="veui-transfer-selected-flat-option-label"
+              >
+                {{ opt.label }}
+              </span>
+              <span
+                v-if="i < options.items.length - 1"
+                :key="'s-' + opt.value"
+                class="veui-transfer-selected-flat-option-separator"
+              >
+                <veui-icon :name="icons.separator"/>
+              </span>
+            </template>
+            <veui-icon
+              class="veui-transfer-selected-flat-icon-remove"
+              :name="icons.remove"
+            />
+          </div>
+        </slot>
+      </li>
+    </ul>
+  </template>
 
-    <template slot="no-data">
-      <slot name="no-data">{{ t('@transfer.select') }}</slot>
-    </template>
-  </veui-filter-panel>
+  <template slot="no-data">
+    <slot name="no-data">
+      {{ t('@transfer.select') }}
+    </slot>
+  </template>
+</veui-filter-panel>
 </template>
 
 <script>
@@ -94,13 +135,13 @@ import { get, clone, isEqual } from 'lodash'
 
 export default {
   name: 'veui-selected-panel',
-  mixins: [i18n],
   components: {
     'veui-filter-panel': FilterPanel,
     'veui-icon': Icon,
     'veui-button': Button,
     'veui-tree': Tree
   },
+  mixins: [i18n],
   props: {
     datasource: Array,
     showMode: String,

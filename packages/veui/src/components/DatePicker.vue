@@ -1,11 +1,14 @@
 <template>
-<div class="veui-date-picker" :ui="realUi"
+<div
+  class="veui-date-picker"
+  :ui="realUi"
   :class="{
     'veui-input-invalid': realInvalid,
     'veui-date-picker-empty': !selected,
     'veui-date-picker-range': range,
     'veui-date-picker-expanded': expanded
-  }">
+  }"
+>
   <veui-button
     ref="button"
     class="veui-date-picker-button"
@@ -14,7 +17,8 @@
     :aria-readonly="realReadonly"
     aria-haspopup="dialog"
     @click="expanded = !expanded"
-    @keydown.down.up.prevent="expanded = true">
+    @keydown.down.up.prevent="expanded = true"
+  >
     <template v-if="range">
       <span class="veui-date-picker-label">
         <slot
@@ -22,17 +26,30 @@
           name="selected"
           position="from"
           v-bind="toDateData(selected[0])"
-          :formatted="formatted ? formatted[0] : null">{{ formatted[0] }}</slot>
-        <slot v-else name="placeholder">{{ realPlaceholder }}</slot>
+          :formatted="formatted ? formatted[0] : null"
+        >
+          {{ formatted[0] }}
+        </slot>
+        <slot
+          v-else
+          name="placeholder"
+        >
+          {{ realPlaceholder }}
+        </slot>
       </span>
-      <span class="veui-date-picker-tilde">~</span>
+      <span class="veui-date-picker-tilde">
+        ~
+      </span>
       <span class="veui-date-picker-label">
         <slot
           v-if="selected && selected[1]"
           name="selected"
           position="to"
           v-bind="toDateData(selected[1])"
-          :formatted="formatted ? formatted[1] : null">{{ formatted[1] }}</slot>
+          :formatted="formatted ? formatted[1] : null"
+        >
+          {{ formatted[1] }}
+        </slot>
       </span>
     </template>
     <template v-else>
@@ -41,14 +58,33 @@
           v-if="selected"
           name="selected"
           v-bind="toDateData(selected)"
-          :formatted="formatted">{{ formatted }}</slot>
-        <slot v-else name="placeholder">{{ realPlaceholder }}</slot>
+          :formatted="formatted"
+        >
+          {{ formatted }}
+        </slot>
+        <slot
+          v-else
+          name="placeholder"
+        >
+          {{ realPlaceholder }}
+        </slot>
       </span>
     </template>
-    <veui-icon class="veui-date-picker-icon" :name="icons.calendar"/>
+    <veui-icon
+      class="veui-date-picker-icon"
+      :name="icons.calendar"
+    />
   </veui-button>
-  <button v-if="clearable && !!selected" type="button" class="veui-date-picker-clear veui-sr-only" @click="clear">
-    <veui-icon :name="icons.clear" :label="t('clear')"/>
+  <button
+    v-if="clearable && !!selected"
+    type="button"
+    class="veui-date-picker-clear veui-sr-only"
+    @click="clear"
+  >
+    <veui-icon
+      :name="icons.clear"
+      :label="t('clear')"
+    />
   </button>
   <veui-overlay
     target="button"
@@ -56,34 +92,53 @@
     :options="realOverlayOptions"
     :overlay-class="overlayClass"
     autofocus
-    modal>
+    modal
+  >
     <veui-calendar
+      ref="cal"
+      v-model="localSelected"
+      v-outside:button="close"
       role="dialog"
       class="veui-date-picker-overlay"
-      v-model="localSelected"
       v-bind="calendarProps"
-      ref="cal"
       :ui="uiParts.calendar"
-      v-outside:button="close"
+      :panel="realPanel"
+      tabindex="-1"
       @select="handleSelect"
       @selectstart="handleProgress"
       @selectprogress="handleProgress"
-      :panel="realPanel"
-      tabindex="-1"
-      @keydown.esc.native="close">
-      <template :slot="shortcutsPosition" v-if="range && realShortcuts && realShortcuts.length">
+      @keydown.esc.native="close"
+    >
+      <template
+        v-if="range && realShortcuts && realShortcuts.length"
+        :slot="shortcutsPosition"
+      >
         <div class="veui-date-picker-shortcuts">
-          <button v-for="({from, to, label}, index) in realShortcuts" type="button" :key="index"
+          <button
+            v-for="({from, to, label}, index) in realShortcuts"
+            :key="index"
+            type="button"
             :class="{
               'veui-date-picker-shortcut': true,
               'veui-date-picker-shortcut-selected': isShortcutSelected({from, to})
-            }" @click="handleSelect([from, to])"
+            }"
+            @click="handleSelect([from, to])"
             @mouseenter="handleHoverShortcut([from, to])"
-            @mouseleave="handleHoverShortcut()">{{ label }}</button>
+            @mouseleave="handleHoverShortcut()"
+          >
+            {{ label }}
+          </button>
         </div>
       </template>
-      <template v-if="$scopedSlots.date" slot="date" slot-scope="date">
-        <slot name="date" v-bind="date"/>
+      <template
+        v-if="$scopedSlots.date"
+        slot="date"
+        slot-scope="date"
+      >
+        <slot
+          name="date"
+          v-bind="date"
+        />
       </template>
     </veui-calendar>
   </veui-overlay>
@@ -218,6 +273,11 @@ export default {
       })
     }
   },
+  watch: {
+    selected (value) {
+      this.localSelected = value
+    }
+  },
   methods: {
     formatDate (date) {
       if (!date) {
@@ -275,11 +335,6 @@ export default {
     },
     handleHoverShortcut (picking) {
       this.$refs.cal.picking = picking || null
-    }
-  },
-  watch: {
-    selected (value) {
-      this.localSelected = value
     }
   }
 }

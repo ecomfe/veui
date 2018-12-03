@@ -6,24 +6,27 @@
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
   }"
-  :ui="realUi">
+  :ui="realUi"
+>
   <input
     type="checkbox"
     v-bind="attrs"
     :disabled="realDisabled || realReadonly"
     @change="handleChange($event.target.checked)"
-    v-on="listeners">
+    v-on="listeners"
+  >
   <div class="veui-switch-switcher">
-    <div class="veui-switch-button"></div>
+    <div class="veui-switch-button"/>
   </div>
   <template v-if="$slots.default">
-    <div class="veui-switch-label"><slot/></div>
+    <div class="veui-switch-label">
+      <slot/>
+    </div>
   </template>
 </label>
 </template>
 
 <script>
-import Icon from './Icon'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { pick } from 'lodash'
@@ -33,9 +36,6 @@ const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
 
 export default {
   name: 'veui-switch',
-  components: {
-    'veui-icon': Icon
-  },
   mixins: [ui, input],
   model: {
     prop: 'model'

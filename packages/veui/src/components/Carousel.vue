@@ -1,7 +1,18 @@
 <template>
-<div class="veui-carousel" :ui="realUi">
-  <div class="veui-carousel-viewport" @mouseenter="handleEnter" @mouseleave="handleLeave">
-    <transition-group name="veui-carousel-item" class="veui-carousel-items" tag="ol">
+<div
+  class="veui-carousel"
+  :ui="realUi"
+>
+  <div
+    class="veui-carousel-viewport"
+    @mouseenter="handleEnter"
+    @mouseleave="handleLeave"
+  >
+    <transition-group
+      name="veui-carousel-item"
+      class="veui-carousel-items"
+      tag="ol"
+    >
       <li
         v-for="(item, i) in datasource"
         v-show="localIndex === i"
@@ -11,45 +22,83 @@
           'veui-carousel-item': true,
           'veui-carousel-item-current': localIndex === i
         }"
-        tabindex="0">
-        <slot v-bind="item" :index="i">
+        tabindex="0"
+      >
+        <slot
+          v-bind="item"
+          :index="i"
+        >
           <div
             class="veui-carousel-item-image"
             :style="{
               'background-image': `url(${item.src})`
-            }">
-            <img class="veui-sr-only" :src="item.src" :alt="item.alt">
+            }"
+          >
+            <img
+              class="veui-sr-only"
+              :src="item.src"
+              :alt="item.alt"
+            >
           </div>
         </slot>
       </li>
     </transition-group>
   </div>
-  <div v-if="indicator === 'number'" class="veui-carousel-indicator-numbers">{{ localIndex + 1 }}<span class="veui-carousel-indicator-numbers-separator"></span>{{ count }}</div>
-  <nav v-else-if="indicator !== 'none'" :class="{
+  <div
+    v-if="indicator === 'number'"
+    class="veui-carousel-indicator-numbers"
+  >
+    {{ localIndex + 1 }}<span class="veui-carousel-indicator-numbers-separator"/>{{ count }}
+  </div>
+  <nav
+    v-else-if="indicator !== 'none'"
+    :class="{
       [`veui-carousel-indicator-${indicator}s`]: true
-    }">
-    <button type="button" v-for="(item, i) in datasource" :key="i"
+    }"
+  >
+    <button
+      v-for="(item, i) in datasource"
+      :key="i"
+      type="button"
       :class="{
         'veui-carousel-indicator-item': true,
         'veui-carousel-indicator-item-current': localIndex === i
       }"
       @click="select(i, 'click')"
       @mouseenter="select(i, 'hover')"
-    >{{ item.label || t('pageIndex', { index: i + 1 }) }}</button>
+    >
+      {{ item.label || t('pageIndex', { index: i + 1 }) }}
+    </button>
   </nav>
-  <button type="button" class="veui-carousel-control veui-carousel-control-prev"
+  <button
+    type="button"
+    class="veui-carousel-control veui-carousel-control-prev"
+    :disabled="!wrap && localIndex === 0"
     @click="step(-1)"
-    :disabled="!wrap && localIndex === 0">
-    <veui-icon :name="icons.prev" :label="t('prev')"/>
+  >
+    <veui-icon
+      :name="icons.prev"
+      :label="t('prev')"
+    />
   </button>
-  <button type="button" class="veui-carousel-control veui-carousel-control-next"
+  <button
+    type="button"
+    class="veui-carousel-control veui-carousel-control-next"
+    :disabled="!wrap && localIndex === count - 1"
     @click="step(1)"
-    :disabled="!wrap && localIndex === count - 1">
-    <veui-icon :name="icons.next" :label="t('next')"/>
+  >
+    <veui-icon
+      :name="icons.next"
+      :label="t('next')"
+    />
   </button>
-  <div class="veui-sr-only" aria-live="polite" aria-atomic="true">
+  <div
+    class="veui-sr-only"
+    aria-live="polite"
+    aria-atomic="true"
+  >
     {{ t('detail', { index: localIndex + 1, total: datasource.length }) }}
-    </div>
+  </div>
 </div>
 </template>
 
@@ -61,10 +110,10 @@ import i18n from '../mixins/i18n'
 
 export default {
   name: 'veui-carousel',
-  mixins: [ui, i18n],
   components: {
     'veui-icon': Icon
   },
+  mixins: [ui, i18n],
   props: {
     datasource: {
       type: Array,
@@ -127,6 +176,12 @@ export default {
       this.initPlay()
     }
   },
+  mounted () {
+    this.initPlay()
+  },
+  beforeDestroy () {
+    this.stop()
+  },
   methods: {
     step (delta) {
       this.localIndex = (this.localIndex + delta + this.count) % this.count
@@ -166,12 +221,6 @@ export default {
         this.initPlay()
       }
     }
-  },
-  mounted () {
-    this.initPlay()
-  },
-  beforeDestroy () {
-    this.stop()
   }
 }
 </script>

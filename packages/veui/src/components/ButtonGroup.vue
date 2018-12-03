@@ -6,16 +6,23 @@
   }"
   :ui="realUi"
   role="group"
-  :aria-disabled="disabled">
+  :aria-disabled="disabled"
+>
   <slot>
     <veui-button
       v-for="(item, index) in items"
       :key="index"
       :disabled="disabled || item.disabled"
-      @click="handleClick(item, index)"
       :aria-posinset="index + 1"
-      :aria-setsize="items.length">
-      <slot v-bind="item" :index="index">{{ item.label }}</slot>
+      :aria-setsize="items.length"
+      @click="handleClick(item, index)"
+    >
+      <slot
+        v-bind="item"
+        :index="index"
+      >
+        {{ item.label }}
+      </slot>
     </veui-button>
   </slot>
 </div>

@@ -7,12 +7,20 @@
   }"
   :ui="realUi"
   v-bind="attrs"
-  v-on="listeners">
-  <template v-if="!loading"><slot/></template>
+  v-on="listeners"
+>
+  <template v-if="!loading">
+    <slot/>
+  </template>
   <template v-else>
     <slot name="loading">
-      <veui-icon :name="icons.loading" spin/>
-      <span class="veui-button-loading-text"><slot/></span>
+      <veui-icon
+        :name="icons.loading"
+        spin
+      />
+      <span class="veui-button-loading-text">
+        <slot/>
+      </span>
     </slot>
   </template>
 </button>
@@ -31,10 +39,10 @@ const EVENTS = [
 
 export default {
   name: 'veui-button',
-  mixins: [ui],
   components: {
     'veui-icon': Icon
   },
+  mixins: [ui],
   props: {
     disabled: Boolean,
     name: String,

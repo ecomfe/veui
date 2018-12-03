@@ -1,8 +1,8 @@
 <template>
 <button
+  v-show="!hidden"
   type="button"
   class="veui-option"
-  v-show="!hidden"
   :tabindex="hidden ? -1 : false"
   :ui="realUi"
   :class="{
@@ -12,10 +12,19 @@
   :autofocus="selected"
   :role="role"
   :aria-selected="String(selected)"
-  @click.stop="selectOption">
+  @click.stop="selectOption"
+>
   <slot>
-    <span class="veui-option-label"><slot name="label">{{ label }}</slot></span>
-    <veui-icon class="veui-option-checkmark" v-if="selected" :name="icons.checked"/>
+    <span class="veui-option-label">
+      <slot name="label">
+        {{ label }}
+      </slot>
+    </span>
+    <veui-icon
+      v-if="selected"
+      class="veui-option-checkmark"
+      :name="icons.checked"
+    />
   </slot>
 </button>
 </template>
@@ -30,10 +39,10 @@ import { isType } from '../../utils/helper'
 
 export default {
   name: 'veui-option',
-  mixins: [ui, menu, select],
   components: {
     'veui-icon': Icon
   },
+  mixins: [ui, menu, select],
   props: {
     label: {
       type: [String, Number]
@@ -54,19 +63,6 @@ export default {
     },
     role () {
       return isType(this.select, 'input') ? 'option' : 'menuitem'
-    }
-  },
-  methods: {
-    selectOption () {
-      if (!this.disabled) {
-        this.$emit('click')
-        let menu = this.menu
-        while (menu) {
-          menu.close()
-          menu = menu.menu
-        }
-        this.select.handleSelect(this.value)
-      }
     }
   },
   mounted () {
@@ -90,6 +86,19 @@ export default {
           container.scrollTop += oBottom - cBottom
         }
       })
+    }
+  },
+  methods: {
+    selectOption () {
+      if (!this.disabled) {
+        this.$emit('click')
+        let menu = this.menu
+        while (menu) {
+          menu.close()
+          menu = menu.menu
+        }
+        this.select.handleSelect(this.value)
+      }
     }
   }
 }

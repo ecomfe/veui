@@ -6,17 +6,33 @@
   :priority="priority"
   :closable="false"
   :before-close="beforeClose"
+  role="alertdialog"
   @ok="$emit('ok')"
   @cancel="$emit('cancel')"
   @afterclose="$emit('afterclose')"
-  role="alertdialog">
-  <template v-if="title || $slots.title" slot="title">
-    <template v-if="title">{{ title }}</template>
-    <slot name="title" v-else/>
+>
+  <template
+    v-if="title || $slots.title"
+    slot="title"
+  >
+    <template v-if="title">
+      {{ title }}
+    </template>
+    <slot
+      v-else
+      name="title"
+    />
   </template>
   <slot/>
-  <template v-if="$slots.foot || $scopedSlots.foot" slot="foot" slot-scope="scope">
-    <slot name="foot" v-bind="scope"/>
+  <template
+    v-if="$slots.foot || $scopedSlots.foot"
+    slot="foot"
+    slot-scope="scope"
+  >
+    <slot
+      name="foot"
+      v-bind="scope"
+    />
   </template>
 </veui-dialog>
 </template>
@@ -24,7 +40,6 @@
 <script>
 import { pick } from 'lodash'
 import Dialog from './Dialog'
-import Button from './Button'
 import config from '../managers/config'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
@@ -36,8 +51,7 @@ config.defaults({
 export default {
   name: 'veui-confirm-box',
   components: {
-    'veui-dialog': Dialog,
-    'veui-button': Button
+    'veui-dialog': Dialog
   },
   mixins: [ui, overlay],
   props: pick(Dialog.props, ['open', 'title', 'beforeClose']),

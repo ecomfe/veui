@@ -3,7 +3,8 @@
   :ui="realUi"
   class="veui-form"
   @submit.prevent="handleSubmit"
-  @reset.prevent="reset(null)">
+  @reset.prevent="reset(null)"
+>
   <slot/>
 </form>
 </template>
@@ -92,6 +93,10 @@ export default {
       }
       return map
     }
+  },
+
+  created () {
+    this.$on('interact', this.handleInteract)
   },
 
   methods: {
@@ -278,10 +283,6 @@ export default {
         target.resetValue()
       })
     }
-  },
-
-  created () {
-    this.$on('interact', this.handleInteract)
   }
 }
 </script>

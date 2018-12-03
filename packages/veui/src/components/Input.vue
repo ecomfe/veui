@@ -12,19 +12,23 @@
   :ui="realUi"
 >
   <template v-if="$slots.before">
-    <div class="veui-input-before"><slot name="before"/></div>
+    <div class="veui-input-before">
+      <slot name="before"/>
+    </div>
   </template>
   <label class="veui-input-main">
     <span
-      @selectstart.prevent="() => false"
-      class="veui-input-placeholder"
       v-if="type !== 'hidden'"
       v-show="empty"
-    >{{ placeholder }}</span>
+      class="veui-input-placeholder"
+      @selectstart.prevent="() => false"
+    >
+      {{ placeholder }}
+    </span>
     <input
       ref="input"
-      class="veui-input-input"
       v-model="localValue"
+      class="veui-input-input"
       v-bind="attrs"
       v-on="listeners"
       @focus="handleFocus"
@@ -40,14 +44,19 @@
     v-show="editable && !empty"
     class="veui-input-clear"
   >
-    <button type="button"
+    <button
+      type="button"
       :aria-label="t('clear')"
       class="veui-input-clear-button"
       @click.stop="clear"
-    ><veui-icon :name="icons.remove"/></button>
+    >
+      <veui-icon :name="icons.remove"/>
+    </button>
   </span>
   <template v-if="$slots.after">
-    <div class="veui-input-after"><slot name="after"/></div>
+    <div class="veui-input-after">
+      <slot name="after"/>
+    </div>
   </template>
 </div>
 </template>
@@ -65,10 +74,10 @@ const TYPE_LIST = ['text', 'password', 'hidden']
 
 export default {
   name: 'veui-input',
-  mixins: [input, ui, i18n],
   components: {
     'veui-icon': Icon
   },
+  mixins: [input, ui, i18n],
   props: {
     ui: String,
     type: {
@@ -128,6 +137,11 @@ export default {
       }
     }
   },
+  mounted () {
+    if (this.type !== 'hidden' && this.selectOnFocus) {
+      this.$on('focus', $event => $event.target.select())
+    }
+  },
   methods: {
     handleInput ($event) {
       try {
@@ -169,11 +183,6 @@ export default {
       this.compositionValue = ''
       this.focus()
       this.$emit('input', '')
-    }
-  },
-  mounted () {
-    if (this.type !== 'hidden' && this.selectOnFocus) {
-      this.$on('focus', $event => $event.target.select())
     }
   }
 }

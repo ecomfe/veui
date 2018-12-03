@@ -1,33 +1,51 @@
 <template>
-  <veui-tree-node :datasource="localDatasource"
-    :item-click="itemClick"
-    :icons="icons"
-    :ui="realUi"
-    @toggle="toggle"
-    @click="handleItemClick"
-    v-if="this.$scopedSlots.item">
-    <template slot="item" slot-scope="props">
-      <slot name="item" v-bind="props"/>
-    </template>
-  </veui-tree-node>
-  <veui-tree-node :datasource="localDatasource"
-    :item-click="itemClick"
-    :icons="icons"
-    :ui="realUi"
-    @toggle="toggle"
-    @click="handleItemClick"
-    v-else-if="this.$scopedSlots['item-label']">
-    <template slot="item-label" slot-scope="props">
-      <slot name="item-label" v-bind="props"/>
-    </template>
-  </veui-tree-node>
-  <veui-tree-node :datasource="localDatasource"
-    :item-click="itemClick"
-    :icons="icons"
-    :ui="realUi"
-    @toggle="toggle"
-    @click="handleItemClick"
-    v-else/>
+<veui-tree-node
+  v-if="this.$scopedSlots.item"
+  :datasource="localDatasource"
+  :item-click="itemClick"
+  :icons="icons"
+  :ui="realUi"
+  @toggle="toggle"
+  @click="handleItemClick"
+>
+  <template
+    slot="item"
+    slot-scope="props"
+  >
+    <slot
+      name="item"
+      v-bind="props"
+    />
+  </template>
+</veui-tree-node>
+<veui-tree-node
+  v-else-if="this.$scopedSlots['item-label']"
+  :datasource="localDatasource"
+  :item-click="itemClick"
+  :icons="icons"
+  :ui="realUi"
+  @toggle="toggle"
+  @click="handleItemClick"
+>
+  <template
+    slot="item-label"
+    slot-scope="props"
+  >
+    <slot
+      name="item-label"
+      v-bind="props"
+    />
+  </template>
+</veui-tree-node>
+<veui-tree-node
+  v-else
+  :datasource="localDatasource"
+  :item-click="itemClick"
+  :icons="icons"
+  :ui="realUi"
+  @toggle="toggle"
+  @click="handleItemClick"
+/>
 </template>
 
 <script>

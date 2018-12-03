@@ -1,5 +1,7 @@
 <template>
-<div class="veui-searchbox"
+<div
+  ref="self"
+  class="veui-searchbox"
   :class="{
     'veui-searchbox-suggestion-expanded': expanded,
     'veui-disabled': realDisabled,
@@ -7,24 +9,25 @@
   }"
   :ui="realUi"
   @click="handleClickBox"
-  ref="self"
 >
   <veui-input
     ref="input"
+    v-model="localValue"
+    v-outside:input="disallowSuggest"
     :name="realName"
     :readonly="realReadonly"
     :disabled="realDisabled"
     v-bind="attrs"
-    v-model="localValue"
-    @keypress.enter.prevent="search"
-    @focus="handleInputFocus"
     autocomplete="off"
-    v-outside:input="disallowSuggest"
     role="searchbox"
     :aria-haspopup="inputPopup"
+    @keypress.enter.prevent="search"
+    @focus="handleInputFocus"
   >
-    <div slot="after" class="veui-searchbox-action"
+    <div
+      slot="after"
       ref="search"
+      class="veui-searchbox-action"
       @click.stop="search"
     >
       <button
@@ -33,32 +36,50 @@
         :disabled="realDisabled || realReadonly"
         :aria-haspopup="submitPopup"
       >
-        <veui-icon :name="icons.search" :label="t('search')"/>
+        <veui-icon
+          :name="icons.search"
+          :label="t('search')"
+        />
       </button>
-      <veui-button :ui="uiParts.button"
+      <veui-button
+        :ui="uiParts.button"
         class="veui-searchbox-action-button"
         :disabled="realDisabled || realReadonly"
         :aria-haspopup="submitPopup"
-      >{{ t('search') }}</veui-button>
+      >
+        {{ t('search') }}
+      </veui-button>
     </div>
   </veui-input>
   <veui-overlay
+    v-if="realExpanded"
     ref="overlay"
     target="input"
     :options="realOverlayOptions"
     :open="realExpanded"
-    v-if="realExpanded"
-    :overlay-class="overlayClass">
-    <div class="veui-searchbox-suggestion-overlay"
+    :overlay-class="overlayClass"
+  >
+    <div
       ref="box"
+      class="veui-searchbox-suggestion-overlay"
       role="listbox"
-      :aria-expanded="String(realExpanded)">
-      <slot name="suggestions" :suggestions="realSuggestions" :select="selectSuggestion">
+      :aria-expanded="String(realExpanded)"
+    >
+      <slot
+        name="suggestions"
+        :suggestions="realSuggestions"
+        :select="selectSuggestion"
+      >
         <template v-for="(suggestion, index) in realSuggestions">
-          <div class="veui-searchbox-suggestion-item"
+          <div
             :key="index"
-            @click="selectSuggestion(suggestion)">
-            <slot name="suggestion" v-bind="suggestion">
+            class="veui-searchbox-suggestion-item"
+            @click="selectSuggestion(suggestion)"
+          >
+            <slot
+              name="suggestion"
+              v-bind="suggestion"
+            >
               {{ suggestion.label }}
             </slot>
           </div>
@@ -83,13 +104,13 @@ import { pick, includes } from 'lodash'
 
 export default {
   name: 'veui-searchbox',
-  mixins: [ui, input, dropdown, overlay, i18n],
   components: {
     'veui-input': Input,
     'veui-icon': Icon,
     'veui-overlay': Overlay,
     'veui-button': Button
   },
+  mixins: [ui, input, dropdown, overlay, i18n],
   props: {
     suggestions: {
       type: Array,

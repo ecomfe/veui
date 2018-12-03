@@ -1,16 +1,27 @@
 <template>
 <veui-field
-  :ui="realUi"
   ref="field"
+  :ui="realUi"
   class="veui-fieldset"
   :class="{
     'veui-fieldset-required': required
   }"
   role="group"
-  v-bind="attrs">
-  <template v-if="$slots.label" slot="label"><slot name="label"/></template>
+  v-bind="attrs"
+>
+  <template
+    v-if="$slots.label"
+    slot="label"
+  >
+    <slot name="label"/>
+  </template>
   <slot/>
-  <template v-if="$slots.tip" slot="tip"><slot name="tip"/></template>
+  <template
+    v-if="$slots.tip"
+    slot="tip"
+  >
+    <slot name="tip"/>
+  </template>
 </veui-field>
 </template>
 
@@ -26,10 +37,10 @@ import '../../common/uiTypes'
 export default {
   name: 'veui-fieldset',
   uiTypes: ['fieldset', 'form-container'],
-  mixins: [ui],
   components: {
     'veui-field': Field
   },
+  mixins: [ui],
   props: {
     label: String,
     name: String,

@@ -3,51 +3,66 @@
   class="veui-pagination"
   role="navigation"
   :aria-label="t('infoLabel', { page, pageCount })"
-  :ui="realUi">
+  :ui="realUi"
+>
   <div class="veui-pagination-info">
-    <div class="veui-pagination-total">{{ t('total', { total: realTotal }) }}</div>
+    <div class="veui-pagination-total">
+      {{ t('total', { total: realTotal }) }}
+    </div>
     <div class="veui-pagination-size">
       <span>{{ t('pageSize') }}</span>
-      <veui-select v-model="realPageSize"
+      <veui-select
+        v-model="realPageSize"
         :ui="uiParts.pageSize"
         :options="realPageSizes"
         overlay-class="veui-pagination-select-overlay"
         :aria-label="t('pageSizeLabel')"
-        @change="size => $emit('pagesizechange', size)">
-      </veui-select>
+        @change="size => $emit('pagesizechange', size)"
+      />
     </div>
   </div>
   <div class="veui-pagination-switch">
-    <veui-link class="veui-pagination-prev"
+    <veui-link
+      class="veui-pagination-prev"
       :to="page === 1 ? '' : pageNavHref.prev.href"
       :native="native"
       :disabled="page === 1"
       :aria-label="t('prev')"
-      @click="handleRedirect(pageNavHref.prev.page, $event)">
+      @click="handleRedirect(pageNavHref.prev.page, $event)"
+    >
       <veui-icon :name="icons.prev"/>
     </veui-link>
-    <ul class="veui-pagination-pages" :class="{[`veui-pagination-digit-length-${pageDigitLength}`]: true}">
+    <ul
+      class="veui-pagination-pages"
+      :class="{[`veui-pagination-digit-length-${pageDigitLength}`]: true}"
+    >
       <li
         v-for="item in pageIndicatorSeries"
+        :key="item.page"
         :class="{
           'veui-pagination-page': true,
           'veui-active': item.page === page
         }"
-        :key="item.page">
+      >
         <veui-link
           :to="item.page === page ? null : item.href"
           :native="native"
           :aria-current="item.page === page ? 'page' : null"
           :aria-label="item.page === page ? t('current', { page: item.page }) : t('pageLabel', { page: item.page })"
-          @click="handleRedirect(item.page, $event)">{{ item.text }}</veui-link>
+          @click="handleRedirect(item.page, $event)"
+        >
+          {{ item.text }}
+        </veui-link>
       </li>
     </ul>
-    <veui-link class="veui-pagination-next"
+    <veui-link
+      class="veui-pagination-next"
       :to="page === pageCount ? '' : pageNavHref.next.href"
       :native="native"
       :disabled="page === pageCount || pageCount === 0"
       :aria-label="t('next')"
-      @click="handleRedirect(pageNavHref.next.page, $event)">
+      @click="handleRedirect(pageNavHref.next.page, $event)"
+    >
       <veui-icon :name="icons.next"/>
     </veui-link>
   </div>
@@ -58,7 +73,6 @@
 import Icon from './Icon'
 import Link from './Link'
 import Select from './Select'
-import Option from './Select/Option'
 import config from '../managers/config'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
@@ -92,13 +106,12 @@ const moreIndicatorOffsetLength = 5
 
 export default {
   name: 'veui-pagination',
-  mixins: [ui, i18n],
   components: {
     'veui-icon': Icon,
     'veui-link': Link,
-    'veui-select': Select,
-    'veui-option': Option
+    'veui-select': Select
   },
+  mixins: [ui, i18n],
   props: {
     page: {
       type: Number,

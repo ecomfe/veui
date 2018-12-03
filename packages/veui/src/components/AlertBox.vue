@@ -10,22 +10,41 @@
   :escapable="false"
   :priority="priority"
   :before-close="beforeClose"
+  role="alertdialog"
   @ok="$emit('ok')"
   @afterclose="$emit('afterclose')"
-  role="alertdialog">
-  <veui-icon v-if="icons[type]"
+>
+  <veui-icon
+    v-if="icons[type]"
     class="veui-alert-box-icon"
-    :name="icons[type]">
-  </veui-icon>
-  <h3 v-if="title || $slots.title" class="veui-alert-box-title">
-    <template v-if="title">{{ title }}</template>
-    <slot name="title" v-else/>
+    :name="icons[type]"
+  />
+  <h3
+    v-if="title || $slots.title"
+    class="veui-alert-box-title"
+  >
+    <template v-if="title">
+      {{ title }}
+    </template>
+    <slot
+      v-else
+      name="title"
+    />
   </h3>
   <div class="veui-alert-box-content">
     <slot/>
   </div>
-  <template slot="foot" slot-scope="{ close }">
-    <veui-button :ui="uiParts.ok" autofocus @click="close('ok')">知道了</veui-button>
+  <template
+    slot="foot"
+    slot-scope="{ close }"
+  >
+    <veui-button
+      :ui="uiParts.ok"
+      autofocus
+      @click="close('ok')"
+    >
+      知道了
+    </veui-button>
   </template>
 </veui-dialog>
 </template>
@@ -45,6 +64,11 @@ config.defaults({
 
 export default {
   name: 'veui-alert-box',
+  components: {
+    'veui-dialog': Dialog,
+    'veui-button': Button,
+    'veui-icon': Icon
+  },
   mixins: [ui, overlay],
   props: {
     ...pick(Dialog.props, ['open', 'title', 'beforeClose']),
@@ -55,11 +79,6 @@ export default {
       },
       default: 'success'
     }
-  },
-  components: {
-    'veui-dialog': Dialog,
-    'veui-button': Button,
-    'veui-icon': Icon
   },
   data () {
     return {

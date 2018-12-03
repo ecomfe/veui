@@ -4,26 +4,46 @@
   class="veui-alert"
   :ui="realUi"
   :class="`veui-alert-${type}`"
-  role="alert" aria-expanded="true"
+  role="alert"
+  aria-expanded="true"
 >
   <slot name="content">
     <div class="veui-alert-state">
-      <veui-icon class="veui-alert-icon" :name="icons[type]"/>
+      <veui-icon
+        class="veui-alert-icon"
+        :name="icons[type]"
+      />
     </div>
 
-    <div v-if="isMultiple" class="veui-alert-message veui-alert-message-multiple">
-      <slot :index="localIndex" :message="message[localIndex]">{{ message[localIndex] }}</slot>
+    <div
+      v-if="isMultiple"
+      class="veui-alert-message veui-alert-message-multiple"
+    >
+      <slot
+        :index="localIndex"
+        :message="message[localIndex]"
+      >
+        {{ message[localIndex] }}
+      </slot>
     </div>
-    <div v-else class="veui-alert-message">
-      <slot :message="message">{{ message }}</slot>
+    <div
+      v-else
+      class="veui-alert-message"
+    >
+      <slot :message="message">
+        {{ message }}
+      </slot>
     </div>
 
-    <div class="veui-alert-nav" v-if="isMultiple">
+    <div
+      v-if="isMultiple"
+      class="veui-alert-nav"
+    >
       <veui-button
         :ui="uiParts.prev"
         :disabled="isFirst"
-        @click="switchMessage(-1)"
         :aria-label="t('prev')"
+        @click="switchMessage(-1)"
       >
         <veui-icon :name="icons.prev"/>
       </veui-button>
@@ -33,29 +53,36 @@
           index: localIndex + 1,
           total: message.length
         })"
-      >{{ localIndex + 1 }}/{{ message.length }}</span>
+      >
+        {{ localIndex + 1 }}/{{ message.length }}
+      </span>
       <veui-button
         :ui="uiParts.next"
         :disabled="isLast"
-        @click="switchMessage(1)"
         :aria-label="t('next')"
+        @click="switchMessage(1)"
       >
         <veui-icon :name="icons.next"/>
       </veui-button>
     </div>
 
-    <div class="veui-alert-close" v-if="closable">
+    <div
+      v-if="closable"
+      class="veui-alert-close"
+    >
       <veui-button
         v-if="realCloseLabel"
         class="veui-alert-close-text"
         :ui="uiParts.close"
         @click="close"
-      >{{ realCloseLabel }}</veui-button>
+      >
+        {{ realCloseLabel }}
+      </veui-button>
       <veui-button
         v-else
         :ui="uiParts.closeLabel"
-        @click="close"
         :aria-label="t('close')"
+        @click="close"
       >
         <veui-icon :name="icons.close"/>
       </veui-button>
@@ -73,11 +100,11 @@ import warn from '../utils/warn'
 
 export default {
   name: 'alert',
-  mixins: [ui, i18n],
   components: {
     'veui-icon': Icon,
     'veui-button': Button
   },
+  mixins: [ui, i18n],
   props: {
     type: {
       type: String,

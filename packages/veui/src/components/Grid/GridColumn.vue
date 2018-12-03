@@ -2,7 +2,9 @@
 <div
   class="veui-grid-column"
   :style="style"
-><slot/></div>
+>
+  <slot/>
+</div>
 </template>
 
 <script>

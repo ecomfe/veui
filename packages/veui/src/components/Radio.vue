@@ -4,15 +4,22 @@
     'veui-radio': true,
     'veui-disabled': realReadonly || realDisabled
   }"
-  :ui="realUi">
+  :ui="realUi"
+>
   <input
     ref="box"
     type="radio"
     v-bind="attrs"
     @change="handleChange"
-    v-on="listeners">
-  <span class="veui-radio-box"></span>
-  <span v-if="$slots.default" class="veui-radio-label"><slot/></span>
+    v-on="listeners"
+  >
+  <span class="veui-radio-box"/>
+  <span
+    v-if="$slots.default"
+    class="veui-radio-label"
+  >
+    <slot/>
+  </span>
 </label>
 </template>
 
@@ -25,8 +32,8 @@ const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
 
 export default {
   name: 'veui-radio',
-  inheritAttrs: false,
   mixins: [ui, input],
+  inheritAttrs: false,
   model: {
     prop: 'model'
   },

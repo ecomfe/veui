@@ -5,19 +5,26 @@
   role="listbox"
   aria-multiselectable="true"
   :aria-readonly="String(realReadonly)"
-  :aria-disabled="String(realDisabled)">
+  :aria-disabled="String(realDisabled)"
+>
   <veui-checkbox
-    :name="localName"
     v-for="(item, index) in items"
     :key="index"
+    :name="localName"
     :disabled="item.disabled || realDisabled || realReadonly"
     :checked="localValue.indexOf(item.value) !== -1"
-    @change="checked => handleChange(item.value, checked)"
     role="option"
     :aria-selected="String(localValue.indexOf(item.value) !== -1)"
     :aria-posinset="index + 1"
-    :aria-setsize="items.length">
-    <slot v-bind="item" :index="index">{{ item.label }}</slot>
+    :aria-setsize="items.length"
+    @change="checked => handleChange(item.value, checked)"
+  >
+    <slot
+      v-bind="item"
+      :index="index"
+    >
+      {{ item.label }}
+    </slot>
   </veui-checkbox>
 </div>
 </template>
@@ -51,14 +58,14 @@ export default {
       localValue: this.value
     }
   },
-  watch: {
-    value (val) {
-      this.localValue = val || []
-    }
-  },
   computed: {
     localName () {
       return this.realName || uniqueId('veui-checkbox-group-')
+    }
+  },
+  watch: {
+    value (val) {
+      this.localValue = val || []
     }
   },
   methods: {

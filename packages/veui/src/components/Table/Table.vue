@@ -1,14 +1,21 @@
 <template>
-<div class="veui-table" :ui="realUi">
-  <div v-if="scrollableY" class="veui-table-fixed-header" aria-hidden="true">
+<div
+  class="veui-table"
+  :ui="realUi"
+>
+  <div
+    v-if="scrollableY"
+    class="veui-table-fixed-header"
+    aria-hidden="true"
+  >
     <table>
       <col-group gutter/>
       <table-head @sort="sort"/>
     </table>
   </div>
   <div
-    class="veui-table-main"
     ref="main"
+    class="veui-table-main"
     :style="{
       maxHeight: scrollableY ? realScroll.y : null
     }"
@@ -16,15 +23,32 @@
     <table>
       <slot/>
       <col-group/>
-      <table-head v-if="!scrollableY" @sort="sort"/>
-      <table-body><template slot="no-data"><slot name="no-data">{{ t('noData') }}</slot></template></table-body>
-      <table-foot v-if="!scrollableY && hasFoot"><slot name="foot"/></table-foot>
+      <table-head
+        v-if="!scrollableY"
+        @sort="sort"
+      />
+      <table-body>
+        <template slot="no-data">
+          <slot name="no-data">
+            {{ t('noData') }}
+          </slot>
+        </template>
+      </table-body>
+      <table-foot v-if="!scrollableY && hasFoot">
+        <slot name="foot"/>
+      </table-foot>
     </table>
   </div>
-  <div v-if="scrollableY" class="veui-table-fixed-footer" aria-hidden="true">
+  <div
+    v-if="scrollableY"
+    class="veui-table-fixed-footer"
+    aria-hidden="true"
+  >
     <table>
       <col-group gutter/>
-      <table-foot v-if="hasFoot"><slot name="foot"/></table-foot>
+      <table-foot v-if="hasFoot">
+        <slot name="foot"/>
+      </table-foot>
     </table>
   </div>
 </div>
@@ -47,13 +71,13 @@ import { isEqualSet } from '../../utils/lang'
 export default {
   name: 'veui-table',
   uiTypes: ['table'],
-  mixins: [ui, i18n],
   components: {
     'table-body': Body,
     'table-head': Head,
     'table-foot': Foot,
     'col-group': ColGroup
   },
+  mixins: [ui, i18n],
   props: {
     data: {
       type: Array,
@@ -74,6 +98,7 @@ export default {
       }
     },
     selected: {
+      type: null,
       default () {
         return []
       }
@@ -179,6 +204,42 @@ export default {
       return this.realScroll.y && this.data.length
     }
   },
+  watch: {
+    selected (val) {
+      if (this.validateSelected(val)) {
+        this.localSelected = normalizeArray(val)
+      }
+    },
+    expanded (val) {
+      this.localExpanded = val
+    },
+    localExpanded (val, oldVal) {
+      if (val === oldVal || !isEqualSet(val, oldVal)) {
+        this.$emit('update:expanded', val)
+      }
+    },
+    realKeys (val) {
+      this.localSelected = intersection(this.localSelected, val)
+    },
+    realSelected (val, oldVal) {
+      if (val === oldVal || !isEqualSet(val, oldVal)) {
+        this.$emit('update:selected', val)
+      }
+    }
+  },
+  created () {
+    this.validateSelected()
+  },
+  mounted () {
+    if (this.maxHeight) {
+      this.updateLayout()
+    }
+  },
+  updated () {
+    if (this.maxHeight) {
+      this.updateLayout()
+    }
+  },
   methods: {
     add (col) {
       let length = this.columns.length
@@ -251,42 +312,6 @@ export default {
     },
     updateLayout () {
       this.gutterWidth = getElementScrollbarWidth(this.$refs.main)
-    }
-  },
-  created () {
-    this.validateSelected()
-  },
-  mounted () {
-    if (this.maxHeight) {
-      this.updateLayout()
-    }
-  },
-  updated () {
-    if (this.maxHeight) {
-      this.updateLayout()
-    }
-  },
-  watch: {
-    selected (val) {
-      if (this.validateSelected(val)) {
-        this.localSelected = normalizeArray(val)
-      }
-    },
-    expanded (val) {
-      this.localExpanded = val
-    },
-    localExpanded (val, oldVal) {
-      if (val === oldVal || !isEqualSet(val, oldVal)) {
-        this.$emit('update:expanded', val)
-      }
-    },
-    realKeys (val) {
-      this.localSelected = intersection(this.localSelected, val)
-    },
-    realSelected (val, oldVal) {
-      if (val === oldVal || !isEqualSet(val, oldVal)) {
-        this.$emit('update:selected', val)
-      }
     }
   }
 }

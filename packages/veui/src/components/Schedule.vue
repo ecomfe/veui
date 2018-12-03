@@ -5,19 +5,29 @@
   role="application"
   aria-label="时段选择"
   :aria-disabled="realDisabled"
-  :aria-readonly="realReadonly">
+  :aria-readonly="realReadonly"
+>
   <slot name="header">
     <div class="veui-schedule-header">
       <slot name="header-content">
-        <slot name="shortcuts" v-if="shortcuts && shortcuts.length">
+        <slot
+          v-if="shortcuts && shortcuts.length"
+          name="shortcuts"
+        >
           <div class="veui-schedule-shortcuts">
             <template v-if="shortcutsDisplay === 'inline'">
-              <button type="button" v-for="({ label }, i) in shortcuts" :key="i"
-                @click="selectShortcut(i)"
+              <button
+                v-for="({ label }, i) in shortcuts"
+                :key="i"
+                type="button"
                 :class="{
                   'veui-schedule-shortcut': true,
                   'veui-schedule-shortcut-selected': shortcutChecked[i]
-                }">{{ label }}</button>
+                }"
+                @click="selectShortcut(i)"
+              >
+                {{ label }}
+              </button>
             </template>
             <template v-else>
               <veui-dropdown
@@ -25,15 +35,28 @@
                 :label="t('preset')"
                 :aria-label="t('selectPreset')"
                 :options="shortcutOptions"
-                @click="selectShortcut"/>
+                @click="selectShortcut"
+              />
             </template>
           </div>
         </slot>
         <slot name="legend">
-          <div class="veui-schedule-legend" aria-hidden="true">
-            <span v-for="(status, i) in realStatuses" :key="i"
-              class="veui-schedule-legend-item" :class="`veui-schedule-legend-${status.value || status.name}`">
-              <slot name="legend-label" v-bind="status">{{ status.label }}</slot>
+          <div
+            class="veui-schedule-legend"
+            aria-hidden="true"
+          >
+            <span
+              v-for="(status, i) in realStatuses"
+              :key="i"
+              class="veui-schedule-legend-item"
+              :class="`veui-schedule-legend-${status.value || status.name}`"
+            >
+              <slot
+                name="legend-label"
+                v-bind="status"
+              >
+                {{ status.label }}
+              </slot>
             </span>
           </div>
         </slot>
@@ -42,30 +65,56 @@
   </slot>
   <div class="veui-schedule-body">
     <div class="veui-schedule-head-hour">
-      <div class="veui-schedule-head-hour-item" v-for="i in 13" :key="i">{{ `${(i - 1) * 2}:00` }}</div>
+      <div
+        v-for="i in 13"
+        :key="i"
+        class="veui-schedule-head-hour-item"
+      >
+        {{ `${(i - 1) * 2}:00` }}
+      </div>
     </div>
     <div class="veui-schedule-head-day">
-      <div class="veui-schedule-head-day-item" v-for="i in 7" :key="i">
+      <div
+        v-for="i in 7"
+        :key="i"
+        class="veui-schedule-head-day-item"
+      >
         <veui-checkbox
           :ui="uiParts.dayPicker"
           :indeterminate="dayChecked[i - 1].indeterminate"
           :checked="dayChecked[i - 1].checked"
           :aria-label="getDayLabel(i - 1)"
-          @change="toggleDay(week[i - 1], !dayChecked[i - 1].checked)">
+          @change="toggleDay(week[i - 1], !dayChecked[i - 1].checked)"
+        >
           {{ dayNames[i - 1] }}
         </veui-checkbox>
       </div>
     </div>
-    <div class="veui-schedule-detail" v-outside.mouseup="() => markEnd()">
+    <div
+      v-outside.mouseup="() => markEnd()"
+      class="veui-schedule-detail"
+    >
       <table class="veui-schedule-table veui-schedule-table-interaction">
         <colgroup>
-          <col v-for="i in 24" :key="i">
+          <col
+            v-for="i in 24"
+            :key="i"
+          >
         </colgroup>
-        <tr v-for="(day, i) in hourlyStates" :key="i">
-          <td v-for="(hour, j) in day" :key="j" :class="{ 'veui-schedule-selected': hour.isSelected }">
-            <button type="button" :disabled="realDisabled || hour.isDisabled"
-              :class="mergeClass({ 'veui-schedule-selected': hour.isSelected }, week[i], j)"
+        <tr
+          v-for="(day, i) in hourlyStates"
+          :key="i"
+        >
+          <td
+            v-for="(hour, j) in day"
+            :key="j"
+            :class="{ 'veui-schedule-selected': hour.isSelected }"
+          >
+            <button
               :ref="`hour-${week[i]}-${j}`"
+              type="button"
+              :disabled="realDisabled || hour.isDisabled"
+              :class="mergeClass({ 'veui-schedule-selected': hour.isSelected }, week[i], j)"
               :tabindex="i === 0 && j === 0 ? '0' : '-1'"
               :aria-label="getHourLabel(i, j, hour)"
               @mousedown="handleMousedown(i, j)"
@@ -76,26 +125,46 @@
               @keydown.up.prevent="moveFocus((i + 6) % 7, j)"
               @keydown.right.prevent="moveFocus(i, (j + 25) % 24)"
               @keydown.down.prevent="moveFocus((i + 1) % 7, j)"
-              @keydown.left.prevent="moveFocus(i, (j + 23) % 24)"><slot name="hour" :day="week[i]" :hour="j"/></button>
+              @keydown.left.prevent="moveFocus(i, (j + 23) % 24)"
+            >
+              <slot
+                name="hour"
+                :day="week[i]"
+                :hour="j"
+              />
+            </button>
           </td>
         </tr>
       </table>
       <table class="veui-schedule-table veui-schedule-table-selected">
         <colgroup>
-          <col v-for="i in 24" :key="i">
+          <col
+            v-for="i in 24"
+            :key="i"
+          >
         </colgroup>
-        <tr v-for="(day, i) in hourlyStates" :key="i">
+        <tr
+          v-for="(day, i) in hourlyStates"
+          :key="i"
+        >
           <template v-for="(hour, j) in day">
-            <td v-if="!hour.isSelected || hour.isStart" :key="j"
-              :colspan="hour.isStart && hour.span > 1 ? hour.span : false">
-              <slot name="label" :from="hour.from" :to="hour.end">
-              {{
-                hour.isWhole
-                  ? t('entireDay')
-                  : hour.isStart && hour.span > 2
-                    ? `${hour.start}:00–${hour.end + 1}:00`
-                  : ''
-              }}
+            <td
+              v-if="!hour.isSelected || hour.isStart"
+              :key="j"
+              :colspan="hour.isStart && hour.span > 1 ? hour.span : false"
+            >
+              <slot
+                name="label"
+                :from="hour.from"
+                :to="hour.end"
+              >
+                {{
+                  hour.isWhole
+                    ? t('entireDay')
+                    : hour.isStart && hour.span > 2
+                      ? `${hour.start}:00–${hour.end + 1}:00`
+                      : ''
+                }}
               </slot>
             </td>
           </template>
@@ -108,8 +177,14 @@
         :delay="0"
         :interactive="false"
         :ui="uiParts.tooltip"
-        open>
-        <slot name="tooltip" v-bind="current">{{ currentLabel }}</slot>
+        open
+      >
+        <slot
+          name="tooltip"
+          v-bind="current"
+        >
+          {{ currentLabel }}
+        </slot>
       </veui-tooltip>
     </div>
   </div>
@@ -145,16 +220,16 @@ function warnDeprecated (oldVal, newVal) {
 
 export default {
   name: 'veui-schedule',
-  mixins: [ui, input, i18n],
   directives: { outside },
-  model: {
-    prop: 'selected',
-    event: 'select'
-  },
   components: {
     'veui-checkbox': Checkbox,
     'veui-tooltip': Tooltip,
     'veui-dropdown': Dropdown
+  },
+  mixins: [ui, input, i18n],
+  model: {
+    prop: 'selected',
+    event: 'select'
   },
   props: {
     selected: {
@@ -198,14 +273,6 @@ export default {
       pickingEnd: null,
       current: null,
       mergeMode: 'xor'
-    }
-  },
-  watch: {
-    selected: {
-      handler (val) {
-        this.localSelected = val ? cloneDeep(val) : []
-      },
-      immediate: true
     }
   },
   computed: {
@@ -279,6 +346,14 @@ export default {
     },
     shortcutOptions () {
       return this.realShortcuts.map(({ label }, i) => ({ label, value: i }))
+    }
+  },
+  watch: {
+    selected: {
+      handler (val) {
+        this.localSelected = val ? cloneDeep(val) : []
+      },
+      immediate: true
     }
   },
   methods: {
