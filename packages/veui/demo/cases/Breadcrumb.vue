@@ -5,7 +5,7 @@
     <section>
       <veui-breadcrumb :routes="items" @redirect="handleRedirect">
         <template slot-scope="route"><em>{{ route.label }}</em></template>
-        <template slot="separator" slot-scope="_">{{ sep }}</template>
+        <template slot="separator">{{ sep }}</template>
       </veui-breadcrumb>
     </section>
     <section>

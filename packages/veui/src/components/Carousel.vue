@@ -6,7 +6,7 @@
         v-for="(item, i) in datasource"
         v-show="localIndex === i"
         ref="item"
-        :key="i"
+        :key="`${i}`"
         :class="{
           'veui-carousel-item': true,
           'veui-carousel-item-current': localIndex === i
