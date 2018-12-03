@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/rugby</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/rugby" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path class="fillColor" d="M24,40 C36.1502645,40 46,30 46,24 C46,18 36.1502645,8 24,8 C11.8497355,8 2,18 2,24 C2,30 11.8497355,40 24,40 Z" id="Oval-2" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M9,14 L9,34" id="Path-379" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M39,14 L39,34" id="Path-379-Copy" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M15,24 L33,24" id="Path-380" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M18,19 L18,29" id="Path-381" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M24,19 L24,29" id="Path-381-Copy" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M30,19 L30,29" id="Path-381-Copy-2" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

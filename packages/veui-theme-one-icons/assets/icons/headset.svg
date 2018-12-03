@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/headset</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/headset" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M46,42 L46,28 C46,15.8497355 36.1502645,6 24,6 C11.8497355,6 2,15.8497355 2,28 L2,42" id="Oval" stroke="#000000" stroke-width="4"></path>
+        <path d="M16,33 L16,39" id="Path-444" stroke="#000000" stroke-width="4"></path>
+        <path d="M32,33 L32,39" id="Path-444-Copy" stroke="#000000" stroke-width="4"></path>
+        <path d="M24,29 L24,43" id="Path-445" stroke="#000000" stroke-width="4"></path>
+        <rect class="fillColor" id="Rectangle" stroke="#000000" stroke-width="4" x="2" y="30" width="4" height="12"></rect>
+        <rect class="fillColor" id="Rectangle-Copy" stroke="#000000" stroke-width="4" x="42" y="30" width="4" height="12"></rect>
+    </g>
+</svg>

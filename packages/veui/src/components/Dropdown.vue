@@ -26,7 +26,7 @@
     <span class="veui-dropdown-label" v-if="!split">
       <slot name="label" :label="label">{{ label }}</slot>
     </span>
-    <veui-icon class="veui-dropdown-icon" :name="icons[expanded ? 'collapse': 'expand']"/>
+    <veui-icon class="veui-dropdown-icon" :name="icons[expanded ? 'collapse' : 'expand']"/>
   </veui-button>
   <veui-overlay
     target="main"

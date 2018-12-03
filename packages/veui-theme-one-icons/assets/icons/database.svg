@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/database </title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/database-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path class="fillColor" d="M2,10 C2,25.721148 2,35.0544813 2,38 C2,42.418278 11.8497355,46 24,46 C36.1502645,46 46,42.418278 46,38 L46,10" id="Oval-Copy" stroke="#000000" stroke-width="4"></path>
+        <ellipse class="fillColor" id="Oval" stroke="#000000" stroke-width="4" cx="24" cy="10" rx="22" ry="8"></ellipse>
+        <path class="innerStrokeColor" d="M2,20 C2,24.418278 11.8497355,28 24,28 C36.1502645,28 46,24.418278 46,20" id="Oval-Copy-2" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M2,29 C2,33.418278 11.8497355,37 24,37 C36.1502645,37 46,33.418278 46,29" id="Oval-Copy-3" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

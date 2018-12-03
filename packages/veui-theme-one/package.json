@@ -1,7 +1,7 @@
 {
   "name": "veui-theme-one",
   "version": "1.0.0-alpha.18",
-  "description": "One Design theme for VEUI.",
+  "description": "Theme ONE DESIGN of VEUI.",
   "repository": "ecomfe/veui",
   "license": "MIT",
   "keywords": [
@@ -34,6 +34,7 @@
     "stylelint": "^8.4.0",
     "stylelint-config-standard": "^18.0.0",
     "svgo": "^1.1.1",
-    "svgson": "^3.0.0"
+    "svgson": "^3.0.0",
+    "veui-theme-one-icons": "1.0.0-alpha.18"
   }
 }

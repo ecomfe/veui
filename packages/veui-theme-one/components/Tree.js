@@ -1,8 +1,8 @@
-import '../icons/angle-right'
+import 'veui-theme-one-icons/chevron-right'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    collapsed: 'angle-right'
+    collapsed: 'chevron-right'
   }
 }, 'tree')

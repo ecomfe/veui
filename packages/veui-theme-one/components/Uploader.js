@@ -1,21 +1,21 @@
-import '../icons/upload'
-import '../icons/cross'
-import '../icons/check'
-import '../icons/clip'
-import '../icons/refresh'
-import '../icons/plus-huge'
-import '../icons/exclamation-circle-o'
+import 'veui-theme-one-icons/upload'
+import 'veui-theme-one-icons/times'
+import 'veui-theme-one-icons/check'
+import 'veui-theme-one-icons/paperclip'
+import 'veui-theme-one-icons/sync-alt'
+import 'veui-theme-one-icons/plus'
+import 'veui-theme-one-icons/exclamation-circle'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
     upload: 'upload',
-    clear: 'cross',
+    clear: 'times',
     success: 'check',
-    redo: 'refresh',
-    file: 'clip',
-    add: 'plus-huge',
-    alert: 'exclamation-circle-o'
+    redo: 'sync-alt',
+    file: 'paperclip',
+    add: 'plus',
+    alert: 'exclamation-circle'
   },
   ui: {
     direction: {

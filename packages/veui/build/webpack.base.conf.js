@@ -24,7 +24,8 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       '@': resolve('src'),
-      veui: resolve('src')
+      veui: resolve('src'),
+      'veui-theme-one-icons': resolve('../veui-theme-one-icons/icons')
     }
   },
   module: {

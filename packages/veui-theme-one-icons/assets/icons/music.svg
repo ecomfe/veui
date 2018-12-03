@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="48px" viewBox="0 0 44 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="others/music" transform="translate(-2.000000, 0.000000)" stroke="#000000" stroke-width="4">
+            <path class="fillColor" d="M8,38 L16,38 L16,42 C16,44.209139 14.209139,46 12,46 L8,46 C5.790861,46 4,44.209139 4,42 L4,42 C4,39.790861 5.790861,38 8,38 Z" id="Rectangle"></path>
+            <path class="fillColor" d="M36,30 L44,30 L44,34 C44,36.209139 42.209139,38 40,38 L36,38 C33.790861,38 32,36.209139 32,34 L32,34 C32,31.790861 33.790861,30 36,30 Z" id="Rectangle-Copy"></path>
+            <path d="M16,18 L44,10" id="Path-2"></path>
+            <polyline id="Path-435" points="16 38 16 10 44 2 44 30"></polyline>
+        </g>
+    </g>
+</svg>

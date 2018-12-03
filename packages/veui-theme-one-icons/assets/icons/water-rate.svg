@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/water-rate</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/water-rate" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path class="fillColor" d="M24,46 C32.836556,46 40,38.8363206 40,30 C40,21.3333333 34.6666667,12 24,2 C13.3333333,12 8,21.3333333 8,30 C8,38.836556 15.163444,46 24,46 Z" id="Combined-Shape" stroke="#000000" stroke-width="4"></path>
+        <polyline class="innerStrokeColor" id="Path-7" stroke="#000000" stroke-width="4" points="24 22 20 30 28 30 24 38"></polyline>
+    </g>
+</svg>

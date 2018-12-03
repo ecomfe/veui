@@ -1,9 +1,9 @@
-import '../icons/angle-right-small'
+import 'veui-theme-one-icons/chevron-right'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    separator: 'angle-right-small'
+    separator: 'chevron-right'
   },
   parts: {
     link: 'link primary'

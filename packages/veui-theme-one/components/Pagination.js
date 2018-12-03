@@ -1,11 +1,11 @@
-import '../icons/angle-left'
-import '../icons/angle-right'
+import 'veui-theme-one-icons/chevron-left'
+import 'veui-theme-one-icons/chevron-right'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    prev: 'angle-left',
-    next: 'angle-right'
+    prev: 'chevron-left',
+    next: 'chevron-right'
   },
   ui: {
     style: {

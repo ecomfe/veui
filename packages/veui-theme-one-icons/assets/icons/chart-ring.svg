@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>charts/chart-ring</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="charts/chart-ring" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M38.0071523,5.03588816 C35.1455387,3.11840579 31.7033782,2 28,2 C18.0588745,2 10,10.0588745 10,20 C10,29.9411255 18.0588745,38 28,38 C31.6886738,38 35.1182001,36.8904579 37.9730385,34.9869143 M42.9914601,29.9662176 C44.8922242,27.1127382 46,23.6857366 46,20 C46,16.3164725 44.8935518,12.8913699 42.994877,10.0389138" id="Oval" stroke="#000000" stroke-width="4"></path>
+        <circle class="fillColor" id="Oval" stroke="#000000" stroke-width="4" cx="28" cy="20" r="8"></circle>
+        <polyline id="Path-206" stroke="#000000" stroke-width="4" points="2 2 2 46 46 46"></polyline>
+    </g>
+</svg>

@@ -1,0 +1,10 @@
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="others/puzzle" stroke="#000000" stroke-width="4">
+            <path class="fillColor" d="M2,24 L2,12 L13,12 L13,8 C13,4.6862915 15.6862915,2 19,2 C22.3137085,2 25,4.6862915 25,8 L25,12 L36,12 L36,24 L40,24 C43.3137085,24 46,26.6862915 46,30 C46,33.3137085 43.3137085,36 40,36 L36,36 L36,46 L2,46 L2,36 L6,36 C9.3137085,36 12,33.3137085 12,30 C12,26.6862915 9.3137085,24 6,24 L2,24 Z" id="Combined-Shape"></path>
+        </g>
+    </g>
+</svg>

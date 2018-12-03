@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>charts/chart-graph</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="charts/chart-graph" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polyline id="Path-206" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="2 2 2 46 46 46"></polyline>
+        <polyline id="Path-218" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="14 17 28 20 21 4"></polyline>
+        <polyline id="Path-219" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="41 7 28 20 41 33"></polyline>
+        <path d="M28,20 L15,33" id="Path-220" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+        <circle class="noStroke fillColor" id="Oval-3" fill="#000000" cx="28.0000679" cy="20" r="7"></circle>
+        <circle class="noStroke fillColor" id="Oval-3-Copy-3" fill="#000000" cx="15.0000679" cy="33" r="7"></circle>
+        <circle class="noStroke fillColor" id="Oval-3-Copy-2" fill="#000000" cx="41.0000679" cy="33" r="6"></circle>
+        <circle class="noStroke fillColor" id="Oval-3-Copy" fill="#000000" cx="41.0000679" cy="7" r="5"></circle>
+        <circle class="noStroke fillColor" id="Oval-3-Copy-5" fill="#000000" cx="14.0000679" cy="17" r="5"></circle>
+        <circle class="noStroke fillColor" id="Oval-3-Copy-4" fill="#000000" cx="21.0000679" cy="4" r="4"></circle>
+    </g>
+</svg>

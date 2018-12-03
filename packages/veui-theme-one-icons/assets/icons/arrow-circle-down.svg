@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>base/download-c</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="base/download-c" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <circle class="fillColor" id="Oval-14" stroke="#000000" stroke-width="4" cx="24" cy="24" r="22"></circle>
+        <g class="innerStrokeColor" >
+        <polyline id="Path-54" stroke="#000000" stroke-width="4" points="16 26 24 34 32 26"></polyline>
+        <path d="M24,34 L24,14" id="Path-55" stroke="#000000" stroke-width="4"></path>
+        </g>
+    </g>
+</svg>

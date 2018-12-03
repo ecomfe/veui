@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/van</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/van" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <polygon class="innerFillColor" id="Rectangle-2-Copy-11" stroke="#000000" stroke-width="4" points="2 2 46 2 46 40 2 40"></polygon>
+        <polygon class="fillColor" id="Rectangle-2-Copy-10" stroke="#000000" stroke-width="4" points="8 28 40 28 40 40 8 40"></polygon>
+        <polygon class="fillColor" id="Rectangle-2-Copy-11" stroke="#000000" stroke-width="4" points="8 10 40 10 40 28 8 28"></polygon>
+        <rect class="fillColor" id="Rectangle-2-Copy-13" stroke="#000000" stroke-width="4" x="8" y="40" width="6" height="6"></rect>
+        <rect class="fillColor" id="Rectangle-2-Copy-14" stroke="#000000" stroke-width="4" x="34" y="40" width="6" height="6"></rect>
+        <path class="innerStrokeColor" d="M21,16 L27,16" id="Path-3-Copy-5" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M14,34 L16,34" id="Path-3-Copy-6" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M32,34 L34,34" id="Path-3-Copy-8" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>base/off-screen</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="base/off-screen" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M46,28 L30,28 C28.8954305,28 28,28.8954305 28,30 L28,46" id="Path-113" stroke="#000000" stroke-width="4"></path>
+        <path d="M46,46 L30,30" id="Path-114" stroke="#000000" stroke-width="4"></path>
+        <path d="M28,2 L44,2 C45.1045695,2 46,2.8954305 46,4 L46,20" id="Path-115" stroke="#000000" stroke-width="4"></path>
+        <path d="M20,46 L4,46 C2.8954305,46 2,45.1045695 2,44 L2,28" id="Path-115-Copy" stroke="#000000" stroke-width="4"></path>
+        <path d="M20,2 L4,2 C2.8954305,2 2,2.8954305 2,4 L2,20" id="Path-113" stroke="#000000" stroke-width="4" transform="translate(11.000000, 11.000000) scale(-1, -1) translate(-11.000000, -11.000000) "></path>
+        <path d="M18,18 L2,2" id="Path-114-Copy" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

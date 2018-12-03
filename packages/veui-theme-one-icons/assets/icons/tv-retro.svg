@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="hardware/tv" stroke="#000000" stroke-width="4">
+            <rect id="Rectangle" x="2" y="14" width="44" height="32"></rect>
+            <rect class="fillColor" id="Rectangle-2" x="8" y="20" width="24" height="20"></rect>
+            <polyline id="Path-197" points="14 5 24 14 36 2"></polyline>
+            <path d="M39,20 L39,21" id="Path-320"></path>
+            <path d="M39,27 L39,28" id="Path-320-Copy"></path>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>base/visible</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g class="fillColor" id="base/visible" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M24,41 C32,41 39.3333333,35.3333333 46,24 C39.3333333,12.6666667 32,7 24,7 C16,7 8.66666667,12.6666667 2,24 C8.66666667,35.3333333 16,41 24,41 Z" id="Oval-28" stroke="#000000" stroke-width="4"></path>
+        <circle class="innerFillColor innerStrokeColor" id="Oval" stroke="#000000" stroke-width="4" cx="24" cy="24" r="7"></circle>
+    </g>
+</svg>

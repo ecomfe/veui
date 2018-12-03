@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>arrows/arrow-double-top</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="arrows/arrow-double-top" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g transform="translate(24.000000, 24.000000) scale(1, -1) translate(-24.000000, -24.000000) translate(6.000000, 2.000000)" fill-rule="nonzero" stroke="#000000" stroke-width="4">
+            <polyline id="Path-5" points="14 0 14 44 0 30"></polyline>
+            <polyline id="Path-5-Copy" points="22 0 22 44 36 30"></polyline>
+        </g>
+    </g>
+</svg>

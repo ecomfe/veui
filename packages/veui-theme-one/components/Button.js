@@ -1,9 +1,9 @@
-import '../icons/loading'
+import 'veui-theme-one-icons/spinner'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    loading: 'loading'
+    loading: 'spinner'
   },
   ui: {
     style: {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/ppt</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/ppt" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2,6 L46,6" id="Path-284" stroke="#000000" stroke-width="4"></path>
+        <rect class="fillColor" id="Rectangle" stroke="#000000" stroke-width="4" x="6" y="6" width="36" height="30"></rect>
+        <polyline class="innerStrokeColor" id="Path-285" stroke="#000000" stroke-width="4" points="22 16 27 21 22 26"></polyline>
+        <polyline id="Path-286" stroke="#000000" stroke-width="4" points="16 44 24 36 32 44"></polyline>
+    </g>
+</svg>

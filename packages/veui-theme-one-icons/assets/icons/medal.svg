@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>base/level</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="base/level" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <circle class="fillColor" id="Oval-29" stroke="#000000" stroke-width="4" cx="24" cy="30" r="16"></circle>
+        <path d="M13,18 L8.81142187,4.59654999 C8.48195641,3.54226051 9.06954237,2.4205055 10.1238318,2.09104004 C10.3169327,2.03069601 10.5180718,2 10.7203818,2 L37.2796182,2 C38.3841877,2 39.2796182,2.8954305 39.2796182,4 C39.2796182,4.20231006 39.2489222,4.40344909 39.1885781,4.59654999 L35,18" id="Path-118" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>base/share-sys</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="base/share-sys" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14.7295632,43.9572231 C7.2117222,40.4591473 2,32.8382051 2,24 C2,11.8497355 11.8497355,2 24,2 C36.1502645,2 46,11.8497355 46,24 C46,32.8382051 40.7882778,40.4591473 33.2704368,43.9572231" id="Combined-Shape" stroke="#000000" stroke-width="4"></path>
+        <path d="M17.4390654,36.3706168 C13.0135157,34.0185766 10,29.3612104 10,24 C10,16.2680135 16.2680135,10 24,10 C31.7319865,10 38,16.2680135 38,24 C38,29.3612104 34.9864843,34.0185766 30.5609346,36.3706168" id="Combined-Shape" stroke="#000000" stroke-width="4"></path>
+        <path d="M20.1990312,28.6427126 C18.856587,27.5423614 18,25.871214 18,24 C18,20.6862915 20.6862915,18 24,18 C27.3137085,18 30,20.6862915 30,24 C30,25.871214 29.143413,27.5423614 27.8009688,28.6427126" id="Combined-Shape" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

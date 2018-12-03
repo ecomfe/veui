@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>base/plus</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="base/plus" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9,24 L39,24" id="Path-46" stroke="#000000" stroke-width="4"></path>
+        <path d="M24,39 L24,9" id="Path-46" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

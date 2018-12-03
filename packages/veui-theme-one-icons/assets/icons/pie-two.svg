@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/pie-two</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/pie-two" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path class="noStroke fillColor" d="M39.3057963,8.19704548 C35.345936,4.36099749 29.9486883,2 24,2 L24,24 L39.3057963,8.19704548 Z" id="Oval" fill="#000000"></path>
+        <circle id="Oval" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" cx="24" cy="24" r="22"></circle>
+    </g>
+</svg>

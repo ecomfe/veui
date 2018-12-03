@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/bug</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/bug" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path class="fillColor" d="M24,44 C32.836556,44 40,36.836556 40,28 C40,24.837862 40,20.1711953 40,14 L8,14 C8,17.442296 8,22.1089627 8,28 C8,36.836556 15.163444,44 24,44 Z" id="Oval" stroke="#000000" stroke-width="4"></path>
+        <path d="M2,8 L8,14" id="Path-321" stroke="#000000" stroke-width="4"></path>
+        <path d="M46,8 L40,14" id="Path-322" stroke="#000000" stroke-width="4"></path>
+        <path d="M2,27 L8,27" id="Path-323" stroke="#000000" stroke-width="4"></path>
+        <path d="M46,27 L40,27" id="Path-324" stroke="#000000" stroke-width="4"></path>
+        <path d="M6,46 L12,40" id="Path-325" stroke="#000000" stroke-width="4"></path>
+        <path d="M42,46 L36,40" id="Path-326" stroke="#000000" stroke-width="4"></path>
+        <path class="innerStrokeColor" d="M24,44 L24,22" id="Path-327" stroke="#000000" stroke-width="4"></path>
+        <path d="M34,12 C34,6.4771525 29.5228475,2 24,2 C18.4771525,2 14,6.4771525 14,12 L14,14 L34,14 L34,12 Z" id="Oval-2" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

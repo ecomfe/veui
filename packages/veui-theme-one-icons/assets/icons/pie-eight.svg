@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/pie-eight</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/pie-eight" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path class="noStroke fillColor" d="M24,46 C36.1502645,46 46,36.1502645 46,24 C46,11.8497355 36.1502645,2 24,2 L24,24 L8.46859328,8.41874803 C4.47272124,12.4019167 2,17.9121909 2,24 C2,36.1502645 11.8497355,46 24,46 Z" id="Oval" fill="#000000"></path>
+        <circle id="Oval" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" cx="24" cy="24" r="22"></circle>
+    </g>
+</svg>

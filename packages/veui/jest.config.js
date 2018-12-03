@@ -27,6 +27,7 @@ module.exports = {
   moduleNameMapper: {
     '^veui$': '<rootDir>/src/index.js',
     '^veui\\/(.*)': '<rootDir>/src/$1',
+    '^veui-theme-one-icons\\/(.*)': '<rootDir>/../veui-theme-one-icons/icons/$1',
     '^@\\/(.*)': '<rootDir>/src/$1',
     '^vue$': '<rootDir>/node_modules/vue/dist/vue.common.js'
   },

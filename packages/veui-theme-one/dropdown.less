@@ -69,6 +69,11 @@
 
   &-icon {
     float: right;
+    transition: transform @veui-transition-duration;
+  }
+
+  &-expanded &-icon {
+    transform: rotateZ(180deg);
   }
 
   &-button[ui~="primary"]:not(.veui-button-loading):disabled {

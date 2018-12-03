@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/comment</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/comment" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path class="fillColor" d="M7.1277704,6 L40.8722296,6 C42.6552671,6 43.3018396,6.18565122 43.9536914,6.53426541 C44.6055433,6.88287959 45.1171204,7.39445674 45.4657346,8.04630859 C45.8143488,8.69816044 46,9.34473292 46,11.1277704 L46,32.8722296 C46,34.6552671 45.8143488,35.3018396 45.4657346,35.9536914 C45.1171204,36.6055433 44.6055433,37.1171204 43.9536914,37.4657346 C43.3018396,37.8143488 42.6552671,38 40.8722296,38 L10,38 L2,46 L2,11.1277704 C2,9.34473292 2.18565122,8.69816044 2.53426541,8.04630859 C2.88287959,7.39445674 3.39445674,6.88287959 4.04630859,6.53426541 C4.69816044,6.18565122 5.34473292,6 7.1277704,6 Z" id="comment" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/sun</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/sun" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M24,2 L24,6 M39.5563492,8.44365081 L36.7279221,11.2720779 M46,24 L42,24 M39.5563492,39.5563492 L36.7279221,36.7279221 M24,46 L24,42 M8.44365081,39.5563492 L11.2720779,36.7279221 M2,24 L6,24 M8.44365081,8.44365081 L11.2720779,11.2720779" id="Path-428" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+        <circle class="fillColor" id="Oval-41" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" cx="24" cy="24" r="10"></circle>
+    </g>
+</svg>

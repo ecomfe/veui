@@ -44,6 +44,7 @@
     width: @veui-font-size-large;
     margin-right: 8px;
     border: 1px solid @veui-gray-color-2;
+    border-radius: 1px;
     background-color: #fff;
     font-size: @veui-font-size-large;
     transition: box-shadow @veui-transition-duration;
@@ -51,7 +52,7 @@
     .veui-icon {
       color: @veui-gray-color-1;
       .absolute(50%, 50%);
-      transform: translate(-50%, -50%) scale(1);
+      transform: translate(-50%, -50%) scale(.8);
       transition: transform @veui-transition-duration, opacity @veui-transition-duration;
     }
   }
@@ -59,7 +60,7 @@
   &-icon-enter,
   &-icon-leave-to {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(.8);
+    transform: translate(-50%, -50%) scale(.6);
   }
 
   &:hover &-box {
@@ -108,4 +109,3 @@
     font-size: @veui-font-size-small;
   }
 }
-

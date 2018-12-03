@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/rss</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/rss" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M46,46 C46,21.699471 26.300529,2 2,2" id="Oval" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M32,46 C32,29.4314575 18.5685425,16 2,16" id="Oval-3" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M18,46.5 C18,37.3873016 10.6126984,30 1.5,30" id="Oval-3" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+        <circle class="noStroke fillColor" id="Oval-2" fill="#000000" cx="3" cy="45" r="3"></circle>
+    </g>
+</svg>

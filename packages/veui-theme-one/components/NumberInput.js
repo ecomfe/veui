@@ -1,11 +1,11 @@
-import '../icons/angle-up'
-import '../icons/angle-down'
+import 'veui-theme-one-icons/chevron-up'
+import 'veui-theme-one-icons/chevron-down'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    increase: 'angle-up',
-    decrease: 'angle-down'
+    increase: 'chevron-up',
+    decrease: 'chevron-down'
   },
   ui: {
     size: {

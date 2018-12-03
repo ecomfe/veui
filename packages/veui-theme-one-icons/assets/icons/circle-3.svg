@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/circle-3</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/circle-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path class="fillColor" d="M42.9162307,28.166048 C41.7135059,27.6536488 40.3898656,27.3701042 39,27.3701042 C33.4771525,27.3701042 29,31.8472567 29,37.3701042 C29,39.8533415 29.9051327,42.1251738 31.4034774,43.8736804 C29.1282611,44.8372221 26.6263612,45.3701042 24,45.3701042 C21.3736388,45.3701042 18.8717389,44.8372221 16.5965226,43.8736804 C18.0948673,42.1251738 19,39.8533415 19,37.3701042 C19,31.8472567 14.5228475,27.3701042 9,27.3701042 C7.61013436,27.3701042 6.28649412,27.6536488 5.08376928,28.166048 C5.02834096,27.5748531 5,26.9757883 5,26.3701042 C5,19.3997614 8.75344842,13.3060835 14.3494157,10 C15.5040444,14.2470058 19.3873029,17.3701042 24,17.3701042 C28.6126971,17.3701042 32.4959556,14.2470058 33.6505843,10 C39.2465516,13.3060835 43,19.3997614 43,26.3701042 C43,26.9757883 42.971659,27.5748531 42.9162309,28.1660447 Z" id="Combined-Shape" stroke="#000000" stroke-width="4"></path>
+        <circle class="innerFillColor" id="Oval-2" stroke="#000000" stroke-width="4" cx="24" cy="7" r="4"></circle>
+        <circle class="innerFillColor" id="Oval-2-Copy" stroke="#000000" stroke-width="4" cx="9" cy="37" r="4"></circle>
+        <circle class="innerFillColor" id="Oval-2-Copy-2" stroke="#000000" stroke-width="4" cx="39" cy="37" r="4"></circle>
+    </g>
+</svg>

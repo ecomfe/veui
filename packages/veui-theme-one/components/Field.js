@@ -1,9 +1,9 @@
-import '../icons/exclamation-circle-o'
+import 'veui-theme-one-icons/exclamation-circle'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    alert: 'exclamation-circle-o'
+    alert: 'exclamation-circle'
   },
   ui: {
     size: {

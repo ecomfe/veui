@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>editors/text-vertical</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="editors/text-vertical" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <polyline id="Path-238" stroke="#000000" stroke-width="4" points="8 2 2 2 2 46 8 46"></polyline>
+        <path d="M2,24 L46,24" id="Path-239" stroke="#000000" stroke-width="4"></path>
+        <path d="M46,16 L46,32" id="Path-240" stroke="#000000" stroke-width="4"></path>
+    </g>
+</svg>

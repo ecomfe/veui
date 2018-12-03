@@ -1,12 +1,12 @@
-import '../icons/angle-left'
-import '../icons/angle-down-small'
-import '../icons/angle-right'
+import 'veui-theme-one-icons/chevron-left'
+import 'veui-theme-one-icons/chevron-down'
+import 'veui-theme-one-icons/chevron-right'
 import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    prev: 'angle-left',
-    next: 'angle-right',
-    expand: 'angle-down-small'
+    prev: 'chevron-left',
+    next: 'chevron-right',
+    expand: 'chevron-down'
   }
 }, 'calendar')

@@ -2,8 +2,12 @@
   <ul :class="{'veui-tree-item-group': depth > 1, 'veui-tree': depth === 1}">
     <li v-for="(option, index) in datasource"
       :key="option.value">
-      <div class="veui-tree-item"
-        :class="{'veui-tree-item-expanded': option.expanded}"
+      <div
+        :class="{
+          'veui-tree-item': true,
+          'veui-tree-item-expanded': option.expanded,
+          'veui-tree-item-clickable': clickable
+        }"
         @click="click(option, [], index, depth)">
         <slot name="item" :item="option" :index="index" :depth="depth">
           <span class="veui-tree-item-expand-switcher"
@@ -70,6 +74,11 @@ export default {
       validator (value) {
         return includes(['toggle', 'none'], value)
       }
+    }
+  },
+  computed: {
+    clickable () {
+      return this.itemClick !== 'none'
     }
   },
   methods: {

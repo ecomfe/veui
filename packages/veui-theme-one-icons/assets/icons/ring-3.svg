@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="46px" viewBox="0 0 48 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>others/ring-3</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="others/ring-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M33.6505843,8.62989583 C39.2465516,11.9359793 43,18.0296572 43,25 C43,25.6056842 42.971659,26.2047489 42.9162309,26.7959405 L42.9162307,26.7959439 M31.4034774,42.5035762 C29.1282611,43.467118 26.6263612,44 24,44 C21.3736388,44 18.8717389,43.467118 16.5965226,42.5035762 M5.08376928,26.7959439 C5.02834096,26.2047489 5,25.6056842 5,25 C5,18.0296572 8.75344842,11.9359793 14.3494157,8.62989583" id="Combined-Shape" stroke="#000000" stroke-width="4"></path>
+        <circle class="fillColor" id="Oval-2" stroke="#000000" stroke-width="4" cx="24" cy="6" r="4"></circle>
+        <circle class="fillColor" id="Oval-2-Copy" stroke="#000000" stroke-width="4" cx="9" cy="36" r="4"></circle>
+        <circle class="fillColor" id="Oval-2-Copy-2" stroke="#000000" stroke-width="4" cx="39" cy="36" r="4"></circle>
+    </g>
+</svg>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>arrows/arrow-rt</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="arrows/arrow-rt" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9,38 L35,12" id="Path-157" stroke="#000000" stroke-width="4"></path>
+        <polyline id="Path-158" stroke="#000000" stroke-width="4" points="17 10 37 10 37 30"></polyline>
+    </g>
+</svg>
