@@ -11,11 +11,6 @@ export default {
     }
   },
   computed: getTypedAncestorTracker('menu').computed,
-  methods: {
-    getLabelNaive () {
-      return get(this, '$vnode.componentOptions.children[0].text', '')
-    }
-  },
   created () {
     if (!this.menu) {
       return
@@ -32,5 +27,10 @@ export default {
       return
     }
     this.menu.removeById(this.id)
+  },
+  methods: {
+    getLabelNaive () {
+      return get(this, '$vnode.componentOptions.children[0].text', '')
+    }
   }
 }

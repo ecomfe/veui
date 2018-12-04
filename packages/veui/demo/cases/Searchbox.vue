@@ -1,162 +1,180 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-searchbox&gt;</code></h1>
-    <section>
-      <h2>普通</h2>
-      <p>
-        <veui-searchbox
-          :name="name"
-          :placeholder="placeholder"
-          @search="log($event)"/>
-      </p>
-    </section>
-    <section>
-      <h2>禁用</h2>
-      <p>
-        <veui-searchbox
-          :value="value"
-          :name="name"
-          clearable
-          :placeholder="placeholder"
-          disabled
-          @search="log($event)"/>
-      </p>
-    </section>
-    <section>
-      <h2>Suggestion(submit async)</h2>
-      <p>
-        <veui-searchbox
-          v-model="value2"
-          clearable
-          :name="name"
-          :placeholder="placeholder"
-          :suggestions="suggestions1"
-          suggest-trigger="submit"
-          @suggest="asyncHandleSuggest('1', $event)"
-          @search="log($event)"
-          @select="value2 = $event.label"/>
-      </p>
-    </section>
-    <section>
-      <h2>小ui模式(focus)</h2>
-      <p>
-        <veui-searchbox
-          ui="primary small"
-          clearable
-          v-model="value3"
-          :name="name"
-          :placeholder="placeholder"
-          :suggestions="suggestions2"
-          replace-on-select
-          suggest-trigger="focus"
-          @suggest="handleSuggest('2', $event)"
-          @search="log($event)"
-          @select="value3 = $event.label"/>
-      </p>
-    </section>
-    <section>
-      <h2>小ui模式2(input, submit)</h2>
-      <p>
-        <veui-searchbox
-          ui="primary small"
-          clearable
-          v-model="valueis"
-          :name="name"
-          :placeholder="placeholder"
-          :suggestions="suggestionsis"
-          replace-on-select
-          :suggest-trigger="['input', 'submit']"
-          @suggest="handleSuggest('is', $event)"
-          @search="log($event)"
-          @select="valueis = $event.label"/>
-      </p>
-    </section>
-    <section>
-      <h2>大ui模式(input)</h2>
-      <p>
-        <veui-searchbox
-          ui="primary large"
-          :name="name"
-          v-model="value4"
-          :placeholder="placeholder"
-          :suggestions="suggestions3"
-          suggest-trigger="input"
-          @suggest="handleSuggest('3', $event)"
-          @search="log($event)"
-          @select="value4 = $event.label"/>
-      </p>
-    </section>
-    <section>
-      <h2>全局搜索框</h2>
-      <p>
-        <veui-searchbox
-          ui="primary"
-          replace-on-select
-          :name="name"
-          :placeholder="placeholder"
-          :suggestions="suggestions4"
-          @input="handleSuggest('4', $event)"
-          @search="log($event)"
-          @select="log('select', $event)"/>
-      </p>
-    </section>
-    <section>
-      <h2>禁用全局搜索框</h2>
-      <p>
-        <veui-searchbox
-          ui="alt primary"
-          disabled
-          :name="name"
-          :placeholder="placeholder"
-          :suggestions="suggestions5"
-          @input="handleSuggest('5', $event)"
-          @search="log($event)"/>
-      </p>
-    </section>
-    <section>
-      <h2>自定义Suggestion样式1</h2>
-      <p>
-        <veui-searchbox
-          ui="alt"
-          :name="name"
-          :placeholder="placeholder"
-          :suggestions="suggestions6"
-          @input="handleSuggest('6', $event)"
-          @search="log($event)">
-          <template slot="suggestion" slot-scope="suggestion">
-            <span>{{ suggestion.value }}</span>
-            <icon name="eye"></icon>
-          </template>
-        </veui-searchbox>
-      </p>
-    </section>
-    <section>
-      <h2>自定义Suggestion样式2</h2>
-      <p>
-        <veui-searchbox
-          :name="name"
-          :placeholder="placeholder"
-          :suggestions="suggestions7"
-          @input="handleSuggest('7', $event)"
-          @search="log($event)">
-          <template slot="suggestions" slot-scope="props">
-            <div>
-              <h3>header</h3>
-              <template v-for="(suggestion, index) in props.suggestions">
-                <div class="veui-searchbox-suggestion-item"
-                  :key="index"
-                  @click="props.select(suggestion)">
-                  <span>{{ suggestion.value }}</span>
-                  <icon name="eye"></icon>
-                </div>
-              </template>
-              <h3>ender</h3>
-            </div>
-          </template>
-        </veui-searchbox>
-      </p>
-    </section>
-  </article>
+<article>
+  <h1><code>&lt;veui-searchbox&gt;</code></h1>
+  <section>
+    <h2>普通</h2>
+    <p>
+      <veui-searchbox
+        :name="name"
+        :placeholder="placeholder"
+        @search="log($event)"
+      />
+    </p>
+  </section>
+  <section>
+    <h2>禁用</h2>
+    <p>
+      <veui-searchbox
+        :value="value"
+        :name="name"
+        clearable
+        :placeholder="placeholder"
+        disabled
+        @search="log($event)"
+      />
+    </p>
+  </section>
+  <section>
+    <h2>Suggestion(submit async)</h2>
+    <p>
+      <veui-searchbox
+        v-model="value2"
+        clearable
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions1"
+        suggest-trigger="submit"
+        @suggest="asyncHandleSuggest('1', $event)"
+        @search="log($event)"
+        @select="value2 = $event.label"
+      />
+    </p>
+  </section>
+  <section>
+    <h2>小ui模式(focus)</h2>
+    <p>
+      <veui-searchbox
+        v-model="value3"
+        ui="primary small"
+        clearable
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions2"
+        replace-on-select
+        suggest-trigger="focus"
+        @suggest="handleSuggest('2', $event)"
+        @search="log($event)"
+        @select="value3 = $event.label"
+      />
+    </p>
+  </section>
+  <section>
+    <h2>小ui模式2(input, submit)</h2>
+    <p>
+      <veui-searchbox
+        v-model="valueis"
+        ui="primary small"
+        clearable
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestionsis"
+        replace-on-select
+        :suggest-trigger="['input', 'submit']"
+        @suggest="handleSuggest('is', $event)"
+        @search="log($event)"
+        @select="valueis = $event.label"
+      />
+    </p>
+  </section>
+  <section>
+    <h2>大ui模式(input)</h2>
+    <p>
+      <veui-searchbox
+        v-model="value4"
+        ui="primary large"
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions3"
+        suggest-trigger="input"
+        @suggest="handleSuggest('3', $event)"
+        @search="log($event)"
+        @select="value4 = $event.label"
+      />
+    </p>
+  </section>
+  <section>
+    <h2>全局搜索框</h2>
+    <p>
+      <veui-searchbox
+        ui="primary"
+        replace-on-select
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions4"
+        @input="handleSuggest('4', $event)"
+        @search="log($event)"
+        @select="log('select', $event)"
+      />
+    </p>
+  </section>
+  <section>
+    <h2>禁用全局搜索框</h2>
+    <p>
+      <veui-searchbox
+        ui="alt primary"
+        disabled
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions5"
+        @input="handleSuggest('5', $event)"
+        @search="log($event)"
+      />
+    </p>
+  </section>
+  <section>
+    <h2>自定义Suggestion样式1</h2>
+    <p>
+      <veui-searchbox
+        ui="alt"
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions6"
+        @input="handleSuggest('6', $event)"
+        @search="log($event)"
+      >
+        <template
+          slot="suggestion"
+          slot-scope="suggestion"
+        >
+          <span>{{ suggestion.value }}</span>
+          <icon name="eye"/>
+        </template>
+      </veui-searchbox>
+    </p>
+  </section>
+  <section>
+    <h2>自定义Suggestion样式2</h2>
+    <p>
+      <veui-searchbox
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions7"
+        @input="handleSuggest('7', $event)"
+        @search="log($event)"
+      >
+        <template
+          slot="suggestions"
+          slot-scope="props"
+        >
+          <div>
+            <h3>header</h3>
+            <template v-for="(suggestion, index) in props.suggestions">
+              <div
+                :key="index"
+                class="veui-searchbox-suggestion-item"
+                @click="props.select(suggestion)"
+              >
+                <span>{{ suggestion.value }}</span>
+                <icon name="eye"/>
+              </div>
+            </template>
+            <h3>ender</h3>
+          </div>
+        </template>
+      </veui-searchbox>
+    </p>
+  </section>
+</article>
 </template>
 
 <script>

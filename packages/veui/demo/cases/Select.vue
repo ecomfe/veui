@@ -1,144 +1,328 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-select&gt;</code></h1>
-    <section>
-      <h2>默认样式：</h2>
-      <veui-select v-bind="attrs" v-model="defaultValue1" placeholder="全部" clearable :filter="filter">
-        <div slot="before"><veui-input class="filter" ui="tiny" v-model="keyword"/></div>
-      </veui-select>
-    </section>
-    <section>
-      <h2>显示已选图标样式：</h2>
-      <veui-select v-bind="attrs" ui="checkmark" v-model="defaultValue2"></veui-select>
-    </section>
-    <section>
-      <h2>禁用样式：</h2>
-      <veui-select v-bind="attrs" v-model="defaultValue1" disabled></veui-select>
-    </section>
-    <section>
-      <h2>Slot[name=option-label] 样式：</h2>
-      <veui-select v-bind="attrs" v-model="defaultValue3" ui="alt">
-        <template slot="option-label" slot-scope="props">
-          <span class="veui-option-custom-label">{{ props.label }}</span>
-        </template>
-      </veui-select>
-    </section>
-    <section>
-      <h2>Slot 样式 2：</h2>
-      <veui-select v-bind="attrs" v-model="defaultValue4">
-        <template slot="option" slot-scope="props">
-          <span class="veui-option-label-text">{{ props.label }}</span>
-          <veui-icon name="eye"/>
-        </template>
-      </veui-select>
-    </section>
-    <section>
-      <h2>Slot 样式 3：</h2>
-      <veui-select v-bind="attrs" v-model="defaultValue1">
-        <template slot="option" slot-scope="props">
-          <veui-radio :checked="props.selected">{{ props.label }}</veui-radio>
-        </template>
-      </veui-select>
-    </section>
-    <section>
-      <h2>内联样式：</h2>
-      <veui-select v-model="hero">
-        <veui-option-group label="中国" position="popup">
-          <veui-option-group label="互联网" position="popup">
-            <veui-option value="baidu" label="百度"/>
-            <veui-option value="alibaba" label="阿里巴巴"/>
-            <veui-option value="tencent" label="腾讯"/>
-          </veui-option-group>
-          <veui-option-group label="通信" position="popup">
-            <veui-option value="telecom" label="中国电信"/>
-            <veui-option value="mobile" label="中国移动"/>
-          </veui-option-group>
+<article>
+  <h1><code>&lt;veui-select&gt;</code></h1>
+  <section>
+    <h2>默认样式：</h2>
+    <veui-select
+      v-model="defaultValue1"
+      v-bind="attrs"
+      placeholder="全部"
+      clearable
+      :filter="filter"
+    >
+      <div slot="before">
+        <veui-input
+          v-model="keyword"
+          class="filter"
+          ui="tiny"
+        />
+      </div>
+    </veui-select>
+  </section>
+  <section>
+    <h2>显示已选图标样式：</h2>
+    <veui-select
+      v-model="defaultValue2"
+      v-bind="attrs"
+      ui="checkmark"
+    />
+  </section>
+  <section>
+    <h2>禁用样式：</h2>
+    <veui-select
+      v-model="defaultValue1"
+      v-bind="attrs"
+      disabled
+    />
+  </section>
+  <section>
+    <h2>Slot[name=option-label] 样式：</h2>
+    <veui-select
+      v-model="defaultValue3"
+      v-bind="attrs"
+      ui="alt"
+    >
+      <template
+        slot="option-label"
+        slot-scope="props"
+      >
+        <span class="veui-option-custom-label">
+          {{ props.label }}
+        </span>
+      </template>
+    </veui-select>
+  </section>
+  <section>
+    <h2>Slot 样式 2：</h2>
+    <veui-select
+      v-model="defaultValue4"
+      v-bind="attrs"
+    >
+      <template
+        slot="option"
+        slot-scope="props"
+      >
+        <span class="veui-option-label-text">
+          {{ props.label }}
+        </span>
+        <veui-icon name="eye"/>
+      </template>
+    </veui-select>
+  </section>
+  <section>
+    <h2>Slot 样式 3：</h2>
+    <veui-select
+      v-model="defaultValue1"
+      v-bind="attrs"
+    >
+      <template
+        slot="option"
+        slot-scope="props"
+      >
+        <veui-radio :checked="props.selected">
+          {{ props.label }}
+        </veui-radio>
+      </template>
+    </veui-select>
+  </section>
+  <section>
+    <h2>内联样式：</h2>
+    <veui-select v-model="hero">
+      <veui-option-group
+        label="中国"
+        position="popup"
+      >
+        <veui-option-group
+          label="互联网"
+          position="popup"
+        >
+          <veui-option
+            value="baidu"
+            label="百度"
+          />
+          <veui-option
+            value="alibaba"
+            label="阿里巴巴"
+          />
+          <veui-option
+            value="tencent"
+            label="腾讯"
+          />
         </veui-option-group>
-        <veui-option-group label="美国" position="popup">
-          <veui-option-group label="互联网" position="popup">
-            <veui-option value="google" label="Google"/>
-            <veui-option value="facebook" label="Facebook"/>
-            <veui-option value="twitter" label="Twitter"/>
-          </veui-option-group>
-          <veui-option-group label="通信" position="popup">
-            <veui-option value="atnt" label="AT&T"/>
-            <veui-option value="verizon" label="Verizon"/>
-          </veui-option-group>
+        <veui-option-group
+          label="通信"
+          position="popup"
+        >
+          <veui-option
+            value="telecom"
+            label="中国电信"
+          />
+          <veui-option
+            value="mobile"
+            label="中国移动"
+          />
         </veui-option-group>
-      </veui-select>
-    </section>
-    <section>
-      <h2>内联样式 2：</h2>
-      <veui-select v-model="phone">
-        <veui-option-group label="国产">
-          <veui-option value="xiaomi" label="小米"/>
-          <veui-option value="oppo" label="OPPO"/>
-          <veui-option value="vivo" label="vivo"/>
-          <veui-option value="smartisan" label="坚果"/>
+      </veui-option-group>
+      <veui-option-group
+        label="美国"
+        position="popup"
+      >
+        <veui-option-group
+          label="互联网"
+          position="popup"
+        >
+          <veui-option
+            value="google"
+            label="Google"
+          />
+          <veui-option
+            value="facebook"
+            label="Facebook"
+          />
+          <veui-option
+            value="twitter"
+            label="Twitter"
+          />
         </veui-option-group>
-        <veui-option-group label="非国产" position="popup">
-          <veui-option-group label="美国" position="popup">
-            <veui-option value="apple" label="Apple"/>
-            <veui-option value="google" label="Google"/>
-          </veui-option-group>
-          <veui-option-group label="日本" position="popup">
-            <veui-option value="sharp" label="夏普"/>
-            <veui-option value="sony" label="索尼"/>
-          </veui-option-group>
-          <veui-option-group label="韩国" position="popup">
-            <veui-option value="samsung" label="三星"/>
-            <veui-option value="lg" label="LG"/>
-          </veui-option-group>
+        <veui-option-group
+          label="通信"
+          position="popup"
+        >
+          <veui-option
+            value="atnt"
+            label="AT&T"
+          />
+          <veui-option
+            value="verizon"
+            label="Verizon"
+          />
         </veui-option-group>
-      </veui-select>
-    </section>
-    <section style="margin-top:500px;">
-      <h2>默认分组样式：</h2>
-      <veui-select v-bind="optGroupAttrs" v-model="defaultValue5"></veui-select>
-    </section>
-    <section>
-      <h2>显示已选图标分组样式：</h2>
-      <veui-select v-bind="optGroupAttrs" ui="checkmark" v-model="defaultValue6"></veui-select>
-    </section>
-    <section>
-      <h2>Slot 分组样式 1：</h2>
-      <veui-select v-bind="optGroupAttrs" v-model="defaultValue7">
-        <template slot="option" slot-scope="props">
-          <div class="veui-option-custom">{{ props.label }}</div>
-        </template>
-      </veui-select>
-    </section>
-    <section>
-      <h2>Slot[name=option] 分组样式 2：</h2>
-      <veui-select v-bind="optGroupAttrs" v-model="defaultValue8" :overlay-options="{
-          position: 'bottom right'
-        }">
-        <template slot="option" slot-scope="props">
-          <span class="veui-option-label-text veui-option-custom-label">{{ props.label }}</span>
-          <veui-icon name="gift"/>
-        </template>
-      </veui-select>
-    </section>
-    <section>
-      <h2>分隔线样式：</h2>
-      <veui-select v-bind="optGroupAttrs" :options="groupedOpts" v-model="defaultValue9"></veui-select>
-    </section>
-    <section>
-      <h2>内联样式 3：</h2>
-      <veui-select v-model="defaultValue10" clearable>
-        <veui-option-group label="字母">
-          <veui-option value="A" label="选项 A"/>
-          <veui-option value="B" label="选项 B"/>
-          <veui-option value="C" label="选项 C"/>
+      </veui-option-group>
+    </veui-select>
+  </section>
+  <section>
+    <h2>内联样式 2：</h2>
+    <veui-select v-model="phone">
+      <veui-option-group label="国产">
+        <veui-option
+          value="xiaomi"
+          label="小米"
+        />
+        <veui-option
+          value="oppo"
+          label="OPPO"
+        />
+        <veui-option
+          value="vivo"
+          label="vivo"
+        />
+        <veui-option
+          value="smartisan"
+          label="坚果"
+        />
+      </veui-option-group>
+      <veui-option-group
+        label="非国产"
+        position="popup"
+      >
+        <veui-option-group
+          label="美国"
+          position="popup"
+        >
+          <veui-option
+            value="apple"
+            label="Apple"
+          />
+          <veui-option
+            value="google"
+            label="Google"
+          />
         </veui-option-group>
-        <veui-option-group label="数字">
-          <veui-option value="1" label="选项 1"/>
-          <veui-option value="2" label="选项 2"/>
-          <veui-option value="3" label="选项 3"/>
+        <veui-option-group
+          label="日本"
+          position="popup"
+        >
+          <veui-option
+            value="sharp"
+            label="夏普"
+          />
+          <veui-option
+            value="sony"
+            label="索尼"
+          />
         </veui-option-group>
-      </veui-select>
-    </section>
-  </article>
+        <veui-option-group
+          label="韩国"
+          position="popup"
+        >
+          <veui-option
+            value="samsung"
+            label="三星"
+          />
+          <veui-option
+            value="lg"
+            label="LG"
+          />
+        </veui-option-group>
+      </veui-option-group>
+    </veui-select>
+  </section>
+  <section style="margin-top:500px;">
+    <h2>默认分组样式：</h2>
+    <veui-select
+      v-model="defaultValue5"
+      v-bind="optGroupAttrs"
+    />
+  </section>
+  <section>
+    <h2>显示已选图标分组样式：</h2>
+    <veui-select
+      v-model="defaultValue6"
+      v-bind="optGroupAttrs"
+      ui="checkmark"
+    />
+  </section>
+  <section>
+    <h2>Slot 分组样式 1：</h2>
+    <veui-select
+      v-model="defaultValue7"
+      v-bind="optGroupAttrs"
+    >
+      <template
+        slot="option"
+        slot-scope="props"
+      >
+        <div class="veui-option-custom">
+          {{ props.label }}
+        </div>
+      </template>
+    </veui-select>
+  </section>
+  <section>
+    <h2>Slot[name=option] 分组样式 2：</h2>
+    <veui-select
+      v-model="defaultValue8"
+      v-bind="optGroupAttrs"
+      :overlay-options="{
+        position: 'bottom right'
+      }"
+    >
+      <template
+        slot="option"
+        slot-scope="props"
+      >
+        <span class="veui-option-label-text veui-option-custom-label">
+          {{ props.label }}
+        </span>
+        <veui-icon name="gift"/>
+      </template>
+    </veui-select>
+  </section>
+  <section>
+    <h2>分隔线样式：</h2>
+    <veui-select
+      v-model="defaultValue9"
+      v-bind="optGroupAttrs"
+      :options="groupedOpts"
+    />
+  </section>
+  <section>
+    <h2>内联样式 3：</h2>
+    <veui-select
+      v-model="defaultValue10"
+      clearable
+    >
+      <veui-option-group label="字母">
+        <veui-option
+          value="A"
+          label="选项 A"
+        />
+        <veui-option
+          value="B"
+          label="选项 B"
+        />
+        <veui-option
+          value="C"
+          label="选项 C"
+        />
+      </veui-option-group>
+      <veui-option-group label="数字">
+        <veui-option
+          value="1"
+          label="选项 1"
+        />
+        <veui-option
+          value="2"
+          label="选项 2"
+        />
+        <veui-option
+          value="3"
+          label="选项 3"
+        />
+      </veui-option-group>
+    </veui-select>
+  </section>
+</article>
 </template>
 
 <script>

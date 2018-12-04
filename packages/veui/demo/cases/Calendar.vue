@@ -1,34 +1,70 @@
 <template>
-  <article class="veui-demo-calendar">
-    <h1><code>&lt;veui-calendar&gt;</code></h1>
-    <section>
-      <h2>单日选择</h2>
-      <veui-calendar v-model="selected1" :disabled-date="isDisabled"/>
-    </section>
-    <section>
-      <h2>禁用</h2>
-      <veui-calendar v-model="selected1" disabled/>
-    </section>
-    <section>
-      <h2>多单日选择 <small>(<code>multiple</code>)</small></h2>
-      <veui-calendar v-model="selected0" multiple :date-class="dateClass"/>
-    </section>
-    <section>
-      <h2>时间段选择 <small>(<code>range</code>)</small></h2>
-      <veui-calendar v-model="selected2" range :panel="2" :disabled-date="isDisabled"/>
-    </section>
-    <section>
-      <h2>多时间段选择带 scoped slot <small>(<code>multiple</code> &amp; <code>range</code>)</small></h2>
-      <veui-calendar v-model="selected3" range multiple :panel="3">
-        <template slot="date" slot-scope="day">{{ day.date }} <span v-if="day.date % 7 === 0" style="position: absolute;">*</span></template>
-      </veui-calendar>
-    </section>
-    <section>
-      <h2>外部设置 <code>selected</code></h2>
-      <veui-calendar v-model="selected4" range :panel="2"/>
-      <veui-button @click="setSelected">设置</veui-button>
-    </section>
-  </article>
+<article class="veui-demo-calendar">
+  <h1><code>&lt;veui-calendar&gt;</code></h1>
+  <section>
+    <h2>单日选择</h2>
+    <veui-calendar
+      v-model="selected1"
+      :disabled-date="isDisabled"
+    />
+  </section>
+  <section>
+    <h2>禁用</h2>
+    <veui-calendar
+      v-model="selected1"
+      disabled
+    />
+  </section>
+  <section>
+    <h2>多单日选择 <small>(<code>multiple</code>)</small></h2>
+    <veui-calendar
+      v-model="selected0"
+      multiple
+      :date-class="dateClass"
+    />
+  </section>
+  <section>
+    <h2>时间段选择 <small>(<code>range</code>)</small></h2>
+    <veui-calendar
+      v-model="selected2"
+      range
+      :panel="2"
+      :disabled-date="isDisabled"
+    />
+  </section>
+  <section>
+    <h2>多时间段选择带 scoped slot <small>(<code>multiple</code> &amp; <code>range</code>)</small></h2>
+    <veui-calendar
+      v-model="selected3"
+      range
+      multiple
+      :panel="3"
+    >
+      <template
+        slot="date"
+        slot-scope="day"
+      >
+        {{ day.date }} <span
+          v-if="day.date % 7 === 0"
+          style="position: absolute;"
+        >
+          *
+        </span>
+      </template>
+    </veui-calendar>
+  </section>
+  <section>
+    <h2>外部设置 <code>selected</code></h2>
+    <veui-calendar
+      v-model="selected4"
+      range
+      :panel="2"
+    />
+    <veui-button @click="setSelected">
+      设置
+    </veui-button>
+  </section>
+</article>
 </template>
 
 <script>

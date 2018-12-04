@@ -9,6 +9,7 @@ export default {
   props: {
     overlayClass: getClassPropDef(),
     overlayOptions: {
+      type: Object,
       default () {
         return {}
       }

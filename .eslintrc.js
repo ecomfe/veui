@@ -62,6 +62,7 @@ module.exports = {
         endTag: 'never',
         selfClosingTag: 'never'
       }
-    ]
+    ],
+    'vue/no-v-html': 0
   }
 }

@@ -10,6 +10,9 @@ export class AlertManager extends SimpleDialogManager {
       data: {
         open: false
       },
+      mounted () {
+        this.open = true
+      },
       render (h) {
         return h(
           AlertBox,
@@ -28,9 +31,6 @@ export class AlertManager extends SimpleDialogManager {
           },
           [h('template', { slot: 'default' }, data.content)]
         )
-      },
-      mounted () {
-        this.open = true
       }
     })
   }

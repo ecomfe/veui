@@ -1,22 +1,41 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-link&gt;</code></h1>
-    <section>
-      <veui-link to="button">Button</veui-link> &larr; default
-    </section>
-    <section>
-      <veui-link to="#/dialog" native>Dialog</veui-link> &larr; <code>native</code>
-    </section>
-    <section>
-      <veui-link to="https://www.baidu.com/" native target="_blank" rel="next">Baidu.com</veui-link> &larr; <code>native</code> &amp; <code>target="_blank"</code>
-    </section>
-    <section>
-      <veui-link to="icon" disabled>Icon</veui-link> &larr; <code>disabled</code>
-    </section>
-    <section>
-      <veui-link>Nowhere</veui-link> &larr; fallback to <code>&lt;span&gt;</code>
-    </section>
-  </article>
+<article>
+  <h1><code>&lt;veui-link&gt;</code></h1>
+  <section>
+    <veui-link to="button">
+      Button
+    </veui-link> &larr; default
+  </section>
+  <section>
+    <veui-link
+      to="#/dialog"
+      native
+    >
+      Dialog
+    </veui-link> &larr; <code>native</code>
+  </section>
+  <section>
+    <veui-link
+      to="https://www.baidu.com/"
+      native
+      target="_blank"
+      rel="next"
+    >
+      Baidu.com
+    </veui-link> &larr; <code>native</code> &amp; <code>target="_blank"</code>
+  </section>
+  <section>
+    <veui-link
+      to="icon"
+      disabled
+    >
+      Icon
+    </veui-link> &larr; <code>disabled</code>
+  </section>
+  <section>
+    <veui-link>Nowhere</veui-link> &larr; fallback to <code>&lt;span&gt;</code>
+  </section>
+</article>
 </template>
 
 <script>

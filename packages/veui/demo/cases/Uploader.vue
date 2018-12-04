@@ -1,107 +1,138 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-uploader&gt;</code></h1>
-    <h2>图片上传模式，上传进度以文字百分比显示</h2>
-    <veui-uploader type="image"
-      name="file"
-      action="/upload"
-      v-model="files"
-      :max-count="3"
-      max-size="10mb"
-      accept=".jpg,.jpeg,.gif"
-      ui="horizontal"
-      :payload="payload"
-      progress="percent"
-      @success="onSuccess"
-      @failure="onFailure"
-      @change="handleChange('files')"
-      @statuschange="handleStatusChange">
-      <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
-    </veui-uploader>
-    <h2>图片上传模式，上传进度以进度条显示</h2>
-    <veui-uploader type="image"
-      request-mode="custom"
-      name="file"
-      v-model="files1"
-      :max-count="3"
-      max-size="10mb"
-      accept=".jpg,.jpeg,.gif"
-      :payload="payload"
-      ui="horizontal"
-      progress="bar"
-      @success="onSuccess"
-      @failure="onFailure"
-      @change="handleChange('files1')"
-      @statuschange="handleStatusChange"
-      :upload="upload">
-      <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
-    </veui-uploader>
-    <h2>图片上传模式，增加额外操作按钮可以直接输入图片地址</h2>
-    <veui-uploader type="image"
-      name="file"
-      action="/upload"
-      v-model="filesExtra"
-      :max-count="3"
-      max-size="10mb"
-      accept=".jpg,.jpeg,.gif"
-      :payload="payload"
-      ui="horizontal"
-      progress="bar"
-      @success="onSuccess"
-      @failure="onFailure"
-      @change="handleChange('filesExtra')"
-      @statuschange="handleStatusChange"
-      class="extra-operation">
-      <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图</template>
-      <template slot="extra-operation" slot-scope="file">
-        <veui-button
-          :ui="file.src ? 'dark' : null"
-          class="extra-operation-button"
-          @click="openTooltip(file)"
-          :ref="`add-image${file.index !== undefined ? '-' + file.index : ''}`">输入图片地址</veui-button>
-      </template>
-    </veui-uploader>
-    <veui-tooltip :target="tooltipTarget" :open="tooltipOpen" trigger="click">
-      <div class="extra-url">
-        <veui-span>图片地址：</veui-span><veui-input v-model="imageSrc"></veui-input>
-        <veui-button @click="addImage">确定</veui-button>
-      </div>
-    </veui-tooltip>
-    <h2>文件上传模式</h2>
-    <veui-uploader
-      name="file"
-      action="/upload"
-      v-model="files2"
-      :max-count="3"
-      max-size="10mb"
-      accept=".jpg,.jpeg,.gif"
-      :payload="payload"
-      ui="horizontal"
-      progress="detail"
-      @success="onSuccess"
-      @failure="onFailure"
-      @change="handleChange('files2')"
-      @statuschange="handleStatusChange">
-      <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，只能上传3张图</template>
-    </veui-uploader>
-    <h2>文件上传模式，通过iframe上传</h2>
-    <veui-uploader ref="iframeUploader"
-      name="file"
-      action="/uploadiframe"
-      request-mode="iframe"
-      v-model="filesIframe"
-      :max-count="1"
-      max-size="10mb"
-      accept=".jpg,.jpeg,.gif"
-      :payload="payload"
-      :convert-response="convertResponse"
-      @success="onSuccess"
-      @failure="onFailure"
-      @change="handleChange('filesIframe')"
-      @statuschange="handleStatusChange">
-      <template slot="desc">请选择jpg,jpeg,gif图片，大小在10M以内，只能上传1张图</template>
-    </veui-uploader>
-  </article>
+<article>
+  <h1><code>&lt;veui-uploader&gt;</code></h1>
+  <h2>图片上传模式，上传进度以文字百分比显示</h2>
+  <veui-uploader
+    v-model="files"
+    type="image"
+    name="file"
+    action="/upload"
+    :max-count="3"
+    max-size="10mb"
+    accept=".jpg,.jpeg,.gif"
+    ui="horizontal"
+    :payload="payload"
+    progress="percent"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files')"
+    @statuschange="handleStatusChange"
+  >
+    <template slot="desc">
+      请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图
+    </template>
+  </veui-uploader>
+  <h2>图片上传模式，上传进度以进度条显示</h2>
+  <veui-uploader
+    v-model="files1"
+    type="image"
+    request-mode="custom"
+    name="file"
+    :max-count="3"
+    max-size="10mb"
+    accept=".jpg,.jpeg,.gif"
+    :payload="payload"
+    ui="horizontal"
+    progress="bar"
+    :upload="upload"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files1')"
+    @statuschange="handleStatusChange"
+  >
+    <template slot="desc">
+      请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图
+    </template>
+  </veui-uploader>
+  <h2>图片上传模式，增加额外操作按钮可以直接输入图片地址</h2>
+  <veui-uploader
+    v-model="filesExtra"
+    type="image"
+    name="file"
+    action="/upload"
+    :max-count="3"
+    max-size="10mb"
+    accept=".jpg,.jpeg,.gif"
+    :payload="payload"
+    ui="horizontal"
+    progress="bar"
+    class="extra-operation"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('filesExtra')"
+    @statuschange="handleStatusChange"
+  >
+    <template slot="desc">
+      请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图
+    </template>
+    <template
+      slot="extra-operation"
+      slot-scope="file"
+    >
+      <veui-button
+        :ref="`add-image${file.index !== undefined ? '-' + file.index : ''}`"
+        :ui="file.src ? 'dark' : null"
+        class="extra-operation-button"
+        @click="openTooltip(file)"
+      >
+        输入图片地址
+      </veui-button>
+    </template>
+  </veui-uploader>
+  <veui-tooltip
+    :target="tooltipTarget"
+    :open="tooltipOpen"
+    trigger="click"
+  >
+    <div class="extra-url">
+      <veui-span>图片地址：</veui-span><veui-input v-model="imageSrc"/>
+      <veui-button @click="addImage">
+        确定
+      </veui-button>
+    </div>
+  </veui-tooltip>
+  <h2>文件上传模式</h2>
+  <veui-uploader
+    v-model="files2"
+    name="file"
+    action="/upload"
+    :max-count="3"
+    max-size="10mb"
+    accept=".jpg,.jpeg,.gif"
+    :payload="payload"
+    ui="horizontal"
+    progress="detail"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files2')"
+    @statuschange="handleStatusChange"
+  >
+    <template slot="desc">
+      请选择jpg,jpeg,gif图片，大小在10M以内，只能上传3张图
+    </template>
+  </veui-uploader>
+  <h2>文件上传模式，通过iframe上传</h2>
+  <veui-uploader
+    ref="iframeUploader"
+    v-model="filesIframe"
+    name="file"
+    action="/uploadiframe"
+    request-mode="iframe"
+    :max-count="1"
+    max-size="10mb"
+    accept=".jpg,.jpeg,.gif"
+    :payload="payload"
+    :convert-response="convertResponse"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('filesIframe')"
+    @statuschange="handleStatusChange"
+  >
+    <template slot="desc">
+      请选择jpg,jpeg,gif图片，大小在10M以内，只能上传1张图
+    </template>
+  </veui-uploader>
+</article>
 </template>
 <script>
 import { Uploader, Button, Tooltip, Input, Span } from 'veui'
@@ -116,6 +147,7 @@ export default {
     'veui-input': Input,
     'veui-span': Span
   },
+  mixins: [ui],
   data: function () {
     let files = [
       {
@@ -165,7 +197,6 @@ export default {
       }
     }
   },
-  mixins: [ui],
   methods: {
     onSuccess (data) {
       console.log('Success event: ', data)

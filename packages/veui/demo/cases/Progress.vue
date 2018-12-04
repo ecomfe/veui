@@ -1,32 +1,68 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-progress&gt;</code></h1>
-    <section>
-      <p>
-        Progress <input type="number" step="0.01" min="0" :max="1" v-model="progress">
-      </p>
-      <p>
-        <veui-button @click="status = 'alert'">Trigger Error</veui-button>
-        <veui-button @click="status = null">Clear Status</veui-button>
-      </p>
-    </section>
-    <section>
-      <h2>线性进度条</h2>
-      <veui-progress :value="Number(progress)" desc :auto-succeed="200" :status.sync="status" :decimal-place="1"></veui-progress>
-    </section>
-    <section>
-      <h2>线性进度条（自适应宽度）</h2>
-      <veui-progress :value="Number(progress)" ui="fluid" desc :auto-succeed="200" :status.sync="status" :decimal-place="1"></veui-progress>
-    </section>
-    <section>
-      <h2>环形进度条</h2>
-      <veui-progress type="circular" :value="Number(progress)" desc :auto-succeed="200" :status.sync="status"></veui-progress>
-    </section>
-    <section>
-      <h2>小型环形进度条</h2>
-      <veui-progress ui="tiny" type="circular" :value="Number(progress)" desc :auto-succeed="200" :status.sync="status"></veui-progress>
-    </section>
-  </article>
+<article>
+  <h1><code>&lt;veui-progress&gt;</code></h1>
+  <section>
+    <p>
+      Progress <input
+        v-model="progress"
+        type="number"
+        step="0.01"
+        min="0"
+        :max="1"
+      >
+    </p>
+    <p>
+      <veui-button @click="status = 'alert'">
+        Trigger Error
+      </veui-button>
+      <veui-button @click="status = null">
+        Clear Status
+      </veui-button>
+    </p>
+  </section>
+  <section>
+    <h2>线性进度条</h2>
+    <veui-progress
+      :value="Number(progress)"
+      desc
+      :auto-succeed="200"
+      :status.sync="status"
+      :decimal-place="1"
+    />
+  </section>
+  <section>
+    <h2>线性进度条（自适应宽度）</h2>
+    <veui-progress
+      :value="Number(progress)"
+      ui="fluid"
+      desc
+      :auto-succeed="200"
+      :status.sync="status"
+      :decimal-place="1"
+    />
+  </section>
+  <section>
+    <h2>环形进度条</h2>
+    <veui-progress
+      type="circular"
+      :value="Number(progress)"
+      desc
+      :auto-succeed="200"
+      :status.sync="status"
+    />
+  </section>
+  <section>
+    <h2>小型环形进度条</h2>
+    <veui-progress
+      ui="tiny"
+      type="circular"
+      :value="Number(progress)"
+      desc
+      :auto-succeed="200"
+      :status.sync="status"
+    />
+  </section>
+</article>
 </template>
 
 <script>

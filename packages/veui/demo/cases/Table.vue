@@ -1,17 +1,29 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-table&gt;</code></h1>
-    <section>
-      <veui-button ui="primary" @click="append">添加</veui-button>
-    </section>
-    <section>
-      <veui-checkbox v-model="showGroup">显示数据分组</veui-checkbox>
-    </section>
-    <section>
-      <veui-checkbox v-model="selectSpanRow">选择合并行</veui-checkbox>
-    </section>
-    <section>
-      <veui-checkboxgroup type="checkbox" v-model="columns" :items="[
+<article>
+  <h1><code>&lt;veui-table&gt;</code></h1>
+  <section>
+    <veui-button
+      ui="primary"
+      @click="append"
+    >
+      添加
+    </veui-button>
+  </section>
+  <section>
+    <veui-checkbox v-model="showGroup">
+      显示数据分组
+    </veui-checkbox>
+  </section>
+  <section>
+    <veui-checkbox v-model="selectSpanRow">
+      选择合并行
+    </veui-checkbox>
+  </section>
+  <section>
+    <veui-checkboxgroup
+      v-model="columns"
+      type="checkbox"
+      :items="[
         { value: 'typeId', label: '类型 ID'},
         { value: 'id', label: '数据 ID'},
         { value: 'group', label: '数据分组'},
@@ -19,95 +31,256 @@
         { value: 'price', label: '价格'},
         { value: 'updateDate', label: '更新时间'},
         { value: 'operation', label: '操作'}
-      ]"/>
-    </section>
-    <section>
-      <veui-table ui="alt bordered custom" scroll="150" :data="data" :column-filter="columns" :key-field="selectSpanRow ? 'group' : 'id'" selectable
-        :order-by="orderBy" :order="order" @select="handleSelect" @sort="handleSort" :selected.sync="selected1">
-        <veui-table-column field="id" title="数据 ID" sortable>
-          <template slot="head"><strong>数据 <span style="color: #3998fc">ID</span></strong></template>
-          <template slot="foot"><strong>总计</strong></template>
-        </veui-table-column>
-        <veui-table-column field="typeId" title="类型 ID" :span="typeSpan"/>
-        <veui-table-column v-if="showGroup" field="group" title="数据分组" :span="groupSpan">
-        </veui-table-column>
-        <veui-table-column field="desc" title="数据描述"/>
-        <veui-table-column field="price" title="价格" sortable width="160" align="right">
-          <template slot-scope="props">{{ props.item.price | currency }}</template>
-          <template slot="foot"><strong>{{ total | currency }}</strong></template>
-        </veui-table-column>
-        <veui-table-column field="updateDate" title="更新时间" align="center">
-          <template slot-scope="props">
-            <span :ref="`time-a-${props.item.id}`">{{ props.item.updateDate | date }}</span>
-            <veui-tooltip :target="`time-a-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
-          </template>
-        </veui-table-column>
-        <veui-table-column field="operation" title="操作">
-          <template slot-scope="props">
-            <veui-button ui="link" @click="log(props.item)">编辑</veui-button>
-            <veui-button ui="link alert" @click="del(props.index)">删除</veui-button>
-          </template>
-        </veui-table-column>
-      </veui-table>
-      <p>已选ID：{{ JSON.stringify(selected1) }}</p>
-    </section>
-    <section class="container">
-      <veui-table ui="slim bordered" :data="data" :column-filter="columns" :key-field="selectSpanRow ? 'group' : 'id'"
-        selectable select-mode="single" :selected.sync="selected2">
-        <veui-table-column field="id" title="数据 ID"/>
-        <veui-table-column v-if="showGroup" field="group" title="数据分组" :span="groupSpan">
-        </veui-table-column>
-        <veui-table-column field="desc" title="数据描述"/>
-        <veui-table-column field="price" title="价格" width="160" align="right">
-          <template slot-scope="props">{{ props.item.price | currency }}</template>
-        </veui-table-column>
-        <veui-table-column field="updateDate" title="更新时间" align="right">
-          <template slot-scope="props">
-            <span :ref="`time-b-${props.item.id}`">{{ props.item.updateDate | date }}</span>
-            <veui-tooltip :target="`time-b-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
-          </template>
-        </veui-table-column>
-        <!-- <template slot="foot">An awesome table foot!</template> -->
-      </veui-table>
-      <p>已选ID：{{ JSON.stringify(selected2) }}</p>
-    </section>
-    <section class="container">
-      <veui-table :data="data" :column-filter="columns" key-field="id" selectable expandable>
-        <veui-table-column field="id" title="数据 ID"/>
-        <veui-table-column field="desc" title="数据描述"/>
-        <veui-table-column field="price" title="价格" width="160" align="right">
-          <template slot-scope="props">{{ props.item.price | currency }}</template>
-        </veui-table-column>
-        <veui-table-column field="updateDate" title="更新时间" align="right">
-          <template slot-scope="props">
-            <span :ref="`time-b-${props.item.id}`">{{ props.item.updateDate | date }}</span>
-            <veui-tooltip :target="`time-b-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
-          </template>
-        </veui-table-column>
-        <template slot="sub-row" slot-scope="{ desc }">{{ desc }}</template>
-      </veui-table>
-    </section>
-    <section class="container">
-      <veui-table :data="data" :column-filter="columns" key-field="id" expandable>
-        <veui-table-column field="id" title="数据 ID">
-          <template slot="sub-row" slot-scope="{ id }">
-            <em>{{ id }}</em>
-          </template>
-        </veui-table-column>
-        <veui-table-column field="desc" title="数据描述"/>
-        <veui-table-column field="price" title="价格" width="160" align="right">
-          <template slot-scope="props">{{ props.item.price | currency }}</template>
-        </veui-table-column>
-        <veui-table-column field="updateDate" title="更新时间" align="right">
-          <template slot-scope="props">
-            <span :ref="`time-b-${props.item.id}`">{{ props.item.updateDate | date }}</span>
-            <veui-tooltip :target="`time-b-${props.item.id}`">{{ props.item.updateDate | time }}</veui-tooltip>
-          </template>
-        </veui-table-column>
-        <template slot="foot">An awesome table foot!</template>
-      </veui-table>
-    </section>
-  </article>
+      ]"
+    />
+  </section>
+  <section>
+    <veui-table
+      ui="alt bordered custom"
+      scroll="150"
+      :data="data"
+      :column-filter="columns"
+      :key-field="selectSpanRow ? 'group' : 'id'"
+      selectable
+      :order-by="orderBy"
+      :order="order"
+      :selected.sync="selected1"
+      @select="handleSelect"
+      @sort="handleSort"
+    >
+      <veui-table-column
+        field="id"
+        title="数据 ID"
+        sortable
+      >
+        <template slot="head">
+          <strong>
+            数据 <span style="color: #3998fc">
+              ID
+            </span>
+          </strong>
+        </template>
+        <template slot="foot">
+          <strong>总计</strong>
+        </template>
+      </veui-table-column>
+      <veui-table-column
+        field="typeId"
+        title="类型 ID"
+        :span="typeSpan"
+      />
+      <veui-table-column
+        v-if="showGroup"
+        field="group"
+        title="数据分组"
+        :span="groupSpan"
+      />
+      <veui-table-column
+        field="desc"
+        title="数据描述"
+      />
+      <veui-table-column
+        field="price"
+        title="价格"
+        sortable
+        width="160"
+        align="right"
+      >
+        <template slot-scope="props">
+          {{ props.item.price | currency }}
+        </template>
+        <template slot="foot">
+          <strong>{{ total | currency }}</strong>
+        </template>
+      </veui-table-column>
+      <veui-table-column
+        field="updateDate"
+        title="更新时间"
+        align="center"
+      >
+        <template slot-scope="props">
+          <span :ref="`time-a-${props.item.id}`">
+            {{ props.item.updateDate | date }}
+          </span>
+          <veui-tooltip :target="`time-a-${props.item.id}`">
+            {{ props.item.updateDate | time }}
+          </veui-tooltip>
+        </template>
+      </veui-table-column>
+      <veui-table-column
+        field="operation"
+        title="操作"
+      >
+        <template slot-scope="props">
+          <veui-button
+            ui="link"
+            @click="log(props.item)"
+          >
+            编辑
+          </veui-button>
+          <veui-button
+            ui="link alert"
+            @click="del(props.index)"
+          >
+            删除
+          </veui-button>
+        </template>
+      </veui-table-column>
+    </veui-table>
+    <p>已选ID：{{ JSON.stringify(selected1) }}</p>
+  </section>
+  <section class="container">
+    <veui-table
+      ui="slim bordered"
+      :data="data"
+      :column-filter="columns"
+      :key-field="selectSpanRow ? 'group' : 'id'"
+      selectable
+      select-mode="single"
+      :selected.sync="selected2"
+    >
+      <veui-table-column
+        field="id"
+        title="数据 ID"
+      />
+      <veui-table-column
+        v-if="showGroup"
+        field="group"
+        title="数据分组"
+        :span="groupSpan"
+      />
+      <veui-table-column
+        field="desc"
+        title="数据描述"
+      />
+      <veui-table-column
+        field="price"
+        title="价格"
+        width="160"
+        align="right"
+      >
+        <template slot-scope="props">
+          {{ props.item.price | currency }}
+        </template>
+      </veui-table-column>
+      <veui-table-column
+        field="updateDate"
+        title="更新时间"
+        align="right"
+      >
+        <template slot-scope="props">
+          <span :ref="`time-b-${props.item.id}`">
+            {{ props.item.updateDate | date }}
+          </span>
+          <veui-tooltip :target="`time-b-${props.item.id}`">
+            {{ props.item.updateDate | time }}
+          </veui-tooltip>
+        </template>
+      </veui-table-column>
+      <!-- <template slot="foot">An awesome table foot!</template> -->
+    </veui-table>
+    <p>已选ID：{{ JSON.stringify(selected2) }}</p>
+  </section>
+  <section class="container">
+    <veui-table
+      :data="data"
+      :column-filter="columns"
+      key-field="id"
+      selectable
+      expandable
+    >
+      <veui-table-column
+        field="id"
+        title="数据 ID"
+      />
+      <veui-table-column
+        field="desc"
+        title="数据描述"
+      />
+      <veui-table-column
+        field="price"
+        title="价格"
+        width="160"
+        align="right"
+      >
+        <template slot-scope="props">
+          {{ props.item.price | currency }}
+        </template>
+      </veui-table-column>
+      <veui-table-column
+        field="updateDate"
+        title="更新时间"
+        align="right"
+      >
+        <template slot-scope="props">
+          <span :ref="`time-b-${props.item.id}`">
+            {{ props.item.updateDate | date }}
+          </span>
+          <veui-tooltip :target="`time-b-${props.item.id}`">
+            {{ props.item.updateDate | time }}
+          </veui-tooltip>
+        </template>
+      </veui-table-column>
+      <template
+        slot="sub-row"
+        slot-scope="{ desc }"
+      >
+        {{ desc }}
+      </template>
+    </veui-table>
+  </section>
+  <section class="container">
+    <veui-table
+      :data="data"
+      :column-filter="columns"
+      key-field="id"
+      expandable
+    >
+      <veui-table-column
+        field="id"
+        title="数据 ID"
+      >
+        <template
+          slot="sub-row"
+          slot-scope="{ id }"
+        >
+          <em>{{ id }}</em>
+        </template>
+      </veui-table-column>
+      <veui-table-column
+        field="desc"
+        title="数据描述"
+      />
+      <veui-table-column
+        field="price"
+        title="价格"
+        width="160"
+        align="right"
+      >
+        <template slot-scope="props">
+          {{ props.item.price | currency }}
+        </template>
+      </veui-table-column>
+      <veui-table-column
+        field="updateDate"
+        title="更新时间"
+        align="right"
+      >
+        <template slot-scope="props">
+          <span :ref="`time-b-${props.item.id}`">
+            {{ props.item.updateDate | date }}
+          </span>
+          <veui-tooltip :target="`time-b-${props.item.id}`">
+            {{ props.item.updateDate | time }}
+          </veui-tooltip>
+        </template>
+      </veui-table-column>
+      <template slot="foot">
+        An awesome table foot!
+      </template>
+    </veui-table>
+  </section>
+</article>
 </template>
 
 <script>
@@ -232,6 +405,11 @@ export default {
       }, 0)
     }
   },
+  mounted () {
+    // for (let i = 0; i < 300; i++) {
+    //   this.append()
+    // }
+  },
   methods: {
     log (...args) {
       bus.$emit('log', ...args)
@@ -260,11 +438,6 @@ export default {
       this.orderBy = orderBy
       this.order = order
     }
-  },
-  mounted () {
-    // for (let i = 0; i < 300; i++) {
-    //   this.append()
-    // }
   }
 }
 </script>

@@ -9,9 +9,7 @@
   v-bind="attrs"
   v-on="listeners"
 >
-  <template v-if="!loading">
-    <slot/>
-  </template>
+  <slot v-if="!loading"/>
   <template v-else>
     <slot name="loading">
       <veui-icon

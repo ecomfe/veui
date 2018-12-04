@@ -1,19 +1,31 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-radio-group&gt;</code></h1>
-    <p>
-      <veui-radio-group :items="data1" name="111" v-model="picked1">
-        <template slot-scope="props">{{ props.label }}</template>
-      </veui-radio-group>
-    </p>
-    <p>value: {{ picked1 }}</p>
-    <p>
-      <veui-radio-group :items="data2" ui="small" v-model="picked2">
-        <template slot-scope="props">{{ props.label }}</template>
-      </veui-radio-group>
-    </p>
-    <p>value: {{ picked2 }}</p>
-  </article>
+<article>
+  <h1><code>&lt;veui-radio-group&gt;</code></h1>
+  <p>
+    <veui-radio-group
+      v-model="picked1"
+      :items="data1"
+      name="111"
+    >
+      <template slot-scope="props">
+        {{ props.label }}
+      </template>
+    </veui-radio-group>
+  </p>
+  <p>value: {{ picked1 }}</p>
+  <p>
+    <veui-radio-group
+      v-model="picked2"
+      :items="data2"
+      ui="small"
+    >
+      <template slot-scope="props">
+        {{ props.label }}
+      </template>
+    </veui-radio-group>
+  </p>
+  <p>value: {{ picked2 }}</p>
+</article>
 </template>
 
 <script>
