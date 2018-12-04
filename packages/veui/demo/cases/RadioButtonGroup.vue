@@ -1,26 +1,42 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-radio-button-group&gt;</code></h1>
-    <section>
-      <veui-checkbox v-model="disabled">禁用</veui-checkbox>
-    </section>
-    <section>
-      <p>
-        <veui-radio-button-group :items="data1" name="111" v-model="picked1" :disabled="disabled">
-          <template slot-scope="props">{{ props.label }}</template>
-        </veui-radio-button-group>
-      </p>
-      <p>已选：{{ picked1 }}</p>
-    </section>
-    <section>
-      <p>
-        <veui-radio-button-group :items="data2" ui="small alt" v-model="picked2" :disabled="disabled">
-          <template slot-scope="props">{{ props.label }}</template>
-        </veui-radio-button-group>
-      </p>
-      <p>已选：{{ picked2 }}</p>
-    </section>
-  </article>
+<article>
+  <h1><code>&lt;veui-radio-button-group&gt;</code></h1>
+  <section>
+    <veui-checkbox v-model="disabled">
+      禁用
+    </veui-checkbox>
+  </section>
+  <section>
+    <p>
+      <veui-radio-button-group
+        v-model="picked1"
+        :items="data1"
+        name="111"
+        :disabled="disabled"
+      >
+        <template slot-scope="props">
+          {{ props.label }}
+        </template>
+      </veui-radio-button-group>
+    </p>
+    <p>已选：{{ picked1 }}</p>
+  </section>
+  <section>
+    <p>
+      <veui-radio-button-group
+        v-model="picked2"
+        :items="data2"
+        ui="small alt"
+        :disabled="disabled"
+      >
+        <template slot-scope="props">
+          {{ props.label }}
+        </template>
+      </veui-radio-button-group>
+    </p>
+    <p>已选：{{ picked2 }}</p>
+  </section>
+</article>
 </template>
 
 <script>

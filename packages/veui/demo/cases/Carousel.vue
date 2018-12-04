@@ -1,20 +1,74 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-carousel&gt;</code></h1>
-    <p><code>index</code>: <veui-number-input ui="tiny" v-model="index" :min="0" :max="items.length - 1"/></p>
-    <p><code>interval</code>: <veui-number-input ui="tiny" v-model="interval" :min="0" :step="1000"/></p>
-    <p><veui-checkbox v-model="loose"><code>ui="loose"</code></veui-checkbox></p>
-    <p><veui-checkbox v-model="autoplay"><code>autoplay</code></veui-checkbox></p>
-    <p><veui-checkbox v-model="wrap"><code>wrap</code></veui-checkbox></p>
-    <p><veui-checkbox v-model="pauseOnHover"><code>pause-on-hover</code></veui-checkbox></p>
-    <p><veui-radio-group v-model="trigger" :items="triggers"/></p>
-    <p><veui-radio-group v-model="size" :items="sizes"/></p>
-    <p><veui-radio-group v-model="indicator" :items="indicators"/></p>
-    <section>
-      <veui-carousel :datasource="items" :index.sync="index" :ui="ui" :interval="interval" :pause-on-hover="pauseOnHover"
-        :switch-trigger="trigger" :wrap="wrap" :indicator="indicator" :autoplay="autoplay"></veui-carousel>
-    </section>
-  </article>
+<article>
+  <h1><code>&lt;veui-carousel&gt;</code></h1>
+  <p>
+    <code>index</code>: <veui-number-input
+      v-model="index"
+      ui="tiny"
+      :min="0"
+      :max="items.length - 1"
+    />
+  </p>
+  <p>
+    <code>interval</code>: <veui-number-input
+      v-model="interval"
+      ui="tiny"
+      :min="0"
+      :step="1000"
+    />
+  </p>
+  <p>
+    <veui-checkbox v-model="loose">
+      <code>ui="loose"</code>
+    </veui-checkbox>
+  </p>
+  <p>
+    <veui-checkbox v-model="autoplay">
+      <code>autoplay</code>
+    </veui-checkbox>
+  </p>
+  <p>
+    <veui-checkbox v-model="wrap">
+      <code>wrap</code>
+    </veui-checkbox>
+  </p>
+  <p>
+    <veui-checkbox v-model="pauseOnHover">
+      <code>pause-on-hover</code>
+    </veui-checkbox>
+  </p>
+  <p>
+    <veui-radio-group
+      v-model="trigger"
+      :items="triggers"
+    />
+  </p>
+  <p>
+    <veui-radio-group
+      v-model="size"
+      :items="sizes"
+    />
+  </p>
+  <p>
+    <veui-radio-group
+      v-model="indicator"
+      :items="indicators"
+    />
+  </p>
+  <section>
+    <veui-carousel
+      :datasource="items"
+      :index.sync="index"
+      :ui="ui"
+      :interval="interval"
+      :pause-on-hover="pauseOnHover"
+      :switch-trigger="trigger"
+      :wrap="wrap"
+      :indicator="indicator"
+      :autoplay="autoplay"
+    />
+  </section>
+</article>
 </template>
 
 <script>

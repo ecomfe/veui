@@ -1,73 +1,158 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-slider&gt;</code></h1>
+<article>
+  <h1><code>&lt;veui-slider&gt;</code></h1>
 
-    <section>
-        <veui-slider v-model="value1"/>
-        <veui-slider v-model="value1" readonly ui="small">
-          <div slot="tip" style="position: absolute">&#8203;</div>
-        </veui-slider>
-        <veui-slider v-model="value1" disabled ui="tiny">
-          <span slot="tip-label">{{ value1.toFixed(2) }}</span>
-        </veui-slider>
-        <div class="desc">Range: 0~1, Value: {{ value1 }}</div>
-    </section>
+  <section>
+    <veui-slider v-model="value1"/>
+    <veui-slider
+      v-model="value1"
+      readonly
+      ui="small"
+    >
+      <div
+        slot="tip"
+        style="position: absolute"
+      >
+        &#8203;
+      </div>
+    </veui-slider>
+    <veui-slider
+      v-model="value1"
+      disabled
+      ui="tiny"
+    >
+      <span slot="tip-label">
+        {{ value1.toFixed(2) }}
+      </span>
+    </veui-slider>
+    <div class="desc">
+      Range: 0~1, Value: {{ value1 }}
+    </div>
+  </section>
 
-    <section>
-        <veui-slider ui="micro" v-model="value2" :min="10" :max="100" :step="7" mark>
-          <span slot="tip-label">{{ value2 }}%</span>
-        </veui-slider>
-        <veui-slider ui="micro" disabled v-model="value2" :min="10" :max="100" :step="7" mark/>
-        <div class="desc">Range: 0~100, Step: 8, Value: {{ value2 }}</div>
-    </section>
+  <section>
+    <veui-slider
+      v-model="value2"
+      ui="micro"
+      :min="10"
+      :max="100"
+      :step="7"
+      mark
+    >
+      <span slot="tip-label">
+        {{ value2 }}%
+      </span>
+    </veui-slider>
+    <veui-slider
+      v-model="value2"
+      ui="micro"
+      disabled
+      :min="10"
+      :max="100"
+      :step="7"
+      mark
+    />
+    <div class="desc">
+      Range: 0~100, Step: 8, Value: {{ value2 }}
+    </div>
+  </section>
 
-    <section>
-        <veui-slider v-model="value4" :min="0" :max="100"/>
-        <div class="desc">Range: 0~100, Value: {{ value4 }}</div>
-    </section>
+  <section>
+    <veui-slider
+      v-model="value4"
+      :min="0"
+      :max="100"
+    />
+    <div class="desc">
+      Range: 0~100, Value: {{ value4 }}
+    </div>
+  </section>
 
-    <section>
-        <veui-slider v-model="value3" :min="0" :max="360" :step="1" :parse="parseColorHue" :format="formatColorHue">
-          <div slot="track" style="width: 100%; height: 20px;" :style="{background: colorGradient}"></div>
-          <div slot="thumb" style="margin-top: 6px" slot-scope="{ index }" :key="`thumb_${index}`">
-            <div style="width: 16px; height: 12px">
-              <svg width="16" height="12" viewBox="0 0 16 12">
-                <polygon points="8,0 16,12 0,12"/>
-              </svg>
-            </div>
-          </div>
-          <template slot="tip" slot-scope="{ open, activeIndex }">
-            <div v-show="open" class="custom-tip" :style="{
-              left: `${(activeIndex >= 0 ? parseColorHue(value3[activeIndex]) : 0) / 360 * 100}%`,
-              backgroundColor: value3[activeIndex]
-            }"></div>
-          </template>
-        </veui-slider>
-        <div class="desc">Range: 0~255, Step: 1, Value: <br> [
-          <span v-for="(val, index) in value3" :key="`colorValue${index}`">
-            "<span :style="{ color: val }">{{ val }}</span>"
-            <span v-if="index < value3.length - 1">,</span>
-          </span>
-        ]</div>
-    </section>
-
-    <section class="video">
-        <div class="play-button">▶️</div>
-        <veui-slider v-model="videoPlayProgress" :secondary-progress="videoBufferProgress" ui="micro">
-          <span slot="tip-label">{{ Math.round(videoPlayProgress * 100) }}%</span>
-        </veui-slider>
-        <div class="duration">
-          <span>{{ formatDuration(videoDuration * videoPlayProgress) }}</span> /
-          <span>{{ formatDuration(videoDuration * videoBufferProgress) }}</span> /
-          <span>{{ formatDuration(videoDuration) }}</span>
+  <section>
+    <veui-slider
+      v-model="value3"
+      :min="0"
+      :max="360"
+      :step="1"
+      :parse="parseColorHue"
+      :format="formatColorHue"
+    >
+      <div
+        slot="track"
+        style="width: 100%; height: 20px;"
+        :style="{background: colorGradient}"
+      />
+      <div
+        slot="thumb"
+        :key="`thumb_${index}`"
+        slot-scope="{ index }"
+        style="margin-top: 6px"
+      >
+        <div style="width: 16px; height: 12px">
+          <svg
+            width="16"
+            height="12"
+            viewBox="0 0 16 12"
+          >
+            <polygon points="8,0 16,12 0,12"/>
+          </svg>
         </div>
-    </section>
+      </div>
+      <template
+        slot="tip"
+        slot-scope="{ open, activeIndex }"
+      >
+        <div
+          v-show="open"
+          class="custom-tip"
+          :style="{
+            left: `${(activeIndex >= 0 ? parseColorHue(value3[activeIndex]) : 0) / 360 * 100}%`,
+            backgroundColor: value3[activeIndex]
+          }"
+        />
+      </template>
+    </veui-slider>
+    <div class="desc">
+      Range: 0~255, Step: 1, Value: <br> [
+      <span
+        v-for="(val, index) in value3"
+        :key="`colorValue${index}`"
+      >
+        "<span :style="{ color: val }">
+          {{ val }}
+        </span>"
+        <span v-if="index < value3.length - 1">
+          ,
+        </span>
+      </span>
+      ]
+    </div>
+  </section>
 
-  </article>
+  <section class="video">
+    <div class="play-button">
+      ▶️
+    </div>
+    <veui-slider
+      v-model="videoPlayProgress"
+      :secondary-progress="videoBufferProgress"
+      ui="micro"
+    >
+      <span slot="tip-label">
+        {{ Math.round(videoPlayProgress * 100) }}%
+      </span>
+    </veui-slider>
+    <div class="duration">
+      <span>{{ formatDuration(videoDuration * videoPlayProgress) }}</span> /
+      <span>{{ formatDuration(videoDuration * videoBufferProgress) }}</span> /
+      <span>{{ formatDuration(videoDuration) }}</span>
+    </div>
+  </section>
+</article>
 </template>
 
 <script>
-import { Slider, Tooltip } from 'veui'
+import { Slider } from 'veui'
 import { fill, padStart } from 'lodash'
 
 function makeArray (length) {
@@ -77,8 +162,7 @@ function makeArray (length) {
 export default {
   name: 'slider-demo',
   components: {
-    'veui-slider': Slider,
-    'veui-tooltip': Tooltip
+    'veui-slider': Slider
   },
   data () {
     return {

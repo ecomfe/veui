@@ -1,11 +1,15 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-schedule&gt;</code></h1>
-    <section>
-      <veui-schedule v-model="selected" :hourClass="hourClass"
-        :shortcuts="shortcuts" shortcuts-display="popup"></veui-schedule>
-    </section>
-  </article>
+<article>
+  <h1><code>&lt;veui-schedule&gt;</code></h1>
+  <section>
+    <veui-schedule
+      v-model="selected"
+      :hour-class="hourClass"
+      :shortcuts="shortcuts"
+      shortcuts-display="popup"
+    />
+  </section>
+</article>
 </template>
 
 <script>

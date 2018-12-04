@@ -11,6 +11,9 @@ export class PromptManager extends SimpleDialog {
       data: {
         open: false
       },
+      mounted () {
+        this.open = true
+      },
       render (h) {
         return h(
           PromptBox,
@@ -33,9 +36,6 @@ export class PromptManager extends SimpleDialog {
           },
           [h('template', { slot: 'default' }, data.content)]
         )
-      },
-      mounted () {
-        this.open = true
       }
     })
   }

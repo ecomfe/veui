@@ -1,57 +1,78 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-dropdown&gt;</code></h1>
-    <p>
-      <veui-dropdown
-        ui="primary"
-        label="操作"
-        split
-        :options="options"></veui-dropdown>
-      <veui-dropdown
-        ui="primary micro"
-        label="操作操作操作操作操作操作"
-        trigger="hover"
-        :options="options">
-        <template slot="option-label" slot-scope="{ label }">
-          👉 {{ label }}
-        </template>
-      </veui-dropdown>
-    </p>
-    <p>
-      <veui-dropdown
-        ui="small"
-        label="操作操作操作操作操作操作"
-        trigger="hover"
-        split
-        :options="options"/>
-      <veui-dropdown
-        ui="primary"
-        label="操作操作操作操作操作操作"
-        disabled
-        :options="options"></veui-dropdown>
-    </p>
-    <p>
-      <veui-dropdown
-        ui="link"
-        label="操作">
-        <veui-option-group label="提交">
-          <veui-option @click="log('save')" label="保存"/>
-          <veui-option value="publish" label="发布"/>
-        </veui-option-group>
-        <veui-option-group label="操作">
-          <veui-option value="undo" label="撤销"/>
-          <veui-option value="redo" label="重复"/>
-        </veui-option-group>
-      </veui-dropdown>
-    </p>
-    <p>
-      <veui-dropdown
-        ui="link"
-        label="操作"
-        disabled
-        :options="options"></veui-dropdown>
-    </p>
-  </article>
+<article>
+  <h1><code>&lt;veui-dropdown&gt;</code></h1>
+  <p>
+    <veui-dropdown
+      ui="primary"
+      label="操作"
+      split
+      :options="options"
+    />
+    <veui-dropdown
+      ui="primary micro"
+      label="操作操作操作操作操作操作"
+      trigger="hover"
+      :options="options"
+    >
+      <template
+        slot="option-label"
+        slot-scope="{ label }"
+      >
+        👉 {{ label }}
+      </template>
+    </veui-dropdown>
+  </p>
+  <p>
+    <veui-dropdown
+      ui="small"
+      label="操作操作操作操作操作操作"
+      trigger="hover"
+      split
+      :options="options"
+    />
+    <veui-dropdown
+      ui="primary"
+      label="操作操作操作操作操作操作"
+      disabled
+      :options="options"
+    />
+  </p>
+  <p>
+    <veui-dropdown
+      ui="link"
+      label="操作"
+    >
+      <veui-option-group label="提交">
+        <veui-option
+          label="保存"
+          @click="log('save')"
+        />
+        <veui-option
+          value="publish"
+          label="发布"
+        />
+      </veui-option-group>
+      <veui-option-group label="操作">
+        <veui-option
+          value="undo"
+          label="撤销"
+        />
+        <veui-option
+          value="redo"
+          label="重复"
+        />
+      </veui-option-group>
+    </veui-dropdown>
+  </p>
+  <p>
+    <veui-dropdown
+      ui="link"
+      label="操作"
+      disabled
+      :options="options"
+    />
+  </p>
+</article>
 </template>
 
 <script>

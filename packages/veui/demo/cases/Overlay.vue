@@ -1,26 +1,34 @@
 <template>
-  <article class="demo-overlay">
-    <h1><code>&lt;veui-overlay&gt;</code></h1>
+<article class="demo-overlay">
+  <h1><code>&lt;veui-overlay&gt;</code></h1>
 
-    <div class="row">
-      <veui-button slot="target"
-        ui="primary"
-        @click="overlayVisible=!overlayVisible"
-        ref="clickOpen">
-        <template v-if="overlayVisible">隐藏overlay</template>
-        <template v-else>展示overlay</template>
-      </veui-button>
+  <div class="row">
+    <veui-button
+      slot="target"
+      ref="clickOpen"
+      ui="primary"
+      @click="overlayVisible=!overlayVisible"
+    >
+      <template v-if="overlayVisible">
+        隐藏overlay
+      </template>
+      <template v-else>
+        展示overlay
+      </template>
+    </veui-button>
 
-      <veui-overlay overlay-class="demo-overlay-box"
-        target="clickOpen"
-        :open="overlayVisible"
-        :options="{attachment: 'top right', targetAttachment: 'top left'}">
-        点击按钮展开的
-      </veui-overlay>
-    </div>
+    <veui-overlay
+      overlay-class="demo-overlay-box"
+      target="clickOpen"
+      :open="overlayVisible"
+      :options="{attachment: 'top right', targetAttachment: 'top left'}"
+    >
+      点击按钮展开的
+    </veui-overlay>
+  </div>
 
-    <div class="row">
-      <pre>
+  <div class="row">
+    <pre>
       {
         attachment: 'top right',
         targetAttachment: 'top left',
@@ -32,88 +40,125 @@
         ]
       }
       </pre>
-      <div class="preview">
-        <div class="scroll-content">
-          <veui-overlay overlay-class="demo-overlay-box"
-            target="overlay1"
-            :open="true"
-            :options="{attachment: 'top right', targetAttachment: 'top left'}">
-            提示信息
-          </veui-overlay>
-          <div class="target" ref="overlay1"></div>
-        </div>
+    <div class="preview">
+      <div class="scroll-content">
+        <veui-overlay
+          overlay-class="demo-overlay-box"
+          target="overlay1"
+          :open="true"
+          :options="{attachment: 'top right', targetAttachment: 'top left'}"
+        >
+          提示信息
+        </veui-overlay>
+        <div
+          ref="overlay1"
+          class="target"
+        />
       </div>
     </div>
+  </div>
 
-    <div class="row">
-      <pre>
+  <div class="row">
+    <pre>
       {
         attachment: 'bottom left',
         targetAttachment: 'top left'
       }
       </pre>
-      <div class="preview">
-        <div class="scroll-content">
-          <div class="target" ref="overlay2"></div>
-          <veui-overlay overlay-class="demo-overlay-box"
-            target="overlay2"
-            :open="true"
-            :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
-            提示信息
-          </veui-overlay>
-        </div>
+    <div class="preview">
+      <div class="scroll-content">
+        <div
+          ref="overlay2"
+          class="target"
+        />
+        <veui-overlay
+          overlay-class="demo-overlay-box"
+          target="overlay2"
+          :open="true"
+          :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
+        >
+          提示信息
+        </veui-overlay>
       </div>
     </div>
+  </div>
 
-    <div class="row">
-      <veui-button ref="overlay3" @click="showMultiFirst">第一个target</veui-button>
-      <veui-button ref="overlay4" @click="showMultiSecond">第二个target</veui-button>
-      <veui-overlay overlay-class="demo-overlay-box"
-        :target="multiTargetRef"
-        :open="multiTargetOpen"
-        :options="multiOptions">多个target</veui-overlay>
-    </div>
+  <div class="row">
+    <veui-button
+      ref="overlay3"
+      @click="showMultiFirst"
+    >
+      第一个target
+    </veui-button>
+    <veui-button
+      ref="overlay4"
+      @click="showMultiSecond"
+    >
+      第二个target
+    </veui-button>
+    <veui-overlay
+      overlay-class="demo-overlay-box"
+      :target="multiTargetRef"
+      :open="multiTargetOpen"
+      :options="multiOptions"
+    >
+      多个target
+    </veui-overlay>
+  </div>
 
-    <div class="row">
-      <veui-button v-for="(item, index) in vforItems"
-        :ref="`overlay5-${index}`"
-        :key="item.name"
-        @click="showItem(item, index)">
-        {{ item.name }}
-      </veui-button>
-      <veui-overlay overlay-class="demo-overlay-box"
-        :target="vforTargetRef"
-        :open="vforOpen"
-        :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
-        年龄是{{ vforCurrentItem.age }}
-      </veui-overlay>
-    </div>
+  <div class="row">
+    <veui-button
+      v-for="(item, index) in vforItems"
+      :ref="`overlay5-${index}`"
+      :key="item.name"
+      @click="showItem(item, index)"
+    >
+      {{ item.name }}
+    </veui-button>
+    <veui-overlay
+      overlay-class="demo-overlay-box"
+      :target="vforTargetRef"
+      :open="vforOpen"
+      :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
+    >
+      年龄是{{ vforCurrentItem.age }}
+    </veui-overlay>
+  </div>
 
-    <div class="row">
-      <a ref="vnodeTest">直接传vnode</a>
-      <veui-overlay overlay-class="demo-overlay-box"
-        :target="vnodeTarget"
-        :open="true"
-        :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
-        好的，一切正常。
-      </veui-overlay>
-      <veui-overlay overlay-class="demo-overlay-box"
-        :target="null"
-        :open="true"
-        :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
-        这个没有飞到左上角去，就说明有bug了。
-      </veui-overlay>
+  <div class="row">
+    <a ref="vnodeTest">
+      直接传vnode
+    </a>
+    <veui-overlay
+      overlay-class="demo-overlay-box"
+      :target="vnodeTarget"
+      :open="true"
+      :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
+    >
+      好的，一切正常。
+    </veui-overlay>
+    <veui-overlay
+      overlay-class="demo-overlay-box"
+      :target="null"
+      :open="true"
+      :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
+    >
+      这个没有飞到左上角去，就说明有bug了。
+    </veui-overlay>
 
-      <veui-button ref="vnodeComponentTest">组件vnode</veui-button>
-      <veui-overlay overlay-class="demo-overlay-box"
-        :target="vnodeComponentTarget"
-        :open="true"
-        :options="{attachment: 'bottom left', targetAttachment: 'top left'}">
-        组件vnode的overlay
-      </veui-overlay>
-    </div>
-
-  </article>
+    <veui-button ref="vnodeComponentTest">
+      组件vnode
+    </veui-button>
+    <veui-overlay
+      overlay-class="demo-overlay-box"
+      :target="vnodeComponentTarget"
+      :open="true"
+      :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
+    >
+      组件vnode的overlay
+    </veui-overlay>
+  </div>
+</article>
 </template>
 <script>
 import { Overlay, Button } from 'veui'

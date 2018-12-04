@@ -1,92 +1,164 @@
 <template>
-  <article class="veui-transfer-demo">
-    <h1><code>&lt;veui-tree&gt;</code></h1>
+<article class="veui-transfer-demo">
+  <h1><code>&lt;veui-tree&gt;</code></h1>
 
-    <h2>点击左侧图标展开收起</h2>
-    <p>当前展开：{{ expands1 }}</p>
-    <veui-tree :datasource="treeDatasource1" :expands.sync="expands1"></veui-tree>
+  <h2>点击左侧图标展开收起</h2>
+  <p>当前展开：{{ expands1 }}</p>
+  <veui-tree
+    :datasource="treeDatasource1"
+    :expands.sync="expands1"
+  />
 
-    <h2>点击整行展开收起</h2>
-    <veui-tree :datasource="treeDatasource2" item-click="toggle"></veui-tree>
+  <h2>点击整行展开收起</h2>
+  <veui-tree
+    :datasource="treeDatasource2"
+    item-click="toggle"
+  />
 
-    <h1><code>&lt;veui-filter-panel&gt;</code></h1>
+  <h1><code>&lt;veui-filter-panel&gt;</code></h1>
 
-    <veui-filter-panel :datasource="treeDatasource1" class="veui-select-panel-demo1">
-      <template slot="title">列表</template>
-      <template slot-scope="props">
-        <veui-tree :datasource="props.items">
-          <template slot="item-label" slot-scope="props">
-            <slot name="tree-item-label" v-bind="props">{{ props.item.label }}</slot>
-          </template>
-        </veui-tree>
+  <veui-filter-panel
+    :datasource="treeDatasource1"
+    class="veui-select-panel-demo1"
+  >
+    <template slot="title">
+      列表
+    </template>
+    <template slot-scope="{ items }">
+      <veui-tree :datasource="items">
+        <template
+          slot="item-label"
+          slot-scope="props"
+        >
+          <slot
+            name="tree-item-label"
+            v-bind="props"
+          >
+            {{ props.item.label }}
+          </slot>
+        </template>
+      </veui-tree>
+    </template>
+  </veui-filter-panel>
+
+  <h1><code>&lt;veui-transfer&gt;</code></h1>
+
+  <h2>多级树形结构</h2>
+  <veui-transfer
+    v-model="selected1"
+    :datasource="datasource1"
+  >
+    <template slot="candidate-title">
+      备选列表（{{ datasource1LeafCount }}）
+    </template>
+    <template slot="selected-title">
+      已选列表（{{ selected1.length }}）
+    </template>
+  </veui-transfer>
+
+  <h2>单级结构</h2>
+  <p>
+    <veui-transfer
+      v-model="selected2"
+      :datasource="datasource2"
+    />
+  </p>
+
+  <h2>多级树形结构，右侧扁平</h2>
+  <p>
+    <veui-transfer
+      v-model="selected3"
+      :datasource="datasource3"
+      selected-show-mode="flat"
+    >
+      <template slot="candidate-title">
+        备选列表（{{ datasource1LeafCount }}）
       </template>
-    </veui-filter-panel>
-
-    <h1><code>&lt;veui-transfer&gt;</code></h1>
-
-    <h2>多级树形结构</h2>
-    <veui-transfer :datasource="datasource1" v-model="selected1">
-      <template slot="candidate-title">备选列表（{{ datasource1LeafCount }}）</template>
-      <template slot="selected-title">已选列表（{{ selected1.length }}）</template>
+      <template slot="selected-title">
+        已选列表（{{ selected3.length }}）
+      </template>
     </veui-transfer>
+  </p>
 
-    <h2>单级结构</h2>
-    <p>
-      <veui-transfer :datasource="datasource2" v-model="selected2"/>
-    </p>
+  <h2>单级结构，禁用</h2>
+  <p>
+    <veui-transfer
+      v-model="selected4"
+      :datasource="datasource4"
+      disabled
+    >
+      <template slot="candidate-title">
+        备选列表（3）
+      </template>
+      <template slot="selected-title">
+        已选列表（{{ selected4.length }}）
+      </template>
+    </veui-transfer>
+  </p>
 
-    <h2>多级树形结构，右侧扁平</h2>
-    <p>
-      <veui-transfer :datasource="datasource3" v-model="selected3" selected-show-mode="flat">
-        <template slot="candidate-title">备选列表（{{ datasource1LeafCount }}）</template>
-        <template slot="selected-title">已选列表（{{ selected3.length }}）</template>
+  <h2>多级树形结构，禁用</h2>
+  <p>
+    <veui-transfer
+      v-model="selected5"
+      :datasource="datasource5"
+      selected-show-mode="flat"
+      disabled
+    >
+      <template slot="candidate-title">
+        备选列表（{{ datasource1LeafCount }}）
+      </template>
+      <template slot="selected-title">
+        已选列表（{{ selected5.length }}）
+      </template>
+    </veui-transfer>
+  </p>
+
+  <h2>用于表单</h2>
+  <veui-form
+    :data="formData"
+    :validators="validators"
+  >
+    <veui-field
+      label="地域："
+      field="selected6"
+      name="selected6"
+      rules="required"
+    >
+      <veui-transfer
+        v-model="formData.selected6"
+        :datasource="datasource6"
+        candidate-placeholder="搜索备选列表"
+        selected-placeholder="搜索已选列表"
+      >
+        <template slot="candidate-title">
+          备选列表（{{ datasource1LeafCount }}）
+        </template>
+        <template slot="selected-title">
+          已选列表（{{ formData.selected6.length }}）
+        </template>
       </veui-transfer>
-    </p>
-
-    <h2>单级结构，禁用</h2>
-    <p>
-      <veui-transfer :datasource="datasource4" v-model="selected4" disabled>
-        <template slot="candidate-title">备选列表（3）</template>
-        <template slot="selected-title">已选列表（{{ selected4.length }}）</template>
-      </veui-transfer>
-    </p>
-
-    <h2>多级树形结构，禁用</h2>
-    <p>
-      <veui-transfer :datasource="datasource5" v-model="selected5" selected-show-mode="flat" disabled>
-        <template slot="candidate-title">备选列表（{{ datasource1LeafCount }}）</template>
-        <template slot="selected-title">已选列表（{{ selected5.length }}）</template>
-      </veui-transfer>
-    </p>
-
-    <h2>用于表单</h2>
-    <veui-form :data="formData" :validators="validators">
-      <veui-field label="地域：" field="selected6" name="selected6" rules="required">
-        <veui-transfer :datasource="datasource6"
-          v-model="formData.selected6"
-          candidate-placeholder="搜索备选列表"
-          selected-placeholder="搜索已选列表">
-          <template slot="candidate-title">备选列表（{{ datasource1LeafCount }}）</template>
-          <template slot="selected-title">已选列表（{{ formData.selected6.length }}）</template>
-        </veui-transfer>
-      </veui-field>
-      <div class="operation">
-        <veui-button ui="primary" type="submit">提交</veui-button>
-      </div>
-    </veui-form>
-  </article>
+    </veui-field>
+    <div class="operation">
+      <veui-button
+        ui="primary"
+        type="submit"
+      >
+        提交
+      </veui-button>
+    </div>
+  </veui-form>
+</article>
 </template>
 
 <script>
-import { Transfer, Form, Fieldset, Field, Button, Tree, FilterPanel } from 'veui'
+import { Transfer, Form, Field, Button, Tree, FilterPanel } from 'veui'
 import { cloneDeep } from 'lodash'
 
 export default {
-  name: 'TransferDemo',
+  name: 'transfer-demo',
   components: {
     'veui-transfer': Transfer,
     'veui-form': Form,
-    'veui-fieldset': Fieldset,
     'veui-field': Field,
     'veui-button': Button,
     'veui-tree': Tree,

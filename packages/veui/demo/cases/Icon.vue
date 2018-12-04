@@ -1,13 +1,21 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-icon&gt;</code></h1>
-    <div class="icons">
-      <div class="icon" v-for="icon in icons" :key="icon">
-        <div class="svg"><veui-icon :name="icon"/></div>
-        <div class="name">{{ icon }}</div>
+<article>
+  <h1><code>&lt;veui-icon&gt;</code></h1>
+  <div class="icons">
+    <div
+      v-for="icon in icons"
+      :key="icon"
+      class="icon"
+    >
+      <div class="svg">
+        <veui-icon :name="icon"/>
+      </div>
+      <div class="name">
+        {{ icon }}
       </div>
     </div>
-  </article>
+  </div>
+</article>
 </template>
 
 <script>
@@ -17,13 +25,13 @@ import 'veui-theme-one-icons'
 
 export default {
   name: 'icon-demo',
+  components: {
+    'veui-icon': Icon
+  },
   data () {
     return {
       icons: Object.keys(Icon.icons).sort((a, b) => a > b ? 1 : -1)
     }
-  },
-  components: {
-    'veui-icon': Icon
   },
   mounted () {
     this.$children.forEach(child => {

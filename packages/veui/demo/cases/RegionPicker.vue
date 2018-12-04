@@ -1,17 +1,29 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-region-picker&gt;</code></h1>
-    <h3>品牌数据源</h3>
-    <section><input type="text" v-model="selected"></section>
-    <section>已选地区：{{ selected1.join(', ') || '无' }}</section>
-    <section>
-      <veui-region-picker :datasource="regions1" v-model="selected1" include-indeterminate></veui-region-picker>
-    </section>
-    <h3>网盟数据源</h3>
-    <section>已选地区：{{ selected2.join(', ') || '无' }}</section>
-    <section>
-      <veui-region-picker :datasource="regions2" v-model="selected2"></veui-region-picker>
-    </section>
+<article>
+  <h1><code>&lt;veui-region-picker&gt;</code></h1>
+  <h3>品牌数据源</h3>
+  <section>
+    <input
+      v-model="selected"
+      type="text"
+    >
+  </section>
+  <section>已选地区：{{ selected1.join(', ') || '无' }}</section>
+  <section>
+    <veui-region-picker
+      v-model="selected1"
+      :datasource="regions1"
+      include-indeterminate
+    />
+  </section>
+  <h3>网盟数据源</h3>
+  <section>已选地区：{{ selected2.join(', ') || '无' }}</section>
+  <section>
+    <veui-region-picker
+      v-model="selected2"
+      :datasource="regions2"
+    />
+  </section>
 </article>
 </template>
 

@@ -1,14 +1,40 @@
 <template>
-<aside :class="{
-  expanded, 'veui-console': true
-}">
+<aside
+  :class="{
+    expanded, 'veui-console': true
+  }"
+>
   <h2 @click="expanded = !expanded">
-    <icon @click.native.stop="logs = []" name="ban" label="Clear console" flip="horizontal"></icon>
-    <icon :name="expanded ? 'angle-down' : 'angle-up'" label="Toggle console"></icon>
-    Console <small>({{logs.length}})</small>
+    <icon
+      name="ban"
+      label="Clear console"
+      flip="horizontal"
+      @click.native.stop="logs = []"
+    />
+    <icon
+      :name="expanded ? 'angle-down' : 'angle-up'"
+      label="Toggle console"
+    />
+    Console <small>({{ logs.length }})</small>
   </h2>
-  <section class="output" ref="logList">
-    <pre class="log" v-for="(log, index) in logs" :key="`log-${index}`"><template v-if="log != null"><div v-if="(log instanceof String)">{{ log }}</div><div class="line" v-else v-for="(line, index) in log" v-html="format(line)" :key="`line-${index}`"></div></template><template v-else v-html="format(log)"></template></pre>
+  <section
+    ref="logList"
+    class="output"
+  >
+    <pre
+      v-for="(logItem, index) in logs"
+      :key="`log-${index}`"
+      class="log"
+    ><template v-if="logItem != null"><div v-if="typeof logItem === 'string'">{{ logItem }}</div><div
+      v-for="(line, i) in logItem"
+      v-else
+      :key="`line-${i}`"
+      class="line"
+      v-html="format(line)"
+    /></template><template
+      v-else
+      v-html="format(log)"
+    /></pre>
   </section>
 </aside>
 </template>
@@ -31,6 +57,14 @@ export default {
       logs: []
     }
   },
+  watch: {
+    expanded (value) {
+      document.body.classList.toggle('console-expanded', value)
+    }
+  },
+  mounted () {
+    bus.$on('log', (...messages) => this.log(...messages))
+  },
   methods: {
     log (...messages) {
       console.log(...messages)
@@ -46,14 +80,6 @@ export default {
       }
       return `<span style="color: #ccc">${text === '' ? 'empty' : String(text)}</span>`
     }
-  },
-  watch: {
-    expanded (value) {
-      document.body.classList.toggle('console-expanded', value)
-    }
-  },
-  mounted () {
-    bus.$on('log', (...messages) => this.log(...messages))
   }
 }
 </script>

@@ -1,15 +1,42 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-toast&gt;</code></h1>
-    <section>
-      <div class="toast-title">全局提示</div>
-      <veui-button ui="aux" @click="showToast('all')">全部</veui-button>
-      <veui-button ui="aux" @click="showToast('success')">成功</veui-button>
-      <veui-button ui="aux" @click="showToast('warn')">警告</veui-button>
-      <veui-button ui="aux" @click="showToast('info')">提醒</veui-button>
-      <veui-button ui="aux" @click="showToast('error')">错误</veui-button>
-    </section>
-  </article>
+<article>
+  <h1><code>&lt;veui-toast&gt;</code></h1>
+  <section>
+    <div class="toast-title">
+      全局提示
+    </div>
+    <veui-button
+      ui="aux"
+      @click="showToast('all')"
+    >
+      全部
+    </veui-button>
+    <veui-button
+      ui="aux"
+      @click="showToast('success')"
+    >
+      成功
+    </veui-button>
+    <veui-button
+      ui="aux"
+      @click="showToast('warn')"
+    >
+      警告
+    </veui-button>
+    <veui-button
+      ui="aux"
+      @click="showToast('info')"
+    >
+      提醒
+    </veui-button>
+    <veui-button
+      ui="aux"
+      @click="showToast('error')"
+    >
+      错误
+    </veui-button>
+  </section>
+</article>
 </template>
 
 <script>
@@ -58,6 +85,13 @@ export default {
       }, {})
     }
   },
+  mounted () {
+    this.$children.forEach(child => {
+      child.$on('click', () => {
+        bus.$emit('log', child.$el.getAttribute('ui'))
+      })
+    })
+  },
   methods: {
     showToast (type) {
       if (type === 'all') {
@@ -71,13 +105,6 @@ export default {
         toast[type](this.messageMap[type].message)
       }
     }
-  },
-  mounted () {
-    this.$children.forEach(child => {
-      child.$on('click', () => {
-        bus.$emit('log', child.$el.getAttribute('ui'))
-      })
-    })
   }
 }
 </script>

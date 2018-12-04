@@ -18,6 +18,26 @@ export default {
       }
     }
   },
+  updated () {
+    let { box } = this.$refs
+    if (!box || !(box instanceof HTMLElement)) {
+      return
+    }
+
+    if (box.scrollHeight > box.offsetHeight) {
+      toggleClass(box, 'veui-dropdown-overflow', true)
+
+      this.__overlay_scroll_handler__ = throttle(
+        this.handleScroll,
+        200,
+        { leading: true }
+      )
+
+      this.handleScroll()
+
+      box.addEventListener('scroll', this.__overlay_scroll_handler__, false)
+    }
+  },
   methods: {
     close () {
       this.expanded = false
@@ -42,26 +62,6 @@ export default {
         'veui-dropdown-overflow-scroll-end',
         box.scrollTop + box.offsetHeight >= box.scrollHeight
       )
-    }
-  },
-  updated () {
-    let { box } = this.$refs
-    if (!box || !(box instanceof HTMLElement)) {
-      return
-    }
-
-    if (box.scrollHeight > box.offsetHeight) {
-      toggleClass(box, 'veui-dropdown-overflow', true)
-
-      this.__overlay_scroll_handler__ = throttle(
-        this.handleScroll,
-        200,
-        { leading: true }
-      )
-
-      this.handleScroll()
-
-      box.addEventListener('scroll', this.__overlay_scroll_handler__, false)
     }
   },
   destroy () {

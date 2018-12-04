@@ -10,6 +10,9 @@ export class ConfirmManager extends SimpleDialog {
       data: {
         open: false
       },
+      mounted () {
+        this.open = true
+      },
       render (h) {
         return h(
           ConfirmBox,
@@ -29,9 +32,6 @@ export class ConfirmManager extends SimpleDialog {
           },
           [h('template', { slot: 'default' }, data.content)]
         )
-      },
-      mounted () {
-        this.open = true
       }
     })
   }

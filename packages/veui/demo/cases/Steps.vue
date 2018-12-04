@@ -1,33 +1,75 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-steps&gt;</code></h1>
-    <section>
-      <p>Step <input type="number" step="1" min="1" :max="steps.length" v-model="current"></p>
-      <p><label><veui-checkbox v-model="vertical">纵向样式</veui-checkbox></label></p>
-    </section>
-    <section>
-      <h2>默认样式：</h2>
-      <veui-steps :steps="steps" :current="current - 1" :ui="`${vertical ? 'vertical' : ''}`"></veui-steps>
-    </section>
-    <section>
-      <h2>多行样式：</h2>
-      <veui-steps :steps="steps" :ui="`full${vertical ? ' vertical' : ''}`" :current="current - 1"></veui-steps>
-    </section>
-    <section>
-      <h2>小型样式：</h2>
-      <veui-steps :steps="steps" :current="current - 1" :ui="`small${vertical ? ' vertical' : ''}`"></veui-steps>
-    </section>
-    <section>
-      <h2>多行小型样式：</h2>
-      <veui-steps :steps="steps" :current="current - 1" :ui="`small full${vertical ? ' vertical' : ''}`"></veui-steps>
-    </section>
-    <section>
-      <h2>自定义模板：</h2>
-      <veui-steps :steps="steps" :ui="`full${vertical ? ' vertical' : ''}`" :current="current - 1">
-        <template slot="label" slot-scope="step">{{ step.label }} <veui-icon class="star" name="star"></veui-icon></template>
-      </veui-steps>
-    </section>
-  </article>
+<article>
+  <h1><code>&lt;veui-steps&gt;</code></h1>
+  <section>
+    <p>
+      Step <input
+        v-model="current"
+        type="number"
+        step="1"
+        min="1"
+        :max="steps.length"
+      >
+    </p>
+    <p>
+      <label>
+        <veui-checkbox v-model="vertical">
+          纵向样式
+        </veui-checkbox>
+      </label>
+    </p>
+  </section>
+  <section>
+    <h2>默认样式：</h2>
+    <veui-steps
+      :steps="steps"
+      :current="current - 1"
+      :ui="`${vertical ? 'vertical' : ''}`"
+    />
+  </section>
+  <section>
+    <h2>多行样式：</h2>
+    <veui-steps
+      :steps="steps"
+      :ui="`full${vertical ? ' vertical' : ''}`"
+      :current="current - 1"
+    />
+  </section>
+  <section>
+    <h2>小型样式：</h2>
+    <veui-steps
+      :steps="steps"
+      :current="current - 1"
+      :ui="`small${vertical ? ' vertical' : ''}`"
+    />
+  </section>
+  <section>
+    <h2>多行小型样式：</h2>
+    <veui-steps
+      :steps="steps"
+      :current="current - 1"
+      :ui="`small full${vertical ? ' vertical' : ''}`"
+    />
+  </section>
+  <section>
+    <h2>自定义模板：</h2>
+    <veui-steps
+      :steps="steps"
+      :ui="`full${vertical ? ' vertical' : ''}`"
+      :current="current - 1"
+    >
+      <template
+        slot="label"
+        slot-scope="step"
+      >
+        {{ step.label }} <veui-icon
+          class="star"
+          name="star"
+        />
+      </template>
+    </veui-steps>
+  </section>
+</article>
 </template>
 
 <script>

@@ -1,36 +1,55 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-breadcrumb&gt;</code></h1>
-    <section><veui-button @click="next">Switch separator</veui-button></section>
-    <section>
-      <veui-breadcrumb :routes="items" @redirect="handleRedirect">
-        <template slot-scope="route"><em>{{ route.label }}</em></template>
-        <template slot="separator">{{ sep }}</template>
-      </veui-breadcrumb>
-    </section>
-    <section>
-      <veui-breadcrumb :routes="items" @redirect="handleRedirect"/>
-    </section>
-    <section>
-      <veui-breadcrumb>
-        <veui-breadcrumb-item to="/">首页</veui-breadcrumb-item>
-        <veui-breadcrumb-item :to="{ name: 'Breadcrumb' }">面包屑</veui-breadcrumb-item>
-        <veui-breadcrumb-item type="text">我在这里</veui-breadcrumb-item>
-      </veui-breadcrumb>
-    </section>
-  </article>
+<article>
+  <h1><code>&lt;veui-breadcrumb&gt;</code></h1>
+  <section>
+    <veui-button @click="next">
+      Switch separator
+    </veui-button>
+  </section>
+  <section>
+    <veui-breadcrumb
+      :routes="items"
+      @redirect="handleRedirect"
+    >
+      <template slot-scope="route">
+        <em>{{ route.label }}</em>
+      </template>
+      <template slot="separator">
+        {{ sep }}
+      </template>
+    </veui-breadcrumb>
+  </section>
+  <section>
+    <veui-breadcrumb
+      :routes="items"
+      @redirect="handleRedirect"
+    />
+  </section>
+  <section>
+    <veui-breadcrumb>
+      <veui-breadcrumb-item to="/">
+        首页
+      </veui-breadcrumb-item>
+      <veui-breadcrumb-item :to="{ name: 'Breadcrumb' }">
+        面包屑
+      </veui-breadcrumb-item>
+      <veui-breadcrumb-item type="text">
+        我在这里
+      </veui-breadcrumb-item>
+    </veui-breadcrumb>
+  </section>
+</article>
 </template>
 
 <script>
-import { Button, Breadcrumb, BreadcrumbItem, Icon } from 'veui'
+import { Button, Breadcrumb, BreadcrumbItem } from 'veui'
 
 export default {
   name: 'breadcrumb-demo',
   components: {
     'veui-button': Button,
     'veui-breadcrumb': Breadcrumb,
-    'veui-breadcrumb-item': BreadcrumbItem,
-    'veui-icon': Icon
+    'veui-breadcrumb-item': BreadcrumbItem
   },
   data () {
     return {

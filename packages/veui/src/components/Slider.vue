@@ -19,11 +19,11 @@
             class="veui-slider-track-default-marks"
           >
             <div
-              v-for="mark in stepMarks"
-              :key="mark"
+              v-for="mk in stepMarks"
+              :key="mk"
               class="veui-slider-track-default-mark"
               :style="{
-                left: `${mark * 100}%`
+                left: `${mk * 100}%`
               }"
             />
           </div>

@@ -1,36 +1,56 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-check-button-group&gt;</code></h1>
-    <section>
-      <veui-checkbox v-model="disabled">禁用</veui-checkbox>
-    </section>
-    <section>
-      <p>
-        <veui-check-button-group :items="data1" v-model="picked1" :disabled="disabled">
-          <template slot-scope="props">{{ props.label }}</template>
-        </veui-check-button-group>
-      </p>
-      <p>value: {{ picked1 }}</p>
-    </section>
-    <section>
-      <p>
-        <veui-check-button-group :items="data2" ui="small alt" v-model="picked2" :disabled="disabled">
-          <template slot-scope="props">{{ props.label }}</template>
-        </veui-check-button-group>
-      </p>
-      <p>value: {{ picked2 }}</p>
-    </section>
-    <section>
-      <p>
-        <veui-check-button-group :items="data3" ui="micro" v-model="picked3" :disabled="disabled">
-          <template slot-scope="props">
-            <veui-icon :name="props.icon" />
-          </template>
-        </veui-check-button-group>
-      </p>
-      <p>value: {{ picked3 }}</p>
-    </section>
-  </article>
+<article>
+  <h1><code>&lt;veui-check-button-group&gt;</code></h1>
+  <section>
+    <veui-checkbox v-model="disabled">
+      禁用
+    </veui-checkbox>
+  </section>
+  <section>
+    <p>
+      <veui-check-button-group
+        v-model="picked1"
+        :items="data1"
+        :disabled="disabled"
+      >
+        <template slot-scope="props">
+          {{ props.label }}
+        </template>
+      </veui-check-button-group>
+    </p>
+    <p>value: {{ picked1 }}</p>
+  </section>
+  <section>
+    <p>
+      <veui-check-button-group
+        v-model="picked2"
+        :items="data2"
+        ui="small alt"
+        :disabled="disabled"
+      >
+        <template slot-scope="props">
+          {{ props.label }}
+        </template>
+      </veui-check-button-group>
+    </p>
+    <p>value: {{ picked2 }}</p>
+  </section>
+  <section>
+    <p>
+      <veui-check-button-group
+        v-model="picked3"
+        :items="data3"
+        ui="micro"
+        :disabled="disabled"
+      >
+        <template slot-scope="props">
+          <veui-icon :name="props.icon"/>
+        </template>
+      </veui-check-button-group>
+    </p>
+    <p>value: {{ picked3 }}</p>
+  </section>
+</article>
 </template>
 
 <script>

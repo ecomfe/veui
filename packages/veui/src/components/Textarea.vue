@@ -21,20 +21,18 @@
       :key="index"
       class="veui-textarea-measurer-line"
     >
+      <!-- eslint-disable vue/multiline-html-element-content-newline -->
       <div
         v-if="lineNumber"
         class="veui-textarea-measurer-line-number"
         :style="{width: `${lineNumberWidth}px`}"
-      >
-        {{ index + 1 }}
-      </div>
+      >{{ index + 1 }}</div>
       <div
         class="veui-textarea-measurer-line-content"
         aria-hidden="true"
         :style="{width: `${measurerContentWidth}px`}"
-      >
-        {{ line }}
-      </div>
+      >{{ line }}</div>
+      <!-- eslint-ensable vue/multiline-html-element-content-newline -->
     </div>
   </div>
   <textarea

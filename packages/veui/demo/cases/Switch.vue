@@ -1,22 +1,56 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-switch&gt;</code></h1>
-    <section>
-      <veui-switch ui="small" v-model="value1">夜间模式</veui-switch>
-      <veui-switch ui="small" v-model="value1" readonly></veui-switch>
-      <veui-switch ui="small" v-model="value1" disabled></veui-switch>
-    </section>
-    <section>
-      <veui-switch v-model="value2">勿扰模式</veui-switch>
-      <veui-switch v-model="value2" readonly></veui-switch>
-      <veui-switch v-model="value2" disabled></veui-switch>
-    </section>
-    <section>
-      <veui-switch ui="large" v-model="value3">飞行模式</veui-switch>
-      <veui-switch ui="large" v-model="value3" readonly></veui-switch>
-      <veui-switch ui="large" v-model="value3" disabled></veui-switch>
-    </section>
-  </article>
+<article>
+  <h1><code>&lt;veui-switch&gt;</code></h1>
+  <section>
+    <veui-switch
+      v-model="value1"
+      ui="small"
+    >
+      夜间模式
+    </veui-switch>
+    <veui-switch
+      v-model="value1"
+      ui="small"
+      readonly
+    />
+    <veui-switch
+      v-model="value1"
+      ui="small"
+      disabled
+    />
+  </section>
+  <section>
+    <veui-switch v-model="value2">
+      勿扰模式
+    </veui-switch>
+    <veui-switch
+      v-model="value2"
+      readonly
+    />
+    <veui-switch
+      v-model="value2"
+      disabled
+    />
+  </section>
+  <section>
+    <veui-switch
+      v-model="value3"
+      ui="large"
+    >
+      飞行模式
+    </veui-switch>
+    <veui-switch
+      v-model="value3"
+      ui="large"
+      readonly
+    />
+    <veui-switch
+      v-model="value3"
+      ui="large"
+      disabled
+    />
+  </section>
+</article>
 </template>
 
 <script>
