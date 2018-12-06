@@ -56,8 +56,8 @@ export default {
               native={route.native}
               onRedirect={event => this.fireRedirect(event, route, index)}>
               {
-                this.$scopedSlots.default
-                  ? this.$scopedSlots.default({ route, ...route, index })
+                this.$scopedSlots.item
+                  ? this.$scopedSlots.item({ route, ...route, index })
                   : (route.label || route.text)
               }
               <template slot="separator">
