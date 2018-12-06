@@ -11,7 +11,10 @@
       :routes="items"
       @redirect="handleRedirect"
     >
-      <template slot-scope="route">
+      <template
+        slot="item"
+        slot-scope="route"
+      >
         <em>{{ route.label }}</em>
       </template>
       <template slot="separator">
