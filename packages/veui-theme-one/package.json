@@ -1,6 +1,6 @@
 {
   "name": "veui-theme-one",
-  "version": "1.0.0-alpha.18",
+  "version": "1.0.0-alpha.19",
   "description": "Theme ONE DESIGN of VEUI.",
   "repository": "ecomfe/veui",
   "license": "MIT",
@@ -35,6 +35,6 @@
     "stylelint-config-standard": "^18.0.0",
     "svgo": "^1.1.1",
     "svgson": "^3.0.0",
-    "veui-theme-one-icons": "1.0.0-alpha.18"
+    "veui-theme-one-icons": "^1.0.0-alpha.19"
   }
 }
