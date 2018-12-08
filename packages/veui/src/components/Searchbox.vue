@@ -13,7 +13,7 @@
   <veui-input
     ref="input"
     v-model="localValue"
-    v-outside:input,overlay="disallowSuggest"
+    v-outside:input,box="disallowSuggest"
     :name="realName"
     :readonly="realReadonly"
     :disabled="realDisabled"
@@ -65,6 +65,7 @@
       role="listbox"
       :aria-expanded="String(realExpanded)"
     >
+      <slot name="suggestions-before"/>
       <slot
         name="suggestions"
         :suggestions="realSuggestions"
@@ -84,6 +85,7 @@
           </slot>
         </div>
       </slot>
+      <slot name="suggestions-after"/>
     </div>
   </veui-overlay>
 </div>

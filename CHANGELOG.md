@@ -1,5 +1,10 @@
 ## 1.0.0-alpha.20
 
+### 💡 主要变更
+
+* [+] `Searchbox` 新增了 `suggestions-before` 与 `suggestions-after` 两个插槽。
+* [^] `Searchbox` 提示层只在选择选项后关闭，如果点击自定义插槽而非默认的选择选项时，提示层不再自动关闭。
+
 ### 🐞 问题修复
 
 * [^] 修正了主模块没有导出 `OptionGroup` 组件的问题。
