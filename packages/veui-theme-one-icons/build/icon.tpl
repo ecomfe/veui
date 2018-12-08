@@ -1,3 +1,3 @@
-var Icon = require('veui/components/Icon').default
+import Icon from 'veui/components/Icon'
 
 Icon.register(${icon})
