@@ -13,7 +13,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs",
     "test": "npm run unit",
     "prepublishOnly": "cp -r ./src/* .",
-    "publish": "rm -rf ./common ./components ./directives ./managers ./mixins ./plugins ./utils ./icons.js ./index.js"
+    "publish": "rm -rf ./common ./components ./directives ./locale ./managers ./mixins ./plugins ./utils ./icons.js ./index.js"
   },
   "module": "index.js",
   "dependencies": {

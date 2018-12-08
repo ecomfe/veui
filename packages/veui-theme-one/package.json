@@ -17,10 +17,11 @@
   "dependencies": {
     "classlist-polyfill": "^1.2.0",
     "focus-visible": "^4.1.0",
-    "less-plugin-est": "^3.0.0"
+    "less-plugin-est": "^3.0.0",
+    "veui-theme-one-icons": "^1.0.0-alpha.19"
   },
   "peerDependencies": {
-    "veui": "1.0.0-alpha.19"
+    "veui": "1.0.0-alpha.20"
   },
   "devDependencies": {
     "babel-plugin-lodash": "^3.2.11",
@@ -34,7 +35,6 @@
     "stylelint": "^8.4.0",
     "stylelint-config-standard": "^18.0.0",
     "svgo": "^1.1.1",
-    "svgson": "^3.0.0",
-    "veui-theme-one-icons": "^1.0.0-alpha.19"
+    "svgson": "^3.0.0"
   }
 }

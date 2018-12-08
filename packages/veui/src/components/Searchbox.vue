@@ -3,7 +3,7 @@
   ref="self"
   class="veui-searchbox"
   :class="{
-    'veui-searchbox-suggestion-expanded': expanded,
+    'veui-searchbox-suggestion-expanded': realExpanded,
     'veui-disabled': realDisabled,
     'veui-readonly': realReadonly
   }"
@@ -13,7 +13,7 @@
   <veui-input
     ref="input"
     v-model="localValue"
-    v-outside:input="disallowSuggest"
+    v-outside:input,overlay="disallowSuggest"
     :name="realName"
     :readonly="realReadonly"
     :disabled="realDisabled"
@@ -70,20 +70,19 @@
         :suggestions="realSuggestions"
         :select="selectSuggestion"
       >
-        <template v-for="(suggestion, index) in realSuggestions">
-          <div
-            :key="index"
-            class="veui-searchbox-suggestion-item"
-            @click="selectSuggestion(suggestion)"
+        <div
+          v-for="(suggestion, index) in realSuggestions"
+          :key="index"
+          class="veui-searchbox-suggestion-item"
+          @click="selectSuggestion(suggestion)"
+        >
+          <slot
+            name="suggestion"
+            v-bind="suggestion"
           >
-            <slot
-              name="suggestion"
-              v-bind="suggestion"
-            >
-              {{ suggestion.label }}
-            </slot>
-          </div>
-        </template>
+            {{ suggestion.label }}
+          </slot>
+        </div>
       </slot>
     </div>
   </veui-overlay>
@@ -240,7 +239,7 @@ export default {
       this.focus()
       this.$emit('select', suggestion)
       // 选择 select 的情况会有可能
-      //  触发 localValue 改变 => watcher => handleInput => allowSuggest
+      // 触发 localValue 改变 => watcher => handleInput => allowSuggest
       // 所以在下一个 nextTick 强制隐藏 suggest
       this.$nextTick(() => {
         this.disallowSuggest()
