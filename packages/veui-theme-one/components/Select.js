@@ -12,7 +12,8 @@ config.defaults({
       inherit: true
     },
     style: {
-      values: ['alt']
+      values: ['alt'],
+      inherit: true
     }
   }
 }, 'select')
