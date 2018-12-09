@@ -1,0 +1,27 @@
+{
+  "presets": [
+    ["env", { "modules": false }],
+    "stage-2"
+  ],
+  "plugins": [
+    [
+      "transform-runtime",
+      {
+        "polyfill": false,
+        "regenerator": false
+      }
+    ]
+  ],
+  "comments": false,
+  "env": {
+    "test": {
+      "presets": ["env", "stage-2"]
+    },
+    "production": {
+      "plugins": ["lodash"]
+    },
+    "development": {
+      "plugins": ["lodash"]
+    }
+  }
+}

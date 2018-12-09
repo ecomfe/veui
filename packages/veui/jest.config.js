@@ -32,7 +32,7 @@ module.exports = {
     '^vue$': '<rootDir>/node_modules/vue/dist/vue.common.js'
   },
   transformIgnorePatterns: [
-    '<rootDir>/node_modules/(?!vue-awesome|resize-detector|veui-theme-one/)'
+    '<rootDir>/node_modules/(?!vue-awesome|resize-detector|veui-theme-one)'
   ],
   transform: {
     '^.+\\.js$': 'babel-jest',

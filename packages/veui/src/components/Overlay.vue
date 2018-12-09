@@ -44,7 +44,7 @@ export default {
     overlayClass: getClassPropDef(),
     open: Boolean,
     target: {
-      type: [String, Object],
+      type: [String, Object, Element],
       default: null
     },
     options: {
