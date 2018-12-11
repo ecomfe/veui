@@ -19,9 +19,10 @@ export function closest (element, selectors) {
   return element
 }
 
-let needIndeterminatePatch = null
-
 function testIndeterminate () {
+  if (typeof document === 'undefined') {
+    return null
+  }
   let checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
   checkbox.indeterminate = true
@@ -32,14 +33,13 @@ function testIndeterminate () {
   return needPatch
 }
 
+// cache test result for repeated use
+let needIndeterminatePatch = testIndeterminate()
+
 // IE won't trigger change event for indeterminate checkboxes
 // Problem see http://stackoverflow.com/questions/33523130/ie-does-not-fire-change-event-on-indeterminate-checkbox-when-you-click-on-it
 // A more thorough compatibility fix here:
 export function patchIndeterminate (element) {
-  if (needIndeterminatePatch == null) {
-    needIndeterminatePatch = testIndeterminate()
-  }
-
   if (
     !needIndeterminatePatch ||
     !element.tagName ||
