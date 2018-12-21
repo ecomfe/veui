@@ -37,7 +37,7 @@ export default {
   components: {
     'veui-button': Button
   },
-  mixins: [input, ui],
+  mixins: [ui, input],
   model: {
     event: 'change'
   },

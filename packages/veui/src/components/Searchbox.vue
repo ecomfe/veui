@@ -94,7 +94,6 @@
 <script>
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
-import overlay from '../mixins/overlay'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import Input from './Input'
@@ -111,7 +110,7 @@ export default {
     'veui-overlay': Overlay,
     'veui-button': Button
   },
-  mixins: [ui, input, dropdown, overlay, i18n],
+  mixins: [ui, input, dropdown, i18n],
   props: {
     suggestions: {
       type: Array,

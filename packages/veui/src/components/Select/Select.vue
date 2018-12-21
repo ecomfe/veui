@@ -8,7 +8,6 @@ import config from '../../managers/config'
 import input from '../../mixins/input'
 import keySelect from '../../mixins/key-select'
 import ui from '../../mixins/ui'
-import overlay from '../../mixins/overlay'
 import dropdown from '../../mixins/dropdown'
 import warn from '../../utils/warn'
 import { walk } from '../../utils/data'
@@ -22,7 +21,7 @@ config.defaults({
 export default {
   name: 'veui-select',
   uiTypes: ['select'],
-  mixins: [ui, input, overlay, dropdown, keySelect],
+  mixins: [ui, input, dropdown, keySelect],
   model: {
     event: 'change'
   },
