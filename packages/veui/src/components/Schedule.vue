@@ -213,9 +213,9 @@ config.defaults({
   shortcuts: []
 }, 'schedule')
 
-function warnDeprecated (oldVal, newVal) {
+function warnDeprecated (oldVal, newVal, vm) {
   warn('[veui-schedule] `shortcuts-display` value `' + oldVal + '` is renamed to `' +
-    newVal + '` and will be removed in `1.0.0`. Use `' + newVal + '` instead.')
+    newVal + '` and will be removed in `1.0.0`. Use `' + newVal + '` instead.', vm)
 }
 
 export default {
@@ -256,9 +256,9 @@ export default {
       default: 'inline',
       validator (value) {
         if (value === 'expand') {
-          warnDeprecated('expand', 'inline')
+          warnDeprecated('expand', 'inline', this)
         } else if (value === 'collapse') {
-          warnDeprecated('collapse', 'popup')
+          warnDeprecated('collapse', 'popup', this)
         }
         return includes(['expand', 'collapse', 'inline', 'popup'], value)
       }

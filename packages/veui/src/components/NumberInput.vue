@@ -182,10 +182,10 @@ export default {
   },
   created () {
     if (this.realMax < this.realMin) {
-      warn('[veui-number-input] `max` value must not be less than `min` value.')
+      warn('[veui-number-input] `max` value must not be less than `min` value.', this)
     }
     if (this.value > this.realMax || this.value < this.realMin) {
-      warn('[veui-number-input] `value` must not be less than `min` value and not greater than `max` value.')
+      warn('[veui-number-input] `value` must not be less than `min` value and not greater than `max` value.', this)
     }
   },
   methods: {

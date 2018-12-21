@@ -41,7 +41,7 @@ export default {
   },
   computed: {
     optionMap () {
-      return extractOptions(this.options, {})
+      return this.extractOptions()
     },
     labelMap () {
       return mapValues(this.optionMap, 'label')
@@ -103,6 +103,19 @@ export default {
         e.stopPropagation()
         e.preventDefault()
       }
+    },
+    extractOptions () {
+      let map = {}
+      walk(this.options, option => {
+        let { value } = option
+        if (value != null) {
+          if (map[value]) {
+            warn(`[veui-select] Duplicate item value [${value}] for select options.`, this)
+          }
+          map[value] = option
+        }
+      }, ['options', 'children'])
+      return map
     }
   },
   render () {
@@ -184,18 +197,5 @@ export default {
       }
     </div>
   }
-}
-
-function extractOptions (options, map) {
-  walk(options, (option) => {
-    let { value } = option
-    if (value != null) {
-      if (map[value]) {
-        warn(`[veui-select] Duplicate item value [${value}] for select options.`)
-      }
-      map[value] = option
-    }
-  }, ['options', 'children'])
-  return map
 }
 </script>

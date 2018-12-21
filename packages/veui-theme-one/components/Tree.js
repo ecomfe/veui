@@ -3,6 +3,7 @@ import config from 'veui/managers/config'
 
 config.defaults({
   icons: {
-    collapsed: 'chevron-right'
+    collapse: 'chevron-right',
+    expand: 'chevron-right'
   }
 }, 'tree')

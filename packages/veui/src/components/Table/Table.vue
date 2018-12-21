@@ -302,10 +302,10 @@ export default {
     },
     validateSelected (val = this.selected) {
       if (this.selectMode === 'single' && Array.isArray(this.selected)) {
-        warn('`selected` should not be an array when `select-mode` is `single`.')
+        warn('`selected` should not be an array when `select-mode` is `single`.', this)
         return false
       } else if (this.selectMode === 'multiple' && !Array.isArray(this.selected)) {
-        warn('`selected` should be an array when `select-mode` is `multiple`.')
+        warn('`selected` should be an array when `select-mode` is `multiple`.', this)
         return false
       }
       return true

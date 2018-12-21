@@ -288,8 +288,8 @@
       ui="big"
       composition
       @change="log('change')"
-      @focus.native="numberOpen = true"
-      @blur.native="numberOpen = false"
+      @focus="numberOpen = true"
+      @blur="numberOpen = false"
     />
     <veui-tooltip
       position="top"

@@ -30,7 +30,7 @@ export default {
       default: 'inline',
       validator (val) {
         if (val === 'popout') {
-          warn('[veui-option-group] `popout` is a deprecated value for `position` and will be removed in `v1.0.0`. Use `popup` component instead.')
+          warn('[veui-option-group] `popout` is a deprecated value for `position` and will be removed in `v1.0.0`. Use `popup` component instead.', this)
         }
         return ['inline', 'popout', 'popup'].indexOf(val) !== -1
       }
