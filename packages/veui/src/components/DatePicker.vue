@@ -153,7 +153,6 @@ import Icon from './Icon'
 import dropdown from '../mixins/dropdown'
 import input from '../mixins/input'
 import ui from '../mixins/ui'
-import overlay from '../mixins/overlay'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import { toDateData } from '../utils/date'
@@ -190,7 +189,7 @@ export default {
     'veui-calendar': Calendar,
     'veui-icon': Icon
   },
-  mixins: [ui, dropdown, input, overlay, i18n],
+  mixins: [ui, dropdown, input, i18n],
   model: {
     prop: 'selected',
     event: 'select'
