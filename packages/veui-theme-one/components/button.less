@@ -27,6 +27,7 @@
   }
 
   &.focus-visible {
+    .veui-focus-shadow(@veui-gray-color-6);
     color: @veui-brand-color;
   }
 
@@ -38,6 +39,10 @@
     &:hover,
     &.focus-visible {
       background-color: @veui-brand-color-2;
+    }
+
+    &.focus-visible {
+      .veui-focus-shadow(@veui-brand-color-7);
     }
 
     &:active {
@@ -73,6 +78,10 @@
     &:active,
     &.focus-visible {
       background-color: fadeout(@dark-color, 20%);
+    }
+
+    &.focus-visible {
+      .veui-focus-shadow(fadeout(@dark-color, 60%));
     }
   }
 

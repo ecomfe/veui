@@ -38,8 +38,9 @@
 
 <script>
 import Icon from './Icon'
-import input from '../mixins/input'
 import ui from '../mixins/ui'
+import input from '../mixins/input'
+import focusable from '../mixins/focusable'
 import { getListeners } from '../utils/helper'
 import { patchIndeterminate } from '../utils/dom'
 
@@ -50,7 +51,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui, input],
+  mixins: [ui, input, focusable],
   inheritAttrs: false,
   model: {
     prop: 'model'
@@ -123,12 +124,6 @@ export default {
     patchIndeterminate(box)
   },
   methods: {
-    activate () {
-      if (this.realDisabled || this.realReadonly) {
-        return
-      }
-      this.toggleChecked()
-    },
     handleChange () {
       if (this.localIndeterminate) {
         this.localChecked = this.falseValue
@@ -143,6 +138,13 @@ export default {
     },
     focus () {
       this.$refs.box.focus()
+    },
+    activate () {
+      if (this.realDisabled || this.realReadonly) {
+        return
+      }
+      this.toggleChecked()
+      this.focus()
     }
   }
 }

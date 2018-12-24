@@ -92,15 +92,26 @@
 </template>
 
 <script>
+import ui from '../mixins/ui'
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
-import ui from '../mixins/ui'
+import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
 import Input from './Input'
 import Icon from './Icon'
 import Overlay from './Overlay'
 import Button from './Button'
-import { pick, includes } from 'lodash'
+import { pick, omit, includes } from 'lodash'
+
+const SHARED_PROPS = [
+  'autocomplete',
+  'placeholder',
+  'value',
+  'autofocus',
+  'selectOnFocus',
+  'composition',
+  'clearable'
+]
 
 export default {
   name: 'veui-searchbox',
@@ -110,7 +121,7 @@ export default {
     'veui-overlay': Overlay,
     'veui-button': Button
   },
-  mixins: [ui, input, dropdown, i18n],
+  mixins: [ui, input, dropdown, focusable, i18n],
   props: {
     suggestions: {
       type: Array,
@@ -132,15 +143,7 @@ export default {
         return val.every(i => includes(['focus', 'input', 'submit'], i))
       }
     },
-    ...pick(Input.props,
-      'autocomplete',
-      'placeholder',
-      'value',
-      'autofocus',
-      'selectOnFocus',
-      'composition',
-      'clearable'
-    )
+    ...pick(Input.props, SHARED_PROPS)
   },
   data () {
     return {
@@ -150,7 +153,7 @@ export default {
   },
   computed: {
     attrs () {
-      return pick(this, 'ui', 'autocomplete', 'autofocus', 'selectOnFocus', 'composition', 'clearable', 'placeholder')
+      return pick(this, ['ui', ...omit(SHARED_PROPS, 'value')])
     },
     realExpanded () {
       return !!(this.expanded && this.realSuggestions && this.realSuggestions.length)

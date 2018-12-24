@@ -2,13 +2,16 @@
 
 .veui-calendar {
   display: inline-block;
-  overflow: hidden;
   border: 1px solid @veui-gray-color-6;
   background-color: #fff;
   outline: none;
 
   button {
     .veui-button-transition();
+
+    &.focus-visible {
+      .veui-focus-shadow();
+    }
   }
 
   &-panel {
@@ -63,6 +66,11 @@
       &.focus-visible {
         background-color: @veui-brand-color-10;
         color: @veui-text-color-strong;
+        z-index: 1;
+      }
+
+      &.focus-visible {
+        box-shadow: none;
       }
 
       &:active {
@@ -120,6 +128,10 @@
       &:hover,
       &.focus-visible {
         background-color: @veui-brand-color-7;
+      }
+
+      &.focus-visible {
+        .veui-focus-shadow(@veui-brand-color-9);
       }
 
       &:active {

@@ -28,6 +28,7 @@
 import { omit } from 'lodash'
 import Icon from './Icon'
 import ui from '../mixins/ui'
+import focusable from '../mixins/focusable'
 import { getListeners } from '../utils/helper'
 
 const EVENTS = [
@@ -40,7 +41,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui],
+  mixins: [ui, focusable],
   props: {
     disabled: Boolean,
     name: String,

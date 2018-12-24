@@ -13,7 +13,7 @@
 }
 
 .veui-button-transition() {
-  transition-property: border-color, background-color, color, opacity;
+  transition-property: border-color, background-color, color, opacity, box-shadow;
   transition-duration: @veui-transition-duration;
 }
 
@@ -51,4 +51,8 @@
 
 .veui-overlay-shadow() {
   box-shadow: 0 1px 4px fadeout(#000, 80%);
+}
+
+.veui-focus-shadow(@color: @veui-gray-color-5) {
+  box-shadow: 0 0 0 2px @color;
 }

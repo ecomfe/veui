@@ -3,6 +3,7 @@
   :class="sliderClasses"
   :ui="realUi"
   role="application"
+  tabindex="-1"
 >
   <!-- 条 -->
   <div
@@ -102,6 +103,7 @@ import nudge from '../directives/nudge'
 import outside from '../directives/outside'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import focusable from '../mixins/focusable'
 import Tooltip from './Tooltip'
 
 export default {
@@ -114,7 +116,7 @@ export default {
     nudge,
     outside
   },
-  mixins: [ui, input],
+  mixins: [ui, input, focusable],
   props: {
     value: null,
     secondaryProgress: {
@@ -380,6 +382,9 @@ export default {
         left,
         width
       }
+    },
+    focus () {
+      this.$el.focus()
     }
   }
 }

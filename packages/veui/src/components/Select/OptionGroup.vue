@@ -15,7 +15,7 @@ import { isType } from '../../utils/helper'
 import warn from '../../utils/warn'
 import { pull } from 'lodash'
 
-export default {
+const OptionGroup = {
   name: 'veui-option-group',
   uiTypes: ['menu'],
   directives: {
@@ -270,4 +270,5 @@ function findItemByValue (items, val) {
   return result
 }
 
+export default OptionGroup
 </script>
