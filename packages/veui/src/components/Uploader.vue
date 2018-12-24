@@ -3,6 +3,9 @@
   ref="main"
   class="veui-uploader"
   :ui="realUi"
+  role="application"
+  tabindex="-1"
+  :aria-label="t('uploader')"
 >
   <div
     v-if="type === 'file'"
@@ -396,6 +399,7 @@ import Tooltip from './Tooltip'
 import { cloneDeep, uniqueId, assign, isNumber, last, pick, omit, includes, isEmpty } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
@@ -416,7 +420,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-uploader-progress': getProgress()
   },
-  mixins: [ui, input, i18n],
+  mixins: [ui, input, focusable, i18n],
   model: {
     event: 'change'
   },
@@ -1041,6 +1045,9 @@ export default {
       return this.compat
         ? this.pureFileList[0].src || this.pureFileList[0].name
         : this.pureFileList[0]
+    },
+    focus () {
+      this.$el.focus()
     }
   }
 }

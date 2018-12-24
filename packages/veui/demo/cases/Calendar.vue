@@ -106,9 +106,11 @@ export default {
 </script>
 
 <style lang="less">
+@import "~veui-theme-one/lib.less";
+
 .veui-demo-calendar {
   section {
-    overflow: hidden;
+    .clearfix();
     margin-bottom: 10px;
   }
 

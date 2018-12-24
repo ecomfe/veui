@@ -63,6 +63,8 @@
 import Input from './Input'
 import Button from './Button'
 import ui from '../mixins/ui'
+import focusable from '../mixins/focusable'
+import activatable from '../mixins/activatable'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
 import Icon from './Icon'
@@ -86,7 +88,7 @@ export default {
     'veui-input': Input,
     'veui-button': Button
   },
-  mixins: [input, ui, i18n],
+  mixins: [ui, input, focusable, activatable, i18n],
   props: {
     ui: String,
     value: Number,
@@ -327,8 +329,11 @@ export default {
       }
       return round(this.filterLimitValue(val), this.decimalPlace).toFixed(this.decimalPlace)
     },
+    focus () {
+      this.$refs.input.focus()
+    },
     activate () {
-      this.$ref.input.activate()
+      this.$refs.input.activate()
     }
   }
 }

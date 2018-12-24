@@ -120,6 +120,7 @@ import OptionGroup from './Select/OptionGroup'
 import ui from '../mixins/ui'
 import dropdown from '../mixins/dropdown'
 import keySelect from '../mixins/key-select'
+import focusable from '../mixins/focusable'
 import '../common/uiTypes'
 import { includes } from 'lodash'
 
@@ -142,7 +143,7 @@ export default {
     'veui-overlay': Overlay,
     'veui-option-group': OptionGroup
   },
-  mixins: [ui, dropdown, keySelect],
+  mixins: [ui, dropdown, keySelect, focusable],
   props: {
     label: String,
     disabled: Boolean,
@@ -183,6 +184,9 @@ export default {
       if (value != null) {
         this.$emit('click', value)
       }
+    },
+    focus () {
+      this.$refs.button.focus()
     }
   }
 }

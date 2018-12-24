@@ -73,8 +73,9 @@
 import Overlay from './Overlay'
 import Button from './Button'
 import ui from '../mixins/ui'
-import i18n from '../mixins/i18n'
 import overlay from '../mixins/overlay'
+import focusable from '../mixins/focusable'
+import i18n from '../mixins/i18n'
 import drag from '../directives/drag'
 import Icon from './Icon'
 
@@ -86,7 +87,7 @@ export default {
     'veui-icon': Icon
   },
   directives: { drag },
-  mixins: [ui, overlay, i18n],
+  mixins: [ui, overlay, focusable, i18n],
   inheritAttrs: false,
   props: {
     modal: {

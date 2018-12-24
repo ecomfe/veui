@@ -9,6 +9,7 @@
   :ui="realUi"
 >
   <input
+    ref="box"
     type="checkbox"
     v-bind="attrs"
     :disabled="realDisabled || realReadonly"
@@ -29,6 +30,7 @@
 <script>
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import focusable from '../mixins/focusable'
 import { pick } from 'lodash'
 import { getListeners } from '../utils/helper'
 
@@ -36,7 +38,7 @@ const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
 
 export default {
   name: 'veui-switch',
-  mixins: [ui, input],
+  mixins: [ui, input, focusable],
   model: {
     prop: 'model'
   },
@@ -93,6 +95,9 @@ export default {
     handleChange (checked) {
       this.localChecked = checked
       this.$emit('change', checked)
+    },
+    focus () {
+      this.$refs.box.focus()
     },
     activate () {
       if (this.realDisabled || this.realReadonly) {

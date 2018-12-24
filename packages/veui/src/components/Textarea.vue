@@ -61,6 +61,8 @@
 import { pick } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import focusable from '../mixins/focusable'
+import activatable from '../mixins/activatable'
 import { getListeners } from '../utils/helper'
 import { log10 } from '../utils/math'
 
@@ -68,7 +70,7 @@ const EVENTS = ['click', 'keyup', 'keydown', 'keypress']
 
 export default {
   name: 'veui-textarea',
-  mixins: [ui, input],
+  mixins: [ui, input, focusable, activatable],
   props: {
     placeholder: String,
     value: {

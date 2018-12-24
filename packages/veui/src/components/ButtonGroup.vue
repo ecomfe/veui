@@ -31,13 +31,15 @@
 <script>
 import Button from './Button'
 import ui from '../mixins/ui'
+import focusable from '../mixins/focusable'
+import { focusIn } from '../utils/dom'
 
 export default {
   name: 'veui-button-group',
   components: {
     'veui-button': Button
   },
-  mixins: [ui],
+  mixins: [ui, focusable],
   props: {
     items: {
       type: Array,
@@ -53,6 +55,9 @@ export default {
         this.$emit(item.value, item, index)
       }
       this.$emit('click', item, index)
+    },
+    focus () {
+      focusIn(this.$el)
     }
   }
 }
