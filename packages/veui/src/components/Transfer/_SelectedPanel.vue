@@ -45,7 +45,7 @@
             :class="{'veui-transfer-selected-item-hidden': props.item.hidden}"
           >
             <!-- 控制展开收起的图标 -->
-            <span
+            <button
               v-if="props.item.children && props.item.children.length"
               class="veui-tree-item-expand-switcher"
               @click.stop="toggle(props.item)"
@@ -54,7 +54,7 @@
                 :name="props.expanded ? icons.collapse : icons.expand"
                 :label="t(props.expanded ? '@transfer.collapse' : '@transfer.expand')"
               />
-            </span>
+            </button>
 
             <div class="veui-transfer-item-label">
               <span class="veui-transfer-item-text">

@@ -16,6 +16,11 @@
   &-item {
     .centered-line(@item-height);
     .clearfix();
+    outline: none;
+
+    &.focus-visible {
+      .veui-focus-shadow();
+    }
 
     &-expand-switcher,
     &-label {
@@ -23,14 +28,23 @@
     }
 
     &-expand-switcher {
+      @height: @item-height / 2;
       .centered-line(@item-icon-size);
+      display: inline-block;
+      background: none;
+      border: none;
+      padding: 0;
       vertical-align: top;
+      margin-top: ~"calc(@{height} - 0.5em)";
       margin-right: @item-icon-gap;
       cursor: pointer;
-      transition: transform @veui-transition-duration;
+      outline: none;
+      transition-property: box-shadow, transform;
+      transition-duration: @veui-transition-duration;
 
-      @height: @item-height / 2;
-      margin-top: ~"calc(@{height} - 0.5em)";
+      &.focus-visible {
+        .veui-focus-shadow();
+      }
 
       .veui-icon {
         .size(@item-icon-size);

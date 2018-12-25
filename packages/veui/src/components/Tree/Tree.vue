@@ -114,7 +114,10 @@ export default {
       }
       this.localDatasource = walk(this.datasource, clone(expands))
     },
-    toggle (item, index, depth) {
+    toggle (item, index, depth, val) {
+      if (val === item.expanded || !item.children || item.children.length === 0) {
+        return
+      }
       item.expanded = !item.expanded
 
       let expands = item.expanded
