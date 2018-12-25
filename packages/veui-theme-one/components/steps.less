@@ -79,15 +79,24 @@
 
     a&:hover,
     a&.focus-visible {
-      .veui-steps-step {
-        &-label {
-          color: @veui-text-color-strong;
-        }
+      .veui-steps-step-label {
+        color: @veui-text-color-strong;
+      }
 
-        &-index {
-          border-color: @veui-success-color-2;
-          color: @veui-success-color-2;
-        }
+      .veui-steps-step-index {
+        border-color: @veui-success-color-2;
+        color: @veui-success-color-2;
+      }
+    }
+
+    a& {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      transition: outline @veui-transition-duration;
+
+      &.focus-visible {
+        border-radius: 1px;
+        outline: 2px solid @veui-gray-color-5;
       }
     }
   }

@@ -96,6 +96,7 @@
       color: @veui-text-color-weak;
       cursor: pointer;
       outline: none;
+      .veui-button-transition();
 
       .veui-icon {
         display: block;
@@ -108,6 +109,10 @@
       &:hover,
       &.focus-visible {
         color: @veui-text-color-normal;
+      }
+
+      &.focus-visible {
+        .veui-focus-shadow();
       }
 
       &:active {
@@ -137,12 +142,16 @@
         content: "";
         .absolute(_, 10px, 0, 10px);
         height: 2px;
-        transition: background-color @veui-transition-duration;
+        transition: background-color @veui-transition-duration, height @veui-transition-duration;
       }
 
       &.focus-visible::after,
       &:hover::after {
         background-color: @veui-gray-color-3;
+      }
+
+      &.focus-visible::after {
+        height: 3px;
       }
 
       &:active::after {
@@ -344,8 +353,14 @@
       .make-margin-left(21px);
       position: relative;
 
-      &-label::after {
-        height: 1px;
+      &-label {
+        &::after {
+          height: 1px;
+        }
+
+        &.focus-visible::after {
+          height: 2px;
+        }
       }
 
       &::before {
@@ -410,6 +425,10 @@
         margin-left: 0;
       }
 
+      &:hover {
+        background-color: @veui-gray-color-8;
+      }
+
       &-label {
         min-width: 62px;
         max-width: 160px;
@@ -417,19 +436,20 @@
         padding: 0 8px 0 12px;
         .ellipsis();
         text-align: left;
+        transition-property: background-color, box-shadow;
+        transition-duration: @veui-transition-duration;
 
         &::after {
           display: none;
         }
-      }
 
-      &.focus-visible,
-      &:hover {
-        background-color: @veui-gray-color-8;
-      }
+        &.focus-visible {
+          box-shadow: inset 0 0 0 2px @veui-gray-color-4;
+        }
 
-      &:active {
-        background-color: @veui-gray-color-6;
+        &:active {
+          background-color: @veui-gray-color-6;
+        }
       }
 
       &.veui-tabs-item-removable > .veui-tabs-item-label {

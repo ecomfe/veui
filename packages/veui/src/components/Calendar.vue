@@ -418,7 +418,7 @@ export default {
     }
   },
   watch: {
-    month (val) {
+    viewMonth (val) {
       this.$emit('viewchange', {
         year: this.year,
         month: this.month
