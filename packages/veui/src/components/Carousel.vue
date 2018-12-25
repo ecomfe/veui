@@ -65,6 +65,7 @@
         'veui-carousel-indicator-item-current': localIndex === i
       }"
       @click="select(i, 'click')"
+      @focus="switchTrigger === 'hover' && select(i, 'hover')"
       @mouseenter="select(i, 'hover')"
     >
       {{ item.label || t('pageIndex', { index: i + 1 }) }}

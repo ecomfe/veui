@@ -8,9 +8,11 @@
 
   button {
     .veui-button-transition();
+    position: relative;
 
     &.focus-visible {
       .veui-focus-shadow();
+      z-index: 1;
     }
   }
 
@@ -66,7 +68,6 @@
       &.focus-visible {
         background-color: @veui-brand-color-10;
         color: @veui-text-color-strong;
-        z-index: 1;
       }
 
       &.focus-visible {

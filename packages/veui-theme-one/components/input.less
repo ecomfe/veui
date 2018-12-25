@@ -9,7 +9,6 @@
     line-height: @height - 2px;
   }
 
-  overflow: hidden;
   display: inline-table;
   position: relative;
   .make-line-height(@veui-height-normal);
@@ -17,7 +16,8 @@
   border: 1px solid @veui-gray-color-5;
   background-color: #fff;
   color: @veui-text-color-normal;
-  transition: border-color @veui-transition-duration, color @veui-transition-duration;
+  transition-property: border-color, color, box-shadow;
+  transition-duration: @veui-transition-duration;
 
   &-autofill {
     background-color: #faffbd;
@@ -96,6 +96,7 @@
   }
 
   &-focused {
+    .veui-focus-shadow(@veui-gray-color-6);
     color: @veui-text-color-strong;
   }
 

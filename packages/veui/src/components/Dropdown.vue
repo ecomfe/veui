@@ -10,6 +10,7 @@
 >
   <veui-button
     v-if="split"
+    ref="command"
     class="veui-dropdown-command"
     @click="$emit('click')"
   >
@@ -186,7 +187,12 @@ export default {
       }
     },
     focus () {
-      this.$refs.button.focus()
+      let { command, button } = this.$refs
+      if (command) {
+        command.focus()
+        return
+      }
+      button.focus()
     }
   }
 }

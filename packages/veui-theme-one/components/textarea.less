@@ -11,7 +11,8 @@
   background-color: @veui-gray-color-7;
   font-size: @veui-font-size-normal;
   line-height: @veui-height-normal;
-  transition: border-color @veui-transition-duration, color @veui-transition-duration;
+  transition-property: border-color, color, box-shadow;
+  transition-duration:  @veui-transition-duration;
   color: @veui-text-color-normal;
   min-height: 150px;
 
@@ -25,6 +26,7 @@
   }
 
   &-focused {
+    .veui-focus-shadow(@veui-gray-color-6);
     color: @veui-text-color-strong;
   }
 

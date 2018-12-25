@@ -87,6 +87,7 @@
     />
   </button>
   <veui-overlay
+    ref="overlay"
     target="button"
     :open="expanded"
     :options="realOverlayOptions"
@@ -108,6 +109,7 @@
       @selectstart="handleProgress"
       @selectprogress="handleProgress"
       @keydown.esc.native="close"
+      @viewchange="handleViewChange"
     >
       <template
         v-if="range && realShortcuts && realShortcuts.length"
@@ -301,6 +303,11 @@ export default {
     },
     handleProgress (picking) {
       this.picking = Array.isArray(picking) ? picking : [picking]
+    },
+    handleViewChange () {
+      this.$nextTick(() => {
+        this.relocate()
+      })
     },
     clear (e) {
       this.$emit('select', null)

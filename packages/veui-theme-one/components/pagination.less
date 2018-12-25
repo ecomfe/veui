@@ -101,6 +101,7 @@
     }
 
     &.focus-visible {
+      .veui-focus-shadow(@veui-gray-color-6);
       color: @veui-brand-color;
     }
 
@@ -119,7 +120,7 @@
     }
 
     .veui-icon {
-      .veui-position-center()
+      .veui-position-center();
     }
   }
 
@@ -146,8 +147,10 @@
       font-size: @digit-size;
 
       .veui-link {
+        position: relative;
         display: inline-block;
         min-width: @button-width;
+        .veui-button-transition();
         .padding(_, 6px);
 
         &:hover {
@@ -156,6 +159,9 @@
 
         &.focus-visible {
           color: @veui-link-color-active;
+          z-index: 1;
+          background-color: #fff;
+          .veui-focus-shadow();
         }
       }
 
