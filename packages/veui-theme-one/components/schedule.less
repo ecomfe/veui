@@ -150,6 +150,11 @@
           color: @veui-brand-color-10;
         }
 
+        &.focus-visible {
+          .veui-focus-shadow();
+          z-index: 1;
+        }
+
         &:hover:active,
         &.veui-schedule-selected {
           color: @veui-brand-color-8;
