@@ -301,7 +301,7 @@ export function toggleClass (el, className, force) {
  */
 export function hasClass (el, className) {
   if (el.classList) {
-    return el.classList.contains(klass)
+    return el.classList.contains(className)
   }
 
   let klass = el.getAttribute('class')
