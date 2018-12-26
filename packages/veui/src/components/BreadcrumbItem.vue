@@ -6,6 +6,7 @@
     :to="to"
     :replace="replace"
     :native="native"
+    tabindex="0"
     @click="$emit('redirect', $event)"
   >
     <slot/>
