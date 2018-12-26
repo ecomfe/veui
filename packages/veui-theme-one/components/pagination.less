@@ -14,7 +14,6 @@
   .clearfix();
   display: inline-block;
   color: @veui-text-color-normal;
-  // font-weight: @veui-font-weight-normal;
 
   a {
     color: inherit;
@@ -101,7 +100,7 @@
     }
 
     &.focus-visible {
-      .veui-focus-shadow(@veui-gray-color-6);
+      .veui-focus-shadow(fadeout(@veui-gray-color-5, 50%));
       color: @veui-brand-color;
     }
 

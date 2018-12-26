@@ -60,6 +60,14 @@
 
   &.veui-input-invalid:not(.veui-disabled):not(.veui-readonly) {
     &:extend(._veui-input-invalid all);
+
+    .veui-number-input-step-up {
+      .border-color(@veui-alert-color, @veui-alert-color, _, _);
+    }
+
+    .veui-number-input-step-down {
+      .border-color(_, @veui-alert-color, @veui-alert-color, _);
+    }
   }
 
   &[ui~="tiny"] {

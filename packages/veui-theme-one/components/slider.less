@@ -74,10 +74,10 @@
     &.focus-visible {
       .veui-slider-thumb-default {
         border-color: @veui-brand-color-1;
-        .veui-focus-shadow(@veui-brand-color-7);
+        .veui-focus-shadow(fadeout(@veui-brand-color-5, 50%));
 
         .veui-readonly & {
-          .veui-focus-shadow(@veui-gray-color-6);
+          .veui-focus-shadow();
         }
       }
     }

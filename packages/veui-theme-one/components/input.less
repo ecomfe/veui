@@ -69,9 +69,11 @@
       color: @veui-text-color-normal;
       outline: none;
       cursor: unset;
+      .veui-button-transition();
 
       &.focus-visible {
         color: @veui-text-color-strong;
+        .veui-focus-shadow();
       }
     }
 
@@ -95,7 +97,7 @@
   }
 
   &-focused {
-    .veui-focus-shadow(@veui-gray-color-6);
+    .veui-focus-shadow();
     color: @veui-text-color-strong;
   }
 
@@ -123,6 +125,8 @@
     color: @veui-text-color-weak !important;
     pointer-events: none;
     cursor: text;
+    .ellipsis();
+    width: 100%;
   }
 
   &[ui~="large"] {

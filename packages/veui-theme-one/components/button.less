@@ -27,7 +27,7 @@
   }
 
   &.focus-visible {
-    .veui-focus-shadow();
+    .veui-focus-shadow(fadeout(@veui-gray-color-5, 50%));
     color: @veui-brand-color;
   }
 
@@ -62,7 +62,7 @@
     }
 
     &.focus-visible {
-      .veui-focus-shadow(fadeout(@veui-gray-color-3, 50%));
+      .veui-focus-shadow(fadeout(@veui-gray-color-4, 50%));
       color: @veui-brand-color;
     }
   }
@@ -160,12 +160,18 @@
     min-width: auto;
     border: none;
     padding: 0;
+    outline-color: transparent;
+    .veui-transition(color, outline-color);
 
     &,
     &:hover,
     &:active,
     &.focus-visible {
       background-color: transparent;
+    }
+
+    &.focus-visible {
+      .veui-focus-shadow(fadeout(@veui-link-color-hover, 50%), 2px);
     }
 
     &.veui-disabled {

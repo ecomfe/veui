@@ -23,14 +23,20 @@
     &-icon {
       outline: none;
       border: none;
+      margin-right: 10px;
       padding: 0;
       width: auto;
       height: auto;
+      line-height: 1;
       background-color: transparent;
+      .veui-button-transition();
 
       .veui-icon {
-        margin-right: 10px;
         vertical-align: middle;
+      }
+
+      &.focus-visible {
+        .veui-focus-shadow();
       }
     }
 
