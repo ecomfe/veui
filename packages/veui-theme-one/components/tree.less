@@ -39,8 +39,7 @@
       margin-right: @item-icon-gap;
       cursor: pointer;
       outline: none;
-      transition-property: box-shadow, transform;
-      transition-duration: @veui-transition-duration;
+      .veui-transition(box-shadow, transform);
 
       &.focus-visible {
         .veui-focus-shadow();

@@ -52,15 +52,15 @@
     display: inline-block;
     background-color: @veui-gray-color-4;
     user-select: none;
-    transition: background-color @veui-transition-duration, box-shadow @veui-transition-duration;
+    .veui-transition(background-color, box-shadow);
   }
 
   .focus-visible + &-switcher {
-    box-shadow: 0 0 0 2px @veui-gray-color-6;
+    .veui-focus-shadow();
   }
 
   :checked.focus-visible + &-switcher {
-    box-shadow: 0 0 0 2px @veui-brand-color-8;
+    .veui-focus-shadow(fadeout(@veui-brand-color-5, 50%));
   }
 
   &-button {
@@ -69,12 +69,7 @@
     margin: @gap;
     background-color: #fff;
     border-radius: 50%;
-    transition: transform ease @veui-transition-duration;
-
-    // .veui-icon {
-    //   .absolute(50%, _, _, 50%);
-    //   transform: translate(-50%, -50%);
-    // }
+    .veui-transition(transform);
   }
 
   :checked + &-switcher {

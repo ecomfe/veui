@@ -54,7 +54,7 @@
     display: block;
     .size(100%);
     cursor: pointer;
-    transition: background-color @veui-transition-duration;
+    .veui-transition(background-color);
 
     .veui-icon {
       font-size: 50px;
@@ -80,7 +80,7 @@
     li {
       margin: 0 10px 5px 0;
       position: relative;
-      transition: transform @veui-transition-duration;
+      .veui-transition(transform);
     }
 
     img {
@@ -125,7 +125,7 @@
       padding: 3px 4px;
       max-width: @width;
       color: @veui-gray-color-2;
-      transition: background-color @veui-transition-duration;
+      .veui-transition(background-color);
       text-align: right;
       overflow: hidden;
       white-space: nowrap;
@@ -224,7 +224,7 @@
 
     &-mask {
       opacity: 0;
-      transition: opacity @veui-transition-duration;
+      .veui-transition(opacity);
       .absolute(0);
       background-color: fadeout(#000, 90%);
 
@@ -346,7 +346,7 @@
     color: @veui-gray-color-2;
     opacity: 0;
     vertical-align: middle;
-    transition: opacity @veui-transition-duration;
+    .veui-transition(opacity);
   }
 
   &-list-enter,
@@ -360,7 +360,7 @@
 
   &-fade-leave-active {
     opacity: 0;
-    transition: opacity @veui-transition-duration ease;
+    .veui-transition(opacity);
   }
 
   &-progress {

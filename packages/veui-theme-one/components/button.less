@@ -27,7 +27,7 @@
   }
 
   &.focus-visible {
-    .veui-focus-shadow(@veui-gray-color-6);
+    .veui-focus-shadow();
     color: @veui-brand-color;
   }
 
@@ -41,7 +41,7 @@
     }
 
     &.focus-visible {
-      .veui-focus-shadow(@veui-brand-color-7);
+      .veui-focus-shadow(fadeout(@veui-brand-color-5, 50%));
     }
 
     &:active {
@@ -62,7 +62,7 @@
     }
 
     &.focus-visible {
-      .veui-focus-shadow(@veui-gray-color-4);
+      .veui-focus-shadow(fadeout(@veui-gray-color-3, 50%));
       color: @veui-brand-color;
     }
   }

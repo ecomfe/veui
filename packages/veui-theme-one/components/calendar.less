@@ -8,11 +8,10 @@
 
   button {
     .veui-button-transition();
-    position: relative;
 
     &.focus-visible {
       .veui-focus-shadow();
-      z-index: 1;
+      position: relative;
     }
   }
 
@@ -53,7 +52,6 @@
     padding-bottom: 5px;
 
     button {
-      position: relative;
       width: 100%;
       height: 36px;
       margin-top: 1px;
@@ -71,7 +69,7 @@
       }
 
       &.focus-visible {
-        box-shadow: none;
+        .veui-focus-shadow(fadeout(@veui-brand-color-7, 50%));
       }
 
       &:active {
@@ -97,7 +95,6 @@
   }
 
   td {
-    position: relative;
     .size(36px);
     padding: 0;
     color: @veui-text-color-normal;
@@ -129,10 +126,6 @@
       &:hover,
       &.focus-visible {
         background-color: @veui-brand-color-7;
-      }
-
-      &.focus-visible {
-        .veui-focus-shadow(@veui-brand-color-9);
       }
 
       &:active {
