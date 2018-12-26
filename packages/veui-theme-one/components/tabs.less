@@ -142,7 +142,7 @@
         content: "";
         .absolute(_, 10px, 0, 10px);
         height: 2px;
-        transition: background-color @veui-transition-duration, height @veui-transition-duration;
+        .veui-transition(background-color, height);
       }
 
       &.focus-visible::after,
@@ -436,15 +436,14 @@
         padding: 0 8px 0 12px;
         .ellipsis();
         text-align: left;
-        transition-property: background-color, box-shadow;
-        transition-duration: @veui-transition-duration;
+        .veui-transition(background-color, box-shadow);
 
         &::after {
           display: none;
         }
 
         &.focus-visible {
-          box-shadow: inset 0 0 0 2px @veui-gray-color-4;
+          box-shadow: inset 0 0 0 2px fadeout(@veui-gray-color-3, 50%);
         }
 
         &:active {

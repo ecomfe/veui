@@ -11,10 +11,9 @@
   background-color: @veui-gray-color-7;
   font-size: @veui-font-size-normal;
   line-height: @veui-height-normal;
-  transition-property: border-color, color, box-shadow;
-  transition-duration:  @veui-transition-duration;
   color: @veui-text-color-normal;
   min-height: 150px;
+  .veui-transition(border-color, color, box-shadow);
 
   &.veui-input-invalid {
     &:extend(._veui-input-invalid all);
