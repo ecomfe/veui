@@ -4,9 +4,13 @@
 
 * [+] `Searchbox` 新增了 `suggestions-before` 与 `suggestions-after` 两个插槽。
 * [^] `Searchbox` 提示层只在选择选项后关闭，如果点击自定义插槽而非默认的选择选项时，提示层不再自动关闭。
+* [^] 在控制台警告中增加了组件层级信息。
+* [^] 为 `Tree`/`FilterPanel`/`Transfer` 组件的增加了键盘交互。
+* [^] 使用了更为显著的聚焦样式。
 
 ### 🐞 问题修复
 
+* [^] 修复了 `Overlay` 组件的 `target` prop 类型。
 * [^] 修正了主模块没有导出 `OptionGroup` 组件的问题。
 * [^] 提前判断是否需要修正复选框 `indeterminate` 兼容性，而非在用到的组件 `mounted` 以后才判断，避免模拟的点击触发了已经定义的事件监听器。
 
