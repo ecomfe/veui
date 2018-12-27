@@ -11,9 +11,9 @@
   background-color: @veui-gray-color-7;
   font-size: @veui-font-size-normal;
   line-height: @veui-height-normal;
-  transition: border-color @veui-transition-duration, color @veui-transition-duration;
   color: @veui-text-color-normal;
   min-height: 150px;
+  .veui-transition(border-color, color, box-shadow);
 
   &.veui-input-invalid {
     &:extend(._veui-input-invalid all);
@@ -25,6 +25,7 @@
   }
 
   &-focused {
+    .veui-focus-shadow();
     color: @veui-text-color-strong;
   }
 

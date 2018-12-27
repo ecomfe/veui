@@ -1,5 +1,11 @@
 import { findIndex, uniq } from 'lodash'
 
+/**
+ *
+ * @param {Element} element 参考元素
+ * @param {string} selectors 用来查找目标元素的选择器
+ * @returns {?Element} 查找到的元素
+ */
 export function closest (element, selectors) {
   if (element.closest) {
     return element.closest(selectors)
@@ -19,9 +25,10 @@ export function closest (element, selectors) {
   return element
 }
 
-let needIndeterminatePatch = null
-
 function testIndeterminate () {
+  if (typeof document === 'undefined') {
+    return null
+  }
   let checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
   checkbox.indeterminate = true
@@ -32,14 +39,13 @@ function testIndeterminate () {
   return needPatch
 }
 
+// cache test result for repeated use
+let needIndeterminatePatch = testIndeterminate()
+
 // IE won't trigger change event for indeterminate checkboxes
 // Problem see http://stackoverflow.com/questions/33523130/ie-does-not-fire-change-event-on-indeterminate-checkbox-when-you-click-on-it
 // A more thorough compatibility fix here:
 export function patchIndeterminate (element) {
-  if (needIndeterminatePatch == null) {
-    needIndeterminatePatch = testIndeterminate()
-  }
-
   if (
     !needIndeterminatePatch ||
     !element.tagName ||
@@ -284,4 +290,21 @@ export function toggleClass (el, className, force) {
     return
   }
   el.setAttribute('class', klasses.concat([className]).join(' '))
+}
+
+/**
+ * 元素是否包含指定 class
+ *
+ * @param {Element} el 目标元素
+ * @param {string} className 需要检查的类名
+ * @returns {boolean} 是否包含指定类名
+ */
+export function hasClass (el, className) {
+  if (el.classList) {
+    return el.classList.contains(className)
+  }
+
+  let klass = el.getAttribute('class')
+  let klasses = klass.trim().split(/\s+/)
+  return klasses.some(k => k === className)
 }

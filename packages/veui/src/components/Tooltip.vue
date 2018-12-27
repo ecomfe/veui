@@ -122,7 +122,7 @@ export default {
   },
   created () {
     if (this.custom) {
-      warn('[veui-tooltip] `custom` is deprecated and will be removed in `1.0.0`. Use `trigger: \'custom\'` instead.')
+      warn('[veui-tooltip] `custom` is deprecated and will be removed in `1.0.0`. Use `trigger: \'custom\'` instead.', this)
     }
   },
   mounted () {

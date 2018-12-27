@@ -9,7 +9,8 @@ config.defaults({
   },
   ui: {
     style: {
-      values: ['alt']
+      values: ['alt'],
+      inherit: true
     },
     size: {
       values: ['large', 'small', 'tiny', 'micro'],

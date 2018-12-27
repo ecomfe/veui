@@ -12,6 +12,7 @@
   position: relative;
   user-select: none;
   overflow: visible;
+  outline: none;
 
   &-track {
     &-default {
@@ -64,6 +65,7 @@
     // 利用 translateX 左偏移一半，实现 thumb 宽度自适应
     transform: translateX(-50%);
     cursor: pointer;
+    .veui-button-transition();
 
     &:focus {
       outline: none;
@@ -72,6 +74,11 @@
     &.focus-visible {
       .veui-slider-thumb-default {
         border-color: @veui-brand-color-1;
+        .veui-focus-shadow(fadeout(@veui-brand-color-5, 50%));
+
+        .veui-readonly & {
+          .veui-focus-shadow();
+        }
       }
     }
 

@@ -7,6 +7,7 @@
   :aria-label="t('description')"
 >
   <div
+    ref="focus"
     class="veui-sr-only"
     tabindex="0"
     @focus="initFocus"
@@ -257,8 +258,9 @@ import Checkbox from './Checkbox'
 import Overlay from './Overlay'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import i18n from '../mixins/i18n'
 import overlay from '../mixins/overlay'
+import focusable from '../mixins/focusable'
+import i18n from '../mixins/i18n'
 import outside from '../directives/outside'
 import warn from '../utils/warn'
 import { contains, focusBefore } from '../utils/dom'
@@ -272,7 +274,7 @@ export default {
     'veui-overlay': Overlay
   },
   directives: { outside },
-  mixins: [ui, input, overlay, i18n],
+  mixins: [ui, input, overlay, focusable, i18n],
   model: {
     prop: 'selected',
     event: 'select'
@@ -367,7 +369,7 @@ export default {
         exit: ({ node, parent }) => {
           if (!node.id && !(node.children && node.children.length)) {
             // invalid node
-            warn(`[veui-region-picker] Invalid region tree node '${node.label}'. Provide \`value\`, \`children\` or both.`)
+            warn(`[veui-region-picker] Invalid region tree node '${node.label}'. Provide \`value\`, \`children\` or both.`, this)
             return
           }
 
@@ -400,6 +402,9 @@ export default {
       setTimeout(() => {
         this.focusPath.push(last)
       })
+    },
+    focus () {
+      this.$refs.focus.focus()
     },
     focusDown () {
       let { children } = this.focusNode

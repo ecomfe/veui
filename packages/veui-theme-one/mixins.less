@@ -12,9 +12,13 @@
   border: 0;
 }
 
-.veui-button-transition() {
-  transition-property: border-color, background-color, color, opacity;
+.veui-transition(...) {
+  transition-property: ~`"@{arguments}".replace(/[[\]]/g, "")`;
   transition-duration: @veui-transition-duration;
+}
+
+.veui-button-transition(...) {
+  .veui-transition(border-color, background-color, color, opacity, box-shadow, @arguments...)
 }
 
 // https://stackoverflow.com/questions/27000492/css3-transform-property-working-differently-in-internet-explorer
@@ -51,4 +55,15 @@
 
 .veui-overlay-shadow() {
   box-shadow: 0 1px 4px fadeout(#000, 80%);
+}
+
+.veui-focus-shadow(@color: fadeout(@veui-gray-color-4, 50%)) {
+  box-shadow: 0 0 0 2px @color;
+  outline: none;
+}
+
+.veui-focus-shadow(@color, @offset) {
+  outline: 2px solid @color;
+  outline-offset: @offset;
+  box-shadow: none;
 }

@@ -3,6 +3,9 @@
   ref="main"
   class="veui-uploader"
   :ui="realUi"
+  role="application"
+  tabindex="-1"
+  :aria-label="t('uploader')"
 >
   <div
     v-if="type === 'file'"
@@ -396,6 +399,7 @@ import Tooltip from './Tooltip'
 import { cloneDeep, uniqueId, assign, isNumber, last, pick, omit, includes, isEmpty } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
@@ -416,7 +420,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-uploader-progress': getProgress()
   },
-  mixins: [ui, input, i18n],
+  mixins: [ui, input, focusable, i18n],
   model: {
     event: 'change'
   },
@@ -467,7 +471,7 @@ export default {
       validator (val) {
         // TODO: remove support in 1.0.0
         if (val === false) {
-          warn('[veui-uploader] `auto-upload` is deprecated and will be removed in `1.0.0`. Use `autoupload` instead.')
+          warn('[veui-uploader] `auto-upload` is deprecated and will be removed in `1.0.0`. Use `autoupload` instead.', this)
         }
         return true
       }
@@ -628,7 +632,7 @@ export default {
   },
   created () {
     if (this.requestMode !== 'custom' && !this.action) {
-      warn('[veui-uploader] `action` is required when `request-mode` is not `custom`.')
+      warn('[veui-uploader] `action` is required when `request-mode` is not `custom`.', this)
     }
   },
   mounted () {
@@ -910,7 +914,7 @@ export default {
       data = this.convertResponse ? this.convertResponse(data) : data
 
       if (data.status || data.reason) {
-        warn('[veui-uploader] `status` and `reason` in response data are deprecated. Use `success` and `message` instead. Suppor for old fields will be removed in 1.0.0.')
+        warn('[veui-uploader] `status` and `reason` in response data are deprecated. Use `success` and `message` instead. Suppor for old fields will be removed in 1.0.0.', this)
       }
 
       /* Adapting legacy schema */
@@ -1041,6 +1045,9 @@ export default {
       return this.compat
         ? this.pureFileList[0].src || this.pureFileList[0].name
         : this.pureFileList[0]
+    },
+    focus () {
+      this.$el.focus()
     }
   }
 }

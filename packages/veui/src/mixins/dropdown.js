@@ -1,9 +1,12 @@
 import { throttle } from 'lodash'
-import { outside } from '../directives'
 import { toggleClass } from '../utils/dom'
+import outside from '../directives/outside'
+import overlay from './overlay'
+import activatable from './activatable'
 
 export default {
   directives: { outside },
+  mixins: [overlay, activatable],
   data () {
     return {
       expanded: false,

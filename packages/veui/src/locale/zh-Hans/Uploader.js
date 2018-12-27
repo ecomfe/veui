@@ -3,6 +3,7 @@ import i18n from '../../managers/i18n'
 i18n.register(
   'zh-Hans',
   {
+    uploader: '文件上传',
     selectFile: '选择文件',
     fileTypeInvalid: '文件的类型不符合要求',
     fileSizeInvalid: '文件的大小不符合要求',

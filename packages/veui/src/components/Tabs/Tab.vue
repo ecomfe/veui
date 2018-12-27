@@ -75,7 +75,7 @@ export default {
     const props = ['label', 'disabled', 'to', 'native', 'removable', 'status']
 
     if (this.to && this.name) {
-      warn('[veui-tab] prop `name` will be ignored when prop `to` is set.')
+      warn('[veui-tab] prop `name` will be ignored when prop `to` is set.', this)
     }
 
     this.tabs.add({

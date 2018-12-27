@@ -87,6 +87,7 @@
     />
   </button>
   <veui-overlay
+    ref="overlay"
     target="button"
     :open="expanded"
     :options="realOverlayOptions"
@@ -108,6 +109,7 @@
       @selectstart="handleProgress"
       @selectprogress="handleProgress"
       @keydown.esc.native="close"
+      @viewchange="handleViewChange"
     >
       <template
         v-if="range && realShortcuts && realShortcuts.length"
@@ -150,10 +152,10 @@ import Button from './Button'
 import Overlay from './Overlay'
 import Calendar from './Calendar'
 import Icon from './Icon'
-import dropdown from '../mixins/dropdown'
-import input from '../mixins/input'
 import ui from '../mixins/ui'
-import overlay from '../mixins/overlay'
+import input from '../mixins/input'
+import dropdown from '../mixins/dropdown'
+import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import { toDateData } from '../utils/date'
@@ -190,7 +192,7 @@ export default {
     'veui-calendar': Calendar,
     'veui-icon': Icon
   },
-  mixins: [ui, dropdown, input, overlay, i18n],
+  mixins: [ui, input, dropdown, focusable, i18n],
   model: {
     prop: 'selected',
     event: 'select'
@@ -302,12 +304,20 @@ export default {
     handleProgress (picking) {
       this.picking = Array.isArray(picking) ? picking : [picking]
     },
+    handleViewChange () {
+      this.$nextTick(() => {
+        this.relocate()
+      })
+    },
     clear (e) {
       this.$emit('select', null)
       this.expanded = false
       this.$nextTick(() => {
-        this.$refs.button.focus()
+        this.focus()
       })
+    },
+    focus () {
+      this.$refs.button.focus()
     },
     close () {
       this.expanded = false

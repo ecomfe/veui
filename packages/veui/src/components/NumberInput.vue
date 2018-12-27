@@ -63,6 +63,8 @@
 import Input from './Input'
 import Button from './Button'
 import ui from '../mixins/ui'
+import focusable from '../mixins/focusable'
+import activatable from '../mixins/activatable'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
 import Icon from './Icon'
@@ -86,7 +88,7 @@ export default {
     'veui-input': Input,
     'veui-button': Button
   },
-  mixins: [input, ui, i18n],
+  mixins: [ui, input, focusable, activatable, i18n],
   props: {
     ui: String,
     value: Number,
@@ -182,10 +184,10 @@ export default {
   },
   created () {
     if (this.realMax < this.realMin) {
-      warn('[veui-number-input] `max` value must not be less than `min` value.')
+      warn('[veui-number-input] `max` value must not be less than `min` value.', this)
     }
     if (this.value > this.realMax || this.value < this.realMin) {
-      warn('[veui-number-input] `value` must not be less than `min` value and not greater than `max` value.')
+      warn('[veui-number-input] `value` must not be less than `min` value and not greater than `max` value.', this)
     }
   },
   methods: {
@@ -327,8 +329,11 @@ export default {
       }
       return round(this.filterLimitValue(val), this.decimalPlace).toFixed(this.decimalPlace)
     },
+    focus () {
+      this.$refs.input.focus()
+    },
     activate () {
-      this.$ref.input.activate()
+      this.$refs.input.activate()
     }
   }
 }

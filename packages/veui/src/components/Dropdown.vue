@@ -10,6 +10,7 @@
 >
   <veui-button
     v-if="split"
+    ref="command"
     class="veui-dropdown-command"
     @click="$emit('click')"
   >
@@ -118,9 +119,9 @@ import Button from './Button'
 import Overlay from './Overlay'
 import OptionGroup from './Select/OptionGroup'
 import ui from '../mixins/ui'
-import overlay from '../mixins/overlay'
 import dropdown from '../mixins/dropdown'
 import keySelect from '../mixins/key-select'
+import focusable from '../mixins/focusable'
 import '../common/uiTypes'
 import { includes } from 'lodash'
 
@@ -143,7 +144,7 @@ export default {
     'veui-overlay': Overlay,
     'veui-option-group': OptionGroup
   },
-  mixins: [ui, overlay, dropdown, keySelect],
+  mixins: [ui, dropdown, keySelect, focusable],
   props: {
     label: String,
     disabled: Boolean,
@@ -184,6 +185,14 @@ export default {
       if (value != null) {
         this.$emit('click', value)
       }
+    },
+    focus () {
+      let { command, button } = this.$refs
+      if (command) {
+        command.focus()
+        return
+      }
+      button.focus()
     }
   }
 }

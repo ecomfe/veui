@@ -30,6 +30,8 @@
 <script>
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import focusable from '../mixins/focusable'
+import { focusIn } from '../utils/dom'
 import Button from './Button'
 
 export default {
@@ -37,7 +39,7 @@ export default {
   components: {
     'veui-button': Button
   },
-  mixins: [input, ui],
+  mixins: [ui, input, focusable],
   model: {
     event: 'change'
   },
@@ -62,6 +64,9 @@ export default {
       if (this.value !== val) {
         this.$emit('change', val)
       }
+    },
+    focus () {
+      focusIn(this.$el)
     }
   }
 }

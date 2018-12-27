@@ -100,7 +100,7 @@ export default {
       default: 0,
       validator (val) {
         if (val !== 0) {
-          warn('[veui-progress] `precision` is deprecated and will be removed in `1.0.0`. Use `decimal-place` instead.')
+          warn('[veui-progress] `precision` is deprecated and will be removed in `1.0.0`. Use `decimal-place` instead.', this)
         }
         return true
       }
@@ -124,7 +124,7 @@ export default {
       type: String,
       validator (val) {
         if (val != null) {
-          warn('[veui-progress] `state` is deprecated and will be removed in `1.0.0`. Use `status` instead.')
+          warn('[veui-progress] `state` is deprecated and will be removed in `1.0.0`. Use `status` instead.', this)
         }
         return true
       }
@@ -222,7 +222,7 @@ export default {
   },
   created () {
     if (this.max <= this.min) {
-      warn('[veui-progress] `max` must be larger than `min`.')
+      warn('[veui-progress] `max` must be larger than `min`.', this)
     }
   },
   methods: {

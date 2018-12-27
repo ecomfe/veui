@@ -28,7 +28,7 @@
     overflow-y: auto;
     outline: none;
     pointer-events: auto;
-    transition: transform @veui-transition-duration;
+    .veui-transition(transform);
     transform-origin: 50% 50%;
 
     [ui~="small"] & {
@@ -69,8 +69,9 @@
     }
 
     &-head-close {
-      .veui-button-transition();
+      padding: 0;
       outline: none;
+      .veui-button-transition();
 
       &,
       &:hover {
@@ -89,6 +90,10 @@
       &:hover,
       &:focus {
         color: @veui-brand-color;
+      }
+
+      &.focus-visible {
+        .veui-focus-shadow();
       }
     }
 

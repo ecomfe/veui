@@ -8,8 +8,13 @@
   max-width: 210px;
 
   &-split &-command {
+    position: relative;
     width: ~"calc(100% - 36px)";
     margin-right: -1px;
+
+    &.focus-visible {
+      z-index: 1;
+    }
   }
 
   &-split &-label {
@@ -39,7 +44,11 @@
       height: 1em;
       background-color: #fff;
       opacity: .5;
-      transition: opacity @veui-transition-duration, transform @veui-transition-duration;
+      .veui-transition(opacity, transform);
+    }
+
+    &.focus-visible[ui~="primary"]::before {
+      opacity: 0;
     }
   }
 

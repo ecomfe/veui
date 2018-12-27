@@ -117,7 +117,7 @@ export default {
       type: String,
       validator (val) {
         if (val != null) {
-          warn('[veui-alert] `close-text` is deprecated and will be removed in `1.0.0`. Use `close-label` instead.')
+          warn('[veui-alert] `close-text` is deprecated and will be removed in `1.0.0`. Use `close-label` instead.', this)
         }
       }
     },

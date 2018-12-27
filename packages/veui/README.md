@@ -52,11 +52,11 @@ In `build/webpack.base.conf.js`, prepend this rule:
     modules: [
       {
         package: 'veui-theme-one',
-        fileName: '${module}.less'
+        fileName: '{module}.less'
       },
       {
         package: 'veui-theme-one',
-        fileName: '${module}.js',
+        fileName: '{module}.js',
         transform: false
       }
     ]

@@ -1,5 +1,5 @@
-export default function warn (...messages) {
-  if (console && console.warn) {
-    Function.prototype.apply.call(console.warn, console, messages)
-  }
+import Vue from 'vue'
+
+export default function warn (message, vm) {
+  Vue.util.warn(message, vm)
 }

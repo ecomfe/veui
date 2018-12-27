@@ -30,8 +30,10 @@
 </template>
 
 <script>
-import input from '../mixins/input'
 import ui from '../mixins/ui'
+import input from '../mixins/input'
+import focusable from '../mixins/focusable'
+import { focusIn } from '../utils/dom'
 import { uniqueId, findIndex } from 'lodash'
 import Checkbox from './Checkbox'
 
@@ -40,7 +42,7 @@ export default {
   components: {
     'veui-checkbox': Checkbox
   },
-  mixins: [ui, input],
+  mixins: [ui, input, focusable],
   model: {
     event: 'change'
   },
@@ -76,6 +78,9 @@ export default {
         this.localValue.splice(findIndex(this.localValue, item => item === value), 1)
       }
       this.$emit('change', this.localValue)
+    },
+    focus () {
+      focusIn(this.$el)
     }
   }
 }

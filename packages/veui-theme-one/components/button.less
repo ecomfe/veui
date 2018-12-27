@@ -27,6 +27,7 @@
   }
 
   &.focus-visible {
+    .veui-focus-shadow(fadeout(@veui-gray-color-5, 50%));
     color: @veui-brand-color;
   }
 
@@ -35,9 +36,12 @@
     background-color: @veui-brand-color;
     color: #fff;
 
-    &:hover,
-    &.focus-visible {
+    &:hover {
       background-color: @veui-brand-color-2;
+    }
+
+    &.focus-visible {
+      .veui-focus-shadow(fadeout(@veui-brand-color-5, 50%));
     }
 
     &:active {
@@ -58,6 +62,7 @@
     }
 
     &.focus-visible {
+      .veui-focus-shadow(fadeout(@veui-gray-color-4, 50%));
       color: @veui-brand-color;
     }
   }
@@ -73,6 +78,10 @@
     &:active,
     &.focus-visible {
       background-color: fadeout(@dark-color, 20%);
+    }
+
+    &.focus-visible {
+      .veui-focus-shadow(fadeout(@dark-color, 60%));
     }
   }
 
@@ -151,12 +160,18 @@
     min-width: auto;
     border: none;
     padding: 0;
+    outline-color: transparent;
+    .veui-transition(color, outline-color);
 
     &,
     &:hover,
     &:active,
     &.focus-visible {
       background-color: transparent;
+    }
+
+    &.focus-visible {
+      .veui-focus-shadow(fadeout(@veui-link-color-hover, 50%), 2px);
     }
 
     &.veui-disabled {

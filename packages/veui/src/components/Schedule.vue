@@ -6,6 +6,7 @@
   aria-label="时段选择"
   :aria-disabled="realDisabled"
   :aria-readonly="realReadonly"
+  tabindex="-1"
 >
   <slot name="header">
     <div class="veui-schedule-header">
@@ -196,6 +197,7 @@ import { includes, find, isFunction, cloneDeep, mapValues, isEqual } from 'lodas
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
+import focusable from '../mixins/focusable'
 import outside from '../directives/outside'
 import { merge } from '../utils/range'
 import warn from '../utils/warn'
@@ -213,9 +215,9 @@ config.defaults({
   shortcuts: []
 }, 'schedule')
 
-function warnDeprecated (oldVal, newVal) {
+function warnDeprecated (oldVal, newVal, vm) {
   warn('[veui-schedule] `shortcuts-display` value `' + oldVal + '` is renamed to `' +
-    newVal + '` and will be removed in `1.0.0`. Use `' + newVal + '` instead.')
+    newVal + '` and will be removed in `1.0.0`. Use `' + newVal + '` instead.', vm)
 }
 
 export default {
@@ -226,7 +228,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-dropdown': Dropdown
   },
-  mixins: [ui, input, i18n],
+  mixins: [ui, input, focusable, i18n],
   model: {
     prop: 'selected',
     event: 'select'
@@ -256,9 +258,9 @@ export default {
       default: 'inline',
       validator (value) {
         if (value === 'expand') {
-          warnDeprecated('expand', 'inline')
+          warnDeprecated('expand', 'inline', this)
         } else if (value === 'collapse') {
-          warnDeprecated('collapse', 'popup')
+          warnDeprecated('collapse', 'popup', this)
         }
         return includes(['expand', 'collapse', 'inline', 'popup'], value)
       }
@@ -484,6 +486,9 @@ export default {
     getDayLabel (dayIndex) {
       let dayName = this.t('daysLong')[dayIndex]
       return this.t('dayLabel', { dayName })
+    },
+    focus () {
+      this.$el.focus()
     }
   }
 }

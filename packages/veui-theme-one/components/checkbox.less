@@ -17,7 +17,7 @@
   &-box {
     vertical-align: top;
     display: inline-block;
-    transition: color @veui-transition-duration;
+    .veui-transition(color);
   }
 
   .veui-field > & {
@@ -35,7 +35,7 @@
   }
 
   & .focus-visible ~ &-box {
-    box-shadow: 0 0 0 2px @veui-gray-color-5;
+    .veui-focus-shadow();
   }
 
   &-box {
@@ -47,13 +47,13 @@
     border-radius: 1px;
     background-color: #fff;
     font-size: @veui-font-size-large;
-    transition: box-shadow @veui-transition-duration;
+    .veui-transition(box-shadow);
 
     .veui-icon {
       color: @veui-gray-color-1;
       .absolute(50%, 50%);
       transform: translate(-50%, -50%) scale(.8);
-      transition: transform @veui-transition-duration, opacity @veui-transition-duration;
+      .veui-transition(transform, opacity);
     }
   }
 

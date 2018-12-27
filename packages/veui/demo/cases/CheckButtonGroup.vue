@@ -58,6 +58,7 @@ import { CheckButtonGroup, Checkbox, Icon } from 'veui'
 import 'veui-theme-one/icons/check'
 import 'veui-theme-one/icons/cross'
 import 'veui-theme-one/icons/refresh'
+import 'veui-theme-one/icons/edit'
 
 export default {
   name: 'check-button-group-demo',
@@ -103,6 +104,9 @@ export default {
         },
         {
           value: 'refresh', icon: 'refresh'
+        },
+        {
+          value: 'edit', icon: 'edit'
         }
       ]
     }

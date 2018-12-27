@@ -8,11 +8,19 @@
 
     &.focus-visible {
       color: @veui-brand-color;
+      border-color: transparent;
+      .veui-focus-shadow(fadeout(@veui-gray-color-4, 50%));
     }
   }
 
-  &[ui~="alt"].veui-button-selected {
-    background-color: @veui-gray-color-5;
+  &[ui~="alt"] {
+    &.veui-button-selected {
+      background-color: @veui-gray-color-5;
+
+      &.focus-visible {
+        .veui-focus-shadow(fadeout(@veui-gray-color-3, 50%));
+      }
+    }
   }
 
   &.veui-disabled {

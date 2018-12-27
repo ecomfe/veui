@@ -1,6 +1,8 @@
 # VEUI
 
-![](https://badgen.net/circleci/github/ecomfe/veui)
+[![](https://badgen.net/circleci/github/ecomfe/veui)](https://circleci.com/gh/ecomfe/veui)
+
+[Documentation 🇨🇳](https://baidu-design.github.io/development/veui)
 
 Enterprise UI components for Vue.js. Based on ONE DESIGN from Baidu, Inc.
 
@@ -13,6 +15,7 @@ Four packages are included in this repo:
 * [`babel-plugin-veui`](./packages/babel-plugin-veui)
 * [`veui-loader`](./packages/veui-loader)
 * [`veui-theme-one`](./packages/veui-theme-one)
+* [`veui-theme-one-icons`](./packages/veui-theme-one-icons)
 
 Please visit each package for further introductions.
 

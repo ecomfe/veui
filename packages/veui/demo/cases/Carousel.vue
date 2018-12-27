@@ -110,16 +110,19 @@ export default {
       ],
       items: [
         {
-          src: 'http://image.cc0.cn/uploadfile/2017/0612/thumb_1440_0_20170612110044186.jpg',
-          alt: 'Highway'
+          src: 'http://ecmb.bdimg.com/public01/one-design/2b77cc4a4c5c906993c0e512f3ddaf03.jpg',
+          alt: 'A cute kitty looking at you with its greenish eyes.',
+          label: '猫'
         },
         {
-          src: 'http://image.cc0.cn/uploadfile/2017/0621/thumb_1440_0_20170621121923346.jpg',
-          alt: 'City'
+          src: 'http://ecmb.bdimg.com/public01/one-design/6fedc62b9221846ce5114c7447622e47.jpeg',
+          alt: 'A common kingfisher flying above river.',
+          label: '翠鸟'
         },
         {
-          src: 'https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png',
-          alt: 'Baidu logo'
+          src: 'http://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
+          alt: 'A white and gray dolphin in blue water.',
+          label: '海豚'
         }
       ]
     }

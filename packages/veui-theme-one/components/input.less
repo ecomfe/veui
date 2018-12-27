@@ -9,7 +9,6 @@
     line-height: @height - 2px;
   }
 
-  overflow: hidden;
   display: inline-table;
   position: relative;
   .make-line-height(@veui-height-normal);
@@ -17,7 +16,7 @@
   border: 1px solid @veui-gray-color-5;
   background-color: #fff;
   color: @veui-text-color-normal;
-  transition: border-color @veui-transition-duration, color @veui-transition-duration;
+  .veui-transition(border-color, color, box-shadow);
 
   &-autofill {
     background-color: #faffbd;
@@ -70,9 +69,11 @@
       color: @veui-text-color-normal;
       outline: none;
       cursor: unset;
+      .veui-button-transition();
 
       &.focus-visible {
         color: @veui-text-color-strong;
+        .veui-focus-shadow();
       }
     }
 
@@ -96,6 +97,7 @@
   }
 
   &-focused {
+    .veui-focus-shadow();
     color: @veui-text-color-strong;
   }
 
@@ -123,6 +125,8 @@
     color: @veui-text-color-weak !important;
     pointer-events: none;
     cursor: text;
+    .ellipsis();
+    width: 100%;
   }
 
   &[ui~="large"] {

@@ -26,6 +26,7 @@ import overlayManager from '../managers/overlay'
 import focusManager from '../managers/focus'
 import config from '../managers/config'
 import ui from '../mixins/ui'
+import focusable from '../mixins/focusable'
 import { getClassPropDef, mergeClasses, isType } from '../utils/helper'
 import '../common/uiTypes'
 
@@ -39,12 +40,12 @@ overlayManager.setBaseOrder(config.get('overlay.baseZIndex'))
 export default {
   name: 'veui-overlay',
   uiTypes: ['overlay'],
-  mixins: [ui],
+  mixins: [ui, focusable],
   props: {
     overlayClass: getClassPropDef(),
     open: Boolean,
     target: {
-      type: [String, Object],
+      type: [String, Object, Element],
       default: null
     },
     options: {

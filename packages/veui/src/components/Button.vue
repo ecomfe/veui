@@ -3,11 +3,14 @@
   :class="{
     'veui-button': true,
     'veui-button-loading': loading,
-    'veui-disabled': disabled
+    'veui-disabled': disabled,
+    'focus-visible': focusVisible
   }"
   :ui="realUi"
   v-bind="attrs"
   v-on="listeners"
+  @focus="handleFocus"
+  @blur="handleBlur"
 >
   <slot v-if="!loading"/>
   <template v-else>
@@ -28,7 +31,9 @@
 import { omit } from 'lodash'
 import Icon from './Icon'
 import ui from '../mixins/ui'
+import focusable from '../mixins/focusable'
 import { getListeners } from '../utils/helper'
+import { hasClass } from '../utils/dom'
 
 const EVENTS = [
   'mousedown', 'mouseup', 'mouseenter', 'mouseleave',
@@ -40,7 +45,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui],
+  mixins: [ui, focusable],
   props: {
     disabled: Boolean,
     name: String,
@@ -51,11 +56,17 @@ export default {
     value: String,
     loading: Boolean
   },
+  data () {
+    return {
+      props: omit(this.$props, 'loading'),
+      focusVisible: false
+    }
+  },
   computed: {
     attrs () {
-      let attrs = omit(this.$props, 'loading')
-      attrs.disabled = this.disabled || this.loading
-      return attrs
+      let { props } = this
+      props.disabled = this.disabled || this.loading
+      return props
     },
     listeners () {
       return getListeners(EVENTS, this)
@@ -64,6 +75,20 @@ export default {
   methods: {
     focus () {
       this.$el.focus()
+    },
+    /**
+     * Special hack to prevent state lost
+     * upon component rerender
+     */
+    handleFocus () {
+      this.$nextTick(() => {
+        if (hasClass(this.$el, 'focus-visible')) {
+          this.focusVisible = true
+        }
+      })
+    },
+    handleBlur () {
+      this.focusVisible = false
     }
   }
 }

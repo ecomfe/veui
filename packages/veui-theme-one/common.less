@@ -66,6 +66,8 @@ a,
 .veui-button[ui~="link"] {
   cursor: pointer;
   color: @veui-link-color-normal;
+  outline-color: transparent;
+  .veui-transition(color, outline-color);
 
   &:focus {
     outline: none;
@@ -78,6 +80,10 @@ a,
   &:hover,
   &.focus-visible {
     color: @veui-link-color-hover;
+  }
+
+  &.focus-visible {
+    .veui-focus-shadow(fadeout(@veui-link-color-hover, 50%), 2px);
   }
 
   &:active {

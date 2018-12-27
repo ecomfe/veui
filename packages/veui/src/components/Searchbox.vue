@@ -3,7 +3,7 @@
   ref="self"
   class="veui-searchbox"
   :class="{
-    'veui-searchbox-suggestion-expanded': expanded,
+    'veui-searchbox-suggestion-expanded': realExpanded,
     'veui-disabled': realDisabled,
     'veui-readonly': realReadonly
   }"
@@ -13,7 +13,7 @@
   <veui-input
     ref="input"
     v-model="localValue"
-    v-outside:input="disallowSuggest"
+    v-outside:input,box="disallowSuggest"
     :name="realName"
     :readonly="realReadonly"
     :disabled="realDisabled"
@@ -65,42 +65,53 @@
       role="listbox"
       :aria-expanded="String(realExpanded)"
     >
+      <slot name="suggestions-before"/>
       <slot
         name="suggestions"
         :suggestions="realSuggestions"
         :select="selectSuggestion"
       >
-        <template v-for="(suggestion, index) in realSuggestions">
-          <div
-            :key="index"
-            class="veui-searchbox-suggestion-item"
-            @click="selectSuggestion(suggestion)"
+        <div
+          v-for="(suggestion, index) in realSuggestions"
+          :key="index"
+          class="veui-searchbox-suggestion-item"
+          @click="selectSuggestion(suggestion)"
+        >
+          <slot
+            name="suggestion"
+            v-bind="suggestion"
           >
-            <slot
-              name="suggestion"
-              v-bind="suggestion"
-            >
-              {{ suggestion.label }}
-            </slot>
-          </div>
-        </template>
+            {{ suggestion.label }}
+          </slot>
+        </div>
       </slot>
+      <slot name="suggestions-after"/>
     </div>
   </veui-overlay>
 </div>
 </template>
 
 <script>
+import ui from '../mixins/ui'
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
-import overlay from '../mixins/overlay'
-import ui from '../mixins/ui'
+import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
 import Input from './Input'
 import Icon from './Icon'
 import Overlay from './Overlay'
 import Button from './Button'
-import { pick, includes } from 'lodash'
+import { pick, omit, includes } from 'lodash'
+
+const SHARED_PROPS = [
+  'autocomplete',
+  'placeholder',
+  'value',
+  'autofocus',
+  'selectOnFocus',
+  'composition',
+  'clearable'
+]
 
 export default {
   name: 'veui-searchbox',
@@ -110,7 +121,7 @@ export default {
     'veui-overlay': Overlay,
     'veui-button': Button
   },
-  mixins: [ui, input, dropdown, overlay, i18n],
+  mixins: [ui, input, dropdown, focusable, i18n],
   props: {
     suggestions: {
       type: Array,
@@ -132,15 +143,7 @@ export default {
         return val.every(i => includes(['focus', 'input', 'submit'], i))
       }
     },
-    ...pick(Input.props,
-      'autocomplete',
-      'placeholder',
-      'value',
-      'autofocus',
-      'selectOnFocus',
-      'composition',
-      'clearable'
-    )
+    ...pick(Input.props, SHARED_PROPS)
   },
   data () {
     return {
@@ -150,7 +153,7 @@ export default {
   },
   computed: {
     attrs () {
-      return pick(this, 'ui', 'autocomplete', 'autofocus', 'selectOnFocus', 'composition', 'clearable', 'placeholder')
+      return pick(this, ['ui', ...omit(SHARED_PROPS, 'value')])
     },
     realExpanded () {
       return !!(this.expanded && this.realSuggestions && this.realSuggestions.length)
@@ -240,7 +243,7 @@ export default {
       this.focus()
       this.$emit('select', suggestion)
       // 选择 select 的情况会有可能
-      //  触发 localValue 改变 => watcher => handleInput => allowSuggest
+      // 触发 localValue 改变 => watcher => handleInput => allowSuggest
       // 所以在下一个 nextTick 强制隐藏 suggest
       this.$nextTick(() => {
         this.disallowSuggest()

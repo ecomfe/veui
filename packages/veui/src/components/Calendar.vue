@@ -118,6 +118,7 @@
               >
                 <button
                   v-if="fillMonth && panel === 1 || day.month === p.month"
+                  :ref="day.isFocus ? 'focus' : null"
                   type="button"
                   :disabled="realDisabled || realReadonly || day.isDisabled"
                   :autofocus="day.isFocus"
@@ -211,6 +212,7 @@ import { normalizeClass } from '../utils/helper'
 import { flattenDeep, findIndex, uniqueId, upperFirst } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import Icon from './Icon'
@@ -236,7 +238,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui, input, i18n],
+  mixins: [ui, input, focusable, i18n],
   model: {
     prop: 'selected',
     event: 'select'
@@ -416,7 +418,7 @@ export default {
     }
   },
   watch: {
-    month (val) {
+    viewMonth (val) {
       this.$emit('viewchange', {
         year: this.year,
         month: this.month
@@ -726,6 +728,12 @@ export default {
     },
     getDefaultDate () {
       return flattenDeep([this.selected])[0] || this.today
+    },
+    focus () {
+      let { focus } = this.$refs
+      if (focus && focus[0]) {
+        focus[0].focus()
+      }
     }
   }
 }

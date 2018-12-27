@@ -3,6 +3,7 @@
 .veui-schedule {
   width: 653px;
   border: 1px solid @veui-gray-color-5;
+  outline: none;
 
   &-header {
     overflow: hidden;
@@ -147,6 +148,11 @@
         &:hover,
         &.focus-visible {
           color: @veui-brand-color-10;
+        }
+
+        &.focus-visible {
+          .veui-focus-shadow();
+          z-index: 1;
         }
 
         &:hover:active,

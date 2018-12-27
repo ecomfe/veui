@@ -5,11 +5,10 @@ import Option from './Option'
 import OptionGroup from './OptionGroup'
 import Overlay from '../Overlay'
 import config from '../../managers/config'
-import input from '../../mixins/input'
-import keySelect from '../../mixins/key-select'
 import ui from '../../mixins/ui'
-import overlay from '../../mixins/overlay'
+import input from '../../mixins/input'
 import dropdown from '../../mixins/dropdown'
+import keySelect from '../../mixins/key-select'
 import warn from '../../utils/warn'
 import { walk } from '../../utils/data'
 import { cloneDeep, mapValues } from 'lodash'
@@ -22,7 +21,7 @@ config.defaults({
 export default {
   name: 'veui-select',
   uiTypes: ['select'],
-  mixins: [ui, input, overlay, dropdown, keySelect],
+  mixins: [ui, input, dropdown, keySelect],
   model: {
     event: 'change'
   },
@@ -41,7 +40,7 @@ export default {
   },
   computed: {
     optionMap () {
-      return extractOptions(this.options, {})
+      return this.extractOptions()
     },
     labelMap () {
       return mapValues(this.optionMap, 'label')
@@ -103,6 +102,19 @@ export default {
         e.stopPropagation()
         e.preventDefault()
       }
+    },
+    extractOptions () {
+      let map = {}
+      walk(this.options, option => {
+        let { value } = option
+        if (value != null) {
+          if (map[value]) {
+            warn(`[veui-select] Duplicate item value [${value}] for select options.`, this)
+          }
+          map[value] = option
+        }
+      }, ['options', 'children'])
+      return map
     }
   },
   render () {
@@ -184,18 +196,5 @@ export default {
       }
     </div>
   }
-}
-
-function extractOptions (options, map) {
-  walk(options, (option) => {
-    let { value } = option
-    if (value != null) {
-      if (map[value]) {
-        warn(`[veui-select] Duplicate item value [${value}] for select options.`)
-      }
-      map[value] = option
-    }
-  }, ['options', 'children'])
-  return map
 }
 </script>
