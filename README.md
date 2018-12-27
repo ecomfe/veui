@@ -6,7 +6,16 @@
 
 Enterprise UI components for Vue.js. Based on ONE DESIGN from Baidu, Inc.
 
-*This is a work in progress.*
+🚧 *This is a work in progress.* 🚧
+
+## Features
+
+* 🤘 Powerful and flexible components & directives
+* 💅 Swithable/customizable themes
+* 🌲 Fully tree-shakable
+* 🌐 I18N support
+* ⌨️ Full support for ARIA annotation and keyboard navigation
+* ☁️ SSR support
 
 Four packages are included in this repo:
 
