@@ -1,32 +1,66 @@
 @import "../lib.less";
 
 .veui-button-group {
+  .make-size(@padding) {
+    &:first-child {
+      padding-right: @padding + 1px;
+    }
+
+    &:last-child {
+      padding-left: @padding + 1px;
+    }
+
+    &:not(:first-child):not(:last-child) {
+      .padding(_, @padding + 1px);
+    }
+
+    &[ui~="primary"],
+    &[ui~="alt"] {
+      &:first-child {
+        padding-right: @padding;
+      }
+
+      &:last-child {
+        padding-left: @padding;
+      }
+
+      &:not(:first-child):not(:last-child) {
+        .padding(_, @padding);
+      }
+    }
+  }
+
   display: inline-block;
 
   .veui-button {
-    position: relative;
-    z-index: 0;
     margin-left: -1px;
 
     &:first-child {
       margin-left: 0;
     }
 
+    .make-size(20px);
+
     &:hover,
     &:focus {
       &:not(.veui-disabled) {
-        z-index: 2;
+        position: relative;
       }
     }
 
     &[ui~="primary"],
     &[ui~="alt"] {
       margin: 0 0 0 1px;
-      .border-width(_, 0);
 
       &:first-child {
         margin-left: 0;
       }
+    }
+
+    &[ui~="small"],
+    &[ui~="tiny"],
+    &[ui~="micro"] {
+      .make-size(10px);
     }
   }
 
@@ -41,11 +75,6 @@
 
       &:last-child {
         border-right-color: transparent;
-      }
-
-      &[ui~="primary"],
-      &[ui~="alt"] {
-        .border-width(_, 0);
       }
     }
   }

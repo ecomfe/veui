@@ -21,7 +21,7 @@
   </section>
   <section>
     <veui-button-group
-      ui="aux small"
+      ui="alt"
       :items="items3"
       :disabled="disabled"
     />
