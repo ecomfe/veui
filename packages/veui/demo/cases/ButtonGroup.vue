@@ -2,41 +2,46 @@
 <article>
   <h1><code>&lt;veui-button-group&gt;</code></h1>
   <section>
-    <veui-checkbox v-model="disabled">
-      禁用
+    <veui-checkbox
+      v-model="disabled"
+      ui="small"
+    >
+      禁用全部
     </veui-checkbox>
   </section>
   <section>
+    <veui-checkbox
+      v-model="items[2].disabled"
+      ui="small"
+    >
+      禁用「删除」
+    </veui-checkbox>
+  </section>
+  <section>
+    <veui-radio-group
+      v-model="size"
+      ui="small"
+      :items="sizes"
+    />
+  </section>
+  <section>
     <veui-button-group
-      ui="primary large"
-      :items="items1"
+      :ui="`primary ${size}`"
+      :items="items"
       :disabled="disabled"
     />
   </section>
   <section>
     <veui-button-group
-      :items="items2"
+      :ui="size"
+      :items="items"
       :disabled="disabled"
     />
   </section>
   <section>
     <veui-button-group
-      ui="alt"
-      :items="items3"
-      :disabled="disabled"
-    />
-  </section>
-  <section>
-    <veui-button-group
-      ui="alt tiny"
-      :items="items4"
-      :disabled="disabled"
-    />
-  </section>
-  <section>
-    <veui-button-group
-      ui="alt micro"
-      :items="items4"
+      :ui="`alt ${size}`"
+      :items="items"
       :disabled="disabled"
     />
   </section>
@@ -44,36 +49,30 @@
 </template>
 
 <script>
-import { ButtonGroup, Checkbox } from 'veui'
+import { ButtonGroup, Checkbox, RadioGroup } from 'veui'
 
 export default {
   name: 'button-group-demo',
   components: {
     'veui-button-group': ButtonGroup,
-    'veui-checkbox': Checkbox
+    'veui-checkbox': Checkbox,
+    'veui-radio-group': RadioGroup
   },
   data () {
     return {
       disabled: false,
-      items1: [
+      size: '',
+      sizes: [
+        { label: '大', value: 'large' },
+        { label: '中', value: '' },
+        { label: '小', value: 'small' },
+        { label: '迷你', value: 'tiny' },
+        { label: '微型', value: 'micro' }
+      ],
+      items: [
         { label: '新建', event: 'add' },
         { label: '编辑', event: 'edit' },
-        { label: '删除', event: 'remove' }
-      ],
-      items2: [
-        { label: '新建', event: 'add', disabled: true },
-        { label: '编辑', event: 'edit' },
-        { label: '删除', event: 'remove' }
-      ],
-      items3: [
-        { label: '新建', event: 'add', disabled: true },
-        { label: '编辑', event: 'edit' },
-        { label: '删除', event: 'remove' }
-      ],
-      items4: [
-        { label: '新建', event: 'add', disabled: true },
-        { label: '编辑', event: 'edit' },
-        { label: '删除', event: 'remove' }
+        { label: '删除', event: 'remove', disabled: true }
       ]
     }
   }
@@ -82,6 +81,6 @@ export default {
 
 <style lang="less" scoped>
 section {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 </style>
