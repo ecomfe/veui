@@ -526,9 +526,7 @@ export default {
       type: Boolean,
       default: false
     },
-    upload: {
-      type: Function
-    }
+    upload: Function
   },
   data () {
     return {
