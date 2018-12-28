@@ -7,6 +7,7 @@
 * [^] 在控制台警告中增加了组件层级信息。
 * [^] 为 `Tree`/`FilterPanel`/`Transfer` 组件的增加了键盘交互。
 * [^] 为所有支持聚焦或激活操作的组件添加了 `focus` 或 `activate` 方法。
+* [^] 对于使用路由模式的 `Tabs` 及 `Tab` 组件，新增函数 prop `matches(current, to)` 来允许指定自定义的激活状态判断，不再需要手动在 `Tabs` 组件中控制 `index`。`Tab` 组件的 `matches` 逻辑优先于上层 `Tabs` 组件中的 `matches`。
 * [^] 使用了更为显著的聚焦样式。
 
 ### 🐞 问题修复
