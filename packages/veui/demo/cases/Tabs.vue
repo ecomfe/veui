@@ -190,7 +190,7 @@
   </section>
   <section>
     <h2>路由模式：</h2>
-    <veui-tabs :active="$route.fullPath">
+    <veui-tabs :matches="(current, to) => current.path === to.path">
       <veui-tab
         label="Button"
         to="/tabs/button"

@@ -61,6 +61,7 @@
               v-bind="ariaAttrs[i]"
               :to="tab.to"
               :native="tab.native"
+              @click="!tab.disabled && setActive({ index: i })"
             >
               {{ tab.label }}
             </veui-link>
@@ -197,6 +198,12 @@ export default {
       type: Number,
       default: 0
     },
+    matches: {
+      type: Function,
+      default (current, to) {
+        return current.fullPath === to.fullPath
+      }
+    },
     addable: {
       type: Boolean,
       default: false
@@ -310,7 +317,7 @@ export default {
     })
   },
   methods: {
-    add (tab) {
+    add (tab, isMatched) {
       let tabIndex = this.items.length
       let domBaseIndex = tab.index
 
@@ -323,7 +330,8 @@ export default {
       if (
         !this.activeId &&
         tab.name === this.active ||
-        (tabIndex === this.index && !this.active)
+        (tabIndex === this.index && !this.active) ||
+        isMatched
       ) {
         this.localIndex = tabIndex
         this.localActive = tab.name

@@ -6,7 +6,7 @@
   :aria-hidden="String(!isActive)"
 >
   <slot v-if="isInited || isActive">
-    <router-view v-if="to && $route && realTo === $route.fullPath"/>
+    <router-view v-if="to && $route && isMatched"/>
   </slot>
 </div>
 </template>
@@ -38,6 +38,7 @@ export default {
       type: [String, Object],
       default: ''
     },
+    matches: Function,
     native: Boolean,
     removable: {
       type: Boolean,
@@ -66,7 +67,15 @@ export default {
         return null
       }
 
-      return this.$router ? this.$router.resolve(this.to).route.fullPath : this.to
+      return this.$router && typeof this.to === 'string'
+        ? this.$router.resolve(this.to).route
+        : this.to
+    },
+    realMatches () {
+      return this.matches || this.tabs.matches || (() => false)
+    },
+    isMatched () {
+      return this.realMatches(this.$route, this.realTo)
     }
   },
   created () {
@@ -80,9 +89,9 @@ export default {
 
     this.tabs.add({
       ...pick(this, ...props, 'id'),
-      name: this.realTo || this.name || this.id,
+      name: this.to ? this.id : (this.name || this.id),
       index
-    })
+    }, this.to && this.isMatched)
 
     props.forEach(prop => {
       this.$watch(prop, val => {
