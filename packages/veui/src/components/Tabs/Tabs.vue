@@ -176,8 +176,15 @@ import Icon from '../Icon'
 import resize from '../../directives/resize'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
+import config from '../../managers/config'
 import '../../common/uiTypes'
 import { setTransform, getTransform } from '../../utils/dom'
+
+config.defaults({
+  matches (current, to) {
+    return current.fullPath === to.fullPath
+  }
+}, 'tabs')
 
 export default {
   name: 'veui-tabs',
@@ -199,9 +206,11 @@ export default {
       default: 0
     },
     matches: {
-      type: Function,
-      default (current, to) {
-        return current.fullPath === to.fullPath
+      default () {
+        return config.get('tabs.matches')
+      },
+      validator (value) {
+        return typeof value === 'function'
       }
     },
     addable: {
