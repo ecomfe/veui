@@ -89,7 +89,7 @@ export default {
 
     this.tabs.add({
       ...pick(this, ...props, 'id'),
-      name: this.to ? this.id : (this.name || this.id),
+      name: this.realTo ? this.realTo.fullPath : (this.name || this.id),
       index
     }, this.to && this.isMatched)
 
