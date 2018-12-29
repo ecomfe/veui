@@ -12,10 +12,10 @@ Enterprise UI components for Vue.js. Based on ONE DESIGN from Baidu, Inc.
 
 * 🤘 Powerful and flexible components & directives
 * 💅 Swithable/customizable themes
-* 🌲 Fully tree-shakable
-* 🌐 I18N support
-* ⌨️ Full support for ARIA annotation and keyboard navigation
-* ☁️ SSR support
+* 🌲 Fully tree-shakable components
+* 🌐 I18N support w/ compile-time optimization
+* ⌨️ A11Y support w/ ARIA annotation & complete keyboard navigation
+* ☁️ SSR support w/ component level Critical CSS
 
 Four packages are included in this repo:
 
