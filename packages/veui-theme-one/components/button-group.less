@@ -33,7 +33,12 @@
   display: inline-block;
 
   .veui-button {
+    position: relative;
     margin-left: -1px;
+
+    &.veui-disabled {
+      position: static;
+    }
 
     &:first-child {
       margin-left: 0;
@@ -44,7 +49,7 @@
     &:hover,
     &:focus {
       &:not(.veui-disabled) {
-        position: relative;
+        z-index: 1;
       }
     }
 
