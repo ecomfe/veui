@@ -22,7 +22,7 @@
     "lodash": "^4.17.4",
     "resize-detector": "^0.1.6",
     "tether": "^1.4.5",
-    "vue-awesome": "^3.2.0"
+    "vue-awesome": "^3.3.1"
   },
   "peerDependencies": {
     "vue": "^2.5.16"
@@ -77,11 +77,11 @@
     "svg-innerhtml": "^1.1.0",
     "veui-loader": "^1.0.0-alpha.20",
     "veui-theme-one": "^1.0.0-alpha.20",
-    "vue": "^2.5.18-beta.0",
+    "vue": "^2.5.21",
     "vue-jest": "^2.5.0",
     "vue-loader": "^13.3.0",
     "vue-router": "^2.2.0",
-    "vue-template-compiler": "^2.5.18-beta.0",
+    "vue-template-compiler": "^2.5.21",
     "webpack": "^3.11.0",
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.24.3",
