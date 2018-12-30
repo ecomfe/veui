@@ -308,3 +308,24 @@ export function hasClass (el, className) {
   let klasses = klass.trim().split(/\s+/)
   return klasses.some(k => k === className)
 }
+
+const NORMAL_LINE_HEIGHT = 1.2
+
+/**
+ * 获取元素的行高 px 数
+ *
+ * @param {Element} el 目标元素
+ * @returns {number} 行高 px 数
+ */
+export function getAbsoluteLineHeight (el) {
+  let { lineHeight, fontSize } = getComputedStyle(el)
+  let value = parseFloat(lineHeight)
+
+  if (value) {
+    return value
+  }
+
+  // line-height: normal
+  let base = parseFloat(fontSize)
+  return base * NORMAL_LINE_HEIGHT
+}

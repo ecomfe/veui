@@ -65,6 +65,7 @@ import focusable from '../mixins/focusable'
 import activatable from '../mixins/activatable'
 import { getListeners } from '../utils/helper'
 import { log10 } from '../utils/math'
+import { getAbsoluteLineHeight } from '../utils/dom'
 
 const EVENTS = ['click', 'keyup', 'keydown', 'keypress']
 
@@ -90,7 +91,8 @@ export default {
       height: 0,
       measurerContentWidth: 0,
       measurerContentHeight: 0,
-      scrollTop: 0
+      scrollTop: 0,
+      rowsHeight: null
     }
   },
   computed: {
@@ -98,7 +100,7 @@ export default {
       return getListeners(EVENTS, this)
     },
     normalizedRows () {
-      let rows = Number(this.rows)
+      let rows = parseInt(this.rows, 10)
       return isNaN(rows) ? null : rows
     },
     attrs () {
@@ -127,7 +129,7 @@ export default {
         return `${this.measurerContentHeight}px`
       }
 
-      return null
+      return `${this.rowsHeight}px`
     }
   },
   watch: {
@@ -157,8 +159,27 @@ export default {
   },
   mounted () {
     this.scrollTop = this.$refs.input.scrollTop
+    this.rowsHeight = this.getRowsHeight()
   },
   methods: {
+    getRowsHeight () {
+      if (!this.normalizedRows) {
+        return null
+      }
+      let { input } = this.$refs
+      let lineHeight = getAbsoluteLineHeight(input)
+      let {
+        borderTopWidth,
+        paddingTop,
+        paddingBottom,
+        borderBottomWidth
+      } = getComputedStyle(input)
+
+      return this.normalizedRows * lineHeight +
+        [borderTopWidth, paddingTop, paddingBottom, borderBottomWidth]
+          .map(val => parseFloat(val))
+          .reduce((acc, cur) => acc + cur, 0)
+    },
     handleFocus (e) {
       this.focused = true
       this.$emit('focus', e)
