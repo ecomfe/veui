@@ -14,7 +14,6 @@
         :name="icons[type]"
       />
     </div>
-
     <div
       v-if="isMultiple"
       class="veui-alert-message veui-alert-message-multiple"
