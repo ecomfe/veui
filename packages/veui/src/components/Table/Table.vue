@@ -231,12 +231,12 @@ export default {
     this.validateSelected()
   },
   mounted () {
-    if (this.maxHeight) {
+    if (this.scrollableY) {
       this.updateLayout()
     }
   },
   updated () {
-    if (this.maxHeight) {
+    if (this.scrollableY) {
       this.updateLayout()
     }
   },
