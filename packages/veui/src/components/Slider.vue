@@ -42,7 +42,7 @@
   </div>
 
   <!-- 块 -->
-  <div
+  <button
     v-for="(_, index) in new Array(thumbCount)"
     :key="`thumb${index}`"
     ref="thumb"
@@ -60,6 +60,7 @@
     role="slider"
     v-bind="thumbAttrs[index]"
     @mouseenter="handleThumbMouseEnter(index)"
+    @mousedown="handleThumbFocus(index)"
     @focus="handleThumbFocus(index)"
     @blur="handleThumbBlur(index)"
   >
@@ -72,7 +73,7 @@
     >
       <div class="veui-slider-thumb-default"/>
     </slot>
-  </div>
+  </button>
 
   <!-- 提示 -->
   <slot

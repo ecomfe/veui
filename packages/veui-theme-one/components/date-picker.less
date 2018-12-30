@@ -50,7 +50,6 @@
     .veui-date-picker:hover &,
     &.focus-visible {
       .size(~"calc(1em + 2px)");
-      .veui-focus-shadow();
       clip: auto;
     }
 
@@ -59,6 +58,7 @@
     }
 
     &.focus-visible {
+      .veui-focus-shadow();
       color: @veui-brand-color;
     }
 
