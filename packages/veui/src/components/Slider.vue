@@ -53,7 +53,7 @@
       update: (...args) => handleThumbNudgeUpdage(index, ...args)
     }"
     class="veui-slider-thumb"
-    :tabindex="realDisabled ? null : '0'"
+    :disabled="realDisabled"
     :style="{
       left: `${ratios[index] * 100}%`
     }"
