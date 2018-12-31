@@ -134,7 +134,6 @@ export default {
   methods: {
     toggle (item, index, ...args) {
       this.$emit('toggle', item, index, ...args)
-      this.fixFocus(index)
     },
     click (item, parents, ...extraArgs) {
       this.$emit('click', item, parents, ...extraArgs)
@@ -189,6 +188,7 @@ export default {
         case 'ArrowLeft':
           if (item.expanded) {
             this.toggle(item, index, depth, false)
+            this.fixFocus(index)
           } else {
             this.focusLevel()
           }
@@ -199,6 +199,7 @@ export default {
             this.focusLevel(false)
           } else {
             this.toggle(item, index, depth, true)
+            this.fixFocus(index)
           }
           break
         case 'Up':
@@ -225,13 +226,11 @@ export default {
     handleFocus (i) {
       this.$nextTick(() => {
         if (hasClass(this.$refs.item[i], 'focus-visible')) {
-          // this.focusVisible[i] = true
           this.$set(this.focusVisible, i, true)
         }
       })
     },
     handleBlur (i) {
-      // this.focusVisible[i] = false
       this.$set(this.focusVisible, i, false)
     },
     fixFocus (i) {

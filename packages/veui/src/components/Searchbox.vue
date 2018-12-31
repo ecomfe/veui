@@ -101,7 +101,7 @@ import Input from './Input'
 import Icon from './Icon'
 import Overlay from './Overlay'
 import Button from './Button'
-import { pick, omit, includes } from 'lodash'
+import { pick, without, includes } from 'lodash'
 
 const SHARED_PROPS = [
   'autocomplete',
@@ -153,7 +153,7 @@ export default {
   },
   computed: {
     attrs () {
-      return pick(this, ['ui', ...omit(SHARED_PROPS, 'value')])
+      return pick(this, ['ui', ...without(SHARED_PROPS, 'value')])
     },
     realExpanded () {
       return !!(this.expanded && this.realSuggestions && this.realSuggestions.length)
