@@ -44,8 +44,8 @@ export default {
     this.$emit = this.realEmit.bind(this, this.$emit)
   },
   methods: {
-    realEmit (originalEmit, eventName) {
-      originalEmit.apply(this, Array.prototype.slice.call(arguments, 1))
+    realEmit (originalEmit, eventName, ...args) {
+      originalEmit.apply(this, [eventName, ...args])
       // 过滤掉 vue 内部 hook 和 .sync 的 update 事件，不需要往上处理
       let [prefix, name] = eventName.split(':')
       if (!name || !includes(['hook', 'update'], prefix)) {

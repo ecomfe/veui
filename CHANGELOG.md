@@ -3,6 +3,12 @@
 ### 🐞 问题修复
 
 * [^] 修复了 `NumberInput` 中 `value` 和 `localValue` 的同步问题。
+* [^] 修正了 `Overlay` 组件 `target` prop 类型声明在 SSR 下报错的问题。
+* [^] 修正了内部滚动模式的 `Table` 组件在系统有滚动条时的表头宽度。
+* [^] 修正了用 `row` prop 指定 `Textarea` 组件高度时在 IE 下无视行高的问题。
+* [^] 修正了 `Alert` 组件图标在 IE 下没有垂直居中的问题。
+* [^] 修正了 `Slider` 组件在有多按钮时在 IE 下不能正常工作的问题。
+* [^] 修正了 `Tree`、`DatePicker` 有时在鼠标操作时误显示聚焦样式的问题。
 
 ## 1.0.0-alpha.20
 

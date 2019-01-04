@@ -96,7 +96,7 @@ export default {
         }
       )
     },
-    localRules () {
+    realRules () {
       if (!this.rules) {
         return null
       }
@@ -104,7 +104,6 @@ export default {
       let rules
       if (Array.isArray(this.rules)) {
         rules = type.clone(this.rules)
-        rule.initRules(rules)
       } else {
         rules = this.rules
           .trim()
@@ -113,20 +112,20 @@ export default {
             name: perRule,
             value: true
           }))
-        rule.initRules(rules)
       }
+      rule.initRules(rules)
       return rules
     },
     isRequired () {
       return (
-        this.localRules &&
-        this.localRules.some(perRule => perRule.name === 'required')
+        this.realRules &&
+        this.realRules.some(perRule => perRule.name === 'required')
       )
     },
     interactiveRulesMap () {
       let map = {}
-      if (this.localRules) {
-        this.localRules.forEach(({ triggers, name, message, value }) => {
+      if (this.realRules) {
+        this.realRules.forEach(({ triggers, name, message, value }) => {
           if (!triggers) {
             return
           }
@@ -222,7 +221,7 @@ export default {
     validate (rules) {
       let res = rule.validate(
         this.getFieldValue(),
-        rules || this.localRules,
+        rules || this.realRules,
         this.form.data
       )
       // 分两种调用
