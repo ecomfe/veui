@@ -1,3 +1,9 @@
+## 1.0.0-alpha.21
+
+### 🐞 问题修复
+
+* [^] 修复了 `NumberInput` 中 `value` 和 `localValue` 的同步问题。
+
 ## 1.0.0-alpha.20
 
 ### 💡 主要变更

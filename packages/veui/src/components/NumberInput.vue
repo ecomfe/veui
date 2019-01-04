@@ -159,27 +159,28 @@ export default {
   watch: {
     // value 和 localValue 仅在能正确 parse 及上下限限制内时保持同步，
     // value 只关心有效的数字值，localValue 是一个展示的中间状态
-    value (val, oldVal) {
-      // 这里主要处理 set 进来的情况
-      // 1. 输入框内有值，set null
-      // 2. set 的值和输入框内的值不一样
-      if (val == null && !this.isLocalEmpty) {
-        this.localValue = null
-        this.lastChangedValue = null
-        return
-      }
+    value: {
+      handler (val, oldVal) {
+        // 这里主要处理 set 进来的情况
+        // 1. 输入框内有值，set null
+        // 2. set 的值和输入框内的值不一样
+        if (val == null && !this.isLocalEmpty) {
+          this.localValue = null
+          this.lastChangedValue = null
+          return
+        }
 
-      let localValue = this.calcDisplayValue(val)
-      if (val != null && localValue !== this.calcDisplayValue(parseFloat(this.localValue))) {
-        this.localValue = localValue
-
+        let localValue = this.calcDisplayValue(val)
+        if (val != null && localValue !== this.localValue) {
+          this.localValue = localValue
+          this.lastChangedValue = +localValue
+        }
         if (+localValue !== val) {
           // set 进来也要 format 到精度范围内，如果不在精度内，要 $emit('input') 同步回去
           this.$emit('input', +localValue)
         }
-
-        this.lastChangedValue = +localValue
-      }
+      },
+      immediate: true
     }
   },
   created () {
