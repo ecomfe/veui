@@ -313,15 +313,11 @@ export default {
 
     // 让子组件渲染完毕
     this.$nextTick(() => {
-      let menu = this.$refs.menu
-      this.storeBoundingSize()
+      let {menu, extra} = this.$refs
       this.listResizeHandler()
       this.inited = true
       if (this.menuOverflow) {
-        menu.style.marginRight = this.$refs.extra.offsetWidth
-        this.$nextTick(() => {
-          this.storeBoundingSize()
-        })
+        menu.style.marginRight = extra.getBoundingClientRect().width
       }
     })
   },
@@ -357,6 +353,7 @@ export default {
       }
 
       this.$nextTick(() => {
+        this.storeBoundingSize()
         if (!this.transitionSupported) {
           return
         }
@@ -447,7 +444,7 @@ export default {
       let { menu, listContainer, extra } = this.$refs
       let tabConClientWidth = listContainer.$el.clientWidth
       let menuClientWidth = menu.clientWidth
-      let extraWidth = extra.offsetWidth
+      let extraWidth = extra.getBoundingClientRect().width
       if (this.tabConClientWidth !== tabConClientWidth ||
         this.menuClientWidth !== menuClientWidth ||
         this.extraWidth !== extraWidth
@@ -490,7 +487,7 @@ export default {
 
       let menuWidth = menu.offsetWidth
       let tabConWidth = listContainer.$el.offsetWidth
-      let stickyWidth = extra.offsetWidth
+      let stickyWidth = extra.getBoundingClientRect().width
 
       let factor = this.menuOverflow
         ? -(scroller.offsetWidth + parseFloat(getComputedStyle(scroller).marginLeft))
@@ -854,8 +851,8 @@ export default {
           this.currentTranslate = this.fixedTranslate
           setTransform(this.$refs.listContainer.$el, `translate(${this.fixedTranslate}px)`)
         }
-
-        if (this.$refs.extra.offsetWidth !== this.extraWidth && this.menuOverflow) {
+        let extraWidth = this.$refs.extra.getBoundingClientRect().width
+        if (extraWidth !== this.extraWidth && this.menuOverflow) {
           // extra 里头可能有 tip 会影响宽度，需要检查
           this.listResizeHandler()
         } else {
