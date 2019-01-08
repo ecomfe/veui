@@ -11,7 +11,7 @@ Enterprise UI components for Vue.js. Based on ONE DESIGN from Baidu, Inc.
 ## Features
 
 * 🤘 Powerful and flexible components & directives
-* 💅 Swithable/customizable themes
+* 💅 Switchable/customizable themes
 * 🌲 Fully tree-shakable components
 * 🌐 I18N support w/ compile-time optimization
 * ⌨️ A11Y support w/ ARIA annotation & complete keyboard navigation
