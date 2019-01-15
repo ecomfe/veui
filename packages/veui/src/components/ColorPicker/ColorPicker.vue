@@ -1,6 +1,5 @@
 <template>
 <div class="veui-color-picker" :ui="ui">
-  123
   <div class="veui-color-picker-main">
     <div v-if="uiProps.size === 'large'">
       <veui-color-panel-large
@@ -36,11 +35,11 @@
 <script>
 import tinycolor from 'tinycolor2'
 import ColorSwatch from './ColorSwatch'
-import ValueGroup from './ColorValueGroup'
-import ColorPanelLarge from './ColorPickerPanelLarge'
-import ColorPanelStandard from './ColorPickerPanelStandard'
+import ValueGroup from './_ColorValueGroup'
+import ColorPanelLarge from './_ColorPickerPanelLarge'
+import ColorPanelStandard from './_ColorPickerPanelStandard'
 import ui from '../../mixins/ui'
-import ColorHomer from './mixins/ColorHomer'
+import ColorHomer from './mixins/_ColorHomer'
 
 export default {
   name: 'ColorPicker',

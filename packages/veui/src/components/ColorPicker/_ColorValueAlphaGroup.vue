@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import ColorValueGroup from './mixins/ColorValueGroup'
+import ColorValueGroup from './mixins/_ColorValueGroup'
 
 const variants = ['hex', 'rgb', 'hsl']
 

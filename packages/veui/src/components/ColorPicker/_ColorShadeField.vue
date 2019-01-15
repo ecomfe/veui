@@ -30,7 +30,7 @@
 import tinycolor from 'tinycolor2'
 import {drag} from '../../directives'
 import {clamp} from 'lodash'
-import ColorUpdater from './mixins/ColorUpdater'
+import ColorUpdater from './mixins/_ColorUpdater'
 
 export default {
   name: 'ColorShadeField',

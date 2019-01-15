@@ -34,8 +34,8 @@
 </template>
 
 <script>
-import ValueGroup from './ColorValueGroup'
-import ColorPanel from './mixins/ColorPanel'
+import ValueGroup from './_ColorValueGroup'
+import ColorPanel from './mixins/_ColorPanel'
 
 export default {
   name: 'ColorPanelLarge',

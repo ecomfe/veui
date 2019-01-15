@@ -14,7 +14,7 @@
 
 <script>
 import {clamp} from 'lodash'
-import ColorValueInput from './mixins/ColorValueInput'
+import ColorValueInput from './mixins/_ColorValueInput'
 
 export default {
   name: 'ColorValueAlpha',

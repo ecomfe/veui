@@ -44,6 +44,22 @@
     "path": "CheckboxGroup.vue"
   },
   {
+    "name": "ColorPalette",
+    "path": "ColorPicker/ColorPalette.vue"
+  },
+  {
+    "name": "ColorPicker",
+    "path": "ColorPicker/ColorPicker.vue"
+  },
+  {
+    "name": "ColorSwatch",
+    "path": "ColorPicker/ColorSwatch.vue"
+  },
+  {
+    "name": "ColorPicker",
+    "path": "ColorPicker.js"
+  },
+  {
     "name": "Column",
     "path": "Column.js"
   },
@@ -310,18 +326,5 @@
   {
     "name": "Uploader",
     "path": "Uploader.vue"
-  },
-  {
-    "name": "ColorPicker",
-    "path": "ColorPicker"
-  },
-  {
-    "name": "ColorPalette",
-    "path": "ColorPicker/ColorPalette.vue"
-  },
-  {
-    "name": "ColorSwatch",
-    "path": "ColorPicker/ColorSwatch.vue"
   }
 ]
-

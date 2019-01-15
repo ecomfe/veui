@@ -1,8 +1,8 @@
 
 import tinycolor from 'tinycolor2'
-import HueSlider from '../ColorHueSlider'
-import AlphaSlider from '../ColorAlphaSlider'
-import ShadeField from '../ColorShadeField'
+import HueSlider from '../_ColorHueSlider'
+import AlphaSlider from '../_ColorAlphaSlider'
+import ShadeField from '../_ColorShadeField'
 
 export default {
   components: {

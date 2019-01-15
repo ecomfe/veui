@@ -18,8 +18,8 @@
 
 <script>
 import ColorSwatch from './ColorSwatch'
-import ValueAlphaGroup from './ColorValueAlphaGroup'
-import ColorPanel from './mixins/ColorPanel'
+import ValueAlphaGroup from './_ColorValueAlphaGroup'
+import ColorPanel from './mixins/_ColorPanel'
 
 export default {
   name: 'ColorPanelStandard',

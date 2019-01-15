@@ -32,7 +32,7 @@
     <h2>取色器</h2>
     <p>
       <label>
-        <input type="checkbox" v-model="showPalette" /> 带调色板？
+        <input type="checkbox" v-model="showPalette" /> 附加色板？
       </label>
     </p>
 

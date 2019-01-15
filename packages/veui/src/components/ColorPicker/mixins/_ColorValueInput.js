@@ -1,5 +1,5 @@
 
-import ColorUpdater from './ColorUpdater'
+import ColorUpdater from './_ColorUpdater'
 import Input from '../../Input'
 import {nudge as numeric} from '../../../directives'
 

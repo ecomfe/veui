@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import ColorSlider from './mixins/ColorSlider'
+import ColorSlider from './mixins/_ColorSlider'
 
 export default {
   name: 'ColorHueSlider',
