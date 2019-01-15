@@ -4,8 +4,7 @@ i18n.register(
   'en-US',
   {
     remove: 'Remove',
-    add: 'Add',
-    addTab: 'Add a tab'
+    add: 'Add'
   },
   {
     ns: 'tabs'

@@ -1,12 +1,11 @@
 import i18n from '../../managers/i18n'
 
 i18n.register(
-  'zh-Hans',
+  'en-US',
   {
-    remove: '删除',
-    add: '添加'
+    ok: 'OK'
   },
   {
-    ns: 'tabs'
+    ns: 'alertbox'
   }
 )
