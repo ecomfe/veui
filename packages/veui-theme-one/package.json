@@ -28,6 +28,7 @@
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-preset-env": "^1.2.1",
     "babel-preset-stage-2": "^6.22.0",
+    "debug": "^4.1.1",
     "esm": "^3.0.84",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.2",
