@@ -54,3 +54,159 @@
   }
 
 }
+
+
+.veui-color-value {
+  .veui-input {
+    width: 100%;
+  }
+}
+
+.veui-color-value-hex {
+  .veui-input-input {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+}
+
+.veui-color-value-hsl,
+.veui-color-value-rgb {
+  .clearfix();
+
+  .veui-input-input {
+    padding: 0 5px;
+    text-align: center;
+  }
+
+  .veui-color-value {
+    float: left;
+    width: 50px;
+    margin-left: 5px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.veui-color-value-alpha {
+  .veui-color-value {
+    width: 46px;
+
+    .veui-input-input {
+      text-align: right;
+    }
+  }
+}
+
+.veui-color-value-group {
+  .clearfix();
+
+  &-name {
+    font-size: @veui-font-size-normal;
+    line-height: 2;
+    margin-right: 5px;
+  }
+
+  &-item {
+    div {
+      float: left;
+    }
+    &-rgb {
+      float: right;
+    }
+  }
+}
+
+.veui-color-value-alpha-group {
+  &-values {
+    .clearfix();
+  }
+  &-color {
+    float: left;
+  }
+  &-alpha {
+    float: right;
+  }
+
+  .veui-color-value-hex {
+    .veui-color-value {
+      width: 140px;
+    }
+  }
+
+  .veui-color-value-hsl,
+  .veui-color-value-rgb {
+    .veui-color-value {
+      width: 40px;
+      margin-left: 10px;
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+
+  &-text {
+    .clearfix();
+    color: @veui-gray-color-2;
+    font-size: @veui-font-size-small;
+    margin-top: 5px;
+    text-align: center;
+    &-hsl,
+    &-rgb {
+      div {
+        float: left;
+        width: 40px;
+        margin-left: 10px;
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+    &-hex {
+      float: left;
+      width: 140px;
+    }
+    &-alpha {
+      float: right;
+      width: 46px;
+    }
+  }
+
+  &-separator {
+    float: left;
+    width: 14px;
+    padding: 1px;
+    height: @veui-height-small;
+
+    &-dot {
+      margin: 4px;
+      width: 4px;
+      height: 4px;
+      border-radius: 100%;
+      background-color: @veui-gray-color-3;
+    }
+  }
+
+  &[ui~=hex] {
+    .veui-color-value-alpha-group-separator-dot {
+      &:nth-child(1) {
+        background-color: @veui-gray-color-2
+      }
+    }
+  }
+  &[ui~=rgb] {
+    .veui-color-value-alpha-group-separator-dot {
+      &:nth-child(2) {
+        background-color: @veui-gray-color-2
+      }
+    }
+  }
+  &[ui~=hsl] {
+    .veui-color-value-alpha-group-separator-dot {
+      &:nth-child(3) {
+        background-color: @veui-gray-color-2
+      }
+    }
+  }
+}

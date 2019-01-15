@@ -1,5 +1,5 @@
-import ColorUpdater from './ColorUpdater'
-import Slider from '../ColorPickerPrivateSlider'
+import ColorUpdater from './_ColorUpdater'
+import Slider from '../_ColorPickerPrivateSlider'
 
 const horizonalSliderSize = {
   stripWidth: 150,

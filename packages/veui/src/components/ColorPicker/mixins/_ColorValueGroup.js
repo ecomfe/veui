@@ -1,7 +1,7 @@
-import ValueHsl from '../ColorValueHsl'
-import ValueRgb from '../ColorValueRgb'
-import ValueHex from '../ColorValueHex'
-import ValueAlpha from '../ColorValueAlpha'
+import ValueHsl from '../_ColorValueHsl'
+import ValueRgb from '../_ColorValueRgb'
+import ValueHex from '../_ColorValueHex'
+import ValueAlpha from '../_ColorValueAlpha'
 
 export default {
   components: {

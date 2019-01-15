@@ -26,12 +26,12 @@
 
 <script>
 import tinycolor from 'tinycolor2'
-import ValueHsl from './ColorValueHsl'
-import ValueRgb from './ColorValueRgb'
-import ValueHex from './ColorValueHex'
-import ValueAlpha from './ColorValueAlpha'
+import ValueHsl from './_ColorValueHsl'
+import ValueRgb from './_ColorValueRgb'
+import ValueHex from './_ColorValueHex'
+import ValueAlpha from './_ColorValueAlpha'
 import ui from '../../mixins/ui'
-import ColorHomer from './mixins/ColorHomer'
+import ColorHomer from './mixins/_ColorHomer'
 
 export default {
   name: 'ColorSwatch',

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import ColorValueGroup from './mixins/ColorValueGroup'
+import ColorValueGroup from './mixins/_ColorValueGroup'
 
 export default {
   name: 'ColorValueGroup',
