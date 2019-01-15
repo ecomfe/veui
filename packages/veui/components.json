@@ -310,5 +310,18 @@
   {
     "name": "Uploader",
     "path": "Uploader.vue"
+  },
+  {
+    "name": "ColorPicker",
+    "path": "ColorPicker"
+  },
+  {
+    "name": "ColorPalette",
+    "path": "ColorPicker/ColorPalette.vue"
+  },
+  {
+    "name": "ColorSwatch",
+    "path": "ColorPicker/ColorSwatch.vue"
   }
 ]
+

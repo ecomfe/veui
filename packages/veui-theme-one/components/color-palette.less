@@ -1,0 +1,67 @@
+@import "../lib.less";
+
+.veui-color-palette {
+  padding: 10px 15px;
+  border-top: 1px solid @veui-gray-color-8;
+
+  &-colors {
+    .clearfix();
+  }
+
+  &-color {
+    float: left;
+    margin: 5px;
+    width: @veui-height-tiny;
+    height: @veui-height-tiny;
+    border: 1px solid fade(@veui-gray-color-3, 20%);
+    border-radius: 4px;
+
+    div {
+      width: 100%;
+      height: 100%;
+    }
+
+    & > div {
+      .veui-transparency-grid-background();
+    }
+
+    // add button
+    line-height: @veui-height-tiny;
+    text-align: center;
+    background: @veui-gray-color-6;
+
+    path {
+      fill: @veui-gray-color-5;
+    }
+
+    &-outside {
+      opacity: .7;
+      position: relative;
+      z-index: 1;
+
+      &:before {
+        content: "移除";
+        position: absolute;
+        font-size: 12px;
+        width: 40px;
+        top: -20px;
+        left: -10px;
+      }
+    }
+
+    &-putback {
+      transition: transform 300ms;
+    }
+  }
+
+  &[ui=small] {
+    padding: 5px;
+    .veui-color-palette-color {
+      margin: 4px;
+      width: 18px;
+      height: 18px;
+      line-height: 18px;
+      border-radius: 2px;
+    }
+  }
+}

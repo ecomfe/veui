@@ -8,6 +8,7 @@ import Breadcrumb from './Breadcrumb'
 import Input from './Input'
 import Form from './Form'
 import Calendar from './Calendar'
+import ColorPicker from './ColorPicker'
 import DatePicker from './DatePicker'
 import Select from './Select'
 import Dropdown from './Dropdown'
@@ -82,6 +83,11 @@ export default [
     path: '/checkbox-group',
     name: 'CheckboxGroup',
     component: CheckboxGroup
+  },
+  {
+    path: '/color-picker',
+    name: 'ColorPicker',
+    component: ColorPicker
   },
   {
     path: '/date-picker',
@@ -247,4 +253,6 @@ export default [
     name: 'Uploader',
     component: Uploader
   }
-]
+].sort(function (a, b) {
+  return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+})

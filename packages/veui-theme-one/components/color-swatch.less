@@ -1,0 +1,56 @@
+@import "../lib.less";
+
+.veui-color-swatch {
+  @height: 40px;
+
+  .clearfix();
+
+  height: @height;
+  line-height: @height;
+
+  div {
+    height: 100%;
+  }
+
+  &-box {
+    width: @height;
+
+    float: left;
+    border: 1px solid fade(@veui-gray-color-3, 20%);
+    border-radius: 2px;
+
+    &-bg {
+      .veui-transparency-grid-background();
+    }
+
+    div {
+      width: 100%;
+    }
+  }
+
+  &-color {
+    float: left;
+    margin-left: 10px;
+  }
+
+  &-alpha {
+    float: right;
+    div {
+      float: left;
+    }
+    .veui-color-value-alpha {
+      margin: 0 10px;
+    }
+  }
+
+  &[ui~=small] {
+    @height: 30px;
+    height: @height;
+    line-height: @height;
+    .veui-color-swatch-box {
+      width: @height;
+      height: @height;
+    }
+  }
+
+}

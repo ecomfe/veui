@@ -5,6 +5,13 @@ import slash from 'slash'
 import loaderUtils from 'loader-utils'
 import { kebabCase, camelCase, pascalCase, getJSON, normalize } from './utils'
 import COMPONENTS from 'veui/components.json'
+import getDebug from "debug"
+
+const debug = getDebug('veui-loader:')
+const debugFilterKeyword = (process.env.DEBUG_FILTER_KEYWORD || '').toLowerCase()
+const debugFilter = function (modulePath) {
+  return debugFilterKeyword ? modulePath.toLowerCase().indexOf(debugFilterKeyword) >= 0 : true
+}
 
 const COMPONENTS_DIRNAME = 'components'
 const EXT_TYPES = {
@@ -179,6 +186,7 @@ function getParts (component, options) {
         template: fileName
       })
       let peerPath = slash(path.join(pack, packPath, peerComponent))
+      if (debugFilter(peerPath)) debug(`Peer path: ${peerPath}`)
       pushPart(acc, { path: peerPath })
       return acc
     },
@@ -278,7 +286,11 @@ async function assurePath (modulePath, resolve) {
     if (typeof resolve === 'function') {
       try {
         resolveCache[modulePath] = !!(await resolve(modulePath))
+        if (!resolveCache[modulePath]) {
+          if (debugFilter(modulePath)) debug(`Not found: ${modulePath}`)
+        }
       } catch (e) {
+        if (debugFilter(modulePath)) debug(`Can not resolve module: ${modulePath}`)
         resolveCache[modulePath] = false
       }
     }
