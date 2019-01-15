@@ -164,6 +164,9 @@ describe('utils/date', () => {
   const DATES = [0, 1, 2, 3, 4, 5, 6, 7, 8].map(getDate)
 
   it('should calculate range difference correctly', () => {
+    expect(mergeRange([], [[DATES[1], DATES[1]]])).toEqual([
+      [DATES[1], DATES[1]]
+    ])
     expect(mergeRange([[DATES[0], DATES[5]]], [[DATES[1], DATES[1]]])).toEqual([
       [DATES[0], DATES[0]],
       [DATES[2], DATES[5]]
@@ -204,6 +207,9 @@ describe('utils/date', () => {
   })
 
   it('should calculate range union correctly', () => {
+    expect(mergeRange([], [[DATES[2], DATES[5]]], 'union')).toEqual([
+      [DATES[2], DATES[5]]
+    ])
     expect(
       mergeRange([[DATES[0], DATES[5]]], [[DATES[1], DATES[1]]], 'union')
     ).toEqual([[DATES[0], DATES[5]]])
@@ -237,6 +243,7 @@ describe('utils/date', () => {
   })
 
   it('should calculate range relative complement correctly', () => {
+    expect(mergeRange([], [[DATES[1], DATES[1]]], 'substract')).toEqual([])
     expect(
       mergeRange([[DATES[0], DATES[5]]], [[DATES[1], DATES[1]]], 'substract')
     ).toEqual([[DATES[0], DATES[0]], [DATES[2], DATES[5]]])

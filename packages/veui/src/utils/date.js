@@ -63,7 +63,7 @@ export function isInRange (day, range) {
 
 function prepareRanges (range) {
   if (!Array.isArray(range[0])) {
-    range = [range]
+    range = range[0] ? [range] : []
   }
 
   return range.map(r => r.map(toDate).sort((d1, d2) => d1 - d2))

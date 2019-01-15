@@ -28,10 +28,10 @@ const MERGE_FNS = {
 
 export function merge (r1, r2, { compare = DEFAULT_COMPARE, inc = DEFAULT_INC, mode = 'xor' } = {}) {
   if (!Array.isArray(r1[0])) {
-    r1 = [r1]
+    r1 = r1[0] ? [r1] : []
   }
   if (!Array.isArray(r2[0])) {
-    r2 = [r2]
+    r2 = r2[0] ? [r2] : []
   }
   return MERGE_FNS[mode](cloneDeep(r1), cloneDeep(r2), { compare, inc })
 }
@@ -105,6 +105,9 @@ function substractRanges (
   r2,
   { compare, inc }
 ) {
+  if (r1.length === 0) {
+    return []
+  }
   r1 = sortRanges(r1, compare)
   r2 = sortRanges(r2, compare)
 

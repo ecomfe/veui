@@ -556,7 +556,7 @@ export default {
           if (!marked) {
             this.$set(this.picking, 1, this.picking[0])
           }
-          this.pickingRanges = mergeRange(this.realSelected, this.picking, this.mergeMode)
+          this.pickingRanges = mergeRange(this.realSelected || [], this.picking || [], this.mergeMode)
         }
         this.$emit('selectprogress', this.pickingRanges || this.picking)
       }
