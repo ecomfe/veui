@@ -1,15 +1,7 @@
 <template>
 <div class="veui-color-picker" :ui="ui">
   <div class="veui-color-picker-main">
-    <div v-if="uiProps.size === 'large'">
-      <veui-color-panel-large
-        :hue="hsva.h"
-        :saturation="hsva.s"
-        :brightness="hsva.v"
-        :alpha="hsva.a"
-      ></veui-color-panel-large>
-    </div>
-    <div v-else-if="uiProps.size === 'small'">
+    <div v-if="uiProps.size === 'small'">
       <veui-color-value-group
         :hue="hsva.h"
         :saturation="hsva.s"
@@ -46,7 +38,6 @@ export default {
   components: {
     'veui-color-swatch': ColorSwatch,
     'veui-color-panel-standard': ColorPanelStandard,
-    'veui-color-panel-large': ColorPanelLarge,
     'veui-color-value-group': ValueGroup
   },
   mixins: [
