@@ -21,7 +21,7 @@ export default {
       }))
     },
     updateHsvaValue (hsva) {
-      this.updateColor(Object.assign({}, this.hsva, hsva))
+      this.updateColor({...this.hsva, ...hsva})
     }
   }
 }

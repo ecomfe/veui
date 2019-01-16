@@ -16,11 +16,11 @@
       </div>
       <div class="color-swatche">
         <div class="tip">HEX</div>
-        <veui-color-swatch v-model="color" ui="hex small alpha"></veui-color-swatch>
+        <veui-color-swatch v-model="color" ui="switchable small alpha tip"></veui-color-swatch>
       </div>
       <div class="color-swatche">
         <div class="tip">HSL</div>
-        <veui-color-swatch :color.sync="color" ui="alpha normal hsl"></veui-color-swatch>
+        <veui-color-swatch :color.sync="color" ui="alpha normal hsl switchable tip"></veui-color-swatch>
       </div>
       <div class="color-swatche">
         <div class="tip">RGB <small>不能修改</small></div>
@@ -42,17 +42,6 @@
         <!-- v-model="color" OR :color.sync OR @update:color="val => color = val" -->
         <veui-color-picker v-model="color">
           <veui-color-palette :colors="colors" ui="small" v-if="showPalette"
-            @select="handlePaletteColorSelect"
-            @remove="handlePaletteColorRemove"
-            @add="handlePaletteColorAdd"
-          ></veui-color-palette>
-        </veui-color-picker>
-      </section>
-
-      <section class="color-picker">
-        <div class="tip">复杂版</div>
-        <veui-color-picker v-model="color" ui="large">
-          <veui-color-palette :colors="colors" v-if="showPalette"
             @select="handlePaletteColorSelect"
             @remove="handlePaletteColorRemove"
             @add="handlePaletteColorAdd"
@@ -155,14 +144,11 @@ section {
   font-family: monospace;
   font-size: 1.4em;
 }
-.color-swatche {
-  width: 340px;
-}
 .tip {
   margin: 12px 0 2px 0;
-  color: #fff;
-  font-weight: 100;
-  text-shadow: 1px 1px 1px #333, 0 0 1px #999;
+  color: #333;
+  // font-weight: 100;
+  // text-shadow: 1px 1px 1px #333, 0 0 1px #999;
   small {
     &:before {
       content: '('
