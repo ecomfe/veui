@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div class="veui-color-value-alpha-group-alpha" v-if="showAlpha">
+    <div class="veui-color-value-alpha-group-alpha" v-if="alphaChannel">
       <veui-color-value-alpha :percentage="true" v-bind="{alpha, readonly}">
       </veui-color-value-alpha>
     </div>
@@ -32,7 +32,7 @@
     <div class="veui-color-value-alpha-group-tip-hex" v-else-if="realVariant === 'hex'">
       <div>HEX</div>
     </div>
-    <div class="veui-color-value-alpha-group-tip-alpha" v-if="showAlpha">
+    <div class="veui-color-value-alpha-group-tip-alpha" v-if="alphaChannel">
       <div>A</div>
     </div>
   </div>
@@ -40,33 +40,17 @@
 </template>
 
 <script>
-import ValueHsl from './_ColorValueHsl'
-import ValueRgb from './_ColorValueRgb'
-import ValueHex from './_ColorValueHex'
-import ValueAlpha from './_ColorValueAlpha'
+import ColorValueGroup from './mixins/_ColorValueGroup';
 
 const variants = ['hex', 'rgb', 'hsl']
 
 export default {
   name: 'ColorValueAlphaGroup',
-  components: {
-    'veui-color-value-hsl': ValueHsl,
-    'veui-color-value-rgb': ValueRgb,
-    'veui-color-value-hex': ValueHex,
-    'veui-color-value-alpha': ValueAlpha
-  },
+  mixins: [ColorValueGroup],
   props: {
-    hue: Number,
-    saturation: Number,
-    brightness: Number,
-    alpha: Number,
-    readonly: {
-      type: Boolean,
-      default: false
-    },
     switchable: Boolean,
     showTip: Boolean,
-    showAlpha: Boolean,
+    alphaChannel: Boolean,
     variant: String
   },
   data () {

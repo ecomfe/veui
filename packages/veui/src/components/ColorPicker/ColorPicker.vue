@@ -13,12 +13,12 @@
       />
       <div class="veui-color-picker-main-panel-sliders">
         <veui-color-hue-slider :value="hsva.h" />
-        <veui-color-alpha-slider v-if="uiProps.alpha"
+        <veui-color-alpha-slider v-if="alpha"
           :hue="hsva.h" :saturation="hsva.s" :brightness="hsva.v"
           :value="hsva.a" />
       </div>
     </div>
-    <veui-color-swatch v-if="uiProps.swatch" :ui="ui" :color="color" />
+    <veui-color-swatch v-if="uiProps.swatch" v-bind="{color, ui, switchable, alpha, variant}" />
   </div>
   <div class="veui-color-picker-extra">
     <slot></slot>

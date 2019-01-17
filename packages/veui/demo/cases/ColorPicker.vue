@@ -8,15 +8,32 @@
       'text-shadow': `1px 1px 1px ${kolor}`
     }">{{ color }}</div>
 
+    <div class="color-control">
+      <label>
+        Variant
+        <select v-model="variant">
+          <option v-for="variant in variants" :key="variant">{{variant}}</option>
+        </select>
+      </label>
+
+      <label>
+        <input v-model="alpha" type="checkbox">
+        alpha channel
+      </label>
+
+      <label>
+        <input v-model="switchable" type="checkbox">
+        switchable
+      </label>
+    </div>
+
     <h2>色样</h2>
     <section class="color-swatches">
-      <veui-color-swatch v-model="color" ui="small hex"></veui-color-swatch>
-      <veui-color-swatch v-model="color" ui="switchable small alpha tip"></veui-color-swatch>
-
-      <veui-color-swatch v-model="color" ui="hex tip switchable"></veui-color-swatch>
-      <veui-color-swatch :color.sync="color" ui="alpha normal rgb tip"></veui-color-swatch>
-      <veui-color-swatch :color.sync="color" ui="alpha normal hsl switchable tip"></veui-color-swatch>
-      <veui-color-swatch :color="color" ui="normal rgb alpha" :readonly="true"></veui-color-swatch>
+      <veui-color-swatch v-model="color" ui="small" v-bind="{variant, alpha, switchable}"></veui-color-swatch>
+      <veui-color-swatch v-model="color" ui="small tip" v-bind="{variant, alpha, switchable}"></veui-color-swatch>
+      <veui-color-swatch v-model="color" v-bind="{variant, alpha, switchable}"></veui-color-swatch>
+      <veui-color-swatch v-model="color" ui="tip" v-bind="{variant, alpha, switchable}"></veui-color-swatch>
+      <veui-color-swatch :color="color" ui="normal tip" :readonly="true" v-bind="{variant, alpha, switchable}"></veui-color-swatch>
     </section>
 
 
@@ -29,7 +46,10 @@
 
     <section class="color-pickers">
       <section class="color-picker">
-        <veui-color-picker v-model="color" ui="small">
+        <p>
+          <code>ui="small"</code>
+        </p>
+        <veui-color-picker v-model="color" ui="small" v-bind="{variant, alpha, switchable}">
           <!-- 色板作为 slot 传入 -->
           <veui-color-palette ui="small" :colors="colors" v-if="showPalette"
             @select="handlePaletteColorSelect"
@@ -40,7 +60,10 @@
       </section>
 
       <section class="color-picker">
-        <veui-color-picker v-model="color" ui="hsl alpha switchable tip swatch">
+        <p>
+          <code>ui="swatch tip"</code>
+        </p>
+        <veui-color-picker v-model="color" ui="swatch tip"  v-bind="{variant, alpha, switchable}">
           <!-- 色板作为 slot 传入 -->
           <veui-color-palette :colors="colors" v-if="showPalette"
             @select="handlePaletteColorSelect"
@@ -63,6 +86,9 @@
 import bus from '../bus'
 import tinycolor from 'tinycolor2'
 import { ColorSwatch, ColorPicker, ColorPalette, Button } from 'veui'
+
+const variants = ['hex', 'rgb', 'hsl']
+
 export default {
   name: 'color-picker-demo',
   components: {
@@ -73,7 +99,13 @@ export default {
   },
   data () {
     return {
+      variant: variants[0],
+      variants,
+      alpha: true,
+      switchable: true,
+
       showPalette: true,
+
       color: 'hsla(123, 54%, 43%, 0.9)',
       colors: [
         '#D0021B',
@@ -148,8 +180,19 @@ section {
   }
 }
 
+.color-control {
+  position: fixed;
+  right: 30px;
+  top: 70px;
+  margin: 1.2em 0;
+
+  label {
+    margin-right: 2em;
+  }
+}
+
 .veui-color-swatch {
-  margin: 1em 0;
+  margin: 1.2em 0;
 }
 
 .color-pickers {
