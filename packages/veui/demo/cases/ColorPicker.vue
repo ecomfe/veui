@@ -10,22 +10,13 @@
 
     <h2>色样</h2>
     <section class="color-swatches">
-      <div class="color-swatche">
-        <div class="tip">HEX <small>不带透明度</small></div>
-        <veui-color-swatch v-model="color" ui="small hex"></veui-color-swatch>
-      </div>
-      <div class="color-swatche">
-        <div class="tip">HEX</div>
-        <veui-color-swatch v-model="color" ui="switchable small alpha tip"></veui-color-swatch>
-      </div>
-      <div class="color-swatche">
-        <div class="tip">HSL</div>
-        <veui-color-swatch :color.sync="color" ui="alpha normal hsl switchable tip"></veui-color-swatch>
-      </div>
-      <div class="color-swatche">
-        <div class="tip">RGB <small>不能修改</small></div>
-        <veui-color-swatch :color="color" ui="normal rgb alpha" :readonly="true"></veui-color-swatch>
-      </div>
+      <veui-color-swatch v-model="color" ui="small hex"></veui-color-swatch>
+      <veui-color-swatch v-model="color" ui="switchable small alpha tip"></veui-color-swatch>
+
+      <veui-color-swatch v-model="color" ui="hex tip switchable"></veui-color-swatch>
+      <veui-color-swatch :color.sync="color" ui="alpha normal rgb tip"></veui-color-swatch>
+      <veui-color-swatch :color.sync="color" ui="alpha normal hsl switchable tip"></veui-color-swatch>
+      <veui-color-swatch :color="color" ui="normal rgb alpha" :readonly="true"></veui-color-swatch>
     </section>
 
 
@@ -38,20 +29,18 @@
 
     <section class="color-pickers">
       <section class="color-picker">
-        <div class="tip">标准版</div>
-        <!-- v-model="color" OR :color.sync OR @update:color="val => color = val" -->
-        <veui-color-picker v-model="color">
-          <veui-color-palette :colors="colors" ui="small" v-if="showPalette"
+        <veui-color-picker v-model="color" ui="small">
+          <!-- 色板作为 slot 传入 -->
+          <veui-color-palette ui="small" :colors="colors" v-if="showPalette"
             @select="handlePaletteColorSelect"
             @remove="handlePaletteColorRemove"
             @add="handlePaletteColorAdd"
-          ></veui-color-palette>
+          />
         </veui-color-picker>
       </section>
 
       <section class="color-picker">
-        <div class="tip">简单版</div>
-        <veui-color-picker v-model="color" ui="small">
+        <veui-color-picker v-model="color" ui="hsl alpha switchable tip swatch">
           <!-- 色板作为 slot 传入 -->
           <veui-color-palette :colors="colors" v-if="showPalette"
             @select="handlePaletteColorSelect"
@@ -158,10 +147,14 @@ section {
     }
   }
 }
+
+.veui-color-swatch {
+  margin: 1em 0;
+}
+
 .color-pickers {
   display: flex;
   flex-wrap: wrap;
-  jusitify-content: space-between;
 }
 .color-picker {
   margin: 0 3em 3em 0;

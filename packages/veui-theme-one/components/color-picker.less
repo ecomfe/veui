@@ -20,79 +20,50 @@
   }
 }
 
-.veui-color-panel-large {
-  @width: 300px;
 
-  width: @width;
-  position: relative;
 
-  .veui-color-shade-field {
-    margin: 0 auto;
-  }
-  .veui-color-alpha-slider {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  .veui-color-hue-slider {
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
+.veui-color-slider {
+  margin: 5px 0;
+  padding: 3px 0;
 
-  &-color-diff {
-    @textWidth: 40px;
+  .veui-slider {
+    height: 18px;
 
-    margin: @veui-font-size-normal 0;
-    height: @veui-height-tiny;
-    font-size: @veui-font-size-normal;
-    line-height: @veui-height-tiny;
-
-    div {
-      height: 100%;
-      float: left;
+    .veui-slider-thumb {
+      top: -2px;
     }
-
-    &-text {
-      width: @textWidth;
-
-      &:last-child {
-        text-align: right;
-      }
+    .veui-slider-custom-thumb {
+      width: 8px;
+      height: 22px;
+      border: 1px solid rgba(51, 51, 51, 0.8);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+      border-radius: 2px;
     }
-
-    &-color {
-      width: @width - @textWidth * 2;
-      .veui-transparency-grid-background();
-
-      div {
-        width: 50%;
-      }
+    .veui-slider-custom-track {
+      width: 100%;
+      height: 18px;
     }
+  }
+
+}
+
+.veui-color-hue-slider {
+  .veui-slider-custom-track {
+    background: linear-gradient(to left, #F00, #FF0, #0F0, #0FF, #00F, #F0F, #F00);
   }
 }
 
-.veui-color-panel-standard {
-  &-swatch {
-    margin: 10px 0;
-    .clearfix();
-
-    .veui-color-swatch {
-      float: left;
-    }
-  }
-
-  &-sliders {
-    float: right;
-
-    .veui-color-alpha-slider {
-      margin-top: 3px;
-    }
+.veui-color-alpha-slider {
+  .veui-slider-track {
+    .veui-transparency-grid-background();
   }
 }
+
+
 
 .veui-color-picker {
-  width: 340px;
+  width: 336px;
   color: #333;
   border: 1px solid @veui-gray-color-3;
   box-shadow: 0 1px 5px 0 fade(#000, 20%);
@@ -100,10 +71,20 @@
 
   &-main {
     padding: 20px;
+
+    &-panel {
+      &-sliders {
+        margin-top: 15px;
+      }
+    }
+    .veui-color-swatch {
+      margin-top: 15px;
+    }
   }
 
-  &[ui=normal] {
-    width: 222px;
+  &[ui~="small"] {
+    width: 250px + 20px;
+
     .veui-color-picker-main {
       padding: 10px;
     }

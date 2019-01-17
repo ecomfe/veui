@@ -1,35 +1,14 @@
 import ColorUpdater from './_ColorUpdater'
-import Slider from '../_ColorPickerPrivateSlider'
-
-const horizonalSliderSize = {
-  stripWidth: 150,
-  stripHeight: 14,
-  blockWidth: 6,
-  blockHeight: 18
-}
-
-const verticalSliderSize = {
-  stripWidth: 220,
-  stripHeight: 24,
-  blockWidth: 6,
-  blockHeight: 22
-}
+import Slider from '../../Slider'
 
 export default {
   components: {
-    'VeuiColorPickerPrivateSlider': Slider
+    'veui-slider': Slider
   },
   mixins: [
     ColorUpdater
   ],
   props: {
-    value: Number,
-    direction: Number
-  },
-  computed: {
-    sliderSize () {
-      return this.direction === 0
-        ? horizonalSliderSize : verticalSliderSize
-    }
+    value: Number
   }
 }

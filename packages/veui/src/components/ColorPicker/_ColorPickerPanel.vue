@@ -22,7 +22,7 @@ import ValueAlphaGroup from './_ColorValueAlphaGroup'
 import ColorPanel from './mixins/_ColorPanel'
 
 export default {
-  name: 'ColorPanelStandard',
+  name: 'ColorPanel',
   mixins: [
     ColorPanel
   ],
