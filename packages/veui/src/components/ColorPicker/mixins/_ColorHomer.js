@@ -4,10 +4,10 @@ export default {
   uiTypes: ['color-homer'],
   props: {
     color: String,
-    ui: {
-      type: String,
-      default: 'normal hsl'
-    }
+    ui: String,
+    variant: String,
+    alpha: Boolean,
+    switchable: Boolean
   },
   model: {
     prop: 'color',

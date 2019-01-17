@@ -13,10 +13,10 @@
       saturation: hsva.s,
       brightness: hsva.v,
       alpha: hsva.a,
-      switchable: !!uiProps.switchable,
       showTip: !!uiProps.tip,
-      showAlpha: !!uiProps.alpha,
-      variant: uiProps.format
+      switchable,
+      alphaChannel: alpha,
+      variant
     }"
   />
 </div>
