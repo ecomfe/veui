@@ -58,13 +58,12 @@ export default {
   },
   data () {
     return {
-      props: omit(this.$props, 'loading'),
       focusVisible: false
     }
   },
   computed: {
     attrs () {
-      let { props } = this
+      let props = omit(this.$props, 'loading')
       props.disabled = this.disabled || this.loading
       return props
     },
