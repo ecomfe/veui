@@ -58,7 +58,7 @@ export default {
   },
   data () {
     return {
-      localValue: this.value
+      localValue: this.value || []
     }
   },
   watch: {
