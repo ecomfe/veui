@@ -1,15 +1,15 @@
 <template>
-<div class="veui-color-alpha-slider">
-  <VeuiColorPickerPrivateSlider :value="value" :direction="direction" v-bind="sliderSize"
-    @update:value="updateAlphaValue"
-    @dragstart="$emit('dragstart')"
-    @dragend="$emit('dragend')">
-    <div :style="{
-      width: '100%',
-      height: '100%',
-      background: 'linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,1))'
+<div class="veui-color-slider veui-color-alpha-slider">
+  <veui-slider :min="0" :max="1" :step="0.01"
+    :value="value" @input="updateAlphaValue" >
+    <div class="veui-slider-custom-track" slot="track" :style="{
+      background: `linear-gradient(to right,
+        hsla(${hue}, ${saturation * 100}%,${brightness * 100}%, 0),
+        hsla(${hue}, ${saturation * 100}%,${brightness * 100}%, 1))`
     }"></div>
-  </VeuiColorPickerPrivateSlider>
+    <div class="veui-slider-custom-thumb" slot="thumb"></div>
+    <template slot="tip">&#8203;</template>
+  </veui-slider>
 </div>
 </template>
 
@@ -20,6 +20,11 @@ export default {
   name: 'ColorAlphaSlider',
   mixins: [
     ColorSlider
-  ]
+  ],
+  props: {
+    hue: Number,
+    saturation: Number,
+    brightness: Number
+  }
 }
 </script>

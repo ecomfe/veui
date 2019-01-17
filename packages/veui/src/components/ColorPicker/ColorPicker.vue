@@ -1,22 +1,24 @@
 <template>
 <div class="veui-color-picker" :ui="ui">
   <div class="veui-color-picker-main">
-    <div v-if="uiProps.size === 'small'">
-      <veui-color-value-group
+    <div class="veui-color-picker-main-panel">
+      <veui-color-shade-field
+        :width="shadeFieldSize[0]"
+        :height="shadeFieldSize[1]"
+        :ui="ui"
         :hue="hsva.h"
         :saturation="hsva.s"
         :brightness="hsva.v"
         :alpha="hsva.a"
-      ></veui-color-value-group>
+      />
+      <div class="veui-color-picker-main-panel-sliders">
+        <veui-color-hue-slider :value="hsva.h" />
+        <veui-color-alpha-slider v-if="uiProps.alpha"
+          :hue="hsva.h" :saturation="hsva.s" :brightness="hsva.v"
+          :value="hsva.a" />
+      </div>
     </div>
-    <div v-else>
-      <veui-color-panel-standard
-        :hue="hsva.h"
-        :saturation="hsva.s"
-        :brightness="hsva.v"
-        :alpha="hsva.a"
-      ></veui-color-panel-standard>
-    </div>
+    <veui-color-swatch v-if="uiProps.swatch" :ui="ui" :color="color" />
   </div>
   <div class="veui-color-picker-extra">
     <slot></slot>
@@ -27,18 +29,20 @@
 <script>
 import tinycolor from 'tinycolor2'
 import ColorSwatch from './ColorSwatch'
-import ValueGroup from './_ColorValueGroup'
-import ColorPanelLarge from './_ColorPickerPanelLarge'
-import ColorPanelStandard from './_ColorPickerPanelStandard'
 import ui from '../../mixins/ui'
 import ColorHomer from './mixins/_ColorHomer'
+import HueSlider from './_ColorHueSlider'
+import AlphaSlider from './_ColorAlphaSlider'
+import ShadeField from './_ColorShadeField'
+import config from 'veui/managers/config'
 
 export default {
   name: 'ColorPicker',
   components: {
     'veui-color-swatch': ColorSwatch,
-    'veui-color-panel-standard': ColorPanelStandard,
-    'veui-color-value-group': ValueGroup
+    'veui-color-hue-slider': HueSlider,
+    'veui-color-alpha-slider': AlphaSlider,
+    'veui-color-shade-field': ShadeField
   },
   mixins: [
     ui,
@@ -46,10 +50,14 @@ export default {
   ],
   data () {
     return {
-      previousHsva: {}
+      previousHsva: {},
+      shadeFieldSizeMap: config.get('colorpicker.shadeFieldSize')
     }
   },
   computed: {
+    shadeFieldSize() {
+      return this.shadeFieldSizeMap[this.uiProps.size];
+    },
     hsva () {
       let prevHsva = this.previousHsva
       let hsva = tinycolor(this.color).toHsv()
@@ -71,6 +79,10 @@ export default {
       }
       if (hsva.h === undefined) {
         hsva.h = prevHsva.h
+      }
+
+      if (!this.uiProps.alpha) {
+        hsva.a = 1
       }
 
       return hsva
