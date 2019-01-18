@@ -2,8 +2,8 @@
 <div class="veui-color-value-hex">
   <div class="veui-color-value">
     <veui-input
-      type="text"
       ref="hexValue"
+      type="text"
       :value="hexValue"
       :readonly="readonly"
       @input="handleValueInput"

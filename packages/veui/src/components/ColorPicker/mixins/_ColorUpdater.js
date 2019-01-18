@@ -13,6 +13,7 @@ export default {
       this.colorHomer.updateHsvaValue(hsv)
     },
     updateAlphaValue (a) {
+      // getTypedAncestorTracker 取到 ColorXxxx 入口组件，直接 update color prop，避免一层一层地往外透传
       this.colorHomer.updateHsvaValue({a})
     }
   }

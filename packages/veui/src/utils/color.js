@@ -4,19 +4,19 @@ export function formatColor (color, {
   precision = 4,
   format = 'hsl'
 } = {}) {
-  color = tinycolor(color)
+  let tcolor = tinycolor(color)
   switch (format) {
     case 'rgb':
-      return color.toRgbString()
+      return tcolor.toRgbString()
 
     case 'hex':
-      return color.toHexString()
+      return color.a !== 1 ? tcolor.toHex8String() : tcolor.toHexString()
 
     case 'hsl':
     default:
       // 因为 tinycolor 的 toHslString() 得到的颜色没有小数
       // 精度丢失会导致数字修改时突变，所以自己实现一个format保留4位小数
-      return formatHsla(color.toHsl())
+      return formatHsla(tcolor.toHsl(), {precision})
   }
 }
 

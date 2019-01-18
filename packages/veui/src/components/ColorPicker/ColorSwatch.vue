@@ -1,7 +1,7 @@
 <template>
 <div
   class="veui-color-swatch"
-  :ui="ui"
+  :ui="realUi"
 >
   <div class="veui-color-swatch-box">
     <div class="veui-color-swatch-box-bg">
