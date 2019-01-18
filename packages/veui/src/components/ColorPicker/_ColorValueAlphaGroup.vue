@@ -1,38 +1,71 @@
 <template>
-<div class="veui-color-value-alpha-group" :class="{
-  [`veui-color-value-alpha-group-format-${realVariant}`]: true,
-  ['veui-color-value-alpha-group-show-tip']: showTip
-}">
+<div
+  class="veui-color-value-alpha-group"
+  :class="{
+    [`veui-color-value-alpha-group-format-${realVariant}`]: true,
+    ['veui-color-value-alpha-group-show-tip']: showTip
+  }"
+>
   <div class="veui-color-value-alpha-group-values">
     <div class="veui-color-value-alpha-group-color">
-      <component :is="'veui-color-value-' + realVariant"
-        v-bind="{hue, saturation, brightness, readonly}"></component>
+      <component
+        :is="'veui-color-value-' + realVariant"
+        v-bind="{hue, saturation, brightness, readonly}"
+      />
     </div>
-    <div class="veui-color-value-alpha-group-separator" v-if="switchable" @click="toggleColorFormatVariant">
+    <div
+      v-if="switchable"
+      class="veui-color-value-alpha-group-separator"
+      @click="toggleColorFormatVariant"
+    >
       <div class="veui-color-value-alpha-group-separator-wrap">
         <div class="veui-color-value-alpha-group-separator-dots">
-          <div class="veui-color-value-alpha-group-separator-dot"></div>
-          <div class="veui-color-value-alpha-group-separator-dot"></div>
-          <div class="veui-color-value-alpha-group-separator-dot"></div>
+          <div class="veui-color-value-alpha-group-separator-dot"/>
+          <div class="veui-color-value-alpha-group-separator-dot"/>
+          <div class="veui-color-value-alpha-group-separator-dot"/>
         </div>
       </div>
     </div>
-    <div class="veui-color-value-alpha-group-alpha" v-if="alphaChannel">
-      <veui-color-value-alpha :percentage="true" v-bind="{alpha, readonly}">
-      </veui-color-value-alpha>
+    <div
+      v-if="alphaChannel"
+      class="veui-color-value-alpha-group-alpha"
+    >
+      <veui-color-value-alpha
+        :percentage="true"
+        v-bind="{alpha, readonly}"
+      />
     </div>
   </div>
-  <div class="veui-color-value-alpha-group-tip" v-if="showTip">
-    <div class="veui-color-value-alpha-group-tip-rgb" v-if="realVariant === 'rgb'">
-      <div>R</div><div>G</div><div>B</div>
+  <div
+    v-if="showTip"
+    class="veui-color-value-alpha-group-tip"
+  >
+    <div
+      v-if="realVariant === 'rgb'"
+      class="veui-color-value-alpha-group-tip-rgb"
+    >
+      <div>R</div>
+      <div>G</div>
+      <div>B</div>
     </div>
-    <div class="veui-color-value-alpha-group-tip-hsl" v-else-if="realVariant === 'hsl'">
-      <div>H</div><div>S</div><div>L</div>
+    <div
+      v-else-if="realVariant === 'hsl'"
+      class="veui-color-value-alpha-group-tip-hsl"
+    >
+      <div>H</div>
+      <div>S</div>
+      <div>L</div>
     </div>
-    <div class="veui-color-value-alpha-group-tip-hex" v-else-if="realVariant === 'hex'">
+    <div
+      v-else-if="realVariant === 'hex'"
+      class="veui-color-value-alpha-group-tip-hex"
+    >
       <div>HEX</div>
     </div>
-    <div class="veui-color-value-alpha-group-tip-alpha" v-if="alphaChannel">
+    <div
+      v-if="alphaChannel"
+      class="veui-color-value-alpha-group-tip-alpha"
+    >
       <div>A</div>
     </div>
   </div>
@@ -40,12 +73,12 @@
 </template>
 
 <script>
-import ColorValueGroup from './mixins/_ColorValueGroup';
+import ColorValueGroup from './mixins/_ColorValueGroup'
 
 const variants = ['hex', 'rgb', 'hsl']
 
 export default {
-  name: 'ColorValueAlphaGroup',
+  name: 'color-value-alpha-group',
   mixins: [ColorValueGroup],
   props: {
     switchable: Boolean,
@@ -59,11 +92,11 @@ export default {
     }
   },
   watch: {
-    realVariant(val) {
+    realVariant (val) {
       this.$emit('update:variant', val)
     },
     variant: {
-      handler(val, oldVal) {
+      handler (val, oldVal) {
         if (this.realVariant !== val) {
           this.realVariant = val
         }

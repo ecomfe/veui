@@ -1,39 +1,52 @@
 <template>
 <div class="veui-color-value-hsl">
   <div class="veui-color-value">
-    <veui-input type="text" ref="hueValue" :value="hsl.h" :readonly="readonly" v-numeric
+    <veui-input
+      ref="hueValue"
+      v-nudge
+      type="text"
+      :value="hsl.h"
+      :readonly="readonly"
       @input="handleHueValueInput"
       @blur="handleValueBlur"
       @keyup.up.down.native="handleHueValueInput($event.target.value)"
-    ></veui-input>
+    />
   </div>
   <div class="veui-color-value">
-    <veui-input type="text" ref="saturationValue" :value="hsl.s" :readonly="readonly" v-numeric
+    <veui-input
+      ref="saturationValue"
+      v-nudge
+      type="text"
+      :value="hsl.s"
+      :readonly="readonly"
       @input="handleSaturationValueInput"
       @blur="handleValueBlur"
       @keyup.up.down.native="handleSaturationValueInput($event.target.value)"
-    ></veui-input>
+    />
   </div>
   <div class="veui-color-value">
-    <veui-input type="text" ref="lightnessValue" :value="hsl.l" :readonly="readonly" v-numeric
+    <veui-input
+      ref="lightnessValue"
+      v-nudge
+      type="text"
+      :value="hsl.l"
+      :readonly="readonly"
       @input="handleLightnessValueInput"
       @blur="handleValueBlur"
       @keyup.up.down.native="handleLightnessValueInput($event.target.value)"
-    ></veui-input>
+    />
   </div>
 </div>
 </template>
 
 <script>
 import tinycolor from 'tinycolor2'
-import {clamp} from 'lodash'
+import { clamp } from 'lodash'
 import ColorValueInput from './mixins/_ColorValueInput'
 
 export default {
-  name: 'ColorValueHsl',
-  mixins: [
-    ColorValueInput
-  ],
+  name: 'color-value-hsl',
+  mixins: [ColorValueInput],
   props: {
     hue: Number,
     saturation: Number,
@@ -80,11 +93,13 @@ export default {
       if (isNaN(val)) {
         return
       }
-      this.updateHsvValue(tinycolor({
-        h: this.hue,
-        s: this.saturation,
-        l: val
-      }).toHsv())
+      this.updateHsvValue(
+        tinycolor({
+          h: this.hue,
+          s: this.saturation,
+          l: val
+        }).toHsv()
+      )
     },
     handleValueBlur () {
       this.$refs.hueValue.$refs.input.value = this.hsl.h

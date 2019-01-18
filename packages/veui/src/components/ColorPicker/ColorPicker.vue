@@ -1,5 +1,8 @@
 <template>
-<div class="veui-color-picker" :ui="ui">
+<div
+  class="veui-color-picker"
+  :ui="ui"
+>
   <div class="veui-color-picker-main">
     <div class="veui-color-picker-main-panel">
       <veui-color-shade-field
@@ -12,16 +15,23 @@
         :alpha="hsva.a"
       />
       <div class="veui-color-picker-main-panel-sliders">
-        <veui-color-hue-slider :value="hsva.h" />
-        <veui-color-alpha-slider v-if="alpha"
-          :hue="hsva.h" :saturation="hsva.s" :brightness="hsva.v"
-          :value="hsva.a" />
+        <veui-color-hue-slider :value="hsva.h"/>
+        <veui-color-alpha-slider
+          v-if="alpha"
+          :hue="hsva.h"
+          :saturation="hsva.s"
+          :brightness="hsva.v"
+          :value="hsva.a"
+        />
       </div>
     </div>
-    <veui-color-swatch v-if="uiProps.swatch" v-bind="{color, ui, switchable, alpha, variant}" />
+    <veui-color-swatch
+      v-if="uiProps.swatch"
+      v-bind="{color, ui, switchable, alpha, variant}"
+    />
   </div>
   <div class="veui-color-picker-extra">
-    <slot></slot>
+    <slot/>
   </div>
 </div>
 </template>
@@ -37,17 +47,14 @@ import ShadeField from './_ColorShadeField'
 import config from 'veui/managers/config'
 
 export default {
-  name: 'ColorPicker',
+  name: 'color-picker',
   components: {
     'veui-color-swatch': ColorSwatch,
     'veui-color-hue-slider': HueSlider,
     'veui-color-alpha-slider': AlphaSlider,
     'veui-color-shade-field': ShadeField
   },
-  mixins: [
-    ui,
-    ColorHomer
-  ],
+  mixins: [ui, ColorHomer],
   data () {
     return {
       previousHsva: {},
@@ -55,8 +62,8 @@ export default {
     }
   },
   computed: {
-    shadeFieldSize() {
-      return this.shadeFieldSizeMap[this.uiProps.size];
+    shadeFieldSize () {
+      return this.shadeFieldSizeMap[this.uiProps.size]
     },
     hsva () {
       let prevHsva = this.previousHsva

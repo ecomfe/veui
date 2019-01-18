@@ -1,26 +1,27 @@
 <template>
 <div class="veui-color-value-alpha">
   <div class="veui-color-value">
-    <veui-input type="text" ref="alphaValue" v-numeric
+    <veui-input
+      ref="alphaValue"
+      v-nudge
+      type="text"
       :value="alphaPercentage"
       :readonly="readonly"
       @input="handleValueInput"
       @keyup.up.down.native="handleValueInput($event.target.value)"
       @blur="handleValueBlur"
-    ></veui-input>
+    />
   </div>
 </div>
 </template>
 
 <script>
-import {clamp} from 'lodash'
+import { clamp } from 'lodash'
 import ColorValueInput from './mixins/_ColorValueInput'
 
 export default {
-  name: 'ColorValueAlpha',
-  mixins: [
-    ColorValueInput
-  ],
+  name: 'color-value-alpha',
+  mixins: [ColorValueInput],
   props: {
     alpha: Number,
     percentage: Boolean

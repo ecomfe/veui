@@ -1,85 +1,145 @@
 <template>
-  <article>
-    <h1><code>&lt;veui-color-picker&gt;</code></h1>
+<article>
+  <h1>
+    <code>&lt;veui-color-picker&gt;</code>
+  </h1>
 
-    <div class="tip">当前颜色</div>
-    <div class="color-text" :style="{
+  <div class="tip">
+    当前颜色
+  </div>
+  <div
+    class="color-text"
+    :style="{
       color,
       'text-shadow': `1px 1px 1px ${kolor}`
-    }">{{ color }}</div>
+    }"
+  >
+    {{ color }}
+  </div>
 
-    <div class="color-control">
-      <label>
-        Variant
-        <select v-model="variant">
-          <option v-for="variant in variants" :key="variant">{{variant}}</option>
-        </select>
-      </label>
+  <div class="color-control">
+    <label>
+      Variant
+      <select v-model="variant">
+        <option
+          v-for="item in variants"
+          :key="item"
+          :value="item"
+        >
+          {{ item }}
+        </option>
+      </select>
+    </label>
 
-      <label>
-        <input v-model="alpha" type="checkbox">
-        alpha channel
-      </label>
+    <label>
+      <input
+        v-model="alpha"
+        type="checkbox"
+      >
+      alpha channel
+    </label>
 
-      <label>
-        <input v-model="switchable" type="checkbox">
-        switchable
-      </label>
-    </div>
+    <label>
+      <input
+        v-model="switchable"
+        type="checkbox"
+      >
+      switchable
+    </label>
+  </div>
 
-    <h2>色样</h2>
-    <section class="color-swatches">
-      <veui-color-swatch v-model="color" ui="small" v-bind="{variant, alpha, switchable}"></veui-color-swatch>
-      <veui-color-swatch v-model="color" ui="small tip" v-bind="{variant, alpha, switchable}"></veui-color-swatch>
-      <veui-color-swatch v-model="color" v-bind="{variant, alpha, switchable}"></veui-color-swatch>
-      <veui-color-swatch v-model="color" ui="tip" v-bind="{variant, alpha, switchable}"></veui-color-swatch>
-      <veui-color-swatch :color="color" ui="normal tip" :readonly="true" v-bind="{variant, alpha, switchable}"></veui-color-swatch>
+  <h2>色样</h2>
+  <section class="color-swatches">
+    <veui-color-swatch
+      v-model="color"
+      ui="small"
+      v-bind="{variant, alpha, switchable}"
+    />
+    <veui-color-swatch
+      v-model="color"
+      ui="small tip"
+      v-bind="{variant, alpha, switchable}"
+    />
+    <veui-color-swatch
+      v-model="color"
+      v-bind="{variant, alpha, switchable}"
+    />
+    <veui-color-swatch
+      v-model="color"
+      ui="tip"
+      v-bind="{variant, alpha, switchable}"
+    />
+    <veui-color-swatch
+      :color="color"
+      ui="normal tip"
+      :readonly="true"
+      v-bind="{variant, alpha, switchable}"
+    />
+  </section>
+
+  <h2>取色器</h2>
+  <p>
+    <label>
+      <input
+        v-model="showPalette"
+        type="checkbox"
+      >
+      附加色板？
+    </label>
+  </p>
+
+  <section class="color-pickers">
+    <section class="color-picker">
+      <p>
+        <code>ui="small"</code>
+      </p>
+      <veui-color-picker
+        v-model="color"
+        ui="small"
+        v-bind="{variant, alpha, switchable}"
+      >
+        <!-- 色板作为 slot 传入 -->
+        <veui-color-palette
+          v-if="showPalette"
+          ui="small"
+          :colors="colors"
+          @select="handlePaletteColorSelect"
+          @remove="handlePaletteColorRemove"
+          @add="handlePaletteColorAdd"
+        />
+      </veui-color-picker>
     </section>
 
-
-    <h2>取色器</h2>
-    <p>
-      <label>
-        <input type="checkbox" v-model="showPalette" /> 附加色板？
-      </label>
-    </p>
-
-    <section class="color-pickers">
-      <section class="color-picker">
-        <p>
-          <code>ui="small"</code>
-        </p>
-        <veui-color-picker v-model="color" ui="small" v-bind="{variant, alpha, switchable}">
-          <!-- 色板作为 slot 传入 -->
-          <veui-color-palette ui="small" :colors="colors" v-if="showPalette"
-            @select="handlePaletteColorSelect"
-            @remove="handlePaletteColorRemove"
-            @add="handlePaletteColorAdd"
-          />
-        </veui-color-picker>
-      </section>
-
-      <section class="color-picker">
-        <p>
-          <code>ui="swatch tip"</code>
-        </p>
-        <veui-color-picker v-model="color" ui="swatch tip"  v-bind="{variant, alpha, switchable}">
-          <!-- 色板作为 slot 传入 -->
-          <veui-color-palette :colors="colors" v-if="showPalette"
-            @select="handlePaletteColorSelect"
-            @remove="handlePaletteColorRemove"
-            @add="handlePaletteColorAdd"
-          >
-            <div style="margin: 10px 5px 5px 5px;">
-              <veui-button ui="aux small" style="width: 100%">高级选项</veui-button>
-            </div>
-          </veui-color-palette>
-        </veui-color-picker>
-      </section>
-
+    <section class="color-picker">
+      <p>
+        <code>ui="swatch tip"</code>
+      </p>
+      <veui-color-picker
+        v-model="color"
+        ui="swatch tip"
+        v-bind="{variant, alpha, switchable}"
+      >
+        <!-- 色板作为 slot 传入 -->
+        <veui-color-palette
+          v-if="showPalette"
+          :colors="colors"
+          @select="handlePaletteColorSelect"
+          @remove="handlePaletteColorRemove"
+          @add="handlePaletteColorAdd"
+        >
+          <div style="margin: 10px 5px 5px 5px;">
+            <veui-button
+              ui="aux small"
+              style="width: 100%"
+            >
+              高级选项
+            </veui-button>
+          </div>
+        </veui-color-palette>
+      </veui-color-picker>
     </section>
-
-  </article>
+  </section>
+</article>
 </template>
 
 <script>
@@ -124,14 +184,21 @@ export default {
   },
   computed: {
     kolor () {
-      let {r, g, b, a} = tinycolor(this.color).toRgb()
+      let { r, g, b, a } = tinycolor(this.color).toRgb()
       return tinycolor({
-        r: 0xFF - r,
-        g: 0xFF - g,
-        b: 0xFF - b,
+        r: 0xff - r,
+        g: 0xff - g,
+        b: 0xff - b,
         a: a
       }).toRgbString()
     }
+  },
+  mounted () {
+    this.$children.forEach(child => {
+      child.$on('click', () => {
+        bus.$emit('log', child.$el.getAttribute('ui'))
+      })
+    })
   },
   methods: {
     handlePaletteColorSelect (i) {
@@ -146,13 +213,6 @@ export default {
       }
       this.colors.push(this.color)
     }
-  },
-  mounted () {
-    this.$children.forEach(child => {
-      child.$on('click', () => {
-        bus.$emit('log', child.$el.getAttribute('ui'))
-      })
-    })
   }
 }
 </script>
@@ -172,10 +232,10 @@ section {
   // text-shadow: 1px 1px 1px #333, 0 0 1px #999;
   small {
     &:before {
-      content: '('
+      content: '(';
     }
     &:after {
-      content: ')'
+      content: ')';
     }
   }
 }

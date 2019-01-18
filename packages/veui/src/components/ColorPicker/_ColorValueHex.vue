@@ -1,10 +1,14 @@
 <template>
 <div class="veui-color-value-hex">
   <div class="veui-color-value">
-    <veui-input type="text" ref="hexValue" :value="hexValue" :readonly="readonly"
+    <veui-input
+      type="text"
+      ref="hexValue"
+      :value="hexValue"
+      :readonly="readonly"
       @input="handleValueInput"
       @blur="handleValueBlur"
-    ></veui-input>
+    />
   </div>
 </div>
 </template>
@@ -14,10 +18,8 @@ import tinycolor from 'tinycolor2'
 import ColorValueInput from './mixins/_ColorValueInput'
 
 export default {
-  name: 'ColorValueHex',
-  mixins: [
-    ColorValueInput
-  ],
+  name: 'color-value-hex',
+  mixins: [ColorValueInput],
   props: {
     hue: Number,
     saturation: Number,
