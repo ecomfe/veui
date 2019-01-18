@@ -17,7 +17,7 @@ export default {
     updateColor (color) {
       this.previousHsva = color
       this.$emit('update:color', formatColor(color, {
-        format: this.format
+        format: this.variant
       }))
     },
     updateHsvaValue (hsva) {

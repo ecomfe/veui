@@ -1,25 +1,45 @@
 <template>
-<div class="veui-color-palette" :ui="ui">
-  <div class="veui-color-palette-colors" ref="colors">
-    <div class="veui-color-palette-color" v-for="(color, i) in colors" :key="i" v-drag :class="{
+<div
+  class="veui-color-palette"
+  :ui="ui"
+>
+  <div
+    ref="colors"
+    class="veui-color-palette-colors"
+  >
+    <div
+      v-for="(color, i) in colors"
+      :key="i"
+      v-drag
+      class="veui-color-palette-color"
+      :class="{
         'veui-color-palette-color-outside': i === dragItem.index && dragItem.outside
-      }" :style="{
+      }"
+      :style="{
         transform: i === dragItem.index
           ? `translate(${dragItem.distanceX}px, ${dragItem.distanceY}px)`
           : ''
-      }" :data-index="i" @click="handleColorClick(i)">
+      }"
+      :data-index="i"
+      @click="handleColorClick(i)"
+    >
       <div>
-        <div :style="{
-          'background-color': color
-        }"></div>
+        <div
+          :style="{
+            'background-color': color
+          }"
+        />
       </div>
     </div>
-    <div class="veui-color-palette-color" @click="$emit('add')">
-      <veui-icon name="plus"></veui-icon>
+    <div
+      class="veui-color-palette-color"
+      @click="$emit('add')"
+    >
+      <veui-icon name="plus"/>
     </div>
   </div>
   <div class="veui-color-palette-extra">
-    <slot></slot>
+    <slot/>
   </div>
 </div>
 </template>
@@ -31,7 +51,7 @@ import { drag } from '../../directives'
 const putbackClass = 'veui-color-palette-color-putback'
 
 export default {
-  name: 'ColorPalette',
+  name: 'color-palette',
   components: {
     'veui-icon': Icon
   },
@@ -67,30 +87,24 @@ export default {
       }
     }
   },
-  computed: {
-
-  },
-  methods: {
-    handleColorClick (i) {
-      // 如果没有拖动(drag)，就是点击，否则不处理，防止拖动误判为点击
-      if (!this.removable && this.mouseupMark) {
-        return
-      }
-      this.$emit(this.removable ? 'remove' : 'select', i)
-    }
-  },
+  computed: {},
   mounted () {
-    this.$on('dragstart', ({event: {currentTarget: target}}) => {
+    this.$on('dragstart', ({ event: { currentTarget: target } }) => {
       this.mouseupMark = 0
       target.classList.remove(putbackClass)
 
-      let {top: targetTop, left: targetLeft} = target.getBoundingClientRect()
+      let { top: targetTop, left: targetLeft } = target.getBoundingClientRect()
       this.dragItem.top = targetTop
       this.dragItem.left = targetLeft
       this.dragItem.distanceX = 0
       this.dragItem.distanceY = 0
 
-      let {top, left, width, height} = this.$refs.colors.getBoundingClientRect()
+      let {
+        top,
+        left,
+        width,
+        height
+      } = this.$refs.colors.getBoundingClientRect()
       this.fieldSize.top = top
       this.fieldSize.left = left
       this.fieldSize.width = width
@@ -100,7 +114,7 @@ export default {
       this.dragItem.index = parseInt(target.dataset.index, 10)
       this.dragItemNode = target
     })
-    this.$on('dragend', ({event}) => {
+    this.$on('dragend', ({ event }) => {
       let removeIndex = this.dragItem.index
       this.dragItem.index = -1
       if (this.dragItem.outside) {
@@ -110,7 +124,7 @@ export default {
         this.dragItemNode = null
       }
     })
-    this.$on('drag', ({distanceX, distanceY}) => {
+    this.$on('drag', ({ distanceX, distanceY }) => {
       this.mouseupMark = 1
       this.dragItem.distanceX = distanceX
       this.dragItem.distanceY = distanceY
@@ -123,12 +137,32 @@ export default {
         this.fieldSize.height
       )
     })
+  },
+  methods: {
+    handleColorClick (i) {
+      // 如果没有拖动(drag)，就是点击，否则不处理，防止拖动误判为点击
+      if (!this.removable && this.mouseupMark) {
+        return
+      }
+      this.$emit(this.removable ? 'remove' : 'select', i)
+    }
   }
 }
 
-function isDragItemOutsideOfField (itemX, itemY, fieldTop, fieldLeft, fieldWidth, fieldHeight) {
+function isDragItemOutsideOfField (
+  itemX,
+  itemY,
+  fieldTop,
+  fieldLeft,
+  fieldWidth,
+  fieldHeight
+) {
   let aroundWidth = 30
-  return itemX < fieldLeft - aroundWidth || itemX > fieldLeft + fieldWidth + aroundWidth ||
-    itemY < fieldTop - aroundWidth || itemY > fieldTop + fieldHeight + aroundWidth
+  return (
+    itemX < fieldLeft - aroundWidth ||
+    itemX > fieldLeft + fieldWidth + aroundWidth ||
+    itemY < fieldTop - aroundWidth ||
+    itemY > fieldTop + fieldHeight + aroundWidth
+  )
 }
 </script>

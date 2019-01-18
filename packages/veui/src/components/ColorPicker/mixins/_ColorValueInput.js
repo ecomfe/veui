@@ -1,7 +1,7 @@
 
 import ColorUpdater from './_ColorUpdater'
 import Input from '../../Input'
-import {nudge as numeric} from '../../../directives'
+import {nudge} from '../../../directives'
 
 export default {
   components: {
@@ -17,6 +17,6 @@ export default {
     }
   },
   directives: {
-    numeric
+    nudge
   }
 }
