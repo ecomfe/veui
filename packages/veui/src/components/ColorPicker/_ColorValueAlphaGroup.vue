@@ -31,7 +31,6 @@
       class="veui-color-value-alpha-group-alpha"
     >
       <veui-color-value-alpha
-        :percentage="true"
         v-bind="{alpha, readonly}"
       />
     </div>

@@ -1,14 +1,14 @@
 <template>
 <div
   class="veui-color-picker"
-  :ui="ui"
+  :ui="realUi"
 >
   <div class="veui-color-picker-main">
     <div class="veui-color-picker-main-panel">
       <veui-color-shade-field
         :width="shadeFieldSize[0]"
         :height="shadeFieldSize[1]"
-        :ui="ui"
+        :ui="realUi"
         :hue="hsva.h"
         :saturation="hsva.s"
         :brightness="hsva.v"
@@ -27,7 +27,7 @@
     </div>
     <veui-color-swatch
       v-if="uiProps.swatch"
-      v-bind="{color, ui, switchable, alpha, variant}"
+      v-bind="{color, ui: realUi, switchable, alpha, variant}"
     />
   </div>
   <div class="veui-color-picker-extra">
@@ -88,7 +88,7 @@ export default {
         hsva.h = prevHsva.h
       }
 
-      if (!this.uiProps.alpha) {
+      if (!this.alpha) {
         hsva.a = 1
       }
 

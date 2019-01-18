@@ -1,7 +1,7 @@
 <template>
 <div
   class="veui-color-palette"
-  :ui="ui"
+  :ui="realUi"
 >
   <div
     ref="colors"
@@ -47,6 +47,7 @@
 <script>
 import Icon from '../Icon'
 import { drag } from '../../directives'
+import ui from '../../mixins/ui'
 
 const putbackClass = 'veui-color-palette-color-putback'
 
@@ -58,6 +59,7 @@ export default {
   directives: {
     drag
   },
+  mixins: [ui],
   props: {
     colors: {
       type: Array,
@@ -65,10 +67,7 @@ export default {
         return []
       }
     },
-    ui: {
-      type: String,
-      default: 'normal'
-    }
+    ui: String
   },
   data () {
     return {
@@ -87,7 +86,6 @@ export default {
       }
     }
   },
-  computed: {},
   mounted () {
     this.$on('dragstart', ({ event: { currentTarget: target } }) => {
       this.mouseupMark = 0

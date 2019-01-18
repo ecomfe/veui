@@ -5,10 +5,9 @@
       ref="alphaValue"
       v-nudge
       type="text"
-      :value="alphaPercentage"
+      :value="localValue"
       :readonly="readonly"
       @input="handleValueInput"
-      @keyup.up.down.native="handleValueInput($event.target.value)"
       @blur="handleValueBlur"
     />
   </div>
@@ -23,28 +22,38 @@ export default {
   name: 'color-value-alpha',
   mixins: [ColorValueInput],
   props: {
-    alpha: Number,
-    percentage: Boolean
+    alpha: Number
+  },
+  data () {
+    return {
+      localValue: null
+    }
   },
   computed: {
     alphaPercentage () {
-      return Math.round(this.alpha * 100) + (this.percentage ? '%' : '')
-    },
-    matchRegexp () {
-      return this.percentage ? /^\d+(\.\d+)?%$/ : /^\d+(\.\d+)?$/
+      return Math.round(this.alpha * 100) + '%'
+    }
+  },
+  watch: {
+    alpha: {
+      handler (val) {
+        this.localValue = Math.round(val * 100) + '%'
+      },
+      immediate: true
     }
   },
   methods: {
     handleValueInput (val) {
-      // console.log(val)
-      if (!this.matchRegexp.test(val)) {
+      this.localValue = val
+      if (!/^\d+(\.\d+)?%$/.test(val)) {
         return
       }
-      this.updateAlphaValue(clamp(parseFloat(val) / 100 || 1, 0, 1))
+      this.updateAlphaValue(clamp(parseFloat(this.localValue) / 100, 0, 1))
     },
     handleValueBlur () {
-      // 如果输入的值不合法就不触发事件，但希望能把输入框里的非法值改成当前的正确值，所以就这个处理下
-      this.$refs.alphaValue.$refs.input.value = this.alphaPercentage
+      if (this.alphaPercentage !== this.localValue) {
+        this.localValue = this.alphaPercentage
+      }
     }
   }
 }

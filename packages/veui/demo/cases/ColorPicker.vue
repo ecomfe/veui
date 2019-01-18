@@ -9,10 +9,7 @@
   </div>
   <div
     class="color-text"
-    :style="{
-      color,
-      'text-shadow': `1px 1px 1px ${kolor}`
-    }"
+    :style="{ color }"
   >
     {{ color }}
   </div>
@@ -228,8 +225,6 @@ section {
 .tip {
   margin: 12px 0 2px 0;
   color: #333;
-  // font-weight: 100;
-  // text-shadow: 1px 1px 1px #333, 0 0 1px #999;
   small {
     &:before {
       content: '(';
