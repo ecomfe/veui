@@ -1,12 +1,3 @@
-<template>
-<veui-input
-  type="text"
-  :value="localValue"
-  :readonly="readonly"
-  @input="handleValueInput"
-  @blur="handleValueBlur"
-/>
-</template>
 
 <script>
 import Input from '../Input'
@@ -37,6 +28,9 @@ export default {
     parse: {
       type: Function,
       default: identity
+    },
+    nudge: {
+      type: String
     }
   },
   data () {
@@ -47,6 +41,20 @@ export default {
   computed: {
     formattedValue () {
       return this.format(this.value)
+    },
+    directives () {
+      if (!this.nudge) {
+        return []
+      }
+      return [
+        {
+          name: 'nudge',
+          value: {
+            update: this.hanleNudgeUpdate
+          },
+          modifiers: {}
+        }
+      ]
     }
   },
   watch: {
@@ -58,6 +66,27 @@ export default {
     }
   },
   methods: {
+    hanleNudgeUpdate (increase) {
+      if (Math.abs(increase) < 1) {
+        return
+      }
+
+      switch (this.nudge) {
+        case 'hue':
+        case 'ff':
+          break
+
+        case 'percentage':
+          increase /= 100
+          break
+
+        default:
+          return
+      }
+
+      this.handleValueInput(this.format(this.value + increase))
+    },
+
     handleValueInput (val) {
       this.localValue = val
       let realValue
@@ -73,6 +102,16 @@ export default {
         this.localValue = this.formattedValue
       }
     }
+  },
+  render () {
+    return (<veui-input
+      type="text"
+      value={this.localValue}
+      readonly={this.readonly}
+      onInput={this.handleValueInput}
+      onBlur={this.handleValueBlur}
+      {...{ directives: this.directives }}
+    />)
   }
 }
 </script>
