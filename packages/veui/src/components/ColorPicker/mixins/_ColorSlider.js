@@ -9,6 +9,6 @@ export default {
     ColorUpdater
   ],
   props: {
-    value: Number
+    hsl: Object
   }
 }

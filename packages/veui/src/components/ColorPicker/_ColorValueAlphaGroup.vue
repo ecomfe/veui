@@ -10,7 +10,7 @@
     <div class="veui-color-value-alpha-group-color">
       <component
         :is="'veui-color-value-' + realVariant"
-        v-bind="{hue, saturation, brightness, readonly}"
+        v-bind="{hsl, rgb, readonly}"
       />
     </div>
     <div
@@ -31,7 +31,7 @@
       class="veui-color-value-alpha-group-alpha"
     >
       <veui-color-value-alpha
-        v-bind="{alpha, readonly}"
+        v-bind="{hsl, readonly}"
       />
     </div>
   </div>
@@ -72,14 +72,25 @@
 </template>
 
 <script>
-import ColorValueGroup from './mixins/_ColorValueGroup'
+import ValueHsl from './_ColorValueHsl'
+import ValueRgb from './_ColorValueRgb'
+import ValueHex from './_ColorValueHex'
+import ValueAlpha from './_ColorValueAlpha'
 
 const variants = ['hex', 'rgb', 'hsl']
 
 export default {
   name: 'color-value-alpha-group',
-  mixins: [ColorValueGroup],
+  components: {
+    'veui-color-value-hsl': ValueHsl,
+    'veui-color-value-rgb': ValueRgb,
+    'veui-color-value-hex': ValueHex,
+    'veui-color-value-alpha': ValueAlpha
+  },
   props: {
+    hsl: Object,
+    rgb: Object,
+    readonly: Boolean,
     switchable: Boolean,
     showTip: Boolean,
     alphaChannel: Boolean,

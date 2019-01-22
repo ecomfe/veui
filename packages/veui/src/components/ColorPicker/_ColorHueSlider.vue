@@ -4,7 +4,7 @@
     :min="0"
     :max="360"
     :step="1"
-    :value="value"
+    :value="localHue"
     @input="handleValueUpdate"
   >
     <div
@@ -30,10 +30,28 @@ export default {
   mixins: [
     ColorSlider
   ],
+  data () {
+    return {
+      localHue: 0
+    }
+  },
+  watch: {
+    hsl: {
+      handler ({h}) {
+        // Hue 到了 360 时取余归零，为了避免滑块跳变，这里处理一下
+        if (h || this.localHue % 360) {
+          this.localHue = h
+        }
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   methods: {
     handleValueUpdate (val) {
-      this.updateHsvValue({
-        h: val
+      this.localHue = val
+      this.updateColor({
+        h: val % 360
       })
     }
   }

@@ -5,16 +5,22 @@ export default {
     getTypedAncestorTracker('color-homer')
   ],
   methods: {
-    updateHsvValue (hsv) {
-      if (hsv.a !== undefined) {
-        // 这里只更新 hsv，如果有传 alpha，就干掉
-        delete hsv.a
+    updateColor ({h, s, v, l, a, r, g, b}) {
+      switch (true) {
+        case v !== undefined:
+          this.colorHomer.updateHsvValue({h, s, v, a})
+          break
+
+        case r !== undefined:
+        case g !== undefined:
+        case b !== undefined:
+          this.colorHomer.updateRgbValue({r, g, b, a})
+          break
+
+        default:
+          this.colorHomer.updateHslValue({h, s, l, a})
+          break
       }
-      this.colorHomer.updateHsvaValue(hsv)
-    },
-    updateAlphaValue (a) {
-      // getTypedAncestorTracker 取到 ColorXxxx 入口组件，直接 update color prop，避免一层一层地往外透传
-      this.colorHomer.updateHsvaValue({a})
     }
   }
 }

@@ -4,16 +4,16 @@
     :min="0"
     :max="1"
     :step="0.01"
-    :value="value"
-    @input="updateAlphaValue"
+    :value="hsl.a"
+    @input="handleValueUpdate"
   >
     <div
       slot="track"
       class="veui-slider-custom-track"
       :style="{
         background: `linear-gradient(to right,
-          hsla(${hue}, ${saturation * 100}%,${brightness * 100}%, 0),
-          hsla(${hue}, ${saturation * 100}%,${brightness * 100}%, 1))`
+          hsla(${hsl.h}, ${hsl.s * 100}%,${hsl.l * 100}%, 0),
+          hsla(${hsl.h}, ${hsl.s * 100}%,${hsl.l * 100}%, 1))`
       }"
     />
     <div
@@ -35,10 +35,12 @@ export default {
   mixins: [
     ColorSlider
   ],
-  props: {
-    hue: Number,
-    saturation: Number,
-    brightness: Number
+  methods: {
+    handleValueUpdate (val) {
+      this.updateColor({
+        a: val
+      })
+    }
   }
 }
 </script>

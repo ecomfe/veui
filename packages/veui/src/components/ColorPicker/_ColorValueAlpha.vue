@@ -7,7 +7,7 @@
       :format="formatPercentage"
       :parse="parsePercentage"
       nudge="percentage"
-      @input="updateAlphaValue"
+      @input="handleValueInput"
     />
   </div>
 </div>
@@ -19,8 +19,15 @@ import ColorValueInput from './mixins/_ColorValueInput'
 export default {
   name: 'color-value-alpha',
   mixins: [ColorValueInput],
-  props: {
-    alpha: Number
+  computed: {
+    alpha () {
+      return this.hsl.a === undefined ? 1 : this.hsl.a
+    }
+  },
+  methods: {
+    handleValueInput (val) {
+      this.updateColor({a: val})
+    }
   }
 }
 </script>
