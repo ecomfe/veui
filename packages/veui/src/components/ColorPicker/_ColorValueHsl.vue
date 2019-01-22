@@ -34,49 +34,20 @@
 </template>
 
 <script>
-import tinycolor from 'tinycolor2'
 import ColorValueInput from './mixins/_ColorValueInput'
 
 export default {
   name: 'color-value-hsl',
   mixins: [ColorValueInput],
-  props: {
-    hue: Number,
-    saturation: Number,
-    brightness: Number
-  },
-  computed: {
-    hsl () {
-      return tinycolor({
-        h: this.hue,
-        s: this.saturation,
-        v: this.brightness
-      }).toHsl()
-    }
-  },
   methods: {
     handleHueValueInput (val) {
-      this.updateHsvValue({
-        h: val,
-        s: this.saturation,
-        v: this.brightness
-      })
+      this.updateColor({h: val})
     },
     handleSaturationValueInput (val) {
-      this.updateHsvValue({
-        h: this.hue,
-        s: val,
-        v: this.brightness
-      })
+      this.updateColor({s: val})
     },
     handleLightnessValueInput (val) {
-      this.updateHsvValue(
-        tinycolor({
-          h: this.hue,
-          s: this.saturation,
-          l: val
-        }).toHsv()
-      )
+      this.updateColor({l: val})
     }
   }
 }

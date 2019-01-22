@@ -12,10 +12,8 @@
     v-bind="{
       ui,
       readonly,
-      hue: hsva.h,
-      saturation: hsva.s,
-      brightness: hsva.v,
-      alpha: hsva.a,
+      hsl,
+      rgb,
       showTip: !!uiProps.tip,
       switchable,
       alphaChannel: alpha,
@@ -26,7 +24,6 @@
 </template>
 
 <script>
-import tinycolor from 'tinycolor2'
 import ValueAlphaGroup from './_ColorValueAlphaGroup'
 import ui from '../../mixins/ui'
 import ColorHomer from './mixins/_ColorHomer'
@@ -41,15 +38,6 @@ export default {
     readonly: {
       type: Boolean,
       default: false
-    }
-  },
-  computed: {
-    hsva () {
-      let colors = tinycolor(this.color).toHsv()
-      return Object.keys(colors).reduce(function (obj, key) {
-        obj[key] = Math.round(colors[key] * 100) / 100
-        return obj
-      }, {})
     }
   }
 }

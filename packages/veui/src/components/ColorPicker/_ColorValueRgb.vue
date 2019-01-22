@@ -33,35 +33,20 @@
 </template>
 
 <script>
-import tinycolor from 'tinycolor2'
 import ColorValueInput from './mixins/_ColorValueInput'
 
 export default {
   name: 'color-value-rgb',
   mixins: [ColorValueInput],
-  props: {
-    hue: Number,
-    saturation: Number,
-    brightness: Number
-  },
-  computed: {
-    rgb () {
-      return tinycolor({
-        h: this.hue,
-        s: this.saturation,
-        v: this.brightness
-      }).toRgb()
-    }
-  },
   methods: {
     handleRedValueInput (val) {
-      this.updateHsvValue(tinycolor(Object.assign({}, this.rgb, { r: val })).toHsv())
+      this.updateColor({r: val})
     },
     handleGreenValueInput (val) {
-      this.updateHsvValue(tinycolor(Object.assign({}, this.rgb, { g: val })).toHsv())
+      this.updateColor({g: val})
     },
     handleBlueValueInput (val) {
-      this.updateHsvValue(tinycolor(Object.assign({}, this.rgb, { b: val })).toHsv())
+      this.updateColor({b: val})
     }
   }
 }

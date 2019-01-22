@@ -18,23 +18,14 @@ import ColorValueInput from './mixins/_ColorValueInput'
 export default {
   name: 'color-value-hex',
   mixins: [ColorValueInput],
-  props: {
-    hue: Number,
-    saturation: Number,
-    brightness: Number
-  },
   computed: {
     hexValue () {
-      return tinycolor({
-        h: this.hue,
-        s: this.saturation,
-        v: this.brightness
-      }).toHexString()
+      return tinycolor(this.rgb).toHexString()
     }
   },
   methods: {
     handleValueInput (val) {
-      this.updateHsvValue(tinycolor(val).toHsv())
+      this.updateColor(tinycolor(val).toRgb())
     }
   }
 }

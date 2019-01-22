@@ -8,6 +8,8 @@ export default {
   },
   mixins: [ColorUpdater],
   props: {
+    hsl: Object,
+    rgb: Object,
     readonly: Boolean
   },
   methods: {
@@ -19,7 +21,7 @@ export default {
     },
 
     formatHue (val) {
-      return Math.floor(val)
+      return Math.round(val)
     },
     parseHue (val) {
       let realValue = parseFloat(val)

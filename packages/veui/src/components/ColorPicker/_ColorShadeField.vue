@@ -71,7 +71,7 @@
     class="veui-color-shade-field-aperture"
     :style="{
       'background-color': color,
-      transform: `translate(${aperturePosition.x - 6}px, ${aperturePosition.y - 6}px)`
+      transform: `translate(${dragCurrentX - 6}px, ${dragCurrentY - 6}px)`
     }"
     @click.stop
   />
@@ -79,10 +79,11 @@
 </template>
 
 <script>
-import tinycolor from 'tinycolor2'
+// import tinycolor from 'tinycolor2'
 import {drag} from '../../directives'
 import {clamp} from 'lodash'
 import ColorUpdater from './mixins/_ColorUpdater'
+import {getTypedAncestorTracker} from '../../utils/helper'
 
 export default {
   name: 'color-shade-field',
@@ -90,20 +91,23 @@ export default {
     drag
   },
   mixins: [
-    ColorUpdater
+    ColorUpdater,
+    getTypedAncestorTracker('color-homer')
   ],
   props: {
     width: Number,
     height: Number,
-    hue: Number,
-    saturation: Number,
-    brightness: Number
+    color: String,
+    hsv: Object
   },
   data () {
     return {
       isDragging: false,
+
       dragInitX: 0,
-      dragInitY: 0
+      dragInitY: 0,
+      dragCurrentX: 0,
+      dragCurrentY: 0
     }
   },
   computed: {
@@ -112,33 +116,37 @@ export default {
       return Math.round(Math.random() * 0xFFFFFF).toString(36)
     },
     aperturePosition () {
-      let saturation = this.saturation
-      let brightness = this.brightness
+      let {s, v} = this.hsv
       return {
-        x: saturation * this.width,
-        y: (1 - brightness) * this.height
+        x: s * this.width,
+        y: (1 - v) * this.height
       }
     },
-    color () {
-      return tinycolor({
-        h: this.hue,
-        s: this.saturation,
-        v: this.brightness
-      }).toHslString()
-    },
     hueColor () {
-      return tinycolor({
-        h: this.hue,
-        s: 1,
-        v: 1
-      }).toHexString()
+      return `hsl(${this.hsv.h}, 100%, 50%)`
+    }
+  },
+  watch: {
+    aperturePosition: {
+      handler ({x, y}) {
+        if (!this.isDragging) {
+          this.dragCurrentX = x
+          this.dragCurrentY = y
+        }
+      },
+      immediate: true
+    },
+    isDragging (val) {
+      // 如果拖到底下黑色那块儿，颜色出去转一圈回来 hue 变 0 了，呵呵，锁一下
+      this.colorHomer.lockHue(val ? this.hsv.h : null)
     }
   },
   mounted () {
     this.$on('dragstart', () => {
       this.isDragging = true
-      this.dragInitX = this.aperturePosition.x
-      this.dragInitY = this.aperturePosition.y
+      // 一开始没拖的时候还是要从颜色反推位置
+      this.dragInitX = this.dragCurrentX === undefined ? this.aperturePosition.x : this.dragCurrentX
+      this.dragInitY = this.dragCurrentY === undefined ? this.aperturePosition.y : this.dragCurrentY
     })
     this.$on('dragend', () => {
       this.isDragging = false
@@ -146,7 +154,12 @@ export default {
     this.$on('drag', ({distanceX, distanceY}) => {
       let x = this.dragInitX + distanceX
       let y = this.dragInitY + distanceY
-      // 得合在一起传出去(satlig=saturation+brightness)。因为要冒泡到 ColorPicker format成字符串再传回来
+
+      // 底下黑色那一块儿颜色都糊在一起，从颜色算出来的坐标就很飘，还是用自己的位置比较稳
+      this.dragCurrentX = clamp(x, 0, this.width)
+      this.dragCurrentY = clamp(y, 0, this.height)
+
+      // 得合在一起传出去(satlig=saturation+brightness)。因为要到 ColorPicker format成字符串再传回来
       // 如果分开的话，后一个到达 ColorPicker 的时候前一个还没生效，所以使用原来的值，导致前一个无法改变
       this.updateSatbri(x / this.width, 1 - y / this.height)
     })
@@ -157,12 +170,9 @@ export default {
       this.$emit('dragend')
     },
     updateSatbri (saturation, brightness) {
-      saturation = clamp(saturation, 0, 1)
-      brightness = clamp(brightness, 0, 1)
-      this.updateHsvValue({
-        s: saturation,
-        v: brightness
-      })
+      let s = clamp(saturation, 0, 1)
+      let v = clamp(brightness, 0, 1)
+      this.updateColor({s, v})
     }
   }
 }
