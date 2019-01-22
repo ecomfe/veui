@@ -1,13 +1,11 @@
 <template>
 <div class="veui-color-value-hex">
   <div class="veui-color-value">
-    <veui-input
-      ref="hexValue"
-      type="text"
+    <veui-color-value-input
       :value="hexValue"
       :readonly="readonly"
+      :parse="parseHexValue"
       @input="handleValueInput"
-      @blur="handleValueBlur"
     />
   </div>
 </div>
@@ -36,14 +34,7 @@ export default {
   },
   methods: {
     handleValueInput (val) {
-      if (!/^#[0-9A-F]{6}$/i.test(val)) {
-        return
-      }
       this.updateHsvValue(tinycolor(val).toHsv())
-    },
-    handleValueBlur () {
-      // 如果输入的值不合法就不触发事件，但希望能把输入框里的非法值改成当前的正确值，所以就这个处理下
-      this.$refs.hexValue.$refs.input.value = this.hexValue
     }
   }
 }

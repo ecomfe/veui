@@ -1,39 +1,30 @@
 <template>
 <div class="veui-color-value-hsl">
   <div class="veui-color-value">
-    <veui-input
-      ref="hueValue"
-      v-nudge
-      type="text"
+    <veui-color-value-input
       :value="hsl.h"
       :readonly="readonly"
+      :format="formatHue"
+      :parse="parseHue"
       @input="handleHueValueInput"
-      @blur="handleValueBlur"
-      @keyup.up.down.native="handleHueValueInput($event.target.value)"
     />
   </div>
   <div class="veui-color-value">
-    <veui-input
-      ref="saturationValue"
-      v-nudge
-      type="text"
+    <veui-color-value-input
       :value="hsl.s"
       :readonly="readonly"
+      :format="formatPercentage"
+      :parse="parsePercentage"
       @input="handleSaturationValueInput"
-      @blur="handleValueBlur"
-      @keyup.up.down.native="handleSaturationValueInput($event.target.value)"
     />
   </div>
   <div class="veui-color-value">
-    <veui-input
-      ref="lightnessValue"
-      v-nudge
-      type="text"
+    <veui-color-value-input
       :value="hsl.l"
       :readonly="readonly"
+      :format="formatPercentage"
+      :parse="parsePercentage"
       @input="handleLightnessValueInput"
-      @blur="handleValueBlur"
-      @keyup.up.down.native="handleLightnessValueInput($event.target.value)"
     />
   </div>
 </div>
@@ -41,7 +32,6 @@
 
 <script>
 import tinycolor from 'tinycolor2'
-import { clamp } from 'lodash'
 import ColorValueInput from './mixins/_ColorValueInput'
 
 export default {
@@ -54,23 +44,15 @@ export default {
   },
   computed: {
     hsl () {
-      let hsl = tinycolor({
+      return tinycolor({
         h: this.hue,
         s: this.saturation,
         v: this.brightness
       }).toHsl()
-      hsl.h = Math.round(hsl.h)
-      hsl.s = Math.round(hsl.s * 100) + '%'
-      hsl.l = Math.round(hsl.l * 100) + '%'
-      return hsl
     }
   },
   methods: {
     handleHueValueInput (val) {
-      val = clamp(parseFloat(val) % 360, 0, 360)
-      if (isNaN(val)) {
-        return
-      }
       this.updateHsvValue({
         h: val,
         s: this.saturation,
@@ -78,10 +60,6 @@ export default {
       })
     },
     handleSaturationValueInput (val) {
-      val = clamp(parseFloat(val) / 100, 0, 1)
-      if (isNaN(val)) {
-        return
-      }
       this.updateHsvValue({
         h: this.hue,
         s: val,
@@ -89,10 +67,6 @@ export default {
       })
     },
     handleLightnessValueInput (val) {
-      val = clamp(parseFloat(val) / 100, 0, 1)
-      if (isNaN(val)) {
-        return
-      }
       this.updateHsvValue(
         tinycolor({
           h: this.hue,
@@ -100,11 +74,6 @@ export default {
           l: val
         }).toHsv()
       )
-    },
-    handleValueBlur () {
-      this.$refs.hueValue.$refs.input.value = this.hsl.h
-      this.$refs.saturationValue.$refs.input.value = this.hsl.s
-      this.$refs.lightnessValue.$refs.input.value = this.hsl.l
     }
   }
 }

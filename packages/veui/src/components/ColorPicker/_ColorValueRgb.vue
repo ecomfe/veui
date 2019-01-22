@@ -1,41 +1,29 @@
 <template>
 <div class="veui-color-value-rgb">
   <div class="veui-color-value">
-    <veui-input
-      ref="redValue"
-      v-nudge.nodecimals
-      type="text"
+    <veui-color-value-input
       :value="rgb.r"
       :readonly="readonly"
+      :parse="parseFFValue"
       @input="handleRedValueInput"
-      @blur="handleValueBlur"
-      @keyup.up.down.native="handleRedValueInput($event.target.value)"
     />
   </div>
 
   <div class="veui-color-value">
-    <veui-input
-      ref="greenValue"
-      v-nudge.nodecimals
-      type="text"
+    <veui-color-value-input
       :value="rgb.g"
       :readonly="readonly"
+      :parse="parseFFValue"
       @input="handleGreenValueInput"
-      @blur="handleValueBlur"
-      @keyup.up.down.native="handleGreenValueInput($event.target.value)"
     />
   </div>
 
   <div class="veui-color-value">
-    <veui-input
-      ref="blueValue"
-      v-nudge.nodecimals
-      type="text"
+    <veui-color-value-input
       :value="rgb.b"
       :readonly="readonly"
+      :parse="parseFFValue"
       @input="handleBlueValueInput"
-      @blur="handleValueBlur"
-      @keyup.up.down.native="handleBlueValueInput($event.target.value)"
     />
   </div>
 </div>
@@ -43,7 +31,6 @@
 
 <script>
 import tinycolor from 'tinycolor2'
-import { clamp } from 'lodash'
 import ColorValueInput from './mixins/_ColorValueInput'
 
 export default {
@@ -65,37 +52,13 @@ export default {
   },
   methods: {
     handleRedValueInput (val) {
-      val = clamp(parseInt(val, 10), 0, 255)
-      if (isNaN(val)) {
-        return
-      }
-      // 跟 ShadeField 一样的问题，要一起往外传
-      this.updateHsvValue(
-        tinycolor(Object.assign({}, this.rgb, { r: val })).toHsv()
-      )
+      this.updateHsvValue(tinycolor(Object.assign({}, this.rgb, { r: val })).toHsv())
     },
     handleGreenValueInput (val) {
-      val = clamp(parseInt(val, 10), 0, 255)
-      if (isNaN(val)) {
-        return
-      }
-      this.updateHsvValue(
-        tinycolor(Object.assign({}, this.rgb, { g: val })).toHsv()
-      )
+      this.updateHsvValue(tinycolor(Object.assign({}, this.rgb, { g: val })).toHsv())
     },
     handleBlueValueInput (val) {
-      val = clamp(parseInt(val, 10), 0, 255)
-      if (isNaN(val)) {
-        return
-      }
-      this.updateHsvValue(
-        tinycolor(Object.assign({}, this.rgb, { b: val })).toHsv()
-      )
-    },
-    handleValueBlur () {
-      this.$refs.redValue.$refs.input.value = this.rgb.r
-      this.$refs.greenValue.$refs.input.value = this.rgb.g
-      this.$refs.blueValue.$refs.input.value = this.rgb.b
+      this.updateHsvValue(tinycolor(Object.assign({}, this.rgb, { b: val })).toHsv())
     }
   }
 }
