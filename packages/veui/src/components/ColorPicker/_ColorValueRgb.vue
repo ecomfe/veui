@@ -5,6 +5,7 @@
       :value="rgb.r"
       :readonly="readonly"
       :parse="parseFFValue"
+      nudge="ff"
       @input="handleRedValueInput"
     />
   </div>
@@ -14,6 +15,7 @@
       :value="rgb.g"
       :readonly="readonly"
       :parse="parseFFValue"
+      nudge="ff"
       @input="handleGreenValueInput"
     />
   </div>
@@ -23,6 +25,7 @@
       :value="rgb.b"
       :readonly="readonly"
       :parse="parseFFValue"
+      nudge="ff"
       @input="handleBlueValueInput"
     />
   </div>

@@ -6,6 +6,7 @@
       :readonly="readonly"
       :format="formatHue"
       :parse="parseHue"
+      nudge="hue"
       @input="handleHueValueInput"
     />
   </div>
@@ -15,6 +16,7 @@
       :readonly="readonly"
       :format="formatPercentage"
       :parse="parsePercentage"
+      nudge="percentage"
       @input="handleSaturationValueInput"
     />
   </div>
@@ -24,6 +26,7 @@
       :readonly="readonly"
       :format="formatPercentage"
       :parse="parsePercentage"
+      nudge="percentage"
       @input="handleLightnessValueInput"
     />
   </div>

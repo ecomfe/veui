@@ -6,6 +6,7 @@
       :readonly="readonly"
       :format="formatPercentage"
       :parse="parsePercentage"
+      nudge="percentage"
       @input="updateAlphaValue"
     />
   </div>
