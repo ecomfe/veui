@@ -270,9 +270,10 @@
     <veui-confirm-box :open.sync="confirmOpen">
       Hello world.
     </veui-confirm-box>
-    <veui-prompt-box :open.sync="promptOpen">
-      Hello world.
-    </veui-prompt-box>
+    <veui-prompt-box
+      :open.sync="promptOpen"
+      @ok="$alert($event, 'Result')"
+    />
   </section>
 
   <section>

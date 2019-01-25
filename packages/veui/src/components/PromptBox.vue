@@ -8,7 +8,7 @@
   :closable="false"
   :before-close="beforeClose"
   role="alertdialog"
-  @ok="submit"
+  @ok="ok"
   @cancel="cancel"
   @afterclose="$emit('afterclose')"
 >
@@ -21,17 +21,18 @@
       name="title"
     />
   </template>
-  <p class="veui-prompt-box-info">
-    <slot/>
-  </p>
-  <div>
-    <veui-input
-      v-model="localValue"
-      autofocus
-      class="veui-prompt-box-input"
-      @keydown.enter="submit(true)"
-    />
+  <div
+    v-if="content || $slots.default"
+    class="veui-prompt-box-info"
+  >
+    <slot>{{ content }}</slot>
   </div>
+  <veui-input
+    v-model="localValue"
+    autofocus
+    class="veui-prompt-box-input"
+    @keydown.enter="trigger"
+  />
   <template slot="foot">
     <slot name="foot"/>
   </template>
@@ -59,10 +60,7 @@ export default {
   mixins: [ui, overlay],
   props: {
     ...pick(Dialog.props, ['open', 'title', 'beforeClose']),
-    content: {
-      type: String,
-      default: '请输入'
-    },
+    content: String,
     value: {
       type: String,
       default: ''
@@ -90,11 +88,13 @@ export default {
     }
   },
   methods: {
-    submit (close) {
-      this.$emit('ok')
-      if (close) {
-        this.$refs.dialog.close('ok')
-      }
+    trigger () {
+      this.$refs.dialog.close('ok')
+    },
+    ok () {
+      let { localValue } = this
+      this.localValue = ''
+      this.$emit('ok', localValue)
     },
     cancel () {
       this.localValue = ''
