@@ -47,7 +47,9 @@ export default {
   },
   props: {
     items: Array,
-    value: null
+    /* eslint-disable vue/require-prop-types */
+    value: {}
+    /* eslint-enable vue/require-prop-types */
   },
   computed: {
     localName () {

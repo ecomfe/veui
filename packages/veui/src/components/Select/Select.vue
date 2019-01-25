@@ -26,7 +26,9 @@ export default {
     event: 'change'
   },
   props: {
-    value: null,
+    /* eslint-disable vue/require-prop-types */
+    value: {},
+    /* eslint-ensable vue/require-prop-types */
     placeholder: String,
     clearable: Boolean,
     options: Array,

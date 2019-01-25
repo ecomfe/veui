@@ -119,7 +119,9 @@ export default {
   },
   mixins: [ui, input, focusable],
   props: {
-    value: null,
+    /* eslint-disable vue/require-prop-types */
+    value: {},
+    /* eslint-enable vue/require-prop-types */
     secondaryProgress: {
       type: [Number, Array],
       default: 0

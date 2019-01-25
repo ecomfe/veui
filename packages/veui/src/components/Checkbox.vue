@@ -57,17 +57,17 @@ export default {
     prop: 'model'
   },
   props: {
+    /* eslint-disable vue/require-prop-types */
     trueValue: {
-      type: null,
       default: true
     },
     falseValue: {
-      type: null,
       default: false
     },
+    model: {},
+    /* eslint-enable vue/require-prop-types */
     checked: Boolean,
-    indeterminate: Boolean,
-    model: null
+    indeterminate: Boolean
   },
   data () {
     return {

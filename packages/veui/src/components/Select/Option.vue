@@ -47,7 +47,9 @@ export default {
     label: {
       type: [String, Number]
     },
-    value: null,
+    /* eslint-disable vue/require-prop-types */
+    value: {},
+    /* eslint-enable vue/require-prop-types */
     disabled: {
       type: Boolean,
       default: false

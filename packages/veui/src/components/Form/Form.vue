@@ -39,7 +39,9 @@ export default {
     afterValidate: Function,
     disabled: Boolean,
     readonly: Boolean,
-    data: null
+    /* eslint-disable vue/require-prop-types */
+    data: {}
+    /* eslint-enable vue/require-prop-types */
   },
 
   data () {

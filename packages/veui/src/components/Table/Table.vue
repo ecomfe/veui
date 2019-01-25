@@ -97,12 +97,13 @@ export default {
         return val === 'single' || val === 'multiple'
       }
     },
+    /* eslint-disable vue/require-prop-types */
     selected: {
-      type: null,
       default () {
         return []
       }
     },
+    /* eslint-enable vue/require-prop-types */
     expanded: {
       type: Array,
       default () {

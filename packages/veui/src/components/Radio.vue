@@ -40,12 +40,13 @@ export default {
     prop: 'model'
   },
   props: {
+    /* eslint-disable vue/require-prop-types */
     value: {
-      type: null,
       default: true
     },
-    checked: Boolean,
-    model: null
+    model: {},
+    /* eslint-enable vue/require-prop-types */
+    checked: Boolean
   },
   data () {
     return {
