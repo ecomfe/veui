@@ -125,8 +125,8 @@ const OptionGroup = {
               position={option.position}
               key={i}
               scopedSlots={{
-                'group-label': this.$scopedSlots['group-label']
-                  ? group => this.$scopedSlots['group-label'](group) || group.label
+                label: this.$scopedSlots.label
+                  ? group => this.$scopedSlots.label(group) || group.label
                   : null,
                 option: this.$scopedSlots.option || null,
                 'option-label': this.$scopedSlots['option-label'] || null
@@ -197,7 +197,9 @@ const OptionGroup = {
               {
                 this.$scopedSlots.label
                   ? this.$scopedSlots.label({ label: this.label })
-                  : this.label
+                  : this.menu.$scopedSlots.label
+                    ? this.menu.$scopedSlots.label({ label: this.label })
+                    : this.label
               }
             </span>
             {

@@ -292,6 +292,12 @@
       v-model="defaultValue10"
       clearable
     >
+      <template
+        slot="group-label"
+        slot-scope="{ label }"
+      >
+        <b>{{ label }}</b>
+      </template>
       <veui-option-group label="字母">
         <veui-option
           value="A"

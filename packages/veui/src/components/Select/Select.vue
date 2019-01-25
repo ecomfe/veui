@@ -138,7 +138,7 @@ export default {
         <span class="veui-select-label">
           {
             this.$scopedSlots.label
-              ? this.$scopedSlots.label(this.selectedOption || {})
+              ? this.$scopedSlots.label(this.selectedOption || { selected: false })
               : this.label
           }
         </span>
