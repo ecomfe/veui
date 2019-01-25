@@ -3,6 +3,11 @@
 ### 🐞 问题修复
 
 * [^] 修复了 `Button` 中 `target` 等 `props` 的同步问题。
+* [^] 修正了 `PromptBox` 回车确认时事件重复触发的问题。
+* [^] 修正了 `CheckboxGroup` 和 `CheckButtonGroup` 组件初始值为 `null` 时报错的问题。
+* [^] 修正了 `Calendar` 和 `Schedule` 组件范围选择初始值为 `null` 时计算错误的问题。
+* [^] 修正了 `AlerBox` 和 `Tabs` 组件存在硬编码文本的问题。
+* [^] 修正了 `Select` 和 `OptionGroup` 在使用内联组件时，作用域插槽没有生效的问题。
 
 ## 1.0.0-alpha.21
 
