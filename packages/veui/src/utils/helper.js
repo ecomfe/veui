@@ -174,22 +174,6 @@ export function resolveOverlayPosition (position) {
   }
 }
 
-export function keepOwn (obj) {
-  if (typeof obj === 'object') {
-    if (Array.isArray(obj)) {
-      return obj.map(val => keepOwn(val))
-    }
-
-    return keys(obj).reduce((acc, key) => {
-      if (key !== '__ob__') {
-        acc[key] = keepOwn(obj[key])
-      }
-      return acc
-    }, {})
-  }
-  return obj
-}
-
 export function getListeners (events, vm) {
   return events.reduce(function (listeners, type) {
     listeners[type] = (...args) => {

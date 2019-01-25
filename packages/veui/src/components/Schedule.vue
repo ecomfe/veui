@@ -202,7 +202,7 @@ import outside from '../directives/outside'
 import { merge } from '../utils/range'
 import warn from '../utils/warn'
 import config from '../managers/config'
-import { normalizeClass, keepOwn } from '../utils/helper'
+import { normalizeClass } from '../utils/helper'
 import Checkbox from './Checkbox'
 import Tooltip from './Tooltip'
 import Dropdown from './Dropdown'
@@ -295,7 +295,7 @@ export default {
     },
     shortcutChecked () {
       return this.realShortcuts.map(shortcut => {
-        return isEqual(keepOwn(shortcut.selected), keepOwn(this.realSelected))
+        return isEqual(shortcut.selected, this.realSelected)
       })
     },
     hourlyStates () {
