@@ -1,5 +1,13 @@
 ## 1.0.0-alpha.22
 
+### ⚠️ 非兼容性变更
+
+* [^] `Progress` 组件的 `auto-succeed` prop 更名为 `autosucceed`。
+
+### 💡 主要变更
+
+* [^] `Pagination` 组件支持不传入 `to` prop，完全使用事件进行交互。
+
 ### 🐞 问题修复
 
 * [^] 修复了 `Button` 中 `target` 等 `props` 的同步问题。

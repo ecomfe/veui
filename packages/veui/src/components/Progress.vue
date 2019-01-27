@@ -129,7 +129,7 @@ export default {
         return true
       }
     },
-    autoSucceed: [Boolean, Number]
+    autosucceed: [Boolean, Number]
   },
   data () {
     return {
@@ -204,16 +204,16 @@ export default {
         return
       }
 
-      if (this.autoSucceed != null) {
-        if (this.autoSucceed === true || this.autoSucceed === 0) {
+      if (this.autosucceed != null) {
+        if (this.autosucceed === true || this.autosucceed === 0) {
           this.setStatus(val === this.max ? 'success' : null)
           return
-        } else if (this.autoSucceed === false) {
+        } else if (this.autosucceed === false) {
           return
         }
         this.timer = setTimeout(() => {
           this.setStatus(val === this.max ? 'success' : null)
-        }, this.autoSucceed)
+        }, this.autosucceed)
       }
     },
     status (val) {

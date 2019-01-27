@@ -25,7 +25,7 @@
     <veui-progress
       :value="Number(progress)"
       desc
-      :auto-succeed="200"
+      :autosucceed="200"
       :status.sync="status"
       :decimal-place="1"
     />
@@ -36,7 +36,7 @@
       :value="Number(progress)"
       ui="fluid"
       desc
-      :auto-succeed="200"
+      :autosucceed="200"
       :status.sync="status"
       :decimal-place="1"
     />
@@ -47,7 +47,7 @@
       type="circular"
       :value="Number(progress)"
       desc
-      :auto-succeed="200"
+      :autosucceed="200"
       :status.sync="status"
     />
   </section>
@@ -58,7 +58,7 @@
       type="circular"
       :value="Number(progress)"
       desc
-      :auto-succeed="200"
+      :autosucceed="200"
       :status.sync="status"
     />
   </section>

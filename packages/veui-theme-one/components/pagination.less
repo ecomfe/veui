@@ -15,9 +15,10 @@
   display: inline-block;
   color: @veui-text-color-normal;
 
-  a {
+  .veui-link {
     color: inherit;
     text-decoration: none;
+    cursor: pointer;
 
     &:focus {
       outline: none;
@@ -133,6 +134,7 @@
 
   &-pages {
     float: left;
+    min-height: 1px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -164,7 +166,7 @@
         }
       }
 
-      span.veui-link {
+      .veui-current {
         cursor: default;
       }
     }

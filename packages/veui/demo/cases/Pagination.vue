@@ -30,27 +30,6 @@
         :page-size.sync="pageSize"
       />
     </p>
-    <p style="margin-top: -4em">
-      <veui-pagination
-        :page="page"
-        :total="total"
-        :page-sizes="pageSizes"
-        :to="to"
-        ui="full"
-        :page-size.sync="pageSize"
-      />
-    </p>
-    <p style="margin-top: -4em">
-      <veui-pagination
-        :page="page"
-        :total="total"
-        :page-sizes="pageSizes"
-        :to="to"
-        ui="full"
-        :page-size="30"
-      />
-    </p>
-
     <p>
       <veui-pagination
         :page="page"
@@ -69,7 +48,7 @@
         :page="page"
         :total="total"
         ui="advanced"
-        :to="{name: 'Pagination', params: { page: ':page'}}"
+        :to="{ name: 'Pagination', params: { page: ':page'} }"
       />
     </p>
   </section>
@@ -82,22 +61,36 @@
         :total="total"
         :to="'#' + to"
         ui="advanced"
-        :native="true"
+        native
       />
     </p>
   </section>
 
   <section>
-    <h2>事件与阻止跳转</h2>
-    <p><small>仅原生跳转可用</small></p>
+    <h2>阻止跳转</h2>
+    <p><small>仅原生跳转可阻止已配置 <code>to</code> 的跳转</small></p>
     <p>
       <veui-pagination
         :page="page"
         :total="total"
         :to="to"
         ui="advanced"
-        :native="true"
+        native
         @redirect="handlePageRedirect"
+      />
+    </p>
+    <div class="message">
+      {{ fifthPaginationMessage }}
+    </div>
+  </section>
+
+  <section>
+    <h2>自定义事件处理</h2>
+    <p>
+      <veui-pagination
+        :page="p"
+        :total="total"
+        @redirect="handleCustomRedirect"
       />
     </p>
     <div class="message">
@@ -113,7 +106,7 @@
         :total="0"
         :to="'#' + to"
         ui="full"
-        :native="true"
+        native
       />
     </p>
   </section>
@@ -136,7 +129,8 @@ export default {
       to: '/pagination/:page',
       pageSize: 30,
       pageSizes: [30, 60, 100, 200],
-      fifthPaginationMessage: ''
+      fifthPaginationMessage: '',
+      p: 1
     }
   },
   mounted () {
@@ -147,9 +141,12 @@ export default {
     })
   },
   methods: {
-    handlePageRedirect ({page, event}) {
+    handlePageRedirect (page, event) {
       event.preventDefault()
       this.fifthPaginationMessage = `已阻止你跳转到第${page}页`
+    },
+    handleCustomRedirect (page) {
+      this.p = page
     }
   },
   beforeRouteUpdate ({params}, from, next) {

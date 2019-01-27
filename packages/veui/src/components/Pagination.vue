@@ -23,11 +23,14 @@
   </div>
   <div class="veui-pagination-switch">
     <veui-link
+      :tabindex="to || page === 1 ? null : '0'"
+      :role="to ? null : 'button'"
       class="veui-pagination-prev"
       :to="page === 1 ? '' : pageNavHref.prev.href"
       :native="native"
       :disabled="page === 1"
       :aria-label="t('prev')"
+      @keydown.native.enter.space.prevent="handleRedirect(pageNavHref.prev.page)"
       @click="handleRedirect(pageNavHref.prev.page, $event)"
     >
       <veui-icon :name="icons.prev"/>
@@ -38,17 +41,23 @@
     >
       <li
         v-for="item in pageIndicatorSeries"
-        :key="item.page"
+        :key="`${item.page}-${item.text}`"
         :class="{
           'veui-pagination-page': true,
           'veui-active': item.page === page
         }"
       >
         <veui-link
+          :class="{
+            'veui-current': item.page === page
+          }"
+          :tabindex="to || item.page === page ? null : '0'"
+          :role="to ? null : 'button'"
           :to="item.page === page ? null : item.href"
           :native="native"
           :aria-current="item.page === page ? 'page' : null"
           :aria-label="item.page === page ? t('current', { page: item.page }) : t('pageLabel', { page: item.page })"
+          @keydown.native.enter.space.prevent="handleRedirect(item.page)"
           @click="handleRedirect(item.page, $event)"
         >
           {{ item.text }}
@@ -56,11 +65,14 @@
       </li>
     </ul>
     <veui-link
+      :tabindex="to || page === pageCount ? null : '0'"
+      :role="to ? null : 'button'"
       class="veui-pagination-next"
       :to="page === pageCount ? '' : pageNavHref.next.href"
       :native="native"
       :disabled="page === pageCount || pageCount === 0"
       :aria-label="t('next')"
+      @keydown.native.enter.space.prevent="handleRedirect(pageNavHref.next.page)"
       @click="handleRedirect(pageNavHref.next.page, $event)"
     >
       <veui-icon :name="icons.next"/>
@@ -132,10 +144,7 @@ export default {
     total: {
       type: Number
     },
-    to: {
-      type: [String, Object],
-      default: ''
-    },
+    to: [String, Object],
     native: {
       type: Boolean,
       default: false
@@ -147,8 +156,11 @@ export default {
     }
   },
   computed: {
-    realTo () {
-      let to = this.to
+    baseTo () {
+      let { to } = this
+      if (to == null) {
+        return null
+      }
       if (typeof to === 'string') {
         return to
       } else {
@@ -183,7 +195,7 @@ export default {
       return Math.ceil(this.realTotal / this.realPageSize)
     },
     pageIndicatorSeries () {
-      let {page, pageCount, getPageIndicator} = this
+      let { page, pageCount, getPageIndicator } = this
 
       let continuousIndicatorLength = aroundIndicatorLength * 2 + 1
       let boundaryIndicatorLength = (pageIndicatorLength - continuousIndicatorLength - 2) / 2
@@ -219,10 +231,10 @@ export default {
             .concat(getPageSeries(pageCount, boundaryIndicatorLength))
       }
 
-      function getPageSeries (frompage, length) {
+      function getPageSeries (from, length) {
         let series = []
         for (let i = 0; i < length; i++) {
-          series[i] = getPageIndicator(frompage + i)
+          series[i] = getPageIndicator(from + i)
         }
         return series
       }
@@ -258,7 +270,11 @@ export default {
     },
 
     formatHref (page) {
-      return this.realTo.replace(HREF_TPL_PLACEHOLDER, page)
+      let { baseTo } = this
+      if (baseTo === null) {
+        return null
+      }
+      return baseTo.replace(HREF_TPL_PLACEHOLDER, page)
     }
   }
 }
