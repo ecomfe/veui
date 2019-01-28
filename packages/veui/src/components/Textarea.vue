@@ -5,6 +5,7 @@
     'veui-textarea-focused': focused,
     'veui-textarea-rows': normalizedRows > 0,
     'veui-textarea-line-numbered': lineNumber,
+    'veui-textarea-autoresize': autoresize,
     'veui-input-invalid': realInvalid,
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled

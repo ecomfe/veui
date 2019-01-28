@@ -65,7 +65,7 @@
   }
 
   &-measurer {
-    .absolute(0, 0, _);
+    .absolute(0);
     overflow: hidden;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -86,6 +86,10 @@
         visibility: hidden;
       }
     }
+  }
+
+  &-autoresize &-measurer {
+    bottom: auto;
   }
 
   &[ui~="small"] {

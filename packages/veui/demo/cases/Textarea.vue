@@ -5,6 +5,7 @@
     <h2>小尺寸 + 显示 3 行</h2>
     <veui-textarea
       v-model="value"
+      line-number
       ui="small"
       rows="3"
     />
