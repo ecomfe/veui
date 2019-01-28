@@ -129,7 +129,16 @@ export default {
         return true
       }
     },
-    autosucceed: [Boolean, Number]
+    autosucceed: [Boolean, Number],
+    autoSucceed: {
+      type: [Boolean, Number],
+      validator (val) {
+        if (val != null) {
+          warn('[veui-progress] `auto-succeed` is deprecated and will be removed in `1.0.0`. Use `autosucceed` instead.', this)
+        }
+        return true
+      }
+    }
   },
   data () {
     return {
@@ -139,6 +148,9 @@ export default {
   computed: {
     realValue () {
       return clamp(this.value, this.min, this.max)
+    },
+    realAutosucceed () {
+      return this.autoSucceed != null ? this.autoSucceed : this.autosucceed
     },
     klass () {
       return {
@@ -204,16 +216,16 @@ export default {
         return
       }
 
-      if (this.autosucceed != null) {
-        if (this.autosucceed === true || this.autosucceed === 0) {
+      if (this.realAutosucceed != null) {
+        if (this.realAutosucceed === true || this.realAutosucceed === 0) {
           this.setStatus(val === this.max ? 'success' : null)
           return
-        } else if (this.autosucceed === false) {
+        } else if (this.realAutosucceed === false) {
           return
         }
         this.timer = setTimeout(() => {
           this.setStatus(val === this.max ? 'success' : null)
-        }, this.autosucceed)
+        }, this.realAutosucceed)
       }
     },
     status (val) {
