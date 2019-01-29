@@ -150,7 +150,7 @@ export default {
       return clamp(this.value, this.min, this.max)
     },
     realAutosucceed () {
-      return this.autoSucceed != null ? this.autoSucceed : this.autosucceed
+      return this.autosucceed != null ? this.autosucceed : this.autoSucceed
     },
     klass () {
       return {
