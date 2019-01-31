@@ -28,7 +28,10 @@
       :class="{ 'veui-dialog-draggable': draggable }"
     >
       <h3 class="veui-dialog-content-head-title">
-        <slot name="title">
+        <slot
+          name="title"
+          :close="close"
+        >
           {{ title }}
         </slot>
       </h3>
