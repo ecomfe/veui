@@ -69,7 +69,7 @@ export default {
     }
   },
   computed: {
-    localTrigger () {
+    realTrigger () {
       if (this.trigger === 'custom') {
         return {}
       }
@@ -87,13 +87,13 @@ export default {
       }
     },
     targetNode () {
-      return getNodes(this.target, this.$vnode.context)[0]
+      return this.getTargetNode(this.target)
     },
     outsideOptions () {
       return {
         handler: this.closeHandler,
         refs: this.targetNode,
-        trigger: this.localTrigger.close,
+        trigger: this.realTrigger.close,
         delay: this.hideDelay,
         excludeSelf: !this.interactive
       }
@@ -113,8 +113,12 @@ export default {
         this.$emit('update:open', val)
       }
     },
-    target () {
-      this.localOpen = this.open
+    targetNode (val, oldVal) {
+      this.removeHandler(oldVal)
+      this.bindHandler()
+    },
+    trigger () {
+      this.rebindHandler()
     },
     position (val) {
       this.localOverlayOptions.position = val
@@ -128,30 +132,40 @@ export default {
   mounted () {
     this.bindHandler()
   },
-  updated () {
-    this.bindHandler()
-  },
   beforeDestroy () {
-    if (!this.custom && this.trigger !== 'custom') {
-      this.targetNode && this.targetNode.removeEventListener(this.localTrigger.open, this.openHandler, false)
-    }
+    this.removeHandler()
   },
   methods: {
+    getTargetNode (target) {
+      return getNodes(this.target, this.$vnode.context)[0]
+    },
     openHandler () {
       this.localOpen = true
     },
     closeHandler () {
       this.localOpen = false
     },
-    bindHandler () {
-      if (!this.custom && this.trigger !== 'custom') {
-        if (this.targetNode) {
-          if (!this.targetNode.__bindToolTip__) {
-            this.targetNode.addEventListener(this.localTrigger.open, this.openHandler, false)
-            this.targetNode.__bindToolTip__ = true
-          }
-        }
+    removeHandler (target) {
+      let targetNode = target || this.targetNode
+      if (!targetNode || !targetNode.__tooltip_open_trigger__) {
+        return
       }
+
+      targetNode.removeEventListener(targetNode.__tooltip_open_trigger__, this.openHandler, false)
+      targetNode.__tooltip_open_trigger__ = null
+    },
+    bindHandler () {
+      if (this.custom || this.trigger === 'custom' || !this.targetNode) {
+        return
+      }
+      if (!this.targetNode.__tooltip_open_trigger__) {
+        this.targetNode.addEventListener(this.realTrigger.open, this.openHandler, false)
+        this.targetNode.__tooltip_open_trigger__ = this.realTrigger.open
+      }
+    },
+    rebindHandler () {
+      this.removeHandler()
+      this.bindHandler()
     }
   },
   render () {
