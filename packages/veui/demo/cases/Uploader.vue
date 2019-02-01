@@ -98,7 +98,6 @@
     action="/upload"
     :max-count="3"
     max-size="10mb"
-    accept=".jpg,.jpeg,.gif"
     :payload="payload"
     ui="horizontal"
     progress="detail"
@@ -108,7 +107,7 @@
     @statuschange="handleStatusChange"
   >
     <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在10M以内，只能上传3张图
+      请选择文件，大小在10M以内，只能上传3个文件
     </template>
   </veui-uploader>
   <h2>文件上传模式，通过iframe上传</h2>

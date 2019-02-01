@@ -75,14 +75,14 @@ app.use('/uploadiframe', function (req, res) {
   setTimeout(() => {
     let code = Math.random() > 0.5 ? 0 : 1
     let result = {
-      code,
+      success: !code,
       result: {
         name: `abcdefg${Math.random()}.gif`,
         src: 'http://nodejs.cn/static/images/logo.svg'
       }
     }
     if (code) {
-      result.result.reason = '图片尺寸不对！'
+      result.result.message = '图片尺寸不对！'
     }
     result = JSON.stringify(result)
 
@@ -95,14 +95,14 @@ app.use('/upload', function (req, res) {
   setTimeout(() => {
     let code = Math.random() > 0.5 ? 0 : 1
     let result = {
-      status: code ? 'failure' : 'success',
+      success: !code,
       extraInfo: `file${Math.random()}`
     }
     if (code) {
-      result.reason = '图片尺寸不对'
+      result.message = '图片尺寸不对'
     }
     res.json(result)
-  }, 5000)
+  }, 3000)
 })
 
 module.exports = app.listen(port, function (err) {

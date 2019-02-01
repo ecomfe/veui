@@ -403,7 +403,7 @@ import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
-import bytes from 'bytes'
+import { parse, format } from 'bytes'
 import warn from '../utils/warn'
 
 config.defaults({
@@ -821,7 +821,7 @@ export default {
       })
     },
     validateFileSize (fileSize) {
-      return !this.maxSize || !fileSize || fileSize <= bytes.parse(this.maxSize)
+      return !this.maxSize || !fileSize || fileSize <= parse(this.maxSize)
     },
     uploadFiles () {
       this.fileList.forEach(file => {
@@ -1008,7 +1008,7 @@ export default {
       this.$refs.label.appendChild(this.$refs.input)
     },
     convertSizeUnit (size) {
-      return bytes(size, {decimalPlaces: 1})
+      return format(size, { decimalPlaces: 1 })
     },
     parseData (data) {
       if (typeof data === 'object') {
