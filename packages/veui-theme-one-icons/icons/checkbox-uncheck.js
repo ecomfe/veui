@@ -4,7 +4,6 @@ Icon.register({
   'checkbox-uncheck': {
     paths: [
       {
-        class: 'fillColor',
         stroke: 'currentColor',
         'stroke-width': '4',
         d: 'M2 2h44v44H2z',

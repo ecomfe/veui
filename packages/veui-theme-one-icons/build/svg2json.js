@@ -18,7 +18,6 @@ Promise.all(
       return
     }
 
-    console.log(`Converting ${file}...`)
     if (!ICON_PATTERN.test(file)) {
       return
     }
@@ -30,6 +29,7 @@ Promise.all(
     }
 
     let el = await svgson(data)
+    console.log(`Converting ${file}...`)
     let { attributes, children } = el
     let { width, height, viewBox } = attributes
     if (!(width && height)) {
@@ -47,12 +47,51 @@ Promise.all(
     }
 
     walkElement(el, {
-      enter ({ attributes }) {
-        if (attributes.fill && attributes.fill.toLowerCase() !== 'none') {
-          delete attributes.fill
+      enter (node) {
+        let { attributes } = node
+
+        delete attributes.class
+
+        let ctxFill = (getContextAttr(node, 'fill') || '').toLowerCase()
+        let ctxStroke = (getContextAttr(node, 'stroke') || '').toLowerCase()
+        let attrFill = (attributes.fill || '').toLowerCase()
+        let attrStroke = (attributes.stroke || '').toLowerCase()
+
+        if (attrFill) {
+          if (!ctxFill) {
+            if (attrFill !== 'none') {
+              attributes.fill = 'currentColor'
+              console.log(`  fill: ${attrFill} -> currentColor`)
+            }
+          } else {
+            if (attrFill === ctxFill) {
+              delete attributes.fill
+              console.log(`  fill: ${attrFill} -> / (same as context)`)
+            } else if (attrFill !== 'none') {
+              attributes.fill = 'currentColor'
+              console.log(`  fill: ${attrFill} -> currentColor (different from context)`)
+            }
+          }
         }
-        if (attributes.stroke && attributes.stroke.toLowerCase() !== 'none') {
-          attributes.stroke = 'currentColor'
+
+        if (attrStroke) {
+          if (!ctxStroke) {
+            if (attrStroke !== 'none') {
+              attributes.stroke = 'currentColor'
+              console.log(`  stroke: ${attrStroke} -> currentColor`)
+            } else {
+              delete attributes.stroke
+              console.log(`  stroke: ${attrStroke} -> / (same as default)`)
+            }
+          } else {
+            if (attrStroke && attrStroke === ctxStroke) {
+              delete attributes.stroke
+              console.log(`  stroke: ${attrStroke} -> / (same as context)`)
+            } else if (attrStroke !== 'none') {
+              attributes.stroke = 'currentColor'
+              console.log(`  stroke: ${attrStroke} -> currentColor (different from context)`)
+            }
+          }
         }
       }
     })
@@ -90,9 +129,25 @@ function walkElement (el, { enter, leave }) {
     enter(el)
   }
   if (el.children && el.children.length) {
-    el.children.forEach(child => walkElement(child, { enter, leave }))
+    el.children.forEach(child => {
+      child.parentNode = el
+      walkElement(child, { enter, leave })
+      delete child.parentNode
+    })
   }
   if (typeof leave === 'function') {
     leave(el)
   }
+}
+
+function getContextAttr (el, attr) {
+  let node = el.parentNode
+  while (node) {
+    if (node.attributes && node.attributes[attr]) {
+      return node.attributes[attr]
+    }
+
+    node = node.parentNode
+  }
+  return null
 }
