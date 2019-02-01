@@ -45,7 +45,7 @@ export default {
     overlayClass: getClassPropDef(),
     open: Boolean,
     target: {
-      type: [String, Object, Element],
+      type: process.env.VUE_ENV === 'server' ? true : [String, Object, Element],
       default: null
     },
     options: {
