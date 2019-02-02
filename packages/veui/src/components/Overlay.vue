@@ -20,14 +20,13 @@
 
 <script>
 import Tether from 'tether'
-import { assign } from 'lodash'
 import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
 import focusManager from '../managers/focus'
 import config from '../managers/config'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
-import { getClassPropDef, mergeClasses, isType } from '../utils/helper'
+import { getClassPropDef, mergeClasses, isType, resolveOverlayPosition } from '../utils/helper'
 import '../common/uiTypes'
 
 config.defaults({
@@ -42,6 +41,7 @@ export default {
   uiTypes: ['overlay'],
   mixins: [ui, focusable],
   props: {
+    position: String,
     overlayClass: getClassPropDef(),
     open: Boolean,
     target: {
@@ -164,10 +164,12 @@ export default {
       }
 
       if (this.targetNode) {
-        let options = assign({}, this.options, {
+        let options = {
+          ...this.options,
+          ...resolveOverlayPosition(this.position),
           element: this.overlayBox,
           target: this.targetNode
-        })
+        }
 
         if (!this.tether) {
           this.tether = new Tether(options)
