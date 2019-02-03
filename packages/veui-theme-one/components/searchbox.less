@@ -21,18 +21,31 @@
     margin: -1px -1px -1px 0;
 
     &-icon {
+      @half-height: @veui-height-normal / 2;
       outline: none;
       border: none;
+      margin-top: ~"calc(@{half-height} - .5em)";
       margin-right: 10px;
       padding: 0;
       width: auto;
       height: auto;
       line-height: 1;
+      vertical-align: top;
       background-color: transparent;
       .veui-button-transition();
 
+      [ui~="large"] & {
+        @half-height: @veui-height-large / 2;
+        margin-top: ~"calc(@{half-height} - .5em)";
+      }
+
+      [ui~="small"] & {
+        @half-height: @veui-height-small / 2;
+        margin-top: ~"calc(@{half-height} - .5em)";
+      }
+
       .veui-icon {
-        vertical-align: middle;
+        vertical-align: top;
       }
 
       &.focus-visible {
