@@ -165,8 +165,8 @@ export default {
 
       if (this.targetNode) {
         let options = {
-          ...this.options,
           ...resolveOverlayPosition(this.position),
+          ...this.options,
           element: this.overlayBox,
           target: this.targetNode
         }
