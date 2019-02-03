@@ -442,6 +442,9 @@ export default {
     storeBoundingSize (menuRightStable) {
       // 记录 resize 后的一些边界
       let { menu, listContainer, extra } = this.$refs
+      if (!menu || !listContainer || !listContainer.$el || !extra) {
+        return
+      }
       let tabConClientWidth = listContainer.$el.clientWidth
       let menuClientWidth = menu.clientWidth
       let extraWidth = extra.getBoundingClientRect().width
