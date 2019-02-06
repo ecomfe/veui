@@ -52,7 +52,7 @@
     </div>
   </veui-input>
   <veui-overlay
-    v-if="realExpanded"
+    v-show="realExpanded"
     ref="overlay"
     target="input"
     :options="realOverlayOptions"
@@ -159,7 +159,10 @@ export default {
       return !!(this.expanded && this.realSuggestions && this.realSuggestions.length)
     },
     valueProperty () {
-      return this.replaceOnSelect === false ? '' : (this.replaceOnSelect || 'value')
+      if (typeof this.replaceOnSelect !== 'string') {
+        return 'value'
+      }
+      return this.replaceOnSelect
     },
     realSuggestions () {
       if (!this.localSuggestions) {
