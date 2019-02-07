@@ -4,7 +4,9 @@
   :ui="realUi"
 >
   <h3 class="veui-filter-panel-title">
-    <slot name="head"/>
+    <slot name="head">
+      {{ title }}
+    </slot>
   </h3>
   <div class="veui-filter-panel-content">
     <veui-searchbox
@@ -47,6 +49,7 @@ export default {
   },
   mixins: [ui, i18n],
   props: {
+    title: String,
     datasource: {
       type: Array,
       default () {
