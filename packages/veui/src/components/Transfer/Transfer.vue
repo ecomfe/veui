@@ -60,8 +60,8 @@ export default {
       rootAllCount: 0,
       rootPartCount: 0,
 
-      candidateExpands: [],
-      selectedExpands: []
+      candidateExpanded: [],
+      selectedExpanded: []
     }
   },
   computed: {
@@ -329,12 +329,12 @@ export default {
               // 如果右侧没有相同的 option ，说明当前这个 option 是新选中的。
               // 对于新选中的 option ，要保持左侧的展开收起状态。
               if (!relatedSelectedOption) {
-                let expanded = includes(this.candidateExpands, newSelectedOption.value)
+                let expanded = includes(this.candidateExpanded, newSelectedOption.value)
                 if (expanded) {
-                  this.selectedExpands.push(newSelectedOption.value)
-                  uniq(this.selectedExpands)
+                  this.selectedExpanded.push(newSelectedOption.value)
+                  uniq(this.selectedExpanded)
                 } else {
-                  remove(this.selectedExpands, newSelectedOption.value)
+                  remove(this.selectedExpanded, newSelectedOption.value)
                 }
               }
             }
@@ -479,11 +479,11 @@ export default {
               placeholder: this.candidatePlaceholder,
               isSelectable: this.isSelectable,
               icons: this.icons,
-              expands: this.candidateExpands
+              expanded: this.candidateExpanded
             },
             on: {
-              'update:expands': (val) => {
-                this.candidateExpands = val
+              'update:expanded': (val) => {
+                this.candidateExpanded = val
               },
               select: (...args) => {
                 this.select(...args)
@@ -506,12 +506,12 @@ export default {
               filter: this.filter,
               placeholder: this.selectedPlaceholder,
               isSelectable: this.isSelectable,
-              expands: this.selectedExpands,
+              expanded: this.selectedExpanded,
               icons: this.icons
             },
             on: {
-              'update:expands': (val) => {
-                this.selectedExpands = val
+              'update:expanded': (val) => {
+                this.selectedExpanded = val
               },
               remove: (...args) => {
                 this.remove(...args)

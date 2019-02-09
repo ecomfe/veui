@@ -1,5 +1,9 @@
 ## 1.0.0-alpha.23
 
+### ⚠️ 非兼容性变更
+
+* [^] `Tree` 组件的 `expands` prop 更名为 `expanded`。`expands` 被废弃，将在 `1.0.0` 移除。
+
 ### 💡 主要变更
 
 * [^] 为 `Overlay` 组件增加 prop `position`。
@@ -15,7 +19,7 @@
 
 ### ⚠️ 非兼容性变更
 
-* [^] `Progress` 组件的 `auto-succeed` prop 更名为 `autosucceed`。
+* [^] `Progress` 组件的 `auto-succeed` prop 更名为 `autosucceed`。`auto-succeed` 被废弃，将在 `1.0.0` 移除。
 
 ### 💡 主要变更
 

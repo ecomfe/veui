@@ -52,6 +52,7 @@
 import TreeNode from './_TreeNode'
 import { includes, remove, clone, omit, filter, uniq } from 'lodash'
 import ui from '../../mixins/ui'
+import warn from '../../utils/warn'
 
 export default {
   name: 'veui-tree',
@@ -74,8 +75,20 @@ export default {
         return includes(['toggle', 'none'], value)
       }
     },
-    // 当前有哪些节点是展开的
+    /**
+     * @deprecated
+     */
     expands: {
+      type: Array,
+      validator (val) {
+        if (val != null) {
+          warn('[veui-tree] `expands` is deprecated and will be removed in `1.0.0`. Use `expanded` instead.', this)
+        }
+        return true
+      }
+    },
+    // 当前有哪些节点是展开的
+    expanded: {
       type: Array,
       default () {
         return []
@@ -87,32 +100,37 @@ export default {
       localDatasource: []
     }
   },
+  computed: {
+    realExpanded () {
+      return this.expands || this.expanded
+    }
+  },
   watch: {
-    expands () {
-      this.parseExpands()
+    realExpanded () {
+      this.parseExpanded()
     },
     datasource: {
       handler () {
-        this.parseExpands()
+        this.parseExpanded()
       },
       deep: true,
       immediate: true
     }
   },
   methods: {
-    parseExpands (expands = this.expands) {
-      let walk = (items, expands) => {
+    parseExpanded (expanded = this.realExpanded) {
+      let walk = (items, expanded) => {
         return items.map(item => {
           let localOption = omit(item, 'children')
           if (item.children && item.children.length) {
-            let expanded = !!remove(expands, value => value === item.value).length
+            let expanded = !!remove(expanded, value => value === item.value).length
             localOption.expanded = expanded
-            localOption.children = walk(item.children, expands)
+            localOption.children = walk(item.children, expanded)
           }
           return localOption
         })
       }
-      this.localDatasource = walk(this.datasource, clone(expands))
+      this.localDatasource = walk(this.datasource, clone(expanded))
     },
     toggle (item, index, depth, val) {
       if (val === item.expanded || !item.children || item.children.length === 0) {
@@ -120,13 +138,18 @@ export default {
       }
       item.expanded = !item.expanded
 
-      let expands = item.expanded
-        ? uniq([...this.expands, item.value])
+      let expanded = item.expanded
+        ? uniq([...this.realExpanded, item.value])
         : filter(
-          this.expands,
+          this.realExpanded,
           value => value !== item.value
         )
-      this.$emit('update:expands', expands)
+      this.$emit('update:expanded', expanded)
+
+      /**
+       * TODO: remove on 1.0
+       */
+      this.$emit('update:expands', expanded)
 
       this.$emit(item.expanded ? 'expand' : 'collapse', item, index, depth)
     },

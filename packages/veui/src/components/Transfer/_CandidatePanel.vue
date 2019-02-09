@@ -25,7 +25,7 @@
   <template slot-scope="{ items }">
     <veui-tree
       :datasource="items"
-      :expands.sync="expands"
+      :expanded.sync="expanded"
       @click="select"
     >
       <template
@@ -117,26 +117,26 @@ export default {
     filter: Function,
     placeholder: String,
     isSelectable: Boolean,
-    expands: Array,
+    expanded: Array,
     icons: Object
   },
   data () {
     return {
-      localExpands: []
+      localExpanded: []
     }
   },
   watch: {
-    expands: {
+    expanded: {
       handler (val, oldVal) {
         if (!isEqual(val, oldVal)) {
-          this.localExpands = clone(this.expands)
+          this.localExpanded = clone(this.expanded)
         }
       },
       immediate: true
     },
-    localExpands (val, oldVal) {
+    localExpanded (val, oldVal) {
       if (!isEqual(val, oldVal)) {
-        this.$emit('update:expands', val)
+        this.$emit('update:expanded', val)
       }
     }
   },
@@ -145,14 +145,14 @@ export default {
       return this.filter('candidate', keyword, option, this.datasource)
     },
     toggle (option) {
-      let expands = clone(this.localExpands)
-      let index = expands.indexOf(option.value)
+      let expanded = clone(this.localExpanded)
+      let index = expanded.indexOf(option.value)
       if (index > -1) {
-        expands.splice(index, 1)
+        expanded.splice(index, 1)
       } else {
-        expands.push(option.value)
+        expanded.push(option.value)
       }
-      this.localExpands = expands
+      this.localExpanded = expanded
     },
     selectAll () {
       this.$emit('selectall')
