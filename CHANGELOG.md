@@ -1,6 +1,15 @@
 ## 1.0.0-alpha.23
 
+### 💡 主要变更
+
+* [^] 为 `Overlay` 组件增加 prop `position`。
+* [^] 为 `FilterPanel` 组件增加 prop `title`。
+
+### 🐞 问题修复
+
 * [^] 修正 `Overlay` 组件 prop 类型导致 SSR 报错的问题。
+* [^] 修正 `Searchbox` 组件 `suggestions` prop 类型为 `Array<string>` 时，`replace-on-select` 设置无效的问题。
+* [^] 修正 `veui-theme-one-icons` 中图标的 `fill` & `stroke`。
 
 ## 1.0.0-alpha.22
 
