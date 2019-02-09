@@ -89,8 +89,7 @@ export default {
     }
   },
   created () {
-    let me = this
-    this.debounceSearch = debounce(() => me.search(), 200)
+    this.debounceSearch = debounce(() => this.search(), 200)
   },
   beforeDestroy () {
     this.debounceSearch.cancel()
