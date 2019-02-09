@@ -20,6 +20,7 @@
     >
       <slot
         name="item"
+        v-bind="item"
         :item="item"
         :index="index"
         :depth="depth"
@@ -34,6 +35,7 @@
         <div class="veui-tree-item-label">
           <slot
             name="item-label"
+            v-bind="item"
             :item="item"
             :index="index"
             :depth="depth"

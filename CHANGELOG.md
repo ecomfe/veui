@@ -8,6 +8,7 @@
 
 * [^] 为 `Overlay` 组件增加 prop `position`。
 * [^] 为 `FilterPanel` 组件增加 prop `title`。
+* [^] `Tree` 组件的 `item` 及 `itme-label` slot 作用域参数现在包含每个节点数据项的所有字段。
 
 ### 🐞 问题修复
 
