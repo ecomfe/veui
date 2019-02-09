@@ -123,8 +123,7 @@ export default {
         return items.map(item => {
           let localOption = omit(item, 'children')
           if (item.children && item.children.length) {
-            let expanded = !!remove(expanded, value => value === item.value).length
-            localOption.expanded = expanded
+            localOption.expanded = remove(expanded, value => value === item.value).length !== 0
             localOption.children = walk(item.children, expanded)
           }
           return localOption

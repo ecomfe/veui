@@ -3,10 +3,10 @@
   <h1><code>&lt;veui-tree&gt;</code></h1>
 
   <h2>点击左侧图标展开收起</h2>
-  <p>当前展开：{{ expands1 }}</p>
+  <p>当前展开：{{ expanded1 }}</p>
   <veui-tree
     :datasource="treeDatasource1"
-    :expands.sync="expands1"
+    :expanded.sync="expanded1"
   />
 
   <h2>点击整行展开收起</h2>
@@ -2261,7 +2261,7 @@ export default {
     return {
       treeDatasource1: cloneDeep(areas),
       treeDatasource2: cloneDeep(areas),
-      expands1: ['10000', '1000'],
+      expanded1: ['10000', '1000'],
 
       selected1: [],
       datasource1: cloneDeep(areas),
