@@ -8,13 +8,15 @@
 
 * [^] 为 `Overlay` 组件增加 prop `position`。
 * [^] 为 `FilterPanel` 组件增加 prop `title`。
-* [^] `Tree` 组件的 `item` 及 `itme-label` slot 作用域参数现在包含每个节点数据项的所有字段。
+* [^] `Tree` 组件的 `item` 及 `item-label` slot 作用域参数现在包含每个节点数据项的所有字段。
+* [^] `Transfer` 组件的 `candidate-item`、`selected-item`、`candidate-item-label` 及 `selected-item-label` slot 作用域参数现在包含每个节点数据项的所有字段。
 
 ### 🐞 问题修复
 
 * [^] 修正 `Overlay` 组件 prop 类型导致 SSR 报错的问题。
 * [^] 修正 `Searchbox` 组件 `suggestions` prop 类型为 `Array<string>` 时，`replace-on-select` 设置无效的问题。
 * [^] 修正 `veui-theme-one-icons` 中图标的 `fill` & `stroke`。
+* [^] 修正 `Transter` 组件的 `selected-item-label` 插槽在 `selected-show-mode` 为 `'flat'` 时无效的问题。
 
 ## 1.0.0-alpha.22
 

@@ -88,7 +88,7 @@
       >
         <slot
           name="item"
-          :option="options.items"
+          :items="options.items"
           :index="index"
         >
           <div class="veui-transfer-selected-flat-item-label">
@@ -97,7 +97,13 @@
                 :key="'l-' + opt.value"
                 class="veui-transfer-selected-flat-option-label"
               >
-                {{ opt.label }}
+                <slot
+                  name="item-label"
+                  v-bind="opt"
+                  :index="index"
+                >
+                  {{ opt.label }}
+                </slot>
               </span>
               <span
                 v-if="i < options.items.length - 1"

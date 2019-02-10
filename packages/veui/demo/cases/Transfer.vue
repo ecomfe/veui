@@ -43,6 +43,25 @@
 
   <h1><code>&lt;veui-transfer&gt;</code></h1>
 
+  <h2>自定义项目内容</h2>
+  <veui-transfer
+    :datasource="datasource1"
+    selected-show-mode="flat"
+  >
+    <template
+      slot="candidate-item-label"
+      slot-scope="{ label }"
+    >
+      <em>{{ label }}</em>
+    </template>
+    <template
+      slot="selected-item-label"
+      slot-scope="{ label }"
+    >
+      <small>{{ label }}</small>
+    </template>
+  </veui-transfer>
+
   <h2>多级树形结构</h2>
   <veui-transfer
     v-model="selected1"
