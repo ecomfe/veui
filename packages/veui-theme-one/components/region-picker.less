@@ -2,9 +2,9 @@
 
 .veui-region-picker {
   @item-width: 116px;
-  @row-size: 6;
   @padding-x: 20px;
-  width: @item-width * @row-size + @padding-x * 2 + 2px;
+  @padding-y: 16px;
+  width: 740px;
   border: 1px solid @veui-gray-color-5;
 
   &-section {
@@ -16,26 +16,27 @@
 
     &-title {
       .centered-line(40px);
-      padding-left: 20px;
+      padding-left: @padding-x;
+    }
+
+    &-content {
+      display: table;
     }
   }
 
   &-branch {
-    padding: 0 @padding-x;
+    display: table-row;
 
     &:hover {
       background-color: @veui-gray-color-8;
     }
 
     &-title {
-      float: left;
-      margin: 16px 0;
-      width: @item-width;
-
-      &::after {
-        content: "：";
-        line-height: 1;
-      }
+      display: table-cell;
+      vertical-align: top;
+      min-width: @item-width + @padding-x * 2;
+      padding: @padding-y @padding-x * 2 @padding-y @padding-x;
+      white-space: nowrap;
     }
 
     &-content {
@@ -45,10 +46,21 @@
 
   &-group {
     float: left;
-    margin: 16px 0;
+    margin: @padding-y 0;
 
     &-title {
       width: @item-width;
+      white-space: nowrap;
+
+      .veui-checkbox {
+        width: 100%;
+      }
+
+      .veui-checkbox-label {
+        max-width: ~"calc(100% - 24px)";
+        padding-right: 10px;
+        .ellipsis();
+      }
     }
 
     &-overlay {
