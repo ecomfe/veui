@@ -10,6 +10,7 @@
     ref="box"
     type="checkbox"
     v-bind="attrs"
+    indeterminate.prop="localIndeterminate"
     @change="handleChange"
     v-on="listeners"
   >
@@ -114,27 +115,32 @@ export default {
     localIndeterminate (val) {
       this.$refs.box.indeterminate = val
       if (this.indeterminate !== val) {
-        this.$emit('update:indeterminate', false)
+        this.$emit('update:indeterminate', val)
       }
     }
   },
   mounted () {
-    let box = this.$refs.box
-    box.indeterminate = this.localIndeterminate
+    let { box } = this.$refs
     patchIndeterminate(box)
   },
   methods: {
     handleChange () {
       if (this.localIndeterminate) {
-        this.localChecked = this.falseValue
+        this.toggleChecked(false)
         this.localIndeterminate = false
       } else {
         this.toggleChecked()
       }
-      this.$emit('change', this.localChecked)
     },
-    toggleChecked () {
-      this.localChecked = !this.localChecked
+    toggleChecked (forceValue) {
+      if (this.localChecked === forceValue) {
+        return
+      }
+      let checked = forceValue == null ? !this.localChecked : !!forceValue
+      this.localChecked = checked
+      this.$nextTick(() => {
+        this.$emit('change', this.localChecked)
+      })
     },
     focus () {
       this.$refs.box.focus()

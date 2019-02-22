@@ -96,8 +96,16 @@ export default {
   },
   methods: {
     handleChange ($event) {
-      this.localChecked = $event.target.checked
-      this.$emit('change', this.localChecked)
+      this.change($event.target.checked)
+    },
+    change (checked) {
+      if (this.localChecked === checked) {
+        return
+      }
+      this.localChecked = checked
+      this.$nextTick(() => {
+        this.$emit('change', this.localChecked)
+      })
     },
     focus () {
       this.$refs.box.focus()
@@ -106,7 +114,7 @@ export default {
       if (this.realDisabled || this.realReadonly) {
         return
       }
-      this.localChecked = true
+      this.change(true)
       this.focus()
     }
   }

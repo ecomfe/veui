@@ -44,12 +44,14 @@ describe('components/Table', () => {
         const checkboxList = this.$el.querySelectorAll('td input[type="checkbox"]')
 
         checkboxList[0].dispatchEvent(new MouseEvent('click'))
-        expect(this.selected[0]).toBe('11')
-
         checkboxList[1].dispatchEvent(new MouseEvent('click'))
-        expect(this.selected[1]).toBe('22')
 
-        done()
+        this.$nextTick(() => {
+          expect(this.selected[0]).toBe('11')
+          expect(this.selected[1]).toBe('22')
+
+          done()
+        })
       },
       template: `
         <veui-table :data="data" keys="field2" selectable :selected.sync="selected">
