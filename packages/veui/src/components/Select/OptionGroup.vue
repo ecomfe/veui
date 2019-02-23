@@ -198,7 +198,7 @@ const OptionGroup = {
                 this.$scopedSlots.label
                   ? this.$scopedSlots.label({ label: this.label })
                   : this.menu.$scopedSlots.label
-                    ? this.menu.$scopedSlots.label({ label: this.label })
+                    ? this.menu.$scopedSlots.label({ label: this.label }) || this.label
                     : this.label
               }
             </span>

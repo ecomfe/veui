@@ -3,6 +3,7 @@
 ### ⚠️ 非兼容性变更
 
 * [^] `Tree` 组件的 `expands` prop 更名为 `expanded`。`expands` 被废弃，将在 `1.0.0` 移除。
+* [^] `Radio` 和 `Checkbox` 的 `change` 事件将在数据更新完毕后触发。
 
 ### 💡 主要变更
 
