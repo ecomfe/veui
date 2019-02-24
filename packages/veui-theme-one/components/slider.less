@@ -39,15 +39,14 @@
       }
 
       &-marks {
-        width: 100%;
-        position: absolute;
-        top: -1 * @default-mark-top-offset;
+        .absolute(0);
+        transform: translateY(50%);
       }
 
       &-mark {
-        height: @default-mark-height;
         border-left: 1px solid @veui-gray-color-5;
         position: absolute;
+        transform: translateY(-50%);
       }
     }
   }
@@ -86,7 +85,7 @@
     }
   }
 
-  .slider-size(@slider-height, @progress-height: @default-progress-height, @thumb-height: @default-thumb-height) {
+  .slider-size(@slider-height, @progress-height: @default-progress-height, @thumb-height: @default-thumb-height, @mark-height: @default-mark-height) {
     .veui-slider {
       &-track {
         &-default {
@@ -97,6 +96,10 @@
           &-progress {
             height: @progress-height;
             border-radius: @progress-height / 2;
+          }
+
+          &-mark {
+            height: @mark-height;
           }
         }
       }
@@ -120,15 +123,15 @@
   }
 
   &[ui~="small"] {
-    .slider-size(@veui-height-small, 3px, 12px);
+    .slider-size(@veui-height-small, 3px, 12px, 8px);
   }
 
   &[ui~="tiny"] {
-    .slider-size(@veui-height-tiny, 2px, 10px);
+    .slider-size(@veui-height-tiny, 2px, 10px, 6px);
   }
 
   &[ui~="micro"] {
-    .slider-size(@veui-height-micro, 2px, 8px);
+    .slider-size(@veui-height-micro, 2px, 8px, 6px);
   }
 
   &.veui-disabled,
