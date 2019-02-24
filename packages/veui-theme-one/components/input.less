@@ -41,6 +41,7 @@
 
   &-main {
     width: 100%;
+    cursor: inherit;
   }
 
   &-input {
@@ -113,9 +114,10 @@
   }
 
   &.veui-disabled {
-    &,
-    & .veui-input-input {
-      cursor: not-allowed;
+    cursor: not-allowed;
+
+    .veui-input-input {
+      pointer-events: none;
     }
   }
 
