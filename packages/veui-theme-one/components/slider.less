@@ -20,13 +20,6 @@
         position: relative;
       }
 
-      &-bg,
-      &-sp,
-      &-fg {
-        height: @default-progress-height;
-        border-radius: @default-progress-height / 2;
-      }
-
       &-bg {
         background-color: @veui-gray-color-5;
       }
@@ -87,27 +80,35 @@
     }
 
     &-default {
-      width: @default-thumb-height;
-      height: @default-thumb-height;
       border: 2px solid @veui-brand-color;
       border-radius: 100%;
       background-color: #fff;
     }
   }
 
-  .slider-size(@slider-height) {
+  .slider-size(@slider-height, @progress-height: @default-progress-height, @thumb-height: @default-thumb-height) {
     .veui-slider {
       &-track {
         &-default {
           // Slider 高度靠 default track 撑起来，如果替换了 track slot 就高度自适应了
           height: @slider-height;
-          padding-top: (@slider-height - @default-progress-height) / 2;
+          padding-top: (@slider-height - @progress-height) / 2;
+
+          &-progress {
+            height: @progress-height;
+            border-radius: @progress-height / 2;
+          }
         }
       }
 
       &-thumb {
         // track/thumb slot 高度变化需要调整 thumb 的位置
-        top: (@slider-height - @default-thumb-height) / 2;
+        top: (@slider-height - @thumb-height) / 2;
+
+        &-default {
+          width: @thumb-height;
+          height: @thumb-height;
+        }
       }
     }
   }
@@ -119,15 +120,15 @@
   }
 
   &[ui~="small"] {
-    .slider-size(@veui-height-small);
+    .slider-size(@veui-height-small, 3px, 12px);
   }
 
   &[ui~="tiny"] {
-    .slider-size(@veui-height-tiny);
+    .slider-size(@veui-height-tiny, 2px, 10px);
   }
 
   &[ui~="micro"] {
-    .slider-size(@veui-height-micro);
+    .slider-size(@veui-height-micro, 2px, 8px);
   }
 
   &.veui-disabled,

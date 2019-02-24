@@ -14,7 +14,7 @@
     <slot name="track">
       <div class="veui-slider-track-default">
         <div class="veui-slider-track-default-wrapper">
-          <div class="veui-slider-track-default-bg"/>
+          <div class="veui-slider-track-default-bg veui-slider-track-default-progress"/>
           <div
             v-if="stepMarks"
             class="veui-slider-track-default-marks"
@@ -29,11 +29,11 @@
             />
           </div>
           <div
-            class="veui-slider-track-default-sp"
+            class="veui-slider-track-default-sp veui-slider-track-default-progress"
             :style="secondardProgressStyle"
           />
           <div
-            class="veui-slider-track-default-fg"
+            class="veui-slider-track-default-fg veui-slider-track-default-progress"
             :style="progressStyle"
           />
         </div>
