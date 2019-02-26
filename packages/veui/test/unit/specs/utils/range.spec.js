@@ -15,6 +15,7 @@ describe('utils/range', () => {
 
   it('should calculate range difference correctly', () => {
     expect(merge([], [[1, 1]])).toEqual([[1, 1]])
+    expect(merge([0, 5], [1, 1])).toEqual([[0, 0], [2, 5]])
     expect(merge([[0, 5]], [[1, 1]])).toEqual([[0, 0], [2, 5]])
     expect(merge([[0, 5]], [[0, 0]])).toEqual([[1, 5]])
     expect(merge([[0, 0]], [[2, 2]])).toEqual([[0, 0], [2, 2]])
@@ -25,6 +26,7 @@ describe('utils/range', () => {
 
   it('should calculate range union correctly', () => {
     expect(merge([], [[1, 1]], { mode: 'union' })).toEqual([[1, 1]])
+    expect(merge([0, 5], [1, 1], { mode: 'union' })).toEqual([[0, 5]])
     expect(merge([[0, 5]], [[1, 1]], { mode: 'union' })).toEqual([[0, 5]])
     expect(merge([[0, 5]], [[0, 0]], { mode: 'union' })).toEqual([[0, 5]])
     expect(merge([[0, 0]], [[2, 2]], { mode: 'union' })).toEqual([[0, 0], [2, 2]])
@@ -35,6 +37,7 @@ describe('utils/range', () => {
 
   it('should calculate range relative complement correctly', () => {
     expect(merge([], [[1, 1]], { mode: 'substract' })).toEqual([])
+    expect(merge([0, 5], [1, 1], { mode: 'substract' })).toEqual([[0, 0], [2, 5]])
     expect(merge([[0, 5]], [[1, 1]], { mode: 'substract' })).toEqual([[0, 0], [2, 5]])
     expect(merge([[0, 5]], [[0, 0]], { mode: 'substract' })).toEqual([[1, 5]])
     expect(merge([[0, 0]], [[2, 2]], { mode: 'substract' })).toEqual([[0, 0]])
