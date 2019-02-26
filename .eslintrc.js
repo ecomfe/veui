@@ -9,13 +9,13 @@ module.exports = {
   extends: [
     // https://github.com/vuejs/eslint-plugin-vue#bulb-rules
     'plugin:vue/essential',
-    'plugin:vue/strongly-recommended',
     'plugin:vue/recommended',
+    'plugin:vue/strongly-recommended',
     // https://github.com/standard/standard/blob/master/docs/RULES-en.md
     'standard'
   ],
   // required to lint *.vue files
-  plugins: ['vue', 'prettier'],
+  plugins: ['vue'],
   // add your custom rules here
   rules: {
     // allow paren-less arrow functions
