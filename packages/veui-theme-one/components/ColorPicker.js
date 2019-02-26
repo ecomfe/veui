@@ -2,14 +2,17 @@
 import config from 'veui/managers/config'
 
 config.defaults({
-  shadeFieldSize: {
-    normal: [294, 294],
-    small: [248, 180]
-  },
   ui: {
     size: {
-      values: ['small', 'normal'],
-      default: 'normal'
+      values: ['small'],
+      data: {
+        default: {
+          shadeFieldSize: [294, 294]
+        },
+        small: {
+          shadeFieldSize: [248, 180]
+        }
+      }
     },
     swatch: {
       boolean: true,

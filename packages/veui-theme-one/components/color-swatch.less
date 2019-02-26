@@ -24,10 +24,6 @@
     &-bg {
       .veui-transparency-grid-background();
     }
-
-    div {
-      width: 100%;
-    }
   }
 
   &[ui~="small"] {
@@ -50,6 +46,7 @@
         width: @input-width * 3 + 5 * 2;
       }
     }
+
     .veui-color-value-hsl,
     .veui-color-value-rgb,
     .veui-color-value-alpha {
@@ -63,6 +60,7 @@
       &-alpha {
         margin-left: @space-width;
       }
+
       &-alpha {
         margin-left: @space-width + 8px;
       }
@@ -80,6 +78,7 @@
           }
         }
       }
+
       &-tip {
         &-hsl,
         &-rgb,
@@ -87,15 +86,18 @@
           float: left;
           margin-left: @space-width;
         }
+
         &-hsl,
         &-rgb {
           div {
             width: @input-width;
           }
         }
+
         &-hex {
           width: @input-width * 3 + 5 * 2;
         }
+
         &-alpha {
           float: right;
           width: @input-width;
@@ -103,9 +105,7 @@
       }
     }
   }
-
 }
-
 
 .veui-color-value {
   .veui-input {
@@ -118,6 +118,7 @@
     text-transform: uppercase;
     letter-spacing: 1px;
   }
+
   .veui-color-value {
     width: 160px;
   }
@@ -176,6 +177,7 @@
       top: 0;
       left: 0;
       width: @space-width + 8px;
+
       div {
         height: auto;
       }
@@ -200,21 +202,23 @@
   &-format-hex {
     .veui-color-value-alpha-group-separator-dot {
       &:nth-child(1) {
-        background-color: @veui-gray-color-2
+        background-color: @veui-gray-color-2;
       }
     }
   }
+
   &-format-rgb {
     .veui-color-value-alpha-group-separator-dot {
       &:nth-child(2) {
-        background-color: @veui-gray-color-2
+        background-color: @veui-gray-color-2;
       }
     }
   }
+
   &-format-hsl {
     .veui-color-value-alpha-group-separator-dot {
       &:nth-child(3) {
-        background-color: @veui-gray-color-2
+        background-color: @veui-gray-color-2;
       }
     }
   }
@@ -224,6 +228,7 @@
     padding-bottom: 16px;
     box-sizing: content-box;
   }
+
   &-tip {
     .clearfix();
     color: @veui-gray-color-2;
@@ -249,23 +254,20 @@
         float: left;
         width: 50px;
         margin-left: 5px;
+
         &:first-child {
           margin-left: 0;
         }
       }
     }
+
     &-hex {
       width: 160px;
     }
+
     &-alpha {
       float: right;
       width: 50px;
     }
   }
-
 }
-
-
-
-
-

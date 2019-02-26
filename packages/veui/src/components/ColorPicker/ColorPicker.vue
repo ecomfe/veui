@@ -38,7 +38,6 @@ import ColorHomer from './mixins/_ColorHomer'
 import HueSlider from './_ColorHueSlider'
 import AlphaSlider from './_ColorAlphaSlider'
 import ShadeField from './_ColorShadeField'
-import config from 'veui/managers/config'
 
 export default {
   name: 'color-picker',
@@ -49,14 +48,9 @@ export default {
     'veui-color-shade-field': ShadeField
   },
   mixins: [ui, ColorHomer],
-  data () {
-    return {
-      shadeFieldSizeMap: config.get('colorpicker.shadeFieldSize')
-    }
-  },
   computed: {
     shadeFieldSize () {
-      return this.shadeFieldSizeMap[this.uiProps.size]
+      return this.uiData.shadeFieldSize
     }
   }
 }
