@@ -1,7 +1,7 @@
 <script>
 import CandidatePanel from './_CandidatePanel'
 import SelectedPanel from './_SelectedPanel'
-import { isEqual, find, difference, includes, omit, uniq, remove, isString } from 'lodash'
+import { find, difference, includes, omit, uniq, remove, isString } from 'lodash'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 
@@ -76,24 +76,23 @@ export default {
   },
   watch: {
     datasource: {
-      handler (val, oldVal) {
-        if (!isEqual(val, oldVal)) {
-          let walk = (datasource, items) => {
-            datasource.forEach((source, index) => {
-              let item = omit(source, 'children')
-              item.value = this.realKeys(source)
-              if (this.hasChild(source)) {
-                this.$set(item, 'children', [])
-                walk(source.children, item.children)
-              }
-              this.$set(items, index, item)
-            })
-          }
-          walk(this.datasource, this.candidateItems)
-
-          this.correct()
-          this.setSelectedItems(this.cloneSelectedItems())
+      handler (val) {
+        this.candidateItems = []
+        let walk = (datasource, items) => {
+          datasource.forEach((source, index) => {
+            let item = omit(source, 'children')
+            item.value = this.realKeys(source)
+            if (this.hasChild(source)) {
+              this.$set(item, 'children', [])
+              walk(source.children, item.children)
+            }
+            this.$set(items, index, item)
+          })
         }
+        walk(val, this.candidateItems)
+
+        this.correct()
+        this.setSelectedItems(this.cloneSelectedItems())
       },
       immediate: true
     },
