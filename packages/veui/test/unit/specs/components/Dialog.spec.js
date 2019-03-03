@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Dialog from '@/components/Dialog'
 
 describe('components/Dialog', () => {
-  it('should support `sync` modifier for prop `open`', done => {
+  it('should support `sync` modifier for prop `open`.', done => {
     new Vue({
       components: {
         'veui-dialog': Dialog
@@ -45,7 +45,7 @@ describe('components/Dialog', () => {
     }).$mount()
   })
 
-  it('should support async `beforeClose` function prop', done => {
+  it('should support async `beforeClose` function prop.', done => {
     new Vue({
       components: {
         'veui-dialog': Dialog
