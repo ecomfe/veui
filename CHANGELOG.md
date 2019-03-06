@@ -18,6 +18,7 @@
 * [^] 修正 `Searchbox` 组件 `suggestions` prop 类型为 `Array<string>` 时，`replace-on-select` 设置无效的问题。
 * [^] 修正 `veui-theme-one-icons` 中图标的 `fill` & `stroke`。
 * [^] 修正 `Transter` 组件的 `selected-item-label` 插槽在 `selected-show-mode` 为 `'flat'` 时无效的问题。
+* [^] 修正 `Transfer` 组件更新 `datasource` 时候选项没有正确更新的问题。
 * [^] 修正 `Schedule` 时段合并逻辑在从 `0:00` 开始时失效的问题。
 
 ## 1.0.0-alpha.22
