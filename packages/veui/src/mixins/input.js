@@ -1,9 +1,11 @@
+import { includes } from 'lodash'
 import { getTypedAncestorTracker, isTopMostOfType } from '../utils/helper'
 import '../common/uiTypes'
-import { includes } from 'lodash'
+import focusable from './focusable'
 
 export default {
   uiTypes: ['input'],
+  mixins: [focusable],
   props: {
     name: String,
     readonly: Boolean,

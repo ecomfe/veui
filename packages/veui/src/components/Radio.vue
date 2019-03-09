@@ -26,7 +26,6 @@
 <script>
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import focusable from '../mixins/focusable'
 import activatable from '../mixins/activatable'
 import { getListeners } from '../utils/helper'
 
@@ -34,7 +33,7 @@ const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
 
 export default {
   name: 'veui-radio',
-  mixins: [ui, input, focusable, activatable],
+  mixins: [ui, input, activatable],
   inheritAttrs: false,
   model: {
     prop: 'model'

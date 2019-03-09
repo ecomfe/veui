@@ -95,7 +95,6 @@
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
-import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
 import Input from './Input'
 import Icon from './Icon'
@@ -121,7 +120,7 @@ export default {
     'veui-overlay': Overlay,
     'veui-button': Button
   },
-  mixins: [ui, input, dropdown, focusable, i18n],
+  mixins: [ui, input, dropdown, i18n],
   props: {
     suggestions: {
       type: Array,

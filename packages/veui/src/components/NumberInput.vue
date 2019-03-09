@@ -63,7 +63,6 @@
 import Input from './Input'
 import Button from './Button'
 import ui from '../mixins/ui'
-import focusable from '../mixins/focusable'
 import activatable from '../mixins/activatable'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
@@ -88,7 +87,7 @@ export default {
     'veui-input': Input,
     'veui-button': Button
   },
-  mixins: [ui, input, focusable, activatable, i18n],
+  mixins: [ui, input, activatable, i18n],
   props: {
     ui: String,
     value: Number,

@@ -31,7 +31,6 @@
 <script>
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import focusable from '../mixins/focusable'
 import { focusIn } from '../utils/dom'
 import Radio from './Radio'
 import { uniqueId } from 'lodash'
@@ -41,7 +40,7 @@ export default {
   components: {
     'veui-radio': Radio
   },
-  mixins: [ui, input, focusable],
+  mixins: [ui, input],
   model: {
     event: 'change'
   },

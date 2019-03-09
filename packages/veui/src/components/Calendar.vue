@@ -212,7 +212,6 @@ import { normalizeClass } from '../utils/helper'
 import { flattenDeep, findIndex, uniqueId, upperFirst } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import Icon from './Icon'
@@ -238,7 +237,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui, input, focusable, i18n],
+  mixins: [ui, input, i18n],
   model: {
     prop: 'selected',
     event: 'select'

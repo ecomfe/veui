@@ -259,7 +259,6 @@ import Overlay from './Overlay'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import overlay from '../mixins/overlay'
-import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
 import outside from '../directives/outside'
 import warn from '../utils/warn'
@@ -274,7 +273,7 @@ export default {
     'veui-overlay': Overlay
   },
   directives: { outside },
-  mixins: [ui, input, overlay, focusable, i18n],
+  mixins: [ui, input, overlay, i18n],
   model: {
     prop: 'selected',
     event: 'select'

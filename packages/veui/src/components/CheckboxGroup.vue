@@ -32,7 +32,6 @@
 <script>
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import focusable from '../mixins/focusable'
 import { focusIn } from '../utils/dom'
 import { uniqueId, findIndex } from 'lodash'
 import Checkbox from './Checkbox'
@@ -42,7 +41,7 @@ export default {
   components: {
     'veui-checkbox': Checkbox
   },
-  mixins: [ui, input, focusable],
+  mixins: [ui, input],
   model: {
     event: 'change'
   },

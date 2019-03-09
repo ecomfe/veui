@@ -197,7 +197,6 @@ import { includes, find, isFunction, cloneDeep, mapValues, isEqual } from 'lodas
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
-import focusable from '../mixins/focusable'
 import outside from '../directives/outside'
 import { merge } from '../utils/range'
 import warn from '../utils/warn'
@@ -228,7 +227,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-dropdown': Dropdown
   },
-  mixins: [ui, input, focusable, i18n],
+  mixins: [ui, input, i18n],
   model: {
     prop: 'selected',
     event: 'select'
