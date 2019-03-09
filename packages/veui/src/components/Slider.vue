@@ -104,7 +104,6 @@ import nudge from '../directives/nudge'
 import outside from '../directives/outside'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import focusable from '../mixins/focusable'
 import Tooltip from './Tooltip'
 
 export default {
@@ -117,7 +116,7 @@ export default {
     nudge,
     outside
   },
-  mixins: [ui, input, focusable],
+  mixins: [ui, input],
   props: {
     /* eslint-disable vue/require-prop-types */
     value: {},
@@ -141,7 +140,6 @@ export default {
       validator: val => val >= 0
     },
     mark: Boolean,
-
     parse: {
       type: Function,
       default: identity

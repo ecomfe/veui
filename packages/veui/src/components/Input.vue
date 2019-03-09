@@ -64,7 +64,6 @@
 <script>
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import focusable from '../mixins/focusable'
 import activatable from '../mixins/activatable'
 import i18n from '../mixins/i18n'
 import { omit, includes } from 'lodash'
@@ -79,7 +78,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui, input, focusable, activatable, i18n],
+  mixins: [ui, input, activatable, i18n],
   props: {
     ui: String,
     type: {

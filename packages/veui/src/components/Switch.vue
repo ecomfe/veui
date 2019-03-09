@@ -30,7 +30,6 @@
 <script>
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import focusable from '../mixins/focusable'
 import { pick } from 'lodash'
 import { getListeners } from '../utils/helper'
 
@@ -38,7 +37,7 @@ const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
 
 export default {
   name: 'veui-switch',
-  mixins: [ui, input, focusable],
+  mixins: [ui, input],
   model: {
     prop: 'model'
   },

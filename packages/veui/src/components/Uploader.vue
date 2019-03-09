@@ -399,7 +399,6 @@ import Tooltip from './Tooltip'
 import { cloneDeep, uniqueId, assign, isNumber, last, pick, omit, includes, isEmpty } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import { stringifyQuery } from '../utils/helper'
@@ -420,7 +419,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-uploader-progress': getProgress()
   },
-  mixins: [ui, input, focusable, i18n],
+  mixins: [ui, input, i18n],
   model: {
     event: 'change'
   },

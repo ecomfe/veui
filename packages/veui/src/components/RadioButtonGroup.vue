@@ -30,7 +30,6 @@
 <script>
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import focusable from '../mixins/focusable'
 import { focusIn } from '../utils/dom'
 import Button from './Button'
 
@@ -39,7 +38,7 @@ export default {
   components: {
     'veui-button': Button
   },
-  mixins: [ui, input, focusable],
+  mixins: [ui, input],
   model: {
     event: 'change'
   },
