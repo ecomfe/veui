@@ -43,6 +43,20 @@
     </section>
   </section>
   <section>
+    <h2>月份选择</h2>
+    <veui-date-picker
+      v-model="selected3"
+      type="month"
+    />
+  </section>
+  <section>
+    <h2>年份选择</h2>
+    <veui-date-picker
+      v-model="selected3"
+      type="year"
+    />
+  </section>
+  <section>
     <h2>可清除范围选择</h2>
     <section>
       <veui-date-picker
@@ -163,6 +177,7 @@ export default {
     return {
       selected1: null,
       selected2: null,
+      selected3: null,
       shortcuts: [
         {
           label: '上个月',

@@ -5,7 +5,7 @@
   :class="{
     'veui-input-invalid': realInvalid,
     'veui-date-picker-empty': !selected,
-    'veui-date-picker-range': range,
+    'veui-date-picker-range': realRange,
     'veui-date-picker-expanded': expanded
   }"
 >
@@ -19,7 +19,7 @@
     @click="expanded = !expanded"
     @keydown.down.up.prevent="expanded = true"
   >
-    <template v-if="range">
+    <template v-if="realRange">
       <span class="veui-date-picker-label">
         <slot
           v-if="selected && selected[0]"
@@ -27,19 +27,13 @@
           position="from"
           v-bind="toDateData(selected[0])"
           :formatted="formatted ? formatted[0] : null"
-        >
-          {{ formatted[0] }}
-        </slot>
+        >{{ formatted[0] }}</slot>
         <slot
           v-else
           name="placeholder"
-        >
-          {{ realPlaceholder }}
-        </slot>
+        >{{ realPlaceholder }}</slot>
       </span>
-      <span class="veui-date-picker-tilde">
-        ~
-      </span>
+      <span class="veui-date-picker-tilde">~</span>
       <span class="veui-date-picker-label">
         <slot
           v-if="selected && selected[1]"
@@ -47,9 +41,7 @@
           position="to"
           v-bind="toDateData(selected[1])"
           :formatted="formatted ? formatted[1] : null"
-        >
-          {{ formatted[1] }}
-        </slot>
+        >{{ formatted[1] }}</slot>
       </span>
     </template>
     <template v-else>
@@ -59,15 +51,11 @@
           name="selected"
           v-bind="toDateData(selected)"
           :formatted="formatted"
-        >
-          {{ formatted }}
-        </slot>
+        >{{ formatted }}</slot>
         <slot
           v-else
           name="placeholder"
-        >
-          {{ realPlaceholder }}
-        </slot>
+        >{{ realPlaceholder }}</slot>
       </span>
     </template>
     <veui-icon
@@ -112,7 +100,7 @@
       @viewchange="handleViewChange"
     >
       <template
-        v-if="range && realShortcuts && realShortcuts.length"
+        v-if="realRange && realShortcuts && realShortcuts.length"
         :slot="shortcutsPosition"
       >
         <div class="veui-date-picker-shortcuts">
@@ -171,17 +159,33 @@ import addMonths from 'date-fns/add_months'
 import addQuarters from 'date-fns/add_quarters'
 import addYears from 'date-fns/add_years'
 
-config.defaults({
-  shortcuts: [],
-  shortcutsPosition: 'before',
-  placeholder: '@@datepicker.selectDate',
-  rangePlaceholder: '@@datepicker.selectRange'
-}, 'datepicker')
+config.defaults(
+  {
+    shortcuts: [],
+    shortcutsPosition: 'before',
+    placeholder: '@@datepicker.selectDate',
+    monthPlaceholder: '@@datepicker.selectMonth',
+    yearPlaceholder: '@@datepicker.selectYear',
+    rangePlaceholder: '@@datepicker.selectRange'
+  },
+  'datepicker'
+)
 
 const CALENDAR_PROPS = [
-  'range', 'weekStart', 'fillMonth',
-  'today', 'disabledDate', 'dateClass'
+  'type',
+  'range',
+  'weekStart',
+  'fillMonth',
+  'today',
+  'disabledDate',
+  'dateClass'
 ]
+
+const TYPE_FORMAT_MAP = {
+  date: 'YYYY-MM-DD',
+  month: 'YYYY-MM',
+  year: 'YYYY'
+}
 
 export default {
   name: 'veui-date-picker',
@@ -207,8 +211,7 @@ export default {
     clearable: Boolean,
     placeholder: String,
     format: {
-      type: [String, Function],
-      default: 'YYYY-MM-DD'
+      type: [String, Function]
     },
     shortcuts: Array,
     shortcutsPosition: {
@@ -228,7 +231,7 @@ export default {
   computed: {
     formatted () {
       let selected = this.localSelected
-      if (this.range) {
+      if (this.realRange) {
         let current = this.picking || selected
         if (Array.isArray(current)) {
           return current.map(date => this.formatDate(date))
@@ -243,20 +246,39 @@ export default {
       return pick(this, CALENDAR_PROPS)
     },
     realPlaceholder () {
-      return this.placeholder ||
-        (this.range
-          ? config.get('datepicker.rangePlaceholder')
-          : config.get('datepicker.placeholder'))
+      if (this.placeholder) {
+        return this.placeholder
+      }
+
+      if (this.type !== 'date') {
+        return config.get(
+          this.type === 'month'
+            ? 'datepicker.monthPlaceholder'
+            : 'datepicker.yearPlaceholder'
+        )
+      }
+
+      return config.get(
+        this.realRange
+          ? 'datepicker.rangePlaceholder'
+          : 'datepicker.placeholder'
+      )
     },
     realPanel () {
-      return this.panel || (this.range ? 2 : 1)
+      if (this.type !== 'date') {
+        return 1
+      }
+      return this.panel || (this.realRange ? 2 : 1)
+    },
+    realRange () {
+      return this.type === 'date' && this.range
     },
     realShortcuts () {
       let shortcuts = this.shortcuts || config.get('datepicker.shortcuts')
       if (!shortcuts) {
         return null
       }
-      return shortcuts.map(({from = 0, to = 0, label}) => {
+      return shortcuts.map(({ from = 0, to = 0, label }) => {
         from = this.getDateByOffset(from)
         to = this.getDateByOffset(to)
         if (from > to) {
@@ -287,7 +309,9 @@ export default {
       if (typeof this.format === 'function') {
         return this.format(date)
       }
-      return format(date, this.format)
+
+      let dateFormat = this.format || TYPE_FORMAT_MAP[this.type]
+      return format(date, dateFormat)
     },
     toDateData (date) {
       if (!date) {
@@ -325,10 +349,9 @@ export default {
     getDateByOffset (offset) {
       offset = isNumber(offset) ? { days: offset } : offset
       return add(
-        startOf(
-          this.today, offset.startOf || 'day',
-          { weekStartsOn: this.weekStart }
-        ),
+        startOf(this.today, offset.startOf || 'day', {
+          weekStartsOn: this.weekStart
+        }),
         omit(offset, 'startOf')
       )
     },
