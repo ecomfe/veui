@@ -1,0 +1,101 @@
+@import "../lib.less";
+
+.veui-color-shade-field {
+  position: relative;
+
+  &-shade {
+    width: 100%;
+    height: 100%;
+  }
+
+  &-aperture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    border: 2px solid @veui-gray-color-5;
+    border-radius: 100%;
+    box-shadow: 0 2px 4px 0 fade(#000, 50%);
+  }
+}
+
+.veui-color-slider {
+  margin: 5px 0;
+  padding: 3px 0;
+
+  .veui-slider {
+    height: 18px;
+
+    .veui-slider-thumb {
+      top: -2px;
+    }
+
+    .veui-slider-custom-thumb {
+      width: 8px;
+      height: 22px;
+      border: 1px solid rgba(51, 51, 51, .8);
+      background: rgba(255, 255, 255, .9);
+      box-shadow: 1px 1px 4px rgba(0, 0, 0, .8);
+      border-radius: 2px;
+    }
+
+    .veui-slider-custom-track {
+      width: 100%;
+      height: 18px;
+    }
+  }
+}
+
+.veui-color-hue-slider {
+  .veui-slider-custom-track {
+    background: url("data:image/svg+xml;utf8;<svg xmlns='http://www.w3.org/2000/svg'><defs><linearGradient id='a' x1='0%' y1='0%' y2='0%'><stop offset='0%' stop-color='red'/><stop offset='16.7%' stop-color='%23ff0'/><stop offset='33.3%' stop-color='%230f0'/><stop offset='50%' stop-color='%230ff'/><stop offset='66.7%' stop-color='%2300f'/><stop offset='83.3%' stop-color='%23f0f'/><stop offset='100%' stop-color='red'/></linearGradient></defs><rect width='100%' height='100%' fill='url(%23a)'/></svg>");
+    background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+  }
+}
+
+.veui-color-alpha-slider {
+  .veui-slider-track {
+    .veui-transparency-grid-background();
+  }
+}
+
+.veui-color-picker {
+  width: 336px;
+  color: #333;
+  border: 1px solid @veui-gray-color-3;
+  box-shadow: 0 1px 5px 0 fade(#000, 20%);
+  border-radius: 2px;
+
+  &-main {
+    padding: 20px;
+
+    &-panel {
+      &-sliders {
+        margin-top: 15px;
+      }
+    }
+
+    .veui-color-swatch {
+      margin-top: 15px;
+    }
+  }
+
+  &[ui~="small"] {
+    width: 250px + 20px;
+
+    .veui-color-picker-main {
+      padding: 10px;
+
+      &-panel {
+        &-sliders {
+          margin-top: 10px;
+        }
+      }
+
+      .veui-color-swatch {
+        margin-top: 10px;
+      }
+    }
+  }
+}

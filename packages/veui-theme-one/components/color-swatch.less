@@ -1,0 +1,273 @@
+@import "../lib.less";
+
+.veui-color-swatch {
+  @height: 40px;
+
+  .clearfix();
+
+  &-box,
+  .veui-color-value-alpha-group {
+    float: left;
+    height: @height;
+    line-height: @height;
+  }
+
+  &-box {
+    width: @height;
+    border: 1px solid fade(@veui-gray-color-3, 20%);
+    border-radius: 2px;
+
+    div {
+      height: 100%;
+    }
+
+    &-bg {
+      .veui-transparency-grid-background();
+    }
+  }
+
+  &[ui~="small"] {
+    @height: 30px;
+    @space-width: 10px;
+    @input-width: 45px;
+
+    .veui-color-swatch-box,
+    .veui-color-value-alpha-group {
+      height: @height;
+      line-height: @height;
+    }
+
+    .veui-color-swatch-box {
+      width: @height;
+    }
+
+    .veui-color-value-hex {
+      .veui-color-value {
+        width: @input-width * 3 + 5 * 2;
+      }
+    }
+
+    .veui-color-value-hsl,
+    .veui-color-value-rgb,
+    .veui-color-value-alpha {
+      .veui-color-value {
+        width: @input-width;
+      }
+    }
+
+    .veui-color-value-alpha-group {
+      &-color,
+      &-alpha {
+        margin-left: @space-width;
+      }
+
+      &-alpha {
+        margin-left: @space-width + 8px;
+      }
+
+      &-separator {
+        &-wrap {
+          width: @space-width + 8px;
+        }
+
+        &-dots {
+          div {
+            margin: 4px;
+            width: 4px;
+            height: 4px;
+          }
+        }
+      }
+
+      &-tip {
+        &-hsl,
+        &-rgb,
+        &-hex {
+          float: left;
+          margin-left: @space-width;
+        }
+
+        &-hsl,
+        &-rgb {
+          div {
+            width: @input-width;
+          }
+        }
+
+        &-hex {
+          width: @input-width * 3 + 5 * 2;
+        }
+
+        &-alpha {
+          float: right;
+          width: @input-width;
+        }
+      }
+    }
+  }
+}
+
+.veui-color-value {
+  .veui-input {
+    width: 100%;
+  }
+}
+
+.veui-color-value-hex {
+  .veui-input-input {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .veui-color-value {
+    width: 160px;
+  }
+}
+
+.veui-color-value-hsl,
+.veui-color-value-rgb,
+.veui-color-value-alpha {
+  .clearfix();
+
+  .veui-input-input {
+    padding: 0;
+    text-align: center;
+  }
+
+  .veui-color-value {
+    float: left;
+    width: 50px;
+    margin-left: 5px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.veui-color-value-alpha-group {
+  @space-width: 18px;
+
+  &-values {
+    .clearfix();
+
+    &,
+    div {
+      height: 100%;
+    }
+  }
+
+  &-color,
+  &-alpha {
+    margin-left: @space-width;
+    float: left;
+  }
+
+  &-alpha {
+    margin-left: @space-width + 8px;
+  }
+
+  &-separator {
+    float: left;
+    height: 100%;
+    position: relative;
+
+    &-wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: @space-width + 8px;
+
+      div {
+        height: auto;
+      }
+    }
+
+    &-dots {
+      top: 50%;
+      left: 50%;
+      position: absolute;
+      transform: translate(-50%, -50%);
+
+      div {
+        margin: 4px;
+        width: 4px;
+        height: 4px;
+        border-radius: 100%;
+        background-color: @veui-gray-color-3;
+      }
+    }
+  }
+
+  &-format-hex {
+    .veui-color-value-alpha-group-separator-dot {
+      &:nth-child(1) {
+        background-color: @veui-gray-color-2;
+      }
+    }
+  }
+
+  &-format-rgb {
+    .veui-color-value-alpha-group-separator-dot {
+      &:nth-child(2) {
+        background-color: @veui-gray-color-2;
+      }
+    }
+  }
+
+  &-format-hsl {
+    .veui-color-value-alpha-group-separator-dot {
+      &:nth-child(3) {
+        background-color: @veui-gray-color-2;
+      }
+    }
+  }
+
+  &-show-tip {
+    position: relative;
+    padding-bottom: 16px;
+    box-sizing: content-box;
+  }
+
+  &-tip {
+    .clearfix();
+    color: @veui-gray-color-2;
+    font-size: @veui-font-size-small;
+    text-align: center;
+    line-height: 1;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    &-hsl,
+    &-rgb,
+    &-hex {
+      float: left;
+      margin-left: 15px;
+    }
+
+    &-hsl,
+    &-rgb {
+      div {
+        float: left;
+        width: 50px;
+        margin-left: 5px;
+
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+
+    &-hex {
+      width: 160px;
+    }
+
+    &-alpha {
+      float: right;
+      width: 50px;
+    }
+  }
+}
