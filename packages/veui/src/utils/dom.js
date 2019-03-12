@@ -105,6 +105,24 @@ export function contains (parentElem, childElem) {
 }
 
 /**
+ * 判断一个元素是否匹配某个指定的选择器。
+
+ * @param {Element} elem 指定元素
+ * @param {string} selector 选择器字符串
+ * @return {boolean} 是否匹配
+ */
+export function matches (elem, selector) {
+  return (
+    elem.matches ||
+    elem.matchesSelector ||
+    elem.mozMatchesSelector ||
+    elem.msMatchesSelector ||
+    elem.oMatchesSelector ||
+    elem.webkitMatchesSelector
+  ).call(elem, selector)
+}
+
+/**
  * 获取离指定元素最近的可滚动的父级元素
  *
  * @param {Element} elem 指定元素
@@ -236,9 +254,10 @@ function getTransformKey () {
     return transformKey
   }
 
-  transformKey = '-ms-transform' in document.documentElement.style
-    ? 'msTransform'
-    : 'transform'
+  transformKey =
+    '-ms-transform' in document.documentElement.style
+      ? 'msTransform'
+      : 'transform'
   return transformKey
 }
 

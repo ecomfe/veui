@@ -56,6 +56,7 @@ import warn from '../../utils/warn'
 
 export default {
   name: 'veui-tree',
+  uiTypes: ['tree'],
   components: {
     'veui-tree-node': TreeNode
   },

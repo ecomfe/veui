@@ -89,6 +89,7 @@
 import Icon from '../Icon'
 import { includes } from 'lodash'
 import { closest, hasClass } from '../../utils/dom'
+import { getTypedAncestor } from '../../utils/helper'
 
 const ITEM_SELECTOR = '.veui-tree-item'
 
@@ -140,7 +141,11 @@ export default {
     click (item, parents, ...extraArgs) {
       this.$emit('click', item, parents, ...extraArgs)
 
-      if (this.itemClick === 'toggle' && item.children && item.children.length) {
+      if (
+        this.itemClick === 'toggle' &&
+        item.children &&
+        item.children.length
+      ) {
         this.toggle(item, ...extraArgs)
       }
     },
@@ -149,21 +154,6 @@ export default {
     },
     handleChildClick (parentItem, currentItem, parents, ...extraArgs) {
       this.$emit('click', currentItem, [...parents, parentItem], ...extraArgs)
-    },
-    navigate (forward = true) {
-      let el = closest(document.activeElement, 'li')
-      let dest = forward ? el.nextElementSibling : el.previousElementSibling
-      if (!dest) {
-        dest = forward ? el.parentNode.firstElementChild : el.parentNode.lastElementChild
-      }
-      if (dest) {
-        let itemEl = dest.querySelector(ITEM_SELECTOR)
-        if (itemEl) {
-          this.$nextTick(() => {
-            itemEl.focus()
-          })
-        }
-      }
     },
     focusLevel (up = true) {
       let el
@@ -182,6 +172,14 @@ export default {
           itemEl.focus()
         })
       }
+    },
+    navigate (current, forward = false) {
+      let context = (getTypedAncestor(this, 'tree') || this).$el
+      let items = [...context.querySelectorAll(ITEM_SELECTOR)]
+      let index = items.indexOf(current)
+      let targetIndex =
+        index === -1 ? 0 : (forward ? index + 1 : index - 1) % items.length
+      items[targetIndex].focus()
     },
     handleKeydown (e, item, index, depth) {
       let passive = false
@@ -206,11 +204,11 @@ export default {
           break
         case 'Up':
         case 'ArrowUp':
-          this.navigate(false)
+          this.navigate(e.target, false)
           break
         case 'Down':
         case 'ArrowDown':
-          this.navigate()
+          this.navigate(e.target, true)
           break
         default:
           passive = true
