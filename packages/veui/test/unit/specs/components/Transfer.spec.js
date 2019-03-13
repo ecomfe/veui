@@ -32,3 +32,33 @@ describe('components/Transfer', () => {
     }).$mount(wrapper)
   })
 })
+
+describe('components/Transfer', () => {
+  it('should handle selected change correctly.', done => {
+    let wrapper = document.createElement('div')
+    document.body.appendChild(wrapper)
+    new Vue({
+      components: {
+        'veui-transfer': Transfer
+      },
+      data () {
+        return {
+          items: [
+            { label: 'A', value: 'a' },
+            { label: 'B', value: 'b' },
+            { label: 'C', value: 'c' }
+          ],
+          selected: ['a', 'b']
+        }
+      },
+      async mounted () {
+        expect(this.$el.querySelectorAll('.veui-transfer-selected-item').length).toBe(2)
+        this.selected = []
+        await this.$nextTick()
+        expect(this.$el.querySelectorAll('.veui-transfer-selected-item').length).toBe(0)
+        done()
+      },
+      template: '<veui-transfer :datasource="items" v-model="selected" />'
+    }).$mount(wrapper)
+  })
+})
