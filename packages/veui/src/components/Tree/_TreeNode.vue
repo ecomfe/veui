@@ -178,7 +178,9 @@ export default {
       let items = [...context.querySelectorAll(ITEM_SELECTOR)]
       let index = items.indexOf(current)
       let targetIndex =
-        index === -1 ? 0 : (forward ? index + 1 : index - 1) % items.length
+        index === -1
+          ? 0
+          : ((forward ? index + 1 : index - 1) + items.length) % items.length
       items[targetIndex].focus()
     },
     handleKeydown (e, item, index, depth) {
