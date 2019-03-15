@@ -1,7 +1,7 @@
 <script>
 import CandidatePanel from './_CandidatePanel'
 import SelectedPanel from './_SelectedPanel'
-import { find, difference, includes, omit, uniq, remove, isString } from 'lodash'
+import { find, xor, includes, omit, uniq, remove, isString } from 'lodash'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 
@@ -97,7 +97,7 @@ export default {
       immediate: true
     },
     selected (val, oldVal) {
-      if (difference(val, oldVal).length || difference(val, this.getSelectedValuesFromSelectedItems()).length) {
+      if (xor(val, oldVal).length || xor(val, this.getSelectedValuesFromSelectedItems()).length) {
         this.correct()
         this.setSelectedItems(this.cloneSelectedItems())
       }
