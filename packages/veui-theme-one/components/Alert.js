@@ -7,20 +7,23 @@ import 'veui-theme-one-icons/chevron-right'
 import 'veui-theme-one-icons/times'
 import config from 'veui/managers/config'
 
-config.defaults({
-  icons: {
-    success: 'check-circle',
-    warning: 'exclamation-circle',
-    info: 'info-circle',
-    error: 'times-circle',
-    prev: 'chevron-left',
-    next: 'chevron-right',
-    close: 'times'
+config.defaults(
+  {
+    icons: {
+      success: 'check-circle',
+      warning: 'exclamation-circle',
+      info: 'info-circle',
+      error: 'times-circle',
+      prev: 'chevron-left',
+      next: 'chevron-right',
+      close: 'times'
+    },
+    parts: {
+      prev: 'link',
+      next: 'link',
+      close: 'link primary',
+      closeLabel: 'link'
+    }
   },
-  parts: {
-    prev: 'link',
-    next: 'link',
-    close: 'link primary',
-    closeLabel: 'link'
-  }
-}, 'alert')
+  'alert'
+)

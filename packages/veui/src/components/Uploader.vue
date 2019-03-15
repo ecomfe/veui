@@ -396,7 +396,17 @@
 import Button from './Button'
 import Icon from './Icon'
 import Tooltip from './Tooltip'
-import { cloneDeep, uniqueId, assign, isNumber, last, pick, omit, includes, isEmpty } from 'lodash'
+import {
+  cloneDeep,
+  uniqueId,
+  assign,
+  isNumber,
+  last,
+  pick,
+  omit,
+  includes,
+  isEmpty
+} from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
@@ -470,7 +480,10 @@ export default {
       validator (val) {
         // TODO: remove support in 1.0.0
         if (val === false) {
-          warn('[veui-uploader] `auto-upload` is deprecated and will be removed in `1.0.0`. Use `autoupload` instead.', this)
+          warn(
+            '[veui-uploader] `auto-upload` is deprecated and will be removed in `1.0.0`. Use `autoupload` instead.',
+            this
+          )
         }
         return true
       }
@@ -499,7 +512,18 @@ export default {
     extensions: {
       type: Array,
       default () {
-        return ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'tif', 'tiff', 'webp', 'apng', 'svg']
+        return [
+          'jpg',
+          'jpeg',
+          'gif',
+          'png',
+          'bmp',
+          'tif',
+          'tiff',
+          'webp',
+          'apng',
+          'svg'
+        ]
       }
     },
     accept: String,
@@ -556,12 +580,18 @@ export default {
       return this.fileList[this.fileList.length - 1]
     },
     queryURL () {
-      let queryString = stringifyQuery(assign(
-        this.requestMode === 'iframe' && this.iframeMode === 'callback'
-          ? {callback: `parent.${this.callbackNamespace}['${this.callbackFuncName}']`}
-          : {},
-        this.payload
-      ))
+      let queryString = stringifyQuery(
+        assign(
+          this.requestMode === 'iframe' && this.iframeMode === 'callback'
+            ? {
+              callback: `parent.${this.callbackNamespace}['${
+                this.callbackFuncName
+              }']`
+            }
+            : {},
+          this.payload
+        )
+      )
       return `${this.action}${queryString ? '?' + queryString : ''}`
     },
     isReplacing () {
@@ -594,7 +624,8 @@ export default {
       })
     },
     pureFileList () {
-      return this.files.filter(file => file.status === 'success' || !file.status)
+      return this.files
+        .filter(file => file.status === 'success' || !file.status)
         .map(file => omit(file, 'status'))
     }
   },
@@ -629,27 +660,35 @@ export default {
   },
   created () {
     if (this.requestMode !== 'custom' && !this.action) {
-      warn('[veui-uploader] `action` is required when `request-mode` is not `custom`.', this)
+      warn(
+        '[veui-uploader] `action` is required when `request-mode` is not `custom`.',
+        this
+      )
     }
   },
   mounted () {
     if (this.requestMode === 'iframe') {
       if (this.iframeMode === 'postmessage') {
         this.handlePostmessage = event => {
-          if (!event.source ||
+          if (
+            !event.source ||
             !event.source.frameElement ||
             event.source.frameElement.id !== this.iframeId ||
-            this.canceled) {
+            this.canceled
+          ) {
             return
           }
 
           // 支持action为绝对路径或相对路径，ie9里的location没有origin
           let actionOrigin = /^https?:\/\//.test(this.action)
             ? this.action.match(/^https?:\/\/[^/]*/)[0]
-            : location.origin || (location.protocol + '//' + location.host)
+            : location.origin || location.protocol + '//' + location.host
 
           if (actionOrigin === event.origin) {
-            this.uploadCallback(this.parseData(event.data), this.currentSubmitingFile)
+            this.uploadCallback(
+              this.parseData(event.data),
+              this.currentSubmitingFile
+            )
           }
         }
         window.addEventListener('message', this.handlePostmessage)
@@ -689,10 +728,12 @@ export default {
       }
 
       if (typeof value === 'string') {
-        return [assign(this.fileList ? this.fileList[0] : {}, {
-          src: value,
-          name: value
-        })]
+        return [
+          assign(this.fileList ? this.fileList[0] : {}, {
+            src: value,
+            name: value
+          })
+        ]
       }
 
       return isEmpty(value) ? [] : [this.getNewFile(value)]
@@ -723,10 +764,10 @@ export default {
       } else {
         let name = this.$refs.input.value.replace('C:\\fakepath\\', '')
         let size = this.$refs.input.files && this.$refs.input.files[0].size
-        if (!this.validateFile({name, size})) {
+        if (!this.validateFile({ name, size })) {
           return
         }
-        newFiles = [{status: 'uploading', name}]
+        newFiles = [{ status: 'uploading', name }]
       }
 
       if (!newFiles.length) {
@@ -754,14 +795,20 @@ export default {
           this.uploadFile(newFile)
         }
       } else {
-        if (this.maxCount !== 1 && (this.fileList.length + newFiles.length) > this.maxCount) {
+        if (
+          this.maxCount !== 1 &&
+          this.fileList.length + newFiles.length > this.maxCount
+        ) {
           this.error.countOverflow = true
           return
         }
 
-        let currentFiles = this.fileList.filter(file => file.status !== 'failure')
+        let currentFiles = this.fileList.filter(
+          file => file.status !== 'failure'
+        )
 
-        let needImageSrc = this.requestMode !== 'iframe' && this.type === 'image' && window.URL
+        let needImageSrc =
+          this.requestMode !== 'iframe' && this.type === 'image' && window.URL
         newFiles = newFiles.map(file => {
           if (needImageSrc) {
             file.src = window.URL.createObjectURL(file)
@@ -770,9 +817,10 @@ export default {
           return file
         })
 
-        this.fileList = this.order === 'desc'
-          ? [...newFiles, ...currentFiles]
-          : [...currentFiles, ...newFiles]
+        this.fileList =
+          this.order === 'desc'
+            ? [...newFiles, ...currentFiles]
+            : [...currentFiles, ...newFiles]
 
         if (this.maxCount === 1) {
           this.fileList = this.fileList.slice(-1)
@@ -786,7 +834,7 @@ export default {
         }
       }
     },
-    validateFile ({name, size}) {
+    validateFile ({ name, size }) {
       let typeValidation = this.validateFileType(name)
       this.error.typeInvalid = !typeValidation
 
@@ -805,15 +853,19 @@ export default {
       return this.accept.split(/,\s*/).some(item => {
         let acceptExtention = last(item.split(/[./]/)).toLowerCase()
 
-        if (acceptExtention === extension ||
+        if (
+          acceptExtention === extension ||
           // 对于类似'application/msword'这样的mimetype与扩展名对不上的情形跳过校验
-          (acceptExtention !== '*' && item.indexOf('/') > -1)) {
+          (acceptExtention !== '*' && item.indexOf('/') > -1)
+        ) {
           return true
         }
 
-        if (acceptExtention === '*' &&
+        if (
+          acceptExtention === '*' &&
           item.indexOf('/') > -1 &&
-          this.extensions.indexOf(extension) > -1) {
+          this.extensions.indexOf(extension) > -1
+        ) {
           return true
         }
         return false
@@ -840,7 +892,12 @@ export default {
           this.updateFileList(file)
           break
       }
-      this.$emit('progress', this.files[index], index, this.requestMode === 'xhr' ? progress : null)
+      this.$emit(
+        'progress',
+        this.files[index],
+        index,
+        this.requestMode === 'xhr' ? progress : null
+      )
     },
     onload (file, data) {
       this.uploadCallback(data, file)
@@ -911,7 +968,10 @@ export default {
       data = this.convertResponse ? this.convertResponse(data) : data
 
       if (data.status || data.reason) {
-        warn('[veui-uploader] `status` and `reason` in response data are deprecated. Use `success` and `message` instead. Suppor for old fields will be removed in 1.0.0.', this)
+        warn(
+          '[veui-uploader] `status` and `reason` in response data are deprecated. Use `success` and `message` instead. Suppor for old fields will be removed in 1.0.0.',
+          this
+        )
       }
 
       /* Adapting legacy schema */
@@ -949,7 +1009,14 @@ export default {
 
       if (properties) {
         assign(file, properties)
-        file._extra = omit(properties, ['success', 'status', 'reason', 'message', 'name', 'src'])
+        file._extra = omit(properties, [
+          'success',
+          'status',
+          'reason',
+          'message',
+          'name',
+          'src'
+        ])
       }
       this.$set(this.fileList, this.fileList.indexOf(file), file)
 
@@ -959,10 +1026,13 @@ export default {
     },
     getIndexInPureList (file) {
       let initialIndex = this.fileList.indexOf(file)
-      return initialIndex - this.fileList
-        .slice(0, initialIndex)
-        .filter(f => f.status === 'uploading' || f.status === 'failure')
-        .length
+      return (
+        initialIndex -
+        this.fileList
+          .slice(0, initialIndex)
+          .filter(f => f.status === 'uploading' || f.status === 'failure')
+          .length
+      )
     },
     retry (file) {
       if (this.requestMode === 'iframe') {
@@ -1019,7 +1089,7 @@ export default {
           try {
             return JSON.parse(data)
           } catch (error) {
-            this.$emit('failure', {error})
+            this.$emit('failure', { error })
             return { status: 'failure' }
           }
         } else if (this.dataType === 'text') {
@@ -1054,8 +1124,12 @@ function getProgress () {
     props: ['loaded', 'total', 'type', 'uploadingText', 'convertSizeUnit'],
     computed: {
       percent () {
-        if (this.type !== 'text' && isNumber(this.loaded) && isNumber(this.total)) {
-          return Math.ceil((this.loaded) / this.total * 100) + '%'
+        if (
+          this.type !== 'text' &&
+          isNumber(this.loaded) &&
+          isNumber(this.total)
+        ) {
+          return Math.ceil((this.loaded / this.total) * 100) + '%'
         }
         return ''
       },
@@ -1067,7 +1141,9 @@ function getProgress () {
             return this.percent
           case 'detail':
             return this.percent
-              ? `${this.convertSizeUnit(this.loaded)}/${this.convertSizeUnit(this.total)}`
+              ? `${this.convertSizeUnit(this.loaded)}/${this.convertSizeUnit(
+                this.total
+              )}`
               : ''
           case 'bar':
             return ''
@@ -1075,14 +1151,20 @@ function getProgress () {
       }
     },
     render () {
-      let bar = this.type === 'bar'
-        ? [<div class="veui-uploader-progress-bar" style={{ width: this.percent || '0%' }}></div>,
-          <div class="veui-uploader-progress-bar-full"></div>]
-        : ''
+      let bar =
+        this.type === 'bar'
+          ? [
+            <div
+              class="veui-uploader-progress-bar"
+              style={{ width: this.percent || '0%' }}
+            />,
+            <div class="veui-uploader-progress-bar-full" />
+          ]
+          : ''
       return (
         <div class="veui-uploader-progress">
-          { this.content }
-          { bar }
+          {this.content}
+          {bar}
         </div>
       )
     }

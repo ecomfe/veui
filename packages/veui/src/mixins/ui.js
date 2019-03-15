@@ -47,17 +47,20 @@ export default {
           }
           return result
         },
-        keys(uiConfig).reduce((result, name) => {
-          let prop = uiConfig[name]
-          if (prop.boolean) {
-            result[name] = false
-          } else {
-            result[name] = prop.default || 'default'
+        keys(uiConfig).reduce(
+          (result, name) => {
+            let prop = uiConfig[name]
+            if (prop.boolean) {
+              result[name] = false
+            } else {
+              result[name] = prop.default || 'default'
+            }
+            return result
+          },
+          {
+            [UNKNOWN_KEY]: []
           }
-          return result
-        }, {
-          [UNKNOWN_KEY]: []
-        })
+        )
       )
     },
     uiConfig () {
@@ -65,11 +68,13 @@ export default {
     },
     uiData () {
       let { uiConfig = {}, uiProps } = this
-      return keys(uiProps).filter(name => name !== UNKNOWN_KEY).reduce((result, name) => {
-        let data = get(uiConfig[name], ['data', uiProps[name]], {})
-        merge(result, data)
-        return result
-      }, {})
+      return keys(uiProps)
+        .filter(name => name !== UNKNOWN_KEY)
+        .reduce((result, name) => {
+          let data = get(uiConfig[name], ['data', uiProps[name]], {})
+          merge(result, data)
+          return result
+        }, {})
     },
     icons () {
       let icons = this.getComponentConfig('icons')
@@ -98,16 +103,18 @@ export default {
       })
       let { inheritedUiProps = {} } = this.$parent || {}
       let props = { ...inheritedUiProps, ...overrides }
-      return keys(props)
-        .map(key => {
-          if (props[key] === true) {
-            return key
-          }
-          return props[key]
-        })
-        .filter(val => val !== 'default' && val !== false)
-        .concat(uiProps[UNKNOWN_KEY])
-        .join(' ') || null
+      return (
+        keys(props)
+          .map(key => {
+            if (props[key] === true) {
+              return key
+            }
+            return props[key]
+          })
+          .filter(val => val !== 'default' && val !== false)
+          .concat(uiProps[UNKNOWN_KEY])
+          .join(' ') || null
+      )
     }
   },
   methods: {

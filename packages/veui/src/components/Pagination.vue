@@ -138,7 +138,9 @@ export default {
     pageSizes: {
       type: Array,
       default () {
-        return config.get('pagination.pageSizes') || config.get('pager.pageSizes')
+        return (
+          config.get('pagination.pageSizes') || config.get('pager.pageSizes')
+        )
       }
     },
     total: {
@@ -198,7 +200,8 @@ export default {
       let { page, pageCount, getPageIndicator } = this
 
       let continuousIndicatorLength = aroundIndicatorLength * 2 + 1
-      let boundaryIndicatorLength = (pageIndicatorLength - continuousIndicatorLength - 2) / 2
+      let boundaryIndicatorLength =
+        (pageIndicatorLength - continuousIndicatorLength - 2) / 2
 
       let leftLen
       let rightLen
@@ -210,14 +213,20 @@ export default {
           return getPageSeries(1, pageCount)
 
         case page < continuousIndicatorLength:
-          leftLen = Math.max(continuousIndicatorLength, page + aroundIndicatorLength)
+          leftLen = Math.max(
+            continuousIndicatorLength,
+            page + aroundIndicatorLength
+          )
           rightLen = pageIndicatorLength - leftLen - 1
           return getPageSeries(1, leftLen)
             .concat(getPageIndicator(offsetForward, true))
             .concat(getPageSeries(pageCount - rightLen + 1, rightLen))
 
         case page > pageCount - continuousIndicatorLength + 1:
-          rightLen = Math.max(pageCount - page + 1 + aroundIndicatorLength, continuousIndicatorLength)
+          rightLen = Math.max(
+            pageCount - page + 1 + aroundIndicatorLength,
+            continuousIndicatorLength
+          )
           leftLen = pageIndicatorLength - rightLen - 1
           return getPageSeries(1, leftLen)
             .concat(getPageIndicator(offsetBackward, true))
@@ -226,7 +235,12 @@ export default {
         default:
           return getPageSeries(1, boundaryIndicatorLength)
             .concat(getPageIndicator(offsetBackward, true))
-            .concat(getPageSeries(page - boundaryIndicatorLength - 1, continuousIndicatorLength))
+            .concat(
+              getPageSeries(
+                page - boundaryIndicatorLength - 1,
+                continuousIndicatorLength
+              )
+            )
             .concat(getPageIndicator(offsetForward, true))
             .concat(getPageSeries(pageCount, boundaryIndicatorLength))
       }

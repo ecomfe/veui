@@ -30,11 +30,9 @@ export default {
     if (box.scrollHeight > box.offsetHeight) {
       toggleClass(box, 'veui-dropdown-overflow', true)
 
-      this.__overlay_scroll_handler__ = throttle(
-        this.handleScroll,
-        200,
-        { leading: true }
-      )
+      this.__overlay_scroll_handler__ = throttle(this.handleScroll, 200, {
+        leading: true
+      })
 
       this.handleScroll()
 

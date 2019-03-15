@@ -20,7 +20,7 @@
     min-height: @veui-tabs-height-normal + 1;
 
     &-moving {
-      transition: margin-right .5s ease-in-out;
+      transition: margin-right 0.5s ease-in-out;
     }
 
     &::after {
@@ -50,7 +50,7 @@
     transform: translate(0);
 
     &-moving {
-      transition: transform .5s ease-in-out;
+      transition: transform 0.5s ease-in-out;
     }
   }
 
@@ -216,7 +216,6 @@
 
   &-extra {
     display: inline-block;
-    float: right;
     position: absolute;
     top: 0;
 
@@ -257,7 +256,7 @@
   &-operator .veui-icon {
     vertical-align: top;
     // 减掉的 1px 是底部的线
-    margin-top: ~"calc(@{veui-height-normal} / 2 - .5em - 1px)";
+    margin-top: ~"calc(@{veui-height-normal} / 2 - 0.5em - 1px)";
     user-select: none;
   }
 
@@ -318,7 +317,7 @@
     &-item-status .veui-icon,
     &-item-remove,
     &-operator .veui-icon {
-      margin-top: ~"calc(@{veui-height-large} / 2 - .5em - 1px)";
+      margin-top: ~"calc(@{veui-height-large} / 2 - 0.5em - 1px)";
     }
 
     &-scroller {
@@ -409,7 +408,8 @@
 
       &-moving.veui-tabs-item-removable,
       &.veui-tab-leave-active {
-        transition: width .5s ease-in-out, transform .5s ease-in-out, padding-right .5s;
+        transition: width 0.5s ease-in-out, transform 0.5s ease-in-out,
+          padding-right 0.5s;
       }
 
       &.veui-tab-leave-active {
@@ -469,7 +469,7 @@
     &-item-remove,
     &-operator .veui-icon,
     &-scroller .veui-icon {
-      margin-top: ~"calc(@{veui-tabs-height-normal} / 2 - .5em)";
+      margin-top: ~"calc(@{veui-tabs-height-normal} / 2 - 0.5em)";
       vertical-align: top;
     }
 
@@ -543,7 +543,7 @@
     &-item-remove,
     &-operator .veui-icon,
     &-scroller .veui-icon {
-      margin-top: ~"calc(@{veui-tabs-block-height-large} / 2 - .5em)";
+      margin-top: ~"calc(@{veui-tabs-block-height-large} / 2 - 0.5em)";
       vertical-align: top;
     }
 

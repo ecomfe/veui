@@ -83,7 +83,10 @@ export default {
       type: Array,
       validator (val) {
         if (val != null) {
-          warn('[veui-tree] `expands` is deprecated and will be removed in `1.0.0`. Use `expanded` instead.', this)
+          warn(
+            '[veui-tree] `expands` is deprecated and will be removed in `1.0.0`. Use `expanded` instead.',
+            this
+          )
         }
         return true
       }
@@ -124,7 +127,8 @@ export default {
         return items.map(item => {
           let localOption = omit(item, 'children')
           if (item.children && item.children.length) {
-            localOption.expanded = remove(expanded, value => value === item.value).length !== 0
+            localOption.expanded =
+              remove(expanded, value => value === item.value).length !== 0
             localOption.children = walk(item.children, expanded)
           }
           return localOption
@@ -133,17 +137,18 @@ export default {
       this.localDatasource = walk(this.datasource, clone(expanded))
     },
     toggle (item, index, depth, val) {
-      if (val === item.expanded || !item.children || item.children.length === 0) {
+      if (
+        val === item.expanded ||
+        !item.children ||
+        item.children.length === 0
+      ) {
         return
       }
       item.expanded = !item.expanded
 
       let expanded = item.expanded
         ? uniq([...this.realExpanded, item.value])
-        : filter(
-          this.realExpanded,
-          value => value !== item.value
-        )
+        : filter(this.realExpanded, value => value !== item.value)
       this.$emit('update:expanded', expanded)
 
       /**

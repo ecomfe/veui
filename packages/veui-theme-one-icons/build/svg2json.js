@@ -38,7 +38,9 @@ Promise.all(
         console.error(width, height, viewBox)
       }
 
-      [, width, height] = (viewBox.match(/0 0 (\d+) (\d+)/) || []).map(size => parseInt(size, 10))
+      ;[, width, height] = (viewBox.match(/0 0 (\d+) (\d+)/) || []).map(size =>
+        parseInt(size, 10)
+      )
     }
 
     if (!(width && height)) {
@@ -69,7 +71,9 @@ Promise.all(
               console.log(`  fill: ${attrFill} -> / (same as context)`)
             } else if (attrFill !== 'none') {
               attributes.fill = 'currentColor'
-              console.log(`  fill: ${attrFill} -> currentColor (different from context)`)
+              console.log(
+                `  fill: ${attrFill} -> currentColor (different from context)`
+              )
             }
           }
         }
@@ -89,7 +93,9 @@ Promise.all(
               console.log(`  stroke: ${attrStroke} -> / (same as context)`)
             } else if (attrStroke !== 'none') {
               attributes.stroke = 'currentColor'
-              console.log(`  stroke: ${attrStroke} -> currentColor (different from context)`)
+              console.log(
+                `  stroke: ${attrStroke} -> currentColor (different from context)`
+              )
             }
           }
         }
@@ -103,9 +109,11 @@ Promise.all(
       }
     } else {
       icon = {
-        raw: children.map(child => {
-          return stringify(child)
-        }).join('')
+        raw: children
+          .map(child => {
+            return stringify(child)
+          })
+          .join('')
       }
     }
 
@@ -120,7 +128,10 @@ Promise.all(
     }
   })
 ).then(() => {
-  fs.writeFileSync(path.resolve(__dirname, '../assets/icons.json'), JSON.stringify(icons, null, '  '))
+  fs.writeFileSync(
+    path.resolve(__dirname, '../assets/icons.json'),
+    JSON.stringify(icons, null, '  ')
+  )
   console.log(`Generated ${Object.keys(icons).length} icons.`)
 })
 

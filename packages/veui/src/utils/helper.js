@@ -197,9 +197,12 @@ export function getNumberArg (modifiers, defaultTime) {
 
 const RE_INDEX = /\d+/
 export function deepSet (obj, path, val) {
-  let segments = path.split(/[[\].]/).map(s => {
-    return s.match(RE_INDEX) ? Number(s) : s
-  }).filter(s => s !== '')
+  let segments = path
+    .split(/[[\].]/)
+    .map(s => {
+      return s.match(RE_INDEX) ? Number(s) : s
+    })
+    .filter(s => s !== '')
   let context = obj
   segments.forEach((s, index) => {
     if (index === segments.length - 1) {
@@ -222,7 +225,7 @@ export function normalizeLength (val) {
   if (!val) {
     return null
   }
-  if ((typeof val === 'number' || RE_NUMBER.test(val))) {
+  if (typeof val === 'number' || RE_NUMBER.test(val)) {
     return Number(val) > 0 ? `${val}px` : null
   }
   return val

@@ -203,7 +203,9 @@ export default {
           if (
             !option ||
             !path.length === option.length ||
-            path.some((pathItem, index) => option[index].value !== pathItem.value)
+            path.some(
+              (pathItem, index) => option[index].value !== pathItem.value
+            )
           ) {
             this.flattenOptions[index] = { items: path }
           }

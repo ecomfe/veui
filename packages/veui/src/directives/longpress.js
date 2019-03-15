@@ -35,7 +35,11 @@ function parseParams ({ value, modifiers }) {
   let handler = parseFn('handler')
 
   let timeout = get(value, 'timeout', config.get('longpress.timeout'))
-  let repeatInterval = get(value, 'repeatInterval', config.get('longpress.repeatInterval'))
+  let repeatInterval = get(
+    value,
+    'repeatInterval',
+    config.get('longpress.repeatInterval')
+  )
 
   return {
     handler,

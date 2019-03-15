@@ -34,7 +34,8 @@ export default class TranslateHandler extends BaseHandler {
   // 只有被拖动过，才记录总的拖动距离
   isDragged = false
 
-  tempStyle = 'user-select:none;-ms-user-select:none;-webkit-user-select:none;-moz-user-select:none;' +
+  tempStyle =
+    'user-select:none;-ms-user-select:none;-webkit-user-select:none;-moz-user-select:none;' +
     'transition:none;animation:none;-ms-animation:none;-webkit-animation:none;-moz-animation:none'
 
   setOptions (options) {
@@ -82,7 +83,9 @@ export default class TranslateHandler extends BaseHandler {
       distanceY,
       (elm, index, realDistanceX, realDistanceY) => {
         let initialTransform = this.initialTransforms[index] || ''
-        elm.style[TRANSFORM_ACCESSOR] = `${initialTransform} translate(${realDistanceX}px,${realDistanceY}px)`
+        elm.style[
+          TRANSFORM_ACCESSOR
+        ] = `${initialTransform} translate(${realDistanceX}px,${realDistanceY}px)`
       }
     )
 
@@ -99,7 +102,9 @@ export default class TranslateHandler extends BaseHandler {
         let initialStyle = this.initialStyles[index] || ''
         let initialTransform = this.initialTransforms[index] || ''
         elm.setAttribute('style', initialStyle)
-        elm.style[TRANSFORM_ACCESSOR] = `${initialTransform} translate(${realDistanceX}px,${realDistanceY}px)`
+        elm.style[
+          TRANSFORM_ACCESSOR
+        ] = `${initialTransform} translate(${realDistanceX}px,${realDistanceY}px)`
 
         if (this.isDragged) {
           this.totalDistanceX += realDistanceX

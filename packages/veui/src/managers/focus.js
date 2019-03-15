@@ -34,7 +34,7 @@ class FocusContext {
   }
 
   /**
-   * Initalize a focus context:
+   * Initialize a focus context:
    * 1. trap focus events inside `root`
    * 2. focus `root` by default
    */
@@ -86,7 +86,10 @@ class FocusContext {
     if (source) {
       this.source = null
 
-      if (this.env.trigger !== 'pointer' && typeof source.focus === 'function') {
+      if (
+        this.env.trigger !== 'pointer' &&
+        typeof source.focus === 'function'
+      ) {
         setTimeout(() => {
           source.focus()
         })

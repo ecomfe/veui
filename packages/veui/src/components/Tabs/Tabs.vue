@@ -180,11 +180,14 @@ import config from '../../managers/config'
 import '../../common/uiTypes'
 import { setTransform, getTransform } from '../../utils/dom'
 
-config.defaults({
-  matches (current, to) {
-    return current.fullPath === to.fullPath
-  }
-}, 'tabs')
+config.defaults(
+  {
+    matches (current, to) {
+      return current.fullPath === to.fullPath
+    }
+  },
+  'tabs'
+)
 
 export default {
   name: 'veui-tabs',
@@ -263,15 +266,25 @@ export default {
     },
     rightLimited () {
       // offsetWidth/clientWidth 的值会取四舍五入，两个数比较误差不超过 2
-      return this.currentTranslate !== 0 &&
+      return (
+        this.currentTranslate !== 0 &&
         (this.currentTranslate < this.maxTranslate ||
-          inRange(this.currentTranslate, this.maxTranslate + 2, this.maxTranslate - 2))
+          inRange(
+            this.currentTranslate,
+            this.maxTranslate + 2,
+            this.maxTranslate - 2
+          ))
+      )
     },
     maxTranslate () {
       return this.menuClientWidth - this.tabConClientWidth
     },
     needTransition () {
-      return this.inited && this.transitionSupported && this.uiProps.style === 'block'
+      return (
+        this.inited &&
+        this.transitionSupported &&
+        this.uiProps.style === 'block'
+      )
     },
     ariaAttrs () {
       return this.items.map((tab, index) => {
@@ -313,7 +326,7 @@ export default {
 
     // 让子组件渲染完毕
     this.$nextTick(() => {
-      let {menu, extra} = this.$refs
+      let { menu, extra } = this.$refs
       this.listResizeHandler()
       this.inited = true
       if (this.menuOverflow) {
@@ -333,8 +346,7 @@ export default {
       // 如果还没有找到选中的 tab，优先查看配置的 name
       // 因为 index 有默认值，而 tab.name 会 fallback 到 id 上边，所以 active 不指定不会误判断
       if (
-        !this.activeId &&
-        tab.name === this.active ||
+        (!this.activeId && tab.name === this.active) ||
         (tabIndex === this.index && !this.active) ||
         isMatched
       ) {
@@ -398,7 +410,8 @@ export default {
 
       let needFixed = false
       if (items.length > 1) {
-        needFixed = (index === this.localIndex && index === 0) || index < this.localIndex
+        needFixed =
+          (index === this.localIndex && index === 0) || index < this.localIndex
         if (index === this.localIndex) {
           let item = items[this.localIndex - 1] || items[this.localIndex + 1]
           this.localIndex = items.indexOf(item)
@@ -419,7 +432,7 @@ export default {
       })
     },
 
-    setActive ({active, index}) {
+    setActive ({ active, index }) {
       if (this.localActive === active || this.localIndex === index) {
         return
       }
@@ -432,7 +445,8 @@ export default {
 
       this.localIndex = index !== undefined ? index : values.indexOf(active)
       this.localActive = active !== undefined ? active : values[index]
-      this.activeId = this.localActive != null ? this.items[this.localIndex].id : null
+      this.activeId =
+        this.localActive != null ? this.items[this.localIndex].id : null
 
       if (this.menuOverflow && this.localActive) {
         this.scroll({ itemName: this.localActive })
@@ -448,7 +462,8 @@ export default {
       let tabConClientWidth = listContainer.$el.clientWidth
       let menuClientWidth = menu.clientWidth
       let extraWidth = extra.getBoundingClientRect().width
-      if (this.tabConClientWidth !== tabConClientWidth ||
+      if (
+        this.tabConClientWidth !== tabConClientWidth ||
         this.menuClientWidth !== menuClientWidth ||
         this.extraWidth !== extraWidth
       ) {
@@ -493,9 +508,12 @@ export default {
       let stickyWidth = extra.getBoundingClientRect().width
 
       let factor = this.menuOverflow
-        ? -(scroller.offsetWidth + parseFloat(getComputedStyle(scroller).marginLeft))
+        ? -(
+          scroller.offsetWidth +
+            parseFloat(getComputedStyle(scroller).marginLeft)
+        )
         : stickyWidth
-      let menuOverflow = menuWidth < (tabConWidth + factor)
+      let menuOverflow = menuWidth < tabConWidth + factor
 
       if (this.menuOverflow !== menuOverflow) {
         this.switching = true
@@ -512,7 +530,7 @@ export default {
         this.$nextTick(() => {
           let menuRightStable
           if (this.switching || this.extraWidth !== stickyWidth) {
-            this.bindTransition(menu, (e) => {
+            this.bindTransition(menu, e => {
               this.menuMoving = false
               this.conMoving = false
               this.storeBoundingSize()
@@ -530,7 +548,9 @@ export default {
             } else if (this.menuOverflow) {
               // 这个值是为了溢出时横向滚动的同步动画计算记录的，不记录一个稳定位置无法准确滚到位
               menuRightStable = this.menuRight
-                ? this.menuRight + parseFloat(getComputedStyle(menu).marginRight) - extraWidth
+                ? this.menuRight +
+                  parseFloat(getComputedStyle(menu).marginRight) -
+                  extraWidth
                 : null
               menu.style.marginRight = extraWidth + 'px'
             }
@@ -605,14 +625,23 @@ export default {
           }
 
           // 检查是否是一整个 tab 占满视窗的特殊情况，如果是，滚到上一个就是了
-          if (Math.floor(left) <= this.menuLeft && Math.ceil(right) >= this.menuRight) {
+          if (
+            Math.floor(left) <= this.menuLeft &&
+            Math.ceil(right) >= this.menuRight
+          ) {
             former = index - 1
             return true
           }
 
           // 减少 tab 留白和滚动误差带来的影响，三分之二宽度在视窗内才不会被保留在下个视窗中
-          if (left >
-            (this.menuLeft - (tab.offsetWidth + parseFloat(marginLeft) + parseFloat(marginRight)) / 3)) {
+          if (
+            left >
+            this.menuLeft -
+              (tab.offsetWidth +
+                parseFloat(marginLeft) +
+                parseFloat(marginRight)) /
+                3
+          ) {
             if (index === 0) {
               // 第一个就满足条件，说明边界离第一个很近，往左只能在第一个的内部滚了
               former = -1
@@ -632,7 +661,8 @@ export default {
           } else {
             // 视窗在中间
             let tab = this.getTab(this.items[former].name)
-            localTranslate = this.menuRightStable - tab.getBoundingClientRect().right
+            localTranslate =
+              this.menuRightStable - tab.getBoundingClientRect().right
           }
         } else {
           localTranslate = this.menuRightStable - flag.right
@@ -642,35 +672,47 @@ export default {
         overflow = localMaxTranslate <= localTranslate
       } else if (direction === 'right') {
         let former = null
-        this.items.slice().reverse().some((item, index) => {
-          let tab = this.getTab(item.name)
-          let { marginLeft, marginRight } = getComputedStyle(tab)
-          let { left, right } = tab.getBoundingClientRect()
+        this.items
+          .slice()
+          .reverse()
+          .some((item, index) => {
+            let tab = this.getTab(item.name)
+            let { marginLeft, marginRight } = getComputedStyle(tab)
+            let { left, right } = tab.getBoundingClientRect()
 
-          // 记录向右滚动极限距离
-          if (index === 0) {
-            localMaxTranslate = Math.ceil(this.menuRightStable - right)
-          }
-
-          // 检查是否是一整个 tab 占满视窗的特殊情况，如果是，滚到上一个就是了
-          if (Math.floor(left) <= this.menuLeft && Math.ceil(right) >= this.menuRight) {
-            former = this.items.length - index
-            return true
-          }
-
-          // 同向左滚动
-          if (right <
-            (this.menuRightStable + (tab.offsetWidth + parseFloat(marginLeft) + parseFloat(marginRight)) / 3)) {
+            // 记录向右滚动极限距离
             if (index === 0) {
-              // 最后一个就满足条件，说明边界离最后一个很近，往右只能在最后一个的内部滚了
-              former = this.items.length
+              localMaxTranslate = Math.ceil(this.menuRightStable - right)
             }
-            return true
-          }
 
-          assign(flag, { left, right })
-          return false
-        })
+            // 检查是否是一整个 tab 占满视窗的特殊情况，如果是，滚到上一个就是了
+            if (
+              Math.floor(left) <= this.menuLeft &&
+              Math.ceil(right) >= this.menuRight
+            ) {
+              former = this.items.length - index
+              return true
+            }
+
+            // 同向左滚动
+            if (
+              right <
+              this.menuRightStable +
+                (tab.offsetWidth +
+                  parseFloat(marginLeft) +
+                  parseFloat(marginRight)) /
+                  3
+            ) {
+              if (index === 0) {
+                // 最后一个就满足条件，说明边界离最后一个很近，往右只能在最后一个的内部滚了
+                former = this.items.length
+              }
+              return true
+            }
+
+            assign(flag, { left, right })
+            return false
+          })
 
         if (former != null) {
           // 视窗太窄或者只需要滚动一点点
@@ -698,13 +740,18 @@ export default {
         return
       }
 
-      let matrix = getTransform(listContainer).slice(7).split(',').map(v => +v.trim())
+      let matrix = getTransform(listContainer)
+        .slice(7)
+        .split(',')
+        .map(v => +v.trim())
       let currentTranslate = matrix[4] + localTranslate
       currentTranslate = inRange(
         currentTranslate,
         limited[direction] - 2,
         limited[direction] + 2
-      ) ? limited[direction] : currentTranslate
+      )
+        ? limited[direction]
+        : currentTranslate
       this.currentTranslate = currentTranslate
       this.$nextTick(() => {
         setTransform(listContainer, `translate(${currentTranslate}px)`)
@@ -790,7 +837,8 @@ export default {
           case overflowWidth < elWidth && currentTranslate > elWidth:
             transitionWidth = null
             distance = elWidth
-            this.fixedTabs = this.items.filter((item, index) => index < el.dataset.index)
+            this.fixedTabs = this.items
+              .filter((item, index) => index < el.dataset.index)
               .map(({ name }) => this.getTab(name))
             this.fixedTranslate = elWidth - currentTranslate
             break
@@ -807,7 +855,11 @@ export default {
               this.$nextTick(() => {
                 // 右侧动画
                 menu.style.marginRight =
-                  (parseFloat(menu.style.marginRight) + elWidth - currentTranslate - overflowWidth) + 'px'
+                  parseFloat(menu.style.marginRight) +
+                  elWidth -
+                  currentTranslate -
+                  overflowWidth +
+                  'px'
               })
             }
             break
@@ -818,10 +870,7 @@ export default {
         // 左侧的动画
         if (distance != null) {
           this.$nextTick(() => {
-            this.translateTabs(
-              [...this.fixedTabs, el],
-              distance
-            )
+            this.translateTabs([...this.fixedTabs, el], distance)
           })
         }
       }
@@ -852,7 +901,10 @@ export default {
         if (this.fixedTranslate != null) {
           this.translateTabs(this.fixedTabs, 0)
           this.currentTranslate = this.fixedTranslate
-          setTransform(this.$refs.listContainer.$el, `translate(${this.fixedTranslate}px)`)
+          setTransform(
+            this.$refs.listContainer.$el,
+            `translate(${this.fixedTranslate}px)`
+          )
         }
         let extraWidth = this.$refs.extra.getBoundingClientRect().width
         if (extraWidth !== this.extraWidth && this.menuOverflow) {

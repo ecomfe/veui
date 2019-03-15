@@ -28,7 +28,6 @@ export default {
     this.checkLocalRoutes()
   },
   methods: {
-
     /**
      * 默认将最后一个route的type设置为text
      */
@@ -48,28 +47,26 @@ export default {
   render () {
     return (
       <ol class="veui-breadcrumb" role="navigation">
-        {
-          this.$slots.default || this.localRoutes.map((route, index) => (
-            <BreadcrumbItem to={route.to}
+        {this.$slots.default ||
+          this.localRoutes.map((route, index) => (
+            <BreadcrumbItem
+              to={route.to}
               replace={route.replace}
               type={route.type}
               native={route.native}
-              onRedirect={event => this.fireRedirect(event, route, index)}>
-              {
-                this.$scopedSlots.item
-                  ? this.$scopedSlots.item({ route, ...route, index })
-                  : (route.label || route.text)
-              }
+              onRedirect={event => this.fireRedirect(event, route, index)}
+            >
+              {this.$scopedSlots.item
+                ? this.$scopedSlots.item({ route, ...route, index })
+                : route.label || route.text}
               <template slot="separator">
-                {
-                  this.$scopedSlots.separator
-                    ? this.$scopedSlots.separator()
-                    : this.$slots.separator
-                }
+                {this.$scopedSlots.separator
+                  ? this.$scopedSlots.separator()
+                  : this.$slots.separator}
               </template>
             </BreadcrumbItem>
-          )) || this.$slots.default
-        }
+          )) ||
+          this.$slots.default}
       </ol>
     )
   }

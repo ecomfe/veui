@@ -18,7 +18,7 @@ class Node {
    * @public
    * @type Node
    */
-  previous = null;
+  previous = null
 
   /**
    * 在前序遍历中的后一个节点
@@ -26,7 +26,7 @@ class Node {
    * @public
    * @type Node
    */
-  next = null;
+  next = null
 
   /**
    * 子节点按照 priority 的分组，结构示例：
@@ -418,7 +418,11 @@ export class Tree {
    * @param {string} parentId 父节点 id
    * @param {number} priority 优先级顺序值
    */
-  createNode ({ parentId = this.root.id, priority, orderChangeCallback = noop } = {}) {
+  createNode ({
+    parentId = this.root.id,
+    priority,
+    orderChangeCallback = noop
+  } = {}) {
     let node = new Node()
 
     let id = node.id
@@ -487,7 +491,7 @@ export class Tree {
    */
   normalizeIndex (node, groupIndex, childIndex) {
     if (groupIndex === undefined) {
-      ({ groupIndex, childIndex } = node.parent.getChildIndex(node.id))
+      ;({ groupIndex, childIndex } = node.parent.getChildIndex(node.id))
     }
 
     let children = node.parent.childrenGroup[groupIndex].children
@@ -512,11 +516,16 @@ export class Tree {
       return
     }
 
-    ({ groupIndex, childIndex } = this.normalizeIndex(node, groupIndex, childIndex))
+    ;({ groupIndex, childIndex } = this.normalizeIndex(
+      node,
+      groupIndex,
+      childIndex
+    ))
 
     let targetNode
     if (childIndex > 0) {
-      let previousSibling = node.parent.childrenGroup[groupIndex].children[childIndex - 1]
+      let previousSibling =
+        node.parent.childrenGroup[groupIndex].children[childIndex - 1]
       let curTail = previousSibling
       do {
         targetNode = curTail
@@ -528,7 +537,7 @@ export class Tree {
 
     // 到前面的分组看看
     if (groupIndex > 0) {
-      findLast(node.parent.childrenGroup.slice(0, groupIndex), (group) => {
+      findLast(node.parent.childrenGroup.slice(0, groupIndex), group => {
         if (group.children.length) {
           let lastChild = last(group.children)
           targetNode = lastChild.tail || lastChild
@@ -559,7 +568,11 @@ export class Tree {
       return null
     }
 
-    ({ groupIndex, childIndex } = this.normalizeIndex(node, groupIndex, childIndex))
+    ;({ groupIndex, childIndex } = this.normalizeIndex(
+      node,
+      groupIndex,
+      childIndex
+    ))
 
     let children = node.parent.childrenGroup[groupIndex].children
     if (childIndex < children.length - 1) {
@@ -593,7 +606,8 @@ export class Tree {
    */
   generateTreeOrder (node) {
     let previous = node ? this.findPreviousNode(node) : this.root
-    let baseOrder = previous && previous.order ? (previous.order + 1) : this.baseOrder
+    let baseOrder =
+      previous && previous.order ? previous.order + 1 : this.baseOrder
 
     this.iterate({
       curNode: node,

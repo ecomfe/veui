@@ -44,9 +44,11 @@ export default {
   },
   methods: {
     add (message) {
-      this.messages.unshift(assign({ height: 0, top: 0 }, message, {
-        __message_id__: uniqueId('veui-toast-')
-      }))
+      this.messages.unshift(
+        assign({ height: 0, top: 0 }, message, {
+          __message_id__: uniqueId('veui-toast-')
+        })
+      )
     },
     remove (message) {
       let index = findIndex(this.messages, msg => {

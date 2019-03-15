@@ -10,12 +10,15 @@
 <script>
 import config from '../../managers/config'
 
-config.defaults({
-  columns: 12,
-  gutter: 30,
-  margin: 0,
-  flex: false
-}, 'gridcontainer')
+config.defaults(
+  {
+    columns: 12,
+    gutter: 30,
+    margin: 0,
+    flex: false
+  },
+  'gridcontainer'
+)
 
 export default {
   name: 'veui-grid-container',
@@ -61,8 +64,9 @@ export default {
     style () {
       let { margin } = this
       return {
-        ...margin
-          ? { 'padding-right': `${margin}px`, 'padding-left': `${margin}px` } : {}
+        ...(margin
+          ? { 'padding-right': `${margin}px`, 'padding-left': `${margin}px` }
+          : {})
       }
     }
   },

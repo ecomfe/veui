@@ -12,7 +12,9 @@ module.exports = {
     'plugin:vue/recommended',
     'plugin:vue/strongly-recommended',
     // https://github.com/standard/standard/blob/master/docs/RULES-en.md
-    'standard'
+    'standard',
+    'prettier/standard',
+    'prettier/vue'
   ],
   // required to lint *.vue files
   plugins: ['vue'],

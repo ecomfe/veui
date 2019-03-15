@@ -218,15 +218,17 @@ export default {
     },
 
     localSecondaryProgress () {
-      let {min, max} = this
-      return [].concat(this.secondaryProgress).map(progress => (progress - min) / (max - min))
+      let { min, max } = this
+      return []
+        .concat(this.secondaryProgress)
+        .map(progress => (progress - min) / (max - min))
     },
     secondardProgressStyle () {
       return this.getProgressStyle(this.localSecondaryProgress)
     },
     thumbAttrs () {
       return this.localValues.map((value, index) => {
-        let {min, max} = this.getLocalValueBoundary(index)
+        let { min, max } = this.getLocalValueBoundary(index)
         return {
           'aria-valuemin': this.reduceDecimal(min),
           'aria-valuemax': this.reduceDecimal(max),
@@ -247,9 +249,10 @@ export default {
   watch: {
     value: {
       handler (val) {
-        this.localValues = [].concat(val)
+        this.localValues = []
+          .concat(val)
           .map(val => this.getAdjustedValue(this.parse(val)))
-          .sort((a, b) => a > b ? 1 : -1)
+          .sort((a, b) => (a > b ? 1 : -1))
       },
       immediate: true
     },
@@ -333,14 +336,20 @@ export default {
     },
     updateValueByRatio (ratio, index = 0) {
       let { min, max } = this.localValueBoundary
-      let val = this.getAdjustedValue(this.min + (this.max - this.min) * ratio, min, max)
+      let val = this.getAdjustedValue(
+        this.min + (this.max - this.min) * ratio,
+        min,
+        max
+      )
       this.$set(this.localValues, index, val)
     },
     getAdjustedValue (val, min = this.min, max = this.max) {
       val = clamp(val, min, max)
       if (this.step > 0) {
         let maxSteps = Math.floor((max - min) / this.step)
-        val = Math.min(Math.round((val - min) / this.step), maxSteps) * this.step + min
+        val =
+          Math.min(Math.round((val - min) / this.step), maxSteps) * this.step +
+          min
       }
       return val
     },
@@ -363,8 +372,10 @@ export default {
       }
       let prevIndex = thumbIndex - 1
       let nextIndex = thumbIndex + 1
-      let minLocalValue = prevIndex < 0 ? min : ratios[prevIndex] * (max - min) + min
-      let maxLocalValue = nextIndex > len - 1 ? max : ratios[nextIndex] * (max - min) + min
+      let minLocalValue =
+        prevIndex < 0 ? min : ratios[prevIndex] * (max - min) + min
+      let maxLocalValue =
+        nextIndex > len - 1 ? max : ratios[nextIndex] * (max - min) + min
       return {
         min: minLocalValue,
         max: maxLocalValue

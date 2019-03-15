@@ -193,7 +193,14 @@
 </template>
 
 <script>
-import { includes, find, isFunction, cloneDeep, mapValues, isEqual } from 'lodash'
+import {
+  includes,
+  find,
+  isFunction,
+  cloneDeep,
+  mapValues,
+  isEqual
+} from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
@@ -206,17 +213,28 @@ import Checkbox from './Checkbox'
 import Tooltip from './Tooltip'
 import Dropdown from './Dropdown'
 
-config.defaults({
-  statuses: [
-    { name: 'selected', label: '@@schedule.selectedRanges' },
-    { name: 'available', label: '@@schedule.availableRanges' }
-  ],
-  shortcuts: []
-}, 'schedule')
+config.defaults(
+  {
+    statuses: [
+      { name: 'selected', label: '@@schedule.selectedRanges' },
+      { name: 'available', label: '@@schedule.availableRanges' }
+    ],
+    shortcuts: []
+  },
+  'schedule'
+)
 
 function warnDeprecated (oldVal, newVal, vm) {
-  warn('[veui-schedule] `shortcuts-display` value `' + oldVal + '` is renamed to `' +
-    newVal + '` and will be removed in `1.0.0`. Use `' + newVal + '` instead.', vm)
+  warn(
+    '[veui-schedule] `shortcuts-display` value `' +
+      oldVal +
+      '` is renamed to `' +
+      newVal +
+      '` and will be removed in `1.0.0`. Use `' +
+      newVal +
+      '` instead.',
+    vm
+  )
 }
 
 export default {
@@ -288,7 +306,8 @@ export default {
         let [firstRange] = this.realSelected[day] || []
         return {
           checked: !!firstRange,
-          indeterminate: firstRange && (firstRange[0] !== 0 || firstRange[1] !== 23)
+          indeterminate:
+            firstRange && (firstRange[0] !== 0 || firstRange[1] !== 23)
         }
       })
     },
@@ -299,13 +318,20 @@ export default {
     },
     hourlyStates () {
       return this.week.reduce((days, day) => {
-        days.push([...Array(24)].map((v, i) => i).reduce((hours, hour) => {
-          hours.push({
-            disabled: typeof this.disabledHour === 'function' ? this.disabledHour(day, hour) : false,
-            ...this.getSelectState(day, hour)
-          })
-          return hours
-        }, []))
+        days.push(
+          [...Array(24)]
+            .map((v, i) => i)
+            .reduce((hours, hour) => {
+              hours.push({
+                disabled:
+                  typeof this.disabledHour === 'function'
+                    ? this.disabledHour(day, hour)
+                    : false,
+                ...this.getSelectState(day, hour)
+              })
+              return hours
+            }, [])
+        )
         return days
       }, [])
     },
@@ -314,9 +340,17 @@ export default {
         return null
       }
 
-      let dayRange = [this.pickingStart.dayIndex, this.pickingEnd.dayIndex].sort(compare)
-      let hourRange = [this.pickingStart.hour, this.pickingEnd.hour].sort(compare)
-      let days = [...this.week].splice(dayRange[0], dayRange[1] - dayRange[0] + 1)
+      let dayRange = [
+        this.pickingStart.dayIndex,
+        this.pickingEnd.dayIndex
+      ].sort(compare)
+      let hourRange = [this.pickingStart.hour, this.pickingEnd.hour].sort(
+        compare
+      )
+      let days = [...this.week].splice(
+        dayRange[0],
+        dayRange[1] - dayRange[0] + 1
+      )
       return this.mergeRange(days, hourRange)
     },
     realSelected () {
@@ -341,7 +375,7 @@ export default {
       return shortcuts.map(({ label, selected }) => {
         return {
           label,
-          selected: mapValues(selected, day => day === true ? [[0, 23]] : day)
+          selected: mapValues(selected, day => (day === true ? [[0, 23]] : day))
         }
       })
     },
@@ -384,7 +418,7 @@ export default {
       return {
         isDisabled: this.disabledHour(day, hour),
         isSelected: !!range,
-        ...range
+        ...(range
           ? {
             isStart: hour === range[0],
             span: range[1] - range[0] + 1,
@@ -392,7 +426,7 @@ export default {
             end: range[1],
             isWhole: range[0] === 0 && range[1] === 23
           }
-          : {}
+          : {})
       }
     },
     mergeRange (days, range) {
@@ -413,10 +447,12 @@ export default {
     },
     startPicking (dayIndex, hour) {
       this.pickingStart = {
-        dayIndex, hour
+        dayIndex,
+        hour
       }
       this.pickingEnd = {
-        dayIndex, hour
+        dayIndex,
+        hour
       }
     },
     markEnd (dayIndex, hour) {
@@ -428,7 +464,8 @@ export default {
         return
       }
       this.pickingEnd = {
-        dayIndex, hour
+        dayIndex,
+        hour
       }
     },
     updateCurrent (dayIndex, hour) {
@@ -438,7 +475,9 @@ export default {
       }
     },
     handleMousedown (dayIndex, hour) {
-      this.mergeMode = this.hourlyStates[dayIndex][hour].isSelected ? 'substract' : 'union'
+      this.mergeMode = this.hourlyStates[dayIndex][hour].isSelected
+        ? 'substract'
+        : 'union'
       this.startPicking(dayIndex, hour)
       this.updateCurrent(dayIndex, hour)
     },
