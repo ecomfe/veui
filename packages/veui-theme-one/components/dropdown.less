@@ -32,7 +32,7 @@
     }
 
     &::before,
-    &::after, {
+    &::after {
       content: "";
       display: inline-block;
     }
@@ -43,7 +43,7 @@
       width: 1px;
       height: 1em;
       background-color: #fff;
-      opacity: .5;
+      opacity: 0.5;
       .veui-transition(opacity, transform);
     }
 
@@ -53,10 +53,10 @@
   }
 
   &-split&-expanded[ui~="primary"],
-  &-split[ui~="primary"]:hover, {
+  &-split[ui~="primary"]:hover {
     .veui-dropdown-button::before {
       opacity: 0;
-      transform: translateY(50%) scaleY(.01);
+      transform: translateY(50%) scaleY(0.01);
     }
   }
 

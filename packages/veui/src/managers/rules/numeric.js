@@ -5,7 +5,8 @@ import i18n from '../i18n'
 export default {
   validate (val) {
     return !isEmpty(val)
-      ? isNumber(val) || isString(val) && !/^0(?!\.|e)/.test(val) && !isNaN(toNumber(val))
+      ? isNumber(val) ||
+          (isString(val) && !/^0(?!\.|e)/.test(val) && !isNaN(toNumber(val)))
       : true
   },
   message (value, ruleValue) {

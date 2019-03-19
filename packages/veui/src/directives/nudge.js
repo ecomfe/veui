@@ -35,7 +35,8 @@ function parseParams ({ value, modifiers }) {
   // 解析回调函数
   let update = parseFn('update')
 
-  let step = get(value, 'step') || getNumberArg(modifiers, config.get('nudge.step'))
+  let step =
+    get(value, 'step') || getNumberArg(modifiers, config.get('nudge.step'))
 
   return {
     axis,

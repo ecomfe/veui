@@ -1,5 +1,13 @@
 import { addListener, removeListener } from 'resize-detector'
-import { debounce, throttle, isObject, assign, isEqual, find, keys } from 'lodash'
+import {
+  debounce,
+  throttle,
+  isObject,
+  assign,
+  isEqual,
+  find,
+  keys
+} from 'lodash'
 import { getNumberArg } from '../utils/helper'
 
 const modeMap = {
@@ -21,7 +29,9 @@ function attach (el, { value, oldValue, modifiers }) {
   }
 
   let fn = modeMap[options.mode]
-  let cb = fn ? fn(options.handler, options.wait, options.leading) : options.handler
+  let cb = fn
+    ? fn(options.handler, options.wait, options.leading)
+    : options.handler
 
   if (!oldValue) {
     el.__veui_resize_handler__ = cb

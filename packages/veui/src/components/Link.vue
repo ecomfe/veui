@@ -68,7 +68,9 @@ export default {
     },
     realRel () {
       if (this.target && this.target.toLowerCase() === '_blank') {
-        return uniq([...(this.rel || '').split(/\s+/), 'noopener'].filter(t => t)).join(' ')
+        return uniq(
+          [...(this.rel || '').split(/\s+/), 'noopener'].filter(t => t)
+        ).join(' ')
       }
       return this.rel
     }

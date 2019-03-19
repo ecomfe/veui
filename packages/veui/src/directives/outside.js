@@ -64,7 +64,8 @@ function getElementsByRefs (refs, context) {
 function parseParams (arg, modifiers, value) {
   let refs = arg ? arg.split(',') : []
   let handler
-  let trigger = find(TRIGGER_TYPES, triggerType => triggerType in modifiers) || 'click'
+  let trigger =
+    find(TRIGGER_TYPES, triggerType => triggerType in modifiers) || 'click'
   // delay 表示如果鼠标移动到 includeTargets 元素之外多少毫秒之后，才会触发 handler
   let delay = getNumberArg(modifiers, 0)
   let excludeSelf = !!modifiers.excludeSelf
@@ -126,7 +127,10 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
         ...(excludeSelf ? [] : [el]),
         ...getElementsByRefs(refs, context)
       ]
-      if ((EVENT_TRIGGER_MAP[e.type] || e.type) === trigger && !isElementIn(e.target, includeTargets)) {
+      if (
+        (EVENT_TRIGGER_MAP[e.type] || e.type) === trigger &&
+        !isElementIn(e.target, includeTargets)
+      ) {
         handler(e)
       }
     }

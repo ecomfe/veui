@@ -31,7 +31,9 @@ export class ConfigManager {
       setConfigItem (obj, key, val) {
         Vue.set(obj, key, val)
 
-        let relatedWatcherKeys = keys(this.watchers).filter(k => startsWith(k, key))
+        let relatedWatcherKeys = keys(this.watchers).filter(k =>
+          startsWith(k, key)
+        )
         relatedWatcherKeys.forEach(watcherKey => this.unwatch(watcherKey))
 
         this.transformValue(obj, key, null)

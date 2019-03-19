@@ -23,38 +23,39 @@ export default {
 
     return (
       <tbody>
-        {
-          this.data.length
-            ? flatMap(this.data, (item, index) => {
-              let key = this.keyField
-                ? item[this.keyField]
-                : this.keys[index]
-              let expanded = this.expanded.indexOf(key) !== -1
-              let rows = [<Row index={index} expanded={expanded}/>]
+        {this.data.length ? (
+          flatMap(this.data, (item, index) => {
+            let key = this.keyField ? item[this.keyField] : this.keys[index]
+            let expanded = this.expanded.indexOf(key) !== -1
+            let rows = [<Row index={index} expanded={expanded} />]
 
-              if (this.expandable && expanded) {
-                if (subRow) {
-                  rows.push(<Row>{subRow({ ...item, index })}</Row>)
-                } else {
-                  rows = rows.concat((item.children || []).map(item => {
-                    return (
-                      <Row item={item} index={index}/>
-                    )
-                  }))
-                }
+            if (this.expandable && expanded) {
+              if (subRow) {
+                rows.push(<Row>{subRow({ ...item, index })}</Row>)
+              } else {
+                rows = rows.concat(
+                  (item.children || []).map(item => {
+                    return <Row item={item} index={index} />
+                  })
+                )
               }
+            }
 
-              return rows
-            })
-            : <tr>
-              <td
-                class="veui-table-no-data"
-                colspan={this.columnCount}
-                role="cell">
-                <div class="veui-table-cell">{this.$slots['no-data'] || this.t('@table.noData')}</div>
-              </td>
-            </tr>
-        }
+            return rows
+          })
+        ) : (
+          <tr>
+            <td
+              class="veui-table-no-data"
+              colspan={this.columnCount}
+              role="cell"
+            >
+              <div class="veui-table-cell">
+                {this.$slots['no-data'] || this.t('@table.noData')}
+              </div>
+            </td>
+          </tr>
+        )}
       </tbody>
     )
   }

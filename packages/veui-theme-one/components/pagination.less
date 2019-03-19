@@ -176,10 +176,13 @@
     }
   }
 
-  .generate-responsive-page-digit-width(@length, @scale-ratio: 1) when (@length > 2) {
+  .generate-responsive-page-digit-width(@length, @scale-ratio: 1)
+    when
+    (@length > 2) {
     .veui-pagination-digit-length-@{length} {
       li {
-        width: (@digit-width + @digit-width-delta * (@length - 2)) * @scale-ratio;
+        width: (@digit-width + @digit-width-delta * (@length - 2)) *
+          @scale-ratio;
       }
     }
 
@@ -241,6 +244,6 @@
       height: @digit-height * @scale / 2;
     }
 
-    .generate-responsive-page-digit-width(4, .8);
+    .generate-responsive-page-digit-width(4, 0.8);
   }
 }

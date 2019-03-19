@@ -36,8 +36,16 @@ import { getListeners } from '../utils/helper'
 import { hasClass } from '../utils/dom'
 
 const EVENTS = [
-  'mousedown', 'mouseup', 'mouseenter', 'mouseleave',
-  'click', 'keydown', 'keyup', 'keypress', 'focus', 'blur'
+  'mousedown',
+  'mouseup',
+  'mouseenter',
+  'mouseleave',
+  'click',
+  'keydown',
+  'keyup',
+  'keypress',
+  'focus',
+  'blur'
 ]
 
 export default {

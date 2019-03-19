@@ -110,7 +110,14 @@ export default {
   computed: {
     attrs () {
       return {
-        ...omit(this.$props, 'placeholder', 'selectOnFocus', 'composition', 'value', 'clearable'),
+        ...omit(
+          this.$props,
+          'placeholder',
+          'selectOnFocus',
+          'composition',
+          'value',
+          'clearable'
+        ),
         name: this.realName,
         disabled: this.realDisabled,
         readonly: this.realReadonly,

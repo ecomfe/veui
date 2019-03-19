@@ -49,12 +49,12 @@ export class ToastManager {
   show (message, type) {
     let options = {}
     if (isObject(message)) {
-      options = {...options, ...message}
+      options = { ...options, ...message }
     } else if (isString(message)) {
       options.message = message
     }
     if (isObject(type)) {
-      options = {...options, ...type}
+      options = { ...options, ...type }
     } else if (isString(type)) {
       options.type = type
     }

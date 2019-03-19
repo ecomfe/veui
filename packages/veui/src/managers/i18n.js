@@ -32,16 +32,19 @@ export class I18nManager {
         })
       },
       watch (path, callback, locale) {
-        return this.$watch(() => this.get(path, locale), val => {
-          if (isFunction(callback)) {
-            callback(val)
+        return this.$watch(
+          () => this.get(path, locale),
+          val => {
+            if (isFunction(callback)) {
+              callback(val)
+            }
           }
-        })
+        )
       }
     }
-  });
+  })
 
-  _locale = 'zh-Hans';
+  _locale = 'zh-Hans'
 
   get locale () {
     return this.store.locale
@@ -53,7 +56,9 @@ export class I18nManager {
     }
 
     if (!this.store.store[val]) {
-      warn(`[veui-i18n] Locale \`${val}\` not found. Please register locale data before use.`)
+      warn(
+        `[veui-i18n] Locale \`${val}\` not found. Please register locale data before use.`
+      )
     }
 
     this.store.locale = val

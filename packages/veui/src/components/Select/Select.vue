@@ -14,9 +14,12 @@ import { walk } from '../../utils/data'
 import { cloneDeep, mapValues } from 'lodash'
 import '../../common/uiTypes'
 
-config.defaults({
-  placeholder: '@@select.placeholder'
-}, 'select')
+config.defaults(
+  {
+    placeholder: '@@select.placeholder'
+  },
+  'select'
+)
 
 export default {
   name: 'veui-select',
@@ -54,7 +57,9 @@ export default {
       return this.optionMap[this.localValue]
     },
     realPlaceholder () {
-      return this.placeholder == null ? config.get('select.placeholder') : this.placeholder
+      return this.placeholder == null
+        ? config.get('select.placeholder')
+        : this.placeholder
     },
     label () {
       if (this.localValue == null) {
@@ -99,7 +104,12 @@ export default {
       this.expanded = !this.expanded
     },
     handleButtonKeydown (e) {
-      if (e.key === 'Up' || e.key === 'ArrowUp' || e.key === 'Down' || e.key === 'ArrowDown') {
+      if (
+        e.key === 'Up' ||
+        e.key === 'ArrowUp' ||
+        e.key === 'Down' ||
+        e.key === 'ArrowDown'
+      ) {
         this.expanded = true
         e.stopPropagation()
         e.preventDefault()
@@ -107,96 +117,111 @@ export default {
     },
     extractOptions () {
       let map = {}
-      walk(this.options, option => {
-        let { value } = option
-        if (value != null) {
-          if (map[value]) {
-            warn(`[veui-select] Duplicate item value [${value}] for select options.`, this)
+      walk(
+        this.options,
+        option => {
+          let { value } = option
+          if (value != null) {
+            if (map[value]) {
+              warn(
+                `[veui-select] Duplicate item value [${value}] for select options.`,
+                this
+              )
+            }
+            map[value] = option
           }
-          map[value] = option
-        }
-      }, ['options', 'children'])
+        },
+        ['options', 'children']
+      )
       return map
     }
   },
   render () {
-    return <div
-      class={{
-        'veui-select': true,
-        'veui-select-empty': this.localValue == null,
-        'veui-select-expanded': this.expanded,
-        'veui-input-invalid': this.realInvalid
-      }}
-      ui={this.realUi}>
-      <Button
-        ref="button"
-        class="veui-select-button"
-        aria-haspopup="listbox"
-        aria-disabled={String(this.realDisabled)}
-        aria-readonly={String(this.realReadonly)}
-        disabled={this.realDisabled || this.realReadonly}
-        onKeydown={this.handleButtonKeydown}
-        onClick={this.handleButtonClick}>
-        <span class="veui-select-label">
-          {
-            this.$scopedSlots.label
-              ? this.$scopedSlots.label(this.selectedOption || { selected: false })
-              : this.label
-          }
-        </span>
-        <Icon
-          class="veui-select-icon"
-          name={this.icons[this.expanded ? 'collapse' : 'expand']}/>
-      </Button>
-      {
-        <Overlay
-          v-show={this.expanded}
-          target="button"
-          open={this.expanded}
-          autofocus
-          modal
-          options={this.realOverlayOptions}
-          overlay-class={this.overlayClass}
-          onLocate={this.handleRelocate}>
-          <div
-            ref="box"
-            class="veui-select-options"
-            {...{
-              directives: [{
-                name: 'outside',
-                value: {
-                  refs: this.outsideRefs,
-                  handler: this.close
-                }
-              }]
-            }}
-            tabindex="-1"
-            role="listbox"
-            aria-expanded={String(this.expanded)}
-            ui={this.realUi}
-            onKeydown={this.handleKeydown}>
-            {this.$slots.before}
-            {
-              this.clearable
-                ? <Option value={null} label={this.realPlaceholder}/>
-                : null
-            }
-            <OptionGroup
-              ref="options"
-              options={this.realOptions}
+    return (
+      <div
+        class={{
+          'veui-select': true,
+          'veui-select-empty': this.localValue == null,
+          'veui-select-expanded': this.expanded,
+          'veui-input-invalid': this.realInvalid
+        }}
+        ui={this.realUi}
+      >
+        <Button
+          ref="button"
+          class="veui-select-button"
+          aria-haspopup="listbox"
+          aria-disabled={String(this.realDisabled)}
+          aria-readonly={String(this.realReadonly)}
+          disabled={this.realDisabled || this.realReadonly}
+          onKeydown={this.handleButtonKeydown}
+          onClick={this.handleButtonClick}
+        >
+          <span class="veui-select-label">
+            {this.$scopedSlots.label
+              ? this.$scopedSlots.label(
+                this.selectedOption || { selected: false }
+              )
+              : this.label}
+          </span>
+          <Icon
+            class="veui-select-icon"
+            name={this.icons[this.expanded ? 'collapse' : 'expand']}
+          />
+        </Button>
+        {
+          <Overlay
+            v-show={this.expanded}
+            target="button"
+            open={this.expanded}
+            autofocus
+            modal
+            options={this.realOverlayOptions}
+            overlay-class={this.overlayClass}
+            onLocate={this.handleRelocate}
+          >
+            <div
+              ref="box"
+              class="veui-select-options"
+              {...{
+                directives: [
+                  {
+                    name: 'outside',
+                    value: {
+                      refs: this.outsideRefs,
+                      handler: this.close
+                    }
+                  }
+                ]
+              }}
+              tabindex="-1"
+              role="listbox"
+              aria-expanded={String(this.expanded)}
               ui={this.realUi}
-              scopedSlots={{
-                label: this.$scopedSlots['group-label'] || null,
-                option: this.$scopedSlots.option || null,
-                'option-label': this.$scopedSlots['option-label'] || null
-              }}>
-              {this.$slots.default}
-            </OptionGroup>
-            {this.$slots.after}
-          </div>
-        </Overlay>
-      }
-    </div>
+              onKeydown={this.handleKeydown}
+            >
+              {this.$slots.before}
+              {this.clearable ? (
+                <Option value={null} label={this.realPlaceholder} />
+              ) : null}
+              <OptionGroup
+                ref="options"
+                options={this.realOptions}
+                ui={this.realUi}
+                scopedSlots={{
+                  label: this.$scopedSlots['group-label'] || null,
+                  option: this.$scopedSlots.option || null,
+                  'option-label': this.$scopedSlots['option-label'] || null
+                }}
+              >
+                {this.$slots.default}
+              </OptionGroup>
+              {this.$slots.after}
+            </div>
+          </Overlay>
+        }
+      </div>
+    )
   }
 }
 </script>

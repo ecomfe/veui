@@ -175,10 +175,12 @@ export default {
         borderBottomWidth
       } = getComputedStyle(input)
 
-      return this.normalizedRows * lineHeight +
+      return (
+        this.normalizedRows * lineHeight +
         [borderTopWidth, paddingTop, paddingBottom, borderBottomWidth]
           .map(val => parseFloat(val))
           .reduce((acc, cur) => acc + cur, 0)
+      )
     },
     handleFocus (e) {
       this.focused = true
@@ -202,14 +204,20 @@ export default {
       // 2. 不感知输入法
       //  2.1 vue 底层会对原生 input 的 v-model 做忽略输入法组合态处理，所以 localValue 和 $event.target.value 不同步，只有当 localValue 产生变化时才向上继续抛出
       //  2.2 在 localValue 没有变化的情况下，原则上不抛出
-      if (this.composition || !this.composition && this.localValue !== this.value) {
+      if (
+        this.composition ||
+        (!this.composition && this.localValue !== this.value)
+      ) {
         this.$emit('input', $event.target.value, $event)
       }
 
       this.$nextTick(() => {
         let { input } = this.$refs
         let inputLineHeight = this.getLineHeight(input)
-        if (input.scrollHeight - input.clientHeight - input.scrollTop < inputLineHeight) {
+        if (
+          input.scrollHeight - input.clientHeight - input.scrollTop <
+          inputLineHeight
+        ) {
           this.scrollTop = input.scrollHeight - input.clientHeight
         }
       })

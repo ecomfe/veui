@@ -93,7 +93,7 @@ export default {
     checked (val) {
       this.localChecked = val
     },
-    localChecked  (val) {
+    localChecked (val) {
       if (this.checked !== val) {
         this.$emit('update:checked', val)
       }

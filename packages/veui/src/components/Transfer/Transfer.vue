@@ -97,7 +97,10 @@ export default {
       immediate: true
     },
     selected (val, oldVal) {
-      if (xor(val, oldVal).length || xor(val, this.getSelectedValuesFromSelectedItems()).length) {
+      if (
+        xor(val, oldVal).length ||
+        xor(val, this.getSelectedValuesFromSelectedItems()).length
+      ) {
         this.correct()
         this.setSelectedItems(this.cloneSelectedItems())
       }
@@ -112,7 +115,9 @@ export default {
     // 1、如果是叶子节点，直接根据 selected 属性判断。
     // 2、如果是非叶子节点，则该节点下所有子级节点都全部选择了，当前节点才算被选中了。
     isSelected (item) {
-      return this.hasChild(item) ? item.allCount === item.children.length : item.selected
+      return this.hasChild(item)
+        ? item.allCount === item.children.length
+        : item.selected
     },
 
     // 取出 this.selectedItems 中的 values 值，返回一个一维数组。
@@ -138,7 +143,7 @@ export default {
         return
       }
 
-      let walk = (items) => {
+      let walk = items => {
         items.forEach(item => {
           if (this.hasChild(item)) {
             this.setItemCount(item, item.children.length, 0)
@@ -159,7 +164,7 @@ export default {
         return
       }
 
-      let walk = (items) => {
+      let walk = items => {
         items.forEach(item => {
           if (this.hasChild(item)) {
             this.setItemCount(item, 0, 0)
@@ -326,7 +331,10 @@ export default {
               // 如果右侧没有相同的 item ，说明当前这个 item 是新选中的。
               // 对于新选中的 item ，要保持左侧的展开收起状态。
               if (!relatedSelectedItem) {
-                let expanded = includes(this.candidateExpanded, newSelectedItem.value)
+                let expanded = includes(
+                  this.candidateExpanded,
+                  newSelectedItem.value
+                )
                 if (expanded) {
                   this.selectedExpanded.push(newSelectedItem.value)
                   uniq(this.selectedExpanded)
@@ -372,7 +380,10 @@ export default {
             partCount += 1
           }
         } else {
-          this.setLeafSelected(item, this.selected.some(val => val === item.value))
+          this.setLeafSelected(
+            item,
+            this.selected.some(val => val === item.value)
+          )
           allCount += item.selected ? 1 : 0
         }
 
@@ -422,9 +433,10 @@ export default {
         : null
 
       let titleSlotName = `${type}-title`
-      let title = !head && this.$slots[titleSlotName]
-        ? h('template', { slot: 'title' }, this.$slots[titleSlotName])
-        : null
+      let title =
+        !head && this.$slots[titleSlotName]
+          ? h('template', { slot: 'title' }, this.$slots[titleSlotName])
+          : null
 
       return [head, title]
     }
@@ -436,9 +448,10 @@ export default {
         : null
 
       let itemLabelSlotName = `${type}-item-label`
-      let itemLabel = !item && this.$scopedSlots[itemLabelSlotName]
-        ? props => this.$scopedSlots[itemLabelSlotName](props)
-        : null
+      let itemLabel =
+        !item && this.$scopedSlots[itemLabelSlotName]
+          ? props => this.$scopedSlots[itemLabelSlotName](props)
+          : null
 
       return {
         item,
@@ -479,7 +492,7 @@ export default {
               expanded: this.candidateExpanded
             },
             on: {
-              'update:expanded': (val) => {
+              'update:expanded': val => {
                 this.candidateExpanded = val
               },
               select: (...args) => {
@@ -491,7 +504,10 @@ export default {
             },
             scopedSlots: generateItem.call(this, 'candidate')
           },
-          [...generateHead.call(this, 'candidate'), generateNoData.call(this, 'candidate')]
+          [
+            ...generateHead.call(this, 'candidate'),
+            generateNoData.call(this, 'candidate')
+          ]
         ),
         h(
           SelectedPanel,
@@ -507,7 +523,7 @@ export default {
               icons: this.icons
             },
             on: {
-              'update:expanded': (val) => {
+              'update:expanded': val => {
                 this.selectedExpanded = val
               },
               remove: (...args) => {
@@ -519,7 +535,10 @@ export default {
             },
             scopedSlots: generateItem.call(this, 'selected')
           },
-          [...generateHead.call(this, 'selected'), generateNoData.call(this, 'selected')]
+          [
+            ...generateHead.call(this, 'selected'),
+            generateNoData.call(this, 'selected')
+          ]
         )
       ]
     )

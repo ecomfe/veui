@@ -10,7 +10,18 @@
 </template>
 
 <script>
-import { isBoolean, isUndefined, isFunction, includes, assign, zipObject, map, keys, debounce, omit } from 'lodash'
+import {
+  isBoolean,
+  isUndefined,
+  isFunction,
+  includes,
+  assign,
+  zipObject,
+  map,
+  keys,
+  debounce,
+  omit
+} from 'lodash'
 import { getVnodes } from '../../utils/context'
 import ui from '../../mixins/ui'
 import '../../common/uiTypes'
@@ -68,7 +79,7 @@ export default {
           }
 
           // 参照上述 props.validator 支持的格式
-          triggers = (Array.isArray(triggers) ? triggers : [triggers])
+          triggers = Array.isArray(triggers) ? triggers : [triggers]
           triggers.forEach(events => {
             events.split(',').forEach(event => {
               if (event === 'submit') {
@@ -107,24 +118,29 @@ export default {
     },
     handleSubmit (e) {
       // 把 field 上边 disabled 的项去掉
-      let data = omit(this.data, this.fields.filter(field => field.realDisabled).map(({field}) => field))
+      let data = omit(
+        this.data,
+        this.fields
+          .filter(field => field.realDisabled)
+          .map(({ field }) => field)
+      )
       return new Promise(resolve =>
         // 处理 beforeValidate 返回 Promise 的情况，通过 resolve 直接把返回值传递到下层
         isFunction(this.beforeValidate)
           ? resolve(this.beforeValidate.call(getVnodes(this)[0].context, data))
-          : resolve())
-        .then(res =>
-          this.isValid(res)
-            ? this.validate()
-            : res
-        )
+          : resolve()
+      )
+        .then(res => (this.isValid(res) ? this.validate() : res))
         .then(res =>
           this.isValid(res)
             ? new Promise(resolve =>
-              // 处理 afterValidate 返回 Promise 的情况，通过 resolve 直接把返回值传递到下层
+            // 处理 afterValidate 返回 Promise 的情况，通过 resolve 直接把返回值传递到下层
               isFunction(this.afterValidate)
-                ? resolve(this.afterValidate.call(getVnodes(this)[0].context, data))
-                : resolve())
+                ? resolve(
+                  this.afterValidate.call(getVnodes(this)[0].context, data)
+                )
+                : resolve()
+            )
             : res
         )
         .then(res =>
@@ -136,55 +152,58 @@ export default {
 
     validate (names) {
       // fieldset 可以有 name，但是不会有 field 属性，也不要校验 disabled 的
-      let targets = (this.fields || []).filter(item => item.field && !item.realDisabled)
+      let targets = (this.fields || []).filter(
+        item => item.field && !item.realDisabled
+      )
       let validators = this.validators || []
       if (Array.isArray(names) && names.length) {
-        targets = targets.filter(target => includes(names, target.name) && !target.realDisabled)
+        targets = targets.filter(
+          target => includes(names, target.name) && !target.realDisabled
+        )
         validators = validators.filter(
-          validator => validator.fields && validator.fields.some(
-            fieldName => includes(names, fieldName)
-          )
+          validator =>
+            validator.fields &&
+            validator.fields.some(fieldName => includes(names, fieldName))
         )
       }
 
-      return Promise.all(
-        [
-          ...targets.map(target => {
-            let validity = target.validate()
-            // utils/Validator 是同步的，检查一下不是 true 就好，返回其他的都当成错误信息
-            if (!isBoolean(validity) || !validity) {
-              // 没有name的无法描述，invalid的时候就不抛了
-              return Promise.resolve(target.name ? { [target.name]: validity } : {})
-            }
-            return Promise.resolve(true)
-          }),
-
-          ...validators.map(({ validate, handler, fields }) => {
-            let fn = validate || handler
-            if (isFunction(fn) && fields) {
-              let validities = this.execValidator(fn, fields)
-
-              // 异步校验交给返回的 Promise，对于同步校验，true 代表校验通过，false 代表不通过但是没有出错信息，其他当成 { fieldName1: errMsg, ... } 处理
-              // 异步校验
-              if (validities && isFunction(validities.then)) {
-                return validities
-              }
-
-              return Promise.resolve(validities)
-            }
-            // 没有回调或者校验项
-            // TODO: 补个warn？
-            return Promise.resolve(true)
-          })
-        ]
-      )
-        .then(
-          allRes => {
-            return allRes.every(mixed => this.isValid(mixed))
-              ? Promise.resolve(true)
-              : Promise.resolve(assign({}, ...allRes.filter(mixed => !this.isValid(mixed))))
+      return Promise.all([
+        ...targets.map(target => {
+          let validity = target.validate()
+          // utils/Validator 是同步的，检查一下不是 true 就好，返回其他的都当成错误信息
+          if (!isBoolean(validity) || !validity) {
+            // 没有name的无法描述，invalid的时候就不抛了
+            return Promise.resolve(
+              target.name ? { [target.name]: validity } : {}
+            )
           }
-        )
+          return Promise.resolve(true)
+        }),
+
+        ...validators.map(({ validate, handler, fields }) => {
+          let fn = validate || handler
+          if (isFunction(fn) && fields) {
+            let validities = this.execValidator(fn, fields)
+
+            // 异步校验交给返回的 Promise，对于同步校验，true 代表校验通过，false 代表不通过但是没有出错信息，其他当成 { fieldName1: errMsg, ... } 处理
+            // 异步校验
+            if (validities && isFunction(validities.then)) {
+              return validities
+            }
+
+            return Promise.resolve(validities)
+          }
+          // 没有回调或者校验项
+          // TODO: 补个warn？
+          return Promise.resolve(true)
+        })
+      ]).then(allRes => {
+        return allRes.every(mixed => this.isValid(mixed))
+          ? Promise.resolve(true)
+          : Promise.resolve(
+            assign({}, ...allRes.filter(mixed => !this.isValid(mixed)))
+          )
+      })
     },
 
     execValidator (validate, fields) {
@@ -196,12 +215,10 @@ export default {
 
       // 异步校验，详细返回值说明请看prop.validators
       if (validities && isFunction(validities.then)) {
-        return validities.then(
-          res => {
-            this.handleValidities(res, fields)
-            return this.isValid(res) || res
-          }
-        )
+        return validities.then(res => {
+          this.handleValidities(res, fields)
+          return this.isValid(res) || res
+        })
       }
 
       this.handleValidities(validities, fields)
@@ -253,7 +270,12 @@ export default {
             fields: validityName
           }
           // 看下是否之前这个校验规则出过错，没出过错就直接塞进去
-          if (target && !target.validities.some(validity => validity.fields === validityName)) {
+          if (
+            target &&
+            !target.validities.some(
+              validity => validity.fields === validityName
+            )
+          ) {
             target.validities.unshift(validity)
             // 防止使用 fieldset 定位错误之后，上边找不到，所以都要记住
             if (!includes(vectors, target.name)) {
@@ -266,7 +288,9 @@ export default {
             // 之前出过错，要把这个 validities 更新一下
             this.$set(target, 'validities', [
               validity,
-              ...target.validities.filter(validity => validity.fields === validityName)
+              ...target.validities.filter(
+                validity => validity.fields === validityName
+              )
             ])
           }
         })
@@ -274,7 +298,7 @@ export default {
     },
 
     isValid (res) {
-      return isUndefined(res) || isBoolean(res) && res
+      return isUndefined(res) || (isBoolean(res) && res)
     },
 
     reset (names) {

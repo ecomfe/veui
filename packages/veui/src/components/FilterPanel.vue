@@ -103,8 +103,17 @@ export default {
       let walk = (items, filteredItems) => {
         let hasVisibleItem = false
         items.forEach((item, index) => {
-          let isSelfVisible = this.filter(this.keyword, item, index, items, this.datasource)
-          let isChildrenVisible = item.children && item.children.length && walk(item.children, filteredItems[index].children)
+          let isSelfVisible = this.filter(
+            this.keyword,
+            item,
+            index,
+            items,
+            this.datasource
+          )
+          let isChildrenVisible =
+            item.children &&
+            item.children.length &&
+            walk(item.children, filteredItems[index].children)
 
           let isHidden = !isSelfVisible && !isChildrenVisible
           hasVisibleItem = hasVisibleItem || !isHidden

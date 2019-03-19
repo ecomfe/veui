@@ -7,6 +7,9 @@ import warn from '../utils/warn'
 export default {
   ...Pagination,
   created () {
-    warn('[veui-pager] `Pager` is deprecated and will be removed in `1.0.0`. Use `Pagination` component instead.', this)
+    warn(
+      '[veui-pager] `Pager` is deprecated and will be removed in `1.0.0`. Use `Pagination` component instead.',
+      this
+    )
   }
 }

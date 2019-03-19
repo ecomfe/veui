@@ -336,8 +336,8 @@ export default {
       this.init()
     },
     focusPath (val, oldVal) {
-      let prefix = oldVal.length === 4 && val.length === 3
-        ? 'shadow-checker' : 'node'
+      let prefix =
+        oldVal.length === 4 && val.length === 3 ? 'shadow-checker' : 'node'
       this.focusByPath(prefix)
     }
   },
@@ -368,7 +368,12 @@ export default {
         exit: ({ node, parent }) => {
           if (!node.id && !(node.children && node.children.length)) {
             // invalid node
-            warn(`[veui-region-picker] Invalid region tree node '${node.label}'. Provide \`value\`, \`children\` or both.`, this)
+            warn(
+              `[veui-region-picker] Invalid region tree node '${
+                node.label
+              }'. Provide \`value\`, \`children\` or both.`,
+              this
+            )
             return
           }
 
@@ -430,7 +435,11 @@ export default {
       }
       let count = this.focusSiblings.length
       let index = this.focusPath[this.focusPath.length - 1]
-      this.$set(this.focusPath, this.focusPath.length - 1, (count + index + (forward ? 1 : -1)) % count)
+      this.$set(
+        this.focusPath,
+        this.focusPath.length - 1,
+        (count + index + (forward ? 1 : -1)) % count
+      )
     },
     focusByPath (prefix = 'node') {
       setTimeout(() => {
@@ -464,11 +473,18 @@ export default {
           }
           let hasChildren = node.children && node.children.length
           if (hasChildren) {
-            let enabledChildren = node.children.filter(({ disabled }) => !disabled)
-            node.softCount = enabledChildren.filter(({ selected }) => selected).length
-            node.solidCount = enabledChildren.filter(({ selected, indeterminate }) => selected && !indeterminate).length
+            let enabledChildren = node.children.filter(
+              ({ disabled }) => !disabled
+            )
+            node.softCount = enabledChildren.filter(
+              ({ selected }) => selected
+            ).length
+            node.solidCount = enabledChildren.filter(
+              ({ selected, indeterminate }) => selected && !indeterminate
+            ).length
             node.selected = node.softCount > 0
-            node.indeterminate = node.solidCount !== node.children.length && node.softCount !== 0
+            node.indeterminate =
+              node.solidCount !== node.children.length && node.softCount !== 0
           } else {
             node.indeterminate = false
             node.selected = checked
@@ -480,7 +496,9 @@ export default {
       let parent = node
       let prev
       do {
-        prev = prev ? pick(parent, 'selected', 'indeterminate') : { selected, indeterminate }
+        prev = prev
+          ? pick(parent, 'selected', 'indeterminate')
+          : { selected, indeterminate }
         updateNode(parent, prev)
         parent = parent.parent
       } while (parent)
@@ -535,7 +553,8 @@ function updateNode (node, prev) {
 
     // if not all children are determinately selected,
     // the parent is in indeterminate state
-    let indeterminate = node.softCount !== 0 && node.solidCount !== node.children.length
+    let indeterminate =
+      node.softCount !== 0 && node.solidCount !== node.children.length
     if (prev) {
       if (prev.selected !== selected) {
         softDiff = selected ? 1 : -1

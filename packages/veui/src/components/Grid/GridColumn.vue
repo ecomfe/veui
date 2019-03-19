@@ -51,8 +51,8 @@ export default {
         'padding-right': `${gutter / 2}px`,
         'padding-left': `${gutter / 2}px`,
         'margin-left': offset ? formatPercentage(offset / columns) : null,
-        'right': pull ? formatPercentage(pull / columns) : null,
-        'left': push ? formatPercentage(push / columns) : null
+        right: pull ? formatPercentage(pull / columns) : null,
+        left: push ? formatPercentage(push / columns) : null
       }
     }
   }

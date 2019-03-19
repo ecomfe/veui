@@ -7,11 +7,10 @@ export function makeContextualPopupApi (name, manager, method = 'show') {
     return manager[type].bind(manager)
   }
 
-  const METHODS = CONTEXTS
-    .reduce((methods, name) => {
-      methods[name] = getMethod(name)
-      return methods
-    }, {})
+  const METHODS = CONTEXTS.reduce((methods, name) => {
+    methods[name] = getMethod(name)
+    return methods
+  }, {})
 
   return {
     install (Vue) {

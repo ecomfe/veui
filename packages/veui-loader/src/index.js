@@ -237,9 +237,7 @@ const RE_SCRIPT = /<script(?:\s+[^>]*)?>/i
  * @returns {string} The patched content
  */
 function patchType (content, type, peerPaths) {
-  let normalizedPaths = peerPaths.map(path =>
-    slash(normalize(path))
-  )
+  let normalizedPaths = peerPaths.map(path => slash(normalize(path)))
   switch (type) {
     case 'script':
       let scriptImports = normalizedPaths.map(path => `import '${path}'\n`)

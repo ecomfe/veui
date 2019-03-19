@@ -24,11 +24,11 @@ export default {
     style () {
       let { flex, gutter } = this
       return {
-        ...flex
+        ...(flex
           ? {
             display: ['-webkit-box', '-ms-flexbox', 'flex']
           }
-          : {},
+          : {}),
         'margin-right': `-${gutter / 2}px`,
         'margin-left': `-${gutter / 2}px`
       }

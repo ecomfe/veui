@@ -74,7 +74,10 @@ export default {
       if (checked) {
         this.localValue.push(value)
       } else {
-        this.localValue.splice(findIndex(this.localValue, item => item === value), 1)
+        this.localValue.splice(
+          findIndex(this.localValue, item => item === value),
+          1
+        )
       }
       this.$emit('change', this.localValue)
     },

@@ -100,7 +100,10 @@ export default {
       default: 0,
       validator (val) {
         if (val !== 0) {
-          warn('[veui-progress] `precision` is deprecated and will be removed in `1.0.0`. Use `decimal-place` instead.', this)
+          warn(
+            '[veui-progress] `precision` is deprecated and will be removed in `1.0.0`. Use `decimal-place` instead.',
+            this
+          )
         }
         return true
       }
@@ -124,7 +127,10 @@ export default {
       type: String,
       validator (val) {
         if (val != null) {
-          warn('[veui-progress] `state` is deprecated and will be removed in `1.0.0`. Use `status` instead.', this)
+          warn(
+            '[veui-progress] `state` is deprecated and will be removed in `1.0.0`. Use `status` instead.',
+            this
+          )
         }
         return true
       }
@@ -134,7 +140,10 @@ export default {
       type: [Boolean, Number],
       validator (val) {
         if (val != null) {
-          warn('[veui-progress] `auto-succeed` is deprecated and will be removed in `1.0.0`. Use `autosucceed` instead.', this)
+          warn(
+            '[veui-progress] `auto-succeed` is deprecated and will be removed in `1.0.0`. Use `autosucceed` instead.',
+            this
+          )
         }
         return true
       }
@@ -157,12 +166,10 @@ export default {
         'veui-progress-status-complete': this.realValue === this.max,
         'veui-progress-has-desc': this.desc,
         [`veui-progress-${this.type}`]: true,
-        ...this.localStatus
+        ...(this.localStatus
           ? { [`veui-progress-status-${this.localStatus}`]: true }
-          : {},
-        ...this.indeterminate
-          ? { 'veui-progress-indeterminate': true }
-          : {}
+          : {}),
+        ...(this.indeterminate ? { 'veui-progress-indeterminate': true } : {})
       }
     },
     ratio () {
@@ -193,7 +200,9 @@ export default {
       return this.getLength(this.radius + this.halfStroke)
     },
     dm () {
-      return (this.decimalPlace != null ? this.decimalPlace : this.precision) || 0
+      return (
+        (this.decimalPlace != null ? this.decimalPlace : this.precision) || 0
+      )
     },
     valueText () {
       if (this.localStatus === 'success') {

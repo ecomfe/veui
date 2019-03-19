@@ -11,6 +11,7 @@
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "eslint": "^4.19.1",
+    "eslint-config-prettier": "^4.1.0",
     "eslint-config-standard": "^6.2.1",
     "eslint-friendly-formatter": "^2.0.7",
     "eslint-loader": "^1.9.0",

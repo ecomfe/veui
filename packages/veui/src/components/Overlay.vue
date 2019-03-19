@@ -26,7 +26,12 @@ import focusManager from '../managers/focus'
 import config from '../managers/config'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
-import { getClassPropDef, mergeClasses, isType, resolveOverlayPosition } from '../utils/helper'
+import {
+  getClassPropDef,
+  mergeClasses,
+  isType,
+  resolveOverlayPosition
+} from '../utils/helper'
 import '../common/uiTypes'
 
 config.defaults({
@@ -173,7 +178,9 @@ export default {
 
         if (!this.tether) {
           this.tether = new Tether(options)
-          this.tether.on('repositioned', () => { this.$emit('locate') })
+          this.tether.on('repositioned', () => {
+            this.$emit('locate')
+          })
         } else {
           this.tether.setOptions(options)
         }

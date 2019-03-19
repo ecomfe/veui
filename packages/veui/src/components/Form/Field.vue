@@ -232,11 +232,13 @@ export default {
       if (!isBoolean(res) || !res) {
         this.validities.unshift(
           // 去掉一些自定义格式不对的 rule，容易排查
-          ...res.filter(({ name }) => name).map(({ message, name }) => ({
-            valid: false,
-            message,
-            fields: `native:${name}`
-          }))
+          ...res
+            .filter(({ name }) => name)
+            .map(({ message, name }) => ({
+              valid: false,
+              message,
+              fields: `native:${name}`
+            }))
         )
       }
       return res
@@ -262,11 +264,10 @@ export default {
             validity => !includes(validity.fields, 'native:')
           )
         } else {
-          validities = this.validities.filter(
-            validity =>
-              Array.isArray(fields)
-                ? !includes(fields, validity.fields)
-                : fields !== validity.fields
+          validities = this.validities.filter(validity =>
+            Array.isArray(fields)
+              ? !includes(fields, validity.fields)
+              : fields !== validity.fields
           )
         }
         this.$set(this, 'validities', validities)

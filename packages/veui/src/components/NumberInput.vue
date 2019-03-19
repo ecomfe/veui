@@ -100,7 +100,7 @@ export default {
       default: 0,
       validator (val) {
         // -1 代表不处理精度
-        return val === -1 || val >= 0 && val <= 20 && isInteger(val)
+        return val === -1 || (val >= 0 && val <= 20 && isInteger(val))
       }
     },
     max: Number,
@@ -122,7 +122,12 @@ export default {
     },
     attrs () {
       return {
-        ...pick(this.$props, ['autofocus', 'selectOnFocus', 'autocomplete', 'placeholder']),
+        ...pick(this.$props, [
+          'autofocus',
+          'selectOnFocus',
+          'autocomplete',
+          'placeholder'
+        ]),
         name: this.realName,
         disabled: this.realDisabled,
         readonly: this.realReadonly
@@ -137,14 +142,24 @@ export default {
     realMax () {
       let max = this.max
       if (get(this, 'formField.localRules.length')) {
-        return get(find(this.formField.localRules, ({ name }) => name === 'max'), 'value') || max
+        return (
+          get(
+            find(this.formField.localRules, ({ name }) => name === 'max'),
+            'value'
+          ) || max
+        )
       }
       return max
     },
     realMin () {
       let min = this.min
       if (get(this, 'formField.localRules.length')) {
-        return get(find(this.formField.localRules, ({ name }) => name === 'min'), 'value') || min
+        return (
+          get(
+            find(this.formField.localRules, ({ name }) => name === 'min'),
+            'value'
+          ) || min
+        )
       }
       return min
     },
@@ -184,10 +199,16 @@ export default {
   },
   created () {
     if (this.realMax < this.realMin) {
-      warn('[veui-number-input] `max` value must not be less than `min` value.', this)
+      warn(
+        '[veui-number-input] `max` value must not be less than `min` value.',
+        this
+      )
     }
     if (this.value > this.realMax || this.value < this.realMin) {
-      warn('[veui-number-input] `value` must not be less than `min` value and not greater than `max` value.', this)
+      warn(
+        '[veui-number-input] `value` must not be less than `min` value and not greater than `max` value.',
+        this
+      )
     }
   },
   methods: {
@@ -203,8 +224,10 @@ export default {
 
       // 1. 等价或首次输入无效值
       // 2. 存在旧值的情况下输入无效值
-      if (this.calcDisplayValue(parsedVal) === this.calcDisplayValue(parsedOldVal) ||
-        isNaN(parsedVal) && this.value != null
+      if (
+        this.calcDisplayValue(parsedVal) ===
+          this.calcDisplayValue(parsedOldVal) ||
+        (isNaN(parsedVal) && this.value != null)
       ) {
         // 不同步，保留原来的有效值，等 change 和 blur 处理
         return
@@ -229,14 +252,19 @@ export default {
       // 6. 经过上下限重置后和上一次 change 的值相同
 
       // 处理 1，需要重置值
-      if (!this.isLocalEmpty && isNaN(parseFloat(this.localValue)) && this.lastChangedValue != null) {
+      if (
+        !this.isLocalEmpty &&
+        isNaN(parseFloat(this.localValue)) &&
+        this.lastChangedValue != null
+      ) {
         this.localValue = this.calcDisplayValue(this.lastChangedValue)
         return
       }
 
       // 处理 2-6
       if (
-        this.calcDisplayValue(this.lastChangedValue) === this.calcDisplayValue(parseFloat(this.localValue))
+        this.calcDisplayValue(this.lastChangedValue) ===
+        this.calcDisplayValue(parseFloat(this.localValue))
       ) {
         return
       }
@@ -254,9 +282,10 @@ export default {
       this.localValue = val
     },
     handleThumbNudgeUpdate (delta) {
-      if (!this.editable ||
-        this.reachMaxLimit && sign(delta) > 0 ||
-        this.reachMinLimit && sign(delta) < 0
+      if (
+        !this.editable ||
+        (this.reachMaxLimit && sign(delta) > 0) ||
+        (this.reachMinLimit && sign(delta) < 0)
       ) {
         return
       }
@@ -281,9 +310,10 @@ export default {
         val = 0
       }
 
-      let addedVal = this.decimalPlace === -1
-        ? val + delta
-        : add(val, delta, this.decimalPlace)
+      let addedVal =
+        this.decimalPlace === -1
+          ? val + delta
+          : add(val, delta, this.decimalPlace)
       let localValue = this.calcDisplayValue(addedVal)
 
       this.localValue = localValue
@@ -327,7 +357,9 @@ export default {
       if (this.decimalPlace === -1) {
         return val.toString()
       }
-      return round(this.filterLimitValue(val), this.decimalPlace).toFixed(this.decimalPlace)
+      return round(this.filterLimitValue(val), this.decimalPlace).toFixed(
+        this.decimalPlace
+      )
     },
     focus () {
       this.$refs.input.focus()

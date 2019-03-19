@@ -84,14 +84,20 @@ export default {
     const props = ['label', 'disabled', 'to', 'native', 'removable', 'status']
 
     if (this.to && this.name) {
-      warn('[veui-tab] prop `name` will be ignored when prop `to` is set.', this)
+      warn(
+        '[veui-tab] prop `name` will be ignored when prop `to` is set.',
+        this
+      )
     }
 
-    this.tabs.add({
-      ...pick(this, ...props, 'id'),
-      name: this.realTo ? this.realTo.fullPath : (this.name || this.id),
-      index
-    }, this.to && this.isMatched)
+    this.tabs.add(
+      {
+        ...pick(this, ...props, 'id'),
+        name: this.realTo ? this.realTo.fullPath : this.name || this.id,
+        index
+      },
+      this.to && this.isMatched
+    )
 
     props.forEach(prop => {
       this.$watch(prop, val => {

@@ -70,7 +70,10 @@ export default {
       if (!includes(this.localValue, val)) {
         this.localValue.push(val)
       } else {
-        this.localValue.splice(findIndex(this.localValue, item => item === val), 1)
+        this.localValue.splice(
+          findIndex(this.localValue, item => item === val),
+          1
+        )
       }
       this.$emit('change', this.localValue)
     },

@@ -30,7 +30,10 @@ const OptionGroup = {
       default: 'inline',
       validator (val) {
         if (val === 'popout') {
-          warn('[veui-option-group] `popout` is a deprecated value for `position` and will be removed in `v1.0.0`. Use `popup` component instead.', this)
+          warn(
+            '[veui-option-group] `popout` is a deprecated value for `position` and will be removed in `v1.0.0`. Use `popup` component instead.',
+            this
+          )
         }
         return ['inline', 'popout', 'popup'].indexOf(val) !== -1
       }
@@ -60,8 +63,12 @@ const OptionGroup = {
       return this.items.map(({ id }) => id)
     },
     canPopOut () {
-      return !!((this.position === 'popup' || this.position === 'popout') &&
-        this.items && this.items.length && this.label)
+      return !!(
+        (this.position === 'popup' || this.position === 'popout') &&
+        this.items &&
+        this.items.length &&
+        this.label
+      )
     },
     popupRole () {
       return isType(this.select, 'input') ? 'listbox' : 'menu'
@@ -103,11 +110,15 @@ const OptionGroup = {
       }
     },
     relocateDeep () {
-      walk(this, child => {
-        if (child.$options.name === this.$options.name) {
-          child.relocate()
-        }
-      }, '$children')
+      walk(
+        this,
+        child => {
+          if (child.$options.name === this.$options.name) {
+            child.relocate()
+          }
+        },
+        '$children'
+      )
     },
     close () {
       this.expanded = false
@@ -117,66 +128,62 @@ const OptionGroup = {
     let content = this.options
       ? this.options.map((opt, i) => {
         let option = { ...opt, selected: opt.value === this.value }
-        return option.options
-          ? (
-            <OptionGroup
-              label={option.label}
-              options={option.options}
-              position={option.position}
-              key={i}
-              scopedSlots={{
-                label: this.$scopedSlots.label
-                  ? group => this.$scopedSlots.label(group) || group.label
-                  : null,
-                option: this.$scopedSlots.option || null,
-                'option-label': this.$scopedSlots['option-label'] || null
-              }}
-            />
-          )
-          : (
-            <Option
-              label={option.label}
-              value={option.value}
-              hidden={option.hidden}
-              disabled={option.disabled}
-              key={i}>
-              {
-                this.$scopedSlots.option
-                  ? this.$scopedSlots.option(option)
-                  : null
-              }
-              <template slot="label">
-                {
-                  this.$scopedSlots['option-label']
-                    ? this.$scopedSlots['option-label'](option)
-                    : null
-                }
-              </template>
-            </Option>
-          )
+        return option.options ? (
+          <OptionGroup
+            label={option.label}
+            options={option.options}
+            position={option.position}
+            key={i}
+            scopedSlots={{
+              label: this.$scopedSlots.label
+                ? group => this.$scopedSlots.label(group) || group.label
+                : null,
+              option: this.$scopedSlots.option || null,
+              'option-label': this.$scopedSlots['option-label'] || null
+            }}
+          />
+        ) : (
+          <Option
+            label={option.label}
+            value={option.value}
+            hidden={option.hidden}
+            disabled={option.disabled}
+            key={i}
+          >
+            {this.$scopedSlots.option
+              ? this.$scopedSlots.option(option)
+              : null}
+            <template slot="label">
+              {this.$scopedSlots['option-label']
+                ? this.$scopedSlots['option-label'](option)
+                : null}
+            </template>
+          </Option>
+        )
       })
       : this.$slots.default
 
     let LabelTag = this.canPopOut ? 'button' : 'div'
 
-    return <div
-      class={{
-        'veui-option-group': true,
-        'veui-option-group-unlabelled': !this.label,
-        'veui-option-group-expanded': this.expanded
-      }}
-      ui={this.realUi}
-      ref="label">
-      {
-        this.label
-          ? <LabelTag
+    return (
+      <div
+        class={{
+          'veui-option-group': true,
+          'veui-option-group-unlabelled': !this.label,
+          'veui-option-group-expanded': this.expanded
+        }}
+        ui={this.realUi}
+        ref="label"
+      >
+        {this.label ? (
+          <LabelTag
             ref="button"
             class={{
               'veui-option-group-label': true,
               'veui-option-group-button': this.canPopOut
             }}
             aria-haspopup={this.canPopOut ? this.popupRole : null}
-            {...this.canPopOut
+            {...(this.canPopOut
               ? {
                 on: {
                   click: () => {
@@ -191,45 +198,44 @@ const OptionGroup = {
                   }
                 }
               }
-              : {}
-            }>
+              : {})}
+          >
             <span class="veui-option-label">
-              {
-                this.$scopedSlots.label
-                  ? this.$scopedSlots.label({ label: this.label })
-                  : this.menu.$scopedSlots.label
-                    ? this.menu.$scopedSlots.label({ label: this.label }) || this.label
-                    : this.label
-              }
+              {this.$scopedSlots.label
+                ? this.$scopedSlots.label({ label: this.label })
+                : this.menu.$scopedSlots.label
+                  ? this.menu.$scopedSlots.label({ label: this.label }) ||
+                  this.label
+                  : this.label}
             </span>
-            {
-              this.canPopOut
-                ? <Icon class="veui-option-group-expandable" name={this.icons.expandable}/>
-                : null
-            }
+            {this.canPopOut ? (
+              <Icon
+                class="veui-option-group-expandable"
+                name={this.icons.expandable}
+              />
+            ) : null}
           </LabelTag>
-          : null
-      }
-      {
-        this.canPopOut
-          ? (
-            <Overlay
-              ref="overlay"
-              target="button"
-              open={this.expanded}
-              options={this.realOverlayOptions}
-              overlayClass={this.mergeOverlayClass('veui-option-group-box')}
-              autofocus
-              modal>
-              <div
-                ref="box"
-                class="veui-option-group-options"
-                tabindex="-1"
-                role={this.popupRole}
-                aria-expanded={String(this.expanded)}
-                ui={this.realUi}
-                {...{
-                  directives: [{
+        ) : null}
+        {this.canPopOut ? (
+          <Overlay
+            ref="overlay"
+            target="button"
+            open={this.expanded}
+            options={this.realOverlayOptions}
+            overlayClass={this.mergeOverlayClass('veui-option-group-box')}
+            autofocus
+            modal
+          >
+            <div
+              ref="box"
+              class="veui-option-group-options"
+              tabindex="-1"
+              role={this.popupRole}
+              aria-expanded={String(this.expanded)}
+              ui={this.realUi}
+              {...{
+                directives: [
+                  {
                     name: 'outside',
                     value: {
                       refs: this.outsideRefs,
@@ -237,16 +243,19 @@ const OptionGroup = {
                         this.expanded = false
                       }
                     }
-                  }]
-                }}
-                onKeydown={this.handleKeydown}>
-                {content}
-              </div>
-            </Overlay>
-          )
-          : content
-      }
-    </div>
+                  }
+                ]
+              }}
+              onKeydown={this.handleKeydown}
+            >
+              {content}
+            </div>
+          </Overlay>
+        ) : (
+          content
+        )}
+      </div>
+    )
   }
 }
 

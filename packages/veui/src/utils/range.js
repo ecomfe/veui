@@ -26,7 +26,11 @@ const MERGE_FNS = {
   substract: substractRanges
 }
 
-export function merge (r1, r2, { compare = DEFAULT_COMPARE, inc = DEFAULT_INC, mode = 'xor' } = {}) {
+export function merge (
+  r1,
+  r2,
+  { compare = DEFAULT_COMPARE, inc = DEFAULT_INC, mode = 'xor' } = {}
+) {
   if (!Array.isArray(r1[0])) {
     r1 = r1[0] != null ? [r1] : []
   }
@@ -36,11 +40,7 @@ export function merge (r1, r2, { compare = DEFAULT_COMPARE, inc = DEFAULT_INC, m
   return MERGE_FNS[mode](cloneDeep(r1), cloneDeep(r2), { compare, inc })
 }
 
-function xorRanges (
-  r1,
-  r2,
-  { compare, inc }
-) {
+function xorRanges (r1, r2, { compare, inc }) {
   r1 = flatten(r1).sort(compare)
   r2 = flatten(r2).sort(compare)
 
@@ -69,11 +69,7 @@ function xorRanges (
   return result
 }
 
-function unionRanges (
-  r1,
-  r2,
-  { compare, inc }
-) {
+function unionRanges (r1, r2, { compare, inc }) {
   let ranges = [...r1, ...r2].sort((ra, rb) => compare(ra[0], rb[0]))
 
   return ranges.reduce((union, range) => {
@@ -100,11 +96,7 @@ function unionRanges (
   }, [])
 }
 
-function substractRanges (
-  r1,
-  r2,
-  { compare, inc }
-) {
+function substractRanges (r1, r2, { compare, inc }) {
   if (r1.length === 0) {
     return []
   }
@@ -121,7 +113,7 @@ function substractRanges (
       let c1 = r1[i1]
       let c2 = r2[i2]
       if (c1[0] - c2[0] === 0) {
-        c1[0] = c2[0] = inc((c1[1] - c2[1] > 0 ? c2[1] : c1[1]), 1)
+        c1[0] = c2[0] = inc(c1[1] - c2[1] > 0 ? c2[1] : c1[1], 1)
         if (c1[1] - c1[0] < 0) {
           i1++
         } else {

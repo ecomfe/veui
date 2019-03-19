@@ -24,9 +24,12 @@ import ui from '../mixins/ui'
 import config from '../managers/config'
 import { includes } from 'lodash'
 
-config.defaults({
-  duration: 3000
-}, 'toast')
+config.defaults(
+  {
+    duration: 3000
+  },
+  'toast'
+)
 
 const TYPE_LIST = ['success', 'warning', 'info', 'error']
 

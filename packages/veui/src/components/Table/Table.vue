@@ -59,7 +59,14 @@ import warn from '../../utils/warn'
 import { normalizeLength } from '../../utils/helper'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
-import { map, mapValues, intersection, includes, keys as objectKeys, find } from 'lodash'
+import {
+  map,
+  mapValues,
+  intersection,
+  includes,
+  keys as objectKeys,
+  find
+} from 'lodash'
 import Body from './_TableBody'
 import Head from './_TableHead'
 import Foot from './_TableFoot'
@@ -133,7 +140,9 @@ export default {
       return this.columns.map(({ id }) => id)
     },
     realSelected () {
-      return this.selectMode === 'multiple' ? this.localSelected : (this.localSelected[0] || null)
+      return this.selectMode === 'multiple'
+        ? this.localSelected
+        : this.localSelected[0] || null
     },
     realColumns () {
       if (!this.columnFilter) {
@@ -154,11 +163,16 @@ export default {
       return this.realColumns.map(({ width }) => normalizeLength(width))
     },
     viewColumnCount () {
-      return this.columns.length + (this.selectable ? 1 : 0) + (this.expandable ? 1 : 0)
+      return (
+        this.columns.length +
+        (this.selectable ? 1 : 0) +
+        (this.expandable ? 1 : 0)
+      )
     },
     realKeys () {
       if (this.keyField) {
-        let { span } = find(this.columns, ({ field }) => field === this.keyField) || {}
+        let { span } =
+          find(this.columns, ({ field }) => field === this.keyField) || {}
         if (typeof span === 'function') {
           return objectKeys(this.data)
             .map(index => {
@@ -287,9 +301,7 @@ export default {
     },
     getKeyByIndex (index) {
       let item = this.data[index]
-      return this.keyField
-        ? item[this.keyField]
-        : this.realKeys[index]
+      return this.keyField ? item[this.keyField] : this.realKeys[index]
     },
     getItems (key) {
       if (this.keyField) {
@@ -303,10 +315,19 @@ export default {
     },
     validateSelected (val = this.selected) {
       if (this.selectMode === 'single' && Array.isArray(this.selected)) {
-        warn('`selected` should not be an array when `select-mode` is `single`.', this)
+        warn(
+          '`selected` should not be an array when `select-mode` is `single`.',
+          this
+        )
         return false
-      } else if (this.selectMode === 'multiple' && !Array.isArray(this.selected)) {
-        warn('`selected` should be an array when `select-mode` is `multiple`.', this)
+      } else if (
+        this.selectMode === 'multiple' &&
+        !Array.isArray(this.selected)
+      ) {
+        warn(
+          '`selected` should be an array when `select-mode` is `multiple`.',
+          this
+        )
         return false
       }
       return true

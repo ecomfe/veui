@@ -13,4 +13,5 @@ export default {
       }
       return i18n.get(key, data)
     }
-  }}
+  }
+}
