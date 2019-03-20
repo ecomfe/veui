@@ -164,7 +164,7 @@ export default {
     },
     viewColumnCount () {
       return (
-        this.columns.length +
+        this.realColumns.length +
         (this.selectable ? 1 : 0) +
         (this.expandable ? 1 : 0)
       )
