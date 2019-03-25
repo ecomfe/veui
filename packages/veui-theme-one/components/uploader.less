@@ -1,7 +1,6 @@
 @import "../lib.less";
 
 .veui-uploader {
-  @width: 300px;
   @icon-size: 16px;
   @image-size: 140px;
 
@@ -121,9 +120,7 @@
   &-list {
     &-container {
       position: relative;
-      width: @width;
       padding: 3px 4px;
-      max-width: @width;
       color: @veui-gray-color-2;
       .veui-transition(background-color);
       text-align: right;
@@ -141,24 +138,14 @@
 
     &-name {
       .ellipsis();
-      float: left;
-      max-width: ~"calc(100% - 3em)";
       line-height: 22px;
+      float: left;
       text-align: left;
       vertical-align: middle;
     }
 
-    &-name-success {
-      width: ~"calc(100% - 9em)";
-    }
-
-    &-name-failure {
-      width: ~"calc(100% - 12em)";
-    }
-
     &-status {
       display: inline-block;
-      max-width: ~"calc(100% - 3em)";
       height: 100%;
     }
 
@@ -317,6 +304,11 @@
   &-success {
     color: @veui-success-color;
     vertical-align: middle;
+  }
+
+  &-success,
+  &-failure {
+    margin-left: 8px;
   }
 
   &-hide {
