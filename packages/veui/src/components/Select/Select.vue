@@ -134,6 +134,9 @@ export default {
         ['options', 'children']
       )
       return map
+    },
+    focus () {
+      this.$refs.button.focus()
     }
   },
   render () {
