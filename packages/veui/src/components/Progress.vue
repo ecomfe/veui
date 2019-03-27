@@ -136,8 +136,10 @@ export default {
       }
     },
     autosucceed: [Boolean, Number],
+    /**
+     * @deprecated
+     */
     autoSucceed: {
-      type: [Boolean, Number],
       validator (val) {
         if (val != null) {
           warn(
