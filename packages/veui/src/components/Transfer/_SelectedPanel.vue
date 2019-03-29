@@ -48,6 +48,7 @@
             <button
               v-if="props.item.children && props.item.children.length"
               class="veui-tree-item-expand-switcher"
+              tabindex="-1"
               @click.stop="toggle(props.item)"
             >
               <veui-icon
