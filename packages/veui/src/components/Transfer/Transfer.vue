@@ -4,6 +4,7 @@ import SelectedPanel from './_SelectedPanel'
 import { find, xor, includes, omit, uniq, remove, isString } from 'lodash'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
+import { focusIn } from '../../utils/dom'
 
 function defaultFilter (type, keyword, item, datasource) {
   return includes(item.label, keyword)
@@ -423,6 +424,9 @@ export default {
       let chain = []
       walk(items, chain)
       return chain
+    },
+    focus () {
+      focusIn(this.$el)
     }
   },
   render (h) {
