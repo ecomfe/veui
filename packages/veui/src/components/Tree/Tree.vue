@@ -1,14 +1,17 @@
 <template>
 <veui-tree-node
-  v-if="this.$scopedSlots.item"
+  role="tree"
   :datasource="localDatasource"
   :item-click="itemClick"
   :icons="icons"
   :ui="realUi"
   @toggle="toggle"
   @click="handleItemClick"
+  @focusin.native="focused = true"
+  @focusout.native="focused = false"
 >
   <template
+    v-if="$scopedSlots.item"
     slot="item"
     slot-scope="props"
   >
@@ -17,17 +20,8 @@
       v-bind="props"
     />
   </template>
-</veui-tree-node>
-<veui-tree-node
-  v-else-if="this.$scopedSlots['item-label']"
-  :datasource="localDatasource"
-  :item-click="itemClick"
-  :icons="icons"
-  :ui="realUi"
-  @toggle="toggle"
-  @click="handleItemClick"
->
   <template
+    v-else-if="$scopedSlots['item-label']"
     slot="item-label"
     slot-scope="props"
   >
@@ -37,15 +31,6 @@
     />
   </template>
 </veui-tree-node>
-<veui-tree-node
-  v-else
-  :datasource="localDatasource"
-  :item-click="itemClick"
-  :icons="icons"
-  :ui="realUi"
-  @toggle="toggle"
-  @click="handleItemClick"
-/>
 </template>
 
 <script>
@@ -101,7 +86,8 @@ export default {
   },
   data () {
     return {
-      localDatasource: []
+      localDatasource: [],
+      focused: false
     }
   },
   computed: {

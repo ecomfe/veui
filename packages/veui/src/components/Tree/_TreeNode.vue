@@ -1,8 +1,16 @@
 <template>
-<ul :class="{'veui-tree-item-group': depth > 1, 'veui-tree': depth === 1}">
+<ul
+  :class="{
+    'veui-tree-item-group': depth > 1,
+    'veui-tree': depth === 1
+  }"
+  role="group"
+>
   <li
     v-for="(item, index) in datasource"
     :key="item.value"
+    role="treeitem"
+    :aria-expanded="String(item.expanded)"
   >
     <div
       ref="item"
@@ -12,7 +20,7 @@
         'veui-tree-item-clickable': clickable,
         'focus-visible': focusVisible[index]
       }"
-      tabindex="0"
+      :tabindex="focusVisible[index] || (!tree.focused && depth === 1 && index === 0) ? '0' : '-1'"
       @click="click(item, [], index, depth)"
       @keydown="handleKeydown($event, item, index, depth)"
       @focus="handleFocus(index)"
@@ -28,6 +36,7 @@
         <button
           v-if="item.children && item.children.length"
           class="veui-tree-item-expand-switcher"
+          tabindex="-1"
           @click.stop="toggle(item, index, depth)"
         >
           <veui-icon :name="icons.collapse"/>
@@ -66,6 +75,7 @@
           <button
             v-if="props.item.children && props.item.children.length"
             class="veui-tree-item-expand-switcher"
+            tabindex="-1"
             @click.stop="toggle(props.item, props.index, depth + 1)"
           >
             <veui-icon :name="icons.collapse"/>
@@ -127,6 +137,9 @@ export default {
   computed: {
     clickable () {
       return this.itemClick !== 'none'
+    },
+    tree () {
+      return getTypedAncestor(this, 'tree')
     }
   },
   watch: {
@@ -173,10 +186,16 @@ export default {
         })
       }
     },
-    navigate (current, forward = false) {
-      let context = (getTypedAncestor(this, 'tree') || this).$el
+    navigate (current, forward = false, hitBoundary = false) {
+      let context = (this.tree || this).$el
       let items = [...context.querySelectorAll(ITEM_SELECTOR)]
       let index = items.indexOf(current)
+
+      if (hitBoundary) {
+        items[forward ? items.length - 1 : 0].focus()
+        return
+      }
+
       let targetIndex =
         index === -1
           ? 0
@@ -186,6 +205,10 @@ export default {
     handleKeydown (e, item, index, depth) {
       let passive = false
       switch (e.key) {
+        case 'Enter':
+          this.toggle(item, index, depth)
+          this.fixFocus(index)
+          break
         case 'Left':
         case 'ArrowLeft':
           if (item.expanded) {
@@ -201,6 +224,7 @@ export default {
             this.focusLevel(false)
           } else {
             this.toggle(item, index, depth, true)
+            this.focusLevel(false)
             this.fixFocus(index)
           }
           break
@@ -211,6 +235,12 @@ export default {
         case 'Down':
         case 'ArrowDown':
           this.navigate(e.target, true)
+          break
+        case 'Home':
+          this.navigate(e.target, false, true)
+          break
+        case 'End':
+          this.navigate(e.target, true, true)
           break
         default:
           passive = true
