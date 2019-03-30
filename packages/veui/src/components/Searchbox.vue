@@ -155,7 +155,11 @@ export default {
       return pick(this, ['ui', ...without(SHARED_PROPS, 'value')])
     },
     realExpanded () {
-      return !!(this.expanded && this.realSuggestions && this.realSuggestions.length)
+      return !!(
+        this.expanded &&
+        this.realSuggestions &&
+        this.realSuggestions.length
+      )
     },
     valueProperty () {
       if (typeof this.replaceOnSelect !== 'string') {
@@ -190,7 +194,9 @@ export default {
       return includes(this.suggestTriggers, 'submit')
     },
     inputPopup () {
-      return (this.hasFocusSuggestMode || this.hasInputSuggestMode) ? 'listbox' : null
+      return this.hasFocusSuggestMode || this.hasInputSuggestMode
+        ? 'listbox'
+        : null
     },
     submitPopup () {
       return this.hasSubmitSuggestMode ? 'listbox' : null
@@ -260,7 +266,8 @@ export default {
         this.disallowSuggest()
       }
     },
-    activate () { // for label activation
+    activate () {
+      // for label activation
       if (this.realDisabled || this.realReadonly) {
         return
       }

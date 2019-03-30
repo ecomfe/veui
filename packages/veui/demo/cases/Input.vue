@@ -215,7 +215,7 @@ export default {
         if (!matched) {
           return
         }
-        [digits, unit] = matched.slice(1)
+        ;[digits, unit] = matched.slice(1)
         digits = parseFloat(digits)
         if (isNaN(digits)) {
           return

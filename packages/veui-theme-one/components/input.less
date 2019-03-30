@@ -19,7 +19,7 @@
   .veui-transition(border-color, color, box-shadow);
 
   &-autofill {
-    background-color: #faffbd;
+    background-color: @veui-autofill-color;
   }
 
   .veui-field > & {
@@ -46,6 +46,7 @@
 
   &-input {
     display: block;
+    position: relative;
     overflow: hidden;
     width: 100%;
     height: 100%;

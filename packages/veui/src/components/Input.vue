@@ -143,6 +143,11 @@ export default {
       } else {
         this.localValue = val
       }
+    },
+    autofill (val) {
+      if (val) {
+        this.$emit('autofill')
+      }
     }
   },
   mounted () {
@@ -153,7 +158,9 @@ export default {
   methods: {
     handleInput ($event) {
       try {
-        this.autofill = !!this.$el.querySelector(':-webkit-autofill')
+        setTimeout(() => {
+          this.autofill = !!this.$el.querySelector(':-webkit-autofill')
+        })
       } catch (e) {}
 
       // 分2种情况
