@@ -96,6 +96,7 @@ export default {
           <td role="cell" class="veui-table-cell-expand">
             {(item.children || []).length ? (
               <button
+                type="button"
                 aria-label={this.t(
                   this.expanded ? '@table.collapseRow' : '@table.expandRow'
                 )}
