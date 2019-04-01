@@ -47,6 +47,7 @@
             <!-- 控制展开收起的图标 -->
             <button
               v-if="props.item.children && props.item.children.length"
+              type="button"
               class="veui-tree-item-expand-switcher"
               tabindex="-1"
               @click.stop="toggle(props.item)"

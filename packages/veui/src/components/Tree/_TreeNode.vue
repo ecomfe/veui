@@ -35,6 +35,7 @@
       >
         <button
           v-if="item.children && item.children.length"
+          type="button"
           class="veui-tree-item-expand-switcher"
           tabindex="-1"
           @click.stop="toggle(item, index, depth)"
@@ -74,6 +75,7 @@
         >
           <button
             v-if="props.item.children && props.item.children.length"
+            type="button"
             class="veui-tree-item-expand-switcher"
             tabindex="-1"
             @click.stop="toggle(props.item, props.index, depth + 1)"
