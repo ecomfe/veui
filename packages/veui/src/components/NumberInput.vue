@@ -21,8 +21,8 @@
   @blur="handleBlur"
   @input="handleInput"
   @change="handleChange"
-  @focusin.native="focused = true"
-  @focusout.native="focused = false"
+  @focusin="focused = true"
+  @focusout="focused = false"
 >
   <template slot="before">
     <slot name="before"/>
@@ -67,14 +67,12 @@ import activatable from '../mixins/activatable'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
 import Icon from './Icon'
-import { getListeners } from '../utils/helper'
 import { sign, add, round } from '../utils/math'
 import warn from '../utils/warn'
-import { isInteger, isNaN, pick, get, find } from 'lodash'
+import { VALUE_EVENTS } from '../utils/dom'
+import { isInteger, isNaN, pick, get, find, omit } from 'lodash'
 import nudge from 'veui/directives/nudge'
 import longpress from 'veui/directives/longpress'
-
-const EVENTS = ['focus', 'blur', 'click', 'keyup', 'keydown', 'keypress']
 
 export default {
   name: 'veui-number-input',
@@ -118,7 +116,7 @@ export default {
   },
   computed: {
     listeners () {
-      return getListeners(EVENTS, this)
+      return omit(this.$listeners, VALUE_EVENTS)
     },
     attrs () {
       return {

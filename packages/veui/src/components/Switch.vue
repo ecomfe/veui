@@ -7,6 +7,7 @@
     'veui-disabled': realDisabled
   }"
   :ui="realUi"
+  v-on="labelListeners"
 >
   <input
     ref="box"
@@ -14,7 +15,7 @@
     v-bind="attrs"
     :disabled="realDisabled || realReadonly"
     @change="handleChange($event.target.checked)"
-    v-on="listeners"
+    v-on="boxListeners"
   >
   <div class="veui-switch-switcher">
     <div class="veui-switch-button"/>
@@ -31,9 +32,7 @@
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { pick } from 'lodash'
-import { getListeners } from '../utils/helper'
-
-const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
+import { MOUSE_EVENTS, FOCUS_EVENTS, KEYBOARD_EVENTS } from '../utils/dom'
 
 export default {
   name: 'veui-switch',
@@ -65,8 +64,11 @@ export default {
         checked: this.localChecked
       }
     },
-    listeners () {
-      return getListeners(EVENTS, this)
+    boxListeners () {
+      return pick(this.$listeners, [...KEYBOARD_EVENTS, ...FOCUS_EVENTS])
+    },
+    labelListeners () {
+      return pick(this.$listeners, MOUSE_EVENTS)
     }
   },
   watch: {

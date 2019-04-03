@@ -44,7 +44,6 @@
   <!-- 块 -->
   <button
     v-for="(_, index) in new Array(thumbCount)"
-    type="button"
     :key="`thumb${index}`"
     ref="thumb"
     v-outside.hover="() => handleThumbMouseLeave(index)"
@@ -53,6 +52,7 @@
       step: keyboardChangeStep,
       update: (...args) => handleThumbNudgeUpdage(index, ...args)
     }"
+    type="button"
     class="veui-slider-thumb"
     :disabled="realDisabled"
     :style="{

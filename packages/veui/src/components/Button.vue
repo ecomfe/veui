@@ -8,7 +8,7 @@
   }"
   :ui="realUi"
   v-bind="attrs"
-  v-on="listeners"
+  v-on="$listeners"
   @focus="handleFocus"
   @blur="handleBlur"
 >
@@ -32,21 +32,7 @@ import { omit } from 'lodash'
 import Icon from './Icon'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
-import { getListeners } from '../utils/helper'
 import { hasClass } from '../utils/dom'
-
-const EVENTS = [
-  'mousedown',
-  'mouseup',
-  'mouseenter',
-  'mouseleave',
-  'click',
-  'keydown',
-  'keyup',
-  'keypress',
-  'focus',
-  'blur'
-]
 
 export default {
   name: 'veui-button',
@@ -74,9 +60,6 @@ export default {
       let props = omit(this.$props, 'loading')
       props.disabled = this.disabled || this.loading
       return props
-    },
-    listeners () {
-      return getListeners(EVENTS, this)
     }
   },
   methods: {

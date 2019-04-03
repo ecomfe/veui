@@ -5,6 +5,7 @@
     'veui-disabled': realReadonly || realDisabled
   }"
   :ui="realUi"
+  v-on="labelListeners"
 >
   <input
     ref="box"
@@ -12,7 +13,7 @@
     v-bind="attrs"
     indeterminate.prop="localIndeterminate"
     @change="handleChange"
-    v-on="listeners"
+    v-on="boxListeners"
   >
   <span class="veui-checkbox-box">
     <transition name="veui-checkbox-icon">
@@ -38,14 +39,17 @@
 </template>
 
 <script>
+import { pick } from 'lodash'
 import Icon from './Icon'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import focusable from '../mixins/focusable'
-import { getListeners } from '../utils/helper'
-import { patchIndeterminate } from '../utils/dom'
-
-const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
+import {
+  patchIndeterminate,
+  MOUSE_EVENTS,
+  FOCUS_EVENTS,
+  KEYBOARD_EVENTS
+} from '../utils/dom'
 
 export default {
   name: 'veui-checkbox',
@@ -85,8 +89,11 @@ export default {
         ...this.$attrs
       }
     },
-    listeners () {
-      return getListeners(EVENTS, this)
+    boxListeners () {
+      return pick(this.$listeners, [...KEYBOARD_EVENTS, ...FOCUS_EVENTS])
+    },
+    labelListeners () {
+      return pick(this.$listeners, MOUSE_EVENTS)
     }
   },
   watch: {

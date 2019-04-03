@@ -11,6 +11,7 @@
     'veui-disabled': realDisabled
   }"
   :ui="realUi"
+  v-on="containerListeners"
 >
   <div
     v-if="measure"
@@ -48,7 +49,7 @@
       overflow: autoresize ? 'hidden' : 'auto'
     }"
     v-bind="attrs"
-    v-on="listeners"
+    v-on="inputListeners"
     @focus="handleFocus"
     @blur="handleBlur"
     @input="handleInput"
@@ -63,11 +64,13 @@ import { pick } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
-import { getListeners } from '../utils/helper'
 import { log10 } from '../utils/math'
-import { getAbsoluteLineHeight } from '../utils/dom'
-
-const EVENTS = ['click', 'keyup', 'keydown', 'keypress']
+import {
+  getAbsoluteLineHeight,
+  MOUSE_EVENTS,
+  KEYBOARD_EVENTS,
+  FOCUS_EVENTS
+} from '../utils/dom'
 
 export default {
   name: 'veui-textarea',
@@ -96,9 +99,6 @@ export default {
     }
   },
   computed: {
-    listeners () {
-      return getListeners(EVENTS, this)
-    },
     normalizedRows () {
       let rows = parseInt(this.rows, 10)
       return isNaN(rows) ? null : rows
@@ -110,6 +110,12 @@ export default {
         disabled: this.realDisabled,
         readonly: this.realReadonly
       }
+    },
+    inputListeners () {
+      return pick(this.$listeners, [...KEYBOARD_EVENTS, ...FOCUS_EVENTS])
+    },
+    containerListeners () {
+      return pick(this.$listeners, MOUSE_EVENTS)
     },
     measure () {
       return this.lineNumber || this.autoresize

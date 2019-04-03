@@ -10,6 +10,7 @@
     'veui-disabled': realDisabled
   }"
   :ui="realUi"
+  v-on="containerListeners"
 >
   <template v-if="$slots.before">
     <div class="veui-input-before">
@@ -30,7 +31,7 @@
       v-model="localValue"
       class="veui-input-input"
       v-bind="attrs"
-      v-on="listeners"
+      v-on="inputListeners"
       @focus="handleFocus"
       @blur="handleBlur"
       @input="handleInput"
@@ -66,11 +67,10 @@ import ui from '../mixins/ui'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
 import i18n from '../mixins/i18n'
-import { omit, includes } from 'lodash'
+import { omit, includes, pick } from 'lodash'
 import Icon from './Icon'
-import { getListeners } from '../utils/helper'
+import { MOUSE_EVENTS, KEYBOARD_EVENTS, FOCUS_EVENTS } from '../utils/dom'
 
-const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
 const TYPE_LIST = ['text', 'password', 'hidden']
 
 export default {
@@ -124,8 +124,11 @@ export default {
         ...this.$attrs
       }
     },
-    listeners () {
-      return getListeners(EVENTS, this)
+    inputListeners () {
+      return pick(this.$listeners, [...KEYBOARD_EVENTS, ...FOCUS_EVENTS])
+    },
+    containerListeners () {
+      return pick(this.$listeners, MOUSE_EVENTS)
     },
     editable () {
       return !this.realDisabled && !this.realReadonly

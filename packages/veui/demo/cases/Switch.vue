@@ -67,8 +67,6 @@ export default {
       value2: false,
       value3: true
     }
-  },
-  destroyed () {
   }
 }
 </script>
