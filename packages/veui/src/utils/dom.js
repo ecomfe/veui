@@ -348,3 +348,23 @@ export function getAbsoluteLineHeight (el) {
   let base = parseFloat(fontSize)
   return base * NORMAL_LINE_HEIGHT
 }
+
+export const MOUSE_EVENTS = [
+  'auxclick',
+  'click',
+  'contextmenu',
+  'dblclick',
+  'mousedown',
+  'mouseenter',
+  'mouseleave',
+  'mousemove',
+  'mouseover',
+  'mouseout',
+  'mouseup',
+  'select',
+  'wheel'
+]
+
+export const KEYBOARD_EVENTS = ['keydown', 'keypress', 'keyup']
+export const FOCUS_EVENTS = ['focus', 'blur', 'focusin', 'focusout']
+export const VALUE_EVENTS = ['input', 'change']

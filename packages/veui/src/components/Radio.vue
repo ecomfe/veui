@@ -5,13 +5,14 @@
     'veui-disabled': realReadonly || realDisabled
   }"
   :ui="realUi"
+  v-on="labelListeners"
 >
   <input
     ref="box"
     type="radio"
     v-bind="attrs"
     @change="handleChange"
-    v-on="listeners"
+    v-on="boxListeners"
   >
   <span class="veui-radio-box"/>
   <span
@@ -24,12 +25,11 @@
 </template>
 
 <script>
+import { pick } from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
-import { getListeners } from '../utils/helper'
-
-const EVENTS = ['click', 'keyup', 'keydown', 'keypress', 'focus', 'blur']
+import { MOUSE_EVENTS, FOCUS_EVENTS, KEYBOARD_EVENTS } from '../utils/dom'
 
 export default {
   name: 'veui-radio',
@@ -61,8 +61,11 @@ export default {
         ...this.$attrs
       }
     },
-    listeners () {
-      return getListeners(EVENTS, this)
+    boxListeners () {
+      return pick(this.$listeners, [...KEYBOARD_EVENTS, ...FOCUS_EVENTS])
+    },
+    labelListeners () {
+      return pick(this.$listeners, MOUSE_EVENTS)
     }
   },
   watch: {

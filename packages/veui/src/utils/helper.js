@@ -174,15 +174,6 @@ export function resolveOverlayPosition (position) {
   }
 }
 
-export function getListeners (events, vm) {
-  return events.reduce(function (listeners, type) {
-    listeners[type] = (...args) => {
-      vm.$emit(type, ...args)
-    }
-    return listeners
-  }, {})
-}
-
 export function getNumberArg (modifiers, defaultTime) {
   let timing
   find(keys(modifiers), key => {
