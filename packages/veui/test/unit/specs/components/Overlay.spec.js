@@ -63,7 +63,7 @@ describe('components/Overlay', () => {
     vm.$mount()
   })
 
-  it('should cover the previous\'s overlay\'s child overlay.', done => {
+  it("should cover the previous's overlay's child overlay.", done => {
     const vm = new Vue({
       data () {
         return {
@@ -99,7 +99,7 @@ describe('components/Overlay', () => {
             <Overlay ref="parent" open={this.parentVisible}>
               <Overlay ref="child" open={this.childVisible} />
             </Overlay>
-            <Overlay ref="next" open={this.nextVisible}></Overlay>
+            <Overlay ref="next" open={this.nextVisible} />
           </div>
         )
       }

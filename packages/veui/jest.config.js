@@ -20,14 +20,12 @@ module.exports = {
   coverageDirectory: '<rootDir>/test/unit/coverage',
   coverageReporters: ['lcov', 'text-summary'],
   moduleFileExtensions: ['js', 'vue', 'jsx'],
-  testMatch: [
-    '**/__tests__/**/*.js?(x)',
-    '**/?(*.)(spec|test).js?(x)'
-  ],
+  testMatch: ['**/__tests__/**/*.js?(x)', '**/?(*.)(spec|test).js?(x)'],
   moduleNameMapper: {
     '^veui$': '<rootDir>/src/index.js',
     '^veui\\/(.*)': '<rootDir>/src/$1',
-    '^veui-theme-one-icons\\/(.*)': '<rootDir>/../veui-theme-one-icons/icons/$1',
+    '^veui-theme-one-icons\\/(.*)':
+      '<rootDir>/../veui-theme-one-icons/icons/$1',
     '^@\\/(.*)': '<rootDir>/src/$1',
     '^vue$': '<rootDir>/node_modules/vue/dist/vue.common.js'
   },
