@@ -88,28 +88,51 @@
         content: "";
         display: block;
         position: absolute;
-        bottom: -5px;
-        left: -8px;
         width: ~"calc(100% + 8px)";
         height: 10px;
         background-color: #fff;
       }
 
-      &::after {
-        bottom: -10px;
-        left: 20px;
+      &-overlay {
+        margin-top: -16px;
       }
 
-      .tether-element-attached-bottom + &-overlay &,
-      .tether-element-attached-bottom + [data-tether-id] + &-overlay & {
+      [x-placement*="top"] + &-overlay & {
         &::before {
           top: -15px;
-          bottom: auto;
         }
 
         &::after {
           top: -20px;
-          bottom: auto;
+        }
+      }
+
+      [x-placement*="bottom"] + &-overlay & {
+        &::before {
+          bottom: -5px;
+        }
+        &::after {
+          bottom: -10px;
+        }
+      }
+
+      [x-placement*="start"] + &-overlay & {
+        &::before {
+          left: -8px;
+        }
+
+        &::after {
+          left: 20px;
+        }
+      }
+
+      [x-placement*="end"] + &-overlay & {
+        &::before {
+          right: 0;
+        }
+
+        &::after {
+          right: 20px;
         }
       }
     }
@@ -117,14 +140,29 @@
 
   &-units {
     display: table;
-    margin: 10px 0 0 -8px;
     background-color: #fff;
     border-top: 1px solid @veui-gray-color-8;
     z-index: 0;
     .veui-overlay-shadow();
 
-    .tether-element-attached-bottom & {
-      margin: 0 0 10px -8px;
+    [x-placement*="top"] & {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    [x-placement*="bottom"] & {
+      margin-top: 10px;
+      margin-bottom: 0;
+    }
+
+    [x-placement*="start"] & {
+      margin-right: 0;
+      margin-left: -8px;
+    }
+
+    [x-placement*="end"] & {
+      margin-right: -8px;
+      margin-left: 0;
     }
   }
 

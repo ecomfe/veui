@@ -19,19 +19,14 @@
 </template>
 
 <script>
-import Tether from 'tether'
+import Popper from 'popper.js'
 import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
 import focusManager from '../managers/focus'
 import config from '../managers/config'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
-import {
-  getClassPropDef,
-  mergeClasses,
-  isType,
-  resolveOverlayPosition
-} from '../utils/helper'
+import { getClassPropDef, mergeClasses, isType } from '../utils/helper'
 import '../common/uiTypes'
 
 config.defaults({
@@ -77,6 +72,9 @@ export default {
     },
     realOverlayClass () {
       return mergeClasses(this.overlayClass, config.get('overlay.overlayClass'))
+    },
+    realPosition () {
+      return this.position || this.options.position || 'auto'
     }
   },
   watch: {
@@ -169,27 +167,34 @@ export default {
       }
 
       if (this.targetNode) {
-        let options = {
-          ...resolveOverlayPosition(this.position),
-          ...this.options,
-          element: this.overlayBox,
-          target: this.targetNode
+        if (this.popper) {
+          this.popper.destroy()
         }
 
-        if (!this.tether) {
-          this.tether = new Tether(options)
-          this.tether.on('repositioned', () => {
+        this.popper = new Popper(this.targetNode, this.overlayBox, {
+          placement: this.realPosition,
+          modifiers: {
+            preventOverflow: {
+              boundariesElement: 'viewport',
+              enabled: false
+            },
+            hide: {
+              enabled: false
+            },
+            flip: {
+              flipVariationsByContent: true
+            }
+          },
+          onUpdate: () => {
             this.$emit('locate')
-          })
-        } else {
-          this.tether.setOptions(options)
-        }
+          }
+        })
       }
     },
 
     relocate () {
-      if (this.tether) {
-        this.tether.position()
+      if (this.popper) {
+        this.popper.scheduleUpdate()
       }
     },
 
@@ -233,18 +238,18 @@ export default {
     },
 
     toggleLocator (enable) {
-      if (!this.tether) {
+      if (!this.popper) {
         return
       }
-      this.tether[enable ? 'enable' : 'disable']()
+      this.popper[enable ? 'enableEventListeners' : 'disableEventListeners']()
     },
 
     destroyLocator () {
-      if (!this.tether) {
+      if (!this.popper) {
         return
       }
-      this.tether.destroy()
-      this.tether = null
+      this.popper.destroy()
+      this.popper = null
     }
   }
 }

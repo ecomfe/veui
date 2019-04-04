@@ -82,22 +82,22 @@
     }
   }
 
-  .tether-element-attached-top.tether-target-attached-bottom & {
+  [x-placement*="bottom"] & {
     margin-top: @gap;
     .make-direction(top);
   }
 
-  .tether-element-attached-right.tether-target-attached-left & {
+  [x-placement*="left"] & {
     margin-right: @gap;
     .make-direction(right);
   }
 
-  .tether-element-attached-bottom.tether-target-attached-top & {
+  [x-placement*="top"] & {
     margin-bottom: @gap;
     .make-direction(bottom);
   }
 
-  .tether-element-attached-left.tether-target-attached-right & {
+  [x-placement*="right"] & {
     margin-left: @gap;
     .make-direction(left);
   }
@@ -129,19 +129,23 @@
     }
   }
 
-  .tether-element-attached-top.tether-target-attached-top & {
+  [x-placement="right-start"] &,
+  [x-placement="left-start"] & {
     .make-align(top);
   }
 
-  .tether-element-attached-right.tether-target-attached-right & {
+  [x-placement="top-end"] &,
+  [x-placement="bottom-end"] & {
     .make-align(right);
   }
 
-  .tether-element-attached-bottom.tether-target-attached-bottom & {
+  [x-placement="right-end"] &,
+  [x-placement="left-end"] & {
     .make-align(bottom);
   }
 
-  .tether-element-attached-left.tether-target-attached-left & {
+  [x-placement="top-start"] &,
+  [x-placement="bottom-start"] & {
     .make-align(left);
   }
 

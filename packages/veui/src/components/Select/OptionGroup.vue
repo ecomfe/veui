@@ -44,13 +44,7 @@ const OptionGroup = {
       items: [],
       expanded: false,
       localOverlayOptions: {
-        position: 'right-start',
-        constraints: [
-          {
-            to: 'window',
-            attachment: 'together'
-          }
-        ]
+        position: 'right-start'
       },
       outsideRefs: ['button']
     }

@@ -20,8 +20,9 @@
             ref="topLeftHover"
             ui="aux"
             @mouseenter.native="show({
-              position: 'top left',
-              target: 'topLeftHover'})"
+              position: 'top-start',
+              target: 'topLeftHover'
+            })"
           >
             上左
           </veui-button>
@@ -30,7 +31,8 @@
             ui="aux"
             @mouseenter.native="show({
               position: 'top',
-              target: 'topCenterHover'})"
+              target: 'topCenterHover'
+            })"
           >
             上边
           </veui-button>
@@ -38,8 +40,9 @@
             ref="topRightHover"
             ui="aux"
             @mouseenter.native="show({
-              position: 'top right',
-              target: 'topRightHover'})"
+              position: 'top-end',
+              target: 'topRightHover'
+            })"
           >
             上右
           </veui-button>
@@ -49,8 +52,9 @@
             ref="leftTopHover"
             ui="aux"
             @mouseenter.native="show({
-              position: 'left top',
-              target: 'leftTopHover'})"
+              position: 'left-start',
+              target: 'leftTopHover'
+            })"
           >
             左上
           </veui-button>
@@ -59,7 +63,8 @@
             ui="aux"
             @mouseenter.native="show({
               position: 'left',
-              target: 'leftCenterHover'})"
+              target: 'leftCenterHover'
+            })"
           >
             左边
           </veui-button>
@@ -67,8 +72,9 @@
             ref="leftBottomHover"
             ui="aux"
             @mouseenter.native="show({
-              position: 'left bottom',
-              target: 'leftBottomHover'})"
+              position: 'left-end',
+              target: 'leftBottomHover'
+            })"
           >
             左下
           </veui-button>
@@ -78,8 +84,9 @@
             ref="rightTopHover"
             ui="aux"
             @mouseenter.native="show({
-              position: 'right top',
-              target: 'rightTopHover'})"
+              position: 'right-start',
+              target: 'rightTopHover'
+            })"
           >
             右上
           </veui-button>
@@ -88,7 +95,8 @@
             ui="aux"
             @mouseenter.native="show({
               position: 'right',
-              target: 'rightCenterHover'})"
+              target: 'rightCenterHover'
+            })"
           >
             右边
           </veui-button>
@@ -96,8 +104,9 @@
             ref="rightBottomHover"
             ui="aux"
             @mouseenter.native="show({
-              position: 'right bottom',
-              target: 'rightBottomHover'})"
+              position: 'right-end',
+              target: 'rightBottomHover'
+            })"
           >
             右下
           </veui-button>
@@ -107,8 +116,9 @@
             ref="BottomLeftHover"
             ui="aux"
             @mouseenter.native="show({
-              position: 'bottom left',
-              target: 'BottomLeftHover'})"
+              position: 'bottom-start',
+              target: 'BottomLeftHover'
+            })"
           >
             下左
           </veui-button>
@@ -117,7 +127,8 @@
             ui="aux"
             @mouseenter.native="show({
               position: 'bottom',
-              target: 'BottomCenterHover'})"
+              target: 'BottomCenterHover'
+            })"
           >
             下边
           </veui-button>
@@ -125,8 +136,9 @@
             ref="BottomRightHover"
             ui="aux"
             @mouseenter.native="show({
-              position: 'bottom right',
-              target: 'BottomRightHover'})"
+              position: 'bottom-end',
+              target: 'BottomRightHover'
+            })"
           >
             下右
           </veui-button>

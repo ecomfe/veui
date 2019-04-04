@@ -58,13 +58,7 @@ export default {
     return {
       localOpen: this.open,
       localOverlayOptions: {
-        position: this.position,
-        constraints: [
-          {
-            to: 'window',
-            attachment: 'together'
-          }
-        ]
+        position: this.position
       }
     }
   },
@@ -126,7 +120,10 @@ export default {
   },
   created () {
     if (this.custom) {
-      warn('[veui-tooltip] `custom` is deprecated and will be removed in `1.0.0`. Use `trigger: \'custom\'` instead.', this)
+      warn(
+        "[veui-tooltip] `custom` is deprecated and will be removed in `1.0.0`. Use `trigger: 'custom'` instead.",
+        this
+      )
     }
   },
   mounted () {
@@ -151,7 +148,11 @@ export default {
         return
       }
 
-      targetNode.removeEventListener(targetNode.__tooltip_open_trigger__, this.openHandler, false)
+      targetNode.removeEventListener(
+        targetNode.__tooltip_open_trigger__,
+        this.openHandler,
+        false
+      )
       targetNode.__tooltip_open_trigger__ = null
     },
     bindHandler () {
@@ -159,7 +160,11 @@ export default {
         return
       }
       if (!this.targetNode.__tooltip_open_trigger__) {
-        this.targetNode.addEventListener(this.realTrigger.open, this.openHandler, false)
+        this.targetNode.addEventListener(
+          this.realTrigger.open,
+          this.openHandler,
+          false
+        )
         this.targetNode.__tooltip_open_trigger__ = this.realTrigger.open
       }
     },
@@ -186,15 +191,15 @@ export default {
         overlayClass={this.mergeOverlayClass({
           'veui-tooltip-box': true,
           'veui-tooltip-box-transparent': !this.interactive
-        })}>
+        })}
+      >
         <div
           class="veui-tooltip"
           ui={this.realUi}
           role="tooltip"
-          {...{directives}}>
-          <div class="veui-tooltip-content">
-            { this.$slots.default }
-          </div>
+          {...{ directives }}
+        >
+          <div class="veui-tooltip-content">{this.$slots.default}</div>
         </div>
       </veui-overlay>
     )

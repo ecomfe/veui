@@ -1,9 +1,4 @@
-import {
-  mergeClasses,
-  getClassPropDef,
-  resolveOverlayPosition
-} from '../utils/helper'
-import { omit } from 'lodash'
+import { mergeClasses, getClassPropDef } from '../utils/helper'
 
 export default {
   props: {
@@ -22,15 +17,7 @@ export default {
   },
   computed: {
     realOverlayOptions () {
-      let options = { ...this.localOverlayOptions, ...this.overlayOptions }
-      let { position } = options
-      return omit(
-        {
-          ...options,
-          ...resolveOverlayPosition(position)
-        },
-        'position'
-      )
+      return { ...this.localOverlayOptions, ...this.overlayOptions }
     }
   },
   methods: {
