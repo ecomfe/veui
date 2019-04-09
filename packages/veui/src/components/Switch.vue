@@ -13,7 +13,7 @@
     ref="box"
     type="checkbox"
     v-bind="attrs"
-    :disabled="realDisabled || realReadonly"
+    :checked.prop="localChecked"
     @change="handleChange($event.target.checked)"
     v-on="boxListeners"
   >
@@ -60,8 +60,8 @@ export default {
   computed: {
     attrs () {
       return {
-        ...pick(this.$props, 'name', 'readonly'),
-        checked: this.localChecked
+        name: this.realName,
+        disabled: this.realDisabled || this.realReadonly
       }
     },
     boxListeners () {

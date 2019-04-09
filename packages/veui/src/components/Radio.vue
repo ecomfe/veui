@@ -11,6 +11,7 @@
     ref="box"
     type="radio"
     v-bind="attrs"
+    :checked.prop="localChecked"
     @change="handleChange"
     v-on="boxListeners"
   >
@@ -55,7 +56,6 @@ export default {
   computed: {
     attrs () {
       return {
-        checked: this.localChecked,
         name: this.realName,
         disabled: this.realDisabled || this.realReadonly,
         ...this.$attrs

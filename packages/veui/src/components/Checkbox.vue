@@ -11,7 +11,8 @@
     ref="box"
     type="checkbox"
     v-bind="attrs"
-    indeterminate.prop="localIndeterminate"
+    :indeterminate.prop="localIndeterminate"
+    :checked.prop="localChecked"
     @change="handleChange"
     v-on="boxListeners"
   >
@@ -85,7 +86,6 @@ export default {
       return {
         name: this.realName,
         disabled: this.realDisabled || this.realReadonly,
-        checked: this.localChecked,
         ...this.$attrs
       }
     },
@@ -119,11 +119,16 @@ export default {
     indeterminate (val) {
       this.localIndeterminate = val
     },
-    localIndeterminate (val) {
-      this.$refs.box.indeterminate = val
-      if (this.indeterminate !== val) {
-        this.$emit('update:indeterminate', val)
-      }
+    localIndeterminate: {
+      handler (val) {
+        if (this.indeterminate !== val) {
+          this.$emit('update:indeterminate', val)
+        }
+        if (val && !this.localChecked) {
+          this.localChecked = true
+        }
+      },
+      immediate: true
     }
   },
   mounted () {
