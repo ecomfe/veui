@@ -1,4 +1,4 @@
-import { throttle } from 'lodash'
+import { throttle, uniqueId } from 'lodash'
 import { toggleClass } from '../utils/dom'
 import outside from '../directives/outside'
 import overlay from './overlay'
@@ -18,7 +18,8 @@ export default {
             attachment: 'together'
           }
         ]
-      }
+      },
+      dropdownId: uniqueId('veui-dropdown-')
     }
   },
   updated () {

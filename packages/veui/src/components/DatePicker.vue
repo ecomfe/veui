@@ -15,6 +15,7 @@
     :disabled="realDisabled || realReadonly"
     :aria-disabled="realDisabled"
     :aria-readonly="realReadonly"
+    :aria-owns="dropdownId"
     aria-haspopup="dialog"
     @click="expanded = !expanded"
     @keydown.down.up.prevent="expanded = true"
@@ -84,6 +85,7 @@
     modal
   >
     <veui-calendar
+      :id="dropdownId"
       ref="cal"
       v-model="localSelected"
       v-outside:button="close"

@@ -21,6 +21,7 @@
     autocomplete="off"
     role="searchbox"
     :aria-haspopup="inputPopup"
+    :aria-owns="inputPopup ? dropdownId : null"
     @keypress.enter.prevent="search"
     @focus="handleInputFocus"
   >
@@ -60,6 +61,7 @@
     :overlay-class="overlayClass"
   >
     <div
+      :id="dropdownId"
       ref="box"
       class="veui-searchbox-suggestion-overlay"
       role="listbox"
