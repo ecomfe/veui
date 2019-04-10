@@ -154,6 +154,7 @@ export default {
           ref="button"
           class="veui-select-button"
           aria-haspopup="listbox"
+          aria-owns={this.dropdownId}
           aria-disabled={String(this.realDisabled)}
           aria-readonly={String(this.realReadonly)}
           disabled={this.realDisabled || this.realReadonly}
@@ -184,6 +185,7 @@ export default {
             onLocate={this.handleRelocate}
           >
             <div
+              id={this.dropdownId}
               ref="box"
               class="veui-select-options"
               {...{

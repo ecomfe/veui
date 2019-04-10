@@ -29,6 +29,7 @@
     :disabled="disabled"
     aria-haspopup="menu"
     :aria-disabled="String(disabled)"
+    :aria-owns="dropdownId"
     v-on="toggleHandlers"
     @keydown.down.up.prevent="expanded = true"
   >
@@ -57,6 +58,7 @@
     :overlay-class="overlayClass"
   >
     <div
+      :id="dropdownId"
       ref="box"
       v-outside="{
         refs: outsideRefs,
