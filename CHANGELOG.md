@@ -3,6 +3,13 @@
 ### 🐞 问题修复
 
 * [^] 修复了部分原生 `<button>` 未设置 `type="button"` 的问题。
+* [^] 修正了 `Checkbox`、`Radio` 与 `Switch` 组件中原生 `<input>` 状态没有正确同步的问题，以触发 CSS 中正确的伪类样式。
+* [^] 修正了带下拉浮层的组件的 ARIA 标注，使浮层拥有正确的从属关系。
+* [^] 优化了原生事件透传机制，原生元素触发的事件将可以被外层组件直接透传。涉及的组件为 `Button`、`Checkbox`、`Radio`、`Switch`、`Input`。`NumberInput`、`Textarea`。
+
+  > **相关事件包括：**
+  >
+  > `auxclick`、`click`、`contextmenu`、`dblclick`、`mousedown`、`mouseenter`、`mouseleave`、`mousemove`、`mouseover`、`mouseout`、`mouseup`、`select`、`wheel`、`keydown`、`keypress`、`keyup`、`focus`、`blur`、`focusin`、`focusout`。
 
 ## 1.0.0-alpha.24
 
