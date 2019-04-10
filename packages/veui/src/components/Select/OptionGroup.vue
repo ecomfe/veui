@@ -13,7 +13,7 @@ import '../../common/uiTypes'
 import { walk } from '../../utils/data'
 import { isType } from '../../utils/helper'
 import warn from '../../utils/warn'
-import { pull } from 'lodash'
+import { pull, uniqueId } from 'lodash'
 
 const OptionGroup = {
   name: 'veui-option-group',
@@ -52,7 +52,8 @@ const OptionGroup = {
           }
         ]
       },
-      outsideRefs: ['button']
+      outsideRefs: ['button'],
+      popupId: uniqueId('veui-option-group-popup-')
     }
   },
   computed: {
@@ -183,6 +184,7 @@ const OptionGroup = {
               'veui-option-group-button': this.canPopOut
             }}
             aria-haspopup={this.canPopOut ? this.popupRole : null}
+            aria-owns={this.canPopOut ? this.popupId : null}
             {...(this.canPopOut
               ? {
                 on: {
@@ -227,6 +229,7 @@ const OptionGroup = {
             modal
           >
             <div
+              id={this.popupId}
               ref="box"
               class="veui-option-group-options"
               tabindex="-1"
