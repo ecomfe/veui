@@ -97,14 +97,8 @@ export default {
     }
   },
   methods: {
-    handleChange ($event) {
-      this.change($event.target.checked)
-    },
-    change (checked) {
-      if (this.localChecked === checked) {
-        return
-      }
-      this.localChecked = checked
+    handleChange (e) {
+      this.localChecked = e.target.checked
       this.$nextTick(() => {
         this.$emit('change', this.localChecked)
       })
@@ -116,7 +110,10 @@ export default {
       if (this.realDisabled || this.realReadonly) {
         return
       }
-      this.change(true)
+      this.localChecked = true
+      this.$nextTick(() => {
+        this.$emit('change', this.localChecked)
+      })
       this.focus()
     }
   }

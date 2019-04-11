@@ -1,5 +1,13 @@
 ## 1.0.0-alpha.25
 
+### ⚠️ 非兼容性变更
+
+* [^] `Checkbox` 的 `indeterminate` prop 不再支持 `.sync`，始终由外部控制。
+
+### 💡 主要变更
+
+* [^] 支持多个 `Checkbox` 在 `v-model` 绑定到同一个数组时自动组成复选框组。
+
 ### 🐞 问题修复
 
 * [^] 修复了部分原生 `<button>` 未设置 `type="button"` 的问题。
