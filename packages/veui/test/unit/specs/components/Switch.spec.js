@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import { mount } from '@vue/test-utils'
-import Checkbox from '@/components/Checkbox'
+import Switch from '@/components/Switch'
 
-describe('components/Checkbox', () => {
+describe('components/Switch', () => {
   it('should handle checked prop with `null` value.', done => {
-    const wrapper = mount(Checkbox, {
+    const wrapper = mount(Switch, {
       propsData: {
         checked: null
       }
@@ -23,7 +23,7 @@ describe('components/Checkbox', () => {
     document.body.appendChild(wrapper)
     new Vue({
       components: {
-        'veui-checkbox': Checkbox
+        'veui-switch': Switch
       },
       data () {
         return {
@@ -43,7 +43,7 @@ describe('components/Checkbox', () => {
         }
       },
       template:
-        '<veui-checkbox v-model="choice" true-value="YES" false-value="NO" @change="handleChange"/>'
+        '<veui-switch v-model="choice" true-value="YES" false-value="NO" @change="handleChange"/>'
     }).$mount(wrapper)
   })
 })

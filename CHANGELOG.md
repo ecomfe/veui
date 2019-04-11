@@ -3,6 +3,7 @@
 ### ⚠️ 非兼容性变更
 
 * [^] `Checkbox` 的 `indeterminate` prop 不再支持 `.sync`，始终由外部控制。
+* [^] `Switch` 的 `change` 事件将在数据更新完毕后触发。
 
 ### 💡 主要变更
 
