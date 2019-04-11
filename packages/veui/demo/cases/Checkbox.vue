@@ -42,7 +42,8 @@
   <section>
     <veui-checkbox
       v-model="picked5"
-      indeterminate
+      :indeterminate="indeterminate5"
+      @change="indeterminate5 = false"
     >
       部分选中状态
     </veui-checkbox>
@@ -51,7 +52,8 @@
     <veui-checkbox
       v-model="picked6"
       ui="small"
-      indeterminate
+      :indeterminate="indeterminate6"
+      @change="indeterminate6 = false"
     >
       部分选中状态
     </veui-checkbox>
@@ -109,6 +111,14 @@
       部分选中无效状态
     </veui-checkbox>
   </section>
+  <section>
+    <veui-checkbox
+      :checked="checked13"
+      @change="checked13 = $event"
+    >
+      外部控制 <code>checked</code>
+    </veui-checkbox>
+  </section>
 </article>
 </template>
 
@@ -127,14 +137,17 @@ export default {
       picked2: false,
       picked3: true,
       picked4: true,
-      picked5: false,
+      picked5: true,
+      indeterminate5: true,
       picked6: false,
+      indeterminate6: true,
       picked7: true,
       picked8: true,
       picked9: false,
       picked10: false,
       picked11: false,
-      picked12: false
+      picked12: false,
+      checked13: true
     }
   }
 }
