@@ -14,7 +14,7 @@
     type="checkbox"
     v-bind="attrs"
     :checked.prop="localChecked"
-    @change="handleChange($event.target.checked)"
+    @change="handleChange"
     v-on="boxListeners"
   >
   <div class="veui-switch-switcher">
@@ -94,8 +94,10 @@ export default {
   },
   methods: {
     handleChange (checked) {
-      this.localChecked = checked
-      this.$emit('change', checked)
+      this.localChecked = !this.localChecked
+      this.$nextTick(() => {
+        this.$emit('change', this.localChecked)
+      })
     },
     focus () {
       this.$refs.box.focus()
@@ -105,6 +107,10 @@ export default {
         return
       }
       this.localChecked = !this.localChecked
+      this.$nextTick(() => {
+        this.$emit('change', this.localChecked)
+      })
+      this.focus()
     }
   }
 }
