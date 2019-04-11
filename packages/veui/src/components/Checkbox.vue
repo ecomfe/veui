@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { pick } from 'lodash'
+import { pick, includes, pull } from 'lodash'
 import Icon from './Icon'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
@@ -64,6 +64,7 @@ export default {
   },
   props: {
     /* eslint-disable vue/require-prop-types */
+    value: {},
     trueValue: {
       default: true
     },
@@ -104,6 +105,19 @@ export default {
         this.$emit('update:checked', val)
       }
 
+      if (Array.isArray(this.model)) {
+        let model = [...this.model]
+        if (val) {
+          if (!includes(model, this.value)) {
+            model.push(this.value)
+          }
+        } else {
+          pull(model, this.value)
+        }
+        this.$emit('input', model)
+        return
+      }
+
       this.$emit('input', val ? this.trueValue : this.falseValue)
     },
     model: {
@@ -111,6 +125,12 @@ export default {
         if (typeof val === 'undefined') {
           return
         }
+
+        if (Array.isArray(val)) {
+          this.localChecked = includes(val, this.value)
+          return
+        }
+
         this.localChecked = val === this.trueValue
       },
       immediate: true
@@ -121,16 +141,9 @@ export default {
     patchIndeterminate(box)
   },
   methods: {
-    handleChange () {
-      this.toggleChecked()
-      this.$refs.box.indeterminate = this.indeterminate
-    },
-    toggleChecked (forceValue) {
-      if (this.localChecked === forceValue) {
-        return
-      }
-      let checked = forceValue == null ? !this.localChecked : !!forceValue
-      this.localChecked = checked
+    handleChange (e) {
+      e.target.indeterminate = this.indeterminate
+      this.localChecked = !this.localChecked
       this.$nextTick(() => {
         this.$emit('change', this.localChecked)
       })
@@ -142,7 +155,10 @@ export default {
       if (this.realDisabled || this.realReadonly) {
         return
       }
-      this.toggleChecked()
+      this.localChecked = !this.localChecked
+      this.$nextTick(() => {
+        this.$emit('change', this.localChecked)
+      })
       this.focus()
     }
   }
