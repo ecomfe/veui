@@ -11,7 +11,7 @@
     ref="box"
     type="checkbox"
     v-bind="attrs"
-    :indeterminate.prop="localIndeterminate"
+    :indeterminate.prop="indeterminate"
     :checked.prop="localChecked"
     @change="handleChange"
     v-on="boxListeners"
@@ -19,13 +19,13 @@
   <span class="veui-checkbox-box">
     <transition name="veui-checkbox-icon">
       <veui-icon
-        v-if="localIndeterminate"
+        v-if="indeterminate"
         :name="icons.indeterminate"
       />
     </transition>
     <transition name="veui-checkbox-icon">
       <veui-icon
-        v-if="localChecked && !localIndeterminate"
+        v-if="localChecked && !indeterminate"
         :name="icons.checked"
       />
     </transition>
@@ -77,8 +77,7 @@ export default {
   },
   data () {
     return {
-      localChecked: this.checked,
-      localIndeterminate: this.indeterminate
+      localChecked: this.checked
     }
   },
   computed: {
@@ -115,20 +114,6 @@ export default {
         this.localChecked = val === this.trueValue
       },
       immediate: true
-    },
-    indeterminate (val) {
-      this.localIndeterminate = val
-    },
-    localIndeterminate: {
-      handler (val) {
-        if (this.indeterminate !== val) {
-          this.$emit('update:indeterminate', val)
-        }
-        if (val && !this.localChecked) {
-          this.localChecked = true
-        }
-      },
-      immediate: true
     }
   },
   mounted () {
@@ -137,12 +122,8 @@ export default {
   },
   methods: {
     handleChange () {
-      if (this.localIndeterminate) {
-        this.toggleChecked(false)
-        this.localIndeterminate = false
-      } else {
-        this.toggleChecked()
-      }
+      this.toggleChecked()
+      this.$refs.box.indeterminate = this.indeterminate
     },
     toggleChecked (forceValue) {
       if (this.localChecked === forceValue) {
