@@ -433,31 +433,31 @@ export default {
     'veui-tabs': Tabs,
     'veui-tab': Tab,
     'veui-button': Button,
-    'icon': Icon
+    icon: Icon
   },
   data () {
     return {
       totalTabs0: 10,
       totalTabs1: 20,
       tabs0: [
-        {label: '弄一个很长的在第一个试试', name: '默认1'},
-        {label: '默认2', name: '默认2', status: 'success'},
-        {label: '默认3', name: '默认3'}
+        { label: '弄一个很长的在第一个试试', name: '默认1' },
+        { label: '默认2', name: '默认2', status: 'success' },
+        { label: '默认3', name: '默认3' }
       ],
       tabs1: [
-        {label: '默认1', name: '默认1'},
-        {label: '弄一个很长的在中间试试', name: '默认2', status: 'info'},
-        {label: '默认3', name: '默认3'}
+        { label: '默认1', name: '默认1' },
+        { label: '弄一个很长的在中间试试', name: '默认2', status: 'info' },
+        { label: '默认3', name: '默认3' }
       ],
       tabs2: [
-        {label: '默认1', name: '默认1'},
-        {label: '弄一个很长的在中间试试', name: '默认2', status: 'warning'},
-        {label: '默认3', name: '默认3'}
+        { label: '默认1', name: '默认1' },
+        { label: '弄一个很长的在中间试试', name: '默认2', status: 'warning' },
+        { label: '默认3', name: '默认3' }
       ],
       tabs3: [
-        {label: '默认1', name: '默认1', status: 'error'},
-        {label: '弄一个很长的在中间试试', name: '默认2', status: 'warning'},
-        {label: '默认3', name: '默认3'}
+        { label: '默认1', name: '默认1', status: 'error' },
+        { label: '弄一个很长的在中间试试', name: '默认2', status: 'warning' },
+        { label: '默认3', name: '默认3' }
       ],
       active0: '',
       active1: '',
@@ -517,25 +517,25 @@ export default {
       })
       this.index5 = index - 1
     },
-    removeTab0 ({name}) {
+    removeTab0 ({ name }) {
       let index = findIndex(this.tabs0, tab => tab.name === name)
       if (index !== -1) {
         this.tabs0.splice(index, 1)
       }
     },
-    removeTab1 ({name}) {
+    removeTab1 ({ name }) {
       let index = findIndex(this.tabs1, tab => tab.name === name)
       if (index !== -1) {
         this.tabs1.splice(index, 1)
       }
     },
-    removeTab2 ({name}) {
+    removeTab2 ({ name }) {
       let index = findIndex(this.tabs2, tab => tab.name === name)
       if (index !== -1) {
         this.tabs2.splice(index, 1)
       }
     },
-    removeTab3 ({name}) {
+    removeTab3 ({ name }) {
       let index = findIndex(this.tabs3, tab => tab.name === name)
       if (index !== -1) {
         this.tabs3.splice(index, 1)

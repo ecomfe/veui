@@ -117,6 +117,6 @@ p {
   margin-bottom: 30px;
 }
 .veui-button {
-  margin-right: 10px
+  margin-right: 10px;
 }
 </style>

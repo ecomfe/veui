@@ -179,7 +179,7 @@ export default {
   computed: {
     colorGradient () {
       let colors = makeArray(7).map(function (_, index) {
-        return `hsl(${60 * index}, 100%, 50%) ${100 / 6 * index}%`
+        return `hsl(${60 * index}, 100%, 50%) ${(100 / 6) * index}%`
       })
       return `linear-gradient(to right, ${colors.join(',')})`
     }
@@ -193,7 +193,11 @@ export default {
     },
     formatDuration (sec) {
       sec = Math.round(sec)
-      return `${padStart(Math.floor(sec / 60).toString(), 2, '0')}:${padStart((sec % 60).toString(), 2, '0')}`
+      return `${padStart(Math.floor(sec / 60).toString(), 2, '0')}:${padStart(
+        (sec % 60).toString(),
+        2,
+        '0'
+      )}`
     }
   }
 }
@@ -207,7 +211,15 @@ section {
 
 .veui-slider {
   margin: 10px 0;
-  background: repeating-linear-gradient(135deg, #fff 0px, #fff 10px, #f7f7f7 11px, #f7f7f7 12px, #fff 13px, #fff 14px);
+  background: repeating-linear-gradient(
+    135deg,
+    #fff 0px,
+    #fff 10px,
+    #f7f7f7 11px,
+    #f7f7f7 12px,
+    #fff 13px,
+    #fff 14px
+  );
 }
 
 .desc {

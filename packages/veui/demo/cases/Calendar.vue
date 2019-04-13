@@ -97,8 +97,14 @@ export default {
     return {
       selected0: null,
       selected1: new Date(1987, 6, 11),
-      selected2: [today, new Date(today.getFullYear(), today.getMonth() + 1, 13)],
-      selected3: [[new Date(2017, 3, 12), new Date(2017, 3, 18)], [new Date(2017, 3, 22), new Date(2017, 3, 24)]],
+      selected2: [
+        today,
+        new Date(today.getFullYear(), today.getMonth() + 1, 13)
+      ],
+      selected3: [
+        [new Date(2017, 3, 12), new Date(2017, 3, 18)],
+        [new Date(2017, 3, 22), new Date(2017, 3, 24)]
+      ],
       selected4: [new Date(2016, 11, 19), new Date(2016, 11, 25)],
       selected5: new Date(2019, 0, 1),
       selected6: new Date(2019, 0, 1),

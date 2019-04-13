@@ -30,7 +30,7 @@ export default {
   },
   data () {
     return {
-      icons: Object.keys(Icon.icons).sort((a, b) => a > b ? 1 : -1)
+      icons: Object.keys(Icon.icons).sort((a, b) => (a > b ? 1 : -1))
     }
   },
   mounted () {
@@ -50,7 +50,7 @@ export default {
   float: left;
 
   width: @grid-size;
-  height: @grid-size + (.8 + .6) * 16px;
+  height: @grid-size + (0.8 + 0.6) * 16px;
   text-align: center;
   margin: 2em;
 
@@ -67,9 +67,9 @@ export default {
   }
 
   .name {
-    margin-top: .6em;
+    margin-top: 0.6em;
     color: #333;
-    font-size: .8em;
+    font-size: 0.8em;
   }
 }
 </style>

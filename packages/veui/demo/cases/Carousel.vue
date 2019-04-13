@@ -110,17 +110,20 @@ export default {
       ],
       items: [
         {
-          src: 'http://ecmb.bdimg.com/public01/one-design/2b77cc4a4c5c906993c0e512f3ddaf03.jpg',
+          src:
+            'http://ecmb.bdimg.com/public01/one-design/2b77cc4a4c5c906993c0e512f3ddaf03.jpg',
           alt: 'A cute kitty looking at you with its greenish eyes.',
           label: '猫'
         },
         {
-          src: 'http://ecmb.bdimg.com/public01/one-design/6fedc62b9221846ce5114c7447622e47.jpeg',
+          src:
+            'http://ecmb.bdimg.com/public01/one-design/6fedc62b9221846ce5114c7447622e47.jpeg',
           alt: 'A common kingfisher flying above river.',
           label: '翠鸟'
         },
         {
-          src: 'http://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
+          src:
+            'http://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
           alt: 'A white and gray dolphin in blue water.',
           label: '海豚'
         }
@@ -130,8 +133,8 @@ export default {
   computed: {
     ui () {
       return [
-        ...this.loose ? ['loose'] : [],
-        ...this.size ? [this.size] : []
+        ...(this.loose ? ['loose'] : []),
+        ...(this.size ? [this.size] : [])
       ].join(' ')
     }
   }

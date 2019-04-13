@@ -23,10 +23,10 @@ export default {
   data () {
     return {
       selected: {
-        0: [ [0, 23] ],           // 周日
-        1: [ [9, 11], [13, 17] ], // 周一
-        3: [ [13, 16] ],          // 周三
-        5: [ [9, 9], [16, 17] ]   // 周五
+        0: [[0, 23]], // 周日
+        1: [[9, 11], [13, 17]], // 周一
+        3: [[13, 16]], // 周三
+        5: [[9, 9], [16, 17]] // 周五
       },
       isDisabled (day, hour) {
         return day === 2 && hour > 11 && hour < 14
@@ -76,7 +76,7 @@ export default {
 <style lang="less" scoped>
 .veui-schedule {
   & /deep/ .night:not(.veui-schedule-selected) {
-   color: #f1f8ff;
+    color: #f1f8ff;
   }
 
   & /deep/ .weekend:not(.veui-schedule-selected) {

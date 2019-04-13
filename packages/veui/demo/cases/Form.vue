@@ -596,10 +596,26 @@
 
 <script>
 import {
-  Form, Fieldset, Field, Label, Span, Input,
-  Button, DatePicker, Uploader, Select, Textarea,
-  Checkbox, CheckboxGroup, RadioGroup, Searchbox,
-  RegionPicker, Radio, Icon, Slider, NumberInput
+  Form,
+  Fieldset,
+  Field,
+  Label,
+  Span,
+  Input,
+  Button,
+  DatePicker,
+  Uploader,
+  Select,
+  Textarea,
+  Checkbox,
+  CheckboxGroup,
+  RadioGroup,
+  Searchbox,
+  RegionPicker,
+  Radio,
+  Icon,
+  Slider,
+  NumberInput
 } from 'veui'
 import moment from 'moment'
 import bus from '../bus'
@@ -2715,16 +2731,20 @@ export default {
     let hobby = ['🏸']
     let hobbyItems = [
       {
-        value: '⚽️', label: '足球'
+        value: '⚽️',
+        label: '足球'
       },
       {
-        value: '🏀', label: '篮球'
+        value: '🏀',
+        label: '篮球'
       },
       {
-        value: '🏸', label: '羽毛球'
+        value: '🏸',
+        label: '羽毛球'
       },
       {
-        value: '🎾', label: '网球'
+        value: '🎾',
+        label: '网球'
       }
     ]
     let phoneType = 'mobile'
@@ -2747,21 +2767,26 @@ export default {
         married: false,
         marryItems: [
           {
-            value: true, label: '已婚'
+            value: true,
+            label: '已婚'
           },
           {
-            value: false, label: '未婚'
+            value: false,
+            label: '未婚'
           }
         ],
         sexItems: [
           {
-            value: '-', label: '不告诉你'
+            value: '-',
+            label: '不告诉你'
           },
           {
-            value: '男', label: '男'
+            value: '男',
+            label: '男'
           },
           {
-            value: '女', label: '女'
+            value: '女',
+            label: '女'
           }
         ],
         hobby,
@@ -2801,7 +2826,12 @@ export default {
             value: 4
           }
         ],
-        range: [moment().toDate(), moment().add(3, 'month').toDate()]
+        range: [
+          moment().toDate(),
+          moment()
+            .add(3, 'month')
+            .toDate()
+        ]
       },
       storeData4: {
         name: 'liyunteng1',
@@ -2932,7 +2962,12 @@ export default {
         scheduleInfo: [
           {
             project: 'vuejs',
-            range: [moment().toDate(), moment().add(3, 'month').toDate()]
+            range: [
+              moment().toDate(),
+              moment()
+                .add(3, 'month')
+                .toDate()
+            ]
           }
         ]
       },
