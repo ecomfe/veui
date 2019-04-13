@@ -18,8 +18,7 @@ module.exports = {
     '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$':
       'jest-transform-stub',
     '^.+\\.jsx?$': 'babel-jest',
-    '^.+\\.vue$': '<rootDir>/test/veui-jest',
-    '.*\\.svg$': '<rootDir>/build/svg-icon-jest'
+    '^.+\\.vue$': '<rootDir>/test/veui-jest'
   },
   transformIgnorePatterns: [
     '<rootDir>/node_modules/(?!vue-awesome|resize-detector|veui-theme-one)'
