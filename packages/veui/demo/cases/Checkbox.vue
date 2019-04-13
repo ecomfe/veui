@@ -118,13 +118,23 @@
     >
       外部控制 <code>checked</code>
     </veui-checkbox>
-    <veui-button ui="tiny" @click="checked13 = !checked13">Toggle</veui-button>
+    <veui-button
+      ui="tiny"
+      @click="checked13 = !checked13"
+    >
+      Toggle
+    </veui-button>
   </section>
   <section>
     <veui-checkbox :checked.sync="checked14">
       <code>:checked.sync</code> 绑定状态：{{ checked14 }}
     </veui-checkbox>
-    <veui-button ui="tiny" @click="checked14 = !checked14">Toggle</veui-button>
+    <veui-button
+      ui="tiny"
+      @click="checked14 = !checked14"
+    >
+      Toggle
+    </veui-button>
   </section>
   <section>
     <h4>复选框组</h4>
@@ -133,12 +143,29 @@
         :checked="group.length > 0"
         :indeterminate="group.length > 0 && group.length < 3"
         @change="group.length ? group = [] : group = ['A', 'B', 'C']"
-      >全部</veui-checkbox>
+      >
+        全部
+      </veui-checkbox>
     </p>
     <p>
-      <veui-checkbox v-model="group" value="A">A</veui-checkbox>
-      <veui-checkbox v-model="group" value="B">B</veui-checkbox>
-      <veui-checkbox v-model="group" value="C">C</veui-checkbox>
+      <veui-checkbox
+        v-model="group"
+        value="A"
+      >
+        A
+      </veui-checkbox>
+      <veui-checkbox
+        v-model="group"
+        value="B"
+      >
+        B
+      </veui-checkbox>
+      <veui-checkbox
+        v-model="group"
+        value="C"
+      >
+        C
+      </veui-checkbox>
     </p>
     <p>{{ group }}</p>
   </section>

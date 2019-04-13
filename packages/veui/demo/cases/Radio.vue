@@ -88,9 +88,24 @@
   <section>
     <h3>单选组</h3>
     <p>
-      <veui-radio v-model="group" value="A">A</veui-radio>
-      <veui-radio v-model="group" value="B">B</veui-radio>
-      <veui-radio v-model="group" value="C">C</veui-radio>
+      <veui-radio
+        v-model="group"
+        value="A"
+      >
+        A
+      </veui-radio>
+      <veui-radio
+        v-model="group"
+        value="B"
+      >
+        B
+      </veui-radio>
+      <veui-radio
+        v-model="group"
+        value="C"
+      >
+        C
+      </veui-radio>
     </p>
     <p>{{ group }}</p>
   </section>
