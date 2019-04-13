@@ -178,7 +178,7 @@ export default {
       imageSrc: null,
       tooltipTarget: null,
       tooltipOpen: false,
-      upload: (file, {onload, onprogress, onerror}) => {
+      upload: (file, { onload, onprogress, onerror }) => {
         // onload(file: Object, data: Object)
         // onprogress(file: Object, progress: Object({loaded, total}))
         // onerror(file: Object, error: Object({reason}))
@@ -218,11 +218,15 @@ export default {
     openTooltip (file) {
       this.currentImage = file
       this.tooltipOpen = true
-      this.tooltipTarget = `add-image${file.index !== undefined ? '-' + file.index : ''}`
+      this.tooltipTarget = `add-image${
+        file.index !== undefined ? '-' + file.index : ''
+      }`
     },
     addImage () {
       if (this.currentImage.index !== undefined) {
-        this.$set(this.filesExtra, this.currentImage.index, { src: this.imageSrc })
+        this.$set(this.filesExtra, this.currentImage.index, {
+          src: this.imageSrc
+        })
       } else {
         this.filesExtra.push({ src: this.imageSrc })
       }

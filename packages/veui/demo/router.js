@@ -12,13 +12,10 @@ export default new Router({
       component: {
         name: 'empty',
         render (h) {
-          return h(
-            'article',
-            [
-              h('h1', 'Welcome to VEUI!'),
-              h('p', '← Select a demo from the nav bar to get started.')
-            ]
-          )
+          return h('article', [
+            h('h1', 'Welcome to VEUI!'),
+            h('p', '← Select a demo from the nav bar to get started.')
+          ])
         }
       }
     },

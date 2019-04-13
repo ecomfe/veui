@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "cd packages/veui && npm run dev",
+    "dev": "cd packages/veui && npm run serve",
     "test": "lerna run test",
     "build-components": "cd packages/veui && npm run components && npm run build && cd ../..",
     "build-plugin": "cd packages/babel-plugin-veui && npm run build && cd ../..",
@@ -21,9 +21,5 @@
     "lerna": "^2.10.0",
     "prettier": "^1.16.4",
     "prettier-eslint": "^8.8.2"
-  },
-  "browserslist": [
-    "ie >= 9",
-    "last 2 versions"
-  ]
+  }
 }

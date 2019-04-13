@@ -149,7 +149,7 @@ export default {
       this.p = page
     }
   },
-  beforeRouteUpdate ({params}, from, next) {
+  beforeRouteUpdate ({ params }, from, next) {
     let page = parseInt(params.page, 10)
     this.page = isNaN(page) ? 1 : page
     next()

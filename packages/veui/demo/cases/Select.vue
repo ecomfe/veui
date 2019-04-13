@@ -475,13 +475,16 @@ export default {
   },
   computed: {
     groupedOpts () {
-      return type.clone(this.optGroupAttrs.options).map(group => {
-        delete group.label
-        return group
-      }).reduce((acc, cur) => {
-        acc.push(cur)
-        return acc
-      }, [])
+      return type
+        .clone(this.optGroupAttrs.options)
+        .map(group => {
+          delete group.label
+          return group
+        })
+        .reduce((acc, cur) => {
+          acc.push(cur)
+          return acc
+        }, [])
     }
   },
   mounted () {
@@ -515,7 +518,7 @@ export default {
   position: relative;
   padding-left: 24px;
   &::after {
-    content: '❤️';
+    content: "❤️";
     position: absolute;
     top: 50%;
     left: 0;

@@ -42,24 +42,30 @@ export default {
       picked2: 'Nakano Azusa',
       data1: [
         {
-          value: 'Hirasawa Yui', label: 'Hirasawa Yui'
+          value: 'Hirasawa Yui',
+          label: 'Hirasawa Yui'
         },
         {
-          value: 'Akiyama Mio', label: 'Akiyama Mio'
+          value: 'Akiyama Mio',
+          label: 'Akiyama Mio'
         },
         {
-          value: 'Nakano Azusa', label: 'Nakano Azusa'
+          value: 'Nakano Azusa',
+          label: 'Nakano Azusa'
         }
       ],
       data2: [
         {
-          value: 'Hirasawa Yui', label: 'Hirasawa Yui'
+          value: 'Hirasawa Yui',
+          label: 'Hirasawa Yui'
         },
         {
-          value: 'Akiyama Mio', label: 'Akiyama Mio'
+          value: 'Akiyama Mio',
+          label: 'Akiyama Mio'
         },
         {
-          value: 'Nakano Azusa', label: 'Nakano Azusa'
+          value: 'Nakano Azusa',
+          label: 'Nakano Azusa'
         }
       ]
     }

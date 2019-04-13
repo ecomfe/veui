@@ -361,7 +361,7 @@ export default {
       test: '123',
       adaptiveDialogTimer: null,
       loading: false,
-      beforeClose: (type) => {
+      beforeClose: type => {
         if (type === 'cancel') {
           return
         }
@@ -379,12 +379,9 @@ export default {
   watch: {
     contentAutoHeightDialogVisible (value) {
       if (value) {
-        this.adaptiveDialogTimer = setInterval(
-          () => {
-            this.dynamicContent += `${Date.now()}<br>`
-          },
-          1000
-        )
+        this.adaptiveDialogTimer = setInterval(() => {
+          this.dynamicContent += `${Date.now()}<br>`
+        }, 1000)
       } else {
         clearTimeout(this.adaptiveDialogTimer)
         this.dynamicContent = ''
@@ -422,22 +419,23 @@ export default {
       alertManager.warn('The name is invalid.', 'Warn')
     },
     popupConfirms () {
-      confirmManager.warn('Do you really want to delete it?', 'Confirm', {
-        ok: () => {
-          return new Promise(resolve => {
-            setTimeout(() => {
-              resolve()
-            }, 1000)
-          })
-        },
-        cancel: () => {
-          return new Promise(resolve => {
-            setTimeout(() => {
-              resolve()
-            }, 1000)
-          })
-        }
-      })
+      confirmManager
+        .warn('Do you really want to delete it?', 'Confirm', {
+          ok: () => {
+            return new Promise(resolve => {
+              setTimeout(() => {
+                resolve()
+              }, 1000)
+            })
+          },
+          cancel: () => {
+            return new Promise(resolve => {
+              setTimeout(() => {
+                resolve()
+              }, 1000)
+            })
+          }
+        })
         .then(ok => {
           this.$alert(`You chose [${ok ? 'ok' : 'cancel'}]`)
         })
@@ -447,17 +445,14 @@ export default {
         toastManager[type](`${type} message`)
       } else {
         let index = 0
-        let timer = setInterval(
-          () => {
-            const type = ['warn', 'error', 'info', 'success'][index]
-            toastManager[type](`${type}-${index + 1}`)
+        let timer = setInterval(() => {
+          const type = ['warn', 'error', 'info', 'success'][index]
+          toastManager[type](`${type}-${index + 1}`)
 
-            if (++index > 3) {
-              clearTimeout(timer)
-            }
-          },
-          1000
-        )
+          if (++index > 3) {
+            clearTimeout(timer)
+          }
+        }, 1000)
       }
     },
     popupPrompt () {

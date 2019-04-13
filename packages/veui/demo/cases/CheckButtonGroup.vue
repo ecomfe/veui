@@ -75,38 +75,48 @@ export default {
       disabled: false,
       data1: [
         {
-          value: 'Hirasawa Yui', label: 'Hirasawa Yui'
+          value: 'Hirasawa Yui',
+          label: 'Hirasawa Yui'
         },
         {
-          value: 'Akiyama Mio', label: 'Akiyama Mio'
+          value: 'Akiyama Mio',
+          label: 'Akiyama Mio'
         },
         {
-          value: 'Nakano Azusa', label: 'Nakano Azusa'
+          value: 'Nakano Azusa',
+          label: 'Nakano Azusa'
         }
       ],
       data2: [
         {
-          value: 'Hirasawa Yui', label: 'Hirasawa Yui'
+          value: 'Hirasawa Yui',
+          label: 'Hirasawa Yui'
         },
         {
-          value: 'Akiyama Mio', label: 'Akiyama Mio'
+          value: 'Akiyama Mio',
+          label: 'Akiyama Mio'
         },
         {
-          value: 'Nakano Azusa', label: 'Nakano Azusa'
+          value: 'Nakano Azusa',
+          label: 'Nakano Azusa'
         }
       ],
       data3: [
         {
-          value: 'check', icon: 'check'
+          value: 'check',
+          icon: 'check'
         },
         {
-          value: 'cross', icon: 'cross'
+          value: 'cross',
+          icon: 'cross'
         },
         {
-          value: 'refresh', icon: 'refresh'
+          value: 'refresh',
+          icon: 'refresh'
         },
         {
-          value: 'edit', icon: 'edit'
+          value: 'edit',
+          icon: 'edit'
         }
       ]
     }

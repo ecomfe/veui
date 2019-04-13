@@ -55,24 +55,30 @@ export default {
       disabled: false,
       data1: [
         {
-          value: 'pound', label: '£'
+          value: 'pound',
+          label: '£'
         },
         {
-          value: 'euro', label: '€'
+          value: 'euro',
+          label: '€'
         },
         {
-          value: 'yen', label: '¥'
+          value: 'yen',
+          label: '¥'
         }
       ],
       data2: [
         {
-          value: 'bidu', label: '百度'
+          value: 'bidu',
+          label: '百度'
         },
         {
-          value: 'baba', label: '阿里'
+          value: 'baba',
+          label: '阿里'
         },
         {
-          value: 'qq', label: '腾讯'
+          value: 'qq',
+          label: '腾讯'
         }
       ]
     }

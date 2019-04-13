@@ -63,7 +63,12 @@ export default {
         { to: '/steps', label: '步骤条组件' },
         { label: '监听跳转事件', native: true },
         { to: 'http://www.baidu.com', label: '阻止跳转事件', native: true },
-        { to: 'http://www.baidu.com', label: 'replace', replace: true, native: true },
+        {
+          to: 'http://www.baidu.com',
+          label: 'replace',
+          replace: true,
+          native: true
+        },
         { to: '/dialog', label: 'Dialog' },
         { to: 'http://jn.baidu.com', label: 'jn' }
       ]

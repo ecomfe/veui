@@ -323,10 +323,20 @@ export default {
           typeId: '788',
           children: [
             {
-              id: '31541', desc: '数据描述1-1', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+              id: '31541',
+              desc: '数据描述1-1',
+              price: 1024,
+              updateDate: '20131117',
+              group: '1577',
+              typeId: '788'
             },
             {
-              id: '31542', desc: '数据描述1-2', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+              id: '31542',
+              desc: '数据描述1-2',
+              price: 1024,
+              updateDate: '20131117',
+              group: '1577',
+              typeId: '788'
             }
           ]
         },
@@ -339,10 +349,20 @@ export default {
           typeId: '788',
           children: [
             {
-              id: '31551', desc: '数据描述2-1', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+              id: '31551',
+              desc: '数据描述2-1',
+              price: 1024,
+              updateDate: '20131117',
+              group: '1577',
+              typeId: '788'
             },
             {
-              id: '31552', desc: '数据描述2-2', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+              id: '31552',
+              desc: '数据描述2-2',
+              price: 1024,
+              updateDate: '20131117',
+              group: '1577',
+              typeId: '788'
             }
           ]
         },
@@ -355,10 +375,20 @@ export default {
           typeId: '788',
           children: [
             {
-              id: '31561', desc: '数据描述3-1', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+              id: '31561',
+              desc: '数据描述3-1',
+              price: 1024,
+              updateDate: '20131117',
+              group: '1577',
+              typeId: '788'
             },
             {
-              id: '31562', desc: '数据描述3-2', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+              id: '31562',
+              desc: '数据描述3-2',
+              price: 1024,
+              updateDate: '20131117',
+              group: '1577',
+              typeId: '788'
             }
           ]
         },
@@ -371,17 +401,35 @@ export default {
           typeId: '788',
           children: [
             {
-              id: '31571', desc: '数据描述4-1', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+              id: '31571',
+              desc: '数据描述4-1',
+              price: 1024,
+              updateDate: '20131117',
+              group: '1577',
+              typeId: '788'
             },
             {
-              id: '31572', desc: '数据描述4-2', price: 1024, updateDate: '20131117', group: '1577', typeId: '788'
+              id: '31572',
+              desc: '数据描述4-2',
+              price: 1024,
+              updateDate: '20131117',
+              group: '1577',
+              typeId: '788'
             }
           ]
         }
       ],
       nextId: 3158,
       nextIndex: 4,
-      columns: ['typeId', 'id', 'group', 'desc', 'price', 'updateDate', 'operation'],
+      columns: [
+        'typeId',
+        'id',
+        'group',
+        'desc',
+        'price',
+        'updateDate',
+        'operation'
+      ],
       order: false,
       orderBy: null,
       selected1: ['3155', '3156'],
@@ -424,7 +472,9 @@ export default {
         group: String(Math.floor(this.nextId / 2)),
         desc: `数据描述${this.nextIndex}`,
         price: Math.floor(Math.random() * 1280),
-        updateDate: moment(Date.now() + Math.floor(Math.random() * 1e10)).format('YYYYMMDD')
+        updateDate: moment(
+          Date.now() + Math.floor(Math.random() * 1e10)
+        ).format('YYYYMMDD')
       }
       this.nextId++
       this.nextIndex++
