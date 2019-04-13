@@ -1,5 +1,6 @@
 var path = require('path')
 var veuiLoaderOptions = require('./build/veui-loader.conf')
+var webpack = require('webpack')
 
 function resolve (dir) {
   return path.join(__dirname, dir)
@@ -59,5 +60,9 @@ module.exports = {
         .use('less-loader')
         .tap(options => Object.assign({}, options, lessOptions))
     })
+
+    config
+      .plugin('context-replacement')
+      .use(webpack.ContextReplacementPlugin, [/moment[\\/]locale$/, /^$/])
   }
 }
