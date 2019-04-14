@@ -6,12 +6,15 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
-const lessOptions = {
-  javascriptEnabled: true
-}
-
 module.exports = {
-  outputDir: 'components',
+  css: {
+    loaderOptions: {
+      less: {
+        javascriptEnabled: true
+      }
+    }
+  },
+  outputDir: '../../components',
   transpileDependencies: [
     /[/\\]node_modules[/\\]veui[/\\]/,
     /[/\\]node_modules[/\\]veui-theme-one[/\\]/,
@@ -51,15 +54,6 @@ module.exports = {
       .use('veui-loader')
       .loader('veui-loader')
       .tap(() => veuiLoaderOptions)
-
-    const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
-    types.forEach(type => {
-      config.module
-        .rule('less')
-        .oneOf(type)
-        .use('less-loader')
-        .tap(options => Object.assign({}, options, lessOptions))
-    })
 
     config
       .plugin('context-replacement')
