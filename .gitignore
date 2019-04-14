@@ -7,4 +7,4 @@ yarn-error.log
 .vscode
 **/dist
 .idea/
-packages/veui/components
+/components
