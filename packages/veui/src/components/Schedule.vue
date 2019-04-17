@@ -386,8 +386,10 @@ export default {
   watch: {
     selected: {
       handler (val) {
+        console.log(val)
         this.localSelected = val ? cloneDeep(val) : []
       },
+      deep: true,
       immediate: true
     }
   },
@@ -433,7 +435,7 @@ export default {
       return days.reduce((selected, day) => {
         let daySelected = selected[day]
         if (!daySelected) {
-          selected[day] = [range]
+          selected[day] = [[...range]]
         } else {
           selected[day] = merge(daySelected, range, { mode: this.mergeMode })
         }
