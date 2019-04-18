@@ -2,7 +2,7 @@
 
 [![](https://badgen.net/circleci/github/ecomfe/veui)](https://circleci.com/gh/ecomfe/veui)
 
-[Documentation 🇨🇳](https://veui.dev)
+Documentation: [中文 🇨🇳](https://veui.dev) | [English 🇺🇸](https://veui.dev/en-US)
 
 Enterprise UI components for Vue.js. Based on ONE DESIGN from Baidu, Inc.
 
