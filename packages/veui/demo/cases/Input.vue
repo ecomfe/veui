@@ -11,6 +11,7 @@
         <veui-input
           v-model="poem"
           ui="micro"
+          autofocus
         />
       </veui-field>
       <veui-field
@@ -107,7 +108,6 @@
         <veui-input
           v-model="password"
           type="password"
-          autofocus
           placeholder="请输入密码"
           @click="log('click')"
         />

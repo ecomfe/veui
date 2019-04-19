@@ -75,6 +75,7 @@ import {
 export default {
   name: 'veui-textarea',
   mixins: [ui, input, activatable],
+  inheritAttrs: false,
   props: {
     placeholder: String,
     value: {
@@ -83,7 +84,7 @@ export default {
     },
     lineNumber: Boolean,
     rows: [Number, String],
-    autofocus: Boolean,
+    selectOnFocus: Boolean,
     composition: Boolean,
     autoresize: Boolean
   },
@@ -105,7 +106,7 @@ export default {
     },
     attrs () {
       return {
-        ...pick(this, 'placeholder', 'autofocus'),
+        ...this.$attrs,
         rows: this.normalizedRows,
         disabled: this.realDisabled,
         readonly: this.realReadonly
@@ -136,6 +137,9 @@ export default {
       }
 
       return `${this.rowsHeight}px`
+    },
+    realSelectOnFocus () {
+      return this.type !== 'hidden' && this.selectOnFocus
     }
   },
   watch: {
@@ -188,13 +192,15 @@ export default {
           .reduce((acc, cur) => acc + cur, 0)
       )
     },
-    handleFocus (e) {
+    handleFocus ($event) {
       this.focused = true
-      this.$emit('focus', e)
+
+      if (this.realSelectOnFocus && $event.target) {
+        $event.target.select()
+      }
     },
-    handleBlur (e) {
+    handleBlur () {
       this.focused = false
-      this.$emit('blur', e)
     },
     getLineHeight (elem) {
       let computedStyle = getComputedStyle(elem)

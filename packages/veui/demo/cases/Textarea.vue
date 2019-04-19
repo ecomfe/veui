@@ -6,6 +6,7 @@
     <veui-textarea
       v-model="value"
       line-number
+      autofocus
       ui="small"
       rows="3"
     />
@@ -14,6 +15,7 @@
     <veui-textarea
       v-model="value"
       line-number
+      select-on-focus
       autoresize
       placeholder="请输入"
     />
