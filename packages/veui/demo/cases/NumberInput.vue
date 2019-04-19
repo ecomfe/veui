@@ -24,6 +24,8 @@
         <veui-number-input
           v-model="number1"
           ui="tiny"
+          autofocus
+          select-on-focus
           :decimal-place="1"
         />
       </veui-field>

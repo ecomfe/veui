@@ -70,7 +70,7 @@ import Icon from './Icon'
 import { sign, add, round } from '../utils/math'
 import warn from '../utils/warn'
 import { VALUE_EVENTS } from '../utils/dom'
-import { isInteger, isNaN, pick, get, find, omit } from 'lodash'
+import { isInteger, isNaN, get, find, omit } from 'lodash'
 import nudge from 'veui/directives/nudge'
 import longpress from 'veui/directives/longpress'
 
@@ -86,6 +86,7 @@ export default {
     'veui-button': Button
   },
   mixins: [ui, input, activatable, i18n],
+  inhertiAttrs: false,
   props: {
     ui: String,
     value: Number,
@@ -120,12 +121,7 @@ export default {
     },
     attrs () {
       return {
-        ...pick(this.$props, [
-          'autofocus',
-          'selectOnFocus',
-          'autocomplete',
-          'placeholder'
-        ]),
+        ...this.$attrs,
         name: this.realName,
         disabled: this.realDisabled,
         readonly: this.realReadonly

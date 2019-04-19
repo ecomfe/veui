@@ -67,7 +67,7 @@ import ui from '../mixins/ui'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
 import i18n from '../mixins/i18n'
-import { omit, includes, pick } from 'lodash'
+import { includes, pick } from 'lodash'
 import Icon from './Icon'
 import { MOUSE_EVENTS, KEYBOARD_EVENTS, FOCUS_EVENTS } from '../utils/dom'
 
@@ -79,6 +79,7 @@ export default {
     'veui-icon': Icon
   },
   mixins: [ui, input, activatable, i18n],
+  inheritAttrs: false,
   props: {
     ui: String,
     type: {
@@ -88,13 +89,11 @@ export default {
         return includes(TYPE_LIST, val)
       }
     },
-    autocomplete: String,
     placeholder: String,
     value: {
       type: [String, Number],
       default: ''
     },
-    autofocus: Boolean,
     selectOnFocus: Boolean,
     composition: Boolean,
     clearable: Boolean
@@ -110,18 +109,11 @@ export default {
   computed: {
     attrs () {
       return {
-        ...omit(
-          this.$props,
-          'placeholder',
-          'selectOnFocus',
-          'composition',
-          'value',
-          'clearable'
-        ),
+        ...this.$attrs,
+        type: this.type,
         name: this.realName,
         disabled: this.realDisabled,
-        readonly: this.realReadonly,
-        ...this.$attrs
+        readonly: this.realReadonly
       }
     },
     inputListeners () {
@@ -136,6 +128,9 @@ export default {
     empty () {
       // compositionValue 不会是数字 0
       return !this.compositionValue && (this.value == null || this.value === '')
+    },
+    realSelectOnFocus () {
+      return this.type !== 'hidden' && this.selectOnFocus
     }
   },
   watch: {
@@ -151,11 +146,6 @@ export default {
       if (val) {
         this.$emit('autofill')
       }
-    }
-  },
-  mounted () {
-    if (this.type !== 'hidden' && this.selectOnFocus) {
-      this.$on('focus', $event => $event.target.select())
     }
   },
   methods: {
@@ -183,6 +173,10 @@ export default {
     },
     handleFocus ($event) {
       this.focused = true
+
+      if (this.realSelectOnFocus && $event.target) {
+        $event.target.select()
+      }
     },
     handleBlur ($event) {
       this.focused = false

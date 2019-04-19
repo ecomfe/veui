@@ -78,7 +78,9 @@ export default {
       if (text != null) {
         return text
       }
-      return `<span style="color: #ccc">${text === '' ? 'empty' : String(text)}</span>`
+      return `<span style="color: #ccc">${
+        text === '' ? 'empty' : String(text)
+      }</span>`
     }
   }
 }
@@ -128,7 +130,7 @@ export default {
     margin: 0;
     line-height: 20px;
     font-size: 10px;
-    transition: height .2s;
+    transition: height 0.2s;
 
     .log {
       position: relative;
@@ -155,7 +157,6 @@ export default {
   }
 
   &.expanded {
-
     .output {
       overflow: auto;
       height: @console-height;
