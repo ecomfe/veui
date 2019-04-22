@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils'
+import Input from '@/components/Input'
 import NumberInput from '@/components/NumberInput'
 
 describe('components/NumberInput', () => {
@@ -15,5 +16,17 @@ describe('components/NumberInput', () => {
     setTimeout(() => {
       expect(changeHandler.mock.calls.length).toBe(0)
     })
+  })
+
+  it('should transparently pass-through attrs to the <input> element.', () => {
+    const wrapper = mount(NumberInput, {
+      attrs: {
+        autofocus: '',
+        selectOnFocus: ''
+      }
+    })
+
+    expect(wrapper.find(Input).props('selectOnFocus')).toBe(true)
+    expect(wrapper.find('input').element.autofocus).toBe(true)
   })
 })
