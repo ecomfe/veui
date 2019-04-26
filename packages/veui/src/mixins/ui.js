@@ -87,7 +87,7 @@ export default {
     },
     inheritedUiProps () {
       if (!this.uiConfig) {
-        return this.ui
+        return this.uiProps
       }
 
       return pickBy(this.uiProps, (_, key) => {

@@ -206,8 +206,12 @@ export default {
     },
 
     focus () {
-      this.overlayNode.toTop()
-      this.focusContext.toTop()
+      if (this.overlayNode) {
+        this.overlayNode.toTop()
+      }
+      if (this.focusContext) {
+        this.focusContext.toTop()
+      }
     },
 
     initFocus () {

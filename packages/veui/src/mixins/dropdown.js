@@ -53,6 +53,10 @@ export default {
     handleScroll () {
       let { box } = this.$refs
 
+      if (!box) {
+        return
+      }
+
       toggleClass(
         box,
         'veui-dropdown-overflow-scroll-start',
