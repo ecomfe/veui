@@ -28,6 +28,14 @@
     />
   </section>
   <section>
+    <h2>只读样式：</h2>
+    <veui-select
+      v-model="defaultValue1"
+      v-bind="attrs"
+      readonly
+    />
+  </section>
+  <section>
     <h2>禁用样式：</h2>
     <veui-select
       v-model="defaultValue1"

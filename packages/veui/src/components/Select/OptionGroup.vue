@@ -234,7 +234,7 @@ const OptionGroup = {
               class="veui-option-group-options"
               tabindex="-1"
               role={this.popupRole}
-              aria-expanded={String(this.expanded)}
+              aria-expanded={this.expanded}
               ui={this.realUi}
               {...{
                 directives: [

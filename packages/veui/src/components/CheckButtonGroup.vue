@@ -4,8 +4,8 @@
   :ui="realUi"
   role="listbox"
   aria-multiselectable="true"
-  :aria-readonly="String(realReadonly)"
-  :aria-disabled="String(realDisabled)"
+  :aria-readonly="realReadonly"
+  :aria-disabled="realDisabled"
 >
   <veui-button
     v-for="(item, index) in items"
@@ -15,7 +15,7 @@
     }"
     :disabled="item.disabled || realDisabled || realReadonly"
     role="option"
-    :aria-selected="String(localValue.indexOf(item.value) !== -1)"
+    :aria-selected="localValue.indexOf(item.value) !== -1"
     :aria-posinset="index + 1"
     :aria-setsize="items.length"
     @click="handleChange(item.value)"

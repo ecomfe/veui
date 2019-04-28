@@ -11,7 +11,7 @@
   }"
   :autofocus="selected"
   :role="role"
-  :aria-selected="String(selected)"
+  :aria-selected="selected"
   @click.stop="selectOption"
 >
   <slot>

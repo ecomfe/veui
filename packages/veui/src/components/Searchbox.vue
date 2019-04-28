@@ -65,7 +65,7 @@
       ref="box"
       class="veui-searchbox-suggestion-overlay"
       role="listbox"
-      :aria-expanded="String(realExpanded)"
+      :aria-expanded="realExpanded"
     >
       <slot name="suggestions-before"/>
       <slot

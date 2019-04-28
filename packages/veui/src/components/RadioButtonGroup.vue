@@ -3,8 +3,8 @@
   class="veui-radio-button-group veui-button-group"
   :ui="realUi"
   role="radiogroup"
-  :aria-readonly="String(realReadonly)"
-  :aria-disabled="String(realDisabled)"
+  :aria-readonly="realReadonly"
+  :aria-disabled="realDisabled"
 >
   <veui-button
     v-for="(item, index) in items"
@@ -14,7 +14,7 @@
     }"
     :disabled="item.disabled || realDisabled || realReadonly"
     role="radio"
-    :aria-selected="String(item.value === localValue)"
+    :aria-selected="item.value === localValue"
     @click="handleChange(item.value)"
   >
     <slot

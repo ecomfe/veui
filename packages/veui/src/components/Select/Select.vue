@@ -11,7 +11,7 @@ import dropdown from '../../mixins/dropdown'
 import keySelect from '../../mixins/key-select'
 import warn from '../../utils/warn'
 import { walk } from '../../utils/data'
-import { cloneDeep, mapValues } from 'lodash'
+import { uniqueId, cloneDeep, mapValues } from 'lodash'
 import '../../common/uiTypes'
 
 config.defaults(
@@ -39,6 +39,7 @@ export default {
   },
   data () {
     return {
+      labelId: uniqueId('veui-select-label-'),
       localValue: this.value,
       outsideRefs: ['button']
     }
@@ -153,15 +154,18 @@ export default {
         <Button
           ref="button"
           class="veui-select-button"
-          aria-haspopup="listbox"
+          role="listbox"
+          aria-haspopup="true"
           aria-owns={this.dropdownId}
-          aria-disabled={String(this.realDisabled)}
-          aria-readonly={String(this.realReadonly)}
+          aria-readonly={this.realReadonly}
+          aria-expanded={this.expanded}
+          aria-disabled={this.realDisabled || this.realReadonly}
+          aria-labelledby={this.labelId}
           disabled={this.realDisabled || this.realReadonly}
           onKeydown={this.handleButtonKeydown}
           onClick={this.handleButtonClick}
         >
-          <span class="veui-select-label">
+          <span class="veui-select-label" id={this.labelId}>
             {this.$scopedSlots.label
               ? this.$scopedSlots.label(
                 this.selectedOption || { selected: false }
@@ -200,8 +204,6 @@ export default {
                 ]
               }}
               tabindex="-1"
-              role="listbox"
-              aria-expanded={String(this.expanded)}
               ui={this.realUi}
               onKeydown={this.handleKeydown}
             >

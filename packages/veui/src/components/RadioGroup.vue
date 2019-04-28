@@ -3,8 +3,8 @@
   class="veui-radio-group"
   :ui="realUi"
   role="radiogroup"
-  :aria-readonly="String(realReadonly)"
-  :aria-disabled="String(realDisabled)"
+  :aria-readonly="realReadonly"
+  :aria-disabled="realDisabled"
 >
   <veui-radio
     v-for="(item, index) in items"

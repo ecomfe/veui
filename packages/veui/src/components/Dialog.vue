@@ -129,7 +129,7 @@ export default {
     attrs () {
       return {
         role: 'dialog',
-        'aria-modal': String(this.modal),
+        'aria-modal': this.modal,
         ...this.$attrs
       }
     }

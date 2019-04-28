@@ -3,7 +3,7 @@
   v-show="isActive"
   class="veui-tab"
   role="tabpanel"
-  :aria-hidden="String(!isActive)"
+  :aria-hidden="!isActive"
 >
   <slot v-if="isInited || isActive">
     <router-view v-if="to && $route && isMatched"/>
