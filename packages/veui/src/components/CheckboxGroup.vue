@@ -4,8 +4,8 @@
   :ui="realUi"
   role="listbox"
   aria-multiselectable="true"
-  :aria-readonly="String(realReadonly)"
-  :aria-disabled="String(realDisabled)"
+  :aria-readonly="realReadonly"
+  :aria-disabled="realDisabled"
 >
   <veui-checkbox
     v-for="(item, index) in items"
@@ -14,7 +14,7 @@
     :disabled="item.disabled || realDisabled || realReadonly"
     :checked="localValue.indexOf(item.value) !== -1"
     role="option"
-    :aria-selected="String(localValue.indexOf(item.value) !== -1)"
+    :aria-selected="localValue.indexOf(item.value) !== -1"
     :aria-posinset="index + 1"
     :aria-setsize="items.length"
     @change="checked => handleChange(item.value, checked)"

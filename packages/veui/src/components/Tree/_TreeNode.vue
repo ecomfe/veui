@@ -10,7 +10,7 @@
     v-for="(item, index) in datasource"
     :key="item.value"
     role="treeitem"
-    :aria-expanded="String(item.expanded)"
+    :aria-expanded="item.expanded"
   >
     <div
       ref="item"

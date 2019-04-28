@@ -18,10 +18,10 @@
     class="veui-region-picker-section"
     role="treeitem"
     aria-level="1"
-    :aria-expanded="String(localDatasource.length > 0)"
+    :aria-expanded="localDatasource.length > 0"
     :aria-setsize="localDatasource.length"
     :aria-posinset="si + 1"
-    :aria-checked="section.indeterminate ? 'mixed' : String(section.selected)"
+    :aria-checked="section.indeterminate ? 'mixed' : section.selected"
     :aria-selected="section.id != null && section.selected && (includeIndeterminate || !section.indeterminate)"
   >
     <div class="veui-region-picker-section-title">
@@ -56,10 +56,10 @@
         class="veui-region-picker-branch"
         role="treeitem"
         aria-level="2"
-        :aria-expanded="String(section.children.length > 0)"
+        :aria-expanded="section.children.length > 0"
         :aria-setsize="section.children.length"
         :aria-posinset="bi + 1"
-        :aria-checked="branch.indeterminate ? 'mixed' : String(branch.selected)"
+        :aria-checked="branch.indeterminate ? 'mixed' : branch.selected"
         :aria-selected="branch.id != null && branch.selected && (includeIndeterminate || !branch.indeterminate)"
       >
         <div class="veui-region-picker-branch-title">
@@ -95,10 +95,10 @@
             class="veui-region-picker-group"
             role="treeitem"
             aria-level="3"
-            :aria-expanded="String(branch.children.length > 0 && !!group.active)"
+            :aria-expanded="branch.children.length > 0 && !!group.active"
             :aria-setsize="branch.children.length"
             :aria-posinset="gi + 1"
-            :aria-checked="group.indeterminate ? 'mixed' : String(group.selected)"
+            :aria-checked="group.indeterminate ? 'mixed' : group.selected"
             :aria-selected="group.id != null && group.selected && (includeIndeterminate || !group.indeterminate)"
             :aria-owns="`${id}-shadow ${id}-units`"
           >
@@ -161,7 +161,7 @@
                         aria-expanded="true"
                         :aria-setsize="group.children.length"
                         :aria-posinset="ri * 3 + ui - 2"
-                        :aria-checked="String(unit.selected)"
+                        :aria-checked="unit.selected"
                         :aria-selected="unit.id != null && unit.selected"
                       >
                         <veui-checkbox
@@ -214,7 +214,7 @@
                   aria-level="3"
                   :aria-setsize="branch.children.length"
                   :aria-posinset="gi + 1"
-                  :aria-checked="group.indeterminate ? 'mixed' : String(group.selected)"
+                  :aria-checked="group.indeterminate ? 'mixed' : group.selected"
                   :aria-selected="group.id != null && group.selected && (includeIndeterminate || !group.indeterminate)"
                   :aria-owns="`${id}-units`"
                 >

@@ -290,7 +290,7 @@ export default {
       return this.items.map((tab, index) => {
         return {
           role: 'tab',
-          'aria-selected': String(index === this.localIndex),
+          'aria-selected': index === this.localIndex,
           'aria-setsize': this.items.length,
           'aria-posinset': index + 1
         }

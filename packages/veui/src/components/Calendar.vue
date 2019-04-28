@@ -16,7 +16,7 @@
   >
     <div
       class="veui-calendar-head"
-      :aria-hidden="String(pIndex > 0)"
+      :aria-hidden="pIndex > 0"
     >
       <button
         ref="prev"
@@ -26,7 +26,7 @@
           'veui-sr-only': pIndex !== 0 && p.view === 'days'
         }"
         :disabled="disabled || readonly"
-        :aria-hidden="String(pIndex > 0)"
+        :aria-hidden="pIndex > 0"
         :aria-label="getStepLabel(p.view, 'prev')"
         :aria-controls="`${id}:panel-title:${pIndex}`"
         @click="step(false, p.view)"
