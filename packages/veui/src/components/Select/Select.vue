@@ -150,17 +150,17 @@ export default {
           'veui-input-invalid': this.realInvalid
         }}
         ui={this.realUi}
+        role="listbox"
+        aria-owns={this.dropdownId}
+        aria-readonly={this.realReadonly}
+        aria-expanded={this.expanded}
+        aria-disabled={this.realDisabled || this.realReadonly}
+        aria-labelledby={this.labelId}
+        aria-haspopup="listbox"
       >
         <Button
           ref="button"
           class="veui-select-button"
-          role="listbox"
-          aria-haspopup="true"
-          aria-owns={this.dropdownId}
-          aria-readonly={this.realReadonly}
-          aria-expanded={this.expanded}
-          aria-disabled={this.realDisabled || this.realReadonly}
-          aria-labelledby={this.labelId}
           disabled={this.realDisabled || this.realReadonly}
           onKeydown={this.handleButtonKeydown}
           onClick={this.handleButtonClick}
@@ -205,6 +205,7 @@ export default {
               }}
               tabindex="-1"
               ui={this.realUi}
+              role="listbox"
               onKeydown={this.handleKeydown}
             >
               {this.$slots.before}

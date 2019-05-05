@@ -1,6 +1,7 @@
 <template>
 <div
   v-show="isActive"
+  :id="id"
   class="veui-tab"
   role="tabpanel"
   :aria-hidden="!isActive"

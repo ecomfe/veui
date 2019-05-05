@@ -185,6 +185,7 @@ const OptionGroup = {
             }}
             aria-haspopup={this.canPopOut ? this.popupRole : null}
             aria-owns={this.canPopOut ? this.popupId : null}
+            role={this.canPopOut ? null : 'group'}
             {...(this.canPopOut
               ? {
                 on: {
