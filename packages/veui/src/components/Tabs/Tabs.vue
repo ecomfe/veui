@@ -164,7 +164,9 @@
       </div>
     </slot>
   </div>
-  <slot class="veui-tabs-panel"/>
+  <div class="veui-tabs-panel">
+    <slot/>
+  </div>
 </div>
 </template>
 
@@ -287,12 +289,13 @@ export default {
       )
     },
     ariaAttrs () {
-      return this.items.map((tab, index) => {
+      return this.items.map(({ id }, index) => {
         return {
           role: 'tab',
           'aria-selected': index === this.localIndex,
           'aria-setsize': this.items.length,
-          'aria-posinset': index + 1
+          'aria-posinset': index + 1,
+          'aria-controls': id
         }
       })
     }

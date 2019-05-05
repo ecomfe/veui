@@ -1,5 +1,8 @@
 <template>
-<div class="veui-overlay">
+<div
+  class="veui-overlay"
+  aria-hidden="true"
+>
   <transition
     name="veui-overlay"
     @after-leave="$emit('afterclose')"
