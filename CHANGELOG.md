@@ -8,15 +8,16 @@
 ### 💡 主要变更
 
 * [^] 支持多个 `Checkbox` 在 `v-model` 绑定到同一个数组时自动组成复选框组。
+* [+] `Textarea` 新增 `select-on-focus` prop。
 
 ### 🐞 问题修复
 
 * [^] 修复了部分原生 `<button>` 未设置 `type="button"` 的问题。
 * [^] 修正了 `Checkbox`、`Radio` 与 `Switch` 组件中原生 `<input>` 状态没有正确同步的问题，以触发 CSS 中正确的伪类样式。
 * [^] 修正了带下拉浮层的组件的 ARIA 标注，使浮层拥有正确的从属关系。
+* [^] 修正了组合组件时可能发生未正确继承 `ui` prop 的问题。
 * [^] 修复了 `Schedule` 组件在拖动选取多日时段时，`selected` 中可能共享同一数组实例的问题。
 * [^] 优化了 `Input`、`NumberInput` 与 `Textarea` 的属性透传机制，现在未被识别为 prop 的属性都会正确输出到原生 `<input>` 或 `<textarea>` 元素上。
-* [+] `Textarea` 新增 `select-on-focus` prop。
 * [^] 优化了原生事件透传机制，原生元素触发的事件将可以被外层组件直接透传。涉及的组件为 `Button`、`Checkbox`、`Radio`、`Switch`、`Input`。`NumberInput`、`Textarea`。
 
   > **相关事件包括：**
