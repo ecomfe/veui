@@ -11,7 +11,6 @@
   @focusout.native="focused = false"
 >
   <template
-    v-if="$scopedSlots.item"
     slot="item"
     slot-scope="props"
   >
@@ -21,7 +20,6 @@
     />
   </template>
   <template
-    v-else-if="$scopedSlots['item-label']"
     slot="item-label"
     slot-scope="props"
   >

@@ -36,6 +36,7 @@ import Slider from './Slider'
 import NumberInput from './NumberInput'
 import Grid from './Grid'
 import Link from './Link'
+import Tree from './Tree'
 
 export default [
   {
@@ -246,5 +247,10 @@ export default [
     path: '/uploader',
     name: 'Uploader',
     component: Uploader
+  },
+  {
+    path: '/tree',
+    name: 'Tree',
+    component: Tree
   }
 ]
