@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import Tree from '@/components/Tree'
 import Vue from 'vue';
 
@@ -26,86 +26,65 @@ const datasource = [
 ];
 
 describe('components/Tree', () => {
-  it('should render item slot', done => {
-    new Vue({
-      el: document.createElement('div'),
-      components: {
-        'veui-tree': Tree
-      },
-      data() {
-        return {datasource, expanded: ['Infused']}
-      },
-      mounted() {
-        expect(this.$el.querySelector('.test-item-slot')).not.toBe(null)
-        done()
-      },
-      template: `
-        <veui-tree :datasource="datasource" :expanded.sync="expanded">
-          <div
-            slot="item"
-            slot-scope="props"
-            class="test-item-slot">
-            {{ props.item.label }}
-          </div>
-        </veui-tree>
-      `
-    })
+
+  it('should render item slot', () => {
+    expect(
+      mount(
+        Tree,
+        {
+          localVue: createLocalVue(),
+          propsData: {
+            datasource,
+            expanded: ['Infused']
+          },
+          scopedSlots: {
+            item: '<div class="test-item-slot" slot-scope="props">{{props.item.label}}</div>'
+          }
+        }
+      ).find('.test-item-slot').exists())
+    .toBe(true)
   })
 
-  it('should render item-label slot', done => {
-    new Vue({
-      el: document.createElement('div'),
-      components: {
-        'veui-tree': Tree
-      },
-      data() {
-        return {datasource, expanded: ['Infused']}
-      },
-      mounted() {
-        expect(this.$el.querySelector('.test-item-label-slot')).not.toBe(null)
-        done()
-      },
-      template: `
-        <veui-tree :datasource="datasource" :expanded.sync="expanded">
-          <div
-            slot="item-label"
-            slot-scope="props"
-            class="test-item-label-slot">
-            {{ props.item.label }}
-          </div>
-        </veui-tree>
-      `
-    })
+  it('should render item-label slot', () => {
+    expect(
+      mount(
+        Tree,
+        {
+          localVue: createLocalVue(),
+          propsData: {
+            datasource,
+            expanded: ['Infused']
+          },
+          scopedSlots: {
+            'item-label': '<div class="test-item-label-slot" slot-scope="props">{{props.item.label}}</div>'
+          }
+        }
+      ).find('.test-item-label-slot').exists())
+    .toBe(true)
   })
 
   it('should sync expanded status when click the item', done => {
-    new Vue({
-      el: document.createElement('div'),
+    const localVue = createLocalVue()
+    const WrapperTree = {
       components: {
-        'veui-tree': Tree
+        'veui-tree': Tree,
       },
       data() {
-        return {datasource, expanded: ['Infused']}
+        return {
+          expanded: ['Infused'],
+          datasource
+        }
       },
-      mounted() {
-        let $items = this.$el.querySelectorAll('.veui-tree-item')
-        expect($items[0].classList.contains('veui-tree-item-expanded')).toBe(true)
-        $items[2].querySelector('.veui-tree-item-expand-switcher')
-          .dispatchEvent(new Event('click'))
-        setTimeout(() => {
-          expect(this.expanded.indexOf('Boiled') > -1).toBe(true)
-          done()
-        })
-      },
-      template: `
-        <veui-tree :datasource="datasource" :expanded.sync="expanded">
-          <div
-            slot="item-label"
-            slot-scope="props">
-            {{ props.item.label }}
-          </div>
-        </veui-tree>
-      `
+      template: '<veui-tree :datasource="datasource" :expanded.sync="expanded" />'
+    }
+    const wrapper = mount(WrapperTree, {localVue})
+    expect(wrapper.findAll('.veui-tree-item').at(0).classes('veui-tree-item-expanded')).toBe(true)
+    wrapper.findAll('.veui-tree-item').at(2).find('.veui-tree-item-expand-switcher').trigger('click')
+    localVue.nextTick(() => {
+      expect(wrapper.vm.expanded.indexOf('Boiled') > -1).toBe(true)
+      expect(wrapper.findAll('.veui-tree-item').at(2).classes('veui-tree-item-expanded')).toBe(true)
+      done()
     })
   })
+
 })
