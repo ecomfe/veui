@@ -1,5 +1,6 @@
 export { default as Alert } from './components/Alert'
 export { default as AlertBox } from './components/AlertBox'
+export { default as Autocomplete } from './components/Autocomplete/Autocomplete'
 export { default as Breadcrumb } from './components/Breadcrumb'
 export { default as BreadcrumbItem } from './components/BreadcrumbItem'
 export { default as Button } from './components/Button'

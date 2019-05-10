@@ -8,6 +8,10 @@
     "path": "AlertBox.vue"
   },
   {
+    "name": "Autocomplete",
+    "path": "Autocomplete/Autocomplete.vue"
+  },
+  {
     "name": "Breadcrumb",
     "path": "Breadcrumb.vue"
   },
