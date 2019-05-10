@@ -134,6 +134,7 @@ const OptionGroup = {
             label={option.label}
             options={option.options}
             position={option.position}
+            v-show={!option.hidden}
             key={i}
             scopedSlots={{
               label: this.$scopedSlots.label

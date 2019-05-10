@@ -37,12 +37,18 @@ import NumberInput from './NumberInput'
 import Grid from './Grid'
 import Link from './Link'
 import Tree from './Tree'
+import Autocomplete from './Autocomplete'
 
 export default [
   {
     path: '/alert',
     name: 'Alert',
     component: Alert
+  },
+  {
+    path: '/autocomplete',
+    name: 'Autocomplete',
+    component: Autocomplete
   },
   {
     path: '/breadcrumb',
