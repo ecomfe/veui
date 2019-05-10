@@ -1,0 +1,45 @@
+@import "../lib.less";
+@import (reference) "../dropdown.less";
+
+.veui-autocomplete {
+  &-suggestions {
+    &:extend(._veui-dropdown-overlay all);
+    position: relative;
+    min-width: 110px;
+    max-height: 280px;
+    overflow-y: auto;
+    background-color: #fff;
+    outline: none;
+
+    .veui-option-group {
+      padding: 0 10px;
+      &-label {
+        padding: 0;
+      }
+      .veui-option {
+        &-label {
+          position: relative; // 显示在 hover 层的上面
+        }
+        &::before {
+          background: #fff;
+          content: "";
+          position: absolute;
+          left: 0;
+          height: @veui-height-normal;
+          right: 0;
+        }
+        &:hover::before {
+          background: @veui-gray-color-8;
+        }
+        .veui-autocomplete-suggestion-matched {
+          color: @veui-alert-color;
+          background: transparent;
+        }
+      }
+    }
+    &-group.veui-option-group {
+      position: relative;
+      padding: 0;
+    }
+  }
+}

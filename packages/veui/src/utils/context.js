@@ -100,3 +100,26 @@ export function getIndexOfType (current, type, vnodes = 'default') {
     vnode => vnode === currentVNode
   )
 }
+
+/**
+ * 查找该组件的子孙组件中第一个有某个方法的组件实例，深度优先
+ * @param {Vue} context 查找的组件实例，即从 context.$children 开始查找
+ * @param {function(Vue): boolean} predicate 判断这个组件是否匹配
+ * @returns {?Vue} 找到的组件
+ */
+export function findComponent (context, predicate) {
+  let comp = null
+  function walkChildren (children) {
+    return children.some(i => {
+      let match = predicate(i)
+      if (match) {
+        comp = i
+      } else if (i.$children && i.$children.length) {
+        return walkChildren(i.$children)
+      }
+      return !!match
+    })
+  }
+  walkChildren(context.$children || [])
+  return comp
+}

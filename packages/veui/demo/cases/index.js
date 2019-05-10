@@ -38,6 +38,7 @@ import NumberInput from './NumberInput'
 import Grid from './Grid'
 import Link from './Link'
 import Tree from './Tree'
+import Autocomplete from './Autocomplete'
 
 export default [
   {
@@ -49,6 +50,11 @@ export default [
     path: '/alert-box',
     name: 'AlertBox',
     component: AlertBox
+  },
+  {
+    path: '/autocomplete',
+    name: 'Autocomplete',
+    component: Autocomplete
   },
   {
     path: '/breadcrumb',
