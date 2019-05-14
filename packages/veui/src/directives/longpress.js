@@ -1,10 +1,21 @@
-import { get, noop, isFunction } from 'lodash'
+import { normalize } from 'vue-directive-normalizer'
 import config from '../managers/config'
 
 config.defaults({
   'longpress.timeout': 500,
   'longpress.repeatInterval': 100
 })
+
+const OPTIONS_SCHEMA = {
+  value: 'handler',
+  modifiers: {
+    repeat: false
+  },
+  defaults: () => ({
+    timeout: config.get('longpress.timeout'),
+    repeatInterval: config.get('longpress.repeatInterval')
+  })
+}
 
 function clear (el) {
   let longpressData = el.__longpressData__
@@ -17,43 +28,11 @@ function clear (el) {
   el.__longpressData__ = null
 }
 
-function parseParams ({ value, modifiers }) {
-  let { repeat } = modifiers
-  if (!repeat) {
-    repeat = get(value, 'repeat', true)
-  }
-
-  function parseFn (name) {
-    if (isFunction(value)) {
-      return value
-    }
-    let fn = get(value, name, noop)
-    return isFunction(fn) ? fn : noop
-  }
-
-  // 解析回调函数
-  let handler = parseFn('handler')
-
-  let timeout = get(value, 'timeout', config.get('longpress.timeout'))
-  let repeatInterval = get(
-    value,
-    'repeatInterval',
-    config.get('longpress.repeatInterval')
-  )
-
-  return {
-    handler,
-    timeout,
-    repeat,
-    repeatInterval
-  }
-}
-
-function refresh (el, { modifiers, value, arg }) {
-  const params = parseParams({ arg, value, modifiers })
+function refresh (el, binding) {
+  const options = normalize(binding, OPTIONS_SCHEMA)
 
   if (el.__longpressData__) {
-    el.__longpressData__.setOptions(params)
+    el.__longpressData__.setOptions(options)
     return
   }
 
@@ -95,7 +74,7 @@ function refresh (el, { modifiers, value, arg }) {
   el.addEventListener('mousedown', longpressData.mousedownHandler)
   window.addEventListener('mouseup', longpressData.mouseupHandler)
   el.__longpressData__ = longpressData
-  el.__longpressData__.setOptions(params)
+  el.__longpressData__.setOptions(options)
 }
 
 export default {

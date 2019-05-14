@@ -1,3 +1,10 @@
+## 1.0.0-alpha.26
+
+### 🐞 问题修复
+
+* [^] 修正 `Tree` 组件 `item-label` slot 没有正常渲染的问题。
+* [^] 修正 `longpress` 指令 `repeat` 参数的默认值为 `false`。
+
 ## 1.0.0-alpha.25
 
 ### ⚠️ 非兼容性变更

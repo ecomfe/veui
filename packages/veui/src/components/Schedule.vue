@@ -386,7 +386,6 @@ export default {
   watch: {
     selected: {
       handler (val) {
-        console.log(val)
         this.localSelected = val ? cloneDeep(val) : []
       },
       deep: true,

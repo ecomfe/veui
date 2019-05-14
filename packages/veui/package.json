@@ -61,6 +61,7 @@
     "veui-theme-one": "^1.0.0-alpha.25",
     "veui-theme-one-icons": "^1.0.0-alpha.25",
     "vue": "^2.6.7",
+    "vue-directive-normalizer": "^0.1.0",
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.6.7"
   },
