@@ -6,3 +6,7 @@ window.getComputedStyle = () => {
     animationDuration: ''
   }
 }
+
+window.getSelection = () => ({
+  removeAllRanges: () => {}
+})

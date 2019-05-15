@@ -1,8 +1,7 @@
+import { normalize } from 'vue-directive-normalizer'
 import {
-  noop,
   isObject,
-  isFunction,
-  find,
+  noop,
   get,
   keys,
   isString,
@@ -20,6 +19,21 @@ config.defaults({
 })
 
 const HANDLERS = {}
+
+const OPTIONS_SCHEMA = {
+  arg: 'targets[]',
+  modifiers: () => ({
+    type: keys(HANDLERS),
+    axis: [null, 'x', 'y']
+  }),
+  defaults: {
+    draggable: true,
+    dragstart: noop,
+    drag: noop,
+    dragend: noop,
+    ready: noop
+  }
+}
 
 export function registerHandler (name, Handler) {
   if (!(Handler.prototype instanceof BaseHandler)) {
@@ -41,106 +55,48 @@ function clear (el) {
   el.dragData = null
 }
 
-function parseParams (el, { arg, value, modifiers }, vnode) {
-  // 解析 target
-  let targets = []
-  if (arg) {
-    targets = arg.split(',')
-  } else {
-    targets = get(value, 'targets', [])
-  }
+function getOptions (binding, vnode) {
+  let options = normalize(binding, OPTIONS_SCHEMA)
 
-  // 解析 type
-  let type = find(keys(HANDLERS), t => modifiers[t])
-  // 如果 modifiers 里面没有 type，就到 value 里面去找
-  if (!type) {
-    type = get(value, 'type')
-  }
+  let { containment } = options
 
-  // 解析 draggable
-  let draggable = get(value, 'draggable', true)
-
-  // 解析 containment
-  let containment = get(value, 'containment')
   // 如果 containment 不是特殊配置，也不是 object ，或者是 object ，
   // 但是没有完整的 top 、 left 、 width 、 height 属性，
   // 就要看看用 containment 能不能选出 DOM Element 了。
-  function isSpecialSyntax (value) {
-    return isString(value) && value.indexOf(config.get('drag.prefix')) === 0
-  }
-  function isRect (value) {
-    return (
-      isObject(containment) &&
-      containment.hasOwnProperty('top') &&
-      containment.hasOwnProperty('left') &&
-      containment.hasOwnProperty('width') &&
-      containment.hasOwnProperty('height')
-    )
-  }
   if (!isSpecialSyntax(containment) && !isRect(containment)) {
-    containment = getNodes(containment, vnode.context)
-    containment = get(containment, '[0]', null)
+    options.containment = get(getNodes(containment, vnode.context), '[0]', null)
   }
 
-  // 解析 axis
-  let axis = find(['x', 'y'], item => modifiers[item])
-  if (!axis) {
-    axis = get(value, 'axis')
-  }
-
-  function parseFn (name) {
-    let fn = get(value, name, noop)
-    return isFunction(fn) ? fn : noop
-  }
-
-  // 解析 drag 系列回调函数
-  let dragstart = parseFn('dragstart')
-  let drag = parseFn('drag')
-  let dragend = parseFn('dragend')
-
-  // ready 回调
-  let ready = parseFn('ready')
-
-  return {
-    targets,
-    type,
-    draggable,
-    containment,
-    axis,
-    dragstart,
-    drag,
-    dragend,
-    ready
-  }
+  return options
 }
 
-function refresh (el, { modifiers, value, arg }, vnode) {
-  const params = parseParams(el, { arg, value, modifiers }, vnode)
+function refresh (el, binding, vnode) {
+  const options = getOptions(binding, vnode)
 
-  const oldParams = el.dragOldParams
+  const oldOptions = el.dragOldParams
   // 如果参数没发生变化，就不要刷新了
   if (
-    difference(get(params, 'targets', []), get(oldParams, 'targets', []))
+    difference(get(options, 'targets', []), get(oldOptions, 'targets', []))
       .length === 0 &&
-    isEqual(omit(params, 'targets'), omit(oldParams, 'targets'))
+    isEqual(omit(options, 'targets'), omit(oldOptions, 'targets'))
   ) {
     return
   }
-  el.dragOldParams = params
+  el.dragOldParams = options
 
   if (el.dragData) {
-    el.dragData.handler.setOptions(params)
+    el.dragData.handler.setOptions(options)
   } else {
     let contextComponent = vnode.context
     let handler = null
-    if (HANDLERS[params.type]) {
-      let Handler = HANDLERS[params.type]
-      handler = new Handler(params, contextComponent)
+    if (HANDLERS[options.type]) {
+      let Handler = HANDLERS[options.type]
+      handler = new Handler(options, contextComponent)
     } else {
-      handler = new BaseHandler(params, contextComponent)
+      handler = new BaseHandler(options, contextComponent)
     }
 
-    params.ready({ reset: () => handler.reset() })
+    options.ready({ reset: () => handler.reset() })
 
     let dragData = {
       dragging: false,
@@ -149,7 +105,7 @@ function refresh (el, { modifiers, value, arg }, vnode) {
       handler,
 
       mousedownHandler (event) {
-        if (!params.draggable || dragData.dragging) {
+        if (!options.draggable || dragData.dragging) {
           return
         }
 
@@ -159,7 +115,7 @@ function refresh (el, { modifiers, value, arg }, vnode) {
         dragData.initY = clientY
         contextComponent.$emit('dragstart', { event })
         handler.start({ event })
-        params.dragstart({ event })
+        options.dragstart({ event })
 
         function selectStartHandler (e) {
           e.preventDefault()
@@ -178,7 +134,7 @@ function refresh (el, { modifiers, value, arg }, vnode) {
           }
           contextComponent.$emit('drag', dragParams)
           handler.drag(dragParams)
-          params.drag(dragParams)
+          options.drag(dragParams)
         }
 
         function mouseupHandler (event) {
@@ -193,7 +149,7 @@ function refresh (el, { modifiers, value, arg }, vnode) {
           }
           contextComponent.$emit('dragend', dragParams)
           handler.end(dragParams)
-          params.dragend(dragParams)
+          options.dragend(dragParams)
 
           window.removeEventListener('mousemove', mouseMoveHandler)
           window.removeEventListener('mouseup', mouseupHandler)
@@ -201,7 +157,7 @@ function refresh (el, { modifiers, value, arg }, vnode) {
         }
 
         // TODO: 非IE下面不用移除选区
-        document.getSelection().removeAllRanges()
+        window.getSelection().removeAllRanges()
         window.addEventListener('selectstart', selectStartHandler)
 
         window.addEventListener('mousemove', mouseMoveHandler)
@@ -212,6 +168,20 @@ function refresh (el, { modifiers, value, arg }, vnode) {
     el.addEventListener('mousedown', dragData.mousedownHandler)
     el.dragData = dragData
   }
+}
+
+function isSpecialSyntax (value) {
+  return isString(value) && value.indexOf(config.get('drag.prefix')) === 0
+}
+
+function isRect (containment) {
+  return (
+    isObject(containment) &&
+    containment.hasOwnProperty('top') &&
+    containment.hasOwnProperty('left') &&
+    containment.hasOwnProperty('width') &&
+    containment.hasOwnProperty('height')
+  )
 }
 
 /**
