@@ -1,10 +1,19 @@
-import { find, get, noop, isFunction } from 'lodash'
+import { normalize } from 'vue-directive-normalizer'
 import config from '../managers/config'
-import { getNumberArg } from '../utils/helper'
 
 config.defaults({
   'nudge.step': 1
 })
+
+const OPTIONS_SCHEMA = {
+  value: 'update',
+  modifiers: {
+    axis: ['y', 'x']
+  },
+  defaults: () => ({
+    step: config.get('nudge.step')
+  })
+}
 
 function clear (el) {
   let nudgeData = el.__nudgeData__
@@ -16,40 +25,11 @@ function clear (el) {
   el.__nudgeData__ = null
 }
 
-function parseParams ({ value, modifiers }) {
-  // 解析 axis
-  let axis = find(['x', 'y'], item => modifiers[item])
-  if (!axis) {
-    axis = get(value, 'axis', 'y')
-  }
-
-  function parseFn (name) {
-    if (isFunction(value)) {
-      return value
-    }
-
-    let fn = get(value, name, noop)
-    return isFunction(fn) ? fn : noop
-  }
-
-  // 解析回调函数
-  let update = parseFn('update')
-
-  let step =
-    get(value, 'step') || getNumberArg(modifiers, config.get('nudge.step'))
-
-  return {
-    axis,
-    step,
-    update
-  }
-}
-
-function refresh (el, { modifiers, value, arg }) {
-  const params = parseParams({ arg, value, modifiers })
+function refresh (el, binding) {
+  const options = normalize(binding, OPTIONS_SCHEMA)
 
   if (el.__nudgeData__) {
-    el.__nudgeData__.setOptions(params)
+    el.__nudgeData__.setOptions(options)
     return
   }
 
@@ -98,7 +78,7 @@ function refresh (el, { modifiers, value, arg }) {
 
   el.addEventListener('keydown', nudgeData.keydownHandler)
   el.__nudgeData__ = nudgeData
-  el.__nudgeData__.setOptions(params)
+  el.__nudgeData__.setOptions(options)
 }
 
 export default {

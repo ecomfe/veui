@@ -6,7 +6,7 @@ module.exports = {
     '^veui\\/(.*)': '<rootDir>/src/$1',
     '^veui-theme-one-icons\\/(.*)':
       '<rootDir>/../veui-theme-one-icons/icons/$1',
-    '^vue$': '<rootDir>/node_modules/vue/dist/vue.common.js'
+    '^vue$': '<rootDir>/node_modules/vue/dist/vue.common.prod.js'
   },
   setupFiles: ['./test/unit/env.js'],
   snapshotSerializers: ['jest-serializer-vue'],
