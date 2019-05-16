@@ -7,4 +7,5 @@ yarn-error.log
 .vscode
 **/dist
 .idea/
+**/test/coverage
 /components

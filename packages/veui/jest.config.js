@@ -1,4 +1,7 @@
 module.exports = {
+  collectCoverage: true,
+  collectCoverageFrom: ['src/**/*.{js,vue}'],
+  coverageDirectory: './test/coverage',
   moduleFileExtensions: ['js', 'jsx', 'json', 'vue'],
   moduleNameMapper: {
     '^@\\/(.*)': '<rootDir>/src/$1',
