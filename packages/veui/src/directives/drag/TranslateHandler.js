@@ -17,6 +17,17 @@ function getComputedTransform (elm) {
   return getComputedStyle(elm)[TRANSFORM_ACCESSOR]
 }
 
+function combineTransform (oldTransform, [x, y]) {
+  let transforms = []
+  if (oldTransform && oldTransform !== 'none') {
+    transforms.push(oldTransform)
+  }
+  if (x !== 0 || y !== 0) {
+    transforms.push(`translate(${x}px,${y}px)`)
+  }
+  return transforms.join(' ')
+}
+
 export default class TranslateHandler extends BaseHandler {
   elms = []
 
@@ -76,16 +87,15 @@ export default class TranslateHandler extends BaseHandler {
   }
 
   drag ({ distanceX, distanceY }) {
-    super.drag()
-
     this.move(
       distanceX,
       distanceY,
       (elm, index, realDistanceX, realDistanceY) => {
         let initialTransform = this.initialTransforms[index] || ''
-        elm.style[
-          TRANSFORM_ACCESSOR
-        ] = `${initialTransform} translate(${realDistanceX}px,${realDistanceY}px)`
+        elm.style[TRANSFORM_ACCESSOR] = combineTransform(initialTransform, [
+          realDistanceX,
+          realDistanceY
+        ])
       }
     )
 
@@ -102,9 +112,10 @@ export default class TranslateHandler extends BaseHandler {
         let initialStyle = this.initialStyles[index] || ''
         let initialTransform = this.initialTransforms[index] || ''
         elm.setAttribute('style', initialStyle)
-        elm.style[
-          TRANSFORM_ACCESSOR
-        ] = `${initialTransform} translate(${realDistanceX}px,${realDistanceY}px)`
+        elm.style[TRANSFORM_ACCESSOR] = combineTransform(initialTransform, [
+          realDistanceX,
+          realDistanceY
+        ])
 
         if (this.isDragged) {
           this.totalDistanceX += realDistanceX
@@ -202,16 +213,15 @@ export default class TranslateHandler extends BaseHandler {
   reset () {
     // 恢复最初的样式
     this.elms.forEach(elm => {
-      let initialTransform = getComputedTransform(elm)
-      let transformStyle =
-        initialTransform === 'none'
-          ? ''
-          : initialTransform +
-            ` translate(${-this.totalDistanceX}px,${-this.totalDistanceY}px)`
-      elm.style[TRANSFORM_ACCESSOR] = transformStyle
+      elm.style[TRANSFORM_ACCESSOR] = combineTransform(
+        getComputedTransform(elm),
+        [-this.totalDistanceX, -this.totalDistanceY]
+      )
     })
 
     this.totalDistanceX = 0
     this.totalDistanceY = 0
   }
+
+  destroy () {}
 }

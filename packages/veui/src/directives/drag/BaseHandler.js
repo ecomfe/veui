@@ -14,13 +14,17 @@ export default class BaseHandler {
     this.isDragging = true
   }
 
-  drag () {}
+  drag () {
+    throw new Error('`drag` method must be implemented.')
+  }
 
   end () {
     this.isDragging = false
   }
 
-  destroy () {}
+  destroy () {
+    throw new Error('`destroy` method must be implemented.')
+  }
 
   setOptions (options) {
     if (this.isDragging) {
@@ -29,5 +33,7 @@ export default class BaseHandler {
     this.options = options
   }
 
-  reset () {}
+  reset () {
+    throw new Error('`reset` method must be implemented.')
+  }
 }
