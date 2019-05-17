@@ -3,14 +3,14 @@ import BaseHandler from './BaseHandler'
 import { getNodes } from '../../utils/context'
 import config from '../../managers/config'
 
-let computedStyle =
+let style =
   process.env.VUE_ENV === 'server'
     ? function () {}
-    : getComputedStyle(document.body)
+    : document.documentElement.style
 
 const TRANSFORM_ACCESSOR = find(
   ['transform', 'msTransform', 'MozTransform', 'webkitTransform'],
-  accessor => accessor in computedStyle
+  accessor => accessor in style
 )
 
 function getComputedTransform (elm) {

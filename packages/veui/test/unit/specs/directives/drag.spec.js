@@ -6,7 +6,7 @@ describe('directives/drag', () => {
     let results = []
     const wrapper = mount({
       directives: { drag },
-      template: `<div v-drag="{
+      template: `<div ref="self" v-drag:self="{
           dragstart: handleStart,
           drag: handleMove,
           dragend: handleEnd
@@ -19,6 +19,9 @@ describe('directives/drag', () => {
           })
         },
         handleMove ({ event, distanceX, distanceY }) {
+          expect(this.$el.style.transform.trim()).toBe(
+            `translate(${distanceX}px,${distanceY}px)`
+          )
           results.push({
             x: event.clientX,
             y: event.clientY,
@@ -40,6 +43,8 @@ describe('directives/drag', () => {
             { x: 205, y: 205, dx: 200, dy: 200 },
             { x: 205, y: 205, dx: 200, dy: 200 }
           ])
+
+          expect(this.$el.style.transform.trim()).toBe('translate(200px,200px)')
 
           done()
         }

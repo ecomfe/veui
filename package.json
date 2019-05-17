@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
+    "codecov": "^3.5.0",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^4.1.0",
     "eslint-config-standard": "^6.2.1",
