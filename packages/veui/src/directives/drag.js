@@ -45,14 +45,10 @@ export function registerHandler (name, Handler) {
 registerHandler('translate', TranslateHandler)
 
 function clear (el) {
-  let dragData = el.dragData
-  if (!dragData) {
-    return
-  }
-
+  let dragData = el.__dragData__
   dragData.handler.destroy()
   el.removeEventListener('mousedown', dragData.mousedownHandler)
-  el.dragData = null
+  el.__dragData__ = null
 }
 
 function getOptions (binding, vnode) {
@@ -73,7 +69,7 @@ function getOptions (binding, vnode) {
 function refresh (el, binding, vnode) {
   const options = getOptions(binding, vnode)
 
-  const oldOptions = el.dragOldParams
+  const oldOptions = el.__dragOldOptions__
   // 如果参数没发生变化，就不要刷新了
   if (
     difference(get(options, 'targets', []), get(oldOptions, 'targets', []))
@@ -82,10 +78,10 @@ function refresh (el, binding, vnode) {
   ) {
     return
   }
-  el.dragOldParams = options
+  el.__dragOldOptions__ = options
 
-  if (el.dragData) {
-    el.dragData.handler.setOptions(options)
+  if (el.__dragData__) {
+    el.__dragData__.handler.setOptions(options)
   } else {
     let contextComponent = vnode.context
     let handler = null
@@ -105,12 +101,11 @@ function refresh (el, binding, vnode) {
       handler,
 
       mousedownHandler (event) {
-        if (!options.draggable || dragData.dragging) {
+        if (!options.draggable) {
           return
         }
 
         let { clientX, clientY } = event
-        dragData.dragging = true
         dragData.initX = clientX
         dragData.initY = clientY
         contextComponent.$emit('dragstart', { event })
@@ -123,10 +118,6 @@ function refresh (el, binding, vnode) {
 
         function mouseMoveHandler (event) {
           let { clientX, clientY } = event
-          if (!dragData.dragging) {
-            return
-          }
-
           let dragParams = {
             distanceX: clientX - dragData.initX,
             distanceY: clientY - dragData.initY,
@@ -138,8 +129,6 @@ function refresh (el, binding, vnode) {
         }
 
         function mouseupHandler (event) {
-          dragData.dragging = false
-
           let { clientX, clientY } = event
 
           let dragParams = {
@@ -166,7 +155,7 @@ function refresh (el, binding, vnode) {
     }
 
     el.addEventListener('mousedown', dragData.mousedownHandler)
-    el.dragData = dragData
+    el.__dragData__ = dragData
   }
 }
 
