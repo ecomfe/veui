@@ -1,6 +1,6 @@
 # VEUI
 
-![](https://travis-ci.org/ecomfe/veui.svg?branch=dev)
+[![](https://badgen.net/circleci/github/ecomfe/veui)](https://circleci.com/gh/ecomfe/veui)
 
 Enterprise UI components for Vue.js. Based on ONE DESIGN from Baidu, Inc.
 

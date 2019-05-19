@@ -1,6 +1,6 @@
 # VEUI
 
-[![](https://badgen.net/circleci/github/ecomfe/veui)](https://circleci.com/gh/ecomfe/veui)
+[![](https://badgen.net/circleci/github/ecomfe/veui)](https://circleci.com/gh/ecomfe/veui) [![](https://badgen.net/codecov/c/github/ecomfe/veui)](https://codecov.io/gh/ecomfe/veui)
 
 Documentation: [中文 🇨🇳](https://veui.dev) | [English 🇺🇸](https://veui.dev/en-US)
 
