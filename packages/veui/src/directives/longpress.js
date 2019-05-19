@@ -19,10 +19,6 @@ const OPTIONS_SCHEMA = {
 
 function clear (el) {
   let longpressData = el.__longpressData__
-  if (!longpressData) {
-    return
-  }
-
   el.removeEventListener('mousedown', longpressData.mousedownHandler)
   window.removeEventListener('mouseup', longpressData.mouseupHandler)
   el.__longpressData__ = null
@@ -36,6 +32,14 @@ function refresh (el, binding) {
     return
   }
 
+  let longpressData = createLongpressData()
+
+  el.addEventListener('mousedown', longpressData.mousedownHandler)
+  el.__longpressData__ = longpressData
+  el.__longpressData__.setOptions(options)
+}
+
+function createLongpressData () {
   let longpressData = {
     options: {},
 
@@ -59,22 +63,22 @@ function refresh (el, binding) {
       }, timeout)
 
       e.preventDefault()
+
+      window.addEventListener('mouseup', longpressData.mouseupHandler)
     },
 
     mouseupHandler (e) {
       let { timer } = longpressData
-      if (timer) {
-        clearTimeout(timer)
-        clearInterval(timer)
-      }
+      clearTimeout(timer)
+      clearInterval(timer)
+
       e.preventDefault()
+
+      window.removeEventListener('mouseup', longpressData.mouseupHandler)
     }
   }
 
-  el.addEventListener('mousedown', longpressData.mousedownHandler)
-  window.addEventListener('mouseup', longpressData.mouseupHandler)
-  el.__longpressData__ = longpressData
-  el.__longpressData__.setOptions(options)
+  return longpressData
 }
 
 export default {
