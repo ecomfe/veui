@@ -12,7 +12,6 @@ function isAbout (val, base, error = 80) {
 
 describe('directives/longpress', () => {
   it(`should trigger the handler after ${DEFAULT_TIMEOUT}ms by default`, async done => {
-    let called = false
     let time = Date.now()
     const wrapper = mount({
       directives: { longpress },
@@ -21,24 +20,21 @@ describe('directives/longpress', () => {
         }">foo</div>`,
       methods: {
         handler () {
-          if (called) {
-            return
-          }
-          called = true
-
           let timeout = Date.now() - time
           expect(isAbout(timeout, DEFAULT_TIMEOUT)).toBe(true)
-          done()
         }
       }
     })
     wrapper.trigger('mousedown')
     await waitTimeout(DEFAULT_TIMEOUT + 500)
-    wrapper.trigger('mouseup')
+    window.dispatchEvent(new MouseEvent('mouseup'))
+
+    done()
   })
 
   it('should trigger the handler after specified timeout', async done => {
     let time = Date.now()
+    let timeout
     const wrapper = mount({
       directives: { longpress },
       template: `<div v-longpress="{
@@ -47,15 +43,17 @@ describe('directives/longpress', () => {
         }">foo</div>`,
       methods: {
         handler () {
-          let timeout = Date.now() - time
-          expect(isAbout(timeout, 2000)).toBe(true)
-          done()
+          timeout = Date.now() - time
         }
       }
     })
     wrapper.trigger('mousedown')
     await waitTimeout(2000)
-    wrapper.trigger('mouseup')
+    window.dispatchEvent(new MouseEvent('mouseup'))
+
+    expect(isAbout(timeout, 2000)).toBe(true)
+
+    done()
   })
 
   it(`should trigger the handler repeatedly with repeat option after each ${DEFAULT_REPEAT_INTERVAL}ms by default`, async done => {
@@ -69,28 +67,26 @@ describe('directives/longpress', () => {
         }">foo</div>`,
       methods: {
         handler () {
-          let timeout = Date.now() - time
-          delays.push(timeout)
-
-          if (delays.length === 4) {
-            expect(isAbout(delays[0], DEFAULT_TIMEOUT)).toBe(true)
-            expect(
-              isAbout(delays[1], DEFAULT_TIMEOUT + DEFAULT_REPEAT_INTERVAL)
-            ).toBe(true)
-            expect(
-              isAbout(delays[2], DEFAULT_TIMEOUT + DEFAULT_REPEAT_INTERVAL * 2)
-            ).toBe(true)
-            expect(
-              isAbout(delays[3], DEFAULT_TIMEOUT + DEFAULT_REPEAT_INTERVAL * 3)
-            ).toBe(true)
-            done()
-          }
+          delays.push(Date.now() - time)
         }
       }
     })
     wrapper.trigger('mousedown')
     await waitTimeout(DEFAULT_TIMEOUT + DEFAULT_REPEAT_INTERVAL * repeat + 50)
-    wrapper.trigger('mouseup')
+    window.dispatchEvent(new MouseEvent('mouseup'))
+
+    expect(isAbout(delays[0], DEFAULT_TIMEOUT)).toBe(true)
+    expect(isAbout(delays[1], DEFAULT_TIMEOUT + DEFAULT_REPEAT_INTERVAL)).toBe(
+      true
+    )
+    expect(
+      isAbout(delays[2], DEFAULT_TIMEOUT + DEFAULT_REPEAT_INTERVAL * 2)
+    ).toBe(true)
+    expect(
+      isAbout(delays[3], DEFAULT_TIMEOUT + DEFAULT_REPEAT_INTERVAL * 3)
+    ).toBe(true)
+
+    done()
   })
 
   it(`should trigger the handler repeatedly with repeat option after each specified interval`, async done => {
@@ -105,21 +101,66 @@ describe('directives/longpress', () => {
         }">foo</div>`,
       methods: {
         handler () {
-          let timeout = Date.now() - time
-          delays.push(timeout)
-
-          if (delays.length === 4) {
-            expect(isAbout(delays[0], DEFAULT_TIMEOUT)).toBe(true)
-            expect(isAbout(delays[1], DEFAULT_TIMEOUT + 300)).toBe(true)
-            expect(isAbout(delays[2], DEFAULT_TIMEOUT + 300 * 2)).toBe(true)
-            expect(isAbout(delays[3], DEFAULT_TIMEOUT + 300 * 3)).toBe(true)
-            done()
-          }
+          delays.push(Date.now() - time)
         }
       }
     })
     wrapper.trigger('mousedown')
     await waitTimeout(DEFAULT_TIMEOUT + 300 * repeat + 50)
-    wrapper.trigger('mouseup')
+    window.dispatchEvent(new MouseEvent('mouseup'))
+
+    expect(isAbout(delays[0], DEFAULT_TIMEOUT)).toBe(true)
+    expect(isAbout(delays[1], DEFAULT_TIMEOUT + 300)).toBe(true)
+    expect(isAbout(delays[2], DEFAULT_TIMEOUT + 300 * 2)).toBe(true)
+    expect(isAbout(delays[3], DEFAULT_TIMEOUT + 300 * 3)).toBe(true)
+
+    done()
+  })
+
+  it('should handle dynamic options correctly', async done => {
+    let time = Date.now()
+    let timeout
+    const wrapper = mount({
+      directives: { longpress },
+      template: `<div v-longpress="{
+          handler,
+          timeout
+        }">foo</div>`,
+      data () {
+        return {
+          timeout: 300
+        }
+      },
+      methods: {
+        handler () {
+          timeout = Date.now() - time
+        }
+      }
+    })
+
+    let { vm } = wrapper
+    vm.timeout = DEFAULT_TIMEOUT
+    await vm.$nextTick()
+
+    wrapper.trigger('mousedown')
+    await waitTimeout(DEFAULT_TIMEOUT + 500)
+    window.dispatchEvent(new MouseEvent('mouseup'))
+
+    expect(isAbout(timeout, DEFAULT_TIMEOUT)).toBe(true)
+
+    done()
+  })
+
+  it('should clear up correctly', () => {
+    const wrapper = mount({
+      directives: { longpress },
+      template: `<div v-longpress="handler">foo</div>`,
+      methods: {
+        handler () {}
+      }
+    })
+
+    wrapper.destroy()
+    expect(wrapper.element.__longpressData__).toBe(null)
   })
 })
