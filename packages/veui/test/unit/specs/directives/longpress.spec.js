@@ -6,7 +6,7 @@ import config from '@/managers/config'
 const DEFAULT_TIMEOUT = config.get('longpress.timeout')
 const DEFAULT_REPEAT_INTERVAL = config.get('longpress.repeatInterval')
 
-function isAbout (val, base, error = 80) {
+function isAbout (val, base, error = 120) {
   return val >= base && val < base + error
 }
 
