@@ -17,9 +17,6 @@ const OPTIONS_SCHEMA = {
 
 function clear (el) {
   let nudgeData = el.__nudgeData__
-  if (!nudgeData) {
-    return
-  }
 
   el.removeEventListener('keydown', nudgeData.keydownHandler)
   el.__nudgeData__ = null
