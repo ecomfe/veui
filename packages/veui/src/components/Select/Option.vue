@@ -61,7 +61,9 @@ export default {
   },
   computed: {
     selected () {
-      return this.value != null && this.value === this.select.value
+      return this.menu.focusClass
+        ? false
+        : this.value != null && this.value === this.select.value
     },
     role () {
       return isType(this.select, 'input') ? 'option' : 'menuitem'

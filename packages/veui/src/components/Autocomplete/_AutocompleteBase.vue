@@ -1,7 +1,8 @@
 <template>
 <div
   ref="self"
-  class="veui-autocomplete"
+  :aria-expanded="realExpanded"
+  :aria-owns="dropdownId"
 >
   <slot
     :open-suggestions="openSuggestions"
@@ -18,13 +19,15 @@
     :options="realOverlayOptions"
     :overlay-class="overlayClass"
   >
-    <slot
-      :datasource="filteredDatasource"
-      :update-value="suggestionUpdateValue"
-      :value="realValue"
-      :expanded="expanded"
-      name="suggestions"
-    />
+    <div :id="dropdownId">
+      <slot
+        :datasource="filteredDatasource"
+        :update-value="suggestionUpdateValue"
+        :value="realValue"
+        :expanded="realExpanded"
+        name="suggestions"
+      />
+    </div>
   </veui-overlay>
 </div>
 </template>

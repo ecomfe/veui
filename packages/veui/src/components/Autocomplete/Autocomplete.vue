@@ -1,10 +1,14 @@
 <template>
 <veui-autocomplete-base
   ref="base"
+  :ui="realUi"
   class="veui-autocomplete"
   :overlay-class="mergeOverlayClass('veui-autocomplete-suggestions')"
   :datasource="datasource"
-  v-bind="$props"
+  :aria-readonly="realReadonly"
+  :aria-disabled="realDisabled || realReadonly"
+  aria-haspopup="listbox"
+  v-bind="baseProps"
   v-on="$listeners"
 >
   <template
@@ -17,13 +21,16 @@
     >
       <veui-input
         ref="input"
-        v-outside:suggestions="props.closeSuggestions"
+        v-outside:suggestions="() => close(props)"
         autocomplete="off"
         :value="props.value"
         :ui="realUi"
         :readonly="realReadonly"
         :disabled="realDisabled"
         v-bind="inputProps"
+        @keydown="handleSuggestionKeyDown($event, props)"
+        @blur="close(props)"
+        @click="handleTrigger($event, props, 'focus')"
         @input="handleTrigger($event, props, 'input')"
         @focus="handleTrigger($event, props, 'focus')"
       />
@@ -39,8 +46,12 @@
     >
       <veui-option-group
         ref="suggestions"
+        role="listbox"
+        :ui="realUi"
+        :focus-class="focusClass"
         :options="suggestionsProps.datasource"
         class="veui-autocomplete-suggestion-group"
+        @mousedown.native.prevent="() => false"
       >
         <template
           slot="option-label"
@@ -72,8 +83,9 @@ import overlay from '../../mixins/overlay'
 import outside from '../../directives/outside'
 import AutocompleteBase from './_AutocompleteBase'
 import Input from '../Input'
-import { includes, pick } from 'lodash'
+import { includes, pick, omit } from 'lodash'
 import OptionGroup from '../Select/OptionGroup'
+import keySelect from '../../mixins/key-select'
 
 const SHARED_PROPS = [
   'placeholder',
@@ -92,9 +104,13 @@ export default {
     'veui-option-group': OptionGroup
   },
   directives: { outside },
-  mixins: [ui, input, overlay],
+  mixins: [ui, input, overlay, keySelect],
   props: {
     ...AutocompleteBase.props,
+    focusClass: {
+      type: String,
+      default: 'veui-autocomplete-focus'
+    },
     suggestTrigger: {
       type: [String, Array],
       default: 'input'
@@ -108,6 +124,9 @@ export default {
   computed: {
     inputProps () {
       return pick(this.$props, SHARED_PROPS)
+    },
+    baseProps () {
+      return omit(this.$props, ['suggestTrigger', ...SHARED_PROPS])
     },
     realTriggers () {
       return [].concat(this.suggestTrigger)
@@ -129,6 +148,45 @@ export default {
       }
       if (eventName === 'input') {
         props.updateValue(val)
+      }
+    },
+    close ({ closeSuggestions }) {
+      this.clearFocusClass()
+      closeSuggestions()
+    },
+    /**
+     * override
+     */
+    getContainerOfFocusable () {
+      return this.$refs.suggestions.$el
+    },
+    handleSuggestionKeyDown (e, props) {
+      let passive = false
+      switch (e.key) {
+        case 'Esc':
+        case 'Escape':
+          this.close(props)
+          break
+        case 'Up':
+        case 'ArrowUp':
+        case 'Down':
+        case 'ArrowDown':
+          props.openSuggestions()
+          this.handleKeydown(e)
+          return
+        case 'Enter':
+          let elem = this.getCurrentActiveElement()
+          if (elem) {
+            elem.click()
+          }
+          break
+        default:
+          passive = true
+          break
+      }
+      if (!passive) {
+        e.stopPropagation()
+        e.preventDefault()
       }
     }
   }
