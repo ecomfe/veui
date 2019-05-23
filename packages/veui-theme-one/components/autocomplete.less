@@ -2,7 +2,7 @@
 @import (reference) "../dropdown.less";
 
 .veui-autocomplete {
-  &-suggestions {
+  &-suggestion-group {
     &:extend(._veui-dropdown-overlay all);
     position: relative;
     min-width: 110px;
@@ -11,7 +11,12 @@
     background-color: #fff;
     outline: none;
 
-    .veui-option-group {
+    .veui-autocomplete-suggestion-matched {
+      color: @veui-alert-color;
+      background: transparent;
+    }
+    .veui-option-group,
+    &.veui-option-group {
       padding: 0 10px;
       &-label {
         padding: 0;
@@ -28,18 +33,11 @@
           height: @veui-height-normal;
           right: 0;
         }
+        &.veui-autocomplete-focus::before,
         &:hover::before {
           background: @veui-gray-color-8;
         }
-        .veui-autocomplete-suggestion-matched {
-          color: @veui-alert-color;
-          background: transparent;
-        }
       }
-    }
-    &-group.veui-option-group {
-      position: relative;
-      padding: 0;
     }
   }
 }
