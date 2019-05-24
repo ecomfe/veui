@@ -34,7 +34,7 @@ describe('components/Button', () => {
     expect(wrapper.attributes('disabled')).toBe('disabled')
   })
 
-  it('should disabled', () => {
+  it('should support disabled state', () => {
     const wrapper = mount(Button, {
       propsData: {
         disabled: true
@@ -45,7 +45,7 @@ describe('components/Button', () => {
     expect(wrapper.attributes('disabled')).toBe('disabled')
   })
 
-  it('should submit', () => {
+  it('should support submit type', () => {
     const wrapper = mount(Button, {
       propsData: {
         type: 'submit'
@@ -55,23 +55,42 @@ describe('components/Button', () => {
     expect(wrapper.attributes('type')).toContain('submit')
   })
 
+  it('should support set default slot', () => {
+    const Slot = {
+      name: 'Slot',
+      template: '<i>Veui Button</i>'
+    }
+    const wrapper = mount(Button, {
+      slots: {
+        default: Slot
+      }
+    })
+
+    expect(wrapper.contains(Slot)).toBe(true)
+  })
+
   it('should handle click', (done) => {
-    let result = 0
     const ButtonClick = {
       components: {
         'veui-button': Button
       },
       methods: {
-        handleClick: () => (result = 1)
+        handleClick () {
+          this.hasClick = true
+        }
       },
-      template: '<veui-button @click.native="handleClick" ui="primary" />'
+      data () {
+        return {
+          hasClick: false
+        }
+      },
+      template: '<veui-button @click="handleClick" ui="primary" />'
     }
     const wrapper = mount(ButtonClick)
     wrapper.find('.veui-button').trigger('click')
-
-    setTimeout(() => {
-      expect(result).toBe(1)
+    wrapper.vm.$nextTick(() => {
+      expect(wrapper.vm.hasClick).toBe(true)
       done()
-    }, 50)
+    })
   })
 })
