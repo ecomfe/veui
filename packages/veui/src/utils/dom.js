@@ -174,7 +174,7 @@ export function getFocusable (elem) {
  */
 export function focusIn (elem, index = 0, ignoreAutofocus) {
   if (!ignoreAutofocus) {
-    let auto = elem.querySelector('[autofocus]')
+    let auto = elem.querySelector('[data-autofocus]') || elem.querySelector('[autofocus]')
     if (auto) {
       focus(auto)
       return true

@@ -1,11 +1,12 @@
 import { findIndex, find } from 'lodash'
 import { getFocusable, hasClass, toggleClass } from '../utils/dom'
+import config from '../managers/config'
 
 const isActive = (elem, focusClass) => focusClass
   ? hasClass(elem, focusClass)
   : elem === document.activeElement
 
-const focus = (focusableList, index, focusClass) => {
+const focusElement = (focusableList, index, focusClass) => {
   if (focusClass) {
     focusableList.forEach(
       (elem, idx) => toggleClass(elem, focusClass, index === idx)
@@ -15,10 +16,15 @@ const focus = (focusableList, index, focusClass) => {
   }
 }
 
-export default {
-  props: {
-    // 用这个 class 来模拟 focus，不定义则默认原生focus
-    focusClass: String
+config.defaults({
+  'keySelect.focusClass': 'focus-visible'
+})
+
+const createKeySelect = ({ focus }) => ({
+  computed: {
+    focusClass () {
+      return focus ? null : config.get('keySelect.focusClass')
+    }
   },
   methods: {
     // 方便覆盖
@@ -30,7 +36,7 @@ export default {
       return container ? getFocusable(container) : []
     },
     clearFocusClass () {
-      return focus(this.getFocusable(), -1, this.focusClass)
+      return focusElement(this.getFocusable(), -1, this.focusClass)
     },
     getCurrentActiveElement () {
       return find(
@@ -49,7 +55,7 @@ export default {
       index = index === -1
         ? 0
         : (index + length + (forward ? 1 : -1)) % length
-      focus(focusable, index, this.focusClass)
+      focusElement(focusable, index, this.focusClass)
     },
     handleKeydown (e) {
       let passive = false
@@ -81,4 +87,7 @@ export default {
       }
     }
   }
-}
+})
+
+export default createKeySelect({ focus: true })
+export { createKeySelect }
