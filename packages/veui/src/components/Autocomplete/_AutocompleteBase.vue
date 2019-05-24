@@ -7,6 +7,7 @@
   <slot
     :open-suggestions="openSuggestions"
     :close-suggestions="closeAndAutoSuggestion"
+    :handleKeydown="handleSuggestionKeydown"
     :update-value="inputUpdateValue"
     :value="realValue"
     :datasource="realDatasource"
@@ -19,10 +20,14 @@
     :options="realOverlayOptions"
     :overlay-class="overlayClass"
   >
-    <div :id="dropdownId">
+    <div
+      :id="dropdownId"
+      ref="box"
+    >
       <slot
         :datasource="filteredDatasource"
         :update-value="suggestionUpdateValue"
+        :active-descendant="activeDescendant"
         :value="realValue"
         :expanded="realExpanded"
         name="suggestions"
@@ -34,9 +39,10 @@
 
 <script>
 import dropdown from '../../mixins/dropdown'
+import { createKeySelect } from '../../mixins/key-select'
 import Overlay from '../Overlay'
 import { findComponent } from '../../utils/context'
-import { isFunction, cloneDeep, get } from 'lodash'
+import { isFunction, cloneDeep, get, uniqueId } from 'lodash'
 
 function filterSuggestions (suggestions, value, filter, childrenKey) {
   let groupMatch = false
@@ -85,7 +91,7 @@ export default {
   components: {
     'veui-overlay': Overlay
   },
-  mixins: [dropdown],
+  mixins: [dropdown, createKeySelect({ focus: false })],
   props: {
     datasource: {
       type: Array,
@@ -93,9 +99,9 @@ export default {
         return []
       }
     },
-    value: {
-      type: [String, Number, Object, Array]
-    },
+    /* eslint-disable vue/require-prop-types */
+    value: {},
+    /* eslint-enable vue/require-prop-types */
     valueKey: {
       type: String,
       default: 'value'
@@ -110,7 +116,9 @@ export default {
   },
   data () {
     return {
-      localValue: ''
+      localValue: '',
+      activeDescendant: '',
+      optionIdPrefix: uniqueId('veui-autocomplete-option-')
     }
   },
   computed: {
@@ -120,12 +128,16 @@ export default {
     realDatasource () {
       let valueKey = this.valueKey
       let childrenKey = this.childrenKey
+      let self = this
       function walk (suggestions) {
         return suggestions.reduce((result, item) => {
           if (typeof item === 'string') {
             item = { [valueKey]: item }
-          } else if (item[childrenKey]) {
+          }
+          if (item[childrenKey]) {
             item[childrenKey] = walk(item[childrenKey])
+          } else {
+            item.optionId = `${self.optionIdPrefix}-${item[self.valueKey]}`
           }
           result.push(item)
           return result
@@ -183,11 +195,50 @@ export default {
     focus () {
       return this.callComponentMethod('focus')
     },
+    handleSuggestionKeydown (e) {
+      let passive = false
+      switch (e.key) {
+        case 'Esc':
+        case 'Escape':
+          this.closeSuggestions()
+          break
+        case 'Up':
+        case 'ArrowUp':
+        case 'Down':
+        case 'ArrowDown':
+          this.openSuggestions()
+          this.handleKeydown(e)
+          let el = this.getCurrentActiveElement()
+          if (el) {
+            this.activeDescendant = el.id
+          }
+          return
+        case 'Enter':
+          let elem = this.getCurrentActiveElement()
+          if (elem) {
+            elem.click()
+          }
+          break
+        default:
+          passive = true
+          break
+      }
+      if (!passive) {
+        e.stopPropagation()
+        e.preventDefault()
+      }
+    },
     closeSuggestions () {
-      this.expanded = false
+      if (this.expanded) {
+        this.clearFocusClass()
+        this.activeDescendant = null
+        this.expanded = false
+      }
     },
     openSuggestions () {
-      this.expanded = true
+      if (!this.expanded) {
+        this.expanded = true
+      }
     },
     autoSuggest () {
       let match = findSuggestions(

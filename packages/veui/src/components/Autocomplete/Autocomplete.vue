@@ -6,7 +6,7 @@
   :overlay-class="mergeOverlayClass('veui-autocomplete-suggestions')"
   :datasource="datasource"
   :aria-readonly="realReadonly"
-  :aria-disabled="realDisabled || realReadonly"
+  :aria-disabled="realDisabled"
   aria-haspopup="listbox"
   v-bind="baseProps"
   v-on="$listeners"
@@ -21,15 +21,15 @@
     >
       <veui-input
         ref="input"
-        v-outside:suggestions="() => close(props)"
+        v-outside:suggestions="props.closeSuggestions"
         autocomplete="off"
         :value="props.value"
         :ui="realUi"
         :readonly="realReadonly"
         :disabled="realDisabled"
         v-bind="inputProps"
-        @keydown="handleSuggestionKeyDown($event, props)"
-        @blur="close(props)"
+        @blur="props.closeSuggestions"
+        @keydown="props.handleKeydown"
         @click="handleTrigger($event, props, 'focus')"
         @input="handleTrigger($event, props, 'input')"
         @focus="handleTrigger($event, props, 'focus')"
@@ -48,7 +48,7 @@
         ref="suggestions"
         role="listbox"
         :ui="realUi"
-        :focus-class="focusClass"
+        :aria-activedescendant="suggestionsProps.activeDescendant"
         :options="suggestionsProps.datasource"
         class="veui-autocomplete-suggestion-group"
         @mousedown.native.prevent="() => false"
@@ -85,7 +85,6 @@ import AutocompleteBase from './_AutocompleteBase'
 import Input from '../Input'
 import { includes, pick, omit } from 'lodash'
 import OptionGroup from '../Select/OptionGroup'
-import keySelect from '../../mixins/key-select'
 
 const SHARED_PROPS = [
   'placeholder',
@@ -104,7 +103,7 @@ export default {
     'veui-option-group': OptionGroup
   },
   directives: { outside },
-  mixins: [ui, input, overlay, keySelect],
+  mixins: [ui, input, overlay],
   props: {
     ...AutocompleteBase.props,
     focusClass: {
@@ -148,45 +147,6 @@ export default {
       }
       if (eventName === 'input') {
         props.updateValue(val)
-      }
-    },
-    close ({ closeSuggestions }) {
-      this.clearFocusClass()
-      closeSuggestions()
-    },
-    /**
-     * override
-     */
-    getContainerOfFocusable () {
-      return this.$refs.suggestions.$el
-    },
-    handleSuggestionKeyDown (e, props) {
-      let passive = false
-      switch (e.key) {
-        case 'Esc':
-        case 'Escape':
-          this.close(props)
-          break
-        case 'Up':
-        case 'ArrowUp':
-        case 'Down':
-        case 'ArrowDown':
-          props.openSuggestions()
-          this.handleKeydown(e)
-          return
-        case 'Enter':
-          let elem = this.getCurrentActiveElement()
-          if (elem) {
-            elem.click()
-          }
-          break
-        default:
-          passive = true
-          break
-      }
-      if (!passive) {
-        e.stopPropagation()
-        e.preventDefault()
       }
     }
   }

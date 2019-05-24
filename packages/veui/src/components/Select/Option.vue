@@ -9,7 +9,7 @@
     'veui-option-disabled': disabled,
     'veui-option-selected': selected
   }"
-  :autofocus="selected"
+  :data-autofocus="selected"
   :role="role"
   :aria-selected="selected"
   @click.stop="selectOption"
@@ -61,9 +61,7 @@ export default {
   },
   computed: {
     selected () {
-      return this.menu.focusClass
-        ? false
-        : this.value != null && this.value === this.select.value
+      return this.value != null && this.value === this.select.value
     },
     role () {
       return isType(this.select, 'input') ? 'option' : 'menuitem'
