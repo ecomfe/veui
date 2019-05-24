@@ -1,3 +1,4 @@
+import { pick } from 'lodash'
 import TranslateHandler from '@/directives/drag/TranslateHandler'
 import config from '@/managers/config'
 import { mount } from '@vue/test-utils'
@@ -6,128 +7,149 @@ config.defaults({
   'drag.prefix': '@'
 })
 
-const originalGetComputedStyle = window.getComputedStyle
-
 function createHandler (options = { targets: ['target'] }, style = '') {
-  let { vm, element } = mount({
-    template: `<div ref="target" style="color:red;${style}"></div>`
-  })
+  let wrapper = mount(
+    {
+      template: `<div ref="target" style="color: red; position: fixed; top: 0; left: 0;${
+        style ? ' ' + style : ''
+      }"></div>`
+    },
+    {
+      attachToDocument: true
+    }
+  )
+
+  let { vm, element } = wrapper
   let handler = new TranslateHandler(options, vm)
 
   return {
+    wrapper,
     vm,
     element,
     handler
   }
 }
 
+function transformEquals (t1, t2) {
+  let el1 = document.createElement('div')
+  let el2 = document.createElement('div')
+  el1.style.transform = t1
+  el2.style.transform = t2
+  document.body.appendChild(el1)
+  document.body.appendChild(el2)
+  let equals =
+    getComputedStyle(el1).transform === getComputedStyle(el2).transform
+  el1.parentElement.removeChild(el1)
+  el2.parentElement.removeChild(el2)
+  return equals
+}
+
+function assertTransform (el, transform) {
+  expect(transformEquals(el.style.transform, transform)).to.equal(true)
+}
+
 describe('directives/drag/TranslateHandler', () => {
   it('should be instantiatable with specified options and context', () => {
-    let { vm, handler } = createHandler()
-    expect(handler.options.targets).toEqual(['target'])
-    expect(handler.context).toBe(vm)
+    let { wrapper, vm, handler } = createHandler()
+    expect(handler.options.targets).to.deep.equal(['target'])
+    expect(handler.context).to.be.equal(vm)
 
     handler.destroy()
+    wrapper.destroy()
   })
 
   it('should respond correctly when its methods are called with initial transform', () => {
-    let { element, handler } = createHandler(
+    let { wrapper, element, handler } = createHandler(
       { targets: ['target'] },
-      ' transform: translate(5px,5px);'
+      'transform: translate(5px, 5px);'
     )
     expect(() => {
       handler.setOptions({
         targets: ['target']
       })
-    }).not.toThrow()
-    expect(handler.isDragged).toBe(false)
+    }).to.not.throw()
+    expect(handler.isDragged).to.be.equal(false)
 
-    window.getComputedStyle = () => ({
-      transform: 'translate(5px,5px)' // just a necessary hack
+    handler.start()
+    expect(
+      pick(element.style, [
+        'color',
+        'transform',
+        'transition-property',
+        'animation-name'
+      ])
+    ).to.deep.equal({
+      color: 'red',
+      transform: 'translate(5px, 5px)',
+      'transition-property': 'none',
+      'animation-name': 'none'
     })
 
-    handler.start()
-    expect(element.style.cssText).toBe(
-      'color: red; transform: translate(5px,5px); transition: none; animation: none;'
-    )
-
     handler.drag({ distanceX: 100, distanceY: 200 })
-    expect(handler.isDragged).toBe(true)
-    expect(element.style.transform).toBe(
-      'translate(5px,5px) translate(100px,200px)'
-    )
+    expect(handler.isDragged).to.equal(true)
+    assertTransform(element, 'translate(5px, 5px) translate(100px, 200px)')
 
     handler.drag({ distanceX: 200, distanceY: 400 })
-    expect(element.style.transform).toBe(
-      'translate(5px,5px) translate(200px,400px)'
-    )
-
-    handler.reset()
-    expect(element.style.transform).toBe('translate(5px,5px)')
-
-    handler.start()
-    expect(element.style.cssText).toBe(
-      'color: red; transform: translate(5px,5px); transition: none; animation: none;'
-    )
+    assertTransform(element, 'translate(5px, 5px) translate(200px, 400px)')
 
     handler.end({ distanceX: 200, distanceY: 400 })
-    expect(element.style.transform).toBe(
-      'translate(5px,5px) translate(200px,400px)'
-    )
+    assertTransform(element, 'translate(5px, 5px) translate(200px, 400px)')
 
-    window.getComputedStyle = originalGetComputedStyle
+    handler.reset()
+    assertTransform(element, 'translate(5px, 5px)')
+
+    handler.start()
+    assertTransform(element, 'translate(5px, 5px)')
+
+    handler.end({ distanceX: 200, distanceY: 400 })
+    assertTransform(element, 'translate(5px, 5px) translate(200px, 400px)')
+
+    wrapper.destroy()
   })
 
   it('should respond correctly when its methods are called without initial transform', () => {
-    window.getComputedStyle = () => ({
-      transform: 'none'
-    })
-
-    let { element, handler } = createHandler()
+    let { wrapper, element, handler } = createHandler()
     expect(() => {
       handler.setOptions({
         targets: ['target']
       })
-    }).not.toThrow()
-    expect(handler.isDragged).toBe(false)
+    }).to.not.throw()
+    expect(handler.isDragged).to.be.equal(false)
 
     handler.start()
-    expect(element.style.cssText).toBe(
-      'color: red; transition: none; animation: none;'
-    )
+    expect(
+      pick(element.style, ['color', 'transition-property', 'animation-name'])
+    ).to.deep.equal({
+      color: 'red',
+      'transition-property': 'none',
+      'animation-name': 'none'
+    })
 
     handler.start()
     handler.end({ distanceX: 0, distanceY: 0 })
-    expect(element.style.transform).toBe('')
+    assertTransform(element, '')
 
     handler.drag({ distanceX: 100, distanceY: 200 })
-    expect(handler.isDragged).toBe(true)
-    expect(element.style.transform).toBe('translate(100px,200px)')
+    expect(handler.isDragged).to.equal(true)
+    assertTransform(element, 'translate(100px, 200px)')
 
     handler.drag({ distanceX: 200, distanceY: 400 })
-    expect(element.style.transform).toBe('translate(200px,400px)')
+    assertTransform(element, 'translate(200px, 400px)')
 
     handler.end({ distanceX: 300, distanceY: 600 })
-    expect(element.style.transform).toBe('translate(300px,600px)')
-
-    window.getComputedStyle = () => ({
-      transform: 'translate(300px,600px)'
-    })
+    assertTransform(element, 'translate(300px, 600px)')
 
     handler.reset()
-    expect(element.style.transform).toBe(
-      'translate(300px,600px) translate(-300px,-600px)'
+    assertTransform(
+      element,
+      'translate(300px, 600px) translate(-300px, -600px)'
     )
 
-    window.getComputedStyle = originalGetComputedStyle
+    wrapper.destroy()
   })
 
   it('should handle `@window` containment correctly', () => {
-    window.getComputedStyle = () => ({
-      transform: 'none'
-    })
-
-    let { element, handler } = createHandler({
+    let { wrapper, element, handler } = createHandler({
       targets: ['target'],
       containment: '@window'
     })
@@ -137,31 +159,25 @@ describe('directives/drag/TranslateHandler', () => {
     handler.start()
 
     handler.drag({ distanceX: -100, distanceY: -100 })
-    expect(element.style.transform).toBe('')
+    assertTransform(element, '')
 
     handler.drag({ distanceX: 100, distanceY: 100 })
-    expect(element.style.transform).toBe('translate(100px,100px)')
+    assertTransform(element, 'translate(100px, 100px)')
 
     handler.drag({ distanceX: 100, distanceY: 2000 })
-    expect(element.style.transform).toBe(`translate(100px,${innerHeight}px)`)
+    assertTransform(element, `translate(100px, ${innerHeight}px)`)
 
     handler.drag({ distanceX: 2000, distanceY: 100 })
-    expect(element.style.transform).toBe(`translate(${innerWidth}px,100px)`)
+    assertTransform(element, `translate(${innerWidth}px, 100px)`)
 
     handler.drag({ distanceX: 2000, distanceY: 2000 })
-    expect(element.style.transform).toBe(
-      `translate(${innerWidth}px,${innerHeight}px)`
-    )
+    assertTransform(element, `translate(${innerWidth}px, ${innerHeight}px)`)
 
-    window.getComputedStyle = originalGetComputedStyle
+    wrapper.destroy()
   })
 
   it('should handle Element containment correctly', () => {
-    window.getComputedStyle = () => ({
-      transform: 'none'
-    })
-
-    let { element, handler } = createHandler({
+    let { wrapper, element, handler } = createHandler({
       targets: ['target'],
       containment: {
         nodeType: 3,
@@ -179,25 +195,25 @@ describe('directives/drag/TranslateHandler', () => {
     handler.start()
 
     handler.drag({ distanceX: -100, distanceY: -100 })
-    expect(element.style.transform).toBe('')
+    assertTransform(element, '')
 
     handler.drag({ distanceX: 50, distanceY: 50 })
-    expect(element.style.transform).toBe('translate(50px,50px)')
+    assertTransform(element, 'translate(50px, 50px)')
 
     handler.drag({ distanceX: 50, distanceY: 200 })
-    expect(element.style.transform).toBe(`translate(50px,100px)`)
+    assertTransform(element, `translate(50px, 100px)`)
 
     handler.drag({ distanceX: 200, distanceY: 50 })
-    expect(element.style.transform).toBe(`translate(100px,50px)`)
+    assertTransform(element, `translate(100px, 50px)`)
 
     handler.drag({ distanceX: 200, distanceY: 200 })
-    expect(element.style.transform).toBe(`translate(100px,100px)`)
+    assertTransform(element, `translate(100px, 100px)`)
 
-    window.getComputedStyle = originalGetComputedStyle
+    wrapper.destroy()
   })
 
   it('should handle axis y correctly with containment', () => {
-    let { element, handler } = createHandler({
+    let { wrapper, element, handler } = createHandler({
       targets: ['target'],
       containment: {
         top: 0,
@@ -213,23 +229,25 @@ describe('directives/drag/TranslateHandler', () => {
     handler.start()
 
     handler.drag({ distanceX: -100, distanceY: -100 })
-    expect(element.style.transform).toBe('')
+    assertTransform(element, '')
 
     handler.drag({ distanceX: 50, distanceY: 50 })
-    expect(element.style.transform).toBe('translate(0px,50px)')
+    assertTransform(element, 'translate(0px, 50px)')
 
     handler.drag({ distanceX: 50, distanceY: 200 })
-    expect(element.style.transform).toBe(`translate(0px,100px)`)
+    assertTransform(element, `translate(0px, 100px)`)
 
     handler.drag({ distanceX: 200, distanceY: 50 })
-    expect(element.style.transform).toBe(`translate(0px,50px)`)
+    assertTransform(element, `translate(0px, 50px)`)
 
     handler.end({ distanceX: 200, distanceY: 200 })
-    expect(element.style.transform).toBe(`translate(0px,100px)`)
+    assertTransform(element, `translate(0px, 100px)`)
+
+    wrapper.destroy()
   })
 
   it('should handle axis y correctly without containment', () => {
-    let { element, handler } = createHandler({
+    let { wrapper, element, handler } = createHandler({
       targets: ['target'],
       axis: 'y'
     })
@@ -237,23 +255,25 @@ describe('directives/drag/TranslateHandler', () => {
     handler.start()
 
     handler.drag({ distanceX: -100, distanceY: -100 })
-    expect(element.style.transform).toBe('translate(0px,-100px)')
+    assertTransform(element, 'translate(0px, -100px)')
 
     handler.drag({ distanceX: 50, distanceY: 50 })
-    expect(element.style.transform).toBe('translate(0px,50px)')
+    assertTransform(element, 'translate(0px, 50px)')
 
     handler.drag({ distanceX: 50, distanceY: 200 })
-    expect(element.style.transform).toBe(`translate(0px,200px)`)
+    assertTransform(element, `translate(0px, 200px)`)
 
     handler.drag({ distanceX: 200, distanceY: 50 })
-    expect(element.style.transform).toBe(`translate(0px,50px)`)
+    assertTransform(element, `translate(0px, 50px)`)
 
     handler.end({ distanceX: 200, distanceY: 200 })
-    expect(element.style.transform).toBe(`translate(0px,200px)`)
+    assertTransform(element, `translate(0px, 200px)`)
+
+    wrapper.destroy()
   })
 
   it('should handle axis x correctly with containment', () => {
-    let { element, handler } = createHandler({
+    let { wrapper, element, handler } = createHandler({
       targets: ['target'],
       containment: {
         top: 0,
@@ -269,23 +289,25 @@ describe('directives/drag/TranslateHandler', () => {
     handler.start()
 
     handler.drag({ distanceX: -100, distanceY: -100 })
-    expect(element.style.transform).toBe('')
+    assertTransform(element, '')
 
     handler.drag({ distanceX: 50, distanceY: 50 })
-    expect(element.style.transform).toBe('translate(50px,0px)')
+    assertTransform(element, 'translate(50px, 0px)')
 
     handler.drag({ distanceX: 50, distanceY: 200 })
-    expect(element.style.transform).toBe(`translate(50px,0px)`)
+    assertTransform(element, `translate(50px, 0px)`)
 
     handler.drag({ distanceX: 200, distanceY: 50 })
-    expect(element.style.transform).toBe(`translate(100px,0px)`)
+    assertTransform(element, `translate(100px, 0px)`)
 
     handler.end({ distanceX: 200, distanceY: 200 })
-    expect(element.style.transform).toBe(`translate(100px,0px)`)
+    assertTransform(element, `translate(100px, 0px)`)
+
+    wrapper.destroy()
   })
 
   it('should handle axis x correctly without containment', () => {
-    let { element, handler } = createHandler({
+    let { wrapper, element, handler } = createHandler({
       targets: ['target'],
       axis: 'x'
     })
@@ -293,18 +315,20 @@ describe('directives/drag/TranslateHandler', () => {
     handler.start()
 
     handler.drag({ distanceX: -100, distanceY: -100 })
-    expect(element.style.transform).toBe('translate(-100px,0px)')
+    assertTransform(element, 'translate(-100px, 0px)')
 
     handler.drag({ distanceX: 50, distanceY: 50 })
-    expect(element.style.transform).toBe('translate(50px,0px)')
+    assertTransform(element, 'translate(50px, 0px)')
 
     handler.drag({ distanceX: 50, distanceY: 200 })
-    expect(element.style.transform).toBe(`translate(50px,0px)`)
+    assertTransform(element, `translate(50px, 0px)`)
 
     handler.drag({ distanceX: 200, distanceY: 50 })
-    expect(element.style.transform).toBe(`translate(200px,0px)`)
+    assertTransform(element, `translate(200px, 0px)`)
 
     handler.end({ distanceX: 200, distanceY: 200 })
-    expect(element.style.transform).toBe(`translate(200px,0px)`)
+    assertTransform(element, `translate(200px, 0px)`)
+
+    wrapper.destroy()
   })
 })

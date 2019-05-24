@@ -225,6 +225,9 @@ export default {
 
       this.$nextTick(() => {
         let { input } = this.$refs
+        if (!input) {
+          return
+        }
         let inputLineHeight = this.getLineHeight(input)
         if (
           input.scrollHeight - input.clientHeight - input.scrollTop <

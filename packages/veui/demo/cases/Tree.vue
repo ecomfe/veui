@@ -19,7 +19,12 @@
       :item-click="mode"
       :expanded.sync="expanded"
     >
-      <template slot-scope="props" slot="item-label">{{ props.item.label }}</template>
+      <template
+        slot="item-label"
+        slot-scope="props"
+      >
+        {{ props.item.label }}
+      </template>
     </veui-tree>
   </section>
   <section>
@@ -29,7 +34,12 @@
       :item-click="mode"
       :expanded.sync="expanded"
     >
-      <template slot-scope="props" slot="item">{{ props.item.label }}</template>
+      <template
+        slot="item"
+        slot-scope="props"
+      >
+        {{ props.item.label }}
+      </template>
     </veui-tree>
   </section>
 </article>

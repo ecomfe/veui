@@ -1,17 +1,17 @@
-import {
-  invert,
-  isFunction,
-  uniqueId,
-  remove,
-  find,
-  isString,
-  noop,
-  isEqual,
-  pick
-} from 'lodash'
+import { normalize } from 'vue-directive-normalizer'
+import { invert, uniqueId, remove, isEqual, difference, omit } from 'lodash'
 import { getNodes } from '../utils/context'
 import { contains } from '../utils/dom'
-import { getNumberArg } from '../utils/helper'
+
+const OPTIONS_SCHEMA = {
+  value: 'handler',
+  arg: 'refs[]',
+  modifiers: {
+    trigger: ['click', 'mousedown', 'mouseup', 'hover', 'focus'],
+    excludeSelf: false,
+    delay: 0
+  }
+}
 
 const TRIGGER_EVENT_MAP = {
   hover: 'mouseout',
@@ -46,7 +46,7 @@ function initBindingType (type) {
     event,
     e => {
       handlerBindings[type].forEach(item => {
-        item[key] && item[key].handler(e)
+        item[key] && item[key].realHandler(e)
       })
     },
     true
@@ -59,54 +59,6 @@ function getElementsByRefs (refs, context) {
     elements.push(...getNodes(ref, context))
   })
   return elements
-}
-
-function parseParams (arg, modifiers, value) {
-  let refs = arg ? arg.split(',') : []
-  let handler
-  let trigger =
-    find(TRIGGER_TYPES, triggerType => triggerType in modifiers) || 'click'
-  // delay 表示如果鼠标移动到 includeTargets 元素之外多少毫秒之后，才会触发 handler
-  let delay = getNumberArg(modifiers, 0)
-  let excludeSelf = !!modifiers.excludeSelf
-
-  // 如果 value 是 Function 的话，其余参数就尽量从 modifier、arg 里面去解析
-  // 否则从value里面去解析
-  if (isFunction(value)) {
-    handler = value
-  } else {
-    let normalizedValue = value || {}
-    handler = isFunction(normalizedValue.handler)
-      ? normalizedValue.handler
-      : noop
-
-    if (normalizedValue.refs) {
-      refs = Array.isArray(normalizedValue.refs)
-        ? normalizedValue.refs
-        : isString(normalizedValue.refs)
-          ? normalizedValue.refs.split(',')
-          : [normalizedValue.refs]
-    }
-
-    trigger = normalizedValue.trigger || trigger || 'click'
-
-    if ('delay' in normalizedValue) {
-      let delayNum = Number(normalizedValue.delay) || 0
-      delay = delayNum >= 0 ? delayNum : 0
-    }
-
-    if ('excludeSelf' in normalizedValue) {
-      excludeSelf = !!normalizedValue.excludeSelf
-    }
-  }
-
-  return {
-    refs,
-    handler,
-    trigger,
-    delay,
-    excludeSelf
-  }
 }
 
 /**
@@ -196,33 +148,35 @@ function clear (el) {
   })
 }
 
-function refresh (el, { value, arg, modifiers }, vnode) {
-  const params = parseParams(arg, modifiers, value, vnode.context)
-  let { trigger, refs, excludeSelf, delay } = params
+const OMIT_OPTIONS = ['refs', 'id', 'realHandler']
+
+function isEqualOption (o1, o2) {
+  return (
+    difference(o1.refs, o2.refs).length === 0 &&
+    isEqual(omit(o1, OMIT_OPTIONS), omit(o2, OMIT_OPTIONS))
+  )
+}
+
+function refresh (el, binding, vnode) {
+  let options = normalize(binding, OPTIONS_SCHEMA)
+  let { trigger, refs, excludeSelf, delay } = options
   let key = getBindingKey(trigger)
 
-  // 真正发生了变化，才重刷
-  let fields = [
-    'refs',
-    'trigger',
-    'excludeSelf',
-    ...(trigger === 'hover' ? ['delay'] : [])
-  ]
+  let oldOptions = el[key]
 
-  let prevParams = pick(el[key], fields)
-
-  if (isEqual(prevParams, pick(params, fields))) {
+  if (oldOptions && isEqualOption(options, oldOptions)) {
     return
   }
 
   clear(el)
   el[key] = {
     id: uniqueId('veui-outside-'),
-    handler: generate(el, params, vnode.context),
+    handler: options.handler, // to compare with new one
+    realHandler: generate(el, options, vnode.context),
     trigger,
     refs,
     excludeSelf,
-    ...(trigger === 'hover' ? { delay } : {})
+    delay
   }
   addBinding(trigger, el)
 }

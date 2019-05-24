@@ -5,6 +5,7 @@
     <h2>默认样式：</h2>
     <veui-select
       v-model="defaultValue1"
+      ui="large"
       v-bind="attrs"
       placeholder="全部"
       clearable

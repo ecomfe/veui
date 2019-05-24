@@ -1,22 +1,19 @@
+import { mount } from '@vue/test-utils'
 import RegionPicker from '@/components/RegionPicker'
-import Vue from 'vue'
 
 describe('components/RegionPicker', () => {
   it('should handle selected prop with `null` value.', done => {
-    new Vue({
+    let wrapper = mount({
       data () {
         return {
           datasource: [{ id: '1' }]
         }
       },
-      mounted () {
-        this.$el
-          .querySelector('.veui-checkbox input')
-          .dispatchEvent(new Event('change'))
-      },
       methods: {
         handleSelect (val) {
-          expect(val).toEqual(['1'])
+          expect(val).to.deep.equal(['1'])
+
+          wrapper.destroy()
           done()
         }
       },
@@ -28,6 +25,8 @@ describe('components/RegionPicker', () => {
           />
         )
       }
-    }).$mount()
+    })
+
+    wrapper.find('.veui-checkbox input').trigger('change')
   })
 })

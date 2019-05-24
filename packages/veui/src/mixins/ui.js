@@ -109,9 +109,9 @@ export default {
             if (props[key] === true) {
               return key
             }
-            return props[key]
+            return key === UNKNOWN_KEY ? null : props[key]
           })
-          .filter(val => val !== 'default' && val !== false)
+          .filter(val => val && val !== 'default' && val !== false)
           .concat(uiProps[UNKNOWN_KEY])
           .join(' ') || null
       )

@@ -7,20 +7,20 @@ describe('managers/overlay', () => {
       it('should create an instance of Node', () => {
         let node = new Tree().root
 
-        expect(node.hasOwnProperty('parent')).toBe(true)
-        expect(node.hasOwnProperty('childrenGroup')).toBe(true)
-        expect(node.hasOwnProperty('id')).toBe(true)
-        expect(node.hasOwnProperty('order')).toBe(true)
+        expect(node.hasOwnProperty('parent')).to.equal(true)
+        expect(node.hasOwnProperty('childrenGroup')).to.equal(true)
+        expect(node.hasOwnProperty('id')).to.equal(true)
+        expect(node.hasOwnProperty('order')).to.equal(true)
       })
     })
 
     describe('#appendChild', () => {
       it('should append child', () => {
         let node = new Tree().root
-        expect(node.childrenGroup.length).toBe(0)
+        expect(node.childrenGroup.length).to.be.equal(0)
         node.appendChild(new Tree().root)
-        expect(node.childrenGroup.length).toBe(1)
-        expect(node.childrenGroup[0].children.length).toBe(1)
+        expect(node.childrenGroup.length).to.be.equal(1)
+        expect(node.childrenGroup[0].children.length).to.be.equal(1)
       })
 
       it("should append the current node to the last position of the group's last children", () => {
@@ -29,8 +29,8 @@ describe('managers/overlay', () => {
         let child2 = new Tree().root
         node.appendChild(child1)
         node.appendChild(child2)
-        expect(node.childrenGroup[0].children[0]).toBe(child1)
-        expect(node.childrenGroup[0].children[1]).toBe(child2)
+        expect(node.childrenGroup[0].children[0]).to.be.equal(child1)
+        expect(node.childrenGroup[0].children[1]).to.be.equal(child2)
       })
 
       it('should place the node with different priority in different group', () => {
@@ -39,8 +39,8 @@ describe('managers/overlay', () => {
         let child2 = new Tree().root
         node.appendChild(child1, 1)
         node.appendChild(child2, 2)
-        expect(node.childrenGroup[0].children[0]).toBe(child1)
-        expect(node.childrenGroup[1].children[0]).toBe(child2)
+        expect(node.childrenGroup[0].children[0]).to.be.equal(child1)
+        expect(node.childrenGroup[1].children[0]).to.be.equal(child2)
       })
 
       it('should insert the node with bigger priority at the right position', () => {
@@ -49,8 +49,8 @@ describe('managers/overlay', () => {
         let child2 = new Tree().root
         node.appendChild(child1, 1)
         node.appendChild(child2, 2)
-        expect(node.childrenGroup[0].children[0]).toBe(child1)
-        expect(node.childrenGroup[1].children[0]).toBe(child2)
+        expect(node.childrenGroup[0].children[0]).to.be.equal(child1)
+        expect(node.childrenGroup[1].children[0]).to.be.equal(child2)
       })
 
       it('should insert the node with smaller priority at the left position', () => {
@@ -59,8 +59,8 @@ describe('managers/overlay', () => {
         let child2 = new Tree().root
         node.appendChild(child1, 2)
         node.appendChild(child2, 1)
-        expect(node.childrenGroup[1].children[0]).toBe(child1)
-        expect(node.childrenGroup[0].children[0]).toBe(child2)
+        expect(node.childrenGroup[1].children[0]).to.be.equal(child1)
+        expect(node.childrenGroup[0].children[0]).to.be.equal(child2)
       })
 
       it("should record the group's priority", () => {
@@ -69,8 +69,8 @@ describe('managers/overlay', () => {
         let child2 = new Tree().root
         node.appendChild(child1, 1)
         node.appendChild(child2, 2)
-        expect(node.childrenGroup[0].priority).toBe(1)
-        expect(node.childrenGroup[1].priority).toBe(2)
+        expect(node.childrenGroup[0].priority).to.be.equal(1)
+        expect(node.childrenGroup[1].priority).to.be.equal(2)
       })
     })
 
@@ -79,11 +79,11 @@ describe('managers/overlay', () => {
         let node = new Tree().root
         let child1 = new Tree().root
 
-        expect(node.getChildrenCount()).toBe(0)
+        expect(node.getChildrenCount()).to.be.equal(0)
         node.appendChild(child1)
-        expect(node.getChildrenCount()).toBe(1)
+        expect(node.getChildrenCount()).to.be.equal(1)
         node.removeChildById(child1.id)
-        expect(node.getChildrenCount()).toBe(0)
+        expect(node.getChildrenCount()).to.be.equal(0)
       })
     })
 
@@ -92,11 +92,11 @@ describe('managers/overlay', () => {
         let node = new Tree().root
         let child1 = new Tree().root
 
-        expect(node.getChildrenCount()).toBe(0)
+        expect(node.getChildrenCount()).to.be.equal(0)
         node.appendChild(child1)
-        expect(node.getChildrenCount()).toBe(1)
+        expect(node.getChildrenCount()).to.be.equal(1)
         child1.remove()
-        expect(node.getChildrenCount()).toBe(0)
+        expect(node.getChildrenCount()).to.be.equal(0)
       })
 
       it('should remove a node in subtree that is not under the root.', () => {
@@ -113,7 +113,7 @@ describe('managers/overlay', () => {
         })
 
         nodeHandle2.remove()
-        expect(() => nodeHandle3.remove()).not.toThrow()
+        expect(() => nodeHandle3.remove()).to.not.throw()
       })
     })
 
@@ -123,11 +123,11 @@ describe('managers/overlay', () => {
         let child1 = new Tree().root
         let child2 = new Tree().root
 
-        expect(node.getChildrenCount()).toBe(0)
+        expect(node.getChildrenCount()).to.be.equal(0)
         node.appendChild(child1)
-        expect(node.getChildrenCount()).toBe(1)
+        expect(node.getChildrenCount()).to.be.equal(1)
         node.appendChild(child2, 1)
-        expect(node.getChildrenCount()).toBe(2)
+        expect(node.getChildrenCount()).to.be.equal(2)
       })
     })
   })
@@ -136,9 +136,9 @@ describe('managers/overlay', () => {
     describe('#constructor', () => {
       it('should create a Tree instance', () => {
         let tree = new Tree()
-        expect(tree.hasOwnProperty('root')).toBe(true)
-        expect(tree.hasOwnProperty('nodeMap')).toBe(true)
-        expect(tree.hasOwnProperty('baseOrder')).toBe(true)
+        expect(tree.hasOwnProperty('root')).to.equal(true)
+        expect(tree.hasOwnProperty('nodeMap')).to.equal(true)
+        expect(tree.hasOwnProperty('baseOrder')).to.equal(true)
       })
     })
 
@@ -147,10 +147,10 @@ describe('managers/overlay', () => {
         let tree = new Tree()
         let nodeHandle = tree.createNode()
 
-        expect(nodeHandle.hasOwnProperty('id')).toBe(true)
-        expect(isFunction(nodeHandle.remove)).toBe(true)
-        expect(isFunction(nodeHandle.appendTo)).toBe(true)
-        expect(isFunction(nodeHandle.toTop)).toBe(true)
+        expect(nodeHandle.hasOwnProperty('id')).to.equal(true)
+        expect(isFunction(nodeHandle.remove)).to.equal(true)
+        expect(isFunction(nodeHandle.appendTo)).to.equal(true)
+        expect(isFunction(nodeHandle.toTop)).to.equal(true)
       })
     })
 
@@ -158,9 +158,9 @@ describe('managers/overlay', () => {
       it('should set the base order of the tree', () => {
         let tree = new Tree()
         tree.setBaseOrder(201)
-        expect(tree.baseOrder).toBe(201)
+        expect(tree.baseOrder).to.be.equal(201)
         tree.setBaseOrder(202)
-        expect(tree.baseOrder).toBe(202)
+        expect(tree.baseOrder).to.be.equal(202)
       })
     })
 
@@ -185,10 +185,10 @@ describe('managers/overlay', () => {
         tree.iterate({
           callback (child) {
             counter++
-            expect(childIdList.shift()).toBe(child.id)
+            expect(childIdList.shift()).to.be.equal(child.id)
           }
         })
-        expect(counter).toBe(total)
+        expect(counter).to.be.equal(total)
       })
 
       it('should stop iteration white return true in callback', () => {
@@ -213,29 +213,29 @@ describe('managers/overlay', () => {
             return counter === 1
           }
         })
-        expect(counter).toBe(1)
+        expect(counter).to.be.equal(1)
       })
     })
 
     describe('#createNode', () => {
       it('should create a node and append it to parent', () => {
         let tree = new Tree()
-        expect(tree.nodeMap[tree.root.id].node.getChildrenCount()).toBe(0)
+        expect(tree.nodeMap[tree.root.id].node.getChildrenCount()).to.be.equal(0)
 
         tree.createNode()
-        expect(tree.nodeMap[tree.root.id].node.getChildrenCount()).toBe(1)
+        expect(tree.nodeMap[tree.root.id].node.getChildrenCount()).to.be.equal(1)
 
         tree.createNode()
-        expect(tree.nodeMap[tree.root.id].node.getChildrenCount()).toBe(2)
+        expect(tree.nodeMap[tree.root.id].node.getChildrenCount()).to.be.equal(2)
 
         tree.createNode({ priority: 5 })
-        expect(tree.nodeMap[tree.root.id].node.getChildrenCount()).toBe(3)
+        expect(tree.nodeMap[tree.root.id].node.getChildrenCount()).to.be.equal(3)
 
         let nodeHandle = tree.createNode({ priority: 2 })
-        expect(tree.nodeMap[tree.root.id].node.getChildrenCount()).toBe(4)
+        expect(tree.nodeMap[tree.root.id].node.getChildrenCount()).to.be.equal(4)
 
         tree.createNode({ priority: 5, parentId: nodeHandle.id })
-        expect(tree.nodeMap[tree.root.id].node.getChildrenCount()).toBe(4)
+        expect(tree.nodeMap[tree.root.id].node.getChildrenCount()).to.be.equal(4)
       })
 
       it('should receive `orderchange` event', done => {
@@ -266,21 +266,21 @@ describe('managers/overlay', () => {
       it('should generate order for tree', () => {
         let tree = new Tree()
         let nodeHandle = tree.createNode()
-        expect(tree.nodeMap[nodeHandle.id].node.order).toBe(tree.baseOrder)
+        expect(tree.nodeMap[nodeHandle.id].node.order).to.be.equal(tree.baseOrder)
       })
 
       it('should generate bigger order for the latter node', () => {
         let tree = new Tree()
         let nodeHandle = tree.createNode({ parentId: tree.root.id })
-        expect(tree.nodeMap[nodeHandle.id].node.order).toBe(tree.baseOrder)
+        expect(tree.nodeMap[nodeHandle.id].node.order).to.be.equal(tree.baseOrder)
 
         let nodeHandle1 = tree.createNode({ parentId: nodeHandle.id })
-        expect(tree.nodeMap[nodeHandle1.id].node.order).toBe(
+        expect(tree.nodeMap[nodeHandle1.id].node.order).to.be.equal(
           tree.baseOrder + 1
         )
 
         let nodeHandle2 = tree.createNode({ parentId: nodeHandle.id })
-        expect(tree.nodeMap[nodeHandle2.id].node.order).toBe(
+        expect(tree.nodeMap[nodeHandle2.id].node.order).to.be.equal(
           tree.baseOrder + 2
         )
 
@@ -288,7 +288,7 @@ describe('managers/overlay', () => {
           parentId: nodeHandle.id,
           priority: 2
         })
-        expect(tree.nodeMap[nodeHandle3.id].node.order).toBe(
+        expect(tree.nodeMap[nodeHandle3.id].node.order).to.be.equal(
           tree.baseOrder + 3
         )
 
@@ -296,7 +296,7 @@ describe('managers/overlay', () => {
           parentId: nodeHandle.id,
           priority: 6
         })
-        expect(tree.nodeMap[nodeHandle4.id].node.order).toBe(
+        expect(tree.nodeMap[nodeHandle4.id].node.order).to.be.equal(
           tree.baseOrder + 4
         )
 
@@ -304,10 +304,10 @@ describe('managers/overlay', () => {
           parentId: nodeHandle.id,
           priority: 3
         })
-        expect(tree.nodeMap[nodeHandle5.id].node.order).toBe(
+        expect(tree.nodeMap[nodeHandle5.id].node.order).to.be.equal(
           tree.baseOrder + 4
         )
-        expect(tree.nodeMap[nodeHandle4.id].node.order).toBe(
+        expect(tree.nodeMap[nodeHandle4.id].node.order).to.be.equal(
           tree.baseOrder + 5
         )
       })
@@ -318,11 +318,11 @@ describe('managers/overlay', () => {
     describe('#remove', () => {
       it('should remove self from parent', () => {
         let tree = new Tree()
-        expect(tree.root.getChildrenCount()).toBe(0)
+        expect(tree.root.getChildrenCount()).to.be.equal(0)
         let nodeHandle = tree.createNode()
-        expect(tree.root.getChildrenCount()).toBe(1)
+        expect(tree.root.getChildrenCount()).to.be.equal(1)
         nodeHandle.remove()
-        expect(tree.root.getChildrenCount()).toBe(0)
+        expect(tree.root.getChildrenCount()).to.be.equal(0)
       })
     })
 
@@ -335,21 +335,21 @@ describe('managers/overlay', () => {
         let index = 0
         tree.iterate({
           callback (cur) {
-            expect(cur.id).toBe(nodeHandles1[index].id)
+            expect(cur.id).to.be.equal(nodeHandles1[index].id)
             index++
           }
         })
-        expect(index).toBe(nodeHandles1.length)
+        expect(index).to.be.equal(nodeHandles1.length)
 
         nodeHandles1[1].appendTo(nodeHandles1[2].id)
         index = 0
         tree.iterate({
           callback (cur) {
-            expect(cur.id).toBe(nodeHandles2[index].id)
+            expect(cur.id).to.be.equal(nodeHandles2[index].id)
             index++
           }
         })
-        expect(index).toBe(nodeHandles2.length)
+        expect(index).to.be.equal(nodeHandles2.length)
       })
     })
 
@@ -359,18 +359,18 @@ describe('managers/overlay', () => {
         let nodeHandle1 = tree.createNode({ priority: 1 })
         let nodeHandle2 = tree.createNode({ priority: 1 })
 
-        expect(tree.root.childrenGroup[0].children[0].id).toBe(
+        expect(tree.root.childrenGroup[0].children[0].id).to.be.equal(
           nodeHandle1.id
         )
-        expect(tree.root.childrenGroup[0].children[1].id).toBe(
+        expect(tree.root.childrenGroup[0].children[1].id).to.be.equal(
           nodeHandle2.id
         )
 
         nodeHandle1.toTop()
-        expect(tree.root.childrenGroup[0].children[1].id).toBe(
+        expect(tree.root.childrenGroup[0].children[1].id).to.be.equal(
           nodeHandle1.id
         )
-        expect(tree.root.childrenGroup[0].children[0].id).toBe(
+        expect(tree.root.childrenGroup[0].children[0].id).to.be.equal(
           nodeHandle2.id
         )
       })
@@ -384,14 +384,14 @@ describe('managers/overlay', () => {
         let nodeHandle3 = tree.createNode({ priority: 1 })
 
         nodeHandle3.appendTo(nodeHandle1.id)
-        expect(tree.nodeMap[nodeHandle1.id].node.order).toBe(200)
-        expect(tree.nodeMap[nodeHandle2.id].node.order).toBe(202)
-        expect(tree.nodeMap[nodeHandle3.id].node.order).toBe(201)
+        expect(tree.nodeMap[nodeHandle1.id].node.order).to.be.equal(200)
+        expect(tree.nodeMap[nodeHandle2.id].node.order).to.be.equal(202)
+        expect(tree.nodeMap[nodeHandle3.id].node.order).to.be.equal(201)
 
         nodeHandle1.toTop()
-        expect(tree.nodeMap[nodeHandle1.id].node.order).toBe(201)
-        expect(tree.nodeMap[nodeHandle2.id].node.order).toBe(200)
-        expect(tree.nodeMap[nodeHandle3.id].node.order).toBe(202)
+        expect(tree.nodeMap[nodeHandle1.id].node.order).to.be.equal(201)
+        expect(tree.nodeMap[nodeHandle2.id].node.order).to.be.equal(200)
+        expect(tree.nodeMap[nodeHandle3.id].node.order).to.be.equal(202)
       })
 
       it('should fix the tail.', () => {
@@ -417,12 +417,12 @@ describe('managers/overlay', () => {
         })
 
         nodeHandle1.toTop()
-        expect(tree.nodeMap[nodeHandle2.id].node.order).toBe(100)
-        expect(tree.nodeMap[nodeHandle1.id].node.order).toBe(101)
-        expect(tree.nodeMap[nodeHandle3.id].node.order).toBe(102)
-        expect(tree.nodeMap[nodeHandle4.id].node.order).toBe(103)
-        expect(tree.nodeMap[nodeHandle5.id].node.order).toBe(104)
-        expect(tree.nodeMap[nodeHandle6.id].node.order).toBe(105)
+        expect(tree.nodeMap[nodeHandle2.id].node.order).to.be.equal(100)
+        expect(tree.nodeMap[nodeHandle1.id].node.order).to.be.equal(101)
+        expect(tree.nodeMap[nodeHandle3.id].node.order).to.be.equal(102)
+        expect(tree.nodeMap[nodeHandle4.id].node.order).to.be.equal(103)
+        expect(tree.nodeMap[nodeHandle5.id].node.order).to.be.equal(104)
+        expect(tree.nodeMap[nodeHandle6.id].node.order).to.be.equal(105)
       })
 
       it('should properly set the tail node\'s next node.', () => {
@@ -445,7 +445,7 @@ describe('managers/overlay', () => {
         })
 
         nodeHandle2.toTop()
-        expect(tree.nodeMap[nodeHandle7.id].node.next).toBe(null)
+        expect(tree.nodeMap[nodeHandle7.id].node.next).to.be.equal(null)
       })
     })
 
@@ -458,7 +458,7 @@ describe('managers/overlay', () => {
       let nodeHandle3 = tree.createNode({ parentId: nodeHandle2.id })
       let nodeHandle4 = tree.createNode({ priority: 100 })
 
-      expect(tree.nodeMap[nodeHandle4.id].node.previous).toBe(tree.nodeMap[nodeHandle3.id].node)
+      expect(tree.nodeMap[nodeHandle4.id].node.previous).to.be.equal(tree.nodeMap[nodeHandle3.id].node)
     })
   })
 })

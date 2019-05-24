@@ -3,14 +3,23 @@ import Textarea from '@/components/Textarea'
 
 describe('components/Textarea', () => {
   it('should handle value prop with `null` value.', done => {
-    const wrapper = mount(Textarea, {
-      propsData: {
-        value: null
+    let wrapper = mount(
+      Textarea,
+      {
+        propsData: {
+          value: null
+        }
+      },
+      {
+        attachToDocument: true,
+        sync: false
       }
-    })
+    )
 
     wrapper.vm.$on('input', val => {
-      expect(val).toBe('')
+      expect(val).to.equal('')
+
+      wrapper.destroy()
       done()
     })
 
@@ -18,12 +27,19 @@ describe('components/Textarea', () => {
   })
 
   it('should transparently pass-through attrs to the <textarea> element.', () => {
-    const wrapper = mount(Textarea, {
-      attrs: {
-        autofocus: ''
+    let wrapper = mount(
+      Textarea,
+      {
+        attrs: {
+          autofocus: ''
+        }
+      },
+      {
+        sync: false
       }
-    })
+    )
 
-    expect(wrapper.find('textarea').element.autofocus).toBe(true)
+    expect(wrapper.find('textarea').element.autofocus).to.equal(true)
+    wrapper.destroy()
   })
 })

@@ -1,18 +1,19 @@
 import { mount } from '@vue/test-utils'
 import drag, { registerHandler } from '@/directives/drag'
-import BaseHandler from '@/directives/drag/BaseHandler'
-import { waitTimeout } from '../../../utils'
+import { wait } from '../../../utils'
 
 describe('directives/drag', () => {
   it(`should receive correct params inside callbacks`, done => {
     let results = []
-    const wrapper = mount({
+    let wrapper = mount({
       directives: { drag },
-      template: `<div ref="self" v-drag:self="{
+      template: `<div ref="self"
+        v-drag:self="{
           dragstart: handleStart,
           drag: handleMove,
           dragend: handleEnd
-        }">foo</div>`,
+        }"
+        style="width: 20px; height: 20px">foo</div>`,
       methods: {
         handleStart ({ event }) {
           results.push({
@@ -21,7 +22,7 @@ describe('directives/drag', () => {
           })
         },
         handleMove ({ event, distanceX, distanceY }) {
-          assertTransform(this, `translate(${distanceX}px,${distanceY}px)`)
+          assertTransform(this, `translate(${distanceX}px, ${distanceY}px)`)
           results.push({
             x: event.clientX,
             y: event.clientY,
@@ -37,15 +38,16 @@ describe('directives/drag', () => {
             dy: distanceY
           })
 
-          expect(results).toEqual([
+          expect(results).to.deep.equal([
             { x: 5, y: 5 },
             { x: 105, y: 105, dx: 100, dy: 100 },
             { x: 205, y: 205, dx: 200, dy: 200 },
             { x: 205, y: 205, dx: 200, dy: 200 }
           ])
 
-          assertTransform(this, 'translate(200px,200px)')
+          assertTransform(this, 'translate(200px, 200px)')
 
+          wrapper.destroy()
           done()
         }
       }
@@ -54,8 +56,8 @@ describe('directives/drag', () => {
     performDrag(wrapper, [[5, 5], [105, 105], [205, 205], [205, 205]])
   })
 
-  it(`should be able to accept dynamic options`, async done => {
-    const wrapper = mount({
+  it(`should accept dynamic options`, async () => {
+    let wrapper = mount({
       directives: { drag },
       template: `<div ref="self" v-drag:self="dragOptions">foo</div>`,
       data () {
@@ -67,10 +69,10 @@ describe('directives/drag', () => {
       }
     })
 
-    const { vm } = wrapper
+    let { vm } = wrapper
 
     performDrag(wrapper)
-    assertTransform(wrapper, 'translate(200px,0px)')
+    assertTransform(wrapper, 'translate(200px, 0px)')
 
     await vm.$nextTick()
 
@@ -78,34 +80,35 @@ describe('directives/drag', () => {
     wrapper.vm.dragOptions = { axis: 'x' }
     await vm.$nextTick()
     performDrag(wrapper)
-    assertTransform(wrapper, 'translate(200px,0px)')
+    assertTransform(wrapper, 'translate(200px, 0px)')
 
     wrapper.vm.dragOptions = { axis: 'y' }
     await vm.$nextTick()
     performDrag(wrapper)
-    assertTransform(wrapper, 'translate(0px,200px)')
+    assertTransform(wrapper, 'translate(0px, 200px)')
 
-    done()
+    wrapper.destroy()
   })
 
   it(`doesn't accept non-BaseHandler derivatives in registerHandler method`, () => {
     expect(() => {
       registerHandler('foo', {})
-    }).toThrow('The handler class must derive from `BaseHandler`.')
+    }).to.throw('The handler class must derive from `BaseHandler`.')
   })
 
   it('should handle clear up correctly', () => {
-    const { element, vm } = mount({
+    let wrapper = mount({
       directives: { drag },
       template: `<div ref="self" v-drag:self>foo</div>`
     })
 
-    vm.$destroy()
-    expect(element.__dragData__).toBe(null)
+    wrapper.vm.$destroy()
+    expect(wrapper.element.__dragData__).to.be.equal(null)
+    wrapper.destroy()
   })
 
   it('should handle @window containment correctly', () => {
-    const wrapper = mount({
+    let wrapper = mount({
       directives: { drag },
       template: `<div ref="self" v-drag:self="{
         containment: '@window'
@@ -113,11 +116,12 @@ describe('directives/drag', () => {
     })
 
     performDrag(wrapper, [[0, 0], [-100, 2000]])
-    assertTransform(wrapper, 'translate(0px,768px)')
+    assertTransform(wrapper, `translate(0px, ${window.innerHeight}px)`)
+    wrapper.destroy()
   })
 
   it('should handle rect containment correctly', () => {
-    const wrapper = mount({
+    let wrapper = mount({
       directives: { drag },
       template: `<div ref="self" v-drag:self="{
         containment: {
@@ -130,11 +134,12 @@ describe('directives/drag', () => {
     })
 
     performDrag(wrapper, [[0, 0], [-100, 200]])
-    assertTransform(wrapper, 'translate(0px,100px)')
+    assertTransform(wrapper, 'translate(0px, 100px)')
+    wrapper.destroy()
   })
 
-  it('should be able to retrive `reset` method and use when needed', async done => {
-    const wrapper = mount({
+  it('should be able to retrieve `reset` method and use when needed', async () => {
+    let wrapper = mount({
       directives: { drag },
       template: `<div ref="self" v-drag:self="{
         ready
@@ -148,17 +153,17 @@ describe('directives/drag', () => {
 
     let { vm } = wrapper
     performDrag(wrapper, [[0, 0], [100, 100]])
-    assertTransform(wrapper, 'translate(100px,100px)')
+    assertTransform(wrapper, 'translate(100px, 100px)')
 
-    await waitTimeout(200)
+    await wait(200)
     vm.reset()
     assertTransform(wrapper, '')
 
-    done()
+    wrapper.destroy()
   })
 
   it('should handle `draggable` option correctly', () => {
-    const wrapper = mount({
+    let wrapper = mount({
       directives: { drag },
       template: `<div ref="self" v-drag:self="{
         draggable: false
@@ -167,21 +172,23 @@ describe('directives/drag', () => {
 
     performDrag(wrapper, [[0, 0], [100, 100]])
     assertTransform(wrapper, '')
+
+    wrapper.destroy()
   })
 
-  it('should handle unknow type option correctly', () => {
-    const wrapper = mount({
-      directives: { drag },
-      template: `<div ref="self" v-drag:self="{
-        type: 'foo'
-      }">foo</div>`
-    })
-
-    expect(wrapper.element.__dragData__.handler.constructor).toBe(BaseHandler)
+  it('should handle unknown type option correctly', () => {
+    expect(() => {
+      mount({
+        directives: { drag },
+        template: `<div ref="self" v-drag:self="{
+          type: 'foo'
+        }">foo</div>`
+      })
+    }).to.throw('No handler is registered for type "foo".')
   })
 })
 
-const DEFAULT_MOVEMENT = [[5, 5], [105, 105], [205, 205]]
+let DEFAULT_MOVEMENT = [[5, 5], [105, 105], [205, 205]]
 function performDrag (wrapper, series = DEFAULT_MOVEMENT) {
   let [start, ...moves] = series
   let end = moves.pop()
@@ -222,5 +229,5 @@ function assertTransform (target, value) {
   } else {
     throw new Error('Invalid target')
   }
-  expect(el.style.transform.trim()).toBe(value)
+  expect(el.style.transform.trim()).to.be.equal(value)
 }
