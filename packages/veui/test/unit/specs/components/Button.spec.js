@@ -10,7 +10,7 @@ describe('components/Button', () => {
       }
     })
 
-    expect(wrapper.attributes('ui')).toBe('primary')
+    expect(wrapper.attributes('ui')).to.be.equal('primary')
   })
 
   it('should be disabled when the button is loading', () => {
@@ -29,9 +29,9 @@ describe('components/Button', () => {
       }
     })
 
-    expect(wrapper.contains(SpinIcon)).toBe(true)
-    expect(wrapper.classes()).toContain('veui-button-loading')
-    expect(wrapper.attributes('disabled')).toBe('disabled')
+    expect(wrapper.contains(SpinIcon)).to.be.equal(true)
+    expect(wrapper.classes()).to.include('veui-button-loading')
+    expect(wrapper.attributes('disabled')).to.be.equal('disabled')
   })
 
   it('should support disabled state', () => {
@@ -41,8 +41,8 @@ describe('components/Button', () => {
       }
     })
 
-    expect(wrapper.classes()).toContain('veui-disabled')
-    expect(wrapper.attributes('disabled')).toBe('disabled')
+    expect(wrapper.classes()).to.include('veui-disabled')
+    expect(wrapper.attributes('disabled')).to.be.equal('disabled')
   })
 
   it('should support submit type', () => {
@@ -52,24 +52,24 @@ describe('components/Button', () => {
       }
     })
 
-    expect(wrapper.attributes('type')).toContain('submit')
+    expect(wrapper.attributes('type')).to.include('submit')
   })
 
   it('should support set default slot', () => {
-    const Slot = {
-      name: 'Slot',
+    const VItalic = {
+      name: 'v-italic',
       template: '<i>Veui Button</i>'
     }
     const wrapper = mount(Button, {
       slots: {
-        default: Slot
+        default: VItalic
       }
     })
 
-    expect(wrapper.contains(Slot)).toBe(true)
+    expect(wrapper.contains(VItalic)).to.be.equal(true)
   })
 
-  it('should handle click', (done) => {
+  it('should handle click', async () => {
     const ButtonClick = {
       components: {
         'veui-button': Button
@@ -88,9 +88,7 @@ describe('components/Button', () => {
     }
     const wrapper = mount(ButtonClick)
     wrapper.find('.veui-button').trigger('click')
-    wrapper.vm.$nextTick(() => {
-      expect(wrapper.vm.hasClick).toBe(true)
-      done()
-    })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.hasClick).to.be.equal(true)
   })
 })
