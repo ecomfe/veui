@@ -2,12 +2,12 @@ import { mount } from '@vue/test-utils'
 import nudge from '@/directives/nudge'
 import config from '@/managers/config'
 
-const DEFAULT_STEP = config.get('nudge.step')
+let DEFAULT_STEP = config.get('nudge.step')
 
 describe('directives/nudge', () => {
-  it(`should callback with step ${DEFAULT_STEP} upon keydown by default`, async done => {
+  it(`should callback with step ${DEFAULT_STEP} upon keydown by default`, async () => {
     let updated = []
-    const wrapper = mount({
+    let wrapper = mount({
       directives: { nudge },
       template: `<div tabindex="0" v-nudge="handler">foo</div>`,
       methods: {
@@ -44,13 +44,12 @@ describe('directives/nudge', () => {
 
     await wrapper.vm.$nextTick()
 
-    expect(updated).toEqual([1, -1, 0.1, -0.1, 10, -10])
-    done()
+    expect(updated).to.deep.equal([1, -1, 0.1, -0.1, 10, -10])
   })
 
-  it(`should callback with specified step value upon keydown by default`, async done => {
+  it(`should callback with specified step value upon keydown by default`, async () => {
     let updated = []
-    const wrapper = mount({
+    let wrapper = mount({
       directives: { nudge },
       template: `<div tabindex="0" v-nudge="{
           update: handler,
@@ -87,13 +86,12 @@ describe('directives/nudge', () => {
 
     await wrapper.vm.$nextTick()
 
-    expect(updated).toEqual([10, -10, 1, -1, 100, -100])
-    done()
+    expect(updated).to.deep.equal([10, -10, 1, -1, 100, -100])
   })
 
-  it(`should be able to specify axis`, async done => {
+  it(`should be able to specify axis`, async () => {
     let updated = []
-    const wrapper = mount({
+    let wrapper = mount({
       directives: { nudge },
       template: `<div tabindex="0" v-nudge.x="handler">foo</div>`,
       methods: {
@@ -127,12 +125,11 @@ describe('directives/nudge', () => {
 
     await wrapper.vm.$nextTick()
 
-    expect(updated).toEqual([1, -1, 0.1, -0.1, 10, -10])
-    done()
+    expect(updated).to.deep.equal([1, -1, 0.1, -0.1, 10, -10])
   })
 
   it('should clear up correctly', () => {
-    const wrapper = mount({
+    let wrapper = mount({
       directives: { nudge },
       template: `<div tabindex="0" v-nudge="handler">foo</div>`,
       methods: {
@@ -141,12 +138,12 @@ describe('directives/nudge', () => {
     })
 
     wrapper.destroy()
-    expect(wrapper.element.__nudgeData__).toBe(null)
+    expect(wrapper.element.__nudgeData__).to.be.equal(null)
   })
 
-  it('should handle dynamic options correctly', async done => {
+  it('should handle dynamic options correctly', async () => {
     let updated = []
-    const wrapper = mount({
+    let wrapper = mount({
       directives: { nudge },
       template: `<div v-nudge="{
           update: handler,
@@ -171,14 +168,14 @@ describe('directives/nudge', () => {
     })
 
     await wrapper.vm.$nextTick()
-    expect(updated).toEqual([1])
+    expect(updated).to.deep.equal([1])
 
     wrapper.trigger('keydown', {
       key: 'ArrowRight'
     })
 
     await wrapper.vm.$nextTick()
-    expect(updated).toEqual([1])
+    expect(updated).to.deep.equal([1])
 
     wrapper.vm.axis = 'x'
 
@@ -188,15 +185,13 @@ describe('directives/nudge', () => {
     })
 
     await wrapper.vm.$nextTick()
-    expect(updated).toEqual([1, 1])
+    expect(updated).to.deep.equal([1, 1])
 
     wrapper.trigger('keydown', {
       key: 'ArrowUp'
     })
 
     await wrapper.vm.$nextTick()
-    expect(updated).toEqual([1, 1])
-
-    done()
+    expect(updated).to.deep.equal([1, 1])
   })
 })

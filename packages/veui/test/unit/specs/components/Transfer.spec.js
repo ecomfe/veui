@@ -1,64 +1,83 @@
-import Vue from 'vue'
+import { mount } from '@vue/test-utils'
 import Transfer from '@/components/Transfer'
 
 describe('components/Transfer', () => {
-  it('should handle datasource change correctly.', done => {
-    let wrapper = document.createElement('div')
-    document.body.appendChild(wrapper)
-    new Vue({
-      components: {
-        'veui-transfer': Transfer
+  it('should handle datasource change correctly.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-transfer': Transfer
+        },
+        data () {
+          return {
+            items: [
+              { label: 'A', value: 'a' },
+              { label: 'B', value: 'b' },
+              { label: 'C', value: 'c' }
+            ]
+          }
+        },
+        template: '<veui-transfer :datasource="items"/>'
       },
-      data () {
-        return {
-          items: [
-            { label: 'A', value: 'a' },
-            { label: 'B', value: 'b' },
-            { label: 'C', value: 'c' }
-          ]
-        }
-      },
-      async mounted () {
-        expect(this.$el.querySelectorAll('.veui-transfer-candidate-item').length).toBe(3)
-        this.items = [
-          { label: '1', value: '1' },
-          { label: '2', value: '2' }
-        ]
-        await this.$nextTick()
-        expect(this.$el.querySelectorAll('.veui-transfer-candidate-item').length).toBe(2)
-        done()
-      },
-      template: '<veui-transfer :datasource="items"/>'
-    }).$mount(wrapper)
-  })
-})
+      {
+        sync: false
+      }
+    )
 
-describe('components/Transfer', () => {
-  it('should handle selected change correctly.', done => {
-    let wrapper = document.createElement('div')
-    document.body.appendChild(wrapper)
-    new Vue({
-      components: {
-        'veui-transfer': Transfer
+    let { vm } = wrapper
+
+    expect(wrapper.findAll('.veui-transfer-candidate-item').length).to.be.equal(
+      3
+    )
+
+    vm.items = [{ label: '1', value: '1' }, { label: '2', value: '2' }]
+
+    await vm.$nextTick()
+
+    expect(wrapper.findAll('.veui-transfer-candidate-item').length).to.be.equal(
+      2
+    )
+
+    wrapper.destroy()
+  })
+
+  it('should handle selected change correctly.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-transfer': Transfer
+        },
+        data () {
+          return {
+            items: [
+              { label: 'A', value: 'a' },
+              { label: 'B', value: 'b' },
+              { label: 'C', value: 'c' }
+            ],
+            selected: ['a', 'b']
+          }
+        },
+        template: '<veui-transfer :datasource="items" v-model="selected" />'
       },
-      data () {
-        return {
-          items: [
-            { label: 'A', value: 'a' },
-            { label: 'B', value: 'b' },
-            { label: 'C', value: 'c' }
-          ],
-          selected: ['a', 'b']
-        }
-      },
-      async mounted () {
-        expect(this.$el.querySelectorAll('.veui-transfer-selected-item').length).toBe(2)
-        this.selected = []
-        await this.$nextTick()
-        expect(this.$el.querySelectorAll('.veui-transfer-selected-item').length).toBe(0)
-        done()
-      },
-      template: '<veui-transfer :datasource="items" v-model="selected" />'
-    }).$mount(wrapper)
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+
+    expect(wrapper.findAll('.veui-transfer-selected-item').length).to.be.equal(
+      2
+    )
+
+    vm.selected = []
+
+    await vm.$nextTick()
+
+    expect(wrapper.findAll('.veui-transfer-selected-item').length).to.be.equal(
+      0
+    )
+
+    wrapper.destroy()
   })
 })

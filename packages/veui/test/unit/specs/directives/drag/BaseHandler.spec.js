@@ -11,9 +11,9 @@ describe('directives/drag/BaseHandler', () => {
   )
 
   it('should be instantiatable with specified options and context', () => {
-    expect(handler.options.foo).toBe(0)
-    expect(handler.context.bar).toBe(1)
-    expect(handler.isDragging).toBe(false)
+    expect(handler.options.foo).to.be.equal(0)
+    expect(handler.context.bar).to.be.equal(1)
+    expect(handler.isDragging).to.be.equal(false)
   })
 
   it('should respond correctly when its methods are called', () => {
@@ -21,29 +21,29 @@ describe('directives/drag/BaseHandler', () => {
       handler.setOptions({
         foo: 2
       })
-    }).not.toThrow()
-    expect(handler.options.foo).toBe(2)
+    }).to.not.throw()
+    expect(handler.options.foo).to.be.equal(2)
 
     handler.start()
-    expect(handler.isDragging).toBe(true)
+    expect(handler.isDragging).to.be.equal(true)
 
     expect(() => {
       handler.drag()
-    }).toThrow('`drag` method must be implemented.')
+    }).to.throw('`drag` method must be implemented.')
 
     expect(() => {
       handler.setOptions({})
-    }).toThrow('Do not set `options` while dragging.')
+    }).to.throw('Do not set `options` while dragging.')
 
     handler.end()
-    expect(handler.isDragging).toBe(false)
+    expect(handler.isDragging).to.be.equal(false)
 
     expect(() => {
       handler.reset()
-    }).toThrow('`reset` method must be implemented.')
+    }).to.throw('`reset` method must be implemented.')
 
     expect(() => {
       handler.destroy()
-    }).toThrow('`destroy` method must be implemented.')
+    }).to.throw('`destroy` method must be implemented.')
   })
 })

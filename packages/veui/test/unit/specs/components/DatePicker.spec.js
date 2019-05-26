@@ -3,14 +3,16 @@ import DatePicker from '@/components/DatePicker'
 
 describe('components/DatePicker', () => {
   it('should handle selected prop with `null` value.', done => {
-    const wrapper = mount(DatePicker, {
+    let wrapper = mount(DatePicker, {
       propsData: {
         selected: null
       }
     })
 
     wrapper.vm.$on('select', val => {
-      expect(val instanceof Date).toBe(true)
+      expect(val instanceof Date).to.be.equal(true)
+
+      wrapper.destroy()
       done()
     })
 

@@ -29,9 +29,9 @@ describe('components/Select/OptionGroup', () => {
         this.$el.querySelector('.veui-select-button').dispatchEvent(new Event('click'))
 
         setTimeout(() => {
-          const options = document.body.querySelectorAll('.veui-option')
-          expect(some(options[0].classList, item => item === 'veui-option-disabled')).toBe(true)
-          expect(some(options[1].classList, item => item === 'veui-option-disabled')).toBe(false)
+          let options = document.body.querySelectorAll('.veui-option')
+          expect(some(options[0].classList, item => item === 'veui-option-disabled')).to.be.equal(true)
+          expect(some(options[1].classList, item => item === 'veui-option-disabled')).to.be.equal(false)
           done()
         })
       },

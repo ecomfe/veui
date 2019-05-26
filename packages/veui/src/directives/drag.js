@@ -37,7 +37,7 @@ const OPTIONS_SCHEMA = {
 
 export function registerHandler (name, Handler) {
   if (!(Handler.prototype instanceof BaseHandler)) {
-    throw new TypeError('The handler class must derive from `BaseHandler`.')
+    throw new Error('The handler class must derive from `BaseHandler`.')
   }
   HANDLERS[name] = Handler
 }
@@ -89,7 +89,7 @@ function refresh (el, binding, vnode) {
       let Handler = HANDLERS[options.type]
       handler = new Handler(options, contextComponent)
     } else {
-      handler = new BaseHandler(options, contextComponent)
+      throw new Error(`No handler is registered for type "${options.type}".`)
     }
 
     options.ready({ reset: () => handler.reset() })

@@ -3,14 +3,16 @@ import Calendar from '@/components/Calendar'
 
 describe('components/Calendar', () => {
   it('should handle selected prop with `null` value.', done => {
-    const wrapper = mount(Calendar, {
+    let wrapper = mount(Calendar, {
       propsData: {
         selected: null
       }
     })
 
     wrapper.vm.$on('select', val => {
-      expect(val instanceof Date).toBe(true)
+      expect(val instanceof Date).to.be.equal(true)
+
+      wrapper.destroy()
       done()
     })
 

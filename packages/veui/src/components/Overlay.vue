@@ -222,7 +222,7 @@ export default {
         return
       }
 
-      if (!this.focusContext) {
+      if (!this.focusContext && this.overlayBox) {
         this.focusContext = focusManager.createContext(this.overlayBox, {
           source: document.activeElement,
           trap: this.modal

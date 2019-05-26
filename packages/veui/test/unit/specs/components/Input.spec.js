@@ -3,14 +3,14 @@ import Input from '@/components/Input'
 
 describe('components/Input', () => {
   it('should handle value prop with `null` value.', done => {
-    const wrapper = mount(Input, {
+    let wrapper = mount(Input, {
       propsData: {
         value: null
       }
     })
 
     wrapper.vm.$on('input', val => {
-      expect(val).toBe('')
+      expect(val).to.be.equal('')
       done()
     })
 
@@ -18,12 +18,12 @@ describe('components/Input', () => {
   })
 
   it('should transparently pass-through attrs to the <input> element.', () => {
-    const wrapper = mount(Input, {
+    let wrapper = mount(Input, {
       attrs: {
         autofocus: ''
       }
     })
 
-    expect(wrapper.find('input').element.autofocus).toBe(true)
+    expect(wrapper.find('input').element.autofocus).to.be.equal(true)
   })
 })
