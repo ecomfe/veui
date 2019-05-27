@@ -17,13 +17,23 @@ module.exports = function (config) {
       stats: 'errors-only'
     },
 
-    reporters: ['spec', 'istanbul'],
+    reporters: ['spec', 'coverage-istanbul'],
 
     browsers: ['ChromeHeadless'],
 
-    istanbulReporter: {
+    coverageIstanbulReporter: {
       dir: './test/coverage',
-      reporters: [{ type: 'lcov', subdir: '.' }, { type: 'text-summary' }]
+      reports: ['html', 'lcov', 'text-summary'],
+      combineBrowserReports: true,
+      fixWebpackSourcePaths: true,
+      'report-config': {
+        html: {
+          subdir: 'html'
+        },
+        lcov: {
+          subdir: '.'
+        }
+      }
     }
   })
 }
