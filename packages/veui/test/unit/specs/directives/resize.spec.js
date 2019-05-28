@@ -160,9 +160,10 @@ describe('directives/resize', () => {
         directives: { resize },
         template: `<div v-resize="{
         handler: positive ? inc : dec
-      }">foo</div>`,
+      }">{{ content }}</div>`,
         data () {
           return {
+            content: 'foo',
             positive: true
           }
         },
@@ -183,11 +184,16 @@ describe('directives/resize', () => {
     wrapper.element.style.cssText = 'width: 10px; height: 10px;'
     await wait(50)
     expect(count).to.be.equal(1)
-    wrapper.vm.positive = false
+    wrapper.vm.content = 'bar'
     await wait(0)
     wrapper.element.style.cssText = 'width: 20px; height: 20px;'
     await wait(50)
-    expect(count).to.be.equal(0)
+    expect(count).to.be.equal(2)
+    wrapper.vm.positive = false
+    await wait(0)
+    wrapper.element.style.cssText = 'width: 30px; height: 30px;'
+    await wait(50)
+    expect(count).to.be.equal(1)
 
     wrapper.destroy()
   })
