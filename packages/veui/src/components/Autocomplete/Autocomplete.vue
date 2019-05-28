@@ -51,7 +51,7 @@
         :aria-activedescendant="suggestionsProps.activeDescendant || false"
         :options="suggestionsProps.datasource"
         class="veui-autocomplete-suggestion-group"
-        @mousedown.native.prevent="() => false"
+        @mousedown.native.prevent
       >
         <template
           slot="option-label"
