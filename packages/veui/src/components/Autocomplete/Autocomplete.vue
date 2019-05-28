@@ -106,10 +106,6 @@ export default {
   mixins: [ui, input, overlay],
   props: {
     ...AutocompleteBase.props,
-    focusClass: {
-      type: String,
-      default: 'veui-autocomplete-focus'
-    },
     suggestTrigger: {
       type: [String, Array],
       default: 'input'
