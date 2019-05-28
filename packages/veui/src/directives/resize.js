@@ -1,66 +1,51 @@
 import { addListener, removeListener } from 'resize-detector'
-import {
-  debounce,
-  throttle,
-  isObject,
-  assign,
-  isEqual,
-  find,
-  keys
-} from 'lodash'
-import { getNumberArg } from '../utils/helper'
+import { normalize } from 'vue-directive-normalizer'
+import { debounce, throttle, isEqual } from 'lodash'
+
+const OPTIONS_SCHEMA = {
+  value: 'handler',
+  modifiers: {
+    mode: [null, 'throttle', 'debounce'],
+    wait: 150,
+    leading: false
+  }
+}
 
 const modeMap = {
   debounce,
   throttle
 }
 
-function attach (el, { value, oldValue, modifiers }) {
-  let mode = find(keys(modeMap), mode => modifiers[mode])
-  let wait = getNumberArg(modifiers, 150)
-  let options = {
-    wait,
-    mode,
-    handler: value,
-    leading: modifiers.leading
-  }
-  if (isObject(value)) {
-    assign(options, value)
-  }
+function attach (el, binding) {
+  const options = normalize(binding, OPTIONS_SCHEMA)
 
   let fn = modeMap[options.mode]
   let cb = fn
-    ? fn(options.handler, options.wait, options.leading)
+    ? fn(options.handler, options.wait, {
+      leading: !!options.leading
+    })
     : options.handler
 
-  if (!oldValue) {
-    el.__veui_resize_handler__ = cb
+  if (el.__resizeData__ && !isEqual(el.__resizeData__.options, options)) {
+    removeListener(el, el.__resizeData__.handler)
+    el.__resizeData__.options = options
+    el.__resizeData__.handler = cb
     addListener(el, cb)
-  } else {
-    let oldOptions = {
-      wait,
-      mode,
-      handler: oldValue,
-      leading: modifiers.leading
-    }
+    return
+  }
 
-    if (isObject(oldValue)) {
-      assign(oldOptions, oldValue)
+  if (!el.__resizeData__) {
+    el.__resizeData__ = {
+      options,
+      handler: cb
     }
-
-    let changed = isEqual(oldValue, options)
-
-    if (changed) {
-      let oldCb = el.__veui_resize_handler__
-      removeListener(el, oldCb)
-      el.__veui_resize_handler__ = cb
-      addListener(el, cb)
-    }
+    addListener(el, cb)
   }
 }
 
 function clear (el) {
-  removeListener(el, el.__veui_resize_handler__)
+  removeListener(el, el.__resizeData__.handler)
+  el.__resizeData__ = null
 }
 
 export default {

@@ -56,7 +56,7 @@ describe('directives/drag', () => {
     performDrag(wrapper, [[5, 5], [105, 105], [205, 205], [205, 205]])
   })
 
-  it(`should be able to accept dynamic options`, async () => {
+  it(`should accept dynamic options`, async () => {
     let wrapper = mount({
       directives: { drag },
       template: `<div ref="self" v-drag:self="dragOptions">foo</div>`,

@@ -3,3 +3,14 @@ export function wait (timeout) {
     setTimeout(resolve, timeout)
   })
 }
+
+export function nextFrame () {
+  return new Promise(resolve => {
+    requestAnimationFrame(resolve)
+  })
+}
+
+export async function doubleNextFrame () {
+  await nextFrame()
+  await nextFrame()
+}
