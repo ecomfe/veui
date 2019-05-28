@@ -48,7 +48,7 @@
         ref="suggestions"
         role="listbox"
         :ui="realUi"
-        :aria-activedescendant="suggestionsProps.activeDescendant"
+        :aria-activedescendant="suggestionsProps.activeDescendant || false"
         :options="suggestionsProps.datasource"
         class="veui-autocomplete-suggestion-group"
         @mousedown.native.prevent="() => false"
