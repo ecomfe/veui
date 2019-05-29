@@ -63,7 +63,7 @@ describe('components/Alert', function () {
       `
     })
     wrapper.find('.veui-alert-close-text').trigger('click')
-    await wait(1000)
+    await wait(500)
     expect(wrapper.find('.veui-alert').exists()).to.be.equal(false)
     expect(wrapper.vm.open).to.be.equal(false)
     expect(wrapper.vm.closed).to.be.equal(true)
