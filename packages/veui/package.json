@@ -11,7 +11,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test": "cross-env NODE_ENV=test BABEL_ENV=test karma start --single-run"
+    "test": "cross-env NODE_ENV=test BABEL_ENV=test karma start --single-run",
+    "test:start": "cross-env NODE_ENV=test BABEL_ENV=test karma start"
   },
   "module": "index.js",
   "dependencies": {

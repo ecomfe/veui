@@ -4,6 +4,8 @@
 
 * [^] 修正 `Tree` 组件 `item-label` slot 没有正常渲染的问题。
 * [^] 修正 `longpress` 指令 `repeat` 参数的默认值为 `false`。
+* [^] 修正 `resize` 指令没有正确处理 `leading` 参数的问题。
+* [^] 修正 `outside` 指令没有准确判断参数是否变更的问题。
 
 ## 1.0.0-alpha.25
 

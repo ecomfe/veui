@@ -49,6 +49,7 @@ function clear (el) {
   dragData.handler.destroy()
   el.removeEventListener('mousedown', dragData.mousedownHandler)
   el.__dragData__ = null
+  el.__dragOldOptions__ = null
 }
 
 function getOptions (binding, vnode) {
