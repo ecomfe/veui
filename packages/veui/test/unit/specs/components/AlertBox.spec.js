@@ -1,6 +1,5 @@
 import { mount } from '@vue/test-utils'
 import AlertBox from '@/components/AlertBox'
-import { wait } from '../../../utils'
 
 describe('components/AlertBox', function () {
   it('should render title prop correctly by AlertBox', () => {
@@ -43,9 +42,10 @@ describe('components/AlertBox', function () {
       },
       template: '<veui-alert-box :open.sync="open" title="title" />'
     })
+    let { vm } = wrapper
     wrapper.find('.veui-button').trigger('click')
-    await wait(500)
-    expect(wrapper.vm.open).to.be.equal(false)
+    await vm.$nextTick()
+    expect(vm.open).to.be.equal(false)
     wrapper.destroy()
   })
 
@@ -78,7 +78,7 @@ describe('components/AlertBox', function () {
       `
     })
     wrapper.find('.veui-button').trigger('click')
-    await wait(500)
+    await wrapper.vm.$nextTick()
     expect(count).to.be.equal(2)
     wrapper.destroy()
   })
