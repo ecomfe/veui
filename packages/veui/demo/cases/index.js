@@ -20,6 +20,7 @@ import CheckButtonGroup from './CheckButtonGroup'
 import Tooltip from './Tooltip'
 import Toast from './Toast'
 import Alert from './Alert'
+import AlertBox from './AlertBox'
 import Tabs from './Tabs'
 import Switch from './Switch'
 import Searchbox from './Searchbox'
@@ -43,6 +44,11 @@ export default [
     path: '/alert',
     name: 'Alert',
     component: Alert
+  },
+  {
+    path: '/alert-box',
+    name: 'AlertBox',
+    component: AlertBox
   },
   {
     path: '/breadcrumb',

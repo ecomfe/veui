@@ -14,7 +14,7 @@ describe('components/Alert', function () {
     wrapper.destroy()
   })
 
-  it('should render slot successfully for Alert', () => {
+  it('should render slot correctly for Alert', () => {
     let wrapper = mount({
       components: {
         'veui-alert': Alert
@@ -34,7 +34,7 @@ describe('components/Alert', function () {
     wrapper.destroy()
   })
 
-  it('should close the message successfully for Alert', async () => {
+  it('should close the message correctly for Alert', async () => {
     let wrapper = mount({
       components: {
         'veui-alert': Alert
@@ -56,9 +56,8 @@ describe('components/Alert', function () {
           message="content" 
           closable 
           close-label="close"
-          @update:open="val => open = val"
           @close="close"
-          :open="open"
+          :open.sync="open"
           />
       `
     })
@@ -70,7 +69,7 @@ describe('components/Alert', function () {
     wrapper.destroy()
   })
 
-  it('should render multiple message successfully for Alert', () => {
+  it('should render multiple message correctly for Alert', () => {
     let wrapper = mount({
       components: {
         'veui-alert': Alert
@@ -82,7 +81,7 @@ describe('components/Alert', function () {
       },
       template: '<veui-alert type="error" :message="message" closable />'
     })
-    expect(wrapper.find('.veui-alert-nav').exists()).to.be.equal(true)
+    expect(wrapper.find('.veui-alert-message-multiple').exists()).to.be.equal(true)
     wrapper.destroy()
   })
 
@@ -101,16 +100,17 @@ describe('components/Alert', function () {
     let nav = wrapper.find('.veui-alert-nav')
     let prev = nav.findAll('.veui-button').at(0)
     let next = nav.findAll('.veui-button').at(1)
+    let msg = wrapper.find('.veui-alert-message')
     prev.trigger('click')
-    expect(wrapper.text()).to.be.equal('message one  1/3')
+    expect(msg.text()).to.be.equal('message one')
     prev.trigger('click')
-    expect(wrapper.text()).to.be.equal('message one  1/3')
+    expect(msg.text()).to.be.equal('message one')
     next.trigger('click')
-    expect(wrapper.text()).to.be.equal('message two  2/3')
+    expect(msg.text()).to.be.equal('message two')
     next.trigger('click')
-    expect(wrapper.text()).to.be.equal('message three  3/3')
+    expect(msg.text()).to.be.equal('message three')
     next.trigger('click')
-    expect(wrapper.text()).to.be.equal('message three  3/3')
+    expect(msg.text()).to.be.equal('message three')
     wrapper.destroy()
   })
 })
