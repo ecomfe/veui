@@ -7,10 +7,15 @@ describe('components/Input', () => {
       propsData: {
         value: null
       }
+    },
+    {
+      sync: false
     })
 
     wrapper.vm.$on('input', val => {
       expect(val).to.be.equal('')
+
+      wrapper.destroy()
       done()
     })
 
@@ -22,8 +27,72 @@ describe('components/Input', () => {
       attrs: {
         autofocus: ''
       }
+    },
+    {
+      sync: false
     })
 
     expect(wrapper.find('input').element.autofocus).to.be.equal(true)
+
+    wrapper.destroy()
+  })
+
+  it('should hanlde focus event correctly', async () => {
+    let wrapper = mount(Input)
+    wrapper.find('input').trigger('focus')
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+
+    expect(wrapper.find('div.veui-input').classes('veui-input-focused')).to.be.equal(true)
+    expect(vm.focused).to.be.equal(true)
+
+    wrapper.destroy()
+  })
+
+  it('should not focus for disabled input when activate', async () => {
+    let wrapper = mount(Input, {
+      propsData: {
+        disabled: true
+      }
+    })
+
+    let { vm } = wrapper
+    vm.activate()
+    await vm.$nextTick()
+
+    expect(vm.focused).to.be.equal(false)
+    expect(wrapper.find('div.veui-input').classes('veui-input-focused')).to.be.equal(false)
+
+    wrapper.destroy()
+  })
+
+  it('should clear value when trigger clear event', done => {
+    let wrapper = mount({
+      components: {
+        'veui-input': Input
+      },
+      data () {
+        return {
+          value: 'test'
+        }
+      },
+      methods: {
+        handleInput (val) {
+          expect(val).to.be.equal('')
+          expect(this.value).to.be.equal('')
+          expect(this.$refs.input.localValue).to.be.equal('')
+
+          wrapper.destroy()
+          done()
+        }
+      },
+      template: '<veui-input ref="input" v-model="value" @input="handleInput" clearable/>'
+    },
+    {
+      sync: false
+    })
+
+    wrapper.find('button.veui-input-clear-button').trigger('click')
   })
 })
