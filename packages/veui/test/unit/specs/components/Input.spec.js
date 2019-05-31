@@ -1,5 +1,7 @@
 import { mount } from '@vue/test-utils'
 import Input from '@/components/Input'
+import Icon from '@/components/Icon'
+import 'vue-awesome/icons/user'
 
 describe('components/Input', () => {
   it('should handle value prop with `null` value.', done => {
@@ -47,7 +49,7 @@ describe('components/Input', () => {
     wrapper.destroy()
   })
 
-  it('should not focus for disabled input when activate', async () => {
+  it('disabled input should not be focused when activated', async () => {
     let wrapper = mount(Input, {
       propsData: {
         disabled: true
@@ -64,7 +66,7 @@ describe('components/Input', () => {
     wrapper.destroy()
   })
 
-  it('should clear value when trigger clear event', done => {
+  it('should clear value when clear button is clicked', done => {
     let wrapper = mount({
       components: {
         'veui-input': Input
@@ -91,5 +93,48 @@ describe('components/Input', () => {
     })
 
     wrapper.find('button.veui-input-clear-button').trigger('click')
+  })
+
+  it('should render before slot correctly', () => {
+    let wrapper = mount({
+      components: {
+        'veui-input': Input,
+        'veui-icon': Icon
+      },
+      data () {
+        return {
+          userName: null
+        }
+      },
+      template: `
+        <veui-input v-model="userName">
+          <template slot="before">
+            <veui-icon name="user"/>
+          </template>
+        </veui-input>
+      `
+    })
+
+    expect(wrapper.find('.veui-input-before svg').exists()).to.be.equal(true)
+  })
+
+  it('should render after slot correctly', () => {
+    let wrapper = mount({
+      components: {
+        'veui-input': Input
+      },
+      data () {
+        return {
+          money: null
+        }
+      },
+      template: `
+        <veui-input v-model="money">
+          <template slot="after">元</template>
+        </veui-input>
+      `
+    })
+
+    expect(wrapper.find('.veui-input-after').text()).to.be.equal('元')
   })
 })
