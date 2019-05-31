@@ -66,7 +66,7 @@ describe('components/PromptBox', function () {
       returnedValue = value
     })
     input.setValue('18')
-    input.element.dispatchEvent(new KeyboardEvent('keydown', { code: '13', keyCode: 13, key: 'Enter' }))
+    input.trigger('keydown.enter')
     await vm.$nextTick()
     expect(returnedValue).to.equal('18')
     wrapper.destroy()
