@@ -1,7 +1,5 @@
 import { mount } from '@vue/test-utils'
 import Input from '@/components/Input'
-import Icon from '@/components/Icon'
-import 'vue-awesome/icons/user'
 
 describe('components/Input', () => {
   it('should handle value prop with `null` value.', done => {
@@ -98,8 +96,7 @@ describe('components/Input', () => {
   it('should render before slot correctly', () => {
     let wrapper = mount({
       components: {
-        'veui-input': Input,
-        'veui-icon': Icon
+        'veui-input': Input
       },
       data () {
         return {
@@ -108,14 +105,12 @@ describe('components/Input', () => {
       },
       template: `
         <veui-input v-model="userName">
-          <template slot="before">
-            <veui-icon name="user"/>
-          </template>
+          <template slot="before">user</template>
         </veui-input>
       `
     })
 
-    expect(wrapper.find('.veui-input-before svg').exists()).to.be.equal(true)
+    expect(wrapper.find('.veui-input-before').text()).to.be.equal('user')
   })
 
   it('should render after slot correctly', () => {
