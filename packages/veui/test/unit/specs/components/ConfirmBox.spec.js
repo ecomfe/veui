@@ -19,10 +19,15 @@ describe('components/ConfirmBox', function () {
     })
     let { vm } = wrapper
     expect(wrapper.find('.veui-dialog-content-head-title').text()).to.be.equal('title')
-    wrapper.find('.veui-button').trigger('click')
+    let buttons = wrapper.findAll('.veui-button')
+    buttons.at(0).trigger('click')
     await vm.$nextTick()
-    expect(closeHandler.calledOnce).to.be.equal(true)
     expect(vm.open).to.be.equal(false)
+    vm.open = true
+    buttons.at(1).trigger('click')
+    await vm.$nextTick()
+    expect(vm.open).to.be.equal(false)
+    expect(closeHandler.callCount).to.be.equal(2)
     wrapper.destroy()
   })
 
