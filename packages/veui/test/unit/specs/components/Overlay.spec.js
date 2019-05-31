@@ -8,7 +8,7 @@ describe('components/Overlay', () => {
 
     await wait(0)
 
-    expect(wrapper.find('.veui-overlay-box').element.parentNode).to.be.equal(
+    expect(wrapper.find('.veui-overlay-box').element.parentNode).to.equal(
       document.body
     )
 
@@ -24,9 +24,7 @@ describe('components/Overlay', () => {
 
     await wait(0)
 
-    expect(wrapper.find(Overlay).vm.$refs.box.textContent).to.be.equal(
-      'content'
-    )
+    expect(wrapper.find(Overlay).vm.$refs.box.textContent).to.equal('content')
 
     wrapper.destroy()
   })
@@ -44,8 +42,8 @@ describe('components/Overlay', () => {
 
     await wait(0)
 
-    expect(+wrapper.vm.$refs.parent.overlayBox.style.zIndex).to.be.equal(200)
-    expect(+wrapper.vm.$refs.child.overlayBox.style.zIndex).to.be.equal(201)
+    expect(+wrapper.vm.$refs.parent.overlayBox.style.zIndex).to.equal(200)
+    expect(+wrapper.vm.$refs.child.overlayBox.style.zIndex).to.equal(201)
 
     wrapper.destroy()
   })
@@ -83,9 +81,9 @@ describe('components/Overlay', () => {
     vm.childVisible = true
 
     await wait(0)
-    expect(vm.$refs.parent.zIndex).to.be.equal(200)
-    expect(vm.$refs.child.zIndex).to.be.equal(201)
-    expect(vm.$refs.next.zIndex).to.be.equal(202)
+    expect(vm.$refs.parent.zIndex).to.equal(200)
+    expect(vm.$refs.child.zIndex).to.equal(201)
+    expect(vm.$refs.next.zIndex).to.equal(202)
 
     wrapper.destroy()
   })

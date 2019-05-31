@@ -10,7 +10,7 @@ describe('components/Button', () => {
       }
     })
 
-    expect(wrapper.attributes('ui')).to.be.equal('primary')
+    expect(wrapper.attributes('ui')).to.equal('primary')
   })
 
   it('should be disabled when the button is loading', () => {
@@ -29,9 +29,9 @@ describe('components/Button', () => {
       }
     })
 
-    expect(wrapper.contains(SpinIcon)).to.be.equal(true)
+    expect(wrapper.contains(SpinIcon)).to.equal(true)
     expect(wrapper.classes()).to.include('veui-button-loading')
-    expect(wrapper.attributes('disabled')).to.be.equal('disabled')
+    expect(wrapper.attributes('disabled')).to.equal('disabled')
   })
 
   it('should support disabled state', () => {
@@ -42,7 +42,7 @@ describe('components/Button', () => {
     })
 
     expect(wrapper.classes()).to.include('veui-disabled')
-    expect(wrapper.attributes('disabled')).to.be.equal('disabled')
+    expect(wrapper.attributes('disabled')).to.equal('disabled')
   })
 
   it('should support submit type', () => {
@@ -66,7 +66,7 @@ describe('components/Button', () => {
       }
     })
 
-    expect(wrapper.contains(VItalic)).to.be.equal(true)
+    expect(wrapper.contains(VItalic)).to.equal(true)
   })
 
   it('should handle click', async () => {
@@ -89,6 +89,6 @@ describe('components/Button', () => {
     const wrapper = mount(ButtonClick)
     wrapper.find('.veui-button').trigger('click')
     await wrapper.vm.$nextTick()
-    expect(wrapper.vm.hasClick).to.be.equal(true)
+    expect(wrapper.vm.hasClick).to.equal(true)
   })
 })

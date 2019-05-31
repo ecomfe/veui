@@ -26,12 +26,18 @@ describe('components/Select/OptionGroup', () => {
         }
       },
       mounted () {
-        this.$el.querySelector('.veui-select-button').dispatchEvent(new Event('click'))
+        this.$el
+          .querySelector('.veui-select-button')
+          .dispatchEvent(new Event('click'))
 
         setTimeout(() => {
           let options = document.body.querySelectorAll('.veui-option')
-          expect(some(options[0].classList, item => item === 'veui-option-disabled')).to.be.equal(true)
-          expect(some(options[1].classList, item => item === 'veui-option-disabled')).to.be.equal(false)
+          expect(
+            some(options[0].classList, item => item === 'veui-option-disabled')
+          ).to.equal(true)
+          expect(
+            some(options[1].classList, item => item === 'veui-option-disabled')
+          ).to.equal(false)
           done()
         })
       },

@@ -11,7 +11,7 @@ describe('components/Switch', () => {
     })
 
     wrapper.vm.$on('change', val => {
-      expect(val).to.be.equal(true)
+      expect(val).to.equal(true)
 
       wrapper.destroy()
       done()
@@ -32,8 +32,8 @@ describe('components/Switch', () => {
       },
       methods: {
         handleChange (checked) {
-          expect(checked).to.be.equal(false)
-          expect(this.choice).to.be.equal('NO')
+          expect(checked).to.equal(false)
+          expect(this.choice).to.equal('NO')
 
           wrapper.destroy()
           done()
@@ -71,23 +71,26 @@ describe('components/Switch', () => {
     wrapper.find('input').trigger('change')
 
     await wrapper.vm.$nextTick()
-    expect(changeHandler.callCount).to.be.equal(0)
+    expect(changeHandler.callCount).to.equal(0)
 
     wrapper.destroy()
   })
 
   it('should handle correctly when activated', () => {
-    let wrapper = mount(Switch, {
-      propsData: {
-        checked: false
+    let wrapper = mount(
+      Switch,
+      {
+        propsData: {
+          checked: false
+        }
+      },
+      {
+        sync: false
       }
-    },
-    {
-      sync: false
-    })
+    )
 
     wrapper.vm.$on('change', val => {
-      expect(val).to.be.equal(true)
+      expect(val).to.equal(true)
     })
 
     wrapper.vm.activate()

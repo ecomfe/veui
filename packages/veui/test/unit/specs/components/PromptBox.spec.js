@@ -20,16 +20,20 @@ describe('components/PromptBox', function () {
       },
       template: `
         <veui-prompt-box
-          :open.sync="open" 
-          title="Prompt" 
+          :open.sync="open"
+          title="Prompt"
           :before-close="beforeCloseHandler"
           content="Please tell us your age:"
           value="18" />
         `
     })
     let { vm } = wrapper
-    expect(wrapper.find('.veui-dialog-content-head-title').text()).to.equal('Prompt')
-    expect(wrapper.find('.veui-prompt-box-info').text()).to.equal('Please tell us your age:')
+    expect(wrapper.find('.veui-dialog-content-head-title').text()).to.equal(
+      'Prompt'
+    )
+    expect(wrapper.find('.veui-prompt-box-info').text()).to.equal(
+      'Please tell us your age:'
+    )
     expect(wrapper.find('.veui-input').vm.value).to.equal('18')
     wrapper.find('.veui-button').trigger('click')
     await vm.$nextTick()
@@ -95,8 +99,8 @@ describe('components/PromptBox', function () {
           afterCloseMock
         },
         template: `
-          <veui-prompt-box 
-            :open.sync="open" 
+          <veui-prompt-box
+            :open.sync="open"
             value="18"
             @ok="ok"
             @cancel="cancelMock"

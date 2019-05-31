@@ -10,7 +10,7 @@ describe('components/Radio', () => {
     })
 
     wrapper.vm.$on('input', val => {
-      expect(val).to.be.equal(null)
+      expect(val).to.equal(null)
 
       wrapper.destroy()
       done()
@@ -32,8 +32,8 @@ describe('components/Radio', () => {
       },
       methods: {
         handleChange (checked) {
-          expect(checked).to.be.equal(true)
-          expect(this.checked).to.be.equal(true)
+          expect(checked).to.equal(true)
+          expect(this.checked).to.equal(true)
 
           wrapper.destroy()
           done()

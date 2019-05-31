@@ -10,7 +10,7 @@ describe('components/DatePicker', () => {
     })
 
     wrapper.vm.$on('select', val => {
-      expect(val instanceof Date).to.be.equal(true)
+      expect(val instanceof Date).to.equal(true)
 
       wrapper.destroy()
       done()

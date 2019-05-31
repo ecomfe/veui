@@ -38,7 +38,7 @@ describe('components/Tree', () => {
       }
     })
 
-    expect(wrapper.find('.test-item-slot').exists()).to.be.equal(true)
+    expect(wrapper.find('.test-item-slot').exists()).to.equal(true)
 
     wrapper.destroy()
   })
@@ -56,7 +56,7 @@ describe('components/Tree', () => {
       }
     })
 
-    expect(wrapper.find('.test-item-label-slot').exists()).to.be.equal(true)
+    expect(wrapper.find('.test-item-label-slot').exists()).to.equal(true)
 
     wrapper.destroy()
   })
@@ -83,7 +83,7 @@ describe('components/Tree', () => {
         .findAll('.veui-tree-item')
         .at(0)
         .classes('veui-tree-item-expanded')
-    ).to.be.equal(true)
+    ).to.equal(true)
 
     wrapper
       .findAll('.veui-tree-item')
@@ -93,13 +93,13 @@ describe('components/Tree', () => {
 
     await localVue.nextTick()
 
-    expect(wrapper.vm.expanded.indexOf('Boiled') > -1).to.be.equal(true)
+    expect(wrapper.vm.expanded.indexOf('Boiled') > -1).to.equal(true)
     expect(
       wrapper
         .findAll('.veui-tree-item')
         .at(2)
         .classes('veui-tree-item-expanded')
-    ).to.be.equal(true)
+    ).to.equal(true)
 
     wrapper.destroy()
   })

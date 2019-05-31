@@ -7,10 +7,10 @@ describe('managers/overlay', () => {
       it('should create an instance of Node', () => {
         let node = new Tree().root
 
-        expect(node.hasOwnProperty('parent')).to.be.equal(true)
-        expect(node.hasOwnProperty('childrenGroup')).to.be.equal(true)
-        expect(node.hasOwnProperty('id')).to.be.equal(true)
-        expect(node.hasOwnProperty('order')).to.be.equal(true)
+        expect(node.hasOwnProperty('parent')).to.equal(true)
+        expect(node.hasOwnProperty('childrenGroup')).to.equal(true)
+        expect(node.hasOwnProperty('id')).to.equal(true)
+        expect(node.hasOwnProperty('order')).to.equal(true)
       })
     })
 
@@ -136,9 +136,9 @@ describe('managers/overlay', () => {
     describe('#constructor', () => {
       it('should create a Tree instance', () => {
         let tree = new Tree()
-        expect(tree.hasOwnProperty('root')).to.be.equal(true)
-        expect(tree.hasOwnProperty('nodeMap')).to.be.equal(true)
-        expect(tree.hasOwnProperty('baseOrder')).to.be.equal(true)
+        expect(tree.hasOwnProperty('root')).to.equal(true)
+        expect(tree.hasOwnProperty('nodeMap')).to.equal(true)
+        expect(tree.hasOwnProperty('baseOrder')).to.equal(true)
       })
     })
 
@@ -147,10 +147,10 @@ describe('managers/overlay', () => {
         let tree = new Tree()
         let nodeHandle = tree.createNode()
 
-        expect(nodeHandle.hasOwnProperty('id')).to.be.equal(true)
-        expect(isFunction(nodeHandle.remove)).to.be.equal(true)
-        expect(isFunction(nodeHandle.appendTo)).to.be.equal(true)
-        expect(isFunction(nodeHandle.toTop)).to.be.equal(true)
+        expect(nodeHandle.hasOwnProperty('id')).to.equal(true)
+        expect(isFunction(nodeHandle.remove)).to.equal(true)
+        expect(isFunction(nodeHandle.appendTo)).to.equal(true)
+        expect(isFunction(nodeHandle.toTop)).to.equal(true)
       })
     })
 

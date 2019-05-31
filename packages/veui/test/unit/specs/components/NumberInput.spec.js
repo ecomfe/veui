@@ -16,7 +16,7 @@ describe('components/NumberInput', () => {
     wrapper.find('input').trigger('change')
 
     await wrapper.vm.$nextTick()
-    expect(changeHandler.callCount).to.be.equal(0)
+    expect(changeHandler.callCount).to.equal(0)
   })
 
   it('should transparently pass-through attrs to the <input> element.', () => {
@@ -27,7 +27,7 @@ describe('components/NumberInput', () => {
       }
     })
 
-    expect(wrapper.find(Input).props('selectOnFocus')).to.be.equal(true)
-    expect(wrapper.find('input').element.autofocus).to.be.equal(true)
+    expect(wrapper.find(Input).props('selectOnFocus')).to.equal(true)
+    expect(wrapper.find('input').element.autofocus).to.equal(true)
   })
 })

@@ -18,19 +18,22 @@ describe('components/ConfirmBox', function () {
           closeHandler
         }
       },
-      template: '<veui-confirm-box title="title" :open.sync="open" :before-close="closeHandler" />'
+      template:
+        '<veui-confirm-box title="title" :open.sync="open" :before-close="closeHandler" />'
     })
     let { vm } = wrapper
-    expect(wrapper.find('.veui-dialog-content-head-title').text()).to.be.equal('title')
+    expect(wrapper.find('.veui-dialog-content-head-title').text()).to.equal(
+      'title'
+    )
     let buttons = wrapper.findAll('.veui-button')
     buttons.at(0).trigger('click')
     await vm.$nextTick()
-    expect(vm.open).to.be.equal(false)
+    expect(vm.open).to.equal(false)
     vm.open = true
     buttons.at(1).trigger('click')
     await vm.$nextTick()
-    expect(vm.open).to.be.equal(false)
-    expect(closeHandler.callCount).to.be.equal(2)
+    expect(vm.open).to.equal(false)
+    expect(closeHandler.callCount).to.equal(2)
     wrapper.destroy()
   })
 
@@ -42,9 +45,9 @@ describe('components/ConfirmBox', function () {
         foot: '<div class="foot-slot" slot="foot">foot</div>'
       }
     })
-    expect(wrapper.find('.title-slot').text()).to.be.equal('title')
-    expect(wrapper.find('.content-slot').text()).to.be.equal('content')
-    expect(wrapper.find('.foot-slot').text()).to.be.equal('foot')
+    expect(wrapper.find('.title-slot').text()).to.equal('title')
+    expect(wrapper.find('.content-slot').text()).to.equal('content')
+    expect(wrapper.find('.foot-slot').text()).to.equal('foot')
     wrapper.destroy()
   })
 
@@ -68,11 +71,11 @@ describe('components/ConfirmBox', function () {
           afterCloseHandler
         },
         template: `
-          <veui-confirm-box 
-            :open.sync="open" 
-            title="Confirm" 
-            @ok="okHandler" 
-            @cancel="cancelHandler" 
+          <veui-confirm-box
+            :open.sync="open"
+            title="Confirm"
+            @ok="okHandler"
+            @cancel="cancelHandler"
             @afterclose="afterCloseHandler">
             Are you sure you wan to continue?
           </veui-confirm-box>
@@ -85,12 +88,12 @@ describe('components/ConfirmBox', function () {
     let buttons = wrapper.findAll('.veui-button')
     buttons.at(0).trigger('click')
     await wait(600)
-    expect(okHandler.calledOnce).to.be.equal(true)
+    expect(okHandler.calledOnce).to.equal(true)
     wrapper.vm.open = true
     buttons.at(1).trigger('click')
     await wait(600)
-    expect(cancelHandler.calledOnce).to.be.equal(true)
-    expect(afterCloseHandler.callCount).to.be.equal(2)
+    expect(cancelHandler.calledOnce).to.equal(true)
+    expect(afterCloseHandler.callCount).to.equal(2)
     wrapper.destroy()
   })
 })

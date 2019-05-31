@@ -3,17 +3,20 @@ import Input from '@/components/Input'
 
 describe('components/Input', () => {
   it('should handle value prop with `null` value.', done => {
-    let wrapper = mount(Input, {
-      propsData: {
-        value: null
+    let wrapper = mount(
+      Input,
+      {
+        propsData: {
+          value: null
+        }
+      },
+      {
+        sync: false
       }
-    },
-    {
-      sync: false
-    })
+    )
 
     wrapper.vm.$on('input', val => {
-      expect(val).to.be.equal('')
+      expect(val).to.equal('')
 
       wrapper.destroy()
       done()
@@ -29,7 +32,7 @@ describe('components/Input', () => {
       }
     })
 
-    expect(wrapper.find('input').element.autofocus).to.be.equal(true)
+    expect(wrapper.find('input').element.autofocus).to.equal(true)
 
     wrapper.destroy()
   })
@@ -41,8 +44,10 @@ describe('components/Input', () => {
     let { vm } = wrapper
     await vm.$nextTick()
 
-    expect(wrapper.find('div.veui-input').classes('veui-input-focused')).to.be.equal(true)
-    expect(vm.focused).to.be.equal(true)
+    expect(
+      wrapper.find('div.veui-input').classes('veui-input-focused')
+    ).to.equal(true)
+    expect(vm.focused).to.equal(true)
 
     wrapper.destroy()
   })
@@ -58,37 +63,42 @@ describe('components/Input', () => {
     vm.activate()
     await vm.$nextTick()
 
-    expect(vm.focused).to.be.equal(false)
-    expect(wrapper.find('div.veui-input').classes('veui-input-focused')).to.be.equal(false)
+    expect(vm.focused).to.equal(false)
+    expect(
+      wrapper.find('div.veui-input').classes('veui-input-focused')
+    ).to.equal(false)
 
     wrapper.destroy()
   })
 
   it('should clear value when clear button is clicked', done => {
-    let wrapper = mount({
-      components: {
-        'veui-input': Input
-      },
-      data () {
-        return {
-          value: 'test'
-        }
-      },
-      methods: {
-        handleInput (val) {
-          expect(val).to.be.equal('')
-          expect(this.value).to.be.equal('')
-          expect(this.$refs.input.localValue).to.be.equal('')
+    let wrapper = mount(
+      {
+        components: {
+          'veui-input': Input
+        },
+        data () {
+          return {
+            value: 'test'
+          }
+        },
+        methods: {
+          handleInput (val) {
+            expect(val).to.equal('')
+            expect(this.value).to.equal('')
+            expect(this.$refs.input.localValue).to.equal('')
 
-          wrapper.destroy()
-          done()
-        }
+            wrapper.destroy()
+            done()
+          }
+        },
+        template:
+          '<veui-input ref="input" v-model="value" @input="handleInput" clearable/>'
       },
-      template: '<veui-input ref="input" v-model="value" @input="handleInput" clearable/>'
-    },
-    {
-      sync: false
-    })
+      {
+        sync: false
+      }
+    )
 
     wrapper.find('button.veui-input-clear-button').trigger('click')
   })
@@ -110,7 +120,7 @@ describe('components/Input', () => {
       `
     })
 
-    expect(wrapper.find('.veui-input-before').text()).to.be.equal('user')
+    expect(wrapper.find('.veui-input-before').text()).to.equal('user')
   })
 
   it('should render after slot correctly', () => {
@@ -130,6 +140,6 @@ describe('components/Input', () => {
       `
     })
 
-    expect(wrapper.find('.veui-input-after').text()).to.be.equal('元')
+    expect(wrapper.find('.veui-input-after').text()).to.equal('元')
   })
 })

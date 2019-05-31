@@ -112,12 +112,12 @@ describe('components/Table', () => {
     boxes.at(2).trigger('change')
 
     await vm.$nextTick()
-    expect(vm.counter).to.be.equal(2)
+    expect(vm.counter).to.equal(2)
 
     vm.data = cloneDeep(vm.data)
 
     await vm.$nextTick()
-    expect(vm.counter).to.be.equal(2)
+    expect(vm.counter).to.equal(2)
 
     wrapper.destroy()
   })
@@ -145,7 +145,7 @@ describe('components/Table', () => {
             this.isSelectEmitted = true
           },
           handleUpdateSelected () {
-            expect(this.isSelectEmitted).to.be.equal(true)
+            expect(this.isSelectEmitted).to.equal(true)
 
             wrapper.destroy()
             done()
@@ -214,9 +214,7 @@ describe('components/Table', () => {
     let rows = wrapper.findAll('tbody tr')
     expect(rows.length).to.equal(2)
 
-    wrapper
-      .find('td button')
-      .trigger('click')
+    wrapper.find('td button').trigger('click')
 
     await vm.$nextTick()
 
@@ -276,11 +274,9 @@ describe('components/Table', () => {
     )
 
     let active = wrapper.findAll('svg.veui-sorter-active.veui-sorter-icon-desc')
-    expect(active.length).to.be.equal(1)
+    expect(active.length).to.equal(1)
 
-    wrapper
-      .find('svg.veui-sorter')
-      .trigger('click')
+    wrapper.find('svg.veui-sorter').trigger('click')
   })
 
   it('should filter columns correctly.', async () => {
@@ -383,21 +379,17 @@ describe('components/Table', () => {
       }
     )
 
-    wrapper
-      .find('th input[type="checkbox"]')
-      .trigger('change')
+    wrapper.find('th input[type="checkbox"]').trigger('change')
 
     let { vm } = wrapper
     await vm.$nextTick()
 
     expect(vm.selected).to.deep.equal(['11', '22', '33'])
 
-    wrapper
-      .find('th input[type="checkbox"]')
-      .trigger('change')
+    wrapper.find('th input[type="checkbox"]').trigger('change')
 
     await vm.$nextTick()
-    expect(vm.selected).to.be.empty
+    expect(vm.selected).to.have.lengthOf(0)
 
     wrapper.destroy()
   })
@@ -538,7 +530,12 @@ describe('components/Table', () => {
       }
     )
 
-    expect(wrapper.findAll('tbody td').at(1).attributes('rowspan')).to.equal('2')
+    expect(
+      wrapper
+        .findAll('tbody td')
+        .at(1)
+        .attributes('rowspan')
+    ).to.equal('2')
     wrapper.destroy()
   })
 })

@@ -12,7 +12,9 @@ describe('components/AlertBox', function () {
       },
       template: '<veui-alert-box title="this is title" />'
     })
-    expect(wrapper.find('.veui-alert-box-title').text()).to.be.equal('this is title')
+    expect(wrapper.find('.veui-alert-box-title').text()).to.equal(
+      'this is title'
+    )
     wrapper.destroy()
   })
 
@@ -28,8 +30,8 @@ describe('components/AlertBox', function () {
         </veui-alert-box>
       `
     })
-    expect(wrapper.find('.test-title-slot').exists()).to.be.equal(true)
-    expect(wrapper.find('.test-default-slot').exists()).to.be.equal(true)
+    expect(wrapper.find('.test-title-slot').exists()).to.equal(true)
+    expect(wrapper.find('.test-default-slot').exists()).to.equal(true)
     wrapper.destroy()
   })
 
@@ -48,7 +50,7 @@ describe('components/AlertBox', function () {
     let { vm } = wrapper
     wrapper.find('.veui-button').trigger('click')
     await vm.$nextTick()
-    expect(vm.open).to.be.equal(false)
+    expect(vm.open).to.equal(false)
     wrapper.destroy()
   })
 
@@ -77,9 +79,9 @@ describe('components/AlertBox', function () {
           }
         },
         template: `
-          <veui-alert-box 
-            :open.sync="open" 
-            title="title" 
+          <veui-alert-box
+            :open.sync="open"
+            title="title"
             :before-close="beforeClose"
             @ok="ok"
             @afterclose="afterClose" />
@@ -91,7 +93,7 @@ describe('components/AlertBox', function () {
     )
     wrapper.find('.veui-button').trigger('click')
     await wait(600)
-    expect(count).to.be.equal(3)
+    expect(count).to.equal(3)
     wrapper.destroy()
   })
 })

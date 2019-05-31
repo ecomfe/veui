@@ -113,7 +113,7 @@ describe('managers/config', () => {
       b: new Date()
     })
 
-    expect(config.get('a') instanceof Function).to.be.equal(true)
-    expect(config.get('b') instanceof Date).to.be.equal(true)
+    expect(config.get('a') instanceof Function).to.equal(true)
+    expect(config.get('b') instanceof Date).to.equal(true)
   })
 })

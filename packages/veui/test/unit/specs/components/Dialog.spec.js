@@ -20,7 +20,7 @@ describe('components/Dialog', () => {
           .dispatchEvent(new MouseEvent('click'))
 
         await this.$nextTick()
-        expect(this.open).to.be.equal(false)
+        expect(this.open).to.equal(false)
         this.open = true
 
         await this.$nextTick()
@@ -29,7 +29,7 @@ describe('components/Dialog', () => {
           .dispatchEvent(new MouseEvent('click'))
 
         await this.$nextTick()
-        expect(this.open).to.be.equal(false)
+        expect(this.open).to.equal(false)
 
         this.open = true
 
@@ -39,7 +39,7 @@ describe('components/Dialog', () => {
           .dispatchEvent(new MouseEvent('click'))
 
         await this.$nextTick()
-        expect(this.open).to.be.equal(false)
+        expect(this.open).to.equal(false)
 
         wrapper.destroy()
         done()
@@ -73,7 +73,7 @@ describe('components/Dialog', () => {
           .dispatchEvent(new MouseEvent('click'))
 
         await this.$nextTick()
-        expect(this.open).to.be.equal(false)
+        expect(this.open).to.equal(false)
         this.open = true
 
         await this.$nextTick()
@@ -82,10 +82,10 @@ describe('components/Dialog', () => {
           .dispatchEvent(new MouseEvent('click'))
 
         await wait(100)
-        expect(this.open).to.be.equal(true)
+        expect(this.open).to.equal(true)
 
         await wait(500)
-        expect(this.open).to.be.equal(false)
+        expect(this.open).to.equal(false)
 
         wrapper.destroy()
         done()

@@ -130,19 +130,19 @@ describe('utils/date', () => {
         new Date(2018, 11, 31),
         new Date(2019, 0, 1)
       ])
-    ).to.be.equal(true)
+    ).to.equal(true)
     expect(
       isInRange(new Date(2018, 11, 31), [
         new Date(2018, 11, 1),
         new Date(2018, 11, 31)
       ])
-    ).to.be.equal(true)
+    ).to.equal(true)
     expect(
       isInRange(new Date(2018, 11, 10), [
         new Date(2018, 11, 1),
         new Date(2019, 0, 1)
       ])
-    ).to.be.equal(true)
+    ).to.equal(true)
     expect(
       isInRange(new Date(2018, 11, 30), [
         new Date(2018, 11, 31),

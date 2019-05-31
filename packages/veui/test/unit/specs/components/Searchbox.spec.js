@@ -6,7 +6,7 @@ describe('components/Searchbox', () => {
     let wrapper = mount({
       methods: {
         handleInput (val) {
-          expect(val).to.be.equal('')
+          expect(val).to.equal('')
 
           wrapper.destroy()
           done()
