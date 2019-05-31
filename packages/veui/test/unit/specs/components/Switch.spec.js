@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Switch from '@/components/Switch'
+import sinon from 'sinon'
 
 describe('components/Switch', () => {
   it('should handle checked prop with `null` value.', done => {
@@ -43,5 +44,52 @@ describe('components/Switch', () => {
     })
 
     wrapper.find('input').trigger('change')
+  })
+
+  it('should handle disabled prop correctly.', done => {
+    let wrapper = mount(Switch, {
+      propsData: {
+        disabled: true
+      }
+    })
+
+    expect(wrapper.vm.disabled).to.be.equals(true)
+
+    wrapper.destroy()
+    done()
+  })
+
+  it('should handle change correctly when disabled', async () => {
+    let wrapper = mount(Switch, {
+      propsData: {
+        disabled: true
+      }
+    })
+
+    let changeHandler = sinon.spy()
+    wrapper.vm.$on('change', changeHandler)
+    wrapper.find('input').trigger('change')
+
+    await wrapper.vm.$nextTick()
+    expect(changeHandler.callCount).to.be.equal(0)
+
+    wrapper.destroy()
+  })
+
+  it('should handle correctly when activated', () => {
+    let wrapper = mount(Switch, {
+      propsData: {
+        checked: false
+      }
+    },
+    {
+      sync: false
+    })
+
+    wrapper.vm.$on('change', val => {
+      expect(val).to.be.equal(true)
+    })
+
+    wrapper.vm.activate()
   })
 })
