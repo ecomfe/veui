@@ -1,6 +1,9 @@
-import { mount } from '@vue/test-utils'
+import { mount, config } from '@vue/test-utils'
 import sinon from 'sinon'
 import ConfirmBox from '@/components/ConfirmBox'
+import { wait } from '../../../utils'
+
+config.stubs.transition = false
 
 describe('components/ConfirmBox', function () {
   it('shoule handle props correctly', async () => {
@@ -48,34 +51,46 @@ describe('components/ConfirmBox', function () {
   it('should handle event correctly when click ok/cancel button', async () => {
     let okHandler = sinon.spy()
     let cancelHandler = sinon.spy()
-    let wrapper = mount({
-      components: {
-        'veui-confirm-box': ConfirmBox
+    let afterCloseHandler = sinon.spy()
+    let wrapper = mount(
+      {
+        components: {
+          'veui-confirm-box': ConfirmBox
+        },
+        data () {
+          return {
+            open: true
+          }
+        },
+        methods: {
+          okHandler,
+          cancelHandler,
+          afterCloseHandler
+        },
+        template: `
+          <veui-confirm-box 
+            :open.sync="open" 
+            title="Confirm" 
+            @ok="okHandler" 
+            @cancel="cancelHandler" 
+            @afterclose="afterCloseHandler">
+            Are you sure you wan to continue?
+          </veui-confirm-box>
+        `
       },
-      data () {
-        return {
-          open: true
-        }
-      },
-      methods: {
-        okHandler,
-        cancelHandler
-      },
-      template: `
-        <veui-confirm-box :open.sync="open" title="Confirm" @ok="okHandler" @cancel="cancelHandler">
-          Are you sure you wan to continue?
-        </veui-confirm-box>
-      `
-    })
-    let { vm } = wrapper
+      {
+        attachToDocument: true
+      }
+    )
     let buttons = wrapper.findAll('.veui-button')
     buttons.at(0).trigger('click')
-    await vm.$nextTick()
+    await wait(600)
     expect(okHandler.calledOnce).to.be.equal(true)
-    vm.open = true
+    wrapper.vm.open = true
     buttons.at(1).trigger('click')
-    await vm.$nextTick()
+    await wait(600)
     expect(cancelHandler.calledOnce).to.be.equal(true)
+    expect(afterCloseHandler.callCount).to.be.equal(2)
     wrapper.destroy()
   })
 })
