@@ -10,7 +10,7 @@
   <slot/>
 </component>
 <router-link
-  v-else-if="$router && !native"
+  v-else-if="useRouter"
   :class="klass"
   :to="to"
   :rel="realRel"
@@ -73,6 +73,9 @@ export default {
         ).join(' ')
       }
       return this.rel
+    },
+    useRouter () {
+      return this.$router && !this.native
     }
   },
   methods: {
