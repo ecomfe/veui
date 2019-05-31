@@ -1,5 +1,8 @@
-import { mount } from '@vue/test-utils'
+import { mount, config } from '@vue/test-utils'
 import AlertBox from '@/components/AlertBox'
+import { wait } from '../../../utils'
+
+config.stubs.transition = false
 
 describe('components/AlertBox', function () {
   it('should render title prop correctly by AlertBox', () => {
@@ -51,35 +54,44 @@ describe('components/AlertBox', function () {
 
   it('should handle close event correctly by AlertBox', async () => {
     let count = 0
-    let wrapper = mount({
-      components: {
-        'veui-alert-box': AlertBox
-      },
-      data () {
-        return {
-          open: true,
-          beforeClose (type) {
-            count++
-            return true
+    let wrapper = mount(
+      {
+        components: {
+          'veui-alert-box': AlertBox
+        },
+        data () {
+          return {
+            open: true,
+            beforeClose (type) {
+              count++
+              return true
+            }
           }
-        }
+        },
+        methods: {
+          ok () {
+            count++
+          },
+          afterClose () {
+            count++
+          }
+        },
+        template: `
+          <veui-alert-box 
+            :open.sync="open" 
+            title="title" 
+            :before-close="beforeClose"
+            @ok="ok"
+            @afterclose="afterClose" />
+        `
       },
-      methods: {
-        ok () {
-          count++
-        }
-      },
-      template: `
-        <veui-alert-box 
-          :open.sync="open" 
-          title="title" 
-          :before-close="beforeClose"
-          @ok="ok" />
-      `
-    })
+      {
+        attachToDocument: true
+      }
+    )
     wrapper.find('.veui-button').trigger('click')
-    await wrapper.vm.$nextTick()
-    expect(count).to.be.equal(2)
+    await wait(600)
+    expect(count).to.be.equal(3)
     wrapper.destroy()
   })
 })
