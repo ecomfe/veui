@@ -34,9 +34,7 @@ describe('components/Dialog', () => {
     vm.open = true
 
     await vm.$nextTick()
-    wrapper
-      .find('.veui-dialog-content-foot button:last-child')
-      .trigger('click')
+    wrapper.find('.veui-dialog-content-foot button:last-child').trigger('click')
 
     await vm.$nextTick()
     expect(vm.open).to.equal(false)
@@ -44,9 +42,7 @@ describe('components/Dialog', () => {
     vm.open = true
 
     await vm.$nextTick()
-    wrapper
-      .find('.veui-dialog-content-head-close')
-      .trigger('click')
+    wrapper.find('.veui-dialog-content-head-close').trigger('click')
 
     await vm.$nextTick()
     expect(vm.open).to.equal(false)
@@ -92,9 +88,7 @@ describe('components/Dialog', () => {
     let { vm } = wrapper
 
     await vm.$nextTick()
-    wrapper
-      .find('.veui-dialog-content-foot button:last-child')
-      .trigger('click')
+    wrapper.find('.veui-dialog-content-foot button:last-child').trigger('click')
 
     await vm.$nextTick()
     expect(vm.open).to.equal(false)
@@ -124,13 +118,17 @@ describe('components/Dialog', () => {
       sync: false
     })
 
-    expect(wrapper.vm.$refs.overlay.overlayClass['veui-dialog-box-mask']).to.equal(false)
+    expect(
+      wrapper.vm.$refs.overlay.overlayClass['veui-dialog-box-mask']
+    ).to.equal(false)
 
     wrapper.setProps({ modal: true })
 
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.$refs.overlay.overlayClass['veui-dialog-box-mask']).to.equal(true)
+    expect(
+      wrapper.vm.$refs.overlay.overlayClass['veui-dialog-box-mask']
+    ).to.equal(true)
 
     wrapper.destroy()
   })
@@ -148,7 +146,9 @@ describe('components/Dialog', () => {
       }
     })
 
-    expect(wrapper.find('.veui-dialog-content-head-title').text()).to.equal('Title')
+    expect(wrapper.find('.veui-dialog-content-head-title').text()).to.equal(
+      'Title'
+    )
     expect(wrapper.find('.veui-dialog-content-body').text()).to.equal('Content')
     expect(wrapper.find('.veui-dialog-content-foot').text()).to.equal('Foot')
 
@@ -201,9 +201,7 @@ describe('components/Dialog', () => {
 
     expect(vm.foo).to.equal(true)
 
-    wrapper
-      .find('.veui-dialog-content-foot button:last-child')
-      .trigger('click')
+    wrapper.find('.veui-dialog-content-foot button:last-child').trigger('click')
 
     await vm.$nextTick()
 
