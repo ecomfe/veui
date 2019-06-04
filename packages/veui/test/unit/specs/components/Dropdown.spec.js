@@ -1,4 +1,4 @@
-import { mount, createWrapper } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import Dropdown from '@/components/Dropdown'
 
 let datasource = [
@@ -28,7 +28,7 @@ describe('components/Dropdown', () => {
     })
 
     let button = wrapper.find('.veui-dropdown-button')
-    let menuWrapper = createWrapper(document.querySelector('.test-overlay-class'))
+    let menuWrapper = wrapper.find('.test-overlay-class')
 
     button.element.onmouseenter = () => {
       expect(menuWrapper.attributes().style.display).to.not.equal('none')
@@ -54,24 +54,24 @@ describe('components/Dropdown', () => {
 
     let label = wrapper.find('.veui-dropdown-label')
     let button = wrapper.find('.veui-dropdown-button')
+    let menuWrapper = wrapper.find('.test-overlay-class')
     let commandButton = wrapper.find('.veui-dropdown-command')
-    let menuWrapper = createWrapper(document.querySelector('.test-overlay-class'))
     let attributes = button.attributes()
 
     // ui
-    expect(wrapper.attributes().ui).to.be.equal('micro')
+    expect(wrapper.attributes().ui).to.equal('micro')
     // disabled
-    expect(attributes.disabled).to.be.equal('disabled')
+    expect(button.element.disabled).to.equal(true)
     expect(attributes.class).to.include('veui-disabled')
-    expect(attributes['aria-disabled']).to.be.equal('true')
+    expect(attributes['aria-disabled']).to.equal('true')
     // label
-    expect(label.text()).to.be.equal('测试Dropdown')
+    expect(label.text()).to.equal('测试Dropdown')
     // split
-    expect(commandButton.exists()).to.be.equal(true)
+    expect(commandButton.exists()).to.equal(true)
     // overlayClass
-    expect(menuWrapper.exists()).to.be.equal(true)
+    expect(menuWrapper.exists()).to.equal(true)
     // options
-    expect(menuWrapper.find('.veui-option-group').exists()).to.be.equal(true)
+    expect(menuWrapper.find('.veui-option-group').exists()).to.equal(true)
     wrapper.destroy()
   })
 
@@ -90,15 +90,15 @@ describe('components/Dropdown', () => {
     })
 
     wrapper.vm.focus()
-    expect(document.activeElement).to.be.satisfy(
+    expect(document.activeElement).to.satisfy(
       item => item === document.querySelector('.veui-dropdown-button')
     )
 
     let menuWrapper = wrapper.find('.test-overlay-class')
     let option = menuWrapper.find('.test-veui-option')
 
-    expect(option.exists()).to.be.equal(true)
-    expect(option.text()).to.be.oneOf(['男', '女'])
+    expect(option.exists()).to.equal(true)
+    expect(option.text()).to.equal('男')
     wrapper.destroy()
   })
 
@@ -114,14 +114,13 @@ describe('components/Dropdown', () => {
     })
 
     wrapper.vm.$on('click', val => {
-      expect(val).to.be.equal('male')
+      expect(val).to.equal('male')
       wrapper.destroy()
     })
 
-    let menuWrapper = createWrapper(document.querySelector('.test-overlay-class'))
-    let options = menuWrapper.findAll('.veui-option')
+    let menuWrapper = wrapper.find('.test-overlay-class')
 
-    options.wrappers[0].trigger('click')
+    menuWrapper.find('.veui-option').trigger('click')
   })
 
   it('should trigger click event without a value', () => {
@@ -135,13 +134,11 @@ describe('components/Dropdown', () => {
     })
 
     wrapper.vm.$on('click', val => {
-      expect(val).to.be.equal(undefined)
+      expect(val).to.equal(undefined)
       wrapper.destroy()
     })
 
-    let commandButton = wrapper.find('.veui-dropdown-command')
-
-    commandButton.trigger('click')
+    wrapper.find('.veui-dropdown-command').trigger('click')
   })
 
   it('should close the dropdown menu if `esc` is pressed', async () => {
@@ -157,21 +154,19 @@ describe('components/Dropdown', () => {
     })
     // for coverage
     wrapper.vm.focus()
-    expect(document.activeElement).to.be.satisfy(
+    expect(document.activeElement).to.satisfy(
       item => item === document.querySelector('.veui-dropdown-command')
     )
 
     const { $nextTick } = wrapper.vm
-    let button = wrapper.find('.veui-dropdown-button')
-    button.trigger('click')
+    wrapper.find('.veui-dropdown-button').trigger('click')
 
     await $nextTick()
     let menuWrapper = wrapper.find('.test-overlay-class')
-    let optionWrapper = menuWrapper.find('.veui-dropdown-options')
 
-    optionWrapper.trigger('keydown.esc')
+    menuWrapper.find('.veui-dropdown-options').trigger('keydown.esc')
     await $nextTick()
-    expect(menuWrapper.attributes().style).to.include('display: none')
+    expect(menuWrapper.element.style.display).to.equal('none')
     wrapper.destroy()
   })
 })
