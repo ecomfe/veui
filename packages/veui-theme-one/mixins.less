@@ -1,3 +1,5 @@
+/* stylelint-disable at-rule-no-unknown */
+@plugin "./functions";
 @import "~less-plugin-est/src/all.less";
 @import "./variables.less";
 
@@ -12,9 +14,8 @@
   border: 0;
 }
 
-/* prettier-ignore */
 .veui-transition(...) {
-  transition-property: ~`"@{arguments}".replace(/[[\]]/g, "")`;
+  transition-property: args(@arguments);
   transition-duration: @veui-transition-duration;
 }
 

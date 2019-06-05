@@ -32,9 +32,6 @@
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.2",
     "stringify-object": "^3.3.0",
-    "stylelint": "^8.4.0",
-    "stylelint-config-prettier": "^5.0.0",
-    "stylelint-config-standard": "^18.0.0",
     "svgo": "^1.1.1",
     "svgson": "^3.0.0"
   }
