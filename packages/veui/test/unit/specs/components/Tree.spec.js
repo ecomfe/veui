@@ -174,7 +174,7 @@ describe('components/Tree', () => {
     wrapper.destroy()
   })
 
-  it('should only the switcher button can be clicked when `item-click` was not set', async () => {
+  it('nodes can only be toggled by clicking toggle buttons when `item-click` was not set', async () => {
     let wrapper = mount(Tree, {
       propsData: {
         datasource
