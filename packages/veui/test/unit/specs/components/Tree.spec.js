@@ -148,7 +148,7 @@ describe('components/Tree', () => {
     wrapper.destroy()
   })
 
-  it('should render datasource correctly when`expanded` was set', () => {
+  it('should render datasource correctly when `expanded` was set', () => {
     let wrapper = mount(Tree, {
       propsData: {
         datasource,
