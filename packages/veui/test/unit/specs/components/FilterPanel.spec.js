@@ -77,7 +77,7 @@ describe('components/FilterPanel', () => {
     wrapper.destroy()
   })
 
-  it('should not render searchbox when `searchable` was set false', () => {
+  it('should not render searchbox when `searchable` was set to false', () => {
     let wrapper = mount(FilterPanel, {
       propsData: {
         searchable: false
