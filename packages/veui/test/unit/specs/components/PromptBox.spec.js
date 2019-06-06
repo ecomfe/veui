@@ -48,7 +48,8 @@ describe('components/PromptBox', function () {
         default: '<div class="default-slot">content</div>',
         title: '<div class="title-slot" slot="title">title</div>',
         foot: '<div class="foot-slot" slot="foot">foot</div>'
-      }
+      },
+      sync: false
     })
     expect(wrapper.find('.title-slot').text()).to.equal('title')
     expect(wrapper.find('.default-slot').text()).to.equal('content')

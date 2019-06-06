@@ -18,7 +18,7 @@
       @input="searchOnInput && debounceSearch()"
     />
     <div
-      v-if="datasource.length"
+      v-if="datasource && datasource.length"
       ref="main"
       class="veui-filter-panel-content-main"
     >
@@ -96,7 +96,7 @@ export default {
   },
   methods: {
     search () {
-      if (!this.searchable) {
+      if (!this.searchable || !this.datasource) {
         return
       }
 
