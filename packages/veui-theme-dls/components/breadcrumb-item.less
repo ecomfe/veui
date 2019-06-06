@@ -1,0 +1,26 @@
+@import "../lib.less";
+
+.veui-breadcrumb-item {
+  float: left;
+  color: @veui-text-color-strong;
+
+  &:last-child {
+    .veui-breadcrumb-separator {
+      display: none;
+    }
+  }
+
+  &-current {
+    font-weight: @veui-font-weight-bold;
+  }
+
+  & > span,
+  & > a {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .veui-icon {
+    vertical-align: middle;
+  }
+}

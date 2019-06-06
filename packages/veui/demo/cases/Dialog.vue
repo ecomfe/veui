@@ -92,10 +92,18 @@
       ui="reverse high large"
       draggable
     >
-      <p>Drag the current dialog box to the right and open the first draggable dialog.</p>
+      <p>
+        Drag the current dialog box to the right and open the first draggable
+        dialog.
+      </p>
       <p>Keep the two dialog have some parts overlapped.</p>
-      <p>You'll see the first draggable dialog is higher than the second one.</p>
-      <p>You can bring the second dialog to the top layer by clicking the second dialog.</p>
+      <p>
+        You'll see the first draggable dialog is higher than the second one.
+      </p>
+      <p>
+        You can bring the second dialog to the top layer by clicking the
+        second dialog.
+      </p>
     </veui-dialog>
     <veui-button
       ui="primary"
@@ -150,7 +158,8 @@
       :open.sync="customTextTitleDialogVisible"
       title="Custom Title"
     >
-      You can change the dialog title text by setting the `title` prop or passing in the `title` slot parameter.
+      You can change the dialog title text by setting the `title` prop or
+      passing in the `title` slot parameter.
       <template slot="foot">
         <veui-button
           ui="primary"
@@ -173,9 +182,7 @@
       Custom Title
     </veui-button>
 
-    <veui-dialog
-      :open.sync="customIconTitleDialogVisible"
-    >
+    <veui-dialog :open.sync="customIconTitleDialogVisible">
       <template slot="title">
         Custom Title With ICON <veui-icon
           class="svg"
@@ -211,7 +218,10 @@
       :open.sync="contentAutoHeightDialogVisible"
       title="Adaptive Content Height"
     >
-      <p>The following increaming content string will incream the content height slowly:</p>
+      <p>
+        The following increaming content string will incream the content
+        height slowly:
+      </p>
       <div v-html="dynamicContent"/>
       <template slot="foot">
         <veui-button
@@ -237,13 +247,21 @@
   </section>
 
   <section>
-    <veui-button @click="popupAlert('info', 'You\'ve got a new message', 'Message')">
+    <veui-button
+      @click="popupAlert('info', 'You\'ve got a new message', 'Message')"
+    >
       Info Box
     </veui-button>
-    <veui-button @click="popupAlert('error', 'You\'ve got an error', 'Error')">
+    <veui-button
+      @click="popupAlert('error', 'You\'ve got an error', 'Error')"
+    >
       Error Box
     </veui-button>
-    <veui-button @click="popupAlert('success', 'Congratulations! Everything is ok!', 'Success')">
+    <veui-button
+      @click="
+        popupAlert('success', 'Congratulations! Everything is ok!', 'Success')
+      "
+    >
       Success Box
     </veui-button>
     <veui-button
@@ -326,7 +344,7 @@ import confirm from 'veui/plugins/confirm'
 import prompt from 'veui/plugins/prompt'
 import toast from 'veui/plugins/toast'
 import Vue from 'vue'
-import 'veui-theme-one/icons/calendar'
+import 'veui-theme-one-icons/calendar'
 
 Vue.use(alert)
 Vue.use(confirm)

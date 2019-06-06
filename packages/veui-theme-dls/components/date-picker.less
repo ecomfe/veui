@@ -1,0 +1,184 @@
+@import "../lib.less";
+@import (reference) "../dropdown.less";
+@import (reference) "../input.less";
+
+.veui-date-picker {
+  &:extend(._veui-dropdown-button all);
+
+  &.veui-input-invalid .veui-button.veui-date-picker-button {
+    &:extend(._veui-input-invalid all);
+  }
+
+  position: relative;
+  display: inline-block;
+  width: 210px;
+
+  &-overlay {
+    &:extend(._veui-dropdown-overlay all);
+  }
+
+  &-empty {
+    .veui-button {
+      color: @veui-text-color-weak;
+
+      &.focus-visible {
+        color: @veui-brand-color;
+      }
+
+      &.veui-disabled {
+        color: @veui-text-color-aux;
+      }
+    }
+  }
+
+  &-empty &-tilde,
+  &-empty &-label ~ &-label {
+    display: none;
+  }
+
+  &-clear {
+    .absolute(~"calc(50% - 0.5em - 1px)", 10px, _, _);
+    .size(~"calc(1em + 2px)");
+    background: #fff;
+    outline: none;
+    border: none;
+    padding: 0;
+    color: @veui-text-color-weak;
+    cursor: pointer;
+    .veui-button-transition();
+
+    .veui-date-picker:hover &,
+    &.focus-visible {
+      .size(~"calc(1em + 2px)");
+      clip: auto;
+    }
+
+    &:hover {
+      color: @veui-text-color-normal;
+    }
+
+    &.focus-visible {
+      .veui-focus-shadow();
+      color: @veui-brand-color;
+    }
+
+    .veui-icon {
+      display: block;
+    }
+  }
+
+  &-range &-label {
+    width: auto;
+  }
+
+  &-tilde {
+    display: inline-block;
+    overflow: hidden;
+    margin: 0 3px;
+  }
+
+  &-shortcuts {
+    height: 41px;
+    padding: 8px 10px;
+    border-bottom: 1px solid @veui-gray-color-6;
+
+    .veui-calendar-panel + & {
+      border-top: 1px solid @veui-gray-color-6;
+      border-bottom: none;
+    }
+  }
+
+  &-shortcut {
+    .veui-button-transition();
+    .centered-line(24px);
+    margin-right: 10px;
+    padding: 0 10px;
+    border: none;
+    background: none;
+    font-size: @veui-font-size-small;
+    color: @veui-text-color-normal;
+    outline: none;
+
+    &:hover {
+      background-color: @veui-gray-color-6;
+    }
+
+    &.focus-visible {
+      color: @veui-brand-color;
+    }
+
+    &:active {
+      background-color: @veui-gray-color-5;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &-selected {
+      background-color: @veui-gray-color-7;
+      color: @veui-text-color-strong;
+    }
+  }
+
+  &:hover &-clear {
+    display: block;
+  }
+
+  &:hover {
+    .veui-date-picker {
+      &-button:not(.veui-disabled),
+      &-clear {
+        background-color: @veui-gray-color-8;
+        color: @veui-text-color-strong;
+      }
+    }
+  }
+
+  &:hover &-button:not(.veui-disabled):active {
+    &,
+    & + .veui-date-picker-clear {
+      background-color: @veui-gray-color-6;
+    }
+  }
+
+  &-expanded &-icon {
+    transform: none;
+  }
+
+  &[ui~="alt"] &-clear {
+    background-color: @veui-gray-color-7;
+  }
+
+  &[ui~="alt"]:hover {
+    .veui-date-picker {
+      &-button:not(.veui-disabled),
+      &-clear {
+        background-color: @veui-gray-color-6;
+      }
+    }
+  }
+
+  &[ui~="alt"]:hover &-button:not(.veui-disabled):active {
+    &,
+    & + .veui-date-picker-clear {
+      background-color: @veui-gray-color-5;
+    }
+  }
+
+  &[ui~="large"] {
+    width: 232px;
+  }
+
+  &[ui~="large"] &-clear {
+    font-size: @veui-font-size-large;
+  }
+
+  &[ui~="tiny"] &-clear {
+    font-size: @veui-font-size-small;
+  }
+
+  &[ui~="micro"] &-clear {
+    font-size: @veui-font-size-small;
+  }
+}
