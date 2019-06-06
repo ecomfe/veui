@@ -6,6 +6,7 @@
 * [^] 修正 `longpress` 指令 `repeat` 参数的默认值为 `false`。
 * [^] 修正 `resize` 指令没有正确处理 `leading` 参数的问题。
 * [^] 修正 `outside` 指令没有准确判断参数是否变更的问题。
+* [^] 修正 `Breadcrumb` 组件初始值为 `null` 时报错的问题。
 
 ## 1.0.0-alpha.25
 
