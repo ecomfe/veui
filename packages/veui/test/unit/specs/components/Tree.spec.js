@@ -261,7 +261,7 @@ describe('components/Tree', () => {
     wrapper.destroy()
   })
 
-  it('should sync expanded status correctly when click the item', async () => {
+  it('should sync expanded status correctly when toggling a node', async () => {
     let wrapper = mount({
       components: {
         'veui-tree': Tree
