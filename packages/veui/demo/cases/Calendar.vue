@@ -33,7 +33,10 @@
     />
   </section>
   <section>
-    <h2>多时间段选择带 scoped slot <small>(<code>multiple</code> &amp; <code>range</code>)</small></h2>
+    <h2>
+      多时间段选择带 scoped slot
+      <small>(<code>multiple</code> &amp; <code>range</code>)</small>
+    </h2>
     <veui-calendar
       v-model="selected3"
       range
@@ -44,7 +47,8 @@
         slot="date"
         slot-scope="day"
       >
-        {{ day.date }} <span
+        {{ day.date }}
+        <span
           v-if="day.date % 7 === 0"
           style="position: absolute;"
         >
@@ -70,7 +74,12 @@
       v-model="selected5"
       type="month"
     />
-    Selected: {{ selected5 ? `${selected5.getFullYear()}-${selected5.getMonth() + 1}` : '-' }}
+    Selected:
+    {{
+      selected5
+        ? `${selected5.getFullYear()}-${selected5.getMonth() + 1}`
+        : "-"
+    }}
   </section>
   <section>
     <h2>年份选择</h2>
@@ -78,7 +87,7 @@
       v-model="selected6"
       type="year"
     />
-    Selected: {{ selected6 ? selected6.getFullYear() : '-' }}
+    Selected: {{ selected6 ? selected6.getFullYear() : "-" }}
   </section>
 </article>
 </template>
@@ -130,7 +139,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-one/lib.less";
+@import "~veui-theme-dls/lib.less";
 
 .veui-demo-calendar {
   section {

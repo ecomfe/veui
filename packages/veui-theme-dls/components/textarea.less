@@ -1,0 +1,124 @@
+@import "../lib.less";
+@import (reference) "../input.less";
+
+.veui-textarea {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  width: 300px;
+  border: 1px solid @veui-gray-color-5;
+  padding: 0;
+  background-color: @veui-gray-color-7;
+  font-size: @veui-font-size-normal;
+  line-height: @veui-height-normal;
+  color: @veui-text-color-normal;
+  min-height: 150px;
+  .veui-transition(border-color, color, box-shadow);
+
+  &.veui-input-invalid {
+    &:extend(._veui-input-invalid all);
+  }
+
+  &:hover,
+  &-focused {
+    border-color: @veui-gray-color-3;
+  }
+
+  &-focused {
+    .veui-focus-shadow();
+    color: @veui-text-color-strong;
+  }
+
+  &-input,
+  &-measurer {
+    font: inherit;
+  }
+
+  // 不要给 textarea 设置背景色，不然在 IE9 下面光标位置会很难看，同时引起一些其他怪异问题
+  &-input {
+    position: relative;
+    float: right;
+    width: 100%;
+
+    // 和外部容器的高度保持一致
+    height: inherit;
+    min-height: inherit;
+    max-height: inherit;
+
+    border: none;
+    outline: none;
+    padding: 0 10px;
+    z-index: 1;
+    resize: none;
+  }
+
+  &-rows {
+    min-height: auto;
+  }
+
+  &-rows &-input {
+    height: auto;
+  }
+
+  &-measurer + &-input {
+    max-width: ~"calc(100% - @{veui-height-normal})";
+  }
+
+  &-measurer {
+    .absolute(0);
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: @veui-text-color-weak;
+
+    &-line {
+      overflow: hidden;
+
+      &-number {
+        float: left;
+        min-width: @veui-height-normal;
+        text-align: center;
+      }
+
+      &-content {
+        .padding(_, 10px);
+        overflow: hidden;
+        visibility: hidden;
+      }
+    }
+  }
+
+  &-autoresize &-measurer {
+    bottom: auto;
+  }
+
+  &[ui~="small"] {
+    font-size: @veui-font-size-small;
+    line-height: @veui-height-small;
+  }
+
+  &[ui~="large"] {
+    font-size: @veui-font-size-large;
+    line-height: @veui-height-large;
+  }
+
+  &.veui-readonly,
+  &.veui-disabled {
+    &,
+    &:hover {
+      border-color: @veui-gray-color-5;
+      color: @veui-text-color-weak;
+    }
+
+    & .veui-textarea-input {
+      background-color: @veui-gray-color-8;
+    }
+  }
+
+  &.veui-disabled {
+    &,
+    & .veui-textarea-input {
+      cursor: not-allowed;
+    }
+  }
+}
