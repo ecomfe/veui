@@ -15,7 +15,7 @@ export default {
   },
   data () {
     return {
-      localRoutes: [...this.routes || null]
+      localRoutes: [...this.routes || []]
     }
   },
   watch: {
