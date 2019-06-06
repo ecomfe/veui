@@ -1,0 +1,564 @@
+@import "../lib.less";
+
+.veui-tabs {
+  @veui-tabs-height-normal: 34px;
+  @veui-tabs-height-large: 40px;
+  @veui-tabs-block-height-large: 38px;
+
+  overflow: hidden;
+  position: relative;
+
+  &-menu button {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  &-menu {
+    overflow: hidden;
+    white-space: nowrap;
+    min-height: @veui-tabs-height-normal + 1;
+
+    &-moving {
+      transition: margin-right 0.5s ease-in-out;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: @veui-tabs-height-normal;
+      width: 100%;
+      border-bottom: 1px solid @veui-gray-color-6;
+    }
+  }
+
+  &-list {
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    min-height: @veui-height-normal;
+    max-width: 100%;
+    vertical-align: top;
+    z-index: 1;
+  }
+
+  &-list-wrapper {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    transform: translate(0);
+
+    &-moving {
+      transition: transform 0.5s ease-in-out;
+    }
+  }
+
+  .make-margin-left(@margin) {
+    margin-left: @margin;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  &-item {
+    position: relative;
+    display: inline-block;
+    .make-margin-left(50px);
+    vertical-align: top;
+
+    &.veui-tabs-item-removable {
+      .make-margin-left(@veui-tabs-height-normal);
+
+      .veui-tabs-item-status {
+        margin-right: 8px;
+      }
+    }
+
+    &:first-child &-label {
+      padding-left: 0;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: ~"calc(100% - 1px)";
+      background-color: #fff;
+      z-index: -1;
+    }
+
+    & > &-remove {
+      visibility: hidden;
+      color: @veui-text-color-weak;
+      cursor: pointer;
+      outline: none;
+      .veui-button-transition();
+
+      .veui-icon {
+        display: block;
+      }
+
+      &::after {
+        content: none;
+      }
+
+      &:hover,
+      &.focus-visible {
+        color: @veui-text-color-normal;
+      }
+
+      &.focus-visible {
+        .veui-focus-shadow();
+      }
+
+      &:active {
+        color: @veui-gray-color-1;
+      }
+    }
+
+    &-remove:focus,
+    &:hover > &-remove,
+    &-label.focus-visible > &-remove {
+      visibility: visible;
+    }
+
+    & > &-label {
+      padding: 0 10px;
+      line-height: 2.5;
+      display: inline-block;
+      text-decoration: none;
+      outline: none;
+      position: relative;
+    }
+
+    &:not(.veui-tabs-item-disabled) > &-label {
+      color: @veui-text-color-strong;
+
+      &::after {
+        content: "";
+        .absolute(_, 10px, 0, 10px);
+        height: 2px;
+        .veui-transition(background-color, height);
+      }
+
+      &.focus-visible::after,
+      &:hover::after {
+        background-color: @veui-gray-color-3;
+      }
+
+      &.focus-visible::after {
+        height: 3px;
+      }
+
+      &:active::after {
+        background-color: @veui-gray-color-1;
+      }
+    }
+
+    &:first-child:not(.veui-tabs-item-disabled) > &-label {
+      &::after {
+        .absolute(_, 10px, 0, 0);
+      }
+    }
+
+    &-active > &-label {
+      &::after {
+        background-color: @veui-gray-color-1;
+      }
+    }
+
+    &:first-child {
+      &-label {
+        margin-left: -10px;
+      }
+    }
+
+    &-disabled > &-label {
+      cursor: not-allowed;
+      color: @veui-text-color-weak;
+    }
+  }
+
+  &-item-status {
+    display: inline-block;
+    width: 1em;
+    margin-right: 12px;
+    vertical-align: top;
+    cursor: pointer;
+
+    .veui-tabs-status(@type) {
+      @color-name: ~"veui-@{type}-color";
+      @color: @@color-name;
+
+      color: @color;
+    }
+
+    &-success {
+      .veui-tabs-status(success);
+    }
+
+    &-warning {
+      .veui-tabs-status(warning);
+    }
+
+    &-info {
+      .veui-tabs-status(info);
+    }
+
+    &-error {
+      .veui-tabs-status(alert);
+    }
+  }
+
+  &-extra {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+
+    .veui-tabs-list-empty & :first-child {
+      margin-left: 0;
+    }
+  }
+
+  &-extra-tip {
+    display: inline-block;
+    line-height: 2.5;
+    vertical-align: top;
+    color: @veui-text-color-aux;
+  }
+
+  &-operator {
+    display: inline-block;
+    margin-left: 60px;
+    line-height: 2.5;
+    outline: none;
+    cursor: pointer;
+
+    .veui-icon {
+      margin-right: 6px;
+    }
+
+    &[disabled] {
+      &,
+      &:hover {
+        cursor: not-allowed;
+        color: @veui-text-color-aux;
+      }
+    }
+  }
+
+  &-item-status .veui-icon,
+  &-item-remove,
+  &-operator .veui-icon {
+    vertical-align: top;
+    // 减掉的 1px 是底部的线
+    margin-top: ~"calc(@{veui-height-normal} / 2 - 0.5em - 1px)";
+    user-select: none;
+  }
+
+  &-scroller {
+    display: inline-block;
+    line-height: 2.5;
+    margin-left: 30px;
+
+    &-left,
+    &-right {
+      display: inline-block;
+      .size(2 * @veui-font-size-normal);
+      background-color: @veui-gray-color-8;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+
+      &:hover,
+      &.focus-visible {
+        background-color: @veui-gray-color-5;
+      }
+
+      &:active {
+        background-color: @veui-gray-color-3;
+      }
+
+      &[disabled] {
+        background-color: #fff;
+        color: @veui-text-color-weak;
+        cursor: not-allowed;
+      }
+    }
+
+    &-right {
+      margin-left: 8px;
+    }
+  }
+
+  &[ui~="large"] {
+    font-size: @veui-font-size-large;
+  }
+
+  &[ui~="large"] & {
+    &-menu::after {
+      top: @veui-tabs-height-large - 1;
+    }
+
+    &-menu,
+    &-list {
+      min-height: @veui-tabs-height-large;
+    }
+
+    &-operator {
+      padding: 0 10px;
+    }
+
+    &-item-status .veui-icon,
+    &-item-remove,
+    &-operator .veui-icon {
+      margin-top: ~"calc(@{veui-height-large} / 2 - 0.5em - 1px)";
+    }
+
+    &-scroller {
+      &-left,
+      &-right {
+        .size(2 * @veui-font-size-large);
+
+        .veui-icon {
+          font-size: @veui-font-size-normal;
+          vertical-align: text-top;
+        }
+      }
+    }
+  }
+
+  &[ui~="small"] & {
+    &-item {
+      .make-margin-left(30px);
+    }
+
+    &-menu::after {
+      display: none;
+    }
+  }
+
+  &[ui~="tiny"] & {
+    &-menu::after {
+      display: none;
+    }
+
+    &-item {
+      .make-margin-left(21px);
+      position: relative;
+
+      &-label {
+        &::after {
+          height: 1px;
+        }
+
+        &.focus-visible::after {
+          height: 2px;
+        }
+      }
+
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 1px;
+        height: 14px;
+        background-color: @veui-gray-color-6;
+        .absolute(10px, _, _, -11px);
+      }
+
+      &:first-child::before {
+        display: none;
+      }
+    }
+  }
+
+  &[ui~="block"] & {
+    &-menu {
+      &::after {
+        display: none;
+      }
+    }
+
+    &-list {
+      height: ~"@{veui-height-normal}\9\0";
+      border: 1px solid @veui-gray-color-6;
+
+      .veui-tabs-list-empty& {
+        border-width: 1px 0 1px 1px;
+      }
+    }
+
+    &-item {
+      overflow: hidden;
+      .make-margin-left(0);
+      border: 1px solid @veui-gray-color-6;
+      border-width: 0 0 0 1px;
+      background-color: #fff;
+      cursor: pointer;
+
+      &.veui-tabs-item-removable {
+        padding-right: 12px;
+        padding-right: 0\9\0;
+      }
+
+      &-moving.veui-tabs-item-removable,
+      &.veui-tab-leave-active {
+        transition: width 0.5s ease-in-out, transform 0.5s ease-in-out,
+          padding-right 0.5s;
+      }
+
+      &.veui-tab-leave-active {
+        z-index: -1;
+      }
+
+      &::after {
+        display: none;
+      }
+
+      &:first-child {
+        border-left-width: 0;
+        margin-left: 0;
+      }
+
+      &:hover {
+        background-color: @veui-gray-color-8;
+      }
+
+      &-label {
+        min-width: 62px;
+        max-width: 160px;
+        line-height: @veui-tabs-height-normal;
+        padding: 0 8px 0 12px;
+        .ellipsis();
+        text-align: left;
+        .veui-transition(background-color, box-shadow);
+
+        &::after {
+          display: none;
+        }
+
+        &.focus-visible {
+          box-shadow: inset 0 0 0 2px fadeout(@veui-gray-color-3, 50%);
+        }
+
+        &:active {
+          background-color: @veui-gray-color-6;
+        }
+      }
+
+      &.veui-tabs-item-removable > .veui-tabs-item-label {
+        padding-right: 8px;
+      }
+
+      &.veui-tabs-item-disabled {
+        background-color: #fff;
+        color: @veui-gray-color-4;
+      }
+
+      &.veui-tabs-item-active {
+        background-color: @veui-gray-color-6;
+      }
+    }
+
+    &-item-status .veui-icon,
+    &-item-remove,
+    &-operator .veui-icon,
+    &-scroller .veui-icon {
+      margin-top: ~"calc(@{veui-tabs-height-normal} / 2 - 0.5em)";
+      vertical-align: top;
+    }
+
+    &-extra {
+      border-bottom: none;
+      vertical-align: top;
+
+      .veui-tabs-addable&::before {
+        content: "";
+        position: absolute;
+        left: -1px;
+        height: 100%;
+        border-left: 1px solid @veui-gray-color-6;
+        z-index: 1;
+      }
+
+      &-label {
+        display: none;
+      }
+    }
+
+    &-operator {
+      margin-left: 0;
+      margin-right: 20px;
+      width: @veui-height-normal;
+      line-height: @veui-tabs-height-normal;
+      border: 1px solid @veui-gray-color-6;
+      border-width: 1px 1px 1px 0;
+      text-align: center;
+      vertical-align: top;
+
+      .veui-icon {
+        margin-right: 0;
+      }
+    }
+
+    &-scroller {
+      line-height: @veui-tabs-height-normal;
+
+      &-left,
+      &-right {
+        .size(@veui-height-normal);
+        border: 1px solid @veui-gray-color-6;
+        background-color: #fff;
+
+        &:hover,
+        &.focus-visible {
+          background-color: @veui-gray-color-8;
+        }
+
+        &:active {
+          background-color: @veui-gray-color-6;
+        }
+
+        &[disabled] {
+          color: @veui-text-color-aux;
+          background-color: #fff;
+        }
+      }
+    }
+  }
+
+  &[ui~="large"][ui~="block"] & {
+    &-item {
+      &-label {
+        line-height: @veui-tabs-block-height-large;
+      }
+    }
+
+    &-item-status .veui-icon,
+    &-item-remove,
+    &-operator .veui-icon,
+    &-scroller .veui-icon {
+      margin-top: ~"calc(@{veui-tabs-block-height-large} / 2 - 0.5em)";
+      vertical-align: top;
+    }
+
+    &-operator {
+      width: @veui-tabs-height-large;
+      line-height: @veui-tabs-block-height-large;
+    }
+
+    &-scroller {
+      line-height: @veui-tabs-block-height-large;
+
+      &-left,
+      &-right {
+        .size(@veui-tabs-height-large);
+      }
+    }
+  }
+}
