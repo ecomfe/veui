@@ -47,7 +47,8 @@ describe('components/FilterPanel', () => {
               class="test-datasource">{{item.label}}</div>
           </div>
         `
-      }
+      },
+      sync: false
     })
 
     expect(
@@ -106,7 +107,8 @@ describe('components/FilterPanel', () => {
               class="test-datasource">{{item.label}}</div>
           </div>
         `
-      }
+      },
+      sync: false
     })
     let items
 
