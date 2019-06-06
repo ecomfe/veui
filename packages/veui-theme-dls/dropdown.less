@@ -1,0 +1,158 @@
+@import "./lib.less";
+
+._veui-dropdown-overlay {
+  border: 1px solid @veui-gray-color-6;
+  margin: 3px 0;
+  outline: none;
+  transition: transform @veui-transition-duration;
+  transform-origin: 50% 0;
+  .veui-overlay-shadow();
+
+  .veui-overlay-enter &,
+  .veui-overlay-leave-to & {
+    transform: scaleY(0);
+  }
+
+  .tether-element-attached-bottom.veui-overlay-enter-active &,
+  .tether-element-attached-bottom.veui-overlay-leave-active & {
+    transform-origin: 50% 100%;
+  }
+
+  &.veui-dropdown-overflow {
+    &::before,
+    &::after {
+      content: "";
+      height: 20px;
+      pointer-events: none;
+      transition: opacity @veui-transition-duration;
+    }
+
+    &::before {
+      .absolute(3px, 1px, 0);
+      .vertical-gradient(#fff, transparent);
+    }
+
+    &::after {
+      .absolute(_, 1px, 3px);
+      .vertical-gradient(transparent, #fff);
+    }
+
+    &-scroll {
+      &-start {
+        &::before {
+          opacity: 0;
+        }
+      }
+
+      &-end {
+        &::after {
+          opacity: 0;
+        }
+      }
+    }
+  }
+}
+
+._veui-dropdown-button {
+  & &-button {
+    width: 100%;
+    .padding(_, 10px);
+    text-align: left;
+  }
+
+  &-label {
+    display: inline-block;
+    max-width: ~"calc(100% - 24px)";
+    width: 100%;
+    .ellipsis();
+  }
+
+  &-icon {
+    float: right;
+    transition: transform @veui-transition-duration;
+  }
+
+  &-expanded &-icon {
+    transform: rotateZ(180deg);
+  }
+
+  &-button[ui~="primary"]:not(.veui-button-loading):disabled {
+    background-color: @veui-gray-color-7;
+    border-color: transparent;
+    color: @veui-text-color-aux;
+  }
+
+  &-expanded &-button:not([ui~="link"]) {
+    &,
+    &:hover,
+    &.focus-visible {
+      color: @veui-text-color-strong;
+      background-color: @veui-gray-color-8;
+    }
+
+    &:active {
+      background-color: @veui-gray-color-6;
+    }
+  }
+
+  &-expanded &-button[ui~="primary"]:not([ui~="link"]) {
+    &,
+    &:hover,
+    &.focus-visible {
+      background-color: @veui-brand-color-2;
+      color: #fff;
+    }
+
+    &:active {
+      background-color: @veui-brand-color-1;
+    }
+  }
+
+  &-expanded &-button[ui~="alt"] {
+    &,
+    &:hover,
+    &.focus-visible {
+      background-color: @veui-gray-color-6;
+    }
+  }
+}
+
+._veui-dropdown-option {
+  .veui-button-transition();
+  .centered-line(@veui-height-normal);
+  .ellipsis();
+  display: block;
+  width: 100%;
+  background-color: #fff;
+  border: none;
+  padding: 0 10px;
+  color: @veui-text-color-normal;
+  text-align: left;
+  outline: none;
+  cursor: pointer;
+
+  &.focus-visible,
+  &:hover {
+    background-color: @veui-gray-color-8;
+  }
+
+  &:active {
+    background-color: @veui-gray-color-6;
+  }
+
+  &-selected {
+    color: @veui-text-color-strong;
+    font-weight: @veui-font-weight-bold;
+  }
+
+  &-disabled {
+    background-color: #fff;
+    color: @veui-text-color-weak;
+    cursor: not-allowed;
+  }
+
+  &-label {
+    float: left;
+    margin-right: 10px;
+  }
+}
