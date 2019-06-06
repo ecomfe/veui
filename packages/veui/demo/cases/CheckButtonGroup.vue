@@ -55,10 +55,10 @@
 
 <script>
 import { CheckButtonGroup, Checkbox, Icon } from 'veui'
-import 'veui-theme-one/icons/check'
-import 'veui-theme-one/icons/cross'
-import 'veui-theme-one/icons/refresh'
-import 'veui-theme-one/icons/edit'
+import 'veui-theme-one-icons/check'
+import 'veui-theme-one-icons/times'
+import 'veui-theme-one-icons/sync-alt'
+import 'veui-theme-one-icons/edit'
 
 export default {
   name: 'check-button-group-demo',
@@ -107,12 +107,12 @@ export default {
           icon: 'check'
         },
         {
-          value: 'cross',
-          icon: 'cross'
+          value: 'times',
+          icon: 'times'
         },
         {
-          value: 'refresh',
-          icon: 'refresh'
+          value: 'sync-alt',
+          icon: 'sync-alt'
         },
         {
           value: 'edit',

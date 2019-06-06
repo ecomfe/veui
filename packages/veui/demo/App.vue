@@ -3,8 +3,7 @@
   <nav id="main-nav">
     <h1>
       <a href="https://github.com/ecomfe/veui">
-        VEUI components
-      </a><veui-icon
+        VEUI components </a><veui-icon
         name="brands/github"
         scale="6"
       />
@@ -24,8 +23,7 @@
         href="https://www.baidu.com/"
         target="_blank"
       >
-        © {{ year }} Baidu, Inc.
-      </a><veui-icon
+        © {{ year }} Baidu, Inc. </a><veui-icon
         name="baidu"
         scale="8"
       />
@@ -91,7 +89,7 @@ export default {
 
 <style lang="less">
 @import "~less-plugin-est/src/all.less";
-@import "~veui-theme-one/common.less";
+@import "~veui-theme-dls/common.less";
 
 @nav-width: 240px;
 @light-bg-color: #f6f9ff;
