@@ -55,23 +55,23 @@
   </p>
   <p>
     <veui-button ui="micro">
-      <icon name="cross-small"/> 取消
+      <icon name="times"/> 取消
     </veui-button>
     <veui-button ui="tiny">
-      <icon name="cross-small"/> 取消
+      <icon name="times"/> 取消
     </veui-button>
     <veui-button ui="small">
-      <icon name="cross-small"/> 取消
+      <icon name="times"/> 取消
     </veui-button>
-    <veui-button><icon name="cross-small"/> 取消</veui-button>
+    <veui-button><icon name="times"/> 取消</veui-button>
     <veui-button ui="large">
-      <icon name="cross-small"/> 取消
+      <icon name="times"/> 取消
     </veui-button>
     <veui-button disabled>
-      <icon name="cross-small"/> 取消
+      <icon name="times"/> 取消
     </veui-button>
     <veui-button loading>
-      <icon name="cross-small"/> 取消
+      <icon name="times"/> 取消
     </veui-button>
   </p>
   <p>
@@ -250,31 +250,31 @@
   </p>
   <p>
     <veui-button ui="alt square micro">
-      <icon name="cross"/>
+      <icon name="times"/>
     </veui-button>
     <veui-button ui="alt square tiny">
-      <icon name="cross"/>
+      <icon name="times"/>
     </veui-button>
     <veui-button ui="alt square small">
-      <icon name="cross"/>
+      <icon name="times"/>
     </veui-button>
     <veui-button ui="alt square">
-      <icon name="cross"/>
+      <icon name="times"/>
     </veui-button>
     <veui-button ui="alt square large">
-      <icon name="cross"/>
+      <icon name="times"/>
     </veui-button>
     <veui-button
       ui="alt square"
       disabled
     >
-      <icon name="cross"/>
+      <icon name="times"/>
     </veui-button>
     <veui-button
       ui="alt square"
       loading
     >
-      <icon name="cross"/>
+      <icon name="times"/>
     </veui-button>
   </p>
   <p>
@@ -341,11 +341,10 @@
 <script>
 import bus from '../bus'
 import { Button, Icon } from 'veui'
-import 'veui-theme-one/icons/cross-small'
-import 'veui-theme-one/icons/check'
-import 'veui-theme-one/icons/edit'
-import 'veui-theme-one/icons/search'
-import 'veui-theme-one/icons/cross'
+import 'veui-theme-one-icons/check'
+import 'veui-theme-one-icons/edit'
+import 'veui-theme-one-icons/search'
+import 'veui-theme-one-icons/times'
 
 export default {
   name: 'button-demo',

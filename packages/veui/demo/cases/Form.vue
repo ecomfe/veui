@@ -131,7 +131,8 @@
 
       <veui-fieldset class="salary">
         <template slot="label">
-          <veui-label>预期收入：</veui-label> <veui-icon name="money-bill-alt"/>
+          <veui-label>预期收入：</veui-label>
+          <veui-icon name="money-bill-alt"/>
         </template>
         <veui-field>
           <veui-input v-model="storeData2.start"/>
@@ -142,7 +143,8 @@
         </veui-field>
         <veui-span>万</veui-span>
         <template slot="tip">
-          <veui-icon name="indent"/> 使用 &lt;veui-span&gt; 来插入中间非组件内容
+          <veui-icon name="indent"/> 使用 &lt;veui-span&gt;
+          来插入中间非组件内容
         </template>
       </veui-fieldset>
 
@@ -158,7 +160,11 @@
             :step="0.5"
           />
         </veui-field>
-        <veui-span>{{ storeData2.salary[0].toFixed(1) }}~{{ storeData2.salary[1].toFixed(1) }}万</veui-span>
+        <veui-span>
+          {{ storeData2.salary[0].toFixed(1) }}~{{
+            storeData2.salary[1].toFixed(1)
+          }}万
+        </veui-span>
       </veui-fieldset>
     </veui-form>
   </section>
@@ -490,8 +496,8 @@
         field="floor"
         name="floor"
         :rules="[
-          {name: 'required', value: true},
-          {name: 'min', value: 3500, message: '最低收入不小于 3500'}
+          { name: 'required', value: true },
+          { name: 'min', value: 3500, message: '最低收入不小于 3500' }
         ]"
       >
         <veui-number-input v-model="storeData4.floor"/>
@@ -3012,7 +3018,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-one/lib.less";
+@import "~veui-theme-dls/lib.less";
 
 .veui-form-demo {
   h2 {
