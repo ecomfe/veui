@@ -252,7 +252,8 @@ describe('components/Tree', () => {
       scopedSlots: {
         'item-label':
           '<div class="test-item-label-slot" slot-scope="props">{{props.item.label}} item-label slot</div>'
-      }
+      },
+      sync: false
     })
 
     expect(wrapper.find('.test-item-label-slot').exists()).to.equal(true)
