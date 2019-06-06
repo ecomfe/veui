@@ -61,11 +61,8 @@ describe('components/FilterPanel', () => {
     wrapper.destroy()
   })
 
-  it('should render `no data` correctly when datasource was empty array', () => {
+  it('should render `no data` correctly when datasource was not set', () => {
     let wrapper = mount(FilterPanel, {
-      propsData: {
-        datasource: []
-      },
       slots: {
         'no-data': 'no data'
       }
