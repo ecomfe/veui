@@ -13,7 +13,8 @@ describe('components/FilterPanel', () => {
     let wrapper = mount(FilterPanel, {
       propsData: {
         title: 'Title'
-      }
+      },
+      sync: false
     })
 
     expect(wrapper.find('.veui-filter-panel-title').text()).to.equal('Title')
@@ -25,7 +26,8 @@ describe('components/FilterPanel', () => {
     let wrapper = mount(FilterPanel, {
       slots: {
         head: 'Title'
-      }
+      },
+      sync: false
     })
 
     expect(wrapper.find('.veui-filter-panel-title').text()).to.equal('Title')
@@ -65,7 +67,28 @@ describe('components/FilterPanel', () => {
     let wrapper = mount(FilterPanel, {
       slots: {
         'no-data': 'no data'
-      }
+      },
+      sync: false
+    })
+
+    expect(
+      wrapper
+        .find('.veui-filter-panel-no-data')
+        .text()
+    ).to.equal('no data')
+
+    wrapper.destroy()
+  })
+
+  it('should render `no data` correctly when datasource was set to null', () => {
+    let wrapper = mount(FilterPanel, {
+      propsData: {
+        datasource: null
+      },
+      slots: {
+        'no-data': 'no data'
+      },
+      sync: false
     })
 
     expect(
@@ -81,7 +104,8 @@ describe('components/FilterPanel', () => {
     let wrapper = mount(FilterPanel, {
       propsData: {
         searchable: false
-      }
+      },
+      sync: false
     })
 
     expect(wrapper.find('.veui-searchbox').exists()).to.equal(false)
