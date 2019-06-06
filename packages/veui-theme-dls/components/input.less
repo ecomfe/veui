@@ -1,0 +1,154 @@
+@import "../lib.less";
+@import (reference) "../input.less";
+
+.veui-input {
+  @left-padding: 10px;
+
+  .make-line-height(@height) {
+    height: @height;
+    line-height: @height - 2px;
+  }
+
+  display: inline-table;
+  position: relative;
+  .make-line-height(@veui-height-normal);
+  width: @veui-width-normal;
+  border: 1px solid @veui-gray-color-5;
+  background-color: #fff;
+  color: @veui-text-color-normal;
+  .veui-transition(border-color, color, box-shadow);
+
+  &-autofill {
+    background-color: @veui-autofill-color;
+  }
+
+  .veui-field > & {
+    display: inline-table;
+  }
+
+  &-hidden {
+    display: none !important;
+  }
+
+  &-before,
+  &-main,
+  &-clear,
+  &-after {
+    display: table-cell;
+    vertical-align: top;
+    height: 100%;
+  }
+
+  &-main {
+    width: 100%;
+    cursor: inherit;
+  }
+
+  &-input {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    padding: 0 @left-padding;
+    background-color: transparent;
+    text-overflow: ellipsis;
+  }
+
+  &-clear {
+    padding-right: 12px;
+
+    &-button {
+      width: 1em;
+      height: 1em;
+      padding: 0;
+      vertical-align: ~"calc(-50% + 0.5em)";
+      vertical-align: ~"-3px\9\0";
+      border: none;
+      background-color: transparent;
+      color: @veui-text-color-normal;
+      outline: none;
+      cursor: unset;
+      .veui-button-transition();
+
+      &.focus-visible {
+        color: @veui-text-color-strong;
+        .veui-focus-shadow();
+      }
+    }
+
+    .veui-icon {
+      cursor: pointer;
+      vertical-align: top;
+
+      &:hover {
+        color: @veui-text-color-strong;
+      }
+    }
+  }
+
+  &.veui-input-invalid {
+    &:extend(._veui-input-invalid all);
+  }
+
+  &:hover,
+  &-focused {
+    border-color: @veui-gray-color-3;
+  }
+
+  &-focused {
+    .veui-focus-shadow();
+    color: @veui-text-color-strong;
+  }
+
+  &.veui-readonly,
+  &.veui-disabled {
+    background-color: @veui-gray-color-8;
+
+    &,
+    &:hover {
+      border-color: @veui-gray-color-5;
+      color: @veui-text-color-weak;
+    }
+  }
+
+  &.veui-disabled {
+    cursor: not-allowed;
+
+    .veui-input-input {
+      pointer-events: none;
+    }
+  }
+
+  &-placeholder {
+    position: absolute;
+    padding-left: @left-padding;
+    color: @veui-text-color-weak !important;
+    pointer-events: none;
+    cursor: text;
+    .ellipsis();
+    width: 100%;
+  }
+
+  &[ui~="large"] {
+    .make-line-height(@veui-height-large);
+    font-size: @veui-font-size-large;
+  }
+
+  &[ui~="small"] {
+    .make-line-height(@veui-height-small);
+    font-size: @veui-font-size-small;
+  }
+
+  &[ui~="tiny"] {
+    .make-line-height(@veui-height-tiny);
+    font-size: @veui-font-size-small;
+  }
+
+  &[ui~="micro"] {
+    .make-line-height(@veui-height-micro);
+    font-size: @veui-font-size-small;
+  }
+}

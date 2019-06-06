@@ -1,7 +1,8 @@
 <template>
 <aside
   :class="{
-    expanded, 'veui-console': true
+    expanded,
+    'veui-console': true
   }"
 >
   <h2 @click="expanded = !expanded">
@@ -43,8 +44,8 @@
 import bus from './bus'
 import Icon from 'veui/components/Icon'
 import 'vue-awesome/icons/ban'
-import 'veui-theme-one/icons/angle-up'
-import 'veui-theme-one/icons/angle-down'
+import 'veui-theme-one-icons/angle-up'
+import 'veui-theme-one-icons/angle-down'
 
 export default {
   name: 'veui-console',

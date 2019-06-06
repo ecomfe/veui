@@ -1,0 +1,19 @@
+@import "../lib.less";
+
+.veui-checkbox-group {
+  .veui-checkbox {
+    margin-right: 15px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .veui-field > & {
+    line-height: @veui-height-normal;
+  }
+
+  .veui-field[ui~="small"] > &[ui~="small"] {
+    line-height: @veui-height-small;
+  }
+}

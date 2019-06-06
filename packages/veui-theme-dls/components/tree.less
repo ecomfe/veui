@@ -1,0 +1,75 @@
+@import "../lib.less";
+
+.veui-tree {
+  @item-height: 36px;
+  @item-indent-gap: 18px;
+  @item-icon-size: 14px;
+  @item-icon-gap: 4px;
+
+  &,
+  &-item-group {
+    .reset-list-style();
+    padding: 0;
+    margin: 0;
+  }
+
+  &-item {
+    .centered-line(@item-height);
+    .clearfix();
+    outline: none;
+
+    &.focus-visible {
+      .veui-focus-shadow();
+    }
+
+    &-expand-switcher,
+    &-label {
+      float: left;
+    }
+
+    &-expand-switcher {
+      @height: @item-height / 2;
+      .centered-line(@item-icon-size);
+      display: inline-block;
+      background: none;
+      border: none;
+      padding: 0;
+      vertical-align: top;
+      margin-top: ~"calc(@{height} - 0.5em)";
+      margin-right: @item-icon-gap;
+      cursor: pointer;
+      outline: none;
+      .veui-transition(box-shadow, transform);
+
+      &.focus-visible {
+        .veui-focus-shadow();
+      }
+
+      .veui-icon {
+        .size(@item-icon-size);
+      }
+    }
+
+    &-expanded &-expand-switcher {
+      transform: rotateZ(90deg);
+    }
+
+    &-group {
+      display: none;
+      padding-left: @item-indent-gap;
+    }
+
+    &-expanded + &-group {
+      display: block;
+    }
+
+    // 如果前面没有图标，就把图标位置让出来。
+    &-label:first-child {
+      margin-left: @item-indent-gap;
+    }
+
+    &-clickable {
+      cursor: pointer;
+    }
+  }
+}
