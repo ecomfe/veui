@@ -2319,7 +2319,7 @@ export default {
   computed: {
     datasource1LeafCount () {
       let count = 0
-      let walk = (datasource) => {
+      let walk = datasource => {
         datasource.forEach(item => {
           if (!item.children) {
             count += 1

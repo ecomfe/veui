@@ -127,7 +127,9 @@ export default {
     },
     empty () {
       // compositionValue 不会是数字 0
-      return !this.compositionValue && (this.value == null || this.value === '')
+      return (
+        !this.compositionValue && (this.value == null || this.value === '')
+      )
     },
     realSelectOnFocus () {
       return this.type !== 'hidden' && this.selectOnFocus
@@ -178,7 +180,7 @@ export default {
         $event.target.select()
       }
     },
-    handleBlur ($event) {
+    handleBlur () {
       this.focused = false
     },
     focus () {
