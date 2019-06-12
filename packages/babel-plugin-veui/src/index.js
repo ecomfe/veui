@@ -30,7 +30,7 @@ export default function (babel) {
                   t.stringLiteral(src)
                 )
               )
-              path.getSibling(path.key - 1).stop()
+              path.getSibling(path.key - 1).skip()
             } else {
               let realName = getComponentName(imported.name)
 
@@ -45,7 +45,7 @@ export default function (babel) {
                   t.stringLiteral(componentSrc)
                 )
               )
-              path.getSibling(path.key - 1).stop()
+              path.getSibling(path.key - 1).skip()
             }
           })
 
