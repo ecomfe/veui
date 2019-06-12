@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils'
+import { trim } from 'lodash'
 import GridContainer from '@/components/GridContainer'
 import GridRow from '@/components/GridRow'
 import GridColumn from '@/components/GridColumn'
@@ -53,10 +54,10 @@ describe('components/GridContainer', () => {
         attachToDocument: true
       }
     )
-    let element = wrapper.find('.veui-grid-column').element
+    let obj = getStyle(wrapper.find('.veui-grid-column').element)
 
-    expect(getStyle(element, 'padding-left')).to.equal('20px')
-    expect(getStyle(element, 'padding-right')).to.equal('20px')
+    expect(obj['padding-left']).to.equal('20px')
+    expect(obj['padding-right']).to.equal('20px')
 
     wrapper.destroy()
   })
@@ -83,10 +84,10 @@ describe('components/GridContainer', () => {
         attachToDocument: true
       }
     )
-    let element = wrapper.find('.veui-grid-container').element
+    let obj = getStyle(wrapper.find('.veui-grid-container').element)
 
-    expect(getStyle(element, 'padding-left')).to.equal('10px')
-    expect(getStyle(element, 'padding-right')).to.equal('10px')
+    expect(obj['padding-left']).to.equal('10px')
+    expect(obj['padding-right']).to.equal('10px')
 
     wrapper.destroy()
   })
@@ -114,7 +115,7 @@ describe('components/GridContainer', () => {
       }
     )
 
-    expect(getStyle(wrapper.find('.veui-grid-row').element, 'display')).to.equal('flex')
+    expect(getStyle(wrapper.find('.veui-grid-row').element).display).to.equal('flex')
 
     wrapper.destroy()
   })
@@ -130,7 +131,7 @@ describe('components/GridColumn', () => {
           'veui-grid-column': GridColumn
         },
         template: `
-          <veui-grid-container>
+          <veui-grid-container :columns="12">
             <veui-grid-row>
               <veui-grid-column :span="8" />
               <veui-grid-column :span="4" />
@@ -147,12 +148,8 @@ describe('components/GridColumn', () => {
     let columns = wrapper.findAll('.veui-grid-column')
 
     expect(columns.length).to.equal(2)
-    expect(
-      Math.ceil(
-        parseInt(getStyle(columns.at(0).element, 'width'), 10) /
-        parseInt(getStyle(columns.at(1).element, 'width'), 10)
-      )
-    ).to.equal(2)
+    expect(getStyle(columns.at(0).element).width).to.equal('66.667%')
+    expect(getStyle(columns.at(1).element).width).to.equal('33.333%')
 
     wrapper.destroy()
   })
@@ -166,7 +163,7 @@ describe('components/GridColumn', () => {
           'veui-grid-column': GridColumn
         },
         template: `
-          <veui-grid-container>
+          <veui-grid-container :columns="12">
             <veui-grid-row>
               <veui-grid-column :offset="4" :span="4" />
               <veui-grid-column :span="4" />
@@ -180,9 +177,10 @@ describe('components/GridColumn', () => {
       }
     )
 
-    let element = wrapper.find('.veui-grid-column').element
+    let obj = getStyle(wrapper.find('.veui-grid-column').element)
 
-    expect(parseInt(getStyle(element, 'width'), 10)).to.equal(parseInt(getStyle(element, 'margin-left')))
+    expect(obj.width).to.equal('33.333%')
+    expect(obj['margin-left']).to.equal('33.333%')
 
     wrapper.destroy()
   })
@@ -196,7 +194,7 @@ describe('components/GridColumn', () => {
           'veui-grid-column': GridColumn
         },
         template: `
-          <veui-grid-container>
+          <veui-grid-container :columns="12">
             <veui-grid-row>
               <veui-grid-column :pull="4" :span="4" />
               <veui-grid-column />
@@ -210,9 +208,10 @@ describe('components/GridColumn', () => {
       }
     )
 
-    let element = wrapper.find('.veui-grid-column').element
+    let obj = getStyle(wrapper.find('.veui-grid-column').element)
 
-    expect(parseInt(getStyle(element, 'width'), 10)).to.equal(parseInt(getStyle(element, 'right')))
+    expect(obj.width).to.equal('33.333%')
+    expect(obj.right).to.equal('33.333%')
 
     wrapper.destroy()
   })
@@ -226,7 +225,7 @@ describe('components/GridColumn', () => {
           'veui-grid-column': GridColumn
         },
         template: `
-          <veui-grid-container>
+          <veui-grid-container :columns="12">
             <veui-grid-row>
               <veui-grid-column :push="4" :span="4" />
               <veui-grid-column />
@@ -240,14 +239,26 @@ describe('components/GridColumn', () => {
       }
     )
 
-    let element = wrapper.find('.veui-grid-column').element
+    let obj = getStyle(wrapper.find('.veui-grid-column').element)
 
-    expect(parseInt(getStyle(element, 'width'), 10)).to.equal(parseInt(getStyle(element, 'left')))
+    expect(obj.width).to.equal('33.333%')
+    expect(obj.left).to.equal('33.333%')
 
     wrapper.destroy()
   })
 })
 
-function getStyle (element, attribute) {
-  return window.getComputedStyle(element, null).getPropertyValue(attribute)
+function getStyle (element) {
+  let cssText = element.style.cssText || ''
+  let arr = cssText.split(';')
+  return arr.reduce(
+    (obj, item) => {
+      if (!item) {
+        return obj
+      }
+      let [key, value] = item.split(':')
+      return { ...obj, [trim(key)]: trim(value) }
+    },
+    {}
+  )
 }
