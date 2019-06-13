@@ -39,7 +39,7 @@ describe('managers/type', () => {
     expect(curType.configs[1].clone({ a: 1 })).to.deep.equal({ a: 1 })
   })
 
-  it('should realize `clone` function correctly', () => {
+  it('should implement `clone` function correctly', () => {
     let curType = cloneDeep(type)
 
     expect(curType.clone({ a: 1 })).to.deep.equal({ a: 1 })
