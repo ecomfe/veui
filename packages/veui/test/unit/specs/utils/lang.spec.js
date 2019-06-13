@@ -9,7 +9,7 @@ function test () {}
 let promise = Promise.resolve()
 
 describe('utils/lang', () => {
-  it('#getTypeByInstance', () => {
+  it('should implement `getTypeByInstance` correctly', () => {
     expect(getTypeByInstance(null)).to.equal(null)
     expect(getTypeByInstance(undefined)).to.equal(undefined)
     expect(getTypeByInstance(1)).to.equal('Number')
@@ -21,7 +21,7 @@ describe('utils/lang', () => {
     expect(getTypeByInstance(promise)).to.equal('Promise')
   })
 
-  it('#getType', () => {
+  it('should implement `getType` correctly', () => {
     let a1 = 1
     let a2 = ''
     let a3 = false
@@ -38,7 +38,7 @@ describe('utils/lang', () => {
     expect(getType('123')).to.equal('')
   })
 
-  it('#isType', () => {
+  it('should implement `isType` correctly', () => {
     expect(isType(Number.prototype.constructor, 1)).to.equal(true)
     expect(isType(Number.prototype.constructor, '')).to.equal(false)
     expect(isType(String.prototype.constructor, '')).to.equal(true)
@@ -55,7 +55,7 @@ describe('utils/lang', () => {
     expect(isType(Promise.prototype.constructor, 1)).to.equal(false)
   })
 
-  it('#isEqualSet', () => {
+  it('should implement `isEqualSet` correctly', () => {
     let obj = { a: 1 }
     expect(isEqualSet(1, [1])).to.equal(false)
     expect(isEqualSet([1], 1)).to.equal(false)
