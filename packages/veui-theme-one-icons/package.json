@@ -1,6 +1,6 @@
 {
   "name": "veui-theme-one-icons",
-  "version": "1.0.0-alpha.25",
+  "version": "1.0.0-alpha.28",
   "description": "Icon pack for theme ONE DESIGN of VEUI.",
   "repository": "ecomfe/veui",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "publish": "rm *.js"
   },
   "peerDependencies": {
-    "veui": "1.0.0-alpha.25"
+    "veui": "1.0.0-alpha.28"
   },
   "devDependencies": {
     "babel-plugin-lodash": "^3.2.11",

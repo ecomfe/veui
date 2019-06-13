@@ -11,7 +11,7 @@ function isAbout (val, base, error = 120) {
 }
 
 function assertTimeout (received, expected) {
-  expect(isAbout(received, expected)).to.be.equal(true)
+  expect(isAbout(received, expected)).to.equal(true)
 }
 
 describe('directives/longpress', function () {

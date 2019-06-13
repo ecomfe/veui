@@ -10,7 +10,7 @@ describe('components/Alert', function () {
       },
       template: '<veui-alert type="success" message="content" closable />'
     })
-    expect(wrapper.contains('.veui-alert-success')).to.be.equal(true)
+    expect(wrapper.contains('.veui-alert-success')).to.equal(true)
     wrapper.destroy()
   })
 
@@ -30,7 +30,7 @@ describe('components/Alert', function () {
         </veui-alert>
       `
     })
-    expect(wrapper.text()).to.be.equal('default slot content')
+    expect(wrapper.text()).to.equal('default slot content')
     wrapper.destroy()
   })
 
@@ -51,10 +51,10 @@ describe('components/Alert', function () {
         }
       },
       template: `
-        <veui-alert 
-          type="info" 
-          message="content" 
-          closable 
+        <veui-alert
+          type="info"
+          message="content"
+          closable
           close-label="close"
           @close="close"
           :open.sync="open"
@@ -63,9 +63,9 @@ describe('components/Alert', function () {
     })
     wrapper.find('.veui-alert-close-text').trigger('click')
     await wait(500)
-    expect(wrapper.find('.veui-alert').exists()).to.be.equal(false)
-    expect(wrapper.vm.open).to.be.equal(false)
-    expect(wrapper.vm.closed).to.be.equal(true)
+    expect(wrapper.find('.veui-alert').exists()).to.equal(false)
+    expect(wrapper.vm.open).to.equal(false)
+    expect(wrapper.vm.closed).to.equal(true)
     wrapper.destroy()
   })
 
@@ -81,7 +81,7 @@ describe('components/Alert', function () {
       },
       template: '<veui-alert type="error" :message="message" closable />'
     })
-    expect(wrapper.find('.veui-alert-message-multiple').exists()).to.be.equal(true)
+    expect(wrapper.find('.veui-alert-message-multiple').exists()).to.equal(true)
     wrapper.destroy()
   })
 
@@ -95,22 +95,23 @@ describe('components/Alert', function () {
           message: ['message one', 'message two', 'message three']
         }
       },
-      template: '<veui-alert type="error" :message="message" closable :index="1" />'
+      template:
+        '<veui-alert type="error" :message="message" closable :index="1" />'
     })
     let nav = wrapper.find('.veui-alert-nav')
     let prev = nav.findAll('.veui-button').at(0)
     let next = nav.findAll('.veui-button').at(1)
     let msg = wrapper.find('.veui-alert-message')
     prev.trigger('click')
-    expect(msg.text()).to.be.equal('message one')
+    expect(msg.text()).to.equal('message one')
     prev.trigger('click')
-    expect(msg.text()).to.be.equal('message one')
+    expect(msg.text()).to.equal('message one')
     next.trigger('click')
-    expect(msg.text()).to.be.equal('message two')
+    expect(msg.text()).to.equal('message two')
     next.trigger('click')
-    expect(msg.text()).to.be.equal('message three')
+    expect(msg.text()).to.equal('message three')
     next.trigger('click')
-    expect(msg.text()).to.be.equal('message three')
+    expect(msg.text()).to.equal('message three')
     wrapper.destroy()
   })
 })

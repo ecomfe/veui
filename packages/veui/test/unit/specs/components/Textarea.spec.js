@@ -17,7 +17,7 @@ describe('components/Textarea', () => {
     )
 
     wrapper.vm.$on('input', val => {
-      expect(val).to.be.equal('')
+      expect(val).to.equal('')
 
       wrapper.destroy()
       done()
@@ -39,7 +39,7 @@ describe('components/Textarea', () => {
       }
     )
 
-    expect(wrapper.find('textarea').element.autofocus).to.be.equal(true)
+    expect(wrapper.find('textarea').element.autofocus).to.equal(true)
     wrapper.destroy()
   })
 })

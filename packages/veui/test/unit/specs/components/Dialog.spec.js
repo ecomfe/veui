@@ -1,97 +1,212 @@
 import { mount } from '@vue/test-utils'
 import Dialog from '@/components/Dialog'
+import Button from '@/components/Button'
 import { wait } from '../../../utils'
 
 describe('components/Dialog', () => {
-  it('should support `sync` modifier for prop `open`.', done => {
-    let wrapper = mount({
-      components: {
-        'veui-dialog': Dialog
+  it('should support `sync` modifier for prop `open`.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-dialog': Dialog
+        },
+        data () {
+          return {
+            open: true
+          }
+        },
+        template: '<veui-dialog ref="dialog" closable :open.sync="open"/>'
       },
-      data () {
-        return {
-          open: true
-        }
-      },
-      async mounted () {
-        let { dialog } = this.$refs
-        dialog.$refs.content
-          .querySelector('.veui-dialog-content-foot button:first-child')
-          .dispatchEvent(new MouseEvent('click'))
+      {
+        sync: false
+      }
+    )
 
-        await this.$nextTick()
-        expect(this.open).to.be.equal(false)
-        this.open = true
+    let { vm } = wrapper
 
-        await this.$nextTick()
-        dialog.$refs.content
-          .querySelector('.veui-dialog-content-foot button:last-child')
-          .dispatchEvent(new MouseEvent('click'))
+    wrapper
+      .find('.veui-dialog-content-foot button:first-child')
+      .trigger('click')
 
-        await this.$nextTick()
-        expect(this.open).to.be.equal(false)
+    await vm.$nextTick()
+    expect(vm.open).to.equal(false)
 
-        this.open = true
+    vm.open = true
 
-        await this.$nextTick()
-        dialog.$refs.content
-          .querySelector('.veui-dialog-content-head-close')
-          .dispatchEvent(new MouseEvent('click'))
+    await vm.$nextTick()
+    wrapper.find('.veui-dialog-content-foot button:last-child').trigger('click')
 
-        await this.$nextTick()
-        expect(this.open).to.be.equal(false)
+    await vm.$nextTick()
+    expect(vm.open).to.equal(false)
 
-        wrapper.destroy()
-        done()
-      },
-      template: '<veui-dialog ref="dialog" closable :open.sync="open"/>'
-    })
+    vm.open = true
+
+    await vm.$nextTick()
+    wrapper.find('.veui-dialog-content-head-close').trigger('click')
+
+    await vm.$nextTick()
+    expect(vm.open).to.equal(false)
+
+    vm.open = true
+
+    await vm.$nextTick()
+    wrapper.find('.veui-dialog-content').trigger('keydown.esc')
+
+    await vm.$nextTick()
+    expect(vm.open).to.equal(false)
+
+    wrapper.destroy()
   })
 
-  it('should support async `beforeClose` function prop.', done => {
-    let wrapper = mount({
-      components: {
-        'veui-dialog': Dialog
-      },
-      data () {
-        return {
-          open: true,
-          confirm (type) {
-            if (type !== 'ok') {
-              return
+  it('should support async `beforeClose` function prop.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-dialog': Dialog
+        },
+        data () {
+          return {
+            open: true,
+            confirm (type) {
+              if (type !== 'ok') {
+                return
+              }
+              return new Promise(resolve => {
+                setTimeout(() => resolve(), 300)
+              })
             }
-            return new Promise(resolve => {
-              setTimeout(() => resolve(), 300)
-            })
           }
-        }
+        },
+        template:
+          '<veui-dialog ref="dialog" :open.sync="open" :before-close="confirm"/>'
       },
-      async mounted () {
-        let { dialog } = this.$refs
-        dialog.$refs.content
-          .querySelector('.veui-dialog-content-foot button:last-child')
-          .dispatchEvent(new MouseEvent('click'))
+      {
+        sync: false
+      }
+    )
 
-        await this.$nextTick()
-        expect(this.open).to.be.equal(false)
-        this.open = true
+    let { vm } = wrapper
 
-        await this.$nextTick()
-        dialog.$refs.content
-          .querySelector('.veui-dialog-content-foot button:first-child')
-          .dispatchEvent(new MouseEvent('click'))
+    await vm.$nextTick()
+    wrapper.find('.veui-dialog-content-foot button:last-child').trigger('click')
 
-        await wait(100)
-        expect(this.open).to.be.equal(true)
+    await vm.$nextTick()
+    expect(vm.open).to.equal(false)
 
-        await wait(500)
-        expect(this.open).to.be.equal(false)
+    vm.open = true
 
-        wrapper.destroy()
-        done()
+    await vm.$nextTick()
+    wrapper
+      .find('.veui-dialog-content-foot button:first-child')
+      .trigger('click')
+
+    await wait(100)
+    expect(vm.open).to.equal(true)
+
+    await wait(500)
+    expect(vm.open).to.equal(false)
+
+    wrapper.destroy()
+  })
+
+  it('should support customized modal property correctly.', async () => {
+    let wrapper = mount(Dialog, {
+      propsData: {
+        modal: false,
+        open: true
       },
-      template:
-        '<veui-dialog ref="dialog" :open.sync="open" :before-close="confirm"/>'
+      sync: false
     })
+
+    expect(
+      wrapper.vm.$refs.overlay.overlayClass['veui-dialog-box-mask']
+    ).to.equal(false)
+
+    wrapper.setProps({ modal: true })
+
+    await wrapper.vm.$nextTick()
+
+    expect(
+      wrapper.vm.$refs.overlay.overlayClass['veui-dialog-box-mask']
+    ).to.equal(true)
+
+    wrapper.destroy()
+  })
+
+  it('should render slot correctly.', () => {
+    let wrapper = mount(Dialog, {
+      sync: false,
+      propsData: {
+        open: true
+      },
+      slots: {
+        default: 'Content',
+        title: 'Title',
+        foot: 'Foot'
+      }
+    })
+
+    expect(wrapper.find('.veui-dialog-content-head-title').text()).to.equal(
+      'Title'
+    )
+    expect(wrapper.find('.veui-dialog-content-body').text()).to.equal('Content')
+    expect(wrapper.find('.veui-dialog-content-foot').text()).to.equal('Foot')
+
+    wrapper.destroy()
+  })
+
+  it('should support customized close(*) event', async () => {
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            foo: false,
+            open: false
+          }
+        },
+        components: {
+          'veui-dialog': Dialog,
+          'veui-button': Button
+        },
+        methods: {
+          handleFoo () {
+            this.foo = true
+          }
+        },
+        template: `
+        <veui-dialog :open.sync="open" @foo="handleFoo">
+          <template slot="title">Title</template>
+          <template slot="foot" slot-scope="prop">
+            <veui-button ui="primary" @click="prop.close('foo')">foo</veui-button>
+            <veui-button ui="primary" @click="prop.close">cancel</veui-button>
+          </template>
+        </veui-dialog>
+        `
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    vm.open = true
+
+    await vm.$nextTick()
+
+    wrapper
+      .find('.veui-dialog-content-foot button:first-child')
+      .trigger('click')
+
+    await vm.$nextTick()
+
+    expect(vm.foo).to.equal(true)
+
+    wrapper.find('.veui-dialog-content-foot button:last-child').trigger('click')
+
+    await vm.$nextTick()
+
+    expect(vm.open).to.equal(false)
+
+    wrapper.destroy()
   })
 })

@@ -26,6 +26,7 @@ module.exports = function (config) {
       reports: ['html', 'lcov', 'text-summary'],
       combineBrowserReports: true,
       fixWebpackSourcePaths: true,
+      skipFilesWithNoCoverage: false,
       'report-config': {
         html: {
           subdir: 'html'

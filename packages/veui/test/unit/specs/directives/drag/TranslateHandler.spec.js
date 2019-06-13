@@ -45,7 +45,7 @@ function transformEquals (t1, t2) {
 }
 
 function assertTransform (el, transform) {
-  expect(transformEquals(el.style.transform, transform)).to.be.equal(true)
+  expect(transformEquals(el.style.transform, transform)).to.equal(true)
 }
 
 describe('directives/drag/TranslateHandler', () => {
@@ -86,7 +86,7 @@ describe('directives/drag/TranslateHandler', () => {
     })
 
     handler.drag({ distanceX: 100, distanceY: 200 })
-    expect(handler.isDragged).to.be.equal(true)
+    expect(handler.isDragged).to.equal(true)
     assertTransform(element, 'translate(5px, 5px) translate(100px, 200px)')
 
     handler.drag({ distanceX: 200, distanceY: 400 })
@@ -130,7 +130,7 @@ describe('directives/drag/TranslateHandler', () => {
     assertTransform(element, '')
 
     handler.drag({ distanceX: 100, distanceY: 200 })
-    expect(handler.isDragged).to.be.equal(true)
+    expect(handler.isDragged).to.equal(true)
     assertTransform(element, 'translate(100px, 200px)')
 
     handler.drag({ distanceX: 200, distanceY: 400 })

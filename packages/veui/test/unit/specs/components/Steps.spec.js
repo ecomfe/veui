@@ -17,7 +17,7 @@ describe('components/Steps', () => {
       }
     })
 
-    expect(wrapper.contains('.veui-steps')).to.be.true
+    expect(wrapper.contains('.veui-steps')).to.equal(true)
     wrapper.destroy()
   })
 
@@ -30,9 +30,9 @@ describe('components/Steps', () => {
     })
 
     let links = wrapper.findAll(Link)
-    expect(links.at(0).classes('veui-steps-current')).to.be.false
-    expect(links.at(1).classes('veui-steps-current')).to.be.true
-    expect(links.at(2).classes('veui-steps-current')).to.be.false
+    expect(links.at(0).classes('veui-steps-current')).to.equal(false)
+    expect(links.at(1).classes('veui-steps-current')).to.equal(true)
+    expect(links.at(2).classes('veui-steps-current')).to.equal(false)
     wrapper.destroy()
   })
 
@@ -45,9 +45,9 @@ describe('components/Steps', () => {
     })
 
     let links = wrapper.findAll(Link)
-    expect(links.at(0).contains(Icon)).to.be.true
-    expect(links.at(1).contains(Icon)).to.be.false
-    expect(links.at(2).contains(Icon)).to.be.false
+    expect(links.at(0).contains(Icon)).to.equal(true)
+    expect(links.at(1).contains(Icon)).to.equal(false)
+    expect(links.at(2).contains(Icon)).to.equal(false)
     wrapper.destroy()
   })
 
@@ -68,7 +68,8 @@ describe('components/Steps', () => {
         steps: datasource
       },
       scopedSlots: {
-        index: '<div class="test-index-slot" slot-scope="props">{{ props.index + 1 }}</div>'
+        index:
+          '<div class="test-index-slot" slot-scope="props">{{ props.index + 1 }}</div>'
       }
     })
 
@@ -106,7 +107,10 @@ describe('components/Steps', () => {
       }
     })
 
-    wrapper.findAll(Link).at(1).trigger('click')
+    wrapper
+      .findAll(Link)
+      .at(1)
+      .trigger('click')
     expect(wrapper.emitted().click[0][0]).to.equal(1)
     wrapper.destroy()
   })

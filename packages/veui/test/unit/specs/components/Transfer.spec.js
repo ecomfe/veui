@@ -26,17 +26,13 @@ describe('components/Transfer', () => {
 
     let { vm } = wrapper
 
-    expect(wrapper.findAll('.veui-transfer-candidate-item').length).to.be.equal(
-      3
-    )
+    expect(wrapper.findAll('.veui-transfer-candidate-item').length).to.equal(3)
 
     vm.items = [{ label: '1', value: '1' }, { label: '2', value: '2' }]
 
     await vm.$nextTick()
 
-    expect(wrapper.findAll('.veui-transfer-candidate-item').length).to.be.equal(
-      2
-    )
+    expect(wrapper.findAll('.veui-transfer-candidate-item').length).to.equal(2)
 
     wrapper.destroy()
   })
@@ -66,17 +62,13 @@ describe('components/Transfer', () => {
 
     let { vm } = wrapper
 
-    expect(wrapper.findAll('.veui-transfer-selected-item').length).to.be.equal(
-      2
-    )
+    expect(wrapper.findAll('.veui-transfer-selected-item').length).to.equal(2)
 
     vm.selected = []
 
     await vm.$nextTick()
 
-    expect(wrapper.findAll('.veui-transfer-selected-item').length).to.be.equal(
-      0
-    )
+    expect(wrapper.findAll('.veui-transfer-selected-item').length).to.equal(0)
 
     wrapper.destroy()
   })

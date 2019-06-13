@@ -25,7 +25,7 @@ describe('directives/drag/BaseHandler', () => {
     expect(handler.options.foo).to.be.equal(2)
 
     handler.start()
-    expect(handler.isDragging).to.be.equal(true)
+    expect(handler.isDragging).to.equal(true)
 
     expect(() => {
       handler.drag()
