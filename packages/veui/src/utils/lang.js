@@ -14,7 +14,6 @@ export function getType (type) {
 }
 
 export function isType (type, obj) {
-  debugger
   return getType(type) === getTypeByInstance(obj)
 }
 
