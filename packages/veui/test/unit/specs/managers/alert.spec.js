@@ -49,6 +49,8 @@ describe('managers/alert', () => {
     await wait(0)
 
     expect(isClicked).to.equal(true)
+
+    document.body.removeChild(getEl('.veui-alert-box'))
   })
 })
 
