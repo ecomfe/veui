@@ -23,7 +23,7 @@ describe('managers/simple-dialog', () => {
     expect(isType(Vue, dialog.components[0])).to.equal(true)
   })
 
-  it('should implement `removeComponent` frunction correctly', () => {
+  it('should implement `removeComponent` function correctly', () => {
     let component = dialog.create()
 
     expect(dialog.components.length).to.equal(2)
@@ -33,7 +33,7 @@ describe('managers/simple-dialog', () => {
     expect(dialog.components.length).to.equal(1)
   })
 
-  it('should implement `show` frunction correctly', () => {
+  it('should implement `show` function correctly', () => {
     let result = dialog.show('Content', 'Title', { open: true })
 
     expect(result).to.deep.equal({
@@ -43,47 +43,15 @@ describe('managers/simple-dialog', () => {
     })
   })
 
-  it('should implement `success` frunction correctly', () => {
-    let result = dialog.success('Content', 'Title', { open: true })
-
-    expect(result).to.deep.equal({
-      title: 'Title',
-      content: 'Content',
-      open: true,
-      type: 'success'
-    })
-  })
-
-  it('should implement `info` frunction correctly', () => {
-    let result = dialog.info('Content', 'Title', { open: true })
-
-    expect(result).to.deep.equal({
-      title: 'Title',
-      content: 'Content',
-      open: true,
-      type: 'info'
-    })
-  })
-
-  it('should implement `error` frunction correctly', () => {
-    let result = dialog.error('Content', 'Title', { open: true })
-
-    expect(result).to.deep.equal({
-      title: 'Title',
-      content: 'Content',
-      open: true,
-      type: 'error'
-    })
-  })
-
-  it('should implement `warn` frunction correctly', () => {
-    let result = dialog.warn('Content', 'Title', { open: true })
-
-    expect(result).to.deep.equal({
-      title: 'Title',
-      content: 'Content',
-      open: true,
-      type: 'warning'
+  it('should implement contextual methods correctly', () => {
+    ['success', 'info', 'error', 'warn'].forEach(type => {
+      let result = dialog[type]('Content', 'Title', { open: true })
+      expect(result).to.deep.equal({
+        title: 'Title',
+        content: 'Content',
+        open: true,
+        type: type === 'warn' ? 'warning' : type
+      })
     })
   })
 })
