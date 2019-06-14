@@ -20,7 +20,8 @@ describe('managers/alert', () => {
     expect(getEl('.veui-alert-box-title').innerText).to.equal('Title')
     expect(getEl('.veui-alert-box-content').innerText).to.equal('Content')
 
-    getEl('.veui-dialog-content-foot').querySelector('.veui-button')
+    getEl('.veui-dialog-content-foot')
+      .querySelector('.veui-button')
       .dispatchEvent(new MouseEvent('click'))
     await component.$nextTick()
 
@@ -31,13 +32,19 @@ describe('managers/alert', () => {
 
   it('should implement `_show` function correctly', async () => {
     let isClicked = false
-    alert.success('Content', 'Title', { open: true, ok () { isClicked = true } })
+    alert.success('Content', 'Title', {
+      open: true,
+      ok () {
+        isClicked = true
+      }
+    })
     await wait(0)
 
     expect(getEl('.veui-alert-box-title').innerText).to.equal('Title')
     expect(getEl('.veui-alert-box-content').innerText).to.equal('Content')
 
-    getEl('.veui-dialog-content-foot').querySelector('.veui-button')
+    getEl('.veui-dialog-content-foot')
+      .querySelector('.veui-button')
       .dispatchEvent(new MouseEvent('click'))
     await wait(0)
 
