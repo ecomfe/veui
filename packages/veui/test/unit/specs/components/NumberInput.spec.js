@@ -5,11 +5,16 @@ import NumberInput from '@/components/NumberInput'
 
 describe('components/NumberInput', () => {
   it('should handle value prop with `null` value.', async () => {
-    let wrapper = mount(NumberInput, {
-      propsData: {
-        value: null
+    let wrapper = mount(NumberInput,
+      {
+        propsData: {
+          value: null
+        }
+      },
+      {
+        sync: false
       }
-    })
+    )
 
     let changeHandler = sinon.spy()
     wrapper.vm.$on('change', changeHandler)
@@ -64,29 +69,41 @@ describe('components/NumberInput', () => {
   })
 
   it('should not exceed max or min value', async () => {
-    let wrapper = mount(NumberInput, {
-      propsData: {
-        max: 2,
-        min: 2
+    let wrapper = mount(NumberInput,
+      {
+        propsData: {
+          max: 2,
+          min: 2
+        }
+      },
+      {
+        sync: false
       }
-    })
+    )
 
     let input = wrapper.find('input')
     input.setValue(2)
     wrapper.find('button.veui-number-input-step-up').trigger('click')
+    await wrapper.vm.$nextTick()
     expect(input.element.value).to.equal('2')
 
     input.setValue(2)
     wrapper.find('button.veui-number-input-step-down').trigger('click')
+    await wrapper.vm.$nextTick()
     expect(input.element.value).to.equal('2')
   })
 
-  it('should handle readonly correctly', async () => {
-    let wrapper = mount(NumberInput, {
-      propsData: {
-        readonly: true
+  it('should handle readonly correctly', () => {
+    let wrapper = mount(NumberInput,
+      {
+        propsData: {
+          readonly: true
+        }
+      },
+      {
+        sync: false
       }
-    })
+    )
 
     let input = wrapper.find('input.veui-input-input')
     input.setValue(2)
