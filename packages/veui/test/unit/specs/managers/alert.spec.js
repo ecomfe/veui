@@ -13,14 +13,14 @@ describe('managers/alert', () => {
       }
     })
     await component.$nextTick()
-    let $children = component.$children[0]
+    let alertBox = component.$children[0]
 
-    expect($children.open).to.equal(true)
-    expect($children.title).to.equal('Title')
-    expect($children.type).to.equal('error')
-    expect($children.$slots.default[0].text).to.equal('Content')
-
-    $children.$children[0].$children[0].$children[1].$emit('click')
+    expect(alertBox.open).to.equal(true)
+    expect(alertBox.type).to.equal('error')
+    expect(getEl('.veui-alert-box-title').innerText).to.equal('Title')
+    expect(getEl('.veui-alert-box-content').innerText).to.equal('Content')
+    
+    getEl('.veui-dialog-content-foot').querySelector('.veui-button').dispatchEvent(new MouseEvent('click'))
     await component.$nextTick()
 
     expect(isClicked).to.equal(true)
