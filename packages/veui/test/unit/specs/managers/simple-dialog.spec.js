@@ -44,8 +44,9 @@ describe('managers/simple-dialog', () => {
   })
 
   it('should implement contextual methods correctly', () => {
-    ['success', 'info', 'error', 'warn'].forEach(type => {
+    ;['success', 'info', 'error', 'warn'].forEach(type => {
       let result = dialog[type]('Content', 'Title', { open: true })
+
       expect(result).to.deep.equal({
         title: 'Title',
         content: 'Content',
