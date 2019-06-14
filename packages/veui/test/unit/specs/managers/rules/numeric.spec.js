@@ -18,6 +18,7 @@ describe('managers/rules/numeric', () => {
     expect(numeric.validate('2')).to.equal(true)
     expect(numeric.validate('0.2')).to.equal(true)
     expect(numeric.validate('.2')).to.equal(true)
+    expect(numeric.validate('0')).to.equal(true)
   })
 
   it('should not allow strings that start with illegal zeros.', () => {
