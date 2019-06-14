@@ -19,8 +19,9 @@ describe('managers/alert', () => {
     expect(alertBox.type).to.equal('error')
     expect(getEl('.veui-alert-box-title').innerText).to.equal('Title')
     expect(getEl('.veui-alert-box-content').innerText).to.equal('Content')
-    
-    getEl('.veui-dialog-content-foot').querySelector('.veui-button').dispatchEvent(new MouseEvent('click'))
+
+    getEl('.veui-dialog-content-foot').querySelector('.veui-button')
+      .dispatchEvent(new MouseEvent('click'))
     await component.$nextTick()
 
     expect(isClicked).to.equal(true)
@@ -36,7 +37,8 @@ describe('managers/alert', () => {
     expect(getEl('.veui-alert-box-title').innerText).to.equal('Title')
     expect(getEl('.veui-alert-box-content').innerText).to.equal('Content')
 
-    getEl('.veui-dialog-content-foot').querySelector('.veui-button').dispatchEvent(new MouseEvent('click'))
+    getEl('.veui-dialog-content-foot').querySelector('.veui-button')
+      .dispatchEvent(new MouseEvent('click'))
     await wait(0)
 
     expect(isClicked).to.equal(true)
