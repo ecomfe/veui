@@ -113,4 +113,39 @@ describe('components/NumberInput', () => {
 
     expect(input.element.value).to.equal('2')
   })
+
+  it('should handle step prop correctly', async () => {
+    let wrapper = mount(NumberInput,
+      {
+        propsData: {
+          step: 3
+        }
+      },
+      {
+        sync: false
+      }
+    )
+
+    let input = wrapper.find('input.veui-input-input')
+    wrapper.find('button.veui-number-input-step-up').trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(input.element.value).to.equal('3')
+  })
+
+  it('should handle decimalPlace prop correctly', () => {
+    let wrapper = mount(NumberInput,
+      {
+        propsData: {
+          decimalPlace: 2
+        }
+      },
+      {
+        sync: false
+      }
+    )
+
+    let input = wrapper.find('input.veui-input-input')
+    input.setValue(2.34)
+    expect(input.element.value).to.equal('2.34')
+  })
 })
