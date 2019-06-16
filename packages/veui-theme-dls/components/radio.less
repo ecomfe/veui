@@ -1,10 +1,14 @@
 @import "../lib.less";
 
 .veui-radio {
+  @lh: @dls-line-height-m;
+
+  position: relative;
   display: inline-block;
-  color: @veui-text-color-normal;
-  font-size: @veui-font-size-normal;
-  line-height: @veui-font-size-large;
+  color: @dls-radio-font-color;
+  font-size: @dls-radio-font-size-m;
+  line-height: @lh;
+  padding-left: @dls-radio-size-m + @dls-radio-spacing;
   cursor: pointer;
 
   input {
@@ -18,102 +22,126 @@
 
   &-label,
   &-box {
-    vertical-align: top;
     display: inline-block;
-    .veui-transition(color);
   }
 
-  .veui-field > & {
-    line-height: @veui-height-normal;
-
-    .veui-radio-box {
-      vertical-align: text-top;
-    }
+  &-label {
+    vertical-align: middle;
   }
 
-  & .focus-visible ~ &-box,
-  & .focus-visible ~ &-label,
-  &:hover {
-    color: @veui-text-color-strong;
-  }
+  // .veui-field > & {
+  //   line-height: @dls-button-height-m;
 
-  & .focus-visible ~ &-box {
-    .veui-focus-shadow();
-  }
+  //   .veui-radio-box {
+  //     vertical-align: text-top;
+  //   }
+  // }
 
   &-box {
-    position: relative;
-    height: @veui-font-size-large;
-    width: @veui-font-size-large;
-    border: 1px solid @veui-gray-color-2;
-    background-color: #fff;
-    margin-right: 8px;
+    .absolute(50%, _, _, 0);
+    transform: translateY(-50%);
+    .size(@dls-radio-size-m);
+    border: 1px solid @dls-radio-border-color;
+    background-color: @dls-radio-background-color;
     border-radius: 50%;
-    font-size: @veui-font-size-normal;
-    .veui-transition(box-shadow);
+    font-size: @dls-font-size-m;
+    .veui-transition(border-color, background-color, box-shadow);
 
     &::before {
       content: "";
       display: block;
-      .size(@veui-font-size-large);
-      background-color: @veui-gray-color-1;
+      .size(@dls-radio-dot-size-m);
+      background-color: @dls-radio-dot-color;
       border-radius: 50%;
       .absolute(50%, 50%);
       transform: translate(-50%, -50%) scale(0);
-      .veui-transition(transform);
+      .veui-transition(background-color, transform);
+    }
+  }
+
+  & :checked + &-box {
+    border-color: @dls-radio-border-color-checked;
+    background-color: @dls-radio-background-color-checked;
+
+    &::before {
+      transform: translate(-50%, -50%) scale(1);
     }
   }
 
   &:hover &-box {
-    border-color: @veui-gray-color-1;
-  }
-
-  & :checked + &-box {
-    border-color: @veui-gray-color-1;
+    border-color: @dls-radio-border-color-hover;
+    background-color: @dls-radio-background-color-hover;
 
     &::before {
-      transform: translate(-50%, -50%) scale(0.45);
+      background-color: @dls-radio-dot-color-hover;
     }
+  }
+
+  &:active &-box {
+    border-color: @dls-radio-border-color-active;
+    background-color: @dls-radio-background-color-active;
+
+    &::before {
+      background-color: @dls-radio-dot-color-active;
+    }
+  }
+
+  & .focus-visible ~ &-box {
+    border-color: @dls-border-color-focus;
+    background-color: @dls-radio-background-color-focus;
+    .dls-focus-ring();
+
+    &::before {
+      background-color: @dls-radio-dot-color-focus;
+    }
+  }
+
+  &:hover :checked + &-box {
+    border-color: @dls-radio-border-color-checked-hover;
+    background-color: @dls-radio-background-color-checked-hover;
+  }
+
+  &:active :checked + &-box {
+    border-color: @dls-radio-border-color-checked-active;
+    background-color: @dls-radio-background-color-checked-active;
   }
 
   &.veui-disabled {
     cursor: not-allowed;
-
-    .veui-radio-label {
-      color: @veui-text-color-weak;
-    }
   }
 
   & :disabled + &-box {
-    border-color: @veui-gray-color-5;
-    background-color: @veui-gray-color-7;
+    border-color: @dls-radio-border-color-disabled;
+    background-color: @dls-radio-background-color-disabled;
 
     &::before {
-      background-color: @veui-gray-color-5;
+      background-color: @dls-radio-dot-color-disabled;
     }
   }
 
-  &[ui~="small"] {
-    font-size: @veui-font-size-small;
-    line-height: @veui-font-size-small;
+  & :checked:disabled + &-box {
+    border-color: @dls-radio-border-color-checked-disabled;
+    background-color: @dls-radio-background-color-checked-disabled;
   }
 
-  .veui-field[ui~="small"] > &[ui~="small"] {
-    line-height: @veui-height-small;
-
-    .veui-radio-box {
-      vertical-align: -2px;
-    }
+  &[ui~="s"] {
+    font-size: @dls-radio-font-size-s;
+    padding-left: @dls-radio-size-s + @dls-radio-spacing;
   }
 
-  &[ui~="small"] &-box {
-    margin-right: 6px;
-    font-size: @veui-font-size-small;
-    height: @veui-font-size-small;
-    width: @veui-font-size-small;
+  // .veui-field[ui~="s"] > &[ui~="s"] {
+  //   line-height: @veui-height-small;
+
+  //   .veui-radio-box {
+  //     vertical-align: -2px;
+  //   }
+  // }
+
+  &[ui~="s"] &-box {
+    .size(@dls-radio-size-s);
 
     &::before {
-      .size(@veui-font-size-small);
+      .size(@dls-radio-dot-size-s);
     }
   }
 }
