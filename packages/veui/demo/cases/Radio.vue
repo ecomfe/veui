@@ -5,8 +5,8 @@
     <h3><code>v-model</code></h3>
     <p>
       <veui-button
-        ui="small"
-        @click="size = size === 'normal' ? 'small' : 'normal'"
+        ui="s"
+        @click="size = size === 'm' ? 's' : 'm'"
       >
         Toggle
       </veui-button>
@@ -14,16 +14,16 @@
     <p>
       <veui-radio
         v-model="size"
-        value="normal"
+        value="m"
         name="size"
       >
         正常状态
       </veui-radio>
       <veui-radio
         v-model="size"
-        value="small"
+        value="s"
         checked
-        ui="small"
+        ui="s"
         name="size"
       >
         正常状态（小）
@@ -35,7 +35,7 @@
     <h3><code>:checked.sync</code></h3>
     <p>
       <veui-button
-        ui="small"
+        ui="s"
         @click="checked = !checked"
       >
         Toggle
@@ -49,7 +49,7 @@
   </section>
   <section>
     <veui-radio
-      ui="small"
+      ui="s"
       checked
     >
       选中状态
@@ -65,7 +65,7 @@
   </section>
   <section>
     <veui-radio
-      ui="small"
+      ui="s"
       checked
       disabled
     >
@@ -79,7 +79,7 @@
   </section>
   <section>
     <veui-radio
-      ui="small"
+      ui="s"
       disabled
     >
       未选禁用状态
