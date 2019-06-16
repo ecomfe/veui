@@ -20,7 +20,7 @@
       "git add"
     ],
     "packages/veui-theme-one/**/*.less": [
-      "prettier --write 'packages/veui-theme-one/**/*.less'",
+      "prettier --write 'packages/veui-theme-dls/**/*.less'",
       "stylelint **/*.less --syntax=less",
       "git add"
     ]
