@@ -3,75 +3,158 @@ import Pagination from '@/components/Pagination'
 
 describe('components/Pagination', () => {
   it('should handle props correctly', async () => {
-    let wrapper = mount(Pagination, {
-      propsData: {
-        page: 1,
-        total: 25,
-        pageSize: 20
+    let wrapper = mount(
+      Pagination,
+      {
+        propsData: {
+          page: 1,
+          total: 25,
+          pageSize: 20,
+          pageSizes: [20, 40]
+        }
+      },
+      {
+        sync: false
       }
-    },
-    {
-      sync: false
-    })
+    )
+
+    expect(wrapper.find('.veui-pagination-total').text()).to.equal('共 25 条')
+
+    let options = wrapper
+      .find('.veui-pagination-select-overlay')
+      .findAll('.veui-option')
+    expect(options.length).to.equal(2)
+    expect(
+      options
+        .at(0)
+        .find('.veui-option')
+        .classes('veui-option-selected')
+    ).to.equal(true)
+    expect(
+      options
+        .at(0)
+        .find('.veui-option-label')
+        .text()
+    ).to.equal('20')
+    expect(
+      options
+        .at(1)
+        .find('.veui-option-label')
+        .text()
+    ).to.equal('40')
 
     // pages is: 1, 2
-    let pages = wrapper.findAll('li.veui-pagination-page')
-
-    expect(pages.length).to.be.equal(2)
-    expect(pages.at(0).classes('veui-active')).to.be.equal(true)
-    expect(wrapper.find('.veui-pagination-prev').classes('veui-disabled')).to.be.equal(true)
-    expect(wrapper.find('.veui-pagination-next').classes('veui-disabled')).to.be.equal(false)
+    let pages = wrapper.findAll('.veui-pagination-page')
+    expect(pages.length).to.equal(2)
+    expect(pages.at(0).classes('veui-active')).to.equal(true)
+    expect(
+      wrapper.find('.veui-pagination-prev').classes('veui-disabled')
+    ).to.equal(true)
+    expect(
+      wrapper.find('.veui-pagination-next').classes('veui-disabled')
+    ).to.equal(false)
 
     wrapper.destroy()
   })
 
   it('should render page indicator series correctly', async () => {
-    let wrapper = mount(Pagination, {
-      propsData: {
-        page: 6,
-        total: 300
+    let wrapper = mount(
+      Pagination,
+      {
+        propsData: {
+          page: 6,
+          total: 300
+        }
+      },
+      {
+        sync: false
       }
-    },
-    {
-      sync: false
-    })
+    )
 
     let { vm } = wrapper
     // pages is: 1, ... , 4, 5, 6, 7, 8, ... , 10
-    let pages = wrapper.findAll('li.veui-pagination-page')
-    expect(pages.at(0).find('.veui-link').text()).to.be.equal('1')
-    expect(pages.at(1).find('.veui-link').text()).to.be.equal('...')
-    expect(pages.at(2).find('.veui-link').text()).to.be.equal('4')
+    let pages = wrapper.findAll('.veui-pagination-page')
+    expect(
+      pages
+        .at(0)
+        .find('.veui-link')
+        .text()
+    ).to.equal('1')
+    expect(
+      pages
+        .at(1)
+        .find('.veui-link')
+        .text()
+    ).to.equal('...')
+    expect(
+      pages
+        .at(2)
+        .find('.veui-link')
+        .text()
+    ).to.equal('4')
 
-    expect(pages.at(6).find('.veui-link').text()).to.be.equal('8')
-    expect(pages.at(7).find('.veui-link').text()).to.be.equal('...')
-    expect(pages.at(8).find('.veui-link').text()).to.be.equal('10')
+    expect(
+      pages
+        .at(6)
+        .find('.veui-link')
+        .text()
+    ).to.equal('8')
+    expect(
+      pages
+        .at(7)
+        .find('.veui-link')
+        .text()
+    ).to.equal('...')
+    expect(
+      pages
+        .at(8)
+        .find('.veui-link')
+        .text()
+    ).to.equal('10')
 
     wrapper.setProps({ page: 7 })
     await vm.$nextTick()
 
     // pages is: 1, 2，... , 5，6, 7, 8, 9, 10
-    pages = wrapper.findAll('li.veui-pagination-page')
-    expect(pages.at(1).find('.veui-link').text()).to.be.equal('2')
-    expect(pages.at(2).find('.veui-link').text()).to.be.equal('...')
-    expect(pages.at(3).find('.veui-link').text()).to.be.equal('5')
+    pages = wrapper.findAll('.veui-pagination-page')
+    expect(
+      pages
+        .at(1)
+        .find('.veui-link')
+        .text()
+    ).to.equal('2')
+    expect(
+      pages
+        .at(2)
+        .find('.veui-link')
+        .text()
+    ).to.equal('...')
+    expect(
+      pages
+        .at(3)
+        .find('.veui-link')
+        .text()
+    ).to.equal('5')
 
     wrapper.destroy()
   })
 
   it('should handle redirect event correctly', () => {
-    let wrapper = mount(Pagination, {
-      propsData: {
-        page: 4,
-        total: 300
+    let wrapper = mount(
+      Pagination,
+      {
+        propsData: {
+          page: 4,
+          total: 300
+        }
+      },
+      {
+        sync: false
       }
-    },
-    {
-      sync: false
-    })
+    )
 
     wrapper.vm.$on('redirect', page => {
-      expect(page).to.be.equal(5)
+      expect(page).to.equal(5)
     })
 
     wrapper.find('.veui-pagination-next').trigger('click')
