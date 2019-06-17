@@ -18,15 +18,30 @@ describe('components/Pagination', () => {
       }
     )
 
-    let { realTotal, realPageSize, pageCount, realPageSizes } = wrapper.vm
+    expect(wrapper.find('.veui-pagination-total').text()).to.equal('共 25 条')
 
-    expect(realTotal).to.equal(25)
-    expect(realPageSize).to.equal(20)
-    expect(pageCount).to.equal(2)
-
-    expect(realPageSizes.length).to.equal(2)
-    expect(realPageSizes[0].value).to.equal(20)
-    expect(realPageSizes[1].value).to.equal(40)
+    let options = wrapper
+      .find('.veui-pagination-select-overlay')
+      .findAll('.veui-option')
+    expect(options.length).to.equal(2)
+    expect(
+      options
+        .at(0)
+        .find('.veui-option')
+        .classes('veui-option-selected')
+    ).to.equal(true)
+    expect(
+      options
+        .at(0)
+        .find('.veui-option-label')
+        .text()
+    ).to.equal('20')
+    expect(
+      options
+        .at(1)
+        .find('.veui-option-label')
+        .text()
+    ).to.equal('40')
 
     // pages is: 1, 2
     let pages = wrapper.findAll('.veui-pagination-page')
