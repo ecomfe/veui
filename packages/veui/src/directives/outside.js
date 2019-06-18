@@ -55,7 +55,7 @@ function initBindingType (type) {
 
 function getElementsByRefs (refs, context) {
   const elements = []
-  refs || [].forEach(ref => {
+  refs.forEach(ref => {
     elements.push(...getNodes(ref, context))
   })
   return elements
