@@ -491,7 +491,15 @@ export default {
     },
     pick () {
       if (this.pickingStart) {
-        this.localSelected = this.pickingSelected
+        for (let i = 0; i < 7; i++) {
+          if (this.pickingSelected[i]) {
+            this.$set(
+              this.localSelected,
+              i,
+              this.filterDisabledHours(i, this.pickingSelected[i])
+            )
+          }
+        }
         this.pickingStart = this.pickingEnd = null
         this.$emit('select', this.localSelected)
       }
@@ -500,28 +508,16 @@ export default {
       this.localSelected = this.realShortcuts[i].selected
       this.$emit('select', this.localSelected)
     },
+    filterDisabledHours (day, selectedHours = [[0, 23]]) {
+      let disabledHours = [...Array(24)]
+          .map((_, i) => (this.disabledHour(day, i) ? [i, i] : false))
+          .filter(i => i)
+
+      return merge(selectedHours, disabledHours, { mode: 'substract' })
+    },
     toggleDay (day, checked) {
       if (checked) {
-        let hours = [[0, 23]]
-
-        for (let i = 0; i < 24; i++) {
-          if (this.disabledHour(day, i)) {
-            hours = hours.reduce((acc, item) => {
-              if (i > item[0] && i < item[1]) {
-                acc.push([item[0], i - 1], [i + 1, item[1]])
-              } else if (i === item[0]) {
-                acc.push([i + 1, item[1]])
-              } else if (i === item[1]) {
-                acc.push([item[0], i - 1])
-              } else {
-                acc.push(item)
-              }
-
-              return acc
-            }, [])
-          }
-        }
-        this.$set(this.localSelected, day, hours)
+        this.$set(this.localSelected, day, this.filterDisabledHours(day))
       } else {
         this.$delete(this.localSelected, day)
       }
