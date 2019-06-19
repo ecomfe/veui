@@ -1,143 +1,277 @@
 @import "../lib.less";
 
 .veui-button {
-  padding: 0 20px;
   user-select: none;
   vertical-align: middle;
   .veui-button-transition();
-  border: 1px solid @veui-gray-color-5;
-  background-color: #fff;
-  color: @veui-text-color-normal;
+  border: 1px solid @dls-button-border-color-normal;
+  font-size: @dls-button-font-size-m;
+  border-radius: @dls-border-radius-m;
+  .make-height(@dls-button-height-m);
+  .padding(0, @dls-button-padding-m);
+  background-color: @dls-button-background-color-normal;
+  color: @dls-button-font-color-normal;
+
+  .veui-icon {
+    max-width: 1em;
+    margin-right: @dls-button-content-spacing;
+  }
 
   &:hover,
-  &:active {
-    color: @veui-text-color-strong;
-  }
+  &:active,
+  &.focus-visible,
+  &&-loading {
+    color: @dls-button-font-color-normal;
+    .veui-icon {
+      color: @dls-color-gray-9;
+    }
 
-  &:hover {
-    background-color: @veui-gray-color-8;
-  }
+    &[ui~="primary"] {
+      background-color: @dls-button-background-color-primary-active;
+      .veui-icon {
+        color: @dls-button-font-color-primary;
+      }
+    }
 
-  &:active {
-    background-color: @veui-gray-color-6;
+    &[ui~="strong"] {
+      background-color: @dls-button-background-color-strong-active;
+      .veui-icon {
+        color: @dls-button-font-color-strong;
+      }
+    }
+
+    &[ui~="translucent"] {
+      background-color: @dls-button-background-color-translucent-active;
+      .veui-icon {
+        color: @dls-button-font-color-translucent;
+      }
+    }
+
+    &[ui~="text"] {
+      color: @dls-button-font-color-text-active;
+      .veui-icon {
+        color: @dls-button-font-color-text-active;
+      }
+    }
   }
 
   &:focus {
     outline: none;
   }
 
+  &:hover,
   &.focus-visible {
-    .veui-focus-shadow(fadeout(@veui-gray-color-5, 50%));
-    color: @veui-brand-color;
+    background-color: @dls-button-background-color-normal-hover;
+  }
+
+  &:active,
+  &-loading {
+    background-color: @dls-button-background-color-normal-active;
+  }
+
+  &.veui-disabled {
+    border-color: @dls-button-border-color-normal-disabled;
+    background-color: @dls-button-background-color-normal-disabled;
+    color: @dls-button-font-color-normal-disabled;
+    .veui-icon {
+      color: @dls-button-font-color-normal-disabled;
+    }
   }
 
   &[ui~="primary"] {
-    border-color: transparent;
-    background-color: @veui-brand-color;
-    color: #fff;
-
-    &:hover {
-      background-color: @veui-brand-color-2;
-    }
-
-    &.focus-visible {
-      .veui-focus-shadow(fadeout(@veui-brand-color-5, 50%));
-    }
-
-    &:active {
-      background-color: @veui-brand-color-1;
-    }
-  }
-
-  &[ui~="alt"] {
-    border-color: transparent;
-    background-color: @veui-gray-color-7;
-
-    &:hover {
-      background-color: @veui-gray-color-6;
-    }
-
-    &:active {
-      background-color: @veui-gray-color-5;
-    }
-
-    &.focus-visible {
-      .veui-focus-shadow(fadeout(@veui-gray-color-4, 50%));
-      color: @veui-brand-color;
-    }
-  }
-
-  @dark-color: #000;
-
-  &[ui~="dark"] {
-    border-color: transparent;
-    background-color: fadeout(@dark-color, 30%);
-    color: #fff;
+    border-color: @dls-button-border-color-primary;
+    background-color: @dls-button-background-color-primary;
+    color: @dls-button-font-color-primary;
 
     &:hover,
-    &:active,
     &.focus-visible {
-      background-color: fadeout(@dark-color, 20%);
+      background-color: @dls-button-background-color-primary-hover;
     }
 
-    &.focus-visible {
-      .veui-focus-shadow(fadeout(@dark-color, 60%));
+    &:active{
+      background-color: @dls-button-background-color-primary-active;
+      .veui-icon {
+        color: @dls-button-font-color-primary;
+      }
+    }
+
+    &.veui-disabled {
+      background-color: @dls-button-background-color-primary-disabled;
     }
   }
 
-  &[ui~="large"] {
-    .centered-line(@veui-height-large);
-    font-size: @veui-font-size-large;
-    .make-height(@veui-height-large);
+  &[ui~="translucent"] {
+    border-color: @dls-button-border-color-translucent;
+    background-color: @dls-button-background-color-translucent;
+    color: @dls-button-font-color-translucent;
+
+    &:hover,
+    &.focus-visible {
+      background-color: @dls-button-background-color-translucent-hover;
+    }
+
+    &:active{
+      background-color: @dls-button-background-color-translucent-active;
+      .veui-icon {
+        color: @dls-button-font-color-translucent;
+      }
+    }
+
+    &.veui-disabled {
+      background-color: @dls-button-background-color-translucent-disabled;
+    }
   }
 
-  &[ui~="small"] {
-    .centered-line(@veui-height-small);
-    font-size: @veui-font-size-small;
-    .make-height(@veui-height-small);
-    .padding(_, 10px);
+  &[ui~="strong"] {
+    border-color: @dls-button-border-color-strong;
+    background-color: @dls-button-background-color-strong;
+    color: @dls-button-font-color-strong;
+
+    &:hover,
+    &.focus-visible {
+      background-color: @dls-button-background-color-strong-hover;
+    }
+
+    &:active {
+      background-color: @dls-button-background-color-strong-active;
+      .veui-icon {
+        color: @dls-button-font-color-strong;
+      }
+    }
+
+    &.veui-disabled {
+      background-color: @dls-button-background-color-strong-disabled;
+    }
   }
 
-  &[ui~="tiny"] {
-    .centered-line(@veui-height-tiny);
-    font-size: @veui-font-size-small;
-    .make-height(@veui-height-tiny);
-    .padding(_, 10px);
+  &[ui~="xl"] {
+    font-size: @dls-button-font-size-xl;
+    border-radius: @dls-border-radius-l;
+    .make-height(@dls-button-height-xl);
+    .padding(0, @dls-button-padding-xl);
   }
 
-  &[ui~="micro"] {
+  &[ui~="l"] {
+    font-size: @dls-button-font-size-l;
+    border-radius: @dls-border-radius-l;
+    .make-height(@dls-button-height-l);
+    .padding(0, @dls-button-padding-l);
+  }
+
+  &[ui~="m"] {
+    font-size: @dls-button-font-size-m;
+    border-radius: @dls-border-radius-m;
+    .make-height(@dls-button-height-m);
+    .padding(0, @dls-button-padding-m);
+  }
+
+  &[ui~="s"] {
+    font-size: @dls-button-font-size-s;
+    border-radius: @dls-border-radius-s;
+    .make-height(@dls-button-height-s);
+    .padding(0, @dls-button-padding-s);
+  }
+
+  &[ui~="xs"] {
     min-width: auto;
-    .centered-line(@veui-height-micro);
-    .make-height(@veui-height-micro);
-    font-size: @veui-font-size-small;
-    .padding(_, 10px);
+    font-size: @dls-button-font-size-xs;
+    border-radius: @dls-border-radius-s;
+    .make-height(@dls-button-height-xs);
+    .padding(0, @dls-button-padding-xs);
   }
 
-  &[ui~="round"] {
-    border-radius: 50%;
-  }
-
-  &[ui~="round"],
-  &[ui~="square"] {
-    width: @veui-height-normal;
+  &[ui~="pure"],
+  &[ui~="text"] {
     min-width: auto;
-    .padding(_, 0);
     text-align: center;
+    border-color: transparent;
+    .padding(@dls-button-content-spacing, @dls-button-content-spacing * 0.5);
+    height: auto;
+    line-height: 1;
+    text-decoration: none;
+    background-color: transparent;
 
-    &[ui~="large"] {
-      width: @veui-height-large;
+    .veui-icon {
+      margin-top: 0;
+    }
+  }
+
+  &[ui~="icon"] {
+    .padding(0);
+    text-align: center;
+    width: @dls-button-height-m;
+    .veui-icon {
+      margin-right: 0;
     }
 
-    &[ui~="small"] {
-      width: @veui-height-small;
+    &[ui~="xs"] {
+      width: @dls-button-height-xs;
     }
 
-    &[ui~="tiny"] {
-      width: @veui-height-tiny;
+    &[ui~="s"] {
+      width: @dls-button-height-s;
     }
 
-    &[ui~="micro"] {
-      width: @veui-height-micro;
+    &[ui~="m"] {
+      width: @dls-button-height-m;
+    }
+
+    &[ui~="l"] {
+      width: @dls-button-height-l;
+    }
+
+    &[ui~="xl"] {
+      width: @dls-button-height-xl;
+    }
+
+    &[ui~="pure"] {
+      background-color: @dls-button-background-color-icon;
+      color: @dls-button-font-color-icon;
+      width: auto;
+
+      &:hover {
+        background-color: @dls-button-background-color-icon-hover;
+        color: @dls-button-font-color-icon-hover;
+      }
+
+      &:active,
+      &-loading {
+        background-color: @dls-button-background-color-icon-active;
+        color: @dls-button-font-color-icon-active;
+      }
+
+      &.veui-disabled {
+        background-color: @dls-button-background-color-icon-disabled;
+        color: @dls-button-font-color-icon-disabled;
+      }
+
+      &.focus-visible {
+        background-color: @dls-button-background-color-icon-focus;
+        color: @dls-button-font-color-icon-focus;
+      }
+    }
+  }
+
+  &[ui~="text"] {
+    color: @dls-button-font-color-text;
+
+    &:hover {
+      color: @dls-button-font-color-text-hover;
+      font-weight: @dls-button-font-weight-text-hover;
+    }
+
+    &.focus-visible {
+      color: @dls-button-font-color-text-hover;
+      font-weight: @dls-button-font-weight-text-focus;
+    }
+
+    &:active {
+      color: @dls-button-font-color-text-active;
+      font-weight: @dls-button-font-weight-text-active;
+    }
+
+    &.veui-disabled {
+      color: @dls-button-font-color-text-disabled;
     }
   }
 
@@ -149,37 +283,12 @@
     &,
     &:hover {
       cursor: not-allowed;
-      border-color: transparent;
-      background-color: @veui-gray-color-7;
-      color: @veui-text-color-aux;
     }
   }
 
-  &[ui~="link"] {
-    display: inline;
-    min-width: auto;
-    border: none;
-    padding: 0;
-    outline-color: transparent;
-    .veui-transition(color, outline-color);
-
-    &,
-    &:hover,
-    &:active,
-    &.focus-visible {
-      background-color: transparent;
-    }
-
-    &.focus-visible {
-      .veui-focus-shadow(fadeout(@veui-link-color-hover, 50%), 2px);
-    }
-
-    &.veui-disabled {
-      &,
-      &:hover {
-        background-color: transparent;
-      }
-    }
+  &.focus-visible {
+    border-color: @dls-button-border-color-focus;
+    box-shadow: @dls-button-shadow-focus;
   }
 
   &-loading {
@@ -187,15 +296,6 @@
     &[ui] {
       cursor: default;
       pointer-events: none;
-      opacity: 0.5;
-    }
-  }
-
-  .veui-icon {
-    max-width: 1em;
-
-    & + .veui-button-loading-text {
-      margin-left: 5px;
     }
   }
 
@@ -209,14 +309,13 @@
       margin-top: ~"calc(@{height} - 0.5em)";
     }
   }
-  .make-height(@veui-height-normal);
+  .make-height(@dls-button-height-m);
 }
 
 .veui-button-loading-text {
   vertical-align: top;
 
-  [ui~="round"] > &,
-  [ui~="square"] > & {
+  [ui~="icon"] > & {
     display: none;
   }
 }

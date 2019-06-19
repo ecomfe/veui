@@ -2,19 +2,19 @@
 <article>
   <h1><code>&lt;veui-button&gt;</code></h1>
   <p>
-    <veui-button ui="primary micro">
+    <veui-button ui="primary xs">
       提交
     </veui-button>
-    <veui-button ui="primary tiny">
+    <veui-button ui="primary s">
       提交
     </veui-button>
-    <veui-button ui="primary small">
+    <veui-button ui="primary m">
       提交
     </veui-button>
-    <veui-button ui="primary">
+    <veui-button ui="primary l">
       提交
     </veui-button>
-    <veui-button ui="primary large">
+    <veui-button ui="primary xl">
       提交
     </veui-button>
     <veui-button
@@ -31,19 +31,19 @@
     </veui-button>
   </p>
   <p>
-    <veui-button ui="micro">
+    <veui-button ui="xs">
       保存
     </veui-button>
-    <veui-button ui="tiny">
+    <veui-button ui="s">
       保存
     </veui-button>
-    <veui-button ui="small">
+    <veui-button ui="m">
       保存
     </veui-button>
-    <veui-button ui="secondary">
+    <veui-button ui="l">
       保存
     </veui-button>
-    <veui-button ui="large">
+    <veui-button ui="xl">
       保存
     </veui-button>
     <veui-button disabled>
@@ -54,285 +54,258 @@
     </veui-button>
   </p>
   <p>
-    <veui-button ui="micro">
-      <icon name="times"/> 取消
+    <veui-button ui="strong xs">
+      保存
     </veui-button>
-    <veui-button ui="tiny">
-      <icon name="times"/> 取消
+    <veui-button ui="strong s">
+      保存
     </veui-button>
-    <veui-button ui="small">
-      <icon name="times"/> 取消
+    <veui-button ui="strong m">
+      保存
     </veui-button>
-    <veui-button><icon name="times"/> 取消</veui-button>
-    <veui-button ui="large">
-      <icon name="times"/> 取消
+    <veui-button ui="strong l">
+      保存
+    </veui-button>
+    <veui-button ui="strong xl">
+      保存
+    </veui-button>
+    <veui-button
+      ui="strong"
+      disabled
+    >
+      保存
+    </veui-button>
+    <veui-button
+      ui="strong"
+      loading
+    >
+      保存
+    </veui-button>
+  </p>
+  <p>
+    <veui-button ui="xs">
+      <icon name="times"/>取消
+    </veui-button>
+    <veui-button ui="s">
+      <icon name="times"/>取消
+    </veui-button>
+    <veui-button ui="middle">
+      <icon name="times"/>取消
+    </veui-button>
+    <veui-button ui="l">
+      <icon name="times"/>取消
+    </veui-button>
+    <veui-button ui="xl">
+      <icon name="times"/>取消
     </veui-button>
     <veui-button disabled>
-      <icon name="times"/> 取消
+      <icon name="times"/>取消
     </veui-button>
     <veui-button loading>
-      <icon name="times"/> 取消
+      <icon name="times"/>取消
     </veui-button>
   </p>
   <p>
-    <veui-button ui="alt micro">
+    <veui-button ui="translucent xs">
       取消
     </veui-button>
-    <veui-button ui="alt tiny">
+    <veui-button ui="translucent s">
       取消
     </veui-button>
-    <veui-button ui="alt small">
+    <veui-button ui="translucent m">
       取消
     </veui-button>
-    <veui-button ui="alt">
+    <veui-button ui="translucent l">
       取消
     </veui-button>
-    <veui-button ui="alt large">
+    <veui-button ui="translucent xl">
       取消
     </veui-button>
     <veui-button
-      ui="alt"
+      ui="translucent"
       disabled
     >
       取消
     </veui-button>
     <veui-button
-      ui="alt"
+      ui="translucent"
       loading
     >
       取消
     </veui-button>
   </p>
   <p>
-    <veui-button ui="link primary micro">
-      创建
-    </veui-button>
-    <veui-button ui="link primary tiny">
-      创建
-    </veui-button>
-    <veui-button ui="link primary small">
-      创建
-    </veui-button>
-    <veui-button ui="link primary">
-      创建
-    </veui-button>
-    <veui-button ui="link primary large">
-      创建
-    </veui-button>
-    <veui-button
-      ui="link primary"
-      disabled
-    >
-      创建
-    </veui-button>
-    <veui-button
-      ui="link primary"
-      loading
-    >
-      创建
-    </veui-button>
-  </p>
-  <p>
-    <veui-button ui="link micro">
+    <veui-button ui="text xs">
       编辑
     </veui-button>
-    <veui-button ui="link tiny">
+    <veui-button ui="text s">
       编辑
     </veui-button>
-    <veui-button ui="link small">
+    <veui-button ui="text m">
       编辑
     </veui-button>
-    <veui-button ui="link">
+    <veui-button ui="text l">
       编辑
     </veui-button>
-    <veui-button ui="link large">
+    <veui-button ui="text xl">
       编辑
     </veui-button>
     <veui-button
-      ui="link"
+      ui="text"
       disabled
     >
       编辑
     </veui-button>
     <veui-button
-      ui="link"
+      ui="text"
       loading
     >
       编辑
     </veui-button>
   </p>
   <p>
-    <veui-button ui="round primary micro">
-      <icon name="check"/>
-    </veui-button>
-    <veui-button ui="round primary tiny">
-      <icon name="check"/>
-    </veui-button>
-    <veui-button ui="round primary small">
-      <icon name="check"/>
-    </veui-button>
-    <veui-button ui="round primary">
-      <icon name="check"/>
-    </veui-button>
-    <veui-button ui="round primary large">
-      <icon name="check"/>
-    </veui-button>
-    <veui-button
-      ui="round primary"
-      disabled
-    >
-      <icon name="check"/>
-    </veui-button>
-    <veui-button
-      ui="round primary"
-      loading
-    >
-      <icon name="check"/>
-    </veui-button>
-  </p>
-  <p>
-    <veui-button ui="round micro">
-      <icon name="edit"/>
-    </veui-button>
-    <veui-button ui="round tiny">
-      <icon name="edit"/>
-    </veui-button>
-    <veui-button ui="round small">
-      <icon name="edit"/>
-    </veui-button>
-    <veui-button ui="round">
-      <icon name="edit"/>
-    </veui-button>
-    <veui-button ui="round large">
-      <icon name="edit"/>
-    </veui-button>
-    <veui-button
-      ui="round"
-      disabled
-    >
-      <icon name="edit"/>
-    </veui-button>
-    <veui-button
-      ui="round"
-      loading
-    >
-      <icon name="edit"/>
-    </veui-button>
-  </p>
-  <p>
-    <veui-button ui="square micro">
+    <veui-button ui="icon xs">
       <icon name="search"/>
     </veui-button>
-    <veui-button ui="square tiny">
+    <veui-button ui="icon s">
       <icon name="search"/>
     </veui-button>
-    <veui-button ui="square small">
+    <veui-button ui="icon m">
       <icon name="search"/>
     </veui-button>
-    <veui-button ui="square">
+    <veui-button ui="icon l">
       <icon name="search"/>
     </veui-button>
-    <veui-button ui="square large">
+    <veui-button ui="icon xl">
       <icon name="search"/>
     </veui-button>
     <veui-button
-      ui="square"
+      ui="icon"
       disabled
     >
       <icon name="search"/>
     </veui-button>
     <veui-button
-      ui="square"
+      ui="icon"
       loading
     >
       <icon name="search"/>
     </veui-button>
   </p>
   <p>
-    <veui-button ui="alt square micro">
+    <veui-button ui="translucent icon xs">
       <icon name="times"/>
     </veui-button>
-    <veui-button ui="alt square tiny">
+    <veui-button ui="translucent icon s">
       <icon name="times"/>
     </veui-button>
-    <veui-button ui="alt square small">
+    <veui-button ui="translucent icon m">
       <icon name="times"/>
     </veui-button>
-    <veui-button ui="alt square">
+    <veui-button ui="translucent icon l">
       <icon name="times"/>
     </veui-button>
-    <veui-button ui="alt square large">
+    <veui-button ui="translucent icon xl">
       <icon name="times"/>
     </veui-button>
     <veui-button
-      ui="alt square"
+      ui="translucent icon"
       disabled
     >
       <icon name="times"/>
     </veui-button>
     <veui-button
-      ui="alt square"
+      ui="translucent icon"
       loading
     >
       <icon name="times"/>
     </veui-button>
   </p>
   <p>
-    <veui-button ui="dark micro">
-      取消
+    <veui-button ui="primary icon xs">
+      <icon name="times"/>
     </veui-button>
-    <veui-button ui="dark tiny">
-      取消
+    <veui-button ui="primary icon s">
+      <icon name="times"/>
     </veui-button>
-    <veui-button ui="dark small">
-      取消
+    <veui-button ui="primary icon m">
+      <icon name="times"/>
     </veui-button>
-    <veui-button ui="dark">
-      取消
+    <veui-button ui="primary icon l">
+      <icon name="times"/>
     </veui-button>
-    <veui-button ui="dark large">
+    <veui-button ui="primary icon xl">
       取消
     </veui-button>
     <veui-button
-      ui="dark"
+      ui="primary icon"
       disabled
     >
       取消
     </veui-button>
     <veui-button
-      ui="dark"
+      ui="primary icon"
       loading
     >
       取消
     </veui-button>
   </p>
   <p>
-    <veui-button ui="dark square micro">
+    <veui-button ui="strong icon xs">
       <icon name="search"/>
     </veui-button>
-    <veui-button ui="dark square tiny">
+    <veui-button ui="strong icon s">
       <icon name="search"/>
     </veui-button>
-    <veui-button ui="dark square small">
+    <veui-button ui="strong icon m">
       <icon name="search"/>
     </veui-button>
-    <veui-button ui="dark square">
+    <veui-button ui="strong icon l">
       <icon name="search"/>
     </veui-button>
-    <veui-button ui="dark square large">
+    <veui-button ui="strong icon xl">
       <icon name="search"/>
     </veui-button>
     <veui-button
-      ui="dark square"
+      ui="strong icon"
       disabled
     >
       <icon name="search"/>
     </veui-button>
     <veui-button
-      ui="dark square"
+      ui="strong icon"
       loading
     >
       <icon name="search"/>
+    </veui-button>
+  </p>
+  <p>
+    <veui-button ui="icon pure xs">
+      <icon name="times"/>
+    </veui-button>
+    <veui-button ui="icon pure s">
+      <icon name="times"/>
+    </veui-button>
+    <veui-button ui="icon pure m">
+      <icon name="times"/>
+    </veui-button>
+    <veui-button ui="icon pure l">
+      <icon name="times"/>
+    </veui-button>
+    <veui-button ui="icon pure xl">
+      <icon name="times"/>
+    </veui-button>
+    <veui-button
+      ui="icon pure"
+      disabled
+    >
+      <icon name="times"/>
+    </veui-button>
+    <veui-button
+      ui="icon pure"
+      loading
+    >
+      <icon name="times"/>
     </veui-button>
   </p>
 </article>
