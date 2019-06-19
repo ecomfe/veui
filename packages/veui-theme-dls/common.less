@@ -62,87 +62,71 @@ a {
 }
 
 a,
-[ui~="link"],
-.veui-button[ui~="link"] {
+[ui~="link"] {
   cursor: pointer;
-  color: @veui-link-color-normal;
+  color: @dls-link-font-color-normal;
   outline-color: transparent;
+  font-weight: @dls-link-font-weight;
   .veui-transition(color, outline-color);
 
-  &:focus {
-    outline: none;
-  }
-
-  &[ui~="primary"] {
-    color: @veui-link-color-strong;
-  }
-
-  &:hover,
-  &.focus-visible {
-    color: @veui-link-color-hover;
+  &:hover {
+    color: @dls-link-font-color-normal;
+    text-decoration: underline;
+    font-weight: @dls-font-weight-2;
   }
 
   &.focus-visible {
-    .veui-focus-shadow(fadeout(@veui-link-color-hover, 50%), 2px);
+    color: @dls-link-font-color-normal-hover;
+    text-decoration: underline;
+    font-weight: @dls-font-weight-2;
+    border: none;
+    outline-color: transparent;
   }
 
   &:active {
-    color: @veui-link-color-active;
+    color: @dls-link-font-color-normal-hover;
+    text-decoration: underline;
+    font-weight: @dls-font-weight-2;
   }
 
-  &[ui~="aux"] {
-    color: @veui-text-color-weak;
+  &.veui-disabled {
+    color: @dls-link-font-color-normal-disabled;
+    text-decoration: none;
+    font-weight: @dls-font-weight-1;
+  }
 
-    &:hover,
-    &.focus-visible {
-      color: @veui-text-color-normal;
+  &[ui~="s"] {
+    font-size: @dls-link-font-size-s;
+  }
+  &[ui~="m"] {
+    font-size: @dls-link-font-size-m;
+  }
+
+  &[ui~="strong"] {
+    color: @dls-link-font-color-strong;
+
+    &:hover {
+      color: @dls-color-info-6;
       text-decoration: underline;
+      font-weight: @dls-font-weight-2;
+    }
+
+    &.focus-visible {
+      color:@dls-color-info-5;
+      text-decoration: underline;
+      font-weight: @dls-font-weight-2;
     }
 
     &:active {
-      color: @veui-alert-color-1;
-    }
-  }
-
-  &[ui~="alert"] {
-    color: @veui-alert-color;
-
-    &:hover,
-    &.focus-visible {
-      color: @veui-alert-color-2;
+      color: @dls-link-font-color-strong-active;
       text-decoration: underline;
+      font-weight: @dls-font-weight-2;
     }
 
-    &:active {
-      color: @veui-alert-color-1;
-    }
-  }
-
-  &[ui~="success"] {
-    color: @veui-success-color;
-
-    &:hover,
-    &.focus-visible {
-      color: @veui-success-color-2;
-      text-decoration: underline;
-    }
-
-    &:active {
-      color: @veui-success-color-1;
-    }
-  }
-
-  &[ui~="warning"] {
-    color: @veui-warning-color;
-
-    &:hover,
-    &.focus-visible {
-      color: @veui-warning-color-2;
-      text-decoration: underline;
-    }
-
-    &:active {
-      color: @veui-warning-color-1;
+    &.veui-disabled {
+      color: @dls-color-info-3;
+      text-decoration: none;
+      font-weight: @dls-font-weight-1;
     }
   }
 }
