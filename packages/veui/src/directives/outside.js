@@ -55,6 +55,7 @@ function initBindingType (type) {
 
 function getElementsByRefs (refs, context) {
   const elements = []
+  refs = Array.isArray(refs) ? refs : [refs]
   refs.forEach(ref => {
     elements.push(...getNodes(ref, context))
   })
