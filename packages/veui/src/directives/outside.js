@@ -117,9 +117,8 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
         ...(excludeSelf ? [] : [el]),
         ...getElementsByRefs(refs, context)
       ]
-      let isTargetIn = isElementIn(e.target, includeTargets)
       let isRelatedTargetIn = isElementIn(e.relatedTarget, includeTargets)
-      if (isTargetIn && !isRelatedTargetIn) {
+      if (!isRelatedTargetIn) {
         hoverDelayData.state = 'out'
 
         clearTimeout(el[bindingKey].timer)
@@ -128,7 +127,7 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
             handler(e)
           }
         }, delay)
-      } else if (!isTargetIn && isRelatedTargetIn) {
+      } else if (isRelatedTargetIn) {
         hoverDelayData.state = 'in'
       }
     }
