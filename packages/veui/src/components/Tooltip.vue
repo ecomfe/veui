@@ -92,7 +92,7 @@ export default {
     outsideOptions () {
       return {
         handler: this.closeHandler,
-        refs: this.targetNode,
+        refs: [this.targetNode],
         trigger: this.realTrigger.close,
         delay: this.hideDelay,
         excludeSelf: !this.interactive
