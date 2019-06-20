@@ -148,7 +148,7 @@ function clear (el) {
   })
 }
 
-const OMIT_OPTIONS = ['refs', 'id', 'realHandler']
+const OMIT_OPTIONS = ['refs', 'id', 'realHandler', 'timer']
 
 function isEqualOption (o1, o2) {
   return (
