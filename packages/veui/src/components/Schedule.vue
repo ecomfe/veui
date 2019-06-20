@@ -338,6 +338,15 @@ export default {
         return days
       }, [])
     },
+    disabledHours () {
+      return this.week.reduce((acc, day) => {
+        acc[day] = [...Array(24)]
+          .map((_, i) => (this.disabledHour(day, i) ? [i, i] : false))
+          .filter(i => i)
+
+        return acc
+      }, {})
+    },
     pickingSelected () {
       if (!this.pickingStart || !this.pickingEnd) {
         return null
@@ -436,10 +445,12 @@ export default {
     mergeRange (days, range) {
       return days.reduce((selected, day) => {
         let daySelected = selected[day]
+        let hours = merge([[...range]], this.disabledHours[day], { mode: 'substract' })
+
         if (!daySelected) {
-          selected[day] = [[...range]]
+          selected[day] = Array.isArray(hours[0]) ? hours : [[...hours]]
         } else {
-          selected[day] = merge(daySelected, range, { mode: this.mergeMode })
+          selected[day] = merge(daySelected, hours, { mode: this.mergeMode })
         }
 
         if (!selected[day] || !selected[day].length) {
@@ -490,34 +501,21 @@ export default {
       this.updateCurrent(dayIndex, hour)
     },
     pick () {
-      if (this.pickingStart) {
-        for (let i = 0; i < 7; i++) {
-          if (this.pickingSelected[i]) {
-            this.$set(
-              this.localSelected,
-              i,
-              this.filterDisabledHours(i, this.pickingSelected[i])
-            )
-          }
-        }
-        this.pickingStart = this.pickingEnd = null
-        this.$emit('select', this.localSelected)
-      }
+      this.localSelected = this.pickingSelected
+      this.pickingStart = this.pickingEnd = null
+      this.$emit('select', this.localSelected)
     },
     selectShortcut (i) {
       this.localSelected = this.realShortcuts[i].selected
       this.$emit('select', this.localSelected)
     },
-    filterDisabledHours (day, selectedHours = [[0, 23]]) {
-      let disabledHours = [...Array(24)]
-          .map((_, i) => (this.disabledHour(day, i) ? [i, i] : false))
-          .filter(i => i)
-
-      return merge(selectedHours, disabledHours, { mode: 'substract' })
-    },
     toggleDay (day, checked) {
       if (checked) {
-        this.$set(this.localSelected, day, this.filterDisabledHours(day))
+        this.$set(
+          this.localSelected,
+          day,
+          merge([[0, 23]], this.disabledHours[day], { mode: 'substract' })
+        )
       } else {
         this.$delete(this.localSelected, day)
       }
