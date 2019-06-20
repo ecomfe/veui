@@ -16,14 +16,6 @@ describe('components/Span', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.attributes('ui')).to.equal('micro')
 
-    wrapper.setProps({ ui: 'small' })
-    await wrapper.vm.$nextTick()
-    expect(wrapper.attributes('ui')).to.equal('small')
-
-    wrapper.setProps({ ui: 'tiny' })
-    await wrapper.vm.$nextTick()
-    expect(wrapper.attributes('ui')).to.equal('tiny')
-
     wrapper.destroy()
   })
 
