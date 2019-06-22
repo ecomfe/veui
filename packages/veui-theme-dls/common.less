@@ -61,38 +61,33 @@ a {
   text-decoration: none;
 }
 
-a,
-[ui~="link"] {
+a {
   cursor: pointer;
   color: @dls-link-font-color-normal;
-  outline-color: transparent;
   font-weight: @dls-link-font-weight;
-  .veui-transition(color, outline-color);
+  text-decoration: @dls-link-text-decoration;
+  .veui-transition(color);
 
   &:hover {
-    color: @dls-link-font-color-normal;
-    text-decoration: underline;
-    font-weight: @dls-font-weight-2;
+    color: @dls-link-font-color-normal-hover;
+    font-weight: @dls-link-font-weight-hover;
+    text-decoration: @dls-link-text-decoration-hover;
   }
 
   &.focus-visible {
-    color: @dls-link-font-color-normal-hover;
-    text-decoration: underline;
-    font-weight: @dls-font-weight-2;
-    border: none;
-    outline-color: transparent;
+    color: @dls-link-font-color-normal-focus;
+    font-weight: @dls-link-font-weight-focus;
+    text-decoration: @dls-link-text-decoration-focus;
   }
 
   &:active {
-    color: @dls-link-font-color-normal-hover;
-    text-decoration: underline;
-    font-weight: @dls-font-weight-2;
+    color: @dls-link-font-color-normal-active;
+    font-weight: @dls-link-font-weight-active;
+    text-decoration: @dls-link-text-decoration-active;
   }
 
   &.veui-disabled {
     color: @dls-link-font-color-normal-disabled;
-    text-decoration: none;
-    font-weight: @dls-font-weight-1;
   }
 
   &[ui~="s"] {
@@ -106,27 +101,19 @@ a,
     color: @dls-link-font-color-strong;
 
     &:hover {
-      color: @dls-color-info-6;
-      text-decoration: underline;
-      font-weight: @dls-font-weight-2;
+      color: @dls-link-font-color-strong-hover;
     }
 
     &.focus-visible {
-      color:@dls-color-info-5;
-      text-decoration: underline;
-      font-weight: @dls-font-weight-2;
+      color: @dls-link-font-color-strong-focus;
     }
 
     &:active {
       color: @dls-link-font-color-strong-active;
-      text-decoration: underline;
-      font-weight: @dls-font-weight-2;
     }
 
     &.veui-disabled {
-      color: @dls-color-info-3;
-      text-decoration: none;
-      font-weight: @dls-font-weight-1;
+      color: @dls-link-font-color-strong-disabled;
     }
   }
 }
