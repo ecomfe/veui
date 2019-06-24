@@ -4,7 +4,31 @@
   <section>
     <veui-link to="button">
       Button
-    </veui-link> &larr; default
+    </veui-link>
+    &larr; default
+    <veui-link
+      ui="s"
+      to="button"
+    >
+      Button
+    </veui-link>
+    &larr; small
+    <veui-link
+      ui="m"
+      to="button"
+    >
+      Button
+    </veui-link>
+    &larr; middle
+  </section>
+  <section>
+    <veui-link
+      ui="strong"
+      to="button"
+    >
+      Button
+    </veui-link>
+    &larr; strong
   </section>
   <section>
     <veui-link
@@ -12,7 +36,8 @@
       native
     >
       Dialog
-    </veui-link> &larr; <code>native</code>
+    </veui-link>
+    &larr; <code>native</code>
   </section>
   <section>
     <veui-link
@@ -22,7 +47,8 @@
       rel="next"
     >
       Baidu.com
-    </veui-link> &larr; <code>native</code> &amp; <code>target="_blank"</code>
+    </veui-link>
+    &larr; <code>native</code> &amp; <code>target="_blank"</code>
   </section>
   <section>
     <veui-link
@@ -30,10 +56,12 @@
       disabled
     >
       Icon
-    </veui-link> &larr; <code>disabled</code>
+    </veui-link>
+    &larr; <code>disabled</code>
   </section>
   <section>
-    <veui-link>Nowhere</veui-link> &larr; fallback to <code>&lt;span&gt;</code>
+    <veui-link>Nowhere</veui-link> &larr; fallback to
+    <code>&lt;span&gt;</code>
   </section>
 </article>
 </template>
