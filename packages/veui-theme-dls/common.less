@@ -61,88 +61,59 @@ a {
   text-decoration: none;
 }
 
-a,
-[ui~="link"],
-.veui-button[ui~="link"] {
+a {
   cursor: pointer;
-  color: @veui-link-color-normal;
-  outline-color: transparent;
-  .veui-transition(color, outline-color);
+  color: @dls-link-font-color-normal;
+  font-weight: @dls-link-font-weight;
+  text-decoration: @dls-link-text-decoration;
+  .veui-transition(color);
 
-  &:focus {
-    outline: none;
-  }
-
-  &[ui~="primary"] {
-    color: @veui-link-color-strong;
-  }
-
-  &:hover,
-  &.focus-visible {
-    color: @veui-link-color-hover;
+  &:hover {
+    color: @dls-link-font-color-normal-hover;
+    font-weight: @dls-link-font-weight-hover;
+    text-decoration: @dls-link-text-decoration-hover;
   }
 
   &.focus-visible {
-    .veui-focus-shadow(fadeout(@veui-link-color-hover, 50%), 2px);
+    color: @dls-link-font-color-normal-focus;
+    font-weight: @dls-link-font-weight-focus;
+    text-decoration: @dls-link-text-decoration-focus;
   }
 
   &:active {
-    color: @veui-link-color-active;
+    color: @dls-link-font-color-normal-active;
+    font-weight: @dls-link-font-weight-active;
+    text-decoration: @dls-link-text-decoration-active;
   }
 
-  &[ui~="aux"] {
-    color: @veui-text-color-weak;
+  &.veui-disabled {
+    color: @dls-link-font-color-normal-disabled;
+  }
 
-    &:hover,
+  &[ui~="s"] {
+    font-size: @dls-link-font-size-s;
+  }
+  &[ui~="m"] {
+    font-size: @dls-link-font-size-m;
+  }
+
+  &[ui~="strong"] {
+    color: @dls-link-font-color-strong;
+
+    &:hover {
+      color: @dls-link-font-color-strong-hover;
+    }
+
     &.focus-visible {
-      color: @veui-text-color-normal;
-      text-decoration: underline;
+      color: @dls-link-font-color-strong-focus;
     }
 
     &:active {
-      color: @veui-alert-color-1;
-    }
-  }
-
-  &[ui~="alert"] {
-    color: @veui-alert-color;
-
-    &:hover,
-    &.focus-visible {
-      color: @veui-alert-color-2;
-      text-decoration: underline;
+      color: @dls-link-font-color-strong-active;
     }
 
-    &:active {
-      color: @veui-alert-color-1;
-    }
-  }
-
-  &[ui~="success"] {
-    color: @veui-success-color;
-
-    &:hover,
-    &.focus-visible {
-      color: @veui-success-color-2;
-      text-decoration: underline;
-    }
-
-    &:active {
-      color: @veui-success-color-1;
-    }
-  }
-
-  &[ui~="warning"] {
-    color: @veui-warning-color;
-
-    &:hover,
-    &.focus-visible {
-      color: @veui-warning-color-2;
-      text-decoration: underline;
-    }
-
-    &:active {
-      color: @veui-warning-color-1;
+    &.veui-disabled {
+      color: @dls-link-font-color-strong-disabled;
     }
   }
 }
