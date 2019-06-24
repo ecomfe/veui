@@ -8,13 +8,10 @@ config.defaults(
     },
     ui: {
       style: {
-        values: ['translucent', 'primary', 'strong', 'text', 'pure']
+        values: ['translucent', 'primary', 'strong', 'text', 'icon']
       },
       size: {
         values: ['xs', 's', 'm', 'l', 'xl']
-      },
-      role: {
-        values: ['icon']
       }
     }
   },
