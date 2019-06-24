@@ -16,12 +16,11 @@
   <template v-else>
     <slot name="loading">
       <veui-icon
+        class="veui-button-loading-icon"
         :name="icons.loading"
         spin
       />
-      <span class="veui-button-loading-text">
-        <slot/>
-      </span>
+      <slot/>
     </slot>
   </template>
 </button>
