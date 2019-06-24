@@ -148,4 +148,25 @@ describe('components/NumberInput', () => {
     input.setValue(2.34)
     expect(input.element.value).to.equal('2.34')
   })
+
+  it('should handle change event', done => {
+    let wrapper = mount(NumberInput,
+      {
+        propsData: {
+          value: null
+        }
+      },
+      {
+        sync: false
+      }
+    )
+
+    wrapper.vm.$on('change', val => {
+      expect(val).equal(1)
+      wrapper.destroy()
+      done()
+    })
+
+    wrapper.find('button.veui-number-input-step-up').trigger('click')
+  })
 })
