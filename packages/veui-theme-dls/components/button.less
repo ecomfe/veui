@@ -1,55 +1,45 @@
 @import "../lib.less";
 
 .veui-button {
+  display: inline-flex;
+  align-items: center;
   user-select: none;
-  vertical-align: middle;
-  .veui-button-transition();
+  .make-metrics(m);
   border: 1px solid @dls-button-border-color-normal;
-  font-size: @dls-button-font-size-m;
-  border-radius: @dls-border-radius-m;
-  .make-height(@dls-button-height-m);
-  .padding(0, @dls-button-padding-m);
   background-color: @dls-button-background-color-normal;
   color: @dls-button-font-color-normal;
+  .veui-button-transition();
 
-  .veui-icon {
-    max-width: 1em;
-    margin-right: @dls-button-content-spacing;
+  .make-metrics(@size) {
+    @height: ~"dls-button-height-@{size}";
+    @padding: ~"dls-button-padding-@{size}";
+    @radius: ~"dls-button-border-radius-@{size}";
+    @font-size: ~"dls-button-font-size-@{size}";
+    height: @@height;
+    .padding(0, @@padding);
+    border-radius: @@radius;
+    font-size: @@font-size;
   }
 
-  &&-loading {
-    background-color: @dls-button-background-color-normal-active;
-    .veui-icon {
-      color: @dls-color-gray-9;
-    }
+  &[ui~="xs"] {
+    .make-metrics(xs);
+  }
 
-    &[ui~="primary"] {
-      background-color: @dls-button-background-color-primary-active;
-      .veui-icon {
-        color: @dls-button-font-color-primary;
-      }
-    }
+  &[ui~="s"] {
+    .make-metrics(s);
+  }
 
-    &[ui~="strong"] {
-      background-color: @dls-button-background-color-strong-active;
-      .veui-icon {
-        color: @dls-button-font-color-strong;
-      }
-    }
+  &[ui~="l"] {
+    .make-metrics(l);
+  }
 
-    &[ui~="translucent"] {
-      background-color: @dls-button-background-color-translucent-active;
-      .veui-icon {
-        color: @dls-button-font-color-translucent;
-      }
-    }
+  &[ui~="xl"] {
+    .make-metrics(xl);
+  }
 
-    &[ui~="text"] {
-      color: @dls-button-font-color-text-active;
-      .veui-icon {
-        color: @dls-button-font-color-text-active;
-      }
-    }
+  .veui-icon {
+    .size(1em);
+    margin-right: @dls-button-content-spacing;
   }
 
   &:focus {
@@ -58,11 +48,6 @@
 
   &:hover,
   &.focus-visible {
-    outline: none;
-    background-color: @dls-button-background-color-normal-hover;
-  }
-
-  &:hover {
     background-color: @dls-button-background-color-normal-hover;
   }
 
@@ -74,18 +59,36 @@
     border-color: @dls-button-border-color-normal-disabled;
     background-color: @dls-button-background-color-normal-disabled;
     color: @dls-button-font-color-normal-disabled;
-    .veui-icon {
-      color: @dls-button-font-color-normal-disabled;
-    }
   }
 
-  &[ui~="primary"] {
-    border-color: @dls-button-border-color-primary;
-    background-color: @dls-button-background-color-primary;
-    color: @dls-button-font-color-primary;
+  &&-loading {
+    pointer-events: none;
+    cursor: default;
+    background-color: @dls-button-background-color-normal-active;
+  }
 
-    &:hover {
-      background-color: @dls-button-background-color-primary-hover;
+  &[ui~="strong"] {
+    border-color: @dls-button-border-color-strong;
+    background-color: @dls-button-background-color-strong;
+    color: @dls-button-font-color-strong;
+
+    &:hover,
+    &.focus-visible {
+      background-color: @dls-button-background-color-strong-hover;
+    }
+
+    &:active {
+      background-color: @dls-button-background-color-strong-active;
+    }
+
+    &.veui-disabled {
+      border-color: @dls-button-border-color-strong-disabled;
+      background-color: @dls-button-background-color-strong-disabled;
+      color: @dls-button-font-color-strong-disabled;
+    }
+
+    &.veui-button-loading {
+      background-color: @dls-button-background-color-strong-active;
     }
   }
 
@@ -99,17 +102,18 @@
       background-color: @dls-button-background-color-primary-hover;
     }
 
-    &:active{
+    &:active {
       background-color: @dls-button-background-color-primary-active;
-      .veui-icon {
-        color: @dls-button-font-color-primary;
-      }
     }
 
     &.veui-disabled {
-      border: @dls-button-border-color-primary-disabled;
-      color: @dls-button-font-color-primary-disabled;
+      border-color: @dls-button-border-color-primary-disabled;
       background-color: @dls-button-background-color-primary-disabled;
+      color: @dls-button-font-color-primary-disabled;
+    }
+
+    &.veui-button-loading {
+      background-color: @dls-button-background-color-primary-active;
     }
   }
 
@@ -118,224 +122,99 @@
     background-color: @dls-button-background-color-translucent;
     color: @dls-button-font-color-translucent;
 
-    &:hover {
-      background-color: @dls-button-background-color-translucent-hover;
-    }
-
+    &:hover,
     &.focus-visible {
       background-color: @dls-button-background-color-translucent-hover;
     }
 
-    &:active{
+    &:active {
       background-color: @dls-button-background-color-translucent-active;
-      .veui-icon {
-        color: @dls-button-font-color-translucent;
-      }
     }
 
     &.veui-disabled {
       border-color: @dls-button-border-color-translucent-disabled;
-      color: @dls-button-font-color-translucent-disabled;
       background-color: @dls-button-background-color-translucent-disabled;
+      color: @dls-button-font-color-translucent-disabled;
+    }
+
+    &.veui-button-loading {
+      background-color: @dls-button-background-color-translucent-active;
     }
   }
 
-  &[ui~="strong"] {
-    border-color: @dls-button-border-color-strong;
-    background-color: @dls-button-background-color-strong;
-    color: @dls-button-font-color-strong;
-
-    &:hover {
-      background-color: @dls-button-background-color-strong-hover;
-    }
-
-    &.focus-visible {
-      background-color: @dls-button-background-color-strong-hover;
-    }
-
-    &:active {
-      background-color: @dls-button-background-color-strong-active;
-      .veui-icon {
-        color: @dls-button-font-color-strong;
-      }
-    }
-
-    &.veui-disabled {
-      border-color: @dls-button-border-color-strong-disabled;
-      color: @dls-button-font-color-strong-disabled;
-      background-color: @dls-button-background-color-strong-disabled;
-    }
-  }
-
-  &[ui~="xl"] {
-    font-size: @dls-button-font-size-xl;
-    border-radius: @dls-button-border-radius-xl;
-    .make-height(@dls-button-height-xl);
-    .padding(0, @dls-button-padding-xl);
-  }
-
-  &[ui~="l"] {
-    font-size: @dls-button-font-size-l;
-    border-radius: @dls-button-border-radius-l;
-    .make-height(@dls-button-height-l);
-    .padding(0, @dls-button-padding-l);
-  }
-
-  &[ui~="m"] {
-    font-size: @dls-button-font-size-m;
-    border-radius: @dls-button-border-radius-m;
-    .make-height(@dls-button-height-m);
-    .padding(0, @dls-button-padding-m);
-  }
-
-  &[ui~="s"] {
-    font-size: @dls-button-font-size-s;
-    border-radius: @dls-button-border-radius-s;
-    .make-height(@dls-button-height-s);
-    .padding(0, @dls-button-padding-s);
-  }
-
-  &[ui~="xs"] {
-    min-width: auto;
-    font-size: @dls-button-font-size-xs;
-    border-radius: @dls-button-border-radius-xs;
-    .make-height(@dls-button-height-xs);
-    .padding(0, @dls-button-padding-xs);
-  }
-
-  &[ui~="pure"],
   &[ui~="text"] {
     border-color: transparent;
-    .padding(@dls-button-content-spacing, @dls-button-content-spacing * 0.5);
+    .padding(@dls-button-padding-text);
     height: auto;
     line-height: 1;
     background-color: @dls-button-background-color-text;
-
-    .veui-icon {
-      margin-top: 0;
-    }
-
-    &.focus-visible {
-      border-color: @dls-border-color-focus;
-    }
-  }
-
-  &[ui~="icon"] {
-    .padding(0);
-    width: @dls-button-height-m;
-    .veui-icon {
-      margin-right: 0;
-    }
-
-    &[ui~="xs"] {
-      width: @dls-button-height-xs;
-    }
-
-    &[ui~="s"] {
-      width: @dls-button-height-s;
-    }
-
-    &[ui~="m"] {
-      width: @dls-button-height-m;
-    }
-
-    &[ui~="l"] {
-      width: @dls-button-height-l;
-    }
-
-    &[ui~="xl"] {
-      width: @dls-button-height-xl;
-    }
-
-    &[ui~="pure"] {
-      background-color: @dls-button-background-color-icon;
-      color: @dls-button-font-color-icon;
-      width: auto;
-
-      &:hover {
-        background-color: @dls-button-background-color-icon-hover;
-        color: @dls-button-font-color-icon-hover;
-      }
-
-      &:active {
-        background-color: @dls-button-background-color-icon-active;
-        color: @dls-button-font-color-icon-active;
-      }
-
-      &.veui-disabled {
-        background-color: @dls-button-background-color-icon-disabled;
-        color: @dls-button-font-color-icon-disabled;
-      }
-
-      &.focus-visible {
-        background-color: @dls-button-background-color-icon-focus;
-        color: @dls-button-font-color-icon-focus;
-      }
-    }
-  }
-
-  &[ui~="text"] {
     color: @dls-button-font-color-text;
+    font-weight: @dls-button-font-weight-text;
 
     &:hover {
+      background-color: @dls-button-background-color-text-hover;
       color: @dls-button-font-color-text-hover;
       font-weight: @dls-button-font-weight-text-hover;
     }
-  }
 
     &.focus-visible {
+      background-color: @dls-button-background-color-text-focus;
+      color: @dls-button-font-color-text-focus;
       font-weight: @dls-button-font-weight-text-focus;
     }
 
     &:active {
+      background-color: @dls-button-background-color-text-active;
       color: @dls-button-font-color-text-active;
       font-weight: @dls-button-font-weight-text-active;
     }
 
     &.veui-disabled {
+      background-color: @dls-button-background-color-text-disabled;
       color: @dls-button-font-color-text-disabled;
     }
   }
 
-  // use class here to give IE a better experience because
-  // we disabled the current <button> element to prevent
-  // user interaction with buttons while loading
-  &.veui-disabled,
-  &.veui-disabled[ui] {
-    &,
+  &[ui~="icon"] {
+    border-color: transparent;
+    .padding(@dls-button-padding-icon);
+    height: auto;
+    line-height: 1;
+    background-color: @dls-button-background-color-icon;
+    color: @dls-button-font-color-icon;
+
     &:hover {
-      cursor: not-allowed;
+      background-color: @dls-button-background-color-icon-hover;
+      color: @dls-button-font-color-icon-hover;
+    }
+
+    &.focus-visible {
+      background-color: @dls-button-background-color-icon-focus;
+      color: @dls-button-font-color-icon-focus;
+    }
+
+    &:active {
+      background-color: @dls-button-background-color-icon-active;
+      color: @dls-button-font-color-icon-active;
+    }
+
+    &.veui-disabled {
+      background-color: @dls-button-background-color-icon-disabled;
+      color: @dls-button-font-color-icon-disabled;
+    }
+
+    .veui-icon {
+      margin-right: 0;
+    }
+
+    &.veui-button-loading {
+      .veui-icon:not(.veui-button-loading-icon) {
+        display: none;
+      }
     }
   }
 
   &.focus-visible {
-    border-color: @dls-button-border-color-focus;
-    box-shadow: @dls-button-shadow-focus;
-  }
-
-  &-loading {
-    &,
-    &[ui] {
-      cursor: default;
-      pointer-events: none;
-    }
-  }
-
-  .make-height(@button-height) {
-    height: @button-height;
-    line-height: @button-height - 2px;
-
-    .veui-icon {
-      vertical-align: top;
-      @height: @button-height / 2 - 1px;
-      margin-top: ~"calc(@{height} - 0.5em)";
-    }
-  }
-
-.veui-button-loading-text {
-  vertical-align: top;
-
-  [ui~="icon"] > & {
-    display: none;
+    .dls-focus-ring();
   }
 }
