@@ -70,7 +70,7 @@
     "promise-polyfill": "^8.1.0",
     "sinon": "^7.3.2",
     "veui-loader": "^1.0.0-alpha.29",
-    "veui-theme-dls": "^1.0.0-alpha.29",
+    "veui-theme-dls": "^1.0.0-alpha.28",
     "veui-theme-one-icons": "^1.0.0-alpha.29",
     "vue": "^2.6.7",
     "vue-directive-normalizer": "^0.1.0",
