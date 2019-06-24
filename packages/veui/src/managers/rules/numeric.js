@@ -6,7 +6,7 @@ export default {
   validate (val) {
     return !isEmpty(val)
       ? isNumber(val) ||
-          (isString(val) && !/^0(?!\.|e)/.test(val) && !isNaN(toNumber(val)))
+          (isString(val) && !/^0(?!\.|e|$)/.test(val) && !isNaN(toNumber(val)))
       : true
   },
   message (value, ruleValue) {

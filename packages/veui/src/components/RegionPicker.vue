@@ -22,7 +22,11 @@
     :aria-setsize="localDatasource.length"
     :aria-posinset="si + 1"
     :aria-checked="section.indeterminate ? 'mixed' : section.selected"
-    :aria-selected="section.id != null && section.selected && (includeIndeterminate || !section.indeterminate)"
+    :aria-selected="
+      section.id != null &&
+        section.selected &&
+        (includeIndeterminate || !section.indeterminate)
+    "
   >
     <div class="veui-region-picker-section-title">
       <veui-checkbox
@@ -60,7 +64,11 @@
         :aria-setsize="section.children.length"
         :aria-posinset="bi + 1"
         :aria-checked="branch.indeterminate ? 'mixed' : branch.selected"
-        :aria-selected="branch.id != null && branch.selected && (includeIndeterminate || !branch.indeterminate)"
+        :aria-selected="
+          branch.id != null &&
+            branch.selected &&
+            (includeIndeterminate || !branch.indeterminate)
+        "
       >
         <div class="veui-region-picker-branch-title">
           <veui-checkbox
@@ -99,7 +107,11 @@
             :aria-setsize="branch.children.length"
             :aria-posinset="gi + 1"
             :aria-checked="group.indeterminate ? 'mixed' : group.selected"
-            :aria-selected="group.id != null && group.selected && (includeIndeterminate || !group.indeterminate)"
+            :aria-selected="
+              group.id != null &&
+                group.selected &&
+                (includeIndeterminate || !group.indeterminate)
+            "
             :aria-owns="`${id}-shadow ${id}-units`"
           >
             <div class="veui-region-picker-group-title">
@@ -140,20 +152,25 @@
                   :id="`${id}-units`"
                   :ref="`layer-${si}-${bi}-${gi}`"
                   v-outside="{
-                    handler: () => { toggleActive(group, false) },
-                    refs: [`node-${si}-${bi}-${gi}`, `shadow-${si}-${bi}-${gi}`],
+                    handler: getHideFn(`${si}-${bi}-${gi}`, group),
+                    refs: [`shadow-${si}-${bi}-${gi}`],
                     trigger: 'hover',
                     delay: 200
                   }"
                   class="veui-region-picker-units"
                 >
-                  <template v-for="ri in Math.ceil(group.children.length / 3)">
+                  <template
+                    v-for="ri in Math.ceil(group.children.length / 3)"
+                  >
                     <div
                       :key="ri"
                       class="veui-region-picker-unit-row"
                     >
                       <div
-                        v-for="(unit, ui) in group.children.slice(ri * 3 - 3, ri * 3)"
+                        v-for="(unit, ui) in group.children.slice(
+                          ri * 3 - 3,
+                          ri * 3
+                        )"
                         :key="ui"
                         class="veui-region-picker-unit"
                         role="treeitem"
@@ -193,7 +210,9 @@
               <veui-overlay
                 v-if="group.children && group.active"
                 :open.sync="group.active"
-                :overlay-class="mergeOverlayClass('veui-region-picker-group-shadow-overlay')"
+                :overlay-class="
+                  mergeOverlayClass('veui-region-picker-group-shadow-overlay')
+                "
                 :target="`node-${si}-${bi}-${gi}`"
                 :options="{
                   attachment: 'top left',
@@ -204,8 +223,8 @@
                   :id="`${id}-shadow`"
                   :ref="`shadow-${si}-${bi}-${gi}`"
                   v-outside="{
-                    handler: () => { toggleActive(group, false) },
-                    refs: [`node-${si}-${bi}-${gi}`, `layer-${si}-${bi}-${gi}`],
+                    handler: getHideFn(`${si}-${bi}-${gi}`, group),
+                    refs: [`layer-${si}-${bi}-${gi}`],
                     trigger: 'hover',
                     delay: 200
                   }"
@@ -214,8 +233,14 @@
                   aria-level="3"
                   :aria-setsize="branch.children.length"
                   :aria-posinset="gi + 1"
-                  :aria-checked="group.indeterminate ? 'mixed' : group.selected"
-                  :aria-selected="group.id != null && group.selected && (includeIndeterminate || !group.indeterminate)"
+                  :aria-checked="
+                    group.indeterminate ? 'mixed' : group.selected
+                  "
+                  :aria-selected="
+                    group.id != null &&
+                      group.selected &&
+                      (includeIndeterminate || !group.indeterminate)
+                  "
                   :aria-owns="`${id}-units`"
                 >
                   <veui-checkbox
@@ -460,6 +485,19 @@ export default {
       }
       // `active` is not observed yet
       Vue.set(node, 'active', show)
+    },
+    getHideFn (path, group) {
+      // cache them so render function won't create inline functions
+      // over again thus broke the equals check for directive options
+      if (!this.hideFns) {
+        this.hideFns = {}
+      }
+      if (!this.hideFns[path]) {
+        this.hideFns[path] = () => {
+          this.toggleActive(group, false)
+        }
+      }
+      return this.hideFns[path]
     },
     toggleNode (node, checked) {
       // record previous state first

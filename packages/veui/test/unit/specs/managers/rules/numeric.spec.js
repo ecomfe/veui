@@ -18,9 +18,19 @@ describe('managers/rules/numeric', () => {
     expect(numeric.validate('2')).to.equal(true)
     expect(numeric.validate('0.2')).to.equal(true)
     expect(numeric.validate('.2')).to.equal(true)
+    expect(numeric.validate('0')).to.equal(true)
   })
 
   it('should not allow strings that start with illegal zeros.', () => {
-    expect(numeric.validate('00.2')).to.be.equal(false)
+    expect(numeric.validate('00.2')).to.equal(false)
+    expect(numeric.validate('00')).to.equal(false)
+    expect(numeric.validate('00.0')).to.equal(false)
+    expect(numeric.validate('020')).to.equal(false)
+  })
+
+  it('should not allow strings that can not convert to Number', () => {
+    expect(numeric.validate('aa')).to.equal(false)
+    expect(numeric.validate('0|1')).to.equal(false)
+    expect(numeric.validate('{0}')).to.equal(false)
   })
 })

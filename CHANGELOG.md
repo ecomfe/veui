@@ -1,3 +1,12 @@
+## 1.0.0-alpha.29
+
+### 🐞 问题修复
+
+* [^] 修正 `RegionPicker` 组件浮层不能正常关闭的问题。
+* [^] 修正 `Tooltip` 组件的 `v-outside` 参数类型问题导致有时无非正常关闭。
+* [^] 修正 `Schedule` 组件没有正确处理 `readonly`、`disabled` 和 `disabled-hour` prop 的问题。
+* [^] 修正 `Schedule` 组件的 `label` 插槽 `from` 参数错误的问题。
+
 ## 1.0.0-alpha.28
 
 ### 🐞 问题修复

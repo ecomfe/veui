@@ -25,6 +25,7 @@
                   'veui-schedule-shortcut': true,
                   'veui-schedule-shortcut-selected': shortcutChecked[i]
                 }"
+                :disabled="realDisabled || realReadonly"
                 @click="selectShortcut(i)"
               >
                 {{ label }}
@@ -36,6 +37,7 @@
                 :label="t('preset')"
                 :aria-label="t('selectPreset')"
                 :options="shortcutOptions"
+                :disabled="realDisabled || realReadonly"
                 @click="selectShortcut"
               />
             </template>
@@ -85,6 +87,7 @@
           :indeterminate="dayChecked[i - 1].indeterminate"
           :checked="dayChecked[i - 1].checked"
           :aria-label="getDayLabel(i - 1)"
+          :disabled="realDisabled || realReadonly"
           @change="toggleDay(week[i - 1], !dayChecked[i - 1].checked)"
         >
           {{ dayNames[i - 1] }}
@@ -114,7 +117,7 @@
             <button
               :ref="`hour-${week[i]}-${j}`"
               type="button"
-              :disabled="realDisabled || hour.isDisabled"
+              :disabled="realDisabled || realReadonly || hour.isDisabled"
               :class="mergeClass({ 'veui-schedule-selected': hour.isSelected }, week[i], j)"
               :tabindex="i === 0 && j === 0 ? '0' : '-1'"
               :aria-label="getHourLabel(i, j, hour)"
@@ -156,7 +159,7 @@
             >
               <slot
                 name="label"
-                :from="hour.from"
+                :from="hour.start"
                 :to="hour.end"
               >
                 {{
@@ -335,6 +338,15 @@ export default {
         return days
       }, [])
     },
+    disabledHours () {
+      return this.week.reduce((acc, day) => {
+        acc[day] = [...Array(24)]
+          .map((_, i) => (this.disabledHour(day, i) ? [i, i] : false))
+          .filter(i => i)
+
+        return acc
+      }, {})
+    },
     pickingSelected () {
       if (!this.pickingStart || !this.pickingEnd) {
         return null
@@ -433,10 +445,12 @@ export default {
     mergeRange (days, range) {
       return days.reduce((selected, day) => {
         let daySelected = selected[day]
+        let hours = merge([[...range]], this.disabledHours[day], { mode: 'substract' })
+
         if (!daySelected) {
-          selected[day] = [[...range]]
+          selected[day] = Array.isArray(hours[0]) ? hours : [[...hours]]
         } else {
-          selected[day] = merge(daySelected, range, { mode: this.mergeMode })
+          selected[day] = merge(daySelected, hours, { mode: this.mergeMode })
         }
 
         if (!selected[day] || !selected[day].length) {
@@ -487,11 +501,9 @@ export default {
       this.updateCurrent(dayIndex, hour)
     },
     pick () {
-      if (this.pickingStart) {
-        this.localSelected = this.pickingSelected
-        this.pickingStart = this.pickingEnd = null
-        this.$emit('select', this.localSelected)
-      }
+      this.localSelected = this.pickingSelected
+      this.pickingStart = this.pickingEnd = null
+      this.$emit('select', this.localSelected)
     },
     selectShortcut (i) {
       this.localSelected = this.realShortcuts[i].selected
@@ -499,7 +511,11 @@ export default {
     },
     toggleDay (day, checked) {
       if (checked) {
-        this.$set(this.localSelected, day, [[0, 23]])
+        this.$set(
+          this.localSelected,
+          day,
+          merge([[0, 23]], this.disabledHours[day], { mode: 'substract' })
+        )
       } else {
         this.$delete(this.localSelected, day)
       }
