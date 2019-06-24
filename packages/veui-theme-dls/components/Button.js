@@ -8,16 +8,13 @@ config.defaults(
     },
     ui: {
       style: {
-        values: ['translucent', 'primary', 'strong']
-      },
-      role: {
-        values: ['text', 'icon']
+        values: ['translucent', 'primary', 'strong', 'text', 'pure']
       },
       size: {
         values: ['xs', 's', 'm', 'l', 'xl']
       },
-      shape: {
-        values: ['pure']
+      role: {
+        values: ['icon']
       }
     }
   },

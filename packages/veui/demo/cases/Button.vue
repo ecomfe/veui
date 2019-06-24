@@ -235,19 +235,19 @@
       <icon name="times"/>
     </veui-button>
     <veui-button ui="primary icon xl">
-      取消
+      <icon name="search"/>
     </veui-button>
     <veui-button
       ui="primary icon"
       disabled
     >
-      取消
+      <icon name="search"/>
     </veui-button>
     <veui-button
       ui="primary icon"
       loading
     >
-      取消
+      <icon name="search"/>
     </veui-button>
   </p>
   <p>
