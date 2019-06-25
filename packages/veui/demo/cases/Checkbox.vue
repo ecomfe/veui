@@ -11,7 +11,8 @@
       false-value="未选"
     >
       当前数据：
-    </veui-checkbox> {{ current }}
+    </veui-checkbox>
+    {{ current }}
   </section>
   <section>
     <veui-checkbox v-model="checked1">
@@ -21,7 +22,7 @@
   <section>
     <veui-checkbox
       v-model="checked2"
-      ui="small"
+      ui="s"
     >
       正常状态
     </veui-checkbox>
@@ -34,7 +35,7 @@
   <section>
     <veui-checkbox
       v-model="checked4"
-      ui="small"
+      ui="s"
     >
       选中状态
     </veui-checkbox>
@@ -51,7 +52,7 @@
   <section>
     <veui-checkbox
       v-model="checked6"
-      ui="small"
+      ui="s"
       :indeterminate="indeterminate6"
       @change="indeterminate6 = false"
     >
@@ -69,7 +70,7 @@
   <section>
     <veui-checkbox
       v-model="checked8"
-      ui="small"
+      ui="s"
       disabled
     >
       选中无效状态
@@ -86,7 +87,7 @@
   <section>
     <veui-checkbox
       v-model="checked10"
-      ui="small"
+      ui="s"
       disabled
     >
       未选无效状态
@@ -104,7 +105,7 @@
   <section>
     <veui-checkbox
       v-model="checked12"
-      ui="small"
+      ui="s"
       disabled
       indeterminate
     >
@@ -142,7 +143,7 @@
       <veui-checkbox
         :checked="group.length > 0"
         :indeterminate="group.length > 0 && group.length < 3"
-        @change="group.length ? group = [] : group = ['A', 'B', 'C']"
+        @change="group.length ? (group = []) : (group = ['A', 'B', 'C'])"
       >
         全部
       </veui-checkbox>
