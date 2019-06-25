@@ -33,7 +33,12 @@ module.exports = {
     })
 
     config.resolve.alias
-      .set('vue$', process.env.NODE_ENV === 'test' ? 'vue/dist/vue.esm.js' : 'vue/dist/vue.runtime.esm.js')
+      .set(
+        'vue$',
+        process.env.NODE_ENV === 'test'
+          ? 'vue/dist/vue.esm.js'
+          : 'vue/dist/vue.runtime.esm.js'
+      )
       .set('veui', resolve('src'))
       .set('veui-theme-one-icons', resolve('../veui-theme-one-icons/icons'))
 

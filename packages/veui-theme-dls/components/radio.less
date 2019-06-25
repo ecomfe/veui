@@ -13,10 +13,6 @@
     opacity: 0;
   }
 
-  .veui-icon {
-    display: none;
-  }
-
   // .veui-field > & {
   //   line-height: @dls-button-height-m;
 
@@ -34,6 +30,10 @@
     border-radius: 50%;
     font-size: @dls-font-size-m;
     .veui-transition(border-color, background-color, box-shadow);
+
+    .veui-icon {
+      display: none;
+    }
 
     &::before {
       content: "";
