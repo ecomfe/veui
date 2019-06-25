@@ -2,6 +2,8 @@ import { mount } from '@vue/test-utils'
 import Autocomplete from '@/components/Autocomplete/Autocomplete'
 
 const INPUT = '.veui-input'
+const NATIVE_INPUT = '.veui-input input'
+const INPUT_PLACEHOLDER = '.veui-input .veui-input-placeholder'
 const SUGGESTIONS = '.veui-autocomplete-suggestions'
 const SUGGESTION_ITEM = '.veui-autocomplete-suggestions .veui-option'
 
@@ -58,13 +60,16 @@ describe('components/Autocomplete', function () {
     }, debugInBrowser)
 
     let { vm } = wrapper
-    wrapper.find(INPUT).trigger('click')
+    wrapper.find(NATIVE_INPUT).trigger('focus')
     await vm.$nextTick()
-    expect(wrapper.find(SUGGESTIONS).isVisible()).to.be.equal(true)
+    let options = wrapper.findAll(SUGGESTION_ITEM)
+    expect(options.isVisible()).to.be.equal(true)
+    expect(options.at(0).text() === 'male').to.be.equal(true)
+    expect(options.at(1).text() === 'female').to.be.equal(true)
     wrapper.destroy()
   })
 
-  it('should not open dropdown on input', async () => {
+  it('should only open dropdown on correct suggest-trigger', async () => {
     let wrapper = mount({
       ...componentOptions,
       template: '<veui-autocomplete suggest-trigger="input" :datasource="datasource"/>'
@@ -98,10 +103,10 @@ describe('components/Autocomplete', function () {
       template: '<veui-autocomplete v-model="value" strict suggest-trigger="focus" :datasource="groupedDatasource"/>'
     }, debugInBrowser)
     let { vm } = wrapper
-    let nativeInputWrap = wrapper.find(INPUT).find('input')
-    nativeInputWrap.element.value = '2'
-    nativeInputWrap.trigger('input')
     wrapper.find(INPUT).trigger('click')
+    let nativeInput = wrapper.find(NATIVE_INPUT)
+    nativeInput.element.value = '2'
+    nativeInput.trigger('input')
     await vm.$nextTick()
     let options = wrapper.findAll(SUGGESTION_ITEM)
 
@@ -119,7 +124,7 @@ describe('components/Autocomplete', function () {
       ...componentOptions,
       template: '<veui-autocomplete placeholder="placeholder"/>'
     }, debugInBrowser)
-    expect(wrapper.find('.veui-input-placeholder').contains('placeholder')).to.equal(false)
+    expect(wrapper.find(INPUT_PLACEHOLDER).text() === 'placeholder').to.equal(true)
     wrapper.destroy()
   })
 
@@ -131,7 +136,7 @@ describe('components/Autocomplete', function () {
     let { vm } = wrapper
     vm.$refs.autocomplete.focus()
     await vm.$nextTick()
-    expect(wrapper.find('input').element === document.activeElement).to.equal(true)
+    expect(wrapper.find(NATIVE_INPUT).element === document.activeElement).to.equal(true)
     wrapper.destroy()
   })
 
@@ -142,14 +147,13 @@ describe('components/Autocomplete', function () {
     }, debugInBrowser)
 
     let { vm } = wrapper
-    let input = wrapper.find('input')
+    let input = wrapper.find(NATIVE_INPUT)
     input.trigger('focus')
     await vm.$nextTick()
     input.trigger('keydown', { key: 'Down' })
-    await vm.$nextTick()
     input.trigger('keydown', { key: 'Up' })
-    await vm.$nextTick()
     input.trigger('keydown', { key: 'Down' })
+    await vm.$nextTick()
     let options = wrapper.findAll(SUGGESTION_ITEM)
     expect(options.at(0).classes('focus-visible')).to.equal(true)
 
@@ -160,7 +164,6 @@ describe('components/Autocomplete', function () {
     input.trigger('focus')
     await vm.$nextTick()
     input.trigger('keydown', { key: 'Left' })
-    await vm.$nextTick()
     input.trigger('keydown', { key: 'Esc' })
     await vm.$nextTick()
     expect(wrapper.find(SUGGESTIONS).isVisible()).to.be.equal(false)
