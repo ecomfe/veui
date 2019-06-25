@@ -2,8 +2,7 @@
 <div id="app">
   <nav id="main-nav">
     <h1>
-      <a href="https://github.com/ecomfe/veui">
-        VEUI components </a><veui-icon
+      <a href="https://github.com/ecomfe/veui"> VEUI components </a><veui-icon
         name="brands/github"
         scale="6"
       />
@@ -13,7 +12,10 @@
         v-for="(route, index) in routes"
         :key="index"
       >
-        <router-link :to="route">
+        <router-link
+          :to="route"
+          :class="{ disabled: route.disabled }"
+        >
           {{ route.name }}
         </router-link>
       </li>
@@ -168,11 +170,16 @@ export default {
       &:hover {
         font-weight: 500;
       }
+
+      &.disabled {
+        opacity: 0.3;
+        pointer-events: none;
+      }
     }
   }
 
   .router-link-active {
-    color: #3998fc;
+    color: #3d88f2;
     background-color: @light-bg-color;
     font-weight: 500;
   }
