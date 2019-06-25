@@ -1,14 +1,11 @@
 @import "../lib.less";
 
 .veui-radio {
-  @lh: @dls-line-height-m;
-
-  position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   color: @dls-radio-font-color;
   font-size: @dls-radio-font-size-m;
-  line-height: @lh;
-  padding-left: @dls-radio-size-m + @dls-radio-spacing;
+  line-height: @dls-line-height-m;
   cursor: pointer;
 
   input {
@@ -20,15 +17,6 @@
     display: none;
   }
 
-  &-label,
-  &-box {
-    display: inline-block;
-  }
-
-  &-label {
-    vertical-align: middle;
-  }
-
   // .veui-field > & {
   //   line-height: @dls-button-height-m;
 
@@ -38,9 +26,9 @@
   // }
 
   &-box {
-    .absolute(50%, _, _, 0);
-    transform: translateY(-50%);
+    display: flex;
     .size(@dls-radio-size-m);
+    margin-right: @dls-radio-spacing;
     border: 1px solid @dls-radio-border-color;
     background-color: @dls-radio-background-color;
     border-radius: 50%;
@@ -49,12 +37,11 @@
 
     &::before {
       content: "";
-      display: block;
+      margin: auto;
       .size(@dls-radio-dot-size-m);
       background-color: @dls-radio-dot-color;
       border-radius: 50%;
-      .absolute(50%, 50%);
-      transform: translate(-50%, -50%) scale(0);
+      transform: scale(0);
       .veui-transition(background-color, transform);
     }
   }
@@ -64,7 +51,7 @@
     background-color: @dls-radio-background-color-checked;
 
     &::before {
-      transform: translate(-50%, -50%) scale(1);
+      transform: scale(1);
     }
   }
 
@@ -126,7 +113,6 @@
 
   &[ui~="s"] {
     font-size: @dls-radio-font-size-s;
-    padding-left: @dls-radio-size-s + @dls-radio-spacing;
   }
 
   // .veui-field[ui~="s"] > &[ui~="s"] {
