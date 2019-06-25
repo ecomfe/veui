@@ -43,17 +43,20 @@ export default [
   {
     path: '/alert',
     name: 'Alert',
-    component: Alert
+    component: Alert,
+    disabled: true
   },
   {
     path: '/alert-box',
     name: 'AlertBox',
-    component: AlertBox
+    component: AlertBox,
+    disabled: true
   },
   {
     path: '/breadcrumb',
     name: 'Breadcrumb',
-    component: Breadcrumb
+    component: Breadcrumb,
+    disabled: true
   },
   {
     path: '/button',
@@ -63,17 +66,20 @@ export default [
   {
     path: '/button-group',
     name: 'ButtonGroup',
-    component: ButtonGroup
+    component: ButtonGroup,
+    disabled: true
   },
   {
     path: '/calendar',
     name: 'Calendar',
-    component: Calendar
+    component: Calendar,
+    disabled: true
   },
   {
     path: '/carousel',
     name: 'Carousel',
-    component: Carousel
+    component: Carousel,
+    disabled: true
   },
   {
     path: '/checkbox',
@@ -83,47 +89,56 @@ export default [
   {
     path: '/check-button-group',
     name: 'CheckButtonGroup',
-    component: CheckButtonGroup
+    component: CheckButtonGroup,
+    disabled: true
   },
   {
     path: '/checkbox-group',
     name: 'CheckboxGroup',
-    component: CheckboxGroup
+    component: CheckboxGroup,
+    disabled: true
   },
   {
     path: '/date-picker',
     name: 'DatePicker',
-    component: DatePicker
+    component: DatePicker,
+    disabled: true
   },
   {
     path: '/dialog',
     name: 'Dialog',
-    component: Dialog
+    component: Dialog,
+    disabled: true
   },
   {
     path: '/dropdown',
     name: 'Dropdown',
-    component: Dropdown
+    component: Dropdown,
+    disabled: true
   },
   {
     path: '/form',
     name: 'Form',
-    component: Form
+    component: Form,
+    disabled: true
   },
   {
     path: '/grid',
     name: 'Grid',
-    component: Grid
+    component: Grid,
+    disabled: true
   },
   {
     path: '/icon',
     name: 'Icon',
-    component: Icon
+    component: Icon,
+    disabled: true
   },
   {
     path: '/input',
     name: 'Input',
-    component: Input
+    component: Input,
+    disabled: true
   },
   {
     path: '/link',
@@ -133,22 +148,26 @@ export default [
   {
     path: '/number-input',
     name: 'NumberInput',
-    component: NumberInput
+    component: NumberInput,
+    disabled: true
   },
   {
     path: '/overlay',
     name: 'Overlay',
-    component: Overlay
+    component: Overlay,
+    disabled: true
   },
   {
     path: '/pagination/:page?',
     name: 'Pagination',
-    component: Pagination
+    component: Pagination,
+    disabled: true
   },
   {
     path: '/progress',
     name: 'Progress',
-    component: Progress
+    component: Progress,
+    disabled: true
   },
   {
     path: '/radio',
@@ -158,57 +177,68 @@ export default [
   {
     path: '/radio-button-group',
     name: 'RadioButtonGroup',
-    component: RadioButtonGroup
+    component: RadioButtonGroup,
+    disabled: true
   },
   {
     path: '/radio-group',
     name: 'RadioGroup',
-    component: RadioGroup
+    component: RadioGroup,
+    disabled: true
   },
   {
     path: '/region-picker',
     name: 'RegionPicker',
-    component: RegionPicker
+    component: RegionPicker,
+    disabled: true
   },
   {
     path: '/schedule',
     name: 'Schedule',
-    component: Schedule
+    component: Schedule,
+    disabled: true
   },
   {
     path: '/searchbox',
     name: 'Searchbox',
-    component: Searchbox
+    component: Searchbox,
+    disabled: true
   },
   {
     path: '/select',
     name: 'Select',
-    component: Select
+    component: Select,
+    disabled: true
   },
   {
     path: '/slider',
     name: 'Slider',
-    component: Slider
+    component: Slider,
+    disabled: true
   },
   {
     path: '/steps',
     name: 'Steps',
-    component: Steps
+    component: Steps,
+    disabled: true
   },
   {
     path: '/switch',
     name: 'Switch',
-    component: Switch
+    component: Switch,
+    disabled: true
   },
   {
     path: '/table',
     name: 'Table',
-    component: Table
+    component: Table,
+    disabled: true
   },
   {
     path: '/tabs',
     name: 'Tabs',
     component: Tabs,
+    disabled: true,
     redirect: '/tabs/button',
     children: [
       {
@@ -232,31 +262,37 @@ export default [
   {
     path: '/textarea',
     name: 'Textarea',
-    component: Textarea
+    component: Textarea,
+    disabled: true
   },
   {
     path: '/toast',
     name: 'Toast',
-    component: Toast
+    component: Toast,
+    disabled: true
   },
   {
     path: '/tooltip',
     name: 'Tooltip',
-    component: Tooltip
+    component: Tooltip,
+    disabled: true
   },
   {
     path: '/transfer',
     name: 'Transfer',
-    component: Transfer
+    component: Transfer,
+    disabled: true
   },
   {
     path: '/uploader',
     name: 'Uploader',
-    component: Uploader
+    component: Uploader,
+    disabled: true
   },
   {
     path: '/tree',
     name: 'Tree',
-    component: Tree
+    component: Tree,
+    disabled: true
   }
 ]
