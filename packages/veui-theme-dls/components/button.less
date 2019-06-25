@@ -8,6 +8,7 @@
   border: 1px solid @dls-button-border-color-normal;
   background-color: @dls-button-background-color-normal;
   color: @dls-button-font-color-normal;
+  cursor: pointer;
   .veui-button-transition();
 
   .make-metrics(@size) {
@@ -65,6 +66,10 @@
     pointer-events: none;
     cursor: default;
     background-color: @dls-button-background-color-normal-active;
+  }
+
+  &-loading .veui-icon:not(&-loading-icon) {
+    display: none;
   }
 
   &[ui~="strong"] {
@@ -172,6 +177,7 @@
     &.veui-disabled {
       background-color: @dls-button-background-color-text-disabled;
       color: @dls-button-font-color-text-disabled;
+      font-weight: @dls-button-font-weight-text;
     }
   }
 

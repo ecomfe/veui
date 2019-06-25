@@ -1,4 +1,5 @@
 @import "./lib.less";
+@import "./normalize.less";
 
 /* Overriding est variables */
 @support-ie-version: 9;
@@ -7,8 +8,6 @@
 @default-heading-font-family: @veui-font-family;
 @default-border-radius: 2px;
 
-.global-normalize();
-
 *,
 *::before,
 *::after {
@@ -16,8 +15,8 @@
 }
 
 html {
-  font-size: 14px;
-  font-weight: @veui-font-weight-normal;
+  font-size: @dls-font-size-m;
+  font-weight: @dls-font-weight-1;
 }
 
 // only enable on Retina displays
@@ -34,19 +33,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: @veui-font-weight-bold;
-}
-
-input,
-button,
-textarea {
-  font: inherit;
-  font-weight: inherit;
-  color: inherit;
-}
-
-button {
-  border-radius: 0;
+  font-weight: @dls-font-weight-2;
 }
 
 .veui-disabled {
@@ -55,10 +42,6 @@ button {
 
 .veui-sr-only {
   .veui-invisible();
-}
-
-a {
-  text-decoration: none;
 }
 
 a {
