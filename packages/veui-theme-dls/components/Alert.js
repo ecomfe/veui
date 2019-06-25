@@ -19,10 +19,10 @@ config.defaults(
       close: 'times'
     },
     parts: {
-      prev: 'link',
-      next: 'link',
-      close: 'link primary',
-      closeLabel: 'link'
+      prev: 'icon',
+      next: 'icon',
+      close: 'icon',
+      closeLabel: 'text'
     }
   },
   'alert'

@@ -90,18 +90,21 @@
     <p>
       <veui-radio
         v-model="group"
+        name="group"
         value="A"
       >
         A
       </veui-radio>
       <veui-radio
         v-model="group"
+        name="group"
         value="B"
       >
         B
       </veui-radio>
       <veui-radio
         v-model="group"
+        name="group"
         value="C"
       >
         C
