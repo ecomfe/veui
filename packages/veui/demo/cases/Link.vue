@@ -2,41 +2,31 @@
 <article>
   <h1><code>&lt;veui-link&gt;</code></h1>
   <section>
-    <veui-link to="button">
-      Button
-    </veui-link>
+    <veui-link to="button">Button</veui-link>
     &larr; default
     <veui-link
       ui="s"
       to="button"
-    >
-      Button
-    </veui-link>
+    >Button</veui-link>
     &larr; small
     <veui-link
       ui="m"
       to="button"
-    >
-      Button
-    </veui-link>
+    >Button</veui-link>
     &larr; middle
   </section>
   <section>
     <veui-link
       ui="strong"
       to="button"
-    >
-      Button
-    </veui-link>
+    >Button</veui-link>
     &larr; strong
   </section>
   <section>
     <veui-link
       to="#/dialog"
       native
-    >
-      Dialog
-    </veui-link>
+    >Dialog</veui-link>
     &larr; <code>native</code>
   </section>
   <section>
@@ -45,18 +35,14 @@
       native
       target="_blank"
       rel="next"
-    >
-      Baidu.com
-    </veui-link>
+    >Baidu.com</veui-link>
     &larr; <code>native</code> &amp; <code>target="_blank"</code>
   </section>
   <section>
     <veui-link
       to="icon"
       disabled
-    >
-      Icon
-    </veui-link>
+    >Icon</veui-link>
     &larr; <code>disabled</code>
   </section>
   <section>
