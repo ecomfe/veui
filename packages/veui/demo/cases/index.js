@@ -39,6 +39,7 @@ import Grid from './Grid'
 import Link from './Link'
 import Tree from './Tree'
 import Autocomplete from './Autocomplete'
+import Tag from './Tag'
 
 export default [
   {
@@ -210,6 +211,11 @@ export default [
     path: '/table',
     name: 'Table',
     component: Table
+  },
+  {
+    path: '/tag',
+    name: 'Tag',
+    component: Tag
   },
   {
     path: '/tabs',
