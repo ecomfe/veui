@@ -5,9 +5,14 @@
 /* Document
    ========================================================================== */
 
+/**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+ */
+
 html {
-  line-height: @dls-line-height-m;
-  -webkit-text-size-adjust: 100%;
+  line-height: @dls-line-height-m; /* 1 */
+  -webkit-text-size-adjust: 100%; /* 2 */
 }
 
 /* Sections
@@ -53,17 +58,6 @@ hr {
   overflow: visible; /* 2 */
 }
 
-/**
- * 1. Correct the inheritance and scaling of font size in all browsers.
- * 2. Correct the odd `em` font sizing in all browsers.
- */
-
-pre {
-  /* stylelint-disable-next-line font-family-no-duplicate-names */
-  font-family: monospace, monospace; /* 1 */
-  font-size: 1em; /* 2 */
-}
-
 /* Text-level semantics
    ========================================================================== */
 
@@ -100,6 +94,7 @@ strong {
  * 2. Correct the odd `em` font sizing in all browsers.
  */
 
+pre,
 code,
 kbd,
 samp {
