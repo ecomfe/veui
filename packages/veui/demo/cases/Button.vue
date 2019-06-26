@@ -83,25 +83,17 @@
     </veui-button>
   </p>
   <p>
-    <veui-button ui="xs">
-      <icon name="times"/>取消
+    <veui-button ui="xs"> <veui-icon name="times"/>取消 </veui-button>
+    <veui-button ui="s"> <veui-icon name="times"/>取消 </veui-button>
+    <veui-button @click="text = !text">
+      <veui-icon name="times"/><template
+        v-if="text"
+      >取消</template>
     </veui-button>
-    <veui-button ui="s">
-      <icon name="times"/>取消
-    </veui-button>
-    <veui-button> <icon name="times"/>取消 </veui-button>
-    <veui-button ui="l">
-      <icon name="times"/>取消
-    </veui-button>
-    <veui-button ui="xl">
-      <icon name="times"/>取消
-    </veui-button>
-    <veui-button disabled>
-      <icon name="times"/>取消
-    </veui-button>
-    <veui-button loading>
-      <icon name="times"/>取消
-    </veui-button>
+    <veui-button ui="l"> <veui-icon name="times"/>取消 </veui-button>
+    <veui-button ui="xl"> <veui-icon name="times"/>取消 </veui-button>
+    <veui-button disabled> <veui-icon name="times"/>取消 </veui-button>
+    <veui-button loading> <veui-icon name="times"/>取消 </veui-button>
   </p>
   <p>
     <veui-button ui="translucent xs">
@@ -163,31 +155,31 @@
   </p>
   <p>
     <veui-button ui="icon xs">
-      <icon name="search"/>
+      <veui-icon name="search"/>
     </veui-button>
     <veui-button ui="icon s">
-      <icon name="search"/>
+      <veui-icon name="search"/>
     </veui-button>
     <veui-button ui="icon">
-      <icon name="search"/>
+      <veui-icon name="search"/>
     </veui-button>
     <veui-button ui="icon l">
-      <icon name="search"/>
+      <veui-icon name="search"/>
     </veui-button>
     <veui-button ui="icon xl">
-      <icon name="search"/>
+      <veui-icon name="search"/>
     </veui-button>
     <veui-button
       ui="icon"
       disabled
     >
-      <icon name="search"/>
+      <veui-icon name="search"/>
     </veui-button>
     <veui-button
       ui="icon"
       loading
     >
-      <icon name="search"/>
+      <veui-icon name="search"/>
     </veui-button>
   </p>
 </article>
@@ -204,8 +196,13 @@ import 'veui-theme-one-icons/times'
 export default {
   name: 'button-demo',
   components: {
-    Icon,
+    'veui-icon': Icon,
     'veui-button': Button
+  },
+  data () {
+    return {
+      text: false
+    }
   },
   mounted () {
     this.$children.forEach(child => {

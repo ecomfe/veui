@@ -4,7 +4,8 @@
     'veui-button': true,
     'veui-button-loading': loading,
     'veui-disabled': disabled,
-    'focus-visible': focusVisible
+    'focus-visible': focusVisible,
+    'veui-button-icon-only': iconOnly
   }"
   :ui="realUi"
   v-bind="attrs"
@@ -51,6 +52,7 @@ export default {
   },
   data () {
     return {
+      iconOnly: false,
       focusVisible: false
     }
   },
@@ -61,7 +63,26 @@ export default {
       return props
     }
   },
+  created () {
+    this.checkIcon()
+  },
+  updated () {
+    this.checkIcon()
+  },
   methods: {
+    checkIcon () {
+      // Temporary hack
+      let content = (this.$slots.default || []).filter(
+        node => node.tag || node.text !== ''
+      )
+      if (content) {
+        let node = content[0]
+        this.iconOnly =
+          content.length === 1 &&
+          node.tag &&
+          node.componentOptions.Ctor.options.name === 'veui-icon'
+      }
+    },
     focus () {
       this.$el.focus()
     },
