@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     checkIcon () {
-      // Temporary hack
+      // Temporary hack until we can find a pure CSS solution
       let content = (this.$slots.default || []).filter(
         node => node.tag || node.text !== ''
       )
@@ -79,7 +79,7 @@ export default {
         let node = content[0]
         this.iconOnly =
           content.length === 1 &&
-          node.tag &&
+          node.componentOptions &&
           node.componentOptions.Ctor.options.name === 'veui-icon'
       }
     },
