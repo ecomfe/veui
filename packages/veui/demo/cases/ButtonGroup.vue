@@ -4,7 +4,7 @@
   <section>
     <veui-checkbox
       v-model="disabled"
-      ui="small"
+      ui="s"
     >
       禁用全部
     </veui-checkbox>
@@ -12,7 +12,7 @@
   <section>
     <veui-checkbox
       v-model="items[2].disabled"
-      ui="small"
+      ui="s"
     >
       禁用「删除」
     </veui-checkbox>
@@ -20,7 +20,7 @@
   <section>
     <veui-radio-group
       v-model="size"
-      ui="small"
+      ui="s"
       :items="sizes"
     />
   </section>
@@ -33,14 +33,14 @@
   </section>
   <section>
     <veui-button-group
-      :ui="size"
+      :ui="`strong ${size}`"
       :items="items"
       :disabled="disabled"
     />
   </section>
   <section>
     <veui-button-group
-      :ui="`alt ${size}`"
+      :ui="size"
       :items="items"
       :disabled="disabled"
     />
@@ -63,11 +63,11 @@ export default {
       disabled: false,
       size: '',
       sizes: [
-        { label: '大', value: 'large' },
-        { label: '中', value: '' },
-        { label: '小', value: 'small' },
-        { label: '迷你', value: 'tiny' },
-        { label: '微型', value: 'micro' }
+        { label: '超大', value: 'xl' },
+        { label: '大', value: 'l' },
+        { label: '中', value: 'm' },
+        { label: '小', value: 's' },
+        { label: '超小', value: 'xs' }
       ],
       items: [
         { label: '新建', event: 'add' },

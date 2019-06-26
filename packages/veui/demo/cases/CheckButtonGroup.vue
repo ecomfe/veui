@@ -40,7 +40,7 @@
       <veui-check-button-group
         v-model="picked3"
         :items="data3"
-        ui="micro"
+        ui="s"
         :disabled="disabled"
       >
         <template slot-scope="props">
