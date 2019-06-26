@@ -2,11 +2,7 @@
 @import "./normalize.less";
 
 /* Overriding est variables */
-@support-ie-version: 9;
-@default-text-color: @veui-text-color-normal;
-@default-base-font-family: @veui-font-family;
-@default-heading-font-family: @veui-font-family;
-@default-border-radius: 2px;
+@support-ie-version: 11;
 
 *,
 *::before,
@@ -17,6 +13,7 @@
 html {
   font-size: @dls-font-size-m;
   font-weight: @dls-font-weight-1;
+  font-family: @dls-font-family;
 }
 
 // only enable on Retina displays
