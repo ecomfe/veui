@@ -1,86 +1,58 @@
 @import "../lib.less";
 
 .veui-button-group {
-  .make-size(@padding) {
-    &:first-child {
-      padding-right: @padding + 1px;
-    }
-
-    &:last-child {
-      padding-left: @padding + 1px;
-    }
-
-    &:not(:first-child):not(:last-child) {
-      .padding(_, @padding + 1px);
-    }
-
-    &[ui~="primary"],
-    &[ui~="alt"] {
-      &:first-child {
-        padding-right: @padding;
-      }
-
-      &:last-child {
-        padding-left: @padding;
-      }
-
-      &:not(:first-child):not(:last-child) {
-        .padding(_, @padding);
-      }
-    }
-  }
-
-  display: inline-block;
+  display: inline-flex;
 
   .veui-button {
     position: relative;
     margin-left: -1px;
+    border-radius: 0;
+
+    &:first-child {
+      margin-left: 0;
+      .border-left-radius(@dls-button-border-radius-m);
+    }
+
+    &:last-child {
+      .border-right-radius(@dls-button-border-radius-m);
+    }
+
+    &.focus-visible {
+      z-index: 1;
+    }
 
     &.veui-disabled {
       position: static;
     }
+  }
 
-    &:first-child {
-      margin-left: 0;
+  .veui-button[ui~="primary"] + .veui-button[ui~="primary"] {
+    &::before {
+      content: "";
+      .absolute(-1px, _, -1px, -1px);
+      width: 1px;
+
+      /* TODO: replace with final variable */
+      background-color: @dls-button-background-color-primary-hover;
     }
 
-    .make-size(20px);
-
-    &:hover,
-    &:focus {
-      &:not(.veui-disabled) {
-        z-index: 1;
-      }
+    &:hover::before,
+    &.focus-visible::before {
+      background-color: transparent;
     }
 
-    &[ui~="primary"],
-    &[ui~="alt"] {
-      margin: 0 0 0 1px;
-
-      &:first-child {
-        margin-left: 0;
-      }
-    }
-
-    &[ui~="small"],
-    &[ui~="tiny"],
-    &[ui~="micro"] {
-      .make-size(10px);
+    &.veui-disabled::before {
+      background-color: @dls-color-brand-1;
     }
   }
 
-  &-disabled .veui-button {
-    &,
-    &[ui] {
-      .border-color(_, #fff);
+  &[ui~="s"] .veui-button {
+    &:first-child {
+      .border-left-radius(@dls-button-border-radius-s);
+    }
 
-      &:first-child {
-        border-left-color: transparent;
-      }
-
-      &:last-child {
-        border-right-color: transparent;
-      }
+    &:last-child {
+      .border-right-radius(@dls-button-border-radius-s);
     }
   }
 }
