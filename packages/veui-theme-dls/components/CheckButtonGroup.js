@@ -6,10 +6,6 @@ config.defaults(
       size: {
         values: ['s', 'm'],
         inherit: true
-      },
-      style: {
-        values: ['icon'],
-        inherit: true
       }
     },
     parts: {
