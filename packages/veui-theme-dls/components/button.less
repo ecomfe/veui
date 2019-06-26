@@ -43,6 +43,10 @@
     margin-right: @dls-button-content-spacing;
   }
 
+  &-icon-only .veui-icon {
+    margin-right: 0;
+  }
+
   &:focus {
     outline: none;
   }
@@ -202,10 +206,6 @@
     &.veui-disabled {
       background-color: @dls-button-background-color-icon-disabled;
       color: @dls-button-font-color-icon-disabled;
-    }
-
-    .veui-icon {
-      margin-right: 0;
     }
 
     &.veui-button-loading {

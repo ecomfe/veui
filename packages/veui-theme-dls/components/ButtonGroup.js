@@ -4,11 +4,11 @@ config.defaults(
   {
     ui: {
       style: {
-        values: ['alt', 'primary'],
+        values: ['primary', 'strong'],
         inherit: true
       },
       size: {
-        values: ['large', 'small', 'tiny', 'micro'],
+        values: ['xs', 's', 'm', 'l', 'xl'],
         inherit: true
       }
     }
