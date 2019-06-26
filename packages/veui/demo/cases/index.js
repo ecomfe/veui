@@ -73,8 +73,7 @@ export default [
   {
     path: '/button-group',
     name: 'ButtonGroup',
-    component: ButtonGroup,
-    disabled: true
+    component: ButtonGroup
   },
   {
     path: '/calendar',
@@ -96,8 +95,7 @@ export default [
   {
     path: '/check-button-group',
     name: 'CheckButtonGroup',
-    component: CheckButtonGroup,
-    disabled: true
+    component: CheckButtonGroup
   },
   {
     path: '/checkbox-group',
@@ -184,8 +182,7 @@ export default [
   {
     path: '/radio-button-group',
     name: 'RadioButtonGroup',
-    component: RadioButtonGroup,
-    disabled: true
+    component: RadioButtonGroup
   },
   {
     path: '/radio-group',
