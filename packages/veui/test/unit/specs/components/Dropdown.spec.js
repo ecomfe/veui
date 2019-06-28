@@ -83,7 +83,8 @@ describe('components/Dropdown', () => {
         overlayClass: 'test-overlay-class'
       },
       scopedSlots: {
-        option: '<div class="test-veui-option" slot-scope="props">{{props.label}}</div>'
+        option:
+          '<div class="test-veui-option" slot-scope="props">{{props.label}}</div>'
       },
       sync: false,
       attachToDocument: true
