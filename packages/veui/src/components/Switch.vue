@@ -3,6 +3,7 @@
   :class="{
     'veui-switch': true,
     'veui-switch-on': localChecked,
+    'veui-switch-loading': loading,
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
   }"
@@ -18,7 +19,13 @@
     v-on="boxListeners"
   >
   <div class="veui-switch-switcher">
-    <div class="veui-switch-button"/>
+    <div class="veui-switch-button">
+      <veui-icon
+        v-if="loading"
+        spin
+        :name="icons.loading"
+      />
+    </div>
   </div>
   <template v-if="$slots.default">
     <div class="veui-switch-label">
@@ -29,6 +36,7 @@
 </template>
 
 <script>
+import Icon from './Icon'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { pick } from 'lodash'
@@ -36,11 +44,15 @@ import { MOUSE_EVENTS, FOCUS_EVENTS, KEYBOARD_EVENTS } from '../utils/dom'
 
 export default {
   name: 'veui-switch',
+  components: {
+    'veui-icon': Icon
+  },
   mixins: [ui, input],
   model: {
     prop: 'model'
   },
   props: {
+    loading: Boolean,
     /* eslint-disable vue/require-prop-types */
     trueValue: {
       default: true
@@ -61,7 +73,7 @@ export default {
     attrs () {
       return {
         name: this.realName,
-        disabled: this.realDisabled || this.realReadonly
+        disabled: this.loading || this.realDisabled || this.realReadonly
       }
     },
     boxListeners () {
