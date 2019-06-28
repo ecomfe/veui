@@ -132,7 +132,7 @@ describe('components/NumberInput', () => {
     expect(input.element.value).to.equal('3')
   })
 
-  it('should handle decimalPlace prop correctly', () => {
+  it('should handle decimalPlace prop correctly', async () => {
     let wrapper = mount(NumberInput,
       {
         propsData: {
@@ -145,8 +145,10 @@ describe('components/NumberInput', () => {
     )
 
     let input = wrapper.find('input.veui-input-input')
-    input.setValue(2.34)
-    expect(input.element.value).to.equal('2.34')
+    input.setValue(2.333)
+    wrapper.find('input').trigger('blur')
+    await wrapper.vm.$nextTick()
+    expect(input.element.value).to.equal('2.33')
   })
 
   it('should handle change event', done => {
