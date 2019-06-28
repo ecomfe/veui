@@ -117,18 +117,55 @@ describe('components/Schedule', () => {
     let { vm } = wrapper
 
     // hourClass
-    expect(rows.at(0).findAll('td').at(20).find('button').classes()).to.include('night')
-    expect(rows.at(5).findAll('td').at(20).find('button').classes()).to.include('night')
-    expect(rows.at(5).findAll('td').at(20).find('button').classes()).to.include('weekend')
+    expect(
+      rows
+        .at(0)
+        .findAll('td')
+        .at(20)
+        .find('button')
+        .classes()
+    ).to.include('night')
+    expect(
+      rows
+        .at(5)
+        .findAll('td')
+        .at(20)
+        .find('button')
+        .classes()
+    ).to.include('night')
+    expect(
+      rows
+        .at(5)
+        .findAll('td')
+        .at(20)
+        .find('button')
+        .classes()
+    ).to.include('weekend')
 
     // disabledHour
-    expect(rows.at(0).find('td button').attributes('disabled')).to.equal('disabled')
+    expect(
+      rows
+        .at(0)
+        .find('td button')
+        .attributes('disabled')
+    ).to.equal('disabled')
 
     // head-day-checkbox
     wrapper.find('.veui-schedule-head-day-item input').trigger('change')
     await vm.$nextTick()
-    expect(rows.at(0).find('td button').attributes('disabled')).to.equal('disabled')
-    expect(rows.at(0).findAll('td button').at(5).attributes('disabled')).to.not.equal('disabled')
+    expect(
+      rows
+        .at(0)
+        .find('td button')
+        .attributes('disabled')
+    ).to.equal('disabled')
+    expect(
+      rows
+        .at(0)
+        .findAll('td button')
+        .at(5)
+        .attributes('disabled')
+    ).to.not.equal('disabled')
 
     // shortcuts
     wrapper.find('.veui-dropdown-button').trigger('click')
@@ -142,7 +179,10 @@ describe('components/Schedule', () => {
 
     wrapper.find('.veui-dropdown-button').trigger('click')
     await vm.$nextTick()
-    wrapper.findAll('.veui-dropdown-options .veui-option').at(1).trigger('click')
+    wrapper
+      .findAll('.veui-dropdown-options .veui-option')
+      .at(1)
+      .trigger('click')
     await vm.$nextTick()
     expect(vm.selected).to.deep.equal({
       0: [[0, 23]],
@@ -150,18 +190,31 @@ describe('components/Schedule', () => {
     })
 
     // shortcutsDisplay
-    expect(wrapper.find('.veui-schedule-shortcuts').contains('.veui-dropdown')).to.equal(true)
+    expect(
+      wrapper.find('.veui-schedule-shortcuts').contains('.veui-dropdown')
+    ).to.equal(true)
     vm.shortcutsDisplay = 'inline'
     await vm.$nextTick()
-    expect(wrapper.find('.veui-schedule-shortcuts').contains('.veui-dropdown')).to.not.equal(true)
+    expect(
+      wrapper.find('.veui-schedule-shortcuts').contains('.veui-dropdown')
+    ).to.not.equal(true)
     expect(wrapper.findAll('.veui-schedule-shortcut').length).to.equal(2)
 
     // statuses
-    expect(wrapper.find('.veui-schedule-legend .veui-schedule-legend-selected').text()).to.equal('已选')
-    expect(wrapper.find('.veui-schedule-legend .veui-schedule-legend-available').text()).to.equal('可选')
+    expect(
+      wrapper
+        .find('.veui-schedule-legend .veui-schedule-legend-selected')
+        .text()
+    ).to.equal('已选')
+    expect(
+      wrapper
+        .find('.veui-schedule-legend .veui-schedule-legend-available')
+        .text()
+    ).to.equal('可选')
 
     // disabled
-    let button = wrapper.findAll('.veui-schedule-table-interaction tr')
+    let button = wrapper
+      .findAll('.veui-schedule-table-interaction tr')
       .at(4)
       .findAll('td button')
       .at(10)
@@ -170,18 +223,24 @@ describe('components/Schedule', () => {
     vm.disabled = true
     await vm.$nextTick()
     expect(button.attributes('disabled')).to.equal('disabled')
-    expect(wrapper.find('.veui-schedule-head-day-item input')
-      .attributes('disabled')).to.equal('disabled')
-    expect(wrapper.find('.veui-schedule-shortcut').attributes('disabled')).to.equal('disabled')
+    expect(
+      wrapper.find('.veui-schedule-head-day-item input').attributes('disabled')
+    ).to.equal('disabled')
+    expect(
+      wrapper.find('.veui-schedule-shortcut').attributes('disabled')
+    ).to.equal('disabled')
 
     // readonly
     vm.disabled = false
     vm.readonly = true
     await vm.$nextTick()
     expect(button.attributes('disabled')).to.equal('disabled')
-    expect(wrapper.find('.veui-schedule-head-day-item input')
-      .attributes('disabled')).to.equal('disabled')
-    expect(wrapper.find('.veui-schedule-shortcut').attributes('disabled')).to.equal('disabled')
+    expect(
+      wrapper.find('.veui-schedule-head-day-item input').attributes('disabled')
+    ).to.equal('disabled')
+    expect(
+      wrapper.find('.veui-schedule-shortcut').attributes('disabled')
+    ).to.equal('disabled')
 
     wrapper.destroy()
   })
@@ -214,7 +273,8 @@ describe('components/Schedule', () => {
       }
     )
 
-    let button = wrapper.findAll('.veui-schedule-table-interaction tr')
+    let button = wrapper
+      .findAll('.veui-schedule-table-interaction tr')
       .at(6)
       .findAll('td button')
       .at(7)
@@ -230,7 +290,9 @@ describe('components/Schedule', () => {
       }
     })
 
-    expect(wrapper.find('.customized-header').text()).to.equal('schedule header')
+    expect(wrapper.find('.customized-header').text()).to.equal(
+      'schedule header'
+    )
     wrapper.destroy()
   })
 
@@ -242,7 +304,9 @@ describe('components/Schedule', () => {
       }
     })
 
-    expect(wrapper.find('.veui-schedule-header h2').text()).to.equal('Header Content')
+    expect(wrapper.find('.veui-schedule-header h2').text()).to.equal(
+      'Header Content'
+    )
     wrapper.destroy()
   })
 
@@ -266,8 +330,12 @@ describe('components/Schedule', () => {
       }
     })
 
-    expect(wrapper.find('.veui-schedule-header .customized-shortcuts').text()).to.equal('shortcuts')
-    expect(wrapper.find('.veui-schedule-header .customized-legend').text()).to.equal('legend')
+    expect(
+      wrapper.find('.veui-schedule-header .customized-shortcuts').text()
+    ).to.equal('shortcuts')
+    expect(
+      wrapper.find('.veui-schedule-header .customized-legend').text()
+    ).to.equal('legend')
     wrapper.destroy()
   })
 
@@ -291,8 +359,7 @@ describe('components/Schedule', () => {
             ]
           }
         },
-        template:
-        `
+        template: `
           <veui-schedule :statuses="statuses">
             <span slot="legend-label" slot-scope="prop">{{ prop.value }}</span>
             <span slot="hour" slot-scope="prop">{{ prop.day }} {{ prop.hour }}</span>
@@ -313,8 +380,12 @@ describe('components/Schedule', () => {
       }
     )
 
-    expect(wrapper.find('.veui-schedule-legend-item span').text()).to.equal('selected')
-    expect(wrapper.find('.veui-schedule-table-interaction tr button').text()).to.equal('1 0')
+    expect(wrapper.find('.veui-schedule-legend-item span').text()).to.equal(
+      'selected'
+    )
+    expect(
+      wrapper.find('.veui-schedule-table-interaction tr button').text()
+    ).to.equal('1 0')
 
     let button = wrapper.find('.veui-schedule-table-interaction tr button')
     button.trigger('mousedown')
@@ -323,9 +394,13 @@ describe('components/Schedule', () => {
 
     await wrapper.vm.$nextTick()
 
-    let cells = wrapper.find('.veui-schedule-table-interaction tr').findAll('td')
+    let cells = wrapper
+      .find('.veui-schedule-table-interaction tr')
+      .findAll('td')
     expect(cells.at(0).classes()).to.include('veui-schedule-selected')
-    expect(wrapper.find('.veui-schedule-table-selected td').text()).to.equal('0:00–2:00')
+    expect(wrapper.find('.veui-schedule-table-selected td').text()).to.equal(
+      '0:00–2:00'
+    )
 
     expect(wrapper.find('.tooltip-content').text()).to.equal('1 1')
     wrapper.destroy()

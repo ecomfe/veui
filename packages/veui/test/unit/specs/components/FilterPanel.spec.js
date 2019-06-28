@@ -43,8 +43,8 @@ describe('components/FilterPanel', () => {
       scopedSlots: {
         default: `
           <div>
-            <div 
-              v-for="item in props.items" 
+            <div
+              v-for="item in props.items"
               :key="item.value"
               class="test-datasource">{{item.label}}</div>
           </div>
@@ -56,8 +56,7 @@ describe('components/FilterPanel', () => {
     expect(
       wrapper
         .find('.veui-filter-panel-content-main')
-        .findAll('.test-datasource')
-        .length
+        .findAll('.test-datasource').length
     ).to.equal(3)
 
     wrapper.destroy()
@@ -71,11 +70,9 @@ describe('components/FilterPanel', () => {
       sync: false
     })
 
-    expect(
-      wrapper
-        .find('.veui-filter-panel-no-data')
-        .text()
-    ).to.equal('no data')
+    expect(wrapper.find('.veui-filter-panel-no-data').text()).to.equal(
+      'no data'
+    )
 
     wrapper.destroy()
   })
@@ -91,11 +88,9 @@ describe('components/FilterPanel', () => {
       sync: false
     })
 
-    expect(
-      wrapper
-        .find('.veui-filter-panel-no-data')
-        .text()
-    ).to.equal('no data')
+    expect(wrapper.find('.veui-filter-panel-no-data').text()).to.equal(
+      'no data'
+    )
 
     wrapper.destroy()
   })
@@ -121,7 +116,7 @@ describe('components/FilterPanel', () => {
       scopedSlots: {
         default: `
           <div>
-            <div 
+            <div
               v-for="item in props.items"
               v-if="!item.hidden"
               :key="item.value"
