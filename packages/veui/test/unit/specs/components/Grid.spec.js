@@ -115,7 +115,9 @@ describe('components/GridContainer', () => {
       }
     )
 
-    expect(getStyle(wrapper.find('.veui-grid-row').element).display).to.equal('flex')
+    expect(getStyle(wrapper.find('.veui-grid-row').element).display).to.equal(
+      'flex'
+    )
 
     wrapper.destroy()
   })
@@ -251,14 +253,11 @@ describe('components/GridColumn', () => {
 function getStyle (element) {
   let cssText = element.style.cssText || ''
   let arr = cssText.split(';')
-  return arr.reduce(
-    (obj, item) => {
-      if (!item) {
-        return obj
-      }
-      let [key, value] = item.split(':')
-      return { ...obj, [trim(key)]: trim(value) }
-    },
-    {}
-  )
+  return arr.reduce((obj, item) => {
+    if (!item) {
+      return obj
+    }
+    let [key, value] = item.split(':')
+    return { ...obj, [trim(key)]: trim(value) }
+  }, {})
 }

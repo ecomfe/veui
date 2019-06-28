@@ -86,19 +86,26 @@ describe('components/ButtonGroup', () => {
           ]
         }
       },
-      template: '<veui-button-group ui="primary" :items="items" @click="handleClick" @undo="handleUndo" @redo="handleRedo" />'
+      template:
+        '<veui-button-group ui="primary" :items="items" @click="handleClick" @undo="handleUndo" @redo="handleRedo" />'
     }
 
     const wrapper = mount(ButtonGroupClick)
 
-    wrapper.findAll('.veui-button').at(0).trigger('click')
+    wrapper
+      .findAll('.veui-button')
+      .at(0)
+      .trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.hasUndo).to.equal(true)
     expect(wrapper.vm.clicktime).to.equal(1)
     expect(wrapper.vm.index).to.equal(0)
     expect(wrapper.vm.value).to.equal('undo')
 
-    wrapper.findAll('.veui-button').at(1).trigger('click')
+    wrapper
+      .findAll('.veui-button')
+      .at(1)
+      .trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.hasUndo).to.equal(true)
     expect(wrapper.vm.clicktime).to.equal(2)
