@@ -144,7 +144,9 @@ describe('components/Calendar', () => {
       }
     })
 
-    expect(wrapper.vm.getDayNames()[0] === wrapper.vm.daysShort[5]).to.equal(true)
+    expect(wrapper.vm.getDayNames()[0] === wrapper.vm.daysShort[5]).to.equal(
+      true
+    )
 
     wrapper.destroy()
   })
@@ -156,7 +158,7 @@ describe('components/Calendar', () => {
       }
     })
 
-    expect(wrapper.find('.veui-calendar-aux button').exists()).to.be.false
+    expect(wrapper.find('.veui-calendar-aux button').exists()).to.equal(false)
   })
 
   it('should support customized date-class correctly.', () => {
@@ -184,7 +186,11 @@ describe('components/Calendar', () => {
     })
 
     const index = Math.floor(Math.random() * 2) + 1
-    const button = wrapper.findAll('tbody tr').at(index).findAll('td button').at(5)
+    const button = wrapper
+      .findAll('tbody tr')
+      .at(index)
+      .findAll('td button')
+      .at(5)
     expect(button.attributes('disabled')).to.equal('disabled')
 
     wrapper.destroy()
@@ -198,9 +204,15 @@ describe('components/Calendar', () => {
     })
 
     expect(wrapper.attributes('aria-disabled')).to.equal('true')
-    expect(wrapper.find('.veui-calendar-day button').attributes('disabled')).to.equal('disabled')
-    expect(wrapper.find('.veui-calendar-prev').attributes('disabled')).to.equal('disabled')
-    expect(wrapper.find('.veui-calendar-select').attributes('disabled')).to.equal('disabled')
+    expect(
+      wrapper.find('.veui-calendar-day button').attributes('disabled')
+    ).to.equal('disabled')
+    expect(wrapper.find('.veui-calendar-prev').attributes('disabled')).to.equal(
+      'disabled'
+    )
+    expect(
+      wrapper.find('.veui-calendar-select').attributes('disabled')
+    ).to.equal('disabled')
 
     wrapper.destroy()
   })
@@ -213,9 +225,15 @@ describe('components/Calendar', () => {
     })
 
     expect(wrapper.attributes('aria-readonly')).to.equal('true')
-    expect(wrapper.find('.veui-calendar-day button').attributes('disabled')).to.equal('disabled')
-    expect(wrapper.find('.veui-calendar-prev').attributes('disabled')).to.equal('disabled')
-    expect(wrapper.find('.veui-calendar-select').attributes('disabled')).to.equal('disabled')
+    expect(
+      wrapper.find('.veui-calendar-day button').attributes('disabled')
+    ).to.equal('disabled')
+    expect(wrapper.find('.veui-calendar-prev').attributes('disabled')).to.equal(
+      'disabled'
+    )
+    expect(
+      wrapper.find('.veui-calendar-select').attributes('disabled')
+    ).to.equal('disabled')
 
     wrapper.destroy()
   })
@@ -230,7 +248,9 @@ describe('components/Calendar', () => {
     const { vm } = wrapper
     expect(vm.year).to.equal(1987)
     expect(vm.month).to.equal(6)
-    expect(wrapper.find('.veui-calendar-selected button').text()).to.equal('11')
+    expect(wrapper.find('.veui-calendar-selected button').text()).to.equal(
+      '11'
+    )
 
     wrapper.destroy()
   })
@@ -258,13 +278,20 @@ describe('components/Calendar', () => {
   it('should support date slot correctly.', () => {
     const wrapper = mount(Calendar, {
       scopedSlots: {
-        date: '<template slot-scope="{year, month,date}">{{ year }}-{{ month + 1 }}-{{ date }}</template>'
+        date:
+          '<template slot-scope="{year, month,date}">{{ year }}-{{ month + 1 }}-{{ date }}</template>'
       }
     })
 
     const date = new Date()
-    const target = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-    expect(wrapper.find('.veui-calendar-today button').text().trim()).to.equal(target)
+    const target = `${date.getFullYear()}-${date.getMonth() +
+      1}-${date.getDate()}`
+    expect(
+      wrapper
+        .find('.veui-calendar-today button')
+        .text()
+        .trim()
+    ).to.equal(target)
   })
 
   it('should handle select.', async () => {
@@ -336,7 +363,8 @@ describe('components/Calendar', () => {
           times: 0
         }
       },
-      template: '<veui-calendar v-model="selected" multiple @select="handleSelect" />',
+      template:
+        '<veui-calendar v-model="selected" multiple @select="handleSelect" />',
       methods: {
         handleSelect (selected) {
           this.selected = selected
@@ -402,7 +430,8 @@ describe('components/Calendar', () => {
           selectProgress: null
         }
       },
-      template: '<veui-calendar range @selectprogress="handleSelectProgress" />',
+      template:
+        '<veui-calendar range @selectprogress="handleSelectProgress" />',
       methods: {
         handleSelectProgress (selectProgress) {
           this.selectProgress = selectProgress
@@ -434,7 +463,8 @@ describe('components/Calendar', () => {
           selectProgress: null
         }
       },
-      template: '<veui-calendar multiple range v-model="selected" @selectprogress="handleSelectProgress" />',
+      template:
+        '<veui-calendar multiple range v-model="selected" @selectprogress="handleSelectProgress" />',
       methods: {
         handleSelectProgress (selectProgress) {
           this.selectProgress = selectProgress
