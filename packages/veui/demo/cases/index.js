@@ -229,8 +229,7 @@ export default [
   {
     path: '/switch',
     name: 'Switch',
-    component: Switch,
-    disabled: true
+    component: Switch
   },
   {
     path: '/table',
