@@ -85,7 +85,12 @@ describe('components/Breadcrumb', () => {
       }
     })
 
-    expect(wrapper.findAll(BreadcrumbItem).at(2).props('type')).to.equal('text')
+    expect(
+      wrapper
+        .findAll(BreadcrumbItem)
+        .at(2)
+        .props('type')
+    ).to.equal('text')
   })
 
   it('should handle `redirect` event correctly.', () => {
