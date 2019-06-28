@@ -160,9 +160,7 @@ describe('components/Tree', () => {
     expect(wrapper.findAll('.veui-tree-item-expanded').length).to.equal(2)
     expect(wrapper.findAll('.veui-tree-item-group').length).to.equal(2)
     expect(
-      wrapper
-        .find('.veui-tree-item')
-        .classes('veui-tree-item-expanded')
+      wrapper.find('.veui-tree-item').classes('veui-tree-item-expanded')
     ).to.equal(true)
     expect(
       wrapper
@@ -239,7 +237,9 @@ describe('components/Tree', () => {
     })
 
     expect(wrapper.find('.test-item-slot').exists()).to.equal(true)
-    expect(wrapper.find('.test-item-slot').text()).to.equal('Infused item slot')
+    expect(wrapper.find('.test-item-slot').text()).to.equal(
+      'Infused item slot'
+    )
 
     wrapper.destroy()
   })
@@ -257,7 +257,9 @@ describe('components/Tree', () => {
     })
 
     expect(wrapper.find('.test-item-label-slot').exists()).to.equal(true)
-    expect(wrapper.find('.test-item-label-slot').text()).to.equal('Infused item-label slot')
+    expect(wrapper.find('.test-item-label-slot').text()).to.equal(
+      'Infused item-label slot'
+    )
 
     wrapper.destroy()
   })
@@ -279,9 +281,7 @@ describe('components/Tree', () => {
     let { vm } = wrapper
 
     expect(
-      wrapper
-        .find('.veui-tree-item')
-        .classes('veui-tree-item-expanded')
+      wrapper.find('.veui-tree-item').classes('veui-tree-item-expanded')
     ).to.equal(true)
 
     wrapper
@@ -388,23 +388,33 @@ describe('components/Tree', () => {
     wrapper.find('.veui-tree-item').trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()
 
-    expect(wrapper.find('.veui-tree-item').classes('focus-visible')).to.equal(true)
-    expect(wrapper.find('.veui-tree-item').classes('veui-tree-item-expanded')).to.equal(true)
+    expect(wrapper.find('.veui-tree-item').classes('focus-visible')).to.equal(
+      true
+    )
+    expect(
+      wrapper.find('.veui-tree-item').classes('veui-tree-item-expanded')
+    ).to.equal(true)
 
     wrapper.find('.veui-tree-item').trigger('keydown', { key: 'Left' })
     await vm.$nextTick()
 
-    expect(wrapper.find('.veui-tree-item').classes('veui-tree-item-expanded')).to.equal(false)
+    expect(
+      wrapper.find('.veui-tree-item').classes('veui-tree-item-expanded')
+    ).to.equal(false)
 
     wrapper.find('.veui-tree-item').trigger('keydown', { key: 'Right' })
     await vm.$nextTick()
 
-    expect(wrapper.find('.veui-tree-item').classes('veui-tree-item-expanded')).to.equal(true)
+    expect(
+      wrapper.find('.veui-tree-item').classes('veui-tree-item-expanded')
+    ).to.equal(true)
 
     wrapper.find('.veui-tree-item').trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()
 
-    expect(wrapper.find('.veui-tree-item').classes('veui-tree-item-expanded')).to.equal(false)
+    expect(
+      wrapper.find('.veui-tree-item').classes('veui-tree-item-expanded')
+    ).to.equal(false)
 
     wrapper.find('.veui-tree-item').trigger('blur')
     await vm.$nextTick()
