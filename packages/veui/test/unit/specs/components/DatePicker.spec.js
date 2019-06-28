@@ -175,7 +175,11 @@ describe('components/DatePicker', () => {
       }
     })
 
-    let button = wrapper.findAll('tbody tr').at(2).findAll('td button').at(5)
+    let button = wrapper
+      .findAll('tbody tr')
+      .at(2)
+      .findAll('td button')
+      .at(5)
 
     expect(button.attributes('disabled')).to.equal('disabled')
 
@@ -231,7 +235,9 @@ describe('components/DatePicker', () => {
       }
     })
 
-    expect(wrapper.find('.veui-date-picker-label').text()).to.equal('Select a date')
+    expect(wrapper.find('.veui-date-picker-label').text()).to.equal(
+      'Select a date'
+    )
 
     wrapper.destroy()
   })
@@ -257,7 +263,9 @@ describe('components/DatePicker', () => {
     await vm.$nextTick()
 
     let reg = /^(\d{2})\/(\d{2})\/(\d{4})$/
-    expect(reg.test(wrapper.find('.veui-date-picker-label').text())).to.equal(true)
+    expect(reg.test(wrapper.find('.veui-date-picker-label').text())).to.equal(
+      true
+    )
 
     wrapper.destroy()
   })
@@ -340,7 +348,12 @@ describe('components/DatePicker', () => {
 
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.findAll('.veui-calendar>div').at(2).classes()).to.include('veui-date-picker-shortcuts')
+    expect(
+      wrapper
+        .findAll('.veui-calendar>div')
+        .at(2)
+        .classes()
+    ).to.include('veui-date-picker-shortcuts')
 
     wrapper.destroy()
   })
@@ -355,7 +368,9 @@ describe('components/DatePicker', () => {
     let box = wrapper.find('.veui-date-picker-label')
     expect(box.contains('span.customized-slot')).to.equal(true)
 
-    expect(wrapper.find('.customized-slot').text()).to.equal('placeholder slot')
+    expect(wrapper.find('.customized-slot').text()).to.equal(
+      'placeholder slot'
+    )
     wrapper.destroy()
   })
 
@@ -368,7 +383,9 @@ describe('components/DatePicker', () => {
 
     let year = new Date().getFullYear()
 
-    expect(wrapper.find('.veui-calendar-day button').text()).to.equal('' + year)
+    expect(wrapper.find('.veui-calendar-day button').text()).to.equal(
+      '' + year
+    )
 
     wrapper.destroy()
   })
@@ -402,7 +419,9 @@ describe('components/DatePicker', () => {
     await wrapper.vm.$nextTick()
 
     let reg = /^(\d{4})\/(\d{1,2})\/(\d{1,2})$/
-    expect(reg.test(wrapper.find('.veui-date-picker-label').text())).to.equal(true)
+    expect(reg.test(wrapper.find('.veui-date-picker-label').text())).to.equal(
+      true
+    )
 
     wrapper.destroy()
   })
