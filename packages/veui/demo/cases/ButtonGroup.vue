@@ -61,7 +61,7 @@ export default {
   data () {
     return {
       disabled: false,
-      size: '',
+      size: 'm',
       sizes: [
         { label: '超大', value: 'xl' },
         { label: '大', value: 'l' },
