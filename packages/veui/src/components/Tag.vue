@@ -5,9 +5,7 @@
   class="veui-tag"
   :class="`veui-tag-${type}`"
 >
-  <span>
-    <slot/>
-  </span>
+  <slot/>
   <veui-button
     v-if="closable"
     class="veui-tag-close"
