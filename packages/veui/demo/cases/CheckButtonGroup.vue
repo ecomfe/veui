@@ -25,7 +25,7 @@
       <veui-check-button-group
         v-model="picked2"
         :items="data2"
-        ui="small alt"
+        ui="s"
         :disabled="disabled"
       >
         <template slot-scope="props">
