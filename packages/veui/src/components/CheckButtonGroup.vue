@@ -7,27 +7,33 @@
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"
 >
-  <veui-button
-    v-for="(item, index) in items"
-    :key="index"
-    :ui="localValue.indexOf(item.value) !== -1 ? uiParts.checked : null"
-    :class="{
-      'veui-button-selected': localValue.indexOf(item.value) !== -1
-    }"
-    :disabled="item.disabled || realDisabled || realReadonly"
-    role="option"
-    :aria-selected="localValue.indexOf(item.value) !== -1"
-    :aria-posinset="index + 1"
-    :aria-setsize="items.length"
-    @click="handleChange(item.value)"
-  >
-    <slot
-      v-bind="item"
-      :index="index"
+  <template v-for="(item, index) in items">
+    <veui-button
+      :key="`b-${index}`"
+      :ui="localValue.indexOf(item.value) !== -1 ? uiParts.checked : null"
+      :class="{
+        'veui-button-selected': localValue.indexOf(item.value) !== -1
+      }"
+      :disabled="item.disabled || realDisabled || realReadonly"
+      role="option"
+      :aria-selected="localValue.indexOf(item.value) !== -1"
+      :aria-posinset="index + 1"
+      :aria-setsize="items.length"
+      @click="handleChange(item.value)"
     >
-      {{ item.label }}
-    </slot>
-  </veui-button>
+      <slot
+        v-bind="item"
+        :index="index"
+      >
+        {{ item.label }}
+      </slot>
+      <veui-icon
+        :key="`i-${index}`"
+        class="veui-check-button-group-checkmark"
+        :name="icons.check"
+      />
+    </veui-button>
+  </template>
 </div>
 </template>
 
@@ -37,11 +43,13 @@ import ui from '../mixins/ui'
 import { focusIn } from '../utils/dom'
 import { includes, findIndex } from 'lodash'
 import Button from './Button'
+import Icon from './Icon'
 
 export default {
   name: 'veui-check-button-group',
   components: {
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-icon': Icon
   },
   mixins: [ui, input],
   model: {

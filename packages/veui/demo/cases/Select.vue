@@ -364,7 +364,7 @@ export default {
       },
       keyword: '',
       phone: null,
-      hero: null,
+      hero: 'baidu',
       disabled: true,
       selected: true,
       icon: true,

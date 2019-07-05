@@ -17,12 +17,13 @@
       .border-right-radius(@dls-button-border-radius-m);
     }
 
+    &:hover,
     &.focus-visible {
       z-index: 1;
     }
 
     &.veui-disabled {
-      position: static;
+      z-index: 0;
     }
   }
 
@@ -31,7 +32,7 @@
       content: "";
       .absolute(-1px, _, -1px, -1px);
       width: 1px;
-      background-color: @dls-color-brand-4;
+      background-color: @dls-checkbox-strong-checked-separator-color;
     }
 
     &.focus-visible::before {
@@ -39,7 +40,7 @@
     }
 
     &.veui-disabled::before {
-      background-color: @dls-color-brand-1;
+      background-color: @dls-checkbox-strong-checked-separator-color-disabled;
     }
   }
 
