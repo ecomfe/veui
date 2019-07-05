@@ -40,7 +40,7 @@ export default {
   data () {
     return {
       labelId: uniqueId('veui-select-label-'),
-      localValue: this.value,
+      localValue: null,
       outsideRefs: ['button']
     }
   },
@@ -92,6 +92,9 @@ export default {
         this.$emit('change', val)
       }
     }
+  },
+  mounted () {
+    this.localValue = this.value
   },
   methods: {
     handleSelect (value) {
