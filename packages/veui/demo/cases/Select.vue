@@ -363,7 +363,7 @@ export default {
         return label.indexOf(this.keyword) !== -1
       },
       keyword: '',
-      phone: 'google',
+      phone: null,
       hero: 'baidu',
       disabled: true,
       selected: true,
