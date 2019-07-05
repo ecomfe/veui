@@ -73,7 +73,10 @@ export default {
     checkIcon () {
       // Temporary hack until we can find a pure CSS solution
       let content = (this.$slots.default || []).filter(
-        node => node.tag || node.text !== ''
+        node =>
+          (node.tag || node.text !== '') &&
+          (node.data &&
+            node.data.staticClass !== 'veui-check-button-group-checkmark')
       )
       if (content) {
         let node = content[0]
