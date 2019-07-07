@@ -5,7 +5,6 @@ import {
   isString,
   isObject,
   assign,
-  find,
   keys
 } from 'lodash'
 import Vue from 'vue'
@@ -174,18 +173,6 @@ export function resolveOverlayPosition (position) {
   }
 }
 
-export function getNumberArg (modifiers, defaultTime) {
-  let timing
-  find(keys(modifiers), key => {
-    let keyNum = Number(key)
-    if (!isNaN(keyNum) && keyNum >= 0 && modifiers[key]) {
-      timing = keyNum
-      return true
-    }
-  })
-  return timing != null ? timing : defaultTime
-}
-
 const RE_INDEX = /\d+/
 export function deepSet (obj, path, val) {
   let segments = path
@@ -220,4 +207,17 @@ export function normalizeLength (val) {
     return Number(val) > 0 ? `${val}px` : null
   }
   return val
+}
+
+export function hasClass (vnode, clazz) {
+  let { data } = vnode
+
+  if (!data) {
+    return false
+  }
+
+  return (
+    (data.class || {})[clazz] ||
+    (data.staticClass && includes(data.staticClass.split(/\s+/), clazz))
+  )
 }
