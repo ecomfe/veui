@@ -33,6 +33,7 @@ import Icon from './Icon'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import { hasClass } from '../utils/dom'
+import { hasClass as vnodeHasClass } from '../utils/helper'
 
 export default {
   name: 'veui-button',
@@ -73,17 +74,16 @@ export default {
     checkIcon () {
       // Temporary hack until we can find a pure CSS solution
       let content = (this.$slots.default || []).filter(
-        node =>
-          (node.tag || node.text !== '') &&
-          (node.data &&
-            node.data.staticClass !== 'veui-check-button-group-checkmark')
+        vnode =>
+          (vnode.tag || vnode.text !== '') &&
+          !vnodeHasClass(vnode, 'veui-check-button-group-checkmark')
       )
       if (content) {
-        let node = content[0]
+        let vnode = content[0]
         this.iconOnly =
           content.length === 1 &&
-          node.componentOptions &&
-          node.componentOptions.Ctor.options.name === 'veui-icon'
+          vnode.componentOptions &&
+          vnode.componentOptions.Ctor.options.name === 'veui-icon'
       }
     },
     focus () {
