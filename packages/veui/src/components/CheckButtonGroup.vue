@@ -7,33 +7,32 @@
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"
 >
-  <template v-for="(item, index) in items">
-    <veui-button
-      :key="`b-${index}`"
-      :ui="localValue.indexOf(item.value) !== -1 ? uiParts.checked : null"
-      :class="{
-        'veui-button-selected': localValue.indexOf(item.value) !== -1
-      }"
-      :disabled="item.disabled || realDisabled || realReadonly"
-      role="option"
-      :aria-selected="localValue.indexOf(item.value) !== -1"
-      :aria-posinset="index + 1"
-      :aria-setsize="items.length"
-      @click="handleChange(item.value)"
+  <veui-button
+    v-for="(item, index) in items"
+    :key="`b-${item.value}`"
+    :ui="localValue.indexOf(item.value) !== -1 ? uiParts.checked : null"
+    :class="{
+      'veui-button-selected': localValue.indexOf(item.value) !== -1
+    }"
+    :disabled="item.disabled || realDisabled || realReadonly"
+    role="option"
+    :aria-selected="localValue.indexOf(item.value) !== -1"
+    :aria-posinset="index + 1"
+    :aria-setsize="items.length"
+    @click="handleChange(item.value)"
+  >
+    <slot
+      v-bind="item"
+      :index="index"
     >
-      <slot
-        v-bind="item"
-        :index="index"
-      >
-        {{ item.label }}
-      </slot>
-      <veui-icon
-        :key="`i-${index}`"
-        class="veui-check-button-group-checkmark"
-        :name="icons.check"
-      />
-    </veui-button>
-  </template>
+      {{ item.label }}
+    </slot>
+    <veui-icon
+      :key="`i-${item.value}`"
+      class="veui-check-button-group-checkmark"
+      :name="icons.check"
+    />
+  </veui-button>
 </div>
 </template>
 
