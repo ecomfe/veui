@@ -30,7 +30,6 @@
         v-bind="inputProps"
         @blur="props.closeSuggestions"
         @keydown="props.handleKeydown"
-        @click="handleTrigger($event, props, 'focus')"
         @input="handleTrigger($event, props, 'input')"
         @focus="handleTrigger($event, props, 'focus')"
       />
@@ -55,14 +54,16 @@
       >
         <template
           slot="option-label"
-          slot-scope="{value, range}"
+          slot-scope="{ value, range }"
         >
           <template v-if="range && range.end">
             <span
               v-if="range.start"
               class="veui-autocomplete-suggestion-prefix"
             >{{ value.slice(0, range.start) }}</span>
-            <mark class="veui-autocomplete-suggestion-matched">{{ value.slice(range.start, range.end) }}</mark>
+            <mark class="veui-autocomplete-suggestion-matched">{{
+              value.slice(range.start, range.end)
+            }}</mark>
             <span
               v-if="range.end < value.length"
               class="veui-autocomplete-suggestion-suffix"
@@ -138,7 +139,7 @@ export default {
       return includes(this.realTriggers, mode)
     },
     handleTrigger (val, props, eventName) {
-      if (this.openSuggestionOn(eventName)) {
+      if (this.openSuggestionOn(eventName) && !this.realReadonly) {
         props.openSuggestions()
       }
       if (eventName === 'input') {
