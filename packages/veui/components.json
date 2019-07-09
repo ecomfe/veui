@@ -272,6 +272,10 @@
     "path": "Tabs/index.js"
   },
   {
+    "name": "Tag",
+    "path": "Tag.vue"
+  },
+  {
     "name": "Textarea",
     "path": "Textarea.vue"
   },
