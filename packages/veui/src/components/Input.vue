@@ -6,26 +6,36 @@
     'veui-input-hidden': type === 'hidden',
     'veui-input-invalid': realInvalid,
     'veui-input-autofill': autofill,
+    'veui-input-has-before': !!($slots.before || $slots['before-label']),
+    'veui-input-has-after': !!($slots.after || $slots['after-label']),
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled
   }"
   :ui="realUi"
   v-on="containerListeners"
 >
-  <template v-if="$slots.before">
+  <template v-if="$slots.before || $slots['before-label']">
     <div class="veui-input-before">
-      <slot name="before"/>
+      <slot name="before">
+        <div class="veui-input-before-label">
+          <slot name="before-label"/>
+        </div>
+      </slot>
     </div>
   </template>
   <label class="veui-input-main">
     <span
-      v-if="type !== 'hidden'"
-      v-show="empty"
+      v-show="empty && editable"
       class="veui-input-placeholder"
       @selectstart.prevent="() => false"
     >
       {{ placeholder }}
     </span>
+    <template v-if="$slots.prepend">
+      <div class="veui-input-prepend">
+        <slot name="prepend"/>
+      </div>
+    </template>
     <input
       ref="input"
       v-model="localValue"
@@ -39,24 +49,32 @@
       @compositionend="handleCompositionEnd"
       @change="$emit('change', $event.target.value, $event)"
     >
+    <template v-if="$slots.append || clearable">
+      <div class="veui-input-append">
+        <veui-button
+          v-if="clearable"
+          v-show="editable && !empty"
+          class="veui-input-clear"
+          :class="{
+            'veui-input-clear-has-append': !!$slots.append
+          }"
+          :ui="uiParts.clear"
+          :aria-label="t('clear')"
+          @click.stop="clear"
+        >
+          <veui-icon :name="icons.remove"/>
+        </veui-button>
+        <slot name="append"/>
+      </div>
+    </template>
   </label>
-  <span
-    v-if="clearable"
-    v-show="editable && !empty"
-    class="veui-input-clear"
-  >
-    <button
-      type="button"
-      :aria-label="t('clear')"
-      class="veui-input-clear-button"
-      @click.stop="clear"
-    >
-      <veui-icon :name="icons.remove"/>
-    </button>
-  </span>
-  <template v-if="$slots.after">
+  <template v-if="$slots.after || $slots['after-label']">
     <div class="veui-input-after">
-      <slot name="after"/>
+      <slot name="after">
+        <div class="veui-input-after-label">
+          <slot name="after-label"/>
+        </div>
+      </slot>
     </div>
   </template>
 </div>
@@ -68,6 +86,7 @@ import input from '../mixins/input'
 import activatable from '../mixins/activatable'
 import i18n from '../mixins/i18n'
 import { includes, pick } from 'lodash'
+import Button from './Button'
 import Icon from './Icon'
 import { MOUSE_EVENTS, KEYBOARD_EVENTS, FOCUS_EVENTS } from '../utils/dom'
 
@@ -76,6 +95,7 @@ const TYPE_LIST = ['text', 'password', 'hidden']
 export default {
   name: 'veui-input',
   components: {
+    'veui-button': Button,
     'veui-icon': Icon
   },
   mixins: [ui, input, activatable, i18n],
@@ -128,7 +148,8 @@ export default {
     empty () {
       // compositionValue 不会是数字 0
       return (
-        !this.compositionValue && (this.value == null || this.value === '')
+        !this.compositionValue &&
+        (this.localValue == null || this.localValue === '')
       )
     },
     realSelectOnFocus () {
