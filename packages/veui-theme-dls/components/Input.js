@@ -8,9 +8,12 @@ config.defaults(
     },
     ui: {
       size: {
-        values: ['large', 'small', 'tiny', 'micro'],
+        values: ['xs', 's', 'm', 'l'],
         inherit: true
       }
+    },
+    parts: {
+      clear: 'icon'
     }
   },
   'input'
