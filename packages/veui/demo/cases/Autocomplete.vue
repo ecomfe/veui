@@ -2,6 +2,31 @@
 <article>
   <h1><code>&lt;veui-autocomplete&gt;</code></h1>
   <section>
+    <h2>普通</h2>
+    <veui-autocomplete
+      v-model="inputValue"
+      :datasource="suggestions"
+    />
+  </section>
+  <section>
+    <h2>禁用</h2>
+    <veui-autocomplete
+      v-model="inputValue"
+      :datasource="suggestions"
+      :suggest-trigger="['focus', 'input']"
+      disabled
+    />
+  </section>
+  <section>
+    <h2>只读</h2>
+    <veui-autocomplete
+      v-model="inputValue"
+      :datasource="suggestions"
+      :suggest-trigger="['focus', 'input']"
+      readonly
+    />
+  </section>
+  <section>
     <h2>列表型数据，input 时下拉</h2>
     <veui-autocomplete
       v-model="value"
@@ -62,7 +87,7 @@ export default {
     return {
       value: null,
       treeValue: '',
-      inputValue: '222',
+      inputValue: 'male',
       suggestions: [
         {
           value: 'male'
@@ -74,10 +99,7 @@ export default {
       treeSuggestions: [
         {
           label: '组1',
-          options: [
-            '1',
-            '11'
-          ]
+          options: ['1', '11']
         },
         {
           label: '组2',
