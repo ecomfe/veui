@@ -29,7 +29,9 @@ describe('components/Searchbox', () => {
         }
       },
       render () {
-        return <Searchbox value={null} onInput={val => this.handleInput(val)} />
+        return (
+          <Searchbox value={null} onInput={val => this.handleInput(val)} />
+        )
       }
     })
 
@@ -63,21 +65,23 @@ describe('components/Searchbox', () => {
   })
 
   it('should support customized trigger correctly.', async () => {
-    let wrapper = mount({
-      data () {
-        return {
-          suggestions: datasource,
-          suggestTrigger: 'input'
-        }
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            suggestions: datasource,
+            suggestTrigger: 'input'
+          }
+        },
+        components: {
+          'veui-searchbox': Searchbox
+        },
+        template: `<veui-searchbox overlayClass="test-overlay-class" :suggestions="suggestions" :suggestTrigger="suggestTrigger"/>`
       },
-      components: {
-        'veui-searchbox': Searchbox
-      },
-      template: `<veui-searchbox overlayClass="test-overlay-class" :suggestions="suggestions" :suggestTrigger="suggestTrigger"/>`
-    },
-    {
-      sync: false
-    })
+      {
+        sync: false
+      }
+    )
 
     let { vm } = wrapper
     let input = wrapper.find('input')
@@ -113,6 +117,59 @@ describe('components/Searchbox', () => {
     expect(suggestWrapper.element.style.display).to.equal('none')
 
     wrapper.destroy()
+  })
+
+  it('should render correctly on `disable` or `readonly` state', async () => {
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            suggestions: datasource,
+            suggestTrigger: ['input', 'focus'],
+            readonly: false,
+            disabled: true
+          }
+        },
+        components: {
+          'veui-searchbox': Searchbox
+        },
+        template: `<veui-searchbox
+          overlayClass="test-overlay-class"
+          :suggestions="suggestions"
+          :suggestTrigger="suggestTrigger"
+          :readonly="readonly"
+          :disabled="disabled"
+        />`
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    let input = wrapper.find('input')
+    let suggestWrapper = wrapper.find('.test-overlay-class')
+    input.element.value = 'box'
+
+    input.trigger('input')
+    await vm.$nextTick()
+    expect(suggestWrapper.element.style.display).to.equal('none')
+
+    input.trigger('focus')
+    await vm.$nextTick()
+    expect(suggestWrapper.element.style.display).to.equal('none')
+
+    vm.readonly = true
+    vm.disabled = false
+    await vm.$nextTick()
+
+    input.trigger('input')
+    await vm.$nextTick()
+    expect(suggestWrapper.element.style.display).to.equal('none')
+
+    input.trigger('focus')
+    await vm.$nextTick()
+    expect(suggestWrapper.element.style.display).to.equal('none')
   })
 
   it('should support other props correctly.', async () => {
@@ -167,7 +224,9 @@ describe('components/Searchbox', () => {
             this.suggestions = datasource
 
             let suggestWrapper = wrapper.find('.test-overlay-class')
-            expect(suggestWrapper.attributes('style').display).to.not.equal('none')
+            expect(suggestWrapper.attributes('style').display).to.not.equal(
+              'none'
+            )
 
             wrapper.destroy()
             done()
@@ -214,7 +273,9 @@ describe('components/Searchbox', () => {
     input.element.value = 'box'
     input.trigger('input')
 
-    wrapper.find('.test-overlay-class .veui-searchbox-suggestion-item').trigger('click')
+    wrapper
+      .find('.test-overlay-class .veui-searchbox-suggestion-item')
+      .trigger('click')
 
     await wrapper.vm.$nextTick()
 
@@ -300,7 +361,12 @@ describe('components/Searchbox', () => {
     await wrapper.vm.$nextTick()
 
     expect(wrapper.find('.test-overlay-class h3').text()).to.equal('header')
-    expect(wrapper.findAll('.test-overlay-class h3').at(1).text()).to.equal('ender')
+    expect(
+      wrapper
+        .findAll('.test-overlay-class h3')
+        .at(1)
+        .text()
+    ).to.equal('ender')
 
     let items = wrapper.findAll('.veui-searchbox-suggestion-item')
     expect(items.length).to.equal(4)

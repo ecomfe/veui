@@ -241,7 +241,7 @@ export default {
       this.$refs.input.focus()
     },
     handleInputFocus () {
-      if (this.hasFocusSuggestMode) {
+      if (this.hasFocusSuggestMode && !this.realReadonly) {
         this.allowSuggest()
         this.$emit('suggest', this.localValue)
       }
