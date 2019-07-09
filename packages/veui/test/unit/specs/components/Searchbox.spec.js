@@ -119,7 +119,7 @@ describe('components/Searchbox', () => {
     wrapper.destroy()
   })
 
-  it('should rend correctly on `disable` or `readonly` state', async () => {
+  it('should render correctly on `disable` or `readonly` state', async () => {
     let wrapper = mount(
       {
         data () {
@@ -161,6 +161,7 @@ describe('components/Searchbox', () => {
 
     vm.readonly = true
     vm.disabled = false
+    await vm.$nextTick()
 
     input.trigger('input')
     await vm.$nextTick()
