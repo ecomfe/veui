@@ -48,7 +48,7 @@
         :disabled="realDisabled || realReadonly"
         :aria-haspopup="submitPopup"
       >
-        {{ t("search") }}
+        {{ t('search') }}
       </veui-button>
     </div>
   </veui-input>
