@@ -41,7 +41,8 @@ export default {
     return {
       labelId: uniqueId('veui-select-label-'),
       localValue: this.value,
-      outsideRefs: ['button']
+      outsideRefs: ['button'],
+      initOptionLabel: ''
     }
   },
   computed: {
@@ -69,8 +70,10 @@ export default {
       if (this.options) {
         return this.labelMap[this.localValue]
       }
-      let option = this.$refs.options.find(this.localValue)
-      return option ? option.label : ''
+      if (this.$refs.options) {
+        return this.findOptionsLabel()
+      }
+      return ''
     },
     realOptions () {
       if (typeof this.filter !== 'function') {
@@ -93,7 +96,22 @@ export default {
       }
     }
   },
+  mounted () {
+    /**
+     * It cann't obtain 'options' refs in computed attribute
+     * when the default slot component (OptionGroup) did not mounted.
+     * This caused the label data cann't computed by $refs.options.find function.
+     * So it recomputed option label on this component mounted.
+     */
+    if (this.localValue && !this.label) {
+      this.initOptionLabel = this.findOptionsLabel()
+    }
+  },
   methods: {
+    findOptionsLabel () {
+      let option = this.$refs.options.find(this.localValue)
+      return option ? option.label : ''
+    },
     handleSelect (value) {
       this.expanded = false
       this.localValue = value
@@ -170,7 +188,7 @@ export default {
               ? this.$scopedSlots.label(
                 this.selectedOption || { selected: false }
               )
-              : this.label}
+              : this.label || this.initOptionLabel}
           </span>
           <Icon
             class="veui-select-icon"
