@@ -142,8 +142,7 @@ export default [
   {
     path: '/input',
     name: 'Input',
-    component: Input,
-    disabled: true
+    component: Input
   },
   {
     path: '/link',
@@ -153,8 +152,7 @@ export default [
   {
     path: '/number-input',
     name: 'NumberInput',
-    component: NumberInput,
-    disabled: true
+    component: NumberInput
   },
   {
     path: '/overlay',

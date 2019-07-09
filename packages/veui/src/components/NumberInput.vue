@@ -15,24 +15,40 @@
     'veui-input-invalid': realInvalid,
     'veui-readonly': realReadonly,
     'veui-disabled': realDisabled,
-    'veui-number-input-focused': focused
+    'veui-number-input-controls-focused': spinnerFocused
   }"
   v-on="listeners"
   @blur="handleBlur"
-  @input="handleInput"
   @change="handleChange"
-  @focusin="focused = true"
-  @focusout="focused = false"
 >
-  <template slot="before">
-    <slot name="before"/>
+  <template
+    v-if="isStrong"
+    slot="before"
+  >
+    <veui-button
+      ref="dec"
+      v-longpress.repeat="decrease"
+      class="veui-number-input-step veui-number-input-step-down"
+      :disabled="!editable || reachMaxLimit"
+      @click="decrease"
+    >
+      <veui-icon
+        :name="icons.decrease"
+        :label="t('decrease', { value: step })"
+      />
+    </veui-button>
   </template>
-  <template slot="after">
-    <div class="veui-number-input-controls">
+  <template slot="append">
+    <div
+      v-if="editable && !isStrong"
+      class="veui-number-input-controls"
+      @focusin="spinnerFocused = true"
+      @focusout="spinnerFocused = false"
+    >
       <veui-button
-        ref="inc"
+        ref="dec"
         v-longpress.repeat="increase"
-        class="veui-number-input-step-up"
+        class="veui-number-input-step veui-number-input-step-up"
         :disabled="!editable || reachMaxLimit"
         @click="increase"
       >
@@ -44,7 +60,7 @@
       <veui-button
         ref="dec"
         v-longpress.repeat="decrease"
-        class="veui-number-input-step-down"
+        class="veui-number-input-step veui-number-input-step-down"
         :disabled="!editable || reachMinLimit"
         @click="decrease"
       >
@@ -54,7 +70,23 @@
         />
       </veui-button>
     </div>
-    <slot name="after"/>
+  </template>
+  <template
+    v-if="isStrong"
+    slot="after"
+  >
+    <veui-button
+      ref="inc"
+      v-longpress.repeat="increase"
+      class="veui-number-input-step veui-number-input-step-up"
+      :disabled="!editable || reachMinLimit"
+      @click="increase"
+    >
+      <veui-icon
+        :name="icons.increase"
+        :label="t('increase', { value: step })"
+      />
+    </veui-button>
   </template>
 </veui-input>
 </template>
@@ -109,13 +141,16 @@ export default {
     return {
       localValue: this.value,
       lastChangedValue: this.value,
-      focused: false,
+      spinnerFocused: false,
       forward: true,
       inputFocusable: true,
       controlFocusable: true
     }
   },
   computed: {
+    isStrong () {
+      return this.uiProps.style === 'strong'
+    },
     listeners () {
       return omit(this.$listeners, VALUE_EVENTS)
     },
@@ -183,10 +218,6 @@ export default {
           this.localValue = localValue
           this.lastChangedValue = +localValue
         }
-        if (+localValue !== val) {
-          // set 进来也要 format 到精度范围内，如果不在精度内，要 $emit('input') 同步回去
-          this.$emit('input', +localValue)
-        }
       },
       immediate: true
     }
@@ -206,29 +237,6 @@ export default {
     }
   },
   methods: {
-    handleInput (val, $event) {
-      // 处理清空
-      if (this.value != null && val === '') {
-        this.$emit('input', null, $event)
-        return
-      }
-
-      let parsedVal = parseFloat(val)
-      let parsedOldVal = parseFloat(this.value)
-
-      // 1. 等价或首次输入无效值
-      // 2. 存在旧值的情况下输入无效值
-      if (
-        this.calcDisplayValue(parsedVal) ===
-          this.calcDisplayValue(parsedOldVal) ||
-        (isNaN(parsedVal) && this.value != null)
-      ) {
-        // 不同步，保留原来的有效值，等 change 和 blur 处理
-        return
-      }
-
-      this.$emit('input', +this.calcDisplayValue(parsedVal), $event)
-    },
     handleChange (...args) {
       // change 产生的值有 5 种类型
       // 1. null 或 ''，表示清空
@@ -263,6 +271,7 @@ export default {
         return
       }
 
+      this.$emit('input', this.localValue === '' ? null : +this.localValue)
       this.$emit('change', this.value, args[1])
       this.lastChangedValue = this.value
     },
