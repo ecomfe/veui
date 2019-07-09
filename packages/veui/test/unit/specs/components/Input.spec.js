@@ -144,7 +144,7 @@ describe('components/Input', () => {
       }
     )
 
-    wrapper.find('button.veui-input-clear-button').trigger('click')
+    wrapper.find('button.veui-input-clear').trigger('click')
   })
 
   it('should render before slot correctly', () => {
@@ -185,5 +185,45 @@ describe('components/Input', () => {
     })
 
     expect(wrapper.find('.veui-input-after').text()).to.equal('元')
+  })
+
+  it('should render prepend slot correctly', () => {
+    let wrapper = mount({
+      components: {
+        'veui-input': Input
+      },
+      data () {
+        return {
+          userName: null
+        }
+      },
+      template: `
+        <veui-input v-model="userName">
+          <template slot="prepend">user</template>
+        </veui-input>
+      `
+    })
+
+    expect(wrapper.find('.veui-input-prepend').text()).to.equal('user')
+  })
+
+  it('should render append slot correctly', () => {
+    let wrapper = mount({
+      components: {
+        'veui-input': Input
+      },
+      data () {
+        return {
+          userName: null
+        }
+      },
+      template: `
+        <veui-input v-model="userName">
+          <template slot="append">user</template>
+        </veui-input>
+      `
+    })
+
+    expect(wrapper.find('.veui-input-append').text()).to.equal('user')
   })
 })
