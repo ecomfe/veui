@@ -4,12 +4,12 @@
   <section>
     <veui-form>
       <veui-field
-        label="Micro："
-        ui="micro"
+        label="xs:"
+        ui="xs"
       >
         <veui-number-input
           v-model="number"
-          ui="micro"
+          ui="xs"
         >
           <template slot="before">
             Value:
@@ -17,31 +17,29 @@
         </veui-number-input>
       </veui-field>
       <veui-field
-        label="Tiny："
-        ui="tiny"
+        label="s:"
+        ui="s"
         tip="精确到小数点后 1 位"
       >
         <veui-number-input
           v-model="number1"
-          ui="tiny"
+          ui="s"
           autofocus
           select-on-focus
           :decimal-place="1"
         />
       </veui-field>
       <veui-field
-        label="Small："
-        ui="small"
+        label="m:"
         tip="精确到小数点后 2 位"
       >
         <veui-number-input
           v-model="number2"
-          ui="small"
           :decimal-place="2"
         />
       </veui-field>
       <veui-field
-        label="Normal："
+        label="Step 0.1:"
         tip="基准值每次加 0.1"
       >
         <veui-number-input
@@ -51,18 +49,16 @@
         />
       </veui-field>
       <veui-field
-        label="Large："
-        ui="large"
+        label="Step 10:"
         tip="基准值每次加 10"
       >
         <veui-number-input
           v-model="number4"
-          ui="large"
           :step="10"
         />
       </veui-field>
       <veui-field
-        label="DecimalPlace = -1："
+        label="DecimalPlace = -1:"
         tip="不处理精度问题"
       >
         <veui-number-input
@@ -71,26 +67,45 @@
         />
       </veui-field>
       <veui-field
-        label="Max &amp;&amp; Min："
+        label="Max &amp;&amp; Min:"
         :rules="[{ name: 'min', value: -1 }]"
         tip="最大值不大于 10，最小值不小于 -1"
       >
         <veui-number-input
           v-model="number6"
           :max="10"
+          :min="-1"
         />
       </veui-field>
-      <veui-field label="Readonly：">
+      <veui-field label="Readonly:">
         <veui-number-input
           v-model="number7"
           readonly
         />
       </veui-field>
       <veui-field
-        label="Disabled："
+        label="Disabled:"
         disabled
       >
         <veui-number-input v-model="number7"/>
+      </veui-field>
+      <veui-field label="Strong:">
+        <veui-number-input
+          v-model="number8"
+          ui="strong"
+        />
+      </veui-field>
+      <veui-field label="Strong s:">
+        <veui-number-input
+          v-model="number8"
+          ui="strong s"
+        />
+      </veui-field>
+      <veui-field label="Strong xs:">
+        <veui-number-input
+          v-model="number8"
+          ui="strong xs"
+        />
       </veui-field>
     </veui-form>
   </section>
@@ -127,7 +142,8 @@ export default {
       number4: null,
       number5: null,
       number6: null,
-      number7: 1024
+      number7: 1024,
+      number8: 2333
     }
   },
   methods: {
