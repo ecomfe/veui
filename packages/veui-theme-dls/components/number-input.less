@@ -2,90 +2,216 @@
 @import (reference) "../input.less";
 
 .veui-number-input {
+  position: relative;
+  width: @dls-number-input-width-normal-m;
+
+  &[ui~="xs"] {
+    width: @dls-number-input-width-normal-xs;
+  }
+
+  &[ui~="s"] {
+    width: @dls-number-input-width-normal-s;
+  }
+
   input {
     ime-mode: disabled;
   }
 
-  &-focused.veui-input {
-    border-color: @veui-gray-color-3;
+  &[ui~="normal"] .veui-input-main {
+    padding-right: 0;
+    overflow: hidden;
   }
 
-  &-controls {
+  &[ui~="normal"] {
+    .veui-input-append {
+      position: relative;
+      .size(dls-sum(@dls-number-input-spin-button-width-normal-m, -1px), 100%);
+      padding: 0;
+      margin-left: @dls-text-input-padding;
+    }
+
+    &[ui~="xs"] .veui-input-append {
+      .size(dls-sum(@dls-number-input-spin-button-width-normal-xs, -1px), 100%);
+    }
+
+    &[ui~="s"] .veui-input-append {
+      .size(dls-sum(@dls-number-input-spin-button-width-normal-s, -1px), 100%);
+    }
+  }
+
+  &-controls-focused[ui~="normal"] {
+    overflow: visible;
+
+    .veui-input-main {
+      overflow: visible;
+    }
+  }
+
+  &[ui~="normal"] &-controls {
+    .absolute(-1px, -1px, -1px, _);
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    .veui-transition(opacity, width);
+  }
+
+  &[ui~="normal"]:hover &-controls,
+  &[ui~="normal"].veui-input-focused &-controls,
+  &-controls-focused[ui~="normal"] &-controls {
+    width: 100%;
+    opacity: 1;
+    overflow: visible;
+  }
+
+  &-step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-clip: padding-box;
+  }
+
+  &[ui~="normal"] &-step:not(.focus-visible) {
+    .border-color(transparent, transparent, transparent, _);
+  }
+
+  &[ui~="normal"] &-step {
     position: relative;
-    width: 28px;
-    height: 100%;
-  }
-
-  .veui-button&-step-up,
-  .veui-button&-step-down {
-    display: block;
-    position: absolute;
-    .size(100%, ~"calc(50% + 1.5px)");
-    padding: 0;
-
-    &,
-    &.veui-disabled {
-      border-color: @veui-gray-color-5;
+    &.veui-button {
+      .size(100%, ~"calc(50% + 1px)");
+      padding: 0;
+      .border-left-radius(0);
     }
-
-    .veui-icon {
-      .veui-position-center();
-      margin-top: 0;
-    }
-  }
-
-  &:hover &-controls .veui-button,
-  &-focused &-controls .veui-button {
-    border-color: @veui-gray-color-3;
 
     &.focus-visible,
     &:hover {
       z-index: 1;
     }
 
-    &.focus-visible,
-    &.veui-disabled {
-      border-color: @veui-gray-color-5;
+    &.veui-disabled:hover {
+      .border-color(transparent, transparent, transparent, _);
+    }
+
+    .veui-icon {
+      .size(@dls-number-input-spin-icon-size-normal);
     }
   }
 
-  .veui-button&-step-up {
-    top: -1px;
-    right: -1px;
-  }
+  &[ui~="normal"] &-step-up {
+    .absolute(0, 0, _, _);
 
-  .veui-button&-step-down {
-    right: -1px;
-    bottom: -1px;
-  }
-
-  &.veui-input-invalid:not(.veui-disabled):not(.veui-readonly) {
-    &:extend(._veui-input-invalid all);
-
-    .veui-number-input-step-up {
-      .border-color(@veui-alert-color, @veui-alert-color, _, _);
-    }
-
-    .veui-number-input-step-down {
-      .border-color(_, @veui-alert-color, @veui-alert-color, _);
+    &.veui-button {
+      border-bottom-right-radius: 0;
     }
   }
 
-  &[ui~="tiny"] {
-    .veui-number-input-step-up,
-    .veui-number-input-step-down {
-      .veui-icon {
-        transform: translate(50%, 50%) scale(0.8);
+  &[ui~="normal"] &-step-down {
+    .absolute(_, 0, 0, _);
+
+    &.veui-button {
+      border-top-right-radius: 0;
+    }
+  }
+
+  &[ui~="strong"] {
+    width: @dls-number-input-width-strong-m;
+
+    .veui-input {
+      &-main {
+        border-radius: @dls-text-input-border-radius-m;
+        padding: 0;
+      }
+
+      &-input {
+        text-align: center;
+      }
+
+      &-before,
+      &-after {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        .size(@dls-number-input-height-m);
+      }
+
+      &-before {
+        left: 0;
+      }
+
+      &-after {
+        right: 0;
+      }
+    }
+
+    &[ui~="xs"] {
+      width: @dls-number-input-width-strong-xs;
+
+      .veui-input {
+        &-main {
+          border-radius: @dls-text-input-border-radius-xs;
+        }
+
+        &-before,
+        &-after {
+          .size(@dls-number-input-height-xs);
+        }
+      }
+    }
+
+    &[ui~="s"] {
+      width: @dls-number-input-width-strong-s;
+
+      .veui-input {
+        &-main {
+          border-radius: @dls-text-input-border-radius-s;
+        }
+
+        &-before,
+        &-after {
+          .size(@dls-number-input-height-s);
+        }
+      }
+    }
+
+    .veui-number-input {
+      &-step {
+        padding: 0;
+        border-style: none;
+        .size(~"calc(100% - 1px)", ~"calc(100% - 2px)");
+
+        &-down {
+          border-right-style: solid;
+          .border-right-radius(0);
+          margin-left: 1px;
+        }
+
+        &-up {
+          border-left-style: solid;
+          .border-left-radius(0);
+          margin-right: 1px;
+        }
+
+        &.focus-visible {
+          .size(100%);
+          border-style: solid;
+          margin: 0;
+        }
+
+        .veui-icon {
+          .size(@dls-number-input-spin-icon-size-strong);
+        }
       }
     }
   }
 
-  &[ui~="micro"] {
-    .veui-number-input-step-up,
-    .veui-number-input-step-down {
-      .veui-icon {
-        transform: translate(50%, 50%) scale(0.6);
-      }
-    }
-  }
+  // &.veui-input-invalid:not(.veui-disabled):not(.veui-readonly) {
+  //   &:extend(._veui-input-invalid all);
+
+  //   .veui-number-input-step-up {
+  //     .border-color(@veui-alert-color, @veui-alert-color, _, _);
+  //   }
+
+  //   .veui-number-input-step-down {
+  //     .border-color(_, @veui-alert-color, @veui-alert-color, _);
+  //   }
+  // }
 }
