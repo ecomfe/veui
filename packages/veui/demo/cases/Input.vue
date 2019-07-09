@@ -3,33 +3,33 @@
   <h1><code>&lt;veui-input&gt;</code></h1>
   <veui-form>
     <section class="five-sizes">
-      <h3>5 种大小：</h3>
+      <h3>4 种大小：</h3>
       <veui-field
         ui="micro"
-        label="micro"
+        label="xs"
       >
         <veui-input
           v-model="poem"
-          ui="micro"
+          ui="xs"
           autofocus
         />
       </veui-field>
       <veui-field
         ui="tiny"
-        label="tiny"
+        label="s"
       >
         <veui-input
           v-model="poem"
-          ui="tiny"
+          ui="s"
         />
       </veui-field>
       <veui-field
         ui="small"
-        label="small"
+        label="m"
       >
         <veui-input
           v-model="poem"
-          ui="small"
+          ui="m"
         />
       </veui-field>
       <veui-field label="normal">
@@ -37,11 +37,11 @@
       </veui-field>
       <veui-field
         ui="large"
-        label="large"
+        label="l"
       >
         <veui-input
           v-model="poem"
-          ui="large"
+          ui="l"
         />
       </veui-field>
     </section>
@@ -134,7 +134,36 @@
     </section>
 
     <section>
-      <h3>After Slot / 方向键操作指令 v-nudge</h3>
+      <h3>Prepend / Append</h3>
+      <section>
+        <veui-input clearable>
+          <template
+            slot="before-label"
+          >前缀内容</template>
+          <template
+            slot="prepend"
+          ><veui-icon
+            name="user-circle"
+          /></template>
+          <template
+            slot="after-label"
+          >后缀内容</template>
+        </veui-input>
+        <veui-input clearable>
+          <template
+            slot="before-label"
+          >前缀内容</template>
+        </veui-input>
+        <veui-input clearable>
+          <template
+            slot="after-label"
+          >后缀内容</template>
+        </veui-input>
+      </section>
+    </section>
+
+    <section>
+      <h3>方向键操作指令 v-nudge</h3>
       <veui-field label="价格：">
         <veui-input
           v-model="price"
@@ -145,7 +174,7 @@
           class="input-nudge"
           @focus="log('focus')"
         >
-          <template slot="after">
+          <template slot="after-label">
             元
           </template>
         </veui-input>
@@ -155,7 +184,7 @@
           clearable
           readonly
         >
-          <template slot="after">
+          <template slot="after-label">
             元
           </template>
         </veui-input>
@@ -164,7 +193,7 @@
           class="input-nudge"
           disabled
         >
-          <template slot="after">
+          <template slot="after-label">
             元
           </template>
         </veui-input>
@@ -187,8 +216,9 @@
 
 <script>
 import bus from '../bus'
-import { Input, Field, Form, Span } from 'veui'
+import { Input, Field, Form, Span, Icon } from 'veui'
 import nudge from 'veui/directives/nudge'
+import 'veui-theme-one-icons/user-circle'
 
 export default {
   name: 'text-input',
@@ -196,7 +226,8 @@ export default {
     'veui-input': Input,
     'veui-field': Field,
     'veui-form': Form,
-    'veui-span': Span
+    'veui-span': Span,
+    'veui-icon': Icon
   },
   directives: {
     nudge
@@ -257,6 +288,10 @@ export default {
 
 section {
   margin-bottom: 40px;
+
+  .veui-input {
+    margin-right: 10px;
+  }
 }
 
 .veui-form {
@@ -267,32 +302,10 @@ section {
       width: 50px;
     }
   }
-
-  .veui-input,
-  .veui-textarea {
-    width: 280px;
-  }
-
-  .veui-textarea {
-    vertical-align: top;
-
-    &.auto-height {
-      height: auto;
-    }
-
-    &.fixed-height {
-      height: 200px;
-    }
-  }
-
-  /deep/ .veui-input-after {
-    padding-right: 5px;
-  }
 }
 
 .five-sizes {
   & /deep/ .veui-form-label {
-    text-transform: capitalize;
     width: 60px;
     color: #999;
   }
