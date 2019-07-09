@@ -1,7 +1,16 @@
 import { getConfigKey } from '../utils/helper'
 import warn from '../utils/warn'
 import config from '../managers/config'
-import { compact, uniq, find, includes, get, merge, keys, pickBy } from 'lodash'
+import {
+  compact,
+  uniq,
+  find,
+  includes,
+  get,
+  merge,
+  keys,
+  pickBy
+} from 'lodash'
 
 const UNKNOWN_KEY = '$unknown'
 
@@ -27,13 +36,13 @@ export default {
             return includes(values, token)
           })
           if (name) {
-            if (result[name] && result[name] !== 'default') {
+            if (
+              result[name] &&
+              result[name] !== 'default' &&
+              result[name] !== uiConfig[name].default
+            ) {
               warn(
-                `[${
-                  this.$options.name
-                }] Duplicated \`${name}\` value for \`ui\`: [${
-                  result[name]
-                }], [${token}].`
+                `[${this.$options.name}] Duplicated \`${name}\` value for \`ui\`: [${result[name]}], [${token}].`
               )
             }
             let { boolean } = uiConfig[name]
