@@ -210,7 +210,7 @@ export function hasClass (vnode, clazz) {
     return false
   }
 
-  return (
+  return !!(
     (data.class || {})[clazz] ||
     (data.staticClass && includes(data.staticClass.split(/\s+/), clazz))
   )
