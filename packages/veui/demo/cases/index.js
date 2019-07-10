@@ -57,7 +57,8 @@ export default [
   {
     path: '/autocomplete',
     name: 'Autocomplete',
-    component: Autocomplete
+    component: Autocomplete,
+    disabled: true
   },
   {
     path: '/breadcrumb',
@@ -238,7 +239,8 @@ export default [
   {
     path: '/tag',
     name: 'Tag',
-    component: Tag
+    component: Tag,
+    disabled: true
   },
   {
     path: '/tabs',
