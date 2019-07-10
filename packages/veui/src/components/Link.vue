@@ -5,6 +5,7 @@
   :class="klass"
   :ui="realUi"
   :aria-disabled="disabled"
+  :tabindex="disabled ? -1 : null"
   @click="handleRedirect"
 >
   <slot/>
@@ -17,6 +18,7 @@
   :target="target"
   :ui="realUi"
   :aria-disabled="disabled"
+  :tabindex="disabled ? -1 : null"
   :replace="replace"
   v-bind="disabled ? { event: null } : {}"
   @click.native="handleNativeClick"
@@ -31,6 +33,7 @@
   :target="target"
   :ui="realUi"
   :aria-disabled="disabled"
+  :tabindex="disabled ? -1 : null"
   @click="handleRedirect"
 >
   <slot/>

@@ -3,7 +3,7 @@ import Alert from '@/components/Alert'
 import { wait } from '../../../utils'
 
 describe('components/Alert', function () {
-  it('shoule render right type for Alert', () => {
+  it('should render right type for Alert', () => {
     let wrapper = mount({
       components: {
         'veui-alert': Alert
@@ -81,7 +81,9 @@ describe('components/Alert', function () {
       },
       template: '<veui-alert type="error" :message="message" closable />'
     })
-    expect(wrapper.find('.veui-alert-message-multiple').exists()).to.equal(true)
+    expect(wrapper.find('.veui-alert-message-multiple').exists()).to.equal(
+      true
+    )
     wrapper.destroy()
   })
 
