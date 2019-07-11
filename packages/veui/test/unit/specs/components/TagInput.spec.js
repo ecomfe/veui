@@ -220,6 +220,45 @@ describe('components/TagInput', () => {
     wrapper.destroy()
   })
 
+  it('should handle `Backspace` keydown event correctly', async () => {
+    let wrapper = mount(
+      {
+        components,
+        data () {
+          return {
+            datasource,
+            value: ['勇士', '火箭']
+          }
+        },
+        template: '<veui-tag-input v-model="value" :datasource="datasource"/>'
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    let input = wrapper.find(NATIVE_INPUT)
+
+    let tags = wrapper.findAll(TAG)
+    expect(tags.length).to.equal(2)
+
+    input.trigger('keydown', { key: 'Backspace' })
+    await vm.$nextTick()
+    tags = wrapper.findAll(TAG)
+    expect(tags.length).to.equal(1)
+    expect(vm.value).to.deep.equal(['勇士'])
+
+    input.element.value = '1'
+    input.trigger('input')
+    await vm.$nextTick()
+    input.trigger('keydown', { key: 'Backspace' })
+    await vm.$nextTick()
+    tags = wrapper.findAll(TAG)
+    expect(tags.length).to.equal(1)
+    expect(vm.value).to.deep.equal(['勇士'])
+    wrapper.destroy()
+  })
   it('should render correctly on `disabled` or `readonly` state', async () => {
     let wrapper = mount(
       {

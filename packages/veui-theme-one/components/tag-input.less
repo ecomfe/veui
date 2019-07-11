@@ -8,7 +8,28 @@
   border: 1px solid @veui-gray-color-5;
   background-color: #fff;
 
+  .veui-tag {
+    max-width: ~"calc(100% - 10px)";
+    padding-right: 20px;
+
+    &.veui-readonly {
+      padding-right: 8px;
+    }
+
+    span {
+      display: inline-block;
+      vertical-align: middle;
+      max-width: 100%;
+      .ellipsis();
+    }
+    button {
+      position: absolute;
+      right: 5px;
+    }
+  }
   .veui-autocomplete {
+    max-width: ~"calc(100% - 10px)";
+    min-width: 10px;
     margin-left: 5px;
     vertical-align: middle;
   }

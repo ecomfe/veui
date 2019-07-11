@@ -7,6 +7,7 @@
     'veui-readonly': realReadonly
   }"
   @click="focus"
+  @keydown="handleKeydown"
 >
   <slot
     :value="localValue"
@@ -18,10 +19,11 @@
       <veui-tag
         :key="tag"
         ui="tiny"
+        :class="{ 'veui-readonly': !canCloseTag }"
         :closable="canCloseTag"
         @close="removeTag(tag, index)"
       >
-        {{ tag }}
+        <span>{{ tag }}</span>
       </veui-tag>
     </template>
   </slot>
@@ -33,6 +35,7 @@
     :style="{
       width: inputWidth
     }"
+    composition
     @suggest="insertTag"
     @enter="handleEnterEvent"
   />
@@ -46,6 +49,8 @@ import Autocomplete from './Autocomplete/Autocomplete'
 import Tag from './Tag'
 import { omit, includes } from 'lodash'
 
+const OMITTED_PROPS = ['value', 'composition']
+
 export default {
   name: 'veui-tag-input',
   uiTypes: ['select'],
@@ -55,7 +60,7 @@ export default {
   },
   mixins: [ui, input],
   props: {
-    ...Autocomplete.props,
+    ...omit(Autocomplete.props, OMITTED_PROPS),
     value: {
       type: Array,
       default () {
@@ -74,11 +79,10 @@ export default {
       return !this.realReadonly && !this.realDisabled
     },
     inputWidth () {
-      let width = (this.inputValue || '').length * 15
-      return `${width || 10}px`
+      return (this.inputValue || '').length * 15 + 'px'
     },
     autocompleteProps () {
-      return omit(this.$props, ['value'])
+      return omit(this.$props, OMITTED_PROPS)
     }
   },
   watch: {
@@ -107,6 +111,11 @@ export default {
     handleEnterEvent (matched) {
       if (!matched && !this.strict) {
         this.insertTag()
+      }
+    },
+    handleKeydown (e) {
+      if (e.key === 'Backspace' && !this.inputValue) {
+        this.localValue.pop()
       }
     }
   }
