@@ -1,0 +1,31 @@
+@import "../lib.less";
+@import (reference) "../dropdown.less";
+
+.veui-tag-input {
+  display: inline-block;
+  width: 240px;
+  padding: 2px 4px;
+  border: 1px solid @veui-gray-color-5;
+  background-color: #fff;
+
+  .veui-autocomplete {
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+  .veui-input {
+    border: 0;
+
+    &.veui-input-focused {
+      box-shadow: none;
+    }
+    input {
+      padding: 0;
+    }
+  }
+
+  &.veui-disabled,
+  &.veui-readonly {
+    background-color: @veui-gray-color-8;
+    color: @veui-text-color-aux;
+  }
+}

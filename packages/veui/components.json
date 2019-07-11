@@ -276,6 +276,10 @@
     "path": "Tag.vue"
   },
   {
+    "name": "TagInput",
+    "path": "TagInput.vue"
+  },
+  {
     "name": "Textarea",
     "path": "Textarea.vue"
   },

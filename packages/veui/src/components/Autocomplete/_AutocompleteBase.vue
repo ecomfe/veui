@@ -46,16 +46,14 @@ import { isFunction, cloneDeep, get, uniqueId } from 'lodash'
 
 function filterSuggestions (suggestions, value, filter, childrenKey) {
   let groupMatch = false
-  suggestions.forEach(
-    item => {
-      let match = item[childrenKey]
-        ? filterSuggestions(item[childrenKey], value, filter, childrenKey)
-        : filter(item, value)
-      item.range = match && typeof match === 'object' ? match : null
-      item.hidden = !match
-      groupMatch = !!match
-    }
-  )
+  suggestions.forEach(item => {
+    let match = item[childrenKey]
+      ? filterSuggestions(item[childrenKey], value, filter, childrenKey)
+      : filter(item, value)
+    item.range = match && typeof match === 'object' ? match : null
+    item.hidden = !match
+    groupMatch = !!match
+  })
   return groupMatch
 }
 
@@ -64,27 +62,29 @@ const genFilter = valueKey => (item, value) => {
     return true
   }
   let indexOf = get(item[valueKey], 'indexOf')
-  const index = typeof indexOf === 'function' ? indexOf.call(item[valueKey], value) : -1
-  return index >= 0 ? {
-    start: index,
-    end: index + value.length
-  } : false
+  const index =
+    typeof indexOf === 'function' ? indexOf.call(item[valueKey], value) : -1
+  return index >= 0
+    ? {
+      start: index,
+      end: index + value.length
+    }
+    : false
 }
 
 function findSuggestions (suggestions, value, matcher, childrenKey) {
   let target = false
-  suggestions.some(
-    item => {
-      target = item[childrenKey]
-        ? findSuggestions(item[childrenKey], value, matcher, childrenKey)
-        : matcher(item, value)
-      return !!target
-    }
-  )
+  suggestions.some(item => {
+    target = item[childrenKey]
+      ? findSuggestions(item[childrenKey], value, matcher, childrenKey)
+      : matcher(item, value)
+    return !!target
+  })
   return target
 }
 
-const genMatcher = valueKey => (item, value) => item[valueKey] === value ? item : false
+const genMatcher = valueKey => (item, value) =>
+  item[valueKey] === value ? item : false
 
 export default {
   name: 'veui-autocompletebase',
@@ -146,7 +146,9 @@ export default {
       return walk(this.clonedDatasource)
     },
     realExpanded () {
-      return this.expanded && this.filteredDatasource.some(({ hidden }) => !hidden)
+      return (
+        this.expanded && this.filteredDatasource.some(({ hidden }) => !hidden)
+      )
     },
     filteredDatasource () {
       // 若正在关闭，不要计算过滤了，因为会导致页面闪动
@@ -218,6 +220,7 @@ export default {
           if (elem) {
             elem.click()
           }
+          this.$emit('enter', !!elem)
           break
         default:
           passive = true

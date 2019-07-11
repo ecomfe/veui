@@ -40,6 +40,7 @@ import Link from './Link'
 import Tree from './Tree'
 import Autocomplete from './Autocomplete'
 import Tag from './Tag'
+import TagInput from './TagInput'
 
 export default [
   {
@@ -216,6 +217,11 @@ export default [
     path: '/tag',
     name: 'Tag',
     component: Tag
+  },
+  {
+    path: '/tag-input',
+    name: 'TagInput',
+    component: TagInput
   },
   {
     path: '/tabs',

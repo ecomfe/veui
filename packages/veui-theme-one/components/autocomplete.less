@@ -2,6 +2,13 @@
 @import (reference) "../dropdown.less";
 
 .veui-autocomplete {
+  display: inline-block;
+  width: 210px;
+
+  .veui-input {
+    width: 100%;
+  }
+
   &-suggestion-group {
     &:extend(._veui-dropdown-overlay all);
     position: relative;
