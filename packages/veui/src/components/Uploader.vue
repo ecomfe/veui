@@ -14,16 +14,19 @@
     <label
       ref="label"
       class="veui-button veui-uploader-input-label"
-      :class="{'veui-uploader-input-label-disabled': realUneditable ||
-        (maxCount > 1 && fileList.length >= maxCount) ||
-        (requestMode === 'iframe' && isSubmiting)}"
+      :class="{
+        'veui-uploader-input-label-disabled':
+          realUneditable ||
+          (maxCount > 1 && fileList.length >= maxCount) ||
+          (requestMode === 'iframe' && isSubmiting)
+      }"
       @click="handleClick"
     >
       <slot name="button-label">
         <veui-icon
           class="veui-uploader-input-label-icon"
           :name="icons.upload"
-        />{{ t('selectFile') }}
+        />{{ t("selectFile") }}
       </slot>
       <input
         :id="inputId"
@@ -31,11 +34,17 @@
         hidden
         type="file"
         :name="name"
-        :disabled="realUneditable ||
-          (maxCount > 1 && fileList.length >= maxCount) ||
-          (requestMode === 'iframe' && disabledWhenSubmiting)"
+        :disabled="
+          realUneditable ||
+            (maxCount > 1 && fileList.length >= maxCount) ||
+            (requestMode === 'iframe' && disabledWhenSubmiting)
+        "
         :accept="accept"
-        :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
+        :multiple="
+          requestMode !== 'iframe' &&
+            (maxCount > 1 || maxCount === undefined) &&
+            !isReplacing
+        "
         @change="handleNewFiles"
         @click.stop
       >
@@ -49,17 +58,17 @@
     <span class="veui-uploader-error">
       <template v-if="error.typeInvalid">
         <slot name="type-invalid">
-          <veui-icon :name="icons.alert"/>{{ t('fileTypeInvalid') }}
+          <veui-icon :name="icons.alert"/>{{ t("fileTypeInvalid") }}
         </slot>
       </template>
       <template v-if="error.sizeInvalid">
         <slot name="size-invalid">
-          <veui-icon :name="icons.alert"/>{{ t('fileSizeInvalid') }}
+          <veui-icon :name="icons.alert"/>{{ t("fileSizeInvalid") }}
         </slot>
       </template>
       <template v-if="error.countOverflow">
         <slot name="count-overflow">
-          <veui-icon :name="icons.alert"/>{{ t('tooManyFiles') }}
+          <veui-icon :name="icons.alert"/>{{ t("tooManyFiles") }}
         </slot>
       </template>
     </span>
@@ -74,8 +83,10 @@
       :key="`${file.name}-${file.src}-${index}`"
     >
       <template
-        v-if="(type === 'file' && file.status !== 'uploading')
-          || type === 'image' && (!file.status || file.status === 'success')"
+        v-if="
+          (type === 'file' && file.status !== 'uploading') ||
+            (type === 'image' && (!file.status || file.status === 'success'))
+        "
       >
         <slot
           name="file"
@@ -93,8 +104,10 @@
               />
               <span
                 class="veui-uploader-list-name"
-                :class="{'veui-uploader-list-name-success': file.status === 'success',
-                         'veui-uploader-list-name-failure': file.status === 'failure'
+                :class="{
+                  'veui-uploader-list-name-success':
+                    file.status === 'success',
+                  'veui-uploader-list-name-failure': file.status === 'failure'
                 }"
                 :title="file.name"
               >
@@ -105,7 +118,7 @@
                 class="veui-uploader-success"
               >
                 <slot name="success-label">
-                  {{ t('uploadSuccess') }}
+                  {{ t("uploadSuccess") }}
                 </slot>
               </span>
               <span
@@ -114,7 +127,7 @@
                 class="veui-uploader-failure"
               >
                 <slot name="failure-label">
-                  {{ t('uploadFailure') }}
+                  {{ t("uploadFailure") }}
                 </slot>
               </span>
               <veui-button
@@ -166,10 +179,12 @@
                   :for="inputId"
                   :ui="uiParts.retryImageSuccess"
                   class="veui-button"
-                  :class="{'veui-uploader-input-label-disabled': realUneditable}"
+                  :class="{
+                    'veui-uploader-input-label-disabled': realUneditable
+                  }"
                   @click.stop="replaceFile(file)"
                 >
-                  {{ t('replace') }}
+                  {{ t("replace") }}
                 </label>
                 <veui-button
                   :ui="uiParts.clearImageSuccess"
@@ -194,7 +209,7 @@
                 >
                   <span class="veui-uploader-success">
                     <slot name="success-label">
-                      <veui-icon :name="icons.success"/>{{ t('complete') }}
+                      <veui-icon :name="icons.success"/>{{ t("complete") }}
                     </slot>
                   </span>
                 </div>
@@ -225,7 +240,7 @@
               :convert-size-unit="convertSizeUnit"
             >
               <slot name="uploading-label">
-                {{ t('uploading') }}
+                {{ t("uploading") }}
               </slot>
             </veui-uploader-progress>
             <veui-button
@@ -241,7 +256,7 @@
               :ui="uiParts.cancelImage"
               @click="cancelFile(file)"
             >
-              {{ t('cancel') }}
+              {{ t("cancel") }}
             </veui-button>
           </div>
           <slot
@@ -263,19 +278,20 @@
             <div :class="`${listClass}-status`">
               <span class="veui-uploader-failure">
                 <slot name="failure-label">
-                  {{ t('error') }}
-                </slot>{{ file.failureReason }}
+                  {{ t("error") }} </slot>{{ file.failureReason }}
               </span>
             </div>
             <veui-button
               :ui="uiParts.retryImageFailure"
               @click="retry(file)"
             >
-              {{ t('retry') }}
+              {{ t("retry") }}
             </veui-button>
             <veui-button
               :ui="uiParts.clearImageFailure"
-              :class="`${listClass}-mask-remove ${listClass}-mask-remove-failure`"
+              :class="
+                `${listClass}-mask-remove ${listClass}-mask-remove-failure`
+              "
               @click="removeFile(file)"
             >
               <veui-icon
@@ -301,8 +317,11 @@
           ref="label"
           :class="{
             'veui-button': $scopedSlots['extra-operation'],
-            'veui-uploader-input-label-image': !$scopedSlots['extra-operation'],
-            'veui-uploader-input-label-disabled': $scopedSlots['extra-operation'] &&
+            'veui-uploader-input-label-image': !$scopedSlots[
+              'extra-operation'
+            ],
+            'veui-uploader-input-label-disabled':
+              $scopedSlots['extra-operation'] &&
               (realUneditable ||
               (maxCount > 1 && fileList.length >= maxCount) ||
               isSubmiting)
@@ -315,9 +334,16 @@
             hidden
             type="file"
             :name="name"
-            :disabled="realUneditable || (requestMode === 'iframe' && disabledWhenSubmiting)"
+            :disabled="
+              realUneditable ||
+                (requestMode === 'iframe' && disabledWhenSubmiting)
+            "
             :accept="accept"
-            :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
+            :multiple="
+              requestMode !== 'iframe' &&
+                (maxCount > 1 || maxCount === undefined) &&
+                !isReplacing
+            "
             @change="handleNewFiles"
             @click.stop
           >
@@ -327,7 +353,7 @@
           />
           <template v-else>
             <slot name="button-label">
-              {{ t('selectFile') }}
+              {{ t("selectFile") }}
             </slot>
           </template>
         </label>
@@ -347,17 +373,17 @@
   >
     <template v-if="error.typeInvalid">
       <slot name="type-invalid">
-        <veui-icon :name="icons.alert"/>{{ t('fileTypeInvalid') }}
+        <veui-icon :name="icons.alert"/>{{ t("fileTypeInvalid") }}
       </slot>
     </template>
     <template v-if="error.sizeInvalid">
       <slot name="size-invalid">
-        <veui-icon :name="icons.alert"/>{{ t('fileSizeInvalid') }}
+        <veui-icon :name="icons.alert"/>{{ t("fileSizeInvalid") }}
       </slot>
     </template>
     <template v-if="error.countOverflow">
       <slot name="count-overflow">
-        <veui-icon :name="icons.alert"/>{{ t('tooManyFiles') }}
+        <veui-icon :name="icons.alert"/>{{ t("tooManyFiles") }}
       </slot>
     </template>
   </span>
@@ -584,9 +610,7 @@ export default {
         assign(
           this.requestMode === 'iframe' && this.iframeMode === 'callback'
             ? {
-              callback: `parent.${this.callbackNamespace}['${
-                this.callbackFuncName
-              }']`
+              callback: `parent.${this.callbackNamespace}['${this.callbackFuncName}']`
             }
             : {},
           this.payload
@@ -620,13 +644,19 @@ export default {
     },
     files () {
       return this.fileList.map(file => {
-        return { ...pick(file, ['name', 'src', 'status']), ...file._extra }
+        return {
+          ...pick(file, ['name', 'src', 'status', 'toBeUploaded']),
+          ...file._extra
+        }
       })
     },
     pureFileList () {
       return this.files
-        .filter(file => file.status === 'success' || !file.status)
-        .map(file => omit(file, 'status'))
+        .filter(
+          file =>
+            (file.status === 'success' || !file.status) && !file.toBeUploaded
+        )
+        .map(file => omit(file, ['status', 'toBeUploaded']))
     }
   },
   watch: {
@@ -639,7 +669,10 @@ export default {
       let successIndex = 0
       this.fileList = this.fileList
         .map(file => {
-          if (file.status === 'success' || !file.status) {
+          if (
+            (file.status === 'success' || !file.status) &&
+            !file.toBeUploaded
+          ) {
             // 处理外部直接减少文件的情形
             if (successIndex + 1 > temp.length) {
               return null
@@ -698,7 +731,10 @@ export default {
         }
         window[this.callbackNamespace][this.callbackFuncName] = data => {
           if (!this.canceled) {
-            this.uploadCallback(this.parseData(data), this.currentSubmitingFile)
+            this.uploadCallback(
+              this.parseData(data),
+              this.currentSubmitingFile
+            )
           }
         }
       }
@@ -783,9 +819,9 @@ export default {
         }
 
         let replacingIndex = this.fileList.indexOf(this.replacingFile)
-        this.removeFile(this.replacingFile)
-        this.fileList.splice(replacingIndex, 0, null)
         this.$set(this.fileList, replacingIndex, newFile)
+        this.$emit('change', this.getValue())
+
         this.replacingFile = null
 
         if (this.requestMode === 'iframe' && this.realAutoupload) {
@@ -979,6 +1015,9 @@ export default {
         data.success = data.status === 'success'
       }
 
+      delete file.xhr
+      delete file.toBeUploaded
+
       if (data.success) {
         this.showSuccessResult(data, file)
         this.$emit('success', this.files[index], index)
@@ -989,16 +1028,12 @@ export default {
       this.currentSubmitingFile = null
     },
     showSuccessResult (data, file) {
-      file.xhr = null
-      file.toBeUploaded = null
       this.updateFileList(file, 'success', data, true)
       setTimeout(() => {
         this.updateFileList(file, null)
       }, 2000)
     },
     showFailureResult (data, file) {
-      file.xhr = null
-      file.toBeUploaded = null
       file.failureReason = data.message || data.reason || ''
       this.updateFileList(file, 'failure', data)
     },
@@ -1023,16 +1058,6 @@ export default {
       if (toEmit) {
         this.$emit('change', this.getValue(false))
       }
-    },
-    getIndexInPureList (file) {
-      let initialIndex = this.fileList.indexOf(file)
-      return (
-        initialIndex -
-        this.fileList
-          .slice(0, initialIndex)
-          .filter(f => f.status === 'uploading' || f.status === 'failure')
-          .length
-      )
     },
     retry (file) {
       if (this.requestMode === 'iframe') {
