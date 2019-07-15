@@ -3,14 +3,17 @@
   ref="overlay"
   class="veui-dialog"
   :open="localOpen"
-  :overlay-class="mergeOverlayClass({
-    'veui-dialog-box': true,
-    'veui-dialog-box-mask': modal
-  })"
+  :overlay-class="
+    mergeOverlayClass({
+      'veui-dialog-box': true,
+      'veui-dialog-box-mask': modal
+    })
+  "
   :ui="realUi"
   autofocus
   :modal="modal"
   :priority="priority"
+  @clickmask="$emit('clickmask')"
   @afterclose="$emit('afterclose')"
 >
   <div
@@ -22,8 +25,12 @@
     @keydown.esc="handleEscape"
   >
     <div
-      v-if="title || $slots.title"
-      v-drag:content.translate="{ draggable, containment: '@window', ready: dragReady }"
+      v-if="title || $slots.title || $scopedSlots.title"
+      v-drag:content.translate="{
+        draggable,
+        containment: '@window',
+        ready: dragReady
+      }"
       class="veui-dialog-content-head"
       :class="{ 'veui-dialog-draggable': draggable }"
     >
@@ -57,14 +64,14 @@
           :ui="uiParts.ok"
           @click="close('ok')"
         >
-          {{ t('ok') }}
+          {{ t("ok") }}
         </veui-button>
         <veui-button
           :ui="uiParts.cancel"
           autofocus
           @click="cancel"
         >
-          {{ t('cancel') }}
+          {{ t("cancel") }}
         </veui-button>
       </slot>
     </div>
