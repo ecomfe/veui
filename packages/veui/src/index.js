@@ -1,6 +1,8 @@
 export { default as Alert } from './components/Alert'
 export { default as AlertBox } from './components/AlertBox'
-export { default as Autocomplete } from './components/Autocomplete/Autocomplete'
+export {
+  default as Autocomplete
+} from './components/Autocomplete/Autocomplete'
 export { default as Breadcrumb } from './components/Breadcrumb'
 export { default as BreadcrumbItem } from './components/BreadcrumbItem'
 export { default as Button } from './components/Button'
@@ -14,6 +16,7 @@ export { default as Column } from './components/Column'
 export { default as ConfirmBox } from './components/ConfirmBox'
 export { default as DatePicker } from './components/DatePicker'
 export { default as Dialog } from './components/Dialog'
+export { default as Drawer } from './components/Drawer'
 export { default as Dropdown } from './components/Dropdown'
 export { default as Field } from './components/Field'
 export { default as Fieldset } from './components/Fieldset'

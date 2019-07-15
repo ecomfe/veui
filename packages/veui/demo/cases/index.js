@@ -40,6 +40,7 @@ import Link from './Link'
 import Tree from './Tree'
 import Autocomplete from './Autocomplete'
 import Tag from './Tag'
+import Drawer from './Drawer'
 
 export default [
   {
@@ -106,6 +107,11 @@ export default [
     path: '/dialog',
     name: 'Dialog',
     component: Dialog
+  },
+  {
+    path: '/drawer',
+    name: 'Drawer',
+    component: Drawer
   },
   {
     path: '/dropdown',
