@@ -14,7 +14,7 @@
       :class="realOverlayClass"
       :ui="realUi"
       :style="{ zIndex }"
-      @click.self="$emit('clickmask')"
+      @click.self="handleClickMask"
     >
       <slot/>
     </div>
@@ -53,6 +53,7 @@ export default {
     position: String,
     overlayClass: getClassPropDef(),
     open: Boolean,
+    maskClosable: Boolean,
     target: {
       type: process.env.VUE_ENV === 'server' ? true : [String, Object, Element],
       default: null
@@ -157,6 +158,12 @@ export default {
         })
       } else {
         this.overlayNode.appendTo(this.findParentOverlayId(), this.priority)
+      }
+    },
+
+    handleClickMask () {
+      if (this.maskClosable) {
+        this.$emit('update:open', false)
       }
     },
 

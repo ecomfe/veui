@@ -2,7 +2,7 @@
 <veui-overlay
   ref="overlay"
   class="veui-dialog"
-  :open="localOpen"
+  :open.sync="localOpen"
   :overlay-class="
     mergeOverlayClass({
       'veui-dialog-box': true,
@@ -13,7 +13,7 @@
   autofocus
   :modal="modal"
   :priority="priority"
-  @clickmask="$emit('clickmask')"
+  :mask-closable="maskClosable"
   @afterclose="$emit('afterclose')"
 >
   <div
@@ -116,6 +116,7 @@ export default {
       type: Boolean,
       default: true
     },
+    maskClosable: Boolean,
     escapable: {
       type: Boolean,
       default: true
