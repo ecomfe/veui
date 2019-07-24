@@ -25,7 +25,6 @@ export default {
           'veui-drawer-box-mask': true
         },
         modal: true,
-        maskClosable: true,
         draggable: false
       },
       // nativeOn 直接在 drawer 上注册到 dom ，不需透传
