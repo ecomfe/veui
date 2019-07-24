@@ -17,7 +17,6 @@ const debugInBrowser = {
 }
 
 const CONTENT = '.veui-dialog-content'
-const MASK = '.veui-drawer-box-mask'
 
 describe('components/Drawer', () => {
   it('should support placement `top`.', async () => {
@@ -93,22 +92,6 @@ describe('components/Drawer', () => {
     expect(top === 0).to.equal(true)
     expect(bottom === window.innerHeight).to.equal(true)
     expect(left === 0).to.equal(true)
-    wrapper.destroy()
-  })
-
-  it('should handle maskclick correctly', async () => {
-    let wrapper = mount(
-      {
-        ...componentOptions,
-        template: '<veui-drawer :open.sync="open" />'
-      },
-      debugInBrowser
-    )
-    let { vm } = wrapper
-    await vm.$nextTick()
-    wrapper.find(MASK).trigger('click')
-    await vm.$nextTick()
-    expect(vm.open).to.equal(false)
     wrapper.destroy()
   })
 
