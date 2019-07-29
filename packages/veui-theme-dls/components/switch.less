@@ -18,7 +18,7 @@
         .size(@@thumb-size);
 
         .veui-icon {
-          .size(dls-sum(@@thumb-size, -2px));
+          .dls-icon-size(dls-sum(@@thumb-size, -2px));
         }
       }
     }
@@ -98,7 +98,7 @@
   }
 
   :checked + &-switcher {
-    background-color: @veui-brand-color;
+    background-color: @dls-switch-track-color-on;
 
     .veui-icon {
       color: @dls-switch-track-color-on;
