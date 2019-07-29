@@ -38,7 +38,7 @@
       position: absolute;
       margin: auto;
       // TODO: remove min value after icons are updated
-      .dls-icon-size(max(12px, @dls-checkbox-icon-size-s));
+      .dls-icon-size(max(12px, @dls-checkbox-icon-size));
       .veui-position-center();
       .veui-transition(transform, opacity);
     }
@@ -116,11 +116,6 @@
 
     .veui-checkbox-box {
       .size(@dls-checkbox-size-s);
-
-      .veui-icon {
-        // TODO: remove min value after icons are updated
-        .dls-icon-size(max(10px, @dls-checkbox-icon-size-s));
-      }
     }
   }
 
