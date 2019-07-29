@@ -2,14 +2,14 @@
 @import (reference) "../input.less";
 
 .veui-input {
-  @left-padding: @dls-text-input-padding;
+  @left-padding: @dls-input-padding;
 
   display: inline-flex;
   align-items: stretch;
-  height: @dls-text-input-height-m;
-  font-size: @dls-text-input-font-size-m;
-  width: @dls-text-input-width;
-  border-radius: @dls-text-input-border-radius-m;
+  height: @dls-input-height-m;
+  font-size: @dls-input-font-size-m;
+  width: @dls-input-width;
+  border-radius: @dls-input-border-radius-m;
 
   &-autofill {
     background-color: @veui-autofill-color;
@@ -24,11 +24,11 @@
     flex: 1 1 auto;
     align-items: stretch;
     position: relative;
-    padding: 0 @dls-text-input-padding;
-    border: 1px solid @dls-text-input-border-color;
+    padding: 0 @dls-input-padding;
+    border: 1px solid @dls-input-border-color;
     border-radius: inherit;
-    background-color: @dls-text-input-background-color;
-    color: @dls-text-input-font-color;
+    background-color: @dls-input-background-color;
+    color: @dls-input-font-color;
     cursor: inherit;
     .veui-transition(border-color, color, box-shadow);
   }
@@ -60,9 +60,9 @@
     display: flex;
     align-items: center;
     .size(100%);
-    border: 1px solid @dls-text-input-border-color;
+    border: 1px solid @dls-input-border-color;
     border-radius: inherit;
-    padding: 0 @dls-text-input-padding;
+    padding: 0 @dls-input-padding;
   }
 
   &-before-label {
@@ -76,11 +76,11 @@
   }
 
   &-prepend {
-    padding-right: @dls-text-input-content-spacing;
+    padding-right: @dls-input-content-spacing;
   }
 
   &-append {
-    padding-left: @dls-text-input-content-spacing;
+    padding-left: @dls-input-content-spacing;
   }
 
   &-input {
@@ -105,26 +105,26 @@
       margin-right: dls-sum(
         @dls-button-padding-icon * -1,
         -2px,
-        @dls-text-input-content-spacing
+        @dls-input-content-spacing
       );
     }
   }
 
   &-main:hover {
-    border-color: @dls-text-input-border-color-hover;
+    border-color: @dls-input-border-color-hover;
   }
 
   &.veui-readonly &-main {
-    border-color: @dls-text-input-border-color-read-only;
-    background-color: @dls-text-input-background-color-read-only;
+    border-color: @dls-input-border-color-read-only;
+    background-color: @dls-input-background-color-read-only;
   }
 
   &.veui-readonly &-main:hover {
-    border-color: @dls-text-input-border-color-read-only-hover;
+    border-color: @dls-input-border-color-read-only-hover;
   }
 
   &.veui-readonly &-input {
-    color: @dls-text-input-font-color-read-only;
+    color: @dls-input-font-color-read-only;
   }
 
   &-focused {
@@ -132,14 +132,11 @@
   }
 
   &&-focused &-main {
-    .dls-focus-ring(
-      @dls-text-input-border-color-focus,
-      @dls-text-input-shadow-focus
-    );
+    .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
   }
 
   &-focused.veui-readonly &-main:hover {
-    border-color: @dls-text-input-border-color-read-only-focus;
+    border-color: @dls-input-border-color-read-only-focus;
   }
 
   &.veui-disabled &-main,
@@ -147,8 +144,8 @@
   &.veui-readonly &-after-label,
   &.veui-disabled &-before-label,
   &.veui-disabled &-after-label {
-    background-color: @dls-text-input-background-color-disabled;
-    border-color: @dls-text-input-border-color-disabled;
+    background-color: @dls-input-background-color-disabled;
+    border-color: @dls-input-border-color-disabled;
     cursor: not-allowed;
   }
 
@@ -157,7 +154,7 @@
   &.veui-readonly &-after-label,
   &.veui-disabled &-before-label,
   &.veui-disabled &-after-label {
-    color: @dls-text-input-font-color-disabled;
+    color: @dls-input-font-color-disabled;
     pointer-events: none;
   }
 
@@ -166,27 +163,27 @@
     align-items: center;
     position: absolute;
     height: 100%;
-    color: @dls-text-input-placeholder-color;
+    color: @dls-input-placeholder-color;
     pointer-events: none;
     cursor: text;
     .ellipsis();
   }
 
   &[ui~="xs"] {
-    height: @dls-text-input-height-xs;
-    font-size: @dls-text-input-font-size-xs;
-    border-radius: @dls-text-input-border-radius-xs;
+    height: @dls-input-height-xs;
+    font-size: @dls-input-font-size-xs;
+    border-radius: @dls-input-border-radius-xs;
   }
 
   &[ui~="s"] {
-    height: @dls-text-input-height-s;
-    font-size: @dls-text-input-font-size-s;
-    border-radius: @dls-text-input-border-radius-s;
+    height: @dls-input-height-s;
+    font-size: @dls-input-font-size-s;
+    border-radius: @dls-input-border-radius-s;
   }
 
   &[ui~="l"] {
-    height: @dls-text-input-height-l;
-    font-size: @dls-text-input-font-size-l;
-    border-radius: @dls-text-input-border-radius-l;
+    height: @dls-input-height-l;
+    font-size: @dls-input-font-size-l;
+    border-radius: @dls-input-border-radius-l;
   }
 }
