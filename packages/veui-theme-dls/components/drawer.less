@@ -1,0 +1,57 @@
+@import "../lib.less";
+
+.veui-drawer {
+  &-box-mask {
+    .veui-dialog-content {
+      max-height: none;
+      transition: transform 0.2s;
+      width: auto;
+      transform: translate(0, 0);
+    }
+  }
+
+  &-top {
+    .veui-dialog-content {
+      .absolute(0, 0, auto, 0);
+    }
+  }
+  &-right {
+    .veui-dialog-content {
+      .absolute(0, 0, 0, auto);
+    }
+  }
+  &-bottom {
+    .veui-dialog-content {
+      .absolute(auto, 0, 0, 0);
+    }
+  }
+  &-left {
+    .veui-dialog-content {
+      .absolute(0, auto, 0, 0);
+    }
+  }
+
+  &-box-mask.veui-overlay-enter,
+  &-box-mask.veui-overlay-leave-to {
+    &.veui-drawer-top {
+      .veui-dialog-content {
+        transform: translateY(-100%);
+      }
+    }
+    &.veui-drawer-right {
+      .veui-dialog-content {
+        transform: translateX(100%);
+      }
+    }
+    &.veui-drawer-bottom {
+      .veui-dialog-content {
+        transform: translateY(100%);
+      }
+    }
+    &.veui-drawer-left {
+      .veui-dialog-content {
+        transform: translateX(-100%);
+      }
+    }
+  }
+}
