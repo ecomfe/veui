@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { remove } from 'lodash'
 
 export default class SimpleDialog {
-  components = []
+  components = [];
 
   createComponent () {
     const component = new Vue({
@@ -31,7 +31,7 @@ export default class SimpleDialog {
   }
 
   _show () {
-    throw new Error("SimpleDialog's [_show] method must be implemented.")
+    throw new Error('SimpleDialog\'s [_show] method must be implemented.')
   }
 
   show (content, title, options = {}) {
