@@ -318,5 +318,9 @@
   {
     "name": "Uploader",
     "path": "Uploader.vue"
+  },
+  {
+    "name": "Loading",
+    "path": "Loading.vue"
   }
 ]

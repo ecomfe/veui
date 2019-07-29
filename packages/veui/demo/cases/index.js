@@ -40,6 +40,7 @@ import Link from './Link'
 import Tree from './Tree'
 import Autocomplete from './Autocomplete'
 import Tag from './Tag'
+import Loading from './Loading'
 
 export default [
   {
@@ -302,5 +303,10 @@ export default [
     name: 'Tree',
     component: Tree,
     disabled: true
+  },
+  {
+    path: '/loading',
+    name: 'Loading',
+    component: Loading
   }
 ]

@@ -1,6 +1,8 @@
 export { default as Alert } from './components/Alert'
 export { default as AlertBox } from './components/AlertBox'
-export { default as Autocomplete } from './components/Autocomplete/Autocomplete'
+export {
+  default as Autocomplete
+} from './components/Autocomplete/Autocomplete'
 export { default as Breadcrumb } from './components/Breadcrumb'
 export { default as BreadcrumbItem } from './components/BreadcrumbItem'
 export { default as Button } from './components/Button'
@@ -55,3 +57,4 @@ export { default as Tooltip } from './components/Tooltip'
 export { default as Transfer } from './components/Transfer'
 export { default as Tree } from './components/Tree'
 export { default as Uploader } from './components/Uploader'
+export { default as Loading } from '../components/Loading'
