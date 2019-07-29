@@ -1,6 +1,7 @@
 @import "../lib.less";
 
 .veui-button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   user-select: none;
@@ -41,7 +42,7 @@
   }
 
   .veui-icon {
-    .size(1em);
+    .dls-icon-size(1em);
     margin-right: @dls-button-content-spacing;
   }
 
@@ -153,13 +154,39 @@
     }
   }
 
-  &[ui~="text"] {
-    border-color: transparent;
-    .padding(@dls-button-padding-text);
+  &[ui~="text"],
+  &[ui~="icon"] {
+    border: none;
+    .padding(0);
     height: auto;
     line-height: 1;
+
+    &::after {
+      content: "";
+      border: 1px solid transparent;
+      border-radius: inherit;
+      .veui-button-transition();
+    }
+
+    &.focus-visible {
+      box-shadow: none;
+
+      &::after {
+        .dls-focus-ring(
+          @dls-button-border-color-focus,
+          @dls-button-shadow-focus
+        );
+      }
+    }
+  }
+
+  &[ui~="text"] {
     background-color: @dls-button-background-color-text;
     color: @dls-button-font-color-text;
+
+    &::after {
+      .absolute(-@dls-button-padding-text);
+    }
 
     &:hover {
       background-color: @dls-button-background-color-text-hover;
@@ -183,12 +210,12 @@
   }
 
   &[ui~="icon"] {
-    border-color: transparent;
-    .padding(@dls-button-padding-icon);
-    height: auto;
-    line-height: 1;
     background-color: @dls-button-background-color-icon;
     color: @dls-button-font-color-icon;
+
+    &::after {
+      .absolute(-@dls-button-padding-icon);
+    }
 
     &:hover {
       background-color: @dls-button-background-color-icon-hover;
