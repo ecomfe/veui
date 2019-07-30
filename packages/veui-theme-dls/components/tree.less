@@ -1,20 +1,24 @@
 @import "../lib.less";
 
 .veui-tree {
-  @item-height: 36px;
-  @item-indent-gap: 18px;
-  @item-icon-size: 14px;
-  @item-icon-gap: 4px;
+  position: relative;
+  padding: 0 @dls-tree-padding-x;
 
   &,
   &-item-group {
     .reset-list-style();
-    padding: 0;
     margin: 0;
   }
 
+  ul {
+    padding-left: @dls-tree-font-size-m + @dls-tree-node-content-spacing;
+  }
+
   &-item {
-    .centered-line(@item-height);
+    display: flex;
+    align-items: center;
+
+    .centered-line(@dls-tree-node-height-m);
     .clearfix();
     outline: none;
 
@@ -27,26 +31,24 @@
       float: left;
     }
 
+    mark {
+      color: @veui-warning-color;
+      background: none;
+    }
+
     &-expand-switcher {
-      @height: @item-height / 2;
-      .centered-line(@item-icon-size);
       display: inline-block;
+      .size(@dls-tree-font-size-m);
       background: none;
       border: none;
       padding: 0;
-      vertical-align: top;
-      margin-top: ~"calc(@{height} - 0.5em)";
-      margin-right: @item-icon-gap;
+      margin-right: @dls-tree-node-content-spacing;
       cursor: pointer;
       outline: none;
       .veui-transition(box-shadow, transform);
 
       &.focus-visible {
         .veui-focus-shadow();
-      }
-
-      .veui-icon {
-        .size(@item-icon-size);
       }
     }
 
@@ -56,7 +58,6 @@
 
     &-group {
       display: none;
-      padding-left: @item-indent-gap;
     }
 
     &-expanded + &-group {
@@ -64,12 +65,88 @@
     }
 
     // 如果前面没有图标，就把图标位置让出来。
+    &-select:first-child,
     &-label:first-child {
-      margin-left: @item-indent-gap;
+      margin-left: @dls-tree-font-size-m + @dls-tree-node-content-spacing;
     }
 
     &-clickable {
       cursor: pointer;
+    }
+
+    &-remove {
+      cursor: pointer;
+      margin-left: auto;
+    }
+
+    &-hidden {
+      display: none;
+    }
+
+    &:hover::before {
+      background: @dls-tree-node-background-color-hover;
+    }
+    &:focus::before {
+      background: @dls-tree-node-background-color-focus;
+    }
+    &:active::before {
+      background: @dls-tree-node-background-color-active;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      height: @dls-tree-node-height-m;
+      width: 100%;
+      z-index: -1;
+    }
+  }
+
+  &-item-disabled,
+  &-disabled &-item,
+  &-disabled &-item-expand-switcher {
+    color: @dls-tree-node-font-color-disabled;
+    cursor: not-allowed;
+  }
+
+  &[ui~="after-icon"] {
+    .veui-tree {
+      &-item {
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+
+        &-label {
+          margin-left: @dls-tree-font-size-m + @dls-tree-node-content-spacing;
+        }
+
+        &-expand-switcher {
+          order: 1;
+
+          & ~ .veui-tree-item-label {
+            margin-left: 0;
+          }
+        }
+      }
+
+      &-item-select {
+        margin-left: auto;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &[ui~="s"] {
+    font-size: @dls-tree-font-size-m;
+
+    .veui-tree {
+      &-item {
+        .centered-line(@dls-tree-node-height-s);
+
+        &::before {
+          height: @dls-tree-node-height-s;
+        }
+      }
     }
   }
 }

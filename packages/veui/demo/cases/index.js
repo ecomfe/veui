@@ -294,8 +294,7 @@ export default [
   {
     path: '/transfer',
     name: 'Transfer',
-    component: Transfer,
-    disabled: true
+    component: Transfer
   },
   {
     path: '/uploader',
@@ -306,7 +305,6 @@ export default [
   {
     path: '/tree',
     name: 'Tree',
-    component: Tree,
-    disabled: true
+    component: Tree
   }
 ]
