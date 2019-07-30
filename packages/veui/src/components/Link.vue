@@ -20,7 +20,7 @@
   :aria-disabled="disabled"
   :tabindex="disabled ? -1 : null"
   :replace="replace"
-  v-bind="disabled ? { event: null } : {}"
+  :event="disabled ? null : 'click'"
   @click.native="handleNativeClick"
 >
   <slot/>
