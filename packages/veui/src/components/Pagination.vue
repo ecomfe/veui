@@ -7,10 +7,10 @@
 >
   <div class="veui-pagination-info">
     <div class="veui-pagination-total">
-      {{ t('total', { total: realTotal }) }}
+      {{ t("total", { total: realTotal }) }}
     </div>
     <div class="veui-pagination-size">
-      <span>{{ t('pageSize') }}</span>
+      <span>{{ t("pageSize") }}</span>
       <veui-select
         v-model="realPageSize"
         :ui="uiParts.pageSize"
@@ -30,37 +30,53 @@
       :native="native"
       :disabled="page === 1"
       :aria-label="t('prev')"
-      @keydown.native.enter.space.prevent="handleRedirect(pageNavHref.prev.page)"
       @click="handleRedirect(pageNavHref.prev.page, $event)"
     >
       <veui-icon :name="icons.prev"/>
     </veui-link>
     <ul
       class="veui-pagination-pages"
-      :class="{[`veui-pagination-digit-length-${pageDigitLength}`]: true}"
+      :class="{ [`veui-pagination-digit-length-${pageDigitLength}`]: true }"
     >
       <li
         v-for="item in pageIndicatorSeries"
-        :key="`${item.page}-${item.text}`"
+        :key="getKey(item)"
         :class="{
           'veui-pagination-page': true,
-          'veui-active': item.page === page
+          'veui-active': item.current
         }"
       >
         <veui-link
+          :ref="getKey(item)"
           :class="{
-            'veui-current': item.page === page
+            'veui-current': item.current,
+            'veui-pagination-more': item.more,
+            'focus-visible': focusVisible[getKey(item)]
           }"
-          :tabindex="to || item.page === page ? null : '0'"
           :role="to ? null : 'button'"
-          :to="item.page === page ? null : item.href"
+          :to="item.href"
           :native="native"
-          :aria-current="item.page === page ? 'page' : null"
-          :aria-label="item.page === page ? t('current', { page: item.page }) : t('pageLabel', { page: item.page })"
-          @keydown.native.enter.space.prevent="handleRedirect(item.page)"
-          @click="handleRedirect(item.page, $event)"
+          :aria-current="item.current ? 'page' : null"
+          :aria-label="
+            item.current
+              ? t('current', { page: item.page })
+              : t('pageLabel', { page: item.page })
+          "
+          @focus.native="handleFocus(getKey(item), item)"
+          @blur.native="handleBlur(getKey(item))"
+          @click="handleRedirect(item, $event)"
         >
-          {{ item.text }}
+          <template v-if="item.more">
+            <veui-icon
+              class="veui-pagination-more-ellipsis"
+              :name="icons.more"
+            />
+            <veui-icon
+              class="veui-pagination-more-arrow"
+              :name="item.forward ? icons.forward : icons.backward"
+            />
+          </template>
+          <template v-else>{{ item.text }}</template>
         </veui-link>
       </li>
     </ul>
@@ -72,7 +88,6 @@
       :native="native"
       :disabled="page === pageCount || pageCount === 0"
       :aria-label="t('next')"
-      @keydown.native.enter.space.prevent="handleRedirect(pageNavHref.next.page)"
       @click="handleRedirect(pageNavHref.next.page, $event)"
     >
       <veui-icon :name="icons.next"/>
@@ -88,6 +103,7 @@ import Select from './Select'
 import config from '../managers/config'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
+import { hasClass } from '../utils/dom'
 
 config.defaults({
   'pagination.pageSize': 30,
@@ -102,13 +118,13 @@ const HREF_TPL_PLACEHOLDER = /:page\b/g
  * 总页面切换按钮数
  * @type {Number}
  */
-const pageIndicatorLength = 9
+const pageIndicatorLength = 7
 
 /**
- * 围绕切换按钮数
+ * 围绕当前页面切换按钮数
  * @type {Number}
  */
-const aroundIndicatorLength = 2
+const aroundIndicatorLength = 1
 
 /**
  * 省略号点击跳转偏移页数
@@ -132,7 +148,9 @@ export default {
     pageSize: {
       type: Number,
       default () {
-        return config.get('pagination.pageSize') || config.get('pager.pageSize')
+        return (
+          config.get('pagination.pageSize') || config.get('pager.pageSize')
+        )
       }
     },
     pageSizes: {
@@ -154,7 +172,8 @@ export default {
   },
   data () {
     return {
-      customPageSize: 0
+      customPageSize: 0,
+      focusVisible: {}
     }
   },
   computed: {
@@ -212,37 +231,40 @@ export default {
         case pageCount <= pageIndicatorLength:
           return getPageSeries(1, pageCount)
 
-        case page < continuousIndicatorLength:
-          leftLen = Math.max(
-            continuousIndicatorLength,
-            page + aroundIndicatorLength
-          )
-          rightLen = pageIndicatorLength - leftLen - 1
+        case page <= boundaryIndicatorLength + aroundIndicatorLength + 2:
+          leftLen = pageIndicatorLength - boundaryIndicatorLength - 1
           return getPageSeries(1, leftLen)
-            .concat(getPageIndicator(offsetForward, true))
-            .concat(getPageSeries(pageCount - rightLen + 1, rightLen))
+            .concat(getPageIndicator(offsetForward, true, true))
+            .concat(
+              getPageSeries(
+                pageCount - boundaryIndicatorLength + 1,
+                boundaryIndicatorLength
+              )
+            )
 
-        case page > pageCount - continuousIndicatorLength + 1:
-          rightLen = Math.max(
-            pageCount - page + 1 + aroundIndicatorLength,
-            continuousIndicatorLength
-          )
-          leftLen = pageIndicatorLength - rightLen - 1
-          return getPageSeries(1, leftLen)
-            .concat(getPageIndicator(offsetBackward, true))
+        case page >=
+          pageCount - boundaryIndicatorLength - aroundIndicatorLength - 1:
+          rightLen = pageIndicatorLength - boundaryIndicatorLength - 1
+          return getPageSeries(1, boundaryIndicatorLength)
+            .concat(getPageIndicator(offsetBackward, true, false))
             .concat(getPageSeries(pageCount - rightLen + 1, rightLen))
 
         default:
           return getPageSeries(1, boundaryIndicatorLength)
-            .concat(getPageIndicator(offsetBackward, true))
+            .concat(getPageIndicator(offsetBackward, true, false))
             .concat(
               getPageSeries(
-                page - boundaryIndicatorLength - 1,
+                page - aroundIndicatorLength,
                 continuousIndicatorLength
               )
             )
-            .concat(getPageIndicator(offsetForward, true))
-            .concat(getPageSeries(pageCount, boundaryIndicatorLength))
+            .concat(getPageIndicator(offsetForward, true, true))
+            .concat(
+              getPageSeries(
+                pageCount - boundaryIndicatorLength + 1,
+                boundaryIndicatorLength
+              )
+            )
       }
 
       function getPageSeries (from, length) {
@@ -269,16 +291,24 @@ export default {
     }
   },
   methods: {
-    handleRedirect (page, event) {
+    handleRedirect (item, event) {
+      let page = typeof item === 'number' ? item : item.page
+      if (typeof item !== 'number') {
+        this.fixFocus(this.getKey(item))
+      }
+
       if (page !== this.page) {
         this.$emit('redirect', page, event)
       }
     },
 
-    getPageIndicator (page, isMore = false) {
+    getPageIndicator (page, more = false, forward = false) {
       return {
         page,
-        text: isMore ? '...' : page,
+        more,
+        forward,
+        current: page === this.page,
+        text: page,
         href: page ? this.formatHref(page) : null
       }
     },
@@ -289,6 +319,32 @@ export default {
         return null
       }
       return baseTo.replace(HREF_TPL_PLACEHOLDER, page)
+    },
+    getKey (item) {
+      return `p-${item.more ? (item.forward ? 'f' : 'b') : item.page}`
+    },
+    /**
+     * Special hack to prevent state lost
+     * upon component rerender
+     */
+    handleFocus (ref) {
+      this.$nextTick(() => {
+        let link = this.$refs[ref][0]
+        if (link && hasClass(link.$el, 'focus-visible')) {
+          this.focusVisible = { [ref]: true }
+        }
+      })
+    },
+    handleBlur (ref) {
+      this.$set(this.focusVisible, ref, false)
+    },
+    fixFocus (ref) {
+      this.$nextTick(() => {
+        let link = this.$refs[ref][0]
+        if (link) {
+          link.$el.focus()
+        }
+      })
     }
   }
 }
