@@ -1,27 +1,21 @@
 @import "../lib.less";
 
 .veui-loading {
-  text-align: center;
+  line-height: 1;
+  align-items: center;
+  display: inline-flex;
 
   &-text {
-    vertical-align: top;
-    display: inline-block;
-    padding-left: @dls-loading-content-spacing;
+    font-size: @dls-loading-font-size-m;
+    color: @dls-loading-font-color-normal;
+    margin-left: @dls-loading-content-spacing;
 
     &[ui~="s"] {
       font-size: @dls-loading-font-size-s;
     }
 
-    &[ui~="m"] {
-      font-size: @dls-loading-font-size-m;
-    }
-
     &[ui~="l"] {
       font-size: @dls-loading-font-size-l;
-    }
-
-    &[ui~="normal"] {
-      color: @dls-loading-font-color-normal;
     }
 
     &[ui~="strong"] {
@@ -31,29 +25,22 @@
     &[ui~="reverse"] {
       color: @dls-loading-font-color-reverse;
     }
-
-    &[ui~="vertical"] {
-      display: block;
-    }
   }
 
   &-spinner {
-    padding-bottom: @dls-loading-padding;
+    display: flex;
+    color: @dls-loading-color-normal;
 
-    &[ui~="s"] {
-      font-size: @dls-loading-size-s;
+    .veui-icon {
+      .dls-icon-size(@dls-loading-size-m);
     }
 
-    &[ui~="m"] {
-      font-size: @dls-loading-size-m;
+    &[ui~="s"] .veui-icon {
+      .dls-icon-size(@dls-loading-size-s);
     }
 
-    &[ui~="l"] {
-      font-size: @dls-loading-size-l;
-    }
-
-    &[ui~="normal"] {
-      color: @dls-loading-color-normal;
+    &[ui~="l"] .veui-icon {
+      .dls-icon-size(@dls-loading-size-l);
     }
 
     &[ui~="strong"] {
@@ -62,6 +49,18 @@
 
     &[ui~="reverse"] {
       color: @dls-loading-color-reverse;
+    }
+
+    &[ui~="vertical"] {
+      margin-bottom: @dls-loading-padding;
+    }
+  }
+
+  &[ui~="vertical"] {
+    flex-direction: column;
+
+    .veui-loading-text {
+      margin-left: 0;
     }
   }
 }
