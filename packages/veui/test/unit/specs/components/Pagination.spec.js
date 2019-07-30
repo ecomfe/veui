@@ -72,7 +72,7 @@ describe('components/Pagination', () => {
     )
 
     let { vm } = wrapper
-    // pages is: 1, ... , 4, 5, 6, 7, 8, ... , 10
+    // pages is: 1, ..., 5, 6, 7, ..., 10
     let pages = wrapper.findAll('.veui-pagination-page')
     expect(
       pages
@@ -85,29 +85,29 @@ describe('components/Pagination', () => {
         .at(1)
         .find('.veui-link')
         .text()
-    ).to.equal('...')
+    ).to.equal('')
     expect(
       pages
         .at(2)
         .find('.veui-link')
         .text()
-    ).to.equal('4')
+    ).to.equal('5')
 
     expect(
       pages
+        .at(4)
+        .find('.veui-link')
+        .text()
+    ).to.equal('7')
+    expect(
+      pages
+        .at(5)
+        .find('.veui-link')
+        .text()
+    ).to.equal('')
+    expect(
+      pages
         .at(6)
-        .find('.veui-link')
-        .text()
-    ).to.equal('8')
-    expect(
-      pages
-        .at(7)
-        .find('.veui-link')
-        .text()
-    ).to.equal('...')
-    expect(
-      pages
-        .at(8)
         .find('.veui-link')
         .text()
     ).to.equal('10')
@@ -115,26 +115,32 @@ describe('components/Pagination', () => {
     wrapper.setProps({ page: 7 })
     await vm.$nextTick()
 
-    // pages is: 1, 2，... , 5，6, 7, 8, 9, 10
+    // pages is: 1，...，6, 7, 8, 9, 10
     pages = wrapper.findAll('.veui-pagination-page')
+    expect(
+      pages
+        .at(0)
+        .find('.veui-link')
+        .text()
+    ).to.equal('1')
     expect(
       pages
         .at(1)
         .find('.veui-link')
         .text()
-    ).to.equal('2')
+    ).to.equal('')
     expect(
       pages
         .at(2)
         .find('.veui-link')
         .text()
-    ).to.equal('...')
+    ).to.equal('6')
     expect(
       pages
-        .at(3)
+        .at(5)
         .find('.veui-link')
         .text()
-    ).to.equal('5')
+    ).to.equal('9')
 
     wrapper.destroy()
   })
