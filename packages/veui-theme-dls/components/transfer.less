@@ -1,10 +1,6 @@
 @import "../lib.less";
 
 .veui-transfer {
-  @item-height: 36px;
-  @item-indent-gap: 18px;
-  @item-text-max-width: 150px;
-
   @panel-gap: 20px;
   @panel-inner-horizontal-gap: 20px;
 
@@ -17,21 +13,28 @@
   .clearfix();
   display: inline-block;
 
-  // 让 icon 居中
-  .center-icon(@line-height: @item-height) {
-    @height: (@line-height) / 2;
-    margin-top: ~"calc(@{height} - 0.5em)";
-    vertical-align: top;
-  }
-
   // 俩 panel 都左浮动
   .veui-filter-panel {
     float: left;
+
+    &-title {
+      display: flex;
+      align-items: center;
+      background: @dls-transfer-header-background-color;
+      border-bottom: 1px solid @dls-transfer-border-color;
+      margin: 0;
+      padding: 0 @dls-transfer-padding-x;
+      color: @dls-transfer-header-font-color;
+    }
+
+    .veui-searchbox {
+      margin: 0;
+      width: 100%;
+    }
   }
 
-  // tree item 有 centered-line(36px) 的样式，此处要覆盖掉 height
-  .veui-tree-item {
-    height: auto;
+  .veui-tree {
+    margin-top: @dls-transfer-header-content-spacing-1;
   }
 
   &-candidate-panel {
@@ -42,87 +45,9 @@
     position: relative;
   }
 
-  &-candidate-item,
-  &-selected-item {
-    padding: 0 @panel-inner-horizontal-gap;
-    cursor: pointer;
-    color: @veui-text-color-normal;
-    .centered-line(@item-height);
-
-    &::before {
-      content: "";
-      position: absolute;
-      display: block;
-      left: 0;
-      right: 0;
-      height: @item-height;
-    }
-
-    &:hover::before {
-      background: @veui-gray-color-8;
-    }
-
-    &:active::before {
-      background: @veui-gray-color-6;
-    }
-
-    .veui-transfer-item-text,
-    .veui-icon {
-      position: relative;
-      z-index: 1;
-    }
-
-    &-hidden {
-      display: none;
-    }
-  }
-
-  &-candidate-item {
-    &:hover {
-      .veui-transfer-candidate-icon-selected,
-      .veui-transfer-candidate-icon-unselected {
-        display: block;
-      }
-    }
-
-    &-label-selected {
-      color: @veui-text-color-aux;
-    }
-  }
-
-  &-selected-item:hover &-selected-icon-remove {
-    display: block;
-  }
-
-  &-item-text {
-    .ellipsis();
-    max-width: @item-text-max-width;
-    float: left;
-  }
-
-  &-item-label {
-    .clearfix();
-
-    &:first-child {
-      margin-left: @item-indent-gap;
-    }
-  }
-
-  &-candidate-icon-selected,
-  &-candidate-icon-unselected,
-  &-selected-icon-remove {
-    float: right;
-    .center-icon();
-    display: none;
-  }
-
-  &-selected-icon-remove {
-    .size(@remove-icon-size);
-  }
-
   &-select-all,
   &-remove-all {
-    float: right;
+    margin-left: auto;
   }
 
   &-selected-flat {
@@ -139,7 +64,6 @@
     &-item {
       padding: 0 @panel-inner-horizontal-gap;
       cursor: pointer;
-      position: relative;
 
       &:hover {
         background: @veui-gray-color-8;
@@ -150,8 +74,13 @@
       }
 
       &-label {
-        @padding-vertical: (@item-height - @flat-item-line-height) / 2;
-        padding: @padding-vertical @flat-item-right-gap @padding-vertical 0;
+        @padding-vertical: (
+            @dls-transfer-item-height-m - @flat-item-line-height
+          ) / 2;
+        padding: @padding-vertical 0;
+        width: 100%;
+        display: flex;
+        align-items: center;
       }
 
       &-hidden {
@@ -161,36 +90,29 @@
 
     &-option-separator {
       display: inline-block;
-      line-height: 1;
       overflow: hidden;
-      .size(1em);
-      .center-icon(@flat-item-line-height);
+      .centered-line(1em);
     }
 
     &-icon-remove {
-      .absolute(50%, @panel-inner-horizontal-gap, _, _);
-      transform: translateY(-50%);
       display: none;
       .size(@remove-icon-size);
+      margin-left: auto;
     }
 
     &-item:hover &-icon-remove {
-      display: block;
+      display: inline-block;
     }
   }
 
   // disabled 之后的样式
-  &-disabled &-candidate-item,
-  &-disabled &-selected-item,
   &-disabled &-selected-flat-item {
     cursor: not-allowed;
   }
 
-  &-disabled &-item-text,
-  &-disabled &-candidate-icon-unselected,
   &-disabled &-selected-icon-remove,
   &-disabled &-selected-flat-item-label {
-    color: @veui-text-color-aux;
+    color: @dls-transfer-item-font-color-disabled;
   }
 
   &.veui-input-invalid + .veui-field-error {
