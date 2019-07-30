@@ -1,249 +1,139 @@
 @import "../lib.less";
 
 .veui-pagination {
-  @button-width: 30px;
-  @button-height: 30px;
-  @button-gap-width: 6px;
+  display: inline-flex;
+  font-size: @dls-pagination-font-size-m;
 
-  @digit-width: 28px;
-  @digit-width-delta: 6px;
-  @digit-height: 30px;
-
-  @digit-size: 14px;
-
-  .clearfix();
-  display: inline-block;
-  color: @veui-text-color-normal;
-
-  .veui-link {
-    color: inherit;
-    text-decoration: none;
-    cursor: pointer;
-
-    &:focus {
-      outline: none;
-    }
+  &,
+  &-info,
+  &-pages,
+  &-switch,
+  & .veui-link {
+    display: inline-flex;
+    align-items: center;
   }
 
   &-info {
+    margin-right: @dls-pagination-page-items-margin-before;
+  }
+
+  &-size {
+    .veui-select {
+      margin-left: @dls-pagination-spacing-1;
+    }
+  }
+
+  &-total {
     display: none;
-    float: left;
-    margin-right: @button-gap-width;
-    line-height: @digit-height;
-  }
-
-  &-total,
-  &-size {
-    display: inline-block;
-  }
-
-  &-size {
-    .margin(_, 10px, _, 20px);
-  }
-
-  &-switch {
-    float: left;
-
-    .veui-active a,
-    .veui-active span {
-      color: @veui-text-color-strong;
-    }
-  }
-
-  .veui-active a,
-  .veui-active span {
-    background-color: @veui-gray-color-7;
-  }
-
-  .veui-select {
-    min-width: auto;
-    margin-top: -1px;
-    margin-left: 10px;
-    vertical-align: top;
-
-    .veui-button {
-      .padding(0, _);
-      height: @button-height;
-      line-height: @button-height - 2px;
-      white-space: nowrap;
-      color: @veui-text-color-strong;
-
-      .veui-icon {
-        @height: @button-height / 2 - 1px;
-        margin-top: ~"calc(@{height} - 0.5em)";
-      }
-    }
-
-    .veui-select-label {
-      max-width: none;
-      width: auto;
-      float: left;
-      margin-right: 5px;
-    }
-  }
-
-  &-prev,
-  &-next {
-    .veui-button-transition();
-
-    position: relative;
-    float: left;
-    width: @button-width;
-    height: @button-height;
-    line-height: @button-width - 2px;
-    text-align: center;
-    border: 1px solid @veui-gray-color-5;
-    background: transparent;
-
-    &:hover {
-      color: @veui-text-color-strong;
-      background-color: @veui-gray-color-8;
-    }
-
-    &.focus-visible {
-      .veui-focus-shadow(fadeout(@veui-gray-color-5, 50%));
-      color: @veui-brand-color;
-    }
-
-    &:active {
-      background-color: @veui-gray-color-6;
-    }
-
-    &.veui-disabled {
-      &,
-      &:hover,
-      &:active {
-        background-color: @veui-gray-color-7;
-        border-color: transparent;
-        color: @veui-text-color-aux;
-      }
-    }
-
-    .veui-icon {
-      .veui-position-center();
-    }
-  }
-
-  &-prev {
-    margin-right: @button-gap-width;
-  }
-
-  &-next {
-    margin-left: @button-gap-width;
   }
 
   &-pages {
-    float: left;
-    min-height: 1px;
-    margin: 0;
-    padding: 0;
     list-style: none;
+    margin: 0 @dls-pagination-page-item-spacing;
+    padding: 0;
+  }
 
-    li {
-      float: left;
-      width: @digit-width;
-      height: @digit-height;
-      text-align: center;
-      line-height: @digit-height;
-      font-size: @digit-size;
+  &-page + &-page {
+    margin-left: @dls-pagination-page-item-spacing;
+  }
 
-      .veui-link {
-        position: relative;
-        display: inline-block;
-        min-width: @button-width;
-        .veui-button-transition();
-        .padding(_, 6px);
+  .make-metrics(@size) {
+    @height: ~"dls-button-height-@{size}";
+    @radius: ~"dls-button-border-radius-@{size}";
+    @min-width: ~"dls-pagination-page-item-min-width-@{size}";
+    height: @@height;
+    min-width: @@min-width;
+    border-radius: @@radius;
+  }
 
-        &:hover {
-          color: @veui-text-color-strong;
+  .veui-link {
+    .padding(_, @dls-pagination-page-item-padding-x);
+    .make-metrics(m);
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    line-height: 1;
+    font-size: inherit;
+    cursor: pointer;
+
+    border: 1px solid @dls-button-border-color-normal;
+    background-color: @dls-button-background-color-normal;
+    color: @dls-button-font-color-normal;
+    .veui-button-transition();
+
+    &.veui-pagination-more {
+      border-color: transparent;
+      background-color: transparent;
+
+      .veui-icon {
+        .veui-transition(opacity);
+      }
+
+      .veui-pagination-more-ellipsis {
+        opacity: 1;
+      }
+
+      .veui-pagination-more-arrow {
+        position: absolute;
+        opacity: 0;
+      }
+
+      &:hover {
+        border-color: @dls-button-border-color-normal;
+      }
+
+      &:hover,
+      &.focus-visible {
+        .veui-pagination-more-ellipsis {
+          opacity: 0;
         }
 
-        &.focus-visible {
-          color: @veui-link-color-active;
-          z-index: 1;
-          background-color: #fff;
-          .veui-focus-shadow();
-        }
-      }
-
-      .veui-current {
-        cursor: default;
-      }
-    }
-
-    span {
-      color: @veui-link-color-weak;
-    }
-  }
-
-  .generate-responsive-page-digit-width(@length, @scale-ratio: 1)
-    when
-    (@length > 2) {
-    .veui-pagination-digit-length-@{length} {
-      li {
-        width: (@digit-width + @digit-width-delta * (@length - 2)) *
-          @scale-ratio;
-      }
-    }
-
-    .generate-responsive-page-digit-width(@length - 1, @scale-ratio);
-  }
-
-  .generate-responsive-page-digit-width(4);
-
-  &[ui~="hetero"],
-  &[ui~="full"] {
-    .veui-pagination-switch {
-      position: relative;
-    }
-
-    .veui-pagination-pages {
-      margin-right: @button-width + @button-gap-width * 2;
-    }
-
-    .veui-pagination-prev {
-      position: absolute;
-      right: @button-width;
-    }
-
-    .veui-pagination-next {
-      margin-left: 0;
-    }
-  }
-
-  &[ui~="full"] {
-    .veui-pagination-info {
-      display: block;
-    }
-  }
-
-  &[ui~="slim"] {
-    @scale: 2 / 3;
-
-    .veui-pagination-switch {
-      li {
-        width: @digit-width * @scale;
-        height: @digit-height * @scale;
-        line-height: @digit-height * @scale;
-        font-size: @veui-font-size-small;
-
-        a {
-          min-width: @button-width * @scale;
+        .veui-pagination-more-arrow {
+          opacity: 1;
         }
       }
     }
 
-    .veui-pagination-prev,
-    .veui-pagination-next {
-      width: @button-height * @scale;
-      height: @button-height * @scale;
-      line-height: 1.5;
+    &:hover {
+      background-color: @dls-button-background-color-normal-hover;
     }
 
-    .veui-icon {
-      height: @digit-height * @scale / 2;
+    &.focus-visible {
+      background-color: @dls-button-background-color-normal-focus;
+      .dls-focus-ring(@dls-button-border-color-focus, @dls-button-shadow-focus);
     }
 
-    .generate-responsive-page-digit-width(4, 0.8);
+    &:active {
+      background-color: @dls-button-background-color-normal-active;
+    }
+
+    &.veui-disabled {
+      border-color: @dls-button-border-color-normal-disabled;
+      background-color: @dls-button-background-color-normal-disabled;
+      color: @dls-button-font-color-normal-disabled;
+    }
+
+    &.veui-current {
+      border-color: @dls-pagination-page-item-border-color-current;
+      background-color: @dls-pagination-page-item-background-color-current;
+      color: @dls-pagination-page-item-font-color-current;
+      font-weight: @dls-pagination-page-item-font-weight-current;
+    }
+  }
+
+  &[ui~="xs"] {
+    font-size: @dls-pagination-font-size-xs;
+
+    .veui-link {
+      .make-metrics(xs);
+    }
+  }
+
+  &[ui~="s"] {
+    font-size: @dls-pagination-font-size-s;
+
+    .veui-link {
+      .make-metrics(s);
+    }
   }
 }
