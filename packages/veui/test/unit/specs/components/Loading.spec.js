@@ -9,7 +9,7 @@ describe('components/Loading', () => {
           'veui-loading': Loading
         },
         template:
-          '<veui-loading ui="s vertical reverse" :loading="true">加载中</veui-loading>'
+          '<veui-loading ui="s vertical reverse" loading>加载中</veui-loading>'
       },
       {
         sync: false,
@@ -35,8 +35,7 @@ describe('components/Loading', () => {
         components: {
           'veui-loading': Loading
         },
-        template:
-          '<veui-loading ui="s vertical" :loading="false">加载中</veui-loading>'
+        template: '<veui-loading ui="s vertical">加载中</veui-loading>'
       },
       {
         sync: false,
@@ -53,11 +52,8 @@ describe('components/Loading', () => {
         components: {
           'veui-loading': Loading
         },
-        template: `
-        <veui-loading ui="s vertical" :loading="true">
-        加载中...
-        </veui-loading>
-      `
+        template:
+          '<veui-loading ui="s vertical" loading>加载中...</veui-loading>'
       },
       {
         sync: false,
@@ -75,11 +71,9 @@ describe('components/Loading', () => {
           'veui-loading': Loading
         },
         template: `
-        <veui-loading ui="s vertical" :loading="true">
-        加载中...
-        <template slot="spinner">
-          <span class="custom-spinner">custom spinner content</span>
-        </template>
+        <veui-loading ui="s vertical" loading>
+          加载中...
+          <template slot="spinner"><span class="custom-spinner">custom spinner content</span></template>
         </veui-loading>
       `
       },
