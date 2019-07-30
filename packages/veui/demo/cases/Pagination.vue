@@ -2,7 +2,7 @@
 <article>
   <h1><code>&lt;veui-pagination&gt;</code></h1>
   <section>
-    <h2>四种版式</h2>
+    <h2>三种尺寸</h2>
     <p>
       <veui-pagination
         :page="page"
@@ -16,7 +16,7 @@
         :page="page"
         :total="total"
         :to="to"
-        ui="hetero"
+        ui="s"
       />
     </p>
 
@@ -26,16 +26,8 @@
         :total="total"
         :page-sizes="pageSizes"
         :to="to"
-        ui="full"
+        ui="xs"
         :page-size.sync="pageSize"
-      />
-    </p>
-    <p>
-      <veui-pagination
-        :page="page"
-        :total="total"
-        :to="to"
-        ui="slim"
       />
     </p>
   </section>
@@ -47,8 +39,7 @@
       <veui-pagination
         :page="page"
         :total="total"
-        ui="advanced"
-        :to="{ name: 'Pagination', params: { page: ':page'} }"
+        :to="{ name: 'Pagination', params: { page: ':page' } }"
       />
     </p>
   </section>
@@ -60,7 +51,6 @@
         :page="page"
         :total="total"
         :to="'#' + to"
-        ui="advanced"
         native
       />
     </p>
@@ -68,13 +58,14 @@
 
   <section>
     <h2>阻止跳转</h2>
-    <p><small>仅原生跳转可阻止已配置 <code>to</code> 的跳转</small></p>
+    <p>
+      <small>仅原生跳转可阻止已配置 <code>to</code> 的跳转</small>
+    </p>
     <p>
       <veui-pagination
         :page="page"
         :total="total"
         :to="to"
-        ui="advanced"
         native
         @redirect="handlePageRedirect"
       />
@@ -105,7 +96,6 @@
         :page="1"
         :total="0"
         :to="'#' + to"
-        ui="full"
         native
       />
     </p>
