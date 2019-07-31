@@ -10,7 +10,9 @@ i18n.register(
     prev: '上一页',
     next: '下一页',
     pageLabel: '前往第 {page} 页',
-    current: '第 {page} 页，当前页'
+    current: '第 {page} 页，当前页',
+    gotoPage: '去第 {page} 页',
+    go: '确定'
   },
   {
     ns: 'pagination'
