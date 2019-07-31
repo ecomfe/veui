@@ -14,7 +14,7 @@ export class I18nManager {
         let key = options.ns ? `${locale}.${options.ns}` : `${locale}`
         deepSet(this.store, key, data)
       },
-      get (path, data, locale) {
+      get (path, data = {}, locale) {
         if (isString(data)) {
           // overloading get (path, locale)
           locale = data
@@ -27,8 +27,11 @@ export class I18nManager {
           return message
         }
 
-        return message.replace(/\{(\w+)\}/g, (_, key) => {
-          return data[key]
+        return message.replace(/\{(\w+)\}/g, (match, key) => {
+          if (isString(data[key])) {
+            return data[key]
+          }
+          return match
         })
       },
       watch (path, callback, locale) {
@@ -42,9 +45,9 @@ export class I18nManager {
         )
       }
     }
-  })
+  });
 
-  _locale = 'zh-Hans'
+  _locale = 'zh-Hans';
 
   get locale () {
     return this.store.locale
