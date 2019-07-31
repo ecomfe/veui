@@ -10,7 +10,9 @@ i18n.register(
     prev: 'Previous page',
     next: 'Next page',
     pageLabel: 'Go to page {page}',
-    current: 'Page {page}, current page'
+    current: 'Page {page}, current page',
+    gotoPage: 'Page {page}',
+    go: 'Go'
   },
   {
     ns: 'pagination'
