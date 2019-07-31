@@ -7,10 +7,10 @@
 >
   <div class="veui-pagination-info">
     <div class="veui-pagination-total">
-      {{ t("total", { total: realTotal }) }}
+      {{ t('total', { total: realTotal }) }}
     </div>
     <div class="veui-pagination-size">
-      <span>{{ t("pageSize") }}</span>
+      <span>{{ t('pageSize') }}</span>
       <veui-select
         v-model="realPageSize"
         :ui="uiParts.pageSize"
@@ -93,6 +93,34 @@
       <veui-icon :name="icons.next"/>
     </veui-link>
   </div>
+  <div
+    v-if="goto"
+    class="veui-pagination-goto"
+  >
+    <span
+      v-if="gotoPageLabel[0]"
+      class="veui-pagination-goto-label-before"
+    >{{
+      gotoPageLabel[0]
+    }}</span>
+    <veui-input
+      v-model="targetPage"
+      @keydown.enter="gotoPage"
+    />
+    <span
+      v-if="gotoPageLabel[1]"
+      class="veui-pagination-goto-label-after"
+    >{{
+      gotoPageLabel[1]
+    }}</span>
+    <veui-button @click="gotoPage">{{ t('go') }}</veui-button>
+    <veui-link
+      v-show="false"
+      ref="goto"
+      aria-hidden="true"
+      :to="realTargetLink"
+    />
+  </div>
 </div>
 </template>
 
@@ -100,6 +128,8 @@
 import Icon from './Icon'
 import Link from './Link'
 import Select from './Select'
+import Input from './Input'
+import Button from './Button'
 import config from '../managers/config'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
@@ -137,7 +167,9 @@ export default {
   components: {
     'veui-icon': Icon,
     'veui-link': Link,
-    'veui-select': Select
+    'veui-select': Select,
+    'veui-input': Input,
+    'veui-button': Button
   },
   mixins: [ui, i18n],
   props: {
@@ -168,11 +200,16 @@ export default {
     native: {
       type: Boolean,
       default: false
+    },
+    goto: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
       customPageSize: 0,
+      targetPage: '',
       focusVisible: {}
     }
   },
@@ -275,9 +312,20 @@ export default {
         return series
       }
     },
-
     pageDigitLength () {
       return this.pageCount.toString(10).length
+    },
+    gotoPageLabel () {
+      return this.t('gotoPage').split('{page}')
+    },
+    realTargetLink () {
+      let { targetPage = '' } = this
+      let pageStr = targetPage.trim()
+      let page = parseInt(pageStr, 10)
+      if (isNaN(page) || String(page) !== targetPage) {
+        return null
+      }
+      return this.formatHref(page)
     }
   },
   watch: {
@@ -301,7 +349,6 @@ export default {
         this.$emit('redirect', page, event)
       }
     },
-
     getPageIndicator (page, more = false, forward = false) {
       return {
         page,
@@ -312,13 +359,21 @@ export default {
         href: page ? this.formatHref(page) : null
       }
     },
-
     formatHref (page) {
       let { baseTo } = this
       if (baseTo === null) {
         return null
       }
       return baseTo.replace(HREF_TPL_PLACEHOLDER, page)
+    },
+    gotoPage () {
+      if (this.realTargetLink === null) {
+        this.targetPage = ''
+        return
+      }
+
+      this.$refs.goto.$el.click()
+      this.targetPage = ''
     },
     getKey (item) {
       return `p-${item.more ? (item.forward ? 'f' : 'b') : item.page}`
