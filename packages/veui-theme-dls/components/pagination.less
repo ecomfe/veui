@@ -27,6 +27,37 @@
     display: none;
   }
 
+  &-goto {
+    display: flex;
+    align-items: center;
+    margin-left: @dls-pagination-page-items-margin-after;
+
+    .veui-input {
+      width: 40px;
+
+      &-main {
+        padding: 0 @dls-padding-unit * 2;
+      }
+    }
+
+    &-label-before,
+    &-label-after {
+      display: block;
+    }
+
+    &-label-before {
+      margin-right: @dls-pagination-spacing-1;
+    }
+
+    &-label-after {
+      margin-left: @dls-pagination-spacing-1;
+    }
+
+    .veui-button {
+      margin-left: @dls-pagination-spacing-2;
+    }
+  }
+
   &-pages {
     list-style: none;
     margin: 0 @dls-pagination-page-item-spacing;

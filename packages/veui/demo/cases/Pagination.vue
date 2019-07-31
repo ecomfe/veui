@@ -3,65 +3,70 @@
   <h1><code>&lt;veui-pagination&gt;</code></h1>
   <section>
     <h2>三种尺寸</h2>
-    <p>
+    <section>
       <veui-pagination
         :page="page"
         :total="total"
         :to="to"
+        goto
       />
-    </p>
+    </section>
 
-    <p>
+    <section>
       <veui-pagination
         :page="page"
         :total="total"
         :to="to"
+        goto
         ui="s"
       />
-    </p>
+    </section>
 
-    <p>
+    <section>
       <veui-pagination
         :page="page"
         :total="total"
         :page-sizes="pageSizes"
         :to="to"
+        goto
         ui="xs"
         :page-size.sync="pageSize"
       />
-    </p>
+    </section>
   </section>
 
   <section>
     <h2>目标位置模板</h2>
-    <p><small>格式和 &lt;router-link&gt; 的 to prop 一样</small></p>
-    <p>
+    <section>
+      <small>格式和 &lt;router-link&gt; 的 to prop 一样</small>
+    </section>
+    <section>
       <veui-pagination
         :page="page"
         :total="total"
         :to="{ name: 'Pagination', params: { page: ':page' } }"
       />
-    </p>
+    </section>
   </section>
 
   <section>
     <h2>原生跳转</h2>
-    <p>
+    <section>
       <veui-pagination
         :page="page"
         :total="total"
         :to="'#' + to"
         native
       />
-    </p>
+    </section>
   </section>
 
   <section>
     <h2>阻止跳转</h2>
-    <p>
+    <section>
       <small>仅原生跳转可阻止已配置 <code>to</code> 的跳转</small>
-    </p>
-    <p>
+    </section>
+    <section>
       <veui-pagination
         :page="page"
         :total="total"
@@ -69,7 +74,7 @@
         native
         @redirect="handlePageRedirect"
       />
-    </p>
+    </section>
     <div class="message">
       {{ fifthPaginationMessage }}
     </div>
@@ -77,28 +82,25 @@
 
   <section>
     <h2>自定义事件处理</h2>
-    <p>
+    <section>
       <veui-pagination
         :page="p"
         :total="total"
         @redirect="handleCustomRedirect"
       />
-    </p>
-    <div class="message">
-      {{ fifthPaginationMessage }}
-    </div>
+    </section>
   </section>
 
   <section>
     <h2>没有数据时</h2>
-    <p>
+    <section>
       <veui-pagination
         :page="1"
         :total="0"
         :to="'#' + to"
         native
       />
-    </p>
+    </section>
   </section>
 </article>
 </template>
@@ -150,12 +152,11 @@ export default {
 <style lang="less" scoped>
 section {
   margin-bottom: 3em;
-}
-.veui-pagination {
-  margin: 1em 0 3em;
-}
 
-.message {
-  margin-top: -3em;
+  section {
+    margin-bottom: 2em;
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 </style>
