@@ -1,49 +1,78 @@
 <template>
 <div
   v-if="localOpen"
+  ref="box"
   :ui="ui"
-  class="veui-tag"
-  :class="`veui-tag-${type}`"
+  :class="{
+    'veui-tag': true,
+    'veui-tag-selected': localSelected,
+    'veui-disabled': disabled,
+    selectable: selectable
+  }"
+  @click="handleClick"
 >
   <slot/>
-  <veui-button
+  <div
     v-if="closable"
     class="veui-tag-close"
     @click="close"
   >
     <veui-icon :name="icons.close"/>
-  </veui-button>
+  </div>
 </div>
 </template>
 
 <script>
-import Button from './Button'
 import Icon from './Icon'
 import ui from '../mixins/ui'
+import focusable from '../mixins/focusable'
 
 export default {
   name: 'veui-tag',
   components: {
-    'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [ui],
+  mixins: [ui, focusable],
   props: {
-    type: {
-      type: String,
-      default: 'default'
-    },
-    closable: Boolean
+    closable: Boolean,
+    selectable: Boolean,
+    selected: Boolean,
+    disabled: Boolean
   },
   data () {
     return {
-      localOpen: true
+      localOpen: true,
+      localSelected: this.selected
+    }
+  },
+  watch: {
+    selected (val) {
+      this.localSelected = val
+    },
+    localSelected (val) {
+      if (this.selected !== val) {
+        this.$emit('update:selected', this.localSelected)
+      }
     }
   },
   methods: {
-    close () {
+    focus () {
+      this.$refs.box.focus()
+    },
+    handleClick () {
+      if (this.selectable && !this.disabled) {
+        this.localSelected = !this.localSelected
+      }
+    },
+    close (e) {
+      if (this.disabled) {
+        return
+      }
+
       this.localOpen = false
       this.$emit('close')
+      e.stopPropagation()
+      e.preventDefault()
     }
   }
 }

@@ -1,85 +1,220 @@
 @import "../lib.less";
 
 .veui-tag {
-  @success: @veui-success-color-8;
-  @warning: @veui-warning-color-8;
-  @info: @veui-info-color-8;
-  @error: @veui-alert-color-8;
-  @bg-color: @veui-gray-color-8;
-
   position: relative;
-  display: inline-block;
-  margin: 2px;
-  padding: 0 8px;
-  border: 1px solid @veui-gray-color-5;
-  border-radius: 2px;
-  color: @veui-text-color-normal;
-  background-color: @bg-color;
+  display: inline-flex;
+  align-items: center;
+  .make-metrics(m);
+  .padding(0, @dls-tag-padding);
+  border: 1px solid @dls-tag-border-color;
+  color: @dls-tag-font-color;
+  background-color: @dls-tag-background-color;
+  white-space: nowrap;
 
-  span {
-    display: inline-block;
+  .make-metrics(@size) {
+    @height: ~"dls-tag-height-@{size}";
+    @radius: ~"dls-tag-border-radius-@{size}";
+    @font-size: ~"dls-tag-font-size-@{size}";
+
+    height: @@height;
+    border-radius: @@radius;
+    font-size: @@font-size;
   }
 
-  &-close.veui-button {
-    .relative(50%, _, _, _);
-    transform: translateY(-50%);
-    margin-left: 5px;
-    padding: 0;
-    border: none;
-    background-color: transparent;
+  &[ui~="s"] {
+    .make-metrics(s);
+  }
 
-    &:hover,
-    &.focus-visible,
-    &:active {
-      color: @veui-gray-color-1;
-      background-color: transparent;
-    }
+  &-close {
+    cursor: pointer;
     .veui-icon {
-      margin-top: 0;
-      font-size: @veui-font-size-small;
+      margin-left: @dls-tag-content-spacing;
+      .dls-icon-size(@dls-tag-icon-size);
     }
   }
 
-  .make-state-color (@state) {
-    &-@{state} {
-      @border-color-name: ~"veui-@{state}-color-6";
+  &:hover {
+    border-color: @dls-tag-shadow-focus;
+    background-color: @dls-tag-background-color-hover;
+  }
 
-      border-color: @@border-color-name;
-      background-color: @@state;
+  &:focus {
+    border-color: @dls-tag-border-color-focus;
+    background-color: @dls-tag-background-color-focus;
+    box-shadow: @dls-tag-shadow-focus;
+  }
+
+  &:active {
+    background-color: @dls-tag-background-color-active;
+  }
+
+  &.selectable {
+    cursor: pointer;
+  }
+
+  &.veui-disabled {
+    color: @dls-tag-font-color-disabled;
+    border-color: @dls-tag-border-color-disabled;
+    background-color: @dls-tag-background-color-disabled;
+    .veui-tag-close {
+      cursor: not-allowed;
     }
   }
-  .make-state-color(success);
-  .make-state-color(info);
-  .make-state-color(warning);
-  .make-state-color(error);
 
-  &[ui~="large"] {
-    .make-style(@veui-height-small, @veui-font-size-normal);
-  }
-  &[ui~="small"] {
-    padding: 0 5px;
-    .make-style(@veui-height-micro, @veui-font-size-small);
-    .veui-tag-close.veui-button .veui-icon {
-      width: 0.8em;
-      height: 0.8em;
+  &.veui-tag-selected {
+    color: @dls-tag-font-color-selected;
+    border-color: @dls-tag-border-color-selected;
+    background-color: @dls-tag-background-color-selected;
+
+    &:hover {
+      background-color: @dls-tag-background-color-selected-hover;
+    }
+    &:focus {
+      border-color: @dls-tag-border-color-selected-focus;
+      background-color: @dls-tag-background-color-selected-focus;
+      box-shadow: @dls-tag-shadow-selected-focus;
+    }
+    &:active {
+      background-color: @dls-color-brand-7;
+    }
+    &.veui-disabled {
+      background-color: @dls-tag-background-color-selected-disabled;
     }
   }
 
-  .make-style (@height, @font-size) {
-    height: @height;
-    line-height: @height - 2px;
-    font-size: @font-size;
+  &[ui~="info"] {
+    color: @dls-tag-font-color-info;
+    border-color: @dls-tag-border-color-info;
+    background-color: @dls-tag-background-color-info;
 
-    .veui-tag-close.veui-button {
-      height: @height;
-      line-height: @height;
+    &:hover {
+      background-color: @dls-color-info-2;
+    }
+    &:focus {
+      background-color: @dls-color-info-2;
+    }
+    &.veui-disabled {
+      color: @dls-color-info-3;
+      border-color: @dls-color-info-2;
+      background-color: @dls-tag-background-color-info;
+    }
+    &.veui-tag-selected {
+      color: @dls-tag-font-color-selected;
+      border-color: @dls-tag-border-color-selected;
+      background-color: @dls-color-info-6;
 
-      .veui-icon {
-        .relative(@height / 2, _, _, _);
-        transform: translateY(-50%);
+      &:hover,
+      &:focus {
+        background-color: @dls-color-info-5;
+      }
+      &:active {
+        background-color: @dls-color-info-7;
+      }
+      &.veui-disabled {
+        background-color: @dls-color-info-2;
       }
     }
   }
 
-  .make-style(@veui-height-tiny, @veui-font-size-small);
+  &[ui~="success"] {
+    color: @dls-tag-font-color-success;
+    border-color: @dls-tag-border-color-success;
+    background-color: @dls-tag-background-color-success;
+
+    &:hover {
+      background-color: @dls-color-success-2;
+    }
+    &:focus {
+      background-color: @dls-color-success-2;
+    }
+    &.veui-disabled {
+      color: @dls-color-success-3;
+      border-color: @dls-color-success-2;
+      background-color: @dls-tag-background-color-info;
+    }
+    &.veui-tag-selected {
+      color: @dls-tag-font-color-selected;
+      border-color: @dls-tag-border-color-selected;
+      background-color: @dls-color-success-6;
+
+      &:hover,
+      &:focus {
+        background-color: @dls-color-success-5;
+      }
+      &:active {
+        background-color: @dls-color-success-7;
+      }
+      &.veui-disabled {
+        background-color: @dls-color-success-2;
+      }
+    }
+  }
+
+  &[ui~="warning"] {
+    color: @dls-tag-font-color-warning;
+    border-color: @dls-tag-border-color-warning;
+    background-color: @dls-tag-background-color-warning;
+
+    &:hover {
+      background-color: @dls-color-warning-2;
+    }
+    &:focus {
+      background-color: @dls-color-warning-2;
+    }
+    &.veui-disabled {
+      color: @dls-color-warning-3;
+      border-color: @dls-color-warning-2;
+      background-color: @dls-tag-background-color-info;
+    }
+    &.veui-tag-selected {
+      color: @dls-tag-font-color-selected;
+      border-color: @dls-tag-border-color-selected;
+      background-color: @dls-color-warning-6;
+
+      &:hover,
+      &:focus {
+        background-color: @dls-color-warning-5;
+      }
+      &:active {
+        background-color: @dls-color-warning-7;
+      }
+      &.veui-disabled {
+        background-color: @dls-color-warning-2;
+      }
+    }
+  }
+
+  &[ui~="error"] {
+    color: @dls-tag-font-color-error;
+    border-color: @dls-tag-border-color-error;
+    background-color: @dls-tag-background-color-error;
+
+    &:hover {
+      background-color: @dls-color-error-2;
+    }
+    &:focus {
+      background-color: @dls-color-error-2;
+    }
+    &.veui-disabled {
+      color: @dls-color-error-3;
+      border-color: @dls-color-error-2;
+      background-color: @dls-tag-background-color-info;
+    }
+    &.veui-tag-selected {
+      color: @dls-tag-font-color-selected;
+      border-color: @dls-tag-border-color-selected;
+      background-color: @dls-color-error-6;
+
+      &:hover,
+      &:focus {
+        background-color: @dls-color-error-5;
+      }
+      &:active {
+        background-color: @dls-color-error-7;
+      }
+      &.veui-disabled {
+        background-color: @dls-color-error-2;
+      }
+    }
+  }
 }
