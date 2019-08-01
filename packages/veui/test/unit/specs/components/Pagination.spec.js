@@ -167,4 +167,39 @@ describe('components/Pagination', () => {
 
     wrapper.destroy()
   })
+
+  it('should support goto feature correctly', () => {
+    let wrapper = mount(
+      Pagination,
+      {
+        propsData: {
+          page: 4,
+          total: 300,
+          goto: true
+        }
+      },
+      {
+        sync: false
+      }
+    )
+
+    let pages = []
+    wrapper.vm.$on('redirect', page => {
+      pages.push(page)
+
+      if (pages.length === 2) {
+        expect(pages).to.deep.equal([10, 20])
+      }
+    })
+
+    let input = wrapper.find('.veui-pagination-goto input')
+
+    input.setValue('10')
+    input.trigger('keydown.enter')
+
+    input.setValue('20')
+    wrapper.find('.veui-pagination-goto input').trigger('click')
+
+    wrapper.destroy()
+  })
 })
