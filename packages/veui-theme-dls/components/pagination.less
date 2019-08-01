@@ -33,10 +33,10 @@
     margin-left: @dls-pagination-page-items-margin-after;
 
     .veui-input {
-      width: 40px;
+      width: @dls-pagination-goto-input-width;
 
       &-main {
-        padding: 0 @dls-padding-unit * 2;
+        .padding(_, @dls-pagination-goto-input-padding-x);
       }
     }
 
