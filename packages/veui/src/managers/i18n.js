@@ -28,7 +28,7 @@ export class I18nManager {
         }
 
         return message.replace(/\{(\w+)\}/g, (match, key) => {
-          if (isString(data[key])) {
+          if (data[key] != null) {
             return data[key]
           }
           return match
