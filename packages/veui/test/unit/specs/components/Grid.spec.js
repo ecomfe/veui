@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils'
-import { trim } from 'lodash'
 import GridContainer from '@/components/GridContainer'
 import GridRow from '@/components/GridRow'
 import GridColumn from '@/components/GridColumn'
+import { getStyle } from '../../../utils'
 
 describe('components/GridContainer', () => {
   it('should render `columns` props correctly', () => {
@@ -115,7 +115,9 @@ describe('components/GridContainer', () => {
       }
     )
 
-    expect(getStyle(wrapper.find('.veui-grid-row').element).display).to.equal('flex')
+    expect(getStyle(wrapper.find('.veui-grid-row').element).display).to.equal(
+      'flex'
+    )
 
     wrapper.destroy()
   })
@@ -247,18 +249,3 @@ describe('components/GridColumn', () => {
     wrapper.destroy()
   })
 })
-
-function getStyle (element) {
-  let cssText = element.style.cssText || ''
-  let arr = cssText.split(';')
-  return arr.reduce(
-    (obj, item) => {
-      if (!item) {
-        return obj
-      }
-      let [key, value] = item.split(':')
-      return { ...obj, [trim(key)]: trim(value) }
-    },
-    {}
-  )
-}
