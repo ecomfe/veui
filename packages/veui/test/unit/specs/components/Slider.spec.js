@@ -19,7 +19,7 @@ describe('components/Slider', function () {
     wrapper.destroy()
   })
 
-  it('should handle disabled prop correctly.', done => {
+  it('should handle disabled prop correctly.', () => {
     let wrapper = mount(Slider, {
       propsData: {
         disabled: true,
@@ -27,10 +27,20 @@ describe('components/Slider', function () {
       }
     })
 
-    expect(wrapper.vm.disabled).to.be.equals(true)
-
+    expect(wrapper.contains('.veui-slider.veui-disabled')).to.equal(true)
     wrapper.destroy()
-    done()
+  })
+
+  it('should handle readonly prop correctly.', () => {
+    let wrapper = mount(Slider, {
+      propsData: {
+        readonly: true,
+        value: 0.5
+      }
+    })
+
+    expect(wrapper.contains('.veui-slider.veui-readonly')).to.equal(true)
+    wrapper.destroy()
   })
 
   it('should not exceed max or min value', async () => {
