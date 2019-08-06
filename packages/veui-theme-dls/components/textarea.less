@@ -5,33 +5,31 @@
   display: inline-block;
   position: relative;
   overflow: hidden;
-  width: 300px;
-  border: 1px solid @veui-gray-color-5;
-  padding: 0;
-  background-color: @veui-gray-color-7;
-  font-size: @veui-font-size-normal;
-  line-height: @veui-height-normal;
-  color: @veui-text-color-normal;
-  min-height: 150px;
+  width: @dls-textarea-width;
+  border: 1px solid @dls-input-border-color;
+  background-color: @dls-background-color-strong;
+  font-size: @dls-textarea-font-size-m;
+  line-height: @dls-textarea-line-height;
+  color: @dls-input-font-color;
+  min-height: @dls-textarea-height-m;
+  border-radius: @dls-input-border-radius-m;
   .veui-transition(border-color, color, box-shadow);
 
-  &.veui-input-invalid {
-    &:extend(._veui-input-invalid all);
+  @line-number-default-width: @dls-height-m;
+
+  // &.veui-input-invalid {
+  //   &:extend(._veui-input-invalid all);
+  // }
+
+  &:hover {
+    border-color: @dls-input-border-color-hover;
   }
 
-  &:hover,
   &-focused {
-    border-color: @veui-gray-color-3;
-  }
-
-  &-focused {
-    .veui-focus-shadow();
-    color: @veui-text-color-strong;
-  }
-
-  &-input,
-  &-measurer {
-    font: inherit;
+    &,
+    &:hover {
+      .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
+    }
   }
 
   // 不要给 textarea 设置背景色，不然在 IE9 下面光标位置会很难看，同时引起一些其他怪异问题
@@ -39,6 +37,7 @@
     position: relative;
     float: right;
     width: 100%;
+    padding: @dls-textarea-padding-y @dls-textarea-padding-x;
 
     // 和外部容器的高度保持一致
     height: inherit;
@@ -47,9 +46,13 @@
 
     border: none;
     outline: none;
-    padding: 0 10px;
     z-index: 1;
     resize: none;
+  }
+
+  &-input,
+  &-measurer {
+    font: inherit;
   }
 
   &-rows {
@@ -61,7 +64,7 @@
   }
 
   &-measurer + &-input {
-    max-width: ~"calc(100% - @{veui-height-normal})";
+    max-width: ~"calc(100% - @{dls-height-m})";
   }
 
   &-measurer {
@@ -69,19 +72,34 @@
     overflow: hidden;
     white-space: pre-wrap;
     word-wrap: break-word;
-    color: @veui-text-color-weak;
+    color: @dls-font-color-weak;
 
     &-line {
-      overflow: hidden;
+      &:first-child {
+        margin-top: @dls-textarea-padding-y;
+      }
+
+      &:last-child {
+        margin-bottom: @dls-textarea-padding-y;
+      }
 
       &-number {
         float: left;
-        min-width: @veui-height-normal;
+        position: relative;
+        min-width: @line-number-default-width;
         text-align: center;
+
+        &::before {
+          content: "";
+          .absolute(-@dls-textarea-padding-y, 0, _, _);
+          .size(1px, 9999px);
+          background-color: @dls-separator-color-normal;
+          z-index: 2;
+        }
       }
 
       &-content {
-        .padding(_, 10px);
+        .padding(_, @dls-textarea-padding-x);
         overflow: hidden;
         visibility: hidden;
       }
@@ -90,32 +108,36 @@
 
   &-autoresize &-measurer {
     bottom: auto;
+    min-height: inherit;
   }
 
-  &[ui~="small"] {
-    font-size: @veui-font-size-small;
-    line-height: @veui-height-small;
+  &[ui~="s"] {
+    font-size: @dls-textarea-font-size-s;
+    min-height: @dls-textarea-height-s;
+    border-radius: @dls-input-border-radius-s;
   }
 
-  &[ui~="large"] {
-    font-size: @veui-font-size-large;
-    line-height: @veui-height-large;
+  &.veui-readonly {
+    border-color: @dls-input-border-color-read-only;
+    background-color: @dls-input-background-color-read-only;
+    color: @dls-input-font-color-read-only;
+
+    &:hover {
+      border-color: @dls-input-border-color-read-only-hover;
+    }
   }
 
-  &.veui-readonly,
   &.veui-disabled {
     &,
     &:hover {
-      border-color: @veui-gray-color-5;
-      color: @veui-text-color-weak;
+      border-color: @dls-input-border-color-disabled;
+      color: @dls-input-font-color-disabled;
     }
 
     & .veui-textarea-input {
-      background-color: @veui-gray-color-8;
+      background-color: @dls-input-background-color-disabled;
     }
-  }
 
-  &.veui-disabled {
     &,
     & .veui-textarea-input {
       cursor: not-allowed;
