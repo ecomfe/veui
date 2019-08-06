@@ -1,8 +1,9 @@
 @import "../lib.less";
 
 .veui-breadcrumb-item {
-  float: left;
-  color: @veui-text-color-strong;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
 
   &:last-child {
     .veui-breadcrumb-separator {
@@ -11,16 +12,7 @@
   }
 
   &-current {
-    font-weight: @veui-font-weight-bold;
-  }
-
-  & > span,
-  & > a {
-    display: inline-block;
-    vertical-align: top;
-  }
-
-  .veui-icon {
-    vertical-align: middle;
+    line-height: @dls-line-height-m;
+    font-weight: @dls-breadcrumb-item-current-font-weight;
   }
 }
