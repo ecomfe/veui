@@ -65,8 +65,7 @@ export default [
   {
     path: '/breadcrumb',
     name: 'Breadcrumb',
-    component: Breadcrumb,
-    disabled: true
+    component: Breadcrumb
   },
   {
     path: '/button',
