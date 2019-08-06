@@ -4,7 +4,7 @@ config.defaults(
   {
     ui: {
       size: {
-        values: ['large', 'small', 'tiny']
+        values: ['s', 'm']
       }
     }
   },
