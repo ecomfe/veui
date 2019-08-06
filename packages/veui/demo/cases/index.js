@@ -165,14 +165,12 @@ export default [
   {
     path: '/overlay',
     name: 'Overlay',
-    component: Overlay,
-    disabled: true
+    component: Overlay
   },
   {
     path: '/pagination/:page?',
     name: 'Pagination',
-    component: Pagination,
-    disabled: true
+    component: Pagination
   },
   {
     path: '/progress',
@@ -277,8 +275,7 @@ export default [
   {
     path: '/textarea',
     name: 'Textarea',
-    component: Textarea,
-    disabled: true
+    component: Textarea
   },
   {
     path: '/toast',
