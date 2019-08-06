@@ -7,7 +7,7 @@
       v-model="value"
       line-number
       autofocus
-      ui="small"
+      ui="s"
       rows="3"
     />
     <section/>
@@ -20,10 +20,9 @@
       placeholder="请输入"
     />
     <section/>
-    <h2>大尺寸 + 自动扩展</h2>
+    <h2>自动扩展</h2>
     <veui-textarea
       v-model="value"
-      ui="large"
       autoresize
     />
   </section>
@@ -54,5 +53,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
