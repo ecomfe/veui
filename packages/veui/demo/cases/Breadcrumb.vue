@@ -25,6 +25,7 @@
   <section>
     <veui-breadcrumb
       :routes="items"
+      ui="strong"
       @redirect="handleRedirect"
     />
   </section>
