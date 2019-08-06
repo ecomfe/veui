@@ -5,7 +5,8 @@ import NumberInput from '@/components/NumberInput'
 
 describe('components/NumberInput', () => {
   it('should handle value prop with `null` value.', async () => {
-    let wrapper = mount(NumberInput,
+    let wrapper = mount(
+      NumberInput,
       {
         propsData: {
           value: null
@@ -36,7 +37,7 @@ describe('components/NumberInput', () => {
     expect(wrapper.find('input').element.autofocus).to.equal(true)
   })
 
-  it('should hanlde focus event correctly', async () => {
+  it('should handle focus event correctly', async () => {
     let wrapper = mount(NumberInput)
     wrapper.find('input').trigger('focus')
 
@@ -69,7 +70,8 @@ describe('components/NumberInput', () => {
   })
 
   it('should not exceed max or min value', async () => {
-    let wrapper = mount(NumberInput,
+    let wrapper = mount(
+      NumberInput,
       {
         propsData: {
           max: 2,
@@ -94,7 +96,8 @@ describe('components/NumberInput', () => {
   })
 
   it('should handle readonly correctly', () => {
-    let wrapper = mount(NumberInput,
+    let wrapper = mount(
+      NumberInput,
       {
         propsData: {
           readonly: true
@@ -107,15 +110,14 @@ describe('components/NumberInput', () => {
 
     let input = wrapper.find('input.veui-input-input')
     input.setValue(2)
-    expect(
-      input.attributes('readonly')
-    ).to.equal('readonly')
+    expect(input.attributes('readonly')).to.equal('readonly')
 
     expect(input.element.value).to.equal('2')
   })
 
   it('should handle step prop correctly', async () => {
-    let wrapper = mount(NumberInput,
+    let wrapper = mount(
+      NumberInput,
       {
         propsData: {
           step: 3
@@ -133,7 +135,8 @@ describe('components/NumberInput', () => {
   })
 
   it('should handle decimalPlace prop correctly', async () => {
-    let wrapper = mount(NumberInput,
+    let wrapper = mount(
+      NumberInput,
       {
         propsData: {
           decimalPlace: 2
@@ -152,7 +155,8 @@ describe('components/NumberInput', () => {
   })
 
   it('should handle change event', done => {
-    let wrapper = mount(NumberInput,
+    let wrapper = mount(
+      NumberInput,
       {
         propsData: {
           value: null
