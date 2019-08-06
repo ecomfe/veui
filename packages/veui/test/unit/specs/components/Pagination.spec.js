@@ -1,5 +1,7 @@
 import { mount } from '@vue/test-utils'
+import { wait } from '../../../utils'
 import Pagination from '@/components/Pagination'
+import 'focus-visible'
 
 describe('components/Pagination', () => {
   it('should handle props correctly', async () => {
@@ -199,6 +201,37 @@ describe('components/Pagination', () => {
 
     input.setValue('20')
     wrapper.find('.veui-pagination-goto input').trigger('click')
+
+    wrapper.destroy()
+  })
+
+  it('should handle focus-visible correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-pagination': Pagination
+        },
+        template:
+          '<veui-pagination :page="4" :total="300" to="/pagination/:page"/>'
+      },
+      {
+        attachToDocument: true,
+        sync: false
+      }
+    )
+
+    let page = wrapper.findAll('.veui-pagination-page a').at(1)
+
+    page.trigger('keydown.tab')
+    page.element.focus()
+
+    await wait(0)
+    expect(page.classes()).to.include('focus-visible')
+
+    page.element.blur()
+
+    await wait(0)
+    expect(page.classes()).to.not.include('focus-visible')
 
     wrapper.destroy()
   })
