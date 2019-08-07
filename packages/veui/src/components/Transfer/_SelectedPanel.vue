@@ -7,6 +7,7 @@
   class="veui-transfer-selected-panel"
   :class="{ 'veui-transfer-selected-flat': showMode === 'flat' }"
   :placeholder="placeholder"
+  :ui="realUi"
 >
   <template slot="head">
     <slot name="head">
@@ -51,7 +52,7 @@
           v-bind="{ ...props, keyword }"
         />
       </template>
-      <template slot="item-after">
+      <template slot="item-append">
         <veui-icon
           class="veui-tree-item-remove"
           :name="icons.remove"
@@ -143,6 +144,7 @@ export default {
     filter: Function,
     placeholder: String,
     isSelectable: Boolean,
+    realUi: String,
     icons: Object
   },
   data () {

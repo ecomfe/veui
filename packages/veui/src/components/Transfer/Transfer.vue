@@ -1,7 +1,7 @@
 <script>
 import CandidatePanel from './_CandidatePanel'
 import SelectedPanel from './_SelectedPanel'
-import { includes, isString, clone } from 'lodash'
+import { includes, isString, clone, difference } from 'lodash'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import { focusIn } from '../../utils/dom'
@@ -89,8 +89,20 @@ export default {
       this.$emit('select', this.localSelected)
     },
 
-    remove (item) {
-      this.candidateTree.remove(item)
+    collectLeafValue (datasource) {
+      let value = []
+
+      let walk = data => {
+        data.forEach(item => {
+          if (item.children && item.children.length) {
+            walk(item.children)
+          } else if (!item.disabled) {
+            value.push(item.value)
+          }
+        })
+      }
+      walk(datasource)
+      return value
     },
 
     focus () {
@@ -123,17 +135,7 @@ export default {
       let itemLabel =
         !item && this.$scopedSlots[itemLabelSlotName]
           ? props => this.$scopedSlots[itemLabelSlotName](props)
-          : props =>
-            h('span', {
-              domProps: {
-                innerHTML: props.keyword
-                  ? props.item.label.replace(
-                    new RegExp(`(${props.keyword})`, 'gi'),
-                    '<mark>$1</mark>'
-                  )
-                  : props.item.label
-              }
-            })
+          : props => null
 
       return {
         item,
@@ -156,7 +158,7 @@ export default {
           'veui-transfer': true,
           'veui-transfer-disabled': !this.isSelectable
         },
-        props: {
+        attrs: {
           ui: this.ui
         }
       },
@@ -170,15 +172,17 @@ export default {
               filter: this.filter,
               placeholder: this.candidatePlaceholder,
               isSelectable: this.isSelectable,
-              icons: this.icons,
-              selected: this.localSelected
+              selected: this.localSelected,
+              uiParts: this.uiParts,
+              realUi: this.realUi
             },
             on: {
               select: (...args) => {
                 this.handleSelect(...args)
               },
               selectall: (...args) => {
-                this.candidateTree.selectAll(...args)
+                this.localSelected = this.collectLeafValue(this.datasource)
+                this.$emit('select', this.localSelected)
               }
             },
             scopedSlots: generateItem.call(this, 'candidate'),
@@ -199,14 +203,20 @@ export default {
               filter: this.filter,
               placeholder: this.selectedPlaceholder,
               isSelectable: this.isSelectable,
-              icons: this.icons
+              icons: this.icons,
+              realUi: this.realUi
             },
             on: {
-              remove: (...args) => {
-                this.remove(...args)
+              remove: item => {
+                this.localSelected = difference(
+                  this.localSelected,
+                  this.collectLeafValue([item])
+                )
+                this.$emit('select', this.localSelected)
               },
               removeall: (...args) => {
-                this.candidateTree.removeAll(...args)
+                this.localSelected = []
+                this.$emit('select', this.localSelected)
               }
             },
             scopedSlots: generateItem.call(this, 'selected')

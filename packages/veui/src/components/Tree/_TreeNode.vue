@@ -49,7 +49,7 @@
           <veui-icon :name="icons.collapse"/>
         </button>
         <slot
-          name="item-before"
+          name="item-prepend"
           :item="item"
           :index="index"
           :depth="depth"
@@ -66,7 +66,7 @@
           </slot>
         </div>
         <slot
-          name="item-after"
+          name="item-append"
           :item="item"
           :index="index"
           :depth="depth"
@@ -101,7 +101,7 @@
             <veui-icon :name="icons.collapse"/>
           </button>
           <slot
-            name="item-before"
+            name="item-prepend"
             :item="props.item"
             :index="props.index"
             :depth="depth + 1"
@@ -115,7 +115,7 @@
             </slot>
           </div>
           <slot
-            name="item-after"
+            name="item-append"
             :item="props.item"
             :index="props.index"
             :depth="depth + 1"

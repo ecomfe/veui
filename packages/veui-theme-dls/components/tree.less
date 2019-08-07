@@ -11,14 +11,14 @@
   }
 
   ul {
-    padding-left: @dls-tree-font-size-m + @dls-tree-node-content-spacing;
+    padding-left: ~"calc(@{dls-tree-icon-size} + @{dls-tree-node-content-spacing})";
   }
 
   &-item {
     display: flex;
     align-items: center;
+    height: @dls-tree-node-height-m;
 
-    .centered-line(@dls-tree-node-height-m);
     .clearfix();
     outline: none;
 
@@ -31,14 +31,9 @@
       float: left;
     }
 
-    mark {
-      color: @veui-warning-color;
-      background: none;
-    }
-
     &-expand-switcher {
       display: inline-block;
-      .size(@dls-tree-font-size-m);
+      .dls-icon-size(@dls-tree-icon-size);
       background: none;
       border: none;
       padding: 0;
@@ -67,7 +62,7 @@
     // 如果前面没有图标，就把图标位置让出来。
     &-select:first-child,
     &-label:first-child {
-      margin-left: @dls-tree-font-size-m + @dls-tree-node-content-spacing;
+      margin-left: dls-sum(@dls-tree-icon-size, @dls-tree-node-content-spacing);
     }
 
     &-clickable {
@@ -84,20 +79,26 @@
     }
 
     &:hover::before {
-      background: @dls-tree-node-background-color-hover;
+      background-color: @dls-tree-node-background-color-hover;
+      .veui-transition(background-color);
     }
-    &:focus::before {
-      background: @dls-tree-node-background-color-focus;
+    &.focus-visible::before {
+      background-color: @dls-tree-node-background-color-focus;
+      .veui-transition(background-color);
     }
     &:active::before {
-      background: @dls-tree-node-background-color-active;
+      background-color: @dls-tree-node-background-color-active;
+      .veui-transition(background-color);
+    }
+    &:disabled::before {
+      background-color: none;
     }
 
     &::before {
       content: "";
       position: absolute;
       left: 0;
-      height: @dls-tree-node-height-m;
+      height: inherit;
       width: 100%;
       z-index: -1;
     }
@@ -110,7 +111,7 @@
     cursor: not-allowed;
   }
 
-  &[ui~="after-icon"] {
+  &[ui~="checkbox-after"] {
     .veui-tree {
       &-item {
         flex-direction: row-reverse;
@@ -137,15 +138,11 @@
   }
 
   &[ui~="s"] {
-    font-size: @dls-tree-font-size-m;
+    font-size: @dls-tree-font-size-s;
 
     .veui-tree {
       &-item {
-        .centered-line(@dls-tree-node-height-s);
-
-        &::before {
-          height: @dls-tree-node-height-s;
-        }
+        height: @dls-tree-node-height-s;
       }
     }
   }

@@ -5,6 +5,7 @@
   :searchable="searchable"
   :filter="realFilter"
   :placeholder="placeholder"
+  :ui="realUi"
 >
   <template slot="head">
     <slot name="head">
@@ -29,7 +30,7 @@
       :expanded.sync="expanded"
       selectable
       :selected="localSelected"
-      ui="after-icon"
+      :ui="uiParts.tree"
       :disabled="!isSelectable"
       @select="handleSelect"
     >
@@ -83,8 +84,9 @@ export default {
     filter: Function,
     placeholder: String,
     isSelectable: Boolean,
-    icons: Object,
-    selected: Array
+    selected: Array,
+    uiParts: Object,
+    realUi: String
   },
   data () {
     return {

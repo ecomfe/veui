@@ -32,11 +32,11 @@
     />
   </template>
   <template
-    slot="item-before"
+    slot="item-prepend"
     slot-scope="props"
   >
     <slot
-      name="item-before"
+      name="item-prepend"
       v-bind="props"
     >
       <veui-checkbox
@@ -45,16 +45,17 @@
         :checked="props.item.visuallySelected"
         :indeterminate="props.item.partialSelected"
         :disabled="props.item.disabled || realDisabled || realReadonly"
+        :ui="realUi"
         @change="checked => handleItemSelect(checked, props.item)"
       />
     </slot>
   </template>
   <template
-    slot="item-after"
+    slot="item-append"
     slot-scope="props"
   >
     <slot
-      name="item-after"
+      name="item-append"
       v-bind="props"
     />
   </template>

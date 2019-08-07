@@ -1,48 +1,11 @@
 @import "../lib.less";
 
 .veui-transfer {
-  @panel-gap: 20px;
-  @panel-inner-horizontal-gap: 20px;
-
-  @flat-panel-min-width: 350px;
-  @flat-item-line-height: 22px;
-  @flat-item-right-gap: 20px;
-
-  @remove-icon-size: 12px;
-
   .clearfix();
-  display: inline-block;
+  display: flex;
 
-  // 俩 panel 都左浮动
-  .veui-filter-panel {
-    float: left;
-
-    &-title {
-      display: flex;
-      align-items: center;
-      background: @dls-transfer-header-background-color;
-      border-bottom: 1px solid @dls-transfer-border-color;
-      margin: 0;
-      padding: 0 @dls-transfer-padding-x;
-      color: @dls-transfer-header-font-color;
-    }
-
-    .veui-searchbox {
-      margin: 0;
-      width: 100%;
-    }
-  }
-
-  .veui-tree {
-    margin-top: @dls-transfer-header-content-spacing-1;
-  }
-
-  &-candidate-panel {
-    margin-right: @panel-gap;
-  }
-
-  .veui-filter-panel-content-main {
-    position: relative;
+  &-selected-panel {
+    margin-left: @dls-transfer-panel-spacing;
   }
 
   &-select-all,
@@ -51,34 +14,34 @@
   }
 
   &-selected-flat {
-    width: @flat-panel-min-width;
-    min-width: @flat-panel-min-width;
-
     &-items {
       .reset-list-style();
       margin: 0;
       padding: 0;
-      color: @veui-text-color-normal;
+      color: @dls-transfer-item-font-color;
     }
 
     &-item {
-      padding: 0 @panel-inner-horizontal-gap;
+      padding: 0 @dls-transfer-padding-x;
       cursor: pointer;
+      height: @dls-transfer-item-height-m;
 
       &:hover {
-        background: @veui-gray-color-8;
+        background-color: @dls-transfer-item-background-color-hover;
+        .veui-transition(background-color);
       }
 
       &:active {
-        background: @veui-gray-color-6;
+        background-color: @dls-transfer-item-background-color-active;
+        .veui-transition(background-color);
+      }
+
+      &:disabled {
+        background-color: none;
       }
 
       &-label {
-        @padding-vertical: (
-            @dls-transfer-item-height-m - @flat-item-line-height
-          ) / 2;
-        padding: @padding-vertical 0;
-        width: 100%;
+        .size(100%);
         display: flex;
         align-items: center;
       }
@@ -89,14 +52,12 @@
     }
 
     &-option-separator {
-      display: inline-block;
-      overflow: hidden;
-      .centered-line(1em);
+      height: @dls-tree-icon-size;
     }
 
     &-icon-remove {
       display: none;
-      .size(@remove-icon-size);
+      .dls-icon-size(@dls-tree-icon-size-aux);
       margin-left: auto;
     }
 
@@ -112,11 +73,17 @@
 
   &-disabled &-selected-icon-remove,
   &-disabled &-selected-flat-item-label {
-    color: @dls-transfer-item-font-color-disabled;
+    color: @dls-button-font-color-icon-disabled;
   }
 
   &.veui-input-invalid + .veui-field-error {
     .veui-field-gap-error();
     margin-left: @veui-form-label-width;
+  }
+
+  &[ui~="s"] {
+    .veui-transfer-selected-flat-item {
+      height: @dls-transfer-item-height-s;
+    }
   }
 }
