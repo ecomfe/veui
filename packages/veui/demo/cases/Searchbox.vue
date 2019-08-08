@@ -1,18 +1,124 @@
 <template>
-<article>
+<article class="veui-searchbox-demo">
   <h1><code>&lt;veui-searchbox&gt;</code></h1>
-  <section>
-    <h2>普通</h2>
+  <section class="has-margin-right">
+    <h2>sizes</h2>
     <p>
       <veui-searchbox
+        clearable
+        ui="xs"
+        replace-on-select
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions4"
+        @input="handleSuggest('4', $event)"
+        @search="log($event)"
+        @select="log('select', $event)"
+      />
+      <veui-searchbox
+        clearable
+        ui="s"
+        replace-on-select
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions4"
+        @input="handleSuggest('4', $event)"
+        @search="log($event)"
+        @select="log('select', $event)"
+      />
+    </p>
+    <p>
+      <veui-searchbox
+        clearable
+        ui="m"
+        replace-on-select
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions4"
+        @input="handleSuggest('4', $event)"
+        @search="log($event)"
+        @select="log('select', $event)"
+      />
+      <veui-searchbox
+        clearable
+        ui="l"
+        replace-on-select
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions4"
+        @input="handleSuggest('4', $event)"
+        @search="log($event)"
+        @select="log('select', $event)"
+      />
+    </p>
+    <p>
+      <veui-searchbox
+        clearable
+        ui="strong xs"
+        replace-on-select
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions4"
+        @input="handleSuggest('4', $event)"
+        @search="log($event)"
+        @select="log('select', $event)"
+      />
+      <veui-searchbox
+        clearable
+        ui="strong s"
+        replace-on-select
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions4"
+        @input="handleSuggest('4', $event)"
+        @search="log($event)"
+        @select="log('select', $event)"
+      />
+    </p>
+    <p>
+      <veui-searchbox
+        clearable
+        ui="strong m"
+        replace-on-select
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions4"
+        @input="handleSuggest('4', $event)"
+        @search="log($event)"
+        @select="log('select', $event)"
+      />
+      <veui-searchbox
+        clearable
+        ui="strong l"
+        replace-on-select
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions4"
+        @input="handleSuggest('4', $event)"
+        @search="log($event)"
+        @select="log('select', $event)"
+      />
+    </p>
+  </section>
+  <section class="has-margin-right">
+    <h2>styles</h2>
+    <p>
+      <veui-searchbox
+        ui="m"
+        :name="name"
+        :placeholder="placeholder"
+        @search="log($event)"
+      />
+      <veui-searchbox
+        ui="m strong"
         :name="name"
         :placeholder="placeholder"
         @search="log($event)"
       />
     </p>
   </section>
-  <section>
-    <h2>禁用</h2>
+  <section class="has-margin-right">
+    <h2>disabled</h2>
     <p>
       <veui-searchbox
         :value="value"
@@ -22,10 +128,41 @@
         disabled
         @search="log($event)"
       />
+      <veui-searchbox
+        ui=" strong"
+        disabled
+        :name="name"
+        :placeholder="placeholder"
+        :suggestions="suggestions5"
+        @input="handleSuggest('5', $event)"
+        @search="log($event)"
+      />
     </p>
   </section>
-  <section>
-    <h2>Suggestion(submit async)</h2>
+  <section class="has-margin-right">
+    <h2>readonly</h2>
+    <p>
+      <veui-searchbox
+        :value="value"
+        :name="name"
+        clearable
+        :placeholder="placeholder"
+        readonly
+        @search="log($event)"
+      />
+      <veui-searchbox
+        :value="value"
+        :name="name"
+        clearable
+        ui="strong"
+        :placeholder="placeholder"
+        readonly
+        @search="log($event)"
+      />
+    </p>
+  </section>
+  <section class="has-margin-right">
+    <h2>suggestions</h2>
     <p>
       <veui-searchbox
         v-model="value2"
@@ -38,92 +175,6 @@
         @search="log($event)"
         @select="value2 = $event.label"
       />
-    </p>
-  </section>
-  <section>
-    <h2>小ui模式(focus)</h2>
-    <p>
-      <veui-searchbox
-        v-model="value3"
-        ui="primary small"
-        clearable
-        :name="name"
-        :placeholder="placeholder"
-        :suggestions="suggestions2"
-        replace-on-select
-        suggest-trigger="focus"
-        @suggest="handleSuggest('2', $event)"
-        @search="log($event)"
-        @select="value3 = $event.label"
-      />
-    </p>
-  </section>
-  <section>
-    <h2>小ui模式2(input, submit)</h2>
-    <p>
-      <veui-searchbox
-        v-model="valueis"
-        ui="primary small"
-        clearable
-        :name="name"
-        :placeholder="placeholder"
-        :suggestions="suggestionsis"
-        replace-on-select
-        :suggest-trigger="['input', 'submit']"
-        @suggest="handleSuggest('is', $event)"
-        @search="log($event)"
-        @select="valueis = $event.label"
-      />
-    </p>
-  </section>
-  <section>
-    <h2>大ui模式(input)</h2>
-    <p>
-      <veui-searchbox
-        v-model="value4"
-        ui="primary large"
-        :name="name"
-        :placeholder="placeholder"
-        :suggestions="suggestions3"
-        suggest-trigger="input"
-        @suggest="handleSuggest('3', $event)"
-        @search="log($event)"
-        @select="value4 = $event.label"
-      />
-    </p>
-  </section>
-  <section>
-    <h2>全局搜索框</h2>
-    <p>
-      <veui-searchbox
-        ui="primary"
-        replace-on-select
-        :name="name"
-        :placeholder="placeholder"
-        :suggestions="suggestions4"
-        @input="handleSuggest('4', $event)"
-        @search="log($event)"
-        @select="log('select', $event)"
-      />
-    </p>
-  </section>
-  <section>
-    <h2>禁用全局搜索框</h2>
-    <p>
-      <veui-searchbox
-        ui="alt primary"
-        disabled
-        :name="name"
-        :placeholder="placeholder"
-        :suggestions="suggestions5"
-        @input="handleSuggest('5', $event)"
-        @search="log($event)"
-      />
-    </p>
-  </section>
-  <section>
-    <h2>自定义Suggestion样式1</h2>
-    <p>
       <veui-searchbox
         ui="alt"
         :name="name"
@@ -140,11 +191,6 @@
           <icon name="eye"/>
         </template>
       </veui-searchbox>
-    </p>
-  </section>
-  <section>
-    <h2>自定义Suggestion样式2</h2>
-    <p>
       <veui-searchbox
         :name="name"
         :placeholder="placeholder"
@@ -208,7 +254,6 @@ export default {
   },
   methods: {
     handleSuggest (num, value) {
-      console.log(num, value)
       if (value && num) {
         this[`suggestions${num}`] = [
           {
@@ -269,7 +314,6 @@ export default {
           ]
         }
       }, 1000)
-      console.log(num, value)
     },
     log (item) {
       bus.$emit('log', item)
@@ -277,3 +321,12 @@ export default {
   }
 }
 </script>
+<style lang="less">
+.veui-searchbox-demo {
+  .has-margin-right {
+    .veui-searchbox {
+      margin-right: 15px;
+    }
+  }
+}
+</style>
