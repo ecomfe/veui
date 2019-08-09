@@ -3,7 +3,7 @@ import config from 'veui/managers/config'
 config.defaults(
   {
     parts: {
-      style: 'reverse'
+      self: 'reverse'
     }
   },
   'popover'

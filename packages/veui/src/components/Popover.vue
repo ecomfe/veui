@@ -16,7 +16,7 @@ export default {
   render (h) {
     let data = {
       attrs: {
-        ui: this.uiParts.style || '',
+        ui: this.uiParts.self || '',
         ...this.$attrs,
         overlayClass: this.mergeOverlayClass({
           'veui-popover-box': true
