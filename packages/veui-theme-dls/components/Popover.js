@@ -2,11 +2,9 @@ import config from 'veui/managers/config'
 
 config.defaults(
   {
-    ui: {
-      style: {
-        values: ['reverse']
-      }
+    parts: {
+      style: 'reverse'
     }
   },
-  'tooltip'
+  'popover'
 )

@@ -342,5 +342,13 @@
   {
     "name": "Uploader",
     "path": "Uploader.vue"
+  },
+  {
+    "name": "Loading",
+    "path": "Loading.vue"
+  },
+  {
+    "name": "Popover",
+    "path": "Popover.vue"
   }
 ]
