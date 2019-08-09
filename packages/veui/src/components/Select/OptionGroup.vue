@@ -14,6 +14,11 @@ import { isType } from '../../utils/helper'
 import warn from '../../utils/warn'
 import { pull, uniqueId, includes } from 'lodash'
 
+const EVENT_MAP = {
+  hover: 'mouseenter',
+  click: 'click'
+}
+
 const OptionGroup = {
   name: 'veui-option-group',
   uiTypes: ['menu'],
@@ -23,6 +28,13 @@ const OptionGroup = {
   mixins: [ui, menu, select, overlay, keySelect],
   props: {
     label: String,
+    trigger: {
+      type: String,
+      default: 'click',
+      validator (val) {
+        return includes(['hover', 'click'], val)
+      }
+    },
     options: Array,
     disabled: Boolean,
     position: {
@@ -143,6 +155,7 @@ const OptionGroup = {
             disabled={option.disabled}
             key={i}
             ui={this.realUi}
+            trigger={this.trigger}
             scopedSlots={{
               label: this.$scopedSlots.label
                 ? group => this.$scopedSlots.label(group) || group.label
@@ -194,13 +207,14 @@ const OptionGroup = {
               'veui-option-group-button': this.canPopOut,
               'veui-option-group-label-disabled': this.disabled
             }}
+            ui={this.realUi}
             aria-haspopup={this.canPopOut ? this.popupRole : null}
             aria-owns={this.canPopOut ? this.popupId : null}
             role={this.canPopOut ? null : 'group'}
             {...(this.canPopOut
               ? {
                 on: {
-                  click: () => {
+                  [EVENT_MAP[this.trigger]]: () => {
                     if (!this.disabled) {
                       this.expanded = true
                     }
@@ -255,6 +269,8 @@ const OptionGroup = {
                   {
                     name: 'outside',
                     value: {
+                      trigger: this.trigger,
+                      delay: 100,
                       refs: this.outsideRefs,
                       handler: () => {
                         this.expanded = false

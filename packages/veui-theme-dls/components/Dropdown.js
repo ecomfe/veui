@@ -8,12 +8,16 @@ config.defaults(
       collapse: 'chevron-down'
     },
     ui: {
+      size: {
+        values: ['xs', 's', 'm', 'l'],
+        inherit: true
+      },
       style: {
         values: ['primary'],
         inherit: true
       },
       role: {
-        values: ['link'],
+        values: ['text'],
         inherit: true
       }
     }
