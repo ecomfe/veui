@@ -12,6 +12,7 @@
     v-if="split"
     ref="command"
     class="veui-dropdown-command"
+    :disabled="disabled"
     @click="$emit('click')"
   >
     <span class="veui-dropdown-label">
@@ -31,7 +32,7 @@
     :aria-disabled="disabled"
     :aria-owns="dropdownId"
     v-on="toggleHandlers"
-    @keydown.down.up.prevent="expanded = true"
+    @keydown.down.up.enter.space.prevent="expanded = true"
   >
     <span
       v-if="!split"
@@ -76,7 +77,9 @@
     >
       <veui-option-group
         ref="options"
+        :ui="realUi"
         :options="options"
+        :trigger="trigger"
       >
         <slot/>
         <template
@@ -155,7 +158,7 @@ export default {
       type: String,
       default: 'click',
       validator (val) {
-        return includes(['focus', 'hover', 'click'], val)
+        return includes(['hover', 'click'], val)
       }
     },
     split: Boolean,

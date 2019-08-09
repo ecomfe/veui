@@ -325,5 +325,10 @@ export default [
     name: 'Uploader',
     component: Uploader,
     disabled: true
+  },
+  {
+    path: '/loading',
+    name: 'Loading',
+    component: Loading
   }
 ]

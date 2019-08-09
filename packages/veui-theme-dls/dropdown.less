@@ -3,10 +3,12 @@
 ._veui-dropdown-overlay {
   .margin(@dls-option-dropdown-target-spacing, _);
   outline: none;
+  overflow-y: auto;
   .veui-transition(transform);
   transform-origin: 50% 0;
   box-shadow: @dls-option-dropdown-shadow;
   max-height: @dls-option-dropdown-max-height-m;
+  background-color: @dls-option-background-color;
 
   &[ui~="xs"] {
     max-height: @dls-option-dropdown-max-height-xs;
