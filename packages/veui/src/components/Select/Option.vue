@@ -11,6 +11,7 @@
   }"
   :data-autofocus="selected"
   :role="role"
+  :disabled="disabled"
   :aria-selected="selected"
   @click.stop="selectOption"
 >
