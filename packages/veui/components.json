@@ -1,5 +1,9 @@
 [
   {
+    "name": "Accordion",
+    "path": "Accordion.vue"
+  },
+  {
     "name": "Alert",
     "path": "Alert.vue"
   },
@@ -10,6 +14,14 @@
   {
     "name": "Autocomplete",
     "path": "Autocomplete/Autocomplete.vue"
+  },
+  {
+    "name": "Autocomplete",
+    "path": "Autocomplete"
+  },
+  {
+    "name": "Autocomplete",
+    "path": "Autocomplete/index.js"
   },
   {
     "name": "Breadcrumb",
@@ -48,6 +60,10 @@
     "path": "CheckboxGroup.vue"
   },
   {
+    "name": "Collapse",
+    "path": "Collapse.vue"
+  },
+  {
     "name": "Column",
     "path": "Column.js"
   },
@@ -60,12 +76,12 @@
     "path": "DatePicker.vue"
   },
   {
-    "name": "Drawer",
-    "path": "Drawer.vue"
-  },
-  {
     "name": "Dialog",
     "path": "Dialog.vue"
+  },
+  {
+    "name": "Drawer",
+    "path": "Drawer.vue"
   },
   {
     "name": "Dropdown",
@@ -142,6 +158,10 @@
   {
     "name": "Link",
     "path": "Link.vue"
+  },
+  {
+    "name": "Loading",
+    "path": "Loading.vue"
   },
   {
     "name": "NumberInput",
@@ -322,9 +342,5 @@
   {
     "name": "Uploader",
     "path": "Uploader.vue"
-  },
-  {
-    "name": "Loading",
-    "path": "Loading.vue"
   }
 ]

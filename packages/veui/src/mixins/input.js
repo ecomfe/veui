@@ -14,7 +14,7 @@ export default {
   data () {
     return {
       initialData: undefined,
-      isTopMostInput: isTopMostOfType(this, 'input', 'field')
+      isTopMostInput: isTopMostOfType(this, 'input', 'form-field')
     }
   },
   computed: {
@@ -36,7 +36,7 @@ export default {
         this.formField && !this.formField.validity.valid && this.isTopMostInput
       )
     },
-    ...getTypedAncestorTracker('field', 'formField').computed
+    ...getTypedAncestorTracker('form-field').computed
   },
   created () {
     if (!this.isTopMostInput || !this.formField || !this.formField.realField) {
