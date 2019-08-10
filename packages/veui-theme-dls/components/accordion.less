@@ -1,0 +1,25 @@
+@import "../lib.less";
+
+.veui-accordion {
+  border-radius: @dls-collapse-border-radius-m;
+
+  &[ui~="s"] {
+    .border-bottom-radius(@dls-collapse-border-radius-s);
+  }
+
+  & > .veui-collapse + .veui-collapse {
+    margin-top: -1px;
+  }
+
+  & > .veui-collapse {
+    border-radius: 0;
+
+    &:first-child {
+      .border-top-radius(inherit);
+    }
+
+    &:last-child {
+      .border-bottom-radius(inherit);
+    }
+  }
+}
