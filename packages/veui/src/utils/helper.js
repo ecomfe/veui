@@ -9,21 +9,24 @@ import {
 } from 'lodash'
 import Vue from 'vue'
 
-export function getTypedAncestorTracker (type, name = type) {
+export function getTypedAncestorTracker (type, direct = false) {
   return {
     computed: {
-      [camelCase(name)] () {
-        return getTypedAncestor(this, type)
+      [camelCase(type)] () {
+        return getTypedAncestor(this, type, direct)
       }
     }
   }
 }
 
-export function getTypedAncestor (component, type) {
+export function getTypedAncestor (component, type, direct) {
   let current = component.$parent
   while (current) {
     if (isType(current, type)) {
       return current
+    }
+    if (direct) {
+      break
     }
     current = current.$parent
   }
