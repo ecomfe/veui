@@ -29,7 +29,7 @@ export default {
         return
       }
 
-      let field = getTypedAncestor(this, 'field')
+      let field = getTypedAncestor(this, 'form-field')
       let target = this.findInput(field)
       if (target && isFunction(target.activate)) {
         target.activate()
