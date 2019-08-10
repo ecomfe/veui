@@ -52,7 +52,7 @@ const { computed: fieldset } = getTypedAncestorTracker('fieldset')
 
 export default {
   name: 'veui-field',
-  uiTypes: ['field', 'form-container'],
+  uiTypes: ['form-field', 'form-container'],
   components: {
     'veui-icon': Icon,
     'veui-label': Label
@@ -246,7 +246,9 @@ export default {
     handleInteract (eventName) {
       // 需要让对应的 data 更新完值之后，再去 validate，都要 nextTick 来保证
       if (this.interactiveRulesMap[eventName]) {
-        this.$nextTick(() => this.validate(this.interactiveRulesMap[eventName]))
+        this.$nextTick(() =>
+          this.validate(this.interactiveRulesMap[eventName])
+        )
       }
 
       if (this.name) {
