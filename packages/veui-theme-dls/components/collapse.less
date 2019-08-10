@@ -1,0 +1,84 @@
+@import "../lib.less";
+
+.veui-collapse {
+  border: 1px solid @dls-collapse-border-color;
+  border-radius: @dls-collapse-border-radius-m;
+
+  &-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: -1px;
+    padding: @dls-collapse-header-padding-y @dls-collapse-header-padding-x;
+    border: 1px solid @dls-collapse-border-color;
+    background-color: @dls-collapse-header-background-color;
+    color: @dls-collapse-header-font-color;
+    .border-top-radius(inherit);
+    line-height: @dls-collapse-header-line-height;
+    .veui-transition(color, background-color, border-color, border-radius);
+    outline: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: @dls-collapse-header-background-color-hover;
+    }
+
+    &.focus-visible {
+      background-color: @dls-collapse-header-background-color-focus;
+      border-color: @dls-collapse-border-color-focus;
+      z-index: 1;
+    }
+
+    &:active {
+      background-color: @dls-collapse-header-background-color-active;
+    }
+  }
+
+  &-collapsed &-header {
+    .border-bottom-radius(inherit);
+  }
+
+  &-toggle {
+    .dls-icon-size(@dls-collapse-icon-size-aux);
+    color: @dls-collapse-icon-color-aux;
+    margin-right: @dls-collapse-header-content-spacing;
+    .veui-transition(transform);
+  }
+
+  &-expanded &-toggle {
+    transform: rotateZ(90deg);
+  }
+
+  &.veui-disabled {
+    border-color: @dls-collapse-border-color-disabled;
+
+    .veui-collapse {
+      &-header {
+        background-color: @dls-collapse-header-background-color-disabled;
+        color: @dls-collapse-header-font-color-disabled;
+        cursor: not-allowed;
+      }
+
+      &-toggle {
+        color: @dls-collapse-icon-color-aux-disabled;
+      }
+    }
+  }
+
+  &-body {
+    background-color: @dls-collapse-panel-background-color;
+    overflow: hidden;
+    will-change: height;
+    .veui-transition(height);
+    .border-bottom-radius(inherit);
+    color: @dls-collapse-panel-font-color;
+  }
+
+  &-content {
+    padding: @dls-collapse-panel-padding-y @dls-collapse-panel-padding-x;
+  }
+
+  &[ui~="s"] {
+    border-radius: @dls-collapse-border-radius-s;
+  }
+}

@@ -42,6 +42,7 @@ import Autocomplete from './Autocomplete'
 import Tag from './Tag'
 import Drawer from './Drawer'
 import Loading from './Loading'
+import Collapse from './Collapse'
 
 export default [
   {
@@ -106,6 +107,11 @@ export default [
     disabled: true
   },
   {
+    path: '/collapse',
+    name: 'Collapse',
+    component: Collapse
+  },
+  {
     path: '/date-picker',
     name: 'DatePicker',
     component: DatePicker,
@@ -155,6 +161,11 @@ export default [
     path: '/link',
     name: 'Link',
     component: Link
+  },
+  {
+    path: '/loading',
+    name: 'Loading',
+    component: Loading
   },
   {
     path: '/number-input',
@@ -305,10 +316,5 @@ export default [
     name: 'Tree',
     component: Tree,
     disabled: true
-  },
-  {
-    path: '/loading',
-    name: 'Loading',
-    component: Loading
   }
 ]
