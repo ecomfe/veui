@@ -45,6 +45,7 @@ import Loading from './Loading'
 import Collapse from './Collapse'
 import Popover from './Popover'
 import Badge from './Badge'
+import TimePicker from './TimePicker'
 
 export default [
   {
@@ -264,6 +265,12 @@ export default [
     path: '/tag',
     name: 'Tag',
     component: Tag
+  },
+  {
+    path: '/timepicker',
+    name: 'TimePicker',
+    component: TimePicker,
+    disabled: false
   },
   {
     path: '/tabs',
