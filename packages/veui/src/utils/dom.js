@@ -174,7 +174,9 @@ export function getFocusable (elem) {
  */
 export function focusIn (elem, index = 0, ignoreAutofocus) {
   if (!ignoreAutofocus) {
-    let auto = elem.querySelector('[data-autofocus]') || elem.querySelector('[autofocus]')
+    let auto =
+      elem.querySelector('[data-autofocus]') ||
+      elem.querySelector('[autofocus]')
     if (auto) {
       focus(auto)
       return true
@@ -368,3 +370,39 @@ export const MOUSE_EVENTS = [
 export const KEYBOARD_EVENTS = ['keydown', 'keypress', 'keyup']
 export const FOCUS_EVENTS = ['focus', 'blur', 'focusin', 'focusout']
 export const VALUE_EVENTS = ['input', 'change']
+
+const linear = (time, duration, distance) => (time / duration) * distance
+
+export function scrollToCenter (
+  viewport,
+  scroller,
+  target,
+  duration,
+  timingFn = linear
+) {
+  let { top: vTop, height: vHeight } = viewport.getBoundingClientRect()
+  let { top: tTop, height: tHeight } = target.getBoundingClientRect()
+  let { height: sHeight } = scroller.getBoundingClientRect()
+  let initScrollTop = viewport.scrollTop
+  let maxScrollTop = sHeight - vHeight
+  let distance = tTop - (vTop + vHeight / 2 - tHeight / 2)
+  if (initScrollTop + distance < 0) {
+    distance = -initScrollTop
+  }
+  if (initScrollTop + distance > maxScrollTop) {
+    distance = maxScrollTop - initScrollTop
+  }
+  let startTime = null
+  const step = timestamp => {
+    if (!startTime) {
+      startTime = timestamp
+    }
+    let curTime = Math.min(timestamp - startTime, duration)
+    let offset = !duration ? distance : timingFn(curTime, duration, distance)
+    viewport.scrollTop = initScrollTop + offset
+    if (offset !== distance) {
+      requestAnimationFrame(step)
+    }
+  }
+  requestAnimationFrame(step)
+}
