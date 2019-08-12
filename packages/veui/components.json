@@ -308,6 +308,18 @@
     "path": "Textarea.vue"
   },
   {
+    "name": "TimePicker",
+    "path": "TimePicker/TimePicker.vue"
+  },
+  {
+    "name": "TimePicker",
+    "path": "TimePicker"
+  },
+  {
+    "name": "TimePicker",
+    "path": "TimePicker/index.js"
+  },
+  {
     "name": "Toast",
     "path": "Toast.vue"
   },
