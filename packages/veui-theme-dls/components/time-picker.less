@@ -1,0 +1,61 @@
+@import "../lib.less";
+@import (reference) "../dropdown.less";
+
+.veui-time-picker {
+  // TODO 暂时先写这里吧, 变量可能需要微调, 有些是不是要写到 option 中去？
+  @dls-time-picker-dropdown-background-color: @dls-background-color-normal;
+  @dls-time-picker-dropdown-shadow: @dls-shadow;
+  @dls-time-picker-dropdown-max-height-m: @dls-height-m * 10; // TODO 这个高度不够
+  @dls-time-picker-dropdown-max-height-s: @dls-height-s * 10;
+  @dls-time-picker-dropdown-border-color: @dls-border-color-normal;
+
+  @dls-time-picker-option-padding: @dls-padding-unit * 4;
+  @dls-time-picker-option-height-s: @dls-height-s;
+  @dls-time-picker-option-height-m: @dls-height-m;
+  @dls-time-picker-option-font-size-m: @dls-font-size-m;
+  @dls-time-picker-option-font-size-s: @dls-font-size-s;
+
+  display: inline-block;
+  width: @dls-time-picker-width;
+  > .veui-input {
+    width: 100%;
+  }
+  &-overlay-content {
+    &:extend(._veui-dropdown-overlay all);
+    min-width: @dls-time-picker-dropdown-min-width;
+    background-color: @dls-time-picker-dropdown-background-color;
+    box-shadow: @dls-time-picker-dropdown-shadow;
+    display: flex;
+  }
+  &-option-group-wrapper {
+    flex-shrink: 1;
+    flex-grow: 1;
+    max-height: @dls-time-picker-dropdown-max-height-m;
+    overflow: auto;
+    & + & {
+      border-left: 1px solid @dls-time-picker-dropdown-border-color;
+    }
+
+    .veui-option {
+      padding-left: @dls-time-picker-option-padding;
+      padding-right: @dls-time-picker-option-padding;
+      height: @dls-time-picker-option-height-m;
+      line-height: @dls-time-picker-option-height-m;
+      font-size: @dls-time-picker-option-font-size-m;
+      text-align: center;
+      &-label {
+        float: none;
+        margin: 0;
+        min-width: @dls-time-picker-option-content-min-width;
+      }
+    }
+  }
+  &-overlay[ui~="s"] &-option-group-wrapper {
+    max-height: @dls-time-picker-dropdown-max-height-s;
+    .veui-option {
+      height: @dls-time-picker-option-height-s;
+      line-height: @dls-time-picker-option-height-s;
+      font-size: @dls-time-picker-option-font-size-s;
+    }
+  }
+}
