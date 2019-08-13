@@ -1,12 +1,11 @@
 @import "./lib.less";
 
 ._veui-dropdown-overlay {
-  border: 1px solid @veui-gray-color-6;
-  margin: 3px 0;
+  .margin(@dls-option-dropdown-target-spacing, _);
   outline: none;
-  transition: transform @veui-transition-duration;
+  .veui-transition(transform);
   transform-origin: 50% 0;
-  .veui-overlay-shadow();
+  box-shadow: @dls-option-dropdown-shadow;
 
   .veui-overlay-enter &,
   .veui-overlay-leave-to & {
@@ -26,16 +25,15 @@
       pointer-events: none;
       transition: opacity @veui-transition-duration;
     }
+    // &::before {
+    //   .absolute(3px, 1px, 0);
+    //   .vertical-gradient(#fff, transparent);
+    // }
 
-    &::before {
-      .absolute(3px, 1px, 0);
-      .vertical-gradient(#fff, transparent);
-    }
-
-    &::after {
-      .absolute(_, 1px, 3px);
-      .vertical-gradient(transparent, #fff);
-    }
+    // &::after {
+    //   .absolute(_, 1px, 3px);
+    //   .vertical-gradient(#fff, @dls-button-font-color-primary);
+    // }
 
     &-scroll {
       &-start {
@@ -55,21 +53,17 @@
 
 ._veui-dropdown-button {
   & &-button {
-    width: 100%;
-    .padding(_, 10px);
-    text-align: left;
+    width: auto;
+    .padding(_, @dls-button-padding-m);
   }
 
   &-label {
-    display: inline-block;
-    max-width: ~"calc(100% - 24px)";
     width: 100%;
     .ellipsis();
   }
 
   &-icon {
-    float: right;
-    transition: transform @veui-transition-duration;
+    .veui-transition(transform);
   }
 
   &-expanded &-icon {
@@ -77,82 +71,87 @@
   }
 
   &-button[ui~="primary"]:not(.veui-button-loading):disabled {
-    background-color: @veui-gray-color-7;
-    border-color: transparent;
-    color: @veui-text-color-aux;
+    background-color: @dls-button-background-color-primary-disabled;
+    border-color: @dls-button-border-color-primary-disabled;
+    color: @dls-button-font-color-primary-disabled;
   }
 
-  &-expanded &-button:not([ui~="link"]) {
+  &-expanded &-button.veui-button[ui~="primary"] {
     &,
     &:hover,
     &.focus-visible {
-      color: @veui-text-color-strong;
-      background-color: @veui-gray-color-8;
+      color: @dls-button-font-color-primary;
+      background-color: @dls-button-background-color-primary-hover;
     }
 
     &:active {
-      background-color: @veui-gray-color-6;
+      background-color: @dls-button-background-color-primary-active;
     }
   }
 
-  &-expanded &-button[ui~="primary"]:not([ui~="link"]) {
-    &,
-    &:hover,
-    &.focus-visible {
-      background-color: @veui-brand-color-2;
-      color: #fff;
-    }
+  &-expanded &-button {
+    &:not([ui~="text"]) {
+      &,
+      &:hover,
+      &.focus-visible {
+        color: @dls-button-font-color-normal;
+        background-color: @dls-button-background-color-normal-hover;
+      }
 
-    &:active {
-      background-color: @veui-brand-color-1;
-    }
-  }
-
-  &-expanded &-button[ui~="alt"] {
-    &,
-    &:hover,
-    &.focus-visible {
-      background-color: @veui-gray-color-6;
+      &:active {
+        background-color: @dls-button-background-color-normal-active;
+      }
     }
   }
 }
 
 ._veui-dropdown-option {
   .veui-button-transition();
-  .centered-line(@veui-height-normal);
   .ellipsis();
-  display: block;
+  display: flex;
   width: 100%;
-  background-color: #fff;
+  background-color: @dls-option-background-color;
   border: none;
-  padding: 0 10px;
-  color: @veui-text-color-normal;
+  .padding(_, @dls-option-padding-m);
+  color: @dls-option-font-color;
   text-align: left;
   outline: none;
   cursor: pointer;
+  font-size: @dls-option-font-size-m;
+  height: @dls-option-height-m;
+  align-items: center;
+
+  &[ui~="xs"] {
+    font-size: @dls-option-font-size-xs;
+    height: @dls-option-height-xs;
+  }
+
+  &[ui~="s"] {
+    font-size: @dls-option-font-size-s;
+    height: @dls-option-height-s;
+  }
+
+  &[ui~="l"] {
+    font-size: @dls-option-font-size-l;
+    height: @dls-option-height-l;
+  }
 
   &.focus-visible,
   &:hover {
-    background-color: @veui-gray-color-8;
+    background-color: @dls-option-background-color-hover;
   }
 
   &:active {
-    background-color: @veui-gray-color-6;
+    background-color: @dls-option-background-color-active;
   }
 
   &-selected {
-    color: @veui-text-color-strong;
-    font-weight: @veui-font-weight-bold;
+    color: @dls-option-font-color-selected;
+    font-weight: @dls-option-font-weight-selected;
   }
 
   &-disabled {
-    background-color: #fff;
-    color: @veui-text-color-weak;
+    color: @dls-option-font-color-disabled;
     cursor: not-allowed;
-  }
-
-  &-label {
-    float: left;
-    margin-right: 10px;
   }
 }
