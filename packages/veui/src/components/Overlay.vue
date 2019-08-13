@@ -6,7 +6,7 @@
   <transition
     name="veui-overlay"
     @after-leave="$emit('afterclose')"
-    @after-enter="$emit('afterenter')"
+    @after-enter="$emit('afteropen')"
   >
     <div
       v-show="realOpen"

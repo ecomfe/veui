@@ -29,7 +29,7 @@ describe('components/TimePicker', function () {
       {
         ...componentOptions,
         template:
-          '<veui-time-picker :minute-datasource="[0, 30]" :second-datasource="[0, 15, 30]"/>'
+          '<veui-time-picker :minutes="[0, 30]" :seconds="[0, 15, 30]"/>'
       },
       debugInBrowser
     )
@@ -53,7 +53,7 @@ describe('components/TimePicker', function () {
     let wrapper = mount(
       {
         ...componentOptions,
-        template: `<veui-time-picker :second-datasource="[0, 30]"><template
+        template: `<veui-time-picker :seconds="[0, 30]"><template
               slot="option" slot-scope="{label}" >{{label + '*'}}</template></veui-time-picker>`
       },
       debugInBrowser
@@ -79,9 +79,9 @@ describe('components/TimePicker', function () {
       {
         ...componentOptions,
         template: `<veui-time-picker
-            :value.sync="value0"
-            :minute-datasource="[15, 30]"
-            :second-datasource="[0, 30]"
+            v-model="value0"
+            :minutes="[15, 30]"
+            :seconds="[0, 30]"
           />`
       },
       debugInBrowser
@@ -99,7 +99,6 @@ describe('components/TimePicker', function () {
       .trigger('click')
     await vm.$nextTick()
     expect(isEqual(vm.value0, [0, 15, 30])).to.equal(true)
-
     wrapper.destroy()
   })
 
@@ -108,9 +107,9 @@ describe('components/TimePicker', function () {
       {
         ...componentOptions,
         template: `<veui-time-picker
-            :value.sync="value0"
-            :minute-datasource="[15, 30]"
-            :second-datasource="[0, 30]"/>`
+            v-model="value0"
+            :minutes="[15, 30]"
+            :seconds="[0, 30]"/>`
       },
       debugInBrowser
     )

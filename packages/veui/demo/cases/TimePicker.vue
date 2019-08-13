@@ -4,11 +4,11 @@
   <section>
     <h2>小尺寸 + 小时</h2>
     <veui-time-picker
+      v-model="value0"
       mode="hour"
       ui="s"
       :min="min0"
       :max="max0"
-      :value.sync="value0"
       clearable
     />
     <veui-input
@@ -39,20 +39,20 @@
     />
     <h2>范围限制: {{ min3.join(':') }} ~ {{ max3.join(':') }}</h2>
     <veui-time-picker
+      v-model="value3"
       :min="min3"
       :max="max3"
-      :value.sync="value3"
     />
     <h2>
       范围限制: {{ min4.join(':') }} ~ {{ max4.join(':') }} + 定制分钟和秒钟为
       [0, 30]
     </h2>
     <veui-time-picker
+      v-model="value4"
       :min="min4"
       :max="max4"
-      :minute-datasource="[0, 30]"
-      :second-datasource="[0, 30]"
-      :value.sync="value4"
+      :minutes="[0, 30]"
+      :seconds="[0, 30]"
     />
   </section>
 </article>
