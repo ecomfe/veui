@@ -49,7 +49,7 @@ export class Rule {
         return {
           name: rule.name,
           message: isFunction(realMessage)
-            ? realMessage(rule.value, val)
+            ? realMessage(val, rule.value)
             : (realMessage + '')
               .replace(
                 ruleValueRe.test(realMessage) ? ruleValueRe : oldRuleValueRe,
