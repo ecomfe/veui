@@ -5,28 +5,40 @@
     <h2>默认样式：</h2>
     <veui-select
       v-model="defaultValue1"
-      ui="large"
       v-bind="attrs"
       placeholder="全部"
       clearable
-      :filter="filter"
-    >
-      <div slot="before">
-        <veui-input
-          v-model="keyword"
-          class="filter"
-          ui="tiny"
-        />
-      </div>
-    </veui-select>
+    />
   </section>
   <section>
-    <h2>显示已选图标样式：</h2>
+    <h2>4 种大小：</h2>
+    <veui-form>
+      <veui-field
+        v-for="ui in sizes"
+        :key="ui"
+        :ui="ui"
+        :label="ui"
+      >
+        <veui-select
+          v-model="defaultValue1"
+          :ui="ui"
+          v-bind="attrs"
+          placeholder="全部"
+          clearable
+          :filter="filter"
+        />
+      </veui-field>
+    </veui-form>
+  </section>
+  <section>
+    <h2>可搜索Select：</h2>
     <veui-select
       v-model="defaultValue2"
       v-bind="attrs"
       ui="checkmark"
+      searchable
     />
+    <span>currentValue: {{ defaultValue2 }}</span>
   </section>
   <section>
     <h2>只读样式：</h2>
@@ -237,10 +249,11 @@
     </veui-select>
   </section>
   <section style="margin-top:500px;">
-    <h2>默认分组样式：</h2>
+    <h2>可搜索分组样式：</h2>
     <veui-select
       v-model="defaultValue5"
       v-bind="optGroupAttrs"
+      searchable
     />
   </section>
   <section>
@@ -342,7 +355,7 @@
 
 <script>
 import bus from '../bus'
-import { Icon, Select, Option, OptionGroup, Radio, Input } from 'veui'
+import { Icon, Select, Option, OptionGroup, Radio, Field, Form } from 'veui'
 import type from 'veui/managers/type'
 import 'vue-awesome/icons/eye'
 import 'vue-awesome/icons/gift'
@@ -355,7 +368,8 @@ export default {
     'veui-option-group': OptionGroup,
     'veui-radio': Radio,
     'veui-icon': Icon,
-    'veui-input': Input
+    'veui-field': Field,
+    'veui-form': Form
   },
   data () {
     return {
@@ -378,6 +392,7 @@ export default {
       defaultValue8: '1-1',
       defaultValue9: null,
       defaultValue10: null,
+      sizes: ['xs', 's', 'm', 'l'],
       attrs: {
         name: 'age',
         readonly: false,
@@ -527,7 +542,7 @@ export default {
   position: relative;
   padding-left: 24px;
   &::after {
-    content: "❤️";
+    content: '❤️';
     position: absolute;
     top: 50%;
     left: 0;
@@ -540,7 +555,7 @@ export default {
 }
 
 .filter {
-  width: ~"calc(100% - 10px)";
+  width: ~'calc(100% - 10px)';
   margin: 5px;
 }
 </style>

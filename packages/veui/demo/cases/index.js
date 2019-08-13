@@ -226,8 +226,7 @@ export default [
   {
     path: '/select',
     name: 'Select',
-    component: Select,
-    disabled: true
+    component: Select
   },
   {
     path: '/slider',
