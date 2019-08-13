@@ -7,14 +7,15 @@ config.defaults(
       search: 'search'
     },
     parts: {
-      button: 'primary'
+      button: 'primary',
+      search: 'icon'
     },
     ui: {
       style: {
-        values: ['primary']
+        values: ['normal', 'strong']
       },
       size: {
-        values: ['large', 'small'],
+        values: ['xs', 's', 'm', 'l'],
         inherit: true
       }
     }

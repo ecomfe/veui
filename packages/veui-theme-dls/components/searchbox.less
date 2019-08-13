@@ -2,68 +2,65 @@
 @import (reference) "../dropdown.less";
 
 .veui-searchbox {
-  display: inline-block;
+  display: inline-flex;
   position: relative;
-  color: @veui-text-color-weak;
-  width: 210px;
-  background-color: #fff;
+  color: @dls-input-font-color;
+  background-color: @dls-input-background-color;
+
+  .veui-input-has-after .veui-input-main {
+    .border-right-radius(@dls-input-border-radius-m);
+  }
 
   .veui-input {
     width: 100%;
-    vertical-align: top;
     overflow: visible;
+
+    &-main {
+      width: @dls-input-width;
+    }
+    &-append {
+      .veui-input-clear {
+        margin-right: 0;
+      }
+      .veui-searchbox-action-icon {
+        margin-left: @dls-input-content-spacing;
+      }
+    }
+  }
+  .veui-input-focused {
+    .veui-input-main {
+      z-index: 1;
+    }
   }
 
   &-action {
-    color: @veui-text-color-normal;
+    display: flex;
     white-space: nowrap;
-    margin: -1px -1px -1px 0;
+    color: @dls-input-font-color;
 
     &-icon {
-      @half-height: @veui-height-normal / 2;
-      outline: none;
-      border: none;
-      margin-top: ~"calc(@{half-height} - 0.5em)";
-      margin-right: 10px;
       padding: 0;
-      width: auto;
-      height: auto;
-      line-height: 1;
-      vertical-align: top;
-      background-color: transparent;
+      border: none;
+      outline: none;
+      display: inline-flex;
+      background: transparent;
       .veui-button-transition();
 
-      [ui~="large"] & {
-        @half-height: @veui-height-large / 2;
-        margin-top: ~"calc(@{half-height} - 0.5em)";
-      }
-
-      [ui~="small"] & {
-        @half-height: @veui-height-small / 2;
-        margin-top: ~"calc(@{half-height} - 0.5em)";
-      }
-
-      .veui-icon {
-        vertical-align: top;
-      }
-
       &.focus-visible {
-        .veui-focus-shadow();
+        .dls-focus-ring();
       }
     }
 
     &-button.veui-button {
-      vertical-align: top;
       display: none;
       outline: none;
     }
   }
 
-  &.veui-disabled,
   &.veui-readonly {
-    background-color: @veui-gray-color-8;
-    border-color: @veui-gray-color-5;
-    color: @veui-text-color-aux;
+    background-color: @dls-input-background-color-read-only;
+    border-color: @dls-input-border-color-read-only;
+    color: @dls-input-font-color-read-only;
 
     .veui-input-after {
       overflow: hidden;
@@ -72,33 +69,57 @@
     .veui-searchbox-action,
     .veui-searchbox-action-icon {
       cursor: not-allowed;
-      color: @veui-text-color-weak;
+      color: @dls-input-font-color-read-only;
+    }
+  }
+
+  &.veui-disabled {
+    background-color: @dls-input-background-color-disabled;
+    border-color: @dls-input-border-color-disabled;
+    color: @dls-input-font-color-disabled;
+
+    .veui-input-after {
+      overflow: hidden;
+    }
+
+    .veui-searchbox-action,
+    .veui-searchbox-action-icon {
+      cursor: not-allowed;
+      color: @dls-input-font-color-disabled;
     }
   }
 
   &:not(.veui-disabled):not(.veui-readonly) {
     .veui-searchbox-action:hover {
-      color: @veui-gray-color-1;
+      color: @dls-input-font-color;
     }
   }
 
   &-suggestion-overlay {
     &:extend(._veui-dropdown-overlay all);
-    min-width: 160px;
-    max-height: 280px;
     overflow-y: auto;
-    background-color: #fff;
+    background-color: @dls-option-background-color;
 
-    &[ui~="large"] {
-      .veui-searchbox-suggestion-item {
-        font-size: @veui-font-size-large;
-      }
+    .veui-searchbox-suggestion-item {
+      font-size: @dls-option-font-size-m;
+      height: @dls-option-height-m;
+      display: flex;
+      align-items: center;
     }
 
-    &[ui~="small"] {
-      .veui-searchbox-suggestion-item {
-        font-size: @veui-font-size-small;
-      }
+    &[ui~="xs"] .veui-searchbox-suggestion-item {
+      font-size: @dls-option-font-size-xs;
+      height: @dls-option-height-xs;
+    }
+
+    &[ui~="s"] .veui-searchbox-suggestion-item {
+      font-size: @dls-option-font-size-s;
+      height: @dls-option-height-s;
+    }
+
+    &[ui~="l"] .veui-searchbox-suggestion-item {
+      font-size: @dls-option-font-size-l;
+      height: @dls-option-height-l;
     }
   }
 
@@ -106,28 +127,43 @@
     &:extend(._veui-dropdown-option all);
   }
 
-  &[ui~="large"] {
-    .veui-searchbox-suggestion-item {
-      height: @veui-height-large;
-      font-size: @veui-font-size-large;
+  &[ui~="s"] {
+    .veui-input-has-after .veui-input-main {
+      .border-right-radius(@dls-input-border-radius-s);
     }
   }
 
-  &[ui~="small"] {
-    .veui-searchbox-suggestion-item {
-      height: @veui-height-small;
-      font-size: @veui-font-size-small;
+  &[ui~="xs"] {
+    .veui-input-has-after .veui-input-main {
+      .border-right-radius(@dls-input-border-radius-xs);
     }
   }
 
-  &[ui~="primary"] {
-    .veui-searchbox-action {
-      .veui-searchbox-action-button {
-        display: block;
+  &[ui~="l"] {
+    .veui-input-has-after .veui-input-main {
+      .border-right-radius(@dls-input-border-radius-l);
+    }
+  }
+
+  &[ui~="strong"] {
+    .veui-input-has-after {
+      .veui-input-main {
+        .border-right-radius(0);
+
+        .veui-searchbox-action {
+          display: none;
+        }
       }
+      .veui-input-after {
+        .border-left-radius(0);
+        margin-left: -1px;
 
-      .veui-searchbox-action-icon {
-        display: none;
+        .veui-searchbox-action {
+          .veui-searchbox-action-button {
+            display: block;
+            .border-left-radius(0);
+          }
+        }
       }
     }
   }
