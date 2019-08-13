@@ -31,8 +31,23 @@
       class="veui-searchbox-action"
       @click.stop="search"
     >
-      <button
+      <veui-button
+        :ui="uiParts.button"
+        class="veui-searchbox-action-button"
+        :disabled="realDisabled || realReadonly"
+        :aria-haspopup="submitPopup"
+      >
+        {{ t('search') }}
+      </veui-button>
+    </div>
+    <div
+      slot="append"
+      class="veui-searchbox-action"
+      @click.stop="search"
+    >
+      <veui-button
         type="button"
+        :ui="uiParts.search"
         class="veui-searchbox-action-icon"
         :disabled="realDisabled || realReadonly"
         :aria-haspopup="submitPopup"
@@ -41,14 +56,6 @@
           :name="icons.search"
           :label="t('search')"
         />
-      </button>
-      <veui-button
-        :ui="uiParts.button"
-        class="veui-searchbox-action-button"
-        :disabled="realDisabled || realReadonly"
-        :aria-haspopup="submitPopup"
-      >
-        {{ t('search') }}
       </veui-button>
     </div>
   </veui-input>
@@ -65,6 +72,7 @@
       ref="box"
       class="veui-searchbox-suggestion-overlay"
       role="listbox"
+      :ui="realUi"
       :aria-expanded="realExpanded"
     >
       <slot name="suggestions-before"/>
