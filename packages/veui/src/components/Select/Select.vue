@@ -1,6 +1,6 @@
 <script>
 import Icon from '../Icon'
-import Button from '../Button'
+import Input from '../Input'
 import Option from './Option'
 import OptionGroup from './OptionGroup'
 import Overlay from '../Overlay'
@@ -11,7 +11,8 @@ import dropdown from '../../mixins/dropdown'
 import keySelect from '../../mixins/key-select'
 import warn from '../../utils/warn'
 import { walk } from '../../utils/data'
-import { uniqueId, cloneDeep, mapValues } from 'lodash'
+import { filterAndFlatDatasource } from '../../utils/helper'
+import { uniqueId, mapValues } from 'lodash'
 import '../../common/uiTypes'
 
 config.defaults(
@@ -34,15 +35,20 @@ export default {
     /* eslint-ensable vue/require-prop-types */
     placeholder: String,
     clearable: Boolean,
+    searchable: Boolean,
     options: Array,
-    filter: Function
+    childrenKey: {
+      type: String,
+      default: 'options'
+    }
   },
   data () {
     return {
       labelId: uniqueId('veui-select-label-'),
       localValue: this.value,
-      outsideRefs: ['button'],
-      initOptionLabel: ''
+      outsideRefs: ['input'],
+      initOptionLabel: '',
+      inputValue: ''
     }
   },
   computed: {
@@ -75,15 +81,38 @@ export default {
       }
       return ''
     },
-    realOptions () {
-      if (typeof this.filter !== 'function') {
-        return this.options
+    searchInputLabel () {
+      if (this.localValue === null) {
+        return ''
       }
-      let filtered = cloneDeep(this.options)
-      walk(filtered, option => {
-        option.hidden = !this.filter(option)
-      })
-      return filtered
+      return this.label
+    },
+    realOptions () {
+      if (this.searchable && this.inputValue) {
+        let res = filterAndFlatDatasource(
+          this.options,
+          this.inputValue,
+          'label',
+          this.childrenKey
+        )
+        if (!res.length) {
+          res.push({
+            label: '无搜索结果',
+            disabled: true
+          })
+        }
+        return res
+      }
+      return this.options
+    },
+    inputClass () {
+      if (this.searchable) {
+        return 'veui-select-input'
+      }
+      return 'veui-select-input unsearchable'
+    },
+    focusClass () {
+      return this.searchable ? config.get('keySelect.focusClass') : null
     }
   },
   watch: {
@@ -119,19 +148,58 @@ export default {
     handleRelocate () {
       this.$refs.options.relocateDeep()
     },
-    handleButtonClick () {
-      this.expanded = !this.expanded
-    },
-    handleButtonKeydown (e) {
-      if (
-        e.key === 'Up' ||
-        e.key === 'ArrowUp' ||
-        e.key === 'Down' ||
-        e.key === 'ArrowDown'
-      ) {
-        this.expanded = true
+    handleInputClick (e) {
+      if (this.realReadonly || this.realDisabled) {
+        return
+      }
+      if (!this.searchable) {
+        this.expanded = !this.expanded
         e.stopPropagation()
         e.preventDefault()
+      }
+    },
+    handleInputKeydown (e) {
+      let passive = true
+      switch (e.key) {
+        case 'Up':
+        case 'ArrowUp':
+        case 'Down':
+        case 'ArrowDown':
+          this.expanded = true
+          if (this.searchable) {
+            this.handleKeydown(e)
+            this.getCurrentActiveElement()
+          }
+          break
+        case 'Esc':
+        case 'Escape':
+          if (this.searchable) {
+            this.expanded = false
+            passive = false
+          }
+          break
+        case 'Enter':
+          if (this.searchable) {
+            let elem = this.getCurrentActiveElement()
+            if (elem) {
+              elem.click()
+            }
+            passive = false
+          }
+          break
+        default:
+          break
+      }
+      if (!passive) {
+        e.stopPropagation()
+        e.preventDefault()
+      }
+    },
+    handleTriggerInput (val) {
+      this.inputValue = val
+      this.expanded = !!val
+      if (!val) {
+        this.localValue = ''
       }
     },
     extractOptions () {
@@ -155,10 +223,24 @@ export default {
       return map
     },
     focus () {
-      this.$refs.button.focus()
+      this.$refs.input.focus()
     }
   },
   render () {
+    let optionLabel = option => {
+      let { groups } = option
+
+      if (groups) {
+        let res = groups.map((group, index) => {
+          if (group.isSeparator) {
+            return <mark>{group.value}</mark>
+          }
+          return <span>{group.value}</span>
+        })
+        return <span>{res}</span>
+      }
+      return null
+    }
     return (
       <div
         class={{
@@ -176,31 +258,68 @@ export default {
         aria-labelledby={this.labelId}
         aria-haspopup="listbox"
       >
-        <Button
-          ref="button"
-          class="veui-select-button"
-          disabled={this.realDisabled || this.realReadonly}
-          onKeydown={this.handleButtonKeydown}
-          onClick={this.handleButtonClick}
-        >
-          <span class="veui-select-label" id={this.labelId}>
-            {this.$scopedSlots.label
-              ? this.$scopedSlots.label(
-                this.selectedOption || { selected: false }
-              )
-              : this.label || this.initOptionLabel}
-          </span>
-          <Icon
-            class="veui-select-icon"
-            name={this.icons[this.expanded ? 'collapse' : 'expand']}
-          />
-        </Button>
+        {this.searchable ? (
+          <Input
+            ref="input"
+            ui={this.uiParts[this.realUi]}
+            class={this.inputClass}
+            placeholder={this.realPlaceholder}
+            value={this.searchInputLabel}
+            disabled={this.realDisabled || this.realReadonly}
+            onKeydown={this.handleInputKeydown}
+            onClick={this.handleInputClick}
+            onInput={this.handleTriggerInput}
+            clearable
+          >
+            <template slot="append">
+              <Icon
+                class="veui-select-icon"
+                name={this.icons[this.expanded ? 'collapse' : 'expand']}
+              />
+            </template>
+          </Input>
+        ) : (
+          <Input
+            ref="input"
+            ui={this.uiParts[this.realUi]}
+            class={this.inputClass}
+            disabled={this.realDisabled || this.realReadonly}
+            {...{
+              nativeOn: {
+                '!click': this.handleInputClick,
+                '!keydown': this.handleInputKeydown
+              }
+            }}
+          >
+            <template slot="prepend">
+              <span
+                class={{
+                  'veui-select-label': true,
+                  'veui-select-placeholder': this.localValue === null
+                }}
+                id={this.labelId}
+              >
+                {this.$scopedSlots.label
+                  ? this.$scopedSlots.label(
+                    this.selectedOption || { selected: false }
+                  )
+                  : this.label || this.initOptionLabel}
+              </span>
+            </template>
+            <template slot="append">
+              <Icon
+                class="veui-select-icon"
+                name={this.icons[this.expanded ? 'collapse' : 'expand']}
+              />
+            </template>
+          </Input>
+        )}
         {
           <Overlay
             v-show={this.expanded}
-            target="button"
+            target="input"
             open={this.expanded}
-            autofocus
+            autofocus={!this.searchable}
             modal
             options={this.realOverlayOptions}
             overlay-class={this.overlayClass}
@@ -227,7 +346,7 @@ export default {
               onKeydown={this.handleKeydown}
             >
               {this.$slots.before}
-              {this.clearable ? (
+              {this.clearable && !this.searchable ? (
                 <Option value={null} label={this.realPlaceholder} />
               ) : null}
               <OptionGroup
@@ -237,7 +356,8 @@ export default {
                 scopedSlots={{
                   label: this.$scopedSlots['group-label'] || null,
                   option: this.$scopedSlots.option || null,
-                  'option-label': this.$scopedSlots['option-label'] || null
+                  'option-label':
+                    this.$scopedSlots['option-label'] || optionLabel
                 }}
               >
                 {this.$slots.default}

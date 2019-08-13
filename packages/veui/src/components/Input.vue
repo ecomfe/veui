@@ -23,7 +23,10 @@
       </slot>
     </div>
   </template>
-  <label class="veui-input-main">
+  <div
+    class="veui-input-main"
+    @click="focus"
+  >
     <span
       v-show="empty && editable"
       class="veui-input-placeholder"
@@ -67,7 +70,7 @@
         <slot name="append"/>
       </div>
     </template>
-  </label>
+  </div>
   <template v-if="$slots.after || $slots['after-label']">
     <div class="veui-input-after">
       <slot name="after">
@@ -196,7 +199,6 @@ export default {
     },
     handleFocus ($event) {
       this.focused = true
-
       if (this.realSelectOnFocus && $event.target) {
         $event.target.select()
       }

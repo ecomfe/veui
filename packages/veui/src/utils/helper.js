@@ -221,3 +221,57 @@ export function hasClass (vnode, clazz) {
     (data.staticClass && includes(data.staticClass.split(/\s+/), clazz))
   )
 }
+
+/**
+ * 过滤并且打平数据源
+ *
+ * @param {Array<Object>} datasource 数据源
+ * @param {String} searchValue 检索词
+ * @param {String} valueKey 指定数据项的检索属性
+ * @param {String} childrenKey 指定数据项的子节点属性
+ * @return {Array<Object>} 过滤以及打平后的数据
+ */
+export function filterAndFlatDatasource (
+  datasource,
+  searchValue,
+  valueKey,
+  childrenKey
+) {
+  let dest = []
+  function matcher (item) {
+    return item[valueKey].indexOf(searchValue) >= 0
+  }
+  function flatDatasource (src, valuePaths, isParentMatch) {
+    src.forEach(item => {
+      let children = item[childrenKey]
+      let match = isParentMatch || matcher(item)
+      let flatValue = `${valuePaths}${item[valueKey]}`
+
+      if (children) {
+        flatDatasource(children, `${flatValue} > `, match)
+      } else if (match) {
+        let regExp = new RegExp(`(${searchValue})+`, 'g')
+        let separators = flatValue.match(regExp)
+        dest.push({
+          ...item,
+          [valueKey]: flatValue,
+          groups: flatValue.split(regExp).map((value, index) => {
+            if (index % 2 === 0) {
+              return {
+                value,
+                isSeparator: false
+              }
+            }
+            return {
+              value: separators[Math.floor(index / 2)],
+              isSeparator: true
+            }
+          })
+        })
+      }
+    })
+  }
+
+  flatDatasource(datasource, '', false)
+  return dest
+}
