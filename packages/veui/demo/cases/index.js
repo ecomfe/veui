@@ -126,7 +126,7 @@ export default [
     path: '/dropdown',
     name: 'Dropdown',
     component: Dropdown,
-    disabled: true
+    disabled: false
   },
   {
     path: '/form',
@@ -209,7 +209,7 @@ export default [
     path: '/searchbox',
     name: 'Searchbox',
     component: Searchbox,
-    disabled: true
+    disabled: false
   },
   {
     path: '/select',
