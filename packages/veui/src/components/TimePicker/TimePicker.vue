@@ -29,7 +29,7 @@
     "
     :open="expanded"
     :options="realOverlayOptions"
-    @afterenter="scrollSelectedToCenter(0)"
+    @afteropen="scrollSelectedToCenter(0)"
   >
     <div
       v-outside:input="closeDropdown"
@@ -151,13 +151,13 @@ export default {
   },
   mixins: [ui, input, dropdown],
   model: {
-    event: 'update:value'
+    event: 'input'
   },
   props: {
     value: Array,
-    hourDatasource: Array,
-    minuteDatasource: Array,
-    secondDatasource: Array,
+    hours: Array,
+    minutes: Array,
+    seconds: Array,
     placeholder: {
       type: String,
       default: '请选择时间'
@@ -209,17 +209,13 @@ export default {
       )
     },
     sortedHours () {
-      return this.hourDatasource ? this.hourDatasource.sort(sorter) : HOURS
+      return this.hours ? this.hours.sort(sorter) : HOURS
     },
     sortedMinutes () {
-      return this.minuteDatasource
-        ? this.minuteDatasource.sort(sorter)
-        : MINUTES
+      return this.minutes ? this.minutes.sort(sorter) : MINUTES
     },
     sortedSeconds () {
-      return this.secondDatasource
-        ? this.secondDatasource.sort(sorter)
-        : SECONDS
+      return this.seconds ? this.seconds.sort(sorter) : SECONDS
     },
     // 为了实例化和校验
     checkOptions () {
@@ -330,17 +326,21 @@ export default {
     syncValue (val) {
       if (!isEqual(val, this.value)) {
         this.$forceUpdate()
-        this.$emit('update:value', val)
+        this.$emit('input', val)
         this.scrollSelectedToCenter()
       }
     },
     openDropdown () {
       this.expanded = true
+      this.startValue = this.realLocalValue
     },
     closeDropdown () {
       if (this.expanded) {
         this.close()
         this.inputValue = null
+        if (!isEqual(this.startValue, this.realLocalValue)) {
+          this.$emit('change', this.realLocalValue)
+        }
       }
     },
     handleDropdownChange (index, val) {
