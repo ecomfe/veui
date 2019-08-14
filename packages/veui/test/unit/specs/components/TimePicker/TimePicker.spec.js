@@ -12,8 +12,8 @@ let componentOptions = {
   data () {
     return {
       value0: null,
-      min0: [1],
-      max0: [10]
+      min0: '1',
+      max0: '10'
     }
   }
 }
@@ -98,7 +98,7 @@ describe('components/TimePicker', function () {
       .at(1)
       .trigger('click')
     await vm.$nextTick()
-    expect(isEqual(vm.value0, [0, 15, 30])).to.equal(true)
+    expect(isEqual(vm.value0, '00:15:30')).to.equal(true)
     wrapper.destroy()
   })
 
@@ -127,7 +127,7 @@ describe('components/TimePicker', function () {
     nativeInput.trigger('input')
     await vm.$nextTick()
 
-    expect(isEqual(vm.value0, [12, 30, 30])).to.equal(true)
+    expect(isEqual(vm.value0, '12:30:30')).to.equal(true)
     wrapper.destroy()
   })
 })
