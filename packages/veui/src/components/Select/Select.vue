@@ -11,7 +11,6 @@ import dropdown from '../../mixins/dropdown'
 import keySelect from '../../mixins/key-select'
 import warn from '../../utils/warn'
 import { walk } from '../../utils/data'
-import { filterAndFlatDatasource } from '../../utils/helper'
 import { uniqueId, mapValues } from 'lodash'
 import '../../common/uiTypes'
 
@@ -36,11 +35,7 @@ export default {
     placeholder: String,
     clearable: Boolean,
     searchable: Boolean,
-    options: Array,
-    childrenKey: {
-      type: String,
-      default: 'options'
-    }
+    options: Array
   },
   data () {
     return {
@@ -89,19 +84,19 @@ export default {
     },
     realOptions () {
       if (this.searchable && this.inputValue) {
-        let res = filterAndFlatDatasource(
+        let matched = this.filterFlattedDatasource(
           this.options,
-          this.inputValue,
-          'label',
-          this.childrenKey
+          this.inputValue
         )
-        if (!res.length) {
-          res.push({
-            label: '无搜索结果',
-            disabled: true
-          })
+        if (!matched) {
+          return [
+            {
+              label: '无搜索结果',
+              disabled: true
+            }
+          ]
         }
-        return res
+        return this.flattedDatasource
       }
       return this.options
     },
