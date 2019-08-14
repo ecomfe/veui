@@ -42,28 +42,13 @@ export default class TimePickerUtil {
     ) {
       throw new Error('datasource array required')
     }
-    let formatError =
-      (min && min.length && datasource.length !== min.length) ||
-      (max && max.length && datasource.length !== max.length)
-    if (formatError) {
-      throw new Error(
-        'the length of min or max must match the length of datasource'
-      )
-    }
+
     this.datasource = map(datasource, i => i.sort((a, b) => (a > b ? 1 : -1)))
     this.min = min || datasource.map(i => -Infinity)
     this.max = max || datasource.map(i => Infinity)
     this.available = null
     return this
   }
-
-  /*
-   *- bottom
-   *1
-   *2
-   *3
-   *- top
-   */
 
   getIndexOnPrevMatch (bottom, prevAvailable, idx) {
     let ds = this.datasource
