@@ -4,6 +4,12 @@ config.defaults(
   {
     parts: {
       self: 'reverse'
+    },
+    ui: {
+      size: {
+        values: ['s', 'm'],
+        default: 's'
+      }
     }
   },
   'popover'
