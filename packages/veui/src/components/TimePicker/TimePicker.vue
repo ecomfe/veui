@@ -12,6 +12,7 @@
     :readonly="realReadonly"
     :disabled="realDisabled"
     @focus="openDropdown"
+    @click="openDropdown"
   >
     <veui-icon
       slot="append"
@@ -46,7 +47,7 @@
           :ui="realUi"
           :options="realHours"
           :value="realLocalValue[0]"
-          @update:value="handleDropdownChange(0, $event)"
+          @change="handleDropdownChange(0, $event)"
         >
           <template
             slot="option"
@@ -69,7 +70,7 @@
           :ui="realUi"
           :options="realMinutes"
           :value="realLocalValue[1]"
-          @update:value="handleDropdownChange(1, $event)"
+          @change="handleDropdownChange(1, $event)"
         >
           <template
             slot="option"
@@ -92,7 +93,7 @@
           :ui="realUi"
           :options="realSeconds"
           :value="realLocalValue[2]"
-          @update:value="handleDropdownChange(2, $event)"
+          @change="handleDropdownChange(2, $event)"
         >
           <template
             slot="option"
@@ -118,7 +119,15 @@ import Icon from '../Icon'
 import dropdown from '../../mixins/dropdown'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
-import { range, padStart, isEqual, includes, get } from 'lodash'
+import {
+  range,
+  padStart,
+  isEqual,
+  includes,
+  get,
+  times,
+  constant
+} from 'lodash'
 import { scrollToCenter } from '../../utils/dom'
 import TimePickerUtil from './_TimePickerUtil'
 
@@ -129,11 +138,27 @@ const genOption = (o, suffix = '') => ({
 
 const sorter = (a, b) => (a > b ? 1 : -1)
 
-const formatTime = (time, sep = ':') => {
-  if (!get(time, 'length')) {
+const toString = (value, suffix, sep = ':') => {
+  if (!get(value, 'length')) {
     return ''
   }
-  return time.map(i => padStart(i, 2, '0')).join(sep)
+  return value.map(i => padStart(i, 2, '0')).join(sep) + suffix
+}
+
+const toArray = (value, sep = ':') =>
+  value
+    ? value
+      .trim()
+      .split(sep)
+      .map(i => parseInt(i, 10))
+    : []
+
+const ensureLength = (value, length, isMin) => {
+  return value.length === length
+    ? value
+    : value.length > length
+      ? value.slice(0, length)
+      : value.concat(times(length - value.length, constant(isMin ? 0 : 59)))
 }
 
 const HOURS = range(24)
@@ -154,7 +179,7 @@ export default {
     event: 'input'
   },
   props: {
-    value: Array,
+    value: String,
     hours: Array,
     minutes: Array,
     seconds: Array,
@@ -169,16 +194,15 @@ export default {
         return includes(MODES, val)
       }
     },
-    min: Array,
-    max: Array,
+    min: String,
+    max: String,
     autofocus: Boolean,
     clearable: Input.props.clearable
   },
   data () {
     return {
-      localValue: [...(this.value || [])],
+      localValue: this.getRealPropValue(),
       inputValue: null,
-      // 可用的数据源
       availableData: null
     }
   },
@@ -192,22 +216,6 @@ export default {
     minuteSuffix () {
       return !this.enableMinutes ? ':00' : ''
     },
-    realMin () {
-      return (
-        this.min ||
-        (this.enableSeconds ? [0, 0, 0] : this.enableMinutes ? [0, 0] : [0])
-      )
-    },
-    realMax () {
-      return (
-        this.max ||
-        (this.enableSeconds
-          ? [23, 59, 59]
-          : this.enableMinutes
-            ? [23, 59]
-            : [23])
-      )
-    },
     sortedHours () {
       return this.hours ? this.hours.sort(sorter) : HOURS
     },
@@ -217,19 +225,31 @@ export default {
     sortedSeconds () {
       return this.seconds ? this.seconds.sort(sorter) : SECONDS
     },
+    datasource () {
+      return this.enableSeconds
+        ? [this.sortedHours, this.sortedMinutes, this.sortedSeconds]
+        : this.enableMinutes
+          ? [this.sortedHours, this.sortedMinutes]
+          : [this.sortedHours]
+    },
     // 为了实例化和校验
     checkOptions () {
+      let datasource = this.datasource
       return {
         utilOptions: {
-          datasource: this.enableSeconds
-            ? [this.sortedHours, this.sortedMinutes, this.sortedSeconds]
-            : this.enableMinutes
-              ? [this.sortedHours, this.sortedMinutes]
-              : [this.sortedHours],
-          min: this.realMin,
-          max: this.realMax
+          datasource,
+          min: ensureLength(
+            toArray(this.min || '00:00:00'),
+            datasource.length,
+            true
+          ),
+          max: ensureLength(
+            toArray(this.max || '23:59:59'),
+            datasource.length,
+            false
+          )
         },
-        value: this.value
+        value: this.realPropValue
       }
     },
     realHours () {
@@ -252,19 +272,14 @@ export default {
     },
     realInputValue: {
       get () {
-        if (this.inputValue) {
-          return this.inputValue
-        }
-        let val = formatTime(this.realLocalValue)
-        if (val) {
-          val += this.minuteSuffix
-        }
-        return val
+        return (
+          this.inputValue || toString(this.realLocalValue, this.minuteSuffix)
+        )
       },
       set (val) {
         this.inputValue = val
         if (val) {
-          val = val.split(':').map(i => parseInt(i, 10))
+          val = toArray(val)
           if (!this.util.isAvailable(val, true)) {
             return
           }
@@ -274,8 +289,11 @@ export default {
         this.syncValue(val)
       }
     },
+    realPropValue () {
+      return this.getRealPropValue()
+    },
     realLocalValue () {
-      return this.value === undefined ? this.localValue : this.value || []
+      return this.value === undefined ? this.localValue : this.realPropValue
     }
   },
   watch: {
@@ -301,8 +319,13 @@ export default {
     }
   },
   methods: {
+    getRealPropValue () {
+      return this.value
+        ? ensureLength(toArray(this.value), this.datasource.length, true)
+        : []
+    },
     checkPropValidity () {
-      if (this.value && !this.util.isAvailable(this.value, true)) {
+      if (this.value && !this.util.isAvailable(this.realPropValue, true)) {
         // TODO 需要恢复到之前的状态吗
         throw new Error('value prop is invalid!')
       }
@@ -324,22 +347,27 @@ export default {
       })
     },
     syncValue (val) {
-      if (!isEqual(val, this.value)) {
+      if (!isEqual(val, this.realPropValue)) {
         this.$forceUpdate()
-        this.$emit('input', val)
+        this.$emit('input', toString(val, this.minuteSuffix) || null)
         this.scrollSelectedToCenter()
       }
     },
     openDropdown () {
-      this.expanded = true
-      this.startValue = this.realLocalValue
+      if (!this.expanded) {
+        this.expanded = true
+        this.initialValue = this.realLocalValue
+      }
     },
     closeDropdown () {
       if (this.expanded) {
         this.close()
         this.inputValue = null
-        if (!isEqual(this.startValue, this.realLocalValue)) {
-          this.$emit('change', this.realLocalValue)
+        if (!isEqual(this.initialValue, this.realLocalValue)) {
+          this.$emit(
+            'change',
+            toString(this.realLocalValue, this.minuteSuffix) || null
+          )
         }
       }
     },
@@ -347,7 +375,7 @@ export default {
       let value = [...this.realLocalValue]
       value[index] = val
       let hasEmpty =
-        value.filter(i => i != null).length !== this.realMin.length
+        value.filter(i => i != null).length !== this.availableData.length
       if (hasEmpty || !this.util.isAvailable(value)) {
         value = this.util.getMinimumTimeOfIndex(index, val)
       }
