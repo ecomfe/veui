@@ -385,7 +385,7 @@ export function scrollToCenter (
   let { height: sHeight } = scroller.getBoundingClientRect()
   let initScrollTop = viewport.scrollTop
   let maxScrollTop = sHeight - vHeight
-  let distance = tTop - (vTop + vHeight / 2 - tHeight / 2)
+  let distance = tTop + tHeight / 2 - (vTop + vHeight / 2)
   if (initScrollTop + distance < 0) {
     distance = -initScrollTop
   }
