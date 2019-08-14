@@ -11,7 +11,7 @@ export default {
   },
   methods: {
     handleSelect (value) {
-      this.$emit('update:value', value)
+      this.$emit('change', value)
     }
   },
   render (h) {
@@ -20,7 +20,7 @@ export default {
       attrs: {
         ...this.$attrs
       },
-      on: omit(this.$listeners, 'update:value'),
+      on: omit(this.$listeners, 'change'),
       scopedSlots: this.$scopedSlots
     }
     return h(
