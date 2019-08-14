@@ -8,11 +8,14 @@ config.defaults(
     },
     ui: {
       style: {
-        value: ['info', 'success', 'warning', 'error']
+        values: ['info', 'success', 'warning', 'error', 'no-border']
       },
       size: {
         values: ['s', 'm']
       }
+    },
+    parts: {
+      close: 'icon'
     }
   },
   'tag'

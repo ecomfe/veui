@@ -25,30 +25,28 @@
     .make-metrics(s);
   }
 
+  &[ui~="no-border"] {
+    border: none;
+  }
+
   &-close {
-    cursor: pointer;
-    .veui-icon {
-      margin-left: @dls-tag-content-spacing;
-      .dls-icon-size(@dls-tag-icon-size);
-    }
+    margin-left: @dls-tag-content-spacing;
   }
 
   &:hover {
-    border-color: @dls-tag-shadow-focus;
-    background-color: @dls-tag-background-color-hover;
+    opacity: 0.8;
   }
 
-  &:focus {
-    border-color: @dls-tag-border-color-focus;
-    background-color: @dls-tag-background-color-focus;
-    box-shadow: @dls-tag-shadow-focus;
+  &.focus-visible {
+    .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
   }
 
   &:active {
     background-color: @dls-tag-background-color-active;
+    outline: none;
   }
 
-  &.selectable {
+  &-selectable {
     cursor: pointer;
   }
 
@@ -56,6 +54,7 @@
     color: @dls-tag-font-color-disabled;
     border-color: @dls-tag-border-color-disabled;
     background-color: @dls-tag-background-color-disabled;
+    outline: none;
     .veui-tag-close {
       cursor: not-allowed;
     }
@@ -63,19 +62,10 @@
 
   &.veui-tag-selected {
     color: @dls-tag-font-color-selected;
-    border-color: @dls-tag-border-color-selected;
     background-color: @dls-tag-background-color-selected;
 
-    &:hover {
-      background-color: @dls-tag-background-color-selected-hover;
-    }
-    &:focus {
-      border-color: @dls-tag-border-color-selected-focus;
-      background-color: @dls-tag-background-color-selected-focus;
-      box-shadow: @dls-tag-shadow-selected-focus;
-    }
-    &:active {
-      background-color: @dls-color-brand-7;
+    &.focus-visible {
+      .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
     }
     &.veui-disabled {
       background-color: @dls-tag-background-color-selected-disabled;
@@ -87,28 +77,19 @@
     border-color: @dls-tag-border-color-info;
     background-color: @dls-tag-background-color-info;
 
-    &:hover {
-      background-color: @dls-color-info-2;
-    }
-    &:focus {
-      background-color: @dls-color-info-2;
+    &.focus-visible {
+      .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
     }
     &.veui-disabled {
       color: @dls-color-info-3;
       border-color: @dls-color-info-2;
-      background-color: @dls-tag-background-color-info;
     }
     &.veui-tag-selected {
       color: @dls-tag-font-color-selected;
-      border-color: @dls-tag-border-color-selected;
       background-color: @dls-color-info-6;
 
-      &:hover,
-      &:focus {
-        background-color: @dls-color-info-5;
-      }
-      &:active {
-        background-color: @dls-color-info-7;
+      &.focus-visible {
+        .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
       }
       &.veui-disabled {
         background-color: @dls-color-info-2;
@@ -121,28 +102,19 @@
     border-color: @dls-tag-border-color-success;
     background-color: @dls-tag-background-color-success;
 
-    &:hover {
-      background-color: @dls-color-success-2;
-    }
-    &:focus {
-      background-color: @dls-color-success-2;
+    &.focus-visible {
+      .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
     }
     &.veui-disabled {
       color: @dls-color-success-3;
       border-color: @dls-color-success-2;
-      background-color: @dls-tag-background-color-info;
     }
     &.veui-tag-selected {
       color: @dls-tag-font-color-selected;
-      border-color: @dls-tag-border-color-selected;
       background-color: @dls-color-success-6;
 
-      &:hover,
-      &:focus {
-        background-color: @dls-color-success-5;
-      }
-      &:active {
-        background-color: @dls-color-success-7;
+      &.focus-visible {
+        .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
       }
       &.veui-disabled {
         background-color: @dls-color-success-2;
@@ -155,28 +127,19 @@
     border-color: @dls-tag-border-color-warning;
     background-color: @dls-tag-background-color-warning;
 
-    &:hover {
-      background-color: @dls-color-warning-2;
-    }
-    &:focus {
-      background-color: @dls-color-warning-2;
+    &.focus-visible {
+      .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
     }
     &.veui-disabled {
       color: @dls-color-warning-3;
       border-color: @dls-color-warning-2;
-      background-color: @dls-tag-background-color-info;
     }
     &.veui-tag-selected {
       color: @dls-tag-font-color-selected;
-      border-color: @dls-tag-border-color-selected;
       background-color: @dls-color-warning-6;
 
-      &:hover,
-      &:focus {
-        background-color: @dls-color-warning-5;
-      }
-      &:active {
-        background-color: @dls-color-warning-7;
+      &.focus-visible {
+        .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
       }
       &.veui-disabled {
         background-color: @dls-color-warning-2;
@@ -189,28 +152,19 @@
     border-color: @dls-tag-border-color-error;
     background-color: @dls-tag-background-color-error;
 
-    &:hover {
-      background-color: @dls-color-error-2;
-    }
-    &:focus {
-      background-color: @dls-color-error-2;
+    &.focus-visible {
+      .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
     }
     &.veui-disabled {
       color: @dls-color-error-3;
       border-color: @dls-color-error-2;
-      background-color: @dls-tag-background-color-info;
     }
     &.veui-tag-selected {
       color: @dls-tag-font-color-selected;
-      border-color: @dls-tag-border-color-selected;
       background-color: @dls-color-error-6;
 
-      &:hover,
-      &:focus {
-        background-color: @dls-color-error-5;
-      }
-      &:active {
-        background-color: @dls-color-error-7;
+      &.focus-visible {
+        .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
       }
       &.veui-disabled {
         background-color: @dls-color-error-2;

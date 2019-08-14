@@ -51,7 +51,6 @@
         :ui="type"
         :selected.sync="selected"
         selectable
-        closable
       >
         {{ type }}
       </veui-tag>
@@ -68,7 +67,6 @@
         :selected.sync="selected"
         disabled
         selectable
-        closable
       >
         {{ type }}
       </veui-tag>
@@ -79,6 +77,7 @@
         :key="type"
         :ui="type"
         disabled
+        closable
       >
         {{ type }}
       </veui-tag>
@@ -99,7 +98,7 @@ export default {
   data () {
     return {
       teams: ['湖人', '火箭', '猛龙', '马刺', '勇士'],
-      types: ['default', 'info', 'success', 'warning', 'error'],
+      types: ['default', 'info', 'success', 'warning', 'error', 'no-border'],
       sizes: ['s', 'm', 'default'],
       selected: false
     }
