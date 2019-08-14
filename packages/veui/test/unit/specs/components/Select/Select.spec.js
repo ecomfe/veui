@@ -98,7 +98,7 @@ describe('components/Select/Select', () => {
     await vm.$nextTick()
     vm.searchable = true
     await vm.$nextTick()
-    wrapper.find('.veui-select-input').trigger('click')
+    wrapper.find('.veui-select-search-input').trigger('click')
     await vm.$nextTick()
     overlay = wrapper.find('.veui-overlay-box')
     expect(overlay.isVisible()).to.equal(false)

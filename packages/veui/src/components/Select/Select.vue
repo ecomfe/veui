@@ -107,9 +107,9 @@ export default {
     },
     inputClass () {
       if (this.searchable) {
-        return 'veui-select-input'
+        return 'veui-select-search-input'
       }
-      return 'veui-select-input unsearchable'
+      return 'veui-select-input'
     },
     focusClass () {
       return this.searchable ? config.get('keySelect.focusClass') : null
@@ -261,7 +261,6 @@ export default {
         {this.searchable ? (
           <Input
             ref="input"
-            ui={this.uiParts[this.realUi]}
             class={this.inputClass}
             placeholder={this.realPlaceholder}
             value={this.searchInputLabel}
@@ -281,9 +280,12 @@ export default {
         ) : (
           <Input
             ref="input"
-            ui={this.uiParts[this.realUi]}
             class={this.inputClass}
             disabled={this.realDisabled || this.realReadonly}
+            /**
+             * register event on capture stage
+             * to prevent input from setting fouse state
+             */
             {...{
               nativeOn: {
                 '!click': this.handleInputClick,

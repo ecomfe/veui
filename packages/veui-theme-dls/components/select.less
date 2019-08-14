@@ -11,14 +11,16 @@
     &:extend(._veui-input-invalid all);
   }
 
-  &-input {
-    width: 100%;
+  &-input,
+  &-search-input {
+    .veui-input-append {
+      padding-left: @dls-select-content-spacing;
+    }
   }
 
-  &-input.unsearchable {
-    &-input .veui-input-input {
-      pointer-events: none;
-    }
+  &-input {
+    width: 100%;
+
     .veui-input-main {
       cursor: pointer;
     }
@@ -32,6 +34,14 @@
 
   &-placeholder {
     color: @dls-input-placeholder-color;
+  }
+
+  &-icon {
+    .veui-transition(transform);
+  }
+
+  &-expanded &-icon {
+    transform: rotateZ(180deg);
   }
 
   &-options {

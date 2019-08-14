@@ -8,16 +8,10 @@ config.defaults(
       collapse: 'chevron-down'
     },
     ui: {
-      style: {
-        values: ['alt'],
+      size: {
+        values: ['xs', 's', 'm', 'l'],
         inherit: true
       }
-    },
-    parts: {
-      xs: 'xs',
-      s: 's',
-      m: 'm',
-      l: 'l'
     }
   },
   'select'
