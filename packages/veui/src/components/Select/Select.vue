@@ -88,17 +88,9 @@ export default {
           this.options,
           this.inputValue
         )
-        if (!matched) {
-          return [
-            {
-              label: '无搜索结果',
-              disabled: true
-            }
-          ]
-        }
-        return this.flattedDatasource
+        return matched ? this.flattedDatasource : null
       }
-      return this.options
+      return this.options || []
     },
     inputClass () {
       if (this.searchable) {
@@ -180,6 +172,8 @@ export default {
               elem.click()
             }
             passive = false
+          } else {
+            this.expanded = true
           }
           break
         default:
@@ -192,7 +186,7 @@ export default {
     },
     handleTriggerInput (val) {
       this.inputValue = val
-      this.expanded = !!val
+      this.expanded = true
       if (!val) {
         this.localValue = ''
       }
@@ -236,6 +230,11 @@ export default {
       }
       return null
     }
+    let noDadaOption = this.$scopedSlots['no-data'] ? (
+      this.$scopedSlots['no-data']()
+    ) : (
+      <Option value={null} label="无搜索结果" disabled />
+    )
     return (
       <div
         class={{
@@ -346,6 +345,7 @@ export default {
               {this.clearable && !this.searchable ? (
                 <Option value={null} label={this.realPlaceholder} />
               ) : null}
+              {!this.realOptions ? noDadaOption : null}
               <OptionGroup
                 ref="options"
                 options={this.realOptions}

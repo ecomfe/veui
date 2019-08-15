@@ -30,15 +30,7 @@ export default {
   directives: { outside },
   mixins: [overlay, activatable],
   props: {
-    filter: Function,
-    labelKey: {
-      type: String,
-      default: 'label'
-    },
-    childrenKey: {
-      type: String,
-      default: 'options'
-    }
+    filter: Function
   },
   data () {
     return {
@@ -63,11 +55,7 @@ export default {
       return this.options || this.suggestions || []
     },
     flattedDatasource () {
-      return flatDatasource(
-        this.suggestionDatasource,
-        this.labelKey,
-        this.childrenKey
-      )
+      return flatDatasource(this.suggestionDatasource, 'label', 'options')
     }
   },
   updated () {
@@ -119,10 +107,10 @@ export default {
     },
     defaultFilter (item, searchValue) {
       let regExp = new RegExp(`(${searchValue})+`, 'g')
-      let itemValue = item[this.labelKey]
-      let separators = itemValue.match(regExp)
+      let itemLabel = item.label || ''
+      let separators = itemLabel.match(regExp)
       if (separators) {
-        return itemValue.split(regExp).map((value, index) => {
+        return itemLabel.split(regExp).map((value, index) => {
           if (index % 2 === 0) {
             return {
               value,
