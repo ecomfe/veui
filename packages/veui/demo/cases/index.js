@@ -44,6 +44,7 @@ import Drawer from './Drawer'
 import Loading from './Loading'
 import Collapse from './Collapse'
 import Popover from './Popover'
+import Badge from './Badge'
 
 export default [
   {
@@ -63,6 +64,11 @@ export default [
     name: 'Autocomplete',
     component: Autocomplete,
     disabled: true
+  },
+  {
+    path: '/badge',
+    name: 'Badge',
+    component: Badge
   },
   {
     path: '/breadcrumb',
