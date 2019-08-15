@@ -43,6 +43,7 @@ import Tag from './Tag'
 import Drawer from './Drawer'
 import Loading from './Loading'
 import Collapse from './Collapse'
+import Popover from './Popover'
 
 export default [
   {
@@ -316,5 +317,15 @@ export default [
     name: 'Tree',
     component: Tree,
     disabled: true
+  },
+  {
+    path: '/loading',
+    name: 'Loading',
+    component: Loading
+  },
+  {
+    path: '/Popover',
+    name: 'Popover',
+    component: Popover
   }
 ]

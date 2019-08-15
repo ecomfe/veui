@@ -1,22 +1,21 @@
 @import "../lib.less";
 
 .veui-tooltip {
-  @raw-height: @veui-height-normal;
-  @padding-y: (@raw-height - @veui-line-height-normal * @veui-font-size-normal) /
-    2;
-  @gap: 8px;
-  @bg: fadeout(@veui-gray-color-1, 20%);
-  @arrow-size: 8px;
+  @gap: @dls-tooltip-target-spacing + @dls-tooltip-arrow-height;
+  @arrow-size: @dls-tooltip-arrow-width;
   @arrow-side: @arrow-size / sqrt(2);
-  @arrow-indent: 10px;
+  @arrow-indent: @dls-tooltip-arrow-spacing;
 
-  .veui-overlay-shadow();
   position: relative;
-  padding: @padding-y 10px;
-  background-color: @bg;
-  color: #fff;
-  line-height: @veui-line-height-normal;
-  border-radius: 1px;
+  padding: @dls-tooltip-padding-y @dls-tooltip-padding-x;
+  background-color: @dls-tooltip-background-color-normal;
+  color: @dls-tooltip-font-color-normal;
+  line-height: @dls-tooltip-line-height;
+  // TODO
+  border-radius: @dls-border-radius-s;
+  max-width: @dls-tooltip-max-width;
+  font-size: @dls-tooltip-font-size;
+  box-shadow: @dls-tooltip-shadow-normal;
 
   &-box-transparent {
     pointer-events: none;
@@ -25,7 +24,7 @@
   &::before,
   &::after {
     content: "";
-    color: @bg;
+    color: @dls-tooltip-background-color-normal;
     transform-origin: 50% 100%;
     top: 50%;
     left: 50%;
@@ -145,9 +144,10 @@
     .make-align(left);
   }
 
-  &[ui~="alt"] {
-    background-color: #fff;
-    color: @veui-text-color-normal;
+  &[ui~="reverse"] {
+    background-color: @dls-tooltip-background-color-reverse;
+    color: @dls-tooltip-font-color-reverse;
+    box-shadow: @dls-tooltip-shadow-reverse;
 
     &::before {
       display: block;
@@ -156,15 +156,7 @@
     }
 
     &::after {
-      color: #fff;
+      color: @dls-tooltip-background-color-reverse;
     }
-  }
-
-  &[ui~="small"] {
-    font-size: @veui-font-size-small;
-  }
-
-  &[ui~="large"] {
-    font-size: @veui-font-size-large;
   }
 }
