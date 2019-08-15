@@ -1,279 +1,412 @@
 @import "../lib.less";
 
 .veui-steps {
-  display: inline-block;
-  @step-height: 30px;
-  @full-height: 30px;
-  @separator-length-x: 120px;
-  @separator-length-y: 60px;
+  @step-height: @dls-steps-marker-size-m;
+  @title-font-size: @dls-steps-title-font-size-m;
+  @desc-font-size: @dls-steps-desc-font-size-m;
+  @marker-font-size: @dls-steps-marker-font-size-m;
+  @separator-length-y: @dls-steps-connector-length-vertical;
+  @separator-gap-x: @dls-steps-connector-spacing-horizontal;
+  @separator-gap-y: @dls-steps-connector-spacing-vertical;
   @separator-width: 1px;
-  @separator-gap-x: 20px;
-  @separator-gap-y: 10px;
   @border-width: 1px;
-  @full-line-height: @veui-line-height-normal * @veui-font-size-normal;
-  @label-font-size: @veui-font-size-large;
-  @desc-font-size: @veui-font-size-small;
+  @icon-width: 1em;
+  display: flex;
 
   &-step {
-    display: block;
-    float: left;
+    flex: 1;
+    display: flex;
     text-decoration: none;
-    position: relative;
-    margin-right: @separator-gap-x * 2 + @separator-length-x;
+    overflow: hidden;
+    margin-right: @separator-gap-x;
 
     &-index {
-      @half-height: @step-height / 2;
-      position: absolute;
-      top: ~"calc(50% - @{half-height})";
+      flex-grow: 0;
+      flex-shrink: 0;
       .size(@step-height);
-      border: @border-width solid @veui-success-color;
+      .make-index(completed);
       text-align: center;
       line-height: @step-height - @border-width * 2;
-      color: @veui-success-color;
-      font-size: @veui-font-size-large;
+      font-size: @marker-font-size;
       border-radius: 50%;
+      margin: 2px 0 2px 2px;
 
       .veui-icon {
         vertical-align: top;
-        margin-top: ~"calc(50% - 0.5em)";
+        margin-top: ~"calc(50% - @{icon-width} / 2)";
       }
     }
 
     &-content {
-      padding-left: @step-height + 10px;
-    }
-
-    &:last-child {
-      margin-right: 0;
+      padding-left: @dls-steps-marker-spacing;
+      flex-grow: 1;
+      margin-top: 2px;
     }
 
     &-label {
       margin: 0;
-      font-size: @label-font-size;
-      color: @veui-text-color-normal;
       line-height: @step-height;
-      font-weight: @veui-font-weight-normal;
+      font-size: @title-font-size;
+      color: @dls-steps-title-font-color;
+      font-weight: @dls-steps-title-font-weight;
+      margin-right: @separator-gap-x;
+      display: inline-block;
+      position: relative;
+
+      &::after {
+        .make-connector();
+        left: ~"calc(100% + @{separator-gap-x})";
+      }
     }
 
     &-desc {
       display: none;
       margin: 0;
-      color: @veui-text-color-weak;
+      color: @dls-steps-desc-font-color;
       font-size: @desc-font-size;
     }
 
-    &::after {
-      @half-width: @separator-width / 2;
-      .size(@separator-length-x, @separator-width);
-      content: "";
-      position: absolute;
-      top: ~"calc(50% - @{half-width})";
-      right: -@separator-gap-x - @separator-length-x;
-      background-color: @veui-gray-color-2;
-      pointer-events: none;
+    &:last-child {
+      margin-right: 0;
+      .veui-steps-step-label::after {
+        display: none;
+      }
+    }
+  }
+
+  .veui-steps a,
+  .veui-link {
+    &:hover,
+    &.focus-visible,
+    &:active,
+    &.veui-disabled {
+      text-decoration: none;
+    }
+  }
+
+  &-label-vertical {
+    margin-right: 0;
+    text-align: center;
+    position: relative;
+    display: block;
+    width: 100%;
+
+    .veui-steps-step {
+      &-content {
+        padding-left: 0;
+      }
+
+      &-label {
+        margin-right: 0;
+        &::after {
+          display: none;
+        }
+      }
+      &-index {
+        margin: auto;
+      }
     }
 
+    &::after {
+      .make-connector();
+      left: ~"calc(50% + @{step-height} / 2 + @{separator-gap-x})";
+    }
+
+    &::before {
+      .make-connector();
+      right: ~"calc(50% + @{step-height} / 2 + @{separator-gap-x})";
+    }
+
+    &:first-child::before,
     &:last-child::after {
       display: none;
     }
+  }
 
-    a&:hover,
-    a&.focus-visible {
-      .veui-steps-step-label {
-        color: @veui-text-color-strong;
-      }
-
+  &-completed {
+    &:focus {
       .veui-steps-step-index {
-        border-color: @veui-success-color-2;
-        color: @veui-success-color-2;
+        background-color: @dls-steps-marker-background-color-completed-focus;
+        box-shadow: @dls-steps-marker-shadow-completed-focus;
+      }
+      .veui-steps-step-label {
+        color: @dls-steps-title-font-color-focus;
       }
     }
 
-    a& {
-      outline: 2px solid transparent;
-      outline-offset: 2px;
-      .veui-transition(outline);
+    &:hover {
+      .veui-steps-step-index {
+        background-color: @dls-steps-marker-background-color-completed-hover;
+      }
+      .veui-steps-step-label {
+        color: @dls-steps-title-font-color-hover;
+      }
+    }
 
-      &.focus-visible {
-        border-radius: 1px;
-        .veui-focus-shadow(fadeout(@veui-gray-color-4, 50%), 2px);
+    &:active {
+      .veui-steps-step-index {
+        background-color: @dls-steps-marker-background-color-completed-active;
+      }
+      .veui-steps-step-label {
+        color: @dls-steps-title-font-color-active;
       }
     }
   }
 
   &-current {
+    &::before {
+      background-color: @dls-steps-connector-color-current;
+    }
+
     .veui-steps-step-index {
-      border-color: transparent;
-      background-color: @veui-gray-color-2;
-      color: #fff;
+      .make-index(current);
     }
 
-    .veui-steps-step::after {
-      background-color: @veui-gray-color-5;
-    }
-
-    &,
-    & ~ .veui-steps-step {
-      &::after {
-        background-color: @veui-gray-color-5;
-      }
-    }
-
-    & ~ .veui-steps-step {
+    &:focus {
       .veui-steps-step-index {
-        background-color: @veui-gray-color-5;
-        border-color: transparent;
-        color: #fff;
+        background-color: @dls-steps-marker-background-color-current-focus;
+        border-color: @dls-steps-marker-border-color-current-focus;
+        box-shadow: @dls-steps-marker-shadow-current-focus;
       }
     }
 
-    a&:hover,
-    a&.focus-visible {
+    &:hover {
       .veui-steps-step-index {
-        background-color: @veui-gray-color-1;
-        border-color: transparent;
-        color: #fff;
+        background-color: @dls-steps-marker-background-color-current-hover;
       }
     }
 
-    & ~ a.veui-steps-step:hover,
-    & ~ a.veui-steps-step.focus-visible {
+    &:active {
       .veui-steps-step-index {
-        background-color: @veui-gray-color-4;
-        border-color: transparent;
-        color: #fff;
+        background-color: @dls-steps-marker-background-color-current-active;
       }
     }
+  }
+
+  &-incomplete {
+    &::before {
+      background-color: @dls-steps-connector-color-incomplete;
+    }
+    .veui-steps-step {
+      &-index {
+        .make-index(incomplete);
+      }
+      &-label {
+        color: @dls-steps-title-font-color-incomplete;
+      }
+      &-desc {
+        color: @dls-steps-desc-font-color-incomplete;
+      }
+    }
+  }
+
+  &-error {
+    &::before {
+      background-color: @dls-steps-connector-color-error;
+    }
+    .veui-steps-step-index {
+      .make-index(error);
+    }
+
+    &:focus {
+      .veui-steps-step-index {
+        background-color: @dls-steps-marker-background-color-error-focus;
+        box-shadow: @dls-steps-marker-shadow-error-focus;
+      }
+    }
+
+    &:hover {
+      .veui-steps-step-index {
+        background-color: @dls-steps-marker-background-color-error-hover;
+      }
+    }
+
+    &:active {
+      .veui-steps-step-index {
+        background-color: @dls-steps-marker-background-color-error-active;
+      }
+    }
+  }
+
+  &-current-error {
+    &::before {
+      background-color: @dls-steps-connector-color-error-current;
+    }
+    .veui-steps-step-index {
+      .make-index(error-current);
+    }
+
+    &:focus {
+      .veui-steps-step-index {
+        background-color: @dls-steps-marker-background-color-error-current-focus;
+        box-shadow: @dls-steps-marker-shadow-error-current-focus;
+        border-color: @dls-steps-marker-border-color-error-current-focus;
+      }
+    }
+
+    &:hover {
+      .veui-steps-step-index {
+        background-color: @dls-steps-marker-background-color-error-current-hover;
+      }
+      .veui-steps-step-label {
+        color: @dls-color-gray-8;
+      }
+    }
+
+    &:active {
+      .veui-steps-step-index {
+        background-color: @dls-steps-marker-background-color-error-current-active;
+      }
+    }
+  }
+
+  .make-connector() {
+    .size(9999px, @separator-width);
+    content: "";
+    background-color: @dls-steps-connector-color-completed;
+    pointer-events: none;
+    margin: 0;
+    position: absolute;
+    top: ~"calc(@{step-height} / 2 - @{separator-width} / 2)";
+  }
+
+  .make-index(@status) {
+    @border-color: ~"dls-steps-marker-border-color-@{status}";
+    @color: ~"dls-steps-marker-foreground-color-@{status}";
+    @background-color: ~"dls-steps-marker-background-color-@{status}";
+
+    border: @border-width solid @@border-color;
+    color: @@color;
+    background-color: @@background-color;
   }
 
   &[ui~="full"] .veui-steps-step {
-    @half-height: @full-height / 2;
-
-    &-content {
-      padding-left: @full-height + 10px;
-    }
-
-    &-index {
-      top: ~"calc(50% - @{half-height})";
-      .size(@full-height);
-      line-height: @full-height - @border-width * 2;
-    }
-
-    &-label,
     &-desc {
       display: block;
-      line-height: @full-line-height;
     }
   }
 
-  &[ui~="vertical"] .veui-steps-step {
-    float: none;
-    margin-right: 0;
-    margin-bottom: @separator-length-y + @separator-gap-y * 2;
+  &[ui~="vertical"] {
+    display: inline-block;
+    flex-direction: column;
 
-    &::after {
-      .size(@separator-width, @separator-length-y);
-      top: @step-height + @separator-gap-y;
-      left: (@step-height - @separator-width) / 2;
+    .veui-steps-step {
+      margin-right: 0;
+      margin-top: @separator-gap-y;
+      height: ~"calc(@{step-height} + @{separator-length-y} + @{separator-gap-y})";
+      overflow: initial;
+
+      &-index {
+        position: relative;
+        margin-top: 0;
+
+        &::after {
+          .size(@separator-width, @separator-length-y);
+          content: "";
+          position: absolute;
+          top: @step-height + @separator-gap-y;
+          left: @step-height / 2;
+          background-color: @dls-steps-connector-color-completed;
+          pointer-events: none;
+        }
+      }
+
+      &-label::after,
+      &:last-child .veui-steps-step-index::after {
+        display: none;
+      }
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    .veui-steps-label-vertical {
+      display: flex;
+      text-align: left;
+      width: auto;
+
+      .veui-steps-step-content {
+        padding-left: @dls-steps-marker-spacing;
+      }
+
+      &::after,
+      &::before {
+        display: none;
+      }
     }
   }
 
-  &[ui~="vertical"][ui~="full"] .veui-steps-step {
-    margin-bottom: @separator-gap-y * 2 - @full-line-height * 2 + @full-height +
-      @separator-length-y;
-
-    &::after {
-      top: @separator-gap-y + @full-line-height + @full-height / 2;
-      left: (@full-height - @separator-width) / 2;
+  .veui-steps-step-next-incomplete {
+    &::after,
+    .veui-steps-step-label::after,
+    .veui-steps-step-index::after {
+      background-color: @dls-steps-connector-color-incomplete;
     }
   }
 
-  &[ui~="small"] {
-    @step-height: 20px;
-    @full-height: 20px;
-    @separator-length-x: 60px;
-    @separator-length-y: 40px;
-    @separator-gap-x: 20px;
-    @separator-gap-y: 10px;
-    @full-line-height: @veui-line-height-normal * @veui-font-size-normal;
-    @label-font-size: @veui-font-size-normal;
-    @desc-font-size: @veui-font-size-small;
+  .veui-steps-step-next-error {
+    &::after,
+    .veui-steps-step-label::after,
+    .veui-steps-step-index::after {
+      background-color: @dls-steps-connector-color-error;
+    }
+  }
+
+  .veui-steps-step-next-currrent {
+    &::after,
+    .veui-steps-step-label::after,
+    .veui-steps-step-index::after {
+      background-color: @dls-steps-connector-color-current;
+    }
+  }
+
+  .veui-steps-step-next-currrent-error {
+    &::after,
+    .veui-steps-step-label::after,
+    .veui-steps-step-index::after {
+      background-color: @dls-steps-connector-color-error-current;
+    }
+  }
+
+  &[ui~="s"] {
+    @step-height: @dls-steps-marker-size-s;
+    @title-font-size: @dls-steps-title-font-size-s;
+    @desc-font-size: @dls-steps-desc-font-size-s;
+    @marker-font-size: @dls-steps-marker-font-size-s;
 
     .veui-steps {
       &-step {
-        margin-right: @separator-gap-x * 2 + @separator-length-x;
-
         &-index {
-          @half-height: @step-height / 2;
-          top: ~"calc(50% - @{half-height})";
           .size(@step-height);
           line-height: @step-height - @border-width * 2;
-          font-size: @veui-font-size-normal;
-
-          .veui-icon {
-            font-size: 2em / 3;
-          }
-        }
-
-        &-content {
-          padding-left: @step-height + 10px;
+          font-size: @marker-font-size;
         }
 
         &-label {
-          margin: 0;
-          font-size: @label-font-size;
           line-height: @step-height;
+          font-size: @title-font-size;
         }
 
         &-desc {
           font-size: @desc-font-size;
         }
-
+      }
+      &-label-vertical {
         &::after {
-          @half-width: @separator-width / 2;
-          .size(@separator-length-x, @separator-width);
-          top: ~"calc(50% - @{half-width})";
-          right: -@separator-gap-x - @separator-length-x;
+          left: ~"calc(50% + @{step-height} / 2 + @{separator-gap-x})";
+        }
+
+        &::before {
+          right: ~"calc(50% + @{step-height} / 2 + @{separator-gap-x})";
         }
       }
     }
 
-    &[ui~="full"] .veui-steps-step {
-      @half-height: @full-height / 2;
-
-      &-content {
-        padding-left: @full-height + 10px;
-      }
-
-      &-index {
-        top: ~"calc(50% - @{half-height})";
-        .size(@full-height);
-        line-height: @full-height - @border-width * 2;
-      }
-
-      &-label,
-      &-desc {
-        line-height: @full-line-height;
-      }
-    }
-
     &[ui~="vertical"] .veui-steps-step {
-      margin-bottom: @separator-length-y + @separator-gap-y * 2;
-
-      &::after {
-        .size(@separator-width, @separator-length-y);
+      &-index::after {
         top: @step-height + @separator-gap-y;
-        left: (@step-height - @separator-width) / 2;
-      }
-    }
-
-    &[ui~="vertical"][ui~="full"] .veui-steps-step {
-      margin-bottom: @separator-gap-y * 2 - @full-line-height * 2 + @full-height +
-        @separator-length-y;
-
-      &::after {
-        top: @separator-gap-y + @full-line-height + @full-height / 2;
-        left: (@full-height - @separator-width) / 2;
+        left: @step-height / 2;
       }
     }
   }

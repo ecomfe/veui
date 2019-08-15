@@ -244,7 +244,7 @@ export default [
     path: '/steps',
     name: 'Steps',
     component: Steps,
-    disabled: true
+    disabled: false
   },
   {
     path: '/switch',

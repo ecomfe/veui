@@ -8,9 +8,7 @@
     v-for="(step, index) in steps"
     :key="index"
     class="veui-steps-step"
-    :class="{
-      'veui-steps-current': index === current
-    }"
+    :class="getStepClass(index, steps)"
     :to="step.to"
     fallback="div"
     role="listitem"
@@ -18,6 +16,7 @@
     :aria-label="t('step', { index: index + 1 })"
     :aria-posinset="String(index + 1)"
     :aria-setsize="String(steps.length)"
+    tabindex="0"
     @click="$emit('click', index, $event)"
   >
     <slot
@@ -31,8 +30,12 @@
           :index="index"
         >
           <veui-icon
-            v-if="index < current"
+            v-if="index < current && step.status !== 'error'"
             :name="icons.success"
+          />
+          <veui-icon
+            v-else-if="step.status === 'error'"
+            :name="icons.error"
           />
           <template v-else>
             {{ index + 1 }}
@@ -75,6 +78,7 @@ import Icon from './Icon'
 import Link from './Link'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
+import { includes } from 'lodash'
 
 export default {
   name: 'veui-steps',
@@ -93,6 +97,43 @@ export default {
     current: {
       type: Number,
       default: 0
+    },
+    labelPlace: {
+      type: String,
+      validator (val) {
+        return includes(['horizontal', 'vertical'], val)
+      },
+      default: 'horizontal'
+    }
+  },
+  methods: {
+    getStepClass (index, steps) {
+      let step = steps[index]
+      let nextStep = index + 1 < steps.length ? steps[index + 1] : null
+      let current = this.current
+
+      let currentStatus = {
+        'veui-steps-incomplete': index > current,
+        'veui-steps-completed': index < current,
+        'veui-steps-current': index === current,
+        'veui-steps-error': index !== current && step.status === 'error',
+        'veui-steps-current-error':
+          index === current && step.status === 'error',
+        'veui-steps-label-vertical': this.labelPlace === 'vertical'
+      }
+
+      let nextStatus = nextStep
+        ? {
+          'veui-steps-step-next-error': nextStep.status === 'error',
+          'veui-steps-step-next-incomplete': index >= current,
+          'veui-steps-step-next-current':
+              index + 1 === current && nextStep.status !== 'error',
+          'veui-steps-step-next-current-error':
+              index + 1 === current && nextStep.status === 'error'
+        }
+        : {}
+
+      return { ...currentStatus, ...nextStatus }
     }
   }
 }

@@ -4,7 +4,8 @@ import config from 'veui/managers/config'
 config.defaults(
   {
     icons: {
-      success: 'check'
+      success: 'check',
+      error: 'times'
     },
     ui: {
       direction: {
@@ -14,7 +15,7 @@ config.defaults(
         values: ['full']
       },
       size: {
-        values: ['small']
+        values: ['s']
       }
     }
   },
