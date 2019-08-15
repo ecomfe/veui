@@ -164,11 +164,6 @@ export default [
     component: Link
   },
   {
-    path: '/loading',
-    name: 'Loading',
-    component: Loading
-  },
-  {
     path: '/number-input',
     name: 'NumberInput',
     component: NumberInput
