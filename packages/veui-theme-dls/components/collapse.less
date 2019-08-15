@@ -50,8 +50,6 @@
   }
 
   &.veui-disabled {
-    border-color: @dls-collapse-border-color-disabled;
-
     .veui-collapse {
       &-header {
         background-color: @dls-collapse-header-background-color-disabled;
@@ -66,16 +64,16 @@
   }
 
   &-body {
-    background-color: @dls-collapse-panel-background-color;
+    background-color: @dls-collapse-body-background-color;
     overflow: hidden;
     will-change: height;
     .veui-transition(height);
     .border-bottom-radius(inherit);
-    color: @dls-collapse-panel-font-color;
+    color: @dls-collapse-body-font-color;
   }
 
   &-content {
-    padding: @dls-collapse-panel-padding-y @dls-collapse-panel-padding-x;
+    padding: @dls-collapse-body-padding-y @dls-collapse-body-padding-x;
   }
 
   &[ui~="s"] {
