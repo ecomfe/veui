@@ -10,6 +10,7 @@
   color: @dls-tag-font-color;
   background-color: @dls-tag-background-color;
   white-space: nowrap;
+  .veui-transition(color, border-color, background-color, box-shadow, opacity);
 
   .make-metrics(@size) {
     @height: ~"dls-tag-height-@{size}";
@@ -33,21 +34,19 @@
     margin-left: @dls-tag-content-spacing;
   }
 
-  &:hover {
-    opacity: 0.8;
-  }
-
   &.focus-visible {
     .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
   }
 
   &:active {
-    background-color: @dls-tag-background-color-active;
     outline: none;
   }
 
   &-selectable {
     cursor: pointer;
+    &:hover:not(.veui-disabled) {
+      opacity: 0.8;
+    }
   }
 
   &.veui-disabled {
@@ -62,113 +61,64 @@
 
   &.veui-tag-selected {
     color: @dls-tag-font-color-selected;
+    border-color: @dls-tag-border-color-selected;
     background-color: @dls-tag-background-color-selected;
 
     &.focus-visible {
-      .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
+      .dls-focus-ring(
+        @dls-tag-border-color-selected-focus,
+        @dls-tag-shadow-selected-focus
+      );
     }
     &.veui-disabled {
+      border-color: @dls-tag-border-color-selected-disabled;
       background-color: @dls-tag-background-color-selected-disabled;
     }
   }
 
-  &[ui~="info"] {
-    color: @dls-tag-font-color-info;
-    border-color: @dls-tag-border-color-info;
-    background-color: @dls-tag-background-color-info;
+  .make-state-color (@state) {
+    &-@{state} {
+      @color-name: ~"dls-tag-font-color-@{state}";
+      @bd-color-name: ~"dls-tag-border-color-@{state}";
+      @bg-color-name: ~"dls-tag-background-color-@{state}";
+      @disabled-color-name: ~"dls-tag-font-color-@{state}-disabled";
+      @disabled-bd-color-name: ~"dls-tag-border-color-@{state}-disabled";
 
-    &.focus-visible {
-      .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
-    }
-    &.veui-disabled {
-      color: @dls-color-info-3;
-      border-color: @dls-color-info-2;
-    }
-    &.veui-tag-selected {
-      color: @dls-tag-font-color-selected;
-      background-color: @dls-color-info-6;
+      @selected-bg-color-name: ~"dls-tag-background-color-@{state}-reversed";
+      @selected-disabled-bg-color: ~"dls-tag-background-color-@{state}-reversed-disabled";
 
-      &.focus-visible {
-        .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
-      }
-      &.veui-disabled {
-        background-color: @dls-color-info-2;
-      }
-    }
-  }
-
-  &[ui~="success"] {
-    color: @dls-tag-font-color-success;
-    border-color: @dls-tag-border-color-success;
-    background-color: @dls-tag-background-color-success;
-
-    &.focus-visible {
-      .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
-    }
-    &.veui-disabled {
-      color: @dls-color-success-3;
-      border-color: @dls-color-success-2;
-    }
-    &.veui-tag-selected {
-      color: @dls-tag-font-color-selected;
-      background-color: @dls-color-success-6;
+      color: @@color-name;
+      border-color: @@bd-color-name;
+      background-color: @@bg-color-name;
 
       &.focus-visible {
         .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
       }
       &.veui-disabled {
-        background-color: @dls-color-success-2;
+        color: @@disabled-color-name;
+        border-color: @disabled-bd-color-name;
+      }
+      &.veui-tag-selected {
+        color: @dls-tag-font-color-selected;
+        border-color: @dls-tag-border-color-selected;
+        background-color: @@selected-bg-color-name;
+
+        &.focus-visible {
+          .dls-focus-ring(
+            @dls-tag-border-color-selected-focus,
+            @dls-tag-shadow-selected-focus
+          );
+        }
+        &.veui-disabled {
+          border-color: @dls-tag-border-color-selected-disabled;
+          background-color: @@selected-disabled-bg-color;
+        }
       }
     }
   }
 
-  &[ui~="warning"] {
-    color: @dls-tag-font-color-warning;
-    border-color: @dls-tag-border-color-warning;
-    background-color: @dls-tag-background-color-warning;
-
-    &.focus-visible {
-      .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
-    }
-    &.veui-disabled {
-      color: @dls-color-warning-3;
-      border-color: @dls-color-warning-2;
-    }
-    &.veui-tag-selected {
-      color: @dls-tag-font-color-selected;
-      background-color: @dls-color-warning-6;
-
-      &.focus-visible {
-        .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
-      }
-      &.veui-disabled {
-        background-color: @dls-color-warning-2;
-      }
-    }
-  }
-
-  &[ui~="error"] {
-    color: @dls-tag-font-color-error;
-    border-color: @dls-tag-border-color-error;
-    background-color: @dls-tag-background-color-error;
-
-    &.focus-visible {
-      .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
-    }
-    &.veui-disabled {
-      color: @dls-color-error-3;
-      border-color: @dls-color-error-2;
-    }
-    &.veui-tag-selected {
-      color: @dls-tag-font-color-selected;
-      background-color: @dls-color-error-6;
-
-      &.focus-visible {
-        .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
-      }
-      &.veui-disabled {
-        background-color: @dls-color-error-2;
-      }
-    }
-  }
+  .make-state-color(info);
+  .make-state-color(success);
+  .make-state-color(warning);
+  .make-state-color(error);
 }

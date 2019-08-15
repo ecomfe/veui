@@ -23,9 +23,31 @@ describe('components/Tag', () => {
       components: {
         'veui-tag': Tag
       },
-      template: '<veui-tag ui="s success">small tag</veui-tag>'
+      template: '<veui-tag ui="s">small tag</veui-tag>'
     })
-    expect(wrapper.attributes('ui')).to.equal('s success')
+    expect(wrapper.attributes('ui')).to.equal('s')
+    wrapper.destroy()
+  })
+
+  it('should render `type` prop correctly', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-tag': Tag
+      },
+      data () {
+        return {
+          type: 'success'
+        }
+      },
+      template: '<veui-tag :type="type">small tag</veui-tag>'
+    })
+    let { vm } = wrapper
+    expect(wrapper.classes('veui-tag-success')).to.equal(true)
+
+    vm.type = 'error'
+    await vm.$nextTick()
+    expect(wrapper.classes('veui-tag-success')).to.equal(false)
+    expect(wrapper.classes('veui-tag-error')).to.equal(true)
     wrapper.destroy()
   })
 

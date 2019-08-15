@@ -5,6 +5,7 @@
   :ui="ui"
   :class="{
     'veui-tag': true,
+    [`veui-tag-${type}`]: true,
     'veui-tag-selected': localSelected,
     'veui-disabled': disabled,
     'veui-tag-selectable': selectable
@@ -38,6 +39,10 @@ export default {
   },
   mixins: [ui, focusable],
   props: {
+    type: {
+      type: String,
+      default: 'default'
+    },
     closable: Boolean,
     selectable: Boolean,
     selected: Boolean,

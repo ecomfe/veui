@@ -7,11 +7,8 @@ config.defaults(
       close: 'times'
     },
     ui: {
-      style: {
-        values: ['info', 'success', 'warning', 'error', 'no-border']
-      },
       size: {
-        values: ['s', 'm']
+        values: ['s', 'm', 'no-border']
       }
     },
     parts: {
