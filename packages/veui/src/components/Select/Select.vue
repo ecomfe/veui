@@ -230,11 +230,7 @@ export default {
       }
       return null
     }
-    let noDadaOption = this.$scopedSlots['no-data'] ? (
-      this.$scopedSlots['no-data']()
-    ) : (
-      <Option value={null} label="无搜索结果" disabled />
-    )
+
     return (
       <div
         class={{
@@ -345,7 +341,17 @@ export default {
               {this.clearable && !this.searchable ? (
                 <Option value={null} label={this.realPlaceholder} />
               ) : null}
-              {!this.realOptions ? noDadaOption : null}
+              {!this.realOptions ? (
+                <Option value={null} disabled>
+                  <template slot="label">
+                    {this.$scopedSlots['no-data']
+                      ? this.$scopedSlots['no-data']({
+                        searchValue: this.inputValue
+                      })
+                      : this.$slots['no-data'] || '无搜索结果'}
+                  </template>
+                </Option>
+              ) : null}
               <OptionGroup
                 ref="options"
                 options={this.realOptions}
