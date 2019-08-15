@@ -1,14 +1,6 @@
 <template>
 <article>
-  <h1><code>&lt;veui-tooltip&gt;</code></h1>
-  <section>
-    <veui-button
-      ui="primary"
-      @click="ui = ui ? '' : 'reverse'"
-    >
-      切换皮肤
-    </veui-button>
-  </section>
+  <h1><code>&lt;veui-popover&gt;</code></h1>
   <section>
     <div class="demo-wrap">
       <div style="margin-bottom:10px;">
@@ -22,7 +14,7 @@
             @mouseenter.native="
               show({
                 position: 'top left',
-                target: 'topLeftHover'
+                target: $refs['topLeftHover']
               })
             "
           >
@@ -169,16 +161,15 @@
         </div>
       </div>
     </div>
-    <veui-tooltip
+    <veui-popover
       :position="position"
-      :ui="ui"
       :target="target"
       :open.sync="open"
       :overlay-options="overlayOptions"
       trigger="hover"
     >
       当前是hover事件
-    </veui-tooltip>
+    </veui-popover>
   </section>
   <section>
     <div class="demo-wrap">
@@ -340,82 +331,36 @@
         </div>
       </div>
     </div>
-    <veui-tooltip
+    <veui-popover
       :position="clickPosition"
-      :ui="ui"
       :target="clickTarget"
       :open.sync="clickOpen"
       trigger="click"
     >
       当前是click事件
-    </veui-tooltip>
-  </section>
-  <section>
-    <div style="margin-bottom:10px;">
-      自定义事件
-    </div>
-    <veui-input
-      ref="number"
-      v-model="number"
-      ui="big"
-      composition
-      @change="log('change')"
-      @focus="numberOpen = true"
-      @blur="numberOpen = false"
-    />
-    <veui-tooltip
-      position="top"
-      :ui="ui"
-      target="number"
-      trigger="custom"
-      :open.sync="numberOpen"
-    >
-      你focus到了
-    </veui-tooltip>
-  </section>
-
-  <section>
-    <div style="margin-bottom:10px;">
-      排除自己
-    </div>
-    <veui-button ref="exclude">
-      target
-    </veui-button>
-    <veui-tooltip
-      position="top"
-      target="exclude"
-      trigger="hover"
-      :interactive="false"
-      :hide-delay="0"
-    >
-      你focus到了
-    </veui-tooltip>
+    </veui-popover>
   </section>
 </article>
 </template>
 
 <script>
 import bus from '../bus'
-import { Tooltip, Button, Input } from 'veui'
+import { Button, Popover } from 'veui'
 
 export default {
-  name: 'tooltip-demo',
+  name: 'popover-demo',
   components: {
     'veui-button': Button,
-    'veui-tooltip': Tooltip,
-    'veui-input': Input
+    'veui-popover': Popover
   },
   data () {
     return {
       position: '',
       clickPosition: '',
-      ui: '',
       target: 'topLeftHover',
       clickTarget: 'topLeftClick',
       open: false,
       clickOpen: false,
-      number: '12345678910987654321',
-      numberOpen: false,
       overlayOptions: {}
     }
   },
