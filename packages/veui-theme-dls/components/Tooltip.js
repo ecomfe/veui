@@ -4,10 +4,7 @@ config.defaults(
   {
     ui: {
       style: {
-        values: ['alt']
-      },
-      size: {
-        values: ['large', 'small']
+        values: ['reverse']
       }
     }
   },

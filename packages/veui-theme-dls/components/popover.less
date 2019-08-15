@@ -1,0 +1,28 @@
+@import "../lib.less";
+
+.veui-popover-box {
+  .veui-tooltip {
+    max-width: @dls-popover-max-width;
+    line-height: @dls-popover-line-height;
+    font-size: inherit;
+    padding: 0;
+    border: 0.1px solid transparent;
+
+    .veui-tooltip-content {
+      overflow: auto;
+      margin: @dls-popover-padding-y @dls-popover-padding-x;
+    }
+  }
+
+  &[ui~="s"] {
+    .veui-tooltip {
+      border-radius: @dls-popover-border-radius-s;
+    }
+  }
+
+  &[ui~="m"] {
+    .veui-tooltip {
+      border-radius: @dls-popover-border-radius-m;
+    }
+  }
+}
