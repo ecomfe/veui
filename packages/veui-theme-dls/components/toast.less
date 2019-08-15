@@ -12,13 +12,13 @@
 
   &-state,
   &-close {
-    height: 1em * @dls-toast-line-height;
+    height: dls-line-height(@dls-toast-line-height, 1em);
     display: inline-flex;
     align-items: center;
   }
 
   &-icon {
-    font-size: @dls-alert-icon-size;
+    .dls-icon-size(@dls-toast-icon-size);
   }
 
   &-close {
@@ -68,7 +68,7 @@
   &&-titled {
     padding: @dls-toast-padding-y-titled @dls-toast-padding-x;
     .veui-toast-icon {
-      font-size: @dls-toast-icon-size-titled;
+      .dls-icon-size(@dls-toast-icon-size-titled);
     }
 
     .veui-toast-state {

@@ -16,13 +16,18 @@
   &-state,
   &-nav,
   &-close {
-    height: 1em * @dls-alert-line-height;
+    height: dls-line-height(@dls-alert-line-height, 1em);
     display: inline-flex;
     align-items: center;
   }
 
+  &-state {
+    display: none;
+    margin-right: @dls-alert-content-spacing-before;
+  }
+
   &-icon {
-    font-size: @dls-alert-icon-size;
+    .dls-icon-size(@dls-alert-icon-size);
   }
 
   &-close {
@@ -37,16 +42,12 @@
     color: @dls-alert-pages-font-color;
     &-indicator {
       padding: 0 @dls-alert-pages-spacing;
-      &-current {
-        color: @dls-alert-font-color;
-      }
     }
   }
 
   &-content {
     width: 100%;
     height: 100%;
-    padding-left: @dls-alert-content-spacing-before;
     padding-right: @dls-alert-content-spacing-after;
 
     &-title {
@@ -64,14 +65,14 @@
 
   .make-state-message(@state) {
     &-@{state} {
-      @f-color-name: ~"dls-alert-icon-color-@{state}";
+      @fg-color-name: ~"dls-alert-icon-color-@{state}";
       @bg-color-name: ~"dls-alert-background-color-@{state}";
-      @brg-color-name: ~"dls-alert-border-color-@{state}";
+      @border-color-name: ~"dls-alert-border-color-@{state}";
       background-color: @@bg-color-name;
-      border-color: @@brg-color-name;
+      border-color: @@border-color-name;
 
       .veui-alert-icon {
-        color: @@f-color-name;
+        color: @@fg-color-name;
       }
     }
   }
@@ -85,11 +86,7 @@
   &&-titled {
     padding: @dls-alert-padding-y-titled @dls-alert-padding-x;
     .veui-alert-icon {
-      font-size: @dls-alert-icon-size-titled;
-    }
-
-    .veui-alert-state {
-      display: block;
+      .dls-icon-size(@dls-alert-icon-size-titled);
     }
 
     .veui-alert-close {
@@ -113,6 +110,18 @@
     &-content {
       &-title {
         font-size: @dls-alert-title-font-size-m;
+      }
+    }
+  }
+
+  &[ui~="strong"] {
+    .veui-alert-state {
+      display: inline-flex;
+    }
+
+    &.veui-alert-titled {
+      .veui-alert-state {
+        display: block;
       }
     }
   }

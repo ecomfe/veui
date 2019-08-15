@@ -8,10 +8,7 @@
   aria-expanded="true"
 >
   <slot name="content">
-    <div
-      v-if="showIcon"
-      class="veui-alert-state"
-    >
+    <div class="veui-alert-state">
       <veui-icon
         class="veui-alert-icon"
         :name="icons[type]"
@@ -74,18 +71,26 @@
       <veui-button
         :ui="uiParts.prev"
         :disabled="isFirst"
+        :aria-label="t('prev')"
         @click="switchMessage(-1)"
       >
         <veui-icon :name="icons.prev"/>
       </veui-button>
-      <span class="veui-alert-nav-indicator">
-        <span class="veui-alert-nav-indicator-current">{{
-          localIndex + 1
-        }}</span>/{{ message.length }}
+      <span
+        class="veui-alert-nav-indicator"
+        :aria-label="
+          t('indicator', {
+            index: localIndex + 1,
+            total: message.length
+          })
+        "
+      >
+        {{ localIndex + 1 }}/{{ message.length }}
       </span>
       <veui-button
         :ui="uiParts.next"
         :disabled="isLast"
+        :aria-label="t('next')"
         @click="switchMessage(1)"
       >
         <veui-icon :name="icons.next"/>
@@ -97,6 +102,7 @@
     >
       <veui-button
         :ui="uiParts.close"
+        :aria-label="t('close')"
         @click="close"
       >
         <veui-icon :name="icons.close"/>
@@ -127,10 +133,6 @@ export default {
     title: String,
     message: [String, Array],
     closable: Boolean,
-    showIcon: {
-      type: Boolean,
-      default: true
-    },
     open: {
       type: Boolean,
       default: true

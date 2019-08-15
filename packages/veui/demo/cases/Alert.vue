@@ -5,6 +5,7 @@
     <div>固定提示</div>
     <veui-alert
       type="success"
+      ui="strong"
       message="恭喜你，你的请求已成功处理"
       closable
     >
@@ -38,7 +39,7 @@
       type="success"
       message="恭喜你，你的请求已成功处理"
       closable
-      ui="m"
+      ui="m strong"
     >
       <template slot="title">
         恭喜你
@@ -52,12 +53,14 @@
     </veui-alert>
     <veui-alert
       class="limit-width"
+      ui="strong"
       type="success"
       message="恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理"
       closable
     />
     <veui-alert
       type="warning"
+      ui="strong"
       message="警告，进行检查，有风险信息存在"
     />
     <veui-alert

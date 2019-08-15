@@ -36,6 +36,7 @@
     >
       <veui-button
         :ui="uiParts.close"
+        :aria-label="t('close')"
         @click="close"
       >
         <veui-icon :name="icons.close"/>
@@ -49,6 +50,7 @@
 import Icon from './Icon'
 import Button from './Button'
 import ui from '../mixins/ui'
+import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import { includes } from 'lodash'
 
@@ -67,7 +69,7 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button
   },
-  mixins: [ui],
+  mixins: [ui, i18n],
   props: {
     type: {
       type: String,
