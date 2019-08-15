@@ -55,13 +55,12 @@ describe('components/Alert', function () {
           type="info"
           message="content"
           closable
-          close-label="close"
           @close="close"
           :open.sync="open"
           />
       `
     })
-    wrapper.find('.veui-alert-close-text').trigger('click')
+    wrapper.find('.veui-alert-close .veui-button').trigger('click')
     await wait(500)
     expect(wrapper.find('.veui-alert').exists()).to.equal(false)
     expect(wrapper.vm.open).to.equal(false)
@@ -81,7 +80,7 @@ describe('components/Alert', function () {
       },
       template: '<veui-alert type="error" :message="message" closable />'
     })
-    expect(wrapper.find('.veui-alert-message-multiple').exists()).to.equal(
+    expect(wrapper.find('.veui-alert-content-multiple').exists()).to.equal(
       true
     )
     wrapper.destroy()
@@ -103,7 +102,7 @@ describe('components/Alert', function () {
     let nav = wrapper.find('.veui-alert-nav')
     let prev = nav.findAll('.veui-button').at(0)
     let next = nav.findAll('.veui-button').at(1)
-    let msg = wrapper.find('.veui-alert-message')
+    let msg = wrapper.find('.veui-alert-content')
     prev.trigger('click')
     expect(msg.text()).to.equal('message one')
     prev.trigger('click')
