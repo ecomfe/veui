@@ -21,8 +21,13 @@ config.defaults(
     parts: {
       prev: 'icon',
       next: 'icon',
-      close: 'icon',
-      closeLabel: 'text'
+      close: 'icon'
+    },
+    ui: {
+      size: {
+        values: ['s', 'm'],
+        default: 's'
+      }
     }
   },
   'alert'

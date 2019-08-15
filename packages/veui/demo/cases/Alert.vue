@@ -7,13 +7,54 @@
       type="success"
       message="恭喜你，你的请求已成功处理"
       closable
-    />
+    >
+      <template slot="title">
+        恭喜你
+      </template>
+      <template slot="extra">
+        <veui-button ui="text">
+          查看详情
+        </veui-button>
+      </template>
+      恭喜你，你的请求已成功处理
+    </veui-alert>
     <veui-alert
-      class="limit-width"
       type="success"
       message="恭喜你，你的请求已成功处理"
       closable
-      close-label="关闭"
+      :show-icon="false"
+    >
+      <template slot="title">
+        恭喜你
+      </template>
+      <template slot="extra">
+        <veui-button ui="text">
+          查看详情
+        </veui-button>
+      </template>
+      恭喜你，你的请求已成功处理
+    </veui-alert>
+    <veui-alert
+      type="success"
+      message="恭喜你，你的请求已成功处理"
+      closable
+      ui="m"
+    >
+      <template slot="title">
+        恭喜你
+      </template>
+      <template slot="extra">
+        <veui-button ui="text">
+          查看详情
+        </veui-button>
+      </template>
+      恭喜你，你的请求已成功处理
+    </veui-alert>
+    <veui-alert
+      class="limit-width"
+      type="success"
+      message="恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理"
+      closable
     />
     <veui-alert
       type="warning"
@@ -25,6 +66,19 @@
       :message="messages"
       closable
     />
+    <veui-alert
+      class="limit-width"
+      type="warning"
+      :message="messages"
+      closable
+    >
+      <template
+        slot="extra"
+        slot-scope="{ message }"
+      >
+        <veui-button ui="text"> 查看详情 {{ message }} </veui-button>
+      </template>
+    </veui-alert>
     <veui-alert
       type="info"
       message="提醒，这个消息需要注意"
@@ -50,12 +104,13 @@
 
 <script>
 import bus from '../bus'
-import { Alert } from 'veui'
+import { Alert, Button } from 'veui'
 
 export default {
   name: 'alert',
   components: {
-    'veui-alert': Alert
+    'veui-alert': Alert,
+    'veui-button': Button
   },
   data () {
     return {
@@ -95,6 +150,9 @@ section {
 }
 
 .veui-alert.limit-width {
-  width: 350px;
+  width: 650px;
+}
+.veui-button {
+  font-size: 12px;
 }
 </style>

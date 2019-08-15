@@ -98,6 +98,8 @@ export default {
         messages.forEach(({ type, message, duration }) => {
           toast[type]({
             message,
+            title: '测试title',
+            closable: true,
             duration
           })
         })

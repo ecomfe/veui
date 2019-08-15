@@ -10,6 +10,8 @@
     open
     :type="message.type"
     :message="message.message"
+    :closable="message.closable"
+    :title="message.title"
     :duration="message.duration"
     :style="`top: ${message.top}px`"
     @close="remove(message)"
