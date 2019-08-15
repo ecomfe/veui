@@ -1,22 +1,35 @@
 @import "../lib.less";
 
 .veui-toast {
-  @line-height: @veui-line-height-normal;
-  @padding-y: 10px;
+  display: flex;
+  line-height: @dls-toast-line-height;
+  padding: @dls-toast-padding-y @dls-toast-padding-x;
   position: absolute;
-  max-width: 500px;
-  max-height: @padding-y * 2 + @veui-font-size-normal * @veui-line-height-normal *
-    2;
-  padding: @padding-y 30px;
-  background-color: #fff;
-  line-height: @line-height;
-  border-radius: 1px;
-  color: @veui-text-color-normal;
+  max-width: @dls-toast-max-width;
+  background-color: @dls-toast-background-color;
+  color: @dls-toast-font-color;
+  box-shadow: @dls-toast-shadow;
 
-  .veui-overlay-shadow();
+  &-state,
+  &-close {
+    height: dls-line-height(@dls-toast-line-height, 1em);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &-icon {
+    .dls-icon-size(@dls-toast-icon-size);
+  }
+
+  &-close {
+    .veui-button {
+      font-size: @dls-toast-icon-size-aux;
+    }
+    margin-left: @dls-toast-content-spacing-after;
+  }
 
   .veui-toast-style(@type) {
-    @color-name: ~"veui-@{type}-color";
+    @color-name: ~"dls-toast-icon-color-@{type}";
     @color: @@color-name;
 
     .veui-toast-icon {
@@ -24,15 +37,15 @@
     }
   }
 
-  &-message {
-    display: block;
-    margin-left: 36px;
-  }
+  &-content {
+    padding-left: @dls-toast-content-spacing-before;
 
-  &-icon {
-    .absolute(50%, _, _, 30px);
-    transform: translateY(-50%);
-    font-size: @veui-font-size-large;
+    &-title {
+      font-weight: @dls-toast-title-font-weight;
+      line-height: @dls-toast-title-line-height;
+      padding-bottom: @dls-toast-title-spacing-after;
+      color: @dls-toast-title-font-color;
+    }
   }
 
   &-success {
@@ -48,6 +61,45 @@
   }
 
   &-error {
-    .veui-toast-style(alert);
+    .veui-toast-style(error);
+  }
+
+  /* 有title样式 */
+  &&-titled {
+    padding: @dls-toast-padding-y-titled @dls-toast-padding-x;
+    .veui-toast-icon {
+      .dls-icon-size(@dls-toast-icon-size-titled);
+    }
+
+    .veui-toast-state {
+      display: block;
+    }
+
+    .veui-toast-close {
+      position: absolute;
+      align-items: start;
+      top: @dls-toast-padding-y-titled;
+      right: @dls-toast-padding-x;
+    }
+  }
+
+  &[ui~="s"] {
+    font-size: @dls-toast-font-size-s;
+    border-radius: @dls-toast-border-radius-s;
+    &-content {
+      &-title {
+        font-size: @dls-toast-title-font-size-s;
+      }
+    }
+  }
+
+  &[ui~="m"] {
+    font-size: @dls-toast-font-size-m;
+    border-radius: @dls-toast-border-radius-m;
+    &-content {
+      &-title {
+        font-size: @dls-toast-title-font-size-m;
+      }
+    }
   }
 }

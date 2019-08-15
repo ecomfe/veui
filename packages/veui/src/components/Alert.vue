@@ -3,7 +3,7 @@
   v-if="localOpen"
   class="veui-alert"
   :ui="realUi"
-  :class="`veui-alert-${type}`"
+  :class="`veui-alert-${type}${isTitled ? ' veui-alert-titled' : ''}`"
   role="alert"
   aria-expanded="true"
 >
@@ -16,7 +16,7 @@
     </div>
     <div
       v-if="isMultiple"
-      class="veui-alert-message veui-alert-message-multiple"
+      class="veui-alert-content veui-alert-content-multiple"
     >
       <slot
         :index="localIndex"
@@ -24,14 +24,44 @@
       >
         {{ message[localIndex] }}
       </slot>
+      <div
+        v-if="$slots.extra || $scopedSlots.extra"
+        class="veui-alert-content-extra"
+      >
+        <slot
+          name="extra"
+          :index="localIndex"
+          :message="message[localIndex]"
+        />
+      </div>
     </div>
     <div
       v-else
-      class="veui-alert-message"
+      class="veui-alert-content"
     >
-      <slot :message="message">
-        {{ message }}
-      </slot>
+      <div
+        v-if="title || $slots.title"
+        class="veui-alert-content-title"
+      >
+        <template v-if="title">
+          {{ title }}
+        </template>
+        <slot
+          v-else
+          name="title"
+        />
+      </div>
+      <div class="veui-alert-content-message">
+        <slot :message="message">
+          {{ message }}
+        </slot>
+        <div
+          v-if="$slots.extra"
+          class="veui-alert-content-extra"
+        >
+          <slot name="extra"/>
+        </div>
+      </div>
     </div>
 
     <div
@@ -48,10 +78,12 @@
       </veui-button>
       <span
         class="veui-alert-nav-indicator"
-        :aria-label="t('indicator', {
-          index: localIndex + 1,
-          total: message.length
-        })"
+        :aria-label="
+          t('indicator', {
+            index: localIndex + 1,
+            total: message.length
+          })
+        "
       >
         {{ localIndex + 1 }}/{{ message.length }}
       </span>
@@ -64,22 +96,12 @@
         <veui-icon :name="icons.next"/>
       </veui-button>
     </div>
-
     <div
       v-if="closable"
       class="veui-alert-close"
     >
       <veui-button
-        v-if="realCloseLabel"
-        class="veui-alert-close-text"
         :ui="uiParts.close"
-        @click="close"
-      >
-        {{ realCloseLabel }}
-      </veui-button>
-      <veui-button
-        v-else
-        :ui="uiParts.closeLabel"
         :aria-label="t('close')"
         @click="close"
       >
@@ -95,7 +117,6 @@ import Icon from './Icon'
 import Button from './Button'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
-import warn from '../utils/warn'
 
 export default {
   name: 'alert',
@@ -109,20 +130,9 @@ export default {
       type: String,
       default: 'success'
     },
+    title: String,
     message: [String, Array],
     closable: Boolean,
-    closeLabel: String,
-    closeText: {
-      type: String,
-      validator (val) {
-        if (val != null) {
-          warn(
-            '[veui-alert] `close-text` is deprecated and will be removed in `1.0.0`. Use `close-label` instead.',
-            this
-          )
-        }
-      }
-    },
     open: {
       type: Boolean,
       default: true
@@ -139,9 +149,6 @@ export default {
     }
   },
   computed: {
-    realCloseLabel () {
-      return this.closeLabel || this.closeText
-    },
     isMultiple () {
       return Array.isArray(this.message)
     },
@@ -150,6 +157,9 @@ export default {
     },
     isLast () {
       return this.localIndex >= this.message.length - 1
+    },
+    isTitled () {
+      return this.title || this.$slots.title
     }
   },
   watch: {
