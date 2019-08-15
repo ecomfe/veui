@@ -24,6 +24,10 @@
     "path": "Autocomplete/index.js"
   },
   {
+    "name": "Badge",
+    "path": "Badge.vue"
+  },
+  {
     "name": "Breadcrumb",
     "path": "Breadcrumb.vue"
   },

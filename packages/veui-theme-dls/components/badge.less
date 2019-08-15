@@ -1,0 +1,71 @@
+@import "../lib.less";
+
+.veui-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+
+  &-main {
+    .absolute(0, 0, _, _);
+    transform: translate(50%, -50%);
+  }
+
+  &-standalone &-main {
+    position: static;
+    transform: none;
+  }
+
+  &-enter,
+  &-leave-to {
+    transform: translate(50%, -50%) scale(0);
+  }
+
+  &-enter-to,
+  &-leave {
+    transform: translate(50%, -50%) scale(1);
+  }
+
+  &-enter-active,
+  &-leave-active {
+    .veui-transition(transform);
+    transform-origin: 50% 50%;
+  }
+
+  &-standalone-label {
+    margin-left: @dls-badge-label-spacing-status;
+  }
+
+  &-label {
+    .centered-line(@dls-badge-label-height);
+    .padding(_, @dls-badge-label-padding-x);
+    min-width: @dls-badge-label-min-width;
+    font-size: @dls-badge-font-size;
+    color: @dls-badge-font-color;
+    border-radius: @dls-badge-label-height / 2;
+  }
+
+  &-dot {
+    .size(@dls-badge-dot-size);
+    border-radius: 50%;
+  }
+
+  &-aux {
+    background-color: @dls-badge-background-color-aux;
+  }
+
+  &-info {
+    background-color: @dls-badge-background-color-info;
+  }
+
+  &-success {
+    background-color: @dls-badge-background-color-success;
+  }
+
+  &-warning {
+    background-color: @dls-badge-background-color-warning;
+  }
+
+  &-error {
+    background-color: @dls-badge-background-color-error;
+  }
+}
