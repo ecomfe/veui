@@ -25,6 +25,12 @@
     font-size: @dls-alert-icon-size;
   }
 
+  &-close {
+    .veui-button {
+      font-size: @dls-alert-icon-size-aux;
+    }
+  }
+
   &-nav {
     white-space: nowrap;
     margin-right: @dls-alert-content-spacing-after;
@@ -82,10 +88,12 @@
       font-size: @dls-alert-icon-size-titled;
     }
 
-    .veui-alert-state,
-    .veui-alert-nav,
-    .veui-alert-close {
+    .veui-alert-state {
       display: block;
+    }
+
+    .veui-alert-close {
+      align-items: start;
     }
   }
 

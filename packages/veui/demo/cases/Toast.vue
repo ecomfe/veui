@@ -100,6 +100,7 @@ export default {
             message,
             title: '测试title',
             closable: true,
+            ui: 'm',
             duration
           })
         })

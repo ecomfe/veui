@@ -22,6 +22,9 @@
   }
 
   &-close {
+    .veui-button {
+      font-size: @dls-toast-icon-size-aux;
+    }
     margin-left: @dls-toast-content-spacing-after;
   }
 
@@ -68,13 +71,13 @@
       font-size: @dls-toast-icon-size-titled;
     }
 
-    .veui-toast-state,
-    .veui-toast-close {
+    .veui-toast-state {
       display: block;
     }
 
     .veui-toast-close {
       position: absolute;
+      align-items: start;
       top: @dls-toast-padding-y-titled;
       right: @dls-toast-padding-x;
     }
