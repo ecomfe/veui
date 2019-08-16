@@ -72,7 +72,7 @@
       </veui-field>
       <veui-field
         label="Max &amp;&amp; Min："
-        :rules="[{name: 'min', value: -1}]"
+        :rules="[{ name: 'min', value: -1 }]"
         tip="最大值不大于 10，最小值不小于 -1"
       >
         <veui-number-input
@@ -93,6 +93,17 @@
         <veui-number-input v-model="number7"/>
       </veui-field>
     </veui-form>
+  </section>
+
+  <section class="sdf">
+    <h3>单向数据流</h3>
+    <veui-field label="Price：">
+      <veui-number-input
+        :value="number7"
+        :min="0"
+        @change="handlePriceChange"
+      />
+    </veui-field>
   </section>
 </article>
 </template>
@@ -118,6 +129,11 @@ export default {
       number6: null,
       number7: 1024
     }
+  },
+  methods: {
+    handlePriceChange (val) {
+      this.number7 = val
+    }
   }
 }
 </script>
@@ -128,5 +144,8 @@ export default {
     width: 130px;
     color: #999;
   }
+}
+.sdf {
+  margin-top: 60px;
 }
 </style>

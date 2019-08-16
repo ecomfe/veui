@@ -134,7 +134,7 @@
     </section>
 
     <section>
-      <h3>After Slot / 方向键操作指令 v-nudge </h3>
+      <h3>After Slot / 方向键操作指令 v-nudge</h3>
       <veui-field label="价格：">
         <veui-input
           v-model="price"
@@ -168,6 +168,17 @@
             元
           </template>
         </veui-input>
+      </veui-field>
+    </section>
+
+    <section>
+      <h3>单向数据流</h3>
+      <veui-field label="价格：">
+        <veui-input
+          :value="price"
+          placeholder="??????"
+          @change="handlePriceChange"
+        />
       </veui-field>
     </section>
   </veui-form>
@@ -215,7 +226,7 @@ export default {
         if (!matched) {
           return
         }
-        ;[digits, unit] = matched.slice(1)
+        [digits, unit] = matched.slice(1)
         digits = parseFloat(digits)
         if (isNaN(digits)) {
           return
@@ -233,6 +244,9 @@ export default {
       }
 
       this.price = newVal
+    },
+    handlePriceChange (val) {
+      this.price = val
     }
   }
 }

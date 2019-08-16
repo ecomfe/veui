@@ -256,15 +256,16 @@ export default {
       }
 
       // 处理 2-6
+      let val = parseFloat(this.localValue)
       if (
         this.calcDisplayValue(this.lastChangedValue) ===
-        this.calcDisplayValue(parseFloat(this.localValue))
+        this.calcDisplayValue(val)
       ) {
         return
       }
 
-      this.$emit('change', this.value, args[1])
-      this.lastChangedValue = this.value
+      this.$emit('change', val, args[1])
+      this.lastChangedValue = val
     },
     handleBlur ($event) {
       if (this.isLocalEmpty) {
