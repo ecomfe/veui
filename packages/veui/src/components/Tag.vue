@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     tabIndex () {
-      return this.disabled ? -1 : 0
+      return !this.disabled && this.selectable ? 0 : null
     }
   },
   watch: {
