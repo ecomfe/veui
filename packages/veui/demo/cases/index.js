@@ -255,8 +255,7 @@ export default [
   {
     path: '/tag',
     name: 'Tag',
-    component: Tag,
-    disabled: true
+    component: Tag
   },
   {
     path: '/tabs',
