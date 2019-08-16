@@ -2,7 +2,6 @@
 
 .veui-filter-panel {
   overflow: hidden;
-  height: @dls-transfer-content-min-height-m;
   border: 1px solid @dls-transfer-border-color;
   border-radius: @dls-transfer-border-radius-m;
 
@@ -10,7 +9,6 @@
     display: flex;
     align-items: center;
     background: @dls-transfer-header-background-color;
-    border-bottom: 1px solid @dls-transfer-border-color;
     padding: 0 @dls-transfer-padding-x;
     color: @dls-transfer-header-font-color;
     font-weight: @dls-transfer-header-font-weight;
@@ -38,24 +36,19 @@
   }
 
   &-content {
-    height: ~"calc(100% - @{dls-transfer-header-height-m})";
+    border-top: 1px solid @dls-transfer-border-color;
 
     &-main {
       overflow-y: auto;
       position: relative;
-      padding-top: @dls-transfer-content-padding-y;
-      height: ~"calc(100% - @{dls-transfer-item-height-m})";
-    }
-
-    &-main:first-child {
-      height: 100%;
+      padding: @dls-transfer-content-padding-y 0;
+      height: @dls-transfer-content-min-height-m;
     }
   }
 
   &[ui~="s"] {
     font-size: @dls-font-size-s;
     border-radius: @dls-transfer-border-radius-s;
-    height: @dls-transfer-content-min-height-s;
 
     .veui-filter-panel {
       &-title {
@@ -64,6 +57,10 @@
 
       &-no-data {
         height: @dls-transfer-item-height-s;
+      }
+
+      &-content-main {
+        height: @dls-transfer-content-min-height-s;
       }
     }
   }

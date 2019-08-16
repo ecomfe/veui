@@ -22,10 +22,6 @@
     .clearfix();
     outline: none;
 
-    &.focus-visible {
-      .veui-focus-shadow();
-    }
-
     &-expand-switcher,
     &-label {
       float: left;
@@ -41,10 +37,6 @@
       cursor: pointer;
       outline: none;
       .veui-transition(box-shadow, transform);
-
-      &.focus-visible {
-        .veui-focus-shadow();
-      }
     }
 
     &-expanded &-expand-switcher {
@@ -132,7 +124,12 @@
 
       &-item-select {
         margin-left: auto;
+        padding-left: @dls-tree-node-content-spacing;
         cursor: pointer;
+
+        .veui-checkbox-box {
+          margin-right: 0;
+        }
       }
     }
   }

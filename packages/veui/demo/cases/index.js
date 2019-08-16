@@ -316,8 +316,7 @@ export default [
   {
     path: '/tree',
     name: 'Tree',
-    component: Tree,
-    disabled: true
+    component: Tree
   },
   {
     path: '/uploader',
