@@ -50,8 +50,7 @@ export default [
   {
     path: '/alert',
     name: 'Alert',
-    component: Alert,
-    disabled: true
+    component: Alert
   },
   {
     path: '/alert-box',
@@ -190,6 +189,11 @@ export default [
     component: Pagination
   },
   {
+    path: '/Popover',
+    name: 'Popover',
+    component: Popover
+  },
+  {
     path: '/progress',
     name: 'Progress',
     component: Progress,
@@ -208,8 +212,7 @@ export default [
   {
     path: '/radio-group',
     name: 'RadioGroup',
-    component: RadioGroup,
-    disabled: true
+    component: RadioGroup
   },
   {
     path: '/region-picker',
@@ -226,8 +229,7 @@ export default [
   {
     path: '/searchbox',
     name: 'Searchbox',
-    component: Searchbox,
-    disabled: false
+    component: Searchbox
   },
   {
     path: '/select',
@@ -296,25 +298,17 @@ export default [
   {
     path: '/toast',
     name: 'Toast',
-    component: Toast,
-    disabled: true
+    component: Toast
   },
   {
     path: '/tooltip',
     name: 'Tooltip',
-    component: Tooltip,
-    disabled: true
+    component: Tooltip
   },
   {
     path: '/transfer',
     name: 'Transfer',
     component: Transfer,
-    disabled: true
-  },
-  {
-    path: '/uploader',
-    name: 'Uploader',
-    component: Uploader,
     disabled: true
   },
   {
@@ -324,13 +318,9 @@ export default [
     disabled: true
   },
   {
-    path: '/loading',
-    name: 'Loading',
-    component: Loading
-  },
-  {
-    path: '/Popover',
-    name: 'Popover',
-    component: Popover
+    path: '/uploader',
+    name: 'Uploader',
+    component: Uploader,
+    disabled: true
   }
 ]
