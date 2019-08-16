@@ -7,9 +7,15 @@ config.defaults(
       close: 'times'
     },
     ui: {
+      style: {
+        values: ['no-border']
+      },
       size: {
-        values: ['large', 'small']
+        values: ['s', 'm']
       }
+    },
+    parts: {
+      close: 'icon'
     }
   },
   'tag'

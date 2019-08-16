@@ -24,6 +24,7 @@
       >
         {{ type }}
       </veui-tag>
+      <veui-tag ui="no-border">no-border</veui-tag>
     </div>
   </section>
 
@@ -34,11 +35,67 @@
         v-for="(team, index) in teams"
         :key="team"
         :type="types[index]"
-        :ui="sizes[Math.round(index / 2)]"
         closable
         @close="handleClose(team)"
       >
         {{ team }}
+      </veui-tag>
+      <veui-tag
+        ui="no-border"
+        closable
+      >no-border</veui-tag>
+    </div>
+  </section>
+
+  <section>
+    <h2>选择性标签</h2>
+    <div>
+      <veui-tag
+        v-for="type in types"
+        :key="type"
+        :type="type"
+        :selected.sync="selected"
+        selectable
+      >
+        {{ type }}
+      </veui-tag>
+      <veui-tag
+        ui="no-border"
+        :selected.sync="selected"
+        selectable
+      >no-border</veui-tag>
+    </div>
+  </section>
+
+  <section>
+    <h2>禁用标签</h2>
+    <div>
+      <veui-tag
+        v-for="type in types"
+        :key="type"
+        :type="type"
+        :selected.sync="selected"
+        disabled
+        selectable
+      >
+        {{ type }}
+      </veui-tag>
+      <veui-tag
+        ui="no-border"
+        :selected.sync="selected"
+        disabled
+        selectable
+      >no-border</veui-tag>
+    </div>
+    <div style="margin-top: 20px">
+      <veui-tag
+        v-for="type in types"
+        :key="type"
+        :type="type"
+        disabled
+        closable
+      >
+        {{ type }}
       </veui-tag>
     </div>
   </section>
@@ -57,8 +114,9 @@ export default {
   data () {
     return {
       teams: ['湖人', '火箭', '猛龙', '马刺', '勇士'],
-      types: ['default', 'success', 'error', 'warning', 'info'],
-      sizes: ['small', 'default', 'large']
+      types: ['default', 'info', 'success', 'warning', 'error'],
+      sizes: ['s', 'm', 'default'],
+      selected: false
     }
   },
   methods: {
