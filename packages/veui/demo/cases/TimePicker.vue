@@ -69,6 +69,18 @@
       :minutes="[0, 30]"
       :seconds="[0, 30]"
     />
+    <h2>disabled</h2>
+    <veui-time-picker
+      :min="min4"
+      :max="max4"
+      disabled
+    />
+    <h2>readonly</h2>
+    <veui-time-picker
+      :min="min4"
+      :max="max4"
+      readonly
+    />
   </section>
 </article>
 </template>
