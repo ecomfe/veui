@@ -12,7 +12,6 @@
     'veui-disabled': realDisabled
   }"
   :ui="realUi"
-  v-on="containerListeners"
 >
   <template v-if="$slots.before || $slots['before-label']">
     <div class="veui-input-before">
@@ -137,10 +136,11 @@ export default {
       }
     },
     inputListeners () {
-      return pick(this.$listeners, [...KEYBOARD_EVENTS, ...FOCUS_EVENTS])
-    },
-    containerListeners () {
-      return pick(this.$listeners, MOUSE_EVENTS)
+      return pick(this.$listeners, [
+        ...KEYBOARD_EVENTS,
+        ...FOCUS_EVENTS,
+        ...MOUSE_EVENTS
+      ])
     },
     editable () {
       return !this.realDisabled && !this.realReadonly
