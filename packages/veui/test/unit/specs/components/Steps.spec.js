@@ -30,9 +30,9 @@ describe('components/Steps', () => {
     })
 
     let links = wrapper.findAll(Link)
-    expect(links.at(0).classes('veui-steps-current')).to.equal(false)
-    expect(links.at(1).classes('veui-steps-current')).to.equal(true)
-    expect(links.at(2).classes('veui-steps-current')).to.equal(false)
+    expect(links.at(0).classes('veui-steps-step-current')).to.equal(false)
+    expect(links.at(1).classes('veui-steps-step-current')).to.equal(true)
+    expect(links.at(2).classes('veui-steps-step-current')).to.equal(false)
     wrapper.destroy()
   })
 
