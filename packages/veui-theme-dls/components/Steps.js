@@ -1,4 +1,5 @@
 import 'veui-theme-one-icons/check'
+import 'veui-theme-one-icons/times'
 import config from 'veui/managers/config'
 
 config.defaults(
