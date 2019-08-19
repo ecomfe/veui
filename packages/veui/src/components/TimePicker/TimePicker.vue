@@ -2,6 +2,12 @@
 <div
   ref="self"
   class="veui-time-picker"
+  :ui="realUi"
+  :aria-readonly="realReadonly"
+  :aria-disabled="realDisabled"
+  :aria-expanded="expanded"
+  :aria-owns="dropdownId"
+  aria-haspopup="listbox"
 >
   <veui-input
     ref="input"
@@ -33,6 +39,7 @@
     @afteropen="scrollSelectedToCenter(0)"
   >
     <div
+      :id="dropdownId"
       v-outside:input="closeDropdown"
       :class="
         `veui-time-picker-overlay-content veui-time-picker-overlay-${mode}`
@@ -45,6 +52,10 @@
       >
         <veui-time-picker-option-group
           :ui="realUi"
+          role="listbox"
+          :aria-activedescendant="
+            realLocalValue[0] != null ? realLocalValue[0] : false
+          "
           :options="realHours"
           :value="realLocalValue[0]"
           @change="handleDropdownChange(0, $event)"
@@ -68,6 +79,10 @@
       >
         <veui-time-picker-option-group
           :ui="realUi"
+          role="listbox"
+          :aria-activedescendant="
+            realLocalValue[1] != null ? realLocalValue[1] : false
+          "
           :options="realMinutes"
           :value="realLocalValue[1]"
           @change="handleDropdownChange(1, $event)"
@@ -91,6 +106,10 @@
       >
         <veui-time-picker-option-group
           :ui="realUi"
+          role="listbox"
+          :aria-activedescendant="
+            realLocalValue[2] != null ? realLocalValue[2] : false
+          "
           :options="realSeconds"
           :value="realLocalValue[2]"
           @change="handleDropdownChange(2, $event)"
@@ -353,8 +372,8 @@ export default {
         this.scrollSelectedToCenter()
       }
     },
-    openDropdown () {
-      if (!this.expanded) {
+    openDropdown (e) {
+      if (!this.expanded && !this.realReadonly) {
         this.expanded = true
         this.initialValue = this.realLocalValue
       }
