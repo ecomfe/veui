@@ -9,10 +9,7 @@ config.defaults(
     },
     ui: {
       direction: {
-        values: ['vertical']
-      },
-      style: {
-        values: ['full']
+        values: ['vertical', 'labelVerticle']
       },
       size: {
         values: ['s']

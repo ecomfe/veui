@@ -29,14 +29,6 @@
     />
   </section>
   <section>
-    <h2>多行样式：</h2>
-    <veui-steps
-      :steps="steps"
-      :ui="`full${vertical ? ' vertical' : ''}`"
-      :current="current - 1"
-    />
-  </section>
-  <section>
     <h2>小型样式：</h2>
     <veui-steps
       :steps="steps"
@@ -45,18 +37,10 @@
     />
   </section>
   <section>
-    <h2>多行小型样式：</h2>
-    <veui-steps
-      :steps="steps"
-      :current="current - 1"
-      :ui="`s full${vertical ? ' vertical' : ''}`"
-    />
-  </section>
-  <section>
     <h2>文案纵向样式：</h2>
     <veui-steps
       :steps="steps"
-      :ui="`full${vertical ? ' vertical' : ''}`"
+      :ui="`labelVertical ${vertical ? ' vertical' : ''}`"
       :current="current - 1"
       label-place="vertical"
     />
@@ -65,7 +49,7 @@
     <h2>小型文案纵向样式：</h2>
     <veui-steps
       :steps="steps"
-      :ui="`s full${vertical ? ' vertical' : ''}`"
+      :ui="`s labelVertical ${vertical ? ' vertical' : ''}`"
       :current="current - 1"
       label-place="vertical"
     />
@@ -74,7 +58,7 @@
     <h2>自定义模板：</h2>
     <veui-steps
       :steps="steps"
-      :ui="`full${vertical ? ' vertical' : ''}`"
+      :ui="`${vertical ? ' vertical' : ''}`"
       :current="current - 1"
     >
       <template
@@ -110,7 +94,7 @@ export default {
         { label: 'Step 2', desc: '验证身份' },
         { label: 'Step 3', desc: '填写地址', status: 'error' },
         { label: 'Step 4', desc: '填写资料', status: 'error' },
-        { label: 'Step 5', desc: '注册成功' }
+        { label: 'Step 5', desc: '' }
       ],
       vertical: false
     }
