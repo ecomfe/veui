@@ -8,12 +8,19 @@ config.defaults(
       close: 'times'
     },
     ui: {
-      position: {
-        values: ['top']
+      size: {
+        values: ['s', 'm'],
+        default: 'm',
+        inherit: true
+      },
+      width: {
+        values: ['narrow', 'medium', 'wide', 'full'],
+        default: 'medium'
       }
     },
     parts: {
-      ok: 'primary'
+      ok: 'primary',
+      close: 'icon'
     }
   },
   'dialog'
