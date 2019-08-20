@@ -12,11 +12,7 @@
   <veui-input
     ref="input"
     v-model="realInputValue"
-    :clearable="clearable"
-    :autofocus="autofocus"
-    :placeholder="placeholder"
-    :readonly="realReadonly"
-    :disabled="realDisabled"
+    v-bind="inputProps"
     @focus="openDropdown"
     @click="openDropdown"
   >
@@ -145,7 +141,8 @@ import {
   includes,
   get,
   times,
-  constant
+  constant,
+  pick
 } from 'lodash'
 import { scrollToCenter } from '../../utils/dom'
 import TimePickerUtil from './_TimePickerUtil'
@@ -232,8 +229,15 @@ export default {
     enableMinutes () {
       return this.enableSeconds || this.mode === 'minute'
     },
+    inputProps () {
+      return {
+        ...pick(this.$props, ['placeholder', 'autofocus', 'clearable']),
+        readonly: this.realReadonly,
+        disabled: this.realDisabled
+      }
+    },
     minuteSuffix () {
-      return !this.enableMinutes ? ':00' : ''
+      return this.enableMinutes ? '' : ':00'
     },
     sortedHours () {
       return this.hours ? this.hours.sort(sorter) : HOURS
