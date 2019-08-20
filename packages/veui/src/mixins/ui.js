@@ -113,16 +113,17 @@ export default {
       let { inheritedUiProps = {} } = this.$parent || {}
       let props = { ...inheritedUiProps, ...overrides }
       return (
-        keys(props)
-          .map(key => {
-            if (props[key] === true) {
-              return key
-            }
-            return key === UNKNOWN_KEY ? null : props[key]
-          })
-          .filter(val => val && val !== 'default' && val !== false)
-          .concat(uiProps[UNKNOWN_KEY])
-          .join(' ') || null
+        uniq(
+          keys(props)
+            .map(key => {
+              if (props[key] === true) {
+                return key
+              }
+              return key === UNKNOWN_KEY ? null : props[key]
+            })
+            .filter(val => val && val !== 'default' && val !== false)
+            .concat(uiProps[UNKNOWN_KEY])
+        ).join(' ') || null
       )
     }
   },
