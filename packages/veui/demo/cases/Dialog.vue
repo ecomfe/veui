@@ -18,6 +18,19 @@
     </veui-button>
 
     <veui-dialog
+      overlay-class="test demo-dialog-standard-dialog"
+      :open.sync="titlelessDialogVisible"
+    >
+      <p>content area</p>
+    </veui-dialog>
+    <veui-button
+      ui="primary"
+      @click="titlelessDialogVisible = !titlelessDialogVisible"
+    >
+      Open a titleless dialog box
+    </veui-button>
+
+    <veui-dialog
       :modal="false"
       :open.sync="nonModalDialogVisible"
       ui="auto"
@@ -48,7 +61,7 @@
       ui="primary"
       @click="nonModalDialogVisible = !nonModalDialogVisible"
     >
-      Open a modeless dialog box
+      Open a modaless dialog box
     </veui-button>
   </section>
   <section>
@@ -364,6 +377,7 @@ export default {
   data () {
     return {
       modalDialogVisible: false,
+      titlelessDialogVisible: false,
       nonModalDialogVisible: false,
       draggableDialog1Visible: false,
       draggableDialog2Visible: false,
@@ -499,10 +513,11 @@ section {
     &-body {
       border: 1px dashed #999;
       height: 280px;
+
       p {
         color: #999;
         text-align: center;
-        margin-top: 120px;
+        margin: 0;
       }
     }
   }
