@@ -1,13 +1,13 @@
 @import "../lib.less";
 
 .veui-dialog {
-  @golden-ratio: 38.2%;
   @transition-offset: 10px;
 
   display: none;
 
   &-box {
     .fixed(0);
+    display: flex;
 
     &:not(&-mask) {
       pointer-events: none;
@@ -19,128 +19,100 @@
   }
 
   &-content {
+    margin: auto;
+    background: @dls-dialog-background-color;
     .veui-position-center();
-    .veui-overlay-shadow();
-    background: #fff;
-    position: absolute;
-    width: 400px;
-    max-height: ~"calc(100vh - 40px)";
+    max-height: @dls-dialog-max-height;
     overflow-y: auto;
     outline: none;
     pointer-events: auto;
     .veui-transition(transform);
     transform-origin: 50% 50%;
+    box-shadow: @dls-dialog-shadow;
+    border-radius: @dls-dialog-border-radius;
 
-    [ui~="small"] & {
-      width: 350px;
+    [ui~="narrow"] & {
+      width: @dls-dialog-width-narrow;
     }
 
-    [ui~="large"] & {
-      width: 540px;
+    [ui~="medium"] & {
+      width: @dls-dialog-width-medium;
     }
 
-    [ui~="auto"] & {
+    [ui~="wide"] & {
+      width: @dls-dialog-width-wide;
+    }
+
+    [ui~="full"] & {
+      .fixed(0);
       width: auto;
     }
 
-    .veui-dialog-box[ui~="high"] & {
-      .veui-position-center(@y: @golden-ratio);
-    }
-
-    &-head,
-    &-foot {
-      padding: 0 20px;
-    }
-
     &-head {
-      .centered-line(56px);
-    }
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: @dls-dialog-padding-y @dls-dialog-padding-x
+        @dls-dialog-title-spacing-after;
 
-    &-head-title,
-    &-head-close,
-    &-head-close:hover {
-      color: @veui-text-color-strong;
-    }
-
-    &-head-title {
-      margin: 0;
-      font-weight: @veui-font-weight-normal;
-      font-size: @veui-font-size-large;
-    }
-
-    &-head-close {
-      padding: 0;
-      outline: none;
-      .veui-button-transition();
-
-      &,
-      &:hover {
-        border: none;
-        background: none;
-        float: right;
-        .centered-line(14px);
-        text-align: center;
-        font-size: @veui-font-size-normal;
-        cursor: pointer;
-        position: absolute;
-        top: 10px;
-        right: 10px;
+      [ui~="s"] & {
+        font-size: @dls-dialog-title-font-size-s;
       }
 
-      &:hover,
-      &:focus {
-        color: @veui-brand-color;
+      [ui~="m"] & {
+        font-size: @dls-dialog-title-font-size-m;
       }
 
-      &.focus-visible {
-        .veui-focus-shadow();
+      &-title {
+        margin: 0 @dls-dialog-title-spacing-after 0 0;
+        flex-grow: 1;
+        line-height: @dls-line-height-m;
+        font-weight: @dls-font-weight-1;
+        color: @dls-dialog-title-font-color;
+      }
+
+      &-close {
+        font-size: inherit;
+
+        .veui-icon {
+          .dls-icon-size(
+            @dls-dialog-close-icon-size,
+            @dls-dialog-close-icon-min-size
+          );
+
+          [ui~="full"] & {
+            .dls-icon-size(
+              @dls-dialog-close-icon-size-fullscreen,
+              @dls-dialog-close-icon-min-size
+            );
+          }
+        }
       }
     }
 
     &-body {
-      padding-top: 0;
-      .margin(20px, 20px, 0);
-    }
-
-    &-head + &-body {
-      margin-top: 10px;
+      padding: 0 @dls-dialog-padding-x;
+      font-size: inherit;
     }
 
     &-foot {
-      padding: 30px 20px 20px;
-      text-align: center;
-    }
+      padding: @dls-dialog-action-spacing-before @dls-dialog-padding-x
+        @dls-dialog-padding-y;
 
-    &-foot .veui-button {
-      min-width: 94px;
-      margin-right: 20px;
-
-      &:last-child {
-        margin-right: 0;
+      .veui-button + .veui-button {
+        margin-left: @dls-dialog-action-content-spacing;
       }
     }
   }
 
   &-box-mask {
-    background-color: fade(@veui-gray-color-1, 50);
-    overflow: auto;
-
-    // 提升优先级，覆盖样式
-    &,
-    &[ui~="high"] {
-      .fixed(0);
-      transform: none;
-    }
+    background-color: @dls-dialog-backdrop-color;
+    overflow: hidden;
+    transform: none;
   }
 
   .veui-overlay-enter &-content,
   .veui-overlay-leave-to &-content {
     transform: translate(50%, ~"calc(50% - @{transition-offset})");
-  }
-
-  .veui-overlay-enter[ui~="high"] &-content,
-  .veui-overlay-leave-to[ui~="high"] &-content {
-    @ratio: 100% - @golden-ratio;
-    transform: translate(50%, ~"calc(@{ratio} - @{transition-offset})");
   }
 }
