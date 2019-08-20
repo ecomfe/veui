@@ -7,13 +7,18 @@ export default {
   name: 'veui-drawer',
   inheritAttrs: false,
   props: {
+    modal: {
+      type: Boolean,
+      default: true
+    },
     placement: {
       type: String,
       default: 'right',
       validator (value) {
         return PLACEMENT.indexOf(value) >= 0
       }
-    }
+    },
+    backdropClosable: Boolean
   },
   render (h) {
     let data = {
@@ -22,10 +27,11 @@ export default {
         ...this.$attrs,
         overlayClass: {
           [`veui-drawer-${this.placement}`]: true,
-          'veui-drawer-box-mask': true
+          'veui-drawer-box': true
         },
-        modal: true,
-        draggable: false
+        modal: this.modal,
+        draggable: false,
+        outsideClosable: this.modal ? this.backdropClosable : true
       },
       // nativeOn 直接在 drawer 上注册到 dom ，不需透传
       on: this.$listeners,
