@@ -1,56 +1,82 @@
 @import "../lib.less";
 
 .veui-drawer {
-  &-box-mask {
+  &-box {
     .veui-dialog-content {
+      display: flex;
+      flex-direction: column;
       max-height: none;
-      transition: transform 0.2s;
-      width: auto;
+      margin: 0;
       transform: translate(0, 0);
+      border-radius: 0;
+      overflow: auto;
+      .veui-transition(transform);
+
+      &-head {
+        [ui~="s"]& {
+          font-size: @dls-drawer-title-font-size-s;
+        }
+
+        [ui~="m"]& {
+          font-size: @dls-drawer-title-font-size-m;
+        }
+      }
+
+      &-body {
+        flex-grow: 1;
+      }
     }
   }
 
   &-top {
     .veui-dialog-content {
       .absolute(0, 0, auto, 0);
+      width: auto;
+      box-shadow: @dls-drawer-shadow-top;
     }
   }
   &-right {
     .veui-dialog-content {
       .absolute(0, 0, 0, auto);
+      width: @dls-drawer-width;
+      box-shadow: @dls-drawer-shadow-right;
     }
   }
   &-bottom {
     .veui-dialog-content {
       .absolute(auto, 0, 0, 0);
+      width: auto;
+      box-shadow: @dls-drawer-shadow-bottom;
     }
   }
   &-left {
     .veui-dialog-content {
       .absolute(0, auto, 0, 0);
+      width: @dls-drawer-width;
+      box-shadow: @dls-drawer-shadow-left;
     }
   }
 
-  &-box-mask.veui-overlay-enter,
-  &-box-mask.veui-overlay-leave-to {
+  &-box.veui-overlay-enter,
+  &-box.veui-overlay-leave-to {
     &.veui-drawer-top {
       .veui-dialog-content {
-        transform: translateY(-100%);
+        transform: translateY(-20px);
       }
     }
     &.veui-drawer-right {
       .veui-dialog-content {
-        transform: translateX(100%);
+        transform: translateX(20px);
       }
     }
     &.veui-drawer-bottom {
       .veui-dialog-content {
-        transform: translateY(100%);
+        transform: translateY(20px);
       }
     }
     &.veui-drawer-left {
       .veui-dialog-content {
-        transform: translateX(-100%);
+        transform: translateX(-20px);
       }
     }
   }
