@@ -2,19 +2,102 @@
 @import (reference) "../dropdown.less";
 
 .veui-option-group {
-  &-label {
-    display: block;
-    .centered-line(@veui-height-normal);
-    padding: 0 10px;
+  // 先给所有的 OptionGroup 设置 padding 和 max-height， 然后通过后代选择器清除内部的
+  // OptionGroup 的 padding 和 max-height，保证只有最外层的设置了 max-height 和 padding
+  font-size: @dls-option-font-size-m;
+  .padding(@dls-option-group-padding-y, _);
+  max-height: @dls-option-dropdown-max-height-m;
+
+  & & {
+    .padding(0, _);
+    max-height: none;
   }
 
-  &-label:not(&-button) {
-    font-size: @veui-font-size-small;
-    color: @veui-text-color-weak;
+  &-box & {
+    .padding(0, _);
+  }
+
+  // 找到有分割线的元素，padding-top 设置分割线下间距， margin-top 设置分割线上间距
+  &:not(.veui-option-group-popout):not(:first-child) {
+    margin-top: @dls-option-group-padding-y;
+    padding-top: @dls-option-group-padding-y;
+    border-top: 1px solid @dls-option-group-separator-color;
+  }
+
+  &-label {
+    max-width: @dls-option-max-width-m;
+    .margin(@dls-option-group-padding-y, _);
+  }
+
+  &-popout &-label {
+    .margin(0, _);
+  }
+
+  &.veui-option-group-popout {
+    .veui-option-group-label {
+      color: @dls-option-font-color;
+    }
+  }
+
+  &[ui~="xs"] {
+    max-height: @dls-option-dropdown-max-height-xs;
+
+    &-label {
+      font-size: @dls-option-font-size-xs;
+      max-width: @dls-option-max-width-xs;
+    }
+  }
+
+  &[ui~="s"] {
+    max-height: @dls-option-dropdown-max-height-s;
+
+    &-label {
+      font-size: @dls-option-font-size-s;
+      max-width: @dls-option-max-width-s;
+    }
+  }
+
+  &[ui~="l"] {
+    max-height: @dls-option-dropdown-max-height-l;
+
+    &-label {
+      font-size: @dls-option-font-size-l;
+      max-width: @dls-option-max-width-l;
+    }
+  }
+
+  .veui-text-highlighted {
+    color: @dls-option-font-color-highlighted;
+  }
+
+  &-label:not(&-disabled) {
+    display: flex;
+    align-items: center;
+    font-size: @dls-option-font-size-m;
+    color: @dls-option-group-label-font-color;
+    line-height: @dls-option-group-label-line-height;
+    .padding(@dls-option-group-label-padding-y, @dls-option-padding-m);
+
+    .veui-option-label {
+      flex-grow: 1;
+    }
+
+    .veui-option-group-expandable {
+      color: @dls-option-icon-color-aux;
+      .dls-icon-size(@dls-option-icon-size-aux);
+      margin-left: @dls-option-label-spacing-before;
+      margin-right: @dls-option-label-spacing-after;
+    }
+  }
+
+  &-label-disabled {
+    .veui-option-group-expandable {
+      color: @dls-option-icon-color-aux-disabled;
+    }
   }
 
   .veui-option {
-    padding-left: 20px;
+    .padding(_, @dls-option-padding-m);
   }
 
   &-button {
@@ -22,33 +105,17 @@
   }
 
   &-expanded &-button {
-    background-color: @veui-gray-color-8;
+    font-weight: @dls-option-font-weight-selected-parent;
+    background-color: @dls-option-background-color-selected-parent;
 
     &:active {
-      background-color: @veui-gray-color-6;
-    }
-  }
-
-  &-unlabelled {
-    border-top: 1px solid @veui-gray-color-6;
-
-    &:first-child {
-      border-top: none;
-    }
-
-    .veui-option {
-      padding-left: 10px;
+      background-color: @dls-option-background-color-active;
     }
   }
 
   &-box &-options {
     &:extend(._veui-dropdown-overlay all);
-    margin: -1px 5px;
-  }
-
-  &-expandable {
-    @half-height: @veui-height-normal / 2;
-    float: right;
-    margin-top: ~"calc(@{half-height} - 0.5em)";
+    .padding(@dls-option-group-padding-y, _);
+    .margin(0, @dls-option-dropdown-target-spacing);
   }
 }
