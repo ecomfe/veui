@@ -17,6 +17,7 @@
 >
   <div
     ref="content"
+    v-outside="outside"
     class="veui-dialog-content"
     tabindex="-1"
     v-bind="attrs"
@@ -24,7 +25,6 @@
     @keydown.esc="handleEscape"
   >
     <div
-      v-if="title || $slots.title || $scopedSlots.title"
       v-drag:content.translate="{
         draggable,
         containment: '@window',
@@ -33,7 +33,10 @@
       class="veui-dialog-content-head"
       :class="{ 'veui-dialog-draggable': draggable }"
     >
-      <h3 class="veui-dialog-content-head-title">
+      <h3
+        v-if="title || $slots.title || $scopedSlots.title"
+        class="veui-dialog-content-head-title"
+      >
         <slot
           name="title"
           :close="close"
@@ -41,16 +44,16 @@
           {{ title }}
         </slot>
       </h3>
+      <veui-button
+        v-if="closable"
+        :ui="uiParts.close"
+        class="veui-dialog-content-head-close"
+        :aria-label="t('close')"
+        @click="cancel"
+      >
+        <veui-icon :name="icons.close"/>
+      </veui-button>
     </div>
-    <button
-      v-if="closable"
-      type="button"
-      class="veui-dialog-content-head-close"
-      :aria-label="t('close')"
-      @click="cancel"
-    >
-      <veui-icon :name="icons.close"/>
-    </button>
     <div class="veui-dialog-content-body">
       <slot :close="close"/>
     </div>
@@ -63,14 +66,14 @@
           :ui="uiParts.ok"
           @click="close('ok')"
         >
-          {{ t("ok") }}
+          {{ t('ok') }}
         </veui-button>
         <veui-button
           :ui="uiParts.cancel"
           autofocus
           @click="cancel"
         >
-          {{ t("cancel") }}
+          {{ t('cancel') }}
         </veui-button>
       </slot>
     </div>
@@ -85,6 +88,7 @@ import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
+import outside from '../directives/outside'
 import drag from '../directives/drag'
 import Icon from './Icon'
 
@@ -95,7 +99,7 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  directives: { drag },
+  directives: { outside, drag },
   mixins: [ui, overlay, focusable, i18n],
   inheritAttrs: false,
   props: {
@@ -119,6 +123,7 @@ export default {
       type: Boolean,
       default: true
     },
+    outsideClosable: Boolean,
     draggable: {
       type: Boolean,
       default: false
@@ -181,6 +186,11 @@ export default {
         this.localOpen = false
       }
       this.$emit(type)
+    },
+    outside () {
+      if (this.outsideClosable) {
+        this.cancel()
+      }
     },
     cancel () {
       this.close('cancel')
