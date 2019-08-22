@@ -12,12 +12,15 @@
   }
 
   &-input,
-  &-search-input {
+  &-search-input,
+  &-multi-input,
+  &-search-multi-input {
     .veui-input-prepend {
       padding-right: 0;
     }
     .veui-input-append {
       padding-left: @dls-select-content-spacing;
+      color: @dls-font-color-weak;
     }
   }
 
@@ -32,6 +35,55 @@
     }
     .veui-select-label {
       max-width: none;
+    }
+  }
+
+  &-multi-input,
+  &-search-multi-input {
+    &.veui-input {
+      height: auto;
+    }
+
+    .veui-input-main {
+      display: block;
+      overflow: hidden;
+      flex-wrap: wrap;
+    }
+    .veui-input-prepend {
+      display: block;
+      .veui-tag {
+        float: left;
+        margin-right: @dls-select-tag-spacing;
+        margin-top: @dls-select-tag-spacing;
+      }
+      .veui-select-placeholder {
+        float: left;
+        margin-top: @dls-select-tag-spacing;
+      }
+    }
+    input {
+      float: left;
+      margin-top: @dls-select-tag-spacing;
+    }
+    .veui-input-append {
+      float: right;
+      margin: @dls-select-tag-spacing 0;
+      .veui-icon {
+        margin-left: @dls-select-content-spacing;
+      }
+    }
+  }
+
+  &-multi-input {
+    input {
+      width: 0;
+      height: 0;
+    }
+  }
+  &-search-multi-input {
+    input {
+      width: 10px;
+      max-width: 100%;
     }
   }
 
@@ -52,5 +104,40 @@
     overflow-y: auto;
     background-color: @dls-option-background-color;
     outline: none;
+  }
+
+  .make-metrics (@size) {
+    @height: ~"dls-select-tag-height-@{size}";
+
+    .veui-select-multi-input,
+    .veui-select-search-multi-input {
+      .veui-select-placeholder {
+        line-height: @@height;
+      }
+      .veui-input-append {
+        height: @@height;
+      }
+      .veui-tag {
+        height: @@height;
+        font-size: inherit;
+      }
+    }
+    .veui-select-search-multi-input {
+      input {
+        height: @@height;
+      }
+    }
+  }
+
+  .make-metrics(m);
+
+  &[ui~="xs"] {
+    .make-metrics(xs);
+  }
+  &[ui~="s"] {
+    .make-metrics(s);
+  }
+  &[ui~="l"] {
+    .make-metrics(l);
   }
 }

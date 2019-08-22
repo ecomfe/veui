@@ -1,9 +1,11 @@
 <script>
 import Icon from '../Icon'
 import Input from '../Input'
+import Tag from '../Tag'
 import Option from './Option'
 import OptionGroup from './OptionGroup'
 import Overlay from '../Overlay'
+import Checkbox from '../Checkbox'
 import config from '../../managers/config'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
@@ -35,15 +37,19 @@ export default {
     placeholder: String,
     clearable: Boolean,
     searchable: Boolean,
-    options: Array
+    options: Array,
+    multiple: Boolean,
+    limit: Number
   },
   data () {
     return {
       labelId: uniqueId('veui-select-label-'),
-      localValue: this.value,
+      localValue: this.multiple ? this.genMultiValue(this.value) : this.value,
       outsideRefs: ['input'],
       initOptionLabel: '',
-      inputValue: ''
+      inputValue: '',
+      multiLabels: null,
+      nativeInput: null
     }
   },
   computed: {
@@ -54,6 +60,9 @@ export default {
       return mapValues(this.optionMap, 'label')
     },
     selectedOption () {
+      if (this.multiple) {
+        return null
+      }
       if (this.localValue == null) {
         return null
       }
@@ -64,7 +73,18 @@ export default {
         ? config.get('select.placeholder')
         : this.placeholder
     },
+    inputPlaceholder () {
+      if (this.searchable) {
+        if (!this.multiple || (this.multiple && !this.multiLabels)) {
+          return this.realPlaceholder
+        }
+      }
+      return null
+    },
     label () {
+      if (this.multiple) {
+        return ''
+      }
       if (this.localValue == null) {
         return this.realPlaceholder
       }
@@ -72,7 +92,7 @@ export default {
         return this.labelMap[this.localValue]
       }
       if (this.$refs.options) {
-        return this.findOptionsLabel()
+        return this.findOptionsLabel(this.localValue)
       }
       return ''
     },
@@ -81,6 +101,12 @@ export default {
         return ''
       }
       return this.label
+    },
+    limitLabel () {
+      if (this.multiple && this.limit) {
+        return `${(this.multiLabels || []).length}/${this.limit}`
+      }
+      return null
     },
     realOptions () {
       if (this.searchable && this.inputValue) {
@@ -93,10 +119,12 @@ export default {
       return this.options || []
     },
     inputClass () {
-      if (this.searchable) {
-        return 'veui-select-search-input'
+      if (this.multiple) {
+        return this.searchable
+          ? 'veui-select-search-multi-input'
+          : 'veui-select-multi-input'
       }
-      return 'veui-select-input'
+      return this.searchable ? 'veui-select-search-input' : 'veui-select-input'
     },
     focusClass () {
       return this.searchable ? config.get('keySelect.focusClass') : null
@@ -104,9 +132,12 @@ export default {
   },
   watch: {
     value (val) {
-      this.localValue = val
+      this.localValue = this.multiple ? this.genMultiValue(val) : val
     },
     localValue (val) {
+      if (this.multiple) {
+        this.multiLabels = this.genMultiLabels(val)
+      }
       if (this.value !== val) {
         this.$emit('change', val)
       }
@@ -120,17 +151,76 @@ export default {
      * So it recomputed option label on this component mounted.
      */
     if (this.localValue && !this.label) {
-      this.initOptionLabel = this.findOptionsLabel()
+      if (!this.searchable && !this.multiple) {
+        this.initOptionLabel = this.findOptionsLabel(this.localValue)
+      }
+      if (this.multiple) {
+        this.multiLabels = this.genMultiLabels(this.localValue)
+      }
     }
+    this.nativeInput = this.$refs.input.$refs.input
   },
   methods: {
-    findOptionsLabel () {
-      let option = this.$refs.options.find(this.localValue)
+    genMultiValue (value) {
+      if (value) {
+        if (Array.isArray(value)) {
+          return value
+        }
+        return [value]
+      }
+      return []
+    },
+    genMultiLabels (value) {
+      if (value && value.length && this.$refs.options) {
+        return value
+          .map(val => this.findOptionsLabel(val))
+          .filter(val => !!val)
+      }
+      return null
+    },
+    findOptionsLabel (value) {
+      let option = this.$refs.options.find(value)
       return option ? option.label : ''
     },
     handleSelect (value) {
-      this.expanded = false
-      this.localValue = value
+      if (!this.multiple) {
+        this.expanded = false
+        this.localValue = value
+        if (this.searchable) {
+          // change the input value to option'label when selected
+          this.$nextTick(() => {
+            this.inputValue = this.searchInputLabel
+          })
+        }
+        return
+      }
+      if (!value) {
+        // clear
+        this.localValue.splice(0, this.localValue.length)
+        this.expanded = false
+        return
+      }
+
+      let index = this.localValue.indexOf(value)
+      if (index !== -1) {
+        // remove
+        this.removeSelectedValue(index)
+      } else {
+        if (
+          !this.limit ||
+          (this.limit && this.localValue.length < this.limit)
+        ) {
+          this.localValue.push(value)
+        }
+      }
+    },
+    removeSelectedValue (index) {
+      this.localValue.splice(index, 1)
+    },
+    handleCheckboxKeydown (value, e) {
+      if (e.key === 'Enter') {
+        this.handleSelect(value)
+      }
     },
     handleRelocate () {
       this.$refs.options.relocateDeep()
@@ -141,9 +231,11 @@ export default {
       }
       if (!this.searchable) {
         this.expanded = !this.expanded
-        e.stopPropagation()
-        e.preventDefault()
+      } else {
+        this.$refs.input.focus()
       }
+      e.stopPropagation()
+      e.preventDefault()
     },
     handleInputKeydown (e) {
       let passive = true
@@ -165,11 +257,20 @@ export default {
             passive = false
           }
           break
+        case 'Tab':
+          this.expanded = false
+          break
         case 'Enter':
           if (this.searchable) {
-            let elem = this.getCurrentActiveElement()
-            if (elem) {
-              elem.click()
+            if (this.inputValue && !this.expanded) {
+              this.expanded = true
+              break
+            }
+            if (this.expanded) {
+              let elem = this.getCurrentActiveElement()
+              if (elem) {
+                elem.click()
+              }
             }
             passive = false
           } else {
@@ -187,8 +288,12 @@ export default {
     handleTriggerInput (val) {
       this.inputValue = val
       this.expanded = true
-      if (!val) {
+      if (!val && !this.multiple) {
         this.localValue = ''
+      }
+      if (this.multiple && this.searchable) {
+        this.nativeInput.style.width = ''
+        this.nativeInput.style.width = `${this.nativeInput.scrollWidth}px`
       }
     },
     extractOptions () {
@@ -230,7 +335,53 @@ export default {
       }
       return null
     }
+    let option = this.multiple
+      ? option => {
+        return (
+          <Checkbox
+            checked={option.selected}
+            onClick={e => e.preventDefault()}
+            onKeydown={e => this.handleCheckboxKeydown(option.value, e)}
+          >
+            {option.label}
+          </Checkbox>
+        )
+      }
+      : null
 
+    let selectedTags = (this.multiLabels || []).map((label, index) => (
+      <Tag
+        ui="no-border"
+        key={label}
+        onClose={() => this.removeSelectedValue(index)}
+        disabled={this.realDisabled || this.realReadonly}
+        closable
+      >
+        {label}
+      </Tag>
+    ))
+    let multiPrependSlot = this.searchable ? (
+      selectedTags
+    ) : !this.multiLabels ? (
+      <span class="veui-select-placeholder" id={this.labelId}>
+        {this.realPlaceholder}
+      </span>
+    ) : (
+      selectedTags
+    )
+    let prependSlot = !this.searchable ? (
+      <span
+        class={{
+          'veui-select-label': true,
+          'veui-select-placeholder': this.localValue === null
+        }}
+        id={this.labelId}
+      >
+        {this.$scopedSlots.label
+          ? this.$scopedSlots.label(this.selectedOption || { selected: false })
+          : this.label || this.initOptionLabel}
+      </span>
+    ) : null
     return (
       <div
         class={{
@@ -248,64 +399,28 @@ export default {
         aria-labelledby={this.labelId}
         aria-haspopup="listbox"
       >
-        {this.searchable ? (
-          <Input
-            ref="input"
-            class={this.inputClass}
-            placeholder={this.realPlaceholder}
-            value={this.searchInputLabel}
-            disabled={this.realDisabled || this.realReadonly}
-            onKeydown={this.handleInputKeydown}
-            onClick={this.handleInputClick}
-            onInput={this.handleTriggerInput}
-            clearable
-          >
-            <template slot="append">
-              <Icon
-                class="veui-select-icon"
-                name={this.icons[this.expanded ? 'collapse' : 'expand']}
-              />
-            </template>
-          </Input>
-        ) : (
-          <Input
-            ref="input"
-            class={this.inputClass}
-            disabled={this.realDisabled || this.realReadonly}
-            /**
-             * register event on capture stage
-             * to prevent input from setting fouse state
-             */
-            {...{
-              nativeOn: {
-                '!click': this.handleInputClick,
-                '!keydown': this.handleInputKeydown
-              }
-            }}
-          >
-            <template slot="prepend">
-              <span
-                class={{
-                  'veui-select-label': true,
-                  'veui-select-placeholder': this.localValue === null
-                }}
-                id={this.labelId}
-              >
-                {this.$scopedSlots.label
-                  ? this.$scopedSlots.label(
-                    this.selectedOption || { selected: false }
-                  )
-                  : this.label || this.initOptionLabel}
-              </span>
-            </template>
-            <template slot="append">
-              <Icon
-                class="veui-select-icon"
-                name={this.icons[this.expanded ? 'collapse' : 'expand']}
-              />
-            </template>
-          </Input>
-        )}
+        <Input
+          ref="input"
+          class={this.inputClass}
+          disabled={this.realDisabled || this.realReadonly}
+          placeholder={this.inputPlaceholder}
+          value={this.searchInputLabel}
+          onClick={this.handleInputClick}
+          onKeydown={this.handleInputKeydown}
+          onInput={this.handleTriggerInput}
+          clearable={this.searchable && !this.multiple}
+        >
+          <template slot="prepend">
+            {this.multiple ? multiPrependSlot : prependSlot}
+          </template>
+          <template slot="append">
+            {this.limitLabel}
+            <Icon
+              class="veui-select-icon"
+              name={this.icons[this.expanded ? 'collapse' : 'expand']}
+            />
+          </template>
+        </Input>
         {
           <Overlay
             v-show={this.expanded}
@@ -358,7 +473,7 @@ export default {
                 ui={this.realUi}
                 scopedSlots={{
                   label: this.$scopedSlots['group-label'] || null,
-                  option: this.$scopedSlots.option || null,
+                  option: this.$scopedSlots.option || option,
                   'option-label':
                     this.$scopedSlots['option-label'] || optionLabel
                 }}

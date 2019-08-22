@@ -1,4 +1,3 @@
-
 <script>
 import Option from './Option'
 import Overlay from '../Overlay'
@@ -13,7 +12,7 @@ import '../../common/uiTypes'
 import { walk } from '../../utils/data'
 import { isType } from '../../utils/helper'
 import warn from '../../utils/warn'
-import { pull, uniqueId } from 'lodash'
+import { pull, uniqueId, includes } from 'lodash'
 
 const OptionGroup = {
   name: 'veui-option-group',
@@ -128,7 +127,12 @@ const OptionGroup = {
   render () {
     let content = this.options
       ? this.options.map((opt, i) => {
-        let option = { ...opt, selected: opt.value === this.value }
+        let option = {
+          ...opt,
+          selected: Array.isArray(this.value)
+            ? includes(this.value, opt.value)
+            : opt.value === this.value
+        }
         return option.options ? (
           <OptionGroup
             label={option.label}

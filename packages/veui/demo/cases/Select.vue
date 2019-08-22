@@ -2,15 +2,6 @@
 <article>
   <h1><code>&lt;veui-select&gt;</code></h1>
   <section>
-    <h2>默认样式：</h2>
-    <veui-select
-      v-model="defaultValue1"
-      v-bind="attrs"
-      placeholder="全部"
-      clearable
-    />
-  </section>
-  <section>
     <h2>4 种大小：</h2>
     <veui-form>
       <veui-field
@@ -31,6 +22,70 @@
     </veui-form>
   </section>
   <section>
+    <h2>默认样式：</h2>
+    <veui-select
+      v-model="defaultValue"
+      v-bind="attrs"
+      placeholder="全部"
+      clearable
+    />
+  </section>
+  <section>
+    <h2>多选样式：s</h2>
+    <veui-select
+      v-model="defaultMultiValue"
+      ui="s"
+      v-bind="attrs"
+      placeholder="全部"
+      :limit="3"
+      clearable
+      multiple
+    />
+  </section>
+  <section>
+    <h2>多选样式：m (默认)</h2>
+    <veui-select
+      v-model="defaultMultiValue"
+      v-bind="attrs"
+      placeholder="全部"
+      clearable
+      multiple
+    />
+  </section>
+  <section>
+    <h2>多选样式：l</h2>
+    <veui-select
+      v-model="defaultMultiValue"
+      ui="l"
+      v-bind="attrs"
+      placeholder="全部"
+      clearable
+      multiple
+    />
+  </section>
+  <section>
+    <h2>多选样式：有限制</h2>
+    <veui-select
+      v-model="defaultMultiValue"
+      placeholder="全部"
+      v-bind="attrs"
+      :limit="4"
+      clearable
+      multiple
+    />
+  </section>
+  <section>
+    <h2>多选样式：禁用</h2>
+    <veui-select
+      v-model="defaultMultiValue"
+      v-bind="attrs"
+      placeholder="全部"
+      clearable
+      multiple
+      disabled
+    />
+  </section>
+  <section>
     <h2>可搜索Select：</h2>
     <veui-select
       v-model="defaultValue2"
@@ -38,7 +93,25 @@
       ui="checkmark"
       searchable
     />
-    <span>currentValue: {{ defaultValue2 }}</span>
+  </section>
+  <section>
+    <h2>可搜索多选Select：</h2>
+    <veui-select
+      v-model="defaultSearchMultiValue"
+      v-bind="attrs"
+      searchable
+      multiple
+    />
+  </section>
+  <section>
+    <h2>可搜索多选Select：有限制</h2>
+    <veui-select
+      v-model="defaultSearchMultiValue"
+      v-bind="attrs"
+      :limit="4"
+      searchable
+      multiple
+    />
   </section>
   <section>
     <h2>只读样式：</h2>
@@ -382,8 +455,11 @@ export default {
       disabled: true,
       selected: true,
       icon: true,
+      defaultValue: null,
+      defaultMultiValue: [1, 3, 4],
+      defaultSearchMultiValue: [1],
       defaultValue1: null,
-      defaultValue2: null,
+      defaultValue2: 2,
       defaultValue3: null,
       defaultValue4: null,
       defaultValue5: null,
