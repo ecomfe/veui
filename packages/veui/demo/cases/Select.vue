@@ -37,7 +37,7 @@
       ui="s"
       v-bind="attrs"
       placeholder="全部"
-      :limit="3"
+      :max="3"
       clearable
       multiple
     />
@@ -69,7 +69,7 @@
       v-model="defaultMultiValue"
       placeholder="全部"
       v-bind="attrs"
-      :limit="4"
+      :max="4"
       clearable
       multiple
     />
@@ -108,7 +108,7 @@
     <veui-select
       v-model="defaultSearchMultiValue"
       v-bind="attrs"
-      :limit="4"
+      :max="4"
       searchable
       multiple
     />

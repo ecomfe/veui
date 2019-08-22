@@ -10,6 +10,7 @@ import config from '../../managers/config'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import dropdown from '../../mixins/dropdown'
+import suggestion from '../../mixins/suggestion'
 import keySelect from '../../mixins/key-select'
 import warn from '../../utils/warn'
 import { walk } from '../../utils/data'
@@ -26,7 +27,7 @@ config.defaults(
 export default {
   name: 'veui-select',
   uiTypes: ['select'],
-  mixins: [ui, input, dropdown, keySelect],
+  mixins: [ui, input, dropdown, keySelect, suggestion],
   model: {
     event: 'change'
   },
@@ -39,7 +40,7 @@ export default {
     searchable: Boolean,
     options: Array,
     multiple: Boolean,
-    limit: Number
+    max: Number
   },
   data () {
     return {
@@ -48,8 +49,7 @@ export default {
       outsideRefs: ['input'],
       initOptionLabel: '',
       inputValue: '',
-      multiLabels: null,
-      nativeInput: null
+      multiLabels: null
     }
   },
   computed: {
@@ -103,17 +103,14 @@ export default {
       return this.label
     },
     limitLabel () {
-      if (this.multiple && this.limit) {
-        return `${(this.multiLabels || []).length}/${this.limit}`
+      if (this.multiple && this.max) {
+        return `${(this.multiLabels || []).length}/${this.max}`
       }
       return null
     },
     realOptions () {
       if (this.searchable && this.inputValue) {
-        let matched = this.filterFlattedDatasource(
-          this.options,
-          this.inputValue
-        )
+        let matched = this.filterFlattedDatasource(this.inputValue)
         return matched ? this.flattedDatasource : null
       }
       return this.options || []
@@ -196,7 +193,7 @@ export default {
       }
       if (!value) {
         // clear
-        this.localValue.splice(0, this.localValue.length)
+        this.localValue = []
         this.expanded = false
         return
       }
@@ -206,21 +203,13 @@ export default {
         // remove
         this.removeSelectedValue(index)
       } else {
-        if (
-          !this.limit ||
-          (this.limit && this.localValue.length < this.limit)
-        ) {
+        if (!this.max || (this.max && this.localValue.length < this.max)) {
           this.localValue.push(value)
         }
       }
     },
     removeSelectedValue (index) {
       this.localValue.splice(index, 1)
-    },
-    handleCheckboxKeydown (value, e) {
-      if (e.key === 'Enter') {
-        this.handleSelect(value)
-      }
     },
     handleRelocate () {
       this.$refs.options.relocateDeep()
@@ -229,10 +218,12 @@ export default {
       if (this.realReadonly || this.realDisabled) {
         return
       }
-      if (!this.searchable) {
-        this.expanded = !this.expanded
-      } else {
+
+      this.expanded = !this.expanded
+      if (this.expanded) {
         this.$refs.input.focus()
+      } else {
+        this.$el.blur()
       }
       e.stopPropagation()
       e.preventDefault()
@@ -262,7 +253,7 @@ export default {
           break
         case 'Enter':
           if (this.searchable) {
-            if (this.inputValue && !this.expanded) {
+            if (!this.expanded) {
               this.expanded = true
               break
             }
@@ -275,6 +266,11 @@ export default {
             passive = false
           } else {
             this.expanded = true
+          }
+          break
+        case 'Backspace':
+          if (this.multiple && this.searchable && !this.inputValue) {
+            this.localValue.pop()
           }
           break
         default:
@@ -339,9 +335,9 @@ export default {
       ? option => {
         return (
           <Checkbox
+            tabindex="-1"
             checked={option.selected}
             onClick={e => e.preventDefault()}
-            onKeydown={e => this.handleCheckboxKeydown(option.value, e)}
           >
             {option.label}
           </Checkbox>
@@ -351,7 +347,6 @@ export default {
 
     let selectedTags = (this.multiLabels || []).map((label, index) => (
       <Tag
-        ui="no-border"
         key={label}
         onClose={() => this.removeSelectedValue(index)}
         disabled={this.realDisabled || this.realReadonly}
