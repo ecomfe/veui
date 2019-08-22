@@ -47,7 +47,7 @@ overlayManager.setBaseOrder(config.get('overlay.baseZIndex'))
 
 export default {
   name: 'veui-overlay',
-  uiTypes: ['overlay'],
+  uiTypes: ['overlay', 'transparent'],
   mixins: [ui, focusable],
   props: {
     position: String,

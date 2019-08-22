@@ -1,21 +1,23 @@
+@import "../lib.less";
+
 .veui-prompt-box {
+  .veui-dialog-content {
+    width: @dls-dialog-width-narrow;
+
+    &-body {
+      line-height: @dls-dialog-body-line-height-contextual;
+    }
+  }
+
   & &-info {
     margin-top: 0;
   }
 
   &-info {
-    margin-bottom: 1em;
+    margin-bottom: @dls-spacing-unit * 3;
   }
 
   & &-input {
     width: 100%;
-
-    &:first-child {
-      margin-top: 1em;
-    }
-  }
-
-  .veui-dialog-content-foot {
-    padding-top: 40px;
   }
 }
