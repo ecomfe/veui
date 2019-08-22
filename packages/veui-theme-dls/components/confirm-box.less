@@ -1,7 +1,11 @@
 @import "../lib.less";
 
 .veui-confirm-box {
-  .veui-dialog-content-foot {
-    padding-top: 40px;
+  .veui-dialog-content {
+    width: @dls-dialog-width-narrow;
+
+    &-body {
+      line-height: @dls-dialog-body-line-height-contextual;
+    }
   }
 }

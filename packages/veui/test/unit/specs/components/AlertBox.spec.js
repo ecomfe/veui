@@ -6,12 +6,18 @@ config.stubs.transition = false
 
 describe('components/AlertBox', function () {
   it('should render title prop correctly by AlertBox', () => {
-    let wrapper = mount({
-      components: {
-        'veui-alert-box': AlertBox
+    let wrapper = mount(
+      {
+        components: {
+          'veui-alert-box': AlertBox
+        },
+        template: '<veui-alert-box title="this is title" />'
       },
-      template: '<veui-alert-box title="this is title" />'
-    })
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
     expect(wrapper.find('.veui-alert-box-title').text()).to.equal(
       'this is title'
     )
@@ -19,34 +25,46 @@ describe('components/AlertBox', function () {
   })
 
   it('should render slot correctly by AlertBox', () => {
-    let wrapper = mount({
-      components: {
-        'veui-alert-box': AlertBox
-      },
-      template: `
+    let wrapper = mount(
+      {
+        components: {
+          'veui-alert-box': AlertBox
+        },
+        template: `
         <veui-alert-box>
           <div class="test-title-slot" slot="title">this is title</div>
           <div class="test-default-slot">this is content</div>
         </veui-alert-box>
       `
-    })
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
     expect(wrapper.find('.test-title-slot').exists()).to.equal(true)
     expect(wrapper.find('.test-default-slot').exists()).to.equal(true)
     wrapper.destroy()
   })
 
   it('should sync `open` status correctly by AlertBox', async () => {
-    let wrapper = mount({
-      components: {
-        'veui-alert-box': AlertBox
+    let wrapper = mount(
+      {
+        components: {
+          'veui-alert-box': AlertBox
+        },
+        data () {
+          return {
+            open: true
+          }
+        },
+        template: '<veui-alert-box :open.sync="open" title="title" />'
       },
-      data () {
-        return {
-          open: true
-        }
-      },
-      template: '<veui-alert-box :open.sync="open" title="title" />'
-    })
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
     let { vm } = wrapper
     wrapper.find('.veui-button').trigger('click')
     await vm.$nextTick()
@@ -88,6 +106,7 @@ describe('components/AlertBox', function () {
         `
       },
       {
+        sync: false,
         attachToDocument: true
       }
     )
