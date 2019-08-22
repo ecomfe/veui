@@ -1,10 +1,13 @@
 <template>
 <veui-dialog
   :ui="realUi"
-  :overlay-class="mergeOverlayClass({
-    'veui-alert-box': true,
-    [`veui-alert-box-${type}`]: true
-  })"
+  :overlay-class="
+    mergeOverlayClass({
+      'veui-alert-box': true,
+      [`veui-alert-box-${type}`]: true,
+      'veui-alert-box-titleless': !title && !$slots.title
+    })
+  "
   :open.sync="localOpen"
   :closable="false"
   :escapable="false"
@@ -14,25 +17,29 @@
   @ok="$emit('ok')"
   @afterclose="$emit('afterclose')"
 >
-  <veui-icon
-    v-if="icons[type]"
-    class="veui-alert-box-icon"
-    :name="icons[type]"
-  />
-  <h3
-    v-if="title || $slots.title"
-    class="veui-alert-box-title"
-  >
-    <template v-if="title">
-      {{ title }}
-    </template>
-    <slot
-      v-else
-      name="title"
+  <div class="veui-alert-box-icon-wrapper">
+    <veui-icon
+      v-if="icons[type]"
+      class="veui-alert-box-icon"
+      :name="icons[type]"
     />
-  </h3>
-  <div class="veui-alert-box-content">
-    <slot/>
+  </div>
+  <div class="veui-alert-box-wrapper">
+    <h3
+      v-if="title || $slots.title"
+      class="veui-alert-box-title"
+    >
+      <template v-if="title">
+        {{ title }}
+      </template>
+      <slot
+        v-else
+        name="title"
+      />
+    </h3>
+    <div class="veui-alert-box-content">
+      <slot/>
+    </div>
   </div>
   <template
     slot="foot"
@@ -43,7 +50,7 @@
       autofocus
       @click="close('ok')"
     >
-      知道了
+      {{ t('ok') }}
     </veui-button>
   </template>
 </veui-dialog>
@@ -56,6 +63,7 @@ import Button from './Button'
 import Icon from './Icon'
 import config from '../managers/config'
 import ui from '../mixins/ui'
+import i18n from '../mixins/i18n'
 import overlay from '../mixins/overlay'
 
 config.defaults({
@@ -69,7 +77,7 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [ui, overlay],
+  mixins: [ui, overlay, i18n],
   props: {
     ...pick(Dialog.props, ['open', 'title', 'beforeClose']),
     type: {

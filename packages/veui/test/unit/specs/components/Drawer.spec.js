@@ -32,9 +32,9 @@ describe('components/Drawer', () => {
     let { top, right, left } = wrapper
       .find(CONTENT)
       .element.getBoundingClientRect()
-    expect(top === 0).to.equal(true)
-    expect(right === window.innerWidth).to.equal(true)
-    expect(left === 0).to.equal(true)
+    expect(top).to.equal(0)
+    expect(right).to.equal(window.innerWidth)
+    expect(left).to.equal(0)
     wrapper.destroy()
   })
 
@@ -51,9 +51,9 @@ describe('components/Drawer', () => {
     let { top, right, bottom } = wrapper
       .find(CONTENT)
       .element.getBoundingClientRect()
-    expect(top === 0).to.equal(true)
-    expect(right === window.innerWidth).to.equal(true)
-    expect(bottom === window.innerHeight).to.equal(true)
+    expect(top).to.equal(0)
+    expect(right).to.equal(window.innerWidth)
+    expect(bottom).to.equal(window.innerHeight)
     wrapper.destroy()
   })
 
@@ -70,9 +70,9 @@ describe('components/Drawer', () => {
     let { left, right, bottom } = wrapper
       .find(CONTENT)
       .element.getBoundingClientRect()
-    expect(left === 0).to.equal(true)
-    expect(right === window.innerWidth).to.equal(true)
-    expect(bottom === window.innerHeight).to.equal(true)
+    expect(left).to.equal(0)
+    expect(right).to.equal(window.innerWidth)
+    expect(bottom).to.equal(window.innerHeight)
     wrapper.destroy()
   })
 
@@ -89,9 +89,9 @@ describe('components/Drawer', () => {
     let { left, top, bottom } = wrapper
       .find(CONTENT)
       .element.getBoundingClientRect()
-    expect(top === 0).to.equal(true)
-    expect(bottom === window.innerHeight).to.equal(true)
-    expect(left === 0).to.equal(true)
+    expect(top).to.equal(0)
+    expect(bottom).to.equal(window.innerHeight)
+    expect(left).to.equal(0)
     wrapper.destroy()
   })
 

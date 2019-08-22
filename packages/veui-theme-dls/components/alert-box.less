@@ -2,44 +2,112 @@
 
 .veui-alert-box {
   .veui-dialog-content {
-    width: 350px;
+    width: @dls-dialog-width-contextual;
+    padding-top: @dls-dialog-padding-y;
 
     &-head {
       display: none;
     }
 
     &-body {
-      text-align: center;
-      margin-top: 30px;
+      display: flex;
     }
   }
 
   &-icon {
-    .size(30px);
+    .dls-icon-size(@dls-dialog-icon-size-contextual);
+
+    &-wrapper {
+      display: flex;
+      align-items: center;
+      margin-right: @dls-dialog-icon-spacing-contextual;
+      height: dls-line-height(
+        @dls-dialog-title-line-height,
+        @dls-dialog-title-font-size-m
+      );
+      font-size: @dls-dialog-title-font-size-m;
+
+      [ui~="s"] & {
+        height: dls-line-height(
+          @dls-dialog-title-line-height,
+          @dls-dialog-title-font-size-s
+        );
+        font-size: @dls-dialog-title-font-size-s;
+      }
+
+      .veui-alert-box-titleless & {
+        height: dls-line-height(
+          @dls-dialog-body-line-height-contextual,
+          @dls-dialog-body-font-size-m
+        );
+        font-size: @dls-dialog-body-font-size-m;
+
+        [ui~="s"]& {
+          height: dls-line-height(
+            @dls-dialog-body-line-height-contextual,
+            @dls-dialog-body-font-size-s
+          );
+          font-size: @dls-dialog-body-font-size-s;
+        }
+      }
+    }
   }
 
   &-title {
-    color: @veui-text-color-strong;
-    font-weight: @veui-font-weight-normal;
-    .margin(20px, _, 14px);
-    line-height: 1;
-    font-size: @veui-font-size-large;
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: @dls-dialog-title-spacing-after-contextual;
+    color: @dls-dialog-title-font-color;
+    line-height: @dls-dialog-title-line-height;
+    font-weight: @dls-font-weight-1;
+    font-size: @dls-dialog-title-font-size-m;
+  }
+
+  &-wrapper {
+    flex-grow: 1;
   }
 
   &-content {
-    color: @veui-text-color-normal;
-    font-size: @veui-font-size-normal;
+    line-height: @dls-dialog-body-line-height-contextual;
   }
 
-  &-info .veui-alert-box-icon {
-    color: @veui-brand-color;
+  .veui-dialog-content-foot {
+    display: flex;
+
+    &::before {
+      content: "";
+      display: block;
+      float: left;
+      font-size: @dls-dialog-title-font-size-m;
+      width: dls-sum(
+        @dls-dialog-icon-size-contextual,
+        @dls-dialog-icon-spacing-contextual
+      );
+    }
   }
 
-  &-error .veui-alert-box-icon {
-    color: @veui-alert-color;
+  &[ui~="s"] .veui-dialog-content-foot::before {
+    font-size: @dls-dialog-title-font-size-s;
   }
 
-  &-success .veui-alert-box-icon {
-    color: @veui-success-color;
+  &-titleless[ui~="s"] .veui-dialog-content-foot::before {
+    font-size: @dls-dialog-body-font-size-s;
+  }
+
+  &-info &-icon {
+    color: @dls-dialog-icon-color-info;
+  }
+
+  &-success &-icon {
+    color: @dls-dialog-icon-color-success;
+  }
+
+  &-error &-icon {
+    color: @dls-dialog-icon-color-error;
+  }
+
+  &-warning &-icon {
+    color: @dls-dialog-icon-color-warning;
   }
 }

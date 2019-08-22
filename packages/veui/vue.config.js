@@ -32,7 +32,7 @@ module.exports = {
       return args
     })
 
-    config.devtool('source-map')
+    // config.devtool('source-map')
 
     config.resolve.alias
       .set(
