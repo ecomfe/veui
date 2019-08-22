@@ -2,20 +2,22 @@ import { closest, toggleClass } from '@/utils/dom'
 
 describe('utils/dom', () => {
   it('should find the closest parent as expected', () => {
-    let root = document.createElement('div')
-    root.innerHTML = `<div class="tip">点此
+    let el = document.createElement('div')
+    el.innerHTML = `<div class="tip">点此
       <a class="btn" href="/login">
         <span class="text">登录</span>
       </a>
     </div>`
-    document.body.appendChild(root)
+    document.body.appendChild(el)
 
-    let span = root.querySelector('span')
+    let span = el.querySelector('span')
 
     expect(closest(span, 'span').className).to.be.equal('text')
     expect(closest(span, 'a').className).to.be.equal('btn')
     expect(closest(span, 'div').className).to.be.equal('tip')
     expect(closest(span, 'nav')).to.be.equal(null)
+
+    el.parentNode.removeChild(el)
   })
 
   it('should toggle classes correctly', () => {
@@ -37,5 +39,7 @@ describe('utils/dom', () => {
     expect(el.classList.contains('e')).to.equal(true)
     expect(el.classList.contains('f')).to.equal(true)
     expect(el.classList.contains('g')).to.be.equal(false)
+
+    el.parentNode.removeChild(el)
   })
 })
