@@ -246,7 +246,10 @@ export default {
       }
     },
     focus () {
-      this.$refs.input.focus()
+      let { input } = this.$refs
+      if (input) {
+        input.focus()
+      }
     },
     handleInputFocus () {
       if (this.hasFocusSuggestMode && !this.realReadonly) {
