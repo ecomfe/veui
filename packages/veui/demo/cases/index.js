@@ -56,8 +56,7 @@ export default [
   {
     path: '/alert-box',
     name: 'AlertBox',
-    component: AlertBox,
-    disabled: true
+    component: AlertBox
   },
   {
     path: '/autocomplete',
@@ -110,8 +109,7 @@ export default [
   {
     path: '/checkbox-group',
     name: 'CheckboxGroup',
-    component: CheckboxGroup,
-    disabled: true
+    component: CheckboxGroup
   },
   {
     path: '/collapse',
@@ -127,8 +125,7 @@ export default [
   {
     path: '/dialog',
     name: 'Dialog',
-    component: Dialog,
-    disabled: true
+    component: Dialog
   },
   {
     path: '/drawer',

@@ -295,10 +295,16 @@
     <veui-button @click="promptOpen = true">
       Inline PromptBox
     </veui-button>
-    <veui-alert-box :open.sync="alertOpen">
+    <veui-alert-box
+      ui="s"
+      :open.sync="alertOpen"
+    >
       Hello world.
     </veui-alert-box>
-    <veui-confirm-box :open.sync="confirmOpen">
+    <veui-confirm-box
+      ui="s"
+      :open.sync="confirmOpen"
+    >
       Hello world.
     </veui-confirm-box>
     <veui-prompt-box

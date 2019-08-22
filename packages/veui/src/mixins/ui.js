@@ -1,4 +1,4 @@
-import { getConfigKey } from '../utils/helper'
+import { getConfigKey, getNonTransparentParent } from '../utils/helper'
 import warn from '../utils/warn'
 import config from '../managers/config'
 import {
@@ -110,7 +110,7 @@ export default {
       let overrides = pickBy(uiProps, (val, key) => {
         return key !== UNKNOWN_KEY && (val !== 'default' || val === true)
       })
-      let { inheritedUiProps = {} } = this.$parent || {}
+      let { inheritedUiProps = {} } = getNonTransparentParent(this) || {}
       let props = { ...inheritedUiProps, ...overrides }
       return (
         uniq(

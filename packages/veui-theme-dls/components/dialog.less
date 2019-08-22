@@ -55,6 +55,10 @@
       padding: @dls-dialog-padding-y @dls-dialog-padding-x
         @dls-dialog-title-spacing-after;
 
+      &:empty {
+        padding-bottom: 0;
+      }
+
       [ui~="s"] & {
         font-size: @dls-dialog-title-font-size-s;
       }
@@ -64,14 +68,18 @@
       }
 
       &-title {
-        margin: 0 @dls-dialog-title-spacing-after 0 0;
+        display: flex;
+        align-items: center;
+        margin: 0;
         flex-grow: 1;
-        line-height: @dls-line-height-m;
+        font-size: inherit;
+        line-height: @dls-dialog-title-line-height;
         font-weight: @dls-font-weight-1;
         color: @dls-dialog-title-font-color;
       }
 
       &-close {
+        margin-left: @dls-dialog-title-spacing-after;
         font-size: inherit;
 
         .veui-icon {
@@ -92,7 +100,13 @@
 
     &-body {
       padding: 0 @dls-dialog-padding-x;
-      font-size: inherit;
+      font-size: @dls-dialog-body-font-size-m;
+      line-height: @dls-line-height-m;
+      color: @dls-dialog-body-font-color;
+
+      [ui~="s"] & {
+        font-size: @dls-dialog-body-font-size-s;
+      }
     }
 
     &-foot {
