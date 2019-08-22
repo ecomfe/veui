@@ -33,6 +33,17 @@ export function getTypedAncestor (component, type, direct) {
   return null
 }
 
+export function getNonTransparentParent (component) {
+  let current = component.$parent
+  while (current) {
+    if (!isType(current, 'transparent')) {
+      return current
+    }
+    current = current.$parent
+  }
+  return null
+}
+
 /**
  * 判断组件实例是否是某个类型
  *

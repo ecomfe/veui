@@ -2,26 +2,20 @@
 <article class="alert-box-demo">
   <h1><code>&lt;veui-alert-box&gt;</code></h1>
   <p>
-    <veui-button
-      type="primary"
-      @click="alertBoxOpen = true"
-    >
-      open alert box
+    <veui-button @click="alertBoxOpen = true">
+      Default
     </veui-button>
-    <veui-alert-box :open.sync="alertBoxOpen">
-      <template slot="title">
-        创建条目成功
-      </template>
+    <veui-alert-box
+      :open.sync="alertBoxOpen"
+      title="创建条目成功"
+    >
       恭喜你，您的资料已经提交成功！
     </veui-alert-box>
   </p>
 
   <p>
-    <veui-button
-      type="primary"
-      @click="alertSuccessBoxOpen = true"
-    >
-      open success alert box
+    <veui-button @click="alertSuccessBoxOpen = true">
+      Success
     </veui-button>
     <veui-alert-box
       :open.sync="alertSuccessBoxOpen"
@@ -35,11 +29,21 @@
   </p>
 
   <p>
-    <veui-button
-      type="primary"
-      @click="alertInfoBoxOpen = true"
+    <veui-button @click="alertWarningBoxOpen = true">
+      Warning
+    </veui-button>
+    <veui-alert-box
+      :open.sync="alertWarningBoxOpen"
+      type="warning"
+      title="提交完毕"
     >
-      open info alert box
+      您提交的数据量较小，请抽空进行补充。
+    </veui-alert-box>
+  </p>
+
+  <p>
+    <veui-button @click="alertInfoBoxOpen = true">
+      Info
     </veui-button>
     <veui-alert-box
       :open.sync="alertInfoBoxOpen"
@@ -53,11 +57,8 @@
   </p>
 
   <p>
-    <veui-button
-      type="primary"
-      @click="alertErrorBoxOpen = true"
-    >
-      open error alert box
+    <veui-button @click="alertErrorBoxOpen = true">
+      Error
     </veui-button>
     <veui-alert-box
       :open.sync="alertErrorBoxOpen"
@@ -85,6 +86,7 @@ export default {
     return {
       alertBoxOpen: false,
       alertSuccessBoxOpen: false,
+      alertWarningBoxOpen: false,
       alertInfoBoxOpen: false,
       alertErrorBoxOpen: false
     }
