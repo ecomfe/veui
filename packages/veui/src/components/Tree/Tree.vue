@@ -146,7 +146,6 @@ export default {
   data () {
     return {
       localDatasource: [],
-      selectedItems: [],
       focused: false
     }
   },
@@ -169,34 +168,36 @@ export default {
     datasource: {
       handler (val) {
         this.localDatasource = []
-        let walk = (datasource, items) => {
+        let walk = (datasource, items, expanded) => {
           datasource.forEach((source, index) => {
             let item = omit(source, 'children')
             item.value = this.realKeys(source)
             if (this.hasChild(source)) {
+              item.expanded =
+                remove(expanded, value => value === item.value).length !== 0
+
               this.$set(item, 'children', [])
-              walk(source.children, item.children)
+              walk(source.children, item.children, expanded)
             }
             this.$set(items, index, item)
           })
         }
-        walk(val, this.localDatasource)
+        walk(val, this.localDatasource, clone(this.realExpanded))
 
-        this.correct()
-        this.setSelectedItems(this.cloneSelectedItems())
-
-        this.parseExpanded()
+        if (this.selectable) {
+          this.correct()
+        }
       },
       deep: true,
       immediate: true
     },
+
     selected (val, oldVal) {
       if (
         xor(val, oldVal).length ||
-        xor(val, this.getSelectedValuesFromSelectedItems()).length
+        xor(val, this.getSelectedValuesFromDatasource()).length
       ) {
         this.correct()
-        this.setSelectedItems(this.cloneSelectedItems())
       }
     }
   },
@@ -217,15 +218,16 @@ export default {
           item.allCount + item.partCount > 0)
       )
     },
-    // 取出 this.selectedItems 中的 values 值，返回一个一维数组。
-    getSelectedValuesFromSelectedItems () {
+    getSelectedValuesFromDatasource () {
       let values = []
-      let walk = (items = this.selectedItems) => {
+      let walk = (items = this.localDatasource) => {
         items.forEach(item => {
-          if (this.hasChild(item)) {
-            walk(item.children)
-          } else {
-            values.push(item.value)
+          if (item.partCount || item.allCount || item.selected) {
+            if (this.hasChild(item)) {
+              walk(item.children)
+            } else if (item.selected) {
+              values.push(item.value)
+            }
           }
         })
       }
@@ -233,21 +235,23 @@ export default {
       return values
     },
     emitSelect () {
-      this.$emit('select', this.getSelectedValuesFromSelectedItems())
+      this.$emit('select', this.getSelectedValuesFromDatasource())
     },
     parseExpanded (expanded = this.realExpanded) {
       let walk = (items, expanded) => {
-        return items.map(item => {
-          let localOption = omit(item, 'children')
+        items.forEach(item => {
           if (item.children && item.children.length) {
-            localOption.expanded =
+            this.$set(
+              item,
+              'expanded',
               remove(expanded, value => value === item.value).length !== 0
-            localOption.children = walk(item.children, expanded)
+            )
+
+            walk(item.children, expanded)
           }
-          return localOption
         })
       }
-      this.localDatasource = walk(this.localDatasource, clone(expanded))
+      walk(this.localDatasource, clone(expanded))
     },
     toggle (item, index, depth, val) {
       if (
@@ -317,7 +321,6 @@ export default {
 
       this.markParentsChain(parents)
       this.selectAllChildren(item, true)
-      this.setSelectedItems(this.cloneSelectedItems())
 
       this.emitSelect()
     },
@@ -340,7 +343,6 @@ export default {
         })
       }
       walk(this.localDatasource)
-      this.setSelectedItems(this.cloneSelectedItems())
       this.emitSelect()
     },
 
@@ -362,12 +364,7 @@ export default {
         })
       }
       walk(this.localDatasource)
-      this.setSelectedItems([])
       this.emitSelect()
-    },
-
-    setSelectedItems (items) {
-      this.selectedItems.splice(0, this.selectedItems.length, ...items)
     },
 
     // 更新祖先节点中的选择标记（ selected 、 allCount 、 partCount ）
@@ -466,53 +463,7 @@ export default {
       this.markParentsChain(parents)
       this.selectAllChildren(item, false)
 
-      this.setSelectedItems(this.cloneSelectedItems())
       this.emitSelect()
-    },
-    // 从 this.localDatasource 中深克隆一份 selectedItems 。
-    cloneSelectedItems () {
-      let walk = (localDatasource, selectedItems) => {
-        let newSelectedItems = []
-        localDatasource.forEach(candidateItem => {
-          if (
-            candidateItem.allCount ||
-            candidateItem.partCount ||
-            candidateItem.selected
-          ) {
-            let relatedSelectedItem = find(
-              selectedItems,
-              selectedItem => selectedItem.value === candidateItem.value
-            )
-
-            let newSelectedItem = omit(candidateItem, 'children')
-            if (this.hasChild(candidateItem)) {
-              newSelectedItem.children = walk(
-                candidateItem.children,
-                relatedSelectedItem && relatedSelectedItem.children
-              )
-
-              // 如果右侧没有相同的 item ，说明当前这个 item 是新选中的。
-              // 对于新选中的 item ，要保持左侧的展开收起状态。
-              if (!relatedSelectedItem) {
-                let expanded = includes(
-                  this.candidateExpanded,
-                  newSelectedItem.value
-                )
-                if (expanded) {
-                  this.selectedExpanded.push(newSelectedItem.value)
-                  uniq(this.selectedExpanded)
-                } else {
-                  remove(this.selectedExpanded, newSelectedItem.value)
-                }
-              }
-            }
-
-            newSelectedItems.push(newSelectedItem)
-          }
-        })
-        return newSelectedItems
-      }
-      return walk(this.localDatasource, this.selectedItems)
     },
 
     // 有可能用户传进来的 selected 没有在 datasource 里面，所以此处要处理一下
@@ -540,11 +491,6 @@ export default {
 
         this.$set(item, 'visuallySelected', this.isSelected(item))
       })
-
-      if (items === this.localDatasource) {
-        this.rootAllCount = allCount
-        this.rootPartCount = partCount
-      }
 
       return { allCount, partCount }
     },

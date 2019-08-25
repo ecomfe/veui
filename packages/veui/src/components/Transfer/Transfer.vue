@@ -1,7 +1,7 @@
 <script>
 import CandidatePanel from './_CandidatePanel'
 import SelectedPanel from './_SelectedPanel'
-import { includes, isString, clone, difference } from 'lodash'
+import { includes, isString, clone, difference, omit, remove } from 'lodash'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import { focusIn } from '../../utils/dom'
@@ -54,11 +54,6 @@ export default {
   },
   data () {
     return {
-      candidateItems: [],
-      selectedItems: [],
-      rootAllCount: 0,
-      rootPartCount: 0,
-
       localSelected: this.selected ? clone(this.selected) : []
     }
   },
@@ -72,16 +67,35 @@ export default {
       }
 
       return this.keys
+    },
+    selectedItems () {
+      let selected = clone(this.localSelected)
+      let walk = datasource => {
+        let res = []
+        datasource.forEach(source => {
+          if (source.children && source.children.length) {
+            let selectedChildren = walk(source.children)
+            if (selectedChildren.length) {
+              let item = omit(source, 'children')
+              item.children = selectedChildren
+              res.push(item)
+            }
+          } else if (
+            remove(selected, value => value === source.value).length !== 0
+          ) {
+            res.push(source)
+          }
+        })
+        return res
+      }
+
+      return walk(this.datasource)
     }
   },
   watch: {
     selected (v) {
       this.localSelected = v ? clone(v) : []
     }
-  },
-  mounted () {
-    this.candidateTree = this.$refs.candidatePanel.$refs.tree
-    this.selectedItems = this.candidateTree.$data.selectedItems
   },
   methods: {
     handleSelect (val) {
