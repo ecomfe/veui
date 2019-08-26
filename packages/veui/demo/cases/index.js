@@ -194,8 +194,7 @@ export default [
   {
     path: '/progress',
     name: 'Progress',
-    component: Progress,
-    disabled: true
+    component: Progress
   },
   {
     path: '/radio',
@@ -238,8 +237,7 @@ export default [
   {
     path: '/slider',
     name: 'Slider',
-    component: Slider,
-    disabled: true
+    component: Slider
   },
   {
     path: '/steps',
