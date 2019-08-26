@@ -2,26 +2,37 @@
 @import (reference) "../input.less";
 
 .veui-slider {
-  @default-progress-height: 4px;
-  @default-thumb-height: 14px;
-  @default-mark-top-offset: 3px;
-  @default-mark-height: @default-progress-height + @default-mark-top-offset * 2;
-
   width: 100%;
-  min-width: @veui-width-normal;
   position: relative;
   user-select: none;
   overflow: visible;
   outline: none;
+  color: @dls-slider-font-color;
 
   &-track {
     &-default {
+      display: flex;
+      align-items: center;
+
       &-wrapper {
         position: relative;
+        flex-grow: 1;
       }
 
       &-bg {
-        background-color: @veui-gray-color-5;
+        background-color: @dls-slider-track-color;
+        cursor: pointer;
+        .veui-transition(background-color);
+
+        &:hover {
+          background-color: @dls-slider-track-color-hover;
+
+          &
+            ~ .veui-slider-track-default-marks
+            .veui-slider-track-default-mark-out-progress {
+            background-color: @dls-slider-track-color-hover;
+          }
+        }
       }
 
       &-sp,
@@ -30,23 +41,78 @@
         top: 0;
       }
 
-      &-sp {
-        background-color: @veui-brand-color-8;
-      }
+      // &-sp {
+      //   background-color: @veui-brand-color-8;
+      // }
 
       &-fg {
-        background-color: @veui-brand-color;
+        background-color: @dls-slider-track-progress-color;
+        .veui-transition(background-color);
+        cursor: pointer;
+
+        &:hover {
+          background-color: @dls-slider-track-progress-color-hover;
+
+          &
+            ~ .veui-slider-track-default-marks
+            .veui-slider-track-default-mark-in-progress {
+            background-color: @dls-slider-track-progress-color-hover;
+          }
+        }
       }
 
       &-marks {
         .absolute(0);
         transform: translateY(50%);
+        pointer-events: none;
       }
 
       &-mark {
-        border-left: 1px solid @veui-gray-color-5;
         position: absolute;
-        transform: translateY(-50%);
+        transform: translate(-50%, -50%);
+        min-width: @dls-slider-mark-min-size;
+        min-height: @dls-slider-mark-min-size;
+        border-radius: 50%;
+        .veui-transition(background-color, transform);
+        cursor: pointer;
+        pointer-events: all;
+
+        &-in-progress {
+          background-color: @dls-slider-track-progress-color;
+        }
+
+        &-out-progress {
+          background-color: @dls-slider-track-color;
+        }
+
+        &::before,
+        &::after {
+          content: "";
+          .absolute(_, 50%, 50%, _);
+          border-radius: 50%;
+          transform: translate(50%, 50%) scale(0);
+          .veui-transition(transform);
+        }
+
+        &::before {
+          background-color: @dls-slider-thumb-background-color-hover;
+          border-radius: 50%;
+        }
+
+        &::after {
+          min-width: @dls-slider-thumb-dot-min-size;
+          min-height: @dls-slider-thumb-dot-min-size;
+          background-color: @dls-slider-thumb-dot-color;
+        }
+
+        &:hover {
+          background-color: @dls-slider-track-progress-color-hover;
+
+          &::before,
+          &::after {
+            transform: translate(50%, 50%) scale(1);
+          }
+        }
       }
     }
   }
@@ -61,100 +127,185 @@
     // 利用 translateX 左偏移一半，实现 thumb 宽度自适应
     transform: translateX(-50%);
     cursor: pointer;
-    .veui-button-transition();
 
     &:focus {
       outline: none;
     }
 
-    &.focus-visible {
-      .veui-slider-thumb-default {
-        border-color: @veui-brand-color-1;
-        .veui-focus-shadow(fadeout(@veui-brand-color-5, 50%));
+    &-default {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      border: 1px solid transparent;
+      background-color: @dls-slider-thumb-background-color;
+      .veui-button-transition();
 
-        .veui-readonly & {
-          .veui-focus-shadow();
-        }
+      &::before {
+        content: "";
+        min-width: @dls-slider-thumb-dot-min-size;
+        min-height: @dls-slider-thumb-dot-min-size;
+        background-color: @dls-slider-thumb-dot-color;
+        border-radius: 50%;
       }
     }
 
-    &-default {
-      border: 2px solid @veui-brand-color;
-      border-radius: 100%;
-      background-color: #fff;
+    &:hover {
+      .veui-slider-thumb-default {
+        background-color: @dls-slider-thumb-background-color-hover;
+      }
+    }
+
+    &.focus-visible {
+      .veui-slider-thumb-default {
+        background-color: @dls-slider-thumb-background-color-focus;
+        .dls-focus-ring(
+          @dls-slider-thumb-border-color-focus,
+          @dls-slider-thumb-shadow-focus
+        );
+      }
+    }
+
+    &:active {
+      .veui-slider-thumb-default {
+        background-color: @dls-slider-thumb-background-color-active;
+      }
     }
   }
 
-  .slider-size(@slider-height, @progress-height: @default-progress-height, @thumb-height: @default-thumb-height, @mark-height: @default-mark-height) {
+  .slider-size(@slider-height, @progress-height, @progress-radius, @thumb-size, @mark-size, @dot-size) {
     .veui-slider {
       &-track {
         &-default {
           // Slider 高度靠 default track 撑起来，如果替换了 track slot 就高度自适应了
           height: @slider-height;
-          padding-top: (@slider-height - @progress-height) / 2;
 
           &-progress {
             height: @progress-height;
-            border-radius: @progress-height / 2;
+            border-radius: @progress-radius;
           }
 
           &-mark {
-            height: @mark-height;
+            .size(@mark-size);
+
+            &::before {
+              .size(@thumb-size);
+            }
+
+            &::after {
+              .size(@dot-size);
+            }
           }
         }
       }
 
       &-thumb {
         // track/thumb slot 高度变化需要调整 thumb 的位置
-        top: (@slider-height - @thumb-height) / 2;
+        top: (@slider-height - @thumb-size) / 2;
 
         &-default {
-          width: @thumb-height;
-          height: @thumb-height;
+          .size(@thumb-size);
+
+          &::before {
+            .size(@dot-size);
+          }
         }
       }
     }
   }
 
-  .slider-size(@veui-height-normal);
-
-  &[ui~="large"] {
-    .slider-size(@veui-height-large);
+  &[ui~="s"] {
+    .slider-size(
+      dls-line-height(@dls-line-height-m, @dls-slider-font-size-s),
+      @dls-slider-track-width-s,
+      @dls-slider-track-border-radius-s,
+      @dls-slider-thumb-size-s,
+      @dls-slider-mark-size-s,
+      @dls-slider-thumb-dot-size-s
+    );
   }
 
-  &[ui~="small"] {
-    .slider-size(@veui-height-small, 3px, 12px, 8px);
+  &[ui~="m"] {
+    .slider-size(
+      dls-line-height(@dls-line-height-m, @dls-slider-font-size-m),
+      @dls-slider-track-width-m,
+      @dls-slider-track-border-radius-m,
+      @dls-slider-thumb-size-m,
+      @dls-slider-mark-size-m,
+      @dls-slider-thumb-dot-size-m
+    );
   }
 
-  &[ui~="tiny"] {
-    .slider-size(@veui-height-tiny, 2px, 10px, 6px);
-  }
-
-  &[ui~="micro"] {
-    .slider-size(@veui-height-micro, 2px, 8px, 6px);
-  }
-
-  &.veui-disabled,
   &.veui-readonly {
     .veui-slider-track {
       &-default {
-        &-bg {
-          background-color: @veui-gray-color-6;
+        &-bg,
+        &-mark-out-progress {
+          background-color: @dls-slider-track-color-read-only;
         }
 
-        &-fg {
-          background-color: @veui-gray-color-4;
+        &-fg,
+        &-mark-in-progress {
+          background-color: @dls-slider-track-progress-color-read-only;
         }
 
+        &-bg,
+        &-fg,
         &-mark {
-          border-color: @veui-gray-color-6;
+          pointer-events: none;
         }
       }
     }
 
     .veui-slider-thumb {
+      cursor: default;
+
       &-default {
-        border-color: @veui-gray-color-4;
+        background-color: @dls-slider-thumb-background-color-read-only;
+
+        &:hover {
+          background-color: @dls-slider-thumb-background-color-read-only-hover;
+        }
+      }
+
+      &.focus-visible .veui-slider-thumb-default {
+        background-color: @dls-slider-thumb-background-color-read-only-focus;
+        .dls-focus-ring(
+          @dls-slider-thumb-border-color-read-only-focus,
+          @dls-slider-thumb-shadow-read-only-focus
+        );
+      }
+    }
+  }
+
+  &.veui-disabled {
+    color: @dls-slider-font-color-disabled;
+
+    .veui-slider-track {
+      &-default {
+        &-bg,
+        &-mark-out-progress {
+          background-color: @dls-slider-track-color-disabled;
+        }
+
+        &-fg,
+        &-mark-in-progress {
+          background-color: @dls-slider-track-progress-color-disabled;
+        }
+
+        &-bg,
+        &-fg,
+        &-mark {
+          pointer-events: none;
+        }
+      }
+    }
+
+    .veui-slider-thumb {
+      cursor: not-allowed;
+
+      &-default {
+        background-color: @dls-slider-thumb-background-color-disabled;
       }
     }
   }
