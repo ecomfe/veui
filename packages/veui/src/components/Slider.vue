@@ -14,7 +14,17 @@
     <slot name="track">
       <div class="veui-slider-track-default">
         <div class="veui-slider-track-default-wrapper">
-          <div class="veui-slider-track-default-bg veui-slider-track-default-progress"/>
+          <div
+            class="veui-slider-track-default-bg veui-slider-track-default-progress"
+          />
+          <div
+            class="veui-slider-track-default-sp veui-slider-track-default-progress"
+            :style="secondaryProgressStyle"
+          />
+          <div
+            class="veui-slider-track-default-fg veui-slider-track-default-progress"
+            :style="progressStyle"
+          />
           <div
             v-if="stepMarks"
             class="veui-slider-track-default-marks"
@@ -23,19 +33,19 @@
               v-for="mk in stepMarks"
               :key="mk"
               class="veui-slider-track-default-mark"
+              :class="{
+                [`veui-slider-track-default-mark-${
+                  progressRange[0] <= mk && mk <= progressRange[1]
+                    ? 'in-progress'
+                    : 'out-progress'
+                }`]: true
+              }"
               :style="{
                 left: `${mk * 100}%`
               }"
+              @click="handleMarkClick($event, mk)"
             />
           </div>
-          <div
-            class="veui-slider-track-default-sp veui-slider-track-default-progress"
-            :style="secondardProgressStyle"
-          />
-          <div
-            class="veui-slider-track-default-fg veui-slider-track-default-progress"
-            :style="progressStyle"
-          />
         </div>
       </div>
     </slot>
@@ -126,7 +136,6 @@ export default {
       type: [Number, Array],
       default: 0
     },
-
     min: {
       type: Number,
       default: 0
@@ -169,6 +178,15 @@ export default {
         'veui-disabled': this.realDisabled,
         'veui-readonly': this.realReadonly
       }
+    },
+    progressRange () {
+      if (this.localValues.length === 0) {
+        return [0, 0]
+      }
+      if (this.localValues.length === 1) {
+        return [0, this.ratios[0]]
+      }
+      return [this.ratios[0], this.ratios[1]]
     },
     ratios () {
       let { min, max } = this
@@ -217,14 +235,13 @@ export default {
     progressStyle () {
       return this.getProgressStyle(this.ratios)
     },
-
     localSecondaryProgress () {
       let { min, max } = this
       return []
         .concat(this.secondaryProgress)
         .map(progress => (progress - min) / (max - min))
     },
-    secondardProgressStyle () {
+    secondaryProgressStyle () {
       return this.getProgressStyle(this.localSecondaryProgress)
     },
     thumbAttrs () {
@@ -289,6 +306,14 @@ export default {
     }
   },
   methods: {
+    handleMarkClick (e, ratio) {
+      if (this.noInteractive || this.localValues.length > 1) {
+        return
+      }
+      e.stopPropagation()
+      this.updateValueByRatio(ratio)
+      this.$refs.thumb[0].focus()
+    },
     handleTrackClick ({ offsetX }) {
       if (this.noInteractive || this.localValues.length > 1) {
         return
@@ -326,7 +351,11 @@ export default {
         return
       }
       let { min, max } = this.localValueBoundary
-      let val = this.getAdjustedValue(this.localValues[index] + delta, min, max)
+      let val = this.getAdjustedValue(
+        this.localValues[index] + delta,
+        min,
+        max
+      )
       this.$set(this.localValues, index, val)
     },
     handleThumbFocus (index) {
