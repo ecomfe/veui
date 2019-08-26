@@ -7,7 +7,7 @@
       slot="target"
       ref="clickOpen"
       ui="primary"
-      @click="overlayVisible=!overlayVisible"
+      @click="overlayVisible = !overlayVisible"
     >
       <template v-if="overlayVisible">
         隐藏overlay
@@ -20,8 +20,9 @@
     <veui-overlay
       overlay-class="demo-overlay-box"
       target="clickOpen"
+      inline
       :open="overlayVisible"
-      :options="{attachment: 'top right', targetAttachment: 'top left'}"
+      :options="{ attachment: 'top right', targetAttachment: 'top left' }"
     >
       点击按钮展开的
     </veui-overlay>
@@ -46,7 +47,7 @@
           overlay-class="demo-overlay-box"
           target="overlay1"
           :open="true"
-          :options="{attachment: 'top right', targetAttachment: 'top left'}"
+          :options="{ attachment: 'top right', targetAttachment: 'top left' }"
         >
           提示信息
         </veui-overlay>
@@ -75,7 +76,10 @@
           overlay-class="demo-overlay-box"
           target="overlay2"
           :open="true"
-          :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
+          :options="{
+            attachment: 'bottom left',
+            targetAttachment: 'top left'
+          }"
         >
           提示信息
         </veui-overlay>
@@ -119,7 +123,7 @@
       overlay-class="demo-overlay-box"
       :target="vforTargetRef"
       :open="vforOpen"
-      :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
+      :options="{ attachment: 'bottom left', targetAttachment: 'top left' }"
     >
       年龄是{{ vforCurrentItem.age }}
     </veui-overlay>
@@ -133,7 +137,7 @@
       overlay-class="demo-overlay-box"
       :target="vnodeTarget"
       :open="true"
-      :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
+      :options="{ attachment: 'bottom left', targetAttachment: 'top left' }"
     >
       好的，一切正常。
     </veui-overlay>
@@ -141,7 +145,7 @@
       overlay-class="demo-overlay-box"
       :target="null"
       :open="true"
-      :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
+      :options="{ attachment: 'bottom left', targetAttachment: 'top left' }"
     >
       这个没有飞到左上角去，就说明有bug了。
     </veui-overlay>
@@ -153,7 +157,7 @@
       overlay-class="demo-overlay-box"
       :target="vnodeComponentTarget"
       :open="true"
-      :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
+      :options="{ attachment: 'bottom left', targetAttachment: 'top left' }"
     >
       组件vnode的overlay
     </veui-overlay>
@@ -225,10 +229,10 @@ export default {
 </script>
 
 <style lang="less">
-@import "~less-plugin-est/src/all.less";
+@import '~less-plugin-est/src/all.less';
 
 .demo-overlay-box {
-  box-shadow: 1px 1px 6px fadeOut(#000, 80%);
+  box-shadow: 1px 1px 6px fadeout(#000, 80%);
   padding: 10px 20px;
   background: #fff;
 }

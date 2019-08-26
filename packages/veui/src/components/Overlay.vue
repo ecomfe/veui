@@ -1,27 +1,3 @@
-<template>
-<div
-  class="veui-overlay"
-  aria-hidden="true"
->
-  <transition
-    name="veui-overlay"
-    @after-leave="$emit('afterclose')"
-    @after-enter="$emit('afteropen')"
-  >
-    <div
-      v-show="realOpen"
-      ref="box"
-      class="veui-overlay-box"
-      :class="realOverlayClass"
-      :ui="realUi"
-      :style="{ zIndex }"
-    >
-      <slot/>
-    </div>
-  </transition>
-</div>
-</template>
-
 <script>
 import Tether from 'tether'
 import { getNodes } from '../utils/context'
@@ -53,6 +29,7 @@ export default {
     position: String,
     overlayClass: getClassPropDef(),
     open: Boolean,
+    inline: Boolean,
     target: {
       type: process.env.VUE_ENV === 'server' ? true : [String, Object, Element],
       default: null
@@ -77,7 +54,7 @@ export default {
   },
   computed: {
     realOpen () {
-      return this.zIndex !== null && this.open
+      return (this.inline || this.zIndex !== null) && this.open
     },
     realOverlayClass () {
       return mergeClasses(
@@ -88,6 +65,9 @@ export default {
   },
   watch: {
     realOpen (val) {
+      if (this.inline) {
+        return
+      }
       this.toggleLocator(val)
       this.updateLocator()
       this.updateNode()
@@ -100,14 +80,23 @@ export default {
       }
     },
     target () {
+      if (this.inline) {
+        return
+      }
       this.findTargetNode()
     },
     targetNode () {
+      if (this.inline) {
+        return
+      }
       this.updateLocator()
       this.updateNode()
     }
   },
   created () {
+    if (this.inline) {
+      return
+    }
     // 初始化时，updateNode 依赖 created 在组件树中的执行顺序：
     // 先父后子
     // 而 mounted 执行顺序是先子后父，所以 updateNode 只能放在
@@ -115,6 +104,9 @@ export default {
     this.updateNode()
   },
   mounted () {
+    if (this.inline) {
+      return
+    }
     this.overlayBox = this.$refs.box
     document.body.appendChild(this.overlayBox)
 
@@ -126,6 +118,9 @@ export default {
     this.updateLocator()
   },
   updated () {
+    if (this.inline) {
+      return
+    }
     this.$nextTick(() => {
       if (this.realOpen) {
         this.relocate()
@@ -133,6 +128,9 @@ export default {
     })
   },
   destroyed () {
+    if (this.inline) {
+      return
+    }
     this.destroyLocator()
 
     let node = this.overlayNode
@@ -244,19 +242,53 @@ export default {
     },
 
     toggleLocator (enable) {
-      if (!this.tether) {
+      if (this.inline || !this.tether) {
         return
       }
       this.tether[enable ? 'enable' : 'disable']()
     },
 
     destroyLocator () {
-      if (!this.tether) {
+      if (this.inline || !this.tether) {
         return
       }
       this.tether.destroy()
       this.tether = null
     }
+  },
+  render () {
+    const box = (
+      <div
+        v-show={this.realOpen}
+        style={{ zIndex: this.zIndex }}
+        class={{
+          'veui-overlay-box': true,
+          ...this.realOverlayClass
+        }}
+        ref="box"
+        ui={this.realUi}
+      >
+        {this.$slots.default}
+      </div>
+    )
+
+    return this.inline ? (
+      box
+    ) : (
+      <div class="veui-overlay" aria-hidden="true">
+        <transition
+          name="veui-overlay"
+          onAfterLeave={() => {
+            this.$emit('afterclose')
+          }}
+          onAfterEnter={() => {
+            this.$emit('afteropen')
+          }}
+        >
+          {box}
+        </transition>
+      </div>
+    )
   }
 }
 </script>
