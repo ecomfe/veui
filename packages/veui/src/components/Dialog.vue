@@ -6,11 +6,13 @@
   :overlay-class="
     mergeOverlayClass({
       'veui-dialog-box': true,
-      'veui-dialog-box-mask': modal
+      'veui-dialog-box-mask': modal,
+      'veui-dialog-inline': inline
     })
   "
   :ui="realUi"
   autofocus
+  :inline="inline"
   :modal="modal"
   :priority="priority"
   @afterclose="$emit('afterclose')"
@@ -123,6 +125,7 @@ export default {
       type: Boolean,
       default: true
     },
+    inline: Boolean,
     outsideClosable: Boolean,
     draggable: {
       type: Boolean,
@@ -140,7 +143,7 @@ export default {
     attrs () {
       return {
         role: 'dialog',
-        'aria-modal': this.modal,
+        'aria-modal': !this.inline && this.modal,
         ...this.$attrs
       }
     }
