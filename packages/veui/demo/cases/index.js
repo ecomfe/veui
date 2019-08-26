@@ -46,6 +46,7 @@ import Collapse from './Collapse'
 import Popover from './Popover'
 import Badge from './Badge'
 import TimePicker from './TimePicker'
+import Embedded from './Embedded'
 
 export default [
   {
@@ -137,6 +138,11 @@ export default [
     name: 'Dropdown',
     component: Dropdown,
     disabled: false
+  },
+  {
+    path: '/embedded',
+    name: 'Embedded',
+    component: Embedded
   },
   {
     path: '/form',

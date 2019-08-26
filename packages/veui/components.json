@@ -92,6 +92,10 @@
     "path": "Dropdown.vue"
   },
   {
+    "name": "Embedded",
+    "path": "Embedded.vue"
+  },
+  {
     "name": "Field",
     "path": "Field.js"
   },
