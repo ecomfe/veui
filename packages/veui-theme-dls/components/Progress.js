@@ -1,25 +1,34 @@
 import 'veui-theme-one-icons/check'
+import 'veui-theme-one-icons/times'
+import 'veui-theme-one-icons/check-circle'
+import 'veui-theme-one-icons/times-circle'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      success: 'check'
+      success: 'check',
+      error: 'times',
+      successBar: 'check-circle',
+      errorBar: 'times-circle'
     },
     ui: {
       size: {
-        values: ['tiny'],
+        values: ['s', 'm'],
+        default: 'm',
         data: {
-          default: {
-            radius: 60
+          m: {
+            radius: 54,
+            strokeWidth: 8,
+            strokeLinecap: 'round'
           },
-          tiny: {
-            radius: 13
+          s: {
+            radius: 54,
+            strokeWidth: 4,
+            strokeLinecap: 'round'
           }
-        }
-      },
-      layout: {
-        values: ['fluid']
+        },
+        inherit: true
       }
     }
   },
