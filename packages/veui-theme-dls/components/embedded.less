@@ -1,0 +1,22 @@
+@import "../lib.less";
+
+.veui-embedded {
+  .veui-dialog-content-head {
+    &-close .veui-icon {
+      .dls-icon-size(@dls-dialog-close-icon-size);
+    }
+
+    [ui~="s"] & {
+      font-size: @dls-embedded-title-font-size-s;
+    }
+
+    [ui~="m"] & {
+      font-size: @dls-embedded-title-font-size-m;
+    }
+  }
+
+  .veui-dialog-content {
+    border: 1px solid @dls-embedded-border-color;
+    box-shadow: @dls-embedded-shadow;
+  }
+}
