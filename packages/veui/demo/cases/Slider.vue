@@ -7,7 +7,6 @@
     <veui-slider
       v-model="value1"
       readonly
-      ui="small"
     >
       <div
         slot="tip"
@@ -19,42 +18,35 @@
     <veui-slider
       v-model="value1"
       disabled
-      ui="tiny"
+      ui="s"
     >
       <span slot="tip-label">
         {{ value1.toFixed(2) }}
       </span>
     </veui-slider>
-    <div class="desc">
-      Range: 0~1, Value: {{ value1 }}
-    </div>
+    <div class="desc">Range: 0~1, Value: {{ value1 }}</div>
   </section>
 
   <section>
     <veui-slider
       v-model="value2"
-      ui="micro"
+      ui="s"
       :min="10"
       :max="100"
       :step="7"
       mark
     >
-      <span slot="tip-label">
-        {{ value2 }}%
-      </span>
+      <span slot="tip-label"> {{ value2 }}% </span>
     </veui-slider>
     <veui-slider
       v-model="value2"
-      ui="micro"
       disabled
       :min="10"
       :max="100"
       :step="7"
       mark
     />
-    <div class="desc">
-      Range: 0~100, Step: 8, Value: {{ value2 }}
-    </div>
+    <div class="desc">Range: 10~100, Step: 7, Value: {{ value2 }}</div>
   </section>
 
   <section>
@@ -63,9 +55,7 @@
       :min="0"
       :max="100"
     />
-    <div class="desc">
-      Range: 0~100, Value: {{ value4 }}
-    </div>
+    <div class="desc">Range: 0~100, Value: {{ value4 }}</div>
   </section>
 
   <section>
@@ -80,7 +70,7 @@
       <div
         slot="track"
         style="width: 100%; height: 20px;"
-        :style="{background: colorGradient}"
+        :style="{ background: colorGradient }"
       />
       <div
         slot="thumb"
@@ -106,21 +96,25 @@
           v-show="open"
           class="custom-tip"
           :style="{
-            left: `${(activeIndex >= 0 ? parseColorHue(value3[activeIndex]) : 0) / 360 * 100}%`,
+            left: `${((activeIndex >= 0
+              ? parseColorHue(value3[activeIndex])
+              : 0) /
+              360) *
+              100}%`,
             backgroundColor: value3[activeIndex]
           }"
         />
       </template>
     </veui-slider>
     <div class="desc">
-      Range: 0~255, Step: 1, Value: <br> [
+      Range: 0~255, Step: 1, Value: <br>
+      [
       <span
         v-for="(val, index) in value3"
         :key="`colorValue${index}`"
       >
         "<span :style="{ color: val }">
-          {{ val }}
-        </span>"
+          {{ val }} </span>"
         <span v-if="index < value3.length - 1">
           ,
         </span>
@@ -186,7 +180,10 @@ export default {
   },
   methods: {
     parseColorHue (val) {
-      return parseInt(val.substring(val.indexOf('(') + 1, val.indexOf(',')), 10)
+      return parseInt(
+        val.substring(val.indexOf('(') + 1, val.indexOf(',')),
+        10
+      )
     },
     formatColorHue (val) {
       return `hsl(${val}, 100%, 50%)`
@@ -213,7 +210,7 @@ section {
   margin: 10px 0;
   background: repeating-linear-gradient(
     135deg,
-    #fff 0px,
+    #fff 0,
     #fff 10px,
     #f7f7f7 11px,
     #f7f7f7 12px,
