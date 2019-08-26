@@ -1,115 +1,112 @@
 @import "../lib.less";
 
 .veui-progress {
-  @height: @veui-height-normal;
-  @thickness: 4px;
-  .clearfix();
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   position: relative;
-  color: @veui-text-color-weak;
+  color: @dls-progress-font-color;
   .veui-transition(color);
 
-  &[ui~="fluid"] {
-    width: 100%;
+  &-desc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
   }
 
   &-bar {
-    .centered-line(@height);
+    .veui-progress-desc {
+      margin-left: @dls-progress-track-spacing-bar;
+      order: 1;
+    }
 
     .veui-progress-rail {
-      .size(250px, @thickness);
       overflow: hidden;
-      float: left;
-      margin-top: (@height - @thickness) / 2;
-      background-color: @veui-gray-color-5;
+      order: 0;
+      background-color: @dls-progress-track-color;
     }
 
-    @desc-width: 60px;
+    &[ui~="s"] {
+      height: dls-line-height(@dls-line-height-m, @dls-progress-font-size-s);
+      font-size: @dls-progress-font-size-s;
 
-    &[ui~="fluid"] .veui-progress-rail {
-      width: 100%;
+      .veui-progress-rail {
+        .size(@dls-progress-width-bar-s, @dls-progress-track-width-s);
+      }
+
+      .veui-progress-rail,
+      .veui-progress-meter {
+        border-radius: @dls-progress-border-radius-s;
+      }
     }
 
-    &[ui~="fluid"] .veui-progress-desc + .veui-progress-rail {
-      width: ~"calc(100% - @{desc-width})";
+    &[ui~="m"] {
+      height: dls-line-height(@dls-line-height-m, @dls-progress-font-size-m);
+      font-size: @dls-progress-font-size-m;
+
+      .veui-progress-rail {
+        .size(@dls-progress-width-bar-m, @dls-progress-track-width-m);
+      }
+
+      .veui-progress-rail,
+      .veui-progress-meter {
+        border-radius: @dls-progress-border-radius-m;
+      }
     }
 
     .veui-progress-meter {
       .size(100%);
       margin-left: -100%;
-      background-color: @veui-gray-color-2;
+      background-color: @dls-progress-indicator-color;
       .veui-transition(transform, background-color);
     }
   }
 
   &-circular {
-    height: auto;
-
     .veui-progress-circle {
       display: block;
       transform: rotate(-90deg);
     }
 
     .veui-progress-rail {
-      stroke: @veui-gray-color-5;
+      stroke: @dls-progress-track-color;
     }
 
     .veui-progress-meter {
-      stroke: @veui-gray-color-2;
-      .veui-transition(stroke-dashoffset);
+      stroke: @dls-progress-indicator-color;
+      .veui-transition(stroke, stroke-dashoffset);
     }
-  }
-
-  &-desc {
-    float: right;
-    padding-left: 10px;
-    white-space: nowrap;
-  }
-
-  &[ui~="tiny"] &-desc-text {
-    display: none;
-  }
-
-  &[ui~="tiny"] .veui-icon {
-    font-size: 20px;
   }
 
   &-circular &-desc {
-    .veui-position-center();
-    .centered-line(20px);
-    padding-left: 0;
-    font-size: @veui-font-size-large;
+    .absolute(0);
+    font-size: @dls-progress-font-size-circular;
 
-    .veui-icon {
-      vertical-align: top;
-      margin-top: ~"calc(10px - 0.5em)";
-    }
-
-    .veui-icon + .veui-progress-desc-text {
-      margin-left: 5px;
+    .veui-progress-status-icon {
+      .dls-icon-size(@dls-progress-icon-size-circular);
     }
   }
 
   &-status {
-    &-complete {
-      color: @veui-text-color-normal;
-    }
-
     &-success {
-      color: @veui-success-color;
-
       .veui-progress-meter {
-        background-color: @veui-success-color;
-        stroke: @veui-success-color;
+        background-color: @dls-progress-indicator-color-success;
+        stroke: @dls-progress-indicator-color-success;
+      }
+
+      .veui-progress-status-icon {
+        color: @dls-progress-icon-color-success;
       }
     }
 
-    &-alert {
-      color: @veui-alert-color;
-
+    &-error {
       .veui-progress-meter {
-        background-color: @veui-alert-color;
-        stroke: @veui-alert-color;
+        background-color: @dls-progress-indicator-color-error;
+        stroke: @dls-progress-indicator-color-error;
+      }
+
+      .veui-progress-status-icon {
+        color: @dls-progress-icon-color-error;
       }
     }
   }

@@ -15,12 +15,11 @@
   >
     <slot v-bind="{ percent, value: realValue, status }">
       <veui-icon
-        v-if="type === 'circular' && localStatus === 'success'"
-        :name="icons.success"
+        v-if="localStatus"
+        class="veui-progress-status-icon"
+        :name="icons[type === 'bar' ? `${localStatus}Bar` : localStatus]"
       />
-      <span class="veui-progress-desc-text">
-        {{ valueText }}
-      </span>
+      <template v-else>{{ valueText }}</template>
     </slot>
   </div>
   <div
@@ -45,17 +44,17 @@
       class="veui-progress-rail"
       :cx="halfWidth"
       :cy="halfWidth"
-      :r="getLength(radius)"
+      :r="getLength(realRadius)"
       fill="none"
-      :stroke-width="getLength(stroke)"
+      :stroke-width="getLength(realStroke)"
     />
     <circle
       class="veui-progress-meter"
       :cx="halfWidth"
       :cy="halfWidth"
-      :r="getLength(radius)"
+      :r="getLength(realRadius)"
       fill="none"
-      :stroke-width="getLength(stroke)"
+      :stroke-width="getLength(realStroke)"
       :stroke-dasharray="getLength(circumference)"
       :stroke-dashoffset="getLength(circumference * (1 - ratio))"
       :stroke-linecap="strokeLinecap"
@@ -86,6 +85,8 @@ export default {
       type: String,
       default: 'bar'
     },
+    radius: Number,
+    strokeWidth: Number,
     indeterminate: Boolean,
     desc: Boolean,
     value: {
@@ -180,26 +181,26 @@ export default {
     percent () {
       return this.ratio * 100
     },
-    circumference () {
-      return 2 * Math.PI * this.radius
+    realRadius () {
+      return this.radius || this.uiData.radius || RADIUS_DEFAULT
     },
-    radius () {
-      return this.uiData.radius || RADIUS_DEFAULT
-    },
-    stroke () {
-      return this.uiData.stroke || STROKE_DEFAULT
+    realStroke () {
+      return this.strokeWidth || this.uiData.strokeWidth || STROKE_DEFAULT
     },
     halfStroke () {
-      return this.stroke / 2
+      return this.realStroke / 2
     },
     strokeLinecap () {
       return this.uiData.strokeLinecap || STROKE_LINECAP
+    },
+    circumference () {
+      return 2 * Math.PI * this.realRadius
     },
     width () {
       return this.halfWidth * 2
     },
     halfWidth () {
-      return this.getLength(this.radius + this.halfStroke)
+      return this.getLength(this.realRadius + this.halfStroke)
     },
     dm () {
       return (
@@ -209,7 +210,7 @@ export default {
     valueText () {
       if (this.localStatus === 'success') {
         return this.t('done')
-      } else if (this.localStatus === 'alert') {
+      } else if (this.localStatus === 'error') {
         return this.t('error')
       } else {
         return this.percent.toFixed(this.decimalPlace) + '%'

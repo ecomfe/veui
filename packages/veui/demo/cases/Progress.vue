@@ -3,7 +3,8 @@
   <h1><code>&lt;veui-progress&gt;</code></h1>
   <section>
     <p>
-      Progress <input
+      Progress
+      <input
         v-model="progress"
         type="number"
         step="0.01"
@@ -12,7 +13,7 @@
       >
     </p>
     <p>
-      <veui-button @click="status = 'alert'">
+      <veui-button @click="status = 'error'">
         Trigger Error
       </veui-button>
       <veui-button @click="status = null">
@@ -31,10 +32,10 @@
     />
   </section>
   <section>
-    <h2>线性进度条（自适应宽度）</h2>
+    <h2>线性进度条（小尺寸）</h2>
     <veui-progress
       :value="Number(progress)"
-      ui="fluid"
+      ui="s"
       desc
       :autosucceed="200"
       :status.sync="status"
@@ -52,9 +53,9 @@
     />
   </section>
   <section>
-    <h2>小型环形进度条</h2>
+    <h2>环形进度条（小尺寸）</h2>
     <veui-progress
-      ui="tiny"
+      ui="s"
       type="circular"
       :value="Number(progress)"
       desc
