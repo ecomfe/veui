@@ -180,10 +180,7 @@ export default {
   },
   methods: {
     parseColorHue (val) {
-      return parseInt(
-        val.substring(val.indexOf('(') + 1, val.indexOf(',')),
-        10
-      )
+      return parseInt(val.substring(val.indexOf('(') + 1, val.indexOf(',')), 10)
     },
     formatColorHue (val) {
       return `hsl(${val}, 100%, 50%)`
