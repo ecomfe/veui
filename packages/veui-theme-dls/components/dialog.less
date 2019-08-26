@@ -14,6 +14,10 @@
     }
   }
 
+  &-inline {
+    position: static;
+  }
+
   &-draggable {
     cursor: all-scroll;
   }
@@ -123,6 +127,17 @@
     background-color: @dls-dialog-backdrop-color;
     overflow: hidden;
     transform: none;
+  }
+
+  &-inline &-content {
+    position: static;
+    width: 100%;
+    transform: none;
+  }
+
+  &-inline&-box-mask {
+    overflow: visible;
+    background-color: transparent;
   }
 
   .veui-overlay-enter &-content,
