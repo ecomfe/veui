@@ -99,31 +99,9 @@
     &:extend(._veui-dropdown-overlay all);
     overflow-y: auto;
     background-color: @dls-option-background-color;
-
-    .veui-searchbox-suggestion-item {
-      font-size: @dls-option-font-size-m;
-      height: @dls-option-height-m;
-      display: flex;
-      align-items: center;
-    }
-
-    &[ui~="xs"] .veui-searchbox-suggestion-item {
-      font-size: @dls-option-font-size-xs;
-      height: @dls-option-height-xs;
-    }
-
-    &[ui~="s"] .veui-searchbox-suggestion-item {
-      font-size: @dls-option-font-size-s;
-      height: @dls-option-height-s;
-    }
-
-    &[ui~="l"] .veui-searchbox-suggestion-item {
-      font-size: @dls-option-font-size-l;
-      height: @dls-option-height-l;
-    }
   }
 
-  &-suggestion-item {
+  .veui-option {
     &:extend(._veui-dropdown-option all);
   }
 
