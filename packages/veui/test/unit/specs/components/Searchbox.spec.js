@@ -17,6 +17,22 @@ let datasource = [
   'pineapple'
 ]
 
+let cars = [
+  {
+    label: 'toyota',
+    options: [
+      {
+        label: '凯美瑞',
+        value: 'camry'
+      },
+      {
+        label: '卡罗拉',
+        value: 'carolla'
+      }
+    ]
+  }
+]
+
 describe('components/Searchbox', () => {
   it('should handle selected prop with `null` value.', done => {
     let wrapper = mount({
@@ -170,6 +186,7 @@ describe('components/Searchbox', () => {
     input.trigger('focus')
     await vm.$nextTick()
     expect(suggestWrapper.element.style.display).to.equal('none')
+    wrapper.destroy()
   })
 
   it('should support other props correctly.', async () => {
@@ -273,9 +290,7 @@ describe('components/Searchbox', () => {
     input.element.value = 'box'
     input.trigger('input')
 
-    wrapper
-      .find('.test-overlay-class .veui-searchbox-suggestion-item')
-      .trigger('click')
+    wrapper.find('.test-overlay-class .veui-option').trigger('click')
 
     await wrapper.vm.$nextTick()
 
@@ -294,9 +309,10 @@ describe('components/Searchbox', () => {
         methods: {
           searchHandler (val) {
             expect(val).to.equal('box')
-
-            wrapper.destroy()
-            done()
+            this.$nextTick(() => {
+              wrapper.destroy()
+              done()
+            })
           }
         },
         template: `<veui-searchbox @search="searchHandler"/>`
@@ -406,10 +422,113 @@ describe('components/Searchbox', () => {
     wrapper.find('input').trigger('focus')
     await wrapper.vm.$nextTick()
 
-    let items = wrapper.findAll('.veui-searchbox-suggestion-item')
+    let items = wrapper.findAll('.veui-option')
     expect(items.length).to.equal(4)
     expect(items.at(1).text()).to.equal('22')
 
+    wrapper.destroy()
+  })
+
+  it('should render group-label slot and option-label slot correctly', () => {
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            suggestions: cars
+          }
+        },
+        components: {
+          'veui-searchbox': Searchbox
+        },
+        template: `
+          <veui-searchbox
+            :suggestions="suggestions"
+            suggestTrigger="focus"
+            overlayClass="test-overlay-class"
+          >
+            <template slot="group-label" slot-scope="suggestion">
+              <span class="custom-group-label-slot">{{ suggestion.label }}</span>
+            </template>
+            <template slot="option-label" slot-scope="suggestion">
+              <span class="custom-option-label-slot">{{ suggestion.value }}</span>
+            </template>
+          </veui-searchbox>
+        `
+      },
+      {
+        sync: false
+      }
+    )
+    expect(wrapper.find('.custom-group-label-slot').text()).to.equal('toyota')
+    expect(wrapper.findAll('.custom-option-label-slot').length).to.equal(2)
+
+    wrapper.destroy()
+  })
+
+  it('should respond to keyboard event correctly', async () => {
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            counter: 0,
+            suggestions: cars
+          }
+        },
+        components: {
+          'veui-searchbox': Searchbox
+        },
+        methods: {
+          handleSearch (val) {
+            this.counter++
+          }
+        },
+        template: `
+          <veui-searchbox
+            :suggestions="suggestions"
+            suggestTrigger="focus"
+            replace-on-select
+            overlayClass="test-overlay-class"
+            @search="handleSearch"
+          >
+            <template slot="group-label" slot-scope="suggestion">
+              <span class="custom-group-label-slot">{{ suggestion.label }}</span>
+            </template>
+            <template slot="option-label" slot-scope="suggestion">
+              <span class="custom-option-label-slot">{{ suggestion.label }}</span>
+            </template>
+          </veui-searchbox>
+        `
+      },
+      {
+        sync: false
+      }
+    )
+    let inputWrapper = wrapper.find('.veui-input-input')
+    inputWrapper.element.focus()
+    expect(wrapper.findAll('.focus-visible').length).to.equal(0)
+    inputWrapper.trigger('keydown', { key: 'Down' })
+    expect(wrapper.findAll('.focus-visible').length).to.equal(1)
+    expect(wrapper.find('.focus-visible').text()).to.equal('凯美瑞')
+    inputWrapper.trigger('keydown', { key: 'ArrowDown' })
+    expect(wrapper.find('.focus-visible').text()).to.equal('卡罗拉')
+    inputWrapper.trigger('keydown', { key: 'Up' })
+    expect(wrapper.find('.focus-visible').text()).to.equal('凯美瑞')
+    inputWrapper.trigger('keydown', { key: 'ArrowUp' })
+    expect(wrapper.find('.focus-visible').text()).to.equal('卡罗拉')
+    inputWrapper.trigger('keydown', { key: 'Tab' })
+    expect(wrapper.find('.test-overlay-class').element.style.display).to.equal(
+      'none'
+    )
+    inputWrapper.element.focus()
+    inputWrapper.trigger('keydown', { key: 'Enter' })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.counter).to.equal(1)
+    inputWrapper.trigger('keydown', { key: 'Down' })
+    inputWrapper.trigger('keydown', { key: 'Enter' })
+    expect(wrapper.vm.counter).to.equal(1)
+    expect(wrapper.find('.test-overlay-class').element.style.display).to.equal(
+      'none'
+    )
     wrapper.destroy()
   })
 })
