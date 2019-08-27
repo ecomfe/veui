@@ -13,7 +13,7 @@
   <veui-input
     ref="input"
     v-model="localValue"
-    v-outside:input,box="disallowSuggest"
+    v-outside:input,box="closeSuggestions"
     :name="realName"
     :readonly="realReadonly"
     :disabled="realDisabled"
@@ -22,8 +22,8 @@
     role="searchbox"
     :aria-haspopup="inputPopup"
     :aria-owns="inputPopup ? dropdownId : null"
-    @keypress.enter.prevent="search"
     @focus="handleInputFocus"
+    @keydown="handleSuggestionKeydown"
   >
     <div
       slot="after"
@@ -81,19 +81,45 @@
         :suggestions="realSuggestions"
         :select="selectSuggestion"
       >
-        <div
-          v-for="(suggestion, index) in realSuggestions"
-          :key="index"
-          class="veui-searchbox-suggestion-item"
-          @click="selectSuggestion(suggestion)"
+        <veui-option-group
+          ref="options"
+          :ui="realUi"
+          :options="realSuggestions"
+          class="veui-searchbox-option-group"
         >
-          <slot
-            name="suggestion"
-            v-bind="suggestion"
+          <template
+            v-if="$scopedSlots['group-label']"
+            slot="label"
+            slot-scope="group"
           >
-            {{ suggestion.label }}
-          </slot>
-        </div>
+            <slot
+              name="group-label"
+              v-bind="group"
+            />
+          </template>
+          <template
+            v-if="$scopedSlots['suggestion']"
+            slot="option"
+            slot-scope="option"
+          >
+            <slot
+              name="suggestion"
+              v-bind="option"
+            >
+              {{ option.label }}
+            </slot>
+          </template>
+          <template
+            v-if="$scopedSlots['option-label']"
+            slot="option-label"
+            slot-scope="option"
+          >
+            <slot
+              name="option-label"
+              v-bind="option"
+            />
+          </template>
+        </veui-option-group>
       </slot>
       <slot name="suggestions-after"/>
     </div>
@@ -110,6 +136,9 @@ import Input from './Input'
 import Icon from './Icon'
 import Overlay from './Overlay'
 import Button from './Button'
+import OptionGroup from './OptionGroup'
+import focusable from '../mixins/focusable'
+import { createKeySelect } from '../mixins/key-select'
 import { pick, without, includes } from 'lodash'
 
 const SHARED_PROPS = [
@@ -122,15 +151,19 @@ const SHARED_PROPS = [
   'clearable'
 ]
 
+const keySelect = createKeySelect({ focus: false })
+
 export default {
   name: 'veui-searchbox',
+  uiTypes: ['select'],
   components: {
     'veui-input': Input,
     'veui-icon': Icon,
     'veui-overlay': Overlay,
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-option-group': OptionGroup
   },
-  mixins: [ui, input, dropdown, i18n],
+  mixins: [ui, input, dropdown, keySelect, focusable, i18n],
   props: {
     suggestions: {
       type: Array,
@@ -237,7 +270,7 @@ export default {
   methods: {
     handleInput () {
       if (this.hasFocusSuggestMode || this.hasInputSuggestMode) {
-        this.allowSuggest()
+        this.openSuggestions()
       }
     },
     handleClickBox () {
@@ -253,7 +286,7 @@ export default {
     },
     handleInputFocus () {
       if (this.hasFocusSuggestMode && !this.realReadonly) {
-        this.allowSuggest()
+        this.openSuggestions()
         this.$emit('suggest', this.localValue)
       }
     },
@@ -264,19 +297,19 @@ export default {
       this.focus()
       this.$emit('select', suggestion)
       // 选择 select 的情况会有可能
-      // 触发 localValue 改变 => watcher => handleInput => allowSuggest
+      // 触发 localValue 改变 => watcher => handleInput => openSuggestions
       // 所以在下一个 nextTick 强制隐藏 suggest
       this.$nextTick(() => {
-        this.disallowSuggest()
+        this.closeSuggestions()
       })
     },
     search ($event) {
       this.$emit('search', this.localValue, $event)
       if (this.hasSubmitSuggestMode) {
-        this.allowSuggest()
+        this.openSuggestions()
         this.$emit('suggest', this.localValue)
       } else if (this.hasInputSuggestMode || this.hasFocusSuggestMode) {
-        this.disallowSuggest()
+        this.closeSuggestions()
       }
     },
     activate () {
@@ -286,13 +319,72 @@ export default {
       }
       this.focus()
     },
-    disallowSuggest () {
-      this.expanded = false
-      this.localSuggestions = []
+    handleSuggestionKeydown (e) {
+      let passive = false
+      switch (e.key) {
+        case 'Up':
+        case 'ArrowUp':
+        case 'Down':
+        case 'ArrowDown':
+          this.openSuggestions()
+          this.handleKeydown(e)
+          this.getCurrentActiveElement()
+          break
+        case 'Enter':
+          if (!this.expanded) {
+            this.search(e)
+            return
+          }
+          let elem = this.getCurrentActiveElement()
+          if (elem) {
+            elem.click()
+          }
+          this.closeSuggestions()
+          break
+        case 'Tab':
+          passive = true
+          this.closeSuggestions()
+          break
+        default:
+          passive = true
+      }
+      if (!passive) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
     },
-    allowSuggest () {
+    handleSelect (value) {
+      // find suggestion object recursively according to selected value
+      let suggestion = findSuggestion(this.realSuggestions, value)
+      this.selectSuggestion(suggestion)
+    },
+    closeSuggestions () {
+      this.expanded = false
+    },
+    openSuggestions () {
       this.expanded = true
     }
   }
+}
+
+function findSuggestion (suggestions, val) {
+  if (!suggestions) {
+    return null
+  }
+  let result = null
+  suggestions.some(suggestion => {
+    if (!suggestion.options) {
+      if (suggestion.value === val) {
+        result = suggestion
+        return true
+      }
+    }
+    let inner = findSuggestion(suggestion.options, val)
+    if (inner !== null) {
+      result = inner
+      return true
+    }
+  })
+  return result
 }
 </script>

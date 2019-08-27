@@ -170,18 +170,18 @@
         :name="name"
         :placeholder="placeholder"
         :suggestions="suggestions1"
-        suggest-trigger="submit"
+        suggest-trigger="focus"
         @suggest="asyncHandleSuggest('1', $event)"
         @search="log($event)"
         @select="value2 = $event.label"
       />
       <veui-searchbox
-        ui="alt"
         :name="name"
         :placeholder="placeholder"
-        :suggestions="suggestions6"
-        @input="handleSuggest('6', $event)"
+        :suggestions="suggestions8"
+        suggest-trigger="focus"
         @search="log($event)"
+        @suggest="suggestHandler"
       >
         <template
           slot="suggestion"
@@ -194,28 +194,28 @@
       <veui-searchbox
         :name="name"
         :placeholder="placeholder"
-        :suggestions="suggestions7"
+        :suggestions="suggestions9"
+        replace-on-select
         @input="handleSuggest('7', $event)"
         @search="log($event)"
       >
+        <template slot="suggestions-before">
+          <h3>header</h3>
+        </template>
         <template
-          slot="suggestions"
-          slot-scope="props"
+          slot="group-label"
+          slot-scope="{ label }"
         >
-          <div>
-            <h3>header</h3>
-            <template v-for="(suggestion, index) in props.suggestions">
-              <div
-                :key="index"
-                class="veui-searchbox-suggestion-item"
-                @click="props.select(suggestion)"
-              >
-                <span>{{ suggestion.value }}</span>
-                <icon name="eye"/>
-              </div>
-            </template>
-            <h3>ender</h3>
-          </div>
+          1👉 {{ label }}
+        </template>
+        <template
+          slot="option-label"
+          slot-scope="{ label }"
+        >
+          2👉 {{ label }}
+        </template>
+        <template slot="suggestions-after">
+          <h3>ender</h3>
         </template>
       </veui-searchbox>
     </p>
@@ -225,6 +225,7 @@
 
 <script>
 import bus from '../bus'
+import { includes } from 'lodash'
 import { Searchbox, Icon } from 'veui'
 
 export default {
@@ -249,6 +250,29 @@ export default {
       suggestions5: [],
       suggestions6: [],
       suggestions7: [],
+      suggestions8: [
+        {
+          value: '百度',
+          label: '百度'
+        },
+        {
+          value: '百度贴吧',
+          label: '百度贴吧'
+        },
+        {
+          value: '百度MVP',
+          label: '百度MVP'
+        }
+      ],
+      suggestions9: [
+        {
+          label: '汽车',
+          options: [
+            { label: 'camry', value: 'camry' },
+            { label: 'carola', value: 'carola' }
+          ]
+        }
+      ],
       suggestionsis: []
     }
   },
@@ -317,6 +341,14 @@ export default {
     },
     log (item) {
       bus.$emit('log', item)
+    },
+    suggestHandler (value) {
+      this.suggestions8 = this.suggestions8.map(item => {
+        item.hidden = !(
+          includes(item.label, value) || includes(item.value, value)
+        )
+        return item
+      })
     }
   }
 }
