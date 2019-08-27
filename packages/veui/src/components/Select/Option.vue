@@ -20,17 +20,11 @@
         {{ label }}
       </slot>
     </span>
-    <veui-icon
-      v-if="selected"
-      class="veui-option-checkmark"
-      :name="icons.checked"
-    />
   </slot>
 </button>
 </template>
 
 <script>
-import Icon from '../Icon'
 import ui from '../../mixins/ui'
 import menu from '../../mixins/menu'
 import select from '../../mixins/select'
@@ -39,9 +33,6 @@ import { isType } from '../../utils/helper'
 
 export default {
   name: 'veui-option',
-  components: {
-    'veui-icon': Icon
-  },
   mixins: [ui, menu, select],
   props: {
     label: {

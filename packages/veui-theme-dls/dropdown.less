@@ -6,6 +6,19 @@
   .veui-transition(transform);
   transform-origin: 50% 0;
   box-shadow: @dls-option-dropdown-shadow;
+  max-height: @dls-option-dropdown-max-height-m;
+
+  &[ui~="xs"] {
+    max-height: @dls-option-dropdown-max-height-xs;
+  }
+
+  &[ui~="s"] {
+    max-height: @dls-option-dropdown-max-height-s;
+  }
+
+  &[ui~="l"] {
+    max-height: @dls-option-dropdown-max-height-l;
+  }
 
   .veui-overlay-enter &,
   .veui-overlay-leave-to & {
@@ -109,7 +122,10 @@
   .veui-button-transition();
   .ellipsis();
   display: flex;
+  align-items: center;
   width: 100%;
+  height: @dls-option-height-m;
+  max-width: @dls-option-max-width-m;
   background-color: @dls-option-background-color;
   border: none;
   .padding(_, @dls-option-padding-m);
@@ -118,40 +134,64 @@
   outline: none;
   cursor: pointer;
   font-size: @dls-option-font-size-m;
-  height: @dls-option-height-m;
-  align-items: center;
 
   &[ui~="xs"] {
     font-size: @dls-option-font-size-xs;
     height: @dls-option-height-xs;
+    max-width: @dls-option-max-width-xs;
+    .padding(_, @dls-option-padding-xs);
   }
 
   &[ui~="s"] {
     font-size: @dls-option-font-size-s;
     height: @dls-option-height-s;
+    max-width: @dls-option-max-width-s;
+    .padding(_, @dls-option-padding-s);
   }
 
   &[ui~="l"] {
     font-size: @dls-option-font-size-l;
     height: @dls-option-height-l;
+    max-width: @dls-option-max-width-l;
+    .padding(_, @dls-option-padding-l);
   }
 
-  &.focus-visible,
   &:hover {
+    color: @dls-option-font-color-hover;
     background-color: @dls-option-background-color-hover;
   }
 
   &:active {
+    color: @dls-option-font-color-active;
     background-color: @dls-option-background-color-active;
+  }
+
+  &.focus-visible {
+    color: @dls-option-font-color-focus;
+    background-color: @dls-option-background-color-focus;
   }
 
   &-selected {
     color: @dls-option-font-color-selected;
     font-weight: @dls-option-font-weight-selected;
+
+    &:hover {
+      color: @dls-option-font-color-selected-hover;
+    }
+
+    &:active {
+      color: @dls-option-font-color-selected-active;
+    }
+
+    &.focus-visible {
+      color: @dls-option-font-color-selected-focus;
+    }
   }
 
-  &-disabled {
-    color: @dls-option-font-color-disabled;
-    cursor: not-allowed;
+  &-disabled,
+  &-group-label-disabled {
+    cursor: not-allowed !important;
+    color: @dls-option-font-color-disabled !important;
+    background-color: @dls-option-background-color !important;
   }
 }

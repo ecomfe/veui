@@ -3,12 +3,10 @@ import config from 'veui/managers/config'
 
 config.defaults(
   {
-    icons: {
-      checked: 'check'
-    },
     ui: {
-      style: {
-        values: ['checkmark']
+      size: {
+        values: ['xs', 's', 'm', 'l'],
+        inherit: true
       }
     }
   },

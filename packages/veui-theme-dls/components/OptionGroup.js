@@ -5,6 +5,12 @@ config.defaults(
   {
     icons: {
       expandable: 'chevron-right'
+    },
+    ui: {
+      size: {
+        values: ['xs', 's', 'm', 'l'],
+        inherit: true
+      }
     }
   },
   'optiongroup'
