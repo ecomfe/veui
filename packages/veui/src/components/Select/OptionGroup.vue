@@ -1,4 +1,3 @@
-
 <script>
 import Option from './Option'
 import Overlay from '../Overlay'
@@ -25,6 +24,7 @@ const OptionGroup = {
   props: {
     label: String,
     options: Array,
+    disabled: Boolean,
     position: {
       type: String,
       default: 'inline',
@@ -135,7 +135,9 @@ const OptionGroup = {
             options={option.options}
             position={option.position}
             v-show={!option.hidden}
+            disabled={option.disabled}
             key={i}
+            ui={this.realUi}
             scopedSlots={{
               label: this.$scopedSlots.label
                 ? group => this.$scopedSlots.label(group) || group.label
@@ -150,7 +152,7 @@ const OptionGroup = {
             label={option.label}
             value={option.value}
             hidden={option.hidden}
-            disabled={option.disabled}
+            disabled={this.disabled || option.disabled}
             key={i}
           >
             {this.$scopedSlots.option
@@ -173,7 +175,8 @@ const OptionGroup = {
         class={{
           'veui-option-group': true,
           'veui-option-group-unlabelled': !this.label,
-          'veui-option-group-expanded': this.expanded
+          'veui-option-group-expanded': this.expanded,
+          'veui-option-group-popout': this.canPopOut
         }}
         ui={this.realUi}
         ref="label"
@@ -183,7 +186,8 @@ const OptionGroup = {
             ref="button"
             class={{
               'veui-option-group-label': true,
-              'veui-option-group-button': this.canPopOut
+              'veui-option-group-button': this.canPopOut,
+              'veui-option-group-label-disabled': this.disabled
             }}
             aria-haspopup={this.canPopOut ? this.popupRole : null}
             aria-owns={this.canPopOut ? this.popupId : null}
@@ -192,7 +196,9 @@ const OptionGroup = {
               ? {
                 on: {
                   click: () => {
-                    this.expanded = true
+                    if (!this.disabled) {
+                      this.expanded = true
+                    }
                   },
                   keydown: e => {
                     if (e.key === 'Right' || e.key === 'ArrowRight') {

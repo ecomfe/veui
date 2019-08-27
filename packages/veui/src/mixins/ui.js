@@ -108,7 +108,7 @@ export default {
       // merge ui & $parent's inheritedUi
       let { uiProps = {} } = this
       let overrides = pickBy(uiProps, (val, key) => {
-        return key !== UNKNOWN_KEY && (val !== 'default' || val === true)
+        return key !== UNKNOWN_KEY && val !== 'default'
       })
       let { inheritedUiProps = {} } = getNonTransparentParent(this) || {}
       let props = { ...inheritedUiProps, ...overrides }
