@@ -82,9 +82,6 @@
       background-color: @dls-tree-node-background-color-active;
       .veui-transition(background-color);
     }
-    &:disabled::before {
-      background-color: none;
-    }
 
     &::before {
       content: "";
@@ -93,6 +90,12 @@
       height: inherit;
       width: 100%;
       z-index: -1;
+    }
+
+    &-disabled:active::before,
+    &-disabled:hover::before,
+    &-disabled.focus-visible::before {
+      background-color: unset;
     }
   }
 

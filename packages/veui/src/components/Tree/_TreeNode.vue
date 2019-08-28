@@ -23,7 +23,9 @@
         'focus-visible': focusVisible[index]
       }"
       :tabindex="
-        focusVisible[index] || (!tree.focused && depth === 1 && index === 0)
+        (focusVisible[index] ||
+          (!tree.focused && depth === 1 && index === 0)) &&
+          !item.disabled
           ? '0'
           : '-1'
       "
