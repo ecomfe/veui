@@ -40,18 +40,16 @@
     <h2>文案纵向样式：</h2>
     <veui-steps
       :steps="steps"
-      :ui="`labelVertical ${vertical ? ' vertical' : ''}`"
+      :ui="`labelVertical`"
       :current="current - 1"
-      label-place="vertical"
     />
   </section>
   <section>
     <h2>小型文案纵向样式：</h2>
     <veui-steps
       :steps="steps"
-      :ui="`s labelVertical ${vertical ? ' vertical' : ''}`"
+      :ui="`s labelVertical`"
       :current="current - 1"
-      label-place="vertical"
     />
   </section>
   <section>

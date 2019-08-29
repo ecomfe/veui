@@ -41,7 +41,6 @@ import Tree from './Tree'
 import Autocomplete from './Autocomplete'
 import Tag from './Tag'
 import Drawer from './Drawer'
-import Loading from './Loading'
 import Collapse from './Collapse'
 import Popover from './Popover'
 import Badge from './Badge'
@@ -243,8 +242,7 @@ export default [
   {
     path: '/steps',
     name: 'Steps',
-    component: Steps,
-    disabled: false
+    component: Steps
   },
   {
     path: '/switch',

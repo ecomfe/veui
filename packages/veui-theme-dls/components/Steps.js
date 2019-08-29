@@ -10,10 +10,11 @@ config.defaults(
     },
     ui: {
       direction: {
-        values: ['vertical', 'labelVerticle']
+        values: ['vertical', 'label-vertical']
       },
       size: {
-        values: ['s']
+        values: ['s', 'm'],
+        inherit: true
       }
     }
   },

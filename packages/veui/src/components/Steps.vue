@@ -24,10 +24,6 @@
       fallback="div"
       role="listitem"
       :aria-current="index === current ? 'step' : null"
-      :aria-label="t('step', { index: index + 1 })"
-      :aria-posinset="String(index + 1)"
-      :aria-setsize="String(steps.length)"
-      tabindex="0"
       @click="$emit('click', index, $event)"
     >
       <slot
@@ -99,7 +95,6 @@ import Icon from './Icon'
 import Link from './Link'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
-import { reduce } from 'lodash'
 
 export default {
   name: 'veui-steps',
@@ -122,25 +117,21 @@ export default {
   },
   computed: {
     stepStatus () {
-      return reduce(
-        this.steps,
-        (acc, step, i) => {
-          let status =
-            step.status === 'error'
-              ? i === this.current
-                ? 'error-current'
-                : 'error'
-              : i === this.current
-                ? 'current'
-                : i < this.current
-                  ? 'completed'
-                  : 'incomplete'
+      return this.steps.reduce((acc, step, i) => {
+        let status =
+          step.status === 'error'
+            ? i === this.current
+              ? 'error-current'
+              : 'error'
+            : i === this.current
+              ? 'current'
+              : i < this.current
+                ? 'completed'
+                : 'incomplete'
 
-          acc.push(status)
-          return acc
-        },
-        []
-      )
+        acc.push(status)
+        return acc
+      }, [])
     }
   }
 }
