@@ -13,6 +13,15 @@ config.defaults(
       collapse: 'chevron-right',
       expand: 'chevron-right',
       separator: 'chevron-right'
+    },
+    parts: {
+      tree: 'checkbox-after'
+    },
+    ui: {
+      size: {
+        values: ['s', 'm'],
+        inherit: true
+      }
     }
   },
   'transfer'
