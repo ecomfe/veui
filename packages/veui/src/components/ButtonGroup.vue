@@ -15,7 +15,7 @@
       :disabled="disabled || item.disabled"
       :aria-posinset="index + 1"
       :aria-setsize="items.length"
-      @click="handleClick(item, index)"
+      @click="handleClick(item, index, $event)"
     >
       <slot
         v-bind="item"
@@ -50,11 +50,11 @@ export default {
     disabled: Boolean
   },
   methods: {
-    handleClick (item, index) {
+    handleClick (item, index, e) {
       if (item.value) {
-        this.$emit(item.value, item, index)
+        this.$emit(item.value, item, index, e)
       }
-      this.$emit('click', item, index)
+      this.$emit('click', item, index, e)
     },
     focus () {
       focusIn(this.$el)
