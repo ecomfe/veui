@@ -22,14 +22,17 @@
       ref="main"
       class="veui-filter-panel-content-main"
     >
-      <slot :items="filteredDatasource"/>
+      <slot
+        :items="filteredDatasource"
+        :keyword="keyword"
+      />
     </div>
     <div
       v-else
       class="veui-filter-panel-no-data"
     >
       <slot name="no-data">
-        {{ t('noData') }}
+        {{ t("noData") }}
       </slot>
     </div>
   </div>

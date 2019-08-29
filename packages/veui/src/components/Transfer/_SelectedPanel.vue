@@ -5,31 +5,33 @@
   :searchable="searchable"
   :filter="realFilter"
   class="veui-transfer-selected-panel"
-  :class="{'veui-transfer-selected-flat': showMode === 'flat'}"
+  :class="{ 'veui-transfer-selected-flat': showMode === 'flat' }"
   :placeholder="placeholder"
+  :ui="realUi"
 >
   <template slot="head">
     <slot name="head">
       <slot name="title">
-        {{ t('@transfer.selected') }}
+        {{ t("@transfer.selected") }}
       </slot>
       <veui-button
-        ui="link"
+        ui="text"
         class="veui-transfer-remove-all"
-        :disabled="!isSelectable"
+        :disabled="!isSelectable || !datasource.length"
         @click="removeAll"
       >
-        {{ t('@transfer.deselectAll') }}
+        {{ t("@transfer.deselectAll") }}
       </veui-button>
     </slot>
   </template>
 
-  <template slot-scope="{ items }">
+  <template slot-scope="{ items, keyword }">
     <veui-tree
       v-if="showMode === 'tree'"
       :datasource="items"
-      :expanded.sync="localExpanded"
+      :expanded.sync="expanded"
       class="veui-transfer-selected-tree"
+      :disabled="!isSelectable"
       @click="remove"
     >
       <template
@@ -39,42 +41,22 @@
         <slot
           name="item"
           v-bind="props"
-        >
-          <div
-            class="veui-transfer-selected-item"
-            :class="{'veui-transfer-selected-item-hidden': props.item.hidden}"
-          >
-            <!-- 控制展开收起的图标 -->
-            <button
-              v-if="props.item.children && props.item.children.length"
-              type="button"
-              class="veui-tree-item-expand-switcher"
-              tabindex="-1"
-              @click.stop="toggle(props.item)"
-            >
-              <veui-icon
-                :name="props.expanded ? icons.collapse : icons.expand"
-                :label="t(props.expanded ? '@transfer.collapse' : '@transfer.expand')"
-              />
-            </button>
-
-            <div class="veui-transfer-item-label">
-              <span class="veui-transfer-item-text">
-                <slot
-                  name="item-label"
-                  v-bind="props"
-                >
-                  {{ props.item.label }}
-                </slot>
-              </span>
-
-              <veui-icon
-                class="veui-transfer-selected-icon-remove"
-                :name="icons.remove"
-              />
-            </div>
-          </div>
-        </slot>
+        />
+      </template>
+      <template
+        slot="item-label"
+        slot-scope="props"
+      >
+        <slot
+          name="item-label"
+          v-bind="{ ...props, keyword }"
+        />
+      </template>
+      <template slot="item-append">
+        <veui-icon
+          class="veui-tree-item-remove"
+          :name="icons.remove"
+        />
       </template>
     </veui-tree>
     <ul
@@ -85,8 +67,13 @@
         v-for="(options, index) in items"
         :key="options.items[options.items.length - 1].value"
         class="veui-transfer-selected-flat-item"
-        :class="{'veui-transfer-selected-flat-item-hidden': options.hidden}"
-        @click="remove(options.items[options.items.length - 1], options.items.slice(0, options.items.length - 1).reverse())"
+        :class="{ 'veui-transfer-selected-flat-item-hidden': options.hidden }"
+        @click="
+          remove(
+            options.items[options.items.length - 1],
+            options.items.slice(0, options.items.length - 1).reverse()
+          )
+        "
       >
         <slot
           name="item"
@@ -94,22 +81,22 @@
           :index="index"
         >
           <div class="veui-transfer-selected-flat-item-label">
-            <template v-for="(opt, i) in options.items">
+            <template v-for="(item, i) in options.items">
               <span
-                :key="'l-' + opt.value"
+                :key="'l-' + item.value"
                 class="veui-transfer-selected-flat-option-label"
               >
                 <slot
                   name="item-label"
-                  v-bind="opt"
+                  v-bind="{ item, ...item, keyword }"
                   :index="index"
                 >
-                  {{ opt.label }}
+                  {{ item.label }}
                 </slot>
               </span>
               <span
                 v-if="i < options.items.length - 1"
-                :key="'s-' + opt.value"
+                :key="'s-' + item.value"
                 class="veui-transfer-selected-flat-option-separator"
               >
                 <veui-icon :name="icons.separator"/>
@@ -127,7 +114,7 @@
 
   <template slot="no-data">
     <slot name="no-data">
-      {{ t('@transfer.select') }}
+      {{ t("@transfer.select") }}
     </slot>
   </template>
 </veui-filter-panel>
@@ -139,7 +126,7 @@ import Icon from '../Icon'
 import Button from '../Button'
 import Tree from '../Tree'
 import i18n from '../../mixins/i18n'
-import { get, clone, isEqual } from 'lodash'
+import { get } from 'lodash'
 
 export default {
   name: 'veui-selected-panel',
@@ -157,29 +144,16 @@ export default {
     filter: Function,
     placeholder: String,
     isSelectable: Boolean,
-    expanded: Array,
+    realUi: String,
     icons: Object
   },
   data () {
     return {
       flattenOptions: [],
-      localExpanded: []
+      expanded: []
     }
   },
   watch: {
-    expanded: {
-      handler (val, oldVal) {
-        if (!isEqual(val, oldVal)) {
-          this.localExpanded = clone(this.expanded)
-        }
-      },
-      immediate: true
-    },
-    localExpanded (val, oldVal) {
-      if (!isEqual(val, oldVal)) {
-        this.$emit('update:expanded', val)
-      }
-    },
     datasource: {
       handler (selectedOptions) {
         let walk = (option, path, paths) => {
@@ -232,20 +206,14 @@ export default {
         isFlat ? this.flattenOptions : this.datasource
       )
     },
-    toggle (option) {
-      let expanded = clone(this.localExpanded)
-      let index = expanded.indexOf(option.value)
-      if (index > -1) {
-        expanded.splice(index, 1)
-      } else {
-        expanded.push(option.value)
-      }
-      this.localExpanded = expanded
-    },
     removeAll () {
       this.$emit('removeall')
     },
     remove (...args) {
+      if (!this.isSelectable) {
+        return
+      }
+
       this.$emit('remove', ...args)
     }
   }
