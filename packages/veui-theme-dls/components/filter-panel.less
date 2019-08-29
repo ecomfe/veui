@@ -1,56 +1,69 @@
 @import "../lib.less";
 
 .veui-filter-panel {
-  @panel-min-width: 230px;
-  @panel-height: 358px;
-  @panel-inner-horizontal-gap: 20px;
-  @panel-inner-vertical-top-gap: 10px;
-
-  @line-height: 36px;
-
-  @searchbox-bottom-gap: 6px;
-
-  @no-data-top-gap: 12px;
-
-  display: inline-block;
   overflow: hidden;
-  width: @panel-min-width;
-  min-width: @panel-min-width;
-  height: @panel-height;
-  border: 1px solid @veui-gray-color-6;
+  border: 1px solid @dls-transfer-border-color;
+  border-radius: @dls-transfer-border-radius-m;
+  width: @dls-transfer-panel-width-m;
 
   &-title {
-    .centered-line(@line-height);
-    margin: @panel-inner-vertical-top-gap @panel-inner-horizontal-gap;
-    color: @veui-text-color-strong;
-    font-size: @veui-font-size-normal;
+    display: flex;
+    align-items: center;
+    background: @dls-transfer-header-background-color;
+    padding: 0 @dls-transfer-padding-x;
+    color: @dls-transfer-header-font-color;
+    font-weight: @dls-transfer-header-font-weight;
+    font-size: @dls-font-size-m;
+    margin: 0;
+    height: @dls-transfer-header-height-m;
+
+    .veui-button {
+      font-weight: @dls-transfer-header-button-font-weight;
+    }
   }
 
   .veui-searchbox {
-    .margin(0, @panel-inner-horizontal-gap, @searchbox-bottom-gap);
-
-    @other-width: @panel-inner-horizontal-gap * 2;
-    width: ~"calc(100% - @{other-width})";
+    margin: 0;
+    width: 100%;
   }
 
   &-no-data {
-    color: @veui-text-color-aux;
-    margin: @no-data-top-gap @panel-inner-horizontal-gap 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: @dls-font-color-weak;
+    height: @dls-transfer-item-height-m;
+    padding-top: @dls-transfer-content-padding-y;
   }
 
   &-content {
-    @other-height: @line-height + @panel-inner-vertical-top-gap * 2;
-    height: ~"calc(100% - @{other-height})";
+    border-top: 1px solid @dls-transfer-border-color;
 
     &-main {
-      @other-height: 32px + @searchbox-bottom-gap;
-      height: ~"calc(100% - @{other-height})";
-      padding: 2px 2px 0;
       overflow-y: auto;
+      position: relative;
+      padding: @dls-transfer-content-padding-y 0;
+      height: @dls-transfer-content-min-height-m;
     }
+  }
 
-    &-main:first-child {
-      height: 100%;
+  &[ui~="s"] {
+    font-size: @dls-font-size-s;
+    border-radius: @dls-transfer-border-radius-s;
+    width: @dls-transfer-panel-width-s;
+
+    .veui-filter-panel {
+      &-title {
+        height: @dls-transfer-header-height-s;
+      }
+
+      &-no-data {
+        height: @dls-transfer-item-height-s;
+      }
+
+      &-content-main {
+        height: @dls-transfer-content-min-height-s;
+      }
     }
   }
 }
