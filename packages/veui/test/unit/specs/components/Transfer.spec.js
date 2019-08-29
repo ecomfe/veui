@@ -1,5 +1,7 @@
 import { mount } from '@vue/test-utils'
 import Transfer from '@/components/Transfer'
+import Tree from '@/components/Tree'
+import Checkbox from '@/components/Checkbox'
 
 describe('components/Transfer', () => {
   it('should handle datasource change correctly.', async () => {
@@ -26,13 +28,19 @@ describe('components/Transfer', () => {
 
     let { vm } = wrapper
 
-    expect(wrapper.findAll('.veui-transfer-candidate-item').length).to.equal(3)
+    expect(
+      wrapper.find('.veui-transfer-candidate-panel').findAll('.veui-tree-item')
+        .length
+    ).to.equal(3)
 
     vm.items = [{ label: '1', value: '1' }, { label: '2', value: '2' }]
 
     await vm.$nextTick()
 
-    expect(wrapper.findAll('.veui-transfer-candidate-item').length).to.equal(2)
+    expect(
+      wrapper.find('.veui-transfer-candidate-panel').findAll('.veui-tree-item')
+        .length
+    ).to.equal(2)
 
     wrapper.destroy()
   })
@@ -62,13 +70,246 @@ describe('components/Transfer', () => {
 
     let { vm } = wrapper
 
-    expect(wrapper.findAll('.veui-transfer-selected-item').length).to.equal(2)
+    expect(
+      wrapper.find('.veui-transfer-selected-panel').findAll('.veui-tree-item')
+        .length
+    ).to.equal(2)
 
     vm.selected = []
 
     await vm.$nextTick()
 
-    expect(wrapper.findAll('.veui-transfer-selected-item').length).to.equal(0)
+    expect(
+      wrapper.find('.veui-transfer-selected-panel').findAll('.veui-tree-item')
+        .length
+    ).to.equal(0)
+
+    wrapper.destroy()
+  })
+
+  let datasource = [
+    {
+      value: 'aa',
+      label: 'AA',
+      children: [
+        {
+          value: 'aa0',
+          label: 'AA0'
+        },
+        {
+          value: 'aa1',
+          label: 'AA1',
+          children: [
+            {
+              value: 'aa10',
+              label: 'AA10'
+            },
+            {
+              value: 'aa11',
+              label: 'AA11'
+            },
+            {
+              value: 'aa12',
+              label: 'AA12'
+            }
+          ]
+        },
+        {
+          value: 'aa2',
+          label: 'AA2'
+        }
+      ]
+    },
+    {
+      value: 'bb',
+      label: 'BB'
+    },
+    {
+      value: 'cc',
+      label: 'CC',
+      children: [
+        {
+          value: 'cc1',
+          label: 'CC1',
+          children: [
+            {
+              value: 'cc10',
+              label: 'CC10'
+            },
+            {
+              value: 'cc11',
+              label: 'CC11'
+            }
+          ]
+        },
+        {
+          value: 'cc2',
+          label: 'CC2'
+        }
+      ]
+    }
+  ]
+
+  it('should generate selected tree correctly.', () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-transfer': Transfer
+        },
+        data () {
+          return {
+            datasource,
+            selected: ['aa10', 'aa11', 'bb', 'cc11']
+          }
+        },
+        template:
+          '<veui-transfer :datasource="datasource" v-model="selected" />'
+      },
+      {
+        sync: false
+      }
+    )
+
+    let selectedTree = wrapper.findAll(Tree).at(1)
+    expect(selectedTree.props('datasource')).to.eql([
+      {
+        value: 'aa',
+        label: 'AA',
+        hidden: false,
+        children: [
+          {
+            value: 'aa1',
+            label: 'AA1',
+            hidden: false,
+            children: [
+              {
+                value: 'aa10',
+                label: 'AA10',
+                hidden: false
+              },
+              {
+                value: 'aa11',
+                label: 'AA11',
+                hidden: false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        value: 'bb',
+        label: 'BB',
+        hidden: false
+      },
+      {
+        value: 'cc',
+        label: 'CC',
+        hidden: false,
+        children: [
+          {
+            value: 'cc1',
+            label: 'CC1',
+            hidden: false,
+            children: [
+              {
+                value: 'cc11',
+                label: 'CC11',
+                hidden: false
+              }
+            ]
+          }
+        ]
+      }
+    ])
+
+    wrapper.destroy()
+  })
+
+  it('should select all and remove all correctly.', () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-transfer': Transfer
+        },
+        data () {
+          return {
+            datasource,
+            selected: ['aa10', 'aa11', 'bb', 'cc11']
+          }
+        },
+        template:
+          '<veui-transfer :datasource="datasource" v-model="selected" />'
+      },
+      {
+        sync: false
+      }
+    )
+
+    wrapper.find('.veui-transfer-select-all').trigger('click')
+    expect(wrapper.vm.$data.selected).to.eql([
+      'aa0',
+      'aa10',
+      'aa11',
+      'aa12',
+      'aa2',
+      'bb',
+      'cc10',
+      'cc11',
+      'cc2'
+    ])
+
+    wrapper.find('.veui-transfer-remove-all').trigger('click')
+    expect(wrapper.vm.$data.selected).to.eql([])
+
+    wrapper.destroy()
+  })
+
+  it('should handle select and remove correctly.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-transfer': Transfer
+        },
+        data () {
+          return {
+            datasource,
+            selected: ['aa10', 'aa11', 'bb', 'cc11']
+          }
+        },
+        template:
+          '<veui-transfer :datasource="datasource" v-model="selected" />'
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+
+    let selectors = wrapper.find(Tree).findAll(Checkbox)
+    selectors
+      .at(0)
+      .find('input[type="checkbox"]')
+      .trigger('change')
+    await vm.$nextTick()
+
+    expect(vm.$data.selected).to.eql([
+      'aa0',
+      'aa10',
+      'aa11',
+      'aa12',
+      'aa2',
+      'bb',
+      'cc11'
+    ])
+
+    let selectedItems = wrapper
+      .findAll(Tree)
+      .at(1)
+      .findAll('.veui-tree-item')
+    selectedItems.at(0).trigger('click')
+    await vm.$nextTick()
+    expect(vm.$data.selected).to.eql(['bb', 'cc11'])
 
     wrapper.destroy()
   })

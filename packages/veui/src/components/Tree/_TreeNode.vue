@@ -18,9 +18,17 @@
         'veui-tree-item': true,
         'veui-tree-item-expanded': item.expanded,
         'veui-tree-item-clickable': clickable,
+        'veui-tree-item-hidden': item.hidden,
+        'veui-tree-item-disabled': item.disabled,
         'focus-visible': focusVisible[index]
       }"
-      :tabindex="focusVisible[index] || (!tree.focused && depth === 1 && index === 0) ? '0' : '-1'"
+      :tabindex="
+        (focusVisible[index] ||
+          (!tree.focused && depth === 1 && index === 0)) &&
+          !item.disabled
+          ? '0'
+          : '-1'
+      "
       @click="click(item, [], index, depth)"
       @keydown="handleKeydown($event, item, index, depth)"
       @focus="handleFocus(index)"
@@ -42,6 +50,12 @@
         >
           <veui-icon :name="icons.collapse"/>
         </button>
+        <slot
+          name="item-prepend"
+          :item="item"
+          :index="index"
+          :depth="depth"
+        />
         <div class="veui-tree-item-label">
           <slot
             name="item-label"
@@ -53,6 +67,12 @@
             {{ item.label }}
           </slot>
         </div>
+        <slot
+          name="item-append"
+          :item="item"
+          :index="index"
+          :depth="depth"
+        />
       </slot>
     </div>
 
@@ -82,6 +102,12 @@
           >
             <veui-icon :name="icons.collapse"/>
           </button>
+          <slot
+            name="item-prepend"
+            :item="props.item"
+            :index="props.index"
+            :depth="depth + 1"
+          />
           <div class="veui-tree-item-label">
             <slot
               name="item-label"
@@ -90,6 +116,12 @@
               {{ props.item.label }}
             </slot>
           </div>
+          <slot
+            name="item-append"
+            :item="props.item"
+            :index="props.index"
+            :depth="depth + 1"
+          />
         </slot>
       </template>
     </veui-tree-node>
