@@ -311,14 +311,12 @@ export default [
   {
     path: '/transfer',
     name: 'Transfer',
-    component: Transfer,
-    disabled: true
+    component: Transfer
   },
   {
     path: '/tree',
     name: 'Tree',
-    component: Tree,
-    disabled: true
+    component: Tree
   },
   {
     path: '/uploader',

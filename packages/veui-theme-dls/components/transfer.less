@@ -1,157 +1,49 @@
 @import "../lib.less";
 
 .veui-transfer {
-  @item-height: 36px;
-  @item-indent-gap: 18px;
-  @item-text-max-width: 150px;
-
-  @panel-gap: 20px;
-  @panel-inner-horizontal-gap: 20px;
-
-  @flat-panel-min-width: 350px;
-  @flat-item-line-height: 22px;
-  @flat-item-right-gap: 20px;
-
-  @remove-icon-size: 12px;
-
   .clearfix();
-  display: inline-block;
+  display: flex;
 
-  // 让 icon 居中
-  .center-icon(@line-height: @item-height) {
-    @height: (@line-height) / 2;
-    margin-top: ~"calc(@{height} - 0.5em)";
-    vertical-align: top;
-  }
-
-  // 俩 panel 都左浮动
-  .veui-filter-panel {
-    float: left;
-  }
-
-  // tree item 有 centered-line(36px) 的样式，此处要覆盖掉 height
-  .veui-tree-item {
-    height: auto;
-  }
-
-  &-candidate-panel {
-    margin-right: @panel-gap;
-  }
-
-  .veui-filter-panel-content-main {
-    position: relative;
-  }
-
-  &-candidate-item,
-  &-selected-item {
-    padding: 0 @panel-inner-horizontal-gap;
-    cursor: pointer;
-    color: @veui-text-color-normal;
-    .centered-line(@item-height);
-
-    &::before {
-      content: "";
-      position: absolute;
-      display: block;
-      left: 0;
-      right: 0;
-      height: @item-height;
-    }
-
-    &:hover::before {
-      background: @veui-gray-color-8;
-    }
-
-    &:active::before {
-      background: @veui-gray-color-6;
-    }
-
-    .veui-transfer-item-text,
-    .veui-icon {
-      position: relative;
-      z-index: 1;
-    }
-
-    &-hidden {
-      display: none;
-    }
-  }
-
-  &-candidate-item {
-    &:hover {
-      .veui-transfer-candidate-icon-selected,
-      .veui-transfer-candidate-icon-unselected {
-        display: block;
-      }
-    }
-
-    &-label-selected {
-      color: @veui-text-color-aux;
-    }
-  }
-
-  &-selected-item:hover &-selected-icon-remove {
-    display: block;
-  }
-
-  &-item-text {
-    .ellipsis();
-    max-width: @item-text-max-width;
-    float: left;
-  }
-
-  &-item-label {
-    .clearfix();
-
-    &:first-child {
-      margin-left: @item-indent-gap;
-    }
-  }
-
-  &-candidate-icon-selected,
-  &-candidate-icon-unselected,
-  &-selected-icon-remove {
-    float: right;
-    .center-icon();
-    display: none;
-  }
-
-  &-selected-icon-remove {
-    .size(@remove-icon-size);
+  &-selected-panel {
+    margin-left: @dls-transfer-panel-spacing;
   }
 
   &-select-all,
   &-remove-all {
-    float: right;
+    margin-left: auto;
   }
 
   &-selected-flat {
-    width: @flat-panel-min-width;
-    min-width: @flat-panel-min-width;
-
     &-items {
       .reset-list-style();
       margin: 0;
       padding: 0;
-      color: @veui-text-color-normal;
+      color: @dls-transfer-item-font-color;
     }
 
     &-item {
-      padding: 0 @panel-inner-horizontal-gap;
+      padding: 0 @dls-transfer-padding-x;
       cursor: pointer;
-      position: relative;
+      height: @dls-transfer-item-height-m;
 
       &:hover {
-        background: @veui-gray-color-8;
+        background-color: @dls-transfer-item-background-color-hover;
+        .veui-transition(background-color);
       }
 
       &:active {
-        background: @veui-gray-color-6;
+        background-color: @dls-transfer-item-background-color-active;
+        .veui-transition(background-color);
+      }
+
+      &:disabled {
+        background-color: none;
       }
 
       &-label {
-        @padding-vertical: (@item-height - @flat-item-line-height) / 2;
-        padding: @padding-vertical @flat-item-right-gap @padding-vertical 0;
+        .size(100%);
+        display: flex;
+        align-items: center;
       }
 
       &-hidden {
@@ -160,41 +52,38 @@
     }
 
     &-option-separator {
-      display: inline-block;
-      line-height: 1;
-      overflow: hidden;
-      .size(1em);
-      .center-icon(@flat-item-line-height);
+      height: @dls-tree-icon-size;
     }
 
     &-icon-remove {
-      .absolute(50%, @panel-inner-horizontal-gap, _, _);
-      transform: translateY(-50%);
       display: none;
-      .size(@remove-icon-size);
+      .dls-icon-size(@dls-tree-icon-size-aux);
+      margin-left: auto;
     }
 
     &-item:hover &-icon-remove {
-      display: block;
+      display: inline-block;
     }
   }
 
   // disabled 之后的样式
-  &-disabled &-candidate-item,
-  &-disabled &-selected-item,
   &-disabled &-selected-flat-item {
     cursor: not-allowed;
   }
 
-  &-disabled &-item-text,
-  &-disabled &-candidate-icon-unselected,
   &-disabled &-selected-icon-remove,
   &-disabled &-selected-flat-item-label {
-    color: @veui-text-color-aux;
+    color: @dls-button-font-color-icon-disabled;
   }
 
   &.veui-input-invalid + .veui-field-error {
     .veui-field-gap-error();
     margin-left: @veui-form-label-width;
+  }
+
+  &[ui~="s"] {
+    .veui-transfer-selected-flat-item {
+      height: @dls-transfer-item-height-s;
+    }
   }
 }
