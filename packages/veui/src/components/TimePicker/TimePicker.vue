@@ -25,6 +25,7 @@
     v-show="expanded"
     ref="overlay"
     target="self"
+    match-width
     :overlay-class="
       mergeOverlayClass({
         'veui-time-picker-overlay': true
