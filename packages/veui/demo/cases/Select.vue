@@ -2,30 +2,115 @@
 <article>
   <h1><code>&lt;veui-select&gt;</code></h1>
   <section>
+    <h2>4 种大小：</h2>
+    <veui-form>
+      <veui-field
+        v-for="ui in sizes"
+        :key="ui"
+        :ui="ui"
+        :label="ui"
+      >
+        <veui-select
+          v-model="defaultValue1"
+          :ui="ui"
+          v-bind="attrs"
+          placeholder="全部"
+          clearable
+          :filter="filter"
+        />
+      </veui-field>
+    </veui-form>
+  </section>
+  <section>
     <h2>默认样式：</h2>
     <veui-select
-      v-model="defaultValue1"
-      ui="large"
+      v-model="defaultValue"
       v-bind="attrs"
       placeholder="全部"
       clearable
-      :filter="filter"
-    >
-      <div slot="before">
-        <veui-input
-          v-model="keyword"
-          class="filter"
-          ui="tiny"
-        />
-      </div>
-    </veui-select>
+    />
   </section>
   <section>
-    <h2>显示已选图标样式：</h2>
+    <h2>多选样式：s</h2>
+    <veui-select
+      v-model="defaultMultiValue"
+      ui="s"
+      v-bind="attrs"
+      placeholder="全部"
+      :max="3"
+      clearable
+      multiple
+    />
+  </section>
+  <section>
+    <h2>多选样式：m (默认)</h2>
+    <veui-select
+      v-model="defaultMultiValue"
+      v-bind="attrs"
+      placeholder="全部"
+      clearable
+      multiple
+    />
+  </section>
+  <section>
+    <h2>多选样式：l</h2>
+    <veui-select
+      v-model="defaultMultiValue"
+      ui="l"
+      v-bind="attrs"
+      placeholder="全部"
+      clearable
+      multiple
+    />
+  </section>
+  <section>
+    <h2>多选样式：有限制</h2>
+    <veui-select
+      v-model="defaultMultiValue"
+      placeholder="全部"
+      v-bind="attrs"
+      :max="4"
+      clearable
+      multiple
+    />
+  </section>
+  <section>
+    <h2>多选样式：禁用</h2>
+    <veui-select
+      v-model="defaultMultiValue"
+      v-bind="attrs"
+      placeholder="全部"
+      clearable
+      multiple
+      disabled
+    />
+  </section>
+  <section>
+    <h2>可搜索Select：</h2>
     <veui-select
       v-model="defaultValue2"
       v-bind="attrs"
       ui="checkmark"
+      searchable
+    />
+  </section>
+  <section>
+    <h2>可搜索多选Select：</h2>
+    <veui-select
+      v-model="defaultSearchMultiValue"
+      v-bind="attrs"
+      searchable
+      multiple
+    />
+  </section>
+  <section>
+    <h2>可搜索多选Select：有限制</h2>
+    <veui-select
+      v-model="defaultSearchMultiValue"
+      v-bind="attrs"
+      :max="4"
+      searchable
+      multiple
     />
   </section>
   <section>
@@ -237,10 +322,11 @@
     </veui-select>
   </section>
   <section style="margin-top:500px;">
-    <h2>默认分组样式：</h2>
+    <h2>可搜索分组样式：</h2>
     <veui-select
       v-model="defaultValue5"
       v-bind="optGroupAttrs"
+      searchable
     />
   </section>
   <section>
@@ -342,7 +428,7 @@
 
 <script>
 import bus from '../bus'
-import { Icon, Select, Option, OptionGroup, Radio, Input } from 'veui'
+import { Icon, Select, Option, OptionGroup, Radio, Field, Form } from 'veui'
 import type from 'veui/managers/type'
 import 'vue-awesome/icons/eye'
 import 'vue-awesome/icons/gift'
@@ -355,7 +441,8 @@ export default {
     'veui-option-group': OptionGroup,
     'veui-radio': Radio,
     'veui-icon': Icon,
-    'veui-input': Input
+    'veui-field': Field,
+    'veui-form': Form
   },
   data () {
     return {
@@ -368,8 +455,11 @@ export default {
       disabled: true,
       selected: true,
       icon: true,
+      defaultValue: null,
+      defaultMultiValue: [1, 3, 4],
+      defaultSearchMultiValue: [1],
       defaultValue1: null,
-      defaultValue2: null,
+      defaultValue2: 2,
       defaultValue3: null,
       defaultValue4: null,
       defaultValue5: null,
@@ -378,6 +468,7 @@ export default {
       defaultValue8: '1-1',
       defaultValue9: null,
       defaultValue10: null,
+      sizes: ['xs', 's', 'm', 'l'],
       attrs: {
         name: 'age',
         readonly: false,
@@ -527,7 +618,7 @@ export default {
   position: relative;
   padding-left: 24px;
   &::after {
-    content: "❤️";
+    content: '❤️';
     position: absolute;
     top: 50%;
     left: 0;
@@ -540,7 +631,7 @@ export default {
 }
 
 .filter {
-  width: ~"calc(100% - 10px)";
+  width: ~'calc(100% - 10px)';
   margin: 5px;
 }
 </style>
