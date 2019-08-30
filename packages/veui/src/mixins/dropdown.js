@@ -31,13 +31,18 @@ export default {
     if (box.scrollHeight > box.offsetHeight) {
       toggleClass(box, 'veui-dropdown-overflow', true)
 
-      this.__overlay_scroll_handler__ = throttle(this.handleScroll, 200, {
-        leading: true
-      })
+      if (!box.__overlay_scroll_handler__) {
+        box.__overlay_scroll_handler__ = this.__overlay_scroll_handler__ = throttle(
+          this.handleScroll,
+          200,
+          {
+            leading: true
+          }
+        )
+        box.addEventListener('scroll', this.__overlay_scroll_handler__, false)
+      }
 
       this.handleScroll()
-
-      box.addEventListener('scroll', this.__overlay_scroll_handler__, false)
     }
   },
   methods: {
@@ -71,12 +76,15 @@ export default {
     }
   },
   destroy () {
+    let { box } = this.$refs
+
+    if (!box) {
+      return
+    }
+
     if (this.__overlay_scroll_handler__) {
-      this.$refs.box.removeEventListener(
-        'scroll',
-        this.__overlay_scroll_handler__,
-        false
-      )
+      box.removeEventListener('scroll', this.__overlay_scroll_handler__, false)
+      box.__overlay_scroll_handler__ = null
     }
   }
 }
