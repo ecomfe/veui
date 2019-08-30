@@ -42,7 +42,8 @@ export default {
     },
     priority: Number,
     autofocus: Boolean,
-    modal: Boolean
+    modal: Boolean,
+    matchWidth: Boolean
   },
   data () {
     return {
@@ -68,6 +69,7 @@ export default {
       if (this.inline) {
         return
       }
+      this.syncWidth()
       this.toggleLocator(val)
       this.updateLocator()
       this.updateNode()
@@ -109,12 +111,13 @@ export default {
     }
     this.overlayBox = this.$refs.box
     document.body.appendChild(this.overlayBox)
+    this.findTargetNode()
 
     if (this.realOpen) {
       this.initFocus()
+      this.syncWidth()
     }
 
-    this.findTargetNode()
     this.updateLocator()
   },
   updated () {
@@ -166,6 +169,20 @@ export default {
         }
         cur = cur.$parent
       }
+    },
+
+    syncWidth () {
+      if (!this.matchWidth) {
+        return
+      }
+
+      let { box } = this.$refs
+      let { targetNode } = this
+      if (!box || !targetNode) {
+        return
+      }
+
+      box.style.minWidth = `${targetNode.offsetWidth}px`
     },
 
     updateLocator () {
