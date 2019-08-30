@@ -173,6 +173,11 @@ export default [
     component: Link
   },
   {
+    path: '/loading',
+    name: 'Loading',
+    component: Loading
+  },
+  {
     path: '/number-input',
     name: 'NumberInput',
     component: NumberInput
@@ -262,10 +267,9 @@ export default [
     component: Tag
   },
   {
-    path: '/timepicker',
+    path: '/time-picker',
     name: 'TimePicker',
-    component: TimePicker,
-    disabled: false
+    component: TimePicker
   },
   {
     path: '/tabs',
