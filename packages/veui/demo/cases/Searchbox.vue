@@ -8,7 +8,6 @@
         clearable
         ui="xs"
         replace-on-select
-        :name="name"
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
@@ -19,7 +18,6 @@
         clearable
         ui="s"
         replace-on-select
-        :name="name"
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
@@ -32,7 +30,6 @@
         clearable
         ui="m"
         replace-on-select
-        :name="name"
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
@@ -43,7 +40,6 @@
         clearable
         ui="l"
         replace-on-select
-        :name="name"
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
@@ -56,7 +52,6 @@
         clearable
         ui="strong xs"
         replace-on-select
-        :name="name"
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
@@ -67,7 +62,6 @@
         clearable
         ui="strong s"
         replace-on-select
-        :name="name"
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
@@ -80,7 +74,6 @@
         clearable
         ui="strong m"
         replace-on-select
-        :name="name"
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
@@ -91,7 +84,6 @@
         clearable
         ui="strong l"
         replace-on-select
-        :name="name"
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
@@ -105,13 +97,11 @@
     <p>
       <veui-searchbox
         ui="m"
-        :name="name"
         :placeholder="placeholder"
         @search="log($event)"
       />
       <veui-searchbox
         ui="m strong"
-        :name="name"
         :placeholder="placeholder"
         @search="log($event)"
       />
@@ -122,7 +112,6 @@
     <p>
       <veui-searchbox
         :value="value"
-        :name="name"
         clearable
         :placeholder="placeholder"
         disabled
@@ -131,7 +120,6 @@
       <veui-searchbox
         ui=" strong"
         disabled
-        :name="name"
         :placeholder="placeholder"
         :suggestions="suggestions5"
         @input="handleSuggest('5', $event)"
@@ -144,7 +132,6 @@
     <p>
       <veui-searchbox
         :value="value"
-        :name="name"
         clearable
         :placeholder="placeholder"
         readonly
@@ -152,7 +139,6 @@
       />
       <veui-searchbox
         :value="value"
-        :name="name"
         clearable
         ui="strong"
         :placeholder="placeholder"
@@ -167,7 +153,6 @@
       <veui-searchbox
         v-model="value2"
         clearable
-        :name="name"
         :placeholder="placeholder"
         :suggestions="suggestions1"
         suggest-trigger="focus"
@@ -176,7 +161,6 @@
         @select="value2 = $event.label"
       />
       <veui-searchbox
-        :name="name"
         :placeholder="placeholder"
         :suggestions="suggestions8"
         suggest-trigger="focus"
@@ -192,7 +176,6 @@
         </template>
       </veui-searchbox>
       <veui-searchbox
-        :name="name"
         :placeholder="placeholder"
         :suggestions="suggestions9"
         replace-on-select
