@@ -1,11 +1,10 @@
 import { mount } from '@vue/test-utils'
 import Steps from '@/components/Steps'
 import Link from '@/components/Link'
-import Icon from '@/components/Icon'
 
 let datasource = [
   { label: 'label 1', desc: 'desc 1', to: '/home' },
-  { label: 'label 2', desc: 'desc 2' },
+  { label: 'label 2', desc: 'desc 2', status: 'error' },
   { label: 'label 3', desc: 'desc 3' }
 ]
 
@@ -21,33 +20,24 @@ describe('components/Steps', () => {
     wrapper.destroy()
   })
 
-  it('should have current style only on current step.', () => {
+  it('should render correctly according to the step status.', () => {
     let wrapper = mount(Steps, {
       propsData: {
         steps: datasource,
-        current: 1
+        current: 2
       }
     })
 
     let links = wrapper.findAll(Link)
-    expect(links.at(0).classes('veui-steps-current')).to.equal(false)
-    expect(links.at(1).classes('veui-steps-current')).to.equal(true)
-    expect(links.at(2).classes('veui-steps-current')).to.equal(false)
-    wrapper.destroy()
-  })
+    expect(links.at(0).classes('veui-steps-step-completed')).to.equal(true)
+    expect(links.at(1).classes('veui-steps-step-error')).to.equal(true)
+    expect(links.at(2).classes('veui-steps-step-current')).to.equal(true)
 
-  it('should render success icon only in steps before current step.', () => {
-    let wrapper = mount(Steps, {
-      propsData: {
-        steps: datasource,
-        current: 1
-      }
-    })
+    wrapper.setProps({ current: 1 })
 
-    let links = wrapper.findAll(Link)
-    expect(links.at(0).contains(Icon)).to.equal(true)
-    expect(links.at(1).contains(Icon)).to.equal(false)
-    expect(links.at(2).contains(Icon)).to.equal(false)
+    expect(links.at(0).classes('veui-steps-step-completed')).to.equal(true)
+    expect(links.at(1).classes('veui-steps-step-error-current')).to.equal(true)
+    expect(links.at(2).classes('veui-steps-step-incomplete')).to.equal(true)
     wrapper.destroy()
   })
 
