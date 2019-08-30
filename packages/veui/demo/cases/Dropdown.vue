@@ -213,10 +213,13 @@
         :options="options"
       />
       <veui-dropdown
-        ui="text m"
+        ui="text xs"
         label="操作"
       >
-        <veui-option-group label="提交">
+        <veui-option-group
+          label="提交"
+          ui="xs"
+        >
           <veui-option
             label="保存"
             @click="log('save')"
@@ -226,7 +229,10 @@
             label="发布"
           />
         </veui-option-group>
-        <veui-option-group label="操作">
+        <veui-option-group
+          label="操作"
+          ui="xs"
+        >
           <veui-option
             value="undo"
             label="撤销"
