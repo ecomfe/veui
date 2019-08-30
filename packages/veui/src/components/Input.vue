@@ -191,7 +191,6 @@ export default {
     },
     handleFocus ($event) {
       this.focused = true
-
       if (this.realSelectOnFocus && $event.target) {
         $event.target.select()
       }
