@@ -4,9 +4,11 @@
 .veui-time-picker {
   display: inline-block;
   width: @dls-time-picker-width;
+
   & > .veui-input {
     width: 100%;
   }
+
   &-overlay-content {
     &:extend(._veui-dropdown-overlay all);
     min-width: @dls-time-picker-dropdown-min-width;
@@ -14,6 +16,7 @@
     box-shadow: @dls-option-dropdown-shadow;
     display: flex;
   }
+
   &-option-group-wrapper {
     flex-shrink: 1;
     flex-grow: 1;
@@ -24,15 +27,11 @@
     }
 
     .veui-option {
-      text-align: center;
-      & > span {
-        float: none;
-        margin: 0;
+      justify-content: center;
+
+      &-label {
         min-width: @dls-time-picker-option-content-min-width;
       }
     }
-  }
-  &-overlay[ui~="s"] &-option-group-wrapper {
-    max-height: @dls-option-dropdown-max-height-s;
   }
 }

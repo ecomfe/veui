@@ -426,6 +426,7 @@ export default {
             options={this.realOverlayOptions}
             overlay-class={this.overlayClass}
             onLocate={this.handleRelocate}
+            match-width
           >
             <div
               id={this.dropdownId}
