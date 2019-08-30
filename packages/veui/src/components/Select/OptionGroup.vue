@@ -140,7 +140,12 @@ const OptionGroup = {
   render () {
     let content = this.options
       ? this.options.map((opt, i) => {
-        let option = { ...opt, selected: opt.value === this.value }
+        let option = {
+          ...opt,
+          selected: Array.isArray(this.value)
+            ? includes(this.value, opt.value)
+            : opt.value === this.value
+        }
         return option.options ? (
           <OptionGroup
             label={option.label}

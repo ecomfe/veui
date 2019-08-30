@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Tree from '@/components/Tree'
+import Checkbox from '@/components/Checkbox'
 
 let datasource = [
   {
@@ -198,13 +199,13 @@ describe('components/Tree', () => {
     wrapper.destroy()
   })
 
-  it('nodes can be toggled by clicking any part of them when `item-click` was not set', async () => {
+  it('nodes can be toggled by clicking any part of them when `item-click` was set', async () => {
     let wrapper = mount(Tree, {
       propsData: {
-        datasource,
         itemClick: 'toggle'
       }
     })
+    wrapper.setProps({ datasource })
     let { vm } = wrapper
 
     expect(wrapper.findAll('.veui-tree-item').length).to.equal(4)
@@ -217,24 +218,20 @@ describe('components/Tree', () => {
     expect(item.classes('veui-tree-item-expanded')).to.equal(true)
 
     item.find('.veui-tree-item-expand-switcher').trigger('click')
-    await vm.$nextTick()
 
     expect(wrapper.findAll('.veui-tree-item').length).to.equal(4)
     expect(item.classes('veui-tree-item-expanded')).to.equal(false)
-
     wrapper.destroy()
   })
 
   it('should render item scoped-slot correctly', () => {
     let wrapper = mount(Tree, {
-      propsData: {
-        datasource
-      },
       scopedSlots: {
         item:
           '<div class="test-item-slot" slot-scope="props">{{props.item.label}} item slot</div>'
       }
     })
+    wrapper.setProps({ datasource })
 
     expect(wrapper.find('.test-item-slot').exists()).to.equal(true)
     expect(wrapper.find('.test-item-slot').text()).to.equal(
@@ -244,17 +241,17 @@ describe('components/Tree', () => {
     wrapper.destroy()
   })
 
-  it('should render item-label scoped-slot correctly', () => {
+  it('should render item-label scoped-slot correctly', async () => {
     let wrapper = mount(Tree, {
-      propsData: {
-        datasource
-      },
       scopedSlots: {
         'item-label':
           '<div class="test-item-label-slot" slot-scope="props">{{props.item.label}} item-label slot</div>'
       },
       sync: false
     })
+    wrapper.setProps({ datasource })
+
+    await wrapper.vm.$nextTick()
 
     expect(wrapper.find('.test-item-label-slot').exists()).to.equal(true)
     expect(wrapper.find('.test-item-label-slot').text()).to.equal(
@@ -354,7 +351,7 @@ describe('components/Tree', () => {
       },
       data () {
         return {
-          datasource
+          datasource: []
         }
       },
       methods: {
@@ -369,21 +366,20 @@ describe('components/Tree', () => {
         '<veui-tree :datasource="datasource" @click="handleClick" item-click="toggle" />'
     })
     let { vm } = wrapper
+    wrapper.setData({ datasource })
 
-    wrapper.find('.veui-tree-item').trigger('click')
     await vm.$nextTick()
+    wrapper.find('.veui-tree-item').trigger('click')
 
     wrapper.destroy()
   })
 
   it('should handle keyboard event correctly', async () => {
     let wrapper = mount(Tree, {
-      propsData: {
-        datasource
-      },
       attachToDocument: true
     })
     let { vm } = wrapper
+    wrapper.setProps({ datasource })
 
     wrapper.find('.veui-tree-item').trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()
@@ -425,6 +421,105 @@ describe('components/Tree', () => {
         .at(0)
         .classes('focus-visible')
     ).to.equal(false)
+
+    wrapper.destroy()
+  })
+
+  it('should parse selected and handle select correctly', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-tree': Tree
+      },
+      data () {
+        return {
+          datasource: [],
+          selected: [],
+          expanded: []
+        }
+      },
+      template:
+        '<veui-tree :datasource="datasource" v-model="selected" :expanded.sync="expanded" selectable/>'
+    })
+
+    wrapper.setData({
+      datasource,
+      selected: ['filtered'],
+      expanded: ['infused', 'brewed', 'boiled']
+    })
+
+    let selectors = wrapper.findAll(Checkbox)
+    expect(selectors.at(0).props('indeterminate')).to.equal(true)
+    expect(selectors.at(1).props('indeterminate')).to.equal(true)
+    expect(selectors.at(2).props('checked')).to.equal(false)
+    expect(selectors.at(3).props('checked')).to.equal(true)
+
+    // select leaf
+    selectors
+      .at(2)
+      .find('input[type="checkbox"]')
+      .trigger('change')
+    await wrapper.vm.$nextTick()
+
+    let data = wrapper.vm.$data
+    expect(data.selected).to.eql(['drip-brewed', 'filtered'])
+    expect(selectors.at(2).props('checked')).to.equal(true)
+
+    // remove all leaves
+    selectors
+      .at(2)
+      .find('input[type="checkbox"]')
+      .trigger('change')
+    selectors
+      .at(3)
+      .find('input[type="checkbox"]')
+      .trigger('change')
+    await wrapper.vm.$nextTick()
+    expect(data.selected).to.eql([])
+    expect(selectors.at(0).props('indeterminate')).to.equal(false)
+    expect(selectors.at(1).props('indeterminate')).to.equal(false)
+    expect(selectors.at(2).props('checked')).to.equal(false)
+    expect(selectors.at(3).props('checked')).to.equal(false)
+
+    // select middle node 'brewed'
+    selectors
+      .at(1)
+      .find('input[type="checkbox"]')
+      .trigger('change')
+    await wrapper.vm.$nextTick()
+    expect(data.selected).to.eql([
+      'drip-brewed',
+      'filtered',
+      'pour-over',
+      'immersion-brewed'
+    ])
+    expect(selectors.at(0).props('indeterminate')).to.equal(true)
+    expect(selectors.at(1).props('checked')).to.equal(true)
+    expect(selectors.at(2).props('checked')).to.equal(true)
+    expect(selectors.at(3).props('checked')).to.equal(true)
+    expect(selectors.at(4).props('checked')).to.equal(true)
+    expect(selectors.at(5).props('checked')).to.equal(true)
+
+    // select leat 'turkish' under another middle node 'boiled'
+    selectors
+      .at(10)
+      .find('input[type="checkbox"]')
+      .trigger('change')
+    await wrapper.vm.$nextTick()
+    expect(data.selected).to.eql([
+      'drip-brewed',
+      'filtered',
+      'pour-over',
+      'immersion-brewed',
+      'turkish'
+    ])
+
+    // remove middle node 'brewed'
+    selectors
+      .at(1)
+      .find('input[type="checkbox"]')
+      .trigger('change')
+    await wrapper.vm.$nextTick()
+    expect(data.selected).to.eql(['turkish'])
 
     wrapper.destroy()
   })

@@ -4,69 +4,89 @@
   :ui="realUi"
   role="list"
 >
-  <veui-link
-    v-for="(step, index) in steps"
-    :key="index"
-    class="veui-steps-step"
-    :class="{
-      'veui-steps-current': index === current
-    }"
-    :to="step.to"
-    fallback="div"
-    role="listitem"
-    :aria-current="index === current ? 'step' : null"
-    :aria-label="t('step', { index: index + 1 })"
-    :aria-posinset="String(index + 1)"
-    :aria-setsize="String(steps.length)"
-    @click="$emit('click', index, $event)"
-  >
-    <slot
-      v-bind="step"
-      :index="index"
+  <template v-for="(step, index) in steps">
+    <div
+      v-if="index !== 0"
+      :key="'connector-' + index"
+      class="veui-steps-step-connector"
+      :class="'veui-steps-step-connector-' + stepStatus[index]"
+    />
+    <veui-link
+      :key="'step-' + index"
+      class="veui-steps-step"
+      :class="[
+        'veui-steps-step-' + stepStatus[index],
+        index < steps.length - 1
+          ? 'veui-steps-step-next-' + stepStatus[index + 1]
+          : ''
+      ]"
+      :to="step.to"
+      fallback="div"
+      role="listitem"
+      :aria-current="index === current ? 'step' : null"
+      @click="$emit('click', index, $event)"
     >
-      <div class="veui-steps-step-index">
-        <slot
-          name="index"
-          v-bind="step"
-          :index="index"
-        >
-          <veui-icon
-            v-if="index < current"
-            :name="icons.success"
-          />
-          <template v-else>
-            {{ index + 1 }}
-          </template>
-        </slot>
-      </div>
-      <div
-        v-if="step.label"
-        class="veui-steps-step-content"
+      <slot
+        v-bind="step"
+        :index="index"
       >
-        <h3 class="veui-steps-step-label">
-          <slot
-            name="label"
-            v-bind="step"
-            :index="index"
-          >
-            {{ step.label }}
-          </slot>
-        </h3>
-        <p
-          v-if="step.desc"
-          class="veui-steps-step-desc"
+        <div class="veui-steps-step-index-container">
+          <div class="veui-steps-step-index">
+            <slot
+              name="index"
+              v-bind="step"
+              :index="index"
+            >
+              <veui-icon
+                v-if="index < current && step.status !== 'error'"
+                :name="icons.success"
+              />
+              <veui-icon
+                v-else-if="step.status === 'error'"
+                :name="icons.error"
+              />
+              <template v-else>
+                {{ index + 1 }}
+              </template>
+            </slot>
+          </div>
+          <div
+            v-if="index < stepStatus.length - 1"
+            class="veui-steps-step-connector-placeholder"
+            :class="
+              'veui-steps-step-connector-placeholder-' + stepStatus[index + 1]
+            "
+          />
+        </div>
+        <div
+          v-if="step.label"
+          class="veui-steps-step-content"
         >
-          <slot
-            name="desc"
-            v-bind="step"
-            :index="index"
+          <h3 class="veui-steps-step-label">
+            <slot
+              name="label"
+              v-bind="step"
+              :index="index"
+            >
+              {{ step.label }}
+            </slot>
+          </h3>
+          <p
+            v-if="step.desc"
+            class="veui-steps-step-desc"
           >
-            {{ step.desc }}
-          </slot>
-        </p>
-      </div>
-    </slot>
-  </veui-link>
+            <slot
+              name="desc"
+              v-bind="step"
+              :index="index"
+            >
+              {{ step.desc }}
+            </slot>
+          </p>
+        </div>
+      </slot>
+    </veui-link>
+  </template>
 </div>
 </template>
 
@@ -93,6 +113,25 @@ export default {
     current: {
       type: Number,
       default: 0
+    }
+  },
+  computed: {
+    stepStatus () {
+      return this.steps.reduce((acc, step, i) => {
+        let status =
+          step.status === 'error'
+            ? i === this.current
+              ? 'error-current'
+              : 'error'
+            : i === this.current
+              ? 'current'
+              : i < this.current
+                ? 'completed'
+                : 'incomplete'
+
+        acc.push(status)
+        return acc
+      }, [])
     }
   }
 }

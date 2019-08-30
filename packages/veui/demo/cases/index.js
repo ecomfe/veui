@@ -41,7 +41,6 @@ import Tree from './Tree'
 import Autocomplete from './Autocomplete'
 import Tag from './Tag'
 import Drawer from './Drawer'
-import Loading from './Loading'
 import Collapse from './Collapse'
 import Popover from './Popover'
 import Badge from './Badge'
@@ -173,6 +172,11 @@ export default [
     component: Link
   },
   {
+    path: '/loading',
+    name: 'Loading',
+    component: Loading
+  },
+  {
     path: '/number-input',
     name: 'NumberInput',
     component: NumberInput
@@ -232,8 +236,7 @@ export default [
   {
     path: '/select',
     name: 'Select',
-    component: Select,
-    disabled: true
+    component: Select
   },
   {
     path: '/slider',
@@ -243,8 +246,7 @@ export default [
   {
     path: '/steps',
     name: 'Steps',
-    component: Steps,
-    disabled: true
+    component: Steps
   },
   {
     path: '/switch',
@@ -263,10 +265,9 @@ export default [
     component: Tag
   },
   {
-    path: '/timepicker',
+    path: '/time-picker',
     name: 'TimePicker',
-    component: TimePicker,
-    disabled: false
+    component: TimePicker
   },
   {
     path: '/tabs',
@@ -311,14 +312,12 @@ export default [
   {
     path: '/transfer',
     name: 'Transfer',
-    component: Transfer,
-    disabled: true
+    component: Transfer
   },
   {
     path: '/tree',
     name: 'Tree',
-    component: Tree,
-    disabled: true
+    component: Tree
   },
   {
     path: '/uploader',

@@ -7,7 +7,6 @@
       :open.sync="modalDialogVisible"
       title="Dialog Title"
       modal
-      inline
     >
       <p>content area</p>
     </veui-dialog>

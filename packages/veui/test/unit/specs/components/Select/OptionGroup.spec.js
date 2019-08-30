@@ -29,7 +29,7 @@ describe('components/Select/OptionGroup', () => {
       },
       mounted () {
         this.$el
-          .querySelector('.veui-select-button')
+          .querySelector('.veui-select-input')
           .dispatchEvent(new Event('click'))
 
         setTimeout(() => {
