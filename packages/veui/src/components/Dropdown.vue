@@ -54,6 +54,7 @@
     :open="expanded"
     autofocus
     modal
+    match-width
     :options="realOverlayOptions"
     :overlay-class="overlayClass"
   >

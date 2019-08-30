@@ -6,6 +6,7 @@
   position: relative;
   display: inline-flex;
   align-items: center;
+  width: @dls-select-width;
 
   &.veui-input-invalid .veui-select-input {
     &:extend(._veui-input-invalid all);
@@ -18,6 +19,7 @@
     .veui-input-prepend {
       padding-right: 0;
     }
+
     .veui-input-append {
       padding-left: @dls-select-content-spacing;
       color: @dls-font-color-weak;
@@ -49,25 +51,33 @@
       overflow: hidden;
       flex-wrap: wrap;
     }
-    .veui-input-prepend {
-      display: block;
-      .veui-tag {
+
+    .veui-input {
+      &-prepend {
+        display: block;
+
+        .veui-tag {
+          float: left;
+          margin-right: @dls-select-tag-spacing;
+          margin-top: @dls-select-tag-spacing;
+        }
+
+        .veui-select-placeholder {
+          float: left;
+          margin-top: @dls-select-tag-spacing;
+        }
+      }
+
+      &-input {
         float: left;
-        margin-right: @dls-select-tag-spacing;
         margin-top: @dls-select-tag-spacing;
       }
-      .veui-select-placeholder {
-        float: left;
-        margin-top: @dls-select-tag-spacing;
+
+      &-append {
+        float: right;
+        margin: @dls-select-tag-spacing 0;
       }
-    }
-    input {
-      float: left;
-      margin-top: @dls-select-tag-spacing;
-    }
-    .veui-input-append {
-      float: right;
-      margin: @dls-select-tag-spacing 0;
+
       .veui-icon {
         margin-left: @dls-select-content-spacing;
       }
@@ -80,6 +90,7 @@
       height: 0;
     }
   }
+
   &-search-multi-input {
     input {
       width: 10px;
@@ -114,9 +125,11 @@
       .veui-select-placeholder {
         line-height: @@height;
       }
+
       .veui-input-append {
         height: @@height;
       }
+
       .veui-tag {
         height: @@height;
         font-size: inherit;

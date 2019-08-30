@@ -63,6 +63,7 @@
     v-show="realExpanded"
     ref="overlay"
     target="input"
+    match-width
     :options="realOverlayOptions"
     :open="realExpanded"
     :overlay-class="overlayClass"
