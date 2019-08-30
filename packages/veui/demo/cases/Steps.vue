@@ -3,7 +3,8 @@
   <h1><code>&lt;veui-steps&gt;</code></h1>
   <section>
     <p>
-      Step <input
+      Step
+      <input
         v-model="current"
         type="number"
         step="1"
@@ -28,34 +29,34 @@
     />
   </section>
   <section>
-    <h2>多行样式：</h2>
-    <veui-steps
-      :steps="steps"
-      :ui="`full${vertical ? ' vertical' : ''}`"
-      :current="current - 1"
-    />
-  </section>
-  <section>
     <h2>小型样式：</h2>
     <veui-steps
       :steps="steps"
       :current="current - 1"
-      :ui="`small${vertical ? ' vertical' : ''}`"
+      :ui="`s${vertical ? ' vertical' : ''}`"
     />
   </section>
   <section>
-    <h2>多行小型样式：</h2>
+    <h2>文案纵向样式：</h2>
     <veui-steps
       :steps="steps"
+      :ui="`labelVertical`"
       :current="current - 1"
-      :ui="`small full${vertical ? ' vertical' : ''}`"
+    />
+  </section>
+  <section>
+    <h2>小型文案纵向样式：</h2>
+    <veui-steps
+      :steps="steps"
+      :ui="`s labelVertical`"
+      :current="current - 1"
     />
   </section>
   <section>
     <h2>自定义模板：</h2>
     <veui-steps
       :steps="steps"
-      :ui="`full${vertical ? ' vertical' : ''}`"
+      :ui="`${vertical ? ' vertical' : ''}`"
       :current="current - 1"
     >
       <template
@@ -85,11 +86,13 @@ export default {
   },
   data () {
     return {
-      current: 2,
+      current: 4,
       steps: [
         { label: 'Step 1', desc: '填写信息', to: '/Tabs' },
         { label: 'Step 2', desc: '验证身份' },
-        { label: 'Step 3', desc: '注册成功' }
+        { label: 'Step 3', desc: '填写地址', status: 'error' },
+        { label: 'Step 4', desc: '填写资料', status: 'error' },
+        { label: 'Step 5', desc: '' }
       ],
       vertical: false
     }
@@ -98,7 +101,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-input[type="number"] {
+input[type='number'] {
   width: 60px;
   height: 30px;
   text-align: center;
