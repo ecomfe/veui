@@ -18,15 +18,10 @@
   }
 
   // 找到有分割线的元素，padding-top 设置分割线下间距， margin-top 设置分割线上间距
-  &:not(.veui-option-group-popout):not(:first-child) {
+  & &:not(.veui-option-group-popout):not(:first-child) {
     margin-top: @dls-option-group-padding-y;
     padding-top: @dls-option-group-padding-y;
     border-top: 1px solid @dls-option-group-separator-color;
-  }
-
-  &-label {
-    max-width: @dls-option-max-width-m;
-    .margin(@dls-option-group-padding-y, _);
   }
 
   &-popout &-label {
@@ -42,7 +37,7 @@
   &[ui~="xs"] {
     max-height: @dls-option-dropdown-max-height-xs;
 
-    &-label {
+    .veui-option-group-label {
       font-size: @dls-option-font-size-xs;
       max-width: @dls-option-max-width-xs;
     }
@@ -51,7 +46,7 @@
   &[ui~="s"] {
     max-height: @dls-option-dropdown-max-height-s;
 
-    &-label {
+    .veui-option-group-label {
       font-size: @dls-option-font-size-s;
       max-width: @dls-option-max-width-s;
     }
@@ -60,7 +55,7 @@
   &[ui~="l"] {
     max-height: @dls-option-dropdown-max-height-l;
 
-    &-label {
+    .veui-option-group-label {
       font-size: @dls-option-font-size-l;
       max-width: @dls-option-max-width-l;
     }
@@ -70,9 +65,10 @@
     color: @dls-option-font-color-highlighted;
   }
 
-  &-label:not(&-disabled) {
+  &-label {
     display: flex;
     align-items: center;
+    max-width: @dls-option-max-width-m;
     font-size: @dls-option-font-size-m;
     color: @dls-option-group-label-font-color;
     line-height: @dls-option-group-label-line-height;
@@ -85,9 +81,12 @@
     .veui-option-group-expandable {
       color: @dls-option-icon-color-aux;
       .dls-icon-size(@dls-option-icon-size-aux);
-      margin-left: @dls-option-label-spacing-before;
-      margin-right: @dls-option-label-spacing-after;
+      margin-left: @dls-option-label-spacing-after;
     }
+  }
+
+  &-label&-button {
+    .padding(0, _);
   }
 
   &-label-disabled {
