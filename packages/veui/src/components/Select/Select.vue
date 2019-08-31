@@ -396,6 +396,7 @@ export default {
       >
         <Input
           ref="input"
+          ui={this.realUi}
           class={this.inputClass}
           disabled={this.realDisabled || this.realReadonly}
           placeholder={this.inputPlaceholder}
