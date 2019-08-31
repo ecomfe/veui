@@ -19,6 +19,7 @@
 
   &-size {
     .veui-select {
+      width: auto;
       margin-left: @dls-pagination-spacing-1;
     }
   }
@@ -132,6 +133,11 @@
     &.focus-visible {
       background-color: @dls-button-background-color-normal-focus;
       .dls-focus-ring(@dls-button-border-color-focus, @dls-button-shadow-focus);
+    }
+
+    &:hover,
+    &.focus-visible {
+      text-decoration: none;
     }
 
     &:active {
