@@ -28,7 +28,7 @@
     "veui": "^1.0.0-alpha.31"
   },
   "devDependencies": {
-    "ava": "^0.20.0",
+    "ava": "^2.3.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "raw-loader": "^0.5.1",
     "veui-theme-one": "^1.0.0-alpha.31",
