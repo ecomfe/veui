@@ -36,7 +36,9 @@ export default function (babel) {
 
               let componentSrc = getComponentPath(realName)
               if (!componentSrc) {
-                throw new Error(`[${realName}] is not a valid component in VEUI.`)
+                throw new Error(
+                  `[${realName}] is not a valid component in VEUI.`
+                )
               }
               let name = local.name || imported.name
               path.insertBefore(

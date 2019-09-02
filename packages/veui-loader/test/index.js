@@ -8,17 +8,18 @@ function resolve (...args) {
 
 const SPECS = [
   {
+    title: 'should inject peer style module',
     entry: '../../veui/src/components/Breadcrumb.vue',
     expect: {
       include: [
         `\n<style lang="less" src="veui-theme-one/components/breadcrumb.less"></style>\n`
       ],
-      exclude: [
-        `\nimport 'veui-theme-one/components/Breadcrumb.js'\n`
-      ]
+      exclude: [`\nimport 'veui-theme-one/components/Breadcrumb.js'\n`]
     }
   },
   {
+    title:
+      'should inject peer locale module and peer style script module if exists',
     entry: '../../veui/src/components/Button.vue',
     expect: {
       include: [
@@ -30,6 +31,7 @@ const SPECS = [
     }
   },
   {
+    title: 'should inject locale module',
     entry: '../../veui/src/components/Calendar.vue',
     expect: {
       include: [
@@ -41,8 +43,8 @@ const SPECS = [
   }
 ]
 
-SPECS.forEach(({ entry, expect }) => {
-  test.cb(t => {
+SPECS.forEach(({ entry, expect, title }) => {
+  test.cb(title, t => {
     const compiler = webpack({
       entry: resolve(entry),
       output: {
@@ -52,7 +54,7 @@ SPECS.forEach(({ entry, expect }) => {
       resolve: {
         alias: {
           'veui-theme-one': resolve('../../veui-theme-one'),
-          'veui': resolve('../../veui/src')
+          veui: resolve('../../veui/src')
         }
       },
       module: {
