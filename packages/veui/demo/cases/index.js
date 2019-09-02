@@ -40,6 +40,7 @@ import Link from './Link'
 import Tree from './Tree'
 import Autocomplete from './Autocomplete'
 import Tag from './Tag'
+import Loading from './Loading'
 import Drawer from './Drawer'
 import Collapse from './Collapse'
 import Popover from './Popover'
@@ -325,10 +326,5 @@ export default [
     name: 'Uploader',
     component: Uploader,
     disabled: true
-  },
-  {
-    path: '/loading',
-    name: 'Loading',
-    component: Loading
   }
 ]
