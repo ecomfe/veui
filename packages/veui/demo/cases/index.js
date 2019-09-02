@@ -46,6 +46,7 @@ import Popover from './Popover'
 import Badge from './Badge'
 import TimePicker from './TimePicker'
 import Embedded from './Embedded'
+import Loading from './Loading'
 
 export default [
   {
