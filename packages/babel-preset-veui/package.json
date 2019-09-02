@@ -6,7 +6,7 @@
   "repository": "ecomfe/veui",
   "license": "MIT",
   "scripts": {
-    "test": "ava"
+    "test": "NODE_ENV=ava ava"
   },
   "keywords": [
     "veui",
@@ -21,12 +21,12 @@
   },
   "devDependencies": {
     "ava": "^2.3.0",
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.25.0",
-    "babel-eslint": "^7.2.3",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-stage-2": "^6.24.1",
+    "babel-core": "^6.26.3",
     "lerna": "^2.5.1"
+  },
+  "ava": {
+    "files": [
+      "test/index.js"
+    ]
   }
 }
