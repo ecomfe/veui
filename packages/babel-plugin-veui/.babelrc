@@ -1,16 +1,4 @@
 {
-  "presets": [
-    "env",
-    "stage-2"
-  ],
-  "plugins": [
-    "add-module-exports"
-  ],
-  "comments": false,
-  "env": {
-    "test": {
-      "presets": ["env", "stage-2"],
-      "plugins": [ "istanbul" ]
-    }
-  }
+  "presets": ["@babel/preset-env"],
+  "comments": false
 }
