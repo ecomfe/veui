@@ -121,7 +121,7 @@ describe('components/Select/OptionGroup', () => {
       },
       template: '<veui-select :options="options"/>'
     })
-    let controlButton = wrapper.find('.veui-select-button')
+    let controlButton = wrapper.find('.veui-select-input .veui-input-main')
     controlButton.trigger('click')
     await wrapper.vm.$nextTick()
     let options = wrapper.findAll('.veui-option')
