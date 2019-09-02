@@ -407,6 +407,7 @@ export default {
           onKeydown={this.handleInputKeydown}
           onInput={this.handleTriggerInput}
           clearable={this.searchable && !this.multiple}
+          composition
         >
           <template slot="prepend">
             {this.multiple ? multiPrependSlot : prependSlot}

@@ -136,7 +136,7 @@ describe('components/Select/Select', () => {
     let overlay = wrapper.find('.veui-overlay-box')
     expect(overlay.isVisible()).to.equal(false)
 
-    wrapper.find('.veui-select-input').trigger('click')
+    wrapper.find('.veui-input-main').trigger('click')
     await vm.$nextTick()
     overlay = wrapper.find('.veui-overlay-box')
     expect(overlay.isVisible()).to.equal(true)
@@ -145,7 +145,7 @@ describe('components/Select/Select', () => {
     await vm.$nextTick()
     vm.searchable = true
     await vm.$nextTick()
-    wrapper.find('.veui-select-search-input').trigger('click')
+    wrapper.find('.veui-input-main').trigger('click')
     await vm.$nextTick()
     overlay = wrapper.find('.veui-overlay-box')
     expect(overlay.isVisible()).to.equal(true)
@@ -200,7 +200,7 @@ describe('components/Select/Select', () => {
     })
     let { vm } = wrapper
     let overlay = wrapper.find('.veui-overlay-box')
-    wrapper.find('.veui-select-input').trigger('click')
+    wrapper.find('.veui-input-main').trigger('click')
     await vm.$nextTick()
     expect(overlay.isVisible()).to.equal(true)
 
@@ -213,7 +213,7 @@ describe('components/Select/Select', () => {
     vm.multiple = true
     vm.value = []
     await vm.$nextTick()
-    wrapper.find('.veui-select-multi-input').trigger('click')
+    wrapper.find('.veui-input-main').trigger('click')
     await vm.$nextTick()
     options.at(2).trigger('click')
     options.at(3).trigger('click')
