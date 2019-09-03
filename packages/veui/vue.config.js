@@ -43,6 +43,7 @@ module.exports = {
       )
       .set('veui', resolve('src'))
       .set('veui-theme-one-icons', resolve('../veui-theme-one-icons/icons'))
+      .set('veui-theme-dls-icons', resolve('../veui-theme-dls-icons/icons'))
 
     config.module
       .rule('vue')

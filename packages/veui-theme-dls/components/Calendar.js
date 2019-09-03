@@ -1,6 +1,6 @@
-import 'veui-theme-one-icons/chevron-left'
-import 'veui-theme-one-icons/chevron-down'
-import 'veui-theme-one-icons/chevron-right'
+import 'veui-theme-dls-icons/chevron-left'
+import 'veui-theme-dls-icons/chevron-down'
+import 'veui-theme-dls-icons/chevron-right'
 import config from 'veui/managers/config'
 
 config.defaults(

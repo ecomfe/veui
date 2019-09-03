@@ -1,4 +1,4 @@
-import 'veui-theme-one-icons/exclamation-circle'
+import 'veui-theme-dls-icons/exclamation-circle'
 import config from 'veui/managers/config'
 
 config.defaults(

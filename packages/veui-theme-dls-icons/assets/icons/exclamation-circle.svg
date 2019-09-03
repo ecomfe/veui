@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>48</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="画板" transform="translate(-352.000000, -127.000000)">
+            <g id="exclamation-circle" transform="translate(354.000000, 129.000000)">
+                <path d="M22,46 C8.745166,46 -2,35.254834 -2,22 C-2,8.745166 8.745166,-2 22,-2 C35.254834,-2 46,8.745166 46,22 C46,35.254834 35.254834,46 22,46 Z M22,42 C33.045695,42 42,33.045695 42,22 C42,10.954305 33.045695,2 22,2 C10.954305,2 2,10.954305 2,22 C2,33.045695 10.954305,42 22,42 Z M20,10 C20,8.8954305 20.8954305,8 22,8 C23.1045695,8 24,8.8954305 24,10 L24,26 C24,27.1045695 23.1045695,28 22,28 C20.8954305,28 20,27.1045695 20,26 L20,10 Z M20,32 C20,30.8954305 20.8954305,30 22,30 C23.1045695,30 24,30.8954305 24,32 L24,33 C24,34.1045695 23.1045695,35 22,35 C20.8954305,35 20,34.1045695 20,33 L20,32 Z" id="合并形状" fill="#000000" fill-rule="nonzero"></path>
+                <g id="分组" transform="translate(21.000000, 10.000000)"></g>
+            </g>
+        </g>
+    </g>
+</svg>

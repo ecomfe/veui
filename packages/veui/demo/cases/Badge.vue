@@ -45,10 +45,10 @@
 
 <script>
 import { Badge, Button, Checkbox } from 'veui'
-import 'veui-theme-one-icons/check'
+import 'veui-theme-dls-icons/check'
 import 'veui-theme-one-icons/edit'
-import 'veui-theme-one-icons/search'
-import 'veui-theme-one-icons/times'
+import 'veui-theme-dls-icons/search'
+import 'veui-theme-dls-icons/times'
 
 export default {
   name: 'badge-demo',

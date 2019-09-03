@@ -10,7 +10,8 @@ i18n.register(
     expand: 'Expand item',
     collapse: 'Collapse item',
     noData: 'No available items',
-    select: 'Please select'
+    select: 'Please select',
+    remove: 'Remove item'
   },
   {
     ns: 'transfer'

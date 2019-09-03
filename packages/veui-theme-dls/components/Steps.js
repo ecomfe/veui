@@ -1,5 +1,5 @@
-import 'veui-theme-one-icons/check'
-import 'veui-theme-one-icons/times'
+import 'veui-theme-dls-icons/check'
+import 'veui-theme-dls-icons/times'
 import config from 'veui/managers/config'
 
 config.defaults(

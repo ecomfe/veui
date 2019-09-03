@@ -4,7 +4,7 @@ Icon.register({
   'text-underline': {
     paths: [
       {
-        d: 'M8 2v20a16 16 0 1 0 32 0V2M2 46h44',
+        d: 'M8 2v20a16 16 0 1032 0V2M2 46h44',
         fill: 'none',
         'stroke-linecap': 'round',
         'stroke-linejoin': 'round',

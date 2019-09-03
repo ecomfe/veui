@@ -1,7 +1,7 @@
-import 'veui-theme-one-icons/chevron-up'
-import 'veui-theme-one-icons/chevron-down'
-import 'veui-theme-one-icons/plus'
-import 'veui-theme-one-icons/minus'
+import 'veui-theme-dls-icons/chevron-up'
+import 'veui-theme-dls-icons/chevron-down'
+import 'veui-theme-dls-icons/plus'
+import 'veui-theme-dls-icons/minus'
 import config from 'veui/managers/config'
 
 config.defaults(

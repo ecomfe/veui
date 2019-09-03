@@ -1,4 +1,4 @@
-import 'veui-theme-one-icons/times'
+import 'veui-theme-dls-icons/times'
 
 import config from 'veui/managers/config'
 
