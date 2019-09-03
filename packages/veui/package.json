@@ -70,9 +70,9 @@
     "node-dir": "^0.1.17",
     "promise-polyfill": "^8.1.0",
     "sinon": "^7.3.2",
-    "veui-loader": "^1.0.0-alpha.31",
-    "veui-theme-one": "^1.0.0-alpha.31",
-    "veui-theme-one-icons": "^1.0.0-alpha.31",
+    "veui-loader": "^1.0.0-alpha.30",
+    "veui-theme-dls": "^1.0.0-alpha.30",
+    "veui-theme-one-icons": "^1.0.0-alpha.30",
     "vue": "^2.6.7",
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.6.7"
