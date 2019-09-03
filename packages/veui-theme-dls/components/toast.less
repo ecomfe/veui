@@ -11,6 +11,10 @@
   color: @dls-toast-font-color;
   box-shadow: @dls-toast-shadow;
 
+  &-multiline {
+    .padding(@dls-toast-padding-y-multiline, _);
+  }
+
   &-state,
   &-close {
     display: flex;
@@ -53,6 +57,10 @@
       line-height: @dls-toast-title-line-height;
       padding-bottom: @dls-toast-title-spacing-after;
       color: @dls-toast-title-font-color;
+    }
+
+    &-message {
+      display: inline;
     }
   }
 
