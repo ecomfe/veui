@@ -159,7 +159,4 @@ section {
 .veui-alert.limit-width {
   width: 650px;
 }
-.veui-button {
-  font-size: 12px;
-}
 </style>
