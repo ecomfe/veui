@@ -1,0 +1,29 @@
+{
+  "name": "veui-theme-dls-icons",
+  "version": "1.0.0-alpha.30",
+  "description": "Icon pack for theme Baidu DLS of VEUI.",
+  "repository": "ecomfe/veui",
+  "license": "MIT",
+  "keywords": [
+    "veui",
+    "vue",
+    "baidu",
+    "svg icons"
+  ],
+  "scripts": {
+    "build": "node -r esm build/svg2json.js && node -r esm build/icons.js",
+    "prepublishOnly": "cp -r ./icons/* .",
+    "publish": "rm *.js"
+  },
+  "peerDependencies": {
+    "veui": "1.0.0-alpha.30"
+  },
+  "devDependencies": {
+    "esm": "^3.0.84",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.2",
+    "stringify-object": "^3.3.0",
+    "svgo": "^1.1.1",
+    "svgson": "^3.0.0"
+  }
+}

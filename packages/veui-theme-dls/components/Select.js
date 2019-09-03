@@ -1,4 +1,4 @@
-import 'veui-theme-one-icons/chevron-down'
+import 'veui-theme-dls-icons/chevron-down'
 import config from 'veui/managers/config'
 
 config.defaults(

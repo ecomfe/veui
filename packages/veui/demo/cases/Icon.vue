@@ -21,7 +21,7 @@
 <script>
 import bus from '../bus'
 import { Icon } from 'veui'
-import 'veui-theme-one-icons'
+import 'veui-theme-dls-icons'
 
 export default {
   name: 'icon-demo',

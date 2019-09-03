@@ -10,7 +10,7 @@
   <template slot="head">
     <slot name="head">
       <slot name="title">
-        {{ t("@transfer.available") }}
+        {{ t('@transfer.available') }}
       </slot>
       <veui-button
         ui="text"
@@ -18,7 +18,7 @@
         :disabled="!isSelectable"
         @click="selectAll"
       >
-        {{ t("@transfer.selectAll") }}
+        {{ t('@transfer.selectAll') }}
       </veui-button>
     </slot>
   </template>
@@ -57,7 +57,7 @@
 
   <template slot="no-data">
     <slot name="no-data">
-      {{ t("@transfer.noData") }}
+      {{ t('@transfer.noData') }}
     </slot>
   </template>
 </veui-filter-panel>
@@ -86,7 +86,7 @@ export default {
     isSelectable: Boolean,
     selected: Array,
     uiParts: Object,
-    realUi: String
+    ui: String
   },
   data () {
     return {

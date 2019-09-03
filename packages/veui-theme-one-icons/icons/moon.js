@@ -4,7 +4,7 @@ Icon.register({
   moon: {
     paths: [
       {
-        d: 'M28.46 2.45a14 14 0 1 0 17.09 17.1 22 22 0 1 1-17.09-17.1z',
+        d: 'M28.46 2.45a14 14 0 1017.09 17.1 22 22 0 11-17.09-17.1z',
         stroke: 'currentColor',
         'stroke-width': '4',
         fill: 'none',
