@@ -39,7 +39,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-vue": "^5.2.2",
     "husky": "^2.3.0",
-    "lerna": "^2.10.0",
+    "lerna": "^3.16.4",
     "lint-staged": "^8.1.7",
     "prettier": "^1.16.4",
     "prettier-eslint": "^8.8.2",
