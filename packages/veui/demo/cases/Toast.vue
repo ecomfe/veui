@@ -2,9 +2,9 @@
 <article>
   <h1><code>&lt;veui-toast&gt;</code></h1>
   <section>
-    <div class="toast-title">
+    <h3>
       全局提示
-    </div>
+    </h3>
     <veui-button
       ui="aux"
       @click="showToast('all')"
@@ -36,12 +36,103 @@
       错误
     </veui-button>
   </section>
+  <section class="col">
+    <section>
+      <veui-toast open>Test</veui-toast>
+    </section>
+    <section>
+      <veui-toast
+        open
+        closable
+        type="warning"
+      >Test</veui-toast>
+    </section>
+    <section>
+      <veui-toast
+        open
+        closable
+        type="error"
+      >Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
+        dolores, sint harum aspernatur aliquid sed maxime dolorum qui
+        recusandae voluptatem. Saepe dolorem placeat culpa nisi eligendi ipsam
+        illo non quam.</veui-toast>
+    </section>
+    <section>
+      <veui-toast
+        open
+        title="Lorem Ipsum"
+        type="info"
+      >Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
+        laboriosam, atque cumque sequi, debitis impedit fugit vitae iure,
+        rerum accusantium odio porro. Exercitationem excepturi adipisci unde
+        maiores est! Eos, consequatur.</veui-toast>
+    </section>
+    <section>
+      <veui-toast
+        open
+        title="Lorem Ipsum"
+        closable
+      >Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+        minima doloremque quaerat consequatur accusamus repellat eum? Dolorem
+        sunt est, sint inventore, id atque ut aspernatur ipsa corrupti debitis
+        quaerat voluptatibus!</veui-toast>
+    </section>
+  </section>
+  <section class="col">
+    <section>
+      <veui-toast
+        ui="s"
+        open
+      >Test</veui-toast>
+    </section>
+    <section>
+      <veui-toast
+        ui="s"
+        open
+        closable
+        type="warning"
+      >Test</veui-toast>
+    </section>
+    <section>
+      <veui-toast
+        ui="s"
+        open
+        closable
+        type="error"
+      >Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
+        dolores, sint harum aspernatur aliquid sed maxime dolorum qui
+        recusandae voluptatem. Saepe dolorem placeat culpa nisi eligendi ipsam
+        illo non quam.</veui-toast>
+    </section>
+    <section>
+      <veui-toast
+        ui="s"
+        open
+        title="Lorem Ipsum"
+        type="info"
+      >Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
+        laboriosam, atque cumque sequi, debitis impedit fugit vitae iure,
+        rerum accusantium odio porro. Exercitationem excepturi adipisci unde
+        maiores est! Eos, consequatur.</veui-toast>
+    </section>
+    <section>
+      <veui-toast
+        ui="s"
+        open
+        title="Lorem Ipsum"
+        closable
+      >Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+        minima doloremque quaerat consequatur accusamus repellat eum? Dolorem
+        sunt est, sint inventore, id atque ut aspernatur ipsa corrupti debitis
+        quaerat voluptatibus!</veui-toast>
+    </section>
+  </section>
 </article>
 </template>
 
 <script>
 import bus from '../bus'
-import { Button } from 'veui'
+import { Button, Toast } from 'veui'
 import toast from 'veui/managers/toast'
 
 let messages = [
@@ -70,7 +161,8 @@ let messages = [
 export default {
   name: 'toast',
   components: {
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-toast': Toast
   },
   data () {
     return {
@@ -112,14 +204,32 @@ export default {
 }
 </script>
 
-<style scoped>
-p {
-  margin: 30px;
+<style lang="less" scoped>
+section {
+  & + & {
+    margin-top: 20px;
+  }
 }
-.toast-title {
+
+.col {
+  float: left;
+
+  & + & {
+    margin-left: 20px;
+  }
+}
+
+h3 {
   margin-bottom: 30px;
 }
+
 .veui-button {
-  margin-right: 10px;
+  & + & {
+    margin-left: 10px;
+  }
+}
+
+.veui-toast {
+  position: relative;
 }
 </style>

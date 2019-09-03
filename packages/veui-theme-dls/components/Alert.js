@@ -26,7 +26,7 @@ config.defaults(
     ui: {
       size: {
         values: ['s', 'm'],
-        default: 's'
+        default: 'm'
       },
       style: {
         values: ['strong']
