@@ -8,6 +8,10 @@
   border: 1px solid transparent;
   color: @dls-alert-font-color;
 
+  &-multiline {
+    .padding(@dls-alert-padding-y-multiline, _);
+  }
+
   &-state,
   &-nav,
   &-close {
@@ -53,6 +57,10 @@
       line-height: @dls-alert-title-line-height;
       margin-bottom: @dls-alert-title-spacing-after;
       color: @dls-alert-title-font-color;
+    }
+
+    &-message {
+      display: inline;
     }
 
     &-extra {

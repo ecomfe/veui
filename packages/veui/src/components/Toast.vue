@@ -4,7 +4,11 @@
     v-if="localOpen"
     :ui="realUi"
     class="veui-toast"
-    :class="`veui-toast-${type}${isTitled ? ' veui-toast-titled' : ''}`"
+    :class="{
+      [`veui-toast-${type}`]: true,
+      'veui-toast-titled': isTitled,
+      'veui-toast-multiline': multiline
+    }"
     role="alert"
   >
     <div class="veui-toast-state">
@@ -26,7 +30,10 @@
           name="title"
         />
       </div>
-      <div class="veui-toast-content-message">
+      <div
+        ref="message"
+        class="veui-toast-content-message"
+      >
         <slot>{{ message }}</slot>
       </div>
     </div>
@@ -89,7 +96,8 @@ export default {
   },
   data () {
     return {
-      localOpen: this.open
+      localOpen: this.open,
+      multiline: false
     }
   },
   computed: {
@@ -107,6 +115,11 @@ export default {
       this.$emit('update:open', false)
       this.$emit('close')
     }, this.duration)
+
+    let { message } = this.$refs
+    if (message) {
+      this.multiline = message.getClientRects().length > 1
+    }
 
     this.$emit('ready', this.$el.offsetHeight)
   },

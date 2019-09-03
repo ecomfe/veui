@@ -20,7 +20,8 @@ config.defaults(
     ui: {
       size: {
         values: ['s', 'm'],
-        default: 'm'
+        default: 'm',
+        inherit: true
       }
     }
   },

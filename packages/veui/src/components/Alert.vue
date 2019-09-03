@@ -1,9 +1,13 @@
 <template>
 <div
   v-if="localOpen"
-  class="veui-alert"
   :ui="realUi"
-  :class="`veui-alert-${type}${isTitled ? ' veui-alert-titled' : ''}`"
+  class="veui-alert"
+  :class="{
+    [`veui-alert-${type}`]: true,
+    'veui-alert-titled': isTitled,
+    'veui-alert-multiline': multiline
+  }"
   role="alert"
   aria-expanded="true"
 >
@@ -51,7 +55,10 @@
           name="title"
         />
       </div>
-      <div class="veui-alert-content-message">
+      <div
+        ref="message"
+        class="veui-alert-content-message"
+      >
         <slot :message="message">
           {{ message }}
         </slot>
@@ -145,7 +152,8 @@ export default {
   data () {
     return {
       localOpen: this.open,
-      localIndex: 0
+      localIndex: 0,
+      multiline: false
     }
   },
   computed: {
@@ -174,6 +182,12 @@ export default {
     },
     localIndex (value) {
       this.$emit('update:index', value)
+    }
+  },
+  mounted () {
+    let { message } = this.$refs
+    if (message) {
+      this.multiline = message.getClientRects().length > 1
     }
   },
   methods: {
