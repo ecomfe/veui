@@ -21,6 +21,7 @@
     </veui-alert>
     <veui-alert
       type="success"
+      ui="s"
       message="恭喜你，你的请求已成功处理"
       closable
       :show-icon="false"
@@ -53,7 +54,7 @@
     </veui-alert>
     <veui-alert
       class="limit-width"
-      ui="strong"
+      ui="strong s"
       type="success"
       message="恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理"
       closable
@@ -66,6 +67,7 @@
     <veui-alert
       class="limit-width"
       type="warning"
+      ui="s"
       :message="messages"
       closable
     />
@@ -84,6 +86,7 @@
     </veui-alert>
     <veui-alert
       type="info"
+      ui="s"
       message="提醒，这个消息需要注意"
     />
     <veui-alert
@@ -94,6 +97,7 @@
     />
     <veui-alert
       type="error"
+      ui="s"
       message="错误，请检查并修改后再进行操作"
     />
     <veui-alert
