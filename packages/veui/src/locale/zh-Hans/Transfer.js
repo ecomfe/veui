@@ -10,7 +10,8 @@ i18n.register(
     expand: '展开项目',
     collapse: '收起项目',
     noData: '没有待选项',
-    select: '请选择'
+    select: '请选择',
+    remove: '移除'
   },
   {
     ns: 'transfer'

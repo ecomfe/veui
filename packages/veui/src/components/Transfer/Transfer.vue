@@ -188,7 +188,7 @@ export default {
               isSelectable: this.isSelectable,
               selected: this.localSelected,
               uiParts: this.uiParts,
-              realUi: this.realUi
+              ui: this.realUi
             },
             on: {
               select: (...args) => {
@@ -218,7 +218,8 @@ export default {
               placeholder: this.selectedPlaceholder,
               isSelectable: this.isSelectable,
               icons: this.icons,
-              realUi: this.realUi
+              uiParts: this.uiParts,
+              ui: this.realUi
             },
             on: {
               remove: item => {
