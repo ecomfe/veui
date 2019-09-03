@@ -1,4 +1,4 @@
-import 'veui-theme-one-icons/check'
+import 'veui-theme-dls-icons/check'
 import config from 'veui/managers/config'
 
 config.defaults(

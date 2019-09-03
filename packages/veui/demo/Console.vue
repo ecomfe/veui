@@ -13,7 +13,7 @@
       @click.native.stop="logs = []"
     />
     <icon
-      :name="expanded ? 'angle-down' : 'angle-up'"
+      :name="expanded ? 'chevron-down' : 'chevron-up'"
       label="Toggle console"
     />
     Console <small>({{ logs.length }})</small>
@@ -44,8 +44,8 @@
 import bus from './bus'
 import Icon from 'veui/components/Icon'
 import 'vue-awesome/icons/ban'
-import 'veui-theme-one-icons/angle-up'
-import 'veui-theme-one-icons/angle-down'
+import 'veui-theme-dls-icons/chevron-up'
+import 'veui-theme-dls-icons/chevron-down'
 
 export default {
   name: 'veui-console',
@@ -88,7 +88,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~less-plugin-est/src/all.less";
+@import '~less-plugin-est/src/all.less';
 
 @nav-width: 240px;
 @light-bg-color: #f6f9ff;
@@ -145,7 +145,7 @@ export default {
       }
 
       &:last-child::before {
-        content: "";
+        content: '';
         .absolute(0, _, 0, 0);
         width: 2px;
         background-color: #369;

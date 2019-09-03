@@ -363,7 +363,7 @@ import confirm from 'veui/plugins/confirm'
 import prompt from 'veui/plugins/prompt'
 import toast from 'veui/plugins/toast'
 import Vue from 'vue'
-import 'veui-theme-one-icons/calendar'
+import 'veui-theme-dls-icons/calendar'
 
 Vue.use(alert)
 Vue.use(confirm)
