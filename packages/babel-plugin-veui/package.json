@@ -24,7 +24,8 @@
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "ava": "^2.3.0",
-    "lerna": "^2.5.1"
+    "lerna": "^2.5.1",
+    "prettier": "^1.18.2"
   },
   "ava": {
     "files": [
