@@ -2,6 +2,7 @@ import test from 'ava'
 import { transformFileSync } from '@babel/core'
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
+import prettier from 'prettier'
 import plugin from '../lib'
 
 test('should transform VEUI components correctly', t => {
@@ -16,5 +17,9 @@ test('should transform VEUI components correctly', t => {
   )
   expect = expect.replace(/\r\n/gm, '\n')
   code = code.replace(/\r\n/gm, '\n')
-  t.is(code, expect)
+  t.is(format(code), format(expect))
 })
+
+function format (source) {
+  return prettier.format(source, { parser: 'babel' })
+}
