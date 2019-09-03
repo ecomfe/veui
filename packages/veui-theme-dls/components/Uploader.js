@@ -1,10 +1,10 @@
 import 'veui-theme-one-icons/upload'
-import 'veui-theme-one-icons/times'
-import 'veui-theme-one-icons/check'
+import 'veui-theme-dls-icons/times'
+import 'veui-theme-dls-icons/check'
 import 'veui-theme-one-icons/paperclip'
-import 'veui-theme-one-icons/sync-alt'
-import 'veui-theme-one-icons/plus'
-import 'veui-theme-one-icons/exclamation-circle'
+import 'veui-theme-dls-icons/sync-alt'
+import 'veui-theme-dls-icons/plus'
+import 'veui-theme-dls-icons/exclamation-circle'
 import config from 'veui/managers/config'
 
 config.defaults(

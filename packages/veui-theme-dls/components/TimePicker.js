@@ -1,4 +1,4 @@
-import 'veui-theme-one-icons/clock'
+import 'veui-theme-dls-icons/clock'
 import config from 'veui/managers/config'
 
 config.defaults(
