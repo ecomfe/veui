@@ -2,6 +2,7 @@
 
 .veui-toast {
   display: flex;
+  align-items: flex-start;
   line-height: @dls-toast-line-height;
   padding: @dls-toast-padding-y @dls-toast-padding-x;
   position: absolute;
@@ -12,9 +13,12 @@
 
   &-state,
   &-close {
-    height: dls-line-height(@dls-toast-line-height, 1em);
-    display: inline-flex;
+    display: flex;
     align-items: center;
+  }
+
+  &-state {
+    margin-right: @dls-toast-content-spacing-before;
   }
 
   &-icon {
@@ -22,10 +26,13 @@
   }
 
   &-close {
-    .veui-button {
-      font-size: @dls-toast-icon-size-aux;
+    .veui-icon {
+      .dls-icon-size(@dls-toast-icon-size-aux);
     }
-    margin-left: @dls-toast-content-spacing-after;
+
+    .veui-button {
+      font-size: inherit;
+    }
   }
 
   .veui-toast-style(@type) {
@@ -38,7 +45,8 @@
   }
 
   &-content {
-    padding-left: @dls-toast-content-spacing-before;
+    flex-grow: 1;
+    margin-right: @dls-toast-content-spacing-after;
 
     &-title {
       font-weight: @dls-toast-title-font-weight;
@@ -67,38 +75,76 @@
   /* 有title样式 */
   &&-titled {
     padding: @dls-toast-padding-y-titled @dls-toast-padding-x;
+
     .veui-toast-icon {
       .dls-icon-size(@dls-toast-icon-size-titled);
     }
 
-    .veui-toast-state {
-      display: block;
-    }
-
     .veui-toast-close {
-      position: absolute;
       align-items: start;
-      top: @dls-toast-padding-y-titled;
-      right: @dls-toast-padding-x;
-    }
-  }
-
-  &[ui~="s"] {
-    font-size: @dls-toast-font-size-s;
-    border-radius: @dls-toast-border-radius-s;
-    &-content {
-      &-title {
-        font-size: @dls-toast-title-font-size-s;
-      }
     }
   }
 
   &[ui~="m"] {
     font-size: @dls-toast-font-size-m;
     border-radius: @dls-toast-border-radius-m;
-    &-content {
-      &-title {
+
+    .veui-toast {
+      &-state,
+      &-close {
+        font-size: @dls-toast-font-size-m;
+        height: dls-line-height(@dls-toast-line-height, @dls-toast-font-size-m);
+      }
+
+      &-content {
+        &-title {
+          font-size: @dls-toast-title-font-size-m;
+        }
+      }
+    }
+  }
+
+  &-titled[ui~="m"] {
+    .veui-toast {
+      &-state,
+      &-close {
         font-size: @dls-toast-title-font-size-m;
+        height: dls-line-height(
+          @dls-toast-title-line-height,
+          @dls-toast-title-font-size-m
+        );
+      }
+    }
+  }
+
+  &[ui~="s"] {
+    font-size: @dls-toast-font-size-s;
+    border-radius: @dls-toast-border-radius-s;
+
+    .veui-toast {
+      &-state,
+      &-close {
+        font-size: @dls-toast-font-size-s;
+        height: dls-line-height(@dls-toast-line-height, @dls-toast-font-size-s);
+      }
+
+      &-content {
+        &-title {
+          font-size: @dls-toast-title-font-size-s;
+        }
+      }
+    }
+  }
+
+  &-titled[ui~="s"] {
+    .veui-toast {
+      &-state,
+      &-close {
+        font-size: @dls-toast-title-font-size-s;
+        height: dls-line-height(
+          @dls-toast-title-line-height,
+          @dls-toast-title-font-size-s
+        );
       }
     }
   }

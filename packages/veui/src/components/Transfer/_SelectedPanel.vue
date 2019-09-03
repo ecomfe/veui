@@ -7,7 +7,7 @@
   class="veui-transfer-selected-panel"
   :class="{ 'veui-transfer-selected-flat': showMode === 'flat' }"
   :placeholder="placeholder"
-  :ui="realUi"
+  :ui="ui"
 >
   <template slot="head">
     <slot name="head">

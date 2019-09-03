@@ -1,13 +1,8 @@
 @import "../lib.less";
 
 .veui-alert {
-  @success: @veui-success-color;
-  @warning: @veui-warning-color;
-  @info: @veui-info-color;
-  @error: @veui-alert-color;
-
-  position: relative;
   display: flex;
+  align-items: flex-start;
   line-height: @dls-alert-line-height;
   padding: @dls-alert-padding-y @dls-alert-padding-x;
   border: 1px solid transparent;
@@ -16,13 +11,11 @@
   &-state,
   &-nav,
   &-close {
-    height: dls-line-height(@dls-alert-line-height, 1em);
-    display: inline-flex;
+    display: flex;
     align-items: center;
   }
 
   &-state {
-    display: none;
     margin-right: @dls-alert-content-spacing-before;
   }
 
@@ -30,9 +23,14 @@
     .dls-icon-size(@dls-alert-icon-size);
   }
 
+  &-nav,
   &-close {
+    .veui-icon {
+      .dls-icon-size(@dls-alert-icon-size-aux);
+    }
+
     .veui-button {
-      font-size: @dls-alert-icon-size-aux;
+      font-size: inherit;
     }
   }
 
@@ -40,20 +38,20 @@
     white-space: nowrap;
     margin-right: @dls-alert-content-spacing-after;
     color: @dls-alert-pages-font-color;
+
     &-indicator {
       padding: 0 @dls-alert-pages-spacing;
     }
   }
 
   &-content {
-    width: 100%;
-    height: 100%;
-    padding-right: @dls-alert-content-spacing-after;
+    flex-grow: 1;
+    margin-right: @dls-alert-content-spacing-after;
 
     &-title {
       font-weight: @dls-alert-title-font-weight;
       line-height: @dls-alert-title-line-height;
-      padding-bottom: @dls-alert-title-spacing-after;
+      margin-bottom: @dls-alert-title-spacing-after;
       color: @dls-alert-title-font-color;
     }
 
@@ -85,6 +83,7 @@
   /* 有title样式 */
   &&-titled {
     padding: @dls-alert-padding-y-titled @dls-alert-padding-x;
+
     .veui-alert-icon {
       .dls-icon-size(@dls-alert-icon-size-titled);
     }
@@ -94,34 +93,70 @@
     }
   }
 
-  &[ui~="s"] {
-    font-size: @dls-alert-font-size-s;
-    border-radius: @dls-alert-border-radius-s;
-    &-content {
-      &-title {
-        font-size: @dls-alert-title-font-size-s;
-      }
-    }
-  }
-
   &[ui~="m"] {
     font-size: @dls-alert-font-size-m;
     border-radius: @dls-alert-border-radius-m;
-    &-content {
-      &-title {
-        font-size: @dls-alert-title-font-size-m;
+
+    .veui-alert {
+      &-state,
+      &-nav,
+      &-close {
+        font-size: @dls-alert-font-size-m;
+        height: dls-line-height(@dls-alert-line-height, @dls-alert-font-size-m);
+      }
+
+      &-content {
+        &-title {
+          font-size: @dls-alert-title-font-size-m;
+        }
       }
     }
   }
 
-  &[ui~="strong"] {
-    .veui-alert-state {
-      display: inline-flex;
+  &-titled[ui~="m"] {
+    .veui-alert {
+      &-state,
+      &-nav,
+      &-close {
+        font-size: @dls-alert-title-font-size-m;
+        height: dls-line-height(
+          @dls-alert-title-line-height,
+          @dls-alert-title-font-size-m
+        );
+      }
     }
+  }
 
-    &.veui-alert-titled {
-      .veui-alert-state {
-        display: block;
+  &[ui~="s"] {
+    font-size: @dls-alert-font-size-s;
+    border-radius: @dls-alert-border-radius-s;
+
+    .veui-alert {
+      &-state,
+      &-nav,
+      &-close {
+        font-size: @dls-alert-font-size-s;
+        height: dls-line-height(@dls-alert-line-height, @dls-alert-font-size-s);
+      }
+
+      &-content {
+        &-title {
+          font-size: @dls-alert-title-font-size-s;
+        }
+      }
+    }
+  }
+
+  &-titled[ui~="s"] {
+    .veui-alert {
+      &-state,
+      &-nav,
+      &-close {
+        font-size: @dls-alert-title-font-size-s;
+        height: dls-line-height(
+          @dls-alert-title-line-height,
+          @dls-alert-title-font-size-s
+        );
       }
     }
   }

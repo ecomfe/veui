@@ -1,6 +1,5 @@
 import { mount } from '@vue/test-utils'
 import Button from '@/components/Button'
-import Icon from '@/components/Icon'
 
 describe('components/Button', () => {
   it('should create a button component with `primary` ui', () => {
@@ -15,10 +14,7 @@ describe('components/Button', () => {
 
   it('should be disabled when the button is loading', () => {
     const SpinIcon = {
-      components: {
-        'veui-icon': Icon
-      },
-      template: '<veui-icon name="spinner" spin />'
+      template: '<i>Loading</i>'
     }
     const wrapper = mount(Button, {
       propsData: {
