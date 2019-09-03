@@ -1,8 +1,8 @@
-import 'veui-theme-one-icons/chevron-left'
-import 'veui-theme-one-icons/chevron-right'
+import 'veui-theme-dls-icons/chevron-left'
+import 'veui-theme-dls-icons/chevron-right'
 import 'veui-theme-one-icons/angle-double-left'
 import 'veui-theme-one-icons/angle-double-right'
-import 'veui-theme-one-icons/ellipsis-h'
+import 'veui-theme-dls-icons/ellipsis'
 import config from 'veui/managers/config'
 
 config.defaults(
@@ -12,7 +12,7 @@ config.defaults(
       next: 'chevron-right',
       backward: 'angle-double-left',
       forward: 'angle-double-right',
-      more: 'ellipsis-h'
+      more: 'ellipsis'
     },
     ui: {
       style: {

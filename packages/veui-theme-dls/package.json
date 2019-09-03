@@ -19,6 +19,7 @@
     "focus-visible": "^4.1.0",
     "less-plugin-dls": "^0.20.2",
     "less-plugin-est": "^3.0.0",
+    "veui-theme-dls-icons": "^1.0.0-alpha.30",
     "veui-theme-one-icons": "^1.0.0-alpha.30"
   },
   "peerDependencies": {

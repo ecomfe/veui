@@ -11,7 +11,7 @@
   }
 
   ul {
-    padding-left: ~"calc(@{dls-tree-icon-size} + @{dls-tree-node-content-spacing})";
+    padding-left: ~"calc(@{dls-tree-icon-size-aux} + @{dls-tree-node-content-spacing})";
   }
 
   &-item {
@@ -22,6 +22,10 @@
     .clearfix();
     outline: none;
 
+    & > .veui-icon {
+      .dls-icon-size(@dls-tree-icon-size);
+    }
+
     &-expand-switcher,
     &-label {
       float: left;
@@ -29,7 +33,6 @@
 
     &-expand-switcher {
       display: inline-block;
-      .dls-icon-size(@dls-tree-icon-size);
       background: none;
       border: none;
       padding: 0;
@@ -37,6 +40,11 @@
       cursor: pointer;
       outline: none;
       .veui-transition(box-shadow, transform);
+
+      .veui-icon {
+        .dls-icon-size(@dls-tree-icon-size-aux);
+        color: @dls-tree-icon-color-aux;
+      }
     }
 
     &-expanded &-expand-switcher {
@@ -64,6 +72,10 @@
     &-remove {
       cursor: pointer;
       margin-left: auto;
+
+      .veui-icon {
+        .dls-icon-size(@dls-tree-icon-size-aux);
+      }
     }
 
     &-hidden {
@@ -100,10 +112,13 @@
   }
 
   &-item-disabled,
-  &-disabled &-item,
-  &-disabled &-item-expand-switcher {
+  &-disabled &-item {
     color: @dls-tree-node-font-color-disabled;
     cursor: not-allowed;
+  }
+
+  &-disabled &-item-expand-switcher {
+    color: @dls-tree-icon-color-aux-disabled;
   }
 
   &[ui~="checkbox-after"] {

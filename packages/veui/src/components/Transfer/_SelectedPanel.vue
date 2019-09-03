@@ -12,7 +12,7 @@
   <template slot="head">
     <slot name="head">
       <slot name="title">
-        {{ t("@transfer.selected") }}
+        {{ t('@transfer.selected') }}
       </slot>
       <veui-button
         ui="text"
@@ -20,7 +20,7 @@
         :disabled="!isSelectable || !datasource.length"
         @click="removeAll"
       >
-        {{ t("@transfer.deselectAll") }}
+        {{ t('@transfer.deselectAll') }}
       </veui-button>
     </slot>
   </template>
@@ -53,10 +53,15 @@
         />
       </template>
       <template slot="item-append">
-        <veui-icon
+        <veui-button
           class="veui-tree-item-remove"
-          :name="icons.remove"
-        />
+          :ui="uiParts.remove"
+        >
+          <veui-icon
+            :label="t('@transfer.remove')"
+            :name="icons.remove"
+          />
+        </veui-button>
       </template>
     </veui-tree>
     <ul
@@ -114,7 +119,7 @@
 
   <template slot="no-data">
     <slot name="no-data">
-      {{ t("@transfer.select") }}
+      {{ t('@transfer.select') }}
     </slot>
   </template>
 </veui-filter-panel>
@@ -144,8 +149,9 @@ export default {
     filter: Function,
     placeholder: String,
     isSelectable: Boolean,
-    realUi: String,
-    icons: Object
+    ui: String,
+    icons: Object,
+    uiParts: Object
   },
   data () {
     return {
