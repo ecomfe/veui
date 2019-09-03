@@ -71,8 +71,8 @@
     "promise-polyfill": "^8.1.0",
     "sinon": "^7.3.2",
     "veui-loader": "^1.0.0-alpha.32",
-    "veui-theme-one": "^1.0.0-alpha.32",
-    "veui-theme-one-icons": "^1.0.0-alpha.32",
+    "veui-theme-dls": "^1.0.0-alpha.32",
+    "veui-theme-dls-icons": "^1.0.0-alpha.32",
     "vue": "^2.6.7",
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.6.7"

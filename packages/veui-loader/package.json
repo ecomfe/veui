@@ -28,7 +28,7 @@
     "@babel/runtime": "^7.5.5",
     "ava": "^2.3.0",
     "raw-loader": "^0.5.1",
-    "veui-theme-one": "^1.0.0-alpha.32",
+    "veui-theme-dls": "^1.0.0-alpha.32",
     "webpack": "^4.39.3"
   }
 }
