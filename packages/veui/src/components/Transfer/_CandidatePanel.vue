@@ -5,7 +5,7 @@
   :searchable="searchable"
   :filter="realFilter"
   :placeholder="placeholder"
-  :ui="realUi"
+  :ui="ui"
 >
   <template slot="head">
     <slot name="head">
