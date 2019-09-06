@@ -112,13 +112,15 @@
 
   <section class="sdf">
     <h3>单向数据流</h3>
-    <veui-field label="Price：">
-      <veui-number-input
-        :value="number7"
-        :min="0"
-        @change="handlePriceChange"
-      />
-    </veui-field>
+    <veui-form>
+      <veui-field label="Price：">
+        <veui-number-input
+          :value="number7"
+          :min="0"
+          @change="handlePriceChange"
+        />
+      </veui-field>
+    </veui-form>
   </section>
 </article>
 </template>
