@@ -1,4 +1,4 @@
-import { findIndex, uniq } from 'lodash'
+import { findIndex, uniq, get } from 'lodash'
 
 /**
  *
@@ -376,36 +376,197 @@ export const VALUE_EVENTS = ['input', 'change']
 
 const linear = (time, duration, distance) => (time / duration) * distance
 
+const centerToCenter = (
+  { top: vTop, height: vHeight },
+  { top: tTop, height: tHeight }
+) => tTop + tHeight / 2 - (vTop + vHeight / 2)
+
 export function scrollToCenter (
   viewport,
-  scroller,
   target,
   duration,
+  beforeScroll,
+  callback,
   timingFn = linear
 ) {
-  let { top: vTop, height: vHeight } = viewport.getBoundingClientRect()
-  let { top: tTop, height: tHeight } = target.getBoundingClientRect()
-  let { height: sHeight } = scroller.getBoundingClientRect()
-  let initScrollTop = viewport.scrollTop
-  let maxScrollTop = sHeight - vHeight
-  let distance = tTop + tHeight / 2 - (vTop + vHeight / 2)
+  return scrollCommon(
+    centerToCenter,
+    viewport,
+    target,
+    duration,
+    beforeScroll,
+    callback,
+    timingFn
+  )
+}
+
+const topToTop = ({ top: vTop }, { top: tTop }, viewport) =>
+  tTop - (vTop - viewport.clientTop)
+
+export function scrollToTop (
+  viewport,
+  target,
+  duration,
+  beforeScroll,
+  callback,
+  timingFn = linear
+) {
+  return scrollCommon(
+    topToTop,
+    viewport,
+    target,
+    duration,
+    beforeScroll,
+    callback,
+    timingFn
+  )
+}
+
+function scrollCommon (
+  distanceToScroll,
+  viewport,
+  target,
+  duration,
+  beforeScroll,
+  callback,
+  timingFn = linear
+) {
+  // window 用 window.innerHeight or html element?
+  let realViewport = viewport === window ? document.documentElement : viewport
+  let vRect = realViewport.getBoundingClientRect()
+  let tRect = target.getBoundingClientRect()
+  let distance = distanceToScroll(vRect, tRect, realViewport)
+
+  // 滚动的距离不要超出最大范围
+  let initScrollTop = realViewport.scrollTop
   if (initScrollTop + distance < 0) {
     distance = -initScrollTop
   }
+  let maxScrollTop = realViewport.scrollHeight - vRect.vHeight
   if (initScrollTop + distance > maxScrollTop) {
     distance = maxScrollTop - initScrollTop
   }
+  scrollTo(
+    viewport,
+    initScrollTop,
+    distance,
+    duration,
+    beforeScroll,
+    callback,
+    timingFn
+  )
+}
+
+export function scrollTo (
+  viewport,
+  initScrollTop,
+  distance,
+  duration,
+  beforeScroll,
+  callback,
+  timingFn
+) {
   let startTime = null
-  const step = timestamp => {
+  let isWindow = viewport === window
+  const step = () => {
+    let tm = Date.now()
     if (!startTime) {
-      startTime = timestamp
+      startTime = tm
     }
-    let curTime = Math.min(timestamp - startTime, duration)
+    let curTime = Math.min(tm - startTime, duration)
     let offset = !duration ? distance : timingFn(curTime, duration, distance)
-    viewport.scrollTop = initScrollTop + offset
-    if (offset !== distance) {
+    let newScrollTop = initScrollTop + offset
+    if (beforeScroll) beforeScroll(newScrollTop)
+    if (isWindow) {
+      window.scrollTo(document.documentElement.scrollLeft, newScrollTop)
+    } else {
+      viewport.scrollTop = newScrollTop
+    }
+    if (curTime !== duration) {
       requestAnimationFrame(step)
+    } else if (callback) {
+      callback()
     }
   }
-  requestAnimationFrame(step)
+  step()
+}
+
+/**
+ * 计算 elm 以及滚动祖先节点组成的 clip 视口
+ * @param {HTMLElement} elm 起始元素
+ * @param {?object} elmRect elm 的 Rect，若提供了就少一次调用，减少 rect 的获取次数
+ */
+export function getClipViewport (elm, elmRect) {
+  let rect = null
+  let el = elm
+  while (el) {
+    let { clientHeight, clientWidth, scrollHeight, scrollWidth } = el
+    let vScroll = scrollHeight > clientHeight
+    let hScroll = scrollWidth > clientWidth
+    if (vScroll || hScroll) {
+      let { top, left } =
+        el === elm && elmRect ? elmRect : el.getBoundingClientRect()
+      if (vScroll) {
+        let realTop = top + el.clientTop
+        let realBottom = realTop + clientHeight
+        rect = {
+          ...(rect || {}),
+          top: get(rect, 'top') == null ? realTop : Math.max(rect.top, realTop),
+          bottom:
+            get(rect, 'bottom') == null
+              ? realBottom
+              : Math.min(rect.bottom, realBottom)
+        }
+      }
+      if (hScroll) {
+        let realLeft = left + el.clientLeft
+        let realRight = realLeft + el.clientWidth
+        rect = {
+          ...(rect || {}),
+          left:
+            get(rect, 'left') == null
+              ? realLeft
+              : Math.max(rect.left, realLeft),
+          right:
+            get(rect, 'right') == null
+              ? realRight
+              : Math.min(rect.right, realRight)
+        }
+      }
+    }
+    el = el.parentNode
+  }
+  return rect
+}
+
+const normalizeBound = (val, max) => Math.min(Math.max(val, 0), max)
+
+export function calcClip (
+  { top, right, bottom, left, width, height },
+  { top: vTop, right: vRight, bottom: vBottom, left: vLeft }
+) {
+  let clip = null
+  if (vTop !== null && (top < vTop || bottom > vBottom)) {
+    clip = {
+      top: normalizeBound(vTop - top, height),
+      bottom: normalizeBound(vBottom - top, height),
+      left: 0,
+      right: width
+    }
+  }
+  if (vLeft !== null && (left < vLeft || right > vRight)) {
+    clip = {
+      left: normalizeBound(vLeft - left, width),
+      right: normalizeBound(vRight - left, width),
+      top: clip ? clip.top : 0,
+      bottom: clip ? clip.bottom : height
+    }
+  }
+  return clip
+}
+
+export function getHash () {
+  const href = window.location.href
+  const index = href.indexOf('#')
+  return index >= 0 ? href.slice(index) : ''
 }
