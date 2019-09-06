@@ -12,6 +12,10 @@
     "path": "AlertBox.vue"
   },
   {
+    "name": "Anchor",
+    "path": "Anchor.vue"
+  },
+  {
     "name": "Autocomplete",
     "path": "Autocomplete/Autocomplete.vue"
   },

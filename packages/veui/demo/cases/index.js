@@ -47,6 +47,7 @@ import Popover from './Popover'
 import Badge from './Badge'
 import TimePicker from './TimePicker'
 import Embedded from './Embedded'
+import Anchor from './Anchor'
 
 export default [
   {
@@ -69,6 +70,12 @@ export default [
     path: '/badge',
     name: 'Badge',
     component: Badge
+  },
+  {
+    path: '/anchor',
+    hash: '#milk-coffee',
+    name: 'Anchor',
+    component: Anchor
   },
   {
     path: '/breadcrumb',

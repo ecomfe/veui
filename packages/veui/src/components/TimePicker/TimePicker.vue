@@ -360,10 +360,9 @@ export default {
     },
     scrollSelectedTime (viewport, duration) {
       if (viewport) {
-        let sel = viewport.querySelector('.veui-option-selected')
-        if (sel) {
-          let scroller = viewport.querySelector('.veui-option-group')
-          scrollToCenter(viewport, scroller, sel, duration)
+        let selected = viewport.querySelector('.veui-option-selected')
+        if (selected) {
+          scrollToCenter(viewport, selected, duration)
         }
       }
     },
