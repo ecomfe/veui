@@ -180,6 +180,10 @@
 </article>
 </template>
 <script>
+import 'vue-awesome/icons/star'
+import 'vue-awesome/icons/sun'
+import 'vue-awesome/icons/umbrella'
+
 import { Loading, Button, Icon, Span } from 'veui'
 export default {
   name: 'loading',
