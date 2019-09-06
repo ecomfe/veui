@@ -66,7 +66,7 @@
   </p>
   <p>
     <veui-dropdown
-      ui="link"
+      ui="link tiny"
       label="操作"
       disabled
       :options="options"

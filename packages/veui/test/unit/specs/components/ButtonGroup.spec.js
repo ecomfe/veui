@@ -47,21 +47,24 @@ describe('components/ButtonGroup', () => {
     expect(wrapper.classes('veui-button-group-disabled')).to.equal(true)
   })
 
-  it('should handle click', async () => {
+  it('should handle click correctly', async () => {
     const ButtonGroupClick = {
       components: {
         'veui-button-group': ButtonGroup
       },
       methods: {
-        handleClick () {
+        handleClick (item, index, event) {
+          this.event = event
           this.clicktime += 1
         },
-        handleUndo (item, index) {
+        handleUndo (item, index, event) {
+          this.event = event
           this.hasUndo = true
           this.value = item.value
           this.index = index
         },
-        handleRedo (item, index) {
+        handleRedo (item, index, event) {
+          this.event = event
           this.hasRedo = true
           this.value = item.value
           this.index = index
@@ -83,26 +86,36 @@ describe('components/ButtonGroup', () => {
               label: 'Redo',
               value: 'redo'
             }
-          ]
+          ],
+          event
         }
       },
-      template: '<veui-button-group ui="primary" :items="items" @click="handleClick" @undo="handleUndo" @redo="handleRedo" />'
+      template:
+        '<veui-button-group ui="primary" :items="items" @click="handleClick" @undo="handleUndo" @redo="handleRedo" />'
     }
 
     const wrapper = mount(ButtonGroupClick)
 
-    wrapper.findAll('.veui-button').at(0).trigger('click')
+    wrapper
+      .findAll('.veui-button')
+      .at(0)
+      .trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.hasUndo).to.equal(true)
     expect(wrapper.vm.clicktime).to.equal(1)
     expect(wrapper.vm.index).to.equal(0)
     expect(wrapper.vm.value).to.equal('undo')
+    expect(wrapper.vm.event.type).to.equal('click')
 
-    wrapper.findAll('.veui-button').at(1).trigger('click')
+    wrapper
+      .findAll('.veui-button')
+      .at(1)
+      .trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.hasUndo).to.equal(true)
     expect(wrapper.vm.clicktime).to.equal(2)
     expect(wrapper.vm.index).to.equal(1)
     expect(wrapper.vm.value).to.equal('redo')
+    expect(wrapper.vm.event.type).to.equal('click')
   })
 })

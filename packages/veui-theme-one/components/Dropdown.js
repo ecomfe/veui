@@ -8,6 +8,10 @@ config.defaults(
       collapse: 'chevron-down'
     },
     ui: {
+      size: {
+        values: ['large', 'small', 'tiny', 'micro'],
+        inherit: true
+      },
       style: {
         values: ['primary'],
         inherit: true
