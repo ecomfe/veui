@@ -400,21 +400,26 @@ export default {
         <Input
           ref="input"
           ui={this.realUi}
-          class={this.inputClass}
+          class={{
+            'veui-select-trigger': true,
+            [this.inputClass]: true
+          }}
           disabled={this.realDisabled || this.realReadonly}
           placeholder={this.inputPlaceholder}
           value={this.searchInputLabel}
           onClick={this.handleInputClick}
           onKeydown={this.handleInputKeydown}
           onInput={this.handleTriggerInput}
-          clearable={this.searchable && !this.multiple}
+          // clearable={this.searchable && !this.multiple}
           composition
         >
           <template slot="prepend">
             {this.multiple ? multiPrependSlot : prependSlot}
           </template>
           <template slot="append">
-            {this.limitLabel}
+            {this.limitLabel ? (
+              <span class="veui-select-count">{this.limitLabel}</span>
+            ) : null}
             <Icon
               class="veui-select-icon"
               name={this.icons[this.expanded ? 'collapse' : 'expand']}
@@ -462,7 +467,7 @@ export default {
                   <template slot="label">
                     {this.$scopedSlots['no-data']
                       ? this.$scopedSlots['no-data']({
-                        searchValue: this.inputValue
+                        keyword: this.inputValue
                       })
                       : this.$slots['no-data'] || '无搜索结果'}
                   </template>
