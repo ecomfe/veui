@@ -1,0 +1,55 @@
+@import "../lib.less";
+
+// TODO remove it
+@dls-anchor-height-m: @dls-line-height-m * @dls-link-font-size-m;
+
+.veui-anchor {
+  position: relative;
+  max-height: 100%;
+  overflow: auto;
+
+  &-placeholder {
+    display: table;
+    width: 0;
+    height: 0;
+  }
+  &-tree {
+    border-left: @dls-anchor-track-width solid @dls-anchor-track-color;
+    display: inline-block;
+  }
+  &-wrapper {
+    max-height: 100vh;
+    .veui-tree-item {
+      height: @dls-anchor-height-m;
+      line-height: @dls-anchor-height-m;
+      margin-top: @dls-anchor-padding-x;
+    }
+    & > .veui-tree > li:first-child > .veui-tree-item:first-child {
+      margin-top: 0;
+    }
+  }
+  &-wrapper &-item:first-child {
+    margin-left: @dls-anchor-level-indent;
+  }
+  &-item:not(.veui-disabled):hover::before,
+  &-item-active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: @dls-anchor-indicator-width;
+    height: @dls-anchor-height-m;
+    background-color: @dls-link-font-color-normal-hover;
+  }
+  &-wrapper &-item-active {
+    color: @dls-anchor-indicator-color-active;
+    &::before {
+      background-color: @dls-anchor-indicator-color-active;
+    }
+    &:hover {
+      color: @dls-anchor-indicator-color-hover;
+      &::before {
+        background-color: @dls-anchor-indicator-color-hover;
+      }
+    }
+  }
+}
