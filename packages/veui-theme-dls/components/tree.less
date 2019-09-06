@@ -82,19 +82,6 @@
       display: none;
     }
 
-    &:hover::before {
-      background-color: @dls-tree-node-background-color-hover;
-      .veui-transition(background-color);
-    }
-    &.focus-visible::before {
-      background-color: @dls-tree-node-background-color-focus;
-      .veui-transition(background-color);
-    }
-    &:active::before {
-      background-color: @dls-tree-node-background-color-active;
-      .veui-transition(background-color);
-    }
-
     &::before {
       content: "";
       position: absolute;
@@ -102,12 +89,23 @@
       height: inherit;
       width: 100%;
       z-index: -1;
+      .veui-transition(background-color);
+    }
+
+    &:hover::before {
+      background-color: @dls-tree-node-background-color-hover;
+    }
+    &.focus-visible::before {
+      background-color: @dls-tree-node-background-color-focus;
+    }
+    &:active::before {
+      background-color: @dls-tree-node-background-color-active;
     }
 
     &-disabled:active::before,
     &-disabled:hover::before,
     &-disabled.focus-visible::before {
-      background-color: unset;
+      background-color: transparent;
     }
   }
 
