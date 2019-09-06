@@ -10,6 +10,7 @@
   color: @dls-tag-font-color;
   background-color: @dls-tag-background-color;
   white-space: nowrap;
+  outline: none;
   .veui-transition(color, border-color, background-color, box-shadow, opacity);
 
   .make-metrics(@size) {
@@ -27,11 +28,16 @@
   }
 
   &[ui~="no-border"]:not(.focus-visible) {
-    border: none;
+    border-color: transparent;
   }
 
   &-close {
     margin-left: @dls-tag-content-spacing;
+    font-size: inherit;
+
+    .veui-icon {
+      .dls-icon-size(@dls-tag-icon-size);
+    }
   }
 
   &.focus-visible {

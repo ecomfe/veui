@@ -7,19 +7,26 @@
   .veui-transition(transform);
   transform-origin: 50% 0;
   box-shadow: @dls-option-dropdown-shadow;
-  max-height: @dls-option-dropdown-max-height-m;
   background-color: @dls-option-background-color;
 
   &[ui~="xs"] {
     max-height: @dls-option-dropdown-max-height-xs;
+    border-radius: @dls-option-dropdown-border-radius-xs;
   }
 
   &[ui~="s"] {
     max-height: @dls-option-dropdown-max-height-s;
+    border-radius: @dls-option-dropdown-border-radius-s;
+  }
+
+  &[ui~="m"] {
+    max-height: @dls-option-dropdown-max-height-m;
+    border-radius: @dls-option-dropdown-border-radius-m;
   }
 
   &[ui~="l"] {
     max-height: @dls-option-dropdown-max-height-l;
+    border-radius: @dls-option-dropdown-border-radius-l;
   }
 
   .veui-overlay-enter &,
