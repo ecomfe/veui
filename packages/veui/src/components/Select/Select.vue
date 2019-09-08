@@ -218,6 +218,7 @@ export default {
       this.$refs.options.relocateDeep()
     },
     handleInputClick (e) {
+      console.log('click')
       if (this.realReadonly || this.realDisabled) {
         return
       }
