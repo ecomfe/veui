@@ -9,6 +9,14 @@
     width: 100%;
   }
 
+  .veui-input-append > .veui-icon {
+    color: @dls-input-icon-color;
+  }
+
+  &.veui-disabled .veui-input-append > .veui-icon {
+    color: @dls-input-icon-color-disabled;
+  }
+
   &-overlay-content {
     &:extend(._veui-dropdown-overlay all);
     min-width: @dls-time-picker-dropdown-min-width;
