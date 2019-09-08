@@ -2,6 +2,10 @@
 <div
   ref="self"
   class="veui-time-picker"
+  :class="{
+    'veui-readonly': realReadonly,
+    'veui-disabled': realDisabled
+  }"
   :ui="realUi"
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"
