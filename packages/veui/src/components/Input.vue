@@ -12,6 +12,7 @@
     'veui-disabled': realDisabled
   }"
   :ui="realUi"
+  v-on="containerListeners"
 >
   <template v-if="$slots.before || $slots['before-label']">
     <div class="veui-input-before">
@@ -22,7 +23,10 @@
       </slot>
     </div>
   </template>
-  <label class="veui-input-main">
+  <div
+    class="veui-input-main"
+    @click="focus"
+  >
     <span
       v-show="empty && editable"
       class="veui-input-placeholder"
@@ -66,7 +70,7 @@
         <slot name="append"/>
       </div>
     </template>
-  </label>
+  </div>
   <template v-if="$slots.after || $slots['after-label']">
     <div class="veui-input-after">
       <slot name="after">
@@ -136,11 +140,10 @@ export default {
       }
     },
     inputListeners () {
-      return pick(this.$listeners, [
-        ...KEYBOARD_EVENTS,
-        ...FOCUS_EVENTS,
-        ...MOUSE_EVENTS
-      ])
+      return pick(this.$listeners, [...KEYBOARD_EVENTS, ...FOCUS_EVENTS])
+    },
+    containerListeners () {
+      return pick(this.$listeners, MOUSE_EVENTS)
     },
     editable () {
       return !this.realDisabled && !this.realReadonly
