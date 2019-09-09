@@ -4,7 +4,7 @@ import config from 'veui/managers/config'
 config.defaults(
   {
     icons: {
-      remove: 'times-circle'
+      clear: 'times-circle'
     },
     ui: {
       size: {
