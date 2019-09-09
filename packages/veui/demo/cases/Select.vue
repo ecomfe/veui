@@ -31,6 +31,18 @@
     />
   </section>
   <section>
+    <h2>多选样式：xs</h2>
+    <veui-select
+      v-model="defaultMultiValue"
+      ui="xs"
+      v-bind="attrs"
+      placeholder="全部"
+      :max="3"
+      clearable
+      multiple
+    />
+  </section>
+  <section>
     <h2>多选样式：s</h2>
     <veui-select
       v-model="defaultMultiValue"
