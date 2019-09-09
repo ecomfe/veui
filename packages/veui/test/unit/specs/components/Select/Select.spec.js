@@ -316,10 +316,6 @@ describe('components/Select/Select', () => {
     input.trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()
     expect(overlay.isVisible()).to.equal(true)
-    items = wrapper.findAll(OPTION_ITEM)
-    expect(items.at(0).isVisible()).to.equal(true)
-    expect(items.at(1).isVisible()).to.equal(false)
-    expect(items.at(2).isVisible()).to.equal(false)
 
     input.trigger('keydown', { key: 'Tab' })
     await vm.$nextTick()
@@ -371,7 +367,9 @@ describe('components/Select/Select', () => {
     input.trigger('input')
     await vm.$nextTick()
     items = wrapper.findAll(OPTION_ITEM)
-    expect(wrapper.find('.veui-select-no-data').text()).to.equal('无搜索结果')
+    expect(wrapper.find('.veui-select-options-no-data').text()).to.equal(
+      '无搜索结果'
+    )
     wrapper.destroy()
   })
 
