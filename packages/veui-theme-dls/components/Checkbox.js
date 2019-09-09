@@ -10,7 +10,9 @@ config.defaults(
     },
     ui: {
       size: {
-        values: ['small']
+        values: ['s', 'm'],
+        default: 'm',
+        inherit: true
       }
     }
   },
