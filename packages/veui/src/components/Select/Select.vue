@@ -168,6 +168,7 @@ export default {
       } else {
         this.localValue = null
       }
+      this.inputValue = ''
       e.stopPropagation()
     },
     getMultipleLabels (value) {
@@ -215,7 +216,10 @@ export default {
       this.localValue.splice(index, 1)
     },
     handleRelocate () {
-      this.$refs.options.relocateDeep()
+      let { options } = this.$refs
+      if (options) {
+        options.relocateDeep()
+      }
     },
     handleInputClick (e) {
       if (this.realReadonly || this.realDisabled) {
@@ -476,15 +480,6 @@ export default {
               onKeydown={this.handleKeydown}
             >
               {this.$slots.before}
-              {!this.realOptions ? (
-                <div class="veui-select-no-data">
-                  {this.$scopedSlots['no-data']
-                    ? this.$scopedSlots['no-data']({
-                      keyword: this.inputValue
-                    })
-                    : this.$slots['no-data'] || this.t('noData')}
-                </div>
-              ) : null}
               <OptionGroup
                 ref="options"
                 options={this.realOptions}
@@ -497,6 +492,15 @@ export default {
                 }}
               >
                 {this.$slots.default}
+                {!this.realOptions ? (
+                  <div class="veui-select-options-no-data">
+                    {this.$scopedSlots['no-data']
+                      ? this.$scopedSlots['no-data']({
+                        keyword: this.inputValue
+                      })
+                      : this.$slots['no-data'] || this.t('noData')}
+                  </div>
+                ) : null}
               </OptionGroup>
               {this.$slots.after}
             </div>
