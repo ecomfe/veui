@@ -29,6 +29,14 @@
     border-radius: @dls-option-dropdown-border-radius-l;
   }
 
+  &-no-data {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    .padding(@dls-option-dropdown-placeholder-padding-y, _);
+    color: @dls-option-dropdown-placeholder-font-color;
+  }
+
   .veui-overlay-enter &,
   .veui-overlay-leave-to & {
     transform: scaleY(0);
