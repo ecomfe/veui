@@ -15,14 +15,15 @@
   <veui-anchor
     :container="conatiner"
     class="anchor-one"
-    :datasource="coffees0"
+    :items="coffees0"
   />
-  <h2 class="static-header">static anchor</h2>
+  <h2 class="static-header">static small anchor</h2>
   <veui-anchor
     :sticky="false"
+    ui="s"
     :container="conatiner"
     class="anchor-two"
-    :datasource="coffees"
+    :items="coffees"
   />
 
   <h2>clipped anchor</h2>
@@ -35,7 +36,7 @@
       <veui-anchor
         :container="$refs.con3"
         class="anchor-three"
-        :datasource="coffees0"
+        :items="coffees0"
       />
     </div>
     <div class="long blue"/>
@@ -214,17 +215,6 @@ export default {
   },
   mounted () {
     this.conatiner = document.querySelector('#content')
-    setTimeout(() => {
-      this.a = true
-    })
-  },
-  methods: {
-    addItem () {
-      this.coffees0.push({
-        label: 'Cappuccino',
-        value: 'cappuccino'
-      })
-    }
   }
 }
 </script>

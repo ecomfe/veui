@@ -149,7 +149,7 @@ import {
   constant,
   pick
 } from 'lodash'
-import { scrollToCenter } from '../../utils/dom'
+import { scrollTo } from '../../utils/dom'
 import TimePickerUtil from './_TimePickerUtil'
 
 const genOption = (o, suffix = '') => ({
@@ -362,7 +362,7 @@ export default {
       if (viewport) {
         let selected = viewport.querySelector('.veui-option-selected')
         if (selected) {
-          scrollToCenter(viewport, selected, duration)
+          scrollTo(0.5, viewport, selected, duration)
         }
       }
     },
