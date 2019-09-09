@@ -190,7 +190,7 @@ export default {
         if (this.searchable) {
           // change the input value to option'label when selected
           this.$nextTick(() => {
-            this.inputValue = this.searchInputLabel
+            this.inputValue = ''
           })
         }
         return
@@ -399,7 +399,7 @@ export default {
         aria-owns={this.dropdownId}
         aria-readonly={this.realReadonly}
         aria-expanded={this.expanded}
-        aria-disabled={this.realDisabled || this.realReadonly}
+        aria-disabled={this.realDisabled}
         aria-labelledby={this.labelId}
         aria-haspopup="listbox"
       >
@@ -410,7 +410,8 @@ export default {
             'veui-select-trigger': true,
             [this.inputClass]: true
           }}
-          disabled={this.realDisabled || this.realReadonly}
+          disabled={this.realDisabled}
+          readonly={this.realReadonly}
           placeholder={this.inputPlaceholder}
           value={this.searchInputLabel}
           onClick={this.handleInputClick}
