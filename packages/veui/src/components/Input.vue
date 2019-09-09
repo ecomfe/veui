@@ -65,7 +65,7 @@
           :aria-label="t('clear')"
           @click.stop="clear"
         >
-          <veui-icon :name="icons.remove"/>
+          <veui-icon :name="icons.clear"/>
         </veui-button>
         <slot name="append"/>
       </div>
@@ -207,7 +207,10 @@ export default {
       this.focused = false
     },
     focus () {
-      this.$refs.input.focus()
+      let { input } = this.$refs
+      if (input) {
+        input.focus()
+      }
     },
     activate () {
       if (this.realDisabled || this.realReadonly) {

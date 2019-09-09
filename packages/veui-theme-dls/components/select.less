@@ -15,7 +15,9 @@
   &-trigger {
     .veui-input-prepend {
       flex-grow: 1;
+      flex-shrink: 1;
       padding-right: 0;
+      .ellipsis();
     }
 
     .veui-input-append {
@@ -53,12 +55,12 @@
     .veui-input-main {
       display: block;
       overflow: hidden;
-      flex-wrap: wrap;
     }
 
     .veui-input {
       &-prepend {
         display: block;
+        overflow: visible;
 
         .veui-tag {
           float: left;
@@ -107,12 +109,35 @@
   }
 
   &-icon {
-    .dls-icon-size(@dls-select-icon-size-aux);
-    .veui-transition(transform, color);
+    position: relative;
   }
 
-  &-expanded &-icon {
+  &-toggle {
+    .dls-icon-size(@dls-select-icon-size-aux);
+    .veui-transition(transform, color, opacity);
+  }
+
+  &:hover &-clear + &-toggle {
+    opacity: 0;
+  }
+
+  &-expanded &-toggle {
     transform: rotateZ(180deg);
+  }
+
+  &-clear {
+    .absolute(50%, 50%, _, _);
+    transform: translate(50%, -50%);
+    opacity: 0;
+    z-index: 1;
+
+    .veui-icon {
+      .dls-icon-size(@dls-input-icon-size);
+    }
+
+    .veui-select:hover & {
+      opacity: 1;
+    }
   }
 
   &-options {
@@ -137,7 +162,6 @@
 
       .veui-tag {
         height: @@height;
-        font-size: inherit;
       }
     }
     .veui-select-search-multi-input {
