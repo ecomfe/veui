@@ -1,4 +1,4 @@
-import { findIndex, uniq, get } from 'lodash'
+import { findIndex, uniq, get, clamp } from 'lodash'
 
 /**
  *
@@ -371,36 +371,49 @@ export const KEYBOARD_EVENTS = ['keydown', 'keypress', 'keyup']
 export const FOCUS_EVENTS = ['focus', 'blur', 'focusin', 'focusout']
 export const VALUE_EVENTS = ['input', 'change']
 
+export const raf =
+  window.requestAnimationFrame || (cb => setTimeout(cb, 1000 / 60))
+
+export function getWindowRect () {
+  let { innerHeight, innerWidth } = window
+  return {
+    top: 0,
+    bottom: innerHeight,
+    left: 0,
+    right: innerWidth,
+    height: innerHeight,
+    width: innerWidth
+  }
+}
+
 const linear = (time, duration, distance) => (time / duration) * distance
 
-const centerToCenter = (
-  { top: vTop, height: vHeight },
-  { top: tTop, height: tHeight }
-) => tTop + tHeight / 2 - (vTop + vHeight / 2)
-
-export function scrollToCenter (
-  viewport,
-  target,
-  duration,
-  beforeScroll,
-  callback,
-  timingFn = linear
-) {
-  return scrollCommon(
-    centerToCenter,
-    viewport,
-    target,
-    duration,
-    beforeScroll,
-    callback,
-    timingFn
+const calcDistance = (
+  positions,
+  { top: vTop },
+  { top: tTop, height: tHeight },
+  { clientTop, clientHeight }
+) => {
+  let [tPosition, vPosition] = Array.isArray(positions)
+    ? positions
+    : [positions, positions]
+  return (
+    tTop + tHeight * tPosition - (vTop + clientTop + clientHeight * vPosition)
   )
 }
 
-const topToTop = ({ top: vTop }, { top: tTop }, viewport) =>
-  tTop - (vTop - viewport.clientTop)
-
-export function scrollToTop (
+/**
+ * 在 viewport 中滚动 target 到指定位置
+ * @param {Array<number>| number} positions 位置百分数，如 0.5 等价于 [0.5, 0.5]
+ * @param {Window|HTMLElement} viewport 视口元素
+ * @param {HTMLElement} target 被滚动的元素
+ * @param {number} duration 滚动时间，单位ms
+ * @param {Function=} beforeScroll 滚动之前的hook
+ * @param {Function=} callback 滚动完成的回调
+ * @param {Function=} timingFn 时间函数
+ */
+export function scrollTo (
+  positions,
   viewport,
   target,
   duration,
@@ -408,69 +421,34 @@ export function scrollToTop (
   callback,
   timingFn = linear
 ) {
-  return scrollCommon(
-    topToTop,
-    viewport,
-    target,
-    duration,
-    beforeScroll,
-    callback,
-    timingFn
-  )
-}
-
-function scrollCommon (
-  distanceToScroll,
-  viewport,
-  target,
-  duration,
-  beforeScroll,
-  callback,
-  timingFn = linear
-) {
-  // window 用 window.innerHeight or html element?
-  let realViewport = viewport === window ? document.documentElement : viewport
-  let vRect = realViewport.getBoundingClientRect()
+  let isWindow = viewport === window
+  let realViewport = isWindow ? document.documentElement : viewport
+  let vRect = isWindow ? getWindowRect() : viewport.getBoundingClientRect()
   let tRect = target.getBoundingClientRect()
-  let distance = distanceToScroll(vRect, tRect, realViewport)
+  let distance = calcDistance(
+    positions,
+    vRect,
+    tRect,
+    isWindow ? { clientTop: 0, clientHeight: vRect.height } : viewport
+  )
 
   // 滚动的距离不要超出最大范围
   let initScrollTop = realViewport.scrollTop
   if (initScrollTop + distance < 0) {
     distance = -initScrollTop
   }
-  let maxScrollTop = realViewport.scrollHeight - vRect.vHeight
+  let maxScrollTop = realViewport.scrollHeight - vRect.height
   if (initScrollTop + distance > maxScrollTop) {
     distance = maxScrollTop - initScrollTop
   }
-  scrollTo(
-    viewport,
-    initScrollTop,
-    distance,
-    duration,
-    beforeScroll,
-    callback,
-    timingFn
-  )
-}
 
-export function scrollTo (
-  viewport,
-  initScrollTop,
-  distance,
-  duration,
-  beforeScroll,
-  callback,
-  timingFn
-) {
   let startTime = null
-  let isWindow = viewport === window
   const step = () => {
-    let tm = Date.now()
+    let time = Date.now()
     if (!startTime) {
-      startTime = tm
+      startTime = time
     }
-    let curTime = Math.min(tm - startTime, duration)
+    let curTime = Math.min(time - startTime, duration)
     let offset = !duration ? distance : timingFn(curTime, duration, distance)
     let newScrollTop = initScrollTop + offset
     if (beforeScroll) beforeScroll(newScrollTop)
@@ -480,7 +458,7 @@ export function scrollTo (
       viewport.scrollTop = newScrollTop
     }
     if (curTime !== duration) {
-      requestAnimationFrame(step)
+      raf(step)
     } else if (callback) {
       callback()
     }
@@ -490,12 +468,15 @@ export function scrollTo (
 
 /**
  * 计算 elm 以及滚动祖先节点组成的 clip 视口
- * @param {HTMLElement} elm 起始元素
- * @param {?object} elmRect elm 的 Rect，若提供了就少一次调用，减少 rect 的获取次数
+ * @param {HTMLElement | Window} elm 起始元素
+ * @param {Object=} elmRect elm 的 Rect，若提供了就少一次调用，减少 rect 的获取次数
  */
 export function getClipViewport (elm, elmRect) {
   let rect = null
   let el = elm
+  if (elm === window) {
+    return getWindowRect()
+  }
   while (el) {
     let { clientHeight, clientWidth, scrollHeight, scrollWidth } = el
     let vScroll = scrollHeight > clientHeight
@@ -536,8 +517,6 @@ export function getClipViewport (elm, elmRect) {
   return rect
 }
 
-const normalizeBound = (val, max) => Math.min(Math.max(val, 0), max)
-
 export function calcClip (
   { top, right, bottom, left, width, height },
   { top: vTop, right: vRight, bottom: vBottom, left: vLeft }
@@ -545,25 +524,19 @@ export function calcClip (
   let clip = null
   if (vTop !== null && (top < vTop || bottom > vBottom)) {
     clip = {
-      top: normalizeBound(vTop - top, height),
-      bottom: normalizeBound(vBottom - top, height),
+      top: clamp(vTop - top, 0, height),
+      bottom: clamp(vBottom - top, 0, height),
       left: 0,
       right: width
     }
   }
   if (vLeft !== null && (left < vLeft || right > vRight)) {
     clip = {
-      left: normalizeBound(vLeft - left, width),
-      right: normalizeBound(vRight - left, width),
+      left: clamp(vLeft - left, 0, width),
+      right: clamp(vRight - left, 0, width),
       top: clip ? clip.top : 0,
       bottom: clip ? clip.bottom : height
     }
   }
   return clip
-}
-
-export function getHash () {
-  const href = window.location.href
-  const index = href.indexOf('#')
-  return index >= 0 ? href.slice(index) : ''
 }

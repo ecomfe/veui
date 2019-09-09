@@ -1,7 +1,14 @@
 @import "../lib.less";
 
 // TODO remove it
-@dls-anchor-height-m: @dls-line-height-m * @dls-link-font-size-m;
+@dls-anchor-height-m: dls-line-height(
+  @dls-line-height-m,
+  @dls-link-font-size-m
+);
+@dls-anchor-height-s: dls-line-height(
+  @dls-line-height-m,
+  @dls-link-font-size-s
+);
 
 .veui-anchor {
   position: relative;
@@ -9,13 +16,14 @@
   overflow: auto;
 
   &-placeholder {
-    display: table;
+    display: block;
     width: 0;
     height: 0;
   }
   &-tree {
     border-left: @dls-anchor-track-width solid @dls-anchor-track-color;
     display: inline-block;
+    padding: 0;
   }
   &-wrapper {
     max-height: 100vh;
@@ -23,6 +31,15 @@
       height: @dls-anchor-height-m;
       line-height: @dls-anchor-height-m;
       margin-top: @dls-anchor-padding-x;
+      &:hover::before {
+        display: none;
+      }
+    }
+    &[ui~="s"] {
+      .veui-tree-item {
+        height: @dls-anchor-height-s;
+        line-height: @dls-anchor-height-s;
+      }
     }
     & > .veui-tree > li:first-child > .veui-tree-item:first-child {
       margin-top: 0;
@@ -39,6 +56,10 @@
     width: @dls-anchor-indicator-width;
     height: @dls-anchor-height-m;
     background-color: @dls-link-font-color-normal-hover;
+  }
+  &-wrapper[ui~="s"] &-item:not(.veui-disabled):hover::before,
+  &-wrapper[ui~="s"] &-item-active::before {
+    height: @dls-anchor-height-s;
   }
   &-wrapper &-item-active {
     color: @dls-anchor-indicator-color-active;
