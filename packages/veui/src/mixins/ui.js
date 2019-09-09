@@ -9,7 +9,8 @@ import {
   get,
   merge,
   keys,
-  pickBy
+  pickBy,
+  mapValues
 } from 'lodash'
 
 const UNKNOWN_KEY = '$unknown'
@@ -20,7 +21,13 @@ export default {
   },
   computed: {
     uiParts () {
-      return this.getComponentConfig('parts') || {}
+      let parts = this.getComponentConfig('parts') || {}
+      return mapValues(parts, val => {
+        if (typeof val === 'function') {
+          return val(this.uiProps)
+        }
+        return val
+      })
     },
     uiProps () {
       let ui = (this.ui || '').trim()

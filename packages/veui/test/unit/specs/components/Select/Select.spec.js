@@ -39,8 +39,10 @@ const datasource = [
     value: '3'
   }
 ]
+
 const NATIVE_INPUT = '.veui-input input'
 const OPTION_ITEM = '.veui-select-options .veui-option'
+
 describe('components/Select/Select', () => {
   it('should render options correctly', async () => {
     let wrapper = mount(
@@ -71,7 +73,8 @@ describe('components/Select/Select', () => {
     expect(options.length).to.equal(6)
     wrapper.destroy()
   })
-  it('should render value prop correctly', async () => {
+
+  it('should render value prop correctly for singular select', async () => {
     let wrapper = mount(
       {
         components: {
@@ -80,16 +83,13 @@ describe('components/Select/Select', () => {
         data () {
           return {
             options: datasource,
-            placeholder: 'please select',
-            value: null,
-            multiple: false
+            value: null
           }
         },
         template: `<veui-select
           v-model="value"
           :options="options"
-          :placeholder="placeholder"
-          :multiple="multiple"
+          placeholder="Please select"
         />`
       },
       {
@@ -97,18 +97,50 @@ describe('components/Select/Select', () => {
         attachToDocument: true
       }
     )
+
     let { vm } = wrapper
     let label = wrapper.find('.veui-select-label')
-    expect(label.text()).to.equal('please select')
+    expect(label.text()).to.equal('Please select')
 
     vm.value = '3'
     await vm.$nextTick()
     expect(label.text()).to.equal('选项3')
 
     vm.value = null
-    vm.multiple = true
     await vm.$nextTick()
-    expect(label.text()).to.equal('please select')
+    expect(label.text()).to.equal('Please select')
+
+    wrapper.destroy()
+  })
+
+  it('should render value prop correctly for multiple select', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select
+        },
+        data () {
+          return {
+            options: datasource,
+            value: null
+          }
+        },
+        template: `<veui-select
+          v-model="value"
+          :options="options"
+          placeholder="Please select"
+          multiple
+        />`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    let label = wrapper.find('.veui-select-placeholder')
+    expect(label.text()).to.equal('Please select')
     expect(wrapper.find('.veui-tag').exists()).to.equal(false)
 
     vm.value = ['3', '1-1']
@@ -119,6 +151,7 @@ describe('components/Select/Select', () => {
     expect(tags.at(1).text()).to.equal('子选项1-1')
     wrapper.destroy()
   })
+
   it('should handle click event correctly', async () => {
     let wrapper = mount({
       components: {
@@ -151,6 +184,7 @@ describe('components/Select/Select', () => {
     expect(overlay.isVisible()).to.equal(true)
     wrapper.destroy()
   })
+
   it('should render `disabled` and `readonly` props correctly', async () => {
     let wrapper = mount({
       components: {
@@ -180,6 +214,7 @@ describe('components/Select/Select', () => {
     expect(overlay.isVisible()).to.equal(false)
     wrapper.destroy()
   })
+
   it('should handle select correctly', async () => {
     let wrapper = mount({
       components: {
@@ -336,13 +371,7 @@ describe('components/Select/Select', () => {
     input.trigger('input')
     await vm.$nextTick()
     items = wrapper.findAll(OPTION_ITEM)
-    expect(items.at(0).isVisible()).to.equal(true)
-    expect(
-      items
-        .at(0)
-        .find('.veui-option-label')
-        .text()
-    ).to.equal('无搜索结果')
+    expect(wrapper.find('.veui-select-no-data').text()).to.equal('无搜索结果')
     wrapper.destroy()
   })
 
@@ -378,35 +407,25 @@ describe('components/Select/Select', () => {
     let input = wrapper.find(NATIVE_INPUT)
     expect(input.element.value).to.equal('选项3')
 
-    wrapper.find('button.veui-input-clear').trigger('click')
+    expect(wrapper.find('.veui-select-clear').exists()).to.equal(false)
+
     await vm.$nextTick()
-    expect(input.element.value).to.equal('')
-    expect(vm.value).to.equal('')
 
     vm.clearable = true
     vm.searchable = false
     vm.value = '1'
     await vm.$nextTick()
-    input.trigger('keydown', { key: 'Enter' })
-    await vm.$nextTick()
-    let items = wrapper.findAll(OPTION_ITEM)
-    expect(
-      items
-        .at(0)
-        .find('.veui-option-label')
-        .text()
-    ).to.equal('请选择')
+    let clear = wrapper.find('.veui-select-clear')
+    expect(clear.exists()).to.equal(true)
 
-    items.at(0).trigger('click')
+    clear.trigger('click')
     await vm.$nextTick()
     expect(vm.value).to.equal(null)
 
     vm.multiple = true
     vm.value = ['2-1', '1-1']
-    input.trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()
-    items = wrapper.findAll(OPTION_ITEM)
-    items.at(0).trigger('click')
+    clear.trigger('click')
     await vm.$nextTick()
     expect(vm.value).to.deep.equal([])
     wrapper.destroy()
