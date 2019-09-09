@@ -14,7 +14,7 @@
   >
     <veui-tree
       class="veui-anchor-tree"
-      :datasource="datasource"
+      :datasource="items"
       :expanded="allAnchors"
     >
       <template
@@ -33,6 +33,7 @@
             }"
             :disabled="!!props.disabled"
             :to="props.value"
+            :ui="realUi"
             @click="handleClick(props)"
           >
             {{ props.label }}
@@ -48,8 +49,24 @@
 import Tree from './Tree'
 import Link from './Link'
 import ui from '../mixins/ui'
-import { debounce, reduce, startsWith, includes, get } from 'lodash'
-import { scrollToTop, getClipViewport, calcClip, getHash } from '../utils/dom'
+import { debounce, reduce, startsWith, includes, get, isString } from 'lodash'
+import {
+  scrollTo,
+  getClipViewport,
+  calcClip,
+  raf,
+  getWindowRect
+} from '../utils/dom'
+import { getNodes } from '../utils/context'
+import config from '../managers/config'
+
+config.defaults({
+  'anchor.prefix': '@'
+})
+
+function isSpecialSyntax (value) {
+  return isString(value) && value.indexOf(config.get('anchor.prefix')) === 0
+}
 
 const extractValue = data => {
   return reduce(
@@ -67,15 +84,15 @@ const extractValue = data => {
 
 const globalScrollHandler = event => {
   globalScrollHandler.fns.forEach(fn => {
+    // 保证每个 handler 都调用
     try {
       fn(event)
-    } catch (e) {}
+    } catch (e) {
+      console.error(e)
+    }
   })
 }
 globalScrollHandler.fns = []
-
-const raf = window.requestAnimationFrame
-const getRect = el => el.getBoundingClientRect()
 
 // TODO: fiexed anchor 和 placeholder 大小的同步
 
@@ -87,27 +104,27 @@ export default {
   },
   mixins: [ui],
   props: {
-    datasource: Tree.props.datasource,
+    items: Tree.props.datasource,
     sticky: {
       type: Boolean,
       default: true
     },
     container: {
-      type: [HTMLElement, Window],
-      default () {
-        return window
-      }
+      type:
+        process.env.VUE_ENV === 'server' ? true : [String, HTMLElement, Window],
+      default: null
     }
   },
   data () {
     return {
       localActive: null,
+      realContainer: null,
       appendToBody: false
     }
   },
   computed: {
     allAnchors () {
-      return extractValue(this.datasource)
+      return extractValue(this.items)
     },
     sharpAnchors () {
       return this.allAnchors.reduce((result, value) => {
@@ -121,50 +138,64 @@ export default {
       }, [])
     }
   },
-  created () {
-    let hash = getHash()
-    if (hash && includes(this.allValues, hash)) {
+  watch: {
+    container: {
+      handler (val) {
+        this.realContainer = !val
+          ? null
+          : val === window
+            ? window
+            : isSpecialSyntax(val)
+              ? get(window, val.slice(1)) // 特殊语法先直接返回 window 上的
+              : get(getNodes(val, this.$vnode.context), '[0]', null)
+      },
+      immediate: true
+    }
+  },
+  mounted () {
+    this.debounceActivateAnchor = debounce(this.activateAnchor, 1000 / 60)
+
+    this.installScrollHandler()
+
+    let hash = decodeURIComponent(location.hash)
+    if (hash && includes(this.allAnchors, hash)) {
       this.ensureHashActive = true
       this.updateActive(hash)
-
-      // 当 url 上有 hash，但是不是初始加载页面，浏览器不会滚动的，这里保证下滚动
-      this.unwatch = this.$watch(
-        'container',
-        val => {
-          if (val && this.ensureHashActive) {
-            // 延时滚动，确保 dom 已存在
-            this.$nextTick(() => {
-              this.scrollToAnchor(() => {
-                this.ensureHashActive = false
-              }, 0)
-            })
-          }
-        },
-        { immediate: true }
-      )
+      this.$nextTick(() => {
+        this.scrollToAnchor(() => {
+          this.ensureHashActive = false
+        }, 0)
+      })
     }
-
-    if (!globalScrollHandler.fns.length) {
-      // not bubbles
-      window.addEventListener('scroll', globalScrollHandler, true)
-    }
-    globalScrollHandler.fns.push(this.handleScroll)
-
-    this.debounceActive = debounce(this.activateAnchor, 1000 / 60)
   },
   beforeDestroy () {
-    let idx = globalScrollHandler.fns.indexOf(this.handleScroll)
-    globalScrollHandler.fns.splice(idx, 1)
-    if (!globalScrollHandler.fns.length) {
-      window.removeEventListener('scroll', globalScrollHandler, true)
-    }
+    this.removeScrollHandler()
     if (this.appendToBody) {
       this.$el.appendChild(this.$refs.append)
     }
   },
   methods: {
     relocate () {
-      this.switchSticky(true)
+      this.toggleSticky(true)
+    },
+    installScrollHandler () {
+      if (!globalScrollHandler.fns.length) {
+        // not bubbles
+        window.addEventListener('scroll', globalScrollHandler, true)
+      }
+      globalScrollHandler.fns.push(this.handleScroll)
+    },
+    removeScrollHandler () {
+      let idx = globalScrollHandler.fns.indexOf(this.handleScroll)
+      globalScrollHandler.fns.splice(idx, 1)
+      if (!globalScrollHandler.fns.length) {
+        window.removeEventListener('scroll', globalScrollHandler, true)
+      }
+    },
+    getContainerRect () {
+      return this.realContainer === window
+        ? getWindowRect()
+        : this.realContainer.getBoundingClientRect()
     },
     updateActive (val) {
       this.localActive = val
@@ -172,11 +203,15 @@ export default {
       // location.assign(val || '')
     },
     getScrollTopToAffix ({ top }, { top: cTop }) {
-      return Math.round(this.container.scrollTop + top - cTop)
+      let scrollTop =
+        this.realContainer === window
+          ? document.documentElement.scrollTop
+          : this.realContainer.scrollTop
+      return Math.round(scrollTop + top - cTop)
     },
     affixAnchor ({ left }, conRect, force) {
       let append = this.$refs.append
-      let appendRect = getRect(append)
+      let appendRect = append.getBoundingClientRect()
       let { width, height } = appendRect
       let { top: cTop } = conRect
       if (!this.appendToBody || force) {
@@ -197,8 +232,8 @@ export default {
       // clip 一下 fixed anchor, 模拟 absolute 定位被滚动的 C.B. overflow 的效果
       let updateClip = realTime => {
         let clip = calcClip(
-          realTime ? getRect(append) : appendRect,
-          getClipViewport(this.container, realTime ? null : conRect)
+          realTime ? append.getBoundingClientRect() : appendRect,
+          getClipViewport(this.realContainer, realTime ? null : conRect)
         )
         if (clip) {
           let { top, right, bottom, left } = clip
@@ -231,15 +266,17 @@ export default {
       }
     },
     // 只要滚动了就要处理 sticky 效果
-    switchSticky (force) {
-      let conRect = getRect(this.container)
-      // let appendRect = getRect(this.$refs.append)
-      let placeholderRect = getRect(this.$refs.placeholder)
+    toggleSticky (force) {
+      if (!this.realContainer) {
+        return
+      }
+      let conRect = this.getContainerRect()
+      let placeholderRect = this.$refs.placeholder.getBoundingClientRect()
       this.scrollTopToAffix = this.getScrollTopToAffix(
         placeholderRect,
         conRect
       )
-      if (this.container.scrollTop >= this.scrollTopToAffix) {
+      if (this.realContainer.scrollTop >= this.scrollTopToAffix) {
         this.affixAnchor(placeholderRect, conRect, force)
       } else {
         this.unaffixAnchor()
@@ -248,14 +285,13 @@ export default {
     // 手动滚动到当前激活的 anchor
     scrollToAnchor (cb, duration = 200) {
       let el = document.getElementById(this.localActive.slice(1))
-      // 无效的 hash，直接完成
-      if (!el) {
+      // 无效的 hash 或没有 container，直接完成
+      if (!el || !this.realContainer) {
         if (cb) cb()
         return
       }
-      let conRect = getRect(this.container)
-      // let appendRect = getRect(this.$refs.append)
-      let placeholderRect = getRect(this.$refs.placeholder)
+      let conRect = this.getContainerRect()
+      let placeholderRect = this.$refs.placeholder.getBoundingClientRect()
       let beforeScroll = null
       if (this.sticky) {
         beforeScroll = curScrollTop => {
@@ -268,25 +304,26 @@ export default {
         }
       }
       this.animating = true
-      scrollToTop(this.container, el, duration, beforeScroll, () => {
+      scrollTo(0, this.realContainer, el, duration, beforeScroll, () => {
         // 这里要两个raf， 因为 scroll 用 raf 节流了
         raf(() => {
           raf(() => {
-            if (cb) cb()
             this.animating = false
+            if (cb) cb()
           })
         })
       })
     },
     getCurrentAnchor () {
-      let { top: edge } = this.container.getBoundingClientRect()
+      let { top: edge } = this.getContainerRect()
+      edge = Math.round(edge)
       let result = null
       let length = this.sharpAnchors.length
       let item = null
       while (length) {
         item = this.sharpAnchors[length - 1]
         if (item.el) {
-          if (item.el.getBoundingClientRect().top <= edge) {
+          if (Math.round(item.el.getBoundingClientRect().top) <= edge) {
             result = item
             break
           }
@@ -309,23 +346,22 @@ export default {
       if (!this.ticking) {
         raf(() => {
           this.ticking = false
-          let isContainer = event.target === this.container
+          if (!this.realContainer) {
+            return
+          }
+          let isContainer = event.target === this.realContainer
           let isParent =
-            this.container &&
-            this.container !== window &&
-            this.container.compareDocumentPosition(event.target) &
+            this.realContainer !== window &&
+            this.realContainer.compareDocumentPosition(event.target) &
               Node.DOCUMENT_POSITION_CONTAINS
           if (!isContainer && !isParent) {
             return
           }
           if (this.sticky) {
-            this.switchSticky()
+            this.toggleSticky()
           }
-          if (isContainer) {
-            if (this.animating || this.ensureHashActive) {
-              return
-            }
-            this.debounceActive()
+          if (isContainer && !this.animating && !this.ensureHashActive) {
+            this.debounceActivateAnchor()
           }
         })
         this.ticking = true
