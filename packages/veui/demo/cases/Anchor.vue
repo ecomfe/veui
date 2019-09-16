@@ -13,7 +13,7 @@
   </div>
   <h2 class="sticky-header">sticky anchor</h2>
   <veui-anchor
-    :container="conatiner"
+    :container="container"
     class="anchor-one"
     :items="coffees0"
   />
@@ -21,7 +21,7 @@
   <veui-anchor
     :sticky="false"
     ui="s"
-    :container="conatiner"
+    :container="container"
     class="anchor-two"
     :items="coffees"
   />
@@ -29,12 +29,12 @@
   <h2>clipped anchor</h2>
   <div class="anchor-three-wrapper anchor-three-scroll">
     <div
-      ref="con3"
+      ref="container"
       class="anchor-three-scroll"
     >
       <div class="long red"/>
       <veui-anchor
-        :container="$refs.con3"
+        container="container"
         class="anchor-three"
         :items="coffees0"
       />
@@ -54,9 +54,7 @@ export default {
   },
   data () {
     return {
-      a: false,
-      conatiner: null,
-      active: '#boiled',
+      container: null,
       coffees0: [
         {
           label: 'Infused',
@@ -214,7 +212,7 @@ export default {
     }
   },
   mounted () {
-    this.conatiner = document.querySelector('#content')
+    this.container = document.querySelector('#content')
   }
 }
 </script>
