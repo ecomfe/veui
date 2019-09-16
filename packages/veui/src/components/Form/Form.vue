@@ -18,7 +18,6 @@ import {
   assign,
   zipObject,
   map,
-  keys,
   debounce,
   omit
 } from 'lodash'
@@ -260,7 +259,7 @@ export default {
           }
         })
       } else {
-        keys(validities).forEach(name => {
+        Object.keys(validities).forEach(name => {
           let vectors = this.errorMap[validityName] || []
           let target = this.fieldsMap[name]
 

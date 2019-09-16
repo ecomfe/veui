@@ -3,7 +3,6 @@ import {
   isObject,
   noop,
   get,
-  keys,
   isString,
   isEqual,
   difference,
@@ -23,7 +22,7 @@ const HANDLERS = {}
 const OPTIONS_SCHEMA = {
   arg: 'targets[]',
   modifiers: () => ({
-    type: keys(HANDLERS),
+    type: Object.keys(HANDLERS),
     axis: [null, 'x', 'y']
   }),
   defaults: {
