@@ -1,12 +1,4 @@
-import {
-  includes,
-  camelCase,
-  get,
-  isString,
-  isObject,
-  assign,
-  keys
-} from 'lodash'
+import { includes, camelCase, get, isString, isObject, assign } from 'lodash'
 import Vue from 'vue'
 
 export function getTypedAncestorTracker (type, direct = false) {
@@ -128,7 +120,7 @@ export function getConfigKey (name) {
 }
 
 export function stringifyQuery (query) {
-  return keys(query)
+  return Object.keys(query)
     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
     .join('&')
 }

@@ -13,9 +13,8 @@ import dropdown from '../../mixins/dropdown'
 import suggestion from '../../mixins/suggestion'
 import keySelect from '../../mixins/key-select'
 import i18n from '../../mixins/i18n'
-import warn from '../../utils/warn'
-import { walk } from '../../utils/data'
-import { uniqueId, mapValues, isEqual } from 'lodash'
+import { find } from '../../utils/datasource'
+import { uniqueId, isEqual } from 'lodash'
 import '../../common/uiTypes'
 
 config.defaults(
@@ -46,20 +45,17 @@ export default {
   data () {
     return {
       labelId: uniqueId('veui-select-label-'),
-      localValue: this.multiple ? [].concat(this.value) : this.value,
+      localValue: this.multiple
+        ? this.value != null
+          ? [].concat(this.value)
+          : []
+        : this.value,
       outsideRefs: ['input'],
-      initOptionLabel: '',
       inputValue: '',
-      multipleLabels: null
+      inlineOptions: null
     }
   },
   computed: {
-    optionMap () {
-      return this.extractOptions()
-    },
-    labelMap () {
-      return mapValues(this.optionMap, 'label')
-    },
     selectedOption () {
       if (this.multiple) {
         return null
@@ -67,7 +63,7 @@ export default {
       if (this.localValue == null) {
         return null
       }
-      return this.optionMap[this.localValue]
+      return findOptionByValue(this.realOptions, this.localValue)
     },
     realPlaceholder () {
       return this.placeholder == null
@@ -75,46 +71,81 @@ export default {
         : this.placeholder
     },
     inputPlaceholder () {
-      if (this.searchable) {
-        if (!this.multiple || (this.multiple && !this.multipleLabels)) {
-          return this.realPlaceholder
-        }
-      }
-      return null
-    },
-    label () {
       if (this.multiple) {
-        return ''
-      }
-      if (this.localValue == null) {
+        if (this.localValue && this.localValue.length > 0) {
+          return ''
+        }
         return this.realPlaceholder
       }
-      if (this.options) {
-        return this.labelMap[this.localValue]
+
+      if (!this.searchable) {
+        return this.localValue == null ? this.realPlaceholder : ''
       }
-      if (this.$refs.options) {
-        return this.findOptionsLabel(this.localValue)
+
+      return this.localValue == null ? this.realPlaceholder : this.label
+    },
+    label () {
+      return this.selectedOption ? this.selectedOption.label : ''
+    },
+    labels () {
+      let { localValue } = this
+      if (!Array.isArray(localValue)) {
+        return []
       }
-      return ''
+      return this.localValue.map(val => {
+        let option = findOptionByValue(this.realOptions, val)
+        return option ? option.label : ''
+      })
     },
     searchInputLabel () {
-      if (this.localValue === null) {
+      if (this.inputValue) {
+        return this.inputValue
+      }
+      if (this.localValue === null || this.expanded) {
         return ''
       }
       return this.label
     },
     limitLabel () {
       if (this.multiple && this.max) {
-        return `${(this.multipleLabels || []).length}/${this.max}`
+        return `${(this.labels || []).length}/${this.max}`
       }
       return null
     },
     realOptions () {
-      if (this.searchable && this.inputValue) {
+      return this.options || this.inlineOptions
+    },
+    isFiltered () {
+      return this.searchable && this.inputValue
+    },
+    filteredOptions () {
+      if (this.isFiltered) {
         let matched = this.filterFlattedDatasource(this.inputValue)
-        return matched ? this.flattedDatasource : null
+        return matched ? this.flattedDatasource : []
       }
-      return this.options || []
+      return this.realOptions || []
+    },
+    filteredOptionsEmpty () {
+      return !this.filteredOptions.some(({ hidden }) => !hidden)
+    },
+    isEmpty () {
+      return (
+        this.localValue == null ||
+        (Array.isArray(this.localValue) && this.localValue.length === 0)
+      )
+    },
+    isMultiLevel () {
+      return this.realOptions
+        ? this.realOptions.some(
+          option =>
+            option.options &&
+              option.options.length > 0 &&
+              option.position === 'popup'
+        )
+        : false
+    },
+    isMatchWidth () {
+      return !this.isMultiLevel || !!this.inputValue
     },
     inputClass () {
       if (this.multiple) {
@@ -136,29 +167,17 @@ export default {
       this.localValue = this.multiple ? [].concat(val) : val
     },
     localValue (val) {
-      if (this.multiple) {
-        this.multipleLabels = this.getMultipleLabels(val)
-      }
       if (this.value !== val) {
         this.$emit('change', val)
+      }
+    },
+    expanded (val) {
+      if (this.searchable && !val) {
+        this.inputValue = ''
       }
     }
   },
   mounted () {
-    /**
-     * It cant't obtain `this.$refs.options` in `computed` when the default slot
-     * (`OptionGroup`) isn't mounted.
-     * This caused that label data cannot be computed from `$refs.options.find`.
-     * So we have to retrieve option labels on current component's `mounted` hook.
-     */
-    if (this.localValue && !this.label) {
-      if (!this.searchable && !this.multiple) {
-        this.initOptionLabel = this.findOptionsLabel(this.localValue)
-      }
-      if (this.multiple) {
-        this.multipleLabels = this.getMultipleLabels(this.localValue)
-      }
-    }
     this.nativeInput = this.$refs.input.$refs.input
   },
   methods: {
@@ -171,28 +190,18 @@ export default {
       this.inputValue = ''
       e.stopPropagation()
     },
-    getMultipleLabels (value) {
-      if (value && value.length && this.$refs.options) {
-        return value
-          .map(val => this.findOptionsLabel(val))
-          .filter(val => !!val)
-      }
-      return null
-    },
-    findOptionsLabel (value) {
-      let option = this.$refs.options.find(value)
-      return option ? option.label : ''
-    },
     handleSelect (value) {
+      if (this.searchable) {
+        this.$nextTick(() => {
+          if (this.multiple) {
+            this.inputValue = ''
+            this.focus()
+          }
+        })
+      }
       if (!this.multiple) {
         this.expanded = false
         this.localValue = value
-        if (this.searchable) {
-          // change the input value to option'label when selected
-          this.$nextTick(() => {
-            this.inputValue = ''
-          })
-        }
         return
       }
       if (!value) {
@@ -221,16 +230,14 @@ export default {
         options.relocateDeep()
       }
     },
-    handleInputClick (e) {
+    handleInputMouseup (e) {
       if (this.realReadonly || this.realDisabled) {
         return
       }
 
       this.expanded = !this.expanded
       if (this.expanded) {
-        this.$refs.input.focus()
-      } else {
-        this.$el.blur()
+        this.focus()
       }
       e.stopPropagation()
       e.preventDefault()
@@ -299,28 +306,14 @@ export default {
         this.nativeInput.style.width = `${this.nativeInput.scrollWidth}px`
       }
     },
-    extractOptions () {
-      let map = {}
-      walk(
-        this.options,
-        option => {
-          let { value } = option
-          if (value != null) {
-            if (map[value]) {
-              warn(
-                `[veui-select] Duplicate item value [${value}] for select options.`,
-                this
-              )
-            }
-            map[value] = option
-          }
-        },
-        ['options', 'children']
-      )
-      return map
+    handleAfteropen () {
+      this.$emit('afteropen')
     },
     focus () {
-      this.$refs.input.focus()
+      let { input } = this.$refs
+      if (input) {
+        input.focus()
+      }
     }
   },
   render () {
@@ -338,6 +331,7 @@ export default {
       }
       return null
     }
+
     let option = this.multiple
       ? option => {
         return (
@@ -353,7 +347,7 @@ export default {
       }
       : null
 
-    let selectedTags = (this.multipleLabels || []).map((label, index) => (
+    let selectedTags = (this.labels || []).map((label, index) => (
       <Tag
         key={label}
         ui={this.uiParts.tag}
@@ -364,15 +358,17 @@ export default {
         {label}
       </Tag>
     ))
+
     let multiPrependSlot = this.searchable ? (
       selectedTags
-    ) : !this.multipleLabels ? (
+    ) : this.labels.length === 0 ? (
       <span class="veui-select-placeholder" id={this.labelId}>
         {this.realPlaceholder}
       </span>
     ) : (
       selectedTags
     )
+
     let prependSlot = !this.searchable ? (
       <span
         class={{
@@ -383,29 +379,51 @@ export default {
       >
         {this.$scopedSlots.label
           ? this.$scopedSlots.label(this.selectedOption || { selected: false })
-          : this.label || this.initOptionLabel}
+          : this.label}
       </span>
     ) : null
+
+    let renderGroup = (options, children) => {
+      return (
+        <OptionGroup
+          vShow={!!options}
+          hidden={!options}
+          ariaHidden={!options}
+          ref="options"
+          options={options}
+          scopedSlots={{
+            label: this.$scopedSlots['group-label'] || null,
+            option: this.$scopedSlots.option || option,
+            'option-label': this.$scopedSlots['option-label'] || optionLabel
+          }}
+        >
+          {children}
+        </OptionGroup>
+      )
+    }
+
     return (
       <div
         class={{
           'veui-select': true,
-          'veui-select-empty': this.localValue == null,
+          'veui-select-empty': this.isEmpty,
           'veui-select-expanded': this.expanded,
+          'veui-select-searchable': this.searchable,
+          'veui-readonly': this.realReadonly,
+          'veui-disabled': this.realDisabled,
           'veui-input-invalid': this.realInvalid
         }}
         ui={this.realUi}
         role="listbox"
-        aria-owns={this.dropdownId}
-        aria-readonly={this.realReadonly}
-        aria-expanded={this.expanded}
-        aria-disabled={this.realDisabled}
-        aria-labelledby={this.labelId}
-        aria-haspopup="listbox"
+        ariaOwns={this.dropdownId}
+        ariaReadonly={this.realReadonly}
+        ariaExpanded={this.expanded}
+        ariaDisabled={this.realDisabled}
+        ariaLabelledby={this.labelId}
+        ariaHaspopup="listbox"
       >
         <Input
           ref="input"
-          ui={this.realUi}
           class={{
             'veui-select-trigger': true,
             [this.inputClass]: true
@@ -413,8 +431,8 @@ export default {
           disabled={this.realDisabled}
           readonly={this.realReadonly}
           placeholder={this.inputPlaceholder}
-          value={this.searchInputLabel}
-          onClick={this.handleInputClick}
+          value={this.inputValue}
+          onMouseup={this.handleInputMouseup}
           onKeydown={this.handleInputKeydown}
           onInput={this.handleTriggerInput}
           composition
@@ -434,8 +452,9 @@ export default {
                   <Button
                     class="veui-select-clear"
                     ui={this.uiParts.clear}
-                    aria-label={this.t('clear')}
+                    ariaLabel={this.t('clear')}
                     onClick={this.clear}
+                    onMouseup={e => e.stopPropagation()}
                     disabled={this.realDisabled || this.realReadonly}
                   >
                     <Icon name={this.icons.clear} />
@@ -450,15 +469,16 @@ export default {
         </Input>
         {
           <Overlay
-            v-show={this.expanded}
+            vShow={this.expanded}
             target="input"
             open={this.expanded}
             autofocus={!this.searchable}
             modal
             options={this.realOverlayOptions}
-            overlay-class={this.overlayClass}
+            overlayClass={this.overlayClass}
+            matchWidth={this.isMatchWidth}
             onLocate={this.handleRelocate}
-            match-width
+            onAfteropen={this.handleAfteropen}
           >
             <div
               id={this.dropdownId}
@@ -481,19 +501,10 @@ export default {
               onKeydown={this.handleKeydown}
             >
               {this.$slots.before}
-              <OptionGroup
-                ref="options"
-                options={this.realOptions}
-                ui={this.realUi}
-                scopedSlots={{
-                  label: this.$scopedSlots['group-label'] || null,
-                  option: this.$scopedSlots.option || option,
-                  'option-label':
-                    this.$scopedSlots['option-label'] || optionLabel
-                }}
-              >
-                {this.$slots.default}
-                {!this.realOptions ? (
+              {!this.options ? renderGroup(null, this.$slots.default) : null}
+              {renderGroup(
+                this.filteredOptions,
+                this.searchable && this.filteredOptionsEmpty ? (
                   <div class="veui-select-options-no-data">
                     {this.$scopedSlots['no-data']
                       ? this.$scopedSlots['no-data']({
@@ -501,8 +512,8 @@ export default {
                       })
                       : this.$slots['no-data'] || this.t('noData')}
                   </div>
-                ) : null}
-              </OptionGroup>
+                ) : null
+              )}
               {this.$slots.after}
             </div>
           </Overlay>
@@ -510,5 +521,9 @@ export default {
       </div>
     )
   }
+}
+
+function findOptionByValue (options, value) {
+  return find(options, item => item.value === value, 'options')
 }
 </script>

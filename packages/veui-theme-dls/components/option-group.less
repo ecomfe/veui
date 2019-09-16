@@ -6,7 +6,6 @@
   // OptionGroup 的 padding 和 max-height，保证只有最外层的设置了 max-height 和 padding
   font-size: @dls-option-font-size-m;
   .padding(@dls-option-group-padding-y, _);
-  max-height: @dls-option-dropdown-max-height-m;
 
   & & {
     .padding(0, _);
@@ -35,8 +34,6 @@
   }
 
   &[ui~="xs"] {
-    max-height: @dls-option-dropdown-max-height-xs;
-
     .veui-option-group-label {
       font-size: @dls-option-font-size-xs;
       max-width: @dls-option-max-width-xs;
@@ -44,8 +41,6 @@
   }
 
   &[ui~="s"] {
-    max-height: @dls-option-dropdown-max-height-s;
-
     .veui-option-group-label {
       font-size: @dls-option-font-size-s;
       max-width: @dls-option-max-width-s;
@@ -53,8 +48,6 @@
   }
 
   &[ui~="l"] {
-    max-height: @dls-option-dropdown-max-height-l;
-
     .veui-option-group-label {
       font-size: @dls-option-font-size-l;
       max-width: @dls-option-max-width-l;
