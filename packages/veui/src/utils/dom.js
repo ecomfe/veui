@@ -453,7 +453,7 @@ export function scrollTo (
     }
     let curTime = Math.min(time - startTime, duration)
     let offset = !duration ? distance : timingFn(curTime, duration, distance)
-    let newScrollTop = initScrollTop + offset
+    let newScrollTop = Math.round(initScrollTop + offset)
     if (beforeScroll) beforeScroll(newScrollTop)
     if (isWindow) {
       window.scrollTo(document.documentElement.scrollLeft, newScrollTop)

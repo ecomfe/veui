@@ -94,6 +94,8 @@ const globalScrollHandler = event => {
 }
 globalScrollHandler.fns = []
 
+const getScrollTop = el =>
+  el === window ? document.documentElement.scrollTop : el.scrollTop
 // TODO: fiexed anchor 和 placeholder 大小的同步
 
 export default {
@@ -141,13 +143,27 @@ export default {
   watch: {
     container: {
       handler (val) {
-        this.realContainer = !val
-          ? null
-          : val === window
-            ? window
-            : isSpecialSyntax(val)
-              ? get(window, val.slice(1)) // 特殊语法先直接返回 window 上的
-              : get(getNodes(val, this.$vnode.context), '[0]', null)
+        if (!val || val === window) {
+          this.realContainer = val || null
+        } else if (isSpecialSyntax(val)) {
+          // 特殊语法先直接返回 window 上的
+          this.realContainer = get(window, val.slice(1))
+        } else if (isString(val)) {
+          // ref, 那么在 nextTick 中才能拿到 dom
+          this.$nextTick(() => {
+            this.realContainer = get(
+              getNodes(val, this.$vnode.context),
+              '[0]',
+              null
+            )
+          })
+        } else {
+          this.realContainer = get(
+            getNodes(val, this.$vnode.context),
+            '[0]',
+            null
+          )
+        }
       },
       immediate: true
     }
@@ -169,6 +185,7 @@ export default {
     }
   },
   beforeDestroy () {
+    if (this.clipTimer) clearTimeout(this.clipTimer)
     this.removeScrollHandler()
     if (this.appendToBody) {
       this.$el.appendChild(this.$refs.append)
@@ -203,10 +220,7 @@ export default {
       // location.assign(val || '')
     },
     getScrollTopToAffix ({ top }, { top: cTop }) {
-      let scrollTop =
-        this.realContainer === window
-          ? document.documentElement.scrollTop
-          : this.realContainer.scrollTop
+      let scrollTop = getScrollTop(this.realContainer)
       return Math.round(scrollTop + top - cTop)
     },
     affixAnchor ({ left }, conRect, force) {
@@ -267,16 +281,17 @@ export default {
     },
     // 只要滚动了就要处理 sticky 效果
     toggleSticky (force) {
-      if (!this.realContainer) {
+      if (!this.realContainer || !this.$refs.placeholder) {
         return
       }
+
       let conRect = this.getContainerRect()
       let placeholderRect = this.$refs.placeholder.getBoundingClientRect()
       this.scrollTopToAffix = this.getScrollTopToAffix(
         placeholderRect,
         conRect
       )
-      if (this.realContainer.scrollTop >= this.scrollTopToAffix) {
+      if (getScrollTop(this.realContainer) >= this.scrollTopToAffix) {
         this.affixAnchor(placeholderRect, conRect, force)
       } else {
         this.unaffixAnchor()
@@ -286,6 +301,7 @@ export default {
     scrollToAnchor (cb, duration = 200) {
       let el = document.getElementById(this.localActive.slice(1))
       // 无效的 hash 或没有 container，直接完成
+
       if (!el || !this.realContainer) {
         if (cb) cb()
         return
@@ -349,18 +365,27 @@ export default {
           if (!this.realContainer) {
             return
           }
-          let isContainer = event.target === this.realContainer
-          let isParent =
-            this.realContainer !== window &&
+          let isWindow = this.realContainer === window
+          // window 滚动时，target 是 document
+          let isContainerScrolling =
+            event.target === this.realContainer ||
+            (event.target === document && isWindow)
+          let isParentScrolling =
+            !isContainerScrolling &&
+            !isWindow &&
             this.realContainer.compareDocumentPosition(event.target) &
               Node.DOCUMENT_POSITION_CONTAINS
-          if (!isContainer && !isParent) {
+          if (!isContainerScrolling && !isParentScrolling) {
             return
           }
           if (this.sticky) {
             this.toggleSticky()
           }
-          if (isContainer && !this.animating && !this.ensureHashActive) {
+          if (
+            isContainerScrolling &&
+            !this.animating &&
+            !this.ensureHashActive
+          ) {
             this.debounceActivateAnchor()
           }
         })
