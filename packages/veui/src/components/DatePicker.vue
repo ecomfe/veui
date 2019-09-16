@@ -107,12 +107,15 @@
       >
         <div class="veui-date-picker-shortcuts">
           <button
-            v-for="({from, to, label}, index) in realShortcuts"
+            v-for="({ from, to, label }, index) in realShortcuts"
             :key="index"
             type="button"
             :class="{
               'veui-date-picker-shortcut': true,
-              'veui-date-picker-shortcut-selected': isShortcutSelected({from, to})
+              'veui-date-picker-shortcut-selected': isShortcutSelected({
+                from,
+                to
+              })
             }"
             @click="handleSelect([from, to])"
             @mouseenter="handleHoverShortcut([from, to])"
@@ -148,7 +151,7 @@ import dropdown from '../mixins/dropdown'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import { toDateData } from '../utils/date'
-import { isNumber, pick, omit, keys } from 'lodash'
+import { isNumber, pick, omit } from 'lodash'
 import format from 'date-fns/format'
 import startOfDay from 'date-fns/start_of_day'
 import startOfWeek from 'date-fns/start_of_week'
@@ -399,7 +402,7 @@ const ADD_FN_MAP = {
 }
 
 function add (base, offset) {
-  return keys(offset).reduce((acc, key) => {
+  return Object.keys(offset).reduce((acc, key) => {
     if (key in ADD_FN_MAP && offset[key] !== 0) {
       return ADD_FN_MAP[key](acc, offset[key])
     }

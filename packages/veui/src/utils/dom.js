@@ -144,24 +144,27 @@ export function getScrollParent (elem, includeSelf = false) {
 }
 
 const FOCUSABLE_SELECTOR = `
-a[href]:not([tabindex='-1']),
-area[href]:not([tabindex='-1']),
-input:not([disabled]):not([tabindex='-1']),
-select:not([disabled]):not([tabindex='-1']),
-textarea:not([disabled]):not([tabindex='-1']),
-button:not([disabled]):not([tabindex='-1']),
-iframe:not([tabindex='-1']),
-[tabindex]:not([tabindex='-1']),
-[contentEditable=true]:not([tabindex='-1'])`
+a[href],
+area[href],
+input:not([disabled]),
+select:not([disabled]),
+textarea:not([disabled]),
+button:not([disabled]),
+iframe,
+[tabindex],
+[contentEditable=true]`
 
 /**
  * 获取目标元素下所有可以获取焦点的元素
  *
  * @param {Element} elem 需要查找的目标元素
+ * @param {string=} selector 可选的用于查找的选择器
  * @returns {Array.<Element>} 可以获取焦点的元素数组
  */
-export function getFocusable (elem) {
-  return [...elem.querySelectorAll(FOCUSABLE_SELECTOR)]
+export function getFocusable (elem, selector = FOCUSABLE_SELECTOR) {
+  return [...elem.querySelectorAll(selector)].filter(
+    el => !matches(el, '[hidden] *, [tabindex="-1"]')
+  )
 }
 
 /**
@@ -175,23 +178,23 @@ export function getFocusable (elem) {
 export function focusIn (elem, index = 0, ignoreAutofocus) {
   if (!ignoreAutofocus) {
     let auto =
-      elem.querySelector('[data-autofocus]') ||
-      elem.querySelector('[autofocus]')
+      getFocusable(elem, '[data-autofocus]')[0] ||
+      getFocusable(elem, '[autofocus]')[0]
     if (auto) {
       focus(auto)
       return true
     }
   }
 
+  let focusable = getFocusable(elem)
   if (index === 0) {
-    let first = elem.querySelector(FOCUSABLE_SELECTOR)
+    let first = focusable[0]
     if (first) {
       focus(first)
       return true
     }
   }
 
-  let focusable = [...elem.querySelectorAll(FOCUSABLE_SELECTOR)]
   let count = focusable.length
   if (!count) {
     return false

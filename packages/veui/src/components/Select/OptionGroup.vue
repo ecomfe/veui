@@ -9,10 +9,10 @@ import select from '../../mixins/select'
 import keySelect from '../../mixins/key-select'
 import outside from '../../directives/outside'
 import '../../common/uiTypes'
-import { walk } from '../../utils/data'
-import { isType } from '../../utils/helper'
+import { walk } from '../../utils/datasource'
+import { isType, isTopMostOfType } from '../../utils/helper'
 import warn from '../../utils/warn'
-import { pull, uniqueId, includes } from 'lodash'
+import { pull, uniqueId, includes, cloneDeep, pick, isEqual } from 'lodash'
 
 const EVENT_MAP = {
   hover: 'mouseenter',
@@ -69,7 +69,7 @@ const OptionGroup = {
     }
   },
   computed: {
-    value () {
+    selectedValue () {
       return this.select.value
     },
     itemIds () {
@@ -85,6 +85,13 @@ const OptionGroup = {
     },
     popupRole () {
       return isType(this.select, 'input') ? 'listbox' : 'menu'
+    },
+    normalizedOptions () {
+      if (this.options) {
+        return cloneDeep(this.options)
+      }
+
+      return this.items.map(normalizeItem)
     }
   },
   watch: {
@@ -99,23 +106,37 @@ const OptionGroup = {
         }
         parent = parent.menu || parent.select
       }
+    },
+    normalizedOptions: {
+      immediate: true,
+      handler (val, oldVal) {
+        if (!this.options && isTopMostOfType(this, 'menu', 'select')) {
+          if (!isEqual(val, oldVal)) {
+            this.select.inlineOptions = val
+          }
+        }
+      }
+    }
+  },
+  created () {
+    // When being the top-most menu inside a Select,
+    // inject own items into consumer Select
+    if (!this.options && isTopMostOfType(this, 'menu', 'select')) {
+      this.select.inlineOptions = this.normalizedOptions
     }
   },
   methods: {
     add (item) {
       let length = this.items.length
       let index = item.index
-      if (index >= length) {
+      if (index >= length || index === -1) {
         this.items.push(item)
       } else {
-        this.items.splice(index, 0, item)
+        this.items.splice(index, 1, item)
       }
     },
     removeById (id) {
       this.items.splice(this.itemIds.indexOf(id), 1)
-    },
-    find (val) {
-      return findItemByValue(this.items, val)
     },
     relocate () {
       if (this.canPopOut && this.expanded) {
@@ -142,9 +163,9 @@ const OptionGroup = {
       ? this.options.map((opt, i) => {
         let option = {
           ...opt,
-          selected: Array.isArray(this.value)
-            ? includes(this.value, opt.value)
-            : opt.value === this.value
+          selected: Array.isArray(this.selectedValue)
+            ? includes(this.selectedValue, opt.value)
+            : opt.value === this.selectedValue
         }
         return option.options ? (
           <OptionGroup
@@ -152,6 +173,8 @@ const OptionGroup = {
             options={option.options}
             position={option.position}
             v-show={!option.hidden}
+            hidden={option.hidden}
+            aria-hidden={option.hidden}
             disabled={option.disabled}
             key={i}
             ui={this.realUi}
@@ -184,7 +207,7 @@ const OptionGroup = {
           </Option>
         )
       })
-      : this.$slots.default
+      : []
 
     let LabelTag = this.canPopOut ? 'button' : 'div'
 
@@ -282,36 +305,23 @@ const OptionGroup = {
               onKeydown={this.handleKeydown}
             >
               {content}
+              {this.$slots.default}
             </div>
           </Overlay>
         ) : (
-          content
+          [...content, ...(this.$slots.default || [])]
         )}
       </div>
     )
   }
 }
 
-function findItemByValue (items, val) {
-  if (!items) {
-    return null
+function normalizeItem (item) {
+  let options = (item.items || []).map(normalizeItem)
+  return {
+    ...pick(item, ['label', 'value', 'position']),
+    ...(options.length > 0 ? { options } : {})
   }
-
-  let result = null
-  items.some(item => {
-    if (!item.items) {
-      if (item.value === val) {
-        result = item
-        return true
-      }
-    }
-    let inner = findItemByValue(item.items, val)
-    if (inner !== null) {
-      result = inner
-      return true
-    }
-  })
-  return result
 }
 
 export default OptionGroup
