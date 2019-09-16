@@ -25,10 +25,10 @@
   </template>
   <div
     class="veui-input-main"
-    @click="focus"
+    @mousedown="handleMousedown"
   >
     <span
-      v-show="empty && editable"
+      v-show="empty"
       class="veui-input-placeholder"
       @selectstart.prevent="() => false"
     >
@@ -175,7 +175,7 @@ export default {
     }
   },
   methods: {
-    handleInput ($event) {
+    handleInput (e) {
       try {
         setTimeout(() => {
           this.autofill = !!this.$el.querySelector(':-webkit-autofill')
@@ -188,19 +188,22 @@ export default {
       //
       // compositionupdate -> compositionend -> input
       if (this.composition || !this.compositionValue) {
-        this.$emit('input', $event.target.value, $event)
+        this.$emit('input', e.target.value, e)
       }
     },
-    handleComposition ($event) {
-      this.compositionValue = $event.data
+    handleMousedown (e) {
+      this.focus()
+    },
+    handleComposition (e) {
+      this.compositionValue = e.data
     },
     handleCompositionEnd () {
       this.compositionValue = ''
     },
-    handleFocus ($event) {
+    handleFocus (e) {
       this.focused = true
-      if (this.realSelectOnFocus && $event.target) {
-        $event.target.select()
+      if (this.realSelectOnFocus && e.target) {
+        e.target.select()
       }
     },
     handleBlur () {

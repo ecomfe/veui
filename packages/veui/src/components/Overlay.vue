@@ -48,6 +48,7 @@ export default {
   data () {
     return {
       zIndex: null,
+      minWidth: null,
       appendBody: false,
       targetNode: null,
       source: null
@@ -69,7 +70,7 @@ export default {
       if (this.inline) {
         return
       }
-      this.syncWidth()
+      this.updateWidth()
       this.toggleLocator(val)
       this.updateLocator()
       this.updateNode()
@@ -80,6 +81,9 @@ export default {
       } else {
         this.destroyFocus()
       }
+    },
+    matchWidth () {
+      this.updateWidth()
     },
     target () {
       if (this.inline) {
@@ -120,7 +124,7 @@ export default {
 
     if (this.realOpen) {
       this.initFocus()
-      this.syncWidth()
+      this.updateWidth()
     }
 
     this.updateLocator()
@@ -177,8 +181,9 @@ export default {
       }
     },
 
-    syncWidth () {
+    updateWidth () {
       if (!this.matchWidth) {
+        this.minWidth = null
         return
       }
 
@@ -188,7 +193,7 @@ export default {
         return
       }
 
-      box.style.minWidth = `${targetNode.offsetWidth}px`
+      this.minWidth = `${targetNode.offsetWidth}px`
     },
 
     updateLocator () {
@@ -283,7 +288,10 @@ export default {
     const box = (
       <div
         v-show={this.realOpen}
-        style={{ zIndex: this.zIndex }}
+        style={{
+          zIndex: this.zIndex,
+          minWidth: this.minWidth
+        }}
         class={{
           'veui-overlay-box': true,
           ...this.realOverlayClass

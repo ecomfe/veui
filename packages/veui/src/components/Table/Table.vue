@@ -59,14 +59,7 @@ import warn from '../../utils/warn'
 import { normalizeLength } from '../../utils/helper'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
-import {
-  map,
-  mapValues,
-  intersection,
-  includes,
-  keys as objectKeys,
-  find
-} from 'lodash'
+import { map, mapValues, intersection, includes, find } from 'lodash'
 import Body from './_TableBody'
 import Head from './_TableHead'
 import Foot from './_TableFoot'
@@ -174,7 +167,7 @@ export default {
         let { span } =
           find(this.columns, ({ field }) => field === this.keyField) || {}
         if (typeof span === 'function') {
-          return objectKeys(this.data)
+          return Object.keys(this.data)
             .map(index => {
               return {
                 index,
@@ -188,7 +181,7 @@ export default {
       }
       let keys = this.keys
       if (!keys) {
-        keys = objectKeys(this.data)
+        keys = Object.keys(this.data)
       }
       if (typeof keys === 'string') {
         keys = map(this.data, keys)
