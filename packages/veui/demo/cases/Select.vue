@@ -193,7 +193,10 @@
   </section>
   <section>
     <h2>内联样式：</h2>
-    <veui-select v-model="hero">
+    <veui-select
+      v-model="hero"
+      multiple
+    >
       <veui-option-group
         label="中国"
         position="popup"
@@ -371,7 +374,7 @@
       v-model="defaultValue8"
       v-bind="optGroupAttrs"
       :overlay-options="{
-        position: 'bottom right'
+        position: 'top right'
       }"
     >
       <template
@@ -463,12 +466,12 @@ export default {
       },
       keyword: '',
       phone: null,
-      hero: 'baidu',
+      hero: ['baidu'],
       disabled: true,
       selected: true,
       icon: true,
       defaultValue: null,
-      defaultMultiValue: [1, 3, 4],
+      defaultMultiValue: null,
       defaultSearchMultiValue: [1],
       defaultValue1: null,
       defaultValue2: 2,
@@ -506,7 +509,6 @@ export default {
         ]
       },
       optGroupAttrs: {
-        ui: 'aux',
         name: 'name',
         readonly: false,
         disabled: false,
@@ -591,6 +593,7 @@ export default {
         .clone(this.optGroupAttrs.options)
         .map(group => {
           delete group.label
+          delete group.position
           return group
         })
         .reduce((acc, cur) => {
