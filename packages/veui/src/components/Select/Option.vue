@@ -53,43 +53,58 @@ export default {
   },
   computed: {
     selected () {
-      return this.value != null && this.value === this.select.value
+      if (
+        !this.select ||
+        this.value == null ||
+        this.select.localValue == null
+      ) {
+        return false
+      }
+      let selectValue = this.select.localValue
+      return Array.isArray(selectValue)
+        ? selectValue.indexOf(this.value) !== -1
+        : selectValue === this.value
     },
     role () {
       return isType(this.select, 'input') ? 'option' : 'menuitem'
     }
   },
-  mounted () {
-    if (this.selected) {
-      this.$nextTick(() => {
-        let el = this.$el
-        let container = getScrollParent(el)
-        if (!container) {
-          return
-        }
-        let { top: cTop, bottom: cBottom } = container.getBoundingClientRect()
-        let { top: oTop, bottom: oBottom } = el.getBoundingClientRect()
-
-        // fully visible
-        if (oTop >= cTop && oBottom <= cBottom) {
-          return
-        }
-        if (oTop < cTop) {
-          container.scrollTop -= cTop - oTop
-        } else {
-          container.scrollTop += oBottom - cBottom
-        }
-      })
+  watch: {
+    'select.expanded' (val) {
+      if (val && this.selected) {
+        this.select.$once('afteropen', this.scrollIntoView)
+      }
     }
   },
   methods: {
+    scrollIntoView () {
+      let el = this.$el
+      let container = getScrollParent(el)
+      if (!container) {
+        return
+      }
+      let { top: cTop, bottom: cBottom } = container.getBoundingClientRect()
+      let { top: oTop, bottom: oBottom } = el.getBoundingClientRect()
+
+      // fully visible
+      if (oTop >= cTop && oBottom <= cBottom) {
+        return
+      }
+      if (oTop < cTop) {
+        container.scrollTop -= cTop - oTop
+      } else {
+        container.scrollTop += oBottom - cBottom
+      }
+    },
     selectOption () {
       if (!this.disabled) {
         this.$emit('click')
-        let menu = this.menu
-        while (menu) {
-          menu.close()
-          menu = menu.menu
+        if (!this.select.multiple) {
+          let menu = this.menu
+          while (menu) {
+            menu.close()
+            menu = menu.menu
+          }
         }
         this.select.handleSelect(this.value)
       }

@@ -1,4 +1,4 @@
-import { isObject, keys, startsWith, forEach } from 'lodash'
+import { isObject, startsWith, forEach } from 'lodash'
 import Vue from 'vue'
 import i18n from './i18n'
 
@@ -13,7 +13,7 @@ export class ConfigManager {
         if (isObject(key)) {
           ns = val
           val = key
-          keys(val).forEach(k => {
+          Object.keys(val).forEach(k => {
             this.setConfig(obj, k, val[k], ns, override)
           })
           return
@@ -31,7 +31,7 @@ export class ConfigManager {
       setConfigItem (obj, key, val) {
         Vue.set(obj, key, val)
 
-        let relatedWatcherKeys = keys(this.watchers).filter(k =>
+        let relatedWatcherKeys = Object.keys(this.watchers).filter(k =>
           startsWith(k, key)
         )
         relatedWatcherKeys.forEach(watcherKey => this.unwatch(watcherKey))
@@ -82,7 +82,7 @@ export class ConfigManager {
         return this.store[key]
       }
     }
-  })
+  });
 
   set (key, val, ns) {
     this.store.set(key, val, ns)

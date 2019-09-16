@@ -17,7 +17,7 @@ export default {
     }
     let index = getIndexOfType(this, 'menu-item')
     this.menu.add({
-      ...pick(this, 'value', 'items', 'id'),
+      ...pick(this, ['value', 'items', 'id', 'position']),
       label: this.label || this.getLabelNaive(),
       index
     })
