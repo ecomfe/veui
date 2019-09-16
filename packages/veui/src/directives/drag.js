@@ -3,7 +3,6 @@ import {
   isObject,
   noop,
   get,
-  keys,
   isString,
   isEqual,
   difference,
@@ -23,7 +22,7 @@ const HANDLERS = {}
 const OPTIONS_SCHEMA = {
   arg: 'targets[]',
   modifiers: () => ({
-    type: keys(HANDLERS),
+    type: Object.keys(HANDLERS),
     axis: [null, 'x', 'y']
   }),
   defaults: {
@@ -61,7 +60,11 @@ function getOptions (binding, vnode) {
   // 但是没有完整的 top 、 left 、 width 、 height 属性，
   // 就要看看用 containment 能不能选出 DOM Element 了。
   if (!isSpecialSyntax(containment) && !isRect(containment)) {
-    options.containment = get(getNodes(containment, vnode.context), '[0]', null)
+    options.containment = get(
+      getNodes(containment, vnode.context),
+      '[0]',
+      null
+    )
   }
 
   return options

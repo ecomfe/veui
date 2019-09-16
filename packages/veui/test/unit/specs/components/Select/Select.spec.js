@@ -99,8 +99,10 @@ describe('components/Select/Select', () => {
     )
 
     let { vm } = wrapper
+    let placeholder = wrapper.find('.veui-input-placeholder')
     let label = wrapper.find('.veui-select-label')
-    expect(label.text()).to.equal('Please select')
+
+    expect(placeholder.text()).to.equal('Please select')
 
     vm.value = '3'
     await vm.$nextTick()
@@ -108,7 +110,7 @@ describe('components/Select/Select', () => {
 
     vm.value = null
     await vm.$nextTick()
-    expect(label.text()).to.equal('Please select')
+    expect(placeholder.text()).to.equal('Please select')
 
     wrapper.destroy()
   })
@@ -139,8 +141,9 @@ describe('components/Select/Select', () => {
     )
 
     let { vm } = wrapper
-    let label = wrapper.find('.veui-select-placeholder')
-    expect(label.text()).to.equal('Please select')
+    let placeholder = wrapper.find('.veui-select-placeholder')
+
+    expect(placeholder.text()).to.equal('Please select')
     expect(wrapper.find('.veui-tag').exists()).to.equal(false)
 
     vm.value = ['3', '1-1']
@@ -169,16 +172,15 @@ describe('components/Select/Select', () => {
     let overlay = wrapper.find('.veui-overlay-box')
     expect(overlay.isVisible()).to.equal(false)
 
-    wrapper.find('.veui-input-main').trigger('click')
+    wrapper.find('.veui-select-trigger').trigger('mouseup')
     await vm.$nextTick()
     overlay = wrapper.find('.veui-overlay-box')
     expect(overlay.isVisible()).to.equal(true)
-
     document.body.click()
     await vm.$nextTick()
     vm.searchable = true
     await vm.$nextTick()
-    wrapper.find('.veui-input-main').trigger('click')
+    wrapper.find('.veui-select-trigger').trigger('mouseup')
     await vm.$nextTick()
     overlay = wrapper.find('.veui-overlay-box')
     expect(overlay.isVisible()).to.equal(true)
@@ -201,7 +203,7 @@ describe('components/Select/Select', () => {
         '<veui-select :options="options" :disabled="disabled" :readonly="readonly"/>'
     })
     let { vm } = wrapper
-    wrapper.find('.veui-select-input').trigger('click')
+    wrapper.find('.veui-select-trigger').trigger('mouseup')
     await vm.$nextTick()
     let overlay = wrapper.find('.veui-overlay-box')
     expect(overlay.isVisible()).to.equal(false)
@@ -209,7 +211,7 @@ describe('components/Select/Select', () => {
     vm.disabled = false
     vm.readonly = true
     await vm.$nextTick()
-    wrapper.find('.veui-select-input').trigger('click')
+    wrapper.find('.veui-select-trigger').trigger('mouseup')
     await vm.$nextTick()
     expect(overlay.isVisible()).to.equal(false)
     wrapper.destroy()
@@ -235,7 +237,7 @@ describe('components/Select/Select', () => {
     })
     let { vm } = wrapper
     let overlay = wrapper.find('.veui-overlay-box')
-    wrapper.find('.veui-input-main').trigger('click')
+    wrapper.find('.veui-select-trigger').trigger('mouseup')
     await vm.$nextTick()
     expect(overlay.isVisible()).to.equal(true)
 
@@ -248,7 +250,7 @@ describe('components/Select/Select', () => {
     vm.multiple = true
     vm.value = []
     await vm.$nextTick()
-    wrapper.find('.veui-input-main').trigger('click')
+    wrapper.find('.veui-select-trigger').trigger('mouseup')
     await vm.$nextTick()
     options.at(2).trigger('click')
     options.at(3).trigger('click')
@@ -351,8 +353,8 @@ describe('components/Select/Select', () => {
     await vm.$nextTick()
     expect(overlay.isVisible()).to.equal(true)
     let items = wrapper.findAll(OPTION_ITEM)
-    expect(items.at(1).isVisible()).to.equal(false)
     expect(items.at(0).isVisible()).to.equal(false)
+    expect(items.at(1).isVisible()).to.equal(false)
     expect(items.at(2).isVisible()).to.equal(true)
     expect(items.at(3).isVisible()).to.equal(true)
     expect(items.at(4).isVisible()).to.equal(true)
@@ -402,8 +404,8 @@ describe('components/Select/Select', () => {
       }
     )
     let { vm } = wrapper
-    let input = wrapper.find(NATIVE_INPUT)
-    expect(input.element.value).to.equal('选项3')
+    let placeholder = wrapper.find('.veui-input-placeholder')
+    expect(placeholder.text()).to.equal('选项3')
 
     expect(wrapper.find('.veui-select-clear').exists()).to.equal(false)
 

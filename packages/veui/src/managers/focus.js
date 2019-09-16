@@ -1,4 +1,4 @@
-import { remove, findIndex, keys, last } from 'lodash'
+import { remove, findIndex, last } from 'lodash'
 import { focusIn } from '../utils/dom'
 
 class FocusContext {
@@ -106,12 +106,12 @@ export class FocusManager {
    * @type Array.<FocusContext>
    * @private
    */
-  stack = []
+  stack = [];
 
   /**
    * Latest interaction is triggered by pointer or keyboard
    */
-  trigger = 'pointer'
+  trigger = 'pointer';
 
   triggerHandlers = {
     keydown: () => {
@@ -120,16 +120,16 @@ export class FocusManager {
     mousedown: () => {
       this.trigger = 'pointer'
     }
-  }
+  };
 
   initTriggerHandlers () {
-    keys(this.triggerHandlers).forEach(type => {
+    Object.keys(this.triggerHandlers).forEach(type => {
       document.addEventListener(type, this.triggerHandlers[type], true)
     })
   }
 
   destroyTriggerHandlers () {
-    keys(this.triggerHandlers).forEach(type => {
+    Object.keys(this.triggerHandlers).forEach(type => {
       document.removeEventListener(type, this.triggerHandlers[type], true)
     })
   }
