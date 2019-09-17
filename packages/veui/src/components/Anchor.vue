@@ -185,7 +185,6 @@ export default {
     }
   },
   beforeDestroy () {
-    if (this.clipTimer) clearTimeout(this.clipTimer)
     this.removeScrollHandler()
     if (this.appendToBody) {
       this.$el.appendChild(this.$refs.append)
@@ -244,25 +243,16 @@ export default {
       append.style.transform = `translate(${left}px, ${cTop}px)`
 
       // clip 一下 fixed anchor, 模拟 absolute 定位被滚动的 C.B. overflow 的效果
-      let updateClip = realTime => {
-        let clip = calcClip(
-          realTime ? append.getBoundingClientRect() : appendRect,
-          getClipViewport(this.realContainer, realTime ? null : conRect)
-        )
-        if (clip) {
-          let { top, right, bottom, left } = clip
-          append.style.clip = `rect(${top}px ${right}px ${bottom}px ${left}px)`
-        } else {
-          append.style.clip = ''
-        }
+      let clip = calcClip(
+        append.getBoundingClientRect(), // 设置了 append 的样式，重新获取下rect
+        getClipViewport(this.realContainer, conRect)
+      )
+      if (clip) {
+        let { top, right, bottom, left } = clip
+        append.style.clip = `rect(${top}px ${right}px ${bottom}px ${left}px)`
+      } else {
+        append.style.clip = ''
       }
-      updateClip()
-
-      // 测试发现滚动中获取的 rect 不是最新的，补个延时检查，确保最后停止下来 clip 是正确的
-      clearTimeout(this.clipTimer)
-      this.clipTimer = setTimeout(() => {
-        updateClip(true)
-      }, 100)
     },
     unaffixAnchor () {
       if (this.appendToBody) {
