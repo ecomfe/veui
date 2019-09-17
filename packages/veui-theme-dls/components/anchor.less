@@ -34,6 +34,9 @@
       &:hover::before {
         display: none;
       }
+      .veui-anchor-item {
+        height: inherit;
+      }
     }
     &[ui~="s"] {
       .veui-tree-item {
@@ -48,18 +51,13 @@
   &-wrapper &-item:first-child {
     margin-left: @dls-anchor-level-indent;
   }
-  &-item:not(.veui-disabled):hover::before,
   &-item-active::before {
     content: "";
     position: absolute;
-    left: 0;
+    left: -1px;
     width: @dls-anchor-indicator-width;
-    height: @dls-anchor-height-m;
+    height: inherit;
     background-color: @dls-link-font-color-normal-hover;
-  }
-  &-wrapper[ui~="s"] &-item:not(.veui-disabled):hover::before,
-  &-wrapper[ui~="s"] &-item-active::before {
-    height: @dls-anchor-height-s;
   }
   &-wrapper &-item-active {
     color: @dls-anchor-indicator-color-active;
