@@ -24,6 +24,8 @@
 
   &-content {
     margin: auto;
+    display: flex;
+    flex-direction: column;
     background: @dls-dialog-background-color;
     .veui-position-center();
     max-height: @dls-dialog-max-height;
@@ -49,6 +51,18 @@
 
     [ui~="full"] & {
       .fixed(0);
+      width: auto;
+      max-height: none;
+      transform: none;
+      border-radius: 0;
+    }
+
+    [ui~="full"].veui-overlay-enter &,
+    [ui~="full"].veui-overlay-leave-to & {
+      transform: translateY(-@transition-offset);
+    }
+
+    [ui~="auto"] & {
       width: auto;
     }
 
@@ -103,6 +117,7 @@
     }
 
     &-body {
+      flex-grow: 1;
       padding: 0 @dls-dialog-padding-x;
       font-size: @dls-dialog-body-font-size-m;
       line-height: @dls-line-height-m;
@@ -142,6 +157,6 @@
 
   .veui-overlay-enter &-content,
   .veui-overlay-leave-to &-content {
-    transform: translate(50%, ~"calc(50% - @{transition-offset})");
+    transform: translate(50%, calc(50% - @transition-offset));
   }
 }

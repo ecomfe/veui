@@ -6,6 +6,7 @@
       overlay-class="test demo-dialog-standard-dialog"
       :open.sync="modalDialogVisible"
       title="Dialog Title"
+      ui="full"
       modal
     >
       <p>content area</p>
@@ -68,7 +69,7 @@
     <veui-dialog
       :modal="false"
       :open.sync="draggableDialog1Visible"
-      ui="center"
+      ui="narrow s"
       title="First"
       draggable
     >
@@ -102,7 +103,7 @@
       :modal="false"
       :open.sync="draggableDialog2Visible"
       title="Second"
-      ui="reverse high large"
+      ui="medium"
       draggable
     >
       <p>
@@ -130,7 +131,7 @@
       :modal="false"
       :open.sync="draggableDialog3Visible"
       title="Reset Position"
-      ui="reverse high small"
+      ui="wide"
       draggable
     >
       Click the `reset` button to put the dialog to the initial position.

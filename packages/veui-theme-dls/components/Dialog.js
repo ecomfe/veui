@@ -13,8 +13,8 @@ config.defaults(
         default: 'm',
         inherit: true
       },
-      width: {
-        values: ['narrow', 'medium', 'wide', 'full'],
+      dimension: {
+        values: ['narrow', 'medium', 'wide', 'full', 'auto'],
         default: 'medium'
       }
     },
