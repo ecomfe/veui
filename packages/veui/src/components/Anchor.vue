@@ -52,11 +52,12 @@ import ui from '../mixins/ui'
 import { debounce, reduce, startsWith, includes, get, isString } from 'lodash'
 import {
   scrollTo,
-  getClipViewport,
+  getVisibleRect,
   calcClip,
   raf,
   getWindowRect
 } from '../utils/dom'
+import { resolveOffset } from '../utils/helper'
 import { getNodes } from '../utils/context'
 import config from '../managers/config'
 
@@ -96,7 +97,18 @@ globalScrollHandler.fns = []
 
 const getScrollTop = el =>
   el === window ? document.documentElement.scrollTop : el.scrollTop
-// TODO: fiexed anchor 和 placeholder 大小的同步
+
+const getOffset = (container, top, offset) => {
+  let { clientTop, clientHeight } =
+    container === window
+      ? { clientTop: 0, clientHeight: container.innerHeight }
+      : container
+  return Math.round(top + clientTop + resolveOffset(offset, clientHeight))
+}
+
+const offsetValidator = val => !isNaN(resolveOffset(val))
+
+// TODO: sticky anchor 和 placeholder 大小的同步
 
 export default {
   name: 'veui-anchor',
@@ -115,6 +127,16 @@ export default {
       type:
         process.env.VUE_ENV === 'server' ? true : [String, HTMLElement, Window],
       default: null
+    },
+    offset: {
+      type: [String, Number],
+      validator: offsetValidator,
+      default: 0
+    },
+    stickyOffset: {
+      type: [String, Number],
+      validator: offsetValidator,
+      default: 0
     }
   },
   data () {
@@ -145,9 +167,11 @@ export default {
       handler (val) {
         if (!val || val === window) {
           this.realContainer = val || null
+          this.$nextTick(this.updateOnContainerChange)
         } else if (isSpecialSyntax(val)) {
           // 特殊语法先直接返回 window 上的
           this.realContainer = get(window, val.slice(1))
+          this.$nextTick(this.updateOnContainerChange)
         } else if (isString(val)) {
           // ref, 那么在 nextTick 中才能拿到 dom
           this.$nextTick(() => {
@@ -156,6 +180,7 @@ export default {
               '[0]',
               null
             )
+            this.updateOnContainerChange()
           })
         } else {
           this.realContainer = get(
@@ -163,6 +188,7 @@ export default {
             '[0]',
             null
           )
+          this.$nextTick(this.updateOnContainerChange)
         }
       },
       immediate: true
@@ -170,18 +196,24 @@ export default {
   },
   mounted () {
     this.debounceActivateAnchor = debounce(this.activateAnchor, 1000 / 60)
-
     this.installScrollHandler()
-
     let hash = decodeURIComponent(location.hash)
     if (hash && includes(this.allAnchors, hash)) {
       this.ensureHashActive = true
       this.updateActive(hash)
-      this.$nextTick(() => {
-        this.scrollToAnchor(() => {
-          this.ensureHashActive = false
-        }, 0)
-      })
+      const isComplete = document.readyState === 'complete'
+      if (isComplete) {
+        this.scrollForHash()
+      } else {
+        this.waitForLoaded = true
+        window.addEventListener('DOMContentLoaded', () =>
+          setTimeout(() => {
+            this.waitForLoaded = false
+            // firefox 还需做下最后努力
+            this.scrollForHash()
+          }, 0)
+        )
+      }
     }
   },
   beforeDestroy () {
@@ -192,7 +224,26 @@ export default {
   },
   methods: {
     relocate () {
-      this.toggleSticky(true)
+      if (this.sticky) this.toggleSticky(true)
+    },
+    updateOnContainerChange () {
+      // 确保为 hash 滚动不会因为 container 而丢失
+      if (this.ensureHashActive) {
+        this.scrollForHash()
+      } else if (this.realContainer) {
+        if (this.sticky) this.toggleSticky()
+        this.activateAnchor()
+      }
+    },
+    scrollForHash () {
+      // 若是加载页面，那么等到loaded之后才能取消hash滚动
+      if (this.ensureHashActive && this.realContainer) {
+        this.scrollToAnchor(() => {
+          if (!this.waitForLoaded) {
+            this.ensureHashActive = false
+          }
+        }, 0)
+      }
     },
     installScrollHandler () {
       if (!globalScrollHandler.fns.length) {
@@ -218,9 +269,11 @@ export default {
       // TODO 兼容下 :target，直接 assign 页面会跳动
       // location.assign(val || '')
     },
-    getScrollTopToAffix ({ top }, { top: cTop }) {
+    getScrollTopToAffix ({ top }, { top: cTop, height: cHeight }) {
       let scrollTop = getScrollTop(this.realContainer)
-      return Math.round(scrollTop + top - cTop)
+      return Math.round(
+        scrollTop + top - getOffset(this.realContainer, cTop, this.stickyOffset)
+      )
     },
     affixAnchor ({ left }, conRect, force) {
       let append = this.$refs.append
@@ -240,12 +293,16 @@ export default {
         }
       }
       // affix 之后，若发生横向滚动也应该导致 fixed anchor 滚动，即 left 随之变化
-      append.style.transform = `translate(${left}px, ${cTop}px)`
+      append.style.transform = `translate(${left}px, ${getOffset(
+        this.realContainer,
+        cTop,
+        this.stickyOffset
+      )}px)`
 
       // clip 一下 fixed anchor, 模拟 absolute 定位被滚动的 C.B. overflow 的效果
       let clip = calcClip(
         append.getBoundingClientRect(), // 设置了 append 的样式，重新获取下rect
-        getClipViewport(this.realContainer, conRect)
+        getVisibleRect(this.realContainer, conRect)
       )
       if (clip) {
         let { top, right, bottom, left } = clip
@@ -291,7 +348,6 @@ export default {
     scrollToAnchor (cb, duration = 200) {
       let el = document.getElementById(this.localActive.slice(1))
       // 无效的 hash 或没有 container，直接完成
-
       if (!el || !this.realContainer) {
         if (cb) cb()
         return
@@ -310,26 +366,30 @@ export default {
         }
       }
       this.animating = true
-      scrollTo(0, this.realContainer, el, duration, beforeScroll, () => {
-        // 这里要两个raf， 因为 scroll 用 raf 节流了
-        raf(() => {
+      scrollTo([0, this.offset], this.realContainer, el, {
+        duration,
+        beforeScroll,
+        afterScroll: () => {
+          // 这里要两个raf， 因为 scroll 用 raf 节流了
           raf(() => {
-            this.animating = false
-            if (cb) cb()
+            raf(() => {
+              this.animating = false
+              if (cb) cb()
+            })
           })
-        })
+        }
       })
     },
     getCurrentAnchor () {
-      let { top: edge } = this.getContainerRect()
-      edge = Math.round(edge)
+      let { top: cTop } = this.getContainerRect()
+      let offset = getOffset(this.realContainer, cTop, this.offset)
       let result = null
       let length = this.sharpAnchors.length
       let item = null
       while (length) {
         item = this.sharpAnchors[length - 1]
         if (item.el) {
-          if (Math.round(item.el.getBoundingClientRect().top) <= edge) {
+          if (Math.round(item.el.getBoundingClientRect().top) <= offset) {
             result = item
             break
           }
@@ -340,8 +400,10 @@ export default {
     },
     activateAnchor () {
       let newActive = get(this.getCurrentAnchor(), 'value', null)
-      if (newActive !== this.localActive) {
+      if (newActive && newActive !== this.localActive) {
         this.updateActive(newActive)
+      } else if (this.realContainer && !newActive && this.sharpAnchors.length) {
+        this.updateActive(this.sharpAnchors[0].value)
       }
     },
     handleClick (item) {
@@ -349,6 +411,11 @@ export default {
       this.scrollToAnchor()
     },
     handleScroll (event) {
+      // 如果还在等loaded，就已经触发了滚动，那么尽快滚动到hash的地方
+      if (this.waitForLoaded) {
+        this.scrollForHash()
+        return
+      }
       if (!this.ticking) {
         raf(() => {
           this.ticking = false
@@ -368,9 +435,7 @@ export default {
           if (!isContainerScrolling && !isParentScrolling) {
             return
           }
-          if (this.sticky) {
-            this.toggleSticky()
-          }
+          if (this.sticky) this.toggleSticky()
           if (
             isContainerScrolling &&
             !this.animating &&
