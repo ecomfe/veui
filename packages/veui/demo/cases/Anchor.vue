@@ -2,6 +2,7 @@
 <article class="anchor-demo">
   <h1><code>&lt;veui-anchor&gt;</code></h1>
   <div class="content-wrapper">
+    <div class="line"/>
     <div
       v-for="i in coffees0"
       :id="i.value.indexOf('#') >= 0 ? i.value.slice(1) : i.value"
@@ -15,12 +16,22 @@
   <veui-anchor
     :container="container"
     class="anchor-one"
+    :offset="0.1"
+    :items="coffees0"
+  />
+  <h2 class="header-four">sticky anchor (100px)</h2>
+  <veui-anchor
+    :container="container"
+    class="anchor-four"
+    :offset="0.1"
+    sticky-offset="100px"
     :items="coffees0"
   />
   <h2 class="static-header">static small anchor</h2>
   <veui-anchor
     :sticky="false"
     ui="s"
+    :offset="0.1"
     :container="container"
     class="anchor-two"
     :items="coffees"
@@ -218,6 +229,9 @@ export default {
 </script>
 
 <style lang="less">
+main#content {
+  overflow-x: auto;
+}
 .anchor-demo {
   &-middle {
     position: fixed;
@@ -236,7 +250,7 @@ export default {
       float: left;
       clear: both;
       white-space: nowrap;
-      border: 1px solid #111;
+      border-top: 1px solid #ccc;
       width: 100px;
       height: 180px;
       & + .block {
@@ -257,13 +271,23 @@ export default {
 
   .anchor-two {
     position: absolute;
-    left: 450px;
+    left: 700px;
     top: 200px;
+  }
+  .header-four {
+    position: absolute;
+    left: 450px;
+    top: 100px;
+  }
+  .anchor-four {
+    position: absolute;
+    top: 80px;
+    left: 450px;
   }
 
   .static-header {
     position: absolute;
-    left: 450px;
+    left: 700px;
     top: 100px;
   }
   .anchor-three {
@@ -271,6 +295,7 @@ export default {
     top: 70px;
     left: 200px;
   }
+
   .anchor-three-wrapper {
     clear: both;
     border: 1px solid blue;
@@ -286,6 +311,20 @@ export default {
 
   :target {
     border-color: red !important;
+  }
+  .line {
+    position: fixed;
+    top: ~'calc((100vh - 30px) * 0.1)';
+    width: 180px;
+    border-top: 1px solid #ccc;
+    &::after {
+      content: '10%';
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      color: red;
+      font-size: 12px;
+    }
   }
 }
 </style>
