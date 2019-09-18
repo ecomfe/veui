@@ -11,6 +11,7 @@
   background-color: @dls-tag-background-color;
   white-space: nowrap;
   outline: none;
+  line-height: 1;
   .veui-transition(color, border-color, background-color, box-shadow, opacity);
 
   .make-metrics(@size) {
@@ -50,6 +51,7 @@
 
   &-selectable {
     cursor: pointer;
+
     &:hover:not(.veui-disabled) {
       opacity: 0.8;
     }
@@ -57,12 +59,16 @@
 
   &.veui-disabled {
     color: @dls-tag-font-color-disabled;
-    border-color: @dls-tag-border-color-disabled;
-    background-color: @dls-tag-background-color-disabled;
     outline: none;
+
     .veui-tag-close {
       cursor: not-allowed;
     }
+  }
+
+  &-default.veui-disabled {
+    border-color: @dls-tag-border-color-disabled;
+    background-color: @dls-tag-background-color-disabled;
   }
 
   &.veui-tag-selected {
@@ -76,6 +82,7 @@
         @dls-tag-shadow-selected-focus
       );
     }
+
     &.veui-disabled {
       border-color: @dls-tag-border-color-selected-disabled;
       background-color: @dls-tag-background-color-selected-disabled;
@@ -100,10 +107,12 @@
       &.focus-visible {
         .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
       }
+
       &.veui-disabled {
         color: @@disabled-color-name;
-        border-color: @disabled-bd-color-name;
+        border-color: @@disabled-bd-color-name;
       }
+
       &.veui-tag-selected {
         color: @dls-tag-font-color-selected;
         border-color: @dls-tag-border-color-selected;
@@ -115,6 +124,7 @@
             @dls-tag-shadow-selected-focus
           );
         }
+
         &.veui-disabled {
           border-color: @dls-tag-border-color-selected-disabled;
           background-color: @@selected-disabled-bg-color;
