@@ -1,35 +1,9 @@
-<template>
-<div
-  v-if="localOpen"
-  :tabindex="tabIndex"
-  :ui="ui"
-  :class="{
-    'veui-tag': true,
-    [`veui-tag-${type}`]: true,
-    'veui-tag-selected': localSelected,
-    'veui-disabled': disabled,
-    'veui-tag-selectable': selectable
-  }"
-  @click="handleClick"
->
-  <slot/>
-  <veui-button
-    v-if="closable"
-    :ui="uiParts.close"
-    class="veui-tag-close"
-    :disabled="disabled"
-    @click.prevent.stop="close"
-  >
-    <veui-icon :name="icons.close"/>
-  </veui-button>
-</div>
-</template>
-
 <script>
 import Button from './Button'
 import Icon from './Icon'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
+import warn from '../utils/warn'
 
 export default {
   name: 'veui-tag',
@@ -51,8 +25,7 @@ export default {
   data () {
     return {
       localOpen: true,
-      localSelected: this.selected,
-      focused: false
+      localSelected: this.selected
     }
   },
   computed: {
@@ -70,6 +43,11 @@ export default {
       }
     }
   },
+  created () {
+    if (this.closable && this.selectable) {
+      warn('[veui-tag] `closable` and `selectable` cannot be both true.')
+    }
+  },
   methods: {
     focus () {
       this.$el.focus()
@@ -78,16 +56,47 @@ export default {
       if (this.selectable && !this.disabled) {
         this.localSelected = !this.localSelected
       }
-      this.$el.blur()
     },
-    close () {
+    close (e) {
       if (this.disabled) {
         return
       }
 
+      e.stopPropagation()
+      e.preventDefault()
       this.localOpen = false
       this.$emit('close')
     }
+  },
+  render () {
+    let TagName = this.selectable ? 'button' : 'div'
+    return this.localOpen ? (
+      <TagName
+        tabindex={this.tabIndex}
+        ui={this.realUi}
+        class={{
+          'veui-tag': true,
+          [`veui-tag-${this.type}`]: true,
+          'veui-tag-selected': this.localSelected,
+          'veui-disabled': this.disabled,
+          'veui-tag-selectable': this.selectable
+        }}
+        disabled={this.selectable ? this.disabled : null}
+        onClick={this.handleClick}
+      >
+        {this.$slots.default}
+        {this.closable ? (
+          <veui-button
+            ui={this.uiParts.close}
+            class="veui-tag-close"
+            disabled={this.disabled}
+            onClick={this.close}
+          >
+            <veui-icon name={this.icons.close} />
+          </veui-button>
+        ) : null}
+      </TagName>
+    ) : null
   }
 }
 </script>

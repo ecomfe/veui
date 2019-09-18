@@ -104,10 +104,6 @@
       border-color: @@bd-color-name;
       background-color: @@bg-color-name;
 
-      &.focus-visible {
-        .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
-      }
-
       &.veui-disabled {
         color: @@disabled-color-name;
         border-color: @@disabled-bd-color-name;
@@ -129,6 +125,11 @@
           border-color: @dls-tag-border-color-selected-disabled;
           background-color: @@selected-disabled-bg-color;
         }
+      }
+
+      &.focus-visible,
+      &.veui-tag.focus-visible {
+        .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
       }
     }
   }
