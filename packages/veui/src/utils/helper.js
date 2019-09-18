@@ -227,3 +227,9 @@ export function hasClass (vnode, clazz) {
     (data.staticClass && includes(data.staticClass.split(/\s+/), clazz))
   )
 }
+
+export function resolveOffset (val, base) {
+  let isPx = isString(val) && /px$/.test(val)
+  let num = isPx ? +val.replace(/px$/, '') : val || 0
+  return base == null ? num : isPx ? num : base * num
+}
