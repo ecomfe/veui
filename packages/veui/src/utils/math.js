@@ -1,3 +1,5 @@
+import { isString } from 'lodash'
+
 /**
  * 判断两个数字是否相等，支持区分 -0 和 0
  *
@@ -68,4 +70,10 @@ export function round (num, decimals = 0) {
  */
 export function log10 (num) {
   return Math.log10 ? Math.log10(num) : Math.log(num) * Math.LOG10E
+}
+
+export function resolveOffset (val, base) {
+  let isPx = isString(val) && /px$/.test(val)
+  let num = isPx ? +val.replace(/px$/, '') : val || 0
+  return base == null ? num : isPx ? num : base * num
 }

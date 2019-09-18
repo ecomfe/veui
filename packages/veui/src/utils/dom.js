@@ -1,4 +1,5 @@
 import { findIndex, uniq, get, clamp } from 'lodash'
+import { resolveOffset } from './math'
 
 /**
  *
@@ -398,7 +399,9 @@ const calcDistance = (
     ? positions
     : [positions, positions]
   return (
-    tTop + tHeight * tPosition - (vTop + clientTop + clientHeight * vPosition)
+    tTop +
+    resolveOffset(tPosition, tHeight) -
+    (vTop + clientTop + resolveOffset(vPosition, clientHeight))
   )
 }
 
@@ -478,41 +481,48 @@ export function getClipViewport (elm, elmRect) {
     return getWindowRect()
   }
   while (el) {
-    let { clientHeight, clientWidth, scrollHeight, scrollWidth } = el
-    let vScroll = scrollHeight > clientHeight
-    let hScroll = scrollWidth > clientWidth
-    if (vScroll || hScroll) {
-      let { top, left } =
-        el === elm && elmRect ? elmRect : el.getBoundingClientRect()
-      if (vScroll) {
-        let realTop = top + el.clientTop
-        let realBottom = realTop + clientHeight
-        rect = {
-          ...(rect || {}),
-          top: get(rect, 'top') == null ? realTop : Math.max(rect.top, realTop),
-          bottom:
-            get(rect, 'bottom') == null
-              ? realBottom
-              : Math.min(rect.bottom, realBottom)
+    // safari scrollHeight bug
+    if (
+      getComputedStyle(el).overflow !== 'visible' ||
+      el === document.documentElement
+    ) {
+      let { clientHeight, clientWidth, scrollHeight, scrollWidth } = el
+      let vScroll = scrollHeight > clientHeight
+      let hScroll = scrollWidth > clientWidth
+      if (vScroll || hScroll) {
+        let { top, left } =
+          el === elm && elmRect ? elmRect : el.getBoundingClientRect()
+        if (vScroll) {
+          let realTop = top + el.clientTop
+          let realBottom = realTop + clientHeight
+          rect = {
+            ...(rect || {}),
+            top:
+              get(rect, 'top') == null ? realTop : Math.max(rect.top, realTop),
+            bottom:
+              get(rect, 'bottom') == null
+                ? realBottom
+                : Math.min(rect.bottom, realBottom)
+          }
         }
-      }
-      if (hScroll) {
-        let realLeft = left + el.clientLeft
-        let realRight = realLeft + el.clientWidth
-        rect = {
-          ...(rect || {}),
-          left:
-            get(rect, 'left') == null
-              ? realLeft
-              : Math.max(rect.left, realLeft),
-          right:
-            get(rect, 'right') == null
-              ? realRight
-              : Math.min(rect.right, realRight)
+        if (hScroll) {
+          let realLeft = left + el.clientLeft
+          let realRight = realLeft + el.clientWidth
+          rect = {
+            ...(rect || {}),
+            left:
+              get(rect, 'left') == null
+                ? realLeft
+                : Math.max(rect.left, realLeft),
+            right:
+              get(rect, 'right') == null
+                ? realRight
+                : Math.min(rect.right, realRight)
+          }
         }
       }
     }
-    el = el.parentNode
+    el = el.parentElement
   }
   return rect
 }
