@@ -201,12 +201,22 @@
     </section>
 
     <section>
-      <h3>单向数据流</h3>
+      <h3>value + prop</h3>
       <veui-field label="价格：">
         <veui-input
           :value="price"
           placeholder="??????"
           @change="handlePriceChange"
+        />
+      </veui-field>
+    </section>
+
+    <section>
+      <h3>内联样式</h3>
+      <veui-field label="内联：">
+        <veui-input
+          v-model="price"
+          ui="inline"
         />
       </veui-field>
     </section>
@@ -284,7 +294,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "~less-plugin-est/src/all.less";
+@import '~less-plugin-est/src/all.less';
 
 section {
   margin-bottom: 40px;
