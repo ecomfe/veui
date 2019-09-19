@@ -3,7 +3,7 @@
   <h1><code>&lt;veui-searchbox&gt;</code></h1>
   <section class="has-margin-right">
     <h2>sizes</h2>
-    <p>
+    <section>
       <veui-searchbox
         clearable
         ui="xs"
@@ -24,8 +24,8 @@
         @search="log($event)"
         @select="log('select', $event)"
       />
-    </p>
-    <p>
+    </section>
+    <section>
       <veui-searchbox
         clearable
         ui="m"
@@ -46,8 +46,8 @@
         @search="log($event)"
         @select="log('select', $event)"
       />
-    </p>
-    <p>
+    </section>
+    <section>
       <veui-searchbox
         clearable
         ui="strong xs"
@@ -68,8 +68,8 @@
         @search="log($event)"
         @select="log('select', $event)"
       />
-    </p>
-    <p>
+    </section>
+    <section>
       <veui-searchbox
         clearable
         ui="strong m"
@@ -90,11 +90,11 @@
         @search="log($event)"
         @select="log('select', $event)"
       />
-    </p>
+    </section>
   </section>
   <section class="has-margin-right">
     <h2>styles</h2>
-    <p>
+    <section>
       <veui-searchbox
         ui="m"
         :placeholder="placeholder"
@@ -105,11 +105,11 @@
         :placeholder="placeholder"
         @search="log($event)"
       />
-    </p>
+    </section>
   </section>
   <section class="has-margin-right">
     <h2>disabled</h2>
-    <p>
+    <section>
       <veui-searchbox
         :value="value"
         clearable
@@ -125,11 +125,11 @@
         @input="handleSuggest('5', $event)"
         @search="log($event)"
       />
-    </p>
+    </section>
   </section>
   <section class="has-margin-right">
     <h2>readonly</h2>
-    <p>
+    <section>
       <veui-searchbox
         :value="value"
         clearable
@@ -145,11 +145,11 @@
         readonly
         @search="log($event)"
       />
-    </p>
+    </section>
   </section>
   <section class="has-margin-right">
     <h2>suggestions</h2>
-    <p>
+    <section>
       <veui-searchbox
         v-model="value2"
         clearable
@@ -201,7 +201,22 @@
           <h3>ender</h3>
         </template>
       </veui-searchbox>
-    </p>
+    </section>
+  </section>
+  <section>
+    <h2>inline</h2>
+    <div>
+      <veui-searchbox
+        clearable
+        ui="inline"
+        replace-on-select
+        :placeholder="placeholder"
+        :suggestions="suggestions4"
+        @input="handleSuggest('4', $event)"
+        @search="log($event)"
+        @select="log('select', $event)"
+      />
+    </div>
   </section>
 </article>
 </template>
@@ -338,10 +353,18 @@ export default {
 </script>
 <style lang="less">
 .veui-searchbox-demo {
+  padding-bottom: 20px;
+
   .has-margin-right {
     .veui-searchbox {
       margin-right: 15px;
     }
+  }
+}
+
+section {
+  & & {
+    margin-bottom: 20px;
   }
 }
 </style>
