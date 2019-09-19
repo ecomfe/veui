@@ -3,10 +3,14 @@
   <h1><code>&lt;veui-tabs&gt;</code></h1>
   <section>
     <h2>默认样式：</h2>
-    <p>当前标签 <code>{{ active0 }}</code></p>
-    <p>当前序号 <code>{{ index0 + 1 }}</code></p>
+    <p>
+      当前标签 <code>{{ active0 }}</code>
+    </p>
+    <p>
+      当前序号 <code>{{ index0 + 1 }}</code>
+    </p>
     <veui-tabs
-      ui="large"
+      ui="l"
       :active.sync="active0"
       :index.sync="index0"
     >
@@ -43,7 +47,7 @@
     </veui-tabs>
 
     <veui-tabs
-      ui="small"
+      ui="s"
       :active.sync="active0"
       :index.sync="index0"
     >
@@ -59,26 +63,6 @@
         label="分享朋友圈"
         name="shares"
         status="success"
-      />
-    </veui-tabs>
-
-    <veui-tabs
-      ui="tiny"
-      :active.sync="active0"
-      :index.sync="index0"
-    >
-      <veui-tab
-        label="回答问题"
-        name="answers"
-        status="info"
-      />
-      <veui-tab
-        label="文章评论"
-        name="articles"
-      />
-      <veui-tab
-        label="分享朋友圈"
-        name="shares"
       />
     </veui-tabs>
   </section>
@@ -129,9 +113,9 @@
       <veui-tab
         v-for="n in 30"
         :key="n"
-        :label="n === 2
-          ? 'This is Tab2 with long long long long text'
-          : `Tab${n}`"
+        :label="
+          n === 2 ? 'This is Tab2 with long long long long text' : `Tab${n}`
+        "
       />
     </veui-tabs>
     <veui-tabs
@@ -141,15 +125,17 @@
       <veui-tab
         v-for="n in 30"
         :key="n"
-        :label="n === 2
-          ? 'This is Tab2 with long long long long text'
-          : `Tab${n}`"
+        :label="
+          n === 2 ? 'This is Tab2 with long long long long text' : `Tab${n}`
+        "
       />
     </veui-tabs>
   </section>
   <section>
     <h2>禁用样式：</h2>
-    <p>当前序号 <code>{{ index1 + 1 }}</code></p>
+    <p>
+      当前序号 <code>{{ index1 + 1 }}</code>
+    </p>
     <veui-tabs :index.sync="index1">
       <veui-tab label="Tab1">
         <p>This is Tab1</p>
@@ -219,7 +205,9 @@
   </section>
   <section class="inner-ui">
     <h2>增删模式1（内部 UI）：</h2>
-    <p>当前序号 <code>{{ index2 != null ? index2 + 1 : '已删光' }}</code></p>
+    <p>
+      当前序号 <code>{{ index2 != null ? index2 + 1 : '已删光' }}</code>
+    </p>
     <veui-tabs
       ui="large"
       :active.sync="active1"
@@ -240,7 +228,9 @@
         <p>Tab {{ tab.name }}</p>
       </veui-tab>
     </veui-tabs>
-    <p>当前序号 <code>{{ index3 != null ? index3 + 1 : '已删光' }}</code></p>
+    <p>
+      当前序号 <code>{{ index3 != null ? index3 + 1 : '已删光' }}</code>
+    </p>
     <veui-tabs
       ui="large block"
       class="large-block-demo"
@@ -266,7 +256,9 @@
   </section>
   <section>
     <h2>增删模式2（完全外部控制）：</h2>
-    <p>当前序号 <code>{{ index4 != null ? index4 + 1 : '已删光' }}</code></p>
+    <p>
+      当前序号 <code>{{ index4 != null ? index4 + 1 : '已删光' }}</code>
+    </p>
     <veui-button
       class="add-btn"
       @click="addTab2"
@@ -301,7 +293,9 @@
         <p>Tab {{ tab.name }}</p>
       </veui-tab>
     </veui-tabs>
-    <p>当前序号 <code>{{ index5 != null ? index5 + 1 : '已删光' }}</code></p>
+    <p>
+      当前序号 <code>{{ index5 != null ? index5 + 1 : '已删光' }}</code>
+    </p>
     <veui-button
       class="add-btn"
       @click="addTab3"
@@ -334,23 +328,25 @@
         :name="tab.name"
         :status="tab.status"
       >
-        <p v-if="tab.label ==='弄一个很长的在中间试试'">
+        <p v-if="tab.label === '弄一个很长的在中间试试'">
           弄一个很高的在中间试试
           <br
             v-for="n in 10"
             :key="n"
           >
         </p>
-        <p v-else>
-          Tab {{ tab.name }}
-        </p>
+        <p v-else>Tab {{ tab.name }}</p>
       </veui-tab>
     </veui-tabs>
   </section>
   <section>
     <h2>增删模式3（v-if 等 dom 上控制）：</h2>
-    <p>当前标签 <code>{{ active5 }}</code></p>
-    <p>当前序号 <code>{{ index6 + 1 }}</code></p>
+    <p>
+      当前标签 <code>{{ active5 }}</code>
+    </p>
+    <p>
+      当前序号 <code>{{ index6 + 1 }}</code>
+    </p>
     <veui-button
       :disabled="tabIfRemoving"
       @click="insertVisiable = !insertVisiable"
@@ -551,7 +547,7 @@ section + section {
 }
 
 .veui-tabs {
-  & + &[ui~="block"] {
+  & + &[ui~='block'] {
     margin-top: 20px;
   }
 }
