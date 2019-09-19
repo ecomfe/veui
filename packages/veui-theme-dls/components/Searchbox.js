@@ -12,7 +12,8 @@ config.defaults(
     },
     ui: {
       style: {
-        values: ['normal', 'strong']
+        values: ['normal', 'inline', 'strong'],
+        inherit: true
       },
       size: {
         values: ['xs', 's', 'm', 'l'],
