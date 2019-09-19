@@ -189,4 +189,35 @@
     font-size: @dls-input-font-size-l;
     border-radius: @dls-input-border-radius-l;
   }
+
+  &[ui~="inline"] {
+    border-radius: 0;
+    position: relative;
+  }
+
+  &[ui~="inline"] &-main {
+    position: relative;
+    border: none;
+    box-shadow: none;
+
+    &::after {
+      content: "";
+      .absolute(_, 0, 0);
+      .veui-transition(transform);
+      height: 1px;
+      transform-origin: 0% 100%;
+      background-color: @dls-input-border-color;
+    }
+  }
+
+  &[ui~="inline"] .veui-input-has-after .veui-input-main {
+    border-radius: 0;
+  }
+
+  &-focused[ui~="inline"] &-main {
+    &::after {
+      transform: scaleY(2);
+      background-color: @dls-input-border-color-focus;
+    }
+  }
 }
