@@ -61,6 +61,12 @@ export default [
     component: AlertBox
   },
   {
+    path: '/anchor',
+    hash: '#milk-coffee',
+    name: 'Anchor',
+    component: Anchor
+  },
+  {
     path: '/autocomplete',
     name: 'Autocomplete',
     component: Autocomplete,
@@ -70,12 +76,6 @@ export default [
     path: '/badge',
     name: 'Badge',
     component: Badge
-  },
-  {
-    path: '/anchor',
-    hash: '#milk-coffee',
-    name: 'Anchor',
-    component: Anchor
   },
   {
     path: '/breadcrumb',
