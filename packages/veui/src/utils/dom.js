@@ -1,5 +1,5 @@
 import { findIndex, uniq, get, clamp } from 'lodash'
-import { resolveOffset } from './math'
+import { resolveOffset } from './helper'
 
 /**
  *
@@ -372,8 +372,13 @@ export const KEYBOARD_EVENTS = ['keydown', 'keypress', 'keyup']
 export const FOCUS_EVENTS = ['focus', 'blur', 'focusin', 'focusout']
 export const VALUE_EVENTS = ['input', 'change']
 
-export const raf =
-  window.requestAnimationFrame || (cb => setTimeout(cb, 1000 / 60))
+let realRaf
+export const raf = cb => {
+  if (!realRaf) {
+    realRaf = window.requestAnimationFrame || (cb => setTimeout(cb, 1000 / 60))
+  }
+  return realRaf(cb)
+}
 
 export function getWindowRect () {
   let { innerHeight, innerWidth } = window
@@ -407,22 +412,20 @@ const calcDistance = (
 
 /**
  * 在 viewport 中滚动 target 到指定位置
- * @param {Array<number>| number} positions 位置百分数，如 0.5 等价于 [0.5, 0.5]
+ * @param {Array<number>|number} positions 位置百分数，如 0.5 等价于 [0.5, 0.5]
  * @param {Window|HTMLElement} viewport 视口元素
  * @param {HTMLElement} target 被滚动的元素
- * @param {number} duration 滚动时间，单位ms
- * @param {Function=} beforeScroll 滚动之前的hook
- * @param {Function=} callback 滚动完成的回调
- * @param {Function=} timingFn 时间函数
+ * @param {Object=} options 选项
+ * @param {number=} options.duration 滚动时间，单位ms
+ * @param {Function=} options.beforeScroll 每次滚动之前的hook
+ * @param {Function=} options.afterScroll 整个滚动完成之后的回调
+ * @param {Function=} options.timingFn 时间函数
  */
 export function scrollTo (
   positions,
   viewport,
   target,
-  duration,
-  beforeScroll,
-  callback,
-  timingFn = linear
+  { duration = 200, timingFn = linear, beforeScroll, afterScroll } = {}
 ) {
   let isWindow = viewport === window
   let realViewport = isWindow ? document.documentElement : viewport
@@ -462,22 +465,22 @@ export function scrollTo (
     }
     if (curTime !== duration) {
       raf(step)
-    } else if (callback) {
-      callback()
+    } else if (afterScroll) {
+      afterScroll()
     }
   }
   step()
 }
 
 /**
- * 计算 elm 以及滚动祖先节点组成的 clip 视口
- * @param {HTMLElement | Window} elm 起始元素
- * @param {Object=} elmRect elm 的 Rect，若提供了就少一次调用，减少 rect 的获取次数
+ * 计算指定元素在窗口中可视部分
+ * @param {HTMLElement|Window} elem 起始元素
+ * @param {Object=} elemRect elem 的 Rect，若提供了就少一次调用，减少 rect 的获取次数
  */
-export function getClipViewport (elm, elmRect) {
+export function getVisibleRect (elem, elemRect) {
   let rect = null
-  let el = elm
-  if (elm === window) {
+  let el = elem
+  if (elem === window) {
     return getWindowRect()
   }
   while (el) {
@@ -491,7 +494,7 @@ export function getClipViewport (elm, elmRect) {
       let hScroll = scrollWidth > clientWidth
       if (vScroll || hScroll) {
         let { top, left } =
-          el === elm && elmRect ? elmRect : el.getBoundingClientRect()
+          el === elem && elemRect ? elemRect : el.getBoundingClientRect()
         if (vScroll) {
           let realTop = top + el.clientTop
           let realBottom = realTop + clientHeight

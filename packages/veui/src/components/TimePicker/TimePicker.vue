@@ -358,7 +358,7 @@ export default {
       if (viewport) {
         let selected = viewport.querySelector('.veui-option-selected')
         if (selected) {
-          scrollTo(0.5, viewport, selected, duration)
+          scrollTo(0.5, viewport, selected, { duration })
         }
       }
     },

@@ -52,12 +52,12 @@ import ui from '../mixins/ui'
 import { debounce, reduce, startsWith, includes, get, isString } from 'lodash'
 import {
   scrollTo,
-  getClipViewport,
+  getVisibleRect,
   calcClip,
   raf,
   getWindowRect
 } from '../utils/dom'
-import { resolveOffset } from '../utils/math'
+import { resolveOffset } from '../utils/helper'
 import { getNodes } from '../utils/context'
 import config from '../managers/config'
 
@@ -302,7 +302,7 @@ export default {
       // clip 一下 fixed anchor, 模拟 absolute 定位被滚动的 C.B. overflow 的效果
       let clip = calcClip(
         append.getBoundingClientRect(), // 设置了 append 的样式，重新获取下rect
-        getClipViewport(this.realContainer, conRect)
+        getVisibleRect(this.realContainer, conRect)
       )
       if (clip) {
         let { top, right, bottom, left } = clip
@@ -366,13 +366,10 @@ export default {
         }
       }
       this.animating = true
-      scrollTo(
-        [0, this.offset],
-        this.realContainer,
-        el,
+      scrollTo([0, this.offset], this.realContainer, el, {
         duration,
         beforeScroll,
-        () => {
+        afterScroll: () => {
           // 这里要两个raf， 因为 scroll 用 raf 节流了
           raf(() => {
             raf(() => {
@@ -381,7 +378,7 @@ export default {
             })
           })
         }
-      )
+      })
     },
     getCurrentAnchor () {
       let { top: cTop } = this.getContainerRect()
