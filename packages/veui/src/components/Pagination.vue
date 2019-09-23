@@ -50,8 +50,7 @@
           :ref="getKey(item)"
           :class="{
             'veui-current': item.current,
-            'veui-pagination-more': item.more,
-            'focus-visible': focusVisible[getKey(item)]
+            'veui-pagination-more': item.more
           }"
           :role="to ? null : 'button'"
           :to="item.href"
@@ -62,8 +61,6 @@
               ? t('current', { page: item.page })
               : t('pageLabel', { page: item.page })
           "
-          @focus.native="handleFocus(getKey(item), item)"
-          @blur.native="handleBlur(getKey(item))"
           @click="handleRedirect(item, $event)"
         >
           <template v-if="item.more">
@@ -133,7 +130,6 @@ import Button from './Button'
 import config from '../managers/config'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
-import { hasClass } from '../utils/dom'
 
 config.defaults({
   'pagination.pageSize': 30,
@@ -209,8 +205,7 @@ export default {
   data () {
     return {
       customPageSize: 0,
-      targetPage: '',
-      focusVisible: {}
+      targetPage: ''
     }
   },
   computed: {
@@ -377,21 +372,6 @@ export default {
     },
     getKey (item) {
       return `p-${item.more ? (item.forward ? 'f' : 'b') : item.page}`
-    },
-    /**
-     * Special hack to prevent state lost
-     * upon component rerender
-     */
-    handleFocus (ref) {
-      this.$nextTick(() => {
-        let link = this.$refs[ref][0]
-        if (link && hasClass(link.$el, 'focus-visible')) {
-          this.focusVisible = { [ref]: true }
-        }
-      })
-    },
-    handleBlur (ref) {
-      this.$set(this.focusVisible, ref, false)
     },
     fixFocus (ref) {
       this.$nextTick(() => {
