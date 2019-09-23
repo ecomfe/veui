@@ -193,12 +193,8 @@ export default {
       }
     },
     focus () {
-      let { command, button } = this.$refs
-      if (command) {
-        command.focus()
-        return
-      }
-      button.focus()
+      let { command, button } = this.$refs;
+      (command || button).focus()
     }
   }
 }

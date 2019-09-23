@@ -110,3 +110,9 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.veui-time-picker {
+  margin-right: 10px;
+}
+</style>
