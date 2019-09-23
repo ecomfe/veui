@@ -128,7 +128,7 @@ export default {
         process.env.VUE_ENV === 'server' ? true : [String, HTMLElement, Window],
       default: null
     },
-    offset: {
+    targetOffset: {
       type: [String, Number],
       validator: offsetValidator,
       default: 0
@@ -366,7 +366,7 @@ export default {
         }
       }
       this.animating = true
-      scrollTo([0, this.offset], this.realContainer, el, {
+      scrollTo([0, this.targetOffset], this.realContainer, el, {
         duration,
         beforeScroll,
         afterScroll: () => {
@@ -382,7 +382,7 @@ export default {
     },
     getCurrentAnchor () {
       let { top: cTop } = this.getContainerRect()
-      let offset = getOffset(this.realContainer, cTop, this.offset)
+      let offset = getOffset(this.realContainer, cTop, this.targetOffset)
       let result = null
       let length = this.sharpAnchors.length
       let item = null
