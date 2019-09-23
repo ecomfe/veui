@@ -42,7 +42,8 @@
           :aria-label="t('selectYear', { year: p.year })"
           @click="setView(pIndex, 'years')"
         >
-          <b>{{ t('year', { year: p.year }) }}</b> <veui-icon :name="icons.expand"/>
+          <b>{{ t('year', { year: p.year }) }}</b>
+          <veui-icon :name="icons.expand"/>
         </button>
         <button
           :id="`${id}:panel-title:${pIndex}`"
@@ -53,7 +54,9 @@
           :aria-label="t('selectMonth', { month: p.month + 1 })"
           @click="setView(pIndex, 'months')"
         >
-          <b>{{ t('month', { month: p.month + 1 }) || t(`monthsLong[${p.month}]`) }}</b>
+          <b>{{
+            t('month', { month: p.month + 1 }) || t(`monthsLong[${p.month}]`)
+          }}</b>
           <veui-icon :name="icons.expand"/>
         </button>
       </template>
@@ -70,7 +73,7 @@
           :id="`${id}:panel-title:${pIndex}`"
           class="veui-calendar-label"
         >
-          <b>{{ t('year', { year: p.year - p.year % 10 }) }}</b>–<b>{{ t('year', { year: p.year - p.year % 10 + 9 }) }}</b>
+          <b>{{ t('year', { year: p.year - (p.year % 10) }) }}</b>–<b>{{ t('year', { year: p.year - (p.year % 10) + 9 }) }}</b>
         </span>
       </template>
       <button
@@ -117,7 +120,7 @@
                 :class="getDateClass(day, p)"
               >
                 <button
-                  v-if="fillMonth && panel === 1 || day.month === p.month"
+                  v-if="(fillMonth && panel === 1) || day.month === p.month"
                   :ref="day.isFocus ? 'focus' : null"
                   type="button"
                   :disabled="realDisabled || realReadonly || day.isDisabled"
@@ -167,7 +170,10 @@
                 @keydown.down.prevent="moveFocus(p.view, 4)"
                 @keydown.left.prevent="moveFocus(p.view, -1)"
               >
-                {{ t('month', { month: (i - 1) * 4 + j }) || t(`monthsShort[${(i - 1) * 4 + j - 1}]`) }}
+                {{
+                  t('month', { month: (i - 1) * 4 + j }) ||
+                    t(`monthsShort[${(i - 1) * 4 + j - 1}]`)
+                }}
               </button>
             </td>
           </tr>
@@ -186,13 +192,22 @@
                 v-if="(i - 1) * 4 + j - 1 < 10"
                 type="button"
                 :tabindex="i === 1 && j === 1 ? null : '-1'"
-                @click="selectYear(pIndex, p.year - p.year % 10 + (i - 1) * 4 + j - 1)"
-                @keydown.up.prevent="moveFocus(p.view, getYearOffset(i, j, false))"
+                @click="
+                  selectYear(
+                    pIndex,
+                    p.year - (p.year % 10) + (i - 1) * 4 + j - 1
+                  )
+                "
+                @keydown.up.prevent="
+                  moveFocus(p.view, getYearOffset(i, j, false))
+                "
                 @keydown.right.prevent="moveFocus(p.view, 1)"
-                @keydown.down.prevent="moveFocus(p.view, getYearOffset(i, j, true))"
+                @keydown.down.prevent="
+                  moveFocus(p.view, getYearOffset(i, j, true))
+                "
                 @keydown.left.prevent="moveFocus(p.view, -1)"
               >
-                {{ p.year - p.year % 10 + (i - 1) * 4 + j - 1 }}
+                {{ p.year - (p.year % 10) + (i - 1) * 4 + j - 1 }}
               </button>
             </td>
           </tr>
@@ -211,10 +226,16 @@ import {
   isSameDay,
   mergeRange
 } from '../utils/date'
-import { closest, focusIn } from '../utils/dom'
+import { closest, focusIn, focus } from '../utils/dom'
 import { sign, isPositive } from '../utils/math'
 import { normalizeClass } from '../utils/helper'
-import { isInteger, flattenDeep, findIndex, uniqueId, upperFirst } from 'lodash'
+import {
+  isInteger,
+  flattenDeep,
+  findIndex,
+  uniqueId,
+  upperFirst
+} from 'lodash'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
@@ -688,10 +709,7 @@ export default {
     },
     setFocus (part, index) {
       this.$nextTick(() => {
-        let ref = this.$refs[part][index]
-        if (ref) {
-          ref.focus()
-        }
+        focus(this.$refs[part][index])
       })
     },
     setView (i, value) {
@@ -795,10 +813,7 @@ export default {
       return flattenDeep([this.selected])[0] || this.today
     },
     focus () {
-      let { focus } = this.$refs
-      if (focus && focus[0]) {
-        focus[0].focus()
-      }
+      focus(this.$refs.focus && this.$refs.focus[0])
     }
   }
 }

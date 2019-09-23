@@ -384,9 +384,6 @@ describe('components/Tree', () => {
     wrapper.find('.veui-tree-item').trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()
 
-    expect(wrapper.find('.veui-tree-item').classes('focus-visible')).to.equal(
-      true
-    )
     expect(
       wrapper.find('.veui-tree-item').classes('veui-tree-item-expanded')
     ).to.equal(true)
@@ -410,16 +407,6 @@ describe('components/Tree', () => {
 
     expect(
       wrapper.find('.veui-tree-item').classes('veui-tree-item-expanded')
-    ).to.equal(false)
-
-    wrapper.find('.veui-tree-item').trigger('blur')
-    await vm.$nextTick()
-
-    expect(
-      wrapper
-        .findAll('.veui-tree-item')
-        .at(0)
-        .classes('focus-visible')
     ).to.equal(false)
 
     wrapper.destroy()
