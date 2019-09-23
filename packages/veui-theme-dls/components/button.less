@@ -56,7 +56,8 @@
   }
 
   &:hover,
-  &.focus-visible {
+  &.focus-visible,
+  &[data-focus-visible-added] {
     background-color: @dls-button-background-color-normal-hover;
   }
 
@@ -86,7 +87,8 @@
     color: @dls-button-font-color-strong;
 
     &:hover,
-    &.focus-visible {
+    &.focus-visible,
+    &[data-focus-visible-added] {
       background-color: @dls-button-background-color-strong-hover;
     }
 
@@ -111,7 +113,8 @@
     color: @dls-button-font-color-primary;
 
     &:hover,
-    &.focus-visible {
+    &.focus-visible,
+    &[data-focus-visible-added] {
       background-color: @dls-button-background-color-primary-hover;
     }
 
@@ -136,7 +139,8 @@
     color: @dls-button-font-color-translucent;
 
     &:hover,
-    &.focus-visible {
+    &.focus-visible,
+    &[data-focus-visible-added] {
       background-color: @dls-button-background-color-translucent-hover;
     }
 
@@ -169,7 +173,8 @@
       .veui-button-transition();
     }
 
-    &.focus-visible {
+    &.focus-visible,
+    &[data-focus-visible-added] {
       box-shadow: none;
 
       &::after {
@@ -194,7 +199,8 @@
       color: @dls-button-font-color-text-hover;
     }
 
-    &.focus-visible {
+    &.focus-visible,
+    &[data-focus-visible-added] {
       background-color: @dls-button-background-color-text-focus;
       color: @dls-button-font-color-text-focus;
     }
@@ -223,7 +229,8 @@
       color: @dls-button-font-color-icon-hover;
     }
 
-    &.focus-visible {
+    &.focus-visible,
+    &[data-focus-visible-added] {
       background-color: @dls-button-background-color-icon-focus;
       color: @dls-button-font-color-icon-focus;
     }
@@ -245,7 +252,8 @@
     }
   }
 
-  &.focus-visible {
+  &.focus-visible,
+  &[data-focus-visible-added] {
     .dls-focus-ring(@dls-button-border-color-focus, @dls-button-shadow-focus);
   }
 }

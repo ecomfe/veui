@@ -95,16 +95,20 @@
     &:hover::before {
       background-color: @dls-tree-node-background-color-hover;
     }
-    &.focus-visible::before {
+
+    &.focus-visible::before,
+    &[data-focus-visible-added]::before {
       background-color: @dls-tree-node-background-color-focus;
     }
+
     &:active::before {
       background-color: @dls-tree-node-background-color-active;
     }
 
     &-disabled:active::before,
     &-disabled:hover::before,
-    &-disabled.focus-visible::before {
+    &-disabled.focus-visible::before,
+    &-disabled[data-focus-visible-added]::before {
       background-color: transparent;
     }
   }
