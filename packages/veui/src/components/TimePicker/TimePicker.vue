@@ -20,10 +20,26 @@
     @focus="openDropdown"
     @click="openDropdown"
   >
-    <veui-icon
+    <div
       slot="append"
-      :name="icons.clock"
-    />
+      class="veui-time-picker-icon"
+    >
+      <veui-button
+        v-if="clearable && localValue"
+        class="veui-time-picker-clear"
+        :ui="uiParts.clear"
+        :aria-label="t('clear')"
+        :disabled="realDisabled || realReadonly"
+        @click="clear"
+        @mouseup.stop
+      >
+        <veui-icon :name="icons.clear"/>
+      </veui-button>
+      <veui-icon
+        class="veui-time-picker-clock"
+        :name="icons.clock"
+      />
+    </div>
   </veui-input>
   <veui-overlay
     v-show="expanded"
@@ -135,10 +151,12 @@
 import Overlay from '../Overlay'
 import TimePickerOptionGroup from './_TimePickerOptionGroup'
 import Input from '../Input'
+import Button from '../Button'
 import Icon from '../Icon'
 import dropdown from '../../mixins/dropdown'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
+import i18n from '../../mixins/i18n'
 import {
   range,
   padStart,
@@ -193,9 +211,10 @@ export default {
     'veui-overlay': Overlay,
     'veui-time-picker-option-group': TimePickerOptionGroup,
     'veui-input': Input,
+    'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [ui, input, dropdown],
+  mixins: [ui, input, dropdown, i18n],
   model: {
     event: 'input'
   },
@@ -236,7 +255,7 @@ export default {
     },
     inputProps () {
       return {
-        ...pick(this.$props, ['placeholder', 'autofocus', 'clearable']),
+        ...pick(this.$props, ['placeholder', 'autofocus']),
         readonly: this.realReadonly,
         disabled: this.realDisabled
       }
@@ -347,6 +366,9 @@ export default {
     }
   },
   methods: {
+    clear () {
+      this.realInputValue = ''
+    },
     getRealPropValue () {
       return this.value
         ? ensureLength(toArray(this.value), this.datasource.length, true)
@@ -408,6 +430,11 @@ export default {
       }
       this.localValue = value
       this.syncValue(value)
+
+      // Close if only hours are available
+      if (this.mode === 'hour') {
+        this.closeDropdown()
+      }
     },
     focus () {
       this.$refs.input.focus()
