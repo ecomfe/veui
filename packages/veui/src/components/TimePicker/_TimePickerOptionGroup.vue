@@ -4,10 +4,18 @@ import OptionGroup from '../OptionGroup'
 
 export default {
   name: 'veui-time-picker-option-group',
-  uiTypes: ['select'],
+  uiTypes: ['select', 'input'],
   inheritAttrs: false,
   props: {
     value: Number
+  },
+  computed: {
+    localValue () {
+      if (!this.select) {
+        return null
+      }
+      return this.select.localValue
+    }
   },
   methods: {
     handleSelect (value) {
