@@ -16,14 +16,14 @@
   <veui-anchor
     :container="container"
     class="anchor-one"
-    :offset="0.1"
+    :target-offset="0.1"
     :items="coffees0"
   />
   <h2 class="header-four">sticky anchor (100px)</h2>
   <veui-anchor
     :container="container"
     class="anchor-four"
-    :offset="0.1"
+    :target-offset="0.1"
     sticky-offset="100px"
     :items="coffees0"
   />
@@ -31,7 +31,7 @@
   <veui-anchor
     :sticky="false"
     ui="s"
-    :offset="0.1"
+    :target-offset="0.1"
     :container="container"
     class="anchor-two"
     :items="coffees"
