@@ -69,7 +69,7 @@ const OptionGroup = {
     }
   },
   computed: {
-    selectedValue () {
+    value () {
       return this.select.value
     },
     itemIds () {
@@ -163,9 +163,9 @@ const OptionGroup = {
       ? this.options.map((opt, i) => {
         let option = {
           ...opt,
-          selected: Array.isArray(this.selectedValue)
-            ? includes(this.selectedValue, opt.value)
-            : opt.value === this.selectedValue
+          selected: Array.isArray(this.value)
+            ? includes(this.value, opt.value)
+            : opt.value === this.value
         }
         return option.options ? (
           <OptionGroup

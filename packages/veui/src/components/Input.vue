@@ -207,7 +207,9 @@ export default {
     focus () {
       let { input } = this.$refs
       if (input) {
-        input.focus()
+        setTimeout(() => {
+          input.focus()
+        })
       }
     },
     activate () {
