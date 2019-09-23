@@ -115,7 +115,8 @@
       }
 
       &:hover,
-      &.focus-visible {
+      &.focus-visible,
+      &[data-focus-visible-added] {
         .veui-pagination-more-ellipsis {
           opacity: 0;
         }
@@ -130,13 +131,15 @@
       background-color: @dls-button-background-color-normal-hover;
     }
 
-    &.focus-visible {
+    &.focus-visible,
+    &[data-focus-visible-added] {
       background-color: @dls-button-background-color-normal-focus;
       .dls-focus-ring(@dls-button-border-color-focus, @dls-button-shadow-focus);
     }
 
     &:hover,
-    &.focus-visible {
+    &.focus-visible,
+    &[data-focus-visible-added] {
       text-decoration: none;
     }
 
