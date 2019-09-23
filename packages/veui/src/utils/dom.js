@@ -241,9 +241,9 @@ export function focusAfter (elem) {
 }
 
 /**
- * 安全地 focus 一个元素
+ * 安全地 focus 一个元素/组件
  *
- * @param {HTMLElement} elem
+ * @param {HTMLElement|Vue} elem 需要获取焦点的元素/组件
  */
 export function focus (elem) {
   if (!elem || typeof elem.focus !== 'function') {
