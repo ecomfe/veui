@@ -3,7 +3,7 @@
   class="veui-schedule"
   :ui="realUi"
   role="application"
-  aria-label="时段选择"
+  :aria-label="t('schedule')"
   :aria-disabled="realDisabled"
   :aria-readonly="realReadonly"
   tabindex="-1"
@@ -118,7 +118,13 @@
               :ref="`hour-${week[i]}-${j}`"
               type="button"
               :disabled="realDisabled || realReadonly || hour.isDisabled"
-              :class="mergeClass({ 'veui-schedule-selected': hour.isSelected }, week[i], j)"
+              :class="
+                mergeClass(
+                  { 'veui-schedule-selected': hour.isSelected },
+                  week[i],
+                  j
+                )
+              "
               :tabindex="i === 0 && j === 0 ? '0' : '-1'"
               :aria-label="getHourLabel(i, j, hour)"
               @mousedown="handleMousedown(i, j)"
@@ -140,6 +146,7 @@
           </td>
         </tr>
       </table>
+
       <table class="veui-schedule-table veui-schedule-table-selected">
         <colgroup>
           <col
@@ -174,6 +181,7 @@
           </template>
         </tr>
       </table>
+
       <veui-tooltip
         :target="currentRef"
         position="right"
@@ -445,7 +453,9 @@ export default {
     mergeRange (days, range) {
       return days.reduce((selected, day) => {
         let daySelected = selected[day]
-        let hours = merge([[...range]], this.disabledHours[day], { mode: 'substract' })
+        let hours = merge([[...range]], this.disabledHours[day], {
+          mode: 'substract'
+        })
 
         if (!daySelected) {
           selected[day] = Array.isArray(hours[0]) ? hours : [[...hours]]
