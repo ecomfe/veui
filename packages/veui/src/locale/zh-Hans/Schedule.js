@@ -3,6 +3,7 @@ import i18n from '../../managers/i18n'
 i18n.register(
   'zh-Hans',
   {
+    schedule: '时段选择',
     preset: '预设时段',
     selectPreset: '选择预设时段',
     selectedRanges: '已选时段',
