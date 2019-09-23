@@ -72,7 +72,10 @@ export default {
     },
     inputPlaceholder () {
       if (this.multiple) {
-        if (this.localValue && this.localValue.length > 0) {
+        if (
+          (this.localValue && this.localValue.length > 0) ||
+          !this.searchable
+        ) {
           return ''
         }
         return this.realPlaceholder
@@ -189,6 +192,7 @@ export default {
       }
       this.inputValue = ''
       e.stopPropagation()
+      this.focus()
     },
     handleSelect (value) {
       if (this.searchable) {
@@ -242,7 +246,7 @@ export default {
       e.stopPropagation()
       e.preventDefault()
     },
-    handleInputKeydown (e) {
+    handleTriggerKeydown (e) {
       let passive = true
       switch (e.key) {
         case 'Up':
@@ -250,6 +254,7 @@ export default {
         case 'Down':
         case 'ArrowDown':
           this.expanded = true
+          passive = false
           if (this.searchable) {
             this.handleKeydown(e)
             this.getCurrentActiveElement()
@@ -277,7 +282,6 @@ export default {
                 elem.click()
               }
             }
-            passive = false
           } else {
             this.expanded = true
           }
@@ -309,7 +313,11 @@ export default {
     handleAfteropen () {
       this.$emit('afteropen')
     },
-    focus () {
+    focus (visible) {
+      if (!this.searchable) {
+        this.$el.focus()
+        return
+      }
       let { input } = this.$refs
       if (input) {
         input.focus()
@@ -386,9 +394,9 @@ export default {
     let renderGroup = (options, children) => {
       return (
         <OptionGroup
-          vShow={!!options}
+          v-show={!!options}
           hidden={!options}
-          ariaHidden={!options}
+          aria-hidden={!options}
           ref="options"
           options={options}
           scopedSlots={{
@@ -415,12 +423,14 @@ export default {
         }}
         ui={this.realUi}
         role="listbox"
-        ariaOwns={this.dropdownId}
-        ariaReadonly={this.realReadonly}
-        ariaExpanded={this.expanded}
-        ariaDisabled={this.realDisabled}
-        ariaLabelledby={this.labelId}
-        ariaHaspopup="listbox"
+        aria-owns={this.dropdownId}
+        aria-readonly={this.realReadonly}
+        aria-expanded={this.expanded}
+        aria-disabled={this.realDisabled}
+        aria-labelledby={this.labelId}
+        aria-haspopup="listbox"
+        tabindex={this.searchable || this.realDisabled ? null : '0'}
+        onKeydown={this.handleTriggerKeydown}
       >
         <Input
           ref="input"
@@ -433,7 +443,6 @@ export default {
           placeholder={this.inputPlaceholder}
           value={this.inputValue}
           onMouseup={this.handleInputMouseup}
-          onKeydown={this.handleInputKeydown}
           onInput={this.handleTriggerInput}
           composition
         >
@@ -452,10 +461,17 @@ export default {
                   <Button
                     class="veui-select-clear"
                     ui={this.uiParts.clear}
-                    ariaLabel={this.t('clear')}
-                    onClick={this.clear}
-                    onMouseup={e => e.stopPropagation()}
+                    aria-label={this.t('clear')}
                     disabled={this.realDisabled || this.realReadonly}
+                    // had to do so because of vuejs/jsx#77
+                    {...{
+                      on: {
+                        click: this.clear,
+                        '!keydown': stopPropagation,
+                        '!mousedown': stopPropagation,
+                        '!mouseup': stopPropagation
+                      }
+                    }}
                   >
                     <Icon name={this.icons.clear} />
                   </Button>
@@ -469,21 +485,24 @@ export default {
         </Input>
         {
           <Overlay
-            vShow={this.expanded}
+            v-show={this.expanded}
             target="input"
             open={this.expanded}
             autofocus={!this.searchable}
             modal
             options={this.realOverlayOptions}
-            overlayClass={this.overlayClass}
-            matchWidth={this.isMatchWidth}
+            overlay-class={this.overlayClass}
+            match-width={this.isMatchWidth}
             onLocate={this.handleRelocate}
             onAfteropen={this.handleAfteropen}
           >
             <div
               id={this.dropdownId}
               ref="box"
-              class="veui-select-options"
+              class={{
+                'veui-select-options': true,
+                'veui-select-options-multiple': this.multiple
+              }}
               {...{
                 directives: [
                   {
@@ -521,6 +540,10 @@ export default {
       </div>
     )
   }
+}
+
+function stopPropagation (e) {
+  e.stopPropagation()
 }
 
 function findOptionByValue (options, value) {
