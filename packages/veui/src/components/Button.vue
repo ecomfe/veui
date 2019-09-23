@@ -4,14 +4,11 @@
     'veui-button': true,
     'veui-button-loading': loading,
     'veui-disabled': disabled,
-    'focus-visible': focusVisible,
     'veui-button-icon-only': iconOnly
   }"
   :ui="realUi"
   v-bind="attrs"
   v-on="$listeners"
-  @focus="handleFocus"
-  @blur="handleBlur"
 >
   <slot v-if="!loading"/>
   <template v-else>
@@ -32,7 +29,6 @@ import { omit } from 'lodash'
 import Icon from './Icon'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
-import { hasClass } from '../utils/dom'
 import { hasClass as vnodeHasClass } from '../utils/helper'
 
 export default {
@@ -53,8 +49,7 @@ export default {
   },
   data () {
     return {
-      iconOnly: false,
-      focusVisible: false
+      iconOnly: false
     }
   },
   computed: {
@@ -88,20 +83,6 @@ export default {
     },
     focus () {
       this.$el.focus()
-    },
-    /**
-     * Special hack to prevent state lost
-     * upon component rerender
-     */
-    handleFocus () {
-      this.$nextTick(() => {
-        if (hasClass(this.$el, 'focus-visible')) {
-          this.focusVisible = true
-        }
-      })
-    },
-    handleBlur () {
-      this.focusVisible = false
     }
   }
 }
