@@ -210,12 +210,7 @@ export default {
       this.focused = false
     },
     focus () {
-      let { input } = this.$refs
-      if (input) {
-        setTimeout(() => {
-          input.focus()
-        })
-      }
+      this.$refs.input.focus()
     },
     activate () {
       if (this.realDisabled || this.realReadonly) {
