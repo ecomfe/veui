@@ -7,14 +7,6 @@ config.defaults(
     icons: {
       prev: 'chevron-left',
       next: 'chevron-right'
-    },
-    ui: {
-      style: {
-        values: ['loose']
-      },
-      size: {
-        values: ['large', 'small']
-      }
     }
   },
   'carousel'

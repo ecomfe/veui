@@ -19,8 +19,7 @@
         'veui-tree-item-expanded': item.expanded,
         'veui-tree-item-clickable': clickable,
         'veui-tree-item-hidden': item.hidden,
-        'veui-tree-item-disabled': item.disabled,
-        'focus-visible': focusVisible[index]
+        'veui-tree-item-disabled': item.disabled
       }"
       :tabindex="
         (focusVisible[index] ||
@@ -31,8 +30,6 @@
       "
       @click="click(item, [], index, depth)"
       @keydown="handleKeydown($event, item, index, depth)"
-      @focus="handleFocus(index)"
-      @blur="handleBlur(index)"
     >
       <slot
         name="item"
@@ -132,7 +129,7 @@
 <script>
 import Icon from '../Icon'
 import { includes } from 'lodash'
-import { closest, hasClass } from '../../utils/dom'
+import { closest } from '../../utils/dom'
 import { getTypedAncestor } from '../../utils/helper'
 
 const ITEM_SELECTOR = '.veui-tree-item'
@@ -241,13 +238,11 @@ export default {
       switch (e.key) {
         case 'Enter':
           this.toggle(item, index, depth)
-          this.fixFocus(index)
           break
         case 'Left':
         case 'ArrowLeft':
           if (item.expanded) {
             this.toggle(item, index, depth, false)
-            this.fixFocus(index)
           } else {
             this.focusLevel()
           }
@@ -259,7 +254,6 @@ export default {
           } else {
             this.toggle(item, index, depth, true)
             this.focusLevel(false)
-            this.fixFocus(index)
           }
           break
         case 'Up':
@@ -289,16 +283,6 @@ export default {
      * Special hack to prevent state lost
      * upon component rerender
      */
-    handleFocus (i) {
-      this.$nextTick(() => {
-        if (hasClass(this.$refs.item[i], 'focus-visible')) {
-          this.$set(this.focusVisible, i, true)
-        }
-      })
-    },
-    handleBlur (i) {
-      this.$set(this.focusVisible, i, false)
-    },
     fixFocus (i) {
       this.$nextTick(() => {
         this.$set(this.focusVisible, i, true)
