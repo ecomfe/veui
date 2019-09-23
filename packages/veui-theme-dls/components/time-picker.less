@@ -35,11 +35,57 @@
     }
 
     .veui-option {
+      display: flex;
+      flex-direction: column;
       justify-content: center;
+      text-align: center;
 
-      &-label {
-        min-width: @dls-time-picker-option-content-min-width;
+      &::before {
+        content: "00";
+        display: block;
+        height: 0;
+        font-weight: @dls-option-font-weight-selected;
+        opacity: 0;
       }
+    }
+  }
+
+  &-icon {
+    display: flex;
+    position: relative;
+  }
+
+  &-clock {
+    .dls-icon-size(@dls-input-icon-size);
+    .veui-transition(color, opacity);
+    color: @dls-input-icon-color-disabled;
+
+    .veui-readonly &,
+    .veui-disabled & {
+      color: @dls-input-icon-color-disabled;
+    }
+  }
+
+  &:not(.veui-readonly):not(.veui-disabled):hover &-clear + &-clock,
+  .veui-input-focused &-clear + &-clock,
+  &-clear.focus-visible + &-clock {
+    opacity: 0;
+  }
+
+  &-clear {
+    .absolute(50%, 50%, _, _);
+    transform: translate(50%, -50%);
+    opacity: 0;
+    z-index: 1;
+
+    .veui-icon {
+      .dls-icon-size(@dls-input-icon-size);
+    }
+
+    .veui-time-picker:not(.veui-readonly):not(.veui-disabled):hover &,
+    .veui-input-focused &,
+    &.focus-visible {
+      opacity: 1;
     }
   }
 }
