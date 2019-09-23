@@ -318,10 +318,7 @@ export default {
         this.$el.focus()
         return
       }
-      let { input } = this.$refs
-      if (input) {
-        input.focus()
-      }
+      this.$refs.input.focus()
     }
   },
   render () {
