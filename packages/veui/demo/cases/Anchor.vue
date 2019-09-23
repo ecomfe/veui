@@ -18,7 +18,12 @@
     class="anchor-one"
     :target-offset="0.1"
     :items="coffees0"
-  />
+  >
+    <span
+      slot="item-label"
+      slot-scope="{ label }"
+    >{{ label }}🤘</span>
+  </veui-anchor>
   <h2 class="header-four">sticky anchor (100px)</h2>
   <veui-anchor
     :container="container"
