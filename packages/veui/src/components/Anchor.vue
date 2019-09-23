@@ -36,7 +36,12 @@
             :ui="realUi"
             @click="handleClick(props)"
           >
-            {{ props.label }}
+            <slot
+              name="item-label"
+              v-bind="props"
+            >
+              {{ props.label }}
+            </slot>
           </veui-link>
         </slot>
       </template>
