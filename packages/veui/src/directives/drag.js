@@ -61,7 +61,11 @@ function getOptions (binding, vnode) {
   // 但是没有完整的 top 、 left 、 width 、 height 属性，
   // 就要看看用 containment 能不能选出 DOM Element 了。
   if (!isSpecialSyntax(containment) && !isRect(containment)) {
-    options.containment = get(getNodes(containment, vnode.context), '[0]', null)
+    options.containment = get(
+      getNodes(containment, vnode.context),
+      '[0]',
+      null
+    )
   }
 
   return options
@@ -102,7 +106,8 @@ function refresh (el, binding, vnode) {
       handler,
 
       mousedownHandler (event) {
-        if (!options.draggable) {
+        // only start dragging upon left click
+        if (!options.draggable || event.button !== 0) {
           return
         }
 
