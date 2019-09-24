@@ -28,3 +28,12 @@ export function getStyle (element) {
     return { ...obj, [trim(key)]: trim(value) }
   }, {})
 }
+
+export function normalizeTransform (transform) {
+  let el = document.createElement('div')
+  el.style.transform = transform
+  document.body.appendChild(el)
+  let result = getComputedStyle(el).transform
+  el.parentElement.removeChild(el)
+  return result === 'none' ? 'matrix(1, 0, 0, 1, 0, 0)' : result
+}

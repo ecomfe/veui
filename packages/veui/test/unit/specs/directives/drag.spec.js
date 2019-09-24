@@ -1,73 +1,83 @@
 import { mount } from '@vue/test-utils'
 import drag, { registerHandler } from '@/directives/drag'
-import { wait } from '../../../utils'
+import { wait, normalizeTransform } from '../../../utils'
 
 describe('directives/drag', () => {
   it(`should receive correct params inside callbacks`, done => {
     let results = []
-    let wrapper = mount({
-      directives: { drag },
-      template: `<div ref="self"
+    let wrapper = mount(
+      {
+        directives: { drag },
+        template: `<div ref="self"
         v-drag:self="{
           dragstart: handleStart,
           drag: handleMove,
           dragend: handleEnd
         }"
         style="width: 20px; height: 20px">foo</div>`,
-      methods: {
-        handleStart ({ event }) {
-          results.push({
-            x: event.clientX,
-            y: event.clientY
-          })
-        },
-        handleMove ({ event, distanceX, distanceY }) {
-          assertTransform(this, `translate(${distanceX}px, ${distanceY}px)`)
-          results.push({
-            x: event.clientX,
-            y: event.clientY,
-            dx: distanceX,
-            dy: distanceY
-          })
-        },
-        handleEnd ({ event, distanceX, distanceY }) {
-          results.push({
-            x: event.clientX,
-            y: event.clientY,
-            dx: distanceX,
-            dy: distanceY
-          })
+        methods: {
+          handleStart ({ event }) {
+            results.push({
+              x: event.clientX,
+              y: event.clientY
+            })
+          },
+          handleMove ({ event, distanceX, distanceY }) {
+            assertTransform(this, `translate(${distanceX}px, ${distanceY}px)`)
+            results.push({
+              x: event.clientX,
+              y: event.clientY,
+              dx: distanceX,
+              dy: distanceY
+            })
+          },
+          handleEnd ({ event, distanceX, distanceY }) {
+            results.push({
+              x: event.clientX,
+              y: event.clientY,
+              dx: distanceX,
+              dy: distanceY
+            })
 
-          expect(results).to.deep.equal([
-            { x: 5, y: 5 },
-            { x: 105, y: 105, dx: 100, dy: 100 },
-            { x: 205, y: 205, dx: 200, dy: 200 },
-            { x: 205, y: 205, dx: 200, dy: 200 }
-          ])
+            expect(results).to.deep.equal([
+              { x: 5, y: 5 },
+              { x: 105, y: 105, dx: 100, dy: 100 },
+              { x: 205, y: 205, dx: 200, dy: 200 },
+              { x: 205, y: 205, dx: 200, dy: 200 }
+            ])
 
-          assertTransform(this, 'translate(200px, 200px)')
+            assertTransform(this, 'translate(200px, 200px)')
 
-          wrapper.destroy()
-          done()
+            wrapper.destroy()
+            done()
+          }
         }
+      },
+      {
+        attachToDocument: true
       }
-    })
+    )
 
     performDrag(wrapper, [[5, 5], [105, 105], [205, 205], [205, 205]])
   })
 
   it(`should accept dynamic options`, async () => {
-    let wrapper = mount({
-      directives: { drag },
-      template: `<div ref="self" v-drag:self="dragOptions">foo</div>`,
-      data () {
-        return {
-          dragOptions: {
-            axis: 'x'
+    let wrapper = mount(
+      {
+        directives: { drag },
+        template: `<div ref="self" v-drag:self="dragOptions">foo</div>`,
+        data () {
+          return {
+            dragOptions: {
+              axis: 'x'
+            }
           }
         }
+      },
+      {
+        attachToDocument: true
       }
-    })
+    )
 
     let { vm } = wrapper
 
@@ -77,15 +87,15 @@ describe('directives/drag', () => {
     await vm.$nextTick()
 
     // should skip
-    wrapper.vm.dragOptions = { axis: 'x' }
-    await vm.$nextTick()
-    performDrag(wrapper)
-    assertTransform(wrapper, 'translate(200px, 0px)')
-
     wrapper.vm.dragOptions = { axis: 'y' }
     await vm.$nextTick()
     performDrag(wrapper)
-    assertTransform(wrapper, 'translate(0px, 200px)')
+    assertTransform(wrapper, 'translate(200px, 200px)')
+
+    wrapper.vm.dragOptions = { axis: 'x' }
+    await vm.$nextTick()
+    performDrag(wrapper)
+    assertTransform(wrapper, 'translate(400px, 200px)')
 
     wrapper.destroy()
   })
@@ -97,10 +107,15 @@ describe('directives/drag', () => {
   })
 
   it('should handle clear up correctly', () => {
-    let wrapper = mount({
-      directives: { drag },
-      template: `<div ref="self" v-drag:self>foo</div>`
-    })
+    let wrapper = mount(
+      {
+        directives: { drag },
+        template: `<div ref="self" v-drag:self>foo</div>`
+      },
+      {
+        attachToDocument: true
+      }
+    )
 
     wrapper.vm.$destroy()
     expect(wrapper.element.__dragData__).to.be.equal(null)
@@ -108,48 +123,97 @@ describe('directives/drag', () => {
   })
 
   it('should handle @window containment correctly', () => {
-    let wrapper = mount({
-      directives: { drag },
-      template: `<div ref="self" v-drag:self="{
+    document.body.style = 'margin: 0'
+    let wrapper = mount(
+      {
+        directives: { drag },
+        template: `<div ref="self" v-drag:self="{
         containment: '@window'
       }">foo</div>`
-    })
+      },
+      {
+        attachToDocument: true
+      }
+    )
 
     performDrag(wrapper, [[0, 0], [-100, 2000]])
-    assertTransform(wrapper, `translate(0px, ${window.innerHeight}px)`)
+    assertTransform(
+      wrapper,
+      `translate(0px, ${window.innerHeight -
+        wrapper.vm.$refs.self.offsetHeight}px)`
+    )
+    document.body.style = ''
     wrapper.destroy()
   })
 
   it('should handle rect containment correctly', () => {
-    let wrapper = mount({
-      directives: { drag },
-      template: `<div ref="self" v-drag:self="{
+    document.body.style = 'margin: 0'
+    let wrapper = mount(
+      {
+        directives: { drag },
+        template: `<div ref="self" v-drag:self="{
         containment: {
           top: 0,
           left: 0,
           width: 100,
           height: 100
         }
-      }">foo</div>`
-    })
+      }" style="width: 20px; height: 20px">foo</div>`
+      },
+      {
+        attachToDocument: true
+      }
+    )
 
     performDrag(wrapper, [[0, 0], [-100, 200]])
-    assertTransform(wrapper, 'translate(0px, 100px)')
+    assertTransform(
+      wrapper,
+      `translate(0px, ${100 - wrapper.element.offsetHeight}px)`
+    )
+    document.body.style = ''
+    wrapper.destroy()
+  })
+
+  it('should ignore dragging triggered from right click', () => {
+    let wrapper = mount(
+      {
+        directives: { drag },
+        template: `<div ref="self" v-drag:self="dragOptions">foo</div>`,
+        data () {
+          return {
+            dragOptions: {
+              axis: 'x'
+            }
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    performDrag(wrapper, { button: 2 })
+    assertTransform(wrapper, '')
     wrapper.destroy()
   })
 
   it('should be able to retrieve `reset` method and use when needed', async () => {
-    let wrapper = mount({
-      directives: { drag },
-      template: `<div ref="self" v-drag:self="{
+    let wrapper = mount(
+      {
+        directives: { drag },
+        template: `<div ref="self" v-drag:self="{
         ready
       }">foo</div>`,
-      methods: {
-        ready ({ reset }) {
-          this.reset = reset
+        methods: {
+          ready ({ reset }) {
+            this.reset = reset
+          }
         }
+      },
+      {
+        attachToDocument: true
       }
-    })
+    )
 
     let { vm } = wrapper
     performDrag(wrapper, [[0, 0], [100, 100]])
@@ -162,40 +226,88 @@ describe('directives/drag', () => {
     wrapper.destroy()
   })
 
-  it('should handle `draggable` option correctly', () => {
-    let wrapper = mount({
-      directives: { drag },
-      template: `<div ref="self" v-drag:self="{
-        draggable: false
-      }">foo</div>`
-    })
+  it('should be able to `cancel` certain drag behavior when needed', async () => {
+    let wrapper = mount(
+      {
+        directives: { drag },
+        template: `<div ref="self" v-drag:self="{
+        dragend: dragEnd
+      }">foo</div>`,
+        methods: {
+          dragEnd ({ distanceX, cancel }) {
+            if (distanceX > 200) {
+              cancel()
+            }
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
 
-    performDrag(wrapper, [[0, 0], [100, 100]])
+    performDrag(wrapper, [[0, 0], [100, 100], [400, 200]])
     assertTransform(wrapper, '')
-
     wrapper.destroy()
   })
 
-  it('should handle unknown type option correctly', () => {
-    expect(() => {
-      mount({
+  it(
+    'should handle `draggable` option correctly',
+    () => {
+      let wrapper = mount({
         directives: { drag },
         template: `<div ref="self" v-drag:self="{
+        draggable: false
+      }">foo</div>`
+      })
+
+      performDrag(wrapper, [[0, 0], [100, 100]])
+      assertTransform(wrapper, '')
+
+      wrapper.destroy()
+    },
+    {
+      attachToDocument: true
+    }
+  )
+
+  it('should handle unknown type option correctly', () => {
+    expect(() => {
+      mount(
+        {
+          directives: { drag },
+          template: `<div ref="self" v-drag:self="{
           type: 'foo'
         }">foo</div>`
-      })
+        },
+        {
+          attachToDocument: true
+        }
+      )
     }).to.throw('No handler is registered for type "foo".')
   })
 })
 
 let DEFAULT_MOVEMENT = [[5, 5], [105, 105], [205, 205]]
-function performDrag (wrapper, series = DEFAULT_MOVEMENT) {
+function performDrag (wrapper, ...rest) {
+  let series = DEFAULT_MOVEMENT
+  let data = {}
+  if (rest.length === 1) {
+    if (Array.isArray(rest[0])) {
+      series = rest[0]
+    } else {
+      data = rest[0]
+    }
+  } else if (rest.length === 2) {
+    [series, data] = rest
+  }
   let [start, ...moves] = series
   let end = moves.pop()
 
   wrapper.find('div').trigger('mousedown', {
     clientX: start[0],
-    clientY: start[1]
+    clientY: start[1],
+    ...data
   })
 
   window.dispatchEvent(new Event('selectstart'))
@@ -204,7 +316,8 @@ function performDrag (wrapper, series = DEFAULT_MOVEMENT) {
     window.dispatchEvent(
       new MouseEvent('mousemove', {
         clientX: move[0],
-        clientY: move[1]
+        clientY: move[1],
+        ...data
       })
     )
   })
@@ -212,12 +325,13 @@ function performDrag (wrapper, series = DEFAULT_MOVEMENT) {
   window.dispatchEvent(
     new MouseEvent('mouseup', {
       clientX: end[0],
-      clientY: end[1]
+      clientY: end[1],
+      ...data
     })
   )
 }
 
-function assertTransform (target, value) {
+function assertTransform (target, transform) {
   let el
 
   if (target.element && target.vm) {
@@ -229,5 +343,8 @@ function assertTransform (target, value) {
   } else {
     throw new Error('Invalid target')
   }
-  expect(el.style.transform.trim()).to.be.equal(value)
+
+  expect(normalizeTransform(el.style.transform)).to.equal(
+    normalizeTransform(transform)
+  )
 }
