@@ -4,6 +4,17 @@ import 'veui-theme-dls-icons/plus'
 import 'veui-theme-dls-icons/minus'
 import config from 'veui/managers/config'
 
+const ICON_MAP = {
+  normal: {
+    increase: 'chevron-up',
+    decrease: 'chevron-down'
+  },
+  strong: {
+    increase: 'plus',
+    decrease: 'minus'
+  }
+}
+
 config.defaults(
   {
     ui: {
@@ -13,25 +24,14 @@ config.defaults(
       },
       style: {
         values: ['normal', 'strong'],
-        default: 'normal',
-        data: {
-          normal: {
-            icons: {
-              increase: 'chevron-up',
-              decrease: 'chevron-down'
-            }
-          },
-          strong: {
-            icons: {
-              increase: 'plus',
-              decrease: 'minus'
-            }
-          }
-        }
+        default: 'normal'
       }
     },
     parts: {
       spinner: ''
+    },
+    icons: ({ style }) => {
+      return ICON_MAP[style] || {}
     }
   },
   'numberinput'
