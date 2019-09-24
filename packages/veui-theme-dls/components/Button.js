@@ -11,7 +11,8 @@ config.defaults(
         values: ['translucent', 'primary', 'strong', 'text', 'icon']
       },
       size: {
-        values: ['xs', 's', 'm', 'l', 'xl']
+        values: ['xs', 's', 'm', 'l', 'xl'],
+        default: 'm'
       }
     }
   },
