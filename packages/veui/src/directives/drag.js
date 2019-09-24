@@ -106,7 +106,6 @@ function refresh (el, binding, vnode) {
       handler,
 
       mousedownHandler (event) {
-        // only start dragging upon left click
         if (!options.draggable || event.button !== 0) {
           return
         }
@@ -114,8 +113,8 @@ function refresh (el, binding, vnode) {
         let { clientX, clientY } = event
         dragData.initX = clientX
         dragData.initY = clientY
-        contextComponent.$emit('dragstart', { event })
         handler.start({ event })
+        contextComponent.$emit('dragstart', { event })
         options.dragstart({ event })
 
         function selectStartHandler (e) {
@@ -129,22 +128,35 @@ function refresh (el, binding, vnode) {
             distanceY: clientY - dragData.initY,
             event
           }
-          contextComponent.$emit('drag', dragParams)
           handler.drag(dragParams)
+          contextComponent.$emit('drag', dragParams)
           options.drag(dragParams)
         }
 
         function mouseupHandler (event) {
           let { clientX, clientY } = event
 
+          let cancelled = false
           let dragParams = {
             distanceX: clientX - dragData.initX,
             distanceY: clientY - dragData.initY,
+            cancel: () => {
+              cancelled = true
+            },
             event
           }
+          handler.drag(dragParams)
           contextComponent.$emit('dragend', dragParams)
-          handler.end(dragParams)
           options.dragend(dragParams)
+          handler.end(
+            cancelled
+              ? {
+                distanceX: 0,
+                distanceY: 0,
+                event
+              }
+              : dragParams
+          )
 
           window.removeEventListener('mousemove', mouseMoveHandler)
           window.removeEventListener('mouseup', mouseupHandler)

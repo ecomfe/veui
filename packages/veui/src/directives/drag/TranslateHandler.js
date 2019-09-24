@@ -29,25 +29,27 @@ function combineTransform (oldTransform, [x, y]) {
 }
 
 export default class TranslateHandler extends BaseHandler {
-  elms = []
+  elms = [];
 
-  initialStyles = []
+  originalStyles = [];
 
-  initialTransforms = []
+  initialStyles = [];
 
-  initialPositions = []
+  initialTransforms = [];
 
-  totalDistanceX = 0
+  initialPositions = [];
 
-  totalDistanceY = 0
+  totalDistanceX = 0;
+
+  totalDistanceY = 0;
 
   // 是否被拖动过。
   // 只有被拖动过，才记录总的拖动距离
-  isDragged = false
+  isDragged = false;
 
   tempStyle =
     'user-select:none;-ms-user-select:none;-webkit-user-select:none;-moz-user-select:none;' +
-    'transition:none;animation:none;-ms-animation:none;-webkit-animation:none;-moz-animation:none'
+    'transition:none;animation:none;-ms-animation:none;-webkit-animation:none;-moz-animation:none';
 
   setOptions (options) {
     if (isEqual(this.options, options)) {
@@ -68,6 +70,13 @@ export default class TranslateHandler extends BaseHandler {
     if (!this.elms || !this.elms.length) {
       this.elms = this.options.targets.reduce((prev, cur) => {
         prev.push(...getNodes(cur, this.context))
+        return prev
+      }, [])
+    }
+
+    if (!this.originalStyles || !this.originalStyles.length) {
+      this.originalStyles = this.elms.reduce((prev, cur) => {
+        prev.push(cur.getAttribute('style'))
         return prev
       }, [])
     }
@@ -212,11 +221,13 @@ export default class TranslateHandler extends BaseHandler {
 
   reset () {
     // 恢复最初的样式
-    this.elms.forEach(elm => {
-      elm.style[TRANSFORM_ACCESSOR] = combineTransform(
-        getComputedTransform(elm),
-        [-this.totalDistanceX, -this.totalDistanceY]
-      )
+    this.elms.forEach((elm, i) => {
+      let style = this.originalStyles[i]
+      if (style != null) {
+        elm.setAttribute('style', style)
+      } else {
+        elm.removeAttribute('style')
+      }
     })
 
     this.totalDistanceX = 0
