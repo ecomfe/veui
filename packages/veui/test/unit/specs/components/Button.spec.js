@@ -9,7 +9,7 @@ describe('components/Button', () => {
       }
     })
 
-    expect(wrapper.attributes('ui')).to.equal('primary')
+    expect(wrapper.attributes('ui').split(/\s+/)).to.include('primary')
   })
 
   it('should be disabled when the button is loading', () => {
