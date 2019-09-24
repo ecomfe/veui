@@ -15,6 +15,15 @@ import {
 const UNKNOWN_KEY = '$unknown'
 const DEFAULT_VAL = '__default__'
 
+function callWithProps (dictionary, props) {
+  return mapValues(dictionary, val => {
+    if (typeof val === 'function') {
+      return val(props)
+    }
+    return val
+  })
+}
+
 export default {
   props: {
     ui: String
@@ -22,12 +31,7 @@ export default {
   computed: {
     uiParts () {
       let parts = this.getComponentConfig('parts') || {}
-      return mapValues(parts, val => {
-        if (typeof val === 'function') {
-          return val(this.uiProps)
-        }
-        return val
-      })
+      return callWithProps(parts, this.uiProps)
     },
     declaredUiProps () {
       let ui = (this.ui || '').trim()
@@ -115,12 +119,19 @@ export default {
     },
     icons () {
       let icons = this.getComponentConfig('icons')
+      if (typeof icons === 'function') {
+        return icons(this.uiProps)
+      }
+
       let uiIcons = this.uiData.icons || {}
 
-      return {
-        ...icons,
-        ...uiIcons
-      }
+      return callWithProps(
+        {
+          ...icons,
+          ...uiIcons
+        },
+        this.uiProps
+      )
     },
     realUi () {
       let props = this.uiProps
