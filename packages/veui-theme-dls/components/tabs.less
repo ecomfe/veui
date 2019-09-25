@@ -32,7 +32,7 @@
       content: "";
       position: absolute;
       left: 0;
-      top: @veui-tabs-height - 1;
+      top: dls-sum(@veui-tabs-height, -1px);
       width: 100%;
       border-bottom: @dls-tab-container-border-width solid
         @dls-tab-container-separator-color;
@@ -127,11 +127,7 @@
 
       &::before {
         content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: ~"calc(100% - 1px)";
+        .absolute(0, 0, 1px, 0);
         background-color: transparent;
         z-index: -1;
       }
@@ -272,7 +268,7 @@
   &-operator .veui-icon {
     vertical-align: top;
     // 减掉的 1px 是底部的线
-    margin-top: ~"calc(@{veui-height-normal} / 2 - 0.5em - 1px)";
+    margin-top: calc(@veui-tabs-height / 2 - 0.5em - 1px);
     user-select: none;
   }
 
@@ -367,7 +363,7 @@
       &-label {
         min-width: 62px;
         max-width: 160px;
-        line-height: @veui-tabs-height - 1;
+        line-height: dls-sum(@veui-tabs-height, -1px);
         padding: 0 8px 0 12px;
         .ellipsis();
         text-align: left;
@@ -404,7 +400,7 @@
     &-item-remove,
     &-operator .veui-icon,
     &-scroller .veui-icon {
-      margin-top: ~"calc(@{veui-tabs-height} / 2 - 0.5em)";
+      margin-top: calc(@veui-tabs-height / 2 - 0.5em);
       vertical-align: top;
     }
 
@@ -429,7 +425,7 @@
     &-operator {
       margin-left: 0;
       margin-right: 20px;
-      width: @veui-height-normal;
+      width: @veui-tabs-height;
       line-height: @veui-tabs-height;
       border: 1px solid @veui-gray-color-6;
       border-width: 1px 1px 1px 0;
@@ -446,7 +442,7 @@
 
       &-left,
       &-right {
-        .size(@veui-height-normal);
+        .size(@veui-tabs-height);
         border: 1px solid @veui-gray-color-6;
         background-color: #fff;
 
@@ -478,7 +474,7 @@
     &-item-remove,
     &-operator .veui-icon,
     &-scroller .veui-icon {
-      margin-top: ~"calc(@{veui-tabs-block-height-large} / 2 - 0.5em)";
+      margin-top: calc(@veui-tabs-block-height-large / 2 - 0.5em);
       vertical-align: top;
     }
 
@@ -505,7 +501,7 @@
     &-menu {
       min-height: @veui-tabs-height-l;
       &::after {
-        top: @veui-tabs-height-l - 1;
+        top: dls-sum(@veui-tabs-height-l, -1px);
       }
     }
 
@@ -531,7 +527,7 @@
     &-menu {
       min-height: @veui-tabs-height-s;
       &::after {
-        top: @veui-tabs-height-s - 1;
+        top: dls-sum(@veui-tabs-height-s, -1px);
       }
     }
 
