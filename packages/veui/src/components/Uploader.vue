@@ -14,16 +14,19 @@
     <label
       ref="label"
       class="veui-button veui-uploader-input-label"
-      :class="{'veui-uploader-input-label-disabled': realUneditable ||
-        (maxCount > 1 && fileList.length >= maxCount) ||
-        (requestMode === 'iframe' && isSubmiting)}"
+      :class="{
+        'veui-uploader-input-label-disabled':
+          realUneditable ||
+          (maxCount > 1 && fileList.length >= maxCount) ||
+          (requestMode === 'iframe' && isSubmiting)
+      }"
       @click="handleClick"
     >
       <slot name="button-label">
         <veui-icon
           class="veui-uploader-input-label-icon"
           :name="icons.upload"
-        />{{ t('selectFile') }}
+        />{{ t("selectFile") }}
       </slot>
       <input
         :id="inputId"
@@ -31,11 +34,17 @@
         hidden
         type="file"
         :name="name"
-        :disabled="realUneditable ||
-          (maxCount > 1 && fileList.length >= maxCount) ||
-          (requestMode === 'iframe' && disabledWhenSubmiting)"
+        :disabled="
+          realUneditable ||
+            (maxCount > 1 && fileList.length >= maxCount) ||
+            (requestMode === 'iframe' && disabledWhenSubmiting)
+        "
         :accept="accept"
-        :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
+        :multiple="
+          requestMode !== 'iframe' &&
+            (maxCount > 1 || maxCount === undefined) &&
+            !isReplacing
+        "
         @change="handleNewFiles"
         @click.stop
       >
@@ -49,17 +58,17 @@
     <span class="veui-uploader-error">
       <template v-if="error.typeInvalid">
         <slot name="type-invalid">
-          <veui-icon :name="icons.alert"/>{{ t('fileTypeInvalid') }}
+          <veui-icon :name="icons.alert"/>{{ t("fileTypeInvalid") }}
         </slot>
       </template>
       <template v-if="error.sizeInvalid">
         <slot name="size-invalid">
-          <veui-icon :name="icons.alert"/>{{ t('fileSizeInvalid') }}
+          <veui-icon :name="icons.alert"/>{{ t("fileSizeInvalid") }}
         </slot>
       </template>
       <template v-if="error.countOverflow">
         <slot name="count-overflow">
-          <veui-icon :name="icons.alert"/>{{ t('tooManyFiles') }}
+          <veui-icon :name="icons.alert"/>{{ t("tooManyFiles") }}
         </slot>
       </template>
     </span>
@@ -74,12 +83,14 @@
       :key="`${file.name}-${file.src}-${index}`"
     >
       <template
-        v-if="(type === 'file' && file.status !== 'uploading')
-          || type === 'image' && (!file.status || file.status === 'success')"
+        v-if="
+          (type === 'file' && file.status !== 'uploading') ||
+            (type === 'image' && (!file.status || file.status === 'success'))
+        "
       >
         <slot
           name="file"
-          :file="getScopeValue(index, file)"
+          v-bind="getScopeValue(index, file)"
         >
           <template v-if="type === 'file'">
             <slot
@@ -93,8 +104,10 @@
               />
               <span
                 class="veui-uploader-list-name"
-                :class="{'veui-uploader-list-name-success': file.status === 'success',
-                         'veui-uploader-list-name-failure': file.status === 'failure'
+                :class="{
+                  'veui-uploader-list-name-success':
+                    file.status === 'success',
+                  'veui-uploader-list-name-failure': file.status === 'failure'
                 }"
                 :title="file.name"
               >
@@ -105,7 +118,7 @@
                 class="veui-uploader-success"
               >
                 <slot name="success-label">
-                  {{ t('uploadSuccess') }}
+                  {{ t("uploadSuccess") }}
                 </slot>
               </span>
               <span
@@ -114,7 +127,7 @@
                 class="veui-uploader-failure"
               >
                 <slot name="failure-label">
-                  {{ t('uploadFailure') }}
+                  {{ t("uploadFailure") }}
                 </slot>
               </span>
               <veui-button
@@ -166,10 +179,12 @@
                   :for="inputId"
                   :ui="uiParts.retryImageSuccess"
                   class="veui-button"
-                  :class="{'veui-uploader-input-label-disabled': realUneditable}"
+                  :class="{
+                    'veui-uploader-input-label-disabled': realUneditable
+                  }"
                   @click.stop="replaceFile(file)"
                 >
-                  {{ t('replace') }}
+                  {{ t("replace") }}
                 </label>
                 <veui-button
                   :ui="uiParts.clearImageSuccess"
@@ -194,7 +209,7 @@
                 >
                   <span class="veui-uploader-success">
                     <slot name="success-label">
-                      <veui-icon :name="icons.success"/>{{ t('complete') }}
+                      <veui-icon :name="icons.success"/>{{ t("complete") }}
                     </slot>
                   </span>
                 </div>
@@ -210,7 +225,7 @@
       <template v-else-if="file.status === 'uploading'">
         <slot
           name="uploading"
-          :file="getScopeValue(index, file)"
+          v-bind="getScopeValue(index, file)"
         >
           <slot
             name="file-before"
@@ -225,7 +240,7 @@
               :convert-size-unit="convertSizeUnit"
             >
               <slot name="uploading-label">
-                {{ t('uploading') }}
+                {{ t("uploading") }}
               </slot>
             </veui-uploader-progress>
             <veui-button
@@ -241,7 +256,7 @@
               :ui="uiParts.cancelImage"
               @click="cancelFile(file)"
             >
-              {{ t('cancel') }}
+              {{ t("cancel") }}
             </veui-button>
           </div>
           <slot
@@ -253,7 +268,7 @@
       <template v-else-if="file.status === 'failure' && type === 'image'">
         <slot
           name="failure"
-          :file="getScopeValue(index, file)"
+          v-bind="getScopeValue(index, file)"
         >
           <slot
             name="file-before"
@@ -262,20 +277,20 @@
           <div :class="`${listClass}-container`">
             <div :class="`${listClass}-status`">
               <span class="veui-uploader-failure">
-                <slot name="failure-label">
-                  {{ t('error') }}
-                </slot>{{ file.failureReason }}
+                <slot name="failure-label"> {{ t("error") }} </slot>{{ file.failureReason }}
               </span>
             </div>
             <veui-button
               :ui="uiParts.retryImageFailure"
               @click="retry(file)"
             >
-              {{ t('retry') }}
+              {{ t("retry") }}
             </veui-button>
             <veui-button
               :ui="uiParts.clearImageFailure"
-              :class="`${listClass}-mask-remove ${listClass}-mask-remove-failure`"
+              :class="
+                `${listClass}-mask-remove ${listClass}-mask-remove-failure`
+              "
               @click="removeFile(file)"
             >
               <veui-icon
@@ -301,8 +316,11 @@
           ref="label"
           :class="{
             'veui-button': $scopedSlots['extra-operation'],
-            'veui-uploader-input-label-image': !$scopedSlots['extra-operation'],
-            'veui-uploader-input-label-disabled': $scopedSlots['extra-operation'] &&
+            'veui-uploader-input-label-image': !$scopedSlots[
+              'extra-operation'
+            ],
+            'veui-uploader-input-label-disabled':
+              $scopedSlots['extra-operation'] &&
               (realUneditable ||
               (maxCount > 1 && fileList.length >= maxCount) ||
               isSubmiting)
@@ -315,9 +333,16 @@
             hidden
             type="file"
             :name="name"
-            :disabled="realUneditable || (requestMode === 'iframe' && disabledWhenSubmiting)"
+            :disabled="
+              realUneditable ||
+                (requestMode === 'iframe' && disabledWhenSubmiting)
+            "
             :accept="accept"
-            :multiple="requestMode !== 'iframe' && (maxCount > 1 || maxCount === undefined) && !isReplacing"
+            :multiple="
+              requestMode !== 'iframe' &&
+                (maxCount > 1 || maxCount === undefined) &&
+                !isReplacing
+            "
             @change="handleNewFiles"
             @click.stop
           >
@@ -327,7 +352,7 @@
           />
           <template v-else>
             <slot name="button-label">
-              {{ t('selectFile') }}
+              {{ t("selectFile") }}
             </slot>
           </template>
         </label>
@@ -347,17 +372,17 @@
   >
     <template v-if="error.typeInvalid">
       <slot name="type-invalid">
-        <veui-icon :name="icons.alert"/>{{ t('fileTypeInvalid') }}
+        <veui-icon :name="icons.alert"/>{{ t("fileTypeInvalid") }}
       </slot>
     </template>
     <template v-if="error.sizeInvalid">
       <slot name="size-invalid">
-        <veui-icon :name="icons.alert"/>{{ t('fileSizeInvalid') }}
+        <veui-icon :name="icons.alert"/>{{ t("fileSizeInvalid") }}
       </slot>
     </template>
     <template v-if="error.countOverflow">
       <slot name="count-overflow">
-        <veui-icon :name="icons.alert"/>{{ t('tooManyFiles') }}
+        <veui-icon :name="icons.alert"/>{{ t("tooManyFiles") }}
       </slot>
     </template>
   </span>
@@ -698,7 +723,10 @@ export default {
         }
         window[this.callbackNamespace][this.callbackFuncName] = data => {
           if (!this.canceled) {
-            this.uploadCallback(this.parseData(data), this.currentSubmitingFile)
+            this.uploadCallback(
+              this.parseData(data),
+              this.currentSubmitingFile
+            )
           }
         }
       }
