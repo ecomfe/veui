@@ -1,6 +1,6 @@
 {
   "name": "veui-theme-one",
-  "version": "1.0.0-alpha.30",
+  "version": "1.0.0-alpha.31",
   "description": "Theme ONE DESIGN of VEUI.",
   "repository": "ecomfe/veui",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "classlist-polyfill": "^1.2.0",
     "focus-visible": "^4.1.0",
     "less-plugin-est": "^3.0.0",
-    "veui-theme-one-icons": "^1.0.0-alpha.30"
+    "veui-theme-one-icons": "^1.0.0-alpha.31"
   },
   "peerDependencies": {
     "veui": "1.0.0-alpha.31"
