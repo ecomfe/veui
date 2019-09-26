@@ -26,7 +26,7 @@
         <veui-icon
           class="veui-uploader-input-label-icon"
           :name="icons.upload"
-        />{{ t("selectFile") }}
+        />{{ t('selectFile') }}
       </slot>
       <input
         :id="inputId"
@@ -58,17 +58,17 @@
     <span class="veui-uploader-error">
       <template v-if="error.typeInvalid">
         <slot name="type-invalid">
-          <veui-icon :name="icons.alert"/>{{ t("fileTypeInvalid") }}
+          <veui-icon :name="icons.alert"/>{{ t('fileTypeInvalid') }}
         </slot>
       </template>
       <template v-if="error.sizeInvalid">
         <slot name="size-invalid">
-          <veui-icon :name="icons.alert"/>{{ t("fileSizeInvalid") }}
+          <veui-icon :name="icons.alert"/>{{ t('fileSizeInvalid') }}
         </slot>
       </template>
       <template v-if="error.countOverflow">
         <slot name="count-overflow">
-          <veui-icon :name="icons.alert"/>{{ t("tooManyFiles") }}
+          <veui-icon :name="icons.alert"/>{{ t('tooManyFiles') }}
         </slot>
       </template>
     </span>
@@ -118,7 +118,7 @@
                 class="veui-uploader-success"
               >
                 <slot name="success-label">
-                  {{ t("uploadSuccess") }}
+                  {{ t('uploadSuccess') }}
                 </slot>
               </span>
               <span
@@ -127,7 +127,7 @@
                 class="veui-uploader-failure"
               >
                 <slot name="failure-label">
-                  {{ t("uploadFailure") }}
+                  {{ t('uploadFailure') }}
                 </slot>
               </span>
               <veui-button
@@ -184,7 +184,7 @@
                   }"
                   @click.stop="replaceFile(file)"
                 >
-                  {{ t("replace") }}
+                  {{ t('replace') }}
                 </label>
                 <veui-button
                   :ui="uiParts.clearImageSuccess"
@@ -209,7 +209,7 @@
                 >
                   <span class="veui-uploader-success">
                     <slot name="success-label">
-                      <veui-icon :name="icons.success"/>{{ t("complete") }}
+                      <veui-icon :name="icons.success"/>{{ t('complete') }}
                     </slot>
                   </span>
                 </div>
@@ -240,7 +240,7 @@
               :convert-size-unit="convertSizeUnit"
             >
               <slot name="uploading-label">
-                {{ t("uploading") }}
+                {{ t('uploading') }}
               </slot>
             </veui-uploader-progress>
             <veui-button
@@ -256,7 +256,7 @@
               :ui="uiParts.cancelImage"
               @click="cancelFile(file)"
             >
-              {{ t("cancel") }}
+              {{ t('cancel') }}
             </veui-button>
           </div>
           <slot
@@ -277,15 +277,14 @@
           <div :class="`${listClass}-container`">
             <div :class="`${listClass}-status`">
               <span class="veui-uploader-failure">
-                <slot name="failure-label">
-                  {{ t("error") }} </slot>{{ file.failureReason }}
+                <slot name="failure-label">{{ t('error') }}</slot>{{ file.failureReason }}
               </span>
             </div>
             <veui-button
               :ui="uiParts.retryImageFailure"
               @click="retry(file)"
             >
-              {{ t("retry") }}
+              {{ t('retry') }}
             </veui-button>
             <veui-button
               :ui="uiParts.clearImageFailure"
@@ -353,7 +352,7 @@
           />
           <template v-else>
             <slot name="button-label">
-              {{ t("selectFile") }}
+              {{ t('selectFile') }}
             </slot>
           </template>
         </label>
@@ -373,17 +372,17 @@
   >
     <template v-if="error.typeInvalid">
       <slot name="type-invalid">
-        <veui-icon :name="icons.alert"/>{{ t("fileTypeInvalid") }}
+        <veui-icon :name="icons.alert"/>{{ t('fileTypeInvalid') }}
       </slot>
     </template>
     <template v-if="error.sizeInvalid">
       <slot name="size-invalid">
-        <veui-icon :name="icons.alert"/>{{ t("fileSizeInvalid") }}
+        <veui-icon :name="icons.alert"/>{{ t('fileSizeInvalid') }}
       </slot>
     </template>
     <template v-if="error.countOverflow">
       <slot name="count-overflow">
-        <veui-icon :name="icons.alert"/>{{ t("tooManyFiles") }}
+        <veui-icon :name="icons.alert"/>{{ t('tooManyFiles') }}
       </slot>
     </template>
   </span>
@@ -731,10 +730,7 @@ export default {
         }
         window[this.callbackNamespace][this.callbackFuncName] = data => {
           if (!this.canceled) {
-            this.uploadCallback(
-              this.parseData(data),
-              this.currentSubmitingFile
-            )
+            this.uploadCallback(this.parseData(data), this.currentSubmitingFile)
           }
         }
       }
