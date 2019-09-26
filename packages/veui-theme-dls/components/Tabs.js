@@ -23,7 +23,9 @@ config.defaults(
     },
     ui: {
       size: {
-        values: ['large', 'small', 'tiny']
+        values: ['s', 'm', 'l'],
+        default: 'm',
+        inherit: true
       },
       style: {
         values: ['block'],
