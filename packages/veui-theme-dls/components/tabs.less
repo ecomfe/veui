@@ -1,12 +1,17 @@
 @import "../lib.less";
 
 .veui-tabs {
-  @veui-tabs-height-normal: 34px;
-  @veui-tabs-height-large: 40px;
-  @veui-tabs-block-height-large: 38px;
+  @veui-tabs-height: @dls-tab-height-m;
+  @veui-tabs-height-l: @dls-tab-height-l;
+  @veui-tabs-height-s: @dls-tab-height-s;
+
+  // TODO delete
+  @veui-tabs-height-large: @dls-tab-height-l;
+  @veui-tabs-block-height-large: @dls-tab-height-l;
 
   overflow: hidden;
   position: relative;
+  font-size: @dls-tab-font-size-m;
 
   &-menu button {
     background: none;
@@ -17,7 +22,7 @@
   &-menu {
     overflow: hidden;
     white-space: nowrap;
-    min-height: @veui-tabs-height-normal + 1;
+    min-height: @veui-tabs-height;
 
     &-moving {
       transition: margin-right 0.5s ease-in-out;
@@ -27,9 +32,10 @@
       content: "";
       position: absolute;
       left: 0;
-      top: @veui-tabs-height-normal;
+      top: dls-sum(@veui-tabs-height, -1px);
       width: 100%;
-      border-bottom: 1px solid @veui-gray-color-6;
+      border-bottom: @dls-tab-container-border-width solid
+        @dls-tab-container-separator-color;
     }
   }
 
@@ -37,7 +43,7 @@
     overflow: hidden;
     position: relative;
     display: inline-block;
-    min-height: @veui-height-normal;
+    min-height: @veui-tabs-height;
     max-width: 100%;
     vertical-align: top;
     z-index: 1;
@@ -65,31 +71,16 @@
   &-item {
     position: relative;
     display: inline-block;
-    .make-margin-left(50px);
+    .make-margin-left(@dls-tab-spacing-x-m);
     vertical-align: top;
 
-    &.veui-tabs-item-removable {
-      .make-margin-left(@veui-tabs-height-normal);
+    // &.veui-tabs-item-removable {
+    //   .make-margin-left(@veui-tabs-height);
 
-      .veui-tabs-item-status {
-        margin-right: 8px;
-      }
-    }
-
-    &:first-child &-label {
-      padding-left: 0;
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: ~"calc(100% - 1px)";
-      background-color: #fff;
-      z-index: -1;
-    }
+    //   .veui-tabs-item-status {
+    //     margin-right: 8px;
+    //   }
+    // }
 
     & > &-remove {
       visibility: hidden;
@@ -127,59 +118,80 @@
     }
 
     & > &-label {
-      padding: 0 10px;
-      line-height: 2.5;
+      padding: 0 @dls-tab-padding-x-m;
+      line-height: @veui-tabs-height;
       display: inline-block;
       text-decoration: none;
       outline: none;
       position: relative;
+
+      &::before {
+        content: "";
+        .absolute(0, 0, 1px, 0);
+        background-color: transparent;
+        z-index: -1;
+      }
     }
 
     &:not(.veui-tabs-item-disabled) > &-label {
-      color: @veui-text-color-strong;
+      color: @dls-tab-font-color;
 
       &::after {
         content: "";
-        .absolute(_, 10px, 0, 10px);
-        height: 2px;
+        .absolute(_, 0, 0, 0);
+        height: @dls-tab-indicator-width;
         .veui-transition(background-color, height);
       }
 
-      &.focus-visible::after,
-      &:hover::after {
-        background-color: @veui-gray-color-3;
+      &.focus-visible {
+        color: @dls-tab-font-color-focus;
+        &::before {
+          background-color: @dls-tab-background-color-focus;
+        }
       }
 
-      &.focus-visible::after {
-        height: 3px;
+      &:hover {
+        cursor: pointer;
+        color: @dls-tab-font-color-hover;
       }
 
-      &:active::after {
-        background-color: @veui-gray-color-1;
+      &:active {
+        color: @dls-tab-font-color-active;
       }
     }
 
-    &:first-child:not(.veui-tabs-item-disabled) > &-label {
+    &-active:not(.veui-tabs-item-disabled) > &-label {
+      color: @dls-tab-font-color-current;
+
       &::after {
-        .absolute(_, 10px, 0, 0);
+        background-color: @dls-tab-indicator-color;
       }
-    }
 
-    &-active > &-label {
-      &::after {
-        background-color: @veui-gray-color-1;
+      &.focus-visible {
+        color: @dls-tab-font-color-current-focus;
+        &::after {
+          background-color: @dls-tab-font-color-current-focus;
+        }
       }
-    }
 
-    &:first-child {
-      &-label {
-        margin-left: -10px;
+      &:hover {
+        color: @dls-tab-font-color-current-hover;
+        &::after {
+          background-color: @dls-tab-font-color-current-hover;
+        }
+      }
+
+      &:active {
+        color: @dls-tab-font-color-current-active;
+        &::after {
+          background-color: @dls-tab-font-color-current-active;
+        }
       }
     }
 
     &-disabled > &-label {
       cursor: not-allowed;
-      color: @veui-text-color-weak;
+      color: @dls-tab-font-color-disabled;
     }
   }
 
@@ -256,7 +268,7 @@
   &-operator .veui-icon {
     vertical-align: top;
     // 减掉的 1px 是底部的线
-    margin-top: ~"calc(@{veui-height-normal} / 2 - 0.5em - 1px)";
+    margin-top: calc(@veui-tabs-height / 2 - 0.5em - 1px);
     user-select: none;
   }
 
@@ -293,87 +305,6 @@
 
     &-right {
       margin-left: 8px;
-    }
-  }
-
-  &[ui~="large"] {
-    font-size: @veui-font-size-large;
-  }
-
-  &[ui~="large"] & {
-    &-menu::after {
-      top: @veui-tabs-height-large - 1;
-    }
-
-    &-menu,
-    &-list {
-      min-height: @veui-tabs-height-large;
-    }
-
-    &-operator {
-      padding: 0 10px;
-    }
-
-    &-item-status .veui-icon,
-    &-item-remove,
-    &-operator .veui-icon {
-      margin-top: ~"calc(@{veui-height-large} / 2 - 0.5em - 1px)";
-    }
-
-    &-scroller {
-      &-left,
-      &-right {
-        .size(2 * @veui-font-size-large);
-
-        .veui-icon {
-          font-size: @veui-font-size-normal;
-          vertical-align: text-top;
-        }
-      }
-    }
-  }
-
-  &[ui~="small"] & {
-    &-item {
-      .make-margin-left(30px);
-    }
-
-    &-menu::after {
-      display: none;
-    }
-  }
-
-  &[ui~="tiny"] & {
-    &-menu::after {
-      display: none;
-    }
-
-    &-item {
-      .make-margin-left(21px);
-      position: relative;
-
-      &-label {
-        &::after {
-          height: 1px;
-        }
-
-        &.focus-visible::after {
-          height: 2px;
-        }
-      }
-
-      &::before {
-        content: "";
-        display: inline-block;
-        width: 1px;
-        height: 14px;
-        background-color: @veui-gray-color-6;
-        .absolute(10px, _, _, -11px);
-      }
-
-      &:first-child::before {
-        display: none;
-      }
     }
   }
 
@@ -432,7 +363,7 @@
       &-label {
         min-width: 62px;
         max-width: 160px;
-        line-height: @veui-tabs-height-normal;
+        line-height: dls-sum(@veui-tabs-height, -1px);
         padding: 0 8px 0 12px;
         .ellipsis();
         text-align: left;
@@ -469,7 +400,7 @@
     &-item-remove,
     &-operator .veui-icon,
     &-scroller .veui-icon {
-      margin-top: ~"calc(@{veui-tabs-height-normal} / 2 - 0.5em)";
+      margin-top: calc(@veui-tabs-height / 2 - 0.5em);
       vertical-align: top;
     }
 
@@ -494,8 +425,8 @@
     &-operator {
       margin-left: 0;
       margin-right: 20px;
-      width: @veui-height-normal;
-      line-height: @veui-tabs-height-normal;
+      width: @veui-tabs-height;
+      line-height: @veui-tabs-height;
       border: 1px solid @veui-gray-color-6;
       border-width: 1px 1px 1px 0;
       text-align: center;
@@ -507,11 +438,11 @@
     }
 
     &-scroller {
-      line-height: @veui-tabs-height-normal;
+      line-height: @veui-tabs-height;
 
       &-left,
       &-right {
-        .size(@veui-height-normal);
+        .size(@veui-tabs-height);
         border: 1px solid @veui-gray-color-6;
         background-color: #fff;
 
@@ -532,7 +463,7 @@
     }
   }
 
-  &[ui~="large"][ui~="block"] & {
+  &[ui~="l"][ui~="block"] & {
     &-item {
       &-label {
         line-height: @veui-tabs-block-height-large;
@@ -543,7 +474,7 @@
     &-item-remove,
     &-operator .veui-icon,
     &-scroller .veui-icon {
-      margin-top: ~"calc(@{veui-tabs-block-height-large} / 2 - 0.5em)";
+      margin-top: calc(@veui-tabs-block-height-large / 2 - 0.5em);
       vertical-align: top;
     }
 
@@ -558,6 +489,58 @@
       &-left,
       &-right {
         .size(@veui-tabs-height-large);
+      }
+    }
+  }
+
+  &[ui~="l"] {
+    font-size: @dls-tab-font-size-l;
+  }
+
+  &[ui~="l"] & {
+    &-menu {
+      min-height: @veui-tabs-height-l;
+      &::after {
+        top: dls-sum(@veui-tabs-height-l, -1px);
+      }
+    }
+
+    &-list {
+      min-height: @veui-tabs-height-l;
+    }
+
+    &-item {
+      .make-margin-left(@dls-tab-spacing-x-l);
+
+      &-label {
+        padding: 0 @dls-tab-padding-x-l;
+        line-height: @veui-tabs-height-l;
+      }
+    }
+  }
+
+  &[ui~="s"] {
+    font-size: @dls-tab-font-size-s;
+  }
+
+  &[ui~="s"] & {
+    &-menu {
+      min-height: @veui-tabs-height-s;
+      &::after {
+        top: dls-sum(@veui-tabs-height-s, -1px);
+      }
+    }
+
+    &-list {
+      min-height: @veui-tabs-height-s;
+    }
+
+    &-item {
+      .make-margin-left(@dls-tab-spacing-x-s);
+
+      &-label {
+        padding: 0 @dls-tab-padding-x-s;
+        line-height: @veui-tabs-height-s;
       }
     }
   }
