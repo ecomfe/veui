@@ -510,4 +510,105 @@ describe('components/Tree', () => {
 
     wrapper.destroy()
   })
+
+  it('should handle disabled items correctly.', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-tree': Tree
+      },
+      data () {
+        return {
+          datasource: [],
+          selected: [],
+          expanded: []
+        }
+      },
+      template:
+        '<veui-tree :datasource="datasource" v-model="selected" :expanded.sync="expanded" selectable/>'
+    })
+
+    wrapper.setData({
+      datasource: [
+        {
+          label: 'Infused',
+          value: 'infused',
+          children: [
+            {
+              label: 'Brewed',
+              value: 'brewed',
+              children: [
+                {
+                  label: 'Drip brewed',
+                  value: 'drip-brewed'
+                },
+                {
+                  label: 'Filtered',
+                  value: 'filtered',
+                  disabled: true
+                },
+                {
+                  label: 'Pour-over',
+                  value: 'pour-over',
+                  disabled: true
+                },
+                {
+                  label: 'Immersion brewed',
+                  value: 'immersion-brewed'
+                }
+              ]
+            },
+            {
+              label: 'French press',
+              value: 'french-press'
+            },
+            {
+              label: 'Cold brew',
+              value: 'cold-brew'
+            }
+          ]
+        }
+      ],
+      selected: ['filtered', 'cold-brew'],
+      expanded: ['infused', 'brewed']
+    })
+
+    let selectors = wrapper.findAll(Checkbox)
+
+    // select 'drip-brewed'
+    select(2)
+    // select 'immersion-brewed'
+    select(5)
+    await wrapper.vm.$nextTick()
+
+    let data = wrapper.vm.$data
+    expect(data.selected).to.eql([
+      'drip-brewed',
+      'filtered',
+      'immersion-brewed',
+      'cold-brew'
+    ])
+    expect(selectors.at(0).props('indeterminate')).to.equal(true)
+    expect(selectors.at(0).props('checked')).to.equal(false)
+    expect(selectors.at(1).props('indeterminate')).to.equal(true)
+    expect(selectors.at(1).props('checked')).to.equal(true)
+
+    // remove children of brewed
+    select(1)
+    await wrapper.vm.$nextTick()
+
+    expect(data.selected).to.eql(['filtered', 'cold-brew'])
+    expect(selectors.at(0).props('indeterminate')).to.equal(true)
+    expect(selectors.at(0).props('checked')).to.equal(false)
+    expect(selectors.at(1).props('indeterminate')).to.equal(true)
+    expect(selectors.at(1).props('checked')).to.equal(false)
+
+    wrapper.destroy()
+
+    function select (index) {
+      selectors
+        .at(index)
+        .find('input[type="checkbox"]')
+        .trigger('change')
+    }
+  })
 })
