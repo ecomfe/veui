@@ -108,7 +108,7 @@ export default {
 
       let walk = data => {
         data.forEach(item => {
-          if (item.children && item.children.length) {
+          if (item.children && item.children.length && !item.disabled) {
             walk(item.children)
           } else if (!item.disabled) {
             value.push(item.value)

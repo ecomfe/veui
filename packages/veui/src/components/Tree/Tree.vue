@@ -168,16 +168,21 @@ export default {
     datasource: {
       handler (val) {
         this.localDatasource = []
-        let walk = (datasource, items, expanded) => {
+        let walk = (datasource, items, expanded, isBranchDisabled) => {
           datasource.forEach((source, index) => {
             let item = omit(source, 'children')
             item.value = this.realKeys(source)
+            let disabled = isBranchDisabled || item.disabled
+            if (disabled) {
+              item.disabled = disabled
+            }
+
             if (this.hasChild(source)) {
               item.expanded =
                 remove(expanded, value => value === item.value).length !== 0
 
               this.$set(item, 'children', [])
-              walk(source.children, item.children, expanded)
+              walk(source.children, item.children, expanded, disabled)
             }
             this.$set(items, index, item)
           })
@@ -185,7 +190,7 @@ export default {
         walk(val, this.localDatasource, clone(this.realExpanded))
 
         if (this.selectable) {
-          this.correct()
+          this.manageNodeStatus(this.localDatasource, null, true)
         }
       },
       deep: true,
@@ -193,36 +198,69 @@ export default {
     },
 
     selected (val, oldVal) {
-      if (
-        xor(val, oldVal).length ||
-        xor(val, this.getSelectedValuesFromDatasource()).length
-      ) {
-        this.correct()
+      if (xor(val, this.getSelectedValuesFromDatasource()).length) {
+        this.manageNodeStatus(this.localDatasource, null, true)
       }
     }
   },
   methods: {
-    // 判断节点是否被选中：
-    // 1、如果是叶子节点，直接根据 selected 属性判断。
-    // 2、如果是非叶子节点，则该节点下所有子级节点都全部选择了，当前节点才算被选中了。
+    // 每个非叶节点记录四个数字：
+    // allCount：被全部选中（selected=true）并且没有被禁用的子节点数
+    // partCount：部分被选中的子节点数
+    // disabledCount：被禁用但是没有被选中的子节点数
+    // disabledSelectedCount：被全部选中同时被禁用的子节点数
+    //
+    // 被全部选中是指能选的子节点全被选了，如果部分子节点被禁用了无法被选中，这个节点依然算被全部选中
+    // 被全部选中的节点，如果有被禁用的子节点，这个节点同时也属于部分被选中，因为checkbox需要显示成中间状态
+    //
+    // A(-)(√):
+    //   a0(√)
+    //   a1(×)
+    //   a2(√×)
+    //   a3(√)
+    // 例如A节点的四个子节点，allCount=2，disabledCount=1，disabledSelectedCount=1
+    // A节点既是被部分选中状态（有部分子节点没有实际被选中，checkbox显示中间态）
+    // 也是被选中状态（checkbox的checked与节点的selected绑定，所以点击A的checkbox可以触发remove操作）
+    // 否则点击A的checkbox，只会把checkbox的checked改成true，不会触发remove，点了没反应，再点一次才会触发remove
+
+    // 判断节点是不是被全部选中
     isSelected (item) {
-      return this.hasChild(item)
-        ? item.allCount === item.children.length
-        : item.selected
+      if (this.hasChild(item)) {
+        let {
+          allCount = 0,
+          disabledCount = 0,
+          disabledSelectedCount = 0
+        } = item
+        return (
+          disabledCount < item.children.length &&
+          allCount + disabledCount + disabledSelectedCount ===
+            item.children.length
+        )
+      }
+      return item.selected
     },
-    // 判断节点是否被部分选中：
+    // 判断该节点是不是被部分选中
     isPartialSelected (item) {
-      return (
-        this.hasChild(item) &&
-        (item.allCount < item.children.length &&
-          item.allCount + item.partCount > 0)
-      )
+      if (this.hasChild(item)) {
+        let { allCount = 0, partCount = 0, disabledSelectedCount = 0 } = item
+        let selectedCount = allCount + disabledSelectedCount
+        return (
+          (selectedCount > 0 && selectedCount < item.children.length) ||
+          partCount > 0
+        )
+      }
+      return false
     },
     getSelectedValuesFromDatasource () {
       let values = []
       let walk = (items = this.localDatasource) => {
         items.forEach(item => {
-          if (item.partCount || item.allCount || item.selected) {
+          if (
+            item.partCount ||
+            item.allCount ||
+            item.selected ||
+            item.disabledSelectedCount
+          ) {
             if (this.hasChild(item)) {
               walk(item.children)
             } else if (item.selected) {
@@ -286,22 +324,6 @@ export default {
       }
     },
 
-    // 从左侧添加选中项
-    //
-    // 接收的参数为：
-    //  item ：当前被选中的节点
-    //
-    // 注意： parents 来自于 this.localDatasource ，内部的节点数据和 this.localDatasource 中的节点数据是相等的。
-    //
-    // 执行步骤为：
-    // 1、以 this.localDatasource 为主要标记目标。
-    // 2、如果当前选中节点 item 是叶子节点，则设置其被选中（ item.selected=true ）。
-    // 3、如果当前选中节点 item 是非叶子节点，则在 item 中标记“全选（ item.allCount=item.children.length, item.partCount=0 ）”。
-    // 4、依次标记祖先节点，刷新祖先节点中的 allCount 和 partCount 计数。
-    // 5、如果 item 是非叶子节点，则标记所有子孙节点为“全选（ allCount=children.length, partCount=0, selected=true ）”。
-    // 6、从之前选中的节点树中（ this.selectedItems ）中解析出每个节点的状态（目前只有展开/收起状态 expanded ）。
-    // 7、从 this.localDatasource 中剥离出选中的节点及其父节点，并与6步中解析出的状态进行合并，得到新的 this.selectedItems 。
-    // 8、抛出 select 事件，带上一维的选中的节点的 value 值数组。
     select (item) {
       if (!this.selectable) {
         return
@@ -312,7 +334,19 @@ export default {
       let parents = chain.slice(0, chain.length - 1).reverse()
 
       if (this.hasChild(item)) {
-        this.setItemCount(item, item.children.length, 0)
+        let [
+          allCount,
+          partCount,
+          disabledCount,
+          disabledSelectedCount
+        ] = this.manageNodeStatus(item.children, true)
+        this.setItemCount(
+          item,
+          allCount,
+          partCount,
+          disabledCount,
+          disabledSelectedCount
+        )
         this.$set(item, 'partialSelected', this.isPartialSelected(item))
       } else {
         this.setLeafSelected(item, true)
@@ -320,76 +354,117 @@ export default {
       this.$set(item, 'visuallySelected', true)
 
       this.markParentsChain(parents)
-      this.selectAllChildren(item, true)
 
       this.emitSelect()
     },
 
-    selectAll () {
-      if (!this.selectable) {
-        return
-      }
+    // 设置子节点们的计数、状态，并且统计它们的状态并返回
+    // isSettingDisabledNode：只有在初始化（datasource发生变化时）以及selected变化时可以改变被禁用的节点的选择状态
+    manageNodeStatus (items, selected, isSettingDisabledNode) {
+      let allCount = 0
+      let partCount = 0
+      let disabledCount = 0
+      let disabledSelectedCount = 0
 
-      let walk = items => {
-        items.forEach(item => {
-          if (this.hasChild(item)) {
-            this.setItemCount(item, item.children.length, 0)
-            walk(item.children)
+      items.forEach(child => {
+        if (this.hasChild(child)) {
+          let [
+            childAllCount,
+            childPartCount,
+            childDisabledCount,
+            childDisabledSelectedCount
+          ] = this.manageNodeStatus(
+            child.children,
+            selected,
+            isSettingDisabledNode
+          )
+
+          this.setItemCount(
+            child,
+            selected || selected == null ? childAllCount : 0,
+            selected || selected == null ? childPartCount : 0,
+            childDisabledCount,
+            childDisabledSelectedCount
+          )
+
+          this.$set(child, 'partialSelected', this.isPartialSelected(child))
+        } else {
+          this.setLeafSelected(
+            child,
+            selected == null
+              ? this.selected.some(val => val === child.value)
+              : selected,
+            isSettingDisabledNode
+          )
+        }
+
+        this.$set(child, 'visuallySelected', this.isSelected(child))
+
+        if (child.visuallySelected) {
+          if (child.disabled) {
+            disabledSelectedCount++
           } else {
-            this.setLeafSelected(item, true)
+            allCount++
           }
+        }
+        if (child.partialSelected) {
+          partCount++
+        }
+        if (
+          !child.visuallySelected &&
+          !child.partialSelected &&
+          child.disabled
+        ) {
+          disabledCount++
+        }
+      })
 
-          this.$set(item, 'visuallySelected', true)
-        })
-      }
-      walk(this.localDatasource)
-      this.emitSelect()
+      return [allCount, partCount, disabledCount, disabledSelectedCount]
     },
 
-    removeAll () {
-      if (!this.selectable) {
-        return
-      }
-
-      let walk = items => {
-        items.forEach(item => {
-          if (this.hasChild(item)) {
-            this.setItemCount(item, 0, 0)
-            walk(item.children)
-          } else {
-            this.setLeafSelected(item, false)
-          }
-
-          this.$set(item, 'visuallySelected', false)
-        })
-      }
-      walk(this.localDatasource)
-      this.emitSelect()
-    },
-
-    // 更新祖先节点中的选择标记（ selected 、 allCount 、 partCount ）
+    // 更新祖先节点中的选择标记
     markParentsChain (parents) {
       parents.forEach(parent => {
         let allCount = 0
         let partCount = 0
+        let disabledCount = 0
+        let disabledSelectedCount = 0
+
         parent.children.forEach(child => {
-          if (this.hasChild(child)) {
-            if (child.allCount === child.children.length) {
-              allCount += 1
-            } else if (child.allCount > 0 || child.partCount > 0) {
-              partCount += 1
+          let isSelected = this.isSelected(child)
+          let isPartialSelected = this.isPartialSelected(child)
+
+          if (isSelected) {
+            if (child.disabled) {
+              disabledSelectedCount++
+            } else {
+              allCount++
             }
-          } else if (child.selected) {
-            allCount += 1
+          }
+          if (isPartialSelected) {
+            partCount++
+          }
+          if (!isSelected && !isPartialSelected && child.disabled) {
+            disabledCount++
           }
         })
-        this.setItemCount(parent, allCount, partCount)
+        this.setItemCount(
+          parent,
+          allCount,
+          partCount,
+          disabledCount,
+          disabledSelectedCount
+        )
         this.$set(parent, 'visuallySelected', this.isSelected(parent))
         this.$set(parent, 'partialSelected', this.isPartialSelected(parent))
       })
     },
 
-    setLeafSelected (item, selected) {
+    setLeafSelected (item, selected, isSettingDisabledNode) {
+      if (item.disabled && !isSettingDisabledNode) {
+        return
+      }
+
       this.$set(item, 'selected', selected)
       if (this.checkOwnProperty(item, 'allCount')) {
         this.$set(item, 'allCount', undefined)
@@ -398,30 +473,23 @@ export default {
         this.$set(item, 'partCount', undefined)
       }
     },
-    setItemCount (item, allCount, partCount) {
+    setItemCount (
+      item,
+      allCount,
+      partCount,
+      disabledCount,
+      disabledSelectedCount
+    ) {
       this.$set(item, 'allCount', allCount)
       this.$set(item, 'partCount', partCount)
+      this.$set(item, 'disabledCount', disabledCount)
+      this.$set(item, 'disabledSelectedCount', disabledSelectedCount)
       if (this.checkOwnProperty(item, 'selected')) {
         this.$set(item, 'selected', undefined)
       }
     },
     hasChild (item) {
       return item.children && item.children.length
-    },
-    selectAllChildren (item, selected) {
-      if (this.hasChild(item)) {
-        item.children.forEach(child => {
-          if (this.hasChild(child)) {
-            this.setItemCount(child, selected ? child.children.length : 0, 0)
-            this.selectAllChildren(child, selected)
-          } else {
-            this.setLeafSelected(child, selected)
-          }
-
-          this.$set(child, 'visuallySelected', this.isSelected(child))
-          this.$set(child, 'partialSelected', this.isPartialSelected(child))
-        })
-      }
     },
 
     // 从右侧移除选中项。
@@ -453,46 +521,29 @@ export default {
       let parents = chain.slice(0, chain.length - 1).reverse()
 
       if (this.hasChild(item)) {
-        this.setItemCount(item, 0, 0)
+        let [
+          allCount,
+          partCount,
+          disabledCount,
+          disabledSelectedCount
+        ] = this.manageNodeStatus(item.children, false)
+        this.setItemCount(
+          item,
+          allCount,
+          partCount,
+          disabledCount,
+          disabledSelectedCount
+        )
         this.$set(item, 'partialSelected', this.isPartialSelected(item))
       } else {
         this.setLeafSelected(item, false)
       }
+
       this.$set(item, 'visuallySelected', false)
 
       this.markParentsChain(parents)
-      this.selectAllChildren(item, false)
 
       this.emitSelect()
-    },
-
-    // 有可能用户传进来的 selected 没有在 datasource 里面，所以此处要处理一下
-    correct (items = this.localDatasource) {
-      let allCount = 0
-      let partCount = 0
-      items.forEach(item => {
-        if (this.hasChild(item)) {
-          let { allCount: all, partCount: part } = this.correct(item.children)
-          this.setItemCount(item, all, part)
-
-          if (all === item.children.length) {
-            allCount += 1
-          } else if (all > 0 || part > 0) {
-            partCount += 1
-          }
-          this.$set(item, 'partialSelected', this.isPartialSelected(item))
-        } else {
-          this.setLeafSelected(
-            item,
-            this.selected.some(val => val === item.value)
-          )
-          allCount += item.selected ? 1 : 0
-        }
-
-        this.$set(item, 'visuallySelected', this.isSelected(item))
-      })
-
-      return { allCount, partCount }
     },
     checkOwnProperty (obj, property) {
       return Object.prototype.hasOwnProperty.call(obj, property)
