@@ -199,7 +199,8 @@ export default {
               },
               {
                 label: 'Filtered',
-                value: 'filtered'
+                value: 'filtered',
+                disabled: true
               },
               {
                 label: 'Pour-over',
@@ -224,6 +225,7 @@ export default {
       {
         label: 'Boiled',
         value: 'boiled',
+        disabled: true,
         children: [
           {
             label: 'Percolated',
@@ -231,7 +233,8 @@ export default {
           },
           {
             label: 'Turkish',
-            value: 'turkish'
+            value: 'turkish',
+            disabled: true
           },
           {
             label: 'Moka',
@@ -292,6 +295,7 @@ export default {
           {
             label: 'Latte',
             value: 'latte',
+            disabled: true,
             children: [
               {
                 label: 'Red Latte',
