@@ -132,7 +132,7 @@ import { includes } from 'lodash'
 import { closest } from '../../utils/dom'
 import { getTypedAncestor } from '../../utils/helper'
 
-const ITEM_SELECTOR = '.veui-tree-item'
+const ITEM_SELECTOR = '.veui-tree-item:not(.veui-tree-item-disabled)'
 
 export default {
   name: 'veui-tree-node',
