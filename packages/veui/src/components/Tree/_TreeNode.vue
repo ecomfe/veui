@@ -91,7 +91,7 @@
           v-bind="props"
         >
           <button
-            v-if="props.item.children && props.item.children.length"
+            v-if="props.children && props.children.length"
             type="button"
             class="veui-tree-item-expand-switcher"
             tabindex="-1"
@@ -110,7 +110,7 @@
               name="item-label"
               v-bind="props"
             >
-              {{ props.item.label }}
+              {{ props.label }}
             </slot>
           </div>
           <slot

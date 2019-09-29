@@ -42,8 +42,8 @@
       <veui-checkbox
         v-if="checkable"
         class="veui-tree-item-check"
-        :checked="props.item.visuallyChecked"
-        :indeterminate="props.item.partialChecked"
+        :checked="props.item.checked"
+        :indeterminate="props.item.indeterminate"
         :disabled="props.item.disabled || realDisabled || realReadonly"
         :ui="realUi"
         tabindex="-1"
@@ -353,11 +353,11 @@ export default {
           disabledCount,
           disabledCheckedCount
         )
-        this.$set(item, 'partialChecked', this.isPartialChecked(item))
+        this.$set(item, 'indeterminate', this.isPartialChecked(item))
       } else {
         this.setLeafChecked(item, true)
       }
-      this.$set(item, 'visuallyChecked', true)
+      this.$set(item, 'checked', true)
 
       this.markParentsChain(parents)
 
@@ -393,7 +393,7 @@ export default {
             childDisabledCheckedCount
           )
 
-          this.$set(child, 'partialChecked', this.isPartialChecked(child))
+          this.$set(child, 'indeterminate', this.isPartialChecked(child))
         } else {
           this.setLeafChecked(
             child,
@@ -404,19 +404,19 @@ export default {
           )
         }
 
-        this.$set(child, 'visuallyChecked', this.isChecked(child))
+        this.$set(child, 'checked', this.isChecked(child))
 
-        if (child.visuallyChecked) {
+        if (child.checked) {
           if (child.disabled) {
             disabledCheckedCount++
           } else {
             allCount++
           }
         }
-        if (child.partialChecked) {
+        if (child.indeterminate) {
           partCount++
         }
-        if (!child.visuallyChecked && !child.partialChecked && child.disabled) {
+        if (!child.checked && !child.indeterminate && child.disabled) {
           disabledCount++
         }
       })
@@ -457,8 +457,8 @@ export default {
           disabledCount,
           disabledCheckedCount
         )
-        this.$set(parent, 'visuallyChecked', this.isChecked(parent))
-        this.$set(parent, 'partialChecked', this.isPartialChecked(parent))
+        this.$set(parent, 'checked', this.isChecked(parent))
+        this.$set(parent, 'indeterminate', this.isPartialChecked(parent))
       })
     },
 
@@ -536,12 +536,12 @@ export default {
           disabledCount,
           disabledCheckedCount
         )
-        this.$set(item, 'partialChecked', this.isPartialChecked(item))
+        this.$set(item, 'indeterminate', this.isPartialChecked(item))
       } else {
         this.setLeafChecked(item, false)
       }
 
-      this.$set(item, 'visuallyChecked', false)
+      this.$set(item, 'checked', false)
 
       this.markParentsChain(parents)
 
