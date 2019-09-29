@@ -28,11 +28,11 @@
       ref="tree"
       :datasource="items"
       :expanded.sync="expanded"
-      selectable
-      :selected="localSelected"
+      checkable
+      :checked="localSelected"
       :ui="uiParts.tree"
       :disabled="!isSelectable"
-      @select="handleSelect"
+      @check="handleSelect"
     >
       <template
         slot="item"

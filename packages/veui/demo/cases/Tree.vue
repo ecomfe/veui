@@ -29,9 +29,9 @@
     >
       <template
         slot="item"
-        slot-scope="props"
+        slot-scope="item"
       >
-        {{ props.item.label }}
+        {{ item.label }}
       </template>
     </veui-tree>
   </section>

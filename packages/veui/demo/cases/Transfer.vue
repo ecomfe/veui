@@ -21,7 +21,7 @@
     :datasource="treeDatasource1"
     class="veui-select-panel-demo1"
   >
-    <template slot="title">
+    <template slot="head">
       列表
     </template>
     <template slot-scope="{ items }">
