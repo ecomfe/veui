@@ -277,7 +277,8 @@
           <div :class="`${listClass}-container`">
             <div :class="`${listClass}-status`">
               <span class="veui-uploader-failure">
-                <slot name="failure-label"> {{ t("error") }} </slot>{{ file.failureReason }}
+                <slot name="failure-label">
+                  {{ t("error") }} </slot>{{ file.failureReason }}
               </span>
             </div>
             <veui-button
@@ -609,9 +610,7 @@ export default {
         assign(
           this.requestMode === 'iframe' && this.iframeMode === 'callback'
             ? {
-              callback: `parent.${this.callbackNamespace}['${
-                this.callbackFuncName
-              }']`
+              callback: `parent.${this.callbackNamespace}['${this.callbackFuncName}']`
             }
             : {},
           this.payload
@@ -645,13 +644,19 @@ export default {
     },
     files () {
       return this.fileList.map(file => {
-        return { ...pick(file, ['name', 'src', 'status']), ...file._extra }
+        return {
+          ...pick(file, ['name', 'src', 'status', 'toBeUploaded']),
+          ...file._extra
+        }
       })
     },
     pureFileList () {
       return this.files
-        .filter(file => file.status === 'success' || !file.status)
-        .map(file => omit(file, 'status'))
+        .filter(
+          file =>
+            (file.status === 'success' || !file.status) && !file.toBeUploaded
+        )
+        .map(file => omit(file, ['status', 'toBeUploaded']))
     }
   },
   watch: {
@@ -664,7 +669,10 @@ export default {
       let successIndex = 0
       this.fileList = this.fileList
         .map(file => {
-          if (file.status === 'success' || !file.status) {
+          if (
+            (file.status === 'success' || !file.status) &&
+            !file.toBeUploaded
+          ) {
             // 处理外部直接减少文件的情形
             if (successIndex + 1 > temp.length) {
               return null
@@ -811,9 +819,9 @@ export default {
         }
 
         let replacingIndex = this.fileList.indexOf(this.replacingFile)
-        this.removeFile(this.replacingFile)
-        this.fileList.splice(replacingIndex, 0, null)
         this.$set(this.fileList, replacingIndex, newFile)
+        this.$emit('change', this.getValue())
+
         this.replacingFile = null
 
         if (this.requestMode === 'iframe' && this.realAutoupload) {
@@ -1007,6 +1015,9 @@ export default {
         data.success = data.status === 'success'
       }
 
+      delete file.xhr
+      delete file.toBeUploaded
+
       if (data.success) {
         this.showSuccessResult(data, file)
         this.$emit('success', this.files[index], index)
@@ -1017,16 +1028,12 @@ export default {
       this.currentSubmitingFile = null
     },
     showSuccessResult (data, file) {
-      file.xhr = null
-      file.toBeUploaded = null
       this.updateFileList(file, 'success', data, true)
       setTimeout(() => {
         this.updateFileList(file, null)
       }, 2000)
     },
     showFailureResult (data, file) {
-      file.xhr = null
-      file.toBeUploaded = null
       file.failureReason = data.message || data.reason || ''
       this.updateFileList(file, 'failure', data)
     },
@@ -1051,16 +1058,6 @@ export default {
       if (toEmit) {
         this.$emit('change', this.getValue(false))
       }
-    },
-    getIndexInPureList (file) {
-      let initialIndex = this.fileList.indexOf(file)
-      return (
-        initialIndex -
-        this.fileList
-          .slice(0, initialIndex)
-          .filter(f => f.status === 'uploading' || f.status === 'failure')
-          .length
-      )
     },
     retry (file) {
       if (this.requestMode === 'iframe') {
