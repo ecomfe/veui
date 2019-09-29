@@ -77,7 +77,7 @@
       v-if="item.expanded && item.children && item.children.length"
       :datasource="item.children"
       :depth="depth + 1"
-      :item-click="itemClick"
+      :action="action"
       :icons="icons"
       @click="handleChildClick(item, ...arguments)"
       @toggle="handleChildToggle"
@@ -152,11 +152,13 @@ export default {
       default: 1
     },
     // 点击整个 item 区域，是否触发展开/收起
-    itemClick: {
+    action: {
       type: String,
-      default: 'none',
       validator (value) {
-        return includes(['toggle', 'none'], value)
+        if (!value == null) {
+          return true
+        }
+        return includes(['toggle', 'check', 'none'], value)
       }
     }
   },
@@ -167,7 +169,7 @@ export default {
   },
   computed: {
     clickable () {
-      return this.itemClick !== 'none'
+      return this.action !== 'none'
     },
     tree () {
       return getTypedAncestor(this, 'tree')
@@ -185,11 +187,7 @@ export default {
     click (item, parents, ...extraArgs) {
       this.$emit('click', item, parents, ...extraArgs)
 
-      if (
-        this.itemClick === 'toggle' &&
-        item.children &&
-        item.children.length
-      ) {
+      if (this.action === 'toggle' && item.children && item.children.length) {
         this.toggle(item, ...extraArgs)
       }
     },
