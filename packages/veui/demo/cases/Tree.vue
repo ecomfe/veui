@@ -36,17 +36,17 @@
     </veui-tree>
   </section>
   <section>
-    <h4>Selectable item</h4>
+    <h4>Checkable item</h4>
     <veui-tree
-      v-model="selected"
+      v-model="checked"
       :datasource="coffees"
       :expanded.sync="expanded"
-      selectable
+      checkable
     />
   </section>
   <section>
     <h4>Selected items</h4>
-    {{ selected }}
+    {{ checked }}
   </section>
 </article>
 </template>
@@ -68,7 +68,7 @@ export default {
       ],
       mode: 'toggle',
       expanded: ['infused', 'brewed'],
-      selected: ['filtered', 'cold-brew'],
+      checked: ['filtered', 'cold-brew'],
       coffees: [
         {
           label: 'Infused',
