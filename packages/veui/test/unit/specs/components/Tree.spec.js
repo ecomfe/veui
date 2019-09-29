@@ -140,7 +140,8 @@ describe('components/Tree', () => {
     let wrapper = mount(Tree, {
       propsData: {
         datasource
-      }
+      },
+      sync: false
     })
 
     expect(wrapper.findAll('.veui-tree-item').length).to.equal(4)
@@ -154,7 +155,8 @@ describe('components/Tree', () => {
       propsData: {
         datasource,
         expanded: ['infused', 'brewed']
-      }
+      },
+      sync: false
     })
 
     expect(wrapper.findAll('.veui-tree-item').length).to.equal(11)
@@ -173,11 +175,13 @@ describe('components/Tree', () => {
     wrapper.destroy()
   })
 
-  it('nodes can only be toggled by clicking toggle buttons when `item-click` was not set', async () => {
+  it('nodes can only be toggled by clicking toggle buttons when `item-click` was set `none`', async () => {
     let wrapper = mount(Tree, {
       propsData: {
+        itemClick: 'none',
         datasource
-      }
+      },
+      sync: false
     })
     let { vm } = wrapper
 
@@ -202,10 +206,11 @@ describe('components/Tree', () => {
   it('nodes can be toggled by clicking any part of them when `item-click` was set', async () => {
     let wrapper = mount(Tree, {
       propsData: {
-        itemClick: 'toggle'
-      }
+        itemClick: 'toggle',
+        datasource
+      },
+      sync: false
     })
-    wrapper.setProps({ datasource })
     let { vm } = wrapper
 
     expect(wrapper.findAll('.veui-tree-item').length).to.equal(4)
@@ -218,6 +223,7 @@ describe('components/Tree', () => {
     expect(item.classes('veui-tree-item-expanded')).to.equal(true)
 
     item.find('.veui-tree-item-expand-switcher').trigger('click')
+    await vm.$nextTick()
 
     expect(wrapper.findAll('.veui-tree-item').length).to.equal(4)
     expect(item.classes('veui-tree-item-expanded')).to.equal(false)
@@ -226,12 +232,15 @@ describe('components/Tree', () => {
 
   it('should render item scoped-slot correctly', () => {
     let wrapper = mount(Tree, {
+      propsData: {
+        datasource
+      },
       scopedSlots: {
         item:
           '<div class="test-item-slot" slot-scope="props">{{props.item.label}} item slot</div>'
-      }
+      },
+      sync: false
     })
-    wrapper.setProps({ datasource })
 
     expect(wrapper.find('.test-item-slot').exists()).to.equal(true)
     expect(wrapper.find('.test-item-slot').text()).to.equal(
@@ -262,19 +271,24 @@ describe('components/Tree', () => {
   })
 
   it('should sync expanded status correctly when toggling a node', async () => {
-    let wrapper = mount({
-      components: {
-        'veui-tree': Tree
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tree': Tree
+        },
+        data () {
+          return {
+            expanded: ['infused'],
+            datasource
+          }
+        },
+        template:
+          '<veui-tree :datasource="datasource" :expanded.sync="expanded" />'
       },
-      data () {
-        return {
-          expanded: ['infused'],
-          datasource
-        }
-      },
-      template:
-        '<veui-tree :datasource="datasource" :expanded.sync="expanded" />'
-    })
+      {
+        sync: false
+      }
+    )
     let { vm } = wrapper
 
     expect(
@@ -345,28 +359,32 @@ describe('components/Tree', () => {
   })
 
   it('should handle click event correctly', async () => {
-    let wrapper = mount({
-      components: {
-        'veui-tree': Tree
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tree': Tree
+        },
+        data () {
+          return {
+            datasource
+          }
+        },
+        methods: {
+          handleClick (item, parents, index, depth) {
+            expect(item.value).to.equal('infused')
+            expect(parents).to.deep.equal([])
+            expect(index).to.equal(0)
+            expect(depth).to.equal(1)
+          }
+        },
+        template:
+          '<veui-tree :datasource="datasource" @click="handleClick" item-click="toggle" />'
       },
-      data () {
-        return {
-          datasource: []
-        }
-      },
-      methods: {
-        handleClick (item, parents, index, depth) {
-          expect(item.value).to.equal('infused')
-          expect(parents).to.deep.equal([])
-          expect(index).to.equal(0)
-          expect(depth).to.equal(1)
-        }
-      },
-      template:
-        '<veui-tree :datasource="datasource" @click="handleClick" item-click="toggle" />'
-    })
+      {
+        sync: false
+      }
+    )
     let { vm } = wrapper
-    wrapper.setData({ datasource })
 
     await vm.$nextTick()
     wrapper.find('.veui-tree-item').trigger('click')
@@ -376,10 +394,13 @@ describe('components/Tree', () => {
 
   it('should handle keyboard event correctly', async () => {
     let wrapper = mount(Tree, {
-      attachToDocument: true
+      propsData: {
+        datasource
+      },
+      attachToDocument: true,
+      sync: false
     })
     let { vm } = wrapper
-    wrapper.setProps({ datasource })
 
     wrapper.find('.veui-tree-item').trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()
@@ -412,87 +433,71 @@ describe('components/Tree', () => {
     wrapper.destroy()
   })
 
-  it('should parse selected and handle select correctly', async () => {
-    let wrapper = mount({
-      components: {
-        'veui-tree': Tree
+  it('should parse checked and handle check correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tree': Tree
+        },
+        data () {
+          return {
+            datasource,
+            checked: ['filtered'],
+            expanded: ['infused', 'brewed', 'boiled']
+          }
+        },
+        template:
+          '<veui-tree :datasource="datasource" v-model="checked" :expanded.sync="expanded" checkable/>'
       },
-      data () {
-        return {
-          datasource: [],
-          selected: [],
-          expanded: []
-        }
-      },
-      template:
-        '<veui-tree :datasource="datasource" v-model="selected" :expanded.sync="expanded" selectable/>'
-    })
+      {
+        sync: false
+      }
+    )
 
-    wrapper.setData({
-      datasource,
-      selected: ['filtered'],
-      expanded: ['infused', 'brewed', 'boiled']
-    })
-
-    let selectors = wrapper.findAll(Checkbox)
-    expect(selectors.at(0).props('indeterminate')).to.equal(true)
-    expect(selectors.at(1).props('indeterminate')).to.equal(true)
-    expect(selectors.at(2).props('checked')).to.equal(false)
-    expect(selectors.at(3).props('checked')).to.equal(true)
+    let checkboxs = wrapper.findAll(Checkbox)
+    expect(checkboxs.at(0).props('indeterminate')).to.equal(true)
+    expect(checkboxs.at(1).props('indeterminate')).to.equal(true)
+    expect(checkboxs.at(2).props('checked')).to.equal(false)
+    expect(checkboxs.at(3).props('checked')).to.equal(true)
 
     // select leaf
-    selectors
-      .at(2)
-      .find('input[type="checkbox"]')
-      .trigger('change')
+    select(2)
     await wrapper.vm.$nextTick()
 
     let data = wrapper.vm.$data
-    expect(data.selected).to.deep.equal(['drip-brewed', 'filtered'])
-    expect(selectors.at(2).props('checked')).to.equal(true)
+    expect(data.checked).to.deep.equal(['drip-brewed', 'filtered'])
+    expect(checkboxs.at(2).props('checked')).to.equal(true)
 
     // remove all leaves
-    selectors
-      .at(2)
-      .find('input[type="checkbox"]')
-      .trigger('change')
-    selectors
-      .at(3)
-      .find('input[type="checkbox"]')
-      .trigger('change')
+    select(2)
+    select(3)
     await wrapper.vm.$nextTick()
-    expect(data.selected).to.deep.equal([])
-    expect(selectors.at(0).props('indeterminate')).to.equal(false)
-    expect(selectors.at(1).props('indeterminate')).to.equal(false)
-    expect(selectors.at(2).props('checked')).to.equal(false)
-    expect(selectors.at(3).props('checked')).to.equal(false)
+    expect(data.checked).to.deep.equal([])
+    expect(checkboxs.at(0).props('indeterminate')).to.equal(false)
+    expect(checkboxs.at(1).props('indeterminate')).to.equal(false)
+    expect(checkboxs.at(2).props('checked')).to.equal(false)
+    expect(checkboxs.at(3).props('checked')).to.equal(false)
 
     // select middle node 'brewed'
-    selectors
-      .at(1)
-      .find('input[type="checkbox"]')
-      .trigger('change')
+    select(1)
     await wrapper.vm.$nextTick()
-    expect(data.selected).to.deep.equal([
+    expect(data.checked).to.deep.equal([
       'drip-brewed',
       'filtered',
       'pour-over',
       'immersion-brewed'
     ])
-    expect(selectors.at(0).props('indeterminate')).to.equal(true)
-    expect(selectors.at(1).props('checked')).to.equal(true)
-    expect(selectors.at(2).props('checked')).to.equal(true)
-    expect(selectors.at(3).props('checked')).to.equal(true)
-    expect(selectors.at(4).props('checked')).to.equal(true)
-    expect(selectors.at(5).props('checked')).to.equal(true)
+    expect(checkboxs.at(0).props('indeterminate')).to.equal(true)
+    expect(checkboxs.at(1).props('checked')).to.equal(true)
+    expect(checkboxs.at(2).props('checked')).to.equal(true)
+    expect(checkboxs.at(3).props('checked')).to.equal(true)
+    expect(checkboxs.at(4).props('checked')).to.equal(true)
+    expect(checkboxs.at(5).props('checked')).to.equal(true)
 
     // select leat 'turkish' under another middle node 'boiled'
-    selectors
-      .at(10)
-      .find('input[type="checkbox"]')
-      .trigger('change')
+    select(10)
     await wrapper.vm.$nextTick()
-    expect(data.selected).to.deep.equal([
+    expect(data.checked).to.deep.equal([
       'drip-brewed',
       'filtered',
       'pour-over',
@@ -501,78 +506,84 @@ describe('components/Tree', () => {
     ])
 
     // remove middle node 'brewed'
-    selectors
+    checkboxs
       .at(1)
       .find('input[type="checkbox"]')
       .trigger('change')
     await wrapper.vm.$nextTick()
-    expect(data.selected).to.deep.equal(['turkish'])
+    expect(data.checked).to.deep.equal(['turkish'])
 
     wrapper.destroy()
+
+    function select (index) {
+      checkboxs
+        .at(index)
+        .find('input[type="checkbox"]')
+        .trigger('change')
+    }
   })
 
   it('should handle disabled items correctly.', async () => {
-    let wrapper = mount({
-      components: {
-        'veui-tree': Tree
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tree': Tree
+        },
+        data () {
+          return {
+            datasource: [
+              {
+                label: 'Infused',
+                value: 'infused',
+                children: [
+                  {
+                    label: 'Brewed',
+                    value: 'brewed',
+                    children: [
+                      {
+                        label: 'Drip brewed',
+                        value: 'drip-brewed'
+                      },
+                      {
+                        label: 'Filtered',
+                        value: 'filtered',
+                        disabled: true
+                      },
+                      {
+                        label: 'Pour-over',
+                        value: 'pour-over',
+                        disabled: true
+                      },
+                      {
+                        label: 'Immersion brewed',
+                        value: 'immersion-brewed'
+                      }
+                    ]
+                  },
+                  {
+                    label: 'French press',
+                    value: 'french-press'
+                  },
+                  {
+                    label: 'Cold brew',
+                    value: 'cold-brew'
+                  }
+                ]
+              }
+            ],
+            checked: ['filtered', 'cold-brew'],
+            expanded: ['infused', 'brewed']
+          }
+        },
+        template:
+          '<veui-tree :datasource="datasource" v-model="checked" :expanded.sync="expanded" checkable/>'
       },
-      data () {
-        return {
-          datasource: [],
-          selected: [],
-          expanded: []
-        }
-      },
-      template:
-        '<veui-tree :datasource="datasource" v-model="selected" :expanded.sync="expanded" selectable/>'
-    })
+      {
+        sync: false
+      }
+    )
 
-    wrapper.setData({
-      datasource: [
-        {
-          label: 'Infused',
-          value: 'infused',
-          children: [
-            {
-              label: 'Brewed',
-              value: 'brewed',
-              children: [
-                {
-                  label: 'Drip brewed',
-                  value: 'drip-brewed'
-                },
-                {
-                  label: 'Filtered',
-                  value: 'filtered',
-                  disabled: true
-                },
-                {
-                  label: 'Pour-over',
-                  value: 'pour-over',
-                  disabled: true
-                },
-                {
-                  label: 'Immersion brewed',
-                  value: 'immersion-brewed'
-                }
-              ]
-            },
-            {
-              label: 'French press',
-              value: 'french-press'
-            },
-            {
-              label: 'Cold brew',
-              value: 'cold-brew'
-            }
-          ]
-        }
-      ],
-      selected: ['filtered', 'cold-brew'],
-      expanded: ['infused', 'brewed']
-    })
-
-    let selectors = wrapper.findAll(Checkbox)
+    let checkboxs = wrapper.findAll(Checkbox)
 
     // select 'drip-brewed'
     select(2)
@@ -581,31 +592,31 @@ describe('components/Tree', () => {
     await wrapper.vm.$nextTick()
 
     let data = wrapper.vm.$data
-    expect(data.selected).to.deep.equal([
+    expect(data.checked).to.deep.equal([
       'drip-brewed',
       'filtered',
       'immersion-brewed',
       'cold-brew'
     ])
-    expect(selectors.at(0).props('indeterminate')).to.equal(true)
-    expect(selectors.at(0).props('checked')).to.equal(false)
-    expect(selectors.at(1).props('indeterminate')).to.equal(true)
-    expect(selectors.at(1).props('checked')).to.equal(true)
+    expect(checkboxs.at(0).props('indeterminate')).to.equal(true)
+    expect(checkboxs.at(0).props('checked')).to.equal(false)
+    expect(checkboxs.at(1).props('indeterminate')).to.equal(true)
+    expect(checkboxs.at(1).props('checked')).to.equal(true)
 
     // remove children of brewed
     select(1)
     await wrapper.vm.$nextTick()
 
-    expect(data.selected).to.deep.equal(['filtered', 'cold-brew'])
-    expect(selectors.at(0).props('indeterminate')).to.equal(true)
-    expect(selectors.at(0).props('checked')).to.equal(false)
-    expect(selectors.at(1).props('indeterminate')).to.equal(true)
-    expect(selectors.at(1).props('checked')).to.equal(false)
+    expect(data.checked).to.deep.equal(['filtered', 'cold-brew'])
+    expect(checkboxs.at(0).props('indeterminate')).to.equal(true)
+    expect(checkboxs.at(0).props('checked')).to.equal(false)
+    expect(checkboxs.at(1).props('indeterminate')).to.equal(true)
+    expect(checkboxs.at(1).props('checked')).to.equal(false)
 
     wrapper.destroy()
 
     function select (index) {
-      selectors
+      checkboxs
         .at(index)
         .find('input[type="checkbox"]')
         .trigger('change')
