@@ -448,7 +448,7 @@ describe('components/Tree', () => {
     await wrapper.vm.$nextTick()
 
     let data = wrapper.vm.$data
-    expect(data.selected).to.eql(['drip-brewed', 'filtered'])
+    expect(data.selected).to.deep.equal(['drip-brewed', 'filtered'])
     expect(selectors.at(2).props('checked')).to.equal(true)
 
     // remove all leaves
@@ -461,7 +461,7 @@ describe('components/Tree', () => {
       .find('input[type="checkbox"]')
       .trigger('change')
     await wrapper.vm.$nextTick()
-    expect(data.selected).to.eql([])
+    expect(data.selected).to.deep.equal([])
     expect(selectors.at(0).props('indeterminate')).to.equal(false)
     expect(selectors.at(1).props('indeterminate')).to.equal(false)
     expect(selectors.at(2).props('checked')).to.equal(false)
@@ -473,7 +473,7 @@ describe('components/Tree', () => {
       .find('input[type="checkbox"]')
       .trigger('change')
     await wrapper.vm.$nextTick()
-    expect(data.selected).to.eql([
+    expect(data.selected).to.deep.equal([
       'drip-brewed',
       'filtered',
       'pour-over',
@@ -492,7 +492,7 @@ describe('components/Tree', () => {
       .find('input[type="checkbox"]')
       .trigger('change')
     await wrapper.vm.$nextTick()
-    expect(data.selected).to.eql([
+    expect(data.selected).to.deep.equal([
       'drip-brewed',
       'filtered',
       'pour-over',
@@ -506,7 +506,7 @@ describe('components/Tree', () => {
       .find('input[type="checkbox"]')
       .trigger('change')
     await wrapper.vm.$nextTick()
-    expect(data.selected).to.eql(['turkish'])
+    expect(data.selected).to.deep.equal(['turkish'])
 
     wrapper.destroy()
   })
@@ -581,7 +581,7 @@ describe('components/Tree', () => {
     await wrapper.vm.$nextTick()
 
     let data = wrapper.vm.$data
-    expect(data.selected).to.eql([
+    expect(data.selected).to.deep.equal([
       'drip-brewed',
       'filtered',
       'immersion-brewed',
@@ -596,7 +596,7 @@ describe('components/Tree', () => {
     select(1)
     await wrapper.vm.$nextTick()
 
-    expect(data.selected).to.eql(['filtered', 'cold-brew'])
+    expect(data.selected).to.deep.equal(['filtered', 'cold-brew'])
     expect(selectors.at(0).props('indeterminate')).to.equal(true)
     expect(selectors.at(0).props('checked')).to.equal(false)
     expect(selectors.at(1).props('indeterminate')).to.equal(true)
