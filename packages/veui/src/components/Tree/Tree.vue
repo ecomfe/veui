@@ -2,7 +2,7 @@
 <veui-tree-node
   role="tree"
   :datasource="localDatasource"
-  :item-click="itemClick"
+  :action="action"
   :icons="icons"
   :ui="realUi"
   :class="{
@@ -40,13 +40,14 @@
       v-bind="props"
     >
       <veui-checkbox
-        v-if="selectable"
-        class="veui-tree-item-select"
-        :checked="props.item.visuallySelected"
-        :indeterminate="props.item.partialSelected"
+        v-if="checkable"
+        class="veui-tree-item-check"
+        :checked="props.item.visuallyChecked"
+        :indeterminate="props.item.partialChecked"
         :disabled="props.item.disabled || realDisabled || realReadonly"
         :ui="realUi"
-        @change="checked => handleItemSelect(checked, props.item)"
+        tabindex="-1"
+        @change="checked => handleItemCheck(checked, props.item)"
       />
     </slot>
   </template>
@@ -89,8 +90,8 @@ export default {
   },
   mixins: [ui, input],
   model: {
-    prop: 'selected',
-    event: 'select'
+    prop: 'checked',
+    event: 'check'
   },
   props: {
     datasource: {
@@ -102,9 +103,11 @@ export default {
     // 点击整个 item 区域，是否触发展开/收起
     itemClick: {
       type: String,
-      default: 'none',
       validator (value) {
-        return includes(['toggle', 'none'], value)
+        if (!value == null) {
+          return true
+        }
+        return includes(['toggle', 'check', 'none'], value)
       }
     },
     /**
@@ -129,10 +132,10 @@ export default {
         return []
       }
     },
-    selectable: {
+    checkable: {
       type: Boolean
     },
-    selected: {
+    checked: {
       type: Array,
       default () {
         return []
@@ -159,6 +162,9 @@ export default {
       }
 
       return this.keys
+    },
+    action () {
+      return this.itemClick || (this.checkable ? 'check' : 'toggle')
     }
   },
   watch: {
@@ -189,7 +195,7 @@ export default {
         }
         walk(val, this.localDatasource, clone(this.realExpanded))
 
-        if (this.selectable) {
+        if (this.checkable) {
           this.manageNodeStatus(this.localDatasource, null, true)
         }
       },
@@ -197,18 +203,18 @@ export default {
       immediate: true
     },
 
-    selected (val, oldVal) {
-      if (xor(val, this.getSelectedValuesFromDatasource()).length) {
+    checked (val, oldVal) {
+      if (xor(val, this.getCheckedValuesFromDatasource()).length) {
         this.manageNodeStatus(this.localDatasource, null, true)
       }
     }
   },
   methods: {
     // 每个非叶节点记录四个数字：
-    // allCount：被全部选中（selected=true）并且没有被禁用的子节点数
+    // allCount：被全部选中（checked=true）并且没有被禁用的子节点数
     // partCount：部分被选中的子节点数
     // disabledCount：被禁用但是没有被选中的子节点数
-    // disabledSelectedCount：被全部选中同时被禁用的子节点数
+    // disabledCheckedCount：被全部选中同时被禁用的子节点数
     //
     // 被全部选中是指能选的子节点全被选了，如果部分子节点被禁用了无法被选中，这个节点依然算被全部选中
     // 被全部选中的节点，如果有被禁用的子节点，这个节点同时也属于部分被选中，因为checkbox需要显示成中间状态
@@ -218,52 +224,52 @@ export default {
     //   a1(×)
     //   a2(√×)
     //   a3(√)
-    // 例如A节点的四个子节点，allCount=2，disabledCount=1，disabledSelectedCount=1
+    // 例如A节点的四个子节点，allCount=2，disabledCount=1，disabledCheckedCount=1
     // A节点既是被部分选中状态（有部分子节点没有实际被选中，checkbox显示中间态）
-    // 也是被选中状态（checkbox的checked与节点的selected绑定，所以点击A的checkbox可以触发remove操作）
+    // 也是被选中状态（checkbox的checked与节点的checked绑定，所以点击A的checkbox可以触发remove操作）
     // 否则点击A的checkbox，只会把checkbox的checked改成true，不会触发remove，点了没反应，再点一次才会触发remove
 
     // 判断节点是不是被全部选中
-    isSelected (item) {
+    isChecked (item) {
       if (this.hasChild(item)) {
         let {
           allCount = 0,
           disabledCount = 0,
-          disabledSelectedCount = 0
+          disabledCheckedCount = 0
         } = item
         return (
           disabledCount < item.children.length &&
-          allCount + disabledCount + disabledSelectedCount ===
+          allCount + disabledCount + disabledCheckedCount ===
             item.children.length
         )
       }
-      return item.selected
+      return item.checked
     },
     // 判断该节点是不是被部分选中
-    isPartialSelected (item) {
+    isPartialChecked (item) {
       if (this.hasChild(item)) {
-        let { allCount = 0, partCount = 0, disabledSelectedCount = 0 } = item
-        let selectedCount = allCount + disabledSelectedCount
+        let { allCount = 0, partCount = 0, disabledCheckedCount = 0 } = item
+        let checkedCount = allCount + disabledCheckedCount
         return (
-          (selectedCount > 0 && selectedCount < item.children.length) ||
+          (checkedCount > 0 && checkedCount < item.children.length) ||
           partCount > 0
         )
       }
       return false
     },
-    getSelectedValuesFromDatasource () {
+    getCheckedValuesFromDatasource () {
       let values = []
       let walk = (items = this.localDatasource) => {
         items.forEach(item => {
           if (
             item.partCount ||
             item.allCount ||
-            item.selected ||
-            item.disabledSelectedCount
+            item.checked ||
+            item.disabledCheckedCount
           ) {
             if (this.hasChild(item)) {
               walk(item.children)
-            } else if (item.selected) {
+            } else if (item.checked) {
               values.push(item.value)
             }
           }
@@ -272,8 +278,8 @@ export default {
       walk()
       return values
     },
-    emitSelect () {
-      this.$emit('select', this.getSelectedValuesFromDatasource())
+    emitCheck () {
+      this.$emit('check', this.getCheckedValuesFromDatasource())
     },
     parseExpanded (expanded = this.realExpanded) {
       let walk = (items, expanded) => {
@@ -316,16 +322,16 @@ export default {
     handleItemClick (...args) {
       this.$emit('click', ...args)
     },
-    handleItemSelect (checked, item) {
+    handleItemCheck (checked, item) {
       if (checked) {
-        this.select(item)
+        this.check(item)
       } else {
         this.remove(item)
       }
     },
 
-    select (item) {
-      if (!this.selectable) {
+    check (item) {
+      if (!this.checkable) {
         return
       }
 
@@ -338,33 +344,33 @@ export default {
           allCount,
           partCount,
           disabledCount,
-          disabledSelectedCount
+          disabledCheckedCount
         ] = this.manageNodeStatus(item.children, true)
         this.setItemCount(
           item,
           allCount,
           partCount,
           disabledCount,
-          disabledSelectedCount
+          disabledCheckedCount
         )
-        this.$set(item, 'partialSelected', this.isPartialSelected(item))
+        this.$set(item, 'partialChecked', this.isPartialChecked(item))
       } else {
-        this.setLeafSelected(item, true)
+        this.setLeafChecked(item, true)
       }
-      this.$set(item, 'visuallySelected', true)
+      this.$set(item, 'visuallyChecked', true)
 
       this.markParentsChain(parents)
 
-      this.emitSelect()
+      this.emitCheck()
     },
 
     // 设置子节点们的计数、状态，并且统计它们的状态并返回
-    // isSettingDisabledNode：只有在初始化（datasource发生变化时）以及selected变化时可以改变被禁用的节点的选择状态
-    manageNodeStatus (items, selected, isSettingDisabledNode) {
+    // isSettingDisabledNode：只有在初始化（datasource发生变化时）以及checked变化时可以改变被禁用的节点的选择状态
+    manageNodeStatus (items, checked, isSettingDisabledNode) {
       let allCount = 0
       let partCount = 0
       let disabledCount = 0
-      let disabledSelectedCount = 0
+      let disabledCheckedCount = 0
 
       items.forEach(child => {
         if (this.hasChild(child)) {
@@ -372,54 +378,50 @@ export default {
             childAllCount,
             childPartCount,
             childDisabledCount,
-            childDisabledSelectedCount
+            childDisabledCheckedCount
           ] = this.manageNodeStatus(
             child.children,
-            selected,
+            checked,
             isSettingDisabledNode
           )
 
           this.setItemCount(
             child,
-            selected || selected == null ? childAllCount : 0,
-            selected || selected == null ? childPartCount : 0,
+            checked || checked == null ? childAllCount : 0,
+            checked || checked == null ? childPartCount : 0,
             childDisabledCount,
-            childDisabledSelectedCount
+            childDisabledCheckedCount
           )
 
-          this.$set(child, 'partialSelected', this.isPartialSelected(child))
+          this.$set(child, 'partialChecked', this.isPartialChecked(child))
         } else {
-          this.setLeafSelected(
+          this.setLeafChecked(
             child,
-            selected == null
-              ? this.selected.some(val => val === child.value)
-              : selected,
+            checked == null
+              ? this.checked.some(val => val === child.value)
+              : checked,
             isSettingDisabledNode
           )
         }
 
-        this.$set(child, 'visuallySelected', this.isSelected(child))
+        this.$set(child, 'visuallyChecked', this.isChecked(child))
 
-        if (child.visuallySelected) {
+        if (child.visuallyChecked) {
           if (child.disabled) {
-            disabledSelectedCount++
+            disabledCheckedCount++
           } else {
             allCount++
           }
         }
-        if (child.partialSelected) {
+        if (child.partialChecked) {
           partCount++
         }
-        if (
-          !child.visuallySelected &&
-          !child.partialSelected &&
-          child.disabled
-        ) {
+        if (!child.visuallyChecked && !child.partialChecked && child.disabled) {
           disabledCount++
         }
       })
 
-      return [allCount, partCount, disabledCount, disabledSelectedCount]
+      return [allCount, partCount, disabledCount, disabledCheckedCount]
     },
 
     // 更新祖先节点中的选择标记
@@ -428,23 +430,23 @@ export default {
         let allCount = 0
         let partCount = 0
         let disabledCount = 0
-        let disabledSelectedCount = 0
+        let disabledCheckedCount = 0
 
         parent.children.forEach(child => {
-          let isSelected = this.isSelected(child)
-          let isPartialSelected = this.isPartialSelected(child)
+          let isChecked = this.isChecked(child)
+          let isPartialChecked = this.isPartialChecked(child)
 
-          if (isSelected) {
+          if (isChecked) {
             if (child.disabled) {
-              disabledSelectedCount++
+              disabledCheckedCount++
             } else {
               allCount++
             }
           }
-          if (isPartialSelected) {
+          if (isPartialChecked) {
             partCount++
           }
-          if (!isSelected && !isPartialSelected && child.disabled) {
+          if (!isChecked && !isPartialChecked && child.disabled) {
             disabledCount++
           }
         })
@@ -453,19 +455,19 @@ export default {
           allCount,
           partCount,
           disabledCount,
-          disabledSelectedCount
+          disabledCheckedCount
         )
-        this.$set(parent, 'visuallySelected', this.isSelected(parent))
-        this.$set(parent, 'partialSelected', this.isPartialSelected(parent))
+        this.$set(parent, 'visuallyChecked', this.isChecked(parent))
+        this.$set(parent, 'partialChecked', this.isPartialChecked(parent))
       })
     },
 
-    setLeafSelected (item, selected, isSettingDisabledNode) {
+    setLeafChecked (item, checked, isSettingDisabledNode) {
       if (item.disabled && !isSettingDisabledNode) {
         return
       }
 
-      this.$set(item, 'selected', selected)
+      this.$set(item, 'checked', checked)
       if (this.checkOwnProperty(item, 'allCount')) {
         this.$set(item, 'allCount', undefined)
       }
@@ -478,14 +480,14 @@ export default {
       allCount,
       partCount,
       disabledCount,
-      disabledSelectedCount
+      disabledCheckedCount
     ) {
       this.$set(item, 'allCount', allCount)
       this.$set(item, 'partCount', partCount)
       this.$set(item, 'disabledCount', disabledCount)
-      this.$set(item, 'disabledSelectedCount', disabledSelectedCount)
-      if (this.checkOwnProperty(item, 'selected')) {
-        this.$set(item, 'selected', undefined)
+      this.$set(item, 'disabledCheckedCount', disabledCheckedCount)
+      if (this.checkOwnProperty(item, 'checked')) {
+        this.$set(item, 'checked', undefined)
       }
     },
     hasChild (item) {
@@ -497,21 +499,21 @@ export default {
     // 接收的参数为：
     //  item :待移除的节点
     //
-    // 注意：parents 来自于 this.selectedItems ，内部的节点数据和 this.localDatasource 中的节点数据是完全不相等的。
+    // 注意：parents 来自于 this.checkedItems ，内部的节点数据和 this.localDatasource 中的节点数据是完全不相等的。
     //
     // 执行步骤为：
     // 1、以 this.localDatasource 为主要标记目标。
     // 2、按照 parents 的最右侧开始遍历（即从树根开始），找到 parents 对应到 this.localDatasource 中的 parents 祖先节点数组 candidateParents。
     // 3、找到 item 对应到 this.localDatasource 中的节点 candidateItem。
-    // 4、如果 candidateItem 没有子孙节点，就直接标记 candidateItem 上的选中状态（ selected ）为 false 。
+    // 4、如果 candidateItem 没有子孙节点，就直接标记 candidateItem 上的选中状态（ checked ）为 false 。
     // 5、如果 candidateItem 有子孙节点，则标记 candidateItem 上的“子级中全选的节点总数（ allCount ）”为 0，“子级中部分选择的节点总数（ partCount ）”为0。
     // 6、依次刷新 candidateParents 中的 allCount 和 partCount 标记。
-    // 7、如果 candidateItem 有子孙节点的话，则将其子孙节点全部设为未选中状态（ allCount=0 、 partCount=0 、 selected=false ）。
-    // 8、从之前选中的节点树中（ this.selectedItems ）中解析出每个节点的状态（目前只有展开/收起状态 expanded ）。
-    // 9、从 this.localDatasource 中剥离出选中的节点及其父节点，并与8步中解析出的状态进行合并，得到新的 this.selectedItems 。
-    // 10、抛出 select 事件，带上一维的选中的节点的 value 值数组。
+    // 7、如果 candidateItem 有子孙节点的话，则将其子孙节点全部设为未选中状态（ allCount=0 、 partCount=0 、 checked=false ）。
+    // 8、从之前选中的节点树中（ this.checkedItems ）中解析出每个节点的状态（目前只有展开/收起状态 expanded ）。
+    // 9、从 this.localDatasource 中剥离出选中的节点及其父节点，并与8步中解析出的状态进行合并，得到新的 this.checkedItems 。
+    // 10、抛出 check 事件，带上一维的选中的节点的 value 值数组。
     remove (item) {
-      if (!this.selectable) {
+      if (!this.checkable) {
         return
       }
 
@@ -525,25 +527,25 @@ export default {
           allCount,
           partCount,
           disabledCount,
-          disabledSelectedCount
+          disabledCheckedCount
         ] = this.manageNodeStatus(item.children, false)
         this.setItemCount(
           item,
           allCount,
           partCount,
           disabledCount,
-          disabledSelectedCount
+          disabledCheckedCount
         )
-        this.$set(item, 'partialSelected', this.isPartialSelected(item))
+        this.$set(item, 'partialChecked', this.isPartialChecked(item))
       } else {
-        this.setLeafSelected(item, false)
+        this.setLeafChecked(item, false)
       }
 
-      this.$set(item, 'visuallySelected', false)
+      this.$set(item, 'visuallyChecked', false)
 
       this.markParentsChain(parents)
 
-      this.emitSelect()
+      this.emitCheck()
     },
     checkOwnProperty (obj, property) {
       return Object.prototype.hasOwnProperty.call(obj, property)
