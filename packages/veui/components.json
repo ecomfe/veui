@@ -60,6 +60,10 @@
     "path": "DatePicker.vue"
   },
   {
+    "name": "Drawer",
+    "path": "Drawer.vue"
+  },
+  {
     "name": "Dialog",
     "path": "Dialog.vue"
   },

@@ -128,7 +128,8 @@ export default {
     empty () {
       // compositionValue 不会是数字 0
       return (
-        !this.compositionValue && (this.value == null || this.value === '')
+        !this.compositionValue &&
+        (this.localValue == null || this.localValue === '')
       )
     },
     realSelectOnFocus () {

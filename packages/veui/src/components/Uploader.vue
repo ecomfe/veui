@@ -90,7 +90,7 @@
       >
         <slot
           name="file"
-          :file="getScopeValue(index, file)"
+          v-bind="getScopeValue(index, file)"
         >
           <template v-if="type === 'file'">
             <slot
@@ -225,7 +225,7 @@
       <template v-else-if="file.status === 'uploading'">
         <slot
           name="uploading"
-          :file="getScopeValue(index, file)"
+          v-bind="getScopeValue(index, file)"
         >
           <slot
             name="file-before"
@@ -268,7 +268,7 @@
       <template v-else-if="file.status === 'failure' && type === 'image'">
         <slot
           name="failure"
-          :file="getScopeValue(index, file)"
+          v-bind="getScopeValue(index, file)"
         >
           <slot
             name="file-before"

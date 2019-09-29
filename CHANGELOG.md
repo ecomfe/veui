@@ -1,3 +1,30 @@
+## 1.0.0-alpha.31
+
+### ⚠️ 非兼容性变更
+
+* [^] 修正 `Uploader` 组件中 `file`/`uploading`/`failure` 三个作用域插槽参数。由 `{ file: { name, src, status, index } }` 修正为 `{ name, src, status, index }`。
+
+### 💡 主要变更
+
+* [+] `drag` 指令现在仅在鼠标左键按下时才触发拖动。
+* [+] `drag` 指令的 `dragend` 回调参数中新增 `cancel` 方法，可用来撤消最近一次拖动（恢复到 `dragstart` 之前的位置）。
+
+## 1.0.0-alpha.30
+
+### 💡 主要变更
+
+* [+] `ButtonGroup` 的点击事件增加最后一个参数为原生事件对象。
+* [+] 增加 `Autocomplete` 组件。
+* [+] 增加 `Drawer` 组件（缺样式）。
+* [+] 增加 `Tag` 组件（缺样式）。
+
+### 🐞 问题修复
+
+* [^] `Dropdown` 组件现在可以正确支持不同尺寸。
+* [^] 修复 `Input` 组件占位符有时没有正确清除的问题。
+* [^] 修复 `NumberInput` 有时无法正确输入的问题。
+* [^] 修复 `Searchbox` 组件在 `readonly` 状态下会触发提示的问题。
+
 ## 1.0.0-alpha.29
 
 ### 🐞 问题修复

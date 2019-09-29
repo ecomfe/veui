@@ -13,7 +13,7 @@
       class="veui-overlay-box"
       :class="realOverlayClass"
       :ui="realUi"
-      :style="{zIndex}"
+      :style="{ zIndex }"
     >
       <slot/>
     </div>
@@ -79,7 +79,10 @@ export default {
       return this.zIndex !== null && this.open
     },
     realOverlayClass () {
-      return mergeClasses(this.overlayClass, config.get('overlay.overlayClass'))
+      return mergeClasses(
+        this.overlayClass,
+        config.get('overlay.overlayClass')
+      )
     }
   },
   watch: {
