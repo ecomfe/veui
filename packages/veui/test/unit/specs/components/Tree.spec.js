@@ -175,7 +175,7 @@ describe('components/Tree', () => {
     wrapper.destroy()
   })
 
-  it('nodes can only be toggled by clicking toggle buttons when `item-click` was set `none`', async () => {
+  it("nodes can only be toggled by clicking toggle buttons when `item-click` was set to 'none'", async () => {
     let wrapper = mount(Tree, {
       propsData: {
         itemClick: 'none',
@@ -203,10 +203,9 @@ describe('components/Tree', () => {
     wrapper.destroy()
   })
 
-  it('nodes can be toggled by clicking any part of them when `item-click` was set', async () => {
+  it('nodes can be toggled by clicking any part of them by default', async () => {
     let wrapper = mount(Tree, {
       propsData: {
-        itemClick: 'toggle',
         datasource
       },
       sync: false
@@ -454,11 +453,11 @@ describe('components/Tree', () => {
       }
     )
 
-    let checkboxs = wrapper.findAll(Checkbox)
-    expect(checkboxs.at(0).props('indeterminate')).to.equal(true)
-    expect(checkboxs.at(1).props('indeterminate')).to.equal(true)
-    expect(checkboxs.at(2).props('checked')).to.equal(false)
-    expect(checkboxs.at(3).props('checked')).to.equal(true)
+    let checkboxes = wrapper.findAll(Checkbox)
+    expect(checkboxes.at(0).props('indeterminate')).to.equal(true)
+    expect(checkboxes.at(1).props('indeterminate')).to.equal(true)
+    expect(checkboxes.at(2).props('checked')).to.equal(false)
+    expect(checkboxes.at(3).props('checked')).to.equal(true)
 
     // select leaf
     select(2)
@@ -466,17 +465,17 @@ describe('components/Tree', () => {
 
     let data = wrapper.vm.$data
     expect(data.checked).to.deep.equal(['drip-brewed', 'filtered'])
-    expect(checkboxs.at(2).props('checked')).to.equal(true)
+    expect(checkboxes.at(2).props('checked')).to.equal(true)
 
     // remove all leaves
     select(2)
     select(3)
     await wrapper.vm.$nextTick()
     expect(data.checked).to.deep.equal([])
-    expect(checkboxs.at(0).props('indeterminate')).to.equal(false)
-    expect(checkboxs.at(1).props('indeterminate')).to.equal(false)
-    expect(checkboxs.at(2).props('checked')).to.equal(false)
-    expect(checkboxs.at(3).props('checked')).to.equal(false)
+    expect(checkboxes.at(0).props('indeterminate')).to.equal(false)
+    expect(checkboxes.at(1).props('indeterminate')).to.equal(false)
+    expect(checkboxes.at(2).props('checked')).to.equal(false)
+    expect(checkboxes.at(3).props('checked')).to.equal(false)
 
     // select middle node 'brewed'
     select(1)
@@ -487,12 +486,12 @@ describe('components/Tree', () => {
       'pour-over',
       'immersion-brewed'
     ])
-    expect(checkboxs.at(0).props('indeterminate')).to.equal(true)
-    expect(checkboxs.at(1).props('checked')).to.equal(true)
-    expect(checkboxs.at(2).props('checked')).to.equal(true)
-    expect(checkboxs.at(3).props('checked')).to.equal(true)
-    expect(checkboxs.at(4).props('checked')).to.equal(true)
-    expect(checkboxs.at(5).props('checked')).to.equal(true)
+    expect(checkboxes.at(0).props('indeterminate')).to.equal(true)
+    expect(checkboxes.at(1).props('checked')).to.equal(true)
+    expect(checkboxes.at(2).props('checked')).to.equal(true)
+    expect(checkboxes.at(3).props('checked')).to.equal(true)
+    expect(checkboxes.at(4).props('checked')).to.equal(true)
+    expect(checkboxes.at(5).props('checked')).to.equal(true)
 
     // select leat 'turkish' under another middle node 'boiled'
     select(10)
@@ -506,7 +505,7 @@ describe('components/Tree', () => {
     ])
 
     // remove middle node 'brewed'
-    checkboxs
+    checkboxes
       .at(1)
       .find('input[type="checkbox"]')
       .trigger('change')
@@ -516,7 +515,7 @@ describe('components/Tree', () => {
     wrapper.destroy()
 
     function select (index) {
-      checkboxs
+      checkboxes
         .at(index)
         .find('input[type="checkbox"]')
         .trigger('change')
@@ -583,7 +582,7 @@ describe('components/Tree', () => {
       }
     )
 
-    let checkboxs = wrapper.findAll(Checkbox)
+    let checkboxes = wrapper.findAll(Checkbox)
 
     // select 'drip-brewed'
     select(2)
@@ -598,25 +597,25 @@ describe('components/Tree', () => {
       'immersion-brewed',
       'cold-brew'
     ])
-    expect(checkboxs.at(0).props('indeterminate')).to.equal(true)
-    expect(checkboxs.at(0).props('checked')).to.equal(false)
-    expect(checkboxs.at(1).props('indeterminate')).to.equal(true)
-    expect(checkboxs.at(1).props('checked')).to.equal(true)
+    expect(checkboxes.at(0).props('indeterminate')).to.equal(true)
+    expect(checkboxes.at(0).props('checked')).to.equal(false)
+    expect(checkboxes.at(1).props('indeterminate')).to.equal(true)
+    expect(checkboxes.at(1).props('checked')).to.equal(true)
 
     // remove children of brewed
     select(1)
     await wrapper.vm.$nextTick()
 
     expect(data.checked).to.deep.equal(['filtered', 'cold-brew'])
-    expect(checkboxs.at(0).props('indeterminate')).to.equal(true)
-    expect(checkboxs.at(0).props('checked')).to.equal(false)
-    expect(checkboxs.at(1).props('indeterminate')).to.equal(true)
-    expect(checkboxs.at(1).props('checked')).to.equal(false)
+    expect(checkboxes.at(0).props('indeterminate')).to.equal(true)
+    expect(checkboxes.at(0).props('checked')).to.equal(false)
+    expect(checkboxes.at(1).props('indeterminate')).to.equal(true)
+    expect(checkboxes.at(1).props('checked')).to.equal(false)
 
     wrapper.destroy()
 
     function select (index) {
-      checkboxs
+      checkboxes
         .at(index)
         .find('input[type="checkbox"]')
         .trigger('change')
