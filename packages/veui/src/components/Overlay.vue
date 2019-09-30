@@ -115,6 +115,11 @@ export default {
   },
   mounted () {
     this.overlayBox = this.$refs.box
+
+    // create a connection to the portal entrance
+    // v-outside will honor this connection, so we'd
+    // better document this somewhere properly (TODO)
+    this.overlayBox.__portal__ = this.$el
     document.body.appendChild(this.overlayBox)
 
     if (this.realOpen) {
@@ -141,6 +146,7 @@ export default {
     this.destroyFocus()
 
     this.$el.appendChild(this.overlayBox)
+    delete this.overlayBox.__portal__
     this.overlayBox = null
   },
   methods: {
