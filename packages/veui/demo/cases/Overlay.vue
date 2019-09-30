@@ -7,7 +7,7 @@
       slot="target"
       ref="clickOpen"
       ui="primary"
-      @click="overlayVisible=!overlayVisible"
+      @click="overlayVisible = !overlayVisible"
     >
       <template v-if="overlayVisible">
         隐藏overlay
@@ -21,66 +21,10 @@
       overlay-class="demo-overlay-box"
       target="clickOpen"
       :open="overlayVisible"
-      :options="{attachment: 'top right', targetAttachment: 'top left'}"
+      position="left-start"
     >
       点击按钮展开的
     </veui-overlay>
-  </div>
-
-  <div class="row">
-    <pre>
-      {
-        attachment: 'top right',
-        targetAttachment: 'top left',
-        constraints: [
-          {
-            to: 'scrollParent',
-            pin: true
-          }
-        ]
-      }
-      </pre>
-    <div class="preview">
-      <div class="scroll-content">
-        <veui-overlay
-          overlay-class="demo-overlay-box"
-          target="overlay1"
-          :open="true"
-          :options="{attachment: 'top right', targetAttachment: 'top left'}"
-        >
-          提示信息
-        </veui-overlay>
-        <div
-          ref="overlay1"
-          class="target"
-        />
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <pre>
-      {
-        attachment: 'bottom left',
-        targetAttachment: 'top left'
-      }
-      </pre>
-    <div class="preview">
-      <div class="scroll-content">
-        <div
-          ref="overlay2"
-          class="target"
-        />
-        <veui-overlay
-          overlay-class="demo-overlay-box"
-          target="overlay2"
-          :open="true"
-          :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
-        >
-          提示信息
-        </veui-overlay>
-      </div>
-    </div>
   </div>
 
   <div class="row">
@@ -119,7 +63,7 @@
       overlay-class="demo-overlay-box"
       :target="vforTargetRef"
       :open="vforOpen"
-      :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
+      position="top-start"
     >
       年龄是{{ vforCurrentItem.age }}
     </veui-overlay>
@@ -133,17 +77,15 @@
       overlay-class="demo-overlay-box"
       :target="vnodeTarget"
       :open="true"
-      :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
+      position="top-start"
     >
       好的，一切正常。
     </veui-overlay>
     <veui-overlay
-      overlay-class="demo-overlay-box"
-      :target="null"
+      overlay-class="demo-overlay-box global"
       :open="true"
-      :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
     >
-      这个没有飞到左上角去，就说明有bug了。
+      全局定位在右下角
     </veui-overlay>
 
     <veui-button ref="vnodeComponentTest">
@@ -152,22 +94,64 @@
     <veui-overlay
       overlay-class="demo-overlay-box"
       :target="vnodeComponentTarget"
-      :open="true"
-      :options="{attachment: 'bottom left', targetAttachment: 'top left'}"
+      open
+      position="top-start"
     >
       组件vnode的overlay
+    </veui-overlay>
+  </div>
+
+  <div class="row">
+    <a
+      ref="multilevel"
+      @click="parentOpen = !parentOpen"
+    >
+      多层浮层嵌套
+    </a>
+    <veui-overlay
+      overlay-class="demo-overlay-box"
+      :open="parentOpen"
+      target="multilevel"
+      position="auto"
+    >
+      <div
+        v-outside:multilevel="
+          () => {
+            parentOpen = false;
+          }
+        "
+        class="multilevel-parent"
+      >
+        <p>外层浮层</p>
+        <div>
+          <veui-select>
+            <veui-option value="a">
+              A
+            </veui-option>
+            <veui-option value="b">
+              B
+            </veui-option>
+          </veui-select>
+        </div>
+      </div>
     </veui-overlay>
   </div>
 </article>
 </template>
 <script>
-import { Overlay, Button } from 'veui'
+import { Overlay, Button, Select, Option } from 'veui'
+import outside from 'veui/directives/outside'
 
 export default {
   name: 'overlay-demo',
+  directives: {
+    outside
+  },
   components: {
     'veui-overlay': Overlay,
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-select': Select,
+    'veui-option': Option
   },
   data () {
     const items = [
@@ -199,7 +183,9 @@ export default {
       vforCurrentItem: items[0],
       vforTargetRef: 'overlay5-0',
       vnodeTarget: null,
-      vnodeComponentTarget: null
+      vnodeComponentTarget: null,
+
+      parentOpen: true
     }
   },
   mounted () {
@@ -228,9 +214,15 @@ export default {
 @import "~less-plugin-est/src/all.less";
 
 .demo-overlay-box {
-  box-shadow: 1px 1px 6px fadeOut(#000, 80%);
+  box-shadow: 1px 1px 6px fadeout(#000, 80%);
   padding: 10px 20px;
   background: #fff;
+
+  &.global {
+    position: absolute;
+    right: 100px;
+    bottom: 100px;
+  }
 }
 
 .demo-overlay {
