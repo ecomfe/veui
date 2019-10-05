@@ -388,7 +388,7 @@ describe('directives/outside', () => {
     )
 
     let { vm } = wrapper
-    vm.$refs.select.$refs.button.$el.dispatchEvent(new MouseEvent('click'))
+    vm.$refs.select.$refs.input.$el.dispatchEvent(new MouseEvent('click'))
 
     await wait(200)
     vm.$refs.select.$refs.box
