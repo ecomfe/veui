@@ -108,13 +108,13 @@ export default {
               label: '男组',
               options: [
                 {
-                  label: '男组男',
+                  label: 'male',
                   value: 'male'
                 }
               ]
             },
             {
-              label: '女',
+              label: 'female',
               value: 'female'
             }
           ]

@@ -54,22 +54,29 @@
       >
         <template
           slot="option-label"
-          slot-scope="{ value, range }"
+          slot-scope="props"
         >
-          <template v-if="range && range.end">
-            <span
-              v-if="range.start"
-              class="veui-autocomplete-suggestion-prefix"
-            >{{ value.slice(0, range.start) }}</span>
-            <mark class="veui-autocomplete-suggestion-matched">{{
-              value.slice(range.start, range.end)
-            }}</mark>
-            <span
-              v-if="range.end < value.length"
-              class="veui-autocomplete-suggestion-suffix"
-            >{{ value.slice(range.end, value.length) }}</span>
+          <template v-if="!!suggestionsProps.keyword">
+            <template v-for="({ parts }, idx) in props.matches">
+              <template v-for="({ text, matched }, index) in parts">
+                <mark
+                  v-if="matched"
+                  :key="`${idx}-${index}`"
+                  class="veui-autocomplete-suggestion-matched"
+                >{{ text }}</mark>
+                <span
+                  v-else
+                  :key="`${idx}-${index}`"
+                >{{ text }}</span>
+              </template>
+              <span
+                v-if="idx < props.matches.length - 1"
+                :key="idx"
+                class="veui-autocomplete-suggestion-separator"
+              >&gt;</span>
+            </template>
           </template>
-          <span v-else>{{ value }}</span>
+          <span v-else>{{ props.label }}</span>
         </template>
       </veui-option-group>
     </slot>
