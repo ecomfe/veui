@@ -26,7 +26,8 @@
       ref="box"
     >
       <slot
-        :datasource="filteredDatasource"
+        :datasource="keyword ? filteredDatasource : realDatasource"
+        :keyword="keyword"
         :update-value="suggestionUpdateValue"
         :active-descendant="activeDescendant"
         :value="realValue"
@@ -41,58 +42,42 @@
 <script>
 import dropdown from '../../mixins/dropdown'
 import { createKeySelect } from '../../mixins/key-select'
+import { searchable } from '../../mixins/searchable'
 import Overlay from '../Overlay'
 import { findComponent } from '../../utils/context'
-import { isFunction, cloneDeep, get, uniqueId } from 'lodash'
+import { isFunction, cloneDeep, uniqueId } from 'lodash'
 
-function filterSuggestions (suggestions, value, filter, childrenKey) {
-  let groupMatch = false
-  suggestions.forEach(item => {
-    let match = item[childrenKey]
-      ? filterSuggestions(item[childrenKey], value, filter, childrenKey)
-      : filter(item, value)
-    item.range = match && typeof match === 'object' ? match : null
-    item.hidden = !match
-    groupMatch = !!match
-  })
-  return groupMatch
-}
-
-const genFilter = valueKey => (item, value) => {
-  if (!value) {
-    return true
-  }
-  let indexOf = get(item[valueKey], 'indexOf')
-  const index =
-    typeof indexOf === 'function' ? indexOf.call(item[valueKey], value) : -1
-  return index >= 0
-    ? {
-      start: index,
-      end: index + value.length
-    }
-    : false
-}
-
-function findSuggestions (suggestions, value, matcher, childrenKey) {
+function findSuggestions (suggestions, value, finder, childrenKey) {
   let target = false
   suggestions.some(item => {
     target = item[childrenKey]
-      ? findSuggestions(item[childrenKey], value, matcher, childrenKey)
-      : matcher(item, value)
+      ? findSuggestions(item[childrenKey], value, finder, childrenKey)
+      : finder(item, value)
     return !!target
   })
   return target
 }
 
-const genMatcher = valueKey => (item, value) =>
-  item[valueKey] === value ? item : false
+function createFinder (valueKey) {
+  return (item, value) => (item[valueKey] === value ? item : false)
+}
 
 export default {
   name: 'veui-autocompletebase',
   components: {
     'veui-overlay': Overlay
   },
-  mixins: [dropdown, createKeySelect({ focus: false })],
+  mixins: [
+    dropdown,
+    createKeySelect({ focus: false }),
+    searchable({
+      datasourceKey: 'realDatasource',
+      childrenKey: vm => vm.childrenKey,
+      valueKey: vm => vm.valueKey,
+      searchKey: 'label',
+      resultKey: 'filteredDatasource'
+    })
+  ],
   props: {
     datasource: {
       type: Array,
@@ -111,13 +96,13 @@ export default {
       type: String,
       default: 'children'
     },
-    filter: Function,
-    matcher: Function,
+    match: Function,
     strict: Boolean
   },
   data () {
     return {
       localValue: '',
+      keyword: '',
       activeDescendant: '',
       optionIdPrefix: uniqueId('veui-autocomplete-option-')
     }
@@ -134,10 +119,13 @@ export default {
           if (typeof item === 'string') {
             item = { [valueKey]: item }
           }
+          if (!item.label) {
+            item.label = item[valueKey]
+          }
           if (item[childrenKey]) {
             item[childrenKey] = walk(item[childrenKey])
           } else {
-            item.optionId = `${this.optionIdPrefix}-${item[this.valueKey]}`
+            item.optionId = `${this.optionIdPrefix}-${item[valueKey]}`
           }
           result.push(item)
           return result
@@ -146,42 +134,31 @@ export default {
       return walk(this.clonedDatasource)
     },
     realExpanded () {
-      return (
-        this.expanded && this.filteredDatasource.some(({ hidden }) => !hidden)
-      )
-    },
-    filteredDatasource () {
-      // 若正在关闭，不要计算过滤了，因为会导致页面闪动
-      if (!this.expanded) {
-        return this.realDatasource
-      }
-      // 计算过滤
-      filterSuggestions(
-        this.realDatasource,
-        this.realValue,
-        this.realFilter,
-        this.childrenKey
-      )
-      return this.realDatasource
+      let datasource = this.realValue
+        ? this.filteredDatasource
+        : this.realDatasource
+      return this.expanded && !!datasource.length
     },
     realValue () {
       return this.value === undefined ? this.localValue : this.value
     },
-    realMatcher () {
-      return this.matcher || genMatcher(this.valueKey)
-    },
-    realFilter () {
-      return this.filter || genFilter(this.valueKey)
+    realFinder () {
+      return createFinder(this.valueKey)
     }
   },
   methods: {
-    inputUpdateValue (val) {
+    inputUpdateValue (val, updateKeyword = true) {
       this.$forceUpdate()
       this.localValue = val
       this.$emit('input', val)
+      if (updateKeyword) {
+        this.$nextTick(() => {
+          this.keyword = this.realValue
+        })
+      }
     },
     suggestionUpdateValue (val) {
-      this.inputUpdateValue(val)
+      this.inputUpdateValue(val, false)
       this.$emit('suggest', val)
       this.closeSuggestions()
     },
@@ -239,6 +216,7 @@ export default {
     },
     openSuggestions () {
       if (!this.expanded) {
+        this.keyword = this.realValue
         this.expanded = true
       }
     },
@@ -246,7 +224,7 @@ export default {
       let match = findSuggestions(
         this.realDatasource,
         this.realValue,
-        this.realMatcher,
+        this.realFinder,
         this.childrenKey
       )
       if (!match) {
