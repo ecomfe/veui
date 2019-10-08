@@ -48,7 +48,8 @@
     v-if="indicator === 'number'"
     class="veui-carousel-indicator-numbers"
   >
-    {{ localIndex + 1 }}<span class="veui-carousel-indicator-numbers-separator"/>{{ count }}
+    {{ localIndex + 1
+    }}<span class="veui-carousel-indicator-numbers-separator"/>{{ count }}
   </div>
   <nav
     v-else-if="indicator !== 'none'"
@@ -60,6 +61,7 @@
       v-for="(item, i) in datasource"
       :key="i"
       type="button"
+      tabindex="-1"
       :class="{
         'veui-carousel-indicator-item': true,
         'veui-carousel-indicator-item-current': localIndex === i
@@ -71,8 +73,8 @@
       {{ item.label || t('pageIndex', { index: i + 1 }) }}
     </button>
   </nav>
-  <button
-    type="button"
+  <veui-button
+    :ui="uiParts.control"
     class="veui-carousel-control veui-carousel-control-prev"
     :disabled="!wrap && localIndex === 0"
     @click="step(-1)"
@@ -81,9 +83,9 @@
       :name="icons.prev"
       :label="t('prev')"
     />
-  </button>
-  <button
-    type="button"
+  </veui-button>
+  <veui-button
+    :ui="uiParts.control"
     class="veui-carousel-control veui-carousel-control-next"
     :disabled="!wrap && localIndex === count - 1"
     @click="step(1)"
@@ -92,7 +94,7 @@
       :name="icons.next"
       :label="t('next')"
     />
-  </button>
+  </veui-button>
   <div
     class="veui-sr-only"
     aria-live="polite"
@@ -105,6 +107,7 @@
 
 <script>
 import { includes } from 'lodash'
+import Button from './Button'
 import Icon from './Icon'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
@@ -112,6 +115,7 @@ import i18n from '../mixins/i18n'
 export default {
   name: 'veui-carousel',
   components: {
+    'veui-button': Button,
     'veui-icon': Icon
   },
   mixins: [ui, i18n],
