@@ -2,7 +2,8 @@
 <article>
   <h1><code>&lt;veui-carousel&gt;</code></h1>
   <p>
-    <code>index</code>: <veui-number-input
+    <code>index</code>:
+    <veui-number-input
       v-model="index"
       ui="tiny"
       :min="0"
@@ -10,7 +11,8 @@
     />
   </p>
   <p>
-    <code>interval</code>: <veui-number-input
+    <code>interval</code>:
+    <veui-number-input
       v-model="interval"
       ui="tiny"
       :min="0"
@@ -41,12 +43,6 @@
     <veui-radio-group
       v-model="trigger"
       :items="triggers"
-    />
-  </p>
-  <p>
-    <veui-radio-group
-      v-model="size"
-      :items="sizes"
     />
   </p>
   <p>
@@ -95,12 +91,6 @@ export default {
         { value: 'hover', label: 'hover' },
         { value: 'click', label: 'click' }
       ],
-      size: '',
-      sizes: [
-        { value: 'small', label: 'small' },
-        { value: '', label: 'normal' },
-        { value: 'large', label: 'large' }
-      ],
       indicator: 'radio',
       indicators: [
         { value: 'radio', label: 'radio' },
@@ -132,10 +122,7 @@ export default {
   },
   computed: {
     ui () {
-      return [
-        ...(this.loose ? ['loose'] : []),
-        ...(this.size ? [this.size] : [])
-      ].join(' ')
+      return [...(this.loose ? ['loose'] : [])].join(' ')
     }
   }
 }
