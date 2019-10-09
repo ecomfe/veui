@@ -6,25 +6,14 @@
   :aria-valuemin="min"
   :aria-valuenow="realValue"
   :aria-valuetext="desc ? valueText : null"
+  :aria-describedby="descId"
   :class="klass"
   :ui="realUi"
 >
   <div
-    v-if="desc"
-    class="veui-progress-desc"
-  >
-    <slot v-bind="{ percent, value: realValue, status }">
-      <veui-icon
-        v-if="localStatus"
-        class="veui-progress-status-icon"
-        :name="icons[type === 'bar' ? `${localStatus}Bar` : localStatus]"
-      />
-      <template v-else>{{ valueText }}</template>
-    </slot>
-  </div>
-  <div
     v-if="type === 'bar'"
     class="veui-progress-rail"
+    aria-hidden="true"
   >
     <div
       class="veui-progress-meter"
@@ -36,6 +25,7 @@
   <svg
     v-else-if="type === 'circular'"
     class="veui-progress-circle"
+    aria-hidden="true"
     :width="width"
     :height="width"
     :viewBox="`0 0 ${width} ${width}`"
@@ -60,6 +50,24 @@
       :stroke-linecap="strokeLinecap"
     />
   </svg>
+  <div
+    v-if="desc"
+    :id="descId"
+    class="veui-progress-desc"
+  >
+    <slot v-bind="{ percent, value: realValue, status }">
+      <veui-icon
+        v-if="localStatus"
+        class="veui-progress-status-icon"
+        :name="icons[type === 'bar' ? `${localStatus}Bar` : localStatus]"
+      />
+      <template v-else>{{ valueText }}</template>
+      <slot
+        name="append"
+        v-bind="{ percent, value: realValue, status }"
+      />
+    </slot>
+  </div>
 </div>
 </template>
 
@@ -68,7 +76,7 @@ import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import Icon from './Icon'
 import warn from '../utils/warn'
-import { clamp } from 'lodash'
+import { uniqueId, clamp } from 'lodash'
 
 const RADIUS_DEFAULT = 60
 const STROKE_DEFAULT = 2
@@ -154,7 +162,8 @@ export default {
   },
   data () {
     return {
-      localStatus: this.status || this.state
+      localStatus: this.status || this.state,
+      descId: uniqueId('veui-progress-')
     }
   },
   computed: {
