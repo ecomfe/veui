@@ -353,17 +353,13 @@ describe('components/Select/Select', () => {
     await vm.$nextTick()
     expect(overlay.isVisible()).to.equal(true)
     let items = wrapper.findAll(OPTION_ITEM)
-    expect(items.at(0).isVisible()).to.equal(false)
-    expect(items.at(1).isVisible()).to.equal(false)
-    expect(items.at(2).isVisible()).to.equal(true)
-    expect(items.at(3).isVisible()).to.equal(true)
-    expect(items.at(4).isVisible()).to.equal(true)
+    expect(items.length === 3).to.equal(true)
 
     input.element.value = '选项2-1'
     input.trigger('input')
     await vm.$nextTick()
-    expect(items.at(3).isVisible()).to.equal(false)
-    expect(items.at(4).isVisible()).to.equal(false)
+    items = wrapper.findAll(OPTION_ITEM)
+    expect(items.length === 1).to.equal(true)
 
     input.element.value = 'xxsddd'
     input.trigger('input')

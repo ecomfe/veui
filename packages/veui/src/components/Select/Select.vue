@@ -10,11 +10,11 @@ import config from '../../managers/config'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import dropdown from '../../mixins/dropdown'
-import suggestion from '../../mixins/suggestion'
+import searchable from '../../mixins/searchable'
 import keySelect from '../../mixins/key-select'
 import i18n from '../../mixins/i18n'
 import { find } from '../../utils/datasource'
-import { uniqueId, isEqual } from 'lodash'
+import { uniqueId, isEqual, omit } from 'lodash'
 import '../../common/uiTypes'
 
 config.defaults(
@@ -27,7 +27,19 @@ config.defaults(
 export default {
   name: 'veui-select',
   uiTypes: ['select'],
-  mixins: [ui, input, dropdown, keySelect, suggestion, i18n],
+  mixins: [
+    ui,
+    input,
+    dropdown,
+    keySelect,
+    searchable({
+      datasourceKey: 'realOptions',
+      childrenKey: 'options',
+      keywordKey: 'inputValue',
+      resultKey: 'filteredOptions'
+    }),
+    i18n
+  ],
   model: {
     event: 'change'
   },
@@ -116,20 +128,12 @@ export default {
       return null
     },
     realOptions () {
-      return this.options || this.inlineOptions
+      return this.options
+        ? this.options.map(normalizeItem)
+        : this.inlineOptions
     },
     isFiltered () {
       return this.searchable && this.inputValue
-    },
-    filteredOptions () {
-      if (this.isFiltered) {
-        let matched = this.filterFlattedDatasource(this.inputValue)
-        return matched ? this.flattedDatasource : []
-      }
-      return this.realOptions || []
-    },
-    filteredOptionsEmpty () {
-      return !this.filteredOptions.some(({ hidden }) => !hidden)
     },
     isEmpty () {
       return (
@@ -315,19 +319,26 @@ export default {
     }
   },
   render () {
-    let optionLabel = option => {
-      let { groups } = option
-
-      if (groups) {
-        let res = groups.map((group, index) => {
-          if (group.isSeparator) {
-            return <mark>{group.value}</mark>
+    let optionLabel = null
+    if (this.isFiltered) {
+      optionLabel = ({ matches }) => {
+        if (!matches) {
+          return null
+        }
+        return matches.map(({ parts }, idx) => {
+          let item = parts.map(({ text, matched }, index) => {
+            return matched ? (
+              <mark class="veui-select-option-matched">{text}</mark>
+            ) : (
+              <span>{text}</span>
+            )
+          })
+          if (idx < matches.length - 1) {
+            item.push(<span class="veui-select-option-separator"> &gt; </span>)
           }
-          return <span>{group.value}</span>
+          return item
         })
-        return <span>{res}</span>
       }
-      return null
     }
 
     let option = this.multiple
@@ -339,7 +350,11 @@ export default {
             checked={option.selected}
             onClick={e => e.preventDefault()}
           >
-            {option.label}
+            {this.$scopedSlots['option-label']
+              ? this.$scopedSlots['option-label'](option)
+              : this.isFiltered
+                ? optionLabel(option)
+                : option.label}
           </Checkbox>
         )
       }
@@ -512,8 +527,8 @@ export default {
               {this.$slots.before}
               {!this.options ? renderGroup(null, this.$slots.default) : null}
               {renderGroup(
-                this.filteredOptions,
-                this.searchable && this.filteredOptionsEmpty ? (
+                this.isFiltered ? this.filteredOptions : this.realOptions,
+                this.isFiltered && !this.filteredOptions.length ? (
                   <div class="veui-select-options-no-data">
                     {this.$scopedSlots['no-data']
                       ? this.$scopedSlots['no-data']({
@@ -538,5 +553,14 @@ function stopPropagation (e) {
 
 function findOptionByValue (options, value) {
   return find(options, item => item.value === value, 'options')
+}
+
+function normalizeItem (item) {
+  let options = (item.options || []).map(normalizeItem)
+  let isGroup = options.length > 0
+  return {
+    ...(isGroup ? omit(item, 'value') : item),
+    ...(isGroup ? { options } : {})
+  }
 }
 </script>
