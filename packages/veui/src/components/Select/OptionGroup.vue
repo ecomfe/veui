@@ -318,9 +318,13 @@ const OptionGroup = {
 
 function normalizeItem (item) {
   let options = (item.items || []).map(normalizeItem)
+  let isGroup = options.length > 0
   return {
-    ...pick(item, ['label', 'value', 'position']),
-    ...(options.length > 0 ? { options } : {})
+    ...pick(
+      item,
+      isGroup ? ['label', 'position'] : ['label', 'value', 'position']
+    ),
+    ...(isGroup ? { options } : {})
   }
 }
 
