@@ -1,3 +1,5 @@
+import { omit } from 'lodash'
+
 function match (item, keywordRE, { searchKey }) {
   let offsets = []
   const searchVal = item[searchKey]
@@ -90,7 +92,7 @@ function search (
       if (i[valueKey] && realMatched) {
         result.push({
           matches: path,
-          ...i // for optionGroup
+          ...omit(i, childrenKey) // for flat optionGroup
         })
       }
       if (i[childrenKey]) {
@@ -123,7 +125,7 @@ const call = (val, context, fallback) =>
  * @param {string} options.flags 正则的模式
  * @param {boolean} options.literal 默认把 keyword 中的正则特殊字段当成普通字符匹配，如 \d 就是匹配`\d`
  */
-export function searchable ({
+export default function searchable ({
   datasourceKey = 'datasource',
   keywordKey = 'keyword',
   resultKey = 'filteredDatasource',

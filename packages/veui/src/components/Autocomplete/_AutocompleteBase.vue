@@ -42,7 +42,7 @@
 <script>
 import dropdown from '../../mixins/dropdown'
 import { createKeySelect } from '../../mixins/key-select'
-import { searchable } from '../../mixins/searchable'
+import searchable from '../../mixins/searchable'
 import Overlay from '../Overlay'
 import { findComponent } from '../../utils/context'
 import { isFunction, cloneDeep, uniqueId } from 'lodash'
