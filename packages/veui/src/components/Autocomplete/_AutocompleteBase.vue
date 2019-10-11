@@ -146,19 +146,21 @@ export default {
       return createFinder(this.valueKey)
     }
   },
+  watch: {
+    realValue (val) {
+      if (this.expanded) {
+        this.keyword = val
+      }
+    }
+  },
   methods: {
-    inputUpdateValue (val, updateKeyword = true) {
+    inputUpdateValue (val) {
       this.$forceUpdate()
       this.localValue = val
       this.$emit('input', val)
-      if (updateKeyword) {
-        this.$nextTick(() => {
-          this.keyword = this.realValue
-        })
-      }
     },
     suggestionUpdateValue (val) {
-      this.inputUpdateValue(val, false)
+      this.inputUpdateValue(val)
       this.$emit('suggest', val)
       this.closeSuggestions()
     },
