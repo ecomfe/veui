@@ -20,7 +20,7 @@ function createKeywordRe (keyword, { flags, literal }) {
   if (keyword instanceof RegExp) {
     return keyword
   } else {
-    keyword = literal ? keyword.replace(metaRE, '\\$&') : keyword
+    keyword = literal ? String(keyword).replace(metaRE, '\\$&') : keyword
     return new RegExp(keyword, flags)
   }
 }
