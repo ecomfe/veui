@@ -23,6 +23,7 @@
     :aria-haspopup="inputPopup"
     :aria-owns="inputPopup ? dropdownId : null"
     @focus="handleInputFocus"
+    @input="keyword = $event"
     @keydown="handleSuggestionKeydown"
   >
     <div
@@ -85,7 +86,7 @@
         <veui-option-group
           ref="options"
           :ui="realUi"
-          :options="realSuggestions"
+          :options="keyword ? filteredSuggestions : realSuggestions"
           class="veui-searchbox-option-group"
         >
           <template
@@ -106,19 +107,37 @@
             <slot
               name="suggestion"
               v-bind="option"
-            >
-              {{ option.label }}
-            </slot>
+            />
           </template>
           <template
-            v-if="$scopedSlots['option-label']"
             slot="option-label"
             slot-scope="option"
           >
             <slot
               name="option-label"
               v-bind="option"
-            />
+            >
+              <template v-if="!!keyword">
+                <template v-for="({ parts }, idx) in option.matches">
+                  <template v-for="({ text, matched }, index) in parts">
+                    <mark
+                      v-if="matched"
+                      :key="`${idx}-${index}`"
+                      class="veui-searchbox-suggestion-matched"
+                    >{{ text }}</mark>
+                    <span
+                      v-else
+                      :key="`${idx}-${index}`"
+                    >{{ text }}</span>
+                  </template>
+                  <span
+                    v-if="idx < option.matches.length - 1"
+                    :key="idx"
+                    class="veui-searchbox-suggestion-separator"
+                  >&gt;</span>
+                </template>
+              </template>
+            </slot>
           </template>
         </veui-option-group>
       </slot>
@@ -132,6 +151,7 @@
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
+import searchable from '../mixins/searchable'
 import i18n from '../mixins/i18n'
 import Input from './Input'
 import Icon from './Icon'
@@ -164,7 +184,20 @@ export default {
     'veui-button': Button,
     'veui-option-group': OptionGroup
   },
-  mixins: [ui, input, dropdown, keySelect, focusable, i18n],
+  mixins: [
+    ui,
+    input,
+    dropdown,
+    keySelect,
+    focusable,
+    searchable({
+      datasourceKey: 'realSuggestions',
+      childrenKey: 'options',
+      keywordKey: 'keyword',
+      resultKey: 'filteredSuggestions'
+    }),
+    i18n
+  ],
   props: {
     suggestions: {
       type: Array,
@@ -191,6 +224,7 @@ export default {
   data () {
     return {
       localValue: this.value,
+      keyword: this.value,
       localSuggestions: this.suggestions
     }
   },
@@ -249,6 +283,12 @@ export default {
   watch: {
     value (val) {
       this.localValue = val
+      // 因为 selectSuggestion 中关闭用了 nextTick
+      this.$nextTick(() => {
+        if (this.expanded) {
+          this.keyword = val
+        }
+      })
     },
     localValue (val) {
       this.$emit('input', val)
@@ -360,7 +400,10 @@ export default {
       this.expanded = false
     },
     openSuggestions () {
-      this.expanded = true
+      if (!this.expanded) {
+        this.keyword = this.localValue
+        this.expanded = true
+      }
     }
   }
 }
