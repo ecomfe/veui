@@ -14,6 +14,10 @@
       display: flex;
       align-items: center;
 
+      &-progress {
+        min-height: @dls-slider-track-min-width;
+      }
+
       &-wrapper {
         position: relative;
         flex-grow: 1;
@@ -173,16 +177,16 @@
     }
   }
 
-  .slider-size(@slider-height, @progress-height, @progress-radius, @thumb-size, @mark-size, @dot-size) {
+  .slider-size(@total-height, @track-height, @track-radius, @thumb-size, @mark-size, @dot-size) {
     .veui-slider {
       &-track {
         &-default {
           // Slider 高度靠 default track 撑起来，如果替换了 track slot 就高度自适应了
-          height: @slider-height;
+          height: @total-height;
 
           &-progress {
-            height: @progress-height;
-            border-radius: @progress-radius;
+            height: @track-height;
+            border-radius: @track-radius;
           }
 
           &-mark {
@@ -201,7 +205,7 @@
 
       &-thumb {
         // track/thumb slot 高度变化需要调整 thumb 的位置
-        top: (@slider-height - @thumb-size) / 2;
+        top: (@total-height - @thumb-size) / 2;
 
         &-default {
           .size(@thumb-size);

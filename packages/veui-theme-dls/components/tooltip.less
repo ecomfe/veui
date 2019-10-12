@@ -1,10 +1,10 @@
 @import "../lib.less";
 
 .veui-tooltip {
-  @gap: @dls-tooltip-target-spacing + @dls-tooltip-arrow-height;
   @arrow-size: @dls-tooltip-arrow-width;
   @arrow-side: @arrow-size / sqrt(2);
   @arrow-indent: @dls-tooltip-arrow-spacing;
+  @gap: @dls-tooltip-target-spacing + @arrow-size / 2;
 
   position: relative;
   padding: @dls-tooltip-padding-y @dls-tooltip-padding-x;

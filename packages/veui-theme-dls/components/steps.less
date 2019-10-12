@@ -3,13 +3,13 @@
 .veui-steps {
   @step-height: @dls-steps-marker-size-m;
   @title-font-size: @dls-steps-title-font-size-m;
+  @title-height: dls-line-height(@dls-line-height-m, @title-font-size);
   @desc-font-size: @dls-steps-desc-font-size-m;
   @marker-font-size: @dls-steps-marker-font-size-m;
   @separator-gap-x: @dls-steps-connector-spacing-horizontal;
   @separator-gap-y: @dls-steps-connector-spacing-vertical;
   @separator-width: 1px;
   @border-width: 1px;
-  @icon-width: 1em;
   @min-step-connector-width: 16px;
   @min-safe-connector-width: 8px;
   @reserved-space: 2px;
@@ -39,6 +39,10 @@
       font-size: @marker-font-size;
       border-radius: 50%;
       .veui-transition(background-color, box-shadow, border-color);
+
+      .veui-icon {
+        .dls-icon-size(@dls-steps-marker-icon-size);
+      }
     }
 
     &-content {
@@ -47,8 +51,8 @@
     }
 
     &-label {
-      margin: 0;
-      line-height: @step-height;
+      .margin(dls-sum(@step-height / 2, -@title-height / 2), _, 0);
+      line-height: @dls-line-height-m;
       font-size: @title-font-size;
       color: @dls-steps-title-font-color;
       font-weight: @dls-steps-title-font-weight;
@@ -61,13 +65,13 @@
 
       &::after {
         .make-connector();
-        top: dls-sum(@step-height / 2, -@separator-width / 2);
+        top: dls-sum(@title-height / 2, -@separator-width / 2);
         left: dls-sum(100%, @separator-gap-x);
       }
     }
 
     &-desc {
-      margin: 0;
+      .margin(@dls-steps-title-spacing, _, 0);
       color: @dls-steps-desc-font-color;
       font-size: @desc-font-size;
       max-width: @dls-steps-desc-max-width-horizontal;
@@ -353,7 +357,7 @@
     background-color: @@background-color;
   }
 
-  &[ui~="labelVertical"] {
+  &[ui~="label-vertical"] {
     .veui-steps-step {
       flex-direction: column;
       position: relative;
@@ -366,6 +370,7 @@
       }
 
       &-label {
+        margin-top: @dls-steps-marker-spacing;
         margin-right: 0;
         &::after {
           display: none;
@@ -373,28 +378,24 @@
       }
       &-index,
       &-desc {
-        margin: auto;
+        .margin(_, auto);
       }
 
       &-connector {
         flex-grow: 0;
         .make-fixed-length-connector();
-        margin-top: dls-sum(
-          @step-height / 2,
-          -@reserved-space,
-          -@separator-width / 2
-        );
+        margin-top: dls-sum(@step-height / 2, -@separator-width / 2);
       }
 
       &::after {
         .make-connector();
-        top: dls-sum(@step-height / 2, -@separator-width / 2);
+        top: dls-sum(@step-height / 2, @reserved-space, -@separator-width / 2);
         left: dls-sum(50%, @step-height / 2, @separator-gap-x);
       }
 
       &::before {
         .make-connector();
-        top: dls-sum(@step-height / 2, -@separator-width / 2);
+        top: dls-sum(@step-height / 2, @reserved-space, -@separator-width / 2);
         right: dls-sum(50%, @step-height / 2, @separator-gap-x);
       }
 
@@ -461,6 +462,7 @@
   &[ui~="s"] {
     @step-height: @dls-steps-marker-size-s;
     @title-font-size: @dls-steps-title-font-size-s;
+    @title-height: dls-line-height(@dls-line-height-m, @title-font-size);
     @desc-font-size: @dls-steps-desc-font-size-s;
     @marker-font-size: @dls-steps-marker-font-size-s;
 
@@ -473,11 +475,11 @@
         }
 
         &-label {
-          line-height: @step-height;
+          margin-top: dls-sum(@step-height / 2, -@title-height / 2);
           font-size: @title-font-size;
 
           &::after {
-            top: dls-sum(@step-height / 2, -@separator-width / 2);
+            top: dls-sum(@title-height / 2, -@separator-width / 2);
           }
         }
 
@@ -487,22 +489,26 @@
       }
     }
 
-    &[ui~="labelVertical"] {
+    &[ui~="label-vertical"] {
       .veui-steps-step {
         &-connector {
-          margin-top: dls-sum(
-            @step-height / 2,
-            -@reserved-space,
-            -@separator-width / 2
-          );
+          margin-top: dls-sum(@step-height / 2, -@separator-width / 2);
         }
         &::after {
-          top: dls-sum(@step-height / 2, -@separator-width / 2);
+          top: dls-sum(
+            @step-height / 2,
+            @reserved-space,
+            -@separator-width / 2
+          );
           left: dls-sum(50%, @step-height / 2, @separator-gap-x);
         }
 
         &::before {
-          top: dls-sum(@step-height / 2, -@separator-width / 2);
+          top: dls-sum(
+            @step-height / 2,
+            @reserved-space,
+            -@separator-width / 2
+          );
           right: dls-sum(50%, @step-height / 2, @separator-gap-x);
         }
       }

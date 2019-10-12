@@ -24,7 +24,7 @@
       >
         {{ type }}
       </veui-tag>
-      <veui-tag ui="no-border">no-border</veui-tag>
+      <veui-tag ui="borderless">borderless</veui-tag>
     </div>
   </section>
 
@@ -41,9 +41,9 @@
         {{ team }}
       </veui-tag>
       <veui-tag
-        ui="no-border"
+        ui="borderless"
         closable
-      >no-border</veui-tag>
+      >borderless</veui-tag>
     </div>
   </section>
 
@@ -60,10 +60,10 @@
         {{ type }}
       </veui-tag>
       <veui-tag
-        ui="no-border"
+        ui="borderless"
         :selected.sync="selected"
         selectable
-      >no-border</veui-tag>
+      >borderless</veui-tag>
     </div>
   </section>
 
@@ -81,11 +81,11 @@
         {{ type }}
       </veui-tag>
       <veui-tag
-        ui="no-border"
+        ui="borderless"
         :selected.sync="selected"
         disabled
         selectable
-      >no-border</veui-tag>
+      >borderless</veui-tag>
     </div>
     <div style="margin-top: 20px">
       <veui-tag

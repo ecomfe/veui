@@ -86,10 +86,13 @@
     background-color: @dls-button-background-color-strong;
     color: @dls-button-font-color-strong;
 
-    &:hover,
+    &:hover {
+      background-color: @dls-button-background-color-strong-hover;
+    }
+
     &.focus-visible,
     &[data-focus-visible-added] {
-      background-color: @dls-button-background-color-strong-hover;
+      background-color: @dls-button-background-color-strong-focus;
     }
 
     &:active {
@@ -112,10 +115,13 @@
     background-color: @dls-button-background-color-primary;
     color: @dls-button-font-color-primary;
 
-    &:hover,
+    &:hover {
+      background-color: @dls-button-background-color-primary-hover;
+    }
+
     &.focus-visible,
     &[data-focus-visible-added] {
-      background-color: @dls-button-background-color-primary-hover;
+      background-color: @dls-button-background-color-primary-focus;
     }
 
     &:active {
@@ -138,10 +144,13 @@
     background-color: @dls-button-background-color-translucent;
     color: @dls-button-font-color-translucent;
 
-    &:hover,
+    &:hover {
+      background-color: @dls-button-background-color-translucent-hover;
+    }
+
     &.focus-visible,
     &[data-focus-visible-added] {
-      background-color: @dls-button-background-color-translucent-hover;
+      background-color: @dls-button-background-color-translucent-focus;
     }
 
     &:active {

@@ -26,9 +26,10 @@
   </section>
 
   <section>
-    <h3>受控</h3>
+    <h3>受控 & 小号</h3>
     <veui-checkbox v-model="expanded2">展开</veui-checkbox>
     <veui-collapse
+      ui="s"
       :expanded="expanded2"
       label="点击切换"
       @toggle="toggle2"

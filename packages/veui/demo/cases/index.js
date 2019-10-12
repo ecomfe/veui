@@ -200,7 +200,7 @@ export default [
     component: Pagination
   },
   {
-    path: '/Popover',
+    path: '/popover',
     name: 'Popover',
     component: Popover
   },
