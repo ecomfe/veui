@@ -328,13 +328,13 @@ export default {
         return matches.map(({ parts }, idx) => {
           let item = parts.map(({ text, matched }, index) => {
             return matched ? (
-              <mark class="veui-select-option-matched">{text}</mark>
+              <mark class="veui-option-matched">{text}</mark>
             ) : (
               <span>{text}</span>
             )
           })
           if (idx < matches.length - 1) {
-            item.push(<span class="veui-select-option-separator"> &gt; </span>)
+            item.push(<span class="veui-option-separator"> &gt; </span>)
           }
           return item
         })
