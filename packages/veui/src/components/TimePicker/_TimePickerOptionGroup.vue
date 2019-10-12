@@ -9,14 +9,6 @@ export default {
   props: {
     value: Number
   },
-  computed: {
-    localValue () {
-      if (!this.select) {
-        return null
-      }
-      return this.select.localValue
-    }
-  },
   methods: {
     handleSelect (value) {
       this.$emit('change', value)
