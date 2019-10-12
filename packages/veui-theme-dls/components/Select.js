@@ -33,10 +33,10 @@ config.defaults(
     parts: {
       clear: 'icon',
       checkbox ({ size }) {
-        return CHECKBOX_SIZE_MAP[size]
+        return CHECKBOX_SIZE_MAP[size] || size
       },
       tag ({ size }) {
-        return TAG_SIZE_MAP[size]
+        return TAG_SIZE_MAP[size] || size
       }
     }
   },
