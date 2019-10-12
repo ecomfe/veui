@@ -89,6 +89,7 @@
       v-model="selected3"
       :datasource="datasource3"
       selected-show-mode="flat"
+      ui="s"
     >
       <template slot="candidate-title">
         备选列表（{{ datasource1LeafCount }}）
@@ -150,10 +151,10 @@
         selected-placeholder="搜索已选列表"
       >
         <template slot="candidate-title">
-          备选列表（{{ datasource1LeafCount }}）
+          备选列表（{{ countLeaves(datasource1) }}）
         </template>
         <template slot="selected-title">
-          已选列表（{{ formData.selected6.length }}）
+          已选列表（{{ countLeaves(formData.selected6) }}）
         </template>
       </veui-transfer>
     </veui-field>
@@ -351,10 +352,10 @@ export default {
       selected3: [],
       datasource3: cloneDeep(coffees),
 
-      selected4: ['2'],
+      selected4: [],
       datasource4: cloneDeep(oneDepth),
 
-      selected5: ['378'],
+      selected5: [],
       datasource5: cloneDeep(coffees),
 
       datasource6: cloneDeep(coffees),
@@ -377,11 +378,11 @@ export default {
       ]
     }
   },
-  computed: {
-    datasource1LeafCount () {
+  methods: {
+    countLeaves (tree) {
       let count = 0
-      let walk = datasource => {
-        datasource.forEach(item => {
+      let walk = tree => {
+        tree.forEach(item => {
           if (!item.children) {
             count += 1
           } else {
@@ -389,7 +390,7 @@ export default {
           }
         })
       }
-      walk(this.datasource1)
+      walk(tree)
       return count
     }
   }

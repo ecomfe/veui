@@ -13,7 +13,7 @@
         {{ t('@transfer.available') }}
       </slot>
       <veui-button
-        ui="text"
+        :ui="uiParts.selectAll"
         class="veui-transfer-select-all"
         :disabled="!isSelectable"
         @click="selectAll"

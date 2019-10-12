@@ -213,8 +213,6 @@ export default {
             props: {
               datasource: this.selectedItems,
               showMode: this.selectedShowMode,
-              searchable: this.searchable,
-              filter: this.filter,
               placeholder: this.selectedPlaceholder,
               isSelectable: this.isSelectable,
               icons: this.icons,

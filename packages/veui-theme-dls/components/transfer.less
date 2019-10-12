@@ -3,9 +3,49 @@
 .veui-transfer {
   .clearfix();
   display: flex;
+  font-size: @dls-transfer-font-size-m;
 
   &-selected-panel {
     margin-left: @dls-transfer-panel-spacing;
+  }
+
+  .veui-tree {
+    & &-item-check {
+      padding-left: @dls-transfer-item-content-spacing;
+    }
+
+    & &-item {
+      color: @dls-transfer-item-font-color;
+
+      &::before {
+        background-color: @dls-transfer-item-background-color;
+      }
+
+      &:hover {
+        color: @dls-transfer-item-font-color-hover;
+
+        &::before {
+          background-color: @dls-transfer-item-background-color-hover;
+        }
+      }
+
+      &.focus-visible,
+      &[data-focus-visible-added] {
+        color: @dls-transfer-item-font-color-focus;
+
+        &::before {
+          background-color: @dls-transfer-item-background-color-focus;
+        }
+      }
+
+      &:active {
+        color: @dls-transfer-item-font-color-active;
+
+        &::before {
+          background-color: @dls-transfer-item-background-color-active;
+        }
+      }
+    }
   }
 
   &-select-all,
@@ -14,76 +54,40 @@
   }
 
   &-selected-flat {
-    &-items {
-      .reset-list-style();
-      margin: 0;
-      padding: 0;
-      color: @dls-transfer-item-font-color;
-    }
+    .veui-tree-item-label {
+      .ellipsis();
 
-    &-item {
-      padding: 0 @dls-transfer-padding-x;
-      cursor: pointer;
-      height: @dls-transfer-item-height-m;
-
-      &:hover {
-        background-color: @dls-transfer-item-background-color-hover;
-        .veui-transition(background-color);
-      }
-
-      &:active {
-        background-color: @dls-transfer-item-background-color-active;
-        .veui-transition(background-color);
-      }
-
-      &:disabled {
-        background-color: none;
-      }
-
-      &-label {
-        .size(100%);
-        display: flex;
-        align-items: center;
-      }
-
-      &-hidden {
-        display: none;
+      &:first-child {
+        margin-left: 0;
       }
     }
 
-    &-option-separator {
-      height: @dls-tree-icon-size;
+    &-option-label {
+      white-space: nowrap;
     }
 
-    &-icon-remove {
-      display: none;
-      .dls-icon-size(@dls-tree-icon-size-aux);
-      margin-left: auto;
-    }
-
-    &-item:hover &-icon-remove {
-      display: inline-block;
+    &-separator {
+      margin-top: 2px;
+      flex-shrink: 0;
+      .dls-icon-size(@dls-icon-size-aux);
+      color: @dls-icon-color-aux;
     }
   }
 
   // disabled 之后的样式
+  &-disabled .veui-tree-item {
+    color: @dls-transfer-item-font-color-disabled;
+  }
+
   &-disabled &-selected-flat-item {
     cursor: not-allowed;
   }
 
-  &-disabled &-selected-icon-remove,
-  &-disabled &-selected-flat-item-label {
-    color: @dls-button-font-color-icon-disabled;
-  }
-
-  &.veui-input-invalid + .veui-field-error {
-    .veui-field-gap-error();
-    margin-left: @veui-form-label-width;
+  &-disabled &-selected-flat-separator {
+    color: @dls-icon-color-aux-disabled;
   }
 
   &[ui~="s"] {
-    .veui-transfer-selected-flat-item {
-      height: @dls-transfer-item-height-s;
-    }
+    font-size: @dls-transfer-font-size-s;
   }
 }
