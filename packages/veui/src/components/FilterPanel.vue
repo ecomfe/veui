@@ -86,6 +86,10 @@ export default {
   },
   computed: {
     singleLevel () {
+      if (!this.datasource) {
+        return false
+      }
+
       return !this.datasource.some(
         item => item.children && item.children.length > 0
       )

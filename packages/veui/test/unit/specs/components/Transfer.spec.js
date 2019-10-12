@@ -171,26 +171,22 @@ describe('components/Transfer', () => {
     )
 
     let selectedTree = wrapper.findAll(Tree).at(1)
-    expect(selectedTree.props('datasource')).to.eql([
+    expect(selectedTree.props('datasource')).to.deep.equal([
       {
         value: 'aa',
         label: 'AA',
-        hidden: false,
         children: [
           {
             value: 'aa1',
             label: 'AA1',
-            hidden: false,
             children: [
               {
                 value: 'aa10',
-                label: 'AA10',
-                hidden: false
+                label: 'AA10'
               },
               {
                 value: 'aa11',
-                label: 'AA11',
-                hidden: false
+                label: 'AA11'
               }
             ]
           }
@@ -198,23 +194,19 @@ describe('components/Transfer', () => {
       },
       {
         value: 'bb',
-        label: 'BB',
-        hidden: false
+        label: 'BB'
       },
       {
         value: 'cc',
         label: 'CC',
-        hidden: false,
         children: [
           {
             value: 'cc1',
             label: 'CC1',
-            hidden: false,
             children: [
               {
                 value: 'cc11',
-                label: 'CC11',
-                hidden: false
+                label: 'CC11'
               }
             ]
           }
@@ -246,7 +238,7 @@ describe('components/Transfer', () => {
     )
 
     wrapper.find('.veui-transfer-select-all').trigger('click')
-    expect(wrapper.vm.$data.selected).to.eql([
+    expect(wrapper.vm.$data.selected).to.deep.equal([
       'aa0',
       'aa10',
       'aa11',
@@ -259,7 +251,7 @@ describe('components/Transfer', () => {
     ])
 
     wrapper.find('.veui-transfer-remove-all').trigger('click')
-    expect(wrapper.vm.$data.selected).to.eql([])
+    expect(wrapper.vm.$data.selected).to.deep.equal([])
 
     wrapper.destroy()
   })
@@ -293,7 +285,7 @@ describe('components/Transfer', () => {
       .trigger('change')
     await vm.$nextTick()
 
-    expect(vm.$data.selected).to.eql([
+    expect(vm.$data.selected).to.deep.equal([
       'aa0',
       'aa10',
       'aa11',
@@ -309,7 +301,7 @@ describe('components/Transfer', () => {
       .findAll('.veui-tree-item')
     selectedItems.at(0).trigger('click')
     await vm.$nextTick()
-    expect(vm.$data.selected).to.eql(['bb', 'cc11'])
+    expect(vm.$data.selected).to.deep.equal(['bb', 'cc11'])
 
     wrapper.destroy()
   })
