@@ -69,18 +69,36 @@
 
   &:hover &-switcher {
     background-color: @dls-switch-track-color-off-hover;
+
+    .veui-switch-button {
+      background-color: @dls-switch-thumb-color-off-hover;
+    }
   }
 
   &:active &-switcher {
     background-color: @dls-switch-track-color-off-active;
+
+    .veui-switch-button {
+      background-color: @dls-switch-thumb-color-off-active;
+    }
   }
 
   .focus-visible + &-switcher {
+    background-color: @dls-switch-track-color-off-focus;
     box-shadow: @dls-switch-shadow-off-focus;
+
+    .veui-switch-button {
+      background-color: @dls-switch-thumb-color-off-focus;
+    }
   }
 
-  &-on .focus-visible + &-switcher {
+  .focus-visible:checked + &-switcher {
+    background-color: @dls-switch-track-color-on-focus;
     box-shadow: @dls-switch-shadow-on-focus;
+
+    .veui-switch-button {
+      background-color: @dls-switch-thumb-color-on-focus;
+    }
   }
 
   &-button {
@@ -100,6 +118,10 @@
   :checked + &-switcher {
     background-color: @dls-switch-track-color-on;
 
+    .veui-switch-button {
+      background-color: @dls-switch-thumb-color-on;
+    }
+
     .veui-icon {
       color: @dls-switch-track-color-on;
     }
@@ -107,10 +129,18 @@
 
   &:hover :checked + &-switcher {
     background-color: @dls-switch-track-color-on-hover;
+
+    .veui-switch-button {
+      background-color: @dls-switch-thumb-color-on-hover;
+    }
   }
 
   &:active :checked + &-switcher {
     background-color: @dls-switch-track-color-on-active;
+
+    .veui-switch-button {
+      background-color: @dls-switch-thumb-color-on-active;
+    }
   }
 
   &.veui-readonly {
@@ -141,12 +171,20 @@
   &.veui-readonly &-switcher,
   &.veui-disabled &-switcher {
     background-color: @dls-switch-track-color-off-disabled;
+
+    .veui-switch-button {
+      background-color: @dls-switch-thumb-color-off-disabled;
+    }
   }
 
   &-on&-loading &-switcher,
   &-on.veui-readonly &-switcher,
   &-on.veui-disabled &-switcher {
     background-color: @dls-switch-track-color-on-disabled;
+
+    .veui-switch-button {
+      background-color: @dls-switch-thumb-color-on-disabled;
+    }
   }
 
   &[ui~="xs"] {

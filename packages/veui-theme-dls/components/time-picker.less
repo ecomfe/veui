@@ -9,14 +9,6 @@
     width: 100%;
   }
 
-  .veui-input-append > .veui-icon {
-    color: @dls-input-icon-color;
-  }
-
-  &.veui-disabled .veui-input-append > .veui-icon {
-    color: @dls-input-icon-color-disabled;
-  }
-
   &-overlay-content {
     &:extend(._veui-dropdown-overlay all);
     min-width: @dls-time-picker-dropdown-min-width;
@@ -58,11 +50,11 @@
   &-clock {
     .dls-icon-size(@dls-input-icon-size);
     .veui-transition(color, opacity);
-    color: @dls-input-icon-color-disabled;
+    color: @dls-time-picker-icon-color;
 
     .veui-readonly &,
     .veui-disabled & {
-      color: @dls-input-icon-color-disabled;
+      color: @dls-time-picker-icon-color-disabled;
     }
   }
 

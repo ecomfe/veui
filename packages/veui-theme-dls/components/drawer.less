@@ -20,6 +20,15 @@
         [ui~="m"]& {
           font-size: @dls-drawer-title-font-size-m;
         }
+
+        &-close {
+          .veui-icon {
+            .dls-icon-size(
+              @dls-drawer-close-icon-size,
+              @dls-dialog-close-icon-min-size
+            );
+          }
+        }
       }
 
       &-body {

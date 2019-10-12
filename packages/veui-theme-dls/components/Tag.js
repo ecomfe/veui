@@ -7,11 +7,16 @@ config.defaults(
       close: 'times'
     },
     ui: {
-      style: {
-        values: ['no-border']
+      borderless: {
+        boolean: true
+      },
+      reverse: {
+        boolean: true
       },
       size: {
-        values: ['s', 'm']
+        values: ['s', 'm'],
+        inherit: true,
+        default: 'm'
       }
     },
     parts: {
