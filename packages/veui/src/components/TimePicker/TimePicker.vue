@@ -403,7 +403,7 @@ export default {
       }
     },
     openDropdown (e) {
-      if (!this.expanded && !this.realReadonly) {
+      if (!this.expanded && !this.realReadonly && !this.realDisabled) {
         this.expanded = true
         this.initialValue = this.realLocalValue
       }
