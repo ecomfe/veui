@@ -2,8 +2,7 @@
 <veui-filter-panel
   ref="selected"
   :datasource="showMode === 'flat' ? flattenOptions : datasource"
-  :searchable="searchable"
-  :filter="realFilter"
+  :searchable="false"
   class="veui-transfer-selected-panel"
   :class="{ 'veui-transfer-selected-flat': showMode === 'flat' }"
   :placeholder="placeholder"
@@ -15,7 +14,7 @@
         {{ t('@transfer.selected') }}
       </slot>
       <veui-button
-        ui="text"
+        :ui="uiParts.removeAll"
         class="veui-transfer-remove-all"
         :disabled="!isSelectable || !datasource.length"
         @click="removeAll"
@@ -27,7 +26,6 @@
 
   <template slot-scope="{ items, keyword }">
     <veui-tree
-      v-if="showMode === 'tree'"
       :datasource="items"
       :expanded.sync="expanded"
       class="veui-transfer-selected-tree"
@@ -48,14 +46,41 @@
         slot-scope="props"
       >
         <slot
+          v-if="showMode === 'tree'"
           name="item-label"
           v-bind="{ ...props, keyword }"
         />
+        <template v-else>
+          <template v-for="(item, i) in props.path">
+            <span
+              :key="'l-' + item.value"
+              class="veui-transfer-selected-flat-option-label"
+            >
+              <slot
+                name="item-label"
+                v-bind="{ item, ...item, keyword }"
+                :index="i"
+              >
+                {{ item.label }}
+              </slot>
+            </span>
+            <veui-icon
+              v-if="i < props.path.length - 1"
+              :key="'s-' + item.value"
+              class="veui-transfer-selected-flat-separator"
+              :name="icons.separator"
+            />
+          </template>
+        </template>
       </template>
-      <template slot="item-append">
+      <template
+        slot="item-append"
+        slot-scope="props"
+      >
         <veui-button
           class="veui-tree-item-remove"
           :ui="uiParts.remove"
+          @click="removeItem(props.item)"
         >
           <veui-icon
             :label="t('@transfer.remove')"
@@ -64,57 +89,6 @@
         </veui-button>
       </template>
     </veui-tree>
-    <ul
-      v-else
-      class="veui-transfer-selected-flat-items"
-    >
-      <li
-        v-for="(options, index) in items"
-        :key="options.items[options.items.length - 1].value"
-        class="veui-transfer-selected-flat-item"
-        :class="{ 'veui-transfer-selected-flat-item-hidden': options.hidden }"
-        @click="
-          remove(
-            options.items[options.items.length - 1],
-            options.items.slice(0, options.items.length - 1).reverse()
-          )
-        "
-      >
-        <slot
-          name="item"
-          :items="options.items"
-          :index="index"
-        >
-          <div class="veui-transfer-selected-flat-item-label">
-            <template v-for="(item, i) in options.items">
-              <span
-                :key="'l-' + item.value"
-                class="veui-transfer-selected-flat-option-label"
-              >
-                <slot
-                  name="item-label"
-                  v-bind="{ item, ...item, keyword }"
-                  :index="index"
-                >
-                  {{ item.label }}
-                </slot>
-              </span>
-              <span
-                v-if="i < options.items.length - 1"
-                :key="'s-' + item.value"
-                class="veui-transfer-selected-flat-option-separator"
-              >
-                <veui-icon :name="icons.separator"/>
-              </span>
-            </template>
-            <veui-icon
-              class="veui-transfer-selected-flat-icon-remove"
-              :name="icons.remove"
-            />
-          </div>
-        </slot>
-      </li>
-    </ul>
   </template>
 
   <template slot="no-data">
@@ -145,8 +119,6 @@ export default {
   props: {
     datasource: Array,
     showMode: String,
-    searchable: Boolean,
-    filter: Function,
     placeholder: String,
     isSelectable: Boolean,
     ui: String,
@@ -181,15 +153,18 @@ export default {
         })
 
         paths.forEach((path, index) => {
-          let option = get(this.flattenOptions, [index, 'items'])
+          let options = get(this.flattenOptions, [index, 'path'])
           if (
-            !option ||
-            !path.length === option.length ||
+            !options ||
+            !path.length === options.length ||
             path.some(
-              (pathItem, index) => option[index].value !== pathItem.value
+              (pathItem, index) => options[index].value !== pathItem.value
             )
           ) {
-            this.flattenOptions[index] = { items: path }
+            this.flattenOptions[index] = {
+              path,
+              value: path[path.length - 1].value
+            }
           }
         })
         this.flattenOptions.splice(
@@ -202,16 +177,6 @@ export default {
     }
   },
   methods: {
-    realFilter (keyword, option) {
-      let isFlat = this.showMode === 'flat'
-      option = isFlat ? option.items[option.items.length - 1] : option
-      return this.filter(
-        'selected',
-        keyword,
-        option,
-        isFlat ? this.flattenOptions : this.datasource
-      )
-    },
     removeAll () {
       this.$emit('removeall')
     },
@@ -221,6 +186,12 @@ export default {
       }
 
       this.$emit('remove', ...args)
+    },
+    removeItem ({ path }) {
+      this.remove(
+        path[path.length - 1],
+        path.slice(0, path.length - 1).reverse()
+      )
     }
   }
 }

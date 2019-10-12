@@ -39,11 +39,11 @@
       margin-right: @dls-tree-node-content-spacing;
       cursor: pointer;
       outline: none;
+      color: @dls-tree-icon-color-aux;
       .veui-transition(box-shadow, transform);
 
       .veui-icon {
         .dls-icon-size(@dls-tree-icon-size-aux);
-        color: @dls-tree-icon-color-aux;
       }
     }
 
@@ -62,7 +62,10 @@
     // 如果前面没有图标，就把图标位置让出来。
     &-check:first-child,
     &-label:first-child {
-      margin-left: dls-sum(@dls-tree-icon-size, @dls-tree-node-content-spacing);
+      margin-left: dls-sum(
+        @dls-tree-icon-size-aux,
+        @dls-tree-node-content-spacing
+      );
     }
 
     &-clickable {
@@ -119,8 +122,10 @@
     cursor: not-allowed;
   }
 
-  &-disabled &-item-expand-switcher {
+  &-disabled &-item-expand-switcher,
+  &-item-disabled &-item-expand-switcher {
     color: @dls-tree-icon-color-aux-disabled;
+    cursor: not-allowed;
   }
 
   &[ui~="checkbox-after"] {
@@ -130,7 +135,10 @@
         justify-content: flex-end;
 
         &-label {
-          margin-left: @dls-tree-font-size-m + @dls-tree-node-content-spacing;
+          margin-left: dls-sum(
+            @dls-tree-icon-size-aux,
+            @dls-tree-node-content-spacing
+          );
         }
 
         &-expand-switcher {
