@@ -1,6 +1,9 @@
 @import "../lib.less";
 
 .veui-popover-box {
+  @arrow-size: @dls-tooltip-arrow-width;
+  @arrow-indent: @dls-popover-arrow-spacing;
+
   .veui-tooltip {
     max-width: @dls-popover-max-width;
     line-height: @dls-popover-line-height;
@@ -24,5 +27,48 @@
     .veui-tooltip {
       border-radius: @dls-popover-border-radius-m;
     }
+  }
+
+  .make-align(top) {
+    &::before,
+    &::after {
+      top: @arrow-indent + @arrow-size / 2;
+    }
+  }
+  .make-align(right) {
+    &::before,
+    &::after {
+      right: @arrow-indent + @arrow-size / 2;
+      left: auto;
+    }
+  }
+  .make-align(bottom) {
+    &::before,
+    &::after {
+      top: auto;
+      bottom: @arrow-indent + @arrow-size / 2;
+    }
+  }
+  .make-align(left) {
+    &::before,
+    &::after {
+      left: @arrow-indent + @arrow-size / 2;
+    }
+  }
+
+  &.tether-element-attached-top.tether-target-attached-top .veui-tooltip {
+    .make-align(top);
+  }
+
+  &.tether-element-attached-right.tether-target-attached-right .veui-tooltip {
+    .make-align(right);
+  }
+
+  &.tether-element-attached-bottom.tether-target-attached-bottom .veui-tooltip {
+    .make-align(bottom);
+  }
+
+  &.tether-element-attached-left.tether-target-attached-left .veui-tooltip {
+    .make-align(left);
   }
 }

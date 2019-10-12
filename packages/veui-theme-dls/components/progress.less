@@ -17,7 +17,11 @@
   &-bar {
     .veui-progress-desc {
       margin-left: @dls-progress-track-spacing-bar;
-      order: 1;
+      padding-right: @dls-progress-icon-spacing-bar;
+
+      .veui-progress-status-icon {
+        .dls-icon-size(@dls-progress-icon-size-bar);
+      }
     }
 
     .veui-progress-rail {

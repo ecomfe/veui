@@ -12,6 +12,7 @@
     padding: @dls-collapse-header-padding-y @dls-collapse-header-padding-x;
     border: 1px solid @dls-collapse-border-color;
     background-color: @dls-collapse-header-background-color;
+    font-size: @dls-collapse-header-font-size-m;
     color: @dls-collapse-header-font-color;
     .border-top-radius(inherit);
     line-height: @dls-collapse-header-line-height;
@@ -70,6 +71,7 @@
     .veui-transition(height);
     .border-bottom-radius(inherit);
     color: @dls-collapse-body-font-color;
+    font-size: @dls-collapse-body-font-size-m;
   }
 
   &-content {
@@ -78,5 +80,15 @@
 
   &[ui~="s"] {
     border-radius: @dls-collapse-border-radius-s;
+
+    .veui-collapse {
+      &-header {
+        font-size: @dls-collapse-header-font-size-s;
+      }
+
+      &-body {
+        font-size: @dls-collapse-body-font-size-s;
+      }
+    }
   }
 }
