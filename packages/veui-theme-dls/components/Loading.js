@@ -11,7 +11,9 @@ config.defaults(
         values: ['normal', 'strong', 'reverse']
       },
       size: {
-        values: ['s', 'm', 'l']
+        values: ['s', 'm', 'l'],
+        inherit: true,
+        default: 'm'
       },
       direction: {
         values: ['vertical']

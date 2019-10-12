@@ -52,6 +52,7 @@
     .veui-input-main {
       max-width: 100%;
       cursor: pointer;
+      .padding(_, @dls-select-padding-x);
     }
 
     .veui-input-input {
@@ -100,23 +101,23 @@
         .veui-tag {
           float: left;
           margin-right: @dls-select-tag-spacing;
-          margin-top: @dls-select-tag-spacing;
+          margin-top: @dls-select-padding-y;
         }
 
         .veui-select-placeholder {
           float: left;
-          margin-top: @dls-select-tag-spacing;
+          margin-top: @dls-select-padding-y;
         }
       }
 
       &-input {
         float: left;
-        margin-top: @dls-select-tag-spacing;
+        margin-top: @dls-select-padding-y;
       }
 
       &-append {
         float: right;
-        margin: @dls-select-tag-spacing 0;
+        margin: @dls-select-padding-y 0;
       }
     }
   }
@@ -151,10 +152,11 @@
   &-toggle {
     .dls-icon-size(@dls-select-icon-size-aux);
     .veui-transition(transform, color, opacity);
+    color: @dls-select-icon-color-aux;
 
     .veui-readonly &,
     .veui-disabled & {
-      color: @dls-input-icon-color-disabled;
+      color: @dls-select-icon-color-aux-disabled;
     }
   }
 

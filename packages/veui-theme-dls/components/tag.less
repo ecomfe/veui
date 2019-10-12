@@ -28,7 +28,7 @@
     .make-metrics(s);
   }
 
-  &[ui~="no-border"]:not(.focus-visible) {
+  &[ui~="borderless"]:not(.focus-visible) {
     border-color: transparent;
   }
 
@@ -53,7 +53,7 @@
     cursor: pointer;
 
     &:hover:not(.veui-disabled) {
-      opacity: 0.8;
+      opacity: @dls-tag-opacity-hover;
     }
   }
 
@@ -109,7 +109,8 @@
         border-color: @@disabled-bd-color-name;
       }
 
-      &.veui-tag-selected {
+      &.veui-tag-selected,
+      &[ui~="reverse"] {
         color: @dls-tag-font-color-selected;
         border-color: @dls-tag-border-color-selected;
         background-color: @@selected-bg-color-name;
@@ -125,6 +126,10 @@
           border-color: @dls-tag-border-color-selected-disabled;
           background-color: @@selected-disabled-bg-color;
         }
+      }
+
+      &[ui~="reverse"] {
+        color: @dls-tag-font-color-reversed;
       }
 
       &.focus-visible,

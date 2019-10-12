@@ -1,5 +1,6 @@
 <template>
 <div
+  :ui="ui"
   :class="{
     'veui-collapse': true,
     [`veui-collapse-${realExpanded ? 'expanded' : 'collapsed'}`]: true,
