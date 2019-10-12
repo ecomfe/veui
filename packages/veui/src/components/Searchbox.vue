@@ -123,7 +123,7 @@
                     <mark
                       v-if="matched"
                       :key="`${idx}-${index}`"
-                      class="veui-searchbox-suggestion-matched"
+                      class="veui-option-matched"
                     >{{ text }}</mark>
                     <span
                       v-else
@@ -133,7 +133,7 @@
                   <span
                     v-if="idx < option.matches.length - 1"
                     :key="idx"
-                    class="veui-searchbox-suggestion-separator"
+                    class="veui-option-separator"
                   >&gt;</span>
                 </template>
               </template>

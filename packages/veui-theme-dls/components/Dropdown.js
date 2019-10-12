@@ -20,6 +20,9 @@ config.defaults(
         values: ['text'],
         inherit: true
       }
+    },
+    parts: {
+      search: 'inline'
     }
   },
   'dropdown'

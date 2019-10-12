@@ -76,10 +76,30 @@
       @keydown.down.prevent="navigate()"
       @keydown.up.prevent="navigate(false)"
     >
+      <veui-searchbox
+        v-if="searchable"
+        v-model="keyword"
+        class="veui-dropdown-searchbox"
+        :ui="uiParts.search"
+        :placeholder="placeholder"
+        clearable
+      />
+      <div
+        v-if="isSearching && !filteredSuggestions.length"
+        class="veui-dropdown-options-no-data"
+      >
+        <slot
+          name="no-data"
+          v-bind="{ keyword }"
+        >
+          {{ t('noData') }}
+        </slot>
+      </div>
       <veui-option-group
+        v-else
         ref="options"
         :ui="realUi"
-        :options="options"
+        :options="isSearching ? filteredSuggestions : options"
         :trigger="trigger"
       >
         <slot/>
@@ -104,14 +124,34 @@
           />
         </template>
         <template
-          v-if="$scopedSlots['option-label']"
           slot="option-label"
           slot-scope="option"
         >
           <slot
             name="option-label"
             v-bind="option"
-          />
+          >
+            <template v-if="!!searchable && keyword">
+              <template v-for="({ parts }, idx) in option.matches">
+                <template v-for="({ text, matched }, index) in parts">
+                  <mark
+                    v-if="matched"
+                    :key="`${idx}-${index}`"
+                    class="veui-option-matched"
+                  >{{ text }}</mark>
+                  <span
+                    v-else
+                    :key="`${idx}-${index}`"
+                  >{{ text }}</span>
+                </template>
+                <span
+                  v-if="idx < option.matches.length - 1"
+                  :key="idx"
+                  class="veui-option-separator"
+                >&gt;</span>
+              </template>
+            </template>
+          </slot>
         </template>
       </veui-option-group>
     </div>
@@ -123,11 +163,14 @@
 import Icon from './Icon'
 import Button from './Button'
 import Overlay from './Overlay'
+import Searchbox from './Searchbox'
 import OptionGroup from './Select/OptionGroup'
 import ui from '../mixins/ui'
 import dropdown from '../mixins/dropdown'
 import keySelect from '../mixins/key-select'
 import focusable from '../mixins/focusable'
+import searchable from '../mixins/searchable'
+import i18n from '../mixins/i18n'
 import '../common/uiTypes'
 import { includes } from 'lodash'
 
@@ -148,9 +191,22 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button,
     'veui-overlay': Overlay,
+    'veui-searchbox': Searchbox,
     'veui-option-group': OptionGroup
   },
-  mixins: [ui, dropdown, keySelect, focusable],
+  mixins: [
+    ui,
+    dropdown,
+    keySelect,
+    searchable({
+      datasourceKey: 'options',
+      childrenKey: 'options',
+      keywordKey: 'keyword',
+      resultKey: 'filteredSuggestions'
+    }),
+    focusable,
+    i18n
+  ],
   props: {
     label: String,
     disabled: Boolean,
@@ -163,11 +219,14 @@ export default {
       }
     },
     split: Boolean,
+    searchable: Boolean,
+    placeholder: Searchbox.props.placeholder,
     memoize: Boolean
   },
   data () {
     return {
-      outsideRefs: ['button']
+      outsideRefs: ['button'],
+      keyword: ''
     }
   },
   computed: {
@@ -175,6 +234,9 @@ export default {
       return {
         [EVENT_MAP[this.trigger]]: this.handleToggle
       }
+    },
+    isSearching () {
+      return this.searchable && this.keyword
     }
   },
   methods: {
@@ -184,6 +246,9 @@ export default {
         this.expanded = !this.expanded
       } else if (mode === 'expand') {
         this.expanded = true
+      }
+      if (this.expanded) {
+        this.keyword = ''
       }
     },
     handleSelect (value) {
