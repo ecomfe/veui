@@ -15,7 +15,9 @@ config.defaults(
     },
     parts: {
       tree: 'checkbox-after',
-      remove: 'icon'
+      remove: 'icon',
+      selectAll: 'text',
+      removeAll: 'text'
     },
     ui: {
       size: {

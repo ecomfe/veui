@@ -13,7 +13,7 @@
     padding: 0 @dls-transfer-padding-x;
     color: @dls-transfer-header-font-color;
     font-weight: @dls-transfer-header-font-weight;
-    font-size: @dls-font-size-m;
+    font-size: @dls-transfer-font-size-m;
     margin: 0;
     height: @dls-transfer-header-height-m;
 
@@ -36,25 +36,33 @@
     padding-top: @dls-transfer-content-padding-y;
   }
 
+  &-single-level {
+    .veui-tree.veui-tree .veui-tree-item-label {
+      margin-left: 0;
+    }
+  }
+
   &-content {
     border-top: 1px solid @dls-transfer-border-color;
+    height: @dls-transfer-content-min-height-m;
+    overflow-y: auto;
 
     &-main {
       overflow-y: auto;
       position: relative;
       padding: @dls-transfer-content-padding-y 0;
-      height: @dls-transfer-content-min-height-m;
     }
   }
 
   &[ui~="s"] {
-    font-size: @dls-font-size-s;
+    font-size: @dls-transfer-font-size-s;
     border-radius: @dls-transfer-border-radius-s;
     width: @dls-transfer-panel-width-s;
 
     .veui-filter-panel {
       &-title {
         height: @dls-transfer-header-height-s;
+        font-size: @dls-transfer-font-size-s;
       }
 
       &-no-data {

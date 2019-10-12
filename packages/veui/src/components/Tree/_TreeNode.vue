@@ -43,12 +43,14 @@
           type="button"
           class="veui-tree-item-expand-switcher"
           tabindex="-1"
+          :disabled="item.disabled"
           @click.stop="toggle(item, index, depth)"
         >
           <veui-icon :name="icons.collapse"/>
         </button>
         <slot
           name="item-prepend"
+          v-bind="item"
           :item="item"
           :index="index"
           :depth="depth"
@@ -66,6 +68,7 @@
         </div>
         <slot
           name="item-append"
+          v-bind="item"
           :item="item"
           :index="index"
           :depth="depth"
@@ -95,6 +98,7 @@
             type="button"
             class="veui-tree-item-expand-switcher"
             tabindex="-1"
+            :disabled="props.disabled"
             @click.stop="toggle(props.item, props.index, depth + 1)"
           >
             <veui-icon :name="icons.collapse"/>
@@ -185,6 +189,10 @@ export default {
       this.$emit('toggle', item, index, ...args)
     },
     click (item, parents, ...extraArgs) {
+      if (item.disabled) {
+        return
+      }
+
       this.$emit('click', item, parents, ...extraArgs)
 
       if (this.action === 'toggle' && item.children && item.children.length) {

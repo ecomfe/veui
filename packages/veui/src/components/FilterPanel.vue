@@ -1,6 +1,9 @@
 <template>
 <div
   class="veui-filter-panel"
+  :class="{
+    'veui-filter-panel-single-level': singleLevel
+  }"
   :ui="realUi"
 >
   <h3 class="veui-filter-panel-title">
@@ -32,7 +35,7 @@
       class="veui-filter-panel-no-data"
     >
       <slot name="no-data">
-        {{ t("noData") }}
+        {{ t('noData') }}
       </slot>
     </div>
   </div>
@@ -79,6 +82,13 @@ export default {
     return {
       keyword: '',
       filteredDatasource: []
+    }
+  },
+  computed: {
+    singleLevel () {
+      return !this.datasource.some(
+        item => item.children && item.children.length > 0
+      )
     }
   },
   watch: {
