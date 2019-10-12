@@ -75,8 +75,11 @@
     &:extend(._veui-dropdown-overlay all);
   }
 
-  &-option {
-    &:extend(._veui-dropdown-option all);
+  &-searchbox.veui-searchbox {
+    width: 100%;
+    .veui-input .veui-input-main {
+      width: 100%;
+    }
   }
 
   &[ui~="text"] {

@@ -247,7 +247,13 @@
   </div>
   <div>
     <h3>含搜索的下拉框菜单</h3>
-    待补充
+    <veui-dropdown
+      ui="text"
+      label="操作"
+      placeholder="请搜索"
+      searchable
+      :options="options"
+    />
   </div>
 </article>
 </template>
