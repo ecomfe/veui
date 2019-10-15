@@ -396,7 +396,7 @@
   <form
     v-if="requestMode === 'iframe' && isSubmiting"
     ref="form"
-    :action="queryURL"
+    :action="action"
     enctype="multipart/form-data"
     method="POST"
     :target="iframeId"
@@ -436,7 +436,6 @@ import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
-import { stringifyQuery } from '../utils/helper'
 import { parse, format } from 'bytes'
 import warn from '../utils/warn'
 
@@ -603,19 +602,6 @@ export default {
     },
     latestFile () {
       return this.fileList[this.fileList.length - 1]
-    },
-    queryURL () {
-      let queryString = stringifyQuery(
-        assign(
-          this.requestMode === 'iframe' && this.iframeMode === 'callback'
-            ? {
-              callback: `parent.${this.callbackNamespace}['${this.callbackFuncName}']`
-            }
-            : {},
-          this.payload
-        )
-      )
-      return `${this.action}${queryString ? '?' + queryString : ''}`
     },
     isReplacing () {
       return !!this.replacingFile
@@ -957,7 +943,7 @@ export default {
           formData.append(key, this.payload[key])
         }
 
-        xhr.open('POST', this.queryURL, true)
+        xhr.open('POST', this.action, true)
         for (let key in this.headers) {
           xhr.setRequestHeader(key, this.headers[key])
         }
