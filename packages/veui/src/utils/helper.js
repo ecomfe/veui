@@ -114,12 +114,6 @@ export function getConfigKey (name) {
   return name.replace(/^veui|-*/g, '').toLowerCase()
 }
 
-export function stringifyQuery (query) {
-  return keys(query)
-    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
-    .join('&')
-}
-
 const CLASS_PROP_DEF = {
   validator (value) {
     return isObject(value) || isString(value)
