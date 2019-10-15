@@ -407,13 +407,13 @@
       :key="key"
       :name="key"
       :value="val"
-      hidden
+      type="hidden"
     >
     <input
       v-if="iframeMode === 'callback'"
       name="callback"
       :value="`parent.${callbackNamespace}['${callbackFuncName}']`"
-      hidden
+      type="hidden"
     >
   </form>
 </div>
