@@ -10,7 +10,7 @@ describe('components/Uploader', () => {
       }
     })
 
-    expect(wrapper.vm.$data.fileList).to.eql([])
+    expect(wrapper.vm.$data.fileList).to.deep.equal([])
     wrapper.destroy()
   })
 
@@ -22,13 +22,13 @@ describe('components/Uploader', () => {
       }
     })
 
-    expect(wrapper.vm.$data.fileList).to.eql([
+    expect(wrapper.vm.$data.fileList).to.deep.equal([
       { name: 'test.jpg', src: '/test.jpg' }
     ])
     wrapper.destroy()
   })
 
-  it('should transparently pass-through attrs to the <input> element.', () => {
+  it('should transparently pass-through attrs to the <input> element.', async () => {
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
@@ -43,7 +43,7 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should set action to form correctly when mode is iframe.', () => {
+  it('should set action to form correctly when mode is iframe.', async () => {
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
@@ -54,10 +54,11 @@ describe('components/Uploader', () => {
     wrapper.vm.submit({ name: 'test.jpg' })
     expect(wrapper.find('form').attributes('action')).to.equal('/upload')
 
+    await wrapper.vm.$nextTick()
     wrapper.destroy()
   })
 
-  it('should set payload to form correctly when mode is iframe.', () => {
+  it('should set payload to form correctly when mode is iframe.', async () => {
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
@@ -77,14 +78,15 @@ describe('components/Uploader', () => {
     expect({
       value: input.element.value,
       name: input.attributes('name')
-    }).to.eql({ value: '7', name: 'month' })
+    }).to.deep.equal({ value: '7', name: 'month' })
 
     let input2 = form.findAll('input').at(1)
     expect({
       value: input2.element.value,
       name: input2.attributes('name')
-    }).to.eql({ value: '1', name: 'day' })
+    }).to.deep.equal({ value: '1', name: 'day' })
 
+    await wrapper.vm.$nextTick()
     wrapper.destroy()
   })
 
@@ -175,11 +177,11 @@ describe('components/Uploader', () => {
     let callbackData = { src: '/test2.jpg', id: 6, success: true }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
 
-    expect(wrapper.emitted().change[0][0]).to.eql([
+    expect(wrapper.emitted().change[0][0]).to.deep.equal([
       { name: 'test1.jpg', src: '/test1.jpg', id: 5 },
       { name: 'test2.jpg', src: '/test2.jpg', id: 6 }
     ])
-    expect(wrapper.emitted().success[0]).to.eql([
+    expect(wrapper.emitted().success[0]).to.deep.equal([
       {
         name: 'test2.jpg',
         src: '/test2.jpg',
@@ -198,7 +200,7 @@ describe('components/Uploader', () => {
     callbackData = { success: false, message: 'image too large' }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
 
-    expect(wrapper.emitted().failure[0]).to.eql([
+    expect(wrapper.emitted().failure[0]).to.deep.equal([
       {
         name: 'test3.jpg',
         status: 'failure'
@@ -225,6 +227,8 @@ describe('components/Uploader', () => {
     clearXHR(wrapper)
     wrapper.vm.submit()
 
+    await wrapper.vm.$nextTick()
+
     // 这里的iframe里调postMessage无法完全模拟真实环境，所以直接调message事件的回调函数
     wrapper.vm.handlePostmessage({
       source: {
@@ -236,10 +240,11 @@ describe('components/Uploader', () => {
       data: { src: '/test.jpg', success: true }
     })
 
-    expect(wrapper.emitted().change[0][0]).to.eql([
+    expect(wrapper.emitted().change[0][0]).to.deep.equal([
       { name: 'test.jpg', src: '/test.jpg' }
     ])
 
+    await wrapper.vm.$nextTick()
     wrapper.destroy()
   })
 
@@ -260,7 +265,7 @@ describe('components/Uploader', () => {
     input.element.files = dT.files
     input.trigger('change')
 
-    expect(wrapper.emitted().change[0][0]).to.eql([
+    expect(wrapper.emitted().change[0][0]).to.deep.equal([
       { name: 'test.jpg', src: '/test.jpg' }
     ])
 
@@ -276,13 +281,13 @@ describe('components/Uploader', () => {
     })
 
     let callbackData = JSON.stringify({ src: '/test.jpg', id: '23' })
-    expect(wrapper.vm.parseData(callbackData)).to.eql({
+    expect(wrapper.vm.parseData(callbackData)).to.deep.equal({
       src: '/test.jpg',
       id: '23'
     })
 
     callbackData = { src: '/test.jpg', id: '23' }
-    expect(wrapper.vm.parseData(callbackData)).to.eql({
+    expect(wrapper.vm.parseData(callbackData)).to.deep.equal({
       src: '/test.jpg',
       id: '23'
     })
@@ -309,11 +314,11 @@ describe('components/Uploader', () => {
       .findAll('.veui-uploader-button-remove')
       .at(1)
       .trigger('click')
-    expect(wrapper.emitted().remove[0]).to.eql([
+    expect(wrapper.emitted().remove[0]).to.deep.equal([
       { name: 'test2.jpg', src: '/test2.jpg' },
       1
     ])
-    expect(wrapper.emitted().change[0][0]).to.eql([
+    expect(wrapper.emitted().change[0][0]).to.deep.equal([
       { name: 'test1.jpg', src: '/test1.jpg' }
     ])
     wrapper.destroy()
@@ -369,7 +374,7 @@ describe('components/Uploader', () => {
       .find('li')
       .find('button')
       .trigger('click')
-    expect(wrapper.vm.$data.fileList).to.eql([])
+    expect(wrapper.vm.$data.fileList).to.deep.equal([])
     wrapper.destroy()
   })
 
@@ -450,9 +455,9 @@ describe('components/Uploader', () => {
     let callbackData = { src: '/test2.jpg', success: true }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
 
-    expect(wrapper.emitted().change[0][0]).to.eql([])
+    expect(wrapper.emitted().change[0][0]).to.deep.equal([])
 
-    expect(wrapper.emitted().change[1][0]).to.eql([
+    expect(wrapper.emitted().change[1][0]).to.deep.equal([
       { name: 'test2.jpg', src: '/test2.jpg' }
     ])
 

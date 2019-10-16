@@ -18,7 +18,7 @@
         'veui-uploader-input-label-disabled':
           realUneditable ||
           (maxCount > 1 && fileList.length >= maxCount) ||
-          (requestMode === 'iframe' && isSubmiting)
+          (requestMode === 'iframe' && submitting)
       }"
       @click="handleClick"
     >
@@ -728,6 +728,7 @@ export default {
     }
   },
   beforeDestroy () {
+    this.isSubmiting = false
     if (this.requestMode === 'iframe') {
       if (this.iframeMode === 'callback') {
         window[this.callbackNamespace][this.callbackFuncName] = null
@@ -973,9 +974,9 @@ export default {
       this.isSubmiting = true
 
       this.$nextTick(() => {
-        let form = this.$refs.form
+        let { form, iframe } = this.$refs
 
-        document.body.appendChild(this.$refs.iframe)
+        document.body.appendChild(iframe)
         document.body.appendChild(form)
 
         form.appendChild(this.$refs.input)
