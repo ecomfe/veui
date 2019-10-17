@@ -75,29 +75,27 @@ export default {
     checked (val) {
       this.localChecked = val
     },
-    localChecked (val) {
-      if (this.checked !== val) {
-        this.$emit('update:checked', val)
-      }
-
-      this.$emit('input', val ? this.trueValue : this.falseValue)
-    },
     model: {
       handler (val) {
         if (typeof val === 'undefined') {
           return
         }
+
         this.localChecked = val === this.trueValue
       },
       immediate: true
     }
   },
   methods: {
-    handleChange (checked) {
-      this.localChecked = !this.localChecked
-      this.$nextTick(() => {
-        this.$emit('change', this.localChecked)
-      })
+    handleChange () {
+      let val = (this.localChecked = !this.localChecked)
+
+      if (this.checked !== val) {
+        this.$emit('update:checked', val)
+      }
+
+      this.$emit('input', val ? this.trueValue : this.falseValue)
+      this.$emit('change', val)
     },
     focus () {
       this.$refs.box.focus()
@@ -106,10 +104,8 @@ export default {
       if (this.realDisabled || this.realReadonly) {
         return
       }
-      this.localChecked = !this.localChecked
-      this.$nextTick(() => {
-        this.$emit('change', this.localChecked)
-      })
+
+      this.handleChange() // activate will only be called upon user interaction
       this.focus()
     }
   }

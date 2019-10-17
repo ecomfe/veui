@@ -37,7 +37,7 @@ describe('components/Input', () => {
     wrapper.destroy()
   })
 
-  it('should hanlde focus event correctly', async () => {
+  it('should handle focus event correctly', async () => {
     let wrapper = mount(Input)
     wrapper.find('input').trigger('focus')
 
@@ -48,6 +48,50 @@ describe('components/Input', () => {
       wrapper.find('div.veui-input').classes('veui-input-focused')
     ).to.equal(true)
     expect(vm.focused).to.equal(true)
+
+    wrapper.destroy()
+  })
+
+  it('should only emit input event upon user interaction', async () => {
+    let changes = 0
+    let wrapper = mount(
+      {
+        components: {
+          'veui-input': Input
+        },
+        data () {
+          return {
+            value: null
+          }
+        },
+        methods: {
+          handleChange (checked) {
+            changes++
+          }
+        },
+        template: '<veui-input :value="value" @input="handleChange"/>'
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+
+    vm.value = 'foo'
+
+    await vm.$nextTick()
+    expect(changes).to.equal(0)
+
+    let box = wrapper.find('input')
+    box.element.value = 'bar'
+    box.trigger('input')
+
+    box.element.value = 'baz'
+    box.trigger('input')
+
+    await vm.$nextTick()
+    expect(changes).to.equal(2)
 
     wrapper.destroy()
   })

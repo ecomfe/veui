@@ -12,7 +12,7 @@
     type="checkbox"
     v-bind="attrs"
     :indeterminate.prop="indeterminate"
-    :checked.prop="localChecked"
+    :checked="localChecked"
     @change="handleChange"
     v-on="boxListeners"
   >
@@ -98,9 +98,36 @@ export default {
   },
   watch: {
     checked (val) {
+      // we do not support using checked and v-model at the same time
       this.localChecked = val
     },
-    localChecked (val) {
+    model: {
+      handler (val) {
+        if (typeof val === 'undefined') {
+          return
+        }
+
+        this.localChecked = Array.isArray(val)
+          ? includes(val, this.value)
+          : val === this.trueValue
+
+        if (this.checked !== this.localChecked) {
+          this.$emit('update:checked', this.localChecked)
+        }
+      },
+      immediate: true
+    }
+  },
+  mounted () {
+    let { box } = this.$refs
+    patchIndeterminate(box)
+  },
+  methods: {
+    handleChange () {
+      this.$refs.box.indeterminate = this.indeterminate
+
+      let val = (this.localChecked = !this.localChecked)
+
       if (this.checked !== val) {
         this.$emit('update:checked', val)
       }
@@ -115,38 +142,11 @@ export default {
           pull(model, this.value)
         }
         this.$emit('input', model)
-        return
+      } else {
+        this.$emit('input', val ? this.trueValue : this.falseValue)
       }
 
-      this.$emit('input', val ? this.trueValue : this.falseValue)
-    },
-    model: {
-      handler (val) {
-        if (typeof val === 'undefined') {
-          return
-        }
-
-        if (Array.isArray(val)) {
-          this.localChecked = includes(val, this.value)
-          return
-        }
-
-        this.localChecked = val === this.trueValue
-      },
-      immediate: true
-    }
-  },
-  mounted () {
-    let { box } = this.$refs
-    patchIndeterminate(box)
-  },
-  methods: {
-    handleChange (e) {
-      e.target.indeterminate = this.indeterminate
-      this.localChecked = !this.localChecked
-      this.$nextTick(() => {
-        this.$emit('change', this.localChecked)
-      })
+      this.$emit('change', val)
     },
     focus () {
       this.$refs.box.focus()
@@ -155,10 +155,8 @@ export default {
       if (this.realDisabled || this.realReadonly) {
         return
       }
-      this.localChecked = !this.localChecked
-      this.$nextTick(() => {
-        this.$emit('change', this.localChecked)
-      })
+
+      this.handleChange() // activate will only be called upon user interaction
       this.focus()
     }
   }

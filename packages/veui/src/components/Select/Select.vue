@@ -89,11 +89,6 @@ export default {
   watch: {
     value (val) {
       this.localValue = val
-    },
-    localValue (val) {
-      if (this.value !== val) {
-        this.$emit('change', val)
-      }
     }
   },
   mounted () {
@@ -114,7 +109,10 @@ export default {
     },
     handleSelect (value) {
       this.expanded = false
-      this.localValue = value
+      if (this.localValue !== value) {
+        this.localValue = value
+        this.$emit('change', value)
+      }
     },
     handleRelocate () {
       this.$refs.options.relocateDeep()
