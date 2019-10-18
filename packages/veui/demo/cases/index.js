@@ -101,8 +101,7 @@ export default [
   {
     path: '/carousel',
     name: 'Carousel',
-    component: Carousel,
-    disabled: true
+    component: Carousel
   },
   {
     path: '/checkbox',
@@ -143,8 +142,7 @@ export default [
   {
     path: '/dropdown',
     name: 'Dropdown',
-    component: Dropdown,
-    disabled: false
+    component: Dropdown
   },
   {
     path: '/embedded',
@@ -160,14 +158,12 @@ export default [
   {
     path: '/grid',
     name: 'Grid',
-    component: Grid,
-    disabled: true
+    component: Grid
   },
   {
     path: '/icon',
     name: 'Icon',
-    component: Icon,
-    disabled: true
+    component: Icon
   },
   {
     path: '/input',
