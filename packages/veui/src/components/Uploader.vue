@@ -323,7 +323,7 @@
               $scopedSlots['extra-operation'] &&
               (realUneditable ||
               (maxCount > 1 && fileList.length >= maxCount) ||
-              isSubmiting)
+              submitting)
           }"
           @click="handleClick"
         >
@@ -387,14 +387,14 @@
     </template>
   </span>
   <iframe
-    v-if="requestMode === 'iframe' && isSubmiting"
+    v-if="requestMode === 'iframe' && submitting"
     :id="iframeId"
     ref="iframe"
     :name="iframeId"
     class="veui-uploader-hide"
   />
   <form
-    v-if="requestMode === 'iframe' && isSubmiting"
+    v-if="requestMode === 'iframe' && submitting"
     ref="form"
     :action="action"
     enctype="multipart/form-data"
@@ -587,8 +587,8 @@ export default {
       callbackFuncName: uniqueId('veuiUploaderCallback'),
       replacingFile: null,
       currentSubmitingFile: null,
-      // isSubmiting 控制form与iframe是否存在
-      isSubmiting: false,
+      // submitting 控制form与iframe是否存在
+      submitting: false,
       // disabledWhenSubmiting 控制input在submit时是否禁用
       disabledWhenSubmiting: false,
       error: {
@@ -725,7 +725,7 @@ export default {
     }
   },
   beforeDestroy () {
-    this.isSubmiting = false
+    this.submitting = false
     if (this.requestMode === 'iframe') {
       if (this.iframeMode === 'callback') {
         window[this.callbackNamespace][this.callbackFuncName] = null
@@ -968,7 +968,7 @@ export default {
       this.currentSubmitingFile = file
       this.updateFileList(file, 'uploading')
 
-      this.isSubmiting = true
+      this.submitting = true
 
       this.$nextTick(() => {
         let { form, iframe } = this.$refs
@@ -982,7 +982,7 @@ export default {
       })
     },
     uploadCallback (data, file) {
-      this.isSubmiting = false
+      this.submitting = false
       this.disabledWhenSubmiting = false
       let index = this.fileList.indexOf(file)
 
@@ -1072,7 +1072,7 @@ export default {
     cancelFile (file) {
       if (this.requestMode === 'iframe') {
         this.canceled = true
-        this.isSubmiting = false
+        this.submitting = false
         this.disabledWhenSubmiting = false
       }
 
