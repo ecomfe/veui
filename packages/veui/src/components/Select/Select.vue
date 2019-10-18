@@ -179,12 +179,12 @@ export default {
     this.nativeInput = this.$refs.input.$refs.input
   },
   methods: {
+    updateValue (val) {
+      this.localValue = val
+      this.$emit('change', val)
+    },
     clear (e) {
-      if (this.multiple) {
-        this.localValue = []
-      } else {
-        this.localValue = null
-      }
+      this.updateValue(this.multiple ? [] : null)
       this.inputValue = ''
       e.stopPropagation()
       this.focus()
@@ -201,33 +201,24 @@ export default {
       if (!this.multiple) {
         this.expanded = false
         if (this.localValue !== value) {
-          this.localValue = value
-          this.$emit('change', value)
+          this.updateValue(value)
         }
-        return
-      }
-      if (!value) {
-        // clear
-        this.expanded = false
-        this.localValue = []
-        this.$emit('change', value)
         return
       }
 
       let index = this.localValue.indexOf(value)
       if (index !== -1) {
         // remove
-        this.removeSelectedValue(index)
+        this.removeSelectedAt(index)
       } else {
         if (!this.max || (this.max && this.localValue.length < this.max)) {
-          this.localValue.push(value)
-          this.$emit('change', [...this.localValue])
+          this.updateValue(this.localValue.concat(value))
         }
       }
     },
-    removeSelectedValue (index) {
+    removeSelectedAt (index) {
       this.localValue.splice(index, 1)
-      this.$emit('change', [...this.localValue])
+      this.updateValue([...this.localValue])
     },
     handleRelocate () {
       let { options } = this.$refs
@@ -290,6 +281,7 @@ export default {
         case 'Backspace':
           if (this.multiple && this.searchable && !this.inputValue) {
             this.localValue.pop()
+            this.updateValue([...this.localValue])
           }
           break
         default:
@@ -304,7 +296,7 @@ export default {
       this.inputValue = val
       this.expanded = true
       if (!val && !this.multiple) {
-        this.localValue = ''
+        this.updateValue('')
       }
       if (this.multiple && this.searchable) {
         this.nativeInput.style.width = ''
@@ -357,7 +349,7 @@ export default {
       <Tag
         key={label}
         ui={this.uiParts.tag}
-        onClose={() => this.removeSelectedValue(index)}
+        onClose={() => this.removeSelectedAt(index)}
         disabled={this.realDisabled || this.realReadonly}
         closable
       >
