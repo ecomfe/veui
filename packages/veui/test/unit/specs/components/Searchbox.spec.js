@@ -503,19 +503,25 @@ describe('components/Searchbox', () => {
         sync: false
       }
     )
+    await wrapper.vm.$nextTick()
     let inputWrapper = wrapper.find('.veui-input-input')
     inputWrapper.element.focus()
     expect(wrapper.findAll('.focus-visible').length).to.equal(0)
     inputWrapper.trigger('keydown', { key: 'Down' })
+    await wrapper.vm.$nextTick()
     expect(wrapper.findAll('.focus-visible').length).to.equal(1)
     expect(wrapper.find('.focus-visible').text()).to.equal('凯美瑞')
     inputWrapper.trigger('keydown', { key: 'ArrowDown' })
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('.focus-visible').text()).to.equal('卡罗拉')
     inputWrapper.trigger('keydown', { key: 'Up' })
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('.focus-visible').text()).to.equal('凯美瑞')
     inputWrapper.trigger('keydown', { key: 'ArrowUp' })
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('.focus-visible').text()).to.equal('卡罗拉')
     inputWrapper.trigger('keydown', { key: 'Tab' })
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('.test-overlay-class').element.style.display).to.equal(
       'none'
     )
@@ -524,7 +530,9 @@ describe('components/Searchbox', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.counter).to.equal(1)
     inputWrapper.trigger('keydown', { key: 'Down' })
+    await wrapper.vm.$nextTick()
     inputWrapper.trigger('keydown', { key: 'Enter' })
+    await wrapper.vm.$nextTick()
     expect(wrapper.vm.counter).to.equal(1)
     expect(wrapper.find('.test-overlay-class').element.style.display).to.equal(
       'none'

@@ -164,7 +164,9 @@ iframe,
  */
 export function getFocusable (elem, selector = FOCUSABLE_SELECTOR) {
   return [...elem.querySelectorAll(selector)].filter(
-    el => !matches(el, '[hidden] *, [tabindex="-1"]')
+    el =>
+      !matches(el, '[tabindex="-1"]') &&
+      (el.offsetWidth || el.offsetHeight || el.getClientRects().length)
   )
 }
 

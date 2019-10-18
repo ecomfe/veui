@@ -1,16 +1,15 @@
-import { findIndex, find } from 'lodash'
+import { findIndex, find, get } from 'lodash'
 import { getFocusable, hasClass, toggleClass } from '../utils/dom'
 import config from '../managers/config'
 
-const isActive = (elem, focusClass) => focusClass
-  ? hasClass(elem, focusClass)
-  : elem === document.activeElement
+const isActive = (elem, focusClass) =>
+  focusClass ? hasClass(elem, focusClass) : elem === document.activeElement
 
 const focusElement = (focusableList, index, focusClass) => {
   if (focusClass) {
-    focusableList.forEach(
-      (elem, idx) => toggleClass(elem, focusClass, index === idx)
-    )
+    focusableList.forEach((elem, idx) => {
+      toggleClass(elem, focusClass, index === idx)
+    })
   } else {
     focusableList[index].focus()
   }
@@ -20,10 +19,17 @@ config.defaults({
   'keySelect.focusClass': 'focus-visible'
 })
 
-const createKeySelect = ({ focus }) => ({
+const createKeySelect = ({ useNativeFocus, handlers }) => ({
   computed: {
+    focusMode () {
+      return typeof useNativeFocus === 'string'
+        ? this[useNativeFocus]
+        : typeof useNativeFocus === 'function'
+          ? useNativeFocus(this)
+          : useNativeFocus
+    },
     focusClass () {
-      return focus ? null : config.get('keySelect.focusClass')
+      return this.focusMode ? null : config.get('keySelect.focusClass')
     }
   },
   methods: {
@@ -39,10 +45,7 @@ const createKeySelect = ({ focus }) => ({
       return focusElement(this.getFocusable(), -1, this.focusClass)
     },
     getCurrentActiveElement () {
-      return find(
-        this.getFocusable(),
-        elem => isActive(elem, this.focusClass)
-      )
+      return find(this.getFocusable(), elem => isActive(elem, this.focusClass))
     },
     navigate (forward = true) {
       let focusable = this.getFocusable()
@@ -52,9 +55,7 @@ const createKeySelect = ({ focus }) => ({
       }
 
       let index = findIndex(focusable, elem => isActive(elem, this.focusClass))
-      index = index === -1
-        ? 0
-        : (index + length + (forward ? 1 : -1)) % length
+      index = index === -1 ? 0 : (index + length + (forward ? 1 : -1)) % length
       focusElement(focusable, index, this.focusClass)
     },
     handleKeydown (e) {
@@ -78,6 +79,11 @@ const createKeySelect = ({ focus }) => ({
           this.navigate()
           break
         default:
+          // 先就简单支持下，目前仅用到 tab 和 enter
+          let handler = get(handlers, e.key.toLowerCase())
+          if (handler) {
+            handler.call(this, e)
+          }
           passive = true
           break
       }
@@ -89,5 +95,5 @@ const createKeySelect = ({ focus }) => ({
   }
 })
 
-export default createKeySelect({ focus: true })
+export default createKeySelect({ useNativeFocus: true })
 export { createKeySelect }

@@ -69,12 +69,10 @@
         delay: 300
       }"
       class="veui-dropdown-options"
-      tabindex="-1"
       role="menu"
+      :tabindex="searchable ? -1 : 0"
       :aria-expanded="expanded"
-      @keydown.esc.stop="close"
-      @keydown.down.prevent="navigate()"
-      @keydown.up.prevent="navigate(false)"
+      @keydown="handleKeydown"
     >
       <veui-searchbox
         v-if="searchable"
@@ -167,7 +165,7 @@ import Searchbox from './Searchbox'
 import OptionGroup from './Select/OptionGroup'
 import ui from '../mixins/ui'
 import dropdown from '../mixins/dropdown'
-import keySelect from '../mixins/key-select'
+import { createKeySelect } from '../mixins/key-select'
 import focusable from '../mixins/focusable'
 import searchable from '../mixins/searchable'
 import i18n from '../mixins/i18n'
@@ -197,7 +195,26 @@ export default {
   mixins: [
     ui,
     dropdown,
-    keySelect,
+    createKeySelect({
+      useNativeFocus (vm) {
+        return !vm.searchable
+      },
+      handlers: {
+        tab () {
+          if (this.searchable) {
+            this.close()
+          }
+        },
+        enter () {
+          if (this.searchable) {
+            let elem = this.getCurrentActiveElement()
+            if (elem) {
+              elem.click()
+            }
+          }
+        }
+      }
+    }),
     searchable({
       datasourceKey: 'options',
       childrenKey: 'options',
@@ -260,6 +277,9 @@ export default {
     focus () {
       let { command, button } = this.$refs;
       (command || button).focus()
+    },
+    getContainerOfFocusable () {
+      return this.$refs.options.$el
     }
   }
 }

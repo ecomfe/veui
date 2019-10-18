@@ -164,8 +164,9 @@ describe('components/Dropdown', () => {
 
     await $nextTick()
     let menuWrapper = wrapper.find('.test-overlay-class')
-
-    menuWrapper.find('.veui-dropdown-options').trigger('keydown.esc')
+    menuWrapper
+      .find('.veui-dropdown-options')
+      .trigger('keydown.esc', { key: 'Escape' })
     await $nextTick()
     expect(menuWrapper.element.style.display).to.equal('none')
     wrapper.destroy()
