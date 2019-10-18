@@ -304,7 +304,7 @@ describe('components/Select/Select', () => {
     expect(overlay.isVisible()).to.equal(false)
 
     input.trigger('keydown', { key: 'Down' })
-    input.trigger('keydown', { key: 'Down' })
+    await vm.$nextTick()
     input.trigger('keydown', { key: 'Up' })
     await vm.$nextTick()
     let items = wrapper.findAll(OPTION_ITEM)

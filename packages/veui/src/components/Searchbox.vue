@@ -172,7 +172,7 @@ const SHARED_PROPS = [
   'clearable'
 ]
 
-const keySelect = createKeySelect({ focus: false })
+const keySelect = createKeySelect({ useNativeFocus: false })
 
 export default {
   name: 'veui-searchbox',
@@ -365,8 +365,9 @@ export default {
         case 'Down':
         case 'ArrowDown':
           this.openSuggestions()
-          this.handleKeydown(e)
-          this.getCurrentActiveElement()
+          this.$nextTick(() => {
+            this.handleKeydown(e)
+          })
           break
         case 'Enter':
           if (!this.expanded) {
@@ -375,9 +376,9 @@ export default {
           }
           let elem = this.getCurrentActiveElement()
           if (elem) {
+            // 会调用 selectSuggestion，所以已经会关闭了
             elem.click()
           }
-          this.closeSuggestions()
           break
         case 'Tab':
           passive = true
@@ -397,7 +398,9 @@ export default {
       this.selectSuggestion(suggestion)
     },
     closeSuggestions () {
-      this.expanded = false
+      if (this.expanded) {
+        this.expanded = false
+      }
     },
     openSuggestions () {
       if (!this.expanded) {

@@ -69,7 +69,7 @@ export default {
   },
   mixins: [
     dropdown,
-    createKeySelect({ focus: false }),
+    createKeySelect({ useNativeFocus: false }),
     searchable({
       datasourceKey: 'realDatasource',
       childrenKey: vm => vm.childrenKey,
