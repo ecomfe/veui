@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-progress {
+.@{veui-prefix}-progress {
   display: inline-flex;
   align-items: center;
   position: relative;
@@ -15,16 +15,16 @@
   }
 
   &-bar {
-    .veui-progress-desc {
+    .@{veui-prefix}-progress-desc {
       margin-left: @dls-progress-track-spacing-bar;
       padding-right: @dls-progress-icon-spacing-bar;
 
-      .veui-progress-status-icon {
+      .@{veui-prefix}-progress-status-icon {
         .dls-icon-size(@dls-progress-icon-size-bar);
       }
     }
 
-    .veui-progress-rail {
+    .@{veui-prefix}-progress-rail {
       overflow: hidden;
       order: 0;
       background-color: @dls-progress-track-color;
@@ -34,12 +34,12 @@
       height: dls-line-height(@dls-line-height-m, @dls-progress-font-size-s);
       font-size: @dls-progress-font-size-s;
 
-      .veui-progress-rail {
+      .@{veui-prefix}-progress-rail {
         .size(@dls-progress-width-bar-s, @dls-progress-track-width-s);
       }
 
-      .veui-progress-rail,
-      .veui-progress-meter {
+      .@{veui-prefix}-progress-rail,
+      .@{veui-prefix}-progress-meter {
         border-radius: @dls-progress-border-radius-s;
       }
     }
@@ -48,17 +48,17 @@
       height: dls-line-height(@dls-line-height-m, @dls-progress-font-size-m);
       font-size: @dls-progress-font-size-m;
 
-      .veui-progress-rail {
+      .@{veui-prefix}-progress-rail {
         .size(@dls-progress-width-bar-m, @dls-progress-track-width-m);
       }
 
-      .veui-progress-rail,
-      .veui-progress-meter {
+      .@{veui-prefix}-progress-rail,
+      .@{veui-prefix}-progress-meter {
         border-radius: @dls-progress-border-radius-m;
       }
     }
 
-    .veui-progress-meter {
+    .@{veui-prefix}-progress-meter {
       .size(100%);
       margin-left: -100%;
       background-color: @dls-progress-indicator-color;
@@ -67,16 +67,16 @@
   }
 
   &-circular {
-    .veui-progress-circle {
+    .@{veui-prefix}-progress-circle {
       display: block;
       transform: rotate(-90deg);
     }
 
-    .veui-progress-rail {
+    .@{veui-prefix}-progress-rail {
       stroke: @dls-progress-track-color;
     }
 
-    .veui-progress-meter {
+    .@{veui-prefix}-progress-meter {
       stroke: @dls-progress-indicator-color;
       .veui-transition(stroke, stroke-dashoffset);
     }
@@ -86,30 +86,30 @@
     .absolute(0);
     font-size: @dls-progress-font-size-circular;
 
-    .veui-progress-status-icon {
+    .@{veui-prefix}-progress-status-icon {
       .dls-icon-size(@dls-progress-icon-size-circular);
     }
   }
 
   &-status {
     &-success {
-      .veui-progress-meter {
+      .@{veui-prefix}-progress-meter {
         background-color: @dls-progress-indicator-color-success;
         stroke: @dls-progress-indicator-color-success;
       }
 
-      .veui-progress-status-icon {
+      .@{veui-prefix}-progress-status-icon {
         color: @dls-progress-icon-color-success;
       }
     }
 
     &-error {
-      .veui-progress-meter {
+      .@{veui-prefix}-progress-meter {
         background-color: @dls-progress-indicator-color-error;
         stroke: @dls-progress-indicator-color-error;
       }
 
-      .veui-progress-status-icon {
+      .@{veui-prefix}-progress-status-icon {
         color: @dls-progress-icon-color-error;
       }
     }

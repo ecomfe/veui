@@ -1,7 +1,7 @@
 @import "../lib.less";
 @import (reference) "../input.less";
 
-.veui-textarea {
+.@{veui-prefix}-textarea {
   display: inline-block;
   position: relative;
   overflow: hidden;
@@ -17,7 +17,7 @@
 
   @line-number-default-width: @dls-height-m;
 
-  // &.veui-input-invalid {
+  // &.@{veui-prefix}-input-invalid {
   //   &:extend(._veui-input-invalid all);
   // }
 
@@ -117,7 +117,7 @@
     border-radius: @dls-input-border-radius-s;
   }
 
-  &.veui-readonly {
+  &.@{veui-prefix}-readonly {
     border-color: @dls-input-border-color-read-only;
     background-color: @dls-input-background-color-read-only;
     color: @dls-input-font-color-read-only;
@@ -127,19 +127,19 @@
     }
   }
 
-  &.veui-disabled {
+  &.@{veui-prefix}-disabled {
     &,
     &:hover {
       border-color: @dls-input-border-color-disabled;
       color: @dls-input-font-color-disabled;
     }
 
-    & .veui-textarea-input {
+    & .@{veui-prefix}-textarea-input {
       background-color: @dls-input-background-color-disabled;
     }
 
     &,
-    & .veui-textarea-input {
+    & .@{veui-prefix}-textarea-input {
       cursor: not-allowed;
     }
   }

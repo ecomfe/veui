@@ -1,7 +1,7 @@
 @import "../lib.less";
 @import (reference) "../input.less";
 
-.veui-number-input {
+.@{veui-prefix}-number-input {
   position: relative;
   width: @dls-number-input-width-normal-m;
 
@@ -17,13 +17,13 @@
     ime-mode: disabled;
   }
 
-  &[ui~="normal"] .veui-input-main {
+  &[ui~="normal"] .@{veui-prefix}-input-main {
     padding-right: 0;
     overflow: hidden;
   }
 
   &[ui~="normal"] {
-    .veui-input-append {
+    .@{veui-prefix}-input-append {
       position: relative;
       .size(dls-sum(@dls-number-input-spin-button-width-normal-m, -1px), 100%);
       min-width: dls-sum(@dls-number-input-spin-button-min-width-normal, -1px);
@@ -31,11 +31,11 @@
       margin-left: @dls-input-padding;
     }
 
-    &[ui~="xs"] .veui-input-append {
+    &[ui~="xs"] .@{veui-prefix}-input-append {
       .size(dls-sum(@dls-number-input-spin-button-width-normal-xs, -1px), 100%);
     }
 
-    &[ui~="s"] .veui-input-append {
+    &[ui~="s"] .@{veui-prefix}-input-append {
       .size(dls-sum(@dls-number-input-spin-button-width-normal-s, -1px), 100%);
     }
   }
@@ -43,7 +43,7 @@
   &-controls-focused[ui~="normal"] {
     overflow: visible;
 
-    .veui-input-main {
+    .@{veui-prefix}-input-main {
       overflow: visible;
     }
   }
@@ -57,7 +57,7 @@
   }
 
   &[ui~="normal"]:hover &-controls,
-  &[ui~="normal"].veui-input-focused &-controls,
+  &[ui~="normal"].@{veui-prefix}-input-focused &-controls,
   &-controls-focused[ui~="normal"] &-controls {
     width: 100%;
     opacity: 1;
@@ -77,7 +77,7 @@
 
   &[ui~="normal"] &-step {
     position: relative;
-    &.veui-button {
+    &.@{veui-prefix}-button {
       .size(100%, ~"calc(50% + 1px)");
       padding: 0;
       .border-left-radius(0);
@@ -88,11 +88,11 @@
       z-index: 1;
     }
 
-    &.veui-disabled:hover {
+    &.@{veui-prefix}-disabled:hover {
       .border-color(transparent, transparent, transparent, _);
     }
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       .dls-icon-size(@dls-number-input-spin-icon-size-normal);
     }
   }
@@ -100,7 +100,7 @@
   &[ui~="normal"] &-step-up {
     .absolute(0, 0, _, _);
 
-    &.veui-button {
+    &.@{veui-prefix}-button {
       border-bottom-right-radius: 0;
     }
   }
@@ -108,7 +108,7 @@
   &[ui~="normal"] &-step-down {
     .absolute(_, 0, 0, _);
 
-    &.veui-button {
+    &.@{veui-prefix}-button {
       border-top-right-radius: 0;
     }
   }
@@ -116,7 +116,7 @@
   &[ui~="strong"] {
     width: @dls-number-input-width-strong-m;
 
-    .veui-input {
+    .@{veui-prefix}-input {
       &-main {
         border-radius: @dls-input-border-radius-m;
         padding: 0;
@@ -146,7 +146,7 @@
     &[ui~="xs"] {
       width: @dls-number-input-width-strong-xs;
 
-      .veui-input {
+      .@{veui-prefix}-input {
         &-main {
           border-radius: @dls-input-border-radius-xs;
         }
@@ -161,7 +161,7 @@
     &[ui~="s"] {
       width: @dls-number-input-width-strong-s;
 
-      .veui-input {
+      .@{veui-prefix}-input {
         &-main {
           border-radius: @dls-input-border-radius-s;
         }
@@ -173,7 +173,7 @@
       }
     }
 
-    .veui-number-input {
+    .@{veui-prefix}-number-input {
       &-step {
         padding: 0;
         border-style: none;
@@ -197,21 +197,21 @@
           margin: 0;
         }
 
-        .veui-icon {
+        .@{veui-prefix}-icon {
           .dls-icon-size(@dls-number-input-spin-icon-size-strong);
         }
       }
     }
   }
 
-  // &.veui-input-invalid:not(.veui-disabled):not(.veui-readonly) {
+  // &.veui-input-invalid:not(.veui-disabled):not(.@{veui-prefix}-readonly) {
   //   &:extend(._veui-input-invalid all);
 
-  //   .veui-number-input-step-up {
+  //   .@{veui-prefix}-number-input-step-up {
   //     .border-color(@veui-alert-color, @veui-alert-color, _, _);
   //   }
 
-  //   .veui-number-input-step-down {
+  //   .@{veui-prefix}-number-input-step-down {
   //     .border-color(_, @veui-alert-color, @veui-alert-color, _);
   //   }
   // }

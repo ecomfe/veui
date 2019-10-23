@@ -6,11 +6,20 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
+const VEUI_PREFIX = process.env.VEUI_PREFIX || process.env.VUE_APP_VEUI_PREFIX
+
 module.exports = {
   css: {
     loaderOptions: {
       less: {
-        javascriptEnabled: true
+        javascriptEnabled: true,
+        ...(VEUI_PREFIX
+          ? {
+            modifyVars: {
+              'veui-prefix': VEUI_PREFIX
+            }
+          }
+          : {})
       }
     }
   },

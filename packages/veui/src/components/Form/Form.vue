@@ -1,7 +1,7 @@
 <template>
 <form
   :ui="realUi"
-  class="veui-form"
+  :class="$c('form')"
   @submit.prevent="handleSubmit"
   @reset.prevent="reset(null)"
 >
@@ -22,13 +22,14 @@ import {
   omit
 } from 'lodash'
 import { getVnodes } from '../../utils/context'
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import '../../common/uiTypes'
 
 export default {
   name: 'veui-form',
   uiTypes: ['form', 'form-container'],
-  mixins: [ui],
+  mixins: [prefix, ui],
 
   props: {
     /**

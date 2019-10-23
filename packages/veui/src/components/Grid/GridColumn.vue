@@ -1,6 +1,6 @@
 <template>
 <div
-  class="veui-grid-column"
+  :class="$c('grid-column')"
   :style="style"
 >
   <slot/>
@@ -8,8 +8,11 @@
 </template>
 
 <script>
+import prefix from '../../mixins/prefix'
+
 export default {
   name: 'veui-grid-column',
+  mixins: [prefix],
   props: {
     span: {
       type: Number

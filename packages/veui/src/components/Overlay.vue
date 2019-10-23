@@ -4,6 +4,7 @@ import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
 import focusManager from '../managers/focus'
 import config from '../managers/config'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import {
@@ -24,7 +25,7 @@ overlayManager.setBaseOrder(config.get('overlay.baseZIndex'))
 export default {
   name: 'veui-overlay',
   uiTypes: ['overlay', 'transparent'],
-  mixins: [ui, focusable],
+  mixins: [prefix, ui, focusable],
   props: {
     position: String,
     overlayClass: getClassPropDef(),
@@ -59,10 +60,7 @@ export default {
       return (this.inline || this.zIndex !== null) && this.open
     },
     realOverlayClass () {
-      return mergeClasses(
-        this.overlayClass,
-        config.get('overlay.overlayClass')
-      )
+      return mergeClasses(this.overlayClass, config.get('overlay.overlayClass'))
     }
   },
   watch: {
@@ -293,7 +291,7 @@ export default {
           minWidth: this.minWidth
         }}
         class={{
-          'veui-overlay-box': true,
+          [this.$c('overlay-box')]: true,
           ...this.realOverlayClass
         }}
         ref="box"
@@ -306,9 +304,9 @@ export default {
     return this.inline ? (
       box
     ) : (
-      <div class="veui-overlay" aria-hidden="true">
+      <div class={this.$c('overlay')} aria-hidden="true">
         <transition
-          name="veui-overlay"
+          name={this.$c('overlay')}
           onAfterLeave={() => {
             this.$emit('afterclose')
           }}

@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-region-picker {
+.@{veui-prefix}-region-picker {
   @item-width: 116px;
   @padding-x: 20px;
   @padding-y: 16px;
@@ -52,11 +52,11 @@
       width: @item-width;
       white-space: nowrap;
 
-      .veui-checkbox {
+      .@{veui-prefix}-checkbox {
         width: 100%;
       }
 
-      .veui-checkbox-label {
+      .@{veui-prefix}-checkbox-label {
         max-width: ~"calc(100% - 24px)";
         padding-right: 10px;
         .ellipsis();

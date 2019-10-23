@@ -8,37 +8,48 @@
   <!-- 条 -->
   <div
     ref="track"
-    class="veui-slider-track"
+    :class="$c('slider-track')"
     @click="handleTrackClick"
   >
     <slot name="track">
-      <div class="veui-slider-track-default">
-        <div class="veui-slider-track-default-wrapper">
+      <div :class="$c('slider-track-default')">
+        <div :class="$c('slider-track-default-wrapper')">
           <div
-            class="veui-slider-track-default-bg veui-slider-track-default-progress"
+            :class="[
+              $c('slider-track-default-bg'),
+              $c('slider-track-default-progress')
+            ]"
           />
           <div
-            class="veui-slider-track-default-sp veui-slider-track-default-progress"
+            :class="[
+              $c('slider-track-default-sp'),
+              $c('slider-track-default-progress')
+            ]"
             :style="secondaryProgressStyle"
           />
           <div
-            class="veui-slider-track-default-fg veui-slider-track-default-progress"
+            :class="[
+              $c('slider-track-default-fg'),
+              $c('slider-track-default-progress')
+            ]"
             :style="progressStyle"
           />
           <div
             v-if="stepMarks"
-            class="veui-slider-track-default-marks"
+            :class="$c('slider-track-default-marks')"
           >
             <div
               v-for="mk in stepMarks"
               :key="mk"
-              class="veui-slider-track-default-mark"
               :class="{
-                [`veui-slider-track-default-mark-${
-                  progressRange[0] <= mk && mk <= progressRange[1]
-                    ? 'in-progress'
-                    : 'out-progress'
-                }`]: true
+                [$c('slider-track-default-mark')]: true,
+                [$c(
+                  `slider-track-default-mark-${
+                    progressRange[0] <= mk && mk <= progressRange[1]
+                      ? 'in-progress'
+                      : 'out-progress'
+                  }`
+                )]: true
               }"
               :style="{
                 left: `${mk * 100}%`
@@ -63,7 +74,7 @@
       update: (...args) => handleThumbNudgeUpdage(index, ...args)
     }"
     type="button"
-    class="veui-slider-thumb"
+    :class="$c('slider-thumb')"
     :disabled="realDisabled"
     :style="{
       left: `${ratios[index] * 100}%`
@@ -82,7 +93,7 @@
       :hover="currentThumbHoverIndex === index"
       :dragging="currentThumbDraggingIndex === index"
     >
-      <div class="veui-slider-thumb-default"/>
+      <div :class="$c('slider-thumb-default')"/>
     </slot>
   </button>
 
@@ -113,6 +124,7 @@ import { fill, clamp, isEqual, identity } from 'lodash'
 import drag from '../directives/drag'
 import nudge from '../directives/nudge'
 import outside from '../directives/outside'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import Tooltip from './Tooltip'
@@ -127,7 +139,7 @@ export default {
     nudge,
     outside
   },
-  mixins: [ui, input],
+  mixins: [prefix, ui, input],
   props: {
     /* eslint-disable vue/require-prop-types */
     value: {},
@@ -174,9 +186,9 @@ export default {
   computed: {
     sliderClasses () {
       return {
-        'veui-slider': true,
-        'veui-disabled': this.realDisabled,
-        'veui-readonly': this.realReadonly
+        [this.$c('slider')]: true,
+        [this.$c('disabled')]: this.realDisabled,
+        [this.$c('readonly')]: this.realReadonly
       }
     },
     progressRange () {
@@ -351,11 +363,7 @@ export default {
         return
       }
       let { min, max } = this.localValueBoundary
-      let val = this.getAdjustedValue(
-        this.localValues[index] + delta,
-        min,
-        max
-      )
+      let val = this.getAdjustedValue(this.localValues[index] + delta, min, max)
       this.$set(this.localValues, index, val)
     },
     handleThumbFocus (index) {

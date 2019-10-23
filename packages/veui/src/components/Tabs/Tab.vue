@@ -2,7 +2,7 @@
 <div
   v-show="isActive"
   :id="id"
-  class="veui-tab"
+  :class="$c('tab')"
   role="tabpanel"
   :aria-hidden="!isActive"
 >
@@ -18,13 +18,14 @@ import { getTypedAncestorTracker } from '../../utils/helper'
 import { getIndexOfType } from '../../utils/context'
 import warn from '../../utils/warn'
 import '../../common/uiTypes'
+import prefix from '../../mixins/prefix'
 
 const STATUS_LIST = ['success', 'warning', 'info', 'error']
 
 export default {
   name: 'veui-tab',
   uiTypes: ['tab'],
-  mixins: [getTypedAncestorTracker('tabs')],
+  mixins: [prefix, getTypedAncestorTracker('tabs')],
   props: {
     label: {
       type: String,

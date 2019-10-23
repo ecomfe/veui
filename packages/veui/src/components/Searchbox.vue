@@ -1,11 +1,11 @@
 <template>
 <div
   ref="self"
-  class="veui-searchbox"
   :class="{
-    'veui-searchbox-suggestion-expanded': realExpanded,
-    'veui-disabled': realDisabled,
-    'veui-readonly': realReadonly
+    [$c('searchbox')]: true,
+    [$c('searchbox-suggestion-expanded')]: realExpanded,
+    [$c('disabled')]: realDisabled,
+    [$c('readonly')]: realReadonly
   }"
   :ui="realUi"
   @click="handleClickBox"
@@ -29,12 +29,12 @@
     <div
       slot="after"
       ref="search"
-      class="veui-searchbox-action"
+      :class="$c('searchbox-action')"
       @click.stop="search"
     >
       <veui-button
         :ui="uiParts.button"
-        class="veui-searchbox-action-button"
+        :class="$c('searchbox-action-button')"
         :disabled="realDisabled || realReadonly"
         :aria-haspopup="submitPopup"
       >
@@ -43,13 +43,13 @@
     </div>
     <div
       slot="append"
-      class="veui-searchbox-action"
+      :class="$c('searchbox-action')"
       @click.stop="search"
     >
       <veui-button
         type="button"
         :ui="uiParts.search"
-        class="veui-searchbox-action-icon"
+        :class="$c('searchbox-action-icon')"
         :disabled="realDisabled || realReadonly"
         :aria-haspopup="submitPopup"
       >
@@ -72,7 +72,7 @@
     <div
       :id="dropdownId"
       ref="box"
-      class="veui-searchbox-suggestion-overlay"
+      :class="$c('searchbox-suggestion-overlay')"
       role="listbox"
       :ui="realUi"
       :aria-expanded="realExpanded"
@@ -87,7 +87,7 @@
           ref="options"
           :ui="realUi"
           :options="keyword ? filteredSuggestions : realSuggestions"
-          class="veui-searchbox-option-group"
+          :class="$c('searchbox-option-group')"
         >
           <template
             v-if="$scopedSlots['group-label']"
@@ -123,7 +123,7 @@
                     <mark
                       v-if="matched"
                       :key="`${idx}-${index}`"
-                      class="veui-option-matched"
+                      :class="$c('option-matched')"
                     >{{ text }}</mark>
                     <span
                       v-else
@@ -133,7 +133,7 @@
                   <span
                     v-if="idx < option.matches.length - 1"
                     :key="idx"
-                    class="veui-option-separator"
+                    :class="$c('option-separator')"
                   >&gt;</span>
                 </template>
               </template>
@@ -148,6 +148,7 @@
 </template>
 
 <script>
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
@@ -185,6 +186,7 @@ export default {
     'veui-option-group': OptionGroup
   },
   mixins: [
+    prefix,
     ui,
     input,
     dropdown,

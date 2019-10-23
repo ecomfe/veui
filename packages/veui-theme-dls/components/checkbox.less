@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-checkbox {
+.@{veui-prefix}-checkbox {
   display: inline-flex;
   align-items: center;
   color: @dls-checkbox-font-color;
@@ -30,7 +30,7 @@
     font-size: @dls-checkbox-font-size-m;
     .veui-transition(border-color, background-color, box-shadow);
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       position: absolute;
       margin: auto;
       .dls-icon-size(@dls-checkbox-icon-size, @dls-checkbox-icon-min-size);
@@ -102,14 +102,14 @@
     background-color: @dls-checkbox-background-color-checked-disabled;
   }
 
-  &.veui-disabled {
+  &.@{veui-prefix}-disabled {
     cursor: not-allowed;
   }
 
   &[ui~="s"] {
     font-size: @dls-checkbox-font-size-s;
 
-    .veui-checkbox-box {
+    .@{veui-prefix}-checkbox-box {
       .size(@dls-checkbox-size-s);
     }
   }

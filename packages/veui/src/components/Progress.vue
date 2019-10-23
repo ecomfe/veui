@@ -1,6 +1,5 @@
 <template>
 <div
-  class="veui-progress"
   role="progressbar"
   :aria-valuemax="max"
   :aria-valuemin="min"
@@ -12,11 +11,11 @@
 >
   <div
     v-if="type === 'bar'"
-    class="veui-progress-rail"
+    :class="$c('progress-rail')"
     aria-hidden="true"
   >
     <div
-      class="veui-progress-meter"
+      :class="$c('progress-meter')"
       :style="{
         transform: indeterminate ? null : `translateX(${percent}%)`
       }"
@@ -24,14 +23,14 @@
   </div>
   <svg
     v-else-if="type === 'circular'"
-    class="veui-progress-circle"
+    :class="$c('progress-circle')"
     aria-hidden="true"
     :width="width"
     :height="width"
     :viewBox="`0 0 ${width} ${width}`"
   >
     <circle
-      class="veui-progress-rail"
+      :class="$c('progress-rail')"
       :cx="halfWidth"
       :cy="halfWidth"
       :r="getLength(realRadius)"
@@ -39,7 +38,7 @@
       :stroke-width="getLength(realStroke)"
     />
     <circle
-      class="veui-progress-meter"
+      :class="$c('progress-meter')"
       :cx="halfWidth"
       :cy="halfWidth"
       :r="getLength(realRadius)"
@@ -53,12 +52,12 @@
   <div
     v-if="desc"
     :id="descId"
-    class="veui-progress-desc"
+    :class="$c('progress-desc')"
   >
     <slot v-bind="{ percent, value: realValue, status }">
       <veui-icon
         v-if="localStatus"
-        class="veui-progress-status-icon"
+        :class="$c('progress-status-icon')"
         :name="icons[type === 'bar' ? `${localStatus}Bar` : localStatus]"
       />
       <template v-else>{{ valueText }}</template>
@@ -72,6 +71,7 @@
 </template>
 
 <script>
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import Icon from './Icon'
@@ -87,7 +87,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui, i18n],
+  mixins: [prefix, ui, i18n],
   props: {
     type: {
       type: String,
@@ -175,13 +175,16 @@ export default {
     },
     klass () {
       return {
-        'veui-progress-status-complete': this.realValue === this.max,
-        'veui-progress-has-desc': this.desc,
-        [`veui-progress-${this.type}`]: true,
+        [this.$c('progress')]: true,
+        [this.$c('progress-status-complete')]: this.realValue === this.max,
+        [this.$c('progress-has-desc')]: this.desc,
+        [this.$c(`progress-${this.type}`)]: true,
         ...(this.localStatus
-          ? { [`veui-progress-status-${this.localStatus}`]: true }
+          ? { [this.$c(`progress-status-${this.localStatus}`)]: true }
           : {}),
-        ...(this.indeterminate ? { 'veui-progress-indeterminate': true } : {})
+        ...(this.indeterminate
+          ? { [this.$c('progress-indeterminate')]: true }
+          : {})
       }
     },
     ratio () {

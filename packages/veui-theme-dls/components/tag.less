@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-tag {
+.@{veui-prefix}-tag {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -36,7 +36,7 @@
     margin-left: @dls-tag-content-spacing;
     font-size: inherit;
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       .dls-icon-size(@dls-tag-icon-size-aux);
     }
   }
@@ -52,26 +52,26 @@
   &-selectable {
     cursor: pointer;
 
-    &:hover:not(.veui-disabled) {
+    &:hover:not(.@{veui-prefix}-disabled) {
       opacity: @dls-tag-opacity-hover;
     }
   }
 
-  &.veui-disabled {
+  &.@{veui-prefix}-disabled {
     color: @dls-tag-font-color-disabled;
     outline: none;
 
-    .veui-tag-close {
+    .@{veui-prefix}-tag-close {
       cursor: not-allowed;
     }
   }
 
-  &-default.veui-disabled {
+  &-default.@{veui-prefix}-disabled {
     border-color: @dls-tag-border-color-disabled;
     background-color: @dls-tag-background-color-disabled;
   }
 
-  &.veui-tag-selected {
+  &.@{veui-prefix}-tag-selected {
     color: @dls-tag-font-color-selected;
     border-color: @dls-tag-border-color-selected;
     background-color: @dls-tag-background-color-selected;
@@ -83,7 +83,7 @@
       );
     }
 
-    &.veui-disabled {
+    &.@{veui-prefix}-disabled {
       border-color: @dls-tag-border-color-selected-disabled;
       background-color: @dls-tag-background-color-selected-disabled;
     }
@@ -104,12 +104,12 @@
       border-color: @@bd-color-name;
       background-color: @@bg-color-name;
 
-      &.veui-disabled {
+      &.@{veui-prefix}-disabled {
         color: @@disabled-color-name;
         border-color: @@disabled-bd-color-name;
       }
 
-      &.veui-tag-selected,
+      &.@{veui-prefix}-tag-selected,
       &[ui~="reverse"] {
         color: @dls-tag-font-color-selected;
         border-color: @dls-tag-border-color-selected;
@@ -122,7 +122,7 @@
           );
         }
 
-        &.veui-disabled {
+        &.@{veui-prefix}-disabled {
           border-color: @dls-tag-border-color-selected-disabled;
           background-color: @@selected-disabled-bg-color;
         }
@@ -133,7 +133,7 @@
       }
 
       &.focus-visible,
-      &.veui-tag.focus-visible {
+      &.@{veui-prefix}-tag.focus-visible {
         .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
       }
     }

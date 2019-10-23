@@ -1,11 +1,12 @@
 import Row from './_TableRow'
+import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import { flatMap } from 'lodash'
 
 export default {
   name: 'veui-table-body',
-  mixins: [table, i18n],
+  mixins: [prefix, table, i18n],
   computed: {
     ...table.mapTableData(
       'data',
@@ -46,11 +47,11 @@ export default {
         ) : (
           <tr>
             <td
-              class="veui-table-no-data"
+              class={this.$c('table-no-data')}
               colspan={this.columnCount}
               role="cell"
             >
-              <div class="veui-table-cell">
+              <div class={this.$c('table-cell')}>
                 {this.$slots['no-data'] || this.t('@table.noData')}
               </div>
             </td>

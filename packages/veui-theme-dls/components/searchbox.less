@@ -1,17 +1,17 @@
 @import "../lib.less";
 @import (reference) "../dropdown.less";
 
-.veui-searchbox {
+.@{veui-prefix}-searchbox {
   display: inline-flex;
   position: relative;
   color: @dls-input-font-color;
   background-color: @dls-input-background-color;
 
-  .veui-input-has-after .veui-input-main {
+  .@{veui-prefix}-input-has-after .@{veui-prefix}-input-main {
     .border-right-radius(@dls-input-border-radius-m);
   }
 
-  .veui-input {
+  .@{veui-prefix}-input {
     width: 100%;
     overflow: visible;
 
@@ -19,16 +19,16 @@
       width: @dls-input-width;
     }
     &-append {
-      .veui-input-clear {
+      .@{veui-prefix}-input-clear {
         margin-right: 0;
       }
-      .veui-searchbox-action-icon {
+      .@{veui-prefix}-searchbox-action-icon {
         margin-left: @dls-input-content-spacing;
       }
     }
   }
-  .veui-input-focused {
-    .veui-input-main {
+  .@{veui-prefix}-input-focused {
+    .@{veui-prefix}-input-main {
       z-index: 1;
     }
   }
@@ -38,46 +38,46 @@
     white-space: nowrap;
     color: @dls-input-font-color;
 
-    &-button.veui-button {
+    &-button.@{veui-prefix}-button {
       display: none;
       outline: none;
     }
   }
 
-  &.veui-readonly {
+  &.@{veui-prefix}-readonly {
     background-color: @dls-input-background-color-read-only;
     border-color: @dls-input-border-color-read-only;
     color: @dls-input-font-color-read-only;
 
-    .veui-input-after {
+    .@{veui-prefix}-input-after {
       overflow: hidden;
     }
 
-    .veui-searchbox-action,
-    .veui-searchbox-action-icon {
+    .@{veui-prefix}-searchbox-action,
+    .@{veui-prefix}-searchbox-action-icon {
       cursor: not-allowed;
       color: @dls-input-font-color-read-only;
     }
   }
 
-  &.veui-disabled {
+  &.@{veui-prefix}-disabled {
     background-color: @dls-input-background-color-disabled;
     border-color: @dls-input-border-color-disabled;
     color: @dls-input-font-color-disabled;
 
-    .veui-input-after {
+    .@{veui-prefix}-input-after {
       overflow: hidden;
     }
 
-    .veui-searchbox-action,
-    .veui-searchbox-action-icon {
+    .@{veui-prefix}-searchbox-action,
+    .@{veui-prefix}-searchbox-action-icon {
       cursor: not-allowed;
       color: @dls-input-font-color-disabled;
     }
   }
 
-  &:not(.veui-disabled):not(.veui-readonly) {
-    .veui-searchbox-action:hover {
+  &:not(.veui-disabled):not(.@{veui-prefix}-readonly) {
+    .@{veui-prefix}-searchbox-action:hover {
       color: @dls-input-font-color;
     }
   }
@@ -88,43 +88,43 @@
     background-color: @dls-option-background-color;
   }
 
-  .veui-option {
+  .@{veui-prefix}-option {
     &:extend(._veui-dropdown-option all);
   }
 
   &[ui~="s"] {
-    .veui-input-has-after .veui-input-main {
+    .@{veui-prefix}-input-has-after .@{veui-prefix}-input-main {
       .border-right-radius(@dls-input-border-radius-s);
     }
   }
 
   &[ui~="xs"] {
-    .veui-input-has-after .veui-input-main {
+    .@{veui-prefix}-input-has-after .@{veui-prefix}-input-main {
       .border-right-radius(@dls-input-border-radius-xs);
     }
   }
 
   &[ui~="l"] {
-    .veui-input-has-after .veui-input-main {
+    .@{veui-prefix}-input-has-after .@{veui-prefix}-input-main {
       .border-right-radius(@dls-input-border-radius-l);
     }
   }
 
   &[ui~="strong"] {
-    .veui-input-has-after {
-      .veui-input-main {
+    .@{veui-prefix}-input-has-after {
+      .@{veui-prefix}-input-main {
         .border-right-radius(0);
 
-        .veui-searchbox-action {
+        .@{veui-prefix}-searchbox-action {
           display: none;
         }
       }
-      .veui-input-after {
+      .@{veui-prefix}-input-after {
         .border-left-radius(0);
         margin-left: -1px;
 
-        .veui-searchbox-action {
-          .veui-searchbox-action-button {
+        .@{veui-prefix}-searchbox-action {
+          .@{veui-prefix}-searchbox-action-button {
             display: block;
             .border-left-radius(0);
           }

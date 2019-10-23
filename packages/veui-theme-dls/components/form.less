@@ -1,17 +1,17 @@
 @import "../lib.less";
 
-.veui-form {
-  .veui-fieldset,
-  .veui-field {
+.@{veui-prefix}-form {
+  .@{veui-prefix}-fieldset,
+  .@{veui-prefix}-field {
     margin-bottom: @veui-field-gap;
   }
 
-  .veui-fieldset:last-child,
-  .veui-field:last-child {
+  .@{veui-prefix}-fieldset:last-child,
+  .@{veui-prefix}-field:last-child {
     margin-bottom: 0;
   }
 
-  .veui-fieldset > .veui-field {
+  .@{veui-prefix}-fieldset > .@{veui-prefix}-field {
     margin-bottom: 0;
   }
 
@@ -22,18 +22,18 @@
       margin-left: 10px;
     }
 
-    .veui-fieldset,
-    .veui-field {
+    .@{veui-prefix}-fieldset,
+    .@{veui-prefix}-field {
       display: inline-block;
       margin-bottom: 0;
       clear: none;
 
-      & > .veui-form-label,
-      &.veui-field-no-label::before {
+      & > .@{veui-prefix}-form-label,
+      &.@{veui-prefix}-field-no-label::before {
         width: auto;
       }
 
-      & + .veui-fieldset {
+      & + .@{veui-prefix}-fieldset {
         margin-left: 30px;
       }
     }

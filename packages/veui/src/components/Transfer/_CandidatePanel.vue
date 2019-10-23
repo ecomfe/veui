@@ -1,6 +1,6 @@
 <template>
 <veui-filter-panel
-  class="veui-transfer-candidate-panel"
+  :class="$c('transfer-candidate-panel')"
   :datasource="datasource"
   :searchable="searchable"
   :filter="realFilter"
@@ -14,7 +14,7 @@
       </slot>
       <veui-button
         :ui="uiParts.selectAll"
-        class="veui-transfer-select-all"
+        :class="$c('transfer-select-all')"
         :disabled="!isSelectable"
         @click="selectAll"
       >
@@ -67,6 +67,7 @@
 import FilterPanel from '../FilterPanel'
 import Tree from '../Tree'
 import Button from '../Button'
+import prefix from '../../mixins/prefix'
 import i18n from '../../mixins/i18n'
 import { clone } from 'lodash'
 
@@ -77,7 +78,7 @@ export default {
     'veui-tree': Tree,
     'veui-button': Button
   },
-  mixins: [i18n],
+  mixins: [prefix, i18n],
   props: {
     datasource: Array,
     searchable: Boolean,

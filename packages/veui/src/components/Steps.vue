@@ -1,6 +1,6 @@
 <template>
 <div
-  class="veui-steps"
+  :class="$c('steps')"
   :ui="realUi"
   role="list"
 >
@@ -8,16 +8,18 @@
     <div
       v-if="index !== 0"
       :key="'connector-' + index"
-      class="veui-steps-step-connector"
-      :class="'veui-steps-step-connector-' + stepStatus[index]"
+      :class="[
+        $c('steps-step-connector'),
+        $c(`steps-step-connector-${stepStatus[index]}`)
+      ]"
     />
     <veui-link
       :key="'step-' + index"
-      class="veui-steps-step"
       :class="[
-        'veui-steps-step-' + stepStatus[index],
+        $c('steps-step'),
+        $c(`steps-step-${stepStatus[index]}`),
         index < steps.length - 1
-          ? 'veui-steps-step-next-' + stepStatus[index + 1]
+          ? $c(`steps-step-next-${stepStatus[index + 1]}`)
           : ''
       ]"
       :to="step.to"
@@ -30,8 +32,8 @@
         v-bind="step"
         :index="index"
       >
-        <div class="veui-steps-step-index-container">
-          <div class="veui-steps-step-index">
+        <div :class="$c('steps-step-index-container')">
+          <div :class="$c('steps-step-index')">
             <slot
               name="index"
               v-bind="step"
@@ -52,17 +54,17 @@
           </div>
           <div
             v-if="index < stepStatus.length - 1"
-            class="veui-steps-step-connector-placeholder"
-            :class="
-              'veui-steps-step-connector-placeholder-' + stepStatus[index + 1]
-            "
+            :class="[
+              $c('steps-step-connector-placeholder'),
+              $c(`steps-step-connector-placeholder-${stepStatus[index + 1]}`)
+            ]"
           />
         </div>
         <div
           v-if="step.label"
-          class="veui-steps-step-content"
+          :class="$c('steps-step-content')"
         >
-          <h3 class="veui-steps-step-label">
+          <h3 :class="$c('steps-step-label')">
             <slot
               name="label"
               v-bind="step"
@@ -73,7 +75,7 @@
           </h3>
           <p
             v-if="step.desc"
-            class="veui-steps-step-desc"
+            :class="$c('steps-step-desc')"
           >
             <slot
               name="desc"
@@ -93,6 +95,7 @@
 <script>
 import Icon from './Icon'
 import Link from './Link'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 
@@ -102,7 +105,7 @@ export default {
     'veui-icon': Icon,
     'veui-link': Link
   },
-  mixins: [ui, i18n],
+  mixins: [prefix, ui, i18n],
   props: {
     steps: {
       type: Array,

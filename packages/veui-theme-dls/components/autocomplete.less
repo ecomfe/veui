@@ -1,7 +1,7 @@
 @import "../lib.less";
 @import (reference) "../dropdown.less";
 
-.veui-autocomplete {
+.@{veui-prefix}-autocomplete {
   display: inline-block;
 
   &-suggestion-group {
@@ -13,17 +13,17 @@
     background-color: #fff;
     outline: none;
 
-    .veui-autocomplete-suggestion-matched {
+    .@{veui-prefix}-autocomplete-suggestion-matched {
       color: @dls-option-font-color-highlighted;
       background: transparent;
     }
-    .veui-option-group,
-    &.veui-option-group {
+    .@{veui-prefix}-option-group,
+    &.@{veui-prefix}-option-group {
       padding: 0 10px;
       &-label {
         padding: 0;
       }
-      .veui-option {
+      .@{veui-prefix}-option {
         &-label {
           position: relative; // 显示在 hover 层的上面
         }

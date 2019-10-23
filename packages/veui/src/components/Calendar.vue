@@ -1,6 +1,6 @@
 <template>
 <div
-  class="veui-calendar"
+  :class="$c('calendar')"
   :ui="realUi"
   role="application"
   :aria-label="t('calendar')"
@@ -12,18 +12,18 @@
   <div
     v-for="(p, pIndex) in panels"
     :key="pIndex"
-    :class="['veui-calendar-panel', `veui-calendar-${p.view}`]"
+    :class="[$c('calendar-panel'), $c(`calendar-${p.view}`)]"
   >
     <div
-      class="veui-calendar-head"
+      :class="$c('calendar-head')"
       :aria-hidden="pIndex > 0"
     >
       <button
         ref="prev"
         type="button"
         :class="{
-          'veui-calendar-prev': true,
-          'veui-sr-only': pIndex !== 0 && p.view === 'days'
+          [$c('calendar-prev')]: true,
+          [$c('sr-only')]: pIndex !== 0 && p.view === 'days'
         }"
         :disabled="disabled || readonly"
         :aria-hidden="pIndex > 0"
@@ -37,7 +37,7 @@
         <button
           ref="year-select"
           type="button"
-          class="veui-calendar-select"
+          :class="$c('calendar-select')"
           :disabled="disabled || readonly"
           :aria-label="t('selectYear', { year: p.year })"
           @click="setView(pIndex, 'years')"
@@ -49,7 +49,7 @@
           :id="`${id}:panel-title:${pIndex}`"
           ref="month-select"
           type="button"
-          class="veui-calendar-select"
+          :class="$c('calendar-select')"
           :disabled="disabled || readonly"
           :aria-label="t('selectMonth', { month: p.month + 1 })"
           @click="setView(pIndex, 'months')"
@@ -63,7 +63,7 @@
       <template v-else-if="p.view === 'months'">
         <span
           :id="`${id}:panel-title:${pIndex}`"
-          class="veui-calendar-label"
+          :class="$c('calendar-label')"
         >
           <b>{{ t('year', { year: p.year }) }}</b>
         </span>
@@ -71,7 +71,7 @@
       <template v-else-if="p.view === 'years'">
         <span
           :id="`${id}:panel-title:${pIndex}`"
-          class="veui-calendar-label"
+          :class="$c('calendar-label')"
         >
           <b>{{ t('year', { year: p.year - (p.year % 10) }) }}</b>–<b>{{ t('year', { year: p.year - (p.year % 10) + 9 }) }}</b>
         </span>
@@ -80,8 +80,8 @@
         ref="next"
         type="button"
         :class="{
-          'veui-calendar-next': true,
-          'veui-sr-only': pIndex !== panels.length - 1 && p.view === 'days'
+          [$c('calendar-next')]: true,
+          [$c('sr-only')]: pIndex !== panels.length - 1 && p.view === 'days'
         }"
         :disabled="disabled || readonly"
         :aria-label="getStepLabel(p.view, 'next')"
@@ -93,8 +93,10 @@
     </div>
     <div
       ref="body"
-      class="veui-calendar-body"
-      :class="{ 'veui-calendar-multiple-range': realMultiple && realRange }"
+      :class="{
+        [$c('calendar-body')]: true,
+        [$c('calendar-multiple-range')]: realMultiple && realRange
+      }"
     >
       <table>
         <template v-if="p.view === 'days'">
@@ -229,13 +231,8 @@ import {
 import { closest, focusIn, focus } from '../utils/dom'
 import { sign, isPositive } from '../utils/math'
 import { normalizeClass } from '../utils/helper'
-import {
-  isInteger,
-  flattenDeep,
-  findIndex,
-  uniqueId,
-  upperFirst
-} from 'lodash'
+import { isInteger, flattenDeep, findIndex, uniqueId, upperFirst } from 'lodash'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
@@ -246,10 +243,10 @@ config.defaults({
   'calendar.weekStart': 1
 })
 
-const VIEW_CELL_SELECTOR_MAP = {
-  days: '.veui-calendar-day',
-  months: '.veui-calendar-month',
-  years: '.veui-calendar-year'
+const VIEW_CELL_CLASS_MAP = {
+  days: 'calendar-day',
+  months: 'calendar-month',
+  years: 'calendar-year'
 }
 
 const VIEW_STEP_MAP = {
@@ -269,7 +266,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui, input, i18n],
+  mixins: [prefix, ui, input, i18n],
   model: {
     prop: 'selected',
     event: 'select'
@@ -512,25 +509,27 @@ export default {
           : this.dateClass
 
       return {
-        'veui-calendar-day': day.month === panel.month,
-        'veui-calendar-aux': day.month !== panel.month,
-        'veui-calendar-today': day.isToday,
-        'veui-calendar-selected': day.isSelected,
-        'veui-calendar-in-range': day.rangePosition && day.rangePosition.within,
-        'veui-calendar-range-start':
+        [this.$c('calendar-day')]: day.month === panel.month,
+        [this.$c('calendar-aux')]: day.month !== panel.month,
+        [this.$c('calendar-today')]: day.isToday,
+        [this.$c('calendar-selected')]: day.isSelected,
+        [this.$c('calendar-in-range')]:
+          day.rangePosition && day.rangePosition.within,
+        [this.$c('calendar-range-start')]:
           day.rangePosition && day.rangePosition.start,
-        'veui-calendar-range-end': day.rangePosition && day.rangePosition.end,
+        [this.$c('calendar-range-end')]:
+          day.rangePosition && day.rangePosition.end,
         ...normalizeClass(extraClass)
       }
     },
     getMonthClass (panel, i, j) {
       let month = (i - 1) * 4 + j - 1
       return {
-        'veui-calendar-month': true,
-        'veui-calendar-today':
+        [this.$c('calendar-month')]: true,
+        [this.$c('calendar-today')]:
           month === this.today.getMonth() &&
           panel.year === this.today.getFullYear(),
-        'veui-calendar-selected':
+        [this.$c('calendar-selected')]:
           this.realSelected && !this.realMultiple && !this.realRange
             ? month === this.realSelected.getMonth() &&
               panel.year === this.realSelected.getFullYear()
@@ -541,9 +540,9 @@ export default {
       let offset = (i - 1) * 4 + j - 1
       let year = panel.year - (panel.year % 10) + offset
       return {
-        'veui-calendar-year': offset < 10,
-        'veui-calendar-today': year === this.today.getFullYear(),
-        'veui-calendar-selected':
+        [this.$c('calendar-year')]: offset < 10,
+        [this.$c('calendar-today')]: year === this.today.getFullYear(),
+        [this.$c('calendar-selected')]:
           this.realSelected && !this.realMultiple && !this.realRange
             ? year === this.realSelected.getFullYear()
             : false
@@ -638,7 +637,7 @@ export default {
     },
     moveFocus (view, delta, offset = null) {
       // 不走数据流了，直接查找 DOM 元素最简单
-      let selector = VIEW_CELL_SELECTOR_MAP[view]
+      let selector = `.${this.$c(VIEW_CELL_CLASS_MAP[view])}`
       let cells = [...this.$el.querySelectorAll(selector)]
 
       // 查一下当前聚焦元素的偏移量，归一化以后再处理

@@ -1,7 +1,7 @@
 @import "../lib.less";
 @import (reference) "../dropdown.less";
 
-.veui-option-group {
+.@{veui-prefix}-option-group {
   // 先给所有的 OptionGroup 设置 padding 和 max-height， 然后通过后代选择器清除内部的
   // OptionGroup 的 padding 和 max-height，保证只有最外层的设置了 max-height 和 padding
   font-size: @dls-option-font-size-m;
@@ -27,34 +27,34 @@
     .margin(0, _);
   }
 
-  &.veui-option-group-popout {
-    .veui-option-group-label {
+  &.@{veui-prefix}-option-group-popout {
+    .@{veui-prefix}-option-group-label {
       color: @dls-option-font-color;
     }
   }
 
   &[ui~="xs"] {
-    .veui-option-group-label {
+    .@{veui-prefix}-option-group-label {
       font-size: @dls-option-font-size-xs;
       max-width: @dls-option-max-width-xs;
     }
   }
 
   &[ui~="s"] {
-    .veui-option-group-label {
+    .@{veui-prefix}-option-group-label {
       font-size: @dls-option-font-size-s;
       max-width: @dls-option-max-width-s;
     }
   }
 
   &[ui~="l"] {
-    .veui-option-group-label {
+    .@{veui-prefix}-option-group-label {
       font-size: @dls-option-font-size-l;
       max-width: @dls-option-max-width-l;
     }
   }
 
-  .veui-text-highlighted {
+  .@{veui-prefix}-text-highlighted {
     color: @dls-option-font-color-highlighted;
   }
 
@@ -67,11 +67,11 @@
     line-height: @dls-option-group-label-line-height;
     .padding(@dls-option-group-label-padding-y, @dls-option-padding-m);
 
-    .veui-option-label {
+    .@{veui-prefix}-option-label {
       flex-grow: 1;
     }
 
-    .veui-option-group-expandable {
+    .@{veui-prefix}-option-group-expandable {
       color: @dls-option-icon-color-aux;
       .dls-icon-size(@dls-option-icon-size-aux);
       margin-left: @dls-option-label-spacing-after;
@@ -83,12 +83,12 @@
   }
 
   &-label-disabled {
-    .veui-option-group-expandable {
+    .@{veui-prefix}-option-group-expandable {
       color: @dls-option-icon-color-aux-disabled;
     }
   }
 
-  .veui-option {
+  .@{veui-prefix}-option {
     .padding(_, @dls-option-padding-m);
   }
 

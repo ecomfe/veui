@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-dialog {
+.@{veui-prefix}-dialog {
   @transition-offset: 10px;
 
   display: none;
@@ -57,8 +57,8 @@
       border-radius: 0;
     }
 
-    [ui~="full"].veui-overlay-enter &,
-    [ui~="full"].veui-overlay-leave-to & {
+    [ui~="full"].@{veui-prefix}-overlay-enter &,
+    [ui~="full"].@{veui-prefix}-overlay-leave-to & {
       transform: scale(0.98);
     }
 
@@ -100,7 +100,7 @@
         margin-left: @dls-dialog-title-content-spacing;
         font-size: inherit;
 
-        .veui-icon {
+        .@{veui-prefix}-icon {
           .dls-icon-size(
             @dls-dialog-close-icon-size,
             @dls-dialog-close-icon-min-size
@@ -132,7 +132,7 @@
       padding: @dls-dialog-action-spacing-before @dls-dialog-padding-x
         @dls-dialog-padding-y;
 
-      .veui-button + .veui-button {
+      .@{veui-prefix}-button + .@{veui-prefix}-button {
         margin-left: @dls-dialog-action-content-spacing;
       }
     }
@@ -155,8 +155,8 @@
     background-color: transparent;
   }
 
-  .veui-overlay-enter &-content,
-  .veui-overlay-leave-to &-content {
+  .@{veui-prefix}-overlay-enter &-content,
+  .@{veui-prefix}-overlay-leave-to &-content {
     transform: translate(50%, calc(50% - @transition-offset));
   }
 }

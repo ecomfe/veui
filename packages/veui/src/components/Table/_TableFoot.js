@@ -1,8 +1,9 @@
+import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 
 export default {
   name: 'veui-table-foot',
-  mixins: [table],
+  mixins: [prefix, table],
   computed: {
     ...table.mapTableData(
       'selectable',
@@ -23,7 +24,9 @@ export default {
               .concat(
                 this.columns.map(col => (
                   <th
-                    class={col.align ? `veui-table-column-${col.align}` : null}
+                    class={
+                      col.align ? this.$c(`table-column-${col.align}`) : null
+                    }
                   >
                     {col.renderFoot()}
                   </th>

@@ -1,14 +1,14 @@
 <template>
 <div
-  class="veui-textarea"
   :class="{
-    'veui-textarea-focused': focused,
-    'veui-textarea-rows': normalizedRows > 0,
-    'veui-textarea-line-numbered': lineNumber,
-    'veui-textarea-autoresize': autoresize,
-    'veui-input-invalid': realInvalid,
-    'veui-readonly': realReadonly,
-    'veui-disabled': realDisabled
+    [$c('textarea')]: true,
+    [$c('textarea-focused')]: focused,
+    [$c('textarea-rows')]: normalizedRows > 0,
+    [$c('textarea-line-numbered')]: lineNumber,
+    [$c('textarea-autoresize')]: autoresize,
+    [$c('input-invalid')]: realInvalid,
+    [$c('readonly')]: realReadonly,
+    [$c('disabled')]: realDisabled
   }"
   :ui="realUi"
   v-on="containerListeners"
@@ -16,31 +16,35 @@
   <div
     v-if="measure"
     ref="measurer"
-    class="veui-textarea-measurer"
+    :class="$c('textarea-measurer')"
   >
     <div
       v-for="(line, index) in lines"
       :key="index"
-      class="veui-textarea-measurer-line"
+      :class="$c('textarea-measurer-line')"
     >
       <!-- eslint-disable vue/multiline-html-element-content-newline -->
       <div
         v-if="lineNumber"
-        class="veui-textarea-measurer-line-number"
-        :style="{width: `${lineNumberWidth}px`}"
-      >{{ index + 1 }}</div>
+        :class="$c('textarea-measurer-line-number')"
+        :style="{ width: `${lineNumberWidth}px` }"
+      >
+        {{ index + 1 }}
+      </div>
       <div
-        class="veui-textarea-measurer-line-content"
+        :class="$c('textarea-measurer-line-content')"
         aria-hidden="true"
-        :style="{width: `${measurerContentWidth}px`}"
-      >{{ line }}</div>
+        :style="{ width: `${measurerContentWidth}px` }"
+      >
+        {{ line }}
+      </div>
       <!-- eslint-ensable vue/multiline-html-element-content-newline -->
     </div>
   </div>
   <textarea
     ref="input"
     v-model="localValue"
-    class="veui-textarea-input"
+    :class="$c('textarea-input')"
     :style="{
       maxWidth: lineNumber ? null : '100%',
       width: lineNumber ? `calc(100% - ${lineNumberWidth}px)` : null,
@@ -61,6 +65,7 @@
 
 <script>
 import { pick } from 'lodash'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
@@ -74,7 +79,7 @@ import {
 
 export default {
   name: 'veui-textarea',
-  mixins: [ui, input, activatable],
+  mixins: [prefix, ui, input, activatable],
   inheritAttrs: false,
   props: {
     placeholder: String,

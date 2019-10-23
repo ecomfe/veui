@@ -1,8 +1,8 @@
 <template>
 <label
   :class="{
-    'veui-checkbox': true,
-    'veui-disabled': realReadonly || realDisabled
+    [$c('checkbox')]: true,
+    [$c('disabled')]: realReadonly || realDisabled
   }"
   :ui="realUi"
   v-on="labelListeners"
@@ -16,14 +16,14 @@
     @change="handleChange"
     v-on="boxListeners"
   >
-  <span class="veui-checkbox-box">
-    <transition name="veui-checkbox-icon">
+  <span :class="$c('checkbox-box')">
+    <transition :name="$c('checkbox-icon')">
       <veui-icon
         v-if="indeterminate"
         :name="icons.indeterminate"
       />
     </transition>
-    <transition name="veui-checkbox-icon">
+    <transition :name="$c('checkbox-icon')">
       <veui-icon
         v-if="localChecked && !indeterminate"
         :name="icons.checked"
@@ -32,7 +32,7 @@
   </span>
   <span
     v-if="$slots.default"
-    class="veui-checkbox-label"
+    :class="$c('checkbox-label')"
   >
     <slot/>
   </span>
@@ -42,6 +42,7 @@
 <script>
 import { pick, includes, pull } from 'lodash'
 import Icon from './Icon'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import focusable from '../mixins/focusable'
@@ -57,7 +58,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui, input, focusable],
+  mixins: [prefix, ui, input, focusable],
   inheritAttrs: false,
   model: {
     prop: 'model'

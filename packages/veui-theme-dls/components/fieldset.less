@@ -1,15 +1,15 @@
 @import "../lib.less";
 
-.veui-fieldset {
+.@{veui-prefix}-fieldset {
   position: relative;
   clear: both;
 
-  &-required > .veui-form-label::after {
+  &-required > .@{veui-prefix}-form-label::after {
     .veui-field-require();
   }
 
-  &.veui-field-no-label::before,
-  & > .veui-field-no-label::before {
+  &.@{veui-prefix}-field-no-label::before,
+  & > .@{veui-prefix}-field-no-label::before {
     width: auto;
   }
 
@@ -18,8 +18,8 @@
   }
 
   &[ui~="alt"] {
-    & > .veui-form-label,
-    & > .veui-field:first-child .veui-form-label {
+    & > .@{veui-prefix}-form-label,
+    & > .@{veui-prefix}-field:first-child .@{veui-prefix}-form-label {
       padding-left: 10px;
     }
 
@@ -28,8 +28,8 @@
     }
 
     &,
-    & > .veui-form-label,
-    & > .veui-field > .veui-form-label {
+    & > .@{veui-prefix}-form-label,
+    & > .@{veui-prefix}-field > .@{veui-prefix}-form-label {
       background-color: @veui-gray-color-7;
       border-color: @veui-gray-color-7;
       color: @veui-text-color-normal;
@@ -40,18 +40,26 @@
   // 1. fieldset本身有tip，error出在fieldset上（field中已处理）
   // 2. field自己的错误（后边会处理fieldset、field都没有tip的情况，是这个的一种特殊场景）
   // 3. 最后一个不带field不带tip，error出在fieldset上
-  & > .veui-field .veui-field-error,
-  & > .veui-field:not(.veui-field-no-tip) + .veui-field-error {
+  & > .@{veui-prefix}-field .@{veui-prefix}-field-error,
+  &
+    > .veui-field:not(.@{veui-prefix}-field-no-tip)
+    + .@{veui-prefix}-field-error {
     .veui-field-gap-error();
   }
 
   // field自己带label 和 error，这种情况error要缩进
-  & > .veui-field:not(.veui-field-no-label) ~ .veui-field-error,
-  & > .veui-field:not(.veui-field-no-tip) + .veui-field-error {
+  &
+    > .veui-field:not(.@{veui-prefix}-field-no-label)
+    ~ .@{veui-prefix}-field-error,
+  &
+    > .veui-field:not(.@{veui-prefix}-field-no-tip)
+    + .@{veui-prefix}-field-error {
     margin-left: @veui-form-label-width;
   }
 
-  &.veui-field-no-tip > .veui-field-no-tip:last-child > .veui-field-error {
+  &.@{veui-prefix}-field-no-tip
+    > .@{veui-prefix}-field-no-tip:last-child
+    > .@{veui-prefix}-field-error {
     position: static;
     display: inline-block;
     margin-left: 10px;
@@ -59,7 +67,7 @@
     line-height: @veui-height-normal;
     font-size: inherit;
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       margin-top: ~"calc(@{veui-height-normal} / 2 - 0.5em)";
     }
   }

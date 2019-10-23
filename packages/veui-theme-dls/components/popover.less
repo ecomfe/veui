@@ -1,30 +1,30 @@
 @import "../lib.less";
 
-.veui-popover-box {
+.@{veui-prefix}-popover-box {
   @arrow-size: @dls-tooltip-arrow-width;
   @arrow-indent: @dls-popover-arrow-spacing;
 
-  .veui-tooltip {
+  .@{veui-prefix}-tooltip {
     max-width: @dls-popover-max-width;
     line-height: @dls-popover-line-height;
     font-size: inherit;
     padding: 0;
     border: 0.1px solid transparent;
 
-    .veui-tooltip-content {
+    .@{veui-prefix}-tooltip-content {
       overflow: auto;
       margin: @dls-popover-padding-y @dls-popover-padding-x;
     }
   }
 
   &[ui~="s"] {
-    .veui-tooltip {
+    .@{veui-prefix}-tooltip {
       border-radius: @dls-popover-border-radius-s;
     }
   }
 
   &[ui~="m"] {
-    .veui-tooltip {
+    .@{veui-prefix}-tooltip {
       border-radius: @dls-popover-border-radius-m;
     }
   }
@@ -56,19 +56,23 @@
     }
   }
 
-  &.tether-element-attached-top.tether-target-attached-top .veui-tooltip {
+  &.tether-element-attached-top.tether-target-attached-top
+    .@{veui-prefix}-tooltip {
     .make-align(top);
   }
 
-  &.tether-element-attached-right.tether-target-attached-right .veui-tooltip {
+  &.tether-element-attached-right.tether-target-attached-right
+    .@{veui-prefix}-tooltip {
     .make-align(right);
   }
 
-  &.tether-element-attached-bottom.tether-target-attached-bottom .veui-tooltip {
+  &.tether-element-attached-bottom.tether-target-attached-bottom
+    .@{veui-prefix}-tooltip {
     .make-align(bottom);
   }
 
-  &.tether-element-attached-left.tether-target-attached-left .veui-tooltip {
+  &.tether-element-attached-left.tether-target-attached-left
+    .@{veui-prefix}-tooltip {
     .make-align(left);
   }
 }

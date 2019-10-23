@@ -1,10 +1,10 @@
 <template>
 <div
   ref="self"
-  class="veui-time-picker"
   :class="{
-    'veui-readonly': realReadonly,
-    'veui-disabled': realDisabled
+    [$c('time-picker')]: true,
+    [$c('readonly')]: realReadonly,
+    [$c('disabled')]: realDisabled
   }"
   :ui="realUi"
   :aria-readonly="realReadonly"
@@ -22,11 +22,11 @@
   >
     <div
       slot="append"
-      class="veui-time-picker-icon"
+      :class="$c('time-picker-icon')"
     >
       <veui-button
         v-if="clearable && localValue"
-        class="veui-time-picker-clear"
+        :class="$c('time-picker-clear')"
         :ui="uiParts.clear"
         :aria-label="t('clear')"
         :disabled="realDisabled || realReadonly"
@@ -36,7 +36,7 @@
         <veui-icon :name="icons.clear"/>
       </veui-button>
       <veui-icon
-        class="veui-time-picker-clock"
+        :class="$c('time-picker-clock')"
         :name="icons.clock"
       />
     </div>
@@ -48,7 +48,7 @@
     match-width
     :overlay-class="
       mergeOverlayClass({
-        'veui-time-picker-overlay': true
+        [$c('time-picker-overlay')]: true
       })
     "
     :open="expanded"
@@ -58,14 +58,15 @@
     <div
       :id="dropdownId"
       v-outside:input="closeDropdown"
-      :class="
-        `veui-time-picker-overlay-content veui-time-picker-overlay-${mode}`
-      "
+      :class="[
+        $c('time-picker-overlay-content'),
+        $c(`time-picker-overlay-${mode}`)
+      ]"
     >
       <div
         ref="hour"
         key="hour"
-        class="veui-time-picker-option-group-wrapper"
+        :class="$c('time-picker-option-group-wrapper')"
       >
         <veui-time-picker-option-group
           :ui="realUi"
@@ -92,7 +93,7 @@
         v-if="enableMinutes"
         ref="minute"
         key="minute"
-        class="veui-time-picker-option-group-wrapper"
+        :class="$c('time-picker-option-group-wrapper')"
       >
         <veui-time-picker-option-group
           :ui="realUi"
@@ -119,7 +120,7 @@
         v-if="enableSeconds"
         ref="second"
         key="second"
-        class="veui-time-picker-option-group-wrapper"
+        :class="$c('time-picker-option-group-wrapper')"
       >
         <veui-time-picker-option-group
           :ui="realUi"
@@ -153,6 +154,7 @@ import TimePickerOptionGroup from './_TimePickerOptionGroup'
 import Input from '../Input'
 import Button from '../Button'
 import Icon from '../Icon'
+import prefix from '../../mixins/prefix'
 import dropdown from '../../mixins/dropdown'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
@@ -214,7 +216,7 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [ui, input, dropdown, i18n],
+  mixins: [prefix, ui, input, dropdown, i18n],
   model: {
     event: 'input'
   },
@@ -382,7 +384,7 @@ export default {
     },
     scrollSelectedTime (viewport, duration) {
       if (viewport) {
-        let selected = viewport.querySelector('.veui-option-selected')
+        let selected = viewport.querySelector(`.${this.$c('option-selected')}`)
         if (selected) {
           scrollTo(0.5, viewport, selected, { duration })
         }

@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-steps {
+.@{veui-prefix}-steps {
   @step-height: @dls-steps-marker-size-m;
   @title-font-size: @dls-steps-title-font-size-m;
   @title-height: dls-line-height(@dls-line-height-m, @title-font-size);
@@ -40,7 +40,7 @@
       border-radius: 50%;
       .veui-transition(background-color, box-shadow, border-color);
 
-      .veui-icon {
+      .@{veui-prefix}-icon {
         .dls-icon-size(@dls-steps-marker-icon-size);
       }
     }
@@ -81,7 +81,7 @@
     &:last-child {
       margin-right: 0;
       flex: 0 1 auto;
-      .veui-steps-step-label::after {
+      .@{veui-prefix}-steps-step-label::after {
         display: none;
       }
     }
@@ -111,11 +111,11 @@
       }
 
       &.focus-visible {
-        .veui-steps-step-index {
+        .@{veui-prefix}-steps-step-index {
           background-color: @dls-steps-marker-background-color-completed-focus;
           box-shadow: @dls-steps-marker-shadow-completed-focus;
         }
-        .veui-steps-step-label {
+        .@{veui-prefix}-steps-step-label {
           color: @dls-steps-title-font-color-focus;
         }
       }
@@ -126,12 +126,12 @@
         background-color: @dls-steps-connector-color-current;
       }
 
-      .veui-steps-step-index {
+      .@{veui-prefix}-steps-step-index {
         .make-index(current);
       }
 
       &.focus-visible {
-        .veui-steps-step-index {
+        .@{veui-prefix}-steps-step-index {
           background-color: @dls-steps-marker-background-color-current-focus;
           border-color: @dls-steps-marker-border-color-current-focus;
           box-shadow: @dls-steps-marker-shadow-current-focus;
@@ -143,7 +143,7 @@
       &::before {
         background-color: @dls-steps-connector-color-incomplete;
       }
-      .veui-steps-step {
+      .@{veui-prefix}-steps-step {
         &-index {
           .make-index(incomplete);
         }
@@ -160,12 +160,12 @@
       &::before {
         background-color: @dls-steps-connector-color-error;
       }
-      .veui-steps-step-index {
+      .@{veui-prefix}-steps-step-index {
         .make-index(error);
       }
 
       &.focus-visible {
-        .veui-steps-step-index {
+        .@{veui-prefix}-steps-step-index {
           background-color: @dls-steps-marker-background-color-error-focus;
           box-shadow: @dls-steps-marker-shadow-error-focus;
         }
@@ -176,12 +176,12 @@
       &::before {
         background-color: @dls-steps-connector-color-error-current;
       }
-      .veui-steps-step-index {
+      .@{veui-prefix}-steps-step-index {
         .make-index(error-current);
       }
 
       &.focus-visible {
-        .veui-steps-step-index {
+        .@{veui-prefix}-steps-step-index {
           background-color: @dls-steps-marker-background-color-error-current-focus;
           box-shadow: @dls-steps-marker-shadow-error-current-focus;
           border-color: @dls-steps-marker-border-color-error-current-focus;
@@ -191,68 +191,68 @@
 
     &-next-incomplete {
       &::after,
-      .veui-steps-step-label::after,
-      .veui-steps-step-index::after {
+      .@{veui-prefix}-steps-step-label::after,
+      .@{veui-prefix}-steps-step-index::after {
         background-color: @dls-steps-connector-color-incomplete;
       }
     }
 
     &-next-completed {
       &::after,
-      .veui-steps-step-label::after,
-      .veui-steps-step-index::after {
+      .@{veui-prefix}-steps-step-label::after,
+      .@{veui-prefix}-steps-step-index::after {
         background-color: @dls-steps-connector-color-completed;
       }
     }
 
     &-next-error {
       &::after,
-      .veui-steps-step-label::after,
-      .veui-steps-step-index::after {
+      .@{veui-prefix}-steps-step-label::after,
+      .@{veui-prefix}-steps-step-index::after {
         background-color: @dls-steps-connector-color-error;
       }
     }
 
     &-next-current {
       &::after,
-      .veui-steps-step-label::after,
-      .veui-steps-step-index::after {
+      .@{veui-prefix}-steps-step-label::after,
+      .@{veui-prefix}-steps-step-index::after {
         background-color: @dls-steps-connector-color-current;
       }
     }
 
     &-next-error-current {
       &::after,
-      .veui-steps-step-label::after,
-      .veui-steps-step-index::after {
+      .@{veui-prefix}-steps-step-label::after,
+      .@{veui-prefix}-steps-step-index::after {
         background-color: @dls-steps-connector-color-error-current;
       }
     }
   }
 
-  a.veui-steps {
+  a.@{veui-prefix}-steps {
     &-step {
       &:hover {
-        .veui-steps-step-label {
+        .@{veui-prefix}-steps-step-label {
           color: @dls-steps-title-font-color-hover;
         }
       }
 
       &:active {
-        .veui-steps-step-label {
+        .@{veui-prefix}-steps-step-label {
           color: @dls-steps-title-font-color-active;
         }
       }
 
       &-completed {
         &:hover {
-          .veui-steps-step-index {
+          .@{veui-prefix}-steps-step-index {
             background-color: @dls-steps-marker-background-color-completed-hover;
           }
         }
 
         &:active {
-          .veui-steps-step-index {
+          .@{veui-prefix}-steps-step-index {
             background-color: @dls-steps-marker-background-color-completed-active;
           }
         }
@@ -260,13 +260,13 @@
 
       &-current {
         &:hover {
-          .veui-steps-step-index {
+          .@{veui-prefix}-steps-step-index {
             background-color: @dls-steps-marker-background-color-current-hover;
           }
         }
 
         &:active {
-          .veui-steps-step-index {
+          .@{veui-prefix}-steps-step-index {
             background-color: @dls-steps-marker-background-color-current-active;
           }
         }
@@ -274,13 +274,13 @@
 
       &-incomplete {
         &:hover {
-          .veui-steps-step-label {
+          .@{veui-prefix}-steps-step-label {
             color: @dls-steps-title-font-color-incomplete;
           }
         }
 
         &:active {
-          .veui-steps-step-label {
+          .@{veui-prefix}-steps-step-label {
             color: @dls-steps-desc-font-color-incomplete;
           }
         }
@@ -288,13 +288,13 @@
 
       &-error {
         &:hover {
-          .veui-steps-step-index {
+          .@{veui-prefix}-steps-step-index {
             background-color: @dls-steps-marker-background-color-error-hover;
           }
         }
 
         &:active {
-          .veui-steps-step-index {
+          .@{veui-prefix}-steps-step-index {
             background-color: @dls-steps-marker-background-color-error-active;
           }
         }
@@ -302,16 +302,16 @@
 
       &-error-current {
         &:hover {
-          .veui-steps-step-index {
+          .@{veui-prefix}-steps-step-index {
             background-color: @dls-steps-marker-background-color-error-current-hover;
           }
-          .veui-steps-step-label {
+          .@{veui-prefix}-steps-step-label {
             color: @dls-color-gray-8;
           }
         }
 
         &:active {
-          .veui-steps-step-index {
+          .@{veui-prefix}-steps-step-index {
             background-color: @dls-steps-marker-background-color-error-current-active;
           }
         }
@@ -319,17 +319,17 @@
     }
   }
 
-  .veui-steps a,
-  .veui-link {
+  .@{veui-prefix}-steps a,
+  .@{veui-prefix}-link {
     &:hover,
     &.focus-visible,
     &:active,
-    &.veui-disabled {
+    &.@{veui-prefix}-disabled {
       text-decoration: none;
     }
   }
 
-  div.veui-link {
+  div.@{veui-prefix}-link {
     cursor: default;
   }
 
@@ -358,7 +358,7 @@
   }
 
   &[ui~="label-vertical"] {
-    .veui-steps-step {
+    .@{veui-prefix}-steps-step {
       flex-direction: column;
       position: relative;
       margin-right: 0;
@@ -410,7 +410,7 @@
     display: inline-block;
     flex-direction: column;
 
-    .veui-steps-step {
+    .@{veui-prefix}-steps-step {
       margin-right: 0;
       margin-top: @separator-gap-y;
       display: flex;
@@ -419,7 +419,7 @@
       &-index-container {
         display: flex;
         flex-direction: column;
-        .veui-steps-step-connector-placeholder {
+        .@{veui-prefix}-steps-step-connector-placeholder {
           content: "";
           flex-grow: 1;
           width: @separator-width;
@@ -449,7 +449,7 @@
       }
 
       &-label::after,
-      &:last-child .veui-steps-step-index::after {
+      &:last-child .@{veui-prefix}-steps-step-index::after {
         display: none;
       }
 
@@ -466,7 +466,7 @@
     @desc-font-size: @dls-steps-desc-font-size-s;
     @marker-font-size: @dls-steps-marker-font-size-s;
 
-    .veui-steps {
+    .@{veui-prefix}-steps {
       &-step {
         &-index {
           .size(@step-height);
@@ -490,7 +490,7 @@
     }
 
     &[ui~="label-vertical"] {
-      .veui-steps-step {
+      .@{veui-prefix}-steps-step {
         &-connector {
           margin-top: dls-sum(@step-height / 2, -@separator-width / 2);
         }
@@ -514,7 +514,7 @@
       }
     }
     &[ui~="vertical"] {
-      .veui-steps-step {
+      .@{veui-prefix}-steps-step {
         &-index::after {
           top: @step-height + @separator-gap-y;
           left: @step-height / 2;

@@ -1,8 +1,8 @@
 @import "../lib.less";
 
-.veui-drawer {
+.@{veui-prefix}-drawer {
   &-box {
-    .veui-dialog-content {
+    .@{veui-prefix}-dialog-content {
       display: flex;
       flex-direction: column;
       max-height: none;
@@ -22,7 +22,7 @@
         }
 
         &-close {
-          .veui-icon {
+          .@{veui-prefix}-icon {
             .dls-icon-size(
               @dls-drawer-close-icon-size,
               @dls-dialog-close-icon-min-size
@@ -38,53 +38,53 @@
   }
 
   &-top {
-    .veui-dialog-content {
+    .@{veui-prefix}-dialog-content {
       .absolute(0, 0, auto, 0);
       width: auto !important;
       box-shadow: @dls-drawer-shadow-top;
     }
   }
   &-right {
-    .veui-dialog-content {
+    .@{veui-prefix}-dialog-content {
       .absolute(0, 0, 0, auto);
       width: @dls-drawer-width;
       box-shadow: @dls-drawer-shadow-right;
     }
   }
   &-bottom {
-    .veui-dialog-content {
+    .@{veui-prefix}-dialog-content {
       .absolute(auto, 0, 0, 0);
       width: auto !important;
       box-shadow: @dls-drawer-shadow-bottom;
     }
   }
   &-left {
-    .veui-dialog-content {
+    .@{veui-prefix}-dialog-content {
       .absolute(0, auto, 0, 0);
       width: @dls-drawer-width;
       box-shadow: @dls-drawer-shadow-left;
     }
   }
 
-  &-box.veui-overlay-enter,
-  &-box.veui-overlay-leave-to {
-    &.veui-drawer-top {
-      .veui-dialog-content {
+  &-box.@{veui-prefix}-overlay-enter,
+  &-box.@{veui-prefix}-overlay-leave-to {
+    &.@{veui-prefix}-drawer-top {
+      .@{veui-prefix}-dialog-content {
         transform: translateY(-20px);
       }
     }
-    &.veui-drawer-right {
-      .veui-dialog-content {
+    &.@{veui-prefix}-drawer-right {
+      .@{veui-prefix}-dialog-content {
         transform: translateX(20px);
       }
     }
-    &.veui-drawer-bottom {
-      .veui-dialog-content {
+    &.@{veui-prefix}-drawer-bottom {
+      .@{veui-prefix}-dialog-content {
         transform: translateY(20px);
       }
     }
-    &.veui-drawer-left {
-      .veui-dialog-content {
+    &.@{veui-prefix}-drawer-left {
+      .@{veui-prefix}-dialog-content {
         transform: translateX(-20px);
       }
     }

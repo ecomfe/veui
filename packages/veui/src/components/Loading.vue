@@ -2,11 +2,11 @@
 <div
   v-if="loading"
   :ui="realUi"
-  class="veui-loading"
+  :class="$c('loading')"
 >
   <div
     :ui="realUi"
-    class="veui-loading-spinner"
+    :class="$c('loading-spinner')"
   >
     <slot name="spinner">
       <veui-icon
@@ -18,7 +18,7 @@
   <div
     v-if="$slots.default"
     :ui="realUi"
-    class="veui-loading-text"
+    :class="$c('loading-text')"
   >
     <slot/>
   </div>
@@ -26,6 +26,7 @@
 </template>
 <script>
 import Icon from './Icon'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 
 export default {
@@ -33,7 +34,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui],
+  mixins: [prefix, ui],
   props: {
     loading: Boolean
   }

@@ -1,6 +1,6 @@
 <template>
 <label
-  class="veui-label"
+  :class="$c('label')"
   :ui="realUi"
   @click="activateInput"
 >
@@ -11,11 +11,12 @@
 <script>
 import { isFunction } from 'lodash'
 import { getTypedAncestor, isType } from '../utils/helper'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 
 export default {
   name: 'veui-label',
-  mixins: [ui],
+  mixins: [prefix, ui],
   methods: {
     /**
      * Why not implement this in the `Field` component?

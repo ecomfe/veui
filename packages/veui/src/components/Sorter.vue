@@ -6,17 +6,17 @@
 >
   <veui-icon
     :class="{
-      'veui-sorter-icon-asc': true,
-      'veui-sorter-active': order === 'asc',
-      'veui-sorter-inactive': order === 'desc'
+      [$c('sorter-icon-asc')]: true,
+      [$c('sorter-active')]: order === 'asc',
+      [$c('sorter-inactive')]: order === 'desc'
     }"
     :name="icons.asc"
   />
   <veui-icon
     :class="{
-      'veui-sorter-icon-desc': true,
-      'veui-sorter-active': order === 'desc',
-      'veui-sorter-inactive': order === 'asc'
+      [$c('sorter-icon-desc')]: true,
+      [$c('sorter-active')]: order === 'desc',
+      [$c('sorter-inactive')]: order === 'asc'
     }"
     :name="icons.desc"
   />
@@ -25,6 +25,7 @@
 
 <script>
 import Icon from './Icon'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 
 export default {
@@ -32,20 +33,20 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui],
+  mixins: [prefix, ui],
   props: {
     order: [String, Boolean]
   },
   computed: {
     stateClass () {
       if (this.order) {
-        return `veui-sorter-${this.order}`
+        return this.$c(`sorter-${this.order}`)
       }
-      return 'veui-sorter-unordered'
+      return this.$c('sorter-unordered')
     },
     klass () {
       return {
-        'veui-sorter': true,
+        [this.$c('sorter')]: true,
         [this.stateClass]: true
       }
     }

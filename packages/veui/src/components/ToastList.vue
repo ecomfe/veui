@@ -1,7 +1,7 @@
 <template>
 <veui-overlay
-  :open="true"
-  :overlay-class="mergeOverlayClass('veui-toast-list')"
+  open
+  :overlay-class="mergeOverlayClass($c('toast-list'))"
   :priority="priority"
 >
   <veui-toast
@@ -26,6 +26,7 @@ import Overlay from './Overlay'
 import Toast from './Toast'
 import { assign, findIndex, uniqueId } from 'lodash'
 import config from '../managers/config'
+import prefix from '../mixins/prefix'
 import overlay from '../mixins/overlay'
 
 config.defaults({
@@ -38,7 +39,7 @@ export default {
     'veui-overlay': Overlay,
     'veui-toast': Toast
   },
-  mixins: [overlay],
+  mixins: [prefix, overlay],
   data () {
     return {
       messages: [],

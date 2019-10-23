@@ -11,11 +11,11 @@
   inputmode="numeric"
   v-bind="attrs"
   :class="{
-    'veui-number-input': true,
-    'veui-input-invalid': realInvalid,
-    'veui-readonly': realReadonly,
-    'veui-disabled': realDisabled,
-    'veui-number-input-controls-focused': spinnerFocused
+    [$c('number-input')]: true,
+    [$c('input-invalid')]: realInvalid,
+    [$c('readonly')]: realReadonly,
+    [$c('disabled')]: realDisabled,
+    [$c('number-input-controls-focused')]: spinnerFocused
   }"
   v-on="listeners"
   @blur="handleBlur"
@@ -28,7 +28,7 @@
     <veui-button
       ref="dec"
       v-longpress.repeat="decrease"
-      class="veui-number-input-step veui-number-input-step-down"
+      :class="[$c('number-input-step'), $c('number-input-step-down')]"
       :disabled="!editable || reachMaxLimit"
       @click="decrease"
     >
@@ -41,14 +41,14 @@
   <template slot="append">
     <div
       v-if="editable && !isStrong"
-      class="veui-number-input-controls"
+      :class="$c('number-input-controls')"
       @focusin="spinnerFocused = true"
       @focusout="spinnerFocused = false"
     >
       <veui-button
         ref="dec"
         v-longpress.repeat="increase"
-        class="veui-number-input-step veui-number-input-step-up"
+        :class="[$c('number-input-step'), $c('number-input-step-up')]"
         :disabled="!editable || reachMaxLimit"
         @click="increase"
       >
@@ -60,7 +60,7 @@
       <veui-button
         ref="dec"
         v-longpress.repeat="decrease"
-        class="veui-number-input-step veui-number-input-step-down"
+        :class="[$c('number-input-step'), $c('number-input-step-down')]"
         :disabled="!editable || reachMinLimit"
         @click="decrease"
       >
@@ -78,7 +78,7 @@
     <veui-button
       ref="inc"
       v-longpress.repeat="increase"
-      class="veui-number-input-step veui-number-input-step-up"
+      :class="[$c('number-input-step'), $c('number-input-step-up')]"
       :disabled="!editable || reachMinLimit"
       @click="increase"
     >
@@ -94,6 +94,7 @@
 <script>
 import Input from './Input'
 import Button from './Button'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import activatable from '../mixins/activatable'
 import input from '../mixins/input'
@@ -117,7 +118,7 @@ export default {
     'veui-input': Input,
     'veui-button': Button
   },
-  mixins: [ui, input, activatable, i18n],
+  mixins: [prefix, ui, input, activatable, i18n],
   inhertiAttrs: false,
   props: {
     ui: String,

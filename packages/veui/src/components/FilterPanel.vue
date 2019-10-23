@@ -1,17 +1,17 @@
 <template>
 <div
-  class="veui-filter-panel"
   :class="{
-    'veui-filter-panel-single-level': singleLevel
+    [$c('filter-panel')]: true,
+    [$c('filter-panel-single-level')]: singleLevel
   }"
   :ui="realUi"
 >
-  <h3 class="veui-filter-panel-title">
+  <h3 :class="$c('filter-panel-title')">
     <slot name="head">
       {{ title }}
     </slot>
   </h3>
-  <div class="veui-filter-panel-content">
+  <div :class="$c('filter-panel-content')">
     <veui-searchbox
       v-if="searchable"
       v-model="keyword"
@@ -23,7 +23,7 @@
     <div
       v-if="datasource && datasource.length"
       ref="main"
-      class="veui-filter-panel-content-main"
+      :class="$c('filter-panel-content-main')"
     >
       <slot
         :items="filteredDatasource"
@@ -32,7 +32,7 @@
     </div>
     <div
       v-else
-      class="veui-filter-panel-no-data"
+      :class="$c('filter-panel-no-data')"
     >
       <slot name="no-data">
         {{ t('noData') }}
@@ -44,6 +44,7 @@
 
 <script>
 import Searchbox from './Searchbox'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import { includes, debounce, cloneDeep } from 'lodash'
@@ -53,7 +54,7 @@ export default {
   components: {
     'veui-searchbox': Searchbox
   },
-  mixins: [ui, i18n],
+  mixins: [prefix, ui, i18n],
   props: {
     title: String,
     datasource: {

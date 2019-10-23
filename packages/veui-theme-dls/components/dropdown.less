@@ -1,7 +1,7 @@
 @import "../lib.less";
 @import (reference) "../dropdown.less";
 
-.veui-dropdown {
+.@{veui-prefix}-dropdown {
   &:extend(._veui-dropdown-button all);
   display: inline-flex;
 
@@ -9,11 +9,11 @@
     flex: 1;
 
     &[ui~="primary"] {
-      .veui-dropdown-icon {
+      .@{veui-prefix}-dropdown-icon {
         color: @dls-dropdown-icon-color-aux-primary;
       }
 
-      &:disabled .veui-dropdown-icon {
+      &:disabled .@{veui-prefix}-dropdown-icon {
         color: @dls-dropdown-icon-color-aux-primary-disabled;
       }
 
@@ -33,18 +33,18 @@
       padding: 0;
     }
 
-    .veui-dropdown-icon {
+    .@{veui-prefix}-dropdown-icon {
       flex-shrink: 0;
       margin-right: 0;
       color: @dls-dropdown-icon-color-aux-normal;
       .dls-icon-size(@dls-dropdown-icon-size-aux);
     }
 
-    &:disabled .veui-dropdown-icon {
+    &:disabled .@{veui-prefix}-dropdown-icon {
       color: @dls-dropdown-icon-color-aux-normal-disabled;
     }
 
-    .veui-dropdown-label {
+    .@{veui-prefix}-dropdown-label {
       margin-right: @dls-dropdown-icon-spacing-aux;
     }
   }
@@ -75,9 +75,9 @@
     &:extend(._veui-dropdown-overlay all);
   }
 
-  &-searchbox.veui-searchbox {
+  &-searchbox.@{veui-prefix}-searchbox {
     width: 100%;
-    .veui-input .veui-input-main {
+    .@{veui-prefix}-input .@{veui-prefix}-input-main {
       width: 100%;
     }
   }
@@ -85,12 +85,12 @@
   &[ui~="text"] {
     min-width: auto;
 
-    & .veui-dropdown-label {
+    & .@{veui-prefix}-dropdown-label {
       width: auto;
       max-width: none;
     }
 
-    .veui-button {
+    .@{veui-prefix}-button {
       .size(auto);
       color: @dls-link-font-color-normal;
 

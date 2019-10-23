@@ -1,17 +1,17 @@
 <template>
 <div
-  class="veui-date-picker"
   :ui="realUi"
   :class="{
-    'veui-input-invalid': realInvalid,
-    'veui-date-picker-empty': !selected,
-    'veui-date-picker-range': realRange,
-    'veui-date-picker-expanded': expanded
+    [$c('date-picker')]: true,
+    [$c('input-invalid')]: realInvalid,
+    [$c('date-picker-empty')]: !selected,
+    [$c('date-picker-range')]: realRange,
+    [$c('date-picker-expanded')]: expanded
   }"
 >
   <veui-button
     ref="button"
-    class="veui-date-picker-button"
+    :class="$c('date-picker-button')"
     :disabled="realDisabled || realReadonly"
     :aria-disabled="realDisabled"
     :aria-readonly="realReadonly"
@@ -21,7 +21,7 @@
     @keydown.down.up.prevent="expanded = true"
   >
     <template v-if="realRange">
-      <span class="veui-date-picker-label">
+      <span :class="$c('date-picker-label')">
         <slot
           v-if="selected && selected[0]"
           name="selected"
@@ -34,8 +34,8 @@
           name="placeholder"
         >{{ realPlaceholder }}</slot>
       </span>
-      <span class="veui-date-picker-tilde">~</span>
-      <span class="veui-date-picker-label">
+      <span :class="$c('date-picker-tilde')">~</span>
+      <span :class="$c('date-picker-label')">
         <slot
           v-if="selected && selected[1]"
           name="selected"
@@ -46,7 +46,7 @@
       </span>
     </template>
     <template v-else>
-      <span class="veui-date-picker-label">
+      <span :class="$c('date-picker-label')">
         <slot
           v-if="selected"
           name="selected"
@@ -60,14 +60,14 @@
       </span>
     </template>
     <veui-icon
-      class="veui-date-picker-icon"
+      :class="$c('date-picker-icon')"
       :name="icons.calendar"
     />
   </veui-button>
   <button
     v-if="clearable && !!selected"
     type="button"
-    class="veui-date-picker-clear veui-sr-only"
+    :class="[$c('date-picker-clear'), $c('sr-only')]"
     @click="clear"
   >
     <veui-icon
@@ -90,7 +90,7 @@
       v-model="localSelected"
       v-outside:button="close"
       role="dialog"
-      class="veui-date-picker-overlay"
+      :class="$c('date-picker-overlay')"
       v-bind="calendarProps"
       :ui="uiParts.calendar"
       :panel="realPanel"
@@ -105,14 +105,14 @@
         v-if="realRange && realShortcuts && realShortcuts.length"
         :slot="shortcutsPosition"
       >
-        <div class="veui-date-picker-shortcuts">
+        <div :class="$c('date-picker-shortcuts')">
           <button
             v-for="({ from, to, label }, index) in realShortcuts"
             :key="index"
             type="button"
             :class="{
-              'veui-date-picker-shortcut': true,
-              'veui-date-picker-shortcut-selected': isShortcutSelected({
+              [$c('date-picker-shortcut')]: true,
+              [$c('date-picker-shortcut-selected')]: isShortcutSelected({
                 from,
                 to
               })
@@ -145,6 +145,7 @@ import Button from './Button'
 import Overlay from './Overlay'
 import Calendar from './Calendar'
 import Icon from './Icon'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
@@ -200,7 +201,7 @@ export default {
     'veui-calendar': Calendar,
     'veui-icon': Icon
   },
-  mixins: [ui, input, dropdown, i18n],
+  mixins: [prefix, ui, input, dropdown, i18n],
   model: {
     prop: 'selected',
     event: 'select'
