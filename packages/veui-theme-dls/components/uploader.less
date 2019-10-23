@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-uploader {
+.@{veui-prefix}-uploader {
   @icon-size: 16px;
   @image-size: 140px;
 
@@ -21,8 +21,8 @@
     margin-bottom: 12px;
     overflow: hidden;
 
-    .veui-uploader-tip,
-    .veui-uploader-error {
+    .@{veui-prefix}-uploader-tip,
+    .@{veui-prefix}-uploader-error {
       margin-top: 8px;
     }
   }
@@ -38,8 +38,8 @@
     }
   }
 
-  .veui-uploader-input-label-disabled,
-  .veui-button.veui-uploader-input-label-disabled {
+  .@{veui-prefix}-uploader-input-label-disabled,
+  .@{veui-prefix}-button.@{veui-prefix}-uploader-input-label-disabled {
     cursor: not-allowed;
     .disabled();
 
@@ -55,7 +55,7 @@
     cursor: pointer;
     .veui-transition(background-color);
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       font-size: 50px;
       color: @veui-gray-color-2;
       .veui-position-center();
@@ -131,7 +131,7 @@
     &-container:hover {
       background-color: @veui-gray-color-8;
 
-      .veui-uploader-button-remove {
+      .@{veui-prefix}-uploader-button-remove {
         opacity: 1;
       }
     }
@@ -150,7 +150,7 @@
     }
 
     &-success {
-      .veui-icon {
+      .@{veui-prefix}-icon {
         position: relative;
         top: 0;
       }
@@ -166,17 +166,17 @@
       margin-right: 6px;
       margin-left: 10px;
 
-      &.veui-button[ui~="micro"] {
+      &.@{veui-prefix}-button[ui~="micro"] {
         font-size: @veui-font-size-normal;
       }
 
-      .veui-icon {
+      .@{veui-prefix}-icon {
         margin: 4px 6px 0 0;
         font-size: 12px;
       }
     }
 
-    .veui-uploader-progress {
+    .@{veui-prefix}-uploader-progress {
       float: left;
       text-align: left;
       line-height: 22px;
@@ -195,7 +195,7 @@
       text-align: center;
       position: relative;
 
-      label.veui-button {
+      label.@{veui-prefix}-button {
         cursor: pointer;
         .veui-position-center();
         width: 88px;
@@ -219,11 +219,11 @@
         background-color: none;
       }
 
-      .veui-button&-remove {
+      .@{veui-prefix}-button&-remove {
         .absolute(-1px, -1px, _, _);
       }
 
-      .veui-button.veui-uploader-input-label-disabled {
+      .@{veui-prefix}-button.@{veui-prefix}-uploader-input-label-disabled {
         background: none;
 
         &:hover {
@@ -249,14 +249,14 @@
         display: block;
       }
 
-      .veui-icon {
+      .@{veui-prefix}-icon {
         font-size: @icon-size;
         vertical-align: text-bottom;
         margin-right: 5px;
       }
     }
 
-    &-mask-remove.veui-uploader-list-image-mask-remove-failure {
+    &-mask-remove.@{veui-prefix}-uploader-list-image-mask-remove-failure {
       position: absolute;
       display: none;
     }
@@ -265,7 +265,7 @@
       display: inline;
     }
 
-    .veui-uploader-progress {
+    .@{veui-prefix}-uploader-progress {
       &-bar,
       &-bar-full {
         left: ~"calc(50% - 35px)";
@@ -277,7 +277,7 @@
   &-error {
     display: inline-block;
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       vertical-align: -2px;
       margin-right: 7px;
     }
@@ -287,7 +287,7 @@
     color: @veui-gray-color-3;
     display: inline-block;
 
-    & + .veui-uploader-error {
+    & + .@{veui-prefix}-uploader-error {
       display: block;
       clear: both;
       font-size: @veui-font-size-small;
@@ -318,8 +318,8 @@
   &[ui~="horizontal"] {
     width: 100%;
 
-    .veui-uploader-list,
-    .veui-uploader-list-image {
+    .@{veui-prefix}-uploader-list,
+    .@{veui-prefix}-uploader-list-image {
       .clearfix();
 
       li {
@@ -328,7 +328,7 @@
       }
     }
 
-    .veui-uploader-list-container {
+    .@{veui-prefix}-uploader-list-container {
       width: auto;
     }
   }

@@ -1,6 +1,6 @@
 <template>
 <div
-  class="veui-radio-button-group veui-button-group"
+  :class="[$c('radio-button-group'), $c('button-group')]"
   :ui="realUi"
   role="radiogroup"
   :aria-readonly="realReadonly"
@@ -11,7 +11,7 @@
     :key="index"
     :ui="item.value === localValue ? uiParts.checked : null"
     :class="{
-      'veui-button-selected': item.value === localValue
+      [$c('button-selected')]: item.value === localValue
     }"
     :disabled="item.disabled || realDisabled || realReadonly"
     role="radio"
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { focusIn } from '../utils/dom'
@@ -39,7 +40,7 @@ export default {
   components: {
     'veui-button': Button
   },
-  mixins: [ui, input],
+  mixins: [prefix, ui, input],
   model: {
     event: 'change'
   },

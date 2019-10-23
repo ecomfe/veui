@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-calendar {
+.@{veui-prefix}-calendar {
   display: inline-block;
   border: 1px solid @veui-gray-color-6;
   background-color: #fff;
@@ -20,11 +20,11 @@
     position: relative;
 
     & + & {
-      .veui-calendar-head {
+      .@{veui-prefix}-calendar-head {
         margin-left: 1px;
       }
 
-      .veui-calendar-body {
+      .@{veui-prefix}-calendar-body {
         border-left: 1px solid #fff;
       }
     }
@@ -41,7 +41,7 @@
   &-days + &-years,
   &-months + &-days,
   &-years + &-days {
-    .veui-calendar-body {
+    .@{veui-prefix}-calendar-body {
       border-color: @veui-gray-color-6;
     }
   }
@@ -154,7 +154,7 @@
       outline: none;
       cursor: pointer;
 
-      .veui-icon {
+      .@{veui-prefix}-icon {
         margin-top: ~"calc(18px - 0.5em)";
         width: 16px;
         vertical-align: top;
@@ -166,7 +166,7 @@
         background-color: @veui-gray-color-8;
         color: @veui-text-color-strong;
 
-        .veui-icon {
+        .@{veui-prefix}-icon {
           color: inherit;
         }
       }
@@ -175,7 +175,7 @@
         background-color: @veui-gray-color-6;
         color: @veui-text-color-normal;
 
-        .veui-icon {
+        .@{veui-prefix}-icon {
           color: inherit;
         }
       }
@@ -188,7 +188,7 @@
           cursor: not-allowed;
         }
 
-        .veui-icon {
+        .@{veui-prefix}-icon {
           color: inherit;
         }
       }
@@ -241,7 +241,7 @@
       }
     }
 
-    .veui-calendar-body {
+    .@{veui-prefix}-calendar-body {
       padding: 9px 11px 20px;
     }
   }

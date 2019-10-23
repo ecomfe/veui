@@ -2,12 +2,12 @@
 <button
   v-show="!hidden"
   type="button"
-  class="veui-option"
   :tabindex="hidden ? -1 : false"
   :ui="realUi"
   :class="{
-    'veui-option-disabled': disabled,
-    'veui-option-selected': selected
+    [$c('option')]: true,
+    [$c('option-disabled')]: disabled,
+    [$c('option-selected')]: selected
   }"
   :data-autofocus="selected"
   :role="role"
@@ -16,7 +16,7 @@
   @click.stop="selectOption"
 >
   <slot>
-    <span class="veui-option-label">
+    <span :class="$c('option-label')">
       <slot name="label">
         {{ label }}
       </slot>
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import menu from '../../mixins/menu'
 import select from '../../mixins/select'
@@ -34,7 +35,7 @@ import { isType } from '../../utils/helper'
 
 export default {
   name: 'veui-option',
-  mixins: [ui, menu, select],
+  mixins: [prefix, ui, menu, select],
   props: {
     label: {
       type: [String, Number]

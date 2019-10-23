@@ -1,7 +1,7 @@
 <template>
 <veui-dialog
   :ui="realUi"
-  :overlay-class="mergeOverlayClass('veui-confirm-box')"
+  :overlay-class="mergeOverlayClass($c('confirm-box'))"
   :open.sync="localOpen"
   :priority="priority"
   :closable="false"
@@ -41,6 +41,7 @@
 import { pick } from 'lodash'
 import Dialog from './Dialog'
 import config from '../managers/config'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 
@@ -53,7 +54,7 @@ export default {
   components: {
     'veui-dialog': Dialog
   },
-  mixins: [ui, overlay],
+  mixins: [prefix, ui, overlay],
   props: pick(Dialog.props, ['open', 'title', 'beforeClose']),
   data () {
     return {

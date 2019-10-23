@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-toast {
+.@{veui-prefix}-toast {
   display: flex;
   align-items: flex-start;
   line-height: @dls-toast-line-height;
@@ -30,11 +30,11 @@
   }
 
   &-close {
-    .veui-icon {
+    .@{veui-prefix}-icon {
       .dls-icon-size(@dls-toast-icon-size-aux);
     }
 
-    .veui-button {
+    .@{veui-prefix}-button {
       font-size: inherit;
     }
   }
@@ -43,7 +43,7 @@
     @color-name: ~"dls-toast-icon-color-@{type}";
     @color: @@color-name;
 
-    .veui-toast-icon {
+    .@{veui-prefix}-toast-icon {
       color: @color;
     }
   }
@@ -84,11 +84,11 @@
   &&-titled {
     padding: @dls-toast-padding-y-titled @dls-toast-padding-x;
 
-    .veui-toast-icon {
+    .@{veui-prefix}-toast-icon {
       .dls-icon-size(@dls-toast-icon-size-titled);
     }
 
-    .veui-toast-close {
+    .@{veui-prefix}-toast-close {
       align-items: start;
     }
   }
@@ -97,7 +97,7 @@
     font-size: @dls-toast-font-size-m;
     border-radius: @dls-toast-border-radius-m;
 
-    .veui-toast {
+    .@{veui-prefix}-toast {
       &-state,
       &-close {
         font-size: @dls-toast-font-size-m;
@@ -113,7 +113,7 @@
   }
 
   &-titled[ui~="m"] {
-    .veui-toast {
+    .@{veui-prefix}-toast {
       &-state,
       &-close {
         font-size: @dls-toast-title-font-size-m;
@@ -129,7 +129,7 @@
     font-size: @dls-toast-font-size-s;
     border-radius: @dls-toast-border-radius-s;
 
-    .veui-toast {
+    .@{veui-prefix}-toast {
       &-state,
       &-close {
         font-size: @dls-toast-font-size-s;
@@ -145,7 +145,7 @@
   }
 
   &-titled[ui~="s"] {
-    .veui-toast {
+    .@{veui-prefix}-toast {
       &-state,
       &-close {
         font-size: @dls-toast-title-font-size-s;

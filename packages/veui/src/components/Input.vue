@@ -1,48 +1,48 @@
 <template>
 <div
   :class="{
-    'veui-input': true,
-    'veui-input-focused': focused,
-    'veui-input-hidden': type === 'hidden',
-    'veui-input-invalid': realInvalid,
-    'veui-input-autofill': autofill,
-    'veui-input-has-before': !!($slots.before || $slots['before-label']),
-    'veui-input-has-after': !!($slots.after || $slots['after-label']),
-    'veui-readonly': realReadonly,
-    'veui-disabled': realDisabled
+    [$c('input')]: true,
+    [$c('input-focused')]: focused,
+    [$c('input-hidden')]: type === 'hidden',
+    [$c('input-invalid')]: realInvalid,
+    [$c('input-autofill')]: autofill,
+    [$c('input-has-before')]: !!($slots.before || $slots['before-label']),
+    [$c('input-has-after')]: !!($slots.after || $slots['after-label']),
+    [$c('readonly')]: realReadonly,
+    [$c('disabled')]: realDisabled
   }"
   :ui="realUi"
   v-on="containerListeners"
 >
   <template v-if="$slots.before || $slots['before-label']">
-    <div class="veui-input-before">
+    <div :class="$c('input-before')">
       <slot name="before">
-        <div class="veui-input-before-label">
+        <div :class="$c('input-before-label')">
           <slot name="before-label"/>
         </div>
       </slot>
     </div>
   </template>
   <div
-    class="veui-input-main"
+    :class="$c('input-main')"
     @mousedown="handleMousedown"
   >
     <span
       v-show="empty"
-      class="veui-input-placeholder"
+      :class="$c('input-placeholder')"
       @selectstart.prevent="() => false"
     >
       {{ placeholder }}
     </span>
     <template v-if="$slots.prepend">
-      <div class="veui-input-prepend">
+      <div :class="$c('input-prepend')">
         <slot name="prepend"/>
       </div>
     </template>
     <input
       ref="input"
       v-model="localValue"
-      class="veui-input-input"
+      :class="$c('input-input')"
       v-bind="attrs"
       v-on="inputListeners"
       @focus="handleFocus"
@@ -53,13 +53,13 @@
       @change="$emit('change', $event.target.value, $event)"
     >
     <template v-if="$slots.append || clearable">
-      <div class="veui-input-append">
+      <div :class="$c('input-append')">
         <veui-button
           v-if="clearable"
           v-show="editable && !empty"
-          class="veui-input-clear"
           :class="{
-            'veui-input-clear-has-append': !!$slots.append
+            [$c('input-clear')]: true,
+            [$c('input-clear-has-append')]: !!$slots.append
           }"
           :ui="uiParts.clear"
           :aria-label="t('clear')"
@@ -72,9 +72,9 @@
     </template>
   </div>
   <template v-if="$slots.after || $slots['after-label']">
-    <div class="veui-input-after">
+    <div :class="$c('input-after')">
       <slot name="after">
-        <div class="veui-input-after-label">
+        <div :class="$c('input-after-label')">
           <slot name="after-label"/>
         </div>
       </slot>
@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
@@ -101,7 +102,7 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [ui, input, activatable, i18n],
+  mixins: [prefix, ui, input, activatable, i18n],
   inheritAttrs: false,
   props: {
     ui: String,

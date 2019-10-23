@@ -1,8 +1,8 @@
 <template>
 <ul
   :class="{
-    'veui-tree-item-group': depth > 1,
-    'veui-tree': depth === 1
+    [$c('tree-item-group')]: depth > 1,
+    [$c('tree')]: depth === 1
   }"
   role="group"
 >
@@ -15,11 +15,11 @@
     <div
       ref="item"
       :class="{
-        'veui-tree-item': true,
-        'veui-tree-item-expanded': item.expanded,
-        'veui-tree-item-clickable': clickable,
-        'veui-tree-item-hidden': item.hidden,
-        'veui-tree-item-disabled': item.disabled
+        [$c('tree-item')]: true,
+        [$c('tree-item-expanded')]: item.expanded,
+        [$c('tree-item-clickable')]: clickable,
+        [$c('tree-item-hidden')]: item.hidden,
+        [$c('tree-item-disabled')]: item.disabled
       }"
       :tabindex="
         (focusVisible[index] ||
@@ -41,7 +41,7 @@
         <button
           v-if="item.children && item.children.length"
           type="button"
-          class="veui-tree-item-expand-switcher"
+          :class="$c('tree-item-expand-switcher')"
           tabindex="-1"
           :disabled="item.disabled"
           @click.stop="toggle(item, index, depth)"
@@ -55,7 +55,7 @@
           :index="index"
           :depth="depth"
         />
-        <div class="veui-tree-item-label">
+        <div :class="$c('tree-item-label')">
           <slot
             name="item-label"
             v-bind="item"
@@ -96,7 +96,7 @@
           <button
             v-if="props.children && props.children.length"
             type="button"
-            class="veui-tree-item-expand-switcher"
+            :class="$c('tree-item-expand-switcher')"
             tabindex="-1"
             :disabled="props.disabled"
             @click.stop="toggle(props.item, props.index, depth + 1)"
@@ -109,7 +109,7 @@
             :index="props.index"
             :depth="depth + 1"
           />
-          <div class="veui-tree-item-label">
+          <div :class="$c('tree-item-label')">
             <slot
               name="item-label"
               v-bind="props"
@@ -135,14 +135,14 @@ import Icon from '../Icon'
 import { includes } from 'lodash'
 import { closest } from '../../utils/dom'
 import { getTypedAncestor } from '../../utils/helper'
-
-const ITEM_SELECTOR = '.veui-tree-item:not(.veui-tree-item-disabled)'
+import prefix from '../../mixins/prefix'
 
 export default {
   name: 'veui-tree-node',
   components: {
     'veui-icon': Icon
   },
+  mixins: [prefix],
   props: {
     icons: Object,
     datasource: {
@@ -205,6 +205,9 @@ export default {
     handleChildClick (parentItem, currentItem, parents, ...extraArgs) {
       this.$emit('click', currentItem, [...parents, parentItem], ...extraArgs)
     },
+    getFocusSelector () {
+      return `.${this.$c('tree-item')}:not(.${this.$c('tree-item-disabled')})`
+    },
     focusLevel (up = true) {
       let el
       if (up) {
@@ -216,7 +219,7 @@ export default {
         return
       }
 
-      let itemEl = el.querySelector(ITEM_SELECTOR)
+      let itemEl = el.querySelector(this.getFocusSelector())
       if (itemEl) {
         this.$nextTick(() => {
           itemEl.focus()
@@ -225,7 +228,7 @@ export default {
     },
     navigate (current, forward = false, hitBoundary = false) {
       let context = (this.tree || this).$el
-      let items = [...context.querySelectorAll(ITEM_SELECTOR)]
+      let items = [...context.querySelectorAll(this.getFocusSelector())]
       let index = items.indexOf(current)
 
       if (hitBoundary) {

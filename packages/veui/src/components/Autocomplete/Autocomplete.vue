@@ -2,8 +2,8 @@
 <veui-autocomplete-base
   ref="base"
   :ui="realUi"
-  class="veui-autocomplete"
-  :overlay-class="mergeOverlayClass('veui-autocomplete-suggestions')"
+  :class="$c('autocomplete')"
+  :overlay-class="mergeOverlayClass($c('autocomplete-suggestions'))"
   :datasource="datasource"
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"
@@ -49,7 +49,7 @@
         :ui="realUi"
         :aria-activedescendant="suggestionsProps.activeDescendant || false"
         :options="suggestionsProps.datasource"
-        class="veui-autocomplete-suggestion-group"
+        :class="$c('autocomplete-suggestion-group')"
         @mousedown.native.prevent
       >
         <template
@@ -62,7 +62,7 @@
                 <mark
                   v-if="matched"
                   :key="`${idx}-${index}`"
-                  class="veui-autocomplete-suggestion-matched"
+                  :class="$c('autocomplete-suggestion-matched')"
                 >{{ text }}</mark>
                 <span
                   v-else
@@ -72,7 +72,7 @@
               <span
                 v-if="idx < props.matches.length - 1"
                 :key="idx"
-                class="veui-autocomplete-suggestion-separator"
+                :class="$c('autocomplete-suggestion-separator')"
               >&gt;</span>
             </template>
           </template>
@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import overlay from '../../mixins/overlay'
@@ -111,7 +112,7 @@ export default {
     'veui-option-group': OptionGroup
   },
   directives: { outside },
-  mixins: [ui, input, overlay],
+  mixins: [prefix, ui, input, overlay],
   props: {
     ...AutocompleteBase.props,
     suggestTrigger: {

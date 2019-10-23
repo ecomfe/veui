@@ -1,11 +1,11 @@
 @import "../lib.less";
 @import (reference) "../dropdown.less";
 
-.veui-time-picker {
+.@{veui-prefix}-time-picker {
   display: inline-block;
   width: @dls-time-picker-width;
 
-  & > .veui-input {
+  & > .@{veui-prefix}-input {
     width: 100%;
   }
 
@@ -26,7 +26,7 @@
       border-left: 1px solid @dls-option-group-separator-color;
     }
 
-    .veui-option {
+    .@{veui-prefix}-option {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -52,14 +52,14 @@
     .veui-transition(color, opacity);
     color: @dls-time-picker-icon-color;
 
-    .veui-readonly &,
-    .veui-disabled & {
+    .@{veui-prefix}-readonly &,
+    .@{veui-prefix}-disabled & {
       color: @dls-time-picker-icon-color-disabled;
     }
   }
 
-  &:not(.veui-readonly):not(.veui-disabled):hover &-clear + &-clock,
-  .veui-input-focused &-clear + &-clock,
+  &:not(.veui-readonly):not(.@{veui-prefix}-disabled):hover &-clear + &-clock,
+  .@{veui-prefix}-input-focused &-clear + &-clock,
   &-clear.focus-visible + &-clock {
     opacity: 0;
   }
@@ -70,12 +70,12 @@
     opacity: 0;
     z-index: 1;
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       .dls-icon-size(@dls-input-icon-size);
     }
 
-    .veui-time-picker:not(.veui-readonly):not(.veui-disabled):hover &,
-    .veui-input-focused &,
+    .veui-time-picker:not(.veui-readonly):not(.@{veui-prefix}-disabled):hover &,
+    .@{veui-prefix}-input-focused &,
     &.focus-visible {
       opacity: 1;
     }

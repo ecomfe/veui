@@ -1,6 +1,7 @@
 <script>
 import Button from './Button'
 import Icon from './Icon'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import warn from '../utils/warn'
@@ -11,7 +12,7 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button
   },
-  mixins: [ui, focusable],
+  mixins: [prefix, ui, focusable],
   props: {
     type: {
       type: String,
@@ -75,11 +76,11 @@ export default {
         tabindex={this.tabIndex}
         ui={this.realUi}
         class={{
-          'veui-tag': true,
-          [`veui-tag-${this.type}`]: true,
-          'veui-tag-selected': this.localSelected,
-          'veui-disabled': this.disabled,
-          'veui-tag-selectable': this.selectable
+          [this.$c('tag')]: true,
+          [this.$c(`tag-${this.type}`)]: true,
+          [this.$c('tag-selected')]: this.localSelected,
+          [this.$c('disabled')]: this.disabled,
+          [this.$c('tag-selectable')]: this.selectable
         }}
         disabled={this.selectable ? this.disabled : null}
         onClick={this.handleClick}
@@ -88,7 +89,7 @@ export default {
         {this.closable ? (
           <veui-button
             ui={this.uiParts.close}
-            class="veui-tag-close"
+            class={this.$c('tag-close')}
             disabled={this.disabled}
             onClick={this.close}
           >

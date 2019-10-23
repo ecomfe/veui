@@ -2,6 +2,7 @@
 import CandidatePanel from './_CandidatePanel'
 import SelectedPanel from './_SelectedPanel'
 import { includes, isString, clone, difference, omit, remove } from 'lodash'
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import { focusIn } from '../../utils/dom'
@@ -12,7 +13,7 @@ function defaultFilter (type, keyword, item, datasource) {
 
 export default {
   name: 'veui-transfer',
-  mixins: [ui, input],
+  mixins: [prefix, ui, input],
   model: {
     prop: 'selected',
     event: 'select'
@@ -168,9 +169,9 @@ export default {
       'div',
       {
         class: {
-          'veui-input-invalid': this.realInvalid,
-          'veui-transfer': true,
-          'veui-transfer-disabled': !this.isSelectable
+          [this.$c('input-invalid')]: this.realInvalid,
+          [this.$c('transfer')]: true,
+          [this.$c('transfer-disabled')]: !this.isSelectable
         },
         attrs: {
           ui: this.ui

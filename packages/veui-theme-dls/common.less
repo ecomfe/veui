@@ -34,16 +34,16 @@ h6 {
   font-weight: @dls-font-weight-2;
 }
 
-.veui-disabled {
+.@{veui-prefix}-disabled {
   cursor: not-allowed !important;
 }
 
-.veui-sr-only {
+.@{veui-prefix}-sr-only {
   .veui-invisible();
 }
 
 a,
-.veui-link {
+.@{veui-prefix}-link {
   cursor: pointer;
   color: @dls-link-font-color-normal;
   text-decoration: @dls-link-text-decoration;
@@ -65,7 +65,7 @@ a,
     text-decoration: @dls-link-text-decoration-active;
   }
 
-  &.veui-disabled {
+  &.@{veui-prefix}-disabled {
     text-decoration: @dls-link-text-decoration;
 
     &,
@@ -96,7 +96,7 @@ a,
       color: @dls-link-font-color-strong-active;
     }
 
-    &.veui-disabled {
+    &.@{veui-prefix}-disabled {
       color: @dls-link-font-color-strong-disabled;
     }
   }

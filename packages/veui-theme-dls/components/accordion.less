@@ -1,17 +1,17 @@
 @import "../lib.less";
 
-.veui-accordion {
+.@{veui-prefix}-accordion {
   border-radius: @dls-collapse-border-radius-m;
 
   &[ui~="s"] {
     .border-bottom-radius(@dls-collapse-border-radius-s);
   }
 
-  & > .veui-collapse + .veui-collapse {
+  & > .@{veui-prefix}-collapse + .@{veui-prefix}-collapse {
     margin-top: -1px;
   }
 
-  & > .veui-collapse {
+  & > .@{veui-prefix}-collapse {
     border-radius: 0;
 
     &:first-child {

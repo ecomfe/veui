@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-pagination {
+.@{veui-prefix}-pagination {
   display: inline-flex;
   font-size: @dls-pagination-font-size-m;
 
@@ -8,7 +8,7 @@
   &-info,
   &-pages,
   &-switch,
-  & .veui-link {
+  & .@{veui-prefix}-link {
     display: inline-flex;
     align-items: center;
   }
@@ -18,7 +18,7 @@
   }
 
   &-size {
-    .veui-select {
+    .@{veui-prefix}-select {
       width: auto;
       margin-left: @dls-pagination-spacing-1;
     }
@@ -33,7 +33,7 @@
     align-items: center;
     margin-left: @dls-pagination-page-items-margin-after;
 
-    .veui-input {
+    .@{veui-prefix}-input {
       width: @dls-pagination-goto-input-width;
 
       &-main {
@@ -54,7 +54,7 @@
       margin-left: @dls-pagination-spacing-1;
     }
 
-    .veui-button {
+    .@{veui-prefix}-button {
       margin-left: @dls-pagination-spacing-2;
     }
   }
@@ -78,7 +78,7 @@
     border-radius: @@radius;
   }
 
-  .veui-link {
+  .@{veui-prefix}-link {
     .padding(_, @dls-pagination-page-item-padding-x);
     .make-metrics(m);
     align-items: center;
@@ -93,19 +93,19 @@
     color: @dls-button-font-color-normal;
     .veui-button-transition();
 
-    &.veui-pagination-more {
+    &.@{veui-prefix}-pagination-more {
       border-color: transparent;
       background-color: transparent;
 
-      .veui-icon {
+      .@{veui-prefix}-icon {
         .veui-transition(opacity);
       }
 
-      .veui-pagination-more-ellipsis {
+      .@{veui-prefix}-pagination-more-ellipsis {
         opacity: 1;
       }
 
-      .veui-pagination-more-arrow {
+      .@{veui-prefix}-pagination-more-arrow {
         position: absolute;
         opacity: 0;
       }
@@ -117,11 +117,11 @@
       &:hover,
       &.focus-visible,
       &[data-focus-visible-added] {
-        .veui-pagination-more-ellipsis {
+        .@{veui-prefix}-pagination-more-ellipsis {
           opacity: 0;
         }
 
-        .veui-pagination-more-arrow {
+        .@{veui-prefix}-pagination-more-arrow {
           opacity: 1;
         }
       }
@@ -147,13 +147,13 @@
       background-color: @dls-button-background-color-normal-active;
     }
 
-    &.veui-disabled {
+    &.@{veui-prefix}-disabled {
       border-color: @dls-button-border-color-normal-disabled;
       background-color: @dls-button-background-color-normal-disabled;
       color: @dls-button-font-color-normal-disabled;
     }
 
-    &.veui-current {
+    &.@{veui-prefix}-current {
       border-color: @dls-pagination-page-item-border-color-current;
       background-color: @dls-pagination-page-item-background-color-current;
       color: @dls-pagination-page-item-font-color-current;
@@ -164,7 +164,7 @@
   &[ui~="xs"] {
     font-size: @dls-pagination-font-size-xs;
 
-    .veui-link {
+    .@{veui-prefix}-link {
       .make-metrics(xs);
     }
   }
@@ -172,7 +172,7 @@
   &[ui~="s"] {
     font-size: @dls-pagination-font-size-s;
 
-    .veui-link {
+    .@{veui-prefix}-link {
       .make-metrics(s);
     }
   }

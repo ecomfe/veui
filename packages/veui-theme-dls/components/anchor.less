@@ -10,7 +10,7 @@
   @dls-link-font-size-s
 );
 
-.veui-anchor {
+.@{veui-prefix}-anchor {
   position: relative;
   max-height: 100%;
   overflow: auto;
@@ -27,24 +27,27 @@
   }
   &-wrapper {
     max-height: 100vh;
-    .veui-tree-item {
+    .@{veui-prefix}-tree-item {
       height: @dls-anchor-height-m;
       line-height: @dls-anchor-height-m;
       margin-top: @dls-anchor-padding-x;
       &:hover::before {
         display: none;
       }
-      .veui-anchor-item {
+      .@{veui-prefix}-anchor-item {
         height: inherit;
       }
     }
     &[ui~="s"] {
-      .veui-tree-item {
+      .@{veui-prefix}-tree-item {
         height: @dls-anchor-height-s;
         line-height: @dls-anchor-height-s;
       }
     }
-    & > .veui-tree > li:first-child > .veui-tree-item:first-child {
+    &
+      > .@{veui-prefix}-tree
+      > li:first-child
+      > .@{veui-prefix}-tree-item:first-child {
       margin-top: 0;
     }
   }

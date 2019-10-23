@@ -1,10 +1,12 @@
 <script>
 import Dialog from './Dialog'
+import prefix from '../mixins/prefix'
 
 const PLACEMENT = ['top', 'right', 'bottom', 'left']
 
 export default {
   name: 'veui-drawer',
+  mixins: [prefix],
   inheritAttrs: false,
   props: {
     modal: {
@@ -26,8 +28,8 @@ export default {
         // attrs 都直接透传到 Dialog 去
         ...this.$attrs,
         overlayClass: {
-          [`veui-drawer-${this.placement}`]: true,
-          'veui-drawer-box': true
+          [this.$c(`drawer-${this.placement}`)]: true,
+          [this.$c('drawer-box')]: true
         },
         modal: this.modal,
         draggable: false,

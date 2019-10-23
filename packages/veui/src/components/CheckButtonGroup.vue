@@ -1,6 +1,6 @@
 <template>
 <div
-  class="veui-check-button-group veui-button-group"
+  :class="[$c('check-button-group'), $c('button-group')]"
   :ui="realUi"
   role="listbox"
   aria-multiselectable="true"
@@ -12,7 +12,7 @@
     :key="`b-${item.value}`"
     :ui="localValue.indexOf(item.value) !== -1 ? uiParts.checked : null"
     :class="{
-      'veui-button-selected': localValue.indexOf(item.value) !== -1
+      [$c('button-selected')]: localValue.indexOf(item.value) !== -1
     }"
     :disabled="item.disabled || realDisabled || realReadonly"
     role="option"
@@ -29,7 +29,7 @@
     </slot>
     <veui-icon
       :key="`i-${item.value}`"
-      class="veui-check-button-group-checkmark"
+      :class="$c('check-button-group-checkmark')"
       :name="icons.check"
     />
   </veui-button>
@@ -37,8 +37,9 @@
 </template>
 
 <script>
-import input from '../mixins/input'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
+import input from '../mixins/input'
 import { focusIn } from '../utils/dom'
 import { includes, findIndex } from 'lodash'
 import Button from './Button'
@@ -50,7 +51,7 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [ui, input],
+  mixins: [prefix, ui, input],
   model: {
     event: 'change'
   },

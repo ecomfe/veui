@@ -6,7 +6,7 @@
   :icons="icons"
   :ui="realUi"
   :class="{
-    'veui-tree-disabled': realDisabled || realReadonly
+    [$c('tree-disabled')]: realDisabled || realReadonly
   }"
   @toggle="toggle"
   @click="handleItemClick"
@@ -41,7 +41,7 @@
     >
       <veui-checkbox
         v-if="checkable"
-        class="veui-tree-item-check"
+        :class="$c('tree-item-check')"
         :checked="props.item.checked"
         :indeterminate="props.item.indeterminate"
         :disabled="props.item.disabled || realDisabled || realReadonly"
@@ -75,6 +75,7 @@ import {
   xor,
   isString
 } from 'lodash'
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import warn from '../../utils/warn'
@@ -88,7 +89,7 @@ export default {
     'veui-tree-node': TreeNode,
     'veui-checkbox': Checkbox
   },
-  mixins: [ui, input],
+  mixins: [prefix, ui, input],
   model: {
     prop: 'checked',
     event: 'check'
@@ -232,11 +233,7 @@ export default {
     // 判断节点是不是被全部选中
     isChecked (item) {
       if (this.hasChild(item)) {
-        let {
-          allCount = 0,
-          disabledCount = 0,
-          disabledCheckedCount = 0
-        } = item
+        let { allCount = 0, disabledCount = 0, disabledCheckedCount = 0 } = item
         return (
           disabledCount < item.children.length &&
           allCount + disabledCount + disabledCheckedCount ===

@@ -1,16 +1,16 @@
 <template>
 <div
-  class="veui-carousel"
+  :class="$c('carousel')"
   :ui="realUi"
 >
   <div
-    class="veui-carousel-viewport"
+    :class="$c('carousel-viewport')"
     @mouseenter="handleEnter"
     @mouseleave="handleLeave"
   >
     <transition-group
-      name="veui-carousel-item"
-      class="veui-carousel-items"
+      :name="$c('carousel-item')"
+      :class="$c('carousel-items')"
       tag="ol"
     >
       <li
@@ -19,8 +19,8 @@
         ref="item"
         :key="`${i}`"
         :class="{
-          'veui-carousel-item': true,
-          'veui-carousel-item-current': localIndex === i
+          [$c('carousel-item')]: true,
+          [$c('carousel-item-current')]: localIndex === i
         }"
         tabindex="0"
       >
@@ -29,13 +29,13 @@
           :index="i"
         >
           <div
-            class="veui-carousel-item-image"
+            :class="$c('carousel-item-image')"
             :style="{
               'background-image': `url(${item.src})`
             }"
           >
             <img
-              class="veui-sr-only"
+              :class="$c('sr-only')"
               :src="item.src"
               :alt="item.alt"
             >
@@ -46,16 +46,14 @@
   </div>
   <div
     v-if="indicator === 'number'"
-    class="veui-carousel-indicator-numbers"
+    :class="$c('carousel-indicator-numbers')"
   >
     {{ localIndex + 1
-    }}<span class="veui-carousel-indicator-numbers-separator"/>{{ count }}
+    }}<span :class="$c('carousel-indicator-numbers-separator')"/>{{ count }}
   </div>
   <nav
     v-else-if="indicator !== 'none'"
-    :class="{
-      [`veui-carousel-indicator-${indicator}s`]: true
-    }"
+    :class="$c(`carousel-indicator-${indicator}s`)"
   >
     <button
       v-for="(item, i) in datasource"
@@ -63,8 +61,8 @@
       type="button"
       tabindex="-1"
       :class="{
-        'veui-carousel-indicator-item': true,
-        'veui-carousel-indicator-item-current': localIndex === i
+        [$c('carousel-indicator-item')]: true,
+        [$c('carousel-indicator-item-current')]: localIndex === i
       }"
       @click="select(i, 'click')"
       @focus="switchTrigger === 'hover' && select(i, 'hover')"
@@ -75,7 +73,7 @@
   </nav>
   <veui-button
     :ui="uiParts.control"
-    class="veui-carousel-control veui-carousel-control-prev"
+    :class="[$c('carousel-control'), $c('carousel-control-prev')]"
     :disabled="!wrap && localIndex === 0"
     @click="step(-1)"
   >
@@ -86,7 +84,7 @@
   </veui-button>
   <veui-button
     :ui="uiParts.control"
-    class="veui-carousel-control veui-carousel-control-next"
+    :class="[$c('carousel-control'), $c('carousel-control-next')]"
     :disabled="!wrap && localIndex === count - 1"
     @click="step(1)"
   >
@@ -96,7 +94,7 @@
     />
   </veui-button>
   <div
-    class="veui-sr-only"
+    :class="$c('sr-only')"
     aria-live="polite"
     aria-atomic="true"
   >
@@ -109,6 +107,7 @@
 import { includes } from 'lodash'
 import Button from './Button'
 import Icon from './Icon'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 
@@ -118,7 +117,7 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [ui, i18n],
+  mixins: [prefix, ui, i18n],
   props: {
     datasource: {
       type: Array,

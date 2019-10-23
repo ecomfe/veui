@@ -1,6 +1,6 @@
 <template>
 <div
-  class="veui-grid-row"
+  :class="$c('grid-row')"
   :style="style"
 >
   <slot/>
@@ -8,8 +8,11 @@
 </template>
 
 <script>
+import prefix from '../../mixins/prefix'
+
 export default {
   name: 'veui-grid-row',
+  mixins: [prefix],
   provide () {
     let { columns, gutter, flex } = this
 

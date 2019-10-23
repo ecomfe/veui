@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-radio {
+.@{veui-prefix}-radio {
   display: inline-flex;
   align-items: center;
   color: @dls-radio-font-color;
@@ -23,7 +23,7 @@
     font-size: @dls-font-size-m;
     .veui-transition(border-color, background-color, box-shadow);
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       display: none;
     }
 
@@ -93,7 +93,7 @@
     background-color: @dls-radio-background-color-checked-active;
   }
 
-  &.veui-disabled {
+  &.@{veui-prefix}-disabled {
     cursor: not-allowed;
   }
 

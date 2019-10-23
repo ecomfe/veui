@@ -37,17 +37,17 @@
     color: @dls-option-dropdown-placeholder-font-color;
   }
 
-  .veui-overlay-enter &,
-  .veui-overlay-leave-to & {
+  .@{veui-prefix}-overlay-enter &,
+  .@{veui-prefix}-overlay-leave-to & {
     transform: scaleY(0);
   }
 
-  .tether-element-attached-bottom.veui-overlay-enter-active &,
-  .tether-element-attached-bottom.veui-overlay-leave-active & {
+  .tether-element-attached-bottom.@{veui-prefix}-overlay-enter-active &,
+  .tether-element-attached-bottom.@{veui-prefix}-overlay-leave-active & {
     transform-origin: 50% 100%;
   }
 
-  &.veui-dropdown-overflow {
+  &.@{veui-prefix}-dropdown-overflow {
     &::before,
     &::after {
       content: "";
@@ -80,7 +80,7 @@
     }
   }
 
-  .veui-checkbox {
+  .@{veui-prefix}-checkbox {
     &-box {
       margin-right: @dls-option-label-spacing-before;
     }
@@ -106,13 +106,13 @@
     transform: rotateZ(180deg);
   }
 
-  &-button[ui~="primary"]:not(.veui-button-loading):disabled {
+  &-button[ui~="primary"]:not(.@{veui-prefix}-button-loading):disabled {
     background-color: @dls-button-background-color-primary-disabled;
     border-color: @dls-button-border-color-primary-disabled;
     color: @dls-button-font-color-primary-disabled;
   }
 
-  &-expanded &-button.veui-button[ui~="primary"] {
+  &-expanded &-button.@{veui-prefix}-button[ui~="primary"] {
     &,
     &:hover,
     &.focus-visible {

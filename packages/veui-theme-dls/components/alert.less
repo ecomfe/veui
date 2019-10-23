@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-alert {
+.@{veui-prefix}-alert {
   display: flex;
   align-items: flex-start;
   line-height: @dls-alert-line-height;
@@ -29,11 +29,11 @@
 
   &-nav,
   &-close {
-    .veui-icon {
+    .@{veui-prefix}-icon {
       .dls-icon-size(@dls-alert-icon-size-aux);
     }
 
-    .veui-button {
+    .@{veui-prefix}-button {
       font-size: inherit;
     }
   }
@@ -77,7 +77,7 @@
       background-color: @@bg-color-name;
       border-color: @@border-color-name;
 
-      .veui-alert-icon {
+      .@{veui-prefix}-alert-icon {
         color: @@fg-color-name;
       }
     }
@@ -92,11 +92,11 @@
   &&-titled {
     padding: @dls-alert-padding-y-titled @dls-alert-padding-x;
 
-    .veui-alert-icon {
+    .@{veui-prefix}-alert-icon {
       .dls-icon-size(@dls-alert-icon-size-titled);
     }
 
-    .veui-alert-close {
+    .@{veui-prefix}-alert-close {
       align-items: start;
     }
   }
@@ -105,7 +105,7 @@
     font-size: @dls-alert-font-size-m;
     border-radius: @dls-alert-border-radius-m;
 
-    .veui-alert {
+    .@{veui-prefix}-alert {
       &-state,
       &-nav,
       &-close {
@@ -122,7 +122,7 @@
   }
 
   &-titled[ui~="m"] {
-    .veui-alert {
+    .@{veui-prefix}-alert {
       &-state,
       &-nav,
       &-close {
@@ -139,7 +139,7 @@
     font-size: @dls-alert-font-size-s;
     border-radius: @dls-alert-border-radius-s;
 
-    .veui-alert {
+    .@{veui-prefix}-alert {
       &-state,
       &-nav,
       &-close {
@@ -156,7 +156,7 @@
   }
 
   &-titled[ui~="s"] {
-    .veui-alert {
+    .@{veui-prefix}-alert {
       &-state,
       &-nav,
       &-close {

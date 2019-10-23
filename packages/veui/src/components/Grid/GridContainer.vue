@@ -1,6 +1,6 @@
 <template>
 <div
-  class="veui-grid-container"
+  :class="$c('grid-container')"
   :style="style"
 >
   <slot/>
@@ -9,6 +9,7 @@
 
 <script>
 import config from '../../managers/config'
+import prefix from '../../mixins/prefix'
 
 config.defaults(
   {
@@ -22,6 +23,7 @@ config.defaults(
 
 export default {
   name: 'veui-grid-container',
+  mixins: [prefix],
   props: {
     width: {
       type: Number

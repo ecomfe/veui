@@ -2,7 +2,7 @@
 <veui-dialog
   ref="dialog"
   :ui="realUi"
-  :overlay-class="mergeOverlayClass('veui-prompt-box')"
+  :overlay-class="mergeOverlayClass($c('prompt-box'))"
   :open.sync="localOpen"
   :priority="priority"
   :closable="false"
@@ -23,14 +23,14 @@
   </template>
   <div
     v-if="content || $slots.default"
-    class="veui-prompt-box-info"
+    :class="$c('prompt-box-info')"
   >
     <slot>{{ content }}</slot>
   </div>
   <veui-input
     v-model="localValue"
     autofocus
-    class="veui-prompt-box-input"
+    :class="$c('prompt-box-input')"
     @keydown.enter="trigger"
   />
   <template slot="foot">
@@ -44,6 +44,7 @@ import Input from './Input'
 import Dialog from './Dialog'
 import { pick } from 'lodash'
 import config from '../managers/config'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 
@@ -57,7 +58,7 @@ export default {
     'veui-input': Input,
     'veui-dialog': Dialog
   },
-  mixins: [ui, overlay],
+  mixins: [prefix, ui, overlay],
   props: {
     ...pick(Dialog.props, ['open', 'title', 'beforeClose']),
     content: String,

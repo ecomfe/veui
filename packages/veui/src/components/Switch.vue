@@ -1,11 +1,11 @@
 <template>
 <label
   :class="{
-    'veui-switch': true,
-    'veui-switch-on': localChecked,
-    'veui-switch-loading': loading,
-    'veui-readonly': realReadonly,
-    'veui-disabled': realDisabled
+    [$c('switch')]: true,
+    [$c('switch-on')]: localChecked,
+    [$c('switch-loading')]: loading,
+    [$c('readonly')]: realReadonly,
+    [$c('disabled')]: realDisabled
   }"
   :ui="realUi"
   v-on="labelListeners"
@@ -18,8 +18,8 @@
     @change="handleChange"
     v-on="boxListeners"
   >
-  <div class="veui-switch-switcher">
-    <div class="veui-switch-button">
+  <div :class="$c('switch-switcher')">
+    <div :class="$c('switch-button')">
       <veui-icon
         v-if="loading"
         spin
@@ -28,7 +28,7 @@
     </div>
   </div>
   <template v-if="$slots.default">
-    <div class="veui-switch-label">
+    <div :class="$c('switch-label')">
       <slot/>
     </div>
   </template>
@@ -37,6 +37,7 @@
 
 <script>
 import Icon from './Icon'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { pick } from 'lodash'
@@ -47,7 +48,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui, input],
+  mixins: [prefix, ui, input],
   model: {
     prop: 'model'
   },

@@ -1,6 +1,6 @@
 <template>
 <div
-  class="veui-checkbox-group"
+  :class="$c('checkbox-group')"
   :ui="realUi"
   role="listbox"
   aria-multiselectable="true"
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { focusIn } from '../utils/dom'
@@ -41,7 +42,7 @@ export default {
   components: {
     'veui-checkbox': Checkbox
   },
-  mixins: [ui, input],
+  mixins: [prefix, ui, input],
   model: {
     event: 'change'
   },

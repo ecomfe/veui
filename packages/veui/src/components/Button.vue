@@ -1,10 +1,10 @@
 <template>
 <button
   :class="{
-    'veui-button': true,
-    'veui-button-loading': loading,
-    'veui-disabled': disabled,
-    'veui-button-icon-only': iconOnly
+    [$c('button')]: true,
+    [$c('button-loading')]: loading,
+    [$c('disabled')]: disabled,
+    [$c('button-icon-only')]: iconOnly
   }"
   :ui="realUi"
   v-bind="attrs"
@@ -14,7 +14,7 @@
   <template v-else>
     <slot name="loading">
       <veui-icon
-        class="veui-button-loading-icon"
+        :class="$c('button-loading-icon')"
         :name="icons.loading"
         spin
       />
@@ -27,6 +27,7 @@
 <script>
 import { omit } from 'lodash'
 import Icon from './Icon'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import { hasClass as vnodeHasClass } from '../utils/helper'
@@ -36,7 +37,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui, focusable],
+  mixins: [prefix, ui, focusable],
   props: {
     disabled: Boolean,
     name: String,
@@ -71,7 +72,7 @@ export default {
       let content = (this.$slots.default || []).filter(
         vnode =>
           (vnode.tag || vnode.text !== '') &&
-          !vnodeHasClass(vnode, 'veui-check-button-group-checkmark')
+          !vnodeHasClass(vnode, this.$c('check-button-group-checkmark'))
       )
       if (content) {
         let vnode = content[0]

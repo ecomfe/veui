@@ -108,7 +108,7 @@
       disabled
     >
       <template slot="candidate-title">
-        备选列表（3）
+        备选列表
       </template>
       <template slot="selected-title">
         已选列表（{{ selected4.length }}）
@@ -376,6 +376,11 @@ export default {
           }
         }
       ]
+    }
+  },
+  computed: {
+    datasource1LeafCount () {
+      return this.countLeaves(this.datasource1)
     }
   },
   methods: {

@@ -7,6 +7,7 @@ import OptionGroup from './OptionGroup'
 import Overlay from '../Overlay'
 import Checkbox from '../Checkbox'
 import config from '../../managers/config'
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import dropdown from '../../mixins/dropdown'
@@ -28,6 +29,7 @@ export default {
   name: 'veui-select',
   uiTypes: ['select'],
   mixins: [
+    prefix,
     ui,
     input,
     dropdown,
@@ -128,9 +130,7 @@ export default {
       return null
     },
     realOptions () {
-      return this.options
-        ? this.options.map(normalizeItem)
-        : this.inlineOptions
+      return this.options ? this.options.map(normalizeItem) : this.inlineOptions
     },
     isFiltered () {
       return this.searchable && this.inputValue
@@ -157,10 +157,12 @@ export default {
     inputClass () {
       if (this.multiple) {
         return this.searchable
-          ? 'veui-select-search-multi-input'
-          : 'veui-select-multi-input'
+          ? this.$c('select-search-multi-input')
+          : this.$c('select-multi-input')
       }
-      return this.searchable ? 'veui-select-search-input' : 'veui-select-input'
+      return this.searchable
+        ? this.$c('select-search-input')
+        : this.$c('select-input')
     },
     focusClass () {
       return this.searchable ? config.get('keySelect.focusClass') : null
@@ -328,13 +330,13 @@ export default {
         return matches.map(({ parts }, idx) => {
           let item = parts.map(({ text, matched }, index) => {
             return matched ? (
-              <mark class="veui-option-matched">{text}</mark>
+              <mark class={this.$c('option-matched')}>{text}</mark>
             ) : (
               <span>{text}</span>
             )
           })
           if (idx < matches.length - 1) {
-            item.push(<span class="veui-option-separator"> &gt; </span>)
+            item.push(<span class={this.$c('option-separator')}> &gt; </span>)
           }
           return item
         })
@@ -375,7 +377,7 @@ export default {
     let multiPrependSlot = this.searchable ? (
       selectedTags
     ) : this.labels.length === 0 ? (
-      <span class="veui-select-placeholder" id={this.labelId}>
+      <span class={this.$c('select-placeholder')} id={this.labelId}>
         {this.realPlaceholder}
       </span>
     ) : (
@@ -385,8 +387,8 @@ export default {
     let prependSlot = !this.searchable ? (
       <span
         class={{
-          'veui-select-label': true,
-          'veui-select-placeholder': this.localValue === null
+          [this.$c('select-label')]: true,
+          [this.$c('select-placeholder')]: this.localValue === null
         }}
         id={this.labelId}
       >
@@ -418,13 +420,13 @@ export default {
     return (
       <div
         class={{
-          'veui-select': true,
-          'veui-select-empty': this.isEmpty,
-          'veui-select-expanded': this.expanded,
-          'veui-select-searchable': this.searchable,
-          'veui-readonly': this.realReadonly,
-          'veui-disabled': this.realDisabled,
-          'veui-input-invalid': this.realInvalid
+          [this.$c('select')]: true,
+          [this.$c('select-empty')]: this.isEmpty,
+          [this.$c('select-expanded')]: this.expanded,
+          [this.$c('select-searchable')]: this.searchable,
+          [this.$c('readonly')]: this.realReadonly,
+          [this.$c('disabled')]: this.realDisabled,
+          [this.$c('input-invalid')]: this.realInvalid
         }}
         ui={this.realUi}
         role="listbox"
@@ -440,7 +442,7 @@ export default {
         <Input
           ref="input"
           class={{
-            'veui-select-trigger': true,
+            [this.$c('select-trigger')]: true,
             [this.inputClass]: true
           }}
           disabled={this.realDisabled}
@@ -456,15 +458,15 @@ export default {
           </template>
           <template slot="append">
             {this.limitLabel ? (
-              <span class="veui-select-count">{this.limitLabel}</span>
+              <span class={this.$c('select-count')}>{this.limitLabel}</span>
             ) : null}
-            <div class="veui-select-icon">
+            <div class={this.$c('select-icon')}>
               {this.clearable &&
               (this.multiple
                 ? this.localValue.length > 0
                 : this.localValue != null) ? (
                   <Button
-                    class="veui-select-clear"
+                    class={this.$c('select-clear')}
                     ui={this.uiParts.clear}
                     aria-label={this.t('clear')}
                     disabled={this.realDisabled || this.realReadonly}
@@ -482,7 +484,7 @@ export default {
                   </Button>
                 ) : null}
               <Icon
-                class="veui-select-toggle"
+                class={this.$c('select-toggle')}
                 name={this.icons[this.expanded ? 'collapse' : 'expand']}
               />
             </div>
@@ -505,8 +507,8 @@ export default {
               id={this.dropdownId}
               ref="box"
               class={{
-                'veui-select-options': true,
-                'veui-select-options-multiple': this.multiple
+                [this.$c('select-options')]: true,
+                [this.$c('select-options-multiple')]: this.multiple
               }}
               {...{
                 directives: [
@@ -529,7 +531,7 @@ export default {
               {renderGroup(
                 this.isFiltered ? this.filteredOptions : this.realOptions,
                 this.isFiltered && !this.filteredOptions.length ? (
-                  <div class="veui-select-options-no-data">
+                  <div class={this.$c('select-options-no-data')}>
                     {this.$scopedSlots['no-data']
                       ? this.$scopedSlots['no-data']({
                         keyword: this.inputValue

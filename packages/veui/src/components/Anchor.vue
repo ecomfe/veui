@@ -1,19 +1,19 @@
 <template>
 <div
-  class="veui-anchor"
+  :class="$c('anchor')"
   :ui="realUi"
 >
   <div
     ref="placeholder"
-    class="veui-anchor-placeholder"
+    :class="$c('anchor-placeholder')"
   />
   <div
     ref="append"
-    class="veui-anchor-wrapper"
+    :class="$c('anchor-wrapper')"
     :ui="realUi"
   >
     <veui-tree
-      class="veui-anchor-tree"
+      :class="$c('anchor-tree')"
       :datasource="items"
       :expanded="allAnchors"
     >
@@ -27,9 +27,9 @@
         >
           <veui-link
             :class="{
-              'veui-tree-item-label': true,
-              'veui-anchor-item': true,
-              'veui-anchor-item-active': props.value === localActive
+              [$c('tree-item-label')]: true,
+              [$c('anchor-item')]: true,
+              [$c('anchor-item-active')]: props.value === localActive
             }"
             :disabled="!!props.disabled"
             :to="props.value"
@@ -54,6 +54,7 @@
 import Tree from './Tree'
 import Link from './Link'
 import ui from '../mixins/ui'
+import prefix from '../mixins/prefix'
 import { debounce, reduce, startsWith, includes, get, isString } from 'lodash'
 import {
   scrollTo,
@@ -121,7 +122,7 @@ export default {
     'veui-tree': Tree,
     'veui-link': Link
   },
-  mixins: [ui],
+  mixins: [prefix, ui],
   props: {
     items: Tree.props.datasource,
     sticky: {
@@ -339,10 +340,7 @@ export default {
 
       let conRect = this.getContainerRect()
       let placeholderRect = this.$refs.placeholder.getBoundingClientRect()
-      this.scrollTopToAffix = this.getScrollTopToAffix(
-        placeholderRect,
-        conRect
-      )
+      this.scrollTopToAffix = this.getScrollTopToAffix(placeholderRect, conRect)
       if (getScrollTop(this.realContainer) >= this.scrollTopToAffix) {
         this.affixAnchor(placeholderRect, conRect, force)
       } else {

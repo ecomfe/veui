@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-filter-panel {
+.@{veui-prefix}-filter-panel {
   overflow: hidden;
   border: 1px solid @dls-transfer-border-color;
   border-radius: @dls-transfer-border-radius-m;
@@ -17,12 +17,12 @@
     margin: 0;
     height: @dls-transfer-header-height-m;
 
-    .veui-button {
+    .@{veui-prefix}-button {
       font-weight: @dls-transfer-header-button-font-weight;
     }
   }
 
-  .veui-searchbox {
+  .@{veui-prefix}-searchbox {
     margin: 0;
     width: 100%;
   }
@@ -37,7 +37,7 @@
   }
 
   &-single-level {
-    .veui-tree.veui-tree .veui-tree-item-label {
+    .@{veui-prefix}-tree.@{veui-prefix}-tree .@{veui-prefix}-tree-item-label {
       margin-left: 0;
     }
   }
@@ -59,7 +59,7 @@
     border-radius: @dls-transfer-border-radius-s;
     width: @dls-transfer-panel-width-s;
 
-    .veui-filter-panel {
+    .@{veui-prefix}-filter-panel {
       &-title {
         height: @dls-transfer-header-height-s;
         font-size: @dls-transfer-font-size-s;

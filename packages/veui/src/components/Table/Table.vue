@@ -1,11 +1,11 @@
 <template>
 <div
-  class="veui-table"
+  :class="$c('table')"
   :ui="realUi"
 >
   <div
     v-if="scrollableY"
-    class="veui-table-fixed-header"
+    :class="$c('table-fixed-header')"
     aria-hidden="true"
   >
     <table>
@@ -15,7 +15,7 @@
   </div>
   <div
     ref="main"
-    class="veui-table-main"
+    :class="$c('table-main')"
     :style="{
       maxHeight: scrollableY ? realScroll.y : null
     }"
@@ -41,7 +41,7 @@
   </div>
   <div
     v-if="scrollableY"
-    class="veui-table-fixed-footer"
+    :class="$c('table-fixed-footer')"
     aria-hidden="true"
   >
     <table>
@@ -57,6 +57,7 @@
 <script>
 import warn from '../../utils/warn'
 import { normalizeLength } from '../../utils/helper'
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import { map, mapValues, intersection, includes, find } from 'lodash'
@@ -77,7 +78,7 @@ export default {
     'table-foot': Foot,
     'col-group': ColGroup
   },
-  mixins: [ui, i18n],
+  mixins: [prefix, ui, i18n],
   props: {
     data: {
       type: Array,

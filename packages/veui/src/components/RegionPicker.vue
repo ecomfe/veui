@@ -1,6 +1,6 @@
 <template>
 <div
-  class="veui-region-picker"
+  :class="$c('region-picker')"
   :ui="realUi"
   role="tree"
   aria-multiselectable="true"
@@ -8,14 +8,14 @@
 >
   <div
     ref="focus"
-    class="veui-sr-only"
+    :class="$c('sr-only')"
     tabindex="0"
     @focus="initFocus"
   />
   <div
     v-for="(section, si) in localDatasource"
     :key="si"
-    class="veui-region-picker-section"
+    :class="$c('region-picker-section')"
     role="treeitem"
     aria-level="1"
     :aria-expanded="localDatasource.length > 0"
@@ -28,7 +28,7 @@
         (includeIndeterminate || !section.indeterminate)
     "
   >
-    <div class="veui-region-picker-section-title">
+    <div :class="$c('region-picker-section-title')">
       <veui-checkbox
         :ref="`node-${si}`"
         :checked="section.selected"
@@ -52,12 +52,12 @@
     </div>
     <div
       v-if="section.children"
-      class="veui-region-picker-section-content"
+      :class="$c('region-picker-section-content')"
     >
       <div
         v-for="(branch, bi) in section.children"
         :key="bi"
-        class="veui-region-picker-branch"
+        :class="$c('region-picker-branch')"
         role="treeitem"
         aria-level="2"
         :aria-expanded="section.children.length > 0"
@@ -70,7 +70,7 @@
             (includeIndeterminate || !branch.indeterminate)
         "
       >
-        <div class="veui-region-picker-branch-title">
+        <div :class="$c('region-picker-branch-title')">
           <veui-checkbox
             :ref="`node-${si}-${bi}`"
             :checked="branch.selected"
@@ -95,12 +95,12 @@
         </div>
         <div
           v-if="branch.children"
-          class="veui-region-picker-branch-content"
+          :class="$c('region-picker-branch-content')"
         >
           <div
             v-for="(group, gi) in branch.children"
             :key="gi"
-            class="veui-region-picker-group"
+            :class="$c('region-picker-group')"
             role="treeitem"
             aria-level="3"
             :aria-expanded="branch.children.length > 0 && !!group.active"
@@ -114,7 +114,7 @@
             "
             :aria-owns="`${id}-shadow ${id}-units`"
           >
-            <div class="veui-region-picker-group-title">
+            <div :class="$c('region-picker-group-title')">
               <veui-checkbox
                 :ref="`node-${si}-${bi}-${gi}`"
                 :checked="group.selected"
@@ -157,14 +157,14 @@
                     trigger: 'hover',
                     delay: 200
                   }"
-                  class="veui-region-picker-units"
+                  :class="$c('region-picker-units')"
                 >
                   <template
                     v-for="ri in Math.ceil(group.children.length / 3)"
                   >
                     <div
                       :key="ri"
-                      class="veui-region-picker-unit-row"
+                      :class="$c('region-picker-unit-row')"
                     >
                       <div
                         v-for="(unit, ui) in group.children.slice(
@@ -172,7 +172,7 @@
                           ri * 3
                         )"
                         :key="ui"
-                        class="veui-region-picker-unit"
+                        :class="$c('region-picker-unit')"
                         role="treeitem"
                         aria-level="4"
                         aria-expanded="true"
@@ -211,7 +211,7 @@
                 v-if="group.children && group.active"
                 :open.sync="group.active"
                 :overlay-class="
-                  mergeOverlayClass('veui-region-picker-group-shadow-overlay')
+                  mergeOverlayClass($c('region-picker-group-shadow-overlay'))
                 "
                 :target="`node-${si}-${bi}-${gi}`"
                 :options="{
@@ -228,7 +228,7 @@
                     trigger: 'hover',
                     delay: 200
                   }"
-                  class="veui-region-picker-group-shadow"
+                  :class="$c('region-picker-group-shadow')"
                   role="treeitem"
                   aria-level="3"
                   :aria-setsize="branch.children.length"
@@ -281,6 +281,7 @@
 <script>
 import Checkbox from './Checkbox'
 import Overlay from './Overlay'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import overlay from '../mixins/overlay'
@@ -298,7 +299,7 @@ export default {
     'veui-overlay': Overlay
   },
   directives: { outside },
-  mixins: [ui, input, overlay, i18n],
+  mixins: [prefix, ui, input, overlay, i18n],
   model: {
     prop: 'selected',
     event: 'select'
@@ -394,9 +395,7 @@ export default {
           if (!node.id && !(node.children && node.children.length)) {
             // invalid node
             warn(
-              `[veui-region-picker] Invalid region tree node '${
-                node.label
-              }'. Provide \`value\`, \`children\` or both.`,
+              `[veui-region-picker] Invalid region tree node '${node.label}'. Provide \`value\`, \`children\` or both.`,
               this
             )
             return

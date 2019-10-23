@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-table {
+.@{veui-prefix}-table {
   color: @veui-text-color-normal;
 
   table {
@@ -71,15 +71,15 @@
       background-color: @veui-gray-color-8;
     }
 
-    .veui-table-no-data {
+    .@{veui-prefix}-table-no-data {
       background-color: transparent;
     }
   }
 
-  .veui-button,
-  .veui-link {
-    & + .veui-button,
-    & + .veui-link {
+  .@{veui-prefix}-button,
+  .@{veui-prefix}-link {
+    & + .@{veui-prefix}-button,
+    & + .@{veui-prefix}-link {
       margin-left: 30px;
     }
   }
@@ -98,7 +98,7 @@
     padding-right: 38px;
   }
 
-  .veui-sorter {
+  .@{veui-prefix}-sorter {
     margin-left: 5px;
     font-size: @veui-font-size-small;
   }
@@ -138,7 +138,7 @@
         color: @veui-brand-color-1;
       }
 
-      .veui-icon {
+      .@{veui-prefix}-icon {
         display: block;
       }
     }
@@ -149,7 +149,7 @@
       background-color: @veui-gray-color-8;
     }
 
-    &:hover .veui-table-cell-expand {
+    &:hover .@{veui-prefix}-table-cell-expand {
       background-color: #fff;
     }
   }

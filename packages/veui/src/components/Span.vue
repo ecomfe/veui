@@ -1,6 +1,6 @@
 <template>
 <span
-  class="veui-span"
+  :class="$c('span')"
   :ui="realUi"
 >
   <slot/>
@@ -8,10 +8,11 @@
 </template>
 
 <script>
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 
 export default {
   name: 'veui-span',
-  mixins: [ui]
+  mixins: [prefix, ui]
 }
 </script>

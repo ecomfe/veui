@@ -1,5 +1,5 @@
 <template>
-<div class="veui-accordion">
+<div :class="$c('accordion')">
   <slot/>
 </div>
 </template>
@@ -7,6 +7,7 @@
 <script>
 import ui from '../mixins/ui'
 import { makeCoupledParent } from '../mixins/coupled'
+import prefix from '../mixins/prefix'
 import { clone } from 'lodash'
 
 let accordion = makeCoupledParent({
@@ -17,7 +18,7 @@ let accordion = makeCoupledParent({
 export default {
   name: 'veui-accordion',
   uiTypes: ['accordion'],
-  mixins: [ui, accordion],
+  mixins: [prefix, ui, accordion],
   props: {
     multiple: Boolean,
     disabled: Boolean,
