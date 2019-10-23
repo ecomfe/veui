@@ -1134,6 +1134,7 @@ export default {
 
 function getProgress () {
   return {
+    mixins: [prefix],
     props: ['loaded', 'total', 'type', 'uploadingText', 'convertSizeUnit'],
     computed: {
       percent () {
