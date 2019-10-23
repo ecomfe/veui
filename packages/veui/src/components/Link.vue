@@ -42,11 +42,12 @@
 
 <script>
 import { uniq } from 'lodash'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 
 export default {
   name: 'veui-link',
-  mixins: [ui],
+  mixins: [prefix, ui],
   props: {
     to: {
       type: [String, Object],
@@ -65,8 +66,8 @@ export default {
   computed: {
     klass () {
       return {
-        'veui-link': true,
-        'veui-disabled': this.disabled
+        [this.$c('link')]: true,
+        [this.$c('disabled')]: this.disabled
       }
     },
     realRel () {

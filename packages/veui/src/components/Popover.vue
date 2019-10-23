@@ -1,12 +1,13 @@
 <script>
 import Tooltip from './Tooltip'
 import { getNodes } from '../utils/context'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 
 export default {
   name: 'veui-popover',
-  mixins: [ui, overlay],
+  mixins: [prefix, ui, overlay],
   inheritAttrs: false,
   computed: {
     targetNode () {
@@ -19,7 +20,7 @@ export default {
         ui: this.uiParts.self || '',
         ...this.$attrs,
         overlayClass: this.mergeOverlayClass({
-          'veui-popover-box': true
+          [this.$c('popover-box')]: true
         }),
         target: this.targetNode
       },

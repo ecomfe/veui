@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-breadcrumb {
+.@{veui-prefix}-breadcrumb {
   display: flex;
   align-items: center;
   margin: 0;
@@ -14,7 +14,7 @@
 
   &-separator {
     .margin(_, @dls-breadcrumb-separator-spacing);
-    .veui-icon {
+    .@{veui-prefix}-icon {
       .dls-icon-size(@dls-breadcrumb-separator-icon-size);
       color: @dls-breadcrumb-separator-color;
     }

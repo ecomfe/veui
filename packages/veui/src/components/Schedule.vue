@@ -1,6 +1,6 @@
 <template>
 <div
-  class="veui-schedule"
+  :class="$c('schedule')"
   :ui="realUi"
   role="application"
   :aria-label="t('schedule')"
@@ -9,13 +9,13 @@
   tabindex="-1"
 >
   <slot name="header">
-    <div class="veui-schedule-header">
+    <div :class="$c('schedule-header')">
       <slot name="header-content">
         <slot
           v-if="shortcuts && shortcuts.length"
           name="shortcuts"
         >
-          <div class="veui-schedule-shortcuts">
+          <div :class="$c('schedule-shortcuts')">
             <template v-if="shortcutsDisplay === 'inline'">
               <button
                 v-for="({ label }, i) in shortcuts"
@@ -45,14 +45,16 @@
         </slot>
         <slot name="legend">
           <div
-            class="veui-schedule-legend"
+            :class="$c('schedule-legend')"
             aria-hidden="true"
           >
             <span
               v-for="(status, i) in realStatuses"
               :key="i"
-              class="veui-schedule-legend-item"
-              :class="`veui-schedule-legend-${status.value || status.name}`"
+              :class="[
+                $c('schedule-legend-item'),
+                $c(`schedule-legend-${status.value || status.name}`)
+              ]"
             >
               <slot
                 name="legend-label"
@@ -66,21 +68,21 @@
       </slot>
     </div>
   </slot>
-  <div class="veui-schedule-body">
-    <div class="veui-schedule-head-hour">
+  <div :class="$c('schedule-body')">
+    <div :class="$c('schedule-head-hour')">
       <div
         v-for="i in 13"
         :key="i"
-        class="veui-schedule-head-hour-item"
+        :class="$c('schedule-head-hour-item')"
       >
         {{ `${(i - 1) * 2}:00` }}
       </div>
     </div>
-    <div class="veui-schedule-head-day">
+    <div :class="$c('schedule-head-day')">
       <div
         v-for="i in 7"
         :key="i"
-        class="veui-schedule-head-day-item"
+        :class="$c('schedule-head-day-item')"
       >
         <veui-checkbox
           :ui="uiParts.dayPicker"
@@ -96,9 +98,11 @@
     </div>
     <div
       v-outside.mouseup="() => markEnd()"
-      class="veui-schedule-detail"
+      :class="$c('schedule-detail')"
     >
-      <table class="veui-schedule-table veui-schedule-table-interaction">
+      <table
+        :class="[$c('schedule-table'), $c('schedule-table-interaction')]"
+      >
         <colgroup>
           <col
             v-for="i in 24"
@@ -112,7 +116,9 @@
           <td
             v-for="(hour, j) in day"
             :key="j"
-            :class="{ 'veui-schedule-selected': hour.isSelected }"
+            :class="{
+              [$c('schedule-selected')]: hour.isSelected
+            }"
           >
             <button
               :ref="`hour-${week[i]}-${j}`"
@@ -120,7 +126,7 @@
               :disabled="realDisabled || realReadonly || hour.isDisabled"
               :class="
                 mergeClass(
-                  { 'veui-schedule-selected': hour.isSelected },
+                  { [$c('schedule-selected')]: hour.isSelected },
                   week[i],
                   j
                 )
@@ -147,7 +153,7 @@
         </tr>
       </table>
 
-      <table class="veui-schedule-table veui-schedule-table-selected">
+      <table :class="[$c('schedule-table'), $c('schedule-table-selected')]">
         <colgroup>
           <col
             v-for="i in 24"
@@ -212,6 +218,7 @@ import {
   mapValues,
   isEqual
 } from 'lodash'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
@@ -256,7 +263,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-dropdown': Dropdown
   },
-  mixins: [ui, input, i18n],
+  mixins: [prefix, ui, input, i18n],
   model: {
     prop: 'selected',
     event: 'select'

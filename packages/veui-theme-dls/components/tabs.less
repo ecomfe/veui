@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-tabs {
+.@{veui-prefix}-tabs {
   @veui-tabs-height: @dls-tab-height-m;
   @veui-tabs-height-l: @dls-tab-height-l;
   @veui-tabs-height-s: @dls-tab-height-s;
@@ -74,10 +74,10 @@
     .make-margin-left(@dls-tab-spacing-x-m);
     vertical-align: top;
 
-    // &.veui-tabs-item-removable {
+    // &.@{veui-prefix}-tabs-item-removable {
     //   .make-margin-left(@veui-tabs-height);
 
-    //   .veui-tabs-item-status {
+    //   .@{veui-prefix}-tabs-item-status {
     //     margin-right: 8px;
     //   }
     // }
@@ -89,7 +89,7 @@
       outline: none;
       .veui-button-transition();
 
-      .veui-icon {
+      .@{veui-prefix}-icon {
         display: block;
       }
 
@@ -133,7 +133,7 @@
       }
     }
 
-    &:not(.veui-tabs-item-disabled) > &-label {
+    &:not(.@{veui-prefix}-tabs-item-disabled) > &-label {
       color: @dls-tab-font-color;
 
       &::after {
@@ -160,7 +160,7 @@
       }
     }
 
-    &-active:not(.veui-tabs-item-disabled) > &-label {
+    &-active:not(.@{veui-prefix}-tabs-item-disabled) > &-label {
       color: @dls-tab-font-color-current;
 
       &::after {
@@ -231,7 +231,7 @@
     position: absolute;
     top: 0;
 
-    .veui-tabs-list-empty & :first-child {
+    .@{veui-prefix}-tabs-list-empty & :first-child {
       margin-left: 0;
     }
   }
@@ -250,7 +250,7 @@
     outline: none;
     cursor: pointer;
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       margin-right: 6px;
     }
 
@@ -263,9 +263,9 @@
     }
   }
 
-  &-item-status .veui-icon,
+  &-item-status .@{veui-prefix}-icon,
   &-item-remove,
-  &-operator .veui-icon {
+  &-operator .@{veui-prefix}-icon {
     vertical-align: top;
     // 减掉的 1px 是底部的线
     margin-top: calc(@veui-tabs-height / 2 - 0.5em - 1px);
@@ -319,7 +319,7 @@
       height: ~"@{veui-height-normal}\9\0";
       border: 1px solid @veui-gray-color-6;
 
-      .veui-tabs-list-empty& {
+      .@{veui-prefix}-tabs-list-empty& {
         border-width: 1px 0 1px 1px;
       }
     }
@@ -332,18 +332,18 @@
       background-color: #fff;
       cursor: pointer;
 
-      &.veui-tabs-item-removable {
+      &.@{veui-prefix}-tabs-item-removable {
         padding-right: 12px;
         padding-right: 0\9\0;
       }
 
-      &-moving.veui-tabs-item-removable,
-      &.veui-tab-leave-active {
+      &-moving.@{veui-prefix}-tabs-item-removable,
+      &.@{veui-prefix}-tab-leave-active {
         transition: width 0.5s ease-in-out, transform 0.5s ease-in-out,
           padding-right 0.5s;
       }
 
-      &.veui-tab-leave-active {
+      &.@{veui-prefix}-tab-leave-active {
         z-index: -1;
       }
 
@@ -382,24 +382,24 @@
         }
       }
 
-      &.veui-tabs-item-removable > .veui-tabs-item-label {
+      &.@{veui-prefix}-tabs-item-removable > .@{veui-prefix}-tabs-item-label {
         padding-right: 8px;
       }
 
-      &.veui-tabs-item-disabled {
+      &.@{veui-prefix}-tabs-item-disabled {
         background-color: #fff;
         color: @veui-gray-color-4;
       }
 
-      &.veui-tabs-item-active {
+      &.@{veui-prefix}-tabs-item-active {
         background-color: @veui-gray-color-6;
       }
     }
 
-    &-item-status .veui-icon,
+    &-item-status .@{veui-prefix}-icon,
     &-item-remove,
-    &-operator .veui-icon,
-    &-scroller .veui-icon {
+    &-operator .@{veui-prefix}-icon,
+    &-scroller .@{veui-prefix}-icon {
       margin-top: calc(@veui-tabs-height / 2 - 0.5em);
       vertical-align: top;
     }
@@ -408,7 +408,7 @@
       border-bottom: none;
       vertical-align: top;
 
-      .veui-tabs-addable&::before {
+      .@{veui-prefix}-tabs-addable&::before {
         content: "";
         position: absolute;
         left: -1px;
@@ -432,7 +432,7 @@
       text-align: center;
       vertical-align: top;
 
-      .veui-icon {
+      .@{veui-prefix}-icon {
         margin-right: 0;
       }
     }
@@ -470,10 +470,10 @@
       }
     }
 
-    &-item-status .veui-icon,
+    &-item-status .@{veui-prefix}-icon,
     &-item-remove,
-    &-operator .veui-icon,
-    &-scroller .veui-icon {
+    &-operator .@{veui-prefix}-icon,
+    &-scroller .@{veui-prefix}-icon {
       margin-top: calc(@veui-tabs-block-height-large / 2 - 0.5em);
       vertical-align: top;
     }

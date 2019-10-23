@@ -1,8 +1,9 @@
+import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 
 export default {
   name: 'veui-table-col-group',
-  mixins: [table],
+  mixins: [prefix, table],
   props: {
     gutter: Boolean
   },
@@ -18,8 +19,8 @@ export default {
   render () {
     return (
       <colgroup>
-        {this.selectable ? <col class="veui-table-col-select" /> : null}
-        {this.expandable ? <col class="veui-table-col-expand" /> : null}
+        {this.selectable ? <col class={this.$c('table-col-select')} /> : null}
+        {this.expandable ? <col class={this.$c('table-col-expand')} /> : null}
         {this.columns.map((col, i) => (
           <col
             style={{
@@ -30,7 +31,7 @@ export default {
         ))}
         {this.gutter ? (
           <col
-            class="veui-table-header-gutter"
+            class={this.$c('table-header-gutter')}
             aria-hidden="true"
             style={{
               width: this.gutterWidth ? `${this.gutterWidth}px` : null,

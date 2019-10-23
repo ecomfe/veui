@@ -2,9 +2,9 @@
 <veui-field
   ref="field"
   :ui="realUi"
-  class="veui-fieldset"
   :class="{
-    'veui-fieldset-required': required
+    [$c('fieldset')]: true,
+    [$c('fieldset-required')]: required
   }"
   role="group"
   v-bind="attrs"
@@ -31,6 +31,7 @@
  */
 import Field from './Field'
 import { get, pick, assign } from 'lodash'
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import '../../common/uiTypes'
 
@@ -40,7 +41,7 @@ export default {
   components: {
     'veui-field': Field
   },
-  mixins: [ui],
+  mixins: [prefix, ui],
   props: {
     label: String,
     name: String,

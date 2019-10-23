@@ -1,33 +1,33 @@
 <template>
 <div
   v-resize.debounce="listResizeHandler"
-  class="veui-tabs"
   :class="{
-    'veui-tabs-overflow': menuOverflow,
-    'veui-tabs-addable': addable,
-    'veui-tabs-list-empty': items.length === 0,
-    'veui-tabs-left-limited': leftLimited,
-    'veui-tabs-right-limited': rightLimited
+    [$c('tabs')]: true,
+    [$c('tabs-overflow')]: menuOverflow,
+    [$c('tabs-addable')]: addable,
+    [$c('tabs-list-empty')]: items.length === 0,
+    [$c('tabs-left-limited')]: leftLimited,
+    [$c('tabs-right-limited')]: rightLimited
   }"
   :ui="realUi"
 >
   <div
     ref="menu"
     :class="{
-      'veui-tabs-menu': true,
-      'veui-tabs-menu-moving': menuMoving
+      [$c('tabs-menu')]: true,
+      [$c('tabs-menu-moving')]: menuMoving
     }"
     role="tablist"
   >
-    <div class="veui-tabs-list">
+    <div :class="$c('tabs-list')">
       <transition-group
         ref="listContainer"
         tag="div"
         :class="{
-          'veui-tabs-list-wrapper': true,
-          'veui-tabs-list-wrapper-moving': conMoving
+          [$c('tabs-list-wrapper')]: true,
+          [$c('tabs-list-wrapper-moving')]: conMoving
         }"
-        name="veui-tab"
+        :name="$c('tab')"
         @before-leave="beforeLeave"
         @leave="leave"
         @after-leave="afterLeave"
@@ -38,17 +38,22 @@
           :ref="`tab-${tab.name}`"
           :data-index="i"
           :class="{
-            'veui-tabs-item': true,
-            'veui-tabs-item-disabled': tab.disabled,
-            'veui-tabs-item-removable': tab.removable,
-            'veui-tabs-item-active': i === localIndex,
-            'veui-tabs-item-moving': itemMoving
+            [$c('tabs-item')]: true,
+            [$c('tabs-item-disabled')]: tab.disabled,
+            [$c('tabs-item-removable')]: tab.removable,
+            [$c('tabs-item-active')]: i === localIndex,
+            [$c('tabs-item-moving')]: itemMoving
           }"
-          @click="$event => {
-            if ($event.target === $refs[`tab-${tab.name}`][0] && !tab.disabled) {
-              setActive({ i })
+          @click="
+            $event => {
+              if (
+                $event.target === $refs[`tab-${tab.name}`][0] &&
+                !tab.disabled
+              ) {
+                setActive({ i })
+              }
             }
-          }"
+          "
         >
           <slot
             name="tab-item"
@@ -57,7 +62,7 @@
           >
             <veui-link
               v-if="tab.to"
-              class="veui-tabs-item-label"
+              :class="$c('tabs-item-label')"
               v-bind="ariaAttrs[i]"
               :to="tab.to"
               :native="tab.native"
@@ -67,7 +72,7 @@
             </veui-link>
             <button
               v-else
-              class="veui-tabs-item-label"
+              :class="$c('tabs-item-label')"
               v-bind="ariaAttrs[i]"
               type="button"
               @click="!tab.disabled && setActive({ index: i })"
@@ -81,11 +86,11 @@
             >
               <span
                 v-if="tab.status"
-                class="veui-tabs-item-status"
+                :class="$c('tabs-item-status')"
                 @click="!tab.disabled && setActive({ index: i })"
               >
                 <veui-icon
-                  :class="`veui-tabs-item-status-${tab.status}`"
+                  :class="$c(`tabs-item-status-${tab.status}`)"
                   :name="icons[tab.status]"
                 />
               </span>
@@ -98,7 +103,7 @@
               <button
                 v-if="tab.removable"
                 type="button"
-                class="veui-tabs-item-remove"
+                :class="$c('tabs-item-remove')"
                 :aria-label="t('remove')"
                 :disabled="removing"
                 @click="$emit('remove', tab)"
@@ -113,19 +118,19 @@
     <slot name="tabs-extra">
       <div
         ref="extra"
-        class="veui-tabs-extra"
+        :class="$c('tabs-extra')"
       >
         <button
           v-if="addable"
           type="button"
-          class="veui-tabs-operator"
+          :class="$c('tabs-operator')"
           :aria-label="t('add')"
-          :disabled="max != null && items.length >= max || removing"
+          :disabled="(max != null && items.length >= max) || removing"
           @click="$emit('add')"
         >
           <veui-icon :name="icons.add"/>
           <slot name="tabs-extra-label">
-            <span class="veui-tabs-extra-label">
+            <span :class="$c('tabs-extra-label')">
               {{ t('addTab') }}
             </span>
           </slot>
@@ -133,7 +138,7 @@
         <slot name="tabs-extra-tip">
           <span
             v-if="tip"
-            class="veui-tabs-extra-tip"
+            :class="$c('tabs-extra-tip')"
           >
             {{ tip }}
           </span>
@@ -141,12 +146,12 @@
         <div
           v-if="menuOverflow"
           ref="scroller"
-          class="veui-tabs-scroller"
+          :class="$c('tabs-scroller')"
           aria-hidden="true"
         >
           <button
             type="button"
-            class="veui-tabs-scroller-left"
+            :class="$c('tabs-scroller-left')"
             :disabled="leftLimited"
             @click="scroll({ direction: 'left' })"
           >
@@ -154,7 +159,7 @@
           </button>
           <button
             type="button"
-            class="veui-tabs-scroller-right"
+            :class="$c('tabs-scroller-right')"
             :disabled="rightLimited"
             @click="scroll({ direction: 'right' })"
           >
@@ -164,7 +169,7 @@
       </div>
     </slot>
   </div>
-  <div class="veui-tabs-panel">
+  <div :class="$c('tabs-panel')">
     <slot/>
   </div>
 </div>
@@ -176,6 +181,7 @@ import warn from '../../utils/warn'
 import Link from '../Link'
 import Icon from '../Icon'
 import resize from '../../directives/resize'
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import config from '../../managers/config'
@@ -201,7 +207,7 @@ export default {
   directives: {
     resize
   },
-  mixins: [ui, i18n],
+  mixins: [prefix, ui, i18n],
   props: {
     active: {
       type: String
@@ -377,8 +383,8 @@ export default {
         let end = $event => {
           $event.stopPropagation()
         }
-        let label = tabItem.querySelector('.veui-tabs-item-label')
-        let remove = tabItem.querySelector('.veui-tabs-item-remove')
+        let label = tabItem.querySelector(`.${this.$c('tabs-item-label')}`)
+        let remove = tabItem.querySelector(`.${this.$c('tabs-item-remove')}`)
         if (label) {
           label.addEventListener('transitionend', end)
         }

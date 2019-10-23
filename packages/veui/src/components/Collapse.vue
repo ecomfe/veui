@@ -2,25 +2,25 @@
 <div
   :ui="ui"
   :class="{
-    'veui-collapse': true,
-    [`veui-collapse-${realExpanded ? 'expanded' : 'collapsed'}`]: true,
-    'veui-disabled': realDisabled
+    [$c('collapse')]: true,
+    [$c(`collapse-${realExpanded ? 'expanded' : 'collapsed'}`)]: true,
+    [$c('disabled')]: realDisabled
   }"
 >
   <div
-    class="veui-collapse-header"
+    :class="$c('collapse-header')"
     :tabindex="realDisabled ? null : '0'"
     @click="toggle"
     @keydown.enter.space.prevent="toggle"
   >
     <veui-icon
-      class="veui-collapse-toggle"
+      :class="$c('collapse-toggle')"
       :name="icons.collapse"
     />
     <slot name="title">{{ label }}</slot>
   </div>
   <transition
-    name="veui-collapse-body"
+    :name="$c('collapse-body')"
     @before-enter="beforeEnter"
     @enter="enter"
     @after-enter="afterEnter"
@@ -30,9 +30,9 @@
   >
     <div
       v-if="realExpanded"
-      class="veui-collapse-body"
+      :class="$c('collapse-body')"
     >
-      <div class="veui-collapse-content">
+      <div :class="$c('collapse-content')">
         <slot/>
       </div>
     </div>
@@ -45,6 +45,7 @@ import { find } from 'lodash'
 import Icon from './Icon'
 import ui from '../mixins/ui'
 import { makeCoupledChild } from '../mixins/coupled'
+import prefix from '../mixins/prefix'
 
 let accordionItem = makeCoupledChild({
   direct: true,
@@ -58,7 +59,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui, accordionItem],
+  mixins: [prefix, ui, accordionItem],
   props: {
     label: {
       type: String,

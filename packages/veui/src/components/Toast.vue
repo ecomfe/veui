@@ -1,26 +1,26 @@
 <template>
-<transition name="veui-toast">
+<transition :name="$c('toast')">
   <div
     v-if="localOpen"
     :ui="realUi"
-    class="veui-toast"
     :class="{
-      [`veui-toast-${type}`]: true,
-      'veui-toast-titled': isTitled,
-      'veui-toast-multiline': multiline
+      [$c('toast')]: true,
+      [$c(`toast-${type}`)]: true,
+      [$c('toast-titled')]: isTitled,
+      [$c('toast-multiline')]: multiline
     }"
     role="alert"
   >
-    <div class="veui-toast-state">
+    <div :class="$c('toast-state')">
       <veui-icon
-        class="veui-toast-icon"
+        :class="$c('toast-icon')"
         :name="icons[type]"
       />
     </div>
-    <div class="veui-toast-content">
+    <div :class="$c('toast-content')">
       <div
         v-if="title || $slots.title"
-        class="veui-toast-content-title"
+        :class="$c('toast-content-title')"
       >
         <template v-if="title">
           {{ title }}
@@ -32,14 +32,14 @@
       </div>
       <div
         ref="message"
-        class="veui-toast-content-message"
+        :class="$c('toast-content-message')"
       >
         <slot>{{ message }}</slot>
       </div>
     </div>
     <div
       v-if="closable"
-      class="veui-toast-close"
+      :class="$c('toast-close')"
     >
       <veui-button
         :ui="uiParts.close"
@@ -56,6 +56,7 @@
 <script>
 import Icon from './Icon'
 import Button from './Button'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
@@ -71,12 +72,12 @@ config.defaults(
 const TYPE_LIST = ['success', 'warning', 'info', 'error']
 
 export default {
-  name: 'toast',
+  name: 'veui-toast',
   components: {
     'veui-icon': Icon,
     'veui-button': Button
   },
-  mixins: [ui, i18n],
+  mixins: [prefix, ui, i18n],
   props: {
     type: {
       type: String,

@@ -1,29 +1,32 @@
 <template>
 <div
-  class="veui-badge"
   :class="{
-    'veui-badge-standalone': standalone
+    [$c('badge')]: true,
+    [$c('badge-standalone')]: standalone
   }"
 >
   <slot/>
-  <transition name="veui-badge">
+  <transition :name="$c('badge')">
     <span
       v-if="!hidden"
-      class="veui-badge-main"
       :class="{
-        [`veui-badge-${content && !standalone ? 'label' : 'dot'}`]: true,
-        [`veui-badge-${type}`]: true
+        [$c('badge-main')]: true,
+        [$c(`badge-${content && !standalone ? 'label' : 'dot'}`)]: true,
+        [$c(`badge-${type}`)]: true
       }"
     >{{ !standalone ? content : '' }}</span>
   </transition>
   <span
     v-if="standalone && value"
-    class="veui-badge-standalone-label"
-  >{{ value }}</span>
+    :class="$c('badge-standalone-label')"
+  >{{
+    value
+  }}</span>
 </div>
 </template>
 
 <script>
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import { isNumber } from 'lodash'
 import config from '../managers/config'
@@ -34,7 +37,7 @@ config.defaults({
 
 export default {
   name: 'veui-badge',
-  mixins: [ui],
+  mixins: [prefix, ui],
   props: {
     value: [Number, String],
     max: {

@@ -2,12 +2,13 @@ import { find } from 'lodash'
 import Checkbox from '../Checkbox'
 import Radio from '../Radio'
 import Icon from '../Icon'
+import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 
 export default {
   name: 'veui-table-row',
-  mixins: [table, i18n],
+  mixins: [prefix, table, i18n],
   props: {
     index: Number,
     item: Object,
@@ -31,9 +32,9 @@ export default {
     // hero sub row
     if (this.$slots.default) {
       return (
-        <tr class="veui-table-sub-row">
+        <tr class={this.$c('table-sub-row')}>
           <td role="cell" colspan={this.columnCount}>
-            <div class="veui-table-cell">{this.$slots.default}</div>
+            <div class={this.$c('table-cell')}>{this.$slots.default}</div>
           </td>
         </tr>
       )
@@ -42,12 +43,12 @@ export default {
     // isomorphic sub row
     if (this.item) {
       return (
-        <tr class="veui-table-sub-row">
+        <tr class={this.$c('table-sub-row')}>
           {this.selectable ? (
-            <td role="cell" class="veui-table-cell-select" />
+            <td role="cell" class={this.$c('table-cell-select')} />
           ) : null}
           {this.expandable ? (
-            <td role="cell" class="veui-table-cell-expand" />
+            <td role="cell" class={this.$c('table-cell-expand')} />
           ) : null}
           {this.renderColumns(this.index, this.item)}
         </tr>
@@ -66,10 +67,10 @@ export default {
     }
 
     return (
-      <tr class={{ 'veui-table-selected-row': checked }}>
+      <tr class={{ [this.$c('table-selected-row')]: checked }}>
         {this.selectable && data ? (
           <td role="cell" {...data}>
-            <div class="veui-table-cell">
+            <div class={this.$c('table-cell')}>
               {this.selectMode === 'multiple' ? (
                 <Checkbox
                   checked={checked}
@@ -93,7 +94,7 @@ export default {
           </td>
         ) : null}
         {this.expandable ? (
-          <td role="cell" class="veui-table-cell-expand">
+          <td role="cell" class={this.$c('table-cell-expand')}>
             {(item.children || []).length ? (
               <button
                 type="button"
@@ -104,11 +105,16 @@ export default {
                   this.table.expand(!this.expanded, index)
                 }}
               >
-                <transition name="veui-table-expander">
+                <transition name={this.$c('table-expander')}>
                   <Icon
-                    class={`veui-table-expander veui-table-expander-${
-                      this.expanded ? 'collapse' : 'expand'
-                    }`}
+                    class={[
+                      this.$c('table-expander'),
+                      this.$c(
+                        `table-expander-${
+                          this.expanded ? 'collapse' : 'expand'
+                        }`
+                      )
+                    ]}
                     name={
                       this.expanded ? this.icons.collapse : this.icons.expand
                     }
@@ -154,11 +160,11 @@ export default {
         let data = this.getCellSpan(col)
         return data ? (
           <td
-            class={col.align ? `veui-table-column-${col.align}` : null}
+            class={col.align ? this.$c(`table-column-${col.align}`) : null}
             role="cell"
             {...data}
           >
-            <div class="veui-table-cell">
+            <div class={this.$c('table-cell')}>
               {(isSubRow ? col.renderSubRow : col.renderBody)({
                 ...item,
                 item,

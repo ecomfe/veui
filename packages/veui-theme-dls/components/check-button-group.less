@@ -2,14 +2,14 @@
 @import "./button-group.less";
 @import (reference) "../grouped-button.less";
 
-.veui-check-button-group {
+.@{veui-prefix}-check-button-group {
   position: relative;
 
-  .veui-button {
+  .@{veui-prefix}-button {
     &:extend(._veui-grouped-button all);
   }
 
-  .veui-button &-checkmark {
+  .@{veui-prefix}-button &-checkmark {
     @offset: (@dls-button-padding-m - @dls-checkbox-strong-check-icon-size) / 2;
     .absolute(@offset, @offset, _, _);
     .dls-icon-size(@dls-checkbox-strong-check-icon-size);
@@ -17,20 +17,20 @@
     color: @dls-checkbox-strong-check-icon-color;
   }
 
-  &[ui~="s"] .veui-button &-checkmark {
+  &[ui~="s"] .@{veui-prefix}-button &-checkmark {
     @offset: (@dls-button-padding-s - @dls-checkbox-strong-check-icon-size) / 2;
     .absolute(@offset, @offset, _, _);
   }
 
-  .veui-button-selected &-checkmark {
+  .@{veui-prefix}-button-selected &-checkmark {
     color: @dls-checkbox-strong-check-icon-color-checked;
   }
 
-  .veui-disabled &-checkmark {
+  .@{veui-prefix}-disabled &-checkmark {
     color: @dls-checkbox-strong-check-icon-color-disabled;
   }
 
-  .veui-button-selected.veui-disabled &-checkmark {
+  .@{veui-prefix}-button-selected.@{veui-prefix}-disabled &-checkmark {
     color: @dls-checkbox-strong-check-icon-color-checked-disabled;
   }
 }

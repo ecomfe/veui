@@ -1,7 +1,7 @@
 <template>
 <div
   ref="main"
-  class="veui-uploader"
+  :class="$c('uploader')"
   :ui="realUi"
   role="application"
   tabindex="-1"
@@ -9,13 +9,14 @@
 >
   <div
     v-if="type === 'file'"
-    class="veui-uploader-button-container"
+    :class="$c('uploader-button-container')"
   >
     <label
       ref="label"
-      class="veui-button veui-uploader-input-label"
       :class="{
-        'veui-uploader-input-label-disabled':
+        [$c('button')]: true,
+        [$c('uploader-input-label')]: true,
+        [$c('uploader-input-label-disabled')]:
           realUneditable ||
           (maxCount > 1 && fileList.length >= maxCount) ||
           (requestMode === 'iframe' && submitting)
@@ -24,7 +25,7 @@
     >
       <slot name="button-label">
         <veui-icon
-          class="veui-uploader-input-label-icon"
+          :class="$c('uploader-input-label-icon')"
           :name="icons.upload"
         />{{ t('selectFile') }}
       </slot>
@@ -51,11 +52,11 @@
     </label>
     <span
       v-if="$slots.desc"
-      class="veui-uploader-tip"
+      :class="$c('uploader-tip')"
     >
       <slot name="desc"/>
     </span>
-    <span class="veui-uploader-error">
+    <span :class="$c('uploader-error')">
       <template v-if="error.typeInvalid">
         <slot name="type-invalid">
           <veui-icon :name="icons.alert"/>{{ t('fileTypeInvalid') }}
@@ -76,7 +77,7 @@
   <transition-group
     :class="listClass"
     tag="ul"
-    name="veui-uploader-list"
+    :name="$c('uploader-list')"
   >
     <li
       v-for="(file, index) in fileList"
@@ -97,17 +98,18 @@
               name="file-before"
               v-bind="getScopeValue(index, file)"
             />
-            <div class="veui-uploader-list-container">
+            <div :class="$c('uploader-list-container')">
               <veui-icon
                 :name="icons.file"
-                class="veui-uploader-list-icon"
+                :class="$c('uploader-list-icon')"
               />
               <span
-                class="veui-uploader-list-name"
                 :class="{
-                  'veui-uploader-list-name-success':
+                  [$c('uploader-list-name')]: true,
+                  [$c('uploader-list-name-success')]:
                     file.status === 'success',
-                  'veui-uploader-list-name-failure': file.status === 'failure'
+                  [$c('uploader-list-name-failure')]:
+                    file.status === 'failure'
                 }"
                 :title="file.name"
               >
@@ -115,7 +117,7 @@
               </span>
               <span
                 v-if="file.status === 'success'"
-                class="veui-uploader-success"
+                :class="$c('uploader-success')"
               >
                 <slot name="success-label">
                   {{ t('uploadSuccess') }}
@@ -124,7 +126,7 @@
               <span
                 v-if="file.status === 'failure'"
                 :ref="`fileFailure${index}`"
-                class="veui-uploader-failure"
+                :class="$c('uploader-failure')"
               >
                 <slot name="failure-label">
                   {{ t('uploadFailure') }}
@@ -142,7 +144,7 @@
                 />
               </veui-button>
               <veui-button
-                class="veui-uploader-button-remove"
+                :class="$c('uploader-button-remove')"
                 :ui="uiParts.clearFileDone"
                 :disabled="realUneditable"
                 @click="removeFile(file)"
@@ -166,7 +168,7 @@
               name="file-before"
               v-bind="getScopeValue(index, file)"
             />
-            <div class="veui-uploader-list-image-container">
+            <div :class="$c('uploader-list-image-container')">
               <img
                 :src="file.src"
                 :alt="file.alt || ''"
@@ -178,9 +180,9 @@
                 <label
                   :for="inputId"
                   :ui="uiParts.retryImageSuccess"
-                  class="veui-button"
                   :class="{
-                    'veui-uploader-input-label-disabled': realUneditable
+                    [$c('button')]: true,
+                    [$c('uploader-input-label-disabled')]: realUneditable
                   }"
                   @click.stop="replaceFile(file)"
                 >
@@ -194,7 +196,7 @@
                 >
                   <veui-icon
                     :name="icons.clear"
-                    label="移除"
+                    :label="t('remove')"
                   />
                 </veui-button>
                 <slot
@@ -202,12 +204,12 @@
                   v-bind="getScopeValue(index, file)"
                 />
               </div>
-              <transition name="veui-uploader-fade">
+              <transition :name="$c('uploader-fade')">
                 <div
                   v-if="file.status === 'success'"
                   :class="`${listClass}-success`"
                 >
-                  <span class="veui-uploader-success">
+                  <span :class="$c('uploader-success')">
                     <slot name="success-label">
                       <veui-icon :name="icons.success"/>{{ t('complete') }}
                     </slot>
@@ -246,7 +248,7 @@
             <veui-button
               v-if="type === 'file'"
               :ui="uiParts.cancelFile"
-              class="veui-uploader-button-remove"
+              :class="$c('uploader-button-remove')"
               @click="cancelFile(file)"
             >
               <veui-icon :name="icons.clear"/>
@@ -276,7 +278,7 @@
           />
           <div :class="`${listClass}-container`">
             <div :class="`${listClass}-status`">
-              <span class="veui-uploader-failure">
+              <span :class="$c('uploader-failure')">
                 <slot name="failure-label">{{ t('error') }}</slot>{{ file.failureReason }}
               </span>
             </div>
@@ -311,15 +313,15 @@
       v-show="!maxCount || fileList.length < maxCount"
       key="input"
     >
-      <div class="veui-uploader-list-image-container">
+      <div :class="$c('uploader-list-image-container')">
         <label
           ref="label"
           :class="{
-            'veui-button': $scopedSlots['extra-operation'],
-            'veui-uploader-input-label-image': !$scopedSlots[
+            [$c('button')]: $scopedSlots['extra-operation'],
+            [$c('uploader-input-label-image')]: !$scopedSlots[
               'extra-operation'
             ],
-            'veui-uploader-input-label-disabled':
+            [$c('uploader-input-label-disabled')]:
               $scopedSlots['extra-operation'] &&
               (realUneditable ||
               (maxCount > 1 && fileList.length >= maxCount) ||
@@ -362,13 +364,13 @@
   </transition-group>
   <span
     v-if="$slots.desc && type === 'image'"
-    class="veui-uploader-tip"
+    :class="$c('uploader-tip')"
   >
     <slot name="desc"/>
   </span>
   <span
     v-if="type === 'image'"
-    class="veui-uploader-error"
+    :class="$c('uploader-error')"
   >
     <template v-if="error.typeInvalid">
       <slot name="type-invalid">
@@ -391,7 +393,7 @@
     :id="iframeId"
     ref="iframe"
     :name="iframeId"
-    class="veui-uploader-hide"
+    :class="$c('uploader-hide')"
   />
   <form
     v-if="requestMode === 'iframe' && submitting"
@@ -400,7 +402,7 @@
     enctype="multipart/form-data"
     method="POST"
     :target="iframeId"
-    class="veui-uploader-hide"
+    :class="$c('uploader-hide')"
   >
     <input
       v-for="(val, key) in payload"
@@ -434,6 +436,7 @@ import {
   includes,
   isEmpty
 } from 'lodash'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
@@ -455,7 +458,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-uploader-progress': getProgress()
   },
-  mixins: [ui, input, i18n],
+  mixins: [prefix, ui, input, i18n],
   model: {
     event: 'change'
   },
@@ -600,7 +603,7 @@ export default {
   },
   computed: {
     listClass () {
-      return `veui-uploader-list${this.type === 'image' ? '-image' : ''}`
+      return this.$c(`uploader-list${this.type === 'image' ? '-image' : ''}`)
     },
     latestFile () {
       return this.fileList[this.fileList.length - 1]
@@ -1165,14 +1168,14 @@ function getProgress () {
         this.type === 'bar'
           ? [
             <div
-              class="veui-uploader-progress-bar"
+              class={this.$c('uploader-progress-bar')}
               style={{ width: this.percent || '0%' }}
             />,
-            <div class="veui-uploader-progress-bar-full" />
+            <div class={this.$c('uploader-progress-bar-full')} />
           ]
           : ''
       return (
-        <div class="veui-uploader-progress">
+        <div class={this.$c('uploader-progress')}>
           {this.content}
           {bar}
         </div>

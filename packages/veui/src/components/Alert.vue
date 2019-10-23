@@ -2,25 +2,25 @@
 <div
   v-if="localOpen"
   :ui="realUi"
-  class="veui-alert"
   :class="{
-    [`veui-alert-${type}`]: true,
-    'veui-alert-titled': isTitled,
-    'veui-alert-multiline': multiline
+    [$c('alert')]: true,
+    [$c(`alert-${type}`)]: true,
+    [$c('alert-titled')]: isTitled,
+    [$c('alert-multiline')]: multiline
   }"
   role="alert"
   aria-expanded="true"
 >
   <slot name="content">
-    <div class="veui-alert-state">
+    <div :class="$c('alert-state')">
       <veui-icon
-        class="veui-alert-icon"
+        :class="$c('alert-icon')"
         :name="icons[type]"
       />
     </div>
     <div
       v-if="isMultiple"
-      class="veui-alert-content veui-alert-content-multiple"
+      :class="`${$c('alert-content')} ${$c('alert-content-multiple')}`"
     >
       <slot
         :index="localIndex"
@@ -30,7 +30,7 @@
       </slot>
       <div
         v-if="$slots.extra || $scopedSlots.extra"
-        class="veui-alert-content-extra"
+        :class="$c('alert-content-extra')"
       >
         <slot
           name="extra"
@@ -41,11 +41,11 @@
     </div>
     <div
       v-else
-      class="veui-alert-content"
+      :class="$c('alert-content')"
     >
       <div
         v-if="title || $slots.title"
-        class="veui-alert-content-title"
+        :class="$c('alert-content-title')"
       >
         <template v-if="title">
           {{ title }}
@@ -57,14 +57,14 @@
       </div>
       <div
         ref="message"
-        class="veui-alert-content-message"
+        :class="$c('alert-content-message')"
       >
         <slot :message="message">
           {{ message }}
         </slot>
         <div
           v-if="$slots.extra"
-          class="veui-alert-content-extra"
+          :class="$c('alert-content-extra')"
         >
           <slot name="extra"/>
         </div>
@@ -73,7 +73,7 @@
 
     <div
       v-if="isMultiple"
-      class="veui-alert-nav"
+      :class="$c('alert-nav')"
     >
       <veui-button
         :ui="uiParts.prev"
@@ -84,7 +84,7 @@
         <veui-icon :name="icons.prev"/>
       </veui-button>
       <span
-        class="veui-alert-nav-indicator"
+        :class="$c('alert-nav-indicator')"
         :aria-label="
           t('indicator', {
             index: localIndex + 1,
@@ -105,7 +105,7 @@
     </div>
     <div
       v-if="closable"
-      class="veui-alert-close"
+      :class="$c('alert-close')"
     >
       <veui-button
         :ui="uiParts.close"
@@ -124,6 +124,7 @@ import Icon from './Icon'
 import Button from './Button'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
+import prefix from '../mixins/prefix'
 
 export default {
   name: 'alert',
@@ -131,7 +132,7 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button
   },
-  mixins: [ui, i18n],
+  mixins: [prefix, ui, i18n],
   props: {
     type: {
       type: String,

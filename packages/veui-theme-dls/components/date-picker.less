@@ -2,10 +2,11 @@
 @import (reference) "../dropdown.less";
 @import (reference) "../input.less";
 
-.veui-date-picker {
+.@{veui-prefix}-date-picker {
   &:extend(._veui-dropdown-button all);
 
-  &.veui-input-invalid .veui-button.veui-date-picker-button {
+  &.@{veui-prefix}-input-invalid
+    .@{veui-prefix}-button.@{veui-prefix}-date-picker-button {
     &:extend(._veui-input-invalid all);
   }
 
@@ -18,14 +19,14 @@
   }
 
   &-empty {
-    .veui-button {
+    .@{veui-prefix}-button {
       color: @veui-text-color-weak;
 
       &.focus-visible {
         color: @veui-brand-color;
       }
 
-      &.veui-disabled {
+      &.@{veui-prefix}-disabled {
         color: @veui-text-color-aux;
       }
     }
@@ -47,7 +48,7 @@
     cursor: pointer;
     .veui-button-transition();
 
-    .veui-date-picker:hover &,
+    .@{veui-prefix}-date-picker:hover &,
     &.focus-visible {
       .size(~"calc(1em + 2px)");
       clip: auto;
@@ -62,7 +63,7 @@
       color: @veui-brand-color;
     }
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       display: block;
     }
   }
@@ -82,7 +83,7 @@
     padding: 8px 10px;
     border-bottom: 1px solid @veui-gray-color-6;
 
-    .veui-calendar-panel + & {
+    .@{veui-prefix}-calendar-panel + & {
       border-top: 1px solid @veui-gray-color-6;
       border-bottom: none;
     }
@@ -126,8 +127,8 @@
   }
 
   &:hover {
-    .veui-date-picker {
-      &-button:not(.veui-disabled),
+    .@{veui-prefix}-date-picker {
+      &-button:not(.@{veui-prefix}-disabled),
       &-clear {
         background-color: @veui-gray-color-8;
         color: @veui-text-color-strong;
@@ -135,9 +136,9 @@
     }
   }
 
-  &:hover &-button:not(.veui-disabled):active {
+  &:hover &-button:not(.@{veui-prefix}-disabled):active {
     &,
-    & + .veui-date-picker-clear {
+    & + .@{veui-prefix}-date-picker-clear {
       background-color: @veui-gray-color-6;
     }
   }
@@ -151,17 +152,17 @@
   }
 
   &[ui~="alt"]:hover {
-    .veui-date-picker {
-      &-button:not(.veui-disabled),
+    .@{veui-prefix}-date-picker {
+      &-button:not(.@{veui-prefix}-disabled),
       &-clear {
         background-color: @veui-gray-color-6;
       }
     }
   }
 
-  &[ui~="alt"]:hover &-button:not(.veui-disabled):active {
+  &[ui~="alt"]:hover &-button:not(.@{veui-prefix}-disabled):active {
     &,
-    & + .veui-date-picker-clear {
+    & + .@{veui-prefix}-date-picker-clear {
       background-color: @veui-gray-color-5;
     }
   }

@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-tree {
+.@{veui-prefix}-tree {
   position: relative;
   padding: 0 @dls-tree-padding-x;
 
@@ -22,7 +22,7 @@
     .clearfix();
     outline: none;
 
-    & > .veui-icon {
+    & > .@{veui-prefix}-icon {
       .dls-icon-size(@dls-tree-icon-size);
     }
 
@@ -42,7 +42,7 @@
       color: @dls-tree-icon-color-aux;
       .veui-transition(box-shadow, transform);
 
-      .veui-icon {
+      .@{veui-prefix}-icon {
         .dls-icon-size(@dls-tree-icon-size-aux);
       }
     }
@@ -76,7 +76,7 @@
       cursor: pointer;
       margin-left: auto;
 
-      .veui-icon {
+      .@{veui-prefix}-icon {
         .dls-icon-size(@dls-tree-icon-size-aux);
       }
     }
@@ -129,7 +129,7 @@
   }
 
   &[ui~="checkbox-after"] {
-    .veui-tree {
+    .@{veui-prefix}-tree {
       &-item {
         flex-direction: row-reverse;
         justify-content: flex-end;
@@ -144,7 +144,7 @@
         &-expand-switcher {
           order: 1;
 
-          & ~ .veui-tree-item-label {
+          & ~ .@{veui-prefix}-tree-item-label {
             margin-left: 0;
           }
         }
@@ -155,7 +155,7 @@
         padding-left: @dls-tree-node-content-spacing;
         cursor: pointer;
 
-        .veui-checkbox-box {
+        .@{veui-prefix}-checkbox-box {
           margin-right: 0;
         }
       }
@@ -165,7 +165,7 @@
   &[ui~="s"] {
     font-size: @dls-tree-font-size-s;
 
-    .veui-tree {
+    .@{veui-prefix}-tree {
       &-item {
         height: @dls-tree-node-height-s;
       }

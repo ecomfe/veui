@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-loading {
+.@{veui-prefix}-loading {
   line-height: 1;
   align-items: center;
   display: inline-flex;
@@ -31,15 +31,15 @@
     display: flex;
     color: @dls-loading-color-normal;
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       .dls-icon-size(@dls-loading-size-m);
     }
 
-    &[ui~="s"] .veui-icon {
+    &[ui~="s"] .@{veui-prefix}-icon {
       .dls-icon-size(@dls-loading-size-s);
     }
 
-    &[ui~="l"] .veui-icon {
+    &[ui~="l"] .@{veui-prefix}-icon {
       .dls-icon-size(@dls-loading-size-l);
     }
 
@@ -59,7 +59,7 @@
   &[ui~="vertical"] {
     flex-direction: column;
 
-    .veui-loading-text {
+    .@{veui-prefix}-loading-text {
       margin-left: 0;
     }
   }

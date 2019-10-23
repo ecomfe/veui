@@ -1,13 +1,13 @@
 <template>
 <veui-overlay
   ref="overlay"
-  class="veui-dialog"
+  :class="$c('dialog')"
   :open="localOpen"
   :overlay-class="
     mergeOverlayClass({
-      'veui-dialog-box': true,
-      'veui-dialog-box-mask': modal,
-      'veui-dialog-inline': inline
+      [$c('dialog-box')]: true,
+      [$c('dialog-box-mask')]: modal,
+      [$c('dialog-inline')]: inline
     })
   "
   :ui="realUi"
@@ -20,7 +20,7 @@
   <div
     ref="content"
     v-outside="outside"
-    class="veui-dialog-content"
+    :class="$c('dialog-content')"
     tabindex="-1"
     v-bind="attrs"
     @mousedown="focus"
@@ -32,12 +32,14 @@
         containment: '@window',
         ready: dragReady
       }"
-      class="veui-dialog-content-head"
-      :class="{ 'veui-dialog-draggable': draggable }"
+      :class="{
+        [$c('dialog-content-head')]: true,
+        [$c('dialog-draggable')]: draggable
+      }"
     >
       <h3
         v-if="title || $slots.title || $scopedSlots.title"
-        class="veui-dialog-content-head-title"
+        :class="$c('dialog-content-head-title')"
       >
         <slot
           name="title"
@@ -49,17 +51,17 @@
       <veui-button
         v-if="closable"
         :ui="uiParts.close"
-        class="veui-dialog-content-head-close"
+        :class="$c('dialog-content-head-close')"
         :aria-label="t('close')"
         @click="cancel"
       >
         <veui-icon :name="icons.close"/>
       </veui-button>
     </div>
-    <div class="veui-dialog-content-body">
+    <div :class="$c('dialog-content-body')">
       <slot :close="close"/>
     </div>
-    <div class="veui-dialog-content-foot">
+    <div :class="$c('dialog-content-foot')">
       <slot
         name="foot"
         :close="close"
@@ -86,6 +88,7 @@
 <script>
 import Overlay from './Overlay'
 import Button from './Button'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import focusable from '../mixins/focusable'
@@ -102,7 +105,7 @@ export default {
     'veui-icon': Icon
   },
   directives: { outside, drag },
-  mixins: [ui, overlay, focusable, i18n],
+  mixins: [prefix, ui, overlay, focusable, i18n],
   inheritAttrs: false,
   props: {
     modal: {

@@ -1,7 +1,7 @@
 @import "../lib.less";
 @import (reference) "../input.less";
 
-.veui-input {
+.@{veui-prefix}-input {
   @left-padding: @dls-input-padding;
 
   display: inline-flex;
@@ -93,7 +93,7 @@
     background-color: transparent;
   }
 
-  &.veui-input-invalid {
+  &.@{veui-prefix}-input-invalid {
     &:extend(._veui-input-invalid all);
   }
 
@@ -113,16 +113,16 @@
     border-color: @dls-input-border-color-hover;
   }
 
-  &.veui-readonly &-main {
+  &.@{veui-prefix}-readonly &-main {
     border-color: @dls-input-border-color-read-only;
     background-color: @dls-input-background-color-read-only;
   }
 
-  &.veui-readonly &-main:hover {
+  &.@{veui-prefix}-readonly &-main:hover {
     border-color: @dls-input-border-color-read-only-hover;
   }
 
-  &.veui-readonly &-input {
+  &.@{veui-prefix}-readonly &-input {
     color: @dls-input-font-color-read-only;
   }
 
@@ -134,29 +134,29 @@
     .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
   }
 
-  &-focused.veui-readonly &-main:hover {
+  &-focused.@{veui-prefix}-readonly &-main:hover {
     border-color: @dls-input-border-color-read-only-focus;
   }
 
-  &.veui-disabled &-main,
-  &.veui-readonly &-before-label,
-  &.veui-readonly &-after-label,
-  &.veui-disabled &-before-label,
-  &.veui-disabled &-after-label,
-  &.veui-disabled &-prepend,
-  &.veui-disabled &-append {
+  &.@{veui-prefix}-disabled &-main,
+  &.@{veui-prefix}-readonly &-before-label,
+  &.@{veui-prefix}-readonly &-after-label,
+  &.@{veui-prefix}-disabled &-before-label,
+  &.@{veui-prefix}-disabled &-after-label,
+  &.@{veui-prefix}-disabled &-prepend,
+  &.@{veui-prefix}-disabled &-append {
     background-color: @dls-input-background-color-disabled;
     border-color: @dls-input-border-color-disabled;
     cursor: not-allowed;
   }
 
-  &.veui-disabled &-input,
-  &.veui-readonly &-before-label,
-  &.veui-readonly &-after-label,
-  &.veui-disabled &-before-label,
-  &.veui-disabled &-after-label,
-  &.veui-disabled &-prepend,
-  &.veui-disabled &-append {
+  &.@{veui-prefix}-disabled &-input,
+  &.@{veui-prefix}-readonly &-before-label,
+  &.@{veui-prefix}-readonly &-after-label,
+  &.@{veui-prefix}-disabled &-before-label,
+  &.@{veui-prefix}-disabled &-after-label,
+  &.@{veui-prefix}-disabled &-prepend,
+  &.@{veui-prefix}-disabled &-append {
     color: @dls-input-font-color-disabled;
     pointer-events: none;
   }
@@ -210,7 +210,7 @@
     }
   }
 
-  &[ui~="inline"] .veui-input-has-after .veui-input-main {
+  &[ui~="inline"] .@{veui-prefix}-input-has-after .@{veui-prefix}-input-main {
     border-radius: 0;
   }
 

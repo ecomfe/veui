@@ -2,16 +2,16 @@
 <div
   :ui="realUi"
   :class="{
-    'veui-field': true,
-    'veui-field-invalid': !validity.valid,
-    'veui-field-no-label': !label && !$slots.label,
-    'veui-field-no-tip': !tip && !$slots.tip,
-    'veui-field-required': isRequired
+    [$c('field')]: true,
+    [$c('field-invalid')]: !validity.valid,
+    [$c('field-no-label')]: !label && !$slots.label,
+    [$c('field-no-tip')]: !tip && !$slots.tip,
+    [$c('field-required')]: isRequired
   }"
 >
   <div
     v-if="label || $slots.label"
-    class="veui-form-label"
+    :class="$c('form-label')"
   >
     <slot name="label">
       <veui-label>{{ label }}</veui-label>
@@ -20,7 +20,7 @@
   <slot/>
   <div
     v-if="tip || $slots.tip"
-    class="veui-form-tip"
+    :class="$c('form-tip')"
   >
     <slot name="tip">
       {{ tip }}
@@ -28,7 +28,7 @@
   </div>
   <div
     v-if="!validity.valid && !!validity.message"
-    class="veui-field-error"
+    :class="$c('field-error')"
     :title="validity.message"
   >
     <veui-icon :name="icons.alert"/>{{ validity.message }}
@@ -40,6 +40,7 @@
 import Label from '../Label'
 import type from '../../managers/type'
 import rule from '../../managers/rule'
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import { isBoolean, get, last, includes } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
@@ -57,7 +58,7 @@ export default {
     'veui-icon': Icon,
     'veui-label': Label
   },
-  mixins: [ui],
+  mixins: [prefix, ui],
   props: {
     label: String,
     name: String,
@@ -246,9 +247,7 @@ export default {
     handleInteract (eventName) {
       // 需要让对应的 data 更新完值之后，再去 validate，都要 nextTick 来保证
       if (this.interactiveRulesMap[eventName]) {
-        this.$nextTick(() =>
-          this.validate(this.interactiveRulesMap[eventName])
-        )
+        this.$nextTick(() => this.validate(this.interactiveRulesMap[eventName]))
       }
 
       if (this.name) {

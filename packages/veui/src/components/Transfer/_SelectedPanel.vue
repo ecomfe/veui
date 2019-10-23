@@ -3,8 +3,10 @@
   ref="selected"
   :datasource="showMode === 'flat' ? flattenOptions : datasource"
   :searchable="false"
-  class="veui-transfer-selected-panel"
-  :class="{ 'veui-transfer-selected-flat': showMode === 'flat' }"
+  :class="{
+    [$c('transfer-selected-panel')]: true,
+    [$c('transfer-selected-flat')]: showMode === 'flat'
+  }"
   :placeholder="placeholder"
   :ui="ui"
 >
@@ -15,7 +17,7 @@
       </slot>
       <veui-button
         :ui="uiParts.removeAll"
-        class="veui-transfer-remove-all"
+        :class="$c('transfer-remove-all')"
         :disabled="!isSelectable || !datasource.length"
         @click="removeAll"
       >
@@ -28,7 +30,7 @@
     <veui-tree
       :datasource="items"
       :expanded.sync="expanded"
-      class="veui-transfer-selected-tree"
+      :class="$c('transfer-selected-tree')"
       :disabled="!isSelectable"
       @click="remove"
     >
@@ -54,7 +56,7 @@
           <template v-for="(item, i) in props.path">
             <span
               :key="'l-' + item.value"
-              class="veui-transfer-selected-flat-option-label"
+              :class="$c('transfer-selected-flat-option-label')"
             >
               <slot
                 name="item-label"
@@ -67,7 +69,7 @@
             <veui-icon
               v-if="i < props.path.length - 1"
               :key="'s-' + item.value"
-              class="veui-transfer-selected-flat-separator"
+              :class="$c('transfer-selected-flat-separator')"
               :name="icons.separator"
             />
           </template>
@@ -78,7 +80,7 @@
         slot-scope="props"
       >
         <veui-button
-          class="veui-tree-item-remove"
+          :class="$c('tree-item-remove')"
           :ui="uiParts.remove"
           @click="removeItem(props.item)"
         >
@@ -104,6 +106,7 @@ import FilterPanel from '../FilterPanel'
 import Icon from '../Icon'
 import Button from '../Button'
 import Tree from '../Tree'
+import prefix from '../../mixins/prefix'
 import i18n from '../../mixins/i18n'
 import { get } from 'lodash'
 
@@ -115,7 +118,7 @@ export default {
     'veui-button': Button,
     'veui-tree': Tree
   },
-  mixins: [i18n],
+  mixins: [prefix, i18n],
   props: {
     datasource: Array,
     showMode: String,

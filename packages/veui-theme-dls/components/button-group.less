@@ -1,9 +1,9 @@
 @import "../lib.less";
 
-.veui-button-group {
+.@{veui-prefix}-button-group {
   display: inline-flex;
 
-  .veui-button {
+  .@{veui-prefix}-button {
     position: relative;
     margin-left: -1px;
     border-radius: 0;
@@ -22,12 +22,13 @@
       z-index: 2;
     }
 
-    &.veui-disabled {
+    &.@{veui-prefix}-disabled {
       z-index: 0;
     }
   }
 
-  .veui-button[ui~="primary"] + .veui-button[ui~="primary"] {
+  .@{veui-prefix}-button[ui~="primary"]
+    + .@{veui-prefix}-button[ui~="primary"] {
     &::before {
       content: "";
       .absolute(-1px, _, -1px, -1px);
@@ -39,12 +40,12 @@
       background-color: transparent;
     }
 
-    &.veui-disabled::before {
+    &.@{veui-prefix}-disabled::before {
       background-color: @dls-button-group-separator-color-primary-disabled;
     }
   }
 
-  &[ui~="s"] .veui-button {
+  &[ui~="s"] .@{veui-prefix}-button {
     &:first-child {
       .border-left-radius(@dls-button-border-radius-s);
     }

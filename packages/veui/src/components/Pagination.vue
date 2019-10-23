@@ -1,31 +1,31 @@
 <template>
 <div
-  class="veui-pagination"
+  :class="$c('pagination')"
   role="navigation"
   :aria-label="t('infoLabel', { page, pageCount })"
   :ui="realUi"
 >
-  <div class="veui-pagination-info">
-    <div class="veui-pagination-total">
+  <div :class="$c('pagination-info')">
+    <div :class="$c('pagination-total')">
       {{ t('total', { total: realTotal }) }}
     </div>
-    <div class="veui-pagination-size">
+    <div :class="$c('pagination-size')">
       <span>{{ t('pageSize') }}</span>
       <veui-select
         v-model="realPageSize"
         :ui="uiParts.pageSize"
         :options="realPageSizes"
-        overlay-class="veui-pagination-select-overlay"
+        :overlay-class="$c('pagination-select-overlay')"
         :aria-label="t('pageSizeLabel')"
         @change="size => $emit('pagesizechange', size)"
       />
     </div>
   </div>
-  <div class="veui-pagination-switch">
+  <div :class="$c('pagination-switch')">
     <veui-link
       :tabindex="to || page === 1 ? null : '0'"
       :role="to ? null : 'button'"
-      class="veui-pagination-prev"
+      :class="$c('pagination-prev')"
       :to="page === 1 ? '' : pageNavHref.prev.href"
       :native="native"
       :disabled="page === 1"
@@ -35,22 +35,24 @@
       <veui-icon :name="icons.prev"/>
     </veui-link>
     <ul
-      class="veui-pagination-pages"
-      :class="{ [`veui-pagination-digit-length-${pageDigitLength}`]: true }"
+      :class="[
+        $c('pagination-pages'),
+        $c(`pagination-digit-length-${pageDigitLength}`)
+      ]"
     >
       <li
         v-for="item in pageIndicatorSeries"
         :key="getKey(item)"
         :class="{
-          'veui-pagination-page': true,
-          'veui-active': item.current
+          [$c('pagination-page')]: true,
+          [$c('active')]: item.current
         }"
       >
         <veui-link
           :ref="getKey(item)"
           :class="{
-            'veui-current': item.current,
-            'veui-pagination-more': item.more
+            [$c('current')]: item.current,
+            [$c('pagination-more')]: item.more
           }"
           :role="to ? null : 'button'"
           :to="item.href"
@@ -65,11 +67,11 @@
         >
           <template v-if="item.more">
             <veui-icon
-              class="veui-pagination-more-ellipsis"
+              :class="$c('pagination-more-ellipsis')"
               :name="icons.more"
             />
             <veui-icon
-              class="veui-pagination-more-arrow"
+              :class="$c('pagination-more-arrow')"
               :name="item.forward ? icons.forward : icons.backward"
             />
           </template>
@@ -80,7 +82,7 @@
     <veui-link
       :tabindex="to || page === pageCount ? null : '0'"
       :role="to ? null : 'button'"
-      class="veui-pagination-next"
+      :class="$c('pagination-next')"
       :to="page === pageCount ? '' : pageNavHref.next.href"
       :native="native"
       :disabled="page === pageCount || pageCount === 0"
@@ -92,24 +94,20 @@
   </div>
   <div
     v-if="goto"
-    class="veui-pagination-goto"
+    :class="$c('pagination-goto')"
   >
     <span
       v-if="gotoPageLabel[0]"
-      class="veui-pagination-goto-label-before"
-    >{{
-      gotoPageLabel[0]
-    }}</span>
+      :class="$c('pagination-goto-label-before')"
+    >{{ gotoPageLabel[0] }}</span>
     <veui-input
       v-model="targetPage"
       @keydown.enter="gotoPage"
     />
     <span
       v-if="gotoPageLabel[1]"
-      class="veui-pagination-goto-label-after"
-    >{{
-      gotoPageLabel[1]
-    }}</span>
+      :class="$c('pagination-goto-label-after')"
+    >{{ gotoPageLabel[1] }}</span>
     <veui-button @click="gotoPage">{{ t('go') }}</veui-button>
     <veui-link
       v-show="false"
@@ -128,6 +126,7 @@ import Select from './Select'
 import Input from './Input'
 import Button from './Button'
 import config from '../managers/config'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 
@@ -167,7 +166,7 @@ export default {
     'veui-input': Input,
     'veui-button': Button
   },
-  mixins: [ui, i18n],
+  mixins: [prefix, ui, i18n],
   props: {
     page: {
       type: Number,
@@ -176,9 +175,7 @@ export default {
     pageSize: {
       type: Number,
       default () {
-        return (
-          config.get('pagination.pageSize') || config.get('pager.pageSize')
-        )
+        return config.get('pagination.pageSize') || config.get('pager.pageSize')
       }
     },
     pageSizes: {

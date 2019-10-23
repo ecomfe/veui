@@ -2,60 +2,60 @@
 @import (reference) "../dropdown.less";
 @import (reference) "../input.less";
 
-.veui-select {
+.@{veui-prefix}-select {
   position: relative;
   display: inline-flex;
   align-items: center;
   width: @dls-select-width;
   outline: none;
 
-  &.veui-input-invalid .veui-select-input {
+  &.@{veui-prefix}-input-invalid .@{veui-prefix}-select-input {
     &:extend(._veui-input-invalid all);
   }
 
   &:not(&-empty):not(&-expanded)
-    .veui-input:not(.veui-input-focused)
-    .veui-input-placeholder {
+    .veui-input:not(.@{veui-prefix}-input-focused)
+    .@{veui-prefix}-input-placeholder {
     color: @dls-input-font-color;
   }
 
-  &&-readonly .veui-input-placeholder {
+  &&-readonly .@{veui-prefix}-input-placeholder {
     color: @dls-input-font-color-read-only;
   }
 
-  &.focus-visible .veui-input-main,
-  &[data-focus-visible-added] .veui-input-main {
+  &.focus-visible .@{veui-prefix}-input-main,
+  &[data-focus-visible-added] .@{veui-prefix}-input-main {
     .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
   }
 
-  .veui-input-input {
+  .@{veui-prefix}-input-input {
     display: none;
   }
 
-  &-searchable .veui-input-input {
+  &-searchable .@{veui-prefix}-input-input {
     display: block;
   }
 
   &-trigger {
-    .veui-input-prepend {
+    .@{veui-prefix}-input-prepend {
       flex-grow: 1;
       flex-shrink: 1;
       padding-right: 0;
       .ellipsis();
     }
 
-    .veui-input-append {
+    .@{veui-prefix}-input-append {
       padding-left: @dls-select-content-spacing;
       color: @dls-font-color-weak;
     }
 
-    .veui-input-main {
+    .@{veui-prefix}-input-main {
       max-width: 100%;
       cursor: pointer;
       .padding(_, @dls-select-padding-x);
     }
 
-    .veui-input-input {
+    .@{veui-prefix}-input-input {
       cursor: inherit;
     }
   }
@@ -72,39 +72,39 @@
     max-width: none;
     .ellipsis();
 
-    .veui-readonly & {
+    .@{veui-prefix}-readonly & {
       color: @dls-input-font-color-read-only;
     }
 
-    .veui-disabled & {
+    .@{veui-prefix}-disabled & {
       color: @dls-input-font-color-disabled;
     }
   }
 
   &-multi-input,
   &-search-multi-input {
-    &.veui-input {
+    &.@{veui-prefix}-input {
       height: auto;
     }
 
-    .veui-input-main {
+    .@{veui-prefix}-input-main {
       min-width: 100%;
       display: block;
       overflow: hidden;
     }
 
-    .veui-input {
+    .@{veui-prefix}-input {
       &-prepend {
         display: block;
         overflow: visible;
 
-        .veui-tag {
+        .@{veui-prefix}-tag {
           float: left;
           margin-right: @dls-select-tag-spacing;
           margin-top: @dls-select-padding-y;
         }
 
-        .veui-select-placeholder {
+        .@{veui-prefix}-select-placeholder {
           float: left;
           margin-top: @dls-select-padding-y;
         }
@@ -154,14 +154,14 @@
     .veui-transition(transform, color, opacity);
     color: @dls-select-icon-color-aux;
 
-    .veui-readonly &,
-    .veui-disabled & {
+    .@{veui-prefix}-readonly &,
+    .@{veui-prefix}-disabled & {
       color: @dls-select-icon-color-aux-disabled;
     }
   }
 
-  &:not(.veui-readonly):not(.veui-disabled):hover &-clear + &-toggle,
-  .veui-input-focused &-clear + &-toggle,
+  &:not(.veui-readonly):not(.@{veui-prefix}-disabled):hover &-clear + &-toggle,
+  .@{veui-prefix}-input-focused &-clear + &-toggle,
   &-clear.focus-visible + &-toggle {
     opacity: 0;
   }
@@ -176,12 +176,12 @@
     opacity: 0;
     z-index: 1;
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       .dls-icon-size(@dls-input-icon-size);
     }
 
-    .veui-select:not(.veui-readonly):not(.veui-disabled):hover &,
-    .veui-input-focused &,
+    .veui-select:not(.veui-readonly):not(.@{veui-prefix}-disabled):hover &,
+    .@{veui-prefix}-input-focused &,
     &.focus-visible {
       opacity: 1;
     }
@@ -193,7 +193,7 @@
     background-color: @dls-option-background-color;
     outline: none;
 
-    &-multiple .veui-option-selected {
+    &-multiple .@{veui-prefix}-option-selected {
       font-weight: @dls-font-weight-1;
     }
   }
@@ -201,21 +201,21 @@
   .make-metrics (@size) {
     @height: ~"dls-select-tag-height-@{size}";
 
-    .veui-select-multi-input,
-    .veui-select-search-multi-input {
-      .veui-select-placeholder {
+    .@{veui-prefix}-select-multi-input,
+    .@{veui-prefix}-select-search-multi-input {
+      .@{veui-prefix}-select-placeholder {
         line-height: @@height;
       }
 
-      .veui-input-append {
+      .@{veui-prefix}-input-append {
         height: @@height;
       }
 
-      .veui-tag {
+      .@{veui-prefix}-tag {
         height: @@height;
       }
     }
-    .veui-select-search-multi-input {
+    .@{veui-prefix}-select-search-multi-input {
       input {
         height: @@height;
       }

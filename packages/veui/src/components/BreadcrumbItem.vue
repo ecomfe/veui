@@ -1,5 +1,5 @@
 <template>
-<li class="veui-breadcrumb-item">
+<li :class="$c('breadcrumb-item')">
   <veui-link
     v-if="type === 'link'"
     :ui="uiParts.link"
@@ -13,11 +13,11 @@
   </veui-link>
   <span
     v-else
-    class="veui-breadcrumb-item-current"
+    :class="$c('breadcrumb-item-current')"
   >
     <slot/>
   </span>
-  <span class="veui-breadcrumb-separator">
+  <span :class="$c('breadcrumb-separator')">
     <slot name="separator">
       <veui-icon
         v-if="icons.separator"
@@ -30,6 +30,7 @@
 
 <script>
 import { includes } from 'lodash'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import Link from './Link'
 import Icon from './Icon'
@@ -42,7 +43,7 @@ export default {
     'veui-link': Link,
     'veui-icon': Icon
   },
-  mixins: [ui],
+  mixins: [prefix, ui],
   props: {
     to: [String, Object],
     // TODO: 提供replace这个属性缺少实际use case？

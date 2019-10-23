@@ -1,8 +1,8 @@
 <template>
 <label
   :class="{
-    'veui-radio': true,
-    'veui-disabled': realReadonly || realDisabled
+    [$c('radio')]: true,
+    [$c('disabled')]: realReadonly || realDisabled
   }"
   :ui="realUi"
   v-on="labelListeners"
@@ -15,10 +15,10 @@
     @change="handleChange"
     v-on="boxListeners"
   >
-  <span class="veui-radio-box"/>
+  <span :class="$c('radio-box')"/>
   <span
     v-if="$slots.default"
-    class="veui-radio-label"
+    :class="$c('radio-label')"
   >
     <slot/>
   </span>
@@ -27,6 +27,7 @@
 
 <script>
 import { pick } from 'lodash'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
@@ -34,7 +35,7 @@ import { MOUSE_EVENTS, FOCUS_EVENTS, KEYBOARD_EVENTS } from '../utils/dom'
 
 export default {
   name: 'veui-radio',
-  mixins: [ui, input, activatable],
+  mixins: [prefix, ui, input, activatable],
   inheritAttrs: false,
   model: {
     prop: 'model'

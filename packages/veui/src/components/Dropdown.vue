@@ -3,19 +3,19 @@
   ref="main"
   :ui="realUi"
   :class="{
-    'veui-dropdown': true,
-    'veui-dropdown-expanded': expanded,
-    'veui-dropdown-split': split
+    [$c('dropdown')]: true,
+    [$c('dropdown-expanded')]: expanded,
+    [$c('dropdown-split')]: split
   }"
 >
   <veui-button
     v-if="split"
     ref="command"
-    class="veui-dropdown-command"
+    :class="$c('dropdown-command')"
     :disabled="disabled"
     @click="$emit('click')"
   >
-    <span class="veui-dropdown-label">
+    <span :class="$c('dropdown-label')">
       <slot
         name="label"
         :label="label"
@@ -26,7 +26,7 @@
   </veui-button>
   <veui-button
     ref="button"
-    class="veui-dropdown-button"
+    :class="$c('dropdown-button')"
     :disabled="disabled"
     aria-haspopup="menu"
     :aria-disabled="disabled"
@@ -36,7 +36,7 @@
   >
     <span
       v-if="!split"
-      class="veui-dropdown-label"
+      :class="$c('dropdown-label')"
     >
       <slot
         name="label"
@@ -46,7 +46,7 @@
       </slot>
     </span>
     <veui-icon
-      class="veui-dropdown-icon"
+      :class="$c('dropdown-icon')"
       :name="icons[expanded ? 'collapse' : 'expand']"
     />
   </veui-button>
@@ -68,7 +68,7 @@
         trigger,
         delay: 300
       }"
-      class="veui-dropdown-options"
+      :class="$c('dropdown-options')"
       role="menu"
       :tabindex="searchable ? -1 : 0"
       :aria-expanded="expanded"
@@ -77,14 +77,14 @@
       <veui-searchbox
         v-if="searchable"
         v-model="keyword"
-        class="veui-dropdown-searchbox"
+        :class="$c('dropdown-searchbox')"
         :ui="uiParts.search"
         :placeholder="placeholder"
         clearable
       />
       <div
         v-if="isSearching && !filteredSuggestions.length"
-        class="veui-dropdown-options-no-data"
+        :class="$c('dropdown-options-no-data')"
       >
         <slot
           name="no-data"
@@ -135,7 +135,7 @@
                   <mark
                     v-if="matched"
                     :key="`${idx}-${index}`"
-                    class="veui-option-matched"
+                    :class="$c('option-matched')"
                   >{{ text }}</mark>
                   <span
                     v-else
@@ -145,7 +145,7 @@
                 <span
                   v-if="idx < option.matches.length - 1"
                   :key="idx"
-                  class="veui-option-separator"
+                  :class="$c('option-separator')"
                 >&gt;</span>
               </template>
             </template>
@@ -163,6 +163,7 @@ import Button from './Button'
 import Overlay from './Overlay'
 import Searchbox from './Searchbox'
 import OptionGroup from './Select/OptionGroup'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import dropdown from '../mixins/dropdown'
 import { createKeySelect } from '../mixins/key-select'
@@ -193,6 +194,7 @@ export default {
     'veui-option-group': OptionGroup
   },
   mixins: [
+    prefix,
     ui,
     dropdown,
     createKeySelect({
@@ -275,8 +277,8 @@ export default {
       }
     },
     focus () {
-      let { command, button } = this.$refs;
-      (command || button).focus()
+      let { command, button } = this.$refs
+      ;(command || button).focus()
     },
     getContainerOfFocusable () {
       return this.$refs.options.$el

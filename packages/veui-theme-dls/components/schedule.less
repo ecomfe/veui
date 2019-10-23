@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-schedule {
+.@{veui-prefix}-schedule {
   width: 653px;
   border: 1px solid @veui-gray-color-5;
   outline: none;
@@ -95,8 +95,8 @@
       &-item {
         line-height: 23px;
 
-        .veui-checkbox[ui~="small"] {
-          .veui-checkbox {
+        .@{veui-prefix}-checkbox[ui~="small"] {
+          .@{veui-prefix}-checkbox {
             &-box {
               margin-right: 10px;
             }
@@ -107,7 +107,7 @@
           }
         }
 
-        .veui-checkbox-label {
+        .@{veui-prefix}-checkbox-label {
           width: 1em;
           text-align: center;
         }
@@ -156,11 +156,11 @@
         }
 
         &:hover:active,
-        &.veui-schedule-selected {
+        &.@{veui-prefix}-schedule-selected {
           color: @veui-brand-color-8;
         }
 
-        &.veui-schedule-selected {
+        &.@{veui-prefix}-schedule-selected {
           &:hover,
           &.focus-visible {
             color: @veui-brand-color-7;
@@ -187,7 +187,9 @@
         position: relative;
         border: 1px solid @veui-gray-color-6;
 
-        &.veui-schedule-selected + .veui-schedule-selected button::before {
+        &.@{veui-prefix}-schedule-selected
+          + .@{veui-prefix}-schedule-selected
+          button::before {
           content: "";
           .absolute(0, _, _, -1px);
           .size(1px, 22px);

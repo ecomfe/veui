@@ -1,10 +1,10 @@
 @import "../lib.less";
 
-.veui-field {
+.@{veui-prefix}-field {
   vertical-align: top;
   clear: both;
 
-  &-required > .veui-form-label::after {
+  &-required > .@{veui-prefix}-form-label::after {
     .veui-field-require();
   }
 
@@ -23,13 +23,13 @@
     margin-left: 10px;
   }
 
-  .veui-form-label {
+  .@{veui-prefix}-form-label {
     height: @veui-height-normal;
     width: @veui-form-label-width;
     line-height: @veui-height-normal;
   }
 
-  .veui-span {
+  .@{veui-prefix}-span {
     line-height: @veui-height-normal;
   }
 
@@ -41,31 +41,33 @@
     vertical-align: top;
     color: @veui-alert-color;
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       margin-right: 7px;
     }
   }
 
-  .veui-form-tip {
+  .@{veui-prefix}-form-tip {
     height: @veui-height-normal;
     line-height: @veui-height-normal;
     margin-left: 10px;
     color: @veui-text-color-weak;
   }
 
-  .veui-form-tip + .veui-field-error {
+  .@{veui-prefix}-form-tip + .@{veui-prefix}-field-error {
     .veui-field-gap-error();
   }
 
-  .veui-form-label ~ .veui-form-tip + .veui-field-error {
+  .@{veui-prefix}-form-label
+    ~ .@{veui-prefix}-form-tip
+    + .@{veui-prefix}-field-error {
     margin-left: @veui-form-label-width;
   }
 
-  .veui-form-label,
-  .veui-field-error,
-  .veui-form-tip,
-  .veui-span {
-    .veui-icon {
+  .@{veui-prefix}-form-label,
+  .@{veui-prefix}-field-error,
+  .@{veui-prefix}-form-tip,
+  .@{veui-prefix}-span {
+    .@{veui-prefix}-icon {
       vertical-align: top;
       margin-top: ~"calc(@{veui-height-normal} / 2 - 0.5em)";
     }
@@ -74,20 +76,20 @@
   .make-ui(@font-size, @box-size) {
     font-size: @font-size;
 
-    .veui-form-label,
-    .veui-field-error,
-    .veui-form-tip,
-    .veui-span {
+    .@{veui-prefix}-form-label,
+    .@{veui-prefix}-field-error,
+    .@{veui-prefix}-form-tip,
+    .@{veui-prefix}-span {
       line-height: @box-size;
 
-      .veui-icon {
+      .@{veui-prefix}-icon {
         margin-top: ~"calc(@{box-size} / 2 - 0.5em)";
       }
     }
 
-    .veui-form-label,
-    .veui-field-error,
-    .veui-form-tip {
+    .@{veui-prefix}-form-label,
+    .@{veui-prefix}-field-error,
+    .@{veui-prefix}-form-tip {
       height: @box-size;
     }
   }

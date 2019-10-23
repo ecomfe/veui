@@ -1,7 +1,7 @@
 @import "../lib.less";
 
-.veui-alert-box {
-  .veui-dialog-content {
+.@{veui-prefix}-alert-box {
+  .@{veui-prefix}-dialog-content {
     width: @dls-dialog-width-contextual;
     padding-top: @dls-dialog-padding-y;
 
@@ -35,7 +35,7 @@
         font-size: @dls-dialog-title-font-size-s;
       }
 
-      .veui-alert-box-titleless & {
+      .@{veui-prefix}-alert-box-titleless & {
         height: dls-line-height(
           @dls-dialog-body-line-height-contextual,
           @dls-dialog-body-font-size-m
@@ -72,7 +72,7 @@
     line-height: @dls-dialog-body-line-height-contextual;
   }
 
-  .veui-dialog-content-foot {
+  .@{veui-prefix}-dialog-content-foot {
     display: flex;
 
     &::before {
@@ -87,11 +87,11 @@
     }
   }
 
-  &[ui~="s"] .veui-dialog-content-foot::before {
+  &[ui~="s"] .@{veui-prefix}-dialog-content-foot::before {
     font-size: @dls-dialog-title-font-size-s;
   }
 
-  &-titleless[ui~="s"] .veui-dialog-content-foot::before {
+  &-titleless[ui~="s"] .@{veui-prefix}-dialog-content-foot::before {
     font-size: @dls-dialog-body-font-size-s;
   }
 

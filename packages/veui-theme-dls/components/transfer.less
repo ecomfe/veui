@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-transfer {
+.@{veui-prefix}-transfer {
   .clearfix();
   display: flex;
   font-size: @dls-transfer-font-size-m;
@@ -9,7 +9,7 @@
     margin-left: @dls-transfer-panel-spacing;
   }
 
-  .veui-tree {
+  .@{veui-prefix}-tree {
     & &-item-check {
       padding-left: @dls-transfer-item-content-spacing;
     }
@@ -54,7 +54,7 @@
   }
 
   &-selected-flat {
-    .veui-tree-item-label {
+    .@{veui-prefix}-tree-item-label {
       .ellipsis();
       padding-right: @dls-transfer-item-content-spacing;
 
@@ -76,7 +76,7 @@
   }
 
   // disabled 之后的样式
-  &-disabled .veui-tree-item {
+  &-disabled .@{veui-prefix}-tree-item {
     color: @dls-transfer-item-font-color-disabled;
   }
 

@@ -1,6 +1,6 @@
 <template>
 <div
-  class="veui-radio-group"
+  :class="$c('radio-group')"
   :ui="realUi"
   role="radiogroup"
   :aria-readonly="realReadonly"
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { focusIn } from '../utils/dom'
@@ -40,7 +41,7 @@ export default {
   components: {
     'veui-radio': Radio
   },
-  mixins: [ui, input],
+  mixins: [prefix, ui, input],
   model: {
     event: 'change'
   },

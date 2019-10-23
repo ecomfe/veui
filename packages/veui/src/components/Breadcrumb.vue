@@ -1,10 +1,11 @@
 <script>
 import BreadcrumbItem from './BreadcrumbItem'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 
 export default {
   name: 'veui-breadcrumb',
-  mixins: [ui],
+  mixins: [prefix, ui],
   props: {
     routes: {
       type: Array,
@@ -46,7 +47,7 @@ export default {
   },
   render () {
     return (
-      <ol class="veui-breadcrumb" role="navigation">
+      <ol class={this.$c('breadcrumb')} role="navigation">
         {this.$slots.default ||
           this.localRoutes.map((route, index) => (
             <BreadcrumbItem

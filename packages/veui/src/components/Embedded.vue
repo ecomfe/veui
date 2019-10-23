@@ -1,8 +1,10 @@
 <script>
 import Dialog from './Dialog'
+import prefix from '../mixins/prefix'
 
 export default {
   name: 'veui-embedded',
+  mixins: [prefix],
   inheritAttrs: false,
   render (h) {
     let data = {
@@ -10,7 +12,7 @@ export default {
         // attrs 都直接透传到 Dialog 去
         ...this.$attrs,
         overlayClass: {
-          'veui-embedded': true
+          [this.$c('embedded')]: true
         },
         inline: true
       },

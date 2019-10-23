@@ -1,7 +1,7 @@
 @import "../lib.less";
 @import (reference) "../input.less";
 
-.veui-slider {
+.@{veui-prefix}-slider {
   width: 100%;
   position: relative;
   user-select: none;
@@ -32,8 +32,8 @@
           background-color: @dls-slider-track-color-hover;
 
           &
-            ~ .veui-slider-track-default-marks
-            .veui-slider-track-default-mark-out-progress {
+            ~ .@{veui-prefix}-slider-track-default-marks
+            .@{veui-prefix}-slider-track-default-mark-out-progress {
             background-color: @dls-slider-track-color-hover;
           }
         }
@@ -58,8 +58,8 @@
           background-color: @dls-slider-track-progress-color-hover;
 
           &
-            ~ .veui-slider-track-default-marks
-            .veui-slider-track-default-mark-in-progress {
+            ~ .@{veui-prefix}-slider-track-default-marks
+            .@{veui-prefix}-slider-track-default-mark-in-progress {
             background-color: @dls-slider-track-progress-color-hover;
           }
         }
@@ -155,13 +155,13 @@
     }
 
     &:hover {
-      .veui-slider-thumb-default {
+      .@{veui-prefix}-slider-thumb-default {
         background-color: @dls-slider-thumb-background-color-hover;
       }
     }
 
     &.focus-visible {
-      .veui-slider-thumb-default {
+      .@{veui-prefix}-slider-thumb-default {
         background-color: @dls-slider-thumb-background-color-focus;
         .dls-focus-ring(
           @dls-slider-thumb-border-color-focus,
@@ -171,14 +171,14 @@
     }
 
     &:active {
-      .veui-slider-thumb-default {
+      .@{veui-prefix}-slider-thumb-default {
         background-color: @dls-slider-thumb-background-color-active;
       }
     }
   }
 
   .slider-size(@total-height, @track-height, @track-radius, @thumb-size, @mark-size, @dot-size) {
-    .veui-slider {
+    .@{veui-prefix}-slider {
       &-track {
         &-default {
           // Slider 高度靠 default track 撑起来，如果替换了 track slot 就高度自适应了
@@ -240,8 +240,8 @@
     );
   }
 
-  &.veui-readonly {
-    .veui-slider-track {
+  &.@{veui-prefix}-readonly {
+    .@{veui-prefix}-slider-track {
       &-default {
         &-bg,
         &-mark-out-progress {
@@ -261,7 +261,7 @@
       }
     }
 
-    .veui-slider-thumb {
+    .@{veui-prefix}-slider-thumb {
       cursor: default;
 
       &-default {
@@ -272,7 +272,7 @@
         }
       }
 
-      &.focus-visible .veui-slider-thumb-default {
+      &.focus-visible .@{veui-prefix}-slider-thumb-default {
         background-color: @dls-slider-thumb-background-color-read-only-focus;
         .dls-focus-ring(
           @dls-slider-thumb-border-color-read-only-focus,
@@ -282,10 +282,10 @@
     }
   }
 
-  &.veui-disabled {
+  &.@{veui-prefix}-disabled {
     color: @dls-slider-font-color-disabled;
 
-    .veui-slider-track {
+    .@{veui-prefix}-slider-track {
       &-default {
         &-bg,
         &-mark-out-progress {
@@ -305,7 +305,7 @@
       }
     }
 
-    .veui-slider-thumb {
+    .@{veui-prefix}-slider-thumb {
       cursor: not-allowed;
 
       &-default {

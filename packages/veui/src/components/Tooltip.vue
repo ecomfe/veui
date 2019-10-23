@@ -1,5 +1,6 @@
 <script>
 import Overlay from './Overlay'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import outside from '../directives/outside'
@@ -22,7 +23,7 @@ export default {
   components: {
     'veui-overlay': Overlay
   },
-  mixins: [ui, overlay],
+  mixins: [prefix, ui, overlay],
   props: {
     position: {
       type: String,
@@ -195,17 +196,17 @@ export default {
         open={this.realOpen}
         options={this.realOverlayOptions}
         overlayClass={this.mergeOverlayClass({
-          'veui-tooltip-box': true,
-          'veui-tooltip-box-transparent': !this.interactive
+          [this.$c('tooltip-box')]: true,
+          [this.$c('tooltip-box-transparent')]: !this.interactive
         })}
       >
         <div
-          class="veui-tooltip"
+          class={this.$c('tooltip')}
           ui={this.realUi}
           role="tooltip"
           {...{ directives }}
         >
-          <div class="veui-tooltip-content">{this.$slots.default}</div>
+          <div class={this.$c('tooltip-content')}>{this.$slots.default}</div>
         </div>
       </veui-overlay>
     )

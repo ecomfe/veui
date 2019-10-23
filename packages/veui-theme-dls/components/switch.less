@@ -1,13 +1,13 @@
 @import "../lib.less";
 
-.veui-switch {
+.@{veui-prefix}-switch {
   .metrics(@size) {
     @width: ~"dls-switch-width-@{size}";
     @height: ~"dls-switch-height-@{size}";
     @thumb-size: ~"dls-switch-thumb-size-@{size}";
     @padding: ~"dls-switch-padding-@{size}";
 
-    .veui-switch {
+    .@{veui-prefix}-switch {
       &-switcher {
         .size(@@width, @@height);
         padding: @@padding;
@@ -17,22 +17,23 @@
       &-button {
         .size(@@thumb-size);
 
-        .veui-icon {
+        .@{veui-prefix}-icon {
           .dls-icon-size(dls-sum(@@thumb-size, -2px));
         }
       }
     }
 
-    &.veui-switch-loading .veui-switch-button,
-    &.veui-switch-on:not(.veui-switch-loading)
-      > .veui-switch-switcher
-      > .veui-switch-button {
+    &.@{veui-prefix}-switch-loading .@{veui-prefix}-switch-button,
+    &.veui-switch-on:not(.@{veui-prefix}-switch-loading)
+      > .@{veui-prefix}-switch-switcher
+      > .@{veui-prefix}-switch-button {
       transform: translateX(
         dls-sum(@@width, @@thumb-size * -1, @@padding * -2)
       );
     }
 
-    &.veui-switch-on.veui-switch-loading .veui-switch-button {
+    &.@{veui-prefix}-switch-on.@{veui-prefix}-switch-loading
+      .@{veui-prefix}-switch-button {
       transform: translateX(0);
     }
   }
@@ -70,7 +71,7 @@
   &:hover &-switcher {
     background-color: @dls-switch-track-color-off-hover;
 
-    .veui-switch-button {
+    .@{veui-prefix}-switch-button {
       background-color: @dls-switch-thumb-color-off-hover;
     }
   }
@@ -78,7 +79,7 @@
   &:active &-switcher {
     background-color: @dls-switch-track-color-off-active;
 
-    .veui-switch-button {
+    .@{veui-prefix}-switch-button {
       background-color: @dls-switch-thumb-color-off-active;
     }
   }
@@ -87,7 +88,7 @@
     background-color: @dls-switch-track-color-off-focus;
     box-shadow: @dls-switch-shadow-off-focus;
 
-    .veui-switch-button {
+    .@{veui-prefix}-switch-button {
       background-color: @dls-switch-thumb-color-off-focus;
     }
   }
@@ -96,7 +97,7 @@
     background-color: @dls-switch-track-color-on-focus;
     box-shadow: @dls-switch-shadow-on-focus;
 
-    .veui-switch-button {
+    .@{veui-prefix}-switch-button {
       background-color: @dls-switch-thumb-color-on-focus;
     }
   }
@@ -109,7 +110,7 @@
     border-radius: 50%;
     .veui-transition(transform);
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       position: absolute;
       color: @dls-switch-track-color-off;
     }
@@ -118,11 +119,11 @@
   :checked + &-switcher {
     background-color: @dls-switch-track-color-on;
 
-    .veui-switch-button {
+    .@{veui-prefix}-switch-button {
       background-color: @dls-switch-thumb-color-on;
     }
 
-    .veui-icon {
+    .@{veui-prefix}-icon {
       color: @dls-switch-track-color-on;
     }
   }
@@ -130,7 +131,7 @@
   &:hover :checked + &-switcher {
     background-color: @dls-switch-track-color-on-hover;
 
-    .veui-switch-button {
+    .@{veui-prefix}-switch-button {
       background-color: @dls-switch-thumb-color-on-hover;
     }
   }
@@ -138,12 +139,12 @@
   &:active :checked + &-switcher {
     background-color: @dls-switch-track-color-on-active;
 
-    .veui-switch-button {
+    .@{veui-prefix}-switch-button {
       background-color: @dls-switch-thumb-color-on-active;
     }
   }
 
-  &.veui-readonly {
+  &.@{veui-prefix}-readonly {
     cursor: default;
   }
 
@@ -152,37 +153,37 @@
   }
 
   &-loading &-switcher {
-    .veui-icon {
+    .@{veui-prefix}-icon {
       color: @dls-switch-track-color-off;
     }
   }
 
   &-on&-loading &-switcher {
-    .veui-icon {
+    .@{veui-prefix}-icon {
       color: @dls-switch-track-color-on;
     }
   }
 
-  &.veui-disabled {
+  &.@{veui-prefix}-disabled {
     cursor: not-allowed;
   }
 
   &-loading &-switcher,
-  &.veui-readonly &-switcher,
-  &.veui-disabled &-switcher {
+  &.@{veui-prefix}-readonly &-switcher,
+  &.@{veui-prefix}-disabled &-switcher {
     background-color: @dls-switch-track-color-off-disabled;
 
-    .veui-switch-button {
+    .@{veui-prefix}-switch-button {
       background-color: @dls-switch-thumb-color-off-disabled;
     }
   }
 
   &-on&-loading &-switcher,
-  &-on.veui-readonly &-switcher,
-  &-on.veui-disabled &-switcher {
+  &-on.@{veui-prefix}-readonly &-switcher,
+  &-on.@{veui-prefix}-disabled &-switcher {
     background-color: @dls-switch-track-color-on-disabled;
 
-    .veui-switch-button {
+    .@{veui-prefix}-switch-button {
       background-color: @dls-switch-thumb-color-on-disabled;
     }
   }

@@ -2,6 +2,7 @@
 import Option from './Option'
 import Overlay from '../Overlay'
 import Icon from '../Icon'
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import overlay from '../../mixins/overlay'
 import menu from '../../mixins/menu'
@@ -25,7 +26,7 @@ const OptionGroup = {
   directives: {
     outside
   },
-  mixins: [ui, menu, select, overlay, keySelect],
+  mixins: [prefix, ui, menu, select, overlay, keySelect],
   props: {
     label: String,
     trigger: {
@@ -214,10 +215,10 @@ const OptionGroup = {
     return (
       <div
         class={{
-          'veui-option-group': true,
-          'veui-option-group-unlabelled': !this.label,
-          'veui-option-group-expanded': this.expanded,
-          'veui-option-group-popout': this.canPopOut
+          [this.$c('option-group')]: true,
+          [this.$c('option-group-unlabelled')]: !this.label,
+          [this.$c('option-group-expanded')]: this.expanded,
+          [this.$c('option-group-popout')]: this.canPopOut
         }}
         ui={this.realUi}
         ref="label"
@@ -226,9 +227,9 @@ const OptionGroup = {
           <LabelTag
             ref="button"
             class={{
-              'veui-option-group-label': true,
-              'veui-option-group-button': this.canPopOut,
-              'veui-option-group-label-disabled': this.disabled
+              [this.$c('option-group-label')]: true,
+              [this.$c('option-group-button')]: this.canPopOut,
+              [this.$c('option-group-label-disabled')]: this.disabled
             }}
             ui={this.realUi}
             aria-haspopup={this.canPopOut ? this.popupRole : null}
@@ -253,7 +254,7 @@ const OptionGroup = {
               }
               : {})}
           >
-            <span class="veui-option-label">
+            <span class={this.$c('option-label')}>
               {this.$scopedSlots.label
                 ? this.$scopedSlots.label({ label: this.label })
                 : this.menu.$scopedSlots.label
@@ -263,7 +264,7 @@ const OptionGroup = {
             </span>
             {this.canPopOut ? (
               <Icon
-                class="veui-option-group-expandable"
+                class={this.$c('option-group-expandable')}
                 name={this.icons.expandable}
               />
             ) : null}
@@ -275,14 +276,14 @@ const OptionGroup = {
             target="button"
             open={this.expanded}
             options={this.realOverlayOptions}
-            overlayClass={this.mergeOverlayClass('veui-option-group-box')}
+            overlayClass={this.mergeOverlayClass(this.$c('option-group-box'))}
             autofocus
             modal
           >
             <div
               id={this.popupId}
               ref="box"
-              class="veui-option-group-options"
+              class={this.$c('option-group-options')}
               tabindex="-1"
               role={this.popupRole}
               aria-expanded={this.expanded}

@@ -1,6 +1,6 @@
 @import "../lib.less";
 
-.veui-collapse {
+.@{veui-prefix}-collapse {
   border: 1px solid @dls-collapse-border-color;
   border-radius: @dls-collapse-border-radius-m;
 
@@ -50,8 +50,8 @@
     transform: rotateZ(90deg);
   }
 
-  &.veui-disabled {
-    .veui-collapse {
+  &.@{veui-prefix}-disabled {
+    .@{veui-prefix}-collapse {
       &-header {
         background-color: @dls-collapse-header-background-color-disabled;
         color: @dls-collapse-header-font-color-disabled;
@@ -81,7 +81,7 @@
   &[ui~="s"] {
     border-radius: @dls-collapse-border-radius-s;
 
-    .veui-collapse {
+    .@{veui-prefix}-collapse {
       &-header {
         font-size: @dls-collapse-header-font-size-s;
       }
