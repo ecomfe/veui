@@ -14,7 +14,7 @@
   }
 
   &:not(&-empty):not(&-expanded)
-    .veui-input:not(.@{veui-prefix}-input-focused)
+    .@{veui-prefix}-input:not(.@{veui-prefix}-input-focused)
     .@{veui-prefix}-input-placeholder {
     color: @dls-input-font-color;
   }
@@ -160,7 +160,9 @@
     }
   }
 
-  &:not(.veui-readonly):not(.@{veui-prefix}-disabled):hover &-clear + &-toggle,
+  &:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
+    &-clear
+    + &-toggle,
   .@{veui-prefix}-input-focused &-clear + &-toggle,
   &-clear.focus-visible + &-toggle {
     opacity: 0;
@@ -180,7 +182,8 @@
       .dls-icon-size(@dls-input-icon-size);
     }
 
-    .veui-select:not(.veui-readonly):not(.@{veui-prefix}-disabled):hover &,
+    .@{veui-prefix}-select:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
+      &,
     .@{veui-prefix}-input-focused &,
     &.focus-visible {
       opacity: 1;

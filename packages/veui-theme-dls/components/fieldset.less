@@ -42,17 +42,17 @@
   // 3. 最后一个不带field不带tip，error出在fieldset上
   & > .@{veui-prefix}-field .@{veui-prefix}-field-error,
   &
-    > .veui-field:not(.@{veui-prefix}-field-no-tip)
+    > .@{veui-prefix}-field:not(.@{veui-prefix}-field-no-tip)
     + .@{veui-prefix}-field-error {
     .veui-field-gap-error();
   }
 
   // field自己带label 和 error，这种情况error要缩进
   &
-    > .veui-field:not(.@{veui-prefix}-field-no-label)
+    > .@{veui-prefix}-field:not(.@{veui-prefix}-field-no-label)
     ~ .@{veui-prefix}-field-error,
   &
-    > .veui-field:not(.@{veui-prefix}-field-no-tip)
+    > .@{veui-prefix}-field:not(.@{veui-prefix}-field-no-tip)
     + .@{veui-prefix}-field-error {
     margin-left: @veui-form-label-width;
   }
