@@ -58,7 +58,9 @@
     }
   }
 
-  &:not(.veui-readonly):not(.@{veui-prefix}-disabled):hover &-clear + &-clock,
+  &:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
+    &-clear
+    + &-clock,
   .@{veui-prefix}-input-focused &-clear + &-clock,
   &-clear.focus-visible + &-clock {
     opacity: 0;
@@ -74,7 +76,8 @@
       .dls-icon-size(@dls-input-icon-size);
     }
 
-    .veui-time-picker:not(.veui-readonly):not(.@{veui-prefix}-disabled):hover &,
+    .@{veui-prefix}-time-picker:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
+      &,
     .@{veui-prefix}-input-focused &,
     &.focus-visible {
       opacity: 1;
