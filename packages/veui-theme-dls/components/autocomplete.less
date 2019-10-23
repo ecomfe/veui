@@ -6,40 +6,5 @@
 
   &-suggestion-group {
     &:extend(._veui-dropdown-overlay all);
-    position: relative;
-    min-width: 110px;
-    max-height: 280px;
-    overflow-y: auto;
-    background-color: #fff;
-    outline: none;
-
-    .@{veui-prefix}-autocomplete-suggestion-matched {
-      color: @dls-option-font-color-highlighted;
-      background: transparent;
-    }
-    .@{veui-prefix}-option-group,
-    &.@{veui-prefix}-option-group {
-      padding: 0 10px;
-      &-label {
-        padding: 0;
-      }
-      .@{veui-prefix}-option {
-        &-label {
-          position: relative; // 显示在 hover 层的上面
-        }
-        &::before {
-          background: #fff;
-          content: "";
-          position: absolute;
-          left: 0;
-          height: @dls-option-height-m;
-          right: 0;
-        }
-        &.focus-visible::before,
-        &:hover::before {
-          background: @veui-gray-color-8;
-        }
-      }
-    }
   }
 }
