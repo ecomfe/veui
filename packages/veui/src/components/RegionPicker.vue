@@ -141,12 +141,8 @@
                 v-if="group.children && group.active"
                 :open.sync="group.active"
                 :overlay-class="overlayClass"
-                :target="`node-${si}-${bi}-${gi}`"
-                :options="{
-                  attachment: 'top left',
-                  targetAttachment: 'bottom left',
-                  constraints
-                }"
+                :target="`shadow-checker-${si}-${bi}-${gi}`"
+                position="bottom-start"
               >
                 <div
                   :id="`${id}-units`"
@@ -214,10 +210,7 @@
                   mergeOverlayClass($c('region-picker-group-shadow-overlay'))
                 "
                 :target="`node-${si}-${bi}-${gi}`"
-                :options="{
-                  attachment: 'top left',
-                  targetAttachment: 'top left'
-                }"
+                position="bottom-start"
               >
                 <div
                   :id="`${id}-shadow`"

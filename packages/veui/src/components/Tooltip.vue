@@ -59,13 +59,7 @@ export default {
     return {
       localOpen: this.open,
       localOverlayOptions: {
-        position: this.position,
-        constraints: [
-          {
-            to: 'window',
-            attachment: 'together'
-          }
-        ]
+        position: this.position
       }
     }
   },

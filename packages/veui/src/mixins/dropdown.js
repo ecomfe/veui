@@ -11,13 +11,7 @@ export default {
     return {
       expanded: false,
       localOverlayOptions: {
-        position: 'bottom left',
-        constraints: [
-          {
-            to: 'window',
-            attachment: 'together'
-          }
-        ]
+        position: 'bottom-start'
       },
       dropdownId: uniqueId('veui-dropdown-')
     }
