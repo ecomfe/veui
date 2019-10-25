@@ -130,49 +130,6 @@ export function getClassPropDef () {
   return { ...CLASS_PROP_DEF }
 }
 
-const OPPOSITE = {
-  top: 'bottom',
-  right: 'left',
-  bottom: 'top',
-  left: 'right'
-}
-
-const ALIGN_HORIZONTAL = {
-  left: 'left',
-  start: 'left',
-  right: 'right',
-  end: 'right'
-}
-
-const ALIGN_VERTICAL = {
-  top: 'top',
-  start: 'top',
-  bottom: 'bottom',
-  end: 'bottom'
-}
-
-export function resolveOverlayPosition (position) {
-  if (!position) {
-    return {}
-  }
-
-  let [side, align] = position.split(/[-\s]+/)
-  side = side === 'auto' ? 'bottom' : side
-  let targetAttachment
-  let attachment
-  if (side === 'top' || side === 'bottom') {
-    targetAttachment = `${side} ${ALIGN_HORIZONTAL[align] || 'center'}`
-    attachment = `${OPPOSITE[side]} ${ALIGN_HORIZONTAL[align] || 'center'}`
-  } else {
-    targetAttachment = `${ALIGN_VERTICAL[align] || 'middle'} ${side}`
-    attachment = `${ALIGN_VERTICAL[align] || 'middle'} ${OPPOSITE[side]}`
-  }
-  return {
-    targetAttachment,
-    attachment
-  }
-}
-
 const RE_INDEX = /\d+/
 export function deepSet (obj, path, val) {
   let segments = path

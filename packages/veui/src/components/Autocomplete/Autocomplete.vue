@@ -62,7 +62,7 @@
                 <mark
                   v-if="matched"
                   :key="`${idx}-${index}`"
-                  :class="$c('autocomplete-suggestion-matched')"
+                  :class="$c('option-matched')"
                 >{{ text }}</mark>
                 <span
                   v-else

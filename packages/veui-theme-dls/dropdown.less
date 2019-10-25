@@ -42,8 +42,8 @@
     transform: scaleY(0);
   }
 
-  .tether-element-attached-bottom.@{veui-prefix}-overlay-enter-active &,
-  .tether-element-attached-bottom.@{veui-prefix}-overlay-leave-active & {
+  [x-placement*="top"].@{veui-prefix}-overlay-enter-active &,
+  [x-placement*="top"].@{veui-prefix}-overlay-leave-active & {
     transform-origin: 50% 100%;
   }
 
