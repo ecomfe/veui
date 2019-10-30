@@ -6,7 +6,11 @@
 * [^] `Input` 组件的 `before`/`after` slot 重命名为 `prepend`/`append`，新的 `before`/`after` 位置在输入框外部。并且新增了 `before-label`/`after-label` 两个 slot。见 [#502](https://github.com/ecomfe/veui/issues/502)。
 * [^] `NumberInput` 组件的 `before`/`after` slot 重命名为 `prepend`/`append`。见 [#502](https://github.com/ecomfe/veui/issues/502)。
 * [^] `Pagination` 组件根据新的设计不再支持总数显示。
-* [-] 移除已废弃的 `Pager`。
+* [-] 移除已废弃的 `Pager` 组件，请使用 `Pagination` 组件代替。
+* [-] 移除已废弃的 `Progress` 组件的 `precision` prop，请使用 `decimal-place` prop 代替。
+* [-] 移除已废弃的 `Progress` 组件的 `state` prop，请使用 `status` prop 代替。
+* [-] 移除已废弃的 `Progress` 组件的 `auto-succeed` prop，请使用 `autosucceed` prop 代替。
+* [-] 移除已废弃的 `Schedule` 组件的 `shortcuts-display` 值 `expand`/`collapse`，请使用 `inline`/`popup` 代替。
 
 ### 💡 主要变更
 

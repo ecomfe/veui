@@ -224,7 +224,6 @@ import input from '../mixins/input'
 import i18n from '../mixins/i18n'
 import outside from '../directives/outside'
 import { merge } from '../utils/range'
-import warn from '../utils/warn'
 import config from '../managers/config'
 import { normalizeClass } from '../utils/helper'
 import Checkbox from './Checkbox'
@@ -241,19 +240,6 @@ config.defaults(
   },
   'schedule'
 )
-
-function warnDeprecated (oldVal, newVal, vm) {
-  warn(
-    '[veui-schedule] `shortcuts-display` value `' +
-      oldVal +
-      '` is renamed to `' +
-      newVal +
-      '` and will be removed in `1.0.0`. Use `' +
-      newVal +
-      '` instead.',
-    vm
-  )
-}
 
 export default {
   name: 'veui-schedule',
@@ -292,12 +278,7 @@ export default {
       type: String,
       default: 'inline',
       validator (value) {
-        if (value === 'expand') {
-          warnDeprecated('expand', 'inline', this)
-        } else if (value === 'collapse') {
-          warnDeprecated('collapse', 'popup', this)
-        }
-        return includes(['expand', 'collapse', 'inline', 'popup'], value)
+        return includes(['inline', 'popup'], value)
       }
     },
     statuses: Array
