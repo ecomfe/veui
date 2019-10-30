@@ -78,7 +78,6 @@ import {
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
-import warn from '../../utils/warn'
 import Checkbox from '../Checkbox'
 import { focusIn } from '../../utils/dom'
 
@@ -111,21 +110,6 @@ export default {
         return includes(['toggle', 'check', 'none'], value)
       }
     },
-    /**
-     * @deprecated
-     */
-    expands: {
-      type: Array,
-      validator (val) {
-        if (val != null) {
-          warn(
-            '[veui-tree] `expands` is deprecated and will be removed in `1.0.0`. Use `expanded` instead.',
-            this
-          )
-        }
-        return true
-      }
-    },
     // 当前有哪些节点是展开的
     expanded: {
       type: Array,
@@ -154,9 +138,6 @@ export default {
     }
   },
   computed: {
-    realExpanded () {
-      return this.expands || this.expanded
-    },
     realKeys () {
       if (isString(this.keys)) {
         return source => source[this.keys]
@@ -169,7 +150,7 @@ export default {
     }
   },
   watch: {
-    realExpanded () {
+    expanded () {
       this.parseExpanded()
     },
     datasource: {
@@ -194,7 +175,7 @@ export default {
             this.$set(items, index, item)
           })
         }
-        walk(val, this.localDatasource, clone(this.realExpanded))
+        walk(val, this.localDatasource, clone(this.expanded))
 
         if (this.checkable) {
           this.manageNodeStatus(this.localDatasource, null, true)
@@ -278,7 +259,7 @@ export default {
     emitCheck () {
       this.$emit('check', this.getCheckedValuesFromDatasource())
     },
-    parseExpanded (expanded = this.realExpanded) {
+    parseExpanded (expanded = this.expanded) {
       let walk = (items, expanded) => {
         items.forEach(item => {
           if (item.children && item.children.length) {
@@ -305,15 +286,9 @@ export default {
       item.expanded = !item.expanded
 
       let expanded = item.expanded
-        ? uniq([...this.realExpanded, item.value])
-        : filter(this.realExpanded, value => value !== item.value)
+        ? uniq([...this.expanded, item.value])
+        : filter(this.expanded, value => value !== item.value)
       this.$emit('update:expanded', expanded)
-
-      /**
-       * TODO: remove on 1.0
-       */
-      this.$emit('update:expands', expanded)
-
       this.$emit(item.expanded ? 'expand' : 'collapse', item, index, depth)
     },
     handleItemClick (...args) {

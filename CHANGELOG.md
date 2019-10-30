@@ -13,6 +13,7 @@
 * [-] 移除 `Schedule` 组件已废弃的 `shortcuts-display` 值 `expand`/`collapse`，请使用 `inline`/`popup` 代替。
 * [-] 移除 `OptionGroup` 组件已废弃的 `position` 值 `popout`，请使用 `popup` 代替。
 * [-] 移除 `Tooltip` 组件已废弃的 `custom` prop，请使用 `trigger: 'custom'` 代替。
+* [-] 移除 `Tree` 组件已废弃的 `expands` prop，请使用 `expanded` 代替。
 
 ### 💡 主要变更
 
