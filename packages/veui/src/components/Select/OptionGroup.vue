@@ -12,7 +12,6 @@ import outside from '../../directives/outside'
 import '../../common/uiTypes'
 import { walk } from '../../utils/datasource'
 import { isType, isTopMostOfType } from '../../utils/helper'
-import warn from '../../utils/warn'
 import { pull, uniqueId, includes, cloneDeep, pick, isEqual } from 'lodash'
 
 const EVENT_MAP = {
@@ -45,13 +44,7 @@ const OptionGroup = {
       type: String,
       default: 'inline',
       validator (val) {
-        if (val === 'popout') {
-          warn(
-            '[veui-option-group] `popout` is a deprecated value for `position` and will be removed in `v1.0.0`. Use `popup` component instead.',
-            this
-          )
-        }
-        return ['inline', 'popout', 'popup'].indexOf(val) !== -1
+        return ['inline', 'popup'].indexOf(val) !== -1
       }
     }
   },
@@ -95,7 +88,7 @@ const OptionGroup = {
     },
     canPopOut () {
       return !!(
-        (this.position === 'popup' || this.position === 'popout') &&
+        this.position === 'popup' &&
         this.items &&
         this.items.length &&
         this.labelContent
