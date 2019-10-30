@@ -1,6 +1,6 @@
 {
   "name": "veui-theme-dls-icons",
-  "version": "1.0.0-alpha.30",
+  "version": "1.0.0-alpha.32",
   "description": "Icon pack for theme Baidu DLS of VEUI.",
   "repository": "ecomfe/veui",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "publish": "rm *.js"
   },
   "peerDependencies": {
-    "veui": "1.0.0-alpha.30"
+    "veui": "1.0.0-alpha.32"
   },
   "devDependencies": {
     "esm": "^3.0.84",

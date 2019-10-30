@@ -26,7 +26,7 @@ module.exports = {
   outputDir: '../../components',
   transpileDependencies: [
     /[/\\]node_modules[/\\]veui[/\\]/,
-    /[/\\]node_modules[/\\]veui-theme-one[/\\]/,
+    /[/\\]node_modules[/\\]veui-theme-dls[/\\]/,
     /[/\\]node_modules[/\\]vue-awesome[/\\]/,
     /[/\\]node_modules[/\\]resize-detector[/\\]/
   ],

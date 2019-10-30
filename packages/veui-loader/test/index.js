@@ -9,12 +9,12 @@ function resolve (...args) {
 const SPECS = [
   {
     title: 'should inject peer style module',
-    entry: '../../veui/src/components/Breadcrumb.vue',
+    entry: '../../veui/src/components/Badge.vue',
     expect: {
       include: [
-        `\n<style lang="less" src="veui-theme-one/components/breadcrumb.less"></style>\n`
+        `\n<style lang="less" src="veui-theme-dls/components/badge.less"></style>\n`
       ],
-      exclude: [`\nimport 'veui-theme-one/components/Breadcrumb.js'\n`]
+      exclude: [`\nimport 'veui-theme-dls/components/Badge.js'\n`]
     }
   },
   {
@@ -24,9 +24,9 @@ const SPECS = [
     expect: {
       include: [
         `\nimport 'veui/locale/en-US/common.js'\n`,
-        `\nimport 'veui-theme-one/components/Button.js'\n`,
-        `\nimport 'veui-theme-one/components/Button.js'\n`,
-        `\n<style lang="less" src="veui-theme-one/components/button.less"></style>\n`
+        `\nimport 'veui-theme-dls/components/Button.js'\n`,
+        `\nimport 'veui-theme-dls/components/Button.js'\n`,
+        `\n<style lang="less" src="veui-theme-dls/components/button.less"></style>\n`
       ]
     }
   },
@@ -53,7 +53,7 @@ SPECS.forEach(({ entry, expect, title }) => {
       },
       resolve: {
         alias: {
-          'veui-theme-one': resolve('../../veui-theme-one'),
+          'veui-theme-dls': resolve('../../veui-theme-dls'),
           veui: resolve('../../veui/src')
         }
       },
@@ -67,11 +67,11 @@ SPECS.forEach(({ entry, expect, title }) => {
               locale: ['en-US'],
               modules: [
                 {
-                  package: 'veui-theme-one',
+                  package: 'veui-theme-dls',
                   fileName: '${module}.less'
                 },
                 {
-                  package: 'veui-theme-one',
+                  package: 'veui-theme-dls',
                   fileName: '${module}.js',
                   transform: false
                 }

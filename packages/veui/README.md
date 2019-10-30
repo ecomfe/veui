@@ -15,10 +15,10 @@ $ npm i --save veui
 $ npm i --save-dev babel-preset-veui veui-loader
 ```
 
-To use default theme `one` you have to install it too.
+To use default theme `dls` you have to install it too.
 
 ```sh
-$ npm i --save veui-theme-one
+$ npm i --save veui-theme-dls
 ```
 
 ## Configuration
@@ -39,7 +39,7 @@ VEUI requires some Babel plugins to be transpiled correctly. We've provided a pr
 
 ### webpack loaders
 
-To use the default theme `veui-theme-one`, make sure to configure `veui-loader` in the workflow as follows:
+To use the default theme `veui-theme-dls`, make sure to configure `veui-loader` in the workflow as follows:
 
 In `build/webpack.base.conf.js`, prepend this rule:
 
@@ -51,11 +51,11 @@ In `build/webpack.base.conf.js`, prepend this rule:
   options: {
     modules: [
       {
-        package: 'veui-theme-one',
+        package: 'veui-theme-dls',
         fileName: '{module}.less'
       },
       {
-        package: 'veui-theme-one',
+        package: 'veui-theme-dls',
         fileName: '{module}.js',
         transform: false
       }
