@@ -500,23 +500,6 @@ export default {
         return config.get('uploader.iframeMode')
       }
     },
-    /**
-     * @deprecated
-     */
-    autoUpload: {
-      type: Boolean,
-      default: true,
-      validator (val) {
-        // TODO: remove support in 1.0.0
-        if (val === false) {
-          warn(
-            '[veui-uploader] `auto-upload` is deprecated and will be removed in `1.0.0`. Use `autoupload` instead.',
-            this
-          )
-        }
-        return true
-      }
-    },
     convertResponse: {
       default () {
         return config.get('uploader.convertResponse')
@@ -628,9 +611,6 @@ export default {
       }
 
       return 'success'
-    },
-    realAutoupload () {
-      return this.autoupload && this.autoUpload
     },
     files () {
       return this.fileList.map(file => {
@@ -812,10 +792,10 @@ export default {
 
         this.replacingFile = null
 
-        if (this.requestMode === 'iframe' && this.realAutoupload) {
+        if (this.requestMode === 'iframe' && this.autoupload) {
           this.submit(newFile)
         }
-        if (this.requestMode !== 'iframe' && this.realAutoupload) {
+        if (this.requestMode !== 'iframe' && this.autoupload) {
           this.uploadFile(newFile)
         }
       } else {
@@ -850,10 +830,10 @@ export default {
           this.fileList = this.fileList.slice(-1)
         }
 
-        if (this.requestMode === 'iframe' && this.realAutoupload) {
+        if (this.requestMode === 'iframe' && this.autoupload) {
           this.submit()
         }
-        if (this.requestMode !== 'iframe' && this.realAutoupload) {
+        if (this.requestMode !== 'iframe' && this.autoupload) {
           this.uploadFiles()
         }
       }
@@ -991,18 +971,6 @@ export default {
 
       data = this.convertResponse ? this.convertResponse(data) : data
 
-      if (data.status || data.reason) {
-        warn(
-          '[veui-uploader] `status` and `reason` in response data are deprecated. Use `success` and `message` instead. Suppor for old fields will be removed in 1.0.0.',
-          this
-        )
-      }
-
-      /* Adapting legacy schema */
-      if (data.success == null && data.status) {
-        data.success = data.status === 'success'
-      }
-
       delete file.xhr
       delete file.toBeUploaded
 
@@ -1022,7 +990,7 @@ export default {
       }, 2000)
     },
     showFailureResult (data, file) {
-      file.failureReason = data.message || data.reason || ''
+      file.failureReason = data.message || ''
       this.updateFileList(file, 'failure', data)
     },
     updateFileList (file, status, properties, toEmit = false) {
@@ -1032,14 +1000,7 @@ export default {
 
       if (properties) {
         assign(file, properties)
-        file._extra = omit(properties, [
-          'success',
-          'status',
-          'reason',
-          'message',
-          'name',
-          'src'
-        ])
+        file._extra = omit(properties, ['success', 'message', 'name', 'src'])
       }
       this.$set(this.fileList, this.fileList.indexOf(file), file)
 

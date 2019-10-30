@@ -14,6 +14,8 @@
 * [-] 移除 `OptionGroup` 组件已废弃的 `position` 值 `popout`，请使用 `popup` 代替。
 * [-] 移除 `Tooltip` 组件已废弃的 `custom` prop，请使用 `trigger: 'custom'` 代替。
 * [-] 移除 `Tree` 组件已废弃的 `expands` prop，请使用 `expanded` 代替。
+* [-] 移除 `Uploader` 组件已废弃的 `auto-upload` prop，请使用 `autoupload` prop 代替。
+* [-] `Uploader` 组件响应数据中的 `status` 及 `reason` 字段被移除，请使用 `success` 及 `message` 代替。见 [1.0.0-alpha.19](# 1.0.0-alpha.19) 的迁移指南。
 
 ### 💡 主要变更
 
