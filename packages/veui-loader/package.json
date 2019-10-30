@@ -1,6 +1,6 @@
 {
   "name": "veui-loader",
-  "version": "1.0.0-alpha.32",
+  "version": "2.0.0-alpha.0",
   "description": "webpack loader for VEUI.",
   "main": "lib/index.js",
   "repository": "ecomfe/veui",
@@ -19,7 +19,7 @@
     "loader-utils": "^1.1.0",
     "pkg-dir": "^2.0.0",
     "slash": "^2.0.0",
-    "veui": "^1.0.0-alpha.32"
+    "veui": "^2.0.0-alpha.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -28,7 +28,7 @@
     "@babel/runtime": "^7.5.5",
     "ava": "^2.3.0",
     "raw-loader": "^0.5.1",
-    "veui-theme-dls": "^1.0.0-alpha.32",
+    "veui-theme-dls": "^2.0.0-alpha.0",
     "webpack": "^4.39.3"
   }
 }
