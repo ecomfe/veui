@@ -7,18 +7,18 @@ You can load peer style/script modules for any VEUI component by configuring loa
 ```js
 modules: [
   {
-    package: 'veui-theme-one',
+    package: 'veui-theme-dls',
     fileName: '{module}.less'
   },
   {
-    package: 'veui-theme-one',
+    package: 'veui-theme-dls',
     fileName: '{module}.js',
     transform: false
   }
 ]
 ```
 
-The above config means that two additional modules will be loaded for each component. eg. for `Button.vue`, it will load `veui-theme-one/components/button.less` and `veui-theme-one/components/Button.js`.
+The above config means that two additional modules will be loaded for each component. eg. for `Button.vue`, it will load `veui-theme-dls/components/button.less` and `veui-theme-dls/components/Button.js`.
 
 ## Options
 
@@ -48,7 +48,7 @@ An array that holds the peer module configs for each component.
 
 Type: `string`
 
-The peer package name. It's usually the name of the theme package, like `veui-theme-one`.
+The peer package name. It's usually the name of the theme package, like `veui-theme-dls`.
 
 #### `path`
 
