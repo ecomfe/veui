@@ -101,22 +101,6 @@ export default {
       type: Number,
       default: 0
     },
-    /**
-     * @deprecated
-     */
-    precision: {
-      type: Number,
-      default: 0,
-      validator (val) {
-        if (val !== 0) {
-          warn(
-            '[veui-progress] `precision` is deprecated and will be removed in `1.0.0`. Use `decimal-place` instead.',
-            this
-          )
-        }
-        return true
-      }
-    },
     decimalPlace: {
       type: Number
     },
@@ -129,49 +113,17 @@ export default {
       default: 1
     },
     status: String,
-    /**
-     * @deprecated
-     */
-    state: {
-      type: String,
-      validator (val) {
-        if (val != null) {
-          warn(
-            '[veui-progress] `state` is deprecated and will be removed in `1.0.0`. Use `status` instead.',
-            this
-          )
-        }
-        return true
-      }
-    },
-    autosucceed: [Boolean, Number],
-    /**
-     * @deprecated
-     */
-    autoSucceed: {
-      validator (val) {
-        if (val != null) {
-          warn(
-            '[veui-progress] `auto-succeed` is deprecated and will be removed in `1.0.0`. Use `autosucceed` instead.',
-            this
-          )
-        }
-        return true
-      }
-    }
+    autosucceed: [Boolean, Number]
   },
   data () {
     return {
-      localStatus: this.status || this.state,
+      localStatus: this.status,
       descId: uniqueId('veui-progress-')
     }
   },
   computed: {
     realValue () {
       return clamp(this.value, this.min, this.max)
-    },
-    realAutosucceed () {
-      return this.autosucceed != null ? this.autosucceed : this.autoSucceed
     },
     klass () {
       return {
@@ -214,11 +166,6 @@ export default {
     halfWidth () {
       return this.getLength(this.realRadius + this.halfStroke)
     },
-    dm () {
-      return (
-        (this.decimalPlace != null ? this.decimalPlace : this.precision) || 0
-      )
-    },
     valueText () {
       if (this.localStatus === 'success') {
         return this.t('done')
@@ -240,16 +187,16 @@ export default {
         return
       }
 
-      if (this.realAutosucceed != null) {
-        if (this.realAutosucceed === true || this.realAutosucceed === 0) {
+      if (this.autosucceed != null) {
+        if (this.autosucceed === true || this.autosucceed === 0) {
           this.setStatus(val === this.max ? 'success' : null)
           return
-        } else if (this.realAutosucceed === false) {
+        } else if (this.autosucceed === false) {
           return
         }
         this.timer = setTimeout(() => {
           this.setStatus(val === this.max ? 'success' : null)
-        }, this.realAutosucceed)
+        }, this.autosucceed)
       }
     },
     status (val) {
@@ -265,7 +212,6 @@ export default {
     setStatus (status) {
       this.localStatus = status
       this.$emit('update:status', status)
-      this.$emit('update:state', status)
     },
     getLength (val) {
       return `${Math.round(val * 100) / 100}`
