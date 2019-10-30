@@ -16,10 +16,12 @@ export default {
       return
     }
     let index = getIndexOfType(this, 'menu-item')
+    let label = this.label || this.getLabelNaive()
     this.menu.add({
-      ...pick(this, ['value', 'items', 'id', 'position']),
-      label: this.label || this.getLabelNaive(),
-      index
+      ...pick(this, ['value', 'items', 'id', 'position', 'trigger']),
+      label,
+      index,
+      renderLabel: this.$scopedSlots.label || (() => this.$slots.label || label)
     })
   },
   destroyed () {

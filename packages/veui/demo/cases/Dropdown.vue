@@ -220,27 +220,15 @@
           label="提交"
           ui="xs"
         >
-          <veui-option
-            label="保存"
-            @click="log('save')"
-          />
-          <veui-option
-            value="publish"
-            label="发布"
-          />
+          <veui-option @click="log('save')">💾保存</veui-option>
+          <veui-option value="publish">✅发布</veui-option>
         </veui-option-group>
         <veui-option-group
           label="操作"
           ui="xs"
         >
-          <veui-option
-            value="undo"
-            label="撤销"
-          />
-          <veui-option
-            value="redo"
-            label="重复"
-          />
+          <veui-option value="undo">⬅️撤消</veui-option>
+          <veui-option value="redo">➡️重复</veui-option>
         </veui-option-group>
       </veui-dropdown>
     </div>

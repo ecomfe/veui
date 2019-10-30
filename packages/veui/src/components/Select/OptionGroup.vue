@@ -33,6 +33,9 @@ const OptionGroup = {
       type: String,
       default: 'click',
       validator (val) {
+        if (!val) {
+          return true
+        }
         return includes(['hover', 'click'], val)
       }
     },
@@ -70,12 +73,32 @@ const OptionGroup = {
     itemIds () {
       return this.items.map(({ id }) => id)
     },
+    labelContent () {
+      if (isTopMostOfType(this, 'menu', 'select')) {
+        return null
+      }
+
+      return (
+        (this.$scopedSlots.label &&
+          this.$scopedSlots.label({ label: this.label })) ||
+        this.$slots.label ||
+        ((this.menu &&
+          this.menu.$scopedSlots.label &&
+          this.menu.$scopedSlots.label({ label: this.label })) ||
+          (this.menu && this.menu.$slots.label) ||
+          this.label)
+      )
+    },
+    realTrigger () {
+      // derivable from parent group unless explicitly set
+      return this.trigger || (this.menu && this.menu.trigger) || 'click'
+    },
     canPopOut () {
       return !!(
         (this.position === 'popup' || this.position === 'popout') &&
         this.items &&
         this.items.length &&
-        this.label
+        this.labelContent
       )
     },
     popupRole () {
@@ -173,11 +196,12 @@ const OptionGroup = {
             disabled={option.disabled}
             key={i}
             ui={this.realUi}
-            trigger={this.trigger}
+            trigger={option.trigger}
             scopedSlots={{
-              label: this.$scopedSlots.label
-                ? group => this.$scopedSlots.label(group) || group.label
-                : null,
+              label:
+                  option.renderLabel ||
+                  this.$scopedSlots.label ||
+                  (group => group.label),
               option: this.$scopedSlots.option || null,
               'option-label': this.$scopedSlots['option-label'] || null
             }}
@@ -210,14 +234,14 @@ const OptionGroup = {
       <div
         class={{
           [this.$c('option-group')]: true,
-          [this.$c('option-group-unlabelled')]: !this.label,
+          [this.$c('option-group-unlabelled')]: !this.labelContent,
           [this.$c('option-group-expanded')]: this.expanded,
           [this.$c('option-group-popout')]: this.canPopOut
         }}
         ui={this.realUi}
         ref="label"
       >
-        {this.label ? (
+        {this.labelContent ? (
           <LabelTag
             ref="button"
             class={{
@@ -248,14 +272,7 @@ const OptionGroup = {
               }
               : {})}
           >
-            <span class={this.$c('option-label')}>
-              {this.$scopedSlots.label
-                ? this.$scopedSlots.label({ label: this.label })
-                : this.menu.$scopedSlots.label
-                  ? this.menu.$scopedSlots.label({ label: this.label }) ||
-                  this.label
-                  : this.label}
-            </span>
+            <span class={this.$c('option-label')}>{this.labelContent}</span>
             {this.canPopOut ? (
               <Icon
                 class={this.$c('option-group-expandable')}
@@ -317,7 +334,9 @@ function normalizeItem (item) {
   return {
     ...pick(
       item,
-      isGroup ? ['label', 'position'] : ['label', 'value', 'position']
+      isGroup
+        ? ['label', 'position', 'trigger', 'renderLabel']
+        : ['label', 'value', 'renderLabel']
     ),
     ...(isGroup ? { options } : {})
   }

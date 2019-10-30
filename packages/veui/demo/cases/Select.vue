@@ -198,9 +198,12 @@
       multiple
     >
       <veui-option-group
-        label="中国"
         position="popup"
+        trigger="hover"
       >
+        <template
+          slot="label"
+        >中国 🇨🇳</template>
         <veui-option-group
           label="互联网"
           position="popup"
