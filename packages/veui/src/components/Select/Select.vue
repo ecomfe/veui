@@ -321,9 +321,8 @@ export default {
     }
   },
   render () {
-    let optionLabel = null
-    if (this.isFiltered) {
-      optionLabel = ({ matches }) => {
+    let optionLabel = this.isFiltered
+      ? ({ matches }) => {
         if (!matches) {
           return null
         }
@@ -341,7 +340,7 @@ export default {
           return item
         })
       }
-    }
+      : null
 
     let option = this.multiple
       ? option => {
@@ -352,11 +351,13 @@ export default {
             checked={option.selected}
             onClick={e => e.preventDefault()}
           >
-            {this.$scopedSlots['option-label']
-              ? this.$scopedSlots['option-label'](option)
-              : this.isFiltered
-                ? optionLabel(option)
-                : option.label}
+            {option.renderLabel
+              ? option.renderLabel(omit(option, ['renderLabel']))
+              : this.$scopedSlots['option-label']
+                ? this.$scopedSlots['option-label'](option)
+                : this.isFiltered
+                  ? optionLabel(option)
+                  : option.label}
           </Checkbox>
         )
       }

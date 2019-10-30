@@ -1,3 +1,15 @@
+## ?
+
+### ⚠️ 非兼容性变更
+
+* [^] 用 Popper.js 替代了 Tether。`Overlay` 组件的 `options` prop（以及多个组件的 `overlay-options` prop）现在都对应于[Popper.js 的 `options` 参数](https://popper.js.org/popper-documentation.html#new_Popper_new)。`Overlay` 的 `position` prop 在之前的版本就已经兼容了 Popper.js 的语法，所以如果之前就以 Popper.js 风格进行描述，则无需调整。
+
+### 🐞 问题修复
+
+* [^] 修复 `Select` 组件中 `Option` 没有传入 `label` 时对应 slot 不渲染的问题。
+* [^] 修复 `Select` 内联写法时部分 slot 不生效的问题。
+* [^] 修复 `Select` 内联写法时 `trigger` prop 不生效的问题。
+
 ## 1.0.0-alpha.32
 
 ### ⚠️ 非兼容性变更

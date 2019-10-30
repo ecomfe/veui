@@ -1,4 +1,6 @@
 import Select from 'veui/components/Select'
+import OptionGroup from 'veui/components/OptionGroup'
+import Option from 'veui/components/Option'
 import { mount } from '@vue/test-utils'
 
 const datasource = [
@@ -41,7 +43,9 @@ const datasource = [
 ]
 
 const NATIVE_INPUT = '.veui-input input'
-const OPTION_ITEM = '.veui-select-options .veui-option'
+const OPTION_ITEM =
+  '.veui-select-options .veui-option-group:not([hidden]) > .veui-option'
+const GROUP_LABEL = '.veui-select-options .veui-option-group-label'
 
 describe('components/Select/Select', () => {
   it('should render options correctly', async () => {
@@ -59,7 +63,8 @@ describe('components/Select/Select', () => {
         template: '<veui-select :options="options"/>'
       },
       {
-        sync: false
+        sync: false,
+        attachToDocument: true
       }
     )
 
@@ -71,6 +76,58 @@ describe('components/Select/Select', () => {
     await vm.$nextTick()
     options = wrapper.findAll(OPTION_ITEM)
     expect(options.length).to.equal(6)
+    wrapper.destroy()
+  })
+
+  it('should render inline options correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select,
+          'veui-option-group': OptionGroup,
+          'veui-option': Option
+        },
+        data () {
+          return {
+            hero: null
+          }
+        },
+        template: `
+          <veui-select
+            v-model="hero"
+          >
+            <veui-option
+              value="baidu"
+              label="百度"
+            />
+            <veui-option
+              value="alibaba"
+              label="阿里巴巴"
+            />
+            <veui-option
+              value="tencent"
+              label="腾讯"
+            />
+          </veui-select>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+
+    await vm.$nextTick()
+    let options = wrapper.findAll(OPTION_ITEM)
+    expect(options.length).to.equal(3)
+    expect(wrapper.text()).to.equal('请选择')
+
+    options.at(0).trigger('click')
+    await vm.$nextTick()
+
+    expect(vm.hero).to.equal('baidu')
+    expect(wrapper.text()).to.equal('百度')
     wrapper.destroy()
   })
 
@@ -99,10 +156,9 @@ describe('components/Select/Select', () => {
     )
 
     let { vm } = wrapper
-    let placeholder = wrapper.find('.veui-input-placeholder')
     let label = wrapper.find('.veui-select-label')
 
-    expect(placeholder.text()).to.equal('Please select')
+    expect(wrapper.text()).to.equal('Please select')
 
     vm.value = '3'
     await vm.$nextTick()
@@ -110,7 +166,7 @@ describe('components/Select/Select', () => {
 
     vm.value = null
     await vm.$nextTick()
-    expect(placeholder.text()).to.equal('Please select')
+    expect(wrapper.text()).to.equal('Please select')
 
     wrapper.destroy()
   })
@@ -141,9 +197,8 @@ describe('components/Select/Select', () => {
     )
 
     let { vm } = wrapper
-    let placeholder = wrapper.find('.veui-select-placeholder')
 
-    expect(placeholder.text()).to.equal('Please select')
+    expect(wrapper.text()).to.equal('Please select')
     expect(wrapper.find('.veui-tag').exists()).to.equal(false)
 
     vm.value = ['3', '1-1']
@@ -400,8 +455,7 @@ describe('components/Select/Select', () => {
       }
     )
     let { vm } = wrapper
-    let placeholder = wrapper.find('.veui-input-placeholder')
-    expect(placeholder.text()).to.equal('选项3')
+    expect(wrapper.text()).to.equal('选项3')
 
     expect(wrapper.find('.veui-select-clear').exists()).to.equal(false)
 
@@ -424,6 +478,41 @@ describe('components/Select/Select', () => {
     clear.trigger('click')
     await vm.$nextTick()
     expect(vm.value).to.deep.equal([])
+    wrapper.destroy()
+  })
+
+  it('should render label slot correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select
+        },
+        data () {
+          return {
+            value: null,
+            options: datasource
+          }
+        },
+        template: `
+          <veui-select :options="options">
+            <template v-slot:option-label="{ label }">{{ label }} - 🤘</template>
+            <template v-slot:group-label="{ label }">{{ label }} - 🤞</template>
+          </veui-select>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+
+    await vm.$nextTick()
+    let options = wrapper.findAll(OPTION_ITEM)
+    expect(options.at(0).text()).to.equal('子选项1-1 - 🤘')
+
+    let groups = wrapper.findAll(GROUP_LABEL)
+    expect(groups.at(0).text()).to.equal('选项1 - 🤞')
     wrapper.destroy()
   })
 })
