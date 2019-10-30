@@ -7,11 +7,12 @@
 * [^] `NumberInput` 组件的 `before`/`after` slot 重命名为 `prepend`/`append`。见 [#502](https://github.com/ecomfe/veui/issues/502)。
 * [^] `Pagination` 组件根据新的设计不再支持总数显示。
 * [-] 移除已废弃的 `Pager` 组件，请使用 `Pagination` 组件代替。
-* [-] 移除已废弃的 `Progress` 组件的 `precision` prop，请使用 `decimal-place` prop 代替。
-* [-] 移除已废弃的 `Progress` 组件的 `state` prop，请使用 `status` prop 代替。
-* [-] 移除已废弃的 `Progress` 组件的 `auto-succeed` prop，请使用 `autosucceed` prop 代替。
-* [-] 移除已废弃的 `Schedule` 组件的 `shortcuts-display` 值 `expand`/`collapse`，请使用 `inline`/`popup` 代替。
-* [-] 移除已废弃的 `OptionGroup` 组件的 `position` 值 `popout`，请使用 `popup` 代替。
+* [-] 移除 `Progress` 组件已废弃的 `precision` prop，请使用 `decimal-place` prop 代替。
+* [-] 移除 `Progress` 组件已废弃的 `state` prop，请使用 `status` prop 代替。
+* [-] 移除 `Progress` 组件已废弃的 `auto-succeed` prop，请使用 `autosucceed` prop 代替。
+* [-] 移除 `Schedule` 组件已废弃的 `shortcuts-display` 值 `expand`/`collapse`，请使用 `inline`/`popup` 代替。
+* [-] 移除 `OptionGroup` 组件已废弃的 `position` 值 `popout`，请使用 `popup` 代替。
+* [-] 移除 `Tooltip` 组件已废弃的 `custom` prop，请使用 `trigger: 'custom'` 代替。
 
 ### 💡 主要变更
 

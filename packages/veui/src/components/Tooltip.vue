@@ -6,7 +6,6 @@ import overlay from '../mixins/overlay'
 import outside from '../directives/outside'
 import { getNodes, isValidNodesResolver } from '../utils/context'
 import { isString } from 'lodash'
-import warn from '../utils/warn'
 import config from '../managers/config'
 
 const TRIGGER_MAP = {
@@ -41,10 +40,6 @@ export default {
     hideDelay: {
       type: Number,
       default: config.get('tooltip.hideDelay')
-    },
-    custom: {
-      type: Boolean,
-      default: false
     },
     open: {
       type: Boolean,
@@ -119,14 +114,6 @@ export default {
       this.localOverlayOptions.position = val
     }
   },
-  created () {
-    if (this.custom) {
-      warn(
-        "[veui-tooltip] `custom` is deprecated and will be removed in `1.0.0`. Use `trigger: 'custom'` instead.",
-        this
-      )
-    }
-  },
   mounted () {
     this.bindHandler()
   },
@@ -157,7 +144,7 @@ export default {
       targetNode.__tooltip_open_trigger__ = null
     },
     bindHandler () {
-      if (this.custom || this.trigger === 'custom' || !this.targetNode) {
+      if (this.trigger === 'custom' || !this.targetNode) {
         return
       }
       if (!this.targetNode.__tooltip_open_trigger__) {
@@ -176,7 +163,7 @@ export default {
   },
   render () {
     let directives = []
-    if (!this.custom && this.trigger !== 'custom') {
+    if (this.trigger !== 'custom') {
       directives.push({
         name: 'outside',
         value: this.outsideOptions,
