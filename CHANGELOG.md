@@ -2,7 +2,25 @@
 
 ### ⚠️ 非兼容性变更
 
-* [^] 用 Popper.js 替代了 Tether。`Overlay` 组件的 `options` prop（以及多个组件的 `overlay-options` prop）现在都对应于[Popper.js 的 `options` 参数](https://popper.js.org/popper-documentation.html#new_Popper_new)。`Overlay` 的 `position` prop 在之前的版本就已经兼容了 Popper.js 的语法，所以如果之前就以 Popper.js 风格进行描述，则无需调整。
+* [^] 用 Popper.js 替代了 Tether。`Overlay` 组件的 `options` prop（以及多个组件的 `overlay-options` prop）现在都对应于[Popper.js 的 `options` 参数](https://popper.js.org/popper-documentation.html#new_Popper_new)。`Overlay` 的 `position` prop 在之前的版本就已经兼容了 Popper.js 的语法，所以如果之前就以 Popper.js 风格进行描述，则无需调整。见 [#574](https://github.com/ecomfe/veui/pull/574)。
+* [^] `Input` 组件的 `before`/`after` slot 重命名为 `prepend`/`append`，新的 `before`/`after` 位置在输入框外部。并且新增了 `before-label`/`after-label` 两个 slot。见 [#502](https://github.com/ecomfe/veui/issues/502)。
+* [^] `NumberInput` 组件的 `before`/`after` slot 重命名为 `prepend`/`append`。见 [#502](https://github.com/ecomfe/veui/issues/502)。
+* [^] `Pagination` 组件根据新的设计不再支持总数显示。
+
+### 💡 主要变更
+
+* [+] 支持在编译时指定组件 class 前缀。具体自定义方式见 [#573](https://github.com/ecomfe/veui/pull/573)。
+* [+] 新增了 `veui-theme-dls` 主题并将大部分组件调整为适配 DLS 实现。
+* [+] 新增了 `Loading` 组件。
+* [+] 新增了 `Collapse` 组件。
+* [+] 新增了 `Accordion` 组件。
+* [+] 新增了 `Badge` 组件。
+* [+] 新增了 `TimePicker` 组件。
+* [+] 新增了 `Drawer` 组件。
+* [+] 新增了 `Embedded` 组件。
+* [+] 新增了 `Anchor` 组件。
+* [+] 为 `Overlay`/`Dialog` 组件新增了 `inline` prop，允许内联在内容中进行渲染。
+* [+] 为 `Overlay` 新增了 `match-width` prop，允许对于相对指定元素定位时，以目标元素宽度为浮层最小宽度。
 
 ### 🐞 问题修复
 

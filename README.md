@@ -17,14 +17,14 @@ Enterprise UI components for Vue.js. Based on [BAIDU](https://www.baidu.com)'s D
 * ⌨️ A11Y support w/ ARIA annotation & complete keyboard navigation
 * ☁️ SSR support w/ component level Critical CSS
 
-Four packages are included in this repo:
+Packages included in this repo are:
 
 * [`veui`](./packages/veui)
 * [`babel-preset-veui`](./packages/babel-preset-veui)
 * [`babel-plugin-veui`](./packages/babel-plugin-veui)
 * [`veui-loader`](./packages/veui-loader)
-* [`veui-theme-one`](./packages/veui-theme-one)
-* [`veui-theme-one-icons`](./packages/veui-theme-one-icons)
+* [`veui-theme-dls`](./packages/veui-theme-dls)
+* [`veui-theme-dls-icons`](./packages/veui-theme-dls-icons)
 
 Please visit each package for further introductions.
 
