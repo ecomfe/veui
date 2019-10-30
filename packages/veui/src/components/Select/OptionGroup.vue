@@ -196,7 +196,7 @@ const OptionGroup = {
             disabled={option.disabled}
             key={i}
             ui={this.realUi}
-            trigger={option.trigger}
+            trigger={option.trigger || this.trigger}
             scopedSlots={{
               label:
                   option.renderLabel ||

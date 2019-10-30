@@ -167,9 +167,13 @@ describe('components/Select/OptionGroup', () => {
             ]
           }
         },
-        template: '<veui-dropdown :options="options" trigger="hover"/>'
+        template:
+          '<veui-dropdown label="Go" :options="options" trigger="hover"/>'
       },
-      { sync: false }
+      {
+        sync: false,
+        attachToDocument: true
+      }
     )
     let btn = wrapper.find('.veui-dropdown-button')
     btn.trigger('mouseenter')
