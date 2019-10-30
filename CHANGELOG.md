@@ -6,6 +6,7 @@
 * [^] `Input` 组件的 `before`/`after` slot 重命名为 `prepend`/`append`，新的 `before`/`after` 位置在输入框外部。并且新增了 `before-label`/`after-label` 两个 slot。见 [#502](https://github.com/ecomfe/veui/issues/502)。
 * [^] `NumberInput` 组件的 `before`/`after` slot 重命名为 `prepend`/`append`。见 [#502](https://github.com/ecomfe/veui/issues/502)。
 * [^] `Pagination` 组件根据新的设计不再支持总数显示。
+* [-] 移除已废弃的 `Pager`。
 
 ### 💡 主要变更
 
