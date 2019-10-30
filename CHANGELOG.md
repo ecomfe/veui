@@ -20,7 +20,8 @@
 * [+] 新增了 `Embedded` 组件。
 * [+] 新增了 `Anchor` 组件。
 * [+] 为 `Overlay`/`Dialog` 组件新增了 `inline` prop，允许内联在内容中进行渲染。
-* [+] 为 `Overlay` 新增了 `match-width` prop，允许对于相对指定元素定位时，以目标元素宽度为浮层最小宽度。
+* [+] 为 `Overlay` 组件新增了 `match-width` prop，允许对于相对指定元素定位时，以目标元素宽度为浮层最小宽度。
+* [+] 为 `Progress` 组件新增了 `append` slot。
 
 ### 🐞 问题修复
 
