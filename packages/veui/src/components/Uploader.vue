@@ -72,6 +72,11 @@
           <veui-icon :name="icons.alert"/>{{ t('tooManyFiles') }}
         </slot>
       </template>
+      <template v-if="error.customValidationInvalid">
+        <slot name="custom-validation-invalid">
+          <veui-icon :name="icons.alert"/>{{ customValidationMessage }}
+        </slot>
+      </template>
     </span>
   </div>
   <transition-group
@@ -387,6 +392,11 @@
         <veui-icon :name="icons.alert"/>{{ t('tooManyFiles') }}
       </slot>
     </template>
+    <template v-if="error.customValidationInvalid">
+      <slot name="custom-validation-invalid">
+        <veui-icon :name="icons.alert"/>{{ customValidationMessage }}
+      </slot>
+    </template>
   </span>
   <iframe
     v-if="requestMode === 'iframe' && submitting"
@@ -556,6 +566,9 @@ export default {
       }
     },
     accept: String,
+    validator: {
+      type: Function
+    },
     maxCount: Number,
     maxSize: [Number, String],
     payload: Object,
@@ -597,8 +610,10 @@ export default {
       error: {
         sizeInvalid: false,
         typeInvalid: false,
-        countOverflow: false
-      }
+        countOverflow: false,
+        customValidationInvalid: false
+      },
+      customValidationMessage: ''
     }
   },
   computed: {
@@ -777,95 +792,100 @@ export default {
       this.error = {
         sizeInvalid: false,
         typeInvalid: false,
-        countOverflow: false
+        countOverflow: false,
+        customValidationInvalid: false
       }
 
-      let newFiles
-      if (this.requestMode !== 'iframe') {
-        newFiles = [...this.$refs.input.files].filter(file => {
-          return this.validateFile(file)
-        })
-      } else {
-        let name = this.$refs.input.value.replace('C:\\fakepath\\', '')
-        let size = this.$refs.input.files && this.$refs.input.files[0].size
-        if (!this.validateFile({ name, size })) {
-          return
-        }
-        newFiles = [{ status: 'uploading', name }]
-      }
-
-      if (!newFiles.length) {
-        return
-      }
-
-      if (this.isReplacing) {
-        // type=image时，点击重新上传进入此分支，替换掉原位置的文件replacingFile
-        let newFile = newFiles[0]
-        newFile.toBeUploaded = true
-        if (this.requestMode !== 'iframe' && window.URL) {
-          newFile.src = window.URL.createObjectURL(newFile)
-        }
-
-        let replacingIndex = this.fileList.indexOf(this.replacingFile)
-        this.$set(this.fileList, replacingIndex, newFile)
-        this.$emit('change', this.getValue())
-
-        this.replacingFile = null
-
-        if (this.requestMode === 'iframe' && this.realAutoupload) {
-          this.submit(newFile)
-        }
-        if (this.requestMode !== 'iframe' && this.realAutoupload) {
-          this.uploadFile(newFile)
-        }
-      } else {
-        if (
-          this.maxCount !== 1 &&
-          this.fileList.length + newFiles.length > this.maxCount
-        ) {
-          this.error.countOverflow = true
-          return
-        }
-
-        let currentFiles = this.fileList.filter(
-          file => file.status !== 'failure'
-        )
-
-        let needImageSrc =
-          this.requestMode !== 'iframe' && this.type === 'image' && window.URL
-        newFiles = newFiles.map(file => {
-          if (needImageSrc) {
-            file.src = window.URL.createObjectURL(file)
+      let newFiles = [...this.$refs.input.files]
+      Promise.all(newFiles.map(file => this.validateFile(file))).then(
+        validationResults => {
+          newFiles = newFiles.filter((file, index) => validationResults[index])
+          if (!newFiles.length) {
+            return
           }
-          file.toBeUploaded = true
-          return file
-        })
 
-        this.fileList =
-          this.order === 'desc'
-            ? [...newFiles, ...currentFiles]
-            : [...currentFiles, ...newFiles]
+          if (this.isReplacing) {
+            // type=image时，点击重新上传进入此分支，替换掉原位置的文件replacingFile
+            let newFile = newFiles[0]
+            newFile.toBeUploaded = true
+            if (this.requestMode !== 'iframe' && window.URL) {
+              newFile.src = window.URL.createObjectURL(newFile)
+            }
 
-        if (this.maxCount === 1) {
-          this.fileList = this.fileList.slice(-1)
-        }
+            let replacingIndex = this.fileList.indexOf(this.replacingFile)
+            this.$set(this.fileList, replacingIndex, newFile)
+            this.$emit('change', this.getValue())
 
-        if (this.requestMode === 'iframe' && this.realAutoupload) {
-          this.submit()
+            this.replacingFile = null
+
+            if (this.requestMode === 'iframe' && this.realAutoupload) {
+              this.submit(newFile)
+            }
+            if (this.requestMode !== 'iframe' && this.realAutoupload) {
+              this.uploadFile(newFile)
+            }
+          } else {
+            if (
+              this.maxCount !== 1 &&
+              this.fileList.length + newFiles.length > this.maxCount
+            ) {
+              this.error.countOverflow = true
+              return
+            }
+
+            let currentFiles = this.fileList.filter(
+              file => file.status !== 'failure'
+            )
+
+            let needImageSrc =
+              this.requestMode !== 'iframe' &&
+              this.type === 'image' &&
+              window.URL
+            newFiles = newFiles.map(file => {
+              if (needImageSrc) {
+                file.src = window.URL.createObjectURL(file)
+              }
+              file.toBeUploaded = true
+              return file
+            })
+
+            this.fileList =
+              this.order === 'desc'
+                ? [...newFiles, ...currentFiles]
+                : [...currentFiles, ...newFiles]
+
+            if (this.maxCount === 1) {
+              this.fileList = this.fileList.slice(-1)
+            }
+
+            if (this.requestMode === 'iframe' && this.realAutoupload) {
+              this.submit()
+            }
+            if (this.requestMode !== 'iframe' && this.realAutoupload) {
+              this.uploadFiles()
+            }
+          }
         }
-        if (this.requestMode !== 'iframe' && this.realAutoupload) {
-          this.uploadFiles()
-        }
-      }
+      )
     },
-    validateFile ({ name, size }) {
-      let typeValidation = this.validateFileType(name)
+    async validateFile (file) {
+      let typeValidation = this.validateFileType(file.name)
       this.error.typeInvalid = !typeValidation
 
-      let sizeValidation = this.validateFileSize(size)
+      let sizeValidation = this.validateFileSize(file.size)
       this.error.sizeInvalid = !sizeValidation
 
-      return typeValidation && sizeValidation
+      let customValidation = true
+      if (this.validator) {
+        let validationResult = await this.validator(file)
+        customValidation = validationResult.valid
+        if (!customValidation) {
+          this.customValidationMessage = validationResult.message
+        }
+      }
+      this.error.customValidationInvalid = !customValidation
+
+      return typeValidation && sizeValidation && customValidation
     },
     validateFileType (filename) {
       if (!this.accept) {

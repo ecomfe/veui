@@ -326,7 +326,6 @@ export default [
   {
     path: '/uploader',
     name: 'Uploader',
-    component: Uploader,
-    disabled: true
+    component: Uploader
   }
 ]

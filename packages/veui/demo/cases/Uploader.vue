@@ -13,13 +13,14 @@
     ui="horizontal"
     :payload="payload"
     progress="percent"
+    :validator="validator"
     @success="onSuccess"
     @failure="onFailure"
     @change="handleChange('files')"
     @statuschange="handleStatusChange"
   >
     <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图
+      请选择jpg,jpeg,gif图片，大小在10M以内，宽、高大于200像素，最多上传3张图
     </template>
   </veui-uploader>
   <h2>图片上传模式，上传进度以进度条显示</h2>
@@ -193,6 +194,18 @@ export default {
 
         xhr.open('POST', '/upload', true)
         xhr.send(formData)
+      },
+      validator (file) {
+        return new Promise(resolve => {
+          let image = new Image()
+          image.src = window.URL.createObjectURL(file)
+          image.onload = () => {
+            resolve({
+              valid: image.height > 200 && image.width > 200,
+              message: '图片宽高太小'
+            })
+          }
+        })
       }
     }
   },
@@ -239,7 +252,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "~veui-theme-dls/lib.less";
+@import '~veui-theme-dls/lib.less';
 
 h2 {
   font-size: 16px;
