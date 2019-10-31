@@ -131,6 +131,50 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
+  function nextTick () {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve()
+      }, 0)
+    })
+  }
+
+  it('should validate file with custom async validator correctly.', async () => {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload',
+        accept: 'jpg',
+        validator (file) {
+          return new Promise(resolve => {
+            setTimeout(() => {
+              resolve({
+                valid: file.name.length > 10,
+                message: 'file name too short'
+              })
+            }, 0)
+          })
+        }
+      }
+    })
+
+    let input = wrapper.find('input[type="file"]')
+    let dT = new DataTransfer()
+    dT.items.add(new File(['foo'], 'test.jpg'))
+    dT.items.add(new File(['bar'], 'testLongName.jpg'))
+    input.element.files = dT.files
+    input.trigger('change')
+    clearXHR(wrapper)
+
+    // change事件的回调里有异步，这里等待一下
+    await nextTick()
+
+    let validatedFiles = wrapper.vm.$data.fileList
+    expect(validatedFiles.length).to.equal(1)
+    expect(validatedFiles[0].name).to.equal('testLongName.jpg')
+
+    wrapper.destroy()
+  })
+
   it('should emit `statuschange` event when status is changed.', async () => {
     let wrapper = mount(Uploader, {
       propsData: {
@@ -144,6 +188,8 @@ describe('components/Uploader', () => {
     input.element.files = dT.files
     input.trigger('change')
     clearXHR(wrapper)
+    await nextTick()
+
     expect(wrapper.emitted().statuschange[1][0]).to.equal('uploading')
 
     wrapper.vm.uploadCallback({ success: true }, dT.files[0])
@@ -154,12 +200,13 @@ describe('components/Uploader', () => {
     input.element.files = dT.files
     input.trigger('change')
     clearXHR(wrapper)
+    await nextTick()
 
     expect(wrapper.emitted().statuschange[3][0]).to.equal('uploading')
     wrapper.destroy()
   })
 
-  it('should handle callback correctly when upload is finished.', () => {
+  it('should handle callback correctly when upload is finished.', async () => {
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
@@ -173,10 +220,10 @@ describe('components/Uploader', () => {
     input.element.files = dT.files
     input.trigger('change')
     clearXHR(wrapper)
+    await nextTick()
 
     let callbackData = { src: '/test2.jpg', id: 6, success: true }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
-
     expect(wrapper.emitted().change[0][0]).to.deep.equal([
       { name: 'test1.jpg', src: '/test1.jpg', id: 5 },
       { name: 'test2.jpg', src: '/test2.jpg', id: 6 }
@@ -196,11 +243,12 @@ describe('components/Uploader', () => {
     input.element.files = dT.files
     input.trigger('change')
     clearXHR(wrapper)
+    await nextTick()
 
     callbackData = { success: false, message: 'image too large' }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
 
-    expect(wrapper.emitted().failure[0]).to.deep.equal([
+    expect(wrapper.emitted().failure[2]).to.deep.equal([
       {
         name: 'test3.jpg',
         status: 'failure'
@@ -225,6 +273,8 @@ describe('components/Uploader', () => {
     input.element.files = dT.files
     input.trigger('change')
     clearXHR(wrapper)
+    await nextTick()
+
     wrapper.vm.submit()
 
     await wrapper.vm.$nextTick()
@@ -248,7 +298,7 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should support custom upload function correctly.', () => {
+  it('should support custom upload function correctly.', async () => {
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
@@ -264,6 +314,7 @@ describe('components/Uploader', () => {
     dT.items.add(new File(['foo'], 'test.jpg'))
     input.element.files = dT.files
     input.trigger('change')
+    await nextTick()
 
     expect(wrapper.emitted().change[0][0]).to.deep.equal([
       { name: 'test.jpg', src: '/test.jpg' }
@@ -431,7 +482,7 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should handle replace correctly.', () => {
+  it('should handle replace correctly.', async () => {
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
@@ -451,6 +502,7 @@ describe('components/Uploader', () => {
     input.element.files = dT.files
     input.trigger('change')
     clearXHR(wrapper)
+    await nextTick()
 
     let callbackData = { src: '/test2.jpg', success: true }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
