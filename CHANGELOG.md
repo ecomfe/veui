@@ -1,8 +1,14 @@
+## 2.0.0-alpha.1
+
+### 💡 主要变更
+
+* [^] 补充了 `veui-theme-dls-icons` 中缺失的图标。
+
 ## 2.0.0-alpha.0
 
 ### ⚠️ 非兼容性变更
 
-* [^] 用 Popper.js 替代了 Tether。`Overlay` 组件的 `options` prop（以及多个组件的 `overlay-options` prop）现在都对应于[Popper.js 的 `options` 参数](https://popper.js.org/popper-documentation.html#new_Popper_new)。`Overlay` 的 `position` prop 在之前的版本就已经兼容了 Popper.js 的语法，所以如果之前就以 Popper.js 风格进行描述，则无需调整。见 [#574](https://github.com/ecomfe/veui/pull/574)。
+* [^] 用 Popper.js 替代了 Tether。`Overlay` 组件的 `options` prop（以及多个组件的 `overlay-options` prop）现在都对应于 [Popper.js 的 `options` 参数](https://popper.js.org/popper-documentation.html#new_Popper_new)。`Overlay` 的 `position` prop 在之前的版本就已经兼容了 Popper.js 的语法，所以如果之前就以 Popper.js 风格进行描述，则无需调整。见 [#574](https://github.com/ecomfe/veui/pull/574)。
 * [^] `Input` 组件的 `before`/`after` slot 重命名为 `prepend`/`append`，新的 `before`/`after` 位置在输入框外部。并且新增了 `before-label`/`after-label` 两个 slot。见 [#502](https://github.com/ecomfe/veui/issues/502)。
 * [^] `NumberInput` 组件的 `before`/`after` slot 重命名为 `prepend`/`append`。见 [#502](https://github.com/ecomfe/veui/issues/502)。
 * [^] `Pagination` 组件根据新的设计不再支持总数显示。
@@ -15,7 +21,7 @@
 * [-] 移除 `Tooltip` 组件已废弃的 `custom` prop，请使用 `trigger: 'custom'` 代替。
 * [-] 移除 `Tree` 组件已废弃的 `expands` prop，请使用 `expanded` 代替。
 * [-] 移除 `Uploader` 组件已废弃的 `auto-upload` prop，请使用 `autoupload` prop 代替。
-* [-] `Uploader` 组件响应数据中的 `status` 及 `reason` 字段被移除，请使用 `success` 及 `message` 代替。见 [1.0.0-alpha.19](# 1.0.0-alpha.19) 的迁移指南。
+* [-] `Uploader` 组件响应数据中的 `status` 及 `reason` 字段被移除，请使用 `success` 及 `message` 代替。见 [1.0.0-alpha.19](#1.0.0-alpha.19) 的迁移指南。
 
 ### 💡 主要变更
 

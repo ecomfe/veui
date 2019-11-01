@@ -1,5 +1,4 @@
 import 'veui-theme-dls-icons/times'
-import 'veui-theme-one-icons/plus-circle'
 import 'veui-theme-dls-icons/chevron-left'
 import 'veui-theme-dls-icons/chevron-right'
 import 'veui-theme-dls-icons/plus'
@@ -13,7 +12,7 @@ config.defaults(
   {
     icons: {
       remove: 'times',
-      add: 'plus-circle',
+      add: 'plus',
       prev: 'chevron-left',
       next: 'chevron-right',
       success: 'check-circle',
@@ -28,14 +27,7 @@ config.defaults(
         inherit: true
       },
       style: {
-        values: ['block'],
-        data: {
-          block: {
-            icons: {
-              add: 'plus'
-            }
-          }
-        }
+        values: ['block']
       }
     }
   },

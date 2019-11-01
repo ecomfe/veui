@@ -1,8 +1,8 @@
-import 'veui-theme-one-icons/upload'
+import 'veui-theme-dls-icons/upload'
 import 'veui-theme-dls-icons/times'
 import 'veui-theme-dls-icons/check'
-import 'veui-theme-one-icons/paperclip'
-import 'veui-theme-dls-icons/sync-alt'
+import 'veui-theme-dls-icons/file'
+import 'veui-theme-dls-icons/sync'
 import 'veui-theme-dls-icons/plus'
 import 'veui-theme-dls-icons/exclamation-circle'
 import config from 'veui/managers/config'
@@ -13,8 +13,8 @@ config.defaults(
       upload: 'upload',
       clear: 'times',
       success: 'check',
-      redo: 'sync-alt',
-      file: 'paperclip',
+      redo: 'sync',
+      file: 'file',
       add: 'plus',
       alert: 'exclamation-circle'
     },

@@ -1,12 +1,12 @@
-import 'veui-theme-one-icons/sort-up'
-import 'veui-theme-one-icons/sort-down'
+import 'veui-theme-dls-icons/arrow-up'
+import 'veui-theme-dls-icons/arrow-down'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      asc: 'sort-up',
-      desc: 'sort-down'
+      asc: 'arrow-up',
+      desc: 'arrow-down'
     }
   },
   'sorter'

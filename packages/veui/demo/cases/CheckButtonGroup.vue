@@ -57,7 +57,7 @@
 import { CheckButtonGroup, Checkbox, Icon } from 'veui'
 import 'veui-theme-dls-icons/check'
 import 'veui-theme-dls-icons/times'
-import 'veui-theme-dls-icons/sync-alt'
+import 'veui-theme-dls-icons/sync'
 import 'veui-theme-one-icons/edit'
 
 export default {
@@ -111,8 +111,8 @@ export default {
           icon: 'times'
         },
         {
-          value: 'sync-alt',
-          icon: 'sync-alt'
+          value: 'sync',
+          icon: 'sync'
         },
         {
           value: 'edit',
