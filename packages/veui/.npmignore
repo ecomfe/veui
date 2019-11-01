@@ -1,5 +1,6 @@
 .*
 *.config.js
+*.conf.js
 build
 config
 demo
