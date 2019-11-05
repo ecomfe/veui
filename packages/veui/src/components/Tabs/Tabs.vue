@@ -50,7 +50,7 @@
                 $event.target === $refs[`tab-${tab.name}`][0] &&
                 !tab.disabled
               ) {
-                setActive({ i })
+                setActive({ index: i })
               }
             }
           "
