@@ -44,11 +44,16 @@
             'veui-tabs-item-active': i === localIndex,
             'veui-tabs-item-moving': itemMoving
           }"
-          @click="$event => {
-            if ($event.target === $refs[`tab-${tab.name}`][0] && !tab.disabled) {
-              setActive({ i })
+          @click="
+            $event => {
+              if (
+                $event.target === $refs[`tab-${tab.name}`][0] &&
+                !tab.disabled
+              ) {
+                setActive({ index: i });
+              }
             }
-          }"
+          "
         >
           <slot
             name="tab-item"
@@ -120,13 +125,13 @@
           type="button"
           class="veui-tabs-operator"
           :aria-label="t('add')"
-          :disabled="max != null && items.length >= max || removing"
+          :disabled="(max != null && items.length >= max) || removing"
           @click="$emit('add')"
         >
           <veui-icon :name="icons.add"/>
           <slot name="tabs-extra-label">
             <span class="veui-tabs-extra-label">
-              {{ t('addTab') }}
+              {{ t("addTab") }}
             </span>
           </slot>
         </button>
