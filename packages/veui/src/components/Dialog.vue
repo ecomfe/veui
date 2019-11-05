@@ -151,15 +151,15 @@ export default {
     }
   },
   methods: {
-    dragReady (handle) {
-      this.dragHandle = handle
+    dragReady ({ reset }) {
+      this.resetDrag = reset
     },
     resetPosition () {
-      if (!this.dragHandle) {
+      if (!this.resetDrag) {
         throw new Error('The dialog is not ready for drag.')
       }
 
-      this.dragHandle.reset()
+      this.resetDrag()
     },
     focus () {
       let { overlay } = this.$refs

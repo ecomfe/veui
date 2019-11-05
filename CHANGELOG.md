@@ -1,3 +1,28 @@
+## 1.0.0-alpha.32
+
+### ⚠️ 非兼容性变更
+
+* [^] `Select`/`Input`/`Checkbox`/`Radio`/`Switch` 组件现在不会在外部数据发生变化后触发更新时抛出 `input` 或 `change` 事件。当需要始终同步数据时，则需使用 `v-model` 进行绑定。
+
+### 💡 主要变更
+
+* [^] `outside` 指令判断元素位置时增加了 Portal 逻辑的支持，如果 Portal 入口在指定范围内，则被其移动的元素也将视为在指定范围内。
+
+### 🐞 问题修复
+
+* [^] 修复 `Uploader` 组件在 `iframe` 模式下，提交过程中被销毁时没有正确移除 `<iframe>` 和 `<form>` 的情况。
+
+## 1.0.0-alpha.31
+
+### ⚠️ 非兼容性变更
+
+* [^] 修正 `Uploader` 组件中 `file`/`uploading`/`failure` 三个作用域插槽参数。由 `{ file: { name, src, status, index } }` 修正为 `{ name, src, status, index }`。
+
+### 💡 主要变更
+
+* [+] `drag` 指令现在仅在鼠标左键按下时才触发拖动。
+* [+] `drag` 指令的 `dragend` 回调参数中新增 `cancel` 方法，可用来撤消最近一次拖动（恢复到 `dragstart` 之前的位置）。
+
 ## 1.0.0-alpha.30
 
 ### 💡 主要变更

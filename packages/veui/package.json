@@ -1,6 +1,6 @@
 {
   "name": "veui",
-  "version": "1.0.0-alpha.30",
+  "version": "1.0.0-alpha.32",
   "description": "Baidu Enterprise UI for Vue.js.",
   "repository": "ecomfe/veui",
   "license": "MIT",
@@ -21,7 +21,8 @@
     "lodash": "^4.17.4",
     "resize-detector": "^0.1.6",
     "tether": "^1.4.5",
-    "vue-awesome": "^3.3.1"
+    "vue-awesome": "^3.3.1",
+    "vue-directive-normalizer": "^0.1.0"
   },
   "peerDependencies": {
     "vue": "^2.5.16"
@@ -43,7 +44,7 @@
     "babel-eslint": "^10.0.1",
     "babel-plugin-istanbul": "^5.1.4",
     "babel-plugin-lodash": "^3.3.4",
-    "babel-plugin-veui": "^1.0.0-alpha.30",
+    "babel-plugin-veui": "^1.0.0-alpha.32",
     "chai": "^4.2.0",
     "classlist-polyfill": "^1.2.0",
     "core-js": "^2.6.5",
@@ -66,11 +67,10 @@
     "node-dir": "^0.1.17",
     "promise-polyfill": "^8.1.0",
     "sinon": "^7.3.2",
-    "veui-loader": "^1.0.0-alpha.30",
-    "veui-theme-one": "^1.0.0-alpha.30",
-    "veui-theme-one-icons": "^1.0.0-alpha.30",
+    "veui-loader": "^1.0.0-alpha.32",
+    "veui-theme-one": "^1.0.0-alpha.32",
+    "veui-theme-one-icons": "^1.0.0-alpha.32",
     "vue": "^2.6.7",
-    "vue-directive-normalizer": "^0.1.0",
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.6.7"
   },

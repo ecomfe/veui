@@ -2,6 +2,7 @@ import { pick } from 'lodash'
 import TranslateHandler from '@/directives/drag/TranslateHandler'
 import config from '@/managers/config'
 import { mount } from '@vue/test-utils'
+import { normalizeTransform } from '../../../../utils'
 
 config.defaults({
   'drag.prefix': '@'
@@ -30,22 +31,10 @@ function createHandler (options = { targets: ['target'] }, style = '') {
   }
 }
 
-function transformEquals (t1, t2) {
-  let el1 = document.createElement('div')
-  let el2 = document.createElement('div')
-  el1.style.transform = t1
-  el2.style.transform = t2
-  document.body.appendChild(el1)
-  document.body.appendChild(el2)
-  let equals =
-    getComputedStyle(el1).transform === getComputedStyle(el2).transform
-  el1.parentElement.removeChild(el1)
-  el2.parentElement.removeChild(el2)
-  return equals
-}
-
 function assertTransform (el, transform) {
-  expect(transformEquals(el.style.transform, transform)).to.equal(true)
+  expect(normalizeTransform(el.style.transform)).to.equal(
+    normalizeTransform(transform)
+  )
 }
 
 describe('directives/drag/TranslateHandler', () => {

@@ -61,7 +61,11 @@ function getOptions (binding, vnode) {
   // 但是没有完整的 top 、 left 、 width 、 height 属性，
   // 就要看看用 containment 能不能选出 DOM Element 了。
   if (!isSpecialSyntax(containment) && !isRect(containment)) {
-    options.containment = get(getNodes(containment, vnode.context), '[0]', null)
+    options.containment = get(
+      getNodes(containment, vnode.context),
+      '[0]',
+      null
+    )
   }
 
   return options
@@ -102,15 +106,15 @@ function refresh (el, binding, vnode) {
       handler,
 
       mousedownHandler (event) {
-        if (!options.draggable) {
+        if (!options.draggable || event.button !== 0) {
           return
         }
 
         let { clientX, clientY } = event
         dragData.initX = clientX
         dragData.initY = clientY
-        contextComponent.$emit('dragstart', { event })
         handler.start({ event })
+        contextComponent.$emit('dragstart', { event })
         options.dragstart({ event })
 
         function selectStartHandler (e) {
@@ -124,22 +128,35 @@ function refresh (el, binding, vnode) {
             distanceY: clientY - dragData.initY,
             event
           }
-          contextComponent.$emit('drag', dragParams)
           handler.drag(dragParams)
+          contextComponent.$emit('drag', dragParams)
           options.drag(dragParams)
         }
 
         function mouseupHandler (event) {
           let { clientX, clientY } = event
 
+          let cancelled = false
           let dragParams = {
             distanceX: clientX - dragData.initX,
             distanceY: clientY - dragData.initY,
+            cancel: () => {
+              cancelled = true
+            },
             event
           }
+          handler.drag(dragParams)
           contextComponent.$emit('dragend', dragParams)
-          handler.end(dragParams)
           options.dragend(dragParams)
+          handler.end(
+            cancelled
+              ? {
+                distanceX: 0,
+                distanceY: 0,
+                event
+              }
+              : dragParams
+          )
 
           window.removeEventListener('mousemove', mouseMoveHandler)
           window.removeEventListener('mouseup', mouseupHandler)

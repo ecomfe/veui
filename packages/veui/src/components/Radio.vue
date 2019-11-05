@@ -11,7 +11,7 @@
     ref="box"
     type="radio"
     v-bind="attrs"
-    :checked.prop="localChecked"
+    :checked="localChecked"
     @change="handleChange"
     v-on="boxListeners"
   >
@@ -75,33 +75,27 @@ export default {
       },
       immediate: true
     },
-    localChecked: {
-      handler (val) {
-        if (this.checked !== val) {
-          this.$emit('update:checked', val)
-        }
-
-        if (val) {
-          this.$emit('input', this.value)
-        }
-      },
-      immediate: true
-    },
     model: {
       handler (val) {
-        if (val != null) {
-          this.localChecked = val === null ? false : this.value === val
+        if (typeof val === 'undefined') {
+          return
         }
+
+        this.localChecked = val === null ? false : this.value === val
       },
       immediate: true
     }
   },
   methods: {
-    handleChange (e) {
-      this.localChecked = e.target.checked
-      this.$nextTick(() => {
-        this.$emit('change', this.localChecked)
-      })
+    handleChange () {
+      this.localChecked = true
+
+      if (this.checked === false) {
+        this.$emit('update:checked', true)
+      }
+
+      this.$emit('input', this.value)
+      this.$emit('change', true)
     },
     focus () {
       this.$refs.box.focus()
@@ -110,10 +104,8 @@ export default {
       if (this.realDisabled || this.realReadonly) {
         return
       }
-      this.localChecked = true
-      this.$nextTick(() => {
-        this.$emit('change', this.localChecked)
-      })
+
+      this.handleChange() // activate will only be called upon user interaction
       this.focus()
     }
   }

@@ -45,4 +45,55 @@ describe('components/Radio', () => {
     wrapper.find('input').element.checked = true
     wrapper.find('input').trigger('change')
   })
+
+  it('should support v-model binding to multiple radios', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-radio': Radio
+        },
+        data () {
+          return {
+            group: 'A'
+          }
+        },
+        template: `<div>
+            <veui-radio v-model="group" value="A"> A </veui-radio>
+            <veui-radio v-model="group" value="B"> B </veui-radio>
+            <veui-radio v-model="group" value="C"> C </veui-radio>
+          </div>`
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+
+    let boxes = wrapper.findAll('input')
+    expect(boxes.at(0).element.checked).to.equal(true)
+    expect(boxes.at(2).element.checked).to.equal(false)
+
+    boxes.at(0).element.checked = false
+    boxes.at(1).element.checked = true
+    boxes.at(1).trigger('change')
+
+    await vm.$nextTick()
+    boxes.at(1).element.checked = false
+    boxes.at(2).element.checked = true
+    boxes.at(2).trigger('change')
+
+    await vm.$nextTick()
+    expect(vm.group).to.equal('C')
+
+    vm.group = 'B'
+
+    await vm.$nextTick()
+    expect(boxes.at(0).element.checked).to.equal(false)
+    expect(boxes.at(1).element.checked).to.equal(true)
+    expect(boxes.at(2).element.checked).to.equal(false)
+
+    wrapper.destroy()
+  })
 })
