@@ -30,5 +30,7 @@ names.forEach(function (name) {
   indexModule += `import './${name}'\n`
 })
 
-fs.writeFileSync(ICON_PATH + '/index.js', indexModule)
+fs.writeFileSync(path.join(ICON_PATH, 'index.js'), indexModule)
 console.log(names.length + ' icon modules generated.')
+
+fs.writeFileSync(path.join(ICON_PATH, 'icon-names.json'), JSON.stringify(names, null, '  '))

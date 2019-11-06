@@ -22,6 +22,7 @@
 import bus from '../bus'
 import { Icon } from 'veui'
 import 'veui-theme-dls-icons'
+import icons from 'veui-theme-dls-icons/icon-names.json'
 
 export default {
   name: 'icon-demo',
@@ -30,7 +31,7 @@ export default {
   },
   data () {
     return {
-      icons: Object.keys(Icon.icons).sort((a, b) => (a > b ? 1 : -1))
+      icons: icons.sort((a, b) => (a > b ? 1 : -1))
     }
   },
   mounted () {
