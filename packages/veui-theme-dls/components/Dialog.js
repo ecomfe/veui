@@ -14,7 +14,7 @@ config.defaults(
         inherit: true
       },
       dimension: {
-        values: ['narrow', 'medium', 'wide', 'full', 'auto'],
+        values: ['narrow', 'medium', 'wide', 'fullscreen', 'auto'],
         default: 'medium'
       }
     },

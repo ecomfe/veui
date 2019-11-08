@@ -27,6 +27,7 @@
     display: flex;
     flex-direction: column;
     background: @dls-dialog-background-color;
+    padding-bottom: @dls-dialog-padding-y;
     .veui-position-center();
     max-height: @dls-dialog-max-height;
     overflow-y: auto;
@@ -49,7 +50,7 @@
       width: @dls-dialog-width-wide;
     }
 
-    [ui~="full"] & {
+    [ui~="fullscreen"] & {
       .fixed(0);
       width: auto;
       max-height: none;
@@ -57,8 +58,8 @@
       border-radius: 0;
     }
 
-    [ui~="full"].@{veui-prefix}-overlay-enter &,
-    [ui~="full"].@{veui-prefix}-overlay-leave-to & {
+    [ui~="fullscreen"].@{veui-prefix}-overlay-enter &,
+    [ui~="fullscreen"].@{veui-prefix}-overlay-leave-to & {
       transform: scale(0.98);
     }
 
@@ -106,7 +107,7 @@
             @dls-dialog-close-icon-min-size
           );
 
-          [ui~="full"] & {
+          [ui~="fullscreen"] & {
             .dls-icon-size(
               @dls-dialog-close-icon-size-fullscreen,
               @dls-dialog-close-icon-min-size
@@ -122,6 +123,7 @@
       font-size: @dls-dialog-body-font-size-m;
       line-height: @dls-dialog-body-line-height;
       color: @dls-dialog-body-font-color;
+      overflow: auto;
 
       [ui~="s"] & {
         font-size: @dls-dialog-body-font-size-s;
@@ -129,8 +131,7 @@
     }
 
     &-foot {
-      padding: @dls-dialog-action-spacing-before @dls-dialog-padding-x
-        @dls-dialog-padding-y;
+      padding: @dls-dialog-action-spacing-before @dls-dialog-padding-x 0;
 
       .@{veui-prefix}-button + .@{veui-prefix}-button {
         margin-left: @dls-dialog-action-content-spacing;

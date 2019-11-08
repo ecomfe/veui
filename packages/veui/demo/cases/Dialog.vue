@@ -6,7 +6,6 @@
       overlay-class="test demo-dialog-standard-dialog"
       :open.sync="modalDialogVisible"
       title="Dialog Title"
-      ui="full"
       modal
     >
       <p>content area</p>
@@ -18,6 +17,40 @@
       Open a modal dialog box
     </veui-button>
 
+    <veui-dialog
+      overlay-class="test demo-dialog-standard-dialog"
+      :open.sync="fullscreenDialogVisible"
+      title="Dialog Title"
+      modal
+      ui="fullscreen"
+    >
+      <p>content area</p>
+    </veui-dialog>
+    <veui-button
+      ui="primary"
+      @click="fullscreenDialogVisible = !fullscreenDialogVisible"
+    >
+      Open a fullscreen dialog box
+    </veui-button>
+
+    <veui-dialog
+      overlay-class="test demo-dialog-standard-dialog auto-dialog-standard-dialog"
+      :open.sync="autoDialogVisible"
+      modal
+      outside-closable
+      ui="auto"
+      footless
+    >
+      <textarea class="resizable"/>
+    </veui-dialog>
+    <veui-button
+      ui="primary"
+      @click="autoDialogVisible = !autoDialogVisible"
+    >
+      Open an footless dialog box with auto dimension
+    </veui-button>
+  </section>
+  <section>
     <veui-dialog
       overlay-class="test demo-dialog-standard-dialog"
       :open.sync="titlelessDialogVisible"
@@ -384,6 +417,8 @@ export default {
   data () {
     return {
       modalDialogVisible: false,
+      fullscreenDialogVisible: false,
+      autoDialogVisible: false,
       titlelessDialogVisible: false,
       nonModalDialogVisible: false,
       draggableDialog1Visible: false,
@@ -509,14 +544,13 @@ section {
 }
 
 .demo-dialog {
-  .svg {
-    width: 20px;
-  }
   .veui-button {
     margin-right: 10px;
   }
+
   &-standard-dialog .veui-dialog-content {
     width: 540px;
+
     &-body {
       border: 1px dashed #999;
       height: 280px;
@@ -527,6 +561,19 @@ section {
         margin: 0;
       }
     }
+  }
+}
+
+.auto-dialog-standard-dialog {
+  .veui-dialog-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100px;
+  }
+
+  .resizable {
+    resize: both;
   }
 }
 </style>

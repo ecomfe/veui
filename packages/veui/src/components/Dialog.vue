@@ -61,7 +61,10 @@
     <div :class="$c('dialog-content-body')">
       <slot :close="close"/>
     </div>
-    <div :class="$c('dialog-content-foot')">
+    <div
+      v-if="!footless"
+      :class="$c('dialog-content-foot')"
+    >
       <slot
         name="foot"
         :close="close"
@@ -135,7 +138,11 @@ export default {
       default: false
     },
     priority: Number,
-    beforeClose: Function
+    beforeClose: Function,
+    footless: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
