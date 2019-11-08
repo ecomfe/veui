@@ -1,7 +1,7 @@
 @import "../lib.less";
 @import (reference) "../dropdown.less";
 
-.@{veui-prefix}-searchbox {
+.@{veui-prefix}-search-box {
   display: inline-flex;
   position: relative;
   color: @dls-input-font-color;
@@ -22,7 +22,7 @@
       .@{veui-prefix}-input-clear {
         margin-right: 0;
       }
-      .@{veui-prefix}-searchbox-action-icon {
+      .@{veui-prefix}-search-box-action-icon {
         margin-left: @dls-input-content-spacing;
       }
     }
@@ -53,8 +53,8 @@
       overflow: hidden;
     }
 
-    .@{veui-prefix}-searchbox-action,
-    .@{veui-prefix}-searchbox-action-icon {
+    .@{veui-prefix}-search-box-action,
+    .@{veui-prefix}-search-box-action-icon {
       cursor: not-allowed;
       color: @dls-input-font-color-read-only;
     }
@@ -69,15 +69,15 @@
       overflow: hidden;
     }
 
-    .@{veui-prefix}-searchbox-action,
-    .@{veui-prefix}-searchbox-action-icon {
+    .@{veui-prefix}-search-box-action,
+    .@{veui-prefix}-search-box-action-icon {
       cursor: not-allowed;
       color: @dls-input-font-color-disabled;
     }
   }
 
   &:not(.@{veui-prefix}-disabled):not(.@{veui-prefix}-readonly) {
-    .@{veui-prefix}-searchbox-action:hover {
+    .@{veui-prefix}-search-box-action:hover {
       color: @dls-input-font-color;
     }
   }
@@ -115,7 +115,7 @@
       .@{veui-prefix}-input-main {
         .border-right-radius(0);
 
-        .@{veui-prefix}-searchbox-action {
+        .@{veui-prefix}-search-box-action {
           display: none;
         }
       }
@@ -123,8 +123,8 @@
         .border-left-radius(0);
         margin-left: -1px;
 
-        .@{veui-prefix}-searchbox-action {
-          .@{veui-prefix}-searchbox-action-button {
+        .@{veui-prefix}-search-box-action {
+          .@{veui-prefix}-search-box-action-button {
             display: block;
             .border-left-radius(0);
           }

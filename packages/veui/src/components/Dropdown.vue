@@ -74,10 +74,10 @@
       :aria-expanded="expanded"
       @keydown="handleKeydown"
     >
-      <veui-searchbox
+      <veui-search-box
         v-if="searchable"
         v-model="keyword"
-        :class="$c('dropdown-searchbox')"
+        :class="$c('dropdown-search-box')"
         :ui="uiParts.search"
         :placeholder="placeholder"
         clearable
@@ -161,7 +161,7 @@
 import Icon from './Icon'
 import Button from './Button'
 import Overlay from './Overlay'
-import Searchbox from './Searchbox'
+import SearchBox from './SearchBox'
 import OptionGroup from './Select/OptionGroup'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
@@ -190,7 +190,7 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button,
     'veui-overlay': Overlay,
-    'veui-searchbox': Searchbox,
+    'veui-search-box': SearchBox,
     'veui-option-group': OptionGroup
   },
   mixins: [
@@ -239,7 +239,7 @@ export default {
     },
     split: Boolean,
     searchable: Boolean,
-    placeholder: Searchbox.props.placeholder,
+    placeholder: SearchBox.props.placeholder,
     memoize: Boolean
   },
   data () {

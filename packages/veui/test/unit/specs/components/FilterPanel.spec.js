@@ -95,7 +95,7 @@ describe('components/FilterPanel', () => {
     wrapper.destroy()
   })
 
-  it('should not render searchbox when `searchable` was set to false', () => {
+  it('should not render search-box when `searchable` was set to false', () => {
     let wrapper = mount(FilterPanel, {
       propsData: {
         searchable: false
@@ -103,7 +103,7 @@ describe('components/FilterPanel', () => {
       sync: false
     })
 
-    expect(wrapper.find('.veui-searchbox').exists()).to.equal(false)
+    expect(wrapper.find('.veui-search-box').exists()).to.equal(false)
 
     wrapper.destroy()
   })

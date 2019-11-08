@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import Searchbox from '@/components/Searchbox'
+import SearchBox from '@/components/SearchBox'
 
 let datasource = [
   {
@@ -33,7 +33,7 @@ let cars = [
   }
 ]
 
-describe('components/Searchbox', () => {
+describe('components/SearchBox', () => {
   it('should handle selected prop with `null` value.', done => {
     let wrapper = mount({
       methods: {
@@ -45,9 +45,7 @@ describe('components/Searchbox', () => {
         }
       },
       render () {
-        return (
-          <Searchbox value={null} onInput={val => this.handleInput(val)} />
-        )
+        return <SearchBox value={null} onInput={val => this.handleInput(val)} />
       }
     })
 
@@ -58,7 +56,7 @@ describe('components/Searchbox', () => {
     let wrapper = mount(
       {
         components: {
-          'veui-searchbox': Searchbox
+          'veui-search-box': SearchBox
         },
         methods: {
           inputHandler (val) {
@@ -68,7 +66,7 @@ describe('components/Searchbox', () => {
             done()
           }
         },
-        template: `<veui-searchbox @input="inputHandler"/>`
+        template: `<veui-search-box @input="inputHandler"/>`
       },
       {
         sync: false
@@ -90,9 +88,9 @@ describe('components/Searchbox', () => {
           }
         },
         components: {
-          'veui-searchbox': Searchbox
+          'veui-search-box': SearchBox
         },
-        template: `<veui-searchbox overlayClass="test-overlay-class" :suggestions="suggestions" :suggestTrigger="suggestTrigger"/>`
+        template: `<veui-search-box overlayClass="test-overlay-class" :suggestions="suggestions" :suggestTrigger="suggestTrigger"/>`
       },
       {
         sync: false
@@ -118,7 +116,7 @@ describe('components/Searchbox', () => {
 
     vm.suggestTrigger = 'submit'
     await vm.$nextTick()
-    wrapper.find('.veui-searchbox-action').trigger('click')
+    wrapper.find('.veui-search-box-action').trigger('click')
     await vm.$nextTick()
     expect(suggestWrapper.element.style.display).to.not.equal('none')
 
@@ -147,9 +145,9 @@ describe('components/Searchbox', () => {
           }
         },
         components: {
-          'veui-searchbox': Searchbox
+          'veui-search-box': SearchBox
         },
-        template: `<veui-searchbox
+        template: `<veui-search-box
           overlayClass="test-overlay-class"
           :suggestions="suggestions"
           :suggestTrigger="suggestTrigger"
@@ -190,7 +188,7 @@ describe('components/Searchbox', () => {
   })
 
   it('should support other props correctly.', async () => {
-    let wrapper = mount(Searchbox, {
+    let wrapper = mount(SearchBox, {
       sync: false,
       propsData: {
         placeholder: 'content',
@@ -232,7 +230,7 @@ describe('components/Searchbox', () => {
           }
         },
         components: {
-          'veui-searchbox': Searchbox
+          'veui-search-box': SearchBox
         },
         methods: {
           suggestHandler (val) {
@@ -249,7 +247,7 @@ describe('components/Searchbox', () => {
             done()
           }
         },
-        template: `<veui-searchbox overlayClass="test-overlay-class" :suggestions="suggestions" @suggest="suggestHandler"/>`
+        template: `<veui-search-box overlayClass="test-overlay-class" :suggestions="suggestions" @suggest="suggestHandler"/>`
       },
       {
         sync: false
@@ -271,7 +269,7 @@ describe('components/Searchbox', () => {
           }
         },
         components: {
-          'veui-searchbox': Searchbox
+          'veui-search-box': SearchBox
         },
         methods: {
           selectHandler (item) {
@@ -279,7 +277,7 @@ describe('components/Searchbox', () => {
             expect(item.label).to.equal('cherry')
           }
         },
-        template: `<veui-searchbox v-model="value" replaceOnSelect overlayClass="test-overlay-class" :suggestions="suggestions" @select="selectHandler"/>`
+        template: `<veui-search-box v-model="value" replaceOnSelect overlayClass="test-overlay-class" :suggestions="suggestions" @select="selectHandler"/>`
       },
       {
         sync: false
@@ -304,7 +302,7 @@ describe('components/Searchbox', () => {
     let wrapper = mount(
       {
         components: {
-          'veui-searchbox': Searchbox
+          'veui-search-box': SearchBox
         },
         methods: {
           searchHandler (val) {
@@ -315,7 +313,7 @@ describe('components/Searchbox', () => {
             })
           }
         },
-        template: `<veui-searchbox @search="searchHandler"/>`
+        template: `<veui-search-box @search="searchHandler"/>`
       },
       {
         sync: false
@@ -326,7 +324,7 @@ describe('components/Searchbox', () => {
     input.element.value = 'box'
     input.trigger('input')
 
-    wrapper.find('.veui-searchbox-action').trigger('click')
+    wrapper.find('.veui-search-box-action').trigger('click')
   })
 
   it('should render customized suggestions & suggestions-before & suggestions-after slot correctly.', async () => {
@@ -338,10 +336,10 @@ describe('components/Searchbox', () => {
           }
         },
         components: {
-          'veui-searchbox': Searchbox
+          'veui-search-box': SearchBox
         },
         template: `
-          <veui-searchbox
+          <veui-search-box
             :suggestions="suggestions"
             suggestTrigger="submit"
             overlayClass="test-overlay-class"
@@ -354,7 +352,7 @@ describe('components/Searchbox', () => {
                 <template v-for="(suggestion, index) in props.suggestions">
                   <div
                     :key="index"
-                    class="veui-searchbox-suggestion-item"
+                    class="veui-search-box-suggestion-item"
                     @click="props.select(suggestion)"
                   >
                     <span>{{ suggestion.value }}</span>
@@ -365,7 +363,7 @@ describe('components/Searchbox', () => {
             <template slot="suggestions-after">
               <h3>ender</h3>
             </template>
-          </veui-searchbox>
+          </veui-search-box>
         `
       },
       {
@@ -373,7 +371,7 @@ describe('components/Searchbox', () => {
       }
     )
 
-    wrapper.find('.veui-searchbox-action').trigger('click')
+    wrapper.find('.veui-search-box-action').trigger('click')
     await wrapper.vm.$nextTick()
 
     expect(wrapper.find('.test-overlay-class h3').text()).to.equal('header')
@@ -384,7 +382,7 @@ describe('components/Searchbox', () => {
         .text()
     ).to.equal('ender')
 
-    let items = wrapper.findAll('.veui-searchbox-suggestion-item')
+    let items = wrapper.findAll('.veui-search-box-suggestion-item')
     expect(items.length).to.equal(4)
     expect(items.at(1).text()).to.equal('22')
 
@@ -400,10 +398,10 @@ describe('components/Searchbox', () => {
           }
         },
         components: {
-          'veui-searchbox': Searchbox
+          'veui-search-box': SearchBox
         },
         template: `
-          <veui-searchbox
+          <veui-search-box
             :suggestions="suggestions"
             suggestTrigger="focus"
             overlayClass="test-overlay-class"
@@ -411,7 +409,7 @@ describe('components/Searchbox', () => {
             <template slot="suggestion" slot-scope="suggestion">
               <span>{{ suggestion.value }}</span>
             </template>
-          </veui-searchbox>
+          </veui-search-box>
         `
       },
       {
@@ -438,10 +436,10 @@ describe('components/Searchbox', () => {
           }
         },
         components: {
-          'veui-searchbox': Searchbox
+          'veui-search-box': SearchBox
         },
         template: `
-          <veui-searchbox
+          <veui-search-box
             :suggestions="suggestions"
             suggestTrigger="focus"
             overlayClass="test-overlay-class"
@@ -452,7 +450,7 @@ describe('components/Searchbox', () => {
             <template slot="option-label" slot-scope="suggestion">
               <span class="custom-option-label-slot">{{ suggestion.value }}</span>
             </template>
-          </veui-searchbox>
+          </veui-search-box>
         `
       },
       {
@@ -475,7 +473,7 @@ describe('components/Searchbox', () => {
           }
         },
         components: {
-          'veui-searchbox': Searchbox
+          'veui-search-box': SearchBox
         },
         methods: {
           handleSearch (val) {
@@ -483,7 +481,7 @@ describe('components/Searchbox', () => {
           }
         },
         template: `
-          <veui-searchbox
+          <veui-search-box
             :suggestions="suggestions"
             suggestTrigger="focus"
             replace-on-select
@@ -496,7 +494,7 @@ describe('components/Searchbox', () => {
             <template slot="option-label" slot-scope="suggestion">
               <span class="custom-option-label-slot">{{ suggestion.label }}</span>
             </template>
-          </veui-searchbox>
+          </veui-search-box>
         `
       },
       {

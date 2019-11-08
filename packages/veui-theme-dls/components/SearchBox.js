@@ -1,4 +1,4 @@
-import 'veui-theme-one-icons/search'
+import 'veui-theme-dls-icons/search'
 import config from 'veui/managers/config'
 
 config.defaults(
@@ -7,17 +7,19 @@ config.defaults(
       search: 'search'
     },
     parts: {
-      button: 'primary'
+      button: 'primary',
+      search: 'icon'
     },
     ui: {
       style: {
-        values: ['primary']
+        values: ['normal', 'inline', 'strong'],
+        inherit: true
       },
       size: {
-        values: ['large', 'small'],
+        values: ['xs', 's', 'm', 'l'],
         inherit: true
       }
     }
   },
-  'search-box'
+  'searchbox'
 )

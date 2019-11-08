@@ -192,10 +192,6 @@
     "path": "Overlay.vue"
   },
   {
-    "name": "Pager",
-    "path": "Pager.js"
-  },
-  {
     "name": "Pagination",
     "path": "Pagination.vue"
   },
@@ -232,8 +228,8 @@
     "path": "Schedule.vue"
   },
   {
-    "name": "Searchbox",
-    "path": "Searchbox.vue"
+    "name": "SearchBox",
+    "path": "SearchBox.vue"
   },
   {
     "name": "Option",

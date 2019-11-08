@@ -12,7 +12,7 @@
     </slot>
   </h3>
   <div :class="$c('filter-panel-content')">
-    <veui-searchbox
+    <veui-search-box
       v-if="searchable"
       v-model="keyword"
       :ui="uiParts.search"
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import Searchbox from './Searchbox'
+import SearchBox from './SearchBox'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
@@ -52,7 +52,7 @@ import { includes, debounce, cloneDeep } from 'lodash'
 export default {
   name: 'veui-filter-panel',
   components: {
-    'veui-searchbox': Searchbox
+    'veui-search-box': SearchBox
   },
   mixins: [prefix, ui, i18n],
   props: {
