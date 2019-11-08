@@ -8,7 +8,7 @@
 
   @line-height: 36px;
 
-  @searchbox-bottom-gap: 6px;
+  @search-box-bottom-gap: 6px;
 
   @no-data-top-gap: 12px;
 
@@ -26,8 +26,8 @@
     font-size: @veui-font-size-normal;
   }
 
-  .veui-searchbox {
-    .margin(0, @panel-inner-horizontal-gap, @searchbox-bottom-gap);
+  .veui-search-box {
+    .margin(0, @panel-inner-horizontal-gap, @search-box-bottom-gap);
 
     @other-width: @panel-inner-horizontal-gap * 2;
     width: ~"calc(100% - @{other-width})";
@@ -43,7 +43,7 @@
     height: ~"calc(100% - @{other-height})";
 
     &-main {
-      @other-height: 32px + @searchbox-bottom-gap;
+      @other-height: 32px + @search-box-bottom-gap;
       height: ~"calc(100% - @{other-height})";
       padding: 2px 2px 0;
       overflow-y: auto;

@@ -189,7 +189,7 @@
 
       <veui-fieldset class="right">
         <veui-field>
-          <veui-searchbox placeholder="请输入搜索内容"/>
+          <veui-search-box placeholder="请输入搜索内容"/>
         </veui-field>
       </veui-fieldset>
     </veui-form>
@@ -218,7 +218,7 @@
 
       <veui-fieldset class="right">
         <veui-field>
-          <veui-searchbox
+          <veui-search-box
             ui="alt"
             placeholder="请输入搜索内容"
           />
@@ -616,7 +616,7 @@ import {
   Checkbox,
   CheckboxGroup,
   RadioGroup,
-  Searchbox,
+  SearchBox,
   RegionPicker,
   Radio,
   Icon,
@@ -2726,7 +2726,7 @@ export default {
     'veui-checkboxgroup': CheckboxGroup,
     'veui-radio': Radio,
     'veui-radiogroup': RadioGroup,
-    'veui-searchbox': Searchbox,
+    'veui-search-box': SearchBox,
     'veui-region-picker': RegionPicker,
     'veui-icon': Icon,
     'veui-slider': Slider,
@@ -3018,7 +3018,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-dls/lib.less";
+@import '~veui-theme-dls/lib.less';
 
 .veui-form-demo {
   h2 {
@@ -3031,7 +3031,7 @@ export default {
 
   margin-bottom: 50px;
 
-  .veui-form[ui~="inline"] + .veui-form[ui~="inline"] {
+  .veui-form[ui~='inline'] + .veui-form[ui~='inline'] {
     margin-top: 30px;
   }
 
@@ -3053,7 +3053,7 @@ export default {
     &::before {
       position: absolute;
       left: -80px;
-      content: "⇒";
+      content: '⇒';
       line-height: 32px;
       font-size: 30px;
       color: #999;
@@ -3089,11 +3089,11 @@ export default {
     margin-top: 60px;
     margin-left: 120px;
 
-    [class*="veui"] {
+    [class*='veui'] {
       margin-left: 10px;
     }
 
-    [class*="veui"]:first-child {
+    [class*='veui']:first-child {
       margin-left: 0;
     }
   }

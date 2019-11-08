@@ -23,7 +23,7 @@ import Alert from './Alert'
 import AlertBox from './AlertBox'
 import Tabs from './Tabs'
 import Switch from './Switch'
-import Searchbox from './Searchbox'
+import SearchBox from './SearchBox'
 import Steps from './Steps'
 import RegionPicker from './RegionPicker'
 import ButtonGroup from './ButtonGroup'
@@ -69,8 +69,7 @@ export default [
   {
     path: '/autocomplete',
     name: 'Autocomplete',
-    component: Autocomplete,
-    disabled: true
+    component: Autocomplete
   },
   {
     path: '/badge',
@@ -233,9 +232,9 @@ export default [
     disabled: true
   },
   {
-    path: '/searchbox',
-    name: 'Searchbox',
-    component: Searchbox
+    path: '/search-box',
+    name: 'SearchBox',
+    component: SearchBox
   },
   {
     path: '/select',
