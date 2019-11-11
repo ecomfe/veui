@@ -848,24 +848,41 @@ export default {
         }
       )
     },
-    async validateFile (file) {
+    validateFile (file) {
       let typeValidation = this.validateFileType(file.name)
       this.error.typeInvalid = !typeValidation
 
       let sizeValidation = this.validateFileSize(file.size)
       this.error.sizeInvalid = !sizeValidation
 
-      let customValidation = true
-      if (this.validator) {
-        let validationResult = await this.validator(file)
-        customValidation = validationResult.valid
-        if (!customValidation) {
-          this.customValidationMessage = validationResult.message
-        }
-      }
-      this.error.customValidationInvalid = !customValidation
+      return new Promise(resolve => {
+        if (this.validator) {
+          let validationResult = this.validator(file)
+          let customValidation = true
 
-      return typeValidation && sizeValidation && customValidation
+          if (typeof validationResult.then === 'function') {
+            validationResult.then(result => {
+              customValidation = this.handleCustomValidationResult(result)
+              resolve(typeValidation && sizeValidation && customValidation)
+            })
+          } else {
+            customValidation = this.handleCustomValidationResult(
+              validationResult
+            )
+            resolve(typeValidation && sizeValidation && customValidation)
+          }
+        } else {
+          resolve(typeValidation && sizeValidation)
+        }
+      })
+    },
+    handleCustomValidationResult (result) {
+      let valid = result.valid
+      if (!valid) {
+        this.customValidationMessage = result.message
+      }
+      this.error.customValidationInvalid = !valid
+      return valid
     },
     validateFileType (filename) {
       if (!this.accept) {
