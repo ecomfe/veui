@@ -32,10 +32,30 @@
     <h2>可移除标签</h2>
     <div>
       <veui-tag
+        v-for="(team, index) in teams2"
+        :key="team"
+        :type="types[index]"
+        closable
+        @close="handleClose(team)"
+      >
+        {{ team }}
+      </veui-tag>
+      <veui-tag
+        ui="borderless"
+        closable
+      >borderless</veui-tag>
+    </div>
+  </section>
+
+  <section>
+    <h2>可移除标签（小）</h2>
+    <div>
+      <veui-tag
         v-for="(team, index) in teams"
         :key="team"
         :type="types[index]"
         closable
+        ui="s"
         @close="handleClose(team)"
       >
         {{ team }}
@@ -114,6 +134,7 @@ export default {
   data () {
     return {
       teams: ['湖人', '火箭', '猛龙', '马刺', '勇士'],
+      teams2: ['湖人', '火箭', '猛龙', '马刺', '勇士'],
       types: ['default', 'info', 'success', 'warning', 'error'],
       sizes: ['s', 'm', 'default'],
       selected: false
