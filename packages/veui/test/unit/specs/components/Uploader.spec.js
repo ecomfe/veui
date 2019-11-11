@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Uploader from '@/components/Uploader'
+import { wait } from '../../../utils'
 
 describe('components/Uploader', () => {
   it('should handle value prop with `null` value.', () => {
@@ -131,14 +132,6 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  function nextTick () {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve()
-      }, 0)
-    })
-  }
-
   it('should validate file with custom async validator correctly.', async () => {
     let wrapper = mount(Uploader, {
       propsData: {
@@ -166,7 +159,7 @@ describe('components/Uploader', () => {
     clearXHR(wrapper)
 
     // change事件的回调里有异步，这里等待一下
-    await nextTick()
+    await wait(0)
 
     let validatedFiles = wrapper.vm.$data.fileList
     expect(validatedFiles.length).to.equal(1)
@@ -188,7 +181,7 @@ describe('components/Uploader', () => {
     input.element.files = dT.files
     input.trigger('change')
     clearXHR(wrapper)
-    await nextTick()
+    await wait(0)
 
     expect(wrapper.emitted().statuschange[1][0]).to.equal('uploading')
 
@@ -200,7 +193,7 @@ describe('components/Uploader', () => {
     input.element.files = dT.files
     input.trigger('change')
     clearXHR(wrapper)
-    await nextTick()
+    await wait(0)
 
     expect(wrapper.emitted().statuschange[3][0]).to.equal('uploading')
     wrapper.destroy()
@@ -220,7 +213,7 @@ describe('components/Uploader', () => {
     input.element.files = dT.files
     input.trigger('change')
     clearXHR(wrapper)
-    await nextTick()
+    await wait(0)
 
     let callbackData = { src: '/test2.jpg', id: 6, success: true }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
@@ -243,7 +236,7 @@ describe('components/Uploader', () => {
     input.element.files = dT.files
     input.trigger('change')
     clearXHR(wrapper)
-    await nextTick()
+    await wait(0)
 
     callbackData = { success: false, message: 'image too large' }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
@@ -273,7 +266,7 @@ describe('components/Uploader', () => {
     input.element.files = dT.files
     input.trigger('change')
     clearXHR(wrapper)
-    await nextTick()
+    await wait(0)
 
     wrapper.vm.submit()
 
@@ -314,7 +307,7 @@ describe('components/Uploader', () => {
     dT.items.add(new File(['foo'], 'test.jpg'))
     input.element.files = dT.files
     input.trigger('change')
-    await nextTick()
+    await wait(0)
 
     expect(wrapper.emitted().change[0][0]).to.deep.equal([
       { name: 'test.jpg', src: '/test.jpg' }
@@ -502,7 +495,7 @@ describe('components/Uploader', () => {
     input.element.files = dT.files
     input.trigger('change')
     clearXHR(wrapper)
-    await nextTick()
+    await wait(0)
 
     let callbackData = { src: '/test2.jpg', success: true }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
