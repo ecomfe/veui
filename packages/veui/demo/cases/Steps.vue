@@ -90,7 +90,7 @@ export default {
       steps: [
         { label: 'Step 1', desc: '填写信息', to: '/Tabs' },
         { label: 'Step 2', desc: '验证身份' },
-        { label: 'Step 3', desc: '填写地址', status: 'error' },
+        { label: 'Step 3', desc: '填写地址', status: 'error', to: '/Button' },
         { label: 'Step 4', desc: '填写资料', status: 'error' },
         { label: 'Step 5', desc: '' }
       ],
