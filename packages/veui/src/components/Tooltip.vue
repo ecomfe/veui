@@ -188,6 +188,7 @@ export default {
           {...{ directives }}
         >
           <div class={this.$c('tooltip-content')}>{this.$slots.default}</div>
+          <div class={this.$c('tooltip-arrow')} />
         </div>
       </veui-overlay>
     )

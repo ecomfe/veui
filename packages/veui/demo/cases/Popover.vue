@@ -13,7 +13,7 @@
             ui="aux"
             @mouseenter.native="
               show({
-                position: 'top left',
+                position: 'top-start',
                 target: $refs['topLeftHover']
               })
             "
@@ -37,7 +37,7 @@
             ui="aux"
             @mouseenter.native="
               show({
-                position: 'top right',
+                position: 'top-end',
                 target: 'topRightHover'
               })
             "
@@ -51,7 +51,7 @@
             ui="aux"
             @mouseenter.native="
               show({
-                position: 'left top',
+                position: 'left-start',
                 target: 'leftTopHover'
               })
             "
@@ -75,7 +75,7 @@
             ui="aux"
             @mouseenter.native="
               show({
-                position: 'left bottom',
+                position: 'left-end',
                 target: 'leftBottomHover'
               })
             "
@@ -89,7 +89,7 @@
             ui="aux"
             @mouseenter.native="
               show({
-                position: 'right top',
+                position: 'right-start',
                 target: 'rightTopHover'
               })
             "
@@ -113,7 +113,7 @@
             ui="aux"
             @mouseenter.native="
               show({
-                position: 'right bottom',
+                position: 'right-end',
                 target: 'rightBottomHover'
               })
             "
@@ -127,7 +127,7 @@
             ui="aux"
             @mouseenter.native="
               show({
-                position: 'bottom left',
+                position: 'bottom-start',
                 target: 'BottomLeftHover'
               })
             "
@@ -151,7 +151,7 @@
             ui="aux"
             @mouseenter.native="
               show({
-                position: 'bottom right',
+                position: 'bottom-end',
                 target: 'BottomRightHover'
               })
             "
@@ -183,7 +183,7 @@
             ui="aux"
             @click.native="
               clickShow({
-                clickPosition: 'top left',
+                clickPosition: 'top-start',
                 clickTarget: 'topLeftClick'
               })
             "
@@ -207,7 +207,7 @@
             ui="aux"
             @click.native="
               clickShow({
-                clickPosition: 'top right',
+                clickPosition: 'top-end',
                 clickTarget: 'topRightClick'
               })
             "
@@ -221,7 +221,7 @@
             ui="aux"
             @click.native="
               clickShow({
-                clickPosition: 'left top',
+                clickPosition: 'left-start',
                 clickTarget: 'leftTopClick'
               })
             "
@@ -245,7 +245,7 @@
             ui="aux"
             @click.native="
               clickShow({
-                clickPosition: 'left bottom',
+                clickPosition: 'left-end',
                 clickTarget: 'leftBottomClick'
               })
             "
@@ -259,7 +259,7 @@
             ui="aux"
             @click.native="
               clickShow({
-                clickPosition: 'right top',
+                clickPosition: 'right-start',
                 clickTarget: 'rightTopClick'
               })
             "
@@ -283,7 +283,7 @@
             ui="aux"
             @click.native="
               clickShow({
-                clickPosition: 'right bottom',
+                clickPosition: 'right-end',
                 clickTarget: 'rightBottomClick'
               })
             "
@@ -297,7 +297,7 @@
             ui="aux"
             @click.native="
               clickShow({
-                clickPosition: 'bottom left',
+                clickPosition: 'bottom-start',
                 clickTarget: 'BottomLeftClick'
               })
             "
@@ -321,7 +321,7 @@
             ui="aux"
             @click.native="
               clickShow({
-                clickPosition: 'bottom right',
+                clickPosition: 'bottom-end',
                 clickTarget: 'BottomRightClick'
               })
             "
