@@ -139,18 +139,18 @@
       ui="medium"
       draggable
     >
-      <p>
+      <div>
         Drag the current dialog box to the right and open the first draggable
         dialog.
-      </p>
-      <p>Keep the two dialog have some parts overlapped.</p>
-      <p>
+      </div>
+      <div>Keep the two dialog have some parts overlapped.</div>
+      <div>
         You'll see the first draggable dialog is higher than the second one.
-      </p>
-      <p>
+      </div>
+      <div>
         You can bring the second dialog to the top layer by clicking the
         second dialog.
-      </p>
+      </div>
     </veui-dialog>
     <veui-button
       ui="primary"

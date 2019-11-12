@@ -37,14 +37,14 @@
 
       .@{veui-prefix}-alert-box-titleless & {
         height: dls-line-height(
-          @dls-dialog-body-line-height-contextual,
+          @dls-dialog-body-line-height,
           @dls-dialog-body-font-size-m
         );
         font-size: @dls-dialog-body-font-size-m;
 
         [ui~="s"]& {
           height: dls-line-height(
-            @dls-dialog-body-line-height-contextual,
+            @dls-dialog-body-line-height,
             @dls-dialog-body-font-size-s
           );
           font-size: @dls-dialog-body-font-size-s;
@@ -69,7 +69,7 @@
   }
 
   &-content {
-    line-height: @dls-dialog-body-line-height-contextual;
+    line-height: @dls-dialog-body-line-height;
   }
 
   .@{veui-prefix}-dialog-content-foot {
