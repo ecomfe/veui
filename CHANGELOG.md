@@ -4,6 +4,10 @@
 
 * [^] `Searchbox` 组件更名为 `SearchBox`。同时组件内部所有的 `class` 中的 `searchbox` 亦被更名为 `search-box`。如果在样式代码中进行过定制，请进行全局替换。
 
+### 💡 主要变更
+
+* [+] `Switch` 组件增加了 `on-label` 和 `off-label` prop 以及 `content` 作用域插槽，支持在内部输出提示文字或其它内容。
+
 ### 🐞 问题修复
 
 * [^] 修复 `Tabs` 组件有时为激活 tab 的操作设置了错误参数的问题。

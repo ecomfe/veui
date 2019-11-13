@@ -19,6 +19,15 @@
     v-on="boxListeners"
   >
   <div :class="$c('switch-switcher')">
+    <div
+      v-if="hasContent && !loading"
+      :class="$c('switch-text')"
+    >
+      <slot
+        name="content"
+        :on="localChecked"
+      >{{ contentLabel }}</slot>
+    </div>
     <div :class="$c('switch-button')">
       <veui-icon
         v-if="loading"
@@ -63,7 +72,9 @@ export default {
     },
     model: {},
     /* eslint-enable vue/require-prop-types */
-    checked: Boolean
+    checked: Boolean,
+    onLabel: String,
+    offLabel: String
   },
   data () {
     return {
@@ -82,6 +93,12 @@ export default {
     },
     labelListeners () {
       return pick(this.$listeners, MOUSE_EVENTS)
+    },
+    hasContent () {
+      return this.onLabel || this.offLabel || this.$scopedSlots.content
+    },
+    contentLabel () {
+      return this.localChecked ? this.onLabel : this.offLabel
     }
   },
   watch: {

@@ -48,6 +48,8 @@
     <veui-switch
       v-model="value2"
       :loading="loading"
+      on-label="开"
+      off-label="关"
     >
       勿扰模式
     </veui-switch>
@@ -65,18 +67,29 @@
       :checked="asyncValue"
       :loading="asyncLoading"
       @click.prevent="toggle"
-    >异步</veui-switch>
+    >
+      异步
+      <template
+        slot="content"
+        slot-scope="{ on }"
+      >
+        <veui-icon :name="on ? 'check' : 'times'"/>
+      </template>
+    </veui-switch>
   </section>
 </article>
 </template>
 
 <script>
-import { Switch } from 'veui'
+import { Switch, Icon } from 'veui'
+import 'veui-theme-dls-icons/check'
+import 'veui-theme-dls-icons/times'
 
 export default {
   name: 'switch-demo',
   components: {
-    'veui-switch': Switch
+    'veui-switch': Switch,
+    'veui-icon': Icon
   },
   data () {
     return {

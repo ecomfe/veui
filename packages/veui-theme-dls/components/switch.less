@@ -6,6 +6,7 @@
     @height: ~"dls-switch-height-@{size}";
     @thumb-size: ~"dls-switch-thumb-size-@{size}";
     @padding: ~"dls-switch-padding-@{size}";
+    @text-offset: dls-sum(@@height / 2, @@thumb-size / 2, @dls-padding-unit);
 
     .@{veui-prefix}-switch {
       &-switcher {
@@ -21,6 +22,15 @@
           .dls-icon-size(dls-sum(@@thumb-size, -2px));
         }
       }
+
+      &-text {
+        left: @text-offset;
+      }
+    }
+
+    &.@{veui-prefix}-switch-on &-text {
+      right: @text-offset;
+      left: auto;
     }
 
     &.@{veui-prefix}-switch-loading .@{veui-prefix}-switch-button,
@@ -59,13 +69,29 @@
 
   &-label {
     margin-left: @dls-padding-unit * 2;
+    line-height: 1;
   }
 
   &-switcher {
+    position: relative;
     font-size: @dls-switch-font-size;
     background-color: @dls-switch-track-color-off;
     user-select: none;
     .veui-transition(background-color, box-shadow);
+  }
+
+  &-text {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: @dls-switch-font-color;
+
+    .veui-icon {
+      .dls-icon-size(@dls-icon-size-aux);
+    }
   }
 
   &:hover &-switcher {
@@ -121,10 +147,10 @@
 
     .@{veui-prefix}-switch-button {
       background-color: @dls-switch-thumb-color-on;
-    }
 
-    .@{veui-prefix}-icon {
-      color: @dls-switch-track-color-on;
+      .@{veui-prefix}-icon {
+        color: @dls-switch-track-color-on;
+      }
     }
   }
 
@@ -196,5 +222,10 @@
   &[ui~="s"] {
     font-size: @dls-font-size-s;
     .metrics(s);
+  }
+
+  &[ui~="xs"] &-text,
+  &[ui~="s"] &-text {
+    display: none;
   }
 }
