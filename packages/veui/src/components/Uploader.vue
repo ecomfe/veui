@@ -57,26 +57,17 @@
       <slot name="desc"/>
     </span>
     <span :class="$c('uploader-error')">
-      <template v-if="error.typeInvalid">
-        <slot name="type-invalid">
-          <veui-icon :name="icons.alert"/>{{ t('fileTypeInvalid') }}
-        </slot>
-      </template>
-      <template v-if="error.sizeInvalid">
-        <slot name="size-invalid">
-          <veui-icon :name="icons.alert"/>{{ t('fileSizeInvalid') }}
-        </slot>
-      </template>
-      <template v-if="error.countOverflow">
-        <slot name="count-overflow">
-          <veui-icon :name="icons.alert"/>{{ t('tooManyFiles') }}
-        </slot>
-      </template>
-      <template v-if="error.customValidationInvalid">
-        <slot name="custom-validation-invalid">
-          <veui-icon :name="icons.alert"/>{{ customValidationMessage }}
-        </slot>
-      </template>
+      <slot
+        name="invalid"
+        :error="error"
+      >
+        <veui-icon
+          v-if="validationMessage"
+          :name="icons.alert"
+        />{{
+          validationMessage
+        }}
+      </slot>
     </span>
   </div>
   <transition-group
@@ -377,26 +368,17 @@
     v-if="type === 'image'"
     :class="$c('uploader-error')"
   >
-    <template v-if="error.typeInvalid">
-      <slot name="type-invalid">
-        <veui-icon :name="icons.alert"/>{{ t('fileTypeInvalid') }}
-      </slot>
-    </template>
-    <template v-if="error.sizeInvalid">
-      <slot name="size-invalid">
-        <veui-icon :name="icons.alert"/>{{ t('fileSizeInvalid') }}
-      </slot>
-    </template>
-    <template v-if="error.countOverflow">
-      <slot name="count-overflow">
-        <veui-icon :name="icons.alert"/>{{ t('tooManyFiles') }}
-      </slot>
-    </template>
-    <template v-if="error.customValidationInvalid">
-      <slot name="custom-validation-invalid">
-        <veui-icon :name="icons.alert"/>{{ customValidationMessage }}
-      </slot>
-    </template>
+    <slot
+      name="invalid"
+      :error="error"
+    >
+      <veui-icon
+        v-if="validationMessage"
+        :name="icons.alert"
+      />{{
+        validationMessage
+      }}
+    </slot>
   </span>
   <iframe
     v-if="requestMode === 'iframe' && submitting"
@@ -642,6 +624,18 @@ export default {
             (file.status === 'success' || !file.status) && !file.toBeUploaded
         )
         .map(file => omit(file, ['status', 'toBeUploaded']))
+    },
+    validationMessage () {
+      let messageMap = {
+        typeInvalid: this.t('fileTypeInvalid'),
+        sizeInvalid: this.t('fileSizeInvalid'),
+        countOverflow: this.t('tooManyFiles'),
+        customValidationInvalid: this.customValidationMessage
+      }
+      return Object.keys(this.error)
+        .map(key => (this.error[key] ? messageMap[key] : ''))
+        .filter(i => !!i)
+        .join(', ')
     }
   },
   watch: {
