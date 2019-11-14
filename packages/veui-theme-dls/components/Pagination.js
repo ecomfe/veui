@@ -15,7 +15,7 @@ config.defaults(
       more: 'ellipsis'
     },
     ui: {
-      style: {
+      size: {
         values: ['xs', 's', 'm'],
         inherit: true
       }
