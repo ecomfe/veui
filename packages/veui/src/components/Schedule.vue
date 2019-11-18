@@ -446,10 +446,9 @@ export default {
         })
 
         if (!daySelected) {
-          selected[day] = Array.isArray(hours[0]) ? hours : [[...hours]]
-        } else {
-          selected[day] = merge(daySelected, hours, { mode: this.mergeMode })
+          daySelected = []
         }
+        selected[day] = merge(daySelected, hours, { mode: this.mergeMode })
 
         if (!selected[day] || !selected[day].length) {
           this.$delete(selected, day)
