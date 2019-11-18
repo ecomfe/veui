@@ -4,19 +4,19 @@
   line-height: 1;
   align-items: center;
   display: inline-flex;
+  font-size: @dls-loading-font-size-m;
+
+  &[ui~="s"] {
+    font-size: @dls-loading-font-size-s;
+  }
+
+  &[ui~="l"] {
+    font-size: @dls-loading-font-size-l;
+  }
 
   &-text {
-    font-size: @dls-loading-font-size-m;
     color: @dls-loading-font-color-normal;
     margin-left: @dls-loading-content-spacing;
-
-    &[ui~="s"] {
-      font-size: @dls-loading-font-size-s;
-    }
-
-    &[ui~="l"] {
-      font-size: @dls-loading-font-size-l;
-    }
 
     &[ui~="strong"] {
       color: @dls-loading-font-color-strong;
