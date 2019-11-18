@@ -56,17 +56,15 @@
     >
       <slot name="desc"/>
     </span>
-    <span :class="$c('uploader-error')">
+    <span
+      v-if="validationMessage"
+      :class="$c('uploader-error')"
+    >
       <slot
         name="invalid"
         :error="error"
       >
-        <veui-icon
-          v-if="validationMessage"
-          :name="icons.alert"
-        />{{
-          validationMessage
-        }}
+        <veui-icon :name="icons.alert"/>{{ validationMessage }}
       </slot>
     </span>
   </div>
@@ -426,7 +424,8 @@ import {
   pick,
   omit,
   includes,
-  isEmpty
+  isEmpty,
+  findKey
 } from 'lodash'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
@@ -576,7 +575,8 @@ export default {
         sizeInvalid: false,
         typeInvalid: false,
         countOverflow: false,
-        customValidationInvalid: false
+        customError: false,
+        valid: true
       },
       customValidationMessage: ''
     }
@@ -630,12 +630,9 @@ export default {
         typeInvalid: this.t('fileTypeInvalid'),
         sizeInvalid: this.t('fileSizeInvalid'),
         countOverflow: this.t('tooManyFiles'),
-        customValidationInvalid: this.customValidationMessage
+        customError: this.customValidationMessage
       }
-      return Object.keys(this.error)
-        .map(key => (this.error[key] ? messageMap[key] : ''))
-        .filter(i => !!i)
-        .join(', ')
+      return messageMap[findKey(this.error)]
     }
   },
   watch: {
@@ -767,12 +764,15 @@ export default {
         sizeInvalid: false,
         typeInvalid: false,
         countOverflow: false,
-        customValidationInvalid: false
+        customError: false,
+        valid: true
       }
 
       let newFiles = [...this.$refs.input.files]
       Promise.all(newFiles.map(file => this.validateFile(file))).then(
         validationResults => {
+          this.error.valid = validationResults.every(valid => valid)
+
           newFiles = newFiles.filter((file, index) => validationResults[index])
           if (!newFiles.length) {
             return
@@ -875,7 +875,7 @@ export default {
       if (!valid) {
         this.customValidationMessage = result.message
       }
-      this.error.customValidationInvalid = !valid
+      this.error.customError = !valid
       return valid
     },
     validateFileType (filename) {
