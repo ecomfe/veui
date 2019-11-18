@@ -771,7 +771,7 @@ export default {
       let newFiles = [...this.$refs.input.files]
       Promise.all(newFiles.map(file => this.validateFile(file))).then(
         validationResults => {
-          this.error.valid = validationResults.every(valid => valid)
+          this.error.valid = validationResults.every(Boolean)
 
           newFiles = newFiles.filter((file, index) => validationResults[index])
           if (!newFiles.length) {
