@@ -1,7 +1,7 @@
 <template>
 <article>
   <h1><code>&lt;veui-button&gt;</code></h1>
-  <p>
+  <section>
     <veui-button ui="xs">
       保存
     </veui-button>
@@ -23,8 +23,8 @@
     <veui-button loading>
       保存
     </veui-button>
-  </p>
-  <p>
+  </section>
+  <section>
     <veui-button ui="strong xs">
       保存
     </veui-button>
@@ -52,8 +52,8 @@
     >
       保存
     </veui-button>
-  </p>
-  <p>
+  </section>
+  <section>
     <veui-button ui="primary xs">
       提交
     </veui-button>
@@ -81,21 +81,17 @@
     >
       提交
     </veui-button>
-  </p>
-  <p>
-    <veui-button ui="xs"> <veui-icon name="times"/>取消 </veui-button>
-    <veui-button ui="s"> <veui-icon name="times"/>取消 </veui-button>
-    <veui-button @click="text = !text">
-      <veui-icon name="times"/><template
-        v-if="text"
-      >取消</template>
-    </veui-button>
-    <veui-button ui="l"> <veui-icon name="times"/>取消 </veui-button>
-    <veui-button ui="xl"> <veui-icon name="times"/>取消 </veui-button>
-    <veui-button disabled> <veui-icon name="times"/>取消 </veui-button>
-    <veui-button loading> <veui-icon name="times"/>取消 </veui-button>
-  </p>
-  <p>
+  </section>
+  <section>
+    <veui-button ui="xs"><veui-icon name="times"/>取消</veui-button>
+    <veui-button ui="s"><veui-icon name="times"/>取消</veui-button>
+    <veui-button><veui-icon name="times"/>取消</veui-button>
+    <veui-button ui="l"><veui-icon name="times"/>取消</veui-button>
+    <veui-button ui="xl"><veui-icon name="times"/>取消</veui-button>
+    <veui-button disabled><veui-icon name="times"/>取消</veui-button>
+    <veui-button loading><veui-icon name="times"/>取消</veui-button>
+  </section>
+  <section>
     <veui-button ui="translucent xs">
       取消
     </veui-button>
@@ -123,8 +119,8 @@
     >
       取消
     </veui-button>
-  </p>
-  <p>
+  </section>
+  <section>
     <veui-button ui="text xs">
       编辑
     </veui-button>
@@ -152,8 +148,8 @@
     >
       编辑
     </veui-button>
-  </p>
-  <p>
+  </section>
+  <section>
     <veui-button ui="icon xs">
       <veui-icon name="search"/>
     </veui-button>
@@ -181,7 +177,17 @@
     >
       <veui-icon name="search"/>
     </veui-button>
-  </p>
+  </section>
+  <section class="dynamic">
+    <h4>动态内容</h4>
+    <p>
+      <veui-button @click="text = !text">
+        <veui-icon name="times"/><template
+          v-if="text"
+        >取消</template>
+      </veui-button>
+    </p>
+  </section>
 </article>
 </template>
 
@@ -215,10 +221,15 @@ export default {
 </script>
 
 <style scoped>
-p {
+section {
   user-select: none;
   display: flex;
   align-items: center;
+  margin-bottom: 20px;
+}
+
+.dynamic {
+  display: block;
 }
 
 .veui-button {

@@ -71,7 +71,7 @@ export default {
       // Temporary hack until we can find a pure CSS solution
       let content = (this.$slots.default || []).filter(
         vnode =>
-          (vnode.tag || vnode.text !== '') &&
+          (vnode.tag || vnode.text) &&
           !vnodeHasClass(vnode, this.$c('check-button-group-checkmark'))
       )
       if (content) {
