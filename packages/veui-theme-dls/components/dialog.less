@@ -78,23 +78,22 @@
         padding-bottom: 0;
       }
 
-      [ui~="s"] & {
-        font-size: @dls-dialog-title-font-size-s;
-      }
-
-      [ui~="m"] & {
-        font-size: @dls-dialog-title-font-size-m;
-      }
-
       &-title {
         display: flex;
         align-items: center;
         margin: 0;
         flex-grow: 1;
-        font-size: inherit;
         line-height: @dls-dialog-title-line-height;
         font-weight: @dls-font-weight-1;
         color: @dls-dialog-title-font-color;
+
+        [ui~="s"] & {
+          font-size: @dls-dialog-title-font-size-s;
+        }
+
+        [ui~="m"] & {
+          font-size: @dls-dialog-title-font-size-m;
+        }
       }
 
       &-close {
