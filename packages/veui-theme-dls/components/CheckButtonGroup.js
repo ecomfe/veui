@@ -10,7 +10,7 @@ config.defaults(
       }
     },
     parts: {
-      checked: 'primary'
+      checked: 'strong'
     },
     icons: {
       check: 'check'
