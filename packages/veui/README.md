@@ -77,4 +77,4 @@ And you should include `veui` and `vue-awesome` in the configs for `babel-loader
 
 ## Browser Support
 
-Evergreen browsers, IE9 and above.
+Evergreen browsers, IE11 and above.
