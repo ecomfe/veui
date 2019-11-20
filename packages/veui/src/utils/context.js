@@ -1,4 +1,5 @@
 import { isString, isObject, includes, every, isArray, findIndex } from 'lodash'
+import { getTypedAncestor } from './helper'
 
 function isVnode (vnode) {
   return isObject(vnode) && vnode.componentOptions
@@ -71,34 +72,31 @@ export function getVnodes (ref, context) {
   return vnodes || []
 }
 
-function getUITypes (vnode) {
-  if (!vnode) {
-    return null
-  }
-  return vnode.componentOptions.Ctor.options.uiTypes
-}
-
 /**
- * 获取一个组件实例在给定的 VNode 列表中是某个类型的第几个
+ * 获取与当前组件最接近的给定类型的祖先组件中，当前组件在其第几个直接子节点的位置
  * @param {Vue} current 查找的组件实例
- * @param {String} type 特定类型
- * @param {Array<VNode>|String} vnodes VNode 列表，为字符串时代表 slot 名称
- * @returns {Number} 该实例所在位置的索引，找不到返回 -1
+ * @param {string} parentType 父级类型
+ * @returns {number} 该实例所在位置的索引，找不到返回 -1
  */
-export function getIndexOfType (current, type, vnodes = 'default') {
-  let currentVNode = getVnodes(current)[0]
-  let parent = current.$parent
-  if (!parent || !parent.$slots[vnodes]) {
-    return -1
+export function getIndexOfType (current, parentType) {
+  let parent = parentType
+    ? getTypedAncestor(current, parentType)
+    : current.$parent
+
+  if (parentType && !parent) {
+    throw new Error(`No ancestor typed as [${parentType}] found.`)
   }
+
+  let parentVnodes = parent.$slots.default
+
+  while (current.$parent !== parent) {
+    current = current.$parent
+  }
+
+  let currentVnode = getVnodes(current)[0]
 
   // 只是用于每次渲染时插入到当前位置的顺序
-  return findIndex(
-    [...parent.$slots[vnodes]].filter(
-      vnode => vnode.componentOptions && includes(getUITypes(vnode), type)
-    ),
-    vnode => vnode === currentVNode
-  )
+  return findIndex(parentVnodes, vnode => vnode === currentVnode)
 }
 
 /**

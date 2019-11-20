@@ -81,7 +81,7 @@ export default {
     }
   },
   created () {
-    let index = getIndexOfType(this, 'tab')
+    let index = getIndexOfType(this, 'tabs')
 
     const props = ['label', 'disabled', 'to', 'native', 'removable', 'status']
 
