@@ -198,27 +198,15 @@
 
   &[ui~="inline"] &-main {
     position: relative;
-    border: none;
     box-shadow: none;
-
-    &::after {
-      content: "";
-      .absolute(_, 0, 0);
-      .veui-transition(transform);
-      height: 1px;
-      transform-origin: 0% 100%;
-      background-color: @dls-input-border-color;
-    }
+    border-style: none none solid;
   }
 
-  &[ui~="inline"] .@{veui-prefix}-input-has-after .@{veui-prefix}-input-main {
+  &[ui~="inline"].@{veui-prefix}-input-has-after .@{veui-prefix}-input-main {
     border-radius: 0;
   }
 
   &-focused[ui~="inline"] &-main {
-    &::after {
-      transform: scaleY(2);
-      background-color: @dls-input-border-color-focus;
-    }
+    box-shadow: @dls-input-shadow-inline-focus;
   }
 }
