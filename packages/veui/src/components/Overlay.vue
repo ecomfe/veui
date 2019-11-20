@@ -155,7 +155,8 @@ export default {
     // 更新 zindex 树
     updateNode () {
       if (!this.overlayNode) {
-        this.overlayNode = overlayManager.createNode({
+        let overlay = config.get('managers.overlay') || overlayManager
+        this.overlayNode = overlay.createNode({
           parentId: this.findParentOverlayId(),
           priority: this.priority,
           orderChangeCallback: order => {

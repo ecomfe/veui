@@ -1,5 +1,7 @@
 import { mount } from '@vue/test-utils'
 import Overlay from '@/components/Overlay'
+import overlay, { OverlayManager } from '@/managers/overlay'
+import config from '@/managers/config'
 import { wait } from '../../../utils'
 
 describe('components/Overlay', () => {
@@ -45,6 +47,32 @@ describe('components/Overlay', () => {
     expect(+wrapper.vm.$refs.parent.overlayBox.style.zIndex).to.equal(200)
     expect(+wrapper.vm.$refs.child.overlayBox.style.zIndex).to.equal(201)
 
+    wrapper.destroy()
+  })
+
+  it('should use injected overlay manager.', async () => {
+    config.set(
+      'managers.overlay',
+      new OverlayManager({
+        baseOrder: 300
+      })
+    )
+    let wrapper = mount({
+      render () {
+        return (
+          <Overlay class="parent-overlay" ref="parent">
+            <Overlay class="child-overlay" ref="child" />
+          </Overlay>
+        )
+      }
+    })
+
+    await wait(0)
+
+    expect(+wrapper.vm.$refs.parent.overlayBox.style.zIndex).to.equal(300)
+    expect(+wrapper.vm.$refs.child.overlayBox.style.zIndex).to.equal(301)
+
+    config.set('managers.overlay', overlay)
     wrapper.destroy()
   })
 

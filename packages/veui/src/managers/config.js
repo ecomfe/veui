@@ -82,7 +82,7 @@ export class ConfigManager {
         return this.store[key]
       }
     }
-  });
+  })
 
   set (key, val, ns) {
     this.store.set(key, val, ns)
