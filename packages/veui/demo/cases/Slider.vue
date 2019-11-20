@@ -7,14 +7,7 @@
     <veui-slider
       v-model="value1"
       readonly
-    >
-      <div
-        slot="tip"
-        style="position: absolute"
-      >
-        &#8203;
-      </div>
-    </veui-slider>
+    />
     <veui-slider
       v-model="value1"
       disabled
@@ -113,8 +106,7 @@
         v-for="(val, index) in value3"
         :key="`colorValue${index}`"
       >
-        "<span :style="{ color: val }">
-          {{ val }} </span>"
+        "<span :style="{ color: val }"> {{ val }} </span>"
         <span v-if="index < value3.length - 1">
           ,
         </span>

@@ -376,9 +376,6 @@
     <veui-select
       v-model="defaultValue8"
       v-bind="optGroupAttrs"
-      :overlay-options="{
-        position: 'top right'
-      }"
     >
       <template
         slot="option"
