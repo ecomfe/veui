@@ -2,6 +2,11 @@
 
 ._veui-grouped-button {
   &.@{veui-prefix}-button-selected {
-    z-index: 1;
+    z-index: 3;
+
+    &:hover,
+    &[data-focus-visible-added] {
+      z-index: 4;
+    }
   }
 }

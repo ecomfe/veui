@@ -18,8 +18,12 @@
       .border-right-radius(@dls-button-border-radius-m);
     }
 
-    &[data-focus-visible-added] {
+    &:hover {
       z-index: 2;
+    }
+
+    &[data-focus-visible-added] {
+      z-index: 4;
     }
 
     &.@{veui-prefix}-disabled {
