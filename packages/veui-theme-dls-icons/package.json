@@ -13,7 +13,8 @@
   "scripts": {
     "build": "node -r esm build/svg2json.js && node -r esm build/icons.js",
     "prepublishOnly": "cp -r ./icons/* .",
-    "publish": "rm *.js"
+    "publish": "rm *.js",
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "veui": "2.0.0-alpha.2"

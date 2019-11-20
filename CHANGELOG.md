@@ -8,7 +8,8 @@
 
 * [+] `Switch` 组件增加了 `on-label` 和 `off-label` prop 以及 `content` 作用域插槽，支持在内部输出提示文字或其它内容。
 * [^] 重写了 overlay manager，修复了输出的 `z-index` 无限制上涨的问题。
-* [*] 调整了耦合组件的关联机制，现在 `Column`、`Tab` 等组件可以被封装在其它组件内，填充入 `Table`、`Tabs` 等的插槽中使用。
+* [+] 新增了全局配置项 `managers.overlay`，可以注入其它实例接管浮层管理逻辑。
+* [^] 调整了耦合组件的关联机制，现在 `Column`、`Tab` 等组件可以被封装在其它组件内，填充入 `Table`、`Tabs` 等的插槽中使用。
 
 ### 🐞 问题修复
 
