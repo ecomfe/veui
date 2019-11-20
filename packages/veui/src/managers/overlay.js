@@ -1,5 +1,6 @@
 import { uniqueId, pull, findLastIndex } from 'lodash'
 import { walk } from '../utils/datasource'
+import config from './config'
 
 let nodeIndex = {}
 
@@ -185,18 +186,23 @@ export class OverlayManager {
    *
    * @constructor
    */
-  constructor () {
+  constructor ({ baseOrder } = {}) {
+    if (baseOrder != null) {
+      this.baseOrder = baseOrder
+    }
     this.root.reorder = this.reorder.bind(this)
   }
 
   /**
-   * Sets the base order
+   * Sets the base order and reorder the whole tree (if necessary)
    *
    * @param {number} order the base order
    */
   setBaseOrder (order) {
-    this.baseOrder = order
-    this.reorder()
+    if (this.baseOrder !== order) {
+      this.baseOrder = order
+      this.reorder()
+    }
   }
 
   /**
@@ -243,4 +249,7 @@ export class OverlayManager {
   }
 }
 
-export default new OverlayManager()
+let defaultManager = new OverlayManager()
+config.defaults('managers.overlay', defaultManager)
+
+export default defaultManager

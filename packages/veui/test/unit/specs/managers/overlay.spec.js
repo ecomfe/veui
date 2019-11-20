@@ -74,6 +74,11 @@ describe('managers/overlay', () => {
         let mgr = new OverlayManager()
         expect(typeof mgr.createNode).to.equal('function')
         expect(typeof mgr.setBaseOrder).to.equal('function')
+
+        mgr = new OverlayManager({
+          baseOrder: 300
+        })
+        expect(mgr.baseOrder).to.equal(300)
       })
     })
 
