@@ -30,7 +30,7 @@ export default {
     }
   },
   created () {
-    let index = getIndexOfType(this, 'table-column')
+    let index = getIndexOfType(this, 'table')
 
     const props = ['title', 'field', 'sortable', 'width', 'align', 'span']
 

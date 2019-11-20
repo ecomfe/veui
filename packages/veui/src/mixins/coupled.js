@@ -18,7 +18,7 @@ export function makeCoupledChild ({ direct = false, type, parentType, fields }) 
       if (!this[parentRef]) {
         return
       }
-      let index = getIndexOfType(this, type)
+      let index = getIndexOfType(this, parentType)
       this[parentRef].add(index, {
         id: this.id,
         ...pick(this, fields)

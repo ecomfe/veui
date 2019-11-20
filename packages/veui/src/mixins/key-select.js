@@ -16,7 +16,7 @@ const focusElement = (focusableList, index, focusClass) => {
 }
 
 config.defaults({
-  'keySelect.focusClass': 'focus-visible'
+  'keyselect.focusClass': 'focus-visible'
 })
 
 const createKeySelect = ({ useNativeFocus, handlers }) => ({
@@ -29,7 +29,7 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
           : useNativeFocus
     },
     focusClass () {
-      return this.focusMode ? null : config.get('keySelect.focusClass')
+      return this.focusMode ? null : config.get('keyselect.focusClass')
     }
   },
   methods: {
