@@ -538,4 +538,78 @@ describe('components/Table', () => {
     ).to.equal('2')
     wrapper.destroy()
   })
+
+  it('should support wrapping column component', () => {
+    let AwesomeColumn = {
+      components: {
+        'veui-table-column': Column
+      },
+      props: {
+        field: String,
+        title: String
+      },
+      template: `
+        <veui-table-column :field="field" :title="title" align="center">
+          <template slot-scope="{ name }">
+            <b>{{ name }}</b>
+          </template>
+        </veui-table-column>`
+    }
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column,
+          AwesomeColumn
+        },
+        data () {
+          return {
+            data: [
+              {
+                id: 1,
+                type: 'fruits',
+                name: 'apple'
+              },
+              {
+                id: 2,
+                type: 'fruits',
+                name: 'cherry'
+              },
+              {
+                id: 3,
+                type: 'veggie',
+                name: 'tomato'
+              },
+              {
+                id: 4,
+                type: 'veggie',
+                name: 'potato'
+              }
+            ],
+            groupSpan (i) {
+              return {
+                row: i % 2 ? 0 : 2
+              }
+            }
+          }
+        },
+        template: `
+          <veui-table :data="data">
+            <veui-table-column field="id" title="id"/>
+            <awesome-column field="type" title="type"/>
+            <veui-table-column field="name" title="name"/>
+          </veui-table>
+        `
+      },
+      {
+        sync: false
+      }
+    )
+
+    let td = wrapper.findAll('tbody td').at(1)
+    expect(td.classes()).to.include('veui-table-column-center')
+    expect(td.find('.veui-table-cell').html()).to.include('<b>apple</b>')
+
+    wrapper.destroy()
+  })
 })
