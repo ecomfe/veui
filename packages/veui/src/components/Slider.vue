@@ -227,7 +227,7 @@ export default {
       let marks = []
       while (val <= max) {
         let pos = (val - min) / (max - min)
-        if (pos > 0 && pos < 1) {
+        if (pos >= 0 && pos <= 1) {
           marks.push(pos)
         }
         val += step
