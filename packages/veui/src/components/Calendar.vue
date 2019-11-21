@@ -1,6 +1,11 @@
 <template>
 <div
-  :class="$c('calendar')"
+  :class="{
+    [$c('calendar')]: true,
+    [$c(`calendar-type-${type}`)]: true,
+    [$c(`calendar-range`)]: range,
+    [$c(`calendar-multiple`)]: multiple
+  }"
   :ui="realUi"
   role="application"
   :aria-label="t('calendar')"
@@ -12,81 +17,102 @@
   <div
     v-for="(p, pIndex) in panels"
     :key="pIndex"
-    :class="[$c('calendar-panel'), $c(`calendar-${p.view}`)]"
+    :class="{
+      [$c('calendar-panel')]: true,
+      [$c(`calendar-expanded`)]: p.expanded
+    }"
   >
     <div
       :class="$c('calendar-head')"
       :aria-hidden="pIndex > 0"
     >
       <button
+        ref="doublePrev"
+        type="button"
+        :class="{
+          [$c('calendar-double-prev')]: true,
+          [$c('calendar-visible')]:
+            !pIndex && (type === 'date' || (type === 'month' && !p.expanded)),
+          [$c('sr-only')]:
+            pIndex && (type === 'date' || (type === 'month' && !p.expanded))
+        }"
+        :disabled="disabled || readonly"
+        :aria-hidden="pIndex > 0"
+        :aria-label="t('prevYear')"
+        :aria-controls="`${id}:panel-title:${pIndex}`"
+        @click="step(false, 'year')"
+      >
+        <veui-icon :name="icons.doublePrev"/>
+      </button>
+      <button
         ref="prev"
         type="button"
         :class="{
           [$c('calendar-prev')]: true,
-          [$c('sr-only')]: pIndex !== 0 && p.view === 'days'
+          [$c('calendar-visible')]: !pIndex && type === 'date',
+          [$c('sr-only')]: pIndex && type === 'date'
         }"
         :disabled="disabled || readonly"
         :aria-hidden="pIndex > 0"
-        :aria-label="getStepLabel(p.view, 'prev')"
+        :aria-label="t('prevMonth')"
         :aria-controls="`${id}:panel-title:${pIndex}`"
-        @click="step(false, p.view)"
+        @click="step(false, 'month')"
       >
         <veui-icon :name="icons.prev"/>
       </button>
-      <template v-if="p.view === 'days'">
-        <button
-          ref="year-select"
-          type="button"
-          :class="$c('calendar-select')"
-          :disabled="disabled || readonly"
-          :aria-label="t('selectYear', { year: p.year })"
-          @click="setView(pIndex, 'years')"
-        >
-          <b>{{ t('year', { year: p.year }) }}</b>
-          <veui-icon :name="icons.expand"/>
-        </button>
+      <template>
         <button
           :id="`${id}:panel-title:${pIndex}`"
-          ref="month-select"
+          ref="expansion-select"
           type="button"
           :class="$c('calendar-select')"
           :disabled="disabled || readonly"
           :aria-label="t('selectMonth', { month: p.month + 1 })"
-          @click="setView(pIndex, 'months')"
+          @click="setExpanded(pIndex, !p.expanded)"
         >
-          <b>{{
-            t('month', { month: p.month + 1 }) || t(`monthsLong[${p.month}]`)
-          }}</b>
-          <veui-icon :name="icons.expand"/>
+          <b><span v-if="type === 'date'">{{
+               t('month', { month: p.month + 1 }) ||
+                 t(`monthsLong[${p.month}]`)
+             }}</span>
+            {{ t('year', { year: p.year }) }}</b>
+          <veui-icon
+            v-if="type !== 'year'"
+            :name="icons.expand"
+          />
         </button>
       </template>
-      <template v-else-if="p.view === 'months'">
-        <span
-          :id="`${id}:panel-title:${pIndex}`"
-          :class="$c('calendar-label')"
-        >
-          <b>{{ t('year', { year: p.year }) }}</b>
-        </span>
-      </template>
-      <template v-else-if="p.view === 'years'">
-        <span
-          :id="`${id}:panel-title:${pIndex}`"
-          :class="$c('calendar-label')"
-        >
-          <b>{{ t('year', { year: p.year - (p.year % 10) }) }}</b>–<b>{{ t('year', { year: p.year - (p.year % 10) + 9 }) }}</b>
-        </span>
-      </template>
+      <button
+        ref="doubleNext"
+        type="button"
+        :class="{
+          [$c('calendar-double-next')]: true,
+          [$c('calendar-visible')]:
+            pIndex === panels.length - 1 &&
+            (type === 'date' || (type === 'month' && !p.expanded)),
+          [$c('sr-only')]:
+            pIndex !== panels.length - 1 &&
+            (type === 'date' || (type === 'month' && !p.expanded))
+        }"
+        :disabled="disabled || readonly"
+        :aria-label="t('nextYear')"
+        :aria-controls="`${id}:panel-title:${pIndex}`"
+        @click="step(true, 'year')"
+      >
+        <veui-icon :name="icons.doubleNext"/>
+      </button>
       <button
         ref="next"
         type="button"
         :class="{
           [$c('calendar-next')]: true,
-          [$c('sr-only')]: pIndex !== panels.length - 1 && p.view === 'days'
+          [$c('calendar-visible')]:
+            pIndex === panels.length - 1 && type === 'date',
+          [$c('sr-only')]: pIndex !== panels.length - 1 && type === 'date'
         }"
         :disabled="disabled || readonly"
-        :aria-label="getStepLabel(p.view, 'next')"
+        :aria-label="t('nextMonth')"
         :aria-controls="`${id}:panel-title:${pIndex}`"
-        @click="step(true, p.view)"
+        @click="step(true, 'month')"
       >
         <veui-icon :name="icons.next"/>
       </button>
@@ -95,11 +121,47 @@
       ref="body"
       :class="{
         [$c('calendar-body')]: true,
-        [$c('calendar-multiple-range')]: realMultiple && realRange
+        [$c('calendar-multiple-range')]: multiple && range
       }"
     >
-      <table>
-        <template v-if="p.view === 'days'">
+      <infinite-scroll
+        v-if="type === 'date' && p.expanded"
+        :notable="1901"
+        :row="150"
+        :current="p.year"
+      >
+        <template slot-scope="{ listeners, data }">
+          <ul
+            ref="yearScroller"
+            :class="$c('calendar-year-scroller')"
+            v-on="listeners"
+          >
+            <li
+              v-for="idx in data.row"
+              :key="idx + data.start - 1 + `-${data.page}`"
+              :class="getYearClass(p, idx + data.start - 1, true)"
+            >
+              <button
+                type="button"
+                @click="selectYear(pIndex, idx + data.start - 1)"
+              >
+                {{ idx + data.start - 1 }}
+              </button>
+            </li>
+          </ul>
+        </template>
+      </infinite-scroll>
+      <table
+        v-if="!(type === 'year' || (type === 'month' && p.expanded))"
+        ref="table"
+        :class="{
+          [$c('calendar-date-table')]: type === 'date' && !p.expanded,
+          [$c('calendar-month-table')]:
+            (type === 'date' && p.expanded) ||
+            (type === 'month' && !p.expanded)
+        }"
+      >
+        <template v-if="type === 'date' && !p.expanded">
           <thead>
             <tr>
               <th
@@ -122,7 +184,7 @@
                 :class="getDateClass(day, p)"
               >
                 <button
-                  v-if="(fillMonth && panel === 1) || day.month === p.month"
+                  v-if="fillMonth || day.month === p.month"
                   :ref="day.isFocus ? 'focus' : null"
                   type="button"
                   :disabled="realDisabled || realReadonly || day.isDisabled"
@@ -153,68 +215,100 @@
             </tr>
           </tbody>
         </template>
-        <tbody v-else-if="p.view === 'months'">
+        <tbody
+          v-else-if="
+            (type === 'date' && p.expanded) ||
+              (type === 'month' && !p.expanded)
+          "
+        >
           <tr
-            v-for="i in 3"
+            v-for="i in 4"
             :key="i"
           >
             <td
-              v-for="j in 4"
+              v-for="j in 3"
               :key="j"
-              :class="getMonthClass(p, i, j)"
+              :class="getMonthClass(p, i, j, type === 'date')"
             >
               <button
                 type="button"
                 :tabindex="i === 1 && j === 1 ? null : '-1'"
-                @click="selectMonth(pIndex, (i - 1) * 4 + j - 1)"
-                @keydown.up.prevent="moveFocus(p.view, -4)"
+                @click="selectMonth(pIndex, (i - 1) * 3 + j - 1)"
+                @mouseenter="handleMonthMouseEnter(p, i, j)"
+                @keydown.up.prevent="moveFocus(p.view, -3)"
                 @keydown.right.prevent="moveFocus(p.view, 1)"
-                @keydown.down.prevent="moveFocus(p.view, 4)"
+                @keydown.down.prevent="moveFocus(p.view, 3)"
                 @keydown.left.prevent="moveFocus(p.view, -1)"
               >
                 {{
-                  t('month', { month: (i - 1) * 4 + j }) ||
-                    t(`monthsShort[${(i - 1) * 4 + j - 1}]`)
+                  t('month', { month: (i - 1) * 3 + j }) ||
+                    t(`monthsShort[${(i - 1) * 3 + j - 1}]`)
                 }}
               </button>
             </td>
           </tr>
         </tbody>
-        <tbody v-else-if="p.view === 'years'">
-          <tr
-            v-for="i in 3"
-            :key="i"
-          >
-            <td
-              v-for="j in 4"
-              :key="j"
-              :class="getYearClass(p, i, j)"
-            >
-              <button
-                v-if="(i - 1) * 4 + j - 1 < 10"
-                type="button"
-                :tabindex="i === 1 && j === 1 ? null : '-1'"
-                @click="
-                  selectYear(
-                    pIndex,
-                    p.year - (p.year % 10) + (i - 1) * 4 + j - 1
-                  )
-                "
-                @keydown.up.prevent="
-                  moveFocus(p.view, getYearOffset(i, j, false))
-                "
-                @keydown.right.prevent="moveFocus(p.view, 1)"
-                @keydown.down.prevent="
-                  moveFocus(p.view, getYearOffset(i, j, true))
-                "
-                @keydown.left.prevent="moveFocus(p.view, -1)"
-              >
-                {{ p.year - (p.year % 10) + (i - 1) * 4 + j - 1 }}
-              </button>
-            </td>
-          </tr>
-        </tbody>
       </table>
+      <infinite-scroll
+        v-else
+        :notable="1901"
+        :row="50"
+        :col="3"
+        :current="p.year"
+      >
+        <template slot-scope="{ listeners, data }">
+          <div
+            ref="yearScroller"
+            :class="$c('calendar-year-table-wrap')"
+            v-on="listeners"
+          >
+            <table
+              ref="table"
+              :class="$c('calendar-year-table')"
+            >
+              <tbody>
+                <tr
+                  v-for="i in data.row"
+                  :key="`${i}-${data.page}`"
+                >
+                  <td
+                    v-for="j in 3"
+                    :key="j"
+                    :class="
+                      getYearClass(
+                        p,
+                        data.start + 3 * (i - 1) + j - 1,
+                        type === 'month'
+                      )
+                    "
+                  >
+                    <button
+                      type="button"
+                      :tabindex="i === 1 && j === 1 ? null : '-1'"
+                      @click="
+                        selectYear(pIndex, data.start + 3 * (i - 1) + j - 1)
+                      "
+                      @mouseenter="
+                        handleYearMouseEnter(data.start + 3 * (i - 1) + j - 1)
+                      "
+                      @keydown.up.prevent="
+                        moveFocus(p.view, getYearOffset(i, j, false))
+                      "
+                      @keydown.right.prevent="moveFocus(p.view, 1)"
+                      @keydown.down.prevent="
+                        moveFocus(p.view, getYearOffset(i, j, true))
+                      "
+                      @keydown.left.prevent="moveFocus(p.view, -1)"
+                    >
+                      {{ data.start + 3 * (i - 1) + j - 1 }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </template>
+      </infinite-scroll>
     </div>
   </div>
   <slot name="after"/>
@@ -226,18 +320,21 @@ import {
   getDaysInMonth,
   fromDateData,
   isSameDay,
+  isSameMonth,
+  isSameYear,
   mergeRange
 } from '../utils/date'
-import { closest, focusIn, focus } from '../utils/dom'
+import { closest, focusIn, focus, scrollTo } from '../utils/dom'
 import { sign, isPositive } from '../utils/math'
 import { normalizeClass } from '../utils/helper'
-import { isInteger, flattenDeep, findIndex, uniqueId, upperFirst } from 'lodash'
+import { isInteger, flattenDeep, findIndex, uniqueId } from 'lodash'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import Icon from './Icon'
+import InfiniteScroll from './Calendar/_InfiniteScroll'
 
 config.defaults({
   'calendar.weekStart': 1
@@ -249,22 +346,11 @@ const VIEW_CELL_CLASS_MAP = {
   years: 'calendar-year'
 }
 
-const VIEW_STEP_MAP = {
-  days: 'month',
-  months: 'year',
-  years: 'decade'
-}
-
-const TYPE_VIEW_MAP = {
-  date: 'days',
-  month: 'months',
-  year: 'years'
-}
-
 export default {
   name: 'veui-calendar',
   components: {
-    'veui-icon': Icon
+    'veui-icon': Icon,
+    InfiniteScroll
   },
   mixins: [prefix, ui, input, i18n],
   model: {
@@ -324,13 +410,9 @@ export default {
     }
   },
   data () {
-    let views = []
-    if (this.type !== 'date') {
-      views.push(TYPE_VIEW_MAP[this.type])
-    } else {
-      for (let i = 0; i < this.panel; i++) {
-        views[i] = 'days'
-      }
+    let expands = []
+    for (let i = 0; i < this.panel; i++) {
+      expands[i] = false
     }
 
     let current = this.getDefaultDate()
@@ -338,9 +420,10 @@ export default {
     let id = uniqueId('veui-calendar-')
 
     return {
+      // panel 显示的基准
       year: current.getFullYear(),
       month: current.getMonth(),
-      views,
+      expands,
       id,
       picking: null,
       pickingRanges: null,
@@ -348,12 +431,6 @@ export default {
     }
   },
   computed: {
-    realRange () {
-      return this.type === 'date' && this.range
-    },
-    realMultiple () {
-      return this.type === 'date' && this.multiple
-    },
     realWeekStart () {
       return this.weekStart != null
         ? this.weekStart
@@ -363,7 +440,7 @@ export default {
       return `${this.year}/${this.month}`
     },
     realSelected () {
-      return this.selected ? this.selected : this.realMultiple ? [] : null
+      return this.selected ? this.selected : this.multiple ? [] : null
     },
     realPicking () {
       let [from, to] = this.picking || []
@@ -372,20 +449,36 @@ export default {
       }
       return this.picking
     },
+    isSame () {
+      return {
+        year: isSameYear,
+        month: isSameMonth,
+        date: isSameDay
+      }[this.type]
+    },
     panels () {
-      let panel = this.type !== 'date' ? 1 : this.panel
+      let panel = this.panel
 
       let panels = []
       for (let i = 0; i < panel; i++) {
         let year = this.year + Math.floor((this.month + i) / 12)
         let month = (this.month + i) % 12
-        let view = this.views[i]
+        let expanded = this.expands[i]
+        if (this.type !== 'date') {
+          panels.push({
+            year,
+            month,
+            expanded
+          })
+          continue
+        }
 
         let firstDayInMonth = new Date(year, month)
         let offset = (firstDayInMonth.getDay() + 7 - this.realWeekStart) % 7
         let daysInMonth = getDaysInMonth(year, month)
         let daysInPreviousMonth = getDaysInMonth(year, month - 1)
-        let weekCount = Math.ceil((offset + daysInMonth) / 7)
+        // let weekCount = Math.ceil((offset + daysInMonth) / 7)
+        let weekCount = 6
         let weeks = []
 
         // 默认 focus 入口顺序：
@@ -458,7 +551,7 @@ export default {
           year,
           month,
           weeks,
-          view
+          expanded
         })
       }
       return panels
@@ -489,6 +582,27 @@ export default {
     getDayFullNames () {
       let names = [...this.daysLong]
       return names.splice(this.realWeekStart - 1).concat(names)
+    },
+    handleMonthMouseEnter (panel, i, j) {
+      if (this.type === 'month') {
+        let month = (i - 1) * 3 + j - 1
+        let day = {
+          year: panel.year,
+          month,
+          date: 1
+        }
+        this.markEnd(day)
+      }
+    },
+    handleYearMouseEnter (year) {
+      if (this.type === 'year') {
+        let day = {
+          year: year,
+          month: 0,
+          date: 1
+        }
+        this.markEnd(day)
+      }
     },
     getLocaleString (day) {
       let { year, month, date } = day
@@ -522,34 +636,53 @@ export default {
         ...normalizeClass(extraClass)
       }
     },
-    getMonthClass (panel, i, j) {
-      let month = (i - 1) * 4 + j - 1
+    getRangeClass (day) {
+      let rangePosition = this.getRangePosition(day)
       return {
+        [this.$c('calendar-in-range')]: rangePosition && rangePosition.within,
+        [this.$c('calendar-range-start')]: rangePosition && rangePosition.start,
+        [this.$c('calendar-range-end')]: rangePosition && rangePosition.end
+      }
+    },
+    getMonthClass (p, i, j, ignoreRange) {
+      let month = (i - 1) * 3 + j - 1
+      let day = {
+        year: p.year,
+        month,
+        date: 1
+      }
+      let clazz = {
         [this.$c('calendar-month')]: true,
         [this.$c('calendar-today')]:
           month === this.today.getMonth() &&
-          panel.year === this.today.getFullYear(),
-        [this.$c('calendar-selected')]:
-          this.realSelected && !this.realMultiple && !this.realRange
-            ? month === this.realSelected.getMonth() &&
-              panel.year === this.realSelected.getFullYear()
-            : false
+          p.year === this.today.getFullYear(),
+        [this.$c('calendar-selected')]: this.isSelected(day, isSameMonth)
       }
+      return ignoreRange
+        ? clazz
+        : {
+          ...clazz,
+          ...this.getRangeClass(day)
+        }
     },
-    getYearClass (panel, i, j) {
-      let offset = (i - 1) * 4 + j - 1
-      let year = panel.year - (panel.year % 10) + offset
-      return {
-        [this.$c('calendar-year')]: offset < 10,
-        [this.$c('calendar-today')]: year === this.today.getFullYear(),
-        [this.$c('calendar-selected')]:
-          this.realSelected && !this.realMultiple && !this.realRange
-            ? year === this.realSelected.getFullYear()
-            : false
+    getYearClass (p, year, ignoreRange) {
+      let day = {
+        year: year,
+        month: 0,
+        date: 1
       }
-    },
-    getStepLabel (view, type) {
-      return this.t(`${type}${upperFirst(VIEW_STEP_MAP[view])}`)
+      let clazz = {
+        [this.$c('calendar-year')]: true,
+        [this.$c('calendar-current')]: p.year === year,
+        [this.$c('calendar-selected')]: this.isSelected(day, isSameYear),
+        [this.$c('calendar-today')]: year === this.today.getFullYear()
+      }
+      return ignoreRange
+        ? clazz
+        : {
+          ...clazz,
+          ...this.getRangeClass(day)
+        }
     },
     getYearOffset (i, j, isNext) {
       return isNext
@@ -564,38 +697,28 @@ export default {
             : -6
           : -4
     },
-    selectDay (day) {
-      // switch month in days view if dates in previous/next months are visible
-      if (this.fillMonth && this.panel === 1) {
-        this.year = day.year
-        this.month = day.month
-      }
-
+    commonSelect (day) {
       let selected = new Date(day.year, day.month, day.date)
-      if (!this.realRange) {
-        if (!this.realMultiple) {
-          // single day selection
-          this.$emit('select', selected)
-          return
-        }
-
-        // multiple single days selection
-        let result = [...this.realSelected]
-        let pos = findIndex(result, date => {
-          return isSameDay(date, selected)
-        })
-        if (pos === -1) {
-          result.push(selected)
+      if (!this.range) {
+        if (this.multiple) {
+          let result = [...this.realSelected]
+          let pos = findIndex(result, date => this.isSame(date, selected))
+          if (pos === -1) {
+            result.push(selected)
+          } else {
+            result.splice(pos, 1)
+          }
+          return this.$emit('select', result)
         } else {
-          result.splice(pos, 1)
+          return this.$emit('select', selected)
         }
-        this.$emit('select', result)
-        return
       }
 
       // range selection
       if (!this.picking) {
-        this.mergeMode = day.rangePosition.within ? 'substract' : 'union'
+        // 日期上有rangePosition，月份年份直接算
+        let rangPosition = day.rangePosition || this.getRangePosition(day)
+        this.mergeMode = rangPosition.within ? 'substract' : 'union'
         this.picking = [selected]
         this.$emit('selectstart', selected)
         this.markEnd(day)
@@ -605,7 +728,7 @@ export default {
       // prepare to select
       this.$set(this.picking, 1, selected)
       let picking = this.picking.sort((d1, d2) => d1 - d2)
-      if (!this.realMultiple) {
+      if (!this.multiple) {
         // single range selection
         this.picking = null
         this.$emit('select', [...picking])
@@ -618,17 +741,54 @@ export default {
       this.pickingRanges = null
       this.$emit('select', ranges)
     },
+    selectDay (day) {
+      // switch month in days view if dates in previous/next months are visible
+      if (this.fillMonth && this.panel === 1) {
+        this.year = day.year
+        this.month = day.month
+      }
+      return this.commonSelect(day)
+    },
+    selectMonth (i, month) {
+      if (this.type === 'month') {
+        return this.commonSelect({
+          year: this.year,
+          month,
+          date: 1
+        })
+      }
+
+      // type === date 的视图修改
+      // yearDiff = ⌊(currentMonth + monthDiff) / 12⌋
+      this.year += Math.floor((this.month + month - this.panels[i].month) / 12)
+      this.month = (month - i + 12) % 12
+      this.setExpanded(false)
+      this.setFocus('expansion-select', i)
+    },
+    selectYear (i, year) {
+      if (this.type === 'year') {
+        return this.commonSelect({
+          year: year,
+          month: 0,
+          date: 1
+        })
+      }
+      this.year = year + Math.floor((this.panels[i].month - i) / 12)
+      this.setExpanded(false)
+      this.setFocus('expansion-select', i)
+    },
     markEnd (day) {
-      if (this.realRange && this.picking) {
+      if (this.range && this.picking) {
         let marked = day ? new Date(day.year, day.month, day.date) : null
         this.$set(this.picking, 1, marked)
-        if (this.realMultiple) {
+        if (this.multiple) {
           if (!marked) {
             this.$set(this.picking, 1, this.picking[0])
           }
           this.pickingRanges = mergeRange(
             this.realSelected || [],
             this.picking || [],
+            this.type,
             this.mergeMode
           )
         }
@@ -711,100 +871,96 @@ export default {
         focus(this.$refs[part][index])
       })
     },
-    setView (i, value) {
-      if (value) {
-        this.$set(this.views, i, value)
+    setExpanded (i, value) {
+      if (this.type === 'year') {
+        return
+      }
+
+      if (value != null) {
+        this.$set(this.expands, i, value)
         this.$nextTick(() => {
+          if (value) {
+            // todo 能去掉这个nextTick么
+            return this.$nextTick(() => {
+              let container = this.$refs.yearScroller[0]
+              let el = container.querySelector(
+                `.${this.$c('calendar-current')}`
+              )
+              if (el) {
+                scrollTo(0.5, container, el, {
+                  duration: 0
+                })
+                focusIn(this.type === 'month' ? el : el)
+              }
+            })
+          }
           focusIn(this.$refs.body[i])
         })
       } else {
         value = i
-        this.views.forEach((view, i) => {
-          this.$set(this.views, i, value)
+        this.expands.forEach((view, i) => {
+          this.$set(this.expands, i, value)
         })
       }
     },
-    selectMonth (i, month) {
-      if (this.type === 'month') {
-        // single day selection
-        this.$emit('select', new Date(this.year, month, 1))
-        return
-      }
-      // yearDiff = ⌊(currentMonth + monthDiff) / 12⌋
-      this.year += Math.floor((this.month + month - this.panels[i].month) / 12)
-      this.month = (month - i + 12) % 12
-      this.setView('days')
-      this.setFocus('month-select', i)
-    },
-    selectYear (i, year) {
-      if (this.type === 'year') {
-        // single day selection
-        this.$emit('select', new Date(year, 0, 1))
-        return
-      }
-      this.year = year + Math.floor((this.panels[i].month - i) / 12)
-      this.setView('days')
-      this.setFocus('year-select', i)
-    },
-    isSelected (day) {
+    isSelected (day, isSame) {
       if (!this.realSelected && !this.picking) {
         return false
       }
-      if (!this.realRange) {
-        if (!this.realMultiple) {
+      isSame = isSame || this.isSame
+
+      if (!this.range) {
+        if (!this.multiple) {
           // single day
-          return isSameDay(this.realSelected, day)
+          return isSame(this.realSelected, day)
         }
         // multiple single days
-        return (this.realSelected || []).some(d => isSameDay(d, day))
+        return (this.realSelected || []).some(d => isSame(d, day))
       }
-      if (!this.realMultiple) {
+      if (!this.multiple) {
         // single range
         let range = this.picking || this.realSelected
-        return isSameDay(range[0], day) || isSameDay(range[1], day)
+        return isSame(range[0], day) || isSame(range[1], day)
       }
       // multiple ranges
       return (this.pickingRanges || this.realSelected || []).some(selected => {
-        return isSameDay(selected[0], day) || isSameDay(selected[1], day)
+        return isSame(selected[0], day) || isSame(selected[1], day)
       })
     },
     getRangePosition (day) {
-      if (!this.realRange) {
+      if (!this.range) {
         return false
       }
 
-      if (!this.realMultiple) {
+      if (!this.multiple) {
         // single range
         let range = this.realPicking || this.realSelected
-        return getRangePosition(day, range)
+        return getRangePosition(day, range, this.type)
       }
 
       // multiple ranges
       let ranges = this.pickingRanges || this.realSelected || []
       let position = false
       for (let i = 0, j = ranges.length; i < j; i++) {
-        position = getRangePosition(day, ranges[i])
+        position = getRangePosition(day, ranges[i], this.type)
         if (position) {
           break
         }
       }
       return position
     },
-    step (isNext, view) {
+    step (isNext, type) {
       let sign = isNext ? 1 : -1
-      switch (view) {
-        case 'days':
+      switch (type) {
+        case 'month':
           let newMonth = this.month + sign
           if (newMonth === -1 || newMonth === 12) {
             this.year += sign
           }
           this.month = (newMonth + 12) % 12
           break
-        case 'months':
+        case 'year':
           this.year += sign
-          break
-        case 'years':
-          this.year += sign * 10
           break
       }
     },
@@ -817,11 +973,21 @@ export default {
   }
 }
 
-function getRangePosition (day, range) {
+function getRangePosition (day, range, type) {
   if (!range || !range[1]) {
     return false
   }
   let date = new Date(day.year, day.month, day.date)
+  if (type !== 'date') {
+    range = range.map(i => {
+      let copy = new Date(i.getTime())
+      copy.setDate(1)
+      if (type === 'year') {
+        copy.setMonth(0)
+      }
+      return copy
+    })
+  }
   let within = (range[0] - date) * (range[1] - date) <= 0
   if (!within) {
     return false

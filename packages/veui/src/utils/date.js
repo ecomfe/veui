@@ -57,6 +57,24 @@ export function isSameDay (src, target) {
   )
 }
 
+export function isSameMonth (src, target) {
+  if (!src || !target) {
+    return false
+  }
+  let srcData = toDateData(src)
+  let targetData = toDateData(target)
+  return srcData.year === targetData.year && srcData.month === targetData.month
+}
+
+export function isSameYear (src, target) {
+  if (!src || !target) {
+    return false
+  }
+  let srcData = toDateData(src)
+  let targetData = toDateData(target)
+  return srcData.year === targetData.year
+}
+
 export function isInRange (day, range) {
   return includes(range.map(toDate), toDate(day))
 }
@@ -69,12 +87,29 @@ function prepareRanges (range) {
   return range.map(r => r.map(toDate).sort((d1, d2) => d1 - d2))
 }
 
-export function mergeRange (r1, r2, mode = 'xor') {
-  return merge(prepareRanges(r1), prepareRanges(r2), { inc: addDays, mode })
+export function mergeRange (r1, r2, type = 'date', mode = 'xor') {
+  let inc = {
+    month: addMonths,
+    date: addDays,
+    year: addYears
+  }[type]
+  return merge(prepareRanges(r1), prepareRanges(r2), { inc, mode })
 }
 
 const ONE_DAY = 24 * 60 * 60 * 1000
 
 function addDays (date, days) {
   return new Date(date - 0 + days * ONE_DAY)
+}
+
+function addMonths (date, months) {
+  let d = new Date(date - 0)
+  d.setMonth(d.getMonth() + months)
+  return d
+}
+
+function addYears (date, years) {
+  let d = new Date(date - 0)
+  d.setFullYear(d.getFullYear() + years)
+  return d
 }
