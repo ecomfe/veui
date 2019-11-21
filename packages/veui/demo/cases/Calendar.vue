@@ -2,10 +2,108 @@
 <article class="veui-demo-calendar">
   <h1><code>&lt;veui-calendar&gt;</code></h1>
   <section>
-    <h2>单日选择</h2>
+    <h2>日期选择</h2>
     <veui-calendar
-      v-model="selected1"
+      v-model="singleDate"
+      type="date"
       :disabled-date="isDisabled"
+    />
+  </section>
+  <section>
+    <h2>日期多选</h2>
+    <veui-calendar
+      v-model="multipleDate"
+      type="date"
+      multiple
+    />
+  </section>
+  <section>
+    <h2>日期范围单选</h2>
+    <veui-calendar
+      v-model="singleDateRange"
+      type="date"
+      range
+    />
+  </section>
+  <section>
+    <h2>日期范围多选</h2>
+    <veui-calendar
+      v-model="multipleDateRange"
+      type="date"
+      range
+      multiple
+    />
+  </section>
+
+  <section>
+    <h2>月份单选</h2>
+    <veui-calendar
+      v-model="singleMonth"
+      type="month"
+    />
+    Selected:
+    {{
+      selected5
+        ? `${selected5.getFullYear()}-${selected5.getMonth() + 1}`
+        : '-'
+    }}
+  </section>
+  <section>
+    <h2>月份多选</h2>
+    <veui-calendar
+      v-model="multipleMonth"
+      type="month"
+      multiple
+    />
+  </section>
+  <section>
+    <h2>月份范围单选</h2>
+    <veui-calendar
+      v-model="singleMonthRange"
+      type="month"
+      range
+    />
+  </section>
+  <section>
+    <h2>月份范围多选</h2>
+    <veui-calendar
+      v-model="multipleMonthRange"
+      type="month"
+      range
+      multiple
+    />
+  </section>
+
+  <section>
+    <h2>年份单选</h2>
+    <veui-calendar
+      v-model="singleYear"
+      type="year"
+    />
+  </section>
+  <section>
+    <h2>年份多选</h2>
+    <veui-calendar
+      v-model="multipleYear"
+      type="year"
+      multiple
+    />
+  </section>
+  <section>
+    <h2>年份范围单选</h2>
+    <veui-calendar
+      v-model="singleYearRange"
+      type="year"
+      range
+    />
+  </section>
+  <section>
+    <h2>年份范围多选</h2>
+    <veui-calendar
+      v-model="multipleYearRange"
+      type="year"
+      range
+      multiple
     />
   </section>
   <section>
@@ -69,25 +167,12 @@
     </veui-button>
   </section>
   <section>
-    <h2>月份选择</h2>
-    <veui-calendar
-      v-model="selected5"
-      type="month"
-    />
-    Selected:
-    {{
-      selected5
-        ? `${selected5.getFullYear()}-${selected5.getMonth() + 1}`
-        : "-"
-    }}
-  </section>
-  <section>
     <h2>年份选择</h2>
     <veui-calendar
       v-model="selected6"
       type="year"
     />
-    Selected: {{ selected6 ? selected6.getFullYear() : "-" }}
+    Selected: {{ selected6 ? selected6.getFullYear() : '-' }}
   </section>
 </article>
 </template>
@@ -104,6 +189,18 @@ export default {
   data () {
     let today = new Date()
     return {
+      singleDate: null,
+      singleDateRange: null,
+      multipleDate: null,
+      multipleDateRange: null,
+      singleMonth: null,
+      singleMonthRange: null,
+      multipleMonth: null,
+      multipleMonthRange: null,
+      singleYear: null,
+      singleYearRange: null,
+      multipleYear: null,
+      multipleYearRange: null,
       selected0: null,
       selected1: new Date(1987, 6, 11),
       selected2: [
@@ -139,7 +236,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-dls/lib.less";
+@import '~veui-theme-dls/lib.less';
 
 .veui-demo-calendar {
   section {

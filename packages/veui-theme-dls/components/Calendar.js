@@ -8,6 +8,8 @@ config.defaults(
     icons: {
       prev: 'chevron-left',
       next: 'chevron-right',
+      doublePrev: 'chevron-double-left',
+      doubleNext: 'chevron-double-right',
       expand: 'chevron-down'
     }
   },
