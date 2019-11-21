@@ -83,6 +83,6 @@ describe('components/Slider', function () {
     })
     let obj = wrapper.find('.veui-slider-track-default-marks').element
       .childNodes
-    expect(obj.length).to.equal(9)
+    expect(obj.length).to.equal(11)
   })
 })
