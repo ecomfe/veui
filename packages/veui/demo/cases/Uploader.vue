@@ -33,9 +33,9 @@
     max-size="10mb"
     accept=".jpg,.jpeg,.gif"
     :payload="payload"
-    ui="horizontal"
     progress="bar"
     :upload="upload"
+    ui="bottom-desc"
     @success="onSuccess"
     @failure="onFailure"
     @change="handleChange('files1')"
@@ -43,41 +43,6 @@
   >
     <template slot="desc">
       请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图
-    </template>
-  </veui-uploader>
-  <h2>图片上传模式，增加额外操作按钮可以直接输入图片地址</h2>
-  <veui-uploader
-    v-model="filesExtra"
-    type="image"
-    name="file"
-    action="/upload"
-    :max-count="3"
-    max-size="10mb"
-    accept=".jpg,.jpeg,.gif"
-    :payload="payload"
-    ui="horizontal"
-    progress="bar"
-    class="extra-operation"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('filesExtra')"
-    @statuschange="handleStatusChange"
-  >
-    <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图
-    </template>
-    <template
-      slot="extra-operation"
-      slot-scope="file"
-    >
-      <veui-button
-        :ref="`add-image${file.index !== undefined ? '-' + file.index : ''}`"
-        :ui="file.src ? 'dark' : null"
-        class="extra-operation-button"
-        @click="openTooltip(file)"
-      >
-        输入图片地址
-      </veui-button>
     </template>
   </veui-uploader>
   <veui-tooltip
@@ -100,7 +65,6 @@
     :max-count="3"
     max-size="10mb"
     :payload="payload"
-    ui="horizontal"
     progress="detail"
     @success="onSuccess"
     @failure="onFailure"
@@ -123,6 +87,7 @@
     accept=".jpg,.jpeg,.gif"
     :payload="payload"
     :convert-response="convertResponse"
+    ui="bottom-desc"
     @success="onSuccess"
     @failure="onFailure"
     @change="handleChange('filesIframe')"
@@ -151,7 +116,7 @@ export default {
   data: function () {
     let files = [
       {
-        name: 'demo-file1.jpg',
+        name: 'demo-file111111111111111111111111111111111.jpg',
         src: 'https://www.baidu.com/img/bd_logo1.png',
         extraInfo: 123
       },

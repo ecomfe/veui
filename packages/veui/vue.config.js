@@ -76,5 +76,16 @@ module.exports = {
     config
       .plugin('context-replacement')
       .use(webpack.ContextReplacementPlugin, [/moment[\\/]locale$/, /^$/])
+  },
+  devServer: {
+    before (app) {
+      app.post('/upload', (req, res) => {
+        res.json({
+          success: Math.random() > 0.5,
+          src: 'https://webpack.js.org/e0b5805d423a4ec9473ee315250968b2.svg',
+          message: 'image too large'
+        })
+      })
+    }
   }
 }
