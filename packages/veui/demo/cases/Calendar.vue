@@ -18,11 +18,12 @@
     />
   </section>
   <section>
-    <h2>日期范围单选</h2>
+    <h2>日期范围单选(small)</h2>
     <veui-calendar
       v-model="singleDateRange"
       type="date"
       range
+      ui="s"
     />
   </section>
   <section>
@@ -57,11 +58,12 @@
     />
   </section>
   <section>
-    <h2>月份范围单选</h2>
+    <h2>月份范围单选(small)</h2>
     <veui-calendar
       v-model="singleMonthRange"
       type="month"
       range
+      ui="s"
     />
   </section>
   <section>
@@ -90,11 +92,12 @@
     />
   </section>
   <section>
-    <h2>年份范围单选</h2>
+    <h2>年份范围单选(small)</h2>
     <veui-calendar
       v-model="singleYearRange"
       type="year"
       range
+      ui="s"
     />
   </section>
   <section>
