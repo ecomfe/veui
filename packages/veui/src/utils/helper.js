@@ -25,10 +25,10 @@ export function getTypedAncestor (component, type, direct) {
   return null
 }
 
-export function getNonTransparentParent (component) {
+export function findAncestor (component, predicate) {
   let current = component.$parent
   while (current) {
-    if (!isType(current, 'transparent')) {
+    if (predicate(current)) {
       return current
     }
     current = current.$parent
