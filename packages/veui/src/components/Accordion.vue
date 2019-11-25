@@ -9,6 +9,7 @@ import ui from '../mixins/ui'
 import { makeCoupledParent } from '../mixins/coupled'
 import prefix from '../mixins/prefix'
 import { clone } from 'lodash'
+import '../common/uiTypes'
 
 let accordion = makeCoupledParent({
   type: 'accordion',

@@ -162,6 +162,7 @@ import OptionGroup from './OptionGroup'
 import focusable from '../mixins/focusable'
 import { createKeySelect } from '../mixins/key-select'
 import { pick, without, includes } from 'lodash'
+import '../common/uiTypes'
 
 const SHARED_PROPS = [
   'autocomplete',

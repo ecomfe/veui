@@ -136,9 +136,11 @@ import { includes } from 'lodash'
 import { closest } from '../../utils/dom'
 import { getTypedAncestor } from '../../utils/helper'
 import prefix from '../../mixins/prefix'
+import '../../common/uiTypes'
 
 export default {
   name: 'veui-tree-node',
+  uiTypes: ['transparent'],
   components: {
     'veui-icon': Icon
   },

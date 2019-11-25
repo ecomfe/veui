@@ -80,6 +80,7 @@ import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import Checkbox from '../Checkbox'
 import { focusIn } from '../../utils/dom'
+import '../../common/uiTypes'
 
 export default {
   name: 'veui-tree',

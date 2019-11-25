@@ -94,6 +94,7 @@ import AutocompleteBase from './_AutocompleteBase'
 import Input from '../Input'
 import { includes, pick, omit } from 'lodash'
 import OptionGroup from '../Select/OptionGroup'
+import '../../common/uiTypes'
 
 const SHARED_PROPS = [
   'placeholder',
