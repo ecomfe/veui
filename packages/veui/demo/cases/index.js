@@ -6,6 +6,7 @@ import Dialog from './Dialog'
 import Overlay from './Overlay'
 import Breadcrumb from './Breadcrumb'
 import Input from './Input'
+import InputGroup from './InputGroup'
 import Form from './Form'
 import Calendar from './Calendar'
 import DatePicker from './DatePicker'
@@ -168,6 +169,11 @@ export default [
     path: '/input',
     name: 'Input',
     component: Input
+  },
+  {
+    path: '/input-group',
+    name: 'InputGroup',
+    component: InputGroup
   },
   {
     path: '/link',

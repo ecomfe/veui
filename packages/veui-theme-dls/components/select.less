@@ -236,4 +236,20 @@
   &[ui~="l"] {
     .make-metrics(l);
   }
+
+  .@{veui-prefix}-input-group & {
+    margin-right: -1px;
+
+    &:first-child .@{veui-prefix}-input {
+      .border-right-radius(0);
+    }
+
+    &:last-child .@{veui-prefix}-input {
+      .border-left-radius(0);
+    }
+
+    &:not(:first-child):not(:last-child) .@{veui-prefix}-input {
+      border-radius: 0;
+    }
+  }
 }

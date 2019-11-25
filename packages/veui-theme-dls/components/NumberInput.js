@@ -20,6 +20,7 @@ config.defaults(
     ui: {
       size: {
         values: ['xs', 's', 'm'],
+        default: 'm',
         inherit: true
       },
       style: {

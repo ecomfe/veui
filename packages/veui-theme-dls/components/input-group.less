@@ -1,0 +1,59 @@
+@import "../lib.less";
+@import (reference) "../input.less";
+
+.@{veui-prefix}-input-group {
+  display: inline-flex;
+  align-items: stretch;
+
+  .veui-span,
+  .veui-label {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    border: 1px solid @dls-input-border-color;
+    padding: 0 @dls-input-padding;
+    border-radius: inherit;
+  }
+
+  &[ui~="xs"] {
+    border-radius: @dls-input-border-radius-xs;
+  }
+
+  &[ui~="s"] {
+    border-radius: @dls-input-border-radius-s;
+  }
+
+  &[ui~="m"] {
+    border-radius: @dls-input-border-radius-m;
+  }
+
+  &[ui~="l"] {
+    border-radius: @dls-input-border-radius-l;
+  }
+
+  & > [class^="@{veui-prefix}"] {
+    position: relative;
+    margin-right: -1px;
+
+    &:first-child {
+      .border-right-radius(0);
+    }
+
+    &:last-child {
+      .border-left-radius(0);
+    }
+
+    &:not(:first-child):not(:last-child) {
+      border-radius: 0;
+    }
+
+    &:hover {
+      z-index: 1;
+    }
+
+    &[class*="-focused"],
+    &[data-focus-visible-added] {
+      z-index: 2;
+    }
+  }
+}
