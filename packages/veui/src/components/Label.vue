@@ -17,6 +17,17 @@ import ui from '../mixins/ui'
 export default {
   name: 'veui-label',
   mixins: [prefix, ui],
+  props: {
+    for: {
+      type: process.env.VUE_ENV === 'server' ? true : [String, Object, Element],
+      default: null
+    }
+  },
+  computed: {
+    target () {
+      return this.for ? this.$vnode.context.$refs[this.for] : null
+    }
+  },
   methods: {
     /**
      * Why not implement this in the `Field` component?
@@ -30,8 +41,11 @@ export default {
         return
       }
 
-      let field = getTypedAncestor(this, 'form-field')
-      let target = this.findInput(field)
+      let { target } = this
+      if (!target) {
+        let field = getTypedAncestor(this, 'form-field')
+        target = this.findInput(field)
+      }
       if (target && isFunction(target.activate)) {
         target.activate()
       }
