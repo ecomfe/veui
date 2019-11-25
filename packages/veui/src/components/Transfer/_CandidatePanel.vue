@@ -5,6 +5,7 @@
   :searchable="searchable"
   :filter="realFilter"
   :placeholder="placeholder"
+  :disabled="!isSelectable"
   :ui="ui"
 >
   <template slot="head">

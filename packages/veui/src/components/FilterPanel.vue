@@ -17,6 +17,7 @@
       v-model="keyword"
       :ui="uiParts.search"
       :placeholder="placeholder"
+      :disabled="disabled"
       @search="debounceSearch"
       @input="searchOnInput && debounceSearch()"
     />
@@ -77,6 +78,7 @@ export default {
         return includes(item.label, keyword)
       }
     },
+    disabled: Boolean,
     placeholder: String
   },
   data () {
