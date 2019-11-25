@@ -164,6 +164,10 @@
     "path": "Input.vue"
   },
   {
+    "name": "InputGroup",
+    "path": "InputGroup.vue"
+  },
+  {
     "name": "Label",
     "path": "Label.vue"
   },

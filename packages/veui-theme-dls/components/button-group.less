@@ -11,11 +11,11 @@
 
     &:first-child {
       margin-left: 0;
-      .border-left-radius(@dls-button-border-radius-m);
+      .border-left-radius(inherit);
     }
 
     &:last-child {
-      .border-right-radius(@dls-button-border-radius-m);
+      .border-right-radius(inherit);
     }
 
     &:hover {
@@ -29,6 +29,26 @@
     &.@{veui-prefix}-disabled {
       z-index: 0;
     }
+  }
+
+  &[ui~="xs"] {
+    border-radius: @dls-button-border-radius-xs;
+  }
+
+  &[ui~="s"] {
+    border-radius: @dls-button-border-radius-s;
+  }
+
+  &[ui~="m"] {
+    border-radius: @dls-button-border-radius-m;
+  }
+
+  &[ui~="l"] {
+    border-radius: @dls-button-border-radius-l;
+  }
+
+  &[ui~="xl"] {
+    border-radius: @dls-button-border-radius-xl;
   }
 
   .@{veui-prefix}-button[ui~="primary"]

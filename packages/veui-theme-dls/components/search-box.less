@@ -6,18 +6,30 @@
   position: relative;
   color: @dls-input-font-color;
   background-color: @dls-input-background-color;
+  border-radius: @dls-input-border-radius-m;
 
-  .@{veui-prefix}-input-has-after .@{veui-prefix}-input-main {
-    .border-right-radius(@dls-input-border-radius-m);
+  &[ui~="s"] {
+    border-radius: @dls-input-border-radius-s;
+  }
+
+  &[ui~="xs"] {
+    border-radius: @dls-input-border-radius-xs;
+  }
+
+  &[ui~="l"] {
+    border-radius: @dls-input-border-radius-l;
+  }
+
+  .@{veui-prefix}-input-main {
+    width: @dls-input-width;
+    .border-right-radius(inherit);
   }
 
   .@{veui-prefix}-input {
     width: 100%;
     overflow: visible;
+    border-radius: inherit;
 
-    &-main {
-      width: @dls-input-width;
-    }
     &-append {
       .@{veui-prefix}-input-clear {
         margin-right: 0;
@@ -90,24 +102,6 @@
 
   .@{veui-prefix}-option {
     &:extend(._veui-dropdown-option all);
-  }
-
-  &[ui~="s"] {
-    .@{veui-prefix}-input-has-after .@{veui-prefix}-input-main {
-      .border-right-radius(@dls-input-border-radius-s);
-    }
-  }
-
-  &[ui~="xs"] {
-    .@{veui-prefix}-input-has-after .@{veui-prefix}-input-main {
-      .border-right-radius(@dls-input-border-radius-xs);
-    }
-  }
-
-  &[ui~="l"] {
-    .@{veui-prefix}-input-has-after .@{veui-prefix}-input-main {
-      .border-right-radius(@dls-input-border-radius-l);
-    }
   }
 
   &[ui~="inline"] {

@@ -26,10 +26,14 @@
     .@{veui-prefix}-input-append {
       right: 0;
       position: absolute;
-      .size(dls-sum(@dls-number-input-spin-button-width-normal-m, -1px), 100%);
       min-width: dls-sum(@dls-number-input-spin-button-min-width-normal, -1px);
       padding: 0;
       margin-left: @dls-input-padding;
+    }
+
+    .@{veui-prefix}-input-append,
+    .@{veui-prefix}-number-input-controls {
+      .border-right-radius(inherit);
     }
 
     &[ui~="xs"] .@{veui-prefix}-input-append {
@@ -38,6 +42,10 @@
 
     &[ui~="s"] .@{veui-prefix}-input-append {
       .size(dls-sum(@dls-number-input-spin-button-width-normal-s, -1px), 100%);
+    }
+
+    &[ui~="m"] .@{veui-prefix}-input-append {
+      .size(dls-sum(@dls-number-input-spin-button-width-normal-m, -1px), 100%);
     }
   }
 
@@ -65,8 +73,10 @@
     overflow: visible;
   }
 
-  &-step {
+  &-step,
+  &-step[ui] {
     display: flex;
+    position: relative;
     align-items: center;
     justify-content: center;
     background-clip: padding-box;
@@ -81,13 +91,12 @@
     position: relative;
 
     &.@{veui-prefix}-button {
-      .size(100%, ~"calc(50% + 1px)");
+      .size(100%, calc(50% + 1px));
       padding: 0;
       .border-left-radius(0);
     }
 
-    &.focus-visible,
-    &:hover {
+    &.focus-visible {
       z-index: 1;
     }
 
@@ -117,11 +126,8 @@
   }
 
   &[ui~="strong"] {
-    width: @dls-number-input-width-strong-m;
-
     .@{veui-prefix}-input {
       &-main {
-        border-radius: @dls-input-border-radius-m;
         padding: 0;
       }
 
@@ -134,7 +140,6 @@
         position: absolute;
         z-index: 1;
         top: 0;
-        .size(@dls-number-input-height-m);
       }
 
       &-before {
@@ -176,11 +181,26 @@
       }
     }
 
+    &[ui~="m"] {
+      width: @dls-number-input-width-strong-m;
+
+      .@{veui-prefix}-input {
+        &-main {
+          border-radius: @dls-input-border-radius-m;
+        }
+
+        &-before,
+        &-after {
+          .size(@dls-number-input-height-m);
+        }
+      }
+    }
+
     .@{veui-prefix}-number-input {
       &-step {
         padding: 0;
         border-style: none;
-        .size(~"calc(100% - 1px)", ~"calc(100% - 2px)");
+        .size(calc(100% - 1px), calc(100% - 2px));
 
         &-down {
           border-right-style: solid;
