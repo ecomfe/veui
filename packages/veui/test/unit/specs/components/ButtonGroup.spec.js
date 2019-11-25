@@ -20,7 +20,7 @@ describe('components/ButtonGroup', () => {
     })
 
     const buttons = wrapper.findAll('.veui-button')
-    expect(wrapper.attributes('ui')).to.equal('primary')
+    expect(wrapper.attributes('ui')).to.include('primary')
     expect(buttons.length).to.equal(2)
     expect(buttons.at(0).text()).to.equal('Undo')
     expect(buttons.at(1).text()).to.equal('Redo')
