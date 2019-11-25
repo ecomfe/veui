@@ -194,6 +194,14 @@
   &[ui~="inline"] {
     border-radius: 0;
     position: relative;
+    background-color: transparent;
+
+    &.veui-readonly,
+    &.veui-disabled {
+      .veui-input-main {
+        background-color: transparent;
+      }
+    }
   }
 
   &[ui~="inline"] &-main {

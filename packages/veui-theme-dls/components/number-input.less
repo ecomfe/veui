@@ -15,16 +15,17 @@
 
   input {
     ime-mode: disabled;
+    text-overflow: ellipsis;
   }
 
   &[ui~="normal"] .@{veui-prefix}-input-main {
-    padding-right: 0;
     overflow: hidden;
   }
 
   &[ui~="normal"] {
     .@{veui-prefix}-input-append {
-      position: relative;
+      right: 0;
+      position: absolute;
       .size(dls-sum(@dls-number-input-spin-button-width-normal-m, -1px), 100%);
       min-width: dls-sum(@dls-number-input-spin-button-min-width-normal, -1px);
       padding: 0;
@@ -69,6 +70,7 @@
     align-items: center;
     justify-content: center;
     background-clip: padding-box;
+    border-radius: inherit;
   }
 
   &[ui~="normal"] &-step:not(.focus-visible) {
@@ -77,6 +79,7 @@
 
   &[ui~="normal"] &-step {
     position: relative;
+
     &.@{veui-prefix}-button {
       .size(100%, ~"calc(50% + 1px)");
       padding: 0;

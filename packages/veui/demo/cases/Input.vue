@@ -218,6 +218,16 @@
           v-model="price"
           ui="inline"
         />
+        <veui-input
+          v-model="price"
+          ui="inline"
+          readonly
+        />
+        <veui-input
+          v-model="price"
+          ui="inline"
+          disabled
+        />
       </veui-field>
     </section>
   </veui-form>
@@ -267,7 +277,7 @@ export default {
         if (!matched) {
           return
         }
-        [digits, unit] = matched.slice(1)
+        ;[digits, unit] = matched.slice(1)
         digits = parseFloat(digits)
         if (isNaN(digits)) {
           return

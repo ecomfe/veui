@@ -110,6 +110,18 @@
     }
   }
 
+  &[ui~="inline"] {
+    .@{veui-prefix}-input-has-after .@{veui-prefix}-input-main {
+      border-radius: 0;
+    }
+
+    &,
+    &.veui-readonly,
+    &.veui-disabled {
+      background: transparent;
+    }
+  }
+
   &[ui~="strong"] {
     .@{veui-prefix}-input-has-after {
       .@{veui-prefix}-input-main {

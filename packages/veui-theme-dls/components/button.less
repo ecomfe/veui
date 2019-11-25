@@ -6,7 +6,6 @@
   justify-content: center;
   align-items: center;
   user-select: none;
-  .make-metrics(m);
   border: 1px solid @dls-button-border-color-normal;
   background-color: @dls-button-background-color-normal;
   color: @dls-button-font-color-normal;
@@ -32,6 +31,10 @@
 
   &[ui~="s"] {
     .make-metrics(s);
+  }
+
+  &[ui~="m"] {
+    .make-metrics(m);
   }
 
   &[ui~="l"] {
