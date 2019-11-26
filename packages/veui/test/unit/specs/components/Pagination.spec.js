@@ -226,12 +226,12 @@ describe('components/Pagination', () => {
     page.element.focus()
 
     await wait(0)
-    expect(page.classes()).to.include('focus-visible')
+    expect(page.classes('focus-visible')).to.equal(true)
 
     page.element.blur()
 
     await wait(0)
-    expect(page.classes()).to.not.include('focus-visible')
+    expect(page.classes('focus-visible')).to.equal(false)
 
     wrapper.destroy()
   })

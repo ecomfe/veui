@@ -26,7 +26,7 @@ describe('components/Button', () => {
     })
 
     expect(wrapper.contains(SpinIcon)).to.equal(true)
-    expect(wrapper.classes()).to.include('veui-button-loading')
+    expect(wrapper.classes('veui-button-loading')).to.equal(true)
     expect(wrapper.attributes('disabled')).to.equal('disabled')
   })
 
@@ -37,7 +37,7 @@ describe('components/Button', () => {
       }
     })
 
-    expect(wrapper.classes()).to.include('veui-disabled')
+    expect(wrapper.classes('veui-disabled')).to.equal(true)
     expect(wrapper.attributes('disabled')).to.equal('disabled')
   })
 

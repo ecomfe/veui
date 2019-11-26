@@ -13,8 +13,8 @@
     </veui-input-group>
   </section>
   <section>
-    <h4>Label + NumberInput + Button</h4>
-    <veui-input-group>
+    <h4>Label + NumberInput + Button + <code>ui="s"</code></h4>
+    <veui-input-group ui="s">
       <veui-label for="bid">USD</veui-label>
       <veui-number-input
         ref="bid"
@@ -25,8 +25,8 @@
     </veui-input-group>
   </section>
   <section>
-    <h4>NumberInput + Span + NumberInput</h4>
-    <veui-input-group>
+    <h4>NumberInput + Span + NumberInput + <code>ui="xs"</code></h4>
+    <veui-input-group ui="xs">
       <veui-number-input v-model="width"/>
       <veui-span>×</veui-span>
       <veui-number-input v-model="height"/>
@@ -44,8 +44,8 @@
     </veui-input-group>
   </section>
   <section>
-    <h4>Select + SearchBox</h4>
-    <veui-input-group>
+    <h4>Select + SearchBox + <code>ui="l"</code></h4>
+    <veui-input-group ui="l">
       <veui-select
         :options="types"
         :value="type"

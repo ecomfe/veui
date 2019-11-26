@@ -146,7 +146,7 @@ describe('components/DatePicker', () => {
     let cells = wrapper.findAll('tbody td')
     let rand = Math.floor(Math.random() * cells.length)
 
-    expect(cells.at(rand).classes()).to.include('date-class')
+    expect(cells.at(rand).classes('date-class')).to.equal(true)
 
     wrapper.destroy()
   })
@@ -160,7 +160,7 @@ describe('components/DatePicker', () => {
 
     let button = wrapper.find('.veui-date-picker-button')
 
-    expect(button.classes()).to.include('veui-disabled')
+    expect(button.classes('veui-disabled')).to.equal(true)
     expect(button.attributes('disabled')).to.equal('disabled')
 
     wrapper.destroy()
@@ -195,7 +195,7 @@ describe('components/DatePicker', () => {
 
     let button = wrapper.find('.veui-date-picker-button')
 
-    expect(button.classes()).to.include('veui-disabled')
+    expect(button.classes('veui-disabled')).to.equal(true)
     expect(button.attributes('disabled')).to.equal('disabled')
 
     wrapper.destroy()
@@ -352,8 +352,8 @@ describe('components/DatePicker', () => {
       wrapper
         .findAll('.veui-calendar>div')
         .at(2)
-        .classes()
-    ).to.include('veui-date-picker-shortcuts')
+        .classes('veui-date-picker-shortcuts')
+    ).to.equal(true)
 
     wrapper.destroy()
   })
@@ -368,9 +368,7 @@ describe('components/DatePicker', () => {
     let box = wrapper.find('.veui-date-picker-label')
     expect(box.contains('span.customized-slot')).to.equal(true)
 
-    expect(wrapper.find('.customized-slot').text()).to.equal(
-      'placeholder slot'
-    )
+    expect(wrapper.find('.customized-slot').text()).to.equal('placeholder slot')
     wrapper.destroy()
   })
 
@@ -383,9 +381,7 @@ describe('components/DatePicker', () => {
 
     let year = new Date().getFullYear()
 
-    expect(wrapper.find('.veui-calendar-day button').text()).to.equal(
-      '' + year
-    )
+    expect(wrapper.find('.veui-calendar-day button').text()).to.equal('' + year)
 
     wrapper.destroy()
   })

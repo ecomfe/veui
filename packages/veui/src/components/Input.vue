@@ -2,7 +2,7 @@
 <div
   :class="{
     [$c('input')]: true,
-    [$c('input-focused')]: focused,
+    [$c('focus')]: focused,
     [$c('input-hidden')]: type === 'hidden',
     [$c('input-invalid')]: realInvalid,
     [$c('input-autofill')]: autofill,

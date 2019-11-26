@@ -44,9 +44,7 @@ describe('components/Input', () => {
     let { vm } = wrapper
     await vm.$nextTick()
 
-    expect(
-      wrapper.find('div.veui-input').classes('veui-input-focused')
-    ).to.equal(true)
+    expect(wrapper.find('div.veui-input').classes('veui-focus')).to.equal(true)
     expect(vm.focused).to.equal(true)
 
     wrapper.destroy()
@@ -108,9 +106,7 @@ describe('components/Input', () => {
     await vm.$nextTick()
 
     expect(vm.focused).to.equal(false)
-    expect(
-      wrapper.find('div.veui-input').classes('veui-input-focused')
-    ).to.equal(false)
+    expect(wrapper.find('div.veui-input').classes('veui-focus')).to.equal(false)
 
     wrapper.destroy()
   })

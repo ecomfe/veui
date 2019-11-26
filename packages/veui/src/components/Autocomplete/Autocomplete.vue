@@ -3,7 +3,11 @@
   ref="base"
   :ui="realUi"
   :class="$c('autocomplete')"
-  :overlay-class="mergeOverlayClass($c('autocomplete-suggestions'))"
+  :overlay-class="
+    mergeOverlayClass({
+      [$c('autocomplete-suggestions')]: true
+    })
+  "
   :datasource="datasource"
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"

@@ -14,12 +14,12 @@
   }
 
   &:not(&-empty):not(&-expanded)
-    .@{veui-prefix}-input:not(.@{veui-prefix}-input-focused)
+    .@{veui-prefix}-input:not(.@{veui-prefix}-input-focus)
     .@{veui-prefix}-input-placeholder {
     color: @dls-input-font-color;
   }
 
-  &&-readonly .@{veui-prefix}-input-placeholder {
+  &.@{veui-prefix}-readonly .@{veui-prefix}-input-placeholder {
     color: @dls-input-font-color-read-only;
   }
 
@@ -163,7 +163,7 @@
   &:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
     &-clear
     + &-toggle,
-  .@{veui-prefix}-input-focused &-clear + &-toggle,
+  .@{veui-prefix}-input-focus &-clear + &-toggle,
   &-clear.focus-visible + &-toggle {
     opacity: 0;
   }
@@ -184,7 +184,7 @@
 
     .@{veui-prefix}-select:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
       &,
-    .@{veui-prefix}-input-focused &,
+    .@{veui-prefix}-focus &,
     &.focus-visible {
       opacity: 1;
     }
