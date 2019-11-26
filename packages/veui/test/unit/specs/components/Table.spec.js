@@ -607,7 +607,7 @@ describe('components/Table', () => {
     )
 
     let td = wrapper.findAll('tbody td').at(1)
-    expect(td.classes()).to.include('veui-table-column-center')
+    expect(td.classes('veui-table-column-center')).to.equal(true)
     expect(td.find('.veui-table-cell').html()).to.include('<b>apple</b>')
 
     wrapper.destroy()

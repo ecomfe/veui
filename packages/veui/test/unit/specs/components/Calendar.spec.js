@@ -171,7 +171,7 @@ describe('components/Calendar', () => {
     const cells = wrapper.findAll('tbody td')
     const rand = Math.floor(Math.random() * cells.length)
 
-    expect(cells.at(rand).classes()).to.include('date-class')
+    expect(cells.at(rand).classes('date-class')).to.equal(true)
 
     wrapper.destroy()
   })
@@ -248,9 +248,7 @@ describe('components/Calendar', () => {
     const { vm } = wrapper
     expect(vm.year).to.equal(1987)
     expect(vm.month).to.equal(6)
-    expect(wrapper.find('.veui-calendar-selected button').text()).to.equal(
-      '11'
-    )
+    expect(wrapper.find('.veui-calendar-selected button').text()).to.equal('11')
 
     wrapper.destroy()
   })

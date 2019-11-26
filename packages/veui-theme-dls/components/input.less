@@ -127,15 +127,15 @@
     color: @dls-input-font-color-read-only;
   }
 
-  &-focused {
+  &.@{veui-prefix}-focus {
     position: relative;
   }
 
-  &&-focused &-main {
+  &.@{veui-prefix}-focus &-main {
     .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
   }
 
-  &-focused.@{veui-prefix}-readonly &-main:hover {
+  &.@{veui-prefix}-focus.@{veui-prefix}-readonly &-main:hover {
     border-color: @dls-input-border-color-read-only-focus;
   }
 
@@ -214,7 +214,7 @@
     border-radius: 0;
   }
 
-  &-focused[ui~="inline"] &-main {
+  &.@{veui-prefix}-focus[ui~="inline"] &-main {
     box-shadow: @dls-input-shadow-inline-focus;
   }
 }

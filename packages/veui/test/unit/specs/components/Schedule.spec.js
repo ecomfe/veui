@@ -123,24 +123,24 @@ describe('components/Schedule', () => {
         .findAll('td')
         .at(20)
         .find('button')
-        .classes()
-    ).to.include('night')
+        .classes('night')
+    ).to.equal(true)
     expect(
       rows
         .at(5)
         .findAll('td')
         .at(20)
         .find('button')
-        .classes()
-    ).to.include('night')
+        .classes('night')
+    ).to.equal(true)
     expect(
       rows
         .at(5)
         .findAll('td')
         .at(20)
         .find('button')
-        .classes()
-    ).to.include('weekend')
+        .classes('weekend')
+    ).to.equal(true)
 
     // disabledHour
     expect(
@@ -397,7 +397,7 @@ describe('components/Schedule', () => {
     let cells = wrapper
       .find('.veui-schedule-table-interaction tr')
       .findAll('td')
-    expect(cells.at(0).classes()).to.include('veui-schedule-selected')
+    expect(cells.at(0).classes('veui-schedule-selected')).to.equal(true)
     expect(wrapper.find('.veui-schedule-table-selected td').text()).to.equal(
       '0:00–2:00'
     )

@@ -15,7 +15,7 @@
     [$c('input-invalid')]: realInvalid,
     [$c('readonly')]: realReadonly,
     [$c('disabled')]: realDisabled,
-    [$c('number-input-controls-focused')]: spinnerFocused
+    [$c('number-input-controls-focus')]: spinnerFocused
   }"
   v-on="listeners"
   @blur="handleBlur"

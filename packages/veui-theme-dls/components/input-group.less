@@ -13,22 +13,27 @@
     border: 1px solid @dls-input-border-color;
     padding: 0 @dls-input-padding;
     border-radius: inherit;
+    font-size: inherit;
   }
 
   &[ui~="xs"] {
     border-radius: @dls-input-border-radius-xs;
+    font-size: @dls-input-font-size-xs;
   }
 
   &[ui~="s"] {
     border-radius: @dls-input-border-radius-s;
+    font-size: @dls-input-font-size-s;
   }
 
   &[ui~="m"] {
     border-radius: @dls-input-border-radius-m;
+    font-size: @dls-input-font-size-m;
   }
 
   &[ui~="l"] {
     border-radius: @dls-input-border-radius-l;
+    font-size: @dls-input-font-size-l;
   }
 
   & > [class^="@{veui-prefix}"] {
@@ -51,7 +56,7 @@
       z-index: 1;
     }
 
-    &[class*="-focused"],
+    &[class*="-focus"],
     &[data-focus-visible-added] {
       z-index: 2;
     }

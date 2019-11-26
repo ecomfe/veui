@@ -2,7 +2,7 @@
 <div
   :class="{
     [$c('textarea')]: true,
-    [$c('textarea-focused')]: focused,
+    [$c('focus')]: focused,
     [$c('textarea-rows')]: normalizedRows > 0,
     [$c('textarea-line-numbered')]: lineNumber,
     [$c('textarea-autoresize')]: autoresize,

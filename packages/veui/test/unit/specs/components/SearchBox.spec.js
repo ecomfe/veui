@@ -216,7 +216,7 @@ describe('components/SearchBox', () => {
     wrapper.setProps({ disabled: true })
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.classes()).to.include('veui-disabled')
+    expect(wrapper.classes('veui-disabled')).to.equal(true)
 
     wrapper.destroy()
   })
