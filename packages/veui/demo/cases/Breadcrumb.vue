@@ -7,6 +7,7 @@
     </veui-button>
   </section>
   <section>
+    <h4>自定义加粗</h4>
     <veui-breadcrumb
       :routes="items"
       @redirect="handleRedirect"
@@ -23,6 +24,7 @@
     </veui-breadcrumb>
   </section>
   <section>
+    <h4>加强型</h4>
     <veui-breadcrumb
       :routes="items"
       ui="strong"
@@ -30,6 +32,15 @@
     />
   </section>
   <section>
+    <h4><code>ui="s"</code></h4>
+    <veui-breadcrumb
+      :routes="items"
+      ui="s"
+      @redirect="handleRedirect"
+    />
+  </section>
+  <section>
+    <h4>内联模式</h4>
     <veui-breadcrumb>
       <veui-breadcrumb-item to="/">
         首页

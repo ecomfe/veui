@@ -47,7 +47,7 @@ export default {
   },
   render () {
     return (
-      <ol class={this.$c('breadcrumb')} role="navigation">
+      <ol class={this.$c('breadcrumb')} role="navigation" ui={this.realUi}>
         {this.$slots.default ||
           this.localRoutes.map((route, index) => (
             <BreadcrumbItem
