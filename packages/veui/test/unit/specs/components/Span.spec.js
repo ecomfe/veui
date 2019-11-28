@@ -6,15 +6,15 @@ describe('components/Span', () => {
     let wrapper = mount(Span, {
       sync: false,
       propsData: {
-        ui: 'large'
+        ui: 'l'
       }
     })
 
-    expect(wrapper.attributes('ui')).to.equal('large')
+    expect(wrapper.attributes('ui')).to.equal('l')
 
-    wrapper.setProps({ ui: 'micro' })
+    wrapper.setProps({ ui: 'xs' })
     await wrapper.vm.$nextTick()
-    expect(wrapper.attributes('ui')).to.equal('micro')
+    expect(wrapper.attributes('ui')).to.equal('xs')
 
     wrapper.destroy()
   })
