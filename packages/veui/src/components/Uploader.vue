@@ -24,6 +24,7 @@
           (maxCount > 1 && fileList.length >= maxCount) ||
           (requestMode === 'iframe' && submitting)
       }"
+      :ui="realUi"
       @click="handleClick"
     >
       <slot name="button-label">
@@ -59,17 +60,6 @@
     >
       <slot name="desc"/>
     </span>
-    <span
-      v-if="validationMessage"
-      :class="$c('uploader-error')"
-    >
-      <slot
-        name="invalid"
-        :error="error"
-      >
-        <veui-icon :name="icons.alert"/>{{ validationMessage }}
-      </slot>
-    </span>
   </div>
   <transition-group
     :class="listClass"
@@ -99,6 +89,7 @@
             <div :class="$c('uploader-list-container')">
               <veui-icon
                 v-if="file.status !== 'uploading'"
+                :ui="realUi"
                 :name="icons.file"
                 :class="{
                   [$c('uploader-list-file-icon')]: true,
@@ -116,6 +107,8 @@
                 :ref="`fileFailure${index}`"
                 :class="{
                   [$c('uploader-list-name')]: true,
+                  [$c('uploader-list-name-success')]:
+                    file.status === 'success',
                   [$c('uploader-list-name-failure')]:
                     file.status === 'failure'
                 }"
@@ -126,15 +119,17 @@
               <veui-icon
                 v-if="file.status === 'success'"
                 :name="icons.success"
+                :u="realUi"
                 :class="$c('uploader-success-icon')"
               />
               <veui-icon
                 v-if="file.status === 'failure'"
                 :name="icons.failure"
+                :u="realUi"
                 :class="$c('uploader-failure-icon')"
               />
               <veui-button
-                :class="$c('uploader-button-remove')"
+                :class="$c('uploader-list-remove')"
                 :ui="uiParts.clearFileDone"
                 :disabled="realUneditable"
                 @click="removeFile(file)"
@@ -173,14 +168,14 @@
               >
               <div :class="`${listClass}-mask`">
                 <veui-button
-                  :ui="uiParts.previewImage"
+                  :ui="uiParts.imageAction"
                   @click="preview(file)"
                 >
-                  <veui-icon :name="icons.previewImage"/>
+                  <veui-icon :name="icons.preview"/>
                 </veui-button>
                 <label
                   :for="inputId"
-                  :ui="uiParts.retryImageSuccess"
+                  :ui="uiParts.imageAction"
                   :class="{
                     [$c('button')]: true,
                     [$c('button-icon-only')]: true,
@@ -191,13 +186,13 @@
                   <veui-icon :name="icons.upload"/>
                 </label>
                 <veui-button
-                  :ui="uiParts.clearImageSuccess"
+                  :ui="uiParts.imageAction"
                   :disabled="realUneditable"
                   :class="`${listClass}-mask-remove`"
                   @click="removeFile(file)"
                 >
                   <veui-icon
-                    :name="icons.clearImage"
+                    :name="icons.clear"
                     :label="t('remove')"
                   />
                 </veui-button>
@@ -222,11 +217,11 @@
           <div
             :class="`${listClass}-container ${listClass}-container-uploading`"
           >
-            <p :class="`${listClass}-container-uploading-text`">
+            <div :class="`${listClass}-container-uploading-text`">
               <slot name="uploading-label">
                 {{ t('uploading') }}
               </slot>
-            </p>
+            </div>
             <veui-progress
               v-if="requestMode !== 'iframe'"
               :value="file.loaded / file.total"
@@ -256,16 +251,16 @@
                 [$c('uploader-input-label-image')]: true
               }"
             >
-              <veui-icon :name="icons.imageAdd"/>
+              <veui-icon :name="icons.addImage"/>
             </label>
             <div :class="`${listClass}-mask`">
               <veui-button
-                :ui="uiParts.clearImageSuccess"
+                :ui="uiParts.imageAction"
                 :class="`${listClass}-mask-remove`"
                 @click="removeFile(file)"
               >
                 <veui-icon
-                  :name="icons.clearImage"
+                  :name="icons.clear"
                   :label="t('remove')"
                 />
               </veui-button>
@@ -335,9 +330,10 @@
             @change="handleNewFiles"
             @click.stop
           >
-          <veui-icon :name="icons.imageAdd"/>
+          <veui-icon :name="icons.addImage"/>
         </label>
       </div>
+      <slot name="extra-operation"/>
     </li>
   </transition-group>
   <span
@@ -345,17 +341,6 @@
     :class="$c('uploader-desc')"
   >
     <slot name="desc"/>
-  </span>
-  <span
-    v-if="type === 'image' && validationMessage"
-    :class="$c('uploader-error')"
-  >
-    <slot
-      name="invalid"
-      :error="error"
-    >
-      <veui-icon :name="icons.alert"/>{{ validationMessage }}
-    </slot>
   </span>
   <iframe
     v-if="requestMode === 'iframe' && submitting"
@@ -390,10 +375,14 @@
 
   <veui-dialog
     :open.sync="previewDialogOpen"
+    :overlay-class="$c('uploader-preview-dialog')"
     footless
-    draggable
+    outside-closable
   >
-    <img :src="previewImageSrc">
+    <img
+      :src="previewImageSrc"
+      :class="$c('uploader-preview-dialog-image')"
+    >
   </veui-dialog>
 </div>
 </template>
@@ -420,6 +409,7 @@ import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
+import toast from '../managers/toast'
 import { parse, format } from 'bytes'
 import warn from '../utils/warn'
 
@@ -763,6 +753,9 @@ export default {
       Promise.all(newFiles.map(file => this.validateFile(file))).then(
         validationResults => {
           this.error.valid = validationResults.every(Boolean)
+          if (!this.error.valid) {
+            toast.error(this.validationMessage)
+          }
 
           newFiles = newFiles.filter((file, index) => validationResults[index])
           if (!newFiles.length) {
@@ -795,6 +788,7 @@ export default {
               this.fileList.length + newFiles.length > this.maxCount
             ) {
               this.error.countOverflow = true
+              toast.error(this.validationMessage)
               return
             }
 
@@ -835,39 +829,21 @@ export default {
     },
     validateFile (file) {
       let typeValidation = this.validateFileType(file.name)
-      this.error.typeInvalid = !typeValidation
+      this.error.typeInvalid = !typeValidation || this.error.typeInvalid
 
       let sizeValidation = this.validateFileSize(file.size)
-      this.error.sizeInvalid = !sizeValidation
+      this.error.sizeInvalid = !sizeValidation || this.error.sizeInvalid
 
       return new Promise(resolve => {
-        if (this.validator) {
-          let validationResult = this.validator(file)
-          let customValidation = true
-
-          if (typeof validationResult.then === 'function') {
-            validationResult.then(result => {
-              customValidation = this.handleCustomValidationResult(result)
-              resolve(typeValidation && sizeValidation && customValidation)
-            })
-          } else {
-            customValidation = this.handleCustomValidationResult(
-              validationResult
-            )
-            resolve(typeValidation && sizeValidation && customValidation)
-          }
-        } else {
-          resolve(typeValidation && sizeValidation)
+        resolve(this.validator ? this.validator(file) : { valid: true })
+      }).then(result => {
+        let customValidation = result.valid
+        if (!customValidation) {
+          this.customValidationMessage = result.message
+          this.error.customError = true
         }
+        return customValidation && typeValidation && sizeValidation
       })
-    },
-    handleCustomValidationResult (result) {
-      let valid = result.valid
-      if (!valid) {
-        this.customValidationMessage = result.message
-      }
-      this.error.customError = !valid
-      return valid
     },
     validateFileType (filename) {
       if (!this.accept) {
@@ -1025,13 +1001,6 @@ export default {
 
       if (toEmit) {
         this.$emit('change', this.getValue(false))
-      }
-    },
-    retry (file) {
-      if (this.requestMode === 'iframe') {
-        this.submit(file)
-      } else {
-        this.uploadFile(file)
       }
     },
     removeFile (file) {

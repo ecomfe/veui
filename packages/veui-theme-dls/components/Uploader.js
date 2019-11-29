@@ -1,5 +1,4 @@
 import 'veui-theme-dls-icons/upload'
-import 'veui-theme-dls-icons/times'
 import 'veui-theme-dls-icons/trash'
 import 'veui-theme-dls-icons/check-circle'
 import 'veui-theme-dls-icons/times-circle'
@@ -15,30 +14,31 @@ config.defaults(
   {
     icons: {
       upload: 'upload',
-      clear: 'times',
-      clearImage: 'trash',
+      clear: 'trash',
       success: 'check-circle',
       failure: 'times-circle',
       file: 'file',
-      imageAdd: 'image-add',
+      addImage: 'image-add',
       alert: 'exclamation-circle',
       loading: 'loading',
-      previewImage: 'eye',
+      preview: 'eye',
       message: 'question-circle'
     },
     ui: {
+      size: {
+        values: ['m', 's'],
+        inherit: true
+      },
       descPosition: {
-        values: ['right-desc', 'bottom-desc'],
-        default: 'right-desc'
+        values: ['desc-horizontal', 'desc-vertical'],
+        default: 'desc-horizontal'
       }
     },
     parts: {
       clearFileDone: 'text',
-      retryImageSuccess: 'icon s',
-      clearImageSuccess: 'icon s',
       progress: 's',
       messageTooltip: 'reverse',
-      previewImage: 'icon s'
+      imageAction: 'icon s'
     }
   },
   'uploader'

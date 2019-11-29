@@ -355,7 +355,7 @@ describe('components/Uploader', () => {
     })
 
     wrapper
-      .findAll('.veui-uploader-button-remove')
+      .findAll('.veui-uploader-list-remove')
       .at(1)
       .trigger('click')
     expect(wrapper.emitted().remove[0]).to.deep.equal([
@@ -437,7 +437,7 @@ describe('components/Uploader', () => {
     let input = wrapper.find('input[type="file"]')
     expect(input.attributes('disabled')).to.equal('disabled')
 
-    wrapper.find('.veui-uploader-button-remove').trigger('click')
+    wrapper.find('.veui-uploader-list-remove').trigger('click')
     expect(input.attributes('disabled')).to.equal(undefined)
     wrapper.destroy()
   })
@@ -457,21 +457,6 @@ describe('components/Uploader', () => {
     let images = wrapper.findAll('img')
     expect(images.at(0).attributes('src')).to.equal('/test1.jpg')
     expect(images.at(1).attributes('src')).to.equal('/test2.jpg')
-    wrapper.destroy()
-  })
-
-  it('should handle retry correctly.', () => {
-    let wrapper = mount(Uploader, {
-      propsData: {
-        action: '/upload'
-      }
-    })
-
-    wrapper.vm.$data.fileList = [{ name: 'test.jpg', status: 'failure' }]
-    wrapper.find('.veui-uploader-list-retry').trigger('click')
-    clearXHR(wrapper)
-
-    expect(wrapper.vm.$data.fileList[0].status).to.equal('uploading')
     wrapper.destroy()
   })
 
@@ -509,32 +494,6 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should display upload progress correctly.', () => {
-    let wrapper = mount(Uploader, {
-      propsData: {
-        action: '/upload',
-        progress: 'percent'
-      }
-    })
-
-    wrapper.vm.$data.fileList = [
-      { name: 'test.jpg', loaded: 300, total: 1000, status: 'uploading' }
-    ]
-    expect(wrapper.find('.veui-uploader-progress').text()).to.equal('30%')
-
-    wrapper.setProps({ progress: 'detail' })
-    expect(wrapper.find('.veui-uploader-progress').text()).to.equal(
-      '300B/1000B'
-    )
-
-    wrapper.setProps({ progress: 'bar' })
-    expect(
-      wrapper.find('.veui-uploader-progress-bar').element.style.width
-    ).to.equal('30%')
-
-    wrapper.destroy()
-  })
-
   it('should set callback function correctly when request mode is iframe.', () => {
     let wrapper = mount(Uploader, {
       propsData: {
@@ -559,7 +518,7 @@ describe('components/Uploader', () => {
       }
     })
 
-    expect(wrapper.find('.veui-uploader-tip').text()).to.equal('jpg only.')
+    expect(wrapper.find('.veui-uploader-desc').text()).to.equal('jpg only.')
     wrapper.destroy()
   })
 
