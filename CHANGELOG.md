@@ -1,5 +1,12 @@
 ## 2.0.0-alpha.4
 
+### ⚠️ 非兼容性变更
+* [^] `Uploader` 组件调整为适配 DLS 实现，移除 `type-invald`/`size-invalid`/`count-overflow` 这三个插槽，移除 prop `progress`，移除 `ui` 选项 `horizontal`。
+
+### 💡 主要变更
+* [+] `Uploader` 组件新增了 `validator` prop，支持自定义的异步校验功能。
+* [+] `Uploader` 组件新增了 `actions` prop，支持在图片模式下自定义可对文件进行的操作。
+
 ### 🐞 问题修复
 - [^] 修复 `DatePicker` 组件 shortcut 样式不正确的问题。
 
