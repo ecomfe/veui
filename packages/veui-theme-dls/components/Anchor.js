@@ -7,6 +7,9 @@ config.defaults(
         values: ['s', 'm'],
         inherit: true
       }
+    },
+    parts: {
+      current: 'strong'
     }
   },
   'anchor'

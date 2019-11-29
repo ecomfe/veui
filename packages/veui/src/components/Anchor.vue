@@ -234,7 +234,7 @@ export default {
     },
     getFinalUi (link) {
       return `${this.realUi || ''} ${
-        link === this.localActive ? 'strong' : ''
+        link === this.localActive ? this.uiParts.current : ''
       }`.trim()
     },
     updateOnContainerChange () {
