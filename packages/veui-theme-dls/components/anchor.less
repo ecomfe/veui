@@ -54,7 +54,7 @@
   &-wrapper &-item:first-child {
     margin-left: @dls-anchor-level-indent;
   }
-  &-item-active::before {
+  &-current::before {
     content: "";
     position: absolute;
     left: -1px;
@@ -62,8 +62,7 @@
     height: inherit;
     background-color: @dls-link-font-color-normal-hover;
   }
-  &-wrapper &-item-active {
-    color: @dls-anchor-indicator-color-active;
+  &-wrapper &-current {
     &::before {
       background-color: @dls-anchor-indicator-color-active;
     }

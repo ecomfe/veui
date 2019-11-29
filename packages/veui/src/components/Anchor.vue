@@ -29,11 +29,11 @@
             :class="{
               [$c('tree-item-label')]: true,
               [$c('anchor-item')]: true,
-              [$c('anchor-item-active')]: props.value === localActive
+              [$c('anchor-current')]: props.value === localActive
             }"
             :disabled="!!props.disabled"
             :to="props.value"
-            :ui="realUi"
+            :ui="getFinalUi(props.value)"
             @click="handleClick(props)"
           >
             <slot
@@ -231,6 +231,11 @@ export default {
   methods: {
     relocate () {
       if (this.sticky) this.toggleSticky(true)
+    },
+    getFinalUi (link) {
+      return `${this.realUi || ''} ${
+        link === this.localActive ? 'strong' : ''
+      }`.trim()
     },
     updateOnContainerChange () {
       // 确保为 hash 滚动不会因为 container 而丢失
