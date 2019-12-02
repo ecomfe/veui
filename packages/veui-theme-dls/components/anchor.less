@@ -20,11 +20,13 @@
     width: 0;
     height: 0;
   }
+
   &-tree {
     border-left: @dls-anchor-track-width solid @dls-anchor-track-color;
     display: inline-block;
     padding: 0;
   }
+
   &-wrapper {
     max-height: 100vh;
     .@{veui-prefix}-tree-item {
@@ -38,12 +40,14 @@
         height: inherit;
       }
     }
+
     &[ui~="s"] {
       .@{veui-prefix}-tree-item {
         height: @dls-anchor-height-s;
         line-height: @dls-anchor-height-s;
       }
     }
+
     &
       > .@{veui-prefix}-tree
       > li:first-child
@@ -51,26 +55,34 @@
       margin-top: 0;
     }
   }
+
   &-wrapper &-item:first-child {
     margin-left: @dls-anchor-level-indent;
   }
+
   &-current::before {
     content: "";
     position: absolute;
     left: -1px;
     width: @dls-anchor-indicator-width;
     height: inherit;
-    background-color: @dls-link-font-color-normal-hover;
   }
+
   &-wrapper &-current {
     &::before {
-      background-color: @dls-anchor-indicator-color-active;
+      background-color: @dls-anchor-indicator-color;
     }
-    &:hover {
-      color: @dls-anchor-indicator-color-hover;
-      &::before {
-        background-color: @dls-anchor-indicator-color-hover;
-      }
+
+    &:hover::before {
+      background-color: @dls-anchor-indicator-color-hover;
+    }
+
+    &.focus-visible::before {
+      background-color: @dls-anchor-indicator-color-focus;
+    }
+
+    &:active::before {
+      background-color: @dls-anchor-indicator-color-active;
     }
   }
 }
