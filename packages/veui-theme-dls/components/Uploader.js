@@ -27,7 +27,8 @@ config.defaults(
     ui: {
       size: {
         values: ['m', 's'],
-        inherit: true
+        inherit: true,
+        default: 'm'
       },
       descPosition: {
         values: ['desc-horizontal', 'desc-vertical'],
@@ -35,10 +36,10 @@ config.defaults(
       }
     },
     parts: {
-      clearFileDone: 'text',
+      remove: 'icon',
       progress: 's',
-      messageTooltip: 'reverse',
-      imageAction: 'icon s'
+      imageAction: 'icon s',
+      preview: 'auto'
     }
   },
   'uploader'
