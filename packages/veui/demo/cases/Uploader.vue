@@ -12,7 +12,6 @@
     accept=".jpg,.jpeg,.gif"
     ui="horizontal"
     :payload="payload"
-    progress="percent"
     :validator="validator"
     @success="onSuccess"
     @failure="onFailure"
@@ -33,7 +32,6 @@
     max-size="10mb"
     accept=".jpg,.jpeg,.gif"
     :payload="payload"
-    progress="bar"
     :upload="upload"
     ui="desc-vertical s"
     @success="onSuccess"
@@ -65,7 +63,6 @@
     :max-count="3"
     max-size="10mb"
     :payload="payload"
-    progress="detail"
     ui="s"
     @success="onSuccess"
     @failure="onFailure"
@@ -78,7 +75,6 @@
   </veui-uploader>
   <h2>文件上传模式，通过iframe上传</h2>
   <veui-uploader
-    ref="iframeUploader"
     v-model="filesIframe"
     name="file"
     action="/uploadiframe"

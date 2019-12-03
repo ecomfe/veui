@@ -91,12 +91,9 @@
     .@{veui-prefix}-uploader-success-icon,
     .@{veui-prefix}-uploader-failure-icon {
       margin: 0 @dls-uploader-file-item-close-icon-spacing 0 auto;
-      // width auto 避免icon被中间的文字挤小
-      width: auto;
     }
     &-file-icon,
     &-loading-icon {
-      width: auto;
       margin-left: @dls-uploader-file-item-label-spacing-before;
       color: @dls-uploader-file-item-font-color;
       &-failure {
@@ -172,7 +169,7 @@
       .veui-transition(opacity);
       .absolute(_, 0, 0, 0);
       // todo: mask background color variable
-      background-color: fadeout(#000, 60%);
+      background-color: fade(#000, 60%);
       padding: @dls-uploader-mask-padding-y @dls-uploader-mask-padding-x;
       .@{veui-prefix}-icon {
         color: @dls-uploader-mask-icon-color;
@@ -200,9 +197,6 @@
   }
 
   &-preview-dialog {
-    .@{veui-prefix}-dialog-content {
-      width: auto;
-    }
     &-image {
       min-width: @dls-uploader-image-preview-min-width;
       max-width: @dls-uploader-image-preview-max-width;
@@ -235,6 +229,9 @@
 
   &[ui~="s"] {
     font-size: @dls-uploader-font-size-s;
+    .@{veui-prefix}-uploader-list-image-container {
+      border-radius: @dls-button-border-radius-s;
+    }
   }
 
   &-hide {

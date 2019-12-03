@@ -130,20 +130,19 @@
               />
               <veui-button
                 :class="$c('uploader-list-remove')"
-                :ui="uiParts.clearFileDone"
+                :ui="uiParts.remove"
                 :disabled="realUneditable"
                 @click="removeFile(file)"
               >
                 <veui-icon :name="icons.clear"/>
               </veui-button>
-              <veui-tooltip
+              <veui-popover
                 v-if="file.status === 'failure'"
                 :target="`fileFailure${index}`"
                 position="top"
-                :ui="uiParts.messageTooltip"
               >
                 {{ file.message }}
-              </veui-tooltip>
+              </veui-popover>
             </div>
             <slot
               name="file-after"
@@ -277,13 +276,12 @@
                 :name="icons.message"
               /></slot>
             </p>
-            <veui-tooltip
+            <veui-popover
               :target="`fileFailure${index}`"
               position="top"
-              :ui="uiParts.messageTooltip"
             >
               {{ file.message }}
-            </veui-tooltip>
+            </veui-popover>
           </template>
           <slot
             name="file-after"
@@ -376,6 +374,7 @@
   <veui-dialog
     :open.sync="previewDialogOpen"
     :overlay-class="$c('uploader-preview-dialog')"
+    :ui="uiParts.preview"
     footless
     outside-closable
   >
@@ -390,7 +389,7 @@
 <script>
 import Button from './Button'
 import Icon from './Icon'
-import Tooltip from './Tooltip'
+import Popover from './Popover'
 import Progress from './Progress'
 import Dialog from './Dialog'
 import {
@@ -424,7 +423,7 @@ export default {
   components: {
     'veui-icon': Icon,
     'veui-button': Button,
-    'veui-tooltip': Tooltip,
+    'veui-popover': Popover,
     'veui-progress': Progress,
     'veui-dialog': Dialog
   },
@@ -515,10 +514,6 @@ export default {
     maxCount: Number,
     maxSize: [Number, String],
     payload: Object,
-    progress: {
-      type: String,
-      default: 'text'
-    },
     autoupload: {
       type: Boolean,
       default: true
@@ -885,15 +880,10 @@ export default {
     },
     onprogress (file, progress) {
       let index = this.fileList.indexOf(file)
-      switch (this.progress) {
-        case 'percent':
-        case 'detail':
-        case 'bar':
-          file.loaded = progress.loaded
-          file.total = progress.total
-          this.updateFileList(file)
-          break
-      }
+      file.loaded = progress.loaded
+      file.total = progress.total
+      this.updateFileList(file)
+
       this.$emit(
         'progress',
         this.files[index],
