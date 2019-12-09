@@ -273,7 +273,9 @@ describe('components/Table', () => {
       }
     )
 
-    let active = wrapper.findAll('svg.veui-sorter-active.veui-sorter-icon-desc')
+    let active = wrapper.findAll(
+      'svg.veui-sorter-active.veui-sorter-icon-desc'
+    )
     expect(active.length).to.be.equal(1)
 
     wrapper.find('svg.veui-sorter').trigger('click')
@@ -536,6 +538,50 @@ describe('components/Table', () => {
         .at(1)
         .attributes('rowspan')
     ).to.equal('2')
+    wrapper.destroy()
+  })
+
+  it('should handle head/foot slot update correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        template: `
+          <div>
+            <veui-table>
+              <veui-table-column field="field1" title="field1">
+                <template slot="head"><div id="t1">{{ title1 }}</div></template>
+              </veui-table-column>
+              <veui-table-column field="field2" title="field2"/>
+            </veui-table>
+            <veui-table>
+              <veui-table-column field="field1" title="field1">
+                <template slot="head"><div id="t1">{{ title1 }}</div></template>
+              </veui-table-column>
+              <veui-table-column field="field2" title="field2"/>
+            </veui-table>
+          </div>`,
+        data () {
+          return {
+            title1: 'foo'
+          }
+        }
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    expect(wrapper.find('#t1').text()).to.equal('foo')
+
+    vm.title1 = 'bar'
+
+    await vm.$nextTick()
+    expect(wrapper.find('#t1').text()).to.equal('bar')
+
     wrapper.destroy()
   })
 })

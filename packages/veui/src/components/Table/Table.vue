@@ -10,7 +10,10 @@
   >
     <table>
       <col-group gutter/>
-      <table-head @sort="sort"/>
+      <table-head
+        ref="head"
+        @sort="sort"
+      />
     </table>
   </div>
   <div
@@ -25,16 +28,20 @@
       <col-group/>
       <table-head
         v-if="!scrollableY"
+        ref="head"
         @sort="sort"
       />
       <table-body>
         <template slot="no-data">
           <slot name="no-data">
-            {{ t('noData') }}
+            {{ t("noData") }}
           </slot>
         </template>
       </table-body>
-      <table-foot v-if="!scrollableY && hasFoot">
+      <table-foot
+        v-if="!scrollableY && hasFoot"
+        ref="foot"
+      >
         <slot name="foot"/>
       </table-foot>
     </table>
@@ -46,7 +53,10 @@
   >
     <table>
       <col-group gutter/>
-      <table-foot v-if="hasFoot">
+      <table-foot
+        v-if="hasFoot"
+        ref="foot"
+      >
         <slot name="foot"/>
       </table-foot>
     </table>
@@ -213,10 +223,20 @@ export default {
       return 'partial'
     },
     hasFoot () {
-      return this.$slots.foot || this.columns.some(col => col.hasFoot())
+      return (
+        this.$scopedSlots.foot ||
+        this.$slots.foot ||
+        this.columns.some(col => col.hasFoot())
+      )
     },
     scrollableY () {
       return this.realScroll.y && this.data.length
+    },
+    staleHead () {
+      return this.realColumns.some(({ hasStaleHead }) => hasStaleHead())
+    },
+    staleFoot () {
+      return this.realColumns.some(({ hasStaleFoot }) => hasStaleFoot())
     }
   },
   watch: {
@@ -251,6 +271,12 @@ export default {
     }
   },
   updated () {
+    if (this.staleHead) {
+      this.$refs.head.$forceUpdate()
+    }
+    if (this.hasFoot && this.staleFoot) {
+      this.$refs.foot.$forceUpdate()
+    }
     if (this.scrollableY) {
       this.updateLayout()
     }

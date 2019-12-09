@@ -24,13 +24,13 @@
       v-model="columns"
       type="checkbox"
       :items="[
-        { value: 'typeId', label: '类型 ID'},
-        { value: 'id', label: '数据 ID'},
-        { value: 'group', label: '数据分组'},
-        { value: 'desc', label: '数据描述'},
-        { value: 'price', label: '价格'},
-        { value: 'updateDate', label: '更新时间'},
-        { value: 'operation', label: '操作'}
+        { value: 'typeId', label: '类型 ID' },
+        { value: 'id', label: '数据 ID' },
+        { value: 'group', label: '数据分组' },
+        { value: 'desc', label: '数据描述' },
+        { value: 'price', label: '价格' },
+        { value: 'updateDate', label: '更新时间' },
+        { value: 'operation', label: '操作' }
       ]"
     />
   </section>
@@ -55,7 +55,8 @@
       >
         <template slot="head">
           <strong>
-            数据 <span style="color: #3998fc">
+            数据
+            <span style="color: #3998fc">
               ID
             </span>
           </strong>
@@ -177,7 +178,6 @@
           </veui-tooltip>
         </template>
       </veui-table-column>
-      <!-- <template slot="foot">An awesome table foot!</template> -->
     </veui-table>
     <p>已选ID：{{ JSON.stringify(selected2) }}</p>
   </section>
@@ -280,13 +280,81 @@
       </template>
     </veui-table>
   </section>
+  <section class="container">
+    <section>
+      <veui-input
+        v-model="idTitle"
+        placeholder="列标题"
+      />
+    </section>
+    <veui-table
+      :data="data"
+      key-field="id"
+    >
+      <veui-table-column
+        field="id"
+        title="数据 ID"
+      >
+        <template slot="head">
+          {{ idTitle }}
+        </template>
+      </veui-table-column>
+      <veui-table-column
+        field="desc"
+        title="数据描述"
+      />
+      <veui-table-column
+        field="price"
+        title="价格"
+        width="160"
+        align="right"
+      >
+        <template slot-scope="props">
+          {{ props.item.price | currency }}
+        </template>
+      </veui-table-column>
+      <veui-table-column
+        field="updateDate"
+        title="更新时间"
+        align="right"
+      >
+        <template slot-scope="props">
+          {{ props.item.updateDate | date }}
+        </template>
+      </veui-table-column>
+      <template slot="foot">
+        An awesome table foot!
+      </template>
+    </veui-table>
+  </section>
+  <section class="container">
+    <veui-table
+      key-field="id"
+      :data="data"
+    >
+      <veui-table-column
+        v-for="field in fields"
+        :key="field.name"
+        :field="field.name"
+        :title="field.title"
+      />
+    </veui-table>
+  </section>
 </article>
 </template>
 
 <script>
 import moment from 'moment'
 import bus from '../bus'
-import { Button, Checkbox, CheckboxGroup, Table, Column, Tooltip } from 'veui'
+import {
+  Button,
+  Input,
+  Checkbox,
+  CheckboxGroup,
+  Table,
+  Column,
+  Tooltip
+} from 'veui'
 
 export default {
   name: 'table-demo',
@@ -296,6 +364,7 @@ export default {
     'veui-table-column': Column,
     'veui-tooltip': Tooltip,
     'veui-checkbox': Checkbox,
+    'veui-input': Input,
     'veui-checkboxgroup': CheckboxGroup
   },
   filters: {
@@ -311,8 +380,10 @@ export default {
   },
   data () {
     return {
+      idTitle: '#',
       showGroup: true,
       selectSpanRow: true,
+      fields: [{ name: 'id', title: 'ID' }, { name: 'desc', title: '描述' }],
       data: [
         {
           id: '3154',
