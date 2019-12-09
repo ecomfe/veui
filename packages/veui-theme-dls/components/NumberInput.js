@@ -32,12 +32,8 @@ config.defaults(
       spinner: ''
     },
     icons: {
-      increase ({ style }) {
-        return ICON_MAP[style].increase
-      },
-      decrease ({ style }) {
-        return ICON_MAP[style].decrease
-      }
+      increase: ({ style }) => ICON_MAP[style].increase,
+      decrease: ({ style }) => ICON_MAP[style].decrease
     }
   },
   'numberinput'
