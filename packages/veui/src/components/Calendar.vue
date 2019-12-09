@@ -24,7 +24,7 @@
   >
     <div
       :class="$c('calendar-head')"
-      :aria-hidden="pIndex > 0"
+      :aria-hidden="!!pIndex"
     >
       <button
         ref="backward"
@@ -124,7 +124,7 @@
         v-if="isDateType && p.expanded"
         :notable="1901"
         :row="150"
-        :current="panelData[pIndex].scrollYear"
+        :initial="panelData[pIndex].initialScrollYear"
       >
         <template slot-scope="{ listeners, data }">
           <ul
@@ -135,7 +135,7 @@
             <li
               v-for="idx in data.row"
               :key="idx + data.start - 1 + `-${data.page}`"
-              :class="getYearClass(p, idx + data.start - 1, true)"
+              :class="getYearClass(p, idx + data.start - 1)"
             >
               <button
                 type="button"
@@ -216,7 +216,7 @@
             <td
               v-for="j in 3"
               :key="j"
-              :class="getMonthClass(p, i, j, isDateType)"
+              :class="getMonthClass(p, i, j)"
             >
               <button
                 type="button"
@@ -242,7 +242,7 @@
         :notable="1901"
         :row="50"
         :col="3"
-        :current="p.year"
+        :initial="p.year"
       >
         <template slot-scope="{ listeners, data }">
           <div
@@ -265,13 +265,7 @@
                   <td
                     v-for="j in 3"
                     :key="j"
-                    :class="
-                      getYearClass(
-                        p,
-                        data.start + 3 * (i - 1) + j - 1,
-                        type === 'month'
-                      )
-                    "
+                    :class="getYearClass(p, data.start + 3 * (i - 1) + j - 1)"
                   >
                     <button
                       type="button"
@@ -328,6 +322,7 @@ import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import Icon from './Icon'
 import InfiniteScroll from './Calendar/_InfiniteScroll'
+import addMonths from 'date-fns/add_months'
 
 config.defaults({
   'calendar.weekStart': 1
@@ -411,13 +406,15 @@ export default {
         data.push({
           date: { year },
           expanded: false,
-          scrollYear: null
+          initialScrollYear: null,
+          currentScrollYear: null
         })
       } else if (this.type === 'month') {
         data.push({
           date: { year: year + i },
           expanded: false,
-          scrollYear: null
+          initialScrollYear: null,
+          currentScrollYear: null
         })
       } else {
         data.push({
@@ -429,15 +426,14 @@ export default {
             i
           ),
           expanded: false,
-          scrollYear: null
+          initialScrollYear: null,
+          currentScrollYear: null
         })
       }
     }
 
     return {
       panelData: data,
-      expands: [],
-      scrollYear: [],
       id: uniqueId('veui-calendar-'),
       picking: null,
       pickingRanges: null,
@@ -481,7 +477,7 @@ export default {
       let data = this.panelData
       let panels = []
       for (let i = 0; i < panel; i++) {
-        let { date, expanded } = data[i]
+        let { date, expanded, currentScrollYear } = data[i]
         let { year, month } = date
         if (this.type === 'year') {
           panels.push({ year })
@@ -574,7 +570,8 @@ export default {
           year,
           month,
           weeks,
-          expanded
+          expanded,
+          currentScrollYear
         })
       }
       return panels
@@ -674,7 +671,7 @@ export default {
         if (dateLt(p[i].date, p[i + 1].date)) {
           break
         }
-        let date = getPrevDate(p[i + 1].date)
+        let date = getNextDate(p[i + 1].date, -1)
         p[i].date = date
         this.$emit('viewchange', {
           ...date,
@@ -741,10 +738,11 @@ export default {
         ...normalizeClass(extraClass)
       }
     },
-    getMonthClass (p, i, j, ignoreRange) {
+    getMonthClass (p, i, j) {
       let month = (i - 1) * 3 + j - 1
+      let year = this.isDateType ? p.currentScrollYear : p.year
       let day = {
-        year: p.year,
+        year,
         month,
         date: 1
       }
@@ -752,17 +750,21 @@ export default {
         [this.$c('calendar-month')]: true,
         [this.$c('calendar-today')]:
           month === this.today.getMonth() &&
-          p.year === this.today.getFullYear(),
-        [this.$c('calendar-selected')]: this.isSelected(day, isSameMonth)
+          day.year === this.today.getFullYear()
       }
-      return ignoreRange
-        ? clazz
+      return this.isDateType
+        ? {
+          ...clazz,
+          [this.$c('calendar-current')]:
+              month === p.month && p.year === day.year
+        }
         : {
           ...clazz,
+          [this.$c('calendar-selected')]: this.isSelected(day, isSameMonth),
           ...this.getRangeClass(day)
         }
     },
-    getYearClass (p, year, ignoreRange) {
+    getYearClass (p, year) {
       let day = {
         year: year,
         month: 0,
@@ -770,14 +772,19 @@ export default {
       }
       let clazz = {
         [this.$c('calendar-year')]: true,
-        [this.$c('calendar-current')]: p.year === year,
-        [this.$c('calendar-selected')]: this.isSelected(day, isSameYear),
         [this.$c('calendar-today')]: year === this.today.getFullYear()
       }
-      return ignoreRange
-        ? clazz
+      let navigate = this.type !== 'year'
+      return navigate
+        ? {
+          ...clazz,
+          [this.$c('calendar-current')]: this.isDateType
+            ? p.currentScrollYear === year
+            : p.year === year
+        }
         : {
           ...clazz,
+          [this.$c('calendar-selected')]: this.isSelected(day, isSameYear),
           ...this.getRangeClass(day)
         }
     },
@@ -854,7 +861,8 @@ export default {
       return this.commonSelect(day)
     },
     selectMonth (i, month) {
-      let year = this.panels[i].year
+      let { currentScrollYear, year } = this.panels[i]
+      year = this.isDateType ? currentScrollYear : year
 
       if (this.type === 'month') {
         return this.commonSelect({
@@ -869,7 +877,7 @@ export default {
         year,
         month
       })
-      this.setExpanded(false)
+      this.setExpanded(i, false)
       // this.setFocus('expansion-select', i)
     },
     selectYear (i, year) {
@@ -881,17 +889,21 @@ export default {
         })
       }
       // type === month/date 的视图修改
-      this.updatePanelDate(i, { year })
       if (!this.isDateType) {
-        this.setExpanded(false)
+        this.updatePanelDate(i, { year })
+        this.setExpanded(i, false)
       } else {
+        this.panelData[i].currentScrollYear = year
         this.scrollCurrentToCenter(this.$refs[`yearScroller-${i}`][0])
       }
       // this.setFocus('expansion-select', i)
     },
     scrollCurrentToCenter (container, duration = 200) {
       this.$nextTick(() => {
-        let el = container.querySelector(`.${this.$c('calendar-current')}`)
+        let el =
+          container.querySelector(`.${this.$c('calendar-selected')}`) ||
+          container.querySelector(`.${this.$c('calendar-current')}`) ||
+          container.querySelector(`.${this.$c('calendar-today')}`)
         if (el) {
           scrollTo(0.5, container, el, { duration })
           focusIn(this.type === 'month' ? el : el)
@@ -903,6 +915,7 @@ export default {
     },
     pick (value) {
       this.closeMousePicking()
+      this.setExpanded(false)
       this.picking = Array.isArray(value) ? [...value] : value
     },
     markEnd (day) {
@@ -1011,7 +1024,8 @@ export default {
       if (value != null) {
         let data = this.panelData[i]
         if (this.isDateType && !data.expanded && value) {
-          data.scrollYear = this.panels[i].year
+          data.initialScrollYear = this.panels[i].year
+          data.currentScrollYear = this.panels[i].year
         }
         data.expanded = value
         // this.$set(this.expands, i, value)
@@ -1145,24 +1159,15 @@ function getRangePosition (day, range, type) {
   }
 }
 
-function getNextDate ({ year, month }, offset = 1) {
+function getNextDate ({ year, month }, count = 1) {
   if (month != null) {
-    month = month + offset
-    let rest = month % 12
-    let yearOffset = (month - rest) / 12
-    yearOffset = month < 0 ? yearOffset - 1 : yearOffset
-    year = year + yearOffset
-    month = rest + (rest < 0 ? 12 : 0)
+    let date = addMonths(new Date(year, month, 1), count)
     return {
-      year,
-      month
+      year: date.getFullYear(),
+      month: date.getMonth()
     }
   } else {
-    return { year: year + offset }
+    return { year: year + count }
   }
-}
-
-function getPrevDate (data, offset = -1) {
-  return getNextDate(data, offset)
 }
 </script>

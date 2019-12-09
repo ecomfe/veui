@@ -1,14 +1,66 @@
 <template>
 <article>
-  <h1><code>&lt;veui-date-picker&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-date-picker&gt;</code>
+  </h1>
   <section>
-    <h2>普通</h2>
-    <veui-date-picker v-model="selected1"/>
+    <h2>日期选择</h2>
+    <veui-date-picker
+      v-model="selectedDate"
+      clearable
+    />
+  </section>
+  <section>
+    <h2>日期范围选择</h2>
+    <veui-date-picker
+      v-model="selectedDateRange"
+      clearable
+      range
+      format="MM/DD/YYYY"
+    />
+  </section>
+  <section>
+    <h2>日期范围选择（快捷）</h2>
+    <veui-date-picker
+      v-model="selectedDateRange"
+      range
+      :shortcuts="shortcuts"
+    />
+  </section>
+  <section>
+    <h2>月份选择</h2>
+    <veui-date-picker
+      v-model="selectedMonth"
+      type="month"
+    />
+  </section>
+  <section>
+    <h2>月份范围选择</h2>
+    <veui-date-picker
+      v-model="selectedMonthRange"
+      type="month"
+      range
+    />
+  </section>
+  <section>
+    <h2>年份选择</h2>
+    <veui-date-picker
+      v-model="selectedYear"
+      type="year"
+    />
+  </section>
+  <section>
+    <h2>年份范围选择</h2>
+    <veui-date-picker
+      v-model="selectedYearRange"
+      type="year"
+      range
+    />
   </section>
   <section>
     <h2>小尺寸</h2>
     <veui-date-picker
-      v-model="selected1"
+      v-model="selectedDate"
       ui="micro"
     />
   </section>
@@ -16,7 +68,7 @@
     <h2>禁用</h2>
     <section>
       <veui-date-picker
-        v-model="selected1"
+        v-model="selectedDate"
         disabled
       />
     </section>
@@ -25,42 +77,17 @@
     <h2>可清除选择</h2>
     <section>
       <veui-date-picker
-        v-model="selected1"
+        v-model="selectedDate"
         ui="micro"
         clearable
       />
     </section>
   </section>
   <section>
-    <h2>范围选择</h2>
-    <section>
-      <veui-date-picker
-        v-model="selected2"
-        range
-        :shortcuts="shortcuts"
-        ui="alt"
-      />
-    </section>
-  </section>
-  <section>
-    <h2>月份选择</h2>
-    <veui-date-picker
-      v-model="selected3"
-      type="month"
-    />
-  </section>
-  <section>
-    <h2>年份选择</h2>
-    <veui-date-picker
-      v-model="selected3"
-      type="year"
-    />
-  </section>
-  <section>
     <h2>可清除范围选择</h2>
     <section>
       <veui-date-picker
-        v-model="selected2"
+        v-model="selectedDateRange"
         range
         clearable
         :panel="3"
@@ -68,7 +95,7 @@
     </section>
     <section>
       <veui-date-picker
-        v-model="selected2"
+        v-model="selectedDateRange"
         ui="large"
         range
         clearable
@@ -77,7 +104,7 @@
     </section>
     <section>
       <veui-date-picker
-        v-model="selected2"
+        v-model="selectedDateRange"
         ui="small"
         range
         clearable
@@ -89,17 +116,20 @@
     <h2>范围禁用</h2>
     <section>
       <veui-date-picker
-        v-model="selected2"
+        v-model="selectedDateRange"
         range
         disabled
       />
     </section>
   </section>
   <section>
-    <h2>作用域插槽 <code>date</code></h2>
+    <h2>
+      作用域插槽
+      <code>date</code>
+    </h2>
     <section>
       <veui-date-picker
-        v-model="selected2"
+        v-model="selectedDateRange"
         range
       >
         <template
@@ -111,43 +141,20 @@
       </veui-date-picker>
     </section>
   </section>
-  <section>
-    <h2>作用域插槽 <code>selected</code></h2>
-    <section>
-      <veui-date-picker
-        v-model="selected2"
-        range
-      >
-        <template
-          slot="selected"
-          slot-scope="{ year, month, date, position }"
-        >
-          {{ position === 'from' ? '👉' : '' }}{{ year % 2000 }}.{{ month + 1 }}.<strong>{{ date }}</strong>{{ position === 'to' ? ' 👈' : '' }}
-        </template>
-      </veui-date-picker>
-    </section>
-  </section>
   <section style="height: 500px;"/>
   <section>
     <h2>普通</h2>
-    <section><veui-date-picker v-model="selected1"/></section>
+    <section>
+      <veui-date-picker v-model="selectedDate"/>
+    </section>
   </section>
   <section>
     <h2>可清除选择</h2>
     <section>
       <veui-date-picker
-        v-model="selected1"
+        v-model="selectedDate"
         clearable
         ui="alt"
-      />
-    </section>
-  </section>
-  <section>
-    <h2>范围选择</h2>
-    <section>
-      <veui-date-picker
-        v-model="selected2"
-        range
       />
     </section>
   </section>
@@ -155,7 +162,7 @@
     <h2>可清除范围选择</h2>
     <section>
       <veui-date-picker
-        v-model="selected2"
+        v-model="selectedDateRange"
         range
         clearable
         :panel="3"
@@ -175,9 +182,12 @@ export default {
   },
   data () {
     return {
-      selected1: null,
-      selected2: null,
-      selected3: null,
+      selectedDate: null,
+      selectedMonth: null,
+      selectedYear: null,
+      selectedDateRange: null,
+      selectedMonthRange: null,
+      selectedYearRange: null,
       shortcuts: [
         {
           label: '上个月',

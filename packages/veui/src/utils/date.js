@@ -89,8 +89,8 @@ function prepareRanges (range) {
 
 export function mergeRange (r1, r2, type = 'date', mode = 'xor') {
   let inc = {
-    month: addMonths,
     date: addDays,
+    month: addMonths,
     year: addYears
   }[type]
   return merge(prepareRanges(r1), prepareRanges(r2), { inc, mode })

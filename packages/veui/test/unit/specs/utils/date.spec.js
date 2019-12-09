@@ -94,7 +94,9 @@ describe('utils/date', () => {
     expect(toDate(new Date(2018, 11, 32).getTime())).to.deep.equal(
       new Date(2018, 11, 32)
     )
-    expect(toDate(new Date(2018, 0, 0).getTime())).to.deep.equal(new Date(2018, 0, 0))
+    expect(toDate(new Date(2018, 0, 0).getTime())).to.deep.equal(
+      new Date(2018, 0, 0)
+    )
   })
 
   it('should calculate `Date`/plain date object/timestamp equality correctly', () => {
@@ -167,17 +169,15 @@ describe('utils/date', () => {
     expect(mergeRange([], [[DATES[1], DATES[1]]])).to.deep.equal([
       [DATES[1], DATES[1]]
     ])
-    expect(mergeRange([[DATES[0], DATES[5]]], [[DATES[1], DATES[1]]])).to.deep.equal([
-      [DATES[0], DATES[0]],
-      [DATES[2], DATES[5]]
-    ])
-    expect(mergeRange([[DATES[0], DATES[5]]], [[DATES[0], DATES[0]]])).to.deep.equal([
-      [DATES[1], DATES[5]]
-    ])
-    expect(mergeRange([[DATES[0], DATES[0]]], [[DATES[2], DATES[2]]])).to.deep.equal([
-      [DATES[0], DATES[0]],
-      [DATES[2], DATES[2]]
-    ])
+    expect(
+      mergeRange([[DATES[0], DATES[5]]], [[DATES[1], DATES[1]]])
+    ).to.deep.equal([[DATES[0], DATES[0]], [DATES[2], DATES[5]]])
+    expect(
+      mergeRange([[DATES[0], DATES[5]]], [[DATES[0], DATES[0]]])
+    ).to.deep.equal([[DATES[1], DATES[5]]])
+    expect(
+      mergeRange([[DATES[0], DATES[0]]], [[DATES[2], DATES[2]]])
+    ).to.deep.equal([[DATES[0], DATES[0]], [DATES[2], DATES[2]]])
     expect(
       mergeRange(
         [[DATES[0], DATES[1]], [DATES[4], DATES[8]]],
@@ -207,22 +207,38 @@ describe('utils/date', () => {
   })
 
   it('should calculate range union correctly', () => {
-    expect(mergeRange([], [[DATES[2], DATES[5]]], 'union')).to.deep.equal([
-      [DATES[2], DATES[5]]
-    ])
     expect(
-      mergeRange([[DATES[0], DATES[5]]], [[DATES[1], DATES[1]]], 'union')
+      mergeRange([], [[DATES[2], DATES[5]]], 'date', 'union')
+    ).to.deep.equal([[DATES[2], DATES[5]]])
+    expect(
+      mergeRange(
+        [[DATES[0], DATES[5]]],
+        [[DATES[1], DATES[1]]],
+        'date',
+        'union'
+      )
     ).to.deep.equal([[DATES[0], DATES[5]]])
     expect(
-      mergeRange([[DATES[0], DATES[5]]], [[DATES[0], DATES[0]]], 'union')
+      mergeRange(
+        [[DATES[0], DATES[5]]],
+        [[DATES[0], DATES[0]]],
+        'date',
+        'union'
+      )
     ).to.deep.equal([[DATES[0], DATES[5]]])
     expect(
-      mergeRange([[DATES[0], DATES[0]]], [[DATES[2], DATES[2]]], 'union')
+      mergeRange(
+        [[DATES[0], DATES[0]]],
+        [[DATES[2], DATES[2]]],
+        'date',
+        'union'
+      )
     ).to.deep.equal([[DATES[0], DATES[0]], [DATES[2], DATES[2]]])
     expect(
       mergeRange(
         [[DATES[0], DATES[1]], [DATES[4], DATES[8]]],
         [[DATES[1], DATES[6]]],
+        'date',
         'union'
       )
     ).to.deep.equal([[DATES[0], DATES[8]]])
@@ -230,6 +246,7 @@ describe('utils/date', () => {
       mergeRange(
         [[DATES[0], DATES[1]], [DATES[4], DATES[8]]],
         [[DATES[1], DATES[2]], [DATES[4], DATES[8]]],
+        'date',
         'union'
       )
     ).to.deep.equal([[DATES[0], DATES[2]], [DATES[4], DATES[8]]])
@@ -237,26 +254,45 @@ describe('utils/date', () => {
       mergeRange(
         [[DATES[0], DATES[1]], [DATES[5], DATES[7]]],
         [[DATES[3], DATES[4]], [DATES[6], DATES[8]]],
+        'date',
         'union'
       )
     ).to.deep.equal([[DATES[0], DATES[1]], [DATES[3], DATES[8]]])
   })
 
   it('should calculate range relative complement correctly', () => {
-    expect(mergeRange([], [[DATES[1], DATES[1]]], 'substract')).to.deep.equal([])
     expect(
-      mergeRange([[DATES[0], DATES[5]]], [[DATES[1], DATES[1]]], 'substract')
+      mergeRange([], [[DATES[1], DATES[1]]], 'date', 'substract')
+    ).to.deep.equal([])
+    expect(
+      mergeRange(
+        [[DATES[0], DATES[5]]],
+        [[DATES[1], DATES[1]]],
+        'date',
+        'substract'
+      )
     ).to.deep.equal([[DATES[0], DATES[0]], [DATES[2], DATES[5]]])
     expect(
-      mergeRange([[DATES[0], DATES[5]]], [[DATES[0], DATES[0]]], 'substract')
+      mergeRange(
+        [[DATES[0], DATES[5]]],
+        [[DATES[0], DATES[0]]],
+        'date',
+        'substract'
+      )
     ).to.deep.equal([[DATES[1], DATES[5]]])
     expect(
-      mergeRange([[DATES[0], DATES[0]]], [[DATES[2], DATES[2]]], 'substract')
+      mergeRange(
+        [[DATES[0], DATES[0]]],
+        [[DATES[2], DATES[2]]],
+        'date',
+        'substract'
+      )
     ).to.deep.equal([[DATES[0], DATES[0]]])
     expect(
       mergeRange(
         [[DATES[0], DATES[1]], [DATES[4], DATES[8]]],
         [[DATES[1], DATES[6]]],
+        'date',
         'substract'
       )
     ).to.deep.equal([[DATES[0], DATES[0]], [DATES[7], DATES[8]]])
@@ -264,6 +300,7 @@ describe('utils/date', () => {
       mergeRange(
         [[DATES[0], DATES[1]], [DATES[4], DATES[8]]],
         [[DATES[1], DATES[2]], [DATES[4], DATES[8]]],
+        'date',
         'substract'
       )
     ).to.deep.equal([[DATES[0], DATES[0]]])
@@ -271,6 +308,7 @@ describe('utils/date', () => {
       mergeRange(
         [[DATES[0], DATES[1]], [DATES[5], DATES[7]]],
         [[DATES[3], DATES[4]], [DATES[6], DATES[8]]],
+        'date',
         'substract'
       )
     ).to.deep.equal([[DATES[0], DATES[1]], [DATES[5], DATES[5]]])

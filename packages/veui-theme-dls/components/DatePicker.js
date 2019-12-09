@@ -1,12 +1,12 @@
 import 'veui-theme-dls-icons/calendar'
-import 'veui-theme-dls-icons/times'
+import 'veui-theme-dls-icons/times-circle'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
       calendar: 'calendar',
-      clear: 'times'
+      clear: 'times-circle'
     },
     ui: {
       style: {
@@ -17,6 +17,9 @@ config.defaults(
         values: ['large', 'small', 'tiny', 'micro'],
         inherit: true
       }
+    },
+    parts: {
+      clear: 'icon'
     }
   },
   'datepicker'

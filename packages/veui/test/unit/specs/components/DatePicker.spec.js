@@ -16,7 +16,7 @@ describe('components/DatePicker', () => {
       done()
     })
 
-    wrapper.find('.veui-date-picker-button').trigger('click')
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
     wrapper.find('.veui-calendar-day button').trigger('click')
   })
 
@@ -34,7 +34,7 @@ describe('components/DatePicker', () => {
       done()
     })
 
-    wrapper.find('.veui-date-picker-button').trigger('click')
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
     wrapper.find('.veui-calendar-year button').trigger('click')
   })
 
@@ -52,7 +52,7 @@ describe('components/DatePicker', () => {
       done()
     })
 
-    wrapper.find('.veui-date-picker-button').trigger('click')
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
     wrapper.find('.veui-calendar-month button').trigger('click')
   })
 
@@ -69,7 +69,7 @@ describe('components/DatePicker', () => {
       template: `<veui-date-picker v-model="selected" range/>`
     })
 
-    wrapper.find('.veui-date-picker-button').trigger('click')
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
     let days = wrapper.findAll('.veui-calendar-day button')
     let { vm } = wrapper
 
@@ -81,19 +81,6 @@ describe('components/DatePicker', () => {
     expect(vm.selected[0]).to.be.an.instanceof(Date)
     expect(vm.selected[1]).to.be.an.instanceof(Date)
     expect(vm.selected[1] - vm.selected[0]).to.equal(7 * 1000 * 60 * 60 * 24)
-
-    wrapper.destroy()
-  })
-
-  it('should support customized panel count correctly.', () => {
-    let wrapper = mount(DatePicker, {
-      propsData: {
-        panel: 3
-      }
-    })
-
-    let panels = wrapper.findAll('.veui-calendar-panel')
-    expect(panels.length).to.equal(3)
 
     wrapper.destroy()
   })
@@ -158,10 +145,10 @@ describe('components/DatePicker', () => {
       }
     })
 
-    let button = wrapper.find('.veui-date-picker-button')
+    let trigger = wrapper.find('.veui-date-picker-trigger')
 
-    expect(button.classes('veui-disabled')).to.equal(true)
-    expect(button.attributes('disabled')).to.equal('disabled')
+    expect(trigger.classes()).to.include('veui-disabled')
+    expect(trigger.find('input').attributes('disabled')).to.equal('disabled')
 
     wrapper.destroy()
   })
@@ -193,10 +180,9 @@ describe('components/DatePicker', () => {
       }
     })
 
-    let button = wrapper.find('.veui-date-picker-button')
+    let button = wrapper.find('.veui-date-picker-trigger')
 
-    expect(button.classes('veui-disabled')).to.equal(true)
-    expect(button.attributes('disabled')).to.equal('disabled')
+    expect(button.classes()).to.include('veui-disabled')
 
     wrapper.destroy()
   })
@@ -215,7 +201,7 @@ describe('components/DatePicker', () => {
     })
 
     let { vm } = wrapper
-    wrapper.find('.veui-date-picker-button').trigger('click')
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
     wrapper.find('.veui-calendar-day button').trigger('click')
 
     await vm.$nextTick()
@@ -257,15 +243,13 @@ describe('components/DatePicker', () => {
     })
 
     let { vm } = wrapper
-    wrapper.find('.veui-date-picker-button').trigger('click')
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
     wrapper.find('.veui-calendar-day button').trigger('click')
 
     await vm.$nextTick()
 
     let reg = /^(\d{2})\/(\d{2})\/(\d{4})$/
-    expect(reg.test(wrapper.find('.veui-date-picker-label').text())).to.equal(
-      true
-    )
+    expect(reg.test(wrapper.find('input').element.value)).to.equal(true)
 
     wrapper.destroy()
   })
@@ -318,60 +302,6 @@ describe('components/DatePicker', () => {
     wrapper.destroy()
   })
 
-  it('should support customized shortcuts-position correctly', async () => {
-    let wrapper = mount({
-      data () {
-        return {
-          selected: [],
-          shortcuts: [
-            {
-              label: '最近7天',
-              from: -6,
-              to: 0
-            }
-          ]
-        }
-      },
-      components: {
-        'veui-date-picker': DatePicker
-      },
-      template: `
-        <veui-date-picker
-          v-model="selected"
-          range
-          :shortcuts="shortcuts"
-          shortcutsPosition="after"
-        />`
-    })
-
-    wrapper.find('.veui-date-picker-button').trigger('click')
-
-    await wrapper.vm.$nextTick()
-
-    expect(
-      wrapper
-        .findAll('.veui-calendar>div')
-        .at(2)
-        .classes('veui-date-picker-shortcuts')
-    ).to.equal(true)
-
-    wrapper.destroy()
-  })
-
-  it('should support placeholder slot correctly.', () => {
-    let wrapper = mount(DatePicker, {
-      slots: {
-        placeholder: '<span class="customized-slot">placeholder slot</span>'
-      }
-    })
-
-    let box = wrapper.find('.veui-date-picker-label')
-    expect(box.contains('span.customized-slot')).to.equal(true)
-
-    expect(wrapper.find('.customized-slot').text()).to.equal('placeholder slot')
-    wrapper.destroy()
-  })
-
   it('should support date slot correctly.', () => {
     let wrapper = mount(DatePicker, {
       scopedSlots: {
@@ -382,42 +312,6 @@ describe('components/DatePicker', () => {
     let year = new Date().getFullYear()
 
     expect(wrapper.find('.veui-calendar-day button').text()).to.equal('' + year)
-
-    wrapper.destroy()
-  })
-
-  it('should support selected slot correctly.', async () => {
-    let wrapper = mount({
-      data () {
-        return {
-          selected: null
-        }
-      },
-      components: {
-        'veui-date-picker': DatePicker
-      },
-      methods: {
-        format ({ date, month, year }) {
-          return year + '/' + month + '/' + date
-        }
-      },
-      template: `
-        <veui-date-picker v-model="selected">
-          <template slot="selected" slot-scope="props">{{ format(props) }}
-          </template>
-        </veui-date-picker>
-      `
-    })
-
-    wrapper.find('.veui-date-picker-button').trigger('click')
-    wrapper.find('.veui-calendar-day button').trigger('click')
-
-    await wrapper.vm.$nextTick()
-
-    let reg = /^(\d{4})\/(\d{1,2})\/(\d{1,2})$/
-    expect(reg.test(wrapper.find('.veui-date-picker-label').text())).to.equal(
-      true
-    )
 
     wrapper.destroy()
   })
