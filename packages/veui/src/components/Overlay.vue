@@ -39,7 +39,8 @@ export default {
     priority: Number,
     autofocus: Boolean,
     modal: Boolean,
-    matchWidth: Boolean
+    matchWidth: Boolean,
+    inner: Boolean
   },
   data () {
     return {
@@ -215,6 +216,10 @@ export default {
             },
             flip: {
               flipVariationsByContent: true
+            },
+            // todo 先看下效果
+            inner: {
+              enabled: !!this.inner
             }
           },
           onUpdate: () => {

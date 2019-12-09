@@ -13,7 +13,7 @@ export default {
       type: Number,
       default: 1
     },
-    current: {
+    initial: {
       type: Number,
       required: true
     }
@@ -32,8 +32,8 @@ export default {
       return this.realRow * this.col
     },
     start () {
-      let rest = (this.current - this.notable) % this.realCount
-      let origin = this.current - rest
+      let rest = (this.initial - this.notable) % this.realCount
+      let origin = this.initial - rest
       let unit = this.realCount / 3
       let sign = rest < unit ? -1 : rest > unit * 2 ? 1 : 0
       origin += unit * sign

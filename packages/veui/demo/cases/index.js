@@ -95,8 +95,7 @@ export default [
   {
     path: '/calendar',
     name: 'Calendar',
-    component: Calendar,
-    disabled: true
+    component: Calendar
   },
   {
     path: '/carousel',
@@ -126,8 +125,7 @@ export default [
   {
     path: '/date-picker',
     name: 'DatePicker',
-    component: DatePicker,
-    disabled: true
+    component: DatePicker
   },
   {
     path: '/dialog',
