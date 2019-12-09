@@ -130,8 +130,8 @@ describe('components/Calendar', () => {
     })
 
     expect(wrapper.vm.getDefaultDate() - new Date(2019, 10, 1)).to.equal(0)
-    expect(wrapper.vm.year).to.equal(2019)
-    expect(wrapper.vm.month).to.equal(10)
+    expect(wrapper.vm.panelData[0].date.year).to.equal(2019)
+    expect(wrapper.vm.panelData[0].date.month).to.equal(10)
     expect(wrapper.find('.veui-calendar-today').text()).to.equal('1')
 
     wrapper.destroy()
@@ -246,8 +246,8 @@ describe('components/Calendar', () => {
     })
 
     const { vm } = wrapper
-    expect(vm.year).to.equal(1987)
-    expect(vm.month).to.equal(6)
+    expect(vm.panelData[0].date.year).to.equal(1987)
+    expect(vm.panelData[0].date.month).to.equal(6)
     expect(wrapper.find('.veui-calendar-selected button').text()).to.equal('11')
 
     wrapper.destroy()

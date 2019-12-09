@@ -1,6 +1,8 @@
 import 'veui-theme-dls-icons/chevron-left'
 import 'veui-theme-dls-icons/chevron-down'
 import 'veui-theme-dls-icons/chevron-right'
+import 'veui-theme-dls-icons/chevron-double-left'
+import 'veui-theme-dls-icons/chevron-double-right'
 import config from 'veui/managers/config'
 
 config.defaults(
@@ -8,8 +10,8 @@ config.defaults(
     icons: {
       prev: 'chevron-left',
       next: 'chevron-right',
-      doublePrev: 'chevron-double-left',
-      doubleNext: 'chevron-double-right',
+      backward: 'chevron-double-left',
+      forward: 'chevron-double-right',
       expand: 'chevron-down'
     }
   },

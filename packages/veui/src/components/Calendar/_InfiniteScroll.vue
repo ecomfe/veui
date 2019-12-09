@@ -14,7 +14,8 @@ export default {
       default: 1
     },
     current: {
-      type: Number
+      type: Number,
+      required: true
     }
   },
   data () {
@@ -33,10 +34,10 @@ export default {
     start () {
       let rest = (this.current - this.notable) % this.realCount
       let origin = this.current - rest
-      let oneOfThird = this.realCount / 3
-      let sign = rest < oneOfThird ? -1 : rest > oneOfThird * 2 ? 1 : 0
-      origin += oneOfThird * sign
-      return origin + this.page * oneOfThird
+      let unit = this.realCount / 3
+      let sign = rest < unit ? -1 : rest > unit * 2 ? 1 : 0
+      origin += unit * sign
+      return origin + this.page * unit
     }
   },
   methods: {

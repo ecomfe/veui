@@ -27,41 +27,38 @@
       :aria-hidden="pIndex > 0"
     >
       <button
-        ref="doublePrev"
+        ref="backward"
         type="button"
         :class="{
-          [$c('calendar-double-prev')]: true,
-          [$c('calendar-visible')]:
-            !pIndex && (type === 'date' || (type === 'month' && !p.expanded)),
-          [$c('sr-only')]:
-            pIndex && (type === 'date' || (type === 'month' && !p.expanded))
+          [$c('calendar-backward')]: true,
+          [$c('calendar-visible')]: !isYearsView(pIndex)
         }"
         :disabled="disabled || readonly"
         :aria-hidden="pIndex > 0"
-        :aria-label="t('prevYear')"
+        :aria-label="t('backwardYear')"
         :aria-controls="`${id}:panel-title:${pIndex}`"
-        @click="step(false, 'year')"
+        @click="step(pIndex, false, 'year')"
       >
-        <veui-icon :name="icons.doublePrev"/>
+        <veui-icon :name="icons.backward"/>
       </button>
       <button
         ref="prev"
         type="button"
         :class="{
           [$c('calendar-prev')]: true,
-          [$c('calendar-visible')]: !pIndex && type === 'date',
-          [$c('sr-only')]: pIndex && type === 'date'
+          [$c('calendar-visible')]: isDateType
         }"
         :disabled="disabled || readonly"
         :aria-hidden="pIndex > 0"
         :aria-label="t('prevMonth')"
         :aria-controls="`${id}:panel-title:${pIndex}`"
-        @click="step(false, 'month')"
+        @click="step(pIndex, false, 'month')"
       >
         <veui-icon :name="icons.prev"/>
       </button>
       <template>
         <button
+          v-if="type !== 'year'"
           :id="`${id}:panel-title:${pIndex}`"
           ref="expansion-select"
           type="button"
@@ -70,51 +67,50 @@
           :aria-label="t('selectMonth', { month: p.month + 1 })"
           @click="setExpanded(pIndex, !p.expanded)"
         >
-          <b><span v-if="type === 'date'">{{
-               t('month', { month: p.month + 1 }) ||
-                 t(`monthsLong[${p.month}]`)
-             }}</span>
-            {{ t('year', { year: p.year }) }}</b>
-          <veui-icon
-            v-if="type !== 'year'"
-            :name="icons.expand"
-          />
+          <b>
+            <span v-if="isDateType">
+              {{
+                t('month', { month: p.month + 1 }) ||
+                  t(`monthsLong[${p.month}]`)
+              }}
+            </span>
+            {{ t('year', { year: p.year }) }}
+          </b>
+          <veui-icon :name="icons.expand"/>
         </button>
+        <b
+          v-else
+          :id="`${id}:panel-title:${pIndex}`"
+          :class="$c('calendar-select')"
+        >{{ t('year', { year: p.year }) }}</b>
       </template>
-      <button
-        ref="doubleNext"
-        type="button"
-        :class="{
-          [$c('calendar-double-next')]: true,
-          [$c('calendar-visible')]:
-            pIndex === panels.length - 1 &&
-            (type === 'date' || (type === 'month' && !p.expanded)),
-          [$c('sr-only')]:
-            pIndex !== panels.length - 1 &&
-            (type === 'date' || (type === 'month' && !p.expanded))
-        }"
-        :disabled="disabled || readonly"
-        :aria-label="t('nextYear')"
-        :aria-controls="`${id}:panel-title:${pIndex}`"
-        @click="step(true, 'year')"
-      >
-        <veui-icon :name="icons.doubleNext"/>
-      </button>
       <button
         ref="next"
         type="button"
         :class="{
           [$c('calendar-next')]: true,
-          [$c('calendar-visible')]:
-            pIndex === panels.length - 1 && type === 'date',
-          [$c('sr-only')]: pIndex !== panels.length - 1 && type === 'date'
+          [$c('calendar-visible')]: isDateType
         }"
         :disabled="disabled || readonly"
         :aria-label="t('nextMonth')"
         :aria-controls="`${id}:panel-title:${pIndex}`"
-        @click="step(true, 'month')"
+        @click="step(pIndex, true, 'month')"
       >
         <veui-icon :name="icons.next"/>
+      </button>
+      <button
+        ref="forward"
+        type="button"
+        :class="{
+          [$c('calendar-forward')]: true,
+          [$c('calendar-visible')]: !isYearsView(pIndex)
+        }"
+        :disabled="disabled || readonly"
+        :aria-label="t('forwardYear')"
+        :aria-controls="`${id}:panel-title:${pIndex}`"
+        @click="step(pIndex, true, 'year')"
+      >
+        <veui-icon :name="icons.forward"/>
       </button>
     </div>
     <div
@@ -125,14 +121,14 @@
       }"
     >
       <infinite-scroll
-        v-if="type === 'date' && p.expanded"
+        v-if="isDateType && p.expanded"
         :notable="1901"
         :row="150"
-        :current="p.year"
+        :current="panelData[pIndex].scrollYear"
       >
         <template slot-scope="{ listeners, data }">
           <ul
-            ref="yearScroller"
+            :ref="`yearScroller-${pIndex}`"
             :class="$c('calendar-year-scroller')"
             v-on="listeners"
           >
@@ -152,16 +148,15 @@
         </template>
       </infinite-scroll>
       <table
-        v-if="!(type === 'year' || (type === 'month' && p.expanded))"
+        v-if="!isYearsView(pIndex)"
         ref="table"
         :class="{
-          [$c('calendar-date-table')]: type === 'date' && !p.expanded,
-          [$c('calendar-month-table')]:
-            (type === 'date' && p.expanded) ||
-            (type === 'month' && !p.expanded)
+          [$c('calendar-table')]: true,
+          [$c('calendar-date-table')]: isDaysView(pIndex),
+          [$c('calendar-month-table')]: isMonthsView(pIndex)
         }"
       >
-        <template v-if="type === 'date' && !p.expanded">
+        <template v-if="isDaysView(pIndex)">
           <thead>
             <tr>
               <th
@@ -192,13 +187,13 @@
                   :aria-label="getLocaleString(day)"
                   :aria-current="day.isToday ? 'date' : null"
                   :tabindex="day.isFocus ? null : '-1'"
-                  @click="selectDay(day)"
+                  @click="selectDay(pIndex, day)"
                   @mouseenter="markEnd(day)"
                   @focus="markEnd(day)"
-                  @keydown.up.prevent="moveFocus(p.view, -7)"
-                  @keydown.right.prevent="moveFocus(p.view, 1)"
-                  @keydown.down.prevent="moveFocus(p.view, 7)"
-                  @keydown.left.prevent="moveFocus(p.view, -1)"
+                  @keydown.up.prevent="moveFocus(pIndex, -7)"
+                  @keydown.right.prevent="moveFocus(pIndex, 1)"
+                  @keydown.down.prevent="moveFocus(pIndex, 7)"
+                  @keydown.left.prevent="moveFocus(pIndex, -1)"
                 >
                   <slot
                     name="date"
@@ -207,20 +202,13 @@
                       month: day.month,
                       date: day.date
                     }"
-                  >
-                    {{ day.date }}
-                  </slot>
+                  >{{ day.date }}</slot>
                 </button>
               </td>
             </tr>
           </tbody>
         </template>
-        <tbody
-          v-else-if="
-            (type === 'date' && p.expanded) ||
-              (type === 'month' && !p.expanded)
-          "
-        >
+        <tbody v-else-if="isMonthsView(pIndex)">
           <tr
             v-for="i in 4"
             :key="i"
@@ -228,17 +216,17 @@
             <td
               v-for="j in 3"
               :key="j"
-              :class="getMonthClass(p, i, j, type === 'date')"
+              :class="getMonthClass(p, i, j, isDateType)"
             >
               <button
                 type="button"
                 :tabindex="i === 1 && j === 1 ? null : '-1'"
                 @click="selectMonth(pIndex, (i - 1) * 3 + j - 1)"
                 @mouseenter="handleMonthMouseEnter(p, i, j)"
-                @keydown.up.prevent="moveFocus(p.view, -3)"
-                @keydown.right.prevent="moveFocus(p.view, 1)"
-                @keydown.down.prevent="moveFocus(p.view, 3)"
-                @keydown.left.prevent="moveFocus(p.view, -1)"
+                @keydown.up.prevent="moveFocus(pIndex, -3)"
+                @keydown.right.prevent="moveFocus(pIndex, 1)"
+                @keydown.down.prevent="moveFocus(pIndex, 3)"
+                @keydown.left.prevent="moveFocus(pIndex, -1)"
               >
                 {{
                   t('month', { month: (i - 1) * 3 + j }) ||
@@ -258,13 +246,16 @@
       >
         <template slot-scope="{ listeners, data }">
           <div
-            ref="yearScroller"
+            :ref="`yearScroller-${pIndex}`"
             :class="$c('calendar-year-table-wrap')"
             v-on="listeners"
           >
             <table
               ref="table"
-              :class="$c('calendar-year-table')"
+              :class="{
+                [$c('calendar-year-table')]: true,
+                [$c('calendar-table')]: true
+              }"
             >
               <tbody>
                 <tr
@@ -292,13 +283,13 @@
                         handleYearMouseEnter(data.start + 3 * (i - 1) + j - 1)
                       "
                       @keydown.up.prevent="
-                        moveFocus(p.view, getYearOffset(i, j, false))
+                        moveFocus(pIndex, getYearOffset(i, j, false))
                       "
-                      @keydown.right.prevent="moveFocus(p.view, 1)"
+                      @keydown.right.prevent="moveFocus(pIndex, 1)"
                       @keydown.down.prevent="
-                        moveFocus(p.view, getYearOffset(i, j, true))
+                        moveFocus(pIndex, getYearOffset(i, j, true))
                       "
-                      @keydown.left.prevent="moveFocus(p.view, -1)"
+                      @keydown.left.prevent="moveFocus(pIndex, -1)"
                     >
                       {{ data.start + 3 * (i - 1) + j - 1 }}
                     </button>
@@ -322,12 +313,14 @@ import {
   isSameDay,
   isSameMonth,
   isSameYear,
-  mergeRange
+  mergeRange,
+  dateGt,
+  dateLt
 } from '../utils/date'
 import { closest, focusIn, focus, scrollTo } from '../utils/dom'
 import { sign, isPositive } from '../utils/math'
 import { normalizeClass } from '../utils/helper'
-import { isInteger, flattenDeep, findIndex, uniqueId } from 'lodash'
+import { isInteger, flattenDeep, findIndex, uniqueId, isEqual } from 'lodash'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
@@ -410,23 +403,45 @@ export default {
     }
   },
   data () {
-    let expands = []
+    let current = this.getDefaultDate()
+    let year = current.getFullYear()
+    let data = []
     for (let i = 0; i < this.panel; i++) {
-      expands[i] = false
+      if (this.type === 'year') {
+        data.push({
+          date: { year },
+          expanded: false,
+          scrollYear: null
+        })
+      } else if (this.type === 'month') {
+        data.push({
+          date: { year: year + i },
+          expanded: false,
+          scrollYear: null
+        })
+      } else {
+        data.push({
+          date: getNextDate(
+            {
+              year,
+              month: current.getMonth()
+            },
+            i
+          ),
+          expanded: false,
+          scrollYear: null
+        })
+      }
     }
 
-    let current = this.getDefaultDate()
-
-    let id = uniqueId('veui-calendar-')
-
     return {
-      // panel 显示的基准
-      year: current.getFullYear(),
-      month: current.getMonth(),
-      expands,
-      id,
+      panelData: data,
+      expands: [],
+      scrollYear: [],
+      id: uniqueId('veui-calendar-'),
       picking: null,
       pickingRanges: null,
+      mousePickingStart: false,
       mergeMode: 'xor'
     }
   },
@@ -436,6 +451,9 @@ export default {
         ? this.weekStart
         : config.get('calendar.weekStart')
     },
+    isDateType () {
+      return this.type === 'date'
+    },
     viewMonth () {
       return `${this.year}/${this.month}`
     },
@@ -443,9 +461,11 @@ export default {
       return this.selected ? this.selected : this.multiple ? [] : null
     },
     realPicking () {
-      let [from, to] = this.picking || []
-      if (to && to - from < 0) {
-        return [to, from]
+      if (this.range) {
+        let [from, to] = this.picking || []
+        if (from && to && to - from < 0) {
+          return [to, from]
+        }
       }
       return this.picking
     },
@@ -458,16 +478,17 @@ export default {
     },
     panels () {
       let panel = this.panel
-
+      let data = this.panelData
       let panels = []
       for (let i = 0; i < panel; i++) {
-        let year = this.year + Math.floor((this.month + i) / 12)
-        let month = (this.month + i) % 12
-        let expanded = this.expands[i]
-        if (this.type !== 'date') {
+        let { date, expanded } = data[i]
+        let { year, month } = date
+        if (this.type === 'year') {
+          panels.push({ year })
+          continue
+        } else if (this.type === 'month') {
           panels.push({
             year,
-            month,
             expanded
           })
           continue
@@ -539,10 +560,12 @@ export default {
         }
 
         // 如果本月没有选中的日期时再选择当天或第一天
+        // todo 这里没有考虑disabled
         if (!selectedDay) {
           if (today) {
             today.isFocus = true
-          } else {
+          } else if (firstDay) {
+            // todo?
             firstDay.isFocus = true
           }
         }
@@ -564,15 +587,12 @@ export default {
     }
   },
   watch: {
-    viewMonth (val) {
-      this.$emit('viewchange', {
-        year: this.year,
-        month: this.month
-      })
-    },
     selected (val) {
       this.picking = this.pickingRanges = null
     }
+  },
+  mounted () {
+    this.scrollCurrentYear()
   },
   methods: {
     getDayNames () {
@@ -582,27 +602,6 @@ export default {
     getDayFullNames () {
       let names = [...this.daysLong]
       return names.splice(this.realWeekStart - 1).concat(names)
-    },
-    handleMonthMouseEnter (panel, i, j) {
-      if (this.type === 'month') {
-        let month = (i - 1) * 3 + j - 1
-        let day = {
-          year: panel.year,
-          month,
-          date: 1
-        }
-        this.markEnd(day)
-      }
-    },
-    handleYearMouseEnter (year) {
-      if (this.type === 'year') {
-        let day = {
-          year: year,
-          month: 0,
-          date: 1
-        }
-        this.markEnd(day)
-      }
     },
     getLocaleString (day) {
       let { year, month, date } = day
@@ -616,6 +615,117 @@ export default {
         day: this.t(`daysLong[${d.getDay()}]`)
       })
     },
+    isDaysView (index) {
+      return this.type === 'date' && !this.panels[index].expanded
+    },
+    isMonthsView (index) {
+      return (
+        (this.type === 'date' && this.panels[index].expanded) ||
+        (this.type === 'month' && !this.panels[index].expanded)
+      )
+    },
+    isYearsView (index) {
+      return (
+        (this.type === 'month' && this.panels[index].expanded) ||
+        this.type === 'year'
+      )
+    },
+    getViewType (index) {
+      return this.isDaysView(index)
+        ? 'days'
+        : this.isMonthsView(index)
+          ? 'months'
+          : 'years'
+    },
+    scrollCurrentYear () {
+      if (this.type === 'year') {
+        this.$nextTick(() => {
+          for (let i = 0; i < this.panel; i++) {
+            let container = this.$refs[`yearScroller-${i}`]
+            if (container && container[0]) {
+              this.scrollCurrentToCenter(container[0], 0)
+            }
+          }
+        })
+      }
+    },
+    isMousePicking () {
+      return this.mousePickingStart
+    },
+    closeMousePicking () {
+      if (this.mousePickingStart) {
+        this.mousePickingStart = false
+      }
+    },
+    updatePanelDate (index, dateData) {
+      if (this.isDateType && dateData.month == null) {
+        dateData.month = this.panels[index].month
+      }
+      let p = this.panelData
+      if (!isEqual(p[index].date, dateData)) {
+        p[index].date = dateData
+        this.$emit('viewchange', {
+          ...dateData,
+          index
+        })
+      }
+      let i = index
+      while (i--) {
+        if (dateLt(p[i].date, p[i + 1].date)) {
+          break
+        }
+        let date = getPrevDate(p[i + 1].date)
+        p[i].date = date
+        this.$emit('viewchange', {
+          ...date,
+          index: i
+        })
+      }
+      for (i = index + 1; i < p.length; i++) {
+        if (dateGt(p[i].date, p[i - 1].date)) {
+          break
+        }
+        let date = getNextDate(p[i - 1].date)
+        p[i].date = date
+        this.$emit('viewchange', {
+          ...date,
+          index: i
+        })
+      }
+    },
+    handleMonthMouseEnter (panel, i, j) {
+      if (this.type === 'month' && this.mousePickingStart) {
+        let month = (i - 1) * 3 + j - 1
+        let day = {
+          year: panel.year,
+          month,
+          date: 1
+        }
+        this.markEnd(day)
+      }
+    },
+    handleYearMouseEnter (year) {
+      if (this.type === 'year' && this.mousePickingStart) {
+        let day = {
+          year: year,
+          month: 0,
+          date: 1
+        }
+        this.markEnd(day)
+      }
+    },
+    getRangeClass (day, isDay) {
+      let rangePosition = isDay ? day.rangePosition : this.getRangePosition(day)
+      return {
+        [this.$c('calendar-in-range')]: rangePosition && rangePosition.within,
+        [this.$c('calendar-range-start')]: rangePosition && rangePosition.start,
+        [this.$c('calendar-range-end')]: rangePosition && rangePosition.end,
+        [this.$c('calendar-action-end')]:
+          rangePosition && rangePosition.actionEnd,
+        [this.$c('calendar-range-single')]:
+          rangePosition && rangePosition.single
+      }
+    },
     getDateClass (day, panel) {
       let extraClass =
         typeof this.dateClass === 'function'
@@ -627,21 +737,8 @@ export default {
         [this.$c('calendar-aux')]: day.month !== panel.month,
         [this.$c('calendar-today')]: day.isToday,
         [this.$c('calendar-selected')]: day.isSelected,
-        [this.$c('calendar-in-range')]:
-          day.rangePosition && day.rangePosition.within,
-        [this.$c('calendar-range-start')]:
-          day.rangePosition && day.rangePosition.start,
-        [this.$c('calendar-range-end')]:
-          day.rangePosition && day.rangePosition.end,
+        ...this.getRangeClass(day, true),
         ...normalizeClass(extraClass)
-      }
-    },
-    getRangeClass (day) {
-      let rangePosition = this.getRangePosition(day)
-      return {
-        [this.$c('calendar-in-range')]: rangePosition && rangePosition.within,
-        [this.$c('calendar-range-start')]: rangePosition && rangePosition.start,
-        [this.$c('calendar-range-end')]: rangePosition && rangePosition.end
       }
     },
     getMonthClass (p, i, j, ignoreRange) {
@@ -697,6 +794,10 @@ export default {
             : -6
           : -4
     },
+    syncSelected (val) {
+      this.closeMousePicking()
+      this.$emit('select', val)
+    },
     commonSelect (day) {
       let selected = new Date(day.year, day.month, day.date)
       if (!this.range) {
@@ -708,18 +809,19 @@ export default {
           } else {
             result.splice(pos, 1)
           }
-          return this.$emit('select', result)
+          return this.syncSelected(result)
         } else {
-          return this.$emit('select', selected)
+          return this.syncSelected(selected)
         }
       }
 
       // range selection
-      if (!this.picking) {
+      if (!this.mousePickingStart) {
         // 日期上有rangePosition，月份年份直接算
         let rangPosition = day.rangePosition || this.getRangePosition(day)
         this.mergeMode = rangPosition.within ? 'substract' : 'union'
         this.picking = [selected]
+        this.mousePickingStart = true
         this.$emit('selectstart', selected)
         this.markEnd(day)
         return
@@ -731,7 +833,7 @@ export default {
       if (!this.multiple) {
         // single range selection
         this.picking = null
-        this.$emit('select', [...picking])
+        this.syncSelected([...picking])
         return
       }
 
@@ -739,31 +841,36 @@ export default {
       this.picking = null
       let ranges = [...this.pickingRanges]
       this.pickingRanges = null
-      this.$emit('select', ranges)
+      this.syncSelected(ranges)
     },
-    selectDay (day) {
+    selectDay (i, day) {
       // switch month in days view if dates in previous/next months are visible
       if (this.fillMonth && this.panel === 1) {
-        this.year = day.year
-        this.month = day.month
+        this.updatePanelDate(i, {
+          year: day.year,
+          month: day.month
+        })
       }
       return this.commonSelect(day)
     },
     selectMonth (i, month) {
+      let year = this.panels[i].year
+
       if (this.type === 'month') {
         return this.commonSelect({
-          year: this.year,
+          year,
           month,
           date: 1
         })
       }
 
       // type === date 的视图修改
-      // yearDiff = ⌊(currentMonth + monthDiff) / 12⌋
-      this.year += Math.floor((this.month + month - this.panels[i].month) / 12)
-      this.month = (month - i + 12) % 12
+      this.updatePanelDate(i, {
+        year,
+        month
+      })
       this.setExpanded(false)
-      this.setFocus('expansion-select', i)
+      // this.setFocus('expansion-select', i)
     },
     selectYear (i, year) {
       if (this.type === 'year') {
@@ -773,14 +880,36 @@ export default {
           date: 1
         })
       }
-      this.year = year + Math.floor((this.panels[i].month - i) / 12)
-      this.setExpanded(false)
-      this.setFocus('expansion-select', i)
+      // type === month/date 的视图修改
+      this.updatePanelDate(i, { year })
+      if (!this.isDateType) {
+        this.setExpanded(false)
+      } else {
+        this.scrollCurrentToCenter(this.$refs[`yearScroller-${i}`][0])
+      }
+      // this.setFocus('expansion-select', i)
+    },
+    scrollCurrentToCenter (container, duration = 200) {
+      this.$nextTick(() => {
+        let el = container.querySelector(`.${this.$c('calendar-current')}`)
+        if (el) {
+          scrollTo(0.5, container, el, { duration })
+          focusIn(this.type === 'month' ? el : el)
+        }
+      })
+    },
+    navigate (index, { year, month }) {
+      this.updatePanelDate(index, this.isDateType ? { year, month } : { year })
+    },
+    pick (value) {
+      this.closeMousePicking()
+      this.picking = Array.isArray(value) ? [...value] : value
     },
     markEnd (day) {
-      if (this.range && this.picking) {
+      if (this.range && this.mousePickingStart) {
         let marked = day ? new Date(day.year, day.month, day.date) : null
         this.$set(this.picking, 1, marked)
+
         if (this.multiple) {
           if (!marked) {
             this.$set(this.picking, 1, this.picking[0])
@@ -795,9 +924,11 @@ export default {
         this.$emit('selectprogress', this.pickingRanges || this.picking)
       }
     },
-    moveFocus (view, delta, offset = null) {
+    moveFocus (index, delta, offset = null) {
       // 不走数据流了，直接查找 DOM 元素最简单
+      let view = typeof index === 'number' ? this.getViewType(index) : index
       let selector = `.${this.$c(VIEW_CELL_CLASS_MAP[view])}`
+      // todo 是不是限制在本 panel 中？
       let cells = [...this.$el.querySelectorAll(selector)]
 
       // 查一下当前聚焦元素的偏移量，归一化以后再处理
@@ -851,7 +982,8 @@ export default {
         year = this.panels[0].year
         month = this.panels[0].month
       }
-      this.step(inc, view)
+      // todo
+      // this.step(inc, view)
       if (view === 'days' && !inc) {
         year = this.panels[0].year
         month = this.panels[0].month
@@ -877,29 +1009,26 @@ export default {
       }
 
       if (value != null) {
-        this.$set(this.expands, i, value)
+        let data = this.panelData[i]
+        if (this.isDateType && !data.expanded && value) {
+          data.scrollYear = this.panels[i].year
+        }
+        data.expanded = value
+        // this.$set(this.expands, i, value)
         this.$nextTick(() => {
           if (value) {
             // todo 能去掉这个nextTick么
-            return this.$nextTick(() => {
-              let container = this.$refs.yearScroller[0]
-              let el = container.querySelector(
-                `.${this.$c('calendar-current')}`
-              )
-              if (el) {
-                scrollTo(0.5, container, el, {
-                  duration: 0
-                })
-                focusIn(this.type === 'month' ? el : el)
-              }
-            })
+            return this.scrollCurrentToCenter(
+              this.$refs[`yearScroller-${i}`][0],
+              0
+            )
           }
           focusIn(this.$refs.body[i])
         })
       } else {
         value = i
-        this.expands.forEach((view, i) => {
-          this.$set(this.expands, i, value)
+        this.panelData.forEach(data => {
+          data.expanded = value
         })
       }
     },
@@ -912,7 +1041,7 @@ export default {
       if (!this.range) {
         if (!this.multiple) {
           // single day
-          return isSame(this.realSelected, day)
+          return isSame(this.picking || this.realSelected, day)
         }
         // multiple single days
         return (this.realSelected || []).some(d => isSame(d, day))
@@ -935,7 +1064,11 @@ export default {
       if (!this.multiple) {
         // single range
         let range = this.realPicking || this.realSelected
-        return getRangePosition(day, range, this.type)
+        let pos = getRangePosition(day, range, this.type)
+        if (pos && this.picking && this.picking[1]) {
+          pos.actionEnd = this.isSame(day, this.picking[1])
+        }
+        return pos
       }
 
       // multiple ranges
@@ -949,18 +1082,18 @@ export default {
       }
       return position
     },
-    step (isNext, type) {
+    step (index, isNext, type) {
       let sign = isNext ? 1 : -1
+      let { year, month } = this.panels[index]
       switch (type) {
         case 'month':
-          let newMonth = this.month + sign
-          if (newMonth === -1 || newMonth === 12) {
-            this.year += sign
-          }
-          this.month = (newMonth + 12) % 12
+          month = month + sign
+          year = month === -1 || month === 12 ? year + sign : year
+          month = (month + 12) % 12
+          this.updatePanelDate(index, { year, month })
           break
         case 'year':
-          this.year += sign
+          this.updatePanelDate(index, { year: year + sign })
           break
       }
     },
@@ -974,20 +1107,33 @@ export default {
 }
 
 function getRangePosition (day, range, type) {
-  if (!range || !range[1]) {
+  if (!range || !range.length) {
     return false
   }
+
   let date = new Date(day.year, day.month, day.date)
-  if (type !== 'date') {
-    range = range.map(i => {
-      let copy = new Date(i.getTime())
-      copy.setDate(1)
-      if (type === 'year') {
-        copy.setMonth(0)
+  if (!range[0] || !range[1]) {
+    let edge = range[0] || range[1]
+    return edge - date !== 0
+      ? false
+      : {
+        within: true,
+        single: true,
+        start: range[0] - date === 0,
+        end: range[1] - date === 0
       }
-      return copy
-    })
   }
+
+  range = range.map(i => {
+    if (i) {
+      return new Date(
+        i.getFullYear(),
+        type === 'year' ? 0 : i.getMonth(),
+        type !== 'date' ? 1 : i.getDate()
+      )
+    }
+    return i
+  })
   let within = (range[0] - date) * (range[1] - date) <= 0
   if (!within) {
     return false
@@ -997,5 +1143,26 @@ function getRangePosition (day, range, type) {
     start: range[0] - date === 0,
     end: range[1] - date === 0
   }
+}
+
+function getNextDate ({ year, month }, offset = 1) {
+  if (month != null) {
+    month = month + offset
+    let rest = month % 12
+    let yearOffset = (month - rest) / 12
+    yearOffset = month < 0 ? yearOffset - 1 : yearOffset
+    year = year + yearOffset
+    month = rest + (rest < 0 ? 12 : 0)
+    return {
+      year,
+      month
+    }
+  } else {
+    return { year: year + offset }
+  }
+}
+
+function getPrevDate (data, offset = -1) {
+  return getNextDate(data, offset)
 }
 </script>
