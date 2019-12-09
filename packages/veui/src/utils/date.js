@@ -113,3 +113,80 @@ function addYears (date, years) {
   d.setFullYear(d.getFullYear() + years)
   return d
 }
+
+const dateReStr = ['(\\d{4})', '(0?[1-9]|1[0-2])', '(0?[1-9]|[12]\\d|3[01])']
+
+function createDateRe (type, sep, strict) {
+  let reStr =
+    type === 'date'
+      ? dateReStr.join(sep)
+      : type === 'month'
+        ? dateReStr.slice(0, 2).join(sep)
+        : dateReStr[0]
+  return new RegExp(`^${reStr}${strict ? '$' : '(?:$|' + sep + ')'}`)
+}
+
+const components = ['year', 'month', 'date']
+
+function fromArrayToDateData (arr) {
+  return arr.reduce((res, part, index) => {
+    res[components[index]] = index === 1 ? part - 1 : part
+    return res
+  }, {})
+}
+
+function getDateData (dataStr, re, type) {
+  let matches = dataStr.match(re)
+  let result = null
+  if (matches) {
+    matches = matches.slice(1).map(i => +i)
+    let [year, month, date] = matches
+    if (type === 'date') {
+      let d = new Date(year, month - 1, date)
+      let valid =
+        d.getFullYear() === year &&
+        d.getMonth() === month - 1 &&
+        d.getDate() === date
+      if (valid) {
+        result = matches
+      }
+    } else if (year) {
+      result = matches
+    }
+  }
+  return result ? fromArrayToDateData(result) : null
+}
+
+export function getExactDateData (dataStr, type, sep) {
+  return getDateData(dataStr, createDateRe(type, sep, true), type)
+}
+
+export function getLooseDateData (dataStr, type, sep) {
+  let types = ['date', 'month', 'year']
+  let result = null
+  types.some(i => {
+    let data = getDateData(dataStr, createDateRe(i, sep, i === type), i)
+    if (data) {
+      result = data
+    }
+    return !!data
+  })
+  return result
+}
+
+function dateSubstract (a, b) {
+  if (a && b) {
+    a = a instanceof Date ? a : new Date(a.year, a.month || 0, a.date || 1)
+    b = b instanceof Date ? b : new Date(b.year, b.month || 0, b.date || 1)
+    return a - b
+  }
+  return NaN
+}
+
+export function dateGt (a, b) {
+  return dateSubstract(a, b) > 0
+}
+
+export function dateLt (a, b) {
+  return dateSubstract(a, b) < 0
+}
