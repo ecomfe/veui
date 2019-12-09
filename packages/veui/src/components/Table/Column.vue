@@ -46,7 +46,7 @@ export default {
       ...pick(this, ...props, 'id'),
       index,
       hasFoot: () => {
-        return !!this.$slots.foot
+        return !!(this.$scopedSlots.foot || this.$slots.foot)
       },
       renderBody,
       renderSubRow: item => {
@@ -57,11 +57,16 @@ export default {
         return renderBody(item)
       },
       renderHead: () => {
-        return this.$slots.head || this.title
+        let render =
+          this.$scopedSlots.head || (() => this.$slots.head || this.title)
+        return render()
       },
+      hasStaleHead: () => !!this.$slots.head,
       renderFoot: () => {
-        return this.$slots.foot || null
-      }
+        let render = this.$scopedSlots.foot || (() => this.$slots.foot || null)
+        return render()
+      },
+      hasStaleFoot: () => !!this.$slots.foot
     })
   },
   destroyed () {
