@@ -32,12 +32,8 @@ config.defaults(
     },
     parts: {
       clear: 'icon',
-      checkbox ({ size }) {
-        return CHECKBOX_SIZE_MAP[size] || size
-      },
-      tag ({ size }) {
-        return TAG_SIZE_MAP[size] || size
-      }
+      checkbox: ({ size }) => CHECKBOX_SIZE_MAP[size] || size,
+      tag: ({ size }) => TAG_SIZE_MAP[size] || size
     }
   },
   'select'
