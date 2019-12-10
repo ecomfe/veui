@@ -12,9 +12,6 @@
   v-bind="attrs"
   :class="{
     [$c('number-input')]: true,
-    [$c('input-invalid')]: realInvalid,
-    [$c('readonly')]: realReadonly,
-    [$c('disabled')]: realDisabled,
     [$c('number-input-controls-focus')]: spinnerFocused
   }"
   v-on="listeners"
@@ -160,7 +157,8 @@ export default {
         ...this.$attrs,
         name: this.realName,
         disabled: this.realDisabled,
-        readonly: this.realReadonly
+        readonly: this.realReadonly,
+        invalid: this.realInvalid
       }
     },
     isLocalEmpty () {

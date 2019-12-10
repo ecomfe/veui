@@ -36,6 +36,11 @@
 # Indirectedly referenced via @dls-dialog-max-height
 @dls-dialog-spacing-y
 
+# Input
+# Indirectedly referenced via @@dls-time-picker-icon-color-*
+@dls-input-icon-color
+@dls-input-icon-color-disabled
+
 # NumberInput
 # Indirectedly referenced via @dls-number-input-width-normal-*
 # and @dls-number-input-width-strong-*

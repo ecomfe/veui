@@ -9,7 +9,8 @@ export default {
   props: {
     name: String,
     readonly: Boolean,
-    disabled: Boolean
+    disabled: Boolean,
+    invalid: Boolean
   },
   data () {
     return {
@@ -32,8 +33,11 @@ export default {
       )
     },
     realInvalid () {
-      return (
-        this.formField && !this.formField.validity.valid && this.isTopMostInput
+      return Boolean(
+        this.invalid ||
+          (this.formField &&
+            !this.formField.validity.valid &&
+            this.isTopMostInput)
       )
     },
     ...getTypedAncestorTracker('form-field').computed
