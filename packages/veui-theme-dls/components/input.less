@@ -86,7 +86,7 @@
   &-input {
     display: block;
     overflow: hidden;
-    .size(100%);
+    width: 100%;
     border: none;
     outline: none;
     color: inherit;
@@ -135,7 +135,23 @@
     .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
   }
 
-  &.@{veui-prefix}-focus.@{veui-prefix}-readonly &-main:hover {
+  &-invalid &-main {
+    border: 1px solid @dls-input-border-color-error;
+    color: @dls-input-font-color-error;
+  }
+
+  &-invalid &-main:hover {
+    border: 1px solid @dls-input-border-color-error-hover;
+  }
+
+  &-invalid.@{veui-prefix}-focus &-main {
+    .dls-focus-ring(
+      @dls-input-border-color-error-focus,
+      @dls-input-shadow-error-focus
+    );
+  }
+
+  &.@{veui-prefix}-focus.@{veui-prefix}-readonly &-main {
     border-color: @dls-input-border-color-read-only-focus;
   }
 
@@ -216,5 +232,9 @@
 
   &.@{veui-prefix}-focus[ui~="inline"] &-main {
     box-shadow: @dls-input-shadow-inline-focus;
+  }
+
+  &-invalid.@{veui-prefix}-focus[ui~="inline"] &-main {
+    box-shadow: @dls-input-shadow-inline-error-focus;
   }
 }

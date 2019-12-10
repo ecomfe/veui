@@ -89,6 +89,12 @@
       >
         <veui-number-input v-model="number7"/>
       </veui-field>
+      <veui-field label="Invalid:">
+        <veui-number-input
+          v-model="number7"
+          invalid
+        />
+      </veui-field>
       <veui-field label="Strong:">
         <veui-number-input
           v-model="number8"
@@ -105,6 +111,13 @@
         <veui-number-input
           v-model="number8"
           ui="strong xs"
+        />
+      </veui-field>
+      <veui-field label="Strong invalid:">
+        <veui-number-input
+          v-model="number8"
+          ui="strong"
+          invalid
         />
       </veui-field>
     </veui-form>

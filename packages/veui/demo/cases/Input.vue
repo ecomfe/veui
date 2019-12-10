@@ -231,6 +231,17 @@
       </veui-field>
     </section>
   </veui-form>
+
+  <section>
+    <h3>错误样式</h3>
+    <section>
+      <veui-input invalid/>
+      <veui-input
+        ui="inline"
+        invalid
+      />
+    </section>
+  </section>
 </article>
 </template>
 
@@ -311,6 +322,11 @@ section {
 
   .veui-input {
     margin-right: 10px;
+  }
+
+  & > & {
+    display: flex;
+    align-items: center;
   }
 }
 
