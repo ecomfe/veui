@@ -31,6 +31,7 @@
         :ui="realUi"
         :readonly="realReadonly"
         :disabled="realDisabled"
+        :invalid="realInvalid"
         v-bind="inputProps"
         @blur="props.closeSuggestions"
         @keydown="props.handleKeydown"

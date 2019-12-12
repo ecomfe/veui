@@ -94,10 +94,6 @@
     background-color: transparent;
   }
 
-  &.@{veui-prefix}-input-invalid {
-    &:extend(._veui-input-invalid all);
-  }
-
   &-clear {
     margin: dls-sum(@dls-button-padding-icon * -1, -2px);
 
@@ -135,16 +131,16 @@
     .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
   }
 
-  &-invalid &-main {
-    border: 1px solid @dls-input-border-color-error;
+  &.@{veui-prefix}-invalid &-main {
+    border-color: @dls-input-border-color-error;
     color: @dls-input-font-color-error;
   }
 
-  &-invalid &-main:hover {
-    border: 1px solid @dls-input-border-color-error-hover;
+  &.@{veui-prefix}-invalid &-main:hover {
+    border-color: @dls-input-border-color-error-hover;
   }
 
-  &-invalid.@{veui-prefix}-focus &-main {
+  &.@{veui-prefix}-invalid.@{veui-prefix}-focus &-main {
     .dls-focus-ring(
       @dls-input-border-color-error-focus,
       @dls-input-shadow-error-focus
@@ -234,7 +230,7 @@
     box-shadow: @dls-input-shadow-inline-focus;
   }
 
-  &-invalid.@{veui-prefix}-focus[ui~="inline"] &-main {
+  &.@{veui-prefix}-invalid.@{veui-prefix}-focus[ui~="inline"] &-main {
     box-shadow: @dls-input-shadow-inline-error-focus;
   }
 }

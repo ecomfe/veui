@@ -17,12 +17,35 @@
 
   @line-number-default-width: @dls-height-m;
 
-  // &.@{veui-prefix}-input-invalid {
-  //   &:extend(._veui-input-invalid all);
-  // }
-
   &:hover {
     border-color: @dls-input-border-color-hover;
+  }
+
+  &.@{veui-prefix}-readonly {
+    border-color: @dls-input-border-color-read-only;
+    background-color: @dls-input-background-color-read-only;
+    color: @dls-input-font-color-read-only;
+
+    &:hover {
+      border-color: @dls-input-border-color-read-only-hover;
+    }
+  }
+
+  &.@{veui-prefix}-disabled {
+    &,
+    &:hover {
+      border-color: @dls-input-border-color-disabled;
+      color: @dls-input-font-color-disabled;
+    }
+
+    & .@{veui-prefix}-textarea-input {
+      background-color: @dls-input-background-color-disabled;
+    }
+
+    &,
+    & .@{veui-prefix}-textarea-input {
+      cursor: not-allowed;
+    }
   }
 
   &.@{veui-prefix}-focus {
@@ -30,6 +53,22 @@
     &:hover {
       .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
     }
+  }
+
+  &.@{veui-prefix}-invalid {
+    border-color: @dls-input-border-color-error;
+    color: @dls-input-font-color-error;
+  }
+
+  &.@{veui-prefix}-invalid:hover {
+    border-color: @dls-input-border-color-error-hover;
+  }
+
+  &.@{veui-prefix}-invalid.@{veui-prefix}-focus {
+    .dls-focus-ring(
+      @dls-input-border-color-error-focus,
+      @dls-input-shadow-error-focus
+    );
   }
 
   // 不要给 textarea 设置背景色，不然在 IE9 下面光标位置会很难看，同时引起一些其他怪异问题
@@ -115,32 +154,5 @@
     font-size: @dls-textarea-font-size-s;
     min-height: @dls-textarea-height-s;
     border-radius: @dls-input-border-radius-s;
-  }
-
-  &.@{veui-prefix}-readonly {
-    border-color: @dls-input-border-color-read-only;
-    background-color: @dls-input-background-color-read-only;
-    color: @dls-input-font-color-read-only;
-
-    &:hover {
-      border-color: @dls-input-border-color-read-only-hover;
-    }
-  }
-
-  &.@{veui-prefix}-disabled {
-    &,
-    &:hover {
-      border-color: @dls-input-border-color-disabled;
-      color: @dls-input-font-color-disabled;
-    }
-
-    & .@{veui-prefix}-textarea-input {
-      background-color: @dls-input-background-color-disabled;
-    }
-
-    &,
-    & .@{veui-prefix}-textarea-input {
-      cursor: not-allowed;
-    }
   }
 }

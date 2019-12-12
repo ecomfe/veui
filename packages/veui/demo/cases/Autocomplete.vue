@@ -1,6 +1,8 @@
 <template>
 <article>
-  <h1><code>&lt;veui-autocomplete&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-autocomplete&gt;</code>
+  </h1>
   <section>
     <h2>普通</h2>
     <veui-autocomplete
@@ -24,6 +26,15 @@
       :datasource="suggestions"
       :suggest-trigger="['focus', 'input']"
       readonly
+    />
+  </section>
+  <section>
+    <h2>错误</h2>
+    <veui-autocomplete
+      v-model="inputValue"
+      invalid
+      :datasource="suggestions"
+      :suggest-trigger="['focus', 'input']"
     />
   </section>
   <section>
@@ -62,15 +73,9 @@
       strict
     />
   </section>
-  <veui-button @click="value = 'male'">
-    设置list->male
-  </veui-button>
-  <veui-button @click="treeValue = 'male'">
-    设置tree->male
-  </veui-button>
-  <veui-button @click="switchDatasource">
-    切换数据源
-  </veui-button>
+  <veui-button @click="value = 'male'">设置list->male</veui-button>
+  <veui-button @click="treeValue = 'male'">设置tree->male</veui-button>
+  <veui-button @click="switchDatasource">切换数据源</veui-button>
 </article>
 </template>
 

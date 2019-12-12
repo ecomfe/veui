@@ -6,7 +6,7 @@
     [$c('textarea-rows')]: normalizedRows > 0,
     [$c('textarea-line-numbered')]: lineNumber,
     [$c('textarea-autoresize')]: autoresize,
-    [$c('input-invalid')]: realInvalid,
+    [$c('invalid')]: realInvalid,
     [$c('readonly')]: realReadonly,
     [$c('disabled')]: realDisabled
   }"
