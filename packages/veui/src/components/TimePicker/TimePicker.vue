@@ -259,7 +259,8 @@ export default {
       return {
         ...pick(this.$props, ['placeholder', 'autofocus']),
         readonly: this.realReadonly,
-        disabled: this.realDisabled
+        disabled: this.realDisabled,
+        invalid: this.realInvalid
       }
     },
     minuteSuffix () {
