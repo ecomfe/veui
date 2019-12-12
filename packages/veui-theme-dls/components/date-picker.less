@@ -1,14 +1,8 @@
 @import "../lib.less";
 @import (reference) "../dropdown.less";
-@import (reference) "../input.less";
 
 .@{veui-prefix}-date-picker {
   &:extend(._veui-dropdown-button all);
-
-  &.@{veui-prefix}-input-invalid
-    .@{veui-prefix}-button.@{veui-prefix}-date-picker-button {
-    &:extend(._veui-input-invalid all);
-  }
 
   position: relative;
   display: inline-block;

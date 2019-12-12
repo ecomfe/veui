@@ -1,6 +1,5 @@
 @import "../lib.less";
 @import (reference) "../dropdown.less";
-@import (reference) "../input.less";
 
 .@{veui-prefix}-select {
   position: relative;
@@ -8,10 +7,6 @@
   align-items: center;
   width: @dls-select-width;
   outline: none;
-
-  &.@{veui-prefix}-input-invalid .@{veui-prefix}-select-input {
-    &:extend(._veui-input-invalid all);
-  }
 
   &:not(&-empty):not(&-expanded)
     .@{veui-prefix}-input:not(.@{veui-prefix}-input-focus)
