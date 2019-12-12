@@ -10,7 +10,8 @@
       ui="s"
       rows="3"
     />
-    <section/>
+  </section>
+  <section>
     <h2>默认尺寸 + 行号 + 自动扩展</h2>
     <veui-textarea
       v-model="value"
@@ -19,11 +20,33 @@
       autoresize
       placeholder="请输入"
     />
-    <section/>
+  </section>
+  <section>
     <h2>自动扩展</h2>
     <veui-textarea
       v-model="value"
       autoresize
+    />
+  </section>
+  <section>
+    <h2>只读样式</h2>
+    <veui-textarea
+      v-model="value"
+      readonly
+    />
+  </section>
+  <section>
+    <h2>禁用样式</h2>
+    <veui-textarea
+      v-model="value"
+      disabled
+    />
+  </section>
+  <section>
+    <h2>错误样式</h2>
+    <veui-textarea
+      v-model="value"
+      invalid
     />
   </section>
 </article>

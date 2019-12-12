@@ -39,6 +39,7 @@
   & > [class^="@{veui-prefix}"] {
     position: relative;
     margin-right: -1px;
+    z-index: 1;
 
     &:first-child {
       .border-right-radius(0);
@@ -53,12 +54,16 @@
     }
 
     &:hover {
-      z-index: 1;
+      z-index: 2;
     }
 
     &[class*="-focus"],
     &[data-focus-visible-added] {
-      z-index: 2;
+      z-index: 3;
+    }
+
+    &.@{veui-prefix}-disabled {
+      z-index: 0;
     }
   }
 }

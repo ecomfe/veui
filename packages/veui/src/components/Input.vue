@@ -4,10 +4,10 @@
     [$c('input')]: true,
     [$c('focus')]: focused,
     [$c('input-hidden')]: type === 'hidden',
-    [$c('input-invalid')]: realInvalid,
     [$c('input-autofill')]: autofill,
     [$c('input-has-before')]: !!($slots.before || $slots['before-label']),
     [$c('input-has-after')]: !!($slots.after || $slots['after-label']),
+    [$c('invalid')]: realInvalid,
     [$c('readonly')]: realReadonly,
     [$c('disabled')]: realDisabled
   }"
