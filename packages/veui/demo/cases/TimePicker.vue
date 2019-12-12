@@ -81,6 +81,12 @@
       :max="max4"
       readonly
     />
+    <h2>invalid</h2>
+    <veui-time-picker
+      :min="min4"
+      :max="max4"
+      invalid
+    />
   </section>
 </article>
 </template>
