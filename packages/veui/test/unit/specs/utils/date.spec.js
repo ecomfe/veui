@@ -4,8 +4,13 @@ import {
   fromDateData,
   toDate,
   isSameDay,
+  isSameMonth,
+  isSameYear,
   isInRange,
-  mergeRange
+  mergeRange,
+  getExactDateData,
+  dateGt,
+  dateLt
 } from '@/utils/date'
 
 describe('utils/date', () => {
@@ -123,6 +128,24 @@ describe('utils/date', () => {
         { year: 2018, month: 11, date: 31 },
         { year: 2018, month: 11, date: 31 }
       )
+    )
+
+    expect(
+      isSameMonth(new Date(2018, 11, 31).getTime(), new Date(2018, 11, 30))
+    )
+    expect(
+      isSameMonth(new Date(2018, 11, 31).getTime(), {
+        year: 2018,
+        month: 11
+      })
+    )
+
+    expect(isSameYear(new Date(2018, 11, 31).getTime(), new Date(2018, 10, 31)))
+    expect(
+      isSameYear(new Date(2018, 11, 31).getTime(), {
+        year: 2018,
+        month: 11
+      })
     )
   })
 
@@ -312,5 +335,31 @@ describe('utils/date', () => {
         'substract'
       )
     ).to.deep.equal([[DATES[0], DATES[1]], [DATES[5], DATES[5]]])
+  })
+
+  it('should parse date correctly', () => {
+    expect(getExactDateData('2019-12-15', 'date', '[-]')).to.deep.equal({
+      year: 2019,
+      month: 11,
+      date: 15
+    })
+
+    expect(getExactDateData('2019-12', 'month', '[-]')).to.deep.equal({
+      year: 2019,
+      month: 11
+    })
+  })
+
+  it('should compare date correctly', () => {
+    expect(
+      dateGt(
+        { year: 2019, month: 11, date: 15 },
+        { year: 2019, month: 11, date: 14 }
+      )
+    ).to.be.equal(true)
+
+    expect(
+      dateLt({ year: 2019, month: 11 }, { year: 2019, month: 10 })
+    ).to.be.equal(false)
   })
 })

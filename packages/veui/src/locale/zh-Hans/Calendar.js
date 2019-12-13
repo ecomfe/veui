@@ -27,7 +27,8 @@ i18n.register(
     nextMonth: '下个月',
     nextYear: '下一年',
     nextDecade: '下十年',
-    dateLabel: '{year} {month} {date}，{day}'
+    dateLabel: '{year} {month} {date}，{day}',
+    yearAndMonth: '{year} 年 {month} 月'
   },
   {
     ns: 'calendar'

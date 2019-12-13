@@ -14,7 +14,7 @@ config.defaults(
         inherit: true
       },
       size: {
-        values: ['large', 'small', 'tiny', 'micro'],
+        values: ['s', 'm'],
         inherit: true
       }
     },

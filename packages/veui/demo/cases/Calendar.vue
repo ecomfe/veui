@@ -23,6 +23,7 @@
       v-model="singleDateRange"
       type="date"
       range
+      :panel="2"
       ui="s"
     />
   </section>
@@ -41,6 +42,7 @@
     <veui-calendar
       v-model="singleMonth"
       type="month"
+      :disabled-date="isYearDisabled"
     />
     Selected:
     {{
@@ -80,6 +82,7 @@
     <h2>年份单选</h2>
     <veui-calendar
       v-model="singleYear"
+      :disabled-date="isYearDisabled"
       type="year"
     />
   </section>
@@ -193,7 +196,7 @@ export default {
     let today = new Date()
     return {
       singleDate: null,
-      singleDateRange: null,
+      singleDateRange: [new Date(2019, 9, 10), new Date(2019, 11, 10)],
       multipleDate: null,
       multipleDateRange: null,
       singleMonth: null,
@@ -219,6 +222,9 @@ export default {
       selected6: new Date(2019, 0, 1),
       isDisabled (day) {
         return !(day.getDate() % 5) || day.getDate() === 1
+      },
+      isYearDisabled (day) {
+        return day.getFullYear() === 2018
       },
       dateClass (day) {
         if ((day.getDay() + 1) % 7 < 2) {
