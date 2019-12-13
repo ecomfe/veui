@@ -53,7 +53,8 @@ i18n.register(
     nextMonth: 'Next month',
     nextYear: 'Next year',
     nextDecade: 'Next decade',
-    dateLabel: '{day}, {month} {date}, {year}'
+    dateLabel: '{day}, {month} {date}, {year}',
+    yearAndMonth: '{month} {year}'
   },
   {
     ns: 'calendar'

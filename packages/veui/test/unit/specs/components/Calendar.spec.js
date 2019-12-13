@@ -527,4 +527,35 @@ describe('components/Calendar', () => {
 
     wrapper.destroy()
   })
+
+  it('should has range classes and navigate correctly.', async () => {
+    const wrapper = mount(Calendar, {
+      propsData: {
+        panel: 2,
+        range: true,
+        fillMonth: false,
+        selected: [new Date(2019, 9, 1), new Date(2019, 11, 31)]
+      }
+    })
+    const { vm } = wrapper
+    let [p1, p2] = vm.panelData
+
+    expect(p1.date).to.deep.equal({ year: 2019, month: 9 })
+    expect(p2.date).to.deep.equal({ year: 2019, month: 11 })
+    let days = wrapper.findAll('.veui-calendar-day')
+    expect(days.at(0).classes()).to.include('veui-calendar-in-range')
+    expect(days.at(0).classes()).to.include('veui-calendar-range-start')
+    expect(days.at(days.length - 1).classes()).to.include(
+      'veui-calendar-in-range'
+    )
+    expect(days.at(days.length - 1).classes()).to.include(
+      'veui-calendar-range-end'
+    )
+
+    vm.navigate([new Date(2018, 1, 1), new Date(2018, 3, 1)], false)
+
+    expect(p1.date).to.deep.equal({ year: 2018, month: 1 })
+    expect(p2.date).to.deep.equal({ year: 2018, month: 3 })
+    wrapper.destroy()
+  })
 })

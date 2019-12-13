@@ -6,16 +6,17 @@
     [$c('input-invalid')]: realInvalid,
     [$c('date-picker-empty')]: !selected,
     [$c('date-picker-range')]: range,
-    [$c('date-picker-expanded')]: expanded
+    [$c('date-picker-expanded')]: expanded,
+    [$c('disabled')]: realDisabled || realReadonly
   }"
 >
   <div
     ref="button"
     :class="{
-      [$c('date-picker-trigger')]: true,
-      [$c('disabled')]: realDisabled || realReadonly
+      [$c('date-picker-trigger')]: true
     }"
     :aria-disabled="realDisabled"
+    :tabindex="realDisabled ? null : '0'"
     :aria-readonly="realReadonly"
     :aria-owns="dropdownId"
     aria-haspopup="dialog"
@@ -27,6 +28,7 @@
       :placeholder="realPlaceholder[0]"
       :value="range ? formattedSelection[0] : formattedSelection"
       :class="$c('date-picker-label')"
+      tabindex="-1"
     />
     <template v-if="range">
       <span :class="$c('date-picker-tilde')">~</span>
@@ -35,6 +37,7 @@
         :disabled="realDisabled"
         :value="formattedSelection[1]"
         :placeholder="realPlaceholder[1]"
+        tabindex="-1"
       />
     </template>
     <div :class="$c('date-picker-icon')">
@@ -64,12 +67,16 @@
     :open="expanded"
     :options="realOverlayOptions"
     :overlay-class="overlayClass"
+    position="top-start"
     inner
     autofocus
     modal
     @afteropen="$refs.cal.scrollCurrentYear()"
   >
-    <div :class="$c('date-picker-overlay-content')">
+    <div
+      :ui="realUi"
+      :class="$c('date-picker-overlay-content')"
+    >
       <div
         v-if="range && realShortcuts && realShortcuts.length"
         :class="$c('date-picker-shortcuts')"
@@ -78,13 +85,7 @@
           v-for="({ from, to, label }, index) in realShortcuts"
           :key="index"
           type="button"
-          :class="{
-            [$c('date-picker-shortcut')]: true,
-            [$c('date-picker-shortcut-selected')]: isShortcutSelected({
-              from,
-              to
-            })
-          }"
+          :class="$c('date-picker-shortcut')"
           @click="handleSelect([from, to])"
           @mouseenter="handleHoverShortcut([from, to])"
           @mouseleave="handleHoverShortcut()"
@@ -114,15 +115,19 @@
           <div
             ref="inputs"
             :class="$c('date-picker-inputs')"
+            @keydown.up.down.prevent="$refs.cal.focus()"
           >
             <veui-input
+              ref="start"
               :value="realInputValue[0]"
+              autofocus
               @input="handleInput(0, $event)"
               @focus="handleInputFocus"
             />
             <template v-if="range">
               <span :class="$c('date-picker-connector')">~</span>
               <veui-input
+                ref="end"
                 :value="realInputValue[1]"
                 @input="handleInput(1, $event)"
                 @focus="handleInputFocus"
@@ -158,9 +163,10 @@ import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
-import { toDateData, getExactDateData, toDate, dateLt } from '../utils/date'
+import { toDateData, getExactDateData, dateLt } from '../utils/date'
 import { isNumber, pick, omit, defaults } from 'lodash'
 import format from 'date-fns/format'
+import parse from 'date-fns/parse'
 import startOfDay from 'date-fns/start_of_day'
 import startOfWeek from 'date-fns/start_of_week'
 import startOfMonth from 'date-fns/start_of_month'
@@ -175,11 +181,12 @@ import addYears from 'date-fns/add_years'
 config.defaults(
   {
     shortcuts: [],
-    shortcutsPosition: 'before',
     placeholder: '@@datepicker.selectDate',
     monthPlaceholder: '@@datepicker.selectMonth',
     yearPlaceholder: '@@datepicker.selectYear',
-    rangePlaceholder: '@@datepicker.selectRange'
+    rangePlaceholder: '@@datepicker.selectRange',
+    monthRangePlaceholder: '@@datepicker.selectMonthRange',
+    yearRangePlaceholder: '@@datepicker.selectYearRange'
   },
   'datepicker'
 )
@@ -195,10 +202,12 @@ const CALENDAR_PROPS = [
 ]
 
 const TYPE_FORMAT_MAP = {
-  date: 'YYYY-MM-DD',
-  month: 'YYYY-MM',
-  year: 'YYYY'
+  date: 'yyyy-MM-dd',
+  month: 'yyyy-MM',
+  year: 'yyyy'
 }
+
+const DEFAULT_DATE_SEP = '[/.-]'
 
 export default {
   name: 'veui-date-picker',
@@ -240,10 +249,7 @@ export default {
     return {
       picking: null,
       localSelected: null,
-      localInputValue: [],
-      localOverlayOptions: {
-        position: 'top-start'
-      }
+      localInputValue: []
     }
   },
   computed: {
@@ -286,17 +292,21 @@ export default {
     realPlaceholder () {
       let placeholder = this.placeholder
       if (!placeholder) {
-        if (this.type !== 'date') {
+        if (!this.range) {
           placeholder = config.get(
-            this.type === 'month'
-              ? 'datepicker.monthPlaceholder'
-              : 'datepicker.yearPlaceholder'
+            {
+              date: 'datepicker.placeholder',
+              month: 'datepicker.monthPlaceholder',
+              year: 'datepicker.yearPlaceholder'
+            }[this.type]
           )
         } else {
           placeholder = config.get(
-            this.range
-              ? 'datepicker.rangePlaceholder'
-              : 'datepicker.placeholder'
+            {
+              date: 'datepicker.rangePlaceholder',
+              month: 'datepicker.monthRangePlaceholder',
+              year: 'datepicker.yearRangePlaceholder'
+            }[this.type]
           )
         }
       }
@@ -333,14 +343,9 @@ export default {
       let dates = []
       let len = this.range ? 2 : 1
       for (let i = 0; i < len; i++) {
-        let data = getExactDateData(
-          this.localInputValue[i] || '',
-          this.type,
-          '[/.-]'
-        )
-        if (data) {
-          let { year, month = 0, date = 1 } = data
-          dates.push(toDate({ year, month, date }))
+        let date = this.parseDate(this.localInputValue[i])
+        if (date) {
+          dates.push(date)
         } else {
           return
         }
@@ -359,10 +364,17 @@ export default {
       if (this.expanded) {
         let cal = this.$refs.cal
         cal.setExpanded(false)
+        let selected = [].concat(this.realSelected)
+        if (selected[0]) {
+          cal.navigate(selected, false)
+        }
       }
     },
     handleInputFocus () {
       this.$refs.cal.closeMousePicking()
+    },
+    moveFocus () {
+      this.$refs.cal.focus()
     },
     getSorted (onlySelected) {
       if (this.range) {
@@ -383,41 +395,31 @@ export default {
       let cal = this.$refs.cal
       if (cal) {
         let result = []
-        let dateData = getExactDateData(val, this.type, '[/.-]')
-        result[index] = dateData
-          ? new Date(dateData.year, dateData.month || 0, dateData.date || 1)
-          : null
-        if (!this.range) {
-          if (dateData) {
-            cal.navigate(index, dateData)
-          }
-          cal.pick(result[index])
-          return
-        }
-        let another = getExactDateData(
-          this.realInputValue[1 - index] || '',
-          this.type,
-          '[/.-]'
-        )
-        result[1 - index] = another
-          ? new Date(another.year, another.month || 0, another.date || 1)
-          : null
+        let date = this.parseDate(val)
+        result[index] = date || null
 
-        let rangeError = dateData && another && result[0] > result[1]
-        if (rangeError) {
-          result[index] = null
-        }
-        if (!result[0] && !result[1]) {
-          return cal.pick([])
+        if (this.range) {
+          // 要重新parse，因为可能范围原来不对，现在对了
+          let another = this.parseDate(this.realInputValue[1 - index])
+          result[1 - index] = another || null
+
+          let rangeError = date && another && result[0] > result[1]
+          if (rangeError) {
+            result[index] = null
+          }
+          if (!result[0] && !result[1]) {
+            // [] 用来覆盖 selected 的值
+            return cal.pick([])
+          }
         }
         if (result[index]) {
-          cal.navigate(index, dateData)
+          cal.navigate(index, toDateData(date), false)
         }
-        cal.pick(result)
+        cal.pick(this.range ? result : result[index])
       }
     },
     formatDate (date) {
-      if (!date || !isFinite(date)) {
+      if (!date) {
         return ''
       }
       if (typeof this.format === 'function') {
@@ -425,7 +427,24 @@ export default {
       }
 
       let dateFormat = this.format || TYPE_FORMAT_MAP[this.type]
+      dateFormat = checkFormat(dateFormat)
       return format(date, dateFormat)
+    },
+    parseDate (input) {
+      // todo 定制了就一定要使用方 parse 了，是不是加个 parse prop？
+      let result = null
+      input = input || ''
+      if (typeof this.format === 'function') {
+        result = this.format(input)
+        return isNaN(+result) ? null : result
+      }
+      if (this.format && typeof this.format === 'string') {
+        let dateFormat = checkFormat(this.format)
+        result = parse(input, dateFormat, new Date())
+        return isNaN(+result) ? null : result
+      }
+      let data = getExactDateData(input, this.type, DEFAULT_DATE_SEP)
+      return data ? new Date(data.year, data.month || 0, data.date || 1) : null
     },
     toDateData (date) {
       if (!date) {
@@ -479,16 +498,6 @@ export default {
         omit(offset, 'startOf')
       )
     },
-    isShortcutSelected ({ from, to }) {
-      let selected = this.picking || this.realSelected
-      if (!selected) {
-        return false
-      }
-      if (selected[0] < selected[1]) {
-        return from - selected[0] === 0 && to - selected[1] === 0
-      }
-      return to - selected[0] === 0 && from - selected[1] === 0
-    },
     handleHoverShortcut (picking) {
       this.$refs.cal.pick(picking)
     }
@@ -527,5 +536,17 @@ function add (base, offset) {
     }
     return acc
   }, base)
+}
+
+function checkFormat (input) {
+  if (input.indexOf('YYYY') >= 0) {
+    console.warn('Use `yyyy` instead of `YYYY` for formatting years')
+    input = input.replace(/YYYY/, 'yyyy')
+  }
+  if (input.indexOf('DD') >= 0) {
+    console.warn('Use `dd` instead of `DD` for formatting dates')
+    input = input.replace(/DD/, 'dd')
+  }
+  return input
 }
 </script>

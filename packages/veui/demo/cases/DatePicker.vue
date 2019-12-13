@@ -61,7 +61,8 @@
     <h2>小尺寸</h2>
     <veui-date-picker
       v-model="selectedDate"
-      ui="micro"
+      clearable
+      ui="s"
     />
   </section>
   <section>
@@ -185,7 +186,7 @@ export default {
       selectedDate: null,
       selectedMonth: null,
       selectedYear: null,
-      selectedDateRange: null,
+      selectedDateRange: [new Date(2019, 9, 10), new Date(2019, 11, 10)],
       selectedMonthRange: null,
       selectedYearRange: null,
       shortcuts: [

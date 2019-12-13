@@ -161,20 +161,7 @@ export function getExactDateData (dataStr, type, sep) {
   return getDateData(dataStr, createDateRe(type, sep, true), type)
 }
 
-export function getLooseDateData (dataStr, type, sep) {
-  let types = ['date', 'month', 'year']
-  let result = null
-  types.some(i => {
-    let data = getDateData(dataStr, createDateRe(i, sep, i === type), i)
-    if (data) {
-      result = data
-    }
-    return !!data
-  })
-  return result
-}
-
-function dateSubstract (a, b) {
+function dateSubtract (a, b) {
   if (a && b) {
     a = a instanceof Date ? a : new Date(a.year, a.month || 0, a.date || 1)
     b = b instanceof Date ? b : new Date(b.year, b.month || 0, b.date || 1)
@@ -184,9 +171,9 @@ function dateSubstract (a, b) {
 }
 
 export function dateGt (a, b) {
-  return dateSubstract(a, b) > 0
+  return dateSubtract(a, b) > 0
 }
 
 export function dateLt (a, b) {
-  return dateSubstract(a, b) < 0
+  return dateSubtract(a, b) < 0
 }

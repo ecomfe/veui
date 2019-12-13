@@ -1,6 +1,11 @@
 import { mount } from '@vue/test-utils'
 import DatePicker from '@/components/DatePicker'
 
+const debugInBrowser = {
+  attachToDocument: true,
+  sync: false
+}
+
 describe('components/DatePicker', () => {
   it('should handle selected prop with `null` value.', done => {
     let wrapper = mount(DatePicker, {
@@ -145,7 +150,7 @@ describe('components/DatePicker', () => {
       }
     })
 
-    let trigger = wrapper.find('.veui-date-picker-trigger')
+    let trigger = wrapper.find('.veui-date-picker')
 
     expect(trigger.classes()).to.include('veui-disabled')
     expect(trigger.find('input').attributes('disabled')).to.equal('disabled')
@@ -180,7 +185,7 @@ describe('components/DatePicker', () => {
       }
     })
 
-    let button = wrapper.find('.veui-date-picker-trigger')
+    let button = wrapper.find('.veui-date-picker')
 
     expect(button.classes()).to.include('veui-disabled')
 
@@ -313,6 +318,104 @@ describe('components/DatePicker', () => {
 
     expect(wrapper.find('.veui-calendar-day button').text()).to.equal('' + year)
 
+    wrapper.destroy()
+  })
+
+  it('should handle input correctly.', async () => {
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            selected: null
+          }
+        },
+        components: {
+          'veui-date-picker': DatePicker
+        },
+        template: `<veui-date-picker v-model="selected" clearable/>`
+      },
+      debugInBrowser
+    )
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    let { vm } = wrapper
+
+    await vm.$nextTick()
+    let input = wrapper.find('.veui-date-picker-inputs input')
+    input.element.value = '2019-12-10'
+    input.trigger('input')
+
+    await vm.$nextTick()
+    document.body.click()
+
+    await vm.$nextTick()
+    expect(+vm.selected).to.be.equal(+new Date(2019, 11, 10))
+    wrapper.destroy()
+  })
+
+  it('should handle inputs correctly.', async () => {
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            selected: null
+          }
+        },
+        components: {
+          'veui-date-picker': DatePicker
+        },
+        template: `<veui-date-picker v-model="selected" clearable range/>`
+      },
+      debugInBrowser
+    )
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    let { vm } = wrapper
+
+    await vm.$nextTick()
+    let inputs = wrapper.findAll('.veui-date-picker-inputs input')
+    let input0 = inputs.at(0)
+    input0.element.value = '2019-12-10'
+    input0.trigger('input')
+
+    let input1 = inputs.at(1)
+    input1.element.value = '2019-12-11'
+    input1.trigger('input')
+    await vm.$nextTick()
+    document.body.click()
+
+    await vm.$nextTick()
+    expect(+vm.selected[0]).to.be.equal(+new Date(2019, 11, 10))
+    expect(+vm.selected[1]).to.be.equal(+new Date(2019, 11, 11))
+    wrapper.destroy()
+  })
+
+  it('should update panel date correctly on opening overlay.', async () => {
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            selected: [new Date(2019, 9, 10), new Date(2019, 11, 11)]
+          }
+        },
+        components: {
+          'veui-date-picker': DatePicker
+        },
+        template: `<veui-date-picker ref="picker" v-model="selected" clearable range/>`
+      },
+      debugInBrowser
+    )
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    let { vm } = wrapper
+
+    await vm.$nextTick()
+    let [p1, p2] = vm.$refs.picker.$refs.cal.panelData
+    expect(p1.date).to.deep.equal({
+      year: 2019,
+      month: 9
+    })
+    expect(p2.date).to.deep.equal({
+      year: 2019,
+      month: 11
+    })
     wrapper.destroy()
   })
 })
