@@ -27,13 +27,13 @@
       :class="$c('calendar-head')"
       :aria-hidden="!!pIndex"
     >
-      <button
+      <veui-button
         ref="backward"
-        type="button"
         :class="{
           [$c('calendar-backward')]: true,
           [$c('calendar-visible')]: !isYearsView(p)
         }"
+        :ui="uiParts.navigate"
         :disabled="disabled || readonly"
         :aria-hidden="pIndex > 0"
         :aria-label="t('prevYear')"
@@ -41,14 +41,14 @@
         @click="step(pIndex, false, 'year')"
       >
         <veui-icon :name="icons.backward"/>
-      </button>
-      <button
+      </veui-button>
+      <veui-button
         ref="prev"
-        type="button"
         :class="{
           [$c('calendar-prev')]: true,
           [$c('calendar-visible')]: isDateType
         }"
+        :ui="uiParts.navigate"
         :disabled="disabled || readonly"
         :aria-hidden="pIndex > 0"
         :aria-label="t('prevMonth')"
@@ -56,65 +56,54 @@
         @click="step(pIndex, false, 'month')"
       >
         <veui-icon :name="icons.prev"/>
-      </button>
+      </veui-button>
       <template>
-        <button
+        <veui-button
           v-if="type !== 'year'"
           :id="`${id}:panel-title:${pIndex}`"
           ref="expansion-select"
-          type="button"
           :class="$c('calendar-select')"
           :disabled="disabled || readonly"
           :aria-label="t('selectMonth', { month: p.month + 1 })"
           @click="setExpanded(pIndex, !p.expanded)"
         >
-          <b>
-            <span v-if="isDateType">
-              {{
-                t('yearAndMonth', {
-                  year: p.year,
-                  month: t(`monthsLong[${p.month}]`) || p.month + 1
-                })
-              }}
-            </span>
-            <span v-else>{{ t('year', { year: p.year }) }}</span>
-          </b>
+          <b>{{ getExpansionText(p) }}</b>
           <veui-icon :name="icons.expand"/>
-        </button>
+        </veui-button>
         <b
           v-else
           :id="`${id}:panel-title:${pIndex}`"
           :class="$c('calendar-select')"
         >{{ t('year', { year: p.year }) }}</b>
       </template>
-      <button
+      <veui-button
         ref="next"
-        type="button"
         :class="{
           [$c('calendar-next')]: true,
           [$c('calendar-visible')]: isDateType
         }"
+        :ui="uiParts.navigate"
         :disabled="disabled || readonly"
         :aria-label="t('nextMonth')"
         :aria-controls="`${id}:panel-title:${pIndex}`"
         @click="step(pIndex, true, 'month')"
       >
         <veui-icon :name="icons.next"/>
-      </button>
-      <button
+      </veui-button>
+      <veui-button
         ref="forward"
-        type="button"
         :class="{
           [$c('calendar-forward')]: true,
           [$c('calendar-visible')]: !isYearsView(p)
         }"
+        :ui="uiParts.navigate"
         :disabled="disabled || readonly"
         :aria-label="t('nextYear')"
         :aria-controls="`${id}:panel-title:${pIndex}`"
         @click="step(pIndex, true, 'year')"
       >
         <veui-icon :name="icons.forward"/>
-      </button>
+      </veui-button>
     </div>
     <div
       ref="body"
@@ -129,23 +118,23 @@
         :row="150"
         :initial="panelData[pIndex].initialScrollYear"
       >
-        <template slot-scope="{ listeners, data }">
+        <template slot-scope="{ onscroll, start, row, page }">
           <ul
             :ref="`yearScroller-${pIndex}`"
             :class="$c('calendar-year-scroller')"
-            v-on="listeners"
+            @scroll="onscroll"
           >
             <li
-              v-for="idx in data.row"
-              :key="idx + data.start - 1 + `-${data.page}`"
-              :class="getYearClass(p, idx + data.start - 1)"
+              v-for="idx in row"
+              :key="idx + start - 1 + `-${page}`"
+              :class="getYearClass(p, idx + start - 1)"
             >
               <button
                 type="button"
                 tabindex="-1"
-                @click="selectYear(pIndex, idx + data.start - 1)"
+                @click="selectYear(pIndex, idx + start - 1)"
               >
-                {{ idx + data.start - 1 }}
+                {{ idx + start - 1 }}
               </button>
             </li>
           </ul>
@@ -253,11 +242,11 @@
         :col="3"
         :initial="p.year"
       >
-        <template slot-scope="{ listeners, data }">
+        <template slot-scope="{ onscroll, start, row, page }">
           <div
             :ref="`yearScroller-${pIndex}`"
             :class="$c('calendar-year-table-wrap')"
-            v-on="listeners"
+            @scroll="onscroll"
           >
             <table
               ref="table"
@@ -268,13 +257,13 @@
             >
               <tbody>
                 <tr
-                  v-for="i in data.row"
-                  :key="`${i}-${data.page}`"
+                  v-for="i in row"
+                  :key="`${i}-${page}`"
                 >
                   <td
                     v-for="j in 3"
                     :key="j"
-                    :class="getYearClass(p, data.start + 3 * (i - 1) + j - 1)"
+                    :class="getYearClass(p, start + 3 * (i - 1) + j - 1)"
                   >
                     <button
                       type="button"
@@ -283,13 +272,11 @@
                         !p.expanded &&
                           (realDisabled ||
                           realReadonly ||
-                          markDisabled(data.start + 3 * (i - 1) + j - 1))
+                          markDisabled(start + 3 * (i - 1) + j - 1))
                       "
-                      @click="
-                        selectYear(pIndex, data.start + 3 * (i - 1) + j - 1)
-                      "
+                      @click="selectYear(pIndex, start + 3 * (i - 1) + j - 1)"
                       @mouseenter="
-                        handleYearMouseEnter(data.start + 3 * (i - 1) + j - 1)
+                        handleYearMouseEnter(start + 3 * (i - 1) + j - 1)
                       "
                       @keydown.up.prevent="
                         moveFocus(pIndex, getYearOffset(i, j, false))
@@ -300,7 +287,7 @@
                       "
                       @keydown.left.prevent="moveFocus(pIndex, -1)"
                     >
-                      {{ data.start + 3 * (i - 1) + j - 1 }}
+                      {{ start + 3 * (i - 1) + j - 1 }}
                     </button>
                   </td>
                 </tr>
@@ -324,8 +311,8 @@ import {
   isSameMonth,
   isSameYear,
   mergeRange,
-  dateGt,
-  dateLt
+  gt,
+  lt
 } from '../utils/date'
 import { closest, focusIn, focus, scrollTo } from '../utils/dom'
 import { sign, isPositive } from '../utils/math'
@@ -344,6 +331,7 @@ import input from '../mixins/input'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import Icon from './Icon'
+import Button from './Button'
 import InfiniteScroll from './Calendar/_InfiniteScroll'
 import addMonths from 'date-fns/add_months'
 
@@ -361,6 +349,7 @@ export default {
   name: 'veui-calendar',
   components: {
     'veui-icon': Icon,
+    'veui-button': Button,
     InfiniteScroll
   },
   mixins: [prefix, ui, input, i18n],
@@ -520,7 +509,7 @@ export default {
     }
   },
   mounted () {
-    this.scrollCurrentYear()
+    this.scrollToCurrentYear()
     let selected = [].concat(this.realSelected)
     if (this.multiple) selected = selected[0]
     this.navigate(selected, false)
@@ -545,6 +534,14 @@ export default {
         date: this.t('date', { date }),
         day: this.t(`daysLong[${d.getDay()}]`)
       })
+    },
+    getExpansionText (p) {
+      return this.isDateType
+        ? this.t('yearAndMonth', {
+          year: p.year,
+          month: this.t(`monthsLong[${p.month}]`) || p.month + 1
+        })
+        : this.t('year', { year: p.year })
     },
     isDaysView (index) {
       return this.isDateType && !this.panels[index].expanded
@@ -576,28 +573,25 @@ export default {
           weeks[i] = []
         }
         for (let j = 0; j < 7; j++) {
-          let inMonth = i * 7 + j - offset < daysInMonth
           if (i === 0 && j < offset) {
             weeks[i][j] = {
               date: daysInPreviousMonth + j + 1 - offset,
               month: (month + 11) % 12,
               year: month === 0 ? year - 1 : year
             }
-          } else if (inMonth) {
+          } else if (i * 7 + j - offset < daysInMonth) {
             weeks[i][j] = {
               date: i * 7 + j + 1 - offset,
               month: month,
               year: year
             }
+            marks = this.markDay(weeks[i][j], marks)
           } else {
             weeks[i][j] = {
               date: i * 7 + j + 1 - offset - daysInMonth,
               month: (month + 1) % 12,
               year: month === 11 ? year + 1 : year
             }
-          }
-          if (inMonth) {
-            marks = this.markDay(weeks[i][j], marks)
           }
         }
       }
@@ -657,7 +651,7 @@ export default {
       }
       return marks
     },
-    scrollCurrentYear () {
+    scrollToCurrentYear () {
       if (this.isYearType) {
         this.$nextTick(() => {
           for (let i = 0; i < this.panel; i++) {
@@ -708,14 +702,14 @@ export default {
       this.syncPanelDate(index, dateData)
       i = index
       while (i--) {
-        if (dateLt(p[i].date, p[i + 1].date)) {
+        if (lt(p[i].date, p[i + 1].date)) {
           break
         }
         let date = getNextDate(p[i + 1].date, -1)
         this.syncPanelDate(i, date)
       }
       for (i = index + 1; i < p.length; i++) {
-        if (dateGt(p[i].date, p[i - 1].date)) {
+        if (gt(p[i].date, p[i - 1].date)) {
           break
         }
         let date = getNextDate(p[i - 1].date)
@@ -914,7 +908,7 @@ export default {
     navigate (index, destination, force = true) {
       if (Array.isArray(index)) {
         return index.forEach(
-          (val, idx) => val && this.navigate(idx, val, force)
+          (val, idx) => val && this.navigate(idx, val, destination)
         )
       }
       if (isNumber(index) && destination && this.panels[index]) {

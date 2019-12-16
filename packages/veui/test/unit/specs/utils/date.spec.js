@@ -9,8 +9,8 @@ import {
   isInRange,
   mergeRange,
   getExactDateData,
-  dateGt,
-  dateLt
+  gt,
+  lt
 } from '@/utils/date'
 
 describe('utils/date', () => {
@@ -352,14 +352,14 @@ describe('utils/date', () => {
 
   it('should compare date correctly', () => {
     expect(
-      dateGt(
+      gt(
         { year: 2019, month: 11, date: 15 },
         { year: 2019, month: 11, date: 14 }
       )
     ).to.be.equal(true)
 
     expect(
-      dateLt({ year: 2019, month: 11 }, { year: 2019, month: 10 })
+      lt({ year: 2019, month: 11 }, { year: 2019, month: 10 })
     ).to.be.equal(false)
   })
 })

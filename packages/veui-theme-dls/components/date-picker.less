@@ -6,14 +6,11 @@
   position: relative;
   display: inline-block;
 
-  &.@{veui-prefix}-input-invalid &-button.@{veui-prefix}-button {
-    &:extend(._veui-input-invalid all);
-  }
-
   &-trigger {
+    .veui-button-transition();
     display: flex;
     align-items: center;
-    border: 1px solid @veui-gray-color-6;
+    border: 1px solid @dls-input-border-color;
     padding-right: @dls-input-padding;
     border-radius: @dls-border-radius-m;
     outline: none;
@@ -23,8 +20,29 @@
       padding-right: 0;
     }
 
+    &:hover {
+      border-color: @dls-input-border-color-hover;
+    }
+
     &.focus-visible {
       .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
+    }
+
+    .@{veui-prefix}-invalid & {
+      border-color: @dls-input-border-color-error;
+      .@{veui-prefix}-input-main {
+        color: @dls-input-font-color-error;
+      }
+
+      &:hover {
+        border-color: @dls-input-border-color-error-hover;
+      }
+    }
+    .@{veui-prefix}-invalid.@{veui-prefix}-focus & {
+      .dls-focus-ring(
+        @dls-input-border-color-error-focus,
+        @dls-input-shadow-error-focus
+      );
     }
   }
 
@@ -37,18 +55,18 @@
   &-clock {
     .dls-icon-size(@dls-input-icon-size);
     .veui-transition(color, opacity);
-    color: @dls-time-picker-icon-color;
+    color: @dls-date-picker-icon-color;
 
     .@{veui-prefix}-readonly &,
     .@{veui-prefix}-disabled & {
-      color: @dls-time-picker-icon-color-disabled;
+      color: @dls-date-picker-icon-color-disabled;
     }
   }
 
   &:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
     &-clear
     + &-clock,
-  .@{veui-prefix}-input-focused &-clear + &-clock,
+  .@{veui-prefix}-focus &-clear + &-clock,
   &-clear.focus-visible + &-clock {
     opacity: 0;
   }
@@ -61,12 +79,12 @@
 
     .@{veui-prefix}-icon {
       .dls-icon-size(@dls-input-icon-size);
-      color: @dls-time-picker-icon-color;
+      color: @dls-date-picker-icon-color;
     }
 
     .@{veui-prefix}-date-picker:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
       &,
-    .@{veui-prefix}-input-focused &,
+    .@{veui-prefix}-focus &,
     &.focus-visible {
       opacity: 1;
     }
@@ -74,6 +92,9 @@
 
   &-overlay-content {
     &:extend(._veui-dropdown-overlay all);
+    &[ui] {
+      max-height: none;
+    }
     box-shadow: @dls-date-picker-dropdown-shadow;
     .border-radius(@dls-date-picker-dropdown-border-radius-m);
     margin-top: -1px;
@@ -82,43 +103,14 @@
   }
 
   &-inputs {
-    border-bottom: 1px solid @veui-gray-color-6;
-
+    border-bottom: 1px solid @dls-input-border-color;
+    display: flex;
+    align-items: center;
     .@{veui-prefix}-input {
-      width: 100%;
-
+      flex: 1 1 auto;
+      width: auto; // 覆盖 width
       &-main {
-        border: 0;
-        border-radius: 0;
-      }
-
-      &.@{veui-prefix}-input-focused .@{veui-prefix}-input-main {
-        box-shadow: 0 2px 0 0 @veui-brand-color;
-      }
-    }
-
-    .@{veui-prefix}-calendar-range & {
-      display: flex;
-    }
-  }
-
-  &-connector {
-    padding: 0 @dls-date-picker-range-connector-padding-x;
-    .centered-line(@dls-height-m);
-    flex-shrink: 0;
-    color: @veui-text-color-weak;
-  }
-
-  &-empty {
-    .@{veui-prefix}-button {
-      color: @veui-text-color-weak;
-
-      &.focus-visible {
-        color: @veui-brand-color;
-      }
-
-      &.@{veui-prefix}-disabled {
-        color: @veui-text-color-aux;
+        margin-bottom: -1px;
       }
     }
   }
@@ -128,19 +120,25 @@
   }
 
   &-tilde {
-    display: inline-block;
     overflow: hidden;
     padding: 0 @dls-date-picker-range-connector-padding-x;
-    line-height: @dls-line-height-m;
-    color: @veui-text-color-weak;
+    color: @dls-font-color-aux;
+
+    .@{veui-prefix}-disabled & {
+      color: @dls-input-font-color-disabled;
+    }
+
+    .@{veui-prefix}-readonly & {
+      color: @dls-input-font-color-read-only;
+    }
   }
 
   &-shortcuts {
     display: flex;
     flex-direction: column;
     padding: @dls-date-picker-header-padding-y 0;
-    border-bottom: 1px solid @veui-gray-color-6;
-    border-top: 1px solid @veui-gray-color-6;
+    border-bottom: 1px solid @dls-date-picker-panel-separator-color;
+    border-top: 1px solid @dls-date-picker-panel-separator-color;
   }
 
   &-shortcut {
@@ -149,21 +147,21 @@
     .centered-line(@dls-height-m);
     border: none;
     background: none;
-    color: @veui-text-color-normal;
+    color: @dls-date-picker-list-font-color;
     outline: none;
     padding: 0 @dls-date-picker-panel-padding-x;
     margin-bottom: @dls-date-picker-list-item-spacing;
 
     &:hover {
-      background-color: @veui-gray-color-6;
+      background-color: @dls-date-picker-list-background-color-hover;
     }
 
     &.focus-visible {
-      color: @veui-brand-color;
+      color: @dls-date-picker-list-font-color-focus;
     }
 
     &:active {
-      background-color: @veui-gray-color-5;
+      background-color: @dls-date-picker-list-font-color-active;
     }
 
     &:last-child {
@@ -179,29 +177,9 @@
     background-color: @dls-input-background-color-disabled;
   }
 
-  &[ui~="alt"] &-clear {
-    background-color: @veui-gray-color-7;
-  }
-
-  &[ui~="alt"]:hover {
-    .@{veui-prefix}-date-picker {
-      &-button:not(.@{veui-prefix}-disabled),
-      &-clear {
-        background-color: @veui-gray-color-6;
-      }
-    }
-  }
-
-  &[ui~="alt"]:hover &-button:not(.@{veui-prefix}-disabled):active {
-    &,
-    & + .@{veui-prefix}-date-picker-clear {
-      background-color: @veui-gray-color-5;
-    }
-  }
-
   &-overlay-content[ui~="s"],
   &[ui~="s"] {
-    font-size: @dls-font-size-s;
+    font-size: @dls-date-picker-font-size-s;
   }
   &-overlay-content[ui~="s"] {
     .border-radius(@dls-date-picker-dropdown-border-radius-s);

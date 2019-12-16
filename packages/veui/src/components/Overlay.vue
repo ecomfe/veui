@@ -9,6 +9,7 @@ import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import { getClassPropDef, mergeClasses, isType } from '../utils/helper'
 import '../common/uiTypes'
+import { omit } from 'lodash'
 
 config.defaults({
   'overlay.baseZIndex': 200,
@@ -39,8 +40,7 @@ export default {
     priority: Number,
     autofocus: Boolean,
     modal: Boolean,
-    matchWidth: Boolean,
-    inner: Boolean
+    matchWidth: Boolean
   },
   data () {
     return {
@@ -217,10 +217,7 @@ export default {
             flip: {
               flipVariationsByContent: true
             },
-            // todo 先看下效果
-            inner: {
-              enabled: !!this.inner
-            }
+            ...omit(this.options, 'position')
           },
           onUpdate: () => {
             this.$emit('locate')

@@ -55,14 +55,10 @@ export default {
   },
   render (h) {
     return this.$scopedSlots['default']({
-      listeners: {
-        scroll: this.handleScroll
-      },
-      data: {
-        start: this.start,
-        row: this.realRow,
-        page: this.page
-      }
+      onscroll: this.handleScroll,
+      start: this.start,
+      row: this.realRow,
+      page: this.page
     })
   }
 }

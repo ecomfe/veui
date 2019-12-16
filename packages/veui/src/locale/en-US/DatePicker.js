@@ -7,9 +7,9 @@ i18n.register(
     selectDate: 'Select a date',
     selectMonth: 'Select a month',
     selectYear: 'Select a year',
-    selectRange: ['Select a start date', 'Select a end date'],
-    selectMonthRange: ['Select a start month', 'Select a end month'],
-    selectYearRange: ['Select a start year', 'Select a end year']
+    selectRange: ['Start date', 'End date'],
+    selectMonthRange: ['Start month', 'End month'],
+    selectYearRange: ['Start year', 'End year']
   },
   {
     ns: 'datepicker'
