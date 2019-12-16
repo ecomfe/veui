@@ -212,8 +212,8 @@ describe('components/Uploader', () => {
     dT.items.add(new File(['foo'], 'test2.jpg'))
     input.element.files = dT.files
     input.trigger('change')
-    clearXHR(wrapper)
     await wait(0)
+    clearXHR(wrapper)
 
     let callbackData = { src: '/test2.jpg', id: 6, success: true }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
@@ -235,13 +235,12 @@ describe('components/Uploader', () => {
     dT.items.add(new File(['foo'], 'test3.jpg'))
     input.element.files = dT.files
     input.trigger('change')
-    clearXHR(wrapper)
     await wait(0)
+    clearXHR(wrapper)
 
     callbackData = { success: false, message: 'image too large' }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
-
-    expect(wrapper.emitted().failure[2]).to.deep.equal([
+    expect(wrapper.emitted().failure[0]).to.deep.equal([
       {
         name: 'test3.jpg',
         status: 'failure'
