@@ -29,10 +29,6 @@ config.defaults(
         values: ['m', 's'],
         inherit: true,
         default: 'm'
-      },
-      descPosition: {
-        values: ['desc-horizontal', 'desc-vertical'],
-        default: 'desc-horizontal'
       }
     },
     parts: {

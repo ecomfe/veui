@@ -10,7 +10,6 @@
     :max-count="3"
     max-size="100kb"
     accept=".jpg,.jpeg,.gif"
-    ui="horizontal"
     :payload="payload"
     :validator="validator"
     @success="onSuccess"
@@ -19,7 +18,7 @@
     @statuschange="handleStatusChange"
   >
     <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在10M以内，宽、高大于200像素，最多上传3张图
+      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于200像素，最多上传3张图
     </template>
   </veui-uploader>
   <h2>图片上传模式，上传进度以进度条显示</h2>
@@ -28,19 +27,19 @@
     type="image"
     request-mode="custom"
     name="file"
-    :max-count="3"
     max-size="10mb"
     accept=".jpg,.jpeg,.gif"
     :payload="payload"
     :upload="upload"
-    ui="desc-vertical s"
+    desc-direction="vertical"
+    ui="s"
     @success="onSuccess"
     @failure="onFailure"
     @change="handleChange('files1')"
     @statuschange="handleStatusChange"
   >
     <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在10M以内，最多上传3张图
+      请选择jpg,jpeg,gif图片，大小在10M以内
     </template>
   </veui-uploader>
   <veui-tooltip
@@ -63,7 +62,6 @@
     :max-count="3"
     max-size="10mb"
     :payload="payload"
-    ui="s"
     @success="onSuccess"
     @failure="onFailure"
     @change="handleChange('files2')"
@@ -84,7 +82,7 @@
     accept=".jpg,.jpeg,.gif"
     :payload="payload"
     :convert-response="convertResponse"
-    ui="desc-vertical"
+    desc-direction="vertical"
     @success="onSuccess"
     @failure="onFailure"
     @change="handleChange('filesIframe')"
