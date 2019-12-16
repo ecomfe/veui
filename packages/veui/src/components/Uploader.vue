@@ -3,13 +3,20 @@
   ref="main"
   :class="{
     [$c('uploader')]: true,
-    [$c(`uploader-${type}`)]: true
+    [$c(`uploader-${type}`)]: true,
+    [$c(`uploader-desc-vertical`)]: descDirection === 'vertical'
   }"
   :ui="realUi"
   role="application"
   tabindex="-1"
   :aria-label="t('uploader')"
 >
+  <span
+    v-if="$slots.desc && descDirection === 'vertical' && type === 'image'"
+    :class="$c('uploader-desc')"
+  >
+    <slot name="desc"/>
+  </span>
   <div
     v-if="type === 'file'"
     :class="$c('uploader-button-container')"
@@ -24,14 +31,11 @@
           (maxCount > 1 && fileList.length >= maxCount) ||
           (requestMode === 'iframe' && submitting)
       }"
-      :ui="realUi"
+      :ui="uiProps.size"
       @click="handleClick"
     >
       <slot name="button-label">
-        <veui-icon
-          :class="$c('uploader-input-label-icon')"
-          :name="icons.upload"
-        />{{ t('selectFile') }}
+        <veui-icon :name="icons.upload"/>{{ t('selectFile') }}
       </slot>
       <input
         :id="inputId"
@@ -89,7 +93,6 @@
             <div :class="$c('uploader-list-container')">
               <veui-icon
                 v-if="file.status !== 'uploading'"
-                :ui="realUi"
                 :name="icons.file"
                 :class="{
                   [$c('uploader-list-file-icon')]: true,
@@ -119,13 +122,11 @@
               <veui-icon
                 v-if="file.status === 'success'"
                 :name="icons.success"
-                :u="realUi"
                 :class="$c('uploader-success-icon')"
               />
               <veui-icon
                 v-if="file.status === 'failure'"
                 :name="icons.failure"
-                :u="realUi"
                 :class="$c('uploader-failure-icon')"
               />
               <veui-button
@@ -242,7 +243,9 @@
             name="file-before"
             v-bind="getScopeValue(index, file)"
           />
-          <div :class="`${listClass}-container`">
+          <div
+            :class="`${listClass}-container ${listClass}-container-failure`"
+          >
             <label
               :for="inputId"
               :class="{
@@ -294,7 +297,7 @@
       v-if="type === 'image'"
       v-show="!maxCount || fileList.length < maxCount"
       key="input"
-      :class="`${listClass}-item`"
+      :class="`${listClass}-upload-item`"
     >
       <div :class="$c('uploader-list-image-container')">
         <label
@@ -335,7 +338,7 @@
     </li>
   </transition-group>
   <span
-    v-if="$slots.desc && type === 'image'"
+    v-if="$slots.desc && type === 'image' && descDirection === 'horizontal'"
     :class="$c('uploader-desc')"
   >
     <slot name="desc"/>
@@ -529,7 +532,14 @@ export default {
       type: Boolean,
       default: false
     },
-    upload: Function
+    upload: Function,
+    descDirection: {
+      type: String,
+      default: 'horizontal',
+      validator (value) {
+        return includes(['horizontal', 'vertical'], value)
+      }
+    }
   },
   data () {
     return {
