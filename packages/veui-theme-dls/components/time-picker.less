@@ -61,7 +61,7 @@
   &:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
     &-clear
     + &-clock,
-  .@{veui-prefix}-input-focus &-clear + &-clock,
+  .@{veui-prefix}-focus &-clear + &-clock,
   &-clear.focus-visible + &-clock {
     opacity: 0;
   }
@@ -78,7 +78,7 @@
 
     .@{veui-prefix}-time-picker:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
       &,
-    .@{veui-prefix}-input-focus &,
+    .@{veui-prefix}-focus &,
     &.focus-visible {
       opacity: 1;
     }

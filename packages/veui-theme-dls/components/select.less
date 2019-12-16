@@ -9,7 +9,7 @@
   outline: none;
 
   &:not(&-empty):not(&-expanded)
-    .@{veui-prefix}-input:not(.@{veui-prefix}-input-focus)
+    .@{veui-prefix}-input:not(.@{veui-prefix}-focus)
     .@{veui-prefix}-input-placeholder {
     color: @dls-input-font-color;
   }
@@ -158,7 +158,7 @@
   &:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
     &-clear
     + &-toggle,
-  .@{veui-prefix}-input-focus &-clear + &-toggle,
+  .@{veui-prefix}-focus &-clear + &-toggle,
   &-clear.focus-visible + &-toggle {
     opacity: 0;
   }
