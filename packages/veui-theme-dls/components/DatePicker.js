@@ -19,7 +19,8 @@ config.defaults(
       }
     },
     parts: {
-      clear: 'icon'
+      clear: 'icon',
+      input: 'inline'
     }
   },
   'datepicker'

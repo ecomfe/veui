@@ -4,12 +4,12 @@ i18n.register(
   'zh-Hans',
   {
     clear: '清除',
-    selectDate: '选择时间',
-    selectMonth: '选择月份',
-    selectYear: '选择年份',
-    selectRange: ['选择开始日期', '选择结束日期'],
-    selectMonthRange: ['选择开始月份', '选择结束月份'],
-    selectYearRange: ['选择开始年份', '选择结束年份']
+    selectDate: '请选择日期',
+    selectMonth: '请选择月份',
+    selectYear: '请选择年份',
+    selectRange: ['开始日期', '结束日期'],
+    selectMonthRange: ['开始月份', '结束月份'],
+    selectYearRange: ['开始年份', '结束年份']
   },
   {
     ns: 'datepicker'

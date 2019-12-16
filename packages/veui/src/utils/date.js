@@ -161,19 +161,16 @@ export function getExactDateData (dataStr, type, sep) {
   return getDateData(dataStr, createDateRe(type, sep, true), type)
 }
 
-function dateSubtract (a, b) {
-  if (a && b) {
-    a = a instanceof Date ? a : new Date(a.year, a.month || 0, a.date || 1)
-    b = b instanceof Date ? b : new Date(b.year, b.month || 0, b.date || 1)
-    return a - b
-  }
-  return NaN
+function subtract (a, b) {
+  a = a instanceof Date ? a : new Date(a.year, a.month || 0, a.date || 1)
+  b = b instanceof Date ? b : new Date(b.year, b.month || 0, b.date || 1)
+  return a - b
 }
 
-export function dateGt (a, b) {
-  return dateSubtract(a, b) > 0
+export function gt (a, b) {
+  return a && b ? subtract(a, b) > 0 : false
 }
 
-export function dateLt (a, b) {
-  return dateSubtract(a, b) < 0
+export function lt (a, b) {
+  return a && b ? subtract(a, b) < 0 : false
 }

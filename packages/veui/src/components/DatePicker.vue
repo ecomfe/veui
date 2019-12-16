@@ -4,10 +4,10 @@
   :class="{
     [$c('date-picker')]: true,
     [$c('input-invalid')]: realInvalid,
-    [$c('date-picker-empty')]: !selected,
     [$c('date-picker-range')]: range,
     [$c('date-picker-expanded')]: expanded,
-    [$c('disabled')]: realDisabled || realReadonly
+    [$c('disabled')]: realDisabled,
+    [$c('readonly')]: realReadonly
   }"
 >
   <div
@@ -25,16 +25,26 @@
   >
     <veui-input
       :disabled="realDisabled"
+      :readonly="realReadonly"
       :placeholder="realPlaceholder[0]"
       :value="range ? formattedSelection[0] : formattedSelection"
-      :class="$c('date-picker-label')"
+      :class="{
+        [$c('date-picker-label')]: true,
+        [$c('disabled')]: realDisabled,
+        [$c('readonly')]: realReadonly
+      }"
       tabindex="-1"
     />
     <template v-if="range">
       <span :class="$c('date-picker-tilde')">~</span>
       <veui-input
-        :class="$c('date-picker-label')"
+        :class="{
+          [$c('date-picker-label')]: true,
+          [$c('disabled')]: realDisabled,
+          [$c('readonly')]: realReadonly
+        }"
         :disabled="realDisabled"
+        :readonly="realReadonly"
         :value="formattedSelection[1]"
         :placeholder="realPlaceholder[1]"
         tabindex="-1"
@@ -68,10 +78,9 @@
     :options="realOverlayOptions"
     :overlay-class="overlayClass"
     position="top-start"
-    inner
     autofocus
     modal
-    @afteropen="$refs.cal.scrollCurrentYear()"
+    @afteropen="$refs.cal.scrollToCurrentYear()"
   >
     <div
       :ui="realUi"
@@ -120,15 +129,17 @@
             <veui-input
               ref="start"
               :value="realInputValue[0]"
+              :ui="uiParts.input"
               autofocus
               @input="handleInput(0, $event)"
               @focus="handleInputFocus"
             />
             <template v-if="range">
-              <span :class="$c('date-picker-connector')">~</span>
+              <span :class="$c('date-picker-tilde')">~</span>
               <veui-input
                 ref="end"
                 :value="realInputValue[1]"
+                :ui="uiParts.input"
                 @input="handleInput(1, $event)"
                 @focus="handleInputFocus"
               />
@@ -163,7 +174,7 @@ import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
-import { toDateData, getExactDateData, dateLt } from '../utils/date'
+import { toDateData, getExactDateData, lt } from '../utils/date'
 import { isNumber, pick, omit, defaults } from 'lodash'
 import format from 'date-fns/format'
 import parse from 'date-fns/parse'
@@ -249,7 +260,12 @@ export default {
     return {
       picking: null,
       localSelected: null,
-      localInputValue: []
+      localInputValue: [],
+      localOverlayOptions: {
+        inner: {
+          enabled: true
+        }
+      }
     }
   },
   computed: {
@@ -351,7 +367,7 @@ export default {
         }
       }
       if (dates.length) {
-        if (!this.range || (this.range && dateLt(dates[0], dates[1]))) {
+        if (!this.range || (this.range && lt(dates[0], dates[1]))) {
           this.handleSelect(this.range ? dates : dates[0])
         }
       }

@@ -13,6 +13,9 @@ config.defaults(
       backward: 'chevron-double-left',
       forward: 'chevron-double-right',
       expand: 'chevron-down'
+    },
+    parts: {
+      navigate: 'icon'
     }
   },
   'calendar'

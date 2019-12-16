@@ -58,10 +58,31 @@
     />
   </section>
   <section>
-    <h2>小尺寸</h2>
+    <h2>小尺寸日期范围</h2>
     <veui-date-picker
-      v-model="selectedDate"
+      v-model="selectedDateRange"
       clearable
+      range
+      ui="s"
+    />
+  </section>
+  <section>
+    <h2>小尺寸月份范围</h2>
+    <veui-date-picker
+      v-model="selectedDateRange"
+      clearable
+      range
+      type="month"
+      ui="s"
+    />
+  </section>
+  <section>
+    <h2>小尺寸年份范围</h2>
+    <veui-date-picker
+      v-model="selectedDateRange"
+      clearable
+      range
+      type="year"
       ui="s"
     />
   </section>
@@ -71,6 +92,15 @@
       <veui-date-picker
         v-model="selectedDate"
         disabled
+      />
+    </section>
+  </section>
+  <section>
+    <h2>invalid</h2>
+    <section>
+      <veui-date-picker
+        v-model="selectedDate"
+        class="veui-invalid"
       />
     </section>
   </section>
@@ -86,32 +116,12 @@
   </section>
   <section>
     <h2>可清除范围选择</h2>
-    <section>
-      <veui-date-picker
-        v-model="selectedDateRange"
-        range
-        clearable
-        :panel="3"
-      />
-    </section>
-    <section>
-      <veui-date-picker
-        v-model="selectedDateRange"
-        ui="large"
-        range
-        clearable
-        :panel="3"
-      />
-    </section>
-    <section>
-      <veui-date-picker
-        v-model="selectedDateRange"
-        ui="small"
-        range
-        clearable
-        :panel="3"
-      />
-    </section>
+    <veui-date-picker
+      v-model="selectedDateRange"
+      range
+      clearable
+      :panel="3"
+    />
   </section>
   <section>
     <h2>范围禁用</h2>
@@ -120,6 +130,16 @@
         v-model="selectedDateRange"
         range
         disabled
+      />
+    </section>
+  </section>
+  <section>
+    <h2>范围readonly</h2>
+    <section>
+      <veui-date-picker
+        v-model="selectedDateRange"
+        range
+        readonly
       />
     </section>
   </section>
@@ -143,12 +163,7 @@
     </section>
   </section>
   <section style="height: 500px;"/>
-  <section>
-    <h2>普通</h2>
-    <section>
-      <veui-date-picker v-model="selectedDate"/>
-    </section>
-  </section>
+
   <section>
     <h2>可清除选择</h2>
     <section>
