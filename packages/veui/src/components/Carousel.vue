@@ -1,7 +1,13 @@
 <template>
 <div
-  :class="$c('carousel')"
+  :class="{
+    [$c('carousel')]: true,
+    [$c('focus')]: focused
+  }"
   :ui="realUi"
+  @focusin="focused = !focused"
+  @keydown.left="step(-1, true)"
+  @keydown.right="step(1, true)"
 >
   <div
     :class="$c('carousel-viewport')"
@@ -23,6 +29,8 @@
           [$c('carousel-item-current')]: localIndex === i
         }"
         tabindex="0"
+        @focusin="focusedIndex = i"
+        @focusout="focusedIndex = null"
       >
         <slot
           v-bind="item"
@@ -153,6 +161,8 @@ export default {
   },
   data () {
     return {
+      focused: false,
+      focusedIndex: null,
       localIndex: this.index
     }
   },
@@ -187,21 +197,38 @@ export default {
     this.stop()
   },
   methods: {
-    step (delta) {
+    step (delta, focus) {
+      if (
+        !this.wrap &&
+        (this.localIndex + delta < 0 ||
+          this.localIndex + delta > this.count - 1)
+      ) {
+        return
+      }
+
       this.localIndex = (this.localIndex + delta + this.count) % this.count
+
+      if (focus) {
+        this.focusCurrent()
+      }
     },
     select (index, event) {
       if (event !== this.switchTrigger) {
         return
       }
 
-      if (event === 'click') {
-        setTimeout(() => {
-          this.$refs.item[this.localIndex].focus()
-        })
-      }
-
       this.localIndex = index
+
+      if (event === 'click') {
+        this.focusCurrent()
+      }
+    },
+    focusCurrent () {
+      setTimeout(() => {
+        this.$refs.item[this.localIndex].focus()
+        this.focused = true
+        this.focusedIndex = this.localIndex
+      })
     },
     initPlay () {
       this.stop()
@@ -209,6 +236,9 @@ export default {
         return
       }
       this.__veui_carousel_timer__ = setInterval(() => {
+        if (this.focusedIndex != null) {
+          this.focusCurrent()
+        }
         this.step(1)
       }, this.interval)
     },

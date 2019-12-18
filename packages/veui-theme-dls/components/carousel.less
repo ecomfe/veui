@@ -44,7 +44,12 @@
     transform: translateY(-50%);
     .size(@dls-carousel-control-size);
     padding: 0;
-    border-radius: @dls-carousel-control-border-radius;
+    opacity: 0;
+
+    &,
+    &[ui] {
+      border-radius: @dls-carousel-control-border-radius;
+    }
 
     &-prev {
       left: @dls-carousel-control-spacing;
@@ -57,6 +62,11 @@
     .@{veui-prefix}-icon {
       .dls-icon-size(@dls-carousel-control-icon-size);
     }
+  }
+
+  &:hover &-control,
+  &.@{veui-prefix}-focus &-control {
+    opacity: 1;
   }
 
   &-indicator {
