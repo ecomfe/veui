@@ -118,7 +118,8 @@
 
     &-body {
       flex-grow: 1;
-      padding: 0 @dls-dialog-padding-x;
+      .margin(-@dls-shadow-spread-focus, _);
+      padding: @dls-shadow-spread-focus @dls-dialog-padding-x;
       font-size: @dls-dialog-body-font-size-m;
       line-height: @dls-dialog-body-line-height;
       color: @dls-dialog-body-font-color;
