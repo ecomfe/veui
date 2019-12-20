@@ -1,6 +1,7 @@
 @import "../lib.less";
 
 .@{veui-prefix}-slider {
+  display: flex;
   width: 100%;
   position: relative;
   user-select: none;
@@ -9,6 +10,8 @@
   color: @dls-slider-font-color;
 
   &-track {
+    flex-grow: 1;
+
     &-default {
       display: flex;
       align-items: center;
