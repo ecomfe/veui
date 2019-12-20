@@ -9,19 +9,9 @@
   role="group"
   v-bind="attrs"
 >
-  <template
-    v-if="$slots.label"
-    slot="label"
-  >
-    <slot name="label"/>
-  </template>
+  <slot name="label"/>
   <slot/>
-  <template
-    v-if="$slots.tip"
-    slot="tip"
-  >
-    <slot name="tip"/>
-  </template>
+  <slot name="tip"/>
 </veui-field>
 </template>
 
