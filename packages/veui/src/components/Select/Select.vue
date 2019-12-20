@@ -96,10 +96,10 @@ export default {
       }
 
       if (!this.searchable) {
-        return this.localValue == null ? this.realPlaceholder : ''
+        return !this.localValue ? this.realPlaceholder : ''
       }
 
-      return this.localValue == null ? this.realPlaceholder : this.label
+      return !this.localValue ? this.realPlaceholder : this.label
     },
     label () {
       return this.selectedOption ? this.selectedOption.label : ''
@@ -137,7 +137,7 @@ export default {
     },
     isEmpty () {
       return (
-        this.localValue == null ||
+        !this.localValue ||
         (Array.isArray(this.localValue) && this.localValue.length === 0)
       )
     },
@@ -154,18 +154,8 @@ export default {
     isMatchWidth () {
       return !this.isMultiLevel || !!this.inputValue
     },
-    inputClass () {
-      if (this.multiple) {
-        return this.searchable
-          ? this.$c('select-search-multi-input')
-          : this.$c('select-multi-input')
-      }
-      return this.searchable
-        ? this.$c('select-search-input')
-        : this.$c('select-input')
-    },
-    focusClass () {
-      return this.searchable ? config.get('keySelect.focusClass') : null
+    focusSelector () {
+      return this.searchable ? config.get('keyselect.focusSelector') : null
     }
   },
   watch: {
@@ -254,13 +244,16 @@ export default {
           this.expanded = true
           passive = false
           if (this.searchable) {
-            this.handleKeydown(e)
-            this.getCurrentActiveElement()
+            this.$refs.input.focus()
+            this.$nextTick(() => {
+              this.handleKeydown(e)
+            })
           }
           break
         case 'Esc':
         case 'Escape':
           if (this.searchable) {
+            this.$el.focus()
             this.expanded = false
             passive = false
           }
@@ -271,15 +264,15 @@ export default {
         case 'Enter':
           if (this.searchable) {
             if (!this.expanded) {
+              this.$refs.input.focus()
               this.expanded = true
               break
             }
-            if (this.expanded) {
-              let elem = this.getCurrentActiveElement()
-              if (elem) {
-                elem.click()
-              }
+            let elem = this.getCurrentActiveElement()
+            if (elem) {
+              elem.click()
             }
+            this.$el.focus()
           } else {
             this.expanded = true
           }
@@ -312,7 +305,7 @@ export default {
     handleAfteropen () {
       this.$emit('afteropen')
     },
-    focus (visible) {
+    focus () {
       if (!this.searchable) {
         this.$el.focus()
         return
@@ -425,6 +418,7 @@ export default {
           [this.$c('select-empty')]: this.isEmpty,
           [this.$c('select-expanded')]: this.expanded,
           [this.$c('select-searchable')]: this.searchable,
+          [this.$c('select-multiple')]: this.multiple,
           [this.$c('readonly')]: this.realReadonly,
           [this.$c('disabled')]: this.realDisabled,
           [this.$c('input-invalid')]: this.realInvalid
@@ -437,15 +431,14 @@ export default {
         aria-disabled={this.realDisabled}
         aria-labelledby={this.labelId}
         aria-haspopup="listbox"
-        tabindex={this.searchable || this.realDisabled ? null : '0'}
+        tabindex={
+          (this.searchable && this.multiple) || this.realDisabled ? null : '0'
+        }
         onKeydown={this.handleTriggerKeydown}
       >
         <Input
           ref="input"
-          class={{
-            [this.$c('select-trigger')]: true,
-            [this.inputClass]: true
-          }}
+          class={this.$c('select-trigger')}
           disabled={this.realDisabled}
           readonly={this.realReadonly}
           placeholder={this.inputPlaceholder}
@@ -465,7 +458,7 @@ export default {
               {this.clearable &&
               (this.multiple
                 ? this.localValue.length > 0
-                : this.localValue != null) ? (
+                : !!this.localValue) ? (
                   <Button
                     class={this.$c('select-clear')}
                     ui={this.uiParts.clear}

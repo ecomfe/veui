@@ -209,10 +209,8 @@
       <veui-search-box
         clearable
         ui="inline"
-        replace-on-select
         :placeholder="placeholder"
-        :suggestions="suggestions4"
-        @input="handleSuggest('4', $event)"
+        :suggest-trigger="[]"
         @search="log($event)"
         @select="log('select', $event)"
       />

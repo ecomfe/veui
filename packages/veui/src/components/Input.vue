@@ -27,31 +27,33 @@
     :class="$c('input-main')"
     @mousedown="handleMousedown"
   >
-    <span
-      v-show="empty"
-      :class="$c('input-placeholder')"
-      @selectstart.prevent="() => false"
-    >
-      {{ placeholder }}
-    </span>
     <template v-if="$slots.prepend">
       <div :class="$c('input-prepend')">
         <slot name="prepend"/>
       </div>
     </template>
-    <input
-      ref="input"
-      v-model="localValue"
-      :class="$c('input-input')"
-      v-bind="attrs"
-      v-on="inputListeners"
-      @focus="handleFocus"
-      @blur="handleBlur"
-      @input="handleInput"
-      @compositionupdate="handleComposition"
-      @compositionend="handleCompositionEnd"
-      @change="$emit('change', $event.target.value, $event)"
-    >
+    <div :class="$c('input-content')">
+      <div
+        v-show="empty"
+        :class="$c('input-placeholder')"
+        @selectstart.prevent="() => false"
+      >
+        {{ placeholder }}
+      </div>
+      <input
+        ref="input"
+        v-model="localValue"
+        :class="$c('input-input')"
+        v-bind="attrs"
+        v-on="inputListeners"
+        @focus="handleFocus"
+        @blur="handleBlur"
+        @input="handleInput"
+        @compositionupdate="handleComposition"
+        @compositionend="handleCompositionEnd"
+        @change="$emit('change', $event.target.value, $event)"
+      >
+    </div>
     <template v-if="$slots.append || clearable">
       <div :class="$c('input-append')">
         <veui-button
@@ -188,7 +190,9 @@ export default {
       }
     },
     handleMousedown (e) {
-      this.focus()
+      setTimeout(() => {
+        this.focus()
+      })
     },
     handleComposition (e) {
       this.compositionValue = e.data
@@ -219,6 +223,7 @@ export default {
       this.compositionValue = ''
       this.focus()
       this.$emit('input', '')
+      this.$emit('clear')
     }
   }
 }

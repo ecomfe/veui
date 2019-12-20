@@ -115,7 +115,7 @@
   &-expanded &-button.@{veui-prefix}-button[ui~="primary"] {
     &,
     &:hover,
-    &.focus-visible {
+    &[data-focus-visible-added] {
       color: @dls-button-font-color-primary;
       background-color: @dls-button-background-color-primary-hover;
     }
@@ -129,7 +129,7 @@
     &:not([ui~="text"]) {
       &,
       &:hover,
-      &.focus-visible {
+      &[data-focus-visible-added] {
         color: @dls-button-font-color-normal;
         background-color: @dls-button-background-color-normal-hover;
       }
@@ -184,7 +184,7 @@
     background-color: @dls-option-background-color-hover;
   }
 
-  &.focus-visible {
+  &[data-focus-visible-added] {
     color: @dls-option-font-color-focus;
     background-color: @dls-option-background-color-focus;
   }
@@ -202,7 +202,7 @@
       color: @dls-option-font-color-selected-hover;
     }
 
-    &.focus-visible {
+    &[data-focus-visible-added] {
       color: @dls-option-font-color-selected-focus;
     }
 

@@ -1,22 +1,47 @@
 import { findIndex, find, get } from 'lodash'
-import { getFocusable, hasClass, toggleClass } from '../utils/dom'
+import { getFocusable, toggleClass, matches } from '../utils/dom'
 import config from '../managers/config'
 
-const isActive = (elem, focusClass) =>
-  focusClass ? hasClass(elem, focusClass) : elem === document.activeElement
+function isActive (elem, focusSelector) {
+  return focusSelector
+    ? matches(elem, focusSelector)
+    : elem === document.activeElement
+}
 
-const focusElement = (focusableList, index, focusClass) => {
-  if (focusClass) {
+function focusElement (focusableList, index, focusSelector) {
+  if (focusSelector) {
     focusableList.forEach((elem, idx) => {
-      toggleClass(elem, focusClass, index === idx)
+      toggleSelector(elem, focusSelector, index === idx)
     })
   } else {
     focusableList[index].focus()
   }
+
+  focusableList[index].scrollIntoView({ behavior: 'smooth' })
+}
+
+function toggleSelector (elem, selector, force) {
+  if (selector.charAt(0) === '.') {
+    toggleClass(elem, selector.slice(1), force)
+    return
+  }
+
+  let [, attr] = selector.match(/^\[([^\]]+)\]$/)
+  if (attr) {
+    if (elem.hasAttribute(attr) || force === false) {
+      elem.removeAttribute(attr)
+    } else if (!elem.hasAttribute(attr) || force === true) {
+      elem.setAttribute(attr, '')
+    }
+  } else {
+    throw new Error(
+      '[keyselect.focusSelector] only accepts a simple class selector (.foo) or an attribute existence selector ([foo]).'
+    )
+  }
 }
 
 config.defaults({
-  'keyselect.focusClass': 'focus-visible'
+  'keyselect.focusSelector': '[data-focus-visible-added]'
 })
 
 const createKeySelect = ({ useNativeFocus, handlers }) => ({
@@ -28,8 +53,8 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
           ? useNativeFocus(this)
           : useNativeFocus
     },
-    focusClass () {
-      return this.focusMode ? null : config.get('keyselect.focusClass')
+    focusSelector () {
+      return this.focusMode ? null : config.get('keyselect.focusSelector')
     }
   },
   methods: {
@@ -41,11 +66,13 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
       let container = this.getContainerOfFocusable()
       return container ? getFocusable(container) : []
     },
-    clearFocusClass () {
-      return focusElement(this.getFocusable(), -1, this.focusClass)
+    clearfocusSelector () {
+      return focusElement(this.getFocusable(), -1, this.focusSelector)
     },
     getCurrentActiveElement () {
-      return find(this.getFocusable(), elem => isActive(elem, this.focusClass))
+      return find(this.getFocusable(), elem =>
+        isActive(elem, this.focusSelector)
+      )
     },
     navigate (forward = true) {
       let focusable = this.getFocusable()
@@ -54,9 +81,11 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
         return
       }
 
-      let index = findIndex(focusable, elem => isActive(elem, this.focusClass))
+      let index = findIndex(focusable, elem =>
+        isActive(elem, this.focusSelector)
+      )
       index = index === -1 ? 0 : (index + length + (forward ? 1 : -1)) % length
-      focusElement(focusable, index, this.focusClass)
+      focusElement(focusable, index, this.focusSelector)
     },
     handleKeydown (e) {
       let passive = false
@@ -66,8 +95,8 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
         case 'Left':
         case 'ArrowLeft':
           this.expanded = false
-          if (this.focusClass) {
-            this.clearFocusClass()
+          if (this.focusSelector) {
+            this.clearfocusSelector()
           }
           break
         case 'Up':

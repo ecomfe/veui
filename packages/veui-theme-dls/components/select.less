@@ -2,10 +2,13 @@
 @import (reference) "../dropdown.less";
 
 .@{veui-prefix}-select {
+  @adjusted-select-padding-y: dls-sum(@dls-select-padding-y, -1px);
+
   position: relative;
   display: inline-flex;
   align-items: center;
   width: @dls-select-width;
+  vertical-align: middle;
   outline: none;
 
   &:not(&-empty):not(&-expanded)
@@ -27,14 +30,16 @@
     display: none;
   }
 
-  &-searchable .@{veui-prefix}-input-input {
-    display: block;
+  &-searchable {
+    .@{veui-prefix}-input-input {
+      display: block;
+    }
   }
 
   &-trigger {
     .@{veui-prefix}-input-prepend {
-      flex-grow: 1;
-      flex-shrink: 1;
+      flex-grow: 0;
+      flex-shrink: 0;
       padding-right: 0;
       .ellipsis();
     }
@@ -55,14 +60,6 @@
     }
   }
 
-  &-input {
-    width: 100%;
-
-    input {
-      width: 0;
-    }
-  }
-
   &-label {
     max-width: none;
     .ellipsis();
@@ -76,12 +73,7 @@
     }
   }
 
-  &-multi-input,
-  &-search-multi-input {
-    &.@{veui-prefix}-input {
-      height: auto;
-    }
-
+  &-multiple:not(.@{veui-prefix}-select-empty) {
     .@{veui-prefix}-input-main {
       min-width: 100%;
       display: block;
@@ -89,6 +81,8 @@
     }
 
     .@{veui-prefix}-input {
+      height: auto;
+
       &-prepend {
         display: block;
         overflow: visible;
@@ -96,36 +90,38 @@
         .@{veui-prefix}-tag {
           float: left;
           margin-right: @dls-select-tag-spacing;
-          margin-top: @dls-select-padding-y;
+          margin-top: @adjusted-select-padding-y;
         }
 
         .@{veui-prefix}-select-placeholder {
           float: left;
-          margin-top: @dls-select-padding-y;
+          margin-top: @adjusted-select-padding-y;
         }
       }
 
       &-input {
         float: left;
-        margin-top: @dls-select-padding-y;
+        margin-top: @adjusted-select-padding-y;
+        width: 0;
+      }
+
+      &-placeholder {
+        margin-top: @adjusted-select-padding-y;
       }
 
       &-append {
         float: right;
-        margin: @dls-select-padding-y 0;
+        margin: @adjusted-select-padding-y 0;
       }
     }
   }
 
-  &-multi-input {
-    input {
-      width: 0;
-      height: 0;
+  &-searchable&-multiple {
+    &:not(.@{veui-prefix}-select-empty) .@{veui-prefix}-input-content {
+      display: block;
     }
-  }
 
-  &-search-multi-input {
-    input {
+    .@{veui-prefix}-input-input {
       width: 10px;
       max-width: 100%;
     }
@@ -199,23 +195,23 @@
   .make-metrics (@size) {
     @height: ~"dls-select-tag-height-@{size}";
 
-    .@{veui-prefix}-select-multi-input,
-    .@{veui-prefix}-select-search-multi-input {
-      .@{veui-prefix}-select-placeholder {
-        line-height: @@height;
-      }
+    &.@{veui-prefix}-select {
+      &-multiple:not(.@{veui-prefix}-select-empty) {
+        .@{veui-prefix}-select-placeholder {
+          line-height: @@height;
+        }
 
-      .@{veui-prefix}-input-append {
-        height: @@height;
-      }
+        .@{veui-prefix}-input-append {
+          height: @@height;
+        }
 
-      .@{veui-prefix}-tag {
-        height: @@height;
-      }
-    }
-    .@{veui-prefix}-select-search-multi-input {
-      input {
-        height: @@height;
+        .@{veui-prefix}-tag {
+          height: @@height;
+        }
+
+        .@{veui-prefix}-input-input {
+          height: @@height;
+        }
       }
     }
   }

@@ -33,9 +33,8 @@
     </veui-input-group>
   </section>
   <section>
-    <h4>CheckButtonGroup + Autocomplete + ButtonGroup</h4>
+    <h4>Autocomplete + ButtonGroup</h4>
     <veui-input-group>
-      <veui-check-button-group :items="protocals"/>
       <veui-autocomplete :datasource="suggestions"/>
       <veui-button-group
         :items="ops"
@@ -61,7 +60,6 @@
 import {
   InputGroup,
   ButtonGroup,
-  CheckButtonGroup,
   Select,
   Input,
   NumberInput,
@@ -77,7 +75,6 @@ export default {
   components: {
     'veui-input-group': InputGroup,
     'veui-button-group': ButtonGroup,
-    'veui-check-button-group': CheckButtonGroup,
     'veui-input': Input,
     'veui-select': Select,
     'veui-number-input': NumberInput,

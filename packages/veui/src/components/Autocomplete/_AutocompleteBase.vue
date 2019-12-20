@@ -211,7 +211,7 @@ export default {
     },
     closeSuggestions () {
       if (this.expanded) {
-        this.clearFocusClass()
+        this.clearFocusSelector()
         this.activeDescendant = null
         this.expanded = false
       }

@@ -5,10 +5,12 @@
 
   display: inline-flex;
   align-items: stretch;
+  vertical-align: middle;
   height: @dls-input-height-m;
   font-size: @dls-input-font-size-m;
   width: @dls-input-width;
   border-radius: @dls-input-border-radius-m;
+  line-height: 1;
 
   &-autofill {
     background-color: @veui-autofill-color;
@@ -28,7 +30,7 @@
     border-radius: inherit;
     background-color: @dls-input-background-color;
     color: @dls-input-font-color;
-    cursor: inherit;
+    cursor: text;
     .veui-transition(border-color, color, box-shadow);
   }
 
@@ -82,15 +84,23 @@
     padding-left: @dls-input-content-spacing;
   }
 
+  &-content {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    position: relative;
+  }
+
   &-input {
     display: block;
     overflow: hidden;
-    width: 100%;
     border: none;
     outline: none;
     color: inherit;
     padding: 0;
+    width: 100%;
     background-color: transparent;
+    .ellipsis();
   }
 
   &-clear {
@@ -174,10 +184,8 @@
   }
 
   &-placeholder {
-    display: flex;
-    align-items: center;
     position: absolute;
-    height: 100%;
+    width: 100%;
     color: @dls-input-placeholder-color;
     pointer-events: none;
     cursor: text;
