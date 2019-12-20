@@ -52,6 +52,7 @@
       // autoresize 的时候 hidden 一下，避免闪现一下滚动条。
       overflow: autoresize ? 'hidden' : 'auto'
     }"
+    :placeholder="placeholder"
     v-bind="attrs"
     v-on="inputListeners"
     @focus="handleFocus"
