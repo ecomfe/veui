@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
 import Button from '@/components/Button'
 import Form from '@/components/Form/Form'
 import Field from '@/components/Form/Field'
+import { wait } from '../../../../utils'
 
 let slot = `
   <veui-field name="gender" field="gender"><veui-input class="gender-input"/></veui-field>
@@ -20,8 +21,7 @@ function genSimpleForm (propsData = {}, defaultSlot = slot) {
       data () {
         return { propsData }
       },
-      template:
-      `<veui-form ref="form" v-bind="propsData">${defaultSlot}</veui-form>`
+      template: `<veui-form ref="form" v-bind="propsData">${defaultSlot}</veui-form>`
     },
     {
       sync: false,
@@ -34,7 +34,9 @@ function genSimpleForm (propsData = {}, defaultSlot = slot) {
 describe('components/Form/Form', () => {
   it('should set `disabled` state correctly', () => {
     let { wrapper } = genSimpleForm({ disabled: true })
-    let isDisabled = wrapper.findAll('input').wrappers.every(item => item.element.disabled)
+    let isDisabled = wrapper
+      .findAll('input')
+      .wrappers.every(item => item.element.disabled)
 
     expect(isDisabled).to.equal(true)
     expect(wrapper.findAll('.veui-disabled').wrappers.length).to.equal(2)
@@ -43,7 +45,9 @@ describe('components/Form/Form', () => {
 
   it('should set `readonly` state correctly', () => {
     let { wrapper } = genSimpleForm({ readonly: true })
-    let isReadonly = wrapper.findAll('input').wrappers.every(item => item.element.readOnly)
+    let isReadonly = wrapper
+      .findAll('input')
+      .wrappers.every(item => item.element.readOnly)
 
     expect(isReadonly).to.equal(true)
     expect(wrapper.findAll('.veui-readonly').wrappers.length).to.equal(2)
@@ -98,14 +102,14 @@ describe('components/Form/Form', () => {
         return message
       },
       afterValidate () {
-        message = 'afterValidate won\'t be called'
+        message = "afterValidate won't be called"
         return true
       },
       validators: [
         {
           fields: ['age', 'gender'],
           handler: data => {
-            message = 'validators won\'t be called'
+            message = "validators won't be called"
             return true
           }
         }
@@ -126,7 +130,7 @@ describe('components/Form/Form', () => {
         return true
       },
       afterValidate () {
-        message = 'afterValidate won\'t be called'
+        message = "afterValidate won't be called"
         return true
       },
       validators: [
@@ -190,7 +194,7 @@ describe('components/Form/Form', () => {
       }
     })
 
-    form.$on('submit', (data) => {
+    form.$on('submit', data => {
       expect(data).include({ gender: 'male' })
       expect(data).not.include({ age: '18' })
       wrapper.destroy()
@@ -228,25 +232,28 @@ describe('components/Form/Form', () => {
     })
   })
 
-  it('validators\'s result should have higher priority than field\'s rule property', () => {
+  it("validators's result should have higher priority than field's rule property", () => {
     let slot = `
       <veui-field name="gender" rules="required" field="gender"><veui-input class="gender-input"/></veui-field>
       <veui-field name="age" rules="required" field="age" disabled><veui-input class="age-input"/></veui-field>
     `
-    let { wrapper, form } = genSimpleForm({
-      validators: [
-        {
-          fields: ['age', 'gender'],
-          validate: (age, gender) => {
-            return {
-              age: 'age出错啦',
-              gender: 'gender出错啦'
-            }
-          },
-          triggers: 'input, submit'
-        }
-      ]
-    }, slot)
+    let { wrapper, form } = genSimpleForm(
+      {
+        validators: [
+          {
+            fields: ['age', 'gender'],
+            validate: (age, gender) => {
+              return {
+                age: 'age出错啦',
+                gender: 'gender出错啦'
+              }
+            },
+            triggers: 'input, submit'
+          }
+        ]
+      },
+      slot
+    )
     let [genderWrapper, ageWrapper] = wrapper.findAll('.veui-field').wrappers
     form.$on('invalid', () => {
       expect(genderWrapper.vm.validity.valid).to.equal(false)
@@ -265,19 +272,18 @@ describe('components/Form/Form', () => {
         gender: 'male',
         age: '18'
       },
-      validators: [{
-        fields: ['age', 'gender'],
-        validate (age, gender) {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve(true)
-              expect(counter).to.equal(1)
-              counter = 2
-            }, 1000)
-          })
-        },
-        triggers: ['submit']
-      }]
+      validators: [
+        {
+          fields: ['age', 'gender'],
+          async validate (age, gender) {
+            await wait(0)
+            expect(counter).to.equal(1)
+            counter = 2
+            return true
+          },
+          triggers: ['submit']
+        }
+      ]
     })
     form.$on('submit', () => {
       expect(counter).to.equal(2)
@@ -287,42 +293,45 @@ describe('components/Form/Form', () => {
     wrapper.trigger('submit')
   })
 
-  it('validators\'s `triggers` property should work correctly', async () => {
+  it("validators's `triggers` property should work correctly", async () => {
     let wrapper
     let counter = 0
     let slot = `
       <veui-field name="gender" field="gender"><veui-input class="gender-input"/></veui-field>
       <veui-field name="age" field="age"><veui-input class="age-input"/></veui-field>
     `
-    let pro = new Promise((resolve) => {
-      wrapper = genSimpleForm({
-        validators: [
-          {
-            fields: ['age'],
-            validate () {
-              counter++
-              resolve('age validator had been fired')
+    let pro = new Promise(resolve => {
+      wrapper = genSimpleForm(
+        {
+          validators: [
+            {
+              fields: ['age'],
+              validate () {
+                counter++
+                resolve('age validator had been fired')
+              },
+              // `change` is in order to increase coverage
+              triggers: ['submit', 'change']
             },
-            // `change` is in order to increase coverage
-            triggers: ['submit', 'change']
-          },
-          {
-            fields: ['gender'],
-            handler () {
-              counter++
-              resolve('gender validator had been fired')
+            {
+              fields: ['gender'],
+              handler () {
+                counter++
+                resolve('gender validator had been fired')
+              },
+              // `change` is in order to increase coverage
+              triggers: ['input', 'change']
             },
-            // `change` is in order to increase coverage
-            triggers: ['input', 'change']
-          },
-          // for coverage
-          {
-            fields: null,
-            validator: null,
-            triggers: null
-          }
-        ]
-      }, slot).wrapper
+            // for coverage
+            {
+              fields: null,
+              validator: null,
+              triggers: null
+            }
+          ]
+        },
+        slot
+      ).wrapper
       let [genderWrapper, ageWrapper] = wrapper.findAll('.veui-input').wrappers
       ageWrapper.find('input').trigger('input')
       genderWrapper.find('input').trigger('input')

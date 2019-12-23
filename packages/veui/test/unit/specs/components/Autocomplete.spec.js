@@ -184,7 +184,7 @@ describe('components/Autocomplete', function () {
     input.trigger('keydown', { key: 'Down' })
     await vm.$nextTick()
     let options = wrapper.findAll(SUGGESTION_ITEM)
-    expect(options.at(0).classes('focus-visible')).to.equal(true)
+    expect(options.at(0).attributes('data-focus-visible-added')).to.equal('')
 
     input.trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()

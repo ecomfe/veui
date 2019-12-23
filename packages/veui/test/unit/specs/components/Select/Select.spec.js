@@ -360,10 +360,8 @@ describe('components/Select/Select', () => {
 
     input.trigger('keydown', { key: 'Down' })
     await vm.$nextTick()
-    input.trigger('keydown', { key: 'Up' })
-    await vm.$nextTick()
     let items = wrapper.findAll(OPTION_ITEM)
-    expect(items.at(0).classes('focus-visible')).to.equal(true)
+    expect(items.at(0).attributes('data-focus-visible-added')).to.equal('')
 
     input.trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()

@@ -1,7 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { wait } from '../../../utils'
 import Pagination from '@/components/Pagination'
-import 'focus-visible'
 
 describe('components/Pagination', () => {
   it('should handle props correctly', async () => {
@@ -222,8 +221,8 @@ describe('components/Pagination', () => {
 
     let page = wrapper.findAll('.veui-pagination-page a').at(1)
 
-    page.trigger('keydown.tab')
     page.element.focus()
+    page.trigger('keydown.tab')
 
     await wait(0)
     expect(page.classes('focus-visible')).to.equal(true)
