@@ -373,7 +373,7 @@ export default {
           })
           break
         case 'Enter':
-          if (!this.expanded) {
+          if (!this.realExpanded) {
             this.search(e)
             return
           }
