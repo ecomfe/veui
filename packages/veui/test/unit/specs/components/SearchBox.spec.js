@@ -298,7 +298,9 @@ describe('components/SearchBox', () => {
     wrapper.destroy()
   })
 
-  it('should support search event correctly.', done => {
+  it('should support search event correctly.', () => {
+    let params = []
+
     let wrapper = mount(
       {
         components: {
@@ -306,25 +308,28 @@ describe('components/SearchBox', () => {
         },
         methods: {
           searchHandler (val) {
-            expect(val).to.equal('box')
-            this.$nextTick(() => {
-              wrapper.destroy()
-              done()
-            })
+            params.push(val)
           }
         },
-        template: `<veui-search-box @search="searchHandler"/>`
+        template: '<veui-search-box @search="searchHandler"/>'
       },
       {
-        sync: false
+        sync: false,
+        attachToDocument: true
       }
     )
 
     let input = wrapper.find('input')
-    input.element.value = 'box'
+
+    input.trigger('keydown', { key: 'Enter' })
+
+    input.setValue('box')
     input.trigger('input')
 
     wrapper.find('.veui-search-box-action').trigger('click')
+
+    expect(params).to.eql(['', 'box'])
+    wrapper.destroy()
   })
 
   it('should render customized suggestions & suggestions-before & suggestions-after slot correctly.', async () => {

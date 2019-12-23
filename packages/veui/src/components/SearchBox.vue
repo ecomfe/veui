@@ -24,7 +24,7 @@
     :aria-owns="inputPopup ? dropdownId : null"
     @focus="handleInputFocus"
     @input="keyword = $event"
-    @keydown="handleSuggestionKeydown"
+    @keydown="handleInputKeydown"
   >
     <div
       slot="after"
@@ -360,7 +360,7 @@ export default {
       }
       this.focus()
     },
-    handleSuggestionKeydown (e) {
+    handleInputKeydown (e) {
       let passive = false
       switch (e.key) {
         case 'Up':
