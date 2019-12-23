@@ -63,7 +63,7 @@ function createFinder (valueKey) {
 }
 
 export default {
-  name: 'veui-autocompletebase',
+  name: 'veui-autocomplete-base',
   components: {
     'veui-overlay': Overlay
   },
@@ -188,11 +188,13 @@ export default {
         case 'Down':
         case 'ArrowDown':
           this.openSuggestions()
-          this.handleKeydown(e)
-          let el = this.getCurrentActiveElement()
-          if (el) {
-            this.activeDescendant = el.id
-          }
+          this.$nextTick(() => {
+            this.handleKeydown(e)
+            let el = this.getCurrentActiveElement()
+            if (el) {
+              this.activeDescendant = el.id
+            }
+          })
           return
         case 'Enter':
           let elem = this.getCurrentActiveElement()

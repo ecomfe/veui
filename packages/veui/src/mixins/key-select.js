@@ -17,7 +17,9 @@ function focusElement (focusableList, index, focusSelector) {
     focusableList[index].focus()
   }
 
-  focusableList[index].scrollIntoView({ behavior: 'smooth' })
+  if (index !== -1) {
+    focusableList[index].scrollIntoView({ behavior: 'smooth' })
+  }
 }
 
 function toggleSelector (elem, selector, force) {
@@ -66,7 +68,7 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
       let container = this.getContainerOfFocusable()
       return container ? getFocusable(container) : []
     },
-    clearfocusSelector () {
+    clearFocusSelector () {
       return focusElement(this.getFocusable(), -1, this.focusSelector)
     },
     getCurrentActiveElement () {
@@ -96,7 +98,7 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
         case 'ArrowLeft':
           this.expanded = false
           if (this.focusSelector) {
-            this.clearfocusSelector()
+            this.clearFocusSelector()
           }
           break
         case 'Up':
