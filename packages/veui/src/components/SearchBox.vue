@@ -25,6 +25,7 @@
     @focus="handleInputFocus"
     @input="keyword = $event"
     @keydown="handleInputKeydown"
+    @clear="handleClear"
   >
     <div
       slot="after"
@@ -415,6 +416,9 @@ export default {
         this.keyword = this.localValue
         this.expanded = true
       }
+    },
+    handleClear () {
+      this.$emit('clear')
     }
   }
 }

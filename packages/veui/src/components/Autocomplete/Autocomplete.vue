@@ -37,6 +37,7 @@
         @keydown="props.handleKeydown"
         @input="handleTrigger($event, props, 'input')"
         @focus="handleTrigger($event, props, 'focus')"
+        @clear="handleClear"
       />
     </slot>
   </template>
@@ -159,6 +160,9 @@ export default {
       if (eventName === 'input') {
         props.updateValue(val)
       }
+    },
+    handleClear () {
+      this.$emit('clear')
     }
   }
 }

@@ -371,6 +371,7 @@ export default {
   methods: {
     clear () {
       this.realInputValue = ''
+      this.$emit('clear')
     },
     getRealPropValue () {
       return this.value

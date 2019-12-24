@@ -32,9 +32,6 @@
           ui="m"
         />
       </veui-field>
-      <veui-field label="normal">
-        <veui-input v-model="poem"/>
-      </veui-field>
       <veui-field
         ui="large"
         label="l"

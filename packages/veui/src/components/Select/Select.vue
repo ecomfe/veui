@@ -182,6 +182,7 @@ export default {
     clear (e) {
       this.updateValue(this.multiple ? [] : null)
       this.inputValue = ''
+      this.$emit('clear')
       e.stopPropagation()
       this.focus()
     },

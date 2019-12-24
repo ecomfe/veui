@@ -11,9 +11,19 @@
     />
   </section>
   <section>
+    <h2>可清除</h2>
+    <veui-autocomplete
+      v-model="inputValue"
+      ui="s"
+      clearable
+      :datasource="suggestions"
+    />
+  </section>
+  <section>
     <h2>禁用</h2>
     <veui-autocomplete
       v-model="inputValue"
+      ui="l"
       :datasource="suggestions"
       :suggest-trigger="['focus', 'input']"
       disabled
@@ -23,6 +33,7 @@
     <h2>只读</h2>
     <veui-autocomplete
       v-model="inputValue"
+      ui="xs"
       :datasource="suggestions"
       :suggest-trigger="['focus', 'input']"
       readonly
