@@ -32,7 +32,7 @@
     :aria-disabled="disabled"
     :aria-owns="dropdownId"
     v-on="toggleHandlers"
-    @keydown.down.up.enter.space.prevent="expanded = true"
+    @keydown.down.up.enter.space.prevent="handleTriggerKeydown"
   >
     <span
       v-if="!split"
@@ -73,6 +73,7 @@
       :tabindex="searchable ? -1 : 0"
       :aria-expanded="expanded"
       @keydown="handleKeydown"
+      @focus="focusAt(0)"
     >
       <veui-search-box
         v-if="searchable"
@@ -96,7 +97,6 @@
       <veui-option-group
         v-else
         ref="options"
-        :ui="realUi"
         :options="isSearching ? filteredSuggestions : options"
         :trigger="trigger"
       >
@@ -259,6 +259,9 @@ export default {
     }
   },
   methods: {
+    handleTriggerKeydown (e) {
+      this.expanded = true
+    },
     handleToggle () {
       let mode = MODE_MAP[this.trigger]
       if (mode === 'toggle') {
@@ -280,7 +283,7 @@ export default {
       let { command, button } = this.$refs
       ;(command || button).focus()
     },
-    getContainerOfFocusable () {
+    getFocusableContainer () {
       return this.$refs.options.$el
     }
   }

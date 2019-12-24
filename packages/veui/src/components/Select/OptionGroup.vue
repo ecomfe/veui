@@ -188,7 +188,6 @@ const OptionGroup = {
             aria-hidden={option.hidden}
             disabled={option.disabled}
             key={i}
-            ui={this.realUi}
             trigger={option.trigger || this.trigger}
             scopedSlots={{
               label:

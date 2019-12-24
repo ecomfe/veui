@@ -61,11 +61,11 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
   },
   methods: {
     // 方便覆盖
-    getContainerOfFocusable () {
+    getFocusableContainer () {
       return this.$refs.box
     },
     getFocusable () {
-      let container = this.getContainerOfFocusable()
+      let container = this.getFocusableContainer()
       return container ? getFocusable(container) : []
     },
     clearFocusSelector () {
@@ -77,16 +77,22 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
       )
     },
     navigate (forward = true) {
+      this.focusAt(forward)
+    },
+    focusAt (indexOrDir) {
       let focusable = this.getFocusable()
       let length = focusable.length
       if (!length) {
         return
       }
 
-      let index = findIndex(focusable, elem =>
-        isActive(elem, this.focusSelector)
-      )
-      index = index === -1 ? 0 : (index + length + (forward ? 1 : -1)) % length
+      let index = indexOrDir
+      if (typeof indexOrDir !== 'number') {
+        let forward = indexOrDir
+        index = findIndex(focusable, elem => isActive(elem, this.focusSelector))
+        index =
+          index === -1 ? 0 : (index + length + (forward ? 1 : -1)) % length
+      }
       focusElement(focusable, index, this.focusSelector)
     },
     handleKeydown (e) {

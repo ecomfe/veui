@@ -368,14 +368,19 @@ export default {
         case 'Down':
         case 'ArrowDown':
           this.openSuggestions()
-          this.$nextTick(() => {
-            this.handleKeydown(e)
-          })
+          if (this.realExpanded) {
+            this.$nextTick(() => {
+              this.handleKeydown(e)
+            })
+          } else {
+            passive = true
+          }
           break
         case 'Enter':
           if (!this.realExpanded) {
             this.search(e)
-            return
+            passive = true
+            break
           }
           let elem = this.getCurrentActiveElement()
           if (elem) {

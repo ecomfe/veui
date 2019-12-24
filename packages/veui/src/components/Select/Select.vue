@@ -231,8 +231,8 @@ export default {
       if (this.expanded) {
         this.focus()
       }
-      e.stopPropagation()
       e.preventDefault()
+      e.stopPropagation()
     },
     handleTriggerKeydown (e) {
       let passive = true
@@ -287,8 +287,8 @@ export default {
           break
       }
       if (!passive) {
-        e.stopPropagation()
         e.preventDefault()
+        e.stopPropagation()
       }
     },
     handleTriggerInput (val) {
