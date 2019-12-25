@@ -14,8 +14,7 @@ describe('components/AlertBox', function () {
         template: '<veui-alert-box title="this is title" />'
       },
       {
-        sync: false,
-        attachToDocument: true
+        sync: false
       }
     )
     expect(wrapper.find('.veui-alert-box-title').text()).to.equal(
@@ -38,8 +37,7 @@ describe('components/AlertBox', function () {
       `
       },
       {
-        sync: false,
-        attachToDocument: true
+        sync: false
       }
     )
     expect(wrapper.find('.test-title-slot').exists()).to.equal(true)
@@ -61,8 +59,7 @@ describe('components/AlertBox', function () {
         template: '<veui-alert-box :open.sync="open" title="title" />'
       },
       {
-        sync: false,
-        attachToDocument: true
+        sync: false
       }
     )
     let { vm } = wrapper

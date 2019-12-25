@@ -87,7 +87,9 @@ export default {
     localOpen (value) {
       this.$emit('update:open', value)
       if (!value) {
-        this.localValue = ''
+        // this.$nextTick(() => {
+        this.localValue = this.value
+        // })
       }
     },
     localValue (value) {

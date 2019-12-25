@@ -70,6 +70,34 @@ describe('managers/confirm', () => {
 
     document.body.removeChild(getEl('.veui-confirm-box'))
   })
+
+  it('should handle async ok/cancel correctly', async () => {
+    let prevent = true
+    confirm.show('Content', 'Title', {
+      open: true,
+      async ok () {
+        await wait(100)
+        if (prevent) {
+          return false
+        }
+      }
+    })
+
+    let buttons = getEl('.veui-dialog-content-foot').querySelectorAll(
+      '.veui-button'
+    )
+    buttons[0].dispatchEvent(new MouseEvent('click'))
+
+    await wait(500)
+
+    expect(getEl('.veui-dialog-content-foot')).to.not.equal(null)
+    prevent = false
+    buttons[0].dispatchEvent(new MouseEvent('click'))
+
+    await wait(500)
+
+    expect(getEl('.veui-dialog-content-foot')).to.equal(null)
+  })
 })
 
 function getEl (selector) {

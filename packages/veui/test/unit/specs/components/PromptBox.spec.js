@@ -8,17 +8,18 @@ config.stubs.transition = false
 describe('components/PromptBox', function () {
   it('shoule handle props correctly', async () => {
     let beforeCloseHandler = sinon.spy()
-    let wrapper = mount({
-      components: {
-        'veui-prompt-box': PromptBox
-      },
-      data () {
-        return {
-          open: true,
-          beforeCloseHandler
-        }
-      },
-      template: `
+    let wrapper = mount(
+      {
+        components: {
+          'veui-prompt-box': PromptBox
+        },
+        data () {
+          return {
+            open: true,
+            beforeCloseHandler
+          }
+        },
+        template: `
         <veui-prompt-box
           :open.sync="open"
           title="Prompt"
@@ -26,7 +27,11 @@ describe('components/PromptBox', function () {
           content="Please tell us your age:"
           value="18" />
         `
-    })
+      },
+      {
+        sync: false
+      }
+    )
     let { vm } = wrapper
     expect(wrapper.find('.veui-dialog-content-head-title').text()).to.equal(
       'Prompt'
@@ -36,7 +41,7 @@ describe('components/PromptBox', function () {
     )
     expect(wrapper.find('.veui-input').vm.value).to.equal('18')
     wrapper.find('.veui-button').trigger('click')
-    await vm.$nextTick()
+    await wait(0)
     expect(vm.open).to.equal(false)
     expect(beforeCloseHandler.calledOnce).to.equal(true)
     wrapper.destroy()
@@ -59,12 +64,18 @@ describe('components/PromptBox', function () {
 
   it('should handle value correctly when submit value', async () => {
     let returnedValue
-    let wrapper = mount(PromptBox, {
-      propsData: {
-        value: null,
-        open: true
+    let wrapper = mount(
+      PromptBox,
+      {
+        propsData: {
+          value: null,
+          open: true
+        }
+      },
+      {
+        sync: false
       }
-    })
+    )
     let { vm } = wrapper
     let input = wrapper.find('input')
     vm.$on('ok', value => {
@@ -109,17 +120,19 @@ describe('components/PromptBox', function () {
         `
       },
       {
+        sync: false,
         attachToDocument: true
       }
     )
     let buttons = wrapper.findAll('.veui-button')
     buttons.at(0).trigger('click')
     await wait(600)
-    expect(wrapper.vm.open).to.equal(false)
+    expect(wrapper.vm.open, '#1').to.equal(false)
     wrapper.vm.open = true
+    await wrapper.vm.$nextTick()
     buttons.at(1).trigger('click')
     await wait(600)
-    expect(wrapper.vm.open).to.equal(false)
+    expect(wrapper.vm.open, '#2').to.equal(false)
     expect(okMock.calledOnce).to.equal(true)
     expect(cancelMock.calledOnce).to.equal(true)
     expect(afterCloseMock.callCount).to.equal(2)

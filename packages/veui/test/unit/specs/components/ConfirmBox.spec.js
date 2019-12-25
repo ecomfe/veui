@@ -6,7 +6,7 @@ import { wait } from '../../../utils'
 config.stubs.transition = false
 
 describe('components/ConfirmBox', function () {
-  it('shoule handle props correctly', async () => {
+  it('should handle props correctly', async () => {
     let closeHandler = sinon.spy()
     let wrapper = mount({
       components: {

@@ -4,8 +4,12 @@
 
 - [+] 新增 `InputGroup` 组件。
 - [+] 为 `Label` 组件增加了 `for` prop，用于显式指定被激活的输入组件。
-- [+] 为 `Input`/`NumberInput`/`TimePicker`/`Textarea`/`Autocomplete` 组件增加错误状态。
+- [+] 为 `Input`/`NumberInput`/`TimePicker`/`Textarea`/`Autocomplete` 组件增加 `invalid` prop，使其处于错误状态。
 - [+] 为 `Autocomplete`/`Dropdown`/`Input`/`SearchBox`/`TimePicker` 组件新增 `clear` 事件。
+- [+] 为 `Dialog`/`Drawer`/`Embedded`/`PromptBox` 新增 `loading` prop，默认使确认按钮处于加载状态。
+- [+] 为 `PromptBox` 增加 `invalid` prop，会使内部的输入框处于错误状态。
+- [^] 现在 `confirm`/`prompt` 的 manager 与插件中，`ok`/`cancel` 选项函数返回 `false` 或返回的 `Promise` resolve `false` 时，将阻止对话框关闭。
+- [^] 现在 `prompt` 的 manager 与插件中，`ok`/`cancel` 选项函数会接收到输入框当前值作为第一个参数。
 
 ### 🐞 问题修复
 
