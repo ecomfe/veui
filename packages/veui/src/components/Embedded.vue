@@ -16,7 +16,7 @@ export default {
         },
         inline: true
       },
-      // nativeOn 直接在 drawer 上注册到 dom ，不需透传
+      // nativeOn 直接在 embedded 上注册到 dom ，不需透传
       on: this.$listeners,
       scopedSlots: this.$scopedSlots
     }

@@ -495,19 +495,13 @@ export default {
     popupConfirms () {
       confirmManager
         .warn('Do you really want to delete it?', 'Confirm', {
-          ok: () => {
-            return new Promise(resolve => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            })
-          },
-          cancel: () => {
-            return new Promise(resolve => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            })
+          ok: async () => {
+            await wait(1000)
+
+            if (Math.random() < 0.5) {
+              this.$toast.error('Not lucky enough :(')
+              return false
+            }
           }
         })
         .then(ok => {
@@ -530,11 +524,32 @@ export default {
       }
     },
     popupPrompt () {
-      promptManager.info('Please tell us your age:', 'Prompt').then(value => {
-        console.log(value)
-      })
+      promptManager
+        .info('Please tell us your age:', 'Prompt', {
+          ok: val => {
+            return new Promise(resolve => {
+              setTimeout(() => {
+                let num = Number(val)
+                if (parseInt(val) !== num || num < 0) {
+                  this.$toast.error('Please enter a valid age.')
+                  return resolve(false)
+                }
+                resolve()
+              }, 2000)
+            })
+          }
+        })
+        .then(value => {
+          console.log(value)
+        })
     }
   }
+}
+
+function wait (timeout) {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout)
+  })
 }
 </script>
 

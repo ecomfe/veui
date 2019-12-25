@@ -71,6 +71,7 @@
       >
         <veui-button
           :ui="uiParts.ok"
+          :loading="loading"
           @click="close('ok')"
         >
           {{ t('ok') }}
@@ -139,10 +140,8 @@ export default {
     },
     priority: Number,
     beforeClose: Function,
-    footless: {
-      type: Boolean,
-      default: false
-    }
+    footless: Boolean,
+    loading: Boolean
   },
   data () {
     return {

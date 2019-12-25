@@ -8,7 +8,8 @@ export class ConfirmManager extends SimpleDialog {
     const manager = this
     return new Vue({
       data: {
-        open: false
+        open: false,
+        loading: false
       },
       mounted () {
         this.open = true
@@ -20,6 +21,7 @@ export class ConfirmManager extends SimpleDialog {
             props: {
               ...pick(data, ['title', 'type', 'overlayClass']),
               open: this.open,
+              loading: this.loading,
               beforeClose: () => false
             },
             on: {
@@ -41,9 +43,13 @@ export class ConfirmManager extends SimpleDialog {
     let cancel = isFunction(options.cancel) ? options.cancel : noop
     return new Promise(resolve => {
       let checkRemove = isOk => {
-        Promise.resolve(isOk ? ok() : cancel()).then(() => {
-          component.open = false
-          resolve(isOk)
+        component.loading = true
+        Promise.resolve(isOk ? ok() : cancel()).then(returnVal => {
+          component.loading = false
+          if (returnVal !== false) {
+            component.open = false
+            resolve(isOk)
+          }
         })
       }
 

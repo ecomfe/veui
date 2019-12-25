@@ -20,6 +20,7 @@ export default {
         return PLACEMENT.indexOf(value) >= 0
       }
     },
+    loading: Boolean,
     backdropClosable: Boolean
   },
   render (h) {
@@ -32,6 +33,7 @@ export default {
           [this.$c('drawer-box')]: true
         },
         modal: this.modal,
+        loading: this.loading,
         draggable: false,
         outsideClosable: this.modal ? this.backdropClosable : true
       },

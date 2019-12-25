@@ -9,7 +9,9 @@ export class PromptManager extends SimpleDialog {
     data.value = data.value || ''
     return new Vue({
       data: {
-        open: false
+        open: false,
+        loading: false,
+        invalid: false
       },
       mounted () {
         this.open = true
@@ -21,6 +23,8 @@ export class PromptManager extends SimpleDialog {
             props: {
               ...pick(data, ['title', 'type', 'value', 'overlayClass']),
               open: this.open,
+              invalid: this.invalid,
+              loading: this.loading,
               beforeClose: () => false
             },
             on: {
@@ -46,10 +50,18 @@ export class PromptManager extends SimpleDialog {
 
     return new Promise(resolve => {
       let checkRemove = value => {
-        Promise.resolve(value != null ? ok() : cancel()).then(() => {
-          component.open = false
-          resolve(value)
-        })
+        component.loading = true
+        Promise.resolve(value != null ? ok(value) : cancel(value)).then(
+          returnVal => {
+            component.loading = false
+            component.invalid = returnVal === false
+
+            if (returnVal !== false) {
+              component.open = false
+              resolve(value)
+            }
+          }
+        )
       }
 
       let component = this.create({

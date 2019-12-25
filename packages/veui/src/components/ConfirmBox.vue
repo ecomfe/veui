@@ -5,6 +5,7 @@
   :open.sync="localOpen"
   :priority="priority"
   :closable="false"
+  :loading="loading"
   :before-close="beforeClose"
   role="alertdialog"
   @ok="$emit('ok')"
@@ -55,7 +56,7 @@ export default {
     'veui-dialog': Dialog
   },
   mixins: [prefix, ui, overlay],
-  props: pick(Dialog.props, ['open', 'title', 'beforeClose']),
+  props: pick(Dialog.props, ['open', 'title', 'beforeClose', 'loading']),
   data () {
     return {
       localOpen: this.open,

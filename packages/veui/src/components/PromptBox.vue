@@ -7,6 +7,7 @@
   :priority="priority"
   :closable="false"
   :before-close="beforeClose"
+  :loading="loading"
   role="alertdialog"
   @ok="ok"
   @cancel="cancel"
@@ -30,6 +31,7 @@
   <veui-input
     v-model="localValue"
     autofocus
+    :invalid="invalid"
     :class="$c('prompt-box-input')"
     @keydown.enter="trigger"
   />
@@ -60,12 +62,13 @@ export default {
   },
   mixins: [prefix, ui, overlay],
   props: {
-    ...pick(Dialog.props, ['open', 'title', 'beforeClose']),
+    ...pick(Dialog.props, ['open', 'title', 'beforeClose', 'loading']),
     content: String,
     value: {
       type: String,
       default: ''
-    }
+    },
+    invalid: Boolean
   },
   data () {
     return {
@@ -83,6 +86,9 @@ export default {
     },
     localOpen (value) {
       this.$emit('update:open', value)
+      if (!value) {
+        this.localValue = ''
+      }
     },
     localValue (value) {
       this.$emit('input', value)
@@ -93,13 +99,10 @@ export default {
       this.$refs.dialog.close('ok')
     },
     ok () {
-      let { localValue } = this
-      this.localValue = ''
-      this.$emit('ok', localValue)
+      this.$emit('ok', this.localValue)
     },
     cancel () {
-      this.localValue = ''
-      this.$emit('cancel')
+      this.$emit('cancel', this.localValue)
     }
   }
 }
