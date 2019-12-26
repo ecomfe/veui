@@ -21,7 +21,7 @@
     :aria-owns="dropdownId"
     aria-haspopup="dialog"
     @click="toggleExpanded()"
-    @keydown.down.up.prevent="toggleExpanded(true)"
+    @keydown.down.enter.up.prevent="toggleExpanded(true)"
   >
     <veui-input
       :disabled="realDisabled"
@@ -382,12 +382,12 @@ export default {
         cal.setExpanded(false)
         let selected = [].concat(this.realSelected)
         if (selected[0]) {
-          cal.navigate(selected, false)
+          cal.navigate(selected)
         }
       }
     },
     handleInputFocus () {
-      this.$refs.cal.closeMousePicking()
+      this.$refs.cal.stopMousePicking()
     },
     moveFocus () {
       this.$refs.cal.focus()
@@ -429,7 +429,7 @@ export default {
           }
         }
         if (result[index]) {
-          cal.navigate(index, toDateData(date), false)
+          cal.navigate(index, toDateData(date))
         }
         cal.pick(this.range ? result : result[index])
       }

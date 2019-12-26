@@ -15,7 +15,8 @@ config.defaults(
       expand: 'chevron-down'
     },
     parts: {
-      navigate: 'icon'
+      nav: 'icon',
+      toggle: 'text'
     }
   },
   'calendar'

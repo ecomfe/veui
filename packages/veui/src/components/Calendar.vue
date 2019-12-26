@@ -33,7 +33,7 @@
           [$c('calendar-backward')]: true,
           [$c('calendar-visible')]: !isYearsView(p)
         }"
-        :ui="uiParts.navigate"
+        :ui="uiParts.nav"
         :disabled="disabled || readonly"
         :aria-hidden="pIndex > 0"
         :aria-label="t('prevYear')"
@@ -48,7 +48,7 @@
           [$c('calendar-prev')]: true,
           [$c('calendar-visible')]: isDateType
         }"
-        :ui="uiParts.navigate"
+        :ui="uiParts.nav"
         :disabled="disabled || readonly"
         :aria-hidden="pIndex > 0"
         :aria-label="t('prevMonth')"
@@ -62,6 +62,7 @@
           v-if="type !== 'year'"
           :id="`${id}:panel-title:${pIndex}`"
           ref="expansion-select"
+          :ui="uiParts.toggle"
           :class="$c('calendar-select')"
           :disabled="disabled || readonly"
           :aria-label="t('selectMonth', { month: p.month + 1 })"
@@ -82,7 +83,7 @@
           [$c('calendar-next')]: true,
           [$c('calendar-visible')]: isDateType
         }"
-        :ui="uiParts.navigate"
+        :ui="uiParts.nav"
         :disabled="disabled || readonly"
         :aria-label="t('nextMonth')"
         :aria-controls="`${id}:panel-title:${pIndex}`"
@@ -96,7 +97,7 @@
           [$c('calendar-forward')]: true,
           [$c('calendar-visible')]: !isYearsView(p)
         }"
-        :ui="uiParts.navigate"
+        :ui="uiParts.nav"
         :disabled="disabled || readonly"
         :aria-label="t('nextYear')"
         :aria-controls="`${id}:panel-title:${pIndex}`"
@@ -322,6 +323,7 @@ import {
   flattenDeep,
   findIndex,
   uniqueId,
+  uniqBy,
   isEqual,
   isNumber
 } from 'lodash'
@@ -505,14 +507,14 @@ export default {
       this.picking = this.pickingRanges = null
       val = [].concat(val)
       if (this.multiple) val = val[0]
-      this.navigate(val, false)
+      if (val && val[0]) this.navigate(val)
     }
   },
   mounted () {
     this.scrollToCurrentYear()
     let selected = [].concat(this.realSelected)
     if (this.multiple) selected = selected[0]
-    this.navigate(selected, false)
+    if (selected && selected[0]) this.navigate(selected)
   },
   methods: {
     getDayNames () {
@@ -666,7 +668,7 @@ export default {
     isMousePicking () {
       return this.mousePickingStart
     },
-    closeMousePicking () {
+    stopMousePicking () {
       if (this.mousePickingStart) {
         this.mousePickingStart = false
       }
@@ -678,7 +680,7 @@ export default {
         index
       })
     },
-    updatePanelDate (index, dateData, force = true) {
+    navigateByIndex (index, dateData, force = true) {
       if (this.isDateType && dateData.month == null) {
         dateData.month = this.panels[index].month
       }
@@ -686,9 +688,8 @@ export default {
       let same = isEqual(p[index].date, dateData)
       if (same) return
 
-      let i = index
+      let i = p.length
       if (!force) {
-        // 应该只要往前面找吧
         let find = false
         while (i--) {
           if (isEqual(p[i].date, dateData)) {
@@ -806,7 +807,7 @@ export default {
           : -4
     },
     syncSelected (val) {
-      this.closeMousePicking()
+      this.stopMousePicking()
       this.$emit('select', val)
     },
     select (day) {
@@ -857,7 +858,7 @@ export default {
     selectDay (i, day) {
       // switch month in days view if dates in previous/next months are visible
       if (this.fillMonth && this.panel === 1) {
-        this.updatePanelDate(i, {
+        this.navigateByIndex(i, {
           year: day.year,
           month: day.month
         })
@@ -874,7 +875,7 @@ export default {
       }
 
       // expanded panel
-      this.updatePanelDate(p.index, { year: day.year, month: day.mmonth })
+      this.navigateByIndex(p.index, { year: day.year, month: day.month })
       this.setExpanded(p.index, false)
       // this.setFocus('expansion-select', i)
     },
@@ -885,7 +886,7 @@ export default {
 
       // expanded panel
       if (!this.isDateType) {
-        this.updatePanelDate(i, { year })
+        this.navigateByIndex(i, { year })
         this.setExpanded(i, false)
       } else {
         this.panelData[i].currentScrollYear = year
@@ -905,20 +906,67 @@ export default {
         }
       })
     },
-    navigate (index, destination, force = true) {
-      if (Array.isArray(index)) {
-        return index.forEach(
-          (val, idx) => val && this.navigate(idx, val, destination)
+    navigateToSelected (selected) {
+      // 转成 dateData
+      let destinations = selected.map(val => {
+        let { year, month } = toDateData(val)
+        return this.isDateType ? { year, month } : { year }
+      })
+
+      // 去掉一样的且保证不超过 panel 个数
+      destinations = uniqBy(
+        destinations,
+        ({ year, month = 0 }) => `${year}/${month}`
+      ).slice(0, this.panel)
+
+      let p = this.panelData
+      let start = 0
+      let end = null
+
+      // 得到完整的新 panelDate 数据
+      let newPanelDates = destinations.reduce((result, destination, index) => {
+        let { year, month } = toDateData(destination)
+        destination = this.isDateType ? { year, month } : { year }
+        end = index - destinations.length + this.panels.length
+        let existIndex = findIndex(result.slice(start, end + 1), val =>
+          isEqual(val, destination)
         )
-      }
-      if (isNumber(index) && destination && this.panels[index]) {
+        if (existIndex >= 0) {
+          start = existIndex + 1
+        } else {
+          // 找不到则修改 start 位置的值，然后向后调节
+          result[start] = destination
+          start += 1
+          let pos = start
+          while (pos < result.length) {
+            if (gt(result[pos], result[pos - 1])) {
+              break
+            }
+            result[pos] = getNextDate(result[pos - 1])
+            pos++
+          }
+        }
+        return result
+      }, p.map(val => val.date))
+
+      // 调节完了之后，统一 sync，避免调节过程中多余的 sync
+      newPanelDates.forEach((newVal, index) => {
+        if (!isEqual(newVal, p[index].date)) {
+          this.syncPanelDate(index, newVal)
+        }
+      })
+    },
+    navigate (index, destination) {
+      if (Array.isArray(index)) {
+        this.navigateToSelected(index)
+      } else if (destination && this.panels[index]) {
         let { year, month } = toDateData(destination)
         let panel = this.isDateType ? { year, month } : { year }
-        this.updatePanelDate(index, panel, force)
+        this.navigateByIndex(index, panel, false)
       }
     },
     pick (value) {
-      this.closeMousePicking()
+      this.stopMousePicking()
       this.setExpanded(false)
       this.picking = Array.isArray(value) ? [...value] : value
     },
@@ -1108,10 +1156,10 @@ export default {
           month = month + sign
           year = month === -1 || month === 12 ? year + sign : year
           month = (month + 12) % 12
-          this.updatePanelDate(index, { year, month })
+          this.navigateByIndex(index, { year, month })
           break
         case 'year':
-          this.updatePanelDate(index, { year: year + sign })
+          this.navigateByIndex(index, { year: year + sign })
           break
       }
     },
