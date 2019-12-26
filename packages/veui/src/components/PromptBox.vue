@@ -98,7 +98,9 @@ export default {
   },
   methods: {
     trigger () {
-      this.$refs.dialog.close('ok')
+      if (!this.loading) {
+        this.$refs.dialog.close('ok')
+      }
     },
     ok () {
       this.$emit('ok', this.localValue)

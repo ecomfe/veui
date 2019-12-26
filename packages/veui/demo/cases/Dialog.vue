@@ -526,17 +526,13 @@ export default {
     popupPrompt () {
       promptManager
         .info('Please tell us your age:', 'Prompt', {
-          ok: val => {
-            return new Promise(resolve => {
-              setTimeout(() => {
-                let num = Number(val)
-                if (parseInt(val) !== num || num < 0) {
-                  this.$toast.error('Please enter a valid age.')
-                  return resolve(false)
-                }
-                resolve()
-              }, 2000)
-            })
+          ok: async val => {
+            await wait(1000)
+            let num = Number(val)
+            if (`${num}` !== val || num <= 0) {
+              this.$toast.error('Please enter a valid age.')
+              return false
+            }
           }
         })
         .then(value => {
