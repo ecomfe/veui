@@ -105,25 +105,6 @@
     </section>
   </section>
   <section>
-    <h2>可清除选择</h2>
-    <section>
-      <veui-date-picker
-        v-model="selectedDate"
-        ui="micro"
-        clearable
-      />
-    </section>
-  </section>
-  <section>
-    <h2>可清除范围选择</h2>
-    <veui-date-picker
-      v-model="selectedDateRange"
-      range
-      clearable
-      :panel="3"
-    />
-  </section>
-  <section>
     <h2>范围禁用</h2>
     <section>
       <veui-date-picker
@@ -170,7 +151,6 @@
       <veui-date-picker
         v-model="selectedDate"
         clearable
-        ui="alt"
       />
     </section>
   </section>
@@ -181,7 +161,6 @@
         v-model="selectedDateRange"
         range
         clearable
-        :panel="3"
       />
     </section>
   </section>

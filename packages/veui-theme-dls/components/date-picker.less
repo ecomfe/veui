@@ -20,14 +20,6 @@
       padding-right: 0;
     }
 
-    &:hover {
-      border-color: @dls-input-border-color-hover;
-    }
-
-    &.focus-visible {
-      .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
-    }
-
     .@{veui-prefix}-invalid & {
       border-color: @dls-input-border-color-error;
       .@{veui-prefix}-input-main {
@@ -37,12 +29,21 @@
       &:hover {
         border-color: @dls-input-border-color-error-hover;
       }
+      &.focus-visible {
+        .dls-focus-ring(
+          @dls-input-border-color-error-focus,
+          @dls-input-shadow-error-focus
+        );
+      }
     }
-    .@{veui-prefix}-invalid.@{veui-prefix}-focus & {
-      .dls-focus-ring(
-        @dls-input-border-color-error-focus,
-        @dls-input-shadow-error-focus
-      );
+  }
+
+  &:not(.@{veui-prefix}-disabled):not(.@{veui-prefix}-invalid) &-trigger {
+    &:hover {
+      border-color: @dls-input-border-color-hover;
+    }
+    &.focus-visible {
+      .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
     }
   }
 
@@ -173,6 +174,7 @@
     transform: none;
   }
 
+  &.@{veui-prefix}-readonly,
   &.@{veui-prefix}-disabled {
     background-color: @dls-input-background-color-disabled;
   }

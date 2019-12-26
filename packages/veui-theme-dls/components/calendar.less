@@ -120,6 +120,7 @@
   &-head {
     padding: @dls-date-picker-header-padding-y @dls-date-picker-panel-padding-x;
     display: flex;
+    align-items: center;
 
     .@{veui-prefix}-button[ui~="icon"] {
       line-height: @dls-line-height-m;
@@ -151,15 +152,21 @@
 
     .@{veui-prefix}-calendar-select {
       text-align: center;
+      color: @dls-font-color-normal;
       margin: auto;
       height: auto;
       border: none;
+      line-height: @dls-line-height-m;
+
+      &.focus-visible,
       &:hover {
         background-color: @dls-background-color-normal;
+        color: @dls-font-color-normal;
       }
 
       .@{veui-prefix}-icon {
         margin-left: @dls-date-picker-header-icon-aux-spacing;
+        margin-right: 0;
         .dls-icon-size(@dls-date-picker-header-icon-size-aux);
         .veui-transition(transform);
 
