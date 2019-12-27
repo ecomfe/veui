@@ -89,18 +89,19 @@
     &::before {
       content: "";
       .make-header-height(@dls-date-picker-font-size-m);
-      .absolute(@header-height, 0, _, 0);
+      .absolute(dls-sum(@header-height, -1px), 0, _, 0);
       height: 0;
       border-bottom: 1px solid @dls-date-picker-panel-separator-color;
     }
   }
 
-  &-panel + &-expanded,
-  &-expanded + &-panel {
+  &-panel + &-expanded &-body,
+  &-expanded + &-panel &-body {
+    position: relative;
     &::after {
       content: "";
       display: block;
-      .absolute(0, _, 0, @dls-date-picker-range-panel-spacing / 2);
+      .absolute(0, _, 0, -@dls-date-picker-range-panel-spacing / 2);
       border-left: 1px solid @dls-date-picker-panel-separator-color;
     }
   }
@@ -212,14 +213,13 @@
 
   &-type-month &-expanded &-body,
   &-type-year &-body {
-    padding-top: dls-sum(
-      @dls-date-picker-month-body-padding-top,
-      -@dls-date-picker-month-cell-spacing-y
-    );
-
     .@{veui-prefix}-calendar-year-table-wrap {
       overflow: auto;
-      padding: 0 @dls-date-picker-panel-padding-x;
+      padding: dls-sum(
+          @dls-date-picker-month-body-padding-top,
+          -@dls-date-picker-month-cell-spacing-y
+        )
+        @dls-date-picker-panel-padding-x 0;
     }
     .@{veui-prefix}-calendar-year-table {
       width: 100%;
@@ -479,7 +479,6 @@
 
   &-year-scroller {
     .size(@dls-date-picker-year-scroller-width, 100%);
-    width: @dls-date-picker-year-scroller-width;
     padding: @dls-date-picker-list-padding-y 0 0 0;
     border-right: 1px solid @dls-date-picker-panel-separator-color;
     overflow: auto;
@@ -497,6 +496,7 @@
       outline: none;
       width: 100%;
       text-align: left;
+      cursor: pointer;
 
       &:hover {
         background-color: @dls-date-picker-list-background-color-hover;
@@ -543,7 +543,7 @@
       }
       &::before {
         .make-header-height(@dls-date-picker-font-size-s);
-        .absolute(@header-height, 0, _, 0);
+        .absolute(dls-sum(@header-height, -1px), 0, _, 0);
       }
     }
     &.@{veui-prefix}-calendar-type-month .@{veui-prefix}-calendar-panel,
@@ -586,7 +586,7 @@
 
   &[ui~="s"] &-year-scroller {
     button {
-      height: @dls-date-picker-list-item-height-s;
+      .centered-line(@dls-date-picker-list-item-height-s);
     }
   }
 

@@ -145,13 +145,14 @@
   &-shortcut {
     .veui-button-transition();
     text-align: left;
-    .centered-line(@dls-height-m);
+    .centered-line(@dls-date-picker-list-item-height-m);
     border: none;
     background: none;
     color: @dls-date-picker-list-font-color;
     outline: none;
     padding: 0 @dls-date-picker-panel-padding-x;
     margin-bottom: @dls-date-picker-list-item-spacing;
+    cursor: pointer;
 
     &:hover {
       background-color: @dls-date-picker-list-background-color-hover;
@@ -185,5 +186,8 @@
   }
   &-overlay-content[ui~="s"] {
     .border-radius(@dls-date-picker-dropdown-border-radius-s);
+  }
+  &-overlay-content[ui~="s"] &-shortcut {
+    .centered-line(@dls-date-picker-list-item-height-s);
   }
 }
