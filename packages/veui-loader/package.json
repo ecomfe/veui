@@ -8,8 +8,7 @@
   "scripts": {
     "build": "babel src --out-dir lib",
     "test": "npm run build && ava test/index.js",
-    "prepare": "npm run build",
-    "prepublish": "node -r esm ./test/link.js"
+    "prepare": "npm run build"
   },
   "keywords": [
     "webpack",
@@ -28,7 +27,6 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/runtime": "^7.5.5",
     "ava": "^2.3.0",
-    "esm": "^3.2.25",
     "raw-loader": "^0.5.1",
     "veui-theme-dls": "^2.0.0-alpha.2",
     "webpack": "^4.39.3"

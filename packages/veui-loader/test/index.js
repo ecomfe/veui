@@ -1,8 +1,9 @@
 import test from 'ava'
 import webpack from 'webpack'
 import path from 'path'
+import { symlink, unlink } from 'fs'
 
-function resolve (...args) {
+function r (...args) {
   return path.resolve(__dirname, ...args)
 }
 
@@ -43,69 +44,79 @@ const SPECS = [
   }
 ]
 
-SPECS.forEach(({ entry, expect, title }) => {
-  test.cb(title, t => {
-    const compiler = webpack({
-      entry: resolve(entry),
-      output: {
-        path: resolve('dist'),
-        filename: 'bundle.js'
-      },
-      resolve: {
-        alias: {
-          'veui-theme-dls': resolve('../../veui-theme-dls'),
-          'veui-next': resolve('../../veui/src')
-        }
-      },
-      module: {
-        rules: [
-          {
-            test: /\.vue$/,
-            loader: './lib',
-            enforce: 'pre',
-            options: {
-              name: 'veui-next',
-              locale: ['en-US'],
-              modules: [
-                {
-                  package: 'veui-theme-dls',
-                  fileName: '${module}.less'
-                },
-                {
-                  package: 'veui-theme-dls',
-                  fileName: '${module}.js',
-                  transform: false
-                }
-              ]
-            }
-          },
-          {
-            test: /\.vue$/,
-            use: 'raw-loader'
-          }
-        ]
-      }
-    })
+function runWebpack (config) {
+  return new Promise(resolve => {
+    const compiler = webpack(config)
 
     compiler.run((err, stats) => {
-      if (err) {
-        console.error(err)
-        return
-      }
-
-      let src = getSource(stats)
-      if (!src) {
-        t.is(typeof src, 'string')
-        t.end()
-        return
-      }
-
-      let { include = [], exclude = [] } = expect
-      include.forEach(item => t.true(src.includes(item)))
-      exclude.forEach(item => t.false(src.includes(item)))
-
-      t.end()
+      resolve({ err, stats })
     })
+  })
+}
+
+SPECS.forEach(({ entry, expect, title }) => {
+  test(title, t => {
+    return prepare()
+      .then(() =>
+        runWebpack({
+          entry: r(entry),
+          output: {
+            path: r('dist'),
+            filename: 'bundle.js'
+          },
+          resolve: {
+            alias: {
+              'veui-theme-dls': r('../../veui-theme-dls'),
+              'veui-next': r('../../veui/src')
+            }
+          },
+          module: {
+            rules: [
+              {
+                test: /\.vue$/,
+                loader: './lib',
+                enforce: 'pre',
+                options: {
+                  name: 'veui-next',
+                  locale: ['en-US'],
+                  modules: [
+                    {
+                      package: 'veui-theme-dls',
+                      fileName: '${module}.less'
+                    },
+                    {
+                      package: 'veui-theme-dls',
+                      fileName: '${module}.js',
+                      transform: false
+                    }
+                  ]
+                }
+              },
+              {
+                test: /\.vue$/,
+                use: 'raw-loader'
+              }
+            ]
+          }
+        })
+      )
+      .then(({ err, stats }) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+
+        let src = getSource(stats)
+        if (!src) {
+          t.is(typeof src, 'string')
+          return
+        }
+
+        let { include = [], exclude = [] } = expect
+        include.forEach(item => t.true(src.includes(item)))
+        exclude.forEach(item => t.false(src.includes(item)))
+      })
+      .then(tearDown)
   })
 })
 
@@ -123,4 +134,20 @@ function getSource (stats) {
   }
 
   return source
+}
+
+function prepare () {
+  return new Promise(resolve => {
+    symlink(
+      r(__dirname, '../node_modules/veui'),
+      r(__dirname, '../node_modules/veui-next'),
+      resolve
+    )
+  })
+}
+
+function tearDown () {
+  return new Promise(resolve => {
+    unlink(r(__dirname, '../node_modules/veui-next'), resolve)
+  })
 }
