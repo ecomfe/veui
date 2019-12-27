@@ -314,10 +314,10 @@ import {
   mergeRange,
   gt,
   lt
-} from '../utils/date'
-import { closest, focusIn, focus, scrollTo } from '../utils/dom'
-import { sign, isPositive } from '../utils/math'
-import { normalizeClass } from '../utils/helper'
+} from '../../utils/date'
+import { closest, focusIn, focus, scrollTo } from '../../utils/dom'
+import { sign, isPositive } from '../../utils/math'
+import { normalizeClass } from '../../utils/helper'
 import {
   isInteger,
   flattenDeep,
@@ -327,14 +327,14 @@ import {
   isEqual,
   isNumber
 } from 'lodash'
-import prefix from '../mixins/prefix'
-import ui from '../mixins/ui'
-import input from '../mixins/input'
-import i18n from '../mixins/i18n'
-import config from '../managers/config'
-import Icon from './Icon'
-import Button from './Button'
-import InfiniteScroll from './Calendar/_InfiniteScroll'
+import prefix from '../../mixins/prefix'
+import ui from '../../mixins/ui'
+import input from '../../mixins/input'
+import i18n from '../../mixins/i18n'
+import config from '../../managers/config'
+import Icon from '../Icon'
+import Button from '../Button'
+import InfiniteScroll from '../Calendar/_InfiniteScroll'
 import addMonths from 'date-fns/add_months'
 
 config.defaults({
@@ -877,7 +877,7 @@ export default {
       // expanded panel
       this.navigateByIndex(p.index, { year: day.year, month: day.month })
       this.setExpanded(p.index, false)
-      // this.setFocus('expansion-select', i)
+      this.setFocus('expansion-select', p.index)
     },
     selectYear (i, year) {
       if (this.isYearType) {
@@ -888,11 +888,11 @@ export default {
       if (!this.isDateType) {
         this.navigateByIndex(i, { year })
         this.setExpanded(i, false)
+        this.setFocus('expansion-select', i)
       } else {
         this.panelData[i].currentScrollYear = year
         this.scrollCurrentToCenter(this.$refs[`yearScroller-${i}`][0])
       }
-      // this.setFocus('expansion-select', i)
     },
     scrollCurrentToCenter (container, duration = 200) {
       this.$nextTick(() => {

@@ -1,4 +1,10 @@
+
 ## 2.0.0-alpha.3
+
+### ⚠️ 非兼容性变更
+
+- [^] `DatePicker` 组件不再支持 `shortcuts-position` 和 `panel` prop。
+- [^] `DatePicker` 组件 `selectRange` locale 变更成数组类型
 
 ### 💡 主要变更
 
@@ -10,6 +16,12 @@
 - [+] 为 `PromptBox` 增加 `invalid` prop，会使内部的输入框处于错误状态。
 - [^] 现在 `confirm`/`prompt` 的 manager 与插件中，`ok`/`cancel` 选项函数返回 `false` 或返回的 `Promise` resolve `false` 时，将阻止对话框关闭。
 - [^] 现在 `prompt` 的 manager 与插件中，`ok`/`cancel` 选项函数会接收到输入框当前值作为第一个参数。
+- [^] `DatePicker`/`Calendar` 组件样式更新到 DLS 版本。
+- [+] `Calendar` 组件 `viewchange` 事件参数中新增该事件触发面板的 `index` 数据。
+- [+] `DatePicker`/`Calendar` 组件支持月份/年份的范围选择。
+- [+] `Calendar` 支持月份/年份的多选。
+- [+] `Calendar` 新增 `yearAndMonth` locale
+- [+] `DatePicker` 新增 `selectMonthRange`/`selectYearRange` locale
 
 ### 🐞 问题修复
 

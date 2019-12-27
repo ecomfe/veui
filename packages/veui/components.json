@@ -49,7 +49,15 @@
   },
   {
     "name": "Calendar",
-    "path": "Calendar.vue"
+    "path": "Calendar/Calendar.vue"
+  },
+  {
+    "name": "Calendar",
+    "path": "Calendar"
+  },
+  {
+    "name": "Calendar",
+    "path": "Calendar/index.js"
   },
   {
     "name": "Carousel",

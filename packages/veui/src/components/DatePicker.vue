@@ -235,7 +235,6 @@ export default {
     event: 'select'
   },
   props: {
-    panel: Number,
     selected: {
       type: [Array, Date],
       default () {
@@ -248,12 +247,6 @@ export default {
       type: [String, Function]
     },
     shortcuts: Array,
-    shortcutsPosition: {
-      type: String,
-      default () {
-        return config.get('datepicker.shortcutsPosition')
-      }
-    },
     ...pick(Calendar.props, CALENDAR_PROPS)
   },
   data () {
