@@ -23,7 +23,7 @@ const SPECS = [
     entry: '../../veui/src/components/Button.vue',
     expect: {
       include: [
-        `\nimport 'veui/locale/en-US/common.js'\n`,
+        `\nimport 'veui-next/locale/en-US/common.js'\n`,
         `\nimport 'veui-theme-dls/components/Button.js'\n`,
         `\nimport 'veui-theme-dls/components/Button.js'\n`,
         `\n<style lang="less" src="veui-theme-dls/components/button.less"></style>\n`
@@ -35,9 +35,9 @@ const SPECS = [
     entry: '../../veui/src/components/Calendar/Calendar.vue',
     expect: {
       include: [
-        `\nimport 'veui/locale/en-US/common.js'\n`,
-        `\nimport 'veui/locale/en-US/Calendar.js'\n`,
-        `\nimport 'veui/locale/en-US/Calendar.js'\n`
+        `\nimport 'veui-next/locale/en-US/common.js'\n`,
+        `\nimport 'veui-next/locale/en-US/Calendar.js'\n`,
+        `\nimport 'veui-next/locale/en-US/Calendar.js'\n`
       ]
     }
   }
@@ -54,7 +54,7 @@ SPECS.forEach(({ entry, expect, title }) => {
       resolve: {
         alias: {
           'veui-theme-dls': resolve('../../veui-theme-dls'),
-          veui: resolve('../../veui/src')
+          'veui-next': resolve('../../veui/src')
         }
       },
       module: {
@@ -64,6 +64,7 @@ SPECS.forEach(({ entry, expect, title }) => {
             loader: './lib',
             enforce: 'pre',
             options: {
+              name: 'veui-next',
               locale: ['en-US'],
               modules: [
                 {
