@@ -32,7 +32,7 @@ const SPECS = [
   },
   {
     title: 'should inject locale module',
-    entry: '../../veui/src/components/Calendar.vue',
+    entry: '../../veui/src/components/Calendar/Calendar.vue',
     expect: {
       include: [
         `\nimport 'veui/locale/en-US/common.js'\n`,
