@@ -17,7 +17,7 @@
   "dependencies": {
     "classlist-polyfill": "^1.2.0",
     "focus-visible": "^4.1.0",
-    "less-plugin-dls": "^0.30.0",
+    "less-plugin-dls": "^0.32.0",
     "less-plugin-est": "^3.0.0",
     "veui-theme-dls-icons": "^2.0.0-alpha.2"
   },

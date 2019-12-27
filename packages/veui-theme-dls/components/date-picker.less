@@ -5,6 +5,11 @@
   &:extend(._veui-dropdown-button all);
   position: relative;
   display: inline-block;
+  width: @dls-date-picker-width;
+
+  &-range {
+    width: @dls-date-picker-width-range;
+  }
 
   &-trigger {
     .veui-button-transition();
