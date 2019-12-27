@@ -8,8 +8,7 @@
   "scripts": {
     "build": "babel src --out-dir lib",
     "test": "npm run build && ava",
-    "prepare": "npm run build",
-    "prepublish": "node -r esm ./test/link.js"
+    "prepare": "npm run build"
   },
   "keywords": [
     "veui",
@@ -25,7 +24,6 @@
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "ava": "^2.3.0",
-    "esm": "^3.2.25",
     "prettier": "^1.18.2"
   },
   "ava": {
