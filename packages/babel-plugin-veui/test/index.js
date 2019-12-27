@@ -8,7 +8,7 @@ import plugin from '../lib'
 test('should transform VEUI components correctly', t => {
   let { code } = transformFileSync(resolve(__dirname, './fixtures/source.js'), {
     babelrc: false,
-    plugins: [plugin]
+    plugins: [plugin, [plugin, { name: 'veui-next' }, 'veui-next']]
   })
 
   let expect = readFileSync(

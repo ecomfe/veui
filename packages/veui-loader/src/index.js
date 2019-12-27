@@ -4,7 +4,8 @@ import pkgDir from 'pkg-dir'
 import slash from 'slash'
 import loaderUtils from 'loader-utils'
 import { kebabCase, camelCase, pascalCase, getJSON, normalize } from './utils'
-import COMPONENTS from 'veui/components.json'
+
+const VEUI_PACKAGE_NAME = 'veui'
 
 const COMPONENTS_DIRNAME = 'components'
 const EXT_TYPES = {
@@ -22,7 +23,7 @@ let resolveCache = {}
 export default async function (content) {
   let callback = this.async()
   const loaderOptions = loaderUtils.getOptions(this) || {}
-  let component = resolveComponent(this.resourcePath)
+  let component = resolveComponent(this.resourcePath, loaderOptions)
   if (!component) {
     callback(null, content)
     return
@@ -124,6 +125,7 @@ function patchComponentSync (content, component, options, resolveSync) {
  */
 function getParts (component, options) {
   let {
+    name = VEUI_PACKAGE_NAME,
     modules = [],
     package: pack,
     path: packPath = COMPONENTS_DIRNAME,
@@ -149,7 +151,7 @@ function getParts (component, options) {
     modules = locale
       .map(l => {
         return {
-          package: 'veui',
+          package: name,
           path: `locale/${l}`,
           transform: false,
           fileName: '{module}.js'
@@ -159,7 +161,7 @@ function getParts (component, options) {
 
     global = locale
       .map(l => {
-        return { path: `veui/locale/${l}/common.js` }
+        return { path: `${name}/locale/${l}/common.js` }
       })
       .concat(global)
   }
@@ -197,7 +199,9 @@ function getParts (component, options) {
  */
 function patchContent (content, parts) {
   return Object.keys(parts).reduce((content, type) => {
-    let paths = parts[type].filter(({ valid }) => valid).map(({ path }) => path)
+    let paths = parts[type]
+      .filter(({ valid }) => valid)
+      .map(({ path }) => path)
     return patchType(content, type, paths)
   }, content)
 }
@@ -345,12 +349,16 @@ function getPeerFilename (
  * Resolve the underlying component for a given file path.
  * '/dev/veui/src/components/Button.vue' → 'Button'
  * @param {string} file Absolute file path
+ * @param {Object} options veui-loader options
  * @returns {?string} The resolved component name (`null` if not a VEUI component)
  */
-function resolveComponent (file) {
+function resolveComponent (file, options) {
   // make sure relative paths resolved to somewhere inside veui
   let pkg = pkgDir.sync(file)
-  if (!pkg || getJSON(path.join(pkg, 'package.json')).name !== 'veui') {
+  if (
+    !pkg ||
+    getJSON(path.join(pkg, 'package.json')).name !== VEUI_PACKAGE_NAME
+  ) {
     return null
   }
 
@@ -364,7 +372,7 @@ function resolveComponent (file) {
   }
 
   // is VEUI component
-  return getComponentName(path.relative(dirPath, file))
+  return getComponentName(path.relative(dirPath, file), options)
 }
 
 /**
@@ -372,13 +380,17 @@ function resolveComponent (file) {
  * VEUI's component list.
  * 'Icon.vue' → 'Icon'
  * @param {string} componentPath Component path
+ * @param {Object} options veui-loader options
  * @returns {?string} Component name (`null` if not a VEUI component)
  */
-function getComponentName (componentPath) {
+function getComponentName (componentPath, options) {
+  let { name = VEUI_PACKAGE_NAME } = options
+  let components = require(`${name}/components.json`)
+
   if (!componentPath) {
     return null
   }
-  let component = COMPONENTS.find(({ path }) => {
+  let component = components.find(({ path }) => {
     path = normalize(path)
     return path === componentPath || path.split('.')[0] === componentPath
   })
