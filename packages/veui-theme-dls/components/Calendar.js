@@ -14,6 +14,12 @@ config.defaults(
       forward: 'chevron-double-right',
       expand: 'chevron-down'
     },
+    ui: {
+      size: {
+        values: ['s', 'm'],
+        inherit: true
+      }
+    },
     parts: {
       nav: 'icon',
       toggle: 'text'
