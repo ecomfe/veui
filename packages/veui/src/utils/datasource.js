@@ -29,12 +29,13 @@ export function find (array, predicate, alias = 'children') {
 
   let result = null
   array.some(item => {
+    if (predicate(item)) {
+      result = item
+      return true
+    }
     let children = getChildrenByAlias(item, alias)
     if (!children) {
-      if (predicate(item)) {
-        result = item
-        return true
-      }
+      return false
     }
     let inner = find(children, predicate, alias)
     if (inner !== null) {

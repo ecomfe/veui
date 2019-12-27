@@ -43,7 +43,7 @@
     />
   </section>
   <section>
-    <h2>多选样式：s</h2>
+    <h2>多选样式：s (自定义 tag slot)</h2>
     <veui-select
       v-model="defaultMultiValue"
       ui="s"
@@ -52,7 +52,12 @@
       :max="3"
       clearable
       multiple
-    />
+    >
+      <template
+        slot="tag"
+        slot-scope="{ label }"
+      ><i>{{ label }}</i></template>
+    </veui-select>
   </section>
   <section>
     <h2>多选样式：m (默认)</h2>

@@ -210,6 +210,37 @@ describe('components/Select/Select', () => {
     wrapper.destroy()
   })
 
+  it('should render tag slot correctly for multiple select', () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select
+        },
+        data () {
+          return {
+            options: datasource,
+            value: ['1']
+          }
+        },
+        template: `<veui-select
+          v-model="value"
+          :options="options"
+          placeholder="Please select"
+          multiple
+        >
+          <template slot="tag" slot-scope="{ label }"><i>{{ label }}</i></template>
+        </veui-select>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    expect(wrapper.find('.veui-tag').html()).to.include('<i>选项1</i>')
+    wrapper.destroy()
+  })
+
   it('should handle click event correctly', async () => {
     let wrapper = mount({
       components: {
@@ -406,13 +437,13 @@ describe('components/Select/Select', () => {
     await vm.$nextTick()
     expect(overlay.isVisible()).to.equal(true)
     let items = wrapper.findAll(OPTION_ITEM)
-    expect(items.length === 3).to.equal(true)
+    expect(items.length).to.equal(4)
 
     input.element.value = '选项2-1'
     input.trigger('input')
     await vm.$nextTick()
     items = wrapper.findAll(OPTION_ITEM)
-    expect(items.length === 1).to.equal(true)
+    expect(items.length).to.equal(1)
 
     input.element.value = 'xxsddd'
     input.trigger('input')
