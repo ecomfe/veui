@@ -111,7 +111,7 @@ export default {
       }
       return this.localValue.map(val => {
         let option = findOptionByValue(this.realOptions, val)
-        return option ? option.label : ''
+        return option ? option.label : val
       })
     },
     searchInputLabel () {
@@ -293,6 +293,7 @@ export default {
       }
     },
     handleTriggerInput (val) {
+      this.$emit('input')
       this.inputValue = val
       this.expanded = true
       if (!val && !this.multiple) {
@@ -365,7 +366,13 @@ export default {
         disabled={this.realDisabled || this.realReadonly}
         closable
       >
-        {label}
+        {this.$scopedSlots.tag
+          ? this.$scopedSlots.tag({
+            label,
+            ...findOptionByValue(this.realOptions, this.localValue[index]),
+            index
+          })
+          : label}
       </Tag>
     ))
 
@@ -556,7 +563,7 @@ function normalizeItem (item) {
   let options = (item.options || []).map(normalizeItem)
   let isGroup = options.length > 0
   return {
-    ...(isGroup ? omit(item, 'value') : item),
+    ...item,
     ...(isGroup ? { options } : {})
   }
 }
