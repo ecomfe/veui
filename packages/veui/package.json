@@ -2,21 +2,20 @@
   "name": "veui",
   "version": "2.0.0-alpha.2",
   "description": "Baidu Enterprise UI for Vue.js.",
-  "repository": "ecomfe/veui",
-  "license": "MIT",
   "scripts": {
-    "components": "node ./build/components.js",
-    "prepublishOnly": "cp -r ./src/* .",
-    "publish": "rm -rf ./common ./components ./directives ./locale ./managers ./mixins ./plugins ./utils ./icons.js ./index.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "components": "node ./build/components.js",
+    "prepublishOnly": "cp -r ./src/* .",
+    "publish": "rm -rf ./common ./components ./directives ./locale ./managers ./mixins ./plugins ./utils ./icons.js ./index.js",
     "test": "cross-env NODE_ENV=test BABEL_ENV=test karma start --single-run",
     "test:start": "cross-env NODE_ENV=test BABEL_ENV=test karma start"
   },
   "module": "index.js",
   "dependencies": {
     "bytes": "^3.0.0",
+    "core-js": "^3.4.4",
     "date-fns": "^2.8.1",
     "lodash": "^4.17.4",
     "popper.js": "^1.16.0",
@@ -24,20 +23,10 @@
     "vue-awesome": "^4.0.2",
     "vue-directive-normalizer": "^0.1.0"
   },
-  "peerDependencies": {
-    "vue": "^2.5.16"
-  },
-  "keywords": [
-    "vue",
-    "ui",
-    "components",
-    "veui",
-    "baidu"
-  ],
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.5.0",
-    "@vue/cli-plugin-eslint": "^3.5.0",
-    "@vue/cli-service": "^3.5.0",
+    "@vue/cli-plugin-babel": "^4.1.2",
+    "@vue/cli-plugin-eslint": "^4.1.2",
+    "@vue/cli-service": "^4.1.2",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
@@ -47,7 +36,6 @@
     "babel-plugin-veui": "^2.0.0-alpha.2",
     "chai": "^4.2.0",
     "classlist-polyfill": "^1.2.0",
-    "core-js": "^2.6.5",
     "cross-env": "^5.2.0",
     "eslint": "^5.8.0",
     "eslint-config-prettier": "^4.1.0",
@@ -61,8 +49,8 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-spec-reporter": "0.0.32",
     "karma-webpack": "^3.0.5",
-    "less": "^3.0.4",
-    "less-loader": "^4.1.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
     "less-plugin-est": "^3.0.0",
     "lint-staged": "^8.1.4",
     "mocha": "^6.1.4",
@@ -73,17 +61,29 @@
     "veui-loader": "^2.0.0-alpha.2",
     "veui-theme-dls": "^2.0.0-alpha.2",
     "veui-theme-dls-icons": "^2.0.0-alpha.2",
-    "vue": "^2.6.7",
+    "vue": "^2.6.11",
     "vue-router": "^3.0.1",
-    "vue-template-compiler": "^2.6.7"
+    "vue-template-compiler": "^2.6.11"
+  },
+  "peerDependencies": {
+    "vue": "^2.5.16"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
+  "keywords": [
+    "vue",
+    "ui",
+    "components",
+    "veui",
+    "baidu"
+  ],
+  "license": "MIT",
   "lint-staged": {
     "*.{js,vue}": [
       "vue-cli-service lint",
       "git add"
     ]
-  }
+  },
+  "repository": "ecomfe/veui"
 }
