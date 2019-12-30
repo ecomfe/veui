@@ -1,28 +1,27 @@
 import { omit } from 'lodash'
 
-function match (item, keywordRE, { searchKey }) {
+function match (item, keywordRe, { searchKey }) {
   let offsets = []
   const searchVal = item[searchKey]
   if (searchVal) {
-    let result = keywordRE.exec(searchVal)
+    let result = keywordRe.exec(searchVal)
     while (result) {
       offsets.push([result.index, result.index + result[0].length])
-      result = keywordRE.exec(searchVal)
+      result = keywordRe.exec(searchVal)
     }
-    keywordRE.lastIndex = 0
+    keywordRe.lastIndex = 0
   }
-  return offsets
+  return offsets.length ? offsets : false
+}
+
+function filter (matchResult) {
+  return Array.isArray(matchResult) ? !!matchResult.length : matchResult
 }
 
 const metaRE = /[|\\{}()[\]^$+*?.]/g
-
 function createKeywordRe (keyword, { flags, literal }) {
-  if (keyword instanceof RegExp) {
-    return keyword
-  } else {
-    keyword = literal ? String(keyword).replace(metaRE, '\\$&') : keyword
-    return new RegExp(keyword, flags)
-  }
+  keyword = literal ? String(keyword).replace(metaRE, '\\$&') : keyword
+  return new RegExp(keyword, flags)
 }
 
 function splitText (text, offsets) {
@@ -51,26 +50,39 @@ function splitText (text, offsets) {
   return result
 }
 
-function search (
-  datasource,
-  keyword,
-  options,
-  matchFn = match,
-  result = [],
-  ancestors = []
-) {
+function search (datasource, keyword, options, result = [], ancestors = []) {
   if (!keyword) {
     return []
   }
-  let { valueKey, childrenKey, limit, exactMatch, searchKey } = options
-  keyword = createKeywordRe(keyword, options)
+
+  let {
+    valueKey,
+    childrenKey,
+    matchFn,
+    filterFn,
+    limit,
+    exactMatch,
+    searchKey,
+    keywordRe
+  } = options
+
+  // 放 options 里面缓存下，保留原来 keyword 变量传给自定义的 matchFn
+  if (!keywordRe) {
+    keywordRe = options.keywordRe = createKeywordRe(keyword, options)
+  }
+
   datasource.some(i => {
     let item = {
       item: { ...i },
       parts: [],
       matched: false
     }
-    let offsets = matchFn(item.item, keyword, options)
+
+    // match
+    let offsets =
+      typeof matchFn === 'function'
+        ? matchFn(item, keyword)
+        : match(item.item, keywordRe, options)
     let isArray = Array.isArray(offsets)
     let isBool = !isArray && typeof offsets === 'boolean'
     if (!isArray && !isBool) {
@@ -78,10 +90,23 @@ function search (
         'The return value of the `match` function must either be a boolean or an array.'
       )
     }
-    if (i[searchKey] && isArray) {
-      item.parts = splitText(i[searchKey], offsets)
+
+    // filter
+    let filtered =
+      typeof filterFn === 'function'
+        ? filterFn(offsets, item.item)
+        : filter(offsets, item.item)
+    if (typeof filtered !== 'boolean') {
+      throw new Error(
+        'The return value of the `filter` function must be a boolean.'
+      )
     }
-    item.matched = isBool ? offsets : !!offsets.length
+
+    // 即使没有匹配成功，为了渲染简单，还是生成 parts
+    if (i[searchKey]) {
+      item.parts = splitText(i[searchKey], offsets || [])
+    }
+    item.matched = filtered
 
     let realMatched = exactMatch
       ? item.matched
@@ -96,7 +121,7 @@ function search (
         })
       }
       if (i[childrenKey]) {
-        search(i[childrenKey], keyword, options, matchFn, result, path)
+        search(i[childrenKey], keyword, options, result, path)
         // update limit after searching children
         return limit && limit <= result.length
       }
@@ -106,8 +131,7 @@ function search (
   return result
 }
 
-const call = (val, context, fallback) =>
-  typeof val === 'function' ? val(context) : fallback
+const call = (val, context) => (typeof val === 'function' ? val(context) : val)
 
 /**
  * searchable mixin，产出一个 computed
@@ -116,10 +140,11 @@ const call = (val, context, fallback) =>
  * @param {string} options.datasourceKey 输入的数据源的key
  * @param {string} options.keywordKey 搜索关键字的key
  * @param {string} options.resultKey 产出的 computed 的名称
+ * @param {string} options.matchKey 搜索方法
+ * @param {string} options.filterKey 过滤方法
  * @param {string} options.valueKey 该字段有值，该项才会作为搜索结果
  * @param {string} options.childrenKey children
  * @param {string} options.searchKey 被搜索的字段
- * @param {string} options.matchKey 搜索方法
  * @param {number} options.limit 限制结果的数量，0 表示不限制
  * @param {boolean} options.exactMatch 该项有valueKey且该项搜索到值才会被认为满足搜索
  * @param {string} options.flags 正则的模式
@@ -132,7 +157,8 @@ export default function searchable ({
   valueKey = 'value',
   childrenKey = 'children',
   searchKey = 'label',
-  matchKey = 'match',
+  matchKey,
+  filterKey,
   flags = 'ig',
   limit = 100,
   exactMatch = false,
@@ -142,18 +168,19 @@ export default function searchable ({
     computed: {
       [resultKey] () {
         return search(
-          call(datasourceKey, this, this[datasourceKey]),
-          call(keywordKey, this, this[keywordKey]),
+          this[call(datasourceKey, this)],
+          this[call(keywordKey, this)],
           {
-            valueKey: call(valueKey, this, valueKey),
-            childrenKey: call(childrenKey, this, childrenKey),
-            searchKey: call(searchKey, this, searchKey),
+            valueKey: call(valueKey, this),
+            childrenKey: call(childrenKey, this),
+            searchKey: call(searchKey, this),
+            matchFn: this[matchKey],
+            filterFn: this[filterKey],
             limit,
             exactMatch,
             flags,
             literal
-          },
-          call(matchKey, this, this[matchKey])
+          }
         )
       }
     }
