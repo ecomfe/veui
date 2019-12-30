@@ -125,7 +125,7 @@ function patchComponentSync (content, component, options, resolveSync) {
  */
 function getParts (component, options) {
   let {
-    name = VEUI_PACKAGE_NAME,
+    alias = VEUI_PACKAGE_NAME,
     modules = [],
     package: pack,
     path: packPath = COMPONENTS_DIRNAME,
@@ -151,7 +151,7 @@ function getParts (component, options) {
     modules = locale
       .map(l => {
         return {
-          package: name,
+          package: alias,
           path: `locale/${l}`,
           transform: false,
           fileName: '{module}.js'
@@ -161,7 +161,7 @@ function getParts (component, options) {
 
     global = locale
       .map(l => {
-        return { path: `${name}/locale/${l}/common.js` }
+        return { path: `${alias}/locale/${l}/common.js` }
       })
       .concat(global)
   }
@@ -353,11 +353,20 @@ function getPeerFilename (
  * @returns {?string} The resolved component name (`null` if not a VEUI component)
  */
 function resolveComponent (file, options) {
-  // make sure relative paths resolved to somewhere inside veui
+  let { alias = VEUI_PACKAGE_NAME } = options
+
+  // make sure relative paths resolved to somewhere inside a correct VEUI
   let pkg = pkgDir.sync(file)
+  let isVEUI =
+    getJSON(path.join(pkg, 'package.json')).name === VEUI_PACKAGE_NAME
   if (
     !pkg ||
-    getJSON(path.join(pkg, 'package.json')).name !== VEUI_PACKAGE_NAME
+    // not VEUI package
+    !isVEUI ||
+    // is dep but dep name isn't correct
+    (isVEUI &&
+      path.basename(path.dirname(pkg)) === 'node_modules' &&
+      path.basename(pkg) !== alias)
   ) {
     return null
   }
@@ -384,8 +393,8 @@ function resolveComponent (file, options) {
  * @returns {?string} Component name (`null` if not a VEUI component)
  */
 function getComponentName (componentPath, options) {
-  let { name = VEUI_PACKAGE_NAME } = options
-  let components = require(`${name}/components.json`)
+  let { alias = VEUI_PACKAGE_NAME } = options
+  let components = require(`${alias}/components.json`)
 
   if (!componentPath) {
     return null

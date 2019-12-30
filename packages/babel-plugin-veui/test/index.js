@@ -10,7 +10,7 @@ test('should transform VEUI components correctly', t => {
     .then(() => {
       let { code } = transformFileSync(r(__dirname, './fixtures/source.js'), {
         babelrc: false,
-        plugins: [plugin, [plugin, { name: 'veui-next' }, 'veui-next']]
+        plugins: [plugin, [plugin, { alias: 'veui-next' }, 'veui-next']]
       })
 
       let expect = readFileSync(r(__dirname, './fixtures/expected.js'), 'utf8')

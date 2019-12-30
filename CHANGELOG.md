@@ -1,13 +1,19 @@
 ## 2.0.0-alpha.4
 
 ### ⚠️ 非兼容性变更
-* [^] `Uploader` 组件调整为适配 DLS 实现，新增了插槽 `upload` 支持图片模式下自定义上传区域，移除 `type-invald`/`size-invalid`/`count-overflow`/`extra-operation` 这四个插槽，移除 prop `progress`，移除 `ui` 选项 `horizontal`。
+
+- [^] `Uploader` 组件调整为适配 DLS 实现，新增了插槽 `upload` 支持图片模式下自定义上传区域，移除 `type-invald`/`size-invalid`/`count-overflow`/`extra-operation` 这四个插槽，移除 prop `progress`，移除 `ui` 选项 `horizontal`。
 
 ### 💡 主要变更
-* [+] `Uploader` 组件新增了 `validator` prop，支持自定义的异步校验功能。
-* [+] `Uploader` 组件新增了 `controls` prop，支持在图片模式下自定义可对文件进行的操作。
+
+- [+] `Uploader` 组件新增了 `validator` prop，支持自定义的异步校验功能。
+- [+] `Uploader` 组件新增了 `controls` prop，支持在图片模式下自定义可对文件进行的操作。
+- [^] `veui-loader` 和 `babel-plugin-veui` 的 `name` 选项改名为 `alias`。
 
 ### 🐞 问题修复
+
+- [^] 修正了 `veui-loader` 读取到非用户依赖版本的 `veui` 版本的问题。
+- [^] 修正了 `veui-loader` 会对用户依赖版本 `veui` 生效而  非仅仅对指定别名的包生效的问题。
 - [^] 修复 `DatePicker` 组件 shortcut 样式不正确的问题。
 - [^] 修复 `Uploader` 组件在有文件未上传完成的情况下，上传新文件会重复上传未上传完的文件的问题。
 
@@ -728,17 +734,13 @@
   > 请检查项目中所有用到
   >
   > ```html
-  > <template slot="..." scope="..."
-  >   >...</template
-  > >
+  > <template slot="..." scope="...">...</template>
   > ```
   >
   > 的地方，统一替换为：
   >
   > ```html
-  > <template slot="..." slot-scope="..."
-  >   >...</template
-  > >
+  > <template slot="..." slot-scope="...">...</template>
   > ```
   >
   > 同时，由于 `vue@2.5.3` 修改了 slot 的逻辑，所以当代码中存在使用

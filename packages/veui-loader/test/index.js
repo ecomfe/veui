@@ -77,7 +77,7 @@ SPECS.forEach(({ entry, expect, title }) => {
                 loader: './lib',
                 enforce: 'pre',
                 options: {
-                  name: 'veui-next',
+                  alias: 'veui-next',
                   locale: ['en-US'],
                   modules: [
                     {

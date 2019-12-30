@@ -11,10 +11,10 @@ export default function (babel) {
     visitor: {
       ImportDeclaration (path, { opts = {} }) {
         let { node } = path
-        let { name: veuiName = VEUI_PACKAGE_NAME } = opts
+        let { alias = VEUI_PACKAGE_NAME } = opts
         let src = normalize(node.source.value)
 
-        if (src === veuiName) {
+        if (src === alias) {
           if (
             node.specifiers.length === 1 &&
             (node.specifiers[0].type === 'ImportDefaultSpecifier' ||
@@ -35,7 +35,7 @@ export default function (babel) {
             } else {
               let realName = getComponentName(imported.name)
 
-              let componentSrc = getComponentPath(realName, veuiName)
+              let componentSrc = getComponentPath(realName, alias)
               if (!componentSrc) {
                 throw new Error(
                   `[${realName}] is not a valid component in VEUI.`
@@ -67,11 +67,11 @@ function getComponentName (importedName) {
 }
 
 // 'Icon' → 'veui/components/Icon.vue'
-function getComponentPath (componentName, name) {
-  let components = require(`${name}/components.json`)
+function getComponentPath (componentName, alias) {
+  let components = require(`${alias}/components.json`)
   let entry = components.find(({ name }) => name === componentName)
   if (!entry) {
     return null
   }
-  return `${name}/${COMPONENTS_DIRNAME}/${entry.path}`
+  return `${alias}/${COMPONENTS_DIRNAME}/${entry.path}`
 }
