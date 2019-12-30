@@ -17,7 +17,7 @@
     <veui-radio-group
       v-model="picked2"
       :items="data2"
-      ui="small"
+      ui="s"
     >
       <template slot-scope="props">
         {{ props.label }}
