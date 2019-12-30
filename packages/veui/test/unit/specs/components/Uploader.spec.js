@@ -24,7 +24,7 @@ describe('components/Uploader', () => {
     })
 
     expect(wrapper.vm.$data.fileList).to.deep.equal([
-      { name: 'test.jpg', src: '/test.jpg' }
+      { name: 'test.jpg', src: '/test.jpg', status: 'success' }
     ])
     wrapper.destroy()
   })
@@ -358,7 +358,7 @@ describe('components/Uploader', () => {
       .at(1)
       .trigger('click')
     expect(wrapper.emitted().remove[0]).to.deep.equal([
-      { name: 'test2.jpg', src: '/test2.jpg' },
+      { name: 'test2.jpg', src: '/test2.jpg', status: 'success' },
       1
     ])
     expect(wrapper.emitted().change[0][0]).to.deep.equal([

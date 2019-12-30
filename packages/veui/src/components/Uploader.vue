@@ -3,20 +3,13 @@
   ref="main"
   :class="{
     [$c('uploader')]: true,
-    [$c(`uploader-${type}`)]: true,
-    [$c(`uploader-desc-vertical`)]: descDirection === 'vertical'
+    [$c(`uploader-${type}`)]: true
   }"
   :ui="realUi"
   role="application"
   tabindex="-1"
   :aria-label="t('uploader')"
 >
-  <span
-    v-if="$slots.desc && descDirection === 'vertical' && type === 'image'"
-    :class="$c('uploader-desc')"
-  >
-    <slot name="desc"/>
-  </span>
   <div
     v-if="type === 'file'"
     :class="$c('uploader-button-container')"
@@ -31,7 +24,7 @@
           (maxCount > 1 && fileList.length >= maxCount) ||
           (requestMode === 'iframe' && submitting)
       }"
-      :ui="uiProps.size"
+      :ui="realUi"
       @click="handleClick"
     >
       <slot name="button-label">
@@ -77,8 +70,7 @@
     >
       <template
         v-if="
-          type === 'file' ||
-            (type === 'image' && (!file.status || file.status === 'success'))
+          type === 'file' || (type === 'image' && file.status === 'success')
         "
       >
         <slot
@@ -133,7 +125,7 @@
                 :class="$c('uploader-list-remove')"
                 :ui="uiParts.remove"
                 :disabled="realUneditable"
-                @click="removeFile(file)"
+                @click="remove(file)"
               >
                 <veui-icon :name="icons.clear"/>
               </veui-button>
@@ -167,35 +159,31 @@
                 :class="$c('uploader-list-image-container-image')"
               >
               <div :class="`${listClass}-mask`">
-                <veui-button
-                  :ui="uiParts.imageAction"
-                  @click="preview(file)"
-                >
-                  <veui-icon :name="icons.preview"/>
-                </veui-button>
-                <label
-                  :for="inputId"
-                  :ui="uiParts.imageAction"
-                  :class="{
-                    [$c('button')]: true,
-                    [$c('button-icon-only')]: true,
-                    [$c('disabled')]: realUneditable
-                  }"
-                  @click.stop="replaceFile(file)"
-                >
-                  <veui-icon :name="icons.upload"/>
-                </label>
-                <veui-button
-                  :ui="uiParts.imageAction"
-                  :disabled="realUneditable"
-                  :class="`${listClass}-mask-remove`"
-                  @click="removeFile(file)"
-                >
-                  <veui-icon
-                    :name="icons.clear"
-                    :label="t('remove')"
-                  />
-                </veui-button>
+                <template v-for="action in getImageActions(file)">
+                  <label
+                    v-if="action.name === 'reupload'"
+                    :key="action.name"
+                    :for="inputId"
+                    :ui="uiParts.imageAction"
+                    :class="{
+                      [$c('button')]: true,
+                      [$c('button-icon-only')]: true,
+                      [$c('disabled')]: realUneditable
+                    }"
+                    @click.stop="replaceFile(file)"
+                  >
+                    <veui-icon :name="icons.upload"/>
+                  </label>
+                  <veui-button
+                    v-else
+                    :key="action.name"
+                    :ui="uiParts.imageAction"
+                    :disabled="realUneditable && !action.alwaysActive"
+                    @click="handleImageAction(file, index, action.name)"
+                  >
+                    <veui-icon :name="action.icon"/>
+                  </veui-button>
+                </template>
               </div>
             </div>
             <slot
@@ -244,6 +232,7 @@
             v-bind="getScopeValue(index, file)"
           />
           <div
+            :ref="`fileFailure${index}`"
             :class="`${listClass}-container ${listClass}-container-failure`"
           >
             <label
@@ -254,38 +243,28 @@
               }"
             >
               <veui-icon :name="icons.addImage"/>
+              <span :class="`${listClass}-file-name`">{{ file.name }}</span>
             </label>
             <div :class="`${listClass}-mask`">
-              <veui-button
-                :ui="uiParts.imageAction"
-                :class="`${listClass}-mask-remove`"
-                @click="removeFile(file)"
-              >
-                <veui-icon
-                  :name="icons.clear"
-                  :label="t('remove')"
-                />
-              </veui-button>
+              <template v-for="action in getImageActions(file)">
+                <veui-button
+                  :key="action.name"
+                  :ui="uiParts.imageAction"
+                  :disabled="realUneditable && !action.alwaysActive"
+                  @click="handleImageAction(file, index, action.name)"
+                >
+                  <veui-icon :name="action.icon"/>
+                </veui-button>
+              </template>
             </div>
           </div>
-          <template v-if="file.message">
-            <p
-              :ref="`fileFailure${index}`"
-              :class="`${listClass}-failure-text`"
-            >
-              <slot
-                name="failure-label"
-              >{{ t('error') }}<veui-icon
-                :name="icons.message"
-              /></slot>
-            </p>
-            <veui-popover
-              :target="`fileFailure${index}`"
-              position="top"
-            >
-              {{ file.message }}
-            </veui-popover>
-          </template>
+          <veui-popover
+            v-if="file.message"
+            :target="`fileFailure${index}`"
+            position="top"
+          >
+            {{ file.message }}
+          </veui-popover>
           <slot
             name="file-after"
             v-bind="getScopeValue(index, file)"
@@ -338,7 +317,7 @@
     </li>
   </transition-group>
   <span
-    v-if="$slots.desc && type === 'image' && descDirection === 'horizontal'"
+    v-if="$slots.desc && type === 'image'"
     :class="$c('uploader-desc')"
   >
     <slot name="desc"/>
@@ -533,13 +512,7 @@ export default {
       default: false
     },
     upload: Function,
-    descDirection: {
-      type: String,
-      default: 'horizontal',
-      validator (value) {
-        return includes(['horizontal', 'vertical'], value)
-      }
-    }
+    actions: Function
   },
   data () {
     return {
@@ -605,10 +578,7 @@ export default {
     },
     pureFileList () {
       return this.files
-        .filter(
-          file =>
-            (file.status === 'success' || !file.status) && !file.toBeUploaded
-        )
+        .filter(file => file.status === 'success' && !file.toBeUploaded)
         .map(file => omit(file, ['status', 'toBeUploaded']))
     },
     validationMessage () {
@@ -631,10 +601,7 @@ export default {
       let successIndex = 0
       this.fileList = this.fileList
         .map(file => {
-          if (
-            (file.status === 'success' || !file.status) &&
-            !file.toBeUploaded
-          ) {
+          if (file.status === 'success' && !file.toBeUploaded) {
             // 处理外部直接减少文件的情形
             if (successIndex + 1 > temp.length) {
               return null
@@ -735,7 +702,9 @@ export default {
       return isEmpty(value) ? [] : [this.getNewFile(value)]
     },
     getNewFile (file) {
-      let newFile = {}
+      let newFile = {
+        status: 'success'
+      }
 
       let extra = omit(file, ['name', 'src'])
       if (!isEmpty(extra)) {
@@ -1003,7 +972,7 @@ export default {
         this.$emit('change', this.getValue(false))
       }
     },
-    removeFile (file) {
+    remove (file) {
       this.error.countOverflow = false
 
       let index = this.fileList.indexOf(file)
@@ -1032,7 +1001,7 @@ export default {
         file.xhr.abort()
       }
 
-      this.removeFile(file)
+      this.remove(file)
     },
     reset () {
       this.$refs.input.value = ''
@@ -1078,6 +1047,31 @@ export default {
     preview ({ src }) {
       this.previewImageSrc = src
       this.previewDialogOpen = true
+    },
+    getImageActions (file) {
+      let defaultActions
+      switch (file.status) {
+        case 'success':
+          defaultActions = [
+            { name: 'preview', icon: this.icons.preview, alwaysActive: true },
+            { name: 'reupload', icon: this.icons.upload },
+            { name: 'remove', icon: this.icons.clear }
+          ]
+          break
+        case 'failure':
+          defaultActions = [{ name: 'remove', icon: this.icons.clear }]
+          break
+        default:
+          defaultActions = []
+      }
+      return this.actions ? this.actions(file, defaultActions) : defaultActions
+    },
+    handleImageAction (file, index, actionName) {
+      if (actionName === 'preview' || actionName === 'remove') {
+        this[actionName](file)
+      } else {
+        this.$emit(actionName, file, index)
+      }
     },
     focus () {
       this.$el.focus()
