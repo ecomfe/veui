@@ -31,8 +31,9 @@
     accept=".jpg,.jpeg,.gif"
     :payload="payload"
     :upload="upload"
-    desc-direction="vertical"
     ui="s"
+    :actions="imageActions"
+    @moveright="handleMoveRight"
     @success="onSuccess"
     @failure="onFailure"
     @change="handleChange('files1')"
@@ -82,7 +83,7 @@
     accept=".jpg,.jpeg,.gif"
     :payload="payload"
     :convert-response="convertResponse"
-    desc-direction="vertical"
+    ui="s"
     @success="onSuccess"
     @failure="onFailure"
     @change="handleChange('filesIframe')"
@@ -97,6 +98,7 @@
 <script>
 import { Uploader, Button, Tooltip, Input, Span } from 'veui'
 import ui from 'veui/mixins/ui'
+import '../../../veui-theme-dls-icons/icons/chevron-right'
 
 export default {
   name: 'uploader-demo',
@@ -117,7 +119,8 @@ export default {
       },
       {
         name: 'demo-file2.gif',
-        src: 'http://nodejs.cn/static/images/logo.svg',
+        src:
+          'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg',
         extraInfo: 128
       }
     ]
@@ -166,6 +169,15 @@ export default {
             })
           }
         })
+      },
+      imageActions (file, defaultActions) {
+        if (file.status === 'success') {
+          return [
+            { name: 'moveright', icon: 'chevron-right', alwaysActive: true },
+            ...defaultActions
+          ]
+        }
+        return defaultActions
       }
     }
   },
@@ -206,6 +218,14 @@ export default {
       this.currentImage = null
       this.imageSrc = null
       this.tooltipOpen = false
+    },
+    handleMoveRight (file, index) {
+      console.log('image action move right: ', file, index)
+      if (index < this.files1.length - 1) {
+        let temp = { ...this.files1[index] }
+        this.$set(this.files1, index, this.files1[index + 1])
+        this.$set(this.files1, index + 1, temp)
+      }
     }
   }
 }
