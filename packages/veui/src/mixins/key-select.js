@@ -1,5 +1,10 @@
 import { findIndex, find, get } from 'lodash'
-import { getFocusable, toggleClass, matches } from '../utils/dom'
+import {
+  getFocusable,
+  toggleClass,
+  matches,
+  scrollIntoView
+} from '../utils/dom'
 import config from '../managers/config'
 
 function isActive (elem, focusSelector) {
@@ -18,7 +23,7 @@ function focusElement (focusableList, index, focusSelector) {
   }
 
   if (index !== -1) {
-    focusableList[index].scrollIntoView({ behavior: 'smooth' })
+    scrollIntoView(focusableList[index])
   }
 }
 

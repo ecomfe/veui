@@ -30,7 +30,7 @@ import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import menu from '../../mixins/menu'
 import select from '../../mixins/select'
-import { getScrollParent } from '../../utils/dom'
+import { scrollIntoView } from '../../utils/dom'
 import { isType } from '../../utils/helper'
 
 export default {
@@ -75,23 +75,7 @@ export default {
   },
   methods: {
     scrollIntoView () {
-      let el = this.$el
-      let container = getScrollParent(el)
-      if (!container) {
-        return
-      }
-      let { top: cTop, bottom: cBottom } = container.getBoundingClientRect()
-      let { top: oTop, bottom: oBottom } = el.getBoundingClientRect()
-
-      // fully visible
-      if (oTop >= cTop && oBottom <= cBottom) {
-        return
-      }
-      if (oTop < cTop) {
-        container.scrollTop -= cTop - oTop
-      } else {
-        container.scrollTop += oBottom - cBottom
-      }
+      scrollIntoView(this.$el)
     },
     selectOption () {
       if (!this.disabled) {

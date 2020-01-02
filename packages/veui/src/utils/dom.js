@@ -144,6 +144,30 @@ export function getScrollParent (elem, includeSelf = false) {
   return getScrollParent(current, false)
 }
 
+/**
+ * 如果指定元素不完全在滚动父级可视范围内，将其滚动到可视范围内
+ *
+ * @param {Element} elem 指定元素
+ */
+export function scrollIntoView (elem) {
+  let container = getScrollParent(elem)
+  if (!container) {
+    return
+  }
+  let { top: cTop, bottom: cBottom } = container.getBoundingClientRect()
+  let { top: oTop, bottom: oBottom } = elem.getBoundingClientRect()
+
+  // fully visible
+  if (oTop >= cTop && oBottom <= cBottom) {
+    return
+  }
+  if (oTop < cTop) {
+    container.scrollTop -= cTop - oTop
+  } else {
+    container.scrollTop += oBottom - cBottom
+  }
+}
+
 const FOCUSABLE_SELECTOR = `
 a[href],
 area[href],
