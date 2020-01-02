@@ -7,6 +7,9 @@ import activatable from './activatable'
 export default {
   directives: { outside },
   mixins: [overlay, activatable],
+  props: {
+    overlayPriority: Number
+  },
   data () {
     return {
       expanded: false,

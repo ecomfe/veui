@@ -77,6 +77,7 @@
     :open="expanded"
     :options="realOverlayOptions"
     :overlay-class="overlayClass"
+    :priority="overlayPriority"
     position="top-start"
     autofocus
     modal

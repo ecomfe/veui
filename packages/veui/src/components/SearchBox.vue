@@ -66,9 +66,10 @@
     ref="overlay"
     target="input"
     match-width
-    :options="realOverlayOptions"
     :open="realExpanded"
     :overlay-class="overlayClass"
+    :options="realOverlayOptions"
+    :priority="overlayPriority"
   >
     <div
       :id="dropdownId"

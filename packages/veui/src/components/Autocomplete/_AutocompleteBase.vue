@@ -19,6 +19,7 @@
     :open="realExpanded"
     :options="realOverlayOptions"
     :overlay-class="overlayClass"
+    :priority="overlayPriority"
     match-width
   >
     <div

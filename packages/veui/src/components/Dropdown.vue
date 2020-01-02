@@ -58,6 +58,7 @@
     match-width
     :options="realOverlayOptions"
     :overlay-class="overlayClass"
+    :priority="overlayPriority"
   >
     <div
       :id="dropdownId"
