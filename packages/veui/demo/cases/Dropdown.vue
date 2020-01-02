@@ -18,7 +18,7 @@
         :options="options"
       />
       <veui-dropdown
-        ui="primary m"
+        ui="primary"
         label="操作"
         split
         :options="options"
