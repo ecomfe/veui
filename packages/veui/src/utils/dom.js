@@ -145,6 +145,17 @@ export function getScrollParent (elem, includeSelf = false) {
 }
 
 /**
+ * 检查指定元素内容是否溢出
+ *
+ * @param {Element} elem 指定元素
+ */
+export function isOverflow (elem) {
+  return (
+    elem.scrollHeight > elem.clientHeight || elem.scrollWidth > elem.clientWidth
+  )
+}
+
+/**
  * 如果指定元素不完全在滚动父级可视范围内，将其滚动到可视范围内
  *
  * @param {Element} elem 指定元素

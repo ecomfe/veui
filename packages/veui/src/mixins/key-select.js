@@ -3,7 +3,8 @@ import {
   getFocusable,
   toggleClass,
   matches,
-  scrollIntoView
+  scrollIntoView,
+  isOverflow
 } from '../utils/dom'
 import config from '../managers/config'
 
@@ -11,20 +12,6 @@ function isActive (elem, focusSelector) {
   return focusSelector
     ? matches(elem, focusSelector)
     : elem === document.activeElement
-}
-
-function focusElement (focusableList, index, focusSelector) {
-  if (focusSelector) {
-    focusableList.forEach((elem, idx) => {
-      toggleSelector(elem, focusSelector, index === idx)
-    })
-  } else {
-    focusableList[index].focus()
-  }
-
-  if (index !== -1) {
-    scrollIntoView(focusableList[index])
-  }
 }
 
 function toggleSelector (elem, selector, force) {
@@ -73,9 +60,6 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
       let container = this.getFocusableContainer()
       return container ? getFocusable(container) : []
     },
-    clearFocusSelector () {
-      return focusElement(this.getFocusable(), -1, this.focusSelector)
-    },
     getCurrentActiveElement () {
       return find(this.getFocusable(), elem =>
         isActive(elem, this.focusSelector)
@@ -98,7 +82,23 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
         index =
           index === -1 ? 0 : (index + length + (forward ? 1 : -1)) % length
       }
-      focusElement(focusable, index, this.focusSelector)
+      this.focusElement(focusable, index)
+    },
+    clearFocusSelector () {
+      return this.focusElement(this.getFocusable(), -1)
+    },
+    focusElement (focusableList, index) {
+      if (this.focusSelector) {
+        focusableList.forEach((elem, idx) => {
+          toggleSelector(elem, this.focusSelector, index === idx)
+        })
+      } else {
+        focusableList[index].focus()
+      }
+
+      if (index !== -1 && isOverflow(this.getFocusableContainer())) {
+        scrollIntoView(focusableList[index])
+      }
     },
     handleKeydown (e) {
       let passive = false
