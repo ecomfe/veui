@@ -335,7 +335,7 @@ import config from '../../managers/config'
 import Icon from '../Icon'
 import Button from '../Button'
 import InfiniteScroll from '../Calendar/_InfiniteScroll'
-import addMonths from 'date-fns/add_months'
+import addMonths from 'date-fns/addMonths'
 
 config.defaults({
   'calendar.weekStart': 1
