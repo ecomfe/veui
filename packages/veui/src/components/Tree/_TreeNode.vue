@@ -17,7 +17,8 @@
       :class="{
         [$c('tree-item')]: true,
         [$c('tree-item-expanded')]: item.expanded,
-        [$c('tree-item-clickable')]: clickable,
+        [$c('tree-item-selected')]: selectable && isSelected(item),
+        [$c('tree-item-clickable')]: isClickable(item),
         [$c('tree-item-hidden')]: item.hidden,
         [$c('tree-item-disabled')]: item.disabled
       }"
@@ -80,50 +81,22 @@
       v-if="item.expanded && item.children && item.children.length"
       :datasource="item.children"
       :depth="depth + 1"
-      :action="action"
       :icons="icons"
+      :selectable="selectable"
+      :selected="selected"
+      :checkable="checkable"
       @click="handleChildClick(item, ...arguments)"
       @toggle="handleChildToggle"
     >
       <template
-        slot="item"
+        v-for="(_, name) in allSlots"
+        :slot="name"
         slot-scope="props"
       >
         <slot
-          name="item"
+          :name="name"
           v-bind="props"
-        >
-          <button
-            v-if="props.children && props.children.length"
-            type="button"
-            :class="$c('tree-item-expand-switcher')"
-            tabindex="-1"
-            :disabled="props.disabled"
-            @click.stop="toggle(props.item, props.index, depth + 1)"
-          >
-            <veui-icon :name="icons.collapse"/>
-          </button>
-          <slot
-            name="item-prepend"
-            :item="props.item"
-            :index="props.index"
-            :depth="depth + 1"
-          />
-          <div :class="$c('tree-item-label')">
-            <slot
-              name="item-label"
-              v-bind="props"
-            >
-              {{ props.label }}
-            </slot>
-          </div>
-          <slot
-            name="item-append"
-            :item="props.item"
-            :index="props.index"
-            :depth="depth + 1"
-          />
-        </slot>
+        />
       </template>
     </veui-tree-node>
   </li>
@@ -132,7 +105,6 @@
 
 <script>
 import Icon from '../Icon'
-import { includes } from 'lodash'
 import { closest } from '../../utils/dom'
 import { getTypedAncestor } from '../../utils/helper'
 import prefix from '../../mixins/prefix'
@@ -157,14 +129,16 @@ export default {
       type: Number,
       default: 1
     },
-    // 点击整个 item 区域，是否触发展开/收起
-    action: {
-      type: String,
-      validator (value) {
-        if (!value == null) {
-          return true
-        }
-        return includes(['toggle', 'check', 'none'], value)
+    checkable: {
+      type: Boolean
+    },
+    selectable: {
+      type: Boolean
+    },
+    selected: {
+      type: Array,
+      default () {
+        return []
       }
     }
   },
@@ -174,8 +148,11 @@ export default {
     }
   },
   computed: {
-    clickable () {
-      return this.action !== 'none'
+    allSlots () {
+      return {
+        ...this.$slots,
+        ...this.$scopedSlots
+      }
     },
     tree () {
       return getTypedAncestor(this, 'tree')
@@ -196,10 +173,16 @@ export default {
       }
 
       this.$emit('click', item, parents, ...extraArgs)
-
-      if (this.action === 'toggle' && item.children && item.children.length) {
-        this.toggle(item, ...extraArgs)
-      }
+    },
+    isClickable (item) {
+      return (
+        this.selectable ||
+        this.checkable ||
+        (item.children && item.children.length)
+      )
+    },
+    isSelected ({ value }) {
+      return this.selected.indexOf(value) >= 0
     },
     handleChildToggle (...args) {
       this.$emit('toggle', ...args)
