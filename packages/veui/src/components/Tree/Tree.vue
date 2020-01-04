@@ -2,7 +2,9 @@
 <veui-tree-node
   role="tree"
   :datasource="localDatasource"
-  :action="action"
+  :checkable="checkable"
+  :selectable="selectable"
+  :selected="realSelected"
   :icons="icons"
   :ui="realUi"
   :class="{
@@ -65,16 +67,7 @@
 
 <script>
 import TreeNode from './_TreeNode'
-import {
-  includes,
-  remove,
-  clone,
-  omit,
-  filter,
-  uniq,
-  xor,
-  isString
-} from 'lodash'
+import { remove, clone, omit, filter, uniq, xor, isString } from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
@@ -101,16 +94,6 @@ export default {
         return []
       }
     },
-    // 点击整个 item 区域，是否触发展开/收起
-    itemClick: {
-      type: String,
-      validator (value) {
-        if (!value == null) {
-          return true
-        }
-        return includes(['toggle', 'check', 'none'], value)
-      }
-    },
     // 当前有哪些节点是展开的
     expanded: {
       type: Array,
@@ -127,6 +110,12 @@ export default {
         return []
       }
     },
+    selectable: {
+      type: Boolean
+    },
+    selected: {
+      type: Array
+    },
     keys: {
       type: [String, Function],
       default: 'value'
@@ -135,7 +124,8 @@ export default {
   data () {
     return {
       localDatasource: [],
-      focused: false
+      focused: false,
+      localSelected: []
     }
   },
   computed: {
@@ -146,8 +136,14 @@ export default {
 
       return this.keys
     },
-    action () {
-      return this.itemClick || (this.checkable ? 'check' : 'toggle')
+    realSelected: {
+      get () {
+        return this.selected === undefined ? this.localSelected : this.selected
+      },
+      set (val) {
+        this.localSelected = val
+        this.$emit('update:selected', val)
+      }
     }
   },
   watch: {
@@ -292,8 +288,25 @@ export default {
       this.$emit('update:expanded', expanded)
       this.$emit(item.expanded ? 'expand' : 'collapse', item, index, depth)
     },
-    handleItemClick (...args) {
-      this.$emit('click', ...args)
+    isSelected ({ value }) {
+      return this.realSelected.indexOf(value) >= 0
+    },
+    handleItemClick (item, parents, ...extraArgs) {
+      if (this.selectable) {
+        let { value } = item
+        let sel = [...this.realSelected]
+        if (this.isSelected(item)) {
+          sel.splice(sel.indexOf(value), 1)
+        } else {
+          sel.push(value)
+        }
+        this.realSelected = sel
+      } else if (this.checkable) {
+        this.handleItemCheck(!item.checked, item)
+      } else if (item.children && item.children.length) {
+        this.toggle(item, ...extraArgs)
+      }
+      this.$emit('click', item, parents, ...extraArgs)
     },
     handleItemCheck (checked, item) {
       if (checked) {

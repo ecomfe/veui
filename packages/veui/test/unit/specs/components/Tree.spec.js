@@ -176,13 +176,36 @@ describe('components/Tree', () => {
   })
 
   it("nodes can only be toggled by clicking toggle buttons when `item-click` was set to 'none'", async () => {
-    let wrapper = mount(Tree, {
-      propsData: {
-        itemClick: 'none',
-        datasource
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tree': Tree
+        },
+        data () {
+          return {
+            datasource,
+            selected: [],
+            selectable: true,
+            checked: [],
+            checkable: true,
+            expanded: []
+          }
+        },
+        template: `<veui-tree
+          :datasource="datasource"
+          v-model="checked"
+          :expanded.sync="expanded"
+          :selected.sync="selected"
+          :checkable="checkable"
+          :selectable="selectable"
+        />
+        `
       },
-      sync: false
-    })
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
     let { vm } = wrapper
 
     expect(wrapper.findAll('.veui-tree-item').length).to.equal(4)
@@ -192,14 +215,20 @@ describe('components/Tree', () => {
     await vm.$nextTick()
 
     expect(wrapper.findAll('.veui-tree-item').length).to.equal(4)
-    expect(item.classes('veui-tree-item-expanded')).to.equal(false)
+    expect(vm.selected).to.deep.equal(['infused'])
 
-    item.find('.veui-tree-item-expand-switcher').trigger('click')
+    vm.selectable = false
     await vm.$nextTick()
+    item.find('.veui-tree-item-label').trigger('click')
+    await vm.$nextTick()
+    expect(vm.checked.length).to.deep.equal(6)
 
+    vm.checkable = false
+    await vm.$nextTick()
+    item.find('.veui-tree-item-label').trigger('click')
+    await vm.$nextTick()
     expect(wrapper.findAll('.veui-tree-item').length).to.equal(7)
     expect(item.classes('veui-tree-item-expanded')).to.equal(true)
-
     wrapper.destroy()
   })
 
@@ -242,9 +271,7 @@ describe('components/Tree', () => {
     })
 
     expect(wrapper.find('.test-item-slot').exists()).to.equal(true)
-    expect(wrapper.find('.test-item-slot').text()).to.equal(
-      'Infused item slot'
-    )
+    expect(wrapper.find('.test-item-slot').text()).to.equal('Infused item slot')
 
     wrapper.destroy()
   })

@@ -2,13 +2,6 @@
 <article>
   <h1><code>&lt;veui-tree&gt;</code></h1>
   <section>
-    <h4>Item click</h4>
-    <veui-radio-group
-      v-model="mode"
-      :items="modes"
-    />
-  </section>
-  <section>
     <h4>Expanded items</h4>
     {{ expanded }}
   </section>
@@ -16,7 +9,6 @@
     <h4>item-label slot was override</h4>
     <veui-tree
       :datasource="coffees"
-      :item-click="mode"
       :expanded.sync="expanded"
     />
   </section>
@@ -24,7 +16,6 @@
     <h4>item slot was override</h4>
     <veui-tree
       :datasource="coffees"
-      :item-click="mode"
       :expanded.sync="expanded"
     >
       <template
@@ -45,30 +36,40 @@
     />
   </section>
   <section>
-    <h4>Selected items</h4>
+    <h4>Checkable & Selectable item</h4>
+    <veui-tree
+      v-model="checked"
+      :datasource="coffees"
+      :expanded.sync="expanded"
+      :selected.sync="selected"
+      checkable
+      selectable
+    />
+  </section>
+  <section>
+    <h4>Checked items</h4>
     {{ checked }}
+  </section>
+  <section>
+    <h4>Selected items</h4>
+    {{ selected }}
   </section>
 </article>
 </template>
 
 <script>
-import { Tree, RadioGroup } from 'veui'
+import { Tree } from 'veui'
 
 export default {
   name: 'tree',
   components: {
-    'veui-tree': Tree,
-    'veui-radio-group': RadioGroup
+    'veui-tree': Tree
   },
   data () {
     return {
-      modes: [
-        { label: 'none', value: 'none' },
-        { label: 'toggle', value: 'toggle' }
-      ],
-      mode: 'toggle',
       expanded: ['infused', 'brewed'],
       checked: ['filtered', 'cold-brew'],
+      selected: [],
       coffees: [
         {
           label: 'Infused',
