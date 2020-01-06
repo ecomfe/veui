@@ -159,10 +159,10 @@
                 :class="$c('uploader-list-image-container-image')"
               >
               <div :class="`${listClass}-mask`">
-                <template v-for="action in getImageActions(file)">
+                <template v-for="imageAction in getImageActions(file)">
                   <label
-                    v-if="action.name === 'reupload'"
-                    :key="action.name"
+                    v-if="imageAction.name === 'reupload'"
+                    :key="imageAction.name"
                     :for="inputId"
                     :ui="uiParts.imageAction"
                     :class="{
@@ -176,12 +176,12 @@
                   </label>
                   <veui-button
                     v-else
-                    :key="action.name"
+                    :key="imageAction.name"
                     :ui="uiParts.imageAction"
-                    :disabled="realUneditable && !action.alwaysActive"
-                    @click="handleImageAction(file, index, action.name)"
+                    :disabled="realUneditable && !imageAction.alwaysActive"
+                    @click="handleImageAction(file, index, imageAction.name)"
                   >
-                    <veui-icon :name="action.icon"/>
+                    <veui-icon :name="imageAction.icon"/>
                   </veui-button>
                 </template>
               </div>
@@ -246,14 +246,14 @@
               <span :class="`${listClass}-file-name`">{{ file.name }}</span>
             </label>
             <div :class="`${listClass}-mask`">
-              <template v-for="action in getImageActions(file)">
+              <template v-for="imageAction in getImageActions(file)">
                 <veui-button
-                  :key="action.name"
+                  :key="imageAction.name"
                   :ui="uiParts.imageAction"
-                  :disabled="realUneditable && !action.alwaysActive"
-                  @click="handleImageAction(file, index, action.name)"
+                  :disabled="realUneditable && !imageAction.alwaysActive"
+                  @click="handleImageAction(file, index, imageAction.name)"
                 >
-                  <veui-icon :name="action.icon"/>
+                  <veui-icon :name="imageAction.icon"/>
                 </veui-button>
               </template>
             </div>
@@ -502,7 +502,6 @@ export default {
     },
     order: {
       type: String,
-      default: 'asc',
       validator (value) {
         return includes(['asc', 'desc'], value)
       }
@@ -589,6 +588,12 @@ export default {
         customError: this.customValidationMessage
       }
       return messageMap[findKey(this.error)]
+    },
+    realOrder () {
+      if (this.order) {
+        return this.order
+      }
+      return this.type === 'file' ? 'desc' : 'asc'
     }
   },
   watch: {
@@ -783,7 +788,7 @@ export default {
             })
 
             this.fileList =
-              this.order === 'desc'
+              this.realOrder === 'desc'
                 ? [...newFiles, ...currentFiles]
                 : [...currentFiles, ...newFiles]
 
@@ -879,6 +884,7 @@ export default {
       this.$emit('failure', this.files[index], index)
     },
     uploadFile (file) {
+      file.toBeUploaded = false
       this.updateFileList(file, 'uploading')
 
       if (this.requestMode === 'xhr' && !this.upload) {
@@ -974,6 +980,12 @@ export default {
     },
     remove (file) {
       this.error.countOverflow = false
+
+      if (file.status === 'uploading') {
+        file.status = null
+        this.cancelFile(file)
+        return
+      }
 
       let index = this.fileList.indexOf(file)
       if (!this.isReplacing) {

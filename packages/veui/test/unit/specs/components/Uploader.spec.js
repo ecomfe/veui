@@ -218,8 +218,8 @@ describe('components/Uploader', () => {
     let callbackData = { src: '/test2.jpg', id: 6, success: true }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
     expect(wrapper.emitted().change[0][0]).to.deep.equal([
-      { name: 'test1.jpg', src: '/test1.jpg', id: 5 },
-      { name: 'test2.jpg', src: '/test2.jpg', id: 6 }
+      { name: 'test2.jpg', src: '/test2.jpg', id: 6 },
+      { name: 'test1.jpg', src: '/test1.jpg', id: 5 }
     ])
     expect(wrapper.emitted().success[0]).to.deep.equal([
       {
@@ -228,7 +228,7 @@ describe('components/Uploader', () => {
         id: 6,
         status: 'success'
       },
-      1
+      0
     ])
 
     dT = new DataTransfer()
@@ -245,7 +245,7 @@ describe('components/Uploader', () => {
         name: 'test3.jpg',
         status: 'failure'
       },
-      2
+      0
     ])
     wrapper.destroy()
   })
