@@ -1,7 +1,7 @@
 <template>
 <article>
   <h1><code>&lt;veui-uploader&gt;</code></h1>
-  <h2>图片上传模式，上传进度以文字百分比显示</h2>
+  <h2>图片上传模式</h2>
   <veui-uploader
     v-model="files"
     type="image"
@@ -21,7 +21,7 @@
       请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于200像素，最多上传3张图
     </template>
   </veui-uploader>
-  <h2>图片上传模式，上传进度以进度条显示</h2>
+  <h2>图片上传模式</h2>
   <veui-uploader
     v-model="files1"
     type="image"
@@ -29,6 +29,7 @@
     name="file"
     max-size="10mb"
     accept=".jpg,.jpeg,.gif"
+    order="desc"
     :payload="payload"
     :upload="upload"
     ui="s"
