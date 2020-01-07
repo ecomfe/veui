@@ -23,13 +23,13 @@
   </veui-uploader>
   <h2>图片上传模式</h2>
   <veui-uploader
+    ref="multipleUploader"
     v-model="files1"
     type="image"
     request-mode="custom"
     name="file"
     max-size="10mb"
     accept=".jpg,.jpeg,.gif"
-    order="desc"
     :payload="payload"
     :upload="upload"
     ui="s"
@@ -44,7 +44,42 @@
       请选择jpg,jpeg,gif图片，大小在10M以内
     </template>
   </veui-uploader>
-  <veui-tooltip
+  <veui-button
+    class="clear"
+    @click="$refs.multipleUploader.clear()"
+  >清除失败文件</veui-button>
+  <h2>图片上传模式，自定义上传slot</h2>
+  <veui-uploader
+    ref="customUploader"
+    v-model="customFiles"
+    type="image"
+    action="/upload"
+    name="file"
+    max-size="10mb"
+    accept=".jpg,.jpeg,.gif"
+    :payload="payload"
+    ui="s"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files1')"
+    @statuschange="handleStatusChange"
+  >
+    <template slot="desc">
+      请选择jpg,jpeg,gif图片，大小在10M以内
+    </template>
+    <template slot="upload">
+      <div class="veui-uploader-list-image-container custom">
+        <veui-button
+          @click="$refs.customUploader.clickInput()"
+        >上传文件</veui-button>
+        <veui-button
+          ref="add-image"
+          @click="openTooltip"
+        >图库上传</veui-button>
+      </div>
+    </template>
+  </veui-uploader>
+  <veui-popover
     :target="tooltipTarget"
     :open="tooltipOpen"
     trigger="click"
@@ -55,7 +90,7 @@
         确定
       </veui-button>
     </div>
-  </veui-tooltip>
+  </veui-popover>
   <h2>文件上传模式</h2>
   <veui-uploader
     v-model="files2"
@@ -97,8 +132,7 @@
 </article>
 </template>
 <script>
-import { Uploader, Button, Tooltip, Input, Span } from 'veui'
-import ui from 'veui/mixins/ui'
+import { Uploader, Button, Popover, Input, Span } from 'veui'
 import '../../../veui-theme-dls-icons/icons/chevron-right'
 
 export default {
@@ -106,12 +140,11 @@ export default {
   components: {
     'veui-uploader': Uploader,
     'veui-button': Button,
-    'veui-tooltip': Tooltip,
+    'veui-popover': Popover,
     'veui-input': Input,
     'veui-span': Span
   },
-  mixins: [ui],
-  data: function () {
+  data () {
     let files = [
       {
         name: 'demo-file111111111111111111111111111111111.jpg',
@@ -130,7 +163,7 @@ export default {
       files,
       files1: files.slice(0),
       files2: files.slice(0),
-      filesExtra: files.slice(0),
+      customFiles: files.slice(0),
       filesIframe: {
         name: 'demo-file.txt',
         src: 'http://www.baidu.com'
@@ -151,7 +184,13 @@ export default {
         file.xhr = xhr
 
         xhr.upload.onprogress = e => onprogress(file, e)
-        xhr.onload = () => onload(file, JSON.parse(xhr.responseText))
+        xhr.onload = () => {
+          try {
+            onload(file, JSON.parse(xhr.responseText))
+          } catch (e) {
+            onload(file, { success: false, message: e })
+          }
+        }
         xhr.onerror = e => onerror(file, e)
         let formData = new FormData()
         formData.append('file', file)
@@ -210,11 +249,11 @@ export default {
     },
     addImage () {
       if (this.currentImage.index !== undefined) {
-        this.$set(this.filesExtra, this.currentImage.index, {
+        this.$set(this.customFiles, this.currentImage.index, {
           src: this.imageSrc
         })
       } else {
-        this.filesExtra.push({ src: this.imageSrc })
+        this.customFiles.push({ src: this.imageSrc })
       }
       this.currentImage = null
       this.imageSrc = null
@@ -242,20 +281,6 @@ h2 {
   margin-top: 40px;
 }
 
-.extra-operation {
-  /deep/ label.veui-button {
-    .veui-position-center(50%, 30%) !important;
-  }
-
-  /deep/ .veui-button&-button {
-    width: 120px;
-    padding: 0;
-    height: 28px;
-    line-height: 26px;
-    .veui-position-center(50%, 70%);
-  }
-}
-
 .extra-url {
   & > * {
     vertical-align: middle;
@@ -264,5 +289,13 @@ h2 {
   .veui-button {
     margin-left: 5px;
   }
+}
+.clear {
+  margin-top: 20px;
+}
+.custom {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
 }
 </style>
