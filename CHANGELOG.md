@@ -1,7 +1,7 @@
 ## 2.0.0-alpha.4
 
 ### ⚠️ 非兼容性变更
-* [^] `Uploader` 组件调整为适配 DLS 实现，移除 `type-invald`/`size-invalid`/`count-overflow` 这三个插槽，移除 prop `progress`，移除 `ui` 选项 `horizontal`。
+* [^] `Uploader` 组件调整为适配 DLS 实现，新增了插槽 `upload` 支持图片模式下自定义上传区域，移除 `type-invald`/`size-invalid`/`count-overflow`/`extra-operation` 这四个插槽，移除 prop `progress`，移除 `ui` 选项 `horizontal`。
 
 ### 💡 主要变更
 * [+] `Uploader` 组件新增了 `validator` prop，支持自定义的异步校验功能。

@@ -15,13 +15,13 @@
     :class="$c('uploader-button-container')"
   >
     <label
-      ref="label"
+      :for="inputId"
       :class="{
         [$c('button')]: true,
         [$c('uploader-input-label')]: true,
         [$c('disabled')]:
           realUneditable ||
-          (maxCount > 1 && fileList.length >= maxCount) ||
+          fileList.length === maxCount ||
           (requestMode === 'iframe' && submitting)
       }"
       :ui="realUi"
@@ -30,26 +30,6 @@
       <slot name="button-label">
         <veui-icon :name="icons.upload"/>{{ t('selectFile') }}
       </slot>
-      <input
-        :id="inputId"
-        ref="input"
-        hidden
-        type="file"
-        :name="name"
-        :disabled="
-          realUneditable ||
-            (maxCount > 1 && fileList.length >= maxCount) ||
-            (requestMode === 'iframe' && disabledWhenSubmiting)
-        "
-        :accept="accept"
-        :multiple="
-          requestMode !== 'iframe' &&
-            (maxCount > 1 || maxCount === undefined) &&
-            !isReplacing
-        "
-        @change="handleNewFiles"
-        @click.stop
-      >
     </label>
     <span
       v-if="$slots.desc"
@@ -58,6 +38,25 @@
       <slot name="desc"/>
     </span>
   </div>
+  <input
+    :id="inputId"
+    ref="input"
+    hidden
+    type="file"
+    :name="name"
+    :disabled="
+      realUneditable ||
+        (type === 'file' && fileList.length === maxCount) ||
+        (requestMode === 'iframe' && disabledWhenSubmiting)
+    "
+    :accept="accept"
+    :multiple="
+      requestMode !== 'iframe' &&
+        (maxCount > 1 || maxCount === undefined) &&
+        !isReplacing
+    "
+    @change="handleNewFiles"
+  >
   <transition-group
     :class="listClass"
     tag="ul"
@@ -241,6 +240,7 @@
                 [$c('button')]: true,
                 [$c('uploader-input-label-image')]: true
               }"
+              @click="replaceFile(file)"
             >
               <veui-icon :name="icons.addImage"/>
               <span :class="`${listClass}-file-name`">{{ file.name }}</span>
@@ -278,42 +278,21 @@
       key="input"
       :class="`${listClass}-upload-item`"
     >
-      <div :class="$c('uploader-list-image-container')">
-        <label
-          ref="label"
-          :class="{
-            [$c('button')]: true,
-            [$c('uploader-input-label-image')]: true,
-            [$c('disabled')]:
-              realUneditable ||
-              (maxCount > 1 && fileList.length >= maxCount) ||
-              submitting
-          }"
-          @click="handleClick"
-        >
-          <input
-            :id="inputId"
-            ref="input"
-            hidden
-            type="file"
-            :name="name"
-            :disabled="
-              realUneditable ||
-                (requestMode === 'iframe' && disabledWhenSubmiting)
-            "
-            :accept="accept"
-            :multiple="
-              requestMode !== 'iframe' &&
-                (maxCount > 1 || maxCount === undefined) &&
-                !isReplacing
-            "
-            @change="handleNewFiles"
-            @click.stop
+      <slot name="upload">
+        <div :class="$c('uploader-list-image-container')">
+          <label
+            :for="inputId"
+            :class="{
+              [$c('button')]: true,
+              [$c('uploader-input-label-image')]: true,
+              [$c('disabled')]: realUneditable || submitting
+            }"
+            @click="handleClick"
           >
-          <veui-icon :name="icons.addImage"/>
-        </label>
-      </div>
-      <slot name="extra-operation"/>
+            <veui-icon :name="icons.addImage"/>
+          </label>
+        </div>
+      </slot>
     </li>
   </transition-group>
   <span
@@ -590,18 +569,12 @@ export default {
       return messageMap[findKey(this.error)]
     },
     realOrder () {
-      if (this.order) {
-        return this.order
-      }
-      return this.type === 'file' ? 'desc' : 'asc'
+      return this.type === 'file' ? this.order || 'desc' : 'asc'
     }
   },
   watch: {
     value (val) {
-      let temp = val
-      if (!Array.isArray(val)) {
-        temp = this.genFileList(val)
-      }
+      let temp = this.genFileList(val)
 
       let successIndex = 0
       this.fileList = this.fileList
@@ -771,10 +744,6 @@ export default {
               return
             }
 
-            let currentFiles = this.fileList.filter(
-              file => file.status !== 'failure'
-            )
-
             let needImageSrc =
               this.requestMode !== 'iframe' &&
               this.type === 'image' &&
@@ -789,8 +758,8 @@ export default {
 
             this.fileList =
               this.realOrder === 'desc'
-                ? [...newFiles, ...currentFiles]
-                : [...currentFiles, ...newFiles]
+                ? [...newFiles, ...this.fileList]
+                : [...this.fileList, ...newFiles]
 
             if (this.maxCount === 1) {
               this.fileList = this.fileList.slice(-1)
@@ -1017,7 +986,7 @@ export default {
     },
     reset () {
       this.$refs.input.value = ''
-      this.$refs.label.appendChild(this.$refs.input)
+      this.$refs.main.appendChild(this.$refs.input)
     },
     convertSizeUnit (size) {
       return format(size, { decimalPlaces: 1 })
@@ -1084,6 +1053,12 @@ export default {
       } else {
         this.$emit(actionName, file, index)
       }
+    },
+    clickInput () {
+      this.$refs.input.click()
+    },
+    clear () {
+      this.fileList = this.fileList.filter(({ status }) => status !== 'failure')
     },
     focus () {
       this.$el.focus()

@@ -86,6 +86,12 @@ module.exports = {
           message: 'image too large'
         })
       })
+
+      app.post('/uploadiframe', (req, res) => {
+        res.send(
+          '<script>window.parent.postMessage({code: 0, result: {src: "https://webpack.js.org/e0b5805d423a4ec9473ee315250968b2.svg"}})</script>'
+        )
+      })
     }
   }
 }
