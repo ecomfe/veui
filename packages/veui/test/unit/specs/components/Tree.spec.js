@@ -175,7 +175,7 @@ describe('components/Tree', () => {
     wrapper.destroy()
   })
 
-  it("nodes can only be toggled by clicking toggle buttons when `item-click` was set to 'none'", async () => {
+  it('should handle select/check/expand priority correctly', async () => {
     let wrapper = mount(
       {
         components: {

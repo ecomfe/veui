@@ -72,11 +72,6 @@
       cursor: pointer;
     }
 
-    // FIXME
-    &-selected {
-      background-color: red;
-    }
-
     &-remove {
       cursor: pointer;
       margin-left: auto;
@@ -113,6 +108,37 @@
       background-color: @dls-tree-node-background-color-active;
     }
 
+    &-selected {
+      font-weight: @dls-tree-node-font-weight-selected;
+      color: @dls-tree-node-font-color-selected;
+      &::before {
+        background-color: @dls-tree-node-background-color-selected;
+      }
+
+      &:hover {
+        color: @dls-tree-node-font-color-selected-hover;
+        &::before {
+          background-color: @dls-tree-node-background-color-selected-hover;
+        }
+      }
+
+      &.focus-visible,
+      &[data-focus-visible-added] {
+        color: @dls-tree-node-font-color-selected-focus;
+        &::before {
+          background-color: @dls-tree-node-background-color-selected-focus;
+        }
+      }
+
+      &:active {
+        color: @dls-tree-node-font-color-selected-active;
+        &::before {
+          background-color: @dls-tree-node-background-color-selected-active;
+        }
+      }
+    }
+
+    &-disabled.@{veui-prefix}-tree-item-selected::before,
     &-disabled:active::before,
     &-disabled:hover::before,
     &-disabled.focus-visible::before,
