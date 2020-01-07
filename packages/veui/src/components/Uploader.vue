@@ -69,7 +69,8 @@
     >
       <template
         v-if="
-          type === 'file' || (type === 'image' && file.status === 'success')
+          type === 'file' ||
+            ((type === 'image' && file.status === 'success') || !file.status)
         "
       >
         <slot
@@ -158,10 +159,10 @@
                 :class="$c('uploader-list-image-container-image')"
               >
               <div :class="`${listClass}-mask`">
-                <template v-for="imageAction in getImageActions(file)">
+                <template v-for="control in getImageControls(file)">
                   <label
-                    v-if="imageAction.name === 'reupload'"
-                    :key="imageAction.name"
+                    v-if="control.name === 'reupload'"
+                    :key="control.name"
                     :for="inputId"
                     :ui="uiParts.imageAction"
                     :class="{
@@ -175,12 +176,16 @@
                   </label>
                   <veui-button
                     v-else
-                    :key="imageAction.name"
+                    :key="control.name"
                     :ui="uiParts.imageAction"
-                    :disabled="realUneditable && !imageAction.alwaysActive"
-                    @click="handleImageAction(file, index, imageAction.name)"
+                    :disabled="
+                      control.disabled !== undefined
+                        ? control.disabled
+                        : realUneditable
+                    "
+                    @click="handleImageControl(file, index, control.name)"
                   >
-                    <veui-icon :name="imageAction.icon"/>
+                    <veui-icon :name="control.icon"/>
                   </veui-button>
                 </template>
               </div>
@@ -246,14 +251,18 @@
               <span :class="`${listClass}-file-name`">{{ file.name }}</span>
             </label>
             <div :class="`${listClass}-mask`">
-              <template v-for="imageAction in getImageActions(file)">
+              <template v-for="control in getImageControls(file)">
                 <veui-button
-                  :key="imageAction.name"
+                  :key="control.name"
                   :ui="uiParts.imageAction"
-                  :disabled="realUneditable && !imageAction.alwaysActive"
-                  @click="handleImageAction(file, index, imageAction.name)"
+                  :disabled="
+                    control.disabled !== undefined
+                      ? control.disabled
+                      : realUneditable
+                  "
+                  @click="handleImageControl(file, index, control.name)"
                 >
-                  <veui-icon :name="imageAction.icon"/>
+                  <veui-icon :name="control.icon"/>
                 </veui-button>
               </template>
             </div>
@@ -490,7 +499,7 @@ export default {
       default: false
     },
     upload: Function,
-    actions: Function
+    controls: Function
   },
   data () {
     return {
@@ -1029,25 +1038,27 @@ export default {
       this.previewImageSrc = src
       this.previewDialogOpen = true
     },
-    getImageActions (file) {
-      let defaultActions
+    getImageControls (file) {
+      let defaultControls
       switch (file.status) {
         case 'success':
-          defaultActions = [
-            { name: 'preview', icon: this.icons.preview, alwaysActive: true },
+          defaultControls = [
+            { name: 'preview', icon: this.icons.preview, disabled: false },
             { name: 'reupload', icon: this.icons.upload },
             { name: 'remove', icon: this.icons.clear }
           ]
           break
         case 'failure':
-          defaultActions = [{ name: 'remove', icon: this.icons.clear }]
+          defaultControls = [{ name: 'remove', icon: this.icons.clear }]
           break
         default:
-          defaultActions = []
+          defaultControls = [{ name: 'remove', icon: this.icons.clear }]
       }
-      return this.actions ? this.actions(file, defaultActions) : defaultActions
+      return this.controls
+        ? this.controls(file, defaultControls)
+        : defaultControls
     },
-    handleImageAction (file, index, actionName) {
+    handleImageControl (file, index, actionName) {
       if (actionName === 'preview' || actionName === 'remove') {
         this[actionName](file)
       } else {

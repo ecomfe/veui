@@ -5,7 +5,7 @@
 
 ### 💡 主要变更
 * [+] `Uploader` 组件新增了 `validator` prop，支持自定义的异步校验功能。
-* [+] `Uploader` 组件新增了 `actions` prop，支持在图片模式下自定义可对文件进行的操作。
+* [+] `Uploader` 组件新增了 `controls` prop，支持在图片模式下自定义可对文件进行的操作。
 
 ### 🐞 问题修复
 - [^] 修复 `DatePicker` 组件 shortcut 样式不正确的问题。

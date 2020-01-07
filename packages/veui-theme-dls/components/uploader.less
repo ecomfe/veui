@@ -28,7 +28,6 @@
     display: flex;
     .size(100%);
     border: none;
-    border-radius: inherit;
     line-height: inherit;
     .@{veui-prefix}-icon {
       .dls-icon-size(@dls-uploader-image-icon-size);
@@ -132,13 +131,13 @@
       position: relative;
       border-radius: @dls-button-border-radius-m;
       border: 1px solid @dls-button-border-color-normal;
+      overflow: hidden;
       &-image {
         width: auto;
         height: auto;
         max-width: 100%;
         max-height: 100%;
         .veui-position-center();
-        border-radius: inherit;
       }
     }
     &-container:hover &-mask {

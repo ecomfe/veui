@@ -33,7 +33,7 @@
     :payload="payload"
     :upload="upload"
     ui="s"
-    :actions="imageActions"
+    :controls="imageControls"
     @moveright="handleMoveRight"
     @success="onSuccess"
     @failure="onFailure"
@@ -210,14 +210,14 @@ export default {
           }
         })
       },
-      imageActions (file, defaultActions) {
+      imageControls (file, defaultControls) {
         if (file.status === 'success') {
           return [
-            { name: 'moveright', icon: 'chevron-right', alwaysActive: true },
-            ...defaultActions
+            { name: 'moveright', icon: 'chevron-right', disabled: false },
+            ...defaultControls
           ]
         }
-        return defaultActions
+        return defaultControls
       }
     }
   },
