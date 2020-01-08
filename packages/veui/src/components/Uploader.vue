@@ -60,7 +60,7 @@
   <transition-group
     :class="listClass"
     tag="ul"
-    :name="$c('uploader-list')"
+    :name="listClass"
   >
     <li
       v-for="(file, index) in fileList"
@@ -285,7 +285,7 @@
       v-if="type === 'image'"
       v-show="!maxCount || fileList.length < maxCount"
       key="input"
-      :class="`${listClass}-upload-item`"
+      :class="`${listClass}-item`"
     >
       <slot name="upload">
         <div :class="$c('uploader-list-image-container')">

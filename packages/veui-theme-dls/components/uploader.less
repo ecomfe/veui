@@ -43,7 +43,7 @@
 
     &-item {
       position: relative;
-      .veui-transition(transform);
+      .veui-transition(transform, opacity);
     }
 
     .@{veui-prefix}-uploader-success-icon {
@@ -51,6 +51,14 @@
     }
     .@{veui-prefix}-uploader-failure-icon {
       color: @dls-uploader-error-color;
+    }
+
+    &-enter,
+    &-leave-to {
+      opacity: 0;
+    }
+    &-leave-active {
+      position: absolute;
     }
   }
 
@@ -118,11 +126,10 @@
     }
   }
   &-list-image {
-    display: flex;
-    flex-wrap: wrap;
     margin: -@dls-uploader-image-spacing-y 0 0 -@dls-uploader-image-spacing-x;
-    &-item,
-    &-upload-item {
+    &-item {
+      display: inline-block;
+      vertical-align: top;
       margin: @dls-uploader-image-spacing-y 0 0 @dls-uploader-image-spacing-x;
     }
     &-container {
@@ -146,31 +153,30 @@
     &-container-uploading {
       flex-direction: column;
       align-items: center;
-      padding: @dls-uploader-image-padding-top @dls-uploader-image-padding-x 0;
+      justify-content: center;
+      padding: 0 @dls-uploader-image-padding-x;
       &-text {
         margin: 0;
       }
       .@{veui-prefix}-progress {
         width: 100%;
         height: auto;
-        margin-top: @dls-uploader-image-progress-spacing-before;
+        margin-top: @dls-uploader-image-content-spacing;
       }
     }
     &-container-failure {
+      flex-direction: column;
       border-color: @dls-uploader-error-color;
 
       .@{veui-prefix}-uploader-input-label-image {
         flex-direction: column;
-        justify-content: flex-start;
-        // todo
-        padding-top: 20px;
+        justify-content: center;
       }
       .@{veui-prefix}-uploader-list-image-file-name {
         color: @dls-uploader-error-color;
         max-width: ~"calc(100% - 2 * @{dls-uploader-image-padding-x})";
         .ellipsis();
-        // todo
-        margin-top: 4px;
+        margin-top: @dls-uploader-image-error-spacing;
       }
     }
     &-mask {
@@ -188,6 +194,9 @@
       .@{veui-prefix}-button + .@{veui-prefix}-button {
         margin-left: @dls-uploader-mask-icon-spacing;
       }
+    }
+    &-container-failure &-mask {
+      position: relative;
     }
   }
 
@@ -220,16 +229,5 @@
 
   &-hide {
     display: none;
-  }
-  &-list-enter,
-  &-list-leave-to {
-    opacity: 0;
-  }
-  &-list-leave-active {
-    position: absolute;
-  }
-  &-list-fade-leave-active {
-    opacity: 0;
-    .veui-transition(opacity);
   }
 }
