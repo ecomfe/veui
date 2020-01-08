@@ -293,7 +293,7 @@ export default {
       }
     },
     handleTriggerInput (val) {
-      this.$emit('input')
+      this.$emit('input', val)
       this.inputValue = val
       this.expanded = true
       if (!val && !this.multiple) {

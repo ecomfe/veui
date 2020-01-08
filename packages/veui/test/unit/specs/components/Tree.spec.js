@@ -215,7 +215,7 @@ describe('components/Tree', () => {
     await vm.$nextTick()
 
     expect(wrapper.findAll('.veui-tree-item').length).to.equal(4)
-    expect(vm.selected).to.deep.equal(['infused'])
+    expect(vm.selected).to.equal('infused')
 
     vm.selectable = false
     await vm.$nextTick()

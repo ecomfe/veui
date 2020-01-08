@@ -69,7 +69,7 @@ export default {
     return {
       expanded: ['infused', 'brewed'],
       checked: ['filtered', 'cold-brew'],
-      selected: [],
+      selected: null,
       coffees: [
         {
           label: 'Infused',

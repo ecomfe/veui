@@ -113,9 +113,9 @@ export default {
     selectable: {
       type: Boolean
     },
-    selected: {
-      type: Array
-    },
+    /* eslint-disable vue/require-prop-types */
+    selected: {},
+    /* eslint-ensable vue/require-prop-types */
     keys: {
       type: [String, Function],
       default: 'value'
@@ -289,18 +289,13 @@ export default {
       this.$emit(item.expanded ? 'expand' : 'collapse', item, index, depth)
     },
     isSelected ({ value }) {
-      return this.realSelected.indexOf(value) >= 0
+      return this.realSelected === value
     },
     handleItemClick (item, parents, ...extraArgs) {
       if (this.selectable) {
         let { value } = item
-        let sel = [...this.realSelected]
-        if (this.isSelected(item)) {
-          sel.splice(sel.indexOf(value), 1)
-        } else {
-          sel.push(value)
-        }
-        this.realSelected = sel
+        let newValue = this.isSelected(item) ? null : value
+        this.realSelected = newValue
       } else if (this.checkable) {
         this.handleItemCheck(!item.checked, item)
       } else if (item.children && item.children.length) {

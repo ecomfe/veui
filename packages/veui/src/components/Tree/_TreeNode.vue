@@ -135,12 +135,9 @@ export default {
     selectable: {
       type: Boolean
     },
-    selected: {
-      type: Array,
-      default () {
-        return []
-      }
-    }
+    /* eslint-disable vue/require-prop-types */
+    selected: {}
+    /* eslint-ensable vue/require-prop-types */
   },
   data () {
     return {
@@ -182,7 +179,7 @@ export default {
       )
     },
     isSelected ({ value }) {
-      return this.selected.indexOf(value) >= 0
+      return this.selected === value
     },
     handleChildToggle (...args) {
       this.$emit('toggle', ...args)
