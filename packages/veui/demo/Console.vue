@@ -88,7 +88,7 @@ export default {
 </script>
 
 <style lang="less">
-@import '~less-plugin-est/src/all.less';
+@import "~less-plugin-est/src/all.less";
 
 @nav-width: 240px;
 @light-bg-color: #f6f9ff;
@@ -145,7 +145,7 @@ export default {
       }
 
       &:last-child::before {
-        content: '';
+        content: "";
         .absolute(0, _, 0, 0);
         width: 2px;
         background-color: #369;

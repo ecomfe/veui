@@ -134,27 +134,15 @@
       <h3>Prepend / Append</h3>
       <section>
         <veui-input clearable>
-          <template
-            slot="before-label"
-          >前缀内容</template>
-          <template
-            slot="prepend"
-          ><veui-icon
-            name="user-circle"
-          /></template>
-          <template
-            slot="after-label"
-          >后缀内容</template>
+          <template slot="before-label">前缀内容</template>
+          <template slot="prepend"><veui-icon name="user-circle"/></template>
+          <template slot="after-label">后缀内容</template>
         </veui-input>
         <veui-input clearable>
-          <template
-            slot="before-label"
-          >前缀内容</template>
+          <template slot="before-label">前缀内容</template>
         </veui-input>
         <veui-input clearable>
-          <template
-            slot="after-label"
-          >后缀内容</template>
+          <template slot="after-label">后缀内容</template>
         </veui-input>
       </section>
     </section>
@@ -312,7 +300,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '~less-plugin-est/src/all.less';
+@import "~less-plugin-est/src/all.less";
 
 section {
   margin-bottom: 40px;

@@ -206,9 +206,7 @@
         position="popup"
         trigger="hover"
       >
-        <template
-          slot="label"
-        >中国 🇨🇳</template>
+        <template slot="label">中国 🇨🇳</template>
         <veui-option-group
           label="互联网"
           position="popup"
@@ -638,7 +636,7 @@ export default {
   position: relative;
   padding-left: 24px;
   &::after {
-    content: '❤️';
+    content: "❤️";
     position: absolute;
     top: 50%;
     left: 0;
@@ -651,7 +649,7 @@ export default {
 }
 
 .filter {
-  width: ~'calc(100% - 10px)';
+  width: ~"calc(100% - 10px)";
   margin: 5px;
 }
 </style>

@@ -101,7 +101,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-input[type='number'] {
+input[type="number"] {
   width: 60px;
   height: 30px;
   text-align: center;

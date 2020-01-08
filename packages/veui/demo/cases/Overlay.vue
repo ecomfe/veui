@@ -118,7 +118,7 @@
       <div
         v-outside:multilevel="
           () => {
-            parentOpen = false;
+            parentOpen = false
           }
         "
         class="multilevel-parent"
@@ -212,7 +212,7 @@ export default {
 </script>
 
 <style lang="less">
-@import '~less-plugin-est/src/all.less';
+@import "~less-plugin-est/src/all.less";
 
 .demo-overlay-box {
   box-shadow: 1px 1px 6px fadeout(#000, 80%);

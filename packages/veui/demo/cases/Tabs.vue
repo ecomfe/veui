@@ -206,7 +206,7 @@
   <section class="inner-ui">
     <h2>增删模式1（内部 UI）：</h2>
     <p>
-      当前序号 <code>{{ index2 != null ? index2 + 1 : '已删光' }}</code>
+      当前序号 <code>{{ index2 != null ? index2 + 1 : "已删光" }}</code>
     </p>
     <veui-tabs
       ui="large"
@@ -229,7 +229,7 @@
       </veui-tab>
     </veui-tabs>
     <p>
-      当前序号 <code>{{ index3 != null ? index3 + 1 : '已删光' }}</code>
+      当前序号 <code>{{ index3 != null ? index3 + 1 : "已删光" }}</code>
     </p>
     <veui-tabs
       ui="large block"
@@ -257,7 +257,7 @@
   <section>
     <h2>增删模式2（完全外部控制）：</h2>
     <p>
-      当前序号 <code>{{ index4 != null ? index4 + 1 : '已删光' }}</code>
+      当前序号 <code>{{ index4 != null ? index4 + 1 : "已删光" }}</code>
     </p>
     <veui-button
       class="add-btn"
@@ -294,7 +294,7 @@
       </veui-tab>
     </veui-tabs>
     <p>
-      当前序号 <code>{{ index5 != null ? index5 + 1 : '已删光' }}</code>
+      当前序号 <code>{{ index5 != null ? index5 + 1 : "已删光" }}</code>
     </p>
     <veui-button
       class="add-btn"
@@ -351,7 +351,7 @@
       :disabled="tabIfRemoving"
       @click="insertVisiable = !insertVisiable"
     >
-      {{ insertVisiable ? '隐藏' : '显示' }}中间一个可切换 TAB
+      {{ insertVisiable ? "隐藏" : "显示" }}中间一个可切换 TAB
     </veui-button>
     <veui-tabs
       ui="large"
@@ -547,7 +547,7 @@ section + section {
 }
 
 .veui-tabs {
-  & + &[ui~='block'] {
+  & + &[ui~="block"] {
     margin-top: 20px;
   }
 }

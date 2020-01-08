@@ -48,7 +48,7 @@
     {{
       selected5
         ? `${selected5.getFullYear()}-${selected5.getMonth() + 1}`
-        : '-'
+        : "-"
     }}
   </section>
   <section>
@@ -178,7 +178,7 @@
       v-model="selected6"
       type="year"
     />
-    Selected: {{ selected6 ? selected6.getFullYear() : '-' }}
+    Selected: {{ selected6 ? selected6.getFullYear() : "-" }}
   </section>
 </article>
 </template>
@@ -245,7 +245,7 @@ export default {
 </script>
 
 <style lang="less">
-@import '~veui-theme-dls/lib.less';
+@import "~veui-theme-dls/lib.less";
 
 .veui-demo-calendar {
   section {

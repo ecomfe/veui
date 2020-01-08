@@ -3018,7 +3018,7 @@ export default {
 </script>
 
 <style lang="less">
-@import '~veui-theme-dls/lib.less';
+@import "~veui-theme-dls/lib.less";
 
 .veui-form-demo {
   h2 {
@@ -3031,7 +3031,7 @@ export default {
 
   margin-bottom: 50px;
 
-  .veui-form[ui~='inline'] + .veui-form[ui~='inline'] {
+  .veui-form[ui~="inline"] + .veui-form[ui~="inline"] {
     margin-top: 30px;
   }
 
@@ -3053,7 +3053,7 @@ export default {
     &::before {
       position: absolute;
       left: -80px;
-      content: '⇒';
+      content: "⇒";
       line-height: 32px;
       font-size: 30px;
       color: #999;
@@ -3089,11 +3089,11 @@ export default {
     margin-top: 60px;
     margin-left: 120px;
 
-    [class*='veui'] {
+    [class*="veui"] {
       margin-left: 10px;
     }
 
-    [class*='veui']:first-child {
+    [class*="veui"]:first-child {
       margin-left: 0;
     }
   }
