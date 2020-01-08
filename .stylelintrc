@@ -1,5 +1,8 @@
 {
-  "extends": ["stylelint-config-standard", "stylelint-config-prettier"],
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-prettier"
+  ],
   "rules": {
     "declaration-empty-line-before": null,
     "no-descending-specificity": null,
@@ -9,7 +12,15 @@
     "at-rule-no-unknown": [
       true,
       {
-        "ignoreAtRules": ["plugin"]
+        "ignoreAtRules": [
+          "plugin"
+        ]
+      }
+    ],
+    "string-quotes": [
+      "double",
+      {
+        "avoidEscape": true
       }
     ]
   }

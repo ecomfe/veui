@@ -19,9 +19,9 @@
       "eslint --fix",
       "git add"
     ],
-    "packages/veui-theme-dls/**/*.less": [
+    "packages/veui-theme-dls/**/*.less,packages/veui/demo/**/*.vue": [
       "prettier --write 'packages/veui-theme-dls/**/*.less'",
-      "stylelint **/*.less --syntax=less",
+      "stylelint **/*.less --syntax=less --fix",
       "git add"
     ]
   },

@@ -90,8 +90,8 @@ export default {
 </script>
 
 <style lang="less">
-@import '~less-plugin-est/src/all.less';
-@import '~veui-theme-dls/common.less';
+@import "~less-plugin-est/src/all.less";
+@import "~veui-theme-dls/common.less";
 
 @nav-width: 240px;
 @light-bg-color: #f6f9ff;
@@ -108,7 +108,7 @@ export default {
 
 #main-nav,
 #console {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
     sans-serif;
 }
 
@@ -152,7 +152,7 @@ export default {
   }
 
   ul {
-    height: ~'calc(100vh - 105px)';
+    height: ~"calc(100vh - 105px)";
     margin: 0;
     padding: 0;
     overflow: auto;
@@ -221,7 +221,7 @@ main {
   .absolute(0, 0, 0, @nav-width);
   overflow: scroll;
   padding: 1em 4em 0;
-  height: ~'calc(100vh - @{title-height})';
+  height: ~"calc(100vh - @{title-height})";
   transition: height 0.2s;
 
   h1 {
@@ -232,7 +232,7 @@ main {
   }
 
   .console-expanded & {
-    height: ~'calc(100vh - @{console-height} - @{title-height})';
+    height: ~"calc(100vh - @{console-height} - @{title-height})";
   }
 }
 
