@@ -8,14 +8,10 @@ i18n.register(
     fileTypeInvalid: 'Invalid file type',
     fileSizeInvalid: 'File size is too large',
     tooManyFiles: 'Too many files',
-    uploadSuccess: 'Upload succeeded!',
     uploadFailure: 'Upload failed!',
     remove: 'Remove',
-    retry: 'Retry',
     replace: 'Replace',
-    cancel: 'Cancel',
-    complete: 'Completed',
-    error: 'Error!',
+    preview: 'Preview',
     uploading: 'Uploading…'
   },
   {
