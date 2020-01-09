@@ -161,7 +161,7 @@
               <div :class="`${listClass}-mask`">
                 <template v-for="control in getImageControls(file)">
                   <label
-                    v-if="control.name === 'reupload'"
+                    v-if="control.name === 'replace'"
                     :key="control.name"
                     :for="inputId"
                     :ui="uiParts.control"
@@ -172,7 +172,10 @@
                     }"
                     @click.stop="replaceFile(file)"
                   >
-                    <veui-icon :name="icons.upload"/>
+                    <veui-icon
+                      :name="icons.upload"
+                      :label="control.label"
+                    />
                   </label>
                   <veui-button
                     v-else
@@ -185,7 +188,10 @@
                     "
                     @click="handleImageControl(file, index, control.name)"
                   >
-                    <veui-icon :name="control.icon"/>
+                    <veui-icon
+                      :name="control.icon"
+                      :label="control.label"
+                    />
                   </veui-button>
                 </template>
               </div>
@@ -262,7 +268,10 @@
                   "
                   @click="handleImageControl(file, index, control.name)"
                 >
-                  <veui-icon :name="control.icon"/>
+                  <veui-icon
+                    :name="control.icon"
+                    :label="control.label"
+                  />
                 </veui-button>
               </template>
             </div>
@@ -1039,19 +1048,33 @@ export default {
     },
     getImageControls (file) {
       let defaultControls
+      let remove = {
+        name: 'remove',
+        icon: this.icons.clear,
+        label: this.t('remove')
+      }
       switch (file.status) {
         case 'success':
           defaultControls = [
-            { name: 'preview', icon: this.icons.preview, disabled: false },
-            { name: 'reupload', icon: this.icons.upload },
-            { name: 'remove', icon: this.icons.clear }
+            {
+              name: 'preview',
+              icon: this.icons.preview,
+              disabled: false,
+              label: this.t('preview')
+            },
+            {
+              name: 'replace',
+              icon: this.icons.upload,
+              label: this.t('replace')
+            },
+            remove
           ]
           break
         case 'failure':
-          defaultControls = [{ name: 'remove', icon: this.icons.clear }]
+          defaultControls = [remove]
           break
         default:
-          defaultControls = [{ name: 'remove', icon: this.icons.clear }]
+          defaultControls = [remove]
       }
       return this.controls
         ? this.controls(file, defaultControls)
