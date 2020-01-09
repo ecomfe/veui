@@ -459,6 +459,32 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
+  it('should config controls of image correctly.', () => {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload',
+        value: [{ name: 'test1.jpg', src: '/test1.jpg' }],
+        type: 'image',
+        controls (file, defaultControls) {
+          if (file.status === 'success') {
+            return [{ name: 'test', icon: 'info' }, ...defaultControls]
+          }
+          return defaultControls
+        }
+      }
+    })
+    wrapper
+      .find('.veui-uploader-list-image-mask')
+      .find('button')
+      .trigger('click')
+
+    expect(wrapper.emitted().test[0][0]).to.deep.equal(
+      { name: 'test1.jpg', src: '/test1.jpg', status: 'success' },
+      0
+    )
+    wrapper.destroy()
+  })
+
   it('should handle replace correctly.', async () => {
     let wrapper = mount(Uploader, {
       propsData: {

@@ -134,7 +134,7 @@
                 :target="`fileFailure${index}`"
                 position="top"
               >
-                {{ file.message }}
+                {{ file.message || t('uploadFailure') }}
               </veui-popover>
             </div>
             <slot
@@ -268,11 +268,10 @@
             </div>
           </div>
           <veui-popover
-            v-if="file.message"
             :target="`fileFailure${index}`"
             position="top"
           >
-            {{ file.message }}
+            {{ file.message || t('uploadFailure') }}
           </veui-popover>
           <slot
             name="file-after"
