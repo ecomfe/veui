@@ -179,7 +179,7 @@ export default {
       upload: (file, { onload, onprogress, onerror }) => {
         // onload(file: Object, data: Object)
         // onprogress(file: Object, progress: Object({loaded, total}))
-        // onerror(file: Object, error: Object({reason}))
+        // onerror(file: Object, error: Object({message}))
         let xhr = new XMLHttpRequest()
         file.xhr = xhr
 
