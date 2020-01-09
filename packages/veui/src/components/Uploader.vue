@@ -164,7 +164,7 @@
                     v-if="control.name === 'reupload'"
                     :key="control.name"
                     :for="inputId"
-                    :ui="uiParts.imageAction"
+                    :ui="uiParts.control"
                     :class="{
                       [$c('button')]: true,
                       [$c('button-icon-only')]: true,
@@ -177,7 +177,7 @@
                   <veui-button
                     v-else
                     :key="control.name"
-                    :ui="uiParts.imageAction"
+                    :ui="uiParts.control"
                     :disabled="
                       control.disabled !== undefined
                         ? control.disabled
@@ -254,7 +254,7 @@
               <template v-for="control in getImageControls(file)">
                 <veui-button
                   :key="control.name"
-                  :ui="uiParts.imageAction"
+                  :ui="uiParts.control"
                   :disabled="
                     control.disabled !== undefined
                       ? control.disabled

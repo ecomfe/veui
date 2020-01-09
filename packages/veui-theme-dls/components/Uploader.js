@@ -34,7 +34,7 @@ config.defaults(
     parts: {
       remove: 'icon',
       progress: 's',
-      imageAction: 'icon s',
+      control: 'icon s',
       preview: 'auto'
     }
   },
