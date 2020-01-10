@@ -19,6 +19,8 @@ const SPECS = [
   }
 ]
 
+let running = 0
+
 SPECS.forEach(({ title, name, plugins }) => {
   test(title, t => {
     return prepare()
@@ -49,17 +51,28 @@ function format (source) {
 }
 
 function prepare () {
+  running++
   return new Promise(resolve => {
-    symlink(
-      r(__dirname, '../node_modules/veui'),
-      r(__dirname, '../node_modules/veui-next'),
-      resolve
-    )
+    if (running === 1) {
+      symlink(
+        r(__dirname, '../node_modules/veui'),
+        r(__dirname, '../node_modules/veui-next'),
+        resolve
+      )
+      return
+    }
+    resolve()
   })
 }
 
 function tearDown () {
+  running--
+
   return new Promise(resolve => {
-    unlink(r(__dirname, '../node_modules/veui-next'), resolve)
+    if (running === 0) {
+      unlink(r(__dirname, '../node_modules/veui-next'), resolve)
+      return
+    }
+    resolve()
   })
 }
