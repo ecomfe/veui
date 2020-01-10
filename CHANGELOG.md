@@ -10,6 +10,27 @@
 - [+] `Uploader` 组件新增了 `controls` prop，支持在图片模式下自定义可对文件进行的操作。
 - [^] `veui-loader` 和 `babel-plugin-veui` 的 `name` 选项改名为 `alias`。
 
+### 💡 主要变更
+
+- [+] 新增 `babel-plugin-veui/rewrite`， 可以将指定路径下对 `veui` 的依赖根据 `alias` 参数重写。
+
+  > #### 例子
+  >
+  > 对于一个典型的同时引入两个版本 VEUI 的项目，`babel.config.js` 内容建议如下：
+  >
+  > ```js
+  > module.exports = {
+  >   presets: ["@vue/app"],
+  >   plugins: ["veui", ["veui", { name: "veui-next" }, "veui-next"], "lodash"],
+  >   overrides: [
+  >     {
+  >       test: [/veui-theme-dls/],
+  >       plugins: [["babel-plugin-veui/lib/rewrite", { alias: "veui-next" }]]
+  >     }
+  >   ]
+  > };
+  > ```
+
 ### 🐞 问题修复
 
 - [^] 修正了 `veui-loader` 读取到非用户依赖版本的 `veui` 版本的问题。
