@@ -39,24 +39,24 @@
   }
 
   .make-side(top) {
-    .veui-tooltip-arrow {
+    .@{veui-prefix}-tooltip-arrow {
       bottom: -@arrow-size * 2;
     }
   }
   .make-side(right) {
-    .veui-tooltip-arrow {
+    .@{veui-prefix}-tooltip-arrow {
       left: -@arrow-size * 2;
       transform: rotate(90deg);
     }
   }
   .make-side(bottom) {
-    .veui-tooltip-arrow {
+    .@{veui-prefix}-tooltip-arrow {
       top: -@arrow-size * 2;
       transform: rotate(180deg);
     }
   }
   .make-side(left) {
-    .veui-tooltip-arrow {
+    .@{veui-prefix}-tooltip-arrow {
       right: -@arrow-size * 2;
       transform: rotate(-90deg);
     }
@@ -146,7 +146,7 @@
     color: @dls-tooltip-font-color-reverse;
     box-shadow: @dls-tooltip-shadow-reverse;
 
-    .veui-tooltip-arrow {
+    .@{veui-prefix}-tooltip-arrow {
       color: @dls-tooltip-background-color-reverse;
 
       &::after {
