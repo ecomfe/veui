@@ -7,6 +7,7 @@
     [$c('textarea-line-numbered')]: lineNumber,
     [$c('textarea-autoresize')]: realAutoresize,
     [$c('textarea-resizable')]: resizable,
+    [$c('textarea-count-overlap')]: countOverlap,
     [$c('invalid')]: realInvalid || lengthOverflow,
     [$c('readonly')]: realReadonly,
     [$c('disabled')]: realDisabled
@@ -16,6 +17,7 @@
 >
   <div
     v-if="measure"
+    v-show="measurerContentWidth !== 0"
     ref="measurer"
     aria-hidden="true"
     :class="$c('textarea-measurer')"
@@ -178,7 +180,7 @@ export default {
       return this.length > this.realMaxlength
     },
     inputStyle () {
-      let style = {
+      return {
         maxWidth: this.lineNumber ? null : '100%',
         width: this.lineNumber
           ? `calc(100% - ${this.lineNumberWidth}px)`
@@ -187,11 +189,6 @@ export default {
         // autoresize 的时候 hidden 一下，避免闪现一下滚动条。
         overflow: this.realAutoresize ? 'hidden' : 'auto'
       }
-
-      if (this.countOverlap) {
-        style.paddingBottom = `${this.originalPadding + this.lineHeight}px`
-      }
-      return style
     }
   },
   watch: {
@@ -219,19 +216,27 @@ export default {
       },
       immediate: true
     },
+    measurerContentWidth () {
+      if (this.realAutoresize) {
+        this.$nextTick(() => {
+          this.measurerContentHeight = this.getMeasurersHeight()
+        })
+      }
+    },
     countOverlap (val) {
       if (!val) {
         return
       }
-
       let { input } = this.$refs
-      console.log(input.scrollTop, input.scrollHeight)
       if (input.value.length === input.selectionStart) {
         // at the end
         setTimeout(() => {
-          input.scrollTop = input.scrollHeight
+          this.scrollTop = input.scrollHeight
         })
       }
+    },
+    scrollTop (val) {
+      return this.syncScroll(val)
     }
   },
   updated () {
@@ -242,7 +247,6 @@ export default {
     this.lineHeight = getAbsoluteLineHeight(input)
     this.scrollTop = this.$refs.input.scrollTop
     this.rowsHeight = this.getRowsHeight()
-    this.originalPadding = parseFloat(getComputedStyle(input).paddingBottom)
   },
   methods: {
     getRowsHeight () {
@@ -276,6 +280,10 @@ export default {
       let rects = lines[lines.length - 1].querySelector('span').getClientRects()
       let rect = rects[rects.length - 1]
 
+      if (!rect) {
+        return false
+      }
+
       let { paddingLeft, paddingRight } = getComputedStyle(input)
       let pl = parseFloat(paddingLeft)
       let pr = parseFloat(paddingRight)
@@ -288,11 +296,11 @@ export default {
     checkCountOverlap () {
       this.countOverlap = this.isCountOverlap()
     },
-    handleFocus ($event) {
+    handleFocus (e) {
       this.focused = true
 
-      if (this.realSelectOnFocus && $event.target) {
-        $event.target.select()
+      if (this.realSelectOnFocus && e.target) {
+        e.target.select()
       }
     },
     handleBlur () {
@@ -306,17 +314,17 @@ export default {
       }
       return lineHeight
     },
-    handleInput ($event) {
+    handleInput (e) {
       // 分3种情况
       // 1. 感知输入法，触发原生 input 事件就必须向上继续抛出
       // 2. 不感知输入法
-      //  2.1 vue 底层会对原生 input 的 v-model 做忽略输入法组合态处理，所以 localValue 和 $event.target.value 不同步，只有当 localValue 产生变化时才向上继续抛出
+      //  2.1 vue 底层会对原生 input 的 v-model 做忽略输入法组合态处理，所以 localValue 和 e.target.value 不同步，只有当 localValue 产生变化时才向上继续抛出
       //  2.2 在 localValue 没有变化的情况下，原则上不抛出
       if (
         this.composition ||
         (!this.composition && this.localValue !== this.value)
       ) {
-        this.$emit('input', $event.target.value, $event)
+        this.$emit('input', e.target.value, e)
       }
 
       this.$nextTick(() => {
@@ -350,15 +358,15 @@ export default {
         return
       }
       this.scrollTop = this.$refs.input.scrollTop
-      // render 里面没有依赖 scrollTop ，单独改 scrollTop 并不会触发 updated hook ，
-      // 所以手动去同步一下 scrollTop
-      this.syncScroll()
     },
-    syncScroll () {
+    syncScroll (val) {
+      let top = val == null ? this.scrollTop : val
       let { input, measurer } = this.$refs
-      input.scrollTop = this.scrollTop
+      if (input) {
+        input.scrollTop = top
+      }
       if (measurer) {
-        measurer.scrollTop = this.scrollTop
+        measurer.scrollTop = top
       }
     }
   }

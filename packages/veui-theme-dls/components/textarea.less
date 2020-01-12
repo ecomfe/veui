@@ -176,4 +176,32 @@
     min-height: @dls-textarea-height-s;
     border-radius: @dls-input-border-radius-s;
   }
+
+  &-count-overlap &-input {
+    padding-bottom: dls-sum(
+      @dls-textarea-padding-y,
+      dls-line-height(@dls-textarea-line-height, @dls-textarea-font-size-m)
+    );
+  }
+
+  &-count-overlap &-measurer-line:last-child {
+    margin-bottom: dls-sum(
+      @dls-textarea-padding-y,
+      dls-line-height(@dls-textarea-line-height, @dls-textarea-font-size-m)
+    );
+  }
+
+  &-count-overlap[ui~="s"] &-input {
+    padding-bottom: dls-sum(
+      @dls-textarea-padding-y,
+      dls-line-height(@dls-textarea-line-height, @dls-textarea-font-size-s)
+    );
+  }
+
+  &-count-overlap[ui~="s"] &-measurer-line:last-child {
+    margin-bottom: dls-sum(
+      @dls-textarea-padding-y,
+      dls-line-height(@dls-textarea-line-height, @dls-textarea-font-size-s)
+    );
+  }
 }

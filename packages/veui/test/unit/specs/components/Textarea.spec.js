@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Textarea from '@/components/Textarea'
+import { wait } from '../../../utils'
 
 describe('components/Textarea', () => {
   it('should handle value prop with `null` value.', done => {
@@ -88,5 +89,38 @@ describe('components/Textarea', () => {
 
     expect(wrapper.find('textarea').attributes('maxlength')).to.equal('5')
     expect(wrapper.find('.veui-textarea-count').text()).to.equal('3/5')
+  })
+
+  it('should prevent content overlapping with counter', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-textarea': Textarea
+        },
+        data () {
+          return {
+            val: '\nWWWWWWWWWWWWWWW'
+          }
+        },
+        template: `
+      <veui-textarea :value="val" line-number rows="2" maxlength="5"/>
+    `
+      },
+      {
+        attachToDocument: true,
+        sync: false
+      }
+    )
+
+    expect(wrapper.find('.veui-textarea-count-overlap').exists()).to.equal(
+      false
+    )
+
+    wrapper.vm.val += 'W'
+    await wait(0)
+
+    expect(wrapper.find('.veui-textarea-count-overlap').exists()).to.equal(true)
+
+    wrapper.destroy()
   })
 })
