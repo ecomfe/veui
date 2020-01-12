@@ -99,7 +99,7 @@ describe('components/Textarea', () => {
         },
         data () {
           return {
-            val: '\nWWWWWWWWWWWWWWW'
+            val: '\nWWWWWWWWWWWWWWWWW'
           }
         },
         template: `
