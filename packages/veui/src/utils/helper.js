@@ -166,6 +166,17 @@ export function normalizeLength (val) {
   return val
 }
 
+/**
+ * 将输入值转化为对应整数，如果值非整数则返回 null
+ *
+ * @param {string|number} val 输入值
+ * @returns {?number} 转换后的整数数值
+ */
+export function normalizeInt (val) {
+  let value = parseInt(val, 10)
+  return isNaN(value) ? null : value
+}
+
 export function hasClass (vnode, clazz) {
   let { data } = vnode
 

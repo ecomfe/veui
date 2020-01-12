@@ -20,6 +20,10 @@
     border-color: @dls-input-border-color-hover;
   }
 
+  &-resizable &-input {
+    resize: vertical;
+  }
+
   &.@{veui-prefix}-readonly {
     border-color: @dls-input-border-color-read-only;
     background-color: @dls-input-background-color-read-only;
@@ -147,6 +151,24 @@
   &-autoresize &-measurer {
     bottom: auto;
     min-height: inherit;
+  }
+
+  &-count {
+    .absolute(_, @dls-textarea-padding-x, @dls-textarea-padding-y, _);
+    margin-left: @dls-input-content-spacing;
+    padding: 0 @dls-textarea-count-padding;
+    line-height: @dls-textarea-count-height;
+    background-color: @dls-textarea-count-background-color;
+    font-size: @dls-textarea-count-font-size;
+    color: @dls-textarea-count-font-color;
+    z-index: 2;
+    border-radius: @dls-textarea-count-border-radius;
+    .veui-transition(background-color, color);
+
+    &-overflow {
+      background-color: @dls-textarea-count-background-color-error;
+      color: @dls-textarea-count-font-color-error;
+    }
   }
 
   &[ui~="s"] {
