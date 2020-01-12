@@ -222,4 +222,32 @@ describe('components/Input', () => {
 
     expect(wrapper.find('.veui-input-append').text()).to.equal('user')
   })
+
+  it('should render maxlength limit correctly', () => {
+    let wrapper = mount({
+      components: {
+        'veui-input': Input
+      },
+      template: `
+        <veui-input value="foo" maxlength="5"/>
+      `
+    })
+
+    expect(wrapper.find('input').attributes('maxlength')).to.equal(undefined)
+    expect(wrapper.find('.veui-input-append').text()).to.equal('3/5')
+  })
+
+  it('should render maxlength limit with strict prop correctly', () => {
+    let wrapper = mount({
+      components: {
+        'veui-input': Input
+      },
+      template: `
+        <veui-input value="foo" maxlength="5" strict/>
+      `
+    })
+
+    expect(wrapper.find('input').attributes('maxlength')).to.equal('5')
+    expect(wrapper.find('.veui-input-append').text()).to.equal('3/5')
+  })
 })

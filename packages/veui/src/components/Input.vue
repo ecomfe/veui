@@ -7,7 +7,7 @@
     [$c('input-autofill')]: autofill,
     [$c('input-has-before')]: !!($slots.before || $slots['before-label']),
     [$c('input-has-after')]: !!($slots.after || $slots['after-label']),
-    [$c('invalid')]: realInvalid,
+    [$c('invalid')]: realInvalid || lengthOverflow,
     [$c('readonly')]: realReadonly,
     [$c('disabled')]: realDisabled
   }"
@@ -54,7 +54,7 @@
         @change="$emit('change', $event.target.value, $event)"
       >
     </div>
-    <template v-if="$slots.append || clearable">
+    <template v-if="$slots.append || clearable || realMaxlength !== null">
       <div :class="$c('input-append')">
         <veui-button
           v-if="clearable"
@@ -69,6 +69,15 @@
         >
           <veui-icon :name="icons.clear"/>
         </veui-button>
+        <span
+          v-if="realMaxlength !== null"
+          :class="{
+            [$c('input-count')]: true,
+            [$c('input-count-overflow')]: lengthOverflow
+          }"
+        >
+          {{ length }}/{{ realMaxlength }}
+        </span>
         <slot name="append"/>
       </div>
     </template>
@@ -122,7 +131,9 @@ export default {
     },
     selectOnFocus: Boolean,
     composition: Boolean,
-    clearable: Boolean
+    clearable: Boolean,
+    maxlength: [String, Number],
+    strict: Boolean
   },
   data () {
     return {
@@ -133,9 +144,14 @@ export default {
     }
   },
   computed: {
+    realMaxlength () {
+      let max = parseInt(this.maxlength, 10)
+      return isNaN(max) ? null : max
+    },
     attrs () {
       return {
         ...this.$attrs,
+        maxlength: this.strict ? this.realMaxlength : null,
         type: this.type,
         name: this.realName,
         disabled: this.realDisabled,
@@ -160,6 +176,15 @@ export default {
     },
     realSelectOnFocus () {
       return this.type !== 'hidden' && this.selectOnFocus
+    },
+    length () {
+      return this.localValue == null ? 0 : this.localValue.length
+    },
+    lengthOverflow () {
+      if (this.realMaxlength == null) {
+        return false
+      }
+      return this.length > this.realMaxlength
     }
   },
   watch: {

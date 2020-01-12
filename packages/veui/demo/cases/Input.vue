@@ -227,6 +227,21 @@
       />
     </section>
   </section>
+
+  <section>
+    <h3>字数限制显示</h3>
+    <section>
+      <veui-input
+        placeholder="允许溢出"
+        maxlength="5"
+      />
+      <veui-input
+        placeholder="不允许溢出"
+        maxlength="5"
+        strict
+      />
+    </section>
+  </section>
 </article>
 </template>
 

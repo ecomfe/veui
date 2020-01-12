@@ -192,6 +192,15 @@
     .ellipsis();
   }
 
+  &-count {
+    color: @dls-input-count-color;
+    .veui-transition(color);
+
+    &-overflow {
+      color: @dls-input-count-color-error;
+    }
+  }
+
   &[ui~="xs"] {
     height: @dls-input-height-xs;
     font-size: @dls-input-font-size-xs;
