@@ -103,6 +103,7 @@ import i18n from '../mixins/i18n'
 import { includes, pick } from 'lodash'
 import Button from './Button'
 import Icon from './Icon'
+import { normalizeInt } from '../utils/helper'
 import { MOUSE_EVENTS, KEYBOARD_EVENTS, FOCUS_EVENTS } from '../utils/dom'
 
 const TYPE_LIST = ['text', 'password', 'hidden']
@@ -132,7 +133,7 @@ export default {
     selectOnFocus: Boolean,
     composition: Boolean,
     clearable: Boolean,
-    maxlength: [String, Number],
+    maxlength: [Number, String],
     strict: Boolean
   },
   data () {
@@ -145,8 +146,7 @@ export default {
   },
   computed: {
     realMaxlength () {
-      let max = parseInt(this.maxlength, 10)
-      return isNaN(max) ? null : max
+      return normalizeInt(this.maxlength)
     },
     attrs () {
       return {

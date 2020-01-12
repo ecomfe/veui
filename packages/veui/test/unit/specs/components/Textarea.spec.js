@@ -42,4 +42,51 @@ describe('components/Textarea', () => {
     expect(wrapper.find('textarea').element.autofocus).to.equal(true)
     wrapper.destroy()
   })
+
+  it('should handle `resizable` correctly', () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-textarea': Textarea
+        },
+        template: '<veui-textarea resizable/>'
+      },
+      {
+        attachToDocument: true,
+        sync: false
+      }
+    )
+
+    let { element } = wrapper.find('textarea')
+    expect(getComputedStyle(element).resize).to.equal('vertical')
+    wrapper.destroy()
+  })
+
+  it('should render maxlength limit correctly', () => {
+    let wrapper = mount({
+      components: {
+        'veui-textarea': Textarea
+      },
+      template: `
+      <veui-textarea value="foo" maxlength="5"/>
+    `
+    })
+
+    expect(wrapper.find('textarea').attributes('maxlength')).to.equal(undefined)
+    expect(wrapper.find('.veui-textarea-count').text()).to.equal('3/5')
+  })
+
+  it('should render maxlength limit with strict prop correctly', () => {
+    let wrapper = mount({
+      components: {
+        'veui-textarea': Textarea
+      },
+      template: `
+      <veui-textarea value="foo" maxlength="5" strict/>
+    `
+    })
+
+    expect(wrapper.find('textarea').attributes('maxlength')).to.equal('5')
+    expect(wrapper.find('.veui-textarea-count').text()).to.equal('3/5')
+  })
 })
