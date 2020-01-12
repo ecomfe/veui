@@ -6,10 +6,12 @@ module.exports = function (config) {
 
     files: [
       'node_modules/focus-visible/dist/focus-visible.js',
+      'test/global.js',
       'test/unit/**/*.spec.js'
     ],
 
     preprocessors: {
+      'test/global.js': ['webpack'],
       '**/*.spec.js': ['webpack', 'sourcemap']
     },
 

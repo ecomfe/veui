@@ -64,6 +64,8 @@
       <veui-textarea
         placeholder="允许溢出"
         maxlength="5"
+        rows="2"
+        line-number
         value="Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis inventore non cumque vero eligendi? Iure ex sint aut. Facilis doloribus facere ducimus consequatur ipsa reiciendis voluptates minima molestiae deserunt nemo."
       />
     </section>
