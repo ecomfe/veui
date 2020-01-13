@@ -3,15 +3,17 @@
 ### ⚠️ 非兼容性变更
 
 - [^] `Uploader` 组件调整为适配 DLS 实现，新增了插槽 `upload` 支持图片模式下自定义上传区域，移除 `type-invald`/`size-invalid`/`count-overflow`/`extra-operation` 这四个插槽，移除 prop `progress`，移除 `ui` 选项 `horizontal`。
+- [^] 用来接入多个版本 VEUI 的 `babel-plugin-veui` 与 `veui-loader` 的 `name` 选项重命名为 `alias`。
+- [^] `Tree` 组件的 `item-click` prop 被移除，现在点击内容区域的行为修改为：`selectable` 时切换选中，否则 `checkable` 时切换勾选，否则在有子节点时切换展开收起。
 
 ### 💡 主要变更
 
 - [+] `Uploader` 组件新增了 `validator` prop，支持自定义的异步校验功能。
 - [+] `Uploader` 组件新增了 `controls` prop，支持在图片模式下自定义可对文件进行的操作。
 - [^] `veui-loader` 和 `babel-plugin-veui` 的 `name` 选项改名为 `alias`。
-
-### 💡 主要变更
-
+- [+] `Tooltip` 与 `Popover` 新增了 `autofocus` prop，允许在 `interactive` 不为 `false` 时在打开时自动聚焦内容。
+- [+] `Input` 与 `Textarea` 新增了 `maxlength` prop，用来指定最长的字符数限制。
+- [+] `Input` 与 `Textarea` 新增了 `strict` prop，用来指定是否允许在字符数到达 `maxlength` 限制时继续输入。
 - [+] 新增 `babel-plugin-veui/rewrite`， 可以将指定路径下对 `veui` 的依赖根据 `alias` 参数重写。
 
   > #### 例子
@@ -37,6 +39,9 @@
 - [^] 修正了 `veui-loader` 会对用户依赖版本 `veui` 生效而  非仅仅对指定别名的包生效的问题。
 - [^] 修复 `DatePicker` 组件 shortcut 样式不正确的问题。
 - [^] 修复 `Uploader` 组件在有文件未上传完成的情况下，上传新文件会重复上传未上传完的文件的问题。
+- [^] 修复 `Option` 聚焦时可能错误引发滚动的问题。
+- [^] 修复了部分样式未按类名前缀变量进行输出的问题。
+- [^] 修复了对 `date-fns` 模块引用了错误路径的问题。
 
 ## 2.0.0-alpha.3
 
