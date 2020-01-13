@@ -56,6 +56,9 @@ export function isTransparent (vm) {
   if (isType(vm, 'transparent')) {
     return true
   }
+  if (!vm.$vnode) {
+    return false
+  }
   let compOptions = vm.$vnode.componentOptions
   return (
     compOptions.Ctor.options.abstract || compOptions.tag === 'transition-group'

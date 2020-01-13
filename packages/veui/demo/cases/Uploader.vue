@@ -83,6 +83,7 @@
     :target="tooltipTarget"
     :open="tooltipOpen"
     trigger="click"
+    autofocus
   >
     <div class="extra-url">
       <veui-span>图片地址：</veui-span><veui-input v-model="imageSrc"/>
@@ -272,7 +273,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '~veui-theme-dls/lib.less';
+@import "~veui-theme-dls/lib.less";
 
 h2 {
   font-size: 16px;
