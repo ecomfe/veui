@@ -48,7 +48,8 @@ export default {
     interactive: {
       type: Boolean,
       default: true
-    }
+    },
+    autofocus: Boolean
   },
   data () {
     return {
@@ -90,6 +91,9 @@ export default {
     },
     realOpen () {
       return this.localOpen && !!this.targetNode
+    },
+    realAutofocus () {
+      return this.interactive ? this.autofocus : false
     }
   },
   watch: {
@@ -180,6 +184,7 @@ export default {
           [this.$c('tooltip-box')]: true,
           [this.$c('tooltip-box-transparent')]: !this.interactive
         })}
+        autofocus={this.realAutofocus}
       >
         <div
           class={this.$c('tooltip')}

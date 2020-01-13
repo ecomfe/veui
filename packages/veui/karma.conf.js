@@ -4,11 +4,7 @@ module.exports = function (config) {
   config.set({
     frameworks: ['mocha', 'chai'],
 
-    files: [
-      'node_modules/focus-visible/dist/focus-visible.js',
-      'test/global.js',
-      'test/unit/**/*.spec.js'
-    ],
+    files: ['test/global.js', 'test/unit/**/*.spec.js'],
 
     preprocessors: {
       'test/global.js': ['webpack'],

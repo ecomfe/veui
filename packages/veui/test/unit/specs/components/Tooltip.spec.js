@@ -29,26 +29,6 @@ describe('components/Tooltip', function () {
     wrapper.destroy()
   })
 
-  it('shoule render right type for Tooltip', () => {
-    let wrapper = mount({
-      components: {
-        'veui-tooltip': Tooltip
-      },
-      data () {
-        return {
-          open: true
-        }
-      },
-      template: `
-        <veui-tooltip :open.sync="open">
-            default slot content
-        </veui-tooltip>
-        `
-    })
-    expect(wrapper.contains('.veui-tooltip')).to.equal(true)
-    wrapper.destroy()
-  })
-
   it('should render slot correctly for Tooltip', () => {
     let wrapper = mount({
       components: {
@@ -66,7 +46,7 @@ describe('components/Tooltip', function () {
         </veui-tooltip>
         `
     })
-    expect(wrapper.find('.veui-tooltip-content').text()).to.equal(
+    expect(wrapper.find('.veui-tooltip-box').text()).to.equal(
       'default slot content'
     )
     wrapper.destroy()
@@ -93,7 +73,8 @@ describe('components/Tooltip', function () {
               `
     })
     wrapper.find('.tooltip-test').trigger('click')
-    await wait(10)
+
+    await wait(0)
     expect(wrapper.vm.open).to.equal(true)
     wrapper.destroy()
   })

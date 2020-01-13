@@ -106,12 +106,12 @@ export class FocusManager {
    * @type Array.<FocusContext>
    * @private
    */
-  stack = [];
+  stack = []
 
   /**
    * Latest interaction is triggered by pointer or keyboard
    */
-  trigger = 'pointer';
+  trigger = 'pointer'
 
   triggerHandlers = {
     keydown: () => {
@@ -120,7 +120,7 @@ export class FocusManager {
     mousedown: () => {
       this.trigger = 'pointer'
     }
-  };
+  }
 
   initTriggerHandlers () {
     Object.keys(this.triggerHandlers).forEach(type => {
