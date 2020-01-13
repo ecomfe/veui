@@ -26,13 +26,18 @@
 
   &-input-label-image {
     display: flex;
-    .size(100%);
-    border: none;
+    .absolute(-1px);
+    border-style: none;
     line-height: inherit;
+    border-radius: inherit;
     .@{veui-prefix}-icon {
       .dls-icon-size(@dls-uploader-image-icon-size);
       margin: 0;
     }
+  }
+
+  &-list-image-container-upload > &-input-label-image {
+    border-style: solid;
   }
 
   &-list,
@@ -138,7 +143,6 @@
       position: relative;
       border-radius: @dls-button-border-radius-m;
       border: 1px solid @dls-button-border-color-normal;
-      overflow: hidden;
       &-image {
         width: auto;
         height: auto;
@@ -146,6 +150,9 @@
         max-height: 100%;
         .veui-position-center();
       }
+    }
+    &-container:not(&-container-upload) {
+      overflow: hidden;
     }
     &-container:hover &-mask {
       opacity: 1;

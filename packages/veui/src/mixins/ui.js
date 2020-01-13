@@ -1,4 +1,4 @@
-import { getConfigKey, findAncestor, isType } from '../utils/helper'
+import { getConfigKey, findAncestor, isTransparent } from '../utils/helper'
 import warn from '../utils/warn'
 import config from '../managers/config'
 import {
@@ -95,7 +95,7 @@ export default {
     },
     uiProps () {
       let { inheritableUiProps = {} } =
-        findAncestor(this, component => !isType(component, 'transparent')) || {}
+        findAncestor(this, component => !isTransparent(component)) || {}
 
       return {
         ...this.defaultUiProps,

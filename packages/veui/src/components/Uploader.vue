@@ -25,10 +25,12 @@
           (requestMode === 'iframe' && submitting)
       }"
       :ui="realUi"
+      tabindex="0"
       @click="handleClick"
     >
       <slot name="button-label">
-        <veui-icon :name="icons.upload"/>{{ t('selectFile') }}
+        <veui-icon :name="icons.upload"/>
+        {{ t("selectFile") }}
       </slot>
     </label>
     <span
@@ -70,7 +72,8 @@
       <template
         v-if="
           type === 'file' ||
-            ((type === 'image' && file.status === 'success') || !file.status)
+            (type === 'image' && file.status === 'success') ||
+            !file.status
         "
       >
         <slot
@@ -108,9 +111,7 @@
                     file.status === 'failure'
                 }"
                 :title="file.name"
-              >
-                {{ file.name }}
-              </span>
+              >{{ file.name }}</span>
               <veui-icon
                 v-if="file.status === 'success'"
                 :name="icons.success"
@@ -133,9 +134,7 @@
                 v-if="file.status === 'failure'"
                 :target="`fileFailure${index}`"
                 position="top"
-              >
-                {{ file.message || t('uploadFailure') }}
-              </veui-popover>
+              >{{ file.message || t("uploadFailure") }}</veui-popover>
             </div>
             <slot
               name="file-after"
@@ -170,6 +169,7 @@
                       [$c('button-icon-only')]: true,
                       [$c('disabled')]: realUneditable
                     }"
+                    tabindex="0"
                     @click.stop="replaceFile(file)"
                   >
                     <veui-icon
@@ -216,9 +216,7 @@
             :class="`${listClass}-container ${listClass}-container-uploading`"
           >
             <div :class="`${listClass}-container-uploading-text`">
-              <slot name="uploading-label">
-                {{ t('uploading') }}
-              </slot>
+              <slot name="uploading-label">{{ t("uploading") }}</slot>
             </div>
             <veui-progress
               v-if="requestMode !== 'iframe'"
@@ -251,6 +249,7 @@
                 [$c('button')]: true,
                 [$c('uploader-input-label-image')]: true
               }"
+              tabindex="0"
               @click="replaceFile(file)"
             >
               <veui-icon :name="icons.addImage"/>
@@ -279,9 +278,9 @@
           <veui-popover
             :target="`fileFailure${index}`"
             position="top"
-          >
-            {{ file.message || t('uploadFailure') }}
-          </veui-popover>
+          >{{
+            file.message || t("uploadFailure")
+          }}</veui-popover>
           <slot
             name="file-after"
             v-bind="getScopeValue(index, file)"
@@ -296,7 +295,12 @@
       :class="`${listClass}-item`"
     >
       <slot name="upload">
-        <div :class="$c('uploader-list-image-container')">
+        <div
+          :class="{
+            [$c('uploader-list-image-container')]: true,
+            [$c('uploader-list-image-container-upload')]: true
+          }"
+        >
           <label
             :for="inputId"
             :class="{
@@ -304,6 +308,7 @@
               [$c('uploader-input-label-image')]: true,
               [$c('disabled')]: realUneditable || submitting
             }"
+            tabindex="0"
             @click="handleClick"
           >
             <veui-icon :name="icons.addImage"/>

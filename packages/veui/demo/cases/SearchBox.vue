@@ -172,7 +172,7 @@
           slot-scope="suggestion"
         >
           <span>{{ suggestion.value }}</span>
-          <icon name="eye"/>
+          <veui-icon name="eye"/>
         </template>
       </veui-search-box>
       <veui-search-box
@@ -223,12 +223,13 @@
 import bus from '../bus'
 import { includes } from 'lodash'
 import { SearchBox, Icon } from 'veui'
+import 'vue-awesome/icons/flag'
 
 export default {
   name: 'demo-search-box',
   components: {
     'veui-search-box': SearchBox,
-    Icon
+    'veui-icon': Icon
   },
   data () {
     return {

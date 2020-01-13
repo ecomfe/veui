@@ -48,6 +48,21 @@ export function isType (vm, type) {
 }
 
 /**
+ * 判断组件实例是否为对 ui 机制透明
+ *
+ * @param {Vue} vm 组件实例
+ */
+export function isTransparent (vm) {
+  if (isType(vm, 'transparent')) {
+    return true
+  }
+  let compOptions = vm.$vnode.componentOptions
+  return (
+    compOptions.Ctor.options.abstract || compOptions.tag === 'transition-group'
+  )
+}
+
+/**
  * 检查组件是否是指定type或根的顶级type类型
  *
  * @param {Vue} vm 组件实例

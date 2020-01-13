@@ -176,7 +176,7 @@
         <span class="veui-option-label-text">
           {{ props.label }}
         </span>
-        <veui-icon name="eye"/>
+        <veui-icon name="flag"/>
       </template>
     </veui-select>
   </section>
@@ -448,7 +448,7 @@
 import bus from '../bus'
 import { Icon, Select, Option, OptionGroup, Radio, Field, Form } from 'veui'
 import type from 'veui/managers/type'
-import 'vue-awesome/icons/eye'
+import 'vue-awesome/icons/flag'
 import 'vue-awesome/icons/gift'
 
 export default {
