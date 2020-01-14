@@ -263,6 +263,7 @@ export default {
     }
   },
   computed: {
+    realWeekStart: Calendar.computed.realWeekStart,
     realSelected: {
       get () {
         return this.selected === undefined ? this.localSelected : this.selected
@@ -503,7 +504,7 @@ export default {
       offset = isNumber(offset) ? { days: offset } : offset
       return add(
         startOf(this.today, offset.startOf || 'day', {
-          weekStartsOn: this.weekStart
+          weekStartsOn: this.realWeekStart
         }),
         omit(offset, 'startOf')
       )
@@ -550,11 +551,11 @@ function add (base, offset) {
 
 function checkFormat (input) {
   if (input.indexOf('YYYY') >= 0) {
-    console.warn('Use `yyyy` instead of `YYYY` for formatting years')
+    console.warn('Use `yyyy` instead of `YYYY` when formatting years.')
     input = input.replace(/YYYY/, 'yyyy')
   }
   if (input.indexOf('DD') >= 0) {
-    console.warn('Use `dd` instead of `DD` for formatting dates')
+    console.warn('Use `dd` instead of `DD` when formatting dates.')
     input = input.replace(/DD/, 'dd')
   }
   return input

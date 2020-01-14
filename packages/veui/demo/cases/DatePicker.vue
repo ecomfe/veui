@@ -16,7 +16,7 @@
       v-model="selectedDateRange"
       clearable
       range
-      format="MM/DD/YYYY"
+      format="MM/dd/yyyy"
     />
   </section>
   <section>
@@ -188,7 +188,7 @@ export default {
           label: '上个月',
           from: {
             startOf: 'month',
-            month: -1
+            months: -1
           },
           to: {
             startOf: 'month',

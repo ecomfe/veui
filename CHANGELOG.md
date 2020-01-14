@@ -14,7 +14,7 @@
 - [+] `Tooltip` 与 `Popover` 新增了 `autofocus` prop，允许在 `interactive` 不为 `false` 时在打开时自动聚焦内容。
 - [+] `Input` 与 `Textarea` 新增了 `maxlength` prop，用来指定最长的字符数限制。
 - [+] `Input` 与 `Textarea` 新增了 `strict` prop，用来指定是否允许在字符数到达 `maxlength` 限制时继续输入。
-- [+] 新增 `babel-plugin-veui/rewrite`， 可以将指定路径下对 `veui` 的依赖根据 `alias` 参数重写。
+- [+] 新增 `babel-plugin-veui/rewrite`，可以将指定路径下对 `veui` 的依赖根据 `alias` 参数重写。
 
   > #### 例子
   >
