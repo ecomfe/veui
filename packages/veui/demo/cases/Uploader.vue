@@ -21,7 +21,7 @@
       请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于200像素，最多上传3张图
     </template>
   </veui-uploader>
-  <h2>图片上传模式</h2>
+  <h2>图片上传模式，扩展操作栏</h2>
   <veui-uploader
     ref="multipleUploader"
     v-model="files1"
