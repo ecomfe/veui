@@ -140,6 +140,7 @@
       &-hidden {
         opacity: 0;
         position: absolute;
+        z-index: -1;
       }
     }
     &-container {
@@ -183,6 +184,11 @@
       .@{veui-prefix}-uploader-input-label-image {
         flex-direction: column;
         justify-content: center;
+        bottom: dls-sum(
+          @dls-uploader-mask-padding-y * 2,
+          @dls-icon-size-minor,
+          -1px
+        );
       }
       .@{veui-prefix}-uploader-list-image-file-name {
         color: @dls-uploader-error-color;
@@ -206,9 +212,6 @@
       .@{veui-prefix}-button + .@{veui-prefix}-button {
         margin-left: @dls-uploader-mask-icon-spacing;
       }
-    }
-    &-container-failure &-mask {
-      position: relative;
     }
   }
 
