@@ -6,7 +6,7 @@
     v-model="files"
     type="image"
     name="file"
-    action="/upload"
+    :action="action"
     :max-count="3"
     max-size="100kb"
     accept=".jpg,.jpeg,.gif"
@@ -53,7 +53,7 @@
     ref="customUploader"
     v-model="customFiles"
     type="image"
-    action="/upload"
+    :action="action"
     name="file"
     max-size="10mb"
     accept=".jpg,.jpeg,.gif"
@@ -96,7 +96,7 @@
   <veui-uploader
     v-model="files2"
     name="file"
-    action="/upload"
+    :action="action"
     :max-count="3"
     max-size="10mb"
     :payload="payload"
@@ -161,6 +161,8 @@ export default {
     ]
 
     return {
+      action:
+        'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog',
       files,
       files1: files.slice(0),
       files2: files.slice(0),
@@ -196,7 +198,7 @@ export default {
         let formData = new FormData()
         formData.append('file', file)
 
-        xhr.open('POST', '/upload', true)
+        xhr.open('POST', this.action, true)
         xhr.send(formData)
       },
       validator (file) {

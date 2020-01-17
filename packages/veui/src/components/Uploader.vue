@@ -290,9 +290,11 @@
     </li>
     <li
       v-if="type === 'image'"
-      v-show="!maxCount || fileList.length < maxCount"
       key="input"
-      :class="`${listClass}-item`"
+      :class="{
+        [`${listClass}-item`]: true,
+        [`${listClass}-item-hidden`]: maxCount && fileList.length >= maxCount
+      }"
     >
       <slot name="upload">
         <div
