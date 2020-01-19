@@ -1,6 +1,7 @@
 <script>
 import Dialog from './Dialog'
 import prefix from '../mixins/prefix'
+import { mergeClasses, getClassPropDef } from '../utils/helper'
 
 const PLACEMENT = ['top', 'right', 'bottom', 'left']
 
@@ -13,6 +14,7 @@ export default {
       type: Boolean,
       default: true
     },
+    overlayClass: getClassPropDef(),
     placement: {
       type: String,
       default: 'right',
@@ -28,10 +30,13 @@ export default {
       attrs: {
         // attrs 都直接透传到 Dialog 去
         ...this.$attrs,
-        overlayClass: {
-          [this.$c(`drawer-${this.placement}`)]: true,
-          [this.$c('drawer-box')]: true
-        },
+        overlayClass: mergeClasses(
+          {
+            [this.$c(`drawer-${this.placement}`)]: true,
+            [this.$c('drawer-box')]: true
+          },
+          this.overlayClass
+        ),
         modal: this.modal,
         loading: this.loading,
         draggable: false,
