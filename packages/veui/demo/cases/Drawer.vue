@@ -62,6 +62,7 @@
     title="Hey man"
     :modal="modal"
     :open.sync="leftOpen"
+    overlay-class="customed-class"
     :backdrop-closable="backdropClosable"
     placement="left"
   />
