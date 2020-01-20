@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-veui",
-  "version": "2.0.0-alpha.4",
+  "version": "2.0.0-alpha.5",
   "description": "All you need to transpile VEUI along with your awesome project.",
   "main": "index.js",
   "repository": "ecomfe/veui",
@@ -16,7 +16,7 @@
   "dependencies": {
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-veui": "^2.0.0-alpha.4",
+    "babel-plugin-veui": "^2.0.0-alpha.5",
     "babel-preset-vue-app": "^2.0.0"
   },
   "devDependencies": {
