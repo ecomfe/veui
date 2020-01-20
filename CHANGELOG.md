@@ -1,3 +1,10 @@
+## 2.0.0-alpha.5
+
+### 🐞 问题修复
+
+- [^] 修复了 `Drawer` 组件没有正确支持 `overlay-class` prop 的问题。
+- [^] 修正了 `DatePicker` 组件没有根据 `week-start` prop 处理快捷选项的问题。
+
 ## 2.0.0-alpha.4
 
 ### ⚠️ 非兼容性变更
