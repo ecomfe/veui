@@ -23,7 +23,7 @@ export default {
       }
     },
     loading: Boolean,
-    backdropClosable: Boolean
+    outsideClosable: Boolean
   },
   render (h) {
     let data = {
@@ -40,7 +40,7 @@ export default {
         modal: this.modal,
         loading: this.loading,
         draggable: false,
-        outsideClosable: this.modal ? this.backdropClosable : true
+        outsideClosable: this.outsideClosable
       },
       // nativeOn 直接在 drawer 上注册到 dom ，不需透传
       on: this.$listeners,
