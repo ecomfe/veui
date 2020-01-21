@@ -2,7 +2,7 @@
 
 ### ⚠️ 非兼容性变更
 
-- [^] 删除了 `Drawer` 组件 prop `backdropClosable`, 新增 prop `outsideClosable` 来控制点击组件外区域是否关闭。
+- [^] 删除了 `Drawer` 组件的 `backdrop-closable` prop，新增 `outside-closable` prop 来控制点击组件外区域时是否关闭。
 
 ## 2.0.0-alpha.5
 
