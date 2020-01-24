@@ -4,9 +4,7 @@
 
   <section>
     <veui-checkbox v-model="modal">Modal</veui-checkbox>
-    <veui-checkbox
-      v-model="backdropClosable"
-    >Backdrop Closable</veui-checkbox>
+    <veui-checkbox v-model="outsideClosable">outside Closable</veui-checkbox>
   </section>
 
   <section>
@@ -27,7 +25,7 @@
   <veui-drawer
     :open.sync="topOpen"
     class="drawer-demo-instance"
-    :backdrop-closable="backdropClosable"
+    :outside-closable="outsideClosable"
     :modal="modal"
     placement="top"
   >
@@ -47,7 +45,7 @@
   <veui-drawer
     :open.sync="rightOpen"
     :modal="modal"
-    :backdrop-closable="backdropClosable"
+    :outside-closable="outsideClosable"
     placement="right"
     title="Hey man"
   />
@@ -55,7 +53,7 @@
     title="Hey man"
     :modal="modal"
     :open.sync="bottomOpen"
-    :backdrop-closable="backdropClosable"
+    :outside-closable="outsideClosable"
     placement="bottom"
   />
   <veui-drawer
@@ -63,7 +61,7 @@
     :modal="modal"
     :open.sync="leftOpen"
     overlay-class="customed-class"
-    :backdrop-closable="backdropClosable"
+    :outside-closable="outsideClosable"
     placement="left"
   />
 </article>
@@ -82,7 +80,7 @@ export default {
   data () {
     return {
       modal: true,
-      backdropClosable: true,
+      outsideClosable: true,
       topOpen: false,
       rightOpen: false,
       bottomOpen: false,

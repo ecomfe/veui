@@ -126,31 +126,22 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
       }
     }
 
-    let hoverDelayData = {
-      state: 'ready' // 'ready' | 'out' | 'in'
-    }
-
     let bindingKey = getBindingKey('hover')
-    // 如果设置了 delay ，在鼠标移出 includeTargets 之后设个计时器，并且标明已经移出去了（ `out` ）。
-    // 如果鼠标在计时器计时结束之前，移回了 includeTargets ，就把标记改为 `in` 。
-    // 如果鼠标在计时器计时结束时，还没有移回 includeTargets 内，对应的标记位还会是 `out` ，此时就可以触发 outside handler 了。
     return function handleOutsideAsync (e) {
       let includeTargets = [
         ...(excludeSelf ? [] : [el]),
         ...getElementsByRefs(refs, context)
       ]
       let isRelatedTargetIn = isElementIn(e.relatedTarget, includeTargets)
-      if (!isRelatedTargetIn) {
-        hoverDelayData.state = 'out'
-
+      if (isRelatedTargetIn) {
         clearTimeout(el[bindingKey].timer)
-        el[bindingKey].timer = setTimeout(() => {
-          if (hoverDelayData.state === 'out') {
+        el[bindingKey].timer = null
+      } else {
+        if (el[bindingKey].timer == null) {
+          el[bindingKey].timer = setTimeout(() => {
             handler(e)
-          }
-        }, delay)
-      } else if (isRelatedTargetIn) {
-        hoverDelayData.state = 'in'
+          }, delay)
+        }
       }
     }
   }
