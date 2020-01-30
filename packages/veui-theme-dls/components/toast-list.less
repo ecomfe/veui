@@ -1,12 +1,14 @@
 @import "../lib.less";
 
 .@{veui-prefix}-toast-list {
-  .fixed(@veui-nav-bar-height + 15px, 0, _, 0);
+  .fixed(@dls-toast-list-spacing-before, 0, _, 0);
+  display: flex;
+  align-items: center;
+  flex-flow: column;
 
   .@{veui-prefix}-toast {
-    left: 50%;
-    transform: translateX(-50%);
     .veui-transition(opacity, top, transform);
+    transform: translateY(0);
 
     &-enter,
     &-leave-to {
@@ -14,7 +16,7 @@
     }
 
     &-enter {
-      transform: translate(-50%, -100%);
+      transform: translateY(-100%);
     }
   }
 }

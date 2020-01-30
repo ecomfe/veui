@@ -1,5 +1,8 @@
 <template>
-<transition :name="$c('toast')">
+<transition
+  :name="$c('toast')"
+  appear
+>
   <div
     v-if="localOpen"
     :ui="realUi"
@@ -112,10 +115,12 @@ export default {
     }
   },
   mounted () {
-    this.timer = setTimeout(() => {
-      this.$emit('update:open', false)
-      this.$emit('close')
-    }, this.duration)
+    if (this.duration > 0) {
+      this.timer = setTimeout(() => {
+        this.$emit('update:open', false)
+        this.$emit('close')
+      }, this.duration)
+    }
 
     let { message } = this.$refs
     if (message) {

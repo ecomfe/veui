@@ -46,5 +46,6 @@
     "stylelint": "^10.1.0",
     "stylelint-config-prettier": "^5.0.0",
     "stylelint-config-standard": "^18.0.0"
-  }
+  },
+  "dependencies": {}
 }
