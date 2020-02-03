@@ -127,7 +127,7 @@ export default {
       this.multiline = message.getClientRects().length > 1
     }
 
-    this.$emit('ready', this.$el.offsetHeight)
+    this.$emit('ready')
   },
   beforeDestroy () {
     clearTimeout(this.timer)

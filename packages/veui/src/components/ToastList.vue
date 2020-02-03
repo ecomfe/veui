@@ -6,6 +6,7 @@
 >
   <veui-toast
     v-for="(message, index) in messages"
+    ref="item"
     :key="message.__message_id__"
     open
     :type="message.type"
@@ -16,7 +17,7 @@
     :duration="message.duration"
     :style="`top: ${message.top}px`"
     @close="remove(message)"
-    @ready="updateHeight(message, index, $event)"
+    @ready="updateHeight(message, index)"
   />
 </veui-overlay>
 </template>
@@ -61,8 +62,10 @@ export default {
       this.messages.splice(index, 1)
       this.updateLayout()
     },
-    updateHeight (message, index, height) {
-      message.height = height
+    updateHeight (message, index) {
+      let el = this.$refs.item[index].$el
+      message.height =
+        el.offsetHeight + parseFloat(getComputedStyle(el).marginBottom)
       this.updateLayout()
     },
     updateLayout () {
@@ -73,7 +76,7 @@ export default {
         }
 
         let prev = this.messages[i - 1]
-        msg.top = prev.top + prev.height + 10
+        msg.top = prev.top + prev.height
       })
     }
   }
