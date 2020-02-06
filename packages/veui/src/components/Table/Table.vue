@@ -118,8 +118,7 @@ export default {
     return {
       columns: [],
       localSelected: normalizeArray(this.selected),
-      localExpanded: [...this.expanded],
-      gutterWidth: 0
+      localExpanded: [...this.expanded]
     }
   },
   computed: {

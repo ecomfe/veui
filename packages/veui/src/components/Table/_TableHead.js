@@ -89,7 +89,6 @@ export default {
               </div>
             </th>
           ))}
-          {this.table.gutterWidth ? <th aria-hidden="true" /> : null}
         </tr>
       </thead>
     )
