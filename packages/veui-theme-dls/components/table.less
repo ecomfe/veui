@@ -1,37 +1,23 @@
 @import "../lib.less";
 
 .@{veui-prefix}-table {
-  color: @veui-text-color-normal;
+  position: relative;
+  overflow: auto;
+  border: 1px @dls-table-border-color;
+  border-style: solid none;
 
   table {
     width: 100%;
     table-layout: fixed;
-    border-collapse: collapse;
-  }
-
-  &-fixed-header {
-    position: relative;
-    margin-bottom: -1px;
-    border-bottom: 1px solid @veui-gray-color-7;
-  }
-
-  &-fixed-footer {
-    margin-top: -1px;
-    border-top: 1px solid @veui-gray-color-7;
-  }
-
-  &-fixed-header + &-main {
-    overflow: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    white-space: nowrap;
   }
 
   &-cell {
-    display: inline-block;
-    line-height: 2;
-    vertical-align: middle;
-  }
-
-  &-col-select {
-    width: 60px;
+    display: flex;
+    line-height: @dls-line-height-m;
+    align-items: center;
   }
 
   &-col-expand {
@@ -40,25 +26,43 @@
 
   th,
   td {
-    .veui-make-table-row-height();
-    .padding(_, 16px);
+    border: 1px @dls-table-border-color;
     text-align: left;
-    white-space: nowrap;
-    .veui-transition(background-color);
+    .veui-transition(background-color, border-color);
   }
 
-  th {
-    font-weight: @veui-font-weight-bold;
+  thead th {
+    border-bottom-style: solid;
+    padding: @dls-table-header-padding-y @dls-table-header-padding-x;
+    background-color: @dls-table-header-background-color;
+    font-weight: @dls-table-header-font-weight;
+    color: @dls-table-header-font-color;
   }
 
-  td {
-    border: 1px solid @veui-gray-color-7;
-    border-style: solid none;
+  &-cell-interactive:hover {
+    background-color: @dls-table-header-background-color-hover;
   }
 
+  td,
   tfoot th {
-    border-top: none;
-    border-bottom: 1px solid @veui-gray-color-7;
+    border-top-style: solid;
+    padding: @dls-table-cell-padding-y @dls-table-cell-padding-x;
+    background-color: @dls-table-cell-background-color;
+    color: @dls-table-cell-font-color;
+  }
+
+  tbody tr:first-child td {
+    border-top-style: none;
+  }
+
+  &-bordered {
+    border: 1px solid @dls-table-border-color;
+    border-style: solid none solid solid;
+
+    th,
+    td {
+      border-right-style: solid;
+    }
   }
 
   td&-no-data {
@@ -68,7 +72,7 @@
 
   tr:hover {
     td {
-      background-color: @veui-gray-color-8;
+      background-color: @dls-table-cell-background-color-hover;
     }
 
     .@{veui-prefix}-table-no-data {
@@ -76,40 +80,36 @@
     }
   }
 
+  .@{veui-prefix}-link {
+    line-height: 1;
+  }
+
   .@{veui-prefix}-button,
   .@{veui-prefix}-link {
     & + .@{veui-prefix}-button,
     & + .@{veui-prefix}-link {
-      margin-left: 30px;
+      margin-left: @dls-padding-unit * 4;
     }
   }
 
-  &-header {
-    display: inline-block;
-    vertical-align: middle;
+  &-cell-center &-cell {
+    justify-content: center;
   }
 
-  & &-column-center {
-    text-align: center;
-  }
-
-  & &-column-right {
-    text-align: right;
-    padding-right: 38px;
-  }
-
-  .@{veui-prefix}-sorter {
-    margin-left: 5px;
-    font-size: @veui-font-size-small;
+  &-cell-right &-cell {
+    flex-flow: row-reverse;
   }
 
   & &-cell-expand {
-    padding: 0 0 0 10px;
-    text-align: center;
+    padding: 0 0 0 16px;
 
     & + th,
     & + td {
-      padding-left: 10px;
+      padding-left: 8px;
+    }
+
+    .@{veui-prefix}-button {
+      flex-grow: 0;
     }
   }
 
@@ -144,57 +144,97 @@
     }
   }
 
-  &-sub-row {
-    td {
-      background-color: @veui-gray-color-8;
-    }
-
-    &:hover .@{veui-prefix}-table-cell-expand {
-      background-color: #fff;
-    }
-  }
-
-  &-sub-row &-cell-expand {
-    position: relative;
-    background-color: #fff;
-
-    &::before {
-      content: "";
-      .absolute(-1px, 0, _);
-      border-top: 1px solid #fff;
-    }
-  }
-
-  &[ui~="slim"] {
-    th,
-    td {
-      .veui-make-table-row-height(@veui-font-size-normal, 8px);
-    }
-  }
-
-  &[ui~="alt"] thead {
-    th {
-      background-color: @veui-gray-color-8;
-    }
-  }
-
-  &[ui~="bordered"] td {
-    border-style: solid;
-
-    &:first-child {
-      border-left: none;
-    }
-
-    &:last-child {
-      border-right: none;
-    }
-  }
-
   &-expander {
     .veui-transition(transform);
 
     &-collapse {
-      transform: rotateZ(90deg);
+      transform: rotate(180deg);
+    }
+  }
+
+  & &-expander {
+    .dls-icon-size(@dls-table-icon-size-aux);
+  }
+
+  &-header-icon {
+    margin-left: @dls-table-cell-content-spacing;
+
+    &-active {
+      color: @dls-table-header-icon-color-activated !important;
+    }
+
+    .@{veui-prefix}-icon {
+      .dls-icon-size(@dls-table-icon-size);
+    }
+  }
+
+  &-cell-right &-header-icon {
+    .margin(_, @dls-table-cell-content-spacing, _, 0);
+  }
+
+  &-sorter .@{veui-prefix}-icon {
+    .veui-transition(transform);
+  }
+
+  &-sorter-reverse .@{veui-prefix}-icon {
+    transform: rotate(180deg);
+  }
+
+  &-scrollable-y thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  &-main {
+    min-width: 100%;
+  }
+
+  &-sub-row {
+    td {
+      background-color: @dls-table-sub-row-background-color;
+
+      &:hover {
+        background-color: @dls-table-sub-row-background-color-hover;
+      }
+    }
+  }
+
+  &[ui~="m"] {
+    font-size: @dls-table-font-size-m;
+    border-radius: @dls-table-border-radius-m;
+
+    .@{veui-prefix}-table {
+      &-col-select {
+        width: dls-sum(@dls-checkbox-size-m, @dls-table-header-padding-x * 2);
+      }
+
+      &-bordered &-col-select {
+        width: dls-sum(
+          @dls-checkbox-size-m,
+          @dls-table-header-padding-x * 2,
+          1px
+        );
+      }
+    }
+  }
+
+  &[ui~="s"] {
+    font-size: @dls-table-font-size-s;
+    border-radius: @dls-table-border-radius-s;
+
+    .@{veui-prefix}-table {
+      &-col-select {
+        width: dls-sum(@dls-checkbox-size-s, @dls-table-header-padding-x * 2);
+      }
+
+      &-bordered &-col-select {
+        width: dls-sum(
+          @dls-checkbox-size-s,
+          @dls-table-header-padding-x * 2,
+          1px
+        );
+      }
     }
   }
 }

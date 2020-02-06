@@ -1,14 +1,15 @@
 import Row from './_TableRow'
 import prefix from '../../mixins/prefix'
-import table from '../../mixins/table'
+import table, { mapTableData } from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import { flatMap } from 'lodash'
 
 export default {
   name: 'veui-table-body',
+  uiTypes: ['transparent'],
   mixins: [prefix, table, i18n],
   computed: {
-    ...table.mapTableData(
+    ...mapTableData(
       'data',
       'selectable',
       'expandable',

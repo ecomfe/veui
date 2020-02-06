@@ -1,5 +1,5 @@
 import prefix from '../../mixins/prefix'
-import table from '../../mixins/table'
+import table, { mapTableData } from '../../mixins/table'
 
 export default {
   name: 'veui-table-col-group',
@@ -8,7 +8,7 @@ export default {
     gutter: Boolean
   },
   computed: {
-    ...table.mapTableData(
+    ...mapTableData(
       { realColumns: 'columns' },
       'selectable',
       'expandable',

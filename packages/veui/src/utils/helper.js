@@ -59,7 +59,16 @@ export function isTransparent (vm) {
   if (!vm.$vnode) {
     return false
   }
-  let compOptions = vm.$vnode.componentOptions
+  return isAbstractVNode(vm.$vnode)
+}
+
+/**
+ * 判断虚拟DOM节点是否是抽象组件（transition/transition-group）
+ *
+ * @param {VNode} vnode 虚拟DOM节点
+ */
+export function isAbstractVNode (vnode) {
+  let compOptions = vnode.componentOptions
   return (
     compOptions.Ctor.options.abstract || compOptions.tag === 'transition-group'
   )

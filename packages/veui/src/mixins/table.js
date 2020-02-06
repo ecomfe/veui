@@ -18,19 +18,20 @@ function getOneKeyValue (map) {
 }
 
 export default {
-  computed: getTypedAncestorTracker('table').computed,
-  mapTableData (...keys) {
-    return keys.reduce((acc, key) => {
-      if (isObject(key)) {
-        let kv = getOneKeyValue(key)
-        if (!kv) {
-          return acc
-        }
-        acc[kv.value] = getDataGetter(kv.key)
-      } else {
-        acc[key] = getDataGetter(key)
+  computed: getTypedAncestorTracker('table').computed
+}
+
+export function mapTableData (...keys) {
+  return keys.reduce((acc, key) => {
+    if (isObject(key)) {
+      let kv = getOneKeyValue(key)
+      if (!kv) {
+        return acc
       }
-      return acc
-    }, {})
-  }
+      acc[kv.value] = getDataGetter(kv.key)
+    } else {
+      acc[key] = getDataGetter(key)
+    }
+    return acc
+  }, {})
 }

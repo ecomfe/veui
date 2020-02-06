@@ -36,8 +36,8 @@
   </section>
   <section>
     <veui-table
-      ui="alt bordered custom"
-      scroll="150"
+      ui="s"
+      scroll="300"
       :data="data"
       :column-filter="columns"
       :key-field="selectSpanRow ? 'group' : 'id'"
@@ -82,11 +82,11 @@
       />
       <veui-table-column
         field="price"
-        title="价格"
         sortable
         width="160"
         align="right"
       >
+        <template slot="head"> 价格 <i>(每 1000g)</i> </template>
         <template slot-scope="props">
           {{ props.item.price | currency }}
         </template>
@@ -114,17 +114,21 @@
       >
         <template slot-scope="props">
           <veui-button
-            ui="link"
+            ui="text"
             @click="log(props.item)"
           >
             编辑
           </veui-button>
           <veui-button
-            ui="link alert"
+            ui="text"
             @click="del(props.index)"
           >
             删除
           </veui-button>
+          <veui-link
+            ui="strong"
+            to="table"
+          >查看</veui-link>
         </template>
       </veui-table-column>
     </veui-table>
@@ -327,6 +331,7 @@
   </section>
   <section class="container">
     <veui-table
+      bordered
       key-field="id"
       :data="data"
     >
@@ -351,7 +356,8 @@ import {
   CheckboxGroup,
   Table,
   Column,
-  Tooltip
+  Tooltip,
+  Link
 } from 'veui'
 
 export default {
@@ -363,6 +369,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-checkbox': Checkbox,
     'veui-input': Input,
+    'veui-link': Link,
     'veui-checkboxgroup': CheckboxGroup
   },
   filters: {
@@ -382,7 +389,10 @@ export default {
       idTitle: '#',
       showGroup: true,
       selectSpanRow: true,
-      fields: [{ name: 'id', title: 'ID' }, { name: 'desc', title: '描述' }],
+      fields: [
+        { name: 'id', title: 'ID' },
+        { name: 'desc', title: '描述' }
+      ],
       data: [
         {
           id: '3154',
@@ -487,10 +497,42 @@ export default {
               typeId: '788'
             }
           ]
+        },
+        {
+          id: '3158',
+          desc: '数据描述5',
+          price: 168,
+          updateDate: '20180109',
+          group: '1579',
+          typeId: '789'
+        },
+        {
+          id: '3159',
+          desc: '数据描述6',
+          price: 820,
+          updateDate: '20180109',
+          group: '1579',
+          typeId: '789'
+        },
+        {
+          id: '3160',
+          desc: '数据描述7',
+          price: 357,
+          updateDate: '20180109',
+          group: '1580',
+          typeId: '789'
+        },
+        {
+          id: '3161',
+          desc: '数据描述8',
+          price: 360,
+          updateDate: '20180109',
+          group: '1580',
+          typeId: '789'
         }
       ],
-      nextId: 3158,
-      nextIndex: 4,
+      nextId: 3162,
+      nextIndex: 9,
       columns: [
         'typeId',
         'id',

@@ -1,11 +1,12 @@
 import prefix from '../../mixins/prefix'
-import table from '../../mixins/table'
+import table, { mapTableData } from '../../mixins/table'
 
 export default {
   name: 'veui-table-foot',
   mixins: [prefix, table],
+  uiTypes: ['transparent'],
   computed: {
-    ...table.mapTableData(
+    ...mapTableData(
       'selectable',
       'expandable',
       { realColumns: 'columns' },
@@ -25,10 +26,10 @@ export default {
                 this.columns.map(col => (
                   <th
                     class={
-                      col.align ? this.$c(`table-column-${col.align}`) : null
+                      col.align ? this.$c(`table-cell-${col.align}`) : null
                     }
                   >
-                    {col.renderFoot()}
+                    <div class={this.$c('table-cell')}>{col.renderFoot()}</div>
                   </th>
                 ))
               )

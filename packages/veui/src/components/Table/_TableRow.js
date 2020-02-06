@@ -1,21 +1,23 @@
 import { find } from 'lodash'
+import Button from '../Button'
 import Checkbox from '../Checkbox'
 import Radio from '../Radio'
 import Icon from '../Icon'
 import prefix from '../../mixins/prefix'
-import table from '../../mixins/table'
+import table, { mapTableData } from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 
 export default {
   name: 'veui-table-row',
   mixins: [prefix, table, i18n],
+  uiTypes: ['transparent'],
   props: {
     index: Number,
     item: Object,
     expanded: Boolean
   },
   computed: {
-    ...table.mapTableData(
+    ...mapTableData(
       'data',
       'selectable',
       'selectMode',
@@ -23,6 +25,7 @@ export default {
       'expandable',
       'keyField',
       'icons',
+      'uiParts',
       { realKeys: 'keys' },
       { realColumns: 'columns' },
       { viewColumnCount: 'columnCount' }
@@ -95,17 +98,17 @@ export default {
         ) : null}
         {this.expandable ? (
           <td role="cell" class={this.$c('table-cell-expand')}>
-            {(item.children || []).length ? (
-              <button
-                type="button"
-                aria-label={this.t(
-                  this.expanded ? '@table.collapseRow' : '@table.expandRow'
-                )}
-                onClick={() => {
-                  this.table.expand(!this.expanded, index)
-                }}
-              >
-                <transition name={this.$c('table-expander')}>
+            <div class={this.$c('table-cell')}>
+              {(item.children || []).length ? (
+                <Button
+                  ui={this.uiParts.icon}
+                  aria-label={this.t(
+                    this.expanded ? '@table.collapseRow' : '@table.expandRow'
+                  )}
+                  onClick={() => {
+                    this.table.expand(!this.expanded, index)
+                  }}
+                >
                   <Icon
                     class={[
                       this.$c('table-expander'),
@@ -119,9 +122,9 @@ export default {
                       this.expanded ? this.icons.collapse : this.icons.expand
                     }
                   />
-                </transition>
-              </button>
-            ) : null}
+                </Button>
+              ) : null}
+            </div>
           </td>
         ) : null}
         {this.renderColumns(index)}
@@ -160,16 +163,18 @@ export default {
         let data = this.getCellSpan(col)
         return data ? (
           <td
-            class={col.align ? this.$c(`table-column-${col.align}`) : null}
+            class={col.align ? this.$c(`table-cell-${col.align}`) : null}
             role="cell"
             {...data}
           >
             <div class={this.$c('table-cell')}>
-              {(isSubRow ? col.renderSubRow : col.renderBody)({
-                ...item,
-                item,
-                index
-              })}
+              <div class={this.$c('table-cell-content')}>
+                {(isSubRow ? col.renderSubRow : col.renderBody)({
+                  ...item,
+                  item,
+                  index
+                })}
+              </div>
             </div>
           </td>
         ) : null
