@@ -1,22 +1,29 @@
-import 'veui-theme-dls-icons/chevron-right'
+import 'veui-theme-dls-icons/chevron-double-down'
+import 'veui-theme-dls-icons/chevron-down'
+import 'veui-theme-dls-icons/arrow-down'
+import 'veui-theme-dls-icons/sort'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      expand: 'chevron-right',
-      collapse: 'chevron-right'
+      expand: 'chevron-down',
+      collapse: 'chevron-down',
+      expandAll: 'chevron-double-down',
+      collapseAll: 'chevron-double-down',
+      asc: 'arrow-down',
+      desc: 'arrow-down',
+      sort: 'sort'
     },
     ui: {
-      slim: {
-        boolean: true
-      },
-      alt: {
-        boolean: true
-      },
-      bordered: {
-        boolean: true
+      size: {
+        values: ['m', 's'],
+        inherit: true,
+        default: 'm'
       }
+    },
+    parts: {
+      icon: 'icon'
     }
   },
   'table'

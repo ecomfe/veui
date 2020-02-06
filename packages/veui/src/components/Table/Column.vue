@@ -6,7 +6,7 @@ import '../../common/uiTypes'
 
 export default {
   name: 'veui-table-column',
-  uiTypes: ['table-column'],
+  uiTypes: ['table-column', 'transparent'],
   mixins: [table],
   props: {
     title: String,

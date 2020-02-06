@@ -1,58 +1,33 @@
 <template>
 <div
-  :class="$c('table')"
+  :class="{
+    [$c('table')]: true,
+    [$c('table-bordered')]: realBordered,
+    [$c('table-scrollable-y')]: scrollableY
+  }"
   :ui="realUi"
+  :style="{
+    maxHeight: scrollableY ? realScroll.y : null
+  }"
 >
-  <div
-    v-if="scrollableY"
-    :class="$c('table-fixed-header')"
-    aria-hidden="true"
-  >
-    <table>
-      <col-group gutter/>
-      <table-head
-        ref="head"
-        @sort="sort"
-      />
-    </table>
-  </div>
   <div
     ref="main"
     :class="$c('table-main')"
-    :style="{
-      maxHeight: scrollableY ? realScroll.y : null
-    }"
   >
     <table>
       <slot/>
       <col-group/>
       <table-head
-        v-if="!scrollableY"
         ref="head"
         @sort="sort"
       />
       <table-body>
         <template slot="no-data">
           <slot name="no-data">
-            {{ t('noData') }}
+            {{ t("noData") }}
           </slot>
         </template>
       </table-body>
-      <table-foot
-        v-if="!scrollableY && hasFoot"
-        ref="foot"
-      >
-        <slot name="foot"/>
-      </table-foot>
-    </table>
-  </div>
-  <div
-    v-if="scrollableY"
-    :class="$c('table-fixed-footer')"
-    aria-hidden="true"
-  >
-    <table>
-      <col-group gutter/>
       <table-foot
         v-if="hasFoot"
         ref="foot"
@@ -66,6 +41,7 @@
 
 <script>
 import warn from '../../utils/warn'
+import config from '../../managers/config'
 import { normalizeLength } from '../../utils/helper'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
@@ -75,9 +51,15 @@ import Body from './_TableBody'
 import Head from './_TableHead'
 import Foot from './_TableFoot'
 import ColGroup from './_ColGroup'
-import { getElementScrollbarWidth } from '../../utils/browser'
 import '../../common/uiTypes'
 import { isEqualSet } from '../../utils/lang'
+
+config.defaults(
+  {
+    allowedOrders: ['desc', 'asc']
+  },
+  'table'
+)
 
 export default {
   name: 'veui-table',
@@ -101,6 +83,7 @@ export default {
     keyField: String,
     selectable: Boolean,
     expandable: Boolean,
+    bordered: Boolean,
     selectMode: {
       type: String,
       default: 'multiple',
@@ -172,6 +155,12 @@ export default {
         (this.selectable ? 1 : 0) +
         (this.expandable ? 1 : 0)
       )
+    },
+    hasSpan () {
+      return this.columns.some(({ span }) => span)
+    },
+    realBordered () {
+      return this.bordered || this.hasSpan
     },
     realKeys () {
       if (this.keyField) {
@@ -259,20 +248,12 @@ export default {
   created () {
     this.validateSelected()
   },
-  mounted () {
-    if (this.scrollableY) {
-      this.updateLayout()
-    }
-  },
   updated () {
     if (this.staleHead) {
       this.$refs.head.$forceUpdate()
     }
     if (this.hasFoot && this.staleFoot) {
       this.$refs.foot.$forceUpdate()
-    }
-    if (this.scrollableY) {
-      this.updateLayout()
     }
   },
   methods: {
@@ -351,9 +332,6 @@ export default {
         return false
       }
       return true
-    },
-    updateLayout () {
-      this.gutterWidth = getElementScrollbarWidth(this.$refs.main)
     }
   }
 }
