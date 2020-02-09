@@ -46,7 +46,8 @@ const OptionGroup = {
       validator (val) {
         return ['inline', 'popup'].indexOf(val) !== -1
       }
-    }
+    },
+    optionTag: Option.props.tag
   },
   data () {
     return {
@@ -75,11 +76,11 @@ const OptionGroup = {
         (this.$scopedSlots.label &&
           this.$scopedSlots.label({ label: this.label })) ||
         this.$slots.label ||
-        ((this.menu &&
+        (this.menu &&
           this.menu.$scopedSlots.label &&
           this.menu.$scopedSlots.label({ label: this.label })) ||
-          (this.menu && this.menu.$slots.label) ||
-          this.label)
+        (this.menu && this.menu.$slots.label) ||
+        this.label
       )
     },
     realTrigger () {
@@ -167,6 +168,13 @@ const OptionGroup = {
     },
     close () {
       this.expanded = false
+    },
+    closeMenu (ref) {
+      let menu = this.$refs[ref]
+      while (menu) {
+        menu.close()
+        menu = menu.menu
+      }
     }
   },
   render () {
@@ -180,6 +188,7 @@ const OptionGroup = {
         }
         return option.options ? (
           <OptionGroup
+            ref={`group-${i}`}
             label={option.label}
             options={option.options}
             position={option.position}
@@ -187,6 +196,8 @@ const OptionGroup = {
             hidden={option.hidden}
             aria-hidden={option.hidden}
             disabled={option.disabled}
+            overlayClass={this.overlayClass}
+            optionTag={this.optionTag}
             key={i}
             trigger={option.trigger || this.trigger}
             scopedSlots={{
@@ -195,7 +206,14 @@ const OptionGroup = {
                   this.$scopedSlots.label ||
                   (group => group.label),
               option: this.$scopedSlots.option || null,
-              'option-label': this.$scopedSlots['option-label'] || null
+              'option-label': this.$scopedSlots['option-label'] || null,
+              'option-group-label': this.$scopedSlots['option-group-label']
+                ? () =>
+                  this.$scopedSlots['option-group-label']({
+                    ...option,
+                    closeMenu: () => this.closeMenu(`group-${i}`)
+                  })
+                : null
             }}
           />
         ) : (
@@ -205,6 +223,7 @@ const OptionGroup = {
             value={option.value}
             hidden={option.hidden}
             disabled={this.disabled || option.disabled}
+            tag={this.optionTag}
             key={i}
           >
             {this.$scopedSlots.option
@@ -220,7 +239,8 @@ const OptionGroup = {
       })
       : []
 
-    let LabelTag = this.canPopOut ? 'button' : 'div'
+    let LabelTag =
+      this.canPopOut && EVENT_MAP[this.trigger] === 'click' ? 'button' : 'div'
 
     return (
       <div
@@ -264,7 +284,11 @@ const OptionGroup = {
               }
               : {})}
           >
-            <span class={this.$c('option-label')}>{this.labelContent}</span>
+            {this.$scopedSlots['option-group-label'] ? (
+              this.$scopedSlots['option-group-label']()
+            ) : (
+              <span class={this.$c('option-label')}>{this.labelContent}</span>
+            )}
             {this.canPopOut ? (
               <Icon
                 class={this.$c('option-group-expandable')}
