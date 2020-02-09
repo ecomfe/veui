@@ -1,7 +1,8 @@
 <template>
-<button
+<div
+  :is="tag"
   v-show="!hidden"
-  type="button"
+  :type="tag === 'button' ? 'button' : null"
   :tabindex="hidden ? -1 : false"
   :ui="realUi"
   :class="{
@@ -22,7 +23,7 @@
       </slot>
     </span>
   </slot>
-</button>
+</div>
 </template>
 
 <script>
@@ -50,6 +51,10 @@ export default {
     hidden: {
       type: Boolean,
       default: false
+    },
+    tag: {
+      type: String,
+      default: 'button'
     }
   },
   computed: {

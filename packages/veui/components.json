@@ -188,6 +188,10 @@
     "path": "Loading.vue"
   },
   {
+    "name": "Menu",
+    "path": "Menu.vue"
+  },
+  {
     "name": "NumberInput",
     "path": "NumberInput.vue"
   },

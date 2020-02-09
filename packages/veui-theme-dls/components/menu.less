@@ -1,0 +1,250 @@
+@import "../lib.less";
+@import (reference) "../dropdown.less";
+
+.@{veui-prefix}-menu {
+  border-right: 1px solid @dls-menu-border-color;
+  width: @dls-menu-width;
+
+  &-collapsed {
+    width: @dls-menu-width-collapsed;
+  }
+
+  &-tree,
+  &-overlay {
+    font-size: @dls-menu-font-size-m;
+    .@{veui-prefix}-menu-link {
+      text-decoration: none;
+    }
+  }
+
+  // Item
+  &-item {
+    cursor: pointer;
+    .centered-line(@dls-menu-item-height-m);
+    &::before {
+      content: "";
+      .absolute(_, 0, _, 0);
+      height: inherit;
+      background-color: @dls-menu-item-background-color;
+    }
+
+    &-label {
+      height: inherit;
+      &::before {
+        content: "";
+        .absolute(_, 0, _, 0);
+        height: inherit;
+      }
+    }
+
+    &:hover::before {
+      background-color: @dls-menu-item-background-color-hover;
+    }
+    &.focus-visible::before {
+      background-color: @dls-menu-item-background-color-focus;
+    }
+    &:active::before {
+      background-color: @dls-menu-item-background-color-active;
+    }
+
+    &-text,
+    &-icon {
+      position: relative;
+      z-index: 1;
+    }
+
+    &-icon {
+      margin-right: 12px; // TODO 缺少个 3p 的变量？
+      .dls-icon-size(@dls-menu-item-icon-size);
+    }
+  }
+
+  &-tree {
+    position: relative;
+    padding: @dls-menu-padding-y @dls-menu-padding-x;
+    .@{veui-prefix}-tree-item {
+      margin-bottom: @dls-menu-item-spacing;
+      height: @dls-menu-item-height-m;
+      // FIXME：Tree 的 before 先干掉，active 等状态放不上
+      &::before {
+        display: none;
+      }
+    }
+    & > li:last-child > .@{veui-prefix}-tree-item {
+      margin-bottom: 0;
+    }
+    ul {
+      padding-left: @dls-menu-level-indent;
+    }
+    // FIXME，
+    & > li > ul {
+      padding-left: dls-sum(@dls-menu-level-indent, 1em);
+    }
+  }
+  &-tree &-item {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    outline: none;
+    max-width: 100%;
+  }
+  &-tree &-link {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+  &-link &-item-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // exact-active
+  &-overlay &-item-exact-active:not(.@{veui-prefix}-disabled),
+  &-item-exact-active:not(.@{veui-prefix}-disabled) &-item-icon,
+  &-item-exact-active:not(.@{veui-prefix}-disabled) &-item-label {
+    color: @dls-menu-item-font-color-current-active;
+    font-weight: @dls-menu-item-font-weight-current;
+  }
+  &-item-exact-active:not(.@{veui-prefix}-disabled) {
+    &::before {
+      background-color: @dls-menu-item-background-color-current;
+    }
+    &:hover::before {
+      background-color: @dls-menu-item-background-color-current-hover;
+    }
+    &.focus-visible::before {
+      background-color: @dls-menu-item-background-color-current-focus;
+    }
+    &:active::before {
+      background-color: @dls-menu-item-background-color-current-active;
+    }
+
+    // Indicators
+    .@{veui-prefix}-menu-tree & {
+      &::after {
+        content: "";
+        .absolute(_, -1px, _, _);
+        .size(@dls-menu-indicator-width, inherit);
+        background: @dls-menu-indicator-color;
+      }
+      &:hover::after {
+        background-color: @dls-menu-indicator-color-hover;
+      }
+      &.focus-visible::after {
+        background-color: @dls-menu-indicator-color-focus;
+      }
+      &:active::after {
+        background-color: @dls-menu-indicator-color-active;
+      }
+    }
+  }
+
+  &-item.@{veui-prefix}-disabled &-item-icon,
+  &-item.@{veui-prefix}-disabled &-item-label {
+    color: @dls-menu-item-font-color-disabled;
+  }
+
+  &-item-expand-switcher {
+    margin-left: 12px; // TODO
+    position: relative;
+    transform: rotateZ(90deg);
+  }
+  .@{veui-prefix}-tree-item-expanded &-item-expand-switcher {
+    transform: rotateZ(-90deg);
+  }
+
+  &-item-expand-switcher,
+  &-bottom-collapse-switcher {
+    background: none;
+    border: none;
+    padding: 0;
+    outline: none;
+    cursor: pointer;
+    line-height: 1;
+    color: @dls-icon-color-aux;
+    .@{veui-prefix}-icon {
+      vertical-align: top;
+    }
+  }
+
+  // Bottom
+  &-bottom {
+    border-top: 1px solid @dls-menu-separator-color;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    height: @dls-menu-footer-height-m;
+    padding-right: @dls-menu-padding-x;
+
+    &-collapse-switcher {
+      transform: rotateZ(180deg);
+    }
+  }
+  &-collapsed &-bottom-collapse-switcher {
+    transform: rotateZ(0);
+  }
+
+  &-collapsed &-tree {
+    padding: @dls-menu-padding-y 0;
+  }
+  &-collapsed &-item {
+    justify-content: center;
+  }
+
+  // collapsed
+  &-collapsed &-item-exact-active-within::before {
+    background-color: @dls-menu-item-background-color-current;
+  }
+  &-collapsed &-tree &-link {
+    flex-basis: 0;
+    flex-grow: 0;
+  }
+
+  &-collapsed &-item-icon {
+    margin: 0;
+  }
+
+  &-overlay {
+    & > .@{veui-prefix}-option-group-options,
+    & > .@{veui-prefix}-option-group {
+      &:extend(._veui-dropdown-overlay all);
+      margin: 0 @dls-option-dropdown-target-spacing;
+    }
+
+    .@{veui-prefix}-option {
+      &,
+      &-group-label {
+        position: relative;
+      }
+    }
+  }
+
+  &-overlay &-link::after {
+    content: "";
+    display: block;
+    .absolute(0, 0, 0, 0);
+  }
+
+  &-tree[ui~="s"],
+  &-overlay[ui~="s"] {
+    font-size: @dls-menu-font-size-s;
+  }
+
+  &[ui~="s"] &-tree .@{veui-prefix}-tree-item,
+  &[ui~="s"] &-item {
+    .centered-line(@dls-menu-item-height-s);
+  }
+
+  &-tree[ui~="l"],
+  &-overlay[ui~="l"] {
+    font-size: @dls-menu-font-size-l;
+  }
+  &[ui~="l"] &-tree .@{veui-prefix}-tree-item,
+  &[ui~="l"] &-item {
+    .centered-line(@dls-menu-item-height-l);
+  }
+}

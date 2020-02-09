@@ -49,6 +49,7 @@ import Badge from './Badge'
 import TimePicker from './TimePicker'
 import Embedded from './Embedded'
 import Anchor from './Anchor'
+import Menu from './Menu'
 
 export default [
   {
@@ -330,5 +331,36 @@ export default [
     path: '/uploader',
     name: 'Uploader',
     component: Uploader
+  },
+  {
+    path: '/menu',
+    name: 'Menu',
+    component: Menu,
+    children: [
+      {
+        path: 'input',
+        component: Input
+      },
+      {
+        path: 'progress',
+        component: Progress
+      },
+      {
+        path: 'switch',
+        component: Switch
+      },
+      {
+        path: 'link',
+        component: Link
+      },
+      {
+        path: 'loading',
+        component: Loading
+      },
+      {
+        path: 'button',
+        component: Button
+      }
+    ]
   }
 ]
