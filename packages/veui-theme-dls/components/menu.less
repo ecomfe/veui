@@ -4,6 +4,8 @@
 .@{veui-prefix}-menu {
   border-right: 1px solid @dls-menu-border-color;
   width: @dls-menu-width;
+  display: flex;
+  flex-direction: column;
 
   &-collapsed {
     width: @dls-menu-width-collapsed;
@@ -17,51 +19,12 @@
     }
   }
 
-  // Item
-  &-item {
-    cursor: pointer;
-    .centered-line(@dls-menu-item-height-m);
-    &::before {
-      content: "";
-      .absolute(_, 0, _, 0);
-      height: inherit;
-      background-color: @dls-menu-item-background-color;
-    }
-
-    &-label {
-      height: inherit;
-      &::before {
-        content: "";
-        .absolute(_, 0, _, 0);
-        height: inherit;
-      }
-    }
-
-    &:hover::before {
-      background-color: @dls-menu-item-background-color-hover;
-    }
-    &.focus-visible::before {
-      background-color: @dls-menu-item-background-color-focus;
-    }
-    &:active::before {
-      background-color: @dls-menu-item-background-color-active;
-    }
-
-    &-text,
-    &-icon {
-      position: relative;
-      z-index: 1;
-    }
-
-    &-icon {
-      margin-right: 12px; // TODO 缺少个 3p 的变量？
-      .dls-icon-size(@dls-menu-item-icon-size);
-    }
-  }
-
+  // tree
   &-tree {
     position: relative;
+    flex: 1;
     padding: @dls-menu-padding-y @dls-menu-padding-x;
+
     .@{veui-prefix}-tree-item {
       margin-bottom: @dls-menu-item-spacing;
       height: @dls-menu-item-height-m;
@@ -69,58 +32,157 @@
       &::before {
         display: none;
       }
+
+      &-group {
+        padding-left: @dls-menu-level-indent;
+      }
     }
+
+    // 第二级缩进
+    &-has-icon > li > ul.@{veui-prefix}-tree-item-group {
+      padding-left: dls-sum(
+        @dls-menu-item-icon-size,
+        @dls-menu-item-content-spacing
+      );
+    }
+
     & > li:last-child > .@{veui-prefix}-tree-item {
       margin-bottom: 0;
     }
-    ul {
-      padding-left: @dls-menu-level-indent;
-    }
-    // FIXME，
-    & > li > ul {
-      padding-left: dls-sum(@dls-menu-level-indent, 1em);
-    }
   }
-  &-tree &-item {
+
+  // bottom
+  &-bottom {
+    flex: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-top: 1px solid @dls-menu-separator-color;
+    height: @dls-menu-footer-height-m;
+    padding-right: @dls-menu-padding-x;
+  }
+  &-toggle {
+    transform: rotateZ(180deg);
+  }
+
+  // item
+  &-item {
+    cursor: pointer;
     display: flex;
     flex: 1;
     align-items: center;
     outline: none;
     max-width: 100%;
-  }
-  &-tree &-link {
-    flex: 1;
-    display: flex;
-    overflow: hidden;
-    &:first-child {
-      margin-left: 0;
+    height: inherit;
+
+    &::before {
+      content: "";
+      .absolute(_, 0, _, 0);
+      height: inherit;
+      background-color: @dls-menu-item-background-color;
+    }
+
+    &:not(.@{veui-prefix}-disabled) {
+      &:hover {
+        color: @dls-menu-item-font-color-hover;
+        &::before {
+          background-color: @dls-menu-item-background-color-hover;
+        }
+      }
+      &.focus-visible {
+        color: @dls-menu-item-font-color-focus;
+        &::before {
+          background-color: @dls-menu-item-background-color-focus;
+        }
+      }
+      &:active {
+        color: @dls-menu-item-font-color-active;
+        &::before {
+          background-color: @dls-menu-item-background-color-active;
+        }
+      }
     }
   }
-  &-link &-item-text {
+
+  &-overlay .@{veui-prefix}-option-group-expandable,
+  &-item-label,
+  &-item-icon {
+    position: relative;
+    z-index: 1;
+  }
+
+  &-item-icon {
+    margin-right: @dls-menu-item-content-spacing;
+    .dls-icon-size(@dls-menu-item-icon-size, true);
+  }
+
+  &-item-label {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  // exact-active
-  &-overlay &-item-exact-active:not(.@{veui-prefix}-disabled),
-  &-item-exact-active:not(.@{veui-prefix}-disabled) &-item-icon,
-  &-item-exact-active:not(.@{veui-prefix}-disabled) &-item-label {
-    color: @dls-menu-item-font-color-current-active;
-    font-weight: @dls-menu-item-font-weight-current;
+  &-link {
+    // link 充满整个 item
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    height: inherit;
+
+    &::before {
+      content: "";
+      .absolute(_, 0);
+      height: inherit;
+    }
   }
+
+  &-tree &-link {
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
   &-item-exact-active:not(.@{veui-prefix}-disabled) {
+    .@{veui-prefix}-menu-item-icon,
+    .@{veui-prefix}-menu-link {
+      color: @dls-menu-item-font-color-current;
+      font-weight: @dls-menu-item-font-weight-current;
+    }
+
     &::before {
       background-color: @dls-menu-item-background-color-current;
+      .veui-transition(background-color);
     }
-    &:hover::before {
-      background-color: @dls-menu-item-background-color-current-hover;
+
+    &:hover {
+      .@{veui-prefix}-menu-item-icon,
+      .@{veui-prefix}-menu-link {
+        color: @dls-menu-item-font-color-current-hover;
+      }
+      &::before {
+        background-color: @dls-menu-item-background-color-current-hover;
+      }
     }
-    &.focus-visible::before {
-      background-color: @dls-menu-item-background-color-current-focus;
+
+    &.focus-visible {
+      .@{veui-prefix}-menu-item-icon,
+      .@{veui-prefix}-menu-link {
+        color: @dls-menu-item-font-color-current-focus;
+      }
+      &::before {
+        background-color: @dls-menu-item-background-color-current-focus;
+      }
     }
-    &:active::before {
-      background-color: @dls-menu-item-background-color-current-active;
+
+    &:active {
+      .@{veui-prefix}-menu-item-icon,
+      .@{veui-prefix}-menu-link {
+        color: @dls-menu-item-font-color-current-active;
+      }
+      &::before {
+        background-color: @dls-menu-item-background-color-current-active;
+      }
     }
 
     // Indicators
@@ -144,66 +206,49 @@
   }
 
   &-item.@{veui-prefix}-disabled &-item-icon,
-  &-item.@{veui-prefix}-disabled &-item-label {
+  &-item.@{veui-prefix}-disabled &-link {
     color: @dls-menu-item-font-color-disabled;
   }
 
-  &-item-expand-switcher {
-    margin-left: 12px; // TODO
-    position: relative;
-    transform: rotateZ(90deg);
-  }
-  .@{veui-prefix}-tree-item-expanded &-item-expand-switcher {
-    transform: rotateZ(-90deg);
-  }
-
-  &-item-expand-switcher,
-  &-bottom-collapse-switcher {
+  &-item-toggle,
+  &-toggle {
+    display: flex;
     background: none;
     border: none;
     padding: 0;
     outline: none;
     cursor: pointer;
-    line-height: 1;
     color: @dls-icon-color-aux;
-    .@{veui-prefix}-icon {
-      vertical-align: top;
-    }
+    .veui-transition(transform);
   }
 
-  // Bottom
-  &-bottom {
-    border-top: 1px solid @dls-menu-separator-color;
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    height: @dls-menu-footer-height-m;
-    padding-right: @dls-menu-padding-x;
-
-    &-collapse-switcher {
-      transform: rotateZ(180deg);
-    }
+  &-item-toggle {
+    position: relative;
+    margin-left: @dls-menu-item-content-spacing;
+    transform: rotateZ(90deg);
   }
-  &-collapsed &-bottom-collapse-switcher {
+  .@{veui-prefix}-tree-item-expanded &-item-toggle {
+    transform: rotateZ(-90deg);
+  }
+
+  // collapsed
+  &-collapsed &-toggle {
     transform: rotateZ(0);
   }
 
   &-collapsed &-tree {
     padding: @dls-menu-padding-y 0;
   }
-  &-collapsed &-item {
+  &-collapsed &-tree &-item {
     justify-content: center;
   }
-
-  // collapsed
-  &-collapsed &-item-exact-active-within::before {
+  &-collapsed &-item-active::before {
+    // TODO: active 样式
     background-color: @dls-menu-item-background-color-current;
   }
   &-collapsed &-tree &-link {
-    flex-basis: 0;
-    flex-grow: 0;
+    flex: 0;
   }
-
   &-collapsed &-item-icon {
     margin: 0;
   }
@@ -223,28 +268,27 @@
     }
   }
 
-  &-overlay &-link::after {
-    content: "";
-    display: block;
-    .absolute(0, 0, 0, 0);
-  }
-
-  &-tree[ui~="s"],
+  &[ui~="s"],
+  &[ui~="s"] &-tree,
   &-overlay[ui~="s"] {
     font-size: @dls-menu-font-size-s;
   }
 
-  &[ui~="s"] &-tree .@{veui-prefix}-tree-item,
-  &[ui~="s"] &-item {
-    .centered-line(@dls-menu-item-height-s);
+  &[ui~="s"] &-tree .@{veui-prefix}-tree-item {
+    height: @dls-menu-item-height-s;
   }
 
-  &-tree[ui~="l"],
+  &[ui~="s"] &-bottom {
+    height: @dls-menu-footer-height-s;
+  }
+
+  &[ui~="l"],
+  &[ui~="l"] &-tree,
   &-overlay[ui~="l"] {
     font-size: @dls-menu-font-size-l;
   }
-  &[ui~="l"] &-tree .@{veui-prefix}-tree-item,
-  &[ui~="l"] &-item {
-    .centered-line(@dls-menu-item-height-l);
+
+  &[ui~="l"] &-bottom {
+    height: @dls-menu-footer-height-l;
   }
 }

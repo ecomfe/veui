@@ -8,7 +8,10 @@
 >
   <veui-tree
     ref="tree"
-    :class="$c('menu-tree')"
+    :class="{
+      [$c('menu-tree')]: true,
+      [$c('menu-tree-has-icon')]: hasIcon
+    }"
     :datasource="itemInfo.realItems"
     :expanded.sync="realExpanded"
     keys="name"
@@ -16,59 +19,58 @@
   >
     <template
       slot="item"
-      slot-scope="props"
+      slot-scope="link"
     >
       <div
-        :ref="`item-${props.name}`"
+        :ref="`item-${link.name}`"
         :class="{
           [$c('menu-item')]: true,
-          ...itemClass(props)
+          ...itemClass(link)
         }"
         tabindex="1"
-        @mouseenter="show(props)"
+        @mouseenter="show(link)"
       >
         <slot
           name="item"
-          v-bind="props"
+          v-bind="link"
         >
           <veui-icon
-            v-if="props.icon"
+            v-if="link.icon"
             :class="$c('menu-item-icon')"
-            :name="props.icon"
+            :name="link.icon"
           />
           <slot
             name="item-label"
-            v-bind="props"
+            v-bind="link"
           >
             <veui-link
-              :class="{
-                [$c('menu-link')]: true,
-                [$c('menu-item-label')]: true
-              }"
-              :disabled="!!props.disabled"
-              :to="props.to"
               :ui="realUi"
+              :class="{
+                [$c('menu-link')]: true
+              }"
+              :disabled="!!link.disabled"
+              v-bind="pickLinkProps(link)"
             >
               <span
                 v-if="!realCollapsed"
-                :class="$c('menu-item-text')"
+                :class="$c('menu-item-label')"
               >{{
-                props.label
+                link.label
               }}</span>
             </veui-link>
           </slot>
           <button
             v-if="
               !realCollapsed &&
-                !props.disabled &&
-                props.children &&
-                props.children.length
+                !link.disabled &&
+                link.children &&
+                link.children.length
             "
             type="button"
-            :ui="uiParts.expand"
+            :ui="uiParts.toggle"
             tabindex="-1"
-            :class="$c('menu-item-expand-switcher')"
-            @click.stop="toggleExpanded(props)"
+            :class="$c('menu-item-toggle')"
+            @click.stop="toggleExpanded(link)"
           >
             <veui-icon :name="icons.expand"/>
           </button>
@@ -100,31 +102,77 @@
     >
       <template
         slot="option"
-        slot-scope="props"
+        slot-scope="link"
       >
-        <veui-link
-          :ui="realUi"
-          :class="{
-            ...itemClass(props),
-            [$c('menu-link')]: true
-          }"
-          v-bind="getLinkProps(props)"
-        >{{ props.label }}</veui-link>
+        <slot
+          name="item"
+          v-bind="link"
+        >
+          <div
+            :class="{
+              [$c('menu-item')]: true,
+              ...itemClass(link)
+            }"
+          >
+            <slot
+              name="item-label"
+              v-bind="link"
+            >
+              <veui-link
+                :ui="realUi"
+                :class="$c('menu-link')"
+                v-bind="pickLinkProps(link)"
+              >
+                <span :class="$c('menu-item-label')">{{ link.label }}</span>
+              </veui-link>
+            </slot>
+          </div>
+        </slot>
       </template>
       <template
         slot="option-group-label"
-        slot-scope="props"
+        slot-scope="link"
+      >
+        <slot
+          name="item"
+          v-bind="link"
+        >
+          <div
+            :class="{
+              [$c('menu-item')]: true,
+              ...itemClass(link)
+            }"
+          >
+            <slot
+              name="item-label"
+              v-bind="link"
+            >
+              <veui-link
+                :ui="realUi"
+                :class="$c('menu-link')"
+                v-bind="pickLinkProps(link)"
+                @click="handleSelect(link.name, link.closeMenu)"
+              >
+                <span :class="$c('menu-item-label')">{{ link.label }}</span>
+              </veui-link>
+            </slot>
+          </div>
+        </slot>
+      </template>
+      <!-- <template
+        slot="option-group-label"
+        slot-scope="link"
       >
         <veui-link
           :ui="realUi"
           :class="{
-            ...itemClass(props),
-            [$c('menu-link')]: true
+            ...itemClass(link),
+            [$c('menu-link')]: true,
+            [$c('menu-item')]: true
           }"
-          v-bind="getLinkProps(props)"
-          @click="handleSelect(props.name, props.closeMenu)"
-        >{{ props.label }}</veui-link>
-      </template>
+          v-bind="pickLinkProps(link)"
+        >{{ link.label }}</veui-link>
+      </template> -->
     </veui-option-group>
   </veui-overlay>
   <div
@@ -135,8 +183,8 @@
   >
     <button
       v-if="collapsible"
-      :ui="uiParts.collapse"
-      :class="$c('menu-bottom-collapse-switcher')"
+      :ui="uiParts.toggle"
+      :class="$c('menu-toggle')"
       @click="toggleCollapsed"
     >
       <veui-icon :name="icons.collapse"/>
@@ -152,7 +200,7 @@ import Icon from './Icon'
 import Link from './Link'
 import OptionGroup from './OptionGroup'
 import Overlay from './Overlay'
-import { map, endsWith, startsWith, uniq, pick, isString } from 'lodash'
+import { get, map, endsWith, uniq, pick, isString } from 'lodash'
 import ui from '../mixins/ui'
 import prefix from '../mixins/prefix'
 import controllable from '../mixins/controllable'
@@ -204,8 +252,7 @@ export default {
     return {
       localExpanded: [],
       localOverlayOptions: {
-        attachment: 'top left',
-        targetAttachment: 'top right'
+        position: 'right-start'
       },
       refTarget: null,
       open: false,
@@ -216,6 +263,9 @@ export default {
     }
   },
   computed: {
+    hasIcon () {
+      return !!get(this.items, '0.icon')
+    },
     transformedItems () {
       let fullPathMap = {}
       return {
@@ -242,30 +292,20 @@ export default {
             : this.localExpanded
       },
       set (_) {
-        // 仅仅在 sync 中用了，直接忽略，让原来的值重新生效，即 Tree 里面点击 toggle 无效
-        // FIXME 当 Tree 不再是 watch时, 暂时用 flag 让每次修改之后的原值都是不同的
+        // 仅仅在 sync 中用了，直接忽略新值，让原来的值重新生效，即 Tree 里面点击 toggle 无效
+        // FIXME 当 tree 不再是 watch 时, 暂时用 flag 让每次修改之后的原值都是不同的
         this.flag = !this.flag
         this.localExpanded = [...this.realExpanded]
         this.$emit('update:expanded', this.localExpanded)
       }
     },
-    // 返回 exactActive/active
+    // 返回 exactActive
     realMatches () {
       return (
         this.matches ||
-        (({ name, to }, realActive) => {
-          let exactActive = name === realActive
-          let active = exactActive
-            ? false
-            : startsWith(
-              to ? ensureSlash(realActive) : realActive,
-              to ? ensureSlash(name) : name
-            )
-
-          return {
-            exactActive,
-            active
-          }
+        (({ name, fullPath }, active) => {
+          let key = name || fullPath
+          return ensureSlash(key) === ensureSlash(active)
         })
       )
     }
@@ -319,7 +359,9 @@ export default {
         } else if (isString(to)) {
           item.fullPath = to
         } else {
-          throw new Error('must have router to resolve to')
+          throw new Error(
+            '[veui-menu] Non-string `to` cannot be resolved without Vue Router.'
+          )
         }
 
         if (!name) {
@@ -339,8 +381,8 @@ export default {
     markItems (items) {
       let exactActiveItem = null
       items.forEach(item => {
-        let { active, exactActive } = this.realMatches(item, this.realActive)
-        let exactActiveWithin = false
+        let exactActive = this.realMatches(item, this.realActive)
+        let active = false
         if (exactActive) {
           exactActiveItem = item
         }
@@ -349,28 +391,25 @@ export default {
           if (exact) {
             exactActiveItem = exact
           }
-          exactActiveWithin = item.children.some(
-            ({ exactActive, exactActiveWithin }) =>
-              exactActive || exactActiveWithin
+          active = item.children.some(
+            ({ exactActive, active }) => exactActive || active
           )
         }
         item.active = active
         item.exactActive = exactActive
-        item.exactActiveWithin = exactActiveWithin
       })
 
       return exactActiveItem
     },
     itemClass (item) {
-      let { active, exactActive, exactActiveWithin, disabled } = item
+      let { active, exactActive, disabled } = item
       return {
         [this.$c('disabled')]: disabled,
         [this.$c('menu-item-exact-active')]: exactActive,
-        [this.$c('menu-item-active')]: active,
-        [this.$c('menu-item-exact-active-within')]: exactActiveWithin
+        [this.$c('menu-item-active')]: active
       }
     },
-    getLinkProps (data) {
+    pickLinkProps (data) {
       return pick(data, Object.keys(Link.props))
     },
     show (props) {

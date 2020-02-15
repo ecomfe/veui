@@ -15,11 +15,11 @@ let options = {
     setReal (value, { prop, local, event } = {}) {
       // TODO forceUpdate
       // '' 则认为忽略对应的操作
-      if (local !== '') {
+      if (local !== null) {
         local = local || `local${capitalize(prop)}`
         this[local] = value
       }
-      if (event !== '') {
+      if (event !== null) {
         event = event || `update:${prop}`
         this.$emit(event, value)
       }
@@ -27,7 +27,7 @@ let options = {
   }
 }
 
-export default function factory (props) {
+export default function makeControllable (props) {
   if (props && isString(props)) {
     props = [props]
   }
@@ -50,7 +50,7 @@ export default function factory (props) {
         }
         // { prop, local, computed, event, get, set }
         let { prop, local, computed, get, set } = def
-        if (local !== '') {
+        if (local !== null) {
           result.data[local || `local${capitalize(prop)}`] = vm => vm[prop]
         }
         let name = computed || `real${capitalize(prop)}`
