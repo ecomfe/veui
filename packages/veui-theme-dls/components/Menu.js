@@ -15,8 +15,7 @@ config.defaults(
       }
     },
     parts: {
-      expand: 'icon',
-      collapse: 'icon'
+      toggle: 'icon'
     }
   },
   'menu'

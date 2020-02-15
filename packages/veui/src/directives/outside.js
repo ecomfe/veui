@@ -138,9 +138,12 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
         el[bindingKey].timer = null
       } else {
         if (el[bindingKey].timer == null) {
-          el[bindingKey].timer = setTimeout(() => {
+          el[bindingKey].delayCb = () => {
+            el[bindingKey].timer = null
+            el[bindingKey].delayCb = null
             handler(e)
-          }, delay)
+          }
+          el[bindingKey].timer = setTimeout(el[bindingKey].delayCb, delay)
         }
       }
     }
@@ -152,7 +155,10 @@ function clear (el) {
     let key = getBindingKey(type)
     if (el[key]) {
       remove(handlerBindings[type], item => item[key].id === el[key].id)
-      if (type === 'hover') {
+      // bug: 导致 Dropdown 同时展开多个 popup
+      // 这里直接 clear 可能会导致之前 delay 的 timer 无效，暂时降级下，忽略 delay 直接调用
+      if (type === 'hover' && el[key].timer != null) {
+        el[key].delayCb()
         clearTimeout(el[key].timer)
       }
       el[key] = null

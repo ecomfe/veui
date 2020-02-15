@@ -6,10 +6,10 @@
   <section>
     <h3>small menu</h3>
     <veui-menu
+      class="small-menu"
       ui="s"
       :items="items"
       :expanded.sync="expanded"
-      :collapsible="false"
     />
   </section>
   <section>
@@ -18,17 +18,17 @@
       :items="items"
       :active.sync="active1"
       :expanded.sync="expanded"
-      :collapsible="true"
+      collapsible
     />
   </section>
   <section>
     <h3>large collapsible menu</h3>
     <veui-menu
       ui="l"
-      :items="items"
+      :items="items2"
       :active.sync="active2"
       :expanded.sync="expanded"
-      :collapsible="true"
+      collapsible
     />
   </section>
   <section><router-view/></section>
@@ -37,6 +37,7 @@
 
 <script>
 import { Menu } from 'veui'
+import { omit } from 'lodash'
 import 'veui-theme-one-icons/android'
 import 'veui-theme-one-icons/apple-f'
 import 'veui-theme-one-icons/baidu'
@@ -48,82 +49,87 @@ export default {
     'veui-menu': Menu
   },
   data () {
+    let items = [
+      {
+        label: 'Group One',
+        name: 'group-one',
+        icon: 'android',
+        children: [
+          {
+            label: 'Sub One',
+            name: 'sub-one',
+            children: [
+              {
+                label: 'Input',
+                to: '/menu/input'
+              },
+              {
+                label: 'Progress',
+                to: '/menu/progress'
+              }
+            ]
+          },
+          {
+            label: 'Sub Two',
+            name: 'sub-two',
+            children: [
+              {
+                label: 'Switch',
+                to: '/menu/switch'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        label: 'Group Two',
+        name: 'Button',
+        to: '/menu/button',
+        icon: 'apple-f',
+        children: [
+          {
+            label: 'Loading',
+            name: 'Loading',
+            to: '/menu/loading',
+            disabled: true,
+            children: [
+              {
+                label: 'Link',
+                name: 'Link',
+                to: '/menu/link'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        label: 'Navigation Three',
+        name: 'nav-three',
+        icon: 'baidu'
+      },
+      {
+        label: 'Navigation Four',
+        name: 'nav-four',
+        icon: 'bug',
+        disabled: true
+      }
+    ]
+    let items2 = items.map(i => omit(i, 'icon'))
     return {
       expanded: [],
-      active1: '一级导航1',
+      active1: '一级导航',
       active2: undefined,
-      items: [
-        {
-          label: '一级导航1',
-          name: '一级导航1',
-          icon: 'android',
-          children: [
-            {
-              label: '二级导航11',
-              name: '二级导航11',
-              children: [
-                {
-                  label: 'Input',
-                  to: '/menu/input'
-                },
-                {
-                  label: 'Progress',
-                  to: '/menu/progress'
-                }
-              ]
-            },
-            {
-              label: '二级导航12',
-              name: '二级导航12',
-              children: [
-                {
-                  label: 'Link121',
-                  to: 'Link121'
-                },
-                {
-                  label: 'Link122',
-                  to: 'Link122'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          label: 'Button',
-          name: 'Button',
-          to: '/menu/button',
-          icon: 'apple-f',
-          children: [
-            {
-              label: 'Loading',
-              name: 'Loading',
-              to: '/menu/loading',
-              disabled: true,
-              children: [
-                {
-                  label: 'Link',
-                  name: 'Link',
-                  to: '/menu/link'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          label: '一级导航3',
-          name: '一级导航3',
-          icon: 'baidu'
-        },
-        {
-          label: '一级导航4',
-          name: '一级导航4',
-          icon: 'bug',
-          disabled: true
-        }
-      ]
+      items,
+      items2
     }
   }
 }
 </script>
 
-<style lang="less"></style>
+<style lang="less">
+.veui-menu-demo {
+  .small-menu {
+    height: 500px;
+  }
+}
+</style>

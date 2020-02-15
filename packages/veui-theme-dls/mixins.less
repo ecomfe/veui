@@ -79,7 +79,10 @@
 .dls-icon-size(@size) {
   .size(auto, @size);
 }
-.dls-icon-size(@size, @min-size) {
+.dls-icon-size(@size, @min-size) when not (@min-size = true) {
   .size(auto, @size);
   min-height: @min-size;
+}
+.dls-icon-size(@size, @fixed-width) when (@fixed-width = true) {
+  .size(@size);
 }
