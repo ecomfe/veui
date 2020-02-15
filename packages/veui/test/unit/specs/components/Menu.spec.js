@@ -86,14 +86,10 @@ describe('components/Menu', () => {
     expect(largeMenuTreeUI).to.include('l')
     expect(largeMenuLinkUI).to.include('l')
 
-    let collapseSwitcher = wrapper.find(
-      '.small-menu .veui-menu-bottom-collapse-switcher'
-    )
+    let collapseSwitcher = wrapper.find('.small-menu .veui-menu-toggle')
     expect(collapseSwitcher.exists()).to.equal(false)
 
-    let largeCollapseSwitcher = wrapper.find(
-      '.large-menu .veui-menu-bottom-collapse-switcher'
-    )
+    let largeCollapseSwitcher = wrapper.find('.large-menu .veui-menu-toggle')
     expect(largeCollapseSwitcher.exists()).to.equal(true)
     wrapper.destroy()
   })
@@ -119,7 +115,7 @@ describe('components/Menu', () => {
     await vm.$nextTick()
     expect(menu.classes('veui-menu-collapsed')).to.equal(false)
 
-    wrapper.find('.veui-menu-bottom-collapse-switcher').trigger('click')
+    wrapper.find('.veui-menu-toggle').trigger('click')
     await vm.$nextTick()
     expect(menu.classes('veui-menu-collapsed')).to.equal(true)
     expect(vm.collapsed).to.equal(true)
@@ -142,11 +138,11 @@ describe('components/Menu', () => {
     let menuUI = wrapper.find('.veui-tree-item')
     expect(menuUI.classes('veui-tree-item-expanded')).to.equal(true)
 
-    wrapper.find('.veui-menu-item-expand-switcher').trigger('click')
+    wrapper.find('.veui-menu-item-toggle').trigger('click')
     await vm.$nextTick()
     expect(menuUI.classes('veui-tree-item-expanded')).to.equal(false)
 
-    wrapper.find('.veui-menu-item-expand-switcher').trigger('click')
+    wrapper.find('.veui-menu-item-toggle').trigger('click')
     await vm.$nextTick()
     expect(menuUI.classes('veui-tree-item-expanded')).to.equal(true)
     expect(wrapper.findAll('.veui-tree-item').length).to.equal(3)
