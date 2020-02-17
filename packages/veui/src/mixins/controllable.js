@@ -3,7 +3,7 @@ import { capitalize, isString, isPlainObject, reduce } from 'lodash'
 let options = {
   methods: {
     hasProp (name) {
-      return name in this.$options.propsData
+      return name in this.$options.propsData && this[name] !== undefined
     },
     getReal ({ prop, local } = {}) {
       return this.hasProp(prop)

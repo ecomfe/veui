@@ -51,8 +51,8 @@
     }
   }
 
-  // bottom
-  &-bottom {
+  // footer
+  &-footer {
     flex: none;
     display: flex;
     justify-content: flex-end;
@@ -89,7 +89,7 @@
           background-color: @dls-menu-item-background-color-hover;
         }
       }
-      &.focus-visible {
+      .@{veui-prefix}-tree-item.focus-visible & {
         color: @dls-menu-item-font-color-focus;
         &::before {
           background-color: @dls-menu-item-background-color-focus;
@@ -278,7 +278,7 @@
     height: @dls-menu-item-height-s;
   }
 
-  &[ui~="s"] &-bottom {
+  &[ui~="s"] &-footer {
     height: @dls-menu-footer-height-s;
   }
 
@@ -288,7 +288,7 @@
     font-size: @dls-menu-font-size-l;
   }
 
-  &[ui~="l"] &-bottom {
+  &[ui~="l"] &-footer {
     height: @dls-menu-footer-height-l;
   }
 }
