@@ -8,7 +8,7 @@ const options = {
   },
   data () {
     return {
-      active: '一级导航1',
+      active: '/menu/input',
       expanded: ['一级导航1'],
       collapsed: true,
       items: [
@@ -122,7 +122,7 @@ describe('components/Menu', () => {
     wrapper.destroy()
   })
 
-  it('should handle ui expanded prop correctly', async () => {
+  it('should handle expanded prop correctly', async () => {
     let wrapper = mount(
       {
         ...options,
@@ -149,7 +149,7 @@ describe('components/Menu', () => {
     wrapper.destroy()
   })
 
-  it('should handle ui active prop correctly', async () => {
+  it('should handle active prop correctly', async () => {
     let wrapper = mount(
       {
         ...options,
@@ -162,16 +162,16 @@ describe('components/Menu', () => {
     )
 
     let { vm } = wrapper
-    let item = wrapper.find('.veui-menu-item')
+    let item = wrapper.findAll('.veui-menu-item').at(2)
     expect(item.classes('veui-menu-item-exact-active')).to.equal(true)
 
     vm.active = null
     await vm.$nextTick()
     expect(item.classes('veui-menu-item-exact-active')).to.equal(false)
 
-    wrapper.find('.veui-menu-link').trigger('click')
+    item.trigger('click')
     await vm.$nextTick()
-    expect(vm.active).to.equal('一级导航1')
+    expect(vm.active).to.equal('/menu/input')
     wrapper.destroy()
   })
 })

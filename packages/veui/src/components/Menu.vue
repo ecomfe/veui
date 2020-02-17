@@ -1,10 +1,10 @@
 <template>
 <div
+  :ui="realUi"
   :class="{
     [$c('menu')]: true,
     [$c('menu-collapsed')]: realCollapsed
   }"
-  :ui="realUi"
 >
   <veui-tree
     ref="tree"
@@ -12,10 +12,9 @@
       [$c('menu-tree')]: true,
       [$c('menu-tree-has-icon')]: hasIcon
     }"
-    :datasource="itemInfo.realItems"
+    :datasource="realItems"
     :expanded.sync="realExpanded"
     keys="name"
-    @click="handleItemClick"
   >
     <template
       slot="item"
@@ -27,7 +26,7 @@
           [$c('menu-item')]: true,
           ...itemClass(link)
         }"
-        tabindex="1"
+        @click.stop="handleItemClick(link)"
         @mouseenter="show(link)"
       >
         <slot
@@ -44,10 +43,7 @@
             v-bind="link"
           >
             <veui-link
-              :ui="realUi"
-              :class="{
-                [$c('menu-link')]: true
-              }"
+              :class="$c('menu-link')"
               :disabled="!!link.disabled"
               v-bind="pickLinkProps(link)"
             >
@@ -59,21 +55,20 @@
               }}</span>
             </veui-link>
           </slot>
-          <button
+          <veui-button
             v-if="
               !realCollapsed &&
                 !link.disabled &&
                 link.children &&
                 link.children.length
             "
-            type="button"
             :ui="uiParts.toggle"
             tabindex="-1"
             :class="$c('menu-item-toggle')"
             @click.stop="toggleExpanded(link)"
           >
             <veui-icon :name="icons.expand"/>
-          </button>
+          </veui-button>
         </slot>
       </div>
     </template>
@@ -119,7 +114,6 @@
               v-bind="link"
             >
               <veui-link
-                :ui="realUi"
                 :class="$c('menu-link')"
                 v-bind="pickLinkProps(link)"
               >
@@ -148,7 +142,6 @@
               v-bind="link"
             >
               <veui-link
-                :ui="realUi"
                 :class="$c('menu-link')"
                 v-bind="pickLinkProps(link)"
                 @click="handleSelect(link.name, link.closeMenu)"
@@ -159,36 +152,17 @@
           </div>
         </slot>
       </template>
-      <!-- <template
-        slot="option-group-label"
-        slot-scope="link"
-      >
-        <veui-link
-          :ui="realUi"
-          :class="{
-            ...itemClass(link),
-            [$c('menu-link')]: true,
-            [$c('menu-item')]: true
-          }"
-          v-bind="pickLinkProps(link)"
-        >{{ link.label }}</veui-link>
-      </template> -->
     </veui-option-group>
   </veui-overlay>
-  <div
-    :class="{
-      [$c('menu-bottom')]: true,
-      [$c('menu-bottom-collapsed')]: localCollapsed
-    }"
-  >
-    <button
+  <div :class="$c('menu-footer')">
+    <veui-button
       v-if="collapsible"
       :ui="uiParts.toggle"
       :class="$c('menu-toggle')"
       @click="toggleCollapsed"
     >
       <veui-icon :name="icons.collapse"/>
-    </button>
+    </veui-button>
   </div>
 </div>
 </template>
@@ -198,14 +172,16 @@ import Vue from 'vue'
 import Tree from './Tree'
 import Icon from './Icon'
 import Link from './Link'
+import Button from './Button'
 import OptionGroup from './OptionGroup'
 import Overlay from './Overlay'
-import { get, map, endsWith, uniq, pick, isString } from 'lodash'
+import { map, some, endsWith, uniq, pick, isString } from 'lodash'
 import ui from '../mixins/ui'
 import prefix from '../mixins/prefix'
 import controllable from '../mixins/controllable'
 import overlay from '../mixins/overlay'
 import outside from '../directives/outside'
+import { find } from '../utils/datasource'
 import 'veui-theme-one-icons/chevron-right'
 
 const ensureSlash = str => (endsWith(str, '/') ? str : `${str}/`)
@@ -217,7 +193,8 @@ export default {
     'veui-link': Link,
     'veui-icon': Icon,
     'veui-option-group': OptionGroup,
-    'veui-overlay': Overlay
+    'veui-overlay': Overlay,
+    'veui-button': Button
   },
   uiTypes: ['select'],
   directives: { outside },
@@ -231,19 +208,24 @@ export default {
         get () {
           return this.collapsible ? this.getReal({ prop: 'collapsed' }) : false
         }
+      },
+      expanded: {
+        get () {
+          return this.realCollapsed ? [] : this.getReal({ prop: 'expanded' })
+        }
       }
     })
   ],
   props: {
-    active: {
-      type: String
-    },
+    active: String,
     matches: {
-      type: Function
+      type: Function,
+      default ({ name, fullPath }, active) {
+        let key = name || fullPath
+        return ensureSlash(key) === ensureSlash(active)
+      }
     },
-    collapsible: {
-      type: Boolean
-    },
+    collapsible: Boolean,
     collapsed: Boolean,
     items: Tree.props.datasource,
     expanded: Tree.props.datasource
@@ -257,85 +239,53 @@ export default {
       refTarget: null,
       open: false,
       currentOptions: null,
-      outsideRefs: ['tree'],
-      // FIXME
-      flag: false
+      outsideRefs: ['tree']
     }
   },
   computed: {
     hasIcon () {
-      return !!get(this.items, '0.icon')
+      return !!some(this.items, ({ icon }) => !!icon)
     },
     transformedItems () {
-      let fullPathMap = {}
-      return {
-        items: Vue.observable(
-          this.transformItems(this.items, null, fullPathMap)
-        ),
-        fullPathMap
-      }
+      return Vue.observable(this.transformItems(this.items, null))
     },
-    itemInfo () {
-      let exactActiveItem = this.markItems(this.transformedItems.items)
-      return Vue.observable({
-        realItems: this.transformedItems.items,
-        exactActiveItem
-      })
-    },
-    realExpanded: {
-      get () {
-        // 这里有点恶心了，改完 Tree 在修复吧
-        return this.realCollapsed
-          ? (this.flag, [])
-          : 'expanded' in this.$options.propsData
-            ? (this.flag, this.expanded ? [...this.expanded] : [])
-            : this.localExpanded
+    realItems () {
+      this.markItems(this.transformedItems)
+      return this.transformedItems
+    }
+  },
+  watch: {
+    realActive: {
+      handler (value) {
+        if (!this.realCollapsed) {
+          let exactActiveItem = find(this.realItems, item => item.exactActive)
+          if (exactActiveItem && exactActiveItem.parent) {
+            this.toggleExpanded(exactActiveItem.parent, true)
+          }
+        }
       },
-      set (_) {
-        // 仅仅在 sync 中用了，直接忽略新值，让原来的值重新生效，即 Tree 里面点击 toggle 无效
-        // FIXME 当 tree 不再是 watch 时, 暂时用 flag 让每次修改之后的原值都是不同的
-        this.flag = !this.flag
-        this.localExpanded = [...this.realExpanded]
-        this.$emit('update:expanded', this.localExpanded)
-      }
-    },
-    // 返回 exactActive
-    realMatches () {
-      return (
-        this.matches ||
-        (({ name, fullPath }, active) => {
-          let key = name || fullPath
-          return ensureSlash(key) === ensureSlash(active)
-        })
-      )
+      immediate: true
     }
   },
   created () {
     if (this.$router) {
       const updateActive = ({ fullPath }) => {
-        let fullPathMap = this.transformedItems.fullPathMap
-        this.realActive = fullPathMap[fullPath] || null
+        let exactActiveItem = find(
+          this.realItems,
+          item => fullPath === item.fullPath
+        )
+        this.realActive = exactActiveItem ? exactActiveItem.name : null
       }
       this.$watch('$route', updateActive)
       // 第一次 prop active 有值，内部就不 sync 了
-      if (!('active' in this.$options.propsData)) {
+      if (!this.hasProp('active')) {
         updateActive(this.$route)
       }
     }
-
-    // 第一次需要初始 this.realActive 之后执行
-    this.$watch('itemInfo', {
-      handler ({ exactActiveItem }) {
-        if (!this.realCollapsed && exactActiveItem && exactActiveItem.parent) {
-          this.toggleExpanded(exactActiveItem.parent, true)
-        }
-      },
-      immediate: true
-    })
   },
   methods: {
     // 确保每个item都有name
-    transformItems (items, parent, fullPathMap) {
+    transformItems (items, parent) {
       return map(items, item => {
         let { to, name, children } = item
         if (name == null && to == null) {
@@ -367,11 +317,10 @@ export default {
         if (!name) {
           item.name = item.fullPath || ''
         }
-        fullPathMap[item.fullPath] = item.name
         item.value = item.value || item.name
 
         if (children) {
-          children = this.transformItems(children, item, fullPathMap)
+          children = this.transformItems(children, item)
           item.position = 'popup'
           item.options = item.children = children
         }
@@ -379,18 +328,11 @@ export default {
       })
     },
     markItems (items) {
-      let exactActiveItem = null
       items.forEach(item => {
-        let exactActive = this.realMatches(item, this.realActive)
+        let exactActive = this.matches(item, this.realActive)
         let active = false
-        if (exactActive) {
-          exactActiveItem = item
-        }
         if (item.children) {
-          let exact = this.markItems(item.children)
-          if (exact) {
-            exactActiveItem = exact
-          }
+          this.markItems(item.children)
           active = item.children.some(
             ({ exactActive, active }) => exactActive || active
           )
@@ -398,8 +340,6 @@ export default {
         item.active = active
         item.exactActive = exactActive
       })
-
-      return exactActiveItem
     },
     itemClass (item) {
       let { active, exactActive, disabled } = item
@@ -438,15 +378,31 @@ export default {
     toggleCollapsed () {
       this.realCollapsed = !this.realCollapsed
     },
-    handleItemClick ({ name }) {
-      this.realActive = name
-      this.$emit('activate', name)
+    handleItemClick (item) {
+      let { name, to, children, disabled } = item
+      if (disabled) {
+        return
+      }
+
+      if (to) {
+        this.realActive = name
+        this.$emit('activate', name)
+      } else if (children && children.length) {
+        this.toggleExpanded(item)
+      } else {
+        this.$emit('click', item)
+      }
     },
     handleSelect (name, closeMenu) {
-      this.realActive = name
-      this.$emit('activate', name)
-      this.close()
-      closeMenu && closeMenu()
+      let item = find(this.realItems, item => item.name === name)
+      if (item.to) {
+        this.realActive = name
+        this.$emit('activate', name)
+        this.close()
+        // closeMenu && closeMenu()
+      } else {
+        this.$emit('click', item)
+      }
     }
   }
 }

@@ -19,6 +19,7 @@
       :active.sync="active1"
       :expanded.sync="expanded"
       collapsible
+      :collapsed.sync="collapsed"
     />
   </section>
   <section>
@@ -70,8 +71,9 @@ export default {
             ]
           },
           {
-            label: 'Sub Two',
-            name: 'sub-two',
+            label: 'Loading',
+            name: 'Loading',
+            to: '/menu/loading',
             children: [
               {
                 label: 'Switch',
@@ -82,15 +84,14 @@ export default {
         ]
       },
       {
-        label: 'Group Two',
+        label: 'Button',
         name: 'Button',
         to: '/menu/button',
         icon: 'apple-f',
         children: [
           {
-            label: 'Loading',
-            name: 'Loading',
-            to: '/menu/loading',
+            label: 'Disabled',
+            name: 'Disabled',
             disabled: true,
             children: [
               {
@@ -119,6 +120,7 @@ export default {
       expanded: [],
       active1: '一级导航',
       active2: undefined,
+      collapsed: undefined,
       items,
       items2
     }
