@@ -76,35 +76,37 @@
         />
       </slot>
     </div>
-
-    <veui-tree-node
-      v-if="item.expanded && item.children && item.children.length"
-      :datasource="item.children"
-      :depth="depth + 1"
-      :icons="icons"
-      :selectable="selectable"
-      :selected="selected"
-      :checkable="checkable"
-      @click="handleChildClick(item, ...arguments)"
-      @toggle="handleChildToggle"
-    >
-      <template
-        v-for="(_, name) in allSlots"
-        :slot="name"
-        slot-scope="props"
+    <veui-expand-transition :name="$c('tree-item-group')">
+      <veui-tree-node
+        v-if="item.expanded && item.children && item.children.length"
+        :datasource="item.children"
+        :depth="depth + 1"
+        :icons="icons"
+        :selectable="selectable"
+        :selected="selected"
+        :checkable="checkable"
+        @click="handleChildClick(item, ...arguments)"
+        @toggle="handleChildToggle"
       >
-        <slot
-          :name="name"
-          v-bind="props"
-        />
-      </template>
-    </veui-tree-node>
+        <template
+          v-for="(_, name) in allSlots"
+          :slot="name"
+          slot-scope="props"
+        >
+          <slot
+            :name="name"
+            v-bind="props"
+          />
+        </template>
+      </veui-tree-node>
+    </veui-expand-transition>
   </li>
 </ul>
 </template>
 
 <script>
 import Icon from '../Icon'
+import ExpandTransition from '../ExpandTransition'
 import { closest } from '../../utils/dom'
 import { getTypedAncestor } from '../../utils/helper'
 import prefix from '../../mixins/prefix'
@@ -114,7 +116,8 @@ export default {
   name: 'veui-tree-node',
   uiTypes: ['transparent'],
   components: {
-    'veui-icon': Icon
+    'veui-icon': Icon,
+    'veui-expand-transition': ExpandTransition
   },
   mixins: [prefix],
   props: {

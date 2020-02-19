@@ -8,6 +8,9 @@
   &-item-group {
     .reset-list-style();
     margin: 0;
+    will-change: height;
+    .veui-transition(height);
+    overflow: hidden;
   }
 
   ul {
@@ -49,10 +52,6 @@
 
     &-expanded &-expand-switcher {
       transform: rotateZ(90deg);
-    }
-
-    &-group {
-      display: none;
     }
 
     &-expanded + &-group {

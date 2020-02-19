@@ -19,15 +19,7 @@
     />
     <slot name="title">{{ label }}</slot>
   </div>
-  <transition
-    :name="$c('collapse-body')"
-    @before-enter="beforeEnter"
-    @enter="enter"
-    @after-enter="afterEnter"
-    @before-leave="beforeLeave"
-    @leave="leave"
-    @after-leave="afterLeave"
-  >
+  <veui-expand-transition :name="$c('collapse-body')">
     <div
       v-if="realExpanded"
       :class="$c('collapse-body')"
@@ -36,13 +28,14 @@
         <slot/>
       </div>
     </div>
-  </transition>
+  </veui-expand-transition>
 </div>
 </template>
 
 <script>
 import { find } from 'lodash'
 import Icon from './Icon'
+import ExpandTransition from './ExpandTransition'
 import ui from '../mixins/ui'
 import { makeCoupledChild } from '../mixins/coupled'
 import prefix from '../mixins/prefix'
@@ -57,7 +50,8 @@ let accordionItem = makeCoupledChild({
 export default {
   name: 'veui-collapse',
   components: {
-    'veui-icon': Icon
+    'veui-icon': Icon,
+    'veui-expand-transition': ExpandTransition
   },
   mixins: [prefix, ui, accordionItem],
   props: {
@@ -132,29 +126,6 @@ export default {
         this.accordion.toggleById(this.id)
       }
       this.$emit('toggle', expanded)
-    },
-    beforeEnter (el) {
-      this.originalHeight = ''
-      el.style.height = '0'
-    },
-    enter (el) {
-      if (el.scrollHeight) {
-        el.style.height = `${el.scrollHeight}px`
-      }
-    },
-    afterEnter (el) {
-      el.style.height = this.originalHeight
-    },
-    beforeLeave (el) {
-      el.style.height = `${el.scrollHeight}px`
-    },
-    leave (el) {
-      if (el.scrollHeight) {
-        el.style.height = '0'
-      }
-    },
-    afterLeave (el) {
-      el.style.height = this.originalHeight
     }
   }
 }

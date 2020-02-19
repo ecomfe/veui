@@ -40,7 +40,7 @@
     <veui-tree
       v-model="checked"
       :datasource="coffees"
-      :expanded.sync="expanded"
+      :expanded.sync="expanded2"
       :selected.sync="selected"
       checkable
       selectable
@@ -68,6 +68,7 @@ export default {
   data () {
     return {
       expanded: ['infused', 'brewed'],
+      expanded2: [],
       checked: ['filtered', 'cold-brew'],
       selected: null,
       coffees: [

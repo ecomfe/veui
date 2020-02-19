@@ -389,9 +389,8 @@ export default {
         this.$emit('activate', name)
       } else if (children && children.length) {
         this.toggleExpanded(item)
-      } else {
-        this.$emit('click', item)
       }
+      this.$emit('click', item)
     },
     handleSelect (name, closeMenu) {
       let item = find(this.realItems, item => item.name === name)
@@ -399,10 +398,10 @@ export default {
         this.realActive = name
         this.$emit('activate', name)
         this.close()
-        // closeMenu && closeMenu()
-      } else {
-        this.$emit('click', item)
+        // TODO closeMenu 应该是 optionGroup 自己调
+        closeMenu && closeMenu()
       }
+      this.$emit('click', item)
     }
   }
 }

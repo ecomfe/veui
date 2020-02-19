@@ -123,13 +123,13 @@
   }
 
   &-link {
-    // link 充满整个 item
     flex: 1;
     display: flex;
     overflow: hidden;
     align-items: center;
     height: inherit;
 
+    // link 充满整个 item
     &::before {
       content: "";
       .absolute(_, 0);
@@ -143,25 +143,19 @@
     }
   }
 
+  &-item-active:not(.@{veui-prefix}-disabled),
   &-item-exact-active:not(.@{veui-prefix}-disabled) {
     .@{veui-prefix}-menu-item-icon,
     .@{veui-prefix}-menu-link {
       color: @dls-menu-item-font-color-current;
       font-weight: @dls-menu-item-font-weight-current;
-    }
-
-    &::before {
-      background-color: @dls-menu-item-background-color-current;
-      .veui-transition(background-color);
+      .veui-transition(color);
     }
 
     &:hover {
       .@{veui-prefix}-menu-item-icon,
       .@{veui-prefix}-menu-link {
         color: @dls-menu-item-font-color-current-hover;
-      }
-      &::before {
-        background-color: @dls-menu-item-background-color-current-hover;
       }
     }
 
@@ -170,9 +164,6 @@
       .@{veui-prefix}-menu-link {
         color: @dls-menu-item-font-color-current-focus;
       }
-      &::before {
-        background-color: @dls-menu-item-background-color-current-focus;
-      }
     }
 
     &:active {
@@ -180,28 +171,49 @@
       .@{veui-prefix}-menu-link {
         color: @dls-menu-item-font-color-current-active;
       }
-      &::before {
-        background-color: @dls-menu-item-background-color-current-active;
-      }
+    }
+  }
+
+  &-item-exact-active:not(.@{veui-prefix}-disabled) {
+    &::before {
+      background-color: @dls-menu-item-background-color-current;
+      .veui-transition(background-color);
+    }
+
+    &:hover::before {
+      background-color: @dls-menu-item-background-color-current-hover;
+    }
+
+    &.focus-visible::before {
+      background-color: @dls-menu-item-background-color-current-focus;
+    }
+
+    &:active::before {
+      background-color: @dls-menu-item-background-color-current-active;
     }
 
     // Indicators
-    .@{veui-prefix}-menu-tree & {
-      &::after {
-        content: "";
-        .absolute(_, -1px, _, _);
-        .size(@dls-menu-indicator-width, inherit);
-        background: @dls-menu-indicator-color;
+    &::after {
+      content: "";
+      .absolute(_, -1px, _, _);
+      .size(@dls-menu-indicator-width, inherit);
+      background: @dls-menu-indicator-color;
+
+      .@{veui-prefix}-menu-overlay & {
+        .absolute(_, 0, _, _);
       }
-      &:hover::after {
-        background-color: @dls-menu-indicator-color-hover;
-      }
-      &.focus-visible::after {
-        background-color: @dls-menu-indicator-color-focus;
-      }
-      &:active::after {
-        background-color: @dls-menu-indicator-color-active;
-      }
+    }
+
+    &:hover::after {
+      background-color: @dls-menu-indicator-color-hover;
+    }
+
+    &.focus-visible::after {
+      background-color: @dls-menu-indicator-color-focus;
+    }
+
+    &:active::after {
+      background-color: @dls-menu-indicator-color-active;
     }
   }
 

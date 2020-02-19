@@ -10,6 +10,7 @@
       ui="s"
       :items="items"
       :expanded.sync="expanded"
+      collapsible
     />
   </section>
   <section>
@@ -28,8 +29,6 @@
       ui="l"
       :items="items2"
       :active.sync="active2"
-      :expanded.sync="expanded"
-      collapsible
     />
   </section>
   <section><router-view/></section>
