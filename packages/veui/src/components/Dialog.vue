@@ -97,6 +97,7 @@ import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
+import modal from '../managers/modal'
 import outside from '../directives/outside'
 import drag from '../directives/drag'
 import Icon from './Icon'
@@ -162,9 +163,27 @@ export default {
       this.localOpen = val
     },
     localOpen (val) {
+      if (this.modal) {
+        if (val) {
+          modal.open()
+        } else {
+          modal.close()
+        }
+      }
+
       if (this.open !== val) {
         this.$emit('update:open', val)
       }
+    }
+  },
+  mounted () {
+    if (this.localOpen && this.modal) {
+      modal.open()
+    }
+  },
+  destroyed () {
+    if (this.localOpen && this.modal) {
+      modal.close()
     }
   },
   methods: {
