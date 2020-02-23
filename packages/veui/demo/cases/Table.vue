@@ -1,23 +1,19 @@
 <template>
 <article>
-  <h1><code>&lt;veui-table&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-table&gt;</code>
+  </h1>
   <section>
     <veui-button
       ui="primary"
       @click="append"
-    >
-      添加
-    </veui-button>
+    >添加</veui-button>
   </section>
   <section>
-    <veui-checkbox v-model="showGroup">
-      显示数据分组
-    </veui-checkbox>
+    <veui-checkbox v-model="showGroup">显示数据分组</veui-checkbox>
   </section>
   <section>
-    <veui-checkbox v-model="selectSpanRow">
-      选择合并行
-    </veui-checkbox>
+    <veui-checkbox v-model="selectSpanRow">选择合并行</veui-checkbox>
   </section>
   <section>
     <veui-checkboxgroup
@@ -37,7 +33,10 @@
   <section>
     <veui-table
       ui="s"
-      scroll="300"
+      :scroll="{
+        x: 1280,
+        y: 300
+      }"
       :data="data"
       :column-filter="columns"
       :key-field="selectSpanRow ? 'group' : 'id'"
@@ -52,30 +51,31 @@
         field="id"
         title="数据 ID"
         sortable
+        fixed
       >
         <template slot="head">
           <strong>
             数据
-            <span style="color: #3998fc">
-              ID
-            </span>
+            <span style="color: #3998fc">ID</span>
           </strong>
         </template>
         <template slot="foot">
           <strong>总计</strong>
         </template>
       </veui-table-column>
-      <veui-table-column
-        field="typeId"
-        title="类型 ID"
-        :span="typeSpan"
-      />
-      <veui-table-column
-        v-if="showGroup"
-        field="group"
-        title="数据分组"
-        :span="groupSpan"
-      />
+      <veui-table-column title="元数据">
+        <veui-table-column
+          field="typeId"
+          title="类型 ID"
+          :span="typeSpan"
+        />
+        <veui-table-column
+          v-if="showGroup"
+          field="group"
+          title="数据分组"
+          :span="groupSpan"
+        />
+      </veui-table-column>
       <veui-table-column
         field="desc"
         title="数据描述"
@@ -85,11 +85,15 @@
         sortable
         width="160"
         align="right"
+        fixed
       >
-        <template slot="head"> 价格 <i>(每 1000g)</i> </template>
-        <template slot-scope="props">
-          {{ props.item.price | currency }}
+        <template slot="head">
+          价格
+          <i>(每 1000g)</i>
         </template>
+        <template slot-scope="props">{{
+          props.item.price | currency
+        }}</template>
         <template slot="foot">
           <strong>{{ total | currency }}</strong>
         </template>
@@ -100,31 +104,29 @@
         align="center"
       >
         <template slot-scope="props">
-          <span :ref="`time-a-${props.item.id}`">
-            {{ props.item.updateDate | date }}
-          </span>
-          <veui-tooltip :target="`time-a-${props.item.id}`">
-            {{ props.item.updateDate | time }}
-          </veui-tooltip>
+          <span :ref="`time-a-${props.item.id}`">{{
+            props.item.updateDate | date
+          }}</span>
+          <veui-tooltip :target="`time-a-${props.item.id}`">{{
+            props.item.updateDate | time
+          }}</veui-tooltip>
         </template>
       </veui-table-column>
       <veui-table-column
         field="operation"
         title="操作"
+        fixed="right"
+        width="160"
       >
         <template slot-scope="props">
           <veui-button
             ui="text"
             @click="log(props.item)"
-          >
-            编辑
-          </veui-button>
+          >编辑</veui-button>
           <veui-button
             ui="text"
             @click="del(props.index)"
-          >
-            删除
-          </veui-button>
+          >删除</veui-button>
           <veui-link
             ui="strong"
             to="table"
@@ -136,7 +138,6 @@
   </section>
   <section class="container">
     <veui-table
-      ui="slim bordered"
       :data="data"
       :column-filter="columns"
       :key-field="selectSpanRow ? 'group' : 'id'"
@@ -144,29 +145,31 @@
       select-mode="single"
       :selected.sync="selected2"
     >
-      <veui-table-column
-        field="id"
-        title="数据 ID"
-      />
-      <veui-table-column
-        v-if="showGroup"
-        field="group"
-        title="数据分组"
-        :span="groupSpan"
-      />
-      <veui-table-column
-        field="desc"
-        title="数据描述"
-      />
+      <veui-table-column title="元数据">
+        <veui-table-column
+          field="id"
+          title="数据 ID"
+        />
+        <veui-table-column
+          v-if="showGroup"
+          field="group"
+          title="数据分组"
+          :span="groupSpan"
+        />
+        <veui-table-column
+          field="desc"
+          title="数据描述"
+        />
+      </veui-table-column>
       <veui-table-column
         field="price"
         title="价格"
         width="160"
         align="right"
       >
-        <template slot-scope="props">
-          {{ props.item.price | currency }}
-        </template>
+        <template slot-scope="props">{{
+          props.item.price | currency
+        }}</template>
       </veui-table-column>
       <veui-table-column
         field="updateDate"
@@ -174,12 +177,12 @@
         align="right"
       >
         <template slot-scope="props">
-          <span :ref="`time-b-${props.item.id}`">
-            {{ props.item.updateDate | date }}
-          </span>
-          <veui-tooltip :target="`time-b-${props.item.id}`">
-            {{ props.item.updateDate | time }}
-          </veui-tooltip>
+          <span :ref="`time-b-${props.item.id}`">{{
+            props.item.updateDate | date
+          }}</span>
+          <veui-tooltip :target="`time-b-${props.item.id}`">{{
+            props.item.updateDate | time
+          }}</veui-tooltip>
         </template>
       </veui-table-column>
     </veui-table>
@@ -188,10 +191,10 @@
   <section class="container">
     <veui-table
       :data="data"
-      :column-filter="columns"
       key-field="id"
       selectable
       expandable
+      :scroll="{ x: 1024 }"
     >
       <veui-table-column
         field="id"
@@ -207,9 +210,9 @@
         width="160"
         align="right"
       >
-        <template slot-scope="props">
-          {{ props.item.price | currency }}
-        </template>
+        <template slot-scope="props">{{
+          props.item.price | currency
+        }}</template>
       </veui-table-column>
       <veui-table-column
         field="updateDate"
@@ -217,28 +220,26 @@
         align="right"
       >
         <template slot-scope="props">
-          <span :ref="`time-b-${props.item.id}`">
-            {{ props.item.updateDate | date }}
-          </span>
-          <veui-tooltip :target="`time-b-${props.item.id}`">
-            {{ props.item.updateDate | time }}
-          </veui-tooltip>
+          <span :ref="`time-b-${props.item.id}`">{{
+            props.item.updateDate | date
+          }}</span>
+          <veui-tooltip :target="`time-b-${props.item.id}`">{{
+            props.item.updateDate | time
+          }}</veui-tooltip>
         </template>
       </veui-table-column>
       <template
         slot="sub-row"
         slot-scope="{ desc }"
-      >
-        {{ desc }}
-      </template>
+      >{{ desc }}</template>
     </veui-table>
   </section>
   <section class="container">
     <veui-table
       :data="data"
-      :column-filter="columns"
       key-field="id"
       expandable
+      :scroll="{ x: 1200 }"
     >
       <veui-table-column
         field="id"
@@ -261,9 +262,9 @@
         width="160"
         align="right"
       >
-        <template slot-scope="props">
-          {{ props.item.price | currency }}
-        </template>
+        <template slot-scope="props">{{
+          props.item.price | currency
+        }}</template>
       </veui-table-column>
       <veui-table-column
         field="updateDate"
@@ -271,17 +272,15 @@
         align="right"
       >
         <template slot-scope="props">
-          <span :ref="`time-b-${props.item.id}`">
-            {{ props.item.updateDate | date }}
-          </span>
-          <veui-tooltip :target="`time-b-${props.item.id}`">
-            {{ props.item.updateDate | time }}
-          </veui-tooltip>
+          <span :ref="`time-b-${props.item.id}`">{{
+            props.item.updateDate | date
+          }}</span>
+          <veui-tooltip :target="`time-b-${props.item.id}`">{{
+            props.item.updateDate | time
+          }}</veui-tooltip>
         </template>
       </veui-table-column>
-      <template slot="foot">
-        An awesome table foot!
-      </template>
+      <template slot="foot">An awesome table foot!</template>
     </veui-table>
   </section>
   <section class="container">
@@ -311,22 +310,20 @@
         width="160"
         align="right"
       >
-        <template slot-scope="props">
-          {{ props.item.price | currency }}
-        </template>
+        <template slot-scope="props">{{
+          props.item.price | currency
+        }}</template>
       </veui-table-column>
       <veui-table-column
         field="updateDate"
         title="更新时间"
         align="right"
       >
-        <template slot-scope="props">{{
-          props.item.updateDate | date
-        }}</template>
+        <template slot-scope="props">
+          {{ props.item.updateDate | date }}
+        </template>
       </veui-table-column>
-      <template slot="foot">
-        An awesome table foot!
-      </template>
+      <template slot="foot">An awesome table foot!</template>
     </veui-table>
   </section>
   <section class="container">
@@ -340,6 +337,41 @@
         :key="field.name"
         :field="field.name"
         :title="field.title"
+      />
+    </veui-table>
+  </section>
+  <section class="container">
+    <veui-table
+      :data="items"
+      bordered
+      :scroll="{ x: 1200 }"
+    >
+      <veui-table-column
+        fixed="right"
+        title="meta"
+      >
+        <veui-table-column
+          field="id"
+          title="id"
+        />
+        <veui-table-column
+          field="type"
+          title="type"
+        />
+      </veui-table-column>
+      <veui-table-column
+        fixed
+        field="name"
+        title="name"
+      />
+      <veui-table-column
+        fixed="left"
+        field="origin"
+        title="origin"
+      />
+      <veui-table-column
+        field="level"
+        title="level"
       />
     </veui-table>
   </section>
@@ -555,7 +587,37 @@ export default {
         return {
           row: i % 4 ? 0 : 4
         }
-      }
+      },
+      items: [
+        {
+          id: 1,
+          type: 'fruits',
+          name: 'apple',
+          origin: 'Japan',
+          level: 'A'
+        },
+        {
+          id: 2,
+          type: 'fruits',
+          name: 'cherry',
+          origin: 'Chile',
+          level: 'A'
+        },
+        {
+          id: 3,
+          type: 'veggie',
+          name: 'tomato',
+          origin: 'China',
+          level: 'A'
+        },
+        {
+          id: 4,
+          type: 'veggie',
+          name: 'potato',
+          origin: 'China',
+          level: 'A'
+        }
+      ]
     }
   },
   computed: {

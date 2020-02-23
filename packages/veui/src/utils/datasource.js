@@ -1,7 +1,24 @@
 import { find as _find } from 'lodash'
 
 export function walk (array, callback, alias = 'children') {
-  if (!array || typeof callback !== 'function') {
+  _walk(array, callback, { depth: 0 }, alias)
+}
+
+function _walk (array, callback, context, alias = 'children') {
+  if (!array || !callback) {
+    return
+  }
+
+  let enter
+  let exit
+  if (typeof callback === 'function') {
+    enter = callback
+  } else {
+    enter = callback.enter
+    exit = callback.exit
+  }
+
+  if (!enter && !exit) {
     return
   }
 
@@ -12,12 +29,21 @@ export function walk (array, callback, alias = 'children') {
     }
   }
 
-  array.forEach(item => {
-    callback(item)
+  let { depth } = context
+  array.forEach((item, index) => {
+    let ctx = { ...context, index, depth }
+
+    if (typeof enter === 'function') {
+      enter(item, ctx)
+    }
 
     let children = getChildrenByAlias(item, alias)
     if (children) {
-      walk(children, callback, alias)
+      _walk(children, callback, { ...ctx, depth: depth + 1 }, alias)
+    }
+
+    if (typeof exit === 'function') {
+      exit(item, ctx)
     }
   })
 }

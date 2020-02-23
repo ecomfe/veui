@@ -1,40 +1,112 @@
 <template>
 <div
+  v-resize="updateLayout"
   :class="{
     [$c('table')]: true,
     [$c('table-bordered')]: realBordered,
-    [$c('table-scrollable-y')]: scrollableY
+    [$c('table-hit-top')]: hit.top,
+    [$c('table-hit-right')]: hit.right,
+    [$c('table-hit-bottom')]: hit.bottom,
+    [$c('table-hit-left')]: hit.left
   }"
   :ui="realUi"
-  :style="{
-    maxHeight: scrollableY ? realScroll.y : null
-  }"
 >
+  <div v-show="false">
+    <slot/>
+  </div>
+  <div
+    v-if="scrollableY"
+    ref="fixedHeader"
+    :class="$c('table-fixed-header')"
+  >
+    <table
+      :style="{
+        minWidth: scrollableX
+          ? `calc(${realScroll.x} + ${gutterWidth}px)`
+          : null
+      }"
+    >
+      <col-group gutter/>
+      <table-head
+        ref="head"
+        @sort="sort"
+      />
+    </table>
+  </div>
   <div
     ref="main"
     :class="$c('table-main')"
+    :style="{
+      maxHeight: scrollableY ? realScroll.y : null
+    }"
   >
-    <table>
-      <slot/>
+    <table
+      ref="table"
+      v-resize="updateLayout"
+      :style="{
+        minWidth: scrollableX ? realScroll.x : null
+      }"
+    >
       <col-group/>
       <table-head
+        v-if="!scrollableY"
         ref="head"
         @sort="sort"
       />
       <table-body>
         <template slot="no-data">
-          <slot name="no-data">
-            {{ t("noData") }}
-          </slot>
+          <slot name="no-data">{{ t('noData') }}</slot>
         </template>
       </table-body>
       <table-foot
-        v-if="hasFoot"
+        v-if="!scrollableY && hasFoot"
         ref="foot"
       >
         <slot name="foot"/>
       </table-foot>
     </table>
+  </div>
+  <div
+    v-if="scrollableY && hasFoot"
+    ref="fixedFooter"
+    :class="$c('table-fixed-footer')"
+  >
+    <table
+      :style="{
+        minWidth: scrollableX
+          ? `calc(${realScroll.x} + ${gutterWidth}px)`
+          : null
+      }"
+    >
+      <col-group gutter/>
+      <table-foot ref="foot">
+        <slot name="foot"/>
+      </table-foot>
+    </table>
+  </div>
+  <div
+    v-if="scrollableX"
+    aria-hidden="true"
+  >
+    <div
+      :class="{
+        [$c('table-overflow-shadow-left')]: true,
+        [$c('table-overflow-shadow-edge')]:
+          !hasFixedLeft && !selectable && !expandable
+      }"
+      :style="{
+        width: shadowOffset.left
+      }"
+    />
+    <div
+      :class="{
+        [$c('table-overflow-shadow-right')]: true,
+        [$c('table-overflow-shadow-edge')]: !hasFixedRight
+      }"
+      :style="{
+        width: shadowOffset.right
+      }"
+    />
   </div>
 </div>
 </template>
@@ -46,13 +118,27 @@ import { normalizeLength } from '../../utils/helper'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
-import { map, mapValues, intersection, includes, find } from 'lodash'
+import colgroup from '../../mixins/colgroup'
+import resize from '../../directives/resize'
+import {
+  map,
+  mapValues,
+  intersection,
+  includes,
+  find,
+  findIndex,
+  findLastIndex,
+  omit
+} from 'lodash'
 import Body from './_TableBody'
 import Head from './_TableHead'
 import Foot from './_TableFoot'
 import ColGroup from './_ColGroup'
+import { getElementScrollbarWidth } from '../../utils/browser'
 import '../../common/uiTypes'
 import { isEqualSet } from '../../utils/lang'
+import { walk } from '../../utils/datasource'
+import { cssSupports, preventBackForward } from '../../utils/dom'
 
 config.defaults(
   {
@@ -60,6 +146,14 @@ config.defaults(
   },
   'table'
 )
+
+const FIXED_PRIORITY = {
+  left: 0,
+  false: 1,
+  right: 2
+}
+
+const DEFAULT_FIXED_COL_WIDTH = 120
 
 export default {
   name: 'veui-table',
@@ -70,7 +164,10 @@ export default {
     'table-foot': Foot,
     'col-group': ColGroup
   },
-  mixins: [prefix, ui, i18n],
+  directives: {
+    resize
+  },
+  mixins: [prefix, ui, i18n, colgroup],
   props: {
     data: {
       type: Array,
@@ -116,25 +213,172 @@ export default {
   },
   data () {
     return {
-      columns: [],
       localSelected: normalizeArray(this.selected),
-      localExpanded: [...this.expanded]
+      localExpanded: [...this.expanded],
+      gutterWidth: 0,
+      selectColumnWidth: 0,
+      expandColumnWidth: 0,
+      overflow: {
+        x: false,
+        y: false
+      },
+      hit: {
+        top: true,
+        right: false,
+        left: true,
+        bottom: false
+      },
+      width: null,
+      supportSticky: true
     }
   },
   computed: {
-    columnIds () {
-      return this.columns.map(({ id }) => id)
-    },
     realSelected () {
       return this.selectMode === 'multiple'
         ? this.localSelected
         : this.localSelected[0] || null
     },
+    filteredColumns () {
+      return this.filterColumns(this.columns)
+    },
+    sortedColumns () {
+      return this.filteredColumns.sort(
+        (col1, col2) => FIXED_PRIORITY[col1.fixed] - FIXED_PRIORITY[col2.fixed]
+      )
+    },
     realColumns () {
-      if (!this.columnFilter) {
-        return this.columns
+      return this.headerGrid[this.headerGrid.length - 1]
+    },
+    headerDepth () {
+      return getDepth(this.sortedColumns)
+    },
+    headerGrid () {
+      let rows = [...Array(this.headerDepth + 1)].map(() => [])
+
+      walk(
+        this.sortedColumns,
+        {
+          exit: (col, { depth }) => {
+            let leaves = getLeaves(col)
+
+            if (col.columns.length === 0) {
+              // leaf columns are used to calculate sticky offsets
+              let cell = { ...col, width: col.width }
+              if (col.fixed) {
+                if (!col.width) {
+                  cell.width = DEFAULT_FIXED_COL_WIDTH
+                  warn(
+                    `[veui-table] Lacking specified width for column "${col.field}". Fixed leaf columns must have specified width. Default to \`${DEFAULT_FIXED_COL_WIDTH}\` when not specified and this may change in future versions.`,
+                    this
+                  )
+                }
+
+                let row = rows[depth]
+                if (col.fixed === 'left') {
+                  cell.offset = sumWidths([
+                    this.offsetLeft,
+                    ...row.map(({ width }) => width)
+                  ])
+                }
+              }
+
+              let rowspan = this.headerDepth - depth + 1
+              cell.rowspan = rowspan
+
+              for (let i = 0; i < rowspan; i++) {
+                rows[depth + i].push({
+                  ...cell,
+                  placeholder: i > 0
+                })
+              }
+            } else {
+              let row = rows[depth]
+              let index = row.length
+
+              let colspan = leaves.length
+
+              for (let i = 0; i < colspan; i++) {
+                let cell = {
+                  ...col,
+                  colspan,
+                  width: rows[rows.length - 1][index + i].width,
+                  placeholder: i > 0
+                }
+                if (col.fixed === 'left') {
+                  cell.offset = sumWidths([
+                    this.offsetLeft,
+                    ...row.map(({ width }) => width)
+                  ])
+                }
+                row.push(cell)
+              }
+            }
+          }
+        },
+        'columns'
+      )
+
+      let colCount = rows[0].length
+      rows.forEach(row => {
+        for (let i = 0; i < colCount; i++) {
+          let prev = row[i - 1]
+          let cell = row[i]
+          let next = row[i + 1]
+
+          if (cell.fixed === 'left') {
+            if (next && !next.fixed) {
+              cell.edge = true
+            }
+          } else if (cell.fixed === 'right') {
+            let { colspan } = cell
+            let rightEdge = i + (colspan > 1 ? colspan - 1 : 0) + 1
+            let widths = row.slice(rightEdge).map(({ width }) => width)
+            cell.offset = sumWidths(widths.concat(this.gutterWidth))
+            cell.bodyOffset = sumWidths(widths)
+
+            if (prev && !prev.fixed) {
+              cell.edge = true
+            }
+          }
+        }
+      })
+
+      return rows
+    },
+    headerRows () {
+      return this.headerGrid.map(row =>
+        row.filter(({ placeholder }) => !placeholder)
+      )
+    },
+    shadowOffset () {
+      if (!this.supportSticky) {
+        return {
+          left: 20,
+          right: 20
+        }
       }
-      return this.columns.filter(col => includes(this.columnFilter, col.field))
+      let row = this.headerGrid[this.headerGrid.length - 1]
+      let leftEnd = findLastIndex(row, cell => cell.fixed === 'left')
+      let rightStart = findIndex(row, cell => cell.fixed === 'right')
+      rightStart = rightStart === -1 ? row.length : rightStart
+
+      // make shadow placeholders at least 20px width because
+      // box-shadow will be affected by element size when
+      // either width or height is smaller than blur radius
+      return {
+        left: sumWidths(
+          row
+            .slice(0, leftEnd + 1)
+            .map(({ width }) => width)
+            .concat(this.offsetLeft, 20)
+        ),
+        right: sumWidths(
+          row
+            .slice(rightStart)
+            .map(({ width }) => width)
+            .concat(this.hasFixedRight ? this.gutterWidth : [], 20)
+        )
+      }
     },
     realScroll () {
       let { scroll } = this
@@ -156,7 +400,13 @@ export default {
       )
     },
     hasSpan () {
-      return this.columns.some(({ span }) => span)
+      return this.realColumns.some(({ span }) => span)
+    },
+    hasFixedLeft () {
+      return this.realColumns.some(({ fixed }) => fixed === 'left')
+    },
+    hasFixedRight () {
+      return this.realColumns.some(({ fixed }) => fixed === 'right')
     },
     realBordered () {
       return this.bordered || this.hasSpan
@@ -164,7 +414,7 @@ export default {
     realKeys () {
       if (this.keyField) {
         let { span } =
-          find(this.columns, ({ field }) => field === this.keyField) || {}
+          find(this.realColumns, ({ field }) => field === this.keyField) || {}
         if (typeof span === 'function') {
           return Object.keys(this.data)
             .map(index => {
@@ -208,8 +458,11 @@ export default {
       return (
         this.$scopedSlots.foot ||
         this.$slots.foot ||
-        this.columns.some(col => col.hasFoot())
+        this.filteredColumns.some(col => col.hasFoot())
       )
+    },
+    scrollableX () {
+      return this.realScroll.x && this.data.length
     },
     scrollableY () {
       return this.realScroll.y && this.data.length
@@ -219,6 +472,9 @@ export default {
     },
     staleFoot () {
       return this.realColumns.some(({ hasStaleFoot }) => hasStaleFoot())
+    },
+    offsetLeft () {
+      return this.selectColumnWidth + this.expandColumnWidth
     }
   },
   watch: {
@@ -247,6 +503,39 @@ export default {
   created () {
     this.validateSelected()
   },
+  mounted () {
+    this.supportSticky = cssSupports('position', 'sticky')
+
+    if (this.scrollableX || this.scrollableY) {
+      this.updateLayout()
+
+      this.$refs.main.addEventListener('scroll', this.handleScroll)
+    }
+
+    if (this.scrollableX) {
+      this.removeBackForwardPreventer = preventBackForward(this.$refs.main)
+    }
+
+    if (this.selectable && this.scrollableX) {
+      this.selectColumnWidth = this.$el.querySelector(
+        `.${this.$c('table-cell-select')}`
+      ).offsetWidth
+    }
+    if (this.expandable && this.scrollableX) {
+      this.expandColumnWidth = this.$el.querySelector(
+        `.${this.$c('table-cell-expand')}`
+      ).offsetWidth
+    }
+  },
+  beforeDestroy () {
+    if (this.scrollableY) {
+      this.$refs.main.removeEventListener('scroll', this.handleScroll)
+    }
+
+    if (this.removeBackForwardPreventer) {
+      this.removeBackForwardPreventer()
+    }
+  },
   updated () {
     if (this.staleHead) {
       this.$refs.head.$forceUpdate()
@@ -256,18 +545,6 @@ export default {
     }
   },
   methods: {
-    add (col) {
-      let length = this.columns.length
-      let index = col.index
-      if (index >= length) {
-        this.columns.push(col)
-      } else {
-        this.columns.splice(index, 0, col)
-      }
-    },
-    removeById (id) {
-      this.columns.splice(this.columnIds.indexOf(id), 1)
-    },
     select (selected, index) {
       let item = null
       if (index !== undefined) {
@@ -331,6 +608,55 @@ export default {
         return false
       }
       return true
+    },
+    updateLayout () {
+      // let { main } = this.$refs
+      let { main, table } = this.$refs
+      this.overflow = {
+        x: table.offsetWidth > main.clientWidth,
+        y: table.offsetHeight > main.clientHeight
+      }
+      if (this.overflow.x) {
+        this.gutterWidth = getElementScrollbarWidth(main)
+      }
+      this.width = main.clientWidth
+    },
+    handleScroll () {
+      let { main, fixedHeader, fixedFooter } = this.$refs
+
+      if (this.scrollableX) {
+        this.hit.right = main.scrollLeft + main.clientWidth >= main.scrollWidth
+        this.hit.left = main.scrollLeft === 0
+      }
+
+      if (this.scrollableY) {
+        this.hit.top = main.scrollTop === 0
+        this.hit.bottom =
+          main.scrollTop + main.clientHeight >= main.scrollHeight
+      }
+
+      if (fixedHeader) {
+        fixedHeader.scrollLeft = main.scrollLeft
+      }
+
+      if (fixedFooter) {
+        fixedFooter.scrollLeft = main.scrollLeft
+      }
+    },
+    filterColumns (columns) {
+      let cols = []
+      columns.forEach(col => {
+        let c = omit(col, 'columns')
+        c.columns = this.filterColumns(col.columns)
+        if (
+          c.columns.length > 0 ||
+          (c.field &&
+            (!this.columnFilter || this.columnFilter.indexOf(c.field) !== -1))
+        ) {
+          cols.push(c)
+        }
+      })
+      return cols
     }
   }
 }
@@ -341,5 +667,42 @@ function normalizeArray (val) {
   }
 
   return Array.isArray(val) ? val : [val]
+}
+
+function getLeaves (col) {
+  let leaves = []
+  walk(
+    col.columns,
+    column => {
+      if (column.columns.length === 0) {
+        leaves.push(column)
+      }
+    },
+    'columns'
+  )
+  return leaves
+}
+
+function getDepth (cols) {
+  let max = 0
+  walk(
+    cols,
+    (_, { depth }) => {
+      if (depth > max) {
+        max = depth
+      }
+    },
+    'columns'
+  )
+  return max
+}
+
+function sumWidths (widths) {
+  let normalized = widths.map(normalizeLength).filter(w => w)
+  return normalized.length === 0
+    ? 0
+    : normalized.length === 1
+      ? normalized[0]
+      : `calc(${normalized.join(' + ')})`
 }
 </script>

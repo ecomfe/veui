@@ -22,10 +22,12 @@ export default {
       'selectable',
       'selectMode',
       'selectedItems',
+      'scrollableX',
       'expandable',
       'keyField',
       'icons',
       'uiParts',
+      'selectColumnWidth',
       { realKeys: 'keys' },
       { realColumns: 'columns' },
       { viewColumnCount: 'columnCount' }
@@ -36,8 +38,21 @@ export default {
     if (this.$slots.default) {
       return (
         <tr class={this.$c('table-sub-row')}>
-          <td role="cell" colspan={this.columnCount}>
-            <div class={this.$c('table-cell')}>{this.$slots.default}</div>
+          <td
+            role="cell"
+            class={{
+              [this.$c('table-cell-hero')]: true
+            }}
+            colspan={this.columnCount}
+          >
+            <div
+              class={this.$c('table-cell')}
+              style={{
+                width: this.table.width ? `${this.table.width}px` : null
+              }}
+            >
+              {this.$slots.default}
+            </div>
           </td>
         </tr>
       )
@@ -48,10 +63,34 @@ export default {
       return (
         <tr class={this.$c('table-sub-row')}>
           {this.selectable ? (
-            <td role="cell" class={this.$c('table-cell-select')} />
+            <td
+              role="cell"
+              class={{
+                [this.$c('table-cell-sticky-left')]: this.scrollableX
+              }}
+              style={
+                this.scrollableX
+                  ? {
+                    left: 0
+                  }
+                  : null
+              }
+            />
           ) : null}
           {this.expandable ? (
-            <td role="cell" class={this.$c('table-cell-expand')} />
+            <td
+              role="cell"
+              class={{
+                [this.$c('table-cell-sticky-left')]: this.scrollableX
+              }}
+              style={
+                this.scrollableX
+                  ? {
+                    left: this.selectable ? `${this.selectColumnWidth}px` : 0
+                  }
+                  : null
+              }
+            />
           ) : null}
           {this.renderColumns(this.index, this.item)}
         </tr>
@@ -72,7 +111,20 @@ export default {
     return (
       <tr class={{ [this.$c('table-selected-row')]: checked }}>
         {this.selectable && data ? (
-          <td role="cell" {...data}>
+          <td
+            role="cell"
+            {...data}
+            class={{
+              [this.$c('table-cell-sticky-left')]: this.scrollableX
+            }}
+            style={
+              this.scrollableX
+                ? {
+                  left: 0
+                }
+                : null
+            }
+          >
             <div class={this.$c('table-cell')}>
               {this.selectMode === 'multiple' ? (
                 <Checkbox
@@ -97,7 +149,19 @@ export default {
           </td>
         ) : null}
         {this.expandable ? (
-          <td role="cell" class={this.$c('table-cell-expand')}>
+          <td
+            role="cell"
+            class={{
+              [this.$c('table-cell-sticky-left')]: this.scrollableX
+            }}
+            style={
+              this.scrollableX
+                ? {
+                  left: this.selectable ? `${this.selectColumnWidth}px` : 0
+                }
+                : null
+            }
+          >
             <div class={this.$c('table-cell')}>
               {(item.children || []).length ? (
                 <Button
@@ -163,7 +227,19 @@ export default {
         let data = this.getCellSpan(col)
         return data ? (
           <td
-            class={col.align ? this.$c(`table-cell-${col.align}`) : null}
+            class={{
+              [this.$c(`table-cell-${col.align}`)]: !!col.align,
+              [this.$c(`table-cell-sticky-${col.fixed}`)]:
+                this.scrollableX && col.fixed
+            }}
+            style={
+              this.scrollableX && col.fixed
+                ? {
+                  [col.fixed]:
+                      col.bodyOffset != null ? col.bodyOffset : col.offset
+                }
+                : null
+            }
             role="cell"
             {...data}
           >

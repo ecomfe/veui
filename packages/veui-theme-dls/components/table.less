@@ -2,7 +2,7 @@
 
 .@{veui-prefix}-table {
   position: relative;
-  overflow: auto;
+  overflow: hidden;
   border: 1px @dls-table-border-color;
   border-style: solid none;
 
@@ -14,14 +14,14 @@
     white-space: nowrap;
   }
 
+  &-main {
+    overflow: auto;
+  }
+
   &-cell {
     display: flex;
     line-height: @dls-line-height-m;
     align-items: center;
-  }
-
-  &-col-expand {
-    width: 24px;
   }
 
   th,
@@ -57,17 +57,20 @@
 
   &-bordered {
     border: 1px solid @dls-table-border-color;
-    border-style: solid none solid solid;
+    border-left-style: none;
 
     th,
     td {
-      border-right-style: solid;
+      border-left-style: solid;
     }
   }
 
-  td&-no-data {
-    height: 300px;
-    text-align: center;
+  &-no-data {
+    height: @dls-table-body-height-no-data;
+  }
+
+  &-no-data &-cell {
+    justify-content: center;
   }
 
   tr:hover {
@@ -88,7 +91,7 @@
   .@{veui-prefix}-link {
     & + .@{veui-prefix}-button,
     & + .@{veui-prefix}-link {
-      margin-left: @dls-padding-unit * 4;
+      margin-left: @dls-table-action-spacing;
     }
   }
 
@@ -100,47 +103,69 @@
     flex-flow: row-reverse;
   }
 
-  & &-cell-expand {
-    padding: 0 0 0 16px;
-
-    & + th,
-    & + td {
-      padding-left: 8px;
-    }
-
-    .@{veui-prefix}-button {
-      flex-grow: 0;
-    }
+  &-cell-sticky-left,
+  &-cell-sticky-right {
+    position: sticky;
+    z-index: 1;
   }
 
-  &-cell-expand {
-    button {
-      .size(1em);
-      background: none;
-      outline: none;
-      border: none;
-      padding: 0;
-      color: @veui-text-color-weak;
-      cursor: pointer;
-      vertical-align: middle;
-      .veui-button-transition();
+  &-overflow-shadow-right,
+  &-overflow-shadow-left {
+    .absolute(0, _);
+    pointer-events: none;
+    z-index: 2;
+    .veui-transition(box-shadow);
+  }
 
-      &:hover,
-      &.focus-visible {
-        color: @veui-brand-color;
-      }
+  &-overflow-shadow-edge {
+    z-index: 3;
+  }
 
-      &.focus-visible {
-        .veui-focus-shadow();
-      }
+  &-overflow-shadow-right {
+    right: -20px;
+    box-shadow: @dls-table-overflow-shadow-right;
+  }
 
-      &:active {
-        color: @veui-brand-color-1;
-      }
+  &-overflow-shadow-left {
+    left: -20px;
+    box-shadow: @dls-table-overflow-shadow-left;
+  }
 
-      .@{veui-prefix}-icon {
-        display: block;
-      }
+  &-bordered &-overflow-shadow-left {
+    left: -19px;
+  }
+
+  &-hit-right &-overflow-shadow-right,
+  &-hit-left &-overflow-shadow-left {
+    box-shadow: none;
+  }
+
+  &-bordered &-cell-sticky-left {
+    &::after {
+      content: "";
+      .absolute(0, -1px, 0, _);
+      width: 1px;
+      background-color: @dls-table-border-color;
+    }
+
+  }
+
+  & &-cell-hero {
+    position: relative;
+    z-index: 3;
+    padding: 0;
+  }
+
+  &-cell-hero &-cell {
+    position: sticky;
+    right: 0;
+    left: 0;
+    padding: @dls-table-cell-padding-y @dls-table-cell-padding-x;
+  }
+
+  & &-cell-expand {
+    .@{veui-prefix}-button {
+      flex-grow: 0;
     }
   }
 
@@ -180,14 +205,30 @@
     transform: rotate(180deg);
   }
 
-  &-scrollable-y thead th {
-    position: sticky;
-    top: 0;
-    z-index: 1;
+  &-main,
+  &-fixed-header,
+  &-fixed-footer {
+    width: 100%;
   }
 
-  &-main {
-    min-width: 100%;
+  &-fixed-header,
+  &-fixed-footer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  &-fixed-header {
+    box-shadow: @dls-table-overflow-shadow-top;
+    z-index: 2;
+  }
+
+  &-fixed-footer {
+    box-shadow: @dls-table-overflow-shadow-bottom;
+  }
+
+  &-hit-top &-fixed-header,
+  &-hit-bottom &-fixed-footer {
+    box-shadow: none;
   }
 
   &-sub-row {
@@ -198,6 +239,32 @@
         background-color: @dls-table-sub-row-background-color-hover;
       }
     }
+  }
+
+  &-gutter {
+    thead & {
+      border-left-color: @dls-table-header-background-color;
+    }
+
+    tbody &,
+    tfoot & {
+      border-left-color: @dls-table-cell-background-color;
+    }
+  }
+
+  &-col-expand {
+    width: dls-sum(
+      @dls-table-icon-size-aux,
+      @dls-table-header-padding-x * 2
+    );
+  }
+
+  &-bordered &-col-expand {
+    width: dls-sum(
+      @dls-table-icon-size-aux,
+      @dls-table-header-padding-x * 2,
+      1px
+    );
   }
 
   &[ui~="m"] {

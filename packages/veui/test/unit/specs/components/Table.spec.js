@@ -202,8 +202,7 @@ describe('components/Table', () => {
             <veui-table-column field="field2" title="field2">
               <template slot="sub-row" slot-scope="{ field4 }">{{ field4 }}</template>
             </veui-table-column>
-          </veui-table>
-        `
+          </veui-table>`
       },
       {
         sync: false
@@ -224,7 +223,7 @@ describe('components/Table', () => {
     wrapper.destroy()
   })
 
-  it('should sort by key field properly.', done => {
+  it('should sort by key field properly.', async () => {
     let wrapper = mount(
       {
         components: {
@@ -254,29 +253,50 @@ describe('components/Table', () => {
         },
         methods: {
           handleSort (orderBy, order) {
-            expect(order).to.equal('asc')
-            expect(orderBy).to.equal('field1')
-
-            wrapper.destroy()
-            done()
+            this.orderBy = orderBy
+            this.order = order
           }
         },
         template: `
           <veui-table :data="data" :key-field="keyField" :order="order" :order-by="orderBy" @sort="handleSort">
             <veui-table-column field="field1" title="field1" sortable/>
             <veui-table-column field="field2" title="field2"/>
-          </veui-table>
-        `
+          </veui-table>`
       },
       {
         sync: false
       }
     )
 
-    let active = wrapper.findAll('svg.veui-sorter-active.veui-sorter-icon-desc')
-    expect(active.length).to.be.equal(1)
+    let { vm } = wrapper
+    expect(
+      wrapper
+        .findAll('.veui-table-sorter')
+        .at(0)
+        .classes()
+    ).to.include('veui-table-sorter-desc')
 
-    wrapper.find('svg.veui-sorter').trigger('click')
+    wrapper.find('.veui-table-sorter').trigger('click')
+    await vm.$nextTick()
+    expect(vm.order).to.equal('asc')
+    expect(
+      wrapper
+        .findAll('.veui-table-sorter')
+        .at(0)
+        .classes()
+    ).to.include('veui-table-sorter-asc')
+
+    wrapper.find('.veui-table-sorter').trigger('click')
+    await vm.$nextTick()
+    expect(vm.order).to.equal(false)
+    expect(
+      wrapper
+        .findAll('.veui-table-sorter')
+        .at(0)
+        .classes()
+    ).to.include('veui-table-sorter-unordered')
+
+    wrapper.destroy()
   })
 
   it('should filter columns correctly.', async () => {
@@ -314,8 +334,7 @@ describe('components/Table', () => {
             <veui-table-column field="field2" title="field2"/>
             <veui-table-column field="field3" title="field3"/>
             <template slot="foot">An awesome table foot!</template>
-          </veui-table>
-        `
+          </veui-table>`
       },
       {
         sync: false
@@ -371,8 +390,7 @@ describe('components/Table', () => {
           <veui-table :data="data" keys="field2" selectable :selected.sync="selected">
             <veui-table-column field="field1" title="field1"/>
             <veui-table-column field="field2" title="field2" align="left"/>
-          </veui-table>
-        `
+          </veui-table>`
       },
       {
         sync: false
@@ -426,8 +444,7 @@ describe('components/Table', () => {
             <veui-table-column field="field2" title="field2" align="left">
               <template slot="foot">总计</template>
             </veui-table-column>
-          </veui-table>
-        `
+          </veui-table>`
       },
       {
         sync: false
@@ -465,8 +482,7 @@ describe('components/Table', () => {
           <veui-table>
             <veui-table-column field="field1" title="field1"/>
             <veui-table-column field="field2" title="field2"/>
-          </veui-table>
-        `
+          </veui-table>`
       },
       {
         sync: false
@@ -522,8 +538,7 @@ describe('components/Table', () => {
             <veui-table-column field="id" title="id"/>
             <veui-table-column field="type" title="type" :span="groupSpan"/>
             <veui-table-column field="name" title="name"/>
-          </veui-table>
-        `
+          </veui-table>`
       },
       {
         sync: false
@@ -598,8 +613,7 @@ describe('components/Table', () => {
             <veui-table-column field="id" title="id"/>
             <awesome-column field="type" title="type"/>
             <veui-table-column field="name" title="name"/>
-          </veui-table>
-        `
+          </veui-table>`
       },
       {
         sync: false
@@ -607,8 +621,197 @@ describe('components/Table', () => {
     )
 
     let td = wrapper.findAll('tbody td').at(1)
-    expect(td.classes('veui-table-column-center')).to.equal(true)
+    expect(td.classes('veui-table-cell-center')).to.equal(true)
     expect(td.find('.veui-table-cell').html()).to.include('<b>apple</b>')
+
+    wrapper.destroy()
+  })
+
+  it('should support grouped columns', () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              {
+                id: 1,
+                type: 'fruits',
+                name: 'apple',
+                origin: 'Japan',
+                level: 'A'
+              },
+              {
+                id: 2,
+                type: 'fruits',
+                name: 'cherry',
+                origin: 'Chile',
+                level: 'A'
+              },
+              {
+                id: 3,
+                type: 'veggie',
+                name: 'tomato',
+                origin: 'China',
+                level: 'A'
+              },
+              {
+                id: 4,
+                type: 'veggie',
+                name: 'potato',
+                origin: 'China',
+                level: 'A'
+              }
+            ]
+          }
+        },
+        template: `
+          <veui-table :data="data" bordered>
+            <veui-table-column title="meta">
+              <veui-table-column field="id" title="id"/>
+              <veui-table-column field="type" title="type"/>
+            </veui-table-column>
+            <veui-table-column title="product">
+              <veui-table-column field="name" title="name"/>
+              <veui-table-column title="info">
+                <veui-table-column field="origin" title="origin"/>
+                <veui-table-column field="level" title="level"/>
+              </veui-table-column>
+            </veui-table-column>
+          </veui-table>`
+      },
+      {
+        sync: false
+      }
+    )
+
+    let ths = wrapper.findAll('th')
+
+    expect(ths.at(0).attributes('colspan')).to.equal('2')
+    expect(ths.at(0).attributes('rowspan')).to.equal(undefined)
+
+    expect(ths.at(1).attributes('colspan')).to.equal('3')
+    expect(ths.at(1).attributes('rowspan')).to.equal(undefined)
+
+    expect(ths.at(2).attributes('colspan')).to.equal(undefined)
+    expect(ths.at(2).attributes('rowspan')).to.equal('2')
+
+    expect(ths.at(3).attributes('colspan')).to.equal(undefined)
+    expect(ths.at(3).attributes('rowspan')).to.equal('2')
+
+    expect(ths.at(4).attributes('colspan')).to.equal(undefined)
+    expect(ths.at(4).attributes('rowspan')).to.equal('2')
+
+    expect(ths.at(5).attributes('colspan')).to.equal('2')
+    expect(ths.at(5).attributes('rowspan')).to.equal(undefined)
+
+    expect(ths.at(6).attributes('colspan')).to.equal(undefined)
+    expect(ths.at(6).attributes('rowspan')).to.equal(undefined)
+
+    expect(ths.at(7).attributes('colspan')).to.equal(undefined)
+    expect(ths.at(7).attributes('rowspan')).to.equal(undefined)
+
+    wrapper.destroy()
+  })
+
+  it('should support fixed columns', () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              {
+                id: 1,
+                type: 'fruits',
+                name: 'apple',
+                origin: 'Japan',
+                level: 'A'
+              },
+              {
+                id: 2,
+                type: 'fruits',
+                name: 'cherry',
+                origin: 'Chile',
+                level: 'A'
+              },
+              {
+                id: 3,
+                type: 'veggie',
+                name: 'tomato',
+                origin: 'China',
+                level: 'A'
+              },
+              {
+                id: 4,
+                type: 'veggie',
+                name: 'potato',
+                origin: 'China',
+                level: 'A'
+              }
+            ]
+          }
+        },
+        template: `
+          <veui-table style="width: 600px;" :data="data" :scroll="{ x: 1200 }">
+            <veui-table-column fixed="right" title="meta">
+              <veui-table-column field="id" title="id"/>
+              <veui-table-column field="type" title="type"/>
+            </veui-table-column>
+            <veui-table-column fixed field="name" title="name"/>
+            <veui-table-column fixed="left" field="origin" title="origin"/>
+            <veui-table-column field="level" title="level"/>
+          </veui-table>`
+      },
+      {
+        sync: false
+      }
+    )
+
+    let ths = wrapper.findAll('th')
+
+    expect(ths.at(0).text()).to.equal('name')
+    expect(ths.at(0).classes()).to.include('veui-table-cell-sticky-left')
+
+    expect(ths.at(1).text()).to.equal('origin')
+    expect(ths.at(1).classes()).to.include('veui-table-cell-sticky-left')
+
+    expect(ths.at(2).text()).to.equal('level')
+    expect(ths.at(2).classes()).to.not.include('veui-table-cell-sticky-left')
+    expect(ths.at(2).classes()).to.not.include('veui-table-cell-sticky-right')
+
+    expect(ths.at(3).text()).to.equal('meta')
+    expect(ths.at(3).classes()).to.include('veui-table-cell-sticky-right')
+
+    expect(ths.at(4).text()).to.equal('id')
+    expect(ths.at(4).classes()).to.include('veui-table-cell-sticky-right')
+
+    expect(ths.at(5).text()).to.equal('type')
+    expect(ths.at(5).classes()).to.include('veui-table-cell-sticky-right')
+
+    let tds = wrapper.findAll('td')
+
+    expect(tds.at(0).text()).to.equal('apple')
+    expect(tds.at(0).classes()).to.include('veui-table-cell-sticky-left')
+
+    expect(tds.at(1).text()).to.equal('Japan')
+    expect(tds.at(1).classes()).to.include('veui-table-cell-sticky-left')
+
+    expect(tds.at(2).text()).to.equal('A')
+    expect(ths.at(2).classes()).to.not.include('veui-table-cell-sticky-left')
+    expect(ths.at(2).classes()).to.not.include('veui-table-cell-sticky-right')
+
+    expect(tds.at(3).text()).to.equal('1')
+    expect(tds.at(3).classes()).to.include('veui-table-cell-sticky-right')
+
+    expect(tds.at(4).text()).to.equal('fruits')
+    expect(tds.at(4).classes()).to.include('veui-table-cell-sticky-right')
 
     wrapper.destroy()
   })
