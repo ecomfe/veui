@@ -46,7 +46,6 @@ export default {
     return {
       zIndex: null,
       minWidth: null,
-      appendBody: false,
       targetNode: null,
       source: null
     }
@@ -67,6 +66,7 @@ export default {
       if (this.inline) {
         return
       }
+
       this.updateWidth()
       this.toggleLocator(val)
       this.updateLocator()
@@ -140,6 +140,7 @@ export default {
     if (this.inline) {
       return
     }
+
     this.destroyLocator()
 
     let node = this.overlayNode
