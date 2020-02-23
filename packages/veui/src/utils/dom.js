@@ -593,3 +593,46 @@ export function calcClip (
   }
   return clip
 }
+
+export function preventBackForward (el) {
+  function handleWheel (e) {
+    let maxX = el.scrollWidth - el.clientWidth
+    let scrollTarget = el.scrollLeft + e.deltaX
+    if (scrollTarget < 0 || scrollTarget > maxX) {
+      e.preventDefault()
+    }
+  }
+
+  el.addEventListener('mousewheel', handleWheel)
+
+  return () => {
+    el.removeEventListener('mousewheel', handleWheel)
+  }
+}
+
+function camelCase (str) {
+  return str.replace(/-([a-zA-Z])/g, (_, ch) => ch.toUpperCase())
+}
+
+let probe = null
+export function cssSupports (prop, val) {
+  if (!probe) {
+    probe = document.createElement('div')
+  }
+
+  let style = probe.style
+  let p = camelCase(prop)
+  if (typeof style[p] === 'undefined') {
+    // prop is not supported
+    return false
+  }
+
+  if (typeof val === 'undefined') {
+    return true
+  }
+
+  style[p] = val
+  let result = style[p] !== ''
+  style[p] = ''
+  return result
+}

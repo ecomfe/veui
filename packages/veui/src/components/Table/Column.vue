@@ -1,38 +1,55 @@
 <script>
 import { uniqueId, pick } from 'lodash'
-import table from '../../mixins/table'
+import colgroup from '../../mixins/colgroup'
 import { getIndexOfType } from '../../utils/context'
 import '../../common/uiTypes'
 
 export default {
   name: 'veui-table-column',
   uiTypes: ['table-column', 'transparent'],
-  mixins: [table],
+  mixins: [colgroup],
   props: {
     title: String,
-    field: {
-      type: String,
-      required: true
-    },
+    field: String,
     width: [String, Number],
     sortable: Boolean,
     align: {
       type: String,
       validator (val) {
-        return !val || val === 'left' || val === 'right' || val === 'center'
+        return val === 'left' || val === 'right' || val === 'center'
       }
     },
-    span: Function
+    span: Function,
+    fixed: {
+      type: [Boolean, String],
+      validator (val) {
+        return typeof val === 'boolean' || val === 'left' || val === 'right'
+      }
+    }
   },
   data () {
     return {
       id: uniqueId('veui-table-column-')
     }
   },
+  computed: {
+    realFixed () {
+      if (this.colgroup.realFixed) {
+        return this.colgroup.realFixed
+      }
+      if (this.fixed === true || this.fixed === 'left') {
+        return 'left'
+      }
+      if (this.fixed === 'right') {
+        return 'right'
+      }
+      return false
+    }
+  },
   created () {
-    let index = getIndexOfType(this, 'table')
+    let index = getIndexOfType(this, 'colgroup')
 
-    const props = ['title', 'field', 'sortable', 'width', 'align', 'span']
+    const props = ['title', 'field', 'width', 'sortable', 'align', 'span']
 
     let renderBody = item => {
       let defaultRow = this.$scopedSlots.default
@@ -42,9 +59,11 @@ export default {
       return item[this.field]
     }
 
-    this.table.add({
+    this.colgroup.addColumn({
       ...pick(this, ...props, 'id'),
+      fixed: this.realFixed,
       index,
+      columns: this.columns,
       hasFoot: () => {
         return !!(this.$scopedSlots.foot || this.$slots.foot)
       },
@@ -70,10 +89,10 @@ export default {
     })
   },
   destroyed () {
-    this.table.removeById(this.id)
+    this.colgroup.removeColumnById(this.id)
   },
-  render () {
-    return null
+  render (h) {
+    return h('div', this.$slots.default)
   }
 }
 </script>

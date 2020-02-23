@@ -4,12 +4,16 @@ import table, { mapTableData } from '../../mixins/table'
 export default {
   name: 'veui-table-col-group',
   mixins: [prefix, table],
+  props: {
+    gutter: Boolean
+  },
   computed: {
     ...mapTableData(
       { realColumns: 'columns' },
       'selectable',
       'expandable',
-      'columnWidths'
+      'columnWidths',
+      'gutterWidth'
     )
   },
   render () {
@@ -25,6 +29,16 @@ export default {
             key={col.field}
           />
         ))}
+        {this.gutter ? (
+          <col
+            class={this.$c('table-header-gutter')}
+            aria-hidden="true"
+            style={{
+              width: this.gutterWidth ? `${this.gutterWidth}px` : null,
+              display: this.gutterWidth ? null : 'none'
+            }}
+          />
+        ) : null}
       </colgroup>
     )
   }
