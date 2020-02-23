@@ -60,11 +60,7 @@ function getOptions (binding, vnode) {
   // 但是没有完整的 top 、 left 、 width 、 height 属性，
   // 就要看看用 containment 能不能选出 DOM Element 了。
   if (!isSpecialSyntax(containment) && !isRect(containment)) {
-    options.containment = get(
-      getNodes(containment, vnode.context),
-      '[0]',
-      null
-    )
+    options.containment = get(getNodes(containment, vnode.context), '[0]', null)
   }
 
   return options
@@ -183,10 +179,10 @@ function isSpecialSyntax (value) {
 function isRect (containment) {
   return (
     isObject(containment) &&
-    containment.hasOwnProperty('top') &&
-    containment.hasOwnProperty('left') &&
-    containment.hasOwnProperty('width') &&
-    containment.hasOwnProperty('height')
+    'top' in containment &&
+    'left' in containment &&
+    'width' in containment &&
+    'height' in containment
   )
 }
 

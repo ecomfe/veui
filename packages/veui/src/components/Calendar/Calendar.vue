@@ -272,8 +272,8 @@
                       :disabled="
                         !p.expanded &&
                           (realDisabled ||
-                          realReadonly ||
-                          markDisabled(start + 3 * (i - 1) + j - 1))
+                            realReadonly ||
+                            markDisabled(start + 3 * (i - 1) + j - 1))
                       "
                       @click="selectYear(pIndex, start + 3 * (i - 1) + j - 1)"
                       @mouseenter="
@@ -924,30 +924,33 @@ export default {
       let end = null
 
       // 得到完整的新 panelDate 数据
-      let newPanelDates = destinations.reduce((result, destination, index) => {
-        let { year, month } = toDateData(destination)
-        destination = this.isDateType ? { year, month } : { year }
-        end = index - destinations.length + this.panels.length
-        let existIndex = findIndex(result.slice(start, end + 1), val =>
-          isEqual(val, destination)
-        )
-        if (existIndex >= 0) {
-          start = existIndex + 1
-        } else {
-          // 找不到则修改 start 位置的值，然后向后调节
-          result[start] = destination
-          start += 1
-          let pos = start
-          while (pos < result.length) {
-            if (gt(result[pos], result[pos - 1])) {
-              break
+      let newPanelDates = destinations.reduce(
+        (result, destination, index) => {
+          let { year, month } = toDateData(destination)
+          destination = this.isDateType ? { year, month } : { year }
+          end = index - destinations.length + this.panels.length
+          let existIndex = findIndex(result.slice(start, end + 1), val =>
+            isEqual(val, destination)
+          )
+          if (existIndex >= 0) {
+            start = existIndex + 1
+          } else {
+            // 找不到则修改 start 位置的值，然后向后调节
+            result[start] = destination
+            start += 1
+            let pos = start
+            while (pos < result.length) {
+              if (gt(result[pos], result[pos - 1])) {
+                break
+              }
+              result[pos] = getNextDate(result[pos - 1])
+              pos++
             }
-            result[pos] = getNextDate(result[pos - 1])
-            pos++
           }
-        }
-        return result
-      }, p.map(val => val.date))
+          return result
+        },
+        p.map(val => val.date)
+      )
 
       // 调节完了之后，统一 sync，避免调节过程中多余的 sync
       newPanelDates.forEach((newVal, index) => {

@@ -26,6 +26,7 @@ module.exports = {
       'single',
       { allowTemplateLiterals: true, avoidEscape: true }
     ],
+    'prefer-const': 0,
     // allow async-await
     'generator-star-spacing': 0,
     // allow debugger during development

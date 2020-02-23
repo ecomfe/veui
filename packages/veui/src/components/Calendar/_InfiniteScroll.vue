@@ -54,7 +54,7 @@ export default {
     }
   },
   render (h) {
-    return this.$scopedSlots['default']({
+    return this.$scopedSlots.default({
       onscroll: this.handleScroll,
       start: this.start,
       row: this.realRow,

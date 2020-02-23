@@ -197,12 +197,13 @@ export default {
             }
           })
           return
-        case 'Enter':
+        case 'Enter': {
           let elem = this.getCurrentActiveElement()
           if (elem) {
             elem.click()
           }
           break
+        }
         default:
           passive = true
           break

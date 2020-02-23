@@ -120,7 +120,7 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
         case 'ArrowDown':
           this.navigate()
           break
-        default:
+        default: {
           // 先就简单支持下，目前仅用到 tab 和 enter
           let handler = get(handlers, e.key.toLowerCase())
           if (handler) {
@@ -128,6 +128,7 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
           }
           passive = true
           break
+        }
       }
       if (!passive) {
         e.stopPropagation()

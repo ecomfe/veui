@@ -378,7 +378,7 @@ export default {
             passive = true
           }
           break
-        case 'Enter':
+        case 'Enter': {
           if (!this.realExpanded) {
             this.search(e)
             passive = true
@@ -390,6 +390,7 @@ export default {
             elem.click()
           }
           break
+        }
         case 'Tab':
           passive = true
           this.closeSuggestions()
