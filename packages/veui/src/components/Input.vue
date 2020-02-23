@@ -199,11 +199,11 @@ export default {
   },
   methods: {
     handleInput (e) {
-      try {
-        setTimeout(() => {
+      setTimeout(() => {
+        try {
           this.autofill = !!this.$el.querySelector(':-webkit-autofill')
-        })
-      } catch (e) {}
+        } catch (e) {}
+      })
 
       // 分2种情况
       // 1. 感知输入法，触发原生 input 事件就必须向上继续抛出
