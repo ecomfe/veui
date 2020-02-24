@@ -1,26 +1,3 @@
-<template>
-<veui-overlay
-  open
-  :overlay-class="mergeOverlayClass($c('toast-list'))"
-  :priority="priority"
->
-  <veui-toast
-    v-for="message in messages"
-    :key="message.__message_id__"
-    open
-    :type="message.type"
-    :message="message.message"
-    :closable="message.closable"
-    :title="message.title"
-    :ui="message.ui"
-    :duration="message.duration"
-    :style="`top: ${message.top}px`"
-    @close="remove(message)"
-    @ready="updateHeight(message, $event)"
-  />
-</veui-overlay>
-</template>
-
 <script>
 import Overlay from './Overlay'
 import Toast from './Toast'
@@ -35,10 +12,6 @@ config.defaults({
 
 export default {
   name: 'toast-list',
-  components: {
-    'veui-overlay': Overlay,
-    'veui-toast': Toast
-  },
   mixins: [prefix, overlay],
   data () {
     return {
@@ -77,6 +50,40 @@ export default {
         msg.top = prev.top + prev.height
       })
     }
+  },
+  render () {
+    return (
+      <Overlay
+        open
+        overlay-class={this.mergeOverlayClass(this.$c('toast-list'))}
+        priority={this.priority}
+      >
+        {this.messages.map(m => (
+          <Toast
+            key={m.__message_id__}
+            open
+            type={m.type}
+            message={typeof m.message === 'string' ? m.message : null}
+            closable={m.closable}
+            title={m.title}
+            ui={m.ui}
+            duration={m.duration}
+            style={`top: ${m.top}px`}
+            onClose={() => this.remove(m)}
+            onReady={e => this.updateHeight(m, e)}
+            scopedSlots={
+              typeof m.message === 'function'
+                ? {
+                  default: m.message
+                }
+                : null
+            }
+          >
+            {typeof m.message === 'object' ? m.message : null}
+          </Toast>
+        ))}
+      </Overlay>
+    )
   }
 }
 </script>

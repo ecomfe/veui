@@ -1,40 +1,34 @@
 <template>
 <article>
-  <h1><code>&lt;veui-toast&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-toast&gt;</code>
+  </h1>
   <section>
-    <h3>
-      全局提示
-    </h3>
+    <h3>全局提示</h3>
     <veui-button
       ui="aux"
       @click="showToast('all')"
-    >
-      全部
-    </veui-button>
+    >全部</veui-button>
     <veui-button
       ui="aux"
       @click="showToast('success')"
-    >
-      成功
-    </veui-button>
+    >成功</veui-button>
     <veui-button
       ui="aux"
       @click="showToast('warn')"
-    >
-      警告
-    </veui-button>
+    >警告</veui-button>
     <veui-button
       ui="aux"
       @click="showToast('info')"
-    >
-      提醒
-    </veui-button>
+    >提醒</veui-button>
     <veui-button
       ui="aux"
       @click="showToast('error')"
-    >
-      错误
-    </veui-button>
+    >错误</veui-button>
+    <veui-button
+      ui="aux"
+      @click="showSlottedToast"
+    >错误（包括组件）</veui-button>
   </section>
   <section class="col">
     <section>
@@ -52,30 +46,36 @@
         open
         closable
         type="error"
-      >Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
-        dolores, sint harum aspernatur aliquid sed maxime dolorum qui
-        recusandae voluptatem. Saepe dolorem placeat culpa nisi eligendi ipsam
-        illo non quam.</veui-toast>
+      >
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolores,
+        sint harum aspernatur aliquid sed maxime dolorum qui recusandae
+        voluptatem. Saepe dolorem placeat culpa nisi eligendi ipsam illo non
+        quam.
+      </veui-toast>
     </section>
     <section>
       <veui-toast
         open
         title="Lorem Ipsum"
         type="info"
-      >Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
+      >
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
         laboriosam, atque cumque sequi, debitis impedit fugit vitae iure,
         rerum accusantium odio porro. Exercitationem excepturi adipisci unde
-        maiores est! Eos, consequatur.</veui-toast>
+        maiores est! Eos, consequatur.
+      </veui-toast>
     </section>
     <section>
       <veui-toast
         open
         title="Lorem Ipsum"
         closable
-      >Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+      >
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
         minima doloremque quaerat consequatur accusamus repellat eum? Dolorem
         sunt est, sint inventore, id atque ut aspernatur ipsa corrupti debitis
-        quaerat voluptatibus!</veui-toast>
+        quaerat voluptatibus!
+      </veui-toast>
     </section>
   </section>
   <section class="col">
@@ -99,10 +99,12 @@
         open
         closable
         type="error"
-      >Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
-        dolores, sint harum aspernatur aliquid sed maxime dolorum qui
-        recusandae voluptatem. Saepe dolorem placeat culpa nisi eligendi ipsam
-        illo non quam.</veui-toast>
+      >
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolores,
+        sint harum aspernatur aliquid sed maxime dolorum qui recusandae
+        voluptatem. Saepe dolorem placeat culpa nisi eligendi ipsam illo non
+        quam.
+      </veui-toast>
     </section>
     <section>
       <veui-toast
@@ -110,10 +112,12 @@
         open
         title="Lorem Ipsum"
         type="info"
-      >Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
+      >
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
         laboriosam, atque cumque sequi, debitis impedit fugit vitae iure,
         rerum accusantium odio porro. Exercitationem excepturi adipisci unde
-        maiores est! Eos, consequatur.</veui-toast>
+        maiores est! Eos, consequatur.
+      </veui-toast>
     </section>
     <section>
       <veui-toast
@@ -121,10 +125,12 @@
         open
         title="Lorem Ipsum"
         closable
-      >Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+      >
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
         minima doloremque quaerat consequatur accusamus repellat eum? Dolorem
         sunt est, sint inventore, id atque ut aspernatur ipsa corrupti debitis
-        quaerat voluptatibus!</veui-toast>
+        quaerat voluptatibus!
+      </veui-toast>
     </section>
   </section>
 </article>
@@ -132,7 +138,7 @@
 
 <script>
 import bus from '../bus'
-import { Button, Toast } from 'veui'
+import { Button, Toast, Link } from 'veui'
 import toast from 'veui/managers/toast'
 
 let messages = [
@@ -198,6 +204,16 @@ export default {
       } else {
         toast[type](this.messageMap[type].message)
       }
+    },
+    showSlottedToast () {
+      const h = this.$createElement
+      toast.error({
+        message: ({ close }) => [
+          '错误，请检查并修改后再提交',
+          h(Link, { props: { ui: 'strong' }, on: { click: close } }, '去修改')
+        ],
+        duration: 100000
+      })
     }
   }
 }
