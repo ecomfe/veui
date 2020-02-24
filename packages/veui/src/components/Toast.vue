@@ -25,19 +25,16 @@
         v-if="title || $slots.title"
         :class="$c('toast-content-title')"
       >
-        <template v-if="title">
-          {{ title }}
-        </template>
         <slot
-          v-else
           name="title"
-        />
+          :close="close"
+        >{{ title }}</slot>
       </div>
       <div
         ref="message"
         :class="$c('toast-content-message')"
       >
-        <slot>{{ message }}</slot>
+        <slot :close="close">{{ message }}</slot>
       </div>
     </div>
     <div
