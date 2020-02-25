@@ -16,6 +16,7 @@
 export default {
   name: 'veui-expand-transition',
   abstract: true,
+  uiTypes: ['abstract'],
   props: {
     name: {
       type: String,

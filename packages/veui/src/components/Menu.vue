@@ -6,73 +6,75 @@
     [$c('menu-collapsed')]: realCollapsed
   }"
 >
-  <veui-tree
-    ref="tree"
-    :class="{
-      [$c('menu-tree')]: true,
-      [$c('menu-tree-has-icon')]: hasIcon
-    }"
-    :datasource="realItems"
-    :expanded.sync="realExpanded"
-    keys="name"
-  >
-    <template
-      slot="item"
-      slot-scope="link"
+  <div :class="[$c('menu-tree-wrapper')]">
+    <veui-tree
+      ref="tree"
+      :class="{
+        [$c('menu-tree')]: true,
+        [$c('menu-tree-has-icon')]: hasIcon
+      }"
+      :datasource="realItems"
+      :expanded.sync="realExpanded"
+      keys="name"
     >
-      <div
-        :ref="`item-${link.name}`"
-        :class="{
-          [$c('menu-item')]: true,
-          ...itemClass(link)
-        }"
-        @click.stop="handleItemClick(link)"
-        @mouseenter="show(link)"
+      <template
+        slot="item"
+        slot-scope="link"
       >
-        <slot
-          name="item"
-          v-bind="link"
+        <div
+          :ref="`item-${link.name}`"
+          :class="{
+            [$c('menu-item')]: true,
+            ...itemClass(link)
+          }"
+          @click.stop="handleItemClick(link)"
+          @mouseenter="show(link)"
         >
-          <veui-icon
-            v-if="link.icon"
-            :class="$c('menu-item-icon')"
-            :name="link.icon"
-          />
           <slot
-            name="item-label"
+            name="item"
             v-bind="link"
           >
-            <veui-link
-              :class="$c('menu-link')"
-              :disabled="!!link.disabled"
-              v-bind="pickLinkProps(link)"
+            <veui-icon
+              v-if="link.icon"
+              :class="$c('menu-item-icon')"
+              :name="link.icon"
+            />
+            <slot
+              name="item-label"
+              v-bind="link"
             >
-              <span
-                v-if="!realCollapsed"
-                :class="$c('menu-item-label')"
-              >{{
-                link.label
-              }}</span>
-            </veui-link>
+              <veui-link
+                :class="$c('menu-link')"
+                :disabled="!!link.disabled"
+                v-bind="pickLinkProps(link)"
+              >
+                <span
+                  v-if="!realCollapsed"
+                  :class="$c('menu-item-label')"
+                >{{
+                  link.label
+                }}</span>
+              </veui-link>
+            </slot>
+            <veui-button
+              v-if="
+                !realCollapsed &&
+                  !link.disabled &&
+                  link.children &&
+                  link.children.length
+              "
+              :ui="uiParts.toggle"
+              tabindex="-1"
+              :class="$c('menu-item-toggle')"
+              @click.stop="toggleExpanded(link)"
+            >
+              <veui-icon :name="icons.expand"/>
+            </veui-button>
           </slot>
-          <veui-button
-            v-if="
-              !realCollapsed &&
-                !link.disabled &&
-                link.children &&
-                link.children.length
-            "
-            :ui="uiParts.toggle"
-            tabindex="-1"
-            :class="$c('menu-item-toggle')"
-            @click.stop="toggleExpanded(link)"
-          >
-            <veui-icon :name="icons.expand"/>
-          </veui-button>
-        </slot>
-      </div>
-    </template>
-  </veui-tree>
+        </div>
+      </template>
+    </veui-tree>
+  </div>
   <veui-overlay
     v-if="realCollapsed"
     :target="refTarget"

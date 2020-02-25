@@ -106,7 +106,7 @@
 
 <script>
 import Icon from '../Icon'
-import ExpandTransition from '../ExpandTransition'
+import ExpandTransition from '../_ExpandTransition'
 import { closest } from '../../utils/dom'
 import { getTypedAncestor } from '../../utils/helper'
 import prefix from '../../mixins/prefix'

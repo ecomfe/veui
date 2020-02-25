@@ -2,8 +2,8 @@
 @import (reference) "../dropdown.less";
 
 .@{veui-prefix}-menu {
-  border-right: 1px solid @dls-menu-border-color;
   width: @dls-menu-width;
+  border-right: 1px solid @dls-menu-border-color;
   display: flex;
   flex-direction: column;
 
@@ -20,9 +20,15 @@
   }
 
   // tree
+  &-tree-wrapper {
+    width: @dls-menu-width;
+    padding-right: 1px;
+    overflow: auto;
+    flex: auto;
+  }
   &-tree {
     position: relative;
-    flex: 1;
+    overflow: visible;
     padding: @dls-menu-padding-y @dls-menu-padding-x;
 
     .@{veui-prefix}-tree-item {
@@ -77,7 +83,7 @@
 
     &::before {
       content: "";
-      .absolute(_, 0, _, 0);
+      .absolute(_, 0);
       height: inherit;
       background-color: @dls-menu-item-background-color;
     }
@@ -254,13 +260,10 @@
   &-collapsed &-tree &-item {
     justify-content: center;
   }
-  &-collapsed &-item-active::before {
-    // TODO: active 样式
-    background-color: @dls-menu-item-background-color-current;
-  }
   &-collapsed &-tree &-link {
     flex: 0;
   }
+
   &-collapsed &-item-icon {
     margin: 0;
   }
