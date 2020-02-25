@@ -35,7 +35,7 @@
 <script>
 import { find } from 'lodash'
 import Icon from './Icon'
-import ExpandTransition from './ExpandTransition'
+import ExpandTransition from './_ExpandTransition'
 import ui from '../mixins/ui'
 import { makeCoupledChild } from '../mixins/coupled'
 import prefix from '../mixins/prefix'
