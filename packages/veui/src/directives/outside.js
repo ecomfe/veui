@@ -139,8 +139,10 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
       } else {
         if (el[bindingKey].timer == null) {
           el[bindingKey].delayCb = () => {
-            el[bindingKey].timer = null
-            el[bindingKey].delayCb = null
+            if (el[bindingKey]) {
+              el[bindingKey].timer = null
+              el[bindingKey].delayCb = null
+            }
             handler(e)
           }
           el[bindingKey].timer = setTimeout(el[bindingKey].delayCb, delay)

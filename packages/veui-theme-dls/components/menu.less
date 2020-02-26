@@ -21,10 +21,24 @@
 
   // tree
   &-tree-wrapper {
-    width: @dls-menu-width;
-    padding-right: 1px;
     overflow: auto;
     flex: auto;
+    display: flex;
+    flex-direction: column;
+    // 当 tree 收起时可能会看到 active 样式溢出到 tree 外面，盖住
+    &::after {
+      content: "";
+      display: block;
+      flex: auto;
+      background: @dls-menu-item-background-color;
+      position: relative;
+      border-right: 1px solid @dls-menu-border-color;
+      margin-right: -1px;
+    }
+  }
+  &:not(&-collapsed) &-tree-wrapper {
+    width: @dls-menu-width;
+    padding-right: 1px;
   }
   &-tree {
     position: relative;
@@ -34,9 +48,18 @@
     .@{veui-prefix}-tree-item {
       margin-bottom: @dls-menu-item-spacing;
       height: @dls-menu-item-height-m;
-      // FIXME：Tree 的 before 先干掉，active 等状态放不上
+      // 盖住 active 样式在 expand 过渡时从 margin-bottom 露出来的部分
       &::before {
-        display: none;
+        content: "";
+        .absolute(_, -1px, _, 0);
+        height: @dls-menu-item-spacing;
+        background-color: @dls-menu-item-background-color;
+        border-right: 1px solid @dls-menu-border-color;
+        transform: translateY(100%);
+        align-self: flex-end;
+        width: auto;
+        display: block;
+        z-index: 0;
       }
 
       &-group {
@@ -83,9 +106,10 @@
 
     &::before {
       content: "";
-      .absolute(_, 0);
+      .absolute(_, -1px, _, 0);
       height: inherit;
       background-color: @dls-menu-item-background-color;
+      border-right: 1px solid @dls-menu-border-color;
     }
 
     &:not(.@{veui-prefix}-disabled) {
@@ -301,6 +325,10 @@
   &[ui~="l"] &-tree,
   &-overlay[ui~="l"] {
     font-size: @dls-menu-font-size-l;
+  }
+
+  &[ui~="l"] &-tree .@{veui-prefix}-tree-item {
+    height: @dls-menu-item-height-l;
   }
 
   &[ui~="l"] &-footer {
