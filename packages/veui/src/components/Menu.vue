@@ -14,7 +14,7 @@
         [$c('menu-tree-has-icon')]: hasIcon
       }"
       :datasource="realItems"
-      :expanded.sync="realExpanded"
+      :expanded="realExpanded"
       keys="name"
     >
       <template
@@ -370,7 +370,7 @@ export default {
       if (index === -1 || ensureExpanded) {
         let names = getParentNames(item)
         names.push(item.name)
-        this.localExpanded = uniq([...this.localExpanded, ...names])
+        this.localExpanded = uniq([...this.realExpanded, ...names])
       } else {
         this.localExpanded = [...this.realExpanded]
         this.localExpanded.splice(index, 1)
