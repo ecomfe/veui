@@ -5,14 +5,10 @@
   border-right: 1px solid @dls-menu-border-color;
   display: flex;
   flex-direction: column;
+  width: @dls-menu-width;
+  .veui-transition(width);
 
-  &,
-  &-tree-wrapper {
-    width: @dls-menu-width;
-  }
-
-  &-collapsed,
-  &-collapsed &-tree-wrapper {
+  &-collapsed {
     width: @dls-menu-width-collapsed;
   }
 
@@ -31,6 +27,7 @@
     display: flex;
     flex-direction: column;
     padding-right: 1px;
+    width: calc(100% + 1px);
 
     // 当 tree 收起时可能会看到 active 样式溢出到 tree 外面，盖住
     &::after {
@@ -102,7 +99,7 @@
   &-item {
     cursor: pointer;
     display: flex;
-    flex: 1;
+    flex: auto;
     align-items: center;
     outline: none;
     max-width: 100%;
@@ -157,7 +154,7 @@
   }
 
   &-link {
-    flex: 1;
+    flex: auto;
     display: flex;
     overflow: hidden;
     align-items: center;
@@ -288,8 +285,10 @@
   &-collapsed &-tree &-item {
     justify-content: center;
   }
+  &-collapsed &-tree &-item-toggle,
   &-collapsed &-tree &-link {
     flex: 0;
+    overflow: hidden;
   }
 
   &-collapsed &-item-icon {
