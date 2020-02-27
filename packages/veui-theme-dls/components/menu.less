@@ -2,12 +2,17 @@
 @import (reference) "../dropdown.less";
 
 .@{veui-prefix}-menu {
-  width: @dls-menu-width;
   border-right: 1px solid @dls-menu-border-color;
   display: flex;
   flex-direction: column;
 
-  &-collapsed {
+  &,
+  &-tree-wrapper {
+    width: @dls-menu-width;
+  }
+
+  &-collapsed,
+  &-collapsed &-tree-wrapper {
     width: @dls-menu-width-collapsed;
   }
 
@@ -25,6 +30,8 @@
     flex: auto;
     display: flex;
     flex-direction: column;
+    padding-right: 1px;
+
     // 当 tree 收起时可能会看到 active 样式溢出到 tree 外面，盖住
     &::after {
       content: "";
@@ -36,10 +43,7 @@
       margin-right: -1px;
     }
   }
-  &:not(&-collapsed) &-tree-wrapper {
-    width: @dls-menu-width;
-    padding-right: 1px;
-  }
+
   &-tree {
     position: relative;
     overflow: visible;
