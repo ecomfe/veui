@@ -185,6 +185,37 @@ export default [
     component: Loading
   },
   {
+    path: '/menu',
+    name: 'Menu',
+    component: Menu,
+    children: [
+      {
+        path: 'input',
+        component: Input
+      },
+      {
+        path: 'progress',
+        component: Progress
+      },
+      {
+        path: 'switch',
+        component: Switch
+      },
+      {
+        path: 'link',
+        component: Link
+      },
+      {
+        path: 'loading',
+        component: Loading
+      },
+      {
+        path: 'button',
+        component: Button
+      }
+    ]
+  },
+  {
     path: '/number-input',
     name: 'NumberInput',
     component: NumberInput
@@ -264,8 +295,7 @@ export default [
   {
     path: '/table',
     name: 'Table',
-    component: Table,
-    disabled: true
+    component: Table
   },
   {
     path: '/tag',
@@ -331,36 +361,5 @@ export default [
     path: '/uploader',
     name: 'Uploader',
     component: Uploader
-  },
-  {
-    path: '/menu',
-    name: 'Menu',
-    component: Menu,
-    children: [
-      {
-        path: 'input',
-        component: Input
-      },
-      {
-        path: 'progress',
-        component: Progress
-      },
-      {
-        path: 'switch',
-        component: Switch
-      },
-      {
-        path: 'link',
-        component: Link
-      },
-      {
-        path: 'loading',
-        component: Loading
-      },
-      {
-        path: 'button',
-        component: Button
-      }
-    ]
   }
 ]
