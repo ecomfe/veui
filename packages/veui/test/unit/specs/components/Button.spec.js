@@ -13,19 +13,12 @@ describe('components/Button', () => {
   })
 
   it('should be disabled when the button is loading', () => {
-    const SpinIcon = {
-      template: '<i>Loading</i>'
-    }
     const wrapper = mount(Button, {
       propsData: {
         loading: true
-      },
-      slots: {
-        loading: SpinIcon
       }
     })
 
-    expect(wrapper.contains(SpinIcon)).to.equal(true)
     expect(wrapper.classes('veui-button-loading')).to.equal(true)
     expect(wrapper.attributes('disabled')).to.equal('disabled')
   })
