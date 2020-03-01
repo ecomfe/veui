@@ -63,7 +63,7 @@
           <strong>总计</strong>
         </template>
       </veui-table-column>
-      <veui-table-column title="元数据">
+      <!-- <veui-table-column title="元数据">
         <veui-table-column
           field="typeId"
           title="类型 ID"
@@ -75,7 +75,7 @@
           title="数据分组"
           :span="groupSpan"
         />
-      </veui-table-column>
+      </veui-table-column> -->
       <veui-table-column
         field="desc"
         title="数据描述"

@@ -508,8 +508,7 @@ export default {
 
     if (this.scrollableX || this.scrollableY) {
       this.updateLayout()
-
-      this.$refs.main.addEventListener('scroll', this.handleScroll)
+      this.$refs.main.addEventListener('scroll', this.updateScrollState)
     }
 
     if (this.scrollableX) {
@@ -529,7 +528,7 @@ export default {
   },
   beforeDestroy () {
     if (this.scrollableY) {
-      this.$refs.main.removeEventListener('scroll', this.handleScroll)
+      this.$refs.main.removeEventListener('scroll', this.updateScrollState)
     }
 
     if (this.removeBackForwardPreventer) {
@@ -610,18 +609,19 @@ export default {
       return true
     },
     updateLayout () {
-      // let { main } = this.$refs
       let { main, table } = this.$refs
       this.overflow = {
         x: table.offsetWidth > main.clientWidth,
         y: table.offsetHeight > main.clientHeight
       }
-      if (this.overflow.x) {
+      if (this.overflow.y) {
         this.gutterWidth = getElementScrollbarWidth(main)
       }
       this.width = main.clientWidth
+
+      this.updateScrollState()
     },
-    handleScroll () {
+    updateScrollState () {
       let { main, fixedHeader, fixedFooter } = this.$refs
 
       if (this.scrollableX) {
