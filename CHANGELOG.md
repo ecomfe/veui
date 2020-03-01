@@ -1,4 +1,16 @@
+## 2.0.0-alpha.7
+
+### ⚠️ 非兼容性变更
+
+- [-] 移除了 `Button` 组件的 `loading` 插槽。
+
 ## 2.0.0-alpha.6
+
+### ⚠️ 非兼容性变更
+
+- [^] 删除了 `Drawer` 组件的 `backdrop-closable` prop，新增 `outside-closable` prop 来控制点击组件外区域时是否关闭。
+- [-] 移除了 `Sorter` 组件，仅在 `Table` 内部使用。
+- [^] `Table` 组件带边框的样式修改为依赖新增 prop `bordered`，而非通过 `ui="bordered"` 指定，并且当存在单元格合并（包括表格内容合并和嵌套表头时）必须输出带边框样式。
 
 ### 💡 主要变更
 
@@ -7,12 +19,6 @@
 - [+] `Table` 组件新增列分组（输出嵌套表头）功能支持。
 - [+] `Table` 组件新增固定列功能支持。
 - [+] `Dialog` 组件在 `modal` 模式下，新增滚动锁定功能支持。
-
-### ⚠️ 非兼容性变更
-
-- [^] 删除了 `Drawer` 组件的 `backdrop-closable` prop，新增 `outside-closable` prop 来控制点击组件外区域时是否关闭。
-- [-] 移除了 `Sorter` 组件，仅在 `Table` 内部使用。
-- [^] `Table` 组件带边框的样式修改为依赖新增 prop `bordered`，而非通过 `ui="bordered"` 指定，并且当存在单元格合并（包括表格内容合并和嵌套表头时）必须输出带边框样式。
 
 ### 🐞 问题修复
 

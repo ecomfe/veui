@@ -10,17 +10,13 @@
   v-bind="attrs"
   v-on="$listeners"
 >
-  <slot v-if="!loading"/>
-  <template v-else>
-    <slot name="loading">
-      <veui-icon
-        :class="$c('button-loading-icon')"
-        :name="icons.loading"
-        spin
-      />
-      <slot/>
-    </slot>
-  </template>
+  <veui-icon
+    v-if="loading"
+    :class="$c('button-loading-icon')"
+    :name="icons.loading"
+    spin
+  />
+  <slot/>
 </button>
 </template>
 
