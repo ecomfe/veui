@@ -5,44 +5,67 @@
 /* Overriding est variables */
 @support-ie-version: 11;
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+._veui-output-common(@selector) {
+  @{selector} {
+    font-size: @dls-font-size-m;
+    font-weight: @dls-font-weight-1;
+    font-family: @dls-font-family;
+    color: @dls-font-color-normal;
+  }
 
-html {
-  font-size: @dls-font-size-m;
-  font-weight: @dls-font-weight-1;
-  font-family: @dls-font-family;
-  color: @dls-font-color-normal;
+  // only enable on Retina displays
+  @media screen and (min-resolution: 2dppx) {
+    @{selector} {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  }
 }
+._veui-output-common(html) {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-// only enable on Retina displays
-@media screen and (min-resolution: 2dppx) {
-  html {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  ._veui-output-common-content();
+}
+._veui-output-common(@selector) when not (@selector = html) {
+  @{selector} {
+    &,
+    * {
+      &,
+      &::before,
+      &::after {
+        box-sizing: border-box;
+      }
+    }
+    ._veui-output-common-content();
   }
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: @dls-font-weight-2;
-}
+._veui-output-common(@veui-root-selector);
 
-.@{veui-prefix}-disabled {
-  cursor: not-allowed !important;
-}
+// common styles for content
+._veui-output-common-content () {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: @dls-font-weight-2;
+  }
 
-.@{veui-prefix}-sr-only {
-  .veui-invisible();
-}
+  .@{veui-prefix}-disabled {
+    cursor: not-allowed !important;
+  }
 
-a {
-  &:extend(._veui-link all);
+  .@{veui-prefix}-sr-only {
+    .veui-invisible();
+  }
+
+  a {
+    &:extend(._veui-link all);
+  }
 }
