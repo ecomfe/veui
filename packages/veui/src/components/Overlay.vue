@@ -1,4 +1,5 @@
 <script>
+import Vue from 'vue'
 import Popper from 'popper.js'
 import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
@@ -10,6 +11,10 @@ import focusable from '../mixins/focusable'
 import { getClassPropDef, mergeClasses, isType } from '../utils/helper'
 import '../common/uiTypes'
 import { omit } from 'lodash'
+
+const VEUI_OVERLAY_ELEMENT_NAME = 'veui-x-overlay'
+
+Vue.config.ignoredElements.push(VEUI_OVERLAY_ELEMENT_NAME)
 
 config.defaults({
   'overlay.baseZIndex': 200,
@@ -293,7 +298,7 @@ export default {
   },
   render () {
     const box = (
-      <div
+      <VEUI_OVERLAY_ELEMENT_NAME
         v-show={this.realOpen}
         style={{
           zIndex: this.zIndex,
@@ -307,7 +312,7 @@ export default {
         ui={this.realUi}
       >
         {this.$slots.default}
-      </div>
+      </VEUI_OVERLAY_ELEMENT_NAME>
     )
 
     return this.inline ? (

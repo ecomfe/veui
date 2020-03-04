@@ -6,7 +6,15 @@
 @support-ie-version: 11;
 
 ._veui-output-common(@element) {
-  @{element} {
+  .output-selector() when (@element = html) {
+    @selector: html;
+  }
+  .output-selector() when not (@element = html) {
+    @selector: @element, @veui-overlay-element;
+  }
+  .output-selector();
+
+  @{selector} {
     font-size: @dls-font-size-m;
     font-weight: @dls-font-weight-1;
     font-family: @dls-font-family;
@@ -15,7 +23,7 @@
 
   // only enable on Retina displays
   @media screen and (min-resolution: 2dppx) {
-    @{element} {
+    @{selector} {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
@@ -31,7 +39,10 @@
   ._veui-output-common-content();
 }
 ._veui-output-common(@element) when not (@element = html) {
-  @{element} {
+  @{element},
+  @{veui-overlay-element} {
+    display: block;
+
     &,
     * {
       &,
