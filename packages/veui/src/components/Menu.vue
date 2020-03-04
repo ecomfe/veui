@@ -184,7 +184,6 @@ import controllable from '../mixins/controllable'
 import overlay from '../mixins/overlay'
 import outside from '../directives/outside'
 import { find } from '../utils/datasource'
-import 'veui-theme-one-icons/chevron-right'
 
 const ensureSlash = str => (endsWith(str, '/') ? str : `${str}/`)
 

@@ -134,7 +134,7 @@
 </template>
 <script>
 import { Uploader, Button, Popover, Input, Span } from 'veui'
-import '../../../veui-theme-dls-icons/icons/chevron-right'
+import 'veui-theme-dls-icons/chevron-right'
 
 export default {
   name: 'uploader-demo',
@@ -275,7 +275,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "~veui-theme-dls/lib.less";
+@import '~veui-theme-dls/lib.less';
 
 h2 {
   font-size: 16px;
