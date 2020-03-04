@@ -5,8 +5,8 @@
 /* Overriding est variables */
 @support-ie-version: 11;
 
-._veui-output-common(@selector) {
-  @{selector} {
+._veui-output-common(@element) {
+  @{element} {
     font-size: @dls-font-size-m;
     font-weight: @dls-font-weight-1;
     font-family: @dls-font-family;
@@ -15,7 +15,7 @@
 
   // only enable on Retina displays
   @media screen and (min-resolution: 2dppx) {
-    @{selector} {
+    @{element} {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
@@ -30,8 +30,8 @@
 
   ._veui-output-common-content();
 }
-._veui-output-common(@selector) when not (@selector = html) {
-  @{selector} {
+._veui-output-common(@element) when not (@element = html) {
+  @{element} {
     &,
     * {
       &,
@@ -44,7 +44,7 @@
   }
 }
 
-._veui-output-common(@veui-root-selector);
+._veui-output-common(@veui-root-element);
 
 // common styles for content
 ._veui-output-common-content () {

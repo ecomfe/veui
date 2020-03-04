@@ -10,8 +10,8 @@
  * 2. Prevent adjustments of font size after orientation changes in iOS.
  */
 
-._veui-output-normalize(@selector) {
-  @{selector} {
+._veui-output-normalize(@element) {
+  @{element} {
     line-height: @dls-line-height-m; /* 1 */
     -webkit-text-size-adjust: 100%; /* 2 */
   }
@@ -27,13 +27,13 @@
 
   ._veui-output-normalize-content();
 }
-._veui-output-normalize(@selector) when not (@selector = html) {
-  @{selector} {
+._veui-output-normalize(@element) when not (@element = html) {
+  @{element} {
     ._veui-output-normalize-content();
   }
 }
 
-._veui-output-normalize(@veui-root-selector);
+._veui-output-normalize(@veui-root-element);
 
 // normalizing content
 ._veui-output-normalize-content() {
