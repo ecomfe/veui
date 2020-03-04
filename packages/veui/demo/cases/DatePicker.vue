@@ -4,6 +4,13 @@
     <code>&lt;veui-date-picker&gt;</code>
   </h1>
   <section>
+    <h2>非受控组件</h2>
+    <veui-date-picker
+      range
+      clearable
+    />
+  </section>
+  <section>
     <h2>日期选择</h2>
     <veui-date-picker
       v-model="selectedDate"
