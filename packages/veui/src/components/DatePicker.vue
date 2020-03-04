@@ -173,6 +173,7 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
+import controllable from '../mixins/controllable'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import { toDateData, getExactDateData, lt } from '../utils/date'
@@ -230,17 +231,25 @@ export default {
     'veui-icon': Icon,
     'veui-input': Input
   },
-  mixins: [prefix, ui, input, dropdown, i18n],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    dropdown,
+    i18n,
+    controllable({
+      selected: {
+        event: 'select'
+      }
+    })
+  ],
   model: {
     prop: 'selected',
     event: 'select'
   },
   props: {
     selected: {
-      type: [Array, Date],
-      default () {
-        return null
-      }
+      type: [Array, Date]
     },
     clearable: Boolean,
     placeholder: String,
@@ -264,15 +273,6 @@ export default {
   },
   computed: {
     realWeekStart: Calendar.computed.realWeekStart,
-    realSelected: {
-      get () {
-        return this.selected === undefined ? this.localSelected : this.selected
-      },
-      set (val) {
-        this.localSelected = val
-        this.$emit('select', val)
-      }
-    },
     realInputValue () {
       let formatted = [].concat(this.formatted)
       return this.localInputValue.length
