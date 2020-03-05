@@ -272,10 +272,6 @@
     "path": "Slider.vue"
   },
   {
-    "name": "Sorter",
-    "path": "Sorter.vue"
-  },
-  {
     "name": "Span",
     "path": "Span.vue"
   },

@@ -7,6 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "components": "node ./build/components.js",
+    "index": "node ./build/components.js index",
     "prepublishOnly": "cp -r ./src/* .",
     "publish": "rm -rf ./common ./components ./directives ./locale ./managers ./mixins ./plugins ./utils ./icons.js ./index.js",
     "test": "cross-env NODE_ENV=test BABEL_ENV=test karma start --single-run",
