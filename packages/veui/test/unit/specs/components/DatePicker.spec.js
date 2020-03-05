@@ -7,6 +7,18 @@ const debugInBrowser = {
 }
 
 describe('components/DatePicker', () => {
+  it('should use `localActive` when used as a uncontrolled component.', async () => {
+    let wrapper = mount(DatePicker)
+
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    wrapper.find('.veui-calendar-day button').trigger('click')
+    await wrapper.vm.$nextTick()
+    let val = wrapper.find('.veui-date-picker-trigger .veui-input-input')
+      .element.value
+    expect(val.trim() !== '').to.equal(true)
+    wrapper.destroy()
+  })
+
   it('should handle selected prop with `null` value.', done => {
     let wrapper = mount(DatePicker, {
       propsData: {
