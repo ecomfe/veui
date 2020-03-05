@@ -11,7 +11,15 @@
  */
 
 ._veui-output-normalize(@element) {
-  @{element} {
+  .output-selector() when (@element = html) {
+    @selector: html;
+  }
+  .output-selector() when not (@element = html) {
+    @selector: @element, @veui-overlay-element;
+  }
+  .output-selector();
+
+  @{selector} {
     line-height: @dls-line-height-m; /* 1 */
     -webkit-text-size-adjust: 100%; /* 2 */
   }
@@ -28,7 +36,8 @@
   ._veui-output-normalize-content();
 }
 ._veui-output-normalize(@element) when not (@element = html) {
-  @{element} {
+  @{element},
+  @{veui-overlay-element} {
     ._veui-output-normalize-content();
   }
 }
