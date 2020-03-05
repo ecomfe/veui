@@ -62,10 +62,6 @@ export default {
               {
                 label: 'Input',
                 to: '/menu/input'
-              },
-              {
-                label: 'Progress',
-                to: '/menu/progress'
               }
             ]
           },
@@ -105,13 +101,19 @@ export default {
       {
         label: 'Navigation Three',
         name: 'nav-three',
-        icon: 'baidu'
+        icon: 'baidu',
+        disabled: true
       },
       {
         label: 'Navigation Four',
         name: 'nav-four',
         icon: 'bug',
-        disabled: true
+        children: [
+          {
+            label: 'Progress',
+            to: '/menu/progress'
+          }
+        ]
       }
     ]
     let items2 = items.map(i => omit(i, 'icon'))

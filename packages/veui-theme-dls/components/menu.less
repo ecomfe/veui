@@ -47,9 +47,9 @@
     padding: @dls-menu-padding-y @dls-menu-padding-x;
 
     .@{veui-prefix}-tree-item {
-      margin-bottom: @dls-menu-item-spacing;
+      margin-top: @dls-menu-item-spacing;
       height: @dls-menu-item-height-m;
-      // 盖住 active 样式在 expand 过渡时从 margin-bottom 露出来的部分
+      // 盖住 active 样式在 expand 过渡时从 margin-top 露出来的部分
       &::before {
         content: "";
         .absolute(_, -1px, _, 0);
@@ -75,10 +75,10 @@
         @dls-menu-item-content-spacing
       );
     }
-
-    & > li:last-child > .@{veui-prefix}-tree-item {
-      margin-bottom: 0;
+    & > li:first-child > .@{veui-prefix}-tree-item {
+      margin-top: 0;
     }
+
   }
 
   // footer
