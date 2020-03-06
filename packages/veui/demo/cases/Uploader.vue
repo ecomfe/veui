@@ -28,11 +28,11 @@
     type="image"
     request-mode="custom"
     name="file"
-    max-size="10mb"
+    max-size="100kb"
     accept=".jpg,.jpeg,.gif"
     :payload="payload"
     :upload="upload"
-    ui="s"
+    ui="s upload-front"
     :controls="imageControls"
     @moveright="handleMoveRight"
     @success="onSuccess"
@@ -41,7 +41,7 @@
     @statuschange="handleStatusChange"
   >
     <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在10M以内
+      请选择jpg,jpeg,gif图片，大小在100kb以内
     </template>
   </veui-uploader>
   <veui-button
@@ -98,7 +98,7 @@
     name="file"
     :action="action"
     :max-count="3"
-    max-size="10mb"
+    max-size="100kb"
     :payload="payload"
     @success="onSuccess"
     @failure="onFailure"
@@ -186,20 +186,25 @@ export default {
         let xhr = new XMLHttpRequest()
         file.xhr = xhr
 
-        xhr.upload.onprogress = e => onprogress(file, e)
+        xhr.upload.onprogress = e => onprogress(e)
         xhr.onload = () => {
           try {
-            onload(file, JSON.parse(xhr.responseText))
+            onload(JSON.parse(xhr.responseText))
           } catch (e) {
-            onload(file, { success: false, message: e })
+            onload({ success: false, message: e })
           }
         }
-        xhr.onerror = e => onerror(file, e)
+        xhr.onerror = e => onerror(e)
         let formData = new FormData()
         formData.append('file', file)
 
-        xhr.open('POST', this.action, true)
+        // xhr.open('POST', this.action, true)
+        xhr.open('POST', '/upload', true)
         xhr.send(formData)
+
+        return () => {
+          xhr.abort()
+        }
       },
       validator (file) {
         return new Promise(resolve => {

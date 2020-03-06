@@ -30,7 +30,7 @@
     >
       <slot name="button-label">
         <veui-icon :name="icons.upload"/>
-        {{ t("selectFile") }}
+        {{ t('selectFile') }}
       </slot>
     </label>
     <span
@@ -57,7 +57,7 @@
         (maxCount > 1 || maxCount === undefined) &&
         !isReplacing
     "
-    @change="handleNewFiles"
+    @change="handleNewFiles()"
   >
   <transition-group
     :class="listClass"
@@ -66,8 +66,11 @@
   >
     <li
       v-for="(file, index) in fileList"
-      :key="`${file.name}-${file.src}-${index}`"
+      :key="`${file.name}-${file.src}`"
       :class="`${listClass}-item`"
+      :style="{
+        order: index + 1
+      }"
     >
       <template
         v-if="
@@ -126,7 +129,9 @@
                 :class="$c('uploader-list-remove')"
                 :ui="uiParts.remove"
                 :disabled="realUneditable"
-                @click="remove(file)"
+                @click="
+                  file.status === 'uploading' ? cancel(file) : remove(file)
+                "
               >
                 <veui-icon :name="icons.clear"/>
               </veui-button>
@@ -134,7 +139,7 @@
                 v-if="file.status === 'failure'"
                 :target="`fileFailure${index}`"
                 position="top"
-              >{{ file.message || t("uploadFailure") }}</veui-popover>
+              >{{ file.message || t('uploadFailure') }}</veui-popover>
             </div>
             <slot
               name="file-after"
@@ -216,7 +221,7 @@
             :class="`${listClass}-container ${listClass}-container-uploading`"
           >
             <div :class="`${listClass}-container-uploading-text`">
-              <slot name="uploading-label">{{ t("uploading") }}</slot>
+              <slot name="uploading-label">{{ t('uploading') }}</slot>
             </div>
             <veui-progress
               v-if="requestMode !== 'iframe'"
@@ -253,7 +258,12 @@
               @click="replaceFile(file)"
             >
               <veui-icon :name="icons.addImage"/>
-              <span :class="`${listClass}-file-name`">{{ file.name }}</span>
+              <span
+                :class="`${listClass}-file-name`"
+                :title="file.name"
+              >{{
+                file.name
+              }}</span>
             </label>
             <div :class="`${listClass}-mask`">
               <template v-for="control in getImageControls(file)">
@@ -279,7 +289,7 @@
             :target="`fileFailure${index}`"
             position="top"
           >{{
-            file.message || t("uploadFailure")
+            file.message || t('uploadFailure')
           }}</veui-popover>
           <slot
             name="file-after"
@@ -293,6 +303,7 @@
       key="input"
       :class="{
         [`${listClass}-item`]: true,
+        [`${listClass}-item-upload`]: true,
         [`${listClass}-item-hidden`]: maxCount && fileList.length >= maxCount
       }"
     >
@@ -386,7 +397,8 @@ import {
   omit,
   includes,
   isEmpty,
-  findKey
+  isFunction,
+  partial
 } from 'lodash'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
@@ -537,7 +549,6 @@ export default {
         customError: false,
         valid: true
       },
-      customValidationMessage: '',
       previewImageSrc: null,
       previewDialogOpen: false
     }
@@ -582,15 +593,6 @@ export default {
       return this.files
         .filter(file => file.status === 'success' && !file.toBeUploaded)
         .map(file => omit(file, ['status', 'toBeUploaded']))
-    },
-    validationMessage () {
-      let messageMap = {
-        typeInvalid: this.t('fileTypeInvalid'),
-        sizeInvalid: this.t('fileSizeInvalid'),
-        countOverflow: this.t('tooManyFiles'),
-        customError: this.customValidationMessage
-      }
-      return messageMap[findKey(this.error)]
     },
     realOrder () {
       return this.type === 'file' ? this.order || 'desc' : 'asc'
@@ -714,43 +716,40 @@ export default {
       }
       return assign(newFile, pick(file, ['name', 'src']))
     },
-    handleNewFiles () {
+    handleNewFiles (files = this.$refs.input.files) {
       this.canceled = false
 
-      this.error = {
-        sizeInvalid: false,
-        typeInvalid: false,
-        countOverflow: false,
-        customError: false,
-        valid: true
-      }
+      let newFiles = [...files]
 
-      let newFiles = [...this.$refs.input.files]
       Promise.all(newFiles.map(file => this.validateFile(file))).then(
         validationResults => {
-          this.error.valid = validationResults.every(Boolean)
-          if (!this.error.valid) {
-            toast.error(this.validationMessage)
-          }
+          newFiles = newFiles.map((file, index) => {
+            if (validationResults[index].valid) {
+              file.toBeUploaded = true
+              if (this.type === 'image' && window.URL) {
+                file.src = window.URL.createObjectURL(file)
+              }
+            } else {
+              file.status = 'failure'
+              file.message = validationResults[index].message
+            }
 
-          newFiles = newFiles.filter((file, index) => validationResults[index])
-          if (!newFiles.length) {
-            return
-          }
+            return file
+          })
 
           if (this.isReplacing) {
             // type=image时，点击重新上传进入此分支，替换掉原位置的文件replacingFile
             let newFile = newFiles[0]
-            newFile.toBeUploaded = true
-            if (this.requestMode !== 'iframe' && window.URL) {
-              newFile.src = window.URL.createObjectURL(newFile)
-            }
 
             let replacingIndex = this.fileList.indexOf(this.replacingFile)
             this.$set(this.fileList, replacingIndex, newFile)
             this.$emit('change', this.getValue())
 
             this.replacingFile = null
+
+            if (newFile.status === 'failure') {
+              return
+            }
 
             if (this.requestMode === 'iframe' && this.autoupload) {
               this.submit(newFile)
@@ -763,22 +762,9 @@ export default {
               this.maxCount !== 1 &&
               this.fileList.length + newFiles.length > this.maxCount
             ) {
-              this.error.countOverflow = true
-              toast.error(this.validationMessage)
+              toast.error(this.t('tooManyFiles'))
               return
             }
-
-            let needImageSrc =
-              this.requestMode !== 'iframe' &&
-              this.type === 'image' &&
-              window.URL
-            newFiles = newFiles.map(file => {
-              if (needImageSrc) {
-                file.src = window.URL.createObjectURL(file)
-              }
-              file.toBeUploaded = true
-              return file
-            })
 
             this.fileList =
               this.realOrder === 'desc'
@@ -800,21 +786,28 @@ export default {
       )
     },
     validateFile (file) {
+      let message = []
       let typeValidation = this.validateFileType(file.name)
-      this.error.typeInvalid = !typeValidation || this.error.typeInvalid
+      if (!typeValidation) {
+        message.push(this.t('fileTypeInvalid'))
+      }
 
       let sizeValidation = this.validateFileSize(file.size)
-      this.error.sizeInvalid = !sizeValidation || this.error.sizeInvalid
+      if (!sizeValidation) {
+        message.push(this.t('fileSizeInvalid'))
+      }
 
       return new Promise(resolve => {
         resolve(this.validator ? this.validator(file) : { valid: true })
       }).then(result => {
         let customValidation = result.valid
         if (!customValidation) {
-          this.customValidationMessage = result.message
-          this.error.customError = true
+          message.push(result.message)
         }
-        return customValidation && typeValidation && sizeValidation
+        return {
+          valid: customValidation && typeValidation && sizeValidation,
+          message: message.join(', ')
+        }
       })
     },
     validateFileType (filename) {
@@ -902,11 +895,15 @@ export default {
         xhr.withCredentials = this.withCredentials
         xhr.send(formData)
       } else if (this.requestMode === 'custom' && this.upload) {
-        this.upload.call(null, file, {
-          onload: this.onload,
-          onprogress: this.onprogress,
-          onerror: this.onerror
+        let cancelFunc = this.upload.call(null, file, {
+          onload: partial(this.onload, file),
+          onprogress: partial(this.onprogress, file),
+          onerror: partial(this.onerror, file)
         })
+
+        if (cancelFunc && isFunction(cancelFunc)) {
+          file.cancel = cancelFunc
+        }
       }
     },
     replaceFile (file) {
@@ -972,14 +969,6 @@ export default {
       }
     },
     remove (file) {
-      this.error.countOverflow = false
-
-      if (file.status === 'uploading') {
-        file.status = null
-        this.cancelFile(file)
-        return
-      }
-
       let index = this.fileList.indexOf(file)
       if (!this.isReplacing) {
         this.$emit('remove', this.files[index], index)
@@ -995,14 +984,14 @@ export default {
         this.$emit('change', this.getValue(true))
       }
     },
-    cancelFile (file) {
-      if (this.requestMode === 'iframe') {
+    cancel (file) {
+      if (file.cancel) {
+        file.cancel()
+      } else if (this.requestMode === 'iframe') {
         this.canceled = true
         this.submitting = false
         this.disabledWhenSubmiting = false
-      }
-
-      if (file.xhr) {
+      } else if (file.xhr) {
         file.xhr.abort()
       }
 
@@ -1098,7 +1087,15 @@ export default {
       this.$refs.input.click()
     },
     clear () {
+      this.fileList.forEach(file => {
+        if (file.status === 'uploading') {
+          this.cancel(file)
+        }
+      })
       this.fileList = this.fileList.filter(({ status }) => status !== 'failure')
+    },
+    appendFiles (files) {
+      this.handleNewFiles(files)
     },
     focus () {
       this.$el.focus()
