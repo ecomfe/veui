@@ -162,8 +162,13 @@ describe('components/Uploader', () => {
     await wait(0)
 
     let validatedFiles = wrapper.vm.$data.fileList
-    expect(validatedFiles.length).to.equal(1)
-    expect(validatedFiles[0].name).to.equal('testLongName.jpg')
+    expect(validatedFiles.length).to.equal(2)
+    // test.jpg
+    expect(validatedFiles[0].status).to.equal('failure')
+    expect(validatedFiles[0].message).to.equal('file name too short')
+    // testLongName.jpg
+    expect(validatedFiles[1].status).to.equal('uploading')
+    expect(validatedFiles[1].message).to.equal(undefined)
 
     wrapper.destroy()
   })
@@ -296,7 +301,7 @@ describe('components/Uploader', () => {
         action: '/upload',
         requestMode: 'custom',
         upload: (file, { onload, onprogress, onerror }) => {
-          onload(file, { src: '/test.jpg', success: true })
+          onload({ src: '/test.jpg', success: true })
         }
       }
     })

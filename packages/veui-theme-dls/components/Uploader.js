@@ -29,6 +29,9 @@ config.defaults(
         values: ['m', 's'],
         inherit: true,
         default: 'm'
+      },
+      'upload-front': {
+        boolean: true
       }
     },
     parts: {
