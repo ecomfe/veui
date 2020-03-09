@@ -102,6 +102,8 @@
     >
       <table
         :class="[$c('schedule-table'), $c('schedule-table-interaction')]"
+        @mouseenter="tooltipOpen = true"
+        @mouseleave="tooltipOpen = false"
       >
         <colgroup>
           <col
@@ -191,11 +193,11 @@
       <veui-tooltip
         :target="currentRef"
         position="right"
-        trigger="hover"
+        trigger="custom"
         :delay="0"
         :interactive="false"
         :ui="uiParts.tooltip"
-        open
+        :open="tooltipOpen"
       >
         <slot
           name="tooltip"
@@ -290,7 +292,8 @@ export default {
       pickingStart: null,
       pickingEnd: null,
       current: null,
-      mergeMode: 'xor'
+      mergeMode: 'xor',
+      tooltipOpen: false
     }
   },
   computed: {
