@@ -57,10 +57,13 @@
         (maxCount > 1 || maxCount === undefined) &&
         !isReplacing
     "
-    @change="handleNewFiles()"
+    @change="handleNewFiles"
   >
   <transition-group
-    :class="listClass"
+    :class="{
+      [listClass]: true,
+      [`${listClass}-picker-before`]: pickerPosition === 'before'
+    }"
     tag="ul"
     :name="listClass"
   >
@@ -129,9 +132,7 @@
                 :class="$c('uploader-list-remove')"
                 :ui="uiParts.remove"
                 :disabled="realUneditable"
-                @click="
-                  file.status === 'uploading' ? cancel(file) : remove(file)
-                "
+                @click="remove(file)"
               >
                 <veui-icon :name="icons.clear"/>
               </veui-button>
@@ -412,7 +413,8 @@ import warn from '../utils/warn'
 config.defaults({
   'uploader.requestMode': 'xhr',
   'uploader.iframeMode': 'postmessage',
-  'uploader.callbackNamespace': 'veuiUploadResult'
+  'uploader.callbackNamespace': 'veuiUploadResult',
+  'uploader.pickerPosition': 'after'
 })
 
 export default {
@@ -526,7 +528,13 @@ export default {
       default: false
     },
     upload: Function,
-    controls: Function
+    controls: Function,
+    pickerPosition: {
+      type: String,
+      default () {
+        return config.get('uploader.pickerPosition')
+      }
+    }
   },
   data () {
     return {
@@ -716,9 +724,12 @@ export default {
       }
       return assign(newFile, pick(file, ['name', 'src']))
     },
-    handleNewFiles (files = this.$refs.input.files) {
+    handleNewFiles (files) {
       this.canceled = false
 
+      if (!Array.isArray(files)) {
+        files = this.$refs.input.files
+      }
       let newFiles = [...files]
 
       Promise.all(newFiles.map(file => this.validateFile(file))).then(
@@ -787,12 +798,12 @@ export default {
     },
     validateFile (file) {
       let message = []
-      let typeValidation = this.validateFileType(file.name)
+      let typeValidation = this.typeValidate(file.name)
       if (!typeValidation) {
         message.push(this.t('fileTypeInvalid'))
       }
 
-      let sizeValidation = this.validateFileSize(file.size)
+      let sizeValidation = this.sizeValidate(file.size)
       if (!sizeValidation) {
         message.push(this.t('fileSizeInvalid'))
       }
@@ -806,11 +817,11 @@ export default {
         }
         return {
           valid: customValidation && typeValidation && sizeValidation,
-          message: message.join(', ')
+          message: message.join(this.t('separator'))
         }
       })
     },
-    validateFileType (filename) {
+    typeValidate (filename) {
       if (!this.accept) {
         return true
       }
@@ -838,7 +849,7 @@ export default {
         return false
       })
     },
-    validateFileSize (fileSize) {
+    sizeValidate (fileSize) {
       return !this.maxSize || !fileSize || fileSize <= parse(this.maxSize)
     },
     uploadFiles () {
@@ -969,6 +980,10 @@ export default {
       }
     },
     remove (file) {
+      if (file.status === 'uploading') {
+        this.cancel(file)
+      }
+
       let index = this.fileList.indexOf(file)
       if (!this.isReplacing) {
         this.$emit('remove', this.files[index], index)
@@ -994,8 +1009,6 @@ export default {
       } else if (file.xhr) {
         file.xhr.abort()
       }
-
-      this.remove(file)
     },
     reset () {
       this.$refs.input.value = ''

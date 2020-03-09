@@ -1,5 +1,9 @@
 ## 2.0.0-alpha.9
 
+### ⚠️ 非兼容性变更
+
+- [^] `Uploader` 的 prop `upload` 自定义上传过程的回调函数 `onload`/`onprogress`/`onerror` 不再需要提供参数 `file`。
+
 ### 🐞 问题修复
 
 - [^] 修复了仍有部分局部输出全局样式对浮层不生效的问题。😭
@@ -8,9 +12,9 @@
 
 ### 💡 主要变更
 
-- [^] `Uploader` 的 prop `upload` 可以返回自定义取消上传过程的函数，并且回调函数 `onload`/`onprogress`/`onerror` 不再需要提供参数 `file`。
+- [^] `Uploader` 的 prop `upload` 自定义上传过程可以返回自定义取消上传过程的函数。
 - [^] `Uploader` 没有通过文件类型校验、文件大小校验和自定义校验的文件现在会以上传失败的状态出现在文件列表中。
-- [+] `Uploader` 新增 `ui` 选项 `upload-front`，支持图片上传模式下上传按钮始终保持在列表最前面。
+- [+] `Uploader` 新增 prop `picker-position` ，支持图片上传模式下控制上传按钮始终保持在列表最前面还是最后面。
 - [+] `Uploader` 新增可供外部调用的方法 `appendFiles`，支持通过函数直接添加并上传文件。
 
 ## 2.0.0-alpha.8
