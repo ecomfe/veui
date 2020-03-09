@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-veui",
-  "version": "2.0.0-alpha.8",
+  "version": "2.0.0-alpha.9",
   "description": "Import VEUI components with ease.",
   "main": "./index.js",
   "repository": "ecomfe/veui",
@@ -18,7 +18,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "veui": "^2.0.0-alpha.8"
+    "veui": "^2.0.0-alpha.9"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
