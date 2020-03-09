@@ -16,7 +16,8 @@ i18n.register(
     cancel: '取消',
     complete: '完成',
     error: '错误！',
-    uploading: '上传中…'
+    uploading: '上传中…',
+    separator: '；'
   },
   {
     ns: 'uploader'

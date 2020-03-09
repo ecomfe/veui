@@ -12,7 +12,8 @@ i18n.register(
     remove: 'Remove',
     replace: 'Replace',
     preview: 'Preview',
-    uploading: 'Uploading…'
+    uploading: 'Uploading…',
+    separator: '; '
   },
   {
     ns: 'uploader'

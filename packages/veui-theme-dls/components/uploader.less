@@ -213,6 +213,14 @@
         margin-left: @dls-uploader-mask-icon-spacing;
       }
     }
+    &-picker-before {
+      display: flex;
+      flex-wrap: wrap;
+
+      &-item-upload {
+        order: 0;
+      }
+    }
   }
 
   &-preview-dialog {
@@ -239,17 +247,6 @@
     font-size: @dls-uploader-font-size-s;
     .@{veui-prefix}-uploader-list-image-container {
       border-radius: @dls-button-border-radius-s;
-    }
-  }
-
-  &[ui~="upload-front"] {
-    .@{veui-prefix}-uploader-list-image {
-      display: flex;
-      flex-wrap: wrap;
-
-      &-item-upload {
-        order: 0;
-      }
     }
   }
 
