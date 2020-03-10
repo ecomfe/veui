@@ -906,14 +906,14 @@ export default {
         xhr.withCredentials = this.withCredentials
         xhr.send(formData)
       } else if (this.requestMode === 'custom' && this.upload) {
-        let cancelFunc = this.upload.call(null, file, {
+        let cancelFn = this.upload.call(null, file, {
           onload: partial(this.onload, file),
           onprogress: partial(this.onprogress, file),
           onerror: partial(this.onerror, file)
         })
 
-        if (cancelFunc && isFunction(cancelFunc)) {
-          file.cancel = cancelFunc
+        if (cancelFn && isFunction(cancelFn)) {
+          file.cancel = cancelFn
         }
       }
     },
@@ -1107,7 +1107,7 @@ export default {
       })
       this.fileList = this.fileList.filter(({ status }) => status !== 'failure')
     },
-    appendFiles (files) {
+    addFiles (files) {
       this.handleNewFiles(files)
     },
     focus () {
