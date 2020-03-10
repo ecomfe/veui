@@ -2,8 +2,7 @@
 
 ### ⚠️ 非兼容性变更
 
-- [^] `Uploader` 的 prop `upload` 自定义上传过程的方法，原第二个参数包含回调函数 `onload`/`onprogress`/`onerror` 的对象
-变成第一个参数。
+- [^] `Uploader` 的 prop `upload` 自定义上传过程的方法，回调函数 `onload`/`onprogress`/`onerror` 的原来的第二个参数提供上传相关信息的对象变成第一个参数。
 
 ### 💡 主要变更
 
