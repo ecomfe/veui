@@ -99,14 +99,14 @@ describe('components/Uploader', () => {
       }
     })
 
-    expect(wrapper.vm.validateFileSize(6000)).to.equal(false)
+    expect(wrapper.vm.sizeValidate(6000)).to.equal(false)
 
     wrapper.setProps({ maxSize: '20mb' })
-    expect(wrapper.vm.validateFileSize(20 * 1024 * 1024 + 1)).to.equal(false)
-    expect(wrapper.vm.validateFileSize(20 * 1024 * 1024 - 1)).to.equal(true)
+    expect(wrapper.vm.sizeValidate(20 * 1024 * 1024 + 1)).to.equal(false)
+    expect(wrapper.vm.sizeValidate(20 * 1024 * 1024 - 1)).to.equal(true)
 
     wrapper.setProps({ maxSize: undefined })
-    expect(wrapper.vm.validateFileSize(10000)).to.equal(true)
+    expect(wrapper.vm.sizeValidate(10000)).to.equal(true)
     wrapper.destroy()
   })
 
@@ -118,17 +118,17 @@ describe('components/Uploader', () => {
       }
     })
 
-    expect(wrapper.vm.validateFileType('test.1.gif')).to.equal(true)
-    expect(wrapper.vm.validateFileType('test.1.txt')).to.equal(false)
+    expect(wrapper.vm.typeValidate('test.1.gif')).to.equal(true)
+    expect(wrapper.vm.typeValidate('test.1.txt')).to.equal(false)
 
     wrapper.setProps({ accept: 'image/*,.xlsx,.pdf' })
-    expect(wrapper.vm.validateFileType('test2.gif')).to.equal(true)
-    expect(wrapper.vm.validateFileType('test2.jpg')).to.equal(true)
-    expect(wrapper.vm.validateFileType('test.2.pdf')).to.equal(true)
-    expect(wrapper.vm.validateFileType('test.2.ppt')).to.equal(false)
+    expect(wrapper.vm.typeValidate('test2.gif')).to.equal(true)
+    expect(wrapper.vm.typeValidate('test2.jpg')).to.equal(true)
+    expect(wrapper.vm.typeValidate('test.2.pdf')).to.equal(true)
+    expect(wrapper.vm.typeValidate('test.2.ppt')).to.equal(false)
 
     wrapper.setProps({ accept: undefined })
-    expect(wrapper.vm.validateFileType('test.3.ppt')).to.equal(true)
+    expect(wrapper.vm.typeValidate('test.3.ppt')).to.equal(true)
     wrapper.destroy()
   })
 
