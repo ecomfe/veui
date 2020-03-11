@@ -23,6 +23,7 @@ import Button from '../Button'
 import prefix from '../../mixins/prefix'
 import table, { mapTableData } from '../../mixins/table'
 import config from '../../managers/config'
+import '../../common/uiTypes'
 
 export default {
   name: 'veui-table-sorter',
