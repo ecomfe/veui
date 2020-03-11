@@ -68,7 +68,10 @@
               :class="$c('menu-item-toggle')"
               @click.stop="toggleExpanded(link)"
             >
-              <veui-icon :name="icons.expand"/>
+              <veui-icon
+                :class="$c('menu-toggle-icon')"
+                :name="link.expanded ? icons.collapse : icons.expand"
+              />
             </veui-button>
           </slot>
         </div>
@@ -163,7 +166,10 @@
       :class="$c('menu-toggle')"
       @click="toggleCollapsed"
     >
-      <veui-icon :name="icons.collapse"/>
+      <veui-icon
+        :class="$c('menu-toggle-icon')"
+        :name="realCollapsed ? icons.expand : icons.collapse"
+      />
     </veui-button>
   </div>
 </div>
@@ -184,6 +190,7 @@ import controllable from '../mixins/controllable'
 import overlay from '../mixins/overlay'
 import outside from '../directives/outside'
 import { find } from '../utils/datasource'
+import '../common/uiTypes'
 
 const ensureSlash = str => (endsWith(str, '/') ? str : `${str}/`)
 
@@ -364,9 +371,9 @@ export default {
       this.open = false
       this.refTarget = null
     },
-    toggleExpanded (item, ensureExpanded) {
+    toggleExpanded (item, force) {
       let index = this.realExpanded.indexOf(item.name)
-      if (index === -1 || ensureExpanded) {
+      if (index === -1 || force) {
         let names = getParentNames(item)
         names.push(item.name)
         this.localExpanded = uniq([...this.realExpanded, ...names])
@@ -388,6 +395,7 @@ export default {
       if (to) {
         this.realActive = name
         this.$emit('activate', name)
+        this.toggleExpanded(item, true)
       } else if (children && children.length) {
         this.toggleExpanded(item)
       }
