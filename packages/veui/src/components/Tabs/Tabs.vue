@@ -115,11 +115,11 @@
         </div>
       </transition-group>
     </div>
-    <slot name="tabs-extra">
-      <div
-        ref="extra"
-        :class="$c('tabs-extra')"
-      >
+    <div
+      ref="extra"
+      :class="$c('tabs-extra')"
+    >
+      <slot name="tabs-extra">
         <button
           v-if="addable"
           type="button"
@@ -166,8 +166,8 @@
             <veui-icon :name="icons.next"/>
           </button>
         </div>
-      </div>
-    </slot>
+      </slot>
+    </div>
   </div>
   <div :class="$c('tabs-panel')">
     <slot/>
