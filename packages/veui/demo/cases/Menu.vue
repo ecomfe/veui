@@ -4,7 +4,7 @@
   <div>expanded: {{ expanded }}</div>
   <div>active: {{ active1 }}</div>
   <section>
-    <h3>small menu</h3>
+    <h3>small collapsible menu</h3>
     <veui-menu
       class="small-menu"
       ui="s"
@@ -24,19 +24,32 @@
     />
   </section>
   <section>
-    <h3>large collapsible menu</h3>
+    <h3>large menu</h3>
     <veui-menu
       ui="l"
       :items="items2"
       :active.sync="active2"
     />
   </section>
+  <section>
+    <h3>自定义 icon slot</h3>
+    <veui-menu
+      ui="s"
+      collapsible
+      :items="items"
+    >
+      <veui-icon
+        slot="icon"
+        name="baidu"
+      />
+    </veui-menu>
+  </section>
   <section><router-view/></section>
 </article>
 </template>
 
 <script>
-import { Menu } from 'veui'
+import { Menu, Icon } from 'veui'
 import { omit } from 'lodash'
 import 'veui-theme-one-icons/android'
 import 'veui-theme-one-icons/apple-f'
@@ -46,7 +59,8 @@ import 'veui-theme-one-icons/bug'
 export default {
   name: 'veui-menu-demo',
   components: {
-    'veui-menu': Menu
+    'veui-menu': Menu,
+    'veui-icon': Icon
   },
   data () {
     let items = [
