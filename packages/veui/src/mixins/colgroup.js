@@ -1,5 +1,6 @@
 import { getTypedAncestorTracker } from '../utils/helper'
 import { findIndex } from 'lodash'
+import '../common/uiTypes'
 
 export default {
   uiTypes: ['colgroup'],

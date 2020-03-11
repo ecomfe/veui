@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import '../common/uiTypes'
+
 export default {
   name: 'veui-expand-transition',
   abstract: true,
