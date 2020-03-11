@@ -7,6 +7,7 @@
   }"
 >
   <div :class="[$c('menu-tree-wrapper')]">
+    <slot name="before"/>
     <veui-tree
       ref="tree"
       :class="{
@@ -34,11 +35,17 @@
             name="item"
             v-bind="link"
           >
-            <veui-icon
-              v-if="link.icon"
+            <div
+              v-if="link.icon || $scopedSlots.icon || $slots.icon"
               :class="$c('menu-item-icon')"
-              :name="link.icon"
-            />
+            >
+              <slot
+                name="icon"
+                v-bind="link"
+              >
+                <veui-icon :name="link.icon"/>
+              </slot>
+            </div>
             <slot
               name="item-label"
               v-bind="link"
@@ -74,6 +81,7 @@
         </div>
       </template>
     </veui-tree>
+    <slot name="after"/>
   </div>
   <veui-overlay
     v-if="realCollapsed"
@@ -156,9 +164,11 @@
       </template>
     </veui-option-group>
   </veui-overlay>
-  <div :class="$c('menu-footer')">
+  <div
+    v-if="collapsible"
+    :class="$c('menu-footer')"
+  >
     <veui-button
-      v-if="collapsible"
       :ui="uiParts.toggle"
       :class="$c('menu-toggle')"
       @click="toggleCollapsed"
