@@ -2,11 +2,43 @@
 
 ### ⚠️ 非兼容性变更
 
-- [^] `Uploader` 的 prop `upload` 自定义上传过程的方法，回调函数 `onload`/`onprogress`/`onerror` 的原来的第二个参数提供上传相关信息的对象变成第一个参数。
+- [^] 使用 `Uploader` 的 `upload` prop 自定义上传过程时，参数中的回调函数 `onload`/`onprogress`/`onerror` 中第一个参数 `file` 被移除，原来提供上传结果、进度或错误信息的第二个参数成为第一个参数。
+
+  > #### 迁移指南
+  >
+  > ##### 原回调方法
+  >
+  > ```js
+  > function upload (file, { onload, onprogress, onerror }) {
+  >   const xhr = new XMLHttpRequest()
+  >   xhr.upload.onprogress = e => onprogress(file, e)
+  >   xhr.onload = () => {
+  >     onload(file, JSON.parse(xhr.responseText))
+  >   }
+  >   xhr.onerror = e => onerror(file, e)
+  >
+  >   // ……实际上传操作……
+  > }
+  > ```
+  >
+  > ##### 新回调方法
+  >
+  > ```js
+  > function upload (file, { onload, onprogress, onerror }) {
+  >   const xhr = new XMLHttpRequest()
+  >   xhr.upload.onprogress = e => onprogress(e)
+  >   xhr.onload = () => {
+  >     onload(JSON.parse(xhr.responseText))
+  >   }
+  >   xhr.onerror = e => onerror(e)
+  >
+  >   // ……实际上传操作……
+  > }
+  > ```
 
 ### 💡 主要变更
 
-- [^] `Uploader` 使用 prop `upload` 自定义上传过程时，如果返回一个函数，该函数将在用户操作取消或上传组件销毁时被调用，用来中断自定义上传过程。
+- [^] `Uploader` 使用 `upload` prop 自定义上传过程时，如果返回一个函数，该函数将在用户操作取消或上传组件销毁时被调用，用来中断自定义上传过程。
 - [^] `Uploader` 没有通过文件类型校验、文件大小校验和自定义校验的文件现在会以上传失败的状态出现在文件列表中。
 - [+] `Uploader` 新增 prop `picker-position`，支持图片上传模式下控制上传按钮始终保持在列表最前面还是最后面。
 - [+] `Uploader` 新增可供外部调用的方法 `addFiles`，支持通过函数直接添加并上传文件。
@@ -14,6 +46,9 @@
 ### 🐞 问题修复
 
 - [^] 修复了使用 `tabs-extra` 插槽时由于插槽位置错误可能引起报错的问题。
+- [^] 修正了 `Menu` 组件图标尺寸错误的问题。
+- [^] 调整了部分输入组件的样式，解决了在为组件最外层元素设置宽度后内部组件没有匹配尺寸的问题。
+- [^] 修正了 `Table` 组件在初始数据为空时（比如异步加载），滚动事件监听器没有正常初始化导致内容加载后，表头与内容横向滚动不同步的问题。
 
 ## 2.0.0-alpha.9
 
