@@ -1,5 +1,5 @@
 import prefix from '../../mixins/prefix'
-import table, { mapTableData } from '../../mixins/table'
+import table from '../../mixins/table'
 
 export default {
   name: 'veui-table-col-group',
@@ -7,24 +7,16 @@ export default {
   props: {
     gutter: Boolean
   },
-  computed: {
-    ...mapTableData(
-      { realColumns: 'columns' },
-      'selectable',
-      'expandable',
-      'columnWidths',
-      'gutterWidth'
-    )
-  },
   render () {
+    let { table } = this
     return (
       <colgroup>
-        {this.selectable ? <col class={this.$c('table-col-select')} /> : null}
-        {this.expandable ? <col class={this.$c('table-col-expand')} /> : null}
-        {this.columns.map((col, i) => (
+        {table.selectable ? <col class={this.$c('table-col-select')} /> : null}
+        {table.expandable ? <col class={this.$c('table-col-expand')} /> : null}
+        {table.realColumns.map((col, i) => (
           <col
             style={{
-              width: this.columnWidths[i]
+              width: table.columnWidths[i]
             }}
             key={col.field}
           />
@@ -34,8 +26,8 @@ export default {
             class={this.$c('table-header-gutter')}
             aria-hidden="true"
             style={{
-              width: this.gutterWidth ? `${this.gutterWidth}px` : null,
-              display: this.gutterWidth ? null : 'none'
+              width: table.gutterWidth ? `${table.gutterWidth}px` : null,
+              display: table.gutterWidth ? null : 'none'
             }}
           />
         ) : null}

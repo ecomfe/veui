@@ -1,6 +1,6 @@
 import Row from './_TableRow'
 import prefix from '../../mixins/prefix'
-import table, { mapTableData } from '../../mixins/table'
+import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import { flatMap } from 'lodash'
 import '../../common/uiTypes'
@@ -9,30 +9,21 @@ export default {
   name: 'veui-table-body',
   uiTypes: ['transparent'],
   mixins: [prefix, table, i18n],
-  computed: {
-    ...mapTableData(
-      'data',
-      'selectable',
-      'expandable',
-      'keyField',
-      { realKeys: 'keys' },
-      { localExpanded: 'expanded' },
-      { realColumns: 'columns' },
-      { viewColumnCount: 'columnCount' }
-    )
-  },
   render () {
-    let subRow = this.table.$scopedSlots['sub-row']
+    let { table } = this
+    let subRow = table.$scopedSlots['sub-row']
 
     return (
       <tbody>
-        {this.data.length ? (
-          flatMap(this.data, (item, index) => {
-            let key = this.keyField ? item[this.keyField] : this.keys[index]
-            let expanded = this.expanded.indexOf(key) !== -1
+        {table.data.length ? (
+          flatMap(table.data, (item, index) => {
+            let key = table.keyField
+              ? item[table.keyField]
+              : table.realKeys[index]
+            let expanded = table.localExpanded.indexOf(key) !== -1
             let rows = [<Row index={index} expanded={expanded} />]
 
-            if (this.expandable && expanded) {
+            if (table.expandable && expanded) {
               if (subRow) {
                 rows.push(<Row>{subRow({ ...item, index })}</Row>)
               } else {
@@ -49,11 +40,21 @@ export default {
         ) : (
           <tr>
             <td
-              class={this.$c('table-no-data')}
-              colspan={this.columnCount}
+              class={{
+                [this.$c('table-no-data')]: true,
+                [this.$c('table-cell-hero')]: true
+              }}
+              colspan={table.viewColumnCount}
               role="cell"
             >
-              <div class={this.$c('table-cell')}>
+              <div
+                class={this.$c('table-cell')}
+                style={{
+                  width: table.width
+                    ? `${table.width - (table.realBordered ? 1 : 0)}px`
+                    : null
+                }}
+              >
                 {this.$slots['no-data'] || this.t('@table.noData')}
               </div>
             </td>

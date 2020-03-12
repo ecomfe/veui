@@ -1,7 +1,7 @@
 import Checkbox from '../Checkbox'
 import Sorter from './_Sorter'
 import prefix from '../../mixins/prefix'
-import table, { mapTableData } from '../../mixins/table'
+import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import '../../common/uiTypes'
 
@@ -9,38 +9,24 @@ export default {
   name: 'veui-table-head',
   mixins: [prefix, table, i18n],
   uiTypes: ['transparent'],
-  computed: {
-    ...mapTableData(
-      'data',
-      'icons',
-      'selectable',
-      'selectMode',
-      'selectStatus',
-      'expandable',
-      'headerRows',
-      'scrollableX',
-      'selectColumnWidth',
-      { realColumns: 'columns' },
-      { viewColumnCount: 'columnCount' }
-    )
-  },
   render () {
-    let depth = this.headerRows.length
+    let { table } = this
+    let depth = table.headerRows.length
     return (
       <thead>
-        {this.headerRows.map((row, i) => (
+        {table.headerRows.map((row, i) => (
           <tr>
-            {this.selectable && i === 0 ? (
+            {table.selectable && i === 0 ? (
               <th
                 scope="col"
                 role="columnheader"
                 rowspan={depth}
                 class={{
                   [this.$c('table-cell-select')]: true,
-                  [this.$c('table-cell-sticky-left')]: this.scrollableX
+                  [this.$c('table-cell-sticky-left')]: table.needFixLeft
                 }}
                 style={
-                  this.scrollableX
+                  table.scrollableX
                     ? {
                       left: 0
                     }
@@ -50,16 +36,16 @@ export default {
                 {i === 0 ? (
                   <div class={this.$c('table-cell')}>
                     <div class={this.$c('table-cell-content')}>
-                      {this.selectMode === 'multiple' ? (
+                      {table.selectMode === 'multiple' ? (
                         <Checkbox
-                          checked={this.selectStatus !== 'none'}
-                          disabled={!this.data.length}
-                          indeterminate={this.selectStatus === 'partial'}
+                          checked={table.selectStatus !== 'none'}
+                          disabled={!table.data.length}
+                          indeterminate={table.selectStatus === 'partial'}
                           onChange={checked => {
-                            this.table.select(checked)
+                            table.select(checked)
                           }}
                           aria-label={this.t(
-                            this.checked
+                            table.selectStatus !== 'none'
                               ? '@table.unselectAll'
                               : '@table.selectAll'
                           )}
@@ -70,87 +56,85 @@ export default {
                 ) : null}
               </th>
             ) : null}
-            {this.expandable ? (
+            {table.expandable ? (
               <th
                 scope="col"
                 role="columnheader"
                 class={{
                   [this.$c('table-cell-expand')]: true,
-                  [this.$c('table-cell-sticky-left')]: this.scrollableX
+                  [this.$c('table-cell-sticky-left')]: table.needFixLeft
                 }}
                 style={
-                  this.scrollableX
+                  table.needFixLeft
                     ? {
-                      left: this.selectable
-                        ? `${this.selectColumnWidth}px`
+                      left: table.selectable
+                        ? `${table.selectColumnWidth}px`
                         : 0
                     }
                     : null
                 }
               />
             ) : null}
-            {row.map(col => (
-              <th
-                class={{
-                  [this.$c(`table-cell-center`)]:
-                    i !== depth && col.columns.length > 0 && !col.align,
-                  [this.$c(`table-cell-${col.align}`)]:
-                    !!col.align || i === depth,
-                  [this.$c('table-cell-interactive')]:
-                    !!col.sortable && i === depth,
-                  [this.$c(`table-cell-sticky-${col.fixed}`)]:
-                    this.scrollableX && col.fixed
-                }}
-                style={
-                  this.scrollableX
-                    ? {
-                      [col.fixed]: col.offset
-                    }
-                    : null
-                }
-                scope="col"
-                role="columnheader"
-                aria-sort={
-                  this.table.orderBy === col.field && this.table.order
-                    ? `${this.table.order}ending`
-                    : null
-                }
-                colspan={col.colspan > 1 ? col.colspan : null}
-                rowspan={col.rowspan > 1 ? col.rowspan : null}
-              >
-                <div class={this.$c('table-cell')}>
-                  <div class={this.$c('table-cell-content')}>
-                    {col.renderHead()}{' '}
-                  </div>
-                  {col.sortable && col.columns.length === 0 ? (
-                    <Sorter
-                      class={{
-                        [this.$c('table-header-icon')]: true,
-                        [this.$c('table-header-icon-active')]:
-                          this.table.orderBy === col.field &&
-                          this.table.order !== false
-                      }}
-                      order={
-                        this.table.orderBy === col.field
-                          ? this.table.order
-                          : false
+            {row.map(col => {
+              let isLeaf = col.columns.length === 0
+              return (
+                <th
+                  class={{
+                    [this.$c(`table-cell-center`)]: !isLeaf,
+                    [this.$c(`table-cell-${col.align}`)]: !!col.align && isLeaf,
+                    [this.$c('table-cell-interactive')]:
+                      !!col.sortable && isLeaf,
+                    [this.$c(`table-cell-sticky-${col.fixed}`)]:
+                      table.scrollableX && col.fixed
+                  }}
+                  style={
+                    table.scrollableX
+                      ? {
+                        [col.fixed]: col.offset
                       }
-                      onSort={order => {
-                        this.$emit('sort', col.field, order)
-                      }}
-                    />
-                  ) : null}
-                </div>
-              </th>
-            ))}
-            {i === 0 && this.table.gutterWidth ? (
+                      : null
+                  }
+                  scope="col"
+                  role="columnheader"
+                  aria-sort={
+                    table.orderBy === col.field && table.order
+                      ? `${table.order}ending`
+                      : null
+                  }
+                  colspan={col.colspan > 1 ? col.colspan : null}
+                  rowspan={col.rowspan > 1 ? col.rowspan : null}
+                >
+                  <div class={this.$c('table-cell')}>
+                    <div class={this.$c('table-cell-content')}>
+                      {col.renderHead()}{' '}
+                    </div>
+                    {col.sortable && isLeaf ? (
+                      <Sorter
+                        class={{
+                          [this.$c('table-header-icon')]: true,
+                          [this.$c('table-header-icon-active')]:
+                            table.orderBy === col.field && table.order !== false
+                        }}
+                        order={
+                          table.orderBy === col.field ? table.order : false
+                        }
+                        onSort={order => {
+                          this.$emit('sort', col.field, order)
+                        }}
+                      />
+                    ) : null}
+                  </div>
+                </th>
+              )
+            })}
+            {i === 0 && table.gutterWidth ? (
               <th
                 class={{
                   [this.$c('table-gutter')]: true,
-                  [this.$c('table-cell-sticky-right')]: this.table.hasFixedRight
+                  [this.$c('table-cell-sticky-right')]: table.hasFixedRight
                 }}
                 style={
-                  this.table.hasFixedRight
+                  table.hasFixedRight
                     ? {
                       right: 0
                     }

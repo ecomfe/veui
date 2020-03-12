@@ -89,6 +89,7 @@
     aria-hidden="true"
   >
     <div
+      v-if="needFixLeft"
       :class="{
         [$c('table-overflow-shadow-left')]: true,
         [$c('table-overflow-shadow-edge')]:
@@ -408,6 +409,9 @@ export default {
     hasFixedRight () {
       return this.realColumns.some(({ fixed }) => fixed === 'right')
     },
+    needFixLeft () {
+      return this.scrollableX && (this.hasFixedLeft || this.data.length > 0)
+    },
     realBordered () {
       return this.bordered || this.hasSpan
     },
@@ -462,10 +466,10 @@ export default {
       )
     },
     scrollableX () {
-      return this.realScroll.x && this.data.length
+      return !!this.realScroll.x
     },
     scrollableY () {
-      return this.realScroll.y && this.data.length
+      return !!(this.realScroll.y && this.data.length)
     },
     staleHead () {
       return this.realColumns.some(({ hasStaleHead }) => hasStaleHead())
@@ -505,35 +509,29 @@ export default {
   },
   mounted () {
     this.supportSticky = cssSupports('position', 'sticky')
+    ;['scrollableX', 'scrollableY'].forEach(state => {
+      this.$watch(
+        state,
+        () => {
+          this.updateScrollListeners()
+        },
+        { immediate: true }
+      )
+    })
 
-    if (this.scrollableX || this.scrollableY) {
-      this.updateLayout()
-      this.$refs.main.addEventListener('scroll', this.updateScrollState)
-    }
-
-    if (this.scrollableX) {
-      this.removeBackForwardPreventer = preventBackForward(this.$refs.main)
-    }
-
-    if (this.selectable && this.scrollableX) {
+    if (this.selectable) {
       this.selectColumnWidth = this.$el.querySelector(
         `.${this.$c('table-cell-select')}`
       ).offsetWidth
     }
-    if (this.expandable && this.scrollableX) {
+    if (this.expandable) {
       this.expandColumnWidth = this.$el.querySelector(
         `.${this.$c('table-cell-expand')}`
       ).offsetWidth
     }
   },
   beforeDestroy () {
-    if (this.scrollableY) {
-      this.$refs.main.removeEventListener('scroll', this.updateScrollState)
-    }
-
-    if (this.removeBackForwardPreventer) {
-      this.removeBackForwardPreventer()
-    }
+    this.updateScrollListeners(true)
   },
   updated () {
     if (this.staleHead) {
@@ -614,9 +612,7 @@ export default {
         x: table.offsetWidth > main.clientWidth,
         y: table.offsetHeight > main.clientHeight
       }
-      if (this.overflow.y) {
-        this.gutterWidth = getElementScrollbarWidth(main)
-      }
+      this.gutterWidth = getElementScrollbarWidth(main)
       this.width = main.clientWidth
 
       this.updateScrollState()
@@ -641,6 +637,24 @@ export default {
 
       if (fixedFooter) {
         fixedFooter.scrollLeft = main.scrollLeft
+      }
+    },
+    updateScrollListeners (isDestroy) {
+      if ((this.scrollableX || this.scrollableY) && !isDestroy) {
+        this.updateLayout()
+        this.$refs.main.addEventListener('scroll', this.updateScrollState)
+      } else if (isDestroy) {
+        this.$refs.main.removeEventListener('scroll', this.updateScrollState)
+      } else {
+        this.updateLayout()
+      }
+
+      if (this.scrollableX && !isDestroy) {
+        this.removeBackForwardPreventer = preventBackForward(this.$refs.main)
+      } else {
+        if (this.removeBackForwardPreventer) {
+          this.removeBackForwardPreventer()
+        }
       }
     },
     filterColumns (columns) {

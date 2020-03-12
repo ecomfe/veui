@@ -197,6 +197,7 @@
       selectable
       expandable
       :scroll="{ x: 1024 }"
+      bordered
     >
       <veui-table-column
         field="id"
