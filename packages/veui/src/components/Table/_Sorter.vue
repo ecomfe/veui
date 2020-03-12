@@ -12,7 +12,7 @@
   <veui-icon
     v-else
     key="ordered"
-    :name="icons[order]"
+    :name="table.icons[order]"
   />
 </veui-button>
 </template>
