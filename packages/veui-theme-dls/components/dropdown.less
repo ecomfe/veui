@@ -51,10 +51,11 @@
   }
 
   &-split &-command {
-    margin-right: -1px;
-    position: relative;
     .border-right-radius(0);
     .padding(_, @dls-dropdown-split-button-padding-x);
+    position: relative;
+    margin-right: -1px;
+    flex-grow: 1;
 
     &.focus-visible:not([ui~="primary"]) {
       z-index: 1;
@@ -64,6 +65,7 @@
   &-split &-button {
     .border-left-radius(0);
     .padding(_, @dls-dropdown-icon-spacing-aux);
+    flex-grow: 0;
 
     &::before,
     &::after {

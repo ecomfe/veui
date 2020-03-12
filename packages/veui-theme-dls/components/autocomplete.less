@@ -2,7 +2,8 @@
 @import (reference) "../dropdown.less";
 
 .@{veui-prefix}-autocomplete {
-  display: inline-block;
+  display: inline-flex;
+  vertical-align: middle;
   border-radius: @dls-input-border-radius-m;
 
   &[ui~="s"] {
@@ -19,6 +20,8 @@
 
   .@{veui-prefix}-input {
     border-radius: inherit;
+    width: auto;
+    flex-grow: 1;
   }
 
   &-suggestion-group {
