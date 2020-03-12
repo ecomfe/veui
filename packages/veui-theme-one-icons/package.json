@@ -16,7 +16,7 @@
     "publish": "rm *.js"
   },
   "peerDependencies": {
-    "veui": "2.0.0-alpha.9"
+    "veui": "2.0.0-alpha.10"
   },
   "devDependencies": {
     "esm": "^3.0.84",
