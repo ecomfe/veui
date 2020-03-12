@@ -8,6 +8,7 @@
       ui="primary"
       @click="append"
     >添加</veui-button>
+    <veui-button @click="toggle">切换数据</veui-button>
   </section>
   <section>
     <veui-checkbox v-model="showGroup">显示数据分组</veui-checkbox>
@@ -63,7 +64,7 @@
           <strong>总计</strong>
         </template>
       </veui-table-column>
-      <!-- <veui-table-column title="元数据">
+      <veui-table-column title="元数据">
         <veui-table-column
           field="typeId"
           title="类型 ID"
@@ -73,9 +74,10 @@
           v-if="showGroup"
           field="group"
           title="数据分组"
+          align="right"
           :span="groupSpan"
         />
-      </veui-table-column> -->
+      </veui-table-column>
       <veui-table-column
         field="desc"
         title="数据描述"
@@ -392,6 +394,145 @@ import {
   Link
 } from 'veui'
 
+const tableData = [
+  {
+    id: '3154',
+    desc: '数据描述1',
+    price: 1024,
+    updateDate: '20131117',
+    group: '1577',
+    typeId: '788',
+    children: [
+      {
+        id: '31541',
+        desc: '数据描述1-1',
+        price: 1024,
+        updateDate: '20131117',
+        group: '1577',
+        typeId: '788'
+      },
+      {
+        id: '31542',
+        desc: '数据描述1-2',
+        price: 1024,
+        updateDate: '20131117',
+        group: '1577',
+        typeId: '788'
+      }
+    ]
+  },
+  {
+    id: '3155',
+    desc: '数据描述2',
+    price: 598,
+    updateDate: '20140214',
+    group: '1577',
+    typeId: '788',
+    children: [
+      {
+        id: '31551',
+        desc: '数据描述2-1',
+        price: 1024,
+        updateDate: '20131117',
+        group: '1577',
+        typeId: '788'
+      },
+      {
+        id: '31552',
+        desc: '数据描述2-2',
+        price: 1024,
+        updateDate: '20131117',
+        group: '1577',
+        typeId: '788'
+      }
+    ]
+  },
+  {
+    id: '3156',
+    desc: '数据描述3',
+    price: 820,
+    updateDate: '20170610',
+    group: '1578',
+    typeId: '788',
+    children: [
+      {
+        id: '31561',
+        desc: '数据描述3-1',
+        price: 1024,
+        updateDate: '20131117',
+        group: '1577',
+        typeId: '788'
+      },
+      {
+        id: '31562',
+        desc: '数据描述3-2',
+        price: 1024,
+        updateDate: '20131117',
+        group: '1577',
+        typeId: '788'
+      }
+    ]
+  },
+  {
+    id: '3157',
+    desc: '数据描述4',
+    price: 736,
+    updateDate: '20180109',
+    group: '1578',
+    typeId: '788',
+    children: [
+      {
+        id: '31571',
+        desc: '数据描述4-1',
+        price: 1024,
+        updateDate: '20131117',
+        group: '1577',
+        typeId: '788'
+      },
+      {
+        id: '31572',
+        desc: '数据描述4-2',
+        price: 1024,
+        updateDate: '20131117',
+        group: '1577',
+        typeId: '788'
+      }
+    ]
+  },
+  {
+    id: '3158',
+    desc: '数据描述5',
+    price: 168,
+    updateDate: '20180109',
+    group: '1579',
+    typeId: '789'
+  },
+  {
+    id: '3159',
+    desc: '数据描述6',
+    price: 820,
+    updateDate: '20180109',
+    group: '1579',
+    typeId: '789'
+  },
+  {
+    id: '3160',
+    desc: '数据描述7',
+    price: 357,
+    updateDate: '20180109',
+    group: '1580',
+    typeId: '789'
+  },
+  {
+    id: '3161',
+    desc: '数据描述8',
+    price: 360,
+    updateDate: '20180109',
+    group: '1580',
+    typeId: '789'
+  }
+]
+
 export default {
   name: 'table-demo',
   components: {
@@ -425,144 +566,7 @@ export default {
         { name: 'id', title: 'ID' },
         { name: 'desc', title: '描述' }
       ],
-      data: [
-        {
-          id: '3154',
-          desc: '数据描述1',
-          price: 1024,
-          updateDate: '20131117',
-          group: '1577',
-          typeId: '788',
-          children: [
-            {
-              id: '31541',
-              desc: '数据描述1-1',
-              price: 1024,
-              updateDate: '20131117',
-              group: '1577',
-              typeId: '788'
-            },
-            {
-              id: '31542',
-              desc: '数据描述1-2',
-              price: 1024,
-              updateDate: '20131117',
-              group: '1577',
-              typeId: '788'
-            }
-          ]
-        },
-        {
-          id: '3155',
-          desc: '数据描述2',
-          price: 598,
-          updateDate: '20140214',
-          group: '1577',
-          typeId: '788',
-          children: [
-            {
-              id: '31551',
-              desc: '数据描述2-1',
-              price: 1024,
-              updateDate: '20131117',
-              group: '1577',
-              typeId: '788'
-            },
-            {
-              id: '31552',
-              desc: '数据描述2-2',
-              price: 1024,
-              updateDate: '20131117',
-              group: '1577',
-              typeId: '788'
-            }
-          ]
-        },
-        {
-          id: '3156',
-          desc: '数据描述3',
-          price: 820,
-          updateDate: '20170610',
-          group: '1578',
-          typeId: '788',
-          children: [
-            {
-              id: '31561',
-              desc: '数据描述3-1',
-              price: 1024,
-              updateDate: '20131117',
-              group: '1577',
-              typeId: '788'
-            },
-            {
-              id: '31562',
-              desc: '数据描述3-2',
-              price: 1024,
-              updateDate: '20131117',
-              group: '1577',
-              typeId: '788'
-            }
-          ]
-        },
-        {
-          id: '3157',
-          desc: '数据描述4',
-          price: 736,
-          updateDate: '20180109',
-          group: '1578',
-          typeId: '788',
-          children: [
-            {
-              id: '31571',
-              desc: '数据描述4-1',
-              price: 1024,
-              updateDate: '20131117',
-              group: '1577',
-              typeId: '788'
-            },
-            {
-              id: '31572',
-              desc: '数据描述4-2',
-              price: 1024,
-              updateDate: '20131117',
-              group: '1577',
-              typeId: '788'
-            }
-          ]
-        },
-        {
-          id: '3158',
-          desc: '数据描述5',
-          price: 168,
-          updateDate: '20180109',
-          group: '1579',
-          typeId: '789'
-        },
-        {
-          id: '3159',
-          desc: '数据描述6',
-          price: 820,
-          updateDate: '20180109',
-          group: '1579',
-          typeId: '789'
-        },
-        {
-          id: '3160',
-          desc: '数据描述7',
-          price: 357,
-          updateDate: '20180109',
-          group: '1580',
-          typeId: '789'
-        },
-        {
-          id: '3161',
-          desc: '数据描述8',
-          price: 360,
-          updateDate: '20180109',
-          group: '1580',
-          typeId: '789'
-        }
-      ],
+      data: [],
       nextId: 3162,
       nextIndex: 9,
       columns: [
@@ -641,6 +645,9 @@ export default {
     // }
   },
   methods: {
+    toggle () {
+      this.data = this.data === tableData ? [] : tableData
+    },
     log (...args) {
       bus.$emit('log', ...args)
     },
@@ -681,6 +688,10 @@ section {
 
 label {
   margin-right: 10px;
+}
+
+.veui-button + .veui-button {
+  margin-left: 20px;
 }
 
 .veui-table {
