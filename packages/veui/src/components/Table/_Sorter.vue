@@ -1,13 +1,13 @@
 <template>
 <veui-button
-  :ui="uiParts.icon"
+  :ui="table.uiParts.icon"
   :class="klass"
   @click="sort"
 >
   <veui-icon
     v-if="!order"
     key="unordered"
-    :name="icons.sort"
+    :name="table.icons.sort"
   />
   <veui-icon
     v-else
@@ -21,7 +21,7 @@
 import Icon from '../Icon'
 import Button from '../Button'
 import prefix from '../../mixins/prefix'
-import table, { mapTableData } from '../../mixins/table'
+import table from '../../mixins/table'
 import config from '../../managers/config'
 import '../../common/uiTypes'
 
@@ -63,7 +63,6 @@ export default {
     }
   },
   computed: {
-    ...mapTableData('icons', 'uiParts'),
     klass () {
       return {
         [this.$c('table-sorter')]: true,

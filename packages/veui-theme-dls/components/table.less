@@ -63,6 +63,14 @@
     td {
       border-left-style: solid;
     }
+
+    &::after {
+      content: "";
+      .absolute(0, _, 0, 0);
+      width: 1px;
+      background-color: @dls-table-border-color;
+      z-index: 3;
+    }
   }
 
   &-no-data {
@@ -79,7 +87,7 @@
     }
 
     .@{veui-prefix}-table-no-data {
-      background-color: transparent;
+      background-color: @dls-table-cell-background-color;
     }
   }
 
@@ -161,6 +169,10 @@
     right: 0;
     left: 0;
     padding: @dls-table-cell-padding-y @dls-table-cell-padding-x;
+  }
+
+  &-bordered &-cell-hero &-cell {
+    left: 1px;
   }
 
   & &-cell-expand {

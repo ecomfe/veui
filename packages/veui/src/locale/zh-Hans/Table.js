@@ -4,10 +4,10 @@ i18n.register(
   'zh-Hans',
   {
     noData: '没有数据',
-    selectAll: '选中全部',
-    unselectAll: '取消选中全部',
-    selectRow: '选中本行',
-    deselectRow: '取消选中本行',
+    selectAll: '选择全部',
+    unselectAll: '取消选择全部',
+    selectRow: '选择本行',
+    deselectRow: '取消选择本行',
     expandRow: '展开本行',
     collapseRow: '收起本行'
   },

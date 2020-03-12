@@ -4,7 +4,7 @@ import Checkbox from '../Checkbox'
 import Radio from '../Radio'
 import Icon from '../Icon'
 import prefix from '../../mixins/prefix'
-import table, { mapTableData } from '../../mixins/table'
+import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import '../../common/uiTypes'
 
@@ -17,24 +17,9 @@ export default {
     item: Object,
     expanded: Boolean
   },
-  computed: {
-    ...mapTableData(
-      'data',
-      'selectable',
-      'selectMode',
-      'selectedItems',
-      'scrollableX',
-      'expandable',
-      'keyField',
-      'icons',
-      'uiParts',
-      'selectColumnWidth',
-      { realKeys: 'keys' },
-      { realColumns: 'columns' },
-      { viewColumnCount: 'columnCount' }
-    )
-  },
   render () {
+    let { table } = this
+
     // hero sub row
     if (this.$slots.default) {
       return (
@@ -44,12 +29,14 @@ export default {
             class={{
               [this.$c('table-cell-hero')]: true
             }}
-            colspan={this.columnCount}
+            colspan={table.viewColumnCount}
           >
             <div
               class={this.$c('table-cell')}
               style={{
-                width: this.table.width ? `${this.table.width}px` : null
+                width: table.width
+                  ? `${table.width - (table.realBordered ? 1 : 0)}px`
+                  : null
               }}
             >
               {this.$slots.default}
@@ -63,14 +50,14 @@ export default {
     if (this.item) {
       return (
         <tr class={this.$c('table-sub-row')}>
-          {this.selectable ? (
+          {table.selectable ? (
             <td
               role="cell"
               class={{
-                [this.$c('table-cell-sticky-left')]: this.scrollableX
+                [this.$c('table-cell-sticky-left')]: table.scrollableX
               }}
               style={
-                this.scrollableX
+                table.scrollableX
                   ? {
                     left: 0
                   }
@@ -78,16 +65,18 @@ export default {
               }
             />
           ) : null}
-          {this.expandable ? (
+          {table.expandable ? (
             <td
               role="cell"
               class={{
-                [this.$c('table-cell-sticky-left')]: this.scrollableX
+                [this.$c('table-cell-sticky-left')]: table.scrollableX
               }}
               style={
-                this.scrollableX
+                table.scrollableX
                   ? {
-                    left: this.selectable ? `${this.selectColumnWidth}px` : 0
+                    left: table.selectable
+                      ? `${table.selectColumnWidth}px`
+                      : 0
                   }
                   : null
               }
@@ -99,11 +88,14 @@ export default {
     }
 
     let index = this.index
-    let item = this.data[index]
-    let key = this.keyField ? item[this.keyField] : this.keys[index]
-    let checked = !!this.selectedItems[key]
+    let item = table.data[index]
+    let key = table.keyField ? item[table.keyField] : table.realKeys[index]
+    let checked = !!table.selectedItems[key]
 
-    let keyCol = find(this.columns, ({ field }) => field === this.keyField)
+    let keyCol = find(
+      table.realColumns,
+      ({ field }) => field === table.keyField
+    )
     let data = {}
     if (keyCol) {
       data = this.getCellSpan(keyCol)
@@ -111,15 +103,15 @@ export default {
 
     return (
       <tr class={{ [this.$c('table-selected-row')]: checked }}>
-        {this.selectable && data ? (
+        {table.selectable && data ? (
           <td
             role="cell"
             {...data}
             class={{
-              [this.$c('table-cell-sticky-left')]: this.scrollableX
+              [this.$c('table-cell-sticky-left')]: table.scrollableX
             }}
             style={
-              this.scrollableX
+              table.scrollableX
                 ? {
                   left: 0
                 }
@@ -127,7 +119,7 @@ export default {
             }
           >
             <div class={this.$c('table-cell')}>
-              {this.selectMode === 'multiple' ? (
+              {table.selectMode === 'multiple' ? (
                 <Checkbox
                   checked={checked}
                   onChange={checked => {
@@ -149,16 +141,16 @@ export default {
             </div>
           </td>
         ) : null}
-        {this.expandable ? (
+        {table.expandable ? (
           <td
             role="cell"
             class={{
-              [this.$c('table-cell-sticky-left')]: this.scrollableX
+              [this.$c('table-cell-sticky-left')]: table.scrollableX
             }}
             style={
-              this.scrollableX
+              table.scrollableX
                 ? {
-                  left: this.selectable ? `${this.selectColumnWidth}px` : 0
+                  left: table.selectable ? `${table.selectColumnWidth}px` : 0
                 }
                 : null
             }
@@ -166,7 +158,7 @@ export default {
             <div class={this.$c('table-cell')}>
               {(item.children || []).length ? (
                 <Button
-                  ui={this.uiParts.icon}
+                  ui={table.uiParts.icon}
                   aria-label={this.t(
                     this.expanded ? '@table.collapseRow' : '@table.expandRow'
                   )}
@@ -184,7 +176,7 @@ export default {
                       )
                     ]}
                     name={
-                      this.expanded ? this.icons.collapse : this.icons.expand
+                      this.expanded ? table.icons.collapse : table.icons.expand
                     }
                   />
                 </Button>
@@ -198,12 +190,14 @@ export default {
   },
   methods: {
     getCellSpan (col) {
+      let { table } = this
       let data = {
         attrs: {}
       }
 
       if (typeof col.span === 'function') {
-        let { data: dataItems, index } = this
+        let { data: dataItems } = table
+        let { index } = this
         let { col: colspan = 1, row: rowspan = 1 } = col.span(
           index,
           dataItems[index]
@@ -222,19 +216,20 @@ export default {
       return data
     },
     renderColumns (index, subItem) {
+      let { table } = this
       let isSubRow = !!subItem
-      let item = subItem || this.data[index]
-      return this.columns.map(col => {
+      let item = subItem || table.data[index]
+      return table.realColumns.map(col => {
         let data = this.getCellSpan(col)
         return data ? (
           <td
             class={{
               [this.$c(`table-cell-${col.align}`)]: !!col.align,
               [this.$c(`table-cell-sticky-${col.fixed}`)]:
-                this.scrollableX && col.fixed
+                table.scrollableX && col.fixed
             }}
             style={
-              this.scrollableX && col.fixed
+              table.scrollableX && col.fixed
                 ? {
                   [col.fixed]:
                       col.bodyOffset != null ? col.bodyOffset : col.offset

@@ -1,28 +1,19 @@
 import prefix from '../../mixins/prefix'
-import table, { mapTableData } from '../../mixins/table'
+import table from '../../mixins/table'
 import '../../common/uiTypes'
 
 export default {
   name: 'veui-table-foot',
   mixins: [prefix, table],
   uiTypes: ['transparent'],
-  computed: {
-    ...mapTableData(
-      'selectable',
-      'expandable',
-      'scrollableX',
-      'selectColumnWidth',
-      { realColumns: 'columns' },
-      { viewColumnCount: 'columnCount' }
-    )
-  },
   render () {
+    let { table } = this
     return (
       <tfoot>
         <tr>
           {this.$slots.default ? (
             <th
-              colspan={this.columnCount}
+              colspan={table.viewColumnCount}
               class={{
                 [this.$c('table-cell-hero')]: true
               }}
@@ -30,24 +21,23 @@ export default {
               <div
                 class={this.$c('table-cell')}
                 style={{
-                  width: this.table.width ? `${this.table.width}px` : null
+                  width: table.width ? `${table.width}px` : null
                 }}
               >
                 {this.$slots.default}
               </div>
             </th>
           ) : (
-            (this.selectable
+            (table.selectable
               ? [
                 <th
                   class={{
                     [this.$c('table-cell-select')]: true,
-                    [this.$c('table-cell-sticky-left')]: this.scrollableX
+                    [this.$c('table-cell-sticky-left')]: table.needFixLeft
                   }}
                   style={
-                    this.scrollableX
+                    table.needFixLeft
                       ? {
-                        position: 'sticky',
                         left: 0
                       }
                       : null
@@ -57,18 +47,18 @@ export default {
               : []
             )
               .concat(
-                this.expandable
+                table.expandable
                   ? [
                     <th
                       class={{
                         [this.$c('table-cell-expand')]: true,
-                        [this.$c('table-cell-sticky-left')]: this.scrollableX
+                        [this.$c('table-cell-sticky-left')]: table.needFixLeft
                       }}
                       style={
-                        this.scrollableX
+                        table.needFixLeft
                           ? {
-                            left: this.selectable
-                              ? `${this.selectColumnWidth}px`
+                            left: table.selectable
+                              ? `${table.selectColumnWidth}px`
                               : 0
                           }
                           : null
@@ -78,15 +68,15 @@ export default {
                   : []
               )
               .concat(
-                this.columns.map(col => (
+                table.realColumns.map(col => (
                   <th
                     class={{
                       [this.$c(`table-cell-${col.align}`)]: !!col.align,
                       [this.$c(`table-cell-sticky-${col.fixed}`)]:
-                        this.scrollableX && col.fixed
+                        table.scrollableX && col.fixed
                     }}
                     style={
-                      this.scrollableX && col.fixed
+                      table.scrollableX && col.fixed
                         ? {
                           [col.fixed]: col.offset
                         }
@@ -99,14 +89,14 @@ export default {
                 ))
               )
           )}
-          {this.table.gutterWidth ? (
+          {table.gutterWidth ? (
             <th
               class={{
                 [this.$c('table-gutter')]: true,
-                [this.$c('table-cell-sticky-right')]: this.table.hasFixedRight
+                [this.$c('table-cell-sticky-right')]: table.hasFixedRight
               }}
               style={
-                this.table.hasFixedRight
+                table.hasFixedRight
                   ? {
                     right: 0
                   }
