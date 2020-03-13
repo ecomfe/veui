@@ -283,7 +283,7 @@
           class="veui-tabs-item-remove"
           @click="removeTab2(props)"
         >
-          <icon name="cross-small"/>
+          <icon name="times"/>
         </button>
       </template>
       <veui-tab
@@ -321,7 +321,7 @@
           class="veui-tabs-item-remove"
           @click="removeTab3(props)"
         >
-          <icon name="cross-small"/>
+          <icon name="times"/>
         </button>
       </template>
       <veui-tab
@@ -426,6 +426,7 @@
 <script>
 import { Icon, Tabs, Tab, Button } from 'veui'
 import { findIndex, uniqueId } from 'lodash'
+import 'veui-theme-dls-icons/times'
 
 export default {
   name: 'tabs-demo',
