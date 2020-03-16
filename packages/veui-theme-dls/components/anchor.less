@@ -22,9 +22,15 @@
   }
 
   &-tree {
-    border-left: @dls-anchor-track-width solid @dls-anchor-track-color;
     display: inline-block;
-    padding: 0;
+    padding: 0 0 0 @dls-anchor-track-width;
+    &::before {
+      content: "";
+      display: block;
+      border-left: @dls-anchor-track-width solid @dls-anchor-track-color;
+      width: @dls-anchor-track-width;
+      .absolute(0, _, 0, 0);
+    }
   }
 
   &-wrapper {
@@ -63,7 +69,7 @@
   &-current::before {
     content: "";
     position: absolute;
-    left: -1px;
+    left: 0;
     width: @dls-anchor-indicator-width;
     height: inherit;
   }

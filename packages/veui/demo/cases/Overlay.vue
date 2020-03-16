@@ -30,6 +30,22 @@
 
   <div class="row">
     <veui-button
+      ref="inlineOverlay"
+      @click="inline = !inline"
+    >
+      toggle inline
+    </veui-button>
+    <veui-overlay
+      overlay-class="demo-overlay-box"
+      target="inlineOverlay"
+      open
+      :inline="inline"
+    >
+      {{ inline ? '' : 'non-' }}inline Overlay
+    </veui-overlay>
+  </div>
+  <div class="row">
+    <veui-button
       ref="overlay3"
       @click="showMultiFirst"
     >
@@ -171,7 +187,7 @@ export default {
     ]
     return {
       overlayVisible: false,
-
+      inline: true,
       multiTargetRef: 'overlay3',
       multiTargetOpen: false,
       multiOptions: {
@@ -212,7 +228,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~less-plugin-est/src/all.less";
+@import '~less-plugin-est/src/all.less';
 
 .demo-overlay-box {
   box-shadow: 1px 1px 6px fadeout(#000, 80%);
