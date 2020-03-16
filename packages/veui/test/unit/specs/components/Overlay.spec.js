@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Overlay from '@/components/Overlay'
+import Button from '@/components/Button'
 import overlay, { OverlayManager } from '@/managers/overlay'
 import config from '@/managers/config'
 import { wait } from '../../../utils'
@@ -113,6 +114,40 @@ describe('components/Overlay', () => {
     expect(vm.$refs.child.zIndex).to.equal(201)
     expect(vm.$refs.next.zIndex).to.equal(202)
 
+    wrapper.destroy()
+  })
+
+  it('should handle right on `watch` prop changing', async () => {
+    let wrapper = mount({
+      data () {
+        return {
+          inline: true
+        }
+      },
+      render () {
+        return (
+          <div>
+            <Button ref="btn">toggle inline</Button>
+            <Overlay target="btn" open inline={this.inline}>
+              content
+            </Overlay>
+          </div>
+        )
+      }
+    })
+
+    let { vm } = wrapper
+    await wait(0)
+    let overlayVm = wrapper.find(Overlay).vm
+    expect(overlayVm.$refs.box === overlayVm.$el).to.equal(true)
+
+    vm.inline = false
+    await wait(0)
+    expect(overlayVm.$refs.box.parentNode === document.body).to.equal(true)
+
+    vm.inline = true
+    await wait(0)
+    expect(overlayVm.$refs.box === overlayVm.$el).to.equal(true)
     wrapper.destroy()
   })
 })

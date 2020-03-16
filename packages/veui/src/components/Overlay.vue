@@ -112,51 +112,22 @@ export default {
     this.updateNode()
   },
   mounted () {
-    if (this.inline) {
-      return
-    }
-    this.overlayBox = this.$refs.box
-
-    // create a connection to the portal entrance
-    // v-outside will honor this connection, so we'd
-    // better document this somewhere properly (TODO)
-    this.overlayBox.__portal__ = this.$el
-    document.body.appendChild(this.overlayBox)
-    this.findTargetNode()
-
-    if (this.realOpen) {
-      this.initFocus()
-      this.updateWidth()
-    }
-
-    this.updateLocator()
+    this.updateOnInlineChange()
   },
   updated () {
-    if (this.inline) {
-      return
+    this.updateOnInlineChange()
+    if (!this.inline) {
+      this.$nextTick(() => {
+        if (this.realOpen) {
+          this.relocate()
+        }
+      })
     }
-    this.$nextTick(() => {
-      if (this.realOpen) {
-        this.relocate()
-      }
-    })
   },
   destroyed () {
-    if (this.inline) {
-      return
+    if (this.ported) {
+      this.removePortal(true)
     }
-
-    this.destroyLocator()
-
-    let node = this.overlayNode
-    node.remove()
-    this.overlayNode = null
-
-    this.destroyFocus()
-
-    this.$el.appendChild(this.overlayBox)
-    delete this.overlayBox.__portal__
-    this.overlayBox = null
   },
   methods: {
     // 更新 zindex 树
@@ -173,6 +144,51 @@ export default {
       } else {
         this.overlayNode.appendTo(this.findParentOverlayId(), this.priority)
       }
+    },
+
+    updateOnInlineChange () {
+      if (this.inline && this.ported) {
+        // non-inline -> inline
+        this.removePortal()
+        this.ported = false
+      } else if (!this.inline && !this.ported) {
+        // inline -> non-inline
+        this.overlayBox = this.$refs.box
+
+        // create a connection to the portal entrance
+        // v-outside will honor this connection, so we'd
+        // better document this somewhere properly (TODO)
+        this.overlayBox.__portal__ = this.$el
+        document.body.appendChild(this.overlayBox)
+        this.findTargetNode()
+
+        if (this.realOpen) {
+          this.initFocus()
+          this.updateWidth()
+        }
+
+        this.updateLocator()
+        this.ported = true
+      }
+    },
+
+    removePortal (destroy) {
+      this.destroyLocator()
+
+      let node = this.overlayNode
+      node && node.remove()
+      this.overlayNode = null
+
+      this.destroyFocus()
+      if (destroy) {
+        // destroy 时将原来移出去的移回来
+        this.$el.appendChild(this.overlayBox)
+      } else {
+        // 切换到 inline, 将原来移出去的节点删了（会重新渲染一个）
+        this.overlayBox && this.overlayBox.remove()
+      }
+      delete this.overlayBox.__portal__
+      this.overlayBox = null
     },
 
     findParentOverlayId () {

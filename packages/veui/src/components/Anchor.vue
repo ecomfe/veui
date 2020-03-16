@@ -8,6 +8,7 @@
     :class="$c('anchor-placeholder')"
   />
   <div
+    :is="tagName"
     ref="append"
     :class="$c('anchor-wrapper')"
     :ui="realUi"
@@ -51,6 +52,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import Tree from './Tree'
 import Link from './Link'
 import ui from '../mixins/ui'
@@ -66,6 +68,10 @@ import {
 import { resolveOffset } from '../utils/helper'
 import { getNodes } from '../utils/context'
 import config from '../managers/config'
+
+const VEUI_OVERLAY_ELEMENT_NAME = 'veui-x-overlay'
+
+Vue.config.ignoredElements.push(VEUI_OVERLAY_ELEMENT_NAME)
 
 config.defaults({
   'anchor.prefix': '@'
@@ -153,6 +159,9 @@ export default {
     }
   },
   computed: {
+    tagName () {
+      return VEUI_OVERLAY_ELEMENT_NAME
+    },
     allAnchors () {
       return extractValue(this.items)
     },
