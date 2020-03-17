@@ -185,7 +185,7 @@ export default {
         this.$el.appendChild(this.overlayBox)
       } else {
         // 切换到 inline, 将原来移出去的节点删了（会重新渲染一个）
-        this.overlayBox && this.overlayBox.remove()
+        this.overlayBox.parentNode.removeChild(this.overlayBox)
       }
       delete this.overlayBox.__portal__
       this.overlayBox = null
