@@ -117,7 +117,7 @@ describe('components/Overlay', () => {
     wrapper.destroy()
   })
 
-  it('should handle right on `watch` prop changing', async () => {
+  it('should handle right on changing `inline` prop', async () => {
     let wrapper = mount({
       data () {
         return {
