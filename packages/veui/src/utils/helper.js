@@ -222,3 +222,12 @@ export function resolveOffset (val, base) {
   let num = isPx ? +val.replace(/px$/, '') : val || 0
   return base == null ? num : isPx ? num : base * num
 }
+
+export function ignoreElements (names) {
+  names = [].concat(names)
+  names.forEach(name => {
+    if (Vue.config.ignoredElements.indexOf(name) === -1) {
+      Vue.config.ignoredElements.push(name)
+    }
+  })
+}
