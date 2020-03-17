@@ -52,7 +52,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import Tree from './Tree'
 import Link from './Link'
 import ui from '../mixins/ui'
@@ -65,13 +64,13 @@ import {
   raf,
   getWindowRect
 } from '../utils/dom'
-import { resolveOffset } from '../utils/helper'
+import { resolveOffset, ignoreElements } from '../utils/helper'
 import { getNodes } from '../utils/context'
 import config from '../managers/config'
 
 const VEUI_OVERLAY_ELEMENT_NAME = 'veui-x-overlay'
 
-Vue.config.ignoredElements.push(VEUI_OVERLAY_ELEMENT_NAME)
+ignoreElements(VEUI_OVERLAY_ELEMENT_NAME)
 
 config.defaults({
   'anchor.prefix': '@'

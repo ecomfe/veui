@@ -1,5 +1,4 @@
 <script>
-import Vue from 'vue'
 import Popper from 'popper.js'
 import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
@@ -8,13 +7,18 @@ import config from '../managers/config'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
-import { getClassPropDef, mergeClasses, isType } from '../utils/helper'
+import {
+  getClassPropDef,
+  mergeClasses,
+  isType,
+  ignoreElements
+} from '../utils/helper'
 import '../common/uiTypes'
 import { omit } from 'lodash'
 
 const VEUI_OVERLAY_ELEMENT_NAME = 'veui-x-overlay'
 
-Vue.config.ignoredElements.push(VEUI_OVERLAY_ELEMENT_NAME)
+ignoreElements(VEUI_OVERLAY_ELEMENT_NAME)
 
 config.defaults({
   'overlay.baseZIndex': 200,
