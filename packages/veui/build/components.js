@@ -43,7 +43,17 @@ function genIndex () {
       recursive: false,
       shortName: true
     })
-    .filter(file => /^[A-Z]/.exec(file))
+    .filter(file => {
+      let match = /^[A-Z]/.exec(file)
+      // 没有 index.js 的目录不要
+      if (match) {
+        let abs = path.join(componentDir, file)
+        if (fs.statSync(abs).isDirectory()) {
+          return fs.existsSync(path.join(abs, 'index.js'))
+        }
+      }
+      return !!match
+    })
     .sort()
     .reduce(
       (res, file) => {
