@@ -315,7 +315,7 @@ import {
   gt,
   lt
 } from '../../utils/date'
-import { closest, focusIn, focus, scrollTo } from '../../utils/dom'
+import { closest, focusIn, focus, scrollToAlign } from '../../utils/dom'
 import { sign, isPositive } from '../../utils/math'
 import { normalizeClass } from '../../utils/helper'
 import {
@@ -901,7 +901,7 @@ export default {
           container.querySelector(`.${this.$c('calendar-current')}`) ||
           container.querySelector(`.${this.$c('calendar-today')}`)
         if (el) {
-          scrollTo(0.5, container, el, { duration })
+          scrollToAlign(0.5, container, el, { duration })
           focusIn(this.isMonthType ? el : el)
         }
       })
