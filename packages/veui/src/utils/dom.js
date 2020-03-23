@@ -1,4 +1,4 @@
-import { findIndex, uniq, get, clamp } from 'lodash'
+import { findIndex, uniq, get, clamp, isPlainObject, isNumber } from 'lodash'
 import { resolveOffset } from './helper'
 
 /**
@@ -466,11 +466,23 @@ const calcDistance = (
  * @param {HTMLElement} target 被滚动的元素
  * @param {ScrollOptions=} options 选项
  */
-export function scrollToAlign (positions, viewport, target, options) {
+export function scrollToAlign (viewport, target, options) {
   let isWindow = viewport === window
   let realViewport = isWindow ? document.documentElement : viewport
   let vRect = isWindow ? getWindowRect() : viewport.getBoundingClientRect()
   let tRect = target.getBoundingClientRect()
+  let positions
+  if (isPlainObject(options)) {
+    positions = [options.targetPosition, options.viewportPosition]
+  } else if (Array.isArray(options)) {
+    positions = options
+    options = {}
+  } else {
+    throw new Error(
+      'the third argument of `scrollToAlign` must be a object or an array'
+    )
+  }
+
   let distance = calcDistance(
     positions,
     vRect,
@@ -488,49 +500,65 @@ export function scrollToAlign (positions, viewport, target, options) {
     distance = maxScrollTop - initScrollTop
   }
 
-  doScroll([0, distance], realViewport, options)
+  doScroll(realViewport, [0, distance], options)
 }
 
 /**
- * 按根据坐标(x, y)来滚动
- * @param {[x, y]} point - (x,y) 是以内容左上角为(0, 0)的位置
+ * 按根据坐标(left, top)来滚动，支持两种调用方式:
+ *  scrollTo(el, { left, top, ...})
+ *  scrollTo(el, left, top) - 固定默认的 options
  * @param {Window|HTMLElement} viewport 视口元素
  * @param {ScrollOptions=} options 选项
  */
-export function scrollTo ([x, y], viewport, options) {
+export function scrollTo (viewport, options) {
   let isWindow = viewport === window
   viewport = isWindow ? document.documentElement : viewport
   let { scrollLeft, scrollTop } = viewport
-  let distanceX = x - scrollLeft
-  let distanceY = y - scrollTop
+  let left
+  let top
+  if (isPlainObject(options)) {
+    left = options.left
+    top = options.top
+  } else {
+    left = options
+    top = arguments[2]
+    options = {}
+  }
+  if (!isNumber(left) || !isNumber(top)) {
+    throw new Error('left and top must be numbers')
+  }
+
+  let distanceLeft = left - scrollLeft
+  let distanceTop = top - scrollTop
   // 确保距离在能滚动的范围内
-  if (distanceX + scrollLeft < 0) {
-    distanceX = -scrollLeft
+  if (distanceLeft + scrollLeft < 0) {
+    distanceLeft = -scrollLeft
   }
   let vRect = isWindow ? getWindowRect() : viewport.getBoundingClientRect()
   let maxDistanceX = viewport.scrollWidth - vRect.width
-  if (scrollLeft + distanceX > maxDistanceX) {
-    distanceX = maxDistanceX - scrollLeft
+  if (scrollLeft + distanceLeft > maxDistanceX) {
+    distanceLeft = maxDistanceX - scrollLeft
   }
-  if (distanceY + scrollTop < 0) {
-    distanceY = -scrollTop
+
+  if (distanceTop + scrollTop < 0) {
+    distanceTop = -scrollTop
   }
   let maxDistanceY = viewport.scrollHeight - vRect.height
-  if (scrollTop + distanceY > maxDistanceY) {
-    distanceY = maxDistanceY - scrollTop
+  if (scrollTop + distanceTop > maxDistanceY) {
+    distanceTop = maxDistanceY - scrollTop
   }
-  doScroll([distanceX, distanceY], viewport, options)
+  doScroll(viewport, [distanceLeft, distanceTop], options)
 }
 
 /**
  * 根据距离来滚动
- * @param {[distanceX, distanceY]} distances - 水平/垂直方向滚动的距离
  * @param {Window|HTMLElement} viewport 视口元素
+ * @param {[distanceX, distanceY]} distances - 水平/垂直方向滚动的距离
  * @param {ScrollOptions=} options 选项
  */
 function doScroll (
-  [distanceX, distanceY],
   viewport,
+  [distanceX, distanceY],
   { duration = 200, timingFn = linear, beforeScroll, afterScroll } = {}
 ) {
   let startTime = null
