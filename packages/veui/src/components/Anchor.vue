@@ -35,7 +35,7 @@
             :disabled="!!props.disabled"
             :to="props.value"
             :ui="getFinalUi(props.value)"
-            @click="handleClick(props)"
+            @click.stop="handleClick(props)"
           >
             <slot
               name="item-label"
@@ -212,6 +212,9 @@ export default {
     this.debounceActivateAnchor = debounce(this.activateAnchor, 1000 / 60)
     this.installScrollHandler()
     let hash = decodeURIComponent(location.hash)
+    // url 上初始就有 hash，那么最好一开始就滚动到对应的位置
+    // 但是浏览器自己可能也会滚动，因为 Anchor 是可以指定容器滚动的，所以浏览器的滚动不一定是我们想要的位置
+    // 所以希望可以覆盖掉浏览器的滚动，最终滚动到合适位置
     if (hash && includes(this.allAnchors, hash)) {
       this.ensureHashActive = true
       this.updateActive(hash)
@@ -221,6 +224,7 @@ export default {
       } else {
         this.waitForLoaded = true
         window.addEventListener('DOMContentLoaded', () =>
+          // 为了尽可能在浏览器滚动后再滚动一次
           setTimeout(() => {
             this.waitForLoaded = false
             // firefox 还需做下最后努力
@@ -260,6 +264,8 @@ export default {
         this.scrollToAnchor(() => {
           if (!this.waitForLoaded) {
             this.ensureHashActive = false
+            // 可能因为浏览器的滚动或保留上次滚动位置，而导致实际不会触发滚动，所以补个 sticky 检测
+            if (this.sticky) this.toggleSticky()
           }
         }, 0)
       }
@@ -382,7 +388,9 @@ export default {
         }
       }
       this.animating = true
-      scrollToAlign([0, this.targetOffset], this.realContainer, el, {
+      scrollToAlign(this.realContainer, el, {
+        targetPosition: 0,
+        viewportPosition: this.targetOffset,
         duration,
         beforeScroll,
         afterScroll: () => {
@@ -402,15 +410,14 @@ export default {
       let result = null
       let length = this.sharpAnchors.length
       let item = null
-      while (length) {
-        item = this.sharpAnchors[length - 1]
+      while (length--) {
+        item = this.sharpAnchors[length]
         if (item.el) {
           if (Math.round(item.el.getBoundingClientRect().top) <= offset) {
             result = item
             break
           }
         }
-        length--
       }
       return result
     },
