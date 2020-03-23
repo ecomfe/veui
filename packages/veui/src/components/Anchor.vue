@@ -58,7 +58,7 @@ import ui from '../mixins/ui'
 import prefix from '../mixins/prefix'
 import { debounce, reduce, startsWith, includes, get, isString } from 'lodash'
 import {
-  scrollTo,
+  scrollToAlign,
   getVisibleRect,
   calcClip,
   raf,
@@ -382,7 +382,7 @@ export default {
         }
       }
       this.animating = true
-      scrollTo([0, this.targetOffset], this.realContainer, el, {
+      scrollToAlign([0, this.targetOffset], this.realContainer, el, {
         duration,
         beforeScroll,
         afterScroll: () => {

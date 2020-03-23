@@ -169,7 +169,7 @@ import {
   constant,
   pick
 } from 'lodash'
-import { scrollTo } from '../../utils/dom'
+import { scrollToAlign } from '../../utils/dom'
 import TimePickerUtil from './_TimePickerUtil'
 
 const genOption = (o, suffix = '') => ({
@@ -388,7 +388,7 @@ export default {
       if (viewport) {
         let selected = viewport.querySelector(`.${this.$c('option-selected')}`)
         if (selected) {
-          scrollTo(0.5, viewport, selected, { duration })
+          scrollToAlign(0.5, viewport, selected, { duration })
         }
       }
     },
