@@ -455,18 +455,9 @@ const calcDistance = (
  * @param {Array<number>|number} positions 位置百分数，如 0.5 等价于 [0.5, 0.5]
  * @param {Window|HTMLElement} viewport 视口元素
  * @param {HTMLElement} target 被滚动的元素
- * @param {Object=} options 选项
- * @param {number=} options.duration 滚动时间，单位ms
- * @param {Function=} options.beforeScroll 每次滚动之前的hook
- * @param {Function=} options.afterScroll 整个滚动完成之后的回调
- * @param {Function=} options.timingFn 时间函数
+ * @param {Object=} options 选项，参见 doScroll 方法
  */
-export function scrollTo (
-  positions,
-  viewport,
-  target,
-  { duration = 200, timingFn = linear, beforeScroll, afterScroll } = {}
-) {
+export function scrollTo (positions, viewport, target, options) {
   let isWindow = viewport === window
   let realViewport = isWindow ? document.documentElement : viewport
   let vRect = isWindow ? getWindowRect() : viewport.getBoundingClientRect()
@@ -488,25 +479,76 @@ export function scrollTo (
     distance = maxScrollTop - initScrollTop
   }
 
+  doScroll([0, distance], realViewport, options)
+}
+
+/**
+ * 按根据坐标(x, y)来滚动
+ * @param {[x, y]} point - (x,y) 是以内容左上角为(0, 0)的位置
+ * @param {Window|HTMLElement} viewport 视口元素
+ * @param {Object=} options 选项，参见 doScroll 方法
+ */
+export function scrollToPoint ([x, y], viewport, options) {
+  let isWindow = viewport === window
+  viewport = isWindow ? document.documentElement : viewport
+  let { scrollLeft, scrollTop } = viewport
+  let distanceX = x - scrollLeft
+  let distanceY = y - scrollTop
+  // 确保距离在能滚动的范围内
+  if (distanceX + scrollLeft < 0) {
+    distanceX = -scrollLeft
+  }
+  let vRect = isWindow ? getWindowRect() : viewport.getBoundingClientRect()
+  let maxDistanceX = viewport.scrollWidth - vRect.width
+  if (scrollLeft + distanceX > maxDistanceX) {
+    distanceX = maxDistanceX - scrollLeft
+  }
+  if (distanceY + scrollTop < 0) {
+    distanceY = -scrollTop
+  }
+  let maxDistanceY = viewport.scrollHeight - vRect.height
+  if (scrollTop + distanceY > maxDistanceY) {
+    distanceY = maxDistanceY - scrollTop
+  }
+  doScroll([distanceX, distanceY], viewport, options)
+}
+
+/**
+ * 根据距离来滚动
+ * @param {[distanceX, distanceY]} distances - 水平/垂直方向滚动的距离
+ * @param {Window|HTMLElement} viewport 视口元素
+ * @param {Object=} options 选项
+ * @param {number=} options.duration 滚动时间，单位ms
+ * @param {Function=} options.beforeScroll 每次滚动之前的hook
+ * @param {Function=} options.afterScroll 整个滚动完成之后的回调
+ * @param {Function=} options.timingFn 时间函数
+ */
+function doScroll (
+  [distanceX, distanceY],
+  viewport,
+  { duration = 200, timingFn = linear, beforeScroll, afterScroll } = {}
+) {
   let startTime = null
+  // 记下开始的滚动位置，step 中的距离都是基于该位置的
+  let { scrollLeft, scrollTop } = viewport
   const step = () => {
-    let time = Date.now()
+    let now = Date.now()
     if (!startTime) {
-      startTime = time
+      startTime = now
     }
-    let curTime = Math.min(time - startTime, duration)
-    let offset = !duration ? distance : timingFn(curTime, duration, distance)
-    let newScrollTop = Math.round(initScrollTop + offset)
-    if (beforeScroll) beforeScroll(newScrollTop)
-    if (isWindow) {
-      window.scrollTo(document.documentElement.scrollLeft, newScrollTop)
-    } else {
-      viewport.scrollTop = newScrollTop
-    }
+    let curTime = Math.min(now - startTime, duration)
+    let stepX = !duration ? distanceX : timingFn(curTime, duration, distanceX)
+    let stepY = !duration ? distanceY : timingFn(curTime, duration, distanceY)
+    let newPos = [Math.round(scrollLeft + stepX), Math.round(scrollTop + stepY)]
+
+    if (beforeScroll) beforeScroll(newPos)
+    viewport.scrollLeft = newPos[0]
+    viewport.scrollTop = newPos[1]
+
     if (curTime !== duration) {
       raf(step)
     } else if (afterScroll) {
-      afterScroll()
+      afterScroll(newPos)
     }
   }
   step()
