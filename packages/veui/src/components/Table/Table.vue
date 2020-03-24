@@ -135,11 +135,14 @@ import Body from './_TableBody'
 import Head from './_TableHead'
 import Foot from './_TableFoot'
 import ColGroup from './_ColGroup'
-import { getElementScrollbarWidth } from '../../utils/browser'
 import '../../common/uiTypes'
 import { isEqualSet } from '../../utils/lang'
 import { walk } from '../../utils/datasource'
-import { cssSupports, preventBackForward } from '../../utils/dom'
+import {
+  cssSupports,
+  preventBackForward,
+  getElementScrollbarWidth
+} from '../../utils/dom'
 
 config.defaults(
   {
