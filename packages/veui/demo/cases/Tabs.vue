@@ -6,13 +6,9 @@
     <p>
       当前标签 <code>{{ active0 }}</code>
     </p>
-    <p>
-      当前序号 <code>{{ index0 + 1 }}</code>
-    </p>
     <veui-tabs
       ui="l"
       :active.sync="active0"
-      :index.sync="index0"
     >
       <veui-tab
         label="回答问题"
@@ -32,10 +28,7 @@
       >覆盖 extra</veui-button>
     </veui-tabs>
 
-    <veui-tabs
-      :active.sync="active0"
-      :index.sync="index0"
-    >
+    <veui-tabs :active.sync="active0">
       <veui-tab
         label="回答问题"
         name="answers"
@@ -53,7 +46,6 @@
     <veui-tabs
       ui="s"
       :active.sync="active0"
-      :index.sync="index0"
     >
       <veui-tab
         label="回答问题"
@@ -72,11 +64,7 @@
   </section>
   <section>
     <h2>边框样式：</h2>
-    <veui-tabs
-      ui="block"
-      :active.sync="active0"
-      :index.sync="index0"
-    >
+    <veui-tabs :active.sync="active0">
       <veui-tab
         label="回答问题"
         name="answers"
@@ -92,9 +80,8 @@
       />
     </veui-tabs>
     <veui-tabs
-      ui="block large"
+      ui="l"
       :active.sync="active0"
-      :index.sync="index0"
     >
       <veui-tab
         label="回答问题"
@@ -113,7 +100,7 @@
   </section>
   <section>
     <h2>溢出样式：</h2>
-    <veui-tabs :index="0">
+    <veui-tabs>
       <veui-tab
         v-for="n in 30"
         :key="n"
@@ -122,10 +109,7 @@
         "
       />
     </veui-tabs>
-    <veui-tabs
-      ui="block"
-      :index="0"
-    >
+    <veui-tabs>
       <veui-tab
         v-for="n in 30"
         :key="n"
@@ -137,10 +121,7 @@
   </section>
   <section>
     <h2>禁用样式：</h2>
-    <p>
-      当前序号 <code>{{ index1 + 1 }}</code>
-    </p>
-    <veui-tabs :index.sync="index1">
+    <veui-tabs>
       <veui-tab label="Tab1">
         <p>This is Tab1</p>
       </veui-tab>
@@ -157,10 +138,7 @@
         <p>This is Tab4</p>
       </veui-tab>
     </veui-tabs>
-    <veui-tabs
-      ui="block"
-      :index.sync="index1"
-    >
+    <veui-tabs>
       <veui-tab label="Tab1">
         <p>This is Tab1</p>
       </veui-tab>
@@ -193,29 +171,21 @@
         label="Progress"
         to="/tabs/progress"
       />
+      <veui-tab label="内联内容">
+        <b>Hello world.</b>
+      </veui-tab>
       <veui-tab
         label="跳转到 Progress"
         to="/progress"
       />
-      <veui-tab
-        label="包点东西"
-        to="/tabs/switch"
-      >
-        <h3>-------- Tabs 里头的 switch 开始 --------</h3>
-        <router-view v-if="$route.fullPath === '/tabs/switch'"/>
-        <h3>-------- Tabs 里头的 switch 结束 --------</h3>
-      </veui-tab>
+      <router-view slot="panel"/>
     </veui-tabs>
   </section>
   <section class="inner-ui">
     <h2>增删模式1（内部 UI）：</h2>
-    <p>
-      当前序号 <code>{{ index2 != null ? index2 + 1 : '已删光' }}</code>
-    </p>
     <veui-tabs
-      ui="large"
+      ui="l"
       :active.sync="active1"
-      :index.sync="index2"
       addable
       :max="totalTabs0"
       @add="addTab0"
@@ -232,14 +202,10 @@
         <p>Tab {{ tab.name }}</p>
       </veui-tab>
     </veui-tabs>
-    <p>
-      当前序号 <code>{{ index3 != null ? index3 + 1 : '已删光' }}</code>
-    </p>
     <veui-tabs
-      ui="large block"
+      ui="l"
       class="large-block-demo"
       :active.sync="active2"
-      :index.sync="index3"
       addable
       :max="totalTabs1"
       :tip="`还可新建 ${totalTabs1 - tabs1.length} 条`"
@@ -260,19 +226,13 @@
   </section>
   <section>
     <h2>增删模式2（完全外部控制）：</h2>
-    <p>
-      当前序号 <code>{{ index4 != null ? index4 + 1 : '已删光' }}</code>
-    </p>
     <veui-button
       class="add-btn"
       @click="addTab2"
     >
       添加 TAB
     </veui-button>
-    <veui-tabs
-      :active.sync="active3"
-      :index.sync="index4"
-    >
+    <veui-tabs :active.sync="active3">
       <template
         v-if="props.removable && tabs2.length > 1"
         slot="tab-item-extra"
@@ -297,20 +257,13 @@
         <p>Tab {{ tab.name }}</p>
       </veui-tab>
     </veui-tabs>
-    <p>
-      当前序号 <code>{{ index5 != null ? index5 + 1 : '已删光' }}</code>
-    </p>
     <veui-button
       class="add-btn"
       @click="addTab3"
     >
       添加 TAB
     </veui-button>
-    <veui-tabs
-      :active.sync="active4"
-      :index.sync="index5"
-      ui="block"
-    >
+    <veui-tabs :active.sync="active4">
       <template
         slot="tab-item-extra"
         slot-scope="props"
@@ -348,9 +301,6 @@
     <p>
       当前标签 <code>{{ active5 }}</code>
     </p>
-    <p>
-      当前序号 <code>{{ index6 + 1 }}</code>
-    </p>
     <veui-button
       :disabled="tabIfRemoving"
       @click="insertVisiable = !insertVisiable"
@@ -358,9 +308,8 @@
       {{ insertVisiable ? '隐藏' : '显示' }}中间一个可切换 TAB
     </veui-button>
     <veui-tabs
-      ui="large"
+      ui="l"
       :active.sync="active5"
-      :index.sync="index6"
     >
       <veui-tab
         label="DuerOS"
@@ -389,9 +338,8 @@
       </veui-tab>
     </veui-tabs>
     <veui-tabs
-      ui="large block"
+      ui="l"
       :active.sync="active5"
-      :index.sync="index6"
     >
       <veui-tab
         label="DuerOS"
@@ -438,7 +386,7 @@ export default {
   },
   data () {
     return {
-      totalTabs0: 10,
+      totalTabs0: 15,
       totalTabs1: 20,
       tabs0: [
         { label: '弄一个很长的在第一个试试', name: '默认1' },
@@ -466,13 +414,6 @@ export default {
       active3: '',
       active4: '',
       active5: '',
-      index0: 0,
-      index1: 0,
-      index2: 0,
-      index3: 0,
-      index4: 0,
-      index5: 0,
-      index6: 0,
       insertVisiable: false,
       tabIfRemoving: false
     }
@@ -484,11 +425,11 @@ export default {
       }
 
       let label = uniqueId('默认')
-      let index = this.tabs0.push({
+      this.tabs0.push({
         label,
         name: label
       })
-      this.index2 = index - 1
+      this.active1 = label
     },
     addTab1 () {
       if (this.tabs1.length >= this.totalTabs1) {
@@ -496,27 +437,24 @@ export default {
       }
 
       let label = uniqueId('每次都增加一些很长的来试试看')
-      let index = this.tabs1.push({
+      this.tabs1.push({
         label,
         name: label
       })
-      this.index3 = index - 1
     },
     addTab2 () {
       let label = uniqueId('默认')
-      let index = this.tabs2.push({
+      this.tabs2.push({
         label,
         name: label
       })
-      this.index4 = index - 1
     },
     addTab3 () {
       let label = uniqueId('默认')
-      let index = this.tabs3.push({
+      this.tabs3.push({
         label,
         name: label
       })
-      this.index5 = index - 1
     },
     removeTab0 ({ name }) {
       let index = findIndex(this.tabs0, tab => tab.name === name)

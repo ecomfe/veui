@@ -311,7 +311,6 @@ export default [
     path: '/tabs',
     name: 'Tabs',
     component: Tabs,
-    disabled: true,
     redirect: '/tabs/button',
     children: [
       {

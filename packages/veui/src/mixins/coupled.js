@@ -21,14 +21,21 @@ export function makeCoupledChild ({ direct = false, type, parentType, fields }) 
       let index = getIndexOfType(this, parentType)
       this[parentRef].add(index, {
         id: this.id,
-        ...pick(this, fields)
+        index,
+        ...mapState(this, fields)
       })
     },
     destroyed () {
-      if (!this[parentRef]) {
+      let parent = this[parentRef]
+      if (!parent) {
         return
       }
-      this[parentRef].removeById(this.id)
+
+      let index = parent.removeById(this.id)
+
+      if (typeof parent.handleRemoveChild === 'function') {
+        parent.handleRemoveChild(index)
+      }
     }
   }
 }
@@ -46,14 +53,33 @@ export function makeCoupledParent ({ type, childrenKey = 'items' }) {
         }
       },
       removeById (id) {
-        this[childrenKey].splice(
-          this[childrenKey].map(child => child.id).indexOf(id),
-          1
-        )
+        let index = this[childrenKey].map(child => child.id).indexOf(id)
+        this[childrenKey].splice(index, 1)
+        return index
       },
       findById (id) {
         return find(this[childrenKey], child => child.id === id)
       }
     }
   }
+}
+
+function mapState (state, map) {
+  if (Array.isArray(map)) {
+    return pick(state, map)
+  } else if (typeof map === 'object') {
+    return Object.keys(map).reduce((result, field) => {
+      let mapper = map[field]
+
+      if (typeof mapper === 'string') {
+        result[mapper] = state[field]
+      } else if (typeof mapper === 'function') {
+        result[field] = mapper(state)
+      }
+
+      return result
+    }, {})
+  }
+
+  throw new Error('[coupled] mixin received an invalid argument.')
 }

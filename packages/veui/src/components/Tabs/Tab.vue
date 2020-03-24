@@ -1,31 +1,45 @@
 <template>
 <div
-  v-show="isActive"
+  v-if="isActive && !empty"
   :id="id"
   :class="$c('tab')"
   role="tabpanel"
   :aria-hidden="!isActive"
 >
-  <slot v-if="isInited || isActive">
-    <router-view v-if="to && $route && isMatched"/>
-  </slot>
+  <slot/>
 </div>
 </template>
 
 <script>
-import { pick, find, uniqueId, includes } from 'lodash'
-import { getTypedAncestorTracker } from '../../utils/helper'
-import { getIndexOfType } from '../../utils/context'
-import warn from '../../utils/warn'
+import { uniqueId, includes } from 'lodash'
+import { makeCoupledChild } from '../../mixins/coupled'
 import '../../common/uiTypes'
 import prefix from '../../mixins/prefix'
+
+let tab = makeCoupledChild({
+  direct: true,
+  type: 'tab',
+  parentType: 'tabs',
+  fields: {
+    name: ({ id, name }) => name || id,
+    label: 'label',
+    disabled: 'disabled',
+    realTo: 'to',
+    native: 'native',
+    removable: 'removable',
+    status: 'status',
+    isMatched: 'matched',
+    realMatches: 'matches',
+    empty: 'empty',
+    attrs: ({ $attrs }) => $attrs
+  }
+})
 
 const STATUS_LIST = ['success', 'warning', 'info', 'error']
 
 export default {
   name: 'veui-tab',
-  uiTypes: ['tab'],
-  mixins: [prefix, getTypedAncestorTracker('tabs')],
+  mixins: [prefix, tab],
   props: {
     label: {
       type: String,
@@ -56,13 +70,16 @@ export default {
   },
   data () {
     return {
-      id: uniqueId('veui-tab-'),
-      isInited: false
+      id: uniqueId('veui-tab-')
     }
   },
   computed: {
     isActive () {
-      return this.id === this.tabs.activeId
+      let { activeTab } = this.tabs
+      if (!activeTab) {
+        return false
+      }
+      return this.id === activeTab.id
     },
     realTo () {
       if (!this.to) {
@@ -76,48 +93,9 @@ export default {
     realMatches () {
       return this.matches || this.tabs.matches || (() => false)
     },
-    isMatched () {
-      return this.realMatches(this.$route, this.realTo)
+    empty () {
+      return !this.$slots.default
     }
-  },
-  created () {
-    let index = getIndexOfType(this, 'tabs')
-
-    const props = ['label', 'disabled', 'to', 'native', 'removable', 'status']
-
-    if (this.to && this.name) {
-      warn(
-        '[veui-tab] prop `name` will be ignored when prop `to` is set.',
-        this
-      )
-    }
-
-    this.tabs.add(
-      {
-        ...pick(this, ...props, 'id'),
-        name: this.realTo ? this.realTo.fullPath : this.name || this.id,
-        index
-      },
-      this.to && this.isMatched
-    )
-
-    props.forEach(prop => {
-      this.$watch(prop, val => {
-        find(this.tabs.items, item => item.id === this.id)[prop] = val
-      })
-    })
-
-    if (!this.isActive) {
-      let unWatchIsActive = this.$watch('isActive', () => {
-        this.isInited = true
-        unWatchIsActive()
-      })
-    } else {
-      this.isInited = true
-    }
-  },
-  destroyed () {
-    this.tabs.removeById(this.id)
   }
 }
 </script>
