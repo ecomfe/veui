@@ -1,4 +1,5 @@
-import { closest, toggleClass } from '@/utils/dom'
+import { closest, toggleClass, scrollToAlign, scrollTo } from '@/utils/dom'
+import { wait } from '../../../utils'
 
 describe('utils/dom', () => {
   it('should find the closest parent as expected', () => {
@@ -41,5 +42,47 @@ describe('utils/dom', () => {
     expect(el.classList.contains('g')).to.be.equal(false)
 
     el.parentNode.removeChild(el)
+  })
+
+  it('should scrollToAlign correctly', async () => {
+    let el = document.createElement('div')
+    el.style = 'width:200px;height:200px;overflow:auto;'
+    el.innerHTML = `<div style="width:400px;height:400px;"></div>`
+    document.body.appendChild(el)
+
+    let target = el.childNodes[0]
+    scrollToAlign(el, target, 0.5)
+    await wait(500)
+    expect(el.scrollTop, 'scrollToAlign 0.5').to.be.equal(100)
+
+    scrollToAlign(el, target, {
+      targetPosition: 0.2,
+      viewportPosition: 0.2
+    })
+    await wait(500)
+    expect(el.scrollTop, 'scrollToAlign 0.2').to.be.equal(40)
+
+    document.body.removeChild(el)
+  })
+
+  it('should scrollTo correctly', async () => {
+    let el = document.createElement('div')
+    el.style = 'width:200px;height:200px;overflow:auto;'
+    el.innerHTML = `<div style="width:400px;height:400px;"></div>`
+    document.body.appendChild(el)
+
+    scrollTo(el, 50, 50)
+    await wait(500)
+    expect(el.scrollTop, 'scrollTo top 50px').to.be.equal(50)
+    expect(el.scrollLeft, 'scrollTo left 50px').to.be.equal(50)
+
+    scrollTo(el, {
+      left: 100,
+      top: 100
+    })
+    await wait(500)
+    expect(el.scrollTop, 'scrollTo top 100px').to.be.equal(100)
+    expect(el.scrollLeft, 'scrollTo left 100px').to.be.equal(100)
+    document.body.removeChild(el)
   })
 })
