@@ -34,10 +34,6 @@ export default {
     active: {
       type: String
     },
-    index: {
-      type: Number,
-      default: 0
-    },
     matches: {
       default () {
         return config.get('tabs.matches')
