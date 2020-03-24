@@ -121,11 +121,13 @@ export default {
     this.updateLayout()
   },
   methods: {
-    handleActivate ({ disabled, name, id }) {
-      if (disabled) {
+    handleActivate (tab) {
+      if (tab.disabled) {
         return
       }
-      this.realActive = name || id
+      this.realActive = tab.name || tab.id
+
+      this.scrollTabIntoView(tab)
     },
     handleRemove (tab, e) {
       this.$emit('remove', tab)

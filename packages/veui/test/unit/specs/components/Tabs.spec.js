@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils'
 import Tabs from '@/components/Tabs'
 import Tab from '@/components/Tab'
 import { findIndex } from 'lodash'
+import { wait } from '../../../utils'
 
 describe('components/Tabs', () => {
   it('should render default active tab correctly with uncontrolled `active` prop', async () => {
@@ -493,6 +494,80 @@ describe('components/Tabs', () => {
         .find('.veui-tabs-item-status-success')
         .exists()
     ).to.equal(true)
+
+    wrapper.destroy()
+  })
+
+  it('should handle scroll correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tabs': Tabs,
+          'veui-tab': Tab
+        },
+        template: `
+          <veui-tabs style="width: 220px;">
+            <veui-tab label="#1"/>
+            <veui-tab label="#2"/>
+            <veui-tab label="#3"/>
+            <template #tab-item="tab">
+              <button
+                type="button"
+                class="my-btn"
+                :disabled="tab.disabled"
+                v-bind="tab.attrs"
+                @click="tab.activate"
+                style="width: 60px;"
+              >
+                {{ tab.label }}
+              </button>
+            </template>
+          </veui-tabs>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    await wait(0)
+    // need to wait because scroller buttons are rendered in nextTick
+    let prev = wrapper.find('.veui-tabs-prev')
+    let next = wrapper.find('.veui-tabs-next')
+    let list = wrapper.find('.veui-tabs-list').element
+
+    expect(list.scrollLeft).to.equal(0)
+    expect(prev.element.disabled).to.equal(true)
+    expect(next.element.disabled).to.equal(false)
+
+    next.trigger('click')
+
+    await wait(400)
+    expect(list.scrollLeft + list.clientWidth).to.equal(list.scrollWidth)
+    expect(prev.element.disabled).to.equal(false)
+    expect(next.element.disabled).to.equal(true)
+
+    prev.trigger('click')
+
+    await wait(400)
+    expect(list.scrollLeft).to.equal(0)
+    expect(prev.element.disabled).to.equal(true)
+    expect(next.element.disabled).to.equal(false)
+
+    let btns = wrapper.findAll('.my-btn')
+    btns.at(2).trigger('click')
+
+    await wait(400)
+    expect(list.scrollLeft + list.clientWidth).to.equal(list.scrollWidth)
+    expect(prev.element.disabled).to.equal(false)
+    expect(next.element.disabled).to.equal(true)
+
+    btns.at(0).trigger('click')
+
+    await wait(400)
+    expect(list.scrollLeft).to.equal(0)
+    expect(prev.element.disabled).to.equal(true)
+    expect(next.element.disabled).to.equal(false)
 
     wrapper.destroy()
   })
