@@ -29,6 +29,11 @@ config.defaults(
       style: {
         values: ['block']
       }
+    },
+    parts: {
+      remove: 'icon',
+      add: 'text',
+      nav: 'icon'
     }
   },
   'tabs'
