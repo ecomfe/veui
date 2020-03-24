@@ -477,9 +477,12 @@ export function scrollToAlign (viewport, target, options) {
   } else if (Array.isArray(options)) {
     positions = options
     options = {}
+  } else if (typeof options === 'number') {
+    positions = [options, options]
+    options = {}
   } else {
     throw new Error(
-      'the third argument of `scrollToAlign` must be a object or an array'
+      'the third argument of `scrollToAlign` must be a object or an array or a number'
     )
   }
 
