@@ -1,4 +1,10 @@
-import { closest, toggleClass, scrollToAlign, scrollTo } from '@/utils/dom'
+import {
+  closest,
+  toggleClass,
+  scrollToAlign,
+  scrollTo,
+  getElementScrollbarWidth
+} from '@/utils/dom'
 import { wait } from '../../../utils'
 
 describe('utils/dom', () => {
@@ -51,16 +57,21 @@ describe('utils/dom', () => {
     document.body.appendChild(el)
 
     let target = el.childNodes[0]
+
     scrollToAlign(el, target, 0.5)
     await wait(500)
-    expect(el.scrollTop, 'scrollToAlign 0.5').to.be.equal(100)
+    expect(el.scrollTop, 'scrollToAlign 0.5').to.be.equal(
+      calcScroll(el, 200, 0.5, 400, 0.5)
+    )
 
     scrollToAlign(el, target, {
       targetPosition: 0.2,
       viewportPosition: 0.2
     })
     await wait(500)
-    expect(el.scrollTop, 'scrollToAlign 0.2').to.be.equal(40)
+    expect(el.scrollTop, 'scrollToAlign 0.2').to.be.equal(
+      calcScroll(el, 200, 0.2, 400, 0.2)
+    )
 
     document.body.removeChild(el)
   })
@@ -86,3 +97,9 @@ describe('utils/dom', () => {
     document.body.removeChild(el)
   })
 })
+
+function calcScroll (viewport, vValue, vRatio, tValue, tRatio) {
+  return Math.round(
+    tValue * tRatio - (vValue - getElementScrollbarWidth(viewport)) * vRatio
+  )
+}

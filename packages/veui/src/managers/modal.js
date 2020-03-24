@@ -1,4 +1,4 @@
-import { getScrollbarWidth } from '../utils/browser'
+import { getScrollbarWidth } from '../utils/dom'
 
 export class ModalManager {
   count = 0
