@@ -137,16 +137,22 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
         clearTimeout(el[bindingKey].timer)
         el[bindingKey].timer = null
       } else {
-        if (el[bindingKey].timer == null) {
-          el[bindingKey].delayCb = () => {
-            if (el[bindingKey]) {
-              el[bindingKey].timer = null
-              el[bindingKey].delayCb = null
-            }
+        clearTimeout(el[bindingKey].timer)
+        el[bindingKey].delayCb = () => {
+          // refs 变化太频繁了，必须要实时再算一次
+          includeTargets = [
+            ...(excludeSelf ? [] : [el]),
+            ...getElementsByRefs(el[bindingKey].refs, context)
+          ]
+          if (!isElementIn(e.relatedTarget, includeTargets)) {
             handler(e)
           }
-          el[bindingKey].timer = setTimeout(el[bindingKey].delayCb, delay)
+          if (el[bindingKey]) {
+            el[bindingKey].timer = null
+            el[bindingKey].delayCb = null
+          }
         }
+        el[bindingKey].timer = setTimeout(el[bindingKey].delayCb, delay)
       }
     }
   }
@@ -158,7 +164,7 @@ function clear (el) {
     if (el[key]) {
       remove(handlerBindings[type], item => item[key].id === el[key].id)
       // bug: 导致 Dropdown 同时展开多个 popup
-      // 这里直接 clear 可能会导致之前 delay 的 timer 无效，暂时降级下，忽略 delay 直接调用
+      // 这里直接 clearTimeout 可能会导致之前 delay 的 timer 无效，暂时降级下，忽略 delay 直接调用
       if (type === 'hover' && el[key].timer != null) {
         el[key].delayCb()
         clearTimeout(el[key].timer)
@@ -168,7 +174,7 @@ function clear (el) {
   })
 }
 
-const OMIT_OPTIONS = ['refs', 'id', 'realHandler', 'timer']
+const OMIT_OPTIONS = ['refs', 'id', 'realHandler', 'timer', 'delayCb']
 
 function isEqualOption (o1, o2) {
   return (
@@ -187,7 +193,11 @@ function refresh (el, binding, vnode) {
   if (oldOptions && isEqualOption(options, oldOptions)) {
     return
   }
-
+  // 让后面的 clear 中的 delayCb 获取到最新的 refs
+  if (el[key]) {
+    el[key].refs = refs
+  }
+  let timer = el[key] && el[key].timer
   clear(el)
   el[key] = {
     id: uniqueId('veui-outside-'),
@@ -196,7 +206,8 @@ function refresh (el, binding, vnode) {
     trigger,
     refs,
     excludeSelf,
-    delay
+    delay,
+    timer
   }
   addBinding(trigger, el)
 }
