@@ -54,7 +54,7 @@ describe('components/Tabs', () => {
     wrapper.destroy()
   })
 
-  it('should render active tab correctly with controlled `active` prop', async () => {
+  it('should render active tab correctly with controlled `active` prop and `change` event', async () => {
     let wrapper = mount(
       {
         components: {
@@ -62,7 +62,7 @@ describe('components/Tabs', () => {
           'veui-tab': Tab
         },
         template: `
-          <veui-tabs :active="active">
+          <veui-tabs :active="active" @change="handleChange">
             <veui-tab name="a" label="#1">ONE</veui-tab>
             <veui-tab name="b" label="#2">TWO</veui-tab>
             <veui-tab name="c" label="#3">THREE</veui-tab>
@@ -70,6 +70,13 @@ describe('components/Tabs', () => {
         data () {
           return {
             active: 'c'
+          }
+        },
+        methods: {
+          handleChange ({ name }) {
+            if (name === 'c') {
+              this.active = name
+            }
           }
         }
       },
@@ -109,6 +116,19 @@ describe('components/Tabs', () => {
 
     panel = wrapper.find('.veui-tabs-panel')
     expect(panel.text()).to.equal('TWO')
+
+    tabs
+      .at(2)
+      .find('button')
+      .trigger('click')
+
+    await vm.$nextTick()
+
+    expect(tabs.at(1).classes()).to.not.include('veui-tabs-item-active')
+    expect(tabs.at(2).classes()).to.include('veui-tabs-item-active')
+
+    panel = wrapper.find('.veui-tabs-panel')
+    expect(panel.text()).to.equal('THREE')
 
     wrapper.destroy()
   })
@@ -560,7 +580,6 @@ describe('components/Tabs', () => {
     btns.at(2).trigger('click')
 
     await wait(400)
-    console.log(list.scrollLeft, list.clientWidth, list.scrollWidth)
     expect(list.scrollLeft + list.clientWidth).to.equal(list.scrollWidth)
     expect(prev.element.disabled).to.equal(false)
     expect(next.element.disabled).to.equal(true)
