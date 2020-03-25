@@ -14,7 +14,7 @@
   }
 
   ul {
-    padding-left: ~"calc(@{dls-tree-icon-size-aux} + @{dls-tree-node-content-spacing})";
+    padding-left: dls-sum(@dls-tree-icon-size-aux, @dls-tree-node-content-spacing);
   }
 
   &-item {

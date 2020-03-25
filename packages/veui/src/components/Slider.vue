@@ -102,7 +102,7 @@
     name="tip"
     :target="tooltipTarget"
     :open="activeTooltipIndex >= 0"
-    :activeIndex="activeTooltipIndex"
+    :active-index="activeTooltipIndex"
   >
     <veui-tooltip
       ref="tip"

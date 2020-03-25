@@ -31,7 +31,7 @@
     />
   </section>
   <section>
-    <h2>多选样式：xs</h2>
+    <h2>多选样式：xs (定制 max)</h2>
     <veui-select
       v-model="defaultMultiValue"
       ui="xs"
@@ -49,7 +49,6 @@
       ui="s"
       v-bind="attrs"
       placeholder="全部"
-      :max="3"
       clearable
       multiple
     >
@@ -636,7 +635,7 @@ export default {
   position: relative;
   padding-left: 24px;
   &::after {
-    content: "❤️";
+    content: '❤️';
     position: absolute;
     top: 50%;
     left: 0;
@@ -649,7 +648,7 @@ export default {
 }
 
 .filter {
-  width: ~"calc(100% - 10px)";
+  width: ~'calc(100% - 10px)';
   margin: 5px;
 }
 </style>

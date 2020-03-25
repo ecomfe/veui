@@ -1,4 +1,4 @@
-import { isString, isObject, includes, every, isArray, findIndex } from 'lodash'
+import { isString, isObject, includes, every, findIndex } from 'lodash'
 import { getTypedAncestor } from './helper'
 
 function isVnode (vnode) {
@@ -21,7 +21,7 @@ export function isValidNodesResolver (v) {
     )
   }
 
-  return isValid(v) || (isArray(v) && every(v, isValid))
+  return isValid(v) || (Array.isArray(v) && every(v, isValid))
 }
 
 /**

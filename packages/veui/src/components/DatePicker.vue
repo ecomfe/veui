@@ -176,6 +176,7 @@ import dropdown from '../mixins/dropdown'
 import controllable from '../mixins/controllable'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
+import warn from '../utils/warn'
 import { toDateData, getExactDateData, lt } from '../utils/date'
 import { isNumber, pick, omit, defaults } from 'lodash'
 import format from 'date-fns/format'
@@ -551,11 +552,11 @@ function add (base, offset) {
 
 function checkFormat (input) {
   if (input.indexOf('YYYY') >= 0) {
-    console.warn('Use `yyyy` instead of `YYYY` when formatting years.')
+    warn('Use `yyyy` instead of `YYYY` when formatting years.')
     input = input.replace(/YYYY/, 'yyyy')
   }
   if (input.indexOf('DD') >= 0) {
-    console.warn('Use `dd` instead of `DD` when formatting dates.')
+    warn('Use `dd` instead of `DD` when formatting dates.')
     input = input.replace(/DD/, 'dd')
   }
   return input
