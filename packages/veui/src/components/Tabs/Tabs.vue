@@ -8,6 +8,7 @@ import i18n from '../../mixins/i18n'
 import config from '../../managers/config'
 import { makeCoupledParent } from '../../mixins/coupled'
 import makeControllable from '../../mixins/controllable'
+import resize from '../../directives/resize'
 import { isEmpty } from '../../utils/helper'
 import '../../common/uiTypes'
 import { scrollTo } from '../../utils/dom'
@@ -29,6 +30,9 @@ config.defaults(
 
 export default {
   name: 'veui-tabs',
+  directives: {
+    resize
+  },
   mixins: [prefix, ui, i18n, tabs, makeControllable(['active'])],
   props: {
     active: {
@@ -242,6 +246,14 @@ export default {
         </div>
       ])
 
+    const directives = [
+      {
+        name: 'resize',
+        value: this.updateLayout,
+        modifiers: { debounce: true, leading: true, 200: true }
+      }
+    ]
+
     return (
       <div
         class={{
@@ -253,6 +265,7 @@ export default {
         <div class={this.$c('tabs-menu')}>
           {this.listOverflow ? (
             <Button
+              key="prev"
               class={this.$c('tabs-prev')}
               ui={this.uiParts.nav}
               disabled={this.hit.start}
@@ -266,6 +279,7 @@ export default {
             class={this.$c('tabs-list')}
             role="tablist"
             onScroll={this.updateScrollState}
+            {...{ directives }}
           >
             {this.items.map((tab, index) => (
               <div
@@ -340,6 +354,7 @@ export default {
           </div>
           {this.listOverflow ? (
             <Button
+              key="next"
               class={this.$c('tabs-next')}
               ui={this.uiParts.nav}
               disabled={this.hit.end}
@@ -350,6 +365,7 @@ export default {
           ) : null}
           {this.addable ? (
             <Button
+              key="add"
               class={this.$c('tabs-add')}
               ui={this.uiParts.add}
               disabled={this.max != null && this.items.length >= this.max}

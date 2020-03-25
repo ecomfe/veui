@@ -498,7 +498,9 @@ describe('components/Tabs', () => {
     wrapper.destroy()
   })
 
-  it('should handle scroll correctly', async () => {
+  it('should handle scroll and resize correctly', async function () {
+    this.timeout(3000)
+
     let wrapper = mount(
       {
         components: {
@@ -558,6 +560,7 @@ describe('components/Tabs', () => {
     btns.at(2).trigger('click')
 
     await wait(400)
+    console.log(list.scrollLeft, list.clientWidth, list.scrollWidth)
     expect(list.scrollLeft + list.clientWidth).to.equal(list.scrollWidth)
     expect(prev.element.disabled).to.equal(false)
     expect(next.element.disabled).to.equal(true)
@@ -568,6 +571,12 @@ describe('components/Tabs', () => {
     expect(list.scrollLeft).to.equal(0)
     expect(prev.element.disabled).to.equal(true)
     expect(next.element.disabled).to.equal(false)
+
+    wrapper.find('.veui-tabs').element.style.width = '300px'
+
+    await wait(400)
+    expect(wrapper.find('.veui-tabs-prev').exists()).to.equal(false)
+    expect(wrapper.find('.veui-tabs-next').exists()).to.equal(false)
 
     wrapper.destroy()
   })
