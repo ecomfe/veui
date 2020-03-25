@@ -33,7 +33,10 @@ describe('components/Transfer', () => {
         .length
     ).to.equal(3)
 
-    vm.items = [{ label: '1', value: '1' }, { label: '2', value: '2' }]
+    vm.items = [
+      { label: '1', value: '1' },
+      { label: '2', value: '2' }
+    ]
 
     await vm.$nextTick()
 
@@ -299,7 +302,10 @@ describe('components/Transfer', () => {
       .findAll(Tree)
       .at(1)
       .findAll('.veui-tree-item')
-    selectedItems.at(0).trigger('click')
+    selectedItems
+      .at(0)
+      .find('.veui-tree-item-remove')
+      .trigger('click')
     await vm.$nextTick()
     expect(vm.$data.selected).to.deep.equal(['bb', 'cc11'])
 
