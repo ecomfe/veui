@@ -130,8 +130,9 @@ export default {
         return
       }
       this.realActive = tab.name || tab.id
-
       this.scrollTabIntoView(tab)
+
+      this.$emit('change', tab)
     },
     handleRemove (tab, e) {
       this.$emit('remove', tab)
