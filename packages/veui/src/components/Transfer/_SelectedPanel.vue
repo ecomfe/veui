@@ -32,7 +32,6 @@
       :expanded.sync="expanded"
       :class="$c('transfer-selected-tree')"
       :disabled="!isSelectable"
-      @click="remove"
     >
       <template
         slot="item"
@@ -82,7 +81,8 @@
         <veui-button
           :class="$c('tree-item-remove')"
           :ui="uiParts.remove"
-          @click="removeItem(props.item)"
+          :disabled="!isSelectable"
+          @click="remove(props.item)"
         >
           <veui-icon
             :label="t('@transfer.remove')"
@@ -183,18 +183,16 @@ export default {
     removeAll () {
       this.$emit('removeall')
     },
-    remove (...args) {
-      if (!this.isSelectable) {
-        return
+    remove (item) {
+      if (this.showMode === 'tree') {
+        this.$emit('remove', item)
+      } else {
+        this.$emit(
+          'remove',
+          item.path[item.path.length - 1],
+          item.path.slice(0, item.path.length - 1).reverse()
+        )
       }
-
-      this.$emit('remove', ...args)
-    },
-    removeItem ({ path }) {
-      this.remove(
-        path[path.length - 1],
-        path.slice(0, path.length - 1).reverse()
-      )
     }
   }
 }

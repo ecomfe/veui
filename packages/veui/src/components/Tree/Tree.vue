@@ -296,7 +296,7 @@ export default {
         let { value } = item
         let newValue = this.isSelected(item) ? null : value
         this.realSelected = newValue
-      } else if (this.checkable) {
+      } else if (this.checkable && !this.realDisabled && !this.realReadonly) {
         this.handleItemCheck(!item.checked, item)
       } else if (item.children && item.children.length) {
         this.toggle(item, ...extraArgs)

@@ -355,7 +355,7 @@ export default {
       selected4: [],
       datasource4: cloneDeep(oneDepth),
 
-      selected5: [],
+      selected5: ['flat-white'],
       datasource5: cloneDeep(coffees),
 
       datasource6: cloneDeep(coffees),
