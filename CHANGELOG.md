@@ -1,9 +1,75 @@
 ## 2.0.0-alpha.11
 
+### ⚠️ 非兼容性变更
+
+- [^] 对 `Tabs` 组件进行了重写，其中引入的非兼容性变更如下：
+
+  - [-] 移除了 `index` prop，现在控制激活标签页只能使用 `active` prop。
+  - [^] `tabs-extra` slot 更名为 `extra`，且仅包括提示区域的内容，不包括添加按钮。
+  - [-] 移除了 `tabs-extra-label` 与 `tabs-extra-tip` slot。
+  - [^] `tab-item` scoped slot 现在包含整个按钮/链接，方便替换为自定义实现。
+  - [-] 移除了 `tab-item-extra` scoped slot，`removable` 的 `Tab` 组件始终显示移除按钮。
+  - [^] 在路由模式下，不再自动输出 `<router-view>` 组件，需要通过 `Tab` 的 `default` slot 或 `Tabs` 新增的 `panel` slot 中进行输出。
+
+  其余变更：
+
+  - [+] 新增 `panel` slot，用于指定标签下方面板内的自定义内容。
+  - [+] 新增 `change` 事件，回调参数为 `tab` 对像，包含 `name`、`label`、`to`、`status` 等字段。
+
+    > #### 使用指南
+    >
+    > ##### 使用 `active` prop 与 `change` 事件完全外部控制激活状态
+    >
+    > ```html
+    > <veui-tabs :active="active" @change="tab => active = tab.name">
+    >   <veui-tab label="A" name="a">Content A</veui-tab>
+    >   <veui-tab label="B" name="b">Content B</veui-tab>
+    >   <veui-tab label="C" name="c">Content C</veui-tab>
+    > </veui-tabs>
+    > ```
+    > ##### 使用 `active.sync` 双向同步激活状态
+    >
+    > ```html
+    > <veui-tabs :active.sync="active">
+    >   <veui-tab label="A" name="a">Content A</veui-tab>
+    >   <veui-tab label="B" name="b">Content B</veui-tab>
+    >   <veui-tab label="C" name="c">Content C</veui-tab>
+    > </veui-tabs>
+    > ```
+    > ##### 激活状态完全由组件内部控制
+    >
+    > ```html
+    > <veui-tabs>
+    >   <veui-tab label="A">Content A</veui-tab>
+    >   <veui-tab label="B">Content B</veui-tab>
+    >   <veui-tab label="C">Content C</veui-tab>
+    > </veui-tabs>
+    > ```
+    >
+    > ##### （嵌套）路由模式
+    >
+    > 在之前的版本，如果 `Tab` 组件的 `default` slot 未传入任何内容，路由模式下 VEUI 会自动在标签内容容器内渲染 `<router-view>`。这导致在不使用嵌套路由时或是希望灵活控制 `<router-view>` 位置时产生额外的问题。所以在这个版本中移除了这个逻辑，用户可以使用 `Tabs` 的 `panel` slot 来统一在标签内容容器中输出 `<router-view>`，也可以在某些 `Tab` 的 `default` slot 中输出 `<router-view>` 及额外内容来覆盖全局的 `panel` slot，甚至可以将 `<router-view>` 输出到其它任意合适的位置。
+    >
+    > ```html
+    > <veui-tabs>
+    >   <veui-tab label="A" to="content/a"/>
+    >   <veui-tab label="B" to="content/b"/>
+    >   <veui-tab label="C" to="content/c">
+    >     <h3>Content C</h3>
+    >     <router-view/>
+    >   </veui-tab>
+    >   <template #panel>
+    >     <router-view/>
+    >   </template>
+    > </veui-tabs>
+    > ```
+
 ### 🐞 问题修复
 
-- [^] 修复 `Transfer` 组件删除已选项时报错的问题。
-- [^] 修复 `Transfer` 组件和 `Tree` 组件在被禁用状态下依然可以添加已选项的问题。
+- [^] 修复了 `Transfer` 组件删除已选项时报错的问题。
+- [^] 修复了 `Transfer` 组件和 `Tree` 组件在被禁用状态下依然可以添加已选项的问题。
+- [^] 修复了在局部输出全局样式时没有正确处理 `Anchor` 浮层的问题。
+- [^] 修复了 `Overlay` 组件没有响应 `inline` prop 变化的问题。
 
 ## 2.0.0-alpha.10
 

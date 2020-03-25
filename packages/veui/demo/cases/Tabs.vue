@@ -2,7 +2,7 @@
 <article>
   <h1><code>&lt;veui-tabs&gt;</code></h1>
   <section>
-    <h2>默认样式：</h2>
+    <h2>默认样式：(.sync)</h2>
     <p>
       当前标签 <code>{{ active0 }}</code>
     </p>
@@ -23,7 +23,7 @@
         name="shares"
       />
       <veui-button
-        slot="tabs-extra"
+        slot="extra"
         ui="primary"
       >覆盖 extra</veui-button>
     </veui-tabs>
@@ -63,39 +63,22 @@
     </veui-tabs>
   </section>
   <section>
-    <h2>边框样式：</h2>
-    <veui-tabs :active.sync="active0">
-      <veui-tab
-        label="回答问题"
-        name="answers"
-      />
+    <h2>边框样式：(不受控)</h2>
+    <veui-tabs>
+      <veui-tab label="回答问题">Answers</veui-tab>
       <veui-tab
         label="文章评论"
-        name="articles"
         status="error"
-      />
-      <veui-tab
-        label="分享朋友圈"
-        name="shares"
-      />
+      >Articles</veui-tab>
+      <veui-tab label="分享朋友圈">Shares</veui-tab>
     </veui-tabs>
-    <veui-tabs
-      ui="l"
-      :active.sync="active0"
-    >
+    <veui-tabs ui="l">
       <veui-tab
         label="回答问题"
-        name="answers"
         status="warning"
-      />
-      <veui-tab
-        label="文章评论"
-        name="articles"
-      />
-      <veui-tab
-        label="分享朋友圈"
-        name="shares"
-      />
+      >Answers</veui-tab>
+      <veui-tab label="文章评论">Articles</veui-tab>
+      <veui-tab label="分享朋友圈">Shares</veui-tab>
     </veui-tabs>
   </section>
   <section>
