@@ -231,3 +231,30 @@ export function ignoreElements (names) {
     }
   })
 }
+
+function getScopeAttrs (el) {
+  return [...el.attributes]
+    .map(attr => attr.nodeName)
+    .filter(name => name.indexOf('data-v-') === 0)
+}
+
+export function createPortal (el, target) {
+  let parent = el.parentNode
+
+  // create a connection to the portal entrance
+  // v-outside will honor this connection, so we'd
+  // better document this somewhere properly (TODO)
+  el.__portal__ = parent
+
+  let attrs = getScopeAttrs(parent)
+  let patched = []
+  attrs.forEach(attr => {
+    if (!el.hasAttribute(attr)) {
+      el.setAttribute(attr, '')
+      patched.push(attr)
+    }
+  })
+  el.__patched_scope_attrs__ = patched
+
+  target.appendChild(el)
+}

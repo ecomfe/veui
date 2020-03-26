@@ -20,7 +20,6 @@
     <veui-overlay
       overlay-class="demo-overlay-box"
       target="clickOpen"
-      inline
       :open="overlayVisible"
       position="left-start"
     >
@@ -227,7 +226,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import '~less-plugin-est/src/all.less';
 
 .demo-overlay-box {
