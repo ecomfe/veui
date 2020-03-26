@@ -5,17 +5,12 @@ import NumberInput from '@/components/NumberInput'
 
 describe('components/NumberInput', () => {
   it('should handle value prop with `null` value.', async () => {
-    let wrapper = mount(
-      NumberInput,
-      {
-        propsData: {
-          value: null
-        }
+    let wrapper = mount(NumberInput, {
+      propsData: {
+        value: null
       },
-      {
-        sync: false
-      }
-    )
+      sync: false
+    })
 
     let changeHandler = sinon.spy()
     wrapper.vm.$on('change', changeHandler)
@@ -30,7 +25,8 @@ describe('components/NumberInput', () => {
       attrs: {
         autofocus: '',
         selectOnFocus: ''
-      }
+      },
+      sync: false
     })
 
     expect(wrapper.find(Input).props('selectOnFocus')).to.equal(true)
@@ -53,7 +49,8 @@ describe('components/NumberInput', () => {
     let wrapper = mount(NumberInput, {
       propsData: {
         disabled: true
-      }
+      },
+      sync: false
     })
 
     let { vm } = wrapper
@@ -67,42 +64,52 @@ describe('components/NumberInput', () => {
 
   it('should not exceed max or min value', async () => {
     let wrapper = mount(
-      NumberInput,
       {
-        propsData: {
-          max: 2,
-          min: 2
+        components: {
+          'veui-number-input': NumberInput
+        },
+        template: '<veui-number-input :min="1" :max="3" v-model="val"/>',
+        data () {
+          return {
+            val: 2
+          }
         }
       },
       {
-        sync: false
+        sync: false,
+        attachToDocument: true
       }
     )
 
-    let input = wrapper.find('input')
-    input.setValue(2)
-    wrapper.find('button.veui-number-input-step-up').trigger('click')
-    await wrapper.vm.$nextTick()
-    expect(input.element.value).to.equal('2')
+    let up = wrapper.find('.veui-number-input-step-up')
+    let down = wrapper.find('.veui-number-input-step-down')
+    let input = wrapper.find('input').element
 
-    input.setValue(2)
-    wrapper.find('button.veui-number-input-step-down').trigger('click')
+    up.trigger('click')
     await wrapper.vm.$nextTick()
-    expect(input.element.value).to.equal('2')
+    expect(input.value).to.equal('3')
+    up.trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(input.value).to.equal('3')
+
+    down.trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(input.value).to.equal('2')
+    down.trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(input.value).to.equal('1')
+    down.trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(input.value).to.equal('1')
   })
 
   it('should handle readonly correctly', () => {
-    let wrapper = mount(
-      NumberInput,
-      {
-        propsData: {
-          readonly: true
-        }
+    let wrapper = mount(NumberInput, {
+      propsData: {
+        readonly: true
       },
-      {
-        sync: false
-      }
-    )
+      sync: false
+    })
 
     let input = wrapper.find('input.veui-input-input')
     input.setValue(2)
@@ -131,17 +138,12 @@ describe('components/NumberInput', () => {
   })
 
   it('should handle decimalPlace prop correctly', async () => {
-    let wrapper = mount(
-      NumberInput,
-      {
-        propsData: {
-          decimalPlace: 2
-        }
+    let wrapper = mount(NumberInput, {
+      propsData: {
+        decimalPlace: 2
       },
-      {
-        sync: false
-      }
-    )
+      sync: false
+    })
 
     let input = wrapper.find('input.veui-input-input')
     input.setValue(2.333)
@@ -151,17 +153,12 @@ describe('components/NumberInput', () => {
   })
 
   it('should handle change event', done => {
-    let wrapper = mount(
-      NumberInput,
-      {
-        propsData: {
-          value: null
-        }
+    let wrapper = mount(NumberInput, {
+      propsData: {
+        value: null
       },
-      {
-        sync: false
-      }
-    )
+      sync: false
+    })
 
     wrapper.vm.$on('change', val => {
       expect(val).equal(1)

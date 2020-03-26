@@ -23,10 +23,9 @@
     slot="before"
   >
     <veui-button
-      ref="dec"
       v-longpress.repeat="decrease"
       :class="[$c('number-input-step'), $c('number-input-step-down')]"
-      :disabled="!editable || reachMaxLimit"
+      :disabled="!editable || reachMinLimit"
       @click="decrease"
     >
       <veui-icon
@@ -43,7 +42,6 @@
       @focusout="spinnerFocused = false"
     >
       <veui-button
-        ref="dec"
         v-longpress.repeat="increase"
         :class="[$c('number-input-step'), $c('number-input-step-up')]"
         :disabled="!editable || reachMaxLimit"
@@ -55,7 +53,6 @@
         />
       </veui-button>
       <veui-button
-        ref="dec"
         v-longpress.repeat="decrease"
         :class="[$c('number-input-step'), $c('number-input-step-down')]"
         :disabled="!editable || reachMinLimit"
@@ -73,10 +70,9 @@
     slot="after"
   >
     <veui-button
-      ref="inc"
       v-longpress.repeat="increase"
       :class="[$c('number-input-step'), $c('number-input-step-up')]"
-      :disabled="!editable || reachMinLimit"
+      :disabled="!editable || reachMaxLimit"
       @click="increase"
     >
       <veui-icon
