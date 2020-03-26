@@ -57,7 +57,7 @@
     modal
     match-width
     :options="realOverlayOptions"
-    :overlay-class="overlayClass"
+    :overlay-class="mergeOverlayClass($c('dropdown-box'))"
     :priority="overlayPriority"
   >
     <div
@@ -100,6 +100,7 @@
         ref="options"
         :options="isSearching ? filteredSuggestions : options"
         :trigger="trigger"
+        :overlay-class="overlayClass"
       >
         <slot/>
         <template

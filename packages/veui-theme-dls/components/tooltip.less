@@ -15,6 +15,7 @@
   max-width: @dls-tooltip-max-width;
   font-size: @dls-tooltip-font-size;
   box-shadow: @dls-tooltip-shadow-normal;
+  pointer-events: all;
 
   &-box-transparent {
     pointer-events: none;
@@ -24,6 +25,7 @@
     .size(@arrow-size * 2);
     position: absolute;
     overflow: hidden;
+    pointer-events: none;
     color: @dls-tooltip-background-color-normal;
 
     &::after {
@@ -35,6 +37,7 @@
       transform: translateX(-50%) rotateZ(45deg);
       top: @arrow-size * (1 - sqrt(2));
       left: 50%;
+      pointer-events: all;
     }
   }
 
@@ -154,5 +157,9 @@
           fade(@dls-shadow-color, percentage(@dls-shadow-opacity));
       }
     }
+  }
+
+  &-box {
+    pointer-events: none;
   }
 }

@@ -105,9 +105,14 @@
     }
   }
 
+  &-box {
+    pointer-events: none;
+  }
+
   &-box &-options {
     &:extend(._veui-dropdown-overlay all);
     .padding(@dls-option-group-padding-y, _);
     .margin(0, @dls-option-dropdown-target-spacing);
+    pointer-events: all;
   }
 }
