@@ -6,15 +6,10 @@
   // OptionGroup 的 padding 和 max-height，保证只有最外层的设置了 max-height 和 padding
   font-size: @dls-option-font-size-m;
   .padding(@dls-option-group-padding-y, _);
-  pointer-events: all;
 
   & & {
     .padding(0, _);
     max-height: none;
-  }
-
-  &-box {
-    pointer-events: none;
   }
 
   &-box & {
@@ -110,9 +105,14 @@
     }
   }
 
+  &-box {
+    pointer-events: none;
+  }
+
   &-box &-options {
     &:extend(._veui-dropdown-overlay all);
     .padding(@dls-option-group-padding-y, _);
     .margin(0, @dls-option-dropdown-target-spacing);
+    pointer-events: all;
   }
 }

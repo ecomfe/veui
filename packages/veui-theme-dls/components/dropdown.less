@@ -6,6 +6,13 @@
   display: inline-flex;
   vertical-align: middle;
 
+  &-box {
+    pointer-events: none;
+  }
+  &-box &-options {
+    pointer-events: all;
+  }
+
   &-button {
     flex: 1;
 
