@@ -162,7 +162,7 @@ export default {
     initPortal () {
       this.overlayBox = this.$refs.box
 
-      createPortal(this.overlayBox, document.body)
+      this.removePortal = createPortal(this.overlayBox, document.body)
 
       this.findTargetNode()
 
@@ -182,8 +182,11 @@ export default {
       this.overlayNode = null
 
       this.destroyFocus()
-      this.$el.appendChild(this.overlayBox)
-      delete this.overlayBox.__portal__
+
+      if (this.removePortal) {
+        this.removePortal()
+      }
+
       this.overlayBox = null
     },
 

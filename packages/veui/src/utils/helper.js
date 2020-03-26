@@ -254,7 +254,14 @@ export function createPortal (el, target) {
       patched.push(attr)
     }
   })
-  el.__patched_scope_attrs__ = patched
 
   target.appendChild(el)
+
+  let removePortal = () => {
+    delete el.__portal__
+    patched.forEach(attr => el.removeAttribute(attr))
+    parent.appendChild(el)
+  }
+
+  return removePortal
 }
