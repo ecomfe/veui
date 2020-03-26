@@ -736,9 +736,3 @@ export function getElementScrollbarWidth (el, horizontal) {
   }
   return el.offsetWidth - el.clientWidth
 }
-
-export function getScopeAttrs (el) {
-  return [...el.attributes]
-    .map(attr => attr.nodeName)
-    .filter(name => name.indexOf('data-v-') === 0)
-}
