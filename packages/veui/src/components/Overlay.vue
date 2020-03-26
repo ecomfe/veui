@@ -11,7 +11,8 @@ import {
   getClassPropDef,
   mergeClasses,
   isType,
-  ignoreElements
+  ignoreElements,
+  createPortal
 } from '../utils/helper'
 import '../common/uiTypes'
 import { omit } from 'lodash'
@@ -106,9 +107,9 @@ export default {
     },
     inline (val) {
       if (val) {
-        this.removePortal()
+        this.disposePortal()
       } else {
-        this.$nextTick(this.createPortal)
+        this.$nextTick(this.initPortal)
       }
     }
   },
@@ -124,7 +125,7 @@ export default {
   },
   mounted () {
     if (!this.inline) {
-      this.createPortal()
+      this.initPortal()
     }
   },
   updated () {
@@ -138,7 +139,7 @@ export default {
   },
   destroyed () {
     if (!this.inline) {
-      this.removePortal()
+      this.disposePortal()
     }
   },
   methods: {
@@ -158,14 +159,11 @@ export default {
       }
     },
 
-    createPortal () {
+    initPortal () {
       this.overlayBox = this.$refs.box
 
-      // create a connection to the portal entrance
-      // v-outside will honor this connection, so we'd
-      // better document this somewhere properly (TODO)
-      this.overlayBox.__portal__ = this.$el
-      document.body.appendChild(this.overlayBox)
+      createPortal(this.overlayBox, document.body)
+
       this.findTargetNode()
 
       if (this.realOpen) {
@@ -176,7 +174,7 @@ export default {
       this.updateLocator()
     },
 
-    removePortal () {
+    disposePortal () {
       this.destroyLocator()
 
       let node = this.overlayNode
