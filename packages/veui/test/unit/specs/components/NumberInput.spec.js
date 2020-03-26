@@ -101,6 +101,8 @@ describe('components/NumberInput', () => {
     down.trigger('click')
     await wrapper.vm.$nextTick()
     expect(input.value).to.equal('1')
+
+    wrapper.destroy()
   })
 
   it('should handle readonly correctly', () => {
