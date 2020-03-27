@@ -64,7 +64,7 @@ import {
   raf,
   getWindowRect
 } from '../utils/dom'
-import { resolveOffset, ignoreElements } from '../utils/helper'
+import { resolveOffset, ignoreElements, createPortal } from '../utils/helper'
 import { getNodes } from '../utils/context'
 import config from '../managers/config'
 
@@ -154,7 +154,7 @@ export default {
     return {
       localActive: null,
       realContainer: null,
-      appendToBody: false
+      removePortal: null
     }
   },
   computed: {
@@ -236,7 +236,7 @@ export default {
   },
   beforeDestroy () {
     this.removeScrollHandler()
-    if (this.appendToBody) {
+    if (this.removePortal) {
       this.$el.appendChild(this.$refs.append)
     }
   },
@@ -305,16 +305,15 @@ export default {
       let appendRect = append.getBoundingClientRect()
       let { width, height } = appendRect
       let { top: cTop } = conRect
-      if (!this.appendToBody || force) {
+      if (!this.removePortal || force) {
         let placeholder = this.$refs.placeholder
         placeholder.style.width = `${width}px`
         placeholder.style.height = `${height}px`
         append.style.position = 'fixed'
         append.style.top = '0'
         append.style.left = '0'
-        if (!this.appendToBody) {
-          document.body.appendChild(append)
-          this.appendToBody = true
+        if (!this.removePortal) {
+          this.removePortal = createPortal(append, document.body)
         }
       }
       // affix 之后，若发生横向滚动也应该导致 fixed anchor 滚动，即 left 随之变化
@@ -337,7 +336,7 @@ export default {
       }
     },
     unaffixAnchor () {
-      if (this.appendToBody) {
+      if (this.removePortal) {
         let placeholder = this.$refs.placeholder
         let append = this.$refs.append
         // 仅仅清除之前的样式
@@ -347,8 +346,8 @@ export default {
         append.style.top = ''
         append.style.left = ''
         append.style.transform = ''
-        this.$el.appendChild(append)
-        this.appendToBody = false
+        this.removePortal()
+        this.removePortal = null
       }
     },
     // 只要滚动了就要处理 sticky 效果
@@ -380,7 +379,7 @@ export default {
       if (this.sticky) {
         beforeScroll = curScrollTop => {
           if (
-            !this.appendToBody &&
+            !this.removePortal &&
             curScrollTop >= this.getScrollTopToAffix(placeholderRect, conRect)
           ) {
             this.affixAnchor(placeholderRect, conRect)
