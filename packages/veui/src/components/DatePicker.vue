@@ -239,9 +239,8 @@ export default {
     dropdown,
     i18n,
     controllable({
-      selected: {
-        event: 'select'
-      }
+      prop: 'selected',
+      event: 'select'
     })
   ],
   model: {

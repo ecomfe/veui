@@ -220,19 +220,21 @@ export default {
     prefix,
     ui,
     overlay,
-    controllable({
-      active: 'active',
-      collapsed: {
+    controllable([
+      'active',
+      {
+        prop: 'collapsed',
         get () {
           return this.collapsible ? this.getReal({ prop: 'collapsed' }) : false
         }
       },
-      expanded: {
+      {
+        prop: 'expanded',
         get () {
           return this.realCollapsed ? [] : this.getReal({ prop: 'expanded' })
         }
       }
-    })
+    ])
   ],
   props: {
     active: String,
