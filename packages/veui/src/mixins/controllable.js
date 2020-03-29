@@ -29,12 +29,12 @@ function hasProp (vm, name) {
 }
 
 const errorMsg =
-  '[controllable] prop config must be a string or a object or an array of that!'
+  '[controllable] prop config must be either a string, an object or an object array.'
 
 /**
  * 自动将对应的 prop 转换成受控的
  * @param {string|Object|[string|Object]} props - 定义的受控props
- * @returns 转换后的 mixin
+ * @return 转换后的 mixin
  */
 export default function makeControllable (props) {
   if (!props) {
@@ -64,7 +64,7 @@ export default function makeControllable (props) {
         return result
       } else if (!def.prop) {
         console.error(
-          '[controllable] the `prop` property is required when prop config item is a object'
+          '[controllable] the `prop` property is required when prop config item is an object.'
         )
         return result
       }

@@ -153,8 +153,7 @@ export default {
   data () {
     return {
       localActive: null,
-      realContainer: null,
-      removePortal: null
+      realContainer: null
     }
   },
   computed: {
@@ -237,7 +236,7 @@ export default {
   beforeDestroy () {
     this.removeScrollHandler()
     if (this.removePortal) {
-      this.$el.appendChild(this.$refs.append)
+      this.removePortal()
     }
   },
   methods: {
