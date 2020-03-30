@@ -185,6 +185,7 @@ export default {
 
       if (this.removePortal) {
         this.removePortal()
+        this.removePortal = null
       }
 
       this.overlayBox = null
