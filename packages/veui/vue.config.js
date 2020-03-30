@@ -1,25 +1,28 @@
-var path = require('path')
-var veuiLoaderOptions = require('./build/veui-loader.conf')
-var webpack = require('webpack')
+const path = require('path')
+const veuiLoaderOptions = require('./build/veui-loader.conf')
+const webpack = require('webpack')
 
 function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
 const VEUI_PREFIX = process.env.VEUI_PREFIX || process.env.VUE_APP_VEUI_PREFIX
+const vars =
+  process.env.DLS_VERSION === 'D20' ? require('../veui-theme-dls/d20.json') : {}
 
 module.exports = {
   css: {
     loaderOptions: {
       less: {
         javascriptEnabled: true,
-        ...(VEUI_PREFIX
-          ? {
-            modifyVars: {
+        modifyVars: {
+          ...vars,
+          ...(VEUI_PREFIX
+            ? {
               'veui-prefix': VEUI_PREFIX
             }
-          }
-          : {})
+            : {})
+        }
       }
     }
   },
