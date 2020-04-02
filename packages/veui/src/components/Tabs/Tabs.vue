@@ -95,9 +95,6 @@ export default {
       }
 
       return find(this.items, ({ matches, to }) => matches(this.$route, to))
-    },
-    showPanel () {
-      return this.$slots.panel || (this.activeTab && !this.activeTab.empty)
     }
   },
   watch: {
@@ -230,22 +227,44 @@ export default {
   },
   render () {
     const renderTabItem = this.$scopedSlots['tab-item']
-    const renderLabel =
-      this.$scopedSlots['tab-item-label'] ||
-      (({ label, status }) => [
-        <div class={this.$c('tabs-item-label-content')}>
-          {label}
-          {status ? (
-            <Icon
-              class={[
-                this.$c('tabs-item-status'),
-                this.$c(`tabs-item-status-${status}`)
-              ]}
-              name={this.icons[status]}
-            />
-          ) : null}
+    const renderTabContent = props => (
+      <div class={this.$c('tabs-item-label-content')}>
+        {renderItem(
+          [props.renderLabel, this.$scopedSlots['tab-label']],
+          props
+        ) || props.label}
+        {props.status ? (
+          <Icon
+            class={[
+              this.$c('tabs-item-status'),
+              this.$c(`tabs-item-status-${props.status}`)
+            ]}
+            name={this.icons[props.status]}
+          />
+        ) : null}
+      </div>
+    )
+
+    const renderTabPanel = props => {
+      const tabPanel = props.renderPanel(props)
+
+      return props.active && tabPanel ? (
+        <div id={props.id} class={this.$c('tab-panel')} role="tabpanel">
+          {tabPanel}
         </div>
-      ])
+      ) : null
+    }
+
+    const tabPanels = this.items.map((tab, index) =>
+      renderTabPanel({
+        ...tab,
+        index,
+        active: this.activeTab === tab
+      })
+    )
+    const panelContent = tabPanels.some(content => content)
+      ? tabPanels
+      : this.$slots.panel
 
     const directives = [
       {
@@ -263,6 +282,7 @@ export default {
         }}
         ui={this.realUi}
       >
+        {this.$slots.default}
         <div class={this.$c('tabs-menu')}>
           {this.listOverflow ? (
             <Button
@@ -295,43 +315,41 @@ export default {
                   [this.$c('tabs-item-remove-focus')]: this.focusedTab === tab
                 }}
               >
-                {renderTabItem ? (
-                  renderTabItem({
-                    ...tab,
-                    index,
-                    attrs: this.tabAttrs[index],
-                    activate: () => this.handleActivate(tab)
-                  })
-                ) : tab.to ? (
-                  <Link
-                    class={this.$c('tabs-item-label')}
-                    to={tab.to}
-                    native={tab.native}
-                    disabled={tab.disabled}
-                    onClick={() => this.handleActivate(tab)}
-                    {...{ attrs: this.tabAttrs[index] }}
-                  >
-                    {renderLabel({
-                      ...tab,
-                      index,
-                      attrs: this.tabAttrs[index]
-                    })}
-                  </Link>
-                ) : (
-                  <button
-                    type="button"
-                    class={this.$c('tabs-item-label')}
-                    disabled={tab.disabled}
-                    onClick={() => this.handleActivate(tab)}
-                    {...{ attrs: this.tabAttrs[index] }}
-                  >
-                    {renderLabel({
-                      ...tab,
-                      index,
-                      attrs: this.tabAttrs[index]
-                    })}
-                  </button>
-                )}
+                {renderItem([tab.renderTab, renderTabItem], {
+                  ...tab,
+                  index,
+                  active: this.activeTab === tab,
+                  attrs: this.tabAttrs[index],
+                  activate: () => this.handleActivate(tab)
+                }) ||
+                  (tab.to ? (
+                    <Link
+                      class={this.$c('tabs-item-label')}
+                      to={tab.to}
+                      native={tab.native}
+                      disabled={tab.disabled}
+                      onClick={() => this.handleActivate(tab)}
+                      {...{ attrs: this.tabAttrs[index] }}
+                    >
+                      {renderTabContent({
+                        ...tab,
+                        index
+                      })}
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      class={this.$c('tabs-item-label')}
+                      disabled={tab.disabled}
+                      onClick={() => this.handleActivate(tab)}
+                      {...{ attrs: this.tabAttrs[index] }}
+                    >
+                      {renderTabContent({
+                        ...tab,
+                        index
+                      })}
+                    </button>
+                  ))}
                 {tab.removable ? (
                   <Button
                     class={this.$c('tabs-item-remove')}
@@ -385,12 +403,32 @@ export default {
             </div>
           ) : null}
         </div>
-        <div v-show="showPanel" class={this.$c('tabs-panel')}>
-          {this.$slots.default}
-          {!this.activeTab || this.activeTab.empty ? this.$slots.panel : null}
-        </div>
+        {panelContent ? (
+          <div class={this.$c('tabs-panel')}>{panelContent}</div>
+        ) : null}
       </div>
     )
   }
+}
+
+/**
+ * Render with the first render function that returns something
+ * @param {Array<Function>} renderFns render functions, usually scoped slot renderers
+ * @param {Object} props slot scopes
+ */
+function renderItem (renderFns, props) {
+  for (let i = 0; i < renderFns.length; i++) {
+    let render = renderFns[i]
+    if (!render) {
+      continue
+    }
+
+    let content = render(props)
+    if (content) {
+      return content
+    }
+  }
+
+  return null
 }
 </script>

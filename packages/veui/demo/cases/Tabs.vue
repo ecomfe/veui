@@ -78,11 +78,19 @@
         status="warning"
       >Answers</veui-tab>
       <veui-tab label="文章评论">Articles</veui-tab>
-      <veui-tab label="分享朋友圈">Shares</veui-tab>
+      <veui-tab label="分享朋友圈">
+        <template v-slot:label><em>分享朋友圈</em></template>
+        <template
+          v-slot:default
+        >Shares [from <code>v-slot:default</code>]</template>
+      </veui-tab>
+      <template
+        #tab-label="{ label }"
+      ><b>{{ label }}</b></template>
     </veui-tabs>
   </section>
   <section>
-    <h2>溢出样式：</h2>
+    <h2>溢出样式</h2>
     <veui-tabs>
       <veui-tab
         v-for="n in 30"
@@ -92,7 +100,7 @@
         "
       />
     </veui-tabs>
-    <veui-tabs>
+    <veui-tabs ui="s">
       <veui-tab
         v-for="n in 30"
         :key="n"
@@ -153,7 +161,12 @@
       <veui-tab
         label="Progress"
         to="/tabs/progress"
-      />
+      >
+        <div style="border: 1px solid red; padding: 5px;">
+          <h3>包一点内容</h3>
+          <router-view/>
+        </div>
+      </veui-tab>
       <veui-tab label="内联内容">
         <b>Hello world.</b>
       </veui-tab>
@@ -216,19 +229,6 @@
       添加 TAB
     </veui-button>
     <veui-tabs :active.sync="active3">
-      <template
-        v-if="props.removable && tabs2.length > 1"
-        slot="tab-item-extra"
-        slot-scope="props"
-      >
-        <button
-          type="button"
-          class="veui-tabs-item-remove"
-          @click="removeTab2(props)"
-        >
-          <icon name="times"/>
-        </button>
-      </template>
       <veui-tab
         v-for="tab in tabs2"
         :key="tab.name"
@@ -247,19 +247,6 @@
       添加 TAB
     </veui-button>
     <veui-tabs :active.sync="active4">
-      <template
-        slot="tab-item-extra"
-        slot-scope="props"
-      >
-        <button
-          v-if="props.removable && tabs3.length > 1"
-          type="button"
-          class="veui-tabs-item-remove"
-          @click="removeTab3(props)"
-        >
-          <icon name="times"/>
-        </button>
-      </template>
       <veui-tab
         v-for="tab in tabs3"
         :key="tab.name"
@@ -355,17 +342,15 @@
 </template>
 
 <script>
-import { Icon, Tabs, Tab, Button } from 'veui'
+import { Tabs, Tab, Button } from 'veui'
 import { findIndex, uniqueId } from 'lodash'
-import 'veui-theme-dls-icons/times'
 
 export default {
   name: 'tabs-demo',
   components: {
     'veui-tabs': Tabs,
     'veui-tab': Tab,
-    'veui-button': Button,
-    icon: Icon
+    'veui-button': Button
   },
   data () {
     return {

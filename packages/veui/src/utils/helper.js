@@ -265,3 +265,7 @@ export function createPortal (el, target) {
 
   return removePortal
 }
+
+export function renderSlot (vm, name, props = {}) {
+  return vm.$scopedSlots[name] ? vm.$scopedSlots[name](props) : vm.$slots[name]
+}

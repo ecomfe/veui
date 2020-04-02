@@ -1,20 +1,9 @@
-<template>
-<div
-  v-if="isActive && !empty"
-  :id="id"
-  :class="$c('tab')"
-  role="tabpanel"
-  :aria-hidden="!isActive"
->
-  <slot/>
-</div>
-</template>
-
 <script>
 import { uniqueId, includes } from 'lodash'
 import { makeCoupledChild } from '../../mixins/coupled'
 import '../../common/uiTypes'
 import prefix from '../../mixins/prefix'
+import { renderSlot } from '../../utils/helper'
 
 let tab = makeCoupledChild({
   direct: true,
@@ -22,6 +11,7 @@ let tab = makeCoupledChild({
   parentType: 'tabs',
   fields: {
     name: ({ id, name }) => name || id,
+    id: 'id',
     label: 'label',
     disabled: 'disabled',
     realTo: 'to',
@@ -30,8 +20,10 @@ let tab = makeCoupledChild({
     status: 'status',
     isMatched: 'matched',
     realMatches: 'matches',
-    empty: 'empty',
-    attrs: ({ $attrs }) => $attrs
+    attrs: ({ $attrs }) => $attrs,
+    renderTab: vm => props => renderSlot(vm, 'item', props),
+    renderLabel: vm => props => renderSlot(vm, 'label', props),
+    renderPanel: vm => props => renderSlot(vm, 'default', props)
   }
 })
 
@@ -92,10 +84,10 @@ export default {
     },
     realMatches () {
       return this.matches || this.tabs.matches || (() => false)
-    },
-    empty () {
-      return !this.$slots.default
     }
+  },
+  render (h) {
+    return h()
   }
 }
 </script>

@@ -395,7 +395,7 @@ describe('components/Tabs', () => {
             <template #tab-item="tab">
               <button
                 type="button"
-                class="my-btn"
+                class="foo-btn"
                 :disabled="tab.disabled"
                 v-bind="tab.attrs"
                 @click="tab.activate"
@@ -418,7 +418,7 @@ describe('components/Tabs', () => {
     let tabs = wrapper.findAll('.veui-tabs-item')
     expect(tabs.at(0).classes()).to.include('veui-tabs-item-active')
 
-    let btns = wrapper.findAll('.my-btn')
+    let btns = wrapper.findAll('.foo-btn')
     expect(btns.length).to.equal(3)
 
     btns.at(1).trigger('click')
@@ -436,6 +436,147 @@ describe('components/Tabs', () => {
     wrapper.destroy()
   })
 
+  it("should render Tab's `item` and `label` and Tabs' `tab-item` scoped slot correctly", async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tabs': Tabs,
+          'veui-tab': Tab
+        },
+        template: `
+          <veui-tabs>
+            <veui-tab label="#1">
+              ONE
+              <template #label="tab">
+                <em class="foo-label">{{ tab.label }}</em>
+              </template>
+            </veui-tab>
+            <veui-tab label="#2" disabled>TWO</veui-tab>
+            <veui-tab label="#3">
+              THREE
+              <template #item="tab">
+              <button
+                type="button"
+                class="foo-btn"
+                :disabled="tab.disabled"
+                v-bind="tab.attrs"
+                @click="tab.activate"
+              >
+                {{ tab.label }}
+              </button>
+            </template>
+            </veui-tab>
+            <template #tab-item="tab">
+              <button
+                type="button"
+                class="bar-btn"
+                :disabled="tab.disabled"
+                v-bind="tab.attrs"
+                @click="tab.activate"
+              >
+                {{ tab.label }}
+              </button>
+            </template>
+          </veui-tabs>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+
+    await vm.$nextTick()
+
+    let tabs = wrapper.findAll('.veui-tabs-item')
+    expect(tabs.at(0).classes()).to.include('veui-tabs-item-active')
+    expect(
+      tabs
+        .at(0)
+        .find('.foo-label')
+        .exists()
+    ).to.equal(false)
+    expect(
+      tabs
+        .at(1)
+        .find('.bar-btn')
+        .exists()
+    ).to.equal(true)
+    expect(
+      tabs
+        .at(2)
+        .find('.foo-btn')
+        .exists()
+    ).to.equal(true)
+
+    let btns = tabs.at(2).find('.foo-btn')
+    expect(btns.exists()).to.equal(true)
+
+    btns.trigger('click')
+
+    await vm.$nextTick()
+    expect(tabs.at(2).classes()).to.include('veui-tabs-item-active')
+    expect(tabs.at(0).classes()).to.not.include('veui-tabs-item-active')
+
+    wrapper.destroy()
+  })
+
+  it("should render Tab's `label` and Tabs' `tab-label` scoped slot correctly", async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tabs': Tabs,
+          'veui-tab': Tab
+        },
+        template: `
+          <veui-tabs>
+            <veui-tab label="#1">
+              ONE
+              <template #label="tab">
+                <em class="foo-label">{{ tab.label }}</em>
+              </template>
+            </veui-tab>
+            <veui-tab label="#2" disabled>TWO</veui-tab>
+            <veui-tab label="#3">THREE</veui-tab>
+            <template #tab-label="tab">
+              <b class="bar-label">{{ tab.label }}</b>
+            </template>
+          </veui-tabs>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+
+    await vm.$nextTick()
+
+    let tabs = wrapper.findAll('.veui-tabs-item')
+    expect(
+      tabs
+        .at(0)
+        .find('.foo-label')
+        .exists()
+    ).to.equal(true)
+    expect(
+      tabs
+        .at(1)
+        .find('.bar-label')
+        .exists()
+    ).to.equal(true)
+    expect(
+      tabs
+        .at(2)
+        .find('.bar-label')
+        .exists()
+    ).to.equal(true)
+
+    wrapper.destroy()
+  })
+
   it('should render `extra` and `panel` slots correctly', async () => {
     let wrapper = mount(
       {
@@ -447,7 +588,7 @@ describe('components/Tabs', () => {
           <veui-tabs>
             <veui-tab label="#1"/>
             <veui-tab label="#2"/>
-            <veui-tab label="#3"/>
+            <veui-tab label="#3">THREE</veui-tab>
             <template #extra>WATCH OUT!</template>
             <template #panel>PANEL CONTENT</template>
           </veui-tabs>`
@@ -473,6 +614,14 @@ describe('components/Tabs', () => {
 
     await vm.$nextTick()
     expect(wrapper.find('.veui-tabs-panel').text()).to.equal('PANEL CONTENT')
+
+    tabs
+      .at(2)
+      .find('button')
+      .trigger('click')
+
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-tabs-panel').text()).to.equal('THREE')
 
     wrapper.destroy()
   })
@@ -535,7 +684,7 @@ describe('components/Tabs', () => {
             <template #tab-item="tab">
               <button
                 type="button"
-                class="my-btn"
+                class="foo-btn"
                 :disabled="tab.disabled"
                 v-bind="tab.attrs"
                 @click="tab.activate"
@@ -576,7 +725,7 @@ describe('components/Tabs', () => {
     expect(prev.element.disabled).to.equal(true)
     expect(next.element.disabled).to.equal(false)
 
-    let btns = wrapper.findAll('.my-btn')
+    let btns = wrapper.findAll('.foo-btn')
     btns.at(2).trigger('click')
 
     await wait(400)
