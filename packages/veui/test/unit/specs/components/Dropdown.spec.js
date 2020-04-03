@@ -40,7 +40,6 @@ describe('components/Dropdown', () => {
   it('should handle other props correctly', () => {
     let wrapper = mount(Dropdown, {
       propsData: {
-        ui: 'micro',
         split: true,
         disabled: true,
         trigger: 'hover',
@@ -58,8 +57,6 @@ describe('components/Dropdown', () => {
     let commandButton = wrapper.find('.veui-dropdown-command')
     let attributes = button.attributes()
 
-    // ui
-    expect(wrapper.attributes().ui).to.equal('micro')
     // disabled
     expect(button.element.disabled).to.equal(true)
     expect(attributes.class).to.include('veui-disabled')
