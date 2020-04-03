@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src --out-dir lib",
-    "test": "npm run build && ava test/index.js",
+    "test": "npm run build && ava",
     "prepare": "npm run build"
   },
   "keywords": [
@@ -16,9 +16,9 @@
     "veui"
   ],
   "dependencies": {
-    "loader-utils": "^1.1.0",
-    "pkg-dir": "^2.0.0",
-    "slash": "^2.0.0"
+    "loader-utils": "^2.0.0",
+    "pkg-dir": "^4.2.0",
+    "slash": "^3.0.0"
   },
   "peerDependencies": {
     "veui": "*"
@@ -28,10 +28,19 @@
     "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/runtime": "^7.5.5",
-    "ava": "^2.3.0",
+    "ava": "^3.5.1",
+    "esm": "^3.2.25",
     "raw-loader": "^0.5.1",
     "veui": "^2.0.0-alpha.10",
     "veui-theme-dls": "^2.0.0-alpha.10",
     "webpack": "^4.39.3"
+  },
+  "ava": {
+    "require": [
+      "esm"
+    ],
+    "files": [
+      "test/index.js"
+    ]
   }
 }

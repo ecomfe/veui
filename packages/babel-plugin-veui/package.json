@@ -7,9 +7,9 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src --out-dir .",
-    "test": "npm run build && ava",
+    "test": "npm run build && ava && rm -rf ./*.js",
     "prepare": "npm run build",
-    "publish": "rm -rf ./index.js ./rewrite.js ./treeshake.js ./utils.js"
+    "publish": "rm -rf ./*.js"
   },
   "keywords": [
     "veui",
@@ -24,10 +24,14 @@
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
-    "ava": "^2.3.0",
+    "ava": "^3.5.1",
+    "esm": "^3.2.25",
     "prettier": "^1.18.2"
   },
   "ava": {
+    "require": [
+      "esm"
+    ],
     "files": [
       "test/index.js"
     ]

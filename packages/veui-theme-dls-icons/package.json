@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "esm": "^3.0.84",
-    "mkdirp": "^0.5.1",
+    "mkdirp": "^0.5.4",
     "rimraf": "^2.6.2",
     "stringify-object": "^3.3.0",
     "svgo": "^1.3.2",

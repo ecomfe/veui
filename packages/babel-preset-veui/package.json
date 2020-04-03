@@ -20,10 +20,14 @@
     "babel-preset-vue-app": "^2.0.0"
   },
   "devDependencies": {
-    "ava": "^2.3.0",
-    "babel-core": "^6.26.3"
+    "ava": "^3.5.1",
+    "babel-core": "^6.26.3",
+    "esm": "^3.2.25"
   },
   "ava": {
+    "require": [
+      "esm"
+    ],
     "files": [
       "test/index.js"
     ]
