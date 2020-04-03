@@ -2,6 +2,8 @@
 
 ### ⚠️ 非兼容性变更
 
+- [-] 移除了 `babel-preset-veui`。
+- [-] 移除了 `veui-theme-one`。
 - [^] 对 `Tabs` 组件进行了重写，其中引入的非兼容性变更如下：
 
   - [-] 移除了 `index` prop，现在控制激活标签页只能使用 `active` prop。
@@ -66,11 +68,51 @@
     >   </template>
     > </veui-tabs>
     > ```
+    >
+    > ##### 自定义标签项内容
+    >
+    > 可以使用 `Tabs` 的 `tab-item` scoped slot 来自定义所有标签项的内容，也可以使用 `Tab` 的 `item` scoped slot 来自定义单个标签项内容（单个内容将覆盖整体的内容）。
+    >
+    > ```html
+    > <veui-tabs>
+    >   <veui-tab label="A">
+    >     Content A
+    >     <template #item="tab">
+    >       <button
+    >         type="button"
+    >         class="foo-btn"
+    >         :disabled="tab.disabled"
+    >         v-bind="tab.attrs"
+    >         @click="tab.activate"
+    >       >
+    >         {{ `${tab.label} ${tab.active ? '✅' : '' }` }}
+    >       </button>
+    >     </template>
+    >   </veui-tab>
+    >   <veui-tab label="B">Content B</veui-tab>
+    >   <veui-tab label="C">Content C</veui-tab>
+    > </veui-tabs>
+    > ```
+    >
+    > 如果只想定义文本区域的内容（不需重写点击激活等逻辑），请使用 `Tabs` 的 `tab-label` 或 `Tab` 的 `label` scoped slot，用法类似。
+    >
+    > ```html
+    > <veui-tabs>
+    >   <veui-tab label="A">
+    >     Content A
+    >     <template #label="tab">Content A {{ ${tab.active ? '✅' : '' }` }}</template>
+    >   </veui-tab>
+    >   <veui-tab label="B">Content B</veui-tab>
+    >   <veui-tab label="C">Content C</veui-tab>
+    > </veui-tabs>
+    > ```
+
 
 ### 🐞 问题修复
 
 - [^] 修复了 `Transfer` 组件删除已选项时报错的问题。
 - [^] 修复了 `Transfer` 组件和 `Tree` 组件在被禁用状态下依然可以添加已选项的问题。
+- [^] 修复了悬浮触发的 `Tooltip` 组件可能被错误关闭的问题。
 - [^] 修复了在局部输出全局样式时没有正确处理 `Anchor` 浮层的问题。
 - [^] 修复了 `Overlay` 组件没有响应 `inline` prop 变化的问题。
 - [^] 修复了 `NumberInput` 组件在 `strong` 模式下最大最小值没有正确工作的问题。

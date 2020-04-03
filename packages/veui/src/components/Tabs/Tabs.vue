@@ -333,7 +333,8 @@ export default {
                     >
                       {renderTabContent({
                         ...tab,
-                        index
+                        index,
+                        active: this.activeTab === tab
                       })}
                     </Link>
                   ) : (
