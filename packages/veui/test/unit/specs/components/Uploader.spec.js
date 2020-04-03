@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils'
 import Uploader from '@/components/Uploader'
 import { wait } from '../../../utils'
+import 'veui-theme-dls-icons/check'
 
 describe('components/Uploader', () => {
   it('should handle value prop with `null` value.', () => {
@@ -472,7 +473,7 @@ describe('components/Uploader', () => {
         type: 'image',
         controls (file, defaultControls) {
           if (file.status === 'success') {
-            return [{ name: 'test', icon: 'info' }, ...defaultControls]
+            return [{ name: 'test', icon: 'check' }, ...defaultControls]
           }
           return defaultControls
         }
