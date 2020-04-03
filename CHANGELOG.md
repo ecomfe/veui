@@ -13,8 +13,11 @@
 
   其余变更：
 
+  - [+] 新增了 `tab-item-label` scoped slot，用于仅自定义标签项内容。
   - [+] 新增 `panel` slot，用于指定标签下方面板内的自定义内容。
   - [+] 新增 `change` 事件，回调参数为 `tab` 对像，包含 `name`、`label`、`to`、`status` 等字段。
+  - [+] `Tab` 组件新增了 `item` slot，用于自定义标签内容，与 `Tabs` 组件的 `tab-item` 对应，优先级更高。
+  - [+] `Tab` 组件新增了 `label` slot，用于自定义标签内容，与 `Tabs` 组件的 `tab-label` 对应，优先级更高。
 
     > #### 使用指南
     >

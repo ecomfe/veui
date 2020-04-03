@@ -19,9 +19,7 @@
       <slot
         name="label"
         :label="label"
-      >
-        {{ label }}
-      </slot>
+      >{{ label }}</slot>
     </span>
   </veui-button>
   <veui-button
@@ -41,9 +39,7 @@
       <slot
         name="label"
         :label="label"
-      >
-        {{ label }}
-      </slot>
+      >{{ label }}</slot>
     </span>
     <veui-icon
       :class="$c('dropdown-icon')"
@@ -70,6 +66,7 @@
         delay: 300
       }"
       :class="$c('dropdown-options')"
+      :ui="realUi"
       role="menu"
       :tabindex="searchable ? -1 : 0"
       :aria-expanded="expanded"
@@ -91,9 +88,7 @@
         <slot
           name="no-data"
           v-bind="{ keyword }"
-        >
-          {{ t('noData') }}
-        </slot>
+        >{{ t('noData') }}</slot>
       </div>
       <veui-option-group
         v-else
