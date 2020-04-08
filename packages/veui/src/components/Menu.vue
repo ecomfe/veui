@@ -298,7 +298,9 @@ export default {
       }
       this.$watch('$route', updateActive)
       // 第一次 prop active 有值，内部就不 sync 了
-      if (!this.hasProp('active')) {
+      let hasPropActive =
+        'active' in this.$options.propsData && this.active !== undefined
+      if (!hasPropActive) {
         updateActive(this.$route)
       }
     }
