@@ -2,8 +2,12 @@ import { capitalize, isString, isPlainObject, reduce } from 'lodash'
 
 let options = {
   methods: {
+    isControlled (name) {
+      // 排除 default value 的影响
+      return name in this.$options.propsData && this[name] !== undefined
+    },
     getReal ({ prop, local } = {}) {
-      return hasProp(this, prop)
+      return this.isControlled(prop)
         ? this[prop]
         : local
           ? this[local]
@@ -22,10 +26,6 @@ let options = {
       }
     }
   }
-}
-
-function hasProp (vm, name) {
-  return name in vm.$options.propsData && vm[name] !== undefined
 }
 
 const errorMsg =
