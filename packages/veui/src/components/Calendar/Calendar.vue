@@ -581,6 +581,7 @@ export default {
               month: (month + 11) % 12,
               year: month === 0 ? year - 1 : year
             }
+            weeks[i][j].isDisabled = this.markDisabled(weeks[i][j])
           } else if (i * 7 + j - offset < daysInMonth) {
             weeks[i][j] = {
               date: i * 7 + j + 1 - offset,
@@ -594,6 +595,7 @@ export default {
               month: (month + 1) % 12,
               year: month === 11 ? year + 1 : year
             }
+            weeks[i][j].isDisabled = this.markDisabled(weeks[i][j])
           }
         }
       }

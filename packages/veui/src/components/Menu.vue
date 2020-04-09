@@ -297,10 +297,8 @@ export default {
         this.realActive = exactActiveItem ? exactActiveItem.name : null
       }
       this.$watch('$route', updateActive)
-      // 第一次 prop active 有值，内部就不 sync 了
-      let hasPropActive =
-        'active' in this.$options.propsData && this.active !== undefined
-      if (!hasPropActive) {
+      // active 受控了，初始当前路由就不同步了
+      if (!this.isControlled('active')) {
         updateActive(this.$route)
       }
     }

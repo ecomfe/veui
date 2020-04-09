@@ -48,7 +48,7 @@
     {{
       selected5
         ? `${selected5.getFullYear()}-${selected5.getMonth() + 1}`
-        : "-"
+        : '-'
     }}
   </section>
   <section>
@@ -120,6 +120,10 @@
     />
   </section>
   <section>
+    <h2>部分禁用</h2>
+    <veui-calendar :disabled-date="disabledDate"/>
+  </section>
+  <section>
     <h2>多单日选择 <small>(<code>multiple</code>)</small></h2>
     <veui-calendar
       v-model="selected0"
@@ -178,7 +182,7 @@
       v-model="selected6"
       type="year"
     />
-    Selected: {{ selected6 ? selected6.getFullYear() : "-" }}
+    Selected: {{ selected6 ? selected6.getFullYear() : '-' }}
   </section>
 </article>
 </template>
@@ -239,13 +243,16 @@ export default {
   methods: {
     setSelected () {
       this.selected4 = [new Date(2016, 11, 19), new Date(2016, 11, 25)]
+    },
+    disabledDate (date) {
+      return date.getTime() > Date.now()
     }
   }
 }
 </script>
 
 <style lang="less">
-@import "~veui-theme-dls/lib.less";
+@import '~veui-theme-dls/lib.less';
 
 .veui-demo-calendar {
   section {
