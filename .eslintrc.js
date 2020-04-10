@@ -31,6 +31,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-multi-spaces': ['error', { ignoreEOLComments: true }],
     'no-template-curly-in-string': 'off',
+    'no-case-declarations': 'off',
     // to many false positives
     'vue/no-side-effects-in-computed-properties': 'off',
     // fix unused var error for JSX custom tags

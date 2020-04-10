@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src --out-dir .",
-    "test": "npm run build && ava && rm -rf ./*.js",
+    "test": "npm run build && ava",
     "prepare": "npm run build",
     "publish": "rm -rf ./*.js"
   },
@@ -17,16 +17,14 @@
     "theme",
     "babel-plugin"
   ],
-  "peerDependencies": {
-    "veui": "*"
-  },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "ava": "^3.5.1",
     "esm": "^3.2.25",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "veui": "^2.0.0-alpha.11"
   },
   "ava": {
     "require": [

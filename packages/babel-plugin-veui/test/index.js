@@ -50,29 +50,37 @@ function format (source) {
   return prettier.format(source, { parser: 'babel' })
 }
 
+function symlinkP (target, path) {
+  return new Promise(resolve => {
+    symlink(target, path, resolve)
+  })
+}
+
+function unlinkP (path) {
+  return new Promise(resolve => {
+    unlink(path, resolve)
+  })
+}
+
 function prepare () {
   running++
-  return new Promise(resolve => {
-    if (running === 1) {
-      symlink(
-        r(__dirname, '../node_modules/veui'),
-        r(__dirname, '../node_modules/veui-next'),
-        resolve
-      )
-      return
-    }
-    resolve()
-  })
+
+  if (running === 1) {
+    return symlinkP(
+      r(__dirname, '../node_modules/veui'),
+      r(__dirname, '../node_modules/veui-next')
+    )
+  }
+
+  return Promise.resolve()
 }
 
 function tearDown () {
   running--
 
-  return new Promise(resolve => {
-    if (running === 0) {
-      unlink(r(__dirname, '../node_modules/veui-next'), resolve)
-      return
-    }
-    resolve()
-  })
+  if (running === 0) {
+    return unlinkP(r(__dirname, '../node_modules/veui-next'))
+  }
+
+  return Promise.resolve()
 }
