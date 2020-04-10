@@ -17,8 +17,8 @@
     "theme",
     "babel-plugin"
   ],
-  "dependencies": {
-    "veui": "^2.0.0-alpha.11"
+  "peerDependencies": {
+    "veui": "*"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
