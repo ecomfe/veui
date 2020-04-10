@@ -73,7 +73,7 @@ export default {
   },
   watch: {
     'select.expanded' (val) {
-      if (val && this.selected) {
+      if (val && this.selected && !this.select.multiple) {
         this.select.$once('afteropen', this.scrollIntoView)
       }
     }
