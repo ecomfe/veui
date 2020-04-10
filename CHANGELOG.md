@@ -1,3 +1,14 @@
+## 2.0.0-alpha.12
+
+### 🐞 问题修复
+
+- [^] `veui` 现在在 `babel-plugin-veui` 的 `peerDependencies` 中，以免多版本共存时 `babel-plugin-veui` 无法找到正确的 `veui` 版本。
+- [^] 修复了 `Menu` 组件非受控模式下第一次没有正确同步当前路由状态的问题。
+- [^] 修复了 `Calendar` 组件 `disabled-date` prop 对显示在本月的下月日期未生效的问题（[#644](https://github.com/ecomfe/veui/issues/502)）。
+- [^] 现在 `ButtonGroup` 组件只有在按钮项 `value` 为字符串时抛出同名事件，避免在非字符串类型时报错。
+- [^] 去除了多选 `Select` 组件已选项默认滚动入可视区域的行为（因为可能有多个已选项）。
+- [^] 修正了开启搜索功能的 `Dropdown` 组件搜索栏和选项区域同时滚动的问题，搜索栏现在固定在下拉菜单顶端。
+
 ## 2.0.0-alpha.11
 
 ### ⚠️ 非兼容性变更
@@ -106,7 +117,6 @@
     >   <veui-tab label="C">Content C</veui-tab>
     > </veui-tabs>
     > ```
-
 
 ### 🐞 问题修复
 
@@ -343,6 +353,7 @@
 - [^] 重写了 overlay manager，修复了输出的 `z-index` 无限制上涨的问题。
 - [+] 新增了全局配置项 `managers.overlay`，可以注入其它实例接管浮层管理逻辑。
 - [^] 调整了耦合组件的关联机制，现在 `Column`、`Tab` 等组件可以被封装在其它组件内，填充入 `Table`、`Tabs` 等的插槽中使用。
+- [+] `Dialog` 新增了 `footless` prop，用于不输出默认的底部操作栏。
 
 ### 🐞 问题修复
 
