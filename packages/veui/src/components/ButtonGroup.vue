@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     handleClick (item, index, e) {
-      if (item.value) {
+      if (typeof item.value === 'string') {
         this.$emit(item.value, item, index, e)
       }
       this.$emit('click', item, index, e)

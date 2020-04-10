@@ -1,21 +1,19 @@
 <template>
 <article>
-  <h1><code>&lt;veui-button-group&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-button-group&gt;</code>
+  </h1>
   <section>
     <veui-checkbox
       v-model="disabled"
       ui="s"
-    >
-      禁用全部
-    </veui-checkbox>
+    >禁用全部</veui-checkbox>
   </section>
   <section>
     <veui-checkbox
       v-model="items[2].disabled"
       ui="s"
-    >
-      禁用「删除」
-    </veui-checkbox>
+    >禁用「删除」</veui-checkbox>
   </section>
   <section>
     <veui-radio-group
@@ -45,16 +43,25 @@
       :disabled="disabled"
     />
   </section>
+  <section>
+    <h4>Inline Buttons</h4>
+    <veui-button-group ui="primary">
+      <veui-button>新建</veui-button>
+      <veui-button>编辑</veui-button>
+      <veui-button>删除</veui-button>
+    </veui-button-group>
+  </section>
 </article>
 </template>
 
 <script>
-import { ButtonGroup, Checkbox, RadioGroup } from 'veui'
+import { Button, ButtonGroup, Checkbox, RadioGroup } from 'veui'
 
 export default {
   name: 'button-group-demo',
   components: {
     'veui-button-group': ButtonGroup,
+    'veui-button': Button,
     'veui-checkbox': Checkbox,
     'veui-radio-group': RadioGroup
   },
