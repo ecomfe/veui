@@ -42,9 +42,12 @@
   &-control {
     .absolute(50%, _, _);
     transform: translateY(-50%);
-    .size(@dls-carousel-control-size);
-    padding: 0;
     opacity: 0;
+
+    &[ui] {
+      .size(@dls-carousel-control-size);
+      padding: 0;
+    }
 
     &,
     &[ui] {
