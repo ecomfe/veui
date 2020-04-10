@@ -83,6 +83,12 @@
 
   &-options {
     &:extend(._veui-dropdown-overlay all);
+    display: flex;
+    flex-direction: column;
+
+    & > .@{veui-prefix}-option-group {
+      overflow: auto;
+    }
   }
 
   &-search-box.@{veui-prefix}-search-box {
