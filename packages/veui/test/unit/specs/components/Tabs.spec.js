@@ -748,4 +748,57 @@ describe('components/Tabs', () => {
 
     wrapper.destroy()
   })
+
+  it("should keep Tab's props reactive properly", async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tabs': Tabs,
+          'veui-tab': Tab
+        },
+        template: `
+          <veui-tabs
+            :active.sync="active"
+            addable
+            @add="handleAdd"
+            @remove="handleRemove"
+          >
+            <veui-tab
+              v-for="tab in tabs"
+              :key="tab.name"
+              :name="tab.name"
+              :label="tab.label"
+              removable
+            >{{ tab.content }}</veui-tab>
+          </veui-tabs>`,
+        data () {
+          return {
+            tabs: [
+              { label: '#1', content: '=1=', name: '1' },
+              { label: '#2', content: '=2=', name: '2' },
+              { label: '#3', content: '=3=', name: '3' },
+              { label: '#4', content: '=4=', name: '4' }
+            ],
+            active: '2'
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+
+    await vm.$nextTick()
+    let tabs = wrapper.findAll('.veui-tabs-item')
+    expect(tabs.at(0).text()).to.equal('#1')
+
+    vm.tabs[0].label = '#1!'
+    await vm.$nextTick()
+    expect(tabs.at(0).text()).to.equal('#1!')
+
+    wrapper.destroy()
+  })
 })

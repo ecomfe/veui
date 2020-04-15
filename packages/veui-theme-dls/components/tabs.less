@@ -16,12 +16,6 @@
     white-space: nowrap;
     height: @veui-tabs-height;
 
-    button {
-      background: none;
-      border: none;
-      padding: 0;
-    }
-
     &::after {
       content: "";
       .absolute(_, 0, 0);
@@ -38,6 +32,18 @@
     align-self: stretch;
     z-index: 1;
     overflow: hidden;
+
+    button {
+      background: none;
+      border: none;
+      padding: 0;
+    }
+  }
+
+  &-extra {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
   }
 
   .make-margin-left(@margin) {

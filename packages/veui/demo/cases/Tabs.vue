@@ -1,31 +1,49 @@
 <template>
 <article>
-  <h1><code>&lt;veui-tabs&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-tabs&gt;</code>
+  </h1>
   <section>
     <h2>默认样式：(.sync)</h2>
     <p>
-      当前标签 <code>{{ active0 }}</code>
+      当前标签
+      <code>{{ active0 }}</code>
     </p>
     <veui-tabs
       ui="l"
       :active.sync="active0"
     >
       <veui-tab
-        label="回答问题"
+        :label="label1"
         name="answers"
       />
+      <veui-tab name="articles">
+        <template #label>{{ label2 }}</template>
+      </veui-tab>
       <veui-tab
-        label="文章评论"
-        name="articles"
-      />
-      <veui-tab
-        label="分享朋友圈"
+        :label="label3"
         name="shares"
       />
-      <veui-button
-        slot="extra"
-        ui="primary"
-      >覆盖 extra</veui-button>
+      <template #extra>
+        <div class="extra">
+          <veui-button
+            slot="extra"
+            ui="primary s"
+            @click="label1 += '1'"
+          >修改1</veui-button>
+          <veui-button
+            slot="extra"
+            ui="s"
+            @click="label2 += '2'"
+          >修改2</veui-button>
+          <veui-button
+            slot="extra"
+            ui="s"
+            @click="label3 += '3'"
+          >修改3</veui-button>
+        </div>
+      </template>
+      <template #tab-label="{ label }">{{ label }}</template>
     </veui-tabs>
 
     <veui-tabs :active.sync="active0">
@@ -79,14 +97,17 @@
       >Answers</veui-tab>
       <veui-tab label="文章评论">Articles</veui-tab>
       <veui-tab label="分享朋友圈">
-        <template v-slot:label><em>分享朋友圈</em></template>
-        <template
-          v-slot:default
-        >Shares [from <code>v-slot:default</code>]</template>
+        <template v-slot:label>
+          <em>分享朋友圈</em>
+        </template>
+        <template v-slot:default>
+          Shares [from
+          <code>v-slot:default</code>]
+        </template>
       </veui-tab>
-      <template
-        #tab-label="{ label }"
-      ><b>{{ label }}</b></template>
+      <template #tab-label="{ label }">
+        <b>{{ label }}</b>
+      </template>
     </veui-tabs>
   </section>
   <section>
@@ -225,9 +246,7 @@
     <veui-button
       class="add-btn"
       @click="addTab2"
-    >
-      添加 TAB
-    </veui-button>
+    >添加 TAB</veui-button>
     <veui-tabs :active.sync="active3">
       <veui-tab
         v-for="tab in tabs2"
@@ -243,9 +262,7 @@
     <veui-button
       class="add-btn"
       @click="addTab3"
-    >
-      添加 TAB
-    </veui-button>
+    >添加 TAB</veui-button>
     <veui-tabs :active.sync="active4">
       <veui-tab
         v-for="tab in tabs3"
@@ -269,14 +286,13 @@
   <section>
     <h2>增删模式3（v-if 等 dom 上控制）：</h2>
     <p>
-      当前标签 <code>{{ active5 }}</code>
+      当前标签
+      <code>{{ active5 }}</code>
     </p>
     <veui-button
       :disabled="tabIfRemoving"
       @click="insertVisiable = !insertVisiable"
-    >
-      {{ insertVisiable ? '隐藏' : '显示' }}中间一个可切换 TAB
-    </veui-button>
+    >{{ insertVisiable ? '隐藏' : '显示' }}中间一个可切换 TAB</veui-button>
     <veui-tabs
       ui="l"
       :active.sync="active5"
@@ -354,6 +370,9 @@ export default {
   },
   data () {
     return {
+      label1: '回答问题',
+      label2: '文章评论',
+      label3: '分享朋友圈',
       totalTabs0: 15,
       totalTabs1: 20,
       tabs0: [
@@ -469,6 +488,16 @@ section + section {
 
   p {
     padding: 0 30px;
+  }
+}
+
+.extra {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+
+  .veui-button {
+    margin-left: 12px;
   }
 }
 

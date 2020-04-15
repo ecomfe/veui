@@ -1,9 +1,15 @@
-import { uniqueId, pick, find } from 'lodash'
+import { uniqueId, pick, findIndex } from 'lodash'
 import { getTypedAncestorTracker } from '../utils/helper'
 import { getIndexOfType } from '../utils/context'
 import '../common/uiTypes'
 
-export function makeCoupledChild ({ direct = false, type, parentType, fields }) {
+export function makeCoupledChild ({
+  direct = false,
+  type,
+  parentType,
+  fields,
+  watchKeys = []
+}) {
   let computed = getTypedAncestorTracker(parentType, direct).computed
   let parentRef = Object.keys(computed)[0]
   return {
@@ -15,15 +21,28 @@ export function makeCoupledChild ({ direct = false, type, parentType, fields }) 
     },
     computed,
     created () {
-      if (!this[parentRef]) {
+      let parent = this[parentRef]
+      if (!parent) {
         return
       }
       let index = getIndexOfType(this, parentType)
-      this[parentRef].add(index, {
+      parent.addChild(index, {
         id: this.id,
         index,
         ...mapState(this, fields)
       })
+
+      if (watchKeys.length > 0) {
+        this.$watch(
+          () => watchKeys.map(key => this[key]),
+          () => {
+            parent.updateChild({
+              id: this.id,
+              ...mapState(this, fields)
+            })
+          }
+        )
+      }
     },
     destroyed () {
       let parent = this[parentRef]
@@ -31,7 +50,7 @@ export function makeCoupledChild ({ direct = false, type, parentType, fields }) 
         return
       }
 
-      let index = parent.removeById(this.id)
+      let index = parent.removeChildById(this.id)
 
       if (typeof parent.handleRemoveChild === 'function') {
         parent.handleRemoveChild(index)
@@ -44,7 +63,7 @@ export function makeCoupledParent ({ type, childrenKey = 'items' }) {
   return {
     uiTypes: [type],
     methods: {
-      add (index, child) {
+      addChild (index, child) {
         let length = this[childrenKey].length
         if (index >= length) {
           this[childrenKey].push(child)
@@ -52,13 +71,23 @@ export function makeCoupledParent ({ type, childrenKey = 'items' }) {
           this[childrenKey].splice(index, 0, child)
         }
       },
-      removeById (id) {
+      updateChild (child) {
+        let index = this.findChildIndexById(child.id)
+        this.$set(this[childrenKey], index, {
+          index,
+          ...child
+        })
+      },
+      removeChildById (id) {
         let index = this[childrenKey].map(child => child.id).indexOf(id)
         this[childrenKey].splice(index, 1)
         return index
       },
-      findById (id) {
-        return find(this[childrenKey], child => child.id === id)
+      findChildById (id) {
+        return this[childrenKey][this.findChildIndexById(id)]
+      },
+      findChildIndexById (id) {
+        return findIndex(this[childrenKey], child => child.id === id)
       }
     }
   }

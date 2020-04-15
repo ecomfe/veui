@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     toggleById (id) {
-      let item = this.findById(id)
+      let item = this.findChildById(id)
       let key = item.name || item.id
       let expanded = clone(this.realExpanded)
       let expand = false

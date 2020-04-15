@@ -24,7 +24,17 @@ let tab = makeCoupledChild({
     renderTab: vm => props => renderSlot(vm, 'item', props),
     renderLabel: vm => props => renderSlot(vm, 'label', props),
     renderPanel: vm => props => renderSlot(vm, 'default', props)
-  }
+  },
+  watchKeys: [
+    'label',
+    'disabled',
+    'to',
+    'native',
+    'removable',
+    'status',
+    'matched',
+    'matches'
+  ]
 })
 
 const STATUS_LIST = ['success', 'warning', 'info', 'error']
