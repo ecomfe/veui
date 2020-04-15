@@ -9,8 +9,14 @@
   &-box {
     pointer-events: none;
   }
+
   &-box &-options {
     pointer-events: all;
+  }
+
+  .@{veui-prefix}-button.focus-visible {
+    position: relative;
+    z-index: 1;
   }
 
   &-button {
@@ -29,9 +35,14 @@
         .absolute(_, _, 50%, -1px);
         transform: translateY(50%);
         width: 1px;
-        height: ~"calc(100% + 2px)";
+        height: calc(100% + 2px);
         background-color: @dls-dropdown-split-separator-color-primary;
       }
+
+      &.focus-visible::before {
+        background-color: transparent;
+      }
+
       &:disabled::before {
         background-color: @dls-dropdown-split-separator-color-primary-disabled;
       }

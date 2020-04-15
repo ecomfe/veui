@@ -9,7 +9,6 @@
     flex: 1 1 0;
     margin-left: -1px;
     border-radius: 0;
-    z-index: 1;
 
     &:first-child {
       margin-left: 0;
@@ -20,16 +19,12 @@
       .border-right-radius(inherit);
     }
 
-    &:hover {
-      z-index: 2;
-    }
-
     &[data-focus-visible-added] {
-      z-index: 4;
+      z-index: 1;
     }
 
     &.@{veui-prefix}-disabled {
-      z-index: 0;
+      position: static;
     }
   }
 
