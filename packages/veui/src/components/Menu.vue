@@ -279,8 +279,8 @@ export default {
       handler (value) {
         if (!this.realCollapsed) {
           let exactActiveItem = find(this.realItems, item => item.exactActive)
-          if (exactActiveItem && exactActiveItem.parent) {
-            this.toggleExpanded(exactActiveItem.parent, true)
+          if (exactActiveItem) {
+            this.showItem(exactActiveItem)
           }
         }
       },
@@ -305,7 +305,7 @@ export default {
   },
   methods: {
     // 确保每个item都有name
-    transformItems (items, parent) {
+    transformItems (items) {
       return map(items, item => {
         let { to, name, children } = item
         if (name == null && to == null) {
@@ -315,9 +315,7 @@ export default {
         item = {
           ...item,
           exactActive: false,
-          active: false,
-          exactActiveWithin: false,
-          parent
+          active: false
         }
 
         // fullPath 是用来跳转的
@@ -340,7 +338,7 @@ export default {
         item.value = item.value || item.name
 
         if (children) {
-          children = this.transformItems(children, item)
+          children = this.transformItems(children)
           item.position = 'popup'
           item.options = item.children = children
         }
@@ -383,12 +381,18 @@ export default {
       this.open = false
       this.refTarget = null
     },
-    toggleExpanded (item, force) {
-      let index = this.realExpanded.indexOf(item.name)
-      if (index === -1 || force) {
-        let names = getParentNames(item)
-        names.push(item.name)
+    // 保证该 item 的父级是展开的
+    showItem (item) {
+      let names = getParentNames(item, this.realItems)
+      if (names) {
         this.localExpanded = uniq([...this.realExpanded, ...names])
+        this.$emit('update:expanded', this.localExpanded)
+      }
+    },
+    toggleExpanded ({ name }) {
+      let index = this.realExpanded.indexOf(name)
+      if (index === -1) {
+        this.localExpanded = uniq([...this.realExpanded, name])
       } else {
         this.localExpanded = [...this.realExpanded]
         this.localExpanded.splice(index, 1)
@@ -407,7 +411,7 @@ export default {
       if (to) {
         this.realActive = name
         this.$emit('activate', name)
-        this.toggleExpanded(item, true)
+        this.showItem(item)
       } else if (children && children.length) {
         this.toggleExpanded(item)
       }
@@ -427,12 +431,21 @@ export default {
   }
 }
 
-function getParentNames (item) {
-  let names = []
-  while (item.parent) {
-    names.push(item.parent.name)
-    item = item.parent
-  }
+function getParentNames (item, items, _parent) {
+  let names = null
+  items.some(i => {
+    let { name, children } = i
+    let got = name === item.name
+    if (got) {
+      names = _parent ? [_parent.name] : null
+    } else if (children) {
+      got = getParentNames(item, children, i)
+      if (got) {
+        names = [name, ...got]
+      }
+    }
+    return !!got
+  })
   return names
 }
 </script>
