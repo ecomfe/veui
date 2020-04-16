@@ -16,6 +16,7 @@ import keySelect from '../../mixins/key-select'
 import i18n from '../../mixins/i18n'
 import { find } from '../../utils/datasource'
 import { uniqueId, isEqual, omit } from 'lodash'
+import { contains } from '../../utils/dom'
 import '../../common/uiTypes'
 
 config.defaults(
@@ -235,6 +236,11 @@ export default {
       e.preventDefault()
       e.stopPropagation()
     },
+    handleInputBlur (e) {
+      if (this.multiple && contains(this.$refs.box, e.relatedTarget, true)) {
+        e.target.focus()
+      }
+    },
     handleTriggerKeydown (e) {
       let passive = true
       switch (e.key) {
@@ -452,6 +458,7 @@ export default {
           placeholder={this.inputPlaceholder}
           value={this.inputValue}
           onMouseup={this.handleInputMouseup}
+          onBlur={this.handleInputBlur}
           onInput={this.handleTriggerInput}
           composition
         >

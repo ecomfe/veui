@@ -68,29 +68,9 @@ function getElementsByRefs (refs, context) {
  * @param {Array.<Element>} elements 元素范围
  */
 function isElementIn (element, elements) {
-  let portal = getPortal(element)
   return elements.some(el => {
-    return contains(el, element) || (portal ? contains(el, portal) : false)
+    return contains(el, element, true)
   })
-}
-
-/**
- * 查找元素是否有绑定的 Portal 入口，如果有则返回该入口元素
- *
- * @param {Element} element 起始的元素
- * @returns {?Element} Portal 入口元素
- */
-function getPortal (element) {
-  let el = element
-  while (el) {
-    if (el.__portal__) {
-      return el.__portal__
-    }
-
-    el = el.parentNode
-  }
-
-  return null
 }
 
 function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) {

@@ -21,7 +21,10 @@ export default {
       ...pick(this, ['value', 'items', 'id', 'position', 'trigger']),
       label,
       index,
-      renderLabel: this.$scopedSlots.label || (() => this.$slots.label || label)
+      renderLabel:
+        this.$scopedSlots.label || (() => this.$slots.label || label),
+      renderBefore: () => this.$slots.before,
+      renderAfter: () => this.$slots.after
     })
   },
   destroyed () {
