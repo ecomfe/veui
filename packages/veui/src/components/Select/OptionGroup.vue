@@ -95,8 +95,11 @@ const OptionGroup = {
         this.labelContent
       )
     },
+    isInput () {
+      return isType(this.select, 'input')
+    },
     popupRole () {
-      return isType(this.select, 'input') ? 'listbox' : 'menu'
+      return this.isInput ? 'listbox' : 'menu'
     },
     normalizedOptions () {
       if (this.options) {
@@ -169,8 +172,8 @@ const OptionGroup = {
     close () {
       this.expanded = false
     },
-    closeMenu (ref) {
-      let menu = this.$refs[ref]
+    closeMenu (i) {
+      let menu = this.$refs.group[i]
       while (menu) {
         menu.close()
         menu = menu.menu
@@ -188,7 +191,8 @@ const OptionGroup = {
         }
         return option.options ? (
           <OptionGroup
-            ref={`group-${i}`}
+            ref="group"
+            refInFor
             label={option.label}
             options={option.options}
             position={option.position}
@@ -211,11 +215,18 @@ const OptionGroup = {
                 ? () =>
                   this.$scopedSlots['option-group-label']({
                     ...option,
-                    closeMenu: () => this.closeMenu(`group-${i}`)
+                    closeMenu: () => this.closeMenu(i)
                   })
                 : null
             }}
-          />
+          >
+            {option.renderBefore ? (
+              <template slot="before">{option.renderBefore()}</template>
+            ) : null}
+            {option.renderAfter ? (
+              <template slot="after">{option.renderAfter()}</template>
+            ) : null}
+          </OptionGroup>
         ) : (
           <Option
             id={option.optionId}
@@ -300,7 +311,9 @@ const OptionGroup = {
         {this.canPopOut ? (
           <Overlay
             ref="overlay"
-            target="button"
+            target={
+              this.isInput ? this.menu.$refs.box || this.menu.$el : 'button'
+            }
             open={this.expanded}
             options={this.realOverlayOptions}
             overlayClass={this.mergeOverlayClass(this.$c('option-group-box'))}
@@ -332,8 +345,10 @@ const OptionGroup = {
               }}
               onKeydown={this.handleKeydown}
             >
+              {this.$slots.before}
               {content}
               {this.$slots.default}
+              {this.$slots.after}
             </div>
           </Overlay>
         ) : (
@@ -351,8 +366,15 @@ function normalizeItem (item) {
     ...pick(
       item,
       isGroup
-        ? ['label', 'position', 'trigger', 'renderLabel']
-        : ['label', 'value', 'renderLabel']
+        ? [
+          'label',
+          'position',
+          'trigger',
+          'renderLabel',
+          'renderBefore',
+          'renderAfter'
+        ]
+        : ['label', 'value', 'renderLabel', 'renderBefore', 'renderAfter']
     ),
     ...(isGroup ? { options } : {})
   }

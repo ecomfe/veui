@@ -97,9 +97,20 @@ export function patchIndeterminate (element) {
  *
  * @param {Element} parentElem 父元素
  * @param {Element} childElem 子元素
+ * @param {boolean} followPortal 是否考虑 portal 嵌套关系
  * @return {boolean}
  */
-export function contains (parentElem, childElem) {
+export function contains (parentElem, childElem, followPortal) {
+  if (followPortal) {
+    let portalEntry = getPortalEntry(childElem)
+    return (
+      contains(parentElem, childElem) ||
+      (portalEntry
+        ? contains(parentElem, portalEntry) ||
+          contains(parentElem, portalEntry, true)
+        : false)
+    )
+  }
   return parentElem.contains
     ? parentElem.contains(childElem)
     : document.body.contains.call(parentElem, childElem)
@@ -735,4 +746,23 @@ export function getElementScrollbarWidth (el, horizontal) {
     return el.offsetHeight - el.clientHeight
   }
   return el.offsetWidth - el.clientWidth
+}
+
+/**
+ * 查找元素是否有绑定的 Portal 入口，如果有则返回该入口元素
+ *
+ * @param {Element} element 起始的元素
+ * @returns {?Element} Portal 入口元素
+ */
+export function getPortalEntry (element) {
+  let el = element
+  while (el) {
+    if (el.__portal__) {
+      return el.__portal__
+    }
+
+    el = el.parentNode
+  }
+
+  return null
 }

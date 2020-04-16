@@ -341,6 +341,155 @@
       </veui-option-group>
     </veui-select>
   </section>
+  <section>
+    <h2>复杂自定义样式：</h2>
+    <veui-select
+      v-model="complex"
+      multiple
+      clearable
+      searchable
+    >
+      <veui-option-group
+        label="内容类型"
+        position="popup"
+      >
+        <veui-option
+          label="通用"
+          value="general"
+        />
+        <veui-option
+          label="问答"
+          value="qna"
+        />
+        <veui-option
+          label="常见问题"
+          value="faq"
+        />
+      </veui-option-group>
+      <veui-option-group
+        label="行业"
+        position="popup"
+      >
+        <veui-option-group
+          label="医疗服务"
+          position="popup"
+        >
+          <veui-option label="x"/>
+        </veui-option-group>
+        <veui-option-group
+          label="整形美容"
+          position="popup"
+        >
+          <veui-option
+            label="整形美容综合"
+            value="1"
+          />
+          <veui-option
+            label="整形修复外科"
+            value="2"
+          />
+          <veui-option
+            label="五官整形"
+            value="3"
+          />
+          <veui-option
+            label="微整形"
+            value="4"
+          />
+          <veui-option
+            label="减肥塑身"
+            value="5"
+          />
+          <veui-option
+            label="植发"
+            value="6"
+          />
+          <veui-option
+            label="纹身"
+            value="7"
+          />
+          <veui-option
+            label="口腔美容"
+            value="8"
+          />
+        </veui-option-group>
+        <veui-option-group
+          label="医疗器械"
+          position="popup"
+        >
+          <veui-option label="x"/>
+        </veui-option-group>
+        <veui-option-group
+          label="教育培训"
+          position="popup"
+        >
+          <veui-option label="x"/>
+        </veui-option-group>
+        <veui-option-group
+          label="招商加盟"
+          position="popup"
+        >
+          <veui-option label="x"/>
+        </veui-option-group>
+        <veui-option-group
+          label="商务服务"
+          position="popup"
+        >
+          <veui-option label="x"/>
+        </veui-option-group>
+        <veui-option-group
+          label="办公文教"
+          position="popup"
+        >
+          <veui-option label="x"/>
+        </veui-option-group>
+        <veui-option-group
+          label="网络服务"
+          position="popup"
+        >
+          <veui-option label="x"/>
+        </veui-option-group>
+      </veui-option-group>
+      <veui-option-group
+        label="业务点"
+        position="popup"
+        data-id="asdf"
+      >
+        <veui-option
+          label="工程师培训"
+          value="a"
+        />
+        <veui-option
+          label="大数据培训班"
+          value="b"
+        />
+        <veui-option
+          label="双眼皮产品类"
+          value="c"
+        />
+        <veui-option
+          label="分散机"
+          value="d"
+        />
+        <veui-option
+          label="编码器"
+          value="e"
+        />
+        <veui-option
+          label="相亲中介"
+          value="f"
+        />
+        <template #before>
+          <div class="note">
+            <veui-icon name="info-circle"/>
+            <div class="text">
+              此处仅显示业务点 Top n，您可通过搜索添加其它业务点标签。
+            </div>
+          </div>
+        </template>
+      </veui-option-group>
+    </veui-select>
+  </section>
   <section style="margin-top:500px;">
     <h2>可搜索分组样式：</h2>
     <veui-select
@@ -449,6 +598,7 @@ import { Icon, Select, Option, OptionGroup, Radio, Field, Form } from 'veui'
 import type from 'veui/managers/type'
 import 'vue-awesome/icons/flag'
 import 'vue-awesome/icons/gift'
+import 'veui-theme-dls-icons/info-circle'
 
 export default {
   name: 'select-demo',
@@ -471,6 +621,7 @@ export default {
       hero: ['baidu'],
       disabled: true,
       selected: true,
+      complex: ['1', '2'],
       icon: true,
       defaultValue: null,
       defaultMultiValue: null,
@@ -648,7 +799,24 @@ export default {
 }
 
 .filter {
-  width: ~'calc(100% - 10px)';
+  width: calc(100% - 10px);
   margin: 5px;
+}
+
+.note {
+  margin: 8px;
+  font-size: 12px;
+  width: 240px;
+
+  .veui-icon {
+    float: left;
+    margin-top: 3px;
+    margin-right: 8px;
+    margin-left: 8px;
+  }
+
+  .text {
+    overflow: hidden;
+  }
 }
 </style>
