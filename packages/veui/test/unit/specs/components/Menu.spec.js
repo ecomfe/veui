@@ -174,4 +174,25 @@ describe('components/Menu', () => {
     expect(vm.active).to.equal('/menu/input')
     wrapper.destroy()
   })
+
+  it('should expand active items correctly on activating', async () => {
+    let wrapper = mount(
+      {
+        ...options,
+        template:
+          '<veui-menu :active.sync="active" :expanded.sync="expanded" :items="items"/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+    let item = wrapper.findAll('.veui-menu-item').at(2)
+    expect(item.find('.veui-menu-item-label').text()).to.equal('Input')
+    expect(vm.expanded).to.deep.equal(['一级导航1', '二级导航11'])
+    wrapper.destroy()
+  })
 })

@@ -62,27 +62,32 @@
           slot="option-label"
           slot-scope="props"
         >
-          <template v-if="!!suggestionsProps.keyword">
-            <template v-for="({ parts }, idx) in props.matches">
-              <template v-for="({ text, matched }, index) in parts">
-                <mark
-                  v-if="matched"
-                  :key="`${idx}-${index}`"
-                  :class="$c('option-matched')"
-                >{{ text }}</mark>
+          <slot
+            name="option-label"
+            v-bind="props"
+          >
+            <template v-if="!!suggestionsProps.keyword">
+              <template v-for="({ parts }, idx) in props.matches">
+                <template v-for="({ text, matched }, index) in parts">
+                  <mark
+                    v-if="matched"
+                    :key="`${idx}-${index}`"
+                    :class="$c('option-matched')"
+                  >{{ text }}</mark>
+                  <span
+                    v-else
+                    :key="`${idx}-${index}`"
+                  >{{ text }}</span>
+                </template>
                 <span
-                  v-else
-                  :key="`${idx}-${index}`"
-                >{{ text }}</span>
+                  v-if="idx < props.matches.length - 1"
+                  :key="idx"
+                  :class="$c('autocomplete-suggestion-separator')"
+                >&gt;</span>
               </template>
-              <span
-                v-if="idx < props.matches.length - 1"
-                :key="idx"
-                :class="$c('autocomplete-suggestion-separator')"
-              >&gt;</span>
             </template>
-          </template>
-          <span v-else>{{ props.label }}</span>
+            <span v-else>{{ props.label }}</span>
+          </slot>
         </template>
       </veui-option-group>
     </slot>
