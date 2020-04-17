@@ -255,4 +255,35 @@ describe('components/Autocomplete', function () {
 
     wrapper.destroy()
   })
+
+  it('should render `option-label` slot correctly', async () => {
+    let wrapper = mount(
+      {
+        ...componentOptions,
+        template: `<veui-autocomplete placeholder="placeholder" :datasource="datasource" suggest-trigger="focus">
+          <template slot="option-label" slot-scope="option">
+            {{ option.value }}-{{ option.value }}
+          </template>
+        </veui-autocomplete>`
+      },
+      debugInBrowser
+    )
+    let { vm } = wrapper
+    let input = wrapper.find(NATIVE_INPUT)
+    input.trigger('focus')
+    await vm.$nextTick()
+
+    let { value } = vm.datasource[0]
+    expect(
+      wrapper.find('.veui-option-label').text() === `${value}-${value}`
+    ).to.equal(true)
+    input.element.value = 'fe'
+    input.trigger('input')
+    await vm.$nextTick()
+    let value2 = vm.datasource[1].value
+    expect(
+      wrapper.find('.veui-option-label').text() === `${value2}-${value2}`
+    ).to.equal(true)
+    wrapper.destroy()
+  })
 })

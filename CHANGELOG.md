@@ -1,8 +1,13 @@
 ## 2.0.0-alpha.13
 
+### 💡 主要变更
+
+- [+] `Autocomplete` 组件新增了 `option-label` 插槽。
+
 ### 🐞 问题修复
 
 - [^] 修复了 `Tab` 组件的 `label` 等 prop 更新时视图没有同步更新的问题。
+- [^] 修复了 `Menu` 组件的数据源中的 parent 引用在 SSR 环境下无限循环的问题。
 
 ## 2.0.0-alpha.12
 
