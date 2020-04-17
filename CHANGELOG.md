@@ -3,6 +3,7 @@
 ### 💡 主要变更
 
 - [+] `Autocomplete` 组件新增了 `option-label` 插槽。
+- [+] `OptionGroup` 组件新增 `before`/`after` 插槽，用于在 `popup` 模式下在新开浮层上下插入自定义内容。
 
 ### 🐞 问题修复
 
