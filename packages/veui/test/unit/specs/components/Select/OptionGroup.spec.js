@@ -1,5 +1,7 @@
 import Select from 'veui/components/Select'
 import Dropdown from 'veui/components/Dropdown'
+import Option from 'veui/components/Option'
+import OptionGroup from 'veui/components/OptionGroup'
 import { mount } from '@vue/test-utils'
 
 describe('components/Select/OptionGroup', () => {
@@ -188,6 +190,50 @@ describe('components/Select/OptionGroup', () => {
     await wrapper.vm.$nextTick()
     let group = wrapper.find('.veui-option-group-box')
     expect(group.element.style.display).to.equal('')
+    wrapper.destroy()
+  })
+
+  it('should render `before` and `after` slot correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select,
+          'veui-option-group': OptionGroup,
+          'veui-option': Option
+        },
+        template: `
+        <veui-select>
+          <veui-option-group label="A" position="popup" overlay-class="my-group">
+            <veui-option value="a0" label="A.0"/>
+            <veui-option value="a1" label="A.1"/>
+            <veui-option value="a2" label="A.2"/>
+            <template #before>BEFORE</template>
+            <template #after>AFTER</template>
+          </veui-option-group>
+        </veui-select>
+      `
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    wrapper.find(Select).vm.expanded = true
+
+    await wrapper.vm.$nextTick()
+    wrapper
+      .find(
+        '.veui-option-group:not([aria-hidden="true"]) > .veui-option-group > .veui-option-group-button'
+      )
+      .trigger('click')
+    await wrapper.vm.$nextTick()
+
+    let options = wrapper.find(
+      '.veui-option-group-options[aria-expanded="true"]'
+    )
+    expect(options.element.firstChild.nodeValue).to.equal('BEFORE')
+    expect(options.element.lastChild.nodeValue).to.equal('AFTER')
+
     wrapper.destroy()
   })
 })
