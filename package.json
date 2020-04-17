@@ -21,6 +21,7 @@
     ],
     "packages/veui-theme-dls/**/*.less,packages/veui/demo/**/*.vue": [
       "prettier --write 'packages/veui-theme-dls/**/*.less'",
+      "stylelint **/*.vue --fix",
       "stylelint **/*.less --syntax=less --fix",
       "git add"
     ]

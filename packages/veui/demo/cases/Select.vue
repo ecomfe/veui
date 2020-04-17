@@ -1,6 +1,8 @@
 <template>
 <article>
-  <h1><code>&lt;veui-select&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-select&gt;</code>
+  </h1>
   <section>
     <h2>4 种大小：</h2>
     <veui-form>
@@ -55,7 +57,9 @@
       <template
         slot="tag"
         slot-scope="{ label }"
-      ><i>{{ label }}</i></template>
+      >
+        <i>{{ label }}</i>
+      </template>
     </veui-select>
   </section>
   <section>
@@ -156,9 +160,7 @@
         slot="option-label"
         slot-scope="props"
       >
-        <span class="veui-option-custom-label">
-          {{ props.label }}
-        </span>
+        <span class="veui-option-custom-label">{{ props.label }}</span>
       </template>
     </veui-select>
   </section>
@@ -172,9 +174,7 @@
         slot="option"
         slot-scope="props"
       >
-        <span class="veui-option-label-text">
-          {{ props.label }}
-        </span>
+        <span class="veui-option-label-text">{{ props.label }}</span>
         <veui-icon name="flag"/>
       </template>
     </veui-select>
@@ -189,9 +189,7 @@
         slot="option"
         slot-scope="props"
       >
-        <veui-radio :checked="props.selected">
-          {{ props.label }}
-        </veui-radio>
+        <veui-radio :checked="props.selected">{{ props.label }}</veui-radio>
       </template>
     </veui-select>
   </section>
@@ -348,146 +346,52 @@
       multiple
       clearable
       searchable
+      :options="complexResult"
+      @input="handleSearch"
     >
-      <veui-option-group
-        label="内容类型"
-        position="popup"
-      >
+      <template v-if="complexResult">
         <veui-option
-          label="通用"
-          value="general"
+          v-for="o in complexResult"
+          :key="o.value"
+          :label="o.label"
+          :value="o.value"
         />
-        <veui-option
-          label="问答"
-          value="qna"
-        />
-        <veui-option
-          label="常见问题"
-          value="faq"
-        />
-      </veui-option-group>
-      <veui-option-group
-        label="行业"
-        position="popup"
-      >
+      </template>
+      <template v-else>
         <veui-option-group
-          label="医疗服务"
+          v-for="(group, i) in complexData"
+          :key="i"
+          :label="group.label"
           position="popup"
         >
-          <veui-option label="x"/>
-        </veui-option-group>
-        <veui-option-group
-          label="整形美容"
-          position="popup"
-        >
-          <veui-option
-            label="整形美容综合"
-            value="1"
-          />
-          <veui-option
-            label="整形修复外科"
-            value="2"
-          />
-          <veui-option
-            label="五官整形"
-            value="3"
-          />
-          <veui-option
-            label="微整形"
-            value="4"
-          />
-          <veui-option
-            label="减肥塑身"
-            value="5"
-          />
-          <veui-option
-            label="植发"
-            value="6"
-          />
-          <veui-option
-            label="纹身"
-            value="7"
-          />
-          <veui-option
-            label="口腔美容"
-            value="8"
-          />
-        </veui-option-group>
-        <veui-option-group
-          label="医疗器械"
-          position="popup"
-        >
-          <veui-option label="x"/>
-        </veui-option-group>
-        <veui-option-group
-          label="教育培训"
-          position="popup"
-        >
-          <veui-option label="x"/>
-        </veui-option-group>
-        <veui-option-group
-          label="招商加盟"
-          position="popup"
-        >
-          <veui-option label="x"/>
-        </veui-option-group>
-        <veui-option-group
-          label="商务服务"
-          position="popup"
-        >
-          <veui-option label="x"/>
-        </veui-option-group>
-        <veui-option-group
-          label="办公文教"
-          position="popup"
-        >
-          <veui-option label="x"/>
-        </veui-option-group>
-        <veui-option-group
-          label="网络服务"
-          position="popup"
-        >
-          <veui-option label="x"/>
-        </veui-option-group>
-      </veui-option-group>
-      <veui-option-group
-        label="业务点"
-        position="popup"
-        data-id="asdf"
-      >
-        <veui-option
-          label="工程师培训"
-          value="a"
-        />
-        <veui-option
-          label="大数据培训班"
-          value="b"
-        />
-        <veui-option
-          label="双眼皮产品类"
-          value="c"
-        />
-        <veui-option
-          label="分散机"
-          value="d"
-        />
-        <veui-option
-          label="编码器"
-          value="e"
-        />
-        <veui-option
-          label="相亲中介"
-          value="f"
-        />
-        <template #before>
-          <div class="note">
-            <veui-icon name="info-circle"/>
-            <div class="text">
-              此处仅显示业务点 Top n，您可通过搜索添加其它业务点标签。
+          <template v-for="(g, j) in group.options">
+            <veui-option-group
+              v-if="g.options"
+              :key="j"
+              position="popup"
+              :label="g.label"
+              :options="g.options"
+            />
+            <veui-option
+              v-else
+              :key="j"
+              :label="g.label"
+              :value="g.value"
+            />
+          </template>
+          <template
+            v-if="group.label === '业务点'"
+            #before
+          >
+            <div class="note">
+              <veui-icon name="info-circle"/>
+              <div class="text">
+                此处仅显示业务点 Top n，您可通过搜索添加其它业务点标签。
+              </div>
             </div>
-          </div>
-        </template>
-      </veui-option-group>
+          </template>
+        </veui-option-group>
+      </template>
     </veui-select>
   </section>
   <section style="margin-top:500px;">
@@ -516,9 +420,7 @@
         slot="option"
         slot-scope="props"
       >
-        <div class="veui-option-custom">
-          {{ props.label }}
-        </div>
+        <div class="veui-option-custom">{{ props.label }}</div>
       </template>
     </veui-select>
   </section>
@@ -532,9 +434,9 @@
         slot="option"
         slot-scope="props"
       >
-        <span class="veui-option-label-text veui-option-custom-label">
-          {{ props.label }}
-        </span>
+        <span class="veui-option-label-text veui-option-custom-label">{{
+          props.label
+        }}</span>
         <veui-icon name="gift"/>
       </template>
     </veui-select>
@@ -737,7 +639,75 @@ export default {
             ]
           }
         ]
-      }
+      },
+      searchResult: null,
+      complexData: [
+        {
+          label: '内容类型',
+          options: [
+            { label: '通用', value: '1' },
+            { label: '问答', value: '2' },
+            { label: '常见问题', value: '3' }
+          ]
+        },
+        {
+          label: '行业',
+          options: [
+            {
+              label: '医疗服务',
+              options: [{ label: 'A', value: 'a' }]
+            },
+            {
+              label: '整形美容',
+              options: [
+                { label: '整形美容综合', value: '4' },
+                { label: '整形修复外科', value: '5' },
+                { label: '五官整形', value: '6' },
+                { label: '微整形', value: '7' },
+                { label: '减肥塑身', value: '8' },
+                { label: '植发', value: '9' },
+                { label: '纹身', value: '10' },
+                { label: '口腔美容', value: '11' }
+              ]
+            },
+            {
+              label: '医疗器械',
+              options: [{ label: 'B', value: 'b' }]
+            },
+            {
+              label: '教育培训',
+              options: [{ label: 'C', value: 'c' }]
+            },
+            {
+              label: '招商加盟',
+              options: [{ label: 'D', value: 'd' }]
+            },
+            {
+              label: '商务服务',
+              options: [{ label: 'E', value: 'e' }]
+            },
+            {
+              label: '办公文教',
+              options: [{ label: 'F', value: 'f' }]
+            },
+            {
+              label: '网络服务',
+              options: [{ label: 'G', value: 'g' }]
+            }
+          ]
+        },
+        {
+          label: '业务点',
+          options: [
+            { label: '工程师培训', value: '12' },
+            { label: '大数据培训班', value: '13' },
+            { label: '双眼皮产品类', value: '14' },
+            { label: '分散机', value: '15' },
+            { label: '编码器', value: '16' },
+            { label: '相亲中介', value: '17' }
+          ]
+        }
+      ]
     }
   },
   computed: {
@@ -753,6 +723,16 @@ export default {
           acc.push(cur)
           return acc
         }, [])
+    },
+    complexResult () {
+      return this.searchResult
+        ? (this.complex || [])
+          .map(v => ({
+            label: v + '**',
+            value: v
+          }))
+          .concat(this.searchResult || [])
+        : null
     }
   },
   mounted () {
@@ -765,6 +745,18 @@ export default {
   methods: {
     change (value) {
       // alert('您选中的下拉选项值是' + value)
+    },
+    handleSearch (val) {
+      if (val) {
+        this.searchResult = Array.from({
+          length: 5
+        }).map((_, i) => ({
+          label: `${val}#${i}`,
+          value: `${val}#${i}`
+        }))
+      } else {
+        this.searchResult = null
+      }
     }
   }
 }

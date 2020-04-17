@@ -134,7 +134,7 @@ export default {
       return this.options ? this.options.map(normalizeItem) : this.inlineOptions
     },
     isFiltered () {
-      return this.searchable && this.inputValue
+      return !!(this.searchable && this.inputValue)
     },
     isEmpty () {
       return (

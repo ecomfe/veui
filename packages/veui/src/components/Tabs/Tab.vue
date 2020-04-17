@@ -3,7 +3,7 @@ import { uniqueId, includes } from 'lodash'
 import { makeCoupledChild } from '../../mixins/coupled'
 import '../../common/uiTypes'
 import prefix from '../../mixins/prefix'
-import { renderSlot } from '../../utils/helper'
+import { renderSlot, Void } from '../../utils/helper'
 
 let tab = makeCoupledChild({
   direct: true,
@@ -96,8 +96,8 @@ export default {
       return this.matches || this.tabs.matches || (() => false)
     }
   },
-  render (h) {
-    return h()
+  render () {
+    return <Void />
   }
 }
 </script>
