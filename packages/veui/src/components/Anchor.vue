@@ -56,7 +56,15 @@ import Tree from './Tree'
 import Link from './Link'
 import ui from '../mixins/ui'
 import prefix from '../mixins/prefix'
-import { debounce, reduce, startsWith, includes, get, isString } from 'lodash'
+import {
+  debounce,
+  reduce,
+  startsWith,
+  includes,
+  get,
+  isString,
+  isObject
+} from 'lodash'
 import {
   scrollToAlign,
   getVisibleRect,
@@ -178,7 +186,8 @@ export default {
   watch: {
     container: {
       handler (val) {
-        if (!val || val === window) {
+        // isObject 检查：避免 SSR 时访问 window
+        if (!val || (isObject(val) && val === window)) {
           this.realContainer = val || null
           this.$nextTick(this.updateOnContainerChange)
         } else if (isSpecialSyntax(val)) {
@@ -217,10 +226,8 @@ export default {
     if (hash && includes(this.allAnchors, hash)) {
       this.ensureHashActive = true
       this.updateActive(hash)
-      const isComplete = document.readyState === 'complete'
-      if (isComplete) {
-        this.scrollForHash()
-      } else {
+      const isLoading = document.readyState === 'loading'
+      if (isLoading) {
         this.waitForLoaded = true
         window.addEventListener('DOMContentLoaded', () =>
           // 为了尽可能在浏览器滚动后再滚动一次
@@ -230,6 +237,8 @@ export default {
             this.scrollForHash()
           }, 0)
         )
+      } else {
+        this.scrollForHash()
       }
     }
   },

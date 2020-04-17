@@ -604,8 +604,8 @@ export function getVisibleRect (elem, elemRect) {
   while (el) {
     // safari scrollHeight bug
     if (
-      getComputedStyle(el).overflow !== 'visible' ||
-      el === document.documentElement
+      getComputedStyle(el).overflow !== 'visible' &&
+      el !== document.documentElement
     ) {
       let { clientHeight, clientWidth, scrollHeight, scrollWidth } = el
       let vScroll = scrollHeight > clientHeight
@@ -653,7 +653,7 @@ export function calcClip (
   { top: vTop, right: vRight, bottom: vBottom, left: vLeft }
 ) {
   let clip = null
-  if (vTop !== null && (top < vTop || bottom > vBottom)) {
+  if (vTop != null && (top < vTop || bottom > vBottom)) {
     clip = {
       top: clamp(vTop - top, 0, height),
       bottom: clamp(vBottom - top, 0, height),
@@ -661,7 +661,7 @@ export function calcClip (
       right: width
     }
   }
-  if (vLeft !== null && (left < vLeft || right > vRight)) {
+  if (vLeft != null && (left < vLeft || right > vRight)) {
     clip = {
       left: clamp(vLeft - left, 0, width),
       right: clamp(vRight - left, 0, width),
