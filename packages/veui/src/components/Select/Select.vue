@@ -406,9 +406,10 @@ export default {
       </span>
     ) : null
 
-    let renderGroup = (options, children) => {
+    let renderGroup = (options, children, key) => {
       return (
         <OptionGroup
+          key={key}
           v-show={!!options}
           hidden={!options}
           aria-hidden={!options}
@@ -536,7 +537,9 @@ export default {
               onKeydown={this.handleKeydown}
             >
               {this.$slots.before}
-              {!this.options ? renderGroup(null, this.$slots.default) : null}
+              {!this.options
+                ? renderGroup(null, this.$slots.default, 'data')
+                : null}
               {renderGroup(
                 this.isFiltered ? this.filteredOptions : this.realOptions,
                 this.isFiltered && !this.filteredOptions.length ? (
@@ -547,7 +550,8 @@ export default {
                       })
                       : this.$slots['no-data'] || this.t('noData')}
                   </div>
-                ) : null
+                ) : null,
+                'render'
               )}
               {this.$slots.after}
             </div>
