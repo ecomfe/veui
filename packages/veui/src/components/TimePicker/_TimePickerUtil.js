@@ -2,31 +2,32 @@ import {
   padStart,
   map,
   includes,
-  last,
-  first,
   findIndex,
-  findLastIndex
+  findLastIndex,
+  intersection,
+  union
 } from 'lodash'
 
 const isArray = Array.isArray
 
-const timeToNumber = time => {
-  return includes([-Infinity, Infinity], time[0])
-    ? time[0]
-    : parseInt(time.map(i => padStart(i, 2, '0')).join(''), 10)
-}
-
-const matchEdge = (prev, edge) => {
-  // prev 是空数组，那么可以返回true，即 idx === 0
-  return prev.every((i, index) => i === edge[index])
-}
+const NONE = 0
+const INTERSECTION = 1
+const UNION = 2
 
 export default class TimePickerUtil {
-  datasource = null; // [ [1, 2, 3], [1, 2, 3] ]
-  min = null;
-  max = null;
+  datasource = null // [ [1, 2, 3], [1, 2, 3] ]
+  min = null
+  max = null
 
-  available = null; // [ [1, 2, 3], [1, 2, 3] ]
+  available = null // [ [1, 2, 3], [1, 2, 3] ]
+
+  /**
+   * @typedef TimePickerUtilOptions
+   * @type {Object}
+   * @property {!number[][]} datasource - 时间选项的二维数组
+   * @property {number[]=} min - 最小值
+   * @property {number[]=} max - 最大值
+   */
 
   constructor (options) {
     if (options) {
@@ -34,6 +35,11 @@ export default class TimePickerUtil {
     }
   }
 
+  /**
+   * 修改 util 的配置
+   * @param {TimePickerUtilOptions} options - 配置
+   * @return {TimePickerUtil} this
+   */
   setOptions ({ datasource, min, max }) {
     if (
       !isArray(datasource) ||
@@ -46,147 +52,185 @@ export default class TimePickerUtil {
     this.datasource = map(datasource, i => i.sort((a, b) => (a > b ? 1 : -1)))
     this.min = min || datasource.map(i => -Infinity)
     this.max = max || datasource.map(i => Infinity)
+    // null 表示尚未计算
     this.available = null
     return this
   }
 
-  getIndexOnPrevMatch (bottom, prevAvailable, idx) {
-    let ds = this.datasource
-    const prevPicker = bottom ? first : last
-    const curPicker = prevPicker
-    const afterPicker = bottom ? last : first
-    const curEdge = bottom ? this.min : this.max
-    const afterEdge = bottom ? this.max : this.min
-    const fastIdx = bottom ? 0 : ds[idx].length - 1
+  /**
+   * 这个可以和 getMaxTime 合并到一起，但是感觉可读性下降很多
+   * 计算最小的时间, 这个时间有可能是超过的最大值：
+   *  对于 datasource ： [ [1, 2, 3], [4, 5, 6], [7, 8, 9] ], min：[2, 3, 8]
+   *  1：第一位选取 2，等于对应的最值 2 ，_prevEdge 是 true
+   *  2：因为 _prevEdge 是 true， 所以选择大于 3 的值即 4, _prevEdge是 false
+   *  3：因为 _prevEdge 是 false，直接选取 0 处值，即 7
+   *  得到结果：[2, 4, 7]
+   * @param {number} _index - 内部递归的位置
+   * @param {boolean} _prevEdge - 内部递归的状态，表示之前选取是贴着最小值的
+   * @return {Array<number>=} 没有值返回 undefined
+   */
+  getMinTime (_index = 0, _prevEdge) {
+    if (!_index) {
+      _prevEdge = true
+    }
+    let source = this.datasource[_index]
+    // 根据上层选取的情况来决定决定本次选取的位置
+    let start = _prevEdge ? findIndex(source, i => i >= this.min[_index]) : 0
+    if (start > -1) {
+      let val = source[start]
+      // 上层贴着，本层值和最值相等，那么本层才是贴着最值得
+      let selfEdge = _prevEdge && val === this.min[_index]
+      if (_index + 1 < this.datasource.length) {
+        // 还有下层，递归下，下层返回 undefined 表示下层选取失败了
+        let childResult = this.getMinTime(_index + 1, selfEdge)
+        if (childResult) {
+          return [source[start], ...childResult]
+        }
 
-    let curMatch = false
-    let edgeTime = ds.reduce((result, i, index) => {
-      if (!result) {
-        return result
-      }
-      let cur
-      if (index < idx) {
-        cur = prevPicker(prevAvailable[index])
-      } else if (index === idx) {
-        curMatch = matchEdge(result, curEdge)
-        cur = curPicker(
-          curMatch
-            ? i.filter(item =>
-              bottom ? item >= curEdge[index] : item <= curEdge[index]
-            )
-            : i
-        )
+        // 本层是贴着最小值，但下层没有找到，那么本层：
+        //   1. 试着不贴，因为不贴了，下层会直接选取0处值，所以肯定会成功的
+        //   2. 本层贴着已经是可选值中最大的了，那么返回 undefined，让上层来处理
+        if (selfEdge && start + 1 < source.length) {
+          return [source[start + 1], ...this.getMinTime(_index + 1, false)]
+        }
       } else {
-        cur = afterPicker(
-          matchEdge(result, afterEdge)
-            ? i.filter(item =>
-              bottom ? item <= afterEdge[index] : item >= afterEdge[index]
-            )
-            : i
-        )
+        // 本层已经是最后一层了，直接返回本层的结果
+        return [source[start]]
       }
-      // idx === 0 上面两种情况可能会filter不到，因为0是假定前面的虚拟位满足三位一体
-      if (cur == null) {
-        return null
-      }
-      result.push(cur)
-      return result
-    }, [])
-    // 只有idx = 0 才会找不到，因为其他都是前面找到的情况下，前面存在，这里肯定能找到
-    if (!edgeTime) {
-      return -1
     }
-    if (!curMatch) {
-      return fastIdx
+    // 本次没有可选值，直接返回 undefined，让上层来处理
+  }
+
+  getMaxTime (_index = 0, _prevEdge = false) {
+    if (!_index) {
+      _prevEdge = true
     }
-    let inRange = this.isAvailable(edgeTime)
-    return bottom
-      ? findIndex(ds[idx], i =>
-        inRange ? i >= curEdge[idx] : i > curEdge[idx]
-      )
-      : findLastIndex(ds[idx], i =>
-        inRange ? i <= curEdge[idx] : i < curEdge[idx]
-      )
-  }
-
-  getIndexOnPrevMatchBottom (prevAvailable, idx) {
-    return this.getIndexOnPrevMatch(true, prevAvailable, idx)
-  }
-
-  getIndexOnPrevMatchTop (prevAvailable, idx) {
-    return this.getIndexOnPrevMatch(false, prevAvailable, idx)
-  }
-
-  getAvailableDatasourceIdx (prevAvailable, idx) {
-    // 前面都没有找到，后面都不可用
-    let ds = this.datasource
-    let available = (minIdx, maxIdx) => ds[idx].slice(minIdx, maxIdx + 1)
-
-    if (idx) {
-      let prev = prevAvailable[idx - 1]
-      if (!prev.length) {
-        return []
-      }
-      let mul = prevAvailable.reduce((result, i) => result * i.length, 1)
-      let allLess2 = prevAvailable.every(i => i <= 2)
-      if (!allLess2 && mul >= 3) {
-        return ds[idx]
-      }
-      // 4维不支持
-      if (idx >= 3) {
-        throw new Error('not support')
-      }
-      if (mul >= 2) {
-        available = (minIdx, maxIdx) => {
-          if (minIdx <= maxIdx) {
-            return ds[idx]
-          }
-          let result = ds[idx].slice()
-          result.splice(maxIdx + 1, minIdx - maxIdx - 1)
-          return result
+    let source = this.datasource[_index]
+    let start = _prevEdge
+      ? findLastIndex(source, i => i <= this.max[_index])
+      : source.length - 1
+    if (start > -1) {
+      let val = source[start]
+      let selfEdge = _prevEdge && val === this.max[_index]
+      if (_index + 1 < this.datasource.length) {
+        let childResult = this.getMaxTime(_index + 1, selfEdge)
+        if (childResult) {
+          return [source[start], ...childResult]
         }
-      }
-      if (mul === 4) {
-        let minInRange = this.isAvailable([
-          ...prevAvailable.map(i => first(i)),
-          last(ds[idx])
-        ])
-        let maxInRange = this.isAvailable([
-          ...prevAvailable.map(i => last(i)),
-          first(ds[idx])
-        ])
-        if (!minInRange && !maxInRange) {
-          return available(
-            this.getIndexOnPrevMatchBottom(
-              [first(prevAvailable[0]), last(prevAvailable[1])],
-              idx
-            ),
-            this.getIndexOnPrevMatchTop(
-              [last(prevAvailable[0]), first(prevAvailable[1])],
-              idx
-            )
-          )
+
+        if (selfEdge && start - 1 >= 0) {
+          return [source[start - 1], ...this.getMaxTime(_index + 1, false)]
         }
-        return ds[idx]
+      } else {
+        return [source[start]]
       }
     }
-    let minIdx = this.getIndexOnPrevMatchBottom(prevAvailable, idx)
-    let maxIdx = this.getIndexOnPrevMatchTop(prevAvailable, idx)
-    return minIdx === -1 || maxIdx === -1 ? [] : available(minIdx, maxIdx)
   }
 
-  getAvailableDatasource () {
-    let ds = this.datasource
-    this.available = ds.reduce((result, i, idx) => {
-      result.push(this.getAvailableDatasourceIdx(result, idx))
-      return result
-    }, [])
+  updateAvailable () {
+    let min = (this.aMin = this.getMinTime())
+    if (!min || !this.isAvailable(min)) {
+      this.available = []
+    } else {
+      // 最小值选取成功了，那么最大值也一定能取到
+      let max = this.getMaxTime()
+      this.available = this.calcAvailable(min, max, NONE)
+    }
     return this.available
   }
 
+  /**
+   * 获取可用的数据
+   * @public
+   * @return {Array} 可用的数据
+   */
+  getAvailable () {
+    if (!this.available) {
+      this.updateAvailable()
+    }
+    return this.available
+  }
+
+  /**
+   * 通过两个最值来计算每个部分的可选值
+   * @protected
+   * @param {number[]} minTime - getMinTime 计算出来的最小值（要保证合法）
+   * @param {number[]} maxTime - getMaxTime 计算出来的最大值（要保证合法）
+   * @param {0|1|2} prevOp - 上层对下层如何合并的要求
+   * @param {number} index - 内部递归的位置
+   * @return {number[][]} available
+   */
+  calcAvailable (minTime, maxTime, prevOp, index = 0) {
+    let min = minTime[index]
+    let max = maxTime[index]
+    let source = this.datasource[index]
+    let op = NONE
+    let result = []
+    let hasNext = index + 1 < this.datasource.length
+    if (!index) {
+      result = source.filter(i => i >= min && i <= max)
+      // 0处只有一个值，下层要取交集；0处有两个值，下层要取并集，否则下层取 datasource 中所有值
+      if (hasNext) {
+        // eslint-disable-next-line no-sparse-arrays
+        op = [, INTERSECTION, UNION][result.length] || NONE
+      }
+    } else if (prevOp === NONE) {
+      result = source
+    } else {
+      let rangeFromMin = source.filter(i => i >= min)
+      let rangeFromMax = source.filter(i => i <= max)
+      if (prevOp === INTERSECTION) {
+        result = intersection(rangeFromMin, rangeFromMax).sort((a, b) =>
+          a > b ? 1 : -1
+        )
+
+        if (hasNext) {
+          // 1: *──*
+          // 2: * ──*
+          //     \──*
+          // eslint-disable-next-line no-sparse-arrays
+          op = [, INTERSECTION, UNION][result.length] || NONE
+        }
+      } else {
+        result = union(rangeFromMin, rangeFromMax).sort((a, b) =>
+          a > b ? 1 : -1
+        )
+        if (hasNext) {
+          if (result.length === 1) {
+            // *── *
+            // *──/
+            op = UNION
+          } else if (
+            intersection(result, rangeFromMin) === 1 &&
+            intersection(result, rangeFromMax) === 1
+          ) {
+            // *──*
+            // *──*
+            op = UNION
+          }
+        }
+      }
+    }
+    if (hasNext) {
+      return [result, ...this.calcAvailable(minTime, maxTime, op, index + 1)]
+    } else {
+      return [result]
+    }
+  }
+
+  /**
+   * 验证时间的合法性：1. 满足最值限制 2. 必须在时间选项中（可选）
+   * @public
+   * @param {!number[]} time - 被验证的时间
+   * @param {boolean} checkInDatasource - 是否要验证在时间选项中
+   * @return {boolean} 结果
+   */
   isAvailable (time, checkInDatasource) {
     let valid = true
     if (checkInDatasource) {
+      if (!this.available) {
+        this.updateAvailable()
+      }
       valid = time.every((i, idx) => includes(this.available[idx], i))
     }
     if (valid) {
@@ -197,47 +241,55 @@ export default class TimePickerUtil {
     return valid
   }
 
+  /**
+   * 获取指定位置值固定的最小值，如在 available 中寻找 [*, 4, *] 1位是 4 的最小合法值
+   * @public
+   * @param {number} index - 指定位置
+   * @param {number} val - 值
+   * @return {?number[]} 返回找到的最小值或null
+   */
   getMinimumTimeOfIndex (index, val) {
     if (!this.available) {
-      this.available = this.getAvailableDatasource()
+      this.updateAvailable()
     }
+
     if (!includes(this.available[index], val)) {
       return null
     }
-    if (!index && val !== this.min[index]) {
-      return this.available.map((i, idx) => (idx ? i[0] : val))
-    }
-    return this.getMinimum(index, val)
-  }
 
-  getMinimum (index, val, prev = []) {
-    let avail = this.available
-    let end = avail.length - prev.length === 1
-    if (prev.length === index) {
-      return end ? [...prev, val] : this.getMinimum(index, val, [...prev, val])
-    } else {
-      let curIdx = prev.length
-      let prevFirst = [...prev, first(avail[curIdx])]
-      prevFirst = end ? prevFirst : this.getMinimum(index, val, prevFirst)
-      let prevLast = [...prev, last(avail[curIdx])]
-      prevLast = end ? prevLast : this.getMinimum(index, val, prevLast)
-
-      let minInRange = prevFirst && this.isAvailable(prevFirst)
-      let maxInRange = prevLast && this.isAvailable(prevLast)
-      if (!minInRange && !maxInRange) {
-        return null
+    let min = [...this.aMin]
+    min[index] = val
+    if (val !== this.aMin[index]) {
+      let idx = index
+      while (++idx < this.datasource.length) {
+        min[idx] = this.available[idx][0]
       }
-      let result = null
-      avail[curIdx].some(i => {
-        let cur = [...prev, i]
-        cur = end ? cur : this.getMinimum(index, val, cur)
-        let match = cur && this.isAvailable(cur)
-        if (match) {
-          result = cur
-        }
-        return match
-      })
-      return result
     }
+    if (val < this.aMin[index]) {
+      while (index--) {
+        let idx = findIndex(this.available[index], i => i === this.aMin[index])
+        if (idx < this.available[index].length - 1) {
+          min[index] = this.available[index][idx + 1]
+          break
+        } else if (index) {
+          // 非0处的最后一个了
+          min[index] = this.available[index][0]
+        } else {
+          // 0处的最后一个了,找不到了
+          return null
+        }
+      }
+    }
+
+    if (this.isAvailable(min)) {
+      return min
+    }
+    return null
   }
+}
+
+function timeToNumber (time) {
+  return includes([-Infinity, Infinity], time[0])
+    ? time[0]
+    : parseInt(time.map(i => padStart(i, 2, '0')).join(''), 10)
 }
