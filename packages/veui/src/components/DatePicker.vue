@@ -107,12 +107,15 @@
       >
         <div class="veui-date-picker-shortcuts">
           <button
-            v-for="({from, to, label}, index) in realShortcuts"
+            v-for="({ from, to, label }, index) in realShortcuts"
             :key="index"
             type="button"
             :class="{
               'veui-date-picker-shortcut': true,
-              'veui-date-picker-shortcut-selected': isShortcutSelected({from, to})
+              'veui-date-picker-shortcut-selected': isShortcutSelected({
+                from,
+                to
+              })
             }"
             @click="handleSelect([from, to])"
             @mouseenter="handleHoverShortcut([from, to])"
@@ -147,19 +150,19 @@ import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
-import { toDateData } from '../utils/date'
+import { toDateData, normalizeDateFormat } from '../utils/date'
 import { isNumber, pick, omit, keys } from 'lodash'
 import format from 'date-fns/format'
-import startOfDay from 'date-fns/start_of_day'
-import startOfWeek from 'date-fns/start_of_week'
-import startOfMonth from 'date-fns/start_of_month'
-import startOfQuarter from 'date-fns/start_of_quarter'
-import startOfYear from 'date-fns/start_of_year'
-import addDays from 'date-fns/add_days'
-import addWeeks from 'date-fns/add_weeks'
-import addMonths from 'date-fns/add_months'
-import addQuarters from 'date-fns/add_quarters'
-import addYears from 'date-fns/add_years'
+import startOfDay from 'date-fns/startOfDay'
+import startOfWeek from 'date-fns/startOfWeek'
+import startOfMonth from 'date-fns/startOfMonth'
+import startOfQuarter from 'date-fns/startOfQuarter'
+import startOfYear from 'date-fns/startOfYear'
+import addDays from 'date-fns/addDays'
+import addWeeks from 'date-fns/addWeeks'
+import addMonths from 'date-fns/addMonths'
+import addQuarters from 'date-fns/addQuarters'
+import addYears from 'date-fns/addYears'
 
 config.defaults(
   {
@@ -313,7 +316,7 @@ export default {
       }
 
       let dateFormat = this.format || TYPE_FORMAT_MAP[this.type]
-      return format(date, dateFormat)
+      return format(date, normalizeDateFormat(dateFormat))
     },
     toDateData (date) {
       if (!date) {

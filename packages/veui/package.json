@@ -17,7 +17,7 @@
   "module": "index.js",
   "dependencies": {
     "bytes": "^3.0.0",
-    "date-fns": "^1.29.0",
+    "date-fns": "^2.11.1",
     "lodash": "^4.17.4",
     "resize-detector": "^0.1.6",
     "tether": "^1.4.5",
