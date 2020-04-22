@@ -71,11 +71,9 @@
         <veui-time-picker-option-group
           :ui="realUi"
           role="listbox"
-          :aria-activedescendant="
-            realLocalValue[0] != null ? realLocalValue[0] : false
-          "
+          :aria-activedescendant="realValue[0] != null ? realValue[0] : false"
           :options="realHours"
-          :value="realLocalValue[0]"
+          :value="realValue[0]"
           @change="handleDropdownChange(0, $event)"
         >
           <template
@@ -98,11 +96,9 @@
         <veui-time-picker-option-group
           :ui="realUi"
           role="listbox"
-          :aria-activedescendant="
-            realLocalValue[1] != null ? realLocalValue[1] : false
-          "
+          :aria-activedescendant="realValue[1] != null ? realValue[1] : false"
           :options="realMinutes"
-          :value="realLocalValue[1]"
+          :value="realValue[1]"
           @change="handleDropdownChange(1, $event)"
         >
           <template
@@ -125,11 +121,9 @@
         <veui-time-picker-option-group
           :ui="realUi"
           role="listbox"
-          :aria-activedescendant="
-            realLocalValue[2] != null ? realLocalValue[2] : false
-          "
+          :aria-activedescendant="realValue[2] != null ? realValue[2] : false"
           :options="realSeconds"
-          :value="realLocalValue[2]"
+          :value="realValue[2]"
           @change="handleDropdownChange(2, $event)"
         >
           <template
@@ -156,6 +150,7 @@ import Button from '../Button'
 import Icon from '../Icon'
 import prefix from '../../mixins/prefix'
 import dropdown from '../../mixins/dropdown'
+import controllable from '../../mixins/controllable'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import i18n from '../../mixins/i18n'
@@ -172,36 +167,6 @@ import {
 import { scrollToAlign } from '../../utils/dom'
 import TimePickerUtil from './_TimePickerUtil'
 
-const genOption = (o, suffix = '') => ({
-  label: `${padStart(o, 2, '0')}${suffix}`,
-  value: o
-})
-
-const sorter = (a, b) => (a > b ? 1 : -1)
-
-const toString = (value, suffix, sep = ':') => {
-  if (!get(value, 'length')) {
-    return ''
-  }
-  return value.map(i => padStart(i, 2, '0')).join(sep) + suffix
-}
-
-const toArray = (value, sep = ':') =>
-  value
-    ? value
-      .trim()
-      .split(sep)
-      .map(i => parseInt(i, 10))
-    : []
-
-const ensureLength = (value, length, isMin) => {
-  return value.length === length
-    ? value
-    : value.length > length
-      ? value.slice(0, length)
-      : value.concat(times(length - value.length, constant(isMin ? 0 : 59)))
-}
-
 const HOURS = range(24)
 const MINUTES = range(60)
 const SECONDS = MINUTES
@@ -216,7 +181,28 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, input, dropdown, i18n],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    dropdown,
+    i18n,
+    controllable({
+      prop: 'value',
+      event: 'input',
+      get (def) {
+        let val = this.getReal(def)
+        return val ? ensureLength(toArray(val), this.datasource.length, 0) : []
+      },
+      set (val, def) {
+        // val 是数组
+        // 因为同步出去都是字符串（local 和 prop 一般是一致的），所以 local 也用字符串
+        if (!isEqual(val, this.realValue)) {
+          this.setReal(toString(val, this.minuteSuffix), def)
+        }
+      }
+    })
+  ],
   model: {
     event: 'input'
   },
@@ -243,7 +229,6 @@ export default {
   },
   data () {
     return {
-      localValue: this.getRealPropValue(),
       inputValue: null,
       availableData: null
     }
@@ -291,15 +276,15 @@ export default {
           min: ensureLength(
             toArray(this.min || '00:00:00'),
             datasource.length,
-            true
+            0
           ),
           max: ensureLength(
             toArray(this.max || '23:59:59'),
             datasource.length,
-            false
+            59
           )
         },
-        value: this.realPropValue
+        value: this.realValue
       }
     },
     realHours () {
@@ -322,9 +307,7 @@ export default {
     },
     realInputValue: {
       get () {
-        return (
-          this.inputValue || toString(this.realLocalValue, this.minuteSuffix)
-        )
+        return this.inputValue || toString(this.realValue, this.minuteSuffix)
       },
       set (val) {
         this.inputValue = val
@@ -334,16 +317,9 @@ export default {
             return
           }
         }
-        val = val || null
-        this.localValue = val
-        this.syncValue(val)
+        this.realValue = val
+        this.scrollSelectedToCenter()
       }
-    },
-    realPropValue () {
-      return this.getRealPropValue()
-    },
-    realLocalValue () {
-      return this.value === undefined ? this.localValue : this.realPropValue
     }
   },
   watch: {
@@ -356,9 +332,7 @@ export default {
           this.util = new TimePickerUtil()
         }
         if (!isEqual(utilOptions, oldUtilOptions)) {
-          this.availableData = this.util
-            .setOptions(utilOptions)
-            .getAvailableDatasource()
+          this.availableData = this.util.setOptions(utilOptions).getAvailable()
           this.checkPropValidity()
         } else if (!isEqual(value, oldValue)) {
           this.checkPropValidity()
@@ -373,13 +347,8 @@ export default {
       this.realInputValue = ''
       this.$emit('clear')
     },
-    getRealPropValue () {
-      return this.value
-        ? ensureLength(toArray(this.value), this.datasource.length, true)
-        : []
-    },
     checkPropValidity () {
-      if (this.value && !this.util.isAvailable(this.realPropValue, true)) {
+      if (this.value && !this.util.isAvailable(this.realValue, true)) {
         // TODO 需要恢复到之前的状态吗
         throw new Error('value prop is invalid!')
       }
@@ -403,41 +372,31 @@ export default {
         this.scrollSelectedTime(this.$refs.second, duration)
       })
     },
-    syncValue (val) {
-      if (!isEqual(val, this.realPropValue)) {
-        this.$forceUpdate()
-        this.$emit('input', toString(val, this.minuteSuffix) || null)
-        this.scrollSelectedToCenter()
-      }
-    },
     openDropdown (e) {
       if (!this.expanded && !this.realReadonly && !this.realDisabled) {
         this.expanded = true
-        this.initialValue = this.realLocalValue
+        this.valueOnOpen = [...this.realValue]
       }
     },
     closeDropdown () {
       if (this.expanded) {
         this.close()
-        this.inputValue = null
-        if (!isEqual(this.initialValue, this.realLocalValue)) {
-          this.$emit(
-            'change',
-            toString(this.realLocalValue, this.minuteSuffix) || null
-          )
+        this.inputValue = ''
+        if (!isEqual(this.valueOnOpen, this.realValue)) {
+          this.$emit('change', toString(this.realValue, this.minuteSuffix))
         }
       }
     },
     handleDropdownChange (index, val) {
-      let value = [...this.realLocalValue]
+      let value = [...this.realValue]
       value[index] = val
       let hasEmpty =
         value.filter(i => i != null).length !== this.availableData.length
       if (hasEmpty || !this.util.isAvailable(value)) {
         value = this.util.getMinimumTimeOfIndex(index, val)
       }
-      this.localValue = value
-      this.syncValue(value)
+      this.realValue = value
+      this.scrollSelectedToCenter()
 
       // Close if only hours are available
       if (this.mode === 'hour') {
@@ -448,5 +407,43 @@ export default {
       this.$refs.input.focus()
     }
   }
+}
+
+function toString (value, suffix, sep = ':') {
+  if (!get(value, 'length')) {
+    return ''
+  }
+  return value.map(i => padStart(i, 2, '0')).join(sep) + suffix
+}
+
+function toArray (value, sep = ':') {
+  if (Array.isArray(value)) {
+    return value
+  }
+  return value
+    ? value
+      .trim()
+      .split(sep)
+      .map(i => parseInt(i, 10))
+    : []
+}
+
+function ensureLength (value, length, padding) {
+  return value.length === length
+    ? value
+    : value.length > length
+      ? value.slice(0, length)
+      : value.concat(times(length - value.length, constant(padding)))
+}
+
+function genOption (opt, suffix = '') {
+  return {
+    label: `${padStart(opt, 2, '0')}${suffix}`,
+    value: opt
+  }
+}
+
+function sorter (a, b) {
+  return a > b ? 1 : -1
 }
 </script>

@@ -83,6 +83,9 @@ export default function makeControllable (props) {
           }
         },
         set (value) {
+          // 没有禁用 set
+          // 有 get 的话，判断下值是否相等，相等则默认不用同步；
+          // 没有 get 的话，无法判断是否相等，直接同步
           if (set !== false && ((hasGet && value !== this[name]) || !hasGet)) {
             return set ? set.call(this, value, def) : this.setReal(value, def)
           }

@@ -69,6 +69,15 @@
       :minutes="[0, 30]"
       :seconds="[0, 30]"
     />
+    <h2>选择时间段</h2>
+    <veui-time-picker
+      v-model="range1"
+      :max="range2"
+    />~
+    <veui-time-picker
+      v-model="range2"
+      :min="range1"
+    />
     <h2>disabled</h2>
     <veui-time-picker
       :min="min4"
@@ -111,7 +120,9 @@ export default {
       max3: '01:55:00',
       value4: null,
       min4: '01:30:50',
-      max4: '03:00:01'
+      max4: '03:00:01',
+      range1: null,
+      range2: null
     }
   }
 }
