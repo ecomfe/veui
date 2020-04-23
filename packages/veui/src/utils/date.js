@@ -1,4 +1,5 @@
 import { includes, merge } from './range'
+import { isString } from 'lodash'
 
 export function getDaysInMonth (year, month) {
   let day
@@ -77,4 +78,16 @@ const ONE_DAY = 24 * 60 * 60 * 1000
 
 function addDays (date, days) {
   return new Date(date - 0 + days * ONE_DAY)
+}
+
+/**
+ * 时间格式转换YYYYMMDDHHmmss 转换成date-fns/format的参数yyyyMMyyHHmmss
+ *
+ * @param {string} originFormat 日期format字符串
+ * @return {string} 转换后的date-fns/format参数
+ */
+export function normalizeDateFormat (originFormat) {
+  return isString(originFormat)
+    ? originFormat.replace(/Y/g, 'y').replace(/D/g, 'd')
+    : originFormat
 }
