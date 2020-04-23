@@ -21,7 +21,7 @@
     "veui-theme-one-icons": "^1.0.0-alpha.34"
   },
   "peerDependencies": {
-    "veui": "1.0.0-alpha.34"
+    "veui": "1.0.0-alpha.35"
   },
   "devDependencies": {
     "babel-plugin-lodash": "^3.2.11",
