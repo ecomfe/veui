@@ -24,10 +24,8 @@
   &-tree-wrapper {
     overflow: auto;
     flex: auto;
-    display: flex;
-    flex-direction: column;
     padding-right: 1px;
-    width: calc(100% + 1px);
+    margin-right: -1px;
 
     // 当 tree 收起时可能会看到 active 样式溢出到 tree 外面，盖住
     &::after {
@@ -43,8 +41,18 @@
 
   &-tree {
     position: relative;
-    overflow: visible;
+    margin-right: -1px;
     padding: @dls-menu-padding-y @dls-menu-padding-x;
+    // 盖住 tree 顶部的 padding 间隙
+    &::before {
+      content: "";
+      .absolute(0, 0, _, 0);
+      height: @dls-menu-item-spacing;
+      background-color: @dls-menu-item-background-color;
+      border-right: 1px solid @dls-menu-border-color;
+      display: block;
+      z-index: 0;
+    }
 
     .@{veui-prefix}-tree-item {
       margin-top: @dls-menu-item-spacing;
@@ -52,7 +60,7 @@
       // 盖住 active 样式在 expand 过渡时从 margin-top 露出来的部分
       &::before {
         content: "";
-        .absolute(_, -1px, _, 0);
+        .absolute(_, 0);
         height: @dls-menu-item-spacing;
         background-color: @dls-menu-item-background-color;
         border-right: 1px solid @dls-menu-border-color;
@@ -107,7 +115,7 @@
 
     &::before {
       content: "";
-      .absolute(_, -1px, _, 0);
+      .absolute(_, 0);
       height: inherit;
       background-color: @dls-menu-item-background-color;
       border-right: 1px solid @dls-menu-border-color;
@@ -232,7 +240,7 @@
     // Indicators
     &::after {
       content: "";
-      .absolute(_, -1px, _, _);
+      .absolute(_, 0, _, _);
       .size(@dls-menu-indicator-width, inherit);
       background: @dls-menu-indicator-color;
 

@@ -10,9 +10,16 @@ import {
 
 const isArray = Array.isArray
 
-const NONE = 0
-const INTERSECTION = 1
-const UNION = 2
+/**
+ * @enum {number}
+ */
+const MergeOp = {
+  NONE: 0,
+  INTERSECTION: 1,
+  UNION: 2
+}
+
+const { NONE, INTERSECTION, UNION } = MergeOp
 
 export default class TimePickerUtil {
   datasource = null // [ [1, 2, 3], [1, 2, 3] ]
@@ -24,9 +31,9 @@ export default class TimePickerUtil {
   /**
    * @typedef TimePickerUtilOptions
    * @type {Object}
-   * @property {!number[][]} datasource - 时间选项的二维数组
-   * @property {number[]=} min - 最小值
-   * @property {number[]=} max - 最大值
+   * @property {!Array<Array<number>>} datasource 时间选项的二维数组
+   * @property {Array<number>=} min 最小值
+   * @property {Array<number>=} max 最大值
    */
 
   constructor (options) {
@@ -37,7 +44,7 @@ export default class TimePickerUtil {
 
   /**
    * 修改 util 的配置
-   * @param {TimePickerUtilOptions} options - 配置
+   * @param {TimePickerUtilOptions} options 配置
    * @return {TimePickerUtil} this
    */
   setOptions ({ datasource, min, max }) {
@@ -61,28 +68,28 @@ export default class TimePickerUtil {
    * 这个可以和 getMaxTime 合并到一起，但是感觉可读性下降很多
    * 计算最小的时间, 这个时间有可能是超过的最大值：
    *  对于 datasource ： [ [1, 2, 3], [4, 5, 6], [7, 8, 9] ], min：[2, 3, 8]
-   *  1：第一位选取 2，等于对应的最值 2 ，_prevEdge 是 true
-   *  2：因为 _prevEdge 是 true， 所以选择大于 3 的值即 4, _prevEdge是 false
-   *  3：因为 _prevEdge 是 false，直接选取 0 处值，即 7
+   *  1：第一位选取 2，等于对应的最值 2 ，prevEdge 是 true
+   *  2：因为 prevEdge 是 true， 所以选择大于 3 的值即 4, prevEdge是 false
+   *  3：因为 prevEdge 是 false，直接选取 0 处值，即 7
    *  得到结果：[2, 4, 7]
-   * @param {number} _index - 内部递归的位置
-   * @param {boolean} _prevEdge - 内部递归的状态，表示之前选取是贴着最小值的
-   * @return {Array<number>=} 没有值返回 undefined
+   * @param {number} index 内部递归的位置
+   * @param {boolean} prevEdge 内部递归的状态，表示之前选取是贴着最小值的
+   * @return {?Array<number>} 没有值返回 null
    */
-  getMinTime (_index = 0, _prevEdge) {
-    if (!_index) {
-      _prevEdge = true
+  getMinTime (index = 0, prevEdge) {
+    if (!index) {
+      prevEdge = true
     }
-    let source = this.datasource[_index]
+    let source = this.datasource[index]
     // 根据上层选取的情况来决定决定本次选取的位置
-    let start = _prevEdge ? findIndex(source, i => i >= this.min[_index]) : 0
+    let start = prevEdge ? findIndex(source, i => i >= this.min[index]) : 0
     if (start > -1) {
       let val = source[start]
       // 上层贴着，本层值和最值相等，那么本层才是贴着最值得
-      let selfEdge = _prevEdge && val === this.min[_index]
-      if (_index + 1 < this.datasource.length) {
-        // 还有下层，递归下，下层返回 undefined 表示下层选取失败了
-        let childResult = this.getMinTime(_index + 1, selfEdge)
+      let selfEdge = prevEdge && val === this.min[index]
+      if (index + 1 < this.datasource.length) {
+        // 还有下层，递归下，下层返回 null 表示下层选取失败了
+        let childResult = this.getMinTime(index + 1, selfEdge)
         if (childResult) {
           return [source[start], ...childResult]
         }
@@ -91,40 +98,42 @@ export default class TimePickerUtil {
         //   1. 试着不贴，因为不贴了，下层会直接选取0处值，所以肯定会成功的
         //   2. 本层贴着已经是可选值中最大的了，那么返回 undefined，让上层来处理
         if (selfEdge && start + 1 < source.length) {
-          return [source[start + 1], ...this.getMinTime(_index + 1, false)]
+          return [source[start + 1], ...this.getMinTime(index + 1, false)]
         }
       } else {
         // 本层已经是最后一层了，直接返回本层的结果
         return [source[start]]
       }
     }
-    // 本次没有可选值，直接返回 undefined，让上层来处理
+    // 本次没有可选值，直接返回 null，让上层来处理
+    return null
   }
 
-  getMaxTime (_index = 0, _prevEdge = false) {
-    if (!_index) {
-      _prevEdge = true
+  getMaxTime (index = 0, prevEdge = false) {
+    if (!index) {
+      prevEdge = true
     }
-    let source = this.datasource[_index]
-    let start = _prevEdge
-      ? findLastIndex(source, i => i <= this.max[_index])
+    let source = this.datasource[index]
+    let start = prevEdge
+      ? findLastIndex(source, i => i <= this.max[index])
       : source.length - 1
     if (start > -1) {
       let val = source[start]
-      let selfEdge = _prevEdge && val === this.max[_index]
-      if (_index + 1 < this.datasource.length) {
-        let childResult = this.getMaxTime(_index + 1, selfEdge)
+      let selfEdge = prevEdge && val === this.max[index]
+      if (index + 1 < this.datasource.length) {
+        let childResult = this.getMaxTime(index + 1, selfEdge)
         if (childResult) {
           return [source[start], ...childResult]
         }
 
         if (selfEdge && start - 1 >= 0) {
-          return [source[start - 1], ...this.getMaxTime(_index + 1, false)]
+          return [source[start - 1], ...this.getMaxTime(index + 1, false)]
         }
       } else {
         return [source[start]]
       }
     }
+    return null
   }
 
   updateAvailable () {
@@ -154,11 +163,11 @@ export default class TimePickerUtil {
   /**
    * 通过两个最值来计算每个部分的可选值
    * @protected
-   * @param {number[]} minTime - getMinTime 计算出来的最小值（要保证合法）
-   * @param {number[]} maxTime - getMaxTime 计算出来的最大值（要保证合法）
-   * @param {0|1|2} prevOp - 上层对下层如何合并的要求
-   * @param {number} index - 内部递归的位置
-   * @return {number[][]} available
+   * @param {Array<number>} minTime getMinTime 计算出来的最小值（要保证合法）
+   * @param {Array<number>} maxTime getMaxTime 计算出来的最大值（要保证合法）
+   * @param {MergeOp} prevOp 上层对下层如何合并的要求
+   * @param {number} index 内部递归的位置
+   * @return {Array<Array<number>>} available
    */
   calcAvailable (minTime, maxTime, prevOp, index = 0) {
     let min = minTime[index]
@@ -221,8 +230,8 @@ export default class TimePickerUtil {
   /**
    * 验证时间的合法性：1. 满足最值限制 2. 必须在时间选项中（可选）
    * @public
-   * @param {!number[]} time - 被验证的时间
-   * @param {boolean} checkInDatasource - 是否要验证在时间选项中
+   * @param {!Array<number>} time 被验证的时间
+   * @param {boolean} checkInDatasource 是否要验证在时间选项中
    * @return {boolean} 结果
    */
   isAvailable (time, checkInDatasource) {
@@ -244,9 +253,9 @@ export default class TimePickerUtil {
   /**
    * 获取指定位置值固定的最小值，如在 available 中寻找 [*, 4, *] 1位是 4 的最小合法值
    * @public
-   * @param {number} index - 指定位置
-   * @param {number} val - 值
-   * @return {?number[]} 返回找到的最小值或null
+   * @param {number} index 指定位置
+   * @param {number} val 值
+   * @return {?Array<number>} 返回找到的最小值或null
    */
   getMinimumTimeOfIndex (index, val) {
     if (!this.available) {
