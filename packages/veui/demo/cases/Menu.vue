@@ -146,7 +146,7 @@ export default {
 <style lang="less">
 .veui-menu-demo {
   .small-menu {
-    height: 500px;
+    height: 300px;
   }
 }
 </style>
