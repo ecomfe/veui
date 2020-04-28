@@ -48,10 +48,8 @@
 
   .make-margin-left(@margin) {
     &-item {
-      margin-left: @margin;
-
-      &:first-child {
-        margin-left: 0;
+      & + & {
+        margin-left: @margin;
       }
     }
 

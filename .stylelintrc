@@ -23,5 +23,6 @@
         "avoidEscape": true
       }
     ]
-  }
+  },
+  "ignoreFiles": ["**/*.js"]
 }
