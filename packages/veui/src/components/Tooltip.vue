@@ -49,7 +49,8 @@ export default {
       type: Boolean,
       default: true
     },
-    autofocus: Boolean
+    autofocus: Boolean,
+    overlayUi: String
   },
   data () {
     return {
@@ -185,6 +186,7 @@ export default {
           [this.$c('tooltip-box-transparent')]: !this.interactive
         })}
         autofocus={this.realAutofocus}
+        ui={this.overlayUi}
       >
         <div
           class={this.$c('tooltip')}
