@@ -332,6 +332,7 @@
       </div>
     </div>
     <veui-popover
+      ui="m"
       :position="clickPosition"
       :target="clickTarget"
       :open.sync="clickOpen"
