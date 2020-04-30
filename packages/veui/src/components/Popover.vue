@@ -4,6 +4,7 @@ import { getNodes } from '../utils/context'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
+import { compact } from 'lodash'
 
 export default {
   name: 'veui-popover',
@@ -17,7 +18,7 @@ export default {
   render (h) {
     let data = {
       attrs: {
-        ui: this.uiParts.self || '',
+        ui: compact([this.uiParts.self, this.ui]).join(' '),
         ...this.$attrs,
         overlayClass: this.mergeOverlayClass({
           [this.$c('popover-box')]: true
