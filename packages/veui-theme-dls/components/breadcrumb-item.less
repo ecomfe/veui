@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
+  line-height: @dls-line-height-m;
 
   &:last-child {
     .@{veui-prefix}-breadcrumb-separator {
@@ -12,7 +13,6 @@
   }
 
   &-current {
-    line-height: @dls-line-height-m;
     font-weight: @dls-breadcrumb-item-current-font-weight;
   }
 }
