@@ -234,10 +234,12 @@
       <veui-input
         placeholder="允许溢出"
         maxlength="5"
+        clearable
       />
       <veui-input
         placeholder="不允许溢出"
         maxlength="5"
+        clearable
         strict
       />
     </section>
@@ -315,7 +317,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "~less-plugin-est/src/all.less";
+@import '~less-plugin-est/src/all.less';
 
 section {
   margin-bottom: 40px;

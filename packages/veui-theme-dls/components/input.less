@@ -103,15 +103,13 @@
   }
 
   &-clear {
-    margin: dls-sum(@dls-button-padding-icon * -1, -2px);
-
     &-has-append {
-      margin-right: dls-sum(
-        @dls-button-padding-icon * -1,
-        -2px,
-        @dls-input-content-spacing
-      );
+      margin-right: @dls-input-content-spacing;
     }
+  }
+
+  &-clear + &-count {
+    margin-left: @dls-input-content-spacing;
   }
 
   &-main:hover {
@@ -190,7 +188,9 @@
   }
 
   &-count {
+    line-height: 2; // ensure even number
     color: @dls-input-count-color;
+    font-variant-numeric: tabular-nums;
     .veui-transition(color);
 
     &-overflow {
