@@ -120,16 +120,18 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
         clearTimeout(el[bindingKey].timer)
         el[bindingKey].delayCb = () => {
           // refs 变化太频繁了，必须要实时再算一次
-          includeTargets = [
-            ...(excludeSelf ? [] : [el]),
-            ...getElementsByRefs(el[bindingKey].refs, context)
-          ]
-          if (!isElementIn(e.relatedTarget, includeTargets)) {
-            handler(e)
-          }
           if (el[bindingKey]) {
+            includeTargets = [
+              ...(excludeSelf ? [] : [el]),
+              ...getElementsByRefs(el[bindingKey].refs, context)
+            ]
+            if (!isElementIn(e.relatedTarget, includeTargets)) {
+              handler(e)
+            }
             el[bindingKey].timer = null
             el[bindingKey].delayCb = null
+          } else {
+            handler(e)
           }
         }
         el[bindingKey].timer = setTimeout(el[bindingKey].delayCb, delay)

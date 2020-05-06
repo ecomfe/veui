@@ -289,11 +289,8 @@ export default {
   },
   created () {
     if (this.$router) {
-      const updateActive = ({ fullPath }) => {
-        let exactActiveItem = find(
-          this.realItems,
-          item => fullPath === item.fullPath
-        )
+      const updateActive = ({ path }) => {
+        let exactActiveItem = find(this.realItems, item => path === item.path)
         this.realActive = exactActiveItem ? exactActiveItem.name : null
       }
       this.$watch('$route', updateActive)
@@ -318,14 +315,13 @@ export default {
           active: false
         }
 
-        // fullPath 是用来跳转的
         if (to == null) {
-          item.fullPath = null
+          item.path = null
         } else if (this.$router) {
-          let { fullPath } = this.$router.resolve(to).route
-          item.fullPath = fullPath
+          let { path } = this.$router.resolve(to).route
+          item.path = path
         } else if (isString(to)) {
-          item.fullPath = to
+          item.path = to
         } else {
           throw new Error(
             '[veui-menu] Non-string `to` cannot be resolved without Vue Router.'
@@ -333,7 +329,7 @@ export default {
         }
 
         if (!name) {
-          item.name = item.fullPath || ''
+          item.name = item.path || ''
         }
         item.value = item.value || item.name
 
