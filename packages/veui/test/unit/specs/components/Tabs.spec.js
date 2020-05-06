@@ -757,12 +757,7 @@ describe('components/Tabs', () => {
           'veui-tab': Tab
         },
         template: `
-          <veui-tabs
-            :active.sync="active"
-            addable
-            @add="handleAdd"
-            @remove="handleRemove"
-          >
+          <veui-tabs :active.sync="active">
             <veui-tab
               v-for="tab in tabs"
               :key="tab.name"
@@ -819,7 +814,6 @@ describe('components/Tabs', () => {
               :key="tab.name"
               :name="tab.name"
               :label="tab.label"
-              removable
             >{{ tab.content }}</veui-tab>
           </veui-tabs>`,
         data () {

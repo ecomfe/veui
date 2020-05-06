@@ -109,7 +109,8 @@ export default {
       }
 
       // Might trigger overflow change and scrollers need to be rendered before this
-      setTimeout(() => {
+      clearTimeout(this.scrollTimer)
+      this.scrollTimer = setTimeout(() => {
         this.scrollTabIntoView(tab)
       })
     }
@@ -120,6 +121,9 @@ export default {
     }
 
     this.updateLayout()
+  },
+  beforeDestroy () {
+    clearTimeout(this.scrollTimer)
   },
   methods: {
     handleActivate (tab) {
