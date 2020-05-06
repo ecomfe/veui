@@ -801,4 +801,58 @@ describe('components/Tabs', () => {
 
     wrapper.destroy()
   })
+
+  it('should not emit active changes during destroy', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tabs': Tabs,
+          'veui-tab': Tab
+        },
+        template: `
+          <veui-tabs
+            v-if="show"
+            :active.sync="active"
+          >
+            <veui-tab
+              v-for="tab in tabs"
+              :key="tab.name"
+              :name="tab.name"
+              :label="tab.label"
+              removable
+            >{{ tab.content }}</veui-tab>
+          </veui-tabs>`,
+        data () {
+          return {
+            show: true,
+            tabs: [
+              { label: '#1', content: '=1=', name: '1' },
+              { label: '#2', content: '=2=', name: '2' },
+              { label: '#3', content: '=3=', name: '3' },
+              { label: '#4', content: '=4=', name: '4' }
+            ],
+            active: '2'
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+
+    await vm.$nextTick()
+
+    expect(vm.active).to.equal('2')
+
+    vm.show = false
+
+    await vm.$nextTick()
+
+    expect(vm.active).to.equal('2')
+
+    wrapper.destroy()
+  })
 })

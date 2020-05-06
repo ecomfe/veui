@@ -46,7 +46,7 @@ export function makeCoupledChild ({
     },
     destroyed () {
       let parent = this[parentRef]
-      if (!parent) {
+      if (!parent || parent.__destroying__) {
         return
       }
 
@@ -89,6 +89,9 @@ export function makeCoupledParent ({ type, childrenKey = 'items' }) {
       findChildIndexById (id) {
         return findIndex(this[childrenKey], child => child.id === id)
       }
+    },
+    beforeDestroy () {
+      this.__destroying__ = true
     }
   }
 }
