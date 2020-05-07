@@ -240,9 +240,8 @@ export default {
     active: String,
     matches: {
       type: Function,
-      default ({ name, fullPath }, active) {
-        let key = name || fullPath
-        return ensureSlash(key) === ensureSlash(active)
+      default (route, item) {
+        return ensureSlash(route.path) === ensureSlash(item.path)
       }
     },
     collapsible: Boolean,
@@ -289,8 +288,10 @@ export default {
   },
   created () {
     if (this.$router) {
-      const updateActive = ({ path }) => {
-        let exactActiveItem = find(this.realItems, item => path === item.path)
+      const updateActive = route => {
+        let exactActiveItem = find(this.realItems, item =>
+          this.matches(route, item)
+        )
         this.realActive = exactActiveItem ? exactActiveItem.name : null
       }
       this.$watch('$route', updateActive)
@@ -343,7 +344,7 @@ export default {
     },
     markItems (items) {
       items.forEach(item => {
-        let exactActive = this.matches(item, this.realActive)
+        let exactActive = this.realActive === item.name
         let active = false
         if (item.children) {
           this.markItems(item.children)
