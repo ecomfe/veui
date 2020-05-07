@@ -5,7 +5,9 @@
     [$c('focus')]: focused
   }"
   :ui="realUi"
-  @focusin="focused = !focused"
+  @focusin="handleFocusIn"
+  @focusout="handleFocusOut"
+  @mouseleave="handleFocusOut"
   @keydown.left="step(-1, true)"
   @keydown.right="step(1, true)"
 >
@@ -21,19 +23,20 @@
     >
       <li
         v-for="(item, i) in datasource"
-        v-show="localIndex === i"
+        v-show="realIndex === i"
         ref="item"
-        :key="`${i}`"
+        :key="`i#${item.src}`"
         :class="{
           [$c('carousel-item')]: true,
-          [$c('carousel-item-current')]: localIndex === i
+          [$c('carousel-item-current')]: realIndex === i
         }"
         tabindex="0"
         @focusin="focusedIndex = i"
         @focusout="focusedIndex = null"
       >
         <slot
-          v-bind="item"
+          v-if="realIndex === i || isPreload(i)"
+          v-bind="{ ...item, preload: isPreload(i) }"
           :index="i"
         >
           <div
@@ -56,8 +59,9 @@
     v-if="indicator === 'number'"
     :class="$c('carousel-indicator-numbers')"
   >
-    {{ localIndex + 1
-    }}<span :class="$c('carousel-indicator-numbers-separator')"/>{{ count }}
+    {{ realIndex + 1 }}
+    <span :class="$c('carousel-indicator-numbers-separator')"/>
+    {{ count }}
   </div>
   <nav
     v-else-if="indicator !== 'none'"
@@ -70,7 +74,7 @@
       tabindex="-1"
       :class="{
         [$c('carousel-indicator-item')]: true,
-        [$c('carousel-indicator-item-current')]: localIndex === i
+        [$c('carousel-indicator-item-current')]: realIndex === i
       }"
       @click="select(i, 'click')"
       @focus="switchTrigger === 'hover' && select(i, 'hover')"
@@ -82,7 +86,7 @@
   <veui-button
     :ui="uiParts.control"
     :class="[$c('carousel-control'), $c('carousel-control-prev')]"
-    :disabled="!wrap && localIndex === 0"
+    :disabled="!wrap && realIndex === 0"
     @click="step(-1)"
   >
     <veui-icon
@@ -93,7 +97,7 @@
   <veui-button
     :ui="uiParts.control"
     :class="[$c('carousel-control'), $c('carousel-control-next')]"
-    :disabled="!wrap && localIndex === count - 1"
+    :disabled="!wrap && realIndex === count - 1"
     @click="step(1)"
   >
     <veui-icon
@@ -106,7 +110,7 @@
     aria-live="polite"
     aria-atomic="true"
   >
-    {{ t('detail', { index: localIndex + 1, total: datasource.length }) }}
+    {{ t('detail', { index: realIndex + 1, total: datasource.length }) }}
   </div>
 </div>
 </template>
@@ -118,6 +122,12 @@ import Icon from './Icon'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
+import makeControllable from '../mixins/controllable'
+import { contains } from '../utils/dom'
+
+const DEFAULT_LAZY_OPTIONS = {
+  preload: 1
+}
 
 export default {
   name: 'veui-carousel',
@@ -125,7 +135,7 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, i18n],
+  mixins: [prefix, ui, i18n, makeControllable(['index'])],
   props: {
     datasource: {
       type: Array,
@@ -157,41 +167,53 @@ export default {
       type: Number,
       default: 3000
     },
-    wrap: Boolean
+    wrap: Boolean,
+    lazy: {
+      type: [Boolean, Object],
+      default: false
+    }
   },
   data () {
     return {
       focused: false,
-      focusedIndex: null,
-      localIndex: this.index
+      focusedIndex: null
     }
   },
   computed: {
     count () {
       return this.datasource.length
-    }
-  },
-  watch: {
-    index (value) {
-      if (this.localIndex === value) {
-        return
+    },
+    realLazy () {
+      if (!this.lazy) {
+        return false
       }
-      this.localIndex = value
-      this.initPlay()
+      if (this.lazy === true) {
+        return DEFAULT_LAZY_OPTIONS
+      }
+
+      return {
+        ...DEFAULT_LAZY_OPTIONS,
+        ...this.lazy
+      }
     },
-    interval (value) {
-      this.initPlay()
-    },
-    localIndex (value, oldValue) {
-      this.$emit('update:index', value)
-      this.$emit('change', value, oldValue)
-    },
-    autoplay (value) {
-      this.initPlay()
+    preloadRange () {
+      if (!this.realLazy) {
+        return [0, Number.POSITIVE_INFINITY]
+      }
+
+      return [
+        (this.count + this.realIndex - this.realLazy.preload) % this.count,
+        (this.count + this.realIndex + this.realLazy.preload) % this.count
+      ]
     }
   },
   mounted () {
     this.initPlay()
+
+    this.$watch(
+      () => [this.interval, this.realIndex, this.autoplay],
+      this.initPlay
+    )
   },
   beforeDestroy () {
     this.stop()
@@ -200,13 +222,12 @@ export default {
     step (delta, focus) {
       if (
         !this.wrap &&
-        (this.localIndex + delta < 0 ||
-          this.localIndex + delta > this.count - 1)
+        (this.realIndex + delta < 0 || this.realIndex + delta > this.count - 1)
       ) {
         return
       }
 
-      this.localIndex = (this.localIndex + delta + this.count) % this.count
+      this.triggerChange((this.realIndex + delta + this.count) % this.count)
 
       if (focus) {
         this.focusCurrent()
@@ -217,17 +238,26 @@ export default {
         return
       }
 
-      this.localIndex = index
+      this.triggerChange(index)
 
       if (event === 'click') {
         this.focusCurrent()
       }
     },
+    triggerChange (value) {
+      let oldValue = this.realIndex
+      if (value === oldValue) {
+        return
+      }
+      this.realIndex = value
+      this.$emit('change', value, oldValue)
+    },
     focusCurrent () {
-      setTimeout(() => {
-        this.$refs.item[this.localIndex].focus()
+      clearTimeout(this.focusTimer)
+      this.focusTimer = setTimeout(() => {
+        this.$refs.item[this.realIndex].focus()
         this.focused = true
-        this.focusedIndex = this.localIndex
+        this.focusedIndex = this.realIndex
       })
     },
     initPlay () {
@@ -235,7 +265,7 @@ export default {
       if (!this.autoplay) {
         return
       }
-      this.__veui_carousel_timer__ = setInterval(() => {
+      this.playTimer = setInterval(() => {
         if (this.focusedIndex != null) {
           this.focusCurrent()
         }
@@ -243,7 +273,8 @@ export default {
       }, this.interval)
     },
     stop () {
-      clearTimeout(this.__veui_carousel_timer__)
+      clearTimeout(this.playTimer)
+      clearTimeout(this.focusTimer)
     },
     handleEnter () {
       if (this.pauseOnHover) {
@@ -254,6 +285,20 @@ export default {
       if (this.pauseOnHover) {
         this.initPlay()
       }
+    },
+    handleFocusIn () {
+      this.focused = true
+    },
+    handleFocusOut (e) {
+      if (!contains(this.$el, e.relatedTarget)) {
+        this.focused = false
+      }
+    },
+    isPreload (index) {
+      let [start, end] = this.preloadRange
+      return start <= end
+        ? index >= start && index <= end
+        : index >= start || index <= end
     }
   }
 }
