@@ -62,6 +62,7 @@
       :wrap="wrap"
       :indicator="indicator"
       :autoplay="autoplay"
+      lazy
     />
   </section>
 </article>
@@ -116,6 +117,17 @@ export default {
             'http://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
           alt: 'A white and gray dolphin in blue water.',
           label: '海豚'
+        },
+        {
+          src: 'https://www.baidu.com/img/bd_logo1.png',
+          alt: 'Baidu logo.',
+          label: '百度'
+        },
+        {
+          src:
+            'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg',
+          alt: 'Tesla logo.',
+          label: '特斯拉'
         }
       ]
     }
