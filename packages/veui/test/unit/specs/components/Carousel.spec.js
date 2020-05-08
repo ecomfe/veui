@@ -58,7 +58,17 @@ describe('components/Carousel', () => {
 
     let { vm } = wrapper
     let next = wrapper.find('.veui-carousel-control-next')
+    let prev = wrapper.find('.veui-carousel-control-prev')
 
+    expect(
+      wrapper
+        .findAll('.veui-carousel-item')
+        .at(0)
+        .classes()
+    ).to.include('veui-carousel-item-current')
+    prev.trigger('click')
+
+    await vm.$nextTick()
     expect(
       wrapper
         .findAll('.veui-carousel-item')
@@ -226,7 +236,8 @@ describe('components/Carousel', () => {
         }
       },
       {
-        sync: false
+        sync: false,
+        attachToDocument: true
       }
     )
 
@@ -386,6 +397,20 @@ describe('components/Carousel', () => {
         .at(0)
         .classes()
     ).to.include('veui-carousel-indicator-item-current')
+
+    wrapper
+      .findAll('.veui-carousel-indicator-item')
+      .at(0)
+      .trigger('click')
+
+    await vm.$nextTick()
+    expect(
+      wrapper
+        .findAll('.veui-carousel-indicator-item')
+        .at(0)
+        .classes()
+    ).to.include('veui-carousel-indicator-item-current')
+
     wrapper
       .findAll('.veui-carousel-indicator-item')
       .at(3)
@@ -426,13 +451,14 @@ describe('components/Carousel', () => {
         template: `
           <veui-carousel
             :datasource="items"
-            pause-on-hover
+            :pause-on-hover="pauseOnHover"
             autoplay
             :interval="200"
           />`,
         data () {
           return {
-            items
+            items,
+            pauseOnHover: true
           }
         }
       },
@@ -441,31 +467,46 @@ describe('components/Carousel', () => {
       }
     )
 
+    let { vm } = wrapper
+
     await wait(300)
     expect(
       wrapper
-        .findAll('.veui-carousel-indicator-item')
+        .findAll('.veui-carousel-item')
         .at(1)
         .classes()
-    ).to.include('veui-carousel-indicator-item-current')
+    ).to.include('veui-carousel-item-current')
     wrapper.find('.veui-carousel-viewport').trigger('mouseenter')
 
     await wait(300)
     expect(
       wrapper
-        .findAll('.veui-carousel-indicator-item')
+        .findAll('.veui-carousel-item')
         .at(1)
         .classes()
-    ).to.include('veui-carousel-indicator-item-current')
+    ).to.include('veui-carousel-item-current')
     wrapper.find('.veui-carousel-viewport').trigger('mouseleave')
 
     await wait(300)
     expect(
       wrapper
-        .findAll('.veui-carousel-indicator-item')
+        .findAll('.veui-carousel-item')
         .at(2)
         .classes()
-    ).to.include('veui-carousel-indicator-item-current')
+    ).to.include('veui-carousel-item-current')
+    vm.pauseOnHover = false
+
+    await vm.$nextTick()
+    wrapper.find('.veui-carousel-viewport').trigger('mouseenter')
+
+    await wait(300)
+    expect(
+      wrapper
+        .findAll('.veui-carousel-item')
+        .at(3)
+        .classes()
+    ).to.include('veui-carousel-item-current')
+    wrapper.find('.veui-carousel-viewport').trigger('mouseleave')
 
     wrapper.destroy()
   })
@@ -540,8 +581,7 @@ describe('components/Carousel', () => {
         }
       },
       {
-        sync: false,
-        attachToDocument: true
+        sync: false
       }
     )
 
@@ -571,6 +611,69 @@ describe('components/Carousel', () => {
 
     await vm.$nextTick()
     expect(wrapper.findAll('.veui-carousel-item img').length).to.equal(5)
+
+    wrapper.destroy()
+  })
+
+  it('should handle focus correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-carousel': Carousel
+        },
+        template: `
+          <veui-carousel
+            :datasource="items"
+            :interval="100"
+          />`,
+        data () {
+          return {
+            items
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    let item
+    let next = wrapper.find('.veui-carousel-control-next')
+    let prev = wrapper.find('.veui-carousel-control-prev')
+    next.element.focus()
+
+    await vm.$nextTick()
+    expect(wrapper.classes()).to.include('veui-focus')
+    next.element.blur()
+
+    await vm.$nextTick()
+    expect(wrapper.classes()).to.not.include('veui-focus')
+    next.element.focus()
+
+    await vm.$nextTick()
+    prev.element.focus()
+    expect(wrapper.classes()).to.include('veui-focus')
+    wrapper.trigger('keydown.right')
+
+    await wait(0)
+    item = wrapper.findAll('.veui-carousel-item').at(1)
+    expect(item.classes()).to.include('veui-carousel-item-current')
+    expect(item.element).to.equal(document.activeElement)
+    wrapper.trigger('keydown.left')
+
+    await wait(0)
+    item = wrapper.findAll('.veui-carousel-item').at(0)
+    expect(item.classes()).to.include('veui-carousel-item-current')
+    expect(item.element).to.equal(document.activeElement)
+    wrapper.trigger('keydown.left')
+
+    await wait(0)
+    item = wrapper.findAll('.veui-carousel-item').at(0)
+    expect(item.classes()).to.include('veui-carousel-item-current')
+    expect(item.element).to.equal(document.activeElement)
+    wrapper.trigger('keydown.left')
 
     wrapper.destroy()
   })
