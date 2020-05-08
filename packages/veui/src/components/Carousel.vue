@@ -217,6 +217,7 @@ export default {
   },
   beforeDestroy () {
     this.stop()
+    clearTimeout(this.focusTimer)
   },
   methods: {
     step (delta, focus) {
@@ -255,9 +256,9 @@ export default {
     focusCurrent () {
       clearTimeout(this.focusTimer)
       this.focusTimer = setTimeout(() => {
-        this.$refs.item[this.realIndex].focus()
         this.focused = true
         this.focusedIndex = this.realIndex
+        this.$refs.item[this.realIndex].focus()
       })
     },
     initPlay () {
@@ -266,15 +267,11 @@ export default {
         return
       }
       this.playTimer = setInterval(() => {
-        if (this.focusedIndex != null) {
-          this.focusCurrent()
-        }
         this.step(1)
       }, this.interval)
     },
     stop () {
       clearTimeout(this.playTimer)
-      clearTimeout(this.focusTimer)
     },
     handleEnter () {
       if (this.pauseOnHover) {
