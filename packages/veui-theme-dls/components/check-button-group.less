@@ -10,27 +10,27 @@
   }
 
   .@{veui-prefix}-button &-checkmark {
-    @offset: (@dls-button-padding-m - @dls-checkbox-strong-check-icon-size) / 2;
+    @offset: (@dls-button-padding-m - @dls-checkbox-spacing) / 2;
     .absolute(@offset, @offset, _, _);
-    .dls-icon-size(@dls-checkbox-strong-check-icon-size);
+    .dls-icon-size(@dls-checkbox-spacing);
     margin: 0;
-    color: @dls-checkbox-strong-check-icon-color;
+    color: @dls-checkbox-foreground-color;
   }
 
   &[ui~="s"] .@{veui-prefix}-button &-checkmark {
-    @offset: (@dls-button-padding-s - @dls-checkbox-strong-check-icon-size) / 2;
+    @offset: (@dls-button-padding-s - @dls-checkbox-spacing) / 2;
     .absolute(@offset, @offset, _, _);
   }
 
   .@{veui-prefix}-button-selected &-checkmark {
-    color: @dls-checkbox-strong-check-icon-color-checked;
+    color: @dls-checkbox-foreground-color;
   }
 
   .@{veui-prefix}-disabled &-checkmark {
-    color: @dls-checkbox-strong-check-icon-color-disabled;
+    color: @dls-checkbox-foreground-color-disabled;
   }
 
   .@{veui-prefix}-button-selected.@{veui-prefix}-disabled &-checkmark {
-    color: @dls-checkbox-strong-check-icon-color-checked-disabled;
+    color: @dls-checkbox-foreground-color-disabled;
   }
 }
