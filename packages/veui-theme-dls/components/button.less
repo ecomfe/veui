@@ -199,7 +199,8 @@
     }
   }
 
-  &[ui~="text"] {
+  &[ui~="text"],
+  &[ui~="icon"] {
     background-color: @dls-button-background-color-text;
     color: @dls-button-font-color-text;
 
@@ -226,42 +227,6 @@
     &.@{veui-prefix}-disabled {
       background-color: @dls-button-background-color-text-disabled;
       color: @dls-button-font-color-text-disabled;
-    }
-  }
-
-  &[ui~="icon"] {
-    background-color: @dls-button-background-color-icon;
-    color: @dls-button-font-color-icon;
-
-    &::after {
-      .absolute(-@dls-button-padding-icon);
-    }
-
-    &:hover {
-      background-color: @dls-button-background-color-icon-hover;
-      color: @dls-button-font-color-icon-hover;
-    }
-
-    &.focus-visible,
-    &[data-focus-visible-added] {
-      background-color: @dls-button-background-color-icon-focus;
-      color: @dls-button-font-color-icon-focus;
-    }
-
-    &:active {
-      background-color: @dls-button-background-color-icon-active;
-      color: @dls-button-font-color-icon-active;
-    }
-
-    &.@{veui-prefix}-disabled {
-      background-color: @dls-button-background-color-icon-disabled;
-      color: @dls-button-font-color-icon-disabled;
-    }
-
-    &.@{veui-prefix}-button-loading {
-      .@{veui-prefix}-icon:not(.@{veui-prefix}-button-loading-icon) {
-        display: none;
-      }
     }
   }
 

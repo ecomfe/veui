@@ -7,7 +7,7 @@
   vertical-align: middle;
   .make-metrics(m);
   .padding(0, @dls-tag-padding);
-  border: 1px solid @dls-tag-border-color;
+  border: 1px solid fade(@dls-tag-background-color, @dls-tag-border-opacity * 100);
   color: @dls-tag-font-color;
   background-color: @dls-tag-background-color;
   white-space: nowrap;
@@ -43,7 +43,7 @@
   }
 
   &.focus-visible {
-    .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
+    .dls-focus-ring(@dls-border-color-focus, @dls-shadow-focus);
   }
 
   &:active {
@@ -54,12 +54,12 @@
     cursor: pointer;
 
     &:hover:not(.@{veui-prefix}-disabled) {
-      opacity: @dls-tag-opacity-hover;
+      opacity: @dls-tag-background-opacity-selected-hover;
     }
   }
 
   &.@{veui-prefix}-disabled {
-    color: @dls-tag-font-color-disabled;
+    color: fade(@dls-tag-font-color, @dls-tag-font-opacity-disabled * 100);
     outline: none;
 
     .@{veui-prefix}-tag-close {
@@ -68,64 +68,63 @@
   }
 
   &-default.@{veui-prefix}-disabled {
-    border-color: @dls-tag-border-color-disabled;
-    background-color: @dls-tag-background-color-disabled;
+    border-color: fade(@dls-tag-background-color, @dls-tag-border-opacity-disabled * 100);
+    background-color: fade(@dls-tag-background-color, @dls-tag-background-opacity-disabled * 100);
   }
 
   &.@{veui-prefix}-tag-selected {
     color: @dls-tag-font-color-selected;
-    border-color: @dls-tag-border-color-selected;
-    background-color: @dls-tag-background-color-selected;
+    border-color: fade(@dls-tag-background-color, @dls-tag-border-opacity * 100);
+    background-color: fade(@dls-tag-background-color, @dls-tag-background-opacity-selected * 100);
 
     &.focus-visible {
       .dls-focus-ring(
-        @dls-tag-border-color-selected-focus,
-        @dls-tag-shadow-selected-focus
+        @dls-border-color-focus, @dls-shadow-focus
       );
     }
 
     &.@{veui-prefix}-disabled {
-      border-color: @dls-tag-border-color-selected-disabled;
-      background-color: @dls-tag-background-color-selected-disabled;
+      border-color: fade(@dls-tag-background-color, @dls-tag-border-opacity-disabled * 100);
+      background-color: fade(@dls-tag-background-color, @dls-tag-border-opacity-disabled * 100);
     }
   }
 
   .make-state-color (@state) {
     &-@{state} {
       @color-name: ~"dls-tag-font-color-@{state}";
-      @bd-color-name: ~"dls-tag-border-color-@{state}";
       @bg-color-name: ~"dls-tag-background-color-@{state}";
-      @disabled-color-name: ~"dls-tag-font-color-@{state}-disabled";
-      @disabled-bd-color-name: ~"dls-tag-border-color-@{state}-disabled";
+      @bd-color: fade(@@bg-color-name, @dls-tag-border-opacity * 100);
+      @bg-color: fade(@@bg-color-name, @dls-tag-background-opacity * 100);
+      @disabled-color: fade(@dls-tag-font-color, @dls-tag-font-opacity-disabled * 100);
+      @disabled-bd-color:fade(@@bg-color-name, @dls-tag-border-opacity-disabled * 100);
 
-      @selected-bg-color-name: ~"dls-tag-background-color-@{state}-reversed";
-      @selected-disabled-bg-color: ~"dls-tag-background-color-@{state}-reversed-disabled";
+      @selected-bg-color-name: fade(@@bg-color-name, @dls-tag-background-opacity-selected * 100);
+      @selected-disabled-bg-color: fade(@@bg-color-name, @dls-tag-background-opacity-selected-disabled * 100);
 
       color: @@color-name;
-      border-color: @@bd-color-name;
-      background-color: @@bg-color-name;
+      border-color: @bd-color;
+      background-color: @bg-color;
 
       &.@{veui-prefix}-disabled {
-        color: @@disabled-color-name;
-        border-color: @@disabled-bd-color-name;
+        color: @disabled-color;
+        border-color: @disabled-bd-color;
       }
 
       &.@{veui-prefix}-tag-selected,
       &[ui~="reverse"] {
         color: @dls-tag-font-color-selected;
-        border-color: @dls-tag-border-color-selected;
-        background-color: @@selected-bg-color-name;
+        border-color: fade(@dls-tag-background-color-selected, @dls-tag-border-opacity * 100);
+        background-color: fade(@dls-tag-background-color-selected, @dls-tag-background-opacity-selected * 100);
 
         &.focus-visible {
           .dls-focus-ring(
-            @dls-tag-border-color-selected-focus,
-            @dls-tag-shadow-selected-focus
+            @dls-border-color-focus, @dls-shadow-focus
           );
         }
 
         &.@{veui-prefix}-disabled {
-          border-color: @dls-tag-border-color-selected-disabled;
-          background-color: @@selected-disabled-bg-color;
+          border-color: fade(@dls-tag-background-color-selected, @dls-tag-border-opacity-disabled * 100);
+          background-color: fade(@dls-tag-background-color-selected, @dls-tag-background-opacity-selected-disabled * 100);
         }
       }
 
@@ -135,7 +134,7 @@
 
       &.focus-visible,
       &.@{veui-prefix}-tag.focus-visible {
-        .dls-focus-ring(@dls-tag-border-color-focus, @dls-tag-shadow-focus);
+        .dls-focus-ring(@dls-border-color-focus, @dls-shadow-focus);
       }
     }
   }
