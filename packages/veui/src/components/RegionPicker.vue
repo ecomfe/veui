@@ -258,7 +258,7 @@
                     <slot
                       name="label"
                       v-bind="group"
-                      overlay
+                      :overlay="true"
                       :level="2"
                     >
                       {{ group.label }}
@@ -391,7 +391,7 @@ export default {
           }
         },
         exit: ({ node, parent }) => {
-          if (!node.id && !(node.children && node.children.length)) {
+          if (node.id == null && !(node.children && node.children.length)) {
             // invalid node
             warn(
               `[veui-region-picker] Invalid region tree node '${
@@ -403,7 +403,7 @@ export default {
           }
 
           // get select state for self
-          if (node.id) {
+          if (node.id != null) {
             // check select state from `selected`
             node.selected = !!this.selectedMap[node.id]
           }
@@ -546,7 +546,7 @@ export default {
       let includeIndeterminate = this.includeIndeterminate
       walk(this.localDatasource, {
         enter: ({ node }) => {
-          if (!node.id || !node.selected) {
+          if (node.id == null || !node.selected) {
             return
           }
 
