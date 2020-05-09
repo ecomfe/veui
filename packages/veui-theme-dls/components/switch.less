@@ -54,7 +54,7 @@
   position: relative;
   cursor: pointer;
   outline: none;
-  font-size: @dls-font-size-m;
+  font-size: @dls-font-size-1;
 
   .metrics(m);
 
@@ -76,7 +76,7 @@
 
   &-switcher {
     position: relative;
-    font-size: @dls-switch-font-size;
+    font-size: @dls-font-size-0;
     background-color: @dls-switch-track-color-off;
     user-select: none;
     .veui-transition(background-color, box-shadow);
@@ -89,7 +89,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    color: @dls-switch-font-color;
+    color: @dls-switch-thumb-color-on;
 
     .@{veui-prefix}-icon {
       .dls-icon-size(@dls-icon-size-aux);
@@ -217,12 +217,12 @@
   }
 
   &[ui~="xs"] {
-    font-size: @dls-font-size-s;
+    font-size: @dls-font-size-0;
     .metrics(xs);
   }
 
   &[ui~="s"] {
-    font-size: @dls-font-size-s;
+    font-size: @dls-font-size-0;
     .metrics(s);
   }
 

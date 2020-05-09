@@ -52,10 +52,10 @@
     }
 
     .@{veui-prefix}-uploader-success-icon {
-      color: @dls-uploader-success-color;
+      color: @dls-uploader-foreground-color-success;
     }
     .@{veui-prefix}-uploader-failure-icon {
-      color: @dls-uploader-error-color;
+      color: @dls-uploader-foreground-color-error;
     }
 
     &-enter,
@@ -106,10 +106,10 @@
         @dls-uploader-file-item-label-spacing-before;
     }
     &-name-failure {
-      color: @dls-uploader-error-color;
+      color: @dls-uploader-foreground-color-error;
     }
     .@{veui-prefix}-icon&-file-icon-failure {
-      color: @dls-uploader-error-color;
+      color: @dls-uploader-foreground-color-error;
     }
 
     .@{veui-prefix}-button&-remove {
@@ -179,7 +179,7 @@
     }
     &-container-failure {
       flex-direction: column;
-      border-color: @dls-uploader-error-color;
+      border-color: @dls-uploader-foreground-color-error;
 
       .@{veui-prefix}-uploader-input-label-image {
         flex-direction: column;
@@ -191,7 +191,7 @@
         );
       }
       .@{veui-prefix}-uploader-list-image-file-name {
-        color: @dls-uploader-error-color;
+        color: @dls-uploader-foreground-color-error;
         max-width: ~"calc(100% - 2 * @{dls-uploader-image-padding-x})";
         .ellipsis();
         margin-top: @dls-uploader-image-error-spacing;
@@ -204,7 +204,7 @@
       opacity: 0;
       .veui-transition(opacity);
       .absolute(_, 0, 0, 0);
-      background-color: fade(#000, @dls-uploader-mask-opacity * 100);
+      background-color: @dls-uploader-mask-background-color;
       padding: @dls-uploader-mask-padding-y @dls-uploader-mask-padding-x;
       .@{veui-prefix}-icon {
         color: @dls-uploader-mask-icon-color;
