@@ -104,7 +104,11 @@
 
   &-clear {
     &-has-append {
-      margin-right: @dls-input-content-spacing;
+      margin-right: dls-sum(
+        @dls-button-padding-text * -1,
+        -2px,
+        @dls-input-content-spacing
+      );
     }
   }
 
