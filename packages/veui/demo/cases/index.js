@@ -151,8 +151,7 @@ export default [
   {
     path: '/form',
     name: 'Form',
-    component: Form,
-    disabled: true
+    component: Form
   },
   {
     path: '/grid',
