@@ -2,7 +2,7 @@
 
 .make-header-height(@font-size) {
   @header-height: dls-sum(
-    dls-line-height(@dls-line-height-m, @font-size),
+    dls-line-height(@dls-line-height-1, @font-size),
     @dls-date-picker-header-padding-y * 2
   );
 }
@@ -10,7 +10,7 @@
 .make-day-body-height(@font-size, @date-picker-cell-height) {
   @day-body-height: dls-sum(
     @dls-date-picker-day-body-padding-top,
-    dls-line-height(@dls-line-height-m, @font-size),
+    dls-line-height(@dls-line-height-1, @font-size),
     @dls-date-picker-day-body-padding-bottom,
     @dls-date-picker-weekdays-spacing-after,
     @date-picker-cell-height * 6,
@@ -51,7 +51,7 @@
 
   button {
     .veui-button-transition();
-    line-height: @dls-line-height-m;
+    line-height: @dls-line-height-1;
 
     &.focus-visible {
       .dls-focus-ring(
@@ -124,7 +124,7 @@
     align-items: center;
 
     .@{veui-prefix}-button[ui~="icon"] {
-      line-height: @dls-line-height-m;
+      line-height: @dls-line-height-1;
     }
 
     .@{veui-prefix}-calendar-select,
@@ -154,16 +154,16 @@
 
     .@{veui-prefix}-calendar-select {
       text-align: center;
-      color: @dls-font-color-normal;
+      color: @dls-foreground-color-neutral;
       margin: auto;
       height: auto;
       border: none;
-      line-height: @dls-line-height-m;
+      line-height: @dls-line-height-1;
 
       &.focus-visible,
       &:hover {
-        background-color: @dls-background-color-normal;
-        color: @dls-font-color-normal;
+        background-color: @dls-background-color-neutral;
+        color: @dls-foreground-color-neutral;
       }
 
       .@{veui-prefix}-icon {
@@ -255,12 +255,12 @@
 
       &:hover {
         background-color: @dls-date-picker-cell-background-color-hover;
-        color: @dls-font-color-strong;
+        color: @dls-foreground-color-neutral-strong;
       }
 
       &.focus-visible {
         background-color: @dls-date-picker-cell-background-color-focus;
-        color: @dls-font-color-strong;
+        color: @dls-foreground-color-neutral-strong;
         .dls-focus-ring(
           @dls-date-picker-cell-border-focus-color,
           @dls-date-picker-cell-shadow-focus
@@ -419,7 +419,7 @@
         display: block;
         .size(100%);
         .absolute(0, _, _, _);
-        background-color: @dls-background-color-normal;
+        background-color: @dls-background-color-neutral;
       }
     }
   }
@@ -442,7 +442,7 @@
   &-range-end,
   &-in-range:last-child {
     .@{veui-prefix}-calendar-date-table &::before {
-      background-color: @dls-background-color-normal;
+      background-color: @dls-background-color-neutral;
     }
   }
 
@@ -468,7 +468,7 @@
   &-range-end:first-child {
     .@{veui-prefix}-calendar-month-table &::before,
     .@{veui-prefix}-calendar-year-table &::before {
-      background-color: @dls-background-color-normal;
+      background-color: @dls-background-color-neutral;
     }
   }
 
