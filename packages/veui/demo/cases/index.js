@@ -296,6 +296,7 @@ export default [
     name: 'Table',
     component: Table
   },
+<<<<<<< HEAD
   {
     path: '/grid',
     name: 'Grid',
@@ -439,12 +440,22 @@ export default [
     name: 'Table',
     component: Table
   },
+=======
+>>>>>>> refactor:modify variables to make demo run
   {
     path: '/tag',
     name: 'Tag',
     component: Tag
   },
   {
+<<<<<<< HEAD
+=======
+    path: '/time-picker',
+    name: 'TimePicker',
+    component: TimePicker
+  },
+  {
+>>>>>>> refactor:modify variables to make demo run
     path: '/tabs',
     name: 'Tabs',
     component: Tabs,
@@ -474,11 +485,14 @@ export default [
     component: Textarea
   },
   {
+<<<<<<< HEAD
     path: '/time-picker',
     name: 'TimePicker',
     component: TimePicker
   },
   {
+=======
+>>>>>>> refactor:modify variables to make demo run
     path: '/toast',
     name: 'Toast',
     component: Toast
