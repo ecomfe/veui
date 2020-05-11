@@ -5,7 +5,6 @@
     [$c('field')]: true,
     [$c('field-invalid')]: !validity.valid,
     [$c('field-no-label')]: !label && !$slots.label,
-    [$c('field-no-tip')]: !tip && !$slots.tip,
     [$c('field-required')]: isRequired
   }"
 >
@@ -17,21 +16,31 @@
       <veui-label>{{ label }}</veui-label>
     </slot>
   </div>
-  <slot/>
   <div
     v-if="tip || $slots.tip"
     :class="$c('form-tip')"
   >
-    <slot name="tip">
-      {{ tip }}
-    </slot>
+    <veui-icon
+      ref="question"
+      :name="icons.tip"
+    />
+    <veui-tooltip
+      :ui="uiParts.tip"
+      target="question"
+      position="top-start"
+    >
+      <slot name="tip">{{ tip }}</slot>
+    </veui-tooltip>
   </div>
-  <div
-    v-if="!validity.valid && !!validity.message"
-    :class="$c('field-error')"
-    :title="validity.message"
-  >
-    <veui-icon :name="icons.alert"/>{{ validity.message }}
+  <div :class="$c('form-content')">
+    <slot/>
+    <div
+      v-if="!validity.valid && !!validity.message"
+      :class="$c('field-error')"
+      :title="validity.message"
+    >
+      {{ validity.message }}
+    </div>
   </div>
 </div>
 </template>
@@ -45,6 +54,7 @@ import ui from '../../mixins/ui'
 import { isBoolean, get, last, includes } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
+import Tooltip from '../Tooltip'
 import Vue from 'vue'
 import '../../common/uiTypes'
 
@@ -56,7 +66,8 @@ export default {
   uiTypes: ['form-field', 'form-container'],
   components: {
     'veui-icon': Icon,
-    'veui-label': Label
+    'veui-label': Label,
+    'veui-tooltip': Tooltip
   },
   mixins: [prefix, ui],
   props: {

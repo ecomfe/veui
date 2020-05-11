@@ -1,112 +1,49 @@
 @import "../lib.less";
 
-.@{veui-prefix}-field {
-  vertical-align: top;
-  clear: both;
+// will be removed
+@dls-form-field-min-height: @dls-padding-unit * 8;
 
-  &-required > .@{veui-prefix}-form-label::after {
+.@{veui-prefix}-field {
+  @field-content-left-spacing: ~"calc(@{dls-form-label-width} + @{dls-form-label-spacing-after-horizontal})";
+
+  position: relative;
+  display: flex;
+  min-height: @dls-form-field-min-height;
+
+  .@{veui-prefix}-form-label {
+    width: @dls-form-label-width;
+    line-height: @dls-form-field-min-height;
+    margin-right: @dls-form-label-spacing-after-horizontal;
+    color: @dls-form-label-font-color;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &-required > .@{veui-prefix}-form-label::before {
     .veui-field-require();
   }
 
-  &-no-label::before {
-    content: "";
-    display: inline-block;
-    width: @veui-form-label-width;
+  .@{veui-prefix}-form-tip {
+    position: absolute;
+    left: ~"calc(@{dls-form-label-width} + @{dls-form-label-content-spacing})";
+    top: ~"calc(@{dls-form-field-min-height} / 2 - 0.5em)";
+    color: @dls-form-label-icon-color;
   }
 
-  & > * {
-    display: inline-flex;
-    vertical-align: top;
+  &-no-label {
+    margin-left: @field-content-left-spacing;
   }
 
-  & > *:not([class*="veui-form-label"]) + * {
-    margin-left: 10px;
-  }
-
-  .@{veui-prefix}-form-label {
-    height: @veui-height-normal;
-    width: @veui-form-label-width;
-    line-height: @veui-height-normal;
-  }
-
-  .@{veui-prefix}-span {
-    line-height: @veui-height-normal;
+  .@{veui-prefix}-form-content {
+    flex: 1;
+    display: flex;
+    position: relative;
   }
 
   &-error {
-    position: static;
-    height: @veui-height-normal;
-    line-height: @veui-height-normal;
-    margin: 0 0 0 10px;
-    vertical-align: top;
-    color: @veui-alert-color;
-
-    .@{veui-prefix}-icon {
-      margin-right: 7px;
-    }
-  }
-
-  .@{veui-prefix}-form-tip {
-    height: @veui-height-normal;
-    line-height: @veui-height-normal;
-    margin-left: 10px;
-    color: @veui-text-color-weak;
-  }
-
-  .@{veui-prefix}-form-tip + .@{veui-prefix}-field-error {
-    .veui-field-gap-error();
-  }
-
-  .@{veui-prefix}-form-label
-    ~ .@{veui-prefix}-form-tip
-    + .@{veui-prefix}-field-error {
-    margin-left: @veui-form-label-width;
-  }
-
-  .@{veui-prefix}-form-label,
-  .@{veui-prefix}-field-error,
-  .@{veui-prefix}-form-tip,
-  .@{veui-prefix}-span {
-    .@{veui-prefix}-icon {
-      vertical-align: top;
-      margin-top: ~"calc(@{veui-height-normal} / 2 - 0.5em)";
-    }
-  }
-
-  .make-ui(@font-size, @box-size) {
-    font-size: @font-size;
-
-    .@{veui-prefix}-form-label,
-    .@{veui-prefix}-field-error,
-    .@{veui-prefix}-form-tip,
-    .@{veui-prefix}-span {
-      line-height: @box-size;
-
-      .@{veui-prefix}-icon {
-        margin-top: ~"calc(@{box-size} / 2 - 0.5em)";
-      }
-    }
-
-    .@{veui-prefix}-form-label,
-    .@{veui-prefix}-field-error,
-    .@{veui-prefix}-form-tip {
-      height: @box-size;
-    }
-  }
-
-  &[ui~="large"] {
-    .make-ui(@veui-font-size-large, @veui-height-large);
-  }
-
-  &[ui~="small"] {
-    .make-ui(@veui-font-size-small, @veui-height-small);
-  }
-
-  &[ui~="tiny"] {
-    .make-ui(@veui-font-size-small, @veui-height-tiny);
-  }
-
-  &[ui~="micro"] {
-    .make-ui(@veui-font-size-small, @veui-height-micro);
+    position: absolute;
+    left: 0;
+    top: ~"calc(100% + @{dls-form-field-error-spacing-before-vertical})";
+    color: @dls-form-field-error-font-color;
   }
 }

@@ -88,7 +88,7 @@
       </div>
     </veui-form>
   </section>
-  <section>
+  <!-- <section>
     <h2>行内多组件表单</h2>
     <veui-form>
       <veui-fieldset
@@ -225,7 +225,7 @@
         </veui-field>
       </veui-fieldset>
     </veui-form>
-  </section>
+  </section> -->
   <section>
     <h2>表单的禁用或只读</h2>
     <veui-form
@@ -296,7 +296,7 @@
         />
       </veui-field>
     </veui-form>
-    <h2>行内禁用或只读</h2>
+    <!-- <h2>行内禁用或只读</h2>
     <veui-form>
       <veui-fieldset
         disabled
@@ -367,7 +367,7 @@
           我已阅读并同意工作协议
         </veui-radio>
       </veui-field>
-    </veui-form>
+    </veui-form> -->
   </section>
   <section>
     <h2>使用 field 来支持表单验证，使用 name 来定位验证提示</h2>
@@ -605,7 +605,7 @@ import {
   Form,
   Fieldset,
   Field,
-  Label,
+  // Label,
   Span,
   Input,
   Button,
@@ -616,11 +616,11 @@ import {
   Checkbox,
   CheckboxGroup,
   RadioGroup,
-  SearchBox,
+  // SearchBox,
   RegionPicker,
-  Radio,
-  Icon,
-  Slider,
+  // Radio,
+  // Icon,
+  // Slider,
   NumberInput
 } from 'veui'
 import moment from 'moment'
@@ -2718,18 +2718,18 @@ export default {
     'veui-form': Form,
     'veui-fieldset': Fieldset,
     'veui-field': Field,
-    'veui-label': Label,
+    // 'veui-label': Label,
     'veui-datepicker': DatePicker,
     'veui-uploader': Uploader,
     'veui-select': Select,
     'veui-checkbox': Checkbox,
     'veui-checkboxgroup': CheckboxGroup,
-    'veui-radio': Radio,
+    // 'veui-radio': Radio,
     'veui-radiogroup': RadioGroup,
-    'veui-search-box': SearchBox,
+    // 'veui-search-box': SearchBox,
     'veui-region-picker': RegionPicker,
-    'veui-icon': Icon,
-    'veui-slider': Slider,
+    // 'veui-icon': Icon,
+    // 'veui-slider': Slider,
     'veui-textarea': Textarea
   },
 
@@ -3018,7 +3018,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-dls/lib.less";
+@import '~veui-theme-dls/lib.less';
 
 .veui-form-demo {
   h2 {
@@ -3031,7 +3031,7 @@ export default {
 
   margin-bottom: 50px;
 
-  .veui-form[ui~="inline"] + .veui-form[ui~="inline"] {
+  .veui-form[ui~='inline'] + .veui-form[ui~='inline'] {
     margin-top: 30px;
   }
 
@@ -3053,7 +3053,7 @@ export default {
     &::before {
       position: absolute;
       left: -80px;
-      content: "⇒";
+      content: '⇒';
       line-height: 32px;
       font-size: 30px;
       color: #999;
@@ -3089,11 +3089,11 @@ export default {
     margin-top: 60px;
     margin-left: 120px;
 
-    [class*="veui"] {
+    [class*='veui'] {
       margin-left: 10px;
     }
 
-    [class*="veui"]:first-child {
+    [class*='veui']:first-child {
       margin-left: 0;
     }
   }
