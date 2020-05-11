@@ -3,7 +3,7 @@
 .@{veui-prefix}-steps {
   @step-height: @dls-steps-marker-size-m;
   @title-font-size: @dls-steps-title-font-size-m;
-  @title-height: dls-line-height(@dls-line-height-m, @title-font-size);
+  @title-height: dls-line-height(@dls-line-height-1, @title-font-size);
   @desc-font-size: @dls-steps-desc-font-size-m;
   @marker-font-size: @dls-steps-marker-font-size-m;
   @separator-gap-x: @dls-steps-connector-spacing-horizontal;
@@ -52,7 +52,7 @@
 
     &-label {
       .margin(dls-sum(@step-height / 2, -@title-height / 2), _, 0);
-      line-height: @dls-line-height-m;
+      line-height: @dls-line-height-1;
       font-size: @title-font-size;
       color: @dls-steps-title-font-color;
       font-weight: @dls-steps-title-font-weight;
@@ -462,7 +462,7 @@
   &[ui~="s"] {
     @step-height: @dls-steps-marker-size-s;
     @title-font-size: @dls-steps-title-font-size-s;
-    @title-height: dls-line-height(@dls-line-height-m, @title-font-size);
+    @title-height: dls-line-height(@dls-line-height-1, @title-font-size);
     @desc-font-size: @dls-steps-desc-font-size-s;
     @marker-font-size: @dls-steps-marker-font-size-s;
 
