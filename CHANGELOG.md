@@ -1,3 +1,10 @@
+## 1.0.0-alpha.36
+
+### 🐞 问题修复
+
+* [^] 修复 `RegionPicker` 组件的 `label` scoped slot 没有正确传入 `overlay` 参数的问题。
+* [^] 修复 `RegionPicker` 组件没有正确处理数据项 `value` 为 `0` 的问题。
+
 ## 1.0.0-alpha.35
 
 ### 💡 主要变更
