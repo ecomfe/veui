@@ -88,7 +88,7 @@
       </div>
     </veui-form>
   </section>
-  <!-- <section>
+  <section>
     <h2>行内多组件表单</h2>
     <veui-form>
       <veui-fieldset
@@ -168,7 +168,7 @@
       </veui-fieldset>
     </veui-form>
   </section>
-  <section>
+  <!-- <section>
     <h2>行内表单</h2>
     <veui-form ui="inline">
       <veui-fieldset class="left">
@@ -605,7 +605,7 @@ import {
   Form,
   Fieldset,
   Field,
-  // Label,
+  Label,
   Span,
   Input,
   Button,
@@ -619,8 +619,8 @@ import {
   // SearchBox,
   RegionPicker,
   // Radio,
-  // Icon,
-  // Slider,
+  Icon,
+  Slider,
   NumberInput
 } from 'veui'
 import moment from 'moment'
@@ -2718,7 +2718,7 @@ export default {
     'veui-form': Form,
     'veui-fieldset': Fieldset,
     'veui-field': Field,
-    // 'veui-label': Label,
+    'veui-label': Label,
     'veui-datepicker': DatePicker,
     'veui-uploader': Uploader,
     'veui-select': Select,
@@ -2728,8 +2728,8 @@ export default {
     'veui-radiogroup': RadioGroup,
     // 'veui-search-box': SearchBox,
     'veui-region-picker': RegionPicker,
-    // 'veui-icon': Icon,
-    // 'veui-slider': Slider,
+    'veui-icon': Icon,
+    'veui-slider': Slider,
     'veui-textarea': Textarea
   },
 

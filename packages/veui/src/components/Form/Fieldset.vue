@@ -9,9 +9,9 @@
   role="group"
   v-bind="attrs"
 >
-  <slot name="label"/>
+  <template v-slot:label><slot name="label"/></template>
   <slot/>
-  <slot name="tip"/>
+  <template v-slot:tip><slot name="tip"/></template>
 </veui-field>
 </template>
 
