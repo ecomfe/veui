@@ -2,6 +2,7 @@
 
 // will be removed
 @dls-form-field-min-height: @dls-padding-unit * 8;
+@dls-form-field-spacing-after-horizontal: @dls-padding-unit * 2;
 
 .@{veui-prefix}-field {
   @field-content-left-spacing: ~"calc(@{dls-form-label-width} + @{dls-form-label-spacing-after-horizontal})";
@@ -38,6 +39,17 @@
     flex: 1;
     display: flex;
     position: relative;
+    > * {
+      margin-left: @dls-form-field-spacing-after-horizontal;
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+    .@{veui-prefix}-span,
+    .@{veui-prefix}-radio-group,
+    .@{veui-prefix}-checkbox-group {
+      line-height: @dls-form-field-min-height;
+    }
   }
 
   &-error {
