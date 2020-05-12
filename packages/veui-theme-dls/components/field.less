@@ -39,7 +39,7 @@
     flex: 1;
     display: flex;
     position: relative;
-    > * {
+    > *:not(.@{veui-prefix}-field-error) {
       margin-left: @dls-form-field-spacing-after-horizontal;
       &:first-child {
         margin-left: 0;
