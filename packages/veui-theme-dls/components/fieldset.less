@@ -7,7 +7,10 @@
 
   // 水平排列多个 Field，添加水平 margin，覆盖掉 Field 自己设置的 margin
   .@{veui-prefix}-field {
-    margin: 0 @dls-form-field-spacing-after-horizontal @dls-form-field-spacing-vertical 0;
+    margin: 0 0 @dls-form-field-spacing-vertical @dls-form-field-spacing-after-horizontal;
+    &:first-child {
+      margin-left: 0;
+    }
   }
 
   // todo1: 当 error 信息超长时怎么处理？要么换行？要么每个 error 单独显示一行？
