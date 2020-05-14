@@ -8,6 +8,9 @@ config.defaults(
         default: 'm',
         inherit: true
       }
+    },
+    parts: {
+      tooltip: 'reverse'
     }
   },
   'slider'

@@ -9,7 +9,7 @@
   <veui-button
     v-for="(item, index) in items"
     :key="index"
-    :ui="item.value === localValue ? uiParts.checked : null"
+    :ui="uiParts.button"
     :class="{
       [$c('button-selected')]: item.value === localValue
     }"

@@ -143,3 +143,25 @@
 @veui-prefix: veui;
 @veui-root-element: html;
 @veui-overlay-element: veui-x-overlay;
+
+
+/**
+ * TODO: Remove following hacks
+ */
+@dls-icon-size-normal: 1em;
+@dls-icon-size-minor: calc(1em - 2px);
+@dls-icon-size-aux: calc(1em - 4px);
+
+@dls-radio-dot-size-s: ceil(round(@dls-radio-size-s / 3) / 2) * 2;
+@dls-radio-dot-size-m: ceil(round(@dls-radio-size-m / 3) / 2) * 2;
+
+@dls-switch-width-xs: @dls-padding-unit * 5;
+@dls-switch-width-s: @dls-padding-unit * 6.5;
+@dls-switch-width-m: @dls-padding-unit * 8;
+
+@dls-switch-thumb-size-xs: @dls-height-unit * 2;
+@dls-switch-thumb-size-s: @dls-height-unit * 3;
+@dls-switch-thumb-size-m: @dls-height-unit * 3.5;
+
+@dls-shadow-1: 0 4px 6px fade(@dls-shadow-color, 6%), 0 1px 10px fade(@dls-shadow-color, 5%), 0 2px 4px -1px fade(@dls-shadow-color, 1%);
+@dls-shadow-2: 0 8px 10px fade(@dls-shadow-color, 6%), 0 3px 14px fade(@dls-shadow-color, 5%), 0 5px 5px -3px fade(@dls-shadow-color, 1%);

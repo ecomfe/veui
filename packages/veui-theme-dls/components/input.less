@@ -103,6 +103,12 @@
   }
 
   &-clear {
+    margin: dls-sum(@dls-button-padding-text * -1, -2px);
+
+    &[ui] {
+      color: @dls-input-icon-color;
+    }
+
     &-has-append {
       margin-right: dls-sum(
         @dls-button-padding-text * -1,

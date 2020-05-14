@@ -15,6 +15,18 @@
     font-size: @dls-loading-font-size-l;
   }
 
+  &[ui~="overlay"] {
+    display: flex;
+    .absolute(0);
+    justify-content: center;
+    background-color: @dls-loading-background-color;
+    border-radius: inherit;
+
+    &[ui~="reverse"] {
+      background-color: @dls-loading-background-color-reverse;
+    }
+  }
+
   &-text {
     color: @dls-loading-font-color-normal;
     margin-left: @dls-loading-content-spacing;
