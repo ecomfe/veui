@@ -215,7 +215,7 @@
     cursor: pointer;
 
     .veui-tabs-status(@type) {
-      @color-name: ~"veui-@{type}-color";
+      @color-name: ~"dls-foreground-color-@{type}-primary";
       @color: @@color-name;
 
       color: @color;
@@ -234,7 +234,7 @@
     }
 
     &-error {
-      .veui-tabs-status(alert);
+      .veui-tabs-status(error);
     }
   }
 

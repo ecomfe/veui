@@ -19,6 +19,9 @@
   }
 
   &-size {
+    display: flex;
+    align-items: center;
+
     .@{veui-prefix}-select {
       width: auto;
       flex-grow: 0;
@@ -91,45 +94,8 @@
     font-variant-numeric: tabular-nums;
     cursor: pointer;
 
-    border: 1px solid @dls-button-border-color-normal;
-    background-color: @dls-button-background-color-normal;
-    color: @dls-button-font-color-normal;
+    color: @dls-pagination-page-item-font-color;
     .veui-button-transition();
-
-    &.@{veui-prefix}-pagination-more {
-      border-color: transparent;
-      background-color: transparent;
-      position: relative;
-
-      .@{veui-prefix}-icon {
-        .veui-transition(opacity);
-      }
-
-      .@{veui-prefix}-pagination-more-ellipsis {
-        opacity: 1;
-      }
-
-      .@{veui-prefix}-pagination-more-arrow {
-        position: absolute;
-        opacity: 0;
-      }
-
-      &:hover {
-        border-color: @dls-button-border-color-normal;
-      }
-
-      &:hover,
-      &.focus-visible,
-      &[data-focus-visible-added] {
-        .@{veui-prefix}-pagination-more-ellipsis {
-          opacity: 0;
-        }
-
-        .@{veui-prefix}-pagination-more-arrow {
-          opacity: 1;
-        }
-      }
-    }
 
     &:hover {
       background-color: @dls-button-background-color-normal-hover;
@@ -152,16 +118,43 @@
     }
 
     &.@{veui-prefix}-disabled {
-      border-color: @dls-button-border-color-normal-disabled;
-      background-color: @dls-button-background-color-normal-disabled;
-      color: @dls-button-font-color-normal-disabled;
+      background-color: transparent;
+      color: @dls-pagination-page-item-font-color-disabled;
     }
 
     &.@{veui-prefix}-current {
-      // border-color: @dls-pagination-page-item-border-color-current;
-      background-color: @dls-pagination-page-item-background-color;
-      // color: @dls-pagination-page-item-font-color-current;
-      // font-weight: @dls-pagination-page-item-font-weight-current;
+      border-color: @dls-button-border-color-primary;
+      background-color: @dls-button-background-color-primary;
+      color: @dls-button-font-color-primary;
+    }
+
+    &.@{veui-prefix}-pagination-more {
+      position: relative;
+
+      .@{veui-prefix}-icon {
+        .veui-transition(opacity);
+      }
+
+      .@{veui-prefix}-pagination-more-ellipsis {
+        opacity: 1;
+      }
+
+      .@{veui-prefix}-pagination-more-arrow {
+        position: absolute;
+        opacity: 0;
+      }
+
+      &:hover,
+      &.focus-visible,
+      &[data-focus-visible-added] {
+        .@{veui-prefix}-pagination-more-ellipsis {
+          opacity: 0;
+        }
+
+        .@{veui-prefix}-pagination-more-arrow {
+          opacity: 1;
+        }
+      }
     }
   }
 

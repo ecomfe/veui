@@ -21,7 +21,7 @@ config.defaults(
       }
     },
     parts: {
-      nav: 'icon',
+      nav: 'text',
       toggle: 'text'
     }
   },

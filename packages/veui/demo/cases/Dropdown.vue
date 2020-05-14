@@ -8,7 +8,6 @@
       <veui-dropdown
         ui="primary xs"
         label="操作"
-        split
         :options="options"
       />
       <veui-dropdown
@@ -38,11 +37,10 @@
       />
     </div>
     <div>
-      <h4>normal</h4>
+      <h4>default</h4>
       <veui-dropdown
         ui="xs"
         label="操作"
-        split
         :options="options"
       />
       <veui-dropdown

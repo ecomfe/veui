@@ -6,7 +6,7 @@
   overflow: hidden;
   width: @dls-textarea-width;
   border: 1px solid @dls-input-border-color;
-  background-color: @dls-background-color-strong;
+  background-color: @dls-background-color-base-2;
   font-size: @dls-textarea-font-size-m;
   line-height: @dls-textarea-line-height;
   color: @dls-input-font-color;
@@ -114,7 +114,7 @@
     overflow: hidden;
     white-space: pre-wrap;
     word-wrap: break-word;
-    color: @dls-textarea-count-font-color;
+    color: @dls-foreground-color-neutral-weak;
 
     &-line {
       &:first-child {
@@ -135,7 +135,7 @@
           content: "";
           .absolute(-@dls-textarea-padding-y, 0, _, _);
           .size(1px, 9999px);
-          background-color: @dls-border-color-neutral;
+          background-color: @dls-input-border-color;
           z-index: 2;
         }
       }

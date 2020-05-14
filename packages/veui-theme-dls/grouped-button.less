@@ -8,5 +8,31 @@
     &[data-focus-visible-added] {
       z-index: 4;
     }
+
+    border-color: @dls-checkbox-border-color-strong-checked;
+    background-color: @dls-checkbox-background-color-strong-checked;
+    color: @dls-checkbox-font-color-strong-checked;
+
+    &:hover {
+      background-color: @dls-checkbox-background-color-strong-checked-hover;
+    }
+
+    &.focus-visible {
+      border-color: @dls-button-border-color-focus;
+    }
+
+    &:active {
+      background-color: @dls-checkbox-background-color-strong-checked-active;
+    }
+
+    &.@{veui-prefix}-disabled {
+      border-color: @dls-checkbox-border-color-strong-checked-disabled;
+      background-color: @dls-checkbox-background-color-strong-checked-disabled;
+      color: @dls-checkbox-font-color-strong-checked-disabled;
+
+      &:hover {
+        background-color: @dls-checkbox-background-color-strong-checked-disabled;
+      }
+    }
   }
 }
