@@ -15,7 +15,7 @@ config.defaults(
       }
     },
     parts: {
-      clear: 'icon'
+      clear: 'text'
     }
   },
   'timepicker'

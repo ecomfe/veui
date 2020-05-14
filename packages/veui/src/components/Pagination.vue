@@ -214,7 +214,7 @@ export default {
       if (typeof to === 'string') {
         return to
       } else {
-        return this.$router.resolve(to).href.substring(1)
+        return this.$router.resolve(to).href
       }
     },
     realTotal () {
