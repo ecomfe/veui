@@ -38,6 +38,7 @@
       top: @arrow-size * (1 - sqrt(2));
       left: 50%;
       pointer-events: all;
+      box-shadow: @dls-tooltip-shadow-normal;
     }
   }
 
@@ -153,8 +154,7 @@
       color: @dls-tooltip-background-color-reverse;
 
       &::after {
-        box-shadow: 0 0 @dls-shadow-blur-radius-1
-          fade(@dls-shadow-color, percentage(@dls-shadow-opacity));
+        box-shadow: @dls-tooltip-background-color-reverse;
       }
     }
   }
