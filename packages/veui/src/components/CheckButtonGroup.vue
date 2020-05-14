@@ -10,7 +10,7 @@
   <veui-button
     v-for="(item, index) in items"
     :key="`b-${item.value}`"
-    :ui="localValue.indexOf(item.value) !== -1 ? uiParts.checked : null"
+    :ui="uiParts.button"
     :class="{
       [$c('button-selected')]: localValue.indexOf(item.value) !== -1
     }"
@@ -27,10 +27,9 @@
     >
       {{ item.label }}
     </slot>
-    <veui-icon
+    <div
       :key="`i-${item.value}`"
       :class="$c('check-button-group-checkmark')"
-      :name="icons.check"
     />
   </veui-button>
 </div>
@@ -43,13 +42,11 @@ import input from '../mixins/input'
 import { focusIn } from '../utils/dom'
 import { includes, findIndex } from 'lodash'
 import Button from './Button'
-import Icon from './Icon'
 
 export default {
   name: 'veui-check-button-group',
   components: {
-    'veui-button': Button,
-    'veui-icon': Icon
+    'veui-button': Button
   },
   mixins: [prefix, ui, input],
   model: {

@@ -25,6 +25,35 @@
     </veui-button>
   </section>
   <section>
+    <veui-button ui="basic xs">
+      保存
+    </veui-button>
+    <veui-button ui="basic s">
+      保存
+    </veui-button>
+    <veui-button ui="basic">
+      保存
+    </veui-button>
+    <veui-button ui="basic l">
+      保存
+    </veui-button>
+    <veui-button ui="basic xl">
+      保存
+    </veui-button>
+    <veui-button
+      ui="basic"
+      disabled
+    >
+      保存
+    </veui-button>
+    <veui-button
+      ui="basic"
+      loading
+    >
+      保存
+    </veui-button>
+  </section>
+  <section>
     <veui-button ui="strong xs">
       保存
     </veui-button>
@@ -150,6 +179,64 @@
     </veui-button>
   </section>
   <section>
+    <veui-button ui="text strong xs">
+      编辑
+    </veui-button>
+    <veui-button ui="text strong s">
+      编辑
+    </veui-button>
+    <veui-button ui="text strong">
+      编辑
+    </veui-button>
+    <veui-button ui="text strong l">
+      编辑
+    </veui-button>
+    <veui-button ui="text strong xl">
+      编辑
+    </veui-button>
+    <veui-button
+      ui="text"
+      disabled
+    >
+      编辑
+    </veui-button>
+    <veui-button
+      ui="text"
+      loading
+    >
+      编辑
+    </veui-button>
+  </section>
+  <section>
+    <veui-button ui="text aux xs">
+      编辑
+    </veui-button>
+    <veui-button ui="text aux s">
+      编辑
+    </veui-button>
+    <veui-button ui="text aux">
+      编辑
+    </veui-button>
+    <veui-button ui="text aux l">
+      编辑
+    </veui-button>
+    <veui-button ui="text xl">
+      编辑
+    </veui-button>
+    <veui-button
+      ui="text"
+      disabled
+    >
+      编辑
+    </veui-button>
+    <veui-button
+      ui="text"
+      loading
+    >
+      编辑
+    </veui-button>
+  </section>
+  <section>
     <veui-button ui="icon xs">
       <veui-icon name="search"/>
     </veui-button>
@@ -182,9 +269,7 @@
     <h4>动态内容</h4>
     <p>
       <veui-button @click="text = !text">
-        <veui-icon name="times"/><template
-          v-if="text"
-        >取消</template>
+        <veui-icon name="times"/><template v-if="text">取消</template>
       </veui-button>
     </p>
   </section>

@@ -248,6 +248,7 @@
                 [$c('button')]: true,
                 [$c('uploader-input-label-image')]: true
               }"
+              :ui="uiParts.image"
               tabindex="0"
               @click="replaceFile(file)"
             >
@@ -255,9 +256,9 @@
               <span
                 :class="`${listClass}-file-name`"
                 :title="file.name"
-              >{{
-                file.name
-              }}</span>
+              >
+                {{ file.name }}
+              </span>
             </label>
             <div :class="`${listClass}-mask`">
               <template v-for="control in getImageControls(file)">
@@ -282,9 +283,9 @@
           <veui-popover
             :target="`fileFailure${index}`"
             position="top"
-          >{{
-            file.message || t('uploadFailure')
-          }}</veui-popover>
+          >
+            {{ file.message || t('uploadFailure') }}
+          </veui-popover>
           <slot
             name="file-after"
             v-bind="getScopeValue(index, file)"
@@ -316,6 +317,7 @@
               [$c('disabled')]: realUneditable || submitting
             }"
             tabindex="0"
+            :ui="uiParts.image"
             @click="handleClick"
           >
             <veui-icon :name="icons.addImage"/>

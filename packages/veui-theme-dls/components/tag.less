@@ -7,9 +7,6 @@
   vertical-align: middle;
   .make-metrics(m);
   .padding(0, @dls-tag-padding);
-  border: 1px solid fade(@dls-tag-background-color, @dls-tag-border-opacity * 100);
-  color: @dls-tag-font-color;
-  background-color: @dls-tag-background-color;
   white-space: nowrap;
   outline: none;
   line-height: 1;
@@ -46,36 +43,40 @@
     .dls-focus-ring(@dls-border-color-focus, @dls-shadow-focus);
   }
 
-  &:active {
-    outline: none;
+  &-default {
+    border: 1px solid fade(@dls-tag-font-color, percentage(@dls-tag-border-opacity));
+    color: @dls-tag-font-color;
+    background-color: @dls-tag-background-color;
   }
 
   &-selectable {
     cursor: pointer;
-
-    &:hover:not(.@{veui-prefix}-disabled) {
-      opacity: @dls-tag-background-opacity-selected-hover;
-    }
   }
 
-  &.@{veui-prefix}-disabled {
-    color: fade(@dls-tag-font-color, @dls-tag-font-opacity-disabled * 100);
-    outline: none;
+  &-default&-selectable:not(.@{veui-prefix}-disabled) {
+    &:hover {
+      background-color: @dls-background-color-neutral-hover;
+    }
 
-    .@{veui-prefix}-tag-close {
-      cursor: not-allowed;
+    &:active {
+      background-color: @dls-background-color-neutral-active;
     }
   }
 
   &-default.@{veui-prefix}-disabled {
-    border-color: fade(@dls-tag-background-color, @dls-tag-border-opacity-disabled * 100);
-    background-color: fade(@dls-tag-background-color, @dls-tag-background-opacity-disabled * 100);
+    border-color: @dls-border-color-neutral-disabled;
+    background-color: @dls-background-color-neutral-disabled;
+    color: @dls-foreground-color-neutral-disabled;
+  }
+
+  .@{veui-prefix}-disabled .@{veui-prefix}-tag-close {
+    cursor: not-allowed;
   }
 
   &.@{veui-prefix}-tag-selected {
     color: @dls-tag-font-color-selected;
-    border-color: fade(@dls-tag-background-color, @dls-tag-border-opacity * 100);
-    background-color: fade(@dls-tag-background-color, @dls-tag-background-opacity-selected * 100);
+    border-color: transparent;
+    background-color: @dls-tag-background-color-selected;
 
     &.focus-visible {
       .dls-focus-ring(
@@ -93,13 +94,13 @@
     &-@{state} {
       @color-name: ~"dls-tag-font-color-@{state}";
       @bg-color-name: ~"dls-tag-background-color-@{state}";
-      @bd-color: fade(@@bg-color-name, @dls-tag-border-opacity * 100);
-      @bg-color: fade(@@bg-color-name, @dls-tag-background-opacity * 100);
-      @disabled-color: fade(@dls-tag-font-color, @dls-tag-font-opacity-disabled * 100);
-      @disabled-bd-color:fade(@@bg-color-name, @dls-tag-border-opacity-disabled * 100);
+      @bd-color: fade(@@bg-color-name, percentage(@dls-tag-border-opacity));
+      @bg-color: fade(@@bg-color-name, percentage(@dls-tag-background-opacity));
+      @disabled-color: fade(@dls-tag-font-color, percentage(@dls-tag-font-opacity-disabled));
+      @disabled-bd-color:fade(@@bg-color-name, percentage(@dls-tag-border-opacity-disabled));
 
-      @selected-bg-color-name: fade(@@bg-color-name, @dls-tag-background-opacity-selected * 100);
-      @selected-disabled-bg-color: fade(@@bg-color-name, @dls-tag-background-opacity-selected-disabled * 100);
+      @selected-bg-color-name: fade(@@bg-color-name, percentage(@dls-tag-background-opacity-selected));
+      @selected-disabled-bg-color: fade(@@bg-color-name, percentage(@dls-tag-background-opacity-selected-disabled));
 
       color: @@color-name;
       border-color: @bd-color;

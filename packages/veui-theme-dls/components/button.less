@@ -9,7 +9,7 @@
   border: 1px solid @dls-button-border-color-normal;
   background-color: @dls-button-background-color-normal;
   color: @dls-button-font-color-normal;
-  line-height: 1;
+  line-height: 2;
   white-space: nowrap;
   vertical-align: middle;
   cursor: pointer;
@@ -85,7 +85,36 @@
     display: none;
   }
 
-  &[ui~="strong"] {
+  &[ui~="basic"] {
+    border-color: @dls-button-border-color-basic;
+    background-color: @dls-button-background-color-basic;
+    color: @dls-button-font-color-basic;
+
+    &:hover {
+      background-color: @dls-button-background-color-basic-hover;
+    }
+
+    &.focus-visible,
+    &[data-focus-visible-added] {
+      background-color: @dls-button-background-color-basic-focus;
+    }
+
+    &:active {
+      background-color: @dls-button-background-color-basic-active;
+    }
+
+    &.@{veui-prefix}-disabled {
+      border-color: @dls-button-border-color-basic-disabled;
+      background-color: @dls-button-background-color-basic-disabled;
+      color: @dls-button-font-color-basic-disabled;
+    }
+
+    &.@{veui-prefix}-button-loading {
+      background-color: @dls-button-background-color-basic-active;
+    }
+  }
+
+  &[ui~="strong"]:not([ui~="text"]) {
     border-color: @dls-button-border-color-strong;
     background-color: @dls-button-background-color-strong;
     color: @dls-button-font-color-strong;
@@ -178,34 +207,15 @@
     padding: 0;
     height: auto;
     line-height: 1;
-
-    &::after {
-      content: "";
-      border: 1px solid transparent;
-      border-radius: inherit;
-      .veui-button-transition();
-    }
-
-    &.focus-visible,
-    &[data-focus-visible-added] {
-      box-shadow: none;
-
-      &::after {
-        .dls-focus-ring(
-          @dls-button-border-color-focus,
-          @dls-button-shadow-focus
-        );
-      }
-    }
-  }
-
-  &[ui~="text"],
-  &[ui~="icon"] {
     background-color: @dls-button-background-color-text;
     color: @dls-button-font-color-text;
 
     &::after {
+      content: "";
       .absolute(-@dls-button-padding-text);
+      border: 1px solid transparent;
+      border-radius: inherit;
+      .veui-button-transition();
     }
 
     &:hover {
@@ -215,8 +225,16 @@
 
     &.focus-visible,
     &[data-focus-visible-added] {
+      box-shadow: none;
       background-color: @dls-button-background-color-text-focus;
       color: @dls-button-font-color-text-focus;
+
+      &::after {
+        .dls-focus-ring(
+          @dls-button-border-color-focus,
+          @dls-button-shadow-focus
+        );
+      }
     }
 
     &:active {
@@ -227,6 +245,48 @@
     &.@{veui-prefix}-disabled {
       background-color: @dls-button-background-color-text-disabled;
       color: @dls-button-font-color-text-disabled;
+    }
+
+    &[ui~="strong"] {
+      color: @dls-button-font-color-text-strong;
+
+      &:hover {
+        color: @dls-button-font-color-text-strong-hover;
+      }
+
+      &.focus-visible,
+      &[data-focsu-visible-added] {
+        color: @dls-button-font-color-text-strong-focus;
+      }
+
+      &:active {
+        color: @dls-button-font-color-text-strong-active;
+      }
+
+      &.@{veui-prefix}-disabled {
+        color: @dls-button-font-color-text-strong-disabled;
+      }
+    }
+
+    &[ui~="aux"] {
+      color: @dls-button-font-color-text-aux;
+
+      &:hover {
+        color: @dls-button-font-color-text-aux-hover;
+      }
+
+      &.focus-visible,
+      &[data-focsu-visible-added] {
+        color: @dls-button-font-color-text-aux-focus;
+      }
+
+      &:active {
+        color: @dls-button-font-color-text-aux-active;
+      }
+
+      &.@{veui-prefix}-disabled {
+        color: @dls-button-font-color-text-aux-disabled;
+      }
     }
   }
 

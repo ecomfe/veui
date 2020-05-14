@@ -29,7 +29,7 @@ config.defaults(
       }
     },
     parts: {
-      spinner: ''
+      spinner: 'basic'
     },
     icons: {
       increase: ({ style }) => ICON_MAP[style].increase,
