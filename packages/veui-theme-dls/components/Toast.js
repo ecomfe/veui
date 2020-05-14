@@ -15,7 +15,7 @@ config.defaults(
       close: 'times'
     },
     parts: {
-      close: 'icon'
+      close: 'text'
     },
     ui: {
       size: {

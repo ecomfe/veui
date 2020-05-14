@@ -20,7 +20,7 @@ config.defaults(
     },
     parts: {
       ok: 'primary',
-      close: 'icon'
+      close: 'text'
     }
   },
   'dialog'

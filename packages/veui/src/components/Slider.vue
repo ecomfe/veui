@@ -110,6 +110,7 @@
       :open="activeTooltipIndex >= 0"
       trigger="custom"
       :interactive="false"
+      :ui="uiParts.tooltip"
     >
       <slot name="tip-label">
         {{ tooltipLabel }}

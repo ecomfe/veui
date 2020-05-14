@@ -302,11 +302,6 @@ export default [
     component: Tag
   },
   {
-    path: '/time-picker',
-    name: 'TimePicker',
-    component: TimePicker
-  },
-  {
     path: '/tabs',
     name: 'Tabs',
     component: Tabs,
@@ -334,6 +329,11 @@ export default [
     path: '/textarea',
     name: 'Textarea',
     component: Textarea
+  },
+  {
+    path: '/time-picker',
+    name: 'TimePicker',
+    component: TimePicker
   },
   {
     path: '/toast',

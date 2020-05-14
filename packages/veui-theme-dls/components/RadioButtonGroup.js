@@ -10,7 +10,7 @@ config.defaults(
       }
     },
     parts: {
-      checked: 'strong'
+      button: 'basic'
     }
   },
   'radiobuttongroup'

@@ -11,10 +11,7 @@ config.defaults(
       }
     },
     parts: {
-      checked: 'strong'
-    },
-    icons: {
-      check: 'check'
+      button: 'basic'
     }
   },
   'checkbuttongroup'
