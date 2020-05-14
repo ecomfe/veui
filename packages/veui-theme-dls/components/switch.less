@@ -6,7 +6,6 @@
     @height: ~"dls-switch-height-@{size}";
     @thumb-size: ~"dls-switch-thumb-size-@{size}";
     @padding: ~"dls-switch-padding-@{size}";
-    @text-offset: dls-sum(@@height / 2, @@thumb-size / 2, @dls-padding-unit);
 
     .@{veui-prefix}-switch {
       &-switcher {
@@ -24,13 +23,12 @@
       }
 
       &-text {
-        left: @text-offset;
+        left: dls-sum(@@width / 2, @@height / 2, @@padding * -1);
       }
     }
 
     &.@{veui-prefix}-switch-on &-text {
-      right: @text-offset;
-      left: auto;
+      left: dls-sum(@@width / 2, @@height / -2, @@padding);
     }
 
     &.@{veui-prefix}-switch-loading .@{veui-prefix}-switch-button,
@@ -80,20 +78,6 @@
     background-color: @dls-switch-track-color-off;
     user-select: none;
     .veui-transition(background-color, box-shadow);
-  }
-
-  &-text {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    color: @dls-switch-thumb-color-on;
-
-    .@{veui-prefix}-icon {
-      .dls-icon-size(@dls-icon-size-aux);
-    }
   }
 
   &:hover &-switcher {
@@ -229,5 +213,20 @@
   &[ui~="xs"] &-text,
   &[ui~="s"] &-text {
     display: none;
+  }
+
+  // For backwards compatibility
+  &-text {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: @dls-foreground-color-reverse;
+
+    .@{veui-prefix}-icon {
+      .dls-icon-size(@dls-icon-size-aux);
+    }
   }
 }

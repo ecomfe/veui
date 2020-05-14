@@ -8,7 +8,20 @@ config.defaults(
     },
     ui: {
       style: {
-        values: ['translucent', 'primary', 'strong', 'text', 'icon']
+        values: [
+          'normal',
+          'basic',
+          'translucent',
+          'primary',
+          'text',
+          'text',
+          'strong-text',
+          'weak-text'
+        ],
+        default: 'normal'
+      },
+      strength: {
+        values: ['strong', 'weak']
       },
       size: {
         values: ['xs', 's', 'm', 'l', 'xl'],

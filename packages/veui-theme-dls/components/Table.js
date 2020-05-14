@@ -23,7 +23,7 @@ config.defaults(
       }
     },
     parts: {
-      icon: 'icon'
+      icon: 'text'
     }
   },
   'table'

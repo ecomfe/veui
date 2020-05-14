@@ -13,7 +13,7 @@ config.defaults(
       }
     },
     parts: {
-      clear: 'icon'
+      clear: 'text'
     }
   },
   'input'
