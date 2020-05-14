@@ -19,9 +19,9 @@ config.defaults(
       close: 'times'
     },
     parts: {
-      prev: 'icon',
-      next: 'icon',
-      close: 'icon'
+      prev: 'text',
+      next: 'text',
+      close: 'text'
     },
     ui: {
       size: {
