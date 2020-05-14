@@ -32,10 +32,11 @@ config.defaults(
       }
     },
     parts: {
-      remove: 'icon',
+      remove: 'text',
       progress: 's',
       control: 'icon s',
-      preview: 'auto'
+      preview: 'auto',
+      image: 'basic'
     }
   },
   'uploader'

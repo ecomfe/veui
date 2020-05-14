@@ -38,7 +38,12 @@
         :class="$c('search-box-action-button')"
         :disabled="realDisabled || realReadonly"
         :aria-haspopup="submitPopup"
-      >{{ t('search') }}</veui-button>
+      >
+        <veui-icon
+          :name="icons.search"
+          :label="t('search')"
+        />
+      </veui-button>
     </div>
     <div
       slot="append"

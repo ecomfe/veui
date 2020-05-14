@@ -20,7 +20,7 @@ config.defaults(
       }
     },
     parts: {
-      close: 'icon'
+      close: 'text'
     }
   },
   'tag'

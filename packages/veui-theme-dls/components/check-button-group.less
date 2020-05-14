@@ -10,27 +10,22 @@
   }
 
   .@{veui-prefix}-button &-checkmark {
-    @offset: (@dls-button-padding-m - @dls-checkbox-spacing) / 2;
-    .absolute(@offset, @offset, _, _);
-    .dls-icon-size(@dls-checkbox-spacing);
-    margin: 0;
-    color: @dls-checkbox-foreground-color;
-  }
-
-  &[ui~="s"] .@{veui-prefix}-button &-checkmark {
-    @offset: (@dls-button-padding-s - @dls-checkbox-spacing) / 2;
-    .absolute(@offset, @offset, _, _);
+    .absolute(@dls-checkbox-icon-spacing-strong, @dls-checkbox-icon-spacing-strong, _, _);
+    color: @dls-button-border-color-basic;
+    border: @dls-checkbox-icon-size-strong / 2 solid transparent;
+    .border-color(currentColor, currentColor, _, _);
+    .veui-transition(border-color);
   }
 
   .@{veui-prefix}-button-selected &-checkmark {
-    color: @dls-checkbox-foreground-color;
+    color: @dls-checkbox-border-color-strong-checked;
   }
 
   .@{veui-prefix}-disabled &-checkmark {
-    color: @dls-checkbox-foreground-color-disabled;
+    color: @dls-button-border-color-basic-disabled;
   }
 
   .@{veui-prefix}-button-selected.@{veui-prefix}-disabled &-checkmark {
-    color: @dls-checkbox-foreground-color-disabled;
+    color: @dls-checkbox-border-color-strong-checked-disabled;
   }
 }

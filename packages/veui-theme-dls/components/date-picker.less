@@ -6,9 +6,23 @@
   position: relative;
   display: inline-block;
   width: @dls-date-picker-width;
+  border-radius: @dls-input-border-radius-m;
+  background-color: @dls-input-background-color;
 
   &-range {
     width: @dls-date-picker-width-range;
+  }
+
+  &[ui~="xs"] {
+    border-radius: @dls-input-border-radius-xs;
+  }
+
+  &[ui~="s"] {
+    border-radius: @dls-input-border-radius-s;
+  }
+
+  &[ui~="l"] {
+    border-radius: @dls-input-border-radius-l;
   }
 
   &-trigger {
@@ -17,9 +31,9 @@
     align-items: center;
     border: 1px solid @dls-input-border-color;
     padding-right: @dls-input-padding;
-    border-radius: @dls-border-radius-0;
+    border-radius: inherit;
     outline: none;
-    background-color: @dls-input-background-color;
+    background-color: transparent;
 
     .@{veui-prefix}-input-main {
       border: 0;

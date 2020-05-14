@@ -14,7 +14,8 @@ config.defaults(
         default: 'm'
       },
       style: {
-        values: ['primary'],
+        values: ['primary', 'basic', 'normal'],
+        default: 'basic',
         inherit: true
       },
       role: {

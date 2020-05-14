@@ -9,6 +9,7 @@
     flex: 1 1 0;
     margin-left: -1px;
     border-radius: 0;
+    z-index: 1;
 
     &:first-child {
       margin-left: 0;
@@ -20,12 +21,16 @@
     }
 
     &[data-focus-visible-added] {
-      z-index: 1;
+      z-index: 2;
     }
 
     &.@{veui-prefix}-disabled {
-      position: static;
+      z-index: 0;
     }
+  }
+
+  &-disabled .@{veui-prefix}-button.@{veui-prefix}-disabled {
+    position: relative;
   }
 
   &[ui~="xs"] {
@@ -49,20 +54,39 @@
   }
 
   .@{veui-prefix}-button[ui~="primary"]
-    + .@{veui-prefix}-button[ui~="primary"] {
+    + .@{veui-prefix}-button[ui~="primary"],
+  .@{veui-prefix}-button[ui~="normal"]
+    + .@{veui-prefix}-button[ui~="normal"] {
     &::before {
       content: "";
       .absolute(-1px, _, -1px, -1px);
       width: 1px;
-      background-color: @dls-dropdown-icon-color-aux-primary;
     }
 
     &.focus-visible::before {
       background-color: transparent;
     }
+  }
+
+  .@{veui-prefix}-button[ui~="primary"]
+  + .@{veui-prefix}-button[ui~="primary"] {
+    &::before {
+      background-color: fade(@dls-button-font-color-primary, percentage(@dls-button-group-separator-opacity));
+    }
 
     &.@{veui-prefix}-disabled::before {
-      background-color: @dls-dropdown-icon-color-aux-primary-disabled;
+      background-color: fade(@dls-button-font-color-primary-disabled, percentage(@dls-button-group-separator-opacity));
+    }
+  }
+
+  .@{veui-prefix}-button[ui~="normal"]
+  + .@{veui-prefix}-button[ui~="normal"] {
+    &::before {
+      background-color: fade(@dls-button-font-color-normal, percentage(@dls-button-group-separator-opacity));
+    }
+
+    &.@{veui-prefix}-disabled::before {
+      background-color: fade(@dls-button-font-color-normal-disabled, percentage(@dls-button-group-separator-opacity));
     }
   }
 

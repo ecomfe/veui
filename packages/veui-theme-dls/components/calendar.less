@@ -55,7 +55,7 @@
 
     &.focus-visible {
       .dls-focus-ring(
-        @dls-date-picker-cell-border-focus-color,
+        @dls-date-picker-cell-border-color-focus,
         @dls-date-picker-cell-shadow-focus
       );
     }
@@ -162,7 +162,7 @@
 
       &.focus-visible,
       &:hover {
-        background-color: @dls-background-color-neutral;
+        background-color: @dls-background-color-base-1;
         color: @dls-foreground-color-neutral;
       }
 
@@ -255,14 +255,12 @@
 
       &:hover {
         background-color: @dls-date-picker-cell-background-color-hover;
-        color: @dls-foreground-color-neutral-strong;
       }
 
       &.focus-visible {
         background-color: @dls-date-picker-cell-background-color-focus;
-        color: @dls-foreground-color-neutral-strong;
         .dls-focus-ring(
-          @dls-date-picker-cell-border-focus-color,
+          @dls-date-picker-cell-border-color-focus,
           @dls-date-picker-cell-shadow-focus
         );
       }
@@ -376,7 +374,7 @@
   &-in-range {
     position: relative;
     button {
-      background-color: @dls-date-picker-cell-background-color-active;
+      background-color: @dls-date-picker-cell-background-color-range-end-hover;
       border-radius: 0;
     }
   }
@@ -405,9 +403,8 @@
       background-color: @dls-date-picker-cell-background-color-range-end-focus;
     }
     &:active {
-      border-color: @dls-date-picker-cell-border-color-range-end-active;
       color: @dls-date-picker-cell-font-color;
-      background-color: @dls-date-picker-cell-background-color-active;
+      background-color: @dls-date-picker-cell-background-color-range-end-active;
     }
   }
 
@@ -419,7 +416,7 @@
         display: block;
         .size(100%);
         .absolute(0, _, _, _);
-        background-color: @dls-background-color-neutral;
+        background-color: @dls-background-color-base-1;
       }
     }
   }
@@ -429,7 +426,7 @@
   }
 
   &-in-range:not(&-range-single)::before {
-    background-color: @dls-date-picker-cell-background-color-active;
+    background-color: @dls-date-picker-cell-background-color-range-end-hover;
   }
 
   &-date-table {
@@ -442,7 +439,7 @@
   &-range-end,
   &-in-range:last-child {
     .@{veui-prefix}-calendar-date-table &::before {
-      background-color: @dls-background-color-neutral;
+      background-color: @dls-background-color-base-1;
     }
   }
 
@@ -468,7 +465,7 @@
   &-range-end:first-child {
     .@{veui-prefix}-calendar-month-table &::before,
     .@{veui-prefix}-calendar-year-table &::before {
-      background-color: @dls-background-color-neutral;
+      background-color: @dls-background-color-base-1;
     }
   }
 

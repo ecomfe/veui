@@ -1,6 +1,8 @@
 <template>
 <article>
-  <h1><code>&lt;veui-loading&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-loading&gt;</code>
+  </h1>
   <div class="veui-loading-demo">
     <section>
       <h3>基础加载</h3>
@@ -55,45 +57,35 @@
         <veui-loading
           loading
           ui="l"
-        >
-          加载中...
-        </veui-loading>
+        >加载中...</veui-loading>
       </p>
       <p>
         中等尺寸：
         <veui-loading
           loading
           ui="m"
-        >
-          加载中...
-        </veui-loading>
+        >加载中...</veui-loading>
       </p>
       <p>
         小尺寸：
         <veui-loading
           loading
           ui="s"
-        >
-          加载中...
-        </veui-loading>
+        >加载中...</veui-loading>
       </p>
       <p>
         普通效果：
         <veui-loading
           loading
           ui="normal"
-        >
-          加载中...
-        </veui-loading>
+        >加载中...</veui-loading>
       </p>
       <p>
         加强效果：
         <veui-loading
           loading
           ui="strong"
-        >
-          加载中...
-        </veui-loading>
+        >加载中...</veui-loading>
       </p>
       <p>
         反白效果：
@@ -101,9 +93,7 @@
           loading
           ui="reverse"
           class="reverse"
-        >
-          加载中...
-        </veui-loading>
+        >加载中...</veui-loading>
       </p>
       <p>
         文字垂直显示：
@@ -111,9 +101,7 @@
           loading
           class="reverse"
           ui="reverse vertical"
-        >
-          加载中...
-        </veui-loading>
+        >加载中...</veui-loading>
       </p>
     </section>
     <section>
@@ -176,6 +164,31 @@
         </template>
       </p>
     </section>
+    <section>
+      <h3>遮罩层展现</h3>
+      <section class="cards">
+        <div class="card">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate
+          similique nam, iure maiores consequatur quia suscipit temporibus
+          corporis ipsa molestias magnam repudiandae. Nam nihil eveniet eius
+          dolores ducimus cumque facere.
+          <veui-loading
+            loading
+            ui="strong l overlay"
+          />
+        </div>
+        <div class="card">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate
+          similique nam, iure maiores consequatur quia suscipit temporibus
+          corporis ipsa molestias magnam repudiandae. Nam nihil eveniet eius
+          dolores ducimus cumque facere.
+          <veui-loading
+            loading
+            ui="reverse l overlay"
+          />
+        </div>
+      </section>
+    </section>
   </div>
 </article>
 </template>
@@ -222,6 +235,22 @@ export default {
   }
   .veui-span {
     margin-right: 15px;
+  }
+
+  .cards {
+    display: flex;
+  }
+
+  .card {
+    position: relative;
+    width: 320px;
+    height: 180px;
+    margin-right: 20px;
+    padding: 1em 1.5em;
+    line-height: 1.6;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
 }
 </style>
