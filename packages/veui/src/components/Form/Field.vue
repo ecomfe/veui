@@ -21,12 +21,12 @@
     :class="$c('form-tip')"
   >
     <veui-icon
-      ref="question"
+      ref="tip"
       :name="icons.tip"
     />
     <veui-tooltip
       :ui="uiParts.tip"
-      target="question"
+      target="tip"
       position="top-start"
     >
       <slot name="tip">{{ tip }}</slot>

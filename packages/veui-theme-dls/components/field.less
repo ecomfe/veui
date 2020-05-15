@@ -1,19 +1,16 @@
 @import "../lib.less";
 
 // will be removed
-@dls-form-field-min-height: @dls-padding-unit * 8;
 @dls-form-field-spacing-after-horizontal: @dls-padding-unit * 2;
 
 .@{veui-prefix}-field {
-  @field-content-left-spacing: ~"calc(@{dls-form-label-width} + @{dls-form-label-spacing-after-horizontal})";
+  @field-content-left-spacing: dls-sum(@dls-form-label-width + @dls-form-label-spacing-after-horizontal);
 
   position: relative;
   display: flex;
-  min-height: @dls-form-field-min-height;
 
   .@{veui-prefix}-form-label {
     width: @dls-form-label-width;
-    line-height: @dls-form-field-min-height;
     margin-right: @dls-form-label-spacing-after-horizontal;
     color: @dls-form-label-font-color;
     display: flex;
@@ -27,7 +24,7 @@
   .@{veui-prefix}-form-tip {
     position: absolute;
     left: ~"calc(@{dls-form-label-width} + @{dls-form-label-content-spacing})";
-    top: ~"calc(@{dls-form-field-min-height} / 2 - 0.5em)";
+    transform: translateY(-50%);
     color: @dls-form-label-icon-color;
   }
 
@@ -45,17 +42,46 @@
         margin-left: 0;
       }
     }
-    .@{veui-prefix}-span,
-    .@{veui-prefix}-radio-group,
-    .@{veui-prefix}-checkbox-group {
-      line-height: @dls-form-field-min-height;
-    }
   }
 
   &-error {
     position: absolute;
     left: 0;
-    top: ~"calc(100% + @{dls-form-field-error-spacing-before-vertical})";
+    top: dls-sum(100% + @dls-form-field-error-spacing-before-vertical);
     color: @dls-form-field-error-font-color;
+  }
+
+  .make-ui(@font-size, @min-height) {
+    font-size: @font-size;
+    min-height: @min-height;
+
+    .@{veui-prefix}-form-label {
+      line-height: @min-height;
+    }
+    .@{veui-prefix}-form-tip {
+      top: ~"calc(@{min-height} / 2)";
+    }
+    .@{veui-prefix}-form-content {
+      .@{veui-prefix}-span,
+      .@{veui-prefix}-radio-group,
+      .@{veui-prefix}-checkbox-group {
+        line-height: @min-height;
+      }
+    }
+  }
+  &[ui~="l"] {
+    .make-ui(@dls-font-size-2, @dls-height-l);
+  }
+
+  &[ui~="m"] {
+    .make-ui(@dls-font-size-1, @dls-height-m);
+  }
+
+  &[ui~="s"] {
+    .make-ui(@dls-font-size-0, @dls-height-s);
+  }
+
+  &[ui~="xs"] {
+    .make-ui(@dls-font-size-0, @dls-height-xs);
   }
 }

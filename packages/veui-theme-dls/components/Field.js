@@ -7,10 +7,10 @@ config.defaults(
       tip: 'question-circle'
     },
     ui: {
-      // size: {
-      //   values: ['l', 'm', 's', 'xs'],
-      //   inherit: true
-      // }
+      size: {
+        values: ['l', 'm', 's', 'xs'],
+        inherit: true
+      }
     },
     parts: {
       tip: 'alt'
