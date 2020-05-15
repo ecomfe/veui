@@ -8,44 +8,45 @@
     [$c('dropdown-split')]: split
   }"
 >
-  <veui-button
-    v-if="split"
-    ref="command"
-    :class="$c('dropdown-command')"
-    :disabled="disabled"
-    @click="$emit('click')"
+  <slot
+    name="trigger"
+    v-bind="{ props: triggerProps, handlers: triggerHandlers }"
   >
-    <span :class="$c('dropdown-label')">
-      <slot
-        name="label"
-        :label="label"
-      >{{ label }}</slot>
-    </span>
-  </veui-button>
-  <veui-button
-    ref="button"
-    :class="$c('dropdown-button')"
-    :disabled="disabled"
-    aria-haspopup="menu"
-    :aria-disabled="disabled"
-    :aria-owns="dropdownId"
-    v-on="toggleHandlers"
-    @keydown.down.up.enter.space.prevent="handleTriggerKeydown"
-  >
-    <span
-      v-if="!split"
-      :class="$c('dropdown-label')"
+    <veui-button
+      v-if="split"
+      ref="command"
+      :class="$c('dropdown-command')"
+      :disabled="disabled"
+      @click="$emit('click')"
     >
-      <slot
-        name="label"
-        :label="label"
-      >{{ label }}</slot>
-    </span>
-    <veui-icon
-      :class="$c('dropdown-icon')"
-      :name="icons[expanded ? 'collapse' : 'expand']"
-    />
-  </veui-button>
+      <span :class="$c('dropdown-label')">
+        <slot
+          name="label"
+          :label="label"
+        >{{ label }}</slot>
+      </span>
+    </veui-button>
+    <veui-button
+      ref="button"
+      :class="$c('dropdown-button')"
+      v-bind="triggerProps"
+      v-on="triggerHandlers"
+    >
+      <span
+        v-if="!split"
+        :class="$c('dropdown-label')"
+      >
+        <slot
+          name="label"
+          :label="label"
+        >{{ label }}</slot>
+      </span>
+      <veui-icon
+        :class="$c('dropdown-icon')"
+        :name="icons[expanded ? 'collapse' : 'expand']"
+      />
+    </veui-button>
+  </slot>
   <veui-overlay
     target="main"
     :open="expanded"
@@ -97,7 +98,7 @@
         :trigger="trigger"
         :overlay-class="overlayClass"
       >
-        <slot/>
+        <slot :close="close"/>
         <template
           v-if="$scopedSlots['group-label']"
           slot="label"
@@ -236,19 +237,29 @@ export default {
     },
     split: Boolean,
     searchable: Boolean,
-    placeholder: SearchBox.props.placeholder,
-    memoize: Boolean
+    placeholder: SearchBox.props.placeholder
   },
   data () {
     return {
-      outsideRefs: ['button'],
       keyword: ''
     }
   },
   computed: {
-    toggleHandlers () {
+    outsideRefs () {
+      return [this.split ? 'button' : 'main']
+    },
+    triggerHandlers () {
       return {
-        [EVENT_MAP[this.trigger]]: this.handleToggle
+        [EVENT_MAP[this.trigger]]: this.handleToggle,
+        keydown: this.handleTriggerKeydown
+      }
+    },
+    triggerProps () {
+      return {
+        disabled: this.disabled,
+        'aria-haspopup': 'menu',
+        'aria-disabled': this.disabled,
+        'aria-owns': this.dropdownId
       }
     },
     isSearching () {
@@ -257,7 +268,21 @@ export default {
   },
   methods: {
     handleTriggerKeydown (e) {
-      this.expanded = true
+      switch (e.key) {
+        case ' ':
+        case 'Spacebar':
+        case 'Enter':
+        case 'Up':
+        case 'ArrowUp':
+        case 'Down':
+        case 'ArrowDown':
+          this.expanded = true
+          break
+        default:
+          break
+      }
+
+      e.preventDefault()
     },
     handleToggle () {
       let mode = MODE_MAP[this.trigger]
