@@ -81,6 +81,7 @@
     position="top-start"
     autofocus
     modal
+    match-width
     @afteropen="$refs.cal.scrollToCurrentYear()"
   >
     <div
@@ -216,8 +217,8 @@ const CALENDAR_PROPS = [
 ]
 
 const TYPE_FORMAT_MAP = {
-  date: 'yyyy-MM-dd',
-  month: 'yyyy-MM',
+  date: 'yyyy/MM/dd',
+  month: 'yyyy/MM',
   year: 'yyyy'
 }
 
