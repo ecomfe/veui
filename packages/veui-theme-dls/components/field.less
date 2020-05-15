@@ -8,6 +8,8 @@
 
   position: relative;
   display: flex;
+  font-size: @dls-font-size-1;
+  min-height: @dls-height-m;
 
   .@{veui-prefix}-form-label {
     width: @dls-form-label-width;
@@ -15,6 +17,7 @@
     color: @dls-form-label-font-color;
     display: flex;
     justify-content: flex-end;
+    line-height: @dls-height-m;
   }
 
   &-required > .@{veui-prefix}-form-label::before {
@@ -26,6 +29,7 @@
     left: ~"calc(@{dls-form-label-width} + @{dls-form-label-content-spacing})";
     transform: translateY(-50%);
     color: @dls-form-label-icon-color;
+    top: ~"calc(@{dls-height-m} / 2)";
   }
 
   &-no-label {
@@ -41,6 +45,11 @@
       &:first-child {
         margin-left: 0;
       }
+    }
+    .@{veui-prefix}-span,
+    .@{veui-prefix}-radio-group,
+    .@{veui-prefix}-checkbox-group {
+      line-height: @dls-height-m;
     }
   }
 
