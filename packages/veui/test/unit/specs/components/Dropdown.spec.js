@@ -251,4 +251,159 @@ describe('components/Dropdown', () => {
     expect(menuWrapper.element.style.display).to.equal('none')
     wrapper.destroy()
   })
+
+  it('should toggle the dropdown menu if space/enter/up/down when are pressed', async () => {
+    let wrapper = mount(Dropdown, {
+      propsData: {
+        split: true,
+        options: datasource
+      },
+      sync: false,
+      attachToDocument: true
+    })
+
+    const { vm } = wrapper
+    wrapper
+      .find('.veui-dropdown-button')
+      .trigger('keydown.enter', { key: 'Enter' })
+
+    await vm.$nextTick()
+    expect(vm.expanded).to.equal(true)
+    vm.expanded = false
+    wrapper.find('.veui-dropdown-button').trigger('keydown.space', { key: ' ' })
+
+    await vm.$nextTick()
+    expect(vm.expanded).to.equal(true)
+    vm.expanded = false
+    wrapper.find('.veui-dropdown-button').trigger('keydown.up', { key: 'Up' })
+
+    await vm.$nextTick()
+    expect(vm.expanded).to.equal(true)
+    vm.expanded = false
+    wrapper
+      .find('.veui-dropdown-button')
+      .trigger('keydown.down', { key: 'Down' })
+
+    await vm.$nextTick()
+    expect(vm.expanded).to.equal(true)
+    vm.expanded = false
+    wrapper
+      .find('.veui-dropdown-button')
+      .trigger('keydown.left', { key: 'Left' })
+
+    await vm.$nextTick()
+    expect(vm.expanded).to.equal(false)
+
+    wrapper.destroy()
+  })
+
+  it('should close the searchable dropdown menu if `tab` is pressed', async () => {
+    let wrapper = mount(
+      {
+        template: `
+        <veui-dropdown
+          ref="dropdown"
+          :options="datasource"
+          :searchable="searchable"
+          overlayClass="test-overlay-class"
+        />`,
+        components: {
+          'veui-dropdown': Dropdown
+        },
+        data () {
+          return {
+            datasource,
+            searchable: true
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    const { vm } = wrapper
+    wrapper.find('.veui-dropdown-button').trigger('click')
+
+    await vm.$nextTick()
+    wrapper
+      .find('.test-overlay-class')
+      .find('.veui-dropdown-options')
+      .trigger('keydown.tab', { key: 'Tab' })
+
+    await vm.$nextTick()
+    expect(vm.$refs.dropdown.expanded).to.equal(false)
+    vm.searchable = false
+
+    await vm.$nextTick()
+    wrapper.find('.veui-dropdown-button').trigger('click')
+    wrapper
+      .find('.test-overlay-class')
+      .find('.veui-dropdown-options')
+      .trigger('keydown.tab', { key: 'Tab' })
+
+    await vm.$nextTick()
+    expect(vm.$refs.dropdown.expanded).to.equal(true)
+
+    wrapper.destroy()
+  })
+
+  it('should trigger click on current focused element when enter is pressed on searchable dropdown', async () => {
+    let wrapper = mount(
+      {
+        template: `
+        <veui-dropdown
+          ref="dropdown"
+          :options="datasource"
+          :searchable="searchable"
+          overlayClass="test-overlay-class"
+          @click="handleClick"
+        />`,
+        components: {
+          'veui-dropdown': Dropdown
+        },
+        data () {
+          return {
+            val: null,
+            datasource,
+            searchable: true
+          }
+        },
+        methods: {
+          handleClick (val) {
+            this.val = val
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    const { vm } = wrapper
+    wrapper.find('.veui-dropdown-button').trigger('click')
+
+    await vm.$nextTick()
+    let options = wrapper
+      .find('.test-overlay-class')
+      .find('.veui-dropdown-options')
+    options.trigger('keydown.down', { key: 'Down' })
+    options.trigger('keydown.enter', { key: 'Enter' })
+
+    await vm.$nextTick()
+    expect(vm.val).to.equal('male')
+
+    vm.searchable = false
+    await vm.$nextTick()
+    options = wrapper.find('.test-overlay-class').find('.veui-dropdown-options')
+    options.trigger('keydown.down', { key: 'Down' })
+    options.trigger('keydown.enter', { key: 'Enter' })
+
+    await vm.$nextTick()
+    expect(vm.val).to.equal('male')
+
+    wrapper.destroy()
+  })
 })

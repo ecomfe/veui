@@ -170,6 +170,7 @@ import searchable from '../mixins/searchable'
 import i18n from '../mixins/i18n'
 import '../common/uiTypes'
 import { includes } from 'lodash'
+import { focusIn } from '../utils/dom'
 
 const EVENT_MAP = {
   hover: 'mouseenter',
@@ -277,12 +278,11 @@ export default {
         case 'Down':
         case 'ArrowDown':
           this.expanded = true
+          e.preventDefault()
           break
         default:
           break
       }
-
-      e.preventDefault()
     },
     handleToggle () {
       let mode = MODE_MAP[this.trigger]
@@ -302,8 +302,13 @@ export default {
       }
     },
     focus () {
-      let { command, button } = this.$refs
-      ;(command || button).focus()
+      let { command, button, main } = this.$refs
+
+      if (!command && !button) {
+        focusIn(main)
+      } else {
+        ;(command || button).focus()
+      }
     },
     getFocusableContainer () {
       return this.$refs.options.$el
