@@ -1,7 +1,9 @@
 <template>
 <article>
-  <h1><code>&lt;veui-dropdown&gt;</code></h1>
-  <div>
+  <h1>
+    <code>&lt;veui-dropdown&gt;</code>
+  </h1>
+  <section>
     <h3>基础下拉菜单</h3>
     <div>
       <h4>primary</h4>
@@ -121,14 +123,12 @@
           <template
             slot="option-label"
             slot-scope="{ label }"
-          >
-            👉 {{ label }}
-          </template>
+          >👉 {{ label }}</template>
         </veui-dropdown>
       </div>
     </div>
-  </div>
-  <div>
+  </section>
+  <section>
     <h3>分组下拉框菜单</h3>
     <div>
       <veui-dropdown
@@ -183,8 +183,8 @@
         :options="multiLevelUnlabeledOptions"
       />
     </div>
-  </div>
-  <div>
+  </section>
+  <section>
     <h3>多层级下拉框菜单</h3>
     <div>
       <veui-dropdown
@@ -202,8 +202,8 @@
         :options="multiLevelUnlabeledOptions"
       />
     </div>
-  </div>
-  <div>
+  </section>
+  <section>
     <h3>文字链下拉框菜单</h3>
     <div>
       <veui-dropdown
@@ -232,8 +232,8 @@
         </veui-option-group>
       </veui-dropdown>
     </div>
-  </div>
-  <div>
+  </section>
+  <section>
     <h3>含搜索的下拉框菜单</h3>
     <veui-dropdown
       ui="text"
@@ -242,20 +242,68 @@
       searchable
       :options="options"
     />
-  </div>
+  </section>
+  <section>
+    <h3>自定义插槽</h3>
+    <div>
+      <h4>自定义 #trigger</h4>
+      <veui-dropdown trigger="hover">
+        <veui-option value="undo">⬅️撤消</veui-option>
+        <veui-option value="redo">➡️重复</veui-option>
+        <template #trigger="{ handlers, props }">
+          <veui-button
+            ui="icon"
+            v-bind="props"
+            v-on="handlers"
+          >
+            <veui-icon name="ellipsis"/>
+          </veui-button>
+        </template>
+      </veui-dropdown>
+    </div>
+    <div>
+      <h4>全部自定义</h4>
+      <veui-dropdown>
+        <template #default="{ close }">
+          <div class="filter">
+            筛选：
+            <veui-input
+              ui="xs"
+              class="query"
+            />
+            <veui-button
+              ui="xs primary"
+              @click="close"
+            >OK</veui-button>
+          </div>
+        </template>
+        <template #trigger="{ handlers, props }">
+          <veui-button
+            ui="strong xs"
+            v-bind="props"
+            v-on="handlers"
+          >下拉</veui-button>
+        </template>
+      </veui-dropdown>
+    </div>
+  </section>
 </article>
 </template>
 
 <script>
 import bus from '../bus'
-import { Dropdown, Option, OptionGroup } from 'veui'
+import { Dropdown, Option, OptionGroup, Button, Icon, Input } from 'veui'
+import 'veui-theme-dls-icons/ellipsis'
 
 export default {
   name: 'dropdown-demo',
   components: {
     'veui-dropdown': Dropdown,
     'veui-option-group': OptionGroup,
-    'veui-option': Option
+    'veui-option': Option,
+    'veui-button': Button,
+    'veui-icon': Icon,
+    'veui-input': Input
   },
   data () {
     return {
@@ -386,11 +434,29 @@ export default {
 </script>
 
 <style lang="less" scoped>
+article {
+  padding-bottom: 120px;
+}
+
+section {
+  margin-bottom: 30px;
+}
+
 p {
   margin: 10px 0;
 }
 
 .veui-dropdown {
   margin-right: 20px;
+}
+
+.filter {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.query {
+  width: 120px;
+  margin-right: 8px;
 }
 </style>

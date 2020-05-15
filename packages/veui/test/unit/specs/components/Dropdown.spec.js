@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Dropdown from '@/components/Dropdown'
+import Button from '@/components/Button'
 
 let datasource = [
   {
@@ -97,6 +98,88 @@ describe('components/Dropdown', () => {
 
     expect(option.exists()).to.equal(true)
     expect(option.text()).to.equal('男')
+    wrapper.destroy()
+  })
+
+  it('should render trigger slot correctly', async () => {
+    let wrapper = mount(
+      {
+        template: `
+        <veui-dropdown
+          ref="dropdown"
+          :options="datasource"
+        >
+          <template #trigger="{ handlers, props }">
+            <veui-button
+              v-bind="props"
+              v-on="handlers"
+            >操作</veui-button>
+          </template>
+        </veui-dropdown>`,
+        components: {
+          'veui-dropdown': Dropdown,
+          'veui-button': Button
+        },
+        data () {
+          return {
+            datasource
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    let trigger = wrapper.find('.veui-button')
+    expect(trigger.attributes('aria-haspopup')).to.equal('menu')
+
+    trigger.trigger('click')
+    await vm.$nextTick()
+
+    expect(vm.$refs.dropdown.expanded).to.equal(true)
+
+    wrapper.destroy()
+  })
+
+  it('should render trigger slot correctly', async () => {
+    let wrapper = mount(
+      {
+        template: `
+        <veui-dropdown ref="dropdown">
+          <template #default="{ close }">
+            <div class="content" @click="close"/>
+          </template>
+        </veui-dropdown>`,
+        components: {
+          'veui-dropdown': Dropdown,
+          'veui-button': Button
+        },
+        data () {
+          return {
+            datasource
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+
+    wrapper.find('.veui-button').trigger('click')
+
+    await vm.$nextTick()
+    expect(vm.$refs.dropdown.expanded).to.equal(true)
+    wrapper.find('.content').trigger('click')
+
+    await vm.$nextTick()
+    expect(vm.$refs.dropdown.expanded).to.equal(false)
+
     wrapper.destroy()
   })
 
