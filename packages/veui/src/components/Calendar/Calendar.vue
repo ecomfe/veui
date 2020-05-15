@@ -63,9 +63,12 @@
           :id="`${id}:panel-title:${pIndex}`"
           ref="expansion-select"
           :ui="uiParts.toggle"
-          :class="$c('calendar-select')"
+          :class="{
+            [$c('calendar-select')]: true,
+            [$c('calendar-visible')]: true
+          }"
           :disabled="disabled || readonly"
-          :aria-label="t('selectMonth', { month: p.month + 1 })"
+          :aria-label="selectButtonAriaLabel(p)"
           @click="setExpanded(pIndex, !p.expanded)"
         >
           <b>{{ getExpansionText(p) }}</b>
@@ -74,6 +77,7 @@
         <b
           v-else
           :id="`${id}:panel-title:${pIndex}`"
+          :aria-hidden="true"
           :class="$c('calendar-select')"
         >{{ t('year', { year: p.year }) }}</b>
       </template>
@@ -115,7 +119,6 @@
     >
       <infinite-scroll
         v-if="isDateType && p.expanded"
-        :notable="1901"
         :row="150"
         :initial="panelData[pIndex].initialScrollYear"
       >
@@ -129,6 +132,7 @@
               v-for="idx in row"
               :key="idx + start - 1 + `-${page}`"
               :class="getYearClass(p, idx + start - 1)"
+              :data-index="idx - 1"
             >
               <button
                 type="button"
@@ -238,10 +242,9 @@
       </table>
       <infinite-scroll
         v-else
-        :notable="1901"
         :row="50"
         :col="3"
-        :initial="p.year"
+        :initial="panelData[pIndex].initialScrollYear"
       >
         <template slot-scope="{ onscroll, start, row, page }">
           <div
@@ -265,6 +268,7 @@
                     v-for="j in 3"
                     :key="j"
                     :class="getYearClass(p, start + 3 * (i - 1) + j - 1)"
+                    :data-index="3 * (i - 1) + j - 1"
                   >
                     <button
                       type="button"
@@ -416,11 +420,15 @@ export default {
     let year = current.getFullYear()
     let panelData = []
     for (let i = 0; i < this.panel; i++) {
+      // panelData.date 是用来给指定普通面板（非展开面板）的时间坐标
+      //  1. type=date 时为 {year, month}, 表示 day views 的当前时间坐标，而展开面板中可以设置该坐标
+      //  2. type=month 时为 {year}, 表示 month views 的当前时间坐标，而展开面板中可以设置该坐标
+      //  3. type=year 时无效
       let p = {
         date: { year },
         expanded: false,
-        initialScrollYear: null, // 决定 year scroller 的年份范围
-        currentScrollYear: null
+        initialScrollYear: year, // 最初需要把这个显示到 inf-scroll 中间部分
+        currentScrollYear: null // daysView 展开时再年份滚动面板中选中的年份
       }
 
       if (this.type === 'date') {
@@ -484,15 +492,24 @@ export default {
         let p = { year, index, expanded }
 
         if (this.isMonthType) {
-          p.months = this.getMonths(year)
+          p.months = this.getMonths(year) // 普通月份面板数据源
         } else if (this.isDateType) {
           p.month = month
-          p.months = this.getMonths(year, false) // for expanded panel
-          p.currentScrollYear = currentScrollYear // for expanded panel
+          p.months = this.getMonths(year, false) // 展开月份面板数据源
+          p.currentScrollYear = currentScrollYear
           p.weeks = this.getWeeks(year, month)
         }
         panels.push(p)
       }
+      // panels 的三种情况
+      // 1. type=date 时为 {
+      //   year, month, 当前普通面板时间坐标
+      //   weeks, index, expanded, months,
+      //   currentScrollYear } 当修改时间坐标时只选了年份，还没有选月份时的年份临时状态
+      // 2. type=month 时为 {
+      //   year, 当前普通面板时间坐标
+      //   index, expanded, months}
+      // 3. type=year 时无效
       return panels
     },
     daysShort () {
@@ -511,12 +528,16 @@ export default {
     }
   },
   mounted () {
-    this.scrollToCurrentYear()
     let selected = [].concat(this.realSelected)
     if (this.multiple) selected = selected[0]
     if (selected && selected[0]) this.navigate(selected)
   },
   methods: {
+    selectButtonAriaLabel (panel) {
+      return this.type === 'date'
+        ? this.t('selectMonth', { month: panel.month + 1 })
+        : this.t('selectYear', { year: panel.year })
+    },
     getDayNames () {
       let names = [...this.daysShort]
       return names.splice(this.realWeekStart - 1).concat(names)
@@ -957,7 +978,6 @@ export default {
         },
         p.map(val => val.date)
       )
-
       // 调节完了之后，统一 sync，避免调节过程中多余的 sync
       newPanelDates.forEach((newVal, index) => {
         if (!isEqual(newVal, p[index].date)) {
@@ -1082,6 +1102,7 @@ export default {
     setExpanded (i, value) {
       if (this.isYearType) return
 
+      // 两个参数如 (1, true)即第二个面板进入展开状态
       if (value != null) {
         let data = this.panelData[i]
         if (this.isDateType && !data.expanded && value) {
@@ -1101,6 +1122,7 @@ export default {
           focusIn(this.$refs.body[i])
         })
       } else {
+        // 一个参数如（true）即所有面板进入展开状态
         value = i
         this.panelData.forEach(data => {
           data.expanded = value
