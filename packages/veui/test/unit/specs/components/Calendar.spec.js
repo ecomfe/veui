@@ -558,4 +558,47 @@ describe('components/Calendar', () => {
     expect(p2.date).to.deep.equal({ year: 2018, month: 3 })
     wrapper.destroy()
   })
+
+  it('should handle selected prop correctly on using as a uncontrolled component.', async () => {
+    const wrapper = mount(Calendar)
+    const { vm } = wrapper
+    const today = wrapper.find('.veui-calendar-today button')
+    today.trigger('click')
+    await vm.$nextTick()
+    expect(vm.realSelected.getDate()).to.equal(
+      +today.element.textContent.trim()
+    )
+    wrapper.destroy()
+  })
+
+  it('should handle selection correctly for year calendar.', async () => {
+    const wrapper = mount(Calendar, {
+      propsData: {
+        type: 'year'
+      }
+    })
+    const { vm } = wrapper
+    function isVisible (container, target) {
+      let { top, bottom } = target.getBoundingClientRect()
+      let { top: cTop, bottom: cBottom } = container.getBoundingClientRect()
+      expect(top < cTop && bottom < cTop).to.equal(false)
+      expect(top > cBottom && bottom > cBottom).to.equal(false)
+    }
+
+    // 一开始得滚动到视图中
+    let container = wrapper.find('.veui-calendar-year-table-wrap').element
+    isVisible(container, wrapper.find('.veui-calendar-today').element)
+
+    container.scrollTop = 10
+    let target = wrapper.find('[data-index="3"] button')
+    target.trigger('click')
+    await vm.$nextTick()
+
+    isVisible(container, target.element)
+
+    expect(vm.realSelected.getFullYear()).to.equal(
+      +target.element.textContent.trim()
+    )
+    wrapper.destroy()
+  })
 })
