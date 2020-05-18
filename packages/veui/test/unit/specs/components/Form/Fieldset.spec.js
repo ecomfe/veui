@@ -18,23 +18,25 @@ function genTemplate (state = '', slots = '') {
 }
 
 function genWrapper (template) {
-  return mount({
-    name: 'test-field',
-    components: {
-      'veui-field': Field,
-      'veui-input': Input,
-      'veui-form': Form,
-      'veui-fieldset': Fieldset
+  return mount(
+    {
+      name: 'test-field',
+      components: {
+        'veui-field': Field,
+        'veui-input': Input,
+        'veui-form': Form,
+        'veui-fieldset': Fieldset
+      },
+      template
     },
-    template
-  }, {
-    sync: false,
-    attachToDocument: true
-  })
+    {
+      sync: false,
+      attachToDocument: true
+    }
+  )
 }
 
-let slot =
-`
+let slot = `
   <template slot="label">
     <div class="test-slot-label">通过slot设置label</div>
   </template>
@@ -49,7 +51,9 @@ describe('components/Form/Fieldset', () => {
     let wrapper = genWrapper(template)
     let inputWrapper = wrapper.find('.test-field')
     expect(inputWrapper.attributes().class).to.include('veui-readonly')
-    expect(inputWrapper.find('.veui-input-input').element.readOnly).to.equal(true)
+    expect(inputWrapper.find('.veui-input-input').element.readOnly).to.equal(
+      true
+    )
     wrapper.destroy()
   })
 
@@ -59,7 +63,9 @@ describe('components/Form/Fieldset', () => {
 
     let inputWrapper = wrapper.find('.test-field')
     expect(inputWrapper.attributes().class).to.include('veui-disabled')
-    expect(inputWrapper.find('.veui-input-input').element.disabled).to.equal(true)
+    expect(inputWrapper.find('.veui-input-input').element.disabled).to.equal(
+      true
+    )
     wrapper.destroy()
   })
 
@@ -76,8 +82,10 @@ describe('components/Form/Fieldset', () => {
     let wrapper = genWrapper(template)
     let fieldsetWrapper = wrapper.find('.veui-fieldset')
     // should set label & tip correctly
-    expect(fieldsetWrapper.find('.veui-form-label').text()).to.equal('测试label')
-    expect(fieldsetWrapper.find('.veui-form-tip').text()).to.equal('测试tip')
+    expect(fieldsetWrapper.find('.veui-form-label').text()).to.equal(
+      '测试label'
+    )
+    expect(fieldsetWrapper.find('.veui-tooltip').text()).to.equal('测试tip')
     // should set ui correctly
     expect(fieldsetWrapper.attributes().ui).to.equal('tiny')
     // should set name correctly
@@ -89,7 +97,9 @@ describe('components/Form/Fieldset', () => {
     let template = genTemplate('', slot)
     let wrapper = genWrapper(template)
     // label & tip
-    expect(wrapper.find('.test-slot-label').text()).to.equal('通过slot设置label')
+    expect(wrapper.find('.test-slot-label').text()).to.equal(
+      '通过slot设置label'
+    )
     expect(wrapper.find('.test-slot-tip').text()).to.equal('通过slot设置tip')
     // default slot
     expect(wrapper.find('.veui-input').exists()).to.equal(true)
