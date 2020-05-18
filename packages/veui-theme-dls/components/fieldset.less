@@ -1,74 +1,12 @@
 @import "../lib.less";
 
 .@{veui-prefix}-fieldset {
-  position: relative;
-  clear: both;
 
-  &-required > .@{veui-prefix}-form-label::after {
-    .veui-field-require();
+  // 水平排列多个 Field，添加水平 margin，覆盖掉 Field 自己设置的 margin
+  .@{veui-prefix}-field {
+    margin-bottom: @dls-form-field-spacing-vertical;
   }
 
-  &.@{veui-prefix}-field-no-label::before,
-  & > .@{veui-prefix}-field-no-label::before {
-    width: auto;
-  }
-
-  & > *:not([class*="veui-form-label"]) + * {
-    margin-left: 10px;
-  }
-
-  &[ui~="alt"] {
-    & > .@{veui-prefix}-form-label,
-    & > .@{veui-prefix}-field:first-child .@{veui-prefix}-form-label {
-      padding-left: 10px;
-    }
-
-    & [class*="veui"][ui~="alt"] {
-      border-color: transparent;
-    }
-
-    &,
-    & > .@{veui-prefix}-form-label,
-    & > .@{veui-prefix}-field > .@{veui-prefix}-form-label {
-      background-color: @veui-gray-color-7;
-      border-color: @veui-gray-color-7;
-      color: @veui-text-color-normal;
-    }
-  }
-
-  // 三种情况error要折行放
-  // 1. fieldset本身有tip，error出在fieldset上（field中已处理）
-  // 2. field自己的错误（后边会处理fieldset、field都没有tip的情况，是这个的一种特殊场景）
-  // 3. 最后一个不带field不带tip，error出在fieldset上
-  & > .@{veui-prefix}-field .@{veui-prefix}-field-error,
-  &
-    > .@{veui-prefix}-field:not(.@{veui-prefix}-field-no-tip)
-    + .@{veui-prefix}-field-error {
-    .veui-field-gap-error();
-  }
-
-  // field自己带label 和 error，这种情况error要缩进
-  &
-    > .@{veui-prefix}-field:not(.@{veui-prefix}-field-no-label)
-    ~ .@{veui-prefix}-field-error,
-  &
-    > .@{veui-prefix}-field:not(.@{veui-prefix}-field-no-tip)
-    + .@{veui-prefix}-field-error {
-    margin-left: @veui-form-label-width;
-  }
-
-  &.@{veui-prefix}-field-no-tip
-    > .@{veui-prefix}-field-no-tip:last-child
-    > .@{veui-prefix}-field-error {
-    position: static;
-    display: inline-block;
-    margin-left: 10px;
-    height: @veui-height-normal;
-    line-height: @veui-height-normal;
-    font-size: inherit;
-
-    .@{veui-prefix}-icon {
-      margin-top: ~"calc(@{veui-height-normal} / 2 - 0.5em)";
-    }
-  }
+  // todo1: 当 error 信息超长时怎么处理？要么换行？要么每个 error 单独显示一行？
+  // 单独显示一行怎么写 css 还没想好。。
 }
