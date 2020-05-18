@@ -46,8 +46,7 @@ function genWrapper (template, rules = 'required', propsData = {}) {
   return { form, wrapper }
 }
 
-let slot =
-`
+let slot = `
   <template slot="label">
     <div class="test-slot-label">通过slot设置label</div>
   </template>
@@ -62,7 +61,9 @@ describe('components/Form/Field', () => {
     let { wrapper } = genWrapper(template)
     let inputWrapper = wrapper.find('.test-field')
     expect(inputWrapper.attributes().class).to.include('veui-readonly')
-    expect(inputWrapper.find('.veui-input-input').element.readOnly).to.equal(true)
+    expect(inputWrapper.find('.veui-input-input').element.readOnly).to.equal(
+      true
+    )
     wrapper.destroy()
   })
 
@@ -72,7 +73,9 @@ describe('components/Form/Field', () => {
 
     let inputWrapper = wrapper.find('.test-field')
     expect(inputWrapper.attributes().class).to.include('veui-disabled')
-    expect(inputWrapper.find('.veui-input-input').element.disabled).to.equal(true)
+    expect(inputWrapper.find('.veui-input-input').element.disabled).to.equal(
+      true
+    )
     wrapper.destroy()
   })
 
@@ -82,7 +85,7 @@ describe('components/Form/Field', () => {
     let fieldWrapper = wrapper.find('.veui-field')
     // should set label & tip correctly
     expect(wrapper.find('.veui-label').text()).to.equal('测试label')
-    expect(wrapper.find('.veui-form-tip').text()).to.equal('测试tip')
+    expect(wrapper.find('.veui-tooltip').text()).to.equal('测试tip')
     // should set ui correctly
     expect(fieldWrapper.attributes().ui).to.equal('large')
     // should set name and field correctly
@@ -95,7 +98,9 @@ describe('components/Form/Field', () => {
     let template = genTemplate('', slot)
     let { wrapper } = genWrapper(template)
     // label & tip
-    expect(wrapper.find('.test-slot-label').text()).to.equal('通过slot设置label')
+    expect(wrapper.find('.test-slot-label').text()).to.equal(
+      '通过slot设置label'
+    )
     expect(wrapper.find('.test-slot-tip').text()).to.equal('通过slot设置tip')
     // default slot
     expect(wrapper.find('.veui-input').exists()).to.equal(true)
