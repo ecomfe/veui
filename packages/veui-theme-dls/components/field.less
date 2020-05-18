@@ -1,112 +1,96 @@
 @import "../lib.less";
 
-.@{veui-prefix}-field {
-  vertical-align: top;
-  clear: both;
+// will be removed
+@dls-form-field-spacing-after-horizontal: @dls-padding-unit * 2;
 
-  &-required > .@{veui-prefix}-form-label::after {
+.@{veui-prefix}-field {
+  @field-content-left-spacing: dls-sum(@dls-form-label-width + @dls-form-label-spacing-after-horizontal);
+
+  position: relative;
+  display: flex;
+  font-size: @dls-font-size-1;
+  min-height: @dls-height-m;
+
+  .@{veui-prefix}-form-label {
+    width: @dls-form-label-width;
+    margin-right: @dls-form-label-spacing-after-horizontal;
+    color: @dls-form-label-font-color;
+    display: flex;
+    justify-content: flex-end;
+    line-height: @dls-height-m;
+  }
+
+  &-required > .@{veui-prefix}-form-label::before {
     .veui-field-require();
   }
 
-  &-no-label::before {
-    content: "";
-    display: inline-block;
-    width: @veui-form-label-width;
+  .@{veui-prefix}-form-tip {
+    position: absolute;
+    left: ~"calc(@{dls-form-label-width} + @{dls-form-label-content-spacing})";
+    transform: translateY(-50%);
+    color: @dls-form-label-icon-color;
+    top: ~"calc(@{dls-height-m} / 2)";
   }
 
-  & > * {
-    display: inline-flex;
-    vertical-align: top;
+  &-no-label {
+    margin-left: @field-content-left-spacing;
   }
 
-  & > *:not([class*="veui-form-label"]) + * {
-    margin-left: 10px;
-  }
-
-  .@{veui-prefix}-form-label {
-    height: @veui-height-normal;
-    width: @veui-form-label-width;
-    line-height: @veui-height-normal;
-  }
-
-  .@{veui-prefix}-span {
-    line-height: @veui-height-normal;
+  .@{veui-prefix}-form-content {
+    flex: 1;
+    display: flex;
+    position: relative;
+    > *:not(.@{veui-prefix}-field-error) {
+      margin-left: @dls-form-field-spacing-after-horizontal;
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+    .@{veui-prefix}-span,
+    .@{veui-prefix}-radio-group,
+    .@{veui-prefix}-checkbox-group {
+      line-height: @dls-height-m;
+    }
   }
 
   &-error {
-    position: static;
-    height: @veui-height-normal;
-    line-height: @veui-height-normal;
-    margin: 0 0 0 10px;
-    vertical-align: top;
-    color: @veui-alert-color;
-
-    .@{veui-prefix}-icon {
-      margin-right: 7px;
-    }
+    position: absolute;
+    left: 0;
+    top: dls-sum(100% + @dls-form-field-error-spacing-before-vertical);
+    color: @dls-form-field-error-font-color;
   }
 
-  .@{veui-prefix}-form-tip {
-    height: @veui-height-normal;
-    line-height: @veui-height-normal;
-    margin-left: 10px;
-    color: @veui-text-color-weak;
-  }
-
-  .@{veui-prefix}-form-tip + .@{veui-prefix}-field-error {
-    .veui-field-gap-error();
-  }
-
-  .@{veui-prefix}-form-label
-    ~ .@{veui-prefix}-form-tip
-    + .@{veui-prefix}-field-error {
-    margin-left: @veui-form-label-width;
-  }
-
-  .@{veui-prefix}-form-label,
-  .@{veui-prefix}-field-error,
-  .@{veui-prefix}-form-tip,
-  .@{veui-prefix}-span {
-    .@{veui-prefix}-icon {
-      vertical-align: top;
-      margin-top: ~"calc(@{veui-height-normal} / 2 - 0.5em)";
-    }
-  }
-
-  .make-ui(@font-size, @box-size) {
+  .make-ui(@font-size, @min-height) {
     font-size: @font-size;
+    min-height: @min-height;
 
-    .@{veui-prefix}-form-label,
-    .@{veui-prefix}-field-error,
-    .@{veui-prefix}-form-tip,
-    .@{veui-prefix}-span {
-      line-height: @box-size;
-
-      .@{veui-prefix}-icon {
-        margin-top: ~"calc(@{box-size} / 2 - 0.5em)";
+    .@{veui-prefix}-form-label {
+      line-height: @min-height;
+    }
+    .@{veui-prefix}-form-tip {
+      top: ~"calc(@{min-height} / 2)";
+    }
+    .@{veui-prefix}-form-content {
+      .@{veui-prefix}-span,
+      .@{veui-prefix}-radio-group,
+      .@{veui-prefix}-checkbox-group {
+        line-height: @min-height;
       }
     }
-
-    .@{veui-prefix}-form-label,
-    .@{veui-prefix}-field-error,
-    .@{veui-prefix}-form-tip {
-      height: @box-size;
-    }
+  }
+  &[ui~="l"] {
+    .make-ui(@dls-font-size-2, @dls-height-l);
   }
 
-  &[ui~="large"] {
-    .make-ui(@veui-font-size-large, @veui-height-large);
+  &[ui~="m"] {
+    .make-ui(@dls-font-size-1, @dls-height-m);
   }
 
-  &[ui~="small"] {
-    .make-ui(@veui-font-size-small, @veui-height-small);
+  &[ui~="s"] {
+    .make-ui(@dls-font-size-0, @dls-height-s);
   }
 
-  &[ui~="tiny"] {
-    .make-ui(@veui-font-size-small, @veui-height-tiny);
-  }
-
-  &[ui~="micro"] {
-    .make-ui(@veui-font-size-small, @veui-height-micro);
+  &[ui~="xs"] {
+    .make-ui(@dls-font-size-0, @dls-height-xs);
   }
 }

@@ -1,41 +1,17 @@
 @import "../lib.less";
 
 .@{veui-prefix}-form {
-  .@{veui-prefix}-fieldset,
-  .@{veui-prefix}-field {
-    margin-bottom: @veui-field-gap;
-  }
-
-  .@{veui-prefix}-fieldset:last-child,
-  .@{veui-prefix}-field:last-child {
-    margin-bottom: 0;
-  }
-
-  .@{veui-prefix}-fieldset > .@{veui-prefix}-field {
-    margin-bottom: 0;
-  }
-
-  &[ui~="inline"] {
-    .clearfix();
-
-    & > * + * {
-      margin-left: 10px;
-    }
-
-    .@{veui-prefix}-fieldset,
-    .@{veui-prefix}-field {
-      display: inline-block;
+  > .@{veui-prefix}-field {
+    margin-bottom: @dls-form-field-spacing-vertical;
+    &.@{veui-prefix}-fieldset {
       margin-bottom: 0;
-      clear: none;
-
-      & > .@{veui-prefix}-form-label,
-      &.@{veui-prefix}-field-no-label::before {
-        width: auto;
-      }
-
-      & + .@{veui-prefix}-fieldset {
-        margin-left: 30px;
-      }
     }
   }
+
+  > .@{veui-prefix}-field:last-child {
+    margin-bottom: 0;
+  }
+
+  // todo: @dls-form-actions-spacing-before 似乎用不到？目前 operation 区域全是外部自己写的。。
+  // 或者改模板加 slot？
 }
