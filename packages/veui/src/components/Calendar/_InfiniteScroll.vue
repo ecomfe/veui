@@ -18,7 +18,7 @@ export default {
       type: Number,
       default: 1
     },
-    // 最初希望把这个年份显示到所有年份的中间，这个区间定义为 page=0。
+    // 通过计算找到一个区间使得 initial 处于该区间的中部，并定义该区间处于 page=0 。
     initial: {
       type: Number,
       required: true

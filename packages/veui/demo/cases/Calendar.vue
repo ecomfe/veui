@@ -2,6 +2,10 @@
 <article class="veui-demo-calendar">
   <h1><code>&lt;veui-calendar&gt;</code></h1>
   <section>
+    <h2>非受控</h2>
+    <veui-calendar type="date"/>
+  </section>
+  <section>
     <h2>日期选择</h2>
     <veui-calendar
       v-model="singleDate"

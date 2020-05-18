@@ -334,6 +334,7 @@ import {
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
+import makeControllable from '../../mixins/controllable'
 import i18n from '../../mixins/i18n'
 import config from '../../managers/config'
 import Icon from '../Icon'
@@ -358,7 +359,16 @@ export default {
     'veui-button': Button,
     InfiniteScroll
   },
-  mixins: [prefix, ui, input, i18n],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    i18n,
+    makeControllable({
+      prop: 'selected',
+      event: 'select'
+    })
+  ],
   model: {
     prop: 'selected',
     event: 'select'
@@ -427,7 +437,7 @@ export default {
       let p = {
         date: { year },
         expanded: false,
-        initialScrollYear: year, // 最初需要把这个显示到 inf-scroll 中间部分
+        initialScrollYear: year,
         currentScrollYear: null // daysView 展开时再年份滚动面板中选中的年份
       }
 
@@ -463,9 +473,6 @@ export default {
     },
     isYearType () {
       return this.type === 'year'
-    },
-    realSelected () {
-      return this.selected ? this.selected : this.multiple ? [] : null
     },
     realPicking () {
       if (this.range) {
@@ -523,13 +530,13 @@ export default {
     selected (val) {
       this.picking = this.pickingRanges = null
       val = [].concat(val)
-      if (this.multiple) val = val[0]
+      if (this.multiple && this.range) val = flattenDeep(val)
       if (val && val[0]) this.navigate(val)
     }
   },
   mounted () {
     let selected = [].concat(this.realSelected)
-    if (this.multiple) selected = selected[0]
+    if (this.multiple && this.range) selected = flattenDeep(selected)
     if (selected && selected[0]) this.navigate(selected)
   },
   methods: {
@@ -831,13 +838,13 @@ export default {
     },
     syncSelected (val) {
       this.stopMousePicking()
-      this.$emit('select', val)
+      this.realSelected = val
     },
     select (day) {
       let selected = new Date(day.year, day.month, day.date)
       if (!this.range) {
         if (this.multiple) {
-          let result = [...this.realSelected]
+          let result = this.realSelected ? [...this.realSelected] : []
           let pos = findIndex(result, date => this.isSame(date, selected))
           if (pos === -1) {
             result.push(selected)
@@ -935,10 +942,12 @@ export default {
     },
     navigateToSelected (selected) {
       // 转成 dateData
-      let destinations = selected.map(val => {
-        let { year, month } = toDateData(val)
-        return this.isDateType ? { year, month } : { year }
-      })
+      let destinations = selected
+        .sort((a, b) => a - b)
+        .map(val => {
+          let { year, month } = toDateData(val)
+          return this.isDateType ? { year, month } : { year }
+        })
 
       // 去掉一样的且保证不超过 panel 个数
       destinations = uniqBy(
