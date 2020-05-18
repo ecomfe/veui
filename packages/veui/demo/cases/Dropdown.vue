@@ -71,6 +71,38 @@
       />
     </div>
     <div>
+      <h4>normal</h4>
+      <veui-dropdown
+        ui="xs"
+        label="操作"
+        :options="options"
+      />
+      <veui-dropdown
+        ui="s"
+        label="操作"
+        split
+        :options="options"
+      />
+      <veui-dropdown
+        ui="m"
+        label="操作"
+        split
+        :options="options"
+      />
+      <veui-dropdown
+        ui="l"
+        label="操作"
+        split
+        :options="options"
+      />
+      <veui-dropdown
+        label="操作"
+        split
+        disabled
+        :options="options"
+      />
+    </div>
+    <div>
       <h4>disabled</h4>
       <div>
         <veui-dropdown
