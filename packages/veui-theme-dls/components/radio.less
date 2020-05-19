@@ -5,9 +5,13 @@
   align-items: center;
   position: relative;
   color: @dls-radio-font-color;
-  font-size: @dls-radio-font-size-m;
-  line-height: @dls-line-height-1;
   cursor: pointer;
+  .make-size(@dls-radio-font-size-m);
+
+  .make-size(@font-size) {
+    font-size: @font-size;
+    line-height: dls-even(dls-line-height(@dls-line-height-1, @font-size));
+  }
 
   input {
     position: absolute;
@@ -121,6 +125,7 @@
 
   &[ui~="s"] &-box {
     .size(@dls-radio-size-s);
+    .make-size(@dls-radio-font-size-s);
 
     &::before {
       .size(@dls-radio-dot-size-s);
