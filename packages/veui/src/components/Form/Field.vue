@@ -3,36 +3,36 @@
   :ui="realUi"
   :class="{
     [$c('field')]: true,
-    [$c('field-invalid')]: !validity.valid,
+    [$c('invalid')]: !validity.valid,
     [$c('field-no-label')]: !label && !$slots.label,
     [$c('field-required')]: isRequired
   }"
 >
   <div
     v-if="label || $slots.label"
-    :class="$c('form-label')"
+    :class="$c('field-label')"
   >
     <slot name="label">
       <veui-label>{{ label }}</veui-label>
     </slot>
-  </div>
-  <div
-    v-if="tip || $slots.tip"
-    :class="$c('form-tip')"
-  >
-    <veui-icon
-      ref="tip"
-      :name="icons.tip"
-    />
-    <veui-tooltip
-      :ui="uiParts.tip"
-      target="tip"
-      position="top-start"
+    <div
+      v-if="tip || $slots.tip"
+      :class="$c('field-tip')"
     >
-      <slot name="tip">{{ tip }}</slot>
-    </veui-tooltip>
+      <veui-icon
+        ref="tip"
+        :name="icons.tip"
+      />
+      <veui-tooltip
+        :ui="uiParts.tip"
+        target="tip"
+        position="top-start"
+      >
+        <slot name="tip">{{ tip }}</slot>
+      </veui-tooltip>
+    </div>
   </div>
-  <div :class="$c('form-content')">
+  <div :class="$c('field-content')">
     <slot/>
     <div
       v-if="!validity.valid && !!validity.message"
