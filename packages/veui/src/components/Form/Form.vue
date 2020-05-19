@@ -6,6 +6,15 @@
   @reset.prevent="reset(null)"
 >
   <slot/>
+  <div
+    v-if="hasActions"
+    :class="$c('form-actions')"
+  >
+    <slot
+      name="actions"
+      v-bind="{ submit }"
+    />
+  </div>
 </form>
 </template>
 
@@ -30,7 +39,6 @@ export default {
   name: 'veui-form',
   uiTypes: ['form', 'form-container'],
   mixins: [prefix, ui],
-
   props: {
     /**
      * 假设 validator 的 fields 为 ['a','b','c']，triggers 如下，最后生成的结果如下
@@ -54,20 +62,20 @@ export default {
     data: {}
     /* eslint-enable vue/require-prop-types */
   },
-
   data () {
     return {
       fields: [],
       errorMap: {}
     }
   },
-
   computed: {
+    hasActions () {
+      return this.$slots.actions || this.$scopedSlots.actions
+    },
     fieldsMap () {
       let targets = this.fields.filter(target => target.name)
       return zipObject(map(targets, 'name'), targets)
     },
-
     interactiveValidatorsMap () {
       let map = {}
       if (this.validators) {
@@ -107,11 +115,9 @@ export default {
       return map
     }
   },
-
   created () {
     this.$on('interact', this.handleInteract)
   },
-
   methods: {
     submit () {
       this.handleSubmit(null)
@@ -149,7 +155,6 @@ export default {
             : this.$emit('invalid', res)
         )
     },
-
     validate (names) {
       // fieldset 可以有 name，但是不会有 field 属性，也不要校验 disabled 的
       let targets = (this.fields || []).filter(
@@ -179,7 +184,6 @@ export default {
           }
           return Promise.resolve(true)
         }),
-
         ...validators.map(({ validate, handler, fields }) => {
           let fn = validate || handler
           if (isFunction(fn) && fields) {
@@ -205,7 +209,6 @@ export default {
           )
       })
     },
-
     execValidator (validate, fields) {
       let targets = fields.map(name => this.fieldsMap[name])
       let validities = validate.apply(
@@ -224,7 +227,6 @@ export default {
       this.handleValidities(validities, fields)
       return validities
     },
-
     handleInteract (eventName, name) {
       let validators = this.interactiveValidatorsMap[eventName]
       if (validators) {
@@ -236,7 +238,6 @@ export default {
         })
       }
     },
-
     /**
      * 处理validator产生的校验信息
      *
@@ -296,11 +297,9 @@ export default {
         })
       }
     },
-
     isValid (res) {
       return isUndefined(res) || (isBoolean(res) && res)
     },
-
     reset (names) {
       let fields = names
         ? this.fields.filter(field => includes(names, field.name))
