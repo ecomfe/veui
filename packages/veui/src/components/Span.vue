@@ -1,18 +1,21 @@
-<template>
-<span
-  :class="$c('span')"
-  :ui="realUi"
->
-  <slot/>
-</span>
-</template>
-
 <script>
-import prefix from '../mixins/prefix'
-import ui from '../mixins/ui'
+import { prefixify } from '../mixins/prefix'
 
 export default {
   name: 'veui-span',
-  mixins: [prefix, ui]
+  uiTypes: ['transparent'],
+  functional: true,
+  render (h, { data, children }) {
+    return h(
+      'span',
+      {
+        ...data,
+        class: {
+          [prefixify('span')]: true
+        }
+      },
+      children
+    )
+  }
 }
 </script>
