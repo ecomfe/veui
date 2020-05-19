@@ -82,7 +82,7 @@ describe('components/Form/Fieldset', () => {
     let wrapper = genWrapper(template)
     let fieldsetWrapper = wrapper.find('.veui-fieldset')
     // should set label & tip correctly
-    expect(fieldsetWrapper.find('.veui-form-label').text()).to.equal(
+    expect(fieldsetWrapper.find('.veui-field-label').text()).to.equal(
       '测试label'
     )
     expect(fieldsetWrapper.find('.veui-tooltip').text()).to.equal('测试tip')
