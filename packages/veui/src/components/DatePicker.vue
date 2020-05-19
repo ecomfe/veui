@@ -3,7 +3,7 @@
   :ui="realUi"
   :class="{
     [$c('date-picker')]: true,
-    [$c('input-invalid')]: realInvalid,
+    [$c('invalid')]: realInvalid,
     [$c('date-picker-range')]: range,
     [$c('date-picker-expanded')]: expanded,
     [$c('disabled')]: realDisabled,
