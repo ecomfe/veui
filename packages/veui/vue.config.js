@@ -7,8 +7,29 @@ function resolve (dir) {
 }
 
 const VEUI_PREFIX = process.env.VEUI_PREFIX || process.env.VUE_APP_VEUI_PREFIX
-const vars =
-  process.env.DLS_VERSION === 'D20' ? require('../veui-theme-dls/d20.json') : {}
+const vars = {
+  '@dls-icon-size-normal': '1em',
+  '@dls-icon-size-minor': 'calc(1em - 2px)',
+  '@dls-icon-size-aux': 'calc(1em - 4px)',
+
+  '@dls-form-actions-content-spacing': '20px',
+
+  '@dls-radio-dot-size-s': '6px',
+  '@dls-radio-dot-size-m': '6pc',
+
+  '@dls-switch-width-xs': '20px',
+  '@dls-switch-width-s': '26px',
+  '@dls-switch-width-m': '32px',
+
+  '@dls-switch-thumb-size-xs': '8px',
+  '@dls-switch-thumb-size-s': '12px',
+  '@dls-switch-thumb-size-m': '14px',
+
+  '@dls-shadow-1':
+    '0 4px 6px rgba(0, 0, 0, 0.06), 0 1px 10px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.01)',
+  '@dls-shadow-2':
+    '0 8px 10px 1px rgba(0, 0, 0, 0.06), 0 3px 14px 2px rgba(0, 0, 0, 0.05), 0 5px 5px -3px rgba(0, 0, 0, 0.01)'
+}
 
 module.exports = {
   css: {
