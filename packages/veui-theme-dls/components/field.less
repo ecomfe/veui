@@ -4,59 +4,56 @@
 @dls-form-field-spacing-after-horizontal: @dls-padding-unit * 2;
 
 .@{veui-prefix}-field {
-  @field-content-left-spacing: dls-sum(@dls-form-label-width + @dls-form-label-spacing-after-horizontal);
-
   position: relative;
   display: flex;
+  align-items: stretch;
   font-size: @dls-font-size-1;
   min-height: @dls-height-m;
 
-  .@{veui-prefix}-form-label {
+  &-label {
+    position: relative;
+    flex: none;
     width: @dls-form-label-width;
     margin-right: @dls-form-label-spacing-after-horizontal;
     color: @dls-form-label-font-color;
-    display: flex;
-    justify-content: flex-end;
-    line-height: @dls-height-m;
+    text-align: right;
+
+    .@{veui-prefix}-label {
+      line-height: @dls-height-m;
+    }
   }
 
-  &-required > .@{veui-prefix}-form-label::before {
-    .veui-field-require();
+  &-required > &-label::before {
+    content: "*";
+    margin-right: @dls-form-label-content-spacing;
+    color: @dls-form-label-required-color;
   }
 
-  .@{veui-prefix}-form-tip {
-    position: absolute;
-    left: ~"calc(@{dls-form-label-width} + @{dls-form-label-content-spacing})";
-    transform: translateY(-50%);
+  .@{veui-prefix}-field-tip {
+    .absolute(@dls-height-m / 2, _, _, dls-sum(100%, @dls-form-label-content-spacing));
     color: @dls-form-label-icon-color;
-    top: ~"calc(@{dls-height-m} / 2)";
+    transform: translateY(-50%);
+
+    .@{veui-prefix}-icon {
+      display: block;
+    }
   }
 
   &-no-label {
-    margin-left: @field-content-left-spacing;
+    margin-left: dls-sum(@dls-form-label-width, @dls-form-label-spacing-after-horizontal);
   }
 
-  .@{veui-prefix}-form-content {
-    flex: 1;
+  .@{veui-prefix}-field-content {
     display: flex;
+    align-items: center;
+    flex: 1 0 auto;
     position: relative;
-    > *:not(.@{veui-prefix}-field-error) {
-      margin-left: @dls-form-field-spacing-after-horizontal;
-      &:first-child {
-        margin-left: 0;
-      }
-    }
-    .@{veui-prefix}-span,
-    .@{veui-prefix}-radio-group,
-    .@{veui-prefix}-checkbox-group {
-      line-height: @dls-height-m;
-    }
   }
 
   &-error {
     position: absolute;
     left: 0;
-    top: dls-sum(100% + @dls-form-field-error-spacing-before-vertical);
+    top: dls-sum(100%, @dls-form-field-error-spacing-before-vertical);
     color: @dls-form-field-error-font-color;
   }
 
@@ -69,13 +66,6 @@
     }
     .@{veui-prefix}-form-tip {
       top: ~"calc(@{min-height} / 2)";
-    }
-    .@{veui-prefix}-form-content {
-      .@{veui-prefix}-span,
-      .@{veui-prefix}-radio-group,
-      .@{veui-prefix}-checkbox-group {
-        line-height: @min-height;
-      }
     }
   }
   &[ui~="l"] {
