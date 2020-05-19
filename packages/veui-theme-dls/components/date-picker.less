@@ -35,13 +35,19 @@
     outline: none;
     background-color: transparent;
 
-    .@{veui-prefix}-input-main {
-      border: 0;
-      padding-right: 0;
+    .@{veui-prefix}-input {
+      .margin(-1px, _);
+
+      &-main {
+        border: 0;
+        padding-right: 0;
+        background-color: transparent !important;
+      }
     }
 
     .@{veui-prefix}-invalid & {
       border-color: @dls-input-border-color-error;
+
       .@{veui-prefix}-input-main {
         color: @dls-input-font-color-error;
       }
@@ -49,6 +55,7 @@
       &:hover {
         border-color: @dls-input-border-color-error-hover;
       }
+
       &.focus-visible {
         .dls-focus-ring(
           @dls-input-border-color-error-focus,
@@ -62,6 +69,7 @@
     &:hover {
       border-color: @dls-input-border-color-hover;
     }
+
     &.focus-visible {
       .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
     }
@@ -133,9 +141,11 @@
     border-bottom: 1px solid @dls-input-border-color;
     display: flex;
     align-items: center;
+
     .@{veui-prefix}-input {
       flex: 1 1 auto;
       width: auto; // 覆盖 width
+
       &-main {
         margin-bottom: -1px;
       }
