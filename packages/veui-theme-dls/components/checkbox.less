@@ -5,9 +5,13 @@
   align-items: center;
   position: relative;
   color: @dls-checkbox-font-color;
-  font-size: @dls-checkbox-font-size-m;
-  line-height: @veui-font-size-large;
   cursor: pointer;
+  .make-size(@dls-checkbox-font-size-m);
+
+  .make-size(@font-size) {
+    font-size: @font-size;
+    line-height: dls-even(dls-line-height(@dls-line-height-1, @font-size));
+  }
 
   input {
     position: absolute;
@@ -31,7 +35,6 @@
     background-color: @dls-checkbox-background-color;
     color: @dls-checkbox-foreground-color;
     border-radius: @dls-checkbox-border-radius;
-    font-size: @dls-checkbox-font-size-m;
     .veui-transition(border-color, background-color, box-shadow);
 
     .@{veui-prefix}-icon {
@@ -111,7 +114,7 @@
   }
 
   &[ui~="s"] {
-    font-size: @dls-checkbox-font-size-s;
+    .make-size(@dls-checkbox-font-size-s);
 
     .@{veui-prefix}-checkbox-box {
       .size(@dls-checkbox-size-s);
