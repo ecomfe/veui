@@ -3,31 +3,56 @@ import Span from '@/components/Span'
 
 describe('components/Span', () => {
   it('should support customized ui correctly.', async () => {
-    let wrapper = mount(Span, {
-      sync: false,
-      propsData: {
-        ui: 'l'
+    let wrapper = mount(
+      {
+        components: {
+          'veui-span': Span
+        },
+        template: '<veui-span :ui="ui">Foo</veui-span>',
+        data () {
+          return {
+            ui: 'l'
+          }
+        }
+      },
+      {
+        sync: false
       }
-    })
+    )
 
-    expect(wrapper.attributes('ui')).to.equal('l')
+    let { vm } = wrapper
+    let span = wrapper.find(Span)
 
-    wrapper.setProps({ ui: 'xs' })
-    await wrapper.vm.$nextTick()
-    expect(wrapper.attributes('ui')).to.equal('xs')
+    expect(span.attributes('ui')).to.equal('l')
+
+    vm.ui = 'xs'
+
+    await vm.$nextTick()
+    expect(span.attributes('ui')).to.equal('xs')
 
     wrapper.destroy()
   })
 
   it('should render default slot correctly.', () => {
-    let wrapper = mount(Span, {
-      sync: false,
-      slots: {
-        default: '<a class="link" href="#">Link</a>'
+    let wrapper = mount(
+      {
+        components: {
+          'veui-span': Span
+        },
+        template:
+          '<veui-span :ui="ui"><a class="link" href="#">Link</a></veui-span>',
+        data () {
+          return {
+            ui: 'l'
+          }
+        }
+      },
+      {
+        sync: false
       }
-    })
+    )
 
-    expect(wrapper.contains('a.link')).to.equal(true)
+    expect(wrapper.find(Span).contains('a.link')).to.equal(true)
     wrapper.destroy()
   })
 })
