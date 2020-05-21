@@ -15,7 +15,7 @@ const vars = {
   '@dls-form-actions-content-spacing': '20px',
 
   '@dls-radio-dot-size-s': '6px',
-  '@dls-radio-dot-size-m': '6pc',
+  '@dls-radio-dot-size-m': '6px',
 
   '@dls-switch-width-xs': '20px',
   '@dls-switch-width-s': '26px',
