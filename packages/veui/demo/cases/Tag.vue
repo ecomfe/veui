@@ -2,12 +2,15 @@
 <article>
   <h1><code>&lt;veui-tag&gt;</code></h1>
   <section>
+    <veui-checkbox v-model="bordered">带边框样式</veui-checkbox>
+  </section>
+  <section>
     <h2>不同尺寸</h2>
     <div>
       <veui-tag
         v-for="size in sizes"
         :key="size"
-        :ui="size"
+        :ui="size + (bordered ? ' bordered' : '')"
       >
         {{ size }}
       </veui-tag>
@@ -21,10 +24,10 @@
         v-for="type in types"
         :key="type"
         :type="type"
+        :ui="bordered ? 'bordered' : ''"
       >
         {{ type }}
       </veui-tag>
-      <veui-tag ui="borderless">borderless</veui-tag>
     </div>
   </section>
 
@@ -35,15 +38,12 @@
         v-for="(team, index) in teams2"
         :key="team"
         :type="types[index]"
+        :ui="bordered ? 'bordered' : ''"
         closable
         @close="handleClose(team)"
       >
         {{ team }}
       </veui-tag>
-      <veui-tag
-        ui="borderless"
-        closable
-      >borderless</veui-tag>
     </div>
   </section>
 
@@ -55,15 +55,11 @@
         :key="team"
         :type="types[index]"
         closable
-        ui="s"
+        :ui="'s' + (bordered ? ' bordered' : '')"
         @close="handleClose(team)"
       >
         {{ team }}
       </veui-tag>
-      <veui-tag
-        ui="borderless"
-        closable
-      >borderless</veui-tag>
     </div>
   </section>
 
@@ -75,15 +71,11 @@
         :key="type"
         :type="type"
         :selected.sync="selected"
+        :ui="bordered ? 'bordered' : ''"
         selectable
       >
         {{ type }}
       </veui-tag>
-      <veui-tag
-        ui="borderless"
-        :selected.sync="selected"
-        selectable
-      >borderless</veui-tag>
     </div>
   </section>
 
@@ -95,23 +87,19 @@
         :key="type"
         :type="type"
         :selected.sync="selected"
+        :ui="bordered ? 'bordered' : ''"
         disabled
         selectable
       >
         {{ type }}
       </veui-tag>
-      <veui-tag
-        ui="borderless"
-        :selected.sync="selected"
-        disabled
-        selectable
-      >borderless</veui-tag>
     </div>
     <div style="margin-top: 20px">
       <veui-tag
         v-for="type in types"
         :key="type"
         :type="type"
+        :ui="bordered ? 'bordered' : ''"
         disabled
         closable
       >
@@ -123,13 +111,14 @@
 </template>
 
 <script>
-import { Tag } from 'veui'
+import { Tag, Checkbox } from 'veui'
 import toastManagers from 'veui/managers/toast'
 
 export default {
   name: 'tag-demo',
   components: {
-    'veui-tag': Tag
+    'veui-tag': Tag,
+    'veui-checkbox': Checkbox
   },
   data () {
     return {
@@ -137,7 +126,8 @@ export default {
       teams2: ['湖人', '火箭', '猛龙', '马刺', '勇士'],
       types: ['default', 'info', 'success', 'warning', 'error'],
       sizes: ['s', 'm', 'default'],
-      selected: false
+      selected: false,
+      bordered: false
     }
   },
   methods: {

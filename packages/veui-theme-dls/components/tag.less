@@ -9,7 +9,6 @@
   .padding(0, @dls-tag-padding);
   white-space: nowrap;
   outline: none;
-  line-height: 2;
   .veui-transition(color, border-color, background-color, box-shadow, opacity);
 
   .make-metrics(@size) {
@@ -20,14 +19,15 @@
     height: @@height;
     border-radius: @@radius;
     font-size: @@font-size;
+    line-height: dls-sum(@@height, -2px);
   }
 
   &[ui~="s"] {
     .make-metrics(s);
   }
 
-  &[ui~="borderless"]:not(.focus-visible) {
-    border-color: transparent;
+  &:not([ui~="bordered"]) {
+    border-color: transparent !important;
   }
 
   &-close {
@@ -44,104 +44,100 @@
   }
 
   &-default {
-    border: 1px solid fade(@dls-tag-font-color, percentage(@dls-tag-border-opacity));
-    color: @dls-tag-font-color;
-    background-color: @dls-tag-background-color;
+    .apply-color(@dls-tag-color);
+
+    &.@{veui-prefix}-tag-selected {
+      border: 1px solid transparent;
+      color: @dls-tag-font-color-selected;
+      background-color: fade(@dls-tag-color-selected, percentage(@dls-tag-background-opacity-selected));
+
+      &.@{veui-prefix}-tag-selectable:not(.@{veui-prefix}-disabled) {
+        &:hover {
+          background-color: fade(@dls-tag-color-selected, percentage(@dls-tag-background-opacity-selected-hover));
+        }
+
+        &:active {
+          background-color: fade(@dls-tag-color-selected, percentage(@dls-tag-background-opacity-selected-active));
+        }
+      }
+
+      &.@{veui-prefix}-disabled {
+        background-color: fade(@dls-tag-color-selected, percentage(@dls-tag-background-opacity-selected-disabled));
+      }
+    }
+
+    &[ui~="reverse"] {
+      .apply-reverse-color(@dls-tag-color);
+    }
   }
+
+  .make-status-color (@status) {
+    &-@{status} {
+      @color-name: ~"dls-tag-color-@{status}";
+      @color: @@color-name;
+
+      .apply-color(@color);
+
+      &.@{veui-prefix}-tag-selected,
+      &[ui~="reverse"] {
+        .apply-reverse-color(@color);
+      }
+    }
+  }
+
+  .make-status-color(info);
+  .make-status-color(success);
+  .make-status-color(warning);
+  .make-status-color(error);
 
   &-selectable {
     cursor: pointer;
-  }
-
-  &-default&-selectable:not(.@{veui-prefix}-disabled) {
-    &:hover {
-      background-color: @dls-background-color-neutral-hover;
-    }
-
-    &:active {
-      background-color: @dls-background-color-neutral-active;
-    }
-  }
-
-  &-default.@{veui-prefix}-disabled {
-    border-color: @dls-border-color-neutral-disabled;
-    background-color: @dls-background-color-neutral-disabled;
-    color: @dls-foreground-color-neutral-disabled;
   }
 
   .@{veui-prefix}-disabled .@{veui-prefix}-tag-close {
     cursor: not-allowed;
   }
 
-  &.@{veui-prefix}-tag-selected {
-    color: @dls-tag-font-color-selected;
-    border-color: transparent;
-    background-color: @dls-tag-background-color-selected;
 
-    &.focus-visible {
-      .dls-focus-ring(
-        @dls-border-color-focus, @dls-shadow-focus
-      );
+  .apply-color(@color) {
+    border: 1px solid fade(@color, percentage(@dls-tag-border-opacity));
+    color: @color;
+    background-color: fade(@color, percentage(@dls-tag-background-opacity));
+
+    &.@{veui-prefix}-tag-selectable:not(.@{veui-prefix}-disabled) {
+      &:hover {
+        background-color: fade(@color, percentage(@dls-tag-background-opacity-hover));
+      }
+
+      &:active {
+        background-color: fade(@color, percentage(@dls-tag-background-opacity-active));
+      }
     }
 
     &.@{veui-prefix}-disabled {
-      border-color: fade(@dls-tag-background-color, @dls-tag-border-opacity-disabled * 100);
-      background-color: fade(@dls-tag-background-color, @dls-tag-border-opacity-disabled * 100);
+      border-color: fade(@color, percentage(@dls-tag-border-opacity-disabled));
+      background-color: fade(@color, percentage(@dls-tag-background-opacity-disabled));
+      color: fade(@color, percentage(@dls-tag-font-opacity-disabled));
     }
   }
 
-  .make-state-color (@state) {
-    &-@{state} {
-      @color-name: ~"dls-tag-font-color-@{state}";
-      @bg-color-name: ~"dls-tag-background-color-@{state}";
-      @bd-color: fade(@@bg-color-name, percentage(@dls-tag-border-opacity));
-      @bg-color: fade(@@bg-color-name, percentage(@dls-tag-background-opacity));
-      @disabled-color: fade(@dls-tag-font-color, percentage(@dls-tag-font-opacity-disabled));
-      @disabled-bd-color:fade(@@bg-color-name, percentage(@dls-tag-border-opacity-disabled));
+  .apply-reverse-color(@color) {
+    border: 1px solid transparent;
+    color: @dls-tag-font-color-reverse;
+    background-color: fade(@color, percentage(@dls-tag-background-opacity-reverse));
 
-      @selected-bg-color-name: fade(@@bg-color-name, percentage(@dls-tag-background-opacity-selected));
-      @selected-disabled-bg-color: fade(@@bg-color-name, percentage(@dls-tag-background-opacity-selected-disabled));
-
-      color: @@color-name;
-      border-color: @bd-color;
-      background-color: @bg-color;
-
-      &.@{veui-prefix}-disabled {
-        color: @disabled-color;
-        border-color: @disabled-bd-color;
+    &.@{veui-prefix}-tag-selectable:not(.@{veui-prefix}-disabled) {
+      &:hover {
+        background-color: fade(@color, percentage(@dls-tag-background-opacity-reverse-hover));
       }
 
-      &.@{veui-prefix}-tag-selected,
-      &[ui~="reverse"] {
-        color: @dls-tag-font-color-selected;
-        border-color: fade(@dls-tag-background-color-selected, @dls-tag-border-opacity * 100);
-        background-color: fade(@dls-tag-background-color-selected, @dls-tag-background-opacity-selected * 100);
-
-        &.focus-visible {
-          .dls-focus-ring(
-            @dls-border-color-focus, @dls-shadow-focus
-          );
-        }
-
-        &.@{veui-prefix}-disabled {
-          border-color: fade(@dls-tag-background-color-selected, @dls-tag-border-opacity-disabled * 100);
-          background-color: fade(@dls-tag-background-color-selected, @dls-tag-background-opacity-selected-disabled * 100);
-        }
-      }
-
-      &[ui~="reverse"] {
-        color: @dls-tag-font-color-reversed;
-      }
-
-      &.focus-visible,
-      &.@{veui-prefix}-tag.focus-visible {
-        .dls-focus-ring(@dls-border-color-focus, @dls-shadow-focus);
+      &:active {
+        background-color: fade(@color, percentage(@dls-tag-background-opacity-reverse-active));
       }
     }
-  }
 
-  .make-state-color(info);
-  .make-state-color(success);
-  .make-state-color(warning);
-  .make-state-color(error);
+    &.@{veui-prefix}-disabled {
+      background-color: fade(@color, percentage(@dls-tag-background-opacity-reverse-disabled));
+    }
+  }
 }
