@@ -7,7 +7,7 @@ config.defaults(
       close: 'times'
     },
     ui: {
-      borderless: {
+      bordered: {
         boolean: true
       },
       reverse: {
@@ -20,7 +20,7 @@ config.defaults(
       }
     },
     parts: {
-      close: 'text'
+      close: 'alt text'
     }
   },
   'tag'
