@@ -55,7 +55,7 @@
       <veui-pagination
         :page="page"
         :total="total"
-        :to="'#' + to"
+        :to="to"
         native
       />
     </section>
@@ -97,7 +97,7 @@
       <veui-pagination
         :page="1"
         :total="0"
-        :to="'#' + to"
+        :to="to"
         native
       />
     </section>
