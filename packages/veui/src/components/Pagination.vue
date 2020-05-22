@@ -41,8 +41,8 @@
       ]"
     >
       <li
-        v-for="item in pageIndicatorSeries"
-        :key="getKey(item)"
+        v-for="(item, i) in pageIndicatorSeries"
+        :key="i"
         :class="{
           [$c('pagination-page')]: true,
           [$c('active')]: item.current
@@ -54,6 +54,7 @@
             [$c('current')]: item.current,
             [$c('pagination-more')]: item.more
           }"
+          tabindex="0"
           :role="to ? null : 'button'"
           :to="item.href"
           :native="native"
@@ -64,6 +65,7 @@
               : t('pageLabel', { page: item.page })
           "
           @click="handleRedirect(item, $event)"
+          @keydown.native.enter="handleEnter(item, $event)"
         >
           <template v-if="item.more">
             <veui-icon
@@ -331,6 +333,12 @@ export default {
     }
   },
   methods: {
+    handleEnter (...args) {
+      if (this.to) {
+        return
+      }
+      this.handleRedirect(...args)
+    },
     handleRedirect (item, event) {
       let page = typeof item === 'number' ? item : item.page
       if (typeof item !== 'number') {
@@ -371,7 +379,7 @@ export default {
       return `p-${item.more ? (item.forward ? 'f' : 'b') : item.page}`
     },
     fixFocus (ref) {
-      this.$nextTick(() => {
+      setTimeout(() => {
         let link = this.$refs[ref][0]
         if (link) {
           link.$el.focus()

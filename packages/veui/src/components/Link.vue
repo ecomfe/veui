@@ -1,53 +1,12 @@
-<template>
-<component
-  :is="fallback"
-  v-if="!to"
-  :class="klass"
-  :ui="realUi"
-  :aria-disabled="disabled"
-  :tabindex="disabled ? -1 : null"
-  @click="handleRedirect"
->
-  <slot/>
-</component>
-<router-link
-  v-else-if="useRouter"
-  :class="klass"
-  :to="to"
-  :rel="realRel"
-  :target="target"
-  :ui="realUi"
-  :aria-disabled="disabled"
-  :tabindex="disabled ? -1 : null"
-  :replace="replace"
-  :event="disabled ? null : 'click'"
-  @click.native="handleNativeClick"
->
-  <slot/>
-</router-link>
-<a
-  v-else
-  :class="klass"
-  :href="to"
-  :rel="realRel"
-  :target="target"
-  :ui="realUi"
-  :aria-disabled="disabled"
-  :tabindex="disabled ? -1 : null"
-  @click="handleRedirect"
->
-  <slot/>
-</a>
-</template>
-
 <script>
-import { uniq } from 'lodash'
+import { uniq, noop } from 'lodash'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 
 export default {
   name: 'veui-link',
   mixins: [prefix, ui],
+  inheritAttrs: false,
   props: {
     to: {
       type: [String, Object],
@@ -104,8 +63,78 @@ export default {
       if (this.disabled) {
         return
       }
+
+      // Click events triggered on <router-link> are always called
+      // before we have a chance to deal with. So we are using a fake
+      // `preventDefault` so that we can track users' intention.
+      // After that restore the old one.
+      let prevent = event.preventDefault
+      let prevented = false
+      event.preventDefault = () => {
+        prevented = true
+      }
       this.$emit('click', event)
+
+      event.preventDefault = prevent
+
+      if (prevented) {
+        return
+      }
+
+      // manually navigate so that we are able to stop it
+      // when users call `event.preventDefault()`
+      this.navigate()
+    },
+    navigate () {
+      let { $route, $router } = this
+      let navigate = this.replace ? $router.replace : $router.push
+      navigate.call($router, $router.resolve(this.to, $route).location, noop)
     }
+  },
+  render (h) {
+    let component = !this.to
+      ? this.fallback
+      : this.useRouter
+        ? 'router-link'
+        : 'a'
+    return h(
+      component,
+      {
+        class: this.klass,
+        attrs: {
+          ui: this.realUi,
+          'aria-disabled': this.disabled,
+          tabindex: this.disabled ? -1 : null,
+          ...(component === 'a'
+            ? {
+              href: this.to
+            }
+            : null),
+          ...(this.to
+            ? {
+              rel: this.realRel,
+              target: this.target
+            }
+            : null),
+          ...this.$attrs
+        },
+        props: {
+          ...(component === 'router-link'
+            ? {
+              to: this.to,
+              replace: this.replace,
+              event: null // prevent vue-link from starting navigation immediately
+            }
+            : null)
+        },
+        ...(component === 'router-link'
+          ? {
+            nativeOn: { click: this.handleNativeClick }
+          }
+          : { on: { click: this.handleRedirect } })
+      },
+      this.$slots.default
+    )
   }
 }
 </script>
