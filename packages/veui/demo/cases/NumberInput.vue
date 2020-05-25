@@ -113,6 +113,16 @@
           ui="strong xs"
         />
       </veui-field>
+      <veui-field label="strong formatter:">
+        <veui-number-input
+          v-model="number9"
+          ui="strong"
+          :step="10"
+          :max="100"
+          :min="0"
+          :formatter="percentFormatter"
+        />
+      </veui-field>
       <veui-field label="Strong invalid:">
         <veui-number-input
           v-model="number8"
@@ -158,7 +168,15 @@ export default {
       number5: null,
       number6: null,
       number7: 1024,
-      number8: 2333
+      number8: 2333,
+      number9: 10
+    }
+  },
+  computed: {
+    percentFormatter () {
+      return val => {
+        return val + '%' // 注，暂不支持 step 为 0.1 的情况
+      }
     }
   },
   methods: {

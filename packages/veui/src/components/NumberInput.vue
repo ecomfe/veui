@@ -1,7 +1,7 @@
 <template>
 <veui-input
   ref="input"
-  v-model="localValue"
+  v-model="formattedLocalValue"
   v-nudge.y="{
     step,
     update: handleThumbNudgeUpdate
@@ -96,7 +96,7 @@ import Icon from './Icon'
 import { sign, add, round } from '../utils/math'
 import warn from '../utils/warn'
 import { VALUE_EVENTS } from '../utils/dom'
-import { isInteger, isNaN, get, find, omit } from 'lodash'
+import { isInteger, isNaN, get, find, omit, identity } from 'lodash'
 import nudge from 'veui/directives/nudge'
 import longpress from 'veui/directives/longpress'
 
@@ -129,7 +129,11 @@ export default {
       }
     },
     max: Number,
-    min: Number
+    min: Number,
+    formatter: {
+      type: Function,
+      default: identity
+    }
   },
   data () {
     return {
@@ -142,6 +146,14 @@ export default {
     }
   },
   computed: {
+    formattedLocalValue: {
+      get () {
+        return this.formatter(this.localValue)
+      },
+      set (value) {
+        this.localValue = value
+      }
+    },
     isStrong () {
       return this.uiProps.style === 'strong'
     },
