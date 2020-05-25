@@ -352,7 +352,11 @@ export default {
     return this.inline ? (
       box
     ) : (
-      <div class={this.$c('overlay')} aria-hidden="true" v-show={this.local}>
+      <div
+        class={this.$c('overlay')}
+        aria-hidden={this.local}
+        v-show={this.local}
+      >
         <transition
           name={this.$c('overlay')}
           onAfterLeave={() => {
