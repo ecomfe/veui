@@ -120,7 +120,7 @@
           :step="10"
           :max="100"
           :min="0"
-          :formatter="percentFormatter"
+          :unit="number9Unit"
         />
       </veui-field>
       <veui-field label="Strong invalid:">
@@ -169,14 +169,8 @@ export default {
       number6: null,
       number7: 1024,
       number8: 2333,
-      number9: 10
-    }
-  },
-  computed: {
-    percentFormatter () {
-      return val => {
-        return val + '%' // 注，暂不支持 step 为 0.1 的情况
-      }
+      number9: 10,
+      number9Unit: '%'
     }
   },
   methods: {
