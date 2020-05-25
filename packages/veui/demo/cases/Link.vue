@@ -24,7 +24,7 @@
   </section>
   <section>
     <veui-link
-      to="#/dialog"
+      to="/dialog"
       native
     >Dialog</veui-link>
     &larr; <code>native</code>
