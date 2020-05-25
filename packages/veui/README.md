@@ -11,69 +11,94 @@ Enterprise UI components for Vue.js. Based on ONE DESIGN from Baidu, Inc.
 ## Installation
 
 ```sh
-$ npm i --save veui
-$ npm i --save-dev babel-preset-veui veui-loader
+npm i --save veui
+npm i --save-dev babel-plugin-veui veui-loader lodash babel-plugin-lodash less less-loader
 ```
 
 To use default theme `dls` you have to install it too.
 
 ```sh
-$ npm i --save veui-theme-dls
+npm i --save veui-theme-dls
 ```
 
 ## Configuration
 
-First, scaffold your project using `vue-cli` with template `webpack`.
+First, scaffold your project using `@vue/cli`.
 
 ### Babel plugins
 
-VEUI requires some Babel plugins to be transpiled correctly. We've provided a preset which contains all presets and plugins needed to transpile VEUI, you just need to add the following configs into your `.babelrc` file in addition to the existing `presets`:
+VEUI requires some Babel plugins to work. Configure `babel.config.js` as follows:
 
-```json
-{
-  "presets": [
-    "veui"
+```js
+module.exports = {
+  presets: [
+    '@vue/app'
+  ],
+  plugins: [
+    'veui',
+    'lodash'
   ]
 }
 ```
 
-### webpack loaders
+### webpack configs
 
-To use the default theme `veui-theme-dls`, make sure to configure `veui-loader` in the workflow as follows:
-
-In `build/webpack.base.conf.js`, prepend this rule:
+You need to configure `vue.config.js` as follows to make VEUI loader and the transpilation work:
 
 ```js
-{
-  test: /\.vue$/,
-  loader: 'veui-loader',
-  enforce: 'pre',
-  options: {
-    modules: [
-      {
-        package: 'veui-theme-dls',
-        fileName: '{module}.less'
-      },
-      {
-        package: 'veui-theme-dls',
-        fileName: '{module}.js',
-        transform: false
+module.exports = {
+  css: {
+    loaderOptions: {
+      less: {
+        javascriptEnabled: true
       }
-    ]
+    }
   },
-  include: [resolve('node_modules/veui')]
+  transpileDependencies: [
+    'veui',
+    'vue-awesome',
+    'resize-detector'
+  ],
+  chainWebpack: config => {
+    config.module
+      .rule('veui')
+      .test(/\.vue$/)
+      .pre()
+      .use('veui-loader')
+      .loader('veui-loader')
+      .tap(() => {
+        return {
+          modules: [
+            {
+              package: 'veui-theme-one',
+              fileName: '{module}.less'
+            },
+            {
+              package: 'veui-theme-one',
+              fileName: '{module}.js',
+              transform: false
+            }
+          ]
+        }
+      })
+  }
 }
 ```
 
-And you should include `veui` and `vue-awesome` in the configs for `babel-loader`:
+### Global styles
+
+You can import global styles from `veui-theme-dls` in JS/Less:
 
 ```js
-{
-  test: /\.js$/,
-  loader: 'babel-loader',
-  include: [resolve('node_modules/veui'), resolve('node_modules/vue-awesome')]
-}
+import 'veui-theme-dls/common.less'
 ```
+
+or
+
+```less
+@import "~veui-theme-dls/common.less";
+```
+
 
 ## Browser Support
 
