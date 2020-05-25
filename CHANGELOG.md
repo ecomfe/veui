@@ -4,12 +4,14 @@
 
 - [^] `Dropdown` 组件新增 slot `trigger`，用于自定义下拉触发区域。
 - [+] `Dropdown` 组件默认 slot 新增参数 `close` 函数，用来在自定义下拉内容区时需要关闭下拉浮层时调用。
+- [+] `Overlay` 组件新增 `local` prop，用来指定不将浮层移动到 `document.body` 下，脱离全局浮层管理。
 
 ### 🐞 问题修复
 
 - [^] 修复了 `Popover` 组件的 `ui` prop 不生效的问题。
 - [^] 修复了 `Tabs` 组件在销毁时依然触发 `active` 变化的问题（[#659](https://github.com/ecomfe/veui/issues/659)）。
 - [^] 修正了 `Tabs` 组件在 Safari 下的样式问题。
+- [^] `Menu` 组件使用路由的 `path` 来计算当前激活的项目，而不是 `fullPath`。
 
 ## 2.0.0-alpha.13
 

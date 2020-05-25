@@ -238,14 +238,7 @@ function getScopeAttrs (el) {
     .filter(name => name.indexOf('data-v-') === 0)
 }
 
-export function createPortal (el, target) {
-  let parent = el.parentNode
-
-  // create a connection to the portal entrance
-  // v-outside will honor this connection, so we'd
-  // better document this somewhere properly (TODO)
-  el.__portal__ = parent
-
+export function inheritScopeAttrs (el, parent) {
   let attrs = getScopeAttrs(parent)
   let patched = []
   attrs.forEach(attr => {
@@ -255,11 +248,26 @@ export function createPortal (el, target) {
     }
   })
 
+  return function removeInheritedScopeAttrs (el) {
+    patched.forEach(attr => el.removeAttribute(attr))
+  }
+}
+
+export function createPortal (el, target) {
+  let parent = el.parentNode
+
+  // create a connection to the portal entrance
+  // v-outside will honor this connection, so we'd
+  // better document this somewhere properly (TODO)
+  el.__portal__ = parent
+
+  let restore = inheritScopeAttrs(el, parent)
+
   target.appendChild(el)
 
   let removePortal = () => {
     delete el.__portal__
-    patched.forEach(attr => el.removeAttribute(attr))
+    restore()
     parent.appendChild(el)
   }
 

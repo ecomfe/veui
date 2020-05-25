@@ -117,7 +117,7 @@ describe('components/Overlay', () => {
     wrapper.destroy()
   })
 
-  it('should handle right on changing `inline` prop', async () => {
+  it('should handle the `inline` prop correctly', async () => {
     let wrapper = mount({
       data () {
         return {
@@ -148,6 +148,46 @@ describe('components/Overlay', () => {
     vm.inline = true
     await wait(0)
     expect(overlayVm.$refs.box === overlayVm.$el).to.equal(true)
+    wrapper.destroy()
+  })
+
+  it('should handle the `local` prop correctly', async () => {
+    let wrapper = mount({
+      data () {
+        return {
+          local: true
+        }
+      },
+      render () {
+        return (
+          <div>
+            <Button ref="btn">toggle inline</Button>
+            <Overlay target="btn" open local={this.local}>
+              content
+            </Overlay>
+          </div>
+        )
+      }
+    })
+
+    let { vm } = wrapper
+    await wait(0)
+    let overlayVm = wrapper.find(Overlay).vm
+    expect(overlayVm.$refs.box.parentNode === overlayVm.$el, '#1').to.equal(
+      true
+    )
+
+    vm.local = false
+    await wait(0)
+    expect(overlayVm.$refs.box.parentNode === document.body, '#2').to.equal(
+      true
+    )
+
+    vm.local = true
+    await wait(0)
+    expect(overlayVm.$refs.box.parentNode === overlayVm.$el, '#3').to.equal(
+      true
+    )
     wrapper.destroy()
   })
 })
