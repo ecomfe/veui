@@ -113,9 +113,16 @@
           ui="strong xs"
         />
       </veui-field>
+      <veui-field label="Strong invalid:">
+        <veui-number-input
+          v-model="number8"
+          ui="strong"
+          invalid
+        />
+      </veui-field>
       <veui-field
-        label="Strong formatter:"
-        tip="使用成对的 formatter 和 parser，自定义格式化展示"
+        label="Strong format:"
+        tip="使用成对的 format 和 parse 函数，自定义格式化展示"
       >
         <veui-number-input
           v-model="number9"
@@ -123,15 +130,8 @@
           :step="10"
           :max="100"
           :min="0"
-          :formatter="percentFormatter"
-          :parser="percentParser"
-        />
-      </veui-field>
-      <veui-field label="Strong invalid:">
-        <veui-number-input
-          v-model="number8"
-          ui="strong"
-          invalid
+          :format="percentFormatter"
+          :parse="percentParser"
         />
       </veui-field>
     </veui-form>

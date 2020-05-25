@@ -130,11 +130,11 @@ export default {
     },
     max: Number,
     min: Number,
-    formatter: {
+    format: {
       type: Function,
       default: identity
     },
-    parser: {
+    parse: {
       type: Function,
       default: identity
     }
@@ -152,10 +152,10 @@ export default {
   computed: {
     formattedValue: {
       get () {
-        return this.formatter(this.localValue)
+        return this.format(this.localValue)
       },
       set (val) {
-        this.localValue = this.parser(val) // 去掉 formatter 处理的影响就行了，其它的交给 handleChange 统一处理
+        this.localValue = this.parse(val) // 去掉 format 处理的影响就行了，其它的交给 handleChange 统一处理
       }
     },
     isStrong () {
