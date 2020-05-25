@@ -6,7 +6,7 @@ Enterprise UI components for Vue.js. Based on ONE DESIGN from Baidu, Inc.
 
 *This is a work in progress.*
 
-[DEMO](https://ecomfe.github.io/veui/components)
+[DEMO](https://dls.veui.dev/)
 
 ## Installation
 
