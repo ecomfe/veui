@@ -12,7 +12,8 @@ import {
   mergeClasses,
   isType,
   ignoreElements,
-  createPortal
+  createPortal,
+  inheritScopeAttrs
 } from '../utils/helper'
 import '../common/uiTypes'
 import { omit } from 'lodash'
@@ -50,7 +51,8 @@ export default {
     priority: Number,
     autofocus: Boolean,
     modal: Boolean,
-    matchWidth: Boolean
+    matchWidth: Boolean,
+    local: Boolean
   },
   data () {
     return {
@@ -62,7 +64,9 @@ export default {
   },
   computed: {
     realOpen () {
-      return (this.inline || this.zIndex !== null) && this.open
+      return (
+        this.inline || (this.open && (this.local ? true : this.zIndex !== null))
+      )
     },
     realOverlayClass () {
       return mergeClasses(this.overlayClass, config.get('overlay.overlayClass'))
@@ -83,7 +87,9 @@ export default {
       this.updateNode()
       if (val) {
         let node = this.overlayNode
-        node.toTop()
+        if (node) {
+          node.toTop()
+        }
         this.initFocus()
       } else {
         this.destroyFocus()
@@ -111,6 +117,10 @@ export default {
       } else {
         this.$nextTick(this.initPortal)
       }
+    },
+    local (val) {
+      this.disposePortal()
+      this.initPortal()
     }
   },
   created () {
@@ -145,6 +155,9 @@ export default {
   methods: {
     // 更新 zindex 树
     updateNode () {
+      if (this.local) {
+        return
+      }
       if (!this.overlayNode) {
         let overlay = config.get('managers.overlay') || overlayManager
         this.overlayNode = overlay.createNode({
@@ -162,7 +175,11 @@ export default {
     initPortal () {
       this.overlayBox = this.$refs.box
 
-      this.removePortal = createPortal(this.overlayBox, document.body)
+      if (this.local) {
+        inheritScopeAttrs(this.overlayBox, this.$el)
+      } else {
+        this.removePortal = createPortal(this.overlayBox, document.body)
+      }
 
       this.findTargetNode()
 
@@ -177,9 +194,10 @@ export default {
     disposePortal () {
       this.destroyLocator()
 
-      let node = this.overlayNode
-      node && node.remove()
-      this.overlayNode = null
+      if (this.overlayNode) {
+        this.overlayNode.remove()
+        this.overlayNode = null
+      }
 
       this.destroyFocus()
 
@@ -334,7 +352,7 @@ export default {
     return this.inline ? (
       box
     ) : (
-      <div class={this.$c('overlay')} aria-hidden="true">
+      <div class={this.$c('overlay')} aria-hidden="true" v-show={this.local}>
         <transition
           name={this.$c('overlay')}
           onAfterLeave={() => {

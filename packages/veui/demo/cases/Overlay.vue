@@ -68,20 +68,17 @@
 
   <div class="row">
     <veui-button
-      v-for="(item, index) in vforItems"
-      :ref="`overlay5-${index}`"
-      :key="item.name"
-      @click="showItem(item, index)"
-    >
-      {{ item.name }}
-    </veui-button>
+      ref="local"
+      @click="localOpen = !localOpen"
+    >不加入全局管理</veui-button>
     <veui-overlay
       overlay-class="demo-overlay-box"
-      :target="vforTargetRef"
-      :open="vforOpen"
-      position="top-start"
+      target="local"
+      :open="localOpen"
+      position="top"
+      local
     >
-      年龄是{{ vforCurrentItem.age }}
+      不移动到 <code>&lt;body&gt;</code>
     </veui-overlay>
   </div>
 
@@ -201,6 +198,7 @@ export default {
       vnodeTarget: null,
       vnodeComponentTarget: null,
 
+      localOpen: false,
       parentOpen: true
     }
   },
