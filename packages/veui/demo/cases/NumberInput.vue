@@ -113,14 +113,18 @@
           ui="strong xs"
         />
       </veui-field>
-      <veui-field label="strong formatter:">
+      <veui-field
+        label="Strong formatter:"
+        tip="使用成对的 formatter 和 parser，自定义格式化展示"
+      >
         <veui-number-input
           v-model="number9"
           ui="strong"
           :step="10"
           :max="100"
           :min="0"
-          :unit="number9Unit"
+          :formatter="percentFormatter"
+          :parser="percentParser"
         />
       </veui-field>
       <veui-field label="Strong invalid:">
@@ -169,11 +173,16 @@ export default {
       number6: null,
       number7: 1024,
       number8: 2333,
-      number9: 10,
-      number9Unit: '%'
+      number9: 10
     }
   },
   methods: {
+    percentFormatter (val) {
+      return val + '%'
+    },
+    percentParser (val) {
+      return val.toString().replace('%', '') // 去掉一个百分号就可以了，剩下的交给组件自动格式化
+    },
     handlePriceChange (val) {
       this.number7 = val
     }

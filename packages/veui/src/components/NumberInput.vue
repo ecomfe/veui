@@ -1,7 +1,7 @@
 <template>
 <veui-input
   ref="input"
-  v-model="withUnitLocal"
+  v-model="formattedValue"
   v-nudge.y="{
     step,
     update: handleThumbNudgeUpdate
@@ -96,7 +96,7 @@ import Icon from './Icon'
 import { sign, add, round } from '../utils/math'
 import warn from '../utils/warn'
 import { VALUE_EVENTS } from '../utils/dom'
-import { isInteger, isNaN, get, find, omit } from 'lodash'
+import { isInteger, isNaN, get, find, omit, identity } from 'lodash'
 import nudge from 'veui/directives/nudge'
 import longpress from 'veui/directives/longpress'
 
@@ -130,9 +130,13 @@ export default {
     },
     max: Number,
     min: Number,
-    unit: {
-      type: String,
-      default: ''
+    formatter: {
+      type: Function,
+      default: identity
+    },
+    parser: {
+      type: Function,
+      default: identity
     }
   },
   data () {
@@ -146,12 +150,12 @@ export default {
     }
   },
   computed: {
-    withUnitLocal: {
+    formattedValue: {
       get () {
-        return this.localValue + this.unit
+        return this.formatter(this.localValue)
       },
       set (val) {
-        this.localValue = val.toString().replace(this.unit, '') // 去掉一个 getter 加的单位就可以了，其它的交给 handleChange 统一处理
+        this.localValue = this.parser(val) // 去掉 formatter 处理的影响就行了，其它的交给 handleChange 统一处理
       }
     },
     isStrong () {
@@ -170,7 +174,7 @@ export default {
       }
     },
     isLocalEmpty () {
-      return this.localValue === null || this.localValue === ''
+      return this.localValue == null || this.localValue === ''
     },
     editable () {
       return !this.realDisabled && !this.realReadonly
@@ -366,7 +370,7 @@ export default {
       }
 
       if (this.decimalPlace === -1) {
-        return val
+        return val.toString()
       }
       return round(this.filterLimitValue(val), this.decimalPlace).toFixed(
         this.decimalPlace
