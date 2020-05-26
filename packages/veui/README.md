@@ -2,7 +2,7 @@
 
 [![](https://badgen.net/circleci/github/ecomfe/veui)](https://circleci.com/gh/ecomfe/veui)
 
-Enterprise UI components for Vue.js. Based on ONE DESIGN from Baidu, Inc.
+Enterprise UI components for Vue.js. Based on Baidu Design Language System (DLS).
 
 *This is a work in progress.*
 
@@ -70,11 +70,11 @@ module.exports = {
         return {
           modules: [
             {
-              package: 'veui-theme-one',
+              package: 'veui-theme-dls',
               fileName: '{module}.less'
             },
             {
-              package: 'veui-theme-one',
+              package: 'veui-theme-dls',
               fileName: '{module}.js',
               transform: false
             }
