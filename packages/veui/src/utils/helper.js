@@ -248,7 +248,7 @@ export function inheritScopeAttrs (el, parent) {
     }
   })
 
-  return function removeInheritedScopeAttrs (el) {
+  return function removeInheritedScopeAttrs () {
     patched.forEach(attr => el.removeAttribute(attr))
   }
 }
