@@ -1,0 +1,194 @@
+import { mount } from '@vue/test-utils'
+import Nav from '@/components/Nav'
+
+const options = {
+  components: {
+    'veui-nav': Nav
+  },
+  data () {
+    return {
+      active: '/nav/input',
+      width: '180px',
+      items: [
+        {
+          label: 'Group One',
+          name: 'group-one',
+          position: 'card',
+          children: [
+            {
+              label: 'Sub One',
+              name: 'sub-one',
+              children: [
+                {
+                  label: 'Input',
+                  to: '/nav/input'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          label: 'Button',
+          name: 'Button',
+          to: '/nav/button',
+          children: [
+            {
+              label: 'OptionGroup',
+              name: 'OptionGroup',
+              children: [
+                {
+                  label: 'Link',
+                  name: 'Link',
+                  to: '/nav/link'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          label: 'Loading',
+          name: 'Loading',
+          to: '/nav/loading'
+        }
+      ]
+    }
+  }
+}
+
+describe('components/Nav', () => {
+  it('should handle ui prop correctly', async () => {
+    let wrapper = mount(
+      {
+        ...options,
+        template: `<div>
+          <veui-nav class="small-nav" ui="s" :items="items"/>
+          <veui-nav class="large-nav" ui="l" :items="items"/>
+        </div>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    let { vm } = wrapper
+    let navUI = wrapper.find('.small-nav').attributes().ui
+    let navLinkUI = wrapper.find('.small-nav .veui-nav-link').attributes().ui
+    expect(navUI).to.include('s')
+    expect(navLinkUI).to.include('s')
+
+    navUI = wrapper.find('.large-nav').attributes().ui
+    navLinkUI = wrapper.find('.large-nav .veui-nav-link').attributes().ui
+    expect(navUI).to.include('l')
+    expect(navLinkUI).to.include('l')
+
+    wrapper.find('.small-nav .veui-nav-item').trigger('mouseenter')
+    await vm.$nextTick()
+    let overlay = document.querySelector('.veui-nav-overlay').getAttribute('ui')
+    expect(overlay).to.include('s')
+    wrapper.destroy()
+  })
+
+  it('should handle controlled active prop correctly', async () => {
+    let wrapper = mount(
+      {
+        ...options,
+        template: '<veui-nav :active.sync="active" :items="items"/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    let item = wrapper.findAll('.veui-nav-item').at(0)
+    expect(item.classes('veui-nav-item-active')).to.equal(true)
+
+    vm.active = null
+    await vm.$nextTick()
+    expect(item.classes('veui-nav-item-active')).to.equal(false)
+
+    wrapper
+      .findAll('.veui-nav-item')
+      .at(1)
+      .trigger('click')
+    await vm.$nextTick()
+    expect(vm.active).to.equal('Button')
+    wrapper.destroy()
+  })
+
+  it('should handle uncontrolled active prop correctly', async () => {
+    let wrapper = mount(
+      {
+        ...options,
+        template: '<veui-nav ref="nav" :items="items"/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    wrapper
+      .findAll('.veui-nav-item')
+      .at(1)
+      .trigger('click')
+    await vm.$nextTick()
+    expect(vm.$refs.nav.realActive).to.equal('Button')
+    wrapper.destroy()
+  })
+
+  it('should collapse correctly on resizing', async () => {
+    let wrapper = mount(
+      {
+        ...options,
+        template: '<veui-nav :style="{width}" ref="nav" :items="items"/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+    let length = wrapper.findAll('.veui-nav-item').length
+    expect(length).to.equal(1)
+
+    vm.width = 'auto'
+    vm.$refs.nav.renderAllThenUpdateLayout()
+    await vm.$nextTick()
+    length = wrapper.findAll('.veui-nav-item').length
+    expect(length).to.equal(3)
+    wrapper.destroy()
+  })
+
+  it('should alway emit `click` event on clicking nav item', async () => {
+    let wrapper = mount(
+      {
+        ...options,
+        template: '<veui-nav ref="nav" :items="items"/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    let count = 0
+    vm.$refs.nav.$on('click', () => {
+      count++
+    })
+
+    let items = wrapper.findAll('.veui-nav-item')
+    items.at(0).trigger('click')
+    expect(count).to.equal(1)
+    items.at(1).trigger('mouseenter')
+    await vm.$nextTick()
+    document.querySelector('.veui-nav-overlay .veui-nav-item').click()
+    expect(count).to.equal(2)
+    wrapper.destroy()
+  })
+})

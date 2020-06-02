@@ -14,7 +14,7 @@
         [$c('menu-tree')]: true,
         [$c('menu-tree-has-icon')]: hasIcon
       }"
-      :datasource="realItems"
+      :datasource="normalizedItems"
       :expanded="realExpanded"
       keys="name"
     >
@@ -28,7 +28,7 @@
             [$c('menu-item')]: true,
             ...itemClass(link)
           }"
-          @click.stop="handleItemClick(link)"
+          @click.stop="handleItemClick(link, true)"
           @mouseenter="show(link)"
         >
           <slot
@@ -121,13 +121,16 @@
               [$c('menu-item')]: true,
               ...itemClass(link)
             }"
+            @click="handleItemClick(link)"
           >
             <slot
               name="item-label"
               v-bind="link"
             >
               <veui-link
-                :class="$c('menu-link')"
+                :class="{
+                  [$c('menu-link')]: true
+                }"
                 v-bind="pickLinkProps(link)"
               >
                 <span :class="$c('menu-item-label')">{{ link.label }}</span>
@@ -147,8 +150,9 @@
           <div
             :class="{
               [$c('menu-item')]: true,
-              ...itemClass(link)
+              ...itemClass(link.option)
             }"
+            @click="handleGroupLabelClick(link.option, link.closeMenu)"
           >
             <slot
               name="item-label"
@@ -156,8 +160,7 @@
             >
               <veui-link
                 :class="$c('menu-link')"
-                v-bind="pickLinkProps(link)"
-                @click="handleSelect(link.name, link.closeMenu)"
+                v-bind="pickLinkProps(link.option)"
               >
                 <span :class="$c('menu-item-label')">{{ link.label }}</span>
               </veui-link>
@@ -186,23 +189,16 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import Tree from './Tree'
-import Icon from './Icon'
-import Link from './Link'
-import Button from './Button'
-import OptionGroup from './OptionGroup'
-import Overlay from './Overlay'
-import { map, some, endsWith, uniq, pick, isString } from 'lodash'
-import ui from '../mixins/ui'
-import prefix from '../mixins/prefix'
-import controllable from '../mixins/controllable'
-import overlay from '../mixins/overlay'
-import outside from '../directives/outside'
-import { find } from '../utils/datasource'
-import '../common/uiTypes'
-
-const ensureSlash = str => (endsWith(str, '/') ? str : `${str}/`)
+import Tree from '../Tree'
+import Icon from '../Icon'
+import Link from '../Link'
+import Button from '../Button'
+import OptionGroup from '../OptionGroup'
+import Overlay from '../Overlay'
+import { some, uniq } from 'lodash'
+import controllable from '../../mixins/controllable'
+import mixin from './_mixin'
+import '../../common/uiTypes'
 
 export default {
   name: 'veui-menu',
@@ -214,14 +210,9 @@ export default {
     'veui-overlay': Overlay,
     'veui-button': Button
   },
-  uiTypes: ['select'],
-  directives: { outside },
   mixins: [
-    prefix,
-    ui,
-    overlay,
+    mixin,
     controllable([
-      'active',
       {
         prop: 'collapsed',
         get () {
@@ -231,27 +222,20 @@ export default {
       {
         prop: 'expanded',
         get () {
-          return this.realCollapsed ? [] : this.getReal({ prop: 'expanded' })
+          return this.realCollapsed
+            ? []
+            : this.getReal({ prop: 'expanded' }) || []
         }
       }
     ])
   ],
   props: {
-    active: String,
-    matches: {
-      type: Function,
-      default (route, item) {
-        return ensureSlash(route.path) === ensureSlash(item.path)
-      }
-    },
     collapsible: Boolean,
     collapsed: Boolean,
-    items: Tree.props.datasource,
     expanded: Tree.props.datasource
   },
   data () {
     return {
-      localExpanded: [],
       localOverlayOptions: {
         position: 'right-start'
       },
@@ -264,108 +248,32 @@ export default {
   computed: {
     hasIcon () {
       return !!some(this.items, ({ icon }) => !!icon)
-    },
-    transformedItems () {
-      return Vue.observable(this.transformItems(this.items, null))
-    },
-    realItems () {
-      this.markItems(this.transformedItems)
-      return this.transformedItems
     }
   },
   watch: {
-    realActive: {
+    exactActiveItem: {
       handler (value) {
         if (!this.realCollapsed) {
-          let exactActiveItem = find(this.realItems, item => item.exactActive)
-          if (exactActiveItem) {
-            this.showItem(exactActiveItem)
+          if (value) {
+            this.showActiveItems()
           }
         }
       },
       immediate: true
     }
   },
-  created () {
-    if (this.$router) {
-      const updateActive = route => {
-        let exactActiveItem = find(this.realItems, item =>
-          this.matches(route, item)
-        )
-        this.realActive = exactActiveItem ? exactActiveItem.name : null
-      }
-      this.$watch('$route', updateActive)
-      // active 受控了，初始当前路由就不同步了
-      if (!this.isControlled('active')) {
-        updateActive(this.$route)
-      }
-    }
-  },
   methods: {
-    // 确保每个item都有name
-    transformItems (items) {
-      return map(items, item => {
-        let { to, name, children } = item
-        if (name == null && to == null) {
-          throw new Error('name or to required!')
-        }
-
-        item = {
-          ...item,
-          exactActive: false,
-          active: false
-        }
-
-        if (to == null) {
-          item.path = null
-        } else if (this.$router) {
-          let { path } = this.$router.resolve(to).route
-          item.path = path
-        } else if (isString(to)) {
-          item.path = to
-        } else {
-          throw new Error(
-            '[veui-menu] Non-string `to` cannot be resolved without Vue Router.'
-          )
-        }
-
-        if (!name) {
-          item.name = item.path || ''
-        }
-        item.value = item.value || item.name
-
-        if (children) {
-          children = this.transformItems(children)
-          item.position = 'popup'
-          item.options = item.children = children
-        }
-        return item
-      })
-    },
-    markItems (items) {
-      items.forEach(item => {
-        let exactActive = this.realActive === item.name
-        let active = false
-        if (item.children) {
-          this.markItems(item.children)
-          active = item.children.some(
-            ({ exactActive, active }) => exactActive || active
-          )
-        }
-        item.active = active
-        item.exactActive = exactActive
-      })
-    },
     itemClass (item) {
-      let { active, exactActive, disabled } = item
+      let { name, disabled } = item
       return {
         [this.$c('disabled')]: disabled,
-        [this.$c('menu-item-exact-active')]: exactActive,
-        [this.$c('menu-item-active')]: active
+        [this.$c('menu-item-exact-active')]: this.exactActiveItem
+          ? this.exactActiveItem.name === name
+          : false,
+        [this.$c('menu-item-active')]: this.activeItems.some(
+          i => i.name === name
+        )
       }
-    },
-    pickLinkProps (data) {
-      return pick(data, Object.keys(Link.props))
     },
     show (props) {
       if (this.realCollapsed) {
@@ -378,71 +286,50 @@ export default {
       this.open = false
       this.refTarget = null
     },
-    // 保证该 item 的父级是展开的
-    showItem (item) {
-      let names = getParentNames(item, this.realItems)
+    showActiveItems () {
+      let names = this.activeItems.map(i => i.name)
       if (names) {
-        this.localExpanded = uniq([...this.realExpanded, ...names])
-        this.$emit('update:expanded', this.localExpanded)
+        this.realExpanded = uniq([...this.realExpanded, ...names])
       }
     },
     toggleExpanded ({ name }) {
       let index = this.realExpanded.indexOf(name)
+      let expanded
       if (index === -1) {
-        this.localExpanded = uniq([...this.realExpanded, name])
+        expanded = uniq([...this.realExpanded, name])
       } else {
-        this.localExpanded = [...this.realExpanded]
-        this.localExpanded.splice(index, 1)
+        expanded = [...this.realExpanded]
+        expanded.splice(index, 1)
       }
-      this.$emit('update:expanded', this.localExpanded)
+      this.realExpanded = expanded
     },
     toggleCollapsed () {
       this.realCollapsed = !this.realCollapsed
     },
-    handleItemClick (item) {
-      let { name, to, children, disabled } = item
-      if (disabled) {
-        return
+    postNormalize (item) {
+      if (item.children) {
+        item.position = 'popup'
+        item.options = item.children
       }
+      return item
+    },
+    handleItemClick (item) {
+      let { to, children, disabled } = item
+      if (disabled) return
 
-      if (to) {
-        this.realActive = name
-        this.$emit('activate', name)
-        this.showItem(item)
-      } else if (children && children.length) {
+      // 1. all tree items: activate or toggleExpanded
+      // 2. top items on being collapsed: activate + close dropdown
+      // 3. options: activate + close dropdown
+
+      // collapsed 时在可以跳转时也把 popout 给关了
+      this.activateItem(item, this.realCollapsed)
+      // tree + 不能跳转 + 有 children 则 toggle children
+      if (!this.realCollapsed && !to && children && children.length) {
         this.toggleExpanded(item)
       }
-      this.$emit('click', item)
-    },
-    handleSelect (name, closeMenu) {
-      let item = find(this.realItems, item => item.name === name)
-      if (item.to) {
-        this.realActive = name
-        this.$emit('activate', name)
-        this.close()
-        // TODO closeMenu 应该是 optionGroup 自己调
-        closeMenu && closeMenu()
-      }
+
       this.$emit('click', item)
     }
   }
-}
-
-function getParentNames (item, items, _parent) {
-  let names = null
-  items.some(i => {
-    let { name, children } = i
-    let got = name === item.name
-    if (got) {
-      names = _parent ? [_parent.name] : null
-    } else if (children) {
-      got = getParentNames(item, children, i)
-      if (got) {
-        names = [name, ...got]
-      }
-    }
-    return !!got
-  })
-  return names
 }
 </script>
