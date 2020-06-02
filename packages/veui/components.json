@@ -189,7 +189,19 @@
   },
   {
     "name": "Menu",
-    "path": "Menu.vue"
+    "path": "Menu/Menu.vue"
+  },
+  {
+    "name": "Nav",
+    "path": "Menu/Nav.vue"
+  },
+  {
+    "name": "Menu",
+    "path": "Menu.js"
+  },
+  {
+    "name": "Nav",
+    "path": "Nav.js"
   },
   {
     "name": "NumberInput",

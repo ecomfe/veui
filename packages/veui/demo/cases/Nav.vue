@@ -1,55 +1,47 @@
 <template>
-<article class="veui-menu-demo">
-  <h1><code>&lt;veui-menu&gt;</code></h1>
-  <div>expanded: {{ expanded }}</div>
+<article class="veui-nav-demo">
+  <h1><code>&lt;veui-nav&gt;</code></h1>
   <div>active: {{ active1 }}</div>
   <section>
-    <h3>small collapsible menu</h3>
-    <veui-menu
-      class="small-menu"
+    <h3>small nav</h3>
+    <veui-nav
+      :items="items"
       ui="s"
-      :items="items"
-      :expanded.sync="expanded"
-      collapsible
     />
   </section>
   <section>
-    <h3>medium collapsible menu</h3>
-    <veui-menu
-      :items="items"
-      :active.sync="active1"
-      :expanded.sync="expanded"
-      collapsible
-      :collapsed.sync="collapsed"
-    />
+    <h3>medium nav</h3>
+    <veui-nav :items="items"/>
   </section>
   <section>
-    <h3>large menu</h3>
-    <veui-menu
+    <h3>large nav</h3>
+    <veui-nav
+      :items="items"
       ui="l"
-      :items="items2"
-      :active.sync="active2"
     />
   </section>
   <section>
-    <h3>自定义 icon slot</h3>
-    <veui-menu
-      ui="s"
-      collapsible
+    <h3>folded nav</h3>
+    <veui-nav
+      class="rest-nav"
       :items="items"
-    >
-      <veui-icon
-        slot="icon"
-        name="baidu"
-      />
-    </veui-menu>
+    />
+  </section>
+  <section>
+    <h3>item-label scoped slot</h3>
+    <veui-nav :items="items">
+      <template
+        slot="item-label"
+        slot-scope="item"
+      >{{ item.label }}🐂</template>
+    </veui-nav>
   </section>
   <section><router-view/></section>
 </article>
 </template>
 
 <script>
-import { Menu, Icon } from 'veui'
+import { Nav } from 'veui'
 import { omit } from 'lodash'
 import 'veui-theme-dls-icons/clock'
 import 'veui-theme-dls-icons/envelope'
@@ -59,8 +51,7 @@ import 'veui-theme-dls-icons/file'
 export default {
   name: 'veui-menu-demo',
   components: {
-    'veui-menu': Menu,
-    'veui-icon': Icon
+    'veui-nav': Nav
   },
   data () {
     let items = [
@@ -77,21 +68,21 @@ export default {
             children: [
               {
                 label: 'Input',
-                to: '/menu/input'
+                to: '/nav/input'
               }
             ]
           },
           {
             label: 'Loading',
             name: 'Loading',
-            to: '/menu/loading'
+            to: '/nav/loading'
           }
         ]
       },
       {
         label: 'Button',
         name: 'Button',
-        to: '/menu/button',
+        to: '/nav/button',
         icon: 'eye',
         children: [
           {
@@ -102,7 +93,7 @@ export default {
               {
                 label: 'Link',
                 name: 'Link',
-                to: '/menu/link'
+                to: '/nav/link'
               }
             ]
           }
@@ -125,7 +116,7 @@ export default {
             children: [
               {
                 label: 'Switch',
-                to: '/menu/switch'
+                to: '/nav/switch'
               }
             ]
           },
@@ -136,11 +127,11 @@ export default {
               {
                 label: 'NumberInput',
                 name: 'menu-number-input',
-                to: '/menu/number-input',
+                to: '/nav/number-input',
                 children: [
                   {
                     label: 'Schedule',
-                    to: '/menu/schedule'
+                    to: '/nav/schedule'
                   }
                 ]
               }
@@ -155,11 +146,11 @@ export default {
         children: [
           {
             label: 'Progress',
-            to: '/menu/progress'
+            to: '/nav/progress'
           },
           {
             label: 'Radio',
-            to: '/menu/radio'
+            to: '/nav/radio'
           }
         ]
       }
@@ -178,9 +169,12 @@ export default {
 </script>
 
 <style lang="less">
-.veui-menu-demo {
-  .small-menu {
-    height: 300px;
+.veui-nav-demo {
+  .veui-nav {
+    height: 100px;
+  }
+  .rest-nav {
+    width: 500px;
   }
 }
 </style>

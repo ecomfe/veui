@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Menu from '@/components/Menu'
-import 'veui-theme-one-icons/android'
+import 'veui-theme-dls-icons/eye'
 
 const options = {
   components: {
@@ -15,7 +15,7 @@ const options = {
         {
           label: '一级导航1',
           name: '一级导航1',
-          icon: 'android',
+          icon: 'eye',
           children: [
             {
               label: '二级导航11',
