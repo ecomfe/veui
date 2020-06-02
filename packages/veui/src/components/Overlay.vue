@@ -84,7 +84,7 @@ export default {
       this.updateWidth()
       this.toggleLocator(val)
       this.updateLocator()
-      this.updateNode()
+      this.updateNode(val)
       if (val) {
         let node = this.overlayNode
         if (node) {
@@ -154,7 +154,7 @@ export default {
   },
   methods: {
     // 更新 zindex 树
-    updateNode () {
+    updateNode (val) {
       if (this.local) {
         return
       }
@@ -167,7 +167,7 @@ export default {
             this.zIndex = order
           }
         })
-      } else {
+      } else if (val) {
         this.overlayNode.appendTo(this.findParentOverlayId(), this.priority)
       }
     },
