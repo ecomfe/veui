@@ -113,7 +113,7 @@
     max-width: 100%;
     height: inherit;
 
-    &::before {
+    .@{veui-prefix}-tree-item &::before {
       content: "";
       .absolute(_, 0);
       height: inherit;
@@ -219,7 +219,9 @@
     }
   }
 
-  &-item-exact-active:not(.@{veui-prefix}-disabled) {
+  &-collapsed &-item-active:not(.@{veui-prefix}-disabled),
+  &-collapsed &-item-exact-active:not(.@{veui-prefix}-disabled),
+  & &-item-exact-active:not(.@{veui-prefix}-disabled) {
     &::before {
       background-color: @dls-menu-item-background-color-current;
       .veui-transition(background-color);

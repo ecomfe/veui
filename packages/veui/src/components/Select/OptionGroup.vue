@@ -12,16 +12,27 @@ import outside from '../../directives/outside'
 import '../../common/uiTypes'
 import { walk } from '../../utils/datasource'
 import { isType, isTopMostOfType } from '../../utils/helper'
-import { pull, uniqueId, includes, cloneDeep, pick, isEqual } from 'lodash'
+import {
+  pull,
+  uniqueId,
+  includes,
+  cloneDeep,
+  pick,
+  pickBy,
+  isEqual
+} from 'lodash'
 
 const EVENT_MAP = {
   hover: 'mouseenter',
   click: 'click'
 }
 
+const domAttrRe = /^(?:id|role|hidden)$|^(?:aria-|data-)/
+
 const OptionGroup = {
   name: 'veui-option-group',
   uiTypes: ['menu'],
+  inheritAttrs: false,
   directives: {
     outside
   },
@@ -66,6 +77,12 @@ const OptionGroup = {
     },
     itemIds () {
       return this.items.map(({ id }) => id)
+    },
+    componentAttrs () {
+      return pickBy(this.$attrs, (_, key) => !domAttrRe.exec(key))
+    },
+    domAttrs () {
+      return pickBy(this.$attrs, (_, key) => !!domAttrRe.exec(key))
     },
     labelContent () {
       if (isTopMostOfType(this, 'menu', 'select')) {
@@ -179,7 +196,7 @@ const OptionGroup = {
       this.expanded = false
     },
     closeMenu (i) {
-      let menu = this.$refs.group[i]
+      let menu = this
       while (menu) {
         menu.close()
         menu = menu.menu
@@ -210,6 +227,7 @@ const OptionGroup = {
             optionTag={this.optionTag}
             key={i}
             trigger={option.trigger || this.trigger}
+            option={option} // pass raw option
             scopedSlots={{
               label:
                   option.renderLabel ||
@@ -217,13 +235,8 @@ const OptionGroup = {
                   (group => group.label),
               option: this.$scopedSlots.option || null,
               'option-label': this.$scopedSlots['option-label'] || null,
-              'option-group-label': this.$scopedSlots['option-group-label']
-                ? () =>
-                  this.$scopedSlots['option-group-label']({
-                    ...option,
-                    closeMenu: () => this.closeMenu(i)
-                  })
-                : null
+              'option-group-label':
+                  this.$scopedSlots['option-group-label'] || null
             }}
           >
             {option.renderBefore ? (
@@ -267,6 +280,7 @@ const OptionGroup = {
           [this.$c('option-group-expanded')]: this.expanded,
           [this.$c('option-group-popout')]: this.canPopOut
         }}
+        {...{ attrs: this.domAttrs }}
         ui={this.realUi}
         ref="label"
       >
@@ -302,7 +316,12 @@ const OptionGroup = {
               : {})}
           >
             {this.$scopedSlots['option-group-label'] ? (
-              this.$scopedSlots['option-group-label']()
+              this.$scopedSlots['option-group-label']({
+                // pass non-dom attrs
+                ...this.componentAttrs,
+                label: this.label,
+                closeMenu: this.closeMenu
+              })
             ) : (
               <span class={this.$c('option-label')}>{this.labelContent}</span>
             )}
@@ -341,7 +360,7 @@ const OptionGroup = {
                     name: 'outside',
                     value: {
                       trigger: this.trigger,
-                      delay: 100,
+                      delay: 50,
                       refs: this.outsideRefs,
                       handler: () => {
                         this.expanded = false
