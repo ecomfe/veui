@@ -27,6 +27,8 @@ const EVENT_MAP = {
   click: 'click'
 }
 
+const domAttrRe = /^(?:id|role|hidden)$|^(?:aria-|data-)/
+
 const OptionGroup = {
   name: 'veui-option-group',
   uiTypes: ['menu'],
@@ -77,15 +79,10 @@ const OptionGroup = {
       return this.items.map(({ id }) => id)
     },
     componentAttrs () {
-      return pickBy(
-        this.$attrs,
-        (_, key) => !/^(?:id|role)$|^(?:aria-|data-)/.exec(key)
-      )
+      return pickBy(this.$attrs, (_, key) => !domAttrRe.exec(key))
     },
     domAttrs () {
-      return pickBy(this.$attrs, (_, key) =>
-        /^(?:id|role)$|^(?:aria-|data-)/.exec(key)
-      )
+      return pickBy(this.$attrs, (_, key) => !!domAttrRe.exec(key))
     },
     labelContent () {
       if (isTopMostOfType(this, 'menu', 'select')) {
@@ -231,7 +228,6 @@ const OptionGroup = {
             key={i}
             trigger={option.trigger || this.trigger}
             option={option} // pass raw option
-            {...(this.labelContent ? {} : this.domAttrs)}
             scopedSlots={{
               label:
                   option.renderLabel ||
@@ -258,7 +254,6 @@ const OptionGroup = {
             hidden={option.hidden}
             disabled={this.disabled || option.disabled}
             tag={this.optionTag}
-            {...(this.labelContent ? {} : this.domAttrs)}
             key={i}
           >
             {this.$scopedSlots.option
@@ -285,6 +280,7 @@ const OptionGroup = {
           [this.$c('option-group-expanded')]: this.expanded,
           [this.$c('option-group-popout')]: this.canPopOut
         }}
+        {...{ attrs: this.domAttrs }}
         ui={this.realUi}
         ref="label"
       >
@@ -300,7 +296,6 @@ const OptionGroup = {
             aria-haspopup={this.canPopOut ? this.popupRole : null}
             aria-owns={this.canPopOut ? this.popupId : null}
             role={this.canPopOut ? null : 'group'}
-            {...this.domAttrs}
             {...(this.canPopOut
               ? {
                 on: {
