@@ -101,7 +101,7 @@ describe('components/Nav', () => {
     )
 
     let { vm } = wrapper
-    let item = wrapper.findAll('.veui-nav-item').at(0)
+    let item = wrapper.findAll('.veui-nav-body .veui-nav-item').at(0)
     expect(item.classes('veui-nav-item-active')).to.equal(true)
 
     vm.active = null
@@ -109,7 +109,7 @@ describe('components/Nav', () => {
     expect(item.classes('veui-nav-item-active')).to.equal(false)
 
     wrapper
-      .findAll('.veui-nav-item')
+      .findAll('.veui-nav-body .veui-nav-item')
       .at(1)
       .trigger('click')
     await vm.$nextTick()
@@ -131,7 +131,7 @@ describe('components/Nav', () => {
 
     let { vm } = wrapper
     wrapper
-      .findAll('.veui-nav-item')
+      .findAll('.veui-nav-body .veui-nav-item')
       .at(1)
       .trigger('click')
     await vm.$nextTick()
@@ -153,13 +153,13 @@ describe('components/Nav', () => {
 
     let { vm } = wrapper
     await vm.$nextTick()
-    let length = wrapper.findAll('.veui-nav-item').length
+    let length = wrapper.findAll('.veui-nav-body .veui-nav-item').length
     expect(length).to.equal(1)
 
     vm.width = 'auto'
     vm.$refs.nav.renderAllThenUpdateLayout()
     await vm.$nextTick()
-    length = wrapper.findAll('.veui-nav-item').length
+    length = wrapper.findAll('.veui-nav-body .veui-nav-item').length
     expect(length).to.equal(3)
     wrapper.destroy()
   })
@@ -182,7 +182,7 @@ describe('components/Nav', () => {
       count++
     })
 
-    let items = wrapper.findAll('.veui-nav-item')
+    let items = wrapper.findAll('.veui-nav-body .veui-nav-item')
     items.at(0).trigger('click')
     expect(count).to.equal(1)
     items.at(1).trigger('mouseenter')

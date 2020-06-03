@@ -79,10 +79,10 @@ const OptionGroup = {
       return this.items.map(({ id }) => id)
     },
     componentAttrs () {
-      return pickBy(this.$attrs, (_, key) => !domAttrRe.exec(key))
+      return pickBy(this.$attrs, (_, key) => !domAttrRe.test(key))
     },
     domAttrs () {
-      return pickBy(this.$attrs, (_, key) => !!domAttrRe.exec(key))
+      return pickBy(this.$attrs, (_, key) => domAttrRe.test(key))
     },
     labelContent () {
       if (isTopMostOfType(this, 'menu', 'select')) {
@@ -360,7 +360,7 @@ const OptionGroup = {
                     name: 'outside',
                     value: {
                       trigger: this.trigger,
-                      delay: 50,
+                      delay: 100,
                       refs: this.outsideRefs,
                       handler: () => {
                         this.expanded = false

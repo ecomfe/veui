@@ -23,7 +23,7 @@
         slot-scope="link"
       >
         <div
-          :ref="`item-${link.name}`"
+          :ref="link.name"
           :class="{
             [$c('menu-item')]: true,
             ...itemClass(link)
@@ -81,95 +81,101 @@
               />
             </veui-button>
           </slot>
+          <veui-overlay
+            v-if="realCollapsed && link.options && link.options.length"
+            :target="link.name"
+            :options="realOverlayOptions"
+            :open="!!hoverItem && hoverItem.name === link.name"
+            position="right-start"
+            :overlay-class="$c('menu-overlay')"
+            trigger="hover"
+          >
+            <veui-option-group
+              v-outside="{
+                refs: outsideRefs,
+                delay: 100,
+                trigger: 'hover',
+                handler: close
+              }"
+              :overlay-class="$c('menu-overlay')"
+              :options="link.options"
+              position="popup"
+              trigger="hover"
+              option-tag="div"
+            >
+              <template
+                slot="option"
+                slot-scope="option"
+              >
+                <slot
+                  name="item"
+                  v-bind="option"
+                >
+                  <div
+                    :class="{
+                      [$c('menu-item')]: true,
+                      ...itemClass(option)
+                    }"
+                    @click="handleItemClick(option)"
+                  >
+                    <slot
+                      name="item-label"
+                      v-bind="option"
+                    >
+                      <veui-link
+                        :class="{
+                          [$c('menu-link')]: true
+                        }"
+                        v-bind="pickLinkProps(option)"
+                      >
+                        <span :class="$c('menu-item-label')">{{
+                          option.label
+                        }}</span>
+                      </veui-link>
+                    </slot>
+                  </div>
+                </slot>
+              </template>
+              <template
+                slot="option-group-label"
+                slot-scope="group"
+              >
+                <slot
+                  name="item"
+                  v-bind="group"
+                >
+                  <div
+                    :class="{
+                      [$c('menu-item')]: true,
+                      ...itemClass(group.option)
+                    }"
+                    @click="
+                      handleGroupLabelClick(group.option, group.closeMenu)
+                    "
+                  >
+                    <slot
+                      name="item-label"
+                      v-bind="group"
+                    >
+                      <veui-link
+                        :class="$c('menu-link')"
+                        v-bind="pickLinkProps(group.option)"
+                      >
+                        <span :class="$c('menu-item-label')">{{
+                          group.label
+                        }}</span>
+                      </veui-link>
+                    </slot>
+                  </div>
+                </slot>
+              </template>
+            </veui-option-group>
+          </veui-overlay>
         </div>
       </template>
     </veui-tree>
     <slot name="after"/>
   </div>
-  <veui-overlay
-    v-if="realCollapsed"
-    :target="refTarget"
-    :open.sync="open"
-    :options="realOverlayOptions"
-    position="right-start"
-    :overlay-class="$c('menu-overlay')"
-    trigger="hover"
-  >
-    <veui-option-group
-      v-outside="{
-        refs: outsideRefs,
-        delay: 100,
-        trigger: 'hover',
-        handler: close
-      }"
-      :overlay-class="$c('menu-overlay')"
-      :options="currentOptions"
-      position="popup"
-      trigger="hover"
-      option-tag="div"
-    >
-      <template
-        slot="option"
-        slot-scope="link"
-      >
-        <slot
-          name="item"
-          v-bind="link"
-        >
-          <div
-            :class="{
-              [$c('menu-item')]: true,
-              ...itemClass(link)
-            }"
-            @click="handleItemClick(link)"
-          >
-            <slot
-              name="item-label"
-              v-bind="link"
-            >
-              <veui-link
-                :class="{
-                  [$c('menu-link')]: true
-                }"
-                v-bind="pickLinkProps(link)"
-              >
-                <span :class="$c('menu-item-label')">{{ link.label }}</span>
-              </veui-link>
-            </slot>
-          </div>
-        </slot>
-      </template>
-      <template
-        slot="option-group-label"
-        slot-scope="link"
-      >
-        <slot
-          name="item"
-          v-bind="link"
-        >
-          <div
-            :class="{
-              [$c('menu-item')]: true,
-              ...itemClass(link.option)
-            }"
-            @click="handleGroupLabelClick(link.option, link.closeMenu)"
-          >
-            <slot
-              name="item-label"
-              v-bind="link"
-            >
-              <veui-link
-                :class="$c('menu-link')"
-                v-bind="pickLinkProps(link.option)"
-              >
-                <span :class="$c('menu-item-label')">{{ link.label }}</span>
-              </veui-link>
-            </slot>
-          </div>
-        </slot>
-      </template>
-    </veui-option-group>
-  </veui-overlay>
   <div
     v-if="collapsible"
     :class="$c('menu-footer')"
@@ -239,9 +245,7 @@ export default {
       localOverlayOptions: {
         position: 'right-start'
       },
-      refTarget: null,
-      open: false,
-      currentOptions: null,
+      hoverItem: null,
       outsideRefs: ['tree']
     }
   },
@@ -275,16 +279,13 @@ export default {
         )
       }
     },
-    show (props) {
+    show (item) {
       if (this.realCollapsed) {
-        this.open = true
-        this.refTarget = `item-${props.name}`
-        this.currentOptions = props.options
+        this.hoverItem = item
       }
     },
     close () {
-      this.open = false
-      this.refTarget = null
+      this.hoverItem = null
     },
     showActiveItems () {
       let names = this.activeItems.map(i => i.name)
