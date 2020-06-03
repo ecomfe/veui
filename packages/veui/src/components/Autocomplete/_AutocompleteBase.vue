@@ -17,8 +17,9 @@
     ref="overlay"
     target="self"
     :open="realExpanded"
-    :options="realOverlayOptions"
     :overlay-class="overlayClass"
+    :local="realOverlayOptions.local"
+    :options="realOverlayOptions"
     :priority="overlayPriority"
     match-width
   >

@@ -53,8 +53,9 @@
     autofocus
     modal
     match-width
-    :options="realOverlayOptions"
     :overlay-class="mergeOverlayClass($c('dropdown-box'))"
+    :local="realOverlayOptions.local"
+    :options="realOverlayOptions"
     :priority="overlayPriority"
   >
     <div

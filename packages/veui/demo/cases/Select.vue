@@ -400,6 +400,7 @@
       v-model="defaultValue5"
       v-bind="optGroupAttrs"
       searchable
+      :overlay-options="{ local: true }"
     />
   </section>
   <section>

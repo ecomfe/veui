@@ -257,7 +257,7 @@ export default {
             flip: {
               flipVariationsByContent: true
             },
-            ...omit(this.options, 'position')
+            ...omit(this.options, 'position', 'local')
           },
           onUpdate: () => {
             this.$emit('locate')

@@ -507,8 +507,9 @@ export default {
             open={this.expanded}
             autofocus={!this.searchable}
             modal
-            options={this.realOverlayOptions}
             overlay-class={this.overlayClass}
+            local={this.realOverlayOptions.local}
+            options={this.realOverlayOptions}
             match-width={this.isMatchWidth}
             onLocate={this.handleRelocate}
             onAfteropen={this.handleAfteropen}
