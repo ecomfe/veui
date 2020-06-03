@@ -2,214 +2,239 @@
 @import (reference) "../dropdown.less";
 
 .@{veui-prefix}-nav {
-    &-body {
-      padding: 0;
-      margin: 0;
-      display: flex;
-      position: relative;
-      border-bottom: 1px solid @dls-menu-border-color;
+  &-body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    position: relative;
+    border-bottom: 1px solid @dls-menu-border-color;
+  }
+
+  &-body,
+  &-overlay ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  // all menu items
+  &-item {
+    font-size: @dls-menu-font-size-horizontal-m;
+
+    // implemention of item inherits styles of items
+    & > * {
+      color: inherit;
+      font-weight: inherit;
+      font-size: inherit;
+      white-space: inherit;
     }
-  
-    &-body,
-    &-overlay ul {
-      list-style: none;
-      padding-left: 0;
-    }
-  
-    // all menu items
-    &-item {
-      font-size: @dls-menu-font-size-horizontal-m;
-      // implemention of item inherits styles of items
-      & > * {
-        color: inherit;
-        font-weight: inherit;
-        font-size: inherit;
-        white-space: inherit;
-      }
-    }
-  
-    // default implemention: Link
-    &-item &-link {
-      &::before {
-        content: '';
-        display: block;
-        .absolute(0);
-      }
-      &:hover {
-        text-decoration: none;
-        color: inherit;
-      }
+  }
+
+  // default implemention: Link
+  &-item &-link {
+    &::before {
+      content: "";
+      .absolute(0);
     }
 
-    &-overlay .@{veui-prefix}-option-group-label,
-    &-overlay .@{veui-prefix}-option,
-    &-card &-item,
-    &-body &-item {
-      position: relative;
+    &:hover {
+      text-decoration: none;
+      color: inherit;
     }
-  
-    // top level normal item style
-    &-more,
-    &-body &-item {
-      padding: 0 @dls-menu-item-padding-x-horizontal;
-      height: @dls-menu-item-height-horizontal-m;
-      flex: none;
-      display: flex;
-      align-items: center;
-      position: relative;
-      outline: none;
-      white-space: nowrap;
-      cursor: pointer;
-      // :hover
-      &:not(.@{veui-prefix}-disabled) {
-        background-color: @dls-menu-item-background-color-horizontal;
-        color: @dls-menu-item-font-color-horizontal;
-        &:hover {
-          background-color: @dls-menu-item-background-color-horizontal-hover;
-          color: @dls-menu-item-font-color-horizontal-hover;
-          &::after {
-            content: "";
-            .absolute(_, 0, -1px, 0);
-            .size(auto, @dls-menu-indicator-width);
-            background-color: @dls-menu-indicator-color-hover;
-            box-shadow: @dls-menu-item-shadow-horizontal-current;
-          }
-        }
-        &.focus-visible {
-          background-color: @dls-menu-item-background-color-horizontal-focus;
-          color: @dls-menu-item-font-color-horizontal-focus;
-        }
-        &:active {
-          background-color: @dls-menu-item-background-color-horizontal-active;
-          color: @dls-menu-item-font-color-horizontal-active;
-        }
+  }
+
+  &-overlay .@{veui-prefix}-option-group-label,
+  &-overlay .@{veui-prefix}-option,
+  &-card &-item,
+  &-body &-item {
+    position: relative;
+  }
+
+  // top level normal item style
+  &-more,
+  &-body &-item {
+    padding: 0 @dls-menu-item-padding-x-horizontal;
+    height: @dls-menu-item-height-horizontal-m;
+    flex: none;
+    display: flex;
+    align-items: center;
+    position: relative;
+    outline: none;
+    white-space: nowrap;
+    cursor: pointer;
+
+    &:not(.@{veui-prefix}-disabled) {
+      background-color: @dls-menu-item-background-color-horizontal;
+      color: @dls-menu-item-font-color-horizontal;
+
+      &::after {
+        content: "";
+        .absolute(_, 0, -1px, 0);
+        .size(auto, @dls-menu-indicator-width);
+        opacity: 0;
+        .veui-transition(background-color, box-shadow, opacity);
       }
-      &.@{veui-prefix}-disabled {
-        background-color: @dls-menu-item-background-color-horizontal-disabled;
-        color: @dls-menu-item-font-color-horizontal-disabled;
-      }
-    }
-  
-    // more button
-    &-more {
-      &-hidden {
-        visibility: hidden;
-        position: absolute;
-      }
-    }
-  
-    // top level current item style
-    &-body &-item-exact-active,
-    &-body &-item-active {
-      &:not(.@{veui-prefix}-disabled) {
-        color: @dls-menu-item-font-color-horizontal-current;
-        background-color: @dls-menu-item-background-color-horizontal-current;
-        font-weight: @dls-menu-item-font-weight-current;
+
+      &:hover {
+        background-color: @dls-menu-item-background-color-horizontal-hover;
+        color: @dls-menu-item-font-color-horizontal-hover;
+
         &::after {
           content: "";
           .absolute(_, 0, -1px, 0);
           .size(auto, @dls-menu-indicator-width);
-          background-color: @dls-menu-indicator-color;
+          background-color: @dls-menu-indicator-color-hover;
           box-shadow: @dls-menu-item-shadow-horizontal-current;
-        }
-  
-        &:hover {
-          color: @dls-menu-item-font-color-horizontal-current-hover;
-          background-color: @dls-menu-item-background-color-horizontal-hover;
-          &::after {
-            background-color: @dls-menu-indicator-color-hover;
-          }
-        }
-        &.focus-visible {
-          color: @dls-menu-item-font-color-horizontal-current-focus;
-          background-color: @dls-menu-item-background-color-horizontal-focus;
-          &::after {
-            background-color: @dls-menu-indicator-color-focus;
-          }
-        }
-        &:active {
-          color: @dls-menu-item-font-color-horizontal-current-active;
-          background-color: @dls-menu-item-background-color-horizontal-active;
-          &::after {
-            background-color: @dls-menu-indicator-color-active;
-          }
+          opacity: 1;
         }
       }
-    }
-  
-    // expand icon in top level items
-    &-expand-icon {
-      .dls-icon-size(@dls-menu-item-icon-size-aux, true);
-      margin-left: @dls-menu-card-target-spacing;
-      transform: rotateZ(90deg);
-      color: inherit;
-    }
-    &-item-hover &-expand-icon {
-      transform: rotateZ(-90deg);
-    }
-  
-    // top level items of which have expand icon
-    &-body &-expandable {
-      padding: 0 @dls-menu-item-spacing 0 @dls-menu-item-padding-x-horizontal;
-    }
-  
-    // apply overlay-shadow styles
-    &-dropdown > .@{veui-prefix}-option-group,
-    &-overlay &-card {
-      &:extend(._veui-dropdown-overlay all);
-    }
-  
-    // card
-    &-overlay &-card {
-      display: flex;
-      padding: @dls-menu-card-padding-x @dls-menu-card-padding-y;
-      background-color: @dls-menu-card-background-color;
-      border-radius: @dls-menu-card-border-radius-m;
-      // space between card direct columns
-      & > li + li {
-        margin-left: @dls-menu-card-column-spacing;
+
+      &.focus-visible {
+        background-color: @dls-menu-item-background-color-horizontal-focus;
+        color: @dls-menu-item-font-color-horizontal-focus;
       }
-    }
-    &-card &-item {
-      margin-top: @dls-menu-card-item-spacing;
-    }
-    &-item-title {
-      margin-top: 0;
-      color: @dls-menu-card-title-font-color;
-      font-size: @dls-menu-card-title-font-size-m;
-      font-weight: @dls-menu-card-title-font-weight;
-    }
-    &-card &-item-has-icon {
-      display: flex;
-      align-items: center;
-      // 有 icon 的特殊二级间隔
-      & + ul {
-        padding-left: dls-sum(
-          @dls-menu-card-item-icon-size,
-          @dls-menu-card-target-spacing
-        );
+
+      &:active {
+        background-color: @dls-menu-item-background-color-horizontal-active;
+        color: @dls-menu-item-font-color-horizontal-active;
       }
-    }
-    &-title-icon {
-      margin-right: @dls-menu-card-target-spacing;
-      .dls-icon-size(@dls-menu-card-item-icon-size, true);
     }
 
-    // all active/exact-active items
-    &-overlay .@{veui-prefix}-option-group-label &-item-active,
-    &-overlay .@{veui-prefix}-option-group-label &-item-active + .@{veui-prefix}-icon,
-    &-item-exact-active {
-      color: @dls-menu-item-font-color-horizontal-current;
-    }
-  
-    &-overlay[ui~="s"] &-item,
-    &[ui~="s"] &-item {
-      font-size: @dls-menu-font-size-s;
-    }
-  
-    &-overlay[ui~="l"] &-item,
-    &[ui~="l"] &-item {
-      font-size: @dls-menu-font-size-l;
+    &.@{veui-prefix}-disabled {
+      background-color: @dls-menu-item-background-color-horizontal-disabled;
+      color: @dls-menu-item-font-color-horizontal-disabled;
     }
   }
-  
+
+  // more button
+  &-more {
+    &-hidden {
+      visibility: hidden;
+      position: absolute;
+    }
+  }
+
+  // top level current item style
+  &-body &-item-exact-active,
+  &-body &-item-active {
+    &:not(.@{veui-prefix}-disabled) {
+      color: @dls-menu-item-font-color-horizontal-current;
+      background-color: @dls-menu-item-background-color-horizontal-current;
+      font-weight: @dls-menu-item-font-weight-current;
+
+      &::after {
+        content: "";
+        .absolute(_, 0, -1px, 0);
+        .size(auto, @dls-menu-indicator-width);
+        background-color: @dls-menu-indicator-color;
+        box-shadow: @dls-menu-item-shadow-horizontal-current;
+        .veui-transition(background-color, box-shadow);
+      }
+
+      &:hover {
+        color: @dls-menu-item-font-color-horizontal-current-hover;
+        background-color: @dls-menu-item-background-color-horizontal-hover;
+        &::after {
+          background-color: @dls-menu-indicator-color-hover;
+        }
+      }
+
+      &.focus-visible {
+        color: @dls-menu-item-font-color-horizontal-current-focus;
+        background-color: @dls-menu-item-background-color-horizontal-focus;
+        &::after {
+          background-color: @dls-menu-indicator-color-focus;
+        }
+      }
+
+      &:active {
+        color: @dls-menu-item-font-color-horizontal-current-active;
+        background-color: @dls-menu-item-background-color-horizontal-active;
+        &::after {
+          background-color: @dls-menu-indicator-color-active;
+        }
+      }
+    }
+  }
+
+  // expand icon in top level items
+  &-expand-icon {
+    .dls-icon-size(@dls-menu-item-icon-size-aux, true);
+    margin-left: @dls-menu-card-target-spacing;
+    transform: rotateZ(90deg);
+    color: inherit;
+    .veui-transition(transform, color);
+  }
+
+  &-item-hover &-expand-icon {
+    transform: rotateZ(-90deg);
+  }
+
+  // top level items of which have expand icon
+  &-body &-expandable {
+    padding: 0 @dls-menu-item-spacing 0 @dls-menu-item-padding-x-horizontal;
+  }
+
+  // apply overlay-shadow styles
+  &-dropdown > .@{veui-prefix}-option-group,
+  &-dropdown &-card {
+    &:extend(._veui-dropdown-overlay all);
+  }
+
+  // card
+  &-overlay &-card {
+    display: flex;
+    padding: @dls-menu-card-padding-x @dls-menu-card-padding-y;
+    background-color: @dls-menu-card-background-color;
+    border-radius: @dls-menu-card-border-radius-m;
+
+    // space between card direct columns
+    & > li + li {
+      margin-left: @dls-menu-card-column-spacing;
+    }
+  }
+
+  &-card &-item:not(&-item-title) {
+    margin-top: @dls-menu-card-item-spacing;
+  }
+
+  &-item-title {
+    color: @dls-menu-card-title-font-color;
+    font-size: @dls-menu-card-title-font-size-m;
+    font-weight: @dls-menu-card-title-font-weight;
+  }
+
+  &-card &-item-has-icon {
+    display: flex;
+    align-items: center;
+
+    // 有 icon 的特殊二级间隔
+    & + ul {
+      padding-left: dls-sum(
+        @dls-menu-card-item-icon-size,
+        @dls-menu-card-target-spacing
+      );
+    }
+  }
+
+  &-title-icon {
+    margin-right: @dls-menu-card-target-spacing;
+    .dls-icon-size(@dls-menu-card-item-icon-size, true);
+  }
+
+  // all active/exact-active items
+  &-overlay .@{veui-prefix}-option-group-label &-item-active,
+  &-overlay .@{veui-prefix}-option-group-label &-item-active + .@{veui-prefix}-icon,
+  &-item-exact-active {
+    color: @dls-menu-item-font-color-horizontal-current;
+  }
+
+  &-overlay[ui~="s"] &-item,
+  &[ui~="s"] &-item {
+    font-size: @dls-menu-font-size-s;
+  }
+
+  &-overlay[ui~="l"] &-item,
+  &[ui~="l"] &-item {
+    font-size: @dls-menu-font-size-l;
+  }
+}

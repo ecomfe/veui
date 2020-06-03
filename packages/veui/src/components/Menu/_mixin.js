@@ -72,7 +72,9 @@ export default {
       return map(items, item => {
         let { to, name, children } = item
         if (name == null && to == null) {
-          throw new Error('[veui-menu] `name` or `to` of menuitem is required!')
+          throw new Error(
+            '[veui-menu] `name` or `to` of menu item is required!'
+          )
         }
 
         item = { ...item }
@@ -135,7 +137,7 @@ export default {
       if (disabled) return
       if (to) {
         this.realActive = name
-        this.$emit('activate', name)
+        this.$emit('activate', item)
         if (closePopout && typeof this.close === 'function') {
           this.close()
         }
@@ -146,7 +148,9 @@ export default {
     },
     handleGroupLabelClick (group, closeMenu) {
       this.activateItem(group, true)
-      if (group.to) closeMenu()
+      if (group.to) {
+        closeMenu()
+      }
       this.$emit('click', group)
     }
   }
