@@ -316,6 +316,7 @@
     & > .@{veui-prefix}-option-group {
       &:extend(._veui-dropdown-overlay all);
       margin: 0 @dls-option-dropdown-target-spacing;
+      transform-origin: 0 0;
     }
 
     .@{veui-prefix}-option {
@@ -323,6 +324,13 @@
       &-group-label {
         position: relative;
       }
+    }
+  }
+  &-overlay.@{veui-prefix}-overlay-enter,
+  &-overlay.@{veui-prefix}-overlay-leave-to {
+    & > .@{veui-prefix}-option-group-options,
+    & > .@{veui-prefix}-option-group {
+      transform: scaleX(0);
     }
   }
 
