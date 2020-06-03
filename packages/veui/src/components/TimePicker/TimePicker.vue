@@ -51,8 +51,9 @@
         [$c('time-picker-overlay')]: true
       })
     "
-    :open="expanded"
+    :local="realOverlayOptions.local"
     :options="realOverlayOptions"
+    :open="expanded"
     @afteropen="scrollSelectedToCenter(0)"
   >
     <div

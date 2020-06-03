@@ -95,6 +95,12 @@ const OptionGroup = {
         this.labelContent
       )
     },
+    realLocal () {
+      if (this.realOverlayOptions.local != null) {
+        return !!this.realOverlayOptions.local
+      }
+      return !!this.select.realOverlayOptions.local
+    },
     isInput () {
       return isType(this.select, 'input')
     },
@@ -315,6 +321,7 @@ const OptionGroup = {
               this.isInput ? this.menu.$refs.box || this.menu.$el : 'button'
             }
             open={this.expanded}
+            local={this.realLocal}
             options={this.realOverlayOptions}
             overlayClass={this.mergeOverlayClass(this.$c('option-group-box'))}
             autofocus

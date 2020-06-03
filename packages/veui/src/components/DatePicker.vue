@@ -75,8 +75,9 @@
     ref="overlay"
     target="button"
     :open="expanded"
-    :options="realOverlayOptions"
     :overlay-class="overlayClass"
+    :local="realOverlayOptions.local"
+    :options="realOverlayOptions"
     :priority="overlayPriority"
     position="top-start"
     autofocus
