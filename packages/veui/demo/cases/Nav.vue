@@ -1,17 +1,21 @@
 <template>
 <article class="veui-nav-demo">
   <h1><code>&lt;veui-nav&gt;</code></h1>
-  <div>active: {{ active1 }}</div>
+  <div>active: {{ active }}</div>
   <section>
     <h3>small nav</h3>
     <veui-nav
       :items="items"
+      :active.sync="active"
       ui="s"
     />
   </section>
   <section>
     <h3>medium nav</h3>
-    <veui-nav :items="items"/>
+    <veui-nav
+      :items="items"
+      :active.sync="active"
+    />
   </section>
   <section>
     <h3>large nav</h3>
@@ -28,6 +32,10 @@
     />
   </section>
   <section>
+    <h3>uncontrolled nav</h3>
+    <veui-nav :items="items"/>
+  </section>
+  <section>
     <h3>item-label scoped slot</h3>
     <veui-nav :items="items">
       <template
@@ -42,7 +50,6 @@
 
 <script>
 import { Nav } from 'veui'
-import { omit } from 'lodash'
 import 'veui-theme-dls-icons/clock'
 import 'veui-theme-dls-icons/envelope'
 import 'veui-theme-dls-icons/eye'
@@ -155,14 +162,9 @@ export default {
         ]
       }
     ]
-    let items2 = items.map(i => omit(i, 'icon'))
     return {
-      expanded: [],
-      active1: null,
-      active2: undefined,
-      collapsed: undefined,
-      items,
-      items2
+      active: null,
+      items
     }
   }
 }
