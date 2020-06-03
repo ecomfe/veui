@@ -51,6 +51,185 @@
           </slot>
         </div>
       </slot>
+      <veui-overlay
+        v-if="!!item.children"
+        :overlay-class="$c('nav-overlay')"
+        :open="isHover(item)"
+        :target="item.name"
+        position="bottom-center"
+      >
+        <div
+          v-outside="{
+            refs: outsideRefs,
+            delay: 100,
+            trigger: 'hover',
+            handler: close
+          }"
+          :class="$c('nav-dropdown')"
+        >
+          <ul
+            v-if="item.position === 'card'"
+            :class="{
+              [$c('nav-card')]: true
+            }"
+          >
+            <li
+              v-for="sub in item.children"
+              :key="sub.name"
+              :class="$c('nav-card-item')"
+              @click="handleItemClick(sub)"
+            >
+              <slot
+                name="item"
+                v-bind="sub"
+              >
+                <div
+                  :class="{
+                    [$c('nav-item')]: true,
+                    [$c('nav-item-title')]: true,
+                    [$c('nav-item-has-icon')]: sub.icon,
+                    ...itemClass(sub)
+                  }"
+                >
+                  <slot
+                    v-if="
+                      sub.icon ||
+                        $slots['title-icon'] ||
+                        $scopedSlots['title-icon']
+                    "
+                    name="title-icon"
+                  >
+                    <veui-icon
+                      :class="$c('nav-title-icon')"
+                      :name="sub.icon"
+                    />
+                  </slot>
+                  <slot
+                    name="item-label"
+                    v-bind="sub"
+                  >
+                    <veui-link
+                      v-bind="pickLinkProps(sub)"
+                      :class="{
+                        [$c('nav-link')]: true
+                      }"
+                    >{{ sub.label }}</veui-link>
+                  </slot>
+                </div>
+              </slot>
+              <ul
+                v-if="hasChildren(sub)"
+                role="group"
+              >
+                <li
+                  v-for="leaf in sub.children"
+                  :key="leaf.name"
+                  @click="handleItemClick(leaf)"
+                >
+                  <slot
+                    name="item"
+                    v-bind="leaf"
+                  >
+                    <div
+                      :class="{
+                        [$c('nav-item')]: true,
+                        ...itemClass(leaf)
+                      }"
+                    >
+                      <slot
+                        name="item-label"
+                        v-bind="leaf"
+                      >
+                        <veui-link
+                          v-bind="pickLinkProps(leaf)"
+                          :class="{
+                            [$c('nav-link')]: true
+                          }"
+                        >
+                          {{ leaf.label }}
+                        </veui-link>
+                      </slot>
+                    </div>
+                  </slot>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <veui-option-group
+            v-else
+            :overlay-class="$c('nav-overlay')"
+            :options="item.children"
+            position="popup"
+            trigger="hover"
+            option-tag="div"
+          >
+            <template
+              slot="option"
+              slot-scope="option"
+            >
+              <slot
+                name="item"
+                v-bind="option"
+              >
+                <div
+                  :class="{
+                    [$c('nav-item')]: true,
+                    ...itemClass(option)
+                  }"
+                  @click="handleItemClick(option)"
+                >
+                  <slot
+                    name="item-label"
+                    v-bind="option"
+                  >
+                    <veui-link
+                      v-bind="pickLinkProps(option)"
+                      :class="{
+                        [$c('nav-link')]: true
+                      }"
+                    >
+                      {{ option.label }}
+                    </veui-link>
+                  </slot>
+                </div>
+              </slot>
+            </template>
+            <template
+              slot="option-group-label"
+              slot-scope="group"
+            >
+              <slot
+                name="item"
+                v-bind="group"
+              >
+                <div
+                  :class="{
+                    [$c('nav-item')]: true,
+                    ...itemClass(group.option)
+                  }"
+                  @click="
+                    handleGroupLabelClick(group.option, group.closeMenu)
+                  "
+                >
+                  <slot
+                    name="item-label"
+                    v-bind="group"
+                  >
+                    <veui-link
+                      v-bind="pickLinkProps(group.option, true)"
+                      :class="{
+                        [$c('nav-link')]: true
+                      }"
+                    >
+                      {{ group.label }}
+                    </veui-link>
+                  </slot>
+                </div>
+              </slot>
+            </template>
+          </veui-option-group>
+        </div>
+      </veui-overlay>
     </li>
     <li
       ref="more"
@@ -63,184 +242,6 @@
       ...
     </li>
   </ul>
-
-  <veui-overlay
-    v-if="!!hoverItem && !!hoverItem.children"
-    :overlay-class="$c('nav-overlay')"
-    :open="hasChildren(hoverItem)"
-    :target="hoverItem.name"
-    position="bottom-center"
-  >
-    <div
-      v-outside="{
-        refs: outsideRefs,
-        delay: 100,
-        trigger: 'hover',
-        handler: close
-      }"
-      :class="$c('nav-dropdown')"
-    >
-      <ul
-        v-if="hoverItem.position === 'card'"
-        :class="{
-          [$c('nav-card')]: true
-        }"
-      >
-        <li
-          v-for="sub in hoverItem.children"
-          :key="sub.name"
-          :class="$c('nav-card-item')"
-          @click="handleItemClick(sub)"
-        >
-          <slot
-            name="item"
-            v-bind="sub"
-          >
-            <div
-              :class="{
-                [$c('nav-item')]: true,
-                [$c('nav-item-title')]: true,
-                [$c('nav-item-has-icon')]: sub.icon,
-                ...itemClass(sub)
-              }"
-            >
-              <slot
-                v-if="
-                  sub.icon ||
-                    $slots['title-icon'] ||
-                    $scopedSlots['title-icon']
-                "
-                name="title-icon"
-              >
-                <veui-icon
-                  :class="$c('nav-title-icon')"
-                  :name="sub.icon"
-                />
-              </slot>
-              <slot
-                name="item-label"
-                v-bind="sub"
-              >
-                <veui-link
-                  v-bind="pickLinkProps(sub)"
-                  :class="{
-                    [$c('nav-link')]: true
-                  }"
-                >{{ sub.label }}</veui-link>
-              </slot>
-            </div>
-          </slot>
-          <ul
-            v-if="hasChildren(sub)"
-            role="group"
-          >
-            <li
-              v-for="leaf in sub.children"
-              :key="leaf.name"
-              @click="handleItemClick(leaf)"
-            >
-              <slot
-                name="item"
-                v-bind="leaf"
-              >
-                <div
-                  :class="{
-                    [$c('nav-item')]: true,
-                    ...itemClass(leaf)
-                  }"
-                >
-                  <slot
-                    name="item-label"
-                    v-bind="leaf"
-                  >
-                    <veui-link
-                      v-bind="pickLinkProps(leaf)"
-                      :class="{
-                        [$c('nav-link')]: true
-                      }"
-                    >
-                      {{ leaf.label }}
-                    </veui-link>
-                  </slot>
-                </div>
-              </slot>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <veui-option-group
-        v-else
-        :overlay-class="$c('nav-overlay')"
-        :options="hoverItem.children"
-        position="popup"
-        trigger="hover"
-        option-tag="div"
-      >
-        <template
-          slot="option"
-          slot-scope="item"
-        >
-          <slot
-            name="item"
-            v-bind="item"
-          >
-            <div
-              :class="{
-                [$c('nav-item')]: true,
-                ...itemClass(item)
-              }"
-              @click="handleItemClick(item)"
-            >
-              <slot
-                name="item-label"
-                v-bind="item"
-              >
-                <veui-link
-                  v-bind="pickLinkProps(item)"
-                  :class="{
-                    [$c('nav-link')]: true
-                  }"
-                >
-                  {{ item.label }}
-                </veui-link>
-              </slot>
-            </div>
-          </slot>
-        </template>
-        <template
-          slot="option-group-label"
-          slot-scope="group"
-        >
-          <slot
-            name="item"
-            v-bind="group"
-          >
-            <div
-              :class="{
-                [$c('nav-item')]: true,
-                ...itemClass(group.option)
-              }"
-              @click="handleGroupLabelClick(group.option, group.closeMenu)"
-            >
-              <slot
-                name="item-label"
-                v-bind="group"
-              >
-                <veui-link
-                  v-bind="pickLinkProps(group.option, true)"
-                  :class="{
-                    [$c('nav-link')]: true
-                  }"
-                >
-                  {{ group.label }}
-                </veui-link>
-              </slot>
-            </div>
-          </slot>
-        </template>
-      </veui-option-group>
-    </div>
-  </veui-overlay>
 </div>
 </template>
 
@@ -278,19 +279,19 @@ export default {
     // items 和 active 任一变化，重新计算再渲染下
     this.$watch(
       () => [this.items, this.realActive],
-      () => this.renderAllThenUpdateLayout()
+      this.renderAllThenUpdateLayout
     )
   },
   mounted () {
     this.updateLayout()
   },
   methods: {
-    hasChildren ({ children } = {}) {
-      return Array.isArray(children) && !!children.length
+    hasChildren (item) {
+      return !!item && Array.isArray(item.children) && !!item.children.length
     },
     isHover ({ name }) {
       // hover dropdown 时，icon 也要处于 hover 状态
-      return this.hoverItem && this.hoverItem.name === name
+      return !!this.hoverItem && this.hoverItem.name === name
     },
     itemClass (item) {
       let { name, disabled } = item
