@@ -127,7 +127,8 @@
         .size(auto, @dls-menu-indicator-width);
         background-color: @dls-menu-indicator-color;
         box-shadow: @dls-menu-item-shadow-horizontal-current;
-        .veui-transition(background-color, box-shadow);
+        opacity: 1;
+        .veui-transition(background-color, box-shadow, opacity);
       }
 
       &:hover {
