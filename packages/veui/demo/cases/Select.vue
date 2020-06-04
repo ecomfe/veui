@@ -341,58 +341,79 @@
   </section>
   <section>
     <h2>复杂自定义样式：</h2>
-    <veui-select
-      v-model="complex"
-      multiple
-      clearable
-      searchable
-      :options="complexResult"
-      @input="handleSearch"
-    >
-      <template v-if="complexResult">
-        <veui-option
-          v-for="o in complexResult"
-          :key="o.value"
-          :label="o.label"
-          :value="o.value"
-        />
-      </template>
-      <template v-else>
-        <veui-option-group
-          v-for="(group, i) in complexData"
-          :key="i"
-          :label="group.label"
-          position="popup"
-        >
-          <template v-for="(g, j) in group.options">
-            <veui-option-group
-              v-if="g.options"
-              :key="j"
-              position="popup"
-              :label="g.label"
-              :options="g.options"
-            />
-            <veui-option
-              v-else
-              :key="j"
-              :label="g.label"
-              :value="g.value"
-            />
-          </template>
-          <template
-            v-if="group.label === '业务点'"
-            #before
+    <section>
+      <veui-select
+        v-model="complex"
+        multiple
+        clearable
+        searchable
+        :options="complexResult"
+        @input="handleSearch"
+      >
+        <template v-if="complexResult">
+          <veui-option
+            v-for="o in complexResult"
+            :key="o.value"
+            :label="o.label"
+            :value="o.value"
+          />
+        </template>
+        <template v-else>
+          <veui-option-group
+            v-for="(group, i) in complexData"
+            :key="i"
+            :label="group.label"
+            position="popup"
           >
-            <div class="note">
-              <veui-icon name="info-circle"/>
-              <div class="text">
-                此处仅显示业务点 Top n，您可通过搜索添加其它业务点标签。
+            <template v-for="(g, j) in group.options">
+              <veui-option-group
+                v-if="g.options"
+                :key="j"
+                position="popup"
+                :label="g.label"
+                :options="g.options"
+              />
+              <veui-option
+                v-else
+                :key="j"
+                :label="g.label"
+                :value="g.value"
+              />
+            </template>
+            <template
+              v-if="group.label === '业务点'"
+              #before
+            >
+              <div class="note">
+                <veui-icon name="info-circle"/>
+                <div class="text">
+                  此处仅显示业务点 Top n，您可通过搜索添加其它业务点标签。
+                </div>
               </div>
-            </div>
-          </template>
-        </veui-option-group>
-      </template>
-    </veui-select>
+            </template>
+          </veui-option-group>
+        </template>
+      </veui-select>
+    </section>
+    <section>
+      <veui-select
+        v-model="complex"
+        multiple
+      >
+        <template v-if="loaded">
+          <veui-option-group
+            label="Foo"
+            position="popup"
+          >
+            <template #before>NOTE Foo</template>
+            <veui-option
+              label="Foo1"
+              value="foo1"
+            />
+          </veui-option-group>
+        </template>
+      </veui-select>
+    </section>
   </section>
   <section style="margin-top:500px;">
     <h2>可搜索分组样式：</h2>
@@ -525,6 +546,7 @@ export default {
       disabled: true,
       selected: true,
       complex: ['1', '2'],
+      loaded: false,
       icon: true,
       defaultValue: null,
       defaultMultiValue: null,
@@ -742,6 +764,10 @@ export default {
         bus.$emit('log', child.$el.getAttribute('ui'))
       })
     })
+
+    setTimeout(() => {
+      this.loaded = true
+    }, 3000)
   },
   methods: {
     change (value) {
