@@ -12,15 +12,38 @@
       v-for="item in realItems"
       :key="item.name"
       :ref="item.name"
+      :class="{
+        [$c('nav-more-hidden')]:
+          isMore(item) && moreBtnPosition === normalizedItems.length
+      }"
     >
       <slot
+        v-if="isMore(item)"
+        name="more"
+      >
+        <div
+          :class="{
+            [$c('nav-more')]: true,
+            [$c('nav-item-hover')]: isHover('more'),
+            ...itemClass(item)
+          }"
+          tabindex="0"
+          @mouseenter="handleItemHover(item)"
+        >
+          <slot name="more-icon">
+            <veui-icon :name="icons.more"/>
+          </slot>
+        </div>
+      </slot>
+      <slot
+        v-else
         name="item"
         v-bind="item"
       >
         <div
           :class="{
             [$c('nav-item')]: true,
-            [$c('nav-item-hover')]: isHover(item),
+            [$c('nav-item-hover')]: isHover(item.name),
             [$c('nav-expandable')]: hasChildren(item),
             ...itemClass(item)
           }"
@@ -54,7 +77,7 @@
       <veui-overlay
         v-if="!!item.children"
         :overlay-class="$c('nav-overlay')"
-        :open="isHover(item)"
+        :open="isHover(item.name)"
         :target="item.name"
         position="bottom-center"
       >
@@ -231,16 +254,6 @@
         </div>
       </veui-overlay>
     </li>
-    <li
-      ref="more"
-      :class="{
-        [$c('nav-more')]: true,
-        [$c('nav-more-hidden')]: moreBtnPosition === normalizedItems.length
-      }"
-      @mouseenter="handleMoreBtnHover"
-    >
-      ...
-    </li>
   </ul>
 </div>
 </template>
@@ -262,17 +275,23 @@ export default {
     }
   },
   computed: {
+    // more 按钮下拉的 menu items
+    restItems () {
+      return this.normalizedItems.slice(this.moreBtnPosition)
+    },
     // 直接渲染的 menu items
     realItems () {
       let items = this.normalizedItems
       if (this.moreBtnPosition !== items.length) {
-        return items.slice(0, this.moreBtnPosition)
+        items = items.slice(0, this.moreBtnPosition)
       }
-      return items
-    },
-    // more 按钮下拉的 menu items
-    restItems () {
-      return this.normalizedItems.slice(this.moreBtnPosition)
+      return [
+        ...items,
+        {
+          name: 'more',
+          children: this.restItems
+        }
+      ]
     }
   },
   created () {
@@ -289,11 +308,21 @@ export default {
     hasChildren (item) {
       return !!item && Array.isArray(item.children) && !!item.children.length
     },
-    isHover ({ name }) {
+    isMore ({ name }) {
+      return name === 'more'
+    },
+    isHover (name) {
       // hover dropdown 时，icon 也要处于 hover 状态
       return !!this.hoverItem && this.hoverItem.name === name
     },
     itemClass (item) {
+      if (this.isMore(item)) {
+        return {
+          [this.$c('nav-item-active')]: this.activeItems.some(i =>
+            this.restItems.some(({ name }) => i.name === name)
+          )
+        }
+      }
       let { name, disabled } = item
       return {
         [this.$c('disabled')]: disabled,
@@ -312,7 +341,7 @@ export default {
     },
     // 获取何处放置 more 按钮
     getMoreBtnPosition () {
-      let moreWidth = this.$refs.more.offsetWidth
+      let moreWidth = this.$refs.more[0].offsetWidth
       let { clientWidth } = this.$refs.body
       let len = this.normalizedItems.length
       while (len--) {
@@ -348,13 +377,6 @@ export default {
     handleItemHover (item) {
       this.hoverItem = item
       this.$set(this.outsideRefs, 0, item.name)
-    },
-    handleMoreBtnHover () {
-      this.hoverItem = {
-        name: 'more',
-        children: this.restItems
-      }
-      this.$set(this.outsideRefs, 0, 'more')
     },
     handleItemClick (item) {
       let { disabled } = item

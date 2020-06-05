@@ -20,7 +20,15 @@
   &-item {
     font-size: @dls-menu-font-size-horizontal-m;
 
-    // implemention of item inherits styles of items
+    .@{veui-prefix}-nav-link:hover {
+      text-decoration: none;
+    }
+  }
+
+  // implemention of item inherits styles of items
+  &-body &-item,
+  &-overlay &-item-exact-active,
+  &-overlay .@{veui-prefix}-option-group &-item {
     & > * {
       color: inherit;
       font-weight: inherit;
@@ -29,22 +37,15 @@
     }
   }
 
-  // default implemention: Link
-  &-item &-link {
-    &::before {
-      content: "";
-      .absolute(0);
-    }
-
-    &:hover {
-      text-decoration: none;
-      color: inherit;
-    }
+  &-body &-item &-link::before,
+  &-overlay .@{veui-prefix}-option-group &-item &-link::before {
+    // 非 card 下的 link 盖满整个 item
+    content: "";
+    .absolute(0);
   }
 
   &-overlay .@{veui-prefix}-option-group-label,
   &-overlay .@{veui-prefix}-option,
-  &-card &-item,
   &-body &-item {
     position: relative;
   }
@@ -74,14 +75,11 @@
         .veui-transition(background-color, box-shadow, opacity);
       }
 
-      &:hover {
+      &.@{veui-prefix}-nav-item-hover {
         background-color: @dls-menu-item-background-color-horizontal-hover;
         color: @dls-menu-item-font-color-horizontal-hover;
 
         &::after {
-          content: "";
-          .absolute(_, 0, -1px, 0);
-          .size(auto, @dls-menu-indicator-width);
           background-color: @dls-menu-indicator-color-hover;
           box-shadow: @dls-menu-item-shadow-horizontal-current;
           opacity: 1;
@@ -93,7 +91,7 @@
         color: @dls-menu-item-font-color-horizontal-focus;
       }
 
-      &:active {
+      &:not(.@{veui-prefix}-nav-more):active {
         background-color: @dls-menu-item-background-color-horizontal-active;
         color: @dls-menu-item-font-color-horizontal-active;
       }
@@ -147,7 +145,7 @@
         }
       }
 
-      &:active {
+      &:not(.@{veui-prefix}-nav-more):active {
         color: @dls-menu-item-font-color-horizontal-current-active;
         background-color: @dls-menu-item-background-color-horizontal-active;
         &::after {
