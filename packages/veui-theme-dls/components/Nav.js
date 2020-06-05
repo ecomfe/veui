@@ -1,10 +1,12 @@
 import 'veui-theme-dls-icons/chevron-right'
+import 'veui-theme-dls-icons/ellipsis'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      expand: 'chevron-right'
+      expand: 'chevron-right',
+      more: 'ellipsis'
     },
     ui: {
       size: {
