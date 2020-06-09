@@ -108,6 +108,7 @@ export default {
             role="cell"
             {...data}
             class={{
+              [this.$c('table-cell-select')]: true,
               [this.$c('table-cell-sticky-left')]: table.scrollableX
             }}
             style={
@@ -145,6 +146,7 @@ export default {
           <td
             role="cell"
             class={{
+              [this.$c('table-cell-expand')]: true,
               [this.$c('table-cell-sticky-left')]: table.scrollableX
             }}
             style={
@@ -219,14 +221,19 @@ export default {
       let { table } = this
       let isSubRow = !!subItem
       let item = subItem || table.data[index]
-      return table.realColumns.map(col => {
+      let { realColumns } = table
+
+      return realColumns.map((col, i) => {
         let data = this.getCellSpan(col)
         return data ? (
           <td
             class={{
               [this.$c(`table-cell-${col.align}`)]: !!col.align,
               [this.$c(`table-cell-sticky-${col.fixed}`)]:
-                table.scrollableX && col.fixed
+                table.scrollableX && col.fixed,
+              [this.$c('table-cell-first')]:
+                i === 0 && !table.selectable && !table.expandable,
+              [this.$c('table-cell-last')]: i === realColumns.length - 1
             }}
             style={
               table.scrollableX && col.fixed
