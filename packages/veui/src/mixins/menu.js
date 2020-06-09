@@ -23,8 +23,12 @@ export default {
       index,
       renderLabel:
         this.$scopedSlots.label || (() => this.$slots.label || label),
-      renderBefore: () => this.$slots.before,
-      renderAfter: () => this.$slots.after
+      renderBefore: () =>
+        this.$scopedSlots.before
+          ? this.$scopedSlots.before()
+          : this.$slots.before,
+      renderAfter: () =>
+        this.$scopedSlots.after ? this.$scopedSlots.after() : this.$slots.after
     })
   },
   destroyed () {

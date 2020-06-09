@@ -524,8 +524,8 @@ describe('components/Select/Select', () => {
         },
         template: `
           <veui-select :options="options">
-            <template v-slot:option-label="{ label }">{{ label }} - 🤘</template>
-            <template v-slot:group-label="{ label }">{{ label }} - 🤞</template>
+            <template #option-label="{ label }">{{ label }} - 🤘</template>
+            <template #group-label="{ label }">{{ label }} - 🤞</template>
           </veui-select>`
       },
       {

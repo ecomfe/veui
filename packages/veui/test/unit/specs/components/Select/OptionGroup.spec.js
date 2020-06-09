@@ -202,16 +202,15 @@ describe('components/Select/OptionGroup', () => {
           'veui-option': Option
         },
         template: `
-        <veui-select>
-          <veui-option-group label="A" position="popup" overlay-class="my-group">
-            <veui-option value="a0" label="A.0"/>
-            <veui-option value="a1" label="A.1"/>
-            <veui-option value="a2" label="A.2"/>
-            <template #before>BEFORE</template>
-            <template #after>AFTER</template>
-          </veui-option-group>
-        </veui-select>
-      `
+          <veui-select>
+            <veui-option-group label="A" position="popup" overlay-class="my-group">
+              <veui-option value="a0" label="A.0"/>
+              <veui-option value="a1" label="A.1"/>
+              <veui-option value="a2" label="A.2"/>
+              <template #before><span class="before"></span></template>
+              <template #after><span class="after"></span></template>
+            </veui-option-group>
+          </veui-select>`
       },
       {
         sync: false,
@@ -228,11 +227,88 @@ describe('components/Select/OptionGroup', () => {
       .trigger('click')
     await wrapper.vm.$nextTick()
 
-    let options = wrapper.find(
-      '.veui-option-group-options[aria-expanded="true"]'
+    expect(
+      wrapper
+        .find('.veui-option-group-options[aria-expanded="true"] .before')
+        .exists()
+    ).to.equal(true)
+    expect(
+      wrapper
+        .find('.veui-option-group-options[aria-expanded="true"] .after')
+        .exists()
+    ).to.equal(true)
+
+    wrapper.destroy()
+  })
+
+  it('should render `before` and `after` slot after embedded option selected', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select,
+          'veui-option-group': OptionGroup,
+          'veui-option': Option
+        },
+        template: `
+          <veui-select
+            v-model="complex"
+            multiple
+          >
+            <template v-if="loaded">
+              <veui-option-group
+                label="Foo"
+                position="popup"
+              >
+                <template #before><span class="before"></span></template>
+                <template #after><span class="after"></span></template>
+                <veui-option
+                  label="Foo1"
+                  value="foo1"
+                />
+              </veui-option-group>
+            </template>
+          </veui-select>`,
+        data () {
+          return {
+            complex: ['1', '2'],
+            loaded: false
+          }
+        },
+        mounted () {
+          this.loaded = true
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
     )
-    expect(options.element.firstChild.nodeValue).to.equal('BEFORE')
-    expect(options.element.lastChild.nodeValue).to.equal('AFTER')
+
+    let { vm } = wrapper
+    wrapper.find(Select).vm.expanded = true
+
+    await wrapper.vm.$nextTick()
+
+    wrapper
+      .find(
+        '.veui-option-group:not([aria-hidden="true"]) > .veui-option-group > .veui-option-group-button'
+      )
+      .trigger('click')
+    await wrapper.vm.$nextTick()
+
+    vm.complex.push('foo1')
+    await wrapper.vm.$nextTick()
+
+    expect(
+      wrapper
+        .find('.veui-option-group-options[aria-expanded="true"] .before')
+        .exists()
+    ).to.equal(true)
+    expect(
+      wrapper
+        .find('.veui-option-group-options[aria-expanded="true"] .after')
+        .exists()
+    ).to.equal(true)
 
     wrapper.destroy()
   })
