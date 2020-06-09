@@ -765,9 +765,7 @@ export default {
       })
     })
 
-    setTimeout(() => {
-      this.loaded = true
-    }, 3000)
+    this.loaded = true
   },
   methods: {
     change (value) {
