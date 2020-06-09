@@ -20,6 +20,9 @@ config.defaults(
         values: ['m', 's'],
         inherit: true,
         default: 'm'
+      },
+      density: {
+        values: ['compact', 'normal', 'loose']
       }
     },
     parts: {
