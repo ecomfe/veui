@@ -42,7 +42,8 @@ export default {
             <td
               class={{
                 [this.$c('table-no-data')]: true,
-                [this.$c('table-cell-hero')]: true
+                [this.$c('table-cell-hero')]: true,
+                [this.$c('table-cell-first')]: true
               }}
               colspan={table.viewColumnCount}
               role="cell"
