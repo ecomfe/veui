@@ -60,7 +60,6 @@
   }
 
   &:hover,
-  &.focus-visible,
   &[data-focus-visible-added] {
     background-color: @dls-button-background-color-normal-hover;
   }
@@ -94,7 +93,6 @@
       background-color: @dls-button-background-color-basic-hover;
     }
 
-    &.focus-visible,
     &[data-focus-visible-added] {
       background-color: @dls-button-background-color-basic-focus;
     }
@@ -123,7 +121,6 @@
       background-color: @dls-button-background-color-strong-hover;
     }
 
-    &.focus-visible,
     &[data-focus-visible-added] {
       background-color: @dls-button-background-color-strong-focus;
     }
@@ -152,7 +149,6 @@
       background-color: @dls-button-background-color-primary-hover;
     }
 
-    &.focus-visible,
     &[data-focus-visible-added] {
       background-color: @dls-button-background-color-primary-focus;
     }
@@ -181,7 +177,6 @@
       background-color: @dls-button-background-color-translucent-hover;
     }
 
-    &.focus-visible,
     &[data-focus-visible-added] {
       background-color: @dls-button-background-color-translucent-focus;
     }
@@ -206,7 +201,7 @@
     border: none;
     padding: 0;
     height: auto;
-    line-height: 1;
+    line-height: inherit;
     background-color: @dls-button-background-color-text;
     color: @dls-button-font-color-text;
 
@@ -223,8 +218,8 @@
       color: @dls-button-font-color-text-hover;
     }
 
-    &.focus-visible,
     &[data-focus-visible-added] {
+      border: none;
       box-shadow: none;
       background-color: @dls-button-background-color-text-focus;
       color: @dls-button-font-color-text-focus;
@@ -254,7 +249,6 @@
         color: @dls-button-font-color-text-strong-hover;
       }
 
-      &.focus-visible,
       &[data-focsu-visible-added] {
         color: @dls-button-font-color-text-strong-focus;
       }
@@ -275,7 +269,6 @@
         color: @dls-button-font-color-text-aux-hover;
       }
 
-      &.focus-visible,
       &[data-focsu-visible-added] {
         color: @dls-button-font-color-text-aux-focus;
       }
@@ -290,7 +283,6 @@
     }
   }
 
-  &.focus-visible,
   &[data-focus-visible-added] {
     .dls-focus-ring(@dls-button-border-color-focus, @dls-button-shadow-focus);
   }
