@@ -80,12 +80,14 @@ export default {
               return (
                 <th
                   class={{
-                    [this.$c(`table-cell-center`)]: !isLeaf,
+                    [this.$c('table-cell-center')]: !isLeaf,
                     [this.$c(`table-cell-${col.align}`)]: !!col.align && isLeaf,
                     [this.$c('table-cell-interactive')]:
                       !!col.sortable && isLeaf,
                     [this.$c(`table-cell-sticky-${col.fixed}`)]:
-                      table.scrollableX && col.fixed
+                      table.scrollableX && col.fixed,
+                    [this.$c('table-cell-first')]: col.first,
+                    [this.$c('table-cell-last')]: col.last
                   }}
                   style={
                     table.scrollableX
@@ -141,6 +143,7 @@ export default {
                     : null
                 }
                 aria-hidden="true"
+                role="columnheader"
                 rowspan={depth > 1 ? depth : null}
               />
             ) : null}

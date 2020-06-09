@@ -3,7 +3,9 @@
   v-resize="updateLayout"
   :class="{
     [$c('table')]: true,
-    [$c('table-bordered')]: realBordered,
+    [$c('table-bordered')]: headerBordered || bodyBordered,
+    [$c('table-has-bordered-header')]: headerBordered,
+    [$c('table-has-bordered-body')]: bodyBordered,
     [$c('table-hit-top')]: hit.top,
     [$c('table-hit-right')]: hit.right,
     [$c('table-hit-bottom')]: hit.bottom,
@@ -292,7 +294,11 @@ export default {
               for (let i = 0; i < rowspan; i++) {
                 rows[depth + i].push({
                   ...cell,
-                  placeholder: i > 0
+                  placeholder: i > 0,
+                  first:
+                    rows[depth + i].length === 0 &&
+                    !this.selectable &&
+                    !this.expandable
                 })
               }
             } else {
@@ -306,7 +312,9 @@ export default {
                   ...col,
                   colspan,
                   width: rows[rows.length - 1][index + i].width,
-                  placeholder: i > 0
+                  placeholder: i > 0,
+                  first:
+                    row.length === 0 && !this.selectable && !this.expandable
                 }
                 if (col.fixed === 'left') {
                   cell.offset = sumWidths([
@@ -343,6 +351,10 @@ export default {
             if (prev && !prev.fixed) {
               cell.edge = true
             }
+          }
+
+          if (i === colCount - 1 && !cell.placeholder) {
+            cell.last = true
           }
         }
       })
@@ -416,6 +428,12 @@ export default {
       return this.scrollableX && (this.hasFixedLeft || this.data.length > 0)
     },
     realBordered () {
+      return this.bordered || this.hasSpan
+    },
+    headerBordered () {
+      return this.bordered || this.headerDepth > 0 || this.bodyBordered
+    },
+    bodyBordered () {
       return this.bordered || this.hasSpan
     },
     realKeys () {

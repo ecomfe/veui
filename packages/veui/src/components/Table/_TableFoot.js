@@ -13,6 +13,7 @@ export default {
         <tr>
           {this.$slots.default ? (
             <th
+              role="cell"
               colspan={table.viewColumnCount}
               class={{
                 [this.$c('table-cell-hero')]: true
@@ -31,6 +32,7 @@ export default {
             (table.selectable
               ? [
                 <th
+                  role="cell"
                   class={{
                     [this.$c('table-cell-select')]: true,
                     [this.$c('table-cell-sticky-left')]: table.needFixLeft

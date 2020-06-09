@@ -33,7 +33,7 @@
   </section>
   <section>
     <veui-table
-      ui="s"
+      ui="s compact"
       :scroll="{
         x: 1280,
         y: 300
@@ -140,6 +140,7 @@
   </section>
   <section class="container">
     <veui-table
+      ui="loose"
       :data="data"
       :column-filter="columns"
       :key-field="selectSpanRow ? 'group' : 'id'"
@@ -197,7 +198,6 @@
       selectable
       expandable
       :scroll="{ x: 1024 }"
-      bordered
     >
       <veui-table-column
         field="id"
@@ -331,7 +331,6 @@
   </section>
   <section class="container">
     <veui-table
-      bordered
       key-field="id"
       :data="data"
     >
@@ -346,7 +345,6 @@
   <section class="container">
     <veui-table
       :data="items"
-      bordered
       :scroll="{ x: 1200 }"
     >
       <veui-table-column
@@ -685,14 +683,14 @@ export default {
 <style lang="less" scoped>
 section {
   margin-bottom: 20px;
+
+  .veui-button + .veui-button {
+    margin-left: 20px;
+  }
 }
 
 label {
   margin-right: 10px;
-}
-
-.veui-button + .veui-button {
-  margin-left: 20px;
 }
 
 .veui-table {
