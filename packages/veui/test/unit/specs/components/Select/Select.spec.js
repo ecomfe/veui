@@ -544,4 +544,51 @@ describe('components/Select/Select', () => {
     expect(groups.at(0).text()).to.equal('选项1 - 🤞')
     wrapper.destroy()
   })
+
+  it('should update correctly with dynamic options and inline option components', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select,
+          'veui-option': Option
+        },
+        data () {
+          return {
+            options: [
+              { label: 'Foo', value: 'foo' },
+              { label: 'Bar', value: 'bar' }
+            ]
+          }
+        },
+        template: `
+          <veui-select>
+            <veui-option
+              v-for="o in options"
+              :label="o.label"
+              :value="o.value"
+              :key="o.value"
+            />
+          </veui-select>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+
+    vm.options = [
+      { label: 'Foo', value: 'foo' },
+      { label: 'Baz', value: 'baz' }
+    ]
+
+    await vm.$nextTick()
+    let options = wrapper.findAll(OPTION_ITEM)
+    expect(options.at(1).exists()).to.equal(true)
+    expect(options.at(1).text()).to.equal('Baz')
+
+    wrapper.destroy()
+  })
 })

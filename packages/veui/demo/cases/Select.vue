@@ -340,6 +340,24 @@
     </veui-select>
   </section>
   <section>
+    <h2>动态内联样式：</h2>
+    <section>
+      <veui-select
+        searchable
+        @input="keyword = $event"
+      >
+        <template v-if="keyword">
+          <veui-option
+            v-for="option in result"
+            :key="option.value"
+            :value="option.value"
+            :label="option.label"
+          />
+        </template>
+      </veui-select>
+    </section>
+  </section>
+  <section>
     <h2>复杂自定义样式：</h2>
     <section>
       <veui-select
@@ -456,9 +474,9 @@
         slot="option"
         slot-scope="props"
       >
-        <span class="veui-option-label-text veui-option-custom-label">{{
-          props.label
-        }}</span>
+        <span class="veui-option-label-text veui-option-custom-label">
+          {{ props.label }}
+        </span>
         <veui-icon name="gift"/>
       </template>
     </veui-select>
@@ -734,6 +752,13 @@ export default {
     }
   },
   computed: {
+    result () {
+      return [
+        { label: 'Foo', value: 'foo' },
+        { label: 'Bar', value: 'bar' },
+        { label: this.keyword, value: this.keyword }
+      ]
+    },
     groupedOpts () {
       return type
         .clone(this.optGroupAttrs.options)
