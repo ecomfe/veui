@@ -153,7 +153,7 @@ const OptionGroup = {
       if (index >= length || index === -1) {
         this.items.push(item)
       } else {
-        this.items.splice(index, 1, item)
+        this.items.splice(index, 0, item)
       }
     },
     removeById (id) {
