@@ -705,6 +705,10 @@ function camelCase (str) {
 
 let probe = null
 export function cssSupports (prop, val) {
+  if (typeof CSS !== 'undefined') {
+    return CSS.supports(prop, typeof val === 'undefined' ? 'inherit' : val)
+  }
+
   if (!probe) {
     probe = document.createElement('div')
   }
