@@ -12,7 +12,7 @@
     type="checkbox"
     v-bind="attrs"
     :indeterminate.prop="indeterminate"
-    :checked="localChecked"
+    :checked="realChecked"
     @change="handleChange"
     v-on="boxListeners"
   >
@@ -25,7 +25,7 @@
     </transition>
     <transition :name="$c('checkbox-icon')">
       <veui-icon
-        v-if="localChecked && !indeterminate"
+        v-if="realChecked && !indeterminate"
         :name="icons.checked"
       />
     </transition>
@@ -45,6 +45,7 @@ import Icon from './Icon'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import controllable from '../mixins/controllable'
 import focusable from '../mixins/focusable'
 import {
   patchIndeterminate,
@@ -58,7 +59,25 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, input, focusable],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    focusable,
+    controllable({
+      prop: 'checked',
+      get () {
+        if (this.isControlled('checked')) {
+          return this.checked
+        } else if (this.isControlled('model')) {
+          return Array.isArray(this.model)
+            ? includes(this.model, this.value)
+            : this.model === this.trueValue
+        }
+        return !!this.localChecked
+      }
+    })
+  ],
   inheritAttrs: false,
   model: {
     prop: 'model'
@@ -74,13 +93,9 @@ export default {
     },
     model: {},
     /* eslint-enable vue/require-prop-types */
+    // we do not support using checked and v-model at the same time
     checked: Boolean,
     indeterminate: Boolean
-  },
-  data () {
-    return {
-      localChecked: this.checked
-    }
   },
   computed: {
     attrs () {
@@ -98,23 +113,17 @@ export default {
     }
   },
   watch: {
-    checked (val) {
-      // we do not support using checked and v-model at the same time
-      this.localChecked = val
-    },
     model: {
       handler (val) {
         if (typeof val === 'undefined') {
           return
         }
 
-        this.localChecked = Array.isArray(val)
+        let checked = Array.isArray(val)
           ? includes(val, this.value)
           : val === this.trueValue
 
-        if (this.checked !== this.localChecked) {
-          this.$emit('update:checked', this.localChecked)
-        }
+        this.realChecked = checked
       },
       immediate: true
     }
@@ -125,13 +134,14 @@ export default {
   },
   methods: {
     handleChange () {
-      this.$refs.box.indeterminate = this.indeterminate
+      let { box } = this.$refs
+      box.indeterminate = this.indeterminate
+      // 先把原生的值还原，最终由 realChecked 来控制原生的值
+      box.checked = !box.checked
 
-      let val = (this.localChecked = !this.localChecked)
+      let val = !this.realChecked
 
-      if (this.checked !== val) {
-        this.$emit('update:checked', val)
-      }
+      this.realChecked = val
 
       if (Array.isArray(this.model)) {
         let model = [...this.model]
