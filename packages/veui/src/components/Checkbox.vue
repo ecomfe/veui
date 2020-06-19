@@ -134,10 +134,10 @@ export default {
   },
   methods: {
     handleChange () {
-      this.$refs.box.indeterminate = this.indeterminate
+      let { box } = this.$refs
+      box.indeterminate = this.indeterminate
       // 先把原生的值还原，最终由 realChecked 来控制原生的值
-      let nativeChecked = this.$refs.box.checked
-      this.$refs.box.checked = !nativeChecked
+      box.checked = !box.checked
 
       let val = !this.realChecked
 
