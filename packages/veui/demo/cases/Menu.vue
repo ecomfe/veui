@@ -3,6 +3,8 @@
   <h1><code>&lt;veui-menu&gt;</code></h1>
   <div>expanded: {{ expanded }}</div>
   <div>active: {{ active1 }}</div>
+  <button @click="$router.push('/menu/input')">input</button>
+  <button @click="$router.push('/menu/button')">button</button>
   <section>
     <h3>small collapsible menu</h3>
     <veui-menu

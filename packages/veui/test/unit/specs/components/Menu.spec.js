@@ -2,15 +2,20 @@ import { mount } from '@vue/test-utils'
 import Menu from '@/components/Menu'
 import 'veui-theme-dls-icons/eye'
 
+const fullPathMatches = (route, item) => {
+  return route.fullPath === item.path + item.to
+}
+
 const options = {
   components: {
     'veui-menu': Menu
   },
   data () {
     return {
-      active: '/menu/input',
-      expanded: ['一级导航1'],
+      active: 'Input',
+      expanded: ['一级导航1', '二级导航11'],
       collapsed: true,
+      fullPathMatches,
       items: [
         {
           label: '一级导航1',
@@ -23,7 +28,8 @@ const options = {
               children: [
                 {
                   label: 'Input',
-                  to: '/menu/input'
+                  name: 'Input',
+                  to: '#input'
                 },
                 {
                   label: 'Progress',
@@ -135,17 +141,17 @@ describe('components/Menu', () => {
     )
 
     let { vm } = wrapper
-    let menuUI = wrapper.find('.veui-tree-item')
-    expect(menuUI.classes('veui-tree-item-expanded')).to.equal(true)
+    let menuUI = wrapper.find('.veui-menu-tree-item')
+    expect(menuUI.classes('veui-menu-item-expanded')).to.equal(true)
 
     wrapper.find('.veui-menu-item-toggle').trigger('click')
     await vm.$nextTick()
-    expect(menuUI.classes('veui-tree-item-expanded')).to.equal(false)
+    expect(menuUI.classes('veui-menu-item-expanded')).to.equal(false)
 
     wrapper.find('.veui-menu-item-toggle').trigger('click')
     await vm.$nextTick()
-    expect(menuUI.classes('veui-tree-item-expanded')).to.equal(true)
-    expect(wrapper.findAll('.veui-tree-item').length).to.equal(3)
+    expect(menuUI.classes('veui-menu-item-expanded')).to.equal(true)
+    expect(wrapper.findAll('.veui-menu-item').length).to.equal(5)
     wrapper.destroy()
   })
 
@@ -153,7 +159,8 @@ describe('components/Menu', () => {
     let wrapper = mount(
       {
         ...options,
-        template: '<veui-menu :active.sync="active" :items="items"/>'
+        template:
+          '<veui-menu :active.sync="active" :items="items" :matches="fullPathMatches"/>'
       },
       {
         sync: false,
@@ -169,9 +176,10 @@ describe('components/Menu', () => {
     await vm.$nextTick()
     expect(item.classes('veui-menu-item-exact-active')).to.equal(false)
 
+    item = wrapper.findAll('.veui-menu-link').at(2)
     item.trigger('click')
     await vm.$nextTick()
-    expect(vm.active).to.equal('/menu/input')
+    expect(vm.active).to.equal('Input')
     wrapper.destroy()
   })
 

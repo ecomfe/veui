@@ -1,567 +1,422 @@
 <template>
-<veui-tree-node
-  role="tree"
-  :datasource="localDatasource"
-  :checkable="checkable"
-  :selectable="selectable"
-  :selected="realSelected"
-  :icons="icons"
-  :ui="realUi"
+<abstract-tree
   :class="{
+    [$c('tree')]: true,
     [$c('tree-disabled')]: realDisabled || realReadonly
   }"
-  @toggle="toggle"
-  @click="handleItemClick"
+  :group-class="$c('tree-item-group')"
+  :ui="realUi"
+  :items="normalizedItems"
+  :expanded="realExpanded"
   @focusin.native="focused = true"
   @focusout.native="focused = false"
 >
   <template
     slot="item"
-    slot-scope="props"
+    slot-scope="{ item, index, depth, expanded: itemExpanded, parents }"
   >
-    <slot
-      name="item"
-      v-bind="props"
-    />
-  </template>
-  <template
-    slot="item-label"
-    slot-scope="props"
-  >
-    <slot
-      name="item-label"
-      v-bind="props"
-    />
-  </template>
-  <template
-    slot="item-prepend"
-    slot-scope="props"
-  >
-    <slot
-      name="item-prepend"
-      v-bind="props"
+    <div
+      ref="item"
+      :class="{
+        [$c('tree-item')]: true,
+        [$c('tree-item-expanded')]: itemExpanded,
+        [$c('tree-item-selected')]: selectable && isSelected(item),
+        [$c('tree-item-clickable')]: isClickable(item),
+        [$c('tree-item-hidden')]: item.hidden,
+        [$c('tree-item-disabled')]: item.disabled
+      }"
+      :tabindex="depth === 1 ? item.tabIndex : item.disabled ? null : '-1'"
+      @click="handleItemClick(item, parents, index, depth)"
+      @keydown="handleKeydown($event, item, index, depth)"
     >
-      <veui-checkbox
-        v-if="checkable"
-        :class="$c('tree-item-check')"
-        :checked="props.item.checked"
-        :indeterminate="props.item.indeterminate"
-        :disabled="props.item.disabled || realDisabled || realReadonly"
-        :ui="realUi"
-        tabindex="-1"
-        @change="checked => handleItemCheck(checked, props.item)"
-      />
-    </slot>
+      <slot
+        name="item"
+        v-bind="item"
+        :item="item"
+        :index="index"
+        :depth="depth"
+        :expanded="itemExpanded"
+        :parents="parents"
+      >
+        <button
+          v-if="item.children && item.children.length"
+          type="button"
+          :class="$c('tree-item-expand-switcher')"
+          tabindex="-1"
+          :disabled="item.disabled"
+          @click.stop="toggleExpanded(item, index, depth)"
+        >
+          <veui-icon :name="icons.collapse"/>
+        </button>
+        <slot
+          name="item-prepend"
+          v-bind="item"
+          :item="item"
+          :index="index"
+          :depth="depth"
+          :expanded="itemExpanded"
+          :parents="parents"
+        >
+          <veui-checkbox
+            v-if="checkable"
+            :class="$c('tree-item-check')"
+            :checked="item.checked"
+            :indeterminate="item.partialChecked"
+            :disabled="item.disabled || realDisabled || realReadonly"
+            :ui="realUi"
+            tabindex="-1"
+            @change="() => handleItemCheck(item, parents)"
+          />
+        </slot>
+        <div :class="$c('tree-item-label')">
+          <slot
+            name="item-label"
+            v-bind="item"
+            :item="item"
+            :index="index"
+            :depth="depth"
+            :expanded="itemExpanded"
+            :parents="parents"
+          >
+            {{ item.label }}
+          </slot>
+        </div>
+        <slot
+          name="item-append"
+          v-bind="item"
+          :item="item"
+          :index="index"
+          :depth="depth"
+          :expanded="itemExpanded"
+          :parents="parents"
+        />
+      </slot>
+    </div>
   </template>
-  <template
-    slot="item-append"
-    slot-scope="props"
-  >
-    <slot
-      name="item-append"
-      v-bind="props"
-    />
-  </template>
-</veui-tree-node>
+</abstract-tree>
 </template>
 
 <script>
-import TreeNode from './_TreeNode'
-import { remove, clone, omit, filter, uniq, xor, isString } from 'lodash'
+import AbstractTree from './AbstractTree'
+import Checkbox from '../Checkbox'
+import Icon from '../Icon'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
-import Checkbox from '../Checkbox'
-import { focusIn } from '../../utils/dom'
-import '../../common/uiTypes'
+import controllable from '../../mixins/controllable'
+import { includes, map, filter, uniq, cloneDeep } from 'lodash'
+import { focusIn, closest } from '../../utils/dom'
+import { walk } from '../../utils/datasource'
 
 export default {
   name: 'veui-tree',
-  uiTypes: ['tree'],
   components: {
-    'veui-tree-node': TreeNode,
-    'veui-checkbox': Checkbox
+    'veui-checkbox': Checkbox,
+    'veui-icon': Icon,
+    AbstractTree
   },
-  mixins: [prefix, ui, input],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    controllable([{ prop: 'checked', event: 'check' }, 'selected', 'expanded'])
+  ],
   model: {
     prop: 'checked',
     event: 'check'
   },
   props: {
-    datasource: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
-    // 当前有哪些节点是展开的
-    expanded: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
-    checkable: {
-      type: Boolean
-    },
+    checkable: Boolean,
     checked: {
       type: Array,
       default () {
         return []
       }
     },
-    selectable: {
-      type: Boolean
-    },
+    selectable: Boolean,
     /* eslint-disable vue/require-prop-types */
     selected: {},
     /* eslint-ensable vue/require-prop-types */
-    keys: {
-      type: [String, Function],
-      default: 'value'
-    }
+    includeIndeterminate: Boolean,
+    datasource: AbstractTree.props.items,
+    expanded: AbstractTree.props.expanded
   },
   data () {
     return {
-      localDatasource: [],
       focused: false,
-      localSelected: []
+      focusVisible: map(this.datasource, _ => false)
     }
   },
   computed: {
-    realKeys () {
-      if (isString(this.keys)) {
-        return source => source[this.keys]
-      }
-
-      return this.keys
+    // 不在 normalize 中复制的目的：仅仅 checked 发生变化无需重新复制
+    realItems () {
+      return cloneDeep(this.datasource)
     },
-    realSelected: {
-      get () {
-        return this.selected === undefined ? this.localSelected : this.selected
-      },
-      set (val) {
-        this.localSelected = val
-        this.$emit('update:selected', val)
-      }
-    }
-  },
-  watch: {
-    expanded () {
-      this.parseExpanded()
+    normalizedItems () {
+      return Array.isArray(this.realItems)
+        ? this.normalizeItems(this.realItems, this.realChecked)
+        : []
     },
-    datasource: {
-      handler (val) {
-        this.localDatasource = []
-        let walk = (datasource, items, expanded, isBranchDisabled) => {
-          datasource.forEach((source, index) => {
-            let item = omit(source, 'children')
-            item.value = this.realKeys(source)
-            let disabled = isBranchDisabled || item.disabled
-            if (disabled) {
-              item.disabled = disabled
-            }
-
-            if (this.hasChild(source)) {
-              item.expanded =
-                remove(expanded, value => value === item.value).length !== 0
-
-              this.$set(item, 'children', [])
-              walk(source.children, item.children, expanded, disabled)
-            }
-            this.$set(items, index, item)
-          })
-        }
-        walk(val, this.localDatasource, clone(this.expanded))
-
-        if (this.checkable) {
-          this.manageNodeStatus(this.localDatasource, null, true)
-        }
-      },
-      deep: true,
-      immediate: true
-    },
-
-    checked (val, oldVal) {
-      if (xor(val, this.getCheckedValuesFromDatasource()).length) {
-        this.manageNodeStatus(this.localDatasource, null, true)
-      }
+    // 用来临时修改叶子节点的 checked 信息，然后递归下得到完整的 checked 数据
+    itemsCopy () {
+      return cloneDeep(this.datasource)
     }
   },
   methods: {
-    // 每个非叶节点记录四个数字：
-    // allCount：被全部选中（checked=true）并且没有被禁用的子节点数
-    // partCount：部分被选中的子节点数
-    // disabledCount：被禁用但是没有被选中的子节点数
-    // disabledCheckedCount：被全部选中同时被禁用的子节点数
-    //
-    // 被全部选中是指能选的子节点全被选了，如果部分子节点被禁用了无法被选中，这个节点依然算被全部选中
-    // 被全部选中的节点，如果有被禁用的子节点，这个节点同时也属于部分被选中，因为checkbox需要显示成中间状态
-    //
-    // A(-)(√):
-    //   a0(√)
-    //   a1(×)
-    //   a2(√×)
-    //   a3(√)
-    // 例如A节点的四个子节点，allCount=2，disabledCount=1，disabledCheckedCount=1
-    // A节点既是被部分选中状态（有部分子节点没有实际被选中，checkbox显示中间态）
-    // 也是被选中状态（checkbox的checked与节点的checked绑定，所以点击A的checkbox可以触发remove操作）
-    // 否则点击A的checkbox，只会把checkbox的checked改成true，不会触发remove，点了没反应，再点一次才会触发remove
-
-    // 判断节点是不是被全部选中
-    isChecked (item) {
-      if (this.hasChild(item)) {
-        let { allCount = 0, disabledCount = 0, disabledCheckedCount = 0 } = item
-        return (
-          disabledCount < item.children.length &&
-          allCount + disabledCount + disabledCheckedCount ===
-            item.children.length
-        )
-      }
-      return item.checked
-    },
-    // 判断该节点是不是被部分选中
-    isPartialChecked (item) {
-      if (this.hasChild(item)) {
-        let { allCount = 0, partCount = 0, disabledCheckedCount = 0 } = item
-        let checkedCount = allCount + disabledCheckedCount
-        return (
-          (checkedCount > 0 && checkedCount < item.children.length) ||
-          partCount > 0
-        )
-      }
-      return false
-    },
-    getCheckedValuesFromDatasource () {
-      let values = []
-      let walk = (items = this.localDatasource) => {
-        items.forEach(item => {
-          if (
-            item.partCount ||
-            item.allCount ||
-            item.checked ||
-            item.disabledCheckedCount
-          ) {
-            if (this.hasChild(item)) {
-              walk(item.children)
-            } else if (item.checked) {
-              values.push(item.value)
-            }
-          }
-        })
-      }
-      walk()
-      return values
-    },
-    emitCheck () {
-      this.$emit('check', this.getCheckedValuesFromDatasource())
-    },
-    parseExpanded (expanded = this.expanded) {
-      let walk = (items, expanded) => {
-        items.forEach(item => {
-          if (item.children && item.children.length) {
-            this.$set(
-              item,
-              'expanded',
-              remove(expanded, value => value === item.value).length !== 0
+    /**
+     * 关于 checked：
+     *   1. group 实际是否 checked 完全取决于他的 children（写代码比较简单）
+     *   2. 当非 includeIndeterminate，group 在 checked prop 中，那么表示所有子孙都是 checked
+     *      在实际 normalize 过程中，这种 group 选中信息也是应用到 children 上，再由 children 推导出 group 的状态
+     *   3. 当 includeIndeterminate，group 在 checked prop 中，仅仅表示子孙中有选中的，这个信息无法应用到 children 上
+     *   4. group 是完全选中的，group 一定在 checked prop 中；group 是部分选中的，根据 includeIndeterminate 来决定是否在 checked 中
+     *
+     * 给 item 加上 checked 相关信息：
+     *   checked: 所有子节点（包括禁用的）都是选中的
+     *   partialChecked：至少一个子节点（包括禁用的）是选中的
+     * @param {Array} items 数据数组
+     * @param {Array} checked 选中的 value 数组
+     * @param {Array} collect 递归的过程中收集 checked 到该数组中去，用来生成当前实际生效的 checked
+     * @param {boolean} ancestorInChecked 祖先节点在 checked 中, 递归中变量，外部不要传递
+     * @return {Array} 返回新的数据数组
+     */
+    normalizeItems (items, checked, collect, ancestorInChecked) {
+      let isTopLevel = typeof ancestorInChecked === 'undefined'
+      let firstTabable = null
+      items.forEach(item => {
+        let { value, children } = item
+        let inChecked = includes(checked, value)
+        if (item.children) {
+          this.normalizeItems(
+            item.children,
+            checked,
+            collect,
+            ancestorInChecked || inChecked
+          )
+          item.checked = children.every(({ checked }) => checked)
+          item.partialChecked =
+            !item.checked &&
+            children.some(
+              ({ partialChecked, checked }) => !!partialChecked || checked
             )
+        } else {
+          // 如果中间态不同步进 checked，那么祖先选中，则下面的所有子孙节点都选中
+          item.checked =
+            inChecked || (!this.includeIndeterminate && ancestorInChecked)
+        }
 
-            walk(item.children, expanded)
-          }
-        })
-      }
-      walk(this.localDatasource, clone(expanded))
+        // 第一个非 disabled 的顶层 item 是 tabindex = 0, collect 时这个数据是多余的，就不要计算了
+        if (isTopLevel && !collect) {
+          item.tabIndex = item.disabled ? null : firstTabable ? '-1' : '0'
+          firstTabable = item.tabIndex === '0' ? item : firstTabable
+        }
+
+        if (
+          collect &&
+          item.value &&
+          (item.checked || (this.includeIndeterminate && item.partialChecked))
+        ) {
+          collect.push(item.value)
+        }
+      })
+      return items
     },
-    toggle (item, index, depth, val) {
-      if (
-        val === item.expanded ||
-        !item.children ||
-        item.children.length === 0
-      ) {
+    isSelected (item) {
+      return this.realSelected === item.value
+    },
+    isClickable (item) {
+      return (
+        this.selectable ||
+        this.checkable ||
+        (item.children && item.children.length)
+      )
+    },
+    toggleExpanded (item, index, depth, expand) {
+      let included = includes(this.realExpanded, item.value)
+      if (expand === included || !item.children || item.children.length === 0) {
         return
       }
-      item.expanded = !item.expanded
 
-      let expanded = item.expanded
-        ? uniq([...this.expanded, item.value])
-        : filter(this.expanded, value => value !== item.value)
-      this.$emit('update:expanded', expanded)
-      this.$emit(item.expanded ? 'expand' : 'collapse', item, index, depth)
+      let expanded = included
+        ? filter(this.realExpanded, value => value !== item.value)
+        : uniq([...this.realExpanded, item.value])
+
+      this.realExpanded = expanded
+      this.$emit(included ? 'collapse' : 'expand', item, index, depth)
     },
-    isSelected ({ value }) {
-      return this.realSelected === value
+    handleKeydown (e, item, index, depth) {
+      let passive = false
+      let expanded = includes(this.realExpanded, item.value)
+      switch (e.key) {
+        case 'Enter':
+          this.toggleExpanded(item, index, depth)
+          break
+        case 'Left':
+        case 'ArrowLeft':
+          if (expanded) {
+            this.toggleExpanded(item, index, depth, false)
+          } else {
+            this.focusLevel(e.target)
+          }
+          break
+        case 'Right':
+        case 'ArrowRight':
+          if (expanded) {
+            this.focusLevel(e.target, false)
+          } else {
+            this.toggleExpanded(item, index, depth, true)
+            this.focusLevel(e.target, false)
+          }
+          break
+        case 'Up':
+        case 'ArrowUp':
+          this.navigate(e.target, false)
+          break
+        case 'Down':
+        case 'ArrowDown':
+          this.navigate(e.target, true)
+          break
+        case 'Home':
+          this.navigate(e.target, false, true)
+          break
+        case 'End':
+          this.navigate(e.target, true, true)
+          break
+        default:
+          passive = true
+          break
+      }
+      if (!passive) {
+        e.stopPropagation()
+        e.preventDefault()
+      }
+    },
+    getFocusSelector () {
+      return `.${this.$c('tree-item')}:not(.${this.$c('tree-item-disabled')})`
+    },
+    focusLevel (current, up = true) {
+      let el
+      if (up) {
+        el = closest(closest(document.activeElement, 'li').parentNode, 'li')
+      } else {
+        el = document.activeElement.nextElementSibling
+      }
+      if (!el) {
+        return
+      }
+
+      let itemEl = el.querySelector(this.getFocusSelector())
+      if (itemEl) {
+        this.$nextTick(() => {
+          current.tabIndex = -1
+          itemEl.tabIndex = 0
+          itemEl.focus()
+        })
+      }
+    },
+    focus () {
+      focusIn(this.$el)
+    },
+    navigate (current, forward = false, hitBoundary = false) {
+      let context = this.$el
+      current.tabIndex = -1
+      let items = [...context.querySelectorAll(this.getFocusSelector())]
+      let index = items.indexOf(current)
+
+      let next
+      if (hitBoundary) {
+        next = items[forward ? items.length - 1 : 0]
+        next.tabIndex = 0
+        next.focus()
+        return
+      }
+
+      let targetIndex =
+        index === -1
+          ? 0
+          : ((forward ? index + 1 : index - 1) + items.length) % items.length
+      next = items[targetIndex]
+      next.tabIndex = 0
+      next.focus()
     },
     handleItemClick (item, parents, ...extraArgs) {
+      if (item.disabled) {
+        return
+      }
+
       if (this.selectable) {
         let { value } = item
         let newValue = this.isSelected(item) ? null : value
         this.realSelected = newValue
       } else if (this.checkable && !this.realDisabled && !this.realReadonly) {
-        this.handleItemCheck(!item.checked, item)
+        this.handleItemCheck(item, parents)
       } else if (item.children && item.children.length) {
-        this.toggle(item, ...extraArgs)
+        this.toggleExpanded(item, ...extraArgs)
       }
       this.$emit('click', item, parents, ...extraArgs)
     },
-    handleItemCheck (checked, item) {
+    handleItemCheck (item, parents) {
+      let checked
+      let isGroup = hasChildren(item)
+      let inChecked = includes(this.realChecked, item.value)
+
+      // 1. 尝试全部取消
+      let willUncheck = isGroup ? getLeafs(item, true) : []
+      if ((isGroup && willUncheck.length) || (!isGroup && inChecked)) {
+        willUncheck = [
+          ...willUncheck,
+          item.value,
+          // 下面两个是直接清掉父子链上的 group，后续在 normalizedChecked 中会得到最终生效的
+          // 清掉的原因：
+          //   1. 非 include 时无所谓，因为 group 的状态能从 children 上推导出来
+          //   2. include 时，group 在 checked prop 中会将下面的所有后代都选中，所以先将父子链上的 group 都删了，然后重新从 children 上推导
+          ...(isGroup ? getGroupChildren(item) : []),
+          ...parents.map(i => i.value)
+        ]
+        checked = filter(this.realChecked, i => willUncheck.indexOf(i) === -1)
+      } else {
+        // 2. 尝试全部选中
+        let willCheck = isGroup ? getLeafs(item, false) : [item.value]
+        if ((isGroup && willCheck.length) || (!isGroup && !inChecked)) {
+          checked = uniq([...(this.realChecked || []), ...willCheck])
+        }
+      }
+
       if (checked) {
-        this.check(item)
-      } else {
-        this.remove(item)
+        let normalizedChecked = []
+        // 重新生成一份完整的 checked
+        this.normalizeItems(this.itemsCopy, checked, normalizedChecked)
+        this.realChecked = normalizedChecked
       }
-    },
-
-    check (item) {
-      if (!this.checkable) {
-        return
-      }
-
-      let chain = this.findChain(this.localDatasource, item.value)
-      item = chain[chain.length - 1]
-      let parents = chain.slice(0, chain.length - 1).reverse()
-
-      if (this.hasChild(item)) {
-        let [
-          allCount,
-          partCount,
-          disabledCount,
-          disabledCheckedCount
-        ] = this.manageNodeStatus(item.children, true)
-        this.setItemCount(
-          item,
-          allCount,
-          partCount,
-          disabledCount,
-          disabledCheckedCount
-        )
-        this.$set(item, 'indeterminate', this.isPartialChecked(item))
-      } else {
-        this.setLeafChecked(item, true)
-      }
-      this.$set(item, 'checked', true)
-
-      this.markParentsChain(parents)
-
-      this.emitCheck()
-    },
-
-    // 设置子节点们的计数、状态，并且统计它们的状态并返回
-    // isSettingDisabledNode：只有在初始化（datasource发生变化时）以及checked变化时可以改变被禁用的节点的选择状态
-    manageNodeStatus (items, checked, isSettingDisabledNode) {
-      let allCount = 0
-      let partCount = 0
-      let disabledCount = 0
-      let disabledCheckedCount = 0
-
-      items.forEach(child => {
-        if (this.hasChild(child)) {
-          let [
-            childAllCount,
-            childPartCount,
-            childDisabledCount,
-            childDisabledCheckedCount
-          ] = this.manageNodeStatus(
-            child.children,
-            checked,
-            isSettingDisabledNode
-          )
-
-          this.setItemCount(
-            child,
-            checked || checked == null ? childAllCount : 0,
-            checked || checked == null ? childPartCount : 0,
-            childDisabledCount,
-            childDisabledCheckedCount
-          )
-
-          this.$set(child, 'indeterminate', this.isPartialChecked(child))
-        } else {
-          this.setLeafChecked(
-            child,
-            checked == null
-              ? this.checked.some(val => val === child.value)
-              : checked,
-            isSettingDisabledNode
-          )
-        }
-
-        this.$set(child, 'checked', this.isChecked(child))
-
-        if (child.checked) {
-          if (child.disabled) {
-            disabledCheckedCount++
-          } else {
-            allCount++
-          }
-        }
-        if (child.indeterminate) {
-          partCount++
-        }
-        if (!child.checked && !child.indeterminate && child.disabled) {
-          disabledCount++
-        }
-      })
-
-      return [allCount, partCount, disabledCount, disabledCheckedCount]
-    },
-
-    // 更新祖先节点中的选择标记
-    markParentsChain (parents) {
-      parents.forEach(parent => {
-        let allCount = 0
-        let partCount = 0
-        let disabledCount = 0
-        let disabledCheckedCount = 0
-
-        parent.children.forEach(child => {
-          let isChecked = this.isChecked(child)
-          let isPartialChecked = this.isPartialChecked(child)
-
-          if (isChecked) {
-            if (child.disabled) {
-              disabledCheckedCount++
-            } else {
-              allCount++
-            }
-          }
-          if (isPartialChecked) {
-            partCount++
-          }
-          if (!isChecked && !isPartialChecked && child.disabled) {
-            disabledCount++
-          }
-        })
-        this.setItemCount(
-          parent,
-          allCount,
-          partCount,
-          disabledCount,
-          disabledCheckedCount
-        )
-        this.$set(parent, 'checked', this.isChecked(parent))
-        this.$set(parent, 'indeterminate', this.isPartialChecked(parent))
-      })
-    },
-
-    setLeafChecked (item, checked, isSettingDisabledNode) {
-      if (item.disabled && !isSettingDisabledNode) {
-        return
-      }
-
-      this.$set(item, 'checked', checked)
-      if (this.checkOwnProperty(item, 'allCount')) {
-        this.$set(item, 'allCount', undefined)
-      }
-      if (this.checkOwnProperty(item, 'partCount')) {
-        this.$set(item, 'partCount', undefined)
-      }
-    },
-    setItemCount (
-      item,
-      allCount,
-      partCount,
-      disabledCount,
-      disabledCheckedCount
-    ) {
-      this.$set(item, 'allCount', allCount)
-      this.$set(item, 'partCount', partCount)
-      this.$set(item, 'disabledCount', disabledCount)
-      this.$set(item, 'disabledCheckedCount', disabledCheckedCount)
-      if (this.checkOwnProperty(item, 'checked')) {
-        this.$set(item, 'checked', undefined)
-      }
-    },
-    hasChild (item) {
-      return item.children && item.children.length
-    },
-
-    // 从右侧移除选中项。
-    //
-    // 接收的参数为：
-    //  item :待移除的节点
-    //
-    // 注意：parents 来自于 this.checkedItems ，内部的节点数据和 this.localDatasource 中的节点数据是完全不相等的。
-    //
-    // 执行步骤为：
-    // 1、以 this.localDatasource 为主要标记目标。
-    // 2、按照 parents 的最右侧开始遍历（即从树根开始），找到 parents 对应到 this.localDatasource 中的 parents 祖先节点数组 candidateParents。
-    // 3、找到 item 对应到 this.localDatasource 中的节点 candidateItem。
-    // 4、如果 candidateItem 没有子孙节点，就直接标记 candidateItem 上的选中状态（ checked ）为 false 。
-    // 5、如果 candidateItem 有子孙节点，则标记 candidateItem 上的“子级中全选的节点总数（ allCount ）”为 0，“子级中部分选择的节点总数（ partCount ）”为0。
-    // 6、依次刷新 candidateParents 中的 allCount 和 partCount 标记。
-    // 7、如果 candidateItem 有子孙节点的话，则将其子孙节点全部设为未选中状态（ allCount=0 、 partCount=0 、 checked=false ）。
-    // 8、从之前选中的节点树中（ this.checkedItems ）中解析出每个节点的状态（目前只有展开/收起状态 expanded ）。
-    // 9、从 this.localDatasource 中剥离出选中的节点及其父节点，并与8步中解析出的状态进行合并，得到新的 this.checkedItems 。
-    // 10、抛出 check 事件，带上一维的选中的节点的 value 值数组。
-    remove (item) {
-      if (!this.checkable) {
-        return
-      }
-
-      // 先找到在 this.localDatasource 里面对应的 item 和 parents 数组
-      let chain = this.findChain(this.localDatasource, item.value)
-      item = chain[chain.length - 1]
-      let parents = chain.slice(0, chain.length - 1).reverse()
-
-      if (this.hasChild(item)) {
-        let [
-          allCount,
-          partCount,
-          disabledCount,
-          disabledCheckedCount
-        ] = this.manageNodeStatus(item.children, false)
-        this.setItemCount(
-          item,
-          allCount,
-          partCount,
-          disabledCount,
-          disabledCheckedCount
-        )
-        this.$set(item, 'indeterminate', this.isPartialChecked(item))
-      } else {
-        this.setLeafChecked(item, false)
-      }
-
-      this.$set(item, 'checked', false)
-
-      this.markParentsChain(parents)
-
-      this.emitCheck()
-    },
-    checkOwnProperty (obj, property) {
-      return Object.prototype.hasOwnProperty.call(obj, property)
-    },
-    findChain (items, value) {
-      let walk = (items, chain = []) => {
-        let currentChain = []
-        let result = items.some(item => {
-          if (item.value === value) {
-            currentChain.push(item)
-            return true
-          }
-
-          if (this.hasChild(item)) {
-            currentChain.push(item)
-            return walk(item.children, currentChain)
-          }
-        })
-
-        // 找到了目标 value ，说明这条链路是正确的
-        if (result) {
-          chain.push(...currentChain)
-        }
-
-        return result
-      }
-
-      let chain = []
-      walk(items, chain)
-      return chain
-    },
-
-    focus () {
-      focusIn(this.$el)
     }
   }
+}
+
+function hasChildren (item) {
+  return item.children && !!item.children.length
+}
+
+function getLeafs (item, checked) {
+  let leafs = []
+  walk(item.children, i => {
+    if (!i.disabled) {
+      if (!hasChildren(i) && i.checked === checked) {
+        leafs.push(i.value)
+      }
+    }
+  })
+  return leafs
+}
+
+function getGroupChildren (item) {
+  let groups = []
+  walk(item.children, i => {
+    if (!i.disabled) {
+      if (hasChildren(i)) {
+        groups.push(i.value)
+      }
+    }
+  })
+  return groups
 }
 </script>
