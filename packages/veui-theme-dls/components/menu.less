@@ -6,18 +6,114 @@
   display: flex;
   flex-direction: column;
   width: @dls-menu-width;
+  will-change: width;
   .veui-transition(width);
 
   &-collapsed {
     width: @dls-menu-width-collapsed;
   }
 
-  &-tree,
-  &-overlay {
-    font-size: @dls-menu-font-size-m;
-    .@{veui-prefix}-menu-link {
-      text-decoration: none;
+  .@{veui-prefix}-abstract-tree {
+    &,
+    &-item-group {
+      .reset-list-style();
+      .margin(0, _);
+      // item expand transition
+      will-change: height;
+      .veui-transition(height);
+      overflow: hidden;
     }
+    &-item-group {
+      padding-left: @dls-menu-level-indent;
+    }
+  }
+
+  & &-link,
+  &-overlay &-link {
+    text-decoration: none;
+  }
+
+  // footer
+  &-footer {
+    flex: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-top: 1px solid @dls-menu-separator-color;
+    height: @dls-menu-footer-height-m;
+    padding-right: @dls-menu-padding-x;
+  }
+
+  &-link {
+    flex: auto;
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    height: inherit;
+
+    // link 充满整个 item
+    &::before {
+      content: "";
+      .absolute(_, 0);
+      height: inherit;
+
+      .@{veui-prefix}-menu-tree-item & {
+        border-right: 1px solid @dls-menu-border-color;
+      }
+    }
+  }
+
+  // item
+  &-item {
+    cursor: pointer;
+    display: flex;
+    flex: auto;
+    align-items: center;
+    outline: none;
+    max-width: 100%;
+    font-size: @dls-menu-font-size-m;
+    height: inherit;
+
+    & &-icon,
+    & &-icon .@{veui-prefix}-icon {
+      color: inherit;
+    }
+
+    &:not(.@{veui-prefix}-disabled) {
+      // hover toggle 也让有 hover link 的效果（toggle 不在 link 里面）
+      &.@{veui-prefix}-menu-link:hover,
+      &:hover .@{veui-prefix}-menu-link {
+        color: @dls-menu-item-font-color-hover;
+        &::before {
+          background-color: @dls-menu-item-background-color-hover;
+        }
+      }
+
+      &.@{veui-prefix}-menu-link,
+      .@{veui-prefix}-menu-link {
+        &[data-focus-visible-added] {
+          color: @dls-menu-item-font-color-focus;
+          &::before {
+            background-color: @dls-menu-item-background-color-focus;
+          }
+        }
+        &:active {
+          color: @dls-menu-item-font-color-active;
+          &::before {
+            background-color: @dls-menu-item-background-color-active;
+          }
+        }
+      }
+    }
+  }
+
+  // 盖住：向上收起时，active 的样式应该被后面的 item 覆盖
+  &-tree-item::before {
+    content: "";
+    .absolute(_, 0);
+    height: inherit;
+    background-color: @dls-menu-item-background-color;
+    border-right: 1px solid @dls-menu-border-color;
   }
 
   // tree
@@ -27,7 +123,7 @@
     padding-right: 1px;
     margin-right: -1px;
 
-    // 当 tree 收起时可能会看到 active 样式溢出到 tree 外面，盖住
+    // 盖住：当 tree 收起时可能会看到 active 样式溢出到 tree 外面
     &::after {
       content: "";
       display: block;
@@ -43,7 +139,7 @@
     position: relative;
     margin-right: -1px;
     padding: @dls-menu-padding-y @dls-menu-padding-x;
-    // 盖住 tree 顶部的 padding 间隙
+    // 盖住：tree 顶部的 padding 间隙
     &::before {
       content: "";
       .absolute(0, 0, _, 0);
@@ -51,14 +147,13 @@
       background-color: @dls-menu-item-background-color;
       border-right: 1px solid @dls-menu-border-color;
       display: block;
-      z-index: 0;
     }
 
-    .@{veui-prefix}-tree-item {
+    &-item {
       margin-top: @dls-menu-item-spacing;
       height: @dls-menu-item-height-m;
-      // 盖住 active 样式在 expand 过渡时从 margin-top 露出来的部分
-      &::before {
+      // 盖住：active 样式在 expand 过渡时从 margin-top 露出来的部分
+      &::after {
         content: "";
         .absolute(_, 0);
         height: @dls-menu-item-spacing;
@@ -68,78 +163,19 @@
         align-self: flex-end;
         width: auto;
         display: block;
-        z-index: 0;
+        pointer-events: none;
       }
-
-      &-group {
-        padding-left: @dls-menu-level-indent;
-      }
+    }
+    & > li:first-child > &-item {
+      margin-top: 0;
     }
 
     // 第二级缩进
-    &-has-icon > li > ul.@{veui-prefix}-tree-item-group {
+    &-has-icon > li > ul.@{veui-prefix}-abstract-tree-item-group {
       padding-left: dls-sum(
         @dls-menu-item-icon-size,
         @dls-menu-item-content-spacing
       );
-    }
-    & > li:first-child > .@{veui-prefix}-tree-item {
-      margin-top: 0;
-    }
-
-  }
-
-  // footer
-  &-footer {
-    flex: none;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    border-top: 1px solid @dls-menu-separator-color;
-    height: @dls-menu-footer-height-m;
-    padding-right: @dls-menu-padding-x;
-  }
-  &-toggle {
-    transform: rotateZ(180deg);
-  }
-
-  // item
-  &-item {
-    cursor: pointer;
-    display: flex;
-    flex: auto;
-    align-items: center;
-    outline: none;
-    max-width: 100%;
-    height: inherit;
-
-    .@{veui-prefix}-tree-item &::before {
-      content: "";
-      .absolute(_, 0);
-      height: inherit;
-      background-color: @dls-menu-item-background-color;
-      border-right: 1px solid @dls-menu-border-color;
-    }
-
-    &:not(.@{veui-prefix}-disabled) {
-      &:hover {
-        color: @dls-menu-item-font-color-hover;
-        &::before {
-          background-color: @dls-menu-item-background-color-hover;
-        }
-      }
-      .@{veui-prefix}-tree-item.focus-visible & {
-        color: @dls-menu-item-font-color-focus;
-        &::before {
-          background-color: @dls-menu-item-background-color-focus;
-        }
-      }
-      &:active {
-        color: @dls-menu-item-font-color-active;
-        &::before {
-          background-color: @dls-menu-item-background-color-active;
-        }
-      }
     }
   }
 
@@ -163,104 +199,80 @@
     text-overflow: ellipsis;
   }
 
-  &-link {
-    flex: auto;
-    display: flex;
-    overflow: hidden;
-    align-items: center;
-    height: inherit;
-
-    // link 充满整个 item
-    &::before {
-      content: "";
-      .absolute(_, 0);
-      height: inherit;
-    }
-  }
-
   .@{veui-prefix}-button &-toggle-icon {
     .dls-icon-size(@dls-menu-item-icon-size-aux);
   }
 
-  &-tree &-link {
-    &:first-child {
-      margin-left: 0;
-    }
-  }
-
   &-item-active:not(.@{veui-prefix}-disabled),
   &-item-exact-active:not(.@{veui-prefix}-disabled) {
-    .@{veui-prefix}-menu-item-icon,
-    .@{veui-prefix}-menu-link {
-      color: @dls-menu-item-font-color-current;
-      font-weight: @dls-menu-item-font-weight-current;
-      .veui-transition(color);
-    }
-
-    &:hover {
-      .@{veui-prefix}-menu-item-icon,
-      .@{veui-prefix}-menu-link {
+    &.@{veui-prefix}-menu-link:hover,
+    &:hover .@{veui-prefix}-menu-link {
+      &,
+      & + .@{veui-prefix}-option-group-expandable {
         color: @dls-menu-item-font-color-current-hover;
       }
     }
 
-    &.focus-visible {
-      .@{veui-prefix}-menu-item-icon,
-      .@{veui-prefix}-menu-link {
-        color: @dls-menu-item-font-color-current-focus;
+    &.@{veui-prefix}-menu-link,
+    .@{veui-prefix}-menu-link {
+      &,
+      & + .@{veui-prefix}-option-group-expandable {
+        color: @dls-menu-item-font-color-current;
+        font-weight: @dls-menu-item-font-weight-current;
+        .veui-transition(color);
       }
-    }
-
-    &:active {
-      .@{veui-prefix}-menu-item-icon,
-      .@{veui-prefix}-menu-link {
-        color: @dls-menu-item-font-color-current-active;
+      &[data-focus-visible-added] {
+        &,
+        & + .@{veui-prefix}-option-group-expandable {
+          color: @dls-menu-item-font-color-current-focus;
+        }
+      }
+      &:active {
+        &,
+        & + .@{veui-prefix}-option-group-expandable {
+          color: @dls-menu-item-font-color-current-active;
+        }
       }
     }
   }
 
   &-collapsed &-item-active:not(.@{veui-prefix}-disabled),
   &-collapsed &-item-exact-active:not(.@{veui-prefix}-disabled),
-  & &-item-exact-active:not(.@{veui-prefix}-disabled) {
-    &::before {
-      background-color: @dls-menu-item-background-color-current;
-      .veui-transition(background-color);
-    }
-
-    &:hover::before {
-      background-color: @dls-menu-item-background-color-current-hover;
-    }
-
-    &.focus-visible::before {
-      background-color: @dls-menu-item-background-color-current-focus;
-    }
-
-    &:active::before {
-      background-color: @dls-menu-item-background-color-current-active;
-    }
-
-    // Indicators
-    &::after {
-      content: "";
-      .absolute(_, 0, _, _);
-      .size(@dls-menu-indicator-width, inherit);
-      background: @dls-menu-indicator-color;
-
-      .@{veui-prefix}-menu-overlay & {
-        .absolute(_, 0, _, _);
+  &-tree &-item-exact-active:not(.@{veui-prefix}-disabled) {
+    &:hover .@{veui-prefix}-menu-link {
+      &::before {
+        background-color: @dls-menu-item-background-color-current-hover;
+      }
+      &::after {
+        background-color: @dls-menu-indicator-color-hover;
       }
     }
 
-    &:hover::after {
-      background-color: @dls-menu-indicator-color-hover;
-    }
+    .@{veui-prefix}-menu-link {
+      &::before {
+        background-color: @dls-menu-item-background-color-current;
+        .veui-transition(background-color);
+      }
+      &[data-focus-visible-added]::before {
+        background-color: @dls-menu-item-background-color-current-focus;
+      }
+      &:active::before {
+        background-color: @dls-menu-item-background-color-current-active;
+      }
 
-    &.focus-visible::after {
-      background-color: @dls-menu-indicator-color-focus;
-    }
-
-    &:active::after {
-      background-color: @dls-menu-indicator-color-active;
+      &::after {
+        content: "";
+        .absolute(_, 0, _, _);
+        .size(@dls-menu-indicator-width, inherit);
+        background: @dls-menu-indicator-color;
+      }
+      
+      &[data-focus-visible-added]::after {
+        background-color: @dls-menu-indicator-color-focus;
+      }
+      &:active::after {
+        background-color: @dls-menu-indicator-color-active;
+      }
     }
   }
 
@@ -286,8 +298,12 @@
     margin-left: @dls-menu-item-content-spacing;
     transform: rotateZ(90deg);
   }
-  .@{veui-prefix}-tree-item-expanded &-item-toggle {
+  &-item-expanded &-item-toggle {
     transform: rotateZ(-90deg);
+  }
+
+  &-toggle {
+    transform: rotateZ(180deg);
   }
 
   // collapsed
@@ -298,13 +314,9 @@
   &-collapsed &-tree {
     padding: @dls-menu-padding-y 0;
   }
-  &-collapsed &-tree &-item {
-    justify-content: center;
-  }
-  &-collapsed &-tree &-item-toggle,
+
   &-collapsed &-tree &-link {
-    flex: 0;
-    overflow: hidden;
+    justify-content: center;
   }
 
   &-collapsed &-item-icon {
@@ -312,6 +324,7 @@
   }
 
   &-overlay {
+    & > .@{veui-prefix}-menu-popout,
     & > .@{veui-prefix}-option-group-options,
     & > .@{veui-prefix}-option-group {
       &:extend(._veui-dropdown-overlay all);
@@ -326,8 +339,16 @@
       }
     }
   }
+
+  &-popout &-group-title {
+    .padding(@dls-option-group-label-padding-y + @dls-option-group-label-padding-y, @dls-option-padding-m, @dls-option-group-label-padding-y);
+    color: @dls-menu-item-group-label-font-color;
+    font-weight: @dls-menu-item-group-label-font-weight;
+  }
+
   &-overlay.@{veui-prefix}-overlay-enter,
   &-overlay.@{veui-prefix}-overlay-leave-to {
+    & > .@{veui-prefix}-menu-popout,
     & > .@{veui-prefix}-option-group-options,
     & > .@{veui-prefix}-option-group {
       transform: scaleX(0);
@@ -340,7 +361,7 @@
     font-size: @dls-menu-font-size-s;
   }
 
-  &[ui~="s"] &-tree .@{veui-prefix}-tree-item {
+  &[ui~="s"] &-tree &-item {
     height: @dls-menu-item-height-s;
   }
 
@@ -354,7 +375,7 @@
     font-size: @dls-menu-font-size-l;
   }
 
-  &[ui~="l"] &-tree .@{veui-prefix}-tree-item {
+  &[ui~="l"] &-tree &-item {
     height: @dls-menu-item-height-l;
   }
 
