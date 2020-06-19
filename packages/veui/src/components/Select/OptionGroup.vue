@@ -58,7 +58,8 @@ const OptionGroup = {
         return ['inline', 'popup'].indexOf(val) !== -1
       }
     },
-    optionTag: Option.props.tag
+    optionTag: Option.props.tag,
+    labelTag: String
   },
   data () {
     return {
@@ -225,6 +226,7 @@ const OptionGroup = {
             disabled={option.disabled}
             overlayClass={this.overlayClass}
             optionTag={this.optionTag}
+            labelTag={this.labelTag}
             key={i}
             trigger={option.trigger || this.trigger}
             option={option} // pass raw option
@@ -269,8 +271,7 @@ const OptionGroup = {
       })
       : []
 
-    let LabelTag =
-      this.canPopOut && EVENT_MAP[this.trigger] === 'click' ? 'button' : 'div'
+    let LabelTag = this.labelTag || this.canPopOut ? 'button' : 'div'
 
     return (
       <div

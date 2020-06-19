@@ -59,6 +59,7 @@
     <div
       :id="dropdownId"
       v-outside:input="closeDropdown"
+      :ui="realUi"
       :class="[
         $c('time-picker-overlay-content'),
         $c(`time-picker-overlay-${mode}`)

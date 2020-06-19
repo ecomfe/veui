@@ -20,38 +20,21 @@
   &-item {
     font-size: @dls-menu-font-size-horizontal-m;
 
-    .@{veui-prefix}-nav-link:hover {
+    &,
+    &:hover,
+    &[data-focus-visible-added],
+    &:active {
       text-decoration: none;
     }
   }
 
-  // implemention of item inherits styles of items
-  &-body &-item,
-  &-overlay &-item-exact-active,
-  &-overlay .@{veui-prefix}-option-group &-item {
-    & > * {
-      color: inherit;
-      font-weight: inherit;
-      font-size: inherit;
-      white-space: inherit;
-    }
-  }
-
-  &-body &-item &-link::before,
-  &-overlay .@{veui-prefix}-option-group &-item &-link::before {
-    // 非 card 下的 link 盖满整个 item
-    content: "";
-    .absolute(0);
-  }
-
+  &-item-label-wrapper,
   &-overlay .@{veui-prefix}-option-group-label,
-  &-overlay .@{veui-prefix}-option,
   &-body &-item {
     position: relative;
   }
 
   // top level normal item style
-  &-more,
   &-body &-item {
     padding: 0 @dls-menu-item-padding-x-horizontal;
     height: @dls-menu-item-height-horizontal-m;
@@ -64,8 +47,8 @@
     cursor: pointer;
 
     &:not(.@{veui-prefix}-disabled) {
-      background-color: @dls-menu-item-background-color-horizontal;
       color: @dls-menu-item-font-color-horizontal;
+      background-color: @dls-menu-item-background-color-horizontal;
 
       &::after {
         content: "";
@@ -75,10 +58,9 @@
         .veui-transition(background-color, box-shadow, opacity);
       }
 
-      &.@{veui-prefix}-nav-item-hover {
-        background-color: @dls-menu-item-background-color-horizontal-hover;
+      &.@{veui-prefix}-nav-item-open {
         color: @dls-menu-item-font-color-horizontal-hover;
-
+        background-color: @dls-menu-item-background-color-horizontal-hover;
         &::after {
           background-color: @dls-menu-indicator-color-hover;
           box-shadow: @dls-menu-item-shadow-horizontal-current;
@@ -86,14 +68,14 @@
         }
       }
 
-      &.focus-visible {
-        background-color: @dls-menu-item-background-color-horizontal-focus;
+      &[data-focus-visible-added] {
         color: @dls-menu-item-font-color-horizontal-focus;
+        background-color: @dls-menu-item-background-color-horizontal-focus;
       }
 
       &:not(.@{veui-prefix}-nav-more):active {
-        background-color: @dls-menu-item-background-color-horizontal-active;
         color: @dls-menu-item-font-color-horizontal-active;
+        background-color: @dls-menu-item-background-color-horizontal-active;
       }
     }
 
@@ -119,17 +101,14 @@
       background-color: @dls-menu-item-background-color-horizontal-current;
       font-weight: @dls-menu-item-font-weight-current;
 
+      // indicator
       &::after {
-        content: "";
-        .absolute(_, 0, -1px, 0);
-        .size(auto, @dls-menu-indicator-width);
         background-color: @dls-menu-indicator-color;
         box-shadow: @dls-menu-item-shadow-horizontal-current;
         opacity: 1;
-        .veui-transition(background-color, box-shadow, opacity);
       }
 
-      &:hover {
+      &.@{veui-prefix}-nav-item-open {
         color: @dls-menu-item-font-color-horizontal-current-hover;
         background-color: @dls-menu-item-background-color-horizontal-hover;
         &::after {
@@ -137,7 +116,7 @@
         }
       }
 
-      &.focus-visible {
+      &[data-focus-visible-added] {
         color: @dls-menu-item-font-color-horizontal-current-focus;
         background-color: @dls-menu-item-background-color-horizontal-focus;
         &::after {
@@ -164,16 +143,16 @@
     .veui-transition(transform, color);
   }
 
-  &-item-hover &-expand-icon {
+  &-item-open &-expand-icon {
     transform: rotateZ(-90deg);
   }
 
-  // top level items of which have expand icon
+  // top level expandable items
   &-body &-expandable {
     padding: 0 @dls-menu-item-spacing 0 @dls-menu-item-padding-x-horizontal;
   }
 
-  // apply overlay-shadow styles
+  // dropdown: apply overlay shadow styles
   &-dropdown > .@{veui-prefix}-option-group,
   &-dropdown &-card {
     &:extend(._veui-dropdown-overlay all);
@@ -192,10 +171,47 @@
     }
   }
 
+  // card item
+  &-card &-item {
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      color: @dls-menu-item-font-color-horizontal-hover;
+      background-color: @dls-menu-item-background-color-horizontal-hover;
+    }
+
+    &[data-focus-visible-added] {
+      color: @dls-menu-item-font-color-horizontal-focus;
+      background-color: @dls-menu-item-background-color-horizontal-focus;
+    }
+
+    &.@{veui-prefix}-nav-item-exact-active {
+      & {
+        font-weight: @dls-menu-item-font-weight-current;
+        color: @dls-menu-item-font-color-horizontal-current;
+        background-color: @dls-menu-item-background-color-horizontal-current;
+      }
+      &:hover {
+        color: @dls-menu-item-font-color-horizontal-current-hover;
+        background-color: @dls-menu-item-background-color-horizontal-current-hover;
+      }
+      &[data-focus-visible-added] {
+        color: @dls-menu-item-font-color-horizontal-current-focus;
+        background-color: @dls-menu-item-background-color-horizontal-current-focus;
+      }
+      &:active {
+        color: @dls-menu-item-font-color-horizontal-current-active;
+        background-color: @dls-menu-item-background-color-horizontal-current-active;
+      }
+    }
+  }
+
   &-card &-item:not(&-item-title) {
     margin-top: @dls-menu-card-item-spacing;
   }
 
+  // card item title
   &-item-title {
     color: @dls-menu-card-title-font-color;
     font-size: @dls-menu-card-title-font-size-m;
@@ -203,9 +219,6 @@
   }
 
   &-card &-item-has-icon {
-    display: flex;
-    align-items: center;
-
     // 有 icon 的特殊二级间隔
     & + ul {
       padding-left: dls-sum(
@@ -220,11 +233,148 @@
     .dls-icon-size(@dls-menu-card-item-icon-size, true);
   }
 
-  // all active/exact-active items
-  &-overlay .@{veui-prefix}-option-group-label &-item-active,
-  &-overlay .@{veui-prefix}-option-group-label &-item-active + .@{veui-prefix}-icon,
-  &-item-exact-active {
-    color: @dls-menu-item-font-color-horizontal-current;
+  &-overlay.@{veui-prefix}-option-group-box {
+    & > .@{veui-prefix}-option-group-options,
+    & > .@{veui-prefix}-option-group {
+      transform-origin: 0 0;
+    }
+  }
+
+  &-overlay.@{veui-prefix}-option-group-box.@{veui-prefix}-overlay-enter,
+  &-overlay.@{veui-prefix}-option-group-box.@{veui-prefix}-overlay-leave-to {
+    & > .@{veui-prefix}-option-group-options,
+    & > .@{veui-prefix}-option-group {
+      transform: scaleX(0);
+    }
+  }
+
+  &-overlay .@{veui-prefix}-option-group-label &-item {
+    // option-group-label 下的 link 盖满整个 item
+    flex: 1;
+
+    &::before {
+      content: "";
+      .absolute(0);
+    }
+
+    & + .@{veui-prefix}-option-group-expandable {
+      position: relative;
+    }
+
+    &[data-focus-visible-added] {
+      &,
+      & + .@{veui-prefix}-option-group-expandable {
+        color: @dls-menu-item-font-color-horizontal-focus;
+      }
+      &::before {
+        background-color: @dls-menu-item-background-color-horizontal-focus;
+      }
+    }
+
+    &:active{
+      &,
+      & + .@{veui-prefix}-option-group-expandable {
+        color: @dls-menu-item-font-color-horizontal-active;
+      }
+      &::before {
+        background-color: @dls-menu-item-background-color-horizontal-active;
+      }
+    }
+
+    &.@{veui-prefix}-nav-item-active,
+    &.@{veui-prefix}-nav-item-exact-active {
+      &,
+      & + .@{veui-prefix}-option-group-expandable {
+        font-weight: @dls-menu-item-font-weight-current;
+        color: @dls-menu-item-font-color-horizontal-current;
+      }
+    }
+
+    &.@{veui-prefix}-nav-item-exact-active {
+      &::before {
+        background-color: @dls-menu-item-background-color-horizontal-current;
+      }
+
+      &:hover {
+        &,
+        & + .@{veui-prefix}-option-group-expandable {
+          color: @dls-menu-item-font-color-horizontal-current-hover;
+        }
+        &::before {
+          background-color: @dls-menu-item-background-color-horizontal-current-hover;
+        }
+      }
+
+      &[data-focus-visible-added] {
+        &,
+        & + .@{veui-prefix}-option-group-expandable {
+          color: @dls-menu-item-font-color-horizontal-current-focus;
+        }
+        &::before {
+          background-color: @dls-menu-item-background-color-horizontal-current-focus;
+        }
+      }
+
+      &:active {
+        &,
+        & + .@{veui-prefix}-option-group-expandable {
+          color: @dls-menu-item-font-color-horizontal-current-active;
+        }
+        &::before {
+          background-color: @dls-menu-item-background-color-horizontal-current-active;
+        }
+      }
+    }
+  }
+
+  // option item
+  &-overlay .@{veui-prefix}-option {
+    .padding(_, 0);
+    display: flex;
+    align-items: stretch;
+
+    .@{veui-prefix}-nav-item {
+      .padding(_, @dls-option-padding-m);
+      flex: 1;
+      display: flex;
+      align-items: center;
+
+      &:hover {
+        color: @dls-menu-item-font-color-horizontal-hover;
+        background-color: @dls-menu-item-background-color-horizontal-hover;
+      }
+
+      &[data-focus-visible-added] {
+        color: @dls-menu-item-font-color-horizontal-focus;
+        background-color: @dls-menu-item-background-color-horizontal-focus;
+      }
+
+      &:active {
+        color: @dls-menu-item-font-color-horizontal-active;
+        background-color: @dls-menu-item-background-color-horizontal-active;
+      }
+  
+      &.@{veui-prefix}-nav-item-exact-active {
+        font-weight: @dls-menu-item-font-weight-current;
+        color: @dls-menu-item-font-color-horizontal-current;
+        background-color: @dls-menu-item-background-color-horizontal-current;
+
+        &:hover {
+          color: @dls-menu-item-font-color-horizontal-current-hover;
+          background-color: @dls-menu-item-background-color-horizontal-current-hover;
+        }
+  
+        &[data-focus-visible-added] {
+          color: @dls-menu-item-font-color-horizontal-current-focus;
+          background-color: @dls-menu-item-background-color-horizontal-current-focus;
+        }
+  
+        &:active {
+          color: @dls-menu-item-font-color-horizontal-current-active;
+          background-color: @dls-menu-item-background-color-horizontal-current-active;
+        }
+      }
+    }
   }
 
   &-overlay[ui~="s"] &-item,

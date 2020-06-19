@@ -44,6 +44,14 @@
       >{{ item.label }}🐂</template>
     </veui-nav>
   </section>
+  <section>
+    <h3>named nav（without to）</h3>
+    <veui-nav :items="nameItems"/>
+  </section>
+  <section>
+    <h3>nav based on params</h3>
+    <veui-nav :items="nameItems"/>
+  </section>
   <section><router-view/></section>
 </article>
 </template>
@@ -56,15 +64,15 @@ import 'veui-theme-dls-icons/eye'
 import 'veui-theme-dls-icons/file'
 
 export default {
-  name: 'veui-menu-demo',
+  name: 'veui-nav-demo',
   components: {
     'veui-nav': Nav
   },
   data () {
     let items = [
       {
-        label: 'Group One',
-        name: 'group-one',
+        label: 'Navigation One',
+        name: 'navigation-one',
         icon: 'clock',
         position: 'card',
         children: [
@@ -82,7 +90,14 @@ export default {
           {
             label: 'Loading',
             name: 'Loading',
-            to: '/nav/loading'
+            to: '/nav/loading',
+            children: [
+              {
+                label: 'Link',
+                name: 'Link',
+                to: '/nav/link'
+              }
+            ]
           }
         ]
       },
@@ -162,9 +177,49 @@ export default {
         ]
       }
     ]
+    let nameItems = [
+      {
+        label: 'Group One',
+        name: 'group-one',
+        position: 'card',
+        children: [
+          {
+            label: 'Sub One',
+            name: 'sub-one',
+            children: [
+              {
+                label: 'Input',
+                name: 'Input'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        label: 'Button',
+        name: 'Button',
+        children: [
+          {
+            label: 'OptionGroup',
+            name: 'OptionGroup',
+            children: [
+              {
+                label: 'Link',
+                name: 'Link'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        label: 'Loading',
+        name: 'Loading'
+      }
+    ]
     return {
       active: null,
-      items
+      items,
+      nameItems
     }
   }
 }
