@@ -13,22 +13,24 @@
       :key="item.name"
       :ref="item.name"
       :class="{
-        [$c('nav-more-hidden')]:
-          isMore(item) && moreBtnPosition === normalizedItems.length
+        [$c('nav-more-hidden')]: isMoreBtn(item) && !restItems.length
       }"
     >
       <slot
-        v-if="isMore(item)"
+        v-if="isMoreBtn(item)"
         name="more"
       >
         <div
+          ref="more"
           :class="{
             [$c('nav-more')]: true,
-            [$c('nav-item-hover')]: isHover('more'),
+            [$c('nav-item')]: !!restItems.length,
+            [$c('nav-item-open')]: isOpen('more'),
             ...itemClass(item)
           }"
-          tabindex="0"
+          :tabindex="item.tabIndex"
           @mouseenter="handleItemHover(item)"
+          @keydown="handleKeydown($event, item)"
         >
           <slot name="more-icon">
             <veui-icon :name="icons.more"/>
@@ -40,27 +42,25 @@
         name="item"
         v-bind="item"
       >
-        <div
+        <veui-link
+          :ref="`link-${item.name}`"
           :class="{
             [$c('nav-item')]: true,
-            [$c('nav-item-hover')]: isHover(item.name),
+            [$c('nav-item-open')]: isOpen(item.name),
             [$c('nav-expandable')]: hasChildren(item),
             ...itemClass(item)
           }"
-          tabindex="0"
-          @mouseenter="handleItemHover(item)"
+          :tabindex="item.tabIndex"
+          v-bind="pickLinkProps(item)"
+          @mouseenter.native="handleItemHover(item)"
           @click="handleItemClick(item)"
+          @keydown.native="handleKeydown($event, item)"
         >
           <slot
             name="item-label"
             v-bind="item"
           >
-            <veui-link
-              v-bind="pickLinkProps(item)"
-              :class="$c('nav-link')"
-            >
-              {{ item.label }}
-            </veui-link>
+            {{ item.label }}
           </slot>
           <slot
             v-if="hasChildren(item)"
@@ -72,16 +72,18 @@
               :name="icons.expand"
             />
           </slot>
-        </div>
+        </veui-link>
       </slot>
       <veui-overlay
         v-if="!!item.children"
         :overlay-class="$c('nav-overlay')"
-        :open="isHover(item.name)"
+        :open="isOpen(item.name)"
         :target="item.name"
         position="bottom-center"
+        autofocus
       >
         <div
+          :ref="`dropdown-${item.name}`"
           v-outside="{
             refs: outsideRefs,
             delay: 100,
@@ -89,6 +91,7 @@
             handler: close
           }"
           :class="$c('nav-dropdown')"
+          @keydown="handleKeydown($event, null, item)"
         >
           <ul
             v-if="item.position === 'card'"
@@ -97,26 +100,28 @@
             }"
           >
             <li
-              v-for="sub in item.children"
-              :key="sub.name"
+              v-for="cardItem in item.children"
+              :key="cardItem.name"
               :class="$c('nav-card-item')"
-              @click="handleItemClick(sub)"
+              @click="handleItemClick(cardItem)"
             >
               <slot
                 name="item"
-                v-bind="sub"
+                v-bind="cardItem"
               >
-                <div
+                <veui-link
                   :class="{
                     [$c('nav-item')]: true,
                     [$c('nav-item-title')]: true,
-                    [$c('nav-item-has-icon')]: sub.icon,
-                    ...itemClass(sub)
+                    [$c('nav-item-has-icon')]: cardItem.icon,
+                    ...itemClass(cardItem)
                   }"
+                  :tabindex="!cardItem.disabled && cardItem.to ? 0 : null"
+                  v-bind="pickLinkProps(cardItem)"
                 >
                   <slot
                     v-if="
-                      sub.icon ||
+                      cardItem.icon ||
                         $slots['title-icon'] ||
                         $scopedSlots['title-icon']
                     "
@@ -124,55 +129,45 @@
                   >
                     <veui-icon
                       :class="$c('nav-title-icon')"
-                      :name="sub.icon"
+                      :name="cardItem.icon"
                     />
                   </slot>
                   <slot
                     name="item-label"
-                    v-bind="sub"
+                    v-bind="cardItem"
                   >
-                    <veui-link
-                      v-bind="pickLinkProps(sub)"
-                      :class="{
-                        [$c('nav-link')]: true
-                      }"
-                    >{{ sub.label }}</veui-link>
+                    {{ cardItem.label }}
                   </slot>
-                </div>
+                </veui-link>
               </slot>
               <ul
-                v-if="hasChildren(sub)"
+                v-if="hasChildren(cardItem)"
                 role="group"
               >
                 <li
-                  v-for="leaf in sub.children"
-                  :key="leaf.name"
-                  @click="handleItemClick(leaf)"
+                  v-for="subCardItem in cardItem.children"
+                  :key="subCardItem.name"
+                  @click="handleItemClick(subCardItem)"
                 >
                   <slot
                     name="item"
-                    v-bind="leaf"
+                    v-bind="subCardItem"
                   >
-                    <div
+                    <veui-link
                       :class="{
                         [$c('nav-item')]: true,
-                        ...itemClass(leaf)
+                        ...itemClass(subCardItem)
                       }"
+                      :tabindex="subCardItem.disabled ? null : 0"
+                      v-bind="pickLinkProps(subCardItem)"
                     >
                       <slot
                         name="item-label"
-                        v-bind="leaf"
+                        v-bind="subCardItem"
                       >
-                        <veui-link
-                          v-bind="pickLinkProps(leaf)"
-                          :class="{
-                            [$c('nav-link')]: true
-                          }"
-                        >
-                          {{ leaf.label }}
-                        </veui-link>
+                        {{ subCardItem.label }}
                       </slot>
-                    </div>
+                    </veui-link>
                   </slot>
                 </li>
               </ul>
@@ -185,6 +180,7 @@
             position="popup"
             trigger="hover"
             option-tag="div"
+            label-tag="div"
           >
             <template
               slot="option"
@@ -194,27 +190,22 @@
                 name="item"
                 v-bind="option"
               >
-                <div
+                <veui-link
                   :class="{
                     [$c('nav-item')]: true,
                     ...itemClass(option)
                   }"
+                  :tabindex="option.disabled ? null : 0"
+                  v-bind="pickLinkProps(option)"
                   @click="handleItemClick(option)"
                 >
                   <slot
                     name="item-label"
                     v-bind="option"
                   >
-                    <veui-link
-                      v-bind="pickLinkProps(option)"
-                      :class="{
-                        [$c('nav-link')]: true
-                      }"
-                    >
-                      {{ option.label }}
-                    </veui-link>
+                    {{ option.label }}
                   </slot>
-                </div>
+                </veui-link>
               </slot>
             </template>
             <template
@@ -225,11 +216,13 @@
                 name="item"
                 v-bind="group"
               >
-                <div
+                <veui-link
                   :class="{
                     [$c('nav-item')]: true,
                     ...itemClass(group.option)
                   }"
+                  :tabindex="group.option.disabled ? null : 0"
+                  v-bind="pickLinkProps(group.option, true)"
                   @click="
                     handleGroupLabelClick(group.option, group.closeMenu)
                   "
@@ -238,16 +231,11 @@
                     name="item-label"
                     v-bind="group"
                   >
-                    <veui-link
-                      v-bind="pickLinkProps(group.option, true)"
-                      :class="{
-                        [$c('nav-link')]: true
-                      }"
-                    >
-                      {{ group.label }}
-                    </veui-link>
+                    <span :class="$c('nav-item-label-wrapper')">{{
+                      group.label
+                    }}</span>
                   </slot>
-                </div>
+                </veui-link>
               </slot>
             </template>
           </veui-option-group>
@@ -261,8 +249,11 @@
 <script>
 import mixin from './_mixin'
 import resize from '../../directives/resize'
+import { getFocusable } from '../../utils/dom'
+import { findIndex, last } from 'lodash'
 
 export default {
+  name: 'veui-nav',
   directives: {
     resize
   },
@@ -285,13 +276,16 @@ export default {
       if (this.moreBtnPosition !== items.length) {
         items = items.slice(0, this.moreBtnPosition)
       }
-      return [
+      items = [
         ...items,
         {
           name: 'more',
+          tabIndex: items.some(i => i.tabIndex === 0) ? -1 : 0,
           children: this.restItems
         }
       ]
+
+      return items
     }
   },
   created () {
@@ -308,15 +302,15 @@ export default {
     hasChildren (item) {
       return !!item && Array.isArray(item.children) && !!item.children.length
     },
-    isMore ({ name }) {
-      return name === 'more'
+    isMoreBtn (item) {
+      return item === last(this.realItems)
     },
-    isHover (name) {
+    isOpen (name) {
       // hover dropdown 时，icon 也要处于 hover 状态
       return !!this.hoverItem && this.hoverItem.name === name
     },
     itemClass (item) {
-      if (this.isMore(item)) {
+      if (this.isMoreBtn(item)) {
         return {
           [this.$c('nav-item-active')]: this.activeItems.some(i =>
             this.restItems.some(({ name }) => i.name === name)
@@ -376,6 +370,7 @@ export default {
     },
     handleItemHover (item) {
       this.hoverItem = item
+      this.hover = true
       this.$set(this.outsideRefs, 0, item.name)
     },
     handleItemClick (item) {
@@ -387,6 +382,106 @@ export default {
       // 3. options: activate + close dropdown
       this.activateItem(item, true)
       this.$emit('click', item)
+    },
+    getFocusSelector () {
+      return `.${this.$c('nav-body')} .${this.$c('nav-item')}:not(.${this.$c(
+        'disabled'
+      )})`
+    },
+    handleKeydown (e, item, root) {
+      let passive = false
+      let items
+      switch (e.key) {
+        case 'Enter':
+          passive = true
+          if (!root) {
+            this.activateItem(item, true)
+          }
+          break
+        case 'Esc':
+        case 'Escape':
+          if (root || this.hoverItem) {
+            this.close()
+          }
+          break
+        case 'Left':
+        case 'ArrowLeft':
+          if (!root) {
+            if (this.hoverItem) {
+              this.close()
+            } else {
+              items = this.$el.querySelectorAll(this.getFocusSelector())
+              this.navigate(e.target, items, false, true)
+            }
+          }
+          break
+        case 'Right':
+        case 'ArrowRight':
+          if (!root) {
+            if (this.hoverItem) {
+              this.close()
+            } else {
+              items = this.$el.querySelectorAll(this.getFocusSelector())
+              this.navigate(e.target, items, true, true)
+            }
+          }
+          break
+        case 'Up':
+        case 'ArrowUp':
+          if (root) {
+            items = getFocusable(this.$refs[`dropdown-${root.name}`][0])
+            this.navigate(e.target, items, false, false)
+          }
+          break
+        case 'Down':
+        case 'ArrowDown':
+          if (!root) {
+            this.hoverItem = item
+          } else {
+            items = getFocusable(this.$refs[`dropdown-${root.name}`][0])
+            this.navigate(e.target, items, true, false)
+          }
+          break
+        case 'Home':
+          if (!root) {
+            items = this.$el.querySelectorAll(this.getFocusSelector())
+            this.navigate(e.target, items, false, true, true)
+          }
+          break
+        case 'End':
+          if (!root) {
+            items = this.$el.querySelectorAll(this.getFocusSelector())
+            this.navigate(e.target, items, true, true, true)
+          }
+          break
+        default:
+          passive = true
+          break
+      }
+      if (!passive) {
+        e.stopPropagation()
+        e.preventDefault()
+      }
+    },
+    handleKeyLeftOrRight (item, forward) {
+      let step = forward ? 1 : -1
+      let isMoreHidden = !this.restItems.length
+      let items = isMoreHidden ? this.realItems.slice(0, -1) : this.realItems
+      items = items.filter(i => !i.disabled)
+      let index = findIndex(items, i => i.name === item.name)
+      if (index >= 0) {
+        let len = items.length
+        index = (index + step + len) % len
+        let nextItem = items[index]
+        if (this.isMoreBtn(nextItem)) {
+          this.$refs.more[0].focus()
+        } else {
+          let el = this.$refs[`link-${nextItem.name}`]
+          if (el && el[0]) {
+            el[0].$el.focus()
+          }
+        }
+      }
     }
   }
 }
