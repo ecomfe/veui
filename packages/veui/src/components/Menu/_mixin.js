@@ -9,11 +9,11 @@ import controllable from '../../mixins/controllable'
 import outside from '../../directives/outside'
 import { find } from '../../utils/datasource'
 import { map, endsWith, pick, isString } from 'lodash'
+import { getFocusable } from '../../utils/dom'
 
 const ensureSlash = str => (endsWith(str, '/') ? str : `${str}/`)
 
 export default {
-  name: 'veui-nav',
   components: {
     'veui-link': Link,
     'veui-icon': Icon,
@@ -68,17 +68,14 @@ export default {
     }
   },
   methods: {
-    normalizeItems (items) {
-      return map(items, item => {
+    normalizeItems (items, level = '') {
+      let firstTabable = null
+      return map(items, (item, index) => {
         let { to, name, children } = item
-        if (name == null && to == null) {
-          throw new Error(
-            '[veui-menu] `name` or `to` of menu item is required!'
-          )
-        }
 
         item = { ...item }
 
+        // path 是方便 matches 匹配
         if (to == null) {
           item.path = null
         } else if (this.$router) {
@@ -92,13 +89,19 @@ export default {
           )
         }
 
+        index = `${level}${index}`
         if (!name) {
-          item.name = item.path || ''
+          item.name = item.path || index
         }
         item.value = item.value || item.name
 
+        if (!level) {
+          item.tabIndex = item.disabled ? null : firstTabable ? '-1' : '0'
+          firstTabable = item.tabIndex === '0' ? item : firstTabable
+        }
+
         if (children) {
-          item.children = this.normalizeItems(children)
+          item.children = this.normalizeItems(children, `${index}-`)
         }
 
         return typeof this.postNormalize === 'function'
@@ -152,6 +155,39 @@ export default {
         closeMenu()
       }
       this.$emit('click', group)
+    },
+    // keyboard
+    navigateInContainer (container, target, step) {
+      let focusable = getFocusable(container)
+      if (focusable.length) {
+        let index = focusable.indexOf(target)
+        let next =
+          index === -1
+            ? 0
+            : (index + step + focusable.length) % focusable.length
+        focusable[next].focus()
+      }
+    },
+    navigate (current, items, forward, updateTabIndex, hitBoundary = false) {
+      items = [...items] // 兼容类数组
+      if (updateTabIndex) current.tabIndex = -1
+      let index = items.indexOf(current)
+
+      let next
+      if (hitBoundary) {
+        next = items[forward ? items.length - 1 : 0]
+        next.tabIndex = 0
+        next.focus()
+        return
+      }
+
+      let targetIndex =
+        index === -1
+          ? 0
+          : ((forward ? index + 1 : index - 1) + items.length) % items.length
+      next = items[targetIndex]
+      if (updateTabIndex) next.tabIndex = 0
+      next.focus()
     }
   }
 }

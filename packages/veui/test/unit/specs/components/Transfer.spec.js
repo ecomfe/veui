@@ -275,7 +275,8 @@ describe('components/Transfer', () => {
           '<veui-transfer :datasource="datasource" v-model="selected" />'
       },
       {
-        sync: false
+        sync: false,
+        attachToDocument: true
       }
     )
 
@@ -286,17 +287,12 @@ describe('components/Transfer', () => {
       .at(0)
       .find('input[type="checkbox"]')
       .trigger('change')
+    // // first.checked = false
+    // first.trigger('change')
     await vm.$nextTick()
 
-    expect(vm.$data.selected).to.deep.equal([
-      'aa0',
-      'aa10',
-      'aa11',
-      'aa12',
-      'aa2',
-      'bb',
-      'cc11'
-    ])
+    // 之前change一下希望全选么？现在行为是优先清空
+    expect(vm.$data.selected).to.deep.equal(['bb', 'cc11'])
 
     let selectedItems = wrapper
       .findAll(Tree)
@@ -307,7 +303,7 @@ describe('components/Transfer', () => {
       .find('.veui-tree-item-remove')
       .trigger('click')
     await vm.$nextTick()
-    expect(vm.$data.selected).to.deep.equal(['bb', 'cc11'])
+    expect(vm.$data.selected).to.deep.equal(['cc11'])
 
     wrapper.destroy()
   })

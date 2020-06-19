@@ -24,6 +24,7 @@
     }"
   >
     <div
+      v-if="!isYearType"
       :class="$c('calendar-head')"
       :aria-hidden="!!pIndex"
     >

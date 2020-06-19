@@ -4,12 +4,12 @@
   <div class="content-wrapper">
     <div class="line"/>
     <div
-      v-for="i in coffees0"
-      :id="i.value.indexOf('#') >= 0 ? i.value.slice(1) : i.value"
-      :key="i.value"
+      v-for="i in ids"
+      :id="i"
+      :key="i"
       class="block"
     >
-      {{ i.label }}
+      {{ i }}
     </div>
   </div>
   <h2 class="sticky-header">sticky anchor</h2>
@@ -69,37 +69,58 @@ export default {
     'veui-anchor': Anchor
   },
   data () {
+    let coffees0 = [
+      {
+        label: 'Infused',
+        value: '#infused',
+        children: [
+          {
+            label: 'Filtered',
+            value: '#filtered'
+          },
+          {
+            label: 'Pour-over',
+            value: '#pour-over'
+          }
+        ]
+      },
+      {
+        label: 'Boiled',
+        value: '#boiled',
+        children: [
+          {
+            label: 'Moka',
+            value: '#moka'
+          }
+        ]
+      },
+      {
+        label: 'Espresso',
+        value: '#espresso',
+        children: [
+          {
+            label: '外部导航：Breadcrumb',
+            value: '/breadcrumb'
+          }
+        ]
+      },
+      {
+        label: 'Milk coffee',
+        value: '#milk-coffee'
+      }
+    ]
+
     return {
       container: null,
-      coffees0: [
-        {
-          label: 'Infused',
-          value: '#infused',
-          children: [
-            {
-              label: 'Breadcrumb',
-              value: '/breadcrumb'
-            }
-          ]
-        },
-        {
-          label: 'Boiled',
-          value: '#boiled',
-          children: [
-            {
-              label: 'Button',
-              value: '/button'
-            }
-          ]
-        },
-        {
-          label: 'Espresso',
-          value: '#espresso'
-        },
-        {
-          label: 'Milk coffee',
-          value: '#milk-coffee'
-        }
+      coffees0,
+      ids: [
+        'infused',
+        'filtered',
+        'pour-over',
+        'boiled',
+        'moka',
+        'espresso',
+        'milk-coffee'
       ],
       coffees: [
         {
@@ -116,11 +137,11 @@ export default {
                 },
                 {
                   label: 'Filtered',
-                  value: 'filtered'
+                  value: '#filtered'
                 },
                 {
                   label: 'Pour-over',
-                  value: 'pour-over'
+                  value: '#pour-over'
                 },
                 {
                   label: 'Immersion brewed',
@@ -144,7 +165,7 @@ export default {
           children: [
             {
               label: 'Percolated',
-              value: '#percolated'
+              value: 'percolated'
             },
             {
               label: 'Turkish',
@@ -152,7 +173,7 @@ export default {
             },
             {
               label: 'Moka',
-              value: 'moka'
+              value: '#moka'
             }
           ]
         },
@@ -248,7 +269,7 @@ main#content {
     position: relative;
     &::after {
       display: table;
-      content: "";
+      content: '';
       clear: both;
     }
     .block {
@@ -319,11 +340,11 @@ main#content {
   }
   .line {
     position: fixed;
-    top: ~"calc((100vh - 30px) * 0.1)";
+    top: ~'calc((100vh - 30px) * 0.1)';
     width: 180px;
     border-top: 1px solid #ccc;
     &::after {
-      content: "10%";
+      content: '10%';
       position: absolute;
       right: 0;
       bottom: 0;
