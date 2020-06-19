@@ -59,7 +59,25 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, input, focusable, controllable(['checked'])],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    focusable,
+    controllable({
+      prop: 'checked',
+      get () {
+        if (this.isControlled('checked')) {
+          return this.checked
+        } else if (this.isControlled('model')) {
+          return Array.isArray(this.model)
+            ? includes(this.model, this.value)
+            : this.model === this.trueValue
+        }
+        return !!this.localChecked
+      }
+    })
+  ],
   inheritAttrs: false,
   model: {
     prop: 'model'
