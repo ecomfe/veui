@@ -10,6 +10,11 @@
     </veui-checkbox>
   </section>
   <section>
+    <veui-checkbox :checked="true">
+      受控checked：永远为true
+    </veui-checkbox>
+  </section>
+  <section>
     <veui-checkbox
       v-model="current"
       true-value="已选"
