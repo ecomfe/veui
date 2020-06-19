@@ -85,13 +85,18 @@
     .@{veui-prefix}-calendar-body {
       flex-grow: 1;
     }
+  }
 
+  &-type-date &-panel,
+  &-type-month &-panel {
     &::before {
       content: "";
       .make-header-height(@dls-date-picker-font-size-m);
       .absolute(dls-sum(@header-height, -1px), 0, _, 0);
       height: 0;
       border-bottom: 1px solid @dls-date-picker-panel-separator-color;
+      position: relative;
+      z-index: 1;
     }
   }
 

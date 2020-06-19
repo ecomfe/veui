@@ -337,6 +337,24 @@ export default {
     'veui-input': Input
   },
   data () {
+    console.log('insert')
+    setTimeout(() => {
+      this.multiLevelUnlabeledOptions.splice(1, 0, {
+        label: '丰田1',
+        position: 'popup',
+        options: [
+          {
+            label: '凯美瑞1',
+            value: 'camry1'
+          },
+          {
+            label: '亚洲龙1',
+            value: 'avalon1'
+          }
+        ]
+      })
+    }, 6000)
+
     return {
       options: [
         {

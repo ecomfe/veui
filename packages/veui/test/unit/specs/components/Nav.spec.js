@@ -1,5 +1,10 @@
 import { mount } from '@vue/test-utils'
 import Nav from '@/components/Nav'
+import { wait } from '../../../utils'
+
+const fullPathMatches = (route, item) => {
+  return route.fullPath === item.path + item.to
+}
 
 const options = {
   components: {
@@ -7,8 +12,9 @@ const options = {
   },
   data () {
     return {
-      active: '/nav/input',
+      active: 'Input',
       width: '180px',
+      fullPathMatches,
       items: [
         {
           label: 'Group One',
@@ -21,7 +27,7 @@ const options = {
               children: [
                 {
                   label: 'Input',
-                  to: '/nav/input'
+                  name: 'Input'
                 }
               ]
             }
@@ -30,7 +36,7 @@ const options = {
         {
           label: 'Button',
           name: 'Button',
-          to: '/nav/button',
+          to: '#/button',
           children: [
             {
               label: 'OptionGroup',
@@ -38,8 +44,7 @@ const options = {
               children: [
                 {
                   label: 'Link',
-                  name: 'Link',
-                  to: '/nav/link'
+                  name: 'Link'
                 }
               ]
             }
@@ -47,8 +52,7 @@ const options = {
         },
         {
           label: 'Loading',
-          name: 'Loading',
-          to: '/nav/loading'
+          name: 'Loading'
         }
       ]
     }
@@ -72,12 +76,12 @@ describe('components/Nav', () => {
     )
     let { vm } = wrapper
     let navUI = wrapper.find('.small-nav').attributes().ui
-    let navLinkUI = wrapper.find('.small-nav .veui-nav-link').attributes().ui
+    let navLinkUI = wrapper.find('.small-nav .veui-nav-item').attributes().ui
     expect(navUI).to.include('s')
     expect(navLinkUI).to.include('s')
 
     navUI = wrapper.find('.large-nav').attributes().ui
-    navLinkUI = wrapper.find('.large-nav .veui-nav-link').attributes().ui
+    navLinkUI = wrapper.find('.large-nav .veui-nav-item').attributes().ui
     expect(navUI).to.include('l')
     expect(navLinkUI).to.include('l')
 
@@ -107,7 +111,6 @@ describe('components/Nav', () => {
     vm.active = null
     await vm.$nextTick()
     expect(item.classes('veui-nav-item-active')).to.equal(false)
-
     wrapper
       .findAll('.veui-nav-body .veui-nav-item')
       .at(1)
@@ -121,7 +124,8 @@ describe('components/Nav', () => {
     let wrapper = mount(
       {
         ...options,
-        template: '<veui-nav ref="nav" :items="items"/>'
+        template:
+          '<veui-nav ref="nav" :items="items" :matches="fullPathMatches"/>'
       },
       {
         sync: false,
@@ -153,7 +157,9 @@ describe('components/Nav', () => {
 
     let { vm } = wrapper
     await vm.$nextTick()
-    let length = wrapper.findAll('.veui-nav-body .veui-nav-item').length
+    let length = wrapper.findAll(
+      '.veui-nav-body .veui-nav-item:not(.veui-nav-more)'
+    ).length
     expect(length).to.equal(1)
 
     vm.width = 'auto'
@@ -186,7 +192,7 @@ describe('components/Nav', () => {
     items.at(0).trigger('click')
     expect(count).to.equal(1)
     items.at(1).trigger('mouseenter')
-    await vm.$nextTick()
+    await wait(300)
     document.querySelector('.veui-nav-overlay .veui-nav-item').click()
     expect(count).to.equal(2)
     wrapper.destroy()

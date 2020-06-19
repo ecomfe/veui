@@ -156,7 +156,8 @@ describe('components/Tree', () => {
         datasource,
         expanded: ['infused', 'brewed']
       },
-      sync: false
+      sync: false,
+      attachToDocument: true
     })
 
     expect(wrapper.findAll('.veui-tree-item').length).to.equal(11)
@@ -221,7 +222,7 @@ describe('components/Tree', () => {
     await vm.$nextTick()
     item.find('.veui-tree-item-label').trigger('click')
     await vm.$nextTick()
-    expect(vm.checked.length).to.deep.equal(6)
+    expect(vm.checked.length).to.deep.equal(8)
 
     vm.checkable = false
     await vm.$nextTick()
@@ -476,7 +477,8 @@ describe('components/Tree', () => {
           '<veui-tree :datasource="datasource" v-model="checked" :expanded.sync="expanded" checkable/>'
       },
       {
-        sync: false
+        sync: false,
+        attachToDocument: true
       }
     )
 
@@ -495,7 +497,9 @@ describe('components/Tree', () => {
     expect(checkboxes.at(2).props('checked')).to.equal(true)
 
     // remove all leaves
+    // 现在每次 select 好像都要等下
     select(2)
+    await wrapper.vm.$nextTick()
     select(3)
     await wrapper.vm.$nextTick()
     expect(data.checked).to.deep.equal([])
@@ -511,7 +515,8 @@ describe('components/Tree', () => {
       'drip-brewed',
       'filtered',
       'pour-over',
-      'immersion-brewed'
+      'immersion-brewed',
+      'brewed'
     ])
     expect(checkboxes.at(0).props('indeterminate')).to.equal(true)
     expect(checkboxes.at(1).props('checked')).to.equal(true)
@@ -520,7 +525,7 @@ describe('components/Tree', () => {
     expect(checkboxes.at(4).props('checked')).to.equal(true)
     expect(checkboxes.at(5).props('checked')).to.equal(true)
 
-    // select leat 'turkish' under another middle node 'boiled'
+    // select leaf 'turkish' under another middle node 'boiled'
     select(10)
     await wrapper.vm.$nextTick()
     expect(data.checked).to.deep.equal([
@@ -528,6 +533,7 @@ describe('components/Tree', () => {
       'filtered',
       'pour-over',
       'immersion-brewed',
+      'brewed',
       'turkish'
     ])
 
@@ -605,7 +611,8 @@ describe('components/Tree', () => {
           '<veui-tree :datasource="datasource" v-model="checked" :expanded.sync="expanded" checkable/>'
       },
       {
-        sync: false
+        sync: false,
+        attachToDocument: true
       }
     )
 
@@ -613,6 +620,7 @@ describe('components/Tree', () => {
 
     // select 'drip-brewed'
     select(2)
+    await wrapper.vm.$nextTick()
     // select 'immersion-brewed'
     select(5)
     await wrapper.vm.$nextTick()
@@ -627,7 +635,8 @@ describe('components/Tree', () => {
     expect(checkboxes.at(0).props('indeterminate')).to.equal(true)
     expect(checkboxes.at(0).props('checked')).to.equal(false)
     expect(checkboxes.at(1).props('indeterminate')).to.equal(true)
-    expect(checkboxes.at(1).props('checked')).to.equal(true)
+    // 修改：以前除了disabled是禁用的之外都是选中的则，group 认为是 checked？
+    expect(checkboxes.at(1).props('checked')).to.equal(false)
 
     // remove children of brewed
     select(1)

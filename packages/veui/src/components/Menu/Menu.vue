@@ -6,63 +6,71 @@
     [$c('menu-collapsed')]: realCollapsed
   }"
 >
-  <div :class="[$c('menu-tree-wrapper')]">
+  <div :class="$c('menu-tree-wrapper')">
     <slot name="before"/>
-    <veui-tree
+    <abstract-tree
       ref="tree"
+      :ui="realUi"
       :class="{
         [$c('menu-tree')]: true,
         [$c('menu-tree-has-icon')]: hasIcon
       }"
-      :datasource="normalizedItems"
+      :items="normalizedItems"
       :expanded="realExpanded"
-      keys="name"
+      :matches="treeMatches"
     >
       <template
         slot="item"
-        slot-scope="link"
+        slot-scope="{ item: link, expanded: itemExpanded, depth }"
       >
-        <div
-          :ref="link.name"
-          :class="{
-            [$c('menu-item')]: true,
-            ...itemClass(link)
-          }"
-          @click.stop="handleItemClick(link, true)"
-          @mouseenter="show(link)"
+        <slot
+          name="item"
+          :expanded="itemExpanded"
+          v-bind="link"
         >
-          <slot
-            name="item"
-            v-bind="link"
+          <div
+            :ref="link.name"
+            :class="{
+              [$c('menu-item')]: true,
+              [$c('menu-item-expanded')]: itemExpanded,
+              [$c('menu-tree-item')]: true,
+              ...itemClass(link)
+            }"
+            @mouseenter="show(link)"
           >
-            <div
-              v-if="link.icon || $scopedSlots.icon || $slots.icon"
-              :class="$c('menu-item-icon')"
+            <veui-link
+              :disabled="!!link.disabled"
+              :class="$c('menu-link')"
+              v-bind="pickLinkProps(link)"
+              :ui="realUi"
+              :tabindex="
+                depth === 1 ? link.tabIndex : link.disabled ? null : '-1'
+              "
+              @click="handleItemClick(link, true)"
+              @keydown.native="handleKeydown($event, link)"
             >
+              <span
+                v-if="link.icon || $scopedSlots.icon || $slots.icon"
+                :class="$c('menu-item-icon')"
+              >
+                <slot
+                  name="icon"
+                  v-bind="link"
+                >
+                  <veui-icon
+                    :ui="realUi"
+                    :name="link.icon"
+                  />
+                </slot>
+              </span>
               <slot
-                name="icon"
+                v-if="!realCollapsed"
+                name="item-label"
                 v-bind="link"
               >
-                <veui-icon :name="link.icon"/>
+                <span :class="$c('menu-item-label')">{{ link.label }}</span>
               </slot>
-            </div>
-            <slot
-              name="item-label"
-              v-bind="link"
-            >
-              <veui-link
-                :class="$c('menu-link')"
-                :disabled="!!link.disabled"
-                v-bind="pickLinkProps(link)"
-              >
-                <span
-                  v-if="!realCollapsed"
-                  :class="$c('menu-item-label')"
-                >{{
-                  link.label
-                }}</span>
-              </veui-link>
-            </slot>
+            </veui-link>
             <veui-button
               v-if="
                 !realCollapsed &&
@@ -73,35 +81,44 @@
               :ui="uiParts.toggle"
               tabindex="-1"
               :class="$c('menu-item-toggle')"
-              @click.stop="toggleExpanded(link)"
+              @click="toggleExpanded(link)"
             >
               <veui-icon
                 :class="$c('menu-toggle-icon')"
                 :name="link.expanded ? icons.collapse : icons.expand"
               />
             </veui-button>
-          </slot>
-          <veui-overlay
-            v-if="realCollapsed && link.options && link.options.length"
-            :target="link.name"
-            :options="realOverlayOptions"
-            :open="!!hoverItem && hoverItem.name === link.name"
-            position="right-start"
-            :overlay-class="$c('menu-overlay')"
-            trigger="hover"
+          </div>
+        </slot>
+        <veui-overlay
+          v-if="realCollapsed && link.options && link.options.length"
+          :target="link.name"
+          :options="realOverlayOptions"
+          :open="!!hoverItem && hoverItem.name === link.name"
+          position="right-start"
+          :overlay-class="$c('menu-overlay')"
+          trigger="hover"
+          autofocus
+        >
+          <div
+            v-outside="{
+              refs: outsideRefs,
+              delay: 100,
+              trigger: 'hover',
+              handler: close
+            }"
+            :class="$c('menu-popout')"
           >
+            <div :class="$c('menu-group-title')">{{ link.label }}</div>
             <veui-option-group
-              v-outside="{
-                refs: outsideRefs,
-                delay: 100,
-                trigger: 'hover',
-                handler: close
-              }"
+              :ref="`dropdown-${link.name}`"
               :overlay-class="$c('menu-overlay')"
               :options="link.options"
               position="popup"
               trigger="hover"
               option-tag="div"
+              label-tag="div"
+              @keydown.native="handleKeydown($event, null, link)"
             >
               <template
                 slot="option"
@@ -111,29 +128,25 @@
                   name="item"
                   v-bind="option"
                 >
-                  <div
+                  <veui-link
                     :class="{
                       [$c('menu-item')]: true,
+                      [$c('menu-link')]: true,
                       ...itemClass(option)
                     }"
+                    v-bind="pickLinkProps(option)"
+                    :tabindex="option.disabled ? null : 0"
                     @click="handleItemClick(option)"
                   >
                     <slot
                       name="item-label"
                       v-bind="option"
                     >
-                      <veui-link
-                        :class="{
-                          [$c('menu-link')]: true
-                        }"
-                        v-bind="pickLinkProps(option)"
-                      >
-                        <span :class="$c('menu-item-label')">{{
-                          option.label
-                        }}</span>
-                      </veui-link>
+                      <span :class="$c('menu-item-label')">{{
+                        option.label
+                      }}</span>
                     </slot>
-                  </div>
+                  </veui-link>
                 </slot>
               </template>
               <template
@@ -144,11 +157,14 @@
                   name="item"
                   v-bind="group"
                 >
-                  <div
+                  <veui-link
                     :class="{
                       [$c('menu-item')]: true,
+                      [$c('menu-link')]: true,
                       ...itemClass(group.option)
                     }"
+                    v-bind="pickLinkProps(group.option)"
+                    :tabindex="group.option.disabled ? null : 0"
                     @click="
                       handleGroupLabelClick(group.option, group.closeMenu)
                     "
@@ -157,23 +173,18 @@
                       name="item-label"
                       v-bind="group"
                     >
-                      <veui-link
-                        :class="$c('menu-link')"
-                        v-bind="pickLinkProps(group.option)"
-                      >
-                        <span :class="$c('menu-item-label')">{{
-                          group.label
-                        }}</span>
-                      </veui-link>
+                      <span :class="$c('menu-item-label')">{{
+                        group.label
+                      }}</span>
                     </slot>
-                  </div>
+                  </veui-link>
                 </slot>
               </template>
             </veui-option-group>
-          </veui-overlay>
-        </div>
+          </div>
+        </veui-overlay>
       </template>
-    </veui-tree>
+    </abstract-tree>
     <slot name="after"/>
   </div>
   <div
@@ -183,6 +194,7 @@
     <veui-button
       :ui="uiParts.toggle"
       :class="$c('menu-toggle')"
+      :tabindex="-1"
       @click="toggleCollapsed"
     >
       <veui-icon
@@ -195,21 +207,22 @@
 </template>
 
 <script>
-import Tree from '../Tree'
+import AbstractTree from '../Tree/AbstractTree'
 import Icon from '../Icon'
 import Link from '../Link'
 import Button from '../Button'
 import OptionGroup from '../OptionGroup'
 import Overlay from '../Overlay'
-import { some, uniq } from 'lodash'
+import { some, uniq, includes, forEach, find } from 'lodash'
 import controllable from '../../mixins/controllable'
 import mixin from './_mixin'
+import { closest, getFocusable } from '../../utils/dom'
 import '../../common/uiTypes'
 
 export default {
   name: 'veui-menu',
   components: {
-    'veui-tree': Tree,
+    AbstractTree,
     'veui-link': Link,
     'veui-icon': Icon,
     'veui-option-group': OptionGroup,
@@ -238,7 +251,7 @@ export default {
   props: {
     collapsible: Boolean,
     collapsed: Boolean,
-    expanded: Tree.props.datasource
+    expanded: AbstractTree.props.expanded
   },
   data () {
     return {
@@ -252,6 +265,9 @@ export default {
   computed: {
     hasIcon () {
       return !!some(this.items, ({ icon }) => !!icon)
+    },
+    treeMatches () {
+      return (val, item) => val === item.name
     }
   },
   watch: {
@@ -293,8 +309,13 @@ export default {
         this.realExpanded = uniq([...this.realExpanded, ...names])
       }
     },
-    toggleExpanded ({ name }) {
+    toggleExpanded ({ name, children }, toExpand) {
       let index = this.realExpanded.indexOf(name)
+      let included = index >= 0
+      if (toExpand === included || !children || children.length === 0) {
+        return
+      }
+
       let expanded
       if (index === -1) {
         expanded = uniq([...this.realExpanded, name])
@@ -306,6 +327,24 @@ export default {
     },
     toggleCollapsed () {
       this.realCollapsed = !this.realCollapsed
+      if (this.realCollapsed) {
+        this.$nextTick(() => {
+          let els = this.$el.querySelectorAll(this.getFocusSelector())
+          forEach(els, el => {
+            el.tabIndex = -1
+          })
+          // 切换到 collapsed 状态，将 tabIndex=0 还原到第一层
+          let first = find(
+            this.normalizedItems,
+            ({ tabIndex }) => tabIndex === '0'
+          )
+          if (first) {
+            this.$refs[first.name].querySelector(
+              `.${this.$c('menu-link')}`
+            ).tabIndex = 0
+          }
+        })
+      }
     },
     postNormalize (item) {
       if (item.children) {
@@ -330,7 +369,144 @@ export default {
       }
 
       this.$emit('click', item)
+    },
+    handleKeydown (e, item, root) {
+      // 有 root 表示来自第一级 popout（只有第一级的）
+      let passive = false
+      let items
+      switch (e.key) {
+        case 'Enter':
+          passive = true
+          if (!root) {
+            if (item.to) {
+              this.activateItem(item, false)
+            }
+          }
+          break
+        case 'Esc':
+        case 'Escape':
+          if (root || this.hoverItem) {
+            this.close()
+          }
+          break
+        case 'Left':
+        case 'ArrowLeft':
+          if (root || this.hoverItem) {
+            this.close()
+          } else {
+            if (includes(this.realExpanded, item.value)) {
+              this.toggleExpanded(item, false)
+            } else {
+              this.focusLevel(e.target)
+            }
+          }
+          break
+        case 'Right':
+        case 'ArrowRight':
+          // 仅仅处理 tree item 中的和打开一级 popout 的情况
+          if (!root) {
+            if (this.realCollapsed) {
+              this.show(item)
+            } else {
+              if (includes(this.realExpanded, item.value)) {
+                this.focusLevel(e.target, false)
+              } else {
+                this.toggleExpanded(item, true)
+                this.focusLevel(e.target, false)
+              }
+            }
+          }
+          break
+        case 'Up':
+        case 'ArrowUp':
+          if (this.realCollapsed && !root && this.hoverItem) {
+            this.close()
+          } else {
+            items = root
+              ? getFocusable(this.$refs[`dropdown-${root.name}`].$el)
+              : this.$el.querySelectorAll(this.getFocusSelector())
+            this.navigate(e.target, items, false, !root)
+          }
+          break
+        case 'Down':
+        case 'ArrowDown':
+          if (this.realCollapsed && !root && this.hoverItem) {
+            this.close()
+          } else {
+            items = root
+              ? getFocusable(this.$refs[`dropdown-${root.name}`].$el)
+              : this.$el.querySelectorAll(this.getFocusSelector())
+            this.navigate(e.target, items, true, !root)
+          }
+          break
+        case 'Home':
+          if (!root) {
+            items = this.$el.querySelectorAll(this.getFocusSelector())
+            this.navigate(e.target, items, false, true, true)
+          }
+          break
+        case 'End':
+          if (!root) {
+            items = this.$el.querySelectorAll(this.getFocusSelector())
+            this.navigate(e.target, items, true, true, true)
+          }
+          break
+        default:
+          passive = true
+          break
+      }
+      if (!passive) {
+        e.stopPropagation()
+        e.preventDefault()
+      }
+    },
+    getFocusSelector () {
+      return `.${this.$c('menu-tree-item')}:not(.${this.$c(
+        'disabled'
+      )}) .${this.$c('menu-link')}`
+    },
+    focusLevel (current, up = true) {
+      let el
+      if (up) {
+        el = closest(closest(document.activeElement, 'li').parentNode, 'li')
+      } else {
+        el = document.activeElement.nextElementSibling
+      }
+      if (!el) {
+        return
+      }
+
+      let itemEl = el.querySelector(this.getFocusSelector())
+      if (itemEl) {
+        this.$nextTick(() => {
+          current.tabIndex = -1
+          itemEl.tabIndex = 0
+          itemEl.focus()
+        })
+      }
     }
+    // navigate (current, items, forward = false, hitBoundary = false) {
+    //   let context = this.$el
+    //   current.tabIndex = -1
+    //   let items = [...context.querySelectorAll(this.getFocusSelector())]
+    //   let index = items.indexOf(current)
+
+    //   let next
+    //   if (hitBoundary) {
+    //     next = items[forward ? items.length - 1 : 0]
+    //     next.tabIndex = 0
+    //     next.focus()
+    //     return
+    //   }
+
+    //   let targetIndex =
+    //     index === -1
+    //       ? 0
+    //       : ((forward ? index + 1 : index - 1) + items.length) % items.length
+    //   next = items[targetIndex]
+    //   next.tabIndex = 0
+    //   next.focus()
+    // }
   }
 }
 </script>
