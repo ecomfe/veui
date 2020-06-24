@@ -102,14 +102,12 @@
       background-color: @dls-button-background-color-normal-hover;
     }
 
-    &.focus-visible,
     &[data-focus-visible-added] {
       background-color: @dls-button-background-color-normal-focus;
       .dls-focus-ring(@dls-button-border-color-focus, @dls-button-shadow-focus);
     }
 
     &:hover,
-    &.focus-visible,
     &[data-focus-visible-added] {
       text-decoration: none;
     }
@@ -127,6 +125,14 @@
       border-color: @dls-button-border-color-primary;
       background-color: @dls-button-background-color-primary;
       color: @dls-button-font-color-primary;
+
+      &:hover {
+        background-color: @dls-button-background-color-primary-hover;
+      }
+
+      &:active {
+        background-color: @dls-button-background-color-primary-active;
+      }
     }
 
     &.@{veui-prefix}-pagination-more {
@@ -146,7 +152,6 @@
       }
 
       &:hover,
-      &.focus-visible,
       &[data-focus-visible-added] {
         .@{veui-prefix}-pagination-more-ellipsis {
           opacity: 0;

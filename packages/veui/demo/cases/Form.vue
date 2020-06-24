@@ -586,14 +586,14 @@
         >删除</veui-button>
       </veui-fieldset>
 
-      <div class="operation">
+      <template #actions>
         <veui-button
           ui="primary"
           :loading="isValidating"
           type="submit"
         >提交</veui-button>
         <veui-button @click="dynamicAdd">新增项目及排期</veui-button>
-      </div>
+      </template>
     </veui-form>
   </section>
 </article>

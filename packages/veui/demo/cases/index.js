@@ -50,8 +50,14 @@ import TimePicker from './TimePicker'
 import Embedded from './Embedded'
 import Anchor from './Anchor'
 import Menu from './Menu'
+import Colors from './Colors'
 
 export default [
+  {
+    path: '/color-palette',
+    name: 'Colors',
+    component: Colors
+  },
   {
     path: '/alert',
     name: 'Alert',
