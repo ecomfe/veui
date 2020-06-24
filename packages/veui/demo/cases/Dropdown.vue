@@ -73,29 +73,30 @@
     <div>
       <h4>normal</h4>
       <veui-dropdown
-        ui="xs"
+        ui="normal xs"
         label="操作"
         :options="options"
       />
       <veui-dropdown
-        ui="s"
-        label="操作"
-        split
-        :options="options"
-      />
-      <veui-dropdown
-        ui="m"
+        ui="normal s"
         label="操作"
         split
         :options="options"
       />
       <veui-dropdown
-        ui="l"
+        ui="normal m"
         label="操作"
         split
         :options="options"
       />
       <veui-dropdown
+        ui="normal l"
+        label="操作"
+        split
+        :options="options"
+      />
+      <veui-dropdown
+        ui="normal"
         label="操作"
         split
         disabled
