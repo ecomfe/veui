@@ -8,7 +8,7 @@ config.defaults(
     },
     parts: {
       button: 'primary',
-      search: 'text'
+      search: 'text aux'
     },
     ui: {
       style: {
