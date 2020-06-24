@@ -19,7 +19,7 @@ config.defaults(
       }
     },
     parts: {
-      clear: 'text',
+      clear: 'text aux',
       input: 'inline'
     }
   },
