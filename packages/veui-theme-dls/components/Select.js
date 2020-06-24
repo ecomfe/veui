@@ -31,7 +31,7 @@ config.defaults(
       }
     },
     parts: {
-      clear: 'text',
+      clear: 'text aux',
       checkbox: ({ size }) => CHECKBOX_SIZE_MAP[size] || size,
       tag: ({ size }) => TAG_SIZE_MAP[size] || size
     }
