@@ -6,7 +6,7 @@
     [$c('disabled')]: disabled,
     [$c('button-icon-only')]: iconOnly
   }"
-  :ui="realUi"
+  :ui="`${realUi} ${uiParts.self}`"
   v-bind="attrs"
   v-on="$listeners"
 >

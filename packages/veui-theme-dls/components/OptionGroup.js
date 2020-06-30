@@ -1,10 +1,10 @@
-import 'veui-theme-dls-icons/chevron-right'
+import { IconChevronRight } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      expandable: 'chevron-right'
+      expandable: IconChevronRight
     },
     ui: {
       size: {

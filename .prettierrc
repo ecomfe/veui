@@ -1,0 +1,13 @@
+{
+  "singleQuote": true,
+  "semi": false,
+  "overrides": [
+    {
+      "files": "*.less",
+      "options": {
+        "parser": "less",
+        "singleQuote": false
+      }
+    }
+  ]
+}

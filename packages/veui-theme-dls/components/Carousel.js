@@ -1,5 +1,4 @@
-import 'veui-theme-dls-icons/chevron-left'
-import 'veui-theme-dls-icons/chevron-right'
+import { IconChevronLeft, IconChevronRight } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
@@ -8,8 +7,8 @@ config.defaults(
       control: 'translucent'
     },
     icons: {
-      prev: 'chevron-left',
-      next: 'chevron-right'
+      prev: IconChevronLeft,
+      next: IconChevronRight
     }
   },
   'carousel'

@@ -1,5 +1,4 @@
-import 'veui-theme-dls-icons/chevron-down'
-import 'veui-theme-dls-icons/times-circle'
+import { IconChevronDown, IconTimesCircle } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 const CHECKBOX_SIZE_MAP = {
@@ -19,9 +18,9 @@ const TAG_SIZE_MAP = {
 config.defaults(
   {
     icons: {
-      expand: 'chevron-down',
-      collapse: 'chevron-down',
-      clear: 'times-circle'
+      expand: IconChevronDown,
+      collapse: IconChevronDown,
+      clear: IconTimesCircle
     },
     ui: {
       size: {
@@ -31,7 +30,7 @@ config.defaults(
       }
     },
     parts: {
-      clear: 'text aux',
+      clear: 'icon',
       checkbox: ({ size }) => CHECKBOX_SIZE_MAP[size] || size,
       tag: ({ size }) => TAG_SIZE_MAP[size] || size
     }

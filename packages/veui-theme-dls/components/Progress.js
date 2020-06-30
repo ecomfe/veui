@@ -1,16 +1,18 @@
-import 'veui-theme-dls-icons/check'
-import 'veui-theme-dls-icons/times'
-import 'veui-theme-dls-icons/check-circle'
-import 'veui-theme-dls-icons/times-circle'
+import {
+  IconCheck,
+  IconTimes,
+  IconCheckCircle,
+  IconTimesCircle
+} from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      success: 'check',
-      error: 'times',
-      successBar: 'check-circle',
-      errorBar: 'times-circle'
+      success: IconCheck,
+      error: IconTimes,
+      successBar: IconCheckCircle,
+      errorBar: IconTimesCircle
     },
     ui: {
       size: {
@@ -19,7 +21,7 @@ config.defaults(
         data: {
           m: {
             radius: 54,
-            strokeWidth: 8,
+            strokeWidth: 6,
             strokeLinecap: 'round'
           },
           s: {

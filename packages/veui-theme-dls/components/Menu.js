@@ -1,11 +1,11 @@
-import 'veui-theme-dls-icons/chevron-right'
+import { IconChevronRight } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      expand: 'chevron-right',
-      collapse: 'chevron-right'
+      expand: IconChevronRight,
+      collapse: IconChevronRight
     },
     ui: {
       size: {
@@ -15,7 +15,7 @@ config.defaults(
       }
     },
     parts: {
-      toggle: 'text'
+      toggle: 'icon'
     }
   },
   'menu'

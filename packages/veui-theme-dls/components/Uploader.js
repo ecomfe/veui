@@ -1,28 +1,30 @@
-import 'veui-theme-dls-icons/upload'
-import 'veui-theme-dls-icons/trash'
-import 'veui-theme-dls-icons/check-circle'
-import 'veui-theme-dls-icons/times-circle'
-import 'veui-theme-dls-icons/file'
-import 'veui-theme-dls-icons/image-add'
-import 'veui-theme-dls-icons/exclamation-circle'
-import 'veui-theme-dls-icons/loading'
-import 'veui-theme-dls-icons/eye'
-import 'veui-theme-dls-icons/question-circle'
+import {
+  IconUpload,
+  IconTrash,
+  IconCheckCircle,
+  IconTimesCircle,
+  IconFile,
+  IconImageAdd,
+  IconExclamationCircle,
+  IconLoading,
+  IconEye,
+  IconQuestionCircle
+} from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      upload: 'upload',
-      clear: 'trash',
-      success: 'check-circle',
-      failure: 'times-circle',
-      file: 'file',
-      addImage: 'image-add',
-      alert: 'exclamation-circle',
-      loading: 'loading',
-      preview: 'eye',
-      message: 'question-circle'
+      upload: IconUpload,
+      clear: IconTrash,
+      success: IconCheckCircle,
+      failure: IconTimesCircle,
+      file: IconFile,
+      addImage: IconImageAdd,
+      alert: IconExclamationCircle,
+      loading: IconLoading,
+      preview: IconEye,
+      message: IconQuestionCircle
     },
     ui: {
       size: {
@@ -32,9 +34,9 @@ config.defaults(
       }
     },
     parts: {
-      remove: 'text',
+      remove: 'icon',
       progress: 's',
-      control: 'text s',
+      control: 'icon s',
       preview: 'auto',
       image: 'basic'
     }
