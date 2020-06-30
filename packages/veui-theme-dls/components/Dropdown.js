@@ -1,11 +1,11 @@
-import 'veui-theme-dls-icons/chevron-down'
+import { IconChevronDown } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      expand: 'chevron-down',
-      collapse: 'chevron-down'
+      expand: IconChevronDown,
+      collapse: IconChevronDown
     },
     ui: {
       size: {

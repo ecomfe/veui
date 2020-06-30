@@ -2,19 +2,48 @@
 import FaIcon from 'vue-awesome/components/Icon'
 import { prefixify } from '../mixins/prefix'
 
+const {
+  render,
+  props: { name, ...props },
+  ...options
+} = FaIcon
+
 export default {
-  ...FaIcon,
+  ...options,
   name: 'veui-icon',
   mixins: [
     {
-      data () {
-        return {
-          classes: {
-            [prefixify('icon')]: true
+      computed: {
+        classes () {
+          return {
+            [prefixify('icon')]: true,
+            [prefixify('icon-spin')]: this.spin
           }
         }
       }
     }
-  ]
+  ],
+  props: {
+    name: {
+      type: [Object, String],
+      validator (val) {
+        if (val && typeof val.render === 'function') {
+          return true
+        }
+        return name.validator(val)
+      }
+    },
+    ...props
+  },
+  mounted () {},
+  updated () {},
+  render (h) {
+    if (typeof this.name === 'string') {
+      return render.call(this, h)
+    }
+
+    const Icon = this.name
+    return <Icon class={this.classes} />
+  }
 }
 </script>

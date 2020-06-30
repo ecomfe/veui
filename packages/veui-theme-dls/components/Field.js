@@ -1,10 +1,10 @@
-import 'veui-theme-dls-icons/question-circle'
+import { IconQuestionCircle } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      tip: 'question-circle'
+      tip: IconQuestionCircle
     },
     ui: {
       size: {
