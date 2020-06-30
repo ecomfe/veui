@@ -1,12 +1,11 @@
-import 'veui-theme-dls-icons/calendar'
-import 'veui-theme-dls-icons/times-circle'
+import { IconCalendar, IconTimesCircle } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      calendar: 'calendar',
-      clear: 'times-circle'
+      calendar: IconCalendar,
+      clear: IconTimesCircle
     },
     ui: {
       style: {
@@ -19,7 +18,7 @@ config.defaults(
       }
     },
     parts: {
-      clear: 'text aux',
+      clear: 'icon',
       input: 'inline'
     }
   },

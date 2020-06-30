@@ -1,27 +1,29 @@
-import 'veui-theme-dls-icons/check-circle'
-import 'veui-theme-dls-icons/exclamation-circle'
-import 'veui-theme-dls-icons/info-circle'
-import 'veui-theme-dls-icons/times-circle'
-import 'veui-theme-dls-icons/chevron-left'
-import 'veui-theme-dls-icons/chevron-right'
-import 'veui-theme-dls-icons/times'
+import {
+  IconCheckCircleSolid,
+  IconExclamationCircleSolid,
+  IconInfoCircleSolid,
+  IconTimesCircleSolid,
+  IconChevronLeft,
+  IconChevronRight,
+  IconTimes
+} from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      success: 'check-circle',
-      warning: 'exclamation-circle',
-      info: 'info-circle',
-      error: 'times-circle',
-      prev: 'chevron-left',
-      next: 'chevron-right',
-      close: 'times'
+      success: IconCheckCircleSolid,
+      warning: IconExclamationCircleSolid,
+      info: IconInfoCircleSolid,
+      error: IconTimesCircleSolid,
+      prev: IconChevronLeft,
+      next: IconChevronRight,
+      close: IconTimes
     },
     parts: {
-      prev: 'text',
-      next: 'text',
-      close: 'text'
+      prev: 'icon',
+      next: 'icon',
+      close: 'icon'
     },
     ui: {
       size: {

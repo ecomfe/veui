@@ -1,18 +1,20 @@
-import 'veui-theme-dls-icons/chevron-left'
-import 'veui-theme-dls-icons/chevron-down'
-import 'veui-theme-dls-icons/chevron-right'
-import 'veui-theme-dls-icons/chevron-double-left'
-import 'veui-theme-dls-icons/chevron-double-right'
+import {
+  IconChevronRight,
+  IconChevronLeft,
+  IconChevronDown,
+  IconChevronDoubleRight,
+  IconChevronDoubleLeft
+} from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      prev: 'chevron-left',
-      next: 'chevron-right',
-      backward: 'chevron-double-left',
-      forward: 'chevron-double-right',
-      expand: 'chevron-down'
+      prev: IconChevronLeft,
+      next: IconChevronRight,
+      backward: IconChevronDoubleLeft,
+      forward: IconChevronDoubleRight,
+      expand: IconChevronDown
     },
     ui: {
       size: {
@@ -21,7 +23,7 @@ config.defaults(
       }
     },
     parts: {
-      nav: 'text',
+      nav: 'icon',
       toggle: 'text'
     }
   },
