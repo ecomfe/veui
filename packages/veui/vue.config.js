@@ -7,11 +7,7 @@ function resolve (dir) {
 }
 
 const VEUI_PREFIX = process.env.VEUI_PREFIX || process.env.VUE_APP_VEUI_PREFIX
-const vars = {
-  '@dls-icon-size-normal': '1em',
-  '@dls-icon-size-minor': 'calc(1em - 2px)',
-  '@dls-icon-size-aux': 'calc(1em - 4px)'
-}
+const vars = {}
 
 module.exports = {
   css: {

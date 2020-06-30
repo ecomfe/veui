@@ -38,11 +38,18 @@
     .veui-transition(border-color, background-color, box-shadow);
 
     .@{veui-prefix}-icon {
-      position: absolute;
+      .absolute(50%, _, _, 50%);
       margin: auto;
       .dls-icon-size(@dls-checkbox-icon-size, @dls-checkbox-icon-min-size);
-      .veui-position-center();
+      transform: translate(-50%, -50%) scale(2);
       .veui-transition(transform, opacity);
+
+      path {
+        transform: scale(0.5);
+        transform-origin: 50% 50%;
+        stroke: currentColor;
+        stroke-width: 1px;
+      }
     }
   }
 

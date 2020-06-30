@@ -1,19 +1,22 @@
-import 'veui-theme-dls-icons/chevron-double-down'
-import 'veui-theme-dls-icons/chevron-down'
-import 'veui-theme-dls-icons/arrow-down'
-import 'veui-theme-dls-icons/sort'
+import {
+  IconChevronDown,
+  IconChevronDoubleDown,
+  IconSortAsc,
+  IconSortDesc,
+  IconSort
+} from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      expand: 'chevron-down',
-      collapse: 'chevron-down',
-      expandAll: 'chevron-double-down',
-      collapseAll: 'chevron-double-down',
-      asc: 'arrow-down',
-      desc: 'arrow-down',
-      sort: 'sort'
+      expand: IconChevronDown,
+      collapse: IconChevronDown,
+      expandAll: IconChevronDoubleDown,
+      collapseAll: IconChevronDoubleDown,
+      asc: IconSortAsc,
+      desc: IconSortDesc,
+      sort: IconSort
     },
     ui: {
       size: {
@@ -26,7 +29,7 @@ config.defaults(
       }
     },
     parts: {
-      icon: 'text'
+      icon: 'icon'
     }
   },
   'table'
