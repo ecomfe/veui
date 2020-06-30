@@ -1,17 +1,19 @@
-import 'veui-theme-dls-icons/chevron-up'
-import 'veui-theme-dls-icons/chevron-down'
-import 'veui-theme-dls-icons/plus'
-import 'veui-theme-dls-icons/minus'
+import {
+  IconChevronUp,
+  IconChevronDown,
+  IconPlus,
+  IconMinus
+} from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 const ICON_MAP = {
   normal: {
-    increase: 'chevron-up',
-    decrease: 'chevron-down'
+    increase: IconChevronUp,
+    decrease: IconChevronDown
   },
   strong: {
-    increase: 'plus',
-    decrease: 'minus'
+    increase: IconPlus,
+    decrease: IconMinus
   }
 }
 
