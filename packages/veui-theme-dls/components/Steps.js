@@ -1,12 +1,11 @@
-import 'veui-theme-dls-icons/check'
-import 'veui-theme-dls-icons/times'
+import { IconCheck, IconTimes } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      success: 'check',
-      error: 'times'
+      success: IconCheck,
+      error: IconTimes
     },
     ui: {
       direction: {

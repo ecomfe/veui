@@ -1,14 +1,14 @@
-import 'veui-theme-dls-icons/search'
+import { IconSearch } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      search: 'search'
+      search: IconSearch
     },
     parts: {
-      button: 'primary',
-      search: 'text aux'
+      button: 'primary square',
+      search: 'icon'
     },
     ui: {
       style: {

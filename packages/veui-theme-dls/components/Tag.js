@@ -1,10 +1,10 @@
+import { IconTimes } from 'dls-icons-vue'
 import config from 'veui/managers/config'
-import 'veui-theme-dls-icons/times'
 
 config.defaults(
   {
     icons: {
-      close: 'times'
+      close: IconTimes
     },
     ui: {
       bordered: {
@@ -20,7 +20,7 @@ config.defaults(
       }
     },
     parts: {
-      close: 'alt text'
+      close: 'icon'
     }
   },
   'tag'

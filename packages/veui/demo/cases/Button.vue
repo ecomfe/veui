@@ -220,7 +220,7 @@
     <veui-button ui="text aux l">
       编辑
     </veui-button>
-    <veui-button ui="text xl">
+    <veui-button ui="text aux xl">
       编辑
     </veui-button>
     <veui-button
@@ -265,12 +265,30 @@
       <veui-icon name="search"/>
     </veui-button>
   </section>
-  <section class="dynamic">
+  <section class="block">
     <h4>动态内容</h4>
     <p>
       <veui-button @click="text = !text">
         <veui-icon name="times"/><template v-if="text">取消</template>
       </veui-button>
+    </p>
+  </section>
+  <section class="block">
+    <h4>方形按钮</h4>
+    <p>
+      <veui-button ui="square"><veui-icon name="search"/></veui-button>
+      <veui-button ui="square basic"><veui-icon name="search"/></veui-button>
+      <veui-button
+        ui="square primary"
+      ><veui-icon
+        name="search"
+      /></veui-button>
+      <veui-button ui="square strong"><veui-icon name="search"/></veui-button>
+      <veui-button
+        ui="square translucent"
+      ><veui-icon
+        name="search"
+      /></veui-button>
     </p>
   </section>
 </article>
@@ -313,7 +331,7 @@ section {
   margin-bottom: 20px;
 }
 
-.dynamic {
+.block {
   display: block;
 }
 
