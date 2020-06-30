@@ -1,4 +1,4 @@
-import 'veui-theme-dls-icons/chevron-right'
+import { IconTriangleRight } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
@@ -13,8 +13,8 @@ config.defaults(
       }
     },
     icons: {
-      collapse: 'chevron-right',
-      expand: 'chevron-right'
+      collapse: IconTriangleRight,
+      expand: IconTriangleRight
     }
   },
   'tree'

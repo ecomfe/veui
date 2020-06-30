@@ -1,10 +1,10 @@
-import 'veui-theme-dls-icons/times-circle'
+import { IconTimesCircle } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      clear: 'times-circle'
+      clear: IconTimesCircle
     },
     ui: {
       size: {
@@ -13,7 +13,7 @@ config.defaults(
       }
     },
     parts: {
-      clear: 'text aux'
+      clear: 'icon'
     }
   },
   'input'

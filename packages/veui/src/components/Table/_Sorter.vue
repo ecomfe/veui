@@ -5,14 +5,16 @@
   @click="sort"
 >
   <veui-icon
-    v-if="!order"
-    key="unordered"
+    :class="$c('table-sorter-icon-sort')"
     :name="table.icons.sort"
   />
   <veui-icon
-    v-else
-    key="ordered"
-    :name="table.icons[order]"
+    :class="$c('table-sorter-icon-asc')"
+    :name="table.icons.asc"
+  />
+  <veui-icon
+    :class="$c('table-sorter-icon-desc')"
+    :name="table.icons.desc"
   />
 </veui-button>
 </template>
@@ -67,7 +69,9 @@ export default {
       return {
         [this.$c('table-sorter')]: true,
         [this.$c(`table-sorter-${this.realOrder}`)]: true,
-        [this.$c(`table-sorter-ordered`)]: this.order !== false,
+        [this.$c(
+          `table-sorter-${this.order === false ? 'un' : ''}ordered`
+        )]: true,
         [this.$c('table-sorter-reverse')]: this.order === this.realOrders[2]
       }
     },

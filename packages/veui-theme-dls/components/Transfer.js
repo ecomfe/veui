@@ -1,21 +1,24 @@
-import 'veui-theme-dls-icons/check'
-import 'veui-theme-dls-icons/times'
-import 'veui-theme-dls-icons/chevron-right'
+import {
+  IconCheck,
+  IconTimes,
+  IconChevronRight,
+  IconTriangleRight
+} from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      checked: 'check',
+      checked: IconCheck,
       select: null,
-      remove: 'times',
-      collapse: 'chevron-right',
-      expand: 'chevron-right',
-      separator: 'chevron-right'
+      remove: IconTimes,
+      collapse: IconTriangleRight,
+      expand: IconTriangleRight,
+      separator: IconChevronRight
     },
     parts: {
       tree: 'checkbox-after',
-      remove: 'text',
+      remove: 'icon',
       selectAll: 'strong text',
       removeAll: 'strong text'
     },

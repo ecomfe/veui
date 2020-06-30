@@ -15,14 +15,13 @@
   },
   "lint-staged": {
     "packages/{babel-plugin-veui,veui,veui-loader,veui-theme-dls}/**/*.{js,vue}": [
-      "prettier --single-quote --write",
+      "prettier --write",
       "eslint --fix",
       "git add"
     ],
     "packages/veui-theme-dls/**/*.less,packages/veui/demo/**/*.vue": [
       "prettier --write 'packages/veui-theme-dls/**/*.less'",
-      "stylelint **/*.vue --fix",
-      "stylelint **/*.less --syntax=less --fix",
+      "stylelint --fix",
       "git add"
     ]
   },

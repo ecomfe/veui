@@ -24,6 +24,11 @@
     .padding(0, @@padding);
     border-radius: @@radius;
     font-size: @@font-size;
+
+    &[ui~="square"] {
+      width: @@height;
+      padding: 0;
+    }
   }
 
   &[ui~="xs"] {
@@ -59,12 +64,13 @@
     outline: none;
   }
 
-  &:hover,
-  &[data-focus-visible-added] {
+  &:hover {
+    border-color: @dls-button-border-color-normal-hover;
     background-color: @dls-button-background-color-normal-hover;
   }
 
   &:active {
+    border-color: @dls-button-border-color-normal-active;
     background-color: @dls-button-background-color-normal-active;
   }
 
@@ -77,6 +83,7 @@
   &&-loading {
     pointer-events: none;
     cursor: default;
+    border-color: @dls-button-border-color-normal-active;
     background-color: @dls-button-background-color-normal-active;
   }
 
@@ -90,6 +97,7 @@
     color: @dls-button-font-color-basic;
 
     &:hover {
+      border-color: @dls-button-border-color-basic-hover;
       background-color: @dls-button-background-color-basic-hover;
     }
 
@@ -98,6 +106,7 @@
     }
 
     &:active {
+      border-color: @dls-button-border-color-basic-active;
       background-color: @dls-button-background-color-basic-active;
     }
 
@@ -108,16 +117,18 @@
     }
 
     &.@{veui-prefix}-button-loading {
+      border-color: @dls-button-border-color-basic-active;
       background-color: @dls-button-background-color-basic-active;
     }
   }
 
-  &[ui~="strong"]:not([ui~="text"]) {
+  &[ui~="strong"]:not([ui~="text"]):not([ui~="icon"]) {
     border-color: @dls-button-border-color-strong;
     background-color: @dls-button-background-color-strong;
     color: @dls-button-font-color-strong;
 
     &:hover {
+      border-color: @dls-button-border-color-strong-hover;
       background-color: @dls-button-background-color-strong-hover;
     }
 
@@ -126,6 +137,7 @@
     }
 
     &:active {
+      border-color: @dls-button-border-color-strong-active;
       background-color: @dls-button-background-color-strong-active;
     }
 
@@ -136,6 +148,7 @@
     }
 
     &.@{veui-prefix}-button-loading {
+      border-color: @dls-button-border-color-strong-active;
       background-color: @dls-button-background-color-strong-active;
     }
   }
@@ -146,6 +159,7 @@
     color: @dls-button-font-color-primary;
 
     &:hover {
+      border-color: @dls-button-border-color-primary-hover;
       background-color: @dls-button-background-color-primary-hover;
     }
 
@@ -154,6 +168,7 @@
     }
 
     &:active {
+      border-color: @dls-button-border-color-primary-active;
       background-color: @dls-button-background-color-primary-active;
     }
 
@@ -164,6 +179,7 @@
     }
 
     &.@{veui-prefix}-button-loading {
+      border-color: @dls-button-border-color-primary-active;
       background-color: @dls-button-background-color-primary-active;
     }
   }
@@ -174,6 +190,7 @@
     color: @dls-button-font-color-translucent;
 
     &:hover {
+      border-color: @dls-button-border-color-translucent-hover;
       background-color: @dls-button-background-color-translucent-hover;
     }
 
@@ -182,6 +199,7 @@
     }
 
     &:active {
+      border-color: @dls-button-border-color-translucent-active;
       background-color: @dls-button-background-color-translucent-active;
     }
 
@@ -192,6 +210,7 @@
     }
 
     &.@{veui-prefix}-button-loading {
+      border-color: @dls-button-border-color-translucent-active;
       background-color: @dls-button-background-color-translucent-active;
     }
   }
@@ -207,7 +226,8 @@
 
     &::after {
       content: "";
-      .absolute(-@dls-button-padding-text);
+      .absolute(_, -@dls-button-padding-text);
+      height: calc(1em + @dls-button-padding-text * 2);
       border: 1px solid transparent;
       border-radius: inherit;
       .veui-button-transition();
@@ -283,7 +303,15 @@
     }
   }
 
+  &[ui~="icon"] {
+    &::after {
+      .absolute(auto);
+      .size(calc(1em + @dls-button-padding-text * 2));
+    }
+  }
+
   &[data-focus-visible-added] {
+    background-color: @dls-button-background-color-normal-focus;
     .dls-focus-ring(@dls-button-border-color-focus, @dls-button-shadow-focus);
   }
 }
