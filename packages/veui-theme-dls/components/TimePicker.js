@@ -1,12 +1,11 @@
-import 'veui-theme-dls-icons/clock'
-import 'veui-theme-dls-icons/times-circle'
+import { IconClock, IconTimesCircle } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      clock: 'clock',
-      clear: 'times-circle'
+      clock: IconClock,
+      clear: IconTimesCircle
     },
     ui: {
       size: {
@@ -15,7 +14,7 @@ config.defaults(
       }
     },
     parts: {
-      clear: 'text aux'
+      clear: 'icon'
     }
   },
   'timepicker'
