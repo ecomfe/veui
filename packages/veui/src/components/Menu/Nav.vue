@@ -250,7 +250,7 @@
 import mixin from './_mixin'
 import resize from '../../directives/resize'
 import { getFocusable } from '../../utils/dom'
-import { findIndex, last } from 'lodash'
+import { last } from 'lodash'
 
 export default {
   name: 'veui-nav',
@@ -461,26 +461,6 @@ export default {
       if (!passive) {
         e.stopPropagation()
         e.preventDefault()
-      }
-    },
-    handleKeyLeftOrRight (item, forward) {
-      let step = forward ? 1 : -1
-      let isMoreHidden = !this.restItems.length
-      let items = isMoreHidden ? this.realItems.slice(0, -1) : this.realItems
-      items = items.filter(i => !i.disabled)
-      let index = findIndex(items, i => i.name === item.name)
-      if (index >= 0) {
-        let len = items.length
-        index = (index + step + len) % len
-        let nextItem = items[index]
-        if (this.isMoreBtn(nextItem)) {
-          this.$refs.more[0].focus()
-        } else {
-          let el = this.$refs[`link-${nextItem.name}`]
-          if (el && el[0]) {
-            el[0].$el.focus()
-          }
-        }
       }
     }
   }
