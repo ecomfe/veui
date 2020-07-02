@@ -49,6 +49,7 @@
 <script>
 import prefix from '../../mixins/prefix'
 import ExpandTransition from '../_ExpandTransition'
+import { mergeClasses } from '../../utils/helper'
 
 export default {
   name: 'abstract-tree',
@@ -56,6 +57,7 @@ export default {
     'veui-expand-transition': ExpandTransition
   },
   mixins: [prefix],
+  uiTypes: ['transparent'],
   props: {
     items: {
       type: Array,
@@ -96,14 +98,7 @@ export default {
   },
   computed: {
     realGroupClass () {
-      let clz =
-        typeof this.groupClass === 'string'
-          ? { [this.groupClass]: true }
-          : this.groupClass
-      return {
-        [this.$c('abstract-tree-item-group')]: true,
-        ...clz
-      }
+      return mergeClasses(this.$c('abstract-tree-item-group'), this.groupClass)
     }
   },
   methods: {

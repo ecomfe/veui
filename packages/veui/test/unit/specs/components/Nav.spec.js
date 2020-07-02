@@ -36,7 +36,7 @@ const options = {
         {
           label: 'Button',
           name: 'Button',
-          to: '#/button',
+          to: '#button',
           children: [
             {
               label: 'OptionGroup',
@@ -195,6 +195,56 @@ describe('components/Nav', () => {
     await wait(300)
     document.querySelector('.veui-nav-overlay .veui-nav-item').click()
     expect(count).to.equal(2)
+    wrapper.destroy()
+  })
+
+  it('should handle keyboard navigation correctly', async () => {
+    let wrapper = mount(
+      {
+        ...options,
+        template:
+          '<veui-nav :active.sync="active" :items="items" :matches="fullPathMatches"/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    let items = wrapper.findAll('.veui-nav-body .veui-nav-item')
+    let endIndex = items.length - 1
+    items.at(0).trigger('keydown', { key: 'Right' })
+    await vm.$nextTick()
+    expect(items.at(1).classes()).to.include('focus-visible')
+
+    items.at(endIndex).trigger('keydown', { key: 'Right' })
+    await vm.$nextTick()
+    expect(items.at(0).classes()).to.include('focus-visible')
+
+    items.at(0).trigger('keydown', { key: 'Left' })
+    await vm.$nextTick()
+    expect(items.at(endIndex).classes()).to.include('focus-visible')
+
+    items.at(0).trigger('keydown', { key: 'End' })
+    await vm.$nextTick()
+    expect(items.at(endIndex).classes()).to.include('focus-visible')
+    items.at(endIndex).trigger('keydown', { key: 'Home' })
+    await vm.$nextTick()
+    expect(items.at(0).classes()).to.include('focus-visible')
+
+    items.at(0).trigger('keydown', { key: 'Down' })
+    await vm.$nextTick()
+    expect(items.at(0).classes()).to.include('veui-nav-item-open')
+
+    items.at(0).trigger('keydown', { key: 'Esc' })
+    await vm.$nextTick()
+    expect(items.at(0).classes()).to.not.include('veui-nav-item-open')
+
+    items.at(1).trigger('keydown', { key: 'Enter' })
+    await vm.$nextTick()
+    expect(vm.active).to.equal('Button')
+
     wrapper.destroy()
   })
 })
