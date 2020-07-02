@@ -2,7 +2,7 @@
 <abstract-tree
   :class="{
     [$c('tree')]: true,
-    [$c('tree-disabled')]: realDisabled || realReadonly
+    [$c('disabled')]: realDisabled || realReadonly
   }"
   :group-class="$c('tree-item-group')"
   :ui="realUi"
@@ -23,7 +23,7 @@
         [$c('tree-item-selected')]: selectable && isSelected(item),
         [$c('tree-item-clickable')]: isClickable(item),
         [$c('tree-item-hidden')]: item.hidden,
-        [$c('tree-item-disabled')]: item.disabled
+        [$c('disabled')]: item.disabled
       }"
       :tabindex="depth === 1 ? item.tabIndex : item.disabled ? null : '-1'"
       @click="handleItemClick(item, parents, index, depth)"
@@ -292,7 +292,7 @@ export default {
       }
     },
     getFocusSelector () {
-      return `.${this.$c('tree-item')}:not(.${this.$c('tree-item-disabled')})`
+      return `.${this.$c('tree-item')}:not(.${this.$c('disabled')})`
     },
     focusLevel (current, up = true) {
       let el

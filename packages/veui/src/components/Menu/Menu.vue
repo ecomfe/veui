@@ -485,28 +485,6 @@ export default {
         })
       }
     }
-    // navigate (current, items, forward = false, hitBoundary = false) {
-    //   let context = this.$el
-    //   current.tabIndex = -1
-    //   let items = [...context.querySelectorAll(this.getFocusSelector())]
-    //   let index = items.indexOf(current)
-
-    //   let next
-    //   if (hitBoundary) {
-    //     next = items[forward ? items.length - 1 : 0]
-    //     next.tabIndex = 0
-    //     next.focus()
-    //     return
-    //   }
-
-    //   let targetIndex =
-    //     index === -1
-    //       ? 0
-    //       : ((forward ? index + 1 : index - 1) + items.length) % items.length
-    //   next = items[targetIndex]
-    //   next.tabIndex = 0
-    //   next.focus()
-    // }
   }
 }
 </script>
