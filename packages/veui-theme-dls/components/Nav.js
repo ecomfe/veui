@@ -1,12 +1,11 @@
-import 'veui-theme-dls-icons/chevron-right'
-import 'veui-theme-dls-icons/ellipsis'
+import { IconChevronRight, IconEllipsis } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      expand: 'chevron-right',
-      more: 'ellipsis'
+      expand: IconChevronRight,
+      more: IconEllipsis
     },
     ui: {
       size: {
@@ -16,7 +15,7 @@ config.defaults(
       }
     },
     parts: {
-      toggle: 'text'
+      toggle: 'icon aux'
     }
   },
   'nav'
