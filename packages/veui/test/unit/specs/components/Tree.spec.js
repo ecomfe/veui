@@ -443,6 +443,17 @@ describe('components/Tree', () => {
       wrapper.find('.veui-tree-item').classes('veui-tree-item-expanded')
     ).to.equal(false)
 
+    let first = wrapper.find('.veui-tree > li:first-child .veui-tree-item')
+    let last = wrapper.find('.veui-tree > li:last-child .veui-tree-item')
+
+    last.trigger('keydown', { key: 'Home' })
+    await vm.$nextTick()
+    expect(first.classes()).to.include('focus-visible')
+
+    first.trigger('keydown', { key: 'End' })
+    await vm.$nextTick()
+    expect(last.classes()).to.include('focus-visible')
+
     wrapper.find('.veui-tree-item').trigger('keydown', { key: 'Right' })
     await vm.$nextTick()
 
