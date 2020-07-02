@@ -137,23 +137,23 @@
       }
     }
 
-    &-disabled.@{veui-prefix}-tree-item-selected::before,
-    &-disabled:active::before,
-    &-disabled:hover::before,
-    &-disabled.focus-visible::before,
-    &-disabled[data-focus-visible-added]::before {
+    &.@{veui-prefix}-disabled.@{veui-prefix}-tree-item-selected::before,
+    &.@{veui-prefix}-disabled:active::before,
+    &.@{veui-prefix}-disabled:hover::before,
+    &.@{veui-prefix}-disabled.focus-visible::before,
+    &.@{veui-prefix}-disabled[data-focus-visible-added]::before {
       background-color: transparent;
     }
   }
 
-  &-item-disabled,
-  &-disabled &-item {
+  .@{veui-prefix}-disabled,
+  .@{veui-prefix}-disabled &-item {
     color: @dls-tree-node-font-color-disabled;
     cursor: not-allowed;
   }
 
-  &-disabled &-item-expand-switcher,
-  &-item-disabled &-item-expand-switcher {
+  .@{veui-prefix}-disabled &-item-expand-switcher,
+  .@{veui-prefix}-disabled &-item-expand-switcher {
     color: @dls-tree-icon-color-aux-disabled;
     cursor: not-allowed;
   }
