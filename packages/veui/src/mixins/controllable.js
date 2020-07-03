@@ -1,4 +1,4 @@
-import { capitalize, isString, isPlainObject, reduce } from 'lodash'
+import { capitalize, isString, isPlainObject, reduce, find } from 'lodash'
 
 let options = {
   methods: {
@@ -6,24 +6,14 @@ let options = {
       // 排除 default value 的影响
       return name in this.$options.propsData && this[name] !== undefined
     },
-    getReal ({ prop, local } = {}) {
-      return this.isControlled(prop)
-        ? this[prop]
-        : local
-          ? this[local]
-          : this[`local${capitalize(prop)}`]
-    },
-    setReal (value, { prop, local, event } = {}) {
-      // TODO forceUpdate
-      // null 则认为忽略对应的操作
-      if (local !== null) {
-        local = local || `local${capitalize(prop)}`
-        this[local] = value
+    // 使用方法而非直接赋值：受控时赋值并未直接生效，而仅仅 emit 事件而已，直接让使用方使用赋值违反直觉
+    setReal (prop, value) {
+      let def = find(this._controlledProps, i => i.prop === prop)
+      if (def) {
+        this[getRealName(def)] = value
+        return
       }
-      if (event !== null) {
-        event = event || `update:${prop}`
-        this.$emit(event, value)
-      }
+      throw new Error(`[controllable] Unkown prop key: '${prop}' on setting computed property.`)
     }
   }
 }
@@ -69,37 +59,48 @@ export default function makeControllable (props) {
         return result
       }
 
+      // store prop definitions
+      result.normalized.push(def)
+
       // { prop, local, computed, event, get, set }
-      let { prop, local, computed, get, set } = def
+      let { prop, local, get, set } = def
+
       if (local !== null) {
-        result.data[local || `local${capitalize(prop)}`] = vm => vm[prop]
+        result.data[getLocalName(def)] = vm => vm[prop]
       }
-      let name = computed || `real${capitalize(prop)}`
-      let hasGet = get !== false
-      result.computed[name] = {
+
+      result.computed[getRealName(def)] = {
         get () {
-          if (hasGet) {
-            return get ? get.call(this, def) : this.getReal(def)
+          if (get !== false) {
+            return get
+              ? get.call(this, () => getReal(this, def))
+              : getReal(this, def)
           }
         },
         set (value) {
-          // 没有禁用 set
-          // 有 get 的话，判断下值是否相等，相等则默认不用同步；
-          // 没有 get 的话，无法判断是否相等，直接同步
-          if (set !== false && ((hasGet && value !== this[name]) || !hasGet)) {
-            return set ? set.call(this, value, def) : this.setReal(value, def)
+          // 没有禁用 set 且值不同则更新
+          if (set !== false && !sameValue(this, value, def)) {
+            return set
+              ? set.call(this, value, val => setReal(this, val, def))
+              : setReal(this, value, def)
           }
         }
       }
 
       return result
     },
-    { computed: {}, data: {} }
+    { computed: {}, data: {}, normalized: [] }
   )
+
   return {
     ...options,
     computed: result.computed,
     data () {
+      // 可能会产生多个 data hook，比如 Menu 组件在 MenuMixin 和 Menu 里面都用了 controllable
+      this._controlledProps = this._controlledProps
+        ? [...this._controlledProps, ...result.normalized]
+        : result.normalized
+
       return reduce(
         result.data,
         (res, fn, key) => {
@@ -110,4 +111,38 @@ export default function makeControllable (props) {
       )
     }
   }
+}
+
+function getReal (vm, { prop, local } = {}) {
+  return vm.isControlled(prop)
+    ? vm[prop]
+    : local
+      ? vm[local]
+      : vm[`local${capitalize(prop)}`]
+}
+
+function setReal (vm, value, def = {}) {
+  const { prop, local, event } = def
+  // null 则认为忽略对应的操作
+  if (local !== null) {
+    vm[getLocalName(def)] = value
+  }
+  if (event !== null) {
+    vm.$emit(event || `update:${prop}`, value)
+  }
+}
+
+function getLocalName ({ prop, local } = {}) {
+  return local || `local${capitalize(prop)}`
+}
+
+function getRealName ({ prop, computed } = {}) {
+  return computed || `real${capitalize(prop)}`
+}
+
+// 有 get 的话，判断下值是否相等，相等则默认不用更新；
+// 没有 get 的话，无法判断是否相等，直接更新
+function sameValue (vm, value, def) {
+  const hasGet = def.get !== false
+  return hasGet && value === vm[getRealName(def)]
 }

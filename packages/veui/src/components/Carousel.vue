@@ -247,10 +247,7 @@ export default {
     },
     triggerChange (value) {
       let oldValue = this.realIndex
-      if (value === oldValue) {
-        return
-      }
-      this.realIndex = value
+      this.setReal('index', value)
       this.$emit('change', value, oldValue)
     },
     focusCurrent () {
