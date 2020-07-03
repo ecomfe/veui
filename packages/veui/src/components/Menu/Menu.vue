@@ -326,22 +326,26 @@ export default {
       this.realExpanded = expanded
     },
     toggleCollapsed () {
+      let oldCollapsed = this.realCollapsed
       this.realCollapsed = !this.realCollapsed
-      if (this.realCollapsed) {
+      // 原来是展开的，那么如果最终折叠了就要调整下 tabIndex
+      if (!oldCollapsed) {
         this.$nextTick(() => {
-          let els = this.$el.querySelectorAll(this.getFocusSelector())
-          forEach(els, el => {
-            el.tabIndex = -1
-          })
-          // 切换到 collapsed 状态，将 tabIndex=0 还原到第一层
-          let first = find(
-            this.normalizedItems,
-            ({ tabIndex }) => tabIndex === '0'
-          )
-          if (first) {
-            this.$refs[first.name].querySelector(
-              `.${this.$c('menu-link')}`
-            ).tabIndex = 0
+          if (this.realCollapsed) {
+            let els = this.$el.querySelectorAll(this.getFocusSelector())
+            forEach(els, el => {
+              el.tabIndex = -1
+            })
+            // 切换到 collapsed 状态，将 tabIndex=0 还原到第一层
+            let first = find(
+              this.normalizedItems,
+              ({ tabIndex }) => tabIndex === '0'
+            )
+            if (first) {
+              this.$refs[first.name].querySelector(
+                `.${this.$c('menu-link')}`
+              ).tabIndex = 0
+            }
           }
         })
       }

@@ -216,22 +216,22 @@ describe('components/Nav', () => {
     let endIndex = items.length - 1
     items.at(0).trigger('keydown', { key: 'Right' })
     await vm.$nextTick()
-    expect(items.at(1).classes()).to.include('focus-visible')
+    expect(items.at(1).attributes().tabindex).to.include('0')
 
     items.at(endIndex).trigger('keydown', { key: 'Right' })
     await vm.$nextTick()
-    expect(items.at(0).classes()).to.include('focus-visible')
+    expect(items.at(0).attributes().tabindex).to.include('0')
 
     items.at(0).trigger('keydown', { key: 'Left' })
     await vm.$nextTick()
-    expect(items.at(endIndex).classes()).to.include('focus-visible')
+    expect(items.at(endIndex).attributes().tabindex).to.include('0')
 
     items.at(0).trigger('keydown', { key: 'End' })
     await vm.$nextTick()
-    expect(items.at(endIndex).classes()).to.include('focus-visible')
+    expect(items.at(endIndex).attributes().tabindex).to.include('0')
     items.at(endIndex).trigger('keydown', { key: 'Home' })
     await vm.$nextTick()
-    expect(items.at(0).classes()).to.include('focus-visible')
+    expect(items.at(0).attributes().tabindex).to.include('0')
 
     items.at(0).trigger('keydown', { key: 'Down' })
     await vm.$nextTick()

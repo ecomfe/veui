@@ -9,7 +9,6 @@ import controllable from '../../mixins/controllable'
 import outside from '../../directives/outside'
 import { find } from '../../utils/datasource'
 import { map, endsWith, pick, isString } from 'lodash'
-import { getFocusable } from '../../utils/dom'
 
 const ensureSlash = str => (endsWith(str, '/') ? str : `${str}/`)
 
@@ -157,17 +156,6 @@ export default {
       this.$emit('click', group)
     },
     // keyboard
-    navigateInContainer (container, target, step) {
-      let focusable = getFocusable(container)
-      if (focusable.length) {
-        let index = focusable.indexOf(target)
-        let next =
-          index === -1
-            ? 0
-            : (index + step + focusable.length) % focusable.length
-        focusable[next].focus()
-      }
-    },
     navigate (current, items, forward, updateTabIndex, hitBoundary = false) {
       items = [...items] // 兼容类数组
       if (updateTabIndex) current.tabIndex = -1

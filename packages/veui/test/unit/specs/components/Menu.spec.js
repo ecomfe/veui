@@ -15,6 +15,7 @@ const options = {
       active: 'Input',
       expanded: ['一级导航1', '二级导航11'],
       collapsed: true,
+      collapsed2: false,
       fullPathMatches,
       items: [
         {
@@ -213,7 +214,8 @@ describe('components/Menu', () => {
     let wrapper = mount(
       {
         ...options,
-        template: '<veui-menu :active.sync="active" :items="items"/>'
+        template:
+          '<veui-menu collapsible :collapsed.sync="collapsed2" :active.sync="active" :items="items"/>'
       },
       {
         sync: false,
@@ -226,26 +228,27 @@ describe('components/Menu', () => {
     let endIndex = links.length - 1
     links.at(0).trigger('keydown', { key: 'Down' })
     await vm.$nextTick()
-    expect(links.at(1).classes()).to.include('focus-visible')
+
+    expect(links.at(1).attributes().tabindex).to.equal('0')
 
     links.at(endIndex).trigger('keydown', { key: 'Down' })
     await vm.$nextTick()
-    expect(links.at(0).classes()).to.include('focus-visible')
+    expect(links.at(0).attributes().tabindex).to.equal('0')
 
     links.at(0).trigger('keydown', { key: 'Up' })
     await vm.$nextTick()
-    expect(links.at(endIndex).classes()).to.include('focus-visible')
+    expect(links.at(endIndex).attributes().tabindex).to.equal('0')
 
     links.at(1).trigger('keydown', { key: 'Up' })
     await vm.$nextTick()
-    expect(links.at(0).classes()).to.include('focus-visible')
+    expect(links.at(0).attributes().tabindex).to.equal('0')
+
     links.at(0).trigger('keydown', { key: 'Right' })
     let items = wrapper.findAll('.veui-menu-item')
     await vm.$nextTick()
     expect(items.at(0).classes()).to.include('veui-menu-item-expanded')
 
     links.at(1).trigger('keydown', { key: 'Right' })
-
     links.at(2).trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()
     expect(vm.active).to.equal('Input')
@@ -256,10 +259,21 @@ describe('components/Menu', () => {
 
     links.at(0).trigger('keydown', { key: 'End' })
     await vm.$nextTick()
-    expect(links.at(endIndex).classes()).to.include('focus-visible')
+    expect(links.at(endIndex).attributes().tabindex).to.equal('0')
+
     links.at(endIndex).trigger('keydown', { key: 'Home' })
     await vm.$nextTick()
-    expect(links.at(0).classes()).to.include('focus-visible')
+    expect(links.at(0).attributes().tabindex).to.equal('0')
+
+    links.at(0).trigger('keydown', { key: 'Down' })
+    await vm.$nextTick()
+    expect(links.at(0).attributes().tabindex).to.equal('-1')
+    expect(links.at(endIndex).attributes().tabindex).to.equal('0')
+
+    wrapper.find('.veui-menu-toggle').trigger('click')
+    await vm.$nextTick()
+    expect(links.at(0).attributes().tabindex).to.equal('0')
+    expect(links.at(endIndex).attributes().tabindex).to.equal('-1')
     wrapper.destroy()
   })
 })
