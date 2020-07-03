@@ -256,7 +256,7 @@ export default {
 </script>
 
 <style lang="less">
-@import '~veui-theme-dls/lib.less';
+@import "~veui-theme-dls/lib.less";
 
 .veui-demo-calendar {
   section {

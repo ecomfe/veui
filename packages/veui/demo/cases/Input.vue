@@ -317,7 +317,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '~less-plugin-est/src/all.less';
+@import "~less-plugin-est/src/all.less";
 
 section {
   margin-bottom: 40px;
