@@ -225,7 +225,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '~less-plugin-est/src/all.less';
+@import "~less-plugin-est/src/all.less";
 
 .demo-overlay-box {
   box-shadow: 1px 1px 6px fadeout(#000, 80%);
