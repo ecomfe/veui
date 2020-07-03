@@ -18,7 +18,6 @@
     "classlist-polyfill": "^1.2.0",
     "dls-icons-vue": "^0.3.0",
     "focus-visible": "^4.1.0",
-    "less-plugin-dls": "^1.0.0-alpha.19",
     "less-plugin-est": "^3.0.0"
   },
   "peerDependencies": {
@@ -29,6 +28,6 @@
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-preset-env": "^1.2.1",
     "babel-preset-stage-2": "^6.22.0",
-    "less-plugin-dls": "^1.0.0-alpha.22"
+    "less-plugin-dls": "^1.0.0-alpha.25"
   }
 }
