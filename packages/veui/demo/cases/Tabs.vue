@@ -588,7 +588,7 @@ section + section {
 }
 
 .veui-tabs {
-  & + &[ui~='block'] {
+  & + &[ui~="block"] {
     margin-top: 20px;
   }
 }
@@ -616,7 +616,7 @@ section + section {
   margin-bottom: 10px;
 }
 
-.veui-tabs[ui~='simple'] {
+.veui-tabs[ui~="simple"] {
   margin-bottom: 16px;
 }
 </style>

@@ -26,7 +26,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '~veui-theme-dls/lib.less';
+@import "~veui-theme-dls/lib.less";
 
 article {
   padding-top: 120px;
