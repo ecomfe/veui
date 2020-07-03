@@ -290,7 +290,7 @@ export default {
         <div class={this.$c('tabs-menu')}>
           {this.listOverflow ? (
             <Button
-              key="prev"
+              key="__tabs_prev__"
               class={this.$c('tabs-prev')}
               ui={this.uiParts.nav}
               disabled={this.hit.start}
@@ -313,7 +313,7 @@ export default {
                 refInFor
                 class={{
                   [this.$c('tabs-item')]: true,
-                  [this.$c('tabs-item-disabled')]: tab.disabled,
+                  [this.$c('disabled')]: tab.disabled,
                   [this.$c('tabs-item-removable')]: tab.removable,
                   [this.$c('tabs-item-active')]: this.activeTab === tab,
                   [this.$c('tabs-item-remove-focus')]: this.focusedTab === tab
@@ -378,7 +378,7 @@ export default {
           </div>
           {this.listOverflow ? (
             <Button
-              key="next"
+              key="__tabs_next__"
               class={this.$c('tabs-next')}
               ui={this.uiParts.nav}
               disabled={this.hit.end}
@@ -389,7 +389,7 @@ export default {
           ) : null}
           {this.addable ? (
             <Button
-              key="add"
+              key="__tabs_add__"
               class={this.$c('tabs-add')}
               ui={this.uiParts.add}
               disabled={this.max != null && this.items.length >= this.max}
