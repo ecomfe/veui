@@ -6,6 +6,10 @@
 
   &-spin {
     animation: spin 1s infinite linear;
+
+    g {
+      animation: none; // hacky fix for VueAwesome implementations
+    }
   }
 
   @keyframes spin {
