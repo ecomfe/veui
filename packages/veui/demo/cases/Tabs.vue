@@ -81,7 +81,81 @@
     </veui-tabs>
   </section>
   <section>
-    <h2>边框样式：(不受控)</h2>
+    <h2>简单样式：</h2>
+    <veui-tabs
+      ui="simple s"
+      :active.sync="active0"
+    >
+      <veui-tab
+        label="回答问题"
+        name="answers"
+      />
+      <veui-tab
+        label="文章评论"
+        name="articles"
+      />
+      <veui-tab
+        label="分享朋友圈"
+        name="shares"
+      />
+    </veui-tabs>
+    <veui-tabs
+      ui="simple"
+      :active.sync="active0"
+    >
+      <veui-tab
+        label="回答问题"
+        name="answers"
+      />
+      <veui-tab
+        label="文章评论"
+        name="articles"
+      />
+      <veui-tab
+        label="分享朋友圈"
+        name="shares"
+      />
+    </veui-tabs>
+    <veui-tabs
+      ui="simple l"
+      :active.sync="active0"
+    >
+      <veui-tab
+        label="回答问题"
+        name="answers"
+      />
+      <veui-tab
+        label="文章评论"
+        name="articles"
+      />
+      <veui-tab
+        label="分享朋友圈"
+        name="shares"
+      />
+    </veui-tabs>
+  </section>
+  <section>
+    <h2>加强样式：</h2>
+    <veui-tabs
+      ui="strong"
+      :active.sync="active0"
+    >
+      <veui-tab
+        label="回答问题"
+        name="answers"
+      />
+      <veui-tab
+        label="文章评论"
+        name="articles"
+      />
+      <veui-tab
+        label="分享朋友圈"
+        name="shares"
+      />
+    </veui-tabs>
+  </section>
+  <section>
+    <h2>不受控</h2>
     <veui-tabs>
       <veui-tab label="回答问题">Answers</veui-tab>
       <veui-tab
@@ -201,7 +275,44 @@
   <section class="inner-ui">
     <h2>增删模式1（内部 UI）：</h2>
     <veui-tabs
-      ui="l"
+      :active.sync="active1"
+      addable
+      :max="totalTabs0"
+      @add="addTab0"
+      @remove="removeTab0"
+    >
+      <veui-tab
+        v-for="tab in tabs0"
+        :key="tab.name"
+        removable
+        :label="tab.label"
+        :name="tab.name"
+        :status="tab.status"
+      >
+        <p>Tab {{ tab.name }}</p>
+      </veui-tab>
+    </veui-tabs>
+    <veui-tabs
+      ui="simple"
+      :active.sync="active1"
+      addable
+      :max="totalTabs0"
+      @add="addTab0"
+      @remove="removeTab0"
+    >
+      <veui-tab
+        v-for="tab in tabs0"
+        :key="tab.name"
+        removable
+        :label="tab.label"
+        :name="tab.name"
+        :status="tab.status"
+      >
+        <p>Tab {{ tab.name }}</p>
+      </veui-tab>
+    </veui-tabs>
+    <veui-tabs
+      ui="strong"
       :active.sync="active1"
       addable
       :max="totalTabs0"
@@ -503,5 +614,9 @@ section + section {
 
 .add-btn {
   margin-bottom: 10px;
+}
+
+.veui-tabs[ui~='simple'] {
+  margin-bottom: 16px;
 }
 </style>

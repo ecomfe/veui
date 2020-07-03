@@ -1,9 +1,9 @@
 @import "../lib.less";
 
 .@{veui-prefix}-tabs {
-  @veui-tabs-height: @dls-tab-height-m;
-  @veui-tabs-height-l: @dls-tab-height-l;
-  @veui-tabs-height-s: @dls-tab-height-s;
+  @dls-tab-spacing-x-strong-m: 0;
+  @dls-tab-menu-padding-x-strong-m: 16px;
+  @remove-icon-aspect-ratio: 10 / 16;
 
   .make-margin-left(@dls-tab-spacing-x-m);
   position: relative;
@@ -14,7 +14,7 @@
     position: relative;
     align-items: center;
     white-space: nowrap;
-    height: @veui-tabs-height;
+    height: @dls-tab-height-m;
 
     &::after {
       content: "";
@@ -61,17 +61,11 @@
 
   &-prev,
   &-next {
+    .margin(_, @dls-tab-nav-spacing-m);
+
     .@{veui-prefix}-icon {
       .dls-icon-size(@dls-tab-icon-size-aux);
     }
-  }
-
-  &-prev {
-    margin-right: @dls-tab-nav-spacing-m;
-  }
-
-  &-next {
-    margin-left: @dls-tab-nav-spacing-m;
   }
 
   &-item {
@@ -81,6 +75,7 @@
     flex-shrink: 0;
 
     &-label {
+      line-height: @dls-line-height-1;
       .veui-transition(color);
     }
 
@@ -101,7 +96,7 @@
       }
     }
 
-    &:not(.@{veui-prefix}-tabs-item-disabled) > &-label {
+    &:not(.@{veui-prefix}-disabled) > &-label {
       color: @dls-tab-font-color;
 
       &::after {
@@ -111,7 +106,12 @@
         .veui-transition(background-color, height);
       }
 
-      &.focus-visible {
+      &:hover {
+        cursor: pointer;
+        color: @dls-tab-font-color-hover;
+      }
+
+      &[data-focus-visible-added] {
         color: @dls-tab-font-color-focus;
 
         &::before {
@@ -119,24 +119,19 @@
         }
       }
 
-      &:hover {
-        cursor: pointer;
-        color: @dls-tab-font-color-hover;
-      }
-
       &:active {
         color: @dls-tab-font-color-active;
       }
     }
 
-    &-active:not(.@{veui-prefix}-tabs-item-disabled) > &-label {
+    &-active:not(.@{veui-prefix}-disabled) > &-label {
       color: @dls-tab-font-color-current;
 
       &::after {
         background-color: @dls-tab-indicator-color;
       }
 
-      &.focus-visible {
+      &[data-focus-visible-added] {
         color: @dls-tab-font-color-current-focus;
 
         &::after {
@@ -161,7 +156,7 @@
       }
     }
 
-    &-disabled > &-label {
+    &.@{veui-prefix}-disabled > &-label {
       cursor: not-allowed;
       color: @dls-tab-font-color-disabled;
     }
@@ -169,16 +164,15 @@
     &-label-content {
       display: flex;
       align-items: center;
-      line-height: 1.2;
       .veui-transition(transform);
     }
 
     &-removable&-remove-focus &-label-content,
-    &-removable &-label.focus-visible &-label-content,
+    &-removable &-label[data-focus-visible-added] &-label-content,
     &-removable:hover &-label-content {
       @offset: dls-sum(
         calc(@dls-tab-content-spacing * -0.5),
-        calc(@dls-tab-icon-size-aux * -0.5)
+        calc((1.2em * @remove-icon-aspect-ratio) * -0.5)
       );
 
       transform: ~"translateX(@{offset})";
@@ -188,7 +182,7 @@
       @offset: dls-sum(
         @dls-tab-padding-x-m,
         calc(@dls-tab-content-spacing * -0.5),
-        calc(@dls-tab-icon-size-aux * -0.5)
+        calc((1.2em * @remove-icon-aspect-ratio) * -0.5)
       );
       .absolute(50%, @offset, _, _);
       transform: translateY(-50%) scale(0.5);
@@ -200,8 +194,8 @@
       }
     }
 
-    &-remove.focus-visible,
-    &-removable &-label.focus-visible + &-remove,
+    &-remove[data-focus-visible-added],
+    &-removable &-label[data-focus-visible-added] + &-remove,
     &-removable:hover &-remove {
       opacity: 1;
       transform: translateY(-50%);
@@ -253,11 +247,16 @@
 
   &[ui~="l"] & {
     &-menu {
-      height: @veui-tabs-height-l;
+      height: @dls-tab-height-l;
     }
 
     &-item-label {
       padding: 0 @dls-tab-padding-x-l;
+    }
+
+    &-prev,
+    &-next {
+      .margin(_, @dls-tab-nav-spacing-l);
     }
   }
 
@@ -268,19 +267,150 @@
 
   &[ui~="s"] & {
     &-menu {
-      height: @veui-tabs-height-s;
+      height: @dls-tab-height-s;
     }
 
     &-item-label {
       padding: 0 @dls-tab-padding-x-s;
     }
 
-    &-prev {
-      margin-right: @dls-tab-nav-spacing-s;
+    &-prev,
+    &-next {
+      .margin(_, @dls-tab-nav-spacing-s);
+    }
+  }
+
+  &[ui~="simple"] & {
+    &-menu {
+      height: auto;
+
+      &::after {
+        content: none;
+      }
     }
 
-    &-next {
-      margin-left: @dls-tab-nav-spacing-s;
+    &-item {
+      & + .@{veui-prefix}-tabs-item {
+        position: relative;
+        margin-left: 1px;
+        .centered-line(
+          dls-even(dls-line-height(@dls-line-height-1, @dls-font-size-1))
+        );
+
+        &::before {
+          content: "";
+          .absolute(50%, _, _, -1px);
+          transform: translateY(-50%);
+          .size(1px, @dls-tab-separator-height-simple);
+          background-color: @dls-tab-separator-color;
+        }
+      }
+
+      &-label {
+        &::after {
+          content: none;
+        }
+      }
+    }
+  }
+
+  &[ui~="strong"] & {
+    &-menu {
+      height: @dls-tab-menu-height-strong-m;
+      .padding(dls-sum(@dls-tab-menu-height-strong-m, -@dls-tab-height-m), @dls-tab-menu-padding-x-strong-m, _);
+      background-color: @dls-tab-menu-background-color-strong;
+      .border-top-radius(@dls-tab-container-border-radius-strong-m);
+      .border-top-radius(6px);
+
+      &::after {
+        content: none;
+      }
+    }
+
+    &-item {
+      height: @dls-tab-height-m;
+
+      & + .@{veui-prefix}-tabs-item {
+        margin-left: @dls-tab-spacing-x-strong-m;
+      }
+
+      &-label {
+        padding: 0 @dls-tab-padding-x-strong-m;
+        background-color: @dls-tab-background-color-strong;
+        color: @dls-tab-font-color-strong;
+        .border-top-radius(@dls-tab-border-radius-strong-m);
+        .border-top-radius(10px);
+        .veui-transition(color, background-color);
+
+        &::before,
+        &::after {
+          content: none;
+        }
+
+        &:hover {
+          background-color: @dls-tab-background-color-strong-hover;
+          color: @dls-tab-font-color-strong-hover;
+        }
+
+        &[data-focus-visible-added] {
+          background-color: @dls-tab-background-color-strong-focus;
+          color: @dls-tab-font-color-strong-focus;
+        }
+
+        &:active {
+          background-color: @dls-tab-background-color-strong-active;
+          color: @dls-tab-font-color-strong-active;
+        }
+      }
+
+      &.@{veui-prefix}-disabled &-label {
+        background-color: @dls-tab-background-color-strong-disabled;
+      }
+
+      &-remove {
+        @offset: dls-sum(
+          @dls-tab-padding-x-strong-m,
+          calc(@dls-tab-content-spacing * -0.5),
+          calc((1.2em * @remove-icon-aspect-ratio) * -0.5)
+        );
+        right: @offset;
+      }
+    }
+
+    &-prev {
+      margin-left: dls-sum(@dls-tab-nav-spacing-m, @dls-tab-menu-padding-x-strong-m * -1);
+    }
+
+    &-next:last-child {
+      margin-right: dls-sum(@dls-tab-nav-spacing-m, @dls-tab-menu-padding-x-strong-m * -1);
+    }
+
+    &-item-active {
+      .@{veui-prefix}-tabs-item-label {
+        background-color: @dls-tab-background-color-strong-current;
+        color: @dls-tab-font-color-strong-current;
+
+        &:hover {
+          background-color: @dls-tab-background-color-strong-current-hover;
+          color: @dls-tab-font-color-strong-current-hover;
+        }
+
+        &[data-focus-visible-added] {
+          background-color: @dls-tab-background-color-strong-current-focus;
+          color: @dls-tab-font-color-strong-current-focus;
+        }
+
+        &:active {
+          background-color: @dls-tab-background-color-strong-current-active;
+          color: @dls-tab-font-color-strong-current-active;
+        }
+      }
+    }
+
+    &-panel {
+      .clearfix();
+      border: 1px solid @dls-tab-container-border-color-strong;
+      border-top-style: none;
     }
   }
 }
