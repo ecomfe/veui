@@ -269,7 +269,7 @@ main#content {
     position: relative;
     &::after {
       display: table;
-      content: '';
+      content: "";
       clear: both;
     }
     .block {
@@ -340,11 +340,11 @@ main#content {
   }
   .line {
     position: fixed;
-    top: ~'calc((100vh - 30px) * 0.1)';
+    top: ~"calc((100vh - 30px) * 0.1)";
     width: 180px;
     border-top: 1px solid #ccc;
     &::after {
-      content: '10%';
+      content: "10%";
       position: absolute;
       right: 0;
       bottom: 0;
