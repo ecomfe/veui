@@ -448,11 +448,11 @@ describe('components/Tree', () => {
 
     last.trigger('keydown', { key: 'Home' })
     await vm.$nextTick()
-    expect(first.classes()).to.include('focus-visible')
+    expect(first.attributes().tabindex).to.include('0')
 
     first.trigger('keydown', { key: 'End' })
     await vm.$nextTick()
-    expect(last.classes()).to.include('focus-visible')
+    expect(last.attributes().tabindex).to.include('0')
 
     wrapper.find('.veui-tree-item').trigger('keydown', { key: 'Right' })
     await vm.$nextTick()
