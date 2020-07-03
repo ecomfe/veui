@@ -828,7 +828,7 @@ export default {
   position: relative;
   padding-left: 24px;
   &::after {
-    content: '❤️';
+    content: "❤️";
     position: absolute;
     top: 50%;
     left: 0;
