@@ -7,7 +7,7 @@
     margin: 0;
     display: flex;
     position: relative;
-    border-bottom: 1px solid @dls-menu-border-color;
+    border-bottom: 1px solid @dls-menu-border-color-horizontal;
   }
 
   &-body,
@@ -138,13 +138,12 @@
   &-expand-icon {
     .size(@dls-menu-item-icon-size-aux);
     margin-left: @dls-menu-card-target-spacing;
-    transform: rotateZ(90deg);
     color: inherit;
     .veui-transition(transform, color);
   }
 
   &-item-open &-expand-icon {
-    transform: rotateZ(-90deg);
+    transform: rotateZ(180deg);
   }
 
   // top level expandable items
@@ -353,7 +352,7 @@
         color: @dls-menu-item-font-color-horizontal-active;
         background-color: @dls-menu-item-background-color-horizontal-active;
       }
-  
+
       &.@{veui-prefix}-nav-item-exact-active {
         font-weight: @dls-menu-item-font-weight-current;
         color: @dls-menu-item-font-color-horizontal-current;
@@ -363,12 +362,12 @@
           color: @dls-menu-item-font-color-horizontal-current-hover;
           background-color: @dls-menu-item-background-color-horizontal-current-hover;
         }
-  
+
         &[data-focus-visible-added] {
           color: @dls-menu-item-font-color-horizontal-current-focus;
           background-color: @dls-menu-item-background-color-horizontal-current-focus;
         }
-  
+
         &:active {
           color: @dls-menu-item-font-color-horizontal-current-active;
           background-color: @dls-menu-item-background-color-horizontal-current-active;

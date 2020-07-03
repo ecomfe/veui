@@ -1,10 +1,10 @@
-import { IconChevronRight, IconEllipsis } from 'dls-icons-vue'
+import { IconChevronDown, IconEllipsis } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
   {
     icons: {
-      expand: IconChevronRight,
+      expand: IconChevronDown,
       more: IconEllipsis
     },
     ui: {
