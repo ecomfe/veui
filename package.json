@@ -14,7 +14,7 @@
     }
   },
   "lint-staged": {
-    "packages/{babel-plugin-veui,veui,veui-loader,veui-theme-dls}/**/*.{js,vue}": [
+    "packages/{babel-plugin-veui,veui,veui-loader,veui-theme-dls}/**/*.{js,vue},!packages/veui/demo/**": [
       "prettier --write",
       "eslint --fix",
       "git add"
