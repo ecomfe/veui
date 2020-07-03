@@ -123,7 +123,7 @@ export default {
           ? includes(val, this.value)
           : val === this.trueValue
 
-        this.realChecked = checked
+        this.setReal('checked', checked)
       },
       immediate: true
     }
@@ -141,7 +141,7 @@ export default {
 
       let val = !this.realChecked
 
-      this.realChecked = val
+      this.setReal('checked', val)
 
       if (Array.isArray(this.model)) {
         let model = [...this.model]
