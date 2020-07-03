@@ -839,7 +839,7 @@ export default {
     },
     syncSelected (val) {
       this.stopMousePicking()
-      this.realSelected = val
+      this.setReal('selected', val)
     },
     select (day) {
       let selected = new Date(day.year, day.month, day.date)
