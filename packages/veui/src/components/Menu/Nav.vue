@@ -180,7 +180,6 @@
             position="popup"
             trigger="hover"
             option-tag="div"
-            label-tag="div"
           >
             <template
               slot="option"

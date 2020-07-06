@@ -312,4 +312,60 @@ describe('components/Select/OptionGroup', () => {
 
     wrapper.destroy()
   })
+
+  it('should handle optionTag prop correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-option-group': OptionGroup
+        },
+        uiTypes: ['select'],
+        data () {
+          return {
+            options: [
+              {
+                label: 'h',
+                options: [
+                  {
+                    label: 'm',
+                    value: 'm'
+                  },
+                  {
+                    label: 'n',
+                    value: 'n'
+                  }
+                ]
+              }
+            ],
+            optionTag: 'div'
+          }
+        },
+        methods: {
+          getOptionTag (option) {
+            return option.options ? 'div' : 'button'
+          }
+        },
+        template:
+          '<veui-option-group :options="options" :option-tag="optionTag"/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let option = wrapper.find('.veui-option')
+    let group = wrapper.find('.veui-option-group-label')
+    expect(option.element.tagName.toLowerCase()).to.equal('div')
+    expect(group.element.tagName.toLowerCase()).to.equal('div')
+
+    wrapper.vm.optionTag = wrapper.vm.getOptionTag
+    await wrapper.vm.$nextTick()
+    option = wrapper.find('.veui-option')
+    group = wrapper.find('.veui-option-group-label')
+    expect(option.element.tagName.toLowerCase()).to.equal('button')
+    expect(group.element.tagName.toLowerCase()).to.equal('div')
+
+    wrapper.destroy()
+  })
 })
