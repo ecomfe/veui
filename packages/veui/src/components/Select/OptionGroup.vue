@@ -19,7 +19,8 @@ import {
   cloneDeep,
   pick,
   pickBy,
-  isEqual
+  isEqual,
+  isFunction
 } from 'lodash'
 
 const EVENT_MAP = {
@@ -58,8 +59,19 @@ const OptionGroup = {
         return ['inline', 'popup'].indexOf(val) !== -1
       }
     },
-    optionTag: Option.props.tag,
-    labelTag: String
+    optionTag: {
+      type: [Function, String],
+      default (option) {
+        // label
+        if (option.options) {
+          return option.position === 'popup' && option.options.length
+            ? 'button'
+            : 'div'
+        }
+        // option
+        return 'button'
+      }
+    }
   },
   data () {
     return {
@@ -84,22 +96,6 @@ const OptionGroup = {
     },
     domAttrs () {
       return pickBy(this.$attrs, (_, key) => domAttrRe.test(key))
-    },
-    labelContent () {
-      if (isTopMostOfType(this, 'menu', 'select')) {
-        return null
-      }
-
-      return (
-        (this.$scopedSlots.label &&
-          this.$scopedSlots.label({ label: this.label })) ||
-        this.$slots.label ||
-        (this.menu &&
-          this.menu.$scopedSlots.label &&
-          this.menu.$scopedSlots.label({ label: this.label })) ||
-        (this.menu && this.menu.$slots.label) ||
-        this.label
-      )
     },
     realTrigger () {
       // derivable from parent group unless explicitly set
@@ -202,6 +198,25 @@ const OptionGroup = {
         menu.close()
         menu = menu.menu
       }
+    },
+    getOptionTag (option) {
+      return isFunction(this.optionTag) ? this.optionTag(option) : this.optionTag
+    },
+    getLabelContent () {
+      if (isTopMostOfType(this, 'menu', 'select')) {
+        return null
+      }
+
+      return (
+        (this.$scopedSlots.label &&
+          this.$scopedSlots.label({ label: this.label })) ||
+        this.$slots.label ||
+        (this.menu &&
+          this.menu.$scopedSlots.label &&
+          this.menu.$scopedSlots.label({ label: this.label })) ||
+        (this.menu && this.menu.$slots.label) ||
+        this.label
+      )
     }
   },
   render () {
@@ -213,6 +228,8 @@ const OptionGroup = {
             ? includes(this.value, opt.value)
             : opt.value === this.value
         }
+        // group 直接透传
+        let optionTag = option.options ? null : this.getOptionTag(option)
         return option.options ? (
           <OptionGroup
             ref="group"
@@ -255,7 +272,7 @@ const OptionGroup = {
             value={option.value}
             hidden={option.hidden}
             disabled={this.disabled || option.disabled}
-            tag={this.optionTag}
+            tag={optionTag}
             key={i}
           >
             {this.$scopedSlots.option
@@ -271,7 +288,10 @@ const OptionGroup = {
       })
       : []
 
-    let LabelTag = this.labelTag || this.canPopOut ? 'button' : 'div'
+    this.labelContent = this.getLabelContent()
+    let LabelTag = this.labelContent && this.componentAttrs.option
+      ? this.getOptionTag(this.componentAttrs.option)
+      : 'div'
 
     return (
       <div
