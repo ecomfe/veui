@@ -4,6 +4,11 @@ import {
   IconCheckCircle,
   IconTimesCircle
 } from 'dls-icons-vue'
+import {
+  dlsProgressSizeCircular,
+  dlsProgressTrackWidthM,
+  dlsProgressTrackWidthS
+} from 'less-plugin-dls/variables'
 import config from 'veui/managers/config'
 
 config.defaults(
@@ -20,13 +25,13 @@ config.defaults(
         default: 'm',
         data: {
           m: {
-            radius: 54,
-            strokeWidth: 6,
+            radius: parseInt(dlsProgressSizeCircular, 10) / 2,
+            strokeWidth: parseInt(dlsProgressTrackWidthM),
             strokeLinecap: 'round'
           },
           s: {
-            radius: 54,
-            strokeWidth: 4,
+            radius: parseInt(dlsProgressSizeCircular, 10) / 2,
+            strokeWidth: parseInt(dlsProgressTrackWidthS, 10),
             strokeLinecap: 'round'
           }
         },
