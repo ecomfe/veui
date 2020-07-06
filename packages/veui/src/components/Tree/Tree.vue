@@ -202,7 +202,7 @@ export default {
         } else {
           // 如果中间态不同步进 checked，那么祖先选中，则下面的所有子孙节点都选中
           item.checked =
-            inChecked || (!this.includeIndeterminate && ancestorInChecked)
+            inChecked || (!this.includeIndeterminate && !!ancestorInChecked)
         }
 
         // 第一个非 disabled 的顶层 item 是 tabindex = 0, collect 时这个数据是多余的，就不要计算了
