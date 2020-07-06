@@ -21,17 +21,15 @@
     display: flex;
     align-items: center;
     height: @dls-tree-node-height-m;
-
-    .clearfix();
     outline: none;
 
-    & > .@{veui-prefix}-icon {
-      .dls-icon-size(@dls-tree-icon-size);
-    }
-
-    &-expand-switcher,
     &-label {
-      float: left;
+      .ellipsis();
+      flex-shrink: 1;
+
+      .@{veui-prefix}-icon {
+        .dls-icon-size(@dls-tree-icon-size);
+      }
     }
 
     &-expand-switcher {
@@ -89,7 +87,7 @@
       position: absolute;
       left: 0;
       height: inherit;
-      width: 100%;
+      width: 200%; // hack around Safari's bug
       z-index: -1;
       .veui-transition(background-color);
     }
