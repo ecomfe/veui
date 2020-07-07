@@ -91,7 +91,7 @@
   >
     <veui-icon
       :name="icons.prev"
-      :label="t('prev')"
+      :aria-label="t('prev')"
     />
   </veui-button>
   <veui-button
@@ -102,7 +102,7 @@
   >
     <veui-icon
       :name="icons.next"
-      :label="t('next')"
+      :aria-label="t('next')"
     />
   </veui-button>
   <div
