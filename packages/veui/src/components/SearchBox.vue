@@ -38,11 +38,9 @@
         :class="$c('search-box-action-button')"
         :disabled="realDisabled || realReadonly"
         :aria-haspopup="submitPopup"
+        :aria-label="t('search')"
       >
-        <veui-icon
-          :name="icons.search"
-          :label="t('search')"
-        />
+        <veui-icon :name="icons.search"/>
       </veui-button>
     </div>
     <div
@@ -56,11 +54,9 @@
         :class="$c('search-box-action-icon')"
         :disabled="realDisabled || realReadonly"
         :aria-haspopup="submitPopup"
+        :aria-label="t('search')"
       >
-        <veui-icon
-          :name="icons.search"
-          :label="t('search')"
-        />
+        <veui-icon :name="icons.search"/>
       </veui-button>
     </div>
   </veui-input>
