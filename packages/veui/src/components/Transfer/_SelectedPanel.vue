@@ -85,7 +85,7 @@
           @click="remove(props.item)"
         >
           <veui-icon
-            :label="t('@transfer.remove')"
+            :aria-label="t('@transfer.remove')"
             :name="icons.remove"
           />
         </veui-button>
