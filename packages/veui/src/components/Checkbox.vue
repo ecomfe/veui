@@ -45,7 +45,7 @@ import Icon from './Icon'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
-import controllable from '../mixins/controllable'
+import useControllable from '../mixins/controllable'
 import focusable from '../mixins/focusable'
 import {
   patchIndeterminate,
@@ -64,7 +64,7 @@ export default {
     ui,
     input,
     focusable,
-    controllable({
+    useControllable({
       prop: 'checked',
       get () {
         if (this.isControlled('checked')) {
