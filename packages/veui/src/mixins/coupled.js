@@ -3,7 +3,7 @@ import { getTypedAncestorTracker } from '../utils/helper'
 import { getIndexOfType } from '../utils/context'
 import '../common/uiTypes'
 
-export function makeCoupledChild ({
+export function useCoupledChild ({
   direct = false,
   type,
   parentType,
@@ -59,7 +59,7 @@ export function makeCoupledChild ({
   }
 }
 
-export function makeCoupledParent ({ type, childrenKey = 'items' }) {
+export function useCoupledParent ({ type, childrenKey = 'items' }) {
   return {
     uiTypes: [type],
     methods: {

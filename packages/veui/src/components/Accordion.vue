@@ -6,12 +6,12 @@
 
 <script>
 import ui from '../mixins/ui'
-import { makeCoupledParent } from '../mixins/coupled'
+import { useCoupledParent } from '../mixins/coupled'
 import prefix from '../mixins/prefix'
 import { clone } from 'lodash'
 import '../common/uiTypes'
 
-let accordion = makeCoupledParent({
+let accordion = useCoupledParent({
   type: 'accordion',
   childrenKey: 'items'
 })
