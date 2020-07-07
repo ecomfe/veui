@@ -127,8 +127,8 @@
     display: flex;
     align-items: center;
 
-    .@{veui-prefix}-button[ui~="icon"] {
-      line-height: @dls-line-height-1;
+    .@{veui-prefix}-icon {
+      .dls-icon-size(@dls-date-picker-header-pagination-icon-size);
     }
 
     .@{veui-prefix}-calendar-select,
@@ -141,11 +141,6 @@
 
       &.@{veui-prefix}-calendar-visible {
         visibility: visible;
-      }
-
-      .@{veui-prefix}-icon {
-        .dls-icon-size(@dls-date-picker-header-pagination-icon-size);
-        color: @dls-date-picker-icon-color;
       }
     }
 
@@ -174,6 +169,7 @@
         margin-left: @dls-date-picker-header-icon-aux-spacing;
         margin-right: 0;
         .dls-icon-size(@dls-date-picker-header-icon-size-aux);
+        color: @dls-icon-color-aux;
         .veui-transition(transform);
 
         .@{veui-prefix}-calendar-expanded & {
