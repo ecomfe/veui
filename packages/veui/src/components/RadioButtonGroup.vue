@@ -5,25 +5,27 @@
   role="radiogroup"
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"
+  @keydown.left="pick(-1)"
+  @keydown.right="pick(1)"
 >
   <veui-button
     v-for="(item, index) in items"
+    ref="items"
     :key="index"
     :ui="uiParts.button"
     :class="{
-      [$c('button-selected')]: item.value === localValue
+      [$c('button-selected')]: index === activeIndex
     }"
     :disabled="item.disabled || realDisabled || realReadonly"
     role="radio"
-    :aria-selected="item.value === localValue"
+    :aria-selected="index === activeIndex"
+    :tabindex="index === activeIndex || activeIndex === -1 && index === 0 ? '0' : '-1'"
     @click="handleChange(item.value)"
   >
     <slot
       v-bind="item"
       :index="index"
-    >
-      {{ item.label }}
-    </slot>
+    >{{ item.label }}</slot>
   </veui-button>
 </div>
 </template>
@@ -34,13 +36,23 @@ import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { focusIn } from '../utils/dom'
 import Button from './Button'
+import useControllable from '../mixins/controllable'
+import { findIndex } from 'lodash'
 
 export default {
   name: 'veui-radio-button-group',
   components: {
     'veui-button': Button
   },
-  mixins: [prefix, ui, input],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    useControllable({
+      prop: 'value',
+      event: 'change'
+    })
+  ],
   model: {
     event: 'change'
   },
@@ -50,23 +62,28 @@ export default {
     value: {}
     /* eslint-enable vue/require-prop-types */
   },
-  data () {
-    return {
-      localValue: this.value
-    }
-  },
-  watch: {
-    value (val) {
-      this.localValue = val
+  computed: {
+    activeIndex () {
+      return findIndex(this.items, ({ value }) => value === this.realValue)
     }
   },
   methods: {
     handleChange (val) {
-      this.localValue = val
-
-      if (this.value !== val) {
-        this.$emit('change', val)
+      this.setReal('value', val)
+    },
+    pick (step) {
+      let length = this.items.length
+      if (length <= 1) {
+        return
       }
+
+      let index =
+        ((this.activeIndex === -1 ? 0 : this.activeIndex) + step) % length
+      this.setReal('value', this.items[index].value)
+
+      this.$nextTick(() => {
+        this.$refs.items[index].focus()
+      })
     },
     focus () {
       focusIn(this.$el)
