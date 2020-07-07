@@ -36,6 +36,14 @@
       background-color: @dls-progress-track-color;
     }
 
+    &[ui~="fluid"] {
+      width: 100%;
+
+      .@{veui-prefix}-progress-rail {
+        flex-grow: 1;
+      }
+    }
+
     &[ui~="s"] {
       font-size: @dls-progress-font-size-s;
 

@@ -43,6 +43,17 @@
     />
   </section>
   <section>
+    <h2>线性进度条（自适应）</h2>
+    <veui-progress
+      :value="Number(progress)"
+      desc
+      :autosucceed="200"
+      :status.sync="status"
+      :decimal-place="1"
+      ui="fluid"
+    />
+  </section>
+  <section>
     <h2>环形进度条</h2>
     <veui-progress
       type="circular"
