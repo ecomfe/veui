@@ -6,15 +6,15 @@ import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import config from '../../managers/config'
-import { makeCoupledParent } from '../../mixins/coupled'
-import makeControllable from '../../mixins/controllable'
+import { useCoupledParent } from '../../mixins/coupled'
+import useControllable from '../../mixins/controllable'
 import resize from '../../directives/resize'
 import { isEmpty } from '../../utils/helper'
 import '../../common/uiTypes'
 import { scrollTo } from '../../utils/dom'
 import { find, findIndex, throttle } from 'lodash'
 
-let tabs = makeCoupledParent({
+let tabs = useCoupledParent({
   type: 'tabs',
   childrenKey: 'items'
 })
@@ -33,7 +33,7 @@ export default {
   directives: {
     resize
   },
-  mixins: [prefix, ui, i18n, tabs, makeControllable(['active'])],
+  mixins: [prefix, ui, i18n, tabs, useControllable(['active'])],
   props: {
     active: {
       type: String

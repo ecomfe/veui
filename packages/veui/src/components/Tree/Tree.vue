@@ -103,7 +103,7 @@ import Icon from '../Icon'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
-import controllable from '../../mixins/controllable'
+import useControllable from '../../mixins/controllable'
 import { includes, map, filter, uniq, cloneDeep } from 'lodash'
 import { focusIn, closest } from '../../utils/dom'
 import { walk } from '../../utils/datasource'
@@ -119,7 +119,7 @@ export default {
     prefix,
     ui,
     input,
-    controllable([{ prop: 'checked', event: 'check' }, 'selected', 'expanded'])
+    useControllable([{ prop: 'checked', event: 'check' }, 'selected', 'expanded'])
   ],
   model: {
     prop: 'checked',

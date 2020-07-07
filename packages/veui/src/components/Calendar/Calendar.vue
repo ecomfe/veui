@@ -335,7 +335,7 @@ import {
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
-import makeControllable from '../../mixins/controllable'
+import useControllable from '../../mixins/controllable'
 import i18n from '../../mixins/i18n'
 import config from '../../managers/config'
 import Icon from '../Icon'
@@ -365,7 +365,7 @@ export default {
     ui,
     input,
     i18n,
-    makeControllable({
+    useControllable({
       prop: 'selected',
       event: 'select'
     })

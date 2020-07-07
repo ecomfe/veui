@@ -175,7 +175,7 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
-import controllable from '../mixins/controllable'
+import useControllable from '../mixins/controllable'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import warn from '../utils/warn'
@@ -240,7 +240,7 @@ export default {
     input,
     dropdown,
     i18n,
-    controllable({
+    useControllable({
       prop: 'selected',
       event: 'select'
     })

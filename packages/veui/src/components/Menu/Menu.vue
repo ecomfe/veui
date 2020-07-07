@@ -213,7 +213,7 @@ import Button from '../Button'
 import OptionGroup from '../OptionGroup'
 import Overlay from '../Overlay'
 import { some, uniq, includes, forEach, find } from 'lodash'
-import controllable from '../../mixins/controllable'
+import useControllable from '../../mixins/controllable'
 import mixin from './_mixin'
 import { closest, getFocusable } from '../../utils/dom'
 import '../../common/uiTypes'
@@ -230,7 +230,7 @@ export default {
   },
   mixins: [
     mixin,
-    controllable([
+    useControllable([
       {
         prop: 'collapsed',
         get (getReal) {

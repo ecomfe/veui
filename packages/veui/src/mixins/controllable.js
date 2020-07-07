@@ -26,7 +26,7 @@ const errorMsg =
  * @param {string|Object|[string|Object]} props - 定义的受控props
  * @return 转换后的 mixin
  */
-export default function makeControllable (props) {
+export default function useControllable (props) {
   if (!props) {
     // expose default methods
     return options
