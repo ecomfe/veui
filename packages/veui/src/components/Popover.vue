@@ -23,7 +23,8 @@ export default {
         overlayClass: this.mergeOverlayClass({
           [this.$c('popover-box')]: true
         }),
-        target: this.targetNode
+        target: this.targetNode,
+        interactive: true // Popovers are always interactive
       },
       on: { ...this.$listeners }
     }
