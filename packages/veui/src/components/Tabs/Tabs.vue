@@ -359,6 +359,7 @@ export default {
                   <Button
                     class={this.$c('tabs-item-remove')}
                     ui={this.uiParts.remove}
+                    aria-label={this.t('remove', { label: tab.label })}
                     onClick={e => this.handleRemove(tab, e)}
                     onFocus={() => {
                       this.focusedTab = tab
@@ -367,10 +368,7 @@ export default {
                       this.focusedTab = null
                     }}
                   >
-                    <Icon
-                      name={this.icons.remove}
-                      label={this.t('remove', { label: tab.label })}
-                    />
+                    <Icon name={this.icons.remove}/>
                   </Button>
                 ) : null}
               </div>
