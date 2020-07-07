@@ -37,10 +37,10 @@ import { find } from 'lodash'
 import Icon from './Icon'
 import ExpandTransition from './_ExpandTransition'
 import ui from '../mixins/ui'
-import { makeCoupledChild } from '../mixins/coupled'
+import { useCoupledChild } from '../mixins/coupled'
 import prefix from '../mixins/prefix'
 
-let accordionItem = makeCoupledChild({
+let accordionItem = useCoupledChild({
   direct: true,
   type: 'accordion-item',
   parentType: 'accordion',

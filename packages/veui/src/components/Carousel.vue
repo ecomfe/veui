@@ -122,7 +122,7 @@ import Icon from './Icon'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
-import makeControllable from '../mixins/controllable'
+import useControllable from '../mixins/controllable'
 import { contains } from '../utils/dom'
 
 const DEFAULT_LAZY_OPTIONS = {
@@ -135,7 +135,7 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, i18n, makeControllable(['index'])],
+  mixins: [prefix, ui, i18n, useControllable(['index'])],
   props: {
     datasource: {
       type: Array,
