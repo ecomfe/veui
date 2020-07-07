@@ -11,7 +11,6 @@
       <veui-radio-button-group
         v-model="picked1"
         :items="data1"
-        name="111"
         :disabled="disabled"
       >
         <template slot-scope="props">
@@ -26,7 +25,7 @@
       <veui-radio-button-group
         v-model="picked2"
         :items="data2"
-        ui="small alt"
+        ui="s"
         :disabled="disabled"
       >
         <template slot-scope="props">
@@ -51,7 +50,7 @@ export default {
   data () {
     return {
       picked1: 'euro',
-      picked2: 'qq',
+      picked2: null,
       disabled: false,
       data1: [
         {
