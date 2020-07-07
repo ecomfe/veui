@@ -5,7 +5,7 @@ import OptionGroup from '../OptionGroup'
 import overlay from '../../mixins/overlay'
 import ui from '../../mixins/ui'
 import prefix from '../../mixins/prefix'
-import controllable from '../../mixins/controllable'
+import useControllable from '../../mixins/controllable'
 import outside from '../../directives/outside'
 import { find } from '../../utils/datasource'
 import { map, endsWith, pick, isString } from 'lodash'
@@ -50,7 +50,7 @@ export default {
       return this.exactAndActiveItems ? this.exactAndActiveItems.slice(1) : []
     }
   },
-  mixins: [prefix, overlay, ui, controllable(['active'])],
+  mixins: [prefix, overlay, ui, useControllable(['active'])],
   created () {
     if (this.$router) {
       const updateActive = route => {

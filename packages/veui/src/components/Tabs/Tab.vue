@@ -1,11 +1,11 @@
 <script>
 import { uniqueId, includes } from 'lodash'
-import { makeCoupledChild } from '../../mixins/coupled'
+import { useCoupledChild } from '../../mixins/coupled'
 import '../../common/uiTypes'
 import prefix from '../../mixins/prefix'
 import { renderSlot, Void } from '../../utils/helper'
 
-let tab = makeCoupledChild({
+let tab = useCoupledChild({
   direct: true,
   type: 'tab',
   parentType: 'tabs',
