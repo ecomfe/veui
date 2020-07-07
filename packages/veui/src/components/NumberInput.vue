@@ -31,7 +31,7 @@
     >
       <veui-icon
         :name="icons.decrease"
-        :label="t('decrease', { value: step })"
+        :aria-label="t('decrease', { value: step })"
       />
     </veui-button>
   </template>
@@ -51,7 +51,7 @@
       >
         <veui-icon
           :name="icons.increase"
-          :label="t('increase', { value: step })"
+          :aria-label="t('increase', { value: step })"
         />
       </veui-button>
       <veui-button
@@ -63,7 +63,7 @@
       >
         <veui-icon
           :name="icons.decrease"
-          :label="t('decrease', { value: step })"
+          :aria-label="t('decrease', { value: step })"
         />
       </veui-button>
     </div>
@@ -81,7 +81,7 @@
     >
       <veui-icon
         :name="icons.increase"
-        :label="t('increase', { value: step })"
+        :aria-label="t('increase', { value: step })"
       />
     </veui-button>
   </template>

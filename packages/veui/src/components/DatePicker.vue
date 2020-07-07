@@ -62,7 +62,7 @@
       >
         <veui-icon
           :name="icons.clear"
-          :label="t('clear')"
+          :aria-label="t('clear')"
         />
       </veui-button>
       <veui-icon

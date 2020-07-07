@@ -169,12 +169,10 @@
                       [$c('disabled')]: realUneditable
                     }"
                     :tabindex="realUneditable ? null : 0"
+                    :aria-label="control.label"
                     @click.stop="replaceFile(file)"
                   >
-                    <veui-icon
-                      :name="icons.upload"
-                      :label="control.label"
-                    />
+                    <veui-icon :name="icons.upload"/>
                   </label>
                   <veui-button
                     v-else
@@ -185,12 +183,10 @@
                         ? control.disabled
                         : realUneditable
                     "
+                    :aria-label="control.label"
                     @click="handleImageControl(file, index, control.name)"
                   >
-                    <veui-icon
-                      :name="control.icon"
-                      :label="control.label"
-                    />
+                    <veui-icon :name="control.icon"/>
                   </veui-button>
                 </template>
               </div>
@@ -270,12 +266,10 @@
                       ? control.disabled
                       : realUneditable
                   "
+                  :aria-label="control.label"
                   @click="handleImageControl(file, index, control.name)"
                 >
-                  <veui-icon
-                    :name="control.icon"
-                    :label="control.label"
-                  />
+                  <veui-icon :name="control.icon"/>
                 </veui-button>
               </template>
             </div>
