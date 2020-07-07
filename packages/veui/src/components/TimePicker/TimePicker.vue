@@ -17,6 +17,7 @@
     ref="input"
     v-model="realInputValue"
     v-bind="inputProps"
+    autocomplete="veui-off"
     @focus="openDropdown"
     @click="openDropdown"
   >
@@ -152,7 +153,7 @@ import Button from '../Button'
 import Icon from '../Icon'
 import prefix from '../../mixins/prefix'
 import dropdown from '../../mixins/dropdown'
-import controllable from '../../mixins/controllable'
+import useControllable from '../../mixins/controllable'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import i18n from '../../mixins/i18n'
@@ -163,9 +164,9 @@ import {
   includes,
   get,
   times,
-  constant,
-  pick
+  constant
 } from 'lodash'
+import config from '../../managers/config'
 import { scrollToAlign } from '../../utils/dom'
 import TimePickerUtil from './_TimePickerUtil'
 
@@ -173,6 +174,13 @@ const HOURS = range(24)
 const MINUTES = range(60)
 const SECONDS = MINUTES
 const MODES = ['hour', 'minute', 'second']
+
+config.defaults(
+  {
+    placeholder: '@@timepicker.placeholder'
+  },
+  'timepicker'
+)
 
 export default {
   name: 'veui-time-picker',
@@ -189,7 +197,7 @@ export default {
     input,
     dropdown,
     i18n,
-    controllable({
+    useControllable({
       prop: 'value',
       event: 'input',
       get (getReal) {
@@ -213,10 +221,7 @@ export default {
     hours: Array,
     minutes: Array,
     seconds: Array,
-    placeholder: {
-      type: String,
-      default: '请选择时间'
-    },
+    placeholder: String,
     mode: {
       type: String,
       default: 'second',
@@ -236,6 +241,11 @@ export default {
     }
   },
   computed: {
+    realPlaceholder () {
+      return this.placeholder == null
+        ? config.get('timepicker.placeholder')
+        : this.placeholder
+    },
     enableSeconds () {
       return this.mode === 'second'
     },
@@ -244,7 +254,8 @@ export default {
     },
     inputProps () {
       return {
-        ...pick(this.$props, ['placeholder', 'autofocus']),
+        autofocus: this.autofocus,
+        placeholder: this.realPlaceholder,
         readonly: this.realReadonly,
         disabled: this.realDisabled,
         invalid: this.realInvalid
