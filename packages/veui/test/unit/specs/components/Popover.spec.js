@@ -103,29 +103,4 @@ describe('components/Popover', function () {
     expect(document.activeElement.tagName.toLowerCase()).to.equal('input')
     wrapper.destroy()
   })
-
-  it('should ignore `autofocus` if `interactive` is `false`', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-popover': Popover
-        },
-        template: `
-          <div>
-            <div ref="t">?</div>
-            <veui-popover target="t" autofocus open :interactive="false">
-                <input/>
-            </veui-popover>
-          </div>`
-      },
-      {
-        attachToDocument: true,
-        sync: false
-      }
-    )
-
-    await wait(0)
-    expect(document.activeElement.tagName.toLowerCase()).to.not.equal('input')
-    wrapper.destroy()
-  })
 })
