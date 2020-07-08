@@ -63,12 +63,12 @@ describe('components/Anchor', function () {
     wrapper.destroy()
   })
 
-  it('should handle scroll correctly when container is window', async () => {
+  it('should handle scroll correctly when container is window(or falsy)', async () => {
     let wrapper = mount(
       {
         ...componentOptions,
         template: `<div style="padding-top: 50px;">
-            <veui-anchor :items="coffees" container="@window"/>
+            <veui-anchor :items="coffees"/>
             <veui-anchor class="anchor-two" :items="coffees" :sticky="false"/>
             <div style="height: 200vh;"/>
           </div>`
