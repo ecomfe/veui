@@ -14,24 +14,18 @@ export default {
   name: 'veui-grid-row',
   mixins: [prefix],
   provide () {
-    let { columns, gutter, flex } = this
+    let { columns, gutter } = this
 
     return {
       columns,
-      gutter,
-      flex
+      gutter
     }
   },
-  inject: ['columns', 'gutter', 'flex'],
+  inject: ['columns', 'gutter'],
   computed: {
     style () {
-      let { flex, gutter } = this
+      let { gutter } = this
       return {
-        ...(flex
-          ? {
-            display: ['-webkit-box', '-ms-flexbox', 'flex']
-          }
-          : {}),
         'margin-right': `-${gutter / 2}px`,
         'margin-left': `-${gutter / 2}px`
       }
