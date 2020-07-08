@@ -30,11 +30,10 @@ export default {
       default: 0
     }
   },
-  inject: ['columns', 'gutter', 'flex'],
+  inject: ['columns', 'gutter'],
   provide () {
-    let { flex, gutter, realSpan } = this
+    let { gutter, realSpan } = this
     return {
-      flex,
       gutter,
       columns: realSpan
     }
