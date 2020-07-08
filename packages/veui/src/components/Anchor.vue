@@ -74,19 +74,10 @@ import {
 } from '../utils/dom'
 import { resolveOffset, ignoreElements, createPortal } from '../utils/helper'
 import { getNodes } from '../utils/context'
-import config from '../managers/config'
 
 const VEUI_OVERLAY_ELEMENT_NAME = 'veui-x-overlay'
 
 ignoreElements(VEUI_OVERLAY_ELEMENT_NAME)
-
-config.defaults({
-  'anchor.prefix': '@'
-})
-
-function isSpecialSyntax (value) {
-  return isString(value) && value.indexOf(config.get('anchor.prefix')) === 0
-}
 
 const extractValue = data => {
   return reduce(
@@ -160,8 +151,7 @@ export default {
   },
   data () {
     return {
-      localActive: null,
-      realContainer: null
+      localActive: null
     }
   },
   computed: {
@@ -188,11 +178,7 @@ export default {
       handler (val) {
         // isObject 检查：避免 SSR 时访问 window
         if (!val || (isObject(val) && val === window)) {
-          this.realContainer = val || null
-          this.$nextTick(this.updateOnContainerChange)
-        } else if (isSpecialSyntax(val)) {
-          // 特殊语法先直接返回 window 上的
-          this.realContainer = get(window, val.slice(1))
+          this.realContainer = this.anchorMounted ? (val || window) : val
           this.$nextTick(this.updateOnContainerChange)
         } else if (isString(val)) {
           // ref, 那么在 nextTick 中才能拿到 dom
@@ -205,6 +191,7 @@ export default {
             this.updateOnContainerChange()
           })
         } else {
+          // vue instance...
           this.realContainer = get(
             getNodes(val, this.$vnode.context),
             '[0]',
@@ -219,28 +206,38 @@ export default {
   mounted () {
     this.debounceActivateAnchor = debounce(this.activateAnchor, 1000 / 60)
     this.installScrollHandler()
+
     let hash = decodeURIComponent(location.hash)
-    // url 上初始就有 hash，那么最好一开始就滚动到对应的位置
-    // 但是浏览器自己可能也会滚动，因为 Anchor 是可以指定容器滚动的，所以浏览器的滚动不一定是我们想要的位置
-    // 所以希望可以覆盖掉浏览器的滚动，最终滚动到合适位置
     if (hash && includes(this.allAnchors, hash)) {
-      this.ensureHashActive = true
       this.updateActive(hash)
+
+      // url 上初始就有 hash，那么最好一开始就滚动到对应的位置
+      // 但是浏览器自己可能也会滚动，因为 Anchor 是可以指定容器滚动的，所以浏览器的滚动不一定是我们想要的位置
+      // 所以希望可以覆盖掉浏览器的滚动，最终滚动到合适位置
+      this.ensureHashActive = true
       const isLoading = document.readyState === 'loading'
       if (isLoading) {
         this.waitForLoaded = true
-        window.addEventListener('DOMContentLoaded', () =>
+        window.addEventListener('DOMContentLoaded', () => {
           // 为了尽可能在浏览器滚动后再滚动一次
           setTimeout(() => {
             this.waitForLoaded = false
-            // firefox 还需做下最后努力
-            this.scrollForHash()
+            // 如果这里没有 container，那么会在 container watch 时候再补上
+            if (this.realContainer) {
+              this.scrollForHash()
+            }
           }, 0)
-        )
-      } else {
-        this.scrollForHash()
+        })
       }
+    } else if (!this.container) {
+      this.$nextTick(() => {
+        if (!this.realContainer) {
+          this.realContainer = window
+          this.updateOnContainerChange()
+        }
+      })
     }
+    this.anchorMounted = true
   },
   beforeDestroy () {
     this.removeScrollHandler()
@@ -258,25 +255,23 @@ export default {
       }`.trim()
     },
     updateOnContainerChange () {
-      // 确保为 hash 滚动不会因为 container 而丢失
-      if (this.ensureHashActive) {
-        this.scrollForHash()
-      } else if (this.realContainer) {
-        if (this.sticky) this.toggleSticky()
-        this.activateAnchor()
+      // dom 加载好了还没有滚动到 url hash 处，说明加载事件中还没有 container，这里补上。
+      if (this.realContainer) {
+        if (this.ensureHashActive && !this.waitForLoaded) {
+          this.scrollForHash()
+        } else if (!this.ensureHashActive) {
+          if (this.sticky) this.toggleSticky()
+          this.activateAnchor()
+        }
       }
     },
     scrollForHash () {
-      // 若是加载页面，那么等到loaded之后才能取消hash滚动
-      if (this.ensureHashActive && this.realContainer) {
-        this.scrollToAnchor(() => {
-          if (!this.waitForLoaded) {
-            this.ensureHashActive = false
-            // 可能因为浏览器的滚动或保留上次滚动位置，而导致实际不会触发滚动，所以补个 sticky 检测
-            if (this.sticky) this.toggleSticky()
-          }
-        }, 0)
-      }
+      // 立即滚动到 hash 处
+      this.scrollToAnchor(() => {
+        this.ensureHashActive = false
+        // 可能因为浏览器的滚动或保留上次滚动位置，而导致实际不会触发滚动，所以补个 sticky 检测
+        if (this.sticky) this.toggleSticky()
+      }, 0)
     },
     installScrollHandler () {
       if (!globalScrollHandler.fns.length) {
@@ -441,9 +436,8 @@ export default {
       this.scrollToAnchor()
     },
     handleScroll (event) {
-      // 如果还在等loaded，就已经触发了滚动，那么尽快滚动到hash的地方
-      if (this.waitForLoaded) {
-        this.scrollForHash()
+      // 滚动到 url hash 之前不处理事件
+      if (this.ensureHashActive) {
         return
       }
       if (!this.ticking) {
