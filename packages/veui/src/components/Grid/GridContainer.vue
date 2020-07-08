@@ -15,8 +15,7 @@ config.defaults(
   {
     columns: 12,
     gutter: 30,
-    margin: 0,
-    flex: false
+    margin: 0
   },
   'gridcontainer'
 )
@@ -54,12 +53,6 @@ export default {
       validator (val) {
         return val >= 0
       }
-    },
-    flex: {
-      type: Boolean,
-      default () {
-        return config.get('gridcontainer.flex')
-      }
     }
   },
   computed: {
@@ -73,12 +66,11 @@ export default {
     }
   },
   provide () {
-    let { columns, gutter, flex } = this
+    let { columns, gutter } = this
 
     return {
       columns,
-      gutter,
-      flex
+      gutter
     }
   }
 }
