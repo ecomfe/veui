@@ -91,36 +91,6 @@ describe('components/GridContainer', () => {
 
     wrapper.destroy()
   })
-
-  it('should render `flex` props correctly', () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-grid-container': GridContainer,
-          'veui-grid-row': GridRow,
-          'veui-grid-column': GridColumn
-        },
-        template: `
-          <veui-grid-container flex>
-            <veui-grid-row>
-              <veui-grid-column />
-              <veui-grid-column />
-            </veui-grid-row>
-          </veui-grid-container>
-        `
-      },
-      {
-        sync: false,
-        attachToDocument: true
-      }
-    )
-
-    expect(getStyle(wrapper.find('.veui-grid-row').element).display).to.equal(
-      'flex'
-    )
-
-    wrapper.destroy()
-  })
 })
 
 describe('components/GridColumn', () => {
