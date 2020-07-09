@@ -41,11 +41,11 @@
     margin-right: -1px;
     z-index: 1;
 
-    &:first-child {
+    &:first-child:not(:last-child) {
       .border-right-radius(0);
     }
 
-    &:last-child {
+    &:last-child:not(:first-child) {
       .border-left-radius(0);
     }
 

@@ -132,7 +132,7 @@ describe('components/Select/OptionGroup', () => {
 
     await wrapper.vm.$nextTick()
 
-    let controlButton = wrapper.find('.veui-select-trigger .veui-input-main')
+    let controlButton = wrapper.find('.veui-select-trigger')
     controlButton.trigger('click')
     await wrapper.vm.$nextTick()
     let options = wrapper.findAll('.veui-option')

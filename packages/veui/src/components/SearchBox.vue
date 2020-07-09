@@ -10,56 +10,50 @@
   :ui="realUi"
   @click="handleClickBox"
 >
-  <veui-input
-    ref="input"
-    v-model="localValue"
-    v-outside:input,box="closeSuggestions"
-    :name="realName"
-    :readonly="realReadonly"
-    :disabled="realDisabled"
-    v-bind="attrs"
-    autocomplete="off"
-    role="search"
-    :aria-haspopup="inputPopup"
-    :aria-owns="inputPopup ? dropdownId : null"
-    @input="keyword = $event"
-    @focus="handleInputFocus"
-    @keydown="handleInputKeydown"
-    @clear="handleClear"
-  >
-    <div
-      slot="after"
-      ref="search"
-      :class="$c('search-box-action')"
-      @click.stop="search"
+  <veui-input-group>
+    <veui-input
+      ref="input"
+      v-model="localValue"
+      v-outside:input,box="closeSuggestions"
+      :name="realName"
+      :readonly="realReadonly"
+      :disabled="realDisabled"
+      v-bind="attrs"
+      autocomplete="off"
+      role="search"
+      :aria-haspopup="inputPopup"
+      :aria-owns="inputPopup ? dropdownId : null"
+      @input="keyword = $event"
+      @focus="handleInputFocus"
+      @keydown="handleInputKeydown"
+      @clear="handleClear"
     >
       <veui-button
-        :ui="uiParts.button"
-        :class="$c('search-box-action-button')"
-        :disabled="realDisabled || realReadonly"
-        :aria-haspopup="submitPopup"
-        :aria-label="t('search')"
-      >
-        <veui-icon :name="icons.search"/>
-      </veui-button>
-    </div>
-    <div
-      slot="append"
-      :class="$c('search-box-action')"
-      @click.stop="search"
-    >
-      <veui-button
+        v-if="!isStrong"
+        slot="after"
         type="button"
+        :class="$c('search-box-action')"
         :ui="uiParts.search"
-        :class="$c('search-box-action-icon')"
         :disabled="realDisabled || realReadonly"
         :aria-haspopup="submitPopup"
         :aria-label="t('search')"
+        @click.stop="search"
       >
         <veui-icon :name="icons.search"/>
       </veui-button>
-    </div>
-  </veui-input>
+    </veui-input>
+    <veui-button
+      v-if="isStrong"
+      :ui="uiParts.button"
+      :class="$c('search-box-action')"
+      :disabled="realDisabled || realReadonly"
+      :aria-haspopup="submitPopup"
+      :aria-label="t('search')"
+      @click.stop="search"
+    >
+      <veui-icon :name="icons.search"/>
+    </veui-button>
+  </veui-input-group>
   <veui-overlay
     v-show="realExpanded"
     ref="overlay"
@@ -160,6 +154,7 @@ import Input from './Input'
 import Icon from './Icon'
 import Overlay from './Overlay'
 import Button from './Button'
+import InputGroup from './InputGroup'
 import OptionGroup from './OptionGroup'
 import focusable from '../mixins/focusable'
 import { createKeySelect } from '../mixins/key-select'
@@ -186,7 +181,8 @@ export default {
     'veui-icon': Icon,
     'veui-overlay': Overlay,
     'veui-button': Button,
-    'veui-option-group': OptionGroup
+    'veui-option-group': OptionGroup,
+    'veui-input-group': InputGroup
   },
   mixins: [
     prefix,
@@ -235,6 +231,9 @@ export default {
   computed: {
     attrs () {
       return pick(this, ['ui', ...without(SHARED_PROPS, 'value')])
+    },
+    isStrong () {
+      return this.uiProps.style === 'strong'
     },
     realExpanded () {
       return !!(
