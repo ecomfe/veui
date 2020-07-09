@@ -62,7 +62,7 @@
       />
       <template v-else>{{ valueText }}</template>
       <slot
-        name="append"
+        name="after"
         v-bind="{ percent, value: realValue, status }"
       />
     </slot>

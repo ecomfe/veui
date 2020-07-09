@@ -36,22 +36,16 @@
     background-color: transparent;
 
     .@{veui-prefix}-input {
-      &,
-      &.@{veui-prefix}-focus {
-        .margin(-1px, _);
-
-        .@{veui-prefix}-input-main {
-          border: 0;
-          padding-right: 0;
-          background-color: transparent;
-        }
-      }
+      border: 0;
+      padding-right: 0;
+      background-color: transparent;
+      .margin(-1px, _);
     }
 
     .@{veui-prefix}-invalid & {
       border-color: @dls-input-border-color-error;
 
-      .@{veui-prefix}-input-main {
+      .@{veui-prefix}-input {
         color: @dls-input-font-color-error;
       }
 
@@ -152,18 +146,15 @@
     .@{veui-prefix}-input {
       flex: 1 1 auto;
       width: auto; // 覆盖 width
+      margin-bottom: -1px;
+      // 不加会导致年份选择的 input 下面的 highlight 部分被滚动条盖住
+      z-index: 1;
 
       &:first-child {
         border-top-left-radius: inherit;
       }
       &:last-child {
         border-top-right-radius: inherit;
-      }
-
-      &-main {
-        margin-bottom: -1px;
-        // 不加会导致年份选择的 input 下面的 highlight 部分被滚动条盖住
-        z-index: 1;
       }
     }
   }
