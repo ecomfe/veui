@@ -382,7 +382,7 @@ export default {
       </Tag>
     ))
 
-    let multiPrependSlot = this.searchable ? (
+    let multibeforeSlot = this.searchable ? (
       selectedTags
     ) : this.labels.length === 0 ? (
       <span class={this.$c('select-placeholder')} id={this.labelId}>
@@ -392,7 +392,7 @@ export default {
       selectedTags
     )
 
-    let prependSlot = !this.searchable ? (
+    let beforeSlot = !this.searchable ? (
       <span
         class={{
           [this.$c('select-label')]: true,
@@ -463,10 +463,10 @@ export default {
           onInput={this.handleTriggerInput}
           composition
         >
-          <template slot="prepend">
-            {this.multiple ? multiPrependSlot : prependSlot}
+          <template slot="before">
+            {this.multiple ? multibeforeSlot : beforeSlot}
           </template>
-          <template slot="append">
+          <template slot="after">
             {this.limitLabel ? (
               <span class={this.$c('select-count')}>{this.limitLabel}</span>
             ) : null}

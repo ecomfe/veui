@@ -35,7 +35,7 @@
       />
     </veui-button>
   </template>
-  <template slot="append">
+  <template slot="after">
     <div
       v-if="editable && !isStrong"
       :class="$c('number-input-controls')"

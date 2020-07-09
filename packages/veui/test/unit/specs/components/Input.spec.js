@@ -170,57 +170,17 @@ describe('components/Input', () => {
       },
       data () {
         return {
-          money: null
-        }
-      },
-      template: `
-        <veui-input v-model="money">
-          <template slot="after">元</template>
-        </veui-input>
-      `
-    })
-
-    expect(wrapper.find('.veui-input-after').text()).to.equal('元')
-  })
-
-  it('should render prepend slot correctly', () => {
-    let wrapper = mount({
-      components: {
-        'veui-input': Input
-      },
-      data () {
-        return {
           userName: null
         }
       },
       template: `
         <veui-input v-model="userName">
-          <template slot="prepend">user</template>
+          <template slot="after">user</template>
         </veui-input>
       `
     })
 
-    expect(wrapper.find('.veui-input-prepend').text()).to.equal('user')
-  })
-
-  it('should render append slot correctly', () => {
-    let wrapper = mount({
-      components: {
-        'veui-input': Input
-      },
-      data () {
-        return {
-          userName: null
-        }
-      },
-      template: `
-        <veui-input v-model="userName">
-          <template slot="append">user</template>
-        </veui-input>
-      `
-    })
-
-    expect(wrapper.find('.veui-input-append').text()).to.equal('user')
+    expect(wrapper.find('.veui-input-after').text()).to.equal('user')
   })
 
   it('should render maxlength limit correctly', () => {
@@ -234,7 +194,7 @@ describe('components/Input', () => {
     })
 
     expect(wrapper.find('input').attributes('maxlength')).to.equal(undefined)
-    expect(wrapper.find('.veui-input-append').text()).to.equal('3/5')
+    expect(wrapper.find('.veui-input-after').text()).to.equal('3/5')
   })
 
   it('should render maxlength limit with strict prop correctly', () => {
@@ -248,6 +208,6 @@ describe('components/Input', () => {
     })
 
     expect(wrapper.find('input').attributes('maxlength')).to.equal('5')
-    expect(wrapper.find('.veui-input-append').text()).to.equal('3/5')
+    expect(wrapper.find('.veui-input-after').text()).to.equal('3/5')
   })
 })

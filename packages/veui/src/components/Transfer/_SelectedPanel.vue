@@ -75,7 +75,7 @@
         </template>
       </template>
       <template
-        slot="item-append"
+        slot="item-after"
         slot-scope="props"
       >
         <veui-button
