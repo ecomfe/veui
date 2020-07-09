@@ -5,90 +5,66 @@
     [$c('focus')]: focused,
     [$c('input-hidden')]: type === 'hidden',
     [$c('input-autofill')]: autofill,
-    [$c('input-has-before')]: !!($slots.before || $slots['before-label']),
-    [$c('input-has-after')]: !!($slots.after || $slots['after-label']),
     [$c('invalid')]: realInvalid || lengthOverflow,
     [$c('readonly')]: realReadonly,
     [$c('disabled')]: realDisabled
   }"
   :ui="realUi"
   v-on="containerListeners"
+  @mousedown="handleMousedown"
 >
-  <template v-if="$slots.before || $slots['before-label']">
+  <template v-if="$slots.before">
     <div :class="$c('input-before')">
-      <slot name="before">
-        <div :class="$c('input-before-label')">
-          <slot name="before-label"/>
-        </div>
-      </slot>
+      <slot name="before"/>
     </div>
   </template>
-  <div
-    :class="$c('input-main')"
-    @mousedown="handleMousedown"
-  >
-    <template v-if="$slots.prepend">
-      <div :class="$c('input-prepend')">
-        <slot name="prepend"/>
-      </div>
-    </template>
-    <div :class="$c('input-content')">
-      <div
-        v-show="empty"
-        :class="$c('input-placeholder')"
-        @selectstart.prevent="() => false"
-      >
-        {{ placeholder }}
-      </div>
-      <input
-        ref="input"
-        v-model="localValue"
-        :class="$c('input-input')"
-        v-bind="attrs"
-        v-on="inputListeners"
-        @focus="handleFocus"
-        @blur="handleBlur"
-        @input="handleInput"
-        @compositionupdate="handleComposition"
-        @compositionend="handleCompositionEnd"
-        @change="$emit('change', $event.target.value, $event)"
-      >
+  <div :class="$c('input-content')">
+    <div
+      v-show="empty"
+      :class="$c('input-placeholder')"
+      @selectstart.prevent="() => false"
+    >
+      {{ placeholder }}
     </div>
-    <template v-if="$slots.append || clearable || realMaxlength !== null">
-      <div :class="$c('input-append')">
-        <veui-button
-          v-if="clearable"
-          v-show="editable && !empty"
-          :class="{
-            [$c('input-clear')]: true,
-            [$c('input-clear-has-append')]: !!$slots.append
-          }"
-          :ui="uiParts.clear"
-          :aria-label="t('clear')"
-          @click.stop="clear"
-        >
-          <veui-icon :name="icons.clear"/>
-        </veui-button>
-        <span
-          v-if="realMaxlength !== null"
-          :class="{
-            [$c('input-count')]: true,
-            [$c('input-count-overflow')]: lengthOverflow
-          }"
-        >
-          {{ length }}/{{ realMaxlength }}
-        </span>
-        <slot name="append"/>
-      </div>
-    </template>
+    <input
+      ref="input"
+      v-model="localValue"
+      :class="$c('input-input')"
+      v-bind="attrs"
+      v-on="inputListeners"
+      @focus="handleFocus"
+      @blur="handleBlur"
+      @input="handleInput"
+      @compositionupdate="handleComposition"
+      @compositionend="handleCompositionEnd"
+      @change="$emit('change', $event.target.value, $event)"
+    >
   </div>
-  <template v-if="$slots.after || $slots['after-label']">
+  <template v-if="$slots.after || clearable || realMaxlength !== null">
     <div :class="$c('input-after')">
-      <slot name="after">
-        <div :class="$c('input-after-label')">
-          <slot name="after-label"/>
-        </div>
-      </slot>
+      <veui-button
+        v-if="clearable"
+        v-show="editable && !empty"
+        :class="{
+          [$c('input-clear')]: true,
+          [$c('input-clear-has-after')]: !!$slots.after
+        }"
+        :ui="uiParts.clear"
+        :aria-label="t('clear')"
+        @click.stop="clear"
+      >
+        <veui-icon :name="icons.clear"/>
+      </veui-button>
+      <span
+        v-if="realMaxlength !== null"
+        :class="{
+          [$c('input-count')]: true,
+          [$c('input-count-overflow')]: lengthOverflow
+        }"
+      >
+        {{ length }}/{{ realMaxlength }}
+      </span>
+      <slot name="after"/>
     </div>
   </template>
 </div>

@@ -131,18 +131,10 @@
     </section>
 
     <section>
-      <h3>Prepend / Append</h3>
+      <h3>Before / After</h3>
       <section>
         <veui-input clearable>
-          <template slot="before-label">前缀内容</template>
-          <template slot="prepend"><veui-icon name="user-circle"/></template>
-          <template slot="after-label">后缀内容</template>
-        </veui-input>
-        <veui-input clearable>
-          <template slot="before-label">前缀内容</template>
-        </veui-input>
-        <veui-input clearable>
-          <template slot="after-label">后缀内容</template>
+          <template slot="before"><veui-icon name="user-circle"/></template>
         </veui-input>
       </section>
     </section>
@@ -158,30 +150,18 @@
           clearable
           class="input-nudge"
           @focus="log('focus')"
-        >
-          <template slot="after-label">
-            元
-          </template>
-        </veui-input>
+        />
         <veui-input
           v-model="price"
           class="input-nudge"
           clearable
           readonly
-        >
-          <template slot="after-label">
-            元
-          </template>
-        </veui-input>
+        />
         <veui-input
           v-model="price"
           class="input-nudge"
           disabled
-        >
-          <template slot="after-label">
-            元
-          </template>
-        </veui-input>
+        />
       </veui-field>
     </section>
 

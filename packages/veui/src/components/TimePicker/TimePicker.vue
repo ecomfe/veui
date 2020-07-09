@@ -22,7 +22,7 @@
     @click="openDropdown"
   >
     <div
-      slot="append"
+      slot="after"
       :class="$c('time-picker-icon')"
     >
       <veui-button

@@ -3,14 +3,20 @@
 .@{veui-prefix}-input {
   @left-padding: @dls-input-padding;
 
+  position: relative;
   display: inline-flex;
   align-items: stretch;
-  vertical-align: middle;
-  height: @dls-input-height-m;
-  font-size: @dls-input-font-size-m;
-  width: @dls-input-width;
+  .size(@dls-input-width, @dls-input-height-m);
+  padding: 0 @dls-input-padding;
+  border: 1px solid @dls-input-border-color;
+  background-color: @dls-input-background-color;
+  color: @dls-input-font-color;
   border-radius: @dls-input-border-radius-m;
-  line-height: 2;
+  font-size: @dls-input-font-size-m;
+  vertical-align: middle;
+  line-height: normal;
+  cursor: text;
+  .veui-transition(border-color, color, box-shadow);
 
   &-autofill {
     background-color: @veui-autofill-color;
@@ -22,65 +28,21 @@
 
   &-main {
     display: flex;
-    flex: 1 1 auto;
     align-items: stretch;
-    position: relative;
-    padding: 0 @dls-input-padding;
-    border: 1px solid @dls-input-border-color;
-    border-radius: inherit;
-    background-color: @dls-input-background-color;
-    color: @dls-input-font-color;
-    cursor: text;
-    .veui-transition(border-color, color, box-shadow);
-  }
-
-  &-has-before &-main {
-    .border-left-radius(0);
-  }
-
-  &-has-after &-main {
-    .border-right-radius(0);
   }
 
   &-before,
-  &-after,
-  &-prepend,
-  &-append {
+  &-after {
     display: flex;
     flex: 0 0 auto;
     align-items: center;
   }
 
-  &-before,
-  &-after {
-    border-radius: inherit;
-  }
-
-  &-before-label,
-  &-after-label {
-    display: flex;
-    align-items: center;
-    .size(100%);
-    border: 1px solid @dls-input-border-color;
-    border-radius: inherit;
-    padding: 0 @dls-input-padding;
-  }
-
-  &-before-label {
-    .border-right-radius(0);
-    border-right: none;
-  }
-
-  &-after-label {
-    .border-left-radius(0);
-    border-left: none;
-  }
-
-  &-prepend {
+  &-before {
     padding-right: @dls-input-content-spacing;
   }
 
-  &-append {
+  &-after {
     padding-left: @dls-input-content-spacing;
   }
 
@@ -110,7 +72,7 @@
       color: @dls-input-icon-color;
     }
 
-    &-has-append {
+    &-has-after {
       margin-right: dls-sum(
         @dls-button-padding-text * -1,
         -2px,
@@ -123,16 +85,16 @@
     margin-left: @dls-input-content-spacing;
   }
 
-  &-main:hover {
+  &:hover {
     border-color: @dls-input-border-color-hover;
   }
 
-  &.@{veui-prefix}-readonly &-main {
+  &.@{veui-prefix}-readonly {
     border-color: @dls-input-border-color-read-only;
     background-color: @dls-input-background-color-read-only;
   }
 
-  &.@{veui-prefix}-readonly &-main:hover {
+  &.@{veui-prefix}-readonly:hover {
     border-color: @dls-input-border-color-read-only-hover;
   }
 
@@ -144,47 +106,39 @@
     position: relative;
   }
 
-  &.@{veui-prefix}-focus &-main {
+  &.@{veui-prefix}-focus {
     .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
   }
 
-  &.@{veui-prefix}-invalid &-main {
+  &.@{veui-prefix}-invalid {
     border-color: @dls-input-border-color-error;
     color: @dls-input-font-color-error;
   }
 
-  &.@{veui-prefix}-invalid &-main:hover {
+  &.@{veui-prefix}-invalid:hover {
     border-color: @dls-input-border-color-error-hover;
   }
 
-  &.@{veui-prefix}-invalid.@{veui-prefix}-focus &-main {
+  &.@{veui-prefix}-invalid.@{veui-prefix}-focus {
     .dls-focus-ring(
       @dls-input-border-color-error-focus,
       @dls-input-shadow-error-focus
     );
   }
 
-  &.@{veui-prefix}-focus.@{veui-prefix}-readonly &-main {
+  &.@{veui-prefix}-focus.@{veui-prefix}-readonly {
     border-color: @dls-input-border-color-read-only-focus;
   }
 
-  &.@{veui-prefix}-disabled &-main,
-  &.@{veui-prefix}-readonly &-before-label,
-  &.@{veui-prefix}-readonly &-after-label,
-  &.@{veui-prefix}-disabled &-before-label,
-  &.@{veui-prefix}-disabled &-after-label {
+  &.@{veui-prefix}-disabled {
     background-color: @dls-input-background-color-disabled;
     border-color: @dls-input-border-color-disabled;
     cursor: not-allowed;
   }
 
   &.@{veui-prefix}-disabled &-input,
-  &.@{veui-prefix}-readonly &-before-label,
-  &.@{veui-prefix}-readonly &-after-label,
-  &.@{veui-prefix}-disabled &-before-label,
-  &.@{veui-prefix}-disabled &-after-label,
-  &.@{veui-prefix}-disabled &-prepend,
-  &.@{veui-prefix}-disabled &-append {
+  &.@{veui-prefix}-disabled &-before,
+  &.@{veui-prefix}-disabled &-after {
     color: @dls-input-font-color-disabled;
     pointer-events: none;
   }
@@ -234,31 +188,21 @@
   &[ui~="inline"] {
     border-radius: 0;
     position: relative;
+    border-style: none none solid !important;
     background-color: transparent;
+    box-shadow: none;
 
     &.@{veui-prefix}-readonly,
     &.@{veui-prefix}-disabled {
-      .@{veui-prefix}-input-main {
-        background-color: transparent;
+      background-color: transparent;
+    }
+
+    &.@{veui-prefix}-focus {
+      box-shadow: @dls-input-shadow-inline-focus;
+
+      &.@{veui-prefix}-invalid {
+        box-shadow: @dls-input-shadow-inline-error-focus;
       }
     }
-  }
-
-  &[ui~="inline"] &-main {
-    position: relative;
-    box-shadow: none;
-    border-style: none none solid !important;
-  }
-
-  &[ui~="inline"].@{veui-prefix}-input-has-after .@{veui-prefix}-input-main {
-    border-radius: 0;
-  }
-
-  &.@{veui-prefix}-focus[ui~="inline"] &-main {
-    box-shadow: @dls-input-shadow-inline-focus;
-  }
-
-  &.@{veui-prefix}-invalid.@{veui-prefix}-focus[ui~="inline"] &-main {
-    box-shadow: @dls-input-shadow-inline-error-focus;
   }
 }
