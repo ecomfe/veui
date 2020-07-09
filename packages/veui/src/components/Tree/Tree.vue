@@ -49,7 +49,7 @@
           <veui-icon :name="icons.collapse"/>
         </button>
         <slot
-          name="item-prepend"
+          name="item-before"
           v-bind="item"
           :item="item"
           :index="index"
@@ -82,7 +82,7 @@
           </slot>
         </div>
         <slot
-          name="item-append"
+          name="item-after"
           v-bind="item"
           :item="item"
           :index="index"
