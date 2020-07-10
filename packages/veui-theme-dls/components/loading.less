@@ -44,16 +44,23 @@
     display: flex;
     color: @dls-loading-color-normal;
 
-    .@{veui-prefix}-icon {
+    .@{veui-prefix}-icon,
+    .dls-icon {
       .dls-icon-size(@dls-loading-size-m);
     }
 
-    &[ui~="s"] .@{veui-prefix}-icon {
-      .dls-icon-size(@dls-loading-size-s);
+    &[ui~="s"] {
+      .@{veui-prefix}-icon,
+      .dls-icon {
+        .dls-icon-size(@dls-loading-size-s);
+      }
     }
 
-    &[ui~="l"] .@{veui-prefix}-icon {
-      .dls-icon-size(@dls-loading-size-l);
+    &[ui~="l"] {
+      .@{veui-prefix}-icon,
+      .dls-icon {
+        .dls-icon-size(@dls-loading-size-l);
+      }
     }
 
     &[ui~="strong"] {
