@@ -130,51 +130,51 @@
     .@{veui-prefix}-icon {
       .dls-icon-size(@dls-date-picker-header-pagination-icon-size);
     }
+  }
 
-    .@{veui-prefix}-calendar-select,
-    .@{veui-prefix}-calendar-prev,
-    .@{veui-prefix}-calendar-next,
-    .@{veui-prefix}-calendar-backward,
-    .@{veui-prefix}-calendar-forward {
-      flex-grow: 0;
-      visibility: hidden;
+  &-select,
+  &-prev,
+  &-next,
+  &-backward,
+  &-forward {
+    flex-grow: 0;
+    visibility: hidden;
 
-      &.@{veui-prefix}-calendar-visible {
-        visibility: visible;
-      }
+    &.@{veui-prefix}-calendar-visible {
+      visibility: visible;
     }
+  }
 
-    .@{veui-prefix}-calendar-prev {
-      margin-left: @dls-date-picker-header-pagination-spacing;
-    }
-    .@{veui-prefix}-calendar-next {
-      margin-right: @dls-date-picker-header-pagination-spacing;
-    }
+  &-prev {
+    margin-left: @dls-date-picker-header-pagination-spacing;
+  }
+  &-next {
+    margin-right: @dls-date-picker-header-pagination-spacing;
+  }
 
-    .@{veui-prefix}-calendar-select {
-      text-align: center;
+  &-select {
+    text-align: center;
+    color: @dls-foreground-color-neutral;
+    margin: auto;
+    height: auto;
+    border: none;
+    line-height: @dls-line-height-1;
+
+    &.focus-visible,
+    &:hover {
+      background-color: @dls-background-color-base-1;
       color: @dls-foreground-color-neutral;
-      margin: auto;
-      height: auto;
-      border: none;
-      line-height: @dls-line-height-1;
+    }
 
-      &.focus-visible,
-      &:hover {
-        background-color: @dls-background-color-base-1;
-        color: @dls-foreground-color-neutral;
-      }
+    .@{veui-prefix}-icon {
+      margin-left: @dls-date-picker-header-icon-aux-spacing;
+      margin-right: 0;
+      .dls-icon-size(@dls-date-picker-header-icon-size-aux);
+      color: @dls-icon-color-aux;
+      .veui-transition(transform);
 
-      .@{veui-prefix}-icon {
-        margin-left: @dls-date-picker-header-icon-aux-spacing;
-        margin-right: 0;
-        .dls-icon-size(@dls-date-picker-header-icon-size-aux);
-        color: @dls-icon-color-aux;
-        .veui-transition(transform);
-
-        .@{veui-prefix}-calendar-expanded & {
-          transform: rotate(180deg);
-        }
+      .@{veui-prefix}-calendar-expanded & {
+        transform: rotate(180deg);
       }
     }
   }
