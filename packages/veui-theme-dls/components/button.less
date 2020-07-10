@@ -51,13 +51,17 @@
     .make-metrics(xl);
   }
 
-  .@{veui-prefix}-icon {
+  .@{veui-prefix}-icon,
+  .dls-icon {
     .dls-icon-size(1em);
     margin-right: @dls-button-content-spacing;
   }
 
-  &-icon-only .@{veui-prefix}-icon {
-    margin-right: 0;
+  &-icon-only{
+    .@{veui-prefix}-icon,
+    .dls-icon {
+      margin-right: 0;
+    }
   }
 
   &:focus {
@@ -87,7 +91,8 @@
     background-color: @dls-button-background-color-normal-active;
   }
 
-  &-loading .@{veui-prefix}-icon:not(&-loading-icon) {
+  &-loading .@{veui-prefix}-icon:not(&-loading-icon),
+  &-loading .dls-icon:not(&-loading-icon) {
     display: none;
   }
 
