@@ -74,11 +74,6 @@
     font-size: @dls-menu-font-size-m;
     height: inherit;
 
-    & &-icon,
-    & &-icon .@{veui-prefix}-icon {
-      color: inherit;
-    }
-
     &:not(.@{veui-prefix}-disabled) {
       // hover toggle 也让有 hover link 的效果（toggle 不在 link 里面）
       &.@{veui-prefix}-menu-link:hover,
@@ -266,7 +261,7 @@
         .size(@dls-menu-indicator-width, inherit);
         background: @dls-menu-indicator-color;
       }
-      
+
       &[data-focus-visible-added]::after {
         background-color: @dls-menu-indicator-color-focus;
       }
