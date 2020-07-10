@@ -53,10 +53,7 @@
 <script>
 import { Menu, Icon } from 'veui'
 import { omit } from 'lodash'
-import 'veui-theme-dls-icons/clock'
-import 'veui-theme-dls-icons/envelope'
-import 'veui-theme-dls-icons/eye'
-import 'veui-theme-dls-icons/file'
+import { IconClock, IconEnvelope, IconEye, IconFile } from 'dls-icons-vue'
 
 export default {
   name: 'veui-menu-demo',
@@ -69,13 +66,13 @@ export default {
       {
         label: 'Group One',
         name: 'group-one',
-        icon: 'clock',
+        icon: IconClock,
         position: 'card',
         children: [
           {
             label: 'Sub One',
             name: 'sub-one',
-            icon: 'envelope',
+            icon: IconEnvelope,
             children: [
               {
                 label: 'Input',
@@ -94,7 +91,7 @@ export default {
         label: 'Button',
         name: 'Button',
         to: '/menu/button',
-        icon: 'eye',
+        icon: IconEye,
         children: [
           {
             label: 'Disabled',
@@ -113,13 +110,13 @@ export default {
       {
         label: 'Navigation Three',
         name: 'nav-three',
-        icon: 'file',
+        icon: IconFile,
         disabled: true
       },
       {
         label: 'Navigation Four',
         name: 'nav-four',
-        icon: 'file',
+        icon: IconFile,
         children: [
           {
             label: 'Four Sub One',
@@ -153,7 +150,7 @@ export default {
       {
         label: 'Navigation Five',
         name: 'nav-five',
-        icon: 'file',
+        icon: IconFile,
         children: [
           {
             label: 'Progress',

@@ -5,8 +5,11 @@
   outline: none;
   font-size: @dls-uploader-font-size-m;
 
-  .@{veui-prefix}-disabled .@{veui-prefix}-icon {
-    color: currentColor;
+  .@{veui-prefix}-disabled {
+    .@{veui-prefix}-icon,
+    .dls-icon {
+      color: currentColor;
+    }
   }
 
   &-file {
@@ -224,7 +227,7 @@
       background-color: @dls-uploader-mask-background-color;
       padding: @dls-uploader-mask-padding-y @dls-uploader-mask-padding-x;
 
-      .@{veui-prefix}-icon {
+      .@{veui-prefix}-button {
         color: @dls-uploader-mask-icon-color;
       }
 
