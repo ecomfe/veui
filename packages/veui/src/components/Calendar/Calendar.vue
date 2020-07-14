@@ -531,8 +531,9 @@ export default {
     selected (val) {
       this.picking = this.pickingRanges = null
       val = [].concat(val)
-      if (this.multiple && this.range) val = flattenDeep(val)
-      if (val && val[0]) this.navigate(val)
+      if (!this.multiple && val && val[0]) {
+        this.navigate(val)
+      }
     }
   },
   mounted () {
