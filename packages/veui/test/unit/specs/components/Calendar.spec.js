@@ -601,4 +601,28 @@ describe('components/Calendar', () => {
     )
     wrapper.destroy()
   })
+
+  it('should update panel date correctly on selecting next month.', async () => {
+    const wrapper = mount({
+      components: {
+        'veui-calendar': Calendar
+      },
+      data () {
+        return {
+          selected: [new Date(2020, 6, 15)]
+        }
+      },
+      template: '<veui-calendar ref="calendar" multiple v-model="selected"/>'
+    })
+    const { vm } = wrapper
+    let next = wrapper.find('.veui-calendar-day + .veui-calendar-aux button')
+    next.trigger('click')
+    await vm.$nextTick()
+    let [panelData] = vm.$refs.calendar.panelData
+    expect(panelData.date).to.deep.equal({
+      year: 2020,
+      month: 7
+    })
+    wrapper.destroy()
+  })
 })

@@ -532,7 +532,18 @@ export default {
       this.picking = this.pickingRanges = null
       val = [].concat(val)
       if (this.multiple && this.range) val = flattenDeep(val)
-      if (val && val[0]) this.navigate(val)
+      if (val && val[0]) {
+        // bug: 如选中 7-16，再选中 8-1（fillMonth），会在 selectDay 中切到 8 月，但 selected 变了，这里又切换成 7 月了
+        // fix: 当选中的值都不在面板中，才发生切换面板
+        let anySelectedInPanel = val.some(i => {
+          let { year, month } = toDateData(i)
+          let dateData = this.isDateType ? { year, month } : { year }
+          return this.panelData.some(({ date }) => isEqual(date, dateData))
+        })
+        if (!anySelectedInPanel) {
+          this.navigate(val)
+        }
+      }
     }
   },
   mounted () {
