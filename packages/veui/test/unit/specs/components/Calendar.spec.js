@@ -67,13 +67,14 @@ describe('components/Calendar', () => {
     })
 
     const days = wrapper.findAll('.veui-calendar-day button')
-    days.at(0).trigger('click')
-    days.at(2).trigger('click')
-    days.at(7).trigger('click')
-
     const { vm } = wrapper
-
+    days.at(0).trigger('click')
     await vm.$nextTick()
+    days.at(2).trigger('click')
+    await vm.$nextTick()
+    days.at(7).trigger('click')
+    await vm.$nextTick()
+
     expect(vm.selected[0]).to.be.an.instanceof(Date)
     expect(vm.selected[1]).to.be.an.instanceof(Date)
     expect(vm.selected[2]).to.be.an.instanceof(Date)
@@ -599,6 +600,30 @@ describe('components/Calendar', () => {
     expect(vm.realSelected.getFullYear()).to.equal(
       +target.element.textContent.trim()
     )
+    wrapper.destroy()
+  })
+
+  it('should update panel date correctly on selecting next month.', async () => {
+    const wrapper = mount({
+      components: {
+        'veui-calendar': Calendar
+      },
+      data () {
+        return {
+          selected: [new Date(2020, 6, 15)]
+        }
+      },
+      template: '<veui-calendar ref="calendar" multiple v-model="selected"/>'
+    })
+    const { vm } = wrapper
+    let next = wrapper.find('.veui-calendar-day + .veui-calendar-aux button')
+    next.trigger('click')
+    await vm.$nextTick()
+    let [panelData] = vm.$refs.calendar.panelData
+    expect(panelData.date).to.deep.equal({
+      year: 2020,
+      month: 7
+    })
     wrapper.destroy()
   })
 })
