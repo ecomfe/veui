@@ -16,8 +16,7 @@ export default {
       computed: {
         classes () {
           return {
-            [prefixify('icon')]: true,
-            [prefixify('icon-spin')]: this.spin
+            [prefixify('icon')]: true
           }
         }
       }
@@ -43,7 +42,7 @@ export default {
     }
 
     const Icon = this.name
-    return <Icon class={this.classes} />
+    return <Icon class={this.classes} spin={this.spin} />
   }
 }
 </script>
