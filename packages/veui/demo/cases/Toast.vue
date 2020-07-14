@@ -30,6 +30,22 @@
       @click="showSlottedToast"
     >错误（包括组件）</veui-button>
   </section>
+
+  <section>
+    <h4>关闭</h4>
+
+    <veui-button
+      ui="aux"
+      @click="showCloseToast"
+    >打开</veui-button>
+    <veui-button
+      :disabled="!closeToast"
+      ui="aux"
+      @click="closeCloseToast"
+    >关闭</veui-button>
+  </section>
+
+  <h4>样式</h4>
   <section class="col">
     <section>
       <veui-toast open>Test</veui-toast>
@@ -172,7 +188,8 @@ export default {
   },
   data () {
     return {
-      messages: messages
+      messages: messages,
+      closeToast: null
     }
   },
   computed: {
@@ -214,6 +231,20 @@ export default {
         ],
         duration: 100000
       })
+    },
+    showCloseToast () {
+      if (this.closeToast) {
+        return
+      }
+      this.closeToast = toast.info({
+        message: '点击“关闭”按钮关闭本条提示',
+        duration: -1,
+        closable: false
+      })
+    },
+    closeCloseToast () {
+      this.closeToast()
+      this.closeToast = null
     }
   }
 }
@@ -236,6 +267,10 @@ section {
 
 h3 {
   margin-bottom: 30px;
+}
+
+h4 {
+  margin-top: 2em;
 }
 
 .veui-button {

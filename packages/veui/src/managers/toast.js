@@ -22,15 +22,16 @@ export class ToastManager {
       this.init()
     }
 
+    let messages = []
     if (Array.isArray(option)) {
-      option.forEach(item => {
-        this.container.add(item)
-      })
+      messages = option.map(item => this.container.add(item))
     } else if (isObject(option)) {
-      this.container.add(option)
+      messages = [this.container.add(option)]
     } else {
       warn('[toast-manager] Invalid arguments for Toasts.')
     }
+
+    return () => messages.forEach(message => this.container.remove(message))
   }
 
   remove (index) {
@@ -58,23 +59,23 @@ export class ToastManager {
     } else if (isString(type)) {
       options.type = type
     }
-    this.add(options)
+    return this.add(options)
   }
 
   success (message) {
-    this.show(message, 'success')
+    return this.show(message, 'success')
   }
 
   warn (message) {
-    this.show(message, 'warning')
+    return this.show(message, 'warning')
   }
 
   info (message) {
-    this.show(message, 'info')
+    return this.show(message, 'info')
   }
 
   error (message) {
-    this.show(message, 'error')
+    return this.show(message, 'error')
   }
 }
 
