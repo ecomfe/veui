@@ -20,6 +20,7 @@
     @change="checked => handleChange(item.value, checked)"
   >
     <slot
+      name="item"
       v-bind="item"
       :index="index"
     >

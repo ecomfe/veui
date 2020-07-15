@@ -23,6 +23,7 @@
     @click="handleChange(item.value)"
   >
     <slot
+      name="item"
       v-bind="item"
       :index="index"
     >{{ item.label }}</slot>
