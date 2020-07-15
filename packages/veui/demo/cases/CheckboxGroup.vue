@@ -6,7 +6,7 @@
       v-model="picked1"
       :items="data1"
     >
-      <template slot-scope="props">
+      <template #item="props">
         {{ props.label }}
       </template>
     </veui-checkbox-group>
@@ -18,7 +18,10 @@
       :items="data2"
       ui="s"
     >
-      <template slot-scope="props">
+      <template
+        slot="item"
+        slot-scope="props"
+      >
         {{ props.label }}
       </template>
     </veui-checkbox-group>

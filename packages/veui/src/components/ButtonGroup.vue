@@ -18,6 +18,7 @@
       @click="handleClick(item, index, $event)"
     >
       <slot
+        name="item"
         v-bind="item"
         :index="index"
       >
