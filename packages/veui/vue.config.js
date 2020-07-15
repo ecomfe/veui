@@ -60,13 +60,13 @@ module.exports = {
     config.module
       .rule('vue')
       .use('vue-loader')
-      .tap(options =>
-        Object.assign({}, options, {
-          compilerOptions: {
-            whitespace: 'condense'
-          }
-        })
-      )
+      .tap(options => ({
+        ...options,
+        compilerOptions: {
+          ...options.compilerOptions,
+          whitespace: 'condense'
+        }
+      }))
 
     config.module
       .rule('veui')
