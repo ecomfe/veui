@@ -29,7 +29,7 @@
         {{ message[localIndex] }}
       </slot>
       <div
-        v-if="$slots.extra || $scopedSlots.extra"
+        v-if="$scopedSlots.extra || $slots.extra"
         :class="$c('alert-content-extra')"
       >
         <slot
@@ -63,7 +63,7 @@
           {{ message }}
         </slot>
         <div
-          v-if="$slots.extra"
+          v-if="$scopedSlots.extra || $slots.extra"
           :class="$c('alert-content-extra')"
         >
           <slot name="extra"/>
