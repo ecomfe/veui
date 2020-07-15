@@ -120,6 +120,7 @@
 </template>
 
 <script>
+import { clamp } from 'lodash'
 import Icon from './Icon'
 import Button from './Button'
 import ui from '../mixins/ui'
@@ -183,6 +184,10 @@ export default {
     },
     localIndex (value) {
       this.$emit('update:index', value)
+    },
+    message (value) {
+      let length = Array.isArray(value) ? value.length : 1
+      this.localIndex = clamp(this.localIndex, 0, length - 1)
     }
   },
   mounted () {
