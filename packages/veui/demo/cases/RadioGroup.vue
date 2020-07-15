@@ -7,7 +7,7 @@
       :items="data1"
       name="111"
     >
-      <template slot-scope="props">
+      <template #item="props">
         {{ props.label }}
       </template>
     </veui-radio-group>
@@ -19,7 +19,10 @@
       :items="data2"
       ui="s"
     >
-      <template slot-scope="props">
+      <template
+        slot="item"
+        slot-scope="props"
+      >
         {{ props.label }}
       </template>
     </veui-radio-group>

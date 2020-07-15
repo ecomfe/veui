@@ -13,7 +13,7 @@
         :items="data1"
         :disabled="disabled"
       >
-        <template slot-scope="props">
+        <template #item="props">
           {{ props.label }}
         </template>
       </veui-check-button-group>
@@ -28,7 +28,7 @@
         ui="s"
         :disabled="disabled"
       >
-        <template slot-scope="props">
+        <template #item="props">
           {{ props.label }}
         </template>
       </veui-check-button-group>
@@ -43,7 +43,10 @@
         ui="s"
         :disabled="disabled"
       >
-        <template slot-scope="props">
+        <template
+          slot="item"
+          slot-scope="props"
+        >
           <veui-icon :name="props.icon"/>
         </template>
       </veui-check-button-group>

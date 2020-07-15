@@ -13,7 +13,7 @@
         :items="data1"
         :disabled="disabled"
       >
-        <template slot-scope="props">
+        <template #item="props">
           {{ props.label }}
         </template>
       </veui-radio-button-group>
@@ -28,8 +28,11 @@
         ui="s"
         :disabled="disabled"
       >
-        <template slot-scope="props">
-          {{ props.label }}
+        <template
+          slot="item"
+          slot-scope="props"
+        >
+          <i>{{ props.label }}</i>
         </template>
       </veui-radio-button-group>
     </p>
