@@ -29,13 +29,7 @@
       v-if="title || $slots.title"
       :class="$c('alert-box-title')"
     >
-      <template v-if="title">
-        {{ title }}
-      </template>
-      <slot
-        v-else
-        name="title"
-      />
+      <slot name="title">{{ title }}</slot>
     </h3>
     <div :class="$c('alert-box-content')">
       <slot/>

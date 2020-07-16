@@ -16,13 +16,7 @@
     v-if="title || $slots.title"
     slot="title"
   >
-    <template v-if="title">
-      {{ title }}
-    </template>
-    <slot
-      v-else
-      name="title"
-    />
+    <slot name="title">{{ title }}</slot>
   </template>
   <slot/>
   <template
