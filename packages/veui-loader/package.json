@@ -24,16 +24,16 @@
     "veui": "*"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/plugin-transform-runtime": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/runtime": "^7.5.5",
-    "ava": "^3.5.1",
+    "@babel/cli": "^7.10.5",
+    "@babel/plugin-transform-runtime": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/runtime": "^7.10.5",
+    "ava": "^3.10.1",
     "esm": "^3.2.25",
     "raw-loader": "^0.5.1",
     "veui": "^2.0.0-alpha.20",
     "veui-theme-dls": "^2.0.0-alpha.20",
-    "webpack": "^4.39.3"
+    "webpack": "^4.43.0"
   },
   "ava": {
     "require": [
