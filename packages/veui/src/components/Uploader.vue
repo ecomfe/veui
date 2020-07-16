@@ -19,10 +19,7 @@
       :class="{
         [$c('button')]: true,
         [$c('uploader-input-label')]: true,
-        [$c('disabled')]:
-          realUneditable ||
-          fileList.length === maxCount ||
-          (requestMode === 'iframe' && submitting)
+        [$c('disabled')]: inputDisabled
       }"
       :ui="realUi"
       tabindex="0"
@@ -46,11 +43,6 @@
     hidden
     type="file"
     :name="name"
-    :disabled="
-      realUneditable ||
-        (type === 'file' && fileList.length === maxCount) ||
-        (requestMode === 'iframe' && disabledWhenSubmiting)
-    "
     :accept="accept"
     :multiple="
       requestMode !== 'iframe' &&
@@ -550,13 +542,6 @@ export default {
       submitting: false,
       // disabledWhenSubmiting 控制input在submit时是否禁用
       disabledWhenSubmiting: false,
-      error: {
-        sizeInvalid: false,
-        typeInvalid: false,
-        countOverflow: false,
-        customError: false,
-        valid: true
-      },
       previewImageSrc: null,
       previewDialogOpen: false
     }
@@ -565,14 +550,18 @@ export default {
     listClass () {
       return this.$c(`uploader-list${this.type === 'image' ? '-image' : ''}`)
     },
-    latestFile () {
-      return this.fileList[this.fileList.length - 1]
-    },
     isReplacing () {
       return !!this.replacingFile
     },
     realUneditable () {
       return this.realDisabled || this.realReadonly
+    },
+    inputDisabled () {
+      return (
+        this.realUneditable ||
+        (this.maxCount && this.fileList.length >= this.maxCount) ||
+        (this.requestMode === 'iframe' && this.disabledWhenSubmiting)
+      )
     },
     status () {
       if (!this.fileList.length) {
@@ -689,9 +678,12 @@ export default {
     }
   },
   methods: {
-    handleClick () {
+    handleClick (e) {
       this.replacingFile = null
       this.reset()
+      if (this.inputDisabled) {
+        e.preventDefault()
+      }
     },
     genFileList (value) {
       if (!value) {
@@ -787,7 +779,7 @@ export default {
             }
 
             if (this.requestMode === 'iframe' && this.autoupload) {
-              this.submit()
+              this.submit(newFiles[0])
             }
             if (this.requestMode !== 'iframe' && this.autoupload) {
               this.uploadFiles()
@@ -921,7 +913,7 @@ export default {
       this.replacingFile = file
       this.reset()
     },
-    submit (file = this.latestFile) {
+    submit (file) {
       this.currentSubmitingFile = file
       this.updateFileList(file, 'uploading')
 
