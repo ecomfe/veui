@@ -273,7 +273,7 @@ describe('components/Uploader', () => {
     clearXHR(wrapper)
     await wait(0)
 
-    wrapper.vm.submit()
+    wrapper.vm.submit(input.element.files[0])
 
     await wrapper.vm.$nextTick()
 
@@ -439,11 +439,10 @@ describe('components/Uploader', () => {
       }
     })
 
-    let input = wrapper.find('input[type="file"]')
-    expect(input.attributes('disabled')).to.equal('disabled')
+    expect(wrapper.vm.inputDisabled).to.equal(true)
 
     wrapper.find('.veui-uploader-list-remove').trigger('click')
-    expect(input.attributes('disabled')).to.equal(undefined)
+    expect(wrapper.vm.inputDisabled).to.equal(false)
     wrapper.destroy()
   })
 
