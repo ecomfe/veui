@@ -25,6 +25,7 @@
       <slot
         :index="localIndex"
         :message="message[localIndex]"
+        :close="close"
       >
         {{ message[localIndex] }}
       </slot>
@@ -36,6 +37,7 @@
           name="extra"
           :index="localIndex"
           :message="message[localIndex]"
+          :close="close"
         />
       </div>
     </div>
@@ -47,26 +49,27 @@
         v-if="title || $slots.title"
         :class="$c('alert-content-title')"
       >
-        <template v-if="title">
-          {{ title }}
-        </template>
-        <slot
-          v-else
-          name="title"
-        />
+        <slot name="title">{{ title }}</slot>
       </div>
       <div
         ref="message"
         :class="$c('alert-content-message')"
       >
-        <slot :message="message">
+        <slot
+          :message="message"
+          :close="close"
+        >
           {{ message }}
         </slot>
         <div
           v-if="$scopedSlots.extra || $slots.extra"
           :class="$c('alert-content-extra')"
         >
-          <slot name="extra"/>
+          <slot
+            name="extra"
+            :message="message"
+            :close="close"
+          />
         </div>
       </div>
     </div>
