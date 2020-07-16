@@ -14,13 +14,7 @@
   @afterclose="$emit('afterclose')"
 >
   <template slot="title">
-    <template v-if="title">
-      {{ title }}
-    </template>
-    <slot
-      v-else
-      name="title"
-    />
+    <slot name="title">{{ title }}</slot>
   </template>
   <div
     v-if="content || $slots.default"
