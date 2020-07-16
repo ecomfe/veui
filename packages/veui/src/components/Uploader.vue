@@ -44,6 +44,7 @@
     type="file"
     :name="name"
     :accept="accept"
+    :disabled="realUneditable"
     :multiple="
       requestMode !== 'iframe' &&
         (maxCount > 1 || maxCount === undefined) &&
@@ -540,8 +541,6 @@ export default {
       currentSubmitingFile: null,
       // submitting 控制form与iframe是否存在
       submitting: false,
-      // disabledWhenSubmiting 控制input在submit时是否禁用
-      disabledWhenSubmiting: false,
       previewImageSrc: null,
       previewDialogOpen: false
     }
@@ -560,7 +559,7 @@ export default {
       return (
         this.realUneditable ||
         (this.maxCount && this.fileList.length >= this.maxCount) ||
-        (this.requestMode === 'iframe' && this.disabledWhenSubmiting)
+        (this.requestMode === 'iframe' && this.submitting)
       )
     },
     status () {
@@ -927,12 +926,10 @@ export default {
 
         form.appendChild(this.$refs.input)
         form.submit()
-        this.disabledWhenSubmiting = true
       })
     },
     uploadCallback (data, file) {
       this.submitting = false
-      this.disabledWhenSubmiting = false
       let index = this.fileList.indexOf(file)
 
       data = this.convertResponse ? this.convertResponse(data) : data
@@ -997,7 +994,6 @@ export default {
       } else if (this.requestMode === 'iframe') {
         this.canceled = true
         this.submitting = false
-        this.disabledWhenSubmiting = false
       } else if (file.xhr) {
         file.xhr.abort()
       }
