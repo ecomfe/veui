@@ -10,8 +10,8 @@
     "index": "node ./build/components.js index",
     "prepublishOnly": "cp -r ./src/* .",
     "publish": "rm -rf ./common ./components ./directives ./locale ./managers ./mixins ./plugins ./utils ./icons.js ./index.js",
-    "test": "cross-env NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=test BABEL_ENV=test karma start --single-run",
-    "test:start": "cross-env NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=test BABEL_ENV=test karma start"
+    "test": "cross-env NODE_ENV=test BABEL_ENV=test karma start --single-run",
+    "test:start": "cross-env NODE_ENV=test BABEL_ENV=test karma start"
   },
   "module": "index.js",
   "dependencies": {
@@ -54,7 +54,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-spec-reporter": "0.0.32",
     "karma-webpack": "^4.0.2",
-    "less": "^3.12.2",
+    "less": "^3.11.3",
     "less-loader": "^5.0.0",
     "less-plugin-est": "^3.0.0",
     "lint-staged": "^8.1.4",
