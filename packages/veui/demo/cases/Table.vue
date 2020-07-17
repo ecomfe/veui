@@ -528,7 +528,17 @@ const tableData = [
     price: 360,
     updateDate: '20180109',
     group: '1580',
-    typeId: '789'
+    typeId: '789',
+    children: [
+      {
+        id: '31611',
+        desc: '数据描述8-1',
+        price: 1024,
+        updateDate: '20131117',
+        group: '1580',
+        typeId: '789'
+      }
+    ]
   }
 ]
 
