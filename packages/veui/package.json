@@ -3,15 +3,15 @@
   "version": "2.0.0-alpha.20",
   "description": "Baidu Enterprise UI for Vue.js.",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "cross-env NODE_OPTIONS=--max_old_space_size=4096 vue-cli-service serve",
+    "build": "cross-env NODE_OPTIONS=--max_old_space_size=4096 vue-cli-service build",
     "lint": "vue-cli-service lint",
     "components": "node ./build/components.js",
     "index": "node ./build/components.js index",
     "prepublishOnly": "cp -r ./src/* .",
     "publish": "rm -rf ./common ./components ./directives ./locale ./managers ./mixins ./plugins ./utils ./icons.js ./index.js",
-    "test": "cross-env NODE_ENV=test BABEL_ENV=test karma start --single-run",
-    "test:start": "cross-env NODE_ENV=test BABEL_ENV=test karma start"
+    "test": "cross-env NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=test BABEL_ENV=test karma start --single-run",
+    "test:start": "cross-env NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=test BABEL_ENV=test karma start"
   },
   "module": "index.js",
   "dependencies": {
