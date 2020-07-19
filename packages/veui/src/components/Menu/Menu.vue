@@ -206,7 +206,7 @@
 </template>
 
 <script>
-import AbstractTree from '../Tree/AbstractTree'
+import AbstractTree from '../Tree/_AbstractTree'
 import Icon from '../Icon'
 import Link from '../Link'
 import Button from '../Button'
