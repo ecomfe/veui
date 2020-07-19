@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import AbstractTree from './AbstractTree'
+import AbstractTree from './_AbstractTree'
 import Checkbox from '../Checkbox'
 import Icon from '../Icon'
 import prefix from '../../mixins/prefix'
