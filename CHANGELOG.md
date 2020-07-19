@@ -1,3 +1,43 @@
+## 2.0.0-beta.0
+
+### ⚠️ 非兼容性变更
+
+- [^] `veui-theme-dls` 对组件的 `ui` prop 进行了调整，见下表。
+
+  | 组件 | 删除 | 新增 |
+  | -- | -- | -- |
+  | `Button` | - | `normal`/`basic`/`aux`/`square` |
+  | `Dropdown` | - | `basic`/`normal` |
+  | `Field` | `micro`/`tiny`/`small`/`large` | `xs`/`s`/`m`/`l` |
+  | `Table` | - | `compact`/`loose`/`normal` |
+  | `Tabs` | - | `simple`/`strong` |
+  | `Tag` | `borderless` | `bordered` |
+
+  其中，按钮默认样式变为 `normal`，原默认样式现对应为 `basic`。
+
+- [^] 将 `ButtonGroup`/`RadioGroup`/`CheckboxGroup`/`RadioButtonGroup`/`CheckButtonGroup` 组件的每个项目的作用域插槽从 `default` 更名为 `item`。后续使用时需要用 `<template #item="...">...</template>` 自定义项目内容。
+- [-] 移除了 `GridContainer` 组件的 `flex` prop，默认行容器均使用 flex 布局，不再按条件指定。
+- [-] 移除了 `Input` 组件的 `prepend`/`append` 插槽，并将 `before`/`after` 插槽移入 `Input` 内部。原有的前后组合的场景请使用 `InputGroup` 组件进行组合输入型组件使用。
+- [^] `NumberInput` 组件的 `prepend`/`append` 插槽重命名为 `before`/`after`。
+- [^] `Progress` 组件的 `append` 插槽重命名为 `after`。
+- [^] `Tree` 组件的 `item-prepend`/`item-append` 插槽重命名为 `item-before`/`item-after`。
+
+### 💡 主要变更
+
+- [^] 将整体设计切换到了 D20 版本。
+- [^] 新增 `Nav` 组件。
+- [+] `Alert` 组件的 `default`/`extra` 插槽增加参数 `close`，可用来控制提示的关闭。
+- [+] `Alert` 组件的 `extra` 插槽增加参数 `message`。
+- [+] `Form` 组件新增 `actions` 插槽，用来放置操作按钮。
+- [+] `Icon` 组件的 `name` prop 支持直接传入组件定义进行渲染，此时只支持 `spin` 属性。
+- [+] `OptionGroup` 组件的 `option-tag` prop 支持传入 `function`，来根据选项数据动态生成内部 `Option`/`OptionGroup` 使用的标签。
+- [^] `Tree` 组件的 `item`/`item-before`/`item-after`/`item-label` 增加参数 `expanded` 和 `parents`。
+- [+] `Tree` 组件新增 `include-indeterminate` prop，用来指定半选状态的节点是否被计入 `checked` 结果中。
+
+### 🐞 问题修复
+
+- [^] 修复了 `Menu` 组件的键盘导航功能。
+
 ## 2.0.0-alpha.20
 
 ### 💡 主要变更
