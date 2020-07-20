@@ -5,6 +5,7 @@ import { includes, isString, clone, difference, omit, remove } from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
+import useControllable from '../../mixins/controllable'
 import { focusIn } from '../../utils/dom'
 
 function defaultFilter (type, keyword, item, datasource) {
@@ -13,7 +14,13 @@ function defaultFilter (type, keyword, item, datasource) {
 
 export default {
   name: 'veui-transfer',
-  mixins: [prefix, ui, input],
+  mixins: [prefix, ui, input, useControllable({
+    prop: 'selected',
+    event: 'select',
+    get (getReal) {
+      return getReal() || []
+    }
+  })],
   model: {
     prop: 'selected',
     event: 'select'
@@ -53,11 +60,6 @@ export default {
       default: 'value'
     }
   },
-  data () {
-    return {
-      localSelected: this.selected ? clone(this.selected) : []
-    }
-  },
   computed: {
     isSelectable () {
       return !this.realDisabled && !this.realReadonly
@@ -70,7 +72,7 @@ export default {
       return this.keys
     },
     selectedItems () {
-      let selected = clone(this.localSelected)
+      let selected = clone(this.realSelected)
       let walk = datasource => {
         let res = []
         datasource.forEach(source => {
@@ -93,15 +95,9 @@ export default {
       return walk(this.datasource)
     }
   },
-  watch: {
-    selected (v) {
-      this.localSelected = v ? clone(v) : []
-    }
-  },
   methods: {
     handleSelect (val) {
-      this.localSelected = val
-      this.$emit('select', this.localSelected)
+      this.setReal('selected', val)
     },
 
     collectLeafValue (datasource) {
@@ -187,7 +183,7 @@ export default {
               filter: this.filter,
               placeholder: this.candidatePlaceholder,
               isSelectable: this.isSelectable,
-              selected: this.localSelected,
+              selected: this.realSelected,
               uiParts: this.uiParts,
               ui: this.realUi
             },
@@ -196,8 +192,7 @@ export default {
                 this.handleSelect(...args)
               },
               selectall: (...args) => {
-                this.localSelected = this.collectLeafValue(this.datasource)
-                this.$emit('select', this.localSelected)
+                this.setReal('selected', this.collectLeafValue(this.datasource))
               }
             },
             scopedSlots: generateItem.call(this, 'candidate'),
@@ -222,15 +217,14 @@ export default {
             },
             on: {
               remove: item => {
-                this.localSelected = difference(
-                  this.localSelected,
+                let selected = difference(
+                  this.realSelected,
                   this.collectLeafValue([item])
                 )
-                this.$emit('select', this.localSelected)
+                this.setReal('selected', selected)
               },
               removeall: (...args) => {
-                this.localSelected = []
-                this.$emit('select', this.localSelected)
+                this.setReal('selected', [])
               }
             },
             scopedSlots: generateItem.call(this, 'selected')
