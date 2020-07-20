@@ -39,6 +39,7 @@ import ExpandTransition from './_ExpandTransition'
 import ui from '../mixins/ui'
 import { useCoupledChild } from '../mixins/coupled'
 import prefix from '../mixins/prefix'
+import useControllable from '../mixins/controllable'
 
 let accordionItem = useCoupledChild({
   direct: true,
@@ -53,37 +54,9 @@ export default {
     'veui-icon': Icon,
     'veui-expand-transition': ExpandTransition
   },
-  mixins: [prefix, ui, accordionItem],
-  props: {
-    label: {
-      type: String,
-      required: true
-    },
-    expanded: {
-      validator (val) {
-        return typeof val === 'boolean'
-      }
-    },
-    disabled: Boolean,
-    name: {
-      type: [String, Number],
-      default () {}
-    }
-  },
-  data () {
-    return {
-      localExpanded: null
-    }
-  },
-  computed: {
-    realDisabled () {
-      let { accordion } = this
-      if (accordion) {
-        return accordion.disabled || this.disabled
-      }
-      return this.disabled
-    },
-    realExpanded () {
+  mixins: [prefix, ui, accordionItem, useControllable({
+    prop: 'expanded',
+    get (getReal) {
       let { accordion } = this
       if (accordion) {
         let expanded =
@@ -104,12 +77,33 @@ export default {
             .indexOf(this.id) !== -1
         )
       }
-      return this.expanded === undefined ? this.localExpanded : this.expanded
+
+      return getReal()
+    }
+  })],
+  props: {
+    label: {
+      type: String,
+      required: true
+    },
+    expanded: {
+      validator (val) {
+        return typeof val === 'boolean'
+      }
+    },
+    disabled: Boolean,
+    name: {
+      type: [String, Number],
+      default () {}
     }
   },
-  watch: {
-    expanded (val) {
-      this.localExpanded = val
+  computed: {
+    realDisabled () {
+      let { accordion } = this
+      if (accordion) {
+        return accordion.disabled || this.disabled
+      }
+      return this.disabled
     }
   },
   methods: {
@@ -120,8 +114,7 @@ export default {
 
       let expanded = !this.realExpanded
       if (!this.accordion) {
-        this.localExpanded = expanded
-        this.$emit('update:expanded', expanded)
+        this.setReal('expanded', expanded)
       } else {
         this.accordion.toggleById(this.id)
       }
