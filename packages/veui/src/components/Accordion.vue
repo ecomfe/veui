@@ -8,6 +8,7 @@
 import ui from '../mixins/ui'
 import { useCoupledParent } from '../mixins/coupled'
 import prefix from '../mixins/prefix'
+import useControllable from '../mixins/controllable'
 import { clone } from 'lodash'
 import '../common/uiTypes'
 
@@ -19,27 +20,15 @@ let accordion = useCoupledParent({
 export default {
   name: 'veui-accordion',
   uiTypes: ['accordion'],
-  mixins: [prefix, ui, accordion],
+  mixins: [prefix, ui, accordion, useControllable(['expanded'])],
   props: {
     multiple: Boolean,
     disabled: Boolean,
     expanded: [Number, String, Array]
   },
   data () {
-    let expanded = this.multiple ? clone(this.expanded || []) : null
     return {
-      items: [],
-      localExpanded: expanded
-    }
-  },
-  computed: {
-    realExpanded () {
-      return this.expanded === undefined ? this.localExpanded : this.expanded
-    }
-  },
-  watch: {
-    expanded (val) {
-      this.localExpanded = clone(val) || null
+      items: []
     }
   },
   methods: {
@@ -56,6 +45,7 @@ export default {
           expand = true
         }
       } else {
+        expanded = expanded || []
         let index = expanded.indexOf(key)
         if (index !== -1) {
           expanded.splice(index, 1)
@@ -64,8 +54,7 @@ export default {
           expand = true
         }
       }
-      this.localExpanded = expanded
-      this.$emit('update:expanded', expanded)
+      this.setReal('expanded', expanded)
       this.$emit('toggle', expand, key, expanded)
     }
   }
