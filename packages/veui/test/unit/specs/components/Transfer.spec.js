@@ -307,4 +307,34 @@ describe('components/Transfer', () => {
 
     wrapper.destroy()
   })
+
+  it('should make `selected` prop fully controlled.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-transfer': Transfer
+        },
+        data () {
+          return {
+            datasource,
+            selected: ['aa10', 'aa11', 'bb', 'cc11']
+          }
+        },
+        template:
+          '<veui-transfer ref="transfer" :datasource="datasource" :selected="selected" />'
+      }
+    )
+
+    let { vm } = wrapper
+
+    let selectors = wrapper.find(Tree).findAll(Checkbox)
+    selectors
+      .at(0)
+      .find('input[type="checkbox"]')
+      .trigger('change')
+    await vm.$nextTick()
+    expect(vm.$data.selected).to.deep.equal(['aa10', 'aa11', 'bb', 'cc11'])
+    expect(vm.$refs.transfer.$refs.candidatePanel.selected).to.deep.equal(['aa10', 'aa11', 'bb', 'cc11'])
+    wrapper.destroy()
+  })
 })

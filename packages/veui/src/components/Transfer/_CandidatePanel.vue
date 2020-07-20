@@ -30,7 +30,7 @@
       :datasource="items"
       :expanded.sync="expanded"
       checkable
-      :checked="localSelected"
+      :checked="realSelected"
       :ui="uiParts.tree"
       :disabled="!isSelectable"
       @check="handleSelect"
@@ -70,7 +70,7 @@ import Tree from '../Tree'
 import Button from '../Button'
 import prefix from '../../mixins/prefix'
 import i18n from '../../mixins/i18n'
-import { clone } from 'lodash'
+import useControllable from '../../mixins/controllable'
 
 export default {
   name: 'veui-candidate-panel',
@@ -79,7 +79,13 @@ export default {
     'veui-tree': Tree,
     'veui-button': Button
   },
-  mixins: [prefix, i18n],
+  mixins: [prefix, i18n, useControllable({
+    prop: 'selected',
+    event: 'select',
+    get (getReal) {
+      return getReal() || []
+    }
+  })],
   props: {
     datasource: Array,
     searchable: Boolean,
@@ -92,13 +98,7 @@ export default {
   },
   data () {
     return {
-      expanded: [],
-      localSelected: this.selected ? clone(this.selected) : []
-    }
-  },
-  watch: {
-    selected (v) {
-      this.localSelected = v ? clone(v) : []
+      expanded: []
     }
   },
   methods: {
@@ -112,8 +112,7 @@ export default {
       this.$emit('select', ...args)
     },
     handleSelect (selected) {
-      this.localSelected = selected
-      this.$emit('select', this.localSelected)
+      this.setReal('selected', selected)
     }
   }
 }
