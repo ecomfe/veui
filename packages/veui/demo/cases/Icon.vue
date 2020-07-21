@@ -31,7 +31,7 @@ export default {
   },
   data () {
     return {
-      icons: icons.sort((a, b) => (a > b ? 1 : -1))
+      icons
     }
   },
   mounted () {

@@ -1,13 +1,4 @@
 import Icon from 'veui/components/Icon'
+import { IconUpload } from 'dls-icons-vue'
 
-Icon.register({
-  upload: {
-    paths: [
-      {
-        d: 'M42 27a2 2 0 012 2v14a2 2 0 01-2.25 1.98l-.1.01-.15.01h-35c-.08 0-.17 0-.25-.02L6 45a2 2 0 01-2-2V29a2 2 0 114 0v12h32V29c0-1.1.9-2 2-2zM25.41 4.59l14 14a2 2 0 01-2.82 2.82l-10.6-10.6.01.19v22a2 2 0 11-4 0V10.82l-10.59 10.6a2 2 0 01-2.82-2.83l14-14a2 2 0 012.82 0zM24 8.83l-.18.18a2.03 2.03 0 01.36 0L24 8.83z'
-      }
-    ],
-    width: '48',
-    height: '48'
-  }
-})
+Icon.register('upload', IconUpload)

@@ -61,7 +61,7 @@ import { CheckButtonGroup, Checkbox, Icon } from 'veui'
 import 'veui-theme-dls-icons/check'
 import 'veui-theme-dls-icons/times'
 import 'veui-theme-dls-icons/sync'
-import 'veui-theme-one-icons/edit'
+import 'veui-theme-dls-icons/edit'
 
 export default {
   name: 'check-button-group-demo',

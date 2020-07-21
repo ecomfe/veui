@@ -1,13 +1,4 @@
 import Icon from 'veui/components/Icon'
+import { IconArrowUp } from 'dls-icons-vue'
 
-Icon.register({
-  'arrow-up': {
-    paths: [
-      {
-        d: 'M5.39 19.84L22.64 2.59a2 2 0 012.7-.12l.12.12 17.25 17.25a2 2 0 01-2.7 2.94l-.12-.12L26 8.78V44a2 2 0 01-1.85 2H24a2 2 0 01-2-1.85V8.88L8.21 22.66a2 2 0 01-2.7.12l-.12-.12a2 2 0 01-.12-2.7l.12-.12L22.64 2.59 5.39 19.84z'
-      }
-    ],
-    width: '48',
-    height: '48'
-  }
-})
+Icon.register('arrow-up', IconArrowUp)

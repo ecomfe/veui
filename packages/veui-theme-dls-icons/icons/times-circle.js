@@ -1,13 +1,4 @@
 import Icon from 'veui/components/Icon'
+import { IconTimesCircle } from 'dls-icons-vue'
 
-Icon.register({
-  'times-circle': {
-    paths: [
-      {
-        d: 'M24.5 21.67l8.09-8.08a2 2 0 012.82 2.82l-8.08 8.09 8.08 8.09a2 2 0 01-2.82 2.82l-8.09-8.08-8.09 8.08a2 2 0 01-2.82-2.82l8.08-8.09-8.08-8.09a2 2 0 012.82-2.82l8.09 8.08zM24 48a24 24 0 110-48 24 24 0 010 48zm0-4a20 20 0 100-40 20 20 0 000 40z'
-      }
-    ],
-    width: '48',
-    height: '48'
-  }
-})
+Icon.register('times-circle', IconTimesCircle)
