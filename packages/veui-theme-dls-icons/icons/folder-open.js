@@ -1,13 +1,4 @@
 import Icon from 'veui/components/Icon'
+import { IconFolderOpen } from 'dls-icons-vue'
 
-Icon.register({
-  'folder-open': {
-    paths: [
-      {
-        d: 'M43 17h1.9a3 3 0 012.91 3.75l-5.72 22a3 3 0 01-2.9 2.25H3.5a3 3 0 01-2.96-3.49 5.98 5.98 0 01-.55-2.5V9.99A6 6 0 016 4h8.56c1.68 0 3.71.93 4.82 2.2l2.98 3.43H37a6 6 0 016 6V17zm-4 0v-1.38a2 2 0 00-2-1.99H21.44a2 2 0 01-1.5-.69l-3.58-4.12a3.08 3.08 0 00-1.8-.82H6a2 2 0 00-2 2v17.2l1.91-7.9A3 3 0 018.83 17H39zM4.86 40.65c.32.22.71.35 1.13.35h32.42l5.2-20h-34L4.86 40.65z'
-      }
-    ],
-    width: '48',
-    height: '48'
-  }
-})
+Icon.register('folder-open', IconFolderOpen)

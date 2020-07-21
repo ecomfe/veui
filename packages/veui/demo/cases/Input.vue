@@ -134,7 +134,7 @@
       <h3>Before / After</h3>
       <section>
         <veui-input clearable>
-          <template slot="before"><veui-icon name="user-circle"/></template>
+          <template slot="before"><veui-icon name="info-circle"/></template>
         </veui-input>
       </section>
     </section>
@@ -231,7 +231,7 @@
 import bus from '../bus'
 import { Input, Field, Form, Span, Icon } from 'veui'
 import nudge from 'veui/directives/nudge'
-import 'veui-theme-one-icons/user-circle'
+import 'veui-theme-dls-icons/info-circle'
 
 export default {
   name: 'text-input',
