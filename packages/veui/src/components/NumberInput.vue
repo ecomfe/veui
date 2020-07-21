@@ -267,7 +267,7 @@ export default {
         return
       }
 
-      val = this.calcDisplayValue(val)
+      val = +this.calcDisplayValue(val)
       this.$emit('input', isNaN(val) ? null : val)
       this.$emit('change', val, args[1])
       this.lastChangedValue = val
