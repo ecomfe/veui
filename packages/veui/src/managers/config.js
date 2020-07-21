@@ -39,6 +39,10 @@ export class ConfigManager {
         this.transformValue(obj, key, null)
       },
       transformValue (context, key, path) {
+        if (context && (context._isVue || context._Ctor)) {
+          return
+        }
+
         let watcherKey = path ? `${path}.${key}` : key
         let val = context[key]
 
