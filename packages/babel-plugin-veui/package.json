@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-veui",
-  "version": "2.0.0-alpha.18",
+  "version": "2.0.0-alpha.19",
   "description": "Import VEUI components with ease.",
   "main": "./index.js",
   "repository": "ecomfe/veui",
@@ -27,7 +27,7 @@
     "ava": "^3.5.1",
     "esm": "^3.2.25",
     "prettier": "^1.18.2",
-    "veui": "^2.0.0-alpha.18"
+    "veui": "^2.0.0-alpha.19"
   },
   "ava": {
     "require": [
