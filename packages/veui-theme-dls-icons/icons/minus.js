@@ -1,13 +1,4 @@
 import Icon from 'veui/components/Icon'
+import { IconMinus } from 'dls-icons-vue'
 
-Icon.register({
-  minus: {
-    paths: [
-      {
-        d: 'M4 26a2 2 0 110-4h40a2 2 0 110 4H4z'
-      }
-    ],
-    width: '48',
-    height: '48'
-  }
-})
+Icon.register('minus', IconMinus)

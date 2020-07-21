@@ -73,9 +73,12 @@ export default {
       if (content) {
         let vnode = content[0]
         this.iconOnly =
-          content.length === 1 &&
-          vnode.componentOptions &&
-          vnode.componentOptions.Ctor.options.name === 'veui-icon'
+          (content.length === 1 &&
+            vnode.componentOptions &&
+            vnode.componentOptions.Ctor.options.name === 'veui-icon') ||
+          (vnode.data &&
+            vnode.data.class &&
+            vnode.data.class.indexOf('dls-icon') !== -1)
       }
     },
     focus () {
