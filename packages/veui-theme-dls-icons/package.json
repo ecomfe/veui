@@ -17,7 +17,7 @@
     "prepare": "npm run build"
   },
   "peerDependencies": {
-    "veui": "*"
+    "veui": "^2.0.0-beta.1"
   },
   "devDependencies": {
     "esm": "^3.0.84",
