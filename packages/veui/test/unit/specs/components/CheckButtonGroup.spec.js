@@ -58,6 +58,7 @@ describe('components/CheckButtonGroup', () => {
     let buttons = wrapper.findAll('button.veui-button')
 
     buttons.at(0).trigger('click')
+    await vm.$nextTick()
     buttons.at(1).trigger('click')
     await vm.$nextTick()
 
@@ -68,6 +69,41 @@ describe('components/CheckButtonGroup', () => {
 
     expect(vm.selected).to.deep.equal(['b'])
 
+    wrapper.destroy()
+  })
+
+  it('should make prop `value` fully controlled.', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-check-button-group': CheckButtonGroup
+        },
+        data () {
+          return {
+            items: [
+              { label: 'A', value: 'a' },
+              { label: 'B', value: 'b' },
+              { label: 'C', value: 'c' }
+            ],
+            selected: null
+          }
+        },
+        template: '<veui-check-button-group :value="selected" :items="items"/>'
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    let buttons = wrapper.findAll('button.veui-button')
+
+    buttons.at(0).trigger('click')
+    await vm.$nextTick()
+    buttons.at(1).trigger('click')
+    await vm.$nextTick()
+    expect(buttons.at(0).classes()).to.not.include('veui-button-selected')
+    expect(buttons.at(1).classes()).to.not.include('veui-button-selected')
     wrapper.destroy()
   })
 })
