@@ -111,11 +111,12 @@ describe('components/Alert', function () {
         },
         data () {
           return {
+            index: 1,
             message: ['message one', 'message two', 'message three']
           }
         },
         template:
-          '<veui-alert type="error" :message="message" closable :index="1" />'
+          '<veui-alert type="error" :message="message" closable :index.sync="index" />'
       },
       {
         sync: false
@@ -156,7 +157,7 @@ describe('components/Alert', function () {
             message: ['message one', 'message two', 'message three']
           }
         },
-        template: '<veui-alert :index="2" :message="message" />'
+        template: '<veui-alert :index.sync="current" :message="message" />'
       },
       {
         sync: false
@@ -169,5 +170,37 @@ describe('components/Alert', function () {
 
     await wrapper.vm.$nextTick()
     expect(msg.text()).to.equal('message two')
+    wrapper.destroy()
+  })
+
+  it('should make `index` and `open` fully controlled', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-alert': Alert
+        },
+        data () {
+          return {
+            message: ['message one', 'message two', 'message three']
+          }
+        },
+        template: '<veui-alert :index="0" :open="true" :message="message" closable/>'
+      },
+      {
+        sync: false
+      }
+    )
+
+    let nav = wrapper.find('.veui-alert-nav')
+    let next = nav.findAll('.veui-button').at(1)
+    let msg = wrapper.find('.veui-alert-content')
+    next.trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(msg.text()).to.equal('message one')
+
+    wrapper.find('.veui-alert-close .veui-button').trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('.veui-alert').exists()).to.equal(true)
+    wrapper.destroy()
   })
 })
