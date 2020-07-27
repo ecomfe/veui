@@ -12,11 +12,11 @@
     :key="`b-${item.value}`"
     :ui="uiParts.button"
     :class="{
-      [$c('button-selected')]: localValue.indexOf(item.value) !== -1
+      [$c('button-selected')]: realValue.indexOf(item.value) !== -1
     }"
     :disabled="item.disabled || realDisabled || realReadonly"
     role="option"
-    :aria-selected="localValue.indexOf(item.value) !== -1"
+    :aria-selected="realValue.indexOf(item.value) !== -1"
     :aria-posinset="index + 1"
     :aria-setsize="items.length"
     @click="handleChange(item.value)"
@@ -45,6 +45,7 @@ import { focusIn } from '../utils/dom'
 import { includes, findIndex } from 'lodash'
 import Button from './Button'
 import Icon from './Icon'
+import useControllable from '../mixins/controllable'
 
 export default {
   name: 'veui-check-button-group',
@@ -52,7 +53,13 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, input],
+  mixins: [prefix, ui, input, useControllable({
+    prop: 'value',
+    event: 'change',
+    get (getReal) {
+      return getReal() || []
+    }
+  })],
   model: {
     event: 'change'
   },
@@ -65,27 +72,18 @@ export default {
       }
     }
   },
-  data () {
-    return {
-      localValue: this.value || []
-    }
-  },
-  watch: {
-    value (val) {
-      this.localValue = val || []
-    }
-  },
   methods: {
     handleChange (val) {
-      if (!includes(this.localValue, val)) {
-        this.localValue.push(val)
+      let value = [...this.realValue]
+      if (!includes(value, val)) {
+        value.push(val)
       } else {
-        this.localValue.splice(
-          findIndex(this.localValue, item => item === val),
+        value.splice(
+          findIndex(value, item => item === val),
           1
         )
       }
-      this.$emit('change', this.localValue)
+      this.setReal('value', value)
     },
     focus () {
       focusIn(this.$el)

@@ -64,4 +64,38 @@ describe('components/CheckboxGroup', () => {
       .at(0)
       .trigger('change')
   })
+
+  it('should make prop `value` fully controlled', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-checkbox-group': CheckboxGroup
+        },
+        data () {
+          return {
+            items: [{ label: 'A', value: 'A' }, { label: 'B', value: 'B' }],
+            checked: null
+          }
+        },
+        template:
+          '<veui-checkbox-group :value="checked" :items="items"/>'
+      },
+      {
+        sync: false
+      }
+    )
+
+    let boxes = wrapper.findAll('input[type="checkbox"]')
+    boxes.at(0).element.checked = true
+    boxes.at(0).trigger('change')
+    await wrapper.vm.$nextTick()
+    expect(boxes.at(0).element.checked).to.equal(false)
+
+    boxes.at(1).element.checked = true
+    boxes.at(1).trigger('change')
+    await wrapper.vm.$nextTick()
+    expect(boxes.at(1).element.checked).to.equal(false)
+
+    wrapper.destroy()
+  })
 })
