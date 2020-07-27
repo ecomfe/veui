@@ -19,7 +19,7 @@ config.defaults(
     },
     parts: {
       ok: 'primary',
-      close: 'icon'
+      close: 'icon aux'
     }
   },
   'dialog'

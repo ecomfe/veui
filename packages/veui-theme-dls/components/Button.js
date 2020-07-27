@@ -21,9 +21,6 @@ config.defaults(
       shape: {
         values: ['square']
       }
-    },
-    parts: {
-      self: ({ style }) => (style === 'icon' ? 'aux' : '')
     }
   },
   'button'
