@@ -51,6 +51,11 @@
     }
   }
 
+  &.@{veui-prefix}-readonly &-input,
+  &.@{veui-prefix}-disabled &-input {
+    background: transparent;
+  }
+
   &.@{veui-prefix}-focus {
     &,
     &:hover {
@@ -106,7 +111,7 @@
   }
 
   &-measurer + &-input {
-    max-width: ~"calc(100% - @{dls-height-m})";
+    max-width: calc(100% - @dls-height-m);
   }
 
   &-measurer {
