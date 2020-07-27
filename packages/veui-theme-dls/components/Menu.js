@@ -15,7 +15,7 @@ config.defaults(
       }
     },
     parts: {
-      toggle: 'icon'
+      toggle: 'icon aux'
     }
   },
   'menu'

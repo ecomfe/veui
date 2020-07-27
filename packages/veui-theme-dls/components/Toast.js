@@ -17,7 +17,7 @@ config.defaults(
       close: IconTimes
     },
     parts: {
-      close: 'icon'
+      close: 'icon aux'
     },
     ui: {
       size: {

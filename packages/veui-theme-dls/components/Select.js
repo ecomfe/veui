@@ -30,7 +30,7 @@ config.defaults(
       }
     },
     parts: {
-      clear: 'icon',
+      clear: 'icon aux',
       checkbox: ({ size }) => CHECKBOX_SIZE_MAP[size] || size,
       tag: ({ size }) => TAG_SIZE_MAP[size] || size
     }
