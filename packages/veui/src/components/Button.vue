@@ -1,32 +1,9 @@
-<template>
-<button
-  :class="{
-    [$c('button')]: true,
-    [$c('button-loading')]: loading,
-    [$c('disabled')]: disabled,
-    [$c('button-icon-only')]: iconOnly
-  }"
-  :ui="`${realUi} ${uiParts.self}`"
-  v-bind="attrs"
-  v-on="$listeners"
->
-  <veui-icon
-    v-if="loading"
-    :class="$c('button-loading-icon')"
-    :name="icons.loading"
-    spin
-  />
-  <slot/>
-</button>
-</template>
-
 <script>
 import { omit } from 'lodash'
 import Icon from './Icon'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
-import { hasClass as vnodeHasClass } from '../utils/helper'
 
 export default {
   name: 'veui-button',
@@ -53,37 +30,43 @@ export default {
     attrs () {
       let props = omit(this.$props, 'loading')
       props.disabled = this.disabled || this.loading
+      props.ui = this.realUi
       return props
     }
   },
-  created () {
-    this.checkIcon()
-  },
-  updated () {
-    this.checkIcon()
-  },
   methods: {
-    checkIcon () {
-      // Temporary hack until we can find a pure CSS solution
-      let content = (this.$slots.default || []).filter(
-        vnode =>
-          (vnode.tag || vnode.text) &&
-          !vnodeHasClass(vnode, this.$c('check-button-group-checkmark'))
-      )
-      if (content) {
-        let vnode = content[0]
-        this.iconOnly =
-          content.length === 1 &&
-          ((vnode.componentOptions &&
-            vnode.componentOptions.Ctor.options.name === 'veui-icon') ||
-            (vnode.data &&
-              vnode.data.class &&
-              vnode.data.class.indexOf('dls-icon') !== -1))
-      }
-    },
     focus () {
       this.$el.focus()
     }
+  },
+  render () {
+    return (
+      <button
+        class={{
+          [this.$c('button')]: true,
+          [this.$c('button-loading')]: this.loading,
+          [this.$c('disabled')]: this.disabled
+        }}
+        {...{
+          attrs: this.attrs,
+          on: this.$listeners
+        }}
+      >
+        {this.loading ? (
+          <Icon
+            class={this.$c('button-loading-icon')}
+            name={this.icons.loading}
+            spin
+          />
+        ) : null}
+        {(this.$scopedSlots.default
+          ? this.$scopedSlots.default()
+          : this.$slots.default
+        ).map(vnode =>
+          !vnode.tag && vnode.text != null ? <span>{vnode}</span> : vnode
+        )}
+      </button>
+    )
   }
 }
 </script>
