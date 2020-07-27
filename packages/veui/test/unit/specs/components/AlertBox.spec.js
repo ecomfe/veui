@@ -112,4 +112,27 @@ describe('components/AlertBox', function () {
     expect(count).to.equal(3)
     wrapper.destroy()
   })
+
+  it('should make `open` prop fully controlled', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-alert-box': AlertBox
+        },
+        data () {
+          return {
+            open: true
+          }
+        },
+        template: '<veui-alert-box :open="open" title="title" />'
+      },
+      {
+        sync: false
+      }
+    )
+    wrapper.find('.veui-button').trigger('click')
+    await wait(600)
+    expect(wrapper.find('.veui-alert-box-icon-wrapper').exists()).to.equal(true)
+    wrapper.destroy()
+  })
 })
