@@ -2,15 +2,16 @@
 
 .@{veui-prefix}-schedule {
   width: 653px;
-  border: 1px solid @veui-gray-color-5;
+  border: 1px solid @dls-line-color-1;
   outline: none;
+  border-radius: @dls-border-radius-1;
 
   &-header {
     overflow: hidden;
     padding: 10px 20px;
     font-size: @veui-font-size-small;
     line-height: 24px;
-    border-bottom: 1px solid @veui-gray-color-5;
+    border-bottom: 1px solid @dls-line-color-1;
   }
 
   &-shortcuts {
@@ -23,7 +24,7 @@
     padding: 0 10px;
     border: none;
     background-color: transparent;
-    color: @veui-text-color-normal;
+    color: @dls-foreground-color-neutral;
     outline: none;
     .veui-button-transition();
 
@@ -42,7 +43,7 @@
 
     &-item {
       margin-left: 20px;
-      color: @veui-text-color-weak;
+      color: @dls-foreground-color-neutral-weak;
 
       &:first-child {
         margin-left: 0;
@@ -57,25 +58,25 @@
     }
 
     &-available::before {
-      border: 1px solid @veui-gray-color-5;
+      border: 1px solid @dls-line-color-1;
       background-color: #fff;
     }
 
     &-selected::before {
-      background-color: @veui-brand-color-8;
+      background-color: @dls-background-color-current-hover;
     }
   }
 
   &-body {
     .clearfix();
     padding: 20px 10px 20px 20px;
-    background-color: @veui-gray-color-8;
+    background-color: @dls-background-color-base-2;
   }
 
   &-head {
     &-hour {
       float: right;
-      color: @veui-text-color-weak;
+      color: @dls-foreground-color-neutral-weak;
       margin-bottom: 10px;
       font-size: @veui-font-size-small;
 
@@ -90,7 +91,7 @@
       float: left;
       clear: right;
       margin-right: 10px;
-      color: @veui-text-color-weak;
+      color: @dls-foreground-color-neutral-weak;
 
       &-item {
         line-height: 23px;
@@ -157,7 +158,7 @@
 
         &:hover:active,
         &.@{veui-prefix}-schedule-selected {
-          color: @veui-brand-color-8;
+          color: @dls-background-color-current-hover;
         }
 
         &.@{veui-prefix}-schedule-selected {
@@ -202,7 +203,7 @@
       pointer-events: none; // for Firefox
       .absolute(0, _, _, 0);
       font-size: @veui-font-size-small;
-      color: @veui-text-color-normal;
+      color: @dls-foreground-color-neutral;
 
       td {
         padding-top: 1px;
