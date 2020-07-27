@@ -169,6 +169,64 @@
       <veui-icon name="search"/>
     </veui-button>
   </section>
+  <section>
+    <veui-button ui="icon strong xs">
+      <veui-icon name="search"/>
+    </veui-button>
+    <veui-button ui="icon strong s">
+      <veui-icon name="search"/>
+    </veui-button>
+    <veui-button ui="icon strong">
+      <veui-icon name="search"/>
+    </veui-button>
+    <veui-button ui="icon strong l">
+      <veui-icon name="search"/>
+    </veui-button>
+    <veui-button ui="icon strong xl">
+      <veui-icon name="search"/>
+    </veui-button>
+    <veui-button
+      ui="icon strong"
+      disabled
+    >
+      <veui-icon name="search"/>
+    </veui-button>
+    <veui-button
+      ui="icon strong"
+      loading
+    >
+      <veui-icon name="search"/>
+    </veui-button>
+  </section>
+  <section>
+    <veui-button ui="icon aux xs">
+      <veui-icon name="search"/>
+    </veui-button>
+    <veui-button ui="icon aux s">
+      <veui-icon name="search"/>
+    </veui-button>
+    <veui-button ui="icon aux">
+      <veui-icon name="search"/>
+    </veui-button>
+    <veui-button ui="icon aux l">
+      <veui-icon name="search"/>
+    </veui-button>
+    <veui-button ui="icon aux xl">
+      <veui-icon name="search"/>
+    </veui-button>
+    <veui-button
+      ui="icon aux"
+      disabled
+    >
+      <veui-icon name="search"/>
+    </veui-button>
+    <veui-button
+      ui="icon aux"
+      loading
+    >
+      <veui-icon name="search"/>
+    </veui-button>
+  </section>
   <section class="block">
     <h4>动态内容</h4>
     <p>
