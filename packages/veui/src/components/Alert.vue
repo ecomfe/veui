@@ -1,11 +1,11 @@
 <template>
 <div
-  v-if="localOpen"
+  v-if="realOpen"
   :ui="realUi"
   :class="{
     [$c('alert')]: true,
     [$c(`alert-${type}`)]: true,
-    [$c('alert-titled')]: isTitled,
+    [$c('alert-titled')]: !!(title || $slots.title),
     [$c('alert-multiline')]: multiline
   }"
   role="alert"
@@ -23,11 +23,11 @@
       :class="`${$c('alert-content')} ${$c('alert-content-multiple')}`"
     >
       <slot
-        :index="localIndex"
-        :message="message[localIndex]"
+        :index="realIndex"
+        :message="message[realIndex]"
         :close="close"
       >
-        {{ message[localIndex] }}
+        {{ message[realIndex] }}
       </slot>
       <div
         v-if="$scopedSlots.extra || $slots.extra"
@@ -35,8 +35,8 @@
       >
         <slot
           name="extra"
-          :index="localIndex"
-          :message="message[localIndex]"
+          :index="realIndex"
+          :message="message[realIndex]"
           :close="close"
         />
       </div>
@@ -90,12 +90,12 @@
         :class="$c('alert-nav-indicator')"
         :aria-label="
           t('indicator', {
-            index: localIndex + 1,
+            index: realIndex + 1,
             total: message.length
           })
         "
       >
-        {{ localIndex + 1 }}/{{ message.length }}
+        {{ realIndex + 1 }}/{{ message.length }}
       </span>
       <veui-button
         :ui="uiParts.next"
@@ -129,6 +129,7 @@ import Button from './Button'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import prefix from '../mixins/prefix'
+import useControllable from '../mixins/controllable'
 
 export default {
   name: 'alert',
@@ -136,7 +137,7 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button
   },
-  mixins: [prefix, ui, i18n],
+  mixins: [prefix, ui, i18n, useControllable(['open', 'index'])],
   props: {
     type: {
       type: String,
@@ -156,8 +157,6 @@ export default {
   },
   data () {
     return {
-      localOpen: this.open,
-      localIndex: 0,
       multiline: false
     }
   },
@@ -166,31 +165,16 @@ export default {
       return Array.isArray(this.message)
     },
     isFirst () {
-      return this.localIndex <= 0
+      return this.realIndex <= 0
     },
     isLast () {
-      return this.localIndex >= this.message.length - 1
-    },
-    isTitled () {
-      return this.title || this.$slots.title
+      return this.realIndex >= this.message.length - 1
     }
   },
   watch: {
-    open (value) {
-      this.localOpen = value
-    },
-    index: {
-      handler (value) {
-        this.localIndex = value
-      },
-      immediate: true
-    },
-    localIndex (value) {
-      this.$emit('update:index', value)
-    },
     message (value) {
       let length = Array.isArray(value) ? value.length : 1
-      this.localIndex = clamp(this.localIndex, 0, length - 1)
+      this.setReal('index', clamp(this.realIndex, 0, length - 1))
     }
   },
   mounted () {
@@ -201,15 +185,14 @@ export default {
   },
   methods: {
     close () {
-      this.localOpen = false
-      this.$emit('update:open', false)
+      this.setReal('open', false)
       this.$emit('close')
     },
     switchMessage (step) {
       if ((step > 0 && this.isLast) || (step < 0 && this.isFirst)) {
         return
       }
-      this.localIndex = this.localIndex + step
+      this.setReal('index', this.realIndex + step)
     }
   }
 }
