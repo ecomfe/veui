@@ -12,9 +12,9 @@
     :key="index"
     :name="localName"
     :disabled="item.disabled || realDisabled || realReadonly"
-    :checked="localValue.indexOf(item.value) !== -1"
+    :checked="realValue.indexOf(item.value) !== -1"
     role="option"
-    :aria-selected="localValue.indexOf(item.value) !== -1"
+    :aria-selected="realValue.indexOf(item.value) !== -1"
     :aria-posinset="index + 1"
     :aria-setsize="items.length"
     @change="checked => handleChange(item.value, checked)"
@@ -37,13 +37,20 @@ import input from '../mixins/input'
 import { focusIn } from '../utils/dom'
 import { uniqueId, findIndex } from 'lodash'
 import Checkbox from './Checkbox'
+import useControllable from '../mixins/controllable'
 
 export default {
   name: 'veui-checkbox-group',
   components: {
     'veui-checkbox': Checkbox
   },
-  mixins: [prefix, ui, input],
+  mixins: [prefix, ui, input, useControllable({
+    prop: 'value',
+    event: 'change',
+    get (getReal) {
+      return getReal() || []
+    }
+  })],
   model: {
     event: 'change'
   },
@@ -56,32 +63,23 @@ export default {
       }
     }
   },
-  data () {
-    return {
-      localValue: this.value || []
-    }
-  },
   computed: {
     localName () {
       return this.realName || uniqueId('veui-checkbox-group-')
     }
   },
-  watch: {
-    value (val) {
-      this.localValue = val || []
-    }
-  },
   methods: {
     handleChange (value, checked) {
+      let val = [...this.realValue]
       if (checked) {
-        this.localValue.push(value)
+        val.push(value)
       } else {
-        this.localValue.splice(
-          findIndex(this.localValue, item => item === value),
+        val.splice(
+          findIndex(this.realValue, item => item === value),
           1
         )
       }
-      this.$emit('change', this.localValue)
+      this.setReal('value', val)
     },
     focus () {
       focusIn(this.$el)
