@@ -29,7 +29,7 @@ config.defaults(
       }
     },
     parts: {
-      icon: 'icon'
+      icon: 'icon aux'
     }
   },
   'table'

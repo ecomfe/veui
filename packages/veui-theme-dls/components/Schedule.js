@@ -3,9 +3,9 @@ import config from 'veui/managers/config'
 config.defaults(
   {
     parts: {
-      shortcuts: 'link',
-      dayPicker: 'small',
-      tooltip: 'small'
+      shortcuts: 'text s',
+      dayPicker: 's',
+      tooltip: 's'
     }
   },
   'schedule'

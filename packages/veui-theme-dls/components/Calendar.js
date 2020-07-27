@@ -23,7 +23,7 @@ config.defaults(
       }
     },
     parts: {
-      nav: 'icon',
+      nav: 'icon aux',
       toggle: 'text'
     }
   },

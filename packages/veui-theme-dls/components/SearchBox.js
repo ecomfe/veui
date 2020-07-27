@@ -8,7 +8,7 @@ config.defaults(
     },
     parts: {
       button: 'primary square',
-      search: 'icon'
+      search: 'icon aux'
     },
     ui: {
       style: {
