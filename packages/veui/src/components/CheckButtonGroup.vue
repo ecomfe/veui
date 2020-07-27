@@ -21,6 +21,11 @@
     :aria-setsize="items.length"
     @click="handleChange(item.value)"
   >
+    <div
+      :key="`i-${item.value}`"
+      :class="$c('check-button-group-checkmark')"
+      aria-hidden="true"
+    />
     <slot
       name="item"
       v-bind="item"
@@ -28,10 +33,6 @@
     >
       {{ item.label }}
     </slot>
-    <div
-      :key="`i-${item.value}`"
-      :class="$c('check-button-group-checkmark')"
-    />
   </veui-button>
 </div>
 </template>

@@ -15,6 +15,10 @@
     border: @dls-checkbox-icon-size-strong / 2 solid transparent;
     .border-color(currentColor, currentColor, _, _);
     .veui-transition(border-color);
+
+    & + .@{veui-prefix}-icon:last-child {
+      margin-right: 0;
+    }
   }
 
   .@{veui-prefix}-button-selected &-checkmark {
