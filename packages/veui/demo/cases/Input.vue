@@ -44,6 +44,36 @@
     </section>
 
     <section>
+      <h3>受控（感知输入法，固定值）</h3>
+      <veui-input
+        value="固定内容"
+        composition
+      />
+      <h3>受控（不感知输入法，固定值）</h3>
+      <veui-input
+        value="固定内容"
+      />
+      <h3>受控（感知输入法, 且用 v-model 同步），value: {{ controlled1 }}</h3>
+      <veui-input
+        v-model="controlled1"
+        composition
+      />
+      <veui-button @click="delaySet">delaySet</veui-button>
+      <h3>受控（不感知输入法, 且用 v-model 同步），value: {{ controlled2 }}</h3>
+      <veui-input
+        v-model="controlled2"
+      />
+      <h3>非受控（感知输入法），localValue：{{ uncontrolled1 }}</h3>
+      <veui-input
+        composition
+        @input="uncontrolled1 = $event"
+      />
+      <h3>非受控（不感知输入法），localValue：{{ uncontrolled2 }}</h3>
+      <veui-input
+        @input="uncontrolled2 = $event"
+      />
+    </section>
+    <section>
       <h3>事件及功能展示</h3>
       <veui-field label="描述：">
         <veui-input
@@ -229,7 +259,7 @@
 
 <script>
 import bus from '../bus'
-import { Input, Field, Form, Span, Icon } from 'veui'
+import { Input, Field, Form, Span, Icon, Button } from 'veui'
 import nudge from 'veui/directives/nudge'
 import 'veui-theme-dls-icons/info-circle'
 
@@ -240,6 +270,7 @@ export default {
     'veui-field': Field,
     'veui-form': Form,
     'veui-span': Span,
+    'veui-button': Button,
     'veui-icon': Icon
   },
   directives: {
@@ -253,12 +284,21 @@ export default {
       password: null,
       hiddenValue: '隐藏值',
       poem: '兩岸猿聲啼不住，輕舟已過萬重山',
-      price: '1024'
+      price: '1024',
+      controlled1: '',
+      controlled2: '',
+      uncontrolled1: '',
+      uncontrolled2: ''
     }
   },
   methods: {
     log (item) {
       bus.$emit('log', item)
+    },
+    delaySet () {
+      setTimeout(() => {
+        this.controlled1 = this.controlled2 = '123'
+      }, 3000)
     },
     handleThumbNudgeUpdate (delta) {
       let val = this.price

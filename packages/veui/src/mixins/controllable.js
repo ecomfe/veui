@@ -144,5 +144,5 @@ function getRealName ({ prop, computed } = {}) {
 // 没有 get 的话，无法判断是否相等，直接更新
 function sameValue (vm, value, def) {
   const hasGet = def.get !== false
-  return hasGet && value === vm[getRealName(def)]
+  return hasGet && value === vm[def.prop]
 }

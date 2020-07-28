@@ -210,4 +210,18 @@ describe('components/Input', () => {
     expect(wrapper.find('input').attributes('maxlength')).to.equal('5')
     expect(wrapper.find('.veui-input-after').text()).to.equal('3/5')
   })
+
+  it('should make `value` prop fully controlled', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-input': Input
+      },
+      template: `<veui-input value="foo"/>`
+    })
+    let input = wrapper.find('input')
+    input.element.value = 'bar'
+    input.trigger('input')
+    await wrapper.vm.$nextTick()
+    expect(input.element.value).to.equal('foo')
+  })
 })

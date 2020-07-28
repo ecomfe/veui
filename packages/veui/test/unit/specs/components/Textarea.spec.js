@@ -123,4 +123,18 @@ describe('components/Textarea', () => {
 
     wrapper.destroy()
   })
+
+  it('should make `value` prop fully controlled', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-textarea': Textarea
+      },
+      template: `<veui-textarea value="foo"/>`
+    })
+    let input = wrapper.find('textarea')
+    input.element.value = 'bar'
+    input.trigger('input')
+    await wrapper.vm.$nextTick()
+    expect(input.element.value).to.equal('foo')
+  })
 })
