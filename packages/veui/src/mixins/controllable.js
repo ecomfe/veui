@@ -139,8 +139,7 @@ function getRealName ({ prop, computed } = {}) {
   return computed || `real${capitalize(prop)}`
 }
 
-// 有 get 的话，判断下值是否相等，相等则默认不用更新；
-// 没有 get 的话，无法判断是否相等，直接更新
+// 用来控制是否往上触发同步事件，有 prop 则判断是否相等，没有 prop 就用 real
 function sameValue (vm, value, def) {
   return isControlled(vm, def.prop)
     ? value === vm[def.prop]
