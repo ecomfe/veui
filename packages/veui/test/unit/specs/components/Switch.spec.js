@@ -251,4 +251,66 @@ describe('components/Switch', () => {
 
     wrapper.vm.activate()
   })
+
+  it('should handle `model` prop correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-switch': Switch
+        },
+        data () {
+          return {
+            model: false
+          }
+        },
+        template: '<veui-switch :model="model"/>'
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    let input = wrapper.find('input')
+    expect(input.element.checked).to.equal(false)
+
+    vm.model = true
+    await vm.$nextTick()
+    expect(input.element.checked).to.equal(true)
+
+    // 从 true -> false 不能受之前 localChecked 的影响
+    vm.model = false
+    await vm.$nextTick()
+    expect(input.element.checked).to.equal(false)
+
+    wrapper.destroy()
+  })
+
+  it('should make prop `checked` fully controlled', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-switch': Switch
+        },
+        data () {
+          return {
+            checked: false
+          }
+        },
+        template: '<veui-switch :checked="checked"/>'
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    let input = wrapper.find('input')
+    expect(input.element.checked).to.equal(false)
+
+    input.trigger('change')
+    await vm.$nextTick()
+    expect(input.element.checked).to.equal(false)
+    wrapper.destroy()
+  })
 })

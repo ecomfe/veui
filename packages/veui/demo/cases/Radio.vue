@@ -109,6 +109,7 @@
       >
         C
       </veui-radio>
+      <veui-button @click="group = 'B'">select B</veui-button>
     </p>
     <p>{{ group }}</p>
   </section>
