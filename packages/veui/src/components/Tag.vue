@@ -4,6 +4,7 @@ import Icon from './Icon'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
+import useControllable from '../mixins/controllable'
 import warn from '../utils/warn'
 
 export default {
@@ -12,7 +13,7 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button
   },
-  mixins: [prefix, ui, focusable],
+  mixins: [prefix, ui, focusable, useControllable('selected')],
   props: {
     type: {
       type: String,
@@ -25,23 +26,12 @@ export default {
   },
   data () {
     return {
-      localOpen: true,
-      localSelected: this.selected
+      localOpen: true
     }
   },
   computed: {
     tabIndex () {
       return !this.disabled && this.selectable ? 0 : null
-    }
-  },
-  watch: {
-    selected (val) {
-      this.localSelected = val
-    },
-    localSelected (val) {
-      if (this.selected !== val) {
-        this.$emit('update:selected', this.localSelected)
-      }
     }
   },
   created () {
@@ -55,7 +45,7 @@ export default {
     },
     handleClick (e) {
       if (this.selectable && !this.disabled) {
-        this.localSelected = !this.localSelected
+        this.setReal('selected', !this.realSelected)
       }
     },
     close (e) {
@@ -78,7 +68,7 @@ export default {
         class={{
           [this.$c('tag')]: true,
           [this.$c(`tag-${this.type}`)]: true,
-          [this.$c('tag-selected')]: this.localSelected,
+          [this.$c('tag-selected')]: !!this.realSelected,
           [this.$c('disabled')]: this.disabled,
           [this.$c('tag-selectable')]: this.selectable
         }}

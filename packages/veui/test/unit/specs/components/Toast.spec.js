@@ -101,4 +101,25 @@ describe('components/Toast', function () {
     expect(wrapper.find('.veui-toast').exists()).to.equal(false)
     wrapper.destroy()
   })
+
+  it('should make prop `open` fully controlled', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-toast': Toast
+      },
+      template: `
+        <veui-toast
+          type="info"
+          message="content"
+          closable
+          :open="true"
+          />
+      `
+    })
+
+    wrapper.find('.veui-button').trigger('click')
+    await wait(500)
+    expect(wrapper.find('.veui-toast').exists()).to.equal(true)
+    wrapper.destroy()
+  })
 })
