@@ -42,12 +42,12 @@
       >
         <span style="box-shadow: transparent 0 0;">{{ line }}</span>
       </div>
-      <!-- eslint-ensable vue/multiline-html-element-content-newline -->
+      <!-- eslint-enable vue/multiline-html-element-content-newline -->
     </div>
   </div>
   <textarea
     ref="input"
-    v-model="localValue"
+    :value="realValue"
     :class="$c('textarea-input')"
     :style="inputStyle"
     :placeholder="placeholder"
@@ -57,6 +57,8 @@
     @blur="handleBlur"
     @input="handleInput"
     @scroll="handleScroll"
+    @compositionupdate="handleCompositionUpdate"
+    @compositionend="handleCompositionEnd"
     @change="$emit('change', $event.target.value, $event)"
   />
   <span
@@ -78,6 +80,7 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
+import useControllable from '../mixins/controllable'
 import { log10 } from '../utils/math'
 import { normalizeInt } from '../utils/helper'
 import {
@@ -87,9 +90,18 @@ import {
   FOCUS_EVENTS
 } from '../utils/dom'
 
+const COMPOSITION_UPDATE = 'UPDATE'
+const COMPOSITION_INPUT = 'INPUT'
+
 export default {
   name: 'veui-textarea',
-  mixins: [prefix, ui, input, activatable],
+  mixins: [prefix, ui, input, activatable, useControllable({
+    prop: 'value',
+    event: 'input',
+    get (getReal) {
+      return getReal() || ''
+    }
+  })],
   inheritAttrs: false,
   props: {
     placeholder: String,
@@ -108,7 +120,6 @@ export default {
   },
   data () {
     return {
-      localValue: this.value || '',
       focused: false,
       height: 0,
       measurerContentWidth: 0,
@@ -117,6 +128,7 @@ export default {
       rowsHeight: null,
       originalPadding: null,
       lineHeight: 0,
+      composing: false,
       countOverlap: false
     }
   },
@@ -152,7 +164,7 @@ export default {
     },
     lines () {
       // use a zero-width space to prevent empty element from being collapsed
-      return this.localValue.split('\n').map(line => line || `\u200b${line}`)
+      return this.realValue.split('\n').map(line => line || `\u200b${line}`)
     },
     digits () {
       return Math.floor(log10(this.lines.length)) + 1
@@ -171,7 +183,7 @@ export default {
       return this.type !== 'hidden' && this.selectOnFocus
     },
     length () {
-      return this.localValue == null ? 0 : this.localValue.length
+      return this.realValue.length
     },
     lengthOverflow () {
       if (this.realMaxlength == null) {
@@ -192,10 +204,7 @@ export default {
     }
   },
   watch: {
-    value (val) {
-      this.localValue = val || ''
-    },
-    localValue: {
+    realValue: {
       handler () {
         if (!this.measure) {
           return
@@ -314,17 +323,38 @@ export default {
       }
       return lineHeight
     },
+    updateValue (value) {
+      this.setReal('value', value)
+      this.$nextTick(() => {
+        let input = this.$refs.input
+        if (input && this.realValue !== input.value) {
+          input.value = this.realValue
+        }
+      })
+    },
+    handleCompositionUpdate () {
+      this.composing = COMPOSITION_UPDATE
+    },
+    handleCompositionEnd (e) {
+      let extra = this.composing === COMPOSITION_INPUT
+      this.composing = false
+      if (extra) {
+        this.updateValue(e.target.value)
+      }
+    },
     handleInput (e) {
-      // 分3种情况
       // 1. 感知输入法，触发原生 input 事件就必须向上继续抛出
       // 2. 不感知输入法
-      //  2.1 vue 底层会对原生 input 的 v-model 做忽略输入法组合态处理，所以 localValue 和 e.target.value 不同步，只有当 localValue 产生变化时才向上继续抛出
-      //  2.2 在 localValue 没有变化的情况下，原则上不抛出
-      if (
-        this.composition ||
-        (!this.composition && this.localValue !== this.value)
-      ) {
-        this.$emit('input', e.target.value, e)
+      //  不用 v-model 的原因：在 firefox 下 compositionend 时 vue 会多触发一次 input
+      //  在中文输入法的状态下，又去修改了 input 的值（比如受控情况下 reset 掉用户输入），此时不同浏览器的事件触发情况又不同
+      //  所以受控中文输入法之后，事件的触发情况尽量不要依赖。
+
+      if (this.composing === COMPOSITION_UPDATE) {
+        this.composing = COMPOSITION_INPUT
+      }
+
+      if (this.composition || this.composing !== COMPOSITION_INPUT) {
+        this.updateValue(e.target.value)
       }
 
       this.$nextTick(() => {

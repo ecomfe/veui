@@ -13,6 +13,67 @@
     />
   </section>
   <section>
+    <h3>受控（感知输入法，固定值）</h3>
+    <veui-textarea
+      :value="fixed"
+      composition
+      line-number
+      autofocus
+      ui="s"
+      rows="3"
+      resizable
+    />
+    <h3>受控（不感知输入法，固定值）</h3>
+    <veui-textarea
+      :value="fixed"
+      line-number
+      autofocus
+      ui="s"
+      rows="3"
+      resizable
+    />
+    <h3>受控（感知输入法, 且用 v-model 同步），value: {{ controlled1 }}</h3>
+    <veui-textarea
+      v-model="controlled1"
+      composition
+      line-number
+      autofocus
+      ui="s"
+      rows="3"
+      resizable
+    />
+    <h3>受控（不感知输入法, 且用 v-model 同步），value: {{ controlled2 }}</h3>
+    <veui-textarea
+      v-model="controlled2"
+      line-number
+      autofocus
+      ui="s"
+      rows="3"
+      resizable
+    />
+    <h3>非受控（感知输入法），localValue：{{ uncontrolled1 }}</h3>
+    <veui-textarea
+      ref="text2"
+      composition
+      line-number
+      autofocus
+      ui="s"
+      rows="3"
+      resizable
+      @input="uncontrolled1 = $event"
+    />
+    <h3>非受控（不感知输入法），localValue：{{ uncontrolled2 }}</h3>
+    <veui-textarea
+      ref="text2"
+      line-number
+      autofocus
+      ui="s"
+      rows="3"
+      resizable
+      @input="uncontrolled2 = $event"
+    />
+  </section>
+  <section>
     <h3>默认尺寸 + 行号 + 自动扩展</h3>
     <veui-textarea
       v-model="value"
@@ -84,7 +145,12 @@ export default {
   },
   data () {
     return {
-      value: ''
+      value: '',
+      fixed: '固定内容',
+      controlled1: '',
+      controlled2: '',
+      uncontrolled1: '',
+      uncontrolled2: ''
     }
   },
   mounted () {

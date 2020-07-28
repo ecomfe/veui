@@ -26,16 +26,17 @@
     >
       {{ placeholder }}
     </div>
+    <!-- 如果以后 Vue 对 native input 完全受控，那么这里就不能用 realValue 了 -->
     <input
       ref="input"
-      v-model="localValue"
+      :value="realValue"
       :class="$c('input-input')"
       v-bind="attrs"
       v-on="inputListeners"
       @focus="handleFocus"
       @blur="handleBlur"
       @input="handleInput"
-      @compositionupdate="handleComposition"
+      @compositionupdate="handleCompositionUpdate"
       @compositionend="handleCompositionEnd"
       @change="$emit('change', $event.target.value, $event)"
     >
@@ -74,6 +75,7 @@
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import useControllable from '../mixins/controllable'
 import activatable from '../mixins/activatable'
 import i18n from '../mixins/i18n'
 import { includes, pick } from 'lodash'
@@ -84,13 +86,22 @@ import { MOUSE_EVENTS, KEYBOARD_EVENTS, FOCUS_EVENTS } from '../utils/dom'
 
 const TYPE_LIST = ['text', 'password', 'hidden']
 
+const COMPOSITION_UPDATE = 'UPDATE'
+const COMPOSITION_INPUT = 'INPUT'
+
 export default {
   name: 'veui-input',
   components: {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, input, activatable, i18n],
+  mixins: [prefix, ui, input, activatable, i18n, useControllable({
+    prop: 'value',
+    event: 'input',
+    get (getReal) {
+      return getReal() || ''
+    }
+  })],
   inheritAttrs: false,
   props: {
     ui: String,
@@ -115,7 +126,6 @@ export default {
   data () {
     return {
       focused: false,
-      localValue: this.value == null ? '' : this.value,
       compositionValue: null,
       autofill: false
     }
@@ -147,14 +157,14 @@ export default {
       // compositionValue 不会是数字 0
       return (
         !this.compositionValue &&
-        (this.localValue == null || this.localValue === '')
+        this.realValue === ''
       )
     },
     realSelectOnFocus () {
       return this.type !== 'hidden' && this.selectOnFocus
     },
     length () {
-      return this.localValue == null ? 0 : this.localValue.length
+      return this.realValue.length
     },
     lengthOverflow () {
       if (this.realMaxlength == null) {
@@ -164,9 +174,6 @@ export default {
     }
   },
   watch: {
-    value (val) {
-      this.localValue = val == null ? '' : val
-    },
     autofill (val) {
       if (val) {
         this.$emit('autofill')
@@ -180,14 +187,20 @@ export default {
           this.autofill = !!this.$el.querySelector(':-webkit-autofill')
         } catch (e) {}
       })
-
+      if (this.composing === COMPOSITION_UPDATE) {
+        this.composing = COMPOSITION_INPUT
+      }
       // 分2种情况
       // 1. 感知输入法，触发原生 input 事件就必须向上继续抛出
       // 2. 不感知输入法，在没有输入法状态的值的情况下需要向上抛出
-      //
-      // compositionupdate -> compositionend -> input
-      if (this.composition || !this.compositionValue) {
-        this.$emit('input', e.target.value, e)
+      // 对于不感知输入法同步方案见下：
+      // chrome: input(emit) -> ... -> compositionstart -> compositionupdate -> input(not emit) -> compositionend(emit)
+      // firefox: input(emit) -> ... -> compositionstart -> compositionupdate -> compositionend(not emit) -> input(emit)
+      // 可以归纳出：
+      //  紧跟 compositionupdate 后面的 input 不要往上 sync
+      //  紧跟 input 后面的 compositionend 往上 sync
+      if (this.composition || this.composing !== COMPOSITION_INPUT) {
+        this.updateValue(e.target.value)
       }
     },
     handleMousedown (e) {
@@ -195,11 +208,25 @@ export default {
         this.focus()
       })
     },
-    handleComposition (e) {
+    handleCompositionUpdate (e) {
       this.compositionValue = e.data
+      this.composing = COMPOSITION_UPDATE
     },
-    handleCompositionEnd () {
+    handleCompositionEnd (e) {
       this.compositionValue = ''
+      if (this.composing === COMPOSITION_INPUT) {
+        this.updateValue(e.target.value)
+      }
+      this.composing = false
+    },
+    updateValue (value) {
+      this.setReal('value', value)
+      this.$nextTick(() => {
+        let input = this.$refs.input
+        if (input && this.realValue !== input.value) {
+          input.value = this.realValue
+        }
+      })
     },
     handleFocus (e) {
       this.focused = true
@@ -220,10 +247,9 @@ export default {
       this.focus()
     },
     clear () {
-      this.localValue = ''
       this.compositionValue = ''
+      this.setReal('value', '')
       this.focus()
-      this.$emit('input', '')
       this.$emit('clear')
     }
   }
