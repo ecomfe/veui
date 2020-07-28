@@ -128,6 +128,7 @@ import outside from '../directives/outside'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import useControllable from '../mixins/controllable'
 import Tooltip from './Tooltip'
 
 export default {
@@ -140,7 +141,34 @@ export default {
     nudge,
     outside
   },
-  mixins: [prefix, ui, input],
+  mixins: [prefix, ui, input, useControllable({
+    // 方案1: propValue(formatted), localValue(formatted), realValue(parsed)
+    //   同步步骤: update realValue -> map(format) -> sync local & prop
+
+    // 方案2: propValue(formatted), localValue(parsed), realValue(parsed)
+    //   同步步骤: update realValue -> sync local -> map(format) -> sync prop
+
+    // 本来打算采用方案 1，感觉更统一更简单，实际 propValue 和 localValue 可能不一样，因为:
+    // propValue 是用户给的 formatted，而 localValue 是 format 函数产出的，如 '0.1' 和 '0.10'（会导致不必要事件触发）
+    // 所以采用方案 2
+    prop: 'value',
+    get (getReal) {
+      let val = getReal() || []
+      return !this.isControlled('value')
+        ? val
+        : [].concat(val)
+          .map(val => this.getAdjustedValue(this.parse(val)))
+          .sort((a, b) => (a > b ? 1 : -1))
+    },
+    set (value) {
+      // value 其实也是来自 realValue 的
+      if (!isEqual(value, this.realValue)) {
+        this.localValue = value
+        let formatted = value.map(this.format)
+        this.$emit('input', formatted.length > 1 ? formatted : formatted[0])
+      }
+    }
+  })],
   props: {
     /* eslint-disable vue/require-prop-types */
     value: {},
@@ -174,13 +202,10 @@ export default {
   },
   data () {
     return {
-      localValues: [],
-
       currentThumbFocusIndex: -1,
       currentThumbDraggingIndex: -1,
       currentThumbHoverIndex: -1,
       latestIndex: -1,
-
       thumbCount: 0
     }
   },
@@ -193,17 +218,17 @@ export default {
       }
     },
     progressRange () {
-      if (this.localValues.length === 0) {
+      if (this.realValue.length === 0) {
         return [0, 0]
       }
-      if (this.localValues.length === 1) {
+      if (this.realValue.length === 1) {
         return [0, this.ratios[0]]
       }
       return [this.ratios[0], this.ratios[1]]
     },
     ratios () {
       let { min, max } = this
-      return this.localValues.map(val => (val - min) / (max - min))
+      return this.realValue.map(val => (val - min) / (max - min))
     },
     activeTooltipIndex () {
       if (this.currentThumbFocusIndex >= 0) {
@@ -258,7 +283,7 @@ export default {
       return this.getProgressStyle(this.localSecondaryProgress)
     },
     thumbAttrs () {
-      return this.localValues.map((value, index) => {
+      return this.realValue.map((value, index) => {
         let { min, max } = this.getLocalValueBoundary(index)
         return {
           'aria-valuemin': this.reduceDecimal(min),
@@ -278,16 +303,7 @@ export default {
     }
   },
   watch: {
-    value: {
-      handler (val) {
-        this.localValues = []
-          .concat(val)
-          .map(val => this.getAdjustedValue(this.parse(val)))
-          .sort((a, b) => (a > b ? 1 : -1))
-      },
-      immediate: true
-    },
-    localValues: {
+    realValue: {
       handler (newVal, oldVal = []) {
         if (newVal.length !== oldVal.length) {
           // 解耦 localValue 和 localValue.length，防止依赖 localValue 长度的 drag options 在拖动时改变
@@ -299,12 +315,6 @@ export default {
           this.$nextTick(() => {
             this.$refs.tip.relocate()
           })
-        }
-
-        let value = [].concat(this.value).map(val => this.parse(val))
-        if (!isEqual(value, newVal)) {
-          newVal = newVal.map(this.format)
-          this.$emit('input', newVal.length > 1 ? newVal : newVal[0])
         }
       },
       immediate: true
@@ -320,7 +330,7 @@ export default {
   },
   methods: {
     handleMarkClick (e, ratio) {
-      if (this.noInteractive || this.localValues.length > 1) {
+      if (this.noInteractive || this.realValue.length > 1) {
         return
       }
       e.stopPropagation()
@@ -328,7 +338,7 @@ export default {
       this.$refs.thumb[0].focus()
     },
     handleTrackClick ({ offsetX }) {
-      if (this.noInteractive || this.localValues.length > 1) {
+      if (this.noInteractive || this.realValue.length > 1) {
         return
       }
       let trackWidth = this.$refs.track.offsetWidth
@@ -364,8 +374,13 @@ export default {
         return
       }
       let { min, max } = this.localValueBoundary
-      let val = this.getAdjustedValue(this.localValues[index] + delta, min, max)
-      this.$set(this.localValues, index, val)
+      let val = this.getAdjustedValue(this.realValue[index] + delta, min, max)
+      this.updateValue(index, val)
+    },
+    updateValue (index, val) {
+      let values = [...this.realValue]
+      values[index] = val
+      this.setReal('value', values)
     },
     handleThumbFocus (index) {
       this.currentThumbFocusIndex = index
@@ -380,7 +395,7 @@ export default {
         min,
         max
       )
-      this.$set(this.localValues, index, val)
+      this.updateValue(index, val)
     },
     getAdjustedValue (val, min = this.min, max = this.max) {
       val = clamp(val, min, max)
@@ -405,7 +420,7 @@ export default {
     },
     getLocalValueBoundary (thumbIndex) {
       let { min, max, ratios } = this
-      let len = this.localValues.length
+      let len = this.realValue.length
       if (len === 1) {
         return { min, max }
       }
