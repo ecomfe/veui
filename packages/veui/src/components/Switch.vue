@@ -2,7 +2,7 @@
 <label
   :class="{
     [$c('switch')]: true,
-    [$c('switch-on')]: localChecked,
+    [$c('switch-on')]: realChecked,
     [$c('switch-loading')]: loading,
     [$c('readonly')]: realReadonly,
     [$c('disabled')]: realDisabled
@@ -14,7 +14,7 @@
     ref="box"
     type="checkbox"
     v-bind="attrs"
-    :checked.prop="localChecked"
+    :checked.prop="realChecked"
     @change="handleChange"
     v-on="boxListeners"
   >
@@ -25,7 +25,7 @@
     >
       <slot
         name="content"
-        :on="localChecked"
+        :on="realChecked"
       >{{ contentLabel }}</slot>
     </div>
     <div :class="$c('switch-button')">
@@ -49,6 +49,7 @@ import Icon from './Icon'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
+import useControllable from '../mixins/controllable'
 import { pick } from 'lodash'
 import { MOUSE_EVENTS, FOCUS_EVENTS, KEYBOARD_EVENTS } from '../utils/dom'
 
@@ -57,7 +58,14 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, input],
+  mixins: [prefix, ui, input, useControllable({
+    prop: 'checked',
+    get (getReal) {
+      return this.isControlled('model')
+        ? this.model === this.trueValue
+        : getReal()
+    }
+  })],
   model: {
     prop: 'model'
   },
@@ -76,11 +84,6 @@ export default {
     onLabel: String,
     offLabel: String
   },
-  data () {
-    return {
-      localChecked: this.checked
-    }
-  },
   computed: {
     attrs () {
       return {
@@ -98,31 +101,18 @@ export default {
       return this.onLabel || this.offLabel || this.$scopedSlots.content
     },
     contentLabel () {
-      return this.localChecked ? this.onLabel : this.offLabel
-    }
-  },
-  watch: {
-    checked (val) {
-      this.localChecked = val
-    },
-    model: {
-      handler (val) {
-        if (typeof val === 'undefined') {
-          return
-        }
-
-        this.localChecked = val === this.trueValue
-      },
-      immediate: true
+      return this.realChecked ? this.onLabel : this.offLabel
     }
   },
   methods: {
     handleChange () {
-      let val = (this.localChecked = !this.localChecked)
+      let checkbox = this.$refs.box
+      // 先还原checked，如果 realChecked 真的变了会重新渲染的
+      checkbox.checked = this.realChecked
 
-      if (this.checked !== val) {
-        this.$emit('update:checked', val)
-      }
+      let val = !this.realChecked
+
+      this.setReal('checked', val)
 
       this.$emit('input', val ? this.trueValue : this.falseValue)
       this.$emit('change', val)

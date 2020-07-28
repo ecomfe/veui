@@ -659,19 +659,19 @@ describe('components/Carousel', () => {
 
     await wait(0)
     item = wrapper.findAll('.veui-carousel-item').at(1)
-    expect(item.classes()).to.include('veui-carousel-item-current')
+    expect(item.classes(), '#1').to.include('veui-carousel-item-current')
     expect(item.element).to.equal(document.activeElement)
     wrapper.trigger('keydown.left')
 
     await wait(0)
     item = wrapper.findAll('.veui-carousel-item').at(0)
-    expect(item.classes()).to.include('veui-carousel-item-current')
+    expect(item.classes(), '#2').to.include('veui-carousel-item-current')
     expect(item.element).to.equal(document.activeElement)
     wrapper.trigger('keydown.left')
 
     await wait(0)
     item = wrapper.findAll('.veui-carousel-item').at(0)
-    expect(item.classes()).to.include('veui-carousel-item-current')
+    expect(item.classes(), '#3').to.include('veui-carousel-item-current')
     expect(item.element).to.equal(document.activeElement)
     wrapper.trigger('keydown.left')
 
