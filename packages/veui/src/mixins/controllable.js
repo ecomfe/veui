@@ -2,9 +2,8 @@ import { capitalize, isString, isPlainObject, reduce, find } from 'lodash'
 
 let options = {
   methods: {
-    isControlled (name) {
-      // 排除 default value 的影响
-      return name in this.$options.propsData && this[name] !== undefined
+    isControlled (prop) {
+      return isControlled(this, prop)
     },
     // 使用方法而非直接赋值：受控时赋值并未直接生效，而仅仅 emit 事件而已，直接让使用方使用赋值违反直觉
     setReal (prop, value) {
@@ -143,6 +142,12 @@ function getRealName ({ prop, computed } = {}) {
 // 有 get 的话，判断下值是否相等，相等则默认不用更新；
 // 没有 get 的话，无法判断是否相等，直接更新
 function sameValue (vm, value, def) {
-  const hasGet = def.get !== false
-  return hasGet && value === vm[def.prop]
+  return isControlled(vm, def.prop)
+    ? value === vm[def.prop]
+    : value === vm[getRealName(def)]
+}
+
+function isControlled (vm, prop) {
+  // 排除 default value 的影响
+  return prop in vm.$options.propsData && typeof vm[prop] !== 'undefined'
 }

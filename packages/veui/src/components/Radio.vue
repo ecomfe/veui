@@ -11,7 +11,7 @@
     ref="box"
     type="radio"
     v-bind="attrs"
-    :checked="localChecked"
+    :checked="realChecked"
     @change="handleChange"
     v-on="boxListeners"
   >
@@ -31,11 +31,19 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
+import useControllable from '../mixins/controllable'
 import { MOUSE_EVENTS, FOCUS_EVENTS, KEYBOARD_EVENTS } from '../utils/dom'
 
 export default {
   name: 'veui-radio',
-  mixins: [prefix, ui, input, activatable],
+  mixins: [prefix, ui, input, activatable, useControllable({
+    prop: 'checked',
+    get (getReal) {
+      return this.isControlled('model')
+        ? this.model === this.value
+        : getReal()
+    }
+  })],
   inheritAttrs: false,
   model: {
     prop: 'model'
@@ -48,11 +56,6 @@ export default {
     model: {},
     /* eslint-enable vue/require-prop-types */
     checked: Boolean
-  },
-  data () {
-    return {
-      localChecked: this.model === this.value ? true : this.checked
-    }
   },
   computed: {
     attrs () {
@@ -69,31 +72,15 @@ export default {
       return pick(this.$listeners, MOUSE_EVENTS)
     }
   },
-  watch: {
-    checked: {
-      handler (val) {
-        this.localChecked = val
-      },
-      immediate: true
-    },
-    model: {
-      handler (val) {
-        if (typeof val === 'undefined') {
-          return
-        }
-
-        this.localChecked = val === null ? false : this.value === val
-      },
-      immediate: true
-    }
-  },
   methods: {
     handleChange () {
-      this.localChecked = true
-
-      if (this.checked === false) {
-        this.$emit('update:checked', true)
-      }
+      this.setReal('checked', true)
+      this.$nextTick(() => {
+        let radio = this.$refs.box
+        if (radio && radio.checked !== this.realChecked) {
+          radio.checked = this.realChecked
+        }
+      })
 
       this.$emit('input', this.value)
       this.$emit('change', true)
