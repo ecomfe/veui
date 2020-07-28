@@ -209,4 +209,44 @@ describe('components/Dialog', () => {
 
     wrapper.destroy()
   })
+
+  it('should make prop `open` fully controlled.', async () => {
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            open: true
+          }
+        },
+        components: {
+          'veui-dialog': Dialog,
+          'veui-button': Button
+        },
+        template: `
+        <veui-dialog :open="open">
+          <template slot="title">Title</template>
+          <template slot="foot" slot-scope="prop">
+            <veui-button ui="primary" @click="prop.close">ok</veui-button>
+            <veui-button @click="prop.close">cancel</veui-button>
+          </template>
+        </veui-dialog>
+        `
+      },
+      {
+        sync: false
+      }
+    )
+
+    wrapper
+      .find('.veui-dialog-content-foot button:first-child')
+      .trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('.veui-dialog-box').isVisible()).to.equal(true)
+
+    wrapper.find('.veui-dialog-content-foot button:last-child').trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('.veui-dialog-box').isVisible()).to.equal(true)
+
+    wrapper.destroy()
+  })
 })

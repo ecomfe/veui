@@ -68,7 +68,6 @@ describe('components/PromptBox', function () {
       PromptBox,
       {
         propsData: {
-          value: null,
           open: true
         }
       },
@@ -136,6 +135,46 @@ describe('components/PromptBox', function () {
     expect(okMock.calledOnce).to.equal(true)
     expect(cancelMock.calledOnce).to.equal(true)
     expect(afterCloseMock.callCount).to.equal(2)
+    wrapper.destroy()
+  })
+
+  it('should make `open` prop and `value` prop fully controlled.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-prompt-box': PromptBox
+        },
+        data () {
+          return {
+            open: true,
+            value: 'ok'
+          }
+        },
+        template: `
+          <veui-prompt-box
+            :open="open"
+            :value="value"/>
+        `
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    let buttons = wrapper.findAll('.veui-button')
+    buttons.at(0).trigger('click')
+    await wait(600)
+    expect(wrapper.find('.veui-prompt-box').isVisible()).to.equal(true)
+
+    buttons.at(1).trigger('click')
+    await wait(600)
+    expect(wrapper.find('.veui-prompt-box').isVisible()).to.equal(true)
+
+    let input = wrapper.find('.veui-input input')
+    input.element.value = 'notok'
+    input.trigger('input')
+    await wrapper.vm.$nextTick()
+    expect(input.element.value).to.equal('ok')
     wrapper.destroy()
   })
 })
