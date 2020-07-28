@@ -3,7 +3,7 @@
   ref="dialog"
   :ui="realUi"
   :overlay-class="mergeOverlayClass($c('prompt-box'))"
-  :open.sync="localOpen"
+  :open.sync="realOpen"
   :priority="priority"
   :closable="false"
   :before-close="beforeClose"
@@ -23,7 +23,7 @@
     <slot>{{ content }}</slot>
   </div>
   <veui-input
-    v-model="localValue"
+    v-model="realValue"
     autofocus
     :invalid="invalid"
     :class="$c('prompt-box-input')"
@@ -43,6 +43,7 @@ import config from '../managers/config'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
+import useControllable from '../mixins/controllable'
 
 config.defaults({
   'promptbox.priority': 100
@@ -54,7 +55,13 @@ export default {
     'veui-input': Input,
     'veui-dialog': Dialog
   },
-  mixins: [prefix, ui, overlay],
+  mixins: [prefix, ui, overlay, useControllable([
+    'open',
+    {
+      prop: 'value',
+      event: 'input'
+    }
+  ])],
   props: {
     ...pick(Dialog.props, ['open', 'title', 'beforeClose', 'loading']),
     content: String,
@@ -66,28 +73,14 @@ export default {
   },
   data () {
     return {
-      localOpen: this.open,
-      priority: config.get('promptbox.priority'),
-      localValue: this.value
+      priority: config.get('promptbox.priority')
     }
   },
   watch: {
-    open (value) {
-      this.localOpen = value
-    },
-    value (value) {
-      this.localValue = value
-    },
-    localOpen (value) {
-      this.$emit('update:open', value)
+    realOpen (value) {
       if (!value) {
-        // this.$nextTick(() => {
-        this.localValue = this.value
-        // })
+        this.setReal('value', this.realValue)
       }
-    },
-    localValue (value) {
-      this.$emit('input', value)
     }
   },
   methods: {
@@ -97,10 +90,10 @@ export default {
       }
     },
     ok () {
-      this.$emit('ok', this.localValue)
+      this.$emit('ok', this.realValue)
     },
     cancel () {
-      this.$emit('cancel', this.localValue)
+      this.$emit('cancel', this.realValue)
     }
   }
 }
