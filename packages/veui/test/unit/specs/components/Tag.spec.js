@@ -200,4 +200,29 @@ describe('components/Tag', () => {
     expect(wrapper.find('.veui-tag').exists()).to.equal(true)
     wrapper.destroy()
   })
+
+  it('should make prop `selected` fully controlled', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-tag': Tag
+      },
+      data () {
+        return {
+          selected: true
+        }
+      },
+      template: '<veui-tag selectable :selected="selected">small tag</veui-tag>'
+    })
+    let { vm } = wrapper
+    wrapper.trigger('click')
+    await vm.$nextTick()
+    expect(wrapper.classes()).to.include('veui-tag-selected')
+
+    vm.selected = false
+    await vm.$nextTick()
+    wrapper.trigger('click')
+    await vm.$nextTick()
+    expect(wrapper.classes()).to.not.include('veui-tag-selected')
+    wrapper.destroy()
+  })
 })

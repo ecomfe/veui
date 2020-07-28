@@ -4,7 +4,7 @@
   appear
 >
   <div
-    v-if="localOpen"
+    v-if="realOpen"
     :ui="realUi"
     :class="{
       [$c('toast')]: true,
@@ -59,6 +59,7 @@ import Button from './Button'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
+import useControllable from '../mixins/controllable'
 import config from '../managers/config'
 import { includes } from 'lodash'
 
@@ -77,7 +78,7 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button
   },
-  mixins: [prefix, ui, i18n],
+  mixins: [prefix, ui, i18n, useControllable(['open'])],
   props: {
     type: {
       type: String,
@@ -97,18 +98,12 @@ export default {
   },
   data () {
     return {
-      localOpen: this.open,
       multiline: false
     }
   },
   computed: {
     isTitled () {
       return this.title || this.$slots.title
-    }
-  },
-  watch: {
-    open (value) {
-      this.localOpen = value
     }
   },
   mounted () {
@@ -131,8 +126,7 @@ export default {
   },
   methods: {
     close () {
-      this.localOpen = false
-      this.$emit('update:open', false)
+      this.setReal('open', false)
       this.$emit('close')
     }
   }
