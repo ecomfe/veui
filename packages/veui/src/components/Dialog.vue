@@ -2,7 +2,7 @@
 <veui-overlay
   ref="overlay"
   :class="$c('dialog')"
-  :open="localOpen"
+  :open="realOpen"
   :overlay-class="
     mergeOverlayClass({
       [$c('dialog-box')]: true,
@@ -101,6 +101,7 @@ import modal from '../managers/modal'
 import outside from '../directives/outside'
 import drag from '../directives/drag'
 import Icon from './Icon'
+import useControllable from '../mixins/controllable'
 
 export default {
   name: 'veui-dialog',
@@ -110,7 +111,7 @@ export default {
     'veui-icon': Icon
   },
   directives: { outside, drag },
-  mixins: [prefix, ui, overlay, focusable, i18n],
+  mixins: [prefix, ui, overlay, focusable, i18n, useControllable(['open'])],
   inheritAttrs: false,
   props: {
     modal: {
@@ -144,11 +145,6 @@ export default {
     footless: Boolean,
     loading: Boolean
   },
-  data () {
-    return {
-      localOpen: this.open
-    }
-  },
   computed: {
     attrs () {
       return {
@@ -159,10 +155,7 @@ export default {
     }
   },
   watch: {
-    open (val) {
-      this.localOpen = val
-    },
-    localOpen (val) {
+    realOpen (val) {
       if (this.modal) {
         if (val) {
           modal.open()
@@ -170,19 +163,15 @@ export default {
           modal.close()
         }
       }
-
-      if (this.open !== val) {
-        this.$emit('update:open', val)
-      }
     }
   },
   mounted () {
-    if (this.localOpen && this.modal) {
+    if (this.realOpen && this.modal) {
       modal.open()
     }
   },
   destroyed () {
-    if (this.localOpen && this.modal) {
+    if (this.realOpen && this.modal) {
       modal.close()
     }
   },
@@ -210,11 +199,11 @@ export default {
       if (typeof this.beforeClose === 'function') {
         Promise.resolve(this.beforeClose(type)).then(result => {
           if (result !== false) {
-            this.localOpen = false
+            this.setReal('open', false)
           }
         })
       } else {
-        this.localOpen = false
+        this.setReal('open', false)
       }
       this.$emit(type)
     },
