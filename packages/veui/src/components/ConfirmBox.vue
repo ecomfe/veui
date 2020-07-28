@@ -2,7 +2,7 @@
 <veui-dialog
   :ui="realUi"
   :overlay-class="mergeOverlayClass($c('confirm-box'))"
-  :open.sync="localOpen"
+  :open.sync="realOpen"
   :priority="priority"
   :closable="false"
   :loading="loading"
@@ -39,6 +39,7 @@ import config from '../managers/config'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
+import useControllable from '../mixins/controllable'
 
 config.defaults({
   'confirmbox.priority': 100
@@ -49,21 +50,12 @@ export default {
   components: {
     'veui-dialog': Dialog
   },
-  mixins: [prefix, ui, overlay],
+  mixins: [prefix, ui, overlay, useControllable(['open'])],
   props: pick(Dialog.props, ['open', 'title', 'beforeClose', 'loading']),
   data () {
     return {
-      localOpen: this.open,
       localTitle: this.title,
       priority: config.get('confirmbox.priority')
-    }
-  },
-  watch: {
-    open (value) {
-      this.localOpen = value
-    },
-    localOpen (value) {
-      this.$emit('update:open', value)
     }
   }
 }
