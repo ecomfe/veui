@@ -56,9 +56,9 @@
   >
     <slot v-bind="{ percent, value: realValue, status }">
       <veui-icon
-        v-if="localStatus"
+        v-if="realStatus"
         :class="$c('progress-status-icon')"
-        :name="icons[type === 'bar' ? `${localStatus}Bar` : localStatus]"
+        :name="icons[type === 'bar' ? `${realStatus}Bar` : realStatus]"
       />
       <template v-else>{{ valueText }}</template>
       <slot
@@ -77,6 +77,7 @@ import i18n from '../mixins/i18n'
 import Icon from './Icon'
 import warn from '../utils/warn'
 import { uniqueId, clamp } from 'lodash'
+import useControllable from '../mixins/controllable'
 
 const RADIUS_DEFAULT = 60
 const STROKE_DEFAULT = 2
@@ -87,7 +88,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, i18n],
+  mixins: [prefix, ui, i18n, useControllable('status')],
   props: {
     type: {
       type: String,
@@ -117,7 +118,6 @@ export default {
   },
   data () {
     return {
-      localStatus: this.status,
       descId: uniqueId('veui-progress-')
     }
   },
@@ -131,8 +131,8 @@ export default {
         [this.$c('progress-status-complete')]: this.realValue === this.max,
         [this.$c('progress-has-desc')]: this.desc,
         [this.$c(`progress-${this.type}`)]: true,
-        ...(this.localStatus
-          ? { [this.$c(`progress-status-${this.localStatus}`)]: true }
+        ...(this.realStatus
+          ? { [this.$c(`progress-status-${this.realStatus}`)]: true }
           : {}),
         ...(this.indeterminate
           ? { [this.$c('progress-indeterminate')]: true }
@@ -167,9 +167,9 @@ export default {
       return this.getLength(this.realRadius + this.halfStroke)
     },
     valueText () {
-      if (this.localStatus === 'success') {
+      if (this.realStatus === 'success') {
         return this.t('done')
-      } else if (this.localStatus === 'error') {
+      } else if (this.realStatus === 'error') {
         return this.t('error')
       } else {
         return this.percent.toFixed(this.decimalPlace) + '%'
@@ -183,24 +183,21 @@ export default {
       }
 
       if (this.status === 'success' && val < this.max) {
-        this.setStatus(null)
+        this.setReal('status', null)
         return
       }
 
       if (this.autosucceed != null) {
         if (this.autosucceed === true || this.autosucceed === 0) {
-          this.setStatus(val === this.max ? 'success' : null)
+          this.setReal('status', val === this.max ? 'success' : null)
           return
         } else if (this.autosucceed === false) {
           return
         }
         this.timer = setTimeout(() => {
-          this.setStatus(val === this.max ? 'success' : null)
+          this.setReal('status', val === this.max ? 'success' : null)
         }, this.autosucceed)
       }
-    },
-    status (val) {
-      this.localStatus = val
     }
   },
   created () {
@@ -209,10 +206,6 @@ export default {
     }
   },
   methods: {
-    setStatus (status) {
-      this.localStatus = status
-      this.$emit('update:status', status)
-    },
     getLength (val) {
       return `${Math.round(val * 100) / 100}`
     }

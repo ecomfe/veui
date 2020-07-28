@@ -40,6 +40,13 @@
       mark
     />
     <div class="desc">Range: 10~100, Step: 7, Value: {{ value2 }}</div>
+    <h3>固定比例</h3>
+    <veui-slider
+      :value="50"
+      :min="1"
+      :max="100"
+      mark
+    />
   </section>
 
   <section>
