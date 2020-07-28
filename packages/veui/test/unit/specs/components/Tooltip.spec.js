@@ -78,4 +78,38 @@ describe('components/Tooltip', function () {
     expect(wrapper.vm.open).to.equal(true)
     wrapper.destroy()
   })
+
+  it('should make prop `open` fully controlled', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-tooltip': Tooltip
+      },
+      data () {
+        return {
+          open: false,
+          message: 'default slot content'
+        }
+      },
+      template: `
+              <div>
+                  <div class="tooltip-test" ref="tooltip-test">hover 测试</div>
+                  <veui-tooltip target="tooltip-test" :open="open" trigger="click">
+                      {{ message }}
+                  </veui-tooltip>
+              </div>
+              `
+    })
+    wrapper.find('.tooltip-test').trigger('click')
+
+    await wait(0)
+    expect(wrapper.vm.open).to.equal(false)
+
+    wrapper.vm.open = true
+    await wait(400)
+    expect(wrapper.find('.veui-tooltip').isVisible()).to.equal(true)
+    document.body.click()
+    await wait(400)
+    expect(wrapper.find('.veui-tooltip').isVisible()).to.equal(true)
+    wrapper.destroy()
+  })
 })
