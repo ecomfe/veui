@@ -7,6 +7,7 @@ import outside from '../directives/outside'
 import { getNodes, isValidNodesResolver } from '../utils/context'
 import { isString } from 'lodash'
 import config from '../managers/config'
+import useControllable from '../mixins/controllable'
 
 const TRIGGER_MAP = {
   hover: 'mouseenter'
@@ -22,7 +23,7 @@ export default {
   components: {
     'veui-overlay': Overlay
   },
-  mixins: [prefix, ui, overlay],
+  mixins: [prefix, ui, overlay, useControllable(['open'])],
   props: {
     position: {
       type: String,
@@ -53,7 +54,6 @@ export default {
   },
   data () {
     return {
-      localOpen: this.open,
       localOverlayOptions: {
         position: this.position
       }
@@ -89,24 +89,11 @@ export default {
         excludeSelf: !this.interactive
       }
     },
-    realOpen () {
-      return this.localOpen && !!this.targetNode
-    },
     realAutofocus () {
       return this.interactive ? this.autofocus : false
     }
   },
   watch: {
-    open (val) {
-      if (this.localOpen !== val) {
-        this.localOpen = val
-      }
-    },
-    localOpen (val) {
-      if (this.open !== val) {
-        this.$emit('update:open', val)
-      }
-    },
     targetNode (val, oldVal) {
       this.removeHandler(oldVal)
       this.bindHandler()
@@ -129,10 +116,10 @@ export default {
       return getNodes(this.target, this.$vnode.context)[0]
     },
     openHandler () {
-      this.localOpen = true
+      this.setReal('open', true)
     },
     closeHandler () {
-      this.localOpen = false
+      this.setReal('open', false)
     },
     removeHandler (target) {
       let targetNode = target || this.targetNode
@@ -178,7 +165,7 @@ export default {
       <veui-overlay
         ref="overlay"
         target={this.targetNode}
-        open={this.realOpen}
+        open={this.realOpen && !!this.targetNode}
         options={this.realOverlayOptions}
         overlayClass={this.mergeOverlayClass({
           [this.$c('tooltip-box')]: true,

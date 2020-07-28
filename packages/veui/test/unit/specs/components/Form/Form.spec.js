@@ -333,7 +333,10 @@ describe('components/Form/Form', () => {
         slot
       ).wrapper
       let [genderWrapper, ageWrapper] = wrapper.findAll('.veui-input').wrappers
+      // veui-input 值要变化才会 trigger input
+      ageWrapper.find('input').element.value = 'foo'
       ageWrapper.find('input').trigger('input')
+      genderWrapper.find('input').element.value = 'foo'
       genderWrapper.find('input').trigger('input')
       expect(counter).to.equal(0)
     })
