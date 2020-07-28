@@ -25,14 +25,14 @@
       :key="`i-${item.value}`"
       :class="$c('check-button-group-checkmark')"
       aria-hidden="true"
-    />
+    >
+      <veui-icon :name="icons.check"/>
+    </div>
     <slot
       name="item"
       v-bind="item"
       :index="index"
-    >
-      {{ item.label }}
-    </slot>
+    >{{ item.label }}</slot>
   </veui-button>
 </div>
 </template>
@@ -44,11 +44,13 @@ import input from '../mixins/input'
 import { focusIn } from '../utils/dom'
 import { includes, findIndex } from 'lodash'
 import Button from './Button'
+import Icon from './Icon'
 
 export default {
   name: 'veui-check-button-group',
   components: {
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-icon': Icon
   },
   mixins: [prefix, ui, input],
   model: {

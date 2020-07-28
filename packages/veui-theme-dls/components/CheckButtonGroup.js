@@ -11,6 +11,9 @@ config.defaults(
     },
     parts: {
       button: 'basic'
+    },
+    icons: {
+      check: null
     }
   },
   'checkbuttongroup'
