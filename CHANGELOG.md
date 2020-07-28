@@ -4,6 +4,10 @@
 
 - [-] 移除 `veui-theme-one-icons`。
 
+### 💡 主要变更
+
+- [+] 允许 `CheckButtonGroup` 配置 `icons.check` 来指定已选项的图标。
+
 ### 🐞 问题修复
 
 - [^] 修复多数组件内的图标按钮样式。
