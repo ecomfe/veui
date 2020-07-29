@@ -41,6 +41,10 @@ export default {
   render (h) {
     let Icon
 
+    if (!this.name) {
+      return h()
+    }
+
     if (typeof this.name === 'string') {
       // Icons registered by VueAwesome's register(iconData)
       if (!icons[this.name] || !icons[this.name].render) {
