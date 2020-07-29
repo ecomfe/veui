@@ -13,9 +13,10 @@ import input from '../../mixins/input'
 import dropdown from '../../mixins/dropdown'
 import searchable from '../../mixins/searchable'
 import keySelect from '../../mixins/key-select'
+import useControllable from '../../mixins/controllable'
 import i18n from '../../mixins/i18n'
 import { find } from '../../utils/datasource'
-import { uniqueId, isEqual, omit } from 'lodash'
+import { uniqueId, omit } from 'lodash'
 import { contains } from '../../utils/dom'
 import '../../common/uiTypes'
 
@@ -41,6 +42,18 @@ export default {
       keywordKey: 'inputValue',
       resultKey: 'filteredOptions'
     }),
+    useControllable({
+      prop: 'value',
+      event: 'change',
+      get (getReal) {
+        let val = getReal()
+        return this.multiple
+          ? val != null
+            ? [].concat(val)
+            : []
+          : val
+      }
+    }),
     i18n
   ],
   model: {
@@ -60,11 +73,6 @@ export default {
   data () {
     return {
       labelId: uniqueId('veui-select-label-'),
-      localValue: this.multiple
-        ? this.value != null
-          ? [].concat(this.value)
-          : []
-        : this.value,
       outsideRefs: ['input'],
       inputValue: '',
       inlineOptions: null
@@ -75,10 +83,10 @@ export default {
       if (this.multiple) {
         return null
       }
-      if (this.localValue == null) {
+      if (this.realValue == null) {
         return null
       }
-      return findOptionByValue(this.realOptions, this.localValue)
+      return findOptionByValue(this.realOptions, this.realValue)
     },
     realPlaceholder () {
       return this.placeholder == null
@@ -88,7 +96,7 @@ export default {
     inputPlaceholder () {
       if (this.multiple) {
         if (
-          (this.localValue && this.localValue.length > 0) ||
+          (this.realValue && this.realValue.length > 0) ||
           !this.searchable
         ) {
           return ''
@@ -97,20 +105,20 @@ export default {
       }
 
       if (!this.searchable) {
-        return !this.localValue ? this.realPlaceholder : ''
+        return !this.realValue ? this.realPlaceholder : ''
       }
 
-      return !this.localValue ? this.realPlaceholder : this.label
+      return !this.realValue ? this.realPlaceholder : this.label
     },
     label () {
       return this.selectedOption ? this.selectedOption.label : ''
     },
     labels () {
-      let { localValue } = this
-      if (!Array.isArray(localValue)) {
+      let { realValue } = this
+      if (!Array.isArray(realValue)) {
         return []
       }
-      return this.localValue.map(val => {
+      return realValue.map(val => {
         let option = findOptionByValue(this.realOptions, val)
         return option ? option.label : val
       })
@@ -119,7 +127,7 @@ export default {
       if (this.inputValue) {
         return this.inputValue
       }
-      if (this.localValue === null || this.expanded) {
+      if (this.realValue === null || this.expanded) {
         return ''
       }
       return this.label
@@ -138,8 +146,8 @@ export default {
     },
     isEmpty () {
       return (
-        !this.localValue ||
-        (Array.isArray(this.localValue) && this.localValue.length === 0)
+        !this.realValue ||
+        (Array.isArray(this.realValue) && this.realValue.length === 0)
       )
     },
     isMultiLevel () {
@@ -160,12 +168,6 @@ export default {
     }
   },
   watch: {
-    value (val, oldVal) {
-      if (isEqual(val, oldVal)) {
-        return
-      }
-      this.localValue = this.multiple ? [].concat(val) : val
-    },
     expanded (val) {
       if (this.searchable && !val) {
         this.inputValue = ''
@@ -176,12 +178,8 @@ export default {
     this.nativeInput = this.$refs.input.$refs.input
   },
   methods: {
-    updateValue (val) {
-      this.localValue = val
-      this.$emit('change', val)
-    },
     clear (e) {
-      this.updateValue(this.multiple ? [] : null)
+      this.setReal('value', this.multiple ? [] : null)
       this.inputValue = ''
       this.$emit('clear')
       e.stopPropagation()
@@ -198,25 +196,24 @@ export default {
       }
       if (!this.multiple) {
         this.expanded = false
-        if (this.localValue !== value) {
-          this.updateValue(value)
-        }
+        this.setReal('value', value)
         return
       }
 
-      let index = this.localValue.indexOf(value)
+      let index = this.realValue.indexOf(value)
       if (index !== -1) {
         // remove
         this.removeSelectedAt(index)
       } else {
-        if (!this.max || (this.max && this.localValue.length < this.max)) {
-          this.updateValue(this.localValue.concat(value))
+        if (!this.max || (this.max && this.realValue.length < this.max)) {
+          this.setReal('value', this.realValue.concat(value))
         }
       }
     },
     removeSelectedAt (index) {
-      this.localValue.splice(index, 1)
-      this.updateValue([...this.localValue])
+      let val = [...this.realValue]
+      val.splice(index, 1)
+      this.setReal('value', val)
     },
     handleRelocate () {
       let { options } = this.$refs
@@ -286,8 +283,7 @@ export default {
           break
         case 'Backspace':
           if (this.multiple && this.searchable && !this.inputValue) {
-            this.localValue.pop()
-            this.updateValue([...this.localValue])
+            this.setReal('value', this.realValue.slice(0, -1))
           }
           break
         default:
@@ -303,7 +299,7 @@ export default {
       this.inputValue = val
       this.expanded = true
       if (!val && !this.multiple) {
-        this.updateValue('')
+        this.setReal('value', '')
       }
       if (this.multiple && this.searchable) {
         this.nativeInput.style.width = ''
@@ -375,7 +371,7 @@ export default {
         {this.$scopedSlots.tag
           ? this.$scopedSlots.tag({
             label,
-            ...findOptionByValue(this.realOptions, this.localValue[index]),
+            ...findOptionByValue(this.realOptions, this.realValue[index]),
             index
           })
           : label}
@@ -396,7 +392,7 @@ export default {
       <span
         class={{
           [this.$c('select-label')]: true,
-          [this.$c('select-placeholder')]: this.localValue === null
+          [this.$c('select-placeholder')]: this.realValue === null
         }}
         id={this.labelId}
       >
@@ -473,8 +469,8 @@ export default {
             <div class={this.$c('select-icon')}>
               {this.clearable &&
               (this.multiple
-                ? this.localValue.length > 0
-                : !!this.localValue) ? (
+                ? this.realValue.length > 0
+                : !!this.realValue) ? (
                   <Button
                     class={this.$c('select-clear')}
                     ui={this.uiParts.clear}
