@@ -591,4 +591,35 @@ describe('components/Select/Select', () => {
 
     wrapper.destroy()
   })
+
+  it('should make prop `value` fully controlled', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select
+        },
+        data () {
+          return {
+            value: '1-1',
+            options: datasource
+          }
+        },
+        template: `
+          <veui-select :value="value" :options="options"/>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+
+    await vm.$nextTick()
+    let options = wrapper.findAll(OPTION_ITEM)
+    options.at(1).trigger('click')
+    await vm.$nextTick()
+    expect(wrapper.text()).to.equal('子选项1-1')
+    wrapper.destroy()
+  })
 })

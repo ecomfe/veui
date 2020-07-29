@@ -188,19 +188,35 @@ describe('components/SearchBox', () => {
   })
 
   it('should support other props correctly.', async () => {
-    let wrapper = mount(SearchBox, {
-      sync: false,
-      propsData: {
-        placeholder: 'content',
-        ui: 'primary',
-        value: 'initial',
-        autofocus: true,
-        clearable: true,
-        suggestions: datasource,
-        replaceOnSelect: true,
-        disabled: false
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            suggestions: datasource,
+            suggestTrigger: ['input', 'focus'],
+            readonly: false,
+            disabled: false,
+            value: 'initial'
+          }
+        },
+        components: {
+          'veui-search-box': SearchBox
+        },
+        template: `<veui-search-box
+          v-model="value"
+          :suggestions="suggestions"
+          placeholder="content"
+          ui="primary"
+          clearable
+          autofocus
+          replaceOnSelect
+          disabled
+        />`
+      },
+      {
+        sync: false
       }
-    })
+    )
 
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.veui-input-placeholder').text()).to.equal('content')
@@ -540,6 +556,27 @@ describe('components/SearchBox', () => {
     expect(wrapper.find('.test-overlay-class').element.style.display).to.equal(
       'none'
     )
+    wrapper.destroy()
+  })
+
+  it('should make prop `value` fully controlled', async () => {
+    let wrapper = mount(SearchBox, {
+      sync: false,
+      propsData: {
+        value: 'ok',
+        clearable: true
+      }
+    })
+
+    wrapper.find('button.veui-input-clear').trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('input').element.value).to.equal('ok')
+
+    let input = wrapper.find('input')
+    input.element.value = 'notok'
+    input.trigger('input')
+    await wrapper.vm.$nextTick()
+    expect(input.element.value).to.equal('ok')
     wrapper.destroy()
   })
 })
