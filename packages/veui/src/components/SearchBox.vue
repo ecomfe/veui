@@ -13,7 +13,7 @@
   <veui-input-group>
     <veui-input
       ref="input"
-      v-model="localValue"
+      v-model="realValue"
       v-outside:input,box="closeSuggestions"
       :name="realName"
       :readonly="realReadonly"
@@ -23,7 +23,7 @@
       role="search"
       :aria-haspopup="inputPopup"
       :aria-owns="inputPopup ? dropdownId : null"
-      @input="keyword = $event"
+      @input="handleInput"
       @focus="handleInputFocus"
       @keydown="handleInputKeydown"
       @clear="handleClear"
@@ -158,7 +158,8 @@ import InputGroup from './InputGroup'
 import OptionGroup from './OptionGroup'
 import focusable from '../mixins/focusable'
 import { createKeySelect } from '../mixins/key-select'
-import { pick, without, includes } from 'lodash'
+import useControllable from '../mixins/controllable'
+import { pick, without, includes, map } from 'lodash'
 import '../common/uiTypes'
 
 const SHARED_PROPS = [
@@ -197,6 +198,16 @@ export default {
       keywordKey: 'keyword',
       resultKey: 'filteredSuggestions'
     }),
+    useControllable({
+      prop: 'value',
+      event: 'input',
+      set (val, setReal) {
+        setReal(val)
+        if (this.hasFocusTrigger || this.hasInputTrigger) {
+          this.$emit('suggest', val)
+        }
+      }
+    }),
     i18n
   ],
   props: {
@@ -223,9 +234,7 @@ export default {
   },
   data () {
     return {
-      localValue: this.value,
-      keyword: this.value,
-      localSuggestions: this.suggestions
+      keyword: this.value || ''
     }
   },
   computed: {
@@ -249,15 +258,10 @@ export default {
       return this.replaceOnSelect
     },
     realSuggestions () {
-      if (!this.localSuggestions) {
-        return []
-      }
-      return this.localSuggestions.map(item => {
-        if (typeof item === 'string') {
-          return { label: item, value: item }
-        }
-        return item
-      })
+      return map(
+        this.suggestions,
+        item => typeof item === 'string' ? { label: item, value: item } : item
+      )
     },
     suggestTriggers () {
       return [].concat(this.suggestTrigger)
@@ -279,24 +283,13 @@ export default {
     }
   },
   watch: {
-    value (val) {
-      this.localValue = val
+    realValue (val) {
       // 因为 selectSuggestion 中关闭用了 nextTick
       this.$nextTick(() => {
         if (this.expanded) {
           this.keyword = val
         }
       })
-    },
-    localValue (val) {
-      this.$emit('input', val)
-      this.handleInput()
-      if (this.hasFocusTrigger || this.hasInputTrigger) {
-        this.$emit('suggest', this.localValue)
-      }
-    },
-    suggestions (val) {
-      this.localSuggestions = val
     },
     realSuggestions () {
       if (this.realExpanded) {
@@ -323,27 +316,22 @@ export default {
     handleInputFocus () {
       if (this.hasFocusTrigger && !this.realReadonly) {
         this.openSuggestions()
-        this.$emit('suggest', this.localValue)
+        this.$emit('suggest', this.realValue)
       }
     },
     selectSuggestion (suggestion) {
       if (this.replaceOnSelect !== false) {
-        this.localValue = suggestion[this.valueProperty]
+        this.setReal('value', suggestion[this.valueProperty])
       }
       this.focus()
       this.$emit('select', suggestion)
-      // 选择 select 的情况会有可能
-      // 触发 localValue 改变 => watcher => handleInput => openSuggestions
-      // 所以在下一个 nextTick 强制隐藏 suggest
-      this.$nextTick(() => {
-        this.closeSuggestions()
-      })
+      this.closeSuggestions()
     },
     search ($event) {
-      this.$emit('search', this.localValue, $event)
+      this.$emit('search', this.realValue, $event)
       if (this.hasSubmitTrigger) {
         this.openSuggestions()
-        this.$emit('suggest', this.localValue)
+        this.$emit('suggest', this.realValue)
       } else if (this.hasInputTrigger || this.hasFocusTrigger) {
         this.closeSuggestions()
       }
@@ -408,7 +396,8 @@ export default {
     },
     openSuggestions () {
       if (!this.expanded) {
-        this.keyword = this.localValue
+        // select 时，先关闭了建议，然后 realValue watcher 中因为关闭而没有同步到 keyword，这里打开时保证 keyword 是正确的
+        this.keyword = this.realValue
         this.expanded = true
       }
     },
