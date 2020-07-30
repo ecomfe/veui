@@ -20,7 +20,7 @@ export default {
             let key = table.keyField
               ? item[table.keyField]
               : table.realKeys[index]
-            let expanded = table.localExpanded.indexOf(key) !== -1
+            let expanded = table.realExpanded.indexOf(key) !== -1
             let rows = [<Row index={index} expanded={expanded} />]
 
             if (table.expandable && expanded) {
