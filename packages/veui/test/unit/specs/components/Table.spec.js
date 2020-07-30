@@ -45,10 +45,10 @@ describe('components/Table', () => {
     )
 
     let boxes = wrapper.findAll('td input[type="checkbox"]')
-    boxes.at(0).trigger('change')
-    boxes.at(1).trigger('change')
-
     let { vm } = wrapper
+    boxes.at(0).trigger('change')
+    await vm.$nextTick()
+    boxes.at(1).trigger('change')
     await vm.$nextTick()
 
     expect(vm.selected).to.deep.equal(['11', '22'])
@@ -168,6 +168,7 @@ describe('components/Table', () => {
   })
 
   it('should expand the sub rows correctly.', async () => {
+    let syncExpanded = true
     let wrapper = mount(
       {
         components: {
@@ -191,11 +192,19 @@ describe('components/Table', () => {
                   }
                 ]
               }
-            ]
+            ],
+            expanded: []
+          }
+        },
+        methods: {
+          updateExpanded (expanded) {
+            if (syncExpanded) {
+              this.expanded = expanded
+            }
           }
         },
         template: `
-          <veui-table :data="data" expandable>
+          <veui-table :data="data" :expanded="expanded" expandable @update:expanded="updateExpanded">
             <veui-table-column field="field1" title="field1">
               <template slot="sub-row" slot-scope="{ field3 }">{{ field3 }}</template>
             </veui-table-column>
@@ -212,14 +221,19 @@ describe('components/Table', () => {
     let { vm } = wrapper
     let rows = wrapper.findAll('tbody tr')
     expect(rows.length).to.equal(2)
-
-    wrapper.find('td button').trigger('click')
-
+    let btn = wrapper.find('td button')
+    btn.trigger('click')
     await vm.$nextTick()
-
     let totalRows = wrapper.findAll('tbody tr')
     expect(totalRows.length).to.equal(3)
 
+    // fully controlled
+    vm.expanded = []
+    syncExpanded = false
+    await vm.$nextTick()
+    btn.trigger('click')
+    await vm.$nextTick()
+    expect(wrapper.findAll('tbody tr').length).to.equal(2)
     wrapper.destroy()
   })
 
@@ -413,6 +427,7 @@ describe('components/Table', () => {
   })
 
   it('should select rows correctly when the select mode is single.', async () => {
+    let syncSelected = true
     let wrapper = mount(
       {
         components: {
@@ -438,8 +453,15 @@ describe('components/Table', () => {
             selected: null
           }
         },
+        methods: {
+          updateSelected (selected) {
+            if (syncSelected) {
+              this.selected = selected
+            }
+          }
+        },
         template: `
-          <veui-table :data="data" keys="field2" selectable :selected.sync="selected" select-mode="single">
+          <veui-table :data="data" keys="field2" selectable :selected="selected" @update:selected="updateSelected" select-mode="single">
             <veui-table-column field="field1" title="field1"/>
             <veui-table-column field="field2" title="field2" align="left">
               <template slot="foot">总计</template>
@@ -467,6 +489,15 @@ describe('components/Table', () => {
     await vm.$nextTick()
 
     expect(wrapper.vm.selected).to.equal('22')
+
+    // fully controlled
+    vm.selected = null
+    syncSelected = false
+    await vm.$nextTick()
+    list.at(0).element.checked = true
+    list.at(0).trigger('change')
+    await vm.$nextTick()
+    expect(list.at(0).element.checked).to.equal(false)
 
     wrapper.destroy()
   })
