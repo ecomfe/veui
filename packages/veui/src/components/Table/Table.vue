@@ -122,6 +122,7 @@ import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import colgroup from '../../mixins/colgroup'
+import useControllable from '../../mixins/controllable'
 import resize from '../../directives/resize'
 import {
   map,
@@ -173,7 +174,48 @@ export default {
   directives: {
     resize
   },
-  mixins: [prefix, ui, i18n, colgroup],
+  mixins: [prefix, ui, i18n, colgroup, useControllable([
+    {
+      prop: 'expanded',
+      get (getReal) {
+        return normalizeArray(getReal())
+      },
+      set (val, setReal) {
+        let cur = this.isControlled('expanded')
+          ? this.expanded
+          : this.realExpanded
+        if (!isEqualSet(val, cur)) {
+          setReal(val)
+        }
+      }
+    },
+    {
+      prop: 'selected',
+      get (getReal) {
+        let ctl = this.isControlled('selected')
+        if (
+          (ctl && this.validateSelected(this.selected)) ||
+          !ctl
+        ) {
+          let val = normalizeArray(getReal())
+          return intersection(val, this.realKeys)
+        }
+        return []
+      },
+      set (val, setReal) {
+        let cur = this.isControlled('selected')
+          ? normalizeArray(this.selected)
+          : this.realSelected
+        if (this.isMultiple) {
+          if (!isEqualSet(val, cur)) {
+            setReal(val)
+          }
+        } else if (cur[0] !== val[0]) {
+          setReal(val[0] == null ? null : val[0])
+        }
+      }
+    }
+  ])],
   props: {
     data: {
       type: Array,
@@ -219,8 +261,6 @@ export default {
   },
   data () {
     return {
-      localSelected: normalizeArray(this.selected),
-      localExpanded: [...this.expanded],
       gutterWidth: 0,
       selectColumnWidth: 0,
       expandColumnWidth: 0,
@@ -239,10 +279,8 @@ export default {
     }
   },
   computed: {
-    realSelected () {
+    isMultiple () {
       return this.selectMode === 'multiple'
-        ? this.localSelected
-        : this.localSelected[0] || null
     },
     filteredColumns () {
       return this.filterColumns(this.columns)
@@ -463,14 +501,11 @@ export default {
       return keys.map(String)
     },
     selectedItems () {
-      return this.localSelected.reduce((selectedItems, key) => {
-        selectedItems[key] = this.getItems(key)
-        return selectedItems
-      }, {})
+      return this.getSpecificItems(this.realSelected)
     },
     selectStatus () {
       let keys = this.realKeys
-      let inter = intersection(keys, this.localSelected)
+      let inter = this.realSelected
       if (!inter.length) {
         return 'none'
       }
@@ -501,32 +536,6 @@ export default {
     offsetLeft () {
       return this.selectColumnWidth + this.expandColumnWidth
     }
-  },
-  watch: {
-    selected (val) {
-      if (this.validateSelected(val)) {
-        this.localSelected = normalizeArray(val)
-      }
-    },
-    expanded (val) {
-      this.localExpanded = val
-    },
-    localExpanded (val, oldVal) {
-      if (val === oldVal || !isEqualSet(val, oldVal)) {
-        this.$emit('update:expanded', val)
-      }
-    },
-    realKeys (val) {
-      this.localSelected = intersection(this.localSelected, val)
-    },
-    realSelected (val, oldVal) {
-      if (val === oldVal || !isEqualSet(val, oldVal)) {
-        this.$emit('update:selected', val)
-      }
-    }
-  },
-  created () {
-    this.validateSelected()
   },
   mounted () {
     this.supportSticky = cssSupports('position', 'sticky')
@@ -565,33 +574,38 @@ export default {
   methods: {
     select (selected, index) {
       let item = null
+      let value
       if (index !== undefined) {
         item = this.data[index]
         let key = this.getKeyByIndex(index)
         if (selected) {
-          if (this.selectMode === 'multiple') {
-            this.localSelected.push(key)
-          } else {
-            this.localSelected = [key]
-          }
+          value = this.isMultiple ? [...this.realSelected, key] : [key]
         } else {
-          this.localSelected.splice(this.localSelected.indexOf(key), 1)
+          value = [...this.realSelected]
+          value.splice(value.indexOf(key), 1)
         }
       } else {
-        if (selected) {
-          this.localSelected = [...this.realKeys]
-        } else {
-          this.localSelected = []
-        }
+        value = selected ? [...this.realKeys] : []
       }
-      this.$emit('select', selected, item, this.selectedItems)
+      // 先 select 然后 .sync ，有点怪啊，先保留吧
+      // 不能直接拿 selectedItems ，因为这个时候 realSelected 还没更新
+      this.$emit('select', selected, item, this.getSpecificItems(value))
+      this.setReal('selected', value)
+    },
+    getSpecificItems (specific) {
+      return specific.reduce((selectedItems, key) => {
+        selectedItems[key] = this.getItems(key)
+        return selectedItems
+      }, {})
     },
     expand (expanded, index) {
       let key = this.getKeyByIndex(index)
       if (expanded) {
-        this.localExpanded.push(key)
+        this.setReal('expanded', [...this.realExpanded, key])
       } else {
-        this.localExpanded.splice(this.localExpanded.indexOf(key), 1)
+        let val = [...this.realExpanded]
+        val.splice(val.indexOf(key), 1)
+        this.setReal('expanded', val)
       }
     },
     getKeyByIndex (index) {
