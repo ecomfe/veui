@@ -19,33 +19,59 @@
       <veui-field
         label="s:"
         ui="s"
-        tip="精确到小数点后 1 位"
       >
         <veui-number-input
           v-model="number1"
           ui="s"
           autofocus
           select-on-focus
-          :decimal-place="1"
         />
       </veui-field>
       <veui-field
         label="m:"
-        tip="精确到小数点后 2 位"
       >
         <veui-number-input
           v-model="number2"
-          :decimal-place="2"
         />
       </veui-field>
       <veui-field
-        label="Step 0.1:"
-        tip="基准值每次加 0.1"
+        label="DecimalPlace -1 &amp; Step 0.1:"
+        tip="不强制要求小数位数，基准值每次加 0.1"
+      >
+        <veui-number-input
+          v-model="number5"
+          :decimal-place="-1"
+          :step="0.1"
+        />
+      </veui-field>
+      <veui-field
+        label="DecimalPlace -1 &amp; Step 0.01:"
+        tip="不强制要求小数位数，基准值每次加 0.01"
+      >
+        <veui-number-input
+          v-model="number5"
+          :decimal-place="-1"
+          :step="0.01"
+        />
+      </veui-field>
+      <veui-field
+        label="DecimalPlace 1 &amp; Step 1:"
+        tip="保留1位小数，基准值每次加 1"
+      >
+        <veui-number-input
+          v-model="number3"
+          :step="1"
+          :decimal-place="1"
+        />
+      </veui-field>
+      <veui-field
+        label="DecimalPlace 2 &amp; Step 0.1:"
+        tip="保留2位小数，基准值每次加 0.1"
       >
         <veui-number-input
           v-model="number3"
           :step="0.1"
-          :decimal-place="1"
+          :decimal-place="2"
         />
       </veui-field>
       <veui-field
@@ -58,16 +84,7 @@
         />
       </veui-field>
       <veui-field
-        label="DecimalPlace = -1:"
-        tip="不处理精度问题"
-      >
-        <veui-number-input
-          v-model="number5"
-          :decimal-place="-1"
-        />
-      </veui-field>
-      <veui-field
-        label="Max &amp;&amp; Min:"
+        label="[-1, 10]:"
         :rules="[{ name: 'min', value: -1 }]"
         tip="最大值不大于 10，最小值不小于 -1"
       >
@@ -75,6 +92,16 @@
           v-model="number6"
           :max="10"
           :min="-1"
+        />
+      </veui-field>
+      <veui-field
+        label="[-10, -5]:"
+        :rules="[{ name: 'min', value: -10 }]"
+        tip="最大值不大于 -5，最小值不小于 -10"
+      >
+        <veui-number-input
+          :max="-5"
+          :min="-10"
         />
       </veui-field>
       <veui-field label="Readonly:">
@@ -135,6 +162,54 @@
       </veui-field>
     </veui-form>
   </section>
+  <section class="sdf">
+    <h3>定制 formatter 和 parser </h3>
+    <veui-form>
+      <veui-field label="Percentage：">
+        <veui-number-input
+          :min="0"
+          :parser="percentParser"
+          :formatter="percentFormatter"
+        />
+      </veui-field>
+    </veui-form>
+  </section>
+  <section class="sdf">
+    <h3>prop error</h3>
+    <veui-form>
+      <veui-field
+        label="value precision"
+        tip="保留1位小数, 但是 prop value 初始是 0.01"
+      >
+        <veui-number-input
+          v-model="precisionValue"
+          :min="0"
+          :decimal-place="1"
+        />
+      </veui-field>
+      <veui-field
+        label="range error"
+        tip="[1, 10], prop value 初始是 100"
+      >
+        <veui-number-input
+          v-model="rangeValue"
+          :min="1"
+          :max="10"
+          :decimal-place="1"
+        />
+      </veui-field>
+      <veui-field
+        label="type error"
+        tip="其实可以不考虑 value 非 Number/Null 的情况，毕竟还是要符合类型声明"
+      >
+        <veui-number-input
+          v-model="typeValue"
+          :min="0"
+          :decimal-place="1"
+        />
+      </veui-field>
+    </veui-form>
+  </section>
 </article>
 </template>
 
@@ -158,12 +233,21 @@ export default {
       number5: null,
       number6: null,
       number7: 1024,
-      number8: 2333
+      number8: 2333,
+      precisionValue: 0.01,
+      typeValue: '1km',
+      rangeValue: 100
     }
   },
   methods: {
     handlePriceChange (val) {
       this.number7 = val
+    },
+    percentParser (val) {
+      return val.replace('%', '')
+    },
+    percentFormatter (_, val) {
+      return val + '%'
     }
   }
 }
@@ -171,9 +255,8 @@ export default {
 
 <style lang="less" scoped>
 .veui-form {
-  & /deep/ .veui-form-label {
-    width: 130px;
-    color: #999;
+  & /deep/ .veui-field-label {
+    width: 140px;
   }
 }
 .sdf {

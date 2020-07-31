@@ -1,11 +1,11 @@
 <template>
 <veui-input
   ref="input"
-  v-model="localValue"
   v-nudge.y="{
     step,
-    update: handleThumbNudgeUpdate
+    update: stepValue
   }"
+  :value="realInputValue"
   :ui="realUi"
   type="text"
   inputmode="numeric"
@@ -15,8 +15,8 @@
     [$c('number-input-controls-focus')]: spinnerFocused
   }"
   v-on="listeners"
-  @blur="handleBlur"
   @change="handleChange"
+  @input="handleInput"
 >
   <template
     v-if="isStrong"
@@ -100,9 +100,10 @@ import Icon from './Icon'
 import { sign, add, round } from '../utils/math'
 import warn from '../utils/warn'
 import { VALUE_EVENTS } from '../utils/dom'
-import { isInteger, isNaN, get, find, omit } from 'lodash'
+import { isInteger, isNaN, get, find, omit, isFunction } from 'lodash'
 import nudge from 'veui/directives/nudge'
 import longpress from 'veui/directives/longpress'
+import useControllable from '../mixins/controllable'
 
 export default {
   name: 'veui-number-input',
@@ -115,7 +116,14 @@ export default {
     'veui-input': Input,
     'veui-button': Button
   },
-  mixins: [prefix, ui, input, activatable, i18n],
+  mixins: [prefix, ui, input, activatable, i18n, useControllable({
+    prop: 'value',
+    event: 'input',
+    get (getReal) {
+      let val = getReal()
+      return val == null ? null : val
+    }
+  })],
   inhertiAttrs: false,
   props: {
     ui: String,
@@ -128,24 +136,32 @@ export default {
       type: Number,
       default: 0,
       validator (val) {
-        // -1 代表不处理精度
+        // -1 代表不强制小数位数
         return val === -1 || (val >= 0 && val <= 20 && isInteger(val))
       }
     },
     max: Number,
-    min: Number
+    min: Number,
+    formatter: Function,
+    parser: Function
   },
   data () {
     return {
-      localValue: this.value,
-      lastChangedValue: this.value,
-      spinnerFocused: false,
-      forward: true,
-      inputFocusable: true,
-      controlFocusable: true
+      parsedInputValue: null, // 存储输入过程中的值即：parser(valueEmitFromInput)
+      spinnerFocused: false
     }
   },
   computed: {
+    realInputValue () {
+      if (this.parsedInputValue == null) {
+        // decimal 1 ; prop value 0.01; 这个时候最好也显示成 0.01
+        let decimal = this.decimalPlace === -1 || typeof this.realValue !== 'number'
+          ? -1
+          : Math.max(getDecimalPlace(this.realValue), this.decimalPlace)
+        return this.formatValue(this.realValue, decimal)
+      }
+      return this.formatValue(this.parsedInputValue, -1)
+    },
     isStrong () {
       return this.uiProps.style === 'strong'
     },
@@ -160,9 +176,6 @@ export default {
         readonly: this.realReadonly,
         invalid: this.realInvalid
       }
-    },
-    isLocalEmpty () {
-      return this.localValue == null || this.localValue === ''
     },
     editable () {
       return !this.realDisabled && !this.realReadonly
@@ -192,33 +205,20 @@ export default {
       return min
     },
     reachMaxLimit () {
-      return this.realMax != null && this.value >= this.realMax
+      return this.realMax != null && this.realValue != null && this.realValue >= this.realMax
     },
     reachMinLimit () {
-      return this.realMin != null && this.value <= this.realMin
+      return this.realMin != null && this.realValue != null && this.realValue <= this.realMin
     }
   },
   watch: {
-    // value 和 localValue 仅在能正确 parse 及上下限限制内时保持同步，
-    // value 只关心有效的数字值，localValue 是一个展示的中间状态
-    value: {
-      handler (val, oldVal) {
-        // 这里主要处理 set 进来的情况
-        // 1. 输入框内有值，set null
-        // 2. set 的值和输入框内的值不一样
-        if (val == null && !this.isLocalEmpty) {
-          this.localValue = null
-          this.lastChangedValue = null
-          return
-        }
-
-        let localValue = this.calcDisplayValue(val)
-        if (val != null && localValue !== this.localValue) {
-          this.localValue = localValue
-          this.lastChangedValue = +localValue
-        }
-      },
-      immediate: true
+    // 输入过程中，外部 value 发生变化，那么重置输入
+    // 这个逻辑是为了统一：当无法完全受控，那么 prop 变化时如何处理？目前逻辑是 prop 覆盖 local
+    value (val) {
+      if (this.parsedInputValue != null) {
+        // 没有 local 状态了，就是 realValue 生效了，见 realInputValue
+        this.parsedInputValue = null
+      }
     }
   },
   created () {
@@ -236,56 +236,54 @@ export default {
     }
   },
   methods: {
-    handleChange (...args) {
-      // change 产生的值有 5 种类型
-      // 1. null 或 ''，表示清空
-      // 2. 无效值
-      // 3. 跨越上限
-      // 4. 跨越精度
-      // 5. 正常
-
-      // 存在 6 种情况不需要 change
-      // 1. 无效值，但上一次 change 的值不为空
-      // 2. 无效值，并且上一次 change 的值为空
-      // 3. 都为空
-      // 4. 都不为空但 format 之后和上一次 change 的值相同
-      // 5. 经过精度精确后和上一次 change 的值相同
-      // 6. 经过上下限重置后和上一次 change 的值相同
-
-      // 处理 1，需要重置值
-      if (
-        !this.isLocalEmpty &&
-        isNaN(parseFloat(this.localValue)) &&
-        this.lastChangedValue != null
-      ) {
-        this.localValue = this.calcDisplayValue(this.lastChangedValue)
-        return
-      }
-
-      // 处理 2-6
-      let val = parseFloat(this.localValue)
-      if (
-        this.calcDisplayValue(this.lastChangedValue) ===
-        this.calcDisplayValue(val)
-      ) {
-        return
-      }
-
-      val = +this.calcDisplayValue(val)
-      this.$emit('input', isNaN(val) ? null : val)
-      this.$emit('change', val, args[1])
-      this.lastChangedValue = val
+    parseValue (val, asNumber) {
+      val = isFunction(this.parser)
+        ? this.parser(val)
+        : val
+      return asNumber ? numberParser(val) : val
     },
-    handleBlur ($event) {
-      if (this.isLocalEmpty) {
-        return
+    formatValue (val, decimalPlace) {
+      let strVal = decimalFormatter(val, decimalPlace)
+      return isFunction(this.formatter)
+        ? this.formatter(val, strVal)
+        : strVal
+    },
+    handleInput (val) {
+      this.parsedInputValue = this.parseValue(val, false)
+    },
+    getValidValue (val, decimalPlace = -1) {
+      val = numberParser(val)
+      if (isNaN(val)) {
+        return val
       }
 
-      // 处理产生 change 但是 format 后需要更新展示的情况，例如 null => +1s (change) => 1 (blur)
-      let val = this.calcDisplayValue(parseFloat(this.localValue))
-      this.localValue = val
+      // limit check
+      if (this.realMax != null && val > this.realMax) {
+        val = this.realMax
+      } else if (this.realMin != null && val < this.realMin) {
+        val = this.realMin
+      }
+
+      return decimalPlace === -1
+        ? val
+        : Number(round(val, decimalPlace).toFixed(decimalPlace))
     },
-    handleThumbNudgeUpdate (delta) {
+    handleChange (val) {
+      let parsed = this.parseValue(val, true)
+      this.parsedInputValue = null
+      // 3 种 case:
+      //  1. 置空(null, 会 commit null)
+      //  2. local 输入置空(NaN), 清空 local，让 realValue 生效
+      //  3. commit
+      parsed = parsed === '' || parsed == null
+        ? null
+        : this.getValidValue(parsed, this.decimalPlace)
+
+      if (!isNaN(parsed)) {
+        this.updateValue(parsed)
+      }
+    },
+    stepValue (delta) {
       if (
         !this.editable ||
         (this.reachMaxLimit && sign(delta) > 0) ||
@@ -294,76 +292,51 @@ export default {
         return
       }
 
-      if (this.decimalPlace !== -1) {
+      let limitDecimal = this.decimalPlace !== -1
+      if (limitDecimal) {
         // 精度下限修正
         if (Math.pow(10, -this.decimalPlace) > Math.abs(delta)) {
           delta = sign(delta) * this.step
         }
       }
 
-      let val = this.value
-      if (val != null) {
-        // 超过上下限后操作，直接越值
-        if (this.value > this.realMax && sign(delta) < 0) {
-          val = this.realMax
-        } else if (this.value < this.realMin && sign(delta) > 0) {
-          val = this.realMin
-        }
-      } else {
-        // 如果原来没有值，默认从 0 开始
-        val = 0
+      let val = NaN
+      if (this.parsedInputValue != null) {
+        // 输入的值要尽量 parse
+        val = this.getValidValue(this.parsedInputValue)
+      }
+      if (isNaN(val) && this.realValue != null) {
+        val = typeof this.realValue === 'number'
+          ? this.realValue
+          : this.getValidValue(this.realValue) // in case of prop value: `1km`
+      }
+      if (isNaN(val)) {
+        // 保留之前 fallback 到0 的逻辑吧，如果 0 不在范围内会 clamp
+        val = this.getValidValue(0)
       }
 
-      let addedVal =
-        this.decimalPlace === -1
-          ? val + delta
-          : add(val, delta, this.decimalPlace)
-      let localValue = this.calcDisplayValue(addedVal)
+      let decimalPlace = limitDecimal
+        ? this.decimalPlace
+        : getMaxDecimalPlace(val, delta)
 
-      this.localValue = localValue
-      this.$emit('input', +localValue)
-
-      if (this.lastChangedValue !== +localValue) {
-        this.$emit('change', +localValue)
-        this.lastChangedValue = +localValue
-      }
+      val = this.getValidValue(add(val, delta, decimalPlace), decimalPlace)
+      this.parsedInputValue = null
+      this.updateValue(val)
     },
-    handleStep (sign) {
-      this.handleThumbNudgeUpdate(this.step * sign)
+    updateValue (val) {
+      let changed = this.isControlled('value')
+        ? this.value !== val
+        : this.realValue !== val
+      this.setReal('value', val)
+      if (changed) {
+        this.$emit('change', val)
+      }
     },
     increase () {
-      this.handleStep(1)
+      this.stepValue(this.step)
     },
     decrease () {
-      this.handleStep(-1)
-    },
-    filterLimitValue (val) {
-      // 仅处理上下限问题
-      if (isNaN(val) || val == null || val === '') {
-        return val
-      }
-
-      if (this.realMax != null && val > this.realMax) {
-        return this.realMax
-      }
-
-      if (this.realMin != null && val < this.realMin) {
-        return this.realMin
-      }
-
-      return val
-    },
-    calcDisplayValue (val) {
-      if (isNaN(val) || val == null || val === '') {
-        return null
-      }
-
-      if (this.decimalPlace === -1) {
-        return val.toString()
-      }
-      return round(this.filterLimitValue(val), this.decimalPlace).toFixed(
-        this.decimalPlace
-      )
+      this.stepValue(-this.step)
     },
     focus () {
       this.$refs.input.focus()
@@ -372,5 +345,35 @@ export default {
       this.$refs.input.activate()
     }
   }
+}
+
+function getDecimalPlace (val) {
+  val = String(val)
+  let idx = val.indexOf('e-')
+  if (idx >= 0) {
+    return Number(val.slice(idx + 2))
+  }
+  idx = val.indexOf('.')
+  return idx >= 0
+    ? val.length - idx - 1
+    : 0
+}
+
+function getMaxDecimalPlace (val1, val2) {
+  return Math.max(getDecimalPlace(val1), getDecimalPlace(val2))
+}
+
+function decimalFormatter (val, decimalPlace) {
+  let isNum = typeof val === 'number'
+  if (decimalPlace === -1 || !isNum) {
+    return val == null ? '' : String(val)
+  } else if (isNum) {
+    return val.toFixed(decimalPlace)
+  }
+}
+
+function numberParser (val) {
+  let parsed = parseFloat(val)
+  return isNaN(parsed) ? val : parsed
 }
 </script>
