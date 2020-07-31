@@ -139,7 +139,7 @@ describe('components/NumberInput', () => {
     expect(input.element.value).to.equal('3')
   })
 
-  it('should handle decimalPlace prop correctly', async () => {
+  it('should handle `decimalPlace` prop  correctly', async () => {
     let wrapper = mount(NumberInput, {
       propsData: {
         decimalPlace: 2
@@ -148,17 +148,19 @@ describe('components/NumberInput', () => {
     })
 
     let input = wrapper.find('input.veui-input-input')
-    input.setValue(2.333)
-    wrapper.find('input').trigger('blur')
+    input.setValue('2')
+    wrapper.find('input').trigger('change')
+    await wrapper.vm.$nextTick()
+    expect(input.element.value).to.equal('2.00')
+
+    input.setValue('2.333')
+    wrapper.find('input').trigger('change')
     await wrapper.vm.$nextTick()
     expect(input.element.value).to.equal('2.33')
   })
 
   it('should handle change event', done => {
     let wrapper = mount(NumberInput, {
-      propsData: {
-        value: null
-      },
       sync: false
     })
 
@@ -169,5 +171,23 @@ describe('components/NumberInput', () => {
     })
 
     wrapper.find('button.veui-number-input-step-up').trigger('click')
+  })
+
+  it('should make prop `value` fully controlled and violate `decimalPlace` for respecting prop `value`', async () => {
+    let wrapper = mount(NumberInput, {
+      propsData: {
+        value: 2.123,
+        decimalPlace: 2
+      },
+      sync: false
+    })
+
+    let input = wrapper.find('input.veui-input-input')
+    expect(input.element.value).to.equal('2.123')
+
+    input.setValue('2')
+    wrapper.find('input').trigger('change')
+    await wrapper.vm.$nextTick()
+    expect(input.element.value).to.equal('2.123')
   })
 })
