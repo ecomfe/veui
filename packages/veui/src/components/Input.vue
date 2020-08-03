@@ -200,7 +200,7 @@ export default {
       //  紧跟 compositionupdate 后面的 input 不要往上 sync
       //  紧跟 input 后面的 compositionend 往上 sync
       if (this.composition || this.composing !== COMPOSITION_INPUT) {
-        this.updateValue(e.target.value)
+        this.updateValue(e.target.value, e)
       }
     },
     handleMousedown (e) {
@@ -215,12 +215,12 @@ export default {
     handleCompositionEnd (e) {
       this.compositionValue = ''
       if (this.composing === COMPOSITION_INPUT) {
-        this.updateValue(e.target.value)
+        this.updateValue(e.target.value, e)
       }
       this.composing = false
     },
-    updateValue (value) {
-      this.commit('value', value)
+    updateValue (value, ...args) {
+      this.commit('value', value, ...args)
       this.$nextTick(() => {
         let input = this.$refs.input
         if (input && this.realValue !== input.value) {
