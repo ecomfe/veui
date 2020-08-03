@@ -60,10 +60,10 @@ export default {
   },
   mixins: [prefix, ui, input, useControllable({
     prop: 'checked',
-    get (getReal) {
+    get (val) {
       return this.isControlled('model')
         ? this.model === this.trueValue
-        : getReal()
+        : val
     }
   })],
   model: {
@@ -112,7 +112,7 @@ export default {
 
       let val = !this.realChecked
 
-      this.setReal('checked', val)
+      this.commit('checked', val)
 
       this.$emit('input', val ? this.trueValue : this.falseValue)
       this.$emit('change', val)

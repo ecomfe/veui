@@ -54,7 +54,7 @@ export default {
           expand = true
         }
       }
-      this.setReal('expanded', expanded)
+      this.commit('expanded', expanded)
       this.$emit('toggle', expand, key, expanded)
     }
   }

@@ -200,15 +200,14 @@ export default {
     useControllable({
       prop: 'value',
       event: 'input',
-      get (getReal) {
-        let val = getReal()
+      get (val) {
         return val ? ensureLength(toArray(val), this.datasource.length, 0) : []
       },
-      set (val, setReal) {
+      set (val, commit) {
         // val 是数组, 默认 sameValue 是 === ，所以要自己判断下是否值相同
         // 因为同步出去都是字符串（local 和 prop 一般是一致的），所以 local 也用字符串
         if (!isEqual(val, this.realValue)) {
-          setReal(toString(val, this.minuteSuffix))
+          commit(toString(val, this.minuteSuffix))
         }
       }
     })

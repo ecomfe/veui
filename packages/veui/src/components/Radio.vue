@@ -38,10 +38,10 @@ export default {
   name: 'veui-radio',
   mixins: [prefix, ui, input, activatable, useControllable({
     prop: 'checked',
-    get (getReal) {
+    get (val) {
       return this.isControlled('model')
         ? this.model === this.value
-        : getReal()
+        : val
     }
   })],
   inheritAttrs: false,
@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     handleChange () {
-      this.setReal('checked', true)
+      this.commit('checked', true)
       this.$nextTick(() => {
         let radio = this.$refs.box
         if (radio && radio.checked !== this.realChecked) {

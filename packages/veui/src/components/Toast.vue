@@ -126,7 +126,7 @@ export default {
   },
   methods: {
     close () {
-      this.setReal('open', false)
+      this.commit('open', false)
       this.$emit('close')
     }
   }

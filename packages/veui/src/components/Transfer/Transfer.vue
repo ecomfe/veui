@@ -17,8 +17,8 @@ export default {
   mixins: [prefix, ui, input, useControllable({
     prop: 'selected',
     event: 'select',
-    get (getReal) {
-      return getReal() || []
+    get (val) {
+      return val || []
     }
   })],
   model: {
@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     handleSelect (val) {
-      this.setReal('selected', val)
+      this.commit('selected', val)
     },
 
     collectLeafValue (datasource) {
@@ -192,7 +192,7 @@ export default {
                 this.handleSelect(...args)
               },
               selectall: (...args) => {
-                this.setReal('selected', this.collectLeafValue(this.datasource))
+                this.commit('selected', this.collectLeafValue(this.datasource))
               }
             },
             scopedSlots: generateItem.call(this, 'candidate'),
@@ -221,10 +221,10 @@ export default {
                   this.realSelected,
                   this.collectLeafValue([item])
                 )
-                this.setReal('selected', selected)
+                this.commit('selected', selected)
               },
               removeall: (...args) => {
-                this.setReal('selected', [])
+                this.commit('selected', [])
               }
             },
             scopedSlots: generateItem.call(this, 'selected')

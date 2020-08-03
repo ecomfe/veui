@@ -117,7 +117,7 @@ export default {
   },
   mounted () {
     if (!this.active && this.activeTab) {
-      this.setReal('active', this.activeTab.name || this.activeTab.id)
+      this.commit('active', this.activeTab.name || this.activeTab.id)
     }
 
     this.updateLayout()
@@ -130,7 +130,7 @@ export default {
       if (tab.disabled) {
         return
       }
-      this.setReal('active', tab.name || tab.id)
+      this.commit('active', tab.name || tab.id)
       this.scrollTabIntoView(tab)
 
       this.$emit('change', tab)
@@ -225,7 +225,7 @@ export default {
       let activeIndex = index === 0 ? 0 : index - 1
       let tab = this.items[activeIndex]
       if (tab) {
-        this.setReal('active', tab.name || tab.id)
+        this.commit('active', tab.name || tab.id)
       }
     }
   },

@@ -199,11 +199,11 @@ export default {
       if (typeof this.beforeClose === 'function') {
         Promise.resolve(this.beforeClose(type)).then(result => {
           if (result !== false) {
-            this.setReal('open', false)
+            this.commit('open', false)
           }
         })
       } else {
-        this.setReal('open', false)
+        this.commit('open', false)
       }
       this.$emit(type)
     },

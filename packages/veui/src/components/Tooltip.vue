@@ -116,10 +116,10 @@ export default {
       return getNodes(this.target, this.$vnode.context)[0]
     },
     openHandler () {
-      this.setReal('open', true)
+      this.commit('open', true)
     },
     closeHandler () {
-      this.setReal('open', false)
+      this.commit('open', false)
     },
     removeHandler (target) {
       let targetNode = target || this.targetNode

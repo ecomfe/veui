@@ -466,7 +466,7 @@ export default {
       return toDateData(date)
     },
     handleSelect (selected) {
-      this.setReal('selected', selected)
+      this.commit('selected', selected)
       this.picking = null
       this.expanded = false
       this.localInputValue = []
@@ -484,7 +484,7 @@ export default {
       })
     },
     clear (e) {
-      this.setReal('selected', null)
+      this.commit('selected', null)
       this.expanded = false
       this.localInputValue = []
       this.$nextTick(() => {
