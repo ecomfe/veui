@@ -177,41 +177,41 @@ export default {
   mixins: [prefix, ui, i18n, colgroup, useControllable([
     {
       prop: 'expanded',
-      get (getReal) {
-        return normalizeArray(getReal())
+      get (val) {
+        return normalizeArray(val)
       },
-      set (val, setReal) {
+      set (val, commit) {
         let cur = this.isControlled('expanded')
           ? this.expanded
           : this.realExpanded
         if (!isEqualSet(val, cur)) {
-          setReal(val)
+          commit(val)
         }
       }
     },
     {
       prop: 'selected',
-      get (getReal) {
+      get (val) {
         let ctl = this.isControlled('selected')
         if (
           (ctl && this.validateSelected(this.selected)) ||
           !ctl
         ) {
-          let val = normalizeArray(getReal())
+          val = normalizeArray(val)
           return intersection(val, this.realKeys)
         }
         return []
       },
-      set (val, setReal) {
+      set (val, commit) {
         let cur = this.isControlled('selected')
           ? normalizeArray(this.selected)
           : this.realSelected
         if (this.isMultiple) {
           if (!isEqualSet(val, cur)) {
-            setReal(val)
+            commit(val)
           }
         } else if (cur[0] !== val[0]) {
-          setReal(val[0] == null ? null : val[0])
+          commit(val[0] == null ? null : val[0])
         }
       }
     }
@@ -590,7 +590,7 @@ export default {
       // 先 select 然后 .sync ，有点怪啊，先保留吧
       // 不能直接拿 selectedItems ，因为这个时候 realSelected 还没更新
       this.$emit('select', selected, item, this.getSpecificItems(value))
-      this.setReal('selected', value)
+      this.commit('selected', value)
     },
     getSpecificItems (specific) {
       return specific.reduce((selectedItems, key) => {
@@ -601,11 +601,11 @@ export default {
     expand (expanded, index) {
       let key = this.getKeyByIndex(index)
       if (expanded) {
-        this.setReal('expanded', [...this.realExpanded, key])
+        this.commit('expanded', [...this.realExpanded, key])
       } else {
         let val = [...this.realExpanded]
         val.splice(val.indexOf(key), 1)
-        this.setReal('expanded', val)
+        this.commit('expanded', val)
       }
     },
     getKeyByIndex (index) {

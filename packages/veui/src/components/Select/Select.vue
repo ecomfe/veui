@@ -45,8 +45,7 @@ export default {
     useControllable({
       prop: 'value',
       event: 'change',
-      get (getReal) {
-        let val = getReal()
+      get (val) {
         return this.multiple
           ? val != null
             ? [].concat(val)
@@ -179,7 +178,7 @@ export default {
   },
   methods: {
     clear (e) {
-      this.setReal('value', this.multiple ? [] : null)
+      this.commit('value', this.multiple ? [] : null)
       this.inputValue = ''
       this.$emit('clear')
       e.stopPropagation()
@@ -196,7 +195,7 @@ export default {
       }
       if (!this.multiple) {
         this.expanded = false
-        this.setReal('value', value)
+        this.commit('value', value)
         return
       }
 
@@ -206,14 +205,14 @@ export default {
         this.removeSelectedAt(index)
       } else {
         if (!this.max || (this.max && this.realValue.length < this.max)) {
-          this.setReal('value', this.realValue.concat(value))
+          this.commit('value', this.realValue.concat(value))
         }
       }
     },
     removeSelectedAt (index) {
       let val = [...this.realValue]
       val.splice(index, 1)
-      this.setReal('value', val)
+      this.commit('value', val)
     },
     handleRelocate () {
       let { options } = this.$refs
@@ -283,7 +282,7 @@ export default {
           break
         case 'Backspace':
           if (this.multiple && this.searchable && !this.inputValue) {
-            this.setReal('value', this.realValue.slice(0, -1))
+            this.commit('value', this.realValue.slice(0, -1))
           }
           break
         default:
@@ -299,7 +298,7 @@ export default {
       this.inputValue = val
       this.expanded = true
       if (!val && !this.multiple) {
-        this.setReal('value', '')
+        this.commit('value', '')
       }
       if (this.multiple && this.searchable) {
         this.nativeInput.style.width = ''

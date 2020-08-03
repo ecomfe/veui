@@ -45,7 +45,7 @@ export default {
     },
     handleClick (e) {
       if (this.selectable && !this.disabled) {
-        this.setReal('selected', !this.realSelected)
+        this.commit('selected', !this.realSelected)
       }
     },
     close (e) {

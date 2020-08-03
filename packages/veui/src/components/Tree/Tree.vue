@@ -241,7 +241,7 @@ export default {
         ? filter(this.realExpanded, value => value !== item.value)
         : uniq([...this.realExpanded, item.value])
 
-      this.setReal('expanded', expanded)
+      this.commit('expanded', expanded)
       this.$emit(included ? 'collapse' : 'expand', item, index, depth)
     },
     handleKeydown (e, item, index, depth) {
@@ -347,7 +347,7 @@ export default {
       if (this.selectable) {
         let { value } = item
         let newValue = this.isSelected(item) ? null : value
-        this.setReal('selected', newValue)
+        this.commit('selected', newValue)
       } else if (this.checkable && !this.realDisabled && !this.realReadonly) {
         this.handleItemCheck(item, parents)
       } else if (item.children && item.children.length) {
@@ -386,7 +386,7 @@ export default {
         let normalizedChecked = []
         // 重新生成一份完整的 checked
         this.normalizeItems(this.itemsCopy, checked, normalizedChecked)
-        this.setReal('checked', normalizedChecked)
+        this.commit('checked', normalizedChecked)
       }
     }
   }

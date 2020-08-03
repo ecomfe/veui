@@ -119,8 +119,7 @@ export default {
   mixins: [prefix, ui, input, activatable, i18n, useControllable({
     prop: 'value',
     event: 'input',
-    get (getReal) {
-      let val = getReal()
+    get (val) {
       return val == null ? null : val
     }
   })],
@@ -327,7 +326,7 @@ export default {
       let changed = this.isControlled('value')
         ? this.value !== val
         : this.realValue !== val
-      this.setReal('value', val)
+      this.commit('value', val)
       if (changed) {
         this.$emit('change', val)
       }
