@@ -212,16 +212,32 @@ describe('components/Input', () => {
   })
 
   it('should make `value` prop fully controlled', async () => {
-    let wrapper = mount({
-      components: {
-        'veui-input': Input
-      },
-      template: `<veui-input value="foo"/>`
+    let wrapper = mount(Input, {
+      propsData: {
+        value: 'foo'
+      }
     })
+
     let input = wrapper.find('input')
     input.element.value = 'bar'
     input.trigger('input')
     await wrapper.vm.$nextTick()
     expect(input.element.value).to.equal('foo')
+  })
+
+  it('should pass event object on input', done => {
+    let wrapper = mount(Input, {
+      propsData: {
+        value: 'foo'
+      }
+    })
+    wrapper.vm.$on('input', (_, e) => {
+      expect(!!e).to.equal(true)
+      done()
+    })
+
+    let input = wrapper.find('input')
+    input.element.value = 'bar'
+    input.trigger('input')
   })
 })

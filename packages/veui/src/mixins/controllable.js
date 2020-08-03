@@ -6,13 +6,14 @@ let options = {
       return isControlled(this, prop)
     },
     // 使用方法而非直接赋值：受控时赋值并未直接生效，而仅仅 emit 事件而已，直接让使用方使用赋值违反直觉
-    commit (prop, value) {
+    // commit 可以额外的给事件传递更多的参数
+    commit (prop, value, ...args) {
       let def = find(this._controlledProps, i => i.prop === prop)
       if (def) {
-        this[getRealName(def)] = value
+        computedSetter(this, value, def, ...args)
         return
       }
-      throw new Error(`[controllable] Unkown prop key: '${prop}' on setting computed property.`)
+      throw new Error(`[controllable] Unkown prop key: '${prop}' on committing.`)
     }
   }
 }
@@ -64,25 +65,24 @@ export default function useControllable (props) {
       // { prop, local, computed, event, get, set }
       let { prop, local, get, set } = def
 
-      if (local !== null) {
+      if (local !== false) {
         result.data[getLocalName(def)] = vm => vm[prop]
       }
 
       result.computed[getRealName(def)] = {
         get () {
-          if (get !== false) {
-            return get
-              ? get.call(this, getReal(this, def))
-              : getReal(this, def)
+          if (get === false) {
+            throw new Error('[controllable] Can\'t access disabled getter!')
           }
+          return computedGetter(this, def)
         },
         set (value) {
-          // 没有禁用 set 且值不同则更新
-          if (set !== false && !sameValue(this, value, def)) {
-            return set
-              ? set.call(this, value, val => setReal(this, val, def))
-              : setReal(this, value, def)
+          // 一般可以用来禁用 assignment，而强制使用 vm.commit !
+          // 对于 v-model/.sync，这个 set 还是有点用处
+          if (set === false) {
+            throw new Error('[controllable] Can\'t access disabled setter!')
           }
+          return computedSetter(this, value, def)
         }
       }
 
@@ -112,6 +112,23 @@ export default function useControllable (props) {
   }
 }
 
+function computedGetter (vm, def) {
+  let { get } = def
+  return get
+    ? get.call(vm, getReal(vm, def))
+    : getReal(vm, def)
+}
+
+function computedSetter (vm, value, def, ...args) {
+  let { set } = def
+  // 值不同则更新, 若不更新：不设置 local，不 emit 事件
+  if (!sameValue(vm, value, def)) {
+    return set
+      ? set.call(vm, value, val => setReal(vm, val, def, ...args))
+      : setReal(vm, value, def, ...args)
+  }
+}
+
 function getReal (vm, { prop, local } = {}) {
   return vm.isControlled(prop)
     ? vm[prop]
@@ -120,14 +137,14 @@ function getReal (vm, { prop, local } = {}) {
       : vm[`local${capitalize(prop)}`]
 }
 
-function setReal (vm, value, def = {}) {
+function setReal (vm, value, def = {}, ...args) {
   const { prop, local, event } = def
-  // null 则认为忽略对应的操作
-  if (local !== null) {
+  // false 则认为忽略对应的操作
+  if (local !== false) {
     vm[getLocalName(def)] = value
   }
-  if (event !== null) {
-    vm.$emit(event || `update:${prop}`, value)
+  if (event !== false) {
+    vm.$emit(event || `update:${prop}`, value, ...args)
   }
 }
 

@@ -323,8 +323,8 @@ export default {
       }
       return lineHeight
     },
-    updateValue (value) {
-      this.commit('value', value)
+    updateValue (value, ...args) {
+      this.commit('value', value, ...args)
       this.$nextTick(() => {
         let input = this.$refs.input
         if (input && this.realValue !== input.value) {
@@ -339,7 +339,8 @@ export default {
       let extra = this.composing === COMPOSITION_INPUT
       this.composing = false
       if (extra) {
-        this.updateValue(e.target.value)
+        // compositionend 事件，而非 input
+        this.updateValue(e.target.value, e)
       }
     },
     handleInput (e) {
@@ -354,7 +355,7 @@ export default {
       }
 
       if (this.composition || this.composing !== COMPOSITION_INPUT) {
-        this.updateValue(e.target.value)
+        this.updateValue(e.target.value, e)
       }
 
       this.$nextTick(() => {
