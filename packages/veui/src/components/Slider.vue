@@ -152,8 +152,8 @@ export default {
     // propValue 是用户给的 formatted，而 localValue 是 format 函数产出的，如 '0.1' 和 '0.10'（会导致不必要事件触发）
     // 所以采用方案 2
     prop: 'value',
-    get (getReal) {
-      let val = getReal() || []
+    get (val) {
+      val = val || []
       return !this.isControlled('value')
         ? val
         : [].concat(val)
@@ -380,7 +380,7 @@ export default {
     updateValue (index, val) {
       let values = [...this.realValue]
       values[index] = val
-      this.setReal('value', values)
+      this.commit('value', values)
     },
     handleThumbFocus (index) {
       this.currentThumbFocusIndex = index

@@ -82,8 +82,8 @@ export default {
   mixins: [prefix, i18n, useControllable({
     prop: 'selected',
     event: 'select',
-    get (getReal) {
-      return getReal() || []
+    get (val) {
+      return val || []
     }
   })],
   props: {
@@ -112,7 +112,7 @@ export default {
       this.$emit('select', ...args)
     },
     handleSelect (selected) {
-      this.setReal('selected', selected)
+      this.commit('selected', selected)
     }
   }
 }

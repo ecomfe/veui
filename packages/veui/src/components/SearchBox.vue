@@ -201,8 +201,8 @@ export default {
     useControllable({
       prop: 'value',
       event: 'input',
-      set (val, setReal) {
-        setReal(val)
+      set (val, commit) {
+        commit(val)
         if (this.hasFocusTrigger || this.hasInputTrigger) {
           this.$emit('suggest', val)
         }
@@ -321,7 +321,7 @@ export default {
     },
     selectSuggestion (suggestion) {
       if (this.replaceOnSelect !== false) {
-        this.setReal('value', suggestion[this.valueProperty])
+        this.commit('value', suggestion[this.valueProperty])
       }
       this.focus()
       this.$emit('select', suggestion)

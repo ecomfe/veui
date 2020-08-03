@@ -79,7 +79,7 @@ export default {
   watch: {
     realOpen (value) {
       if (!value) {
-        this.setReal('value', this.realValue)
+        this.commit('value', this.realValue)
       }
     }
   },

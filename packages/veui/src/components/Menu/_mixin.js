@@ -57,7 +57,7 @@ export default {
         let exactActiveItem = find(this.normalizedItems, item =>
           this.matches(route, item)
         )
-        this.setReal('active', exactActiveItem ? exactActiveItem.name : null)
+        this.commit('active', exactActiveItem ? exactActiveItem.name : null)
       }
       this.$watch('$route', updateActive)
       // active 受控了，初始当前路由就不同步了
@@ -138,7 +138,7 @@ export default {
       let { to, disabled, name } = item
       if (disabled) return
       if (to) {
-        this.setReal('active', name)
+        this.commit('active', name)
         this.$emit('activate', item)
         if (closePopout && typeof this.close === 'function') {
           this.close()

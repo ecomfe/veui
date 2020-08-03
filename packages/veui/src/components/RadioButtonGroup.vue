@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     handleChange (val) {
-      this.setReal('value', val)
+      this.commit('value', val)
     },
     pick (step) {
       let length = this.items.length
@@ -80,7 +80,7 @@ export default {
 
       let index =
         ((this.activeIndex === -1 ? 0 : this.activeIndex) + step) % length
-      this.setReal('value', this.items[index].value)
+      this.commit('value', this.items[index].value)
 
       this.$nextTick(() => {
         this.$refs.items[index].focus()

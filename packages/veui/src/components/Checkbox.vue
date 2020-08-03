@@ -123,7 +123,7 @@ export default {
           ? includes(val, this.value)
           : val === this.trueValue
 
-        this.setReal('checked', checked)
+        this.commit('checked', checked)
       },
       immediate: true
     }
@@ -141,7 +141,7 @@ export default {
 
       let val = !this.realChecked
 
-      this.setReal('checked', val)
+      this.commit('checked', val)
 
       if (Array.isArray(this.model)) {
         let model = [...this.model]

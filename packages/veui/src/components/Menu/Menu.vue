@@ -233,14 +233,14 @@ export default {
     useControllable([
       {
         prop: 'collapsed',
-        get (getReal) {
-          return this.collapsible ? getReal() : false
+        get (val) {
+          return this.collapsible ? val : false
         }
       },
       {
         prop: 'expanded',
-        get (getReal) {
-          return this.realCollapsed ? [] : getReal() || []
+        get (val) {
+          return this.realCollapsed ? [] : val || []
         }
       }
     ])
@@ -303,7 +303,7 @@ export default {
     showActiveItems () {
       let names = this.activeItems.map(i => i.name)
       if (names) {
-        this.setReal('expanded', uniq([...this.realExpanded, ...names]))
+        this.commit('expanded', uniq([...this.realExpanded, ...names]))
       }
     },
     toggleExpanded ({ name, children }, toExpand) {
@@ -320,11 +320,11 @@ export default {
         expanded = [...this.realExpanded]
         expanded.splice(index, 1)
       }
-      this.setReal('expanded', expanded)
+      this.commit('expanded', expanded)
     },
     toggleCollapsed () {
       let oldCollapsed = this.realCollapsed
-      this.setReal('collapsed', !this.realCollapsed)
+      this.commit('collapsed', !this.realCollapsed)
       // 原来是展开的，那么如果最终折叠了就要调整下 tabIndex
       if (!oldCollapsed) {
         this.$nextTick(() => {
