@@ -65,7 +65,7 @@ export default {
   computed: {
     realOpen () {
       return (
-        this.inline || (this.open && (this.local ? true : this.zIndex !== null))
+        this.open && (this.inline || this.local || this.zIndex !== null)
       )
     },
     realOverlayClass () {
