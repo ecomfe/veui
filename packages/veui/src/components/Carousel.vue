@@ -247,7 +247,7 @@ export default {
     },
     triggerChange (value) {
       let oldValue = this.realIndex
-      this.setReal('index', value)
+      this.commit('index', value)
       this.$emit('change', value, oldValue)
     },
     focusCurrent () {

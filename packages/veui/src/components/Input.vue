@@ -98,8 +98,8 @@ export default {
   mixins: [prefix, ui, input, activatable, i18n, useControllable({
     prop: 'value',
     event: 'input',
-    get (getReal) {
-      return getReal() || ''
+    get (val) {
+      return val || ''
     }
   })],
   inheritAttrs: false,
@@ -220,7 +220,7 @@ export default {
       this.composing = false
     },
     updateValue (value) {
-      this.setReal('value', value)
+      this.commit('value', value)
       this.$nextTick(() => {
         let input = this.$refs.input
         if (input && this.realValue !== input.value) {
@@ -248,7 +248,7 @@ export default {
     },
     clear () {
       this.compositionValue = ''
-      this.setReal('value', '')
+      this.commit('value', '')
       this.focus()
       this.$emit('clear')
     }

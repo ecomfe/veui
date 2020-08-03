@@ -56,8 +56,8 @@ export default {
   mixins: [prefix, ui, input, useControllable({
     prop: 'value',
     event: 'change',
-    get (getReal) {
-      return getReal() || []
+    get (val) {
+      return val || []
     }
   })],
   model: {
@@ -83,7 +83,7 @@ export default {
           1
         )
       }
-      this.setReal('value', value)
+      this.commit('value', value)
     },
     focus () {
       focusIn(this.$el)

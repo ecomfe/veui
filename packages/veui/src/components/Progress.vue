@@ -183,19 +183,19 @@ export default {
       }
 
       if (this.status === 'success' && val < this.max) {
-        this.setReal('status', null)
+        this.commit('status', null)
         return
       }
 
       if (this.autosucceed != null) {
         if (this.autosucceed === true || this.autosucceed === 0) {
-          this.setReal('status', val === this.max ? 'success' : null)
+          this.commit('status', val === this.max ? 'success' : null)
           return
         } else if (this.autosucceed === false) {
           return
         }
         this.timer = setTimeout(() => {
-          this.setReal('status', val === this.max ? 'success' : null)
+          this.commit('status', val === this.max ? 'success' : null)
         }, this.autosucceed)
       }
     }

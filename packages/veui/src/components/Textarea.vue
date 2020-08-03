@@ -98,8 +98,8 @@ export default {
   mixins: [prefix, ui, input, activatable, useControllable({
     prop: 'value',
     event: 'input',
-    get (getReal) {
-      return getReal() || ''
+    get (val) {
+      return val || ''
     }
   })],
   inheritAttrs: false,
@@ -324,7 +324,7 @@ export default {
       return lineHeight
     },
     updateValue (value) {
-      this.setReal('value', value)
+      this.commit('value', value)
       this.$nextTick(() => {
         let input = this.$refs.input
         if (input && this.realValue !== input.value) {

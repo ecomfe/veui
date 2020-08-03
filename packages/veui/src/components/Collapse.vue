@@ -56,7 +56,7 @@ export default {
   },
   mixins: [prefix, ui, accordionItem, useControllable({
     prop: 'expanded',
-    get (getReal) {
+    get (val) {
       let { accordion } = this
       if (accordion) {
         let expanded =
@@ -78,7 +78,7 @@ export default {
         )
       }
 
-      return getReal()
+      return val
     }
   })],
   props: {
@@ -114,7 +114,7 @@ export default {
 
       let expanded = !this.realExpanded
       if (!this.accordion) {
-        this.setReal('expanded', expanded)
+        this.commit('expanded', expanded)
       } else {
         this.accordion.toggleById(this.id)
       }

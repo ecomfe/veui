@@ -6,7 +6,7 @@ let options = {
       return isControlled(this, prop)
     },
     // 使用方法而非直接赋值：受控时赋值并未直接生效，而仅仅 emit 事件而已，直接让使用方使用赋值违反直觉
-    setReal (prop, value) {
+    commit (prop, value) {
       let def = find(this._controlledProps, i => i.prop === prop)
       if (def) {
         this[getRealName(def)] = value
@@ -72,7 +72,7 @@ export default function useControllable (props) {
         get () {
           if (get !== false) {
             return get
-              ? get.call(this, () => getReal(this, def))
+              ? get.call(this, getReal(this, def))
               : getReal(this, def)
           }
         },

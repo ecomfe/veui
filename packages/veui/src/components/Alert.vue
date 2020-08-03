@@ -174,7 +174,7 @@ export default {
   watch: {
     message (value) {
       let length = Array.isArray(value) ? value.length : 1
-      this.setReal('index', clamp(this.realIndex, 0, length - 1))
+      this.commit('index', clamp(this.realIndex, 0, length - 1))
     }
   },
   mounted () {
@@ -185,14 +185,14 @@ export default {
   },
   methods: {
     close () {
-      this.setReal('open', false)
+      this.commit('open', false)
       this.$emit('close')
     },
     switchMessage (step) {
       if ((step > 0 && this.isLast) || (step < 0 && this.isFirst)) {
         return
       }
-      this.setReal('index', this.realIndex + step)
+      this.commit('index', this.realIndex + step)
     }
   }
 }
