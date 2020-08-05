@@ -9,7 +9,6 @@ import config from '../../managers/config'
 import { useCoupledParent } from '../../mixins/coupled'
 import useControllable from '../../mixins/controllable'
 import resize from '../../directives/resize'
-import { isEmpty } from '../../utils/helper'
 import '../../common/uiTypes'
 import { scrollTo } from '../../utils/dom'
 import { find, findIndex, throttle } from 'lodash'
@@ -85,9 +84,11 @@ export default {
     },
     activeTab () {
       let active = this.realActive
-      return isEmpty(active)
-        ? this.matchedTab || this.items[0]
-        : find(this.items, ({ name, id }) => name === active || id === active)
+      return (
+        find(this.items, ({ name, id }) => name === active || id === active) ||
+        this.matchedTab ||
+        this.items[0]
+      )
     },
     matchedTab () {
       if (!this.$route || !this.items.some(({ to }) => to)) {
@@ -266,9 +267,7 @@ export default {
         active: this.activeTab === tab
       })
     )
-    const panelContent = tabPanels.some(content => content)
-      ? tabPanels
-      : this.$slots.panel
+    const panelContent = tabPanels.some(Boolean) ? tabPanels : this.$slots.panel
 
     const directives = [
       {
@@ -368,7 +367,7 @@ export default {
                       this.focusedTab = null
                     }}
                   >
-                    <Icon name={this.icons.remove}/>
+                    <Icon name={this.icons.remove} />
                   </Button>
                 ) : null}
               </div>
