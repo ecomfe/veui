@@ -36,6 +36,10 @@ export function findAncestor (component, predicate) {
   return null
 }
 
+export function isVueComponent (val) {
+  return val && val._isVue
+}
+
 /**
  * 判断组件实例是否是某个类型
  *
