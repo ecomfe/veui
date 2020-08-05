@@ -1,6 +1,6 @@
 <template>
 <div
-  :ui="ui"
+  :ui="realUi"
   :class="{
     [$c('collapse')]: true,
     [$c(`collapse-${realExpanded ? 'expanded' : 'collapsed'}`)]: true,
