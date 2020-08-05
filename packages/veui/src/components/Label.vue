@@ -10,7 +10,7 @@
 
 <script>
 import { isFunction } from 'lodash'
-import { getTypedAncestor, isType } from '../utils/helper'
+import { getTypedAncestor, isType, isVueComponent } from '../utils/helper'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 
@@ -23,12 +23,21 @@ export default {
       default: null
     }
   },
-  computed: {
-    target () {
-      return this.for ? this.$vnode.context.$refs[this.for] : null
-    }
-  },
   methods: {
+    getTarget () {
+      // String
+      if (typeof this.for === 'string') {
+        return this.for ? this.$vnode.context.$refs[this.for] : null
+      }
+
+      // Vue
+      if (isVueComponent(this.for)) {
+        return this.for
+      }
+
+      // Element
+      return this.for
+    },
     /**
      * Why not implement this in the `Field` component?
      *
@@ -41,35 +50,50 @@ export default {
         return
       }
 
-      let { target } = this
+      let target = this.getTarget()
+
       if (!target) {
-        let field = getTypedAncestor(this, 'form-field')
-        target = this.findInput(field)
+        target = findInput(this)
+
+        if (!target) {
+          target = findInput(getTypedAncestor(this, 'form-field'))
+        }
       }
-      if (target && isFunction(target.activate)) {
+
+      if (!target) {
+        return
+      }
+
+      if (isFunction(target.activate)) {
         target.activate()
-      }
-    },
-    findInput (component) {
-      if (component === this) {
-        return null
-      }
-      if (isType(component, 'input')) {
-        return component
+        return
       }
 
-      let children = component.$children || []
-      if (!children.length) {
-        return null
+      if (target instanceof Element) {
+        target.click()
       }
-
-      let result
-      children.some(c => {
-        result = this.findInput(c)
-        return result
-      })
-      return result
     }
   }
+}
+
+function findInput (component) {
+  if (!component || component === this) {
+    return null
+  }
+  if (isType(component, 'input')) {
+    return component
+  }
+
+  let children = component.$children || []
+  if (!children.length) {
+    return null
+  }
+
+  let result
+  children.some(c => {
+    result = findInput(c)
+    return result
+  })
+  return result
 }
 </script>
