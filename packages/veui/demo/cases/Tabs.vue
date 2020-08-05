@@ -224,7 +224,7 @@
         <p>This is Tab4</p>
       </veui-tab>
     </veui-tabs>
-    <veui-tabs>
+    <veui-tabs ui="strong">
       <veui-tab label="Tab1">
         <p>This is Tab1</p>
       </veui-tab>
