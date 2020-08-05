@@ -368,8 +368,14 @@
         }
       }
 
-      &.@{veui-prefix}-disabled &-label {
-        background-color: @dls-tab-background-color-strong-disabled;
+      &.@{veui-prefix}-disabled .@{veui-prefix}-tabs-item-label {
+        &,
+        &:hover,
+        &[data-focus-visible-added],
+        &:active {
+          background-color: @dls-tab-background-color-strong-disabled;
+          color: @dls-tab-font-color-strong-disabled;
+        }
       }
 
       &-remove {
