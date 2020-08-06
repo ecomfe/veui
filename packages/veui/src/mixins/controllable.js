@@ -94,12 +94,15 @@ export default function useControllable (props) {
   return {
     ...options,
     computed: result.computed,
-    data () {
-      // 可能会产生多个 data hook，比如 Menu 组件在 MenuMixin 和 Menu 里面都用了 controllable
+    beforeCreate () {
+      // 比如 Menu 组件在 MenuMixin 和 Menu 里面都用了 controllable，所以要受控 prop 的定义都 merge 起来
+      // 后面会通过 prop name 来取
+      // 暂时不放 created 里面，因为 immediate watcher 比 created 早
       this._controlledProps = this._controlledProps
         ? [...this._controlledProps, ...result.normalized]
         : result.normalized
-
+    },
+    data () {
       return reduce(
         result.data,
         (res, fn, key) => {
