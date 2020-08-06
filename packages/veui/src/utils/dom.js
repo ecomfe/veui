@@ -83,9 +83,7 @@ export function patchIndeterminate (element) {
         return
       }
       element.checked = !element.checked
-      let event = document.createEvent('HTMLEvents')
-      event.initEvent('change', true, false)
-      element.dispatchEvent(event)
+      trigger(element, 'change')
     },
     false
   )
@@ -769,4 +767,16 @@ export function getPortalEntry (element) {
   }
 
   return null
+}
+
+export function trigger (el, type) {
+  let evt = document.createEvent('HTMLEvents')
+  evt.initEvent(type, true, false)
+  el.dispatchEvent(evt)
+}
+
+export function triggerCustom (el, type, detail) {
+  let evt = document.createEvent('CustomEvent')
+  evt.initCustomEvent(type, true, false, detail)
+  el.dispatchEvent(evt)
 }
