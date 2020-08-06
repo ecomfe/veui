@@ -112,18 +112,59 @@
       <veui-button @click="group = 'B'">select B</veui-button>
     </p>
     <p>{{ group }}</p>
+    <h3>受控单选组（固定选中C）</h3>
+    <p>
+      <veui-form>
+        <veui-radio
+          model="C"
+          name="group2"
+          value="A"
+        >
+          A
+        </veui-radio>
+        <veui-radio
+          model="C"
+          name="group2"
+          value="B"
+        >
+          B
+        </veui-radio>
+        <veui-radio
+          model="C"
+          name="group2"
+          value="C"
+        >
+          C
+        </veui-radio>
+      </veui-form>
+    </p>
+  </section>
+  <section>
+    <veui-radio
+      ui="s"
+      checked
+    >
+      always checked
+    </veui-radio>
+    <veui-radio
+      ui="s"
+      :checked="false"
+    >
+      always unchecked
+    </veui-radio>
   </section>
 </article>
 </template>
 
 <script>
-import { Radio, Button } from 'veui'
+import { Radio, Button, Form } from 'veui'
 
 export default {
   name: 'radio-demo',
   components: {
     'veui-radio': Radio,
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-form': Form
   },
   data () {
     return {
