@@ -39,10 +39,7 @@ export default {
     disabled: Boolean,
     readonly: Boolean,
     // 因为会出现一行里边有必填和非必填共存，交给使用者决定显不显示星号
-    required: {
-      type: Boolean,
-      default: false
-    }
+    required: Boolean
   },
   computed: {
     attrs () {
