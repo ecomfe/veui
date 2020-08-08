@@ -24,7 +24,7 @@
       :class="$c('input-placeholder')"
       @selectstart.prevent="() => false"
     >
-      {{ placeholder }}
+      <slot name="placeholder">{{ placeholder }}</slot>
     </div>
     <!-- 如果以后 Vue 对 native input 完全受控，那么这里就不能用 realValue 了 -->
     <input
@@ -62,9 +62,7 @@
           [$c('input-count')]: true,
           [$c('input-count-overflow')]: lengthOverflow
         }"
-      >
-        {{ length }}/{{ realMaxlength }}
-      </span>
+      >{{ length }}/{{ realMaxlength }}</span>
       <slot name="after"/>
     </div>
   </template>
