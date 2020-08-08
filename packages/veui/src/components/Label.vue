@@ -19,7 +19,7 @@ export default {
   mixins: [prefix, ui],
   props: {
     for: {
-      type: process.env.VUE_ENV === 'server' ? true : [String, Object, Element],
+      type: process.env.VUE_ENV === 'server' ? true : [String, Object, HTMLElement],
       default: null
     }
   },
