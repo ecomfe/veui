@@ -1,3 +1,15 @@
+## 2.0.0-beta.3
+
+### 💡 主要变更
+
+- [+] `Input` 组件增加 `placeholder` 插槽。
+
+### 🐞 问题修复
+
+- [^] 修复 `Icon` 组件 `name` 为 `null` 时报错的问题。
+- [^] 修复 `Select`/`Slider`/`Tabs`/`InputGroup`/`Collapse` 等组件样式细节。
+- [^] 修复 `Label` 组件 `for` prop 不支持传入组件/元素的问题。
+
 ## 2.0.0-beta.2
 
 ### ⚠️ 非兼容性变更

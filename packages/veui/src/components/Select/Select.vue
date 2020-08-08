@@ -18,6 +18,7 @@ import i18n from '../../mixins/i18n'
 import { find } from '../../utils/datasource'
 import { uniqueId, omit } from 'lodash'
 import { contains } from '../../utils/dom'
+import { renderSlot } from '../../utils/helper'
 import '../../common/uiTypes'
 
 config.defaults(
@@ -46,11 +47,7 @@ export default {
       prop: 'value',
       event: 'change',
       get (val) {
-        return this.multiple
-          ? val != null
-            ? [].concat(val)
-            : []
-          : val
+        return this.multiple ? (val != null ? [].concat(val) : []) : val
       }
     }),
     i18n
@@ -78,13 +75,20 @@ export default {
     }
   },
   computed: {
-    selectedOption () {
-      if (this.multiple) {
-        return null
-      }
+    selected () {
       if (this.realValue == null) {
+        if (this.multiple) {
+          return []
+        }
         return null
       }
+
+      if (this.multiple) {
+        return (this.realValue || [])
+          .map(val => findOptionByValue(this.realOptions, val))
+          .filter(Boolean)
+      }
+
       return findOptionByValue(this.realOptions, this.realValue)
     },
     realPlaceholder () {
@@ -94,10 +98,7 @@ export default {
     },
     inputPlaceholder () {
       if (this.multiple) {
-        if (
-          (this.realValue && this.realValue.length > 0) ||
-          !this.searchable
-        ) {
+        if ((this.realValue && this.realValue.length > 0) || !this.searchable) {
           return ''
         }
         return this.realPlaceholder
@@ -110,17 +111,13 @@ export default {
       return !this.realValue ? this.realPlaceholder : this.label
     },
     label () {
-      return this.selectedOption ? this.selectedOption.label : ''
+      return this.selected ? this.selected.label : ''
     },
     labels () {
-      let { realValue } = this
-      if (!Array.isArray(realValue)) {
+      if (!Array.isArray(this.selected)) {
         return []
       }
-      return realValue.map(val => {
-        let option = findOptionByValue(this.realOptions, val)
-        return option ? option.label : val
-      })
+      return this.selected.map(({ label, value }) => label || value)
     },
     searchInputLabel () {
       if (this.inputValue) {
@@ -164,6 +161,9 @@ export default {
     },
     focusSelector () {
       return this.searchable ? config.get('keyselect.focusSelector') : null
+    },
+    hasLabelSlot () {
+      return this.$scopedSlots.label || this.$slots.label
     }
   },
   watch: {
@@ -349,11 +349,8 @@ export default {
           >
             {option.renderLabel
               ? option.renderLabel(omit(option, ['renderLabel']))
-              : this.$scopedSlots['option-label']
-                ? this.$scopedSlots['option-label'](option)
-                : this.isFiltered
-                  ? optionLabel(option)
-                  : option.label}
+              : renderSlot(this, 'option-label', option) ||
+                  (this.isFiltered ? optionLabel(option) : option.label)}
           </Checkbox>
         )
       }
@@ -361,31 +358,47 @@ export default {
 
     let selectedTags = (this.labels || []).map((label, index) => (
       <Tag
-        key={label}
+        key={this.realValue[index]}
         ui={this.uiParts.tag}
         onClose={() => this.removeSelectedAt(index)}
         disabled={this.realDisabled || this.realReadonly}
         closable
+        {...{
+          nativeOn: {
+            '!mouseup': stopPropagation
+          }
+        }}
       >
-        {this.$scopedSlots.tag
-          ? this.$scopedSlots.tag({
-            label,
-            ...findOptionByValue(this.realOptions, this.realValue[index]),
-            index
-          })
-          : label}
+        {renderSlot(this, 'tag', {
+          label,
+          ...findOptionByValue(this.realOptions, this.realValue[index]),
+          index
+        }) || label}
       </Tag>
     ))
 
-    let multibeforeSlot = this.searchable ? (
-      selectedTags
-    ) : this.labels.length === 0 ? (
-      <span class={this.$c('select-placeholder')} id={this.labelId}>
-        {this.realPlaceholder}
-      </span>
-    ) : (
-      selectedTags
-    )
+    let renderCustomLabel = props => {
+      let customLabel = renderSlot(this, 'label', props)
+      if (!customLabel) {
+        return null
+      }
+
+      return <div class={this.$c('select-custom-label')}>{customLabel}</div>
+    }
+
+    let multiBeforeSlot = this.multiple ? (
+      this.selected.length > 0 && this.hasLabelSlot && !this.expanded ? (
+        renderCustomLabel({
+          selected: this.selected
+        })
+      ) : this.selected.length === 0 && !this.searchable ? (
+        <span class={this.$c('select-placeholder')} id={this.labelId}>
+          {this.realPlaceholder}
+        </span>
+      ) : (
+        selectedTags
+      )
+    ) : null
 
     let beforeSlot = !this.searchable ? (
       <span
@@ -395,9 +408,7 @@ export default {
         }}
         id={this.labelId}
       >
-        {this.$scopedSlots.label
-          ? this.$scopedSlots.label(this.selectedOption || { selected: false })
-          : this.label}
+        {renderCustomLabel(this.selected || { selected: false }) || this.label}
       </span>
     ) : null
 
@@ -429,6 +440,10 @@ export default {
           [this.$c('select-expanded')]: this.expanded,
           [this.$c('select-searchable')]: this.searchable,
           [this.$c('select-multiple')]: this.multiple,
+          [this.$c('select-wrap')]:
+            this.multiple &&
+            !this.isEmpty &&
+            (!this.hasLabelSlot || this.expanded),
           [this.$c('readonly')]: this.realReadonly,
           [this.$c('disabled')]: this.realDisabled,
           [this.$c('input-invalid')]: this.realInvalid
@@ -458,8 +473,14 @@ export default {
           onInput={this.handleTriggerInput}
           composition
         >
+          {!this.multiple && this.selected != null && this.hasLabelSlot ? (
+            <template slot="placeholder">
+              {renderCustomLabel(this.selected || { selected: false }) ||
+                this.label}
+            </template>
+          ) : null}
           <template slot="before">
-            {this.multiple ? multibeforeSlot : beforeSlot}
+            {this.multiple ? multiBeforeSlot : beforeSlot}
           </template>
           <template slot="after">
             {this.limitLabel ? (
@@ -467,9 +488,7 @@ export default {
             ) : null}
             <div class={this.$c('select-icon')}>
               {this.clearable &&
-              (this.multiple
-                ? this.realValue.length > 0
-                : !!this.realValue) ? (
+              (this.multiple ? this.realValue.length > 0 : !!this.realValue) ? (
                   <Button
                     class={this.$c('select-clear')}
                     ui={this.uiParts.clear}
@@ -540,11 +559,9 @@ export default {
                 this.isFiltered ? this.filteredOptions : this.realOptions,
                 this.isFiltered && !this.filteredOptions.length ? (
                   <div class={this.$c('select-options-no-data')}>
-                    {this.$scopedSlots['no-data']
-                      ? this.$scopedSlots['no-data']({
-                        keyword: this.inputValue
-                      })
-                      : this.$slots['no-data'] || this.t('noData')}
+                    {renderSlot(this, 'no-data', {
+                      keyword: this.inputValue
+                    }) || this.t('noData')}
                   </div>
                 ) : null,
                 'render'
