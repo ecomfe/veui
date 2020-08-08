@@ -63,6 +63,16 @@
     </veui-select>
   </section>
   <section>
+    <h2>多选样式</h2>
+    <veui-select
+      v-model="defaultMultiValue"
+      v-bind="attrs"
+      placeholder="全部"
+      clearable
+      multiple
+    />
+  </section>
+  <section>
     <h2>多选样式：m (默认)</h2>
     <veui-select
       v-model="defaultMultiValue"
@@ -115,6 +125,20 @@
     />
   </section>
   <section>
+    <h2>可搜索Select：(自定义 label slot)</h2>
+    <veui-select
+      v-model="defaultValue2"
+      v-bind="attrs"
+      ui="checkmark"
+      searchable
+    >
+      <template #label="{ label }">
+        {{ label }}
+        <veui-icon name="flag"/>
+      </template>
+    </veui-select>
+  </section>
+  <section>
     <h2>可搜索多选Select：</h2>
     <veui-select
       v-model="defaultSearchMultiValue"
@@ -122,6 +146,17 @@
       searchable
       multiple
     />
+  </section>
+  <section>
+    <h2>可搜索多选Select：(自定义 label slot)</h2>
+    <veui-select
+      v-model="defaultSearchMultiValue"
+      v-bind="attrs"
+      searchable
+      multiple
+    >
+      <template #label="{ selected }">{{ selected.map(({ label }) => label).join('；') }}</template>
+    </veui-select>
   </section>
   <section>
     <h2>可搜索多选Select：有限制</h2>
@@ -404,9 +439,7 @@
             >
               <div class="note">
                 <veui-icon name="info-circle"/>
-                <div class="text">
-                  此处仅显示业务点 Top n，您可通过搜索添加其它业务点标签。
-                </div>
+                <div class="text">此处仅显示业务点 Top n，您可通过搜索添加其它业务点标签。</div>
               </div>
             </template>
           </veui-option-group>
@@ -474,9 +507,7 @@
         slot="option"
         slot-scope="props"
       >
-        <span class="veui-option-label-text veui-option-custom-label">
-          {{ props.label }}
-        </span>
+        <span class="veui-option-label-text veui-option-custom-label">{{ props.label }}</span>
         <veui-icon name="gift"/>
       </template>
     </veui-select>
@@ -562,7 +593,6 @@ export default {
       phone: null,
       hero: ['baidu'],
       disabled: true,
-      selected: true,
       complex: ['1', '2'],
       loaded: false,
       icon: true,
