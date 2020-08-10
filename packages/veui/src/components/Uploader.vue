@@ -27,7 +27,7 @@
     >
       <slot name="button-label">
         <veui-icon :name="icons.upload"/>
-        {{ t('selectFile') }}
+        <span>{{ t('selectFile') }}</span>
       </slot>
     </label>
     <span
@@ -207,9 +207,7 @@
             name="file-before"
             v-bind="getScopeValue(index, file)"
           />
-          <div
-            :class="`${listClass}-container ${listClass}-container-uploading`"
-          >
+          <div :class="`${listClass}-container ${listClass}-container-uploading`">
             <div :class="`${listClass}-container-uploading-text`">
               <slot name="uploading-label">{{ t('uploading') }}</slot>
             </div>
@@ -252,9 +250,11 @@
               <span
                 :class="`${listClass}-file-name`"
                 :title="file.name"
-              >{{
-                file.name
-              }}</span>
+              >
+                {{
+                  file.name
+                }}
+              </span>
             </label>
             <div :class="`${listClass}-mask`">
               <template v-for="control in getImageControls(file)">
@@ -277,9 +277,11 @@
           <veui-popover
             :target="`fileFailure${index}`"
             position="top"
-          >{{
-            file.message || t('uploadFailure')
-          }}</veui-popover>
+          >
+            {{
+              file.message || t('uploadFailure')
+            }}
+          </veui-popover>
           <slot
             name="file-after"
             v-bind="getScopeValue(index, file)"
