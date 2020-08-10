@@ -14,7 +14,11 @@ export default {
         overlayClass: {
           [this.$c('embedded')]: true
         },
-        inline: true
+        inline: true,
+        outsideClosable: false,
+        draggable: false,
+        escapable: false,
+        modal: false
       },
       // nativeOn 直接在 embedded 上注册到 dom ，不需透传
       on: this.$listeners,
