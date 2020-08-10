@@ -34,7 +34,7 @@ config.defaults(
       }
     },
     parts: {
-      remove: 'icon',
+      remove: 'icon aux',
       progress: 's',
       control: 'icon s',
       preview: 'auto',

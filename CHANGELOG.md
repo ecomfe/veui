@@ -1,5 +1,9 @@
 ## 2.0.0-beta.3
 
+### ⚠️ 非兼容性变更
+
+- [^] `veui-theme-dls-icons` 中，`triangle-up`/`triangle-right`/`triangle-down`/`triangle-left` 分别重命名为 `caret-up`/`caret-right`/`caret-down`/`caret-left`。
+
 ### 💡 主要变更
 
 - [^] 所有支持 `v-model`/`.sync` 的属性现在均支持完全受控模式。
