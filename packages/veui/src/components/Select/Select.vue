@@ -182,7 +182,9 @@ export default {
       this.inputValue = ''
       this.$emit('clear')
       e.stopPropagation()
-      this.focus()
+      if (this.expanded) {
+        this.focus()
+      }
     },
     handleSelect (value) {
       if (this.searchable) {
