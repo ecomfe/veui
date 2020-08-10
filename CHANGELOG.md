@@ -1,3 +1,10 @@
+## 2.0.0-beta.4
+
+### 💡 主要变更
+
+- [+] `NumberInput` 组件增加 `parse`/`format` prop，用来对输入的内容进行格式化输出。
+- [+] `Tag` 组件增加 `open` prop，可以通过外部控制打开/关闭。
+
 ## 2.0.0-beta.3
 
 ### ⚠️ 非兼容性变更
@@ -6,7 +13,7 @@
 
 ### 💡 主要变更
 
-- [^] 所有支持 `v-model`/`.sync` 的属性现在均支持完全受控模式。
+- [^] 所有支持 `v-model`/`.sync` 的 prop 现在均支持完全受控模式。
 - [+] `Input` 组件增加 `placeholder` 插槽。
 - [^] `Select` 组件的 `label` 插槽现在可以对 `multiple` 及 `searchable` 的状态生效了。
 
