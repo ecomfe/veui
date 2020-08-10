@@ -2,7 +2,7 @@ import {
   IconCheck,
   IconTimes,
   IconChevronRight,
-  IconTriangleRight
+  IconCaretRight
 } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
@@ -12,8 +12,8 @@ config.defaults(
       checked: IconCheck,
       select: null,
       remove: IconTimes,
-      collapse: IconTriangleRight,
-      expand: IconTriangleRight,
+      collapse: IconCaretRight,
+      expand: IconCaretRight,
       separator: IconChevronRight
     },
     parts: {

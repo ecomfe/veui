@@ -1,4 +1,4 @@
-import { IconTriangleRight } from 'dls-icons-vue'
+import { IconCaretRight } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
 config.defaults(
@@ -13,8 +13,8 @@ config.defaults(
       }
     },
     icons: {
-      collapse: IconTriangleRight,
-      expand: IconTriangleRight
+      collapse: IconCaretRight,
+      expand: IconCaretRight
     }
   },
   'tree'
