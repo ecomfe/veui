@@ -141,12 +141,12 @@ export default {
     },
     max: Number,
     min: Number,
-    formatter: Function,
-    parser: Function
+    format: Function,
+    parse: Function
   },
   data () {
     return {
-      parsedInputValue: null, // 存储输入过程中的值即：parser(valueEmitFromInput)
+      parsedInputValue: null, // 存储输入过程中的值即：parse(valueEmitFromInput)
       spinnerFocused: false
     }
   },
@@ -236,22 +236,22 @@ export default {
   },
   methods: {
     parseValue (val, asNumber) {
-      val = isFunction(this.parser)
-        ? this.parser(val)
+      val = isFunction(this.parse)
+        ? this.parse(val)
         : val
-      return asNumber ? numberParser(val) : val
+      return asNumber ? parseNumber(val) : val
     },
     formatValue (val, decimalPlace) {
-      let strVal = decimalFormatter(val, decimalPlace)
-      return isFunction(this.formatter)
-        ? this.formatter(val, strVal)
+      let strVal = formatDecimal(val, decimalPlace)
+      return isFunction(this.format)
+        ? this.format(val, strVal)
         : strVal
     },
     handleInput (val) {
       this.parsedInputValue = this.parseValue(val, false)
     },
     getValidValue (val, decimalPlace = -1) {
-      val = numberParser(val)
+      val = parseNumber(val)
       if (isNaN(val)) {
         return val
       }
@@ -362,7 +362,7 @@ function getMaxDecimalPlace (val1, val2) {
   return Math.max(getDecimalPlace(val1), getDecimalPlace(val2))
 }
 
-function decimalFormatter (val, decimalPlace) {
+function formatDecimal (val, decimalPlace) {
   let isNum = typeof val === 'number'
   if (decimalPlace === -1 || !isNum) {
     return val == null ? '' : String(val)
@@ -371,7 +371,7 @@ function decimalFormatter (val, decimalPlace) {
   }
 }
 
-function numberParser (val) {
+function parseNumber (val) {
   let parsed = parseFloat(val)
   return isNaN(parsed) ? val : parsed
 }
