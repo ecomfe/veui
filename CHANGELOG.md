@@ -2,7 +2,9 @@
 
 ### 💡 主要变更
 
+- [^] 所有支持 `v-model`/`.sync` 的属性现在均支持完全受控模式。
 - [+] `Input` 组件增加 `placeholder` 插槽。
+- [^] `Select` 组件的 `label` 插槽现在可以对 `multiple` 及 `searchable` 的状态生效了。
 
 ### 🐞 问题修复
 
