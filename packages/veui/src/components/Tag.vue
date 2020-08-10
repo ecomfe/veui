@@ -13,21 +13,26 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button
   },
-  mixins: [prefix, ui, focusable, useControllable('selected')],
+  mixins: [
+    prefix,
+    ui,
+    focusable,
+    useControllable('selected'),
+    useControllable('open')
+  ],
   props: {
     type: {
       type: String,
       default: 'default'
     },
+    open: {
+      type: Boolean,
+      default: true
+    },
     closable: Boolean,
     selectable: Boolean,
     selected: Boolean,
     disabled: Boolean
-  },
-  data () {
-    return {
-      localOpen: true
-    }
   },
   computed: {
     tabIndex () {
@@ -55,13 +60,13 @@ export default {
 
       e.stopPropagation()
       e.preventDefault()
-      this.localOpen = false
+      this.commit('open', false)
       this.$emit('close')
     }
   },
   render () {
     let TagName = this.selectable ? 'button' : 'div'
-    return this.localOpen ? (
+    return this.realOpen ? (
       <TagName
         tabindex={this.tabIndex}
         ui={this.realUi}
