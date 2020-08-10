@@ -139,7 +139,7 @@ describe('components/NumberInput', () => {
     expect(input.element.value).to.equal('3')
   })
 
-  it('should handle `decimalPlace` prop  correctly', async () => {
+  it('should handle `decimal-place` prop  correctly', async () => {
     let wrapper = mount(NumberInput, {
       propsData: {
         decimalPlace: 2
@@ -173,7 +173,7 @@ describe('components/NumberInput', () => {
     wrapper.find('button.veui-number-input-step-up').trigger('click')
   })
 
-  it('should make prop `value` fully controlled and violate `decimalPlace` for respecting prop `value`', async () => {
+  it('should make prop `value` fully controlled and violate `decimal-place` for respecting prop `value`', async () => {
     let wrapper = mount(NumberInput, {
       propsData: {
         value: 2.123,
