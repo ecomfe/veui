@@ -100,7 +100,11 @@
       background-color: @dls-uploader-file-item-background-color-hover;
 
       .@{veui-prefix}-uploader-list-remove {
-        display: inline-flex;
+        display: flex;
+
+        .@{veui-prefix}-icon {
+          .dls-icon-size(@dls-icon-size-aux, true);
+        }
       }
 
       .@{veui-prefix}-uploader-success-icon,
