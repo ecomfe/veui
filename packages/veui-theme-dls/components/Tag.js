@@ -4,7 +4,7 @@ import config from 'veui/managers/config'
 config.defaults(
   {
     icons: {
-      close: IconTimes
+      remove: IconTimes
     },
     ui: {
       bordered: {
@@ -20,7 +20,7 @@ config.defaults(
       }
     },
     parts: {
-      close: 'icon aux'
+      remove: 'icon aux'
     }
   },
   'tag'
