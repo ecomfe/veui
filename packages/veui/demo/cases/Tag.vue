@@ -39,8 +39,8 @@
         :key="team"
         :type="types[index]"
         :ui="bordered ? 'bordered' : ''"
-        closable
-        @close="handleClose(team)"
+        removable
+        @remove="handleRemove(team)"
       >
         {{ team }}
       </veui-tag>
@@ -54,11 +54,25 @@
         v-for="(team, index) in teams"
         :key="team"
         :type="types[index]"
-        closable
+        removable
         :ui="'s' + (bordered ? ' bordered' : '')"
-        @close="handleClose(team)"
+        @remove="handleRemove(team)"
       >
         {{ team }}
+      </veui-tag>
+    </div>
+  </section>
+
+  <section>
+    <h2>可移除标签（受控）</h2>
+    <div>
+      <veui-tag
+        :ui="bordered ? 'bordered' : ''"
+        removable
+        :removed="controlledRemoved"
+        @remove="handleControlledRemove"
+      >
+        受控可移除标签
       </veui-tag>
     </div>
   </section>
@@ -101,7 +115,7 @@
         :type="type"
         :ui="bordered ? 'bordered' : ''"
         disabled
-        closable
+        removable
       >
         {{ type }}
       </veui-tag>
@@ -111,8 +125,13 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { Tag, Checkbox } from 'veui'
-import toastManagers from 'veui/managers/toast'
+import toast from 'veui/plugins/toast'
+import confirm from 'veui/plugins/confirm'
+
+Vue.use(toast)
+Vue.use(confirm)
 
 export default {
   name: 'tag-demo',
@@ -127,12 +146,20 @@ export default {
       types: ['default', 'info', 'success', 'warning', 'error'],
       sizes: ['s', 'm', 'default'],
       selected: false,
-      bordered: false
+      bordered: false,
+      controlledRemoved: false
     }
   },
   methods: {
-    handleClose (name) {
-      toastManagers.success(name + '赢了')
+    handleRemove (name) {
+      this.$toast.success(name + '赢了')
+    },
+    handleControlledRemove () {
+      this.$confirm('要删除吗？').then(confirmed => {
+        if (confirmed) {
+          this.controlledRemoved = true
+        }
+      })
     }
   }
 }
