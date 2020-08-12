@@ -25,6 +25,6 @@
     "rimraf": "^2.6.2"
   },
   "dependencies": {
-    "dls-icons-vue": "^0.7.0"
+    "dls-icons-vue": "^0.7.1"
   }
 }
