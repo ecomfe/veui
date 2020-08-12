@@ -51,37 +51,75 @@ describe('components/Tag', () => {
     wrapper.destroy()
   })
 
-  it('should close the tag correctly', async () => {
+  it('should remove the tag correctly', async () => {
     let wrapper = mount({
       components: {
         'veui-tag': Tag
       },
       data () {
         return {
-          close: false
+          removed: false
         }
       },
       methods: {
-        handleClose () {
-          this.close = true
+        handleRemove () {
+          this.removed = true
         }
       },
       template: `
         <veui-tag
-          closable
-          @close="handleClose"
+          removable
+          @remove="handleRemove"
         >
-          closable tag
+          removable tag
         </veui-tag>`
     })
-    let closeBtn = wrapper.find('.veui-tag-close')
-    expect(closeBtn.exists()).to.equal(true)
+    let removeBtn = wrapper.find('.veui-tag-remove')
+    expect(removeBtn.exists()).to.equal(true)
 
-    closeBtn.trigger('click')
+    removeBtn.trigger('click')
     await wrapper.vm.$nextTick()
 
     expect(wrapper.find('.veui-tag').exists()).to.equal(false)
-    expect(wrapper.vm.close).to.equal(true)
+    expect(wrapper.vm.removed).to.equal(true)
+    wrapper.destroy()
+  })
+
+  it('should handle `removed` prop correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tag': Tag
+        },
+        data () {
+          return {
+            removed: false
+          }
+        },
+        template: `
+        <veui-tag
+          removable
+          :removed.sync="removed"
+        >
+          removable tag
+        </veui-tag>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    expect(wrapper.find('.veui-tag').exists()).to.equal(true)
+    vm.removed = true
+
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-tag').exists()).to.equal(false)
+    vm.removed = false
+
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-tag').exists()).to.equal(true)
     wrapper.destroy()
   })
 
@@ -131,7 +169,6 @@ describe('components/Tag', () => {
         <veui-tag
           :selected.sync="selected"
           selectable
-          closable
         >
           selected tag
         </veui-tag>`
@@ -149,11 +186,6 @@ describe('components/Tag', () => {
     expect(wrapper.classes('veui-tag-selected')).to.equal(true)
     expect(wrapper.vm.selected).to.equal(true)
 
-    let closeBtn = wrapper.find('.veui-tag-close')
-    closeBtn.trigger('click')
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper.find('.veui-tag').exists()).to.equal(false)
     wrapper.destroy()
   })
 
@@ -166,15 +198,17 @@ describe('components/Tag', () => {
         data () {
           return {
             selected: true,
-            disabled: true
+            disabled: true,
+            selectable: true,
+            removable: false
           }
         },
         template: `
         <veui-tag
           :selected.sync="selected"
           :disabled="disabled"
-          selectable
-          closable
+          :selectable="selectable"
+          :removable="removable"
         >
           selected tag
         </veui-tag>`
@@ -183,19 +217,25 @@ describe('components/Tag', () => {
         sync: false
       }
     )
+
+    let { vm } = wrapper
     let tag = wrapper.find('.veui-tag')
     expect(tag.classes('veui-tag-selected')).to.equal(true)
     expect(tag.classes('veui-disabled')).to.equal(true)
 
     tag.trigger('click')
-    await wrapper.vm.$nextTick()
+    await vm.$nextTick()
 
     expect(wrapper.classes('veui-tag-selected')).to.equal(true)
-    expect(wrapper.vm.selected).to.equal(true)
+    expect(vm.selected).to.equal(true)
 
-    let closeBtn = wrapper.find('.veui-tag-close')
-    closeBtn.trigger('click')
-    await wrapper.vm.$nextTick()
+    vm.selectable = false
+    vm.removable = true
+    await vm.$nextTick()
+
+    let removeBtn = wrapper.find('.veui-tag-remove')
+    removeBtn.trigger('click')
+    await vm.$nextTick()
 
     expect(wrapper.find('.veui-tag').exists()).to.equal(true)
     wrapper.destroy()
