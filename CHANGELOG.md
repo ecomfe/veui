@@ -1,9 +1,14 @@
 ## 2.0.0-beta.4
 
+### ⚠️ 非兼容性变更
+
+- [+] `Tag` 组件的 `closable` prop 重命名为 `removable`。
+- [+] `Tag` 组件的 `close` 事件重命名为 `remove`。
+
 ### 💡 主要变更
 
 - [+] `NumberInput` 组件增加 `parse`/`format` prop，用来对输入的内容进行格式化输出。
-- [+] `Tag` 组件增加 `open` prop，可以通过外部控制打开/关闭。
+- [+] `Tag` 组件增加 `removed` prop，可以通过外部控制是否被移除。
 
 ## 2.0.0-beta.3
 
