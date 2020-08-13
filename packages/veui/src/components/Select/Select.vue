@@ -362,9 +362,9 @@ export default {
       <Tag
         key={this.realValue[index]}
         ui={this.uiParts.tag}
-        onClose={() => this.removeSelectedAt(index)}
+        onRemove={() => this.removeSelectedAt(index)}
         disabled={this.realDisabled || this.realReadonly}
-        closable
+        removable
         {...{
           nativeOn: {
             '!mouseup': stopPropagation
