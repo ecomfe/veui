@@ -150,7 +150,7 @@
     </veui-form>
   </section>
 
-  <section class="sdf">
+  <section>
     <h3>单向数据流</h3>
     <veui-form>
       <veui-field label="Price：">
@@ -162,19 +162,19 @@
       </veui-field>
     </veui-form>
   </section>
-  <section class="sdf">
-    <h3>定制 formatter 和 parser </h3>
+  <section>
+    <h3>定制 format 和 parse </h3>
     <veui-form>
       <veui-field label="Percentage：">
         <veui-number-input
           :min="0"
-          :parser="percentParser"
-          :formatter="percentFormatter"
+          :parse="percentParser"
+          :format="percentFormatter"
         />
       </veui-field>
     </veui-form>
   </section>
-  <section class="sdf">
+  <section>
     <h3>prop error</h3>
     <veui-form>
       <veui-field
@@ -259,7 +259,8 @@ export default {
     width: 140px;
   }
 }
-.sdf {
+
+section + section {
   margin-top: 60px;
 }
 </style>
