@@ -51,6 +51,15 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
       return this.focusMode ? null : config.get('keyselect.focusSelector')
     }
   },
+  watch: {
+    expanded (val) {
+      if (!val) {
+        if (this.focusSelector) {
+          this.clearFocusSelector()
+        }
+      }
+    }
+  },
   methods: {
     // 方便覆盖
     getFocusableContainer () {
@@ -108,9 +117,6 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
         case 'Left':
         case 'ArrowLeft':
           this.expanded = false
-          if (this.focusSelector) {
-            this.clearFocusSelector()
-          }
           break
         case 'Up':
         case 'ArrowUp':
