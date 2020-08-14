@@ -63,7 +63,7 @@ export default {
           ? this.$scopedSlots.default()
           : this.$slots.default || []
         ).map(vnode =>
-          !vnode.tag && vnode.text != null ? <span>{vnode}</span> : vnode
+          !vnode.tag && (vnode.text || '').trim() ? <span>{vnode}</span> : vnode
         )}
       </button>
     )
