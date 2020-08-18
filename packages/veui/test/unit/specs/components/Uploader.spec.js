@@ -249,7 +249,8 @@ describe('components/Uploader', () => {
     expect(wrapper.emitted().failure[0]).to.deep.equal([
       {
         name: 'test3.jpg',
-        status: 'failure'
+        status: 'failure',
+        message: 'image too large'
       },
       0
     ])
