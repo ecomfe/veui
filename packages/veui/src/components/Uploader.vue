@@ -580,7 +580,7 @@ export default {
     files () {
       return this.fileList.map(file => {
         return {
-          ...pick(file, ['name', 'src', 'status', 'toBeUploaded']),
+          ...pick(file, ['name', 'src', 'status', 'toBeUploaded', 'message']),
           ...file._extra
         }
       })
@@ -734,6 +734,9 @@ export default {
             } else {
               file.status = 'failure'
               file.message = validationResults[index].message
+              this.$nextTick(() => {
+                this.$emit('invalid', file, this.fileList.indexOf(file))
+              })
             }
 
             return file

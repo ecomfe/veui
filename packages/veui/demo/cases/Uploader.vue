@@ -16,6 +16,7 @@
     @failure="onFailure"
     @change="handleChange('files')"
     @statuschange="handleStatusChange"
+    @invalid="handleInvalid"
   >
     <template slot="desc">
       请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于200像素，最多上传3张图
@@ -164,6 +165,7 @@ export default {
     return {
       action:
         'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog',
+      // action: '/upload',
       files,
       files1: files.slice(0),
       files2: files.slice(0),
@@ -242,6 +244,9 @@ export default {
     },
     handleStatusChange (status) {
       console.log('Total status is: ', status)
+    },
+    handleInvalid (file, index) {
+      console.log('File invalid: ', file, index)
     },
     convertResponse (data) {
       return {
