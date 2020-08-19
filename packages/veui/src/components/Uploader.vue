@@ -768,6 +768,7 @@ export default {
               this.fileList.length + newFiles.length > this.maxCount
             ) {
               toast.error(this.t('tooManyFiles'))
+              this.$emit('invalid', null, -1)
               return
             }
 
