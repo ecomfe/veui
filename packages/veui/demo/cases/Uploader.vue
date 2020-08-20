@@ -245,8 +245,8 @@ export default {
     handleStatusChange (status) {
       console.log('Total status is: ', status)
     },
-    handleInvalid (file, index) {
-      console.log('File invalid: ', file, index)
+    handleInvalid (arg) {
+      console.log('File invalid: ', arg)
     },
     convertResponse (data) {
       return {

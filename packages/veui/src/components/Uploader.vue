@@ -410,6 +410,15 @@ config.defaults({
   'uploader.pickerPosition': 'after'
 })
 
+const Uploader = {
+  errors: {
+    TYPE_INVALID: 'type',
+    SIZE_INVALID: 'size',
+    TOO_MANY_FILES: 'count',
+    CUSTOM_INVALID: 'custom'
+  }
+}
+
 export default {
   name: 'veui-uploader',
   components: {
@@ -721,7 +730,20 @@ export default {
       if (!Array.isArray(files)) {
         files = this.$refs.input.files
       }
+
       let newFiles = [...files]
+      if (
+        this.maxCount !== 1 &&
+        this.fileList.length + newFiles.length > this.maxCount
+      ) {
+        toast.error(this.t('tooManyFiles'))
+        this.$emit('invalid', {
+          type: Uploader.errors.TOO_MANY_FILES,
+          value: newFiles.length,
+          message: this.t('tooManyFiles')
+        })
+        return
+      }
 
       Promise.all(newFiles.map(file => this.validateFile(file))).then(
         validationResults => {
@@ -734,9 +756,6 @@ export default {
             } else {
               file.status = 'failure'
               file.message = validationResults[index].message
-              this.$nextTick(() => {
-                this.$emit('invalid', file, this.fileList.indexOf(file))
-              })
             }
 
             return file
@@ -763,15 +782,6 @@ export default {
               this.uploadFile(newFile)
             }
           } else {
-            if (
-              this.maxCount !== 1 &&
-              this.fileList.length + newFiles.length > this.maxCount
-            ) {
-              toast.error(this.t('tooManyFiles'))
-              this.$emit('invalid', null, -1)
-              return
-            }
-
             this.fileList =
               this.realOrder === 'desc'
                 ? [...newFiles, ...this.fileList]
@@ -796,11 +806,21 @@ export default {
       let typeValidation = this.typeValidate(file.name)
       if (!typeValidation) {
         message.push(this.t('fileTypeInvalid'))
+        this.$emit('invalid', {
+          type: Uploader.errors.TYPE_INVALID,
+          value: file.name,
+          message: this.t('fileTypeInvalid')
+        })
       }
 
       let sizeValidation = this.sizeValidate(file.size)
       if (!sizeValidation) {
         message.push(this.t('fileSizeInvalid'))
+        this.$emit('invalid', {
+          type: Uploader.errors.SIZE_INVALID,
+          value: file.size,
+          message: this.t('fileSizeInvalid')
+        })
       }
 
       return new Promise(resolve => {
@@ -809,6 +829,11 @@ export default {
         let customValidation = result.valid
         if (!customValidation) {
           message.push(result.message)
+          this.$emit('invalid', {
+            type: Uploader.errors.CUSTOM_INVALID,
+            value: file,
+            message: result.message
+          })
         }
         return {
           valid: customValidation && typeValidation && sizeValidation,
