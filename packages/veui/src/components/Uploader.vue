@@ -738,9 +738,13 @@ export default {
       ) {
         toast.error(this.t('tooManyFiles'))
         this.$emit('invalid', {
-          type: Uploader.errors.TOO_MANY_FILES,
-          value: newFiles.length,
-          message: this.t('tooManyFiles')
+          errors: [
+            {
+              type: Uploader.errors.TOO_MANY_FILES,
+              value: newFiles.length,
+              message: this.t('tooManyFiles')
+            }
+          ]
         })
         return
       }
@@ -802,11 +806,10 @@ export default {
       )
     },
     validateFile (file) {
-      let message = []
+      let errors = []
       let typeValidation = this.typeValidate(file.name)
       if (!typeValidation) {
-        message.push(this.t('fileTypeInvalid'))
-        this.$emit('invalid', {
+        errors.push({
           type: Uploader.errors.TYPE_INVALID,
           value: file.name,
           message: this.t('fileTypeInvalid')
@@ -815,8 +818,7 @@ export default {
 
       let sizeValidation = this.sizeValidate(file.size)
       if (!sizeValidation) {
-        message.push(this.t('fileSizeInvalid'))
-        this.$emit('invalid', {
+        errors.push({
           type: Uploader.errors.SIZE_INVALID,
           value: file.size,
           message: this.t('fileSizeInvalid')
@@ -828,16 +830,25 @@ export default {
       }).then(result => {
         let customValidation = result.valid
         if (!customValidation) {
-          message.push(result.message)
-          this.$emit('invalid', {
+          errors.push({
             type: Uploader.errors.CUSTOM_INVALID,
             value: file,
             message: result.message
           })
         }
+
+        if (errors.length) {
+          this.$emit('invalid', {
+            file,
+            errors
+          })
+        }
+
         return {
           valid: customValidation && typeValidation && sizeValidation,
-          message: message.join(this.t('separator'))
+          message: errors
+            .map(({ message }) => message)
+            .join(this.t('separator'))
         }
       })
     },
