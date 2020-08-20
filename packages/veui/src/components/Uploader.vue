@@ -420,6 +420,7 @@ const Uploader = {
 }
 
 export default {
+  errors: Uploader.errors,
   name: 'veui-uploader',
   components: {
     'veui-icon': Icon,
@@ -732,16 +733,14 @@ export default {
       }
 
       let newFiles = [...files]
-      if (
-        this.maxCount !== 1 &&
-        this.fileList.length + newFiles.length > this.maxCount
-      ) {
+      let countFiles = this.fileList.length + newFiles.length
+      if (this.maxCount !== 1 && countFiles > this.maxCount) {
         toast.error(this.t('tooManyFiles'))
         this.$emit('invalid', {
           errors: [
             {
               type: Uploader.errors.TOO_MANY_FILES,
-              value: newFiles.length,
+              value: countFiles,
               message: this.t('tooManyFiles')
             }
           ]
