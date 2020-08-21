@@ -237,6 +237,22 @@
     .dls-icon {
       .dls-icon-size(@dls-table-icon-size);
     }
+
+    &[ui] {
+      color: @dls-table-header-icon-color;
+
+      &:hover {
+        color: @dls-table-header-icon-color-hover;
+      }
+
+      &:active {
+        color: @dls-table-header-icon-color-active;
+      }
+
+      &.@{veui-prefix}-disabled {
+        color: @dls-table-header-icon-color-disabled;
+      }
+    }
   }
 
   &-cell-right &-header-icon {
