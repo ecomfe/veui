@@ -8,10 +8,6 @@ config.defaults(
       clear: IconTimesCircle
     },
     ui: {
-      style: {
-        values: ['alt'],
-        inherit: true
-      },
       size: {
         values: ['s', 'm'],
         inherit: true
