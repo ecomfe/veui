@@ -410,7 +410,7 @@ config.defaults({
   'uploader.pickerPosition': 'after'
 })
 
-const errors = {
+const ERRORS = {
   TYPE_INVALID: 'type',
   SIZE_INVALID: 'size',
   TOO_MANY_FILES: 'count',
@@ -418,7 +418,7 @@ const errors = {
 }
 
 export default {
-  errors,
+  errors: ERRORS,
   name: 'veui-uploader',
   components: {
     'veui-icon': Icon,
@@ -737,7 +737,7 @@ export default {
         this.$emit('invalid', {
           errors: [
             {
-              type: errors.TOO_MANY_FILES,
+              type: ERRORS.TOO_MANY_FILES,
               value: countFiles,
               message: this.t('tooManyFiles')
             }
@@ -807,7 +807,7 @@ export default {
       let typeValidation = this.typeValidate(file.name)
       if (!typeValidation) {
         errors.push({
-          type: errors.TYPE_INVALID,
+          type: ERRORS.TYPE_INVALID,
           value: file.name,
           message: this.t('fileTypeInvalid')
         })
@@ -816,7 +816,7 @@ export default {
       let sizeValidation = this.sizeValidate(file.size)
       if (!sizeValidation) {
         errors.push({
-          type: errors.SIZE_INVALID,
+          type: ERRORS.SIZE_INVALID,
           value: file.size,
           message: this.t('fileSizeInvalid')
         })
@@ -828,7 +828,7 @@ export default {
         let customValidation = result.valid
         if (!customValidation) {
           errors.push({
-            type: errors.CUSTOM_INVALID,
+            type: ERRORS.CUSTOM_INVALID,
             value: file,
             message: result.message
           })

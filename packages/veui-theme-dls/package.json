@@ -22,7 +22,7 @@
     "veui-theme-dls-icons": "^2.0.0-alpha.20"
   },
   "peerDependencies": {
-    "veui": "2.0.0-alpha.20"
+    "veui": "2.0.0-alpha.21"
   },
   "devDependencies": {
     "babel-plugin-lodash": "^3.2.11",
