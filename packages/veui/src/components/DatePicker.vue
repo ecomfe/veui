@@ -79,7 +79,6 @@
     :local="realOverlayOptions.local"
     :options="realOverlayOptions"
     :priority="overlayPriority"
-    position="top-start"
     autofocus
     modal
     match-width
@@ -267,6 +266,7 @@ export default {
       localSelected: null,
       localInputValue: [],
       localOverlayOptions: {
+        position: 'top-start',
         inner: {
           enabled: true
         }
