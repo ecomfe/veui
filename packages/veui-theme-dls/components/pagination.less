@@ -85,6 +85,7 @@
     .make-metrics(m);
     align-items: center;
     justify-content: center;
+    background-color: @dls-pagination-page-item-background-color;
     text-decoration: none;
     line-height: 1;
     font-size: inherit;
@@ -96,11 +97,11 @@
     .veui-button-transition();
 
     &:hover {
-      background-color: @dls-button-background-color-normal-hover;
+      background-color: @dls-pagination-page-item-background-color-hover;
     }
 
     &[data-focus-visible-added] {
-      background-color: @dls-button-background-color-normal-focus;
+      background-color: @dls-pagination-page-item-background-color-focus;
       .dls-focus-ring(@dls-button-border-color-focus, @dls-button-shadow-focus);
     }
 
@@ -110,11 +111,11 @@
     }
 
     &:active {
-      background-color: @dls-button-background-color-normal-active;
+      background-color: @dls-pagination-page-item-background-color-active;
     }
 
     &.@{veui-prefix}-disabled {
-      background-color: transparent;
+      background-color: @dls-pagination-page-item-background-color-disabled;
       color: @dls-pagination-page-item-font-color-disabled;
     }
 

@@ -26,6 +26,7 @@
 @dls-button-height-l
 @dls-button-height-xl
 @dls-button-padding-xs
+@dls-button-padding-s
 @dls-button-padding-l
 @dls-button-padding-xl
 @dls-button-border-radius-xs
@@ -54,6 +55,10 @@
 @dls-pagination-page-item-min-width-xs
 @dls-pagination-page-item-min-width-s
 @dls-pagination-page-item-min-width-m
+
+# Progress
+# Used with JavaScript variable
+@dls-progress-size-circular
 
 # Select
 # Used with variable interpolation
@@ -104,6 +109,10 @@
 @dls-tag-font-size-s
 @dls-tag-font-size-m
 
+@dls-tag-color-info
+@dls-tag-color-success
+@dls-tag-color-warning
+@dls-tag-color-error
 @dls-tag-font-color-info
 @dls-tag-border-color-info
 @dls-tag-background-color-info
@@ -132,6 +141,20 @@
 @dls-tag-border-color-error-disabled
 @dls-tag-background-color-error-reversed
 @dls-tag-background-color-error-reversed-disabled
+
+@dls-tag-color-selected
+@dls-tag-font-color-selected
+@dls-tag-font-color-reverse
+@dls-tag-font-opacity-selected-disabled
+@dls-tag-font-opacity-reverse-disabled
+@dls-tag-background-opacity-selected
+@dls-tag-background-opacity-selected-hover
+@dls-tag-background-opacity-selected-active
+@dls-tag-background-opacity-selected-disabled
+@dls-tag-background-opacity-reverse
+@dls-tag-background-opacity-reverse-hover
+@dls-tag-background-opacity-reverse-active
+@dls-tag-background-opacity-reverse-disabled
 
 # Textarea
 # Indirectedly referenced via @dls-textarea-height-*

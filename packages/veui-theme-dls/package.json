@@ -18,7 +18,7 @@
     "classlist-polyfill": "^1.2.0",
     "dls-icons-vue": "^0.7.0",
     "focus-visible": "^4.1.0",
-    "less-plugin-dls": "^1.0.0-alpha.26",
+    "less-plugin-dls": "^1.0.0-alpha.27",
     "less-plugin-est": "^3.0.0",
     "veui-theme-dls-icons": "^2.0.0-beta.5"
   },
@@ -29,6 +29,7 @@
     "babel-plugin-lodash": "^3.2.11",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-preset-env": "^1.2.1",
-    "babel-preset-stage-2": "^6.22.0"
+    "babel-preset-stage-2": "^6.22.0",
+    "esm": "^3.2.25"
   }
 }

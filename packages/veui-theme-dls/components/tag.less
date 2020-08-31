@@ -47,40 +47,27 @@
     .apply-color(@dls-tag-color);
 
     &.@{veui-prefix}-tag-selected {
-      border: 1px solid transparent;
-      color: @dls-tag-font-color-selected;
-      background-color: fade(@dls-tag-color-selected, percentage(@dls-tag-background-opacity-selected));
-
-      &.@{veui-prefix}-tag-selectable:not(.@{veui-prefix}-disabled) {
-        &:hover {
-          background-color: fade(@dls-tag-color-selected, percentage(@dls-tag-background-opacity-selected-hover));
-        }
-
-        &:active {
-          background-color: fade(@dls-tag-color-selected, percentage(@dls-tag-background-opacity-selected-active));
-        }
-      }
-
-      &.@{veui-prefix}-disabled {
-        background-color: fade(@dls-tag-color-selected, percentage(@dls-tag-background-opacity-selected-disabled));
-      }
+      .apply-flip-color(selected, @dls-tag-color);
     }
 
     &[ui~="reverse"] {
-      .apply-reverse-color(@dls-tag-color);
+      .apply-flip-color(reverse, @dls-tag-color);
     }
   }
 
-  .make-status-color (@status) {
+  .make-status-color(@status) {
     &-@{status} {
       @color-name: ~"dls-tag-color-@{status}";
       @color: @@color-name;
 
       .apply-color(@color);
 
-      &.@{veui-prefix}-tag-selected,
+      &.@{veui-prefix}-tag-selected {
+        .apply-flip-color(selected, @color);
+      }
+
       &[ui~="reverse"] {
-        .apply-reverse-color(@color);
+        .apply-flip-color(reverse, @color);
       }
     }
   }
@@ -98,7 +85,6 @@
     cursor: not-allowed;
   }
 
-
   .apply-color(@color) {
     border: 1px solid fade(@color, percentage(@dls-tag-border-opacity));
     color: @color;
@@ -106,38 +92,56 @@
 
     &.@{veui-prefix}-tag-selectable:not(.@{veui-prefix}-disabled) {
       &:hover {
-        background-color: fade(@color, percentage(@dls-tag-background-opacity-hover));
+        background-color: fade(
+          @color,
+          percentage(@dls-tag-background-opacity-hover)
+        );
       }
 
       &:active {
-        background-color: fade(@color, percentage(@dls-tag-background-opacity-active));
+        background-color: fade(
+          @color,
+          percentage(@dls-tag-background-opacity-active)
+        );
       }
     }
 
     &.@{veui-prefix}-disabled {
       border-color: fade(@color, percentage(@dls-tag-border-opacity-disabled));
-      background-color: fade(@color, percentage(@dls-tag-background-opacity-disabled));
+      background-color: fade(
+        @color,
+        percentage(@dls-tag-background-opacity-disabled)
+      );
       color: fade(@color, percentage(@dls-tag-font-opacity-disabled));
     }
   }
 
-  .apply-reverse-color(@color) {
+  .apply-flip-color(@name, @color) {
+    @flip-color: ~"dls-tag-font-color-@{name}";
+    @flip-color-hover: ~"dls-tag-font-color-@{name}";
+    @flip-bg-op: ~"dls-tag-background-opacity-@{name}";
+    @flip-bg-op-hover: ~"dls-tag-background-opacity-@{name}-hover";
+    @flip-bg-op-active: ~"dls-tag-background-opacity-@{name}-active";
+    @flip-bg-op-disabled: ~"dls-tag-background-opacity-@{name}-disabled";
+    @flip-font-op-disabled: ~"dls-tag-font-opacity-@{name}-disabled";
+
     border: 1px solid transparent;
-    color: @dls-tag-font-color-reverse;
-    background-color: fade(@color, percentage(@dls-tag-background-opacity-reverse));
+    color: @@flip-color;
+    background-color: fade(@color, percentage(@@flip-bg-op));
 
     &.@{veui-prefix}-tag-selectable:not(.@{veui-prefix}-disabled) {
       &:hover {
-        background-color: fade(@color, percentage(@dls-tag-background-opacity-reverse-hover));
+        background-color: fade(@color, percentage(@@flip-bg-op-hover));
       }
 
       &:active {
-        background-color: fade(@color, percentage(@dls-tag-background-opacity-reverse-active));
+        background-color: fade(@color, percentage(@@flip-bg-op-active));
       }
     }
 
     &.@{veui-prefix}-disabled {
-      background-color: fade(@color, percentage(@dls-tag-background-opacity-reverse-disabled));
+      background-color: fade(@color, percentage(@@flip-bg-op-disabled));
+      color: fade(@@flip-color, percentage(@@flip-font-op-disabled));
     }
   }
 }
