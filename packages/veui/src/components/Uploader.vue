@@ -809,8 +809,8 @@ export default {
     },
     validateFile (file) {
       let errors = []
-      let typeValidation = this.typeValidate(file.name)
-      if (!typeValidation) {
+      let typeValidity = this.validateType(file.name)
+      if (!typeValidity) {
         errors.push({
           type: ERRORS.TYPE_INVALID,
           value: file.name,
@@ -818,8 +818,8 @@ export default {
         })
       }
 
-      let sizeValidation = this.sizeValidate(file.size)
-      if (!sizeValidation) {
+      let sizeValidity = this.validateSize(file.size)
+      if (!sizeValidity) {
         errors.push({
           type: ERRORS.SIZE_INVALID,
           value: file.size,
@@ -830,8 +830,8 @@ export default {
       return new Promise(resolve => {
         resolve(this.validator ? this.validator(file) : { valid: true })
       }).then(result => {
-        let customValidation = result.valid
-        if (!customValidation) {
+        let customValidity = result.valid
+        if (!customValidity) {
           errors.push({
             type: ERRORS.CUSTOM_INVALID,
             value: file,
@@ -847,14 +847,14 @@ export default {
         }
 
         return {
-          valid: customValidation && typeValidation && sizeValidation,
+          valid: customValidity && typeValidity && sizeValidity,
           message: errors
             .map(({ message }) => message)
             .join(this.t('separator'))
         }
       })
     },
-    typeValidate (filename) {
+    validateType (filename) {
       if (!this.accept) {
         return true
       }
@@ -882,7 +882,7 @@ export default {
         return false
       })
     },
-    sizeValidate (fileSize) {
+    validateSize (fileSize) {
       return !this.maxSize || !fileSize || fileSize <= parse(this.maxSize)
     },
     uploadFiles () {
