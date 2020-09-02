@@ -153,10 +153,10 @@ export default {
     // 所以采用方案 2
     prop: 'value',
     get (val) {
-      val = val || []
+      val = val == null ? [] : [].concat(val)
       return !this.isControlled('value')
         ? val
-        : [].concat(val)
+        : val
           .map(val => this.getAdjustedValue(this.parse(val)))
           .sort((a, b) => (a > b ? 1 : -1))
     },
