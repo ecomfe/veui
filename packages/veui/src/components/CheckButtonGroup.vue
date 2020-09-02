@@ -44,7 +44,7 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { focusIn } from '../utils/dom'
-import { includes, findIndex, filter } from 'lodash'
+import { includes, findIndex } from 'lodash'
 import Button from './Button'
 import Icon from './Icon'
 import useControllable from '../mixins/controllable'
@@ -76,7 +76,7 @@ export default {
   },
   computed: {
     exclusiveItems () {
-      return filter(this.items, ({ exclusive }) => !!exclusive)
+      return (this.items || []).filter(({ exclusive }) => !!exclusive)
     },
     exclusiveValues () {
       return this.exclusiveItems.map(({ value }) => value)
@@ -92,7 +92,7 @@ export default {
           1
         )
         // prop value 可能一开始就包含了如下 2 种错误情况
-        let selectedExclusives = filter(values, val => includes(this.exclusiveValues, val))
+        let selectedExclusives = values.filter(val => includes(this.exclusiveValues, val))
         let exLen = selectedExclusives.length
         if (
           exLen > 1 || // 1. 太多 exclusive
@@ -105,11 +105,10 @@ export default {
         values = [value]
       } else {
         // select inclusive: remove all exclusive values
-        values = filter(values, val => !includes(this.exclusiveValues, val))
+        values = values.filter(val => !includes(this.exclusiveValues, val))
         values.push(value)
       }
 
-      // 处理 exclusive
       this.commit('value', values)
     },
     focus () {
