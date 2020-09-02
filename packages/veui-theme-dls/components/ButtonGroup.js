@@ -4,7 +4,7 @@ config.defaults(
   {
     ui: {
       style: {
-        values: ['primary', 'strong'],
+        values: ['primary', 'strong', 'basic'],
         inherit: true
       },
       size: {

@@ -38,6 +38,13 @@
   </section>
   <section>
     <veui-button-group
+      :ui="`basic ${size}`"
+      :items="items"
+      :disabled="disabled"
+    />
+  </section>
+  <section>
+    <veui-button-group
       :ui="size"
       :items="items"
       :disabled="disabled"
