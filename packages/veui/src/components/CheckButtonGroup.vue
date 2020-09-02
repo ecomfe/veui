@@ -12,16 +12,18 @@
     :key="`b-${item.value}`"
     :ui="uiParts.button"
     :class="{
-      [$c('button-selected')]: realValue.indexOf(item.value) !== -1
+      [$c('button-selected')]: realValue.indexOf(item.value) !== -1,
+      [$c('button-exclusive')]: !!item.exclusive
     }"
     :disabled="item.disabled || realDisabled || realReadonly"
     role="option"
     :aria-selected="realValue.indexOf(item.value) !== -1"
     :aria-posinset="index + 1"
     :aria-setsize="items.length"
-    @click="handleChange(item.value)"
+    @click="handleChange(item)"
   >
     <div
+      v-if="!item.exclusive"
       :key="`i-${item.value}`"
       :class="$c('check-button-group-checkmark')"
       aria-hidden="true"
@@ -42,7 +44,7 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { focusIn } from '../utils/dom'
-import { includes, findIndex } from 'lodash'
+import { includes, findIndex, filter } from 'lodash'
 import Button from './Button'
 import Icon from './Icon'
 import useControllable from '../mixins/controllable'
@@ -72,18 +74,43 @@ export default {
       }
     }
   },
+  computed: {
+    exclusiveItems () {
+      return filter(this.items, ({ exclusive }) => !!exclusive)
+    },
+    exclusiveValues () {
+      return this.exclusiveItems.map(({ value }) => value)
+    }
+  },
   methods: {
-    handleChange (val) {
-      let value = [...this.realValue]
-      if (!includes(value, val)) {
-        value.push(val)
-      } else {
-        value.splice(
-          findIndex(value, item => item === val),
+    handleChange ({ value, exclusive }) {
+      let values = [...this.realValue]
+      if (includes(values, value)) {
+        // cancel
+        values.splice(
+          findIndex(values, item => item === value),
           1
         )
+        // prop value 可能一开始就包含了如下 2 种错误情况
+        let selectedExclusives = filter(values, val => includes(this.exclusiveValues, val))
+        let exLen = selectedExclusives.length
+        if (
+          exLen > 1 || // 1. 太多 exclusive
+          (exLen && values.length !== exLen) // 2. 都包含
+        ) {
+          values = [selectedExclusives[0]]
+        }
+      } else if (exclusive) {
+        // select exclusive: only take current exclusive value
+        values = [value]
+      } else {
+        // select inclusive: remove all exclusive values
+        values = filter(values, val => !includes(this.exclusiveValues, val))
+        values.push(value)
       }
-      this.commit('value', value)
+
+      // 处理 exclusive
+      this.commit('value', values)
     },
     focus () {
       focusIn(this.$el)

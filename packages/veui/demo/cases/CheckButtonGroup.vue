@@ -53,6 +53,18 @@
     </p>
     <p>value: {{ picked3 }}</p>
   </section>
+  <section>
+    <h3>有排他性选项</h3>
+    <p>
+      <veui-check-button-group
+        v-model="pickedWithExclusive"
+        :items="dataWithExclusive"
+        :disabled="disabled"
+        ui="s"
+      />
+    </p>
+    <p>value: {{ pickedWithExclusive }}</p>
+  </section>
 </article>
 </template>
 
@@ -75,6 +87,7 @@ export default {
       picked1: ['Hirasawa Yui', 'Akiyama Mio'],
       picked2: [],
       picked3: [],
+      pickedWithExclusive: [],
       disabled: false,
       data1: [
         {
@@ -91,6 +104,30 @@ export default {
         }
       ],
       data2: [
+        {
+          value: 'Hirasawa Yui',
+          label: 'Hirasawa Yui'
+        },
+        {
+          value: 'Akiyama Mio',
+          label: 'Akiyama Mio'
+        },
+        {
+          value: 'Nakano Azusa',
+          label: 'Nakano Azusa'
+        }
+      ],
+      dataWithExclusive: [
+        {
+          value: 'Exclusive1',
+          label: 'Exclusive1',
+          exclusive: true
+        },
+        {
+          value: 'Exclusive2',
+          label: 'Exclusive2',
+          exclusive: true
+        },
         {
           value: 'Hirasawa Yui',
           label: 'Hirasawa Yui'

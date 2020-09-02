@@ -106,4 +106,73 @@ describe('components/CheckButtonGroup', () => {
     expect(buttons.at(1).classes()).to.not.include('veui-button-selected')
     wrapper.destroy()
   })
+
+  it('should handle exclusive items correctly.', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-check-button-group': CheckButtonGroup
+        },
+        data () {
+          return {
+            items: [
+              { label: 'A', value: 'a', exclusive: true },
+              { label: 'B', value: 'b' },
+              { label: 'C', value: 'c' },
+              { label: 'D', value: 'd', exclusive: true }
+            ],
+            selected: ['a']
+          }
+        },
+        template: '<veui-check-button-group v-model="selected" :items="items"/>'
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    let buttons = wrapper.findAll('button.veui-button')
+
+    expect(buttons.at(0).classes()).to.include('veui-button-exclusive')
+    expect(buttons.at(0).classes()).to.include('veui-button-selected')
+
+    buttons.at(1).trigger('click')
+    await vm.$nextTick()
+    expect(vm.selected).to.deep.equal(['b'])
+
+    buttons.at(2).trigger('click')
+    await vm.$nextTick()
+    expect(vm.selected).to.deep.equal(['b', 'c'])
+
+    buttons.at(0).trigger('click')
+    await vm.$nextTick()
+    expect(vm.selected).to.deep.equal(['a'])
+
+    vm.selected = ['a', 'b'] // error prop
+    await vm.$nextTick()
+    buttons.at(2).trigger('click')
+    await vm.$nextTick()
+    expect(vm.selected).to.deep.equal(['b', 'c'])
+
+    vm.selected = ['a', 'd'] // error prop
+    await vm.$nextTick()
+    buttons.at(1).trigger('click')
+    await vm.$nextTick()
+    expect(vm.selected).to.deep.equal(['b'])
+
+    vm.selected = ['a', 'd', 'b'] // error prop
+    await vm.$nextTick()
+    buttons.at(1).trigger('click')
+    await vm.$nextTick()
+    expect(vm.selected).to.deep.equal(['a'])
+
+    vm.selected = ['a', 'd', 'b'] // error prop
+    await vm.$nextTick()
+    buttons.at(3).trigger('click')
+    await vm.$nextTick()
+    expect(vm.selected).to.deep.equal(['a'])
+
+    wrapper.destroy()
+  })
 })
