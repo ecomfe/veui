@@ -8,7 +8,10 @@
     flex: none;
   }
 
-  .@{veui-prefix}-checkbox + .@{veui-prefix}-checkbox {
-    margin-left: @dls-checkbox-group-spacing;
+  .@{veui-prefix}-radio,
+  .@{veui-prefix}-checkbox {
+    & + & {
+      margin-left: @dls-checkbox-group-spacing;
+    }
   }
 }

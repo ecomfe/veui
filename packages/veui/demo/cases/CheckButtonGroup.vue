@@ -66,7 +66,7 @@
     <p>value: {{ pickedWithExclusive }}</p>
   </section>
   <section>
-    <h3>有 emptyValued 的情况（空值选中：Exclusive1）</h3>
+    <h3>有 empty-value 的情况（空值选中：Exclusive1）</h3>
     <p>
       <veui-check-button-group
         v-model="pickedWithEmpty"
