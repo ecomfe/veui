@@ -72,7 +72,10 @@ export default {
       default () {
         return []
       }
-    }
+    },
+    /* eslint-disable vue/require-prop-types */
+    emptyValue: {}
+    /* eslint-enable vue/require-prop-types */
   },
   computed: {
     exclusiveItems () {
@@ -107,6 +110,11 @@ export default {
         // select inclusive: remove all exclusive values
         values = values.filter(val => !includes(this.exclusiveValues, val))
         values.push(value)
+      }
+
+      // 处理 empty
+      if (!values.length && typeof this.emptyValue !== 'undefined') {
+        values = [this.emptyValue]
       }
 
       this.commit('value', values)

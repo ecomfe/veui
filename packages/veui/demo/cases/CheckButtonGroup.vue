@@ -65,6 +65,19 @@
     </p>
     <p>value: {{ pickedWithExclusive }}</p>
   </section>
+  <section>
+    <h3>有 emptyValued 的情况（空值选中：Exclusive1）</h3>
+    <p>
+      <veui-check-button-group
+        v-model="pickedWithEmpty"
+        :items="dataWithExclusive"
+        :disabled="disabled"
+        empty-value="Exclusive1"
+        ui="s"
+      />
+    </p>
+    <p>value: {{ pickedWithEmpty }}</p>
+  </section>
 </article>
 </template>
 
@@ -88,6 +101,7 @@ export default {
       picked2: [],
       picked3: [],
       pickedWithExclusive: [],
+      pickedWithEmpty: [],
       disabled: false,
       data1: [
         {

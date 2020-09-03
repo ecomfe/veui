@@ -175,4 +175,47 @@ describe('components/CheckButtonGroup', () => {
 
     wrapper.destroy()
   })
+
+  it('should handle empty value correctly.', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-check-button-group': CheckButtonGroup
+        },
+        data () {
+          return {
+            items: [
+              { label: 'A', value: 'a', exclusive: true },
+              { label: 'B', value: 'b' },
+              { label: 'C', value: 'c' },
+              { label: 'D', value: 'd', exclusive: true }
+            ],
+            selected: ['b'],
+            emptyValue: 'a'
+          }
+        },
+        template: '<veui-check-button-group :empty-value="emptyValue" v-model="selected" :items="items"/>'
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    let buttons = wrapper.findAll('button.veui-button')
+
+    buttons.at(1).trigger('click')
+    await vm.$nextTick()
+    expect(buttons.at(1).classes()).to.not.include('veui-button-selected')
+    expect(buttons.at(0).classes()).to.include('veui-button-selected')
+    expect(vm.selected).to.deep.equal(['a'])
+
+    vm.emptyValue = undefined
+    await vm.$nextTick()
+    buttons.at(0).trigger('click')
+    await vm.$nextTick()
+    expect(vm.selected).to.deep.equal([])
+
+    wrapper.destroy()
+  })
 })
