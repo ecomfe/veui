@@ -8,8 +8,8 @@
   :aria-disabled="realDisabled"
 >
   <veui-checkbox
-    v-for="(item, index) in items"
     :is="item.exclusive ? 'veui-radio' : 'veui-checkbox'"
+    v-for="(item, index) in items"
     :key="index"
     :name="localName"
     :disabled="item.disabled || realDisabled || realReadonly"
