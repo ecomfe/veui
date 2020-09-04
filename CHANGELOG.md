@@ -6,7 +6,8 @@
 
 ### 💡 主要变更
 
-- [+] `CheckButtonGroup` 组件的 `items` prop 项目支持传入 `exclusive: true` 来指定当前项为排它选项，即选择后将取消其它选中项。
+- [+] `CheckboxGroup` 和 `CheckButtonGroup` 组件的 `items` prop 项目支持传入 `exclusive: true` 来指定当前项为排它选项，即选择后将取消其它选中项。
+- [+] `CheckboxGroup` 和 `CheckButtonGroup` 组件新增 `empty-value` prop，用来指定在用户取消所有复选项时需要重新选中的项目，需要配合新增的 `exclusive` 使用。
 - [+] 为 `ButtonGroup` 的 `ui` 增加可选值 `basic`。
 
 ### 🐞 问题修复
