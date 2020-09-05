@@ -44,6 +44,17 @@ export function useCoupledChild ({
         )
       }
     },
+    updated () {
+      let parent = this[parentRef]
+      if (!parent) {
+        return
+      }
+
+      parent.updateChild({
+        id: this.id,
+        ...mapState(this, fields)
+      })
+    },
     destroyed () {
       let parent = this[parentRef]
       if (!parent || parent.__destroying__) {

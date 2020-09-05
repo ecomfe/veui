@@ -849,4 +849,40 @@ describe('components/Tabs', () => {
 
     wrapper.destroy()
   })
+
+  it('should update slot from parent correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tabs': Tabs,
+          'veui-tab': Tab
+        },
+        template: `
+          <veui-tabs>
+            <veui-tab label="#1">ONE {{ count }}</veui-tab>
+          </veui-tabs>`,
+        data () {
+          return {
+            count: 0
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+
+    await vm.$nextTick()
+
+    let panel = wrapper.find('.veui-tabs-panel')
+    expect(panel.text()).to.equal('ONE 0')
+
+    vm.count++
+    await vm.$nextTick()
+
+    expect(panel.text()).to.equal('ONE 1')
+  })
 })

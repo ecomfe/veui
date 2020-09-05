@@ -16,7 +16,9 @@
       <veui-tab
         :label="label1"
         name="answers"
-      />
+      >
+        {{ count }}
+      </veui-tab>
       <veui-tab name="articles">
         <template #label>{{ label2 }}</template>
       </veui-tab>
@@ -27,20 +29,21 @@
       <template #extra>
         <div class="extra">
           <veui-button
-            slot="extra"
             ui="primary s"
             @click="label1 += '1'"
           >修改1</veui-button>
           <veui-button
-            slot="extra"
             ui="s"
             @click="label2 += '2'"
           >修改2</veui-button>
           <veui-button
-            slot="extra"
             ui="s"
             @click="label3 += '3'"
           >修改3</veui-button>
+          <veui-button
+            ui="s"
+            @click="count++"
+          >修改内容</veui-button>
         </div>
       </template>
       <template #tab-label="{ label }">{{ label }}</template>
@@ -481,6 +484,7 @@ export default {
   },
   data () {
     return {
+      count: 0,
       label1: '回答问题',
       label2: '文章评论',
       label3: '分享朋友圈',
