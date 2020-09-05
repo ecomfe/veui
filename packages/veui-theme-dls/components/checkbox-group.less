@@ -10,7 +10,8 @@
 
   .@{veui-prefix}-radio,
   .@{veui-prefix}-checkbox {
-    & + & {
+    & + .@{veui-prefix}-radio,
+    & + .@{veui-prefix}-checkbox {
       margin-left: @dls-checkbox-group-spacing;
     }
   }
