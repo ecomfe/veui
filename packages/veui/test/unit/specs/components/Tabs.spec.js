@@ -884,5 +884,7 @@ describe('components/Tabs', () => {
     await vm.$nextTick()
 
     expect(panel.text()).to.equal('ONE 1')
+
+    wrapper.destroy()
   })
 })
