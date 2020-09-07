@@ -45,21 +45,25 @@
 
     <section>
       <h3>受控（感知输入法，固定值）</h3>
+      <p class="attention">现象：中英文直接不能输入</p>
       <veui-input
         value="固定内容"
         composition
       />
       <h3>受控（不感知输入法，固定值）</h3>
+      <p class="attention">现象：英文直接不能输入，中文输入法结束时直接被重置</p>
       <veui-input
         value="固定内容"
       />
       <h3>受控（感知输入法, 且用 v-model 同步），value: {{ controlled1 }}</h3>
+      <p class="attention">现象：value的值实时在同步</p>
       <veui-input
         v-model="controlled1"
         composition
       />
       <veui-button @click="delaySet">delaySet</veui-button>
       <h3>受控（不感知输入法, 且用 v-model 同步），value: {{ controlled2 }}</h3>
+      <p class="attention">现象：输入中文时，value的值只有在输入法结束后同步</p>
       <veui-input
         v-model="controlled2"
       />
@@ -351,6 +355,10 @@ export default {
 
 section {
   margin-bottom: 40px;
+
+  .attention {
+    color: red;
+  }
 
   .veui-input {
     margin-right: 10px;
