@@ -5,7 +5,7 @@
     <section class="five-sizes">
       <h3>4 种大小：</h3>
       <veui-field
-        ui="micro"
+        ui="xs"
         label="xs"
       >
         <veui-input
@@ -15,7 +15,7 @@
         />
       </veui-field>
       <veui-field
-        ui="tiny"
+        ui="s"
         label="s"
       >
         <veui-input
@@ -24,7 +24,7 @@
         />
       </veui-field>
       <veui-field
-        ui="small"
+        ui="s"
         label="m"
       >
         <veui-input
@@ -33,7 +33,7 @@
         />
       </veui-field>
       <veui-field
-        ui="large"
+        ui="l"
         label="l"
       >
         <veui-input
@@ -49,7 +49,9 @@
       <veui-input
         value="固定内容"
         composition
+        ui="xs"
       />
+      <veui-button ui="xs">Submit</veui-button>
       <h3>受控（不感知输入法，固定值）</h3>
       <p class="attention">现象：英文直接不能输入，中文输入法结束时直接被重置</p>
       <veui-input

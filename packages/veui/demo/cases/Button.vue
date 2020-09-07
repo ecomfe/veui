@@ -256,6 +256,26 @@
       </veui-button>
     </p>
   </section>
+  <section class="inline">
+    文本 Text
+    <veui-button ui="text">
+      Text
+    </veui-button>
+    <veui-button ui="icon">
+      <veui-icon name="home"/>
+    </veui-button>
+    <veui-button ui="icon strong">
+      <veui-icon name="home"/>
+    </veui-button>
+    <veui-button ui="icon aux">
+      <veui-icon name="home"/>
+    </veui-button>
+    <veui-button ui="primary square">
+      <veui-icon name="home"/>
+    </veui-button>
+    <veui-button ui="text aux">编辑</veui-button>
+    <veui-button>保存</veui-button>
+  </section>
 </article>
 </template>
 
@@ -266,6 +286,7 @@ import 'veui-theme-dls-icons/check'
 import 'veui-theme-dls-icons/edit'
 import 'veui-theme-dls-icons/times'
 import 'veui-theme-dls-icons/search'
+import 'veui-theme-dls-icons/home'
 
 export default {
   name: 'button-demo',
@@ -302,5 +323,9 @@ section {
 
 .veui-button {
   margin-right: 10px;
+}
+
+.inline {
+  display: block;
 }
 </style>

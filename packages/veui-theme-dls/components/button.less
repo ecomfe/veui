@@ -11,9 +11,12 @@
   color: @dls-button-font-color-normal;
   line-height: 2;
   white-space: nowrap;
-  vertical-align: middle;
   cursor: pointer;
   .veui-button-transition();
+
+  &::before {
+    content: "\200b";
+  }
 
   .make-metrics(@size) {
     @height: ~"dls-button-height-@{size}";
@@ -225,7 +228,6 @@
     line-height: inherit;
     background-color: @dls-button-background-color-text;
     color: @dls-button-font-color-text;
-    vertical-align: inherit;
 
     &::after {
       content: "";
