@@ -47,7 +47,7 @@
   </div>
   <textarea
     ref="input"
-    :value="realValue"
+    :value="tmpInputValue == null ? realValue : tmpInputValue"
     :class="$c('textarea-input')"
     :style="inputStyle"
     :placeholder="placeholder"
@@ -129,6 +129,8 @@ export default {
       originalPadding: null,
       lineHeight: 0,
       composing: false,
+      // tmpInputValue 参见 Input
+      tmpInputValue: null,
       countOverlap: false
     }
   },
@@ -327,16 +329,19 @@ export default {
       this.commit('value', value, ...args)
       this.$nextTick(() => {
         let input = this.$refs.input
+        this.tmpInputValue = null
         if (input && this.realValue !== input.value) {
           input.value = this.realValue
         }
       })
     },
-    handleCompositionUpdate () {
+    handleCompositionUpdate (e) {
+      this.tmpInputValue = e.target.value
       this.composing = COMPOSITION_UPDATE
     },
     handleCompositionEnd (e) {
       let extra = this.composing === COMPOSITION_INPUT
+      this.tmpInputValue = e.target.value
       this.composing = false
       if (extra) {
         // compositionend 事件，而非 input
@@ -349,7 +354,7 @@ export default {
       //  不用 v-model 的原因：在 firefox 下 compositionend 时 vue 会多触发一次 input
       //  在中文输入法的状态下，又去修改了 input 的值（比如受控情况下 reset 掉用户输入），此时不同浏览器的事件触发情况又不同
       //  所以受控中文输入法之后，事件的触发情况尽量不要依赖。
-
+      this.tmpInputValue = e.target.value
       if (this.composing === COMPOSITION_UPDATE) {
         this.composing = COMPOSITION_INPUT
       }

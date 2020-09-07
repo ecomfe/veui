@@ -29,7 +29,7 @@
     <!-- 如果以后 Vue 对 native input 完全受控，那么这里就不能用 realValue 了 -->
     <input
       ref="input"
-      :value="realValue"
+      :value="tmpInputValue == null ? realValue : tmpInputValue"
       :class="$c('input-input')"
       v-bind="attrs"
       v-on="inputListeners"
@@ -124,7 +124,13 @@ export default {
   data () {
     return {
       focused: false,
-      compositionValue: null,
+      compositionValue: '',
+
+      // vue 在 composing 时不会更新 input 的 value，这个暂时值用来用 compositionEnd 时保存输入值
+      // 避免 end 时，vue 用旧的 realValue 更新 input，然后 firefox 下 end 之后的 input 同步上来的值不对
+      // 具体情况比较复杂，所以直接输入过程中保留当前输入的值，输入结束再完全由 realValue 决定
+      // 不能是空字符串，否则无法区分：用户在清空内容 vs. nextTick 中的 reset
+      tmpInputValue: null,
       autofill: false
     }
   },
@@ -180,6 +186,7 @@ export default {
   },
   methods: {
     handleInput (e) {
+      this.tmpInputValue = e.target.value
       setTimeout(() => {
         try {
           this.autofill = !!this.$el.querySelector(':-webkit-autofill')
@@ -208,10 +215,12 @@ export default {
     },
     handleCompositionUpdate (e) {
       this.compositionValue = e.data
+      this.tmpInputValue = e.target.value
       this.composing = COMPOSITION_UPDATE
     },
     handleCompositionEnd (e) {
       this.compositionValue = ''
+      this.tmpInputValue = e.target.value
       if (this.composing === COMPOSITION_INPUT) {
         this.updateValue(e.target.value, e)
       }
@@ -221,6 +230,7 @@ export default {
       this.commit('value', value, ...args)
       this.$nextTick(() => {
         let input = this.$refs.input
+        this.tmpInputValue = null
         if (input && this.realValue !== input.value) {
           input.value = this.realValue
         }
