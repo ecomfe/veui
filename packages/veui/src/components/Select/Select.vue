@@ -473,6 +473,7 @@ export default {
           onMouseup={this.handleInputMouseup}
           onBlur={this.handleInputBlur}
           onInput={this.handleTriggerInput}
+          autocomplete="off"
           composition
         >
           {!this.multiple && this.selected != null && this.hasLabelSlot ? (

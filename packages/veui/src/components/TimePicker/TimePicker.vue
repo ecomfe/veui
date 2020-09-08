@@ -17,7 +17,7 @@
     ref="input"
     v-model="realInputValue"
     v-bind="inputProps"
-    autocomplete="veui-off"
+    autocomplete="off"
     @focus="openDropdown"
     @click="openDropdown"
   >
