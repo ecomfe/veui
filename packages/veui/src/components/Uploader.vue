@@ -165,7 +165,6 @@
                     :ui="uiParts.control"
                     :class="{
                       [$c('button')]: true,
-                      [$c('button-icon-only')]: true,
                       [$c('disabled')]: realUneditable
                     }"
                     :tabindex="realUneditable ? null : 0"
@@ -246,7 +245,12 @@
               tabindex="0"
               @click="replaceFile(file)"
             >
-              <veui-icon :name="icons.addImage"/>
+              <slot
+                name="placeholder"
+                v-bind="getScopeValue(index, file)"
+              >
+                <veui-icon :name="icons.addImage"/>
+              </slot>
               <span
                 :class="`${listClass}-file-name`"
                 :title="file.name"
@@ -316,7 +320,9 @@
             :ui="uiParts.image"
             @click="handleClick"
           >
-            <veui-icon :name="icons.addImage"/>
+            <slot name="placeholder">
+              <veui-icon :name="icons.addImage"/>
+            </slot>
           </label>
         </div>
       </slot>

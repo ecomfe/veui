@@ -21,6 +21,9 @@
     <template slot="desc">
       请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于200像素，最多上传3张图
     </template>
+    <template #placeholder>
+      <veui-icon name="id-card"/>
+    </template>
   </veui-uploader>
   <h2>图片上传模式，扩展操作栏</h2>
   <veui-uploader
@@ -135,8 +138,9 @@
 </article>
 </template>
 <script>
-import { Uploader, Button, Popover, Input, Span } from 'veui'
+import { Uploader, Button, Popover, Input, Span, Icon } from 'veui'
 import 'veui-theme-dls-icons/chevron-right'
+import 'veui-theme-dls-icons/id-card'
 
 export default {
   name: 'uploader-demo',
@@ -145,7 +149,8 @@ export default {
     'veui-button': Button,
     'veui-popover': Popover,
     'veui-input': Input,
-    'veui-span': Span
+    'veui-span': Span,
+    'veui-icon': Icon
   },
   data () {
     let files = [
