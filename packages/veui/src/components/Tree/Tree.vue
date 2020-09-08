@@ -65,7 +65,8 @@
             :disabled="item.disabled || realDisabled || realReadonly"
             :ui="realUi"
             tabindex="-1"
-            @change="() => handleItemCheck(item, parents)"
+            @click.native.stop
+            @change="handleItemCheck(item, parents)"
           />
         </slot>
         <div :class="$c('tree-item-label')">
@@ -404,6 +405,7 @@ function getLeafs (item, checked) {
         leafs.push(i.value)
       }
     }
+    return !i.disabled
   })
   return leafs
 }

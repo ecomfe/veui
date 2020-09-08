@@ -82,7 +82,7 @@
           :class="$c('tree-item-remove')"
           :ui="uiParts.remove"
           :disabled="!isSelectable"
-          @click="remove(props.item)"
+          @click="remove(props.item, props.parents)"
         >
           <veui-icon
             :aria-label="t('@transfer.remove')"
@@ -183,10 +183,11 @@ export default {
     removeAll () {
       this.$emit('removeall')
     },
-    remove (item) {
+    remove (item, parents) {
       if (this.showMode === 'tree') {
-        this.$emit('remove', item)
+        this.$emit('remove', item, parents.reverse())
       } else {
+        // flat 模式下 tree 只有一层，parents 信息来自 item.path
         this.$emit(
           'remove',
           item.path[item.path.length - 1],

@@ -34,7 +34,9 @@ function _walk (array, callback, context, alias = 'children') {
     let ctx = { ...context, index, depth }
 
     if (typeof enter === 'function') {
-      enter(item, ctx)
+      if (enter(item, ctx) === false) {
+        return
+      }
     }
 
     let children = getChildrenByAlias(item, alias)
