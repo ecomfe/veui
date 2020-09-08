@@ -17,14 +17,13 @@
     "prepare": "npm run build"
   },
   "peerDependencies": {
-    "veui": "2.0.0-beta.7"
+    "veui": "2.0.0-beta.8"
   },
   "devDependencies": {
+    "dls-icons-vue": "^0.12.0",
     "esm": "^3.0.84",
     "mkdirp": "^0.5.4",
     "rimraf": "^2.6.2"
   },
-  "dependencies": {
-    "dls-icons-vue": "^0.11.0"
-  }
+  "dependencies": {}
 }
