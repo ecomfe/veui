@@ -100,20 +100,21 @@ export default {
       this.commit('selected', val)
     },
 
-    collectLeafValue (datasource) {
-      let value = []
+    collectDescendantValue (datasource) {
+      let values = []
 
       let walk = data => {
-        data.forEach(item => {
-          if (item.children && item.children.length && !item.disabled) {
-            walk(item.children)
-          } else if (!item.disabled) {
-            value.push(item.value)
+        data.forEach(({ disabled, value, children }) => {
+          if (!disabled) {
+            values.push(value)
+            if (children && children.length) {
+              walk(children)
+            }
           }
         })
       }
       walk(datasource)
-      return value
+      return values
     },
 
     focus () {
@@ -192,7 +193,7 @@ export default {
                 this.handleSelect(...args)
               },
               selectall: (...args) => {
-                this.commit('selected', this.collectLeafValue(this.datasource))
+                this.commit('selected', this.collectDescendantValue(this.datasource))
               }
             },
             scopedSlots: generateItem.call(this, 'candidate'),
@@ -216,10 +217,13 @@ export default {
               ui: this.realUi
             },
             on: {
-              remove: item => {
+              remove: (item, parents) => {
                 let selected = difference(
                   this.realSelected,
-                  this.collectLeafValue([item])
+                  [
+                    ...this.collectDescendantValue([item]),
+                    ...parents.map(i => i.value)
+                  ]
                 )
                 this.commit('selected', selected)
               },

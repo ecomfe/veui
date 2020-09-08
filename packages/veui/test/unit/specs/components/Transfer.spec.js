@@ -242,12 +242,16 @@ describe('components/Transfer', () => {
 
     wrapper.find('.veui-transfer-select-all').trigger('click')
     expect(wrapper.vm.$data.selected).to.deep.equal([
+      'aa',
       'aa0',
+      'aa1',
       'aa10',
       'aa11',
       'aa12',
       'aa2',
       'bb',
+      'cc',
+      'cc1',
       'cc10',
       'cc11',
       'cc2'
@@ -322,6 +326,9 @@ describe('components/Transfer', () => {
         },
         template:
           '<veui-transfer ref="transfer" :datasource="datasource" :selected="selected" />'
+      },
+      {
+        sync: false
       }
     )
 
@@ -335,6 +342,97 @@ describe('components/Transfer', () => {
     await vm.$nextTick()
     expect(vm.$data.selected).to.deep.equal(['aa10', 'aa11', 'bb', 'cc11'])
     expect(vm.$refs.transfer.$refs.candidatePanel.selected).to.deep.equal(['aa10', 'aa11', 'bb', 'cc11'])
+    wrapper.destroy()
+  })
+
+  it('should select and remove group correctly.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-transfer': Transfer
+        },
+        data () {
+          return {
+            datasource: [
+              {
+                value: 'aa',
+                label: 'AA',
+                children: [
+                  {
+                    value: 'aa1',
+                    label: 'AA1',
+                    disabled: true,
+                    children: [
+                      {
+                        value: 'aa10',
+                        label: 'AA10'
+                      },
+                      {
+                        value: 'aa11',
+                        label: 'AA11'
+                      }
+                    ]
+                  },
+                  {
+                    value: 'aa2',
+                    label: 'AA2'
+                  }
+                ]
+              },
+              {
+                value: 'bb',
+                label: 'BB',
+                children: [
+                  {
+                    value: 'bb1',
+                    label: 'bb1'
+                  }
+                ]
+              }
+            ],
+            selected: null
+          }
+        },
+        template:
+          '<veui-transfer ref="transfer" :datasource="datasource" v-model="selected" />'
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+
+    let selectors = wrapper.find(Tree).findAll(Checkbox)
+    selectors
+      .at(0)
+      .find('input[type="checkbox"]')
+      .trigger('change')
+    await vm.$nextTick()
+    expect(vm.selected).to.deep.equal(['aa2'])
+    expect(vm.$refs.transfer.$refs.candidatePanel.selected).to.deep.equal(['aa2'])
+
+    vm.selected = null
+    await vm.$nextTick()
+
+    selectors
+      .at(1)
+      .find('input[type="checkbox"]')
+      .trigger('change')
+    await vm.$nextTick()
+    expect(vm.selected).to.deep.equal(['bb1', 'bb'])
+
+    let selectedItems = wrapper
+      .findAll(Tree)
+      .at(1)
+      .findAll('.veui-tree-item')
+    selectedItems
+      .at(0)
+      .find('.veui-tree-item-remove')
+      .trigger('click')
+    await vm.$nextTick()
+    expect(vm.selected).to.deep.equal([])
+
     wrapper.destroy()
   })
 })
