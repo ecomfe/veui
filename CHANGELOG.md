@@ -3,10 +3,14 @@
 ### 💡 主要变更
 
 - [+] `Uploader` 组件的插槽 `button-label` 现在对图片上传也生效（默认为添加图片图标）。
+- [^] 去除了所有输入组件、按钮默认的 `vertical-align: middle` 样式。
 
 ### 🐞 问题修复
 
 - [^] 修正 `Transfer` 组件无法正常删除父级选项的问题。
+- [^] 修正 `Input` 组件在 Firefox 下无法正常输入的问题。
+- [^] 修复 `Dialog` 内容在极端场景下触发 Firefox 图层合成 bug 的问题。
+- [^] 默认为可搜索的 `Select` 中的 `Input` 关闭了原生 `autocomplete` 功能，以避免原生浮层与 `Select` 下拉浮层重叠的问题。
 
 ## 2.0.0-beta.7
 
