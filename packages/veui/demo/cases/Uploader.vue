@@ -21,7 +21,7 @@
     <template slot="desc">
       请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于200像素，最多上传3张图
     </template>
-    <template #placeholder>
+    <template #button-label>
       <veui-icon name="id-card"/>
     </template>
   </veui-uploader>

@@ -246,7 +246,7 @@
               @click="replaceFile(file)"
             >
               <slot
-                name="placeholder"
+                name="button-label"
                 v-bind="getScopeValue(index, file)"
               >
                 <veui-icon :name="icons.addImage"/>
@@ -320,7 +320,7 @@
             :ui="uiParts.image"
             @click="handleClick"
           >
-            <slot name="placeholder">
+            <slot name="button-label">
               <veui-icon :name="icons.addImage"/>
             </slot>
           </label>
