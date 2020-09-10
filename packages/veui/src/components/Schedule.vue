@@ -506,7 +506,7 @@ export default {
       this.$emit('select', this.localSelected)
     },
     selectShortcut (i) {
-      this.localSelected = this.realShortcuts[i].selected
+      this.localSelected = cloneDeep(this.realShortcuts[i].selected)
       this.$emit('select', this.localSelected)
     },
     toggleDay (day, checked) {
