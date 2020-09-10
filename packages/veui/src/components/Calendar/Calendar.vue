@@ -659,7 +659,7 @@ export default {
     markDisabled (day) {
       day = isNumber(day) ? new Date(day, 0, 1) : fromDateData(day)
       return typeof this.disabledDate === 'function'
-        ? this.disabledDate(day)
+        ? this.disabledDate(day, this.picking ? this.picking[0] : null)
         : false
     },
     markDay (day, marks) {
