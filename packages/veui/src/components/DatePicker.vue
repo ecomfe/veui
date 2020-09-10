@@ -116,7 +116,7 @@
         :panel="realPanel"
         tabindex="-1"
         @select="handleSelect"
-        @selectstart="handleProgress"
+        @selectstart="handleStart"
         @selectprogress="handleProgress"
         @keydown.esc.native="close"
         @keydown.enter.native="suggest"
@@ -471,7 +471,15 @@ export default {
       this.expanded = false
       this.localInputValue = []
     },
+    handleStart (picking) {
+      this.$emit('selectstart', picking)
+      return this.updateInput(picking)
+    },
     handleProgress (picking) {
+      this.$emit('selectprogress', picking)
+      return this.updateInput(picking)
+    },
+    updateInput (picking) {
       this.picking = [].concat(picking)
       if (this.picking[0] && this.picking[1]) {
         this.picking.sort((a, b) => a - b)
