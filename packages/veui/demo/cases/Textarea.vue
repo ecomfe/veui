@@ -121,6 +121,13 @@
         strict
       />
     </section>
+    <h3>字数限制， 一个汉字长度算2</h3>
+    <section>
+      <veui-textarea
+        maxlength="5"
+        :get-length="getLength"
+      />
+    </section>
     <section>
       <veui-textarea
         placeholder="允许溢出"
@@ -159,6 +166,12 @@ export default {
         bus.$emit('log', child.$el.getAttribute('ui'))
       })
     })
+  },
+  methods: {
+    getLength (val) {
+      // eslint-disable-next-line no-control-regex
+      return val.replace(/[^\x00-\xff]/g, 'aa').length
+    }
   }
 }
 </script>

@@ -257,6 +257,9 @@ export default {
     format: {
       type: [String, Function]
     },
+    parse: {
+      type: Function
+    },
     shortcuts: Array,
     ...pick(Calendar.props, CALENDAR_PROPS)
   },
@@ -364,7 +367,12 @@ export default {
         }
       }
       if (dates.length) {
-        if (!this.range || (this.range && lt(dates[0], dates[1]))) {
+        let valid = !this.isDisabled(dates[0], dates[1] || null)
+        if (this.range && valid) {
+          valid = !this.isDisabled(dates[1], dates[0] || null) &&
+            lt(dates[0], dates[1])
+        }
+        if (valid) {
           this.handleSelect(this.range ? dates : dates[0])
         }
       }
@@ -408,14 +416,14 @@ export default {
       let cal = this.$refs.cal
       if (cal) {
         let result = []
-        let date = this.parseDate(val)
-        result[index] = date || null
+        let date = this.parseDate(val) || null
+        let another = this.range
+          ? this.parseDate(this.realInputValue[1 - index])
+          : null
+        result[index] = this.isDisabled(date, another) ? null : date
 
         if (this.range) {
-          // 要重新parse，因为可能范围原来不对，现在对了
-          let another = this.parseDate(this.realInputValue[1 - index])
-          result[1 - index] = another || null
-
+          result[1 - index] = another
           let rangeError = date && another && result[0] > result[1]
           if (rangeError) {
             result[index] = null
@@ -444,11 +452,10 @@ export default {
       return format(date, dateFormat)
     },
     parseDate (input) {
-      // todo 定制了就一定要使用方 parse 了，是不是加个 parse prop？
       let result = null
       input = input || ''
-      if (typeof this.format === 'function') {
-        result = this.format(input)
+      if (typeof this.parse === 'function') {
+        result = this.parse(input)
         return isNaN(+result) ? null : result
       }
       if (this.format && typeof this.format === 'string') {
@@ -521,6 +528,9 @@ export default {
     },
     handleHoverShortcut (picking) {
       this.$refs.cal.pick(picking)
+    },
+    isDisabled (date, another) {
+      return !!date && typeof this.disabledDate === 'function' && !!this.disabledDate(date, another)
     }
   }
 }

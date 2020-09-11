@@ -81,6 +81,7 @@ import Button from './Button'
 import Icon from './Icon'
 import { normalizeInt } from '../utils/helper'
 import { MOUSE_EVENTS, KEYBOARD_EVENTS, FOCUS_EVENTS } from '../utils/dom'
+import warn from '../utils/warn'
 
 const TYPE_LIST = ['text', 'password', 'hidden']
 
@@ -119,6 +120,7 @@ export default {
     composition: Boolean,
     clearable: Boolean,
     maxlength: [Number, String],
+    getLength: Function,
     strict: Boolean
   },
   data () {
@@ -168,13 +170,21 @@ export default {
       return this.type !== 'hidden' && this.selectOnFocus
     },
     length () {
-      return this.realValue.length
+      return typeof this.getLength === 'function'
+        ? this.getLength(this.realValue)
+        : this.realValue.length
     },
     lengthOverflow () {
       if (this.realMaxlength == null) {
         return false
       }
       return this.length > this.realMaxlength
+    },
+    checkStrict () {
+      return {
+        strict: this.strict,
+        getLength: this.getLength
+      }
     }
   },
   watch: {
@@ -182,6 +192,17 @@ export default {
       if (val) {
         this.$emit('autofill')
       }
+    },
+    checkStrict: {
+      handler ({ strict, getLength } = {}) {
+        if (strict && getLength) {
+          warn(
+            '[veui-input] `strict` must be `false` when `getLength` is provided.',
+            this
+          )
+        }
+      },
+      immediate: true
     }
   },
   methods: {
