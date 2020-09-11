@@ -240,4 +240,22 @@ describe('components/Input', () => {
     input.element.value = 'bar'
     input.trigger('input')
   })
+
+  it('should handle getLength prop correctly.', () => {
+    let wrapper = mount({
+      components: {
+        'veui-input': Input
+      },
+      methods: {
+        getLength () {
+          return 4
+        }
+      },
+      template: `
+        <veui-input value="中文" :get-length="getLength" maxlength="5"/>
+      `
+    })
+
+    expect(wrapper.find('.veui-input-after').text()).to.equal('4/5')
+  })
 })

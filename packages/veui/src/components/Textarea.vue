@@ -83,6 +83,7 @@ import activatable from '../mixins/activatable'
 import useControllable from '../mixins/controllable'
 import { log10 } from '../utils/math'
 import { normalizeInt } from '../utils/helper'
+import warn from '../utils/warn'
 import {
   getAbsoluteLineHeight,
   MOUSE_EVENTS,
@@ -116,6 +117,7 @@ export default {
     autoresize: Boolean,
     resizable: Boolean,
     maxlength: [Number, String],
+    getLength: Function,
     strict: Boolean
   },
   data () {
@@ -185,7 +187,9 @@ export default {
       return this.type !== 'hidden' && this.selectOnFocus
     },
     length () {
-      return this.realValue.length
+      return typeof this.getLength === 'function'
+        ? this.getLength(this.realValue)
+        : this.realValue.length
     },
     lengthOverflow () {
       if (this.realMaxlength == null) {
@@ -203,9 +207,26 @@ export default {
         // autoresize 的时候 hidden 一下，避免闪现一下滚动条。
         overflow: this.realAutoresize ? 'hidden' : 'auto'
       }
+    },
+    checkStrict () {
+      return {
+        strict: this.strict,
+        getLength: this.getLength
+      }
     }
   },
   watch: {
+    checkStrict: {
+      handler ({ strict, getLength } = {}) {
+        if (strict && getLength) {
+          warn(
+            '[veui-textarea] `strict` must be `false` when `getLength` is provided.',
+            this
+          )
+        }
+      },
+      immediate: true
+    },
     realValue: {
       handler () {
         if (!this.measure) {
