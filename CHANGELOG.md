@@ -1,3 +1,20 @@
+## 2.0.0-beta.9
+
+### 💡 主要变更
+
+- [+] `DatePicker` 组件新增 `parse` prop 用于指定如何从输入值解析日期对象。
+- [+] `DatePicker` 组件新增 `selectstart`/`selectprogress` 事件，用于对外同步日期范围选择的过程信息。
+- [+] `Calendar`/`DatePicker` 组件的 `disabeldDate` prop 在日期范围选择过程中，新增第二个参数，表示当前第一个选择日期。
+- [+] `Input`/`Textarea` 组件新增 prop `get-length`，用于自定义计算已输入字符串长度的逻辑。
+
+### 🐞 问题修复
+
+- [^] 修复 `Schedule` 组件快捷选项由于引用被修改导致的数据混乱。
+- [^] 修复了 `Dialog`/`Table` 组件在极端条件下触发 Firefox 图层合成 bug 的问题。
+- [^] `Overlay` 组件现在不仅在初始化时查找 `target` 对应元素，而是在每次显示时均查找，使得定位逻辑不再依赖对应元素的渲染顺序。
+- [^] 修正了 `Select` 组件中已选的 `disabled` 选项可以被删除的问题。
+- [^] 修正了 `Select` 组件中内联 `Option` 的 `disabled` prop 不生效的问题。
+
 ## 2.0.0-beta.8
 
 ### 💡 主要变更
