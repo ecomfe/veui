@@ -322,7 +322,11 @@
   &[ui~="strong"] & {
     &-menu {
       height: @dls-tab-menu-height-strong-m;
-      .padding(dls-sum(@dls-tab-menu-height-strong-m, -@dls-tab-height-m), @dls-tab-menu-padding-x-strong-m, _);
+      .padding(
+        dls-sum(@dls-tab-menu-height-strong-m, -@dls-tab-height-m),
+        @dls-tab-menu-padding-x-strong-m,
+        _
+      );
       background-color: @dls-tab-menu-background-color-strong;
       .border-top-radius(@dls-tab-container-border-radius-strong-m);
       .border-top-radius(6px);
@@ -389,11 +393,17 @@
     }
 
     &-prev {
-      margin-left: dls-sum(@dls-tab-nav-spacing-m, @dls-tab-menu-padding-x-strong-m * -1);
+      margin-left: dls-sum(
+        @dls-tab-nav-spacing-m,
+        @dls-tab-menu-padding-x-strong-m * -1
+      );
     }
 
     &-next:last-child {
-      margin-right: dls-sum(@dls-tab-nav-spacing-m, @dls-tab-menu-padding-x-strong-m * -1);
+      margin-right: dls-sum(
+        @dls-tab-nav-spacing-m,
+        @dls-tab-menu-padding-x-strong-m * -1
+      );
     }
 
     &-item-active {
