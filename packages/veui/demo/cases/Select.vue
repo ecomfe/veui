@@ -254,6 +254,7 @@
           <veui-option
             value="tencent"
             label="腾讯"
+            disabled
           />
         </veui-option-group>
         <veui-option-group
@@ -591,14 +592,14 @@ export default {
       },
       keyword: '',
       phone: null,
-      hero: ['baidu'],
+      hero: ['baidu', 'tencent'],
       disabled: true,
       complex: ['1', '2'],
       loaded: false,
       icon: true,
       defaultValue: null,
       defaultMultiValue: null,
-      defaultSearchMultiValue: [1],
+      defaultSearchMultiValue: [1, 3],
       defaultValue1: null,
       defaultValue2: 2,
       defaultValue3: null,
@@ -626,7 +627,8 @@ export default {
           },
           {
             label: '下拉选项122',
-            value: 3
+            value: 3,
+            disabled: true
           },
           {
             label: '下拉选项222',

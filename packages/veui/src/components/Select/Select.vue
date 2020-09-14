@@ -186,7 +186,7 @@ export default {
         this.focus()
       }
     },
-    handleSelect (value) {
+    handleSelect (val) {
       if (this.searchable) {
         this.$nextTick(() => {
           if (this.multiple) {
@@ -197,17 +197,17 @@ export default {
       }
       if (!this.multiple) {
         this.expanded = false
-        this.commit('value', value)
+        this.commit('value', val)
         return
       }
 
-      let index = this.realValue.indexOf(value)
+      let index = this.realValue.indexOf(val)
       if (index !== -1) {
         // remove
         this.removeSelectedAt(index)
       } else {
         if (!this.max || (this.max && this.realValue.length < this.max)) {
-          this.commit('value', this.realValue.concat(value))
+          this.commit('value', this.realValue.concat(val))
         }
       }
     },
@@ -282,11 +282,25 @@ export default {
             this.expanded = true
           }
           break
-        case 'Backspace':
+        case 'Backspace': {
+          let values = this.realValue
+          if (!values.length) {
+            break
+          }
+
           if (this.multiple && this.searchable && !this.inputValue) {
-            this.commit('value', this.realValue.slice(0, -1))
+            for (let i = this.realValue.length - 1; i >= 0; i--) {
+              let option = findOptionByValue(this.realOptions, values[i])
+              if (!option.disabled) {
+                let result = [...this.realValue]
+                result.splice(i, 1)
+                this.commit('value', result)
+                break
+              }
+            }
           }
           break
+        }
         default:
           break
       }
@@ -346,7 +360,8 @@ export default {
           <Checkbox
             tabindex="-1"
             ui={this.uiParts.checkbox}
-            checked={option.selected}
+            checked={!!option.selected}
+            disabled={!!option.disabled}
             onClick={e => e.preventDefault()}
           >
             {option.renderLabel
@@ -358,13 +373,14 @@ export default {
       }
       : null
 
-    let selectedTags = (this.labels || []).map((label, index) => (
+    let selected = Array.isArray(this.selected) ? this.selected : []
+    let selectedTags = selected.map(({ label, value, disabled }, index) => (
       <Tag
-        key={this.realValue[index]}
-        ui={this.uiParts.tag}
+        key={value}
+        data-key={value}
         onRemove={() => this.removeSelectedAt(index)}
-        disabled={this.realDisabled || this.realReadonly}
-        removable
+        disabled={this.realDisabled || this.realReadonly || disabled}
+        removable={!this.disabled && !disabled}
         {...{
           nativeOn: {
             '!mouseup': stopPropagation
@@ -373,7 +389,7 @@ export default {
       >
         {renderSlot(this, 'tag', {
           label,
-          ...findOptionByValue(this.realOptions, this.realValue[index]),
+          ...findOptionByValue(this.realOptions, value),
           index
         }) || label}
       </Tag>

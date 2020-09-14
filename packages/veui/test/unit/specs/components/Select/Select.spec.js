@@ -14,7 +14,8 @@ const datasource = [
       },
       {
         label: '子选项1-2',
-        value: '1-2'
+        value: '1-2',
+        disabled: true
       }
     ]
   },
@@ -620,6 +621,49 @@ describe('components/Select/Select', () => {
     options.at(1).trigger('click')
     await vm.$nextTick()
     expect(wrapper.text()).to.equal('子选项1-1')
+    wrapper.destroy()
+  })
+
+  it('should handle disabled option correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select
+        },
+        data () {
+          return {
+            value: ['1-1', '1-2', '2-1'],
+            options: datasource
+          }
+        },
+        template: `
+          <veui-select v-model="value" multiple searchable :options="options"/>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+
+    await vm.$nextTick()
+    let options = wrapper.findAll(OPTION_ITEM)
+    options.at(1).trigger('click')
+
+    await vm.$nextTick()
+    expect(wrapper.text()).to.equal('子选项1-1子选项1-2子选项2-1')
+
+    let input = wrapper.find(NATIVE_INPUT)
+    input.trigger('keydown', { key: 'Backspace' })
+
+    await vm.$nextTick()
+    expect(wrapper.text()).to.equal('子选项1-1子选项1-2')
+    input.trigger('keydown', { key: 'Backspace' })
+
+    await vm.$nextTick()
+    expect(wrapper.text()).to.equal('子选项1-2')
+
     wrapper.destroy()
   })
 })

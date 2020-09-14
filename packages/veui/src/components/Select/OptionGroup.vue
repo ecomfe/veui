@@ -181,7 +181,7 @@ const OptionGroup = {
     relocateDeep () {
       walk(
         this,
-        child => {
+        (child) => {
           if (child.$options.name === this.$options.name) {
             child.relocate()
           }
@@ -200,7 +200,9 @@ const OptionGroup = {
       }
     },
     getOptionTag (option) {
-      return isFunction(this.optionTag) ? this.optionTag(option) : this.optionTag
+      return isFunction(this.optionTag)
+        ? this.optionTag(option)
+        : this.optionTag
     },
     getLabelContent () {
       if (isTopMostOfType(this, 'menu', 'select')) {
@@ -251,7 +253,7 @@ const OptionGroup = {
               label:
                   option.renderLabel ||
                   this.$scopedSlots.label ||
-                  (group => group.label),
+                  ((group) => group.label),
               option: this.$scopedSlots.option || null,
               'option-label': this.$scopedSlots['option-label'] || null,
               'option-group-label':
@@ -289,9 +291,10 @@ const OptionGroup = {
       : []
 
     this.labelContent = this.getLabelContent()
-    let LabelTag = this.labelContent && this.componentAttrs.option
-      ? this.getOptionTag(this.componentAttrs.option)
-      : 'div'
+    let LabelTag =
+      this.labelContent && this.componentAttrs.option
+        ? this.getOptionTag(this.componentAttrs.option)
+        : 'div'
 
     return (
       <div
@@ -325,7 +328,7 @@ const OptionGroup = {
                       this.expanded = true
                     }
                   },
-                  keydown: e => {
+                  keydown: (e) => {
                     if (e.key === 'Right' || e.key === 'ArrowRight') {
                       this.expanded = true
                       e.stopPropagation()
@@ -416,12 +419,20 @@ function normalizeItem (item) {
         ? [
           'label',
           'position',
+          'disabled',
           'trigger',
           'renderLabel',
           'renderBefore',
           'renderAfter'
         ]
-        : ['label', 'value', 'renderLabel', 'renderBefore', 'renderAfter']
+        : [
+          'label',
+          'value',
+          'disabled',
+          'renderLabel',
+          'renderBefore',
+          'renderAfter'
+        ]
     ),
     ...(isGroup ? { options } : {})
   }
