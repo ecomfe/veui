@@ -16,6 +16,9 @@
 
   &-main {
     overflow: auto;
+
+    /* To workaround an edge case which triggers composition problems on Firefox */
+    transform-style: translate-3d;
   }
 
   &-cell {
