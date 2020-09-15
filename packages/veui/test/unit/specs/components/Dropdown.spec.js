@@ -144,7 +144,7 @@ describe('components/Dropdown', () => {
     wrapper.destroy()
   })
 
-  it('should render trigger slot correctly', async () => {
+  it('should render default slot correctly', async () => {
     let wrapper = mount(
       {
         template: `

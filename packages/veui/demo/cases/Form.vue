@@ -423,7 +423,6 @@
       </veui-field>
 
       <veui-field
-        field="desc"
         name="desc"
         rules="required"
         label="介绍"
