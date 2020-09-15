@@ -44,17 +44,6 @@ export function useCoupledChild ({
         )
       }
     },
-    updated () {
-      let parent = this[parentRef]
-      if (!parent) {
-        return
-      }
-
-      parent.updateChild({
-        id: this.id,
-        ...mapState(this, fields)
-      })
-    },
     destroyed () {
       let parent = this[parentRef]
       if (!parent || parent.__destroying__) {
@@ -107,7 +96,7 @@ export function useCoupledParent ({ type, childrenKey = 'items' }) {
   }
 }
 
-function mapState (state, map) {
+export function mapState (state, map) {
   if (Array.isArray(map)) {
     return pick(state, map)
   } else if (typeof map === 'object') {
