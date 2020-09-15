@@ -81,9 +81,9 @@ export default {
         return
       }
 
-      this.updateWidth()
       this.toggleLocator(val)
       this.updateLocator()
+      this.updateWidth()
       this.updateOverlayNode(val)
       if (val) {
         let node = this.overlayNode
