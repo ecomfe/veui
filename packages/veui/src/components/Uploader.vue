@@ -586,18 +586,18 @@ export default {
         return 'empty'
       }
 
-      if (this.fileList.some(file => file.status === 'uploading')) {
+      if (this.fileList.some((file) => file.status === 'uploading')) {
         return 'uploading'
       }
 
-      if (this.fileList.some(file => file.status === 'failure')) {
+      if (this.fileList.some((file) => file.status === 'failure')) {
         return 'failure'
       }
 
       return 'success'
     },
     files () {
-      return this.fileList.map(file => {
+      return this.fileList.map((file) => {
         return {
           ...pick(file, ['name', 'src', 'status', 'toBeUploaded', 'message']),
           ...file._extra
@@ -606,8 +606,8 @@ export default {
     },
     pureFileList () {
       return this.files
-        .filter(file => file.status === 'success' && !file.toBeUploaded)
-        .map(file => omit(file, ['status', 'toBeUploaded']))
+        .filter((file) => file.status === 'success' && !file.toBeUploaded)
+        .map((file) => omit(file, ['status', 'toBeUploaded']))
     },
     realOrder () {
       return this.type === 'file' ? this.order || 'desc' : 'asc'
@@ -617,9 +617,13 @@ export default {
     value (val) {
       let temp = this.genFileList(val)
 
+      if (!Array.isArray(val)) {
+        return cloneDeep(temp)
+      }
+
       let successIndex = 0
       this.fileList = this.fileList
-        .map(file => {
+        .map((file) => {
           if (file.status === 'success' && !file.toBeUploaded) {
             // 处理外部直接减少文件的情形
             if (successIndex + 1 > temp.length) {
@@ -629,7 +633,7 @@ export default {
           }
           return file
         })
-        .filter(file => !!file)
+        .filter(Boolean)
         // 处理外部直接增加文件的情形
         .concat(cloneDeep(temp.slice(successIndex)))
     },
@@ -650,7 +654,7 @@ export default {
   mounted () {
     if (this.requestMode === 'iframe') {
       if (this.iframeMode === 'postmessage') {
-        this.handlePostmessage = event => {
+        this.handlePostmessage = (event) => {
           if (
             !event.source ||
             !event.source.frameElement ||
@@ -677,7 +681,7 @@ export default {
         if (!window[this.callbackNamespace]) {
           window[this.callbackNamespace] = {}
         }
-        window[this.callbackNamespace][this.callbackFuncName] = data => {
+        window[this.callbackNamespace][this.callbackFuncName] = (data) => {
           if (!this.canceled) {
             this.uploadCallback(this.parseData(data), this.currentSubmitingFile)
           }
@@ -709,7 +713,7 @@ export default {
       }
 
       if (Array.isArray(value)) {
-        return value.map(file => this.getNewFile(file))
+        return value.map((file) => this.getNewFile(file))
       }
 
       if (typeof value === 'string') {
@@ -757,8 +761,8 @@ export default {
         return
       }
 
-      Promise.all(newFiles.map(file => this.validateFile(file))).then(
-        validationResults => {
+      Promise.all(newFiles.map((file) => this.validateFile(file))).then(
+        (validationResults) => {
           newFiles = newFiles.map((file, index) => {
             if (validationResults[index].valid) {
               file.toBeUploaded = true
@@ -776,6 +780,7 @@ export default {
           if (this.isReplacing) {
             // type=image时，点击重新上传进入此分支，替换掉原位置的文件replacingFile
             let newFile = newFiles[0]
+            newFile._replacingFile = this.replacingFile
 
             let replacingIndex = this.fileList.indexOf(this.replacingFile)
             this.$set(this.fileList, replacingIndex, newFile)
@@ -833,9 +838,9 @@ export default {
         })
       }
 
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         resolve(this.validator ? this.validator(file) : { valid: true })
-      }).then(result => {
+      }).then((result) => {
         let customValidity = result.valid
         if (!customValidity) {
           errors.push({
@@ -867,7 +872,7 @@ export default {
 
       let extension = last(filename.split('.')).toLowerCase()
 
-      return this.accept.split(/,\s*/).some(item => {
+      return this.accept.split(/,\s*/).some((item) => {
         let acceptExtention = last(item.split(/[./]/)).toLowerCase()
 
         if (
@@ -892,7 +897,7 @@ export default {
       return !this.maxSize || !fileSize || fileSize <= parse(this.maxSize)
     },
     uploadFiles () {
-      this.fileList.forEach(file => {
+      this.fileList.forEach((file) => {
         if (file.toBeUploaded) {
           this.uploadFile(file)
         }
@@ -908,11 +913,18 @@ export default {
         'progress',
         this.files[index],
         index,
-        this.requestMode === 'xhr' ? progress : null
+        progress || null
       )
     },
     onload (file, data) {
       this.uploadCallback(data, file)
+    },
+    oncancel (file) {
+      if (file._replacingFile) {
+        this.restoreReplacingFile(file)
+      } else {
+        this.remove(file, true)
+      }
     },
     onerror (file, error) {
       let index = this.fileList.indexOf(file)
@@ -927,9 +939,9 @@ export default {
         let xhr = new XMLHttpRequest()
         file.xhr = xhr
 
-        xhr.upload.onprogress = e => this.onprogress(file, e)
+        xhr.upload.onprogress = (e) => this.onprogress(file, e)
         xhr.onload = () => this.onload(file, this.parseData(xhr.responseText))
-        xhr.onerror = e => this.onerror(file, e)
+        xhr.onerror = (e) => this.onerror(file, e)
 
         let formData = new FormData()
         formData.append(this.name, file)
@@ -948,6 +960,7 @@ export default {
         let cancelFn = this.upload.call(null, file, {
           onload: partial(this.onload, file),
           onprogress: partial(this.onprogress, file),
+          oncancel: partial(this.oncancel, file),
           onerror: partial(this.onerror, file)
         })
 
@@ -1016,13 +1029,18 @@ export default {
         this.$emit('change', this.getValue(false))
       }
     },
-    remove (file) {
+    restoreReplacingFile (file) {
+      if (file._replacingFile) {
+        this.$set(this.fileList, this.fileList.indexOf(file), file._replacingFile)
+      }
+    },
+    remove (file, silent = false) {
       if (file.status === 'uploading') {
         this.cancel(file)
       }
 
       let index = this.fileList.indexOf(file)
-      if (!this.isReplacing) {
+      if (!this.isReplacing && !silent) {
         this.$emit('remove', this.files[index], index)
       }
 
@@ -1032,7 +1050,7 @@ export default {
         this.fileList.splice(index, 1)
       }
 
-      if (!file.toBeUploaded) {
+      if (!file.toBeUploaded && !silent) {
         this.$emit('change', this.getValue(true))
       }
     },
@@ -1136,7 +1154,7 @@ export default {
       this.$refs.input.click()
     },
     clear () {
-      this.fileList.forEach(file => {
+      this.fileList.forEach((file) => {
         if (file.status === 'uploading') {
           this.cancel(file)
         }

@@ -12,7 +12,7 @@ describe('components/Uploader', () => {
       }
     })
 
-    expect(wrapper.vm.$data.fileList).to.deep.equal([])
+    expect(wrapper.vm.$data.fileList).to.eql([])
     wrapper.destroy()
   })
 
@@ -24,7 +24,7 @@ describe('components/Uploader', () => {
       }
     })
 
-    expect(wrapper.vm.$data.fileList).to.deep.equal([
+    expect(wrapper.vm.$data.fileList).to.eql([
       { name: 'test.jpg', src: '/test.jpg', status: 'success' }
     ])
     wrapper.destroy()
@@ -80,13 +80,13 @@ describe('components/Uploader', () => {
     expect({
       value: input.element.value,
       name: input.attributes('name')
-    }).to.deep.equal({ value: '7', name: 'month' })
+    }).to.eql({ value: '7', name: 'month' })
 
     let input2 = form.findAll('input').at(1)
     expect({
       value: input2.element.value,
       name: input2.attributes('name')
-    }).to.deep.equal({ value: '1', name: 'day' })
+    }).to.eql({ value: '1', name: 'day' })
 
     await wrapper.vm.$nextTick()
     wrapper.destroy()
@@ -223,11 +223,11 @@ describe('components/Uploader', () => {
 
     let callbackData = { src: '/test2.jpg', id: 6, success: true }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
-    expect(wrapper.emitted().change[0][0]).to.deep.equal([
+    expect(wrapper.emitted().change[0][0]).to.eql([
       { name: 'test2.jpg', src: '/test2.jpg', id: 6 },
       { name: 'test1.jpg', src: '/test1.jpg', id: 5 }
     ])
-    expect(wrapper.emitted().success[0]).to.deep.equal([
+    expect(wrapper.emitted().success[0]).to.eql([
       {
         name: 'test2.jpg',
         src: '/test2.jpg',
@@ -246,7 +246,7 @@ describe('components/Uploader', () => {
 
     callbackData = { success: false, message: 'image too large' }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
-    expect(wrapper.emitted().failure[0]).to.deep.equal([
+    expect(wrapper.emitted().failure[0]).to.eql([
       {
         name: 'test3.jpg',
         status: 'failure',
@@ -289,7 +289,7 @@ describe('components/Uploader', () => {
       data: { src: '/test.jpg', success: true }
     })
 
-    expect(wrapper.emitted().change[0][0]).to.deep.equal([
+    expect(wrapper.emitted().change[0][0]).to.eql([
       { name: 'test.jpg', src: '/test.jpg' }
     ])
 
@@ -297,27 +297,106 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should support custom upload function correctly.', async () => {
+  it('should support custom upload function with type `image` correctly.', async () => {
+    let count = 0
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
         requestMode: 'custom',
-        upload: (file, { onload, onprogress, onerror }) => {
-          onload({ src: '/test.jpg', success: true })
+        type: 'image',
+        upload: async (file, { onload, onprogress, oncancel }) => {
+          onprogress({
+            loaded: 50,
+            total: 100
+          })
+
+          await wrapper.vm.$nextTick()
+          expect(wrapper.emitted().progress[count][1]).to.equal(0)
+          expect(wrapper.emitted().progress[count][2]).to.eql({ loaded: 50, total: 100 })
+
+          if (count === 1) {
+            oncancel()
+          } else {
+            onload({ src: `/test${count}.jpg`, success: true })
+          }
+          count++
         }
-      }
+      },
+      attachToDocument: true
     })
 
     let input = wrapper.find('input[type="file"]')
-    let dT = new DataTransfer()
-    dT.items.add(new File(['foo'], 'test.jpg'))
-    input.element.files = dT.files
+    let dt = new DataTransfer()
+    dt.items.add(new File(['foo'], 'test.jpg'))
+    input.element.files = dt.files
     input.trigger('change')
     await wait(0)
 
-    expect(wrapper.emitted().change[0][0]).to.deep.equal([
-      { name: 'test.jpg', src: '/test.jpg' }
+    expect(wrapper.emitted().change[0][0]).to.eql([
+      { name: 'test.jpg', src: '/test0.jpg' }
     ])
+
+    await wrapper.vm.$nextTick()
+    wrapper.find('.veui-uploader-list-image-mask label').trigger('click')
+    dt = new DataTransfer()
+    dt.items.add(new File(['foo'], 'test.jpg'))
+    input.element.files = dt.files
+    input.trigger('change')
+
+    await wait(0)
+    expect(wrapper.findAll('.veui-uploader-list-image-item:not(.veui-uploader-list-image-item-upload)').length).to.equal(1)
+    // should restore uploaded image
+    expect(wrapper.find('.veui-uploader-list-image-container-image').attributes('src')).to.equal('/test0.jpg')
+
+    wrapper.destroy()
+  })
+
+  it('should support custom upload function with type `file` correctly.', async () => {
+    let count = 0
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload',
+        requestMode: 'custom',
+        upload: async (file, { onload, onprogress, oncancel }) => {
+          onprogress({
+            loaded: count * 10 + 30,
+            total: 100
+          })
+
+          await wrapper.vm.$nextTick()
+          expect(wrapper.emitted().progress[count][1]).to.equal(0)
+          expect(wrapper.emitted().progress[count][2]).to.eql({ loaded: count * 10 + 30, total: 100 })
+
+          if (count === 1) {
+            oncancel()
+          } else {
+            onload({ src: `/test${count}.jpg`, success: true })
+          }
+          count++
+        }
+      },
+      attachToDocument: true
+    })
+
+    let input = wrapper.find('input[type="file"]')
+    let dt = new DataTransfer()
+    dt.items.add(new File(['foo'], 'test.jpg'))
+    input.element.files = dt.files
+    input.trigger('change')
+    await wait(0)
+
+    expect(wrapper.emitted().change[0][0]).to.eql([
+      { name: 'test.jpg', src: '/test0.jpg' }
+    ])
+
+    await wrapper.vm.$nextTick()
+    dt = new DataTransfer()
+    dt.items.add(new File(['foo'], 'test2.jpg'))
+    input.element.files = dt.files
+    input.trigger('change')
+
+    await wait(0)
+    expect(wrapper.findAll('.veui-uploader-list-item').length).to.equal(1)
 
     wrapper.destroy()
   })
@@ -331,13 +410,13 @@ describe('components/Uploader', () => {
     })
 
     let callbackData = JSON.stringify({ src: '/test.jpg', id: '23' })
-    expect(wrapper.vm.parseData(callbackData)).to.deep.equal({
+    expect(wrapper.vm.parseData(callbackData)).to.eql({
       src: '/test.jpg',
       id: '23'
     })
 
     callbackData = { src: '/test.jpg', id: '23' }
-    expect(wrapper.vm.parseData(callbackData)).to.deep.equal({
+    expect(wrapper.vm.parseData(callbackData)).to.eql({
       src: '/test.jpg',
       id: '23'
     })
@@ -364,11 +443,11 @@ describe('components/Uploader', () => {
       .findAll('.veui-uploader-list-remove')
       .at(1)
       .trigger('click')
-    expect(wrapper.emitted().remove[0]).to.deep.equal([
+    expect(wrapper.emitted().remove[0]).to.eql([
       { name: 'test2.jpg', src: '/test2.jpg', status: 'success' },
       1
     ])
-    expect(wrapper.emitted().change[0][0]).to.deep.equal([
+    expect(wrapper.emitted().change[0][0]).to.eql([
       { name: 'test1.jpg', src: '/test1.jpg' }
     ])
     wrapper.destroy()
@@ -406,6 +485,7 @@ describe('components/Uploader', () => {
     // 模拟progress
     fileList[0].xhr.upload.onprogress({ loaded: 10, total: 100 })
     expect(wrapper.emitted().progress[0][1]).to.equal(0)
+    expect(wrapper.emitted().progress[0][2]).to.eql({ loaded: 10, total: 100 })
     clearXHR(wrapper)
     wrapper.destroy()
   })
@@ -424,7 +504,7 @@ describe('components/Uploader', () => {
       .find('li')
       .find('button')
       .trigger('click')
-    expect(wrapper.vm.$data.fileList).to.deep.equal([])
+    expect(wrapper.vm.$data.fileList).to.eql([])
     wrapper.destroy()
   })
 
@@ -484,7 +564,7 @@ describe('components/Uploader', () => {
       .find('button')
       .trigger('click')
 
-    expect(wrapper.emitted().test[0][0]).to.deep.equal(
+    expect(wrapper.emitted().test[0][0]).to.eql(
       { name: 'test1.jpg', src: '/test1.jpg', status: 'success' },
       0
     )
@@ -516,9 +596,9 @@ describe('components/Uploader', () => {
     let callbackData = { src: '/test2.jpg', success: true }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
 
-    expect(wrapper.emitted().change[0][0]).to.deep.equal([])
+    expect(wrapper.emitted().change[0][0]).to.eql([])
 
-    expect(wrapper.emitted().change[1][0]).to.deep.equal([
+    expect(wrapper.emitted().change[1][0]).to.eql([
       { name: 'test2.jpg', src: '/test2.jpg' }
     ])
 

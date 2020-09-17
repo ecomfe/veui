@@ -25,6 +25,38 @@
       <veui-icon name="id-card"/>
     </template>
   </veui-uploader>
+  <h2>外部修改值</h2>
+  <veui-uploader
+    v-model="file"
+    type="image"
+    name="file"
+    :action="action"
+    :max-count="1"
+    max-size="500kb"
+    accept=".jpg,.jpeg,.gif"
+    :payload="payload"
+  >
+    <template slot="desc">
+      请选择jpg,jpeg,gif图片，大小在500kb以内，宽、高大于200像素，最多上传1张图
+    </template>
+  </veui-uploader>
+  <veui-button @click="handleChangeFile">修改</veui-button>
+  <h2>外部修改值（数组）</h2>
+  <veui-uploader
+    v-model="fileList"
+    type="image"
+    name="file"
+    :action="action"
+    :max-count="5"
+    max-size="500kb"
+    accept=".jpg,.jpeg,.gif"
+    :payload="payload"
+  >
+    <template slot="desc">
+      请选择jpg,jpeg,gif图片，大小在500kb以内，宽、高大于200像素，最多上传5张图
+    </template>
+  </veui-uploader>
+  <veui-button @click="handleChangeFiles">修改</veui-button>
   <h2>图片上传模式，扩展操作栏</h2>
   <veui-uploader
     ref="multipleUploader"
@@ -167,10 +199,22 @@ export default {
       }
     ]
 
+    let logos = [
+      'https://www.baidu.com/img/bd_logo1.png',
+      'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg'
+    ]
+
     return {
+      logos,
+      count: 0,
       action:
         'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog',
       // action: '/upload',
+      file: logos[0],
+      fileList: [
+        { name: 'bidu', src: 'https://www.baidu.com/img/bd_logo1.png' },
+        { name: 'tsla', src: 'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg' }
+      ],
       files,
       files1: files.slice(0),
       files2: files.slice(0),
@@ -187,7 +231,7 @@ export default {
       imageSrc: null,
       tooltipTarget: null,
       tooltipOpen: false,
-      upload: (file, { onload, onprogress, onerror }) => {
+      upload: (file, { onload, onprogress, onerror, oncancel }) => {
         // onload(file: Object, data: Object)
         // onprogress(file: Object, progress: Object({loaded, total}))
         // onerror(file: Object, error: Object({message}))
@@ -195,11 +239,16 @@ export default {
         file.xhr = xhr
 
         xhr.upload.onprogress = e => onprogress(e)
-        xhr.onload = () => {
-          try {
-            onload(JSON.parse(xhr.responseText))
-          } catch (e) {
-            onload({ success: false, message: e })
+        xhr.onload = async () => {
+          const toProceed = await this.$confirm('Upload complete. Proceed?')
+          if (toProceed) {
+            try {
+              onload(JSON.parse(xhr.responseText))
+            } catch (e) {
+              onload({ success: false, message: e })
+            }
+          } else {
+            oncancel()
           }
         }
         xhr.onerror = e => onerror(e)
@@ -252,6 +301,17 @@ export default {
     },
     handleInvalid (arg) {
       console.log('File invalid: ', arg)
+    },
+    handleChangeFile () {
+      this.count++
+      this.file = this.logos[this.count % 2]
+    },
+    handleChangeFiles () {
+      this.count++
+      this.fileList.unshift({
+        name: 'img-' + this.count,
+        src: this.logos[this.count % 2]
+      })
     },
     convertResponse (data) {
       return {
