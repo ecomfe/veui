@@ -208,7 +208,7 @@ export default {
       this.$emit(type)
     },
     outside () {
-      if (this.outsideClosable) {
+      if (this.outsideClosable && this.realOpen) {
         this.cancel()
       }
     },
