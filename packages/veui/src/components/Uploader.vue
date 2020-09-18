@@ -614,28 +614,31 @@ export default {
     }
   },
   watch: {
-    value (val) {
-      let temp = this.genFileList(val)
+    value: {
+      handler (val) {
+        let temp = this.genFileList(val)
 
-      if (!Array.isArray(val)) {
-        return cloneDeep(temp)
-      }
+        if (!Array.isArray(val)) {
+          return cloneDeep(temp)
+        }
 
-      let successIndex = 0
-      this.fileList = this.fileList
-        .map((file) => {
-          if (file.status === 'success' && !file.toBeUploaded) {
+        let successIndex = 0
+        this.fileList = this.fileList
+          .map((file) => {
+            if (file.status === 'success' && !file.toBeUploaded) {
             // 处理外部直接减少文件的情形
-            if (successIndex + 1 > temp.length) {
-              return null
+              if (successIndex + 1 > temp.length) {
+                return null
+              }
+              return assign(file, temp[successIndex++])
             }
-            return assign(file, temp[successIndex++])
-          }
-          return file
-        })
-        .filter(Boolean)
+            return file
+          })
+          .filter(Boolean)
         // 处理外部直接增加文件的情形
-        .concat(cloneDeep(temp.slice(successIndex)))
+          .concat(cloneDeep(temp.slice(successIndex)))
+      },
+      deep: true
     },
     status (val) {
       if (val) {
