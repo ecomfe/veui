@@ -182,24 +182,22 @@ export default {
     realMax () {
       let max = this.max
       if (get(this, 'formField.localRules.length')) {
-        return (
-          get(
-            find(this.formField.localRules, ({ name }) => name === 'max'),
-            'value'
-          ) || max
+        let maxOfField = get(
+          find(this.formField.localRules, ({ name }) => name === 'max'),
+          'value'
         )
+        return maxOfField == null ? max : maxOfField
       }
       return max
     },
     realMin () {
       let min = this.min
       if (get(this, 'formField.localRules.length')) {
-        return (
-          get(
-            find(this.formField.localRules, ({ name }) => name === 'min'),
-            'value'
-          ) || min
+        let minOfField = get(
+          find(this.formField.localRules, ({ name }) => name === 'min'),
+          'value'
         )
+        return minOfField == null ? min : minOfField
       }
       return min
     },
@@ -208,6 +206,13 @@ export default {
     },
     reachMinLimit () {
       return this.realMin != null && this.realValue != null && this.realValue <= this.realMin
+    },
+    checkValues () {
+      return {
+        max: this.realMax,
+        min: this.realMin,
+        value: this.value
+      }
     }
   },
   watch: {
@@ -218,20 +223,22 @@ export default {
         // 没有 local 状态了，就是 realValue 生效了，见 realInputValue
         this.parsedInputValue = null
       }
-    }
-  },
-  created () {
-    if (this.realMax < this.realMin) {
-      warn(
-        '[veui-number-input] `max` value must not be less than `min` value.',
-        this
-      )
-    }
-    if (this.value > this.realMax || this.value < this.realMin) {
-      warn(
-        '[veui-number-input] `value` must not be less than `min` value and not greater than `max` value.',
-        this
-      )
+    },
+    checkValues ({ max, min, value }) {
+      if (max != null && min != null && max < min) {
+        warn(
+          '[veui-number-input] `max` value must not be less than `min` value.',
+          this
+        )
+      }
+      let maxError = max != null && value != null && value > max
+      let minError = min != null && value != null && value < min
+      if (maxError || minError) {
+        warn(
+          '[veui-number-input] `value` must not be less than `min` value and not greater than `max` value.',
+          this
+        )
+      }
     }
   },
   methods: {
