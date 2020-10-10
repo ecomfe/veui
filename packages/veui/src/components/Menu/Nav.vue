@@ -250,6 +250,7 @@ import mixin from './_mixin'
 import resize from '../../directives/resize'
 import { getFocusable } from '../../utils/dom'
 import { last } from 'lodash'
+import warn from '../../utils/warn'
 
 export default {
   name: 'veui-nav',
@@ -346,7 +347,7 @@ export default {
       }
       if (len < 1) {
         // 第一个 menuitem 都放不下
-        console.warn('[veui-menu] label of first menu item is too long.')
+        warn('[veui-menu] label of first menu item is too long.', this)
         return 1
       }
       return len
