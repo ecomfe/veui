@@ -43,7 +43,9 @@ module.exports = {
       return args
     })
 
-    // config.devtool('source-map')
+    if (process.env.NODE_ENV === 'test') {
+      config.devtool('cheap-module-eval-source-map')
+    }
 
     config.resolve.alias
       .set(
