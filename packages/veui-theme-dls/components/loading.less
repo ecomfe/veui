@@ -43,12 +43,14 @@
     display: flex;
     color: @dls-loading-color-normal;
 
+    .@{veui-prefix}-loading-content,
     .@{veui-prefix}-icon,
     .dls-icon {
       .dls-icon-size(@dls-loading-size-m);
     }
 
     &[ui~="s"] {
+      .@{veui-prefix}-loading-content,
       .@{veui-prefix}-icon,
       .dls-icon {
         .dls-icon-size(@dls-loading-size-s);
@@ -56,6 +58,7 @@
     }
 
     &[ui~="l"] {
+      .@{veui-prefix}-loading-content,
       .@{veui-prefix}-icon,
       .dls-icon {
         .dls-icon-size(@dls-loading-size-l);
