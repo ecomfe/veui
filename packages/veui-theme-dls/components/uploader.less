@@ -149,10 +149,14 @@
 
   &-list-image {
     margin: -@dls-uploader-image-spacing-y 0 0 -@dls-uploader-image-spacing-x;
+
     &-item {
       display: inline-block;
       vertical-align: top;
       margin: @dls-uploader-image-spacing-y 0 0 @dls-uploader-image-spacing-x;
+      .size(@dls-uploader-image-width, @dls-uploader-image-height);
+      border-radius: @dls-button-border-radius-m;
+      border: 1px solid @dls-button-border-color-basic;
 
       &-hidden {
         opacity: 0;
@@ -163,10 +167,9 @@
 
     &-container {
       display: flex;
-      .size(@dls-uploader-image-width, @dls-uploader-image-height);
       position: relative;
-      border-radius: @dls-button-border-radius-m;
-      border: 1px solid @dls-button-border-color-basic;
+      .size(100%);
+
       &-image {
         width: auto;
         height: auto;
@@ -189,9 +192,11 @@
       align-items: center;
       justify-content: center;
       padding: 0 @dls-uploader-image-padding-x;
+
       &-text {
         margin: 0;
       }
+
       .@{veui-prefix}-progress {
         width: 100%;
         height: auto;

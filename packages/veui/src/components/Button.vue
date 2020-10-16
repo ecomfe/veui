@@ -1,6 +1,7 @@
 <script>
 import { omit } from 'lodash'
 import Icon from './Icon'
+import Loading from './Loading'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
@@ -53,16 +54,20 @@ export default {
         }}
       >
         {this.loading ? (
-          <Icon
-            class={this.$c('button-loading-icon')}
-            name={this.icons.loading}
-            spin
-          />
+          this.icons.loading ? (
+            <Icon
+              class={this.$c('button-loading-icon')}
+              name={this.icons.loading}
+              spin
+            />
+          ) : (
+            <Loading class={this.$c('button-loading-icon')} loading />
+          )
         ) : null}
         {(this.$scopedSlots.default
           ? this.$scopedSlots.default()
           : this.$slots.default || []
-        ).map(vnode =>
+        ).map((vnode) =>
           !vnode.tag && (vnode.text || '').trim() ? <span>{vnode}</span> : vnode
         )}
       </button>
