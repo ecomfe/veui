@@ -34,9 +34,7 @@
 import Icon from './Icon'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
-import { loading } from 'dls-graphics'
-
-// console.log(loading)
+import { loading } from 'dls-graphics/dist/separate'
 
 export default {
   name: 'veui-loading',
@@ -53,3 +51,5 @@ export default {
   }
 }
 </script>
+
+<style src="dls-graphics/dist/separate/loading.css"></style>
