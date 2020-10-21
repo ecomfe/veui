@@ -85,7 +85,7 @@ export default {
 
       if (this.multiple) {
         return (this.realValue || [])
-          .map(val => findOptionByValue(this.realOptions, val))
+          .map((val) => findOptionByValue(this.realOptions, val))
           .filter(Boolean)
       }
 
@@ -149,7 +149,7 @@ export default {
     isMultiLevel () {
       return this.realOptions
         ? this.realOptions.some(
-          option =>
+          (option) =>
             option.options &&
               option.options.length > 0 &&
               option.position === 'popup'
@@ -163,17 +163,28 @@ export default {
       return this.searchable ? config.get('keyselect.focusSelector') : null
     },
     hasLabelSlot () {
-      return this.$scopedSlots.label || this.$slots.label
+      return !!(this.$scopedSlots.label || this.$slots.label)
+    },
+    hasSelectedSlot () {
+      return !!(this.$scopedSlots.selected || this.$slots.selected)
     },
     slotProps () {
       return {
         expanded: this.realExpanded,
         value: this.realValue,
-        toggle: val => {
+        toggle: (val) => {
           this.commit('expanded', val == null ? !this.realExpanded : val)
         },
-        select: val => this.commit('value', val)
+        select: (val) => this.commit('value', val)
       }
+    },
+    layoutWrap () {
+      return (
+        this.multiple &&
+        !this.isEmpty &&
+        (!this.hasLabelSlot || this.realExpanded) &&
+        !this.hasSelectedSlot
+      )
     }
   },
   watch: {
@@ -188,7 +199,20 @@ export default {
   },
   methods: {
     clear (e) {
-      this.commit('value', this.multiple ? [] : null)
+      if (this.multiple) {
+        let disabledValues = this.realValue
+          .map((value) => findOptionByValue(this.realOptions, value))
+          .filter(({ disabled } = {}) => disabled)
+          .map(({ value }) => value)
+        this.commit('value', disabledValues)
+      } else {
+        let { disabled } =
+          findOptionByValue(this.realOptions, this.realValue) || {}
+        if (!disabled) {
+          this.commit('value', null)
+        }
+      }
+
       this.inputValue = ''
       this.$emit('clear')
       e.stopPropagation()
@@ -299,7 +323,7 @@ export default {
           }
 
           if (this.multiple && this.searchable && !this.inputValue) {
-            for (let i = this.realValue.length - 1; i >= 0; i--) {
+            for (let i = values.length - 1; i >= 0; i--) {
               let option = findOptionByValue(this.realOptions, values[i])
               if (!option.disabled) {
                 let result = [...this.realValue]
@@ -373,14 +397,14 @@ export default {
       : null
 
     let option = this.multiple
-      ? option => {
+      ? (option) => {
         return (
           <Checkbox
             tabindex="-1"
             ui={this.uiParts.checkbox}
             checked={!!option.selected}
             disabled={!!option.disabled}
-            onClick={e => e.preventDefault()}
+            onClick={(e) => e.preventDefault()}
           >
             {option.renderLabel
               ? option.renderLabel(omit(option, ['renderLabel']))
@@ -413,7 +437,7 @@ export default {
       </Tag>
     ))
 
-    let renderCustomLabel = props => {
+    let renderCustomLabel = (props) => {
       let customLabel = renderSlot(this, 'label', props)
       if (!customLabel) {
         return null
@@ -422,31 +446,52 @@ export default {
       return <div class={this.$c('select-custom-label')}>{customLabel}</div>
     }
 
-    let multiBeforeSlot = this.multiple ? (
-      this.selected.length > 0 && this.hasLabelSlot && !this.realExpanded ? (
-        renderCustomLabel({
-          selected: this.selected
-        })
-      ) : this.selected.length === 0 && !this.searchable ? (
-        <span class={this.$c('select-placeholder')} id={this.labelId}>
-          {this.realPlaceholder}
-        </span>
-      ) : (
-        selectedTags
+    let renderCustomSelected = (props) => {
+      let customSelected = renderSlot(this, 'selected', props)
+      if (!customSelected) {
+        return null
+      }
+
+      return (
+        <div class={this.$c('select-custom-selected')}>{customSelected}</div>
       )
+    }
+
+    let renderLabelOrSelected = (props) =>
+      renderCustomLabel(props) || renderCustomSelected(props)
+
+    let multiBeforeSlot = this.multiple ? (
+      this.selected.length > 0 &&
+      ((this.hasLabelSlot && !this.realExpanded) || this.hasSelectedSlot) ? (
+          this.hasLabelSlot && !this.realExpanded ? (
+            renderCustomLabel({ selected: this.selected })
+          ) : (
+            renderCustomSelected({ selected: this.selected })
+          )
+        ) : this.selected.length === 0 && !this.searchable ? (
+          <span class={this.$c('select-placeholder')} id={this.labelId}>
+            {this.realPlaceholder}
+          </span>
+        ) : (
+          selectedTags
+        )
     ) : null
 
-    let beforeSlot = !this.searchable ? (
-      <span
-        class={{
-          [this.$c('select-label')]: true,
-          [this.$c('select-placeholder')]: this.realValue === null
-        }}
-        id={this.labelId}
-      >
-        {renderCustomLabel(this.selected || { selected: false }) || this.label}
-      </span>
-    ) : null
+    let beforeSlot =
+      !this.multiple && !this.searchable && this.realValue != null ? (
+        <span
+          class={{
+            [this.$c('select-label')]: true,
+            [this.$c('select-placeholder')]: this.realValue === null
+          }}
+          id={this.labelId}
+        >
+          {renderLabelOrSelected({
+            ...this.selected,
+            selected: this.realValue != null
+          }) || this.label}
+        </span>
+      ) : null
 
     let renderGroup = (options, children, key) => {
       return (
@@ -476,10 +521,7 @@ export default {
           [this.$c('select-expanded')]: this.realExpanded,
           [this.$c('select-searchable')]: this.searchable,
           [this.$c('select-multiple')]: this.multiple,
-          [this.$c('select-wrap')]:
-            this.multiple &&
-            !this.isEmpty &&
-            (!this.hasLabelSlot || this.realExpanded),
+          [this.$c('select-wrap')]: this.layoutWrap,
           [this.$c('readonly')]: this.realReadonly,
           [this.$c('disabled')]: this.realDisabled,
           [this.$c('input-invalid')]: this.realInvalid
@@ -498,73 +540,78 @@ export default {
         }
         onKeydown={this.handleTriggerKeydown}
       >
-        {
-          this.$scopedSlots.trigger ? (
-            this.$scopedSlots.trigger({
-              props: this.slotProps,
-              handlers: {
-                mouseup: this.handleInputMouseup,
-                blur: this.handleInputBlur,
-                input: this.handleTriggerInput
-              }
-            })
-          ) : (
-            <Input
-              ref="input"
-              class={this.$c('select-trigger')}
-              disabled={this.realDisabled}
-              readonly={this.realReadonly}
-              placeholder={this.inputPlaceholder}
-              value={this.inputValue}
-              onMouseup={this.handleInputMouseup}
-              onBlur={this.handleInputBlur}
-              onInput={this.handleTriggerInput}
-              autocomplete="off"
-              composition
-            >
-              {!this.multiple && this.selected != null && this.hasLabelSlot ? (
+        {this.$scopedSlots.trigger ? (
+          this.$scopedSlots.trigger({
+            props: this.slotProps,
+            handlers: {
+              mouseup: this.handleInputMouseup,
+              blur: this.handleInputBlur,
+              input: this.handleTriggerInput
+            }
+          })
+        ) : (
+          <Input
+            ref="input"
+            class={this.$c('select-trigger')}
+            disabled={this.realDisabled}
+            readonly={this.realReadonly}
+            placeholder={this.inputPlaceholder}
+            value={this.inputValue}
+            onMouseup={this.handleInputMouseup}
+            onBlur={this.handleInputBlur}
+            onInput={this.handleTriggerInput}
+            autocomplete="off"
+            composition
+          >
+            {!this.multiple &&
+            this.searchable &&
+            this.selected != null &&
+            (this.hasLabelSlot || this.hasSelectedSlot) ? (
                 <template slot="placeholder">
-                  {renderCustomLabel(this.selected || { selected: false }) ||
-                    this.label}
+                  {renderLabelOrSelected({
+                    ...this.selected,
+                    selected: this.realValue != null
+                  }) || this.label}
                 </template>
               ) : null}
-              <template slot="before">
-                {this.multiple ? multiBeforeSlot : beforeSlot}
-              </template>
-              <template slot="after">
-                {this.limitLabel ? (
-                  <span class={this.$c('select-count')}>{this.limitLabel}</span>
-                ) : null}
-                <div class={this.$c('select-icon')}>
-                  {this.clearable &&
-                  (this.multiple ? this.realValue.length > 0 : !!this.realValue) ? (
-                      <Button
-                        class={this.$c('select-clear')}
-                        ui={this.uiParts.clear}
-                        aria-label={this.t('clear')}
-                        disabled={this.realDisabled || this.realReadonly}
-                        // had to do so because of vuejs/jsx#77
-                        {...{
-                          on: {
-                            click: this.clear,
-                            '!keydown': stopPropagation,
-                            '!mousedown': stopPropagation,
-                            '!mouseup': stopPropagation
-                          }
-                        }}
-                      >
-                        <Icon name={this.icons.clear} />
-                      </Button>
-                    ) : null}
-                  <Icon
-                    class={this.$c('select-toggle')}
-                    name={this.icons[this.realExpanded ? 'collapse' : 'expand']}
-                  />
-                </div>
-              </template>
-            </Input>
-          )
-        }
+            <template slot="before">
+              {this.multiple ? multiBeforeSlot : beforeSlot}
+            </template>
+            <template slot="after">
+              {this.limitLabel ? (
+                <span class={this.$c('select-count')}>{this.limitLabel}</span>
+              ) : null}
+              <div class={this.$c('select-icon')}>
+                {this.clearable &&
+                (this.multiple
+                  ? this.realValue.length > 0
+                  : !!this.realValue) ? (
+                    <Button
+                      class={this.$c('select-clear')}
+                      ui={this.uiParts.clear}
+                      aria-label={this.t('clear')}
+                      disabled={this.realDisabled || this.realReadonly}
+                      // had to do so because of vuejs/jsx#77
+                      {...{
+                        on: {
+                          click: this.clear,
+                          '!keydown': stopPropagation,
+                          '!mousedown': stopPropagation,
+                          '!mouseup': stopPropagation
+                        }
+                      }}
+                    >
+                      <Icon name={this.icons.clear} />
+                    </Button>
+                  ) : null}
+                <Icon
+                  class={this.$c('select-toggle')}
+                  name={this.icons[this.realExpanded ? 'collapse' : 'expand']}
+                />
+              </div>
+            </template>
+          </Input>
+        )}
         {
           <Overlay
             v-show={this.realExpanded}
@@ -631,7 +678,7 @@ function stopPropagation (e) {
 }
 
 function findOptionByValue (options, value) {
-  return find(options, item => item.value === value, 'options')
+  return find(options, (item) => item.value === value, 'options')
 }
 
 function normalizeItem (item) {

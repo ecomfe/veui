@@ -29,14 +29,14 @@
 <script>
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
-import menu from '../../mixins/menu'
-import select from '../../mixins/select'
+import menuItem from '../../mixins/menu-item'
+import selectItem from '../../mixins/select-item'
 import { scrollIntoView } from '../../utils/dom'
 import { isType } from '../../utils/helper'
 
 export default {
   name: 'veui-option',
-  mixins: [prefix, ui, menu, select],
+  mixins: [prefix, ui, menuItem, selectItem],
   props: {
     label: {
       type: [String, Number]

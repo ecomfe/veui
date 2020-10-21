@@ -144,11 +144,12 @@ describe('components/Select/Select', () => {
             value: null
           }
         },
-        template: `<veui-select
-          v-model="value"
-          :options="options"
-          placeholder="Please select"
-        />`
+        template: `
+          <veui-select
+            v-model="value"
+            :options="options"
+            placeholder="Please select"
+          />`
       },
       {
         sync: false,
@@ -157,13 +158,12 @@ describe('components/Select/Select', () => {
     )
 
     let { vm } = wrapper
-    let label = wrapper.find('.veui-select-label')
 
     expect(wrapper.text()).to.equal('Please select')
 
     vm.value = '3'
     await vm.$nextTick()
-    expect(label.text()).to.equal('选项3')
+    expect(wrapper.text()).to.equal('选项3')
 
     vm.value = null
     await vm.$nextTick()
@@ -511,7 +511,7 @@ describe('components/Select/Select', () => {
     wrapper.destroy()
   })
 
-  it('should render label slot correctly', async () => {
+  it('should render option label slot correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -704,6 +704,236 @@ describe('components/Select/Select', () => {
     await vm.$nextTick()
     expect(vm.value).to.equal('2-1')
     expect(wrapper.find('.trigger-btn').text()).to.equal('2-1')
+
+    wrapper.destroy()
+  })
+
+  it('should render label slot correctly with single select', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select
+        },
+        data () {
+          return {
+            value: '1-1',
+            options: datasource,
+            searchable: false
+          }
+        },
+        template: `
+          <veui-select
+            v-model="value"
+            :options="options"
+            :searchable="searchable"
+          >
+            <template #label="{ label }">
+              <em>{{ label }}</em>
+            </template>
+          </veui-select>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+    expect(wrapper.findAll('em').length).to.equal(1)
+    expect(wrapper.find('em').text()).to.equal('子选项1-1')
+
+    vm.value = null
+    await vm.$nextTick()
+    expect(wrapper.find('em').exists()).to.equal(false)
+
+    vm.searchable = true
+    await vm.$nextTick()
+    expect(wrapper.find('em').exists()).to.equal(false)
+
+    vm.value = '1-1'
+    await vm.$nextTick()
+    expect(wrapper.findAll('em').length).to.equal(1)
+    expect(wrapper.find('em').text()).to.equal('子选项1-1')
+
+    wrapper.destroy()
+  })
+
+  it('should render label slot correctly with multiple select', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select
+        },
+        data () {
+          return {
+            value: ['1-1', '2-1'],
+            options: datasource,
+            searchable: false,
+            expanded: false
+          }
+        },
+        template: `
+        <veui-select
+          v-model="value"
+          multiple
+          :options="options"
+          :searchable="searchable"
+          :expanded="expanded"
+        >
+          <template #label="{ selected }">
+            <em v-for="{ label }, index in selected" :key="index">{{ label }}</em>
+          </template>
+        </veui-select>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+    expect(wrapper.findAll('em').length).to.equal(2)
+    expect(wrapper.findAll('em').wrappers.map(w => w.text())).to.eql([
+      '子选项1-1',
+      '子选项2-1'
+    ])
+
+    vm.value = []
+    await vm.$nextTick()
+    expect(wrapper.find('em').exists()).to.equal(false)
+
+    vm.searchable = true
+    await vm.$nextTick()
+    expect(wrapper.find('em').exists()).to.equal(false)
+
+    vm.value = ['1-1', '2-1']
+    await vm.$nextTick()
+    expect(wrapper.findAll('em').length).to.equal(2)
+    expect(wrapper.findAll('em').wrappers.map(w => w.text())).to.eql([
+      '子选项1-1',
+      '子选项2-1'
+    ])
+
+    vm.expanded = true
+    await vm.$nextTick()
+    expect(wrapper.findAll('em').length).to.equal(0)
+
+    wrapper.destroy()
+  })
+
+  it('should render selected slot correctly with single select', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select
+        },
+        data () {
+          return {
+            value: '1-1',
+            options: datasource,
+            searchable: false
+          }
+        },
+        template: `
+          <veui-select
+            v-model="value"
+            :options="options"
+            :searchable="searchable"
+          >
+            <template #selected="{ label }">
+              <em>{{ label }}</em>
+            </template>
+          </veui-select>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+    expect(wrapper.findAll('em').length).to.equal(1)
+    expect(wrapper.find('em').text()).to.equal('子选项1-1')
+
+    vm.value = null
+    await vm.$nextTick()
+    expect(wrapper.find('em').exists()).to.equal(false)
+
+    vm.searchable = true
+    await vm.$nextTick()
+    expect(wrapper.find('em').exists()).to.equal(false)
+
+    vm.value = '1-1'
+    await vm.$nextTick()
+    expect(wrapper.findAll('em').length).to.equal(1)
+    expect(wrapper.find('em').text()).to.equal('子选项1-1')
+
+    wrapper.destroy()
+  })
+
+  it('should render selected slot correctly with multiple select', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select
+        },
+        data () {
+          return {
+            value: ['1-1', '2-1'],
+            options: datasource,
+            searchable: false,
+            expanded: false
+          }
+        },
+        template: `
+        <veui-select
+          v-model="value"
+          multiple
+          :options="options"
+          :searchable="searchable"
+          :expanded="expanded"
+        >
+          <template #selected="{ selected }">
+            <em v-for="{ label }, index in selected" :key="index">{{ label }}</em>
+          </template>
+        </veui-select>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+    expect(wrapper.findAll('em').length).to.equal(2)
+    expect(wrapper.findAll('em').wrappers.map(w => w.text())).to.eql([
+      '子选项1-1',
+      '子选项2-1'
+    ])
+
+    vm.value = []
+    await vm.$nextTick()
+    expect(wrapper.find('em').exists()).to.equal(false)
+
+    vm.searchable = true
+    await vm.$nextTick()
+    expect(wrapper.find('em').exists()).to.equal(false)
+
+    vm.value = ['1-1', '2-1']
+    await vm.$nextTick()
+    expect(wrapper.findAll('em').length).to.equal(2)
+    expect(wrapper.findAll('em').wrappers.map(w => w.text())).to.eql([
+      '子选项1-1',
+      '子选项2-1'
+    ])
+
+    vm.expanded = true
+    await vm.$nextTick()
+    expect(wrapper.findAll('em').length).to.equal(2)
 
     wrapper.destroy()
   })
