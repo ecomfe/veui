@@ -11,6 +11,12 @@
 - [+] `Table` 组件新增 `loading` prop，展示“加载中”状态。
 - [+] `Table`/`Column` 组件新增 `allowed-orders` prop，支持定制允许的顺序。
 - [+] `Select` 组件新增 `trigger` 插槽，用于自定义下拉触发区域。
+- [+] `Select` 组件新增 `selected` 插槽，用于自定义下拉按钮已选项回填内容的展示。
+
+    > #### 与 `label` 插槽的区别
+    >
+    > `label` 插槽仅针对收起状态下的已选项回填内容，而 `selected` 插槽包括了展开状态下的已选项回填内容。
+
 - [+] `Uploader` 组件新增了 `type` prop 的可选值 `video`/`media`，用来支持视频上传的场景。
 - [+] `Uploader` 组件新增了 `entries` prop，内置了多入口操作的功能，类型和 `controls` 的返回值相同。
 - [+] `Table` 组件新增 `loading` prop，展示“加载中”状态。

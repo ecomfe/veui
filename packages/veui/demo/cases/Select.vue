@@ -139,6 +139,20 @@
     </veui-select>
   </section>
   <section>
+    <h2>可搜索Select：(自定义 selected slot)</h2>
+    <veui-select
+      v-model="defaultValue2"
+      v-bind="attrs"
+      ui="checkmark"
+      searchable
+    >
+      <template #selected="{ label }">
+        {{ label }}
+        <veui-icon name="flag"/>
+      </template>
+    </veui-select>
+  </section>
+  <section>
     <h2>可搜索多选Select：</h2>
     <veui-select
       v-model="defaultSearchMultiValue"
@@ -155,7 +169,17 @@
       searchable
       multiple
     >
-      <template #label="{ selected }">{{ selected.map(({ label }) => label).join('；') }}</template>
+      <template #label="{ selected }">{{ selected[0].label }}等{{ selected.length }}个{{ ' ' }}</template>
+    </veui-select>
+  </section>
+  <section>
+    <h2>多选Select：(自定义 selected slot)</h2>
+    <veui-select
+      v-model="defaultSearchMultiValue"
+      v-bind="attrs"
+      multiple
+    >
+      <template #selected="{ selected }">{{ selected[0].label }}{{ selected.length > 1 ? `等${selected.length}个` : '' }}</template>
     </veui-select>
   </section>
   <section>

@@ -5,8 +5,8 @@ import Icon from '../Icon'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import overlay from '../../mixins/overlay'
-import menu from '../../mixins/menu'
-import select from '../../mixins/select'
+import menuItem from '../../mixins/menu-item'
+import selectItem from '../../mixins/select-item'
 import keySelect from '../../mixins/key-select'
 import outside from '../../directives/outside'
 import '../../common/uiTypes'
@@ -37,7 +37,7 @@ const OptionGroup = {
   directives: {
     outside
   },
-  mixins: [prefix, ui, menu, select, overlay, keySelect],
+  mixins: [prefix, ui, menuItem, selectItem, overlay, keySelect],
   props: {
     label: String,
     trigger: {
