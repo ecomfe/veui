@@ -85,14 +85,17 @@ export default {
     selectOption () {
       if (!this.disabled) {
         this.$emit('click')
-        if (!this.select.multiple) {
-          let menu = this.menu
-          while (menu) {
-            menu.close()
-            menu = menu.menu
+
+        if (this.select) {
+          if (!this.select.multiple) {
+            let menu = this.menu
+            while (menu) {
+              menu.close()
+              menu = menu.menu
+            }
           }
+          this.select.handleSelect(this.value)
         }
-        this.select.handleSelect(this.value)
       }
     }
   }
