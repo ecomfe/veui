@@ -166,6 +166,7 @@
         status="error"
       >Articles</veui-tab>
       <veui-tab label="分享朋友圈">Shares</veui-tab>
+      <template #tab-label="{ label }"><em>{{ label }}</em></template>
     </veui-tabs>
     <veui-tabs ui="l">
       <veui-tab
