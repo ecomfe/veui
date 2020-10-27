@@ -175,7 +175,7 @@
           <veui-loading
             loading
             ui="strong l overlay"
-          />
+          >正在加载…</veui-loading>
         </div>
         <div class="card">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate

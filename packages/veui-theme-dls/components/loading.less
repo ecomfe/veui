@@ -20,6 +20,7 @@
     justify-content: center;
     background-color: @dls-loading-background-color;
     border-radius: inherit;
+    backdrop-filter: blur(1px);
 
     &[ui~="reverse"] {
       background-color: @dls-loading-background-color-reverse;
@@ -30,11 +31,11 @@
     color: @dls-loading-font-color-normal;
     margin-left: @dls-loading-content-spacing;
 
-    &[ui~="strong"] {
+    .@{veui-prefix}-loading[ui~="strong"] & {
       color: @dls-loading-font-color-strong;
     }
 
-    &[ui~="reverse"] {
+    .@{veui-prefix}-loading[ui~="reverse"] & {
       color: @dls-loading-font-color-reverse;
     }
   }
@@ -49,7 +50,7 @@
       .dls-icon-size(@dls-loading-size-m);
     }
 
-    &[ui~="s"] {
+    .@{veui-prefix}-loading[ui~="s"] & {
       .@{veui-prefix}-loading-content,
       .@{veui-prefix}-icon,
       .dls-icon {
@@ -57,7 +58,7 @@
       }
     }
 
-    &[ui~="l"] {
+    .@{veui-prefix}-loading[ui~="l"] & {
       .@{veui-prefix}-loading-content,
       .@{veui-prefix}-icon,
       .dls-icon {
@@ -65,15 +66,15 @@
       }
     }
 
-    &[ui~="strong"] {
+    .@{veui-prefix}-loading[ui~="strong"] & {
       color: @dls-loading-color-strong;
     }
 
-    &[ui~="reverse"] {
+    .@{veui-prefix}-loading[ui~="reverse"] & {
       color: @dls-loading-color-reverse;
     }
 
-    &[ui~="vertical"] {
+    .@{veui-prefix}-loading[ui~="vertical"] & {
       margin-bottom: @dls-loading-padding;
     }
   }

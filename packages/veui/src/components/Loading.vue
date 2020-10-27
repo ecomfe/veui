@@ -4,10 +4,7 @@
   :ui="realUi"
   :class="$c('loading')"
 >
-  <div
-    :ui="realUi"
-    :class="$c('loading-spinner')"
-  >
+  <div :class="$c('loading-spinner')">
     <slot name="spinner">
       <veui-icon
         v-if="icons.loading"
@@ -16,14 +13,12 @@
       />
       <svg
         v-bind="attrs"
-        :class="$c('loading-content')"
         v-html="contents"
       />
     </slot>
   </div>
   <div
     v-if="$slots.default"
-    :ui="realUi"
     :class="$c('loading-text')"
   >
     <slot/>
@@ -47,7 +42,10 @@ export default {
   },
   created () {
     this.contents = loading.contents
-    this.attrs = loading.attrs
+
+    let attrs = loading.attrs
+    let { class: className, ...others } = attrs
+    this.attrs = { class: [className, this.$c('loading-content')], ...others }
   }
 }
 </script>
