@@ -537,6 +537,14 @@ export default {
       return this.selectColumnWidth + this.expandColumnWidth
     }
   },
+  created () {
+    if ('keys' in this.$options.propsData) {
+      warn(
+        '[veui-talbe] The `keys` prop is deprecated and will be removed in v2.0.0. Use `key-field` instead.',
+        this
+      )
+    }
+  },
   mounted () {
     this.supportSticky = cssSupports('position', 'sticky')
     ;['scrollableX', 'scrollableY'].forEach(state => {

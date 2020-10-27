@@ -49,14 +49,14 @@ export default {
 
     if ('closable' in this.$options.propsData) {
       warn(
-        '[veui-tag] `closable` prop is deprecated and will be removed in v2.0.0. Use `removable` instead.',
+        '[veui-tag] The `closable` prop is deprecated and will be removed in v2.0.0. Use `removable` instead.',
         this
       )
     }
 
     if (this.$listeners.close) {
       warn(
-        '[veui-tag] `close` event is deprecated and will be removed in v2.0.0. Use `remove` instead.',
+        '[veui-tag] The `close` event is deprecated and will be removed in v2.0.0. Use `remove` instead.',
         this
       )
     }
