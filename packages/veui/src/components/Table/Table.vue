@@ -111,6 +111,13 @@
       }"
     />
   </div>
+  <veui-loading
+    :class="$c('table-loading')"
+    :loading="loading"
+    :ui="uiParts.loading"
+  >
+    {{ t('loading') }}
+  </veui-loading>
 </div>
 </template>
 
@@ -124,6 +131,7 @@ import i18n from '../../mixins/i18n'
 import colgroup from '../../mixins/colgroup'
 import useControllable from '../../mixins/controllable'
 import resize from '../../directives/resize'
+import Loading from '../Loading'
 import {
   map,
   mapValues,
@@ -169,7 +177,8 @@ export default {
     'table-body': Body,
     'table-head': Head,
     'table-foot': Foot,
-    'col-group': ColGroup
+    'col-group': ColGroup,
+    'veui-loading': Loading
   },
   directives: {
     resize
@@ -257,7 +266,8 @@ export default {
       }
     },
     orderBy: String,
-    columnFilter: Array
+    columnFilter: Array,
+    loading: Boolean
   },
   data () {
     return {

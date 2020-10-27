@@ -9,6 +9,7 @@
       @click="append"
     >添加</veui-button>
     <veui-button @click="toggle">切换数据</veui-button>
+    <veui-button @click="toggleLoading">切换加载</veui-button>
   </section>
   <section>
     <veui-checkbox v-model="showGroup">显示数据分组</veui-checkbox>
@@ -45,6 +46,7 @@
       :order-by="orderBy"
       :order="order"
       :selected.sync="selected1"
+      :loading="loading"
       @select="handleSelect"
       @sort="handleSort"
     >
@@ -147,6 +149,7 @@
       selectable
       select-mode="single"
       :selected.sync="selected2"
+      :loading="loading"
     >
       <veui-table-column title="元数据">
         <veui-table-column
@@ -198,6 +201,7 @@
       selectable
       expandable
       :scroll="{ x: 1024 }"
+      :loading="loading"
     >
       <veui-table-column
         field="id"
@@ -243,6 +247,7 @@
       key-field="id"
       expandable
       :scroll="{ x: 1200 }"
+      :loading="loading"
     >
       <veui-table-column
         field="id"
@@ -296,6 +301,7 @@
     <veui-table
       :data="data"
       key-field="id"
+      :loading="loading"
     >
       <veui-table-column
         field="id"
@@ -333,6 +339,7 @@
     <veui-table
       key-field="id"
       :data="data"
+      :loading="loading"
     >
       <veui-table-column
         v-for="field in fields"
@@ -346,6 +353,7 @@
     <veui-table
       :data="items"
       :scroll="{ x: 1200 }"
+      :loading="loading"
     >
       <veui-table-column
         fixed="right"
@@ -630,7 +638,8 @@ export default {
           origin: 'China',
           level: 'A'
         }
-      ]
+      ],
+      loading: false
     }
   },
   computed: {
@@ -656,6 +665,9 @@ export default {
   methods: {
     toggle () {
       this.data = this.data === tableData ? [] : tableData
+    },
+    toggleLoading () {
+      this.loading = !this.loading
     },
     log (...args) {
       bus.$emit('log', ...args)
