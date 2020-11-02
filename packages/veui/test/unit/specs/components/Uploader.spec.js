@@ -337,16 +337,16 @@ describe('components/Uploader', () => {
     ])
 
     await wrapper.vm.$nextTick()
-    wrapper.find('.veui-uploader-list-image-mask label').trigger('click')
+    wrapper.find('.veui-uploader-list-media-mask label').trigger('click')
     dt = new DataTransfer()
     dt.items.add(new File(['foo'], 'test.jpg'))
     input.element.files = dt.files
     input.trigger('change')
 
     await wait(0)
-    expect(wrapper.findAll('.veui-uploader-list-image-item:not(.veui-uploader-list-image-item-upload)').length).to.equal(1)
+    expect(wrapper.findAll('.veui-uploader-list-media-item:not(.veui-uploader-list-media-item-upload)').length).to.equal(1)
     // should restore uploaded image
-    expect(wrapper.find('.veui-uploader-list-image-container-image').attributes('src')).to.equal('/test0.jpg')
+    expect(wrapper.find('.veui-uploader-list-media-container-image').attributes('src')).to.equal('/test0.jpg')
 
     wrapper.destroy()
   })
@@ -560,7 +560,7 @@ describe('components/Uploader', () => {
       }
     })
     wrapper
-      .find('.veui-uploader-list-image-mask')
+      .find('.veui-uploader-list-media-mask')
       .find('button')
       .trigger('click')
 
