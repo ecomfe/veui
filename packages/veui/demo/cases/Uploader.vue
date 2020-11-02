@@ -25,6 +25,80 @@
       <veui-icon name="id-card"/>
     </template>
   </veui-uploader>
+  <h2>图片上传模式s</h2>
+  <veui-uploader
+    v-model="files"
+    type="image"
+    ui="s"
+    name="file"
+    :action="action"
+    :max-count="3"
+    max-size="100kb"
+    accept=".jpg,.jpeg,.gif"
+    :payload="payload"
+    :validator="validator"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files')"
+    @statuschange="handleStatusChange"
+    @invalid="handleInvalid"
+  >
+    <template slot="desc">
+      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于200像素，最多上传3张图
+    </template>
+    <template #button-label>
+      <veui-icon name="id-card"/>
+    </template>
+  </veui-uploader>
+  <h2>视频上传模式</h2>
+  <veui-uploader
+    v-model="videos"
+    type="video"
+    name="file"
+    :action="action"
+    :max-count="4"
+    max-size="100kb"
+    :payload="payload"
+    :validator="validator"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files')"
+    @statuschange="handleStatusChange"
+    @invalid="handleInvalid"
+  />
+  <h2>媒体上传模式</h2>
+  <veui-uploader
+    v-model="medias"
+    type="media"
+    name="file"
+    :action="action"
+    :max-count="3"
+    max-size="100kb"
+    :payload="payload"
+    :validator="validator"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files')"
+    @statuschange="handleStatusChange"
+    @invalid="handleInvalid"
+  />
+  <h2>多入口模式</h2>
+  <veui-uploader
+    v-model="files"
+    type="image"
+    name="file"
+    :action="action"
+    :max-count="3"
+    max-size="500kb"
+    :payload="payload"
+    :validator="validator"
+    :entries="entries"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files')"
+    @statuschange="handleStatusChange"
+    @invalid="handleInvalid"
+  />
   <h2>外部修改值</h2>
   <veui-uploader
     v-model="file"
@@ -199,6 +273,32 @@ export default {
       }
     ]
 
+    let videos = [
+      {
+        name: 'flower.mp4',
+        src: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+        poster: 'https://cdn.videvo.net/videvo_files/video/free/2014-08/thumbnails/Earth_Zoom_In_small.jpg'
+      },
+      {
+        name: '200403_WFH_002_preview.mp4',
+        src: 'https://cdn.videvo.net/videvo_files/video/premium/2020-04/small_watermarked/200403_WFH_002_preview.mp4'
+      }
+    ]
+
+    let medias = [
+      {
+        name: '200403_WFH_002_preview.mp4',
+        src: 'https://cdn.videvo.net/videvo_files/video/premium/2020-04/small_watermarked/200403_WFH_002_preview.mp4',
+        poster: 'https://cdn.videvo.net/videvo_files/video/premium/2020-04/thumbnails/200403_WFH_002_small.jpg',
+        type: 'video'
+      },
+      {
+        name: 'demo-file111111111111111111111111111111111.jpg',
+        src: 'https://www.baidu.com/img/bd_logo1.png',
+        type: 'image'
+      }
+    ]
+
     let logos = [
       'https://www.baidu.com/img/bd_logo1.png',
       'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg'
@@ -216,6 +316,8 @@ export default {
         { name: 'tsla', src: 'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg' }
       ],
       files,
+      medias,
+      videos,
       files1: files.slice(0),
       files2: files.slice(0),
       customFiles: files.slice(0),
@@ -279,10 +381,53 @@ export default {
         if (file.status === 'success') {
           return [
             { name: 'moveright', icon: 'chevron-right', disabled: false },
+            {
+              name: 'moveright1',
+              icon: 'chevron-right',
+              disabled: false,
+              children: [
+                {
+                  name: 'moveright1-1',
+                  label: '操作第一'
+                },
+                {
+                  name: 'moveright1-2',
+                  label: '操作第二'
+                }
+              ]
+            },
             ...defaultControls
           ]
         }
         return defaultControls
+      },
+      entries (defaultEntries) {
+        return [
+          {
+            name: 'add',
+            icon: 'upload',
+            label: '本地上传'
+          },
+          {
+            name: 'add',
+            icon: 'thumb-up-solid',
+            label: '更多功能',
+            children: [
+              {
+                label: '操作第一',
+                name: 'entry1'
+              },
+              {
+                label: '操作第二',
+                name: 'entry2'
+              },
+              {
+                label: '操作第三',
+                name: 'entry3'
+              }
+            ]
+          }
+        ]
       }
     }
   },
