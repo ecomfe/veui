@@ -3,13 +3,13 @@
   <h1><code>&lt;veui-uploader&gt;</code></h1>
   <h2>图片上传模式</h2>
   <veui-uploader
+    ui="s"
     v-model="files"
     type="image"
     name="file"
     :action="action"
     :max-count="3"
     max-size="100kb"
-    accept=".jpg,.jpeg,.gif"
     :payload="payload"
     :validator="validator"
     @success="onSuccess"
@@ -25,6 +25,57 @@
       <veui-icon name="id-card"/>
     </template>
   </veui-uploader>
+  <h2>视频上传模式</h2>
+  <veui-uploader
+    ui="s"
+    v-model="files"
+    type="video"
+    name="file"
+    :action="action"
+    :max-count="4"
+    max-size="100kb"
+    :payload="payload"
+    :validator="validator"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files')"
+    @statuschange="handleStatusChange"
+    @invalid="handleInvalid"
+  />
+  <h2>媒体上传模式</h2>
+  <veui-uploader
+    ui="s"
+    v-model="files"
+    type="media"
+    name="file"
+    :action="action"
+    :max-count="3"
+    max-size="100kb"
+    :payload="payload"
+    :validator="validator"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files')"
+    @statuschange="handleStatusChange"
+    @invalid="handleInvalid"
+  />
+  <h2>多入口模式</h2>
+  <veui-uploader
+    v-model="files"
+    type="video"
+    name="file"
+    :action="action"
+    :max-count="3"
+    max-size="500kb"
+    :payload="payload"
+    :validator="validator"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files')"
+    @statuschange="handleStatusChange"
+    @invalid="handleInvalid"
+    :entries="entries"
+  />
   <h2>外部修改值</h2>
   <veui-uploader
     v-model="file"
@@ -68,7 +119,6 @@
     accept=".jpg,.jpeg,.gif"
     :payload="payload"
     :upload="upload"
-    ui="s"
     picker-position="before"
     :controls="imageControls"
     @moveright="handleMoveRight"
@@ -279,10 +329,53 @@ export default {
         if (file.status === 'success') {
           return [
             { name: 'moveright', icon: 'chevron-right', disabled: false },
+            {
+              name: 'moveright1',
+              icon: 'chevron-right',
+              disabled: false,
+              children: [
+                {
+                  name: 'moveright1-1',
+                  label: '操作第一'
+                },
+                {
+                  name: 'moveright1-2',
+                  label: '操作第二'
+                }
+              ]
+            },
             ...defaultControls
           ]
         }
         return defaultControls
+      },
+      entries (defaultEntries) {
+        return [
+          {
+            name: 'add',
+            icon: 'upload',
+            label: '本地上传'
+          },
+          {
+            name: 'add',
+            icon: 'thumb-up-solid',
+            label: '更多功能',
+            children: [
+              {
+                label: '操作第一',
+                name: 'entry1'
+              },
+              {
+                label: '操作第二',
+                name: 'entry2'
+              },
+              {
+                label: '操作第三',
+                name: 'entry3'
+              }
+            ]
+          }
+        ]
       }
     }
   },

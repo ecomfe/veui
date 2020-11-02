@@ -5,6 +5,8 @@ import {
   IconTimesCircle,
   IconFile,
   IconImageAdd,
+  IconVideoAdd,
+  IconMediaAdd,
   IconExclamationCircle,
   IconLoading,
   IconEye,
@@ -21,6 +23,8 @@ config.defaults(
       failure: IconTimesCircle,
       file: IconFile,
       addImage: IconImageAdd,
+      addVideo: IconVideoAdd,
+      addMedia: IconMediaAdd,
       alert: IconExclamationCircle,
       loading: IconLoading,
       preview: IconEye,
@@ -36,9 +40,10 @@ config.defaults(
     parts: {
       remove: 'icon aux',
       progress: 's',
-      control: 'icon s',
+      control: 'icon m',
+      entry: 'icon',
       preview: 'auto',
-      image: 'basic'
+      media: 'basic'
     }
   },
   'uploader'
