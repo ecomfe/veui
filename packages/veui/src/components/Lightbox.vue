@@ -101,7 +101,7 @@
                     v-if="item.type === 'video'"
                     controls
                     :src="item.src"
-                  >您的浏览器不支持 video 标签。</video>
+                  >{{ t('notSupportVideo') }}</video>
                   <img
                     v-else
                     :src="item.src"
