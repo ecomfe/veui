@@ -52,12 +52,11 @@
     "
     @change="handleNewFiles"
   >
-  <transition-group
+  <ul
     :class="{
       [listClass]: true,
       [`${listClass}-picker-before`]: pickerPosition === 'before'
     }"
-    tag="ul"
     :name="listClass"
   >
     <li
@@ -487,7 +486,7 @@
         </div>
       </slot>
     </li>
-  </transition-group>
+  </ul>
   <span
     v-if="$slots.desc && isMediaType"
     :class="$c('uploader-desc')"

@@ -8,7 +8,7 @@
     type="image"
     name="file"
     :action="action"
-    :max-count="3"
+    :max-count="4"
     max-size="100kb"
     :payload="payload"
     :validator="validator"
