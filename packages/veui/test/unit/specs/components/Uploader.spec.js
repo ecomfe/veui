@@ -346,7 +346,7 @@ describe('components/Uploader', () => {
     await wait(0)
     expect(wrapper.findAll('.veui-uploader-list-media-item:not(.veui-uploader-list-media-item-upload)').length).to.equal(1)
     // should restore uploaded image
-    expect(wrapper.find('.veui-uploader-list-media-container-image').attributes('src')).to.equal('/test0.jpg')
+    expect(wrapper.find('.veui-uploader-list-media-container-media').attributes('src')).to.equal('/test0.jpg')
 
     wrapper.destroy()
   })
