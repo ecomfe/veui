@@ -52,6 +52,7 @@ import Anchor from './Anchor'
 import Menu from './Menu'
 import Colors from './Colors'
 import Nav from './Nav'
+import Lightbox from './Lightbox'
 
 export default [
   {
@@ -109,6 +110,11 @@ export default [
     path: '/carousel',
     name: 'Carousel',
     component: Carousel
+  },
+  {
+    path: '/Lightbox',
+    name: 'Lightbox',
+    component: Lightbox
   },
   {
     path: '/checkbox',
