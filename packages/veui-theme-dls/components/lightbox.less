@@ -17,14 +17,15 @@
     position: relative;
     text-align: center;
 
-    &-close {
-      position: absolute;
-      top: 0;
-      right: 0;
+    &-close.@{veui-prefix}-button {
+      .absolute(0, 0, _, _);
+      background: none;
+      &:hover {
+        background: none;
+      }
 
       .@{veui-prefix}-icon {
         .dls-icon-size(@dls-lightbox-close-icon-size);
-        color: @dls-color-brand-0;
       }
     }
   }
@@ -44,8 +45,7 @@
   }
 
   &-viewport-content {
-    width: 100%;
-    height: 100%;
+    .size(100%);
     padding: @dls-lightbox-content-spacing-y @dls-lightbox-content-spacing-x;
     padding-bottom: 0;
   }
@@ -86,11 +86,11 @@
 
       img {
         max-height: 100%;
-        max-width:100%;
+        max-width: 100%;
       }
       video {
         max-height: 100%;
-        max-width:100%;
+        max-width: 100%;
         &:focus {
           outline:none;
         }
