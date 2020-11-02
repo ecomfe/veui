@@ -101,7 +101,7 @@
                     v-if="item.type === 'video'"
                     controls
                     :src="item.src"
-                  >{{ t('notSupportVideo') }}</video>
+                  />
                   <img
                     v-else
                     :src="item.src"

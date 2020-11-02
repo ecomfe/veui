@@ -17,8 +17,7 @@ i18n.register(
     complete: '完成',
     error: '错误！',
     uploading: '上传中…',
-    separator: '；',
-    notSupportVideo: '您的浏览器不支持 video 标签。'
+    separator: '；'
   },
   {
     ns: 'uploader'

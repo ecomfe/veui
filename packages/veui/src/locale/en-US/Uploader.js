@@ -13,8 +13,7 @@ i18n.register(
     replace: 'Replace',
     preview: 'Preview',
     uploading: 'Uploading…',
-    separator: '; ',
-    notSupportVideo: 'Sorry, your browser doesn\'t support embedded videos.'
+    separator: '; '
   },
   {
     ns: 'uploader'

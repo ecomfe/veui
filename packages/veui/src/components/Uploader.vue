@@ -169,7 +169,7 @@
               <video
                 v-else-if="getMediaType(file) === 'video'"
                 controls
-                :src="file.src">{{ t('notSupportVideo') }}</video>
+                :src="file.src"/>
               <div :class="`${listClass}-mask`">
                 <template v-for="(control, controlIndex) in getImageControls(file)">
                   <veui-dropdown
