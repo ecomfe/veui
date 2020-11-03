@@ -116,7 +116,9 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
         case 'Escape':
         case 'Left':
         case 'ArrowLeft':
-          this.expanded = false
+          if (typeof this.close === 'function') {
+            this.close()
+          }
           break
         case 'Up':
         case 'ArrowUp':

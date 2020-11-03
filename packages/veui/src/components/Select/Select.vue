@@ -123,7 +123,7 @@ export default {
       if (this.inputValue) {
         return this.inputValue
       }
-      if (this.realValue === null || this.expanded) {
+      if (this.realValue === null || this.realExpanded) {
         return ''
       }
       return this.label
@@ -167,7 +167,7 @@ export default {
     }
   },
   watch: {
-    expanded (val) {
+    realExpanded (val) {
       if (this.searchable && !val) {
         this.inputValue = ''
       }
@@ -182,7 +182,7 @@ export default {
       this.inputValue = ''
       this.$emit('clear')
       e.stopPropagation()
-      if (this.expanded) {
+      if (this.realExpanded) {
         this.focus()
       }
     },
@@ -196,7 +196,7 @@ export default {
         })
       }
       if (!this.multiple) {
-        this.expanded = false
+        this.commit('expanded', false)
         this.commit('value', val)
         return
       }
@@ -227,8 +227,8 @@ export default {
         return
       }
 
-      this.expanded = !this.expanded
-      if (this.expanded) {
+      this.commit('expanded', !this.realExpanded)
+      if (this.realExpanded) {
         this.focus()
       }
       e.preventDefault()
@@ -246,7 +246,7 @@ export default {
         case 'ArrowUp':
         case 'Down':
         case 'ArrowDown':
-          this.expanded = true
+          this.commit('expanded', true)
           passive = false
           if (this.searchable) {
             this.$refs.input.focus()
@@ -259,18 +259,18 @@ export default {
         case 'Escape':
           if (this.searchable) {
             this.$el.focus()
-            this.expanded = false
+            this.commit('expanded', false)
             passive = false
           }
           break
         case 'Tab':
-          this.expanded = false
+          this.commit('expanded', false)
           break
         case 'Enter':
           if (this.searchable) {
-            if (!this.expanded) {
+            if (!this.realExpanded) {
               this.$refs.input.focus()
-              this.expanded = true
+              this.commit('expanded', true)
               break
             }
             let elem = this.getCurrentActiveElement()
@@ -279,7 +279,7 @@ export default {
             }
             this.$el.focus()
           } else {
-            this.expanded = true
+            this.commit('expanded', true)
           }
           break
         case 'Backspace': {
@@ -312,7 +312,7 @@ export default {
     handleTriggerInput (val) {
       this.$emit('input', val)
       this.inputValue = val
-      this.expanded = true
+      this.commit('expanded', true)
       if (!val && !this.multiple) {
         this.commit('value', '')
       }
@@ -405,7 +405,7 @@ export default {
     }
 
     let multiBeforeSlot = this.multiple ? (
-      this.selected.length > 0 && this.hasLabelSlot && !this.expanded ? (
+      this.selected.length > 0 && this.hasLabelSlot && !this.realExpanded ? (
         renderCustomLabel({
           selected: this.selected
         })
@@ -455,13 +455,13 @@ export default {
         class={{
           [this.$c('select')]: true,
           [this.$c('select-empty')]: this.isEmpty,
-          [this.$c('select-expanded')]: this.expanded,
+          [this.$c('select-expanded')]: this.realExpanded,
           [this.$c('select-searchable')]: this.searchable,
           [this.$c('select-multiple')]: this.multiple,
           [this.$c('select-wrap')]:
             this.multiple &&
             !this.isEmpty &&
-            (!this.hasLabelSlot || this.expanded),
+            (!this.hasLabelSlot || this.realExpanded),
           [this.$c('readonly')]: this.realReadonly,
           [this.$c('disabled')]: this.realDisabled,
           [this.$c('input-invalid')]: this.realInvalid
@@ -470,7 +470,7 @@ export default {
         role="listbox"
         aria-owns={this.dropdownId}
         aria-readonly={this.realReadonly}
-        aria-expanded={this.expanded}
+        aria-expanded={this.realExpanded}
         aria-disabled={this.realDisabled}
         aria-labelledby={this.labelId}
         aria-haspopup="listbox"
@@ -528,16 +528,16 @@ export default {
                 ) : null}
               <Icon
                 class={this.$c('select-toggle')}
-                name={this.icons[this.expanded ? 'collapse' : 'expand']}
+                name={this.icons[this.realExpanded ? 'collapse' : 'expand']}
               />
             </div>
           </template>
         </Input>
         {
           <Overlay
-            v-show={this.expanded}
+            v-show={this.realExpanded}
             target="input"
-            open={this.expanded}
+            open={this.realExpanded}
             autofocus={!this.searchable}
             modal
             overlay-class={this.overlayClass}

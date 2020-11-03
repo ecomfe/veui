@@ -108,6 +108,7 @@ describe('components/Dropdown', () => {
         <veui-dropdown
           ref="dropdown"
           :options="datasource"
+          :expanded.sync="expanded"
         >
           <template #trigger="{ handlers, props }">
             <veui-button
@@ -122,7 +123,8 @@ describe('components/Dropdown', () => {
         },
         data () {
           return {
-            datasource
+            datasource,
+            expanded: false
           }
         }
       },
@@ -139,7 +141,7 @@ describe('components/Dropdown', () => {
     trigger.trigger('click')
     await vm.$nextTick()
 
-    expect(vm.$refs.dropdown.expanded).to.equal(true)
+    expect(vm.expanded).to.equal(true)
 
     wrapper.destroy()
   })
@@ -174,11 +176,11 @@ describe('components/Dropdown', () => {
     wrapper.find('.veui-button').trigger('click')
 
     await vm.$nextTick()
-    expect(vm.$refs.dropdown.expanded).to.equal(true)
+    expect(wrapper.classes()).to.contain('veui-dropdown-expanded')
     wrapper.find('.content').trigger('click')
 
     await vm.$nextTick()
-    expect(vm.$refs.dropdown.expanded).to.equal(false)
+    expect(wrapper.classes()).to.not.contain('veui-dropdown-expanded')
 
     wrapper.destroy()
   })
@@ -253,14 +255,30 @@ describe('components/Dropdown', () => {
   })
 
   it('should toggle the dropdown menu if space/enter/up/down when are pressed', async () => {
-    let wrapper = mount(Dropdown, {
-      propsData: {
-        split: true,
-        options: datasource
+    let wrapper = mount(
+      {
+        template: `
+          <veui-dropdown
+            split
+            :options="datasource"
+            :expanded.sync="expanded"
+          />
+        `,
+        components: {
+          'veui-dropdown': Dropdown
+        },
+        data () {
+          return {
+            datasource,
+            expanded: false
+          }
+        }
       },
-      sync: false,
-      attachToDocument: true
-    })
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
 
     const { vm } = wrapper
     wrapper
@@ -269,17 +287,21 @@ describe('components/Dropdown', () => {
 
     await vm.$nextTick()
     expect(vm.expanded).to.equal(true)
+
     vm.expanded = false
+    await vm.$nextTick()
     wrapper.find('.veui-dropdown-button').trigger('keydown.space', { key: ' ' })
 
     await vm.$nextTick()
     expect(vm.expanded).to.equal(true)
     vm.expanded = false
+    await vm.$nextTick()
     wrapper.find('.veui-dropdown-button').trigger('keydown.up', { key: 'Up' })
 
     await vm.$nextTick()
     expect(vm.expanded).to.equal(true)
     vm.expanded = false
+    await vm.$nextTick()
     wrapper
       .find('.veui-dropdown-button')
       .trigger('keydown.down', { key: 'Down' })
@@ -287,6 +309,7 @@ describe('components/Dropdown', () => {
     await vm.$nextTick()
     expect(vm.expanded).to.equal(true)
     vm.expanded = false
+    await vm.$nextTick()
     wrapper
       .find('.veui-dropdown-button')
       .trigger('keydown.left', { key: 'Left' })
@@ -333,7 +356,7 @@ describe('components/Dropdown', () => {
       .trigger('keydown.tab', { key: 'Tab' })
 
     await vm.$nextTick()
-    expect(vm.$refs.dropdown.expanded).to.equal(false)
+    expect(wrapper.classes()).to.not.contain('veui-dropdown-expanded')
     vm.searchable = false
 
     await vm.$nextTick()
@@ -344,7 +367,7 @@ describe('components/Dropdown', () => {
       .trigger('keydown.tab', { key: 'Tab' })
 
     await vm.$nextTick()
-    expect(vm.$refs.dropdown.expanded).to.equal(true)
+    expect(wrapper.classes()).to.contain('veui-dropdown-expanded')
 
     wrapper.destroy()
   })
