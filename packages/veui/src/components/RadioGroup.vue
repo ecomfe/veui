@@ -6,26 +6,28 @@
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"
 >
-  <veui-radio
-    v-for="(item, index) in items"
-    :key="index"
-    :name="localName"
-    :value="item.value"
-    :model="value"
-    :disabled="item.disabled || realDisabled || realReadonly"
-    :checked="item.value === value"
-    :aria-posinset="index + 1"
-    :aria-setsize="items.length"
-    @change="checked => handleChange(checked, item.value)"
-  >
-    <slot
-      name="item"
-      v-bind="item"
-      :index="index"
+  <div :class="$c('radio-group-items')">
+    <veui-radio
+      v-for="(item, index) in items"
+      :key="index"
+      :name="localName"
+      :value="item.value"
+      :model="value"
+      :disabled="item.disabled || realDisabled || realReadonly"
+      :checked="item.value === value"
+      :aria-posinset="index + 1"
+      :aria-setsize="items.length"
+      @change="checked => handleChange(checked, item.value)"
     >
-      {{ item.label }}
-    </slot>
-  </veui-radio>
+      <slot
+        name="item"
+        v-bind="item"
+        :index="index"
+      >
+        {{ item.label }}
+      </slot>
+    </veui-radio>
+  </div>
 </div>
 </template>
 

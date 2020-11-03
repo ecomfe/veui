@@ -1,14 +1,19 @@
 @import "../lib.less";
 
 .@{veui-prefix}-radio-group {
+  @dls-radio-group-row-gap: @dls-padding-unit * 2;
+
   display: flex;
   align-items: center;
 
-  .@{veui-prefix}-radio {
-    flex: none;
+  &-items {
+    margin-right: -@dls-radio-group-spacing;
+    margin-bottom: -@dls-radio-group-row-gap;
   }
 
-  .@{veui-prefix}-radio + .@{veui-prefix}-radio {
-    margin-left: @dls-radio-group-spacing;
+  .@{veui-prefix}-radio {
+    flex: none;
+    margin-right: @dls-radio-group-spacing;
+    margin-bottom: @dls-radio-group-row-gap;
   }
 }

@@ -7,27 +7,29 @@
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"
 >
-  <veui-checkbox
-    :is="item.exclusive ? 'veui-radio' : 'veui-checkbox'"
-    v-for="(item, index) in items"
-    :key="index"
-    :name="localName"
-    :disabled="item.disabled || realDisabled || realReadonly"
-    :checked="realValue.indexOf(item.value) !== -1"
-    role="option"
-    :aria-selected="realValue.indexOf(item.value) !== -1"
-    :aria-posinset="index + 1"
-    :aria-setsize="items.length"
-    @change="checked => handleChange(item, checked)"
-  >
-    <slot
-      name="item"
-      v-bind="item"
-      :index="index"
+  <div :class="$c('checkbox-group-items')">
+    <veui-checkbox
+      :is="item.exclusive ? 'veui-radio' : 'veui-checkbox'"
+      v-for="(item, index) in items"
+      :key="index"
+      :name="localName"
+      :disabled="item.disabled || realDisabled || realReadonly"
+      :checked="realValue.indexOf(item.value) !== -1"
+      role="option"
+      :aria-selected="realValue.indexOf(item.value) !== -1"
+      :aria-posinset="index + 1"
+      :aria-setsize="items.length"
+      @change="checked => handleChange(item, checked)"
     >
-      {{ item.label }}
-    </slot>
-  </veui-checkbox>
+      <slot
+        name="item"
+        v-bind="item"
+        :index="index"
+      >
+        {{ item.label }}
+      </slot>
+    </veui-checkbox>
+  </div>
 </div>
 </template>
 
