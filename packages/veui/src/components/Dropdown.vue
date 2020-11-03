@@ -269,11 +269,6 @@ export default {
       return this.searchable && this.keyword
     }
   },
-  watch: {
-    expanded (val) {
-      this.$emit('expandchange', val)
-    }
-  },
   methods: {
     handleTriggerKeydown (e) {
       switch (e.key) {

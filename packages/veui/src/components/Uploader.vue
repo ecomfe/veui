@@ -65,7 +65,7 @@
       :class="{
         [`${listClass}-item`]: true,
         [`${listClass}-item-failure`]: file.status === 'failure',
-        [`${listClass}-item-dropdown-open`]: controlDropdownOpenList[index]
+        [`${listClass}-item-dropdown-open`]: expandedControlDropdowns[index]
       }"
       :style="{
         order: index + 1
@@ -169,7 +169,8 @@
               <video
                 v-else-if="getMediaType(file) === 'video'"
                 controls
-                :src="file.src"/>
+                :src="file.src"
+              />
               <div :class="`${listClass}-mask`">
                 <template v-for="(control, controlIndex) in getImageControls(file)">
                   <veui-dropdown
@@ -178,8 +179,8 @@
                     :class="$c('control-item')"
                     trigger="click"
                     :options="control.children"
+                    :expanded.sync="expandedControlDropdowns[index]"
                     @click="handleImageControl(file, index)"
-                    @expandchange="handleDropdownExpand(arguments, index)"
                   >
                     <template v-slot:trigger="{ props, handlers }">
                       <label
@@ -221,7 +222,8 @@
                     :ui="uiParts.control"
                     :class="{
                       [$c('button')]: true,
-                      [$c('disabled')]: realUneditable
+                      [$c('disabled')]: realUneditable,
+                      [$c('control-item')]: true
                     }"
                     :tabindex="realUneditable ? null : 0"
                     :aria-label="control.label"
@@ -337,7 +339,7 @@
                   trigger="click"
                   :options="control.children"
                   @click="handleImageControl(file, index)"
-                  @expandchange="handleDropdownExpand($event, index)"
+                  :expanded.sync="expandedControlDropdowns[index]"
                 >
                   <template v-slot:trigger="{ props, handlers }">
                     <veui-button
@@ -365,6 +367,7 @@
                       ? control.disabled
                       : realUneditable
                   "
+                  :class="$c('control-item')"
                   :aria-label="control.label"
                   @click="handleImageControl(file, index, control.name)"
                 >
@@ -402,7 +405,7 @@
           :class="{
             [$c('uploader-list-media-container')]: true,
             [$c('uploader-list-media-container-upload')]: true,
-            [$c('uploader-list-media-item-entry-dropdown-open')]: entryDropdownOpenList
+            [$c('uploader-list-media-item-entry-dropdown-open')]: expandedEntryDropdown
           }"
         >
           <label
@@ -418,35 +421,26 @@
           >
             <slot name="button-label">
               <veui-icon
-                v-if="type === 'image'"
-                :name="icons.addImage"
-              />
-              <veui-icon
-                v-else-if="type === 'video'"
-                :name="icons.addVideo"
-              />
-              <veui-icon
-                v-else-if="type === 'media'"
-                :name="icons.addMedia"
+                :name="getIconName"
               />
             </slot>
           </label>
           <ul
-            v-if="realUi.includes('m') && getImageEntries().length > 1"
+            v-if="uiProps.size === 'm' && getMediaEntries().length > 1"
             :class="{
               [$c('uploader-entries-container')]: true
             }"
           >
             <li
-              v-for="(entry, entryIndex) in getImageEntries()"
+              v-for="(entry, entryIndex) in getMediaEntries()"
               :key="`${entry.name}-${entryIndex}`"
             >
               <veui-dropdown
                 v-if="entry.children && entry.children.length"
-                @expandchange="handleEntryDropdownExpand"
                 :key="`${entry.label}-${entryIndex}`"
                 trigger="click"
                 :options="entry.children"
+                :expanded.sync="expandedEntryDropdown"
                 @click="handleImageEntry"
               >
                 <template v-slot:trigger="{ props: triggerProps, handlers: triggerHandlers }">
@@ -551,7 +545,8 @@ import {
   isEmpty,
   isFunction,
   partial,
-  endsWith
+  endsWith,
+  find
 } from 'lodash'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
@@ -722,8 +717,8 @@ export default {
       submitting: false,
       previewImageSrc: null,
       previewDialogOpen: false,
-      controlDropdownOpenList: [],
-      entryDropdownOpenList: false
+      expandedControlDropdowns: [],
+      expandedEntryDropdown: false
     }
   },
   computed: {
@@ -1302,7 +1297,7 @@ export default {
             }
           ]
 
-          if (!this.realUi.includes('s')) {
+          if (this.uiProps.size !== 's') {
             defaultControls.push({
               name: 'replace',
               icon: this.icons.upload,
@@ -1325,11 +1320,11 @@ export default {
       return controls.map(control => {
         return {
           ...control,
-          children: this.convertArgumentsChildren(control.children)
+          children: this.normalizeDropdownDatasource(control.children)
         }
       })
     },
-    getImageEntries () {
+    getMediaEntries () {
       let defaultEntries = []
 
       let addIcon
@@ -1354,11 +1349,11 @@ export default {
       return entries.map(entry => {
         return {
           ...entry,
-          children: this.convertArgumentsChildren(entry.children)
+          children: this.normalizeDropdownDatasource(entry.children)
         }
       })
     },
-    convertArgumentsChildren (items) {
+    normalizeDropdownDatasource (items) {
       if (!items) {
         return []
       }
@@ -1366,15 +1361,9 @@ export default {
         return {
           ...item,
           value: item.name,
-          children: this.convertArgumentsChildren(item.children)
+          children: this.normalizeDropdownDatasource(item.children)
         }
       })
-    },
-    handleDropdownExpand (open, index) {
-      this.$set(this.controlDropdownOpenList, index, open)
-    },
-    handleEntryDropdownExpand (open) {
-      this.entryDropdownOpenList = open
     },
     handleImageControl (file, index, actionName) {
       if (actionName === 'preview' || actionName === 'remove') {
@@ -1418,13 +1407,30 @@ export default {
 
       const mediaExtensions = config.get('uploader.mediaExtensions')
 
-      return Object.keys(mediaExtensions).find(type => {
+      return find(Object.keys(mediaExtensions), type => {
         const extensions = mediaExtensions[type]
 
         return extensions.some(extension => {
           return endsWith(file.src, '.' + extension)
         })
       })
+    },
+    getIconName (type) {
+      let iconName
+
+      switch (type) {
+        case 'image':
+          iconName = this.icons.addImage
+          break
+        case 'video':
+          iconName = this.icons.addVideo
+          break
+        case 'media':
+          iconName = this.icons.addMedia
+          break
+      }
+
+      return iconName
     }
   }
 }
