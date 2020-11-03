@@ -309,16 +309,7 @@
                 v-bind="getScopeValue(index, file)"
               >
                 <veui-icon
-                  v-if="type === 'image'"
-                  :name="icons.addImage"
-                />
-                <veui-icon
-                  v-else-if="type === 'video'"
-                  :name="icons.addVideo"
-                />
-                <veui-icon
-                  v-else-if="type === 'media'"
-                  :name="icons.addMedia"
+                  :name="getIconName(type)"
                 />
               </slot>
               <span
@@ -421,7 +412,7 @@
           >
             <slot name="button-label">
               <veui-icon
-                :name="getIconName"
+                :name="getIconName(type)"
               />
             </slot>
           </label>
