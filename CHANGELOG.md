@@ -1,3 +1,16 @@
+## 2.0.0-beta.12
+
+### 💡 主要变更
+
+- [+] 为 `Dropdown`/`Select`/`SearchBox`/`DatePicker`/`TimePicker`/`Autocomplete` 组件新增可受控 prop `expanded`，用来控制其下拉浮层的展开/收起。
+- [+] `Table` 组件新增 `loading` prop，展示“加载中”状态。
+- [^] 为 `Loading` 组件添加了新的动效。
+
+### 🐞 问题修复
+
+- [^] 修正 `Progress` 组件偶尔会由于浏览器编码识别错误显示了错误内容的问题。
+- [^] 修正 `RadioGroup` 组件和 `CheckboxGroup` 组件在内容换行时显示不正确的问题。
+
 ## 2.0.0-beta.11
 
 ### 💡 主要变更
@@ -293,7 +306,7 @@
 
   其余变更：
 
-  - [+] 新增了 `tab-item-label` scoped slot，用于仅自定义标签项内容。
+  - [+] 新增了 <del>`tab-item-label`</del><ins datetime="2020-10-21" title="修正于 2020-10-21">`tab-label`</ins> scoped slot，用于仅自定义标签项内容。
   - [+] 新增 `panel` slot，用于指定标签下方面板内的自定义内容。
   - [+] 新增 `change` 事件，回调参数为 `tab` 对像，包含 `name`、`label`、`to`、`status` 等字段。
   - [+] `Tab` 组件新增了 `item` slot，用于自定义标签内容，与 `Tabs` 组件的 `tab-item` 对应，优先级更高。

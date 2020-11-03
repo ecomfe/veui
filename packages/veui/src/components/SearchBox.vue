@@ -3,7 +3,7 @@
   ref="self"
   :class="{
     [$c('search-box')]: true,
-    [$c('search-box-suggestion-expanded')]: realExpanded,
+    [$c('search-box-suggestion-expanded')]: finalExpanded,
     [$c('disabled')]: realDisabled,
     [$c('readonly')]: realReadonly
   }"
@@ -55,11 +55,11 @@
     </veui-button>
   </veui-input-group>
   <veui-overlay
-    v-show="realExpanded"
+    v-show="finalExpanded"
     ref="overlay"
     target="input"
     match-width
-    :open="realExpanded"
+    :open="finalExpanded"
     :overlay-class="overlayClass"
     :local="realOverlayOptions.local"
     :options="realOverlayOptions"
@@ -71,7 +71,7 @@
       :class="$c('search-box-suggestion-overlay')"
       role="listbox"
       :ui="realUi"
-      :aria-expanded="realExpanded"
+      :aria-expanded="finalExpanded"
     >
       <slot name="suggestions-before"/>
       <slot
@@ -244,9 +244,9 @@ export default {
     isStrong () {
       return this.uiProps.style === 'strong'
     },
-    realExpanded () {
+    finalExpanded () {
       return !!(
-        this.expanded &&
+        this.realExpanded &&
         this.realSuggestions &&
         this.realSuggestions.filter(({ hidden }) => !hidden).length
       )
@@ -286,13 +286,13 @@ export default {
     realValue (val) {
       // 因为 selectSuggestion 中关闭用了 nextTick
       this.$nextTick(() => {
-        if (this.expanded) {
+        if (this.realExpanded) {
           this.keyword = val
         }
       })
     },
     realSuggestions () {
-      if (this.realExpanded) {
+      if (this.finalExpanded) {
         this.$nextTick(() => {
           this.relocate()
         })
@@ -351,7 +351,7 @@ export default {
         case 'Down':
         case 'ArrowDown':
           this.openSuggestions()
-          if (this.realExpanded) {
+          if (this.finalExpanded) {
             this.$nextTick(() => {
               this.handleKeydown(e)
             })
@@ -360,7 +360,7 @@ export default {
           }
           break
         case 'Enter': {
-          if (!this.realExpanded) {
+          if (!this.finalExpanded) {
             this.search(e)
             passive = true
             break
@@ -390,15 +390,15 @@ export default {
       this.selectSuggestion(suggestion)
     },
     closeSuggestions () {
-      if (this.expanded) {
-        this.expanded = false
+      if (this.realExpanded) {
+        this.commit('expanded', false)
       }
     },
     openSuggestions () {
-      if (!this.expanded) {
+      if (!this.realExpanded) {
         // select 时，先关闭了建议，然后 realValue watcher 中因为关闭而没有同步到 keyword，这里打开时保证 keyword 是正确的
         this.keyword = this.realValue
-        this.expanded = true
+        this.commit('expanded', true)
       }
     },
     handleClear () {

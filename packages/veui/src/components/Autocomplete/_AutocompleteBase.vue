@@ -1,7 +1,7 @@
 <template>
 <div
   ref="self"
-  :aria-expanded="realExpanded"
+  :aria-expanded="finalExpanded"
   :aria-owns="dropdownId"
 >
   <slot
@@ -16,7 +16,7 @@
   <veui-overlay
     ref="overlay"
     target="self"
-    :open="realExpanded"
+    :open="finalExpanded"
     :overlay-class="overlayClass"
     :local="realOverlayOptions.local"
     :options="realOverlayOptions"
@@ -33,7 +33,7 @@
         :update-value="suggestionUpdateValue"
         :active-descendant="activeDescendant"
         :value="realValue"
-        :expanded="realExpanded"
+        :expanded="finalExpanded"
         name="suggestions"
       />
     </div>
@@ -135,11 +135,11 @@ export default {
       }
       return walk(this.clonedDatasource)
     },
-    realExpanded () {
+    finalExpanded () {
       let datasource = this.realValue
         ? this.filteredDatasource
         : this.realDatasource
-      return this.expanded && !!datasource.length
+      return this.realExpanded && !!datasource.length
     },
     realValue () {
       return this.value === undefined ? this.localValue : this.value
@@ -150,7 +150,7 @@ export default {
   },
   watch: {
     realValue (val) {
-      if (this.expanded) {
+      if (this.realExpanded) {
         this.keyword = val
       }
     }
@@ -215,16 +215,16 @@ export default {
       }
     },
     closeSuggestions () {
-      if (this.expanded) {
+      if (this.realExpanded) {
         this.clearFocusSelector()
         this.activeDescendant = null
-        this.expanded = false
+        this.commit('expanded', false)
       }
     },
     openSuggestions () {
-      if (!this.expanded) {
+      if (!this.realExpanded) {
         this.keyword = this.realValue
-        this.expanded = true
+        this.commit('expanded', true)
       }
     },
     autoSuggest () {
@@ -239,7 +239,7 @@ export default {
       }
     },
     closeAndAutoSuggestion () {
-      if (this.expanded) {
+      if (this.realExpanded) {
         this.closeSuggestions()
         if (this.realValue && this.strict) {
           this.autoSuggest()

@@ -4,7 +4,7 @@
   :ui="realUi"
   :class="{
     [$c('dropdown')]: true,
-    [$c('dropdown-expanded')]: expanded,
+    [$c('dropdown-expanded')]: realExpanded,
     [$c('dropdown-split')]: split
   }"
 >
@@ -43,13 +43,13 @@
       </span>
       <veui-icon
         :class="$c('dropdown-icon')"
-        :name="icons[expanded ? 'collapse' : 'expand']"
+        :name="icons[realExpanded ? 'collapse' : 'expand']"
       />
     </veui-button>
   </slot>
   <veui-overlay
     target="main"
-    :open="expanded"
+    :open="realExpanded"
     autofocus
     modal
     match-width
@@ -71,7 +71,7 @@
       :ui="realUi"
       role="menu"
       :tabindex="searchable ? -1 : 0"
-      :aria-expanded="expanded"
+      :aria-expanded="realExpanded"
       @keydown="handleKeydown"
       @focus="focusAt(0)"
     >
@@ -278,7 +278,7 @@ export default {
         case 'ArrowUp':
         case 'Down':
         case 'ArrowDown':
-          this.expanded = true
+          this.commit('expanded', true)
           e.preventDefault()
           break
         default:
@@ -288,16 +288,16 @@ export default {
     handleToggle () {
       let mode = MODE_MAP[this.trigger]
       if (mode === 'toggle') {
-        this.expanded = !this.expanded
+        this.commit('expanded', !this.realExpanded)
       } else if (mode === 'expand') {
-        this.expanded = true
+        this.commit('expanded', true)
       }
-      if (this.expanded) {
+      if (this.realExpanded) {
         this.keyword = ''
       }
     },
     handleSelect (value) {
-      this.expanded = false
+      this.commit('expanded', false)
       if (value != null) {
         this.$emit('click', value)
       }

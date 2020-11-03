@@ -5,7 +5,7 @@
     [$c('date-picker')]: true,
     [$c('invalid')]: realInvalid,
     [$c('date-picker-range')]: range,
-    [$c('date-picker-expanded')]: expanded,
+    [$c('date-picker-expanded')]: realExpanded,
     [$c('disabled')]: realDisabled,
     [$c('readonly')]: realReadonly
   }"
@@ -74,7 +74,7 @@
   <veui-overlay
     ref="overlay"
     target="button"
-    :open="expanded"
+    :open="realExpanded"
     :overlay-class="overlayClass"
     :local="realOverlayOptions.local"
     :options="realOverlayOptions"
@@ -381,8 +381,8 @@ export default {
       if (this.realDisabled || this.realReadonly) {
         return
       }
-      this.expanded = force == null ? !this.expanded : force
-      if (this.expanded) {
+      this.commit('expanded', force == null ? !this.realExpanded : force)
+      if (this.realExpanded) {
         let cal = this.$refs.cal
         cal.setExpanded(false)
         let selected = [].concat(this.realSelected)
@@ -474,8 +474,8 @@ export default {
     },
     handleSelect (selected) {
       this.commit('selected', selected)
+      this.commit('expanded', false)
       this.picking = null
-      this.expanded = false
       this.localInputValue = []
     },
     handleStart (picking) {
@@ -500,7 +500,7 @@ export default {
     },
     clear (e) {
       this.commit('selected', null)
-      this.expanded = false
+      this.commit('expanded', false)
       this.localInputValue = []
       this.$nextTick(() => {
         this.focus()
@@ -512,7 +512,7 @@ export default {
     close () {
       let cal = this.$refs.cal
       if (!cal.isMousePicking()) this.suggest()
-      this.expanded = false
+      this.commit('expanded', false)
       this.picking = null
       if (this.range) this.$refs.cal.pick(null)
       this.localInputValue = []
