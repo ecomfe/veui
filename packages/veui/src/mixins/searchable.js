@@ -150,7 +150,7 @@ const call = (val, context) => (typeof val === 'function' ? val(context) : val)
  * @param {string} options.flags 正则的模式
  * @param {boolean} options.literal 默认把 keyword 中的正则特殊字段当成普通字符匹配，如 \d 就是匹配`\d`
  */
-export default function searchable ({
+export default function useSearchable ({
   datasourceKey = 'datasource',
   keywordKey = 'keyword',
   resultKey = 'filteredDatasource',

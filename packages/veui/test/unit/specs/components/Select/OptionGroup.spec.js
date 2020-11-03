@@ -3,6 +3,7 @@ import Dropdown from 'veui/components/Dropdown'
 import Option from 'veui/components/Option'
 import OptionGroup from 'veui/components/OptionGroup'
 import { mount } from '@vue/test-utils'
+import { wait } from '../../../../utils'
 
 describe('components/Select/OptionGroup', () => {
   it('should pass down the `disabled` prop to the Option.', async () => {
@@ -202,7 +203,7 @@ describe('components/Select/OptionGroup', () => {
           'veui-option': Option
         },
         template: `
-          <veui-select>
+          <veui-select :expanded.sync="expanded">
             <veui-option-group label="A" position="popup" overlay-class="my-group">
               <veui-option value="a0" label="A.0"/>
               <veui-option value="a1" label="A.1"/>
@@ -210,14 +211,19 @@ describe('components/Select/OptionGroup', () => {
               <template #before><span class="before"></span></template>
               <template #after><span class="after"></span></template>
             </veui-option-group>
-          </veui-select>`
+          </veui-select>`,
+        data () {
+          return {
+            expanded: false
+          }
+        }
       },
       {
         sync: false,
         attachToDocument: true
       }
     )
-    wrapper.find(Select).vm.expanded = true
+    wrapper.vm.expanded = true
 
     await wrapper.vm.$nextTick()
     wrapper
@@ -253,6 +259,7 @@ describe('components/Select/OptionGroup', () => {
           <veui-select
             v-model="complex"
             multiple
+            :expanded.sync="expanded"
           >
             <template v-if="loaded">
               <veui-option-group
@@ -271,7 +278,8 @@ describe('components/Select/OptionGroup', () => {
         data () {
           return {
             complex: ['1', '2'],
-            loaded: false
+            loaded: false,
+            expanded: false
           }
         },
         mounted () {
@@ -285,7 +293,7 @@ describe('components/Select/OptionGroup', () => {
     )
 
     let { vm } = wrapper
-    wrapper.find(Select).vm.expanded = true
+    wrapper.vm.expanded = true
 
     await wrapper.vm.$nextTick()
 
@@ -365,6 +373,75 @@ describe('components/Select/OptionGroup', () => {
     group = wrapper.find('.veui-option-group-label')
     expect(option.element.tagName.toLowerCase()).to.equal('button')
     expect(group.element.tagName.toLowerCase()).to.equal('div')
+
+    wrapper.destroy()
+  })
+
+  it('should scroll into view when a value is selected', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select
+        },
+        data () {
+          return {
+            options: [
+              {
+                value: 1,
+                label: '1'
+              },
+              {
+                value: 2,
+                label: '2'
+              },
+              {
+                value: 3,
+                label: '3'
+              },
+              {
+                value: 4,
+                label: '4'
+              },
+              {
+                value: 5,
+                label: '5'
+              },
+              {
+                value: 6,
+                label: '6'
+              },
+              {
+                value: 7,
+                label: '7'
+              },
+              {
+                value: 8,
+                label: '8'
+              },
+              {
+                value: 9,
+                label: '9'
+              },
+              {
+                value: 10,
+                label: '10'
+              },
+              {
+                value: 11,
+                label: '11'
+              }]
+          }
+        },
+        template: `<veui-select :options="options" :value="11" expanded/>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    await wait(0)
+    expect(wrapper.find('.veui-select-options').element.scrollTop > 0).to.equal(true)
 
     wrapper.destroy()
   })

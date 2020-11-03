@@ -165,9 +165,9 @@ import OptionGroup from './Select/OptionGroup'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import dropdown from '../mixins/dropdown'
-import { createKeySelect } from '../mixins/key-select'
+import { useKeySelect } from '../mixins/key-select'
 import focusable from '../mixins/focusable'
-import searchable from '../mixins/searchable'
+import useSearchable from '../mixins/searchable'
 import i18n from '../mixins/i18n'
 import '../common/uiTypes'
 import { includes } from 'lodash'
@@ -197,10 +197,11 @@ export default {
     prefix,
     ui,
     dropdown,
-    createKeySelect({
+    useKeySelect({
       useNativeFocus (vm) {
         return !vm.searchable
       },
+      expandedKey: 'realExpanded',
       handlers: {
         tab () {
           if (this.searchable) {
@@ -217,7 +218,7 @@ export default {
         }
       }
     }),
-    searchable({
+    useSearchable({
       datasourceKey: 'options',
       childrenKey: 'options',
       keywordKey: 'keyword',

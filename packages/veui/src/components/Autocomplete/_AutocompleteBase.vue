@@ -43,8 +43,8 @@
 
 <script>
 import dropdown from '../../mixins/dropdown'
-import { createKeySelect } from '../../mixins/key-select'
-import searchable from '../../mixins/searchable'
+import { useKeySelect } from '../../mixins/key-select'
+import useSearchable from '../../mixins/searchable'
 import Overlay from '../Overlay'
 import { findComponent } from '../../utils/context'
 import { isFunction, cloneDeep, uniqueId } from 'lodash'
@@ -71,8 +71,11 @@ export default {
   },
   mixins: [
     dropdown,
-    createKeySelect({ useNativeFocus: false }),
-    searchable({
+    useKeySelect({
+      expandedKey: 'realExpanded',
+      useNativeFocus: false
+    }),
+    useSearchable({
       datasourceKey: 'realDatasource',
       childrenKey: vm => vm.childrenKey,
       valueKey: vm => vm.valueKey,
