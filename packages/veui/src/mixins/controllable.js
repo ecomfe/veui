@@ -1,4 +1,4 @@
-import { capitalize, isString, isPlainObject, reduce, find } from 'lodash'
+import { upperFirst, isString, isPlainObject, reduce, find } from 'lodash'
 import { getModelEvent } from '../utils/helper'
 
 let options = {
@@ -138,7 +138,7 @@ function getReal (vm, { prop, local } = {}) {
     ? vm[prop]
     : local
       ? vm[local]
-      : vm[`local${capitalize(prop)}`]
+      : vm[`local${upperFirst(prop)}`]
 }
 
 function setReal (vm, value, def = {}, ...args) {
@@ -160,11 +160,11 @@ function setReal (vm, value, def = {}, ...args) {
 }
 
 function getLocalName ({ prop, local } = {}) {
-  return local || `local${capitalize(prop)}`
+  return local || `local${upperFirst(prop)}`
 }
 
 function getRealName ({ prop, computed } = {}) {
-  return computed || `real${capitalize(prop)}`
+  return computed || `real${upperFirst(prop)}`
 }
 
 // 用来控制是否往上触发同步事件，有 prop 则判断是否相等，没有 prop 就用 real

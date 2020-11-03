@@ -666,4 +666,45 @@ describe('components/Select/Select', () => {
 
     wrapper.destroy()
   })
+
+  it('should render trigger slot correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select
+        },
+        data () {
+          return {
+            value: null,
+            options: datasource
+          }
+        },
+        template: `
+          <veui-select v-model="value" :options="options">
+            <template #trigger="{ props }">
+              <button class="trigger-btn" @click="props.toggle()">{{ props.value }}</button>
+            </template>
+          </veui-select>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    let btn = wrapper.find('.trigger-btn')
+    btn.trigger('click')
+    await vm.$nextTick()
+    let overlay = wrapper.find('.veui-overlay-box')
+    expect(overlay.isVisible()).to.equal(true)
+
+    let options = wrapper.findAll(OPTION_ITEM)
+    options.at(2).trigger('click')
+    await vm.$nextTick()
+    expect(vm.value).to.equal('2-1')
+    expect(wrapper.find('.trigger-btn').text()).to.equal('2-1')
+
+    wrapper.destroy()
+  })
 })
