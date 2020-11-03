@@ -164,6 +164,16 @@ export default {
     },
     hasLabelSlot () {
       return this.$scopedSlots.label || this.$slots.label
+    },
+    slotProps () {
+      return {
+        expanded: this.realExpanded,
+        value: this.realValue,
+        toggle: val => {
+          this.commit('expanded', val == null ? !this.realExpanded : val)
+        },
+        updateValue: val => this.commit('value', val)
+      }
     }
   },
   watch: {
@@ -174,7 +184,7 @@ export default {
     }
   },
   mounted () {
-    this.nativeInput = this.$refs.input.$refs.input
+    this.nativeInput = this.$refs.input && this.$refs.input.$refs.input
   },
   methods: {
     clear (e) {
@@ -249,7 +259,7 @@ export default {
           this.commit('expanded', true)
           passive = false
           if (this.searchable) {
-            this.$refs.input.focus()
+            this.$refs.input && this.$refs.input.focus()
             this.$nextTick(() => {
               this.handleKeydown(e)
             })
@@ -329,7 +339,7 @@ export default {
         this.$el.focus()
         return
       }
-      this.$refs.input.focus()
+      this.$refs.input && this.$refs.input.focus()
     }
   },
   render () {
@@ -467,6 +477,7 @@ export default {
           [this.$c('input-invalid')]: this.realInvalid
         }}
         ui={this.realUi}
+        ref="root"
         role="listbox"
         aria-owns={this.dropdownId}
         aria-readonly={this.realReadonly}
@@ -479,64 +490,77 @@ export default {
         }
         onKeydown={this.handleTriggerKeydown}
       >
-        <Input
-          ref="input"
-          class={this.$c('select-trigger')}
-          disabled={this.realDisabled}
-          readonly={this.realReadonly}
-          placeholder={this.inputPlaceholder}
-          value={this.inputValue}
-          onMouseup={this.handleInputMouseup}
-          onBlur={this.handleInputBlur}
-          onInput={this.handleTriggerInput}
-          autocomplete="off"
-          composition
-        >
-          {!this.multiple && this.selected != null && this.hasLabelSlot ? (
-            <template slot="placeholder">
-              {renderCustomLabel(this.selected || { selected: false }) ||
-                this.label}
-            </template>
-          ) : null}
-          <template slot="before">
-            {this.multiple ? multiBeforeSlot : beforeSlot}
-          </template>
-          <template slot="after">
-            {this.limitLabel ? (
-              <span class={this.$c('select-count')}>{this.limitLabel}</span>
-            ) : null}
-            <div class={this.$c('select-icon')}>
-              {this.clearable &&
-              (this.multiple ? this.realValue.length > 0 : !!this.realValue) ? (
-                  <Button
-                    class={this.$c('select-clear')}
-                    ui={this.uiParts.clear}
-                    aria-label={this.t('clear')}
-                    disabled={this.realDisabled || this.realReadonly}
-                    // had to do so because of vuejs/jsx#77
-                    {...{
-                      on: {
-                        click: this.clear,
-                        '!keydown': stopPropagation,
-                        '!mousedown': stopPropagation,
-                        '!mouseup': stopPropagation
-                      }
-                    }}
-                  >
-                    <Icon name={this.icons.clear} />
-                  </Button>
+        {
+          this.$scopedSlots.trigger ? (
+            this.$scopedSlots.trigger({
+              props: this.slotProps,
+              handlers: {
+                mouseup: this.handleInputMouseup,
+                blur: this.handleInputBlur,
+                input: this.handleTriggerInput
+              }
+            })
+          ) : (
+            <Input
+              ref="input"
+              class={this.$c('select-trigger')}
+              disabled={this.realDisabled}
+              readonly={this.realReadonly}
+              placeholder={this.inputPlaceholder}
+              value={this.inputValue}
+              onMouseup={this.handleInputMouseup}
+              onBlur={this.handleInputBlur}
+              onInput={this.handleTriggerInput}
+              autocomplete="off"
+              composition
+            >
+              {!this.multiple && this.selected != null && this.hasLabelSlot ? (
+                <template slot="placeholder">
+                  {renderCustomLabel(this.selected || { selected: false }) ||
+                    this.label}
+                </template>
+              ) : null}
+              <template slot="before">
+                {this.multiple ? multiBeforeSlot : beforeSlot}
+              </template>
+              <template slot="after">
+                {this.limitLabel ? (
+                  <span class={this.$c('select-count')}>{this.limitLabel}</span>
                 ) : null}
-              <Icon
-                class={this.$c('select-toggle')}
-                name={this.icons[this.realExpanded ? 'collapse' : 'expand']}
-              />
-            </div>
-          </template>
-        </Input>
+                <div class={this.$c('select-icon')}>
+                  {this.clearable &&
+                  (this.multiple ? this.realValue.length > 0 : !!this.realValue) ? (
+                      <Button
+                        class={this.$c('select-clear')}
+                        ui={this.uiParts.clear}
+                        aria-label={this.t('clear')}
+                        disabled={this.realDisabled || this.realReadonly}
+                        // had to do so because of vuejs/jsx#77
+                        {...{
+                          on: {
+                            click: this.clear,
+                            '!keydown': stopPropagation,
+                            '!mousedown': stopPropagation,
+                            '!mouseup': stopPropagation
+                          }
+                        }}
+                      >
+                        <Icon name={this.icons.clear} />
+                      </Button>
+                    ) : null}
+                  <Icon
+                    class={this.$c('select-toggle')}
+                    name={this.icons[this.realExpanded ? 'collapse' : 'expand']}
+                  />
+                </div>
+              </template>
+            </Input>
+          )
+        }
         {
           <Overlay
             v-show={this.realExpanded}
-            target="input"
+            target="root"
             open={this.realExpanded}
             autofocus={!this.searchable}
             modal
@@ -570,7 +594,7 @@ export default {
               role="listbox"
               onKeydown={this.handleKeydown}
             >
-              {this.$slots.before}
+              {renderSlot(this, 'before', this.slotProps)}
               {!this.options
                 ? renderGroup(null, this.$slots.default, 'data')
                 : null}
@@ -585,7 +609,7 @@ export default {
                 ) : null,
                 'render'
               )}
-              {this.$slots.after}
+              {renderSlot(this, 'after', this.slotProps)}
             </div>
           </Overlay>
         }
