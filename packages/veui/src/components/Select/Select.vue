@@ -11,8 +11,8 @@ import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import dropdown from '../../mixins/dropdown'
-import searchable from '../../mixins/searchable'
-import keySelect from '../../mixins/key-select'
+import useSearchable from '../../mixins/searchable'
+import { useKeySelect } from '../../mixins/key-select'
 import useControllable from '../../mixins/controllable'
 import i18n from '../../mixins/i18n'
 import { find } from '../../utils/datasource'
@@ -36,8 +36,8 @@ export default {
     ui,
     input,
     dropdown,
-    keySelect,
-    searchable({
+    useKeySelect({ expandedKey: 'realExpanded' }),
+    useSearchable({
       datasourceKey: 'realOptions',
       childrenKey: 'options',
       keywordKey: 'inputValue',

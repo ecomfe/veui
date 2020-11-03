@@ -148,7 +148,7 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
-import searchable from '../mixins/searchable'
+import useSearchable from '../mixins/searchable'
 import i18n from '../mixins/i18n'
 import Input from './Input'
 import Icon from './Icon'
@@ -157,7 +157,7 @@ import Button from './Button'
 import InputGroup from './InputGroup'
 import OptionGroup from './OptionGroup'
 import focusable from '../mixins/focusable'
-import { createKeySelect } from '../mixins/key-select'
+import { useKeySelect } from '../mixins/key-select'
 import useControllable from '../mixins/controllable'
 import { pick, without, includes, map } from 'lodash'
 import '../common/uiTypes'
@@ -171,8 +171,6 @@ const SHARED_PROPS = [
   'composition',
   'clearable'
 ]
-
-const keySelect = createKeySelect({ useNativeFocus: false })
 
 export default {
   name: 'veui-search-box',
@@ -190,9 +188,12 @@ export default {
     ui,
     input,
     dropdown,
-    keySelect,
+    useKeySelect({
+      expandedKey: 'realExpanded',
+      useNativeFocus: false
+    }),
     focusable,
-    searchable({
+    useSearchable({
       datasourceKey: 'realSuggestions',
       childrenKey: 'options',
       keywordKey: 'keyword',
@@ -227,7 +228,7 @@ export default {
       validator (val) {
         return []
           .concat(val)
-          .every(trigger => includes(['focus', 'input', 'submit'], trigger))
+          .every((trigger) => includes(['focus', 'input', 'submit'], trigger))
       }
     },
     ...pick(Input.props, SHARED_PROPS)
@@ -258,9 +259,8 @@ export default {
       return this.replaceOnSelect
     },
     realSuggestions () {
-      return map(
-        this.suggestions,
-        item => typeof item === 'string' ? { label: item, value: item } : item
+      return map(this.suggestions, (item) =>
+        typeof item === 'string' ? { label: item, value: item } : item
       )
     },
     suggestTriggers () {
@@ -412,7 +412,7 @@ function findSuggestion (suggestions, val) {
     return null
   }
   let result = null
-  suggestions.some(suggestion => {
+  suggestions.some((suggestion) => {
     if (!suggestion.options) {
       if (suggestion.value === val) {
         result = suggestion
