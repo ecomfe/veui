@@ -25,7 +25,8 @@ export default {
       validator (val) {
         return typeof val === 'boolean' || val === 'left' || val === 'right'
       }
-    }
+    },
+    allowedOrders: Array
   },
   data () {
     return {
@@ -49,7 +50,7 @@ export default {
   created () {
     let index = getIndexOfType(this, 'colgroup')
 
-    const props = ['title', 'field', 'width', 'sortable', 'align', 'span']
+    const props = ['title', 'field', 'width', 'sortable', 'align', 'span', 'allowedOrders']
 
     let renderBody = item => {
       let defaultRow = this.$scopedSlots.default

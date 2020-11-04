@@ -26,6 +26,17 @@ import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import config from '../../managers/config'
 import '../../common/uiTypes'
+import warn from '../../utils/warn'
+import { intersection, includes } from 'lodash'
+
+config.defaults(
+  {
+    allowedOrders: [false, 'desc', 'asc']
+  },
+  'table'
+)
+
+const allowedOrders = [false, 'desc', 'asc']
 
 export default {
   name: 'veui-table-sorter',
@@ -36,60 +47,55 @@ export default {
   mixins: [prefix, table],
   uiTypes: ['transparent'],
   props: {
-    order: {
-      type: [String, Boolean],
-      default: false,
-      validator (val) {
-        return val === false || val === 'asc' || val === 'desc'
-      }
-    },
+    order: [Boolean, String],
     allowedOrders: {
       type: Array,
-      default () {
-        return config.get('table.allowedOrders')
-      },
+      default: () => config.get('table.allowedOrders'),
       validator (val) {
-        if (val === false) {
-          return true
-        }
         if (!Array.isArray(val)) {
           return false
         }
-
-        return (
-          val.length <= 2 &&
-          val.every(o => o === 'asc' || o === 'desc') &&
-          val[0] !== val[1]
-        )
+        return intersection(val, allowedOrders).length === val.length
       }
     }
   },
   computed: {
     klass () {
+      let orders = this.allowedOrders.filter(i => i !== false)
       return {
         [this.$c('table-sorter')]: true,
         [this.$c(`table-sorter-${this.realOrder}`)]: true,
         [this.$c(
           `table-sorter-${this.order === false ? 'un' : ''}ordered`
         )]: true,
-        [this.$c('table-sorter-reverse')]: this.order === this.realOrders[2]
+        [this.$c('table-sorter-reverse')]: this.order === orders[1]
       }
     },
     realOrder () {
       return !this.order ? 'unordered' : this.order
     },
-    realOrders () {
-      return [false, ...this.allowedOrders]
+    orderOptions () {
+      return { order: this.order, allowedOrders: this.allowedOrders }
+    }
+  },
+  watch: {
+    orderOptions: {
+      handler ({ order, allowedOrders }) {
+        if (!includes(allowedOrders, order)) {
+          warn(`[veui] invalid order: ${order}, allowed orders are ${allowedOrders}`, this)
+        }
+      },
+      immediate: true
     }
   },
   methods: {
     sort () {
-      let index = this.realOrders.indexOf(this.order)
+      let index = this.allowedOrders.indexOf(this.order)
       if (index === -1) {
         return
       }
 
-      this.$emit('sort', this.realOrders[(index + 1) % this.realOrders.length])
+      this.$emit('sort', this.allowedOrders[(index + 1) % this.allowedOrders.length])
     }
   }
 }
