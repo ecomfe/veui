@@ -329,8 +329,8 @@
                   :class="$c('control-item')"
                   trigger="click"
                   :options="control.children"
-                  @click="handleImageControl(file, index)"
                   :expanded.sync="expandedControlDropdowns[index]"
+                  @click="handleImageControl(file, index)"
                 >
                   <template v-slot:trigger="{ props, handlers }">
                     <veui-button
@@ -569,7 +569,7 @@ const ERRORS = {
   CUSTOM_INVALID: 'custom'
 }
 
-function normalizeDropdownDatasource(items) {
+function normalizeDropdownDatasource (items) {
   if (!items) {
     return []
   }
