@@ -384,6 +384,38 @@
       />
     </veui-table>
   </section>
+  <section class="container">
+    <h3>Orders: {{ allowedOrders1 }} , Current: {{ order1 }}</h3>
+    <veui-table
+      key-field="id"
+      :data="items"
+      :order="order1"
+      order-by="id"
+      :allowed-orders="allowedOrders1"
+      @sort="(_, order) => order1 = order"
+    >
+      <veui-table-column
+        field="id"
+        title="id"
+        sortable
+      />
+    </veui-table>
+    <h3>Orders: {{ allowedOrders2 }} , Current: {{ order2 }}</h3>
+    <veui-table
+      key-field="id"
+      :data="items"
+      :order="order2"
+      order-by="id"
+      :allowed-orders="allowedOrders2"
+      @sort="(_, order) => order2 = order"
+    >
+      <veui-table-column
+        field="id"
+        title="id"
+        sortable
+      />
+    </veui-table>
+  </section>
 </article>
 </template>
 
@@ -583,6 +615,10 @@ export default {
         { name: 'id', title: 'ID' },
         { name: 'desc', title: '描述' }
       ],
+      allowedOrders1: ['asc', 'desc'],
+      allowedOrders2: [false, 'asc', 'desc'],
+      order1: 'desc',
+      order2: false,
       data: [],
       nextId: 3162,
       nextIndex: 9,

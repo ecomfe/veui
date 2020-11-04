@@ -120,6 +120,7 @@ export default {
                         order={
                           table.orderBy === col.field ? table.order : false
                         }
+                        allowedOrders={col.allowedOrders || table.allowedOrders}
                         onSort={order => {
                           this.$emit('sort', col.field, order)
                         }}

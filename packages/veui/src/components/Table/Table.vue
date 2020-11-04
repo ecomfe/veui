@@ -136,7 +136,6 @@ import {
   map,
   mapValues,
   intersection,
-  includes,
   find,
   findIndex,
   findLastIndex,
@@ -258,14 +257,9 @@ export default {
         return []
       }
     },
-    order: {
-      type: [String, Boolean],
-      default: false,
-      validator (val) {
-        return val === false || includes(['asc', 'desc'], val)
-      }
-    },
+    order: [Boolean, String],
     orderBy: String,
+    allowedOrders: Array,
     columnFilter: Array,
     loading: Boolean
   },

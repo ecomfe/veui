@@ -846,4 +846,61 @@ describe('components/Table', () => {
 
     wrapper.destroy()
   })
+
+  it('should support allowedOrders', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              { id: 1 },
+              { id: 2 },
+              { id: 3 },
+              { id: 4 }
+            ],
+            allowedOrders: ['asc', 'desc'],
+            order: 'asc'
+          }
+        },
+        template: `
+          <veui-table
+            key-field="id"
+            :data="data"
+            order-by="id"
+            :order="order"
+            :allowed-orders="allowedOrders"
+            @sort="(_, order1) => order = order1"
+          >
+            <veui-table-column field="id" title="id" sortable/>
+          </veui-table>`
+      },
+      {
+        sync: false
+      }
+    )
+    let { vm } = wrapper
+    let sorter = wrapper.findAll('.veui-table-sorter')
+    sorter.trigger('click')
+    await vm.$nextTick()
+    expect(vm.order).to.equal('desc')
+    sorter.trigger('click')
+    await vm.$nextTick()
+    expect(vm.order).to.equal('asc')
+
+    vm.allowedOrders = [false, 'asc', 'desc']
+    vm.order = 'desc'
+    await vm.$nextTick()
+    sorter.trigger('click')
+    await vm.$nextTick()
+    expect(vm.order).to.equal(false)
+
+    sorter.trigger('click')
+    await vm.$nextTick()
+    expect(vm.order).to.equal('asc')
+    wrapper.destroy()
+  })
 })
