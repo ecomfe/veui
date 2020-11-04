@@ -1,4 +1,5 @@
 import { capitalize, isString, isPlainObject, reduce, find } from 'lodash'
+import { getModelEvent } from '../utils/helper'
 
 let options = {
   methods: {
@@ -147,7 +148,14 @@ function setReal (vm, value, def = {}, ...args) {
     vm[getLocalName(def)] = value
   }
   if (event !== false) {
-    vm.$emit(event || `update:${prop}`, value, ...args)
+    let modelEvent = getModelEvent(vm)
+
+    if (event !== modelEvent) {
+      vm.$emit(`update:${prop}`, value, ...args)
+    }
+    if (event) {
+      vm.$emit(event, value, ...args)
+    }
   }
 }
 

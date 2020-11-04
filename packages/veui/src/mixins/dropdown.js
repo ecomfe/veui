@@ -7,7 +7,16 @@ import useControllable from './controllable'
 
 export default {
   directives: { outside },
-  mixins: [overlay, activatable, useControllable(['expanded'])],
+  mixins: [
+    overlay,
+    activatable,
+    useControllable([
+      {
+        prop: 'expanded',
+        event: 'toggle'
+      }
+    ])
+  ],
   props: {
     overlayPriority: Number,
     expanded: Boolean

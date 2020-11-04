@@ -320,6 +320,52 @@ describe('components/Dropdown', () => {
     wrapper.destroy()
   })
 
+  it('should handle controlled `expanded` prop correctly', async () => {
+    let count = 0
+    let wrapper = mount(
+      {
+        template: `
+          <veui-dropdown
+            :options="datasource"
+            :expanded="expanded"
+            @toggle="handleToggle"
+          />
+        `,
+        components: {
+          'veui-dropdown': Dropdown
+        },
+        data () {
+          return {
+            datasource,
+            expanded: false
+          }
+        },
+        methods: {
+          handleToggle (val) {
+            this.expanded = count === 0 ? false : val
+            count++
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    const { vm } = wrapper
+    wrapper.find('.veui-dropdown-button').trigger('click')
+
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-dropdown-expanded').exists()).to.equal(false)
+    wrapper.find('.veui-dropdown-button').trigger('click')
+
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-dropdown-expanded').exists()).to.equal(true)
+
+    wrapper.destroy()
+  })
+
   it('should close the searchable dropdown menu if `tab` is pressed', async () => {
     let wrapper = mount(
       {

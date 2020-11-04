@@ -354,6 +354,18 @@ export default {
       })
     }
   },
+  watch: {
+    realExpanded (val) {
+      if (val) {
+        let cal = this.$refs.cal
+        cal.setExpanded(false)
+        let selected = [].concat(this.realSelected)
+        if (selected[0]) {
+          cal.navigate(selected)
+        }
+      }
+    }
+  },
   methods: {
     suggest () {
       let dates = []
@@ -381,15 +393,8 @@ export default {
       if (this.realDisabled || this.realReadonly) {
         return
       }
+
       this.commit('expanded', force == null ? !this.realExpanded : force)
-      if (this.realExpanded) {
-        let cal = this.$refs.cal
-        cal.setExpanded(false)
-        let selected = [].concat(this.realSelected)
-        if (selected[0]) {
-          cal.navigate(selected)
-        }
-      }
     },
     handleInputFocus () {
       this.$refs.cal.stopMousePicking()
