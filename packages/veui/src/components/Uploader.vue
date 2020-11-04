@@ -1401,21 +1401,16 @@ export default {
       })
     },
     getIconName (type) {
-      let iconName
-
       switch (type) {
         case 'image':
-          iconName = this.icons.addImage
-          break
+          return this.icons.addImage
         case 'video':
-          iconName = this.icons.addVideo
-          break
+          return this.icons.addVideo
         case 'media':
-          iconName = this.icons.addMedia
-          break
+          return this.icons.addMedia
       }
 
-      return iconName
+      return null
     }
   }
 }
