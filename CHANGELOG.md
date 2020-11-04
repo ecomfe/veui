@@ -2,7 +2,7 @@
 
 ### 💡 主要变更
 
-- [+] 为 `Dropdown`/`Select`/`SearchBox`/`DatePicker`/`TimePicker`/`Autocomplete` 组件新增可受控 prop `expanded`，用来控制其下拉浮层的展开/收起。
+- [+] 为 `Dropdown`/`Select`/`SearchBox`/`DatePicker`/`TimePicker`/`Autocomplete` 组件新增可受控 prop `expanded` 和 `toggle` 事件，用来控制其下拉浮层的展开/收起。
 - [+] `Table` 组件新增 `loading` prop，展示“加载中”状态。
 - [^] 为 `Loading` 组件添加了新的动效。
 

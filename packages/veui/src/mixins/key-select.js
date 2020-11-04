@@ -116,9 +116,7 @@ const useKeySelect = ({ useNativeFocus, handlers, expandedKey = 'expanded' }) =>
         case 'Escape':
         case 'Left':
         case 'ArrowLeft':
-          if (typeof this.close === 'function') {
-            this.close()
-          }
+          this[expandedKey] = false
           break
         case 'Up':
         case 'ArrowUp':
