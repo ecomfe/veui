@@ -569,6 +569,19 @@ const ERRORS = {
   CUSTOM_INVALID: 'custom'
 }
 
+const normalizeDropdownDatasource = items => {
+  if (!items) {
+    return []
+  }
+  return items.map(item => {
+    return {
+      ...item,
+      value: item.name,
+      children: normalizeDropdownDatasource(item.children)
+    }
+  })
+}
+
 export default {
   errors: ERRORS,
   name: 'veui-uploader',
@@ -1311,21 +1324,14 @@ export default {
       return controls.map(control => {
         return {
           ...control,
-          children: this.normalizeDropdownDatasource(control.children)
+          children: normalizeDropdownDatasource(control.children)
         }
       })
     },
     getMediaEntries () {
       let defaultEntries = []
 
-      let addIcon
-      if (this.type === 'image') {
-        addIcon = this.icons.addImage
-      } else if (this.type === 'video') {
-        addIcon = this.icons.addVideo
-      } else if (this.type === 'media') {
-        addIcon = this.icons.addMedia
-      }
+      let addIcon = this.getIconName(this.type)
 
       defaultEntries.push({
         name: 'add',
@@ -1340,19 +1346,7 @@ export default {
       return entries.map(entry => {
         return {
           ...entry,
-          children: this.normalizeDropdownDatasource(entry.children)
-        }
-      })
-    },
-    normalizeDropdownDatasource (items) {
-      if (!items) {
-        return []
-      }
-      return items.map(item => {
-        return {
-          ...item,
-          value: item.name,
-          children: this.normalizeDropdownDatasource(item.children)
+          children: normalizeDropdownDatasource(entry.children)
         }
       })
     },
