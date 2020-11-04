@@ -569,7 +569,7 @@ const ERRORS = {
   CUSTOM_INVALID: 'custom'
 }
 
-const normalizeDropdownDatasource = items => {
+function normalizeDropdownDatasource(items) {
   if (!items) {
     return []
   }
