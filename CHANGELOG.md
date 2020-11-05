@@ -3,13 +3,16 @@
 ### 💡 主要变更
 
 - [+] 为 `Dropdown`/`Select`/`SearchBox`/`DatePicker`/`TimePicker`/`Autocomplete` 组件新增可受控 prop `expanded` 和 `toggle` 事件，用来控制其下拉浮层的展开/收起。
-- [+] `Table` 组件新增 `loading` prop，展示“加载中”状态。
+- [+] `Table` 组件新增 `loading` prop，展示“加载中”状态，新增 `allowedOrders` prop，支持定制允许的顺序。
+- [+] `Column` 组件新增 `allowedOrders` prop，支持定制允许的顺序。
+- [+] `Select` 组件新增 `trigger` slot，用于自定义下拉触发区域。
 - [^] 为 `Loading` 组件添加了新的动效。
 
 ### 🐞 问题修复
 
 - [^] 修正 `Progress` 组件偶尔会由于浏览器编码识别错误显示了错误内容的问题。
 - [^] 修正 `RadioGroup` 组件和 `CheckboxGroup` 组件在内容换行时显示不正确的问题。
+- [^] 修正 `SearchBox` 输入 `enter` 会触发表单提交的问题。
 
 ## 2.0.0-beta.11
 
