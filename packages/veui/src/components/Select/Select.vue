@@ -17,7 +17,7 @@ import useControllable from '../../mixins/controllable'
 import i18n from '../../mixins/i18n'
 import { find } from '../../utils/datasource'
 import { uniqueId, omit } from 'lodash'
-import { contains } from '../../utils/dom'
+import { contains, focusIn } from '../../utils/dom'
 import { renderSlot } from '../../utils/helper'
 import '../../common/uiTypes'
 
@@ -172,7 +172,7 @@ export default {
         toggle: val => {
           this.commit('expanded', val == null ? !this.realExpanded : val)
         },
-        updateValue: val => this.commit('value', val)
+        select: val => this.commit('value', val)
       }
     }
   },
@@ -259,7 +259,7 @@ export default {
           this.commit('expanded', true)
           passive = false
           if (this.searchable) {
-            this.$refs.input && this.$refs.input.focus()
+            this.focusInput()
             this.$nextTick(() => {
               this.handleKeydown(e)
             })
@@ -279,7 +279,7 @@ export default {
         case 'Enter':
           if (this.searchable) {
             if (!this.realExpanded) {
-              this.$refs.input.focus()
+              this.focusInput()
               this.commit('expanded', true)
               break
             }
@@ -339,7 +339,15 @@ export default {
         this.$el.focus()
         return
       }
-      this.$refs.input && this.$refs.input.focus()
+      this.focusInput()
+    },
+    focusInput () {
+      let { input, root } = this.$refs
+      if (input) {
+        input.focus()
+      } else {
+        focusIn(root)
+      }
     }
   },
   render () {

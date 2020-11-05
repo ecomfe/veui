@@ -883,7 +883,7 @@ describe('components/Table', () => {
       }
     )
     let { vm } = wrapper
-    let sorter = wrapper.findAll('.veui-table-sorter')
+    let sorter = wrapper.find('.veui-table-sorter')
     sorter.trigger('click')
     await vm.$nextTick()
     expect(vm.order).to.equal('desc')
