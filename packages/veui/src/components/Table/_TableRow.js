@@ -123,6 +123,7 @@ export default {
               {table.selectMode === 'multiple' ? (
                 <Checkbox
                   checked={checked}
+                  disabled={item.selectable === false}
                   onChange={checked => {
                     this.table.select(checked, index)
                   }}
@@ -133,6 +134,7 @@ export default {
               ) : (
                 <Radio
                   checked={checked}
+                  disabled={item.selectable === false}
                   onChange={checked => {
                     this.table.select(checked, index)
                   }}

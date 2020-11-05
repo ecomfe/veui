@@ -138,7 +138,8 @@ import {
   find,
   findIndex,
   findLastIndex,
-  omit
+  omit,
+  filter
 } from 'lodash'
 import Body from './_TableBody'
 import Head from './_TableHead'
@@ -288,6 +289,9 @@ export default {
     },
     realColumns () {
       return this.headerGrid[this.headerGrid.length - 1]
+    },
+    selectableItems () {
+      return filter(this.data, i => i.selectable !== false)
     },
     headerDepth () {
       return getDepth(this.sortedColumns)
@@ -471,30 +475,7 @@ export default {
       return this.bordered || this.hasSpan
     },
     realKeys () {
-      if (this.keyField) {
-        let { span } =
-          find(this.realColumns, ({ field }) => field === this.keyField) || {}
-        if (typeof span === 'function') {
-          return Object.keys(this.data)
-            .map(index => {
-              return {
-                index,
-                span: span(index)
-              }
-            })
-            .filter(({ span: { row = 1, col = 1 } }) => row >= 1 && col >= 1)
-            .map(({ index }) => this.data[index][this.keyField])
-        }
-        return map(this.data, this.keyField)
-      }
-      let keys = this.keys
-      if (!keys) {
-        keys = Object.keys(this.data)
-      }
-      if (typeof keys === 'string') {
-        keys = map(this.data, keys)
-      }
-      return keys.map(String)
+      return this.getKeys()
     },
     selectedItems () {
       return this.getSpecificItems(this.realSelected)
@@ -589,7 +570,7 @@ export default {
           value.splice(value.indexOf(key), 1)
         }
       } else {
-        value = selected ? [...this.realKeys] : []
+        value = selected ? [...this.getKeys(true)] : []
       }
       // 先 select 然后 .sync ，有点怪啊，先保留吧
       // 不能直接拿 selectedItems ，因为这个时候 realSelected 还没更新
@@ -601,6 +582,35 @@ export default {
         selectedItems[key] = this.getItems(key)
         return selectedItems
       }, {})
+    },
+    getKeys (onlySelectable) {
+      let data = onlySelectable
+        ? this.selectableItems
+        : this.data
+      if (this.keyField) {
+        let { span } =
+          find(this.realColumns, ({ field }) => field === this.keyField) || {}
+        if (typeof span === 'function') {
+          return Object.keys(data)
+            .map(index => {
+              return {
+                index,
+                span: span(index)
+              }
+            })
+            .filter(({ span: { row = 1, col = 1 } }) => row >= 1 && col >= 1)
+            .map(({ index }) => data[index][this.keyField])
+        }
+        return map(data, this.keyField)
+      }
+      let keys = this.keys
+      if (!keys) {
+        keys = Object.keys(data)
+      }
+      if (typeof keys === 'string') {
+        keys = map(data, keys)
+      }
+      return keys.map(String)
     },
     expand (expanded, index) {
       let key = this.getKeyByIndex(index)
