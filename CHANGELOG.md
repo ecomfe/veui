@@ -1,11 +1,19 @@
 ## 2.0.0-beta.12
 
+### ⚠️ 非兼容性变更
+
+- [+] `Uploader` 组件新增了 `m`/`s` 两种 `ui` 属性值，默认尺寸有所增大。
+
 ### 💡 主要变更
 
+- [+] 新增了 `Lightbox` 组件。
 - [+] 为 `Dropdown`/`Select`/`SearchBox`/`DatePicker`/`TimePicker`/`Autocomplete` 组件新增可受控 prop `expanded` 和 `toggle` 事件，用来控制其下拉浮层的展开/收起。
-- [+] `Table` 组件新增 `loading` prop，展示“加载中”状态，新增 `allowedOrders` prop，支持定制允许的顺序。
-- [+] `Column` 组件新增 `allowedOrders` prop，支持定制允许的顺序。
-- [+] `Select` 组件新增 `trigger` slot，用于自定义下拉触发区域。
+- [+] `Table` 组件新增 `loading` prop，展示“加载中”状态。
+- [+] `Table`/`Column` 组件新增 `allowed-orders` prop，支持定制允许的顺序。
+- [+] `Select` 组件新增 `trigger` 插槽，用于自定义下拉触发区域。
+- [+] `Uploader` 组件新增了 `type` prop 的可选值 `video`/`media`，用来支持视频上传的场景。
+- [+] `Uploader` 组件新增了 `entries` prop，内置了多入口操作的功能，类型和 `controls` 的返回值相同。
+- [+] `Table` 组件新增 `loading` prop，展示“加载中”状态。
 - [^] 为 `Loading` 组件添加了新的动效。
 
 ### 🐞 问题修复
