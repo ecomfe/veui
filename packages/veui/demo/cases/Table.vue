@@ -401,9 +401,11 @@
       />
     </veui-table>
     <h3>Orders: {{ allowedOrders2 }} , Current: {{ order2 }}</h3>
+    <veui-button @click="switchSelectable">切换selectable</veui-button>
     <veui-table
       key-field="id"
       :data="items"
+      selectable
       :order="order2"
       order-by="id"
       :allowed-orders="allowedOrders2"
@@ -701,6 +703,16 @@ export default {
   methods: {
     toggle () {
       this.data = this.data === tableData ? [] : tableData
+    },
+    switchSelectable () {
+      let first = this.items[0]
+      this.items = [
+        {
+          ...first,
+          selectable: !first.selectable
+        },
+        ...this.items.slice(1)
+      ]
     },
     toggleLoading () {
       this.loading = !this.loading

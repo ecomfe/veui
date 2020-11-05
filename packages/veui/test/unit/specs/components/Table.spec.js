@@ -903,4 +903,54 @@ describe('components/Table', () => {
     expect(vm.order).to.equal('asc')
     wrapper.destroy()
   })
+
+  it('should support disabled items', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              { id: 1, selectable: false },
+              { id: 2, selectable: true }
+            ],
+            selected: []
+          }
+        },
+        template: `
+          <veui-table
+            selectable
+            key-field="id"
+            :data="data"
+            :selected.sync="selected"
+          >
+            <veui-table-column field="id" title="id"/>
+          </veui-table>`
+      },
+      {
+        sync: false
+      }
+    )
+    let { vm } = wrapper
+    let boxes = wrapper.findAll('td .veui-checkbox')
+    await vm.$nextTick()
+    expect(boxes.at(0).props('disabled')).to.equal(true)
+    expect(boxes.at(1).props('disabled')).to.equal(false)
+
+    vm.data = [
+      { id: 1, selectable: true },
+      { id: 2, selectable: false }
+    ]
+    await vm.$nextTick()
+    expect(boxes.at(0).props('disabled')).to.equal(false)
+    expect(boxes.at(1).props('disabled')).to.equal(true)
+
+    wrapper.find('th input[type="checkbox"]').trigger('change')
+    await vm.$nextTick()
+    expect(vm.selected).to.deep.equal([1])
+    wrapper.destroy()
+  })
 })
