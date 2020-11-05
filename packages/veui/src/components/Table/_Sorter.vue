@@ -82,7 +82,7 @@ export default {
     orderOptions: {
       handler ({ order, allowedOrders }) {
         if (!includes(allowedOrders, order)) {
-          warn(`[veui] invalid order: ${order}, allowed orders are ${allowedOrders}`, this)
+          warn(`[veui-table] invalid order: ${order}, allowed orders are ${allowedOrders}`, this)
         }
       },
       immediate: true
