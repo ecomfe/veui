@@ -123,7 +123,6 @@
 
 <script>
 import warn from '../../utils/warn'
-import config from '../../managers/config'
 import { normalizeLength } from '../../utils/helper'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
@@ -153,13 +152,6 @@ import {
   preventBackForward,
   getElementScrollbarWidth
 } from '../../utils/dom'
-
-config.defaults(
-  {
-    allowedOrders: ['desc', 'asc']
-  },
-  'table'
-)
 
 const FIXED_PRIORITY = {
   left: 0,
