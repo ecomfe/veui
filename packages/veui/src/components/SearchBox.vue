@@ -362,7 +362,7 @@ export default {
         case 'Enter': {
           if (!this.finalExpanded) {
             this.search(e)
-            passive = true
+            passive = false
             break
           }
           let elem = this.getCurrentActiveElement()
