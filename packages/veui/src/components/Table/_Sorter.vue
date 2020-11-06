@@ -81,7 +81,7 @@ export default {
   watch: {
     orderOptions: {
       handler ({ order, allowedOrders }) {
-        if (!includes(allowedOrders, order)) {
+        if (!includes(allowedOrders, order) && order !== false) {
           warn(`[veui-table] invalid order: ${order}, allowed orders are ${allowedOrders}`, this)
         }
       },
@@ -90,11 +90,8 @@ export default {
   },
   methods: {
     sort () {
+      // -1 + 1 = 0, 正好取第一个
       let index = this.allowedOrders.indexOf(this.order)
-      if (index === -1) {
-        return
-      }
-
       this.$emit('sort', this.allowedOrders[(index + 1) % this.allowedOrders.length])
     }
   }
