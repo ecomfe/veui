@@ -25,7 +25,7 @@ describe('components/Uploader', () => {
     })
 
     expect(wrapper.vm.$data.fileList).to.eql([
-      { name: 'test.jpg', src: '/test.jpg', status: 'success' }
+      { name: 'test.jpg', src: '/test.jpg', status: 'success', type: 'image' }
     ])
     wrapper.destroy()
   })
@@ -565,7 +565,7 @@ describe('components/Uploader', () => {
       .trigger('click')
 
     expect(wrapper.emitted().test[0][0]).to.eql(
-      { name: 'test1.jpg', src: '/test1.jpg', status: 'success' },
+      { name: 'test1.jpg', src: '/test1.jpg', status: 'success', type: 'image' },
       0
     )
     wrapper.destroy()
