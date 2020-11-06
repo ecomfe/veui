@@ -390,9 +390,9 @@
       key-field="id"
       :data="items"
       :order="order1"
-      order-by="id"
+      :order-by="orderBy1"
       :allowed-orders="allowedOrders1"
-      @sort="(_, order) => order1 = order"
+      @sort="(orderBy, order) => { orderBy1 = orderBy; order1 = order }"
     >
       <veui-table-column
         field="id"
@@ -622,6 +622,7 @@ export default {
       allowedOrders2: [false, 'asc', 'desc'],
       order1: 'desc',
       order2: false,
+      orderBy1: 'id2',
       data: [],
       nextId: 3162,
       nextIndex: 9,
