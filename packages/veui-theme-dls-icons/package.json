@@ -20,7 +20,7 @@
     "veui": "2.0.0-beta.12"
   },
   "devDependencies": {
-    "dls-icons-vue": "^0.12.0",
+    "dls-icons-vue": "^0.13.0",
     "esm": "^3.0.84",
     "mkdirp": "^0.5.4",
     "rimraf": "^2.6.2"
