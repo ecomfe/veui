@@ -39,7 +39,7 @@ export default {
                       {table.selectMode === 'multiple' ? (
                         <Checkbox
                           checked={table.selectStatus !== 'none'}
-                          disabled={!table.selectableItems.length}
+                          disabled={!table.enabledData.length}
                           indeterminate={table.selectStatus === 'partial'}
                           onChange={checked => {
                             table.select(checked)

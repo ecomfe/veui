@@ -290,9 +290,6 @@ export default {
     realColumns () {
       return this.headerGrid[this.headerGrid.length - 1]
     },
-    selectableItems () {
-      return filter(this.data, i => i.selectable !== false)
-    },
     headerDepth () {
       return getDepth(this.sortedColumns)
     },
@@ -475,10 +472,21 @@ export default {
       return this.bordered || this.hasSpan
     },
     realKeys () {
-      return this.getKeys()
+      return this.getKeys(this.data)
     },
     selectedItems () {
       return this.getSpecificItems(this.realSelected)
+    },
+    enabledData () {
+      return filter(this.data, i => i.disabled !== true)
+    },
+    disabledSelectedKeys () {
+      return filter(this.realSelected, key => {
+        let items = this.getItems(key)
+        return Array.isArray(items)
+          ? items.some(i => !!i.disabled)
+          : !!(items || {}).disabled
+      })
     },
     selectStatus () {
       let keys = this.realKeys
@@ -570,7 +578,13 @@ export default {
           value.splice(value.indexOf(key), 1)
         }
       } else {
-        value = selected ? [...this.getKeys(true)] : []
+        if (!selected &&
+          intersection(this.realSelected, this.disabledSelectedKeys).length === this.realSelected.length) {
+          selected = true
+        }
+        value = selected
+          ? [...this.getKeys(this.enabledData), ...this.disabledSelectedKeys]
+          : this.disabledSelectedKeys
       }
       // 先 select 然后 .sync ，有点怪啊，先保留吧
       // 不能直接拿 selectedItems ，因为这个时候 realSelected 还没更新
@@ -583,10 +597,7 @@ export default {
         return selectedItems
       }, {})
     },
-    getKeys (onlySelectable) {
-      let data = onlySelectable
-        ? this.selectableItems
-        : this.data
+    getKeys (data) {
       if (this.keyField) {
         let { span } =
           find(this.realColumns, ({ field }) => field === this.keyField) || {}
