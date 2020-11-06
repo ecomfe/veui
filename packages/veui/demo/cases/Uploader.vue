@@ -57,9 +57,7 @@
     name="file"
     :action="action"
     :max-count="4"
-    max-size="100kb"
     :payload="payload"
-    :validator="validator"
     @success="onSuccess"
     @failure="onFailure"
     @change="handleChange('files')"
@@ -73,9 +71,7 @@
     name="file"
     :action="action"
     :max-count="3"
-    max-size="100kb"
     :payload="payload"
-    :validator="validator"
     @success="onSuccess"
     @failure="onFailure"
     @change="handleChange('files')"
@@ -307,9 +303,8 @@ export default {
     return {
       logos,
       count: 0,
-      action:
-        'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog',
-      // action: '/upload',
+      // action: 'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog',
+      action: '/upload',
       file: logos[0],
       fileList: [
         { name: 'bidu', src: 'https://www.baidu.com/img/bd_logo1.png' },
