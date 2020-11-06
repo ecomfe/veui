@@ -26,7 +26,8 @@
 
 - [^] 修正 `Progress` 组件偶尔会由于浏览器编码识别错误显示了错误内容的问题。
 - [^] 修正 `RadioGroup` 组件和 `CheckboxGroup` 组件在内容换行时显示不正确的问题。
-- [^] 修正 `SearchBox` 输入 `enter` 会触发表单提交的问题。
+- [^] 修正 `SearchBox` 组件按下 <kbd>enter</kbd> 时触发表单提交的问题。
+- [^] 修正 `Select` 组件在清空时将禁用的选项一同清空的问题。
 
 ## 2.0.0-beta.11
 
