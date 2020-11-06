@@ -903,7 +903,8 @@ export default {
     },
     getNewFile (file) {
       let newFile = {
-        status: 'success'
+        status: 'success',
+        type: this.getMediaType(file)
       }
       const knownAtrrs = ['name', 'src', 'type', 'poster']
       let extra = omit(file, knownAtrrs)
