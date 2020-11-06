@@ -18,9 +18,7 @@
     z-index: 1;
   }
 
-  &-button {
-    flex: 1;
-
+  &-command + &-button {
     &[ui~="primary"],
     &[ui~="normal"] {
       &::before {
@@ -34,6 +32,10 @@
         background-color: transparent;
       }
     }
+  }
+
+  &-button {
+    flex: 1;
 
     &[ui~="primary"] {
       &::before {
