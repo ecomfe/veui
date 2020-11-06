@@ -914,8 +914,8 @@ describe('components/Table', () => {
         data () {
           return {
             data: [
-              { id: 1, selectable: false },
-              { id: 2, selectable: true }
+              { id: 1, disabled: true },
+              { id: 2, disabled: false }
             ],
             selected: []
           }
@@ -941,8 +941,8 @@ describe('components/Table', () => {
     expect(boxes.at(1).props('disabled')).to.equal(false)
 
     vm.data = [
-      { id: 1, selectable: true },
-      { id: 2, selectable: false }
+      { id: 1, disabled: false },
+      { id: 2, disabled: true }
     ]
     await vm.$nextTick()
     expect(boxes.at(0).props('disabled')).to.equal(false)
