@@ -564,7 +564,7 @@ describe('components/Uploader', () => {
       .find('button')
       .trigger('click')
 
-    expect(wrapper.emitted().test[0][0], 'type').to.eql(
+    expect(wrapper.emitted().test[0][0]).to.eql(
       { name: 'test1.jpg', src: '/test1.jpg', status: 'success', type: 'image' },
       0
     )
