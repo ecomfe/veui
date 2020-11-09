@@ -1,9 +1,0 @@
-.DS_Store
-node_modules
-npm-debug.log
-lerna-debug.log
-yarn-error.log
-**/test/unit/coverage
-.vscode
-**/dist
-.idea/
