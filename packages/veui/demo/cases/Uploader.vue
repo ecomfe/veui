@@ -303,8 +303,8 @@ export default {
     return {
       logos,
       count: 0,
-      // action: 'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog',
-      action: '/upload',
+      action: 'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog',
+      // action: '/upload',
       file: logos[0],
       fileList: [
         { name: 'bidu', src: 'https://www.baidu.com/img/bd_logo1.png' },

@@ -769,7 +769,7 @@ export default {
     files () {
       return this.fileList.map((file) => {
         return {
-          ...pick(file, ['name', 'src', 'status', 'toBeUploaded', 'message', 'poster', 'type']),
+          ...pick(file, ['name', 'src', 'status', 'toBeUploaded', 'message', 'poster']),
           ...file._extra
         }
       })
