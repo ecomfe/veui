@@ -5,7 +5,8 @@ import routes from './cases'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  mode:
+    process.env.BASE_URL && process.env.BASE_URL !== '/' ? 'hash' : 'history',
   base: process.env.BASE_URL || '/',
   routes: [
     {
