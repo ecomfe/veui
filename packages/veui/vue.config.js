@@ -25,6 +25,7 @@ module.exports = {
       }
     }
   },
+  publicPath: process.env.GITHUB_PAGES === 'true' ? '/veui/' : '/',
   outputDir: '../../components',
   transpileDependencies: [
     /[/\\]node_modules[/\\]veui[/\\]/,
