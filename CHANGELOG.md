@@ -1,3 +1,9 @@
+## 2.0.0-beta.14
+
+### 🐞 问题修复
+
+- [^] 修正 `veui` 没有正确标注 `dls-graphics` 依赖类型的问题。
+
 ## 2.0.0-beta.13
 
 ### 🐞 问题修复
@@ -25,7 +31,6 @@
 
 - [+] `Uploader` 组件新增了 `type` prop 的可选值 `video`/`media`，用来支持视频上传的场景。
 - [+] `Uploader` 组件新增了 `entries` prop，内置了多入口操作的功能，类型和 `controls` 的返回值相同。
-- [+] `Table` 组件新增 `loading` prop，展示“加载中”状态。
 - [^] 为 `Loading` 组件添加了新的动效。
 
 ### 🐞 问题修复

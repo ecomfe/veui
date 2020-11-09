@@ -17,8 +17,20 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./components
+          persist-credentials: false
+
+      - name: Install and Build 🔧
+        run: |
+          npm ci
+          npm run bootstrap
+          npm run build-components
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: components # The folder the action should deploy.
+          CLEAN: true
