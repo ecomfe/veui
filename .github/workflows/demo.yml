@@ -26,7 +26,7 @@ jobs:
         run: |
           npm ci
           npm run bootstrap
-          GITHUB_PAGES=true npm run build-components
+          BASE_PATH=/veui/ npm run build-components
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
