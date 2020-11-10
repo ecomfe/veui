@@ -325,12 +325,9 @@ describe('components/Carousel', () => {
     expect(wrapper.find('.veui-carousel-indicator-numbers').exists()).to.equal(
       true
     )
-    expect(
-      wrapper
-        .find('.veui-carousel-indicator-numbers')
-        .text()
-        .split(/\s+/)
-    ).to.eql(['1', '5'])
+    expect(wrapper.find('.veui-carousel-indicator-numbers').text()).to.equal(
+      '1/5'
+    )
     vm.indicator = 'tab'
 
     await vm.$nextTick()
