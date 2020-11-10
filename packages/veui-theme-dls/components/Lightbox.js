@@ -9,7 +9,7 @@ config.defaults(
       next: IconChevronRight
     },
     parts: {
-      close: 'aux translucent',
+      close: 'icon',
       control: 'translucent'
     }
   },

@@ -6,21 +6,18 @@
     mergeOverlayClass({
       [$c('lightbox')]: true,
       [$c('lightbox-mask')]: true
-    })"
+    })
+  "
   :ui="realUi"
   modal
   :priority="priority"
 >
-  <div
-    :class="$c('lightbox-head')"
-  >
+  <div :class="$c('lightbox-head')">
     <div
       v-if="indicator === 'number' && count > 1"
       :class="$c('lightbox-indicator-numbers')"
     >
-      {{ realIndex + 1 }}
-      <span :class="$c('lightbox-indicator-numbers-separator')"/>
-      {{ count }}
+      {{ realIndex + 1 }}/{{ count }}
     </div>
     <div
       :class="$c('sr-only')"
@@ -94,9 +91,7 @@
                 v-bind="{ ...item, preload: isPreload(i) }"
                 :index="i"
               >
-                <div
-                  :class="$c('lightbox-item-content')"
-                >
+                <div :class="$c('lightbox-item-content')">
                   <video
                     v-if="item.type === 'video'"
                     controls
@@ -109,9 +104,7 @@
                   >
                 </div>
               </slot>
-              <slot
-                :desc="item"
-              >
+              <slot :desc="item">
                 <div :class="$c('lightbox-item-desc')">
                   {{ item.desc }}
                 </div>
@@ -157,7 +150,16 @@ export default {
     'veui-icon': Icon,
     'veui-overlay': Overlay
   },
-  mixins: [prefix, ui, overlay, carousel, i18n, focusable, useControllable(['index']), useControllable(['open'])],
+  mixins: [
+    prefix,
+    ui,
+    overlay,
+    carousel,
+    i18n,
+    focusable,
+    useControllable(['index']),
+    useControllable(['open'])
+  ],
   inheritAttrs: false,
   props: {
     open: {
