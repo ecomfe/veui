@@ -73,9 +73,9 @@
     >
       <template
         v-if="
-          type === 'file'
-            || (isMediaType && file.status === 'success')
-            || !file.status
+          type === 'file' ||
+            (isMediaType && file.status === 'success') ||
+            !file.status
         "
       >
         <slot
@@ -172,7 +172,9 @@
                 :class="$c('uploader-list-media-container-media')"
               />
               <div :class="`${listClass}-mask`">
-                <template v-for="(control, controlIndex) in getImageControls(file)">
+                <template
+                  v-for="(control, controlIndex) in getMediaControls(file)"
+                >
                   <veui-dropdown
                     v-if="control.children && control.children.length"
                     :key="`${control.label}-${controlIndex}`"
@@ -180,7 +182,7 @@
                     trigger="click"
                     :options="control.children"
                     :expanded.sync="expandedControlDropdowns[index]"
-                    @click="handleImageControl(file, index)"
+                    @click="handleMediaAction(file, index)"
                   >
                     <template v-slot:trigger="{ props, handlers }">
                       <label
@@ -242,7 +244,7 @@
                         : realUneditable
                     "
                     :aria-label="control.label"
-                    @click="handleImageControl(file, index, control.name)"
+                    @click="handleMediaAction(file, index, control.name)"
                   >
                     <veui-icon :name="control.icon"/>
                   </veui-button>
@@ -265,7 +267,9 @@
             name="file-before"
             v-bind="getScopeValue(index, file)"
           />
-          <div :class="`${listClass}-container ${listClass}-container-uploading`">
+          <div
+            :class="`${listClass}-container ${listClass}-container-uploading`"
+          >
             <div :class="`${listClass}-container-uploading-text`">
               <slot name="uploading-label">{{ t('uploading') }}</slot>
             </div>
@@ -308,21 +312,19 @@
                 name="button-label"
                 v-bind="getScopeValue(index, file)"
               >
-                <veui-icon
-                  :name="getIconName(type)"
-                />
+                <veui-icon :name="getIconName(type)"/>
               </slot>
               <span
                 :class="`${listClass}-file-name`"
                 :title="file.name"
               >
-                {{
-                  file.name
-                }}
+                {{ file.name }}
               </span>
             </label>
             <div :class="`${listClass}-mask`">
-              <template v-for="(control, controlIndex) in getImageControls(file)">
+              <template
+                v-for="(control, controlIndex) in getMediaControls(file)"
+              >
                 <veui-dropdown
                   v-if="control.children && control.children.length"
                   :key="`${control.label}-${controlIndex}`"
@@ -330,7 +332,7 @@
                   trigger="click"
                   :options="control.children"
                   :expanded.sync="expandedControlDropdowns[index]"
-                  @click="handleImageControl(file, index)"
+                  @click="handleMediaAction(file, index)"
                 >
                   <template v-slot:trigger="{ props, handlers }">
                     <veui-button
@@ -360,7 +362,7 @@
                   "
                   :class="$c('control-item')"
                   :aria-label="control.label"
-                  @click="handleImageControl(file, index, control.name)"
+                  @click="handleMediaAction(file, index, control.name)"
                 >
                   <veui-icon :name="control.icon"/>
                 </veui-button>
@@ -371,9 +373,7 @@
             :target="`fileFailure${index}`"
             position="top"
           >
-            {{
-              file.message || t('uploadFailure')
-            }}
+            {{ file.message || t('uploadFailure') }}
           </veui-popover>
           <slot
             name="file-after"
@@ -396,7 +396,9 @@
           :class="{
             [$c('uploader-list-media-container')]: true,
             [$c('uploader-list-media-container-upload')]: true,
-            [$c('uploader-list-media-item-entry-dropdown-open')]: expandedEntryDropdown
+            [$c(
+              'uploader-list-media-item-entry-dropdown-open'
+            )]: expandedEntryDropdown
           }"
         >
           <label
@@ -411,9 +413,7 @@
             @click="handleClick"
           >
             <slot name="button-label">
-              <veui-icon
-                :name="getIconName(type)"
-              />
+              <veui-icon :name="getIconName(type)"/>
             </slot>
           </label>
           <ul
@@ -432,9 +432,14 @@
                 trigger="click"
                 :options="entry.children"
                 :expanded.sync="expandedEntryDropdown"
-                @click="handleImageEntry"
+                @click="handleMediaEntry"
               >
-                <template v-slot:trigger="{ props: triggerProps, handlers: triggerHandlers }">
+                <template
+                  v-slot:trigger="{
+                    props: triggerProps,
+                    handlers: triggerHandlers
+                  }"
+                >
                   <veui-button
                     :key="entry.name"
                     :ui="uiParts.entry"
@@ -461,7 +466,7 @@
                     : realUneditable || submitting
                 "
                 :aria-label="entry.label"
-                @click="handleImageEntry(entry.name)"
+                @click="handleMediaEntry(entry.name)"
               >
                 <veui-icon :name="entry.icon"/>
                 {{ entry.label }}
@@ -510,9 +515,9 @@
   </form>
 
   <veui-lightbox
-    :open.sync="previewDialogOpen"
+    :open.sync="previewOpen"
     :datasource="fileList"
-    :index.sync="previewImageIndex"
+    :index.sync="previewIndex"
     indicator="number"
     wrap
   />
@@ -556,8 +561,22 @@ config.defaults({
   'uploader.pickerPosition': 'after',
   'uploader.mediaExtensions': {
     image: [
-      'apng', 'avif', 'bmp', 'gif', 'ico', 'cur', 'jpg',
-      'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'svg', 'tif', 'tiff', 'webp'
+      'apng',
+      'avif',
+      'bmp',
+      'gif',
+      'ico',
+      'cur',
+      'jpg',
+      'jpeg',
+      'jfif',
+      'pjpeg',
+      'pjp',
+      'png',
+      'svg',
+      'tif',
+      'tiff',
+      'webp'
     ],
     video: ['mp4', 'mov', 'wmv', 'flv', 'avi', 'avchd', 'webm', 'mkv']
   }
@@ -570,18 +589,7 @@ const ERRORS = {
   CUSTOM_INVALID: 'custom'
 }
 
-function normalizeDropdownDatasource (items) {
-  if (!items) {
-    return []
-  }
-  return items.map(item => {
-    return {
-      ...item,
-      value: item.name,
-      children: normalizeDropdownDatasource(item.children)
-    }
-  })
-}
+const PUBLIC_FILE_PROPS = ['name', 'src', 'type', 'poster']
 
 export default {
   errors: ERRORS,
@@ -720,9 +728,8 @@ export default {
       currentSubmitingFile: null,
       // submitting 控制form与iframe是否存在
       submitting: false,
-      previewImageSrc: null,
-      previewImageIndex: 0,
-      previewDialogOpen: false,
+      previewIndex: 0,
+      previewOpen: false,
       expandedControlDropdowns: [],
       expandedEntryDropdown: false
     }
@@ -756,28 +763,35 @@ export default {
         return 'empty'
       }
 
-      if (this.fileList.some((file) => file.status === 'uploading')) {
+      if (this.fileList.some(file => file.status === 'uploading')) {
         return 'uploading'
       }
 
-      if (this.fileList.some((file) => file.status === 'failure')) {
+      if (this.fileList.some(file => file.status === 'failure')) {
         return 'failure'
       }
 
       return 'success'
     },
     files () {
-      return this.fileList.map((file) => {
+      return this.fileList.map(file => {
         return {
-          ...pick(file, ['name', 'src', 'status', 'toBeUploaded', 'message', 'poster']),
+          ...pick(file, [
+            'name',
+            'src',
+            'status',
+            'toBeUploaded',
+            'message',
+            'poster'
+          ]),
           ...file._extra
         }
       })
     },
     pureFileList () {
       return this.files
-        .filter((file) => file.status === 'success' && !file.toBeUploaded)
-        .map((file) => omit(file, ['status', 'toBeUploaded']))
+        .filter(file => file.status === 'success' && !file.toBeUploaded)
+        .map(file => omit(file, ['status', 'toBeUploaded']))
     },
     realOrder () {
       return this.type === 'file' ? this.order || 'desc' : 'asc'
@@ -797,9 +811,9 @@ export default {
 
         let successIndex = 0
         this.fileList = this.fileList
-          .map((file) => {
+          .map(file => {
             if (file.status === 'success' && !file.toBeUploaded) {
-            // 处理外部直接减少文件的情形
+              // 处理外部直接减少文件的情形
               if (successIndex + 1 > temp.length) {
                 return null
               }
@@ -808,7 +822,7 @@ export default {
             return file
           })
           .filter(Boolean)
-        // 处理外部直接增加文件的情形
+          // 处理外部直接增加文件的情形
           .concat(cloneDeep(temp.slice(successIndex)))
       },
       deep: true
@@ -830,7 +844,7 @@ export default {
   mounted () {
     if (this.requestMode === 'iframe') {
       if (this.iframeMode === 'postmessage') {
-        this.handlePostmessage = (event) => {
+        this.handlePostmessage = event => {
           if (
             !event.source ||
             !event.source.frameElement ||
@@ -857,7 +871,7 @@ export default {
         if (!window[this.callbackNamespace]) {
           window[this.callbackNamespace] = {}
         }
-        window[this.callbackNamespace][this.callbackFuncName] = (data) => {
+        window[this.callbackNamespace][this.callbackFuncName] = data => {
           if (!this.canceled) {
             this.uploadCallback(this.parseData(data), this.currentSubmitingFile)
           }
@@ -889,7 +903,7 @@ export default {
       }
 
       if (Array.isArray(value)) {
-        return value.map((file) => this.getNewFile(file))
+        return value.map(file => this.getNewFile(file))
       }
 
       if (typeof value === 'string') {
@@ -908,12 +922,11 @@ export default {
         status: 'success',
         type: this.getMediaType(file)
       }
-      const knownAtrrs = ['name', 'src', 'type', 'poster']
-      let extra = omit(file, knownAtrrs)
+      let extra = omit(file, PUBLIC_FILE_PROPS)
       if (!isEmpty(extra)) {
         newFile._extra = cloneDeep(extra)
       }
-      return assign(newFile, pick(file, knownAtrrs))
+      return assign(newFile, pick(file, PUBLIC_FILE_PROPS))
     },
     handleNewFiles (files) {
       this.canceled = false
@@ -938,8 +951,8 @@ export default {
         return
       }
 
-      Promise.all(newFiles.map((file) => this.validateFile(file))).then(
-        (validationResults) => {
+      Promise.all(newFiles.map(file => this.validateFile(file))).then(
+        validationResults => {
           newFiles = newFiles.map((file, index) => {
             if (validationResults[index].valid) {
               file.toBeUploaded = true
@@ -1015,9 +1028,9 @@ export default {
         })
       }
 
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         resolve(this.validator ? this.validator(file) : { valid: true })
-      }).then((result) => {
+      }).then(result => {
         let customValidity = result.valid
         if (!customValidity) {
           errors.push({
@@ -1049,7 +1062,7 @@ export default {
 
       let extension = last(filename.split('.')).toLowerCase()
 
-      return this.accept.split(/,\s*/).some((item) => {
+      return this.accept.split(/,\s*/).some(item => {
         let acceptExtention = last(item.split(/[./]/)).toLowerCase()
 
         if (
@@ -1074,7 +1087,7 @@ export default {
       return !this.maxSize || !fileSize || fileSize <= parse(this.maxSize)
     },
     uploadFiles () {
-      this.fileList.forEach((file) => {
+      this.fileList.forEach(file => {
         if (file.toBeUploaded) {
           this.uploadFile(file)
         }
@@ -1086,12 +1099,7 @@ export default {
       file.total = progress.total
       this.updateFileList(file)
 
-      this.$emit(
-        'progress',
-        this.files[index],
-        index,
-        progress || null
-      )
+      this.$emit('progress', this.files[index], index, progress || null)
     },
     onload (file, data) {
       this.uploadCallback(data, file)
@@ -1116,9 +1124,9 @@ export default {
         let xhr = new XMLHttpRequest()
         file.xhr = xhr
 
-        xhr.upload.onprogress = (e) => this.onprogress(file, e)
+        xhr.upload.onprogress = e => this.onprogress(file, e)
         xhr.onload = () => this.onload(file, this.parseData(xhr.responseText))
-        xhr.onerror = (e) => this.onerror(file, e)
+        xhr.onerror = e => this.onerror(file, e)
 
         let formData = new FormData()
         formData.append(this.name, file)
@@ -1197,14 +1205,28 @@ export default {
       }
       const type = properties.type
       assign(file, properties)
-      file._extra = omit(properties, ['success', 'message', 'name', 'src', 'poster', 'type'])
+      file._extra = omit(properties, [
+        'success',
+        'message',
+        'name',
+        'src',
+        'poster',
+        'type'
+      ])
 
+      /**
+       * TODO: this is a hack to cope with the problem that `type` property exists
+       * on native File objects, we should move all public/internal metadata onto
+       * something like `file._meta` instead.
+       */
       Object.defineProperty(file, 'type', {
-        writable: true,
-        configurable: true
+        writable: true
       })
 
-      file.type = type || (file.type && file.type.substring(0, file.type.indexOf('/'))) || this.getMediaType(file)
+      file.type =
+        type ||
+        (file.type && file.type.substring(0, file.type.indexOf('/'))) ||
+        this.getMediaType(file)
       this.$set(this.fileList, this.fileList.indexOf(file), file)
 
       if (toEmit) {
@@ -1213,7 +1235,11 @@ export default {
     },
     restoreReplacingFile (file) {
       if (file._replacingFile) {
-        this.$set(this.fileList, this.fileList.indexOf(file), file._replacingFile)
+        this.$set(
+          this.fileList,
+          this.fileList.indexOf(file),
+          file._replacingFile
+        )
       }
     },
     remove (file, silent = false) {
@@ -1288,11 +1314,10 @@ export default {
         : this.pureFileList[0]
     },
     preview ({ src }, index) {
-      this.previewImageSrc = src
-      this.previewImageIndex = index
-      this.previewDialogOpen = true
+      this.previewIndex = index
+      this.previewOpen = true
     },
-    getImageControls (file) {
+    getMediaControls (file) {
       let defaultControls
       let remove = {
         name: 'remove',
@@ -1348,9 +1373,7 @@ export default {
         label: this.t('add')
       })
 
-      let entries = this.entries
-        ? this.entries(defaultEntries)
-        : defaultEntries
+      let entries = this.entries ? this.entries(defaultEntries) : defaultEntries
 
       return entries.map(entry => {
         return {
@@ -1359,14 +1382,14 @@ export default {
         }
       })
     },
-    handleImageControl (file, index, actionName) {
+    handleMediaAction (file, index, actionName) {
       if (actionName === 'preview' || actionName === 'remove') {
         this[actionName](file, index)
       } else {
         this.$emit(actionName, file, index)
       }
     },
-    handleImageEntry (entryName) {
+    handleMediaEntry (entryName) {
       if (entryName === 'add') {
         this.$refs.input.click()
         this.handleClick()
@@ -1378,7 +1401,7 @@ export default {
       this.$refs.input.click()
     },
     clear () {
-      this.fileList.forEach((file) => {
+      this.fileList.forEach(file => {
         if (file.status === 'uploading') {
           this.cancel(file)
         }
@@ -1422,5 +1445,18 @@ export default {
       return null
     }
   }
+}
+
+function normalizeDropdownDatasource (items) {
+  if (!items) {
+    return []
+  }
+  return items.map(item => {
+    return {
+      ...item,
+      value: item.name,
+      children: normalizeDropdownDatasource(item.children)
+    }
+  })
 }
 </script>
