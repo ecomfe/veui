@@ -227,6 +227,7 @@ describe('components/Uploader', () => {
       { name: 'test2.jpg', src: '/test2.jpg', id: 6 },
       { name: 'test1.jpg', src: '/test1.jpg', id: 5 }
     ])
+
     expect(wrapper.emitted().success[0]).to.eql([
       {
         name: 'test2.jpg',

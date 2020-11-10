@@ -512,6 +512,7 @@
   <veui-lightbox
     :open.sync="previewDialogOpen"
     :datasource="fileList"
+    :index.sync="previewImageIndex"
     indicator="number"
     wrap
   />
@@ -720,6 +721,7 @@ export default {
       // submitting 控制form与iframe是否存在
       submitting: false,
       previewImageSrc: null,
+      previewImageIndex: 0,
       previewDialogOpen: false,
       expandedControlDropdowns: [],
       expandedEntryDropdown: false
@@ -767,7 +769,7 @@ export default {
     files () {
       return this.fileList.map((file) => {
         return {
-          ...pick(file, ['name', 'src', 'status', 'toBeUploaded', 'message']),
+          ...pick(file, ['name', 'src', 'status', 'toBeUploaded', 'message', 'poster']),
           ...file._extra
         }
       })
@@ -941,7 +943,7 @@ export default {
           newFiles = newFiles.map((file, index) => {
             if (validationResults[index].valid) {
               file.toBeUploaded = true
-              if (this.type === 'image' && window.URL) {
+              if (this.isMediaType && window.URL) {
                 file.src = window.URL.createObjectURL(file)
               }
             } else {
@@ -953,7 +955,7 @@ export default {
           })
 
           if (this.isReplacing) {
-            // type=image时，点击重新上传进入此分支，替换掉原位置的文件replacingFile
+            // mediaType = true 时，点击重新上传进入此分支，替换掉原位置的文件replacingFile
             let newFile = newFiles[0]
             newFile._replacingFile = this.replacingFile
 
@@ -1189,15 +1191,20 @@ export default {
       file.message = data.message || ''
       this.updateFileList(file, 'failure', data)
     },
-    updateFileList (file, status, properties, toEmit = false) {
+    updateFileList (file, status, properties = {}, toEmit = false) {
       if (status !== undefined) {
         file.status = status
       }
+      const type = properties.type
+      assign(file, properties)
+      file._extra = omit(properties, ['success', 'message', 'name', 'src', 'poster', 'type'])
 
-      if (properties) {
-        assign(file, properties)
-        file._extra = omit(properties, ['success', 'message', 'name', 'src'])
-      }
+      Object.defineProperty(file, 'type', {
+        writable: true,
+        configurable: true
+      })
+
+      file.type = type || (file.type && file.type.substring(0, file.type.indexOf('/'))) || this.getMediaType(file)
       this.$set(this.fileList, this.fileList.indexOf(file), file)
 
       if (toEmit) {
@@ -1280,8 +1287,9 @@ export default {
         ? this.pureFileList[0].src || this.pureFileList[0].name
         : this.pureFileList[0]
     },
-    preview ({ src }) {
+    preview ({ src }, index) {
       this.previewImageSrc = src
+      this.previewImageIndex = index
       this.previewDialogOpen = true
     },
     getImageControls (file) {
@@ -1353,7 +1361,7 @@ export default {
     },
     handleImageControl (file, index, actionName) {
       if (actionName === 'preview' || actionName === 'remove') {
-        this[actionName](file)
+        this[actionName](file, index)
       } else {
         this.$emit(actionName, file, index)
       }
@@ -1397,7 +1405,7 @@ export default {
         const extensions = mediaExtensions[type]
 
         return extensions.some(extension => {
-          return endsWith(file.src, '.' + extension)
+          return endsWith(file.name, '.' + extension)
         })
       })
     },
