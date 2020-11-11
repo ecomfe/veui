@@ -42,6 +42,7 @@
   }
 
   &-viewport {
+    position: relative;
     display: flex;
     height: 100%;
     align-items: center;
@@ -49,7 +50,7 @@
 
   &-viewport-content {
     .size(100%);
-    padding: @dls-lightbox-content-spacing-y @dls-lightbox-content-spacing-x;
+    padding: @dls-lightbox-content-spacing-y (@dls-lightbox-content-spacing-x + @dls-lightbox-control-size);
     padding-bottom: 0;
   }
 
@@ -122,6 +123,7 @@
   }
 
   &-control {
+    position: absolute;
     &[ui] {
       .size(@dls-lightbox-control-size);
     }
@@ -135,10 +137,15 @@
       .dls-icon-size(@dls-lightbox-control-icon-size);
     }
 
+    &-prev {
+      left: 0;
+    }
     &-prev .@{veui-prefix}-icon {
       transform: translateX(percentage(-(sqrt(2) - 1) / 2) / 2);
     }
-
+    &-next {
+      right: 0;
+    }
     &-next .@{veui-prefix}-icon {
       transform: translateX(percentage((sqrt(2) - 1) / 2) / 2);
     }

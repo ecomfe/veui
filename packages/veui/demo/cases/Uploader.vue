@@ -66,6 +66,7 @@
     @failure="onFailure"
     @change="handleChange('files')"
     @statuschange="handleStatusChange"
+    :preview-options="{ wraper: false }"
     @invalid="handleInvalid"
   >
     <template slot="desc">

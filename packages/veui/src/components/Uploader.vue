@@ -530,8 +530,7 @@
     :open.sync="previewOpen"
     :datasource="fileList.filter(file => file.status === 'success')"
     :index.sync="previewIndex"
-    :indicator="indicator"
-    :wrap="wrap"
+    v-bind="realPreviewOptions"
   />
 </div>
 </template>
@@ -727,15 +726,13 @@ export default {
       }
     },
     entries: Function,
-    wrap: {
-      type: Boolean,
-      default: true
-    },
-    indicator: {
-      type: String,
-      default: 'number',
-      validator (value) {
-        return includes(['number', 'none'], value)
+    previewOptions: {
+      type: Object,
+      default () {
+        return {
+          wrap: true,
+          indicator: 'number'
+        }
       }
     }
   },
@@ -835,6 +832,9 @@ export default {
           return 'video/*'
       }
       return null
+    },
+    realPreviewOptions () {
+      return omit(this.previewOptions, ['index'])
     }
   },
   watch: {
