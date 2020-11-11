@@ -43,7 +43,7 @@
     hidden
     type="file"
     :name="name"
-    :accept="accept"
+    :accept="realAccept"
     :disabled="realUneditable"
     :multiple="
       requestMode !== 'iframe' &&
@@ -179,8 +179,8 @@
                     v-if="control.children && control.children.length"
                     :key="`${control.label}-${controlIndex}`"
                     :class="$c('control-item')"
-                    trigger="click"
                     :options="control.children"
+                    trigger="hover"
                     :expanded.sync="expandedControlDropdowns[index]"
                     @click="handleMediaAction(file, index)"
                   >
@@ -298,15 +298,12 @@
             :ref="`fileFailure${index}`"
             :class="`${listClass}-container ${listClass}-container-failure`"
           >
-            <label
-              :for="inputId"
+            <div
               :class="{
-                [$c('button')]: true,
                 [$c('uploader-input-label-media')]: true
               }"
               :ui="uiParts.media"
               tabindex="0"
-              @click="replaceFile(file)"
             >
               <slot
                 name="button-label"
@@ -320,7 +317,7 @@
               >
                 {{ file.name }}
               </span>
-            </label>
+            </div>
             <div :class="`${listClass}-mask`">
               <template
                 v-for="(control, controlIndex) in getMediaControls(file)"
@@ -329,9 +326,9 @@
                   v-if="control.children && control.children.length"
                   :key="`${control.label}-${controlIndex}`"
                   :class="$c('control-item')"
-                  trigger="click"
                   :options="control.children"
                   :expanded.sync="expandedControlDropdowns[index]"
+                  trigger="hover"
                   @click="handleMediaAction(file, index)"
                 >
                   <template v-slot:trigger="{ props, handlers }">
@@ -351,6 +348,21 @@
                     </veui-button>
                   </template>
                 </veui-dropdown>
+                <label
+                  v-if="control.name === 'replace'"
+                  :key="control.name"
+                  :for="inputId"
+                  :ui="uiParts.control"
+                  :class="{
+                    [$c('button')]: true,
+                    [$c('disabled')]: realUneditable
+                  }"
+                  :tabindex="realUneditable ? null : 0"
+                  :aria-label="control.label"
+                  @click.stop="replaceFile(file)"
+                >
+                  <veui-icon :name="icons.upload"/>
+                </label>
                 <veui-button
                   v-else
                   :key="control.name"
@@ -416,63 +428,63 @@
               <veui-icon :name="getIconName(type)"/>
             </slot>
           </label>
-          <ul
+          <div
             v-if="uiProps.size === 'm' && getMediaEntries().length > 1"
-            :class="{
-              [$c('uploader-entries-container')]: true
-            }"
+            :class="{ [$c('uploader-entries-container')]: true }"
           >
-            <li
-              v-for="(entry, entryIndex) in getMediaEntries()"
-              :key="`${entry.name}-${entryIndex}`"
-            >
-              <veui-dropdown
-                v-if="entry.children && entry.children.length"
-                :key="`${entry.label}-${entryIndex}`"
-                trigger="click"
-                :options="entry.children"
-                :expanded.sync="expandedEntryDropdown"
-                @click="handleMediaEntry"
+            <ul>
+              <li
+                v-for="(entry, entryIndex) in getMediaEntries()"
+                :key="`${entry.name}-${entryIndex}`"
               >
-                <template
-                  v-slot:trigger="{
-                    props: triggerProps,
-                    handlers: triggerHandlers
-                  }"
+                <veui-dropdown
+                  v-if="entry.children && entry.children.length"
+                  :key="`${entry.label}-${entryIndex}`"
+                  trigger="hover"
+                  :options="entry.children"
+                  :expanded.sync="expandedEntryDropdown"
+                  @click="handleMediaEntry"
                 >
-                  <veui-button
-                    :key="entry.name"
-                    :ui="uiParts.entry"
-                    :disabled="
-                      entry.disabled !== undefined
-                        ? entry.disabled
-                        : realUneditable
-                    "
-                    :aria-label="entry.label"
-                    v-bind="triggerProps"
-                    v-on="triggerHandlers"
+                  <template
+                    v-slot:trigger="{
+                      props: triggerProps,
+                      handlers: triggerHandlers
+                    }"
                   >
-                    <veui-icon :name="entry.icon"/>
-                    {{ entry.label }}
-                  </veui-button>
-                </template>
-              </veui-dropdown>
-              <veui-button
-                v-else
-                :ui="uiParts.entry"
-                :disabled="
-                  entry.disabled !== undefined
-                    ? entry.disabled
-                    : realUneditable || submitting
-                "
-                :aria-label="entry.label"
-                @click="handleMediaEntry(entry.name)"
-              >
-                <veui-icon :name="entry.icon"/>
-                {{ entry.label }}
-              </veui-button>
-            </li>
-          </ul>
+                    <veui-button
+                      :key="entry.name"
+                      :ui="uiParts.entry"
+                      :disabled="
+                        entry.disabled !== undefined
+                          ? entry.disabled
+                          : realUneditable
+                      "
+                      :aria-label="entry.label"
+                      v-bind="triggerProps"
+                      v-on="triggerHandlers"
+                    >
+                      <veui-icon :name="entry.icon"/>
+                      {{ entry.label }}
+                    </veui-button>
+                  </template>
+                </veui-dropdown>
+                <veui-button
+                  v-else
+                  :ui="uiParts.entry"
+                  :disabled="
+                    entry.disabled !== undefined
+                      ? entry.disabled
+                      : realUneditable || submitting
+                  "
+                  :aria-label="entry.label"
+                  @click="handleMediaEntry(entry.name)"
+                >
+                  <veui-icon :name="entry.icon"/>
+                  {{ entry.label }}
+                </veui-button>
+              </li>
+            </ul>
+          </div>
         </div>
       </slot>
     </li>
@@ -516,10 +528,10 @@
 
   <veui-lightbox
     :open.sync="previewOpen"
-    :datasource="fileList"
+    :datasource="fileList.filter(file => file.status === 'success')"
     :index.sync="previewIndex"
-    indicator="number"
-    wrap
+    :indicator="indicator"
+    :wrap="wrap"
   />
 </div>
 </template>
@@ -714,7 +726,18 @@ export default {
         return config.get('uploader.pickerPosition')
       }
     },
-    entries: Function
+    entries: Function,
+    wrap: {
+      type: Boolean,
+      default: true
+    },
+    indicator: {
+      type: String,
+      default: 'number',
+      validator (value) {
+        return includes(['number', 'none'], value)
+      }
+    }
   },
   data () {
     return {
@@ -798,6 +821,20 @@ export default {
     },
     isMediaType () {
       return ['image', 'video', 'media'].indexOf(this.type) > -1
+    },
+    realAccept () {
+      if (this.accept) {
+        return this.accept
+      }
+      switch (this.type) {
+        case 'media':
+          return 'video/*, image/*'
+        case 'image':
+          return 'image/*'
+        case 'video':
+          return 'video/*'
+      }
+      return null
     }
   },
   watch: {
@@ -937,7 +974,7 @@ export default {
 
       let newFiles = [...files]
       let countFiles = this.fileList.length + newFiles.length
-      if (this.maxCount !== 1 && countFiles > this.maxCount) {
+      if (!this.isReplacing && this.maxCount !== 1 && countFiles > this.maxCount) {
         toast.error(this.t('tooManyFiles'))
         this.$emit('invalid', {
           errors: [
@@ -1056,13 +1093,13 @@ export default {
       })
     },
     validateType (filename) {
-      if (!this.accept) {
+      if (!this.realAccept) {
         return true
       }
 
       let extension = last(filename.split('.')).toLowerCase()
 
-      return this.accept.split(/,\s*/).some(item => {
+      return this.realAccept.split(/,\s*/).some(item => {
         let acceptExtention = last(item.split(/[./]/)).toLowerCase()
 
         if (
@@ -1072,15 +1109,23 @@ export default {
         ) {
           return true
         }
-
-        if (
-          acceptExtention === '*' &&
-          item.indexOf('/') > -1 &&
-          this.extensions.indexOf(extension) > -1
-        ) {
-          return true
+        const mediaExtensions = config.get('uploader.mediaExtensions')
+        let extensions
+        switch (this.type) {
+          case 'image':
+          case 'video':
+            extensions = mediaExtensions[this.type]
+            break
+          case 'media':
+            extensions = mediaExtensions.image.concat(mediaExtensions.video)
+            break
+          default:
+            extensions = this.extensions
         }
-        return false
+
+        return acceptExtention === '*' &&
+          item.indexOf('/') > -1 &&
+          extensions.indexOf(extension) > -1
       })
     },
     validateSize (fileSize) {
@@ -1324,6 +1369,11 @@ export default {
         icon: this.icons.clear,
         label: this.t('remove')
       }
+      let replace = {
+        name: 'replace',
+        icon: this.icons.upload,
+        label: this.t('replace')
+      }
       switch (file.status) {
         case 'success':
           defaultControls = [
@@ -1336,17 +1386,13 @@ export default {
           ]
 
           if (this.uiProps.size !== 's') {
-            defaultControls.push({
-              name: 'replace',
-              icon: this.icons.upload,
-              label: this.t('replace')
-            })
+            defaultControls.push(replace)
           }
 
           defaultControls.push(remove)
           break
         case 'failure':
-          defaultControls = [remove]
+          defaultControls = [replace, remove]
           break
         default:
           defaultControls = [remove]

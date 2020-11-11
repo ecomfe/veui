@@ -25,9 +25,34 @@
       <veui-icon name="id-card"/>
     </template>
   </veui-uploader>
+  <h2>禁用状态</h2>
+  <veui-uploader
+    v-model="files1"
+    type="image"
+    name="file"
+    :action="action"
+    :max-count="3"
+    max-size="100kb"
+    accept=".jpg,.jpeg,.gif"
+    :payload="payload"
+    :validator="validator"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files')"
+    @statuschange="handleStatusChange"
+    @invalid="handleInvalid"
+    :readonly="true"
+  >
+    <template slot="desc">
+      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于200像素，最多上传3张图
+    </template>
+    <template #button-label>
+      <veui-icon name="id-card"/>
+    </template>
+  </veui-uploader>
   <h2>图片上传模式s</h2>
   <veui-uploader
-    v-model="files"
+    v-model="files2"
     type="image"
     ui="s"
     name="file"
@@ -63,6 +88,21 @@
     @change="handleChange('files')"
     @statuschange="handleStatusChange"
     @invalid="handleInvalid"
+  />
+  <h2>视频上传模式上传按钮左边</h2>
+  <veui-uploader
+    v-model="videos1"
+    type="video"
+    name="file"
+    :action="action"
+    :max-count="4"
+    :payload="payload"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files')"
+    @statuschange="handleStatusChange"
+    @invalid="handleInvalid"
+    picker-position="before"
   />
   <h2>媒体上传模式</h2>
   <veui-uploader
@@ -138,9 +178,32 @@
     accept=".jpg,.jpeg,.gif"
     :payload="payload"
     :upload="upload"
-    ui="s"
     picker-position="before"
     :controls="imageControls"
+    @moveright="handleMoveRight"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files1')"
+    @statuschange="handleStatusChange"
+  >
+    <template slot="desc">
+      请选择jpg,jpeg,gif图片，大小在100kb以内
+    </template>
+  </veui-uploader>
+  <h2>图片上传模式，扩展操作栏s</h2>
+  <veui-uploader
+    ref="multipleUploader"
+    v-model="files1"
+    type="image"
+    request-mode="custom"
+    name="file"
+    max-size="100kb"
+    accept=".jpg,.jpeg,.gif"
+    :payload="payload"
+    :upload="upload"
+    ui="s"
+    picker-position="before"
+    :controls="imageControlsSmall"
     @moveright="handleMoveRight"
     @success="onSuccess"
     @failure="onFailure"
@@ -271,21 +334,21 @@ export default {
 
     let videos = [
       {
-        name: 'flower.mp4',
-        src: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
-        poster: 'https://cdn.videvo.net/videvo_files/video/free/2014-08/thumbnails/Earth_Zoom_In_small.jpg'
+        name: '330206454.sd.mp4',
+        src: 'https://player.vimeo.com/external/330206454.sd.mp4?s=243f3d7497ba5d1c7f7ee57071e947540484a89a&profile_id=164&oauth2_token_id=57447761',
+        poster: 'https://images.pexels.com/videos/2156021/free-video-2156021.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500'
       },
       {
-        name: '200403_WFH_002_preview.mp4',
-        src: 'https://cdn.videvo.net/videvo_files/video/premium/2020-04/small_watermarked/200403_WFH_002_preview.mp4'
+        name: '380082136.sd.mp4',
+        src: 'https://player.vimeo.com/external/380082136.sd.mp4?s=930b81a8bf84310005cdb7f3d0c6489b777d7032&profile_id=139&oauth2_token_id=57447761'
       }
     ]
 
     let medias = [
       {
-        name: '200403_WFH_002_preview.mp4',
-        src: 'https://cdn.videvo.net/videvo_files/video/premium/2020-04/small_watermarked/200403_WFH_002_preview.mp4',
-        poster: 'https://cdn.videvo.net/videvo_files/video/premium/2020-04/thumbnails/200403_WFH_002_small.jpg',
+        name: '330206454.sd.mp4',
+        src: 'https://player.vimeo.com/external/330206454.sd.mp4?s=243f3d7497ba5d1c7f7ee57071e947540484a89a&profile_id=164&oauth2_token_id=57447761',
+        poster: 'https://images.pexels.com/videos/2156021/free-video-2156021.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
         type: 'video'
       },
       {
@@ -303,18 +366,20 @@ export default {
     return {
       logos,
       count: 0,
-      action: 'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog',
-      // action: '/upload',
+      // action: 'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog',
+      action: '/upload',
       file: logos[0],
       fileList: [
         { name: 'bidu', src: 'https://www.baidu.com/img/bd_logo1.png' },
         { name: 'tsla', src: 'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg' }
       ],
       files,
-      medias,
-      videos,
       files1: files.slice(0),
       files2: files.slice(0),
+      medias,
+      media1: medias.slice(0),
+      videos,
+      videos1: videos.slice(0),
       customFiles: files.slice(0),
       filesIframe: {
         name: 'demo-file.txt',
@@ -396,6 +461,29 @@ export default {
         }
         return defaultControls
       },
+      imageControlsSmall (file, defaultControls) {
+        if (file.status === 'success') {
+          return [
+            { name: 'moveright', icon: 'chevron-right', disabled: false },
+            {
+              name: 'moveright1',
+              icon: 'chevron-right',
+              disabled: false,
+              children: [
+                {
+                  name: 'moveright1-1',
+                  label: '操作第一'
+                },
+                {
+                  name: 'moveright1-2',
+                  label: '操作第二'
+                }
+              ]
+            }
+          ]
+        }
+        return defaultControls.slice(0, 2)
+      },
       entries (defaultEntries) {
         return [
           {
@@ -404,9 +492,14 @@ export default {
             label: '本地上传'
           },
           {
+            name: 'imageLibrary',
+            icon: 'star-solid',
+            label: '图片库'
+          },
+          {
             name: 'add',
             icon: 'thumb-up-solid',
-            label: '更多功能',
+            label: '更多',
             children: [
               {
                 label: '操作第一',
