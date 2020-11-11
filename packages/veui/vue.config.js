@@ -87,7 +87,7 @@ module.exports = {
       app.post('/upload', (req, res) => {
         res.json({
           success: Math.random() > 0.5,
-          src: 'https://webpack.js.org/e0b5805d423a4ec9473ee315250968b2.svg',
+          src: 'https://images.pexels.com/videos/857134/free-video-857134.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
           message: 'image too large'
         })
       })

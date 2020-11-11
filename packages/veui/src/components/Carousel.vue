@@ -59,9 +59,7 @@
     v-if="indicator === 'number'"
     :class="$c('carousel-indicator-numbers')"
   >
-    {{ realIndex + 1 }}
-    <span :class="$c('carousel-indicator-numbers-separator')"/>
-    {{ count }}
+    {{ realIndex + 1 }}/{{ count }}
   </div>
   <nav
     v-else-if="indicator !== 'none'"

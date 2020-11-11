@@ -121,20 +121,7 @@
       .centered-line(@dls-carousel-pages-height);
       font-variant-numeric: tabular-nums;
       border-radius: @dls-carousel-pages-border-radius;
-      user-select: none;
       cursor: default;
-
-      &-separator {
-        .margin(_, 2px);
-
-        &::after {
-          content: "";
-          display: inline-block;
-          .size(1px, 8px);
-          background-color: currentColor;
-          transform: rotate(15deg);
-        }
-      }
     }
 
     &-tabs {

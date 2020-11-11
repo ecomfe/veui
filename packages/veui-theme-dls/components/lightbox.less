@@ -19,9 +19,12 @@
 
     &-close.@{veui-prefix}-button {
       .absolute(0, 0, _, _);
-      background: none;
-      &:hover {
-        background: none;
+
+      &,
+      &:hover,
+      &[data-focus-visible-added],
+      &:active {
+        color: @dls-button-font-color-translucent;
       }
 
       .@{veui-prefix}-icon {
@@ -75,6 +78,7 @@
       max-height: 100%;
       flex: 1 0 auto;
     }
+
     &-content {
       display: flex;
       align-items: center;
@@ -92,7 +96,7 @@
         max-height: 100%;
         max-width: 100%;
         &:focus {
-          outline:none;
+          outline: none;
         }
       }
     }
@@ -102,7 +106,7 @@
       opacity: 0;
     }
     &-leave-active {
-        position: absolute;
+      position: absolute;
     }
 
     &-desc {
@@ -130,25 +134,20 @@
     .@{veui-prefix}-icon {
       .dls-icon-size(@dls-lightbox-control-icon-size);
     }
+
+    &-prev .@{veui-prefix}-icon {
+      transform: translateX(percentage(-(sqrt(2) - 1) / 2) / 2);
+    }
+
+    &-next .@{veui-prefix}-icon {
+      transform: translateX(percentage((sqrt(2) - 1) / 2) / 2);
+    }
   }
 
   &-indicator {
     &-numbers {
       font-variant-numeric: tabular-nums;
-      user-select: none;
       cursor: default;
-
-      &-separator {
-        .margin(_, 2px);
-
-        &::after {
-          content: "";
-          display: inline-block;
-          .size(1px, 8px);
-          background-color: currentColor;
-          transform: rotate(15deg);
-        }
-      }
     }
   }
 }
