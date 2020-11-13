@@ -1028,10 +1028,7 @@ export default {
             let replacingIndex = this.fileList.indexOf(this.replacingFile)
             this.$set(this.fileList, replacingIndex, newFile)
             this.$emit('change', this.getValue())
-            // window.setTimeout(() => {
             this.replacingFile = null
-            // })
-            console.log(this.$refs.fileFailure2)
 
             if (newFile.status === 'failure') {
               return
