@@ -9,8 +9,9 @@ import {
   IconMediaAdd,
   IconExclamationCircle,
   IconLoading,
-  IconEye,
-  IconQuestionCircle
+  IconQuestionCircle,
+  IconPlayCircle,
+  IconZoomIn
 } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
@@ -27,8 +28,9 @@ config.defaults(
       addMedia: IconMediaAdd,
       alert: IconExclamationCircle,
       loading: IconLoading,
-      preview: IconEye,
-      message: IconQuestionCircle
+      message: IconQuestionCircle,
+      previewImage: IconZoomIn,
+      previewVideo: IconPlayCircle
     },
     ui: {
       size: {

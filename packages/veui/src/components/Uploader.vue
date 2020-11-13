@@ -332,7 +332,23 @@
                   @click="handleMediaAction(file, index)"
                 >
                   <template v-slot:trigger="{ props, handlers }">
+                    <label
+                      v-if="control.name === 'replace'"
+                      :key="control.name"
+                      :for="inputId"
+                      :ui="uiParts.control"
+                      :class="{
+                        [$c('button')]: true,
+                        [$c('disabled')]: realUneditable
+                      }"
+                      :tabindex="realUneditable ? null : 0"
+                      :aria-label="control.label"
+                      @click.stop="replaceFile(file)"
+                    >
+                      <veui-icon :name="icons.upload"/>
+                    </label>
                     <veui-button
+                      v-else
                       :key="control.name"
                       :ui="uiParts.control"
                       :disabled="
@@ -834,7 +850,7 @@ export default {
       return null
     },
     realPreviewOptions () {
-      return omit(this.previewOptions, ['index'])
+      return omit(this.previewOptions, ['index', 'open'])
     }
   },
   watch: {
@@ -1012,8 +1028,10 @@ export default {
             let replacingIndex = this.fileList.indexOf(this.replacingFile)
             this.$set(this.fileList, replacingIndex, newFile)
             this.$emit('change', this.getValue())
-
+            // window.setTimeout(() => {
             this.replacingFile = null
+            // })
+            console.log(this.$refs.fileFailure2)
 
             if (newFile.status === 'failure') {
               return
@@ -1379,7 +1397,7 @@ export default {
           defaultControls = [
             {
               name: 'preview',
-              icon: this.icons.preview,
+              icon: file.type === 'image' ? this.icons.previewImage : this.icons.previewVideo,
               disabled: false,
               label: this.t('preview')
             }

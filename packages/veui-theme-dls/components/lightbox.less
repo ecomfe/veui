@@ -19,7 +19,7 @@
 
     &-close.@{veui-prefix}-button {
       .absolute(0, 0, _, _);
-
+      z-index: 1;
       &,
       &:hover,
       &[data-focus-visible-added],
@@ -37,7 +37,6 @@
     flex-grow: 1;
     overflow: hidden;
     width: 100%;
-    outline: none;
     pointer-events: auto;
   }
 
@@ -50,7 +49,7 @@
 
   &-viewport-content {
     .size(100%);
-    padding: @dls-lightbox-content-spacing-y (@dls-lightbox-content-spacing-x + @dls-lightbox-control-size);
+    padding: @dls-lightbox-content-spacing-y dls-sum(@dls-lightbox-content-spacing-x, @dls-lightbox-control-size);
     padding-bottom: 0;
   }
 
@@ -139,15 +138,17 @@
 
     &-prev {
       left: 0;
-    }
-    &-prev .@{veui-prefix}-icon {
-      transform: translateX(percentage(-(sqrt(2) - 1) / 2) / 2);
+
+      .@{veui-prefix}-icon {
+        transform: translateX(percentage(-(sqrt(2) - 1) / 2) / 2);
+      }
     }
     &-next {
       right: 0;
-    }
-    &-next .@{veui-prefix}-icon {
-      transform: translateX(percentage((sqrt(2) - 1) / 2) / 2);
+
+      .@{veui-prefix}-icon {
+        transform: translateX(percentage((sqrt(2) - 1) / 2) / 2);
+      }
     }
   }
 

@@ -1,6 +1,5 @@
 <template>
 <veui-overlay
-  ref="overlay"
   :open="realOpen"
   :overlay-class="
     mergeOverlayClass({
@@ -8,6 +7,7 @@
       [$c('lightbox-mask')]: true
     })
   "
+  autofocus
   :ui="realUi"
   modal
   :priority="priority"
@@ -37,12 +37,11 @@
     </veui-button>
   </div>
   <div
-    ref="content"
     :class="$c('lightbox-content')"
-    tabindex="-1"
     v-bind="attrs"
-    @mousedown="focus"
     @keydown.esc="handleEscape"
+    @keydown.left="step(-1, true)"
+    @keydown.right="step(1, true)"
   >
     <div :class="$c('lightbox-viewport')">
       <veui-button
@@ -58,14 +57,8 @@
       </veui-button>
       <div
         :class="{
-          [$c('focus')]: focused,
           [$c('lightbox-viewport-content')]: true
         }"
-        @focusin="handleFocusIn"
-        @focusout="handleFocusOut"
-        @mouseleave="handleFocusOut"
-        @keydown.left="step(-1, true)"
-        @keydown.right="step(1, true)"
       >
         <transition-group
           :name="$c('lightbox-item')"
@@ -77,11 +70,12 @@
             v-show="realIndex === i"
             ref="item"
             :key="`i#${item.src}`"
+            tabindex="0"
+            data-autofocus
             :class="{
               [$c('lightbox-item')]: true,
               [$c('lightbox-item-current')]: realIndex === i
             }"
-            tabindex="0"
             @focusin="focusedIndex = i"
             @focusout="focusedIndex = null"
           >
@@ -94,9 +88,9 @@
                 <div :class="$c('lightbox-item-content')">
                   <video
                     v-if="item.type === 'video'"
-                    controls
-                    :src="item.src"
-                  />
+                    v-bind="options.video"
+                    :muted="options.video.autoplay || options.video.muted"
+                    :src="item.src"/>
                   <img
                     v-else
                     :src="item.src"
@@ -182,6 +176,18 @@ export default {
       validator (value) {
         return includes(['number', 'none'], value)
       }
+    },
+    options: {
+      type: Object,
+      default () {
+        return {
+          video: {
+            muted: true,
+            autoplay: true,
+            controls: true
+          }
+        }
+      }
     }
   },
   computed: {
@@ -235,12 +241,6 @@ export default {
       if (this.escapable) {
         e.stopPropagation()
         this.cancel()
-      }
-    },
-    focus () {
-      let { overlay } = this.$refs
-      if (overlay) {
-        overlay.focus()
       }
     }
   }
