@@ -332,7 +332,23 @@
                   @click="handleMediaAction(file, index)"
                 >
                   <template v-slot:trigger="{ props, handlers }">
+                    <label
+                      v-if="control.name === 'replace'"
+                      :key="control.name"
+                      :for="inputId"
+                      :ui="uiParts.control"
+                      :class="{
+                        [$c('button')]: true,
+                        [$c('disabled')]: realUneditable
+                      }"
+                      :tabindex="realUneditable ? null : 0"
+                      :aria-label="control.label"
+                      @click.stop="replaceFile(file)"
+                    >
+                      <veui-icon :name="icons.upload"/>
+                    </label>
                     <veui-button
+                      v-else
                       :key="control.name"
                       :ui="uiParts.control"
                       :disabled="
@@ -530,8 +546,7 @@
     :open.sync="previewOpen"
     :datasource="fileList.filter(file => file.status === 'success')"
     :index.sync="previewIndex"
-    :indicator="indicator"
-    :wrap="wrap"
+    v-bind="realPreviewOptions"
   />
 </div>
 </template>
@@ -727,15 +742,13 @@ export default {
       }
     },
     entries: Function,
-    wrap: {
-      type: Boolean,
-      default: true
-    },
-    indicator: {
-      type: String,
-      default: 'number',
-      validator (value) {
-        return includes(['number', 'none'], value)
+    previewOptions: {
+      type: Object,
+      default () {
+        return {
+          wrap: true,
+          indicator: 'number'
+        }
       }
     }
   },
@@ -835,6 +848,9 @@ export default {
           return 'video/*'
       }
       return null
+    },
+    realPreviewOptions () {
+      return omit(this.previewOptions, ['index', 'open'])
     }
   },
   watch: {
@@ -1012,7 +1028,6 @@ export default {
             let replacingIndex = this.fileList.indexOf(this.replacingFile)
             this.$set(this.fileList, replacingIndex, newFile)
             this.$emit('change', this.getValue())
-
             this.replacingFile = null
 
             if (newFile.status === 'failure') {
@@ -1379,7 +1394,7 @@ export default {
           defaultControls = [
             {
               name: 'preview',
-              icon: this.icons.preview,
+              icon: file.type === 'image' ? this.icons.previewImage : this.icons.previewVideo,
               disabled: false,
               label: this.t('preview')
             }
