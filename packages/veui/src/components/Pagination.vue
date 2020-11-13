@@ -116,6 +116,7 @@
       ref="goto"
       aria-hidden="true"
       :to="realTargetLink"
+      @click="handleRedirect(pageNumber, $event)"
     />
   </div>
 </div>
@@ -312,14 +313,17 @@ export default {
     gotoPageLabel () {
       return this.t('gotoPage').split('{page}')
     },
-    realTargetLink () {
+    pageNumber () {
       let { targetPage = '' } = this
       let pageStr = targetPage.trim()
       let page = parseInt(pageStr, 10)
       if (isNaN(page) || String(page) !== targetPage) {
         return null
       }
-      return this.formatHref(page)
+      return page
+    },
+    realTargetLink () {
+      return this.formatHref(this.pageNumber)
     }
   },
   watch: {
@@ -367,7 +371,7 @@ export default {
       return baseTo.replace(HREF_TPL_PLACEHOLDER, page)
     },
     gotoPage () {
-      if (this.realTargetLink === null) {
+      if (!this.pageNumber) {
         this.targetPage = ''
         return
       }
