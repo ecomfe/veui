@@ -34,5 +34,5 @@ jobs:
           BRANCH: gh-pages # The branch the action should deploy to.
           FOLDER: components # The folder the action should deploy.
           CLEAN: true
-          COMMIT_MESSAGE: "[skip ci] Deploying to gh-pages from @ ${{ github.sha }} 🚀"
+          COMMIT_MESSAGE: "Deploying to gh-pages from @ ${{ github.sha }} 🚀 [ci skip]"
 

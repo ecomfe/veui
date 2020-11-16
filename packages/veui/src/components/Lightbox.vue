@@ -90,7 +90,8 @@
                     v-if="item.type === 'video'"
                     v-bind="options.video"
                     :muted="options.video.autoplay || options.video.muted"
-                    :src="item.src"/>
+                    :src="item.src"
+                  />
                   <img
                     v-else
                     :src="item.src"
