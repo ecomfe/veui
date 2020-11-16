@@ -1,3 +1,18 @@
+## 2.0.0-beta.15
+
+### 💡 主要变更
+
+- [+] `Lightbox` 组件新增 `options` prop，允许指定视频项播放时的 `muted`/`autoplay`/`controls` 等配置。
+- [+] `Uploader` 组件新增 `preview-options` prop，允许指定预览时调用的 `Lightbox` 的配置。
+
+### 🐞 问题修复
+
+- [^] 修正 `Uploader` 组件在图片、视频上传状态下的预览图标。
+- [^] 修正 `Uploader` 组件有时没有正确处理图片预览的问题。
+- [^] 修正 `Uploader` 组件在某一上传项第二次上传/校验失败后无法展示失败理由的问题。
+- [^] 修正 `Lightbox` 未处理初始化时焦点导致打开后初始状态下键盘切换项目失效的问题。
+- [^] 修正 `Pagination` 组件在没有传入 `to` prop 时，点击跳转到 x 页后没有触发 `redirect` 事件的问题。
+
 ## 2.0.0-beta.14
 
 ### 🐞 问题修复
