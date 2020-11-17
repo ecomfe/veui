@@ -8,6 +8,8 @@
     })
   "
   autofocus
+  @focusin="handleFocusIn"
+  @focusout="handleFocusOut"
   :ui="realUi"
   modal
   :priority="priority"
