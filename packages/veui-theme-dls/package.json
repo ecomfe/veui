@@ -1,6 +1,6 @@
 {
   "name": "veui-theme-dls",
-  "version": "2.0.0-beta.15",
+  "version": "2.0.0-beta.16",
   "description": "Theme Baidu DLS for VEUI.",
   "repository": "ecomfe/veui",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "focus-visible": "^4.1.0",
     "less-plugin-dls": "^1.0.0-alpha.33",
     "less-plugin-est": "^3.0.0",
-    "veui-theme-dls-icons": "^2.0.0-beta.15"
+    "veui-theme-dls-icons": "^2.0.0-beta.16"
   },
   "peerDependencies": {
     "veui": "2.0.0-beta.16"
