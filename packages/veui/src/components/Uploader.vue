@@ -182,7 +182,7 @@
                     :options="control.children"
                     trigger="hover"
                     :expanded.sync="expandedControlDropdowns[index]"
-                    @click="handleMediaAction(file, index)"
+                    @click="handleMediaAction(file, index, $event)"
                   >
                     <template v-slot:trigger="{ props, handlers }">
                       <label
@@ -329,7 +329,7 @@
                   :options="control.children"
                   :expanded.sync="expandedControlDropdowns[index]"
                   trigger="hover"
-                  @click="handleMediaAction(file, index)"
+                  @click="handleMediaAction(file, index, $event)"
                 >
                   <template v-slot:trigger="{ props, handlers }">
                     <label

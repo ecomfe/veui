@@ -135,7 +135,6 @@ import i18n from '../mixins/i18n'
 import modal from '../managers/modal'
 import useControllable from '../mixins/controllable'
 import overlay from '../mixins/overlay'
-import focusable from '../mixins/focusable'
 import carousel from '../mixins/carousel'
 
 export default {
@@ -151,7 +150,6 @@ export default {
     overlay,
     carousel,
     i18n,
-    focusable,
     useControllable(['index']),
     useControllable(['open'])
   ],
