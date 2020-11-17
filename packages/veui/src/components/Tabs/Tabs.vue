@@ -11,7 +11,7 @@ import useControllable from '../../mixins/controllable'
 import resize from '../../directives/resize'
 import '../../common/uiTypes'
 import { scrollTo } from '../../utils/dom'
-import { find, findIndex, throttle } from 'lodash'
+import { find, findIndex, throttle, pick } from 'lodash'
 
 let tabs = useCoupledParent({
   type: 'tabs',
@@ -26,6 +26,16 @@ config.defaults(
   },
   'tabs'
 )
+
+const TAB_FIELDS = [
+  'label',
+  'name',
+  'disabled',
+  'to',
+  'native',
+  'removable',
+  'status'
+]
 
 export default {
   name: 'veui-tabs',
@@ -90,6 +100,9 @@ export default {
         this.items[0]
       )
     },
+    activeIndex () {
+      return findIndex(this.items, tab => tab === this.activeTab)
+    },
     matchedTab () {
       if (!this.$route || !this.items.some(({ to }) => to)) {
         return null
@@ -134,10 +147,10 @@ export default {
       this.commit('active', tab.name || tab.id)
       this.scrollTabIntoView(tab)
 
-      this.$emit('change', tab)
+      this.$emit('change', pickFields(tab))
     },
     handleRemove (tab, e) {
-      this.$emit('remove', tab)
+      this.$emit('remove', pickFields(tab))
       e.stopPropagation()
     },
     handleAdd () {
@@ -223,8 +236,11 @@ export default {
       }
     },
     handleRemoveChild (index) {
-      let activeIndex = index === 0 ? 0 : index - 1
-      let tab = this.items[activeIndex]
+      if (index !== this.activeIndex) {
+        return
+      }
+
+      let tab = this.items[index === 0 ? 0 : index - 1]
       if (tab) {
         this.commit('active', tab.name || tab.id)
       }
@@ -251,7 +267,11 @@ export default {
     )
 
     const renderTabPanel = props => {
-      const tabPanel = props.renderPanel(props)
+      const tabPanel = props.renderPanel({
+        ...pickFields(props),
+        index: props.index,
+        active: props.active
+      })
 
       return props.active && tabPanel ? (
         <div id={props.id} class={this.$c('tab-panel')} role="tabpanel">
@@ -319,7 +339,7 @@ export default {
                 }}
               >
                 {renderItem([tab.renderTab, renderTabItem], {
-                  ...tab,
+                  ...pickFields(tab),
                   index,
                   active: this.activeTab === tab,
                   attrs: this.tabAttrs[index],
@@ -335,7 +355,7 @@ export default {
                       {...{ attrs: this.tabAttrs[index] }}
                     >
                       {renderTabContent({
-                        ...tab,
+                        ...pickFields(tab),
                         index,
                         active: this.activeTab === tab
                       })}
@@ -432,5 +452,14 @@ function renderItem (renderFns, props) {
   }
 
   return null
+}
+
+/**
+ * Pick only necessary fields for slots and events
+ * @param {Object} tab a tab object
+ * @returns {Object} An object consists of necessary fields
+ */
+function pickFields (tab) {
+  return pick(tab, TAB_FIELDS)
 }
 </script>

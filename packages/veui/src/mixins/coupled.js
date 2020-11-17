@@ -50,11 +50,13 @@ export function useCoupledChild ({
         return
       }
 
-      let index = parent.removeChildById(this.id)
+      let index = parent.findChildIndexById(this.id)
 
       if (typeof parent.handleRemoveChild === 'function') {
         parent.handleRemoveChild(index)
       }
+
+      parent.removeChildByIndex(index)
     }
   }
 }
@@ -79,9 +81,12 @@ export function useCoupledParent ({ type, childrenKey = 'items' }) {
         })
       },
       removeChildById (id) {
-        let index = this[childrenKey].map(child => child.id).indexOf(id)
-        this[childrenKey].splice(index, 1)
+        let index = this.findChildIndexById(id)
+        this.removeChildByIndex(index)
         return index
+      },
+      removeChildByIndex (index) {
+        this[childrenKey].splice(index, 1)
       },
       findChildById (id) {
         return this[childrenKey][this.findChildIndexById(id)]

@@ -195,7 +195,7 @@ describe('components/Tabs', () => {
   })
 
   it('should handle add & remove correctly', async () => {
-    let count = 4
+    let count = 5
     let wrapper = mount(
       {
         components: {
@@ -223,7 +223,8 @@ describe('components/Tabs', () => {
               { label: '#1', content: '=1=', name: '1' },
               { label: '#2', content: '=2=', name: '2' },
               { label: '#3', content: '=3=', name: '3' },
-              { label: '#4', content: '=4=', name: '4' }
+              { label: '#4', content: '=4=', name: '4' },
+              { label: '#5', content: '=5=', name: '5' }
             ],
             active: '2'
           }
@@ -264,26 +265,36 @@ describe('components/Tabs', () => {
     btns = wrapper.findAll('.veui-tabs-item-remove')
     expect(tabs.at(0).classes()).to.include('veui-tabs-item-active')
     expect(tabs.at(1).text()).to.equal('#3')
-    btns.at(0).trigger('click')
+    btns.at(2).trigger('click')
+
+    await vm.$nextTick()
+    tabs = wrapper.findAll('.veui-tabs-item')
+    expect(tabs.at(0).classes()).to.include('veui-tabs-item-active')
+    expect(tabs.at(2).text()).to.equal('#5')
+    vm.active = '5'
 
     await vm.$nextTick()
     tabs = wrapper.findAll('.veui-tabs-item')
     btns = wrapper.findAll('.veui-tabs-item-remove')
-    expect(tabs.at(0).classes()).to.include('veui-tabs-item-active')
-    expect(tabs.at(0).text()).to.equal('#3')
+    expect(tabs.at(2).classes()).to.include('veui-tabs-item-active')
+    btns.at(2).trigger('click')
+
+    await vm.$nextTick()
+    tabs = wrapper.findAll('.veui-tabs-item')
+    expect(tabs.at(1).classes()).to.include('veui-tabs-item-active')
 
     let add = wrapper.find('.veui-tabs-add')
     add.trigger('click')
 
     await vm.$nextTick()
     tabs = wrapper.findAll('.veui-tabs-item')
-    expect(tabs.at(2).text()).to.equal('#5')
+    expect(tabs.at(2).text()).to.equal('#6')
 
     add.trigger('click')
 
     await vm.$nextTick()
     tabs = wrapper.findAll('.veui-tabs-item')
-    expect(tabs.at(3).text()).to.equal('#6')
+    expect(tabs.at(3).text()).to.equal('#7')
 
     wrapper.destroy()
   })
