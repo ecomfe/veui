@@ -1,7 +1,10 @@
 import { mount } from '@vue/test-utils'
 import Uploader from '@/components/Uploader'
+import Dropdown from '@/components/Dropdown'
 import { wait } from '../../../utils'
 import 'veui-theme-dls-icons/check'
+import 'veui-theme-dls-icons/crop'
+import 'veui-theme-dls-icons/cut'
 
 describe('components/Uploader', () => {
   it('should handle value prop with `null` value.', () => {
@@ -546,7 +549,46 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should config controls of image correctly.', () => {
+  it('should set src of video correctly when type is video.', () => {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload',
+        value: [
+          { name: 'test1.mp4', src: '/test1.mp4' },
+          { name: 'test2.mp4', src: '/test2.mp4' }
+        ],
+        type: 'video'
+      }
+    })
+
+    let videos = wrapper.findAll('video')
+    expect(videos.at(0).attributes('src')).to.equal('/test1.mp4')
+    expect(videos.at(1).attributes('src')).to.equal('/test2.mp4')
+    wrapper.destroy()
+  })
+
+  it('should set src of video or image correctly when type is media.', () => {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload',
+        value: [
+          { name: 'test1.mp4', src: '/test1.mp4' },
+          { name: 'test2.jpg', src: '/test2.jpg' },
+          { name: 'test3.mp4', src: '/test3.mp4', poster: '/test3.jpg' }
+        ],
+        type: 'media'
+      }
+    })
+
+    let images = wrapper.findAll('img')
+    let videos = wrapper.findAll('video')
+    expect(videos.at(0).attributes('src')).to.equal('/test1.mp4')
+    expect(images.at(0).attributes('src')).to.equal('/test2.jpg')
+    expect(images.at(1).attributes('src')).to.equal('/test3.jpg')
+    wrapper.destroy()
+  })
+
+  it('should config controls of media correctly.', () => {
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
@@ -554,21 +596,130 @@ describe('components/Uploader', () => {
         type: 'image',
         controls (file, defaultControls) {
           if (file.status === 'success') {
-            return [{ name: 'test', icon: 'check' }, ...defaultControls]
+            return [
+              { name: 'test', icon: 'check' },
+              {
+                name: 'test1',
+                icon: 'crop',
+                children: [
+                  {
+                    name: 'test11', icon: 'cut', label: 'test11'
+                  }
+                ]
+              },
+              ...defaultControls
+            ]
           }
           return defaultControls
         }
       }
     })
-    wrapper
-      .find('.veui-uploader-list-media-mask')
-      .find('button')
-      .trigger('click')
 
+    let items = wrapper.find('.veui-uploader-list-media-mask').findAll('.veui-control-item')
+    items.at(0).trigger('click')
     expect(wrapper.emitted().test[0][0]).to.eql(
       { name: 'test1.jpg', src: '/test1.jpg', status: 'success', type: 'image' },
       0
     )
+
+    const dropdown = items.at(1).find(Dropdown).vm
+    expect(dropdown.$props.options).to.eql(
+      [{
+        name: 'test11',
+        icon: 'cut',
+        label: 'test11',
+        value: 'test11',
+        children: []
+      }]
+    )
+    items.at(1).find('button').trigger('mouseenter')
+    expect(dropdown.expanded).to.equal(true)
+    dropdown.handleSelect('test11')
+    expect(wrapper.emitted().test11[0][0]).to.eql(
+      { name: 'test1.jpg', src: '/test1.jpg', status: 'success', type: 'image' },
+      0
+    )
+
+    wrapper.destroy()
+  })
+
+  it('should config entries of media correctly.', async () => {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload',
+        value: [{ name: 'test1.jpg', src: '/test1.jpg' }],
+        type: 'media',
+        entries (defaultEntries) {
+          return [
+            { name: 'test', icon: 'check', label: 'test' },
+            {
+              name: 'test1',
+              icon: 'crop',
+              label: 'test2',
+              children: [
+                {
+                  name: 'test11',
+                  icon: 'cut',
+                  label: 'test11'
+                }
+              ]
+            },
+            ...defaultEntries
+          ]
+        }
+      }
+    })
+
+    let entryContainer = wrapper.find('.veui-uploader-entries-container')
+    let items = entryContainer.findAll('li')
+    expect(items.length).to.equal(3)
+
+    expect(items.at(0).text()).to.equal('test')
+    expect(items.at(1).text()).to.equal('test2')
+
+    let buttons = wrapper
+      .find('.veui-uploader-entries-container')
+      .findAll('button')
+
+    buttons.at(0).trigger('click')
+    expect(wrapper.emitted().test).to.eql([[]])
+
+    const dropdown = items.at(1).find(Dropdown).vm
+    expect(dropdown.$props.options).to.eql(
+      [{
+        name: 'test11',
+        icon: 'cut',
+        label: 'test11',
+        value: 'test11',
+        children: []
+      }]
+    )
+
+    buttons.at(1).trigger('mouseenter')
+    expect(dropdown.expanded).to.equal(true)
+    dropdown.handleSelect('test11')
+    expect(wrapper.emitted().test11).to.eql([[]])
+
+    let input = wrapper.find('input[type="file"]').element
+    let clickTriggeredPromise = Promise.race(
+      [
+        new Promise(resolve => {
+          input.addEventListener('click', function () {
+            resolve(true)
+          })
+        }, { once: true }),
+        new Promise(resolve => {
+          setTimeout(function () {
+            resolve(false)
+          }, 2000)
+        })
+      ])
+
+    buttons.at(3).trigger('click')
+
+    let clickTriggered = await clickTriggeredPromise
+    expect(clickTriggered).to.equal(true)
+
     wrapper.destroy()
   })
 
