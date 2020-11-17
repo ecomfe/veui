@@ -65,5 +65,20 @@ module.exports = {
       }
     ],
     'vue/no-v-html': 0
-  }
+  },
+  overrides: [
+    {
+      files: ['*.spec.js'],
+      env: {
+        mocha: true,
+      },
+      plugins: ['mocha'],
+      rules: {
+        'no-new': 'off'
+      },
+      globals: {
+        expect: () => { }
+      }
+    }
+  ]
 }

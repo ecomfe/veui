@@ -34,6 +34,7 @@
     "eslint-friendly-formatter": "^2.0.7",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-mocha": "^8.0.0",
     "eslint-plugin-node": "^5.1.0",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
