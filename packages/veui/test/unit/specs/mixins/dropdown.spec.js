@@ -72,6 +72,6 @@ describe('mixins/dropdown', () => {
 
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.emitted().toggle).to.be.undefined
+    expect(wrapper.emitted().toggle).to.be.equal(undefined)
   })
 })

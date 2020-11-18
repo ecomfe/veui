@@ -41,7 +41,7 @@ describe('mixins/activatable', () => {
     })
 
     expect(vm.activate).to.be.a('function')
-    expect(msg).to.be.undefined
+    expect(msg).to.equal(undefined)
   })
 
   it('should out warn that `activate` is not method', () => {
@@ -49,7 +49,7 @@ describe('mixins/activatable', () => {
       localVue
     })
 
-    expect(vm.activate).to.be.undefined
-    expect(msg).to.not.be.undefined
+    expect(vm.activate).to.equal(undefined)
+    expect(msg).to.not.equal(undefined)
   })
 })
