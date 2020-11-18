@@ -96,10 +96,14 @@ module.exports = {
   },
   overrides: [
     {
+      extends: ['plugin:chai-friendly/recommended'],
       files: ['*.spec.js'],
       env: {
         mocha: true,
       },
+      plugins: [
+        'chai-friendly'
+      ],
       globals: {
         expect: true
       }

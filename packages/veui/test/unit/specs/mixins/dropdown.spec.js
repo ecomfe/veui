@@ -38,7 +38,6 @@ describe('mixins/dropdown', () => {
 
     await wrapper.vm.$nextTick()
 
-    /* eslint-disable no-unused-expressions */
     expect(wrapper.emitted().toggle.length).to.equal(1)
   })
 
@@ -54,11 +53,10 @@ describe('mixins/dropdown', () => {
 
     await wrapper.vm.$nextTick()
 
-    /* eslint-disable no-unused-expressions */
     expect(wrapper.emitted().toggle.length).to.equal(1)
   })
 
-  it('should not expand dropdown', async () => {
+  it('should not expand dropdown when being readonly or disabled', async () => {
     const wrapper = shallowMount(DropdownComponent, {
       localVue,
       propsData: {
@@ -74,7 +72,6 @@ describe('mixins/dropdown', () => {
 
     await wrapper.vm.$nextTick()
 
-    /* eslint-disable no-unused-expressions */
     expect(wrapper.emitted().toggle).to.be.undefined
   })
 })
