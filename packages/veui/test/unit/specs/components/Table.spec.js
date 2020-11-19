@@ -856,12 +856,7 @@ describe('components/Table', () => {
         },
         data () {
           return {
-            data: [
-              { id: 1 },
-              { id: 2 },
-              { id: 3 },
-              { id: 4 }
-            ],
+            data: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
             allowedOrders: ['asc', 'desc'],
             order: 'asc'
           }
@@ -951,6 +946,94 @@ describe('components/Table', () => {
     wrapper.find('th input[type="checkbox"]').trigger('change')
     await vm.$nextTick()
     expect(vm.selected).to.deep.equal([1])
+    wrapper.destroy()
+  })
+
+  it('should support popover when desc provided', async () => {
+    const popoverMessage = 'This is desc content'
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              { id: 1, disabled: false },
+              { id: 2, disabled: false }
+            ],
+            selected: []
+          }
+        },
+        template: `
+          <veui-table
+            selectable
+            key-field="id"
+            :data="data"
+            :selected.sync="selected"
+          >
+            <veui-table-column field="id" title="id" desc="${popoverMessage}" />
+          </veui-table>`
+      },
+      {
+        sync: false
+      }
+    )
+    const { vm } = wrapper
+    const theadEle = wrapper.find('th .veui-table-cell-content > span')
+
+    theadEle.trigger('hover')
+
+    const popoverOverlay = wrapper.find(
+      'th .veui-table-cell-content .veui-overlay'
+    )
+    const popoverRoot = wrapper.find('.veui-tooltip-box')
+
+    await vm.$nextTick()
+
+    expect(popoverOverlay.exists()).to.equal(true)
+    expect(popoverRoot.exists()).to.equal(true)
+    expect(popoverRoot.attributes('style')).to.have.not.string('display:none')
+
+    wrapper.destroy()
+  })
+
+  it('should not have popover when desc miss', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              { id: 1, disabled: false },
+              { id: 2, disabled: false }
+            ],
+            selected: []
+          }
+        },
+        template: `
+          <veui-table
+            selectable
+            key-field="id"
+            :data="data"
+            :selected.sync="selected"
+          >
+            <veui-table-column field="id" title="id"/>
+          </veui-table>`
+      },
+      {
+        sync: false
+      }
+    )
+
+    const theadEle = wrapper.find('th .veui-table-cell-content > .veui-overlay')
+
+    expect(theadEle.exists()).to.equal(false)
+
     wrapper.destroy()
   })
 })

@@ -1,5 +1,6 @@
 <script>
 import { uniqueId, pick } from 'lodash'
+import Popover from '../Popover'
 import colgroup from '../../mixins/colgroup'
 import { getIndexOfType } from '../../utils/context'
 import '../../common/uiTypes'
@@ -7,6 +8,9 @@ import '../../common/uiTypes'
 export default {
   name: 'veui-table-column',
   uiTypes: ['table-column', 'transparent'],
+  components: {
+    'veui-popover': Popover
+  },
   mixins: [colgroup],
   props: {
     title: String,
@@ -26,7 +30,8 @@ export default {
         return typeof val === 'boolean' || val === 'left' || val === 'right'
       }
     },
-    allowedOrders: Array
+    allowedOrders: Array,
+    desc: String
   },
   data () {
     return {
@@ -48,12 +53,20 @@ export default {
     }
   },
   created () {
-    let index = getIndexOfType(this, 'colgroup')
+    const index = getIndexOfType(this, 'colgroup')
 
-    const props = ['title', 'field', 'width', 'sortable', 'align', 'span', 'allowedOrders']
+    const props = [
+      'title',
+      'field',
+      'width',
+      'sortable',
+      'align',
+      'span',
+      'allowedOrders'
+    ]
 
-    let renderBody = item => {
-      let defaultRow = this.$scopedSlots.default
+    const renderBody = item => {
+      const defaultRow = this.$scopedSlots.default
       if (defaultRow) {
         return defaultRow(item)
       }
@@ -70,20 +83,30 @@ export default {
       },
       renderBody,
       renderSubRow: item => {
-        let expandRow = this.$scopedSlots['sub-row']
+        const expandRow = this.$scopedSlots['sub-row']
         if (expandRow) {
           return expandRow(item)
         }
         return renderBody(item)
       },
       renderHead: () => {
-        let render =
+        const render =
           this.$scopedSlots.head || (() => this.$slots.head || this.title)
+        if (this.desc !== undefined) {
+          return [
+            <span ref="table-header-popover">{render()}</span>,
+            <veui-popover ui={this.ui} target="table-header-popover">
+              {this.desc}
+            </veui-popover>
+          ]
+        }
+
         return render()
       },
       hasStaleHead: () => !!this.$slots.head,
       renderFoot: () => {
-        let render = this.$scopedSlots.foot || (() => this.$slots.foot || null)
+        const render =
+          this.$scopedSlots.foot || (() => this.$slots.foot || null)
         return render()
       },
       hasStaleFoot: () => !!this.$slots.foot

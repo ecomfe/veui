@@ -7,7 +7,9 @@
     <veui-button
       ui="primary"
       @click="append"
-    >添加</veui-button>
+    >
+      添加
+    </veui-button>
     <veui-button @click="toggle">切换数据</veui-button>
     <veui-button @click="toggleLoading">切换加载</veui-button>
   </section>
@@ -66,7 +68,10 @@
           <strong>总计</strong>
         </template>
       </veui-table-column>
-      <veui-table-column title="元数据">
+      <veui-table-column
+        title="元数据"
+        :desc="popover"
+      >
         <veui-table-column
           field="typeId"
           title="类型 ID"
@@ -90,6 +95,7 @@
         width="160"
         align="right"
         fixed
+        desc="这是一条带有 slot-scope 的提示"
       >
         <template slot="head">
           价格
@@ -392,7 +398,12 @@
       :order="order1"
       :order-by="orderBy1"
       :allowed-orders="allowedOrders1"
-      @sort="(orderBy, order) => { orderBy1 = orderBy; order1 = order }"
+      @sort="
+        (orderBy, order) => {
+          orderBy1 = orderBy
+          order1 = order
+        }
+      "
     >
       <veui-table-column
         field="id"
@@ -410,7 +421,7 @@
       :order="order2"
       order-by="id"
       :allowed-orders="allowedOrders2"
-      @sort="(_, order) => order2 = order"
+      @sort="(_, order) => (order2 = order)"
     >
       <veui-table-column
         field="id"
@@ -679,7 +690,8 @@ export default {
           level: 'A'
         }
       ],
-      loading: false
+      loading: false,
+      popover: '这是一条补充的 Popover 信息'
     }
   },
   computed: {
