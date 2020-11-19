@@ -93,5 +93,16 @@ module.exports = {
     'vue/object-curly-spacing': ['error', 'always'],
     'vue/space-infix-ops': 'error',
     'vue/space-unary-ops': ['error', { words: true, nonwords: false }]
-  }
+  },
+  overrides: [
+    {
+      files: ['*.spec.js'],
+      env: {
+        mocha: true,
+      },
+      globals: {
+        expect: true
+      }
+    }
+  ]
 }
