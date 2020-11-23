@@ -36,12 +36,12 @@
     accept=".jpg,.jpeg,.gif"
     :payload="payload"
     :validator="validator"
+    :readonly="true"
     @success="onSuccess"
     @failure="onFailure"
     @change="handleChange('files')"
     @statuschange="handleStatusChange"
     @invalid="handleInvalid"
-    :readonly="true"
   >
     <template slot="desc">
       请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于200像素，最多上传3张图
@@ -62,11 +62,11 @@
     accept=".jpg,.jpeg,.gif"
     :payload="payload"
     :validator="validator"
+    :preview-options="{ wrap: false }"
     @success="onSuccess"
     @failure="onFailure"
     @change="handleChange('files')"
     @statuschange="handleStatusChange"
-    :preview-options="{ wrap: false }"
     @invalid="handleInvalid"
   >
     <template slot="desc">
@@ -98,12 +98,12 @@
     :action="action"
     :max-count="4"
     :payload="payload"
+    picker-position="before"
     @success="onSuccess"
     @failure="onFailure"
     @change="handleChange('files')"
     @statuschange="handleStatusChange"
     @invalid="handleInvalid"
-    picker-position="before"
   />
   <h2>媒体上传模式</h2>
   <veui-uploader
@@ -336,20 +336,25 @@ export default {
     let videos = [
       {
         name: '330206454.sd.mp4',
-        src: 'https://player.vimeo.com/external/330206454.sd.mp4?s=243f3d7497ba5d1c7f7ee57071e947540484a89a&profile_id=164&oauth2_token_id=57447761',
-        poster: 'https://images.pexels.com/videos/2156021/free-video-2156021.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500'
+        src:
+          'https://player.vimeo.com/external/330206454.sd.mp4?s=243f3d7497ba5d1c7f7ee57071e947540484a89a&profile_id=164&oauth2_token_id=57447761',
+        poster:
+          'https://images.pexels.com/videos/2156021/free-video-2156021.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500'
       },
       {
         name: '380082136.sd.mp4',
-        src: 'https://player.vimeo.com/external/380082136.sd.mp4?s=930b81a8bf84310005cdb7f3d0c6489b777d7032&profile_id=139&oauth2_token_id=57447761'
+        src:
+          'https://player.vimeo.com/external/380082136.sd.mp4?s=930b81a8bf84310005cdb7f3d0c6489b777d7032&profile_id=139&oauth2_token_id=57447761'
       }
     ]
 
     let medias = [
       {
         name: '330206454.sd.mp4',
-        src: 'https://player.vimeo.com/external/330206454.sd.mp4?s=243f3d7497ba5d1c7f7ee57071e947540484a89a&profile_id=164&oauth2_token_id=57447761',
-        poster: 'https://images.pexels.com/videos/2156021/free-video-2156021.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+        src:
+          'https://player.vimeo.com/external/330206454.sd.mp4?s=243f3d7497ba5d1c7f7ee57071e947540484a89a&profile_id=164&oauth2_token_id=57447761',
+        poster:
+          'https://images.pexels.com/videos/2156021/free-video-2156021.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
         type: 'video'
       },
       {
@@ -367,12 +372,17 @@ export default {
     return {
       logos,
       count: 0,
-      action: 'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog',
+      action:
+        'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog',
       // action: '/upload',
       file: logos[0],
       fileList: [
         { name: 'bidu', src: 'https://www.baidu.com/img/bd_logo1.png' },
-        { name: 'tsla', src: 'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg' }
+        {
+          name: 'tsla',
+          src:
+            'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg'
+        }
       ],
       files,
       files1: files.slice(0),
