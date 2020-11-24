@@ -1,5 +1,6 @@
 import Checkbox from '../Checkbox'
 import Sorter from './_Sorter'
+import Popover from '../Popover.vue'
 import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
@@ -7,8 +8,31 @@ import '../../common/uiTypes'
 
 export default {
   name: 'veui-table-head',
+  components: {
+    'veui-popover': Popover
+  },
   mixins: [prefix, table, i18n],
   uiTypes: ['transparent'],
+  data () {
+    return {
+      open: []
+    }
+  },
+  methods: {
+    handleMouseEnter (i, e) {
+      if (
+        e.target &&
+        (e.target.tagName === 'BUTTON' || e.target.tagName === 'A')
+      ) {
+        this.$set(this.open, i, false)
+      } else {
+        this.$set(this.open, i, true)
+      }
+    },
+    handleMouseLeave (i) {
+      this.$set(this.open, i, false)
+    }
+  },
   render () {
     let { table } = this
     let depth = table.headerRows.length
@@ -75,7 +99,7 @@ export default {
                 }
               />
             ) : null}
-            {row.map(col => {
+            {row.map((col, i) => {
               let isLeaf = col.columns.length === 0
               return (
                 <th
@@ -105,6 +129,9 @@ export default {
                   }
                   colspan={col.colspan > 1 ? col.colspan : null}
                   rowspan={col.rowspan > 1 ? col.rowspan : null}
+                  ref={col.refs}
+                  vOn:mouseenter_capture={e => this.handleMouseEnter(i, e)}
+                  vOn:mouseleave={() => this.handleMouseLeave(i)}
                 >
                   <div class={this.$c('table-cell')}>
                     <div class={this.$c('table-cell-content')}>
@@ -127,6 +154,15 @@ export default {
                       />
                     ) : null}
                   </div>
+                  {col.desc !== undefined ? (
+                    <veui-popover
+                      ui={this.ui}
+                      target={col.refs}
+                      open={this.open[i]}
+                    >
+                      {col.desc}
+                    </veui-popover>
+                  ) : null}
                 </th>
               )
             })}

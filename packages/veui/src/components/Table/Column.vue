@@ -1,6 +1,5 @@
 <script>
 import { uniqueId, pick } from 'lodash'
-import Popover from '../Popover'
 import colgroup from '../../mixins/colgroup'
 import { getIndexOfType } from '../../utils/context'
 import '../../common/uiTypes'
@@ -8,9 +7,6 @@ import '../../common/uiTypes'
 export default {
   name: 'veui-table-column',
   uiTypes: ['table-column', 'transparent'],
-  components: {
-    'veui-popover': Popover
-  },
   mixins: [colgroup],
   props: {
     title: String,
@@ -62,7 +58,8 @@ export default {
       'sortable',
       'align',
       'span',
-      'allowedOrders'
+      'allowedOrders',
+      'desc'
     ]
 
     const renderBody = item => {
@@ -92,15 +89,6 @@ export default {
       renderHead: () => {
         const render =
           this.$scopedSlots.head || (() => this.$slots.head || this.title)
-        if (this.desc !== undefined) {
-          return [
-            <span ref="table-header-popover">{render()}</span>,
-            <veui-popover ui={this.ui} target="table-header-popover">
-              {this.desc}
-            </veui-popover>
-          ]
-        }
-
         return render()
       },
       hasStaleHead: () => !!this.$slots.head,
@@ -109,7 +97,8 @@ export default {
           this.$scopedSlots.foot || (() => this.$slots.foot || null)
         return render()
       },
-      hasStaleFoot: () => !!this.$slots.foot
+      hasStaleFoot: () => !!this.$slots.foot,
+      refs: this.id
     })
   },
   destroyed () {
