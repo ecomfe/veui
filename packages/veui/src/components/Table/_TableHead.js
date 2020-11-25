@@ -1,10 +1,11 @@
 import Checkbox from '../Checkbox'
 import Sorter from './_Sorter'
-import Popover from '../Popover.vue'
+import Popover from '../Popover'
 import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import '../../common/uiTypes'
+import { isFocusable } from '@/utils/dom'
 
 export default {
   name: 'veui-table-head',
@@ -15,18 +16,15 @@ export default {
   uiTypes: ['transparent'],
   data () {
     return {
-      open: []
+      open: {}
     }
   },
   methods: {
-    handleMouseEnter (i, e) {
-      if (
-        e.target &&
-        (e.target.tagName === 'BUTTON' || e.target.tagName === 'A')
-      ) {
-        this.$set(this.open, i, false)
+    handleMouseEnter (id, e) {
+      if (e.target && isFocusable(e.target)) {
+        this.$set(this.open, id, false)
       } else {
-        this.$set(this.open, i, true)
+        this.$set(this.open, id, true)
       }
     },
     handleMouseLeave (i) {
@@ -129,9 +127,9 @@ export default {
                   }
                   colspan={col.colspan > 1 ? col.colspan : null}
                   rowspan={col.rowspan > 1 ? col.rowspan : null}
-                  ref={col.refs}
-                  vOn:mouseenter_capture={e => this.handleMouseEnter(i, e)}
-                  vOn:mouseleave={() => this.handleMouseLeave(i)}
+                  ref={col.id}
+                  vOn:mouseenter_capture={e => this.handleMouseEnter(col.id, e)}
+                  vOn:mouseleave={() => this.handleMouseLeave(col.id)}
                 >
                   <div class={this.$c('table-cell')}>
                     <div class={this.$c('table-cell-content')}>
@@ -154,13 +152,13 @@ export default {
                       />
                     ) : null}
                   </div>
-                  {col.desc !== undefined ? (
+                  {col.hasPopoverDesc() ? (
                     <veui-popover
                       ui={this.ui}
-                      target={col.refs}
-                      open={this.open[i]}
+                      target={col.id}
+                      open={this.open[col.id]}
                     >
-                      {col.desc}
+                      {col.renderPopover()}
                     </veui-popover>
                   ) : null}
                 </th>

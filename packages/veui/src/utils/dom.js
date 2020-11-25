@@ -780,3 +780,7 @@ export function triggerCustom (el, type, detail) {
   evt.initCustomEvent(type, true, false, detail)
   el.dispatchEvent(evt)
 }
+
+export function isFocusable (elem) {
+  return matches(elem, FOCUSABLE_SELECTOR) && !matches(elem, '[tabindex="-1"]')
+}

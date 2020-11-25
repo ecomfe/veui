@@ -95,8 +95,10 @@
         width="160"
         align="right"
         fixed
-        desc="这是一条带有 slot-scope 的提示"
       >
+        <template slot="desc">
+          这是一条带有 slot-scope 的提示
+        </template>
         <template slot="head">
           价格
           <i>(每 1000g)</i>

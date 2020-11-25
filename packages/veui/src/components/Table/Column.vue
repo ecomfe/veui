@@ -98,7 +98,13 @@ export default {
         return render()
       },
       hasStaleFoot: () => !!this.$slots.foot,
-      refs: this.id
+      hasPopoverDesc: () => {
+        return this.desc !== undefined || this.$slots.desc !== undefined
+      },
+      renderPopover: () => {
+        const render = () => this.$slots.desc || this.desc
+        return render()
+      }
     })
   },
   destroyed () {
