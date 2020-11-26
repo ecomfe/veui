@@ -5,7 +5,7 @@ import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import '../../common/uiTypes'
-import { isFocusable } from '../..//utils/dom'
+import { isFocusable } from '../../utils/dom'
 
 export default {
   name: 'veui-table-head',
@@ -21,10 +21,8 @@ export default {
   },
   methods: {
     handleMouseEnter (id, e) {
-      if (e.target && isFocusable(e.target)) {
+      if (!isFocusable(e.target)) {
         this.$set(this.openMap, id, false)
-      } else {
-        this.$set(this.openMap, id, true)
       }
     },
     handleTogglePopover (status, id) {
@@ -97,8 +95,13 @@ export default {
                 }
               />
             ) : null}
-            {row.map((col, i) => {
+            {row.map(col => {
               let isLeaf = col.columns.length === 0
+              let desc = col.renderDesc({
+                close: () => {
+                  this.openMap[col.id] = false
+                }
+              })
               return (
                 <th
                   class={{
@@ -151,7 +154,7 @@ export default {
                       />
                     ) : null}
                   </div>
-                  {col.hasDesc() ? (
+                  {desc ? (
                     <veui-popover
                       ui={this.ui}
                       target={col.id}
@@ -160,11 +163,7 @@ export default {
                         this.handleTogglePopover(status, col.id)
                       }
                     >
-                      {col.renderDesc({
-                        close: () => {
-                          this.openMap[col.id] = false
-                        }
-                      })}
+                      {desc}
                     </veui-popover>
                   ) : null}
                 </th>

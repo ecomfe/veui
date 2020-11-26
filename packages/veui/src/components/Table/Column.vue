@@ -2,6 +2,7 @@
 import { uniqueId, pick } from 'lodash'
 import colgroup from '../../mixins/colgroup'
 import { getIndexOfType } from '../../utils/context'
+import { renderSlot } from '../../utils/helper'
 import '../../common/uiTypes'
 
 export default {
@@ -97,18 +98,8 @@ export default {
         return render()
       },
       hasStaleFoot: () => !!this.$slots.foot,
-      hasDesc: () => {
-        return [this.$scopedSlots.desc, this.desc, this.$slots.desc].some(
-          item => item !== undefined
-        )
-      },
       renderDesc: item => {
-        let scopedSlotsDesc = this.$scopedSlots.desc
-        if (scopedSlotsDesc) {
-          return scopedSlotsDesc(item)
-        }
-        let render = () => this.$slots.desc || this.desc
-        return render()
+        return renderSlot(this, 'desc', item) || this.desc
       }
     })
   },

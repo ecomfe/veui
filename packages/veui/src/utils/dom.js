@@ -199,6 +199,13 @@ iframe,
 [tabindex],
 [contentEditable=true]`
 
+export function isFocusable (el) {
+  return (
+    !matches(el, '[tabindex="-1"]') &&
+    !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length)
+  )
+}
+
 /**
  * 获取目标元素下所有可以获取焦点的元素
  *
@@ -207,11 +214,7 @@ iframe,
  * @returns {Array.<Element>} 可以获取焦点的元素数组
  */
 export function getFocusable (elem, selector = FOCUSABLE_SELECTOR) {
-  return [...elem.querySelectorAll(selector)].filter(
-    el =>
-      !matches(el, '[tabindex="-1"]') &&
-      (el.offsetWidth || el.offsetHeight || el.getClientRects().length)
-  )
+  return [...elem.querySelectorAll(selector)].filter(isFocusable)
 }
 
 /**
@@ -779,8 +782,4 @@ export function triggerCustom (el, type, detail) {
   let evt = document.createEvent('CustomEvent')
   evt.initCustomEvent(type, true, false, detail)
   el.dispatchEvent(evt)
-}
-
-export function isFocusable (elem) {
-  return matches(elem, FOCUSABLE_SELECTOR) && !matches(elem, '[tabindex="-1"]')
 }
