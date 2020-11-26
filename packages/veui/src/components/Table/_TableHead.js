@@ -5,7 +5,8 @@ import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import '../../common/uiTypes'
-import { isFocusable } from '@/utils/dom'
+// import config from '../../managers/config'
+import { isFocusable } from '../..//utils/dom'
 
 export default {
   name: 'veui-table-head',
@@ -16,19 +17,19 @@ export default {
   uiTypes: ['transparent'],
   data () {
     return {
-      open: {}
+      openMap: {}
     }
   },
   methods: {
     handleMouseEnter (id, e) {
       if (e.target && isFocusable(e.target)) {
-        this.$set(this.open, id, false)
+        this.$set(this.openMap, id, false)
       } else {
-        this.$set(this.open, id, true)
+        this.$set(this.openMap, id, true)
       }
     },
-    handleMouseLeave (i) {
-      this.$set(this.open, i, false)
+    handleTogglePopover (status, id) {
+      this.$set(this.openMap, id, status)
     }
   },
   render () {
@@ -129,7 +130,6 @@ export default {
                   rowspan={col.rowspan > 1 ? col.rowspan : null}
                   ref={col.id}
                   vOn:mouseenter_capture={e => this.handleMouseEnter(col.id, e)}
-                  vOn:mouseleave={() => this.handleMouseLeave(col.id)}
                 >
                   <div class={this.$c('table-cell')}>
                     <div class={this.$c('table-cell-content')}>
@@ -152,13 +152,20 @@ export default {
                       />
                     ) : null}
                   </div>
-                  {col.hasPopoverDesc() ? (
+                  {col.hasDesc() ? (
                     <veui-popover
                       ui={this.ui}
                       target={col.id}
-                      open={this.open[col.id]}
+                      open={this.openMap[col.id]}
+                      onToggle={status =>
+                        this.handleTogglePopover(status, col.id)
+                      }
                     >
-                      {col.renderPopover()}
+                      {col.renderDesc({
+                        close: () => {
+                          this.openMap[col.id] = false
+                        }
+                      })}
                     </veui-popover>
                   ) : null}
                 </th>

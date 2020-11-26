@@ -23,7 +23,12 @@ export default {
   components: {
     'veui-overlay': Overlay
   },
-  mixins: [prefix, ui, overlay, useControllable(['open'])],
+  mixins: [
+    prefix,
+    ui,
+    overlay,
+    useControllable([{ prop: 'open', event: 'toggle' }])
+  ],
   props: {
     position: {
       type: String,

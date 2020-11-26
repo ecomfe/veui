@@ -76,7 +76,12 @@
           field="typeId"
           title="类型 ID"
           :span="typeSpan"
-        />
+        >
+          <template #desc="{ close }">
+            <p>一段说明文本……</p>
+            <p><veui-button @click="close">知道了</veui-button></p>
+          </template>
+        </veui-table-column>
         <veui-table-column
           v-if="showGroup"
           field="group"
@@ -97,7 +102,7 @@
         fixed
       >
         <template slot="desc">
-          这是一条带有 slot-scope 的提示
+          这是一条带有 slot 的提示
         </template>
         <template slot="head">
           价格

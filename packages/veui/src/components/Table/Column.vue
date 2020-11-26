@@ -49,9 +49,9 @@ export default {
     }
   },
   created () {
-    const index = getIndexOfType(this, 'colgroup')
+    let index = getIndexOfType(this, 'colgroup')
 
-    const props = [
+    let props = [
       'title',
       'field',
       'width',
@@ -62,8 +62,8 @@ export default {
       'desc'
     ]
 
-    const renderBody = item => {
-      const defaultRow = this.$scopedSlots.default
+    let renderBody = item => {
+      let defaultRow = this.$scopedSlots.default
       if (defaultRow) {
         return defaultRow(item)
       }
@@ -80,29 +80,34 @@ export default {
       },
       renderBody,
       renderSubRow: item => {
-        const expandRow = this.$scopedSlots['sub-row']
+        let expandRow = this.$scopedSlots['sub-row']
         if (expandRow) {
           return expandRow(item)
         }
         return renderBody(item)
       },
       renderHead: () => {
-        const render =
+        let render =
           this.$scopedSlots.head || (() => this.$slots.head || this.title)
         return render()
       },
       hasStaleHead: () => !!this.$slots.head,
       renderFoot: () => {
-        const render =
-          this.$scopedSlots.foot || (() => this.$slots.foot || null)
+        let render = this.$scopedSlots.foot || (() => this.$slots.foot || null)
         return render()
       },
       hasStaleFoot: () => !!this.$slots.foot,
-      hasPopoverDesc: () => {
-        return this.desc !== undefined || this.$slots.desc !== undefined
+      hasDesc: () => {
+        return [this.$scopedSlots.desc, this.desc, this.$slots.desc].some(
+          item => item !== undefined
+        )
       },
-      renderPopover: () => {
-        const render = () => this.$slots.desc || this.desc
+      renderDesc: item => {
+        let scopedSlotsDesc = this.$scopedSlots.desc
+        if (scopedSlotsDesc) {
+          return scopedSlotsDesc(item)
+        }
+        let render = () => this.$slots.desc || this.desc
         return render()
       }
     })
