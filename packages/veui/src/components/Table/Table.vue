@@ -161,6 +161,7 @@ const FIXED_PRIORITY = {
 }
 
 const DEFAULT_FIXED_COL_WIDTH = 120
+const SHADOW_WIDTH = 20
 
 export default {
   name: 'veui-table',
@@ -175,48 +176,51 @@ export default {
   directives: {
     resize
   },
-  mixins: [prefix, ui, i18n, colgroup, useControllable([
-    {
-      prop: 'expanded',
-      get (val) {
-        return normalizeArray(val)
-      },
-      set (val, commit) {
-        let cur = this.isControlled('expanded')
-          ? this.expanded
-          : this.realExpanded
-        if (!isEqualSet(val, cur)) {
-          commit(val)
-        }
-      }
-    },
-    {
-      prop: 'selected',
-      get (val) {
-        let ctl = this.isControlled('selected')
-        if (
-          (ctl && this.validateSelected(this.selected)) ||
-          !ctl
-        ) {
-          val = normalizeArray(val)
-          return intersection(val, this.realKeys)
-        }
-        return []
-      },
-      set (val, commit) {
-        let cur = this.isControlled('selected')
-          ? normalizeArray(this.selected)
-          : this.realSelected
-        if (this.isMultiple) {
+  mixins: [
+    prefix,
+    ui,
+    i18n,
+    colgroup,
+    useControllable([
+      {
+        prop: 'expanded',
+        get (val) {
+          return normalizeArray(val)
+        },
+        set (val, commit) {
+          let cur = this.isControlled('expanded')
+            ? this.expanded
+            : this.realExpanded
           if (!isEqualSet(val, cur)) {
             commit(val)
           }
-        } else if (cur[0] !== val[0]) {
-          commit(val[0] == null ? null : val[0])
+        }
+      },
+      {
+        prop: 'selected',
+        get (val) {
+          let ctl = this.isControlled('selected')
+          if ((ctl && this.validateSelected(this.selected)) || !ctl) {
+            val = normalizeArray(val)
+            return intersection(val, this.realKeys)
+          }
+          return []
+        },
+        set (val, commit) {
+          let cur = this.isControlled('selected')
+            ? normalizeArray(this.selected)
+            : this.realSelected
+          if (this.isMultiple) {
+            if (!isEqualSet(val, cur)) {
+              commit(val)
+            }
+          } else if (cur[0] !== val[0]) {
+            commit(val[0] == null ? null : val[0])
+          }
         }
       }
-    }
-  ])],
+    ])
+  ],
   props: {
     data: {
       type: Array,
@@ -404,8 +408,8 @@ export default {
     shadowOffset () {
       if (!this.supportSticky) {
         return {
-          left: 20,
-          right: 20
+          left: SHADOW_WIDTH,
+          right: SHADOW_WIDTH
         }
       }
       let row = this.headerGrid[this.headerGrid.length - 1]
@@ -421,13 +425,13 @@ export default {
           row
             .slice(0, leftEnd + 1)
             .map(({ width }) => width)
-            .concat(this.offsetLeft, 20)
+            .concat(this.offsetLeft, SHADOW_WIDTH)
         ),
         right: sumWidths(
           row
             .slice(rightStart)
             .map(({ width }) => width)
-            .concat(this.hasFixedRight ? this.gutterWidth : [], 20)
+            .concat(this.hasFixedRight ? this.gutterWidth : [], SHADOW_WIDTH)
         )
       }
     },
@@ -578,8 +582,11 @@ export default {
           value.splice(value.indexOf(key), 1)
         }
       } else {
-        if (!selected &&
-          intersection(this.realSelected, this.disabledSelectedKeys).length === this.realSelected.length) {
+        if (
+          !selected &&
+          intersection(this.realSelected, this.disabledSelectedKeys).length ===
+            this.realSelected.length
+        ) {
           selected = true
         }
         value = selected
