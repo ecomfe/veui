@@ -199,19 +199,15 @@ iframe,
 [tabindex],
 [contentEditable=true]`
 
-export function isFocusable (el) {
+function isPreventFocus (el) {
   return (
     !matches(el, '[tabindex="-1"]') &&
-    !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length)
+    (el.offsetWidth || el.offsetHeight || el.getClientRects().length)
   )
 }
 
-export function isFocusableWithSelector (el, selector = FOCUSABLE_SELECTOR) {
-  return (
-    matches(el, selector) &&
-    !matches(el, '[tabindex="-1"]') &&
-    !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length)
-  )
+export function isFocusable (el) {
+  return matches(el, FOCUSABLE_SELECTOR) && isPreventFocus(el)
 }
 
 /**
@@ -222,7 +218,7 @@ export function isFocusableWithSelector (el, selector = FOCUSABLE_SELECTOR) {
  * @returns {Array.<Element>} 可以获取焦点的元素数组
  */
 export function getFocusable (elem, selector = FOCUSABLE_SELECTOR) {
-  return [...elem.querySelectorAll(selector)].filter(isFocusable)
+  return [...elem.querySelectorAll(selector)].filter(isPreventFocus)
 }
 
 /**
