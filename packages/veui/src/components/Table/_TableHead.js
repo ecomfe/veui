@@ -1,14 +1,34 @@
 import Checkbox from '../Checkbox'
 import Sorter from './_Sorter'
+import Popover from '../Popover'
 import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import '../../common/uiTypes'
+import { isFocusable } from '../../utils/dom'
 
 export default {
   name: 'veui-table-head',
+  components: {
+    'veui-popover': Popover
+  },
   mixins: [prefix, table, i18n],
   uiTypes: ['transparent'],
+  data () {
+    return {
+      openMap: {}
+    }
+  },
+  methods: {
+    handleMouseEnter (id, e) {
+      if (!isFocusable(e.target)) {
+        this.$set(this.openMap, id, false)
+      }
+    },
+    handleTogglePopover (status, id) {
+      this.$set(this.openMap, id, status)
+    }
+  },
   render () {
     let { table } = this
     let depth = table.headerRows.length
@@ -77,6 +97,11 @@ export default {
             ) : null}
             {row.map(col => {
               let isLeaf = col.columns.length === 0
+              let desc = col.renderDesc({
+                close: () => {
+                  this.openMap[col.id] = false
+                }
+              })
               return (
                 <th
                   class={{
@@ -105,6 +130,8 @@ export default {
                   }
                   colspan={col.colspan > 1 ? col.colspan : null}
                   rowspan={col.rowspan > 1 ? col.rowspan : null}
+                  ref={col.id}
+                  vOn:mouseenter_capture={e => this.handleMouseEnter(col.id, e)}
                 >
                   <div class={this.$c('table-cell')}>
                     <div class={this.$c('table-cell-content')}>
@@ -127,6 +154,18 @@ export default {
                       />
                     ) : null}
                   </div>
+                  {desc ? (
+                    <veui-popover
+                      ui={this.ui}
+                      target={col.id}
+                      open={this.openMap[col.id]}
+                      onToggle={status =>
+                        this.handleTogglePopover(status, col.id)
+                      }
+                    >
+                      {desc}
+                    </veui-popover>
+                  ) : null}
                 </th>
               )
             })}
