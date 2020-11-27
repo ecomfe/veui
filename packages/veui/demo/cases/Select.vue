@@ -169,7 +169,9 @@
       searchable
       multiple
     >
-      <template #label="{ selected }">{{ selected[0].label }}等{{ selected.length }}个{{ ' ' }}</template>
+      <template
+        #label="{ selected }"
+      >{{ selected[0].label }}等{{ selected.length }}个{{ ' ' }}</template>
     </veui-select>
   </section>
   <section>
@@ -179,7 +181,10 @@
       v-bind="attrs"
       multiple
     >
-      <template #selected="{ selected }">{{ selected[0].label }}{{ selected.length > 1 ? `等${selected.length}个` : '' }}</template>
+      <template
+        #selected="{ selected }"
+      >{{ selected[0].label
+      }}{{ selected.length > 1 ? `等${selected.length}个` : '' }}</template>
     </veui-select>
   </section>
   <section>
@@ -464,7 +469,9 @@
             >
               <div class="note">
                 <veui-icon name="info-circle"/>
-                <div class="text">此处仅显示业务点 Top n，您可通过搜索添加其它业务点标签。</div>
+                <div class="text">
+                  此处仅显示业务点 Top n，您可通过搜索添加其它业务点标签。
+                </div>
               </div>
             </template>
           </veui-option-group>
@@ -473,7 +480,7 @@
     </section>
     <section>
       <veui-select
-        v-model="complex"
+        v-model="complex2"
         multiple
       >
         <template v-if="loaded">
@@ -532,7 +539,9 @@
         slot="option"
         slot-scope="props"
       >
-        <span class="veui-option-label-text veui-option-custom-label">{{ props.label }}</span>
+        <span class="veui-option-label-text veui-option-custom-label">{{
+          props.label
+        }}</span>
         <veui-icon name="gift"/>
       </template>
     </veui-select>
@@ -619,6 +628,7 @@ export default {
       hero: ['baidu', 'tencent'],
       disabled: true,
       complex: ['1', '2'],
+      complex2: [],
       loaded: false,
       icon: true,
       defaultValue: null,

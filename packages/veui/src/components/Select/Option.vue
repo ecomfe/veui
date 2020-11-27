@@ -76,6 +76,11 @@ export default {
       if (val && this.selected && !this.select.multiple) {
         this.select.$once('afteropen', this.scrollIntoView)
       }
+    },
+    'menu.realExpanded' (val) {
+      if (val && this.selected && !this.select.multiple) {
+        this.menu.$once('afteropen', this.scrollIntoView)
+      }
     }
   },
   methods: {
