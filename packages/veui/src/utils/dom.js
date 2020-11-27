@@ -206,6 +206,14 @@ export function isFocusable (el) {
   )
 }
 
+export function isFocusableWithSelector (el, selector = FOCUSABLE_SELECTOR) {
+  return (
+    matches(el, selector) &&
+    !matches(el, '[tabindex="-1"]') &&
+    !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length)
+  )
+}
+
 /**
  * 获取目标元素下所有可以获取焦点的元素
  *

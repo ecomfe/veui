@@ -5,7 +5,7 @@ import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import '../../common/uiTypes'
-import { isFocusable } from '../../utils/dom'
+import { isFocusableWithSelector } from '../../utils/dom'
 
 export default {
   name: 'veui-table-head',
@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     handleMouseEnter (id, e) {
-      if (!isFocusable(e.target)) {
+      if (isFocusableWithSelector(e.target)) {
         this.$set(this.openMap, id, false)
       }
     },
