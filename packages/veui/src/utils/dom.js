@@ -448,6 +448,27 @@ export function getWindowRect () {
   }
 }
 
+export function getBoundingRect (container) {
+  if (container === window) {
+    return getWindowRect()
+  }
+  return container.getBoundingClientRect()
+}
+
+function getClientSize (container) {
+  if (container === window) {
+    return {
+      width: window.innerWidth,
+      height: window.innerHeight
+    }
+  }
+
+  return {
+    width: container.clientWidth,
+    height: container.clientHeight
+  }
+}
+
 const linear = (time, duration, distance) => (time / duration) * distance
 
 const calcDistance = (
@@ -484,9 +505,8 @@ const calcDistance = (
  */
 export function scrollToAlign (viewport, target, options) {
   let isWindow = viewport === window
-  let realViewport = isWindow ? document.documentElement : viewport
-  let vRect = isWindow ? getWindowRect() : viewport.getBoundingClientRect()
-  let tRect = target.getBoundingClientRect()
+  let vRect = getBoundingRect(viewport)
+  let tRect = getBoundingRect(target)
   let positions
   if (isPlainObject(options)) {
     positions = [options.targetPosition, options.viewportPosition]
@@ -510,6 +530,7 @@ export function scrollToAlign (viewport, target, options) {
   )
 
   // 滚动的距离不要超出最大范围
+  let realViewport = isWindow ? document.documentElement : viewport
   let initScrollTop = realViewport.scrollTop
   if (initScrollTop + distance < 0) {
     distance = -initScrollTop
@@ -553,7 +574,7 @@ export function scrollTo (viewport, options) {
   if (distanceLeft + scrollLeft < 0) {
     distanceLeft = -scrollLeft
   }
-  let vRect = isWindow ? getWindowRect() : viewport.getBoundingClientRect()
+  let vRect = getClientSize(viewport)
   let maxDistanceX = viewport.scrollWidth - vRect.width
   if (scrollLeft + distanceLeft > maxDistanceX) {
     distanceLeft = maxDistanceX - scrollLeft
@@ -572,7 +593,7 @@ export function scrollTo (viewport, options) {
 /**
  * 根据距离来滚动
  * @param {Window|HTMLElement} viewport 视口元素
- * @param {[distanceX, distanceY]} distances - 水平/垂直方向滚动的距离
+ * @param {[number, number]} distances - 水平/垂直方向滚动的距离
  * @param {ScrollOptions=} options 选项
  */
 function doScroll (

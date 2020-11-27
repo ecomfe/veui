@@ -159,8 +159,7 @@ export default {
     updateLayout () {
       let { list, items = [] } = this.$refs
 
-      // need to check tab counts because of a WebKit bug
-      // see https://codepen.io/Justineo/pen/Poqdawm
+      // no items means no need to scroll
       this.listOverflow =
         items.length === 0 ? false : list.scrollWidth > list.clientWidth
 

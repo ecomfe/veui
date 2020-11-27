@@ -70,7 +70,7 @@ import {
   getVisibleRect,
   calcClip,
   raf,
-  getWindowRect
+  getBoundingRect
 } from '../utils/dom'
 import { resolveOffset, ignoreElements, createPortal } from '../utils/helper'
 import { getNodes } from '../utils/context'
@@ -178,7 +178,7 @@ export default {
       handler (val) {
         // isObject 检查：避免 SSR 时访问 window
         if (!val || (isObject(val) && val === window)) {
-          this.realContainer = this.anchorMounted ? (val || window) : val
+          this.realContainer = this.anchorMounted ? val || window : val
           this.$nextTick(this.updateOnContainerChange)
         } else if (isString(val)) {
           // ref, 那么在 nextTick 中才能拿到 dom
@@ -288,9 +288,7 @@ export default {
       }
     },
     getContainerRect () {
-      return this.realContainer === window
-        ? getWindowRect()
-        : this.realContainer.getBoundingClientRect()
+      return getBoundingRect(this.realContainer)
     },
     updateActive (val) {
       this.localActive = val
