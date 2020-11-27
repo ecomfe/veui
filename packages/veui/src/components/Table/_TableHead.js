@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     handleMouseEnter (id, e) {
-      if (!isFocusable(e.target)) {
+      if (isFocusable(e.target)) {
         this.$set(this.openMap, id, false)
       }
     },
