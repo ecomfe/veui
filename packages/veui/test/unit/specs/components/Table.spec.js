@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { cloneDeep } from 'lodash'
+import Popover from '@/components/Popover'
 import Table from '@/components/Table'
 import Column from '@/components/Table/Column'
 
@@ -949,8 +950,7 @@ describe('components/Table', () => {
     wrapper.destroy()
   })
 
-  it('should support popover when desc provided', async () => {
-    const popoverMessage = 'This is desc content'
+  it('should render a popover when desc prop is provided', async () => {
     const wrapper = mount(
       {
         components: {
@@ -962,44 +962,48 @@ describe('components/Table', () => {
             data: [
               { id: 1, disabled: false },
               { id: 2, disabled: false }
-            ],
-            selected: []
+            ]
           }
         },
         template: `
           <veui-table
-            selectable
             key-field="id"
             :data="data"
-            :selected.sync="selected"
           >
-            <veui-table-column field="id" title="id" desc="${popoverMessage}" />
+            <veui-table-column field="id" title="id" desc="Message" sortable/>
           </veui-table>`
       },
       {
-        sync: false
+        sync: false,
+        attachToDocument: true
       }
     )
     const { vm } = wrapper
-    const theadEle = wrapper.find('th .veui-table-cell-content > span')
-
-    theadEle.trigger('hover')
-
-    const popoverOverlay = wrapper.find(
-      'th .veui-table-cell-content .veui-overlay'
-    )
-    const popoverRoot = wrapper.find('.veui-tooltip-box')
+    const head = wrapper.find('th')
+    const sorter = head.find('button')
+    const popover = wrapper.find(Popover)
+    const box = popover.find('.veui-popover-box')
 
     await vm.$nextTick()
 
-    expect(popoverOverlay.exists()).to.equal(true)
-    expect(popoverRoot.exists()).to.equal(true)
-    expect(popoverRoot.attributes('style')).to.have.not.string('display:none')
+    head.trigger('mouseenter')
+
+    await vm.$nextTick()
+
+    expect(popover.exists()).to.equal(true)
+    expect(box.exists()).to.equal(true)
+    expect(box.element.style.display).to.not.equal('none')
+
+    sorter.trigger('mouseover')
+
+    await vm.$nextTick()
+
+    expect(box.element.style.display).to.equal('none')
 
     wrapper.destroy()
   })
 
-  it('should not have popover when desc miss', async () => {
+  it('should render a popover when desc slot is provided', async () => {
     const wrapper = mount(
       {
         components: {
@@ -1011,28 +1015,84 @@ describe('components/Table', () => {
             data: [
               { id: 1, disabled: false },
               { id: 2, disabled: false }
-            ],
-            selected: []
+            ]
           }
         },
         template: `
           <veui-table
-            selectable
             key-field="id"
             :data="data"
-            :selected.sync="selected"
+          >
+            <veui-table-column field="id" title="id" sortable>
+              <template #desc><h1>This is a description</h1></template>
+            </veui-table-column>
+          </veui-table>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    const { vm } = wrapper
+    const head = wrapper.find('th')
+    const sorter = head.find('button')
+    const popover = wrapper.find(Popover)
+    const box = popover.find('.veui-popover-box')
+
+    await vm.$nextTick()
+
+    head.trigger('mouseenter')
+
+    await vm.$nextTick()
+
+    expect(popover.exists()).to.equal(true)
+    expect(box.exists()).to.equal(true)
+    expect(box.find('h1').text()).to.equal('This is a description')
+
+    sorter.trigger('mouseover')
+
+    await vm.$nextTick()
+
+    expect(box.element.style.display).to.equal('none')
+
+    wrapper.destroy()
+  })
+
+  it('should not have popover when desc prop is not provided', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              { id: 1, disabled: false },
+              { id: 2, disabled: false }
+            ]
+          }
+        },
+        template: `
+          <veui-table
+            key-field="id"
+            :data="data"
           >
             <veui-table-column field="id" title="id"/>
           </veui-table>`
       },
       {
-        sync: false
+        sync: false,
+        attachToDocument: true
       }
     )
 
-    const theadEle = wrapper.find('th .veui-table-cell-content > .veui-overlay')
+    const { vm } = wrapper
+    const popover = wrapper.find(Popover)
 
-    expect(theadEle.exists()).to.equal(false)
+    await vm.$nextTick()
+
+    expect(popover.exists()).to.equal(false)
 
     wrapper.destroy()
   })

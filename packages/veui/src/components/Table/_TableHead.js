@@ -20,7 +20,7 @@ export default {
     }
   },
   methods: {
-    handleMouseEnter (id, e) {
+    handleMouseover (id, e) {
       if (isFocusable(e.target)) {
         this.$set(this.openMap, id, false)
       }
@@ -131,7 +131,11 @@ export default {
                   colspan={col.colspan > 1 ? col.colspan : null}
                   rowspan={col.rowspan > 1 ? col.rowspan : null}
                   ref={col.id}
-                  vOn:mouseenter_capture={e => this.handleMouseEnter(col.id, e)}
+                  onMouseover={e => {
+                    if (desc) {
+                      this.handleMouseover(col.id, e)
+                    }
+                  }}
                 >
                   <div class={this.$c('table-cell')}>
                     <div class={this.$c('table-cell-content')}>
