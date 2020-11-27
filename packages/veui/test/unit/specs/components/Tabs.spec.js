@@ -194,6 +194,48 @@ describe('components/Tabs', () => {
     wrapper.destroy()
   })
 
+  it('should render default active tab correctly with `eager` prop', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tabs': Tabs,
+          'veui-tab': Tab
+        },
+        template: `
+          <veui-tabs eager>
+            <veui-tab label="#1">ONE</veui-tab>
+            <veui-tab label="#2">TWO</veui-tab>
+            <veui-tab label="#3">THREE</veui-tab>
+          </veui-tabs>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+
+    await vm.$nextTick()
+
+    let tabs = wrapper.findAll('.veui-tabs-item')
+    let panels = wrapper.findAll('.veui-tab-panel')
+    expect(panels.length).to.equal(3)
+    expect(panels.at(0).isVisible()).to.equal(true)
+
+    tabs
+      .at(2)
+      .find('button')
+      .trigger('click')
+
+    await vm.$nextTick()
+
+    expect(panels.at(0).isVisible()).to.equal(false)
+    expect(panels.at(2).isVisible()).to.equal(true)
+
+    wrapper.destroy()
+  })
+
   it('should handle add & remove correctly', async () => {
     let count = 5
     let wrapper = mount(

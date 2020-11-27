@@ -213,7 +213,7 @@
   </section>
   <section>
     <h2>禁用样式：</h2>
-    <veui-tabs>
+    <veui-tabs eager>
       <veui-tab label="Tab1">
         <p>This is Tab1</p>
       </veui-tab>

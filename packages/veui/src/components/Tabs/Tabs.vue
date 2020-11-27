@@ -55,17 +55,13 @@ export default {
         return typeof value === 'function'
       }
     },
-    addable: {
-      type: Boolean,
-      default: false
-    },
+    addable: Boolean,
     max: {
       type: Number,
       default: null
     },
-    tip: {
-      type: String
-    }
+    tip: String,
+    eager: Boolean
   },
   data () {
     return {
@@ -272,8 +268,13 @@ export default {
         active: props.active
       })
 
-      return props.active && tabPanel ? (
-        <div id={props.id} class={this.$c('tab-panel')} role="tabpanel">
+      return tabPanel && (props.active || this.eager) ? (
+        <div
+          id={props.id}
+          class={this.$c('tab-panel')}
+          role="tabpanel"
+          v-show={props.active}
+        >
           {tabPanel}
         </div>
       ) : null
