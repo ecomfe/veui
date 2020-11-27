@@ -992,13 +992,13 @@ describe('components/Table', () => {
 
     expect(popover.exists()).to.equal(true)
     expect(box.exists()).to.equal(true)
-    expect(box.element.style.display).to.not.equal('none')
+    expect(box.isVisible()).to.equal(true)
 
     sorter.trigger('mouseover')
 
     await vm.$nextTick()
 
-    expect(box.element.style.display).to.equal('none')
+    expect(box.isVisible()).to.equal(false)
 
     wrapper.destroy()
   })
@@ -1053,7 +1053,7 @@ describe('components/Table', () => {
 
     await vm.$nextTick()
 
-    expect(box.element.style.display).to.equal('none')
+    expect(box.isVisible()).to.equal(false)
 
     wrapper.destroy()
   })

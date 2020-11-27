@@ -32,7 +32,7 @@ describe('components/Dropdown', () => {
     let menuWrapper = wrapper.find('.test-overlay-class')
 
     button.element.onmouseenter = () => {
-      expect(menuWrapper.attributes().style.display).to.not.equal('none')
+      expect(menuWrapper.isVisible()).to.not.equal(true)
       wrapper.destroy()
     }
     button.trigger('mouseenter')
@@ -250,7 +250,7 @@ describe('components/Dropdown', () => {
       .find('.veui-dropdown-options')
       .trigger('keydown.esc', { key: 'Escape' })
     await $nextTick()
-    expect(menuWrapper.element.style.display).to.equal('none')
+    expect(menuWrapper.isVisible()).to.equal(false)
     wrapper.destroy()
   })
 

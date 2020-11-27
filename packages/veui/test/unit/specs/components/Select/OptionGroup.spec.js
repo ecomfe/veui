@@ -142,10 +142,10 @@ describe('components/Select/OptionGroup', () => {
     command.wrappers[1].trigger('click')
     await wrapper.vm.$nextTick()
     let menus = wrapper.findAll('.veui-option-group-box')
-    expect(menus.wrappers[1].element.style.display).to.equal('none')
+    expect(menus.wrappers[1].isVisible()).to.equal(false)
     command.wrappers[0].trigger('click')
     await wrapper.vm.$nextTick()
-    expect(menus.wrappers[0].element.style.display).to.equal('')
+    expect(menus.wrappers[0].isVisible()).to.equal(true)
     wrapper.destroy()
   })
 
@@ -190,7 +190,7 @@ describe('components/Select/OptionGroup', () => {
     label.trigger('mouseenter')
     await wrapper.vm.$nextTick()
     let group = wrapper.find('.veui-option-group-box')
-    expect(group.element.style.display).to.equal('')
+    expect(group.isVisible()).to.equal(true)
     wrapper.destroy()
   })
 
@@ -429,7 +429,8 @@ describe('components/Select/OptionGroup', () => {
               {
                 value: 11,
                 label: '11'
-              }]
+              }
+            ]
           }
         },
         template: `<veui-select :options="options" :value="11" expanded/>`
@@ -441,7 +442,9 @@ describe('components/Select/OptionGroup', () => {
     )
 
     await wait(0)
-    expect(wrapper.find('.veui-select-options').element.scrollTop > 0).to.equal(true)
+    expect(wrapper.find('.veui-select-options').element.scrollTop > 0).to.equal(
+      true
+    )
 
     wrapper.destroy()
   })

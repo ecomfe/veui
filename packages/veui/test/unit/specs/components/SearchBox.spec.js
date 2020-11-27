@@ -104,7 +104,7 @@ describe('components/SearchBox', () => {
     await vm.$nextTick()
 
     let suggestWrapper = wrapper.find('.test-overlay-class')
-    expect(suggestWrapper.element.style.display).to.not.equal('none')
+    expect(suggestWrapper.isVisible()).to.equal(true)
 
     await vm.$nextTick()
 
@@ -112,23 +112,23 @@ describe('components/SearchBox', () => {
     await vm.$nextTick()
     wrapper.find('input').trigger('focus')
     await vm.$nextTick()
-    expect(suggestWrapper.element.style.display).to.not.equal('none')
+    expect(suggestWrapper.isVisible()).to.equal(true)
 
     vm.suggestTrigger = 'submit'
     await vm.$nextTick()
     wrapper.find('.veui-search-box-action').trigger('click')
     await vm.$nextTick()
-    expect(suggestWrapper.element.style.display).to.not.equal('none')
+    expect(suggestWrapper.isVisible()).to.equal(true)
 
     vm.suggestTrigger = ['input', 'focus']
     await vm.$nextTick()
     wrapper.find('input').trigger('focus')
     await vm.$nextTick()
-    expect(suggestWrapper.element.style.display).to.not.equal('none')
+    expect(suggestWrapper.isVisible()).to.equal(true)
 
     document.dispatchEvent(new MouseEvent('click'))
     await vm.$nextTick()
-    expect(suggestWrapper.element.style.display).to.equal('none')
+    expect(suggestWrapper.isVisible()).to.equal(false)
 
     wrapper.destroy()
   })
@@ -167,11 +167,11 @@ describe('components/SearchBox', () => {
 
     input.trigger('input')
     await vm.$nextTick()
-    expect(suggestWrapper.element.style.display).to.equal('none')
+    expect(suggestWrapper.isVisible()).to.equal(false)
 
     input.trigger('focus')
     await vm.$nextTick()
-    expect(suggestWrapper.element.style.display).to.equal('none')
+    expect(suggestWrapper.isVisible()).to.equal(false)
 
     vm.readonly = true
     vm.disabled = false
@@ -179,11 +179,11 @@ describe('components/SearchBox', () => {
 
     input.trigger('input')
     await vm.$nextTick()
-    expect(suggestWrapper.element.style.display).to.equal('none')
+    expect(suggestWrapper.isVisible()).to.equal(false)
 
     input.trigger('focus')
     await vm.$nextTick()
-    expect(suggestWrapper.element.style.display).to.equal('none')
+    expect(suggestWrapper.isVisible()).to.equal(false)
     wrapper.destroy()
   })
 
@@ -541,9 +541,7 @@ describe('components/SearchBox', () => {
     expect(wrapper.find('[data-focus-visible-added]').text()).to.equal('卡罗拉')
     inputWrapper.trigger('keydown', { key: 'Tab' })
     await wrapper.vm.$nextTick()
-    expect(wrapper.find('.test-overlay-class').element.style.display).to.equal(
-      'none'
-    )
+    expect(wrapper.find('.test-overlay-class').isVisible()).to.equal(false)
     inputWrapper.element.focus()
     inputWrapper.trigger('keydown', { key: 'Enter' })
     await wrapper.vm.$nextTick()
@@ -553,9 +551,7 @@ describe('components/SearchBox', () => {
     inputWrapper.trigger('keydown', { key: 'Enter' })
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.counter).to.equal(1)
-    expect(wrapper.find('.test-overlay-class').element.style.display).to.equal(
-      'none'
-    )
+    expect(wrapper.find('.test-overlay-class').isVisible()).to.equal(false)
     wrapper.destroy()
   })
 
