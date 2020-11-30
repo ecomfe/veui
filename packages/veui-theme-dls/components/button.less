@@ -13,10 +13,7 @@
   white-space: nowrap;
   cursor: pointer;
   .veui-button-transition();
-
-  &::before {
-    content: "\200b";
-  }
+  .veui-stub();
 
   .make-metrics(@size) {
     @height: ~"dls-button-height-@{size}";

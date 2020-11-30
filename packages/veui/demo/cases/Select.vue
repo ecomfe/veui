@@ -31,6 +31,7 @@
       placeholder="全部"
       clearable
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>多选样式：xs (定制 max)</h2>
@@ -43,6 +44,7 @@
       clearable
       multiple
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>多选样式：s (自定义 tag slot)</h2>
@@ -61,6 +63,7 @@
         <i>{{ label }}</i>
       </template>
     </veui-select>
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>多选样式</h2>
@@ -71,6 +74,7 @@
       clearable
       multiple
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>多选样式：m (默认)</h2>
@@ -81,6 +85,7 @@
       clearable
       multiple
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>多选样式：l</h2>
@@ -92,6 +97,7 @@
       clearable
       multiple
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>多选样式：有限制</h2>
@@ -103,6 +109,7 @@
       clearable
       multiple
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>多选样式：禁用</h2>
@@ -114,6 +121,7 @@
       multiple
       disabled
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>可搜索Select：</h2>
@@ -123,6 +131,7 @@
       ui="checkmark"
       searchable
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>可搜索Select：(自定义 label slot)</h2>
@@ -137,6 +146,7 @@
         <veui-icon name="flag"/>
       </template>
     </veui-select>
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>可搜索Select：(自定义 selected slot)</h2>
@@ -151,6 +161,7 @@
         <veui-icon name="flag"/>
       </template>
     </veui-select>
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>可搜索多选Select：</h2>
@@ -160,6 +171,7 @@
       searchable
       multiple
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>可搜索多选Select：(自定义 label slot)</h2>
@@ -173,6 +185,7 @@
         #label="{ selected }"
       >{{ selected[0].label }}等{{ selected.length }}个{{ ' ' }}</template>
     </veui-select>
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>多选Select：(自定义 selected slot)</h2>
@@ -186,6 +199,7 @@
       >{{ selected[0].label
       }}{{ selected.length > 1 ? `等${selected.length}个` : '' }}</template>
     </veui-select>
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>可搜索多选Select：有限制</h2>
@@ -196,6 +210,7 @@
       searchable
       multiple
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>只读样式：</h2>
@@ -204,6 +219,7 @@
       v-bind="attrs"
       readonly
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>禁用样式：</h2>
@@ -212,6 +228,7 @@
       v-bind="attrs"
       disabled
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>Slot[name=option-label] 样式：</h2>
@@ -227,6 +244,7 @@
         <span class="veui-option-custom-label">{{ props.label }}</span>
       </template>
     </veui-select>
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>Slot 样式 2：</h2>
@@ -242,6 +260,7 @@
         <veui-icon name="flag"/>
       </template>
     </veui-select>
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>Slot 样式 3：</h2>
@@ -256,6 +275,7 @@
         <veui-radio :checked="props.selected">{{ props.label }}</veui-radio>
       </template>
     </veui-select>
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>内联样式：</h2>
@@ -336,6 +356,7 @@
         </veui-option-group>
       </veui-option-group>
     </veui-select>
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>内联样式 2：</h2>
@@ -403,6 +424,7 @@
         </veui-option-group>
       </veui-option-group>
     </veui-select>
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>动态内联样式：</h2>
@@ -420,6 +442,7 @@
           />
         </template>
       </veui-select>
+      <veui-button>OK</veui-button>
     </section>
   </section>
   <section>
@@ -477,6 +500,7 @@
           </veui-option-group>
         </template>
       </veui-select>
+      <veui-button>OK</veui-button>
     </section>
     <section>
       <veui-select
@@ -496,6 +520,7 @@
           </veui-option-group>
         </template>
       </veui-select>
+      <veui-button>OK</veui-button>
     </section>
   </section>
   <section style="margin-top:500px;">
@@ -506,6 +531,7 @@
       searchable
       :overlay-options="{ local: true }"
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>显示已选图标分组样式：</h2>
@@ -514,6 +540,7 @@
       v-bind="optGroupAttrs"
       ui="checkmark"
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>Slot 分组样式 1：</h2>
@@ -528,6 +555,7 @@
         <div class="veui-option-custom">{{ props.label }}</div>
       </template>
     </veui-select>
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>Slot[name=option] 分组样式 2：</h2>
@@ -545,6 +573,7 @@
         <veui-icon name="gift"/>
       </template>
     </veui-select>
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>分隔线样式：</h2>
@@ -553,6 +582,7 @@
       v-bind="optGroupAttrs"
       :options="groupedOpts"
     />
+    <veui-button>OK</veui-button>
   </section>
   <section>
     <h2>内联样式 3：</h2>
@@ -595,13 +625,23 @@
         />
       </veui-option-group>
     </veui-select>
+    <veui-button>OK</veui-button>
   </section>
 </article>
 </template>
 
 <script>
 import bus from '../bus'
-import { Icon, Select, Option, OptionGroup, Radio, Field, Form } from 'veui'
+import {
+  Icon,
+  Select,
+  Option,
+  OptionGroup,
+  Radio,
+  Field,
+  Form,
+  Button
+} from 'veui'
 import type from 'veui/managers/type'
 import 'vue-awesome/icons/flag'
 import 'vue-awesome/icons/gift'
@@ -616,7 +656,8 @@ export default {
     'veui-radio': Radio,
     'veui-icon': Icon,
     'veui-field': Field,
-    'veui-form': Form
+    'veui-form': Form,
+    'veui-button': Button
   },
   data () {
     return {
@@ -926,5 +967,9 @@ export default {
   .text {
     overflow: hidden;
   }
+}
+
+.veui-button {
+  margin-left: 8px;
 }
 </style>

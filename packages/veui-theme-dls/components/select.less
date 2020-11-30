@@ -9,6 +9,11 @@
   align-items: center;
   width: @dls-select-width;
   outline: none;
+  .veui-stub();
+
+  &:not(*:root) {
+    vertical-align: -0.5px; // hacks to align with other inputs
+  }
 
   &:not(&-empty):not(&-expanded)
     .@{veui-prefix}-input:not(.@{veui-prefix}-focus)
