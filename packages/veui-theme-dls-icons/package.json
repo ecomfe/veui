@@ -16,11 +16,12 @@
     "publish": "rm *.js icon-names.json",
     "prepare": "npm run build"
   },
+  "dependencies": {},
   "peerDependencies": {
     "veui": "2.0.0-beta.18"
   },
   "devDependencies": {
-    "dls-icons-vue": "^0.14.0",
+    "dls-icons-vue": "^0.15.0",
     "esm": "^3.0.84",
     "mkdirp": "^0.5.4",
     "rimraf": "^2.6.2"
