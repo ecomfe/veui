@@ -107,6 +107,7 @@
         <template slot="head">
           价格
           <i>(每 1000g)</i>
+          <button>❤️</button>
         </template>
         <template slot-scope="props">{{
           props.item.price | currency

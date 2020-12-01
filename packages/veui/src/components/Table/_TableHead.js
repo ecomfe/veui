@@ -5,7 +5,7 @@ import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import '../../common/uiTypes'
-import { isFocusable } from '../../utils/dom'
+import { isFocusable, contains } from '../../utils/dom'
 
 export default {
   name: 'veui-table-head',
@@ -16,17 +16,61 @@ export default {
   uiTypes: ['transparent'],
   data () {
     return {
-      openMap: {}
+      descOpen: {},
+      sortHover: {}
     }
   },
   methods: {
-    handleMouseover (id, e) {
+    handleMouseover (id, hasDesc, sortable, e) {
+      if (sortable && e.target === this.$refs[id]) {
+        this.$set(this.sortHover, id, true)
+      }
+
+      if (!hasDesc && !sortable) {
+        return
+      }
       if (isFocusable(e.target)) {
-        this.$set(this.openMap, id, false)
+        if (hasDesc) {
+          this.$set(this.descOpen, id, false)
+        }
+
+        if (sortable) {
+          // coming from outside
+          if (!contains(e.target, e.relatedTarget)) {
+            this.$set(this.sortHover, id, false)
+          }
+        }
+      } else if (sortable) {
+        this.$set(this.sortHover, id, true)
+      }
+    },
+    handleMouseout (id, _, sortable, e) {
+      if (!sortable) {
+        return
+      }
+
+      if (e.target === this.$refs[id]) {
+        this.$set(this.sortHover, id, false)
+      }
+
+      if (isFocusable(e.target)) {
+        // going outside
+        if (!contains(e.target, e.relatedTarget)) {
+          this.$set(this.sortHover, id, true)
+          console.log(id, true)
+        }
       }
     },
     handleTogglePopover (status, id) {
-      this.$set(this.openMap, id, status)
+      this.$set(this.descOpen, id, status)
+    },
+    handleClick (id, e) {
+      if (isFocusable(e.target)) {
+        e.stopPropagation()
+        return
+      }
+
+      this.$refs[`sort-${id}`].sort()
     }
   },
   render () {
@@ -99,7 +143,7 @@ export default {
               let isLeaf = col.columns.length === 0
               let desc = col.renderDesc({
                 close: () => {
-                  this.openMap[col.id] = false
+                  this.descOpen[col.id] = false
                 }
               })
               return (
@@ -109,6 +153,7 @@ export default {
                     [this.$c(`table-cell-${col.align}`)]: !!col.align && isLeaf,
                     [this.$c('table-cell-interactive')]:
                       !!col.sortable && isLeaf,
+                    [this.$c('table-cell-sortable')]: !!col.sortable && isLeaf,
                     [this.$c(`table-cell-sticky-${col.fixed}`)]:
                       table.scrollableX && col.fixed,
                     [this.$c('table-cell-first')]: col.first,
@@ -132,21 +177,29 @@ export default {
                   rowspan={col.rowspan > 1 ? col.rowspan : null}
                   ref={col.id}
                   onMouseover={e => {
-                    if (desc) {
-                      this.handleMouseover(col.id, e)
+                    this.handleMouseover(col.id, !!desc, !!col.sortable, e)
+                  }}
+                  onMouseout={e => {
+                    this.handleMouseout(col.id, !!desc, !!col.sortable, e)
+                  }}
+                  onClick={e => {
+                    if (isLeaf) {
+                      this.handleClick(col.id, e)
                     }
                   }}
                 >
                   <div class={this.$c('table-cell')}>
                     <div class={this.$c('table-cell-content')}>
-                      {col.renderHead()}{' '}
+                      {col.renderHead()}
                     </div>
                     {col.sortable && isLeaf ? (
                       <Sorter
                         class={{
                           [this.$c('table-header-icon')]: true,
                           [this.$c('table-header-icon-active')]:
-                            table.orderBy === col.field && table.order !== false
+                            table.orderBy === col.field &&
+                            table.order !== false,
+                          [this.$c('hover')]: this.sortHover[col.id]
                         }}
                         order={
                           table.orderBy === col.field ? table.order : false
@@ -155,6 +208,7 @@ export default {
                         onSort={order => {
                           this.$emit('sort', col.field, order)
                         }}
+                        ref={`sort-${col.id}`}
                       />
                     ) : null}
                   </div>
@@ -162,7 +216,7 @@ export default {
                     <veui-popover
                       ui={this.ui}
                       target={col.id}
-                      open={this.openMap[col.id]}
+                      open={this.descOpen[col.id]}
                       onToggle={status =>
                         this.handleTogglePopover(status, col.id)
                       }

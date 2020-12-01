@@ -51,6 +51,10 @@
     background-color: @dls-table-header-background-color-hover;
   }
 
+  &-cell-sortable {
+    cursor: pointer;
+  }
+
   [role="cell"] {
     border-top-style: solid;
     padding: @dls-table-cell-padding-y @dls-table-cell-padding-x;
@@ -284,10 +288,18 @@
     &-desc .@{veui-prefix}-table-sorter-icon-desc {
       color: @dls-button-background-color-primary;
     }
+
+    &.@{veui-prefix}-hover {
+      color: @dls-table-header-icon-color-hover;
+    }
+
     &-asc:hover .@{veui-prefix}-table-sorter-icon-asc,
-    &-desc:hover .@{veui-prefix}-table-sorter-icon-desc {
+    &-asc.@{veui-prefix}-hover .@{veui-prefix}-table-sorter-icon-asc,
+    &-desc:hover .@{veui-prefix}-table-sorter-icon-desc,
+    &-desc.@{veui-prefix}-hover .@{veui-prefix}-table-sorter-icon-desc {
       color: @dls-button-background-color-primary-hover;
     }
+
     &-asc:active .@{veui-prefix}-table-sorter-icon-asc,
     &-desc:active .@{veui-prefix}-table-sorter-icon-desc {
       color: @dls-button-background-color-primary-active;
