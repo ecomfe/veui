@@ -114,7 +114,7 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should validate file tyle correctly.', () => {
+  it('should validate file type correctly.', () => {
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
@@ -122,17 +122,32 @@ describe('components/Uploader', () => {
       }
     })
 
+    expect(wrapper.vm.validateType('test.1.jpg')).to.equal(true)
     expect(wrapper.vm.validateType('test.1.gif')).to.equal(true)
     expect(wrapper.vm.validateType('test.1.txt')).to.equal(false)
 
-    wrapper.setProps({ accept: 'image/*,.xlsx,.pdf' })
+    wrapper.setProps({ accept: 'application/*,.xlsx,.pdf' })
     expect(wrapper.vm.validateType('test2.gif')).to.equal(true)
     expect(wrapper.vm.validateType('test2.jpg')).to.equal(true)
     expect(wrapper.vm.validateType('test.2.pdf')).to.equal(true)
-    expect(wrapper.vm.validateType('test.2.ppt')).to.equal(false)
+    expect(wrapper.vm.validateType('test.2.ppt')).to.equal(true)
 
     wrapper.setProps({ accept: undefined })
     expect(wrapper.vm.validateType('test.3.ppt')).to.equal(true)
+    wrapper.destroy()
+  })
+
+  it('should validate file type correctly by extensions.', () => {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        accept: 'image/*',
+        action: '/upload',
+        extensions: ['jpg', 'png', 'gif']
+      }
+    })
+
+    expect(wrapper.vm.validateType('test.1.gif')).to.equal(true)
+    expect(wrapper.vm.validateType('test.1.txt')).to.equal(false)
     wrapper.destroy()
   })
 
