@@ -29,7 +29,7 @@
 import Icon from './Icon'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
-import { loading } from 'dls-graphics/dist/separate'
+import { loadingContent as loading } from 'dls-graphics'
 
 export default {
   name: 'veui-loading',

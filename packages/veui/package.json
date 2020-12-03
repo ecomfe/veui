@@ -18,7 +18,7 @@
     "bytes": "^3.0.0",
     "core-js": "^3.6.1",
     "date-fns": "^2.14.0",
-    "dls-graphics": "^0.1.4",
+    "dls-graphics": "^1.0.0-alpha.1",
     "lodash": "^4.17.19",
     "popper.js": "^1.16.0",
     "resize-detector": "^0.1.6",
