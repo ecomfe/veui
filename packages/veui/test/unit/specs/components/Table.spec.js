@@ -405,7 +405,7 @@ describe('components/Table', () => {
             :data="data"
           >
             <veui-table-column field="id" title="id" sortable>
-              <template slot="head">
+              <template #head>
                 <span id="out">价格 <button id="btn"><span id="content">❤️</span></button></span>
               </template>
             </veui-table-column>
@@ -1203,7 +1203,14 @@ describe('components/Table', () => {
             :data="data"
           >
             <veui-table-column field="id" title="id" sortable>
-              <template #desc><h1>This is a description</h1></template>
+              <template #head>
+                <span id="out">价格 <button id="btn"><span id="content">❤️</span></button></span>
+              </template>
+              <template #desc="{ close }">
+                  <h1>This is a description</h1>
+                  <button @click="close">Close</button>
+                </div>
+              </template>
             </veui-table-column>
           </veui-table>`
       },
@@ -1217,6 +1224,9 @@ describe('components/Table', () => {
     const sorter = head.find('button')
     const popover = wrapper.find(Popover)
     const box = popover.find('.veui-popover-box')
+    const out = head.find('#out')
+    const btn = head.find('#btn')
+    const content = head.find('#content')
 
     await vm.$nextTick()
 
@@ -1232,6 +1242,83 @@ describe('components/Table', () => {
 
     await vm.$nextTick()
 
+    expect(box.isVisible()).to.equal(false)
+
+    head.trigger('mouseenter')
+
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(true)
+    box.find('button').trigger('click')
+
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(false)
+
+    await vm.$nextTick()
+
+    head.trigger('mouseover', {
+      relatedTarget: document.body
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(true)
+
+    head.trigger('mouseout', {
+      relatedTarget: out.element
+    })
+    out.trigger('mouseover', {
+      relatedTarget: head.element
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(true)
+
+    out.trigger('mouseout', {
+      relatedTarget: btn.element
+    })
+    btn.trigger('mouseover', {
+      relatedTarget: out.element
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(false)
+
+    btn.trigger('mouseout', {
+      relatedTarget: content.element
+    })
+    content.trigger('mouseover', {
+      relatedTarget: btn.element
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(false)
+
+    content.trigger('mouseout', {
+      relatedTarget: btn.element
+    })
+    btn.trigger('mouseover', {
+      relatedTarget: content.element
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(false)
+
+    btn.trigger('mouseout', {
+      relatedTarget: out.element
+    })
+    out.trigger('mouseover', {
+      relatedTarget: btn.element
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(true)
+
+    out.trigger('mouseout', {
+      relatedTarget: head.element
+    })
+    head.trigger('mouseover', {
+      relatedTarget: out.element
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(true)
+
+    head.trigger('mouseout', {
+      relatedTarget: document.body
+    })
+    await vm.$nextTick()
     expect(box.isVisible()).to.equal(false)
 
     wrapper.destroy()
