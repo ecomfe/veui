@@ -59,18 +59,35 @@ export default {
         this.$emit('click', event)
       }
     },
-    handleNativeClick (event) {
+    handleNativeClick (e) {
       if (this.disabled) {
         return
+      }
+
+      /**
+       * Modified based on https://github.com/vuejs/vue-router/blob/6ec0ee563898ed513556f589209e8456d54ccd3b/src/components/link.js#L166-L176
+       */
+      // don't redirect with control keys
+      if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) {
+        return
+      }
+      // don't redirect on right click
+      if (e.button !== undefined && e.button !== 0) {
+        return
+      }
+      // don't redirect if `target="_blank"`
+      if (e.currentTarget && e.currentTarget.getAttribute) {
+        const target = e.currentTarget.getAttribute('target')
+        if (/\b_blank\b/i.test(target)) return
       }
 
       // Click events triggered on <router-link> are always called
       // before we have a chance to deal with. So we are using a fake
       // `preventDefault` so that we can track users' intention.
       // After that restore the old one.
-      let prevent = event.preventDefault
+      let prevent = e.preventDefault
       let prevented = false
-      event.preventDefault = () => {
+      e.preventDefault = () => {
         prevented = true
       }
       this.$emit('click', event)

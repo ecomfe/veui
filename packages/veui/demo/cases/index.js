@@ -112,11 +112,6 @@ export default [
     component: Carousel
   },
   {
-    path: '/Lightbox',
-    name: 'Lightbox',
-    component: Lightbox
-  },
-  {
     path: '/checkbox',
     name: 'Checkbox',
     component: Checkbox
@@ -175,6 +170,11 @@ export default [
     path: '/icon',
     name: 'Icon',
     component: Icon
+  },
+  {
+    path: '/lightbox',
+    name: 'Lightbox',
+    component: Lightbox
   },
   {
     path: '/input',
