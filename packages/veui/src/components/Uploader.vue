@@ -697,19 +697,12 @@ export default {
     },
     extensions: {
       type: Array,
-      default () {
-        return [
-          'jpg',
-          'jpeg',
-          'gif',
-          'png',
-          'bmp',
-          'tif',
-          'tiff',
-          'webp',
-          'apng',
-          'svg'
-        ]
+      validator () {
+        warn(
+          '[veui-uploader] `extensions` is deprecated and will be removed in future versions. Use `accept` instead.',
+          this
+        )
+        return true
       }
     },
     accept: String,
@@ -836,6 +829,14 @@ export default {
       return ['image', 'video', 'media'].indexOf(this.type) > -1
     },
     realAccept () {
+      if (this.extensions) {
+        return this.extensions.map(extension => {
+          if (extension.indexOf('.') !== 0) {
+            return `.${extension}`
+          }
+          return extension
+        }).join(',')
+      }
       if (this.accept) {
         return this.accept
       }
@@ -1114,6 +1115,10 @@ export default {
 
       let extension = last(filename.split('.')).toLowerCase()
 
+      if (this.extensions) {
+        return this.extensions.indexOf(extension) > -1
+      }
+
       return this.realAccept.split(/,\s*/).some(item => {
         let acceptExtention = last(item.split(/[./]/)).toLowerCase()
 
@@ -1124,8 +1129,10 @@ export default {
         ) {
           return true
         }
-        const mediaExtensions = config.get('uploader.mediaExtensions')
+
         let extensions
+        const mediaExtensions = config.get('uploader.mediaExtensions')
+
         switch (this.type) {
           case 'image':
           case 'video':
@@ -1135,12 +1142,12 @@ export default {
             extensions = mediaExtensions.image.concat(mediaExtensions.video)
             break
           default:
-            extensions = this.extensions
+            extensions = []
         }
 
         return acceptExtention === '*' &&
           item.indexOf('/') > -1 &&
-          extensions.indexOf(extension) > -1
+          (extensions.indexOf(extension) > -1 || !extensions.length)
       })
     },
     validateSize (fileSize) {
