@@ -22,55 +22,42 @@ export default {
   },
   methods: {
     handleMouseover (id, hasDesc, sortable, e) {
-      if (sortable && e.target === this.$refs[id]) {
-        this.$set(this.sortHover, id, true)
-      }
-
-      if (!hasDesc && !sortable) {
+      if (!sortable && !hasDesc) {
         return
       }
-      if (isFocusable(e.target)) {
+
+      let head = this.$refs[id]
+      let unfocusable = !isInsideFocusable(e.target, head)
+
+      if (sortable) {
+        this.$set(this.sortHover, id, unfocusable)
+      }
+      if (hasDesc) {
+        this.$set(this.descOpen, id, unfocusable)
+      }
+    },
+    handleMouseout (id, hasDesc, sortable, e) {
+      if (!sortable && !hasDesc) {
+        return
+      }
+
+      let head = this.$refs[id]
+      if (e.target === head && !contains(head, e.relatedTarget)) {
+        if (sortable) {
+          this.$set(this.sortHover, id, false)
+        }
         if (hasDesc) {
           this.$set(this.descOpen, id, false)
         }
-
-        if (sortable) {
-          // coming from outside
-          if (!contains(e.target, e.relatedTarget)) {
-            this.$set(this.sortHover, id, false)
-          }
-        }
-      } else if (sortable) {
-        this.$set(this.sortHover, id, true)
       }
     },
-    handleMouseout (id, _, sortable, e) {
-      if (!sortable) {
-        return
-      }
-
-      if (e.target === this.$refs[id]) {
-        this.$set(this.sortHover, id, false)
-      }
-
-      if (isFocusable(e.target)) {
-        // going outside
-        if (!contains(e.target, e.relatedTarget)) {
-          this.$set(this.sortHover, id, true)
-          console.log(id, true)
-        }
-      }
-    },
-    handleTogglePopover (status, id) {
+    handleToggleDesc (status, id) {
       this.$set(this.descOpen, id, status)
     },
     handleClick (id, e) {
-      if (isFocusable(e.target)) {
-        e.stopPropagation()
-        return
+      if (!isInsideFocusable(e.target, this.$refs[id])) {
+        this.$refs[`sort-${id}`].sort()
       }
-
-      this.$refs[`sort-${id}`].sort()
     }
   },
   render () {
@@ -217,9 +204,7 @@ export default {
                       ui={this.ui}
                       target={col.id}
                       open={this.descOpen[col.id]}
-                      onToggle={status =>
-                        this.handleTogglePopover(status, col.id)
-                      }
+                      onToggle={status => this.handleToggleDesc(status, col.id)}
                     >
                       {desc}
                     </veui-popover>
@@ -250,4 +235,16 @@ export default {
       </thead>
     )
   }
+}
+
+function isInsideFocusable (el, context) {
+  while (el && el !== context) {
+    if (isFocusable(el)) {
+      return true
+    }
+
+    el = el.parentNode
+  }
+
+  return false
 }
