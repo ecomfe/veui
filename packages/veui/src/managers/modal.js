@@ -7,6 +7,8 @@ export class ModalManager {
 
   originalOverflowY = ''
 
+  unlockCallbacks = []
+
   open () {
     if (this.count === 0) {
       this.lock()
@@ -28,28 +30,62 @@ export class ModalManager {
   }
 
   lock () {
-    let style = document.body.style
-    let computedStyle = getComputedStyle(document.body)
-    this.originalPaddingRight = style.paddingRight
-    this.originalOverflowY = style.overflowY
+    // See https://www.w3.org/TR/CSS22/visufx.html#propdef-overflow
+    let { documentElement: html, body } = document
 
-    let scrollbarWidth = getScrollbarWidth()
-    let isOverflow =
-      document.documentElement.clientHeight < document.body.scrollHeight
-    let overflowY = computedStyle.overflowY
+    let htmlOverflowY = getComputedStyle(html).overflowY
 
-    if (scrollbarWidth > 0 && (isOverflow || overflowY === 'scroll')) {
-      style.paddingRight = `${parseInt(computedStyle.paddingRight, 10) +
-        scrollbarWidth}px`
-      style.overflowY = 'hidden'
+    if (htmlOverflowY === 'visible') {
+      // overflow of <body> is propagated to the viewport
+      // check <body> & lock <html>
+      this.unlockCallbacks.push(lockScroll(body, html, window.innerHeight))
+    } else if (htmlOverflowY === 'hidden') {
+      // potential scroll will happen inside <body>
+      // check <body> & lock <body>
+      this.unlockCallbacks.push(lockScroll(body))
+    } else {
+      // overflow of <html> is propagated to the viewport
+      // check both & lock both
+      this.unlockCallbacks.push(lockScroll(body))
+      this.unlockCallbacks.push(lockScroll(html, html, window.innerHeight))
     }
   }
 
   unlock () {
-    let style = document.body.style
-    style.paddingRight = this.originalPaddingRight
-    style.overflowY = this.originalOverflowY
+    this.unlockCallbacks.forEach(fn => fn())
+    this.unlockCallbacks = []
   }
+}
+
+function lockScroll (
+  trigger,
+  target = trigger,
+  clientHeight = trigger.clientHeight
+) {
+  if (trigger.scrollHeight <= clientHeight) {
+    return () => {}
+  }
+
+  let triggerStyle = trigger.style
+  let targetStyle = target.style
+  let originalOverflowY = triggerStyle.overflowY
+  let originalPaddingRight = targetStyle.paddingRight
+  let { overflowY } = getComputedStyle(trigger)
+  let { paddingRight } = getComputedStyle(target)
+
+  let scrollbarWidth = getScrollbarWidth()
+  if (overflowY !== 'hidden') {
+    targetStyle.paddingRight = `${parseInt(paddingRight, 10) +
+      scrollbarWidth}px`
+    triggerStyle.overflowY = 'hidden'
+
+    return () => {
+      targetStyle.paddingRight = originalPaddingRight
+      triggerStyle.overflowY = originalOverflowY
+    }
+  }
+
+  return () => {}
 }
 
 export default new ModalManager()
