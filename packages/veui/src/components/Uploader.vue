@@ -699,7 +699,7 @@ export default {
       type: Array,
       validator () {
         warn(
-          '[veui-uploader] `extensions` is deprecated and will be removed in v2.1.0. Use `accept` instead.',
+          '[veui-uploader] `extensions` is deprecated and will be removed in future versions. Use `accept` instead.',
           this
         )
         return true
