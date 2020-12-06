@@ -38,17 +38,21 @@ export class ModalManager {
     if (htmlOverflowY === 'visible') {
       // overflow of <body> is propagated to the viewport
       // check <body> & lock <html>
-      this.unlockCallbacks.push(lockScroll(body, html, window.innerHeight))
+      this.onUnlock(lockScroll(body, html))
     } else if (htmlOverflowY === 'hidden') {
       // potential scroll will happen inside <body>
       // check <body> & lock <body>
-      this.unlockCallbacks.push(lockScroll(body))
+      this.onUnlock(lockScroll(body))
     } else {
       // overflow of <html> is propagated to the viewport
       // check both & lock both
-      this.unlockCallbacks.push(lockScroll(body))
-      this.unlockCallbacks.push(lockScroll(html, html, window.innerHeight))
+      this.onUnlock(lockScroll(body))
+      this.onUnlock(lockScroll(html))
     }
+  }
+
+  onUnlock (fn) {
+    this.unlockCallbacks.push(fn)
   }
 
   unlock () {
@@ -57,12 +61,20 @@ export class ModalManager {
   }
 }
 
-function lockScroll (
-  trigger,
-  target = trigger,
-  clientHeight = trigger.clientHeight
-) {
-  if (trigger.scrollHeight <= clientHeight) {
+/**
+ * Lock scroll based on trigger and target element.
+ * The trigger element and the target element can be different due to the special
+ * behavior for `overflow` on <html> and <body>.
+ * We need to set trigger element's `overflow-y` to `hidden` and add an extra `padding-right`
+ * for the width of the scrollbar.
+ *
+ * @param {HTMLElement} trigger the element whose overflow value may trigger scroll
+ * @param {HTMLElement} target the element where scrollbar appears
+ */
+function lockScroll (trigger, target = trigger) {
+  let { scrollHeight, clientHeight } = target
+
+  if (scrollHeight <= clientHeight) {
     return () => {}
   }
 
