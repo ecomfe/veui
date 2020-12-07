@@ -1365,7 +1365,7 @@ export default {
       }
     },
     getScopeValue (index, file) {
-      return { index, ...file }
+      return { index, ...file._extra, ...pick(file, PUBLIC_FILE_PROPS) }
     },
     getValue (isEmptyValue) {
       if (this.maxCount !== 1) {
