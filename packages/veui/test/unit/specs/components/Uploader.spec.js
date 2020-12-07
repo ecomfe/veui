@@ -814,7 +814,7 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should render file-before file-after slot correctly.', () => {
+  it('should render file-before file-after slot correctly.', async () => {
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
@@ -837,6 +837,41 @@ describe('components/Uploader', () => {
     let after = wrapper.findAll('.test-file-after')
     expect(after.at(0).text()).to.equal('/test1.jpg')
     expect(after.at(1).text()).to.equal('/test2.jpg')
+
+    wrapper.destroy()
+
+    wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload',
+        value: [
+          { name: 'test1.jpg', src: '/test1.jpg' },
+          { name: 'test2.jpg', src: '/test2.jpg' }
+        ]
+      },
+      scopedSlots: {
+        'file-before':
+          '<p class="test-file-before" slot-scope="file">{{ file.name }}</p>',
+        'file-after':
+          '<p class="test-file-after" slot-scope="file">{{ file.name }}</p>'
+      }
+    })
+
+    let input = wrapper.find('input[type="file"]')
+    let dT = new DataTransfer()
+    dT.items.add(new File(['foo'], 'test2.jpg'))
+    input.element.files = dT.files
+    input.trigger('change')
+    await wait(0)
+    clearXHR(wrapper)
+
+    let callbackData = { src: '/test2.jpg', id: 6, success: true }
+    wrapper.vm.uploadCallback(callbackData, dT.files[0])
+
+    before = wrapper.findAll('.test-file-before')
+    after = wrapper.findAll('.test-file-after')
+    expect(before.at(2).text()).to.equal('test2.jpg')
+    expect(after.at(2).text()).to.equal('test2.jpg')
+
     wrapper.destroy()
   })
 })
