@@ -1,5 +1,21 @@
 import { getScrollbarWidth } from '../utils/dom'
+import config from './config'
 
+/**
+ * Modal locking supports two modes, which will adopt different strategies when
+ * the viewport is scrollable, to prevent flickering content position:
+ *
+ * - safe
+ * Add extra padding to <html>, but contents with position: fixed/absolute may still
+ * experience flickering.
+ *
+ * - advanced
+ * Make <body> position: fixed and fullscreen, and make the viewport's native scrollbar
+ * still visible. May cause contents with position: absolute.
+ */
+config.defaults({
+  'modal.scrollLockMode': 'safe'
+})
 export class ModalManager {
   count = 0
 
@@ -45,9 +61,10 @@ export class ModalManager {
       this.onUnlock(lockScroll(body))
     } else {
       // overflow of <html> is propagated to the viewport
-      // check both & lock both
-      this.onUnlock(lockScroll(body))
+      // check both & lock both, order matters because changes made on body will
+      // impact scrollHeight for html
       this.onUnlock(lockScroll(html))
+      this.onUnlock(lockScroll(body))
     }
   }
 
@@ -78,22 +95,47 @@ function lockScroll (trigger, target = trigger) {
     return () => {}
   }
 
-  let triggerStyle = trigger.style
-  let targetStyle = target.style
-  let originalOverflowY = triggerStyle.overflowY
-  let originalPaddingRight = targetStyle.paddingRight
+  let triggerStyle = trigger.getAttribute('style') || ''
   let { overflowY } = getComputedStyle(trigger)
-  let { paddingRight } = getComputedStyle(target)
+  let isRoot = target === document.documentElement
 
-  let scrollbarWidth = getScrollbarWidth()
-  if (overflowY !== 'hidden') {
-    targetStyle.paddingRight = `${parseInt(paddingRight, 10) +
-      scrollbarWidth}px`
-    triggerStyle.overflowY = 'hidden'
+  if (overflowY !== 'hidden' && (isRoot || overflowY !== 'visible')) {
+    let mode = config.get('modal.scrollLockMode')
 
-    return () => {
-      targetStyle.paddingRight = originalPaddingRight
-      triggerStyle.overflowY = originalOverflowY
+    if (isRoot && mode === 'advanced') {
+      let { body } = document
+      let html = target
+      let bodyStyle = body.getAttribute('style') || ''
+      body.setAttribute(
+        'style',
+        `${bodyStyle};position:fixed;top:0;right:0;bottom:0;left:0`
+      )
+
+      let htmlStyle = html.getAttribute('style') || ''
+      html.setAttribute(
+        'style',
+        `${htmlStyle};overflow-x:hidden;overflow-y:scroll`
+      )
+
+      return () => {
+        body.setAttribute('style', bodyStyle)
+        html.setAttribute('style', htmlStyle)
+      }
+    } else {
+      let targetStyle = target.getAttribute('style') || ''
+      let { paddingRight } = getComputedStyle(target)
+      let scrollbarWidth = getScrollbarWidth()
+
+      let newPaddingRight = `${parseInt(paddingRight, 10) + scrollbarWidth}px`
+      target.setAttribute(
+        'style',
+        `${targetStyle};padding-right:${newPaddingRight};overflow-y:hidden`
+      )
+
+      return () => {
+        trigger.setAttribute('style', triggerStyle)
+        target.setAttribute('style', targetStyle)
+      }
     }
   }
 
