@@ -184,7 +184,10 @@
                     :expanded.sync="expandedControlDropdowns[index]"
                     @click="handleMediaAction(file, index, $event)"
                   >
-                    <template v-slot:trigger="{ props, handlers }">
+                    <template
+                      slot="trigger"
+                      slot-scope="{ props, handlers }"
+                    >
                       <label
                         v-if="control.name === 'replace'"
                         :key="control.name"
@@ -331,7 +334,10 @@
                   trigger="hover"
                   @click="handleMediaAction(file, index, $event)"
                 >
-                  <template v-slot:trigger="{ props, handlers }">
+                  <template
+                    slot="trigger"
+                    slot-scope="{ props, handlers }"
+                  >
                     <label
                       v-if="control.name === 'replace'"
                       :key="control.name"
@@ -462,7 +468,8 @@
                   @click="handleMediaEntry"
                 >
                   <template
-                    v-slot:trigger="{
+                    slot="trigger"
+                    slot-scope="{
                       props: triggerProps,
                       handlers: triggerHandlers
                     }"
@@ -830,12 +837,14 @@ export default {
     },
     realAccept () {
       if (this.extensions) {
-        return this.extensions.map(extension => {
-          if (extension.indexOf('.') !== 0) {
-            return `.${extension}`
-          }
-          return extension
-        }).join(',')
+        return this.extensions
+          .map(extension => {
+            if (extension.indexOf('.') !== 0) {
+              return `.${extension}`
+            }
+            return extension
+          })
+          .join(',')
       }
       if (this.accept) {
         return this.accept
@@ -991,7 +1000,11 @@ export default {
 
       let newFiles = [...files]
       let countFiles = this.fileList.length + newFiles.length
-      if (!this.isReplacing && this.maxCount !== 1 && countFiles > this.maxCount) {
+      if (
+        !this.isReplacing &&
+        this.maxCount !== 1 &&
+        countFiles > this.maxCount
+      ) {
         toast.error(this.t('tooManyFiles'))
         this.$emit('invalid', {
           errors: [
@@ -1145,9 +1158,11 @@ export default {
             extensions = []
         }
 
-        return acceptExtention === '*' &&
+        return (
+          acceptExtention === '*' &&
           item.indexOf('/') > -1 &&
           (extensions.indexOf(extension) > -1 || !extensions.length)
+        )
       })
     },
     validateSize (fileSize) {
@@ -1401,7 +1416,10 @@ export default {
           defaultControls = [
             {
               name: 'preview',
-              icon: file.type === 'image' ? this.icons.previewImage : this.icons.previewVideo,
+              icon:
+                file.type === 'image'
+                  ? this.icons.previewImage
+                  : this.icons.previewVideo,
               disabled: false,
               label: this.t('preview')
             }
