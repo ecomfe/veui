@@ -231,6 +231,15 @@
     <veui-button>OK</veui-button>
   </section>
   <section>
+    <h2>报错样式：</h2>
+    <veui-select
+      v-model="defaultValue1"
+      v-bind="attrs"
+      invalid
+    />
+    <veui-button>OK</veui-button>
+  </section>
+  <section>
     <h2>Slot[name=option-label] 样式：</h2>
     <veui-select
       v-model="defaultValue3"

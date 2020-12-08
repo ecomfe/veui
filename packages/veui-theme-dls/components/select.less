@@ -25,9 +25,15 @@
     color: @dls-input-font-color-read-only;
   }
 
-  &.focus-visible .@{veui-prefix}-input,
   &[data-focus-visible-added] .@{veui-prefix}-input {
     .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
+
+    &.@{veui-prefix}-invalid {
+      .dls-focus-ring(
+        @dls-input-border-color-error-focus,
+        @dls-input-shadow-error-focus
+      );
+    }
   }
 
   .@{veui-prefix}-input {

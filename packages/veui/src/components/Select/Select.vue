@@ -85,7 +85,7 @@ export default {
 
       if (this.multiple) {
         return (this.realValue || [])
-          .map((val) => findOptionByValue(this.realOptions, val))
+          .map(val => findOptionByValue(this.realOptions, val))
           .filter(Boolean)
       }
 
@@ -149,7 +149,7 @@ export default {
     isMultiLevel () {
       return this.realOptions
         ? this.realOptions.some(
-          (option) =>
+          option =>
             option.options &&
               option.options.length > 0 &&
               option.position === 'popup'
@@ -172,10 +172,10 @@ export default {
       return {
         expanded: this.realExpanded,
         value: this.realValue,
-        toggle: (val) => {
+        toggle: val => {
           this.commit('expanded', val == null ? !this.realExpanded : val)
         },
-        select: (val) => this.commit('value', val)
+        select: val => this.commit('value', val)
       }
     },
     layoutWrap () {
@@ -201,7 +201,7 @@ export default {
     clear (e) {
       if (this.multiple) {
         let disabledValues = this.realValue
-          .map((value) => findOptionByValue(this.realOptions, value))
+          .map(value => findOptionByValue(this.realOptions, value))
           .filter(({ disabled } = {}) => disabled)
           .map(({ value }) => value)
         this.commit('value', disabledValues)
@@ -397,14 +397,14 @@ export default {
       : null
 
     let option = this.multiple
-      ? (option) => {
+      ? option => {
         return (
           <Checkbox
             tabindex="-1"
             ui={this.uiParts.checkbox}
             checked={!!option.selected}
             disabled={!!option.disabled}
-            onClick={(e) => e.preventDefault()}
+            onClick={e => e.preventDefault()}
           >
             {option.renderLabel
               ? option.renderLabel(omit(option, ['renderLabel']))
@@ -437,7 +437,7 @@ export default {
       </Tag>
     ))
 
-    let renderCustomLabel = (props) => {
+    let renderCustomLabel = props => {
       let customLabel = renderSlot(this, 'label', props)
       if (!customLabel) {
         return null
@@ -446,7 +446,7 @@ export default {
       return <div class={this.$c('select-custom-label')}>{customLabel}</div>
     }
 
-    let renderCustomSelected = (props) => {
+    let renderCustomSelected = props => {
       let customSelected = renderSlot(this, 'selected', props)
       if (!customSelected) {
         return null
@@ -457,7 +457,7 @@ export default {
       )
     }
 
-    let renderLabelOrSelected = (props) =>
+    let renderLabelOrSelected = props =>
       renderCustomLabel(props) || renderCustomSelected(props)
 
     let multiBeforeSlot = this.multiple ? (
@@ -524,7 +524,7 @@ export default {
           [this.$c('select-wrap')]: this.layoutWrap,
           [this.$c('readonly')]: this.realReadonly,
           [this.$c('disabled')]: this.realDisabled,
-          [this.$c('input-invalid')]: this.realInvalid
+          [this.$c('invalid')]: this.realInvalid
         }}
         ui={this.realUi}
         ref="root"
@@ -555,6 +555,7 @@ export default {
             class={this.$c('select-trigger')}
             disabled={this.realDisabled}
             readonly={this.realReadonly}
+            invalid={this.realInvalid}
             placeholder={this.inputPlaceholder}
             value={this.inputValue}
             onMouseup={this.handleInputMouseup}
@@ -678,7 +679,7 @@ function stopPropagation (e) {
 }
 
 function findOptionByValue (options, value) {
-  return find(options, (item) => item.value === value, 'options')
+  return find(options, item => item.value === value, 'options')
 }
 
 function normalizeItem (item) {
