@@ -17,10 +17,10 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "dls-icons-vue": "^0.17.0"
+    "dls-icons-vue": "^0.18.0"
   },
   "peerDependencies": {
-    "veui": "2.0.0-beta.21"
+    "veui": "2.0.0-beta.22"
   },
   "devDependencies": {
     "esm": "^3.0.84",
