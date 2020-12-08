@@ -318,7 +318,7 @@ export default {
           break
         case 'Backspace': {
           let values = this.realValue
-          if (!values.length) {
+          if (!values || !values.length) {
             break
           }
 
