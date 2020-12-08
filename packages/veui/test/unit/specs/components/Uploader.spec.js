@@ -852,7 +852,7 @@ describe('components/Uploader', () => {
         'file-before':
           '<p class="test-file-before" slot-scope="file">{{ file.name }}</p>',
         'file-after':
-          '<p class="test-file-after" slot-scope="file">{{ file.name }}</p>'
+          '<p class="test-file-after" slot-scope="file">{{ file.status }}</p>'
       }
     })
 
@@ -870,7 +870,7 @@ describe('components/Uploader', () => {
     before = wrapper.findAll('.test-file-before')
     after = wrapper.findAll('.test-file-after')
     expect(before.at(2).text()).to.equal('test2.jpg')
-    expect(after.at(2).text()).to.equal('test2.jpg')
+    expect(after.at(2).text()).to.equal('success')
 
     wrapper.destroy()
   })
