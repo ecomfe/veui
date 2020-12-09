@@ -869,7 +869,8 @@ export default {
         let temp = this.genFileList(val)
 
         if (!Array.isArray(val)) {
-          return cloneDeep(temp)
+          this.fileList = cloneDeep(temp)
+          return
         }
 
         let successIndex = 0
