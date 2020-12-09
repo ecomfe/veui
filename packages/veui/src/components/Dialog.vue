@@ -15,7 +15,7 @@
   :inline="inline"
   :modal="modal"
   :priority="priority"
-  @afterclose="$emit('afterclose')"
+  @afterclose="handleAfterClose"
 >
   <div
     ref="content"
@@ -159,8 +159,6 @@ export default {
       if (this.modal) {
         if (val) {
           modal.open()
-        } else {
-          modal.close()
         }
       }
     }
@@ -208,7 +206,7 @@ export default {
       this.$emit(type)
     },
     outside () {
-      if (this.outsideClosable) {
+      if (this.outsideClosable && this.realOpen) {
         this.cancel()
       }
     },
@@ -220,6 +218,10 @@ export default {
         e.stopPropagation()
         this.cancel()
       }
+    },
+    handleAfterClose () {
+      modal.close()
+      this.$emit('afterclose')
     }
   }
 }

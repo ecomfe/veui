@@ -1,3 +1,161 @@
+## 2.0.0-beta.22
+
+### 🐞 问题修复
+
+- [^] 修正 `Uploader` 组件插槽参数中字段缺失 `status` 的问题。
+- [^] 修正遗漏 `shopping-cart` 和 `film` 图标的问题。
+
+## 2.0.0-beta.21
+
+### 💡 主要变更
+
+- [^] `Dialog` 触发滚动锁定时，新增全局配置项 `modal.scrollLockMode`，可选值为 `safe`/`advanced`。
+
+  > #### 详细说明
+  >
+  > 滚动锁定用来处理在出现全屏遮罩时，滚动行为透传到上层滚动容器的问题。目前的主流方案都使用 `overflow: hidden` 将上层滚动容器锁定，但当滚动条可见时，切换时会导致容器内部的尺寸发生变化进而发生抖动，故通常方案将在容器上添加一个额外的与滚动条宽度相同的 `padding-right` 来保持内部布局的稳定，也就是 `safe` 模式下采取的行为。但当视口发生滚动时，隐藏其滚动条将使得视口尺寸发生变化，固定定位元素的相对参考位置也会发生变化，会对这部分元素产生滚动条宽度的抖动。如果想避免这一现象，可以全局配置 `modal.scrollLockMode` 为 `advanced`，将采取另一种锁定策略，将 `<body>` 元素固定定位到撑满视口并 `overflow: hidden`，从而使视口不会发生内容溢出，同时强制 `<html>` 使用 `overflow: scroll`，保证视口滚动条依然展示，以达到视口内内容的稳定。但这种模式下同样可能对本身相对 `<body>` 元素底部绝对定位的元素产生副作用。使用时可以测试两种不同的模式后自行选择。
+
+### 🐞 问题修复
+
+- [^] 修正 `Uploader` 组件插槽参数中字段缺失的问题。
+- [^] 修正 `Select` 组件在校验错误状态下的样式问题（#758）。
+
+## 2.0.0-beta.20
+
+### 💡 主要变更
+
+- [^] `Table` 组件现在在整个表头区域内点击都会触发排序（如果开启了排序功能），内部可获取焦点的元素（被认为可以触发其它交互）除外。
+
+### 🐞 问题修复
+
+- [^] 修正 `Uploader` 组件后缀名校验不正确的问题。
+- [^] 修正 `Tooltip` 组件内容可能溢出容器的问题。
+- [^] 修正 `Link` 组件在新标签/窗口打开链接（通过 <kbd>Ctrl</kbd>/<kbd>Shift</kbd>/<kbd>⌘</kbd> + 鼠标点击或链接包含 `target="_blank"` 时）时，原标签/窗口内容发生跳转的问题。
+
+## 2.0.0-beta.19
+
+### 🐞 问题修复
+
+- [^] 更新 `dls-icons-vue` 依赖，修正图标 treeshake 逻辑没有正常生效的问题。
+
+## 2.0.0-beta.18
+
+### 🐞 问题修复
+
+- [^] 修正 `veui-theme-dls-icons` 图标没有更新的问题。
+
+## 2.0.0-beta.17
+
+### 💡 主要变更
+
+- [+] `Column` 组件新增 `desc` prop，可用来在表头通过 `Popover` 输出额外说明。同时新增对应的 `desc` 插槽，来自定义 `Popover` 组件的内容。
+- [+] `Tabs` 组件新增 `eager` prop，将提前渲染未激活的标签面板内容。
+
+### 🐞 问题修复
+
+- [^] 修正 `Uploader` 组件在图片/视频上传时底栏操作时间遗漏回调参数的问题。
+- [^] 修正 `Tabs` 组件有时无法滚动到最后的问题。
+
+## 2.0.0-beta.16
+
+### 🐞 问题修复
+
+- [^] 修正 `Tabs` 组件在移除标签项时激活状态切换不正确的问题。
+
+## 2.0.0-beta.15
+
+### 💡 主要变更
+
+- [+] `Lightbox` 组件新增 `options` prop，允许指定视频项播放时的 `muted`/`autoplay`/`controls` 等配置。
+- [+] `Uploader` 组件新增 `preview-options` prop，允许指定预览时调用的 `Lightbox` 的配置。
+
+### 🐞 问题修复
+
+- [^] 修正 `Uploader` 组件在图片、视频上传状态下的预览图标。
+- [^] 修正 `Uploader` 组件有时没有正确处理图片预览的问题。
+- [^] 修正 `Uploader` 组件在某一上传项第二次上传/校验失败后无法展示失败理由的问题。
+- [^] 修正 `Lightbox` 未处理初始化时焦点导致打开后初始状态下键盘切换项目失效的问题。
+- [^] 修正 `Pagination` 组件在没有传入 `to` prop 时，点击跳转到 x 页后没有触发 `redirect` 事件的问题。
+
+## 2.0.0-beta.14
+
+### 🐞 问题修复
+
+- [^] 修正 `veui` 没有正确标注 `dls-graphics` 依赖类型的问题。
+
+## 2.0.0-beta.13
+
+### 🐞 问题修复
+
+- [^] 修正 `veui-loader` 没有正确标注 `magic-string` 依赖类型的问题。
+
+## 2.0.0-beta.12
+
+### ⚠️ 非兼容性变更
+
+- [+] `Uploader` 组件新增了 `m`/`s` 两种 `ui` 属性值，默认尺寸有所增大。
+
+### 💡 主要变更
+
+- [+] 新增了 `Lightbox` 组件。
+- [+] 为 `Dropdown`/`Select`/`SearchBox`/`DatePicker`/`TimePicker`/`Autocomplete` 组件新增可受控 prop `expanded` 和 `toggle` 事件，用来控制其下拉浮层的展开/收起。
+- [+] `Table` 组件新增 `loading` prop，展示“加载中”状态。
+- [+] `Table`/`Column` 组件新增 `allowed-orders` prop，支持定制允许的顺序。
+- [+] `Select` 组件新增 `trigger` 插槽，用于自定义下拉触发区域。
+- [+] `Select` 组件新增 `selected` 插槽，用于自定义下拉按钮已选项回填内容的展示。
+
+    > #### 与 `label` 插槽的区别
+    >
+    > `label` 插槽仅针对收起状态下的已选项回填内容，而 `selected` 插槽包括了展开状态下的已选项回填内容。
+
+- [+] `Uploader` 组件新增了 `type` prop 的可选值 `video`/`media`，用来支持视频上传的场景。
+- [+] `Uploader` 组件新增了 `entries` prop，内置了多入口操作的功能，类型和 `controls` 的返回值相同。
+- [^] 为 `Loading` 组件添加了新的动效。
+
+### 🐞 问题修复
+
+- [^] 修正 `Progress` 组件偶尔会由于浏览器编码识别错误显示了错误内容的问题。
+- [^] 修正 `RadioGroup` 组件和 `CheckboxGroup` 组件在内容换行时显示不正确的问题。
+- [^] 修正 `SearchBox` 组件按下 <kbd>enter</kbd> 时触发表单提交的问题。
+- [^] 修正 `Select` 组件在清空时将禁用的选项一同清空的问题。
+
+## 2.0.0-beta.11
+
+### 💡 主要变更
+
+- [+] `Uploader` 组件的 `upload` 自定义函数 prop 中的第二个参数增加 `oncancel: Function` 字段，可在自定义上传逻辑中主动取消上传。对于“重新上传”场景，取消后将恢复为之前已经上传的文件。
+
+### 🐞 问题修复
+
+- [^] 修复从外部改变 `Uploader` 组件的 `value` prop 导致渲染不正确的问题。
+- [^] 修复了 `Dialog` 组件在关闭时也可能抛出 `cancel` 事件的问题。
+- [^] 修复了 `NumberInput` 组件在右键点击调节按钮时会触发连续调整的问题。
+
+## 2.0.0-beta.10
+
+### 🐞 问题修复
+
+- [^] 修复上个版本 `Overlay` 组件 `target` 更新逻辑引入的导致 `match-width` 在第一次浮层展开时失效的问题。
+- [^] 修正 `Form` 组件没有正确通过 `Field` 的 `name` prop 进行识别的问题。
+- [^] 修正 `Accordion` 组件无限重渲染的问题。
+
+## 2.0.0-beta.9
+
+### 💡 主要变更
+
+- [+] `DatePicker` 组件新增 `parse` prop 用于指定如何从输入值解析日期对象。
+- [+] `DatePicker` 组件新增 `selectstart`/`selectprogress` 事件，用于对外同步日期范围选择的过程信息。
+- [+] `Calendar`/`DatePicker` 组件的 `disabeldDate` prop 在日期范围选择过程中，新增第二个参数，表示当前第一个选择日期。
+- [+] `Input`/`Textarea` 组件新增 prop `get-length`，用于自定义计算已输入字符串长度的逻辑。
+
+### 🐞 问题修复
+
+- [^] 修复 `Schedule` 组件快捷选项由于引用被修改导致的数据混乱。
+- [^] 修复了 `Dialog`/`Table` 组件在极端条件下触发 Firefox 图层合成 bug 的问题。
+- [^] `Overlay` 组件现在不仅在初始化时查找 `target` 对应元素，而是在每次显示时均查找，使得定位逻辑不再依赖对应元素的渲染顺序。
+- [^] 修正了 `Select` 组件中已选的 `disabled` 选项可以被删除的问题。
+- [^] 修正了 `Select` 组件中内联 `Option` 的 `disabled` prop 不生效的问题。
+
 ## 2.0.0-beta.8
 
 ### 💡 主要变更
@@ -256,7 +414,7 @@
 
   其余变更：
 
-  - [+] 新增了 `tab-item-label` scoped slot，用于仅自定义标签项内容。
+  - [+] 新增了 <del>`tab-item-label`</del><ins datetime="2020-10-21" title="修正于 2020-10-21">`tab-label`</ins> scoped slot，用于仅自定义标签项内容。
   - [+] 新增 `panel` slot，用于指定标签下方面板内的自定义内容。
   - [+] 新增 `change` 事件，回调参数为 `tab` 对像，包含 `name`、`label`、`to`、`status` 等字段。
   - [+] `Tab` 组件新增了 `item` slot，用于自定义标签内容，与 `Tabs` 组件的 `tab-item` 对应，优先级更高。

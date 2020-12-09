@@ -1,7 +1,7 @@
 <template>
 <div
   ref="self"
-  :aria-expanded="realExpanded"
+  :aria-expanded="finalExpanded"
   :aria-owns="dropdownId"
 >
   <slot
@@ -16,7 +16,7 @@
   <veui-overlay
     ref="overlay"
     target="self"
-    :open="realExpanded"
+    :open="finalExpanded"
     :overlay-class="overlayClass"
     :local="realOverlayOptions.local"
     :options="realOverlayOptions"
@@ -33,7 +33,7 @@
         :update-value="suggestionUpdateValue"
         :active-descendant="activeDescendant"
         :value="realValue"
-        :expanded="realExpanded"
+        :expanded="finalExpanded"
         name="suggestions"
       />
     </div>
@@ -43,8 +43,8 @@
 
 <script>
 import dropdown from '../../mixins/dropdown'
-import { createKeySelect } from '../../mixins/key-select'
-import searchable from '../../mixins/searchable'
+import { useKeySelect } from '../../mixins/key-select'
+import useSearchable from '../../mixins/searchable'
 import Overlay from '../Overlay'
 import { findComponent } from '../../utils/context'
 import { isFunction, cloneDeep, uniqueId } from 'lodash'
@@ -71,8 +71,11 @@ export default {
   },
   mixins: [
     dropdown,
-    createKeySelect({ useNativeFocus: false }),
-    searchable({
+    useKeySelect({
+      expandedKey: 'realExpanded',
+      useNativeFocus: false
+    }),
+    useSearchable({
       datasourceKey: 'realDatasource',
       childrenKey: vm => vm.childrenKey,
       valueKey: vm => vm.valueKey,
@@ -135,11 +138,11 @@ export default {
       }
       return walk(this.clonedDatasource)
     },
-    realExpanded () {
+    finalExpanded () {
       let datasource = this.realValue
         ? this.filteredDatasource
         : this.realDatasource
-      return this.expanded && !!datasource.length
+      return this.realExpanded && !!datasource.length
     },
     realValue () {
       return this.value === undefined ? this.localValue : this.value
@@ -150,7 +153,7 @@ export default {
   },
   watch: {
     realValue (val) {
-      if (this.expanded) {
+      if (this.realExpanded) {
         this.keyword = val
       }
     }
@@ -215,16 +218,16 @@ export default {
       }
     },
     closeSuggestions () {
-      if (this.expanded) {
+      if (this.realExpanded) {
         this.clearFocusSelector()
         this.activeDescendant = null
-        this.expanded = false
+        this.commit('expanded', false)
       }
     },
     openSuggestions () {
-      if (!this.expanded) {
+      if (!this.realExpanded) {
         this.keyword = this.realValue
-        this.expanded = true
+        this.commit('expanded', true)
       }
     },
     autoSuggest () {
@@ -239,7 +242,7 @@ export default {
       }
     },
     closeAndAutoSuggestion () {
-      if (this.expanded) {
+      if (this.realExpanded) {
         this.closeSuggestions()
         if (this.realValue && this.strict) {
           this.autoSuggest()

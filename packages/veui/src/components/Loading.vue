@@ -4,20 +4,21 @@
   :ui="realUi"
   :class="$c('loading')"
 >
-  <div
-    :ui="realUi"
-    :class="$c('loading-spinner')"
-  >
+  <div :class="$c('loading-spinner')">
     <slot name="spinner">
       <veui-icon
-        spin
+        v-if="icons.loading"
         :name="icons.loading"
+        spin
+      />
+      <svg
+        v-bind="attrs"
+        v-html="contents"
       />
     </slot>
   </div>
   <div
     v-if="$slots.default"
-    :ui="realUi"
     :class="$c('loading-text')"
   >
     <slot/>
@@ -28,6 +29,7 @@
 import Icon from './Icon'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
+import { loadingContent as loading } from 'dls-graphics'
 
 export default {
   name: 'veui-loading',
@@ -37,6 +39,15 @@ export default {
   mixins: [prefix, ui],
   props: {
     loading: Boolean
+  },
+  created () {
+    this.contents = loading.contents
+
+    let attrs = loading.attrs
+    let { class: className, ...others } = attrs
+    this.attrs = { class: [className, this.$c('loading-content')], ...others }
   }
 }
 </script>
+
+<style src="dls-graphics/dist/separate/loading.css"></style>

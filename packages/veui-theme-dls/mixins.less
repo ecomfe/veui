@@ -32,32 +32,10 @@
   transform: translate(@right, @bottom);
 }
 
-.veui-field-gap-error() {
-  position: absolute;
-  display: block;
-  margin: 0;
-  height: @veui-field-gap;
-  line-height: @veui-field-gap;
-  font-size: 12px;
-
-  .@{veui-prefix}-icon {
-    margin-top: ~"calc(@{veui-field-gap} / 2 - 0.5em)";
+.veui-stub() {
+  &::before {
+    content: "\200b";
   }
-}
-
-.veui-overlay-shadow() {
-  box-shadow: 0 1px 4px fadeout(#000, 80%);
-}
-
-.veui-focus-shadow(@color: fadeout(@veui-gray-color-4, 50%)) {
-  box-shadow: 0 0 0 2px @color;
-  outline: none;
-}
-
-.veui-focus-shadow(@color, @offset) {
-  outline: 2px solid @color;
-  outline-offset: @offset;
-  box-shadow: none;
 }
 
 .dls-focus-ring(@border-color: @dls-border-color-focus, @shadow: @dls-shadow-focus) {
@@ -74,4 +52,22 @@
 }
 .dls-icon-size(@size, @fixed-width) when (@fixed-width = true) {
   .size(@size);
+}
+
+/**
+ * TODO: remove the following mixins
+ */
+.veui-overlay-shadow() {
+  box-shadow: 0 1px 4px fadeout(#000, 80%);
+}
+
+.veui-focus-shadow(@color: fadeout(@veui-gray-color-4, 50%)) {
+  box-shadow: 0 0 0 2px @color;
+  outline: none;
+}
+
+.veui-focus-shadow(@color, @offset) {
+  outline: 2px solid @color;
+  outline-offset: @offset;
+  box-shadow: none;
 }

@@ -1,30 +1,32 @@
 <script>
 import { uniqueId, includes } from 'lodash'
-import { useCoupledChild } from '../../mixins/coupled'
+import { useCoupledChild, mapState } from '../../mixins/coupled'
 import '../../common/uiTypes'
 import prefix from '../../mixins/prefix'
 import { renderSlot, Void } from '../../utils/helper'
+
+let tabFields = {
+  name: ({ id, name }) => name || id,
+  id: 'id',
+  label: 'label',
+  disabled: 'disabled',
+  realTo: 'to',
+  native: 'native',
+  removable: 'removable',
+  status: 'status',
+  isMatched: 'matched',
+  realMatches: 'matches',
+  attrs: ({ $attrs }) => $attrs,
+  renderTab: vm => props => renderSlot(vm, 'item', props),
+  renderLabel: vm => props => renderSlot(vm, 'label', props),
+  renderPanel: vm => props => renderSlot(vm, 'default', props)
+}
 
 let tab = useCoupledChild({
   direct: true,
   type: 'tab',
   parentType: 'tabs',
-  fields: {
-    name: ({ id, name }) => name || id,
-    id: 'id',
-    label: 'label',
-    disabled: 'disabled',
-    realTo: 'to',
-    native: 'native',
-    removable: 'removable',
-    status: 'status',
-    isMatched: 'matched',
-    realMatches: 'matches',
-    attrs: ({ $attrs }) => $attrs,
-    renderTab: vm => props => renderSlot(vm, 'item', props),
-    renderLabel: vm => props => renderSlot(vm, 'label', props),
-    renderPanel: vm => props => renderSlot(vm, 'default', props)
-  },
+  fields: tabFields,
   watchKeys: [
     'label',
     'disabled',
@@ -43,10 +45,7 @@ export default {
   name: 'veui-tab',
   mixins: [prefix, tab],
   props: {
-    label: {
-      type: String,
-      required: true
-    },
+    label: String,
     name: String,
     disabled: {
       type: Boolean,
@@ -95,6 +94,17 @@ export default {
     realMatches () {
       return this.matches || this.tabs.matches || (() => false)
     }
+  },
+  updated () {
+    let parent = this.tabs
+    if (!parent) {
+      return
+    }
+
+    parent.updateChild({
+      id: this.id,
+      ...mapState(this, tabFields)
+    })
   },
   render () {
     return <Void />

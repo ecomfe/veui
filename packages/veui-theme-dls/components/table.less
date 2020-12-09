@@ -16,12 +16,19 @@
 
   &-main {
     overflow: auto;
+
+    /* To workaround an edge case which triggers composition problems on Firefox */
+    transform-style: preserve-3d;
   }
 
   &-cell {
     display: flex;
     line-height: @dls-line-height-1;
     align-items: center;
+  }
+
+  &-loading {
+    z-index: 3;
   }
 
   th,
@@ -42,6 +49,10 @@
 
   &-cell-interactive:hover {
     background-color: @dls-table-header-background-color-hover;
+  }
+
+  &-cell-sortable {
+    cursor: pointer;
   }
 
   [role="cell"] {
@@ -277,10 +288,18 @@
     &-desc .@{veui-prefix}-table-sorter-icon-desc {
       color: @dls-button-background-color-primary;
     }
+
+    &.@{veui-prefix}-hover {
+      color: @dls-table-header-icon-color-hover;
+    }
+
     &-asc:hover .@{veui-prefix}-table-sorter-icon-asc,
-    &-desc:hover .@{veui-prefix}-table-sorter-icon-desc {
+    &-asc.@{veui-prefix}-hover .@{veui-prefix}-table-sorter-icon-asc,
+    &-desc:hover .@{veui-prefix}-table-sorter-icon-desc,
+    &-desc.@{veui-prefix}-hover .@{veui-prefix}-table-sorter-icon-desc {
       color: @dls-button-background-color-primary-hover;
     }
+
     &-asc:active .@{veui-prefix}-table-sorter-icon-asc,
     &-desc:active .@{veui-prefix}-table-sorter-icon-desc {
       color: @dls-button-background-color-primary-active;

@@ -7,8 +7,11 @@
     <veui-button
       ui="primary"
       @click="append"
-    >添加</veui-button>
+    >
+      添加
+    </veui-button>
     <veui-button @click="toggle">切换数据</veui-button>
+    <veui-button @click="toggleLoading">切换加载</veui-button>
   </section>
   <section>
     <veui-checkbox v-model="showGroup">显示数据分组</veui-checkbox>
@@ -45,6 +48,7 @@
       :order-by="orderBy"
       :order="order"
       :selected.sync="selected1"
+      :loading="loading"
       @select="handleSelect"
       @sort="handleSort"
     >
@@ -64,12 +68,20 @@
           <strong>总计</strong>
         </template>
       </veui-table-column>
-      <veui-table-column title="元数据">
+      <veui-table-column
+        title="元数据"
+        :desc="popover"
+      >
         <veui-table-column
           field="typeId"
           title="类型 ID"
           :span="typeSpan"
-        />
+        >
+          <template #desc="{ close }">
+            <p>一段说明文本……</p>
+            <p><veui-button @click="close">知道了</veui-button></p>
+          </template>
+        </veui-table-column>
         <veui-table-column
           v-if="showGroup"
           field="group"
@@ -89,9 +101,13 @@
         align="right"
         fixed
       >
+        <template slot="desc">
+          这是一条带有 slot 的提示
+        </template>
         <template slot="head">
           价格
           <i>(每 1000g)</i>
+          <button>❤️</button>
         </template>
         <template slot-scope="props">{{
           props.item.price | currency
@@ -147,6 +163,7 @@
       selectable
       select-mode="single"
       :selected.sync="selected2"
+      :loading="loading"
     >
       <veui-table-column title="元数据">
         <veui-table-column
@@ -198,6 +215,7 @@
       selectable
       expandable
       :scroll="{ x: 1024 }"
+      :loading="loading"
     >
       <veui-table-column
         field="id"
@@ -243,6 +261,7 @@
       key-field="id"
       expandable
       :scroll="{ x: 1200 }"
+      :loading="loading"
     >
       <veui-table-column
         field="id"
@@ -296,6 +315,7 @@
     <veui-table
       :data="data"
       key-field="id"
+      :loading="loading"
     >
       <veui-table-column
         field="id"
@@ -333,6 +353,7 @@
     <veui-table
       key-field="id"
       :data="data"
+      :loading="loading"
     >
       <veui-table-column
         v-for="field in fields"
@@ -346,6 +367,7 @@
     <veui-table
       :data="items"
       :scroll="{ x: 1200 }"
+      :loading="loading"
     >
       <veui-table-column
         fixed="right"
@@ -373,6 +395,46 @@
       <veui-table-column
         field="level"
         title="level"
+      />
+    </veui-table>
+  </section>
+  <section class="container">
+    <h3>Orders: {{ allowedOrders1 }} , Current: {{ order1 }}</h3>
+    <veui-table
+      key-field="id"
+      :data="items"
+      :order="order1"
+      :order-by="orderBy1"
+      :allowed-orders="allowedOrders1"
+      @sort="
+        (orderBy, order) => {
+          orderBy1 = orderBy
+          order1 = order
+        }
+      "
+    >
+      <veui-table-column
+        field="id"
+        title="id"
+        sortable
+      />
+    </veui-table>
+    <h3>Orders: {{ allowedOrders2 }} , Current: {{ order2 }}</h3>
+    <veui-button @click="switchDisabled">切换disabled</veui-button>
+    <veui-button @click="switchAll">切换all</veui-button>
+    <veui-table
+      key-field="id"
+      :data="items"
+      selectable
+      :order="order2"
+      order-by="id"
+      :allowed-orders="allowedOrders2"
+      @sort="(_, order) => (order2 = order)"
+    >
+      <veui-table-column
+        field="id"
+        title="id"
+        sortable
       />
     </veui-table>
   </section>
@@ -575,6 +637,11 @@ export default {
         { name: 'id', title: 'ID' },
         { name: 'desc', title: '描述' }
       ],
+      allowedOrders1: ['asc', 'desc'],
+      allowedOrders2: [false, 'asc', 'desc'],
+      order1: 'desc',
+      order2: false,
+      orderBy1: 'id2',
       data: [],
       nextId: 3162,
       nextIndex: 9,
@@ -630,7 +697,9 @@ export default {
           origin: 'China',
           level: 'A'
         }
-      ]
+      ],
+      loading: false,
+      popover: '这是一条补充的 Popover 信息'
     }
   },
   computed: {
@@ -656,6 +725,25 @@ export default {
   methods: {
     toggle () {
       this.data = this.data === tableData ? [] : tableData
+    },
+    switchDisabled () {
+      let first = this.items[0]
+      this.items = [
+        {
+          ...first,
+          disabled: !first.disabled
+        },
+        ...this.items.slice(1)
+      ]
+    },
+    switchAll () {
+      this.items = this.items.map(i => ({
+        ...i,
+        disabled: !i.disabled
+      }))
+    },
+    toggleLoading () {
+      this.loading = !this.loading
     },
     log (...args) {
       bus.$emit('log', ...args)

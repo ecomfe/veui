@@ -45,8 +45,8 @@ describe('components/Overlay', () => {
 
     await wait(0)
 
-    expect(+wrapper.vm.$refs.parent.overlayBox.style.zIndex).to.equal(200)
-    expect(+wrapper.vm.$refs.child.overlayBox.style.zIndex).to.equal(201)
+    expect(+wrapper.vm.$refs.parent.$refs.box.style.zIndex).to.equal(200)
+    expect(+wrapper.vm.$refs.child.$refs.box.style.zIndex).to.equal(201)
 
     wrapper.destroy()
   })
@@ -70,8 +70,8 @@ describe('components/Overlay', () => {
 
     await wait(0)
 
-    expect(+wrapper.vm.$refs.parent.overlayBox.style.zIndex).to.equal(300)
-    expect(+wrapper.vm.$refs.child.overlayBox.style.zIndex).to.equal(301)
+    expect(+wrapper.vm.$refs.parent.$refs.box.style.zIndex).to.equal(300)
+    expect(+wrapper.vm.$refs.child.$refs.box.style.zIndex).to.equal(301)
 
     config.set('managers.overlay', overlay)
     wrapper.destroy()

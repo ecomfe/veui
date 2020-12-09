@@ -1,9 +1,7 @@
 @import "../lib.less";
 
 .@{veui-prefix}-tabs {
-  @dls-tab-spacing-x-strong-m: 0;
-  @dls-tab-menu-padding-x-strong-m: 16px;
-  @remove-icon-aspect-ratio: 10 / 16;
+  @remove-icon-size: @dls-tab-icon-size-aux;
 
   .make-margin-left(@dls-tab-spacing-x-m);
   position: relative;
@@ -177,7 +175,7 @@
     &-removable:hover &-label-content {
       @offset: dls-sum(
         calc(@dls-tab-content-spacing * -0.5),
-        calc((1.2em * @remove-icon-aspect-ratio) * -0.5)
+        calc(@remove-icon-size * -0.5)
       );
 
       transform: ~"translateX(@{offset})";
@@ -187,7 +185,7 @@
       @offset: dls-sum(
         @dls-tab-padding-x-m,
         calc(@dls-tab-content-spacing * -0.5),
-        calc((1.2em * @remove-icon-aspect-ratio) * -0.5)
+        calc(@remove-icon-size * -0.5)
       );
       .absolute(50%, @offset, _, _);
       transform: translateY(-50%) scale(0.5);
@@ -195,7 +193,7 @@
       .veui-transition(transform, opacity);
 
       .@{veui-prefix}-icon {
-        .dls-icon-size(@dls-tab-icon-size-aux);
+        .dls-icon-size(@remove-icon-size);
       }
     }
 
@@ -322,7 +320,11 @@
   &[ui~="strong"] & {
     &-menu {
       height: @dls-tab-menu-height-strong-m;
-      .padding(dls-sum(@dls-tab-menu-height-strong-m, -@dls-tab-height-m), @dls-tab-menu-padding-x-strong-m, _);
+      .padding(
+        dls-sum(@dls-tab-menu-height-strong-m, -@dls-tab-height-m),
+        @dls-tab-menu-padding-x-strong-m,
+        _
+      );
       background-color: @dls-tab-menu-background-color-strong;
       .border-top-radius(@dls-tab-container-border-radius-strong-m);
       .border-top-radius(6px);
@@ -382,18 +384,24 @@
         @offset: dls-sum(
           @dls-tab-padding-x-strong-m,
           calc(@dls-tab-content-spacing * -0.5),
-          calc((1.2em * @remove-icon-aspect-ratio) * -0.5)
+          calc(@remove-icon-size * -0.5)
         );
         right: @offset;
       }
     }
 
     &-prev {
-      margin-left: dls-sum(@dls-tab-nav-spacing-m, @dls-tab-menu-padding-x-strong-m * -1);
+      margin-left: dls-sum(
+        @dls-tab-nav-spacing-m,
+        @dls-tab-menu-padding-x-strong-m * -1
+      );
     }
 
     &-next:last-child {
-      margin-right: dls-sum(@dls-tab-nav-spacing-m, @dls-tab-menu-padding-x-strong-m * -1);
+      margin-right: dls-sum(
+        @dls-tab-nav-spacing-m,
+        @dls-tab-menu-padding-x-strong-m * -1
+      );
     }
 
     &-item-active {

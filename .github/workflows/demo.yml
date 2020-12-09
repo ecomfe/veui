@@ -1,0 +1,38 @@
+# This is a basic workflow to help you get started with Actions
+
+name: deploy-demo
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the d20 branch
+on:
+  push:
+    branches: [ d20 ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Install and Build 🔧
+        run: |
+          npm ci
+          npm run bootstrap
+          BASE_PATH=/veui/ npm run build-components
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: components # The folder the action should deploy.
+          CLEAN: true
+          COMMIT_MESSAGE: "Deploying to gh-pages from @ ${{ github.sha }} 🚀 [ci skip]"
+

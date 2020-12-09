@@ -9,7 +9,7 @@
   :ui="realUi"
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"
-  :aria-expanded="expanded"
+  :aria-expanded="realExpanded"
   :aria-owns="dropdownId"
   aria-haspopup="listbox"
 >
@@ -43,7 +43,7 @@
     </div>
   </veui-input>
   <veui-overlay
-    v-show="expanded"
+    v-show="realExpanded"
     ref="overlay"
     target="self"
     match-width
@@ -54,7 +54,7 @@
     "
     :local="realOverlayOptions.local"
     :options="realOverlayOptions"
-    :open="expanded"
+    :open="realExpanded"
     @afteropen="scrollSelectedToCenter(0)"
   >
     <div
@@ -385,13 +385,13 @@ export default {
       })
     },
     openDropdown (e) {
-      if (!this.expanded && !this.realReadonly && !this.realDisabled) {
-        this.expanded = true
+      if (!this.realExpanded && !this.realReadonly && !this.realDisabled) {
+        this.commit('expanded', true)
         this.valueOnOpen = [...this.realValue]
       }
     },
     closeDropdown () {
-      if (this.expanded) {
+      if (this.realExpanded) {
         this.close()
         this.inputValue = ''
         if (!isEqual(this.valueOnOpen, this.realValue)) {

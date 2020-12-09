@@ -73,7 +73,6 @@
 <script>
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
-import i18n from '../mixins/i18n'
 import Icon from './Icon'
 import warn from '../utils/warn'
 import { uniqueId, clamp } from 'lodash'
@@ -88,7 +87,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, i18n, useControllable('status')],
+  mixins: [prefix, ui, useControllable('status')],
   props: {
     type: {
       type: String,
@@ -167,13 +166,7 @@ export default {
       return this.getLength(this.realRadius + this.halfStroke)
     },
     valueText () {
-      if (this.realStatus === 'success') {
-        return this.t('done')
-      } else if (this.realStatus === 'error') {
-        return this.t('error')
-      } else {
-        return this.percent.toFixed(this.decimalPlace) + '%'
-      }
+      return this.percent.toFixed(this.decimalPlace) + '%'
     }
   },
   watch: {

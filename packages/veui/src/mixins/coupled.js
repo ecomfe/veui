@@ -44,28 +44,19 @@ export function useCoupledChild ({
         )
       }
     },
-    updated () {
-      let parent = this[parentRef]
-      if (!parent) {
-        return
-      }
-
-      parent.updateChild({
-        id: this.id,
-        ...mapState(this, fields)
-      })
-    },
     destroyed () {
       let parent = this[parentRef]
       if (!parent || parent.__destroying__) {
         return
       }
 
-      let index = parent.removeChildById(this.id)
+      let index = parent.findChildIndexById(this.id)
 
       if (typeof parent.handleRemoveChild === 'function') {
         parent.handleRemoveChild(index)
       }
+
+      parent.removeChildByIndex(index)
     }
   }
 }
@@ -90,9 +81,12 @@ export function useCoupledParent ({ type, childrenKey = 'items' }) {
         })
       },
       removeChildById (id) {
-        let index = this[childrenKey].map(child => child.id).indexOf(id)
-        this[childrenKey].splice(index, 1)
+        let index = this.findChildIndexById(id)
+        this.removeChildByIndex(index)
         return index
+      },
+      removeChildByIndex (index) {
+        this[childrenKey].splice(index, 1)
       },
       findChildById (id) {
         return this[childrenKey][this.findChildIndexById(id)]
@@ -107,7 +101,7 @@ export function useCoupledParent ({ type, childrenKey = 'items' }) {
   }
 }
 
-function mapState (state, map) {
+export function mapState (state, map) {
   if (Array.isArray(map)) {
     return pick(state, map)
   } else if (typeof map === 'object') {

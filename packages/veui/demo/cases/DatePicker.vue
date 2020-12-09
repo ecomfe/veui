@@ -27,6 +27,15 @@
     />
   </section>
   <section>
+    <h2>日期范围选择（3天限制）</h2>
+    <veui-date-picker
+      clearable
+      :disabled-date="disabledRange"
+      range
+      format="yyyy-MM-dd"
+    />
+  </section>
+  <section>
     <h2>日期范围选择（快捷）</h2>
     <veui-date-picker
       v-model="selectedDateRange"
@@ -186,6 +195,8 @@
 
 <script>
 import { DatePicker } from 'veui'
+import add from 'date-fns/add'
+import startOfDay from 'date-fns/startOfDay'
 
 export default {
   name: 'date-picker-demo',
@@ -242,6 +253,19 @@ export default {
   methods: {
     disabledDate (date) {
       return date > new Date()
+    },
+    disabledRange (date, selected) {
+      let today = startOfDay(new Date())
+      let maxEnd = add(today, { days: 4 })
+      let middle = add(today, { days: 2 })
+      if (selected == null) {
+        return date < today || date > maxEnd
+      } else if (selected <= middle) {
+        maxEnd = add(selected, { days: 2 })
+        return !(date >= today && date <= maxEnd)
+      }
+      let minStart = add(selected, { days: -2 })
+      return !(date >= minStart && date <= maxEnd)
     }
   }
 }

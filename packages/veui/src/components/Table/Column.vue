@@ -2,6 +2,7 @@
 import { uniqueId, pick } from 'lodash'
 import colgroup from '../../mixins/colgroup'
 import { getIndexOfType } from '../../utils/context'
+import { renderSlot } from '../../utils/helper'
 import '../../common/uiTypes'
 
 export default {
@@ -25,7 +26,9 @@ export default {
       validator (val) {
         return typeof val === 'boolean' || val === 'left' || val === 'right'
       }
-    }
+    },
+    allowedOrders: Array,
+    desc: String
   },
   data () {
     return {
@@ -49,7 +52,16 @@ export default {
   created () {
     let index = getIndexOfType(this, 'colgroup')
 
-    const props = ['title', 'field', 'width', 'sortable', 'align', 'span']
+    let props = [
+      'title',
+      'field',
+      'width',
+      'sortable',
+      'align',
+      'span',
+      'allowedOrders',
+      'desc'
+    ]
 
     let renderBody = item => {
       let defaultRow = this.$scopedSlots.default
@@ -85,7 +97,10 @@ export default {
         let render = this.$scopedSlots.foot || (() => this.$slots.foot || null)
         return render()
       },
-      hasStaleFoot: () => !!this.$slots.foot
+      hasStaleFoot: () => !!this.$slots.foot,
+      renderDesc: item => {
+        return renderSlot(this, 'desc', item) || this.desc
+      }
     })
   },
   destroyed () {

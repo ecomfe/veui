@@ -13,10 +13,7 @@
   white-space: nowrap;
   cursor: pointer;
   .veui-button-transition();
-
-  &::before {
-    content: "\200b";
-  }
+  .veui-stub();
 
   .make-metrics(@size) {
     @height: ~"dls-button-height-@{size}";
@@ -54,6 +51,7 @@
     .make-metrics(xl);
   }
 
+  &-loading-icon,
   .@{veui-prefix}-icon,
   .dls-icon {
     margin-right: @dls-button-content-spacing;
@@ -88,6 +86,16 @@
     cursor: default;
     border-color: @dls-button-border-color-normal-active;
     background-color: @dls-button-background-color-normal-active;
+  }
+
+  .@{veui-prefix}-loading {
+    &-spinner {
+      color: inherit;
+    }
+
+    &-content {
+      .dls-icon-size(@dls-icon-size-normal);
+    }
   }
 
   &-loading .@{veui-prefix}-icon:not(&-loading-icon),

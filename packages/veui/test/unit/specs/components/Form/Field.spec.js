@@ -135,11 +135,8 @@ describe('components/Form/Field', () => {
       expect(message).to.equal('custom validator failed')
 
       inputWrapper.setValue('123')
-      wrapper.vm.$nextTick()
-      expect(inputWrapper.find('input').element.value).to.equal('123')
-
       formData.test = '123'
-      wrapper.trigger('submit')
+      wrapper.find('form').trigger('submit')
     })
     form.$on('submit', () => {
       expect(fieldWrapper.vm.validity.valid).to.equal(true)
@@ -150,6 +147,6 @@ describe('components/Form/Field', () => {
     expect(inputWrapper.find('input').element.value).to.equal('123456')
     formData.test = '123456'
 
-    wrapper.trigger('submit')
+    form.submit()
   })
 })

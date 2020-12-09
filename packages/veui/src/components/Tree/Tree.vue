@@ -187,7 +187,7 @@ export default {
       items.forEach(item => {
         let { value, children } = item
         let inChecked = includes(checked, value)
-        if (item.children) {
+        if (item.children && item.children.length) {
           this.normalizeItems(
             item.children,
             checked,
@@ -214,7 +214,8 @@ export default {
 
         if (
           collect &&
-          item.value &&
+          // sometimes value is 0
+          item.value != null &&
           (item.checked || (this.includeIndeterminate && item.partialChecked))
         ) {
           collect.push(item.value)

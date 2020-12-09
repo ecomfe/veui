@@ -18,9 +18,7 @@
     z-index: 1;
   }
 
-  &-button {
-    flex: 1;
-
+  &-command + &-button {
     &[ui~="primary"],
     &[ui~="normal"] {
       &::before {
@@ -34,14 +32,24 @@
         background-color: transparent;
       }
     }
+  }
+
+  &-button {
+    flex: 1;
 
     &[ui~="primary"] {
       &::before {
-        background-color: fade(@dls-button-font-color-primary, percentage(@dls-button-group-separator-opacity));
+        background-color: fade(
+          @dls-button-font-color-primary,
+          percentage(@dls-button-group-separator-opacity)
+        );
       }
 
       &:disabled::before {
-        background-color: fade(@dls-button-font-color-primary-disabled, percentage(@dls-button-group-separator-opacity));
+        background-color: fade(
+          @dls-button-font-color-primary-disabled,
+          percentage(@dls-button-group-separator-opacity)
+        );
       }
 
       .@{veui-prefix}-dropdown-icon {
@@ -55,11 +63,17 @@
 
     &[ui~="normal"] {
       &::before {
-        background-color: fade(@dls-button-font-color-normal, percentage(@dls-button-group-separator-opacity));
+        background-color: fade(
+          @dls-button-font-color-normal,
+          percentage(@dls-button-group-separator-opacity)
+        );
       }
 
       &:disabled::before {
-        background-color: fade(@dls-button-font-color-normal-disabled, percentage(@dls-button-group-separator-opacity));
+        background-color: fade(
+          @dls-button-font-color-normal-disabled,
+          percentage(@dls-button-group-separator-opacity)
+        );
       }
     }
 
@@ -83,7 +97,7 @@
     }
   }
 
-  &-split &-command {
+  &-split &-command[ui] {
     .border-right-radius(0);
     .padding(_, @dls-dropdown-split-button-padding-x);
     position: relative;
@@ -95,7 +109,7 @@
     }
   }
 
-  &-split &-button {
+  &-split &-button[ui] {
     .border-left-radius(0);
     .padding(_, @dls-dropdown-icon-spacing-aux);
     flex-grow: 0;

@@ -38,7 +38,7 @@ config.defaults({
   'keyselect.focusSelector': '[data-focus-visible-added]'
 })
 
-const createKeySelect = ({ useNativeFocus, handlers }) => ({
+const useKeySelect = ({ useNativeFocus, handlers, expandedKey = 'expanded' }) => ({
   computed: {
     focusMode () {
       return typeof useNativeFocus === 'string'
@@ -51,14 +51,14 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
       return this.focusMode ? null : config.get('keyselect.focusSelector')
     }
   },
-  watch: {
-    expanded (val) {
+  created () {
+    this.$watch(expandedKey, val => {
       if (!val) {
         if (this.focusSelector) {
           this.clearFocusSelector()
         }
       }
-    }
+    })
   },
   methods: {
     // 方便覆盖
@@ -116,7 +116,7 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
         case 'Escape':
         case 'Left':
         case 'ArrowLeft':
-          this.expanded = false
+          this[expandedKey] = false
           break
         case 'Up':
         case 'ArrowUp':
@@ -144,5 +144,5 @@ const createKeySelect = ({ useNativeFocus, handlers }) => ({
   }
 })
 
-export default createKeySelect({ useNativeFocus: true })
-export { createKeySelect }
+export default useKeySelect({ useNativeFocus: true })
+export { useKeySelect }

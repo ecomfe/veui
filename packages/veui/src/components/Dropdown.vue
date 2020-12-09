@@ -4,7 +4,7 @@
   :ui="realUi"
   :class="{
     [$c('dropdown')]: true,
-    [$c('dropdown-expanded')]: expanded,
+    [$c('dropdown-expanded')]: realExpanded,
     [$c('dropdown-split')]: split
   }"
 >
@@ -43,13 +43,13 @@
       </span>
       <veui-icon
         :class="$c('dropdown-icon')"
-        :name="icons[expanded ? 'collapse' : 'expand']"
+        :name="icons[realExpanded ? 'collapse' : 'expand']"
       />
     </veui-button>
   </slot>
   <veui-overlay
     target="main"
-    :open="expanded"
+    :open="realExpanded"
     autofocus
     modal
     match-width
@@ -71,7 +71,7 @@
       :ui="realUi"
       role="menu"
       :tabindex="searchable ? -1 : 0"
-      :aria-expanded="expanded"
+      :aria-expanded="realExpanded"
       @keydown="handleKeydown"
       @focus="focusAt(0)"
     >
@@ -165,9 +165,9 @@ import OptionGroup from './Select/OptionGroup'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import dropdown from '../mixins/dropdown'
-import { createKeySelect } from '../mixins/key-select'
+import { useKeySelect } from '../mixins/key-select'
 import focusable from '../mixins/focusable'
-import searchable from '../mixins/searchable'
+import useSearchable from '../mixins/searchable'
 import i18n from '../mixins/i18n'
 import '../common/uiTypes'
 import { includes } from 'lodash'
@@ -197,10 +197,11 @@ export default {
     prefix,
     ui,
     dropdown,
-    createKeySelect({
+    useKeySelect({
       useNativeFocus (vm) {
         return !vm.searchable
       },
+      expandedKey: 'realExpanded',
       handlers: {
         tab () {
           if (this.searchable) {
@@ -217,7 +218,7 @@ export default {
         }
       }
     }),
-    searchable({
+    useSearchable({
       datasourceKey: 'options',
       childrenKey: 'options',
       keywordKey: 'keyword',
@@ -278,7 +279,7 @@ export default {
         case 'ArrowUp':
         case 'Down':
         case 'ArrowDown':
-          this.expanded = true
+          this.commit('expanded', true)
           e.preventDefault()
           break
         default:
@@ -288,16 +289,16 @@ export default {
     handleToggle () {
       let mode = MODE_MAP[this.trigger]
       if (mode === 'toggle') {
-        this.expanded = !this.expanded
+        this.commit('expanded', !this.realExpanded)
       } else if (mode === 'expand') {
-        this.expanded = true
+        this.commit('expanded', true)
       }
-      if (this.expanded) {
+      if (this.realExpanded) {
         this.keyword = ''
       }
     },
     handleSelect (value) {
-      this.expanded = false
+      this.commit('expanded', false)
       if (value != null) {
         this.$emit('click', value)
       }

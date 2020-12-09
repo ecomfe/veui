@@ -13,18 +13,6 @@
       "pre-commit": "lint-staged"
     }
   },
-  "lint-staged": {
-    "packages/{babel-plugin-veui,veui,veui-loader,veui-theme-dls}/**/*.{js,vue},!packages/veui/demo/**": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ],
-    "packages/veui-theme-dls/**/*.less,packages/veui/demo/**/*.vue": [
-      "prettier --write 'packages/veui-theme-dls/**/*.less'",
-      "stylelint --fix",
-      "git add"
-    ]
-  },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "codecov": "^3.5.0",
@@ -36,10 +24,11 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.2.2",
-    "husky": "^2.3.0",
+    "husky": "^4.3.0",
     "lerna": "^3.20.2",
     "lerna-audit": "^1.2.0",
-    "lint-staged": "^8.1.7",
+    "lint-staged": "^10.5.1",
+    "micromatch": "^4.0.2",
     "prettier": "^1.16.4",
     "stylelint": "^13.2.1",
     "stylelint-config-prettier": "^8.0.1",

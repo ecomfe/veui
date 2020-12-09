@@ -29,7 +29,8 @@ config.defaults(
       }
     },
     parts: {
-      icon: 'icon'
+      icon: 'icon',
+      loading: 'm strong overlay'
     }
   },
   'table'

@@ -50,6 +50,16 @@
     </p>
     <p>value: {{ pickedWithEmpty }}</p>
   </section>
+  <section>
+    <h3>多行</h3>
+    <p>
+      <veui-checkbox-group
+        v-model="picked3"
+        :items="data3"
+      />
+    </p>
+    <p>value: {{ picked3 }}</p>
+  </section>
 </article>
 </template>
 
@@ -65,6 +75,7 @@ export default {
     return {
       picked1: ['Hirasawa Yui', 'Akiyama Mio'],
       picked2: [],
+      picked3: [],
       pickedWithExclusive: [],
       pickedWithEmpty: [],
       data1: [
@@ -117,6 +128,48 @@ export default {
         {
           value: 'Nakano Azusa',
           label: 'Nakano Azusa'
+        }
+      ],
+      data3: [
+        {
+          label: 'Steve Rogers',
+          value: 'steve'
+        },
+        {
+          label: 'Tony Stark',
+          value: 'tony'
+        },
+        {
+          label: 'Thor',
+          value: 'thor'
+        },
+        {
+          label: 'Hulk',
+          value: 'hulk'
+        },
+        {
+          label: 'Natasha Romanov',
+          value: 'natasha'
+        },
+        {
+          label: 'Stephen Strange',
+          value: 'stephen'
+        },
+        {
+          label: 'Peter Parker',
+          value: 'peter'
+        },
+        {
+          label: 'Vision',
+          value: 'vision'
+        },
+        {
+          label: 'Clint Barton',
+          value: 'clint'
+        },
+        {
+          label: 'Carol Danvers',
+          value: 'carol'
         }
       ]
     }

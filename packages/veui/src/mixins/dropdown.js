@@ -3,16 +3,26 @@ import { toggleClass } from '../utils/dom'
 import outside from '../directives/outside'
 import overlay from './overlay'
 import activatable from './activatable'
+import useControllable from './controllable'
 
 export default {
   directives: { outside },
-  mixins: [overlay, activatable],
+  mixins: [
+    overlay,
+    activatable,
+    useControllable([
+      {
+        prop: 'expanded',
+        event: 'toggle'
+      }
+    ])
+  ],
   props: {
-    overlayPriority: Number
+    overlayPriority: Number,
+    expanded: Boolean
   },
   data () {
     return {
-      expanded: false,
       localOverlayOptions: {
         position: 'bottom-start'
       },
@@ -44,13 +54,13 @@ export default {
   },
   methods: {
     close () {
-      this.expanded = false
+      this.commit('expanded', false)
     },
     activate () {
       if (this.realDisabled || this.realReadonly) {
         return
       }
-      this.expanded = true
+      this.commit('expanded', true)
     },
     handleScroll () {
       let { box } = this.$refs

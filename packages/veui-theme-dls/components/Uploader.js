@@ -5,10 +5,13 @@ import {
   IconTimesCircle,
   IconFile,
   IconImageAdd,
+  IconVideoAdd,
+  IconMediaAdd,
   IconExclamationCircle,
   IconLoading,
-  IconEye,
-  IconQuestionCircle
+  IconQuestionCircle,
+  IconPlayCircle,
+  IconZoomIn
 } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
@@ -21,10 +24,13 @@ config.defaults(
       failure: IconTimesCircle,
       file: IconFile,
       addImage: IconImageAdd,
+      addVideo: IconVideoAdd,
+      addMedia: IconMediaAdd,
       alert: IconExclamationCircle,
       loading: IconLoading,
-      preview: IconEye,
-      message: IconQuestionCircle
+      message: IconQuestionCircle,
+      previewImage: IconZoomIn,
+      previewVideo: IconPlayCircle
     },
     ui: {
       size: {
@@ -36,9 +42,10 @@ config.defaults(
     parts: {
       remove: 'icon aux',
       progress: 's',
-      control: 'icon s',
+      control: 'icon m',
+      entry: 'icon',
       preview: 'auto',
-      image: 'basic'
+      media: 'basic'
     }
   },
   'uploader'

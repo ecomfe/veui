@@ -111,12 +111,18 @@
       }"
     />
   </div>
+  <veui-loading
+    :class="$c('table-loading')"
+    :loading="loading"
+    :ui="uiParts.loading"
+  >
+    {{ t('loading') }}
+  </veui-loading>
 </div>
 </template>
 
 <script>
 import warn from '../../utils/warn'
-import config from '../../managers/config'
 import { normalizeLength } from '../../utils/helper'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
@@ -124,15 +130,16 @@ import i18n from '../../mixins/i18n'
 import colgroup from '../../mixins/colgroup'
 import useControllable from '../../mixins/controllable'
 import resize from '../../directives/resize'
+import Loading from '../Loading'
 import {
   map,
   mapValues,
   intersection,
-  includes,
   find,
   findIndex,
   findLastIndex,
-  omit
+  omit,
+  filter
 } from 'lodash'
 import Body from './_TableBody'
 import Head from './_TableHead'
@@ -147,13 +154,6 @@ import {
   getElementScrollbarWidth
 } from '../../utils/dom'
 
-config.defaults(
-  {
-    allowedOrders: ['desc', 'asc']
-  },
-  'table'
-)
-
 const FIXED_PRIORITY = {
   left: 0,
   false: 1,
@@ -161,6 +161,7 @@ const FIXED_PRIORITY = {
 }
 
 const DEFAULT_FIXED_COL_WIDTH = 120
+const SHADOW_WIDTH = 20
 
 export default {
   name: 'veui-table',
@@ -169,53 +170,57 @@ export default {
     'table-body': Body,
     'table-head': Head,
     'table-foot': Foot,
-    'col-group': ColGroup
+    'col-group': ColGroup,
+    'veui-loading': Loading
   },
   directives: {
     resize
   },
-  mixins: [prefix, ui, i18n, colgroup, useControllable([
-    {
-      prop: 'expanded',
-      get (val) {
-        return normalizeArray(val)
-      },
-      set (val, commit) {
-        let cur = this.isControlled('expanded')
-          ? this.expanded
-          : this.realExpanded
-        if (!isEqualSet(val, cur)) {
-          commit(val)
-        }
-      }
-    },
-    {
-      prop: 'selected',
-      get (val) {
-        let ctl = this.isControlled('selected')
-        if (
-          (ctl && this.validateSelected(this.selected)) ||
-          !ctl
-        ) {
-          val = normalizeArray(val)
-          return intersection(val, this.realKeys)
-        }
-        return []
-      },
-      set (val, commit) {
-        let cur = this.isControlled('selected')
-          ? normalizeArray(this.selected)
-          : this.realSelected
-        if (this.isMultiple) {
+  mixins: [
+    prefix,
+    ui,
+    i18n,
+    colgroup,
+    useControllable([
+      {
+        prop: 'expanded',
+        get (val) {
+          return normalizeArray(val)
+        },
+        set (val, commit) {
+          let cur = this.isControlled('expanded')
+            ? this.expanded
+            : this.realExpanded
           if (!isEqualSet(val, cur)) {
             commit(val)
           }
-        } else if (cur[0] !== val[0]) {
-          commit(val[0] == null ? null : val[0])
+        }
+      },
+      {
+        prop: 'selected',
+        get (val) {
+          let ctl = this.isControlled('selected')
+          if ((ctl && this.validateSelected(this.selected)) || !ctl) {
+            val = normalizeArray(val)
+            return intersection(val, this.realKeys)
+          }
+          return []
+        },
+        set (val, commit) {
+          let cur = this.isControlled('selected')
+            ? normalizeArray(this.selected)
+            : this.realSelected
+          if (this.isMultiple) {
+            if (!isEqualSet(val, cur)) {
+              commit(val)
+            }
+          } else if (cur[0] !== val[0]) {
+            commit(val[0] == null ? null : val[0])
+          }
         }
       }
-    }
-  ])],
+    ])
+  ],
   props: {
     data: {
       type: Array,
@@ -249,15 +254,11 @@ export default {
         return []
       }
     },
-    order: {
-      type: [String, Boolean],
-      default: false,
-      validator (val) {
-        return val === false || includes(['asc', 'desc'], val)
-      }
-    },
+    order: [Boolean, String],
     orderBy: String,
-    columnFilter: Array
+    allowedOrders: Array,
+    columnFilter: Array,
+    loading: Boolean
   },
   data () {
     return {
@@ -407,8 +408,8 @@ export default {
     shadowOffset () {
       if (!this.supportSticky) {
         return {
-          left: 20,
-          right: 20
+          left: SHADOW_WIDTH,
+          right: SHADOW_WIDTH
         }
       }
       let row = this.headerGrid[this.headerGrid.length - 1]
@@ -424,13 +425,13 @@ export default {
           row
             .slice(0, leftEnd + 1)
             .map(({ width }) => width)
-            .concat(this.offsetLeft, 20)
+            .concat(this.offsetLeft, SHADOW_WIDTH)
         ),
         right: sumWidths(
           row
             .slice(rightStart)
             .map(({ width }) => width)
-            .concat(this.hasFixedRight ? this.gutterWidth : [], 20)
+            .concat(this.hasFixedRight ? this.gutterWidth : [], SHADOW_WIDTH)
         )
       }
     },
@@ -475,33 +476,21 @@ export default {
       return this.bordered || this.hasSpan
     },
     realKeys () {
-      if (this.keyField) {
-        let { span } =
-          find(this.realColumns, ({ field }) => field === this.keyField) || {}
-        if (typeof span === 'function') {
-          return Object.keys(this.data)
-            .map(index => {
-              return {
-                index,
-                span: span(index)
-              }
-            })
-            .filter(({ span: { row = 1, col = 1 } }) => row >= 1 && col >= 1)
-            .map(({ index }) => this.data[index][this.keyField])
-        }
-        return map(this.data, this.keyField)
-      }
-      let keys = this.keys
-      if (!keys) {
-        keys = Object.keys(this.data)
-      }
-      if (typeof keys === 'string') {
-        keys = map(this.data, keys)
-      }
-      return keys.map(String)
+      return this.getKeys(this.data)
     },
     selectedItems () {
       return this.getSpecificItems(this.realSelected)
+    },
+    enabledData () {
+      return filter(this.data, i => i.disabled !== true)
+    },
+    disabledSelectedKeys () {
+      return filter(this.realSelected, key => {
+        let items = this.getItems(key)
+        return Array.isArray(items)
+          ? items.some(i => !!i.disabled)
+          : !!(items || {}).disabled
+      })
     },
     selectStatus () {
       let keys = this.realKeys
@@ -535,6 +524,14 @@ export default {
     },
     offsetLeft () {
       return this.selectColumnWidth + this.expandColumnWidth
+    }
+  },
+  created () {
+    if ('keys' in this.$options.propsData) {
+      warn(
+        '[veui-talbe] The `keys` prop is deprecated and will be removed in v2.0.0. Use `key-field` instead.',
+        this
+      )
     }
   },
   mounted () {
@@ -585,7 +582,16 @@ export default {
           value.splice(value.indexOf(key), 1)
         }
       } else {
-        value = selected ? [...this.realKeys] : []
+        if (
+          !selected &&
+          intersection(this.realSelected, this.disabledSelectedKeys).length ===
+            this.realSelected.length
+        ) {
+          selected = true
+        }
+        value = selected
+          ? [...this.getKeys(this.enabledData), ...this.disabledSelectedKeys]
+          : this.disabledSelectedKeys
       }
       // 先 select 然后 .sync ，有点怪啊，先保留吧
       // 不能直接拿 selectedItems ，因为这个时候 realSelected 还没更新
@@ -597,6 +603,32 @@ export default {
         selectedItems[key] = this.getItems(key)
         return selectedItems
       }, {})
+    },
+    getKeys (data) {
+      if (this.keyField) {
+        let { span } =
+          find(this.realColumns, ({ field }) => field === this.keyField) || {}
+        if (typeof span === 'function') {
+          return Object.keys(data)
+            .map(index => {
+              return {
+                index,
+                span: span(index)
+              }
+            })
+            .filter(({ span: { row = 1, col = 1 } }) => row >= 1 && col >= 1)
+            .map(({ index }) => data[index][this.keyField])
+        }
+        return map(data, this.keyField)
+      }
+      let keys = this.keys
+      if (!keys) {
+        keys = Object.keys(data)
+      }
+      if (typeof keys === 'string') {
+        keys = map(data, keys)
+      }
+      return keys.map(String)
     },
     expand (expanded, index) {
       let key = this.getKeyByIndex(index)

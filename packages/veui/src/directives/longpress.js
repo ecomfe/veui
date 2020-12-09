@@ -50,6 +50,10 @@ function createLongpressData () {
     timer: null,
 
     mousedownHandler (e) {
+      if (e.button !== 0) {
+        return
+      }
+
       let { handler, timeout, repeat, repeatInterval } = longpressData.options
 
       longpressData.timer = setTimeout(() => {

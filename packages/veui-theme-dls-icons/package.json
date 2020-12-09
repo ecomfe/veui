@@ -1,6 +1,6 @@
 {
   "name": "veui-theme-dls-icons",
-  "version": "2.0.0-beta.8",
+  "version": "2.0.0-beta.22",
   "description": "Icon pack for theme Baidu DLS of VEUI.",
   "repository": "ecomfe/veui",
   "license": "MIT",
@@ -16,11 +16,13 @@
     "publish": "rm *.js icon-names.json",
     "prepare": "npm run build"
   },
+  "dependencies": {
+    "dls-icons-vue": "^0.18.0"
+  },
   "peerDependencies": {
-    "veui": "2.0.0-beta.8"
+    "veui": "2.0.0-beta.22"
   },
   "devDependencies": {
-    "dls-icons-vue": "^0.12.0",
     "esm": "^3.0.84",
     "mkdirp": "^0.5.4",
     "rimraf": "^2.6.2"

@@ -11,13 +11,13 @@ import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import dropdown from '../../mixins/dropdown'
-import searchable from '../../mixins/searchable'
-import keySelect from '../../mixins/key-select'
+import useSearchable from '../../mixins/searchable'
+import { useKeySelect } from '../../mixins/key-select'
 import useControllable from '../../mixins/controllable'
 import i18n from '../../mixins/i18n'
 import { find } from '../../utils/datasource'
 import { uniqueId, omit } from 'lodash'
-import { contains } from '../../utils/dom'
+import { contains, focusIn } from '../../utils/dom'
 import { renderSlot } from '../../utils/helper'
 import '../../common/uiTypes'
 
@@ -36,8 +36,8 @@ export default {
     ui,
     input,
     dropdown,
-    keySelect,
-    searchable({
+    useKeySelect({ expandedKey: 'realExpanded' }),
+    useSearchable({
       datasourceKey: 'realOptions',
       childrenKey: 'options',
       keywordKey: 'inputValue',
@@ -123,7 +123,7 @@ export default {
       if (this.inputValue) {
         return this.inputValue
       }
-      if (this.realValue === null || this.expanded) {
+      if (this.realValue === null || this.realExpanded) {
         return ''
       }
       return this.label
@@ -163,30 +163,64 @@ export default {
       return this.searchable ? config.get('keyselect.focusSelector') : null
     },
     hasLabelSlot () {
-      return this.$scopedSlots.label || this.$slots.label
+      return !!(this.$scopedSlots.label || this.$slots.label)
+    },
+    hasSelectedSlot () {
+      return !!(this.$scopedSlots.selected || this.$slots.selected)
+    },
+    slotProps () {
+      return {
+        expanded: this.realExpanded,
+        value: this.realValue,
+        toggle: val => {
+          this.commit('expanded', val == null ? !this.realExpanded : val)
+        },
+        select: val => this.commit('value', val)
+      }
+    },
+    layoutWrap () {
+      return (
+        this.multiple &&
+        !this.isEmpty &&
+        (!this.hasLabelSlot || this.realExpanded) &&
+        !this.hasSelectedSlot
+      )
     }
   },
   watch: {
-    expanded (val) {
+    realExpanded (val) {
       if (this.searchable && !val) {
         this.inputValue = ''
       }
     }
   },
   mounted () {
-    this.nativeInput = this.$refs.input.$refs.input
+    this.nativeInput = this.$refs.input && this.$refs.input.$refs.input
   },
   methods: {
     clear (e) {
-      this.commit('value', this.multiple ? [] : null)
+      if (this.multiple) {
+        let disabledValues = this.realValue
+          .map(value => findOptionByValue(this.realOptions, value))
+          .filter(({ disabled } = {}) => disabled)
+          .map(({ value }) => value)
+        this.commit('value', disabledValues)
+      } else {
+        let { disabled } =
+          findOptionByValue(this.realOptions, this.realValue) || {}
+        if (!disabled) {
+          this.commit('value', null)
+        }
+      }
+
       this.inputValue = ''
       this.$emit('clear')
       e.stopPropagation()
-      if (this.expanded) {
+      if (this.realExpanded) {
         this.focus()
       }
     },
-    handleSelect (value) {
+    handleSelect (val) {
       if (this.searchable) {
         this.$nextTick(() => {
           if (this.multiple) {
@@ -196,18 +230,18 @@ export default {
         })
       }
       if (!this.multiple) {
-        this.expanded = false
-        this.commit('value', value)
+        this.commit('expanded', false)
+        this.commit('value', val)
         return
       }
 
-      let index = this.realValue.indexOf(value)
+      let index = this.realValue.indexOf(val)
       if (index !== -1) {
         // remove
         this.removeSelectedAt(index)
       } else {
         if (!this.max || (this.max && this.realValue.length < this.max)) {
-          this.commit('value', this.realValue.concat(value))
+          this.commit('value', this.realValue.concat(val))
         }
       }
     },
@@ -227,8 +261,8 @@ export default {
         return
       }
 
-      this.expanded = !this.expanded
-      if (this.expanded) {
+      this.commit('expanded', !this.realExpanded)
+      if (this.realExpanded) {
         this.focus()
       }
       e.preventDefault()
@@ -246,10 +280,10 @@ export default {
         case 'ArrowUp':
         case 'Down':
         case 'ArrowDown':
-          this.expanded = true
+          this.commit('expanded', true)
           passive = false
           if (this.searchable) {
-            this.$refs.input.focus()
+            this.focusInput()
             this.$nextTick(() => {
               this.handleKeydown(e)
             })
@@ -259,18 +293,18 @@ export default {
         case 'Escape':
           if (this.searchable) {
             this.$el.focus()
-            this.expanded = false
+            this.commit('expanded', false)
             passive = false
           }
           break
         case 'Tab':
-          this.expanded = false
+          this.commit('expanded', false)
           break
         case 'Enter':
           if (this.searchable) {
-            if (!this.expanded) {
-              this.$refs.input.focus()
-              this.expanded = true
+            if (!this.realExpanded) {
+              this.focusInput()
+              this.commit('expanded', true)
               break
             }
             let elem = this.getCurrentActiveElement()
@@ -279,14 +313,28 @@ export default {
             }
             this.$el.focus()
           } else {
-            this.expanded = true
+            this.commit('expanded', true)
           }
           break
-        case 'Backspace':
+        case 'Backspace': {
+          let values = this.realValue
+          if (!values || !values.length) {
+            break
+          }
+
           if (this.multiple && this.searchable && !this.inputValue) {
-            this.commit('value', this.realValue.slice(0, -1))
+            for (let i = values.length - 1; i >= 0; i--) {
+              let option = findOptionByValue(this.realOptions, values[i])
+              if (!option.disabled) {
+                let result = [...this.realValue]
+                result.splice(i, 1)
+                this.commit('value', result)
+                break
+              }
+            }
           }
           break
+        }
         default:
           break
       }
@@ -298,7 +346,7 @@ export default {
     handleTriggerInput (val) {
       this.$emit('input', val)
       this.inputValue = val
-      this.expanded = true
+      this.commit('expanded', true)
       if (!val && !this.multiple) {
         this.commit('value', '')
       }
@@ -315,7 +363,15 @@ export default {
         this.$el.focus()
         return
       }
-      this.$refs.input.focus()
+      this.focusInput()
+    },
+    focusInput () {
+      let { input, root } = this.$refs
+      if (input) {
+        input.focus()
+      } else {
+        focusIn(root)
+      }
     }
   },
   render () {
@@ -346,7 +402,8 @@ export default {
           <Checkbox
             tabindex="-1"
             ui={this.uiParts.checkbox}
-            checked={option.selected}
+            checked={!!option.selected}
+            disabled={!!option.disabled}
             onClick={e => e.preventDefault()}
           >
             {option.renderLabel
@@ -358,13 +415,14 @@ export default {
       }
       : null
 
-    let selectedTags = (this.labels || []).map((label, index) => (
+    let selected = Array.isArray(this.selected) ? this.selected : []
+    let selectedTags = selected.map(({ label, value, disabled }, index) => (
       <Tag
-        key={this.realValue[index]}
-        ui={this.uiParts.tag}
+        key={value}
+        data-key={value}
         onRemove={() => this.removeSelectedAt(index)}
-        disabled={this.realDisabled || this.realReadonly}
-        removable
+        disabled={this.realDisabled || this.realReadonly || disabled}
+        removable={!this.disabled && !disabled}
         {...{
           nativeOn: {
             '!mouseup': stopPropagation
@@ -373,7 +431,7 @@ export default {
       >
         {renderSlot(this, 'tag', {
           label,
-          ...findOptionByValue(this.realOptions, this.realValue[index]),
+          ...findOptionByValue(this.realOptions, value),
           index
         }) || label}
       </Tag>
@@ -388,31 +446,52 @@ export default {
       return <div class={this.$c('select-custom-label')}>{customLabel}</div>
     }
 
-    let multiBeforeSlot = this.multiple ? (
-      this.selected.length > 0 && this.hasLabelSlot && !this.expanded ? (
-        renderCustomLabel({
-          selected: this.selected
-        })
-      ) : this.selected.length === 0 && !this.searchable ? (
-        <span class={this.$c('select-placeholder')} id={this.labelId}>
-          {this.realPlaceholder}
-        </span>
-      ) : (
-        selectedTags
+    let renderCustomSelected = props => {
+      let customSelected = renderSlot(this, 'selected', props)
+      if (!customSelected) {
+        return null
+      }
+
+      return (
+        <div class={this.$c('select-custom-selected')}>{customSelected}</div>
       )
+    }
+
+    let renderLabelOrSelected = props =>
+      renderCustomLabel(props) || renderCustomSelected(props)
+
+    let multiBeforeSlot = this.multiple ? (
+      this.selected.length > 0 &&
+      ((this.hasLabelSlot && !this.realExpanded) || this.hasSelectedSlot) ? (
+          this.hasLabelSlot && !this.realExpanded ? (
+            renderCustomLabel({ selected: this.selected })
+          ) : (
+            renderCustomSelected({ selected: this.selected })
+          )
+        ) : this.selected.length === 0 && !this.searchable ? (
+          <span class={this.$c('select-placeholder')} id={this.labelId}>
+            {this.realPlaceholder}
+          </span>
+        ) : (
+          selectedTags
+        )
     ) : null
 
-    let beforeSlot = !this.searchable ? (
-      <span
-        class={{
-          [this.$c('select-label')]: true,
-          [this.$c('select-placeholder')]: this.realValue === null
-        }}
-        id={this.labelId}
-      >
-        {renderCustomLabel(this.selected || { selected: false }) || this.label}
-      </span>
-    ) : null
+    let beforeSlot =
+      !this.multiple && !this.searchable && this.realValue != null ? (
+        <span
+          class={{
+            [this.$c('select-label')]: true,
+            [this.$c('select-placeholder')]: this.realValue === null
+          }}
+          id={this.labelId}
+        >
+          {renderLabelOrSelected({
+            ...this.selected,
+            selected: this.realValue != null
+          }) || this.label}
+        </span>
+      ) : null
 
     let renderGroup = (options, children, key) => {
       return (
@@ -439,22 +518,20 @@ export default {
         class={{
           [this.$c('select')]: true,
           [this.$c('select-empty')]: this.isEmpty,
-          [this.$c('select-expanded')]: this.expanded,
+          [this.$c('select-expanded')]: this.realExpanded,
           [this.$c('select-searchable')]: this.searchable,
           [this.$c('select-multiple')]: this.multiple,
-          [this.$c('select-wrap')]:
-            this.multiple &&
-            !this.isEmpty &&
-            (!this.hasLabelSlot || this.expanded),
+          [this.$c('select-wrap')]: this.layoutWrap,
           [this.$c('readonly')]: this.realReadonly,
           [this.$c('disabled')]: this.realDisabled,
-          [this.$c('input-invalid')]: this.realInvalid
+          [this.$c('invalid')]: this.realInvalid
         }}
         ui={this.realUi}
+        ref="root"
         role="listbox"
         aria-owns={this.dropdownId}
         aria-readonly={this.realReadonly}
-        aria-expanded={this.expanded}
+        aria-expanded={this.realExpanded}
         aria-disabled={this.realDisabled}
         aria-labelledby={this.labelId}
         aria-haspopup="listbox"
@@ -463,65 +540,84 @@ export default {
         }
         onKeydown={this.handleTriggerKeydown}
       >
-        <Input
-          ref="input"
-          class={this.$c('select-trigger')}
-          disabled={this.realDisabled}
-          readonly={this.realReadonly}
-          placeholder={this.inputPlaceholder}
-          value={this.inputValue}
-          onMouseup={this.handleInputMouseup}
-          onBlur={this.handleInputBlur}
-          onInput={this.handleTriggerInput}
-          autocomplete="off"
-          composition
-        >
-          {!this.multiple && this.selected != null && this.hasLabelSlot ? (
-            <template slot="placeholder">
-              {renderCustomLabel(this.selected || { selected: false }) ||
-                this.label}
+        {this.$scopedSlots.trigger ? (
+          this.$scopedSlots.trigger({
+            props: this.slotProps,
+            handlers: {
+              mouseup: this.handleInputMouseup,
+              blur: this.handleInputBlur,
+              input: this.handleTriggerInput
+            }
+          })
+        ) : (
+          <Input
+            ref="input"
+            class={this.$c('select-trigger')}
+            disabled={this.realDisabled}
+            readonly={this.realReadonly}
+            invalid={this.realInvalid}
+            placeholder={this.inputPlaceholder}
+            value={this.inputValue}
+            onMouseup={this.handleInputMouseup}
+            onBlur={this.handleInputBlur}
+            onInput={this.handleTriggerInput}
+            autocomplete="off"
+            composition
+          >
+            {!this.multiple &&
+            this.searchable &&
+            this.selected != null &&
+            (this.hasLabelSlot || this.hasSelectedSlot) ? (
+                <template slot="placeholder">
+                  {renderLabelOrSelected({
+                    ...this.selected,
+                    selected: this.realValue != null
+                  }) || this.label}
+                </template>
+              ) : null}
+            <template slot="before">
+              {this.multiple ? multiBeforeSlot : beforeSlot}
             </template>
-          ) : null}
-          <template slot="before">
-            {this.multiple ? multiBeforeSlot : beforeSlot}
-          </template>
-          <template slot="after">
-            {this.limitLabel ? (
-              <span class={this.$c('select-count')}>{this.limitLabel}</span>
-            ) : null}
-            <div class={this.$c('select-icon')}>
-              {this.clearable &&
-              (this.multiple ? this.realValue.length > 0 : !!this.realValue) ? (
-                  <Button
-                    class={this.$c('select-clear')}
-                    ui={this.uiParts.clear}
-                    aria-label={this.t('clear')}
-                    disabled={this.realDisabled || this.realReadonly}
-                    // had to do so because of vuejs/jsx#77
-                    {...{
-                      on: {
-                        click: this.clear,
-                        '!keydown': stopPropagation,
-                        '!mousedown': stopPropagation,
-                        '!mouseup': stopPropagation
-                      }
-                    }}
-                  >
-                    <Icon name={this.icons.clear} />
-                  </Button>
-                ) : null}
-              <Icon
-                class={this.$c('select-toggle')}
-                name={this.icons[this.expanded ? 'collapse' : 'expand']}
-              />
-            </div>
-          </template>
-        </Input>
+            <template slot="after">
+              {this.limitLabel ? (
+                <span class={this.$c('select-count')}>{this.limitLabel}</span>
+              ) : null}
+              <div class={this.$c('select-icon')}>
+                {this.clearable &&
+                (this.multiple
+                  ? this.realValue.length > 0
+                  : !!this.realValue) ? (
+                    <Button
+                      class={this.$c('select-clear')}
+                      ui={this.uiParts.clear}
+                      aria-label={this.t('clear')}
+                      disabled={this.realDisabled || this.realReadonly}
+                      // had to do so because of vuejs/jsx#77
+                      {...{
+                        on: {
+                          click: this.clear,
+                          '!keydown': stopPropagation,
+                          '!mousedown': stopPropagation,
+                          '!mouseup': stopPropagation
+                        }
+                      }}
+                    >
+                      <Icon name={this.icons.clear} />
+                    </Button>
+                  ) : null}
+                <Icon
+                  class={this.$c('select-toggle')}
+                  name={this.icons[this.realExpanded ? 'collapse' : 'expand']}
+                />
+              </div>
+            </template>
+          </Input>
+        )}
         {
           <Overlay
-            v-show={this.expanded}
-            target="input"
-            open={this.expanded}
+            v-show={this.realExpanded}
+            target="root"
+            open={this.realExpanded}
             autofocus={!this.searchable}
             modal
             overlay-class={this.overlayClass}
@@ -554,7 +650,7 @@ export default {
               role="listbox"
               onKeydown={this.handleKeydown}
             >
-              {this.$slots.before}
+              {renderSlot(this, 'before', this.slotProps)}
               {!this.options
                 ? renderGroup(null, this.$slots.default, 'data')
                 : null}
@@ -569,7 +665,7 @@ export default {
                 ) : null,
                 'render'
               )}
-              {this.$slots.after}
+              {renderSlot(this, 'after', this.slotProps)}
             </div>
           </Overlay>
         }

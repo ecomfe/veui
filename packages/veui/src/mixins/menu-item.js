@@ -18,7 +18,7 @@ export default {
     let index = getIndexOfType(this, 'menu')
     let label = this.label || this.getLabelNaive()
     this.menu.add({
-      ...pick(this, ['value', 'items', 'id', 'position', 'trigger']),
+      ...pick(this, ['value', 'items', 'id', 'position', 'trigger', 'disabled']),
       label,
       index,
       renderLabel:

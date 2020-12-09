@@ -390,5 +390,9 @@
   {
     "name": "Uploader",
     "path": "Uploader.vue"
+  },
+  {
+    "name": "Lightbox",
+    "path": "Lightbox.vue"
   }
 ]

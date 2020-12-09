@@ -1,6 +1,8 @@
 <template>
 <article>
-  <h1><code>&lt;veui-alert&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-alert&gt;</code>
+  </h1>
   <section>
     <div>固定提示</div>
     <veui-alert
@@ -9,13 +11,9 @@
       message="恭喜你，你的请求已成功处理"
       closable
     >
-      <template slot="title">
-        恭喜你
-      </template>
+      <template slot="title">恭喜你</template>
       <template slot="extra">
-        <veui-button ui="text">
-          查看详情
-        </veui-button>
+        <veui-button ui="text">查看详情</veui-button>
       </template>
       恭喜你，你的请求已成功处理
     </veui-alert>
@@ -26,10 +24,9 @@
       closable
       :show-icon="false"
     >
-      <template slot="title">
-        恭喜你
-      </template>
-      恭喜你，你的请求已成功处理，欢迎<a
+      <template slot="title">恭喜你</template>
+      恭喜你，你的请求已成功处理，欢迎
+      <a
         href="#"
         ui="strong"
       >查看详情</a>。
@@ -40,13 +37,9 @@
       closable
       ui="m strong"
     >
-      <template slot="title">
-        恭喜你
-      </template>
+      <template slot="title">恭喜你</template>
       <template slot="extra">
-        <veui-button ui="text">
-          查看详情
-        </veui-button>
+        <veui-button ui="text">查看详情</veui-button>
       </template>
       恭喜你，你的请求已成功处理
     </veui-alert>
@@ -79,7 +72,7 @@
         slot="extra"
         slot-scope="{ message }"
       >
-        <veui-button ui="text"> 查看详情 {{ message }} </veui-button>
+        <veui-button ui="text">查看详情 {{ message }}</veui-button>
       </template>
     </veui-alert>
     <veui-alert
@@ -131,7 +124,7 @@ export default {
     }
   },
   mounted () {
-    this.$children.forEach(child => {
+    this.$children.forEach((child) => {
       child.$on('click', () => {
         bus.$emit('log', child.$el.getAttribute('ui'))
       })

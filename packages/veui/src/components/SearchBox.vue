@@ -3,7 +3,7 @@
   ref="self"
   :class="{
     [$c('search-box')]: true,
-    [$c('search-box-suggestion-expanded')]: realExpanded,
+    [$c('search-box-suggestion-expanded')]: finalExpanded,
     [$c('disabled')]: realDisabled,
     [$c('readonly')]: realReadonly
   }"
@@ -55,11 +55,11 @@
     </veui-button>
   </veui-input-group>
   <veui-overlay
-    v-show="realExpanded"
+    v-show="finalExpanded"
     ref="overlay"
     target="input"
     match-width
-    :open="realExpanded"
+    :open="finalExpanded"
     :overlay-class="overlayClass"
     :local="realOverlayOptions.local"
     :options="realOverlayOptions"
@@ -71,7 +71,7 @@
       :class="$c('search-box-suggestion-overlay')"
       role="listbox"
       :ui="realUi"
-      :aria-expanded="realExpanded"
+      :aria-expanded="finalExpanded"
     >
       <slot name="suggestions-before"/>
       <slot
@@ -148,7 +148,7 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
-import searchable from '../mixins/searchable'
+import useSearchable from '../mixins/searchable'
 import i18n from '../mixins/i18n'
 import Input from './Input'
 import Icon from './Icon'
@@ -157,7 +157,7 @@ import Button from './Button'
 import InputGroup from './InputGroup'
 import OptionGroup from './OptionGroup'
 import focusable from '../mixins/focusable'
-import { createKeySelect } from '../mixins/key-select'
+import { useKeySelect } from '../mixins/key-select'
 import useControllable from '../mixins/controllable'
 import { pick, without, includes, map } from 'lodash'
 import '../common/uiTypes'
@@ -171,8 +171,6 @@ const SHARED_PROPS = [
   'composition',
   'clearable'
 ]
-
-const keySelect = createKeySelect({ useNativeFocus: false })
 
 export default {
   name: 'veui-search-box',
@@ -190,9 +188,12 @@ export default {
     ui,
     input,
     dropdown,
-    keySelect,
+    useKeySelect({
+      expandedKey: 'realExpanded',
+      useNativeFocus: false
+    }),
     focusable,
-    searchable({
+    useSearchable({
       datasourceKey: 'realSuggestions',
       childrenKey: 'options',
       keywordKey: 'keyword',
@@ -227,7 +228,7 @@ export default {
       validator (val) {
         return []
           .concat(val)
-          .every(trigger => includes(['focus', 'input', 'submit'], trigger))
+          .every((trigger) => includes(['focus', 'input', 'submit'], trigger))
       }
     },
     ...pick(Input.props, SHARED_PROPS)
@@ -244,9 +245,9 @@ export default {
     isStrong () {
       return this.uiProps.style === 'strong'
     },
-    realExpanded () {
+    finalExpanded () {
       return !!(
-        this.expanded &&
+        this.realExpanded &&
         this.realSuggestions &&
         this.realSuggestions.filter(({ hidden }) => !hidden).length
       )
@@ -258,9 +259,8 @@ export default {
       return this.replaceOnSelect
     },
     realSuggestions () {
-      return map(
-        this.suggestions,
-        item => typeof item === 'string' ? { label: item, value: item } : item
+      return map(this.suggestions, (item) =>
+        typeof item === 'string' ? { label: item, value: item } : item
       )
     },
     suggestTriggers () {
@@ -286,13 +286,13 @@ export default {
     realValue (val) {
       // 因为 selectSuggestion 中关闭用了 nextTick
       this.$nextTick(() => {
-        if (this.expanded) {
+        if (this.realExpanded) {
           this.keyword = val
         }
       })
     },
     realSuggestions () {
-      if (this.realExpanded) {
+      if (this.finalExpanded) {
         this.$nextTick(() => {
           this.relocate()
         })
@@ -351,7 +351,7 @@ export default {
         case 'Down':
         case 'ArrowDown':
           this.openSuggestions()
-          if (this.realExpanded) {
+          if (this.finalExpanded) {
             this.$nextTick(() => {
               this.handleKeydown(e)
             })
@@ -360,9 +360,9 @@ export default {
           }
           break
         case 'Enter': {
-          if (!this.realExpanded) {
+          if (!this.finalExpanded) {
             this.search(e)
-            passive = true
+            passive = false
             break
           }
           let elem = this.getCurrentActiveElement()
@@ -390,15 +390,15 @@ export default {
       this.selectSuggestion(suggestion)
     },
     closeSuggestions () {
-      if (this.expanded) {
-        this.expanded = false
+      if (this.realExpanded) {
+        this.commit('expanded', false)
       }
     },
     openSuggestions () {
-      if (!this.expanded) {
+      if (!this.realExpanded) {
         // select 时，先关闭了建议，然后 realValue watcher 中因为关闭而没有同步到 keyword，这里打开时保证 keyword 是正确的
         this.keyword = this.realValue
-        this.expanded = true
+        this.commit('expanded', true)
       }
     },
     handleClear () {
@@ -412,7 +412,7 @@ function findSuggestion (suggestions, val) {
     return null
   }
   let result = null
-  suggestions.some(suggestion => {
+  suggestions.some((suggestion) => {
     if (!suggestion.options) {
       if (suggestion.value === val) {
         result = suggestion

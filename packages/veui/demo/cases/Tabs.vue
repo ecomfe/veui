@@ -166,6 +166,9 @@
         status="error"
       >Articles</veui-tab>
       <veui-tab label="分享朋友圈">Shares</veui-tab>
+      <template
+        #tab-label="{ label }"
+      ><em>{{ label }}</em></template>
     </veui-tabs>
     <veui-tabs ui="l">
       <veui-tab
@@ -210,7 +213,7 @@
   </section>
   <section>
     <h2>禁用样式：</h2>
-    <veui-tabs>
+    <veui-tabs eager>
       <veui-tab label="Tab1">
         <p>This is Tab1</p>
       </veui-tab>
@@ -468,6 +471,16 @@
       </veui-tab>
     </veui-tabs>
   </section>
+  <section>
+    <veui-tabs :active.sync="active6">
+      <veui-tab
+        v-for="tab in tabs4"
+        :key="tab.name"
+        :label="tab.label"
+      />
+    </veui-tabs>
+    <veui-button @click="tabs4 = tabs5">Change</veui-button>
+  </section>
 </article>
 </template>
 
@@ -510,12 +523,24 @@ export default {
         { label: '弄一个很长的在中间试试', name: '默认2', status: 'warning' },
         { label: '默认3', name: '默认3' }
       ],
+      tabs4: [
+        { label: 'A', name: '默认1' },
+        { label: 'B', name: '默认2' },
+        { label: 'C', name: '默认3' },
+        { label: 'D', name: '默认4' }
+      ],
+      tabs5: [
+        { label: 'A', name: '默认1' },
+        { label: 'B', name: '默认2' },
+        { label: 'C', name: '默认3' }
+      ],
       active0: '',
       active1: '',
       active2: '',
       active3: '',
       active4: '',
       active5: '',
+      active6: '默认1',
       insertVisiable: false,
       tabIfRemoving: false
     }

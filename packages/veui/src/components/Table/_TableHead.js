@@ -1,14 +1,65 @@
 import Checkbox from '../Checkbox'
 import Sorter from './_Sorter'
+import Popover from '../Popover'
 import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import '../../common/uiTypes'
+import { isFocusable, contains } from '../../utils/dom'
 
 export default {
   name: 'veui-table-head',
+  components: {
+    'veui-popover': Popover
+  },
   mixins: [prefix, table, i18n],
   uiTypes: ['transparent'],
+  data () {
+    return {
+      descOpen: {},
+      sortHover: {}
+    }
+  },
+  methods: {
+    handleMouseover (id, hasDesc, sortable, e) {
+      if (!sortable && !hasDesc) {
+        return
+      }
+
+      let head = this.$refs[id]
+      let unfocusable = !isInsideFocusable(e.target, head)
+
+      if (sortable) {
+        this.$set(this.sortHover, id, unfocusable)
+      }
+      if (hasDesc) {
+        this.$set(this.descOpen, id, unfocusable)
+      }
+    },
+    handleMouseout (id, hasDesc, sortable, e) {
+      if (!sortable && !hasDesc) {
+        return
+      }
+
+      let head = this.$refs[id]
+      if (e.target === head && !contains(head, e.relatedTarget)) {
+        if (sortable) {
+          this.$set(this.sortHover, id, false)
+        }
+        if (hasDesc) {
+          this.$set(this.descOpen, id, false)
+        }
+      }
+    },
+    handleToggleDesc (status, id) {
+      this.$set(this.descOpen, id, status)
+    },
+    handleClick (id, e) {
+      if (!isInsideFocusable(e.target, this.$refs[id])) {
+        this.$refs[`sort-${id}`].sort()
+      }
+    }
+  },
   render () {
     let { table } = this
     let depth = table.headerRows.length
@@ -39,7 +90,7 @@ export default {
                       {table.selectMode === 'multiple' ? (
                         <Checkbox
                           checked={table.selectStatus !== 'none'}
-                          disabled={!table.data.length}
+                          disabled={!table.enabledData.length}
                           indeterminate={table.selectStatus === 'partial'}
                           onChange={checked => {
                             table.select(checked)
@@ -77,6 +128,11 @@ export default {
             ) : null}
             {row.map(col => {
               let isLeaf = col.columns.length === 0
+              let desc = col.renderDesc({
+                close: () => {
+                  this.descOpen[col.id] = false
+                }
+              })
               return (
                 <th
                   class={{
@@ -84,6 +140,7 @@ export default {
                     [this.$c(`table-cell-${col.align}`)]: !!col.align && isLeaf,
                     [this.$c('table-cell-interactive')]:
                       !!col.sortable && isLeaf,
+                    [this.$c('table-cell-sortable')]: !!col.sortable && isLeaf,
                     [this.$c(`table-cell-sticky-${col.fixed}`)]:
                       table.scrollableX && col.fixed,
                     [this.$c('table-cell-first')]: col.first,
@@ -105,27 +162,53 @@ export default {
                   }
                   colspan={col.colspan > 1 ? col.colspan : null}
                   rowspan={col.rowspan > 1 ? col.rowspan : null}
+                  ref={col.id}
+                  onMouseover={e => {
+                    this.handleMouseover(col.id, !!desc, !!col.sortable, e)
+                  }}
+                  onMouseout={e => {
+                    this.handleMouseout(col.id, !!desc, !!col.sortable, e)
+                  }}
+                  onClick={e => {
+                    if (isLeaf) {
+                      this.handleClick(col.id, e)
+                    }
+                  }}
                 >
                   <div class={this.$c('table-cell')}>
                     <div class={this.$c('table-cell-content')}>
-                      {col.renderHead()}{' '}
+                      {col.renderHead()}
                     </div>
                     {col.sortable && isLeaf ? (
                       <Sorter
                         class={{
                           [this.$c('table-header-icon')]: true,
                           [this.$c('table-header-icon-active')]:
-                            table.orderBy === col.field && table.order !== false
+                            table.orderBy === col.field &&
+                            table.order !== false,
+                          [this.$c('hover')]: this.sortHover[col.id]
                         }}
                         order={
                           table.orderBy === col.field ? table.order : false
                         }
+                        allowedOrders={col.allowedOrders || table.allowedOrders}
                         onSort={order => {
                           this.$emit('sort', col.field, order)
                         }}
+                        ref={`sort-${col.id}`}
                       />
                     ) : null}
                   </div>
+                  {desc ? (
+                    <veui-popover
+                      ui={this.ui}
+                      target={col.id}
+                      open={this.descOpen[col.id]}
+                      onToggle={status => this.handleToggleDesc(status, col.id)}
+                    >
+                      {desc}
+                    </veui-popover>
+                  ) : null}
                 </th>
               )
             })}
@@ -152,4 +235,16 @@ export default {
       </thead>
     )
   }
+}
+
+function isInsideFocusable (el, context) {
+  while (el && el !== context) {
+    if (isFocusable(el)) {
+      return true
+    }
+
+    el = el.parentNode
+  }
+
+  return false
 }

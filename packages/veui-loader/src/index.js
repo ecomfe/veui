@@ -3,6 +3,7 @@ import path from 'path'
 import pkgDir from 'pkg-dir'
 import slash from 'slash'
 import loaderUtils from 'loader-utils'
+import MagicString from 'magic-string'
 import { kebabCase, camelCase, pascalCase, getJSON, normalize } from './utils'
 
 const VEUI_PACKAGE_NAME = 'veui'
@@ -31,7 +32,7 @@ export default async function (content) {
 
   try {
     let result = await patchComponent(
-      content,
+      new MagicString(content),
       component,
       loaderOptions,
       path => {
@@ -54,8 +55,18 @@ export default async function (content) {
         })
       }
     )
-    callback(null, result)
+
+    callback(
+      null,
+      result.toString(),
+      this.sourceMap
+        ? result.generateMap({
+          file: path.basename(this.resourcePath)
+        })
+        : null
+    )
   } catch (e) {
+    console.error(e)
     callback(e)
   }
 }
@@ -79,11 +90,11 @@ export function processSync (content, file, options, resolveSync) {
 
 /**
  * Patch the original .vue file with additional peer modules.
- * @param {string} content .vue file content
+ * @param {MagicString} content .vue file content
  * @param {string} component Component name
  * @param {Object} options veui-loader options
  * @param {function} resolve webpack resolve function to see if target peer exists
- * @returns {Promise<string>} A promise that resolved with the patched content
+ * @returns {Promise<MagicString>} A promise that resolved with the patched content
  */
 async function patchComponent (content, component, options, resolve) {
   let parts = getParts(component, options)
@@ -99,11 +110,11 @@ async function patchComponent (content, component, options, resolve) {
 
 /**
  * Patch the original .vue file with additional peer modules.
- * @param {string} content .vue file content
+ * @param {MagicString} content .vue file content
  * @param {string} component Component name
  * @param {Object} options veui-loader options
  * @param {function} resolveSync custom synchronous resolve function to see if target peer exists
- * @returns {string} The patched content
+ * @returns {MagicString} The patched content
  */
 function patchComponentSync (content, component, options, resolveSync) {
   let parts = getParts(component, options)
@@ -194,16 +205,17 @@ function getParts (component, options) {
 /**
  * Patch content with extracted parts metadata
  *
- * @param {string} content Module content
+ * @param {MagicString} content Module content
  * @param {Object} parts Extracted parts metadata
+ * @returns {MagicString} Patched content
  */
 function patchContent (content, parts) {
-  return Object.keys(parts).reduce((content, type) => {
-    let paths = parts[type]
-      .filter(({ valid }) => valid)
-      .map(({ path }) => path)
+  Object.keys(parts).forEach(type => {
+    let paths = parts[type].filter(({ valid }) => valid).map(({ path }) => path)
     return patchType(content, type, paths)
-  }, content)
+  })
+
+  return content
 }
 
 /**
@@ -235,18 +247,21 @@ const RE_SCRIPT = /<script(?:\s+[^>]*)?>/i
 
 /**
  * Patch file content according to a given type.
- * @param {string} content Original content
+ * @param {MagicString} content Original content
  * @param {string} type Peer type, can be `script` or `style`
  * @param {Array<string>} peerPaths Peer module paths
- * @returns {string} The patched content
+ * @returns {MagicString} The patched content
  */
 function patchType (content, type, peerPaths) {
+  const code = content.toString()
   let normalizedPaths = peerPaths.map(path => slash(normalize(path)))
   switch (type) {
     case 'script':
       let scriptImports = normalizedPaths.map(path => `import '${path}'\n`)
-      content = content.replace(RE_SCRIPT, match => {
-        return `${match}\n${scriptImports.join('')}`
+      code.replace(RE_SCRIPT, (match, offset) => {
+        const replacement = `${match}\n${scriptImports.join('')}`
+        content.overwrite(offset, offset + match.length, replacement)
+        return replacement
       })
       break
     case 'style':
@@ -258,7 +273,8 @@ function patchType (content, type, peerPaths) {
         }
         return `<style ${langStr}src="${path}"></style>\n`
       })
-      content += styleImports.join('')
+
+      content.append(styleImports.join(''))
       break
     default:
       break

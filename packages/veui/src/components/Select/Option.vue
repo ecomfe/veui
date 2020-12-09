@@ -29,14 +29,14 @@
 <script>
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
-import menu from '../../mixins/menu'
-import select from '../../mixins/select'
+import menuItem from '../../mixins/menu-item'
+import selectItem from '../../mixins/select-item'
 import { scrollIntoView } from '../../utils/dom'
 import { isType } from '../../utils/helper'
 
 export default {
   name: 'veui-option',
-  mixins: [prefix, ui, menu, select],
+  mixins: [prefix, ui, menuItem, selectItem],
   props: {
     label: {
       type: [String, Number]
@@ -72,9 +72,14 @@ export default {
     }
   },
   watch: {
-    'select.expanded' (val) {
+    'select.realExpanded' (val) {
       if (val && this.selected && !this.select.multiple) {
         this.select.$once('afteropen', this.scrollIntoView)
+      }
+    },
+    'menu.realExpanded' (val) {
+      if (val && this.selected && !this.select.multiple) {
+        this.menu.$once('afteropen', this.scrollIntoView)
       }
     }
   },
@@ -85,14 +90,17 @@ export default {
     selectOption () {
       if (!this.disabled) {
         this.$emit('click')
-        if (!this.select.multiple) {
-          let menu = this.menu
-          while (menu) {
-            menu.close()
-            menu = menu.menu
+
+        if (this.select) {
+          if (!this.select.multiple) {
+            let menu = this.menu
+            while (menu) {
+              menu.close()
+              menu = menu.menu
+            }
           }
+          this.select.handleSelect(this.value)
         }
-        this.select.handleSelect(this.value)
       }
     }
   }

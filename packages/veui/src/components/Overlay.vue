@@ -58,7 +58,7 @@ export default {
     return {
       zIndex: null,
       minWidth: null,
-      targetNode: null,
+      targetEl: null,
       source: null
     }
   },
@@ -81,10 +81,10 @@ export default {
         return
       }
 
-      this.updateWidth()
       this.toggleLocator(val)
       this.updateLocator()
-      this.updateNode(val)
+      this.updateWidth()
+      this.updateOverlayNode(val)
       if (val) {
         let node = this.overlayNode
         if (node) {
@@ -102,14 +102,14 @@ export default {
       if (this.inline) {
         return
       }
-      this.findTargetNode()
+      this.updateTargetElement()
     },
-    targetNode () {
+    targetEl () {
       if (this.inline) {
         return
       }
       this.updateLocator()
-      this.updateNode()
+      this.updateOverlayNode()
     },
     inline (val) {
       if (val) {
@@ -127,11 +127,11 @@ export default {
     if (this.inline) {
       return
     }
-    // 初始化时，updateNode 依赖 created 在组件树中的执行顺序：
+    // 初始化时，updateOverlayNode 依赖 created 在组件树中的执行顺序：
     // 先父后子
-    // 而 mounted 执行顺序是先子后父，所以 updateNode 只能放在
+    // 而 mounted 执行顺序是先子后父，所以 updateOverlayNode 只能放在
     // created 里面。
-    this.updateNode()
+    this.updateOverlayNode()
   },
   mounted () {
     if (!this.inline) {
@@ -154,7 +154,7 @@ export default {
   },
   methods: {
     // 更新 zindex 树
-    updateNode (val) {
+    updateOverlayNode (val) {
       if (this.local) {
         return
       }
@@ -173,15 +173,13 @@ export default {
     },
 
     initPortal () {
-      this.overlayBox = this.$refs.box
+      let { box } = this.$refs
 
       if (this.local) {
-        inheritScopeAttrs(this.overlayBox, this.$el)
+        inheritScopeAttrs(box, this.$el)
       } else {
-        this.removePortal = createPortal(this.overlayBox, document.body)
+        this.removePortal = createPortal(box, document.body)
       }
-
-      this.findTargetNode()
 
       if (this.realOpen) {
         this.initFocus()
@@ -205,8 +203,6 @@ export default {
         this.removePortal()
         this.removePortal = null
       }
-
-      this.overlayBox = null
     },
 
     findParentOverlayId () {
@@ -226,12 +222,12 @@ export default {
       }
 
       let { box } = this.$refs
-      let { targetNode } = this
-      if (!box || !targetNode) {
+      let { targetEl } = this
+      if (!box || !targetEl) {
         return
       }
 
-      this.minWidth = `${targetNode.offsetWidth}px`
+      this.minWidth = `${targetEl.offsetWidth}px`
     },
 
     updateLocator () {
@@ -239,12 +235,19 @@ export default {
         return
       }
 
-      if (this.targetNode) {
+      this.updateTargetElement()
+
+      if (this.targetEl) {
         if (this.popper) {
           this.popper.destroy()
         }
 
-        this.popper = new Popper(this.targetNode, this.overlayBox, {
+        let { box } = this.$refs
+        if (!box) {
+          return
+        }
+
+        this.popper = new Popper(this.targetEl, box, {
           placement: this.realPosition,
           modifiers: {
             preventOverflow: {
@@ -272,11 +275,11 @@ export default {
       }
     },
 
-    findTargetNode () {
+    updateTargetElement () {
       if (this.target) {
-        this.targetNode = getNodes(this.target, this.$vnode.context)[0]
+        this.targetEl = getNodes(this.target, this.$vnode.context)[0]
       } else {
-        this.targetNode = null
+        this.targetEl = null
       }
     },
 
@@ -298,8 +301,9 @@ export default {
         return
       }
 
-      if (!this.focusContext && this.overlayBox) {
-        this.focusContext = focusManager.createContext(this.overlayBox, {
+      let { box } = this.$refs
+      if (!this.focusContext && box) {
+        this.focusContext = focusManager.createContext(box, {
           source: document.activeElement,
           trap: this.modal
         })

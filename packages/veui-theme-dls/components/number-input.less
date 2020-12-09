@@ -3,6 +3,7 @@
 .@{veui-prefix}-number-input {
   position: relative;
   width: @dls-number-input-width-normal-m;
+  padding-right: 1px;
 
   &[ui~="xs"] {
     width: @dls-number-input-width-normal-xs;
@@ -12,9 +13,9 @@
     width: @dls-number-input-width-normal-s;
   }
 
-  input {
+  .@{veui-prefix}-input-input {
     ime-mode: disabled;
-    text-overflow: ellipsis;
+    text-overflow: clip;
     font-variant-numeric: tabular-nums;
   }
 
@@ -104,6 +105,7 @@
     }
 
     .@{veui-prefix}-icon {
+      .veui-position-center();
       .dls-icon-size(@dls-number-input-spin-icon-size-normal);
     }
   }

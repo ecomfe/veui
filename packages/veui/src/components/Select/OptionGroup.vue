@@ -5,9 +5,10 @@ import Icon from '../Icon'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import overlay from '../../mixins/overlay'
-import menu from '../../mixins/menu'
-import select from '../../mixins/select'
+import menuItem from '../../mixins/menu-item'
+import selectItem from '../../mixins/select-item'
 import keySelect from '../../mixins/key-select'
+import useControllable from '../../mixins/controllable'
 import outside from '../../directives/outside'
 import '../../common/uiTypes'
 import { walk } from '../../utils/datasource'
@@ -37,7 +38,20 @@ const OptionGroup = {
   directives: {
     outside
   },
-  mixins: [prefix, ui, menu, select, overlay, keySelect],
+  mixins: [
+    prefix,
+    ui,
+    menuItem,
+    selectItem,
+    overlay,
+    keySelect,
+    useControllable([
+      {
+        prop: 'expanded',
+        event: 'toggle'
+      }
+    ])
+  ],
   props: {
     label: String,
     trigger: {
@@ -52,6 +66,7 @@ const OptionGroup = {
     },
     options: Array,
     disabled: Boolean,
+    expanded: Boolean,
     position: {
       type: String,
       default: 'inline',
@@ -76,7 +91,6 @@ const OptionGroup = {
   data () {
     return {
       items: [],
-      expanded: false,
       localOverlayOptions: {
         position: 'right-start'
       },
@@ -130,7 +144,7 @@ const OptionGroup = {
     }
   },
   watch: {
-    expanded (val) {
+    realExpanded (val) {
       let box = this.$refs.box
       let parent = this.menu || this.select
       while (parent) {
@@ -174,7 +188,7 @@ const OptionGroup = {
       this.items.splice(this.itemIds.indexOf(id), 1)
     },
     relocate () {
-      if (this.canPopOut && this.expanded) {
+      if (this.canPopOut && this.realExpanded) {
         this.$refs.overlay.relocate()
       }
     },
@@ -190,7 +204,7 @@ const OptionGroup = {
       )
     },
     close () {
-      this.expanded = false
+      this.commit('expanded', false)
     },
     closeMenu (i) {
       let menu = this
@@ -200,7 +214,9 @@ const OptionGroup = {
       }
     },
     getOptionTag (option) {
-      return isFunction(this.optionTag) ? this.optionTag(option) : this.optionTag
+      return isFunction(this.optionTag)
+        ? this.optionTag(option)
+        : this.optionTag
     },
     getLabelContent () {
       if (isTopMostOfType(this, 'menu', 'select')) {
@@ -217,6 +233,9 @@ const OptionGroup = {
         (this.menu && this.menu.$slots.label) ||
         this.label
       )
+    },
+    handleAfteropen () {
+      this.$emit('afteropen')
     }
   },
   render () {
@@ -289,16 +308,17 @@ const OptionGroup = {
       : []
 
     this.labelContent = this.getLabelContent()
-    let LabelTag = this.labelContent && this.componentAttrs.option
-      ? this.getOptionTag(this.componentAttrs.option)
-      : 'div'
+    let LabelTag =
+      this.labelContent && this.componentAttrs.option
+        ? this.getOptionTag(this.componentAttrs.option)
+        : 'div'
 
     return (
       <div
         class={{
           [this.$c('option-group')]: true,
           [this.$c('option-group-unlabelled')]: !this.labelContent,
-          [this.$c('option-group-expanded')]: this.expanded,
+          [this.$c('option-group-expanded')]: this.realExpanded,
           [this.$c('option-group-popout')]: this.canPopOut
         }}
         {...{ attrs: this.domAttrs }}
@@ -322,12 +342,12 @@ const OptionGroup = {
                 on: {
                   [EVENT_MAP[this.trigger]]: () => {
                     if (!this.disabled) {
-                      this.expanded = true
+                      this.commit('expanded', true)
                     }
                   },
                   keydown: e => {
                     if (e.key === 'Right' || e.key === 'ArrowRight') {
-                      this.expanded = true
+                      this.commit('expanded', true)
                       e.stopPropagation()
                       e.preventDefault()
                     }
@@ -360,12 +380,13 @@ const OptionGroup = {
             target={
               this.isInput ? this.menu.$refs.box || this.menu.$el : 'button'
             }
-            open={this.expanded}
+            open={this.realExpanded}
             local={this.realLocal}
             options={this.realOverlayOptions}
             overlayClass={this.mergeOverlayClass(this.$c('option-group-box'))}
             autofocus
             modal
+            onAfteropen={this.handleAfteropen}
           >
             <div
               id={this.popupId}
@@ -373,7 +394,7 @@ const OptionGroup = {
               class={this.$c('option-group-options')}
               tabindex="-1"
               role={this.popupRole}
-              aria-expanded={this.expanded}
+              aria-expanded={this.realExpanded}
               ui={this.realUi}
               {...{
                 directives: [
@@ -384,7 +405,7 @@ const OptionGroup = {
                       delay: 100,
                       refs: this.outsideRefs,
                       handler: () => {
-                        this.expanded = false
+                        this.commit('expanded', false)
                       }
                     }
                   }
@@ -416,12 +437,20 @@ function normalizeItem (item) {
         ? [
           'label',
           'position',
+          'disabled',
           'trigger',
           'renderLabel',
           'renderBefore',
           'renderAfter'
         ]
-        : ['label', 'value', 'renderLabel', 'renderBefore', 'renderAfter']
+        : [
+          'label',
+          'value',
+          'disabled',
+          'renderLabel',
+          'renderBefore',
+          'renderAfter'
+        ]
     ),
     ...(isGroup ? { options } : {})
   }

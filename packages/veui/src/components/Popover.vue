@@ -10,9 +10,22 @@ export default {
   name: 'veui-popover',
   mixins: [prefix, ui, overlay],
   inheritAttrs: false,
-  computed: {
-    targetNode () {
-      return getNodes(this.$attrs.target, this.$vnode.context)[0]
+  data () {
+    return {
+      targetNode: null
+    }
+  },
+  watch: {
+    '$attrs.target' () {
+      this.updateTargetNode()
+    }
+  },
+  mounted () {
+    this.updateTargetNode()
+  },
+  methods: {
+    updateTargetNode () {
+      this.targetNode = getNodes(this.$attrs.target, this.$vnode.context)[0]
     }
   },
   render (h) {

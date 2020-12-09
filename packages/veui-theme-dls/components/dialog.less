@@ -86,19 +86,10 @@
         line-height: @dls-dialog-title-line-height;
         font-weight: @dls-dialog-title-font-weight;
         color: @dls-dialog-title-font-color;
-
-        [ui~="s"] & {
-          font-size: @dls-dialog-title-font-size-s;
-        }
-
-        [ui~="m"] & {
-          font-size: @dls-dialog-title-font-size-m;
-        }
       }
 
       &-close {
         margin-left: @dls-dialog-title-content-spacing;
-        font-size: inherit;
 
         .@{veui-prefix}-icon {
           .dls-icon-size(
@@ -112,6 +103,17 @@
               @dls-dialog-close-icon-min-size
             );
           }
+        }
+      }
+
+      &-title,
+      &-close {
+        [ui~="s"] & {
+          font-size: @dls-dialog-title-font-size-s;
+        }
+
+        [ui~="m"] & {
+          font-size: @dls-dialog-title-font-size-m;
         }
       }
     }

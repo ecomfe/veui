@@ -5,7 +5,7 @@
     [$c('date-picker')]: true,
     [$c('invalid')]: realInvalid,
     [$c('date-picker-range')]: range,
-    [$c('date-picker-expanded')]: expanded,
+    [$c('date-picker-expanded')]: realExpanded,
     [$c('disabled')]: realDisabled,
     [$c('readonly')]: realReadonly
   }"
@@ -74,7 +74,7 @@
   <veui-overlay
     ref="overlay"
     target="button"
-    :open="expanded"
+    :open="realExpanded"
     :overlay-class="overlayClass"
     :local="realOverlayOptions.local"
     :options="realOverlayOptions"
@@ -116,7 +116,7 @@
         :panel="realPanel"
         tabindex="-1"
         @select="handleSelect"
-        @selectstart="handleProgress"
+        @selectstart="handleStart"
         @selectprogress="handleProgress"
         @keydown.esc.native="close"
         @keydown.enter.native="suggest"
@@ -257,6 +257,9 @@ export default {
     format: {
       type: [String, Function]
     },
+    parse: {
+      type: Function
+    },
     shortcuts: Array,
     ...pick(Calendar.props, CALENDAR_PROPS)
   },
@@ -351,6 +354,18 @@ export default {
       })
     }
   },
+  watch: {
+    realExpanded (val) {
+      if (val) {
+        let cal = this.$refs.cal
+        cal.setExpanded(false)
+        let selected = [].concat(this.realSelected)
+        if (selected[0]) {
+          cal.navigate(selected)
+        }
+      }
+    }
+  },
   methods: {
     suggest () {
       let dates = []
@@ -364,7 +379,12 @@ export default {
         }
       }
       if (dates.length) {
-        if (!this.range || (this.range && lt(dates[0], dates[1]))) {
+        let valid = !this.isDisabled(dates[0], dates[1] || null)
+        if (this.range && valid) {
+          valid = !this.isDisabled(dates[1], dates[0] || null) &&
+            lt(dates[0], dates[1])
+        }
+        if (valid) {
           this.handleSelect(this.range ? dates : dates[0])
         }
       }
@@ -373,15 +393,8 @@ export default {
       if (this.realDisabled || this.realReadonly) {
         return
       }
-      this.expanded = force == null ? !this.expanded : force
-      if (this.expanded) {
-        let cal = this.$refs.cal
-        cal.setExpanded(false)
-        let selected = [].concat(this.realSelected)
-        if (selected[0]) {
-          cal.navigate(selected)
-        }
-      }
+
+      this.commit('expanded', force == null ? !this.realExpanded : force)
     },
     handleInputFocus () {
       this.$refs.cal.stopMousePicking()
@@ -408,14 +421,14 @@ export default {
       let cal = this.$refs.cal
       if (cal) {
         let result = []
-        let date = this.parseDate(val)
-        result[index] = date || null
+        let date = this.parseDate(val) || null
+        let another = this.range
+          ? this.parseDate(this.realInputValue[1 - index])
+          : null
+        result[index] = this.isDisabled(date, another) ? null : date
 
         if (this.range) {
-          // 要重新parse，因为可能范围原来不对，现在对了
-          let another = this.parseDate(this.realInputValue[1 - index])
-          result[1 - index] = another || null
-
+          result[1 - index] = another
           let rangeError = date && another && result[0] > result[1]
           if (rangeError) {
             result[index] = null
@@ -444,11 +457,10 @@ export default {
       return format(date, dateFormat)
     },
     parseDate (input) {
-      // todo 定制了就一定要使用方 parse 了，是不是加个 parse prop？
       let result = null
       input = input || ''
-      if (typeof this.format === 'function') {
-        result = this.format(input)
+      if (typeof this.parse === 'function') {
+        result = this.parse(input)
         return isNaN(+result) ? null : result
       }
       if (this.format && typeof this.format === 'string') {
@@ -467,11 +479,19 @@ export default {
     },
     handleSelect (selected) {
       this.commit('selected', selected)
+      this.commit('expanded', false)
       this.picking = null
-      this.expanded = false
       this.localInputValue = []
     },
+    handleStart (picking) {
+      this.$emit('selectstart', picking)
+      return this.updateInput(picking)
+    },
     handleProgress (picking) {
+      this.$emit('selectprogress', picking)
+      return this.updateInput(picking)
+    },
+    updateInput (picking) {
       this.picking = [].concat(picking)
       if (this.picking[0] && this.picking[1]) {
         this.picking.sort((a, b) => a - b)
@@ -485,7 +505,7 @@ export default {
     },
     clear (e) {
       this.commit('selected', null)
-      this.expanded = false
+      this.commit('expanded', false)
       this.localInputValue = []
       this.$nextTick(() => {
         this.focus()
@@ -497,7 +517,7 @@ export default {
     close () {
       let cal = this.$refs.cal
       if (!cal.isMousePicking()) this.suggest()
-      this.expanded = false
+      this.commit('expanded', false)
       this.picking = null
       if (this.range) this.$refs.cal.pick(null)
       this.localInputValue = []
@@ -513,6 +533,9 @@ export default {
     },
     handleHoverShortcut (picking) {
       this.$refs.cal.pick(picking)
+    },
+    isDisabled (date, another) {
+      return !!date && typeof this.disabledDate === 'function' && !!this.disabledDate(date, another)
     }
   }
 }

@@ -1,18 +1,20 @@
 @import "../lib.less";
 
 .@{veui-prefix}-checkbox-group {
-  display: flex;
-  align-items: center;
+  @dls-checkbox-group-row-gap: @dls-padding-unit * 2;
 
-  .@{veui-prefix}-checkbox {
-    flex: none;
+  &-items {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-right: -@dls-checkbox-group-spacing;
+    margin-bottom: -@dls-checkbox-group-row-gap;
   }
 
   .@{veui-prefix}-radio,
   .@{veui-prefix}-checkbox {
-    & + .@{veui-prefix}-radio,
-    & + .@{veui-prefix}-checkbox {
-      margin-left: @dls-checkbox-group-spacing;
-    }
+    flex: none;
+    margin-right: @dls-checkbox-group-spacing;
+    margin-bottom: @dls-checkbox-group-row-gap;
   }
 }

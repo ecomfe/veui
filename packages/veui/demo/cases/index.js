@@ -52,6 +52,7 @@ import Anchor from './Anchor'
 import Menu from './Menu'
 import Colors from './Colors'
 import Nav from './Nav'
+import Lightbox from './Lightbox'
 
 export default [
   {
@@ -169,6 +170,11 @@ export default [
     path: '/icon',
     name: 'Icon',
     component: Icon
+  },
+  {
+    path: '/lightbox',
+    name: 'Lightbox',
+    component: Lightbox
   },
   {
     path: '/input',

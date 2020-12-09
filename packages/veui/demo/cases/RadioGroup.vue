@@ -28,6 +28,13 @@
     </veui-radio-group>
   </p>
   <p>value: {{ picked2 }}</p>
+  <p>
+    <veui-radio-group
+      v-model="picked3"
+      :items="data3"
+    />
+  </p>
+  <p>value: {{ picked3 }}</p>
 </article>
 </template>
 
@@ -43,6 +50,7 @@ export default {
     return {
       picked1: null,
       picked2: 'Nakano Azusa',
+      picked3: null,
       data1: [
         {
           value: 'Hirasawa Yui',
@@ -69,6 +77,48 @@ export default {
         {
           value: 'Nakano Azusa',
           label: 'Nakano Azusa'
+        }
+      ],
+      data3: [
+        {
+          label: 'Steve Rogers',
+          value: 'steve'
+        },
+        {
+          label: 'Tony Stark',
+          value: 'tony'
+        },
+        {
+          label: 'Thor',
+          value: 'thor'
+        },
+        {
+          label: 'Hulk',
+          value: 'hulk'
+        },
+        {
+          label: 'Natasha Romanov',
+          value: 'natasha'
+        },
+        {
+          label: 'Stephen Strange',
+          value: 'stephen'
+        },
+        {
+          label: 'Peter Parker',
+          value: 'peter'
+        },
+        {
+          label: 'Vision',
+          value: 'vision'
+        },
+        {
+          label: 'Clint Barton',
+          value: 'clint'
+        },
+        {
+          label: 'Carol Danvers',
+          value: 'carol'
         }
       ]
     }

@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { cloneDeep } from 'lodash'
+import Popover from '@/components/Popover'
 import Table from '@/components/Table'
 import Column from '@/components/Table/Column'
 
@@ -309,6 +310,185 @@ describe('components/Table', () => {
         .at(0)
         .classes()
     ).to.include('veui-table-sorter-unordered')
+
+    wrapper.destroy()
+  })
+
+  it('should sort correctly with focusable content in table heads', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              { id: 1, disabled: false },
+              { id: 2, disabled: false }
+            ],
+            order: false,
+            orderBy: false
+          }
+        },
+        template: `
+          <veui-table
+            key-field="id"
+            :order-by="orderBy"
+            :order="order"
+            :data="data"
+            @sort="handleSort"
+          >
+            <veui-table-column field="id" title="id" sortable>
+              <template slot="head">
+                <span id="out">价格 <button id="btn"><span id="content">❤️</span></button></span>
+              </template>
+            </veui-table-column>
+          </veui-table>`,
+        methods: {
+          handleSort (field, order) {
+            this.orderBy = field
+            this.order = order
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    const { vm } = wrapper
+    const head = wrapper.find('th')
+    const out = head.find('#out')
+    const btn = head.find('#btn')
+    const content = head.find('#content')
+
+    await vm.$nextTick()
+
+    content.trigger('click')
+    await vm.$nextTick()
+    expect(head.attributes('aria-sort')).to.equal(undefined)
+
+    btn.trigger('click')
+    await vm.$nextTick()
+    expect(head.attributes('aria-sort')).to.equal(undefined)
+
+    out.trigger('click')
+    await vm.$nextTick()
+    expect(head.attributes('aria-sort')).to.equal('descending')
+
+    head.trigger('click')
+    await vm.$nextTick()
+    expect(head.attributes('aria-sort')).to.equal('ascending')
+
+    wrapper.destroy()
+  })
+
+  it('should handle hover state correctly with focusable content in table heads', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              { id: 1, disabled: false },
+              { id: 2, disabled: false }
+            ]
+          }
+        },
+        template: `
+          <veui-table
+            key-field="id"
+            :data="data"
+          >
+            <veui-table-column field="id" title="id" sortable>
+              <template #head>
+                <span id="out">价格 <button id="btn"><span id="content">❤️</span></button></span>
+              </template>
+            </veui-table-column>
+          </veui-table>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    const { vm } = wrapper
+    const head = wrapper.find('th')
+    const out = head.find('#out')
+    const btn = head.find('#btn')
+    const content = head.find('#content')
+
+    await vm.$nextTick()
+
+    head.trigger('mouseover', {
+      relatedTarget: document.body
+    })
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-hover').exists()).to.equal(true)
+
+    head.trigger('mouseout', {
+      relatedTarget: out.element
+    })
+    out.trigger('mouseover', {
+      relatedTarget: head.element
+    })
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-hover').exists()).to.equal(true)
+
+    out.trigger('mouseout', {
+      relatedTarget: btn.element
+    })
+    btn.trigger('mouseover', {
+      relatedTarget: out.element
+    })
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-hover').exists()).to.equal(false)
+
+    btn.trigger('mouseout', {
+      relatedTarget: content.element
+    })
+    content.trigger('mouseover', {
+      relatedTarget: btn.element
+    })
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-hover').exists()).to.equal(false)
+
+    content.trigger('mouseout', {
+      relatedTarget: btn.element
+    })
+    btn.trigger('mouseover', {
+      relatedTarget: content.element
+    })
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-hover').exists()).to.equal(false)
+
+    btn.trigger('mouseout', {
+      relatedTarget: out.element
+    })
+    out.trigger('mouseover', {
+      relatedTarget: btn.element
+    })
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-hover').exists()).to.equal(true)
+
+    out.trigger('mouseout', {
+      relatedTarget: head.element
+    })
+    head.trigger('mouseover', {
+      relatedTarget: out.element
+    })
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-hover').exists()).to.equal(true)
+
+    head.trigger('mouseout', {
+      relatedTarget: document.body
+    })
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-hover').exists()).to.equal(false)
 
     wrapper.destroy()
   })
@@ -843,6 +1023,342 @@ describe('components/Table', () => {
 
     expect(tds.at(4).text()).to.equal('fruits')
     expect(tds.at(4).classes()).to.include('veui-table-cell-sticky-right')
+
+    wrapper.destroy()
+  })
+
+  it('should support allowedOrders', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+            allowedOrders: ['asc', 'desc'],
+            order: 'asc'
+          }
+        },
+        template: `
+          <veui-table
+            key-field="id"
+            :data="data"
+            order-by="id"
+            :order="order"
+            :allowed-orders="allowedOrders"
+            @sort="(_, order1) => order = order1"
+          >
+            <veui-table-column field="id" title="id" sortable/>
+          </veui-table>`
+      },
+      {
+        sync: false
+      }
+    )
+    let { vm } = wrapper
+    let sorter = wrapper.find('.veui-table-sorter')
+    sorter.trigger('click')
+    await vm.$nextTick()
+    expect(vm.order).to.equal('desc')
+    sorter.trigger('click')
+    await vm.$nextTick()
+    expect(vm.order).to.equal('asc')
+
+    vm.allowedOrders = [false, 'asc', 'desc']
+    vm.order = 'desc'
+    await vm.$nextTick()
+    sorter.trigger('click')
+    await vm.$nextTick()
+    expect(vm.order).to.equal(false)
+
+    sorter.trigger('click')
+    await vm.$nextTick()
+    expect(vm.order).to.equal('asc')
+    wrapper.destroy()
+  })
+
+  it('should support disabled items', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              { id: 1, disabled: true },
+              { id: 2, disabled: false }
+            ],
+            selected: []
+          }
+        },
+        template: `
+          <veui-table
+            selectable
+            key-field="id"
+            :data="data"
+            :selected.sync="selected"
+          >
+            <veui-table-column field="id" title="id"/>
+          </veui-table>`
+      },
+      {
+        sync: false
+      }
+    )
+    let { vm } = wrapper
+    let boxes = wrapper.findAll('td .veui-checkbox')
+    await vm.$nextTick()
+    expect(boxes.at(0).props('disabled')).to.equal(true)
+    expect(boxes.at(1).props('disabled')).to.equal(false)
+
+    vm.data = [
+      { id: 1, disabled: false },
+      { id: 2, disabled: true }
+    ]
+    await vm.$nextTick()
+    expect(boxes.at(0).props('disabled')).to.equal(false)
+    expect(boxes.at(1).props('disabled')).to.equal(true)
+
+    wrapper.find('th input[type="checkbox"]').trigger('change')
+    await vm.$nextTick()
+    expect(vm.selected).to.deep.equal([1])
+    wrapper.destroy()
+  })
+
+  it('should render a popover when desc prop is provided', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              { id: 1, disabled: false },
+              { id: 2, disabled: false }
+            ]
+          }
+        },
+        template: `
+          <veui-table
+            key-field="id"
+            :data="data"
+          >
+            <veui-table-column field="id" title="id" desc="Message" sortable/>
+          </veui-table>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    const { vm } = wrapper
+    const head = wrapper.find('th')
+    const sorter = head.find('button')
+    const popover = wrapper.find(Popover)
+    const box = popover.find('.veui-popover-box')
+
+    await vm.$nextTick()
+
+    head.trigger('mouseenter')
+
+    await vm.$nextTick()
+
+    expect(popover.exists()).to.equal(true)
+    expect(box.exists()).to.equal(true)
+    expect(box.isVisible()).to.equal(true)
+
+    sorter.trigger('mouseover')
+
+    await vm.$nextTick()
+
+    expect(box.isVisible()).to.equal(false)
+
+    wrapper.destroy()
+  })
+
+  it('should render a popover when desc slot is provided', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              { id: 1, disabled: false },
+              { id: 2, disabled: false }
+            ]
+          }
+        },
+        template: `
+          <veui-table
+            key-field="id"
+            :data="data"
+          >
+            <veui-table-column field="id" title="id" sortable>
+              <template #head>
+                <span id="out">价格 <button id="btn"><span id="content">❤️</span></button></span>
+              </template>
+              <template #desc="{ close }">
+                  <h1>This is a description</h1>
+                  <button @click="close">Close</button>
+                </div>
+              </template>
+            </veui-table-column>
+          </veui-table>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    const { vm } = wrapper
+    const head = wrapper.find('th')
+    const sorter = head.find('button')
+    const popover = wrapper.find(Popover)
+    const box = popover.find('.veui-popover-box')
+    const out = head.find('#out')
+    const btn = head.find('#btn')
+    const content = head.find('#content')
+
+    await vm.$nextTick()
+
+    head.trigger('mouseenter')
+
+    await vm.$nextTick()
+
+    expect(popover.exists()).to.equal(true)
+    expect(box.exists()).to.equal(true)
+    expect(box.find('h1').text()).to.equal('This is a description')
+
+    sorter.trigger('mouseover')
+
+    await vm.$nextTick()
+
+    expect(box.isVisible()).to.equal(false)
+
+    head.trigger('mouseenter')
+
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(true)
+    box.find('button').trigger('click')
+
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(false)
+
+    await vm.$nextTick()
+
+    head.trigger('mouseover', {
+      relatedTarget: document.body
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(true)
+
+    head.trigger('mouseout', {
+      relatedTarget: out.element
+    })
+    out.trigger('mouseover', {
+      relatedTarget: head.element
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(true)
+
+    out.trigger('mouseout', {
+      relatedTarget: btn.element
+    })
+    btn.trigger('mouseover', {
+      relatedTarget: out.element
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(false)
+
+    btn.trigger('mouseout', {
+      relatedTarget: content.element
+    })
+    content.trigger('mouseover', {
+      relatedTarget: btn.element
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(false)
+
+    content.trigger('mouseout', {
+      relatedTarget: btn.element
+    })
+    btn.trigger('mouseover', {
+      relatedTarget: content.element
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(false)
+
+    btn.trigger('mouseout', {
+      relatedTarget: out.element
+    })
+    out.trigger('mouseover', {
+      relatedTarget: btn.element
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(true)
+
+    out.trigger('mouseout', {
+      relatedTarget: head.element
+    })
+    head.trigger('mouseover', {
+      relatedTarget: out.element
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(true)
+
+    head.trigger('mouseout', {
+      relatedTarget: document.body
+    })
+    await vm.$nextTick()
+    expect(box.isVisible()).to.equal(false)
+
+    wrapper.destroy()
+  })
+
+  it('should not have popover when desc prop is not provided', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              { id: 1, disabled: false },
+              { id: 2, disabled: false }
+            ]
+          }
+        },
+        template: `
+          <veui-table
+            key-field="id"
+            :data="data"
+          >
+            <veui-table-column field="id" title="id"/>
+          </veui-table>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    const { vm } = wrapper
+    const popover = wrapper.find(Popover)
+
+    await vm.$nextTick()
+
+    expect(popover.exists()).to.equal(false)
 
     wrapper.destroy()
   })

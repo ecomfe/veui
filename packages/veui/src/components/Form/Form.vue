@@ -128,7 +128,7 @@ export default {
         this.data,
         this.fields
           .filter(field => field.realDisabled)
-          .map(({ field }) => field)
+          .map(({ realField }) => realField)
       )
       return new Promise(resolve =>
         // 处理 beforeValidate 返回 Promise 的情况，通过 resolve 直接把返回值传递到下层
@@ -149,16 +149,18 @@ export default {
             )
             : res
         )
-        .then(res =>
-          this.isValid(res)
-            ? this.$emit('submit', data, e)
-            : this.$emit('invalid', res)
-        )
+        .then(res => {
+          if (this.isValid(res)) {
+            this.$emit('submit', data, e)
+          } else {
+            this.$emit('invalid', res)
+          }
+        })
     },
     validate (names) {
       // fieldset 可以有 name，但是不会有 field 属性，也不要校验 disabled 的
       let targets = (this.fields || []).filter(
-        item => item.field && !item.realDisabled
+        item => item.realField && !item.realDisabled
       )
       let validators = this.validators || []
       if (Array.isArray(names) && names.length) {
@@ -298,7 +300,7 @@ export default {
       }
     },
     isValid (res) {
-      return isUndefined(res) || (isBoolean(res) && res)
+      return isUndefined(res) || res === true
     },
     reset (names) {
       let fields = names

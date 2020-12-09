@@ -1,7 +1,10 @@
 import { mount } from '@vue/test-utils'
 import Uploader from '@/components/Uploader'
+import Dropdown from '@/components/Dropdown'
 import { wait } from '../../../utils'
 import 'veui-theme-dls-icons/check'
+import 'veui-theme-dls-icons/crop'
+import 'veui-theme-dls-icons/cut'
 
 describe('components/Uploader', () => {
   it('should handle value prop with `null` value.', () => {
@@ -12,7 +15,7 @@ describe('components/Uploader', () => {
       }
     })
 
-    expect(wrapper.vm.$data.fileList).to.deep.equal([])
+    expect(wrapper.vm.$data.fileList).to.eql([])
     wrapper.destroy()
   })
 
@@ -24,8 +27,8 @@ describe('components/Uploader', () => {
       }
     })
 
-    expect(wrapper.vm.$data.fileList).to.deep.equal([
-      { name: 'test.jpg', src: '/test.jpg', status: 'success' }
+    expect(wrapper.vm.$data.fileList).to.eql([
+      { name: 'test.jpg', src: '/test.jpg', status: 'success', type: 'image' }
     ])
     wrapper.destroy()
   })
@@ -80,13 +83,13 @@ describe('components/Uploader', () => {
     expect({
       value: input.element.value,
       name: input.attributes('name')
-    }).to.deep.equal({ value: '7', name: 'month' })
+    }).to.eql({ value: '7', name: 'month' })
 
     let input2 = form.findAll('input').at(1)
     expect({
       value: input2.element.value,
       name: input2.attributes('name')
-    }).to.deep.equal({ value: '1', name: 'day' })
+    }).to.eql({ value: '1', name: 'day' })
 
     await wrapper.vm.$nextTick()
     wrapper.destroy()
@@ -111,7 +114,7 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should validate file tyle correctly.', () => {
+  it('should validate file type correctly.', () => {
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
@@ -119,17 +122,32 @@ describe('components/Uploader', () => {
       }
     })
 
+    expect(wrapper.vm.validateType('test.1.jpg')).to.equal(true)
     expect(wrapper.vm.validateType('test.1.gif')).to.equal(true)
     expect(wrapper.vm.validateType('test.1.txt')).to.equal(false)
 
-    wrapper.setProps({ accept: 'image/*,.xlsx,.pdf' })
+    wrapper.setProps({ accept: 'application/*,.xlsx,.pdf' })
     expect(wrapper.vm.validateType('test2.gif')).to.equal(true)
     expect(wrapper.vm.validateType('test2.jpg')).to.equal(true)
     expect(wrapper.vm.validateType('test.2.pdf')).to.equal(true)
-    expect(wrapper.vm.validateType('test.2.ppt')).to.equal(false)
+    expect(wrapper.vm.validateType('test.2.ppt')).to.equal(true)
 
     wrapper.setProps({ accept: undefined })
     expect(wrapper.vm.validateType('test.3.ppt')).to.equal(true)
+    wrapper.destroy()
+  })
+
+  it('should validate file type correctly by extensions.', () => {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        accept: 'image/*',
+        action: '/upload',
+        extensions: ['jpg', 'png', 'gif']
+      }
+    })
+
+    expect(wrapper.vm.validateType('test.1.gif')).to.equal(true)
+    expect(wrapper.vm.validateType('test.1.txt')).to.equal(false)
     wrapper.destroy()
   })
 
@@ -223,11 +241,12 @@ describe('components/Uploader', () => {
 
     let callbackData = { src: '/test2.jpg', id: 6, success: true }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
-    expect(wrapper.emitted().change[0][0]).to.deep.equal([
+    expect(wrapper.emitted().change[0][0]).to.eql([
       { name: 'test2.jpg', src: '/test2.jpg', id: 6 },
       { name: 'test1.jpg', src: '/test1.jpg', id: 5 }
     ])
-    expect(wrapper.emitted().success[0]).to.deep.equal([
+
+    expect(wrapper.emitted().success[0]).to.eql([
       {
         name: 'test2.jpg',
         src: '/test2.jpg',
@@ -246,7 +265,7 @@ describe('components/Uploader', () => {
 
     callbackData = { success: false, message: 'image too large' }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
-    expect(wrapper.emitted().failure[0]).to.deep.equal([
+    expect(wrapper.emitted().failure[0]).to.eql([
       {
         name: 'test3.jpg',
         status: 'failure',
@@ -289,7 +308,7 @@ describe('components/Uploader', () => {
       data: { src: '/test.jpg', success: true }
     })
 
-    expect(wrapper.emitted().change[0][0]).to.deep.equal([
+    expect(wrapper.emitted().change[0][0]).to.eql([
       { name: 'test.jpg', src: '/test.jpg' }
     ])
 
@@ -297,27 +316,106 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should support custom upload function correctly.', async () => {
+  it('should support custom upload function with type `image` correctly.', async () => {
+    let count = 0
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
         requestMode: 'custom',
-        upload: (file, { onload, onprogress, onerror }) => {
-          onload({ src: '/test.jpg', success: true })
+        type: 'image',
+        upload: async (file, { onload, onprogress, oncancel }) => {
+          onprogress({
+            loaded: 50,
+            total: 100
+          })
+
+          await wrapper.vm.$nextTick()
+          expect(wrapper.emitted().progress[count][1]).to.equal(0)
+          expect(wrapper.emitted().progress[count][2]).to.eql({ loaded: 50, total: 100 })
+
+          if (count === 1) {
+            oncancel()
+          } else {
+            onload({ src: `/test${count}.jpg`, success: true })
+          }
+          count++
         }
-      }
+      },
+      attachToDocument: true
     })
 
     let input = wrapper.find('input[type="file"]')
-    let dT = new DataTransfer()
-    dT.items.add(new File(['foo'], 'test.jpg'))
-    input.element.files = dT.files
+    let dt = new DataTransfer()
+    dt.items.add(new File(['foo'], 'test.jpg'))
+    input.element.files = dt.files
     input.trigger('change')
     await wait(0)
 
-    expect(wrapper.emitted().change[0][0]).to.deep.equal([
-      { name: 'test.jpg', src: '/test.jpg' }
+    expect(wrapper.emitted().change[0][0]).to.eql([
+      { name: 'test.jpg', src: '/test0.jpg' }
     ])
+
+    await wrapper.vm.$nextTick()
+    wrapper.find('.veui-uploader-list-media-mask label').trigger('click')
+    dt = new DataTransfer()
+    dt.items.add(new File(['foo'], 'test.jpg'))
+    input.element.files = dt.files
+    input.trigger('change')
+
+    await wait(0)
+    expect(wrapper.findAll('.veui-uploader-list-media-item:not(.veui-uploader-list-media-item-upload)').length).to.equal(1)
+    // should restore uploaded image
+    expect(wrapper.find('.veui-uploader-list-media-container-media').attributes('src')).to.equal('/test0.jpg')
+
+    wrapper.destroy()
+  })
+
+  it('should support custom upload function with type `file` correctly.', async () => {
+    let count = 0
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload',
+        requestMode: 'custom',
+        upload: async (file, { onload, onprogress, oncancel }) => {
+          onprogress({
+            loaded: count * 10 + 30,
+            total: 100
+          })
+
+          await wrapper.vm.$nextTick()
+          expect(wrapper.emitted().progress[count][1]).to.equal(0)
+          expect(wrapper.emitted().progress[count][2]).to.eql({ loaded: count * 10 + 30, total: 100 })
+
+          if (count === 1) {
+            oncancel()
+          } else {
+            onload({ src: `/test${count}.jpg`, success: true })
+          }
+          count++
+        }
+      },
+      attachToDocument: true
+    })
+
+    let input = wrapper.find('input[type="file"]')
+    let dt = new DataTransfer()
+    dt.items.add(new File(['foo'], 'test.jpg'))
+    input.element.files = dt.files
+    input.trigger('change')
+    await wait(0)
+
+    expect(wrapper.emitted().change[0][0]).to.eql([
+      { name: 'test.jpg', src: '/test0.jpg' }
+    ])
+
+    await wrapper.vm.$nextTick()
+    dt = new DataTransfer()
+    dt.items.add(new File(['foo'], 'test2.jpg'))
+    input.element.files = dt.files
+    input.trigger('change')
+
+    await wait(0)
+    expect(wrapper.findAll('.veui-uploader-list-item').length).to.equal(1)
 
     wrapper.destroy()
   })
@@ -331,13 +429,13 @@ describe('components/Uploader', () => {
     })
 
     let callbackData = JSON.stringify({ src: '/test.jpg', id: '23' })
-    expect(wrapper.vm.parseData(callbackData)).to.deep.equal({
+    expect(wrapper.vm.parseData(callbackData)).to.eql({
       src: '/test.jpg',
       id: '23'
     })
 
     callbackData = { src: '/test.jpg', id: '23' }
-    expect(wrapper.vm.parseData(callbackData)).to.deep.equal({
+    expect(wrapper.vm.parseData(callbackData)).to.eql({
       src: '/test.jpg',
       id: '23'
     })
@@ -364,11 +462,11 @@ describe('components/Uploader', () => {
       .findAll('.veui-uploader-list-remove')
       .at(1)
       .trigger('click')
-    expect(wrapper.emitted().remove[0]).to.deep.equal([
+    expect(wrapper.emitted().remove[0]).to.eql([
       { name: 'test2.jpg', src: '/test2.jpg', status: 'success' },
       1
     ])
-    expect(wrapper.emitted().change[0][0]).to.deep.equal([
+    expect(wrapper.emitted().change[0][0]).to.eql([
       { name: 'test1.jpg', src: '/test1.jpg' }
     ])
     wrapper.destroy()
@@ -406,6 +504,7 @@ describe('components/Uploader', () => {
     // 模拟progress
     fileList[0].xhr.upload.onprogress({ loaded: 10, total: 100 })
     expect(wrapper.emitted().progress[0][1]).to.equal(0)
+    expect(wrapper.emitted().progress[0][2]).to.eql({ loaded: 10, total: 100 })
     clearXHR(wrapper)
     wrapper.destroy()
   })
@@ -424,7 +523,7 @@ describe('components/Uploader', () => {
       .find('li')
       .find('button')
       .trigger('click')
-    expect(wrapper.vm.$data.fileList).to.deep.equal([])
+    expect(wrapper.vm.$data.fileList).to.eql([])
     wrapper.destroy()
   })
 
@@ -465,7 +564,46 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should config controls of image correctly.', () => {
+  it('should set src of video correctly when type is video.', () => {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload',
+        value: [
+          { name: 'test1.mp4', src: '/test1.mp4' },
+          { name: 'test2.mp4', src: '/test2.mp4' }
+        ],
+        type: 'video'
+      }
+    })
+
+    let videos = wrapper.findAll('video')
+    expect(videos.at(0).attributes('src')).to.equal('/test1.mp4')
+    expect(videos.at(1).attributes('src')).to.equal('/test2.mp4')
+    wrapper.destroy()
+  })
+
+  it('should set src of video or image correctly when type is media.', () => {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload',
+        value: [
+          { name: 'test1.mp4', src: '/test1.mp4' },
+          { name: 'test2.jpg', src: '/test2.jpg' },
+          { name: 'test3.mp4', src: '/test3.mp4', poster: '/test3.jpg' }
+        ],
+        type: 'media'
+      }
+    })
+
+    let images = wrapper.findAll('img')
+    let videos = wrapper.findAll('video')
+    expect(videos.at(0).attributes('src')).to.equal('/test1.mp4')
+    expect(images.at(0).attributes('src')).to.equal('/test2.jpg')
+    expect(images.at(1).attributes('src')).to.equal('/test3.jpg')
+    wrapper.destroy()
+  })
+
+  it('should config controls of media correctly.', () => {
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
@@ -473,21 +611,130 @@ describe('components/Uploader', () => {
         type: 'image',
         controls (file, defaultControls) {
           if (file.status === 'success') {
-            return [{ name: 'test', icon: 'check' }, ...defaultControls]
+            return [
+              { name: 'test', icon: 'check' },
+              {
+                name: 'test1',
+                icon: 'crop',
+                children: [
+                  {
+                    name: 'test11', icon: 'cut', label: 'test11'
+                  }
+                ]
+              },
+              ...defaultControls
+            ]
           }
           return defaultControls
         }
       }
     })
-    wrapper
-      .find('.veui-uploader-list-image-mask')
-      .find('button')
-      .trigger('click')
 
-    expect(wrapper.emitted().test[0][0]).to.deep.equal(
-      { name: 'test1.jpg', src: '/test1.jpg', status: 'success' },
+    let items = wrapper.find('.veui-uploader-list-media-mask').findAll('.veui-control-item')
+    items.at(0).trigger('click')
+    expect(wrapper.emitted().test[0][0]).to.eql(
+      { name: 'test1.jpg', src: '/test1.jpg', status: 'success', type: 'image' },
       0
     )
+
+    const dropdown = items.at(1).find(Dropdown).vm
+    expect(dropdown.$props.options).to.eql(
+      [{
+        name: 'test11',
+        icon: 'cut',
+        label: 'test11',
+        value: 'test11',
+        children: []
+      }]
+    )
+    items.at(1).find('button').trigger('mouseenter')
+    expect(dropdown.expanded).to.equal(true)
+    dropdown.handleSelect('test11')
+    expect(wrapper.emitted().test11[0][0]).to.eql(
+      { name: 'test1.jpg', src: '/test1.jpg', status: 'success', type: 'image' },
+      0
+    )
+
+    wrapper.destroy()
+  })
+
+  it('should config entries of media correctly.', async () => {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload',
+        value: [{ name: 'test1.jpg', src: '/test1.jpg' }],
+        type: 'media',
+        entries (defaultEntries) {
+          return [
+            { name: 'test', icon: 'check', label: 'test' },
+            {
+              name: 'test1',
+              icon: 'crop',
+              label: 'test2',
+              children: [
+                {
+                  name: 'test11',
+                  icon: 'cut',
+                  label: 'test11'
+                }
+              ]
+            },
+            ...defaultEntries
+          ]
+        }
+      }
+    })
+
+    let entryContainer = wrapper.find('.veui-uploader-entries-container')
+    let items = entryContainer.findAll('li')
+    expect(items.length).to.equal(3)
+
+    expect(items.at(0).text()).to.equal('test')
+    expect(items.at(1).text()).to.equal('test2')
+
+    let buttons = wrapper
+      .find('.veui-uploader-entries-container')
+      .findAll('button')
+
+    buttons.at(0).trigger('click')
+    expect(wrapper.emitted().test).to.eql([[]])
+
+    const dropdown = items.at(1).find(Dropdown).vm
+    expect(dropdown.$props.options).to.eql(
+      [{
+        name: 'test11',
+        icon: 'cut',
+        label: 'test11',
+        value: 'test11',
+        children: []
+      }]
+    )
+
+    buttons.at(1).trigger('mouseenter')
+    expect(dropdown.expanded).to.equal(true)
+    dropdown.handleSelect('test11')
+    expect(wrapper.emitted().test11).to.eql([[]])
+
+    let input = wrapper.find('input[type="file"]').element
+    let clickTriggeredPromise = Promise.race(
+      [
+        new Promise(resolve => {
+          input.addEventListener('click', function () {
+            resolve(true)
+          })
+        }, { once: true }),
+        new Promise(resolve => {
+          setTimeout(function () {
+            resolve(false)
+          }, 2000)
+        })
+      ])
+
+    buttons.at(3).trigger('click')
+
+    let clickTriggered = await clickTriggeredPromise
+    expect(clickTriggered).to.equal(true)
+
     wrapper.destroy()
   })
 
@@ -516,9 +763,9 @@ describe('components/Uploader', () => {
     let callbackData = { src: '/test2.jpg', success: true }
     wrapper.vm.uploadCallback(callbackData, dT.files[0])
 
-    expect(wrapper.emitted().change[0][0]).to.deep.equal([])
+    expect(wrapper.emitted().change[0][0]).to.eql([])
 
-    expect(wrapper.emitted().change[1][0]).to.deep.equal([
+    expect(wrapper.emitted().change[1][0]).to.eql([
       { name: 'test2.jpg', src: '/test2.jpg' }
     ])
 
@@ -567,7 +814,7 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should render file-before file-after slot correctly.', () => {
+  it('should render file-before file-after slot correctly.', async () => {
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload',
@@ -590,6 +837,41 @@ describe('components/Uploader', () => {
     let after = wrapper.findAll('.test-file-after')
     expect(after.at(0).text()).to.equal('/test1.jpg')
     expect(after.at(1).text()).to.equal('/test2.jpg')
+
+    wrapper.destroy()
+
+    wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload',
+        value: [
+          { name: 'test1.jpg', src: '/test1.jpg' },
+          { name: 'test2.jpg', src: '/test2.jpg' }
+        ]
+      },
+      scopedSlots: {
+        'file-before':
+          '<p class="test-file-before" slot-scope="file">{{ file.name }}</p>',
+        'file-after':
+          '<p class="test-file-after" slot-scope="file">{{ file.status }}</p>'
+      }
+    })
+
+    let input = wrapper.find('input[type="file"]')
+    let dT = new DataTransfer()
+    dT.items.add(new File(['foo'], 'test2.jpg'))
+    input.element.files = dT.files
+    input.trigger('change')
+    await wait(0)
+    clearXHR(wrapper)
+
+    let callbackData = { src: '/test2.jpg', id: 6, success: true }
+    wrapper.vm.uploadCallback(callbackData, dT.files[0])
+
+    before = wrapper.findAll('.test-file-before')
+    after = wrapper.findAll('.test-file-after')
+    expect(before.at(2).text()).to.equal('test2.jpg')
+    expect(after.at(2).text()).to.equal('success')
+
     wrapper.destroy()
   })
 })
