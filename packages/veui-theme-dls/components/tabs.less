@@ -14,7 +14,7 @@
     white-space: nowrap;
     height: @dls-tab-height-m;
 
-    &::after {
+    &::before {
       content: "";
       .absolute(_, 0, 0);
       border-bottom: @dls-tab-container-border-width solid
@@ -28,7 +28,6 @@
     max-width: 100%;
     flex-shrink: 1;
     align-self: stretch;
-    z-index: 1;
     overflow: hidden;
 
     button {
@@ -287,7 +286,7 @@
     &-menu {
       height: auto;
 
-      &::after {
+      &::before {
         content: none;
       }
     }
@@ -329,7 +328,7 @@
       .border-top-radius(@dls-tab-container-border-radius-strong-m);
       .border-top-radius(6px);
 
-      &::after {
+      &::before {
         content: none;
       }
     }
