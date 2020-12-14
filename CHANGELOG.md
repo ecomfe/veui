@@ -4,6 +4,10 @@
 
 - [-] 已移除实验性全局配置项 `modal.scrollLockMode`，原因是保留滚动位置时无法保证屏幕不发生瞬间闪烁。
 
+### 🐞 问题修复
+
+- [^] 修正 `Overlay` 组件在有开启 `inline`/`local` prop 的父级 `Overlay` 时报错的问题。
+
 ## 2.0.0-beta.22
 
 ### 🐞 问题修复
