@@ -64,6 +64,11 @@ export function useCoupledChild ({
 export function useCoupledParent ({ type, childrenKey = 'items' }) {
   return {
     uiTypes: [type],
+    data () {
+      return {
+        [childrenKey]: []
+      }
+    },
     methods: {
       addChild (index, child) {
         let length = this[childrenKey].length

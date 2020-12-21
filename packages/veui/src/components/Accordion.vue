@@ -26,11 +26,6 @@ export default {
     disabled: Boolean,
     expanded: [Number, String, Array]
   },
-  data () {
-    return {
-      items: []
-    }
-  },
   methods: {
     toggleById (id) {
       let item = this.findChildById(id)
