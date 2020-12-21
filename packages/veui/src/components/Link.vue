@@ -3,6 +3,8 @@ import { uniq, noop } from 'lodash'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 
+const ABS_RE = /^(\w+:)?\/\//
+
 export default {
   name: 'veui-link',
   mixins: [prefix, ui],
@@ -38,7 +40,10 @@ export default {
       return this.rel
     },
     useRouter () {
-      return this.$router && !this.native
+      return !this.absolute && this.$router && !this.native
+    },
+    absolute () {
+      return typeof this.to === 'string' && ABS_RE.test(this.to)
     }
   },
   methods: {
