@@ -279,7 +279,10 @@ export function createPortal (el, target) {
 }
 
 export function renderSlot (vm, name, props = {}) {
-  return vm.$scopedSlots[name] ? vm.$scopedSlots[name](props) : vm.$slots[name]
+  return (
+    (vm.$scopedSlots[name] ? vm.$scopedSlots[name](props) : vm.$slots[name]) ||
+    null
+  )
 }
 
 export const Void = {

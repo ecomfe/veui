@@ -1,14 +1,55 @@
 <script>
-import { uniqueId, pick } from 'lodash'
+import { useCoupledChild } from '../../mixins/coupled'
 import colgroup from '../../mixins/colgroup'
-import { getIndexOfType } from '../../utils/context'
 import { renderSlot } from '../../utils/helper'
 import '../../common/uiTypes'
 
+let renderBody = vm => item => renderSlot(vm, 'default', item) || item[vm.field]
+
+let col = useCoupledChild({
+  type: 'table-column',
+  parentType: 'colgroup',
+  fields: {
+    title: 'title',
+    field: 'field',
+    width: 'width',
+    sortable: 'sortable',
+    align: 'align',
+    span: 'span',
+    allowedOrders: 'allowedOrders',
+    desc: 'desc',
+    filterValue: 'filterValue',
+    columns: 'columns',
+    realFixed: 'fixed',
+    hasFoot: vm => () => !!(vm.$scopedSlots.foot || vm.$slots.foot),
+    renderBody,
+    renderSubRow: vm => item =>
+      renderSlot(vm, 'sub-row', item) || renderBody(vm)(item),
+    renderHead: vm => () => renderSlot(vm, 'head') || vm.title,
+    renderFoot: vm => () => renderSlot(vm, 'foot'),
+    renderDesc: vm => props => renderSlot(vm, 'desc', props) || vm.desc,
+    renderFilter: vm => props => renderSlot(vm, 'filter', props),
+    hasFilter: vm => () => !!(vm.$scopedSlots.filter || vm.$slots.filter),
+    hasStaleHead: vm => () => !!(vm.$slots.head || vm.$slots.desc),
+    hasStaleFoot: vm => () => !!vm.$slots.foot
+  },
+  watchKeys: [
+    'title',
+    'field',
+    'width',
+    'sortable',
+    'align',
+    'span',
+    'allowedOrders',
+    'desc',
+    'filterValue'
+  ]
+})
+
 export default {
   name: 'veui-table-column',
-  uiTypes: ['table-column', 'transparent'],
-  mixins: [colgroup],
+  uiTypes: ['transparent'],
+  mixins: [col, colgroup],
   props: {
     title: String,
     field: String,
@@ -28,12 +69,9 @@ export default {
       }
     },
     allowedOrders: Array,
-    desc: String
-  },
-  data () {
-    return {
-      id: uniqueId('veui-table-column-')
-    }
+    desc: String,
+    // eslint-disable-next-line vue/require-prop-types
+    filterValue: {}
   },
   computed: {
     realFixed () {
@@ -48,63 +86,6 @@ export default {
       }
       return false
     }
-  },
-  created () {
-    let index = getIndexOfType(this, 'colgroup')
-
-    let props = [
-      'title',
-      'field',
-      'width',
-      'sortable',
-      'align',
-      'span',
-      'allowedOrders',
-      'desc'
-    ]
-
-    let renderBody = item => {
-      let defaultRow = this.$scopedSlots.default
-      if (defaultRow) {
-        return defaultRow(item)
-      }
-      return item[this.field]
-    }
-
-    this.colgroup.addColumn({
-      ...pick(this, ...props, 'id'),
-      fixed: this.realFixed,
-      index,
-      columns: this.columns,
-      hasFoot: () => {
-        return !!(this.$scopedSlots.foot || this.$slots.foot)
-      },
-      renderBody,
-      renderSubRow: item => {
-        let expandRow = this.$scopedSlots['sub-row']
-        if (expandRow) {
-          return expandRow(item)
-        }
-        return renderBody(item)
-      },
-      renderHead: () => {
-        let render =
-          this.$scopedSlots.head || (() => this.$slots.head || this.title)
-        return render()
-      },
-      hasStaleHead: () => !!this.$slots.head,
-      renderFoot: () => {
-        let render = this.$scopedSlots.foot || (() => this.$slots.foot || null)
-        return render()
-      },
-      hasStaleFoot: () => !!this.$slots.foot,
-      renderDesc: item => {
-        return renderSlot(this, 'desc', item) || this.desc
-      }
-    })
-  },
-  destroyed () {
-    this.colgroup.removeColumnById(this.id)
   },
   render (h) {
     return h('div', this.$slots.default)
