@@ -235,7 +235,8 @@ export default {
                 table.scrollableX && col.fixed,
               [this.$c('table-cell-first')]:
                 i === 0 && !table.selectable && !table.expandable,
-              [this.$c('table-cell-last')]: i === realColumns.length - 1
+              [this.$c('table-cell-last')]: i === realColumns.length - 1,
+              [this.$c('table-cell-filterable')]: !!col.hasFilter()
             }}
             style={
               table.scrollableX && col.fixed

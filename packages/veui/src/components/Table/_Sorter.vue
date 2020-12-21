@@ -5,15 +5,23 @@
   @click="sort"
 >
   <veui-icon
-    :class="$c('table-sorter-icon-sort')"
+    :class="[$c('table-sorter-icon-sort'), $c('table-header-icon')]"
     :name="table.icons.sort"
   />
   <veui-icon
-    :class="$c('table-sorter-icon-asc')"
+    :class="{
+      [$c('table-header-icon')]: true,
+      [$c('table-sorter-icon-asc')]: true,
+      [$c('table-header-icon-active')]: order === 'asc'
+    }"
     :name="table.icons.asc"
   />
   <veui-icon
-    :class="$c('table-sorter-icon-desc')"
+    :class="{
+      [$c('table-header-icon')]: true,
+      [$c('table-sorter-icon-desc')]: true,
+      [$c('table-header-icon-active')]: order === 'desc'
+    }"
     :name="table.icons.desc"
   />
 </veui-button>
@@ -82,7 +90,10 @@ export default {
     orderOptions: {
       handler ({ order, allowedOrders }) {
         if (!includes(allowedOrders, order) && order !== false) {
-          warn(`[veui-table] invalid order: ${order}, allowed orders are ${allowedOrders}`, this)
+          warn(
+            `[veui-table] invalid order: ${order}, allowed orders are ${allowedOrders}`,
+            this
+          )
         }
       },
       immediate: true
@@ -92,7 +103,10 @@ export default {
     sort () {
       // -1 + 1 = 0, 正好取第一个
       let index = this.allowedOrders.indexOf(this.order)
-      this.$emit('sort', this.allowedOrders[(index + 1) % this.allowedOrders.length])
+      this.$emit(
+        'sort',
+        this.allowedOrders[(index + 1) % this.allowedOrders.length]
+      )
     }
   }
 }

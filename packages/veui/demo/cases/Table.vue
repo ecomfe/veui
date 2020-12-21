@@ -20,6 +20,9 @@
     <veui-checkbox v-model="selectSpanRow">选择合并行</veui-checkbox>
   </section>
   <section>
+    <veui-checkbox v-model="filtered">筛选价格</veui-checkbox>
+  </section>
+  <section>
     <veui-checkboxgroup
       v-model="columns"
       type="checkbox"
@@ -36,7 +39,7 @@
   </section>
   <section>
     <veui-table
-      ui="s compact"
+      ui="s compact crowded"
       :scroll="{
         x: 1280,
         y: 300
@@ -97,10 +100,20 @@
       <veui-table-column
         field="price"
         sortable
-        width="160"
+        width="200"
         align="right"
         fixed
+        :filter-value="filtered"
       >
+        <template #filter="{ close }">
+          <div style="padding: 0 12px">
+            <h4 style="margin: 4px 0 8px">Filter</h4>
+            <veui-checkbox
+              v-model="filtered"
+              @click="close"
+            >优惠</veui-checkbox>
+          </div>
+        </template>
         <template slot="desc">
           这是一条带有 slot 的提示
         </template>
@@ -629,6 +642,7 @@ export default {
   },
   data () {
     return {
+      filtered: false,
       s: false,
       idTitle: '#',
       showGroup: true,

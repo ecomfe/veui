@@ -1,4 +1,7 @@
 import Checkbox from '../Checkbox'
+import Button from '../Button'
+import Dropdown from '../Dropdown'
+import Icon from '../Icon'
 import Sorter from './_Sorter'
 import Popover from '../Popover'
 import prefix from '../../mixins/prefix'
@@ -17,6 +20,7 @@ export default {
   data () {
     return {
       descOpen: {},
+      filterOpen: {},
       sortHover: {}
     }
   },
@@ -32,7 +36,7 @@ export default {
       if (sortable) {
         this.$set(this.sortHover, id, unfocusable)
       }
-      if (hasDesc) {
+      if (hasDesc && !this.filterOpen[id]) {
         this.$set(this.descOpen, id, unfocusable)
       }
     },
@@ -46,13 +50,15 @@ export default {
         if (sortable) {
           this.$set(this.sortHover, id, false)
         }
-        if (hasDesc) {
-          this.$set(this.descOpen, id, false)
-        }
       }
     },
-    handleToggleDesc (status, id) {
-      this.$set(this.descOpen, id, status)
+    handleToggleDesc (open, id) {
+      if (!this.filterOpen[id]) {
+        this.$set(this.descOpen, id, open)
+      }
+    },
+    handleToggleFilter (open, id) {
+      this.$set(this.filterOpen, id, open)
     },
     handleClick (id, e) {
       if (!isInsideFocusable(e.target, this.$refs[id])) {
@@ -141,6 +147,13 @@ export default {
                     [this.$c('table-cell-interactive')]:
                       !!col.sortable && isLeaf,
                     [this.$c('table-cell-sortable')]: !!col.sortable && isLeaf,
+                    [this.$c('table-cell-filterable')]:
+                      !!col.hasFilter() && isLeaf,
+                    [this.$c('table-cell-filter-active')]:
+                      col.filterValue === true,
+                    [this.$c('table-cell-filter-open')]: this.filterOpen[
+                      col.id
+                    ],
                     [this.$c(`table-cell-sticky-${col.fixed}`)]:
                       table.scrollableX && col.fixed,
                     [this.$c('table-cell-first')]: col.first,
@@ -182,10 +195,7 @@ export default {
                     {col.sortable && isLeaf ? (
                       <Sorter
                         class={{
-                          [this.$c('table-header-icon')]: true,
-                          [this.$c('table-header-icon-active')]:
-                            table.orderBy === col.field &&
-                            table.order !== false,
+                          [this.$c('table-header-op')]: true,
                           [this.$c('hover')]: this.sortHover[col.id]
                         }}
                         order={
@@ -198,13 +208,45 @@ export default {
                         ref={`sort-${col.id}`}
                       />
                     ) : null}
+                    {col.hasFilter() && isLeaf ? (
+                      <Dropdown
+                        class={[
+                          this.$c('table-header-op'),
+                          this.$c('table-header-filter')
+                        ]}
+                        open={this.filterOpen[col.id]}
+                        onToggle={open => this.handleToggleFilter(open, col.id)}
+                        scopedSlots={{
+                          default: ({ close }) => col.renderFilter({ close }),
+                          trigger: ({ handlers, props }) => (
+                            <Button
+                              ui={this.table.uiParts.icon}
+                              {...{
+                                on: handlers,
+                                props
+                              }}
+                            >
+                              <Icon
+                                name={this.table.icons.filter}
+                                class={{
+                                  [this.$c('table-header-icon')]: true,
+                                  [this.$c('table-header-icon-active')]:
+                                    col.filterValue === true
+                                }}
+                              />
+                            </Button>
+                          )
+                        }}
+                      />
+                    ) : null}
                   </div>
                   {desc ? (
                     <veui-popover
                       ui={this.ui}
                       target={col.id}
                       open={this.descOpen[col.id]}
-                      onToggle={status => this.handleToggleDesc(status, col.id)}
+                      onToggle={open => this.handleToggleDesc(open, col.id)}
+                      position="bottom"
                     >
                       {desc}
                     </veui-popover>

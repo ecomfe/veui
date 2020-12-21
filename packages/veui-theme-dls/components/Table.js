@@ -3,7 +3,8 @@ import {
   IconChevronDoubleDown,
   IconSortAsc,
   IconSortDesc,
-  IconSort
+  IconSort,
+  IconFilterSolid
 } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
@@ -16,7 +17,8 @@ config.defaults(
       collapseAll: IconChevronDoubleDown,
       asc: IconSortAsc,
       desc: IconSortDesc,
-      sort: IconSort
+      sort: IconSort,
+      filter: IconFilterSolid
     },
     ui: {
       size: {
@@ -26,6 +28,9 @@ config.defaults(
       },
       density: {
         values: ['compact', 'normal', 'loose']
+      },
+      crowded: {
+        boolean: true
       }
     },
     parts: {
