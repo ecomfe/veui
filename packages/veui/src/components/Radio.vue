@@ -12,9 +12,10 @@
     type="radio"
     v-bind="attrs"
     :checked="realChecked"
-    @change="handleChange"
-    @veuiradiointernal="handleInternal"
     v-on="boxListeners"
+    @change="handleChange"
+    @veui:sync="handleSync"
+    @click.stop
   >
   <span :class="$c('radio-box')"/>
   <span
@@ -33,18 +34,27 @@ import ui from '../mixins/ui'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
 import useControllable from '../mixins/controllable'
-import { triggerCustom, MOUSE_EVENTS, FOCUS_EVENTS, KEYBOARD_EVENTS } from '../utils/dom'
+import {
+  triggerCustom,
+  MOUSE_EVENTS,
+  FOCUS_EVENTS,
+  KEYBOARD_EVENTS
+} from '../utils/dom'
 
 export default {
   name: 'veui-radio',
-  mixins: [prefix, ui, input, activatable, useControllable({
-    prop: 'checked',
-    get (val) {
-      return this.isControlled('model')
-        ? this.model === this.value
-        : val
-    }
-  })],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    activatable,
+    useControllable({
+      prop: 'checked',
+      get (val) {
+        return this.isControlled('model') ? this.model === this.value : val
+      }
+    })
+  ],
   inheritAttrs: false,
   model: {
     prop: 'model'
@@ -86,7 +96,7 @@ export default {
           let siblings = form
             ? form.querySelectorAll(`input[name="${name}"][type="radio"]`)
             : null
-          each(siblings, radio => triggerCustom(radio, 'veuiradiointernal'))
+          each(siblings, radio => triggerCustom(radio, 'veui:sync'))
         })
       }
 
@@ -94,7 +104,7 @@ export default {
       this.$emit('change', true)
     },
     // 处理同个 form 下相同名称的 radio
-    handleInternal () {
+    handleSync () {
       let radio = this.$refs.box
       if (radio && radio.checked !== this.realChecked) {
         radio.checked = this.realChecked

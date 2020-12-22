@@ -13,8 +13,9 @@
     v-bind="attrs"
     :indeterminate.prop="indeterminate"
     :checked="realChecked"
-    @change="handleChange"
     v-on="boxListeners"
+    @change="handleChange"
+    @click.stop
   >
   <span :class="$c('checkbox-box')">
     <transition :name="$c('checkbox-icon')">
