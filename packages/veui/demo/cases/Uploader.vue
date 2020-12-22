@@ -24,6 +24,9 @@
     <template #button-label>
       <veui-icon name="id-card"/>
     </template>
+    <template #file-after="{ name }">
+      <span>{{ name }}</span>
+    </template>
   </veui-uploader>
   <h2>禁用状态</h2>
   <veui-uploader
