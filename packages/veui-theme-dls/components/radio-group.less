@@ -2,19 +2,18 @@
 
 .@{veui-prefix}-radio-group {
   @dls-radio-group-row-gap: @dls-padding-unit * 2;
-  overflow: hidden;
 
   &-items {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    margin-right: -@dls-radio-group-spacing;
-    margin-bottom: -@dls-radio-group-row-gap;
+    margin-left: -@dls-radio-group-spacing;
+    margin-top: -@dls-radio-group-row-gap;
   }
 
   .@{veui-prefix}-radio {
     flex: none;
-    margin-right: @dls-radio-group-spacing;
-    margin-bottom: @dls-radio-group-row-gap;
+    margin-left: @dls-radio-group-spacing;
+    margin-top: @dls-radio-group-row-gap;
   }
 }

@@ -2,20 +2,19 @@
 
 .@{veui-prefix}-checkbox-group {
   @dls-checkbox-group-row-gap: @dls-padding-unit * 2;
-  overflow: hidden;
 
   &-items {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    margin-right: -@dls-checkbox-group-spacing;
-    margin-bottom: -@dls-checkbox-group-row-gap;
+    margin-left: -@dls-checkbox-group-spacing;
+    margin-top: -@dls-checkbox-group-row-gap;
   }
 
   .@{veui-prefix}-radio,
   .@{veui-prefix}-checkbox {
     flex: none;
-    margin-right: @dls-checkbox-group-spacing;
-    margin-bottom: @dls-checkbox-group-row-gap;
+    margin-left: @dls-checkbox-group-spacing;
+    margin-top: @dls-checkbox-group-row-gap;
   }
 }
