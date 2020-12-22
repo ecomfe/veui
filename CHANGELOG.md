@@ -1,3 +1,16 @@
+## 2.0.0-beta.24
+
+### 💡 主要变更
+
+- [+] `Column` 组件新增 `filter-value` prop，用来指定表格列的筛选值。当前仅支持在发生过筛选后设置为 `true`。
+- [+] `Column` 组件新增 `filter` slot，用来指定自定义筛选下拉浮层内容。
+
+### 🐞 问题修复
+
+- [^] 修正 `RadioGroup`/`CheckboxGroup` 组件样式可能错误触发容器发生溢出滚动的问题。
+- [^] `Link` 组件的 `to` prop 现在可以正常使用绝对路径了。
+- [^] 修正 `Radio`/`Checkbox`/`Switch` 组件在点击时会触发两次 `click` 事件的问题。
+
 ## 2.0.0-beta.23
 
 ### ⚠️ 非兼容性变更
