@@ -30,9 +30,6 @@ config.defaults(
         values: ['s', 'm'],
         default: 'm',
         inherit: true
-      },
-      style: {
-        values: ['strong']
       }
     }
   },
