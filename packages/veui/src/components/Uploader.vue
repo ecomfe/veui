@@ -23,6 +23,7 @@
       }"
       :ui="realUi"
       :tabindex="fileButtonDisabled ? null : 0"
+      @keydown.enter.space.prevent="handleEnter"
       @click="handleClick"
     >
       <slot name="button-label">
@@ -444,6 +445,7 @@
             }"
             :tabindex="realUneditable || submitting ? null : 0"
             :ui="uiParts.media"
+            @keydown.enter.space.prevent="handleEnter"
             @click="handleClick"
           >
             <slot name="button-label">
@@ -961,6 +963,9 @@ export default {
         e.preventDefault()
       }
     },
+    handleEnter (e) {
+      e.target.click()
+    },
     genFileList (value) {
       if (!value) {
         return []
@@ -1381,7 +1386,12 @@ export default {
       }
     },
     getScopeValue (index, file) {
-      return { index, ...file._extra, ...pick(file, PUBLIC_FILE_PROPS), status: file.status }
+      return {
+        index,
+        ...file._extra,
+        ...pick(file, PUBLIC_FILE_PROPS),
+        status: file.status
+      }
     },
     getValue (isEmptyValue) {
       if (this.maxCount !== 1) {
