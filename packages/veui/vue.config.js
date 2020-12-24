@@ -10,6 +10,7 @@ const VEUI_PREFIX = process.env.VEUI_PREFIX || process.env.VUE_APP_VEUI_PREFIX
 const vars = {}
 
 module.exports = {
+  lintOnSave: false,
   css: {
     loaderOptions: {
       less: {
@@ -87,7 +88,8 @@ module.exports = {
       app.post('/upload', (req, res) => {
         res.json({
           success: Math.random() > 0.5,
-          src: 'https://images.pexels.com/videos/857134/free-video-857134.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+          src:
+            'https://images.pexels.com/videos/857134/free-video-857134.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
           message: 'image too large'
         })
       })
