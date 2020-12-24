@@ -7,7 +7,10 @@ const hotRectExtra = {
   y: [0, 10]
 }
 
-const styleId = 'veui-drag-sort-style'
+const classPrefix = `${process.env.VEUI_PREFIX ||
+  process.env.VUE_APP_VEUI_PREFIX}drag-sort-`
+const draggingClass = `${classPrefix}dragging`
+const styleId = `${classPrefix}style`
 
 export default class SortHandler extends BaseHandler {
   constructor (options, context, vnode) {
@@ -18,7 +21,7 @@ export default class SortHandler extends BaseHandler {
       style.id = styleId
       style.textContent = `
         [data-drag-sort] {cursor: grab}
-        .veui-drag-sort-dragging, [data-drag-sort-dragging] {cursor: grabbing}
+        .${draggingClass}, [data-drag-sort-dragging] {cursor: grabbing}
       `
       document.head.appendChild(style)
     }
@@ -64,8 +67,7 @@ export default class SortHandler extends BaseHandler {
     this.container = container
 
     document.addEventListener('dragover', this.dragOverHandler)
-    // TODO: @{veui-prefix}
-    document.body.classList.add('veui-drag-sort-dragging')
+    document.body.classList.add(draggingClass)
     currentTarget.dataset.dragSortDragging = true
 
     let elements = container.querySelectorAll(
@@ -100,7 +102,7 @@ export default class SortHandler extends BaseHandler {
       hotRectExtra[this.options.axis]
     )
     if (process.env.NODE_ENV === 'development' && this.options.debug) {
-      let id = 'veui-drag-sort-debug-layer'
+      let id = `${draggingClass}debug-layer`
       let layer = document.getElementById(id)
       if (layer) {
         layer.parentNode.removeChild(layer)
@@ -142,7 +144,7 @@ export default class SortHandler extends BaseHandler {
     console.log('dragend')
     delete currentTarget.dataset.draggingGhost
     document.removeEventListener('dragover', this.dragOverHandler)
-    document.body.classList.remove('veui-drag-sort-dragging')
+    document.body.classList.remove(draggingClass)
     delete currentTarget.dataset.dragSortDragging
   }
 
