@@ -11,6 +11,7 @@ import {
 import { getNodes } from '../utils/context'
 import BaseHandler from './drag/BaseHandler'
 import TranslateHandler from './drag/TranslateHandler'
+import SortHandler from './drag/SortHandler'
 import config from '../managers/config'
 
 config.defaults({
@@ -34,14 +35,15 @@ const OPTIONS_SCHEMA = {
   }
 }
 
-export function registerHandler (name, Handler) {
+export function registerHandler (name, Handler, isNativeDrag) {
   if (!(Handler.prototype instanceof BaseHandler)) {
     throw new Error('The handler class must derive from `BaseHandler`.')
   }
-  HANDLERS[name] = Handler
+  HANDLERS[name] = { Handler, isNativeDrag }
 }
 
-registerHandler('translate', TranslateHandler)
+registerHandler('translate', TranslateHandler, false)
+registerHandler('sort', SortHandler, true)
 
 function clear (el) {
   let dragData = el.__dragData__
@@ -85,9 +87,11 @@ function refresh (el, binding, vnode) {
   } else {
     let contextComponent = vnode.context
     let handler = null
+    let isNativeDrag
     if (HANDLERS[options.type]) {
-      let Handler = HANDLERS[options.type]
-      handler = new Handler(options, contextComponent)
+      let { Handler, isNativeDrag: _isNativeDrag } = HANDLERS[options.type]
+      isNativeDrag = _isNativeDrag
+      handler = new Handler(options, contextComponent, vnode)
     } else {
       throw new Error(`No handler is registered for type "${options.type}".`)
     }
@@ -153,8 +157,13 @@ function refresh (el, binding, vnode) {
               : dragParams
           )
 
-          window.removeEventListener('mousemove', mouseMoveHandler)
-          window.removeEventListener('mouseup', mouseupHandler)
+          if (isNativeDrag) {
+            el.removeEventListener('drag', mouseMoveHandler)
+            el.removeEventListener('dragend', mouseupHandler)
+          } else {
+            window.removeEventListener('mousemove', mouseMoveHandler)
+            window.removeEventListener('mouseup', mouseupHandler)
+          }
           window.removeEventListener('selectstart', selectStartHandler)
         }
 
@@ -162,12 +171,20 @@ function refresh (el, binding, vnode) {
         window.getSelection().removeAllRanges()
         window.addEventListener('selectstart', selectStartHandler)
 
-        window.addEventListener('mousemove', mouseMoveHandler)
-        window.addEventListener('mouseup', mouseupHandler)
+        if (isNativeDrag) {
+          el.addEventListener('drag', mouseMoveHandler)
+          el.addEventListener('dragend', mouseupHandler)
+        } else {
+          window.addEventListener('mousemove', mouseMoveHandler)
+          window.addEventListener('mouseup', mouseupHandler)
+        }
       }
     }
 
-    el.addEventListener('mousedown', dragData.mousedownHandler)
+    el.addEventListener(
+      isNativeDrag ? 'dragstart' : 'mousedown',
+      dragData.mousedownHandler
+    )
     el.__dragData__ = dragData
   }
 }

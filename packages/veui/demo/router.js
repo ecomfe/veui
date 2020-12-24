@@ -4,7 +4,7 @@ import routes from './cases'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode:
     process.env.BASE_URL && process.env.BASE_URL !== '/' ? 'hash' : 'history',
   base: process.env.BASE_URL || '/',
@@ -25,3 +25,11 @@ export default new Router({
     ...routes
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  let name = to.name === 'Empty' ? '' : to.name
+  document.title = `Veui${name} - demo`
+  next()
+})
+
+export default router

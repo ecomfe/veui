@@ -53,6 +53,7 @@ import Menu from './Menu'
 import Colors from './Colors'
 import Nav from './Nav'
 import Lightbox from './Lightbox'
+import VDragSort from './VDragSort'
 
 export default [
   {
@@ -427,5 +428,10 @@ export default [
     path: '/uploader',
     name: 'Uploader',
     component: Uploader
+  },
+  {
+    path: '/v-drag-sort',
+    name: 'Directive: v-drag.sort',
+    component: VDragSort
   }
 ]
