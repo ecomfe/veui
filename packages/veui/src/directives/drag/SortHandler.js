@@ -1,4 +1,5 @@
-import { find, pick, assign, isEqual, includes } from 'lodash'
+import Vue from 'vue'
+import { find, pick, assign, isEqual, isUndefined, includes, zip } from 'lodash'
 import BaseHandler from './BaseHandler'
 
 // TODO: default config。2p 是多少？
@@ -7,6 +8,10 @@ const hotRectExtra = {
   y: [0, 10]
 }
 
+const defaultDragSortInsertAlign = 'middle'
+const preventDragOverDefault = evt => evt.preventDefault()
+
+// VUE_APP_VEUI_PREFIX 这个好像是 undefined
 const classPrefix = `${process.env.VEUI_PREFIX ||
   process.env.VUE_APP_VEUI_PREFIX}drag-sort-`
 const draggingClass = `${classPrefix}dragging`
@@ -15,8 +20,10 @@ const styleId = `${classPrefix}style`
 export default class SortHandler extends BaseHandler {
   constructor (options, context, vnode) {
     super(options, context)
+    this.vnode = vnode
 
     if (!document.getElementById(styleId)) {
+      // TODO: directive 里 style 怎么搞进 theme-dls 里
       let style = document.createElement('style')
       style.id = styleId
       style.textContent = `
@@ -26,18 +33,18 @@ export default class SortHandler extends BaseHandler {
       document.head.appendChild(style)
     }
 
-    // console.log(vnode)
+    // 加上标记，开始拖动时需要通过这个找到同组元素
     vnode.elm.dataset.dragSort = this.options.name
     vnode.elm.draggable = true
-
-    this.dragOverHandler = evt => evt.preventDefault()
   }
 
   setOptions (options) {
     if (isEqual(this.options, options)) {
       return
     }
-
+    if (isUndefined(options.align)) {
+      options = { ...options, align: defaultDragSortInsertAlign }
+    }
     super.setOptions(options)
     this.options = assign(
       this.options,
@@ -60,54 +67,56 @@ export default class SortHandler extends BaseHandler {
       }
     ] = args
     let { offsetWidth, offsetHeight } = currentTarget
+    // 算光标到元素中心的偏移量
     this.fixMouseoffset = [
       offsetWidth / 2 - offsetX,
       offsetHeight / 2 - offsetY
     ]
 
-    // let container = this.options.containment?.$el || this.options.containment || this.context.$el || this.context
-    let container =
-      (this.options.containment && this.options.containment.$el) ||
-      this.options.containment ||
-      this.context.$el ||
-      this.context
-    this.container = container
+    // 找出被拖动元素的所在容器。优先用传入的 containment
+    this.container = this.options.containment
+      ? getHtmlElement(this.options.containment)
+      : getHtmlElement(this.context)
 
-    document.addEventListener('dragover', this.dragOverHandler)
-    document.body.classList.add(draggingClass)
+    // 找出被拖动元素的索引
+    this.dragElementIndex = [...this.getElements()].indexOf(currentTarget)
+    if (this.dragElementIndex < 0) {
+      throw new Error('missing dragging element in elements')
+    }
+
+    // 加上拖动中标记，用于匹配css
     currentTarget.dataset.dragSortDragging = true
+    document.body.classList.add(draggingClass)
 
-    let elements = container.querySelectorAll(
-      `[data-drag-sort="${this.options.name}"]`
-    )
-    if (!elements.length) {
-      throw new Error('no matched elements, cancel drag')
-    }
-    let dragElementIndex = [...elements].indexOf(currentTarget)
-    if (dragElementIndex < 0) {
-      throw new Error('no drag element in elements, cancel drag')
-    }
+    // 拖动完成后，如果拖动回调还没完成就不用再等了
+    this.cancelSource = getCancelSource(this)
+    this.isWaitingCallbackConfirm = undefined
 
-    this.dragElementIndex = dragElementIndex
-    this.lastElementIndex = elements.length - 1
-    this.updateHotRects(elements)
+    // 计算热区
+    this.updateHotRects()
 
-    setTimeout(function () {
+    // 避免拖动完成后的原生动画
+    document.addEventListener('dragover', preventDragOverDefault)
+
+    // 下一帧再加上 ghost 样式，避免拖动的 snapshot 也是 ghost 样式
+    requestAnimationFrame(function () {
       currentTarget.dataset.draggingGhost = true
-    }, 0)
+    })
   }
 
-  updateHotRects (elements) {
-    if (!elements) {
-      elements = this.container.querySelectorAll(
-        `[data-drag-sort="${this.options.name}"]`
-      )
-    }
-    let hotRects = getHotRects(
-      elements,
+  getElements () {
+    return this.container.querySelectorAll(
+      `[data-drag-sort="${this.options.name}"]`
+    )
+  }
+
+  updateHotRects () {
+    const hotRects = getHotRects(
+      this.getElements(),
       this.container,
       hotRectExtra[this.options.axis]
     )
+
     if (process.env.NODE_ENV === 'development' && this.options.debug) {
       let id = `${draggingClass}debug-layer`
       let layer = document.getElementById(id)
@@ -121,28 +130,56 @@ export default class SortHandler extends BaseHandler {
       layer.id = id
       document.body.appendChild(layer)
     }
+
     this.hotRects = hotRects
   }
 
-  drag ({ event: { pageX, pageY } }) {
-    let [x, y] = [pageX - window.pageXOffset, pageY - window.pageYOffset]
-    if (this.options.align === 'middle') {
-      x += this.fixMouseoffset[0]
-      y += this.fixMouseoffset[1]
+  async drag ({ event: { pageX, pageY } }) {
+    // 有transition的话需要等动画完成后才认为完成拖动
+    // 前一次拖动回调完成后才能进去下一次
+    if (this.isWaitingCallbackConfirm) {
+      return
     }
-    let toIndex = findInsertIndexByMousePointFromHotRect([x, y], this.hotRects)
-    // The drag event is fired every few hundred milliseconds as an element or text selection is being dragged by the user.
-    // 但是这里如果一直触发回调就比较奇怪，所以判断下，变了才触发
-    if (toIndex >= 0 && toIndex !== this.prevInsertIndex) {
-      let fromIndex = this.dragElementIndex
-      if (!includes([fromIndex, fromIndex + 1], toIndex)) {
-        if (this.options.callback(toIndex, fromIndex) !== false) {
-          this.dragElementIndex = toIndex > fromIndex ? toIndex - 1 : toIndex
-          setTimeout(() => this.updateHotRects(), 0)
-        }
+
+    // 鼠标相对视口的坐标
+    let point = calculatePotins(
+      [
+        [pageX, pageY],
+        [window.scrollX, window.scrollY],
+        this.options.align === 'middle' ? this.fixMouseoffset : [0, 0]
+      ],
+      (pagePoint, scrollPoint, fixPoint) => pagePoint - scrollPoint + fixPoint
+    )
+
+    const toIndex = findInsertIndexByMousePointFromHotRect(point, this.hotRects)
+    // drag 事件会持续触发，如果插入点没变就不用干啥
+    if (toIndex < 0 || toIndex === this.prevInsertIndex) {
+      return
+    }
+
+    const fromIndex = this.dragElementIndex
+    // 插入当前拖动元素或后面一个元素的前面，就是当前的位置，不用修改
+    if (!includes([fromIndex, fromIndex + 1], toIndex)) {
+      // 标记一下开始回调
+      this.isWaitingCallbackConfirm = true
+      let callbackPromise = Promise.race([
+        this.options.callback(toIndex, fromIndex),
+        this.cancelSource.promise
+      ])
+        .catch(() => false)
+        .finally(() => {
+          this.isWaitingCallbackConfirm = undefined
+        })
+      // 如果回调 false 表示这次拖动不生效
+      if ((await callbackPromise) !== false) {
+        // 拖动成功后，更新下当前拖动元素索引
+        this.dragElementIndex = toIndex > fromIndex ? toIndex - 1 : toIndex
+        // 元素列表变了，热区也要更新下（需要等DOM更新了
+        Vue.nextTick(() => this.updateHotRects())
       }
-      this.prevInsertIndex = toIndex
     }
+
+    this.prevInsertIndex = toIndex
   }
 
   end (...args) {
@@ -152,16 +189,28 @@ export default class SortHandler extends BaseHandler {
         event: { currentTarget }
       }
     ] = args
-    console.log('dragend')
+
+    // 清理
     delete currentTarget.dataset.draggingGhost
-    document.removeEventListener('dragover', this.dragOverHandler)
-    document.body.classList.remove(draggingClass)
     delete currentTarget.dataset.dragSortDragging
+    this.clear()
+  }
+
+  clear () {
+    if (this.cancelSource) {
+      this.cancelSource.cancel()
+    }
+    document.body.classList.remove(draggingClass)
+    document.removeEventListener('dragover', preventDragOverDefault)
   }
 
   reset () {}
 
-  destroy () {}
+  destroy () {
+    this.clear()
+    delete this.vnode.elm.dataset.dragSort
+    this.vnode.elm.draggable = false
+  }
 }
 
 function getHotRects (elements, container, hotExtra) {
@@ -278,4 +327,31 @@ function getHotRectsDebugLayer (hotRects, containerBoundary) {
   })
 
   return layer
+}
+
+function getHtmlElement (el) {
+  return el.$el || el
+}
+
+function calculatePotins (points, calc) {
+  return zip(...points).map(values => calc(...values))
+}
+
+function getCancelSource (context) {
+  return new (class {
+    constructor () {
+      let promise = new Promise((resolve, reject) => {
+        this._reject = reject
+      })
+      this.promise = promise.catch(err => {
+        if (context.isWaitingCallbackConfirm) {
+          throw err
+        }
+      })
+    }
+
+    cancel (...args) {
+      this._reject(...args)
+    }
+  })()
 }
