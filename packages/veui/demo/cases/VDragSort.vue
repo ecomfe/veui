@@ -8,6 +8,18 @@
       v-model="debug"
       type="checkbox"
     > 显示debug层 </label>
+
+    <span style="margin-left: 2em">插入判定：</span>
+    <label><input
+      v-model="align"
+      type="radio"
+      value="mouse"
+    >指针</label>
+    <label><input
+      v-model="align"
+      type="radio"
+      value="middle"
+    >中心点</label>
   </section>
   <section ref="itemGroup">
     <h2>Axis: X</h2>
@@ -19,7 +31,8 @@
           name: 'mySortableButton',
           containment: 'itemGroup',
           callback: handleSortCallback,
-          debug
+          debug,
+          align
         }"
         class="item"
       >
@@ -36,7 +49,8 @@
         v-drag.sort.x="{
           name: 'otherSortableButton',
           callback: handleSortCallback2,
-          debug
+          debug,
+          align
         }"
         class="item"
       >
@@ -58,6 +72,7 @@ export default {
   data () {
     return {
       debug: false,
+      align: 'mouse',
       items: [
         '须菩提',
         '菩萨亦如是',
@@ -130,6 +145,7 @@ section {
 }
 
 .item {
+  background: white;
   border: 1px solid pink;
   border-radius: 3px;
   margin: 0 10px 8px 0;
