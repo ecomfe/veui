@@ -41,7 +41,14 @@ export default class SortHandler extends BaseHandler {
     super.setOptions(options)
     this.options = assign(
       this.options,
-      pick(options, ['name', 'containment', 'axis', 'callback', 'debug'])
+      pick(options, [
+        'name',
+        'containment',
+        'axis',
+        'callback',
+        'debug',
+        'align'
+      ])
     )
   }
 
@@ -54,8 +61,8 @@ export default class SortHandler extends BaseHandler {
     ] = args
     let { offsetWidth, offsetHeight } = currentTarget
     this.fixMouseoffset = [
-      offsetX - offsetWidth / 2,
-      offsetY - offsetHeight / 2
+      offsetWidth / 2 - offsetX,
+      offsetHeight / 2 - offsetY
     ]
 
     // let container = this.options.containment?.$el || this.options.containment || this.context.$el || this.context
@@ -119,6 +126,10 @@ export default class SortHandler extends BaseHandler {
 
   drag ({ event: { pageX, pageY } }) {
     let [x, y] = [pageX - window.pageXOffset, pageY - window.pageYOffset]
+    if (this.options.align === 'middle') {
+      x += this.fixMouseoffset[0]
+      y += this.fixMouseoffset[1]
+    }
     let toIndex = findInsertIndexByMousePointFromHotRect([x, y], this.hotRects)
     // The drag event is fired every few hundred milliseconds as an element or text selection is being dragged by the user.
     // 但是这里如果一直触发回调就比较奇怪，所以判断下，变了才触发
