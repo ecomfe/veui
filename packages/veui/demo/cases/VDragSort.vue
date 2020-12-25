@@ -13,6 +13,11 @@
     <label><input
       v-model="align"
       type="radio"
+      :value="undefined"
+    >默认</label>
+    <label><input
+      v-model="align"
+      type="radio"
       value="mouse"
     >指针</label>
     <label><input
@@ -23,7 +28,12 @@
   </section>
   <section ref="itemGroup">
     <h2>Axis: X</h2>
-    <div class="items">
+    <transition-group
+      ref="transitionGroup"
+      name="list"
+      tag="div"
+      class="items"
+    >
       <div
         v-for="item in items"
         :key="item"
@@ -38,7 +48,7 @@
       >
         {{ item }}
       </div>
-    </div>
+    </transition-group>
   </section>
   <section>
     <h2>Axis: Y</h2>
@@ -72,7 +82,7 @@ export default {
   data () {
     return {
       debug: false,
-      align: 'mouse',
+      align: undefined,
       items: [
         '须菩提',
         '菩萨亦如是',
@@ -113,7 +123,17 @@ export default {
       if (toIndex === fromIndex) {
         return
       }
+      let promise = new Promise((resolve, reject) => {
+        let el = this.$refs.transitionGroup.$el
+        let handleTransitionEnd = () => {
+          el.removeEventListener('transitionend', handleTransitionEnd)
+          resolve()
+        }
+        el.addEventListener('transitionend', handleTransitionEnd)
+      })
       this.moveItem(this.items, fromIndex, toIndex)
+      // 动画完了再回调成功
+      return promise
     },
     handleSortCallback2 (toIndex, fromIndex) {
       if (toIndex === fromIndex) {
@@ -174,5 +194,10 @@ section {
   .item {
     border-color: peachpuff;
   }
+}
+
+.list-move {
+  // UE 给出的动画曲线是 0.25, 0.1, 0.25, 1，就是 ease
+  transition: transform 200ms ease;
 }
 </style>

@@ -18,6 +18,8 @@ config.defaults({
   'drag.prefix': '@'
 })
 
+const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+
 const HANDLERS = {}
 
 const OPTIONS_SCHEMA = {
@@ -158,7 +160,11 @@ function refresh (el, binding, vnode) {
           )
 
           if (isNativeDrag) {
-            el.removeEventListener('drag', mouseMoveHandler)
+            if (isFirefox) {
+              window.removeEventListener('dragover', mouseMoveHandler)
+            } else {
+              el.removeEventListener('drag', mouseMoveHandler)
+            }
             el.removeEventListener('dragend', mouseupHandler)
           } else {
             window.removeEventListener('mousemove', mouseMoveHandler)
@@ -172,7 +178,13 @@ function refresh (el, binding, vnode) {
         window.addEventListener('selectstart', selectStartHandler)
 
         if (isNativeDrag) {
-          el.addEventListener('drag', mouseMoveHandler)
+          if (isFirefox) {
+            // Firefox dragevent 里面的鼠标坐标是 0
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=505521
+            window.addEventListener('dragover', mouseMoveHandler)
+          } else {
+            el.addEventListener('drag', mouseMoveHandler)
+          }
           el.addEventListener('dragend', mouseupHandler)
         } else {
           window.addEventListener('mousemove', mouseMoveHandler)
