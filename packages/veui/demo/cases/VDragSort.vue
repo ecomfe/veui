@@ -175,7 +175,7 @@ section {
     font-size: 1.2em;
   }
 
-  &[data-dragging-ghost] {
+  &[data-veui-drag-sort-dragging-ghost] {
     &,
     * {
       color: transparent !important;

@@ -1,5 +1,16 @@
 import Vue from 'vue'
-import { find, pick, assign, isEqual, isUndefined, includes, zip } from 'lodash'
+import {
+  find,
+  pick,
+  assign,
+  isEqual,
+  isUndefined,
+  includes,
+  zip,
+  camelCase,
+  kebabCase
+} from 'lodash'
+import { prefixify } from '../../mixins/prefix'
 import BaseHandler from './BaseHandler'
 
 // TODO: default config。2p 是多少？
@@ -11,30 +22,17 @@ const hotRectExtra = {
 const defaultDragSortInsertAlign = 'middle'
 const preventDragOverDefault = evt => evt.preventDefault()
 
-// VUE_APP_VEUI_PREFIX 这个好像是 undefined
-const classPrefix = `${process.env.VEUI_PREFIX ||
-  process.env.VUE_APP_VEUI_PREFIX}drag-sort-`
-const draggingClass = `${classPrefix}dragging`
-const styleId = `${classPrefix}style`
+const datasetDragSortKey = camelCase(prefixify('drag-sort'))
+const datasetDraggingKey = datasetDragSortKey + 'Dragging'
+const datasetDragGhostKey = datasetDraggingKey + 'Ghost'
 
 export default class SortHandler extends BaseHandler {
   constructor (options, context, vnode) {
     super(options, context)
     this.vnode = vnode
 
-    if (!document.getElementById(styleId)) {
-      // TODO: directive 里 style 怎么搞进 theme-dls 里
-      let style = document.createElement('style')
-      style.id = styleId
-      style.textContent = `
-        [data-drag-sort] {cursor: grab}
-        .${draggingClass}, [data-drag-sort-dragging] {cursor: grabbing}
-      `
-      document.head.appendChild(style)
-    }
-
     // 加上标记，开始拖动时需要通过这个找到同组元素
-    vnode.elm.dataset.dragSort = this.options.name
+    vnode.elm.dataset[datasetDragSortKey] = this.options.name
     vnode.elm.draggable = true
   }
 
@@ -84,9 +82,13 @@ export default class SortHandler extends BaseHandler {
       throw new Error('missing dragging element in elements')
     }
 
+    // 避免拖动完成后的原生动画
+    document.addEventListener('dragover', preventDragOverDefault)
+
     // 加上拖动中标记，用于匹配css
-    currentTarget.dataset.dragSortDragging = true
-    document.body.classList.add(draggingClass)
+    currentTarget.dataset[datasetDraggingKey] = ''
+    // document.body.dataset[datasetDraggingKey] = ''
+    document.body.classList.add(kebabCase(datasetDraggingKey))
 
     // 拖动完成后，如果拖动回调还没完成就不用再等了
     this.cancelSource = getCancelSource(this)
@@ -95,18 +97,15 @@ export default class SortHandler extends BaseHandler {
     // 计算热区
     this.updateHotRects()
 
-    // 避免拖动完成后的原生动画
-    document.addEventListener('dragover', preventDragOverDefault)
-
     // 下一帧再加上 ghost 样式，避免拖动的 snapshot 也是 ghost 样式
     requestAnimationFrame(function () {
-      currentTarget.dataset.draggingGhost = true
+      currentTarget.dataset[datasetDragGhostKey] = ''
     })
   }
 
   getElements () {
     return this.container.querySelectorAll(
-      `[data-drag-sort="${this.options.name}"]`
+      `[data-${kebabCase(datasetDragSortKey)}="${this.options.name}"]`
     )
   }
 
@@ -118,7 +117,7 @@ export default class SortHandler extends BaseHandler {
     )
 
     if (process.env.NODE_ENV === 'development' && this.options.debug) {
-      let id = `${draggingClass}debug-layer`
+      let id = `${datasetDragSortKey}debug-layer`
       let layer = document.getElementById(id)
       if (layer) {
         layer.parentNode.removeChild(layer)
@@ -191,8 +190,8 @@ export default class SortHandler extends BaseHandler {
     ] = args
 
     // 清理
-    delete currentTarget.dataset.draggingGhost
-    delete currentTarget.dataset.dragSortDragging
+    delete currentTarget.dataset[datasetDragGhostKey]
+    delete currentTarget.dataset[datasetDraggingKey]
     this.clear()
   }
 
@@ -200,7 +199,8 @@ export default class SortHandler extends BaseHandler {
     if (this.cancelSource) {
       this.cancelSource.cancel()
     }
-    document.body.classList.remove(draggingClass)
+    // delete document.body.dataset[datasetDraggingKey]
+    document.body.classList.remove(kebabCase(datasetDraggingKey))
     document.removeEventListener('dragover', preventDragOverDefault)
   }
 
@@ -208,7 +208,7 @@ export default class SortHandler extends BaseHandler {
 
   destroy () {
     this.clear()
-    delete this.vnode.elm.dataset.dragSort
+    delete this.vnode.elm.dataset[datasetDragSortKey]
     this.vnode.elm.draggable = false
   }
 }
@@ -344,6 +344,8 @@ function getCancelSource (context) {
         this._reject = reject
       })
       this.promise = promise.catch(err => {
+        // 只有在等待回调时才抛错，用于取消等待
+        // 其它时候抛错会在 console 里输出 Uncaught promise error
         if (context.isWaitingCallbackConfirm) {
           throw err
         }
