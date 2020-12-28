@@ -3,7 +3,7 @@
   <h1>
     <code>v-drag.sort</code>
   </h1>
-  <section>
+  <section v-if="hasDebug">
     <label> <input
       v-model="debug"
       type="checkbox"
@@ -40,7 +40,7 @@
         v-drag.sort.x="{
           name: 'mySortableButton',
           containment: 'itemGroup',
-          callback: handleSortCallback,
+          callback: handleSortCallbackWithTransition,
           debug,
           align
         }"
@@ -56,9 +56,9 @@
       <li
         v-for="item in items2"
         :key="item"
-        v-drag.sort.x="{
+        v-drag.sort.y="{
           name: 'otherSortableButton',
-          callback: handleSortCallback2,
+          callback: handleSortCallback,
           debug,
           align
         }"
@@ -68,58 +68,155 @@
       </li>
     </ol>
   </section>
+
+  <section>
+    <h2>Overlay</h2>
+    <button @click="dialogOpen = true">open dialog</button>
+    <button
+      ref="popoverButton"
+      @click="popoverOpen = true"
+    >
+      open popover
+    </button>
+
+    <veui-dialog
+      :open.sync="dialogOpen"
+      title="In Dialog"
+    >
+      <div class="dialog-content">
+        <div>
+          <p>
+            尔时，须菩提白佛言：“世尊！善男子、善女人，发阿耨多罗三藐三菩提心，云何应住？云何降伏其心？”佛告须菩提：“善男子、善女人，发阿耨多罗三藐三菩提者，当生如是心，我应灭度一切众生。灭度一切众生已，而无有一众生实灭度者。
+          </p>
+          <p>
+            何以故？须菩提！若菩萨有我相、人相、众生相、寿者相，即非菩萨。
+          </p>
+          <p>所以者何？须菩提！实无有法发阿耨多罗三藐三菩提者。”</p>
+        </div>
+        <div
+          ref="dialogContent"
+          class="items"
+        >
+          <div
+            v-for="item in items2"
+            :key="item"
+            v-drag.sort.x="{
+              name: 'buttonInDialog',
+              containment: 'dialogContent',
+              callback: handleSortCallback,
+              debug,
+              align
+            }"
+            class="item"
+          >
+            {{ item }}
+          </div>
+        </div>
+      </div>
+    </veui-dialog>
+
+    <veui-popover
+      :open.sync="popoverOpen"
+      target="popoverButton"
+      trigger="click"
+    >
+      <div class="tooltip-content">
+        <div>
+          <p>
+            尔时，须菩提白佛言：“世尊！善男子、善女人，发阿耨多罗三藐三菩提心，云何应住？云何降伏其心？”佛告须菩提：“善男子、善女人，发阿耨多罗三藐三菩提者，当生如是心，我应灭度一切众生。灭度一切众生已，而无有一众生实灭度者。
+          </p>
+        </div>
+        <div
+          ref="popoverContent"
+          class="items"
+        >
+          <div
+            v-for="item in items2"
+            :key="item"
+            v-drag.sort.x="{
+              name: 'buttonInPopover',
+              containment: 'popoverContent',
+              callback: handleSortCallback,
+              debug,
+              align
+            }"
+            class="item"
+          >
+            {{ item }}
+          </div>
+        </div>
+      </div>
+    </veui-popover>
+  </section>
 </article>
 </template>
 
 <script>
 import drag from 'veui/directives/drag'
+import { Dialog, Popover } from 'veui'
+
+const items = [
+  '须菩提',
+  '菩萨亦如是',
+  '若作是言',
+  '我当灭度无量众生',
+  '即不名菩萨',
+  '🍎🍎',
+  '🍋',
+  '🍉🍉🍉',
+  '🍓🍓',
+  '何以故',
+  '须菩提',
+  '无有法名为菩萨',
+  '是故佛说',
+  '一切法无我',
+  '无人',
+  '无众生',
+  '无寿者',
+  '须菩提',
+  '若菩萨作是言',
+  '我当庄严佛土',
+  '是不名菩萨',
+  '何以故',
+  '🦁',
+  '🙈🙉🙊',
+  '🐷🐶',
+  '如来说',
+  '庄严佛土者',
+  '即非庄严',
+  '是名庄严',
+  '须菩提',
+  '若菩萨通达无我法者',
+  '如来说名真是菩萨'
+]
 
 export default {
   name: 'v-drag-sort-demo',
   directives: {
     drag
   },
+  components: {
+    'veui-dialog': Dialog,
+    'veui-popover': Popover
+  },
   data () {
     return {
       debug: false,
       align: undefined,
-      items: [
-        '须菩提',
-        '菩萨亦如是',
-        '若作是言',
-        '我当灭度无量众生',
-        '即不名菩萨',
-        '🍎🍎',
-        '🍋',
-        '🍉🍉🍉',
-        '🍓🍓',
-        '何以故',
-        '须菩提',
-        '无有法名为菩萨',
-        '是故佛说',
-        '一切法无我',
-        '无人',
-        '无众生',
-        '无寿者'
-      ].map((item, i) => `${i}. ${item}`),
-      items2: [
-        '须菩提',
-        '若菩萨作是言',
-        '我当庄严佛土',
-        '是不名菩萨',
-        '何以故',
-        '如来说',
-        '庄严佛土者',
-        '即非庄严',
-        '是名庄严',
-        '须菩提',
-        '若菩萨通达无我法者',
-        '如来说名真是菩萨'
-      ].map((item, i) => `${i}${item}`)
+      dialogOpen: false,
+      popoverOpen: false,
+
+      items: items.slice(0, 17).map((item, i) => `${i}. ${item}`),
+      items2: items.slice(17).map((item, i) => `${i}${item}`)
+    }
+  },
+  computed: {
+    hasDebug () {
+      return process.env.NODE_ENV === 'development'
     }
   },
   methods: {
-    handleSortCallback (toIndex, fromIndex) {
+    handleSortCallbackWithTransition (toIndex, fromIndex) {
       if (toIndex === fromIndex) {
         return
       }
@@ -135,7 +232,7 @@ export default {
       // 动画完了再回调成功
       return promise
     },
-    handleSortCallback2 (toIndex, fromIndex) {
+    handleSortCallback (toIndex, fromIndex) {
       if (toIndex === fromIndex) {
         return
       }
@@ -154,6 +251,10 @@ export default {
 </script>
 
 <style scoped lang="less">
+article {
+  min-height: 250%;
+}
+
 section {
   margin-bottom: 20px;
 }
@@ -190,8 +291,15 @@ section {
 .list {
   padding: 0;
   list-style-position: inside;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 300px;
+  resize: both;
+  overflow: scroll;
 
   .item {
+    width: 40%;
     border-color: peachpuff;
   }
 }
@@ -199,5 +307,10 @@ section {
 .list-move {
   // UE 给出的动画曲线是 0.25, 0.1, 0.25, 1，就是 ease
   transition: transform 200ms ease;
+}
+
+.dialog-content,
+.tooltip-content {
+  height: 200px;
 }
 </style>

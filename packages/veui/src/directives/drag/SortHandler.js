@@ -16,7 +16,7 @@ import BaseHandler from './BaseHandler'
 // TODO: default config。2p 是多少？
 const hotRectExtra = {
   x: [10, 0],
-  y: [0, 10]
+  y: [0, 5]
 }
 
 const defaultDragSortInsertAlign = 'middle'
@@ -113,7 +113,8 @@ export default class SortHandler extends BaseHandler {
     const hotRects = getHotRects(
       this.getElements(),
       this.container,
-      hotRectExtra[this.options.axis]
+      hotRectExtra[this.options.axis],
+      this.options.axis
     )
 
     if (process.env.NODE_ENV === 'development' && this.options.debug) {
@@ -213,28 +214,35 @@ export default class SortHandler extends BaseHandler {
   }
 }
 
-function getHotRects (elements, container, hotExtra) {
-  let containerBoundary = container.getBoundingClientRect()
+function getHotRects (elements, container, hotExtra, axis) {
+  // TODO: rtl
+  const [top, bottom, leading, trailing] = exchangeAxisValues(
+    ['top', 'bottom', 'left', 'right'],
+    axis
+  )
+  const hotExtraValues = zip(
+    hotExtra.map(val => val * -1),
+    hotExtra
+  ).reduce((ret, values) => ret.concat(values))
+  const containerBoundary = container.getBoundingClientRect()
 
-  let elementRects = [...elements].map(function (el) {
-    // TODO: 如果要考虑container滚动场景的话，这里就不能用 getBoundingClientRect 了
+  const elementRects = [...elements].map(function (el) {
     return el.getBoundingClientRect()
   })
 
   // 找出换行的 index，切成行，按行处理热区
-  let breakIndices = elementRects
+  const breakIndices = elementRects
     .reduce(
       function (indices, current, i) {
         if (i === 0) {
           return indices
         }
 
-        // TODO: axis
         let prev = elementRects[i - 1]
-        if (current.left > prev.left) {
+        let field = axis === 'y' ? 'top' : 'left'
+        if (current[field] > prev[field]) {
           return indices
         }
-
         return indices.concat(i)
       },
       [0]
@@ -242,7 +250,7 @@ function getHotRects (elements, container, hotExtra) {
     .concat(elementRects.length)
 
   let count = 0
-  let hotRects = breakIndices
+  const hotRects = breakIndices
     .slice(1)
     .reduce(function (rows, breakIndex, i) {
       rows.push(elementRects.slice(breakIndices[i], breakIndex))
@@ -253,25 +261,29 @@ function getHotRects (elements, container, hotExtra) {
       let first = rects[0]
       let last = rects[rects.length - 1]
       rects.unshift({
-        top: first.top,
-        bottom: first.bottom,
-        right: containerBoundary.left
+        [top]: first[top],
+        [bottom]: first[bottom],
+        [trailing]: containerBoundary[leading] // 前一个的右边是后一个的左边
       })
       rects.push({
-        top: last.top,
-        bottom: last.bottom,
-        left: containerBoundary.right
+        [top]: last[top],
+        [bottom]: last[bottom],
+        [leading]: containerBoundary[trailing]
       })
+
       rects = rects.slice(1).map(function (current, i) {
-        // TODO: axis
         let prev = rects[i]
-        return [
-          prev.right - hotExtra[0],
-          current.left + hotExtra[0],
-          Math.min(prev.top, current.top) - hotExtra[1],
-          Math.max(prev.bottom, current.bottom) + hotExtra[1],
-          count + i
-        ]
+        return exchangeAxisValues(
+          [
+            prev[trailing],
+            current[leading],
+            Math.min(prev[top], current[top]),
+            Math.max(prev[bottom], current[bottom])
+          ],
+          axis
+        )
+          .map((val, i) => val + hotExtraValues[i])
+          .concat(count + i)
       })
       count += rowCount
       return rects
@@ -290,9 +302,15 @@ function findInsertIndexByMousePointFromHotRect ([x, y], hotRects) {
   return rect ? rect[4] : -1
 }
 
+function exchangeAxisValues (values, axis) {
+  return axis === 'y' ? values.slice(2).concat(values.slice(0, 2)) : values
+}
+
 function getHotRectsDebugLayer (hotRects, containerBoundary) {
+  // Keep it simple. Will be removed when NODE_ENV is production
   let layer = document.createElement('div')
   layer.style.position = 'fixed'
+  layer.style.zIndex = 99999
   layer.style.top = 0
   layer.style.right = 0
   layer.style.bottom = 0
