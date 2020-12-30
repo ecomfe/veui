@@ -40,7 +40,7 @@
         v-drag.sort.x="{
           name: 'mySortableButton',
           containment: 'itemGroup',
-          callback: handleSortCallbackWithTransition,
+          callback: handleAxisXSortCallback,
           debug,
           align
         }"
@@ -52,13 +52,18 @@
   </section>
   <section>
     <h2>Axis: Y</h2>
-    <ol class="list">
+    <transition-group
+      ref="transitionGroup2"
+      name="list"
+      tag="ol"
+      class="list"
+    >
       <li
         v-for="item in items2"
         :key="item"
         v-drag.sort.y="{
           name: 'otherSortableButton',
-          callback: handleSortCallback,
+          callback: handleAxisYSortCallback,
           debug,
           align
         }"
@@ -66,7 +71,7 @@
       >
         {{ item }}
       </li>
-    </ol>
+    </transition-group>
   </section>
 
   <section>
@@ -213,30 +218,38 @@ export default {
   computed: {
     hasDebug () {
       return process.env.NODE_ENV === 'development'
+    },
+    handleAxisXSortCallback () {
+      return this.getTransitionSortCallback('items', 'transitionGroup')
+    },
+    handleAxisYSortCallback () {
+      return this.getTransitionSortCallback('items2', 'transitionGroup2')
+    },
+    handleSortCallback () {
+      return this.getTransitionSortCallback('items2')
     }
   },
   methods: {
-    handleSortCallbackWithTransition (toIndex, fromIndex) {
-      if (toIndex === fromIndex) {
-        return
-      }
-      let promise = new Promise((resolve, reject) => {
-        let el = this.$refs.transitionGroup.$el
-        let handleTransitionEnd = () => {
-          el.removeEventListener('transitionend', handleTransitionEnd)
-          resolve()
+    getTransitionSortCallback (itemsKey, transitionGroupRefKey) {
+      return (toIndex, fromIndex) => {
+        if (toIndex === fromIndex) {
+          return
         }
-        el.addEventListener('transitionend', handleTransitionEnd)
-      })
-      this.moveItem(this.items, fromIndex, toIndex)
-      // 动画完了再回调成功
-      return promise
-    },
-    handleSortCallback (toIndex, fromIndex) {
-      if (toIndex === fromIndex) {
-        return
+        let promise
+        if (transitionGroupRefKey) {
+          promise = new Promise((resolve, reject) => {
+            let el = this.$refs[transitionGroupRefKey].$el
+            let handleTransitionEnd = () => {
+              el.removeEventListener('transitionend', handleTransitionEnd)
+              resolve()
+            }
+            el.addEventListener('transitionend', handleTransitionEnd)
+          })
+        }
+        this.moveItem(this[itemsKey], fromIndex, toIndex)
+        // 动画完了再回调成功
+        return promise
       }
-      this.moveItem(this.items2, fromIndex, toIndex)
     },
     moveItem (items, fromIndex, toIndex) {
       let item = items[fromIndex]
