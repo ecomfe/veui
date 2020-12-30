@@ -1,6 +1,7 @@
 @import "./lib.less";
 @import "./normalize.less";
 @import (reference) "./link.less";
+@import (reference) "./drag.less";
 
 /* Overriding est variables */
 @support-ie-version: 11;
@@ -29,16 +30,7 @@
     }
   }
 
-  @drag-sort: ~"@{veui-prefix}-drag-sort";
-  @data-drag-sort: ~"[data-@{drag-sort}]";
-  @data-drag-sort-dragging: ~"[data-@{drag-sort}-dragging]";
-  @{data-drag-sort} {
-    cursor: grab;
-  }
-  .@{drag-sort}-dragging,
-  @{data-drag-sort-dragging} {
-    cursor: grabbing;
-  }
+  ._veui-drag-sort();
 }
 ._veui-output-common(html) {
   *,

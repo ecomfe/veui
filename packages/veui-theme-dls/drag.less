@@ -1,0 +1,30 @@
+@import "./lib.less";
+
+._veui-drag-sort {
+  @drag-sort: ~"@{veui-prefix}-drag-sort";
+
+  @data-drag-sort: ~"[data-@{drag-sort}]";
+  @data-drag-sort-dragging: ~"[data-@{drag-sort}-dragging]";
+  @{data-drag-sort} {
+    cursor: grab;
+  }
+  .@{drag-sort}-dragging,
+  @{data-drag-sort-dragging} {
+    cursor: grabbing;
+  }
+
+  @data-drag-sort-dragging-ghost: ~"[data-@{drag-sort}-dragging-ghost]";
+  @{data-drag-sort-dragging-ghost} {
+    outline: 1px dashed @dls-line-color-2;
+    outline-offset: -1px;
+
+    color: transparent !important;
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+
+    * {
+      visibility: hidden !important;
+    }
+  }
+}
