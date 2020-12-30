@@ -11,13 +11,15 @@ import {
   kebabCase
 } from 'lodash'
 import { prefixify } from '../../mixins/prefix'
+import config from '../../managers/config'
 import BaseHandler from './BaseHandler'
 
-// TODO: default config。2p 是多少？
-const hotRectExtra = {
-  x: [10, 0],
-  y: [0, 5]
-}
+config.defaults({
+  'drag.sort.hotRectExtra': {
+    x: [8, 0],
+    y: [0, 8]
+  }
+})
 
 const defaultDragSortInsertAlign = 'middle'
 const preventDragOverDefault = evt => evt.preventDefault()
@@ -55,6 +57,8 @@ export default class SortHandler extends BaseHandler {
         'align'
       ])
     )
+
+    this.hotRectExtra = config.get('drag.sort.hotRectExtra')
   }
 
   start (...args) {
@@ -113,7 +117,7 @@ export default class SortHandler extends BaseHandler {
     const hotRects = getHotRects(
       this.getElements(),
       this.container,
-      hotRectExtra[this.options.axis],
+      this.hotRectExtra[this.options.axis],
       this.options.axis
     )
 
@@ -215,11 +219,14 @@ export default class SortHandler extends BaseHandler {
 }
 
 function getHotRects (elements, container, hotExtra, axis) {
-  // TODO: rtl
+  // TODO: rtl，把 leading, trailing 互换
+
+  // 把水平方向的左右和垂直方向的上下归一为 leading(前)、trailing(后)，下面好统一处理
   const [top, bottom, leading, trailing] = exchangeAxisValues(
     ['top', 'bottom', 'left', 'right'],
     axis
   )
+  // 把 x,y 方向上的扩展热区像素值处理成 对应 Rect Tuple 的几个值
   const hotExtraValues = zip(
     hotExtra.map(val => val * -1),
     hotExtra
@@ -257,9 +264,11 @@ function getHotRects (elements, container, hotExtra, axis) {
       return rows
     }, [])
     .map(function (rects) {
+      // 此时 rect 为 元素的边界
       let rowCount = rects.length
       let first = rects[0]
       let last = rects[rects.length - 1]
+      // 首尾插入一个相对容器边界的空矩形用于方便下面热区首尾计算
       rects.unshift({
         [top]: first[top],
         [bottom]: first[bottom],
@@ -271,6 +280,8 @@ function getHotRects (elements, container, hotExtra, axis) {
         [leading]: containerBoundary[trailing]
       })
 
+      // 从 元素边界 计算 热区边界
+      // 变换后 Rect Tuple 元素：热区矩形的左、右、上、下，热区对应的插入索引
       rects = rects.slice(1).map(function (current, i) {
         let prev = rects[i]
         return exchangeAxisValues(
@@ -288,10 +299,7 @@ function getHotRects (elements, container, hotExtra, axis) {
       count += rowCount
       return rects
     })
-    .reduce(function (rects, row) {
-      return rects.concat(row)
-    }, [])
-
+    .reduce((rects, row) => rects.concat(row))
   return hotRects
 }
 
