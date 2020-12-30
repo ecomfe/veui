@@ -288,17 +288,6 @@ section {
   &:nth-child(3n) {
     font-size: 1.2em;
   }
-
-  &[data-veui-drag-sort-dragging-ghost] {
-    &,
-    * {
-      color: transparent !important;
-      background: transparent !important;
-      border-color: transparent !important;
-    }
-    outline: 1px dashed gray;
-    outline-offset: -1px;
-  }
 }
 
 .list {
