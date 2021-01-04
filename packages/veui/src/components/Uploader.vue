@@ -1071,7 +1071,7 @@ export default {
             }
 
             if (this.requestMode === 'iframe' && this.autoupload) {
-              this.submit(newFiles[0])
+              newFiles[0].toBeUploaded && this.submit(newFiles[0])
             }
             if (this.requestMode !== 'iframe' && this.autoupload) {
               this.uploadFiles()
