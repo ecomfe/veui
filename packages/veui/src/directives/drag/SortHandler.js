@@ -21,6 +21,8 @@ config.defaults({
   }
 })
 
+const isSafari = /apple/i.test(navigator.vendor)
+
 const defaultDragSortInsertAlign = 'middle'
 const preventDragOverDefault = evt => evt.preventDefault()
 
@@ -63,11 +65,8 @@ export default class SortHandler extends BaseHandler {
 
   start (...args) {
     super.start(...args)
-    let [
-      {
-        event: { currentTarget, offsetX, offsetY }
-      }
-    ] = args
+    let { event } = args[0]
+    let { currentTarget, offsetX, offsetY } = event
     let { offsetWidth, offsetHeight } = currentTarget
     // 算光标到元素中心的偏移量
     this.fixMouseoffset = [
@@ -100,6 +99,14 @@ export default class SortHandler extends BaseHandler {
 
     // 计算热区
     this.updateHotRects()
+
+    // 处于 tranformed 容器内的元素被拖动时：
+    // * firefox: 被拖动元素snapshot在开始拖动时位置偏移，并从偏移位置动画移动到鼠标位置（猜测实现上没有考虑 transform 产生的偏移）
+    // * safari: 不显示被拖动元素snapshot（猜测实现上存在与firefox类似的问题）
+    // 对比了 react-dnd, sortable.js 等其它使用原生 DnD 接口的拖动库，都存在上述问题。
+    // 经过实验发现，通过主动设置 drag image (setDragImage) 可以在 firefox 上解决偏移问题
+    // 再额外增加 safari 且被拖动元素处于 transformed 容器内的兼容处理————克隆被拖动元素且保证在视口内使得safari可以正常生成 snapshot
+    setDragSnapshotImage(currentTarget, event)
 
     // 下一帧再加上 ghost 样式，避免拖动的 snapshot 也是 ghost 样式
     requestAnimationFrame(function () {
@@ -146,10 +153,11 @@ export default class SortHandler extends BaseHandler {
     }
 
     // 鼠标相对视口的坐标
+    let docEl = document.documentElement
     let point = calculatePotins(
       [
         [pageX, pageY],
-        [window.scrollX, window.scrollY],
+        [window.scrollX || docEl.scrollLeft, window.scrollY || docEl.scrollTop],
         this.options.align === 'middle' ? this.fixMouseoffset : [0, 0]
       ],
       (pagePoint, scrollPoint, fixPoint) => pagePoint - scrollPoint + fixPoint
@@ -383,3 +391,59 @@ function getCancelSource (context) {
     }
   })()
 }
+
+function setDragSnapshotImage (el, event) {
+  let { offsetX, offsetY } = event
+  let newEl
+  if (isSafari && isInsideTransformedContainer(el)) {
+    // newEl = getPlaceholderForElement(el)
+    newEl = cloneElementWithComputedStyle(el)
+    Object.assign(newEl.style, {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      zIndex: 214748364
+    })
+    document.body.append(newEl)
+    requestAnimationFrame(() => document.body.removeChild(newEl))
+  }
+  if (event.dataTransfer.setDragImage) {
+    event.dataTransfer.setDragImage(newEl || el, offsetX, offsetY)
+  }
+}
+
+function isInsideTransformedContainer (el) {
+  let current = el
+  while (current) {
+    let styles = window.getComputedStyle(current)
+    if (styles.transform !== 'none' || styles.transformStyle !== 'flat') {
+      return true
+    }
+    current = current.parentElement
+  }
+  return false
+}
+
+function cloneElementWithComputedStyle (el) {
+  let newEl = el.cloneNode(false)
+  if (el.nodeType === Node.ELEMENT_NODE) {
+    newEl.style.cssText = window.getComputedStyle(el).cssText
+  }
+  ;[...el.childNodes].forEach(function (node) {
+    newEl.appendChild(cloneElementWithComputedStyle(node))
+  })
+  return newEl
+}
+
+// function getPlaceholderForElement(el) {
+//   let canvas = document.createElement('canvas')
+//   canvas.width = el.offsetWidth
+//   canvas.height = el.offsetHeight
+//   let ctx = canvas.getContext('2d')
+//   ctx.fillStyle = 'white'
+//   ctx.lineWidth = 1
+//   ctx.strokeStyle = 'black'
+//   ctx.fillRect(0, 0, canvas.width, canvas.height)
+//   ctx.strokeRect(0, 0, canvas.width, canvas.height)
+//   return canvas
+// }
