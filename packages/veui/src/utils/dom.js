@@ -808,3 +808,26 @@ export function triggerCustom (el, type, detail) {
   evt.initCustomEvent(type, true, false, detail)
   el.dispatchEvent(evt)
 }
+
+export function isInsideTransformedContainer (el) {
+  let current = el.parentElement
+  while (current) {
+    let styles = window.getComputedStyle(current)
+    if (styles.transform !== 'none' || styles.transformStyle !== 'flat') {
+      return true
+    }
+    current = current.parentElement
+  }
+  return false
+}
+
+export function cloneElementWithComputedStyle (el) {
+  let newEl = el.cloneNode(false)
+  if (el.nodeType === Node.ELEMENT_NODE) {
+    newEl.style.cssText = window.getComputedStyle(el).cssText
+  }
+  ;[...el.childNodes].forEach(function (node) {
+    newEl.appendChild(cloneElementWithComputedStyle(node))
+  })
+  return newEl
+}

@@ -12,10 +12,14 @@ import {
 } from 'lodash'
 import { prefixify } from '../../mixins/prefix'
 import config from '../../managers/config'
+import {
+  isInsideTransformedContainer,
+  cloneElementWithComputedStyle
+} from '../../utils/dom'
 import BaseHandler from './BaseHandler'
 
 config.defaults({
-  'drag.sort.hotRectExtra': {
+  'drag.sort.triggerPadding': {
     x: [8, 0],
     y: [0, 8]
   }
@@ -60,7 +64,7 @@ export default class SortHandler extends BaseHandler {
       ])
     )
 
-    this.hotRectExtra = config.get('drag.sort.hotRectExtra')
+    this.triggerPadding = config.get('drag.sort.triggerPadding')
   }
 
   start (...args) {
@@ -90,7 +94,6 @@ export default class SortHandler extends BaseHandler {
 
     // 加上拖动中标记，用于匹配css
     currentTarget.dataset[datasetDraggingKey] = ''
-    // document.body.dataset[datasetDraggingKey] = ''
     document.body.classList.add(kebabCase(datasetDraggingKey))
 
     // 拖动完成后，如果拖动回调还没完成就不用再等了
@@ -124,7 +127,7 @@ export default class SortHandler extends BaseHandler {
     const hotRects = getHotRects(
       this.getElements(),
       this.container,
-      this.hotRectExtra[this.options.axis],
+      this.triggerPadding[this.options.axis],
       this.options.axis
     )
 
@@ -145,7 +148,7 @@ export default class SortHandler extends BaseHandler {
     this.hotRects = hotRects
   }
 
-  async drag ({ event: { pageX, pageY } }) {
+  drag ({ event: { pageX, pageY } }) {
     // 有transition的话需要等动画完成后才认为完成拖动
     // 前一次拖动回调完成后才能进去下一次
     if (this.isWaitingCallbackConfirm) {
@@ -154,7 +157,7 @@ export default class SortHandler extends BaseHandler {
 
     // 鼠标相对视口的坐标
     let docEl = document.documentElement
-    let point = calculatePotins(
+    let point = calculatePoints(
       [
         [pageX, pageY],
         [window.scrollX || docEl.scrollLeft, window.scrollY || docEl.scrollTop],
@@ -174,21 +177,24 @@ export default class SortHandler extends BaseHandler {
     if (!includes([fromIndex, fromIndex + 1], toIndex)) {
       // 标记一下开始回调
       this.isWaitingCallbackConfirm = true
-      let callbackPromise = Promise.race([
+      Promise.race([
         this.options.callback(toIndex, fromIndex),
         this.cancelSource.promise
       ])
         .catch(() => false)
+        .then(success => {
+          // 如果回调 false 表示这次拖动不生效
+          if (success === false) {
+            return
+          }
+          // 拖动成功后，更新下当前拖动元素索引
+          this.dragElementIndex = toIndex > fromIndex ? toIndex - 1 : toIndex
+          // 元素列表变了，热区也要更新下（需要等DOM更新了
+          Vue.nextTick(() => this.updateHotRects())
+        })
         .finally(() => {
           this.isWaitingCallbackConfirm = undefined
         })
-      // 如果回调 false 表示这次拖动不生效
-      if ((await callbackPromise) !== false) {
-        // 拖动成功后，更新下当前拖动元素索引
-        this.dragElementIndex = toIndex > fromIndex ? toIndex - 1 : toIndex
-        // 元素列表变了，热区也要更新下（需要等DOM更新了
-        Vue.nextTick(() => this.updateHotRects())
-      }
     }
 
     this.prevInsertIndex = toIndex
@@ -367,7 +373,7 @@ function getHtmlElement (el) {
   return el.$el || el
 }
 
-function calculatePotins (points, calc) {
+function calculatePoints (points, calc) {
   return zip(...points).map(values => calc(...values))
 }
 
@@ -396,9 +402,8 @@ function setDragSnapshotImage (el, event) {
   let { offsetX, offsetY } = event
   let newEl
   if (isSafari && isInsideTransformedContainer(el)) {
-    // newEl = getPlaceholderForElement(el)
     newEl = cloneElementWithComputedStyle(el)
-    Object.assign(newEl.style, {
+    assign(newEl.style, {
       position: 'fixed',
       top: 0,
       left: 0,
@@ -411,39 +416,3 @@ function setDragSnapshotImage (el, event) {
     event.dataTransfer.setDragImage(newEl || el, offsetX, offsetY)
   }
 }
-
-function isInsideTransformedContainer (el) {
-  let current = el
-  while (current) {
-    let styles = window.getComputedStyle(current)
-    if (styles.transform !== 'none' || styles.transformStyle !== 'flat') {
-      return true
-    }
-    current = current.parentElement
-  }
-  return false
-}
-
-function cloneElementWithComputedStyle (el) {
-  let newEl = el.cloneNode(false)
-  if (el.nodeType === Node.ELEMENT_NODE) {
-    newEl.style.cssText = window.getComputedStyle(el).cssText
-  }
-  ;[...el.childNodes].forEach(function (node) {
-    newEl.appendChild(cloneElementWithComputedStyle(node))
-  })
-  return newEl
-}
-
-// function getPlaceholderForElement(el) {
-//   let canvas = document.createElement('canvas')
-//   canvas.width = el.offsetWidth
-//   canvas.height = el.offsetHeight
-//   let ctx = canvas.getContext('2d')
-//   ctx.fillStyle = 'white'
-//   ctx.lineWidth = 1
-//   ctx.strokeStyle = 'black'
-//   ctx.fillRect(0, 0, canvas.width, canvas.height)
-//   ctx.strokeRect(0, 0, canvas.width, canvas.height)
-//   return canvas
-// }
