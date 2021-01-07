@@ -3,7 +3,8 @@ import {
   toggleClass,
   scrollToAlign,
   scrollTo,
-  getElementScrollbarWidth
+  getElementScrollbarWidth,
+  isInsideTransformedContainer
 } from '@/utils/dom'
 import { wait } from '../../../utils'
 
@@ -94,6 +95,21 @@ describe('utils/dom', () => {
     await wait(500)
     expect(el.scrollTop, 'scrollTo top 100px').to.be.equal(100)
     expect(el.scrollLeft, 'scrollTo left 100px').to.be.equal(100)
+    document.body.removeChild(el)
+  })
+
+  it('should check is an element inside a transformed container correctly', async () => {
+    let el = document.createElement('div')
+    el.innerHTML = `<div>
+      <div class="a" style="transform: translate(100px, 50px)">
+        <div class="b">1111</div>
+      </div>
+    </div>`
+    document.body.appendChild(el)
+
+    expect(isInsideTransformedContainer(el.querySelector('.a'))).to.equal(false)
+    expect(isInsideTransformedContainer(el.querySelector('.b'))).to.equal(true)
+
     document.body.removeChild(el)
   })
 })
