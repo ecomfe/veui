@@ -146,7 +146,7 @@ function refresh (el, binding, vnode) {
             },
             event
           }
-          handler.drag(dragParams)
+          handler.drag({ ...dragParams, last: true })
           contextComponent.$emit('dragend', dragParams)
           options.dragend(dragParams)
           handler.end(

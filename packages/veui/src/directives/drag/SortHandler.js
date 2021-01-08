@@ -148,10 +148,14 @@ export default class SortHandler extends BaseHandler {
     this.hotRects = hotRects
   }
 
-  drag ({ event: { pageX, pageY } }) {
-    // 有transition的话需要等动画完成后才认为完成拖动
-    // 前一次拖动回调完成后才能进去下一次
-    if (this.isWaitingCallbackConfirm) {
+  drag ({ event: { pageX, pageY }, last }) {
+    // 1. Safari上 drag 和 dragend event里的 pageX/Y 不一致
+    //    而 drag.js 里在 dragend 时也会再回调一次 drag
+    //    所以通过 last 来判断是不是最后一次 drag
+    //    这里如果是在 dragend 里触发的 drag 就无视
+    // 2. 有transition的话需要等动画完成后才认为完成拖动
+    //    前一次拖动回调完成后才能进去下一次
+    if (last || this.isWaitingCallbackConfirm) {
       return
     }
 
