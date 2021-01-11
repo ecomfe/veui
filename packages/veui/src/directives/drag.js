@@ -9,6 +9,7 @@ import {
   omit
 } from 'lodash'
 import { getNodes } from '../utils/context'
+import { isFirefox as checkIsFirefox } from '../utils/bom'
 import BaseHandler from './drag/BaseHandler'
 import TranslateHandler from './drag/TranslateHandler'
 import SortHandler from './drag/SortHandler'
@@ -18,7 +19,7 @@ config.defaults({
   'drag.prefix': '@'
 })
 
-const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+const isFirefox = checkIsFirefox()
 
 const HANDLERS = {}
 

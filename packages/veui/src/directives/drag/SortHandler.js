@@ -16,6 +16,7 @@ import {
   isInsideTransformedContainer,
   cloneElementWithComputedStyle
 } from '../../utils/dom'
+import { isSafari as checkIsSafari } from '../../utils/bom'
 import BaseHandler from './BaseHandler'
 
 config.defaults({
@@ -25,7 +26,7 @@ config.defaults({
   }
 })
 
-const isSafari = /apple/i.test(navigator.vendor)
+const isSafari = checkIsSafari()
 
 const defaultDragSortInsertAlign = 'middle'
 const preventDragOverDefault = evt => evt.preventDefault()
