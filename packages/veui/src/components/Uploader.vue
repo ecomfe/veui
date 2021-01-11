@@ -1051,11 +1051,12 @@ export default {
               return
             }
 
-            if (this.requestMode === 'iframe' && this.autoupload) {
-              this.submit(newFile)
-            }
-            if (this.requestMode !== 'iframe' && this.autoupload) {
-              this.uploadFile(newFile)
+            if (this.autoupload) {
+              if (this.requestMode === 'iframe') {
+                this.submit(newFile)
+              } else {
+                this.uploadFile(newFile)
+              }
             }
           } else {
             this.fileList =
@@ -1067,11 +1068,14 @@ export default {
               this.fileList = this.fileList.slice(-1)
             }
 
-            if (this.requestMode === 'iframe' && this.autoupload) {
-              newFiles[0].toBeUploaded && this.submit(newFiles[0])
-            }
-            if (this.requestMode !== 'iframe' && this.autoupload) {
-              this.uploadFiles()
+            if (this.autoupload) {
+              if (this.requestMode === 'iframe') {
+                if (newFiles[0].toBeUploaded) {
+                  this.submit(newFiles[0])
+                }
+              } else {
+                this.uploadFiles()
+              }
             }
           }
         }
