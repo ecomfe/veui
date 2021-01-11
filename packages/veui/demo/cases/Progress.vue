@@ -36,6 +36,13 @@
     />
   </section>
   <section>
+    <h2>线性进度条（不确定进度）</h2>
+    <veui-progress
+      :status.sync="status"
+      indeterminate
+    />
+  </section>
+  <section>
     <h2>线性进度条（小尺寸）</h2>
     <veui-progress
       :value="Number(progress)"

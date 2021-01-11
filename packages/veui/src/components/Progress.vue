@@ -50,7 +50,7 @@
     />
   </svg>
   <div
-    v-if="desc"
+    v-if="desc && !indeterminate"
     :id="descId"
     :class="$c('progress-desc')"
   >
@@ -122,7 +122,7 @@ export default {
   },
   computed: {
     realValue () {
-      return clamp(this.value, this.min, this.max)
+      return this.indeterminate ? null : clamp(this.value, this.min, this.max)
     },
     klass () {
       return {
