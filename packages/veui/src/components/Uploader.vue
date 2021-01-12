@@ -147,6 +147,7 @@
               v-if="file.status === 'uploading' && requestMode !== 'iframe'"
               :value="file.loaded / file.total"
               :ui="uiParts.progress"
+              :indeterminate="file.loaded < 0"
             />
           </template>
           <template v-else>
@@ -281,6 +282,7 @@
               v-if="requestMode !== 'iframe'"
               :value="file.loaded / file.total"
               :ui="uiParts.progress"
+              :indeterminate="file.loaded < 0"
             />
           </div>
           <slot

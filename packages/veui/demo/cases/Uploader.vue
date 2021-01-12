@@ -417,15 +417,21 @@ export default {
         xhr.upload.onprogress = e => onprogress(e)
         xhr.onload = async () => {
           const toProceed = await this.$confirm('Upload complete. Proceed?')
-          if (toProceed) {
+          if (!toProceed) {
+            oncancel()
+            return
+          }
+          onprogress({
+            loaded: -1,
+            total: file.size
+          })
+          setTimeout(function () {
             try {
               onload(JSON.parse(xhr.responseText))
             } catch (e) {
               onload({ success: false, message: e })
             }
-          } else {
-            oncancel()
-          }
+          }, 3000)
         }
         xhr.onerror = e => onerror(e)
         let formData = new FormData()
