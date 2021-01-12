@@ -50,7 +50,8 @@ describe('directives/drag/SortHandler', () => {
         [120, 175],
         [125, 160],
         [128, 162],
-        [130, 130]
+        [130, 130],
+        [131, 128]
       ],
       {
         onDragStart () {
