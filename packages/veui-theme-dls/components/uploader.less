@@ -303,13 +303,16 @@
       .dls-icon-size(@dls-uploader-media-entry-icon-size, true);
     }
 
-    & > ul {
+    & > .@{veui-prefix}-uploader-controls {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       height: 100%;
       padding: 0;
-      .reset-list-style();
+
+      .@{veui-prefix}-control-item {
+        justify-content: flex-start;
+      }
     }
   }
 
