@@ -98,10 +98,9 @@
                     file.status === 'failure'
                 }"
               />
-              <veui-icon
-                v-if="file.status === 'uploading'"
-                :name="icons.loading"
-                spin
+              <veui-loading
+                v-else
+                loading
                 :class="$c('uploader-list-loading-icon')"
               />
               <span
@@ -144,10 +143,12 @@
               v-bind="getScopeValue(index, file)"
             />
             <veui-progress
-              v-if="file.status === 'uploading' && requestMode !== 'iframe'"
-              :value="file.loaded / file.total"
+              v-if="file.status === 'uploading'"
+              :value="isIndeterminate(file) ? 0 : file.loaded / file.total"
               :ui="uiParts.progress"
-              :indeterminate="file.loaded < 0"
+              :indeterminate="
+                isIndeterminate(file) || requestMode === 'iframe'
+              "
             />
           </template>
           <template v-else>
@@ -564,6 +565,7 @@
 <script>
 import Button from './Button'
 import Icon from './Icon'
+import Loading from './Loading'
 import Popover from './Popover'
 import Progress from './Progress'
 import Dropdown from './Dropdown'
@@ -580,7 +582,8 @@ import {
   isFunction,
   partial,
   endsWith,
-  find
+  find,
+  isNumber
 } from 'lodash'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
@@ -633,6 +636,7 @@ export default {
   name: 'veui-uploader',
   components: {
     'veui-icon': Icon,
+    'veui-loading': Loading,
     'veui-button': Button,
     'veui-popover': Popover,
     'veui-progress': Progress,
@@ -1541,6 +1545,11 @@ export default {
       }
 
       return null
+    },
+    isIndeterminate (file) {
+      let { loaded, total } = file
+
+      return !isNumber(loaded) || !isNumber(total) || loaded < 0 || total <= 0
     }
   }
 }

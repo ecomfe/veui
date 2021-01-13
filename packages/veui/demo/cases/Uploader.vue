@@ -19,7 +19,36 @@
     @invalid="handleInvalid"
   >
     <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于200像素，最多上传3张图
+      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于100像素，最多上传3张图
+    </template>
+    <template #button-label>
+      <veui-icon name="id-card"/>
+    </template>
+    <template #file-after="{ name }">
+      <span>{{ name }}</span>
+    </template>
+  </veui-uploader>
+  <h2>图片上传模式 (iframe)</h2>
+  <veui-uploader
+    v-model="files"
+    type="image"
+    name="file"
+    action="/uploadiframe"
+    request-mode="iframe"
+    :max-count="3"
+    max-size="100kb"
+    accept=".jpg,.jpeg,.gif"
+    :payload="payload"
+    :validator="validator"
+    :convert-response="convertResponse"
+    @success="onSuccess"
+    @failure="onFailure"
+    @change="handleChange('files')"
+    @statuschange="handleStatusChange"
+    @invalid="handleInvalid"
+  >
+    <template slot="desc">
+      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于100像素，最多上传3张图
     </template>
     <template #button-label>
       <veui-icon name="id-card"/>
@@ -47,7 +76,7 @@
     @invalid="handleInvalid"
   >
     <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于200像素，最多上传3张图
+      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于100像素，最多上传3张图
     </template>
     <template #button-label>
       <veui-icon name="id-card"/>
@@ -73,7 +102,7 @@
     @invalid="handleInvalid"
   >
     <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于200像素，最多上传3张图
+      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于100像素，最多上传3张图
     </template>
     <template #button-label>
       <veui-icon name="id-card"/>
@@ -151,7 +180,7 @@
     :payload="payload"
   >
     <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在500kb以内，宽、高大于200像素，最多上传1张图
+      请选择jpg,jpeg,gif图片，大小在500kb以内，宽、高大于100像素，最多上传1张图
     </template>
   </veui-uploader>
   <veui-button @click="handleChangeFile">修改</veui-button>
@@ -167,7 +196,7 @@
     :payload="payload"
   >
     <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在500kb以内，宽、高大于200像素，最多上传5张图
+      请选择jpg,jpeg,gif图片，大小在500kb以内，宽、高大于100像素，最多上传5张图
     </template>
   </veui-uploader>
   <veui-button @click="handleChangeFiles">修改</veui-button>
@@ -451,7 +480,7 @@ export default {
           image.src = window.URL.createObjectURL(file)
           image.onload = () => {
             resolve({
-              valid: image.height > 200 && image.width > 200,
+              valid: image.height > 100 && image.width > 100,
               message: '图片宽高太小'
             })
           }

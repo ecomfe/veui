@@ -156,10 +156,6 @@
       margin: @dls-uploader-media-spacing-y 0 0 @dls-uploader-media-spacing-x;
       width: @dls-uploader-media-width-m;
 
-      &-failure {
-        border: 1px solid @dls-uploader-media-border-color-error;
-      }
-
       &-hidden {
         opacity: 0;
         position: absolute;
@@ -226,6 +222,7 @@
 
     &-container-failure {
       flex-direction: column;
+      border: 1px solid @dls-uploader-media-border-color-error;
 
       .@{veui-prefix}-uploader-input-label-media {
         flex-direction: column;
@@ -362,5 +359,9 @@
         .dls-icon-size(@dls-uploader-media-entry-icon-size, true);
       }
     }
+  }
+
+  &-hide {
+    display: none;
   }
 }

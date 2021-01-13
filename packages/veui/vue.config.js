@@ -6,6 +6,12 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
+function delay (time) {
+  return new Promise(resolve => {
+    setTimeout(resolve, time)
+  })
+}
+
 const VEUI_PREFIX = process.env.VEUI_PREFIX || process.env.VUE_APP_VEUI_PREFIX
 const vars = {}
 
@@ -87,16 +93,18 @@ module.exports = {
       app.post('/upload', (req, res) => {
         res.json({
           success: Math.random() > 0.5,
-          src: 'https://images.pexels.com/videos/857134/free-video-857134.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+          src:
+            'https://images.pexels.com/videos/857134/free-video-857134.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
           message: 'image too large'
         })
       })
 
-      app.post('/uploadiframe', (req, res) => {
+      app.post('/uploadiframe', async (req, res) => {
+        await delay(3000)
         res.send(
           `<script>window.parent.postMessage({code: ${
             Math.random() > 0.5 ? 1 : 0
-          }, result: {src: "https://webpack.js.org/e0b5805d423a4ec9473ee315250968b2.svg"}})</script>`
+          }, result: {src: "https://raw.githubusercontent.com/webpack/media/master/logo/logo-on-white-bg.png"}})</script>`
         )
       })
     }
