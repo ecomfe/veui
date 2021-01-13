@@ -487,28 +487,28 @@ export default {
         })
       },
       imageControls (file, defaultControls) {
-        if (file.status === 'success') {
-          return [
-            { name: 'moveright', icon: 'chevron-right', disabled: false },
-            {
-              name: 'moveright1',
-              icon: 'chevron-right',
-              disabled: false,
-              children: [
-                {
-                  name: 'moveright1-1',
-                  label: '操作第一'
-                },
-                {
-                  name: 'moveright1-2',
-                  label: '操作第二'
-                }
-              ]
-            },
-            ...defaultControls
-          ]
+        if (file.status !== 'success') {
+          return defaultControls
         }
-        return defaultControls
+        return [
+          { name: 'moveright', icon: 'chevron-right', disabled: false },
+          {
+            name: 'moveright1',
+            icon: 'chevron-right',
+            disabled: false,
+            children: [
+              {
+                name: 'moveright1-1',
+                label: '操作第一'
+              },
+              {
+                name: 'moveright1-2',
+                label: '操作第二'
+              }
+            ]
+          },
+          ...defaultControls
+        ]
       },
       imageControlsSmall (file, defaultControls) {
         if (file.status === 'success') {
@@ -546,13 +546,13 @@ export default {
             label: '图片库'
           },
           {
-            name: 'add',
+            name: 'more',
             icon: 'thumb-up-solid',
             label: '更多',
             children: [
               {
                 label: '操作第一',
-                name: 'entry1'
+                name: 'add'
               },
               {
                 label: '操作第二',

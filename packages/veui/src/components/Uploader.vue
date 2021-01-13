@@ -168,88 +168,13 @@
                 :src="file.src"
                 :class="$c('uploader-list-media-container-media')"
               />
-              <div :class="`${listClass}-mask`">
-                <template
-                  v-for="(control, controlIndex) in getMediaControls(file)"
-                >
-                  <veui-dropdown
-                    v-if="control.children && control.children.length"
-                    :key="`${control.label}-${controlIndex}`"
-                    :class="$c('control-item')"
-                    :options="control.children"
-                    trigger="hover"
-                    :expanded.sync="expandedControlDropdowns[index]"
-                    @click="handleMediaAction(file, index, $event)"
-                  >
-                    <template
-                      slot="trigger"
-                      slot-scope="{ props, handlers }"
-                    >
-                      <label
-                        v-if="control.name === 'replace'"
-                        :key="control.name"
-                        :for="inputId"
-                        :ui="uiParts.control"
-                        :class="{
-                          [$c('button')]: true,
-                          [$c('disabled')]: realUneditable
-                        }"
-                        :tabindex="realUneditable ? null : 0"
-                        :aria-label="control.label"
-                        @click.stop="replaceFile(file)"
-                      >
-                        <veui-icon :name="icons.upload"/>
-                      </label>
-                      <veui-button
-                        v-else
-                        :key="control.name"
-                        :ui="uiParts.control"
-                        :disabled="
-                          control.disabled !== undefined
-                            ? control.disabled
-                            : realUneditable
-                        "
-                        :aria-label="control.label"
-                        v-bind="props"
-                        v-on="handlers"
-                      >
-                        <veui-icon :name="control.icon"/>
-                      </veui-button>
-                    </template>
-                  </veui-dropdown>
-                  <label
-                    v-else-if="control.name === 'replace'"
-                    :key="control.name"
-                    :for="inputId"
-                    :ui="uiParts.control"
-                    :class="{
-                      [$c('button')]: true,
-                      [$c('disabled')]: realUneditable,
-                      [$c('control-item')]: true
-                    }"
-                    :tabindex="realUneditable ? null : 0"
-                    :aria-label="control.label"
-                    @click.stop="replaceFile(file)"
-                  >
-                    <veui-icon :name="icons.upload"/>
-                  </label>
-                  <veui-button
-                    v-else
-                    :key="control.name"
-                    :class="$c('control-item')"
-                    :ui="uiParts.control"
-                    :disabled="
-                      control.disabled !== undefined
-                        ? control.disabled
-                        : realUneditable
-                    "
-                    :aria-label="control.label"
-                    @click="handleMediaAction(file, index, control.name)"
-                  >
-                    <veui-icon :name="control.icon"/>
-                  </veui-button>
-                </template>
-              </div>
+              <veui-uploader-controls
+                :class="`${listClass}-mask`"
+                :items="getMediaControls(file)"
+                :expanded.sync="expandedControlDropdowns[index]"
+                :disabled="realUneditable"
+                @click="handleMediaAction(file, index, $event)"
+              />
             </div>
             <slot
               name="file-after"
@@ -318,87 +243,13 @@
                 {{ file.name }}
               </span>
             </div>
-            <div :class="`${listClass}-mask`">
-              <template
-                v-for="(control, controlIndex) in getMediaControls(file)"
-              >
-                <veui-dropdown
-                  v-if="control.children && control.children.length"
-                  :key="`${control.label}-${controlIndex}`"
-                  :class="$c('control-item')"
-                  :options="control.children"
-                  :expanded.sync="expandedControlDropdowns[index]"
-                  trigger="hover"
-                  @click="handleMediaAction(file, index, $event)"
-                >
-                  <template
-                    slot="trigger"
-                    slot-scope="{ props, handlers }"
-                  >
-                    <label
-                      v-if="control.name === 'replace'"
-                      :key="control.name"
-                      :for="inputId"
-                      :ui="uiParts.control"
-                      :class="{
-                        [$c('button')]: true,
-                        [$c('disabled')]: realUneditable
-                      }"
-                      :tabindex="realUneditable ? null : 0"
-                      :aria-label="control.label"
-                      @click.stop="replaceFile(file)"
-                    >
-                      <veui-icon :name="icons.upload"/>
-                    </label>
-                    <veui-button
-                      v-else
-                      :key="control.name"
-                      :ui="uiParts.control"
-                      :disabled="
-                        control.disabled !== undefined
-                          ? control.disabled
-                          : realUneditable
-                      "
-                      :aria-label="control.label"
-                      v-bind="props"
-                      v-on="handlers"
-                    >
-                      <veui-icon :name="control.icon"/>
-                    </veui-button>
-                  </template>
-                </veui-dropdown>
-                <label
-                  v-if="control.name === 'replace'"
-                  :key="control.name"
-                  :for="inputId"
-                  :ui="uiParts.control"
-                  :class="{
-                    [$c('button')]: true,
-                    [$c('disabled')]: realUneditable
-                  }"
-                  :tabindex="realUneditable ? null : 0"
-                  :aria-label="control.label"
-                  @click.stop="replaceFile(file)"
-                >
-                  <veui-icon :name="icons.upload"/>
-                </label>
-                <veui-button
-                  v-else
-                  :key="control.name"
-                  :ui="uiParts.control"
-                  :disabled="
-                    control.disabled !== undefined
-                      ? control.disabled
-                      : realUneditable
-                  "
-                  :class="$c('control-item')"
-                  :aria-label="control.label"
-                  @click="handleMediaAction(file, index, control.name)"
-                >
-                  <veui-icon :name="control.icon"/>
-                </veui-button>
-              </template>
-            </div>
+            <veui-uploader-controls
+              :class="`${listClass}-mask`"
+              :items="getMediaControls(file)"
+              :expanded.sync="expandedControlDropdowns[index]"
+              :disabled="realUneditable"
+              @click="handleMediaAction(file, index, $event)"
+            />
           </div>
           <veui-popover
             :target="`fileFailure${index}`"
@@ -452,59 +303,13 @@
             v-if="uiProps.size === 'm' && getMediaEntries().length > 1"
             :class="{ [$c('uploader-entries-container')]: true }"
           >
-            <ul>
-              <li
-                v-for="(entry, entryIndex) in getMediaEntries()"
-                :key="`${entry.name}-${entryIndex}`"
-              >
-                <veui-dropdown
-                  v-if="entry.children && entry.children.length"
-                  :key="`${entry.label}-${entryIndex}`"
-                  trigger="hover"
-                  :options="entry.children"
-                  :expanded.sync="expandedEntryDropdown"
-                  @click="handleMediaEntry"
-                >
-                  <template
-                    slot="trigger"
-                    slot-scope="{
-                      props: triggerProps,
-                      handlers: triggerHandlers
-                    }"
-                  >
-                    <veui-button
-                      :key="entry.name"
-                      :ui="uiParts.entry"
-                      :disabled="
-                        entry.disabled !== undefined
-                          ? entry.disabled
-                          : realUneditable
-                      "
-                      :aria-label="entry.label"
-                      v-bind="triggerProps"
-                      v-on="triggerHandlers"
-                    >
-                      <veui-icon :name="entry.icon"/>
-                      {{ entry.label }}
-                    </veui-button>
-                  </template>
-                </veui-dropdown>
-                <veui-button
-                  v-else
-                  :ui="uiParts.entry"
-                  :disabled="
-                    entry.disabled !== undefined
-                      ? entry.disabled
-                      : realUneditable || submitting
-                  "
-                  :aria-label="entry.label"
-                  @click="handleMediaEntry(entry.name)"
-                >
-                  <veui-icon :name="entry.icon"/>
-                  {{ entry.label }}
-                </veui-button>
-              </li>
-            </ul>
+            <veui-uploader-controls
+              :items="getMediaEntries()"
+              :expanded.sync="expandedEntryDropdown"
+              :disabled="realUneditable"
+              show-label
+              @click="handleMediaEntry"
+            />
           </div>
         </div>
       </slot>
@@ -557,11 +362,11 @@
 </template>
 
 <script>
+import Controls from './Uploader/Controls'
 import Button from './Button'
 import Icon from './Icon'
 import Popover from './Popover'
 import Progress from './Progress'
-import Dropdown from './Dropdown'
 import Lightbox from './Lightbox'
 import {
   cloneDeep,
@@ -632,8 +437,8 @@ export default {
     'veui-button': Button,
     'veui-popover': Popover,
     'veui-progress': Progress,
-    'veui-dropdown': Dropdown,
-    'veui-lightbox': Lightbox
+    'veui-lightbox': Lightbox,
+    'veui-uploader-controls': Controls
   },
   mixins: [prefix, ui, input, i18n],
   model: {
@@ -1483,6 +1288,9 @@ export default {
     handleMediaAction (file, index, actionName) {
       if (actionName === 'preview' || actionName === 'remove') {
         this[actionName](file, index)
+      } else if (actionName === 'replace') {
+        this.$refs.input.click()
+        this.replaceFile(file)
       } else {
         this.$emit(actionName, file, index)
       }
