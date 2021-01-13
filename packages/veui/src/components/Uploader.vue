@@ -279,10 +279,9 @@
               <slot name="uploading-label">{{ t('uploading') }}</slot>
             </div>
             <veui-progress
-              v-if="requestMode !== 'iframe'"
               :value="file.loaded / file.total"
               :ui="uiParts.progress"
-              :indeterminate="file.loaded < 0"
+              :indeterminate="requestMode === 'iframe' || file.loaded < 0"
             />
           </div>
           <slot
