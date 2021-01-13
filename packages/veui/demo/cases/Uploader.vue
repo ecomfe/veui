@@ -289,7 +289,7 @@
     name="file"
     action="/uploadiframe"
     request-mode="iframe"
-    :max-count="1"
+    :max-count="10"
     max-size="10mb"
     accept=".jpg,.jpeg,.gif"
     :payload="payload"
@@ -301,7 +301,7 @@
     @statuschange="handleStatusChange"
   >
     <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在10M以内，只能上传1张图
+      请选择jpg,jpeg,gif图片，大小在10M以内，只能上传10张图
     </template>
   </veui-uploader>
 </article>
@@ -629,5 +629,9 @@ h2 {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+}
+
+.veui-uploader:last-child {
+  margin-bottom: 50px;
 }
 </style>
