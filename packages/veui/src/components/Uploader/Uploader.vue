@@ -10,36 +10,7 @@
   tabindex="-1"
   :aria-label="t('uploader')"
 >
-  <div
-    v-if="type === 'file'"
-    :class="$c('uploader-button-container')"
-  >
-    <label
-      :for="inputId"
-      :class="{
-        [$c('button')]: true,
-        [$c('uploader-input-label')]: true,
-        [$c('disabled')]: inputDisabled
-      }"
-      :ui="realUi"
-      :tabindex="fileButtonDisabled ? null : 0"
-      @keydown.enter.space.prevent="handleEnter"
-      @click="handleClick"
-    >
-      <slot name="button-label">
-        <veui-icon :name="icons.upload"/>
-        <span>{{ t('selectFile') }}</span>
-      </slot>
-    </label>
-    <span
-      v-if="$slots.desc"
-      :class="$c('uploader-desc')"
-    >
-      <slot name="desc"/>
-    </span>
-  </div>
   <input
-    :id="inputId"
     ref="input"
     hidden
     type="file"
@@ -53,308 +24,35 @@
     "
     @change="handleNewFiles"
   >
-  <ul
-    :class="{
-      [listClass]: true,
-      [`${listClass}-picker-before`]: pickerPosition === 'before'
-    }"
-    :name="listClass"
+
+  <component
+    :is="`veui-uploader-${isMediaType ? 'media' : 'file'}`"
+    :type="type"
+    :controls="controls"
+    :files="fileList"
+    :entries="entries"
+    :addable="!canNotAddImage"
+    :disabled="realUneditable"
+    :picker-position="pickerPosition"
+    :request-mode="requestMode"
+    @add="handleImageAdd"
+    @replace="handleImageReplace"
+    @remove="handleImageRemove"
+    @preview="handelImagePreview"
   >
-    <li
-      v-for="(file, index) in fileList"
-      :key="`${file.name}-${file.src}`"
-      :class="{
-        [`${listClass}-item`]: true,
-        [`${listClass}-item-failure`]: file.status === 'failure',
-        [`${listClass}-item-dropdown-open`]: expandedControlDropdowns[index]
-      }"
-      :style="{
-        order: index + 1
-      }"
-    >
-      <template
-        v-if="
-          type === 'file' ||
-            (isMediaType && file.status === 'success') ||
-            !file.status
-        "
-      >
-        <slot
-          name="file"
-          v-bind="getScopeValue(index, file)"
-        >
-          <template v-if="type === 'file'">
-            <slot
-              name="file-before"
-              v-bind="getScopeValue(index, file)"
-            />
-            <div :class="$c('uploader-list-container')">
-              <veui-icon
-                :name="icons.file"
-                :class="{
-                  [$c('uploader-list-file-icon')]: true,
-                  [$c('uploader-list-file-icon-failure')]:
-                    file.status === 'failure'
-                }"
-              />
-              <span
-                :ref="`fileFailure${index}`"
-                :class="{
-                  [$c('uploader-list-name')]: true,
-                  [$c('uploader-list-name-success')]:
-                    file.status === 'success',
-                  [$c('uploader-list-name-failure')]:
-                    file.status === 'failure'
-                }"
-                :title="file.name"
-              >{{ file.name }}</span>
-              <veui-icon
-                v-if="file.status === 'success'"
-                :name="icons.success"
-                :class="$c('uploader-success-icon')"
-              />
-              <veui-icon
-                v-if="file.status === 'failure'"
-                :name="icons.failure"
-                :class="$c('uploader-failure-icon')"
-              />
-              <veui-button
-                :class="$c('uploader-list-remove')"
-                :ui="uiParts.remove"
-                :disabled="realUneditable"
-                @click="remove(file)"
-              >
-                <veui-icon :name="icons.clear"/>
-              </veui-button>
-              <veui-popover
-                v-if="file.status === 'failure'"
-                :target="`fileFailure${index}`"
-                position="top"
-              >{{ file.message || t('uploadFailure') }}</veui-popover>
-            </div>
-            <slot
-              name="file-after"
-              v-bind="getScopeValue(index, file)"
-            />
-            <veui-progress
-              v-if="file.status === 'uploading'"
-              :value="isIndeterminate(file) ? 0 : file.loaded / file.total"
-              :ui="uiParts.progress"
-              :indeterminate="
-                isIndeterminate(file) || requestMode === 'iframe'
-              "
-            />
-          </template>
-          <template v-else>
-            <slot
-              name="file-before"
-              v-bind="getScopeValue(index, file)"
-            />
-            <div :class="$c('uploader-list-media-container')">
-              <img
-                v-if="getMediaType(file) === 'image'"
-                :src="file.src"
-                :alt="file.alt || ''"
-                :class="$c('uploader-list-media-container-media')"
-              >
-              <img
-                v-else-if="getMediaType(file) === 'video' && file.poster"
-                :src="file.poster"
-                :alt="file.alt || ''"
-                :class="$c('uploader-list-media-container-media')"
-              >
-              <video
-                v-else-if="getMediaType(file) === 'video'"
-                :src="file.src"
-                :class="$c('uploader-list-media-container-media')"
-              />
-              <veui-uploader-controls
-                :class="`${listClass}-mask`"
-                :items="getMediaControls(file)"
-                :expanded.sync="expandedControlDropdowns[index]"
-                :disabled="realUneditable"
-                @click="handleMediaAction(file, index, $event)"
-              />
-            </div>
-            <slot
-              name="file-after"
-              v-bind="getScopeValue(index, file)"
-            />
-          </template>
-        </slot>
-      </template>
-      <template v-else-if="file.status === 'uploading' && isMediaType">
-        <slot
-          name="uploading"
-          v-bind="getScopeValue(index, file)"
-        >
-          <slot
-            name="file-before"
-            v-bind="getScopeValue(index, file)"
-          />
-          <div
-            :class="`${listClass}-container ${listClass}-container-uploading`"
-          >
-            <div :class="`${listClass}-container-uploading-text`">
-              <slot name="uploading-label">{{ t('uploading') }}</slot>
-            </div>
-            <veui-progress
-              :value="file.loaded / file.total"
-              :ui="uiParts.progress"
-              :indeterminate="requestMode === 'iframe' || file.loaded < 0"
-            />
-          </div>
-          <slot
-            name="file-after"
-            v-bind="getScopeValue(index, file)"
-          />
-        </slot>
-      </template>
-      <template v-else-if="file.status === 'failure' && isMediaType">
-        <slot
-          name="failure"
-          v-bind="getScopeValue(index, file)"
-        >
-          <slot
-            name="file-before"
-            v-bind="getScopeValue(index, file)"
-          />
-          <div
-            :ref="`fileFailure${index}`"
-            :class="`${listClass}-container ${listClass}-container-failure`"
-          >
-            <div
-              :class="{
-                [$c('uploader-input-label-media')]: true
-              }"
-              :ui="uiParts.media"
-              tabindex="0"
-            >
-              <slot
-                name="button-label"
-                v-bind="getScopeValue(index, file)"
-              >
-                <veui-icon :name="getIconName(type)"/>
-              </slot>
-              <span
-                :class="`${listClass}-file-name`"
-                :title="file.name"
-              >
-                {{ file.name }}
-              </span>
-            </div>
-            <veui-uploader-controls
-              :class="`${listClass}-mask`"
-              :items="getMediaControls(file)"
-              :expanded.sync="expandedControlDropdowns[index]"
-              :disabled="realUneditable"
-              @click="handleMediaAction(file, index, $event)"
-            />
-          </div>
-          <veui-popover
-            :target="`fileFailure${index}`"
-            position="top"
-          >
-            {{ file.message || t('uploadFailure') }}
-          </veui-popover>
-          <slot
-            name="file-after"
-            v-bind="getScopeValue(index, file)"
-          />
-        </slot>
-      </template>
-    </li>
-    <li
-      v-if="isMediaType"
-      key="input"
-      :class="{
-        [`${listClass}-item`]: true,
-        [`${listClass}-item-upload`]: true,
-        [`${listClass}-item-hidden`]: maxCount && fileList.length >= maxCount
-      }"
-    >
-      <slot name="upload">
-        <div
-          :class="{
-            [$c('uploader-list-media-container')]: true,
-            [$c('uploader-list-media-container-upload')]: true,
-            [$c(
-              'uploader-list-media-item-entry-dropdown-open'
-            )]: expandedEntryDropdown
-          }"
-        >
-          <label
-            :for="inputId"
-            :class="{
-              [$c('button')]: true,
-              [$c('uploader-input-label-media')]: true,
-              [$c('disabled')]: realUneditable || submitting
-            }"
-            :tabindex="realUneditable || submitting ? null : 0"
-            :ui="uiParts.media"
-            @keydown.enter.space.prevent="handleEnter"
-            @click="handleClick"
-          >
-            <slot name="button-label">
-              <veui-icon :name="getIconName(type)"/>
-            </slot>
-          </label>
-          <div
-            v-if="uiProps.size === 'm' && getMediaEntries().length > 1"
-            :class="{ [$c('uploader-entries-container')]: true }"
-          >
-            <veui-uploader-controls
-              :items="getMediaEntries()"
-              :expanded.sync="expandedEntryDropdown"
-              :disabled="realUneditable"
-              show-label
-              @click="handleMediaEntry"
-            />
-          </div>
-        </div>
-      </slot>
-    </li>
-  </ul>
-  <span
-    v-if="$slots.desc && isMediaType"
-    :class="$c('uploader-desc')"
-  >
-    <slot name="desc"/>
-  </span>
-  <iframe
-    v-if="requestMode === 'iframe' && submitting"
-    :id="iframeId"
-    ref="iframe"
-    :name="iframeId"
-    :class="$c('uploader-hide')"
-  />
-  <form
-    v-if="requestMode === 'iframe' && submitting"
-    ref="form"
-    :action="action"
-    enctype="multipart/form-data"
-    method="POST"
-    :target="iframeId"
-    :class="$c('uploader-hide')"
-  >
-    <input
-      v-for="(val, key) in payload"
-      :key="key"
-      :name="key"
-      :value="val"
-      type="hidden"
-    >
-    <input
-      v-if="iframeMode === 'callback'"
-      name="callback"
-      :value="`parent.${callbackNamespace}['${callbackFuncName}']`"
-      type="hidden"
-    >
-  </form>
+    <template
+      v-for="(_, name) in $scopedSlots"
+      :slot="name"
+      slot-scope="slotData"
+    ><slot
+      :name="name"
+      v-bind="slotData"
+    /></template>
+  </component>
 
   <veui-lightbox
     :open.sync="previewOpen"
-    :datasource="fileList.filter(file => file.status === 'success')"
+    :datasource="files.filter(file => file.status === 'success')"
     :index.sync="previewIndex"
     v-bind="realPreviewOptions"
   />
@@ -362,12 +60,7 @@
 </template>
 
 <script>
-import Controls from './Uploader/Controls'
-import Button from './Button'
-import Icon from './Icon'
-import Popover from './Popover'
-import Progress from './Progress'
-import Lightbox from './Lightbox'
+import { parse, format } from 'bytes'
 import {
   cloneDeep,
   uniqueId,
@@ -383,14 +76,16 @@ import {
   find,
   isNumber
 } from 'lodash'
-import prefix from '../mixins/prefix'
-import ui from '../mixins/ui'
-import input from '../mixins/input'
-import i18n from '../mixins/i18n'
-import config from '../managers/config'
-import toast from '../managers/toast'
-import { parse, format } from 'bytes'
-import warn from '../utils/warn'
+import prefix from '../../mixins/prefix'
+import ui from '../../mixins/ui'
+import input from '../../mixins/input'
+import i18n from '../../mixins/i18n'
+import config from '../../managers/config'
+import toast from '../../managers/toast'
+import warn from '../../utils/warn'
+import Lightbox from '../Lightbox'
+import FileUploader from './_FileUploader'
+import MediaUploader from './_MediaUploader'
 
 config.defaults({
   'uploader.requestMode': 'xhr',
@@ -433,12 +128,9 @@ export default {
   errors: ERRORS,
   name: 'veui-uploader',
   components: {
-    'veui-icon': Icon,
-    'veui-button': Button,
-    'veui-popover': Popover,
-    'veui-progress': Progress,
     'veui-lightbox': Lightbox,
-    'veui-uploader-controls': Controls
+    'veui-uploader-file': FileUploader,
+    'veui-uploader-media': MediaUploader
   },
   mixins: [prefix, ui, input, i18n],
   model: {
@@ -560,9 +252,6 @@ export default {
     return {
       fileList: this.genFileList(this.value),
       canceled: false,
-      // inputId用于图片里的重新上传的label的for
-      inputId: uniqueId('veui-uploader-input'),
-      iframeId: uniqueId('veui-uploader-iframe'),
       callbackFuncName: uniqueId('veuiUploaderCallback'),
       replacingFile: null,
       currentSubmitingFile: null,
@@ -575,13 +264,6 @@ export default {
     }
   },
   computed: {
-    fileButtonDisabled () {
-      return (
-        this.realUneditable ||
-        this.fileList.length === this.maxCount ||
-        (this.requestMode === 'iframe' && this.submitting)
-      )
-    },
     listClass () {
       return this.$c(`uploader-list${this.isMediaType ? '-media' : ''}`)
     },
@@ -591,7 +273,7 @@ export default {
     realUneditable () {
       return this.realDisabled || this.realReadonly
     },
-    inputDisabled () {
+    canNotAddImage () {
       return (
         this.realUneditable ||
         (this.maxCount && this.fileList.length >= this.maxCount) ||
@@ -761,7 +443,7 @@ export default {
     handleClick (e) {
       this.replacingFile = null
       this.reset()
-      if (this.inputDisabled) {
+      if (this.canNotAddImage) {
         e.preventDefault()
       }
     },
@@ -1191,14 +873,6 @@ export default {
         }
       }
     },
-    getScopeValue (index, file) {
-      return {
-        index,
-        ...file._extra,
-        ...pick(file, PUBLIC_FILE_PROPS),
-        status: file.status
-      }
-    },
     getValue (isEmptyValue) {
       if (this.maxCount !== 1) {
         return this.pureFileList
@@ -1215,93 +889,6 @@ export default {
     preview ({ src }, index) {
       this.previewIndex = index
       this.previewOpen = true
-    },
-    getMediaControls (file) {
-      let defaultControls
-      let remove = {
-        name: 'remove',
-        icon: this.icons.clear,
-        label: this.t('remove')
-      }
-      let replace = {
-        name: 'replace',
-        icon: this.icons.upload,
-        label: this.t('replace')
-      }
-      switch (file.status) {
-        case 'success':
-          defaultControls = [
-            {
-              name: 'preview',
-              icon:
-                file.type === 'image'
-                  ? this.icons.previewImage
-                  : this.icons.previewVideo,
-              disabled: false,
-              label: this.t('preview')
-            }
-          ]
-
-          if (this.uiProps.size !== 's') {
-            defaultControls.push(replace)
-          }
-
-          defaultControls.push(remove)
-          break
-        case 'failure':
-          defaultControls = [replace, remove]
-          break
-        default:
-          defaultControls = [remove]
-      }
-      let controls = this.controls
-        ? this.controls(file, defaultControls)
-        : defaultControls
-
-      return controls.map(control => {
-        return {
-          ...control,
-          children: normalizeDropdownDatasource(control.children)
-        }
-      })
-    },
-    getMediaEntries () {
-      let defaultEntries = []
-
-      let addIcon = this.getIconName(this.type)
-
-      defaultEntries.push({
-        name: 'add',
-        icon: addIcon,
-        label: this.t('add')
-      })
-
-      let entries = this.entries ? this.entries(defaultEntries) : defaultEntries
-
-      return entries.map(entry => {
-        return {
-          ...entry,
-          children: normalizeDropdownDatasource(entry.children)
-        }
-      })
-    },
-    handleMediaAction (file, index, actionName) {
-      if (actionName === 'preview' || actionName === 'remove') {
-        this[actionName](file, index)
-      } else if (actionName === 'replace') {
-        this.$refs.input.click()
-        this.replaceFile(file)
-      } else {
-        this.$emit(actionName, file, index)
-      }
-    },
-    handleMediaEntry (entryName) {
-      if (entryName === 'add') {
-        this.$refs.input.click()
-        this.handleClick()
-        return
-      }
-      this.$emit(entryName)
     },
     clickInput () {
       this.$refs.input.click()
@@ -1320,6 +907,7 @@ export default {
     focus () {
       this.$el.focus()
     },
+
     getMediaType (file) {
       if (file.type) {
         return file.type
@@ -1338,36 +926,20 @@ export default {
         })
       })
     },
-    getIconName (type) {
-      switch (type) {
-        case 'image':
-          return this.icons.addImage
-        case 'video':
-          return this.icons.addVideo
-        case 'media':
-          return this.icons.addMedia
-      }
 
-      return null
+    handleImageAdd () {
+      this.clickInput()
     },
-    isIndeterminate (file) {
-      let { loaded, total } = file
-
-      return !isNumber(loaded) || !isNumber(total) || loaded < 0 || total <= 0
+    handleImageRemove (index) {
+      this.remove(this.fileList[index])
+    },
+    handleImageReplace (index) {
+      this.$refs.input.click()
+      this.replaceFile(this.fileList[index])
+    },
+    handelImagePreview (index) {
+      this.preview(this.fileList[index], index)
     }
   }
-}
-
-function normalizeDropdownDatasource (items) {
-  if (!items) {
-    return []
-  }
-  return items.map(item => {
-    return {
-      ...item,
-      value: item.name,
-      children: normalizeDropdownDatasource(item.children)
-    }
-  })
 }
 </script>

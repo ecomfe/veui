@@ -180,6 +180,10 @@
     "path": "Label.vue"
   },
   {
+    "name": "Lightbox",
+    "path": "Lightbox.vue"
+  },
+  {
     "name": "Link",
     "path": "Link.vue"
   },
@@ -389,10 +393,14 @@
   },
   {
     "name": "Uploader",
-    "path": "Uploader.vue"
+    "path": "Uploader/Uploader.vue"
   },
   {
-    "name": "Lightbox",
-    "path": "Lightbox.vue"
+    "name": "Uploader",
+    "path": "Uploader"
+  },
+  {
+    "name": "Uploader",
+    "path": "Uploader/index.js"
   }
 ]
