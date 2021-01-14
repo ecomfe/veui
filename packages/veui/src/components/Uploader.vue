@@ -90,18 +90,12 @@
             />
             <div :class="$c('uploader-list-container')">
               <veui-icon
-                v-if="file.status !== 'uploading'"
                 :name="icons.file"
                 :class="{
                   [$c('uploader-list-file-icon')]: true,
                   [$c('uploader-list-file-icon-failure')]:
                     file.status === 'failure'
                 }"
-              />
-              <veui-loading
-                v-else
-                loading
-                :class="$c('uploader-list-loading-icon')"
               />
               <span
                 :ref="`fileFailure${index}`"
@@ -565,7 +559,6 @@
 <script>
 import Button from './Button'
 import Icon from './Icon'
-import Loading from './Loading'
 import Popover from './Popover'
 import Progress from './Progress'
 import Dropdown from './Dropdown'
@@ -636,7 +629,6 @@ export default {
   name: 'veui-uploader',
   components: {
     'veui-icon': Icon,
-    'veui-loading': Loading,
     'veui-button': Button,
     'veui-popover': Popover,
     'veui-progress': Progress,
