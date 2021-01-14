@@ -17,7 +17,7 @@
       >
         <veui-button
           :key="control.name"
-          :ui="$parent.uiParts.control"
+          :ui="$parent.$parent.uiParts.control"
           :disabled="
             control.disabled !== undefined ? control.disabled : disabled
           "
@@ -34,7 +34,7 @@
     <veui-button
       v-else
       :key="control.name"
-      :ui="$parent.uiParts.control"
+      :ui="$parent.$parent.uiParts.control"
       :disabled="control.disabled !== undefined ? control.disabled : disabled"
       :class="$c('control-item')"
       :tabindex="disabled ? null : 0"
