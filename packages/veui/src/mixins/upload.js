@@ -1,17 +1,16 @@
 import { pick } from 'lodash'
 
-const PUBLIC_FILE_PROPS = ['name', 'src', 'type', 'poster']
+export const PUBLIC_FILE_PROPS = ['name', 'src', 'type', 'poster']
+
+export const sharedProps = ['type', 'controls', 'icons', 'realUi', 'uiProps', 'uiParts', 'entries', 'pickerPosition', 'requestMode']
 
 export default {
+  // TODO: the provide and inject bindings are NOT reactive
+  inject: sharedProps,
   props: {
-    type: String,
-    controls: Function,
     files: Array,
-    entries: Function,
     addable: Boolean,
-    disabled: Boolean,
-    pickerPosition: String,
-    requestMode: String
+    disabled: Boolean
   },
   methods: {
     getScopeValue (index, file) {

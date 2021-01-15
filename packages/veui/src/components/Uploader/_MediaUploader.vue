@@ -28,21 +28,23 @@
             v-bind="getScopeValue(index, file)"
           />
           <div :class="$c('uploader-list-media-container')">
-            <img
-              v-if="getMediaType(file) === 'image'"
-              :src="file.src"
+            <veui-uploader-file-viewer
+              v-if="file.type === 'image'"
+              tag="img"
+              :src="file.src || file"
               :alt="file.alt || ''"
               :class="$c('uploader-list-media-container-media')"
-            >
+            />
             <img
-              v-else-if="getMediaType(file) === 'video' && file.poster"
+              v-else-if="file.type === 'video' && file.poster"
               :src="file.poster"
               :alt="file.alt || ''"
               :class="$c('uploader-list-media-container-media')"
             >
-            <video
-              v-else-if="getMediaType(file) === 'video'"
-              :src="file.src"
+            <veui-uploader-file-viewer
+              v-else-if="file.type === 'video'"
+              tag="video"
+              :src="file.src || file"
               :class="$c('uploader-list-media-container-media')"
             />
             <veui-uploader-controls
@@ -79,7 +81,7 @@
             <veui-progress
               v-if="requestMode !== 'iframe'"
               :value="file.loaded / file.total"
-              :ui="$parent.uiParts.progress"
+              :ui="uiParts.progress"
             />
           </div>
           <slot
@@ -105,7 +107,7 @@
               :class="{
                 [$c('uploader-input-label-media')]: true
               }"
-              :ui="$parent.uiParts.media"
+              :ui="uiParts.media"
               tabindex="0"
             >
               <slot
@@ -167,7 +169,7 @@
               [$c('disabled')]: disabled
             }"
             :tabindex="disabled ? null : 0"
-            :ui="$parent.uiParts.media"
+            :ui="uiParts.media"
             @keydown.enter.space.prevent="handleEnter"
             @click="$emit('add')"
           >
@@ -177,7 +179,7 @@
           </label>
           <div
             v-if="
-              $parent.uiProps.size === 'm' && getMediaEntries().length > 1
+              uiProps.size === 'm' && getMediaEntries().length > 1
             "
             :class="{ [$c('uploader-entries-container')]: true }"
           >
@@ -204,8 +206,6 @@
 </template>
 
 <script>
-import { endsWith } from 'lodash'
-import config from '../../managers/config'
 import prefix from '../../mixins/prefix'
 import upload from '../../mixins/upload'
 import i18n from '../../mixins/i18n'
@@ -213,6 +213,7 @@ import Icon from '../Icon'
 import Progress from '../Progress'
 import Popover from '../Popover'
 import Controls from './_Controls'
+import FileViewer from './_FileViewer'
 
 export default {
   name: 'veui-uploader-media',
@@ -220,7 +221,8 @@ export default {
     'veui-icon': Icon,
     'veui-popover': Popover,
     'veui-progress': Progress,
-    'veui-uploader-controls': Controls
+    'veui-uploader-controls': Controls,
+    'veui-uploader-file-viewer': FileViewer
   },
   mixins: [prefix, upload, i18n],
   data () {
@@ -235,23 +237,16 @@ export default {
     }
   },
   methods: {
-    handleItemRemove (index) {
-      this.$emit('remove', index)
-    },
-    handleUploadButtonClick () {
-      this.$emit('add')
-    },
-
     getMediaControls (file) {
       let defaultControls
       let remove = {
         name: 'remove',
-        icon: this.$parent.icons.clear,
+        icon: this.icons.clear,
         label: this.t('@uploader.remove')
       }
       let replace = {
         name: 'replace',
-        icon: this.$parent.icons.upload,
+        icon: this.icons.upload,
         label: this.t('@uploader.replace')
       }
       switch (file.status) {
@@ -261,14 +256,14 @@ export default {
               name: 'preview',
               icon:
                 file.type === 'image'
-                  ? this.$parent.icons.previewImage
-                  : this.$parent.icons.previewVideo,
+                  ? this.icons.previewImage
+                  : this.icons.previewVideo,
               disabled: false,
               label: this.t('@uploader.preview')
             }
           ]
 
-          if (this.$parent.uiProps.size !== 's') {
+          if (this.uiProps.size !== 's') {
             defaultControls.push(replace)
           }
 
@@ -325,32 +320,14 @@ export default {
     handleMediaEntry (entryName) {
       this.$emit(entryName)
     },
-    getMediaType (file) {
-      if (file.type) {
-        return file.type
-      }
-      if (this.type === 'video' || this.type === 'image') {
-        return this.type
-      }
-
-      const mediaExtensions = config.get('uploader.mediaExtensions')
-
-      return find(Object.keys(mediaExtensions), type => {
-        const extensions = mediaExtensions[type]
-
-        return extensions.some(extension => {
-          return endsWith(file.name, '.' + extension)
-        })
-      })
-    },
     getIconName (type) {
       switch (type) {
         case 'image':
-          return this.$parent.icons.addImage
+          return this.icons.addImage
         case 'video':
-          return this.$parent.icons.addVideo
+          return this.icons.addVideo
         case 'media':
-          return this.$parent.icons.addMedia
+          return this.icons.addMedia
       }
 
       return null

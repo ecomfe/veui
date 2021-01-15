@@ -10,42 +10,22 @@
   tabindex="-1"
   :aria-label="t('uploader')"
 >
-  <input
-    ref="input"
-    hidden
-    type="file"
-    :name="name"
-    :accept="realAccept"
-    :disabled="realUneditable"
-    :multiple="
-      requestMode !== 'iframe' &&
-        (maxCount > 1 || maxCount === undefined) &&
-        !isReplacing
-    "
-    @change="handleNewFiles"
-  >
-
   <component
     :is="`veui-uploader-${isMediaType ? 'media' : 'file'}`"
-    :type="type"
-    :controls="controls"
     :files="fileList"
-    :entries="entries"
     :addable="!canNotAddImage"
     :disabled="realUneditable"
-    :picker-position="pickerPosition"
-    :request-mode="requestMode"
     @add="handleImageAdd"
     @replace="handleImageReplace"
     @remove="handleImageRemove"
     @preview="handelImagePreview"
   >
     <template
-      v-for="(_, name) in $scopedSlots"
-      :slot="name"
+      v-for="(_, slotName) in $scopedSlots"
+      :slot="slotName"
       slot-scope="slotData"
     ><slot
-      :name="name"
+      :name="slotName"
       v-bind="slotData"
     /></template>
   </component>
@@ -63,7 +43,8 @@
 import { parse, format } from 'bytes'
 import {
   cloneDeep,
-  uniqueId,
+  keys,
+  some,
   assign,
   last,
   pick,
@@ -74,12 +55,15 @@ import {
   partial,
   endsWith,
   find,
-  isNumber
+  uniqueId,
+  entries,
+  identity
 } from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import i18n from '../../mixins/i18n'
+import {sharedProps, PUBLIC_FILE_PROPS} from '../../mixins/upload'
 import config from '../../managers/config'
 import toast from '../../managers/toast'
 import warn from '../../utils/warn'
@@ -122,8 +106,6 @@ const ERRORS = {
   CUSTOM_INVALID: 'custom'
 }
 
-const PUBLIC_FILE_PROPS = ['name', 'src', 'type', 'poster']
-
 export default {
   errors: ERRORS,
   name: 'veui-uploader',
@@ -135,6 +117,9 @@ export default {
   mixins: [prefix, ui, input, i18n],
   model: {
     event: 'change'
+  },
+  provide () {
+    return pick(this, sharedProps)
   },
   props: {
     name: {
@@ -251,25 +236,11 @@ export default {
   data () {
     return {
       fileList: this.genFileList(this.value),
-      canceled: false,
-      callbackFuncName: uniqueId('veuiUploaderCallback'),
-      replacingFile: null,
-      currentSubmitingFile: null,
-      // submitting 控制form与iframe是否存在
-      submitting: false,
       previewIndex: 0,
-      previewOpen: false,
-      expandedControlDropdowns: [],
-      expandedEntryDropdown: false
+      previewOpen: false
     }
   },
   computed: {
-    listClass () {
-      return this.$c(`uploader-list${this.isMediaType ? '-media' : ''}`)
-    },
-    isReplacing () {
-      return !!this.replacingFile
-    },
     realUneditable () {
       return this.realDisabled || this.realReadonly
     },
@@ -347,11 +318,17 @@ export default {
     },
     realPreviewOptions () {
       return omit(this.previewOptions, ['index', 'open'])
+    },
+
+    uploadRequest () {
+      let options = pick(this, ['name', 'action', 'headers', 'withCredentials', 'requestMode', 'iframeMode', 'callbackNamespace', 'dataType', 'convertResponse', 'payload', 'upload'])
+      return getUploadRequest(options)
     }
   },
   watch: {
     value: {
       handler (val) {
+        // TODO: 感觉有点乱，有必要 cloneDeep？
         let temp = this.genFileList(val)
 
         if (!Array.isArray(val)) {
@@ -391,65 +368,10 @@ export default {
       )
     }
   },
-  mounted () {
-    if (this.requestMode === 'iframe') {
-      if (this.iframeMode === 'postmessage') {
-        this.handlePostmessage = event => {
-          if (
-            !event.source ||
-            !event.source.frameElement ||
-            event.source.frameElement.id !== this.iframeId ||
-            this.canceled
-          ) {
-            return
-          }
-
-          // 支持action为绝对路径或相对路径，ie9里的location没有origin
-          let actionOrigin = /^https?:\/\//.test(this.action)
-            ? this.action.match(/^https?:\/\/[^/]*/)[0]
-            : location.origin || location.protocol + '//' + location.host
-
-          if (actionOrigin === event.origin) {
-            this.uploadCallback(
-              this.parseData(event.data),
-              this.currentSubmitingFile
-            )
-          }
-        }
-        window.addEventListener('message', this.handlePostmessage)
-      } else if (this.iframeMode === 'callback') {
-        if (!window[this.callbackNamespace]) {
-          window[this.callbackNamespace] = {}
-        }
-        window[this.callbackNamespace][this.callbackFuncName] = data => {
-          if (!this.canceled) {
-            this.uploadCallback(this.parseData(data), this.currentSubmitingFile)
-          }
-        }
-      }
-    }
-  },
   beforeDestroy () {
-    this.submitting = false
-    if (this.requestMode === 'iframe') {
-      if (this.iframeMode === 'callback') {
-        window[this.callbackNamespace][this.callbackFuncName] = null
-      } else if (this.iframeMode === 'postmessage') {
-        window.removeEventListener('message', this.handlePostmessage)
-      }
-    }
+    // cancel requests
   },
   methods: {
-    handleClick (e) {
-      this.replacingFile = null
-      this.reset()
-      if (this.canNotAddImage) {
-        e.preventDefault()
-      }
-    },
-    handleEnter (e) {
-      e.target.click()
-    },
     genFileList (value) {
       if (!value) {
         return []
@@ -481,6 +403,7 @@ export default {
       }
       return assign(newFile, pick(file, PUBLIC_FILE_PROPS))
     },
+
     handleNewFiles (files) {
       this.canceled = false
 
@@ -513,9 +436,9 @@ export default {
           newFiles = newFiles.map((file, index) => {
             if (validationResults[index].valid) {
               file.toBeUploaded = true
-              if (this.isMediaType && window.URL) {
-                file.src = window.URL.createObjectURL(file)
-              }
+              // if (this.isMediaType && window.URL) {
+              //   file.src = window.URL.createObjectURL(file)
+              // }
             } else {
               file.status = 'failure'
               file.message = validationResults[index].message
@@ -838,20 +761,6 @@ export default {
         this.$emit('change', this.getValue(true))
       }
     },
-    cancel (file) {
-      if (file.cancel) {
-        file.cancel()
-      } else if (this.requestMode === 'iframe') {
-        this.canceled = true
-        this.submitting = false
-      } else if (file.xhr) {
-        file.xhr.abort()
-      }
-    },
-    reset () {
-      this.$refs.input.value = ''
-      this.$refs.main.appendChild(this.$refs.input)
-    },
     convertSizeUnit (size) {
       return format(size, { decimalPlaces: 1 })
     },
@@ -890,9 +799,6 @@ export default {
       this.previewIndex = index
       this.previewOpen = true
     },
-    clickInput () {
-      this.$refs.input.click()
-    },
     clear () {
       this.fileList.forEach(file => {
         if (file.status === 'uploading') {
@@ -901,13 +807,9 @@ export default {
       })
       this.fileList = this.fileList.filter(({ status }) => status !== 'failure')
     },
-    addFiles (files) {
-      this.handleNewFiles(files)
-    },
     focus () {
       this.$el.focus()
     },
-
     getMediaType (file) {
       if (file.type) {
         return file.type
@@ -927,19 +829,204 @@ export default {
       })
     },
 
+
+
+
+    pickFiles (multiple) {
+      let input = document.createElement('input')
+      input.type = 'file'
+      input.hidden = true
+      input.accept = this.realAccept
+      input.multiple = multiple
+
+      // TODO: 处理内存泄露
+      let promise = new Promise(resolve => {
+        input.onchange = ({target}) => {
+          let files = [...target.files]
+          target.parentNode.removeChild(target)
+          resolve(files)
+        }
+      })
+
+      this.$refs.main.appendChild(input)
+      input.click()
+      return promise
+    },
+
     handleImageAdd () {
-      this.clickInput()
+      this.pickFiles().then(files => {
+        if (!files.length) {
+          return
+        }
+        this.addFiles(files)
+      })
     },
     handleImageRemove (index) {
       this.remove(this.fileList[index])
     },
     handleImageReplace (index) {
-      this.$refs.input.click()
       this.replaceFile(this.fileList[index])
+      this.pickFiles(false).then(files => {
+        this.handleNewFiles(files)
+      })
     },
     handelImagePreview (index) {
       this.preview(this.fileList[index], index)
+    },
+
+    addFiles (files) {
+      files = files.map(file => new UploaderFile(file))
+      this.fileList = this.fileList.concat(files)
+      this.triggerUpload()
+    },
+
+    triggerUpload () {
+      this.fileList.forEach(file => file.upload(this))
     }
   }
 }
+
+function getMediaType (file) {
+  const mediaExtensions = config.get('uploader.mediaExtensions')
+  return find(keys(mediaExtensions), function (type) {
+    return some(mediaExtensions[type], ext => endsWith(file.name, `.${ext}`))
+  })
+}
+
+const UPLOAD_PENDING = 'pending'
+const UPLOAD_UPLOADING = 'uploading'
+const UPLOAD_SUCCESS = 'success'
+const UPLOAD_FAILURE = 'failure'
+
+class UploaderFile {
+  constructor (file) {
+    this._file = file
+
+    this.key = uniqueId('veuiUploaderFile')
+    this.status = UPLOAD_PENDING
+    this.message = undefined
+
+    this.meta = file ? {
+      ...pick(file, ['name', 'size']),
+      type: getMediaType(file)
+    } : {}
+
+  }
+
+  getType() {
+    return this.meta.type
+  }
+
+  setType (type) {
+    this.meta.type = type
+  }
+
+  validate(options, context) {
+
+  }
+
+  upload(context) {
+    if (this.status !== UPLOAD_PENDING) {
+      return
+    }
+    this._cancel = context.uploadRequest.call(context, this._file, pick(this, ['onload', 'onerror', 'onprogress', 'oncancel']))
+
+  }
+
+  onload(data) {
+    this.status = UPLOAD_SUCCESS
+  }
+
+  onerror(err) {
+    this.message = err.message
+    this.status = UPLOAD_FAILURE
+  }
+
+  onprogress() {
+
+  }
+
+  oncancel() {
+
+  }
+
+  cancel() {
+    if (this.status === UPLOAD_UPLOADING && this.cancel) {
+      this._cancel()
+      this._cancel = undefined
+    }
+  }
+}
+
+function createUploaderFileFromExternalValue (val) {
+  let file = new UploaderFile()
+  file.meta = pick(val, ['name', 'size', 'type', 'src', 'poster']) // TODO: type
+  file.status = UPLOAD_SUCCESS
+  file.extra = omit(val, ['name', 'size', 'type', 'src', 'poster'])
+  return file
+}
+
+function getUploadRequest(options) {
+  let {requestMode, action, upload} = options
+  if (requestMode === 'xhr' && action) {
+    return getXhrUploadRequest(options)
+  }
+  else if (requestMode === 'iframe' && action) {
+    return getIframeUploadRequest(options)
+  }
+  else if (requestMode === 'custom' && upload) {
+    return getCustomUploadRequest(requestMode)
+  }
+  throw new Error('no matched upload method')
+}
+
+function getIframeUploadRequest ({name, action, iframeMode, callbackNamespace, payload}) {
+  // TODO
+}
+
+function getXhrUploadRequest (options) {
+  let parseResponse = getResonpseParse(options)
+  let {name, action, headers, payload, withCredentials} = options;
+  return function xhrUploadRequest (file, {onload, onerror, onprogress, oncancel}) {
+    let formData = new FormData()
+    formData.append(name, file)
+    entries(payload).forEach(function ([key, val]) {
+      formData.append(key, val)
+    })
+
+    let xhr = new XMLHttpRequest()
+    xhr.upload.onprogress = onprogress
+    xhr.onload = onload(parseResponse(xhr.responseText))
+    xhr.onerror = onerror
+
+    xhr.open('POST', action, true)
+    entries(headers).forEach(function ([key, val]) {
+      xhr.setRequestHeader(key, val)
+    })
+    xhr.withCredentials = withCredentials
+    xhr.send(formData)
+
+    return function () {
+      xhr.abort()
+    }
+  }
+}
+
+function getCustomUploadRequest ({upload}) {
+   return upload
+}
+
+function getResonpseParse({convertResponse = identity, dataType}) {
+  return function (data) {
+    if (typeof data === 'string' && dataType === 'json') {
+      try {
+        data = JSON.parse(data)
+      } catch (err) {
+        return convertResponse(undefined, err)
+      }
+    }
+    return convertResponse(data)
+  }
+}
+
 </script>

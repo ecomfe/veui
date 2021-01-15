@@ -2,13 +2,13 @@
 <div>
   <div :class="$c('uploader-button-container')">
     <veui-button
-      :ui="$parent.realUi"
+      :ui="realUi"
       :disabled="!addable"
       :tabindex="!addable ? null : 0"
       @click="handleUploadButtonClick"
     >
       <slot name="button-label">
-        <veui-icon :name="$parent.icons.upload"/>
+        <veui-icon :name="icons.upload"/>
         <span>{{ t('@uploader.selectFile') }}</span>
       </slot>
     </veui-button>
@@ -41,7 +41,7 @@
         <div :class="$c('uploader-list-container')">
           <veui-icon
             v-if="file.status !== 'uploading'"
-            :name="$parent.icons.file"
+            :name="icons.file"
             :class="{
               [$c('uploader-list-file-icon')]: true,
               [$c('uploader-list-file-icon-failure')]:
@@ -50,7 +50,7 @@
           />
           <veui-icon
             v-if="file.status === 'uploading'"
-            :name="$parent.icons.loading"
+            :name="icons.loading"
             spin
             :class="$c('uploader-list-loading-icon')"
           />
@@ -67,22 +67,22 @@
 
           <veui-icon
             v-if="file.status === 'success'"
-            :name="$parent.icons.success"
+            :name="icons.success"
             :class="$c('uploader-success-icon')"
           />
           <veui-icon
             v-if="file.status === 'failure'"
-            :name="$parent.icons.failure"
+            :name="icons.failure"
             :class="$c('uploader-failure-icon')"
           />
 
           <veui-button
             :class="$c('uploader-list-remove')"
-            :ui="$parent.uiParts.remove"
+            :ui="uiParts.remove"
             :disabled="disabled"
             @click="handleItemRemove(index)"
           >
-            <veui-icon :name="$parent.icons.clear"/>
+            <veui-icon :name="icons.clear"/>
           </veui-button>
 
           <veui-popover
