@@ -183,7 +183,7 @@ export default {
                     this.handleMouseout(col.id, !!desc, !!col.sortable, e)
                   }}
                   onClick={e => {
-                    if (isLeaf) {
+                    if (!!col.sortable && isLeaf) {
                       this.handleClick(col.id, e)
                     }
                   }}
