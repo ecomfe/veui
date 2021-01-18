@@ -8,7 +8,7 @@
   >
     <li
       v-for="(file, index) in files"
-      :key="`${file.name}-${file.src}`"
+      :key="file.key"
       :class="{
         [`${listClass}-item`]: true,
         [`${listClass}-item-failure`]: file.status === 'failure',
@@ -31,7 +31,7 @@
             <veui-uploader-file-viewer
               v-if="file.type === 'image'"
               tag="img"
-              :src="file.src || file"
+              :src="file.src || file.native"
               :alt="file.alt || ''"
               :class="$c('uploader-list-media-container-media')"
             />
@@ -178,9 +178,7 @@
             </slot>
           </label>
           <div
-            v-if="
-              uiProps.size === 'm' && getMediaEntries().length > 1
-            "
+            v-if="uiProps.size === 'm' && getMediaEntries().length > 1"
             :class="{ [$c('uploader-entries-container')]: true }"
           >
             <veui-uploader-controls
