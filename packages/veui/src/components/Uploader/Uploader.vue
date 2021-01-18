@@ -40,30 +40,29 @@
 </template>
 
 <script>
-import { parse, format } from 'bytes'
+import { parse as parseByte } from 'bytes'
 import {
-  cloneDeep,
   keys,
   some,
-  assign,
+  compact,
   last,
   pick,
-  omit,
   includes,
-  isEmpty,
-  isFunction,
-  partial,
+  isArray,
+  isString,
   endsWith,
   find,
+  findIndex,
   uniqueId,
   entries,
-  identity
+  identity,
+  omit
 } from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import i18n from '../../mixins/i18n'
-import {sharedProps, PUBLIC_FILE_PROPS} from '../../mixins/upload'
+import { sharedProps } from '../../mixins/upload'
 import config from '../../managers/config'
 import toast from '../../managers/toast'
 import warn from '../../utils/warn'
@@ -98,6 +97,13 @@ config.defaults({
     video: ['mp4', 'mov', 'wmv', 'flv', 'avi', 'avchd', 'webm', 'mkv']
   }
 })
+
+const UPLOAD_PENDING = 'pending'
+const UPLOAD_UPLOADING = 'uploading'
+const UPLOAD_SUCCESS = 'success'
+const UPLOAD_FAILURE = 'failure'
+
+const FILE_VALUE_KEYS = ['name', 'type', 'poster', 'src']
 
 const ERRORS = {
   TYPE_INVALID: 'type',
@@ -235,7 +241,8 @@ export default {
   },
   data () {
     return {
-      fileList: this.genFileList(this.value),
+      fileList: [],
+
       previewIndex: 0,
       previewOpen: false
     }
@@ -256,35 +263,23 @@ export default {
         return 'empty'
       }
 
-      if (this.fileList.some(file => file.status === 'uploading')) {
-        return 'uploading'
+      if (this.fileList.some(file => file.status === UPLOAD_UPLOADING)) {
+        return UPLOAD_UPLOADING
       }
 
-      if (this.fileList.some(file => file.status === 'failure')) {
-        return 'failure'
+      if (this.fileList.some(file => file.status === UPLOAD_FAILURE)) {
+        return UPLOAD_FAILURE
       }
 
-      return 'success'
+      return UPLOAD_SUCCESS
     },
     files () {
-      return this.fileList.map(file => {
-        return {
-          ...pick(file, [
-            'name',
-            'src',
-            'status',
-            'toBeUploaded',
-            'message',
-            'poster'
-          ]),
-          ...file._extra
-        }
-      })
+      return this.fileList.map(file => file.value)
     },
-    pureFileList () {
-      return this.files
-        .filter(file => file.status === 'success' && !file.toBeUploaded)
-        .map(file => omit(file, ['status', 'toBeUploaded']))
+    successFiles () {
+      return this.fileList
+        .filter(file => file.isSuccess)
+        .map(file => file.value)
     },
     realOrder () {
       return this.type === 'file' ? this.order || 'desc' : 'asc'
@@ -321,38 +316,77 @@ export default {
     },
 
     uploadRequest () {
-      let options = pick(this, ['name', 'action', 'headers', 'withCredentials', 'requestMode', 'iframeMode', 'callbackNamespace', 'dataType', 'convertResponse', 'payload', 'upload'])
+      const options = pick(this, [
+        'name',
+        'action',
+        'headers',
+        'withCredentials',
+        'requestMode',
+        'iframeMode',
+        'callbackNamespace',
+        'dataType',
+        'convertResponse',
+        'payload',
+        'upload'
+      ])
       return getUploadRequest(options)
+    },
+    validateOptions () {
+      return {
+        type: this.type,
+        accept: this.realAccept,
+        extensions: this.extensions,
+        maxSize: this.maxSize,
+        validator: this.validator
+      }
     }
   },
   watch: {
     value: {
       handler (val) {
-        // TODO: 感觉有点乱，有必要 cloneDeep？
-        let temp = this.genFileList(val)
-
-        if (!Array.isArray(val)) {
-          this.fileList = cloneDeep(temp)
-          return
-        }
-
-        let successIndex = 0
-        this.fileList = this.fileList
-          .map(file => {
-            if (file.status === 'success' && !file.toBeUploaded) {
-              // 处理外部直接减少文件的情形
-              if (successIndex + 1 > temp.length) {
-                return null
+        let values = isArray(val) ? val : [val]
+        let fileList = this.fileList
+        let [rest, patched] = values.reduce(
+          ([rest, patched], value) => {
+            if (value._key) {
+              let i = findIndex(fileList, file => file.key === value._key)
+              if (i >= 0) {
+                fileList[i].value = value
+                return [rest, patched.concat(i)]
               }
-              return assign(file, temp[successIndex++])
             }
-            return file
-          })
-          .filter(Boolean)
-          // 处理外部直接增加文件的情形
-          .concat(cloneDeep(temp.slice(successIndex)))
+            return [rest.concat(value), patched]
+          },
+          [[], []]
+        )
+
+        let j = 0
+        fileList.forEach((file, i) => {
+          if (includes(patched, i)) {
+            return
+          }
+          file.value = rest[j++]
+        })
+        if (j < rest.length) {
+          this.fileList = this.fileList.concat(
+            rest.slice(j).map(val => {
+              if (isString(val)) {
+                val = { src: val, name: val }
+              }
+              let file = UploaderFile.fromValue(val)
+              if (!file.type) {
+                // 是否应该在 File 内部处理这个逻辑？
+                file.type = includes(['image', 'video'], this.type)
+                  ? this.type
+                  : getFileMediaType(file)
+              }
+              return file
+            })
+          )
+        }
       },
-      deep: true
+      deep: true,
+      immediate: true
     },
     status (val) {
       if (val) {
@@ -369,468 +403,19 @@ export default {
     }
   },
   beforeDestroy () {
-    // cancel requests
+    this.clear()
   },
   methods: {
-    genFileList (value) {
-      if (!value) {
-        return []
-      }
-
-      if (Array.isArray(value)) {
-        return value.map(file => this.getNewFile(file))
-      }
-
-      if (typeof value === 'string') {
-        return [
-          assign(this.fileList ? this.fileList[0] : {}, {
-            src: value,
-            name: value
-          })
-        ]
-      }
-
-      return isEmpty(value) ? [] : [this.getNewFile(value)]
-    },
-    getNewFile (file) {
-      let newFile = {
-        status: 'success',
-        type: this.getMediaType(file)
-      }
-      let extra = omit(file, PUBLIC_FILE_PROPS)
-      if (!isEmpty(extra)) {
-        newFile._extra = cloneDeep(extra)
-      }
-      return assign(newFile, pick(file, PUBLIC_FILE_PROPS))
-    },
-
-    handleNewFiles (files) {
-      this.canceled = false
-
-      if (!Array.isArray(files)) {
-        files = this.$refs.input.files
-      }
-
-      let newFiles = [...files]
-      let countFiles = this.fileList.length + newFiles.length
-      if (
-        !this.isReplacing &&
-        this.maxCount !== 1 &&
-        countFiles > this.maxCount
-      ) {
-        toast.error(this.t('tooManyFiles'))
-        this.$emit('invalid', {
-          errors: [
-            {
-              type: ERRORS.TOO_MANY_FILES,
-              value: countFiles,
-              message: this.t('tooManyFiles')
-            }
-          ]
-        })
-        return
-      }
-
-      Promise.all(newFiles.map(file => this.validateFile(file))).then(
-        validationResults => {
-          newFiles = newFiles.map((file, index) => {
-            if (validationResults[index].valid) {
-              file.toBeUploaded = true
-              // if (this.isMediaType && window.URL) {
-              //   file.src = window.URL.createObjectURL(file)
-              // }
-            } else {
-              file.status = 'failure'
-              file.message = validationResults[index].message
-            }
-
-            return file
-          })
-
-          if (this.isReplacing) {
-            // mediaType = true 时，点击重新上传进入此分支，替换掉原位置的文件replacingFile
-            let newFile = newFiles[0]
-            newFile._replacingFile = this.replacingFile
-
-            let replacingIndex = this.fileList.indexOf(this.replacingFile)
-            this.$set(this.fileList, replacingIndex, newFile)
-            this.$emit('change', this.getValue())
-            this.replacingFile = null
-
-            if (newFile.status === 'failure') {
-              return
-            }
-
-            if (this.autoupload) {
-              if (this.requestMode === 'iframe') {
-                this.submit(newFile)
-              } else {
-                this.uploadFile(newFile)
-              }
-            }
-          } else {
-            this.fileList =
-              this.realOrder === 'desc'
-                ? [...newFiles, ...this.fileList]
-                : [...this.fileList, ...newFiles]
-
-            if (this.maxCount === 1) {
-              this.fileList = this.fileList.slice(-1)
-            }
-
-            if (this.autoupload) {
-              if (this.requestMode === 'iframe') {
-                if (newFiles[0].toBeUploaded) {
-                  this.submit(newFiles[0])
-                }
-              } else {
-                this.uploadFiles()
-              }
-            }
-          }
-        }
-      )
-    },
-    validateFile (file) {
-      let errors = []
-      let typeValidity = this.validateType(file.name)
-      if (!typeValidity) {
-        errors.push({
-          type: ERRORS.TYPE_INVALID,
-          value: file.name,
-          message: this.t('fileTypeInvalid')
-        })
-      }
-
-      let sizeValidity = this.validateSize(file.size)
-      if (!sizeValidity) {
-        errors.push({
-          type: ERRORS.SIZE_INVALID,
-          value: file.size,
-          message: this.t('fileSizeInvalid')
-        })
-      }
-
-      return new Promise(resolve => {
-        resolve(this.validator ? this.validator(file) : { valid: true })
-      }).then(result => {
-        let customValidity = result.valid
-        if (!customValidity) {
-          errors.push({
-            type: ERRORS.CUSTOM_INVALID,
-            value: file,
-            message: result.message
-          })
-        }
-
-        if (errors.length) {
-          this.$emit('invalid', {
-            file,
-            errors
-          })
-        }
-
-        return {
-          valid: customValidity && typeValidity && sizeValidity,
-          message: errors
-            .map(({ message }) => message)
-            .join(this.t('separator'))
-        }
-      })
-    },
-    validateType (filename) {
-      if (!this.realAccept) {
-        return true
-      }
-
-      let extension = last(filename.split('.')).toLowerCase()
-
-      if (this.extensions) {
-        return this.extensions.indexOf(extension) > -1
-      }
-
-      return this.realAccept.split(/,\s*/).some(item => {
-        let acceptExtention = last(item.split(/[./]/)).toLowerCase()
-
-        if (
-          acceptExtention === extension ||
-          // 对于类似'application/msword'这样的mimetype与扩展名对不上的情形跳过校验
-          (acceptExtention !== '*' && item.indexOf('/') > -1)
-        ) {
-          return true
-        }
-
-        let extensions
-        const mediaExtensions = config.get('uploader.mediaExtensions')
-
-        switch (this.type) {
-          case 'image':
-          case 'video':
-            extensions = mediaExtensions[this.type]
-            break
-          case 'media':
-            extensions = mediaExtensions.image.concat(mediaExtensions.video)
-            break
-          default:
-            extensions = []
-        }
-
-        return (
-          acceptExtention === '*' &&
-          item.indexOf('/') > -1 &&
-          (extensions.indexOf(extension) > -1 || !extensions.length)
-        )
-      })
-    },
-    validateSize (fileSize) {
-      return !this.maxSize || !fileSize || fileSize <= parse(this.maxSize)
-    },
-    uploadFiles () {
-      this.fileList.forEach(file => {
-        if (file.toBeUploaded) {
-          this.uploadFile(file)
-        }
-      })
-    },
-    onprogress (file, progress) {
-      let index = this.fileList.indexOf(file)
-      file.loaded = progress.loaded
-      file.total = progress.total
-      this.updateFileList(file)
-
-      this.$emit('progress', this.files[index], index, progress || null)
-    },
-    onload (file, data) {
-      this.uploadCallback(data, file)
-    },
-    oncancel (file) {
-      if (file._replacingFile) {
-        this.restoreReplacingFile(file)
-      } else {
-        this.remove(file, true)
-      }
-    },
-    onerror (file, error) {
-      let index = this.fileList.indexOf(file)
-      this.showFailureResult(error || {}, file)
-      this.$emit('failure', this.files[index], index)
-    },
-    uploadFile (file) {
-      file.toBeUploaded = false
-      this.updateFileList(file, 'uploading')
-
-      if (this.requestMode === 'xhr' && !this.upload) {
-        let xhr = new XMLHttpRequest()
-        file.xhr = xhr
-
-        xhr.upload.onprogress = e => this.onprogress(file, e)
-        xhr.onload = () => this.onload(file, this.parseData(xhr.responseText))
-        xhr.onerror = e => this.onerror(file, e)
-
-        let formData = new FormData()
-        formData.append(this.name, file)
-
-        for (let key in this.payload) {
-          formData.append(key, this.payload[key])
-        }
-
-        xhr.open('POST', this.action, true)
-        for (let key in this.headers) {
-          xhr.setRequestHeader(key, this.headers[key])
-        }
-        xhr.withCredentials = this.withCredentials
-        xhr.send(formData)
-      } else if (this.requestMode === 'custom' && this.upload) {
-        let cancelFn = this.upload.call(null, file, {
-          onload: partial(this.onload, file),
-          onprogress: partial(this.onprogress, file),
-          oncancel: partial(this.oncancel, file),
-          onerror: partial(this.onerror, file)
-        })
-
-        if (cancelFn && isFunction(cancelFn)) {
-          file.cancel = cancelFn
-        }
-      }
-    },
-    replaceFile (file) {
-      this.replacingFile = file
-      this.reset()
-    },
-    submit (file) {
-      this.currentSubmitingFile = file
-      this.updateFileList(file, 'uploading')
-
-      this.submitting = true
-
-      this.$nextTick(() => {
-        let { form, iframe } = this.$refs
-
-        document.body.appendChild(iframe)
-        document.body.appendChild(form)
-
-        form.appendChild(this.$refs.input)
-        form.submit()
-      })
-    },
-    uploadCallback (data, file) {
-      this.submitting = false
-      let index = this.fileList.indexOf(file)
-
-      data = this.convertResponse ? this.convertResponse(data) : data
-
-      delete file.xhr
-      delete file.toBeUploaded
-
-      if (data.success) {
-        this.showSuccessResult(data, file)
-        this.$emit('success', this.files[index], index)
-      } else {
-        this.showFailureResult(data, file)
-        this.$emit('failure', this.files[index], index)
-      }
-      this.currentSubmitingFile = null
-    },
-    showSuccessResult (data, file) {
-      this.updateFileList(file, 'success', data, true)
-    },
-    showFailureResult (data, file) {
-      file.message = data.message || ''
-      this.updateFileList(file, 'failure', data)
-    },
-    updateFileList (file, status, properties = {}, toEmit = false) {
-      if (status !== undefined) {
-        file.status = status
-      }
-      const type = properties.type
-      assign(file, properties)
-      file._extra = omit(properties, [
-        'success',
-        'message',
-        'name',
-        'src',
-        'poster',
-        'type'
-      ])
-
-      /**
-       * TODO: this is a hack to cope with the problem that `type` property exists
-       * on native File objects, we should move all public/internal metadata onto
-       * something like `file._meta` instead.
-       */
-      Object.defineProperty(file, 'type', {
-        writable: true
-      })
-
-      file.type =
-        type ||
-        (file.type && file.type.substring(0, file.type.indexOf('/'))) ||
-        this.getMediaType(file)
-      this.$set(this.fileList, this.fileList.indexOf(file), file)
-
-      if (toEmit) {
-        this.$emit('change', this.getValue(false))
-      }
-    },
-    restoreReplacingFile (file) {
-      if (file._replacingFile) {
-        this.$set(
-          this.fileList,
-          this.fileList.indexOf(file),
-          file._replacingFile
-        )
-      }
-    },
-    remove (file, silent = false) {
-      if (file.status === 'uploading') {
-        this.cancel(file)
-      }
-
-      let index = this.fileList.indexOf(file)
-      if (!this.isReplacing && !silent) {
-        this.$emit('remove', this.files[index], index)
-      }
-
-      if (this.maxCount === 1) {
-        this.fileList = []
-      } else {
-        this.fileList.splice(index, 1)
-      }
-
-      if (!file.toBeUploaded && !silent) {
-        this.$emit('change', this.getValue(true))
-      }
-    },
-    convertSizeUnit (size) {
-      return format(size, { decimalPlaces: 1 })
-    },
-    parseData (data) {
-      if (typeof data === 'object') {
-        return data
-      }
-
-      if (typeof data === 'string') {
-        if (this.dataType === 'json') {
-          try {
-            return JSON.parse(data)
-          } catch (error) {
-            this.$emit('failure', { error })
-            return { status: 'failure' }
-          }
-        } else if (this.dataType === 'text') {
-          return data
-        }
-      }
-    },
-    getValue (isEmptyValue) {
-      if (this.maxCount !== 1) {
-        return this.pureFileList
-      }
-
-      if (isEmptyValue) {
-        return null
-      }
-
-      return this.compat
-        ? this.pureFileList[0].src || this.pureFileList[0].name
-        : this.pureFileList[0]
-    },
     preview ({ src }, index) {
       this.previewIndex = index
       this.previewOpen = true
     },
     clear () {
-      this.fileList.forEach(file => {
-        if (file.status === 'uploading') {
-          this.cancel(file)
-        }
-      })
-      this.fileList = this.fileList.filter(({ status }) => status !== 'failure')
+      this.fileList.forEach(file => file.cancel())
     },
     focus () {
       this.$el.focus()
     },
-    getMediaType (file) {
-      if (file.type) {
-        return file.type
-      }
-      if (this.type === 'video' || this.type === 'image') {
-        return this.type
-      }
-
-      const mediaExtensions = config.get('uploader.mediaExtensions')
-
-      return find(Object.keys(mediaExtensions), type => {
-        const extensions = mediaExtensions[type]
-
-        return extensions.some(extension => {
-          return endsWith(file.name, '.' + extension)
-        })
-      })
-    },
-
-
-
 
     pickFiles (multiple) {
       let input = document.createElement('input')
@@ -841,7 +426,7 @@ export default {
 
       // TODO: 处理内存泄露
       let promise = new Promise(resolve => {
-        input.onchange = ({target}) => {
+        input.onchange = ({ target }) => {
           let files = [...target.files]
           target.parentNode.removeChild(target)
           resolve(files)
@@ -862,7 +447,7 @@ export default {
       })
     },
     handleImageRemove (index) {
-      this.remove(this.fileList[index])
+      this.removeFile(index)
     },
     handleImageReplace (index) {
       this.replaceFile(this.fileList[index])
@@ -875,119 +460,487 @@ export default {
     },
 
     addFiles (files) {
+      const count = this.fileList.length + files.length
+      if (count > this.maxCount) {
+        const message = this.t('tooManyFiles')
+        toast.error(message)
+        this.$emit('invalid', {
+          errors: [
+            {
+              type: ERRORS.TOO_MANY_FILES,
+              value: count,
+              message
+            }
+          ]
+        })
+        return
+      }
+
       files = files.map(file => new UploaderFile(file))
-      this.fileList = this.fileList.concat(files)
-      this.triggerUpload()
+      this.fileList =
+        this.realOrder === 'desc'
+          ? files.concat(this.fileList)
+          : this.fileList.concat(files)
+      if (this.autoupload) {
+        this.triggerUpload()
+      }
+    },
+    triggerUpload () {
+      this.fileList.forEach(file => this.uploadFile(file))
+    },
+    uploadFile (file) {
+      if (!file.isPending) {
+        return
+      }
+
+      file.isUploading = true
+      return file
+        .validate(this.validateOptions, this)
+        .then(errors => {
+          if (errors) {
+            this.$emit('invalid', { file: file.native, errors })
+            throw errors.map(({ message }) => message).join(this.t('separator'))
+          }
+
+          return new Promise((resolve, reject) => {
+            file.upload(this, {
+              onload: resolve,
+              onerror: reject
+            })
+          })
+        })
+        .then(() => {
+          file.isSuccess = true
+          return 'success'
+        })
+        .catch(err => {
+          file.isFailure = true
+          file.message = isString(err) ? err : err.message
+          return 'failure'
+        })
+        .then(status => {
+          let i = this.fileList.indexOf(file)
+          this.$emit(status, this.files[i], i)
+          this.$emit(
+            'change',
+            !this.value || isArray(this.value)
+              ? this.successFiles
+              : this.successFiles[0]
+          )
+        })
     },
 
-    triggerUpload () {
-      this.fileList.forEach(file => file.upload(this))
+    removeFile (index) {
+      let removed = this.fileList.splice(index, 1)
+      if (removed[0]) {
+        removed[0].cancel()
+      }
     }
   }
 }
 
-function getMediaType (file) {
+function getFileMediaType (file) {
   const mediaExtensions = config.get('uploader.mediaExtensions')
   return find(keys(mediaExtensions), function (type) {
     return some(mediaExtensions[type], ext => endsWith(file.name, `.${ext}`))
   })
 }
 
-const UPLOAD_PENDING = 'pending'
-const UPLOAD_UPLOADING = 'uploading'
-const UPLOAD_SUCCESS = 'success'
-const UPLOAD_FAILURE = 'failure'
+function getMediaExtensionsByType (type) {
+  const mediaExtensions = config.get('uploader.mediaExtensions')
+  switch (type) {
+    case 'image':
+    case 'video':
+      return mediaExtensions[type]
+    case 'media':
+      return mediaExtensions.image.concat(mediaExtensions.video)
+  }
+  return []
+}
+
+function getValidateFileType ({ accept, extensions, type }) {
+  const mediaExtensions = getMediaExtensionsByType(type)
+
+  return function validateFileType (file) {
+    if (!accept) {
+      return true
+    }
+
+    let ext = last(file.name.split('.')).toLowerCase()
+    if (extensions) {
+      return includes(extensions, ext)
+    }
+
+    return accept.split(/,\s*/).some(item => {
+      let acceptExtention = last(item.split(/[./]/)).toLowerCase()
+      if (
+        acceptExtention === ext ||
+        // 对于类似'application/msword'这样的mimetype与扩展名对不上的情形跳过校验
+        (acceptExtention !== '*' && includes(item, '/'))
+      ) {
+        return true
+      }
+
+      return (
+        acceptExtention === '*' &&
+        includes(item, '/') &&
+        (includes(mediaExtensions, ext) || !mediaExtensions.length)
+      )
+    })
+  }
+}
+
+function getValidateFileSize ({ maxSize }) {
+  maxSize = maxSize && parseByte(maxSize)
+  return function validateFileSize (file) {
+    return !maxSize || file.size <= maxSize
+  }
+}
+
+function getCustomValidate ({ validator }) {
+  return function customValidate (file) {
+    return validator ? validator(file) : { valid: true }
+  }
+}
+
+function getValidateFile (options, ctx) {
+  const validators = [
+    [
+      getValidateFileType(options),
+      ERRORS.TYPE_INVALID,
+      file => file.name,
+      result => result,
+      () => ctx.t('fileTypeInvalid')
+    ],
+    [
+      getValidateFileSize(options),
+      ERRORS.SIZE_INVALID,
+      file => file.size,
+      result => result,
+      () => ctx.t('fileSizeInvalid')
+    ],
+    [
+      getCustomValidate(options),
+      ERRORS.CUSTOM_INVALID,
+      file => file,
+      result => result.valid,
+      result => result.message
+    ]
+  ].map(function ([validate, type, getValue, getValid, getMessage]) {
+    return function (file) {
+      return Promise.resolve(validate(file)).then(function (result) {
+        if (getValid(result)) {
+          return
+        }
+        return {
+          type,
+          value: getValue(),
+          message: getMessage()
+        }
+      })
+    }
+  })
+
+  return function validateFile (file) {
+    return Promise.all(validators.map(validate => validate(file))).then(
+      function (errors) {
+        errors = errors.filter(identity)
+        return errors.length ? errors : null
+      }
+    )
+  }
+}
 
 class UploaderFile {
   constructor (file) {
-    this._file = file
-
     this.key = uniqueId('veuiUploaderFile')
     this.status = UPLOAD_PENDING
     this.message = undefined
 
-    this.meta = file ? {
-      ...pick(file, ['name', 'size']),
-      type: getMediaType(file)
-    } : {}
-
+    this._file = file
+    this.meta = file
+      ? {
+        name: file.name,
+        type: getFileMediaType(file)
+      }
+      : {}
   }
 
-  getType() {
-    return this.meta.type
+  get isPending () {
+    return this.status === UPLOAD_PENDING
   }
 
-  setType (type) {
-    this.meta.type = type
+  get isFailure () {
+    return this.status === UPLOAD_FAILURE
   }
 
-  validate(options, context) {
-
-  }
-
-  upload(context) {
-    if (this.status !== UPLOAD_PENDING) {
-      return
+  set isFailure (val) {
+    if (val) {
+      if (this.isUploading) {
+        this.cancel()
+      }
+      this.status = UPLOAD_FAILURE
     }
-    this._cancel = context.uploadRequest.call(context, this._file, pick(this, ['onload', 'onerror', 'onprogress', 'oncancel']))
-
   }
 
-  onload(data) {
-    this.status = UPLOAD_SUCCESS
+  get isUploading () {
+    return this.status === UPLOAD_UPLOADING
   }
 
-  onerror(err) {
+  set isUploading (val) {
+    if (val) {
+      this.status = UPLOAD_UPLOADING
+    }
+  }
+
+  get isSuccess () {
+    return this.status === UPLOAD_SUCCESS
+  }
+
+  set isSuccess (val) {
+    if (val) {
+      if (this.isUploading) {
+        this.cancel()
+      }
+      this.status = UPLOAD_SUCCESS
+    }
+  }
+
+  get name () {
+    // TODO: eslint 该升级了！
+    // return this.result?.name ?? this.meta.name
+    return (this.result && this.result.name) || this.meta.name
+  }
+
+  get src () {
+    return (this.result && this.result.src) || this.meta.src
+  }
+
+  get poster () {
+    return (this.result && this.result.poster) || this.meta.poster
+  }
+
+  get type () {
+    return (this.result && this.result.type) || this.meta.type
+  }
+
+  set type (val) {
+    this.meta.type = val
+  }
+
+  get native () {
+    return this._file
+  }
+
+  get value () {
+    return {
+      _key: this.key,
+      ...pick(this, FILE_VALUE_KEYS),
+      ...this.extra
+    }
+  }
+
+  set value (val) {
+    this.isSuccess = true
+    this.result = pick(val, FILE_VALUE_KEYS)
+    this.extra = omit(val, ['_key', ...FILE_VALUE_KEYS])
+  }
+
+  static fromValue (val) {
+    let file = new UploaderFile()
+    file.value = val
+    return file
+  }
+
+  validate (options, context) {
+    const validateFile = getValidateFile(options, context)
+    return validateFile(this._file)
+  }
+
+  upload (context, callbacks) {
+    const listeners = ['onload', 'onerror', 'onprogress', 'oncancel'].reduce(
+      (ret, key) => {
+        ret[key] = (...args) =>
+          compact([this[key].bind(this), callbacks[key]]).forEach(execute =>
+            execute(...args)
+          )
+        return ret
+      },
+      {}
+    )
+    this._cancel = context.uploadRequest(this._file, listeners)
+  }
+
+  onload (data) {
+    this.status = data.success ? UPLOAD_SUCCESS : UPLOAD_FAILURE
+    this.result = omit(data, ['success'])
+
+    if (data.src) {
+      // 上传完成，不需要再 hold 文件对象
+      this._file = undefined
+    }
+  }
+
+  onerror (err) {
     this.message = err.message
     this.status = UPLOAD_FAILURE
   }
 
-  onprogress() {
-
+  onprogress (evt) {
+    this.loaded = evt.loaded
+    this.total = evt.total
   }
 
-  oncancel() {
+  oncancel () {}
 
-  }
-
-  cancel() {
-    if (this.status === UPLOAD_UPLOADING && this.cancel) {
+  cancel () {
+    if (this.status === UPLOAD_UPLOADING && this._cancel) {
       this._cancel()
       this._cancel = undefined
     }
   }
 }
 
-function createUploaderFileFromExternalValue (val) {
-  let file = new UploaderFile()
-  file.meta = pick(val, ['name', 'size', 'type', 'src', 'poster']) // TODO: type
-  file.status = UPLOAD_SUCCESS
-  file.extra = omit(val, ['name', 'size', 'type', 'src', 'poster'])
-  return file
-}
-
-function getUploadRequest(options) {
-  let {requestMode, action, upload} = options
+function getUploadRequest (options) {
+  const { requestMode, action, upload } = options
   if (requestMode === 'xhr' && action) {
     return getXhrUploadRequest(options)
-  }
-  else if (requestMode === 'iframe' && action) {
+  } else if (requestMode === 'iframe' && action) {
     return getIframeUploadRequest(options)
-  }
-  else if (requestMode === 'custom' && upload) {
+  } else if (requestMode === 'custom' && upload) {
     return getCustomUploadRequest(requestMode)
   }
   throw new Error('no matched upload method')
 }
 
-function getIframeUploadRequest ({name, action, iframeMode, callbackNamespace, payload}) {
-  // TODO
+function getIframeUploadRequest (options) {
+  const parseResponse = getResonpseParse(options)
+  const { name, action, iframeMode, callbackNamespace, payload } = options
+
+  function getForm () {
+    const iframeId = uniqueId('veui-uploader-iframe')
+
+    let form = document.createElement('form')
+    form.method = 'POST'
+    form.action = action
+    form.target = iframeId
+    form.enctype = 'multipart/form-data'
+
+    let iframe = document.createElement('iframe')
+    iframe.name = iframeId
+    iframe.id = iframeId
+    iframe.hidden = true
+
+    document.body.appendChild(form)
+    document.body.appendChild(iframe)
+
+    function clean () {
+      document.body.removeChild(form)
+      document.body.removeChild(iframe)
+    }
+
+    return [form, iframe, clean]
+  }
+
+  function attachFileToForm (file, form) {
+    let fileInput = document.createElement('input')
+    fileInput.type = 'file'
+    fileInput.hidden = true
+    fileInput.name = name
+    fileInput.files = [file]
+    form.appendChild(fileInput)
+  }
+
+  function attachObjectToForm (obj, form) {
+    entries(obj).forEach(function ([key, val]) {
+      let input = document.createElement('input')
+      input.type = 'hidden'
+      input.name = key
+      input.value = val
+      form.appendChild(input)
+    })
+  }
+
+  function bindPostMessageCallback (iframeId, ondata) {
+    function callback (event) {
+      if (
+        !event.source ||
+        !event.source.frameElement ||
+        event.source.frameElement.id !== iframeId
+      ) {
+        return
+      }
+      // 支持action为绝对路径或相对路径，ie9里的location没有origin
+      let actionOrigin = /^https?:\/\//.test(action)
+        ? action.match(/^https?:\/\/[^/]*/)[0]
+        : location.origin || location.protocol + '//' + location.host
+      if (actionOrigin === event.origin) {
+        ondata(event.data)
+      }
+    }
+    function cancel () {
+      window.removeEventListener('message', callback)
+    }
+    window.addEventListener('message', callback)
+    return cancel
+  }
+
+  function bindJsonpCallback (callbackFuncName, ondata) {
+    if (!window[callbackNamespace]) {
+      window[callbackNamespace] = {}
+    }
+    window[callbackNamespace][callbackFuncName] = ondata
+    return function cancel () {
+      window[callbackNamespace][callbackFuncName] = undefined
+    }
+  }
+
+  return function iframeUploadRequest (
+    file,
+    { onload, onerror, onprogress, oncancel }
+  ) {
+    const [form, iframe, cleanDom] = getForm()
+    attachFileToForm(file, form)
+    attachObjectToForm(payload, form)
+
+    let removeBind
+    if (iframeMode === 'postmessage') {
+      removeBind = bindPostMessageCallback(iframe.id, ondata)
+    } else if (iframeMode === 'callback') {
+      const callbackFuncName = uniqueId('veuiUploaderCallback')
+      removeBind = bindJsonpCallback(callbackFuncName, ondata)
+      attachObjectToForm(
+        { callback: `parent.${callbackNamespace}['${callbackFuncName}']` },
+        form
+      )
+    } else {
+      throw new Error('no matched iframe mode')
+    }
+
+    // TODO: timeout ?
+    function ondata (data) {
+      clean()
+      onload(parseResponse(data))
+    }
+
+    function clean () {
+      removeBind()
+      cleanDom()
+    }
+
+    return clean
+  }
 }
 
 function getXhrUploadRequest (options) {
-  let parseResponse = getResonpseParse(options)
-  let {name, action, headers, payload, withCredentials} = options;
-  return function xhrUploadRequest (file, {onload, onerror, onprogress, oncancel}) {
+  const parseResponse = getResonpseParse(options)
+  const { name, action, headers, payload, withCredentials } = options
+  return function xhrUploadRequest (
+    file,
+    { onload, onerror, onprogress, oncancel }
+  ) {
+    let cancelled
+
     let formData = new FormData()
     formData.append(name, file)
     entries(payload).forEach(function ([key, val]) {
@@ -996,8 +949,8 @@ function getXhrUploadRequest (options) {
 
     let xhr = new XMLHttpRequest()
     xhr.upload.onprogress = onprogress
-    xhr.onload = onload(parseResponse(xhr.responseText))
-    xhr.onerror = onerror
+    xhr.onload = () => onload(parseResponse(xhr.responseText))
+    xhr.onerror = (...args) => !cancelled && onerror(...args)
 
     xhr.open('POST', action, true)
     entries(headers).forEach(function ([key, val]) {
@@ -1006,17 +959,19 @@ function getXhrUploadRequest (options) {
     xhr.withCredentials = withCredentials
     xhr.send(formData)
 
-    return function () {
+    return function cancel () {
+      cancelled = true
       xhr.abort()
     }
   }
 }
 
-function getCustomUploadRequest ({upload}) {
-   return upload
+function getCustomUploadRequest ({ upload }) {
+  // 之前的实现里自定义上传函数的 context 是 null，这里继续保留
+  return upload.bind(null)
 }
 
-function getResonpseParse({convertResponse = identity, dataType}) {
+function getResonpseParse ({ convertResponse = identity, dataType }) {
   return function (data) {
     if (typeof data === 'string' && dataType === 'json') {
       try {
@@ -1028,5 +983,4 @@ function getResonpseParse({convertResponse = identity, dataType}) {
     return convertResponse(data)
   }
 }
-
 </script>
