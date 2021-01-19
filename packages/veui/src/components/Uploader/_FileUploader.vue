@@ -31,11 +31,11 @@
     >
       <slot
         name="file"
-        v-bind="getScopeValue(index, file)"
+        v-bind="$parent.getScopeValue(index)"
       >
         <slot
           name="file-before"
-          v-bind="getScopeValue(index, file)"
+          v-bind="$parent.getScopeValue(index)"
         />
 
         <div :class="$c('uploader-list-container')">
@@ -94,7 +94,7 @@
 
         <slot
           name="file-after"
-          v-bind="getScopeValue(index, file)"
+          v-bind="$parent.getScopeValue(index)"
         />
       </slot>
     </li>

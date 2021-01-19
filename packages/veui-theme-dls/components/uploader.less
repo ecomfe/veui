@@ -1,9 +1,12 @@
 @import "../lib.less";
 
 .@{veui-prefix}-uploader {
-  display: flex;
   outline: none;
   font-size: @dls-uploader-font-size-m;
+
+  &-media {
+    display: flex;
+  }
 
   .@{veui-prefix}-disabled {
     .@{veui-prefix}-icon,

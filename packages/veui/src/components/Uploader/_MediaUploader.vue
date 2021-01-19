@@ -1,5 +1,5 @@
 <template>
-<div>
+<div :class="$c('uploader-media')">
   <ul
     :class="{
       [listClass]: true,
@@ -21,11 +21,11 @@
       <template v-if="!file.status || file.status === 'success'">
         <slot
           name="file"
-          v-bind="getScopeValue(index, file)"
+          v-bind="getScopeValue(index)"
         >
           <slot
             name="file-before"
-            v-bind="getScopeValue(index, file)"
+            v-bind="getScopeValue(index)"
           />
           <div :class="$c('uploader-list-media-container')">
             <veui-uploader-file-viewer
@@ -44,7 +44,7 @@
             <veui-uploader-file-viewer
               v-else-if="file.type === 'video'"
               tag="video"
-              :src="file.src || file"
+              :src="file.src || file.native"
               :class="$c('uploader-list-media-container-media')"
             />
             <veui-uploader-controls
@@ -52,23 +52,23 @@
               :items="getMediaControls(file)"
               :expanded.sync="expandedControlDropdowns[index]"
               :disabled="disabled"
-              @click="handleMediaAction(file, index, $event)"
+              @click="handleMediaAction(index, $event)"
             />
           </div>
           <slot
             name="file-after"
-            v-bind="getScopeValue(index, file)"
+            v-bind="getScopeValue(index)"
           />
         </slot>
       </template>
       <template v-else-if="file.status === 'uploading'">
         <slot
           name="uploading"
-          v-bind="getScopeValue(index, file)"
+          v-bind="getScopeValue(index)"
         >
           <slot
             name="file-before"
-            v-bind="getScopeValue(index, file)"
+            v-bind="getScopeValue(index)"
           />
           <div
             :class="`${listClass}-container ${listClass}-container-uploading`"
@@ -86,18 +86,18 @@
           </div>
           <slot
             name="file-after"
-            v-bind="getScopeValue(index, file)"
+            v-bind="getScopeValue(index)"
           />
         </slot>
       </template>
       <template v-else-if="file.status === 'failure'">
         <slot
           name="failure"
-          v-bind="getScopeValue(index, file)"
+          v-bind="getScopeValue(index)"
         >
           <slot
             name="file-before"
-            v-bind="getScopeValue(index, file)"
+            v-bind="getScopeValue(index)"
           />
           <div
             :ref="`fileItem${index}`"
@@ -112,7 +112,7 @@
             >
               <slot
                 name="button-label"
-                v-bind="getScopeValue(index, file)"
+                v-bind="getScopeValue(index)"
               >
                 <veui-icon :name="getIconName(type)"/>
               </slot>
@@ -128,7 +128,7 @@
               :items="getMediaControls(file)"
               :expanded.sync="expandedControlDropdowns[index]"
               :disabled="disabled"
-              @click="handleMediaAction(file, index, $event)"
+              @click="handleMediaAction(index, $event)"
             />
           </div>
           <veui-popover
@@ -139,7 +139,7 @@
           </veui-popover>
           <slot
             name="file-after"
-            v-bind="getScopeValue(index, file)"
+            v-bind="getScopeValue(index)"
           />
         </slot>
       </template>
@@ -204,6 +204,7 @@
 </template>
 
 <script>
+import { includes } from 'lodash'
 import prefix from '../../mixins/prefix'
 import upload from '../../mixins/upload'
 import i18n from '../../mixins/i18n'
@@ -212,6 +213,8 @@ import Progress from '../Progress'
 import Popover from '../Popover'
 import Controls from './_Controls'
 import FileViewer from './_FileViewer'
+
+const INTERNAL_ACTION_EVENTS = ['add', 'preview', 'remove', 'replace']
 
 export default {
   name: 'veui-uploader-media',
@@ -232,6 +235,9 @@ export default {
   computed: {
     listClass () {
       return this.$c('uploader-list-media')
+    },
+    getScopeValue () {
+      return this.$parent.getScopeValue
     }
   },
   methods: {
@@ -304,19 +310,19 @@ export default {
         }
       })
     },
-    handleMediaAction (file, index, actionName) {
-      if (actionName === 'preview') {
-        this.$emit('preview', index)
-      } else if (actionName === 'remove') {
-        this.$emit('remove', index)
-      } else if (actionName === 'replace') {
-        this.$emit('replace', index)
+    handleMediaAction (index, actionName) {
+      if (includes(INTERNAL_ACTION_EVENTS, actionName)) {
+        this.$emit(actionName, index)
       } else {
-        this.$emit(actionName, file, index)
+        this.$emit('custom', actionName, this.files[index], index)
       }
     },
     handleMediaEntry (entryName) {
-      this.$emit(entryName)
+      if (includes(INTERNAL_ACTION_EVENTS, entryName)) {
+        this.$emit(entryName)
+      } else {
+        this.$emit('custom', entryName)
+      }
     },
     getIconName (type) {
       switch (type) {

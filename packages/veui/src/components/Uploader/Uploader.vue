@@ -10,15 +10,24 @@
   tabindex="-1"
   :aria-label="t('uploader')"
 >
+  <input
+    ref="fileInput"
+    type="file"
+    :accept="realAccept"
+    hidden
+  >
+
   <component
     :is="`veui-uploader-${isMediaType ? 'media' : 'file'}`"
     :files="fileList"
     :addable="!canNotAddImage"
     :disabled="realUneditable"
+    :options="childOptions"
     @add="handleImageAdd"
     @replace="handleImageReplace"
     @remove="handleImageRemove"
     @preview="handelImagePreview"
+    @custom="handleImageCustomEvent"
   >
     <template
       v-for="(_, slotName) in $scopedSlots"
@@ -32,7 +41,7 @@
 
   <veui-lightbox
     :open.sync="previewOpen"
-    :datasource="files.filter(file => file.status === 'success')"
+    :datasource="successFiles"
     :index.sync="previewIndex"
     v-bind="realPreviewOptions"
   />
@@ -50,13 +59,15 @@ import {
   includes,
   isArray,
   isString,
+  startsWith,
   endsWith,
   find,
   findIndex,
   uniqueId,
   entries,
   identity,
-  omit
+  omit,
+  isNil
 } from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
@@ -103,7 +114,7 @@ const UPLOAD_UPLOADING = 'uploading'
 const UPLOAD_SUCCESS = 'success'
 const UPLOAD_FAILURE = 'failure'
 
-const FILE_VALUE_KEYS = ['name', 'type', 'poster', 'src']
+const PUBLIC_FILE_PROPS = ['name', 'type', 'poster', 'src']
 
 const ERRORS = {
   TYPE_INVALID: 'type',
@@ -123,9 +134,6 @@ export default {
   mixins: [prefix, ui, input, i18n],
   model: {
     event: 'change'
-  },
-  provide () {
-    return pick(this, sharedProps)
   },
   props: {
     name: {
@@ -216,7 +224,7 @@ export default {
         return includes(['asc', 'desc'], value)
       }
     },
-    compat: {
+    multiple: {
       type: Boolean,
       default: false
     },
@@ -254,8 +262,7 @@ export default {
     canNotAddImage () {
       return (
         this.realUneditable ||
-        (this.maxCount && this.fileList.length >= this.maxCount) ||
-        (this.requestMode === 'iframe' && this.submitting)
+        (this.maxCount && this.fileList.length >= this.maxCount)
       )
     },
     status () {
@@ -290,17 +297,15 @@ export default {
     realAccept () {
       if (this.extensions) {
         return this.extensions
-          .map(extension => {
-            if (extension.indexOf('.') !== 0) {
-              return `.${extension}`
-            }
-            return extension
-          })
+          .map(extension =>
+            startsWith(extension, '.') ? extension : `.${extension}`
+          )
           .join(',')
       }
       if (this.accept) {
         return this.accept
       }
+
       switch (this.type) {
         case 'media':
           return 'video/*, image/*'
@@ -313,6 +318,12 @@ export default {
     },
     realPreviewOptions () {
       return omit(this.previewOptions, ['index', 'open'])
+    },
+    realMultiple () {
+      return this.maxCount === 1 ? this.multiple : true
+    },
+    isIframeRequest () {
+      return this.requestMode === 'iframe'
     },
 
     uploadRequest () {
@@ -339,19 +350,32 @@ export default {
         maxSize: this.maxSize,
         validator: this.validator
       }
+    },
+    childOptions () {
+      return pick(this, sharedProps)
     }
   },
   watch: {
     value: {
       handler (val) {
         let values = isArray(val) ? val : [val]
-        let fileList = this.fileList
+        if (some(values, val => isString(val))) {
+          warn('[veui-uploader] `value` must be object(s).', this)
+        }
+        if (some(values, val => isNil(val._key))) {
+          warn(
+            '[veui-uploader] `_key` is required of `value` to ensure correct order.',
+            this
+          )
+        }
+
+        // 根据 key 匹配
         let [rest, patched] = values.reduce(
           ([rest, patched], value) => {
             if (value._key) {
-              let i = findIndex(fileList, file => file.key === value._key)
+              let i = findIndex(this.fileList, file => file.key === value._key)
               if (i >= 0) {
-                fileList[i].value = value
+                this.fileList[i].value = value
                 return [rest, patched.concat(i)]
               }
             }
@@ -360,19 +384,23 @@ export default {
           [[], []]
         )
 
+        // 剩余的按顺序匹配
         let j = 0
-        fileList.forEach((file, i) => {
-          if (includes(patched, i)) {
-            return
-          }
-          file.value = rest[j++]
-        })
-        if (j < rest.length) {
-          this.fileList = this.fileList.concat(
+        this.fileList = this.fileList
+          .map((file, i) => {
+            if (includes(patched, i) || !file.isSuccess) {
+              return file
+            }
+            if (j < rest.length) {
+              file.value = rest[j++]
+              return file
+            }
+            // 处理外部直接减少文件的情形
+          })
+          .filter(identity)
+          .concat(
+            // 还有剩的添加到最后（TODO: 需要考虑 order 么？）
             rest.slice(j).map(val => {
-              if (isString(val)) {
-                val = { src: val, name: val }
-              }
               let file = UploaderFile.fromValue(val)
               if (!file.type) {
                 // 是否应该在 File 内部处理这个逻辑？
@@ -383,7 +411,6 @@ export default {
               return file
             })
           )
-        }
       },
       deep: true,
       immediate: true
@@ -403,43 +430,52 @@ export default {
     }
   },
   beforeDestroy () {
-    this.clear()
+    this.cancelAll()
   },
   methods: {
     preview ({ src }, index) {
       this.previewIndex = index
       this.previewOpen = true
     },
-    clear () {
+    cancelAll () {
       this.fileList.forEach(file => file.cancel())
+    },
+    clear () {
+      this.fileList.forEach((file, index) => {
+        if (file.isFailure) {
+          this.removeFile(index)
+        }
+      })
     },
     focus () {
       this.$el.focus()
     },
 
     pickFiles (multiple) {
-      let input = document.createElement('input')
-      input.type = 'file'
-      input.hidden = true
-      input.accept = this.realAccept
-      input.multiple = multiple
+      const input = this.$refs.fileInput
+      // iframe 上传只能一个个来，原因见 attachFileToForm 里注释
+      input.multiple = this.isIframeRequest ? false : multiple
 
-      // TODO: 处理内存泄露
       let promise = new Promise(resolve => {
-        input.onchange = ({ target }) => {
+        addOnceEventListener(input, 'change', ({ target }) => {
           let files = [...target.files]
-          target.parentNode.removeChild(target)
+          if (this.isIframeRequest) {
+            files = files.map(file => {
+              file._rawFileList = target.files
+              return file
+            })
+          }
           resolve(files)
-        }
+          input.value = null
+        })
       })
 
-      this.$refs.main.appendChild(input)
       input.click()
       return promise
     },
 
     handleImageAdd () {
-      this.pickFiles().then(files => {
+      this.pickFiles(true).then(files => {
         if (!files.length) {
           return
         }
@@ -450,13 +486,16 @@ export default {
       this.removeFile(index)
     },
     handleImageReplace (index) {
-      this.replaceFile(this.fileList[index])
+      // TODO: pickFiles 异步回调后可能 fileList index 已经变了
       this.pickFiles(false).then(files => {
-        this.handleNewFiles(files)
+        this.replaceFile(index, files[0])
       })
     },
     handelImagePreview (index) {
       this.preview(this.fileList[index], index)
+    },
+    handleImageCustomEvent (name, ...args) {
+      this.$emit(name, ...args)
     },
 
     addFiles (files) {
@@ -481,6 +520,7 @@ export default {
         this.realOrder === 'desc'
           ? files.concat(this.fileList)
           : this.fileList.concat(files)
+
       if (this.autoupload) {
         this.triggerUpload()
       }
@@ -505,7 +545,14 @@ export default {
           return new Promise((resolve, reject) => {
             file.upload(this, {
               onload: resolve,
-              onerror: reject
+              onerror: reject,
+              onprogress: evt =>
+                this.$emit(
+                  'progress',
+                  file.value,
+                  this.fileList.indexOf(file),
+                  evt
+                )
             })
           })
         })
@@ -520,23 +567,49 @@ export default {
         })
         .then(status => {
           let i = this.fileList.indexOf(file)
-          this.$emit(status, this.files[i], i)
-          this.$emit(
-            'change',
-            !this.value || isArray(this.value)
-              ? this.successFiles
-              : this.successFiles[0]
-          )
+          this.$emit(status, this.files[i].value, i)
+          if (status === 'success') {
+            this.triggerChangeEvent()
+          }
         })
     },
-
+    replaceFile (index, file) {
+      this.fileList.splice(index, 1, new UploaderFile(file))
+      this.uploadFile(this.fileList[index])
+    },
     removeFile (index) {
-      let removed = this.fileList.splice(index, 1)
-      if (removed[0]) {
-        removed[0].cancel()
+      let [removed] = this.fileList.splice(index, 1)
+      if (removed) {
+        removed.cancel()
+      }
+      this.$emit('remove', removed.value, index)
+      if (removed.isSuccess) {
+        this.triggerChangeEvent()
+      }
+    },
+    triggerChangeEvent () {
+      let files = this.realMultiple
+        ? this.successFiles
+        : this.successFiles[0] || null
+      this.$emit('change', files)
+    },
+
+    getScopeValue (index) {
+      let file = this.fileList[index]
+      return {
+        ...file.value,
+        ...pick(file, ['status', 'loaded', 'total']),
+        index
       }
     }
   }
+}
+
+function addOnceEventListener (el, evt, listener) {
+  el.addEventListener(evt, function callback (...args) {
+    el.removeEventListener(evt, callback)
+    listener(...args)
+  })
 }
 
 function getFileMediaType (file) {
@@ -609,14 +682,14 @@ function getValidateFile (options, ctx) {
       getValidateFileType(options),
       ERRORS.TYPE_INVALID,
       file => file.name,
-      result => result,
+      identity,
       () => ctx.t('fileTypeInvalid')
     ],
     [
       getValidateFileSize(options),
       ERRORS.SIZE_INVALID,
       file => file.size,
-      result => result,
+      identity,
       () => ctx.t('fileSizeInvalid')
     ],
     [
@@ -634,8 +707,8 @@ function getValidateFile (options, ctx) {
         }
         return {
           type,
-          value: getValue(),
-          message: getMessage()
+          value: getValue(file),
+          message: getMessage(result)
         }
       })
     }
@@ -664,6 +737,9 @@ class UploaderFile {
         type: getFileMediaType(file)
       }
       : {}
+
+    this.loaded = undefined
+    this.total = undefined
   }
 
   get isPending () {
@@ -735,15 +811,18 @@ class UploaderFile {
   get value () {
     return {
       _key: this.key,
-      ...pick(this, FILE_VALUE_KEYS),
+      ...pick(this, PUBLIC_FILE_PROPS),
       ...this.extra
     }
   }
 
   set value (val) {
     this.isSuccess = true
-    this.result = pick(val, FILE_VALUE_KEYS)
-    this.extra = omit(val, ['_key', ...FILE_VALUE_KEYS])
+    if (val._key) {
+      this.key = val._key
+    }
+    this.result = pick(val, PUBLIC_FILE_PROPS)
+    this.extra = omit(val, ['_key', ...PUBLIC_FILE_PROPS])
   }
 
   static fromValue (val) {
@@ -847,7 +926,10 @@ function getIframeUploadRequest (options) {
     fileInput.type = 'file'
     fileInput.hidden = true
     fileInput.name = name
-    fileInput.files = [file]
+    // 解耦了视图和上传逻辑，但是提交到 iframe 需要把 pickFile 选到的文件塞回 input
+    // files 支持设置 FileList，但是 FileList 没有 slice 或者构造函数来从多文件 FileList 得到单文件 FileList
+    // 所以上面 pickFile 逻辑里保证了 iframe 情况下只能选单文件，并把 FileList 关联到 File 上
+    fileInput.files = file._rawFileList
     form.appendChild(fileInput)
   }
 
@@ -920,6 +1002,10 @@ function getIframeUploadRequest (options) {
     // TODO: timeout ?
     function ondata (data) {
       clean()
+      onprogress({
+        loaded: file.size,
+        total: file.size
+      })
       onload(parseResponse(data))
     }
 
@@ -927,6 +1013,14 @@ function getIframeUploadRequest (options) {
       removeBind()
       cleanDom()
     }
+
+    // TODO: fake progress?
+    onprogress({
+      loaded: 0,
+      total: file.size
+    }) // IE 的 ProgressEvent 不支持 constructor，所以这里只能抛个 plain object
+
+    form.submit()
 
     return clean
   }
