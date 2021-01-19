@@ -1,25 +1,30 @@
-import { pick } from 'lodash'
+export const sharedProps = [
+  'type',
+  'controls',
+  'icons',
+  'realUi',
+  'uiProps',
+  'uiParts',
+  'entries',
+  'pickerPosition',
+  'requestMode'
+]
 
-export const PUBLIC_FILE_PROPS = ['name', 'src', 'type', 'poster']
-
-export const sharedProps = ['type', 'controls', 'icons', 'realUi', 'uiProps', 'uiParts', 'entries', 'pickerPosition', 'requestMode']
+const computed = sharedProps.reduce(function (ret, key) {
+  ret[key] = function () {
+    return this.options[key]
+  }
+  return ret
+}, {})
 
 export default {
-  // TODO: the provide and inject bindings are NOT reactive
-  inject: sharedProps,
   props: {
     files: Array,
     addable: Boolean,
-    disabled: Boolean
+    disabled: Boolean,
+
+    // the provide and inject bindings are NOT reactive
+    options: Object
   },
-  methods: {
-    getScopeValue (index, file) {
-      return {
-        index,
-        ...file._extra,
-        ...pick(file, PUBLIC_FILE_PROPS),
-        status: file.status
-      }
-    }
-  }
+  computed
 }

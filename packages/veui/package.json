@@ -46,6 +46,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.2.1",
     "focus-visible": "^4.1.4",
+    "formidable": "^1.2.2",
     "karma": "^5.1.0",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.1.0",

@@ -1,6 +1,7 @@
 <template>
 <article>
   <h1><code>&lt;veui-uploader&gt;</code></h1>
+
   <h2>图片上传模式</h2>
   <veui-uploader
     v-model="files"
@@ -57,6 +58,7 @@
       <span>{{ name }}</span>
     </template>
   </veui-uploader>
+
   <h2>禁用状态</h2>
   <veui-uploader
     v-model="files1"
@@ -82,6 +84,7 @@
       <veui-icon name="id-card"/>
     </template>
   </veui-uploader>
+
   <h2>图片上传模式s</h2>
   <veui-uploader
     v-model="files2"
@@ -108,6 +111,7 @@
       <veui-icon name="id-card"/>
     </template>
   </veui-uploader>
+
   <h2>视频上传模式</h2>
   <veui-uploader
     v-model="videos"
@@ -122,6 +126,7 @@
     @statuschange="handleStatusChange"
     @invalid="handleInvalid"
   />
+
   <h2>视频上传模式上传按钮左边</h2>
   <veui-uploader
     v-model="videos1"
@@ -137,6 +142,7 @@
     @statuschange="handleStatusChange"
     @invalid="handleInvalid"
   />
+
   <h2>媒体上传模式</h2>
   <veui-uploader
     v-model="medias"
@@ -151,6 +157,7 @@
     @statuschange="handleStatusChange"
     @invalid="handleInvalid"
   />
+
   <h2>多入口模式</h2>
   <veui-uploader
     v-model="files"
@@ -168,6 +175,7 @@
     @statuschange="handleStatusChange"
     @invalid="handleInvalid"
   />
+
   <h2>外部修改值</h2>
   <veui-uploader
     v-model="file"
@@ -184,6 +192,7 @@
     </template>
   </veui-uploader>
   <veui-button @click="handleChangeFile">修改</veui-button>
+
   <h2>外部修改值（数组）</h2>
   <veui-uploader
     v-model="fileList"
@@ -200,6 +209,7 @@
     </template>
   </veui-uploader>
   <veui-button @click="handleChangeFiles">修改</veui-button>
+
   <h2>图片上传模式，扩展操作栏</h2>
   <veui-uploader
     ref="multipleUploader"
@@ -223,6 +233,7 @@
       请选择jpg,jpeg,gif图片，大小在100kb以内
     </template>
   </veui-uploader>
+
   <h2>图片上传模式，扩展操作栏s</h2>
   <veui-uploader
     ref="multipleUploader"
@@ -251,6 +262,7 @@
     class="clear"
     @click="$refs.multipleUploader.clear()"
   >清除失败文件</veui-button>
+
   <h2>图片上传模式，自定义上传slot</h2>
   <veui-uploader
     ref="customUploader"
@@ -295,6 +307,7 @@
       </veui-button>
     </div>
   </veui-popover>
+
   <h2>文件上传模式</h2>
   <veui-uploader
     v-model="files2"
@@ -312,6 +325,7 @@
       请选择文件，大小在10M以内，只能上传3个文件
     </template>
   </veui-uploader>
+
   <h2>文件上传模式，通过iframe上传</h2>
   <veui-uploader
     v-model="filesIframe"
@@ -475,7 +489,7 @@ export default {
         }
       },
       validator (file) {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
           let image = new Image()
           image.src = window.URL.createObjectURL(file)
           image.onload = () => {
@@ -483,6 +497,14 @@ export default {
               valid: image.height > 100 && image.width > 100,
               message: '图片宽高太小'
             })
+            window.URL.revokeObjectURL(file)
+          }
+          image.onerror = e => {
+            resolve({
+              valid: false,
+              message: '读取图片失败'
+            })
+            window.URL.revokeObjectURL(file)
           }
         })
       },
