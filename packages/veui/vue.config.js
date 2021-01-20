@@ -97,7 +97,9 @@ module.exports = {
           success: Math.random() > 0.5,
           src:
             'https://images.pexels.com/videos/857134/free-video-857134.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-          message: 'image too large'
+          message: 'image too large',
+          extraInfoFromServer: 'Expecto patronum',
+          alt: 'Expelliarmus' // override field on file
         })
       })
 
@@ -114,7 +116,7 @@ module.exports = {
           res.send(
             `<script>${callbackName}({code: ${
               Math.random() > 0.5 ? 1 : 0
-            }, result: {src: "https://webpack.js.org/e0b5805d423a4ec9473ee315250968b2.svg"}})</script>`
+            }, result: {src: "https://webpack.js.org/e0b5805d423a4ec9473ee315250968b2.svg", cast: 'Alohomora'}})</script>`
           )
         })
       })
