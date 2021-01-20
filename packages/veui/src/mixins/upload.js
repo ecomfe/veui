@@ -23,7 +23,7 @@ export default {
     addable: Boolean,
     disabled: Boolean,
 
-    // the provide and inject bindings are NOT reactive
+    // the provide and inject bindings are NOT reactive, use object to work around
     options: Object
   },
   computed

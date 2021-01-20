@@ -28,25 +28,29 @@
             v-bind="getScopeValue(index)"
           />
           <div :class="$c('uploader-list-media-container')">
-            <veui-uploader-file-viewer
-              v-if="file.type === 'image'"
-              tag="img"
-              :src="file.src || file.native"
-              :alt="file.alt || ''"
-              :class="$c('uploader-list-media-container-media')"
-            />
-            <img
-              v-else-if="file.type === 'video' && file.poster"
-              :src="file.poster"
-              :alt="file.alt || ''"
-              :class="$c('uploader-list-media-container-media')"
-            >
-            <veui-uploader-file-viewer
-              v-else-if="file.type === 'video'"
-              tag="video"
-              :src="file.src || file.native"
-              :class="$c('uploader-list-media-container-media')"
-            />
+            <template v-if="file.type === 'image'">
+              <veui-uploader-file-viewer
+                tag="img"
+                :src="file.src || file.native"
+                :alt="file.alt || ''"
+                :class="$c('uploader-list-media-container-media')"
+              />
+            </template>
+            <template v-else-if="file.type === 'video'">
+              <img
+                v-if="file.poster"
+                :src="file.poster"
+                :alt="file.alt"
+                :class="$c('uploader-list-media-container-media')"
+              >
+              <veui-uploader-file-viewer
+                v-else
+                tag="video"
+                :src="file.src || file.native"
+                :class="$c('uploader-list-media-container-media')"
+              />
+            </template>
+
             <veui-uploader-controls
               :class="`${listClass}-mask`"
               :items="getMediaControls(file)"
@@ -280,7 +284,7 @@ export default {
           defaultControls = [remove]
       }
       let controls = this.controls
-        ? this.controls(file, defaultControls)
+        ? this.controls({ ...file.value, status: file.status }, defaultControls)
         : defaultControls
 
       return controls.map(control => {

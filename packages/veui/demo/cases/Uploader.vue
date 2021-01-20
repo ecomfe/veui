@@ -2,357 +2,184 @@
 <article>
   <h1><code>&lt;veui-uploader&gt;</code></h1>
 
-  <h2>图片上传模式</h2>
+  <fieldset>
+    <legend>Options</legend>
+    <div>
+      Type:
+      <veui-radio-button-group
+        v-model="type"
+        ui="s"
+        :items="avaliableTypes"
+      />
+    </div>
+    <div>
+      Custom:
+      <veui-check-button-group
+        v-model="enabledCustoms"
+        ui="s"
+        :items="availableCustoms"
+      />
+    </div>
+    <div>Accept: <veui-input
+      v-model="accept"
+      ui="xs"
+    /></div>
+    <div>
+      Action:
+      <veui-searchbox
+        v-model="action"
+        ui="xs"
+        :suggestions="availableActions"
+        replace-on-select
+      />
+    </div>
+    <div>
+      RequestMode:
+      <veui-select
+        v-model="requestMode"
+        ui="xs"
+        :options="availableRequestModes"
+      />
+      <template v-if="requestMode === 'iframe'">
+        <br>+ iframeMode:
+        <veui-select
+          v-model="iframeMode"
+          ui="xs"
+          :options="availableRequestIframeModes"
+        />
+      </template>
+    </div>
+    <div>
+      PickerPosition:
+      <veui-select
+        v-model="pickerPosition"
+        ui="xs"
+        :options="availablePickerPositions"
+      />
+    </div>
+  </fieldset>
+
+  <h2>General</h2>
   <veui-uploader
+    ref="uploader"
     v-model="files"
-    type="image"
-    name="file"
-    :action="action"
-    :max-count="3"
-    max-size="100kb"
-    accept=".jpg,.jpeg,.gif"
-    :payload="payload"
-    :validator="validator"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('files')"
-    @statuschange="handleStatusChange"
-    @invalid="handleInvalid"
+    v-bind="uploaderOptions"
   >
-    <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于100像素，最多上传3张图
+    <template
+      v-if="includes(enabledCustoms, '#desc')"
+      #desc
+    >
+      请选择{{ accept }}图片， 大小在{{ maxSize }}以内， 宽、高大于100像素，
+      最多上传{{ maxCount }}张图
     </template>
-    <template #button-label>
+    <template
+      v-if="includes(enabledCustoms, '#button-label')"
+      #button-label
+    >
       <veui-icon name="id-card"/>
     </template>
-    <template #file-after="{ name }">
+    <template
+      v-if="includes(enabledCustoms, '#file-after')"
+      #file-after="{ name }"
+    >
       <span>{{ name }}</span>
     </template>
-  </veui-uploader>
-  <h2>图片上传模式 (iframe)</h2>
-  <veui-uploader
-    v-model="files"
-    type="image"
-    name="file"
-    action="/uploadiframe"
-    request-mode="iframe"
-    :max-count="3"
-    max-size="100kb"
-    accept=".jpg,.jpeg,.gif"
-    :payload="payload"
-    :validator="validator"
-    :convert-response="convertResponse"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('files')"
-    @statuschange="handleStatusChange"
-    @invalid="handleInvalid"
-  >
-    <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于100像素，最多上传3张图
-    </template>
-    <template #button-label>
-      <veui-icon name="id-card"/>
-    </template>
-    <template #file-after="{ name }">
-      <span>{{ name }}</span>
-    </template>
-  </veui-uploader>
-
-  <h2>禁用状态</h2>
-  <veui-uploader
-    v-model="files1"
-    type="image"
-    name="file"
-    :action="action"
-    :max-count="3"
-    max-size="100kb"
-    accept=".jpg,.jpeg,.gif"
-    :payload="payload"
-    :validator="validator"
-    :readonly="true"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('files')"
-    @statuschange="handleStatusChange"
-    @invalid="handleInvalid"
-  >
-    <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于100像素，最多上传3张图
-    </template>
-    <template #button-label>
-      <veui-icon name="id-card"/>
-    </template>
-  </veui-uploader>
-
-  <h2>图片上传模式s</h2>
-  <veui-uploader
-    v-model="files2"
-    type="image"
-    ui="s"
-    name="file"
-    :action="action"
-    :max-count="3"
-    max-size="100kb"
-    accept=".jpg,.jpeg,.gif"
-    :payload="payload"
-    :validator="validator"
-    :preview-options="{ wrap: false }"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('files')"
-    @statuschange="handleStatusChange"
-    @invalid="handleInvalid"
-  >
-    <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在100kb以内，宽、高大于100像素，最多上传3张图
-    </template>
-    <template #button-label>
-      <veui-icon name="id-card"/>
-    </template>
-  </veui-uploader>
-
-  <h2>视频上传模式</h2>
-  <veui-uploader
-    v-model="videos"
-    type="video"
-    name="file"
-    :action="action"
-    :max-count="4"
-    :payload="payload"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('files')"
-    @statuschange="handleStatusChange"
-    @invalid="handleInvalid"
-  />
-
-  <h2>视频上传模式上传按钮左边</h2>
-  <veui-uploader
-    v-model="videos1"
-    type="video"
-    name="file"
-    :action="action"
-    :max-count="4"
-    :payload="payload"
-    picker-position="before"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('files')"
-    @statuschange="handleStatusChange"
-    @invalid="handleInvalid"
-  />
-
-  <h2>媒体上传模式</h2>
-  <veui-uploader
-    v-model="medias"
-    type="media"
-    name="file"
-    :action="action"
-    :max-count="3"
-    :payload="payload"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('files')"
-    @statuschange="handleStatusChange"
-    @invalid="handleInvalid"
-  />
-
-  <h2>多入口模式</h2>
-  <veui-uploader
-    v-model="files"
-    type="image"
-    name="file"
-    :action="action"
-    :max-count="3"
-    max-size="500kb"
-    :payload="payload"
-    :validator="validator"
-    :entries="entries"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('files')"
-    @statuschange="handleStatusChange"
-    @invalid="handleInvalid"
-  />
-
-  <h2>外部修改值</h2>
-  <veui-uploader
-    v-model="file"
-    type="image"
-    name="file"
-    :action="action"
-    :max-count="1"
-    max-size="500kb"
-    accept=".jpg,.jpeg,.gif"
-    :payload="payload"
-  >
-    <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在500kb以内，宽、高大于100像素，最多上传1张图
-    </template>
-  </veui-uploader>
-  <veui-button @click="handleChangeFile">修改</veui-button>
-
-  <h2>外部修改值（数组）</h2>
-  <veui-uploader
-    v-model="fileList"
-    type="image"
-    name="file"
-    :action="action"
-    :max-count="5"
-    max-size="500kb"
-    accept=".jpg,.jpeg,.gif"
-    :payload="payload"
-  >
-    <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在500kb以内，宽、高大于100像素，最多上传5张图
-    </template>
-  </veui-uploader>
-  <veui-button @click="handleChangeFiles">修改</veui-button>
-
-  <h2>图片上传模式，扩展操作栏</h2>
-  <veui-uploader
-    ref="multipleUploader"
-    v-model="files1"
-    type="image"
-    request-mode="custom"
-    name="file"
-    max-size="100kb"
-    accept=".jpg,.jpeg,.gif"
-    :payload="payload"
-    :upload="upload"
-    picker-position="before"
-    :controls="imageControls"
-    @moveright="handleMoveRight"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('files1')"
-    @statuschange="handleStatusChange"
-  >
-    <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在100kb以内
-    </template>
-  </veui-uploader>
-
-  <h2>图片上传模式，扩展操作栏s</h2>
-  <veui-uploader
-    ref="multipleUploader"
-    v-model="files1"
-    type="image"
-    request-mode="custom"
-    name="file"
-    max-size="100kb"
-    accept=".jpg,.jpeg,.gif"
-    :payload="payload"
-    :upload="upload"
-    ui="s"
-    picker-position="before"
-    :controls="imageControlsSmall"
-    @moveright="handleMoveRight"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('files1')"
-    @statuschange="handleStatusChange"
-  >
-    <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在100kb以内
-    </template>
-  </veui-uploader>
-  <veui-button
-    class="clear"
-    @click="$refs.multipleUploader.clear()"
-  >清除失败文件</veui-button>
-
-  <h2>图片上传模式，自定义上传slot</h2>
-  <veui-uploader
-    ref="customUploader"
-    v-model="customFiles"
-    type="image"
-    :action="action"
-    name="file"
-    max-size="10mb"
-    accept=".jpg,.jpeg,.gif"
-    :payload="payload"
-    ui="s"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('files1')"
-    @statuschange="handleStatusChange"
-  >
-    <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在10M以内
-    </template>
-    <template slot="upload">
+    <template
+      v-if="includes(enabledCustoms, '#upload')"
+      #upload
+    >
       <div class="veui-uploader-list-image-container custom">
         <veui-button
-          @click="$refs.customUploader.clickInput()"
+          @click="$refs.uploader.clickInput()"
         >上传文件</veui-button>
-        <veui-button
-          ref="add-image"
-          @click="openTooltip"
-        >图库上传</veui-button>
+        <veui-button ref="custom-add-image">图库上传</veui-button>
       </div>
-    </template>
-  </veui-uploader>
-  <veui-popover
-    :target="tooltipTarget"
-    :open="tooltipOpen"
-    trigger="click"
-    autofocus
-  >
-    <div class="extra-url">
-      <veui-span>图片地址：</veui-span><veui-input v-model="imageSrc"/>
-      <veui-button @click="addImage">
-        确定
-      </veui-button>
-    </div>
-  </veui-popover>
-
-  <h2>文件上传模式</h2>
-  <veui-uploader
-    v-model="files2"
-    name="file"
-    :action="action"
-    :max-count="3"
-    max-size="100kb"
-    :payload="payload"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('files2')"
-    @statuschange="handleStatusChange"
-  >
-    <template slot="desc">
-      请选择文件，大小在10M以内，只能上传3个文件
-    </template>
-  </veui-uploader>
-
-  <h2>文件上传模式，通过iframe上传</h2>
-  <veui-uploader
-    v-model="filesIframe"
-    name="file"
-    action="/uploadiframe"
-    request-mode="iframe"
-    :max-count="10"
-    max-size="10mb"
-    accept=".jpg,.jpeg,.gif"
-    :payload="payload"
-    :convert-response="convertResponse"
-    ui="s"
-    @success="onSuccess"
-    @failure="onFailure"
-    @change="handleChange('filesIframe')"
-    @statuschange="handleStatusChange"
-  >
-    <template slot="desc">
-      请选择jpg,jpeg,gif图片，大小在10M以内，只能上传10张图
+      <veui-popover
+        target="custom-add-image"
+        :open.sync="tooltipOpen"
+        trigger="click"
+        autofocus
+      >
+        <form @submit.prevent="handleTooltipImageSubmit">
+          <veui-span>图片地址：</veui-span>
+          <veui-input
+            name="src"
+            placeholder="https://"
+          />
+          <veui-button type="submit">确定</veui-button>
+        </form>
+      </veui-popover>
     </template>
   </veui-uploader>
 </article>
 </template>
 <script>
-import { Uploader, Button, Popover, Input, Span, Icon } from 'veui'
+import { includes, pick } from 'lodash'
+import {
+  Uploader,
+  Button,
+  Popover,
+  Select,
+  SearchBox,
+  Input,
+  Span,
+  Icon,
+  RadioButtonGroup,
+  CheckButtonGroup
+} from 'veui'
 import 'veui-theme-dls-icons/chevron-right'
 import 'veui-theme-dls-icons/id-card'
+
+const files = [
+  {
+    name: 'EXPjUWaWoAQ07Rj.jpg',
+    src:
+      'https://feed-image.baidu.com/0/pic/f1cc5f2566cba57dedd3357c4aeaf0ef.jpg'
+  },
+  {
+    name:
+      'D_REqQiU4AAY9TaD_REqQiU4AAY9TaD_REqQiU4AAY9TaD_REqQiU4AAY9TaD_REqQiU4AAY9Ta.png',
+    src:
+      'https://feed-image.baidu.com/0/pic/8e1f0412ce0b7104ae33f1e2c2fcd337.png',
+    alt: 'A tea store with a cat inside in the shape of a drink box'
+  },
+  {
+    name: '7a1ba2b.mp4',
+    src:
+      'https://nadvideo2.baidu.com/5dafd8544f4f53b27a5f59b0ab780403_1920_1080.mp4',
+    poster:
+      'https://feed-image.baidu.com/0/pic/4dced79d185a16e228652b136f653dcc.jpg'
+  },
+  {
+    name: 'c9c23af.mp4',
+    src:
+      'https://nadvideo2.baidu.com/b45f066cccd13549219cb475ca520cee_1920_1080.mp4',
+    extraInfo: '123'
+  }
+]
+
+const mapper = value => ({ label: value, value })
+const remoteUploadTarget =
+  'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog'
+const localUploadTarget = '/upload'
+const localIframeUploadTarget = '/uploadiframe'
+const availableActions = [
+  localUploadTarget,
+  localIframeUploadTarget,
+  remoteUploadTarget
+].map(mapper)
+const avaliableTypes = ['file', 'video', 'image', 'media'].map(mapper)
+const availableCustoms = [
+  '#desc',
+  '#button-label',
+  '#file-after',
+  '#upload',
+  ':controls',
+  ':entries'
+].map(mapper)
+const availableRequestModes = ['xhr', 'iframe', 'custom'].map(mapper)
+const availableRequestIframeModes = ['postmessage', 'callback'].map(mapper)
+const availablePickerPositions = ['before', 'after'].map(mapper)
 
 export default {
   name: 'uploader-demo',
@@ -362,293 +189,165 @@ export default {
     'veui-popover': Popover,
     'veui-input': Input,
     'veui-span': Span,
-    'veui-icon': Icon
+    'veui-icon': Icon,
+    'veui-select': Select,
+    'veui-searchbox': SearchBox,
+    'veui-radio-button-group': RadioButtonGroup,
+    'veui-check-button-group': CheckButtonGroup
   },
   data () {
-    let files = [
-      {
-        name: 'demo-file111111111111111111111111111111111.jpg',
-        src: 'https://www.baidu.com/img/bd_logo1.png',
-        extraInfo: 123
-      },
-      {
-        name: 'demo-file2.gif',
-        src:
-          'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg',
-        extraInfo: 128
-      }
-    ]
-
-    let videos = [
-      {
-        name: '330206454.sd.mp4',
-        src:
-          'https://player.vimeo.com/external/330206454.sd.mp4?s=243f3d7497ba5d1c7f7ee57071e947540484a89a&profile_id=164&oauth2_token_id=57447761',
-        poster:
-          'https://images.pexels.com/videos/2156021/free-video-2156021.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500'
-      },
-      {
-        name: '380082136.sd.mp4',
-        src:
-          'https://player.vimeo.com/external/380082136.sd.mp4?s=930b81a8bf84310005cdb7f3d0c6489b777d7032&profile_id=139&oauth2_token_id=57447761'
-      }
-    ]
-
-    let medias = [
-      {
-        name: '330206454.sd.mp4',
-        src:
-          'https://player.vimeo.com/external/330206454.sd.mp4?s=243f3d7497ba5d1c7f7ee57071e947540484a89a&profile_id=164&oauth2_token_id=57447761',
-        poster:
-          'https://images.pexels.com/videos/2156021/free-video-2156021.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        type: 'video'
-      },
-      {
-        name: 'demo-file111111111111111111111111111111111.jpg',
-        src: 'https://www.baidu.com/img/bd_logo1.png',
-        type: 'image'
-      }
-    ]
-
-    let logos = [
-      'https://www.baidu.com/img/bd_logo1.png',
-      'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg'
-    ]
-
     return {
-      logos,
-      count: 0,
-      action:
-        'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog',
-      // action: '/upload',
-      file: logos[0],
-      fileList: [
-        { name: 'bidu', src: 'https://www.baidu.com/img/bd_logo1.png' },
-        {
-          name: 'tsla',
-          src:
-            'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg'
-        }
-      ],
-      files,
-      files1: files.slice(0),
-      files2: files.slice(0),
-      medias,
-      media1: medias.slice(0),
-      videos,
-      videos1: videos.slice(0),
-      customFiles: files.slice(0),
-      filesIframe: {
-        name: 'demo-file.txt',
-        src: 'http://www.baidu.com'
-      },
-      payload: {
-        year: '2017',
-        month: '4'
-      },
-      currentImage: null,
-      imageSrc: null,
-      tooltipTarget: null,
+      avaliableTypes,
+      availableCustoms,
+      availableActions,
+      availableRequestModes,
+      availableRequestIframeModes,
+      availablePickerPositions,
+
+      enabledCustoms: [],
       tooltipOpen: false,
-      upload: (file, { onload, onprogress, onerror, oncancel }) => {
-        // onload(file: Object, data: Object)
-        // onprogress(file: Object, progress: Object({loaded, total}))
-        // onerror(file: Object, error: Object({message}))
-        let xhr = new XMLHttpRequest()
-        file.xhr = xhr
+      localFiles: undefined,
 
-        xhr.upload.onprogress = e => onprogress(e)
-        xhr.onload = async () => {
-          const toProceed = await this.$confirm('Upload complete. Proceed?')
-          if (!toProceed) {
-            oncancel()
-            return
-          }
-          onprogress({
-            loaded: -1,
-            total: file.size
-          })
-          setTimeout(function () {
-            try {
-              onload(JSON.parse(xhr.responseText))
-            } catch (e) {
-              onload({ success: false, message: e })
-            }
-          }, 3000)
-        }
-        xhr.onerror = e => onerror(e)
-        let formData = new FormData()
-        formData.append('file', file)
+      autoupload: true,
+      type: 'file',
 
-        // xhr.open('POST', this.action, true)
-        xhr.open('POST', '/upload', true)
-        xhr.send(formData)
+      accept: '.jpg,.jpeg,.png',
+      maxCount: 5,
+      maxSize: '1mb',
 
-        return () => {
-          xhr.abort()
+      action:
+        process.env.NODE_ENV === 'development'
+          ? localUploadTarget
+          : remoteUploadTarget,
+      // action: localIframeUploadTarget,
+      requestMode: 'xhr',
+      iframeMode: 'postmessage',
+      payload: {
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1
+      },
+      pickerPosition: undefined
+    }
+  },
+  computed: {
+    files: {
+      get () {
+        if (this.localFiles) {
+          return this.localFiles
         }
-      },
-      validator (file) {
-        return new Promise((resolve, reject) => {
-          let image = new Image()
-          image.src = window.URL.createObjectURL(file)
-          image.onload = () => {
-            resolve({
-              valid: image.height > 100 && image.width > 100,
-              message: '图片宽高太小'
-            })
-            window.URL.revokeObjectURL(file)
-          }
-          image.onerror = e => {
-            resolve({
-              valid: false,
-              message: '读取图片失败'
-            })
-            window.URL.revokeObjectURL(file)
-          }
-        })
-      },
-      imageControls (file, defaultControls) {
-        if (file.status !== 'success') {
-          return defaultControls
+        if (['video', 'image'].indexOf(this.type) < 0) {
+          return files
         }
-        return [
-          { name: 'moveright', icon: 'chevron-right', disabled: false },
-          {
-            name: 'moveright1',
-            icon: 'chevron-right',
-            disabled: false,
-            children: [
-              {
-                name: 'moveright1-1',
-                label: '操作第一'
-              },
-              {
-                name: 'moveright1-2',
-                label: '操作第二'
-              }
-            ]
-          },
-          ...defaultControls
-        ]
+        let check = {
+          image: item => /\.(jpe?g|png)$/i.test(item.name),
+          video: item => /\.mp4$/i.test(item.name)
+        }[this.type]
+        return files.filter(check)
       },
-      imageControlsSmall (file, defaultControls) {
-        if (file.status === 'success') {
-          return [
-            { name: 'moveright', icon: 'chevron-right', disabled: false },
-            {
-              name: 'moveright1',
-              icon: 'chevron-right',
-              disabled: false,
-              children: [
-                {
-                  name: 'moveright1-1',
-                  label: '操作第一'
-                },
-                {
-                  name: 'moveright1-2',
-                  label: '操作第二'
-                }
-              ]
-            }
-          ]
-        }
-        return defaultControls.slice(0, 2)
-      },
-      entries (defaultEntries) {
-        return [
-          {
-            name: 'add',
-            icon: 'upload',
-            label: '本地上传'
-          },
-          {
-            name: 'imageLibrary',
-            icon: 'star-solid',
-            label: '图片库'
-          },
-          {
-            name: 'more',
-            icon: 'thumb-up-solid',
-            label: '更多',
-            children: [
-              {
-                label: '操作第一',
-                name: 'add'
-              },
-              {
-                label: '操作第二',
-                name: 'entry2'
-              },
-              {
-                label: '操作第三',
-                name: 'entry3'
-              }
-            ]
-          }
-        ]
+      set (val) {
+        this.localFiles = val
+      }
+    },
+    uploaderOptions () {
+      return {
+        ...pick(this, [
+          'autoupload',
+          'type',
+          'accept',
+          'maxCount',
+          'maxSize',
+          'action',
+          'requestMode',
+          'iframeMode',
+          'payload',
+          'pickerPosition'
+        ]),
+        upload: this.customUpload,
+        controls: includes(this.enabledCustoms, ':controls')
+          ? this.customItemControls
+          : undefined,
+        entries: includes(this.enabledCustoms, ':entries')
+          ? this.customUploadEntries
+          : undefined
       }
     }
   },
+  watch: {
+    type (val) {
+      this.localFiles = undefined
+    },
+    files (val) {
+      console.log('Files updated', this.files)
+    }
+  },
   methods: {
-    onSuccess (data) {
-      console.log('Success event: ', data)
-    },
-    onFailure (data) {
-      console.log('Failure event: ', data)
-    },
-    handleChange (name) {
-      console.log('Change event: ', this[name])
-    },
-    handleStatusChange (status) {
-      console.log('Total status is: ', status)
-    },
-    handleInvalid (arg) {
-      console.log('File invalid: ', arg)
-    },
-    handleChangeFile () {
-      this.count++
-      this.file = this.logos[this.count % 2]
-    },
-    handleChangeFiles () {
-      this.count++
-      this.fileList.unshift({
-        name: 'img-' + this.count,
-        src: this.logos[this.count % 2]
-      })
-    },
-    convertResponse (data) {
-      return {
-        success: !data.code,
-        ...data.result
+    includes,
+    handleTooltipImageSubmit (evt) {
+      let url = evt.target.src.value
+      if (!/^https?:\/\/.+/i.test(url)) {
+        return
       }
-    },
-    openTooltip (file) {
-      this.currentImage = file
-      this.tooltipOpen = true
-      this.tooltipTarget = `add-image${
-        file.index !== undefined ? '-' + file.index : ''
-      }`
-    },
-    addImage () {
-      if (this.currentImage.index !== undefined) {
-        this.$set(this.customFiles, this.currentImage.index, {
-          src: this.imageSrc
-        })
-      } else {
-        this.customFiles.push({ src: this.imageSrc })
-      }
-      this.currentImage = null
-      this.imageSrc = null
+      this.files = this.files.concat({ name: url, src: url })
       this.tooltipOpen = false
     },
-    handleMoveRight (file, index) {
-      console.log('image action move right: ', file, index)
-      if (index < this.files1.length - 1) {
-        let temp = { ...this.files1[index] }
-        this.$set(this.files1, index, this.files1[index + 1])
-        this.$set(this.files1, index + 1, temp)
+
+    customUploadRequest (file, { onload, onerror, onprogress, oncancel }) {},
+    customItemControls (file, defaultControls) {
+      if (file.status !== 'success') {
+        return defaultControls
       }
+      return [
+        { name: 'moveright', icon: 'chevron-right', disabled: false },
+        {
+          name: 'moveright1',
+          icon: 'chevron-right',
+          disabled: false,
+          children: [
+            {
+              name: 'moveright1-1',
+              label: '操作第一'
+            },
+            {
+              name: 'moveright1-2',
+              label: '操作第二'
+            }
+          ]
+        },
+        ...defaultControls
+      ]
+    },
+    customUploadEntries (defaultEntries) {
+      return [
+        {
+          name: 'add',
+          icon: 'upload',
+          label: '本地上传'
+        },
+        {
+          name: 'imageLibrary',
+          icon: 'star-solid',
+          label: '图片库'
+        },
+        {
+          name: 'add',
+          icon: 'thumb-up-solid',
+          label: '更多',
+          children: [
+            {
+              label: '操作第一',
+              name: 'entry1'
+            },
+            {
+              label: '操作第二',
+              name: 'entry2'
+            },
+            {
+              label: '操作第三',
+              name: 'entry3'
+            }
+          ]
+        }
+      ]
     }
   }
 }
@@ -664,22 +363,14 @@ h2 {
   margin-top: 40px;
 }
 
-.extra-url {
-  & > * {
-    vertical-align: middle;
-  }
+legend {
+  background-color: #333;
+  color: #83d0f2;
+  padding: 3px 6px;
+}
 
-  .veui-button {
-    margin-left: 5px;
-  }
-}
-.clear {
-  margin-top: 20px;
-}
-.custom {
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
+fieldset > div {
+  margin: 5px 0;
 }
 
 .veui-uploader:last-child {
