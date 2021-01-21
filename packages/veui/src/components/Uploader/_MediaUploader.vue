@@ -11,61 +11,14 @@
       :key="file.key"
       :class="{
         [`${listClass}-item`]: true,
-        [`${listClass}-item-failure`]: file.status === 'failure',
+        [`${listClass}-item-failure`]: file.isFailure,
         [`${listClass}-item-dropdown-open`]: expandedControlDropdowns[index]
       }"
       :style="{
         order: index + 1
       }"
     >
-      <template v-if="!file.status || file.status === 'success'">
-        <slot
-          name="file"
-          v-bind="getScopeValue(index)"
-        >
-          <slot
-            name="file-before"
-            v-bind="getScopeValue(index)"
-          />
-          <div :class="$c('uploader-list-media-container')">
-            <template v-if="file.type === 'image'">
-              <veui-uploader-file-viewer
-                tag="img"
-                :src="file.src || file.native"
-                :alt="file.alt || ''"
-                :class="$c('uploader-list-media-container-media')"
-              />
-            </template>
-            <template v-else-if="file.type === 'video'">
-              <img
-                v-if="file.poster"
-                :src="file.poster"
-                :alt="file.alt"
-                :class="$c('uploader-list-media-container-media')"
-              >
-              <veui-uploader-file-viewer
-                v-else
-                tag="video"
-                :src="file.src || file.native"
-                :class="$c('uploader-list-media-container-media')"
-              />
-            </template>
-
-            <veui-uploader-controls
-              :class="`${listClass}-mask`"
-              :items="getMediaControls(file)"
-              :expanded.sync="expandedControlDropdowns[index]"
-              :disabled="disabled"
-              @click="handleMediaAction(index, $event)"
-            />
-          </div>
-          <slot
-            name="file-after"
-            v-bind="getScopeValue(index)"
-          />
-        </slot>
-      </template>
-      <template v-else-if="file.status === 'uploading'">
+      <template v-if="file.isUploading">
         <slot
           name="uploading"
           v-bind="getScopeValue(index)"
@@ -83,7 +36,6 @@
               }}</slot>
             </div>
             <veui-progress
-              v-if="requestMode !== 'iframe'"
               :value="file.loaded / file.total"
               :ui="uiParts.progress"
             />
@@ -94,7 +46,7 @@
           />
         </slot>
       </template>
-      <template v-else-if="file.status === 'failure'">
+      <template v-else-if="file.isFailure">
         <slot
           name="failure"
           v-bind="getScopeValue(index)"
@@ -141,6 +93,53 @@
           >
             {{ file.message || t('@uploader.uploadFailure') }}
           </veui-popover>
+          <slot
+            name="file-after"
+            v-bind="getScopeValue(index)"
+          />
+        </slot>
+      </template>
+      <template v-else>
+        <slot
+          name="file"
+          v-bind="getScopeValue(index)"
+        >
+          <slot
+            name="file-before"
+            v-bind="getScopeValue(index)"
+          />
+          <div :class="$c('uploader-list-media-container')">
+            <template v-if="file.type === 'image'">
+              <veui-uploader-file-viewer
+                tag="img"
+                :src="file.src || file.native"
+                :alt="file.alt || ''"
+                :class="$c('uploader-list-media-container-media')"
+              />
+            </template>
+            <template v-else-if="file.type === 'video'">
+              <img
+                v-if="file.poster"
+                :src="file.poster"
+                :alt="file.alt"
+                :class="$c('uploader-list-media-container-media')"
+              >
+              <veui-uploader-file-viewer
+                v-else
+                tag="video"
+                :src="file.src || file.native"
+                :class="$c('uploader-list-media-container-media')"
+              />
+            </template>
+
+            <veui-uploader-controls
+              :class="`${listClass}-mask`"
+              :items="getMediaControls(file)"
+              :expanded.sync="expandedControlDropdowns[index]"
+              :disabled="disabled"
+              @click="handleMediaAction(index, $event)"
+            />
+          </div>
           <slot
             name="file-after"
             v-bind="getScopeValue(index)"
@@ -217,6 +216,7 @@ import Progress from '../Progress'
 import Popover from '../Popover'
 import Controls from './_Controls'
 import FileViewer from './_FileViewer'
+import { STATUS } from './_helper'
 
 const INTERNAL_ACTION_EVENTS = ['add', 'preview', 'remove', 'replace']
 
@@ -258,7 +258,7 @@ export default {
         label: this.t('@uploader.replace')
       }
       switch (file.status) {
-        case 'success':
+        case STATUS.SUCCESS:
           defaultControls = [
             {
               name: 'preview',
@@ -277,7 +277,7 @@ export default {
 
           defaultControls.push(remove)
           break
-        case 'failure':
+        case STATUS.FAILURE:
           defaultControls = [replace, remove]
           break
         default:

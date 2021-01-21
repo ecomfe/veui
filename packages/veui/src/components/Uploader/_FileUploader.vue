@@ -4,7 +4,6 @@
     <veui-button
       :ui="realUi"
       :disabled="!addable"
-      :tabindex="!addable ? null : 0"
       @click="handleUploadButtonClick"
     >
       <slot name="button-label">
@@ -26,7 +25,7 @@
       :key="`${file.name}-${file.src}`"
       :class="{
         [$c('uploader-list-item')]: true,
-        [$c('uploader-list-item-failure')]: file.status === 'failure'
+        [$c('uploader-list-item-failure')]: file.isFailure
       }"
     >
       <slot
@@ -40,38 +39,37 @@
 
         <div :class="$c('uploader-list-container')">
           <veui-icon
-            v-if="file.status !== 'uploading'"
-            :name="icons.file"
-            :class="{
-              [$c('uploader-list-file-icon')]: true,
-              [$c('uploader-list-file-icon-failure')]:
-                file.status === 'failure'
-            }"
-          />
-          <veui-icon
-            v-if="file.status === 'uploading'"
+            v-if="file.isUploading"
             :name="icons.loading"
             spin
             :class="$c('uploader-list-loading-icon')"
+          />
+          <veui-icon
+            v-else
+            :name="icons.file"
+            :class="{
+              [$c('uploader-list-file-icon')]: true,
+              [$c('uploader-list-file-icon-failure')]: file.isFailure
+            }"
           />
 
           <span
             :ref="`fileMeta${index}`"
             :class="{
               [$c('uploader-list-name')]: true,
-              [$c('uploader-list-name-success')]: file.status === 'success',
-              [$c('uploader-list-name-failure')]: file.status === 'failure'
+              [$c('uploader-list-name-success')]: file.isSuccess,
+              [$c('uploader-list-name-failure')]: file.isFailure
             }"
             :title="file.name"
           >{{ file.name }}</span>
 
           <veui-icon
-            v-if="file.status === 'success'"
+            v-if="file.isSuccess"
             :name="icons.success"
             :class="$c('uploader-success-icon')"
           />
           <veui-icon
-            v-if="file.status === 'failure'"
+            v-if="file.isFailure"
             :name="icons.failure"
             :class="$c('uploader-failure-icon')"
           />
@@ -86,7 +84,7 @@
           </veui-button>
 
           <veui-popover
-            v-if="file.status === 'failure'"
+            v-if="file.isFailure"
             :target="`fileMeta${index}`"
             position="top"
           >{{ file.message || t('@uploader.uploadFailure') }}</veui-popover>
