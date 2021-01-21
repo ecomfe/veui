@@ -21,7 +21,6 @@
           :disabled="
             control.disabled !== undefined ? control.disabled : disabled
           "
-          :tabindex="disabled ? null : 0"
           :aria-label="control.label"
           v-bind="props"
           v-on="handlers"
@@ -37,7 +36,6 @@
       :ui="$parent.uiParts.control"
       :disabled="control.disabled !== undefined ? control.disabled : disabled"
       :class="$c('control-item')"
-      :tabindex="disabled ? null : 0"
       :aria-label="control.label"
       @click="handleButtonClick(control.name)"
     >

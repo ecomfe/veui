@@ -12,14 +12,18 @@ import {
   entries,
   identity,
   omit,
-  isEmpty
+  isEmpty,
+  forEach
 } from 'lodash'
 import config from '../../managers/config'
 
-export const UPLOAD_PENDING = 'pending'
-export const UPLOAD_UPLOADING = 'uploading'
-export const UPLOAD_SUCCESS = 'success'
-export const UPLOAD_FAILURE = 'failure'
+export const STATUS = {
+  EMPTY: 'empty',
+  PENDING: 'pending',
+  UPLOADING: 'uploading',
+  SUCCESS: 'success',
+  FAILURE: 'failure'
+}
 
 export const PUBLIC_FILE_PROPS = [
   'name',
@@ -35,13 +39,6 @@ export const ERRORS = {
   SIZE_INVALID: 'size',
   TOO_MANY_FILES: 'count',
   CUSTOM_INVALID: 'custom'
-}
-
-export function addOnceEventListener (el, evt, listener) {
-  el.addEventListener(evt, function callback (...args) {
-    el.removeEventListener(evt, callback)
-    listener(...args)
-  })
 }
 
 export function getFileMediaType (file) {
@@ -127,7 +124,7 @@ export function getValidateFile (options, ctx) {
     [
       getCustomValidate(options),
       ERRORS.CUSTOM_INVALID,
-      file => file,
+      identity,
       result => result.valid,
       result => result.message
     ]
@@ -157,14 +154,17 @@ export function getValidateFile (options, ctx) {
 }
 
 export class UploaderFile {
-  constructor (file) {
+  constructor (file, { keyField }) {
+    this.keyField = keyField
+
     this.key = uniqueId('veuiUploaderFile')
-    this.status = UPLOAD_PENDING
+    this.status = STATUS.PENDING
     this.message = undefined
 
     this._file = file
     this.meta = file
       ? {
+        ...pick(file, ['name', 'size']),
         type: getFileMediaType(file)
       }
       : {}
@@ -174,11 +174,11 @@ export class UploaderFile {
   }
 
   get isPending () {
-    return this.status === UPLOAD_PENDING
+    return this.status === STATUS.PENDING
   }
 
   get isFailure () {
-    return this.status === UPLOAD_FAILURE
+    return this.status === STATUS.FAILURE
   }
 
   set isFailure (val) {
@@ -186,22 +186,22 @@ export class UploaderFile {
       if (this.isUploading) {
         this.cancel()
       }
-      this.status = UPLOAD_FAILURE
+      this.status = STATUS.FAILURE
     }
   }
 
   get isUploading () {
-    return this.status === UPLOAD_UPLOADING
+    return this.status === STATUS.UPLOADING
   }
 
   set isUploading (val) {
     if (val) {
-      this.status = UPLOAD_UPLOADING
+      this.status = STATUS.UPLOADING
     }
   }
 
   get isSuccess () {
-    return this.status === UPLOAD_SUCCESS
+    return this.status === STATUS.SUCCESS
   }
 
   set isSuccess (val) {
@@ -209,18 +209,18 @@ export class UploaderFile {
       if (this.isUploading) {
         this.cancel()
       }
-      this.status = UPLOAD_SUCCESS
+      this.status = STATUS.SUCCESS
     }
   }
 
   get name () {
     // TODO: eslint 该升级了！
-    // return this.result?.name ?? this._file?.name
-    return (this.result && this.result.name) || (this._file && this._file.name)
+    // return this.result?.name ?? this.meta.name
+    return (this.result && this.result.name) || this.meta.name
   }
 
   get size () {
-    return (this.result && this.result.size) || (this._file && this._file.size)
+    return (this.result && this.result.size) || this.meta.size
   }
 
   get src () {
@@ -252,21 +252,21 @@ export class UploaderFile {
       ...omit(this.result, PUBLIC_FILE_PROPS),
       ...this.extra,
       ...pick(this, PUBLIC_FILE_PROPS),
-      _key: this.key
+      [this.keyField]: this.key
     }
   }
 
   set value (val) {
     this.isSuccess = true
-    if (val._key) {
-      this.key = val._key
+    if (val[this.keyField]) {
+      this.key = val[this.keyField]
     }
     this.result = pick(val, PUBLIC_FILE_PROPS)
-    this.extra = omit(val, ['_key', ...PUBLIC_FILE_PROPS])
+    this.extra = omit(val, [this.keyField, ...PUBLIC_FILE_PROPS])
   }
 
-  static fromValue (val) {
-    let file = new UploaderFile()
+  static fromValue (val, options) {
+    let file = new UploaderFile(undefined, options)
     file.value = val
     return file
   }
@@ -277,34 +277,53 @@ export class UploaderFile {
   }
 
   upload (context, callbacks) {
+    let local
+    const promise = new Promise(function (resolve, reject) {
+      local = { onload: resolve, onerror: reject }
+    })
+
     const listeners = ['onload', 'onerror', 'onprogress', 'oncancel'].reduce(
       (ret, key) => {
         ret[key] = (...args) =>
-          compact([
-            this[key] && this[key].bind(this),
-            callbacks[key]
-          ]).forEach(execute => execute(...args))
+          forEach(
+            compact([this[key].bind(this), callbacks[key], local[key]]),
+            execute => {
+              try {
+                execute(...args)
+              } catch (err) {
+                if (key === 'onload') {
+                  // 在 onload 内抛异常就认为出错了，中止onload执行，执行 onerror 逻辑
+                  listeners.onerror(err)
+                  return false
+                }
+              }
+            }
+          )
         return ret
       },
       {}
     )
     // uploadRequest is provided on vm to reduce repetitive creations since it only relates to props
+    // otherwise getUploadRequest(options) every upload is called here
     this._cancel = context.uploadRequest(this._file, listeners)
+    return promise
   }
 
   onload (data) {
-    this.status = data.success ? UPLOAD_SUCCESS : UPLOAD_FAILURE
+    if (!data.success) {
+      throw new Error(data.message)
+    }
+
+    this.status = STATUS.SUCCESS
     this.result = omit(data, ['success', 'message'])
 
-    if (data.src) {
-      // 上传完成，不需要再 hold 文件对象
-      this._file = undefined
-    }
+    // 上传完成，有了 src，不需要再 hold 文件对象
+    this._file = undefined
   }
 
   onerror (err) {
+    this.status = STATUS.FAILURE
     this.message = err.message
-    this.status = UPLOAD_FAILURE
   }
 
   onprogress (evt) {
@@ -312,8 +331,13 @@ export class UploaderFile {
     this.total = evt.total
   }
 
+  oncancel () {
+    this.status = STATUS.PENDING
+    this.loaded = 0
+  }
+
   cancel () {
-    if (this.status === UPLOAD_UPLOADING && this._cancel) {
+    if (this.status === STATUS.UPLOADING && this._cancel) {
       this._cancel()
       this._cancel = undefined
     }
@@ -329,7 +353,9 @@ export function getUploadRequest (options) {
   } else if (requestMode === 'custom' && upload) {
     return getCustomUploadRequest(requestMode)
   }
-  throw new Error('no matched upload method')
+  throw new Error(
+    '`action` is required for `xhr` or `iframe` mode and `upload` is requried for `custom` mode'
+  )
 }
 
 function getIframeUploadRequest (options) {
@@ -458,9 +484,8 @@ function getIframeUploadRequest (options) {
       cleanDom()
     }
 
-    // TODO: fake progress?
     onprogress({
-      loaded: 0,
+      loaded: -1,
       total: file.size
     }) // IE 的 ProgressEvent 不支持 constructor，所以这里只能抛个 plain object
 

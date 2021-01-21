@@ -831,3 +831,10 @@ export function cloneElementWithComputedStyle (el) {
   })
   return newEl
 }
+
+export function addOnceEventListener (el, evt, listener) {
+  el.addEventListener(evt, function callback (...args) {
+    el.removeEventListener(evt, callback)
+    listener.apply(el, args)
+  })
+}

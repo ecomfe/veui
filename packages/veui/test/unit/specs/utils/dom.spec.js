@@ -4,7 +4,8 @@ import {
   scrollToAlign,
   scrollTo,
   getElementScrollbarWidth,
-  isInsideTransformedContainer
+  isInsideTransformedContainer,
+  addOnceEventListener
 } from '@/utils/dom'
 import { wait } from '../../../utils'
 
@@ -111,6 +112,16 @@ describe('utils/dom', () => {
     expect(isInsideTransformedContainer(el.querySelector('.b'))).to.equal(true)
 
     document.body.removeChild(el)
+  })
+
+  it('should callback once only after event trigger', async () => {
+    let el = document.createElement('button')
+    let count = 0
+    addOnceEventListener(el, 'click', () => count++)
+    el.click()
+    el.click()
+    el.click()
+    expect(count).to.equal(1)
   })
 })
 

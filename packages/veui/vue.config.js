@@ -1,7 +1,7 @@
 const path = require('path')
-const veuiLoaderOptions = require('./build/veui-loader.conf')
 const webpack = require('webpack')
-const formidable = require('formidable')
+const veuiLoaderOptions = require('./build/veui-loader.conf')
+const devServer = require('./build/dev-server')
 
 function resolve (dir) {
   return path.join(__dirname, dir)
@@ -90,36 +90,5 @@ module.exports = {
       .plugin('context-replacement')
       .use(webpack.ContextReplacementPlugin, [/moment[\\/]locale$/, /^$/])
   },
-  devServer: {
-    before (app) {
-      app.post('/upload', (req, res) => {
-        res.json({
-          success: Math.random() > 0.5,
-          src:
-            'https://images.pexels.com/videos/857134/free-video-857134.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-          message: 'image too large',
-          extraInfoFromServer: 'Expecto patronum',
-          alt: 'Expelliarmus' // override field on file
-        })
-      })
-
-      app.post('/uploadiframe', (req, res) => {
-        const form = formidable({})
-        form.parse(req, function (err, fields, files) {
-          if (err) {
-            console.log(err)
-            res.status(500).send(err.message)
-            return
-          }
-
-          let callbackName = fields.callback || 'window.parent.postMessage'
-          res.send(
-            `<script>${callbackName}({code: ${
-              Math.random() > 0.5 ? 1 : 0
-            }, result: {src: "https://webpack.js.org/e0b5805d423a4ec9473ee315250968b2.svg", cast: 'Alohomora'}})</script>`
-          )
-        })
-      })
-    }
-  }
+  devServer
 }

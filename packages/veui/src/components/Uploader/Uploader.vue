@@ -20,14 +20,14 @@
   <component
     :is="`veui-uploader-${isMediaType ? 'media' : 'file'}`"
     :files="fileList"
-    :addable="!canNotAddImage"
+    :addable="canAddImage"
     :disabled="realUneditable"
     :options="childOptions"
-    @add="handleImageAdd"
-    @replace="handleImageReplace"
-    @remove="handleImageRemove"
-    @preview="handelImagePreview"
-    @custom="handleImageCustomEvent"
+    @add="handleItemAdd"
+    @replace="handleItemReplace"
+    @remove="handleItemRemove"
+    @preview="handleItemPreview"
+    @custom="handleItemCustomEvent"
   >
     <template
       v-for="(_, slotName) in $scopedSlots"
@@ -53,11 +53,9 @@ import {
   some,
   pick,
   includes,
-  isArray,
   isString,
   startsWith,
   findIndex,
-  identity,
   omit,
   isNil
 } from 'lodash'
@@ -69,15 +67,13 @@ import { sharedProps } from '../../mixins/upload'
 import config from '../../managers/config'
 import toast from '../../managers/toast'
 import warn from '../../utils/warn'
+import { addOnceEventListener } from '../../utils/dom'
 import Lightbox from '../Lightbox'
 import FileUploader from './_FileUploader'
 import MediaUploader from './_MediaUploader'
 import {
-  UPLOAD_UPLOADING,
-  UPLOAD_SUCCESS,
-  UPLOAD_FAILURE,
+  STATUS,
   ERRORS,
-  addOnceEventListener,
   getFileMediaType,
   UploaderFile,
   getUploadRequest
@@ -112,8 +108,9 @@ config.defaults({
 })
 
 export default {
-  errors: ERRORS,
   name: 'veui-uploader',
+  status: STATUS,
+  errors: ERRORS,
   components: {
     'veui-lightbox': Lightbox,
     'veui-uploader-file': FileUploader,
@@ -236,6 +233,10 @@ export default {
           indicator: 'number'
         }
       }
+    },
+    keyField: {
+      type: String,
+      default: 'key'
     }
   },
   data () {
@@ -250,23 +251,23 @@ export default {
     realUneditable () {
       return this.realDisabled || this.realReadonly
     },
-    canNotAddImage () {
-      return this.realUneditable || this.fileList.length >= this.maxCount
+    canAddImage () {
+      return !this.realUneditable && this.fileList.length < this.maxCount
     },
     status () {
       if (!this.fileList.length) {
-        return 'empty'
+        return STATUS.EMPTY
       }
 
-      if (this.fileList.some(file => file.status === UPLOAD_UPLOADING)) {
-        return UPLOAD_UPLOADING
+      if (this.fileList.some(file => file.status === STATUS.UPLOADING)) {
+        return STATUS.UPLOADING
       }
 
-      if (this.fileList.some(file => file.status === UPLOAD_FAILURE)) {
-        return UPLOAD_FAILURE
+      if (this.fileList.some(file => file.status === STATUS.FAILURE)) {
+        return STATUS.FAILURE
       }
 
-      return UPLOAD_SUCCESS
+      return STATUS.SUCCESS
     },
     files () {
       return this.fileList.map(file => file.value)
@@ -349,13 +350,13 @@ export default {
   watch: {
     value: {
       handler (val) {
-        let values = isArray(val) ? val : [val]
+        let values = [].concat(val)
         if (some(values, val => isString(val))) {
           warn('[veui-uploader] `value` must be object(s).', this)
         }
-        if (some(values, val => isNil(val._key))) {
+        if (some(values, val => isNil(val[this.keyField]))) {
           warn(
-            '[veui-uploader] `_key` is required of `value` to ensure correct order.',
+            '[veui-uploader] `key-field` is required of `value` to ensure correct order.',
             this
           )
         }
@@ -375,8 +376,6 @@ export default {
           [[], []]
         )
 
-        const guessType = file => this.preferType || getFileMediaType(file)
-
         // 剩余的按顺序匹配
         let j = 0
         this.fileList = this.fileList
@@ -385,25 +384,14 @@ export default {
               return file
             }
             if (j < rest.length) {
-              let val = rest[j++]
-              file.value = val
-              if (!val.type && guessType(val) !== file.type) {
-                file.type = guessType(val)
-              }
-              return file
+              return this.createUploaderFile(rest[j++], file)
             }
             // 处理外部直接减少文件的情形
           })
-          .filter(identity)
+          .filter(Boolean)
           .concat(
             // 还有剩的添加到最后（TODO: 需要考虑 order 么？）
-            rest.slice(j).map(val => {
-              let file = UploaderFile.fromValue(val)
-              if (!file.type) {
-                file.type = guessType(file)
-              }
-              return file
-            })
+            rest.slice(j).map(val => this.createUploaderFile(val))
           )
       },
       deep: true,
@@ -468,7 +456,7 @@ export default {
       return promise
     },
 
-    handleImageAdd () {
+    handleItemAdd () {
       let restCount = this.maxCount - this.fileList.length
       this.pickFiles(restCount > 1).then(files => {
         if (!files.length) {
@@ -477,21 +465,19 @@ export default {
         this.addFiles(files)
       })
     },
-    handleImageRemove (index) {
-      // TBC: 是否需要 恢复 被替换的
-      let file = this.fileList[index]
-      this.removeFile(index, { restore: file.isFailure })
+    handleItemRemove (index) {
+      this.removeFile(index)
     },
-    handleImageReplace (index) {
+    handleItemReplace (index) {
       // TODO: pickFiles 异步回调后可能 fileList index 已经变了
       this.pickFiles(false).then(files => {
         this.replaceFile(index, files[0])
       })
     },
-    handelImagePreview (index) {
+    handleItemPreview (index) {
       this.preview(this.fileList[index], index)
     },
-    handleImageCustomEvent (name, ...args) {
+    handleItemCustomEvent (name, ...args) {
       this.$emit(name, ...args)
     },
 
@@ -512,7 +498,7 @@ export default {
         return
       }
 
-      files = files.map(file => new UploaderFile(file))
+      files = files.map(file => this.createUploaderFile(file))
       this.fileList =
         this.realOrder === 'desc'
           ? files.concat(this.fileList)
@@ -534,46 +520,42 @@ export default {
       return file
         .validate(this.validateOptions, this)
         .then(errors => {
-          if (errors) {
-            this.$emit('invalid', { file: file.native, errors })
-            throw errors.map(({ message }) => message).join(this.t('separator'))
+          if (!errors) {
+            return
           }
-
-          return new Promise((resolve, reject) => {
-            file.upload(this, {
-              onload: resolve,
-              onerror: reject,
-              onprogress: evt =>
-                this.$emit(
-                  'progress',
-                  file.value,
-                  this.fileList.indexOf(file),
-                  evt
-                ),
-              oncancel: () =>
-                this.removeFile(this.fileList.indexOf(file), { restore: true })
-            })
-          })
+          this.$emit('invalid', { file: file.native, errors })
+          file.isFailure = true
+          file.message = errors
+            .map(({ message }) => message)
+            .join(this.t('separator'))
+          throw new Error('validate failed') // skip to next catch block
         })
         .then(() => {
-          file.isSuccess = true
-          return 'success'
+          // validate success, start to upload
+          return file.upload(this, {
+            onprogress: evt =>
+              this.$emit(
+                'progress',
+                file.value,
+                this.fileList.indexOf(file),
+                evt
+              ),
+            oncancel: () =>
+              this.removeFile(this.fileList.indexOf(file), { restore: true })
+          })
         })
-        .catch(err => {
-          file.isFailure = true
-          file.message = isString(err) ? err : err.message
-          return 'failure'
-        })
+        .then(() => STATUS.SUCCESS)
+        .catch(() => STATUS.FAILURE)
         .then(status => {
           let i = this.fileList.indexOf(file)
           this.$emit(status, this.files[i].value, i)
-          if (status === 'success') {
+          if (status === STATUS.SUCCESS) {
             this.triggerChangeEvent()
           }
         })
     },
     replaceFile (index, file) {
-      let newFile = new UploaderFile(file)
+      let newFile = this.createUploaderFile(file)
       newFile._replacing = this.fileList.splice(index, 1, newFile)[0]
       this.uploadFile(newFile)
     },
@@ -610,10 +592,31 @@ export default {
         index
       }
     },
+    guessFileType (val) {
+      return this.preferType || getFileMediaType(val)
+    },
+    createUploaderFile (val, file) {
+      const options = { keyField: this.keyField }
+      if (val instanceof File) {
+        return new UploaderFile(val, options)
+      }
+
+      if (file) {
+        file.keyField = this.keyField
+        file.value = val
+      } else {
+        file = UploaderFile.fromValue(val, options)
+      }
+      let guessType = this.guessFileType(val)
+      if (!val.type && guessType !== file.type) {
+        file.type = guessType
+      }
+      return file
+    },
 
     // legacy api
     clickInput () {
-      this.handleImageAdd()
+      this.handleItemAdd()
     }
   }
 }

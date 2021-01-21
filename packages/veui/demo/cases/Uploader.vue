@@ -11,6 +11,8 @@
         ui="s"
         :items="avaliableTypes"
       />
+      <div class="space"/>
+      <veui-checkbox v-model="autoupload">autoupload</veui-checkbox>
     </div>
     <div>
       Custom:
@@ -59,62 +61,96 @@
     </div>
   </fieldset>
 
-  <h2>General</h2>
-  <veui-uploader
-    ref="uploader"
-    v-model="files"
-    v-bind="uploaderOptions"
-  >
-    <template
-      v-if="includes(enabledCustoms, '#desc')"
-      #desc
+  <fieldset>
+    <legend>Uploader</legend>
+    <veui-uploader
+      ref="uploader"
+      v-model="files"
+      v-bind="uploaderOptions"
     >
-      请选择{{ accept }}图片， 大小在{{ maxSize }}以内， 宽、高大于100像素，
-      最多上传{{ maxCount }}张图
-    </template>
-    <template
-      v-if="includes(enabledCustoms, '#button-label')"
-      #button-label
-    >
-      <veui-icon name="id-card"/>
-    </template>
-    <template
-      v-if="includes(enabledCustoms, '#file-after')"
-      #file-after="{ name }"
-    >
-      <span>{{ name }}</span>
-    </template>
-    <template
-      v-if="includes(enabledCustoms, '#upload')"
-      #upload
-    >
-      <div class="veui-uploader-list-image-container custom">
-        <veui-button
-          @click="$refs.uploader.clickInput()"
-        >上传文件</veui-button>
-        <veui-button ref="custom-add-image">图库上传</veui-button>
-      </div>
-      <veui-popover
-        target="custom-add-image"
-        :open.sync="tooltipOpen"
-        trigger="click"
-        autofocus
+      <template
+        v-if="includes(enabledCustoms, '#desc')"
+        #desc
       >
-        <form @submit.prevent="handleTooltipImageSubmit">
-          <veui-span>图片地址：</veui-span>
-          <veui-input
-            name="src"
-            placeholder="https://"
-          />
-          <veui-button type="submit">确定</veui-button>
-        </form>
-      </veui-popover>
-    </template>
-  </veui-uploader>
+        请选择{{ accept }}图片， 大小在{{ maxSize }}以内， 宽、高大于100像素，
+        最多上传{{ maxCount }}张图
+      </template>
+      <template
+        v-if="includes(enabledCustoms, '#button-label')"
+        #button-label
+      >
+        <veui-icon name="id-card"/>
+      </template>
+      <template
+        v-if="includes(enabledCustoms, '#file-after')"
+        #file-after="{ name }"
+      >
+        <span>{{ name }}</span>
+      </template>
+      <template
+        v-if="includes(enabledCustoms, '#upload')"
+        #upload
+      >
+        <div class="veui-uploader-list-image-container">
+          <veui-button
+            @click="$refs.uploader.clickInput()"
+          >上传文件</veui-button>
+          <veui-button ref="custom-add-image">图库上传</veui-button>
+        </div>
+        <veui-popover
+          target="custom-add-image"
+          :open.sync="tooltipOpen"
+          trigger="click"
+          autofocus
+        >
+          <form @submit.prevent="handleTooltipImageSubmit">
+            <veui-span>图片地址：</veui-span>
+            <veui-input
+              name="src"
+              placeholder="https://"
+            />
+            <veui-button type="submit">确定</veui-button>
+          </form>
+        </veui-popover>
+      </template>
+      <template
+        v-if="includes(enabledCustoms, '#uploading')"
+        #uploading="{ name, loaded, total }"
+      >
+        <div class="veui-uploader-list-image-container">
+          <p>“{{ name }}”上传中</p>
+          <p>
+            已完成 <strong>{{ loaded }}</strong>字节，剩余<strong>{{ total - loaded }}</strong>字节
+          </p>
+        </div>
+      </template>
+      <template
+        v-if="includes(enabledCustoms, '#file')"
+        #file="{ name, status }"
+      >
+        <div class="veui-uploader-list-media-container">
+          <p>{{ statusIcons[status] }} {{ status }} {{ name }}</p>
+        </div>
+      </template>
+    </veui-uploader>
+  </fieldset>
+
+  <fieldset>
+    <legend>Operations</legend>
+    <veui-button
+      ui="basic s"
+      @click="handleShuffleButtonClick"
+    >打乱</veui-button>
+    <div class="space"/>
+    <veui-button
+      ui="basic s"
+      @click="$refs.uploader.clear()"
+    >清除失败文件</veui-button>
+  </fieldset>
 </article>
 </template>
 <script>
-import { includes, pick } from 'lodash'
+import { includes, pick, shuffle } from 'lodash'
 import {
   Uploader,
   Button,
@@ -124,6 +160,7 @@ import {
   Input,
   Span,
   Icon,
+  Checkbox,
   RadioButtonGroup,
   CheckButtonGroup
 } from 'veui'
@@ -161,8 +198,8 @@ const files = [
 const mapper = value => ({ label: value, value })
 const remoteUploadTarget =
   'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog'
-const localUploadTarget = '/upload'
-const localIframeUploadTarget = '/uploadiframe'
+const localUploadTarget = '/upload/xhr'
+const localIframeUploadTarget = '/upload/iframe'
 const availableActions = [
   localUploadTarget,
   localIframeUploadTarget,
@@ -173,6 +210,8 @@ const availableCustoms = [
   '#desc',
   '#button-label',
   '#file-after',
+  '#file',
+  '#uploading',
   '#upload',
   ':controls',
   ':entries'
@@ -180,6 +219,13 @@ const availableCustoms = [
 const availableRequestModes = ['xhr', 'iframe', 'custom'].map(mapper)
 const availableRequestIframeModes = ['postmessage', 'callback'].map(mapper)
 const availablePickerPositions = ['before', 'after'].map(mapper)
+
+const statusIcons = {
+  [Uploader.status.PENDING]: '❔',
+  [Uploader.status.SUCCESS]: '✅',
+  [Uploader.status.FAILURE]: '❌',
+  [Uploader.status.UPLOADING]: '〽️'
+}
 
 export default {
   name: 'uploader-demo',
@@ -191,12 +237,14 @@ export default {
     'veui-span': Span,
     'veui-icon': Icon,
     'veui-select': Select,
+    'veui-checkbox': Checkbox,
     'veui-searchbox': SearchBox,
     'veui-radio-button-group': RadioButtonGroup,
     'veui-check-button-group': CheckButtonGroup
   },
   data () {
     return {
+      statusIcons,
       avaliableTypes,
       availableCustoms,
       availableActions,
@@ -268,7 +316,8 @@ export default {
           : undefined,
         entries: includes(this.enabledCustoms, ':entries')
           ? this.customUploadEntries
-          : undefined
+          : undefined,
+        convertResponse: this.convertResponse
       }
     }
   },
@@ -290,8 +339,27 @@ export default {
       this.files = this.files.concat({ name: url, src: url })
       this.tooltipOpen = false
     },
+    handleShuffleButtonClick () {
+      this.files = shuffle(this.files)
+    },
 
+    convertResponse (data, err) {
+      if (!data) {
+        return {
+          success: false,
+          message: `上传失败：${err.message}`
+        }
+      }
+
+      return this.requestMode === 'iframe'
+        ? {
+          success: !data.code,
+          ...data.result
+        }
+        : data
+    },
     customUploadRequest (file, { onload, onerror, onprogress, oncancel }) {},
+
     customItemControls (file, defaultControls) {
       if (file.status !== 'success') {
         return defaultControls
@@ -364,16 +432,17 @@ h2 {
 }
 
 legend {
-  background-color: #333;
-  color: #83d0f2;
   padding: 3px 6px;
 }
-
+fieldset {
+  margin: 20px 0;
+}
 fieldset > div {
   margin: 5px 0;
 }
 
-.veui-uploader:last-child {
-  margin-bottom: 50px;
+.space {
+  display: inline-block;
+  width: 2em;
 }
 </style>
