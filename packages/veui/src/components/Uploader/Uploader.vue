@@ -58,7 +58,8 @@ import {
   findIndex,
   find,
   omit,
-  isNil
+  isNil,
+  values
 } from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
@@ -74,6 +75,7 @@ import FileUploader from './_FileUploader'
 import MediaUploader from './_MediaUploader'
 import {
   STATUS,
+  ORDERS,
   ERRORS,
   getFileMediaType,
   UploaderFile,
@@ -210,7 +212,7 @@ export default {
     order: {
       type: String,
       validator (value) {
-        return includes(['asc', 'desc'], value)
+        return includes(values(ORDERS), value)
       }
     },
     multiple: {
@@ -271,7 +273,20 @@ export default {
         .map(file => file.value)
     },
     realOrder () {
-      return this.type === 'file' ? this.order || 'desc' : 'asc'
+      if (this.order) {
+        let mapping = {
+          [ORDERS.LEGACY_PREPEND]: ORDERS.PREPEND,
+          [ORDERS.LEGACY_APPEND]: ORDERS.APPEND
+        }
+        if (this.order in mapping) {
+          warn(
+            '[veui-uploader] `desc|asc` are deprecated for `order`. use `prepend|append` instead'
+          )
+          return mapping[this.order]
+        }
+        return this.order
+      }
+      return this.type === 'file' ? ORDERS.PREPEND : ORDERS.APPEND
     },
     isMediaType () {
       return ['image', 'video', 'media'].indexOf(this.type) > -1
@@ -343,7 +358,7 @@ export default {
   watch: {
     value: {
       handler (val) {
-        let values = [].concat(val)
+        let values = [].concat(val).filter(Boolean)
         if (some(values, val => isString(val))) {
           warn('[veui-uploader] `value` must be object(s).', this)
         }
@@ -426,6 +441,9 @@ export default {
         }
       })
     },
+    prune () {
+      this.fileList.forEach((file, index) => this.removeFile(index))
+    },
     focus () {
       this.$el.focus()
     },
@@ -454,13 +472,7 @@ export default {
     },
 
     handleItemAdd () {
-      let restCount = this.maxCount - this.fileList.length
-      this.pickFiles(restCount > 1).then(files => {
-        if (!files.length) {
-          return
-        }
-        this.addFiles(files)
-      })
+      this.chooseFiles()
     },
     handleItemRemove (index) {
       this.removeFile(index)
@@ -478,6 +490,15 @@ export default {
       this.$emit(name, ...args)
     },
 
+    chooseFiles () {
+      let restCount = this.maxCount - this.fileList.length
+      this.pickFiles(restCount > 1).then(files => {
+        if (!files.length) {
+          return
+        }
+        this.addFiles(files)
+      })
+    },
     addFiles (files) {
       const count = this.fileList.length + files.length
       if (count > this.maxCount) {
@@ -494,10 +515,9 @@ export default {
         })
         return
       }
-
       files = files.map(file => this.createUploaderFile(file))
       this.fileList =
-        this.realOrder === 'desc'
+        this.realOrder === ORDERS.PREPEND
           ? files.concat(this.fileList)
           : this.fileList.concat(files)
 
@@ -611,9 +631,33 @@ export default {
       return file
     },
 
-    // legacy api
+    // legacy APIs
     clickInput () {
-      this.handleItemAdd()
+      warn(
+        '[veui-uploader] `clickInput` is deprecated. use `chooseFiles` instead',
+        this
+      )
+      this.chooseFiles()
+    },
+    submit (file) {
+      warn(
+        '[veui-uploader] `submit` is deprecated. use `triggerUpload` instead',
+        this
+      )
+      let internalFile = find(
+        this.fileList,
+        item => item[this.keyField] === file[this.keyField]
+      )
+      if (internalFile) {
+        this.uploadFile(internalFile)
+      }
+    },
+    uploadFiles () {
+      warn(
+        '[veui-uploader] `uploadFiles` is deprecated. use `triggerUpload` instead',
+        this
+      )
+      this.triggerUpload()
     }
   }
 }
