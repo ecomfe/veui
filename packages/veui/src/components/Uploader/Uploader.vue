@@ -56,6 +56,7 @@ import {
   isString,
   startsWith,
   findIndex,
+  find,
   omit,
   isNil
 } from 'lodash'
@@ -258,19 +259,11 @@ export default {
       if (!this.fileList.length) {
         return STATUS.EMPTY
       }
-
-      if (this.fileList.some(file => file.status === STATUS.UPLOADING)) {
-        return STATUS.UPLOADING
-      }
-
-      if (this.fileList.some(file => file.status === STATUS.FAILURE)) {
-        return STATUS.FAILURE
-      }
-
-      return STATUS.SUCCESS
-    },
-    files () {
-      return this.fileList.map(file => file.value)
+      let status = find(
+        [STATUS.UPLOADING, STATUS.FAILURE, STATUS.PENDING],
+        status => this.fileList.some(file => file.status === status)
+      )
+      return status || STATUS.SUCCESS
     },
     successFiles () {
       return this.fileList
@@ -544,7 +537,7 @@ export default {
               }
               this.$emit(
                 'progress',
-                file.value,
+                this.getValueWithStatus(file),
                 this.fileList.indexOf(file),
                 evt
               )
@@ -557,7 +550,7 @@ export default {
         .catch(() => STATUS.FAILURE)
         .then(status => {
           let i = this.fileList.indexOf(file)
-          this.$emit(status, this.files[i].value, i)
+          this.$emit(status, { ...file.value, status }, i)
           if (status === STATUS.SUCCESS) {
             this.triggerChangeEvent()
           }
@@ -581,7 +574,7 @@ export default {
       }
 
       file.cancel()
-      this.$emit('remove', file.value, index)
+      this.$emit('remove', this.getValueWithStatus(file), index)
       if (file.isSuccess || file._replacing) {
         this.triggerChangeEvent()
       }
@@ -593,6 +586,9 @@ export default {
       this.$emit('change', files)
     },
 
+    getValueWithStatus (file) {
+      return { ...file.value, status: file.status }
+    },
     guessFileType (val) {
       return this.preferType || getFileMediaType(val)
     },

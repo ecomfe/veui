@@ -262,7 +262,7 @@ export class UploaderFile {
       this.key = val[this.keyField]
     }
     this.result = pick(val, PUBLIC_FILE_PROPS)
-    this.extra = omit(val, [this.keyField, ...PUBLIC_FILE_PROPS])
+    this.extra = omit(val, [this.keyField, 'status', ...PUBLIC_FILE_PROPS])
   }
 
   static fromValue (val, options) {
