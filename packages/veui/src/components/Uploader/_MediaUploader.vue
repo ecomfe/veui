@@ -113,7 +113,7 @@
               <veui-uploader-file-viewer
                 tag="img"
                 :src="file.src || file.native"
-                :alt="file.alt || ''"
+                :alt="file.alt"
                 :class="$c('uploader-list-media-container-media')"
               />
             </template>

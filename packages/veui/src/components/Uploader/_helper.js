@@ -351,7 +351,7 @@ export function getUploadRequest (options) {
   } else if (requestMode === 'iframe' && action) {
     return getIframeUploadRequest(options)
   } else if (requestMode === 'custom' && upload) {
-    return getCustomUploadRequest(requestMode)
+    return getCustomUploadRequest(options)
   }
   throw new Error(
     '`action` is required for `xhr` or `iframe` mode and `upload` is requried for `custom` mode'
