@@ -1,3 +1,5 @@
+import { pick, isNumber } from 'lodash'
+
 export const sharedProps = [
   'type',
   'controls',
@@ -26,5 +28,18 @@ export default {
     // the provide and inject bindings are NOT reactive, use object to work around
     options: Object
   },
-  computed
+  computed,
+  methods: {
+    getScopeValue (index) {
+      let file = this.files[index]
+      return {
+        ...file.value,
+        ...pick(file, ['status', 'loaded', 'total']),
+        index
+      }
+    },
+    isIndeterminate ({ loaded, total }) {
+      return !isNumber(loaded) || !isNumber(total) || loaded < 0 || total <= 0
+    }
+  }
 }

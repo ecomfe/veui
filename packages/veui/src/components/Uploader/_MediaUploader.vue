@@ -36,8 +36,9 @@
               }}</slot>
             </div>
             <veui-progress
-              :value="file.loaded / file.total"
               :ui="uiParts.progress"
+              :indeterminate="isIndeterminate(file)"
+              :value="isIndeterminate(file) ? 0 : file.loaded / file.total"
             />
           </div>
           <slot
@@ -239,9 +240,6 @@ export default {
   computed: {
     listClass () {
       return this.$c('uploader-list-media')
-    },
-    getScopeValue () {
-      return this.$parent.getScopeValue
     }
   },
   methods: {

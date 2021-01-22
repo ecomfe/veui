@@ -7,12 +7,6 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
-function delay (time) {
-  return new Promise(resolve => {
-    setTimeout(resolve, time)
-  })
-}
-
 const VEUI_PREFIX = process.env.VEUI_PREFIX || process.env.VUE_APP_VEUI_PREFIX
 const vars = {}
 

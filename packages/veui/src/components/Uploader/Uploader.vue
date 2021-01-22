@@ -415,8 +415,12 @@ export default {
     this.cancelAll()
   },
   methods: {
-    preview ({ src }, index) {
-      this.previewIndex = index
+    preview (index) {
+      let successFileIndex = findIndex(
+        this.successFiles,
+        val => val[this.keyField] === this.fileList[index].key
+      )
+      this.previewIndex = successFileIndex
       this.previewOpen = true
     },
     cancelAll () {
@@ -475,7 +479,7 @@ export default {
       })
     },
     handleItemPreview (index) {
-      this.preview(this.fileList[index], index)
+      this.preview(index)
     },
     handleItemCustomEvent (name, ...args) {
       this.$emit(name, ...args)
@@ -517,6 +521,7 @@ export default {
       }
 
       file.isUploading = true
+      file.loaded = -1
       return file
         .validate(this.validateOptions, this)
         .then(errors => {
@@ -533,13 +538,17 @@ export default {
         .then(() => {
           // validate success, start to upload
           return file.upload(this, {
-            onprogress: evt =>
+            onprogress: evt => {
+              if (evt.loaded < 0) {
+                return
+              }
               this.$emit(
                 'progress',
                 file.value,
                 this.fileList.indexOf(file),
                 evt
-              ),
+              )
+            },
             oncancel: () =>
               this.removeFile(this.fileList.indexOf(file), { restore: true })
           })
@@ -584,14 +593,6 @@ export default {
       this.$emit('change', files)
     },
 
-    getScopeValue (index) {
-      let file = this.fileList[index]
-      return {
-        ...file.value,
-        ...pick(file, ['status', 'loaded', 'total']),
-        index
-      }
-    },
     guessFileType (val) {
       return this.preferType || getFileMediaType(val)
     },
