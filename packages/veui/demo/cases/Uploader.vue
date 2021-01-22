@@ -31,6 +31,7 @@
       <veui-searchbox
         v-model="action"
         ui="xs"
+        clearable
         :suggestions="availableActions"
         replace-on-select
       />
@@ -85,7 +86,7 @@
         v-if="includes(enabledCustoms, '#file-after')"
         #file-after="{ name }"
       >
-        <span>{{ name }}</span>
+        <div class="ellipsis">{{ name }}</div>
       </template>
       <template
         v-if="includes(enabledCustoms, '#upload')"
@@ -196,15 +197,23 @@ const files = [
 ]
 
 const mapper = value => ({ label: value, value })
-const remoteUploadTarget =
+const remoteFakeUploadTarget =
   'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog'
+const remoteUploadTarget = 'https://kylehe.me/veui/upload/xhr'
 const localUploadTarget = '/upload/xhr'
 const localIframeUploadTarget = '/upload/iframe'
 const availableActions = [
-  localUploadTarget,
-  localIframeUploadTarget,
-  remoteUploadTarget
-].map(mapper)
+  { label: localUploadTarget, value: localUploadTarget },
+  { label: localIframeUploadTarget, value: localIframeUploadTarget },
+  {
+    label: `❗️ ${remoteUploadTarget} (第三方提供服务)`,
+    value: remoteUploadTarget
+  },
+  {
+    label: `❗️ ${remoteFakeUploadTarget} (第三方提供服务)`,
+    value: remoteFakeUploadTarget
+  }
+]
 const avaliableTypes = ['file', 'video', 'image', 'media'].map(mapper)
 const availableCustoms = [
   '#desc',
@@ -244,6 +253,7 @@ export default {
   },
   data () {
     return {
+      uploaderStatus: Uploader.status,
       statusIcons,
       avaliableTypes,
       availableCustoms,
@@ -252,12 +262,12 @@ export default {
       availableRequestIframeModes,
       availablePickerPositions,
 
-      enabledCustoms: [],
+      enabledCustoms: ['#file-after'],
       tooltipOpen: false,
       localFiles: undefined,
 
       autoupload: true,
-      type: 'file',
+      type: 'image',
 
       accept: '.jpg,.jpeg,.png',
       maxCount: 5,
@@ -266,7 +276,7 @@ export default {
       action:
         process.env.NODE_ENV === 'development'
           ? localUploadTarget
-          : remoteUploadTarget,
+          : remoteFakeUploadTarget,
       // action: localIframeUploadTarget,
       requestMode: 'xhr',
       iframeMode: 'postmessage',
@@ -308,16 +318,17 @@ export default {
           'requestMode',
           'iframeMode',
           'payload',
-          'pickerPosition'
+          'pickerPosition',
+          'convertResponse'
         ]),
-        upload: this.customUpload,
+        upload: this.customUploadRequest,
         controls: includes(this.enabledCustoms, ':controls')
           ? this.customItemControls
           : undefined,
         entries: includes(this.enabledCustoms, ':entries')
           ? this.customUploadEntries
           : undefined,
-        convertResponse: this.convertResponse
+        validator: this.customValidate
       }
     }
   },
@@ -343,6 +354,48 @@ export default {
       this.files = shuffle(this.files)
     },
 
+    async customValidate (file) {
+      if (!['video', 'image'].includes(this.type)) {
+        return { valid: true }
+      }
+      let src = window.URL.createObjectURL(file)
+      let revoke = () => window.URL.revokeObjectURL(src)
+      let tag = { image: 'img', video: 'video' }[this.type]
+      let el = document.createElement(tag)
+      let promise = new Promise(function (resolve, reject) {
+        if (tag === 'video') {
+          el.ondurationchange = function () {
+            setTimeout(resolve, 1800) // mock 耗时较长的校验
+          }
+        } else {
+          el.onload = resolve
+        }
+        el.onerror = reject
+      })
+      el.src = src
+      try {
+        await promise
+      } catch (e) {
+        return { valid: true }
+      } finally {
+        revoke()
+      }
+      let ret
+      if (this.type === 'image') {
+        let valid = [el.naturalWidth, el.naturalHeight].every(val => val > 100)
+        ret = valid
+          ? { valid }
+          : { valid, message: 'Dimension of image must be great than 100×100' }
+      } else if (this.type === 'video') {
+        let valid = el.duration >= 3 && el.duration < 300
+        ret = valid
+          ? { valid }
+          : { valid, message: 'Duration of video must be in range of [3, 300)' }
+      }
+      revoke()
+      return ret
+    },
+
     convertResponse (data, err) {
       if (!data) {
         return {
@@ -358,7 +411,49 @@ export default {
         }
         : data
     },
-    customUploadRequest (file, { onload, onerror, onprogress, oncancel }) {},
+    customUploadRequest (file, { onload, onerror, onprogress, oncancel }) {
+      let formData = new FormData()
+      formData.append('file', file)
+      Object.entries(this.payload).forEach(function ([key, val]) {
+        formData.append(key, val)
+      })
+
+      let xhr = new XMLHttpRequest()
+      xhr.upload.onprogress = onprogress
+      xhr.onload = async () => {
+        let data
+        try {
+          data = JSON.parse(xhr.responseText)
+        } catch (e) {
+          data = { success: false, message: e.message }
+        }
+        if (!data.success) {
+          onload(data)
+          return
+        }
+
+        let toProceed = await this.$confirm('Upload complete. Proceed?')
+        if (!toProceed) {
+          oncancel()
+          return
+        }
+        onprogress({
+          loaded: -1,
+          total: file.size
+        })
+        setTimeout(function () {
+          onload(data)
+        }, 2000)
+      }
+      xhr.onerror = onerror
+
+      xhr.open('POST', this.action, true)
+      xhr.send(formData)
+
+      return function () {
+        xhr.abort()
+      }
+    },
 
     customItemControls (file, defaultControls) {
       if (file.status !== 'success') {
@@ -444,5 +539,11 @@ fieldset > div {
 .space {
   display: inline-block;
   width: 2em;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
