@@ -30,22 +30,15 @@
     >
       <slot
         name="file"
-        v-bind="$parent.getScopeValue(index)"
+        v-bind="getScopeValue(index)"
       >
         <slot
           name="file-before"
-          v-bind="$parent.getScopeValue(index)"
+          v-bind="getScopeValue(index)"
         />
 
         <div :class="$c('uploader-list-container')">
           <veui-icon
-            v-if="file.isUploading"
-            :name="icons.loading"
-            spin
-            :class="$c('uploader-list-loading-icon')"
-          />
-          <veui-icon
-            v-else
             :name="icons.file"
             :class="{
               [$c('uploader-list-file-icon')]: true,
@@ -92,7 +85,14 @@
 
         <slot
           name="file-after"
-          v-bind="$parent.getScopeValue(index)"
+          v-bind="getScopeValue(index)"
+        />
+
+        <veui-progress
+          v-if="file.isUploading"
+          :ui="uiParts.progress"
+          :indeterminate="isIndeterminate(file)"
+          :value="isIndeterminate(file) ? 0 : file.loaded / file.total"
         />
       </slot>
     </li>
@@ -107,12 +107,14 @@ import i18n from '../../mixins/i18n'
 import Button from '../Button'
 import Icon from '../Icon'
 import Popover from '../Popover'
+import Progress from '../Progress'
 
 export default {
   name: 'veui-uploader-file',
   components: {
     'veui-icon': Icon,
     'veui-button': Button,
+    'veui-progress': Progress,
     'veui-popover': Popover
   },
   mixins: [prefix, upload, i18n],

@@ -25,6 +25,7 @@
     <div>Accept: <veui-input
       v-model="accept"
       ui="xs"
+      clearable
     /></div>
     <div>
       Action:
@@ -542,8 +543,10 @@ fieldset > div {
 }
 
 .ellipsis {
-  white-space: nowrap;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 </style>
