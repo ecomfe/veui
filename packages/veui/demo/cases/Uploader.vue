@@ -64,11 +64,19 @@
   </fieldset>
 
   <fieldset>
-    <legend>Uploader</legend>
+    <legend>
+      Uploader
+      <sup v-if="status">{{ statusTexts[status] }}</sup>
+    </legend>
     <veui-uploader
       ref="uploader"
       v-model="files"
       v-bind="uploaderOptions"
+      @success="handleUploaderEvent('success', ...arguments)"
+      @failure="handleUploaderEvent('failure', ...arguments)"
+      @invalid="handleUploaderEvent('invalid', ...arguments)"
+      @remove="handleUploaderEvent('remove', ...arguments)"
+      @statuschange="handleUploaderEvent('statuschange', ...arguments)"
     >
       <template
         v-if="includes(enabledCustoms, '#desc')"
@@ -168,6 +176,7 @@ import {
 } from 'veui'
 import 'veui-theme-dls-icons/chevron-right'
 import 'veui-theme-dls-icons/id-card'
+import bus from '../bus'
 
 const files = [
   {
@@ -236,6 +245,13 @@ const statusIcons = {
   [Uploader.status.FAILURE]: '❌',
   [Uploader.status.UPLOADING]: '〽️'
 }
+const statusTexts = {
+  [Uploader.status.EMPTY]: '无文件',
+  [Uploader.status.PENDING]: '待上传',
+  [Uploader.status.SUCCESS]: '成功',
+  [Uploader.status.FAILURE]: '失败',
+  [Uploader.status.UPLOADING]: '上传中'
+}
 
 export default {
   name: 'uploader-demo',
@@ -256,6 +272,7 @@ export default {
     return {
       uploaderStatus: Uploader.status,
       statusIcons,
+      statusTexts,
       avaliableTypes,
       availableCustoms,
       availableActions,
@@ -266,6 +283,7 @@ export default {
       enabledCustoms: ['#file-after'],
       tooltipOpen: false,
       localFiles: undefined,
+      status: undefined,
 
       autoupload: true,
       type: 'image',
@@ -353,6 +371,20 @@ export default {
     },
     handleShuffleButtonClick () {
       this.files = shuffle(this.files)
+    },
+    handleUploaderEvent (evt, ...args) {
+      if (evt === 'statuschange') {
+        this.status = args[0]
+      }
+      if (evt === 'invalid' && args[0].file) {
+        args = [{ ...args[0], file: '&lt;<b><i>File</i></b>&gt;' }].concat(
+          args.slice(1)
+        )
+      }
+      bus.$emit(
+        'log',
+        [evt, ...args.map(arg => JSON.stringify(arg))].join('\t')
+      )
     },
 
     async customValidate (file) {
@@ -517,9 +549,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-@import "~veui-theme-dls/lib.less";
-
+<style scoped>
 h2 {
   font-size: 16px;
   border-bottom: 1px solid #eee;
@@ -529,6 +559,9 @@ h2 {
 
 legend {
   padding: 3px 6px;
+}
+legend sup {
+  font-weight: bold;
 }
 fieldset {
   margin: 20px 0;
