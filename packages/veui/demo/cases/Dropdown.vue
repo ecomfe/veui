@@ -308,10 +308,10 @@
             >OK</veui-button>
           </div>
         </template>
-        <template #trigger="{ handlers, props }">
+        <template #trigger="{ handlers, attrs }">
           <veui-button
             ui="strong xs"
-            v-bind="props"
+            v-bind="attrs"
             v-on="handlers"
           >下拉</veui-button>
         </template>

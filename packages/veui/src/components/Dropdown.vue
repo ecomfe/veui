@@ -10,7 +10,7 @@
 >
   <slot
     name="trigger"
-    v-bind="{ props: triggerProps, handlers: triggerHandlers }"
+    v-bind="{ attrs: triggerAttrs, handlers: triggerHandlers }"
   >
     <veui-button
       v-if="split"
@@ -29,7 +29,7 @@
     <veui-button
       ref="button"
       :class="$c('dropdown-button')"
-      v-bind="triggerProps"
+      v-bind="triggerAttrs"
       v-on="triggerHandlers"
     >
       <span
@@ -257,7 +257,7 @@ export default {
         keydown: this.handleTriggerKeydown
       }
     },
-    triggerProps () {
+    triggerAttrs () {
       return {
         disabled: this.disabled,
         'aria-haspopup': 'menu',
