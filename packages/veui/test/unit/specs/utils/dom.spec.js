@@ -114,7 +114,7 @@ describe('utils/dom', () => {
     document.body.removeChild(el)
   })
 
-  it('should callback once only after event trigger', async () => {
+  it('should callback only once after event trigger', async () => {
     let el = document.createElement('button')
     let count = 0
     addOnceEventListener(el, 'click', () => count++)

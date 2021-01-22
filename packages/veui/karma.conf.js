@@ -1,10 +1,11 @@
 const webpackConfig = require('@vue/cli-service/webpack.config.js')
+const devServer = require('./build/dev-server')
 
 module.exports = function (config) {
   config.set({
-    frameworks: ['mocha', 'chai'],
+    frameworks: ['mocha', 'chai', 'expressServer'],
 
-    files: ['test/global.js', 'test/unit/**/*.spec.js'],
+    files: ['test/global.js', 'test/unit/specs/components/Uploader.spec.js'],
 
     preprocessors: {
       'test/global.js': ['webpack'],
@@ -20,7 +21,7 @@ module.exports = function (config) {
 
     reporters: ['spec', 'coverage-istanbul'],
 
-    browsers: ['ChromeHeadless'],
+    browsers: ['Chrome'],
 
     coverageIstanbulReporter: {
       dir: './test/coverage',
@@ -36,6 +37,22 @@ module.exports = function (config) {
           subdir: '.'
         }
       }
+    },
+
+    proxies: {
+      '/upload/': 'http://localhost:9877/upload/'
+    },
+
+    expressServer: {
+      port: 9877, // different than karma's port
+      extensions: [
+        function (
+          app, // express app
+          logger // karma logger
+        ) {
+          devServer.before(app)
+        }
+      ]
     }
   })
 }

@@ -25,6 +25,13 @@ export const STATUS = {
   FAILURE: 'failure'
 }
 
+export const ORDERS = {
+  LEGACY_PREPEND: 'desc',
+  LEGACY_APPEND: 'asc',
+  PREPEND: 'prepend',
+  APPEND: 'append'
+}
+
 export const PUBLIC_FILE_PROPS = [
   'name',
   'type',

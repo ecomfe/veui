@@ -5,7 +5,6 @@ const { random, omit, isUndefined } = require('lodash')
 const formidable = require('formidable')
 
 const uploadDir = path.join(os.tmpdir(), 'veui-dev-server')
-fse.ensureDirSync(uploadDir)
 
 const spells = [
   'Expecto patronum',
@@ -29,9 +28,18 @@ const errors = [
 
 module.exports = {
   before (app) {
+    fse.ensureDirSync(uploadDir)
+
     app.post('/upload/xhr', handleXhrRequest)
     app.post('/upload/iframe', handleIframeRequest)
     app.get('/upload/file/:filename', handleFileRequest)
+
+    // 退出是清理上传文件目录
+    process.on('SIGINT', function () {
+      console.log('[DevServer]', 'Will exit. Cleaning upload dir...')
+      fse.removeSync(uploadDir)
+      process.exit()
+    })
   }
 }
 
@@ -40,7 +48,7 @@ async function handleXhrRequest (req, res) {
   try {
     ;[, { file }] = await parseRequestBody(req)
   } catch (err) {
-    console.log(err)
+    console.log('[DevServer]', err)
     res.status(500).send(err.message)
     return
   }
@@ -62,7 +70,7 @@ async function handleIframeRequest (req, res) {
   try {
     ;[fields, { file }] = await parseRequestBody(req)
   } catch (err) {
-    console.log(err)
+    console.log('[DevServer]', err)
     res.status(500).send(err.message)
     return
   }
@@ -137,19 +145,5 @@ function parseRequestBody (req) {
 }
 
 function getFileURL (req, name) {
-  let [, port = '80'] = req.headers.host.split(':')
-  return `http://localhost:${port}/upload/file/${encodeURIComponent(name)}`
+  return `http://${req.headers.host}/upload/file/${encodeURIComponent(name)}`
 }
-
-// 退出是清理上传文件目录
-let isExiting = false
-process.on('SIGINT', function () {
-  if (isExiting) {
-    console.log('Cleaning... Will exit soon')
-    return
-  }
-  isExiting = true
-  console.log('Will exit. Cleaning upload dir...')
-  fse.removeSync(uploadDir)
-  process.exit()
-})
