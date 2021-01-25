@@ -401,6 +401,7 @@ function getIframeUploadRequest (options) {
     fileInput.name = name
     // 解耦了视图和上传逻辑，但是提交到 iframe 需要把 pickFile 选到的文件塞回 input
     // input.files setter支持 FileList，但是 FileList 没有 slice 或者构造函数来实现从多文件 FileList 得到单文件 FileList
+    // (可以通过 DataTransferItemList.add() 来间接构造 FileList 但是 IE 11 不支持)
     // 所以上面 pickFile 逻辑里保证了 iframe 情况下只能选单文件，并把 FileList 关联到 File._rawFileList 上
     // 这样这里就能从这个字段拿到原始的 FileList 。如果是调用 addFiles 插入的 File，如果要走 iframe 上传，也应该实现这个逻辑
     if (!file._rawFileList) {

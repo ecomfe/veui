@@ -372,8 +372,11 @@ export default {
         // 根据 key 匹配
         let [rest, patched] = values.reduce(
           ([rest, patched], value) => {
-            if (value._key) {
-              let i = findIndex(this.fileList, file => file.key === value._key)
+            if (value[this.keyField]) {
+              let i = findIndex(
+                this.fileList,
+                file => file.key === value[this.keyField]
+              )
               if (i >= 0) {
                 this.fileList[i].value = value
                 return [rest, patched.concat(i)]
