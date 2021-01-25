@@ -13,9 +13,11 @@ import {
   identity,
   omit,
   isEmpty,
-  forEach
+  forEach,
+  isUndefined
 } from 'lodash'
 import config from '../../managers/config'
+import { createFileList } from '../../utils/file'
 
 export const STATUS = {
   EMPTY: 'empty',
@@ -255,12 +257,12 @@ export class UploaderFile {
   }
 
   get value () {
-    return {
+    return omitUndefinedValue({
       ...omit(this.result, PUBLIC_FILE_PROPS),
       ...this.extra,
       ...pick(this, PUBLIC_FILE_PROPS),
       [this.keyField]: this.key
-    }
+    })
   }
 
   set value (val) {
@@ -351,6 +353,15 @@ export class UploaderFile {
   }
 }
 
+function omitUndefinedValue (obj) {
+  return entries(obj).reduce(function (ret, [key, val]) {
+    if (!isUndefined(val)) {
+      ret[key] = val
+    }
+    return ret
+  }, {})
+}
+
 export function getUploadRequest (options) {
   const { requestMode, action, upload } = options
   if (requestMode === 'xhr' && action) {
@@ -404,10 +415,7 @@ function getIframeUploadRequest (options) {
     // (可以通过 DataTransferItemList.add() 来间接构造 FileList 但是 IE 11 不支持)
     // 所以上面 pickFile 逻辑里保证了 iframe 情况下只能选单文件，并把 FileList 关联到 File._rawFileList 上
     // 这样这里就能从这个字段拿到原始的 FileList 。如果是调用 addFiles 插入的 File，如果要走 iframe 上传，也应该实现这个逻辑
-    if (!file._rawFileList) {
-      throw new Error('Fail to upload with iframe: no `_rawFileList` on File')
-    }
-    fileInput.files = file._rawFileList
+    fileInput.files = file._rawFileList || createFileList(file)
     form.appendChild(fileInput)
   }
 
