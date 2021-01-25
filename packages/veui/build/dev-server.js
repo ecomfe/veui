@@ -44,48 +44,35 @@ module.exports = {
 }
 
 async function handleXhrRequest (req, res) {
-  let file
+  let result
   try {
-    ;[, { file }] = await parseRequestBody(req)
+    result = await getResponseData(req)
   } catch (err) {
     console.log('[DevServer]', err)
     res.status(500).send(err.message)
     return
   }
-  await sleep(random(100, 2000))
-  res.json(
-    getResponseImageData(
-      {
-        src: getFileURL(req, file.hash),
-        hash: file.hash
-      },
-      req.query.force
-    )
-  )
+  await delayIfNeeded(req)
+  res.json(result)
 }
 
 async function handleIframeRequest (req, res) {
+  let result
   let fields
-  let file
   try {
-    ;[fields, { file }] = await parseRequestBody(req)
+    result = await getResponseData(req, {
+      onfields (val) {
+        fields = val
+      }
+    })
   } catch (err) {
     console.log('[DevServer]', err)
     res.status(500).send(err.message)
     return
   }
-
+  let data = req.query.convert !== 'false' ? convertResponse(result) : result
+  await delayIfNeeded(req)
   let callbackName = fields.callback || 'window.parent.postMessage'
-  let data = convertResponse(
-    getResponseImageData(
-      {
-        src: getFileURL(req, file.hash),
-        hash: file.hash
-      },
-      req.query.force
-    )
-  )
-  await sleep(random(100, 2000))
   res.send(`<script>${callbackName}(${JSON.stringify(data)})</script>`)
 }
 
@@ -98,11 +85,42 @@ function handleFileRequest (req, res) {
   res.sendFile(p)
 }
 
+function delayIfNeeded (req) {
+  let t = parseInt(req.query.latency)
+  return sleep(isNaN(t) ? random(100, 2000) : t)
+}
+
 function sleep (ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-function getResponseImageData (data, force) {
+async function getResponseData (req, { onfields } = {}) {
+  let fileField = req.query.name || 'file'
+  let [fields, { [fileField]: file }] = await parseRequestBody(req)
+  if (onfields) {
+    onfields(fields)
+  }
+  if (!file) {
+    throw new Error(`no file on field: ${fileField}`)
+  }
+  let result = getResponseResult(
+    {
+      src: getFileURL(req, file.hash),
+      hash: file.hash
+    },
+    req.query.force
+  )
+  if (req.query.includeRequest) {
+    result._req = {
+      headers: getCustomHeaders(req.headers),
+      fields,
+      file: { name: file.name }
+    }
+  }
+  return result
+}
+
+function getResponseResult (data, force) {
   let success = isUndefined(force) ? Math.random() > 0.5 : force === 'success'
   let ret = {
     success,
@@ -142,6 +160,15 @@ function parseRequestBody (req) {
       resolve([fields, files])
     })
   })
+}
+
+function getCustomHeaders (headers) {
+  return Object.entries(headers).reduce(function (ret, [k, v]) {
+    if (/^x-/i.test(k)) {
+      ret[k] = v
+    }
+    return ret
+  }, {})
 }
 
 function getFileURL (req, name) {

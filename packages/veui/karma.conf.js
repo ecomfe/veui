@@ -5,7 +5,7 @@ module.exports = function (config) {
   config.set({
     frameworks: ['mocha', 'chai', 'expressServer'],
 
-    files: ['test/global.js', 'test/unit/specs/components/Uploader.spec.js'],
+    files: ['test/global.js', 'test/unit/**/*.spec.js'],
 
     preprocessors: {
       'test/global.js': ['webpack'],
@@ -21,7 +21,7 @@ module.exports = function (config) {
 
     reporters: ['spec', 'coverage-istanbul'],
 
-    browsers: ['Chrome'],
+    browsers: ['ChromeHeadless'],
 
     coverageIstanbulReporter: {
       dir: './test/coverage',
