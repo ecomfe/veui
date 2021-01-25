@@ -316,7 +316,7 @@ export default {
       if (includes(INTERNAL_ACTION_EVENTS, actionName)) {
         this.$emit(actionName, index)
       } else {
-        this.$emit('custom', actionName, this.files[index], index)
+        this.$emit('custom', actionName, index)
       }
     },
     handleMediaEntry (entryName) {

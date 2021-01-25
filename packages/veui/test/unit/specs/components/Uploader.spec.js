@@ -1,9 +1,11 @@
-import { pick, some } from 'lodash'
+import { pick, omit } from 'lodash'
 import { mount } from '@vue/test-utils'
 import Uploader from '@/components/Uploader'
-// import Dropdown from '@/components/Dropdown'
+import Dropdown from '@/components/Dropdown'
+import Lightbox from '@/components/Lightbox'
 import { wait } from '../../../utils'
 import { addOnceEventListener } from '@/utils/dom'
+import { createFileList } from '@/utils/file'
 import 'veui-theme-dls-icons/check'
 import 'veui-theme-dls-icons/crop'
 import 'veui-theme-dls-icons/cut'
@@ -40,16 +42,49 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should handle value prop with `null` value.', function () {
+  it('should handle value prop with `null` value.', async function () {
+    this.timeout(5000)
+
     let wrapper = mount(Uploader, {
       sync: false,
+      attachToDocument: true,
       propsData: {
+        maxCount: 3,
         value: null,
-        action: '/upload/xhr'
+        action: '/upload/xhr?force=success'
       }
     })
-
     expect(wrapper.vm.$data.fileList).to.eql([])
+
+    let mockFile = createFile('葫芦娃.png', 'image/png', 128 * 1024)
+    let promise = waitForEvent(wrapper.vm, 'success')
+    wrapper.vm.addFiles([mockFile])
+    await promise
+
+    wrapper.vm.prune()
+    wrapper.setProps({ maxCount: 1 })
+    await wait(0)
+    promise = waitForEvent(wrapper.vm, 'success')
+    wrapper.vm.addFiles([mockFile])
+    await promise
+
+    wrapper.vm.prune()
+    wrapper.setProps({ maxCount: 1, multiple: true })
+    await wait(0)
+    promise = waitForEvent(wrapper.vm, 'success')
+    wrapper.vm.addFiles([mockFile])
+    await promise
+
+    let changes = wrapper
+      .emittedByOrder()
+      .filter(e => e.name === 'change')
+      .map(e => e.args[0])
+    expect(changes[0]).to.be.a('array')
+    expect(changes[1]).to.eql([])
+    expect(changes[2]).to.be.a('object')
+    expect(changes[3]).to.equal(null)
+    expect(changes[4]).to.be.a('array')
+
     wrapper.destroy()
   })
 
@@ -303,12 +338,15 @@ describe('components/Uploader', function () {
   })
 
   it('should upload file correctly when mode is iframe.', async function () {
+    this.timeout(5000)
+
     const payload = {
       current: Date.now()
     }
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
+        type: 'media',
         action:
           '/upload/iframe?force=success&includeRequest=true&convert=false',
         requestMode: 'iframe',
@@ -319,7 +357,6 @@ describe('components/Uploader', function () {
 
     // iframeMode: postmessage (default according to global config)
     let mockFile = createFile('xxx.png', 'image/png', 128 * 1024)
-    mockFile._rawFileList = createFileList(mockFile)
     let promise = Promise.all([
       waitForEvent(wrapper.vm, 'success'),
       new Promise(resolve => addOnceEventListener(window, 'message', resolve))
@@ -334,8 +371,7 @@ describe('components/Uploader', function () {
     // iframeMode: callback
     wrapper.setProps({ iframeMode: 'callback' })
     await wait(0)
-    mockFile = createFile('yyyy.png', 'image/png', 128 * 1024)
-    mockFile._rawFileList = createFileList(mockFile)
+    mockFile = createFile('yyyy.mp4', 'video/mp4', 128 * 1024)
     promise = waitForEvent(wrapper.vm, 'success')
     wrapper.vm.addFiles([mockFile])
     await promise
@@ -420,435 +456,378 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  // ----------
+  it('should handle cancel correctly.', async function () {
+    let called = 0
+    let cancel
+    let cancelled = new Promise(resolve => {
+      cancel = resolve
+    })
+    let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
+      propsData: {
+        requestMode: 'custom',
+        upload (file, { onprogress }) {
+          called++
+          onprogress({ loaded: 10, total: 100 })
+          return function () {
+            called++
+            cancel()
+          }
+        }
+      }
+    })
+    let progressPromise = waitForEvent(wrapper.vm, 'progress')
+    let mockFile = createFile('xxx.png', 'image/png', 128 * 1024)
+    wrapper.vm.addFiles([mockFile])
+    await progressPromise
+    wrapper.destroy()
+    await cancelled
+    expect(called).to.equal(2)
+  })
 
-  // it('should handle `remove` event correctly.', function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr',
-  //       value: [
-  //         { name: 'test1.jpg', src: '/test1.jpg' },
-  //         { name: 'test2.jpg', src: '/test2.jpg' }
-  //       ]
-  //     }
-  //   })
+  it('should be disabled when number of files reach max count.', function () {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload/xhr',
+        value: [
+          { name: 'test1.jpg', src: '/test1.jpg' },
+          { name: 'test2.jpg', src: '/test2.jpg' }
+        ],
+        maxCount: 2
+      }
+    })
 
-  //   wrapper
-  //     .findAll('.veui-uploader-list-remove')
-  //     .at(1)
-  //     .trigger('click')
-  //   expect(wrapper.emitted().remove[0]).to.eql([
-  //     { name: 'test2.jpg', src: '/test2.jpg', status: 'success' },
-  //     1
-  //   ])
-  //   expect(wrapper.emitted().change[0][0]).to.eql([
-  //     { name: 'test1.jpg', src: '/test1.jpg' }
-  //   ])
-  //   wrapper.destroy()
-  // })
+    expect(wrapper.vm.canAddImage).to.equal(false)
+    expect(wrapper.find('.veui-button').element.disabled).to.equal(true)
+    wrapper.find('.veui-uploader-list-remove').trigger('click')
+    expect(wrapper.vm.canAddImage).to.equal(true)
 
-  // it('should set request `withCredentials` correctly.', function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr',
-  //       withCredentials: false
-  //     }
-  //   })
+    wrapper.destroy()
+  })
 
-  //   let fileList = [{ name: 'test.jpg' }]
-  //   wrapper.vm.$data.fileList = fileList
-  //   wrapper.vm.uploadFile(fileList[0])
+  it('should set src of image correctly when type is image.', function () {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload/xhr',
+        value: [
+          { name: 'test1.jpg', src: '/test1.jpg' },
+          { name: 'test2.jpg', src: '/test2.jpg' }
+        ],
+        type: 'image'
+      }
+    })
 
-  //   let xhr = fileList[0].xhr
-  //   expect(xhr.withCredentials).to.equal(false)
-  //   clearXHR(wrapper)
-  //   wrapper.destroy()
-  // })
+    let images = wrapper.findAll('img')
+    expect(images.at(0).attributes('src')).to.equal('/test1.jpg')
+    expect(images.at(1).attributes('src')).to.equal('/test2.jpg')
+    wrapper.destroy()
+  })
 
-  // it('should emit `progress` event when uploading.', function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr'
-  //     }
-  //   })
+  it('should set src of video correctly when type is video.', function () {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload/xhr',
+        value: [
+          { name: 'test1.mp4', src: '/test1.mp4' },
+          { name: 'test2.mp4', src: '/test2.mp4' }
+        ],
+        type: 'video'
+      }
+    })
 
-  //   let fileList = [{ name: 'test.jpg' }]
-  //   wrapper.vm.$data.fileList = fileList
-  //   wrapper.vm.uploadFile(fileList[0])
+    let videos = wrapper.findAll('video')
+    expect(videos.at(0).attributes('src')).to.equal('/test1.mp4')
+    expect(videos.at(1).attributes('src')).to.equal('/test2.mp4')
+    wrapper.destroy()
+  })
 
-  //   // 模拟progress
-  //   fileList[0].xhr.upload.onprogress({ loaded: 10, total: 100 })
-  //   expect(wrapper.emitted().progress[0][1]).to.equal(0)
-  //   expect(wrapper.emitted().progress[0][2]).to.eql({ loaded: 10, total: 100 })
-  //   clearXHR(wrapper)
-  //   wrapper.destroy()
-  // })
+  it('should set src of video or image correctly when type is media.', function () {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload/xhr',
+        value: [
+          { name: 'test1.mp4', src: '/test1.mp4' },
+          { name: 'test2.jpg', src: '/test2.jpg' },
+          { name: 'test3.mp4', src: '/test3.mp4', poster: '/test3.jpg' }
+        ],
+        type: 'media'
+      }
+    })
 
-  // it('should handle cancel correctly.', function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr',
-  //       requestMode: 'iframe'
-  //     }
-  //   })
+    let images = wrapper.findAll('img')
+    let videos = wrapper.findAll('video')
+    expect(videos.at(0).attributes('src')).to.equal('/test1.mp4')
+    expect(images.at(0).attributes('src')).to.equal('/test2.jpg')
+    expect(images.at(1).attributes('src')).to.equal('/test3.jpg')
+    wrapper.destroy()
+  })
 
-  //   wrapper.vm.$data.fileList = [{ name: 'test.jpg', status: 'uploading' }]
+  it('should config controls of media correctly.', function () {
+    let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
+      propsData: {
+        action: '/upload/xhr',
+        value: [{ name: 'test1.jpg', src: '/test1.jpg' }],
+        type: 'image',
+        controls (file, defaultControls) {
+          if (file.status === 'success') {
+            return [
+              { name: 'test', icon: 'check' },
+              {
+                name: 'test1',
+                icon: 'crop',
+                children: [
+                  {
+                    name: 'test11',
+                    icon: 'cut',
+                    label: 'test11'
+                  }
+                ]
+              },
+              ...defaultControls
+            ]
+          }
+          return defaultControls
+        }
+      }
+    })
 
-  //   wrapper
-  //     .find('li')
-  //     .find('button')
-  //     .trigger('click')
-  //   expect(wrapper.vm.$data.fileList).to.eql([])
-  //   wrapper.destroy()
-  // })
+    let items = wrapper
+      .find('.veui-uploader-list-media-mask')
+      .findAll('.veui-control-item')
+    items.at(0).trigger('click')
+    let file = wrapper.emitted('test')[0][0]
+    expect(omit(file, ['key'])).to.eql(
+      {
+        name: 'test1.jpg',
+        src: '/test1.jpg',
+        status: 'success',
+        type: 'image'
+      },
+      0
+    )
+    expect(file.key).to.be.a('string')
 
-  // it('should be disabled when number of files reach max count.', function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr',
-  //       value: [
-  //         { name: 'test1.jpg', src: '/test1.jpg' },
-  //         { name: 'test2.jpg', src: '/test2.jpg' }
-  //       ],
-  //       maxCount: 2
-  //     }
-  //   })
+    const dropdown = items.at(1).find(Dropdown).vm
+    expect(dropdown.$props.options).to.eql([
+      {
+        name: 'test11',
+        icon: 'cut',
+        label: 'test11',
+        value: 'test11',
+        children: []
+      }
+    ])
+    items
+      .at(1)
+      .find('button')
+      .trigger('mouseenter')
+    expect(dropdown.localExpanded).to.equal(true)
+    dropdown.handleSelect('test11')
+    expect(wrapper.emitted('test11')[0][0].name).to.equal('test1.jpg')
 
-  //   expect(wrapper.vm.inputDisabled).to.equal(true)
+    wrapper.destroy()
+  })
 
-  //   wrapper.find('.veui-uploader-list-remove').trigger('click')
-  //   expect(wrapper.vm.inputDisabled).to.equal(false)
-  //   wrapper.destroy()
-  // })
+  it('should config entries of media correctly.', async function () {
+    let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
+      propsData: {
+        action: '/upload/xhr',
+        value: [{ name: 'test1.jpg', src: '/test1.jpg' }],
+        type: 'media',
+        entries (defaultEntries) {
+          return [
+            { name: 'test', icon: 'check', label: 'test' },
+            {
+              name: 'test1',
+              icon: 'crop',
+              label: 'test2',
+              children: [
+                {
+                  name: 'test11',
+                  icon: 'cut',
+                  label: 'test11'
+                }
+              ]
+            },
+            ...defaultEntries
+          ]
+        }
+      }
+    })
 
-  // it('should set src of image correctly when type is image.', function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr',
-  //       value: [
-  //         { name: 'test1.jpg', src: '/test1.jpg' },
-  //         { name: 'test2.jpg', src: '/test2.jpg' }
-  //       ],
-  //       type: 'image'
-  //     }
-  //   })
+    let entryContainer = wrapper.find('.veui-uploader-entries-container')
+    let items = entryContainer.findAll('.veui-control-item')
+    expect(items.length).to.equal(3)
 
-  //   let images = wrapper.findAll('img')
-  //   expect(images.at(0).attributes('src')).to.equal('/test1.jpg')
-  //   expect(images.at(1).attributes('src')).to.equal('/test2.jpg')
-  //   wrapper.destroy()
-  // })
+    expect(items.at(0).text()).to.equal('test')
+    expect(items.at(1).text()).to.equal('test2')
 
-  // it('should set src of video correctly when type is video.', function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr',
-  //       value: [
-  //         { name: 'test1.mp4', src: '/test1.mp4' },
-  //         { name: 'test2.mp4', src: '/test2.mp4' }
-  //       ],
-  //       type: 'video'
-  //     }
-  //   })
+    let buttons = wrapper
+      .find('.veui-uploader-entries-container')
+      .findAll('button')
 
-  //   let videos = wrapper.findAll('video')
-  //   expect(videos.at(0).attributes('src')).to.equal('/test1.mp4')
-  //   expect(videos.at(1).attributes('src')).to.equal('/test2.mp4')
-  //   wrapper.destroy()
-  // })
+    buttons.at(0).trigger('click')
+    expect(wrapper.emitted('test')[0]).to.eql([])
 
-  // it('should set src of video or image correctly when type is media.', function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr',
-  //       value: [
-  //         { name: 'test1.mp4', src: '/test1.mp4' },
-  //         { name: 'test2.jpg', src: '/test2.jpg' },
-  //         { name: 'test3.mp4', src: '/test3.mp4', poster: '/test3.jpg' }
-  //       ],
-  //       type: 'media'
-  //     }
-  //   })
+    const dropdown = items.at(1).find(Dropdown).vm
+    expect(dropdown.$props.options).to.eql([
+      {
+        name: 'test11',
+        icon: 'cut',
+        label: 'test11',
+        value: 'test11',
+        children: []
+      }
+    ])
 
-  //   let images = wrapper.findAll('img')
-  //   let videos = wrapper.findAll('video')
-  //   expect(videos.at(0).attributes('src')).to.equal('/test1.mp4')
-  //   expect(images.at(0).attributes('src')).to.equal('/test2.jpg')
-  //   expect(images.at(1).attributes('src')).to.equal('/test3.jpg')
-  //   wrapper.destroy()
-  // })
+    buttons.at(1).trigger('mouseenter')
+    expect(dropdown.localExpanded).to.equal(true)
+    dropdown.handleSelect('test11')
+    expect(wrapper.emitted('test11')[0]).to.eql([])
 
-  // it('should config controls of media correctly.', function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr',
-  //       value: [{ name: 'test1.jpg', src: '/test1.jpg' }],
-  //       type: 'image',
-  //       controls (file, defaultControls) {
-  //         if (file.status === 'success') {
-  //           return [
-  //             { name: 'test', icon: 'check' },
-  //             {
-  //               name: 'test1',
-  //               icon: 'crop',
-  //               children: [
-  //                 {
-  //                   name: 'test11', icon: 'cut', label: 'test11'
-  //                 }
-  //               ]
-  //             },
-  //             ...defaultControls
-  //           ]
-  //         }
-  //         return defaultControls
-  //       }
-  //     }
-  //   })
+    let input = wrapper.find('input[type="file"]').element
+    let clickTriggeredPromise = Promise.race([
+      new Promise(
+        resolve => {
+          input.addEventListener('click', function () {
+            resolve(true)
+          })
+        },
+        { once: true }
+      ),
+      new Promise(resolve => {
+        setTimeout(function () {
+          resolve(false)
+        }, 2000)
+      })
+    ])
 
-  //   let items = wrapper.find('.veui-uploader-list-media-mask').findAll('.veui-control-item')
-  //   items.at(0).trigger('click')
-  //   expect(wrapper.emitted().test[0][0]).to.eql(
-  //     { name: 'test1.jpg', src: '/test1.jpg', status: 'success', type: 'image' },
-  //     0
-  //   )
+    buttons.at(3).trigger('click')
 
-  //   const dropdown = items.at(1).find(Dropdown).vm
-  //   expect(dropdown.$props.options).to.eql(
-  //     [{
-  //       name: 'test11',
-  //       icon: 'cut',
-  //       label: 'test11',
-  //       value: 'test11',
-  //       children: []
-  //     }]
-  //   )
-  //   items.at(1).find('button').trigger('mouseenter')
-  //   expect(dropdown.expanded).to.equal(true)
-  //   dropdown.handleSelect('test11')
-  //   expect(wrapper.emitted().test11[0][0]).to.eql(
-  //     { name: 'test1.jpg', src: '/test1.jpg', status: 'success', type: 'image' },
-  //     0
-  //   )
+    let clickTriggered = await clickTriggeredPromise
+    expect(clickTriggered).to.equal(true)
 
-  //   wrapper.destroy()
-  // })
+    wrapper.destroy()
+  })
 
-  // it('should config entries of media correctly.', async function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr',
-  //       value: [{ name: 'test1.jpg', src: '/test1.jpg' }],
-  //       type: 'media',
-  //       entries (defaultEntries) {
-  //         return [
-  //           { name: 'test', icon: 'check', label: 'test' },
-  //           {
-  //             name: 'test1',
-  //             icon: 'crop',
-  //             label: 'test2',
-  //             children: [
-  //               {
-  //                 name: 'test11',
-  //                 icon: 'cut',
-  //                 label: 'test11'
-  //               }
-  //             ]
-  //           },
-  //           ...defaultEntries
-  //         ]
-  //       }
-  //     }
-  //   })
+  it('should show preview of media correctly.', async function () {
+    let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
+      propsData: {
+        action: '/upload/xhr',
+        value: [
+          { name: 'test1.jpg', src: '/test1.jpg' },
+          { name: 'test2.mp4', src: '/test2.mp4' }
+        ],
+        type: 'media'
+      }
+    })
 
-  //   let entryContainer = wrapper.find('.veui-uploader-entries-container')
-  //   let items = entryContainer.findAll('li')
-  //   expect(items.length).to.equal(3)
+    let items = wrapper
+      .findAll('.veui-uploader-list-media-mask')
+      .at(1)
+      .findAll('.veui-control-item')
+    items.at(0).trigger('click')
+    await wait(0)
+    let lightBox = wrapper.find(Lightbox)
+    expect(lightBox.vm.open).to.equal(true)
+    expect(lightBox.vm.index).to.equal(1)
 
-  //   expect(items.at(0).text()).to.equal('test')
-  //   expect(items.at(1).text()).to.equal('test2')
+    wrapper.destroy()
+  })
 
-  //   let buttons = wrapper
-  //     .find('.veui-uploader-entries-container')
-  //     .findAll('button')
+  it('should handle replace correctly.', async function () {
+    let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
+      propsData: {
+        action: '/upload/xhr?force=success',
+        value: [{ name: 'test.jpg', src: '/test.jpg' }],
+        type: 'image'
+      }
+    })
 
-  //   buttons.at(0).trigger('click')
-  //   expect(wrapper.emitted().test).to.eql([[]])
+    let promise = waitForEvent(wrapper.vm, 'success')
 
-  //   const dropdown = items.at(1).find(Dropdown).vm
-  //   expect(dropdown.$props.options).to.eql(
-  //     [{
-  //       name: 'test11',
-  //       icon: 'cut',
-  //       label: 'test11',
-  //       value: 'test11',
-  //       children: []
-  //     }]
-  //   )
+    wrapper
+      .find('.veui-uploader-controls')
+      .findAll('.veui-control-item')
+      .at(1)
+      .trigger('click')
+    await wait(0)
 
-  //   buttons.at(1).trigger('mouseenter')
-  //   expect(dropdown.expanded).to.equal(true)
-  //   dropdown.handleSelect('test11')
-  //   expect(wrapper.emitted().test11).to.eql([[]])
+    let mockFile = createFile('虚化身体.png', 'image/png', 128 * 1024)
+    let input = wrapper.find('input[type="file"]')
+    input.element.files = createFileList(mockFile)
+    input.trigger('change')
+    await promise
 
-  //   let input = wrapper.find('input[type="file"]').element
-  //   let clickTriggeredPromise = Promise.race(
-  //     [
-  //       new Promise(resolve => {
-  //         input.addEventListener('click', function () {
-  //           resolve(true)
-  //         })
-  //       }, { once: true }),
-  //       new Promise(resolve => {
-  //         setTimeout(function () {
-  //           resolve(false)
-  //         }, 2000)
-  //       })
-  //     ])
+    let file = wrapper.emitted('change')[0][0][0]
+    expect(file.name).to.equal('虚化身体.png')
 
-  //   buttons.at(3).trigger('click')
+    wrapper.destroy()
+  })
 
-  //   let clickTriggered = await clickTriggeredPromise
-  //   expect(clickTriggered).to.equal(true)
+  it('should render desc slot correctly.', function () {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload/xhr'
+      },
+      slots: {
+        desc: 'jpg only.'
+      }
+    })
 
-  //   wrapper.destroy()
-  // })
+    expect(wrapper.find('.veui-uploader-desc').text()).to.equal('jpg only.')
+    wrapper.destroy()
+  })
 
-  // it('should handle replace correctly.', async function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr',
-  //       value: [{ name: 'test.jpg', src: '/test.jpg' }],
-  //       type: 'image'
-  //     }
-  //   })
+  it('should render button label slot correctly.', function () {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload/xhr'
+      },
+      slots: {
+        'button-label': '<span class="test-label">upload</span>'
+      }
+    })
 
-  //   wrapper
-  //     .find('li')
-  //     .find('label')
-  //     .trigger('click')
+    expect(wrapper.find('.test-label').text()).to.equal('upload')
+    wrapper.destroy()
+  })
 
-  //   let input = wrapper.find('input[type="file"]')
-  //   let dT = new DataTransfer()
-  //   dT.items.add(new File(['foo'], 'test2.jpg'))
-  //   input.element.files = dT.files
-  //   input.trigger('change')
-  //   clearXHR(wrapper)
-  //   await wait(0)
+  it('should render file-before file-after slot correctly.', async function () {
+    let wrapper = mount(Uploader, {
+      propsData: {
+        action: '/upload/xhr',
+        value: [
+          { name: 'test1.jpg', src: '/test1.jpg' },
+          { name: 'test2.jpg', src: '/test2.jpg' }
+        ]
+      },
+      scopedSlots: {
+        'file-before':
+          '<p class="test-file-before" slot-scope="file">{{ file.index + 1 }}</p>',
+        'file-after':
+          '<p class="test-file-after" slot-scope="file">{{ file.src }}</p>'
+      }
+    })
 
-  //   let callbackData = { src: '/test2.jpg', success: true }
-  //   wrapper.vm.uploadCallback(callbackData, dT.files[0])
+    let before = wrapper.findAll('.test-file-before')
+    expect(before.at(0).text()).to.equal('1')
+    expect(before.at(1).text()).to.equal('2')
+    let after = wrapper.findAll('.test-file-after')
+    expect(after.at(0).text()).to.equal('/test1.jpg')
+    expect(after.at(1).text()).to.equal('/test2.jpg')
 
-  //   expect(wrapper.emitted().change[0][0]).to.eql([])
-
-  //   expect(wrapper.emitted().change[1][0]).to.eql([
-  //     { name: 'test2.jpg', src: '/test2.jpg' }
-  //   ])
-
-  //   wrapper.destroy()
-  // })
-
-  // it('should set callback function correctly when request mode is iframe.', function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr',
-  //       requestMode: 'iframe',
-  //       iframeMode: 'callback',
-  //       callbackNamespace: 'testNameSpace'
-  //     }
-  //   })
-
-  //   expect(window.testNameSpace).to.be.an('object')
-  //   wrapper.destroy()
-  // })
-
-  // it('should render desc slot correctly.', function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr'
-  //     },
-  //     slots: {
-  //       desc: 'jpg only.'
-  //     }
-  //   })
-
-  //   expect(wrapper.find('.veui-uploader-desc').text()).to.equal('jpg only.')
-  //   wrapper.destroy()
-  // })
-
-  // it('should render button label slot correctly.', function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr'
-  //     },
-  //     slots: {
-  //       'button-label': '<span class="test-label">upload</span>'
-  //     }
-  //   })
-
-  //   expect(wrapper.find('.test-label').text()).to.equal('upload')
-  //   wrapper.destroy()
-  // })
-
-  // it('should render file-before file-after slot correctly.', async function () {
-  //   let wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr',
-  //       value: [
-  //         { name: 'test1.jpg', src: '/test1.jpg' },
-  //         { name: 'test2.jpg', src: '/test2.jpg' }
-  //       ]
-  //     },
-  //     scopedSlots: {
-  //       'file-before':
-  //         '<p class="test-file-before" slot-scope="file">{{ file.index + 1 }}</p>',
-  //       'file-after':
-  //         '<p class="test-file-after" slot-scope="file">{{ file.src }}</p>'
-  //     }
-  //   })
-
-  //   let before = wrapper.findAll('.test-file-before')
-  //   expect(before.at(0).text()).to.equal('1')
-  //   expect(before.at(1).text()).to.equal('2')
-  //   let after = wrapper.findAll('.test-file-after')
-  //   expect(after.at(0).text()).to.equal('/test1.jpg')
-  //   expect(after.at(1).text()).to.equal('/test2.jpg')
-
-  //   wrapper.destroy()
-
-  //   wrapper = mount(Uploader, {
-  //     propsData: {
-  //       action: '/upload/xhr',
-  //       value: [
-  //         { name: 'test1.jpg', src: '/test1.jpg' },
-  //         { name: 'test2.jpg', src: '/test2.jpg' }
-  //       ]
-  //     },
-  //     scopedSlots: {
-  //       'file-before':
-  //         '<p class="test-file-before" slot-scope="file">{{ file.name }}</p>',
-  //       'file-after':
-  //         '<p class="test-file-after" slot-scope="file">{{ file.status }}</p>'
-  //     }
-  //   })
-
-  //   let input = wrapper.find('input[type="file"]')
-  //   let dT = new DataTransfer()
-  //   dT.items.add(new File(['foo'], 'test2.jpg'))
-  //   input.element.files = dT.files
-  //   input.trigger('change')
-  //   await wait(0)
-  //   clearXHR(wrapper)
-
-  //   let callbackData = { src: '/test2.jpg', id: 6, success: true }
-  //   wrapper.vm.uploadCallback(callbackData, dT.files[0])
-
-  //   before = wrapper.findAll('.test-file-before')
-  //   after = wrapper.findAll('.test-file-after')
-  //   expect(before.at(2).text()).to.equal('test2.jpg')
-  //   expect(after.at(2).text()).to.equal('success')
-
-  //   wrapper.destroy()
-  // })
+    wrapper.destroy()
+  })
 })
 
 function waitForEvent (vm, event) {
@@ -865,20 +844,4 @@ function createFile (name, type, size) {
     }
   })
   return file
-}
-
-function createFileList (files) {
-  // FileList没有构造函数来创建，通过 DataTransferItemList 来绕过
-  // from https://github.com/jimmywarting/filelist-constructor/blob/bd262ed3778317d48dceed998f845dfedb2b69a6/filelist.js
-  files = [].concat(files)
-  if (some(files, file => !(file instanceof File))) {
-    throw new Error(
-      'expected argument to FileList is File or array of File objects'
-    )
-  }
-  let dataTransfer = new ClipboardEvent('').clipboardData || new DataTransfer()
-  files.forEach(function (file) {
-    dataTransfer.items.add(file)
-  })
-  return dataTransfer.files
 }

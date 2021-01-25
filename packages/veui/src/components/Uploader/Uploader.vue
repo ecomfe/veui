@@ -59,7 +59,8 @@ import {
   find,
   omit,
   isNil,
-  values
+  values,
+  isUndefined
 } from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
@@ -359,14 +360,16 @@ export default {
     value: {
       handler (val) {
         let values = [].concat(val).filter(Boolean)
-        if (some(values, val => isString(val))) {
-          warn('[veui-uploader] `value` must be object(s).', this)
-        }
-        if (some(values, val => isNil(val[this.keyField]))) {
-          warn(
-            '[veui-uploader] `key-field` is required of `value` to ensure correct order.',
-            this
-          )
+        if (process.env.NODE_ENV !== 'test') {
+          if (some(values, val => isString(val))) {
+            warn('[veui-uploader] `value` must be object(s).', this)
+          }
+          if (some(values, val => isNil(val[this.keyField]))) {
+            warn(
+              '[veui-uploader] `key-field` is required of `value` to ensure correct order.',
+              this
+            )
+          }
         }
 
         // 根据 key 匹配
@@ -489,8 +492,11 @@ export default {
     handleItemPreview (index) {
       this.preview(index)
     },
-    handleItemCustomEvent (name, ...args) {
-      this.$emit(name, ...args)
+    handleItemCustomEvent (name, index) {
+      if (isUndefined(index)) {
+        return this.$emit(name)
+      }
+      this.$emit(name, this.getValueWithStatus(this.fileList[index]))
     },
 
     chooseFiles () {
