@@ -543,7 +543,6 @@ export default {
       }
 
       file.isUploading = true
-      file.loaded = -1
       return file
         .validate(this.validateOptions, this)
         .then(errors => {
@@ -576,12 +575,22 @@ export default {
           })
         })
         .then(() => STATUS.SUCCESS)
-        .catch(() => STATUS.FAILURE)
+        .catch(err => {
+          if (err.__CANCEL__) {
+            throw err
+          }
+          return STATUS.FAILURE
+        })
         .then(status => {
           let i = this.fileList.indexOf(file)
           this.$emit(status, { ...file.value, status }, i)
           if (status === STATUS.SUCCESS) {
             this.triggerChangeEvent()
+          }
+        })
+        .catch(function (err) {
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Upload file exception: ', err)
           }
         })
     },

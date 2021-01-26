@@ -286,6 +286,11 @@ export class UploaderFile {
   }
 
   upload (context, callbacks) {
+    // 因为 validate 是异步的，可能存在在 validate 过程中组件 destroy 调用 cancel 的情况，这里简单拦截下
+    if (this.isCancelled) {
+      throw createCancelError('upload cancelled')
+    }
+
     let local
     const promise = new Promise(function (resolve, reject) {
       local = { onload: resolve, onerror: reject }
@@ -346,6 +351,7 @@ export class UploaderFile {
   }
 
   cancel () {
+    this.isCancelled = true
     if (this.status === STATUS.UPLOADING && this._cancel) {
       this._cancel()
       this._cancel = undefined
@@ -466,7 +472,7 @@ function getIframeUploadRequest (options) {
     }
   }
 
-  return function iframeUploadRequest (file, { onload, onprogress }) {
+  return function iframeUploadRequest (file, { onload, onerror, onprogress }) {
     const [form, iframe, cleanDom] = getForm()
     attachFileToForm(file, form)
     attachObjectToForm(payload, form)
@@ -507,7 +513,10 @@ function getIframeUploadRequest (options) {
 
     form.submit()
 
-    return clean
+    return function () {
+      clean()
+      onerror(createCancelError('upload cancelled'))
+    }
   }
 }
 
@@ -538,13 +547,23 @@ function getXhrUploadRequest (options) {
     return function cancel () {
       cancelled = true
       xhr.abort()
+      // cancel 了也需要回调，否则外面的 promise 没法 settle 就一直占用内存
+      onerror(createCancelError('upload cancelled'))
     }
   }
 }
 
 function getCustomUploadRequest ({ upload }) {
   // 之前的实现里自定义上传函数的 context 是 null，这里继续保留
-  return upload.bind(null)
+  return function (file, callbacks) {
+    let cancel = upload(file, callbacks)
+    return function () {
+      if (cancel) {
+        cancel()
+      }
+      callbacks.onerror(createCancelError('upload cancelled'))
+    }
+  }
 }
 
 function getResonpseParse ({ convertResponse = identity, dataType }) {
@@ -558,4 +577,14 @@ function getResonpseParse ({ convertResponse = identity, dataType }) {
     }
     return convertResponse(data)
   }
+}
+
+function createCancelError (msg) {
+  let err = new Error(msg)
+  err.__CANCEL__ = true
+  return err
+}
+
+export function isCancelError (err) {
+  return !!err.__CANCEL__
 }
