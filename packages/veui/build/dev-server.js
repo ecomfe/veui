@@ -82,7 +82,11 @@ function handleFileRequest (req, res) {
     res.status(403).end()
     return
   }
-  res.sendFile(p)
+  if (fse.pathExistsSync(p)) {
+    res.sendFile(p)
+  } else {
+    res.status(404).end()
+  }
 }
 
 function delayIfNeeded (req) {
@@ -149,8 +153,10 @@ function parseRequestBody (req) {
   })
   form.on('file', function (field, file) {
     let p = path.join(uploadDir, file.hash)
-    fse.renameSync(file.path, p)
-    file.path = p
+    try {
+      fse.renameSync(file.path, p)
+      file.path = p
+    } catch (err) {}
   })
   return new Promise(function (resolve, reject) {
     form.parse(req, function (error, fields, files) {
