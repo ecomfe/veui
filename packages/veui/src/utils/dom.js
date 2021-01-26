@@ -833,8 +833,13 @@ export function cloneElementWithComputedStyle (el) {
 }
 
 export function addOnceEventListener (el, evt, listener) {
-  el.addEventListener(evt, function callback (...args) {
-    el.removeEventListener(evt, callback)
+  function callback (...args) {
+    remove()
     listener.apply(el, args)
-  })
+  }
+  function remove () {
+    el.removeEventListener(evt, callback)
+  }
+  el.addEventListener(evt, callback)
+  return remove
 }

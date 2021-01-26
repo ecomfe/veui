@@ -122,6 +122,10 @@ describe('utils/dom', () => {
     el.click()
     el.click()
     expect(count).to.equal(1)
+
+    addOnceEventListener(el, 'click', () => count++)()
+    el.click()
+    expect(count).to.equal(1)
   })
 })
 

@@ -25,6 +25,8 @@ describe('components/Uploader', function () {
 
     let promise = waitForEvent(wrapper.vm, 'statuschange')
     wrapper.vm.chooseFiles()
+    wrapper.vm.chooseFiles()
+    wrapper.vm.chooseFiles() // only last choose active
 
     let mockFiles = [
       createFile('力大无穷.png', 'image/png', 128 * 1024),
@@ -36,6 +38,7 @@ describe('components/Uploader', function () {
 
     await promise
 
+    expect(wrapper.vm.fileList.length).to.equal(2)
     expect(wrapper.vm.fileList[0].native).to.equal(mockFiles[0])
     expect(wrapper.vm.fileList[1].native).to.equal(mockFiles[1])
 
