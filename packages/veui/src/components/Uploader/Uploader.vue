@@ -53,7 +53,8 @@ import {
   omit,
   isNil,
   values,
-  isUndefined
+  isUndefined,
+  noop
 } from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
@@ -484,12 +485,17 @@ export default {
       return el
     },
     pickFiles (multiple) {
+      if (this.removePreviousFileInputHandler) {
+        this.removePreviousFileInputHandler()
+      }
+
       let input = this.fileInput
       input.accept = this.realAccept
       input.multiple = this.canMultipleChoose && multiple
 
-      let promise = new Promise(resolve => {
-        addOnceEventListener(input, 'change', ({ target }) => {
+      let cancelFunctions = []
+      let promise = new Promise((resolve, reject) => {
+        let remove = addOnceEventListener(input, 'change', ({ target }) => {
           let files = [...target.files]
           if (!this.canMultipleChoose) {
             // IE 11 兼容: 保留 input 和 FileList
@@ -501,19 +507,25 @@ export default {
           resolve(files)
           input.value = null
         })
+        cancelFunctions.push(remove)
+        cancelFunctions.push(reject)
       })
+      this.removePreviousFileInputHandler = () =>
+        cancelFunctions.forEach(c => c())
 
       input.click()
       return promise
     },
     chooseFiles () {
       let restCount = this.maxCount - this.fileList.length
-      this.pickFiles(restCount > 1).then(files => {
-        if (!files.length) {
-          return
-        }
-        this.addFiles(files)
-      })
+      this.pickFiles(restCount > 1)
+        .then(files => {
+          if (!files.length) {
+            return
+          }
+          this.addFiles(files)
+        })
+        .catch(noop)
     },
     addFiles (files) {
       const count = this.fileList.length + files.length
