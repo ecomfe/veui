@@ -5,6 +5,7 @@ import {
   compact,
   last,
   pick,
+  pickBy,
   includes,
   endsWith,
   find,
@@ -257,12 +258,15 @@ export class UploaderFile {
   }
 
   get value () {
-    return omitUndefinedValue({
-      ...omit(this.result, PUBLIC_FILE_PROPS),
-      ...this.extra,
-      ...pick(this, PUBLIC_FILE_PROPS),
-      [this.keyField]: this.key
-    })
+    return pickBy(
+      {
+        ...omit(this.result, PUBLIC_FILE_PROPS),
+        ...this.extra,
+        ...pick(this, PUBLIC_FILE_PROPS),
+        [this.keyField]: this.key
+      },
+      val => !isUndefined(val)
+    )
   }
 
   set value (val) {
@@ -359,15 +363,6 @@ export class UploaderFile {
   }
 }
 
-function omitUndefinedValue (obj) {
-  return entries(obj).reduce(function (ret, [key, val]) {
-    if (!isUndefined(val)) {
-      ret[key] = val
-    }
-    return ret
-  }, {})
-}
-
 export function getUploadRequest (options) {
   const { requestMode, action, upload } = options
   if (requestMode === 'xhr' && action) {
@@ -420,7 +415,8 @@ function getIframeUploadRequest (options) {
     // input.files setter支持 FileList，但是 FileList 没有 slice 或者构造函数来实现从多文件 FileList 得到单文件 FileList
     // (可以通过 DataTransferItemList.add() 来间接构造 FileList 但是 IE 11 不支持)
     // 所以上面 pickFile 逻辑里保证了 iframe 情况下只能选单文件，并把 FileList 关联到 File._rawFileList 上
-    // 这样这里就能从这个字段拿到原始的 FileList 。如果是调用 addFiles 插入的 File，如果要走 iframe 上传，也应该实现这个逻辑
+    // 这样这里就能从这个字段拿到原始的 FileList
+    // 如果是调用 addFiles 插入的 File，requestMode=iframe 上传要兼容 IE 11的话，也要带上 _rawFileList
     fileInput.files = file._rawFileList || createFileList(file)
     form.appendChild(fileInput)
   }

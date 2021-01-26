@@ -10,13 +10,6 @@
   tabindex="-1"
   :aria-label="t('uploader')"
 >
-  <input
-    ref="fileInput"
-    type="file"
-    :accept="realAccept"
-    hidden
-  >
-
   <component
     :is="`veui-uploader-${isMediaType ? 'media' : 'file'}`"
     :files="fileList"
@@ -71,6 +64,7 @@ import config from '../../managers/config'
 import toast from '../../managers/toast'
 import warn from '../../utils/warn'
 import { addOnceEventListener } from '../../utils/dom'
+import { isSupportFileListContructor } from '../../utils/file'
 import Lightbox from '../Lightbox'
 import FileUploader from './_FileUploader'
 import MediaUploader from './_MediaUploader'
@@ -354,6 +348,9 @@ export default {
     },
     preferType () {
       return includes(['image', 'video'], this.type) ? this.type : undefined
+    },
+    canMultipleChoose () {
+      return this.requestMode !== 'iframe' || isSupportFileListContructor()
     }
   },
   watch: {
@@ -425,6 +422,10 @@ export default {
       )
     }
   },
+  mounted () {
+    this.fileInput = this.createInputElement()
+    this.$refs.main.appendChild(this.fileInput)
+  },
   beforeDestroy () {
     this.cancelAll()
   },
@@ -454,29 +455,6 @@ export default {
       this.$el.focus()
     },
 
-    pickFiles (multiple) {
-      const input = this.$refs.fileInput
-      // iframe 上传只能一个个来，原因见 attachFileToForm 里注释
-      input.multiple = this.isIframeRequest ? false : multiple
-
-      let promise = new Promise(resolve => {
-        addOnceEventListener(input, 'change', ({ target }) => {
-          let files = [...target.files]
-          if (this.isIframeRequest) {
-            files = files.map(file => {
-              file._rawFileList = target.files
-              return file
-            })
-          }
-          resolve(files)
-          input.value = null
-        })
-      })
-
-      input.click()
-      return promise
-    },
-
     handleItemAdd () {
       this.chooseFiles()
     },
@@ -499,6 +477,35 @@ export default {
       this.$emit(name, this.getValueWithStatus(this.fileList[index]))
     },
 
+    createInputElement () {
+      let el = document.createElement('input')
+      el.type = 'file'
+      el.hidden = true
+      return el
+    },
+    pickFiles (multiple) {
+      let input = this.fileInput
+      input.accept = this.realAccept
+      input.multiple = this.canMultipleChoose && multiple
+
+      let promise = new Promise(resolve => {
+        addOnceEventListener(input, 'change', ({ target }) => {
+          let files = [...target.files]
+          if (!this.canMultipleChoose) {
+            // IE 11 兼容: 保留 input 和 FileList
+            let file = files[0]
+            file._rawFileList = target.files
+            files = [file]
+            input = this.fileInput = this.createInputElement()
+          }
+          resolve(files)
+          input.value = null
+        })
+      })
+
+      input.click()
+      return promise
+    },
     chooseFiles () {
       let restCount = this.maxCount - this.fileList.length
       this.pickFiles(restCount > 1).then(files => {

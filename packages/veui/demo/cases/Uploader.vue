@@ -63,7 +63,10 @@
     </div>
   </fieldset>
 
-  <fieldset>
+  <fieldset v-if="removed">
+    <legend>已移除</legend>
+  </fieldset>
+  <fieldset v-else>
     <legend>
       Uploader
       <sup v-if="status">{{ statusTexts[status] }}</sup>
@@ -154,8 +157,29 @@
     <div class="space"/>
     <veui-button
       ui="basic s"
+      @click="handleEmptyButtonClick"
+    >清空</veui-button>
+    <div class="space"/>
+    <veui-button
+      ui="basic s"
       @click="$refs.uploader.clear()"
     >清除失败文件</veui-button>
+    <div class="space"/>
+    <veui-button
+      ui="basic s"
+      @click="handleComponentRemoveButtonClick"
+    >{{ removed ? '恢复' : '移除' }}上传组件</veui-button>
+  </fieldset>
+
+  <fieldset>
+    <details>
+      <summary>Value</summary>
+      <veui-textarea
+        ui="s"
+        readonly
+        :value="JSON.stringify(files, null, 4)"
+      />
+    </details>
   </fieldset>
 </article>
 </template>
@@ -172,7 +196,8 @@ import {
   Icon,
   Checkbox,
   RadioButtonGroup,
-  CheckButtonGroup
+  CheckButtonGroup,
+  Textarea
 } from 'veui'
 import 'veui-theme-dls-icons/chevron-right'
 import 'veui-theme-dls-icons/id-card'
@@ -265,6 +290,7 @@ export default {
     'veui-select': Select,
     'veui-checkbox': Checkbox,
     'veui-searchbox': SearchBox,
+    'veui-textarea': Textarea,
     'veui-radio-button-group': RadioButtonGroup,
     'veui-check-button-group': CheckButtonGroup
   },
@@ -279,6 +305,7 @@ export default {
       availableRequestModes,
       availableRequestIframeModes,
       availablePickerPositions,
+      removed: false,
 
       enabledCustoms: ['#file-after'],
       tooltipOpen: false,
@@ -369,6 +396,9 @@ export default {
       this.files = this.files.concat({ name: url, src: url })
       this.tooltipOpen = false
     },
+    handleEmptyButtonClick () {
+      this.files = []
+    },
     handleShuffleButtonClick () {
       this.files = shuffle(this.files)
     },
@@ -385,6 +415,9 @@ export default {
         'log',
         [evt, ...args.map(arg => JSON.stringify(arg))].join('\t')
       )
+    },
+    handleComponentRemoveButtonClick () {
+      this.removed = !this.removed
     },
 
     async customValidate (file) {
@@ -581,5 +614,10 @@ fieldset > div {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.veui-textarea {
+  width: 100%;
+  height: 300px;
 }
 </style>
