@@ -384,7 +384,10 @@ describe('components/Uploader', function () {
   })
 
   it('should upload file correctly when mode is custom.', async function () {
+    let thisInsideUpload
     function successUpload (file, { onload, onprogress }) {
+      thisInsideUpload = this
+
       setTimeout(function () {
         onprogress({
           loaded: 50,
@@ -400,7 +403,7 @@ describe('components/Uploader', function () {
       }, 30)
     }
 
-    function failureUpload (file, { onerror, onprogress }) {
+    function failureUpload (file, { onerror }) {
       setTimeout(function () {
         onerror({
           success: false,
@@ -409,7 +412,7 @@ describe('components/Uploader', function () {
       }, 0)
     }
 
-    function cancelUpload (file, { oncancel, onprogress }) {
+    function cancelUpload (file, { oncancel }) {
       setTimeout(oncancel, 20)
     }
 
@@ -435,6 +438,7 @@ describe('components/Uploader', function () {
       loaded: 50,
       total: mockFile.size
     })
+    expect(thisInsideUpload).to.equal(undefined)
 
     wrapper.setProps({ upload: failureUpload })
     await wait(0)
@@ -484,6 +488,23 @@ describe('components/Uploader', function () {
     wrapper.destroy()
     await cancelled
     expect(called).to.equal(2)
+
+    wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
+      propsData: {
+        requestMode: 'custom',
+        upload (file) {
+          called++
+          return function () {}
+        }
+      }
+    })
+    wrapper.vm.addFiles([mockFile])
+    wrapper.destroy()
+    await wait(100)
+    expect(called).to.equal(2)
+    expect(wrapper.emitted('failure')).to.be.a('undefined')
   })
 
   it('should be disabled when number of files reach max count.', function () {
