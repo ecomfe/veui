@@ -332,7 +332,6 @@ export class UploaderFile {
       throw new Error(data.message)
     }
 
-    this.status = STATUS.SUCCESS
     this.result = omit(data, ['success', 'message'])
 
     // 上传完成，有了 src，不需要再 hold 文件对象
@@ -340,7 +339,6 @@ export class UploaderFile {
   }
 
   onerror (err) {
-    this.status = STATUS.FAILURE
     this.message = err.message
   }
 
@@ -350,7 +348,6 @@ export class UploaderFile {
   }
 
   oncancel () {
-    this.status = STATUS.PENDING
     this.loaded = 0
   }
 
