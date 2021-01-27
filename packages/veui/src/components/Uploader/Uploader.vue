@@ -445,7 +445,7 @@ export default {
     clear () {
       this.fileList.forEach((file, index) => {
         if (file.isFailure) {
-          this.removeFile(index)
+          this.removeFile(this.fileList.indexOf(file))
         }
       })
     },
@@ -569,7 +569,6 @@ export default {
             return
           }
           this.$emit('invalid', { file: file.native, errors })
-          file.isFailure = true
           file.message = errors
             .map(({ message }) => message)
             .join(this.t('separator'))
@@ -601,17 +600,35 @@ export default {
           return STATUS.FAILURE
         })
         .then(status => {
-          let i = this.fileList.indexOf(file)
-          this.$emit(status, { ...file.value, status }, i)
-          if (status === STATUS.SUCCESS) {
-            this.triggerChangeEvent()
-          }
+          this.updateFileStatus(this.fileList.indexOf(file), status)
         })
         .catch(function (err) {
           if (process.env.NODE_ENV === 'development') {
             console.log('Upload file exception: ', err)
           }
         })
+    },
+    updateFileStatus (index, status) {
+      if (index < 0 || index >= this.fileList.length) {
+        return
+      }
+      const isSuccess = status === STATUS.SUCCESS
+      // 需要保证事件顺序：先 change，再 statuschange (重构前逻辑)
+      // 修改 file.status 就会触发 watch:status emit statuschange
+      // 因此需要先在局部构造 change value，触发 change 后，再修改 file.status
+      let successFiles = this.fileList
+        .map((file, i) => {
+          if ((i === index && isSuccess) || file.isSuccess) {
+            return file.value
+          }
+        })
+        .filter(Boolean)
+
+      if (isSuccess) {
+        this.$emit('change', this.getValueForChange(successFiles))
+      }
+      this.$emit(status, { ...this.fileList[index].value, status }, index)
+      this.fileList[index].status = status
     },
     replaceFile (index, file) {
       let newFile = this.createUploaderFile(file)
@@ -624,25 +641,34 @@ export default {
       }
 
       let file = this.fileList[index]
-      if (restore && file._replacing) {
-        this.fileList.splice(index, 1, file._replacing)
-      } else {
-        this.fileList.splice(index, 1)
-      }
-
       file.cancel()
-      this.$emit('remove', this.getValueWithStatus(file), index)
-      if (file.isSuccess || file._replacing) {
-        this.triggerChangeEvent()
+
+      let files = this.fileList
+        .map(function (file, i) {
+          if (i === index) {
+            return restore && file._replacing ? file._replacing : null
+          }
+          return file
+        })
+        .filter(Boolean)
+
+      // 跟 updateFileStatus 相同，也需要保证顺序
+      if (file.isSuccess || (restore && file._replacing)) {
+        let successFiles = files
+          .map(function (file) {
+            return file.isSuccess ? file.value : null
+          })
+          .filter(Boolean)
+        this.$emit('change', this.getValueForChange(successFiles))
       }
-    },
-    triggerChangeEvent () {
-      let files = this.realMultiple
-        ? this.successFiles
-        : this.successFiles[0] || null
-      this.$emit('change', files)
+
+      this.$emit('remove', this.getValueWithStatus(file), index)
+      this.fileList = files
     },
 
+    getValueForChange (files) {
+      return this.realMultiple ? files : files[0] || null
+    },
     getValueWithStatus (file) {
       return { ...file.value, status: file.status }
     },

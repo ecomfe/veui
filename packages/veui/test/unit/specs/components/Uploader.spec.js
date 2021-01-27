@@ -46,15 +46,13 @@ describe('components/Uploader', function () {
   })
 
   it('should handle value prop with `null` value.', async function () {
-    this.timeout(5000)
-
     let wrapper = mount(Uploader, {
       sync: false,
       attachToDocument: true,
       propsData: {
         maxCount: 3,
         value: null,
-        action: '/upload/xhr?force=success'
+        action: '/upload/xhr?force=success&latency=0'
       }
     })
     expect(wrapper.vm.$data.fileList).to.eql([])
@@ -186,7 +184,7 @@ describe('components/Uploader', function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
-        action: '/upload/xhr?force=success',
+        action: '/upload/xhr?force=success&latency=0',
         maxSize: '100kb',
         maxCount: 1
       }
@@ -244,7 +242,7 @@ describe('components/Uploader', function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
-        action: '/upload/xhr',
+        action: '/upload/xhr?latency=0',
         validator (file) {
           return new Promise(resolve => {
             setTimeout(() => {
@@ -275,31 +273,67 @@ describe('components/Uploader', function () {
       sync: false,
       attachToDocument: true,
       propsData: {
-        action: '/upload/xhr?force=success',
+        action: '/upload/xhr?force=success&latency=0',
         accept: '.png'
       }
     })
 
-    let mockFile = createFile('a.png', 'image/png', 128 * 1024)
-    let promise = waitForEvent(wrapper.vm, 'success')
+    let mockFile = createFile('a.jpg', 'image/jpg', 128 * 1024)
+    let promise = waitForEvents(wrapper.vm, ['failure', 'statuschange'])
     wrapper.vm.addFiles([mockFile])
     await promise
+    await wait(0)
 
-    mockFile = createFile('a.jpg', 'image/jpg', 128 * 1024)
-    promise = waitForEvent(wrapper.vm, 'failure')
+    mockFile = createFile('a.png', 'image/png', 128 * 1024)
+    promise = waitForEvents(wrapper.vm, ['success', 'statuschange'])
     wrapper.vm.addFiles([mockFile])
     await promise
+    await wait(0)
 
-    let invalidEvents = wrapper
+    wrapper.setProps({ action: '/upload/xhr?force=failure&latency=0' })
+    await wait(0)
+    promise = waitForEvents(wrapper.vm, ['failure', 'statuschange'])
+    wrapper.vm.addFiles([mockFile])
+    await promise
+    await wait(0)
+
+    wrapper.vm.clear()
+    await wait(0)
+
+    wrapper.setProps({ value: [] })
+    await wait(0)
+
+    const eventNames = wrapper
       .emittedByOrder()
-      .filter(e => e.name === 'statuschange')
-      .map(e => e.args[0])
-    expect(invalidEvents.length).to.equal(4)
-
-    expect(invalidEvents[0]).to.equal('uploading')
-    expect(invalidEvents[1]).to.equal('success')
-    expect(invalidEvents[2]).to.equal('uploading')
-    expect(invalidEvents[3]).to.equal('failure')
+      .filter(e => e.name !== 'progress')
+      .map(({ name, args }) => {
+        switch (name) {
+          case 'statuschange':
+            return `${name}:${args[0]}`
+          case 'invalid':
+            return `${name}:${args[0].file.name}`
+          case 'change':
+            return `${name}:${args[0].length}`
+        }
+        return name
+      })
+    expect(eventNames).to.eql([
+      'statuschange:uploading',
+      'invalid:a.jpg',
+      'failure',
+      'statuschange:failure', // invalid
+      'statuschange:uploading',
+      'change:1',
+      'success',
+      'statuschange:failure', // success
+      'statuschange:uploading',
+      'failure',
+      'statuschange:failure', // failure
+      'remove',
+      'remove',
+      'statuschange:success', // remove
+      'statuschange:empty' // empty
+    ])
 
     wrapper.destroy()
   })
@@ -316,7 +350,8 @@ describe('components/Uploader', function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
-        action: '/upload/xhr?force=success&includeRequest=true&name=filedata',
+        action:
+          '/upload/xhr?force=success&includeRequest=true&name=filedata&latency=0',
         name: 'filedata',
         accept: 'jpg,jpeg,png',
         headers,
@@ -341,8 +376,6 @@ describe('components/Uploader', function () {
   })
 
   it('should upload file correctly when mode is iframe.', async function () {
-    this.timeout(5000)
-
     const payload = {
       current: Date.now()
     }
@@ -351,7 +384,7 @@ describe('components/Uploader', function () {
       propsData: {
         type: 'media',
         action:
-          '/upload/iframe?force=success&includeRequest=true&convert=false',
+          '/upload/iframe?force=success&includeRequest=true&convert=false&latency=0',
         requestMode: 'iframe',
         payload
       },
@@ -771,7 +804,7 @@ describe('components/Uploader', function () {
       sync: false,
       attachToDocument: true,
       propsData: {
-        action: '/upload/xhr?force=success',
+        action: '/upload/xhr?force=success&latency=0',
         value: [{ name: 'test.jpg', src: '/test.jpg' }],
         type: 'image'
       }
@@ -858,6 +891,16 @@ function waitForEvent (vm, event) {
   return new Promise(function (resolve, reject) {
     vm.$once(event, resolve)
   })
+}
+
+function waitForEvents (vm, events) {
+  let p = waitForEvent(vm, events[0])
+  events.slice(1).reduce(function (promise, event) {
+    let p = waitForEvent(vm, event)
+    promise.then(() => p)
+    return p
+  }, p)
+  return p
 }
 
 function createFile (name, type, size) {
