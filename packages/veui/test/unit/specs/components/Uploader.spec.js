@@ -180,6 +180,45 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
+  it('should call `afterPick` hook after files are choosed.', async function () {
+    let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
+      propsData: {
+        action: '/upload/xhr',
+        requestMode: 'custom',
+        upload (file, { onload }) {
+          onload({
+            success: true,
+            name: file.name,
+            src: file.jiale
+          })
+        },
+        afterPick (files) {
+          files = files.map(file => {
+            file.jiale = '强力被夹.jpg'
+            return file
+          })
+          return wait(0).then(() => files)
+        }
+      }
+    })
+
+    let mockFile = createFile('葫芦娃.png', 'image/png', 128 * 1024)
+    let promise = waitForEvent(wrapper.vm, 'change')
+    wrapper.vm.chooseFiles()
+    let input = wrapper.find('input[type="file"]')
+    input.element.files = createFileList(mockFile)
+    input.trigger('change')
+    await promise
+
+    let values = wrapper.emitted('change')[0][0]
+    expect(values[0].name).to.equal('葫芦娃.png')
+    expect(values[0].src).to.equal('强力被夹.jpg')
+
+    wrapper.destroy()
+  })
+
   it('should validate file count/size/type correctly.', async function () {
     let wrapper = mount(Uploader, {
       sync: false,

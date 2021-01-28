@@ -236,7 +236,8 @@ export default {
     keyField: {
       type: String,
       default: 'key'
-    }
+    },
+    afterPick: Function
   },
   data () {
     return {
@@ -514,7 +515,9 @@ export default {
         cancelFunctions.forEach(c => c())
 
       input.click()
-      return promise
+      return !this.afterPick
+        ? promise
+        : promise.then(files => this.afterPick(files))
     },
     chooseFiles () {
       let restCount = this.maxCount - this.fileList.length
