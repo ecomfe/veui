@@ -1,3 +1,17 @@
+## 2.0.0-beta.26
+
+### ⚠️ 非兼容性变更
+
+- [-] 已移除 `Uploader` 组件的 `compat` 属性，不再兼容 `string` 类型的 `value`。
+
+### 💡 主要变更
+
+- [^] `Uploader` 组件重构。
+- [+] `Uploader` 组件的 `value` (数组内)对象新增唯一键字段，用于数据回填时的定位。
+- [+] `Uploader` 组件新增 `keyField` 属性，用于指定 `value` (数组内)对象的唯一键的键名。默认为 `"key"`。
+- [+] `Uploader` 组件新增 `multiple` 属性，用于指定 `maxCount` 为 `1` 时 `value` 的数据类型。如果 `multiple` 为 `true`，即使 `maxCount` 为 `1`，`value` 仍为数组类型。
+- [+] `Uploader` 组件新增 `afterPick` 属性，用于传入在选择完文件后执行的 hook。
+
 ## 2.0.0-beta.25
 
 ### 💡 主要变更
