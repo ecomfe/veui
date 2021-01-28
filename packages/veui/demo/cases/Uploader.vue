@@ -15,6 +15,19 @@
       <veui-checkbox v-model="autoupload">autoupload</veui-checkbox>
     </div>
     <div>
+      MaxCount:
+      <veui-radio-button-group
+        v-model="maxCount"
+        ui="s"
+        :items="avaliableMaxCounts"
+      />
+      <div class="space"/>
+      <veui-checkbox
+        v-if="maxCount < 2"
+        v-model="multiple"
+      >multiple</veui-checkbox>
+    </div>
+    <div>
       Custom:
       <veui-check-button-group
         v-model="enabledCustoms"
@@ -184,7 +197,7 @@
 </article>
 </template>
 <script>
-import { includes, pick, shuffle } from 'lodash'
+import { includes, pick, shuffle, isUndefined } from 'lodash'
 import {
   Uploader,
   Button,
@@ -263,6 +276,7 @@ const availableCustoms = [
 const availableRequestModes = ['xhr', 'iframe', 'custom'].map(mapper)
 const availableRequestIframeModes = ['postmessage', 'callback'].map(mapper)
 const availablePickerPositions = ['before', 'after'].map(mapper)
+const avaliableMaxCounts = [1, 5, 10].map(mapper)
 
 const statusIcons = {
   [Uploader.status.PENDING]: '❔',
@@ -300,6 +314,7 @@ export default {
       statusIcons,
       statusTexts,
       avaliableTypes,
+      avaliableMaxCounts,
       availableCustoms,
       availableActions,
       availableRequestModes,
@@ -318,6 +333,7 @@ export default {
       accept: '.jpg,.jpeg,.png',
       maxCount: 5,
       maxSize: '1mb',
+      multiple: undefined,
 
       action:
         process.env.NODE_ENV === 'development'
@@ -336,7 +352,7 @@ export default {
   computed: {
     files: {
       get () {
-        if (this.localFiles) {
+        if (!isUndefined(this.localFiles)) {
           return this.localFiles
         }
         if (['video', 'image'].indexOf(this.type) < 0) {
@@ -359,6 +375,7 @@ export default {
           'type',
           'accept',
           'maxCount',
+          'multiple',
           'maxSize',
           'action',
           'requestMode',
@@ -384,6 +401,9 @@ export default {
     },
     files (val) {
       console.log('Files updated', this.files)
+    },
+    maxCount (val) {
+      this.multiple = undefined
     }
   },
   methods: {
