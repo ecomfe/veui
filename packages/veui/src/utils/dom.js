@@ -210,6 +210,18 @@ export function isFocusable (el) {
   return matches(el, FOCUSABLE_SELECTOR) && isPreventFocus(el)
 }
 
+export function isInsideFocusable (el, context = document.body) {
+  while (el && el !== context) {
+    if (isFocusable(el)) {
+      return true
+    }
+
+    el = el.parentNode
+  }
+
+  return false
+}
+
 /**
  * 获取目标元素下所有可以获取焦点的元素
  *

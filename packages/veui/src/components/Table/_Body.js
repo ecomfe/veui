@@ -1,4 +1,4 @@
-import Row from './_TableRow'
+import Row from './_Row'
 import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'

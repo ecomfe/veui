@@ -547,7 +547,7 @@ export default {
         {this.$scopedSlots.trigger ? (
           this.$scopedSlots.trigger({
             handlers: {
-              mouseup: this.handleInputMouseup,
+              click: this.handleInputMouseup,
               blur: this.handleInputBlur,
               input: this.handleTriggerInput
             },

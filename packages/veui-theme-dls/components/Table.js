@@ -28,9 +28,6 @@ config.defaults(
       },
       density: {
         values: ['compact', 'normal', 'loose']
-      },
-      crowded: {
-        boolean: true
       }
     },
     parts: {

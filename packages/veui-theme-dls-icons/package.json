@@ -17,7 +17,7 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "dls-icons-vue": "^0.21.0"
+    "dls-icons-vue": "^0.23.0"
   },
   "peerDependencies": {
     "veui": "2.0.0-beta.26"

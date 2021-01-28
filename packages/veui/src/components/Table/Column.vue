@@ -1,55 +1,58 @@
 <script>
-import { useCoupledChild } from '../../mixins/coupled'
+import { useChild } from '../../mixins/coupled'
+import useControllable from '../../mixins/controllable'
 import colgroup from '../../mixins/colgroup'
 import { renderSlot } from '../../utils/helper'
 import '../../common/uiTypes'
 
 let renderBody = vm => item => renderSlot(vm, 'default', item) || item[vm.field]
 
-let col = useCoupledChild({
-  type: 'table-column',
-  parentType: 'colgroup',
-  fields: {
-    title: 'title',
-    field: 'field',
-    width: 'width',
-    sortable: 'sortable',
-    align: 'align',
-    span: 'span',
-    allowedOrders: 'allowedOrders',
-    desc: 'desc',
-    filterValue: 'filterValue',
-    columns: 'columns',
-    realFixed: 'fixed',
-    hasFoot: vm => () => !!(vm.$scopedSlots.foot || vm.$slots.foot),
-    renderBody,
-    renderSubRow: vm => item =>
-      renderSlot(vm, 'sub-row', item) || renderBody(vm)(item),
-    renderHead: vm => () => renderSlot(vm, 'head') || vm.title,
-    renderFoot: vm => () => renderSlot(vm, 'foot'),
-    renderDesc: vm => props => renderSlot(vm, 'desc', props) || vm.desc,
-    renderFilter: vm => props => renderSlot(vm, 'filter', props),
-    hasFilter: vm => () => !!(vm.$scopedSlots.filter || vm.$slots.filter),
-    hasStaleHead: vm => () => !!(vm.$slots.head || vm.$slots.desc),
-    hasStaleFoot: vm => () => !!vm.$slots.foot
-  },
-  watchKeys: [
-    'title',
-    'field',
-    'width',
-    'sortable',
-    'align',
-    'span',
-    'allowedOrders',
-    'desc',
-    'filterValue'
-  ]
-})
+let col = useChild('table-column', 'colgroup', [
+  'title',
+  'field',
+  'width',
+  'sortable',
+  'align',
+  'span',
+  'allowedOrders',
+  'desc',
+  ['filterValue', 'realFilterValue'],
+  'filterTitle',
+  ['filterOptions', 'realFilterOptions'],
+  'filterMultiple',
+  'columns',
+  ['fixed', 'realFixed'],
+  ['hasFoot', vm => () => !!(vm.$scopedSlots.foot || vm.$slots.foot)],
+  ['renderBody', renderBody],
+  [
+    'renderSubRow',
+    vm => item => renderSlot(vm, 'sub-row', item) || renderBody(vm)(item)
+  ],
+  ['renderHead', vm => () => renderSlot(vm, 'head') || vm.title],
+  ['renderFoot', vm => () => renderSlot(vm, 'foot')],
+  ['renderDesc', vm => props => renderSlot(vm, 'desc', props) || vm.desc],
+  ['renderFilter', vm => props => renderSlot(vm, 'filter', props)],
+  [
+    'hasFilter',
+    vm => () =>
+      !!(vm.$scopedSlots.filter || vm.$slots.filter || vm.filterOptions)
+  ],
+  ['hasFilterSlot', vm => () => !!(vm.$scopedSlots.filter || vm.$slots.filter)],
+  ['hasStaleHead', vm => () => !!(vm.$slots.head || vm.$slots.desc)],
+  ['hasStaleFoot', vm => () => !!vm.$slots.foot],
+  ['handleFilterChange', vm => vm.handleFilterChange]
+])
 
 export default {
   name: 'veui-table-column',
   uiTypes: ['transparent'],
-  mixins: [col, colgroup],
+  mixins: [
+    col,
+    colgroup,
+    useControllable({
+      prop: 'filterValue'
+    })
+  ],
   props: {
     title: String,
     field: String,
@@ -71,7 +74,10 @@ export default {
     allowedOrders: Array,
     desc: String,
     // eslint-disable-next-line vue/require-prop-types
-    filterValue: {}
+    filterValue: {},
+    filterTitle: String,
+    filterOptions: Array,
+    filterMultiple: Boolean
   },
   computed: {
     realFixed () {
@@ -85,6 +91,25 @@ export default {
         return 'right'
       }
       return false
+    },
+    realFilterOptions () {
+      if (this.filterTitle) {
+        return [
+          {
+            label: this.filterTitle,
+            options: this.filterOptions
+          }
+        ]
+      }
+      return this.filterOptions
+    }
+  },
+  methods: {
+    handleFilterChange (val) {
+      this.commit('filterValue', val)
+      if (val !== this.filterValue) {
+        this.$emit('filterchange', val)
+      }
     }
   },
   render (h) {
