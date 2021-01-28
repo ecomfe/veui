@@ -110,9 +110,9 @@ describe('components/Dropdown', () => {
           :options="datasource"
           :expanded.sync="expanded"
         >
-          <template #trigger="{ handlers, props }">
+          <template #trigger="{ handlers, attrs }">
             <veui-button
-              v-bind="props"
+              v-bind="attrs"
               v-on="handlers"
             >操作</veui-button>
           </template>

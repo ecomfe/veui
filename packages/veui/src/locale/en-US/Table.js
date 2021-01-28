@@ -10,7 +10,9 @@ i18n.register(
     deselectRow: 'Deselect row',
     expandRow: 'Expand row',
     collapseRow: 'Collapse row',
-    loading: 'Loading…'
+    loading: 'Loading…',
+    apply: 'Apply',
+    clear: 'Clear'
   },
   {
     ns: 'table'

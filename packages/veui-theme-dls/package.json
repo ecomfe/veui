@@ -16,9 +16,9 @@
   },
   "dependencies": {
     "classlist-polyfill": "^1.2.0",
-    "dls-icons-vue": "^0.19.0",
+    "dls-icons-vue": "^0.23.0",
     "focus-visible": "^4.1.0",
-    "less-plugin-dls": "^1.0.0-alpha.35",
+    "less-plugin-dls": "^1.0.0-alpha.36",
     "less-plugin-est": "^3.0.0",
     "veui-theme-dls-icons": "^2.0.0-beta.26"
   },

@@ -681,8 +681,8 @@ describe('components/Select/Select', () => {
         },
         template: `
           <veui-select v-model="value" :options="options">
-            <template #trigger="{ props }">
-              <button class="trigger-btn" @click="props.toggle()">{{ props.value }}</button>
+            <template #trigger="{ toggle, value }">
+              <button class="trigger-btn" @click="toggle">{{ value }}</button>
             </template>
           </veui-select>`
       },

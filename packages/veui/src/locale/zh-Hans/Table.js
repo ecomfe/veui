@@ -10,7 +10,9 @@ i18n.register(
     deselectRow: '取消选择本行',
     expandRow: '展开本行',
     collapseRow: '收起本行',
-    loading: '数据加载中…'
+    loading: '数据加载中…',
+    apply: '应用',
+    clear: '清空'
   },
   {
     ns: 'table'

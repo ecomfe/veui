@@ -141,9 +141,9 @@ import {
   omit,
   filter
 } from 'lodash'
-import Body from './_TableBody'
-import Head from './_TableHead'
-import Foot from './_TableFoot'
+import Body from './_Body'
+import Head from './_Head'
+import Foot from './_Foot'
 import ColGroup from './_ColGroup'
 import '../../common/uiTypes'
 import { isEqualSet } from '../../utils/lang'
@@ -562,7 +562,7 @@ export default {
   },
   updated () {
     if (this.staleHead) {
-      this.$refs.head.$forceUpdate()
+      this.$refs.head.update()
     }
     if (this.hasFoot && this.staleFoot) {
       this.$refs.foot.$forceUpdate()

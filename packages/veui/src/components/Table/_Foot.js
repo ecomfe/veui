@@ -75,8 +75,7 @@ export default {
                     class={{
                       [this.$c(`table-cell-${col.align}`)]: !!col.align,
                       [this.$c(`table-cell-sticky-${col.fixed}`)]:
-                        table.scrollableX && col.fixed,
-                      [this.$c('table-cell-filterable')]: !!col.hasFilter()
+                        table.scrollableX && col.fixed
                     }}
                     style={
                       table.scrollableX && col.fixed

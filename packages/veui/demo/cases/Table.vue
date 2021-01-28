@@ -12,15 +12,13 @@
     </veui-button>
     <veui-button @click="toggle">切换数据</veui-button>
     <veui-button @click="toggleLoading">切换加载</veui-button>
+    <veui-button @click="filtered = null">清空筛选</veui-button>
   </section>
   <section>
     <veui-checkbox v-model="showGroup">显示数据分组</veui-checkbox>
   </section>
   <section>
     <veui-checkbox v-model="selectSpanRow">选择合并行</veui-checkbox>
-  </section>
-  <section>
-    <veui-checkbox v-model="filtered">筛选价格</veui-checkbox>
   </section>
   <section>
     <veui-checkboxgroup
@@ -60,6 +58,7 @@
         title="数据 ID"
         sortable
         fixed
+        width="80"
       >
         <template slot="head">
           <strong>
@@ -103,9 +102,15 @@
         width="200"
         align="right"
         fixed
-        :filter-value="filtered"
+        filter-multiple
+        :filter-value.sync="filtered"
+        :filter-options="[
+          { label: '高', value: 'high' },
+          { label: '中', value: 'mid' },
+          { label: '低', value: 'low' }
+        ]"
       >
-        <template #filter="{ close }">
+        <!-- <template #filter="{ close }">
           <div style="padding: 0 12px">
             <h4 style="margin: 4px 0 8px">Filter</h4>
             <veui-checkbox
@@ -113,7 +118,7 @@
               @click="close"
             >优惠</veui-checkbox>
           </div>
-        </template>
+        </template> -->
         <template slot="desc">
           这是一条带有 slot 的提示
         </template>
@@ -192,13 +197,25 @@
         <veui-table-column
           field="desc"
           title="数据描述"
-        />
+          :filter-value="inputFilterActive"
+        >
+          <template #filter>
+            <veui-input v-model="inputFilter"/>
+          </template>
+        </veui-table-column>
       </veui-table-column>
       <veui-table-column
         field="price"
         title="价格"
         width="160"
         align="right"
+        filter-multiple
+        filter-title="价格区间"
+        :filter-options="[
+          { label: '高价格', value: 'high' },
+          { label: '中价格', value: 'mid' },
+          { label: '低价格', value: 'low' }
+        ]"
       >
         <template slot-scope="props">{{
           props.item.price | currency
@@ -208,6 +225,11 @@
         field="updateDate"
         title="更新时间"
         align="right"
+        :filter-options="[
+          { label: '全部', value: null },
+          { label: '一周前', value: 'early' },
+          { label: '一周内', value: 'late' }
+        ]"
       >
         <template slot-scope="props">
           <span :ref="`time-b-${props.item.id}`">{{
@@ -388,7 +410,7 @@
       >
         <veui-table-column
           field="id"
-          title="id"
+          :title="idTitle"
         />
         <veui-table-column
           field="type"
@@ -642,7 +664,7 @@ export default {
   },
   data () {
     return {
-      filtered: false,
+      filtered: null,
       s: false,
       idTitle: '#',
       showGroup: true,
@@ -713,7 +735,8 @@ export default {
         }
       ],
       loading: false,
-      popover: '这是一条补充的 Popover 信息'
+      popover: '这是一条补充的 Popover 信息',
+      inputFilter: ''
     }
   },
   computed: {
@@ -721,14 +744,9 @@ export default {
       return this.data.reduce((total, item) => {
         return total + item.price
       }, 0)
-    }
-  },
-  watch: {
-    idTitle () {
-      this.s = true
-      this.$nextTick(() => {
-        this.s = false
-      })
+    },
+    inputFilterActive () {
+      return this.inputFilter === '' ? null : true
     }
   },
   mounted () {
