@@ -2,15 +2,19 @@
 
 ### ⚠️ 非兼容性变更
 
-- [-] 已移除 `Uploader` 组件的 `compat` 属性，不再兼容 `string` 类型的 `value`。
+- [-] 已移除 `Uploader` 组件的 `compat` prop，不再兼容 `string` 类型的 `value`。
 
 ### 💡 主要变更
 
-- [^] `Uploader` 组件重构。
-- [+] `Uploader` 组件的 `value` (数组内)对象新增唯一键字段，用于数据回填时的定位。
-- [+] `Uploader` 组件新增 `keyField` 属性，用于指定 `value` (数组内)对象的唯一键的键名。默认为 `"key"`。
-- [+] `Uploader` 组件新增 `multiple` 属性，用于指定 `maxCount` 为 `1` 时 `value` 的数据类型。如果 `multiple` 为 `true`，即使 `maxCount` 为 `1`，`value` 仍为数组类型。
-- [+] `Uploader` 组件新增 `afterPick` 属性，用于传入在选择完文件后执行的 hook。
+- [^] `Uploader` 组件大幅重构，并拆分组件实现。
+- [+] `Uploader` 组件新增 `key-field` prop，用于指定 `value` 数组项的唯一键的键名。默认为 `'key'`。
+- [+] `Uploader` 组件的 `value` 数组项新增唯一键字段，用于数据回填时的定位到准确的位置。
+- [+] `Uploader` 组件新增 `multiple` prop，用于指定 `value` 的数据类型是否为数组。如果 `multiple` 为 `true`，即使 `maxCount` 为 `1`，`value` 仍为数组类型。而当指定了大于 `1` 的 `max-count` 值，即使 `multiple` 为 `false` 也不会生效，`value` 始终为数组。
+- [+] `Uploader` 组件新增 `after-pick` 函数 prop，用于新增在选择完文件后执行定的 hook 逻辑。
+
+### 🐞 问题修复
+
+- [^] 修正了 `Table` 组件没有正确处理非可排序列的标题交互状态导致可能报错的问题。
 
 ## 2.0.0-beta.25
 
