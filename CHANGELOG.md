@@ -1,3 +1,19 @@
+## 2.0.0-beta.27
+
+### ⚠️ 非兼容性变更
+
+- [^] `Select` 与 `Dropdown` 组件的 `trigger` slot 属性中 `props` 被重命名为 `attrs`，用来表达需要输出到 DOM 元素上的属性。
+
+### 💡 主要变更
+
+- [+] `Column` 组件新增 `filter-options` 与 `filter-multiple` prop，用于开启内置的下拉筛选并设置单选/多选。
+- [^] `Column` 组件的 `filter-value` prop 可以支持 `true` 以外的其它属性，在使用内置下拉筛选时对应下拉选项的 `value` 值。当值为 `null` 时，用来指定筛选未激活的状态。
+- [+] `Column` 组件新增 `filter-title` prop，用于指定下拉筛选的标题说明。
+
+### 🐞 问题修复
+
+- [^] 修复了 `less-plugin-dls` 版本依赖错误的问题。
+
 ## 2.0.0-beta.26
 
 ### ⚠️ 非兼容性变更
