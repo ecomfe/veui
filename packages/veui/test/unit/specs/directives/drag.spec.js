@@ -58,7 +58,12 @@ describe('directives/drag', () => {
       }
     )
 
-    performDrag(wrapper, [[5, 5], [105, 105], [205, 205], [205, 205]])
+    performDrag(wrapper, [
+      [5, 5],
+      [105, 105],
+      [205, 205],
+      [205, 205]
+    ])
   })
 
   it(`should accept dynamic options`, async () => {
@@ -136,7 +141,10 @@ describe('directives/drag', () => {
       }
     )
 
-    performDrag(wrapper, [[0, 0], [-100, 2000]])
+    performDrag(wrapper, [
+      [0, 0],
+      [-100, 2000]
+    ])
     assertTransform(
       wrapper,
       `translate(0px, ${window.innerHeight -
@@ -165,7 +173,10 @@ describe('directives/drag', () => {
       }
     )
 
-    performDrag(wrapper, [[0, 0], [-100, 200]])
+    performDrag(wrapper, [
+      [0, 0],
+      [-100, 200]
+    ])
     assertTransform(
       wrapper,
       `translate(0px, ${100 - wrapper.element.offsetHeight}px)`
@@ -216,7 +227,10 @@ describe('directives/drag', () => {
     )
 
     let { vm } = wrapper
-    performDrag(wrapper, [[0, 0], [100, 100]])
+    performDrag(wrapper, [
+      [0, 0],
+      [100, 100]
+    ])
     assertTransform(wrapper, 'translate(100px, 100px)')
 
     await wait(200)
@@ -246,30 +260,36 @@ describe('directives/drag', () => {
       }
     )
 
-    performDrag(wrapper, [[0, 0], [100, 100], [400, 200]])
+    performDrag(wrapper, [
+      [0, 0],
+      [100, 100],
+      [400, 200]
+    ])
     assertTransform(wrapper, '')
     wrapper.destroy()
   })
 
-  it(
-    'should handle `draggable` option correctly',
-    () => {
-      let wrapper = mount({
+  it('should handle `draggable` option correctly', () => {
+    let wrapper = mount(
+      {
         directives: { drag },
         template: `<div ref="self" v-drag:self="{
         draggable: false
       }">foo</div>`
-      })
+      },
+      {
+        attachToDocument: true
+      }
+    )
 
-      performDrag(wrapper, [[0, 0], [100, 100]])
-      assertTransform(wrapper, '')
+    performDrag(wrapper, [
+      [0, 0],
+      [100, 100]
+    ])
+    assertTransform(wrapper, '')
 
-      wrapper.destroy()
-    },
-    {
-      attachToDocument: true
-    }
-  )
+    wrapper.destroy()
+  })
 
   it('should handle unknown type option correctly', () => {
     expect(() => {
@@ -288,7 +308,11 @@ describe('directives/drag', () => {
   })
 })
 
-let DEFAULT_MOVEMENT = [[5, 5], [105, 105], [205, 205]]
+let DEFAULT_MOVEMENT = [
+  [5, 5],
+  [105, 105],
+  [205, 205]
+]
 function performDrag (wrapper, ...rest) {
   let series = DEFAULT_MOVEMENT
   let data = {}
@@ -299,7 +323,7 @@ function performDrag (wrapper, ...rest) {
       data = rest[0]
     }
   } else if (rest.length === 2) {
-    [series, data] = rest
+    ;[series, data] = rest
   }
   let [start, ...moves] = series
   let end = moves.pop()
