@@ -6,15 +6,14 @@ import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import config from '../../managers/config'
-import { useCoupledParent } from '../../mixins/coupled'
+import { useParent } from '../../mixins/coupled'
 import useControllable from '../../mixins/controllable'
 import resize from '../../directives/resize'
 import '../../common/uiTypes'
 import { scrollTo } from '../../utils/dom'
 import { find, findIndex, throttle, pick } from 'lodash'
 
-let tabs = useCoupledParent({
-  type: 'tabs',
+let tabs = useParent('tabs', {
   childrenKey: 'items'
 })
 
