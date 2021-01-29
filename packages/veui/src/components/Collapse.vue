@@ -37,15 +37,12 @@ import { find } from 'lodash'
 import Icon from './Icon'
 import ExpandTransition from './_ExpandTransition'
 import ui from '../mixins/ui'
-import { useCoupledChild } from '../mixins/coupled'
+import { useChild } from '../mixins/coupled'
 import prefix from '../mixins/prefix'
 import useControllable from '../mixins/controllable'
 
-let accordionItem = useCoupledChild({
-  direct: true,
-  type: 'accordion-item',
-  parentType: 'accordion',
-  fields: ['name']
+let accordionItem = useChild('accordion-item', 'accordion', ['name'], {
+  direct: true
 })
 
 export default {
@@ -54,33 +51,38 @@ export default {
     'veui-icon': Icon,
     'veui-expand-transition': ExpandTransition
   },
-  mixins: [prefix, ui, accordionItem, useControllable({
-    prop: 'expanded',
-    get (val) {
-      let { accordion } = this
-      if (accordion) {
-        let expanded =
-          accordion.realExpanded === null
-            ? []
-            : [].concat(accordion.realExpanded)
-        return (
-          expanded
-            .map(key => {
-              let item = find(
-                accordion.items,
-                ({ name, id }) => (name || id) === key
-              )
-              if (item) {
-                return item.id
-              }
-            })
-            .indexOf(this.id) !== -1
-        )
-      }
+  mixins: [
+    prefix,
+    ui,
+    accordionItem,
+    useControllable({
+      prop: 'expanded',
+      get (val) {
+        let { accordion } = this
+        if (accordion) {
+          let expanded =
+            accordion.realExpanded === null
+              ? []
+              : [].concat(accordion.realExpanded)
+          return (
+            expanded
+              .map(key => {
+                let item = find(
+                  accordion.items,
+                  ({ name, id }) => (name || id) === key
+                )
+                if (item) {
+                  return item.id
+                }
+              })
+              .indexOf(this.id) !== -1
+          )
+        }
 
-      return val
-    }
-  })],
+        return val
+      }
+    })
+  ],
   props: {
     label: {
       type: String,
@@ -104,6 +106,9 @@ export default {
         return accordion.disabled || this.disabled
       }
       return this.disabled
+    },
+    id () {
+      return this.coupledProxy.id
     }
   },
   methods: {
