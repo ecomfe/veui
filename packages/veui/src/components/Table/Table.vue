@@ -529,7 +529,7 @@ export default {
   created () {
     if ('keys' in this.$options.propsData) {
       warn(
-        '[veui-talbe] The `keys` prop is deprecated and will be removed in v2.0.0. Use `key-field` instead.',
+        '[veui-table] The `keys` prop is deprecated and will be removed in v2.0.0. Use `key-field` instead.',
         this
       )
     }
