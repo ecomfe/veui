@@ -584,6 +584,7 @@ describe('components/Uploader', function () {
 
   it('should be disabled when number of files reach max count.', function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
         action: '/upload/xhr',
         value: [
@@ -604,6 +605,7 @@ describe('components/Uploader', function () {
 
   it('should set src of image correctly when type is image.', function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
         action: '/upload/xhr',
         value: [
@@ -622,6 +624,7 @@ describe('components/Uploader', function () {
 
   it('should set src of video correctly when type is video.', function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
         action: '/upload/xhr',
         value: [
@@ -640,6 +643,7 @@ describe('components/Uploader', function () {
 
   it('should set src of video or image correctly when type is media.', function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
         action: '/upload/xhr',
         value: [
@@ -872,6 +876,7 @@ describe('components/Uploader', function () {
 
   it('should render desc slot correctly.', function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
         action: '/upload/xhr'
       },
@@ -900,6 +905,7 @@ describe('components/Uploader', function () {
 
   it('should render file-before file-after slot correctly.', async function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
         action: '/upload/xhr',
         value: [
