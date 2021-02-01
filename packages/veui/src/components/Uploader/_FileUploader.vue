@@ -19,10 +19,16 @@
     </span>
   </div>
 
-  <ul :class="$c('uploader-list')">
+  <transition-group
+    ref="transitionGroup"
+    name="list"
+    tag="ul"
+    :class="$c('uploader-list')"
+  >
     <li
       v-for="(file, index) in files"
       :key="`${file.name}-${file.src}`"
+      v-drag.sort.y="dragSortOptions"
       :class="{
         [$c('uploader-list-item')]: true,
         [$c('uploader-list-item-failure')]: file.isFailure
@@ -96,7 +102,7 @@
         />
       </slot>
     </li>
-  </ul>
+  </transition-group>
 </div>
 </template>
 

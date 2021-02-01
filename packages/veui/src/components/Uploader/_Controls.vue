@@ -17,7 +17,7 @@
       >
         <veui-button
           :key="control.name"
-          :ui="$parent.uiParts.control"
+          :ui="uiParts.control"
           :disabled="
             control.disabled !== undefined ? control.disabled : disabled
           "
@@ -33,7 +33,7 @@
     <veui-button
       v-else
       :key="control.name"
-      :ui="$parent.uiParts.control"
+      :ui="uiParts.control"
       :disabled="control.disabled !== undefined ? control.disabled : disabled"
       :class="$c('control-item')"
       :aria-label="control.label"
@@ -54,6 +54,7 @@ import prefix from '../../mixins/prefix'
 
 export default {
   name: 'veui-uploader-controls',
+  inject: ['uiParts'],
   components: {
     'veui-icon': Icon,
     'veui-button': Button,
