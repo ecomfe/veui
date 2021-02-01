@@ -186,9 +186,7 @@ export default {
       return {
         expanded: this.realExpanded,
         value: this.realValue,
-        toggle: val => {
-          this.commit('expanded', val == null ? !this.realExpanded : val)
-        },
+        toggle: this.toggleExpanded,
         select: val => this.commit('value', val)
       }
     },
@@ -212,6 +210,9 @@ export default {
     this.nativeInput = this.$refs.input && this.$refs.input.$refs.input
   },
   methods: {
+    toggleExpanded (force) {
+      this.commit('expanded', force == null ? !this.realExpanded : !!force)
+    },
     clear (e) {
       if (this.multiple) {
         let disabledValues = this.realValue
