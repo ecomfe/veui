@@ -1,6 +1,9 @@
 <template>
 <div :class="$c('uploader-media')">
-  <ul
+  <transition-group
+    ref="transitionGroup"
+    name="list"
+    tag="ul"
     :class="{
       [listClass]: true,
       [`${listClass}-picker-before`]: pickerPosition === 'before'
@@ -9,6 +12,7 @@
     <li
       v-for="(file, index) in files"
       :key="file.key"
+      v-drag.sort.x="dragSortOptions"
       :class="{
         [`${listClass}-item`]: true,
         [`${listClass}-item-failure`]: file.isFailure,
@@ -196,7 +200,7 @@
         </div>
       </slot>
     </li>
-  </ul>
+  </transition-group>
 
   <span
     v-if="$scopedSlots.desc"
@@ -231,6 +235,11 @@ export default {
     'veui-uploader-file-viewer': FileViewer
   },
   mixins: [prefix, upload, i18n],
+  provide () {
+    return {
+      uiParts: this.uiParts
+    }
+  },
   data () {
     return {
       expandedControlDropdowns: [],
