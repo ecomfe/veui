@@ -833,17 +833,6 @@ export function isInsideTransformedContainer (el) {
   return false
 }
 
-export function cloneElementWithComputedStyle (el) {
-  let newEl = el.cloneNode(false)
-  if (el.nodeType === Node.ELEMENT_NODE) {
-    newEl.style.cssText = window.getComputedStyle(el).cssText
-  }
-  ;[...el.childNodes].forEach(function (node) {
-    newEl.appendChild(cloneElementWithComputedStyle(node))
-  })
-  return newEl
-}
-
 export function addOnceEventListener (el, evt, listener) {
   function callback (...args) {
     remove()

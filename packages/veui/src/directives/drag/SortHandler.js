@@ -10,12 +10,10 @@ import {
   camelCase,
   kebabCase
 } from 'lodash'
+import cloneElement from 'clone-element'
 import { prefixify } from '../../mixins/prefix'
 import config from '../../managers/config'
-import {
-  isInsideTransformedContainer,
-  cloneElementWithComputedStyle
-} from '../../utils/dom'
+import { isInsideTransformedContainer } from '../../utils/dom'
 import { isSafari as checkIsSafari } from '../../utils/bom'
 import BaseHandler from './BaseHandler'
 
@@ -407,7 +405,7 @@ function setDragSnapshotImage (el, event) {
   let { offsetX, offsetY } = event
   let newEl
   if (isSafari && isInsideTransformedContainer(el)) {
-    newEl = cloneElementWithComputedStyle(el)
+    newEl = cloneElement(el)
     assign(newEl.style, {
       position: 'fixed',
       top: 0,
