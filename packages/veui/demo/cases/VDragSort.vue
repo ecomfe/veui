@@ -131,8 +131,11 @@
             尔时，须菩提白佛言：“世尊！善男子、善女人，发阿耨多罗三藐三菩提心，云何应住？云何降伏其心？”佛告须菩提：“善男子、善女人，发阿耨多罗三藐三菩提者，当生如是心，我应灭度一切众生。灭度一切众生已，而无有一众生实灭度者。
           </p>
         </div>
-        <div
+        <transition-group
           ref="popoverContent"
+          v-move-end
+          name="list"
+          tag="div"
           class="items"
         >
           <div
@@ -141,7 +144,7 @@
             v-drag.sort.x="{
               name: 'buttonInPopover',
               containment: 'popoverContent',
-              callback: handleSortCallback,
+              callback: handleTransitionMoveEndSortCallback,
               debug,
               align
             }"
@@ -149,7 +152,7 @@
           >
             {{ item }}
           </div>
-        </div>
+        </transition-group>
       </div>
     </veui-popover>
   </section>
@@ -158,6 +161,7 @@
 
 <script>
 import drag from 'veui/directives/drag'
+import moveEnd from 'veui/directives/transitionGroupMoveEnd'
 import { Dialog, Popover } from 'veui'
 
 const items = [
@@ -198,7 +202,8 @@ const items = [
 export default {
   name: 'v-drag-sort-demo',
   directives: {
-    drag
+    drag,
+    moveEnd
   },
   components: {
     'veui-dialog': Dialog,
@@ -250,6 +255,15 @@ export default {
         // 动画完了再回调成功
         return promise
       }
+    },
+    handleTransitionMoveEndSortCallback (toIndex, fromIndex) {
+      if (toIndex === fromIndex) {
+        return
+      }
+      this.moveItem(this.items2, fromIndex, toIndex)
+      return new Promise(resolve => {
+        this.$refs.popoverContent.$once('move-end', resolve)
+      })
     },
     moveItem (items, fromIndex, toIndex) {
       let item = items[fromIndex]

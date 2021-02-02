@@ -21,7 +21,7 @@
 
   <transition-group
     ref="transitionGroup"
-    name="list"
+    v-move-end
     tag="ul"
     :class="$c('uploader-list')"
   >
