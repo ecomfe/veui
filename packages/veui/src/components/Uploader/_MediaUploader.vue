@@ -2,7 +2,7 @@
 <div :class="$c('uploader-media')">
   <transition-group
     ref="transitionGroup"
-    name="list"
+    v-move-end
     tag="ul"
     :class="{
       [listClass]: true,

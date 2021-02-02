@@ -74,6 +74,11 @@ function getOptions (binding, vnode) {
 function refresh (el, binding, vnode) {
   const options = getOptions(binding, vnode)
 
+  if (options.disabled) {
+    // TODO：先不支持动态切换
+    return
+  }
+
   const oldOptions = el.__dragOldOptions__
   // 如果参数没发生变化，就不要刷新了
   if (

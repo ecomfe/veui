@@ -13,6 +13,15 @@
       />
       <div class="space"/>
       <veui-checkbox v-model="autoupload">autoupload</veui-checkbox>
+      <div class="space"/>
+      <veui-checkbox
+        v-model="draggable"
+        :readonly="draggable"
+      >
+        <span title="暂不支持动态切换">draggable</span>
+      </veui-checkbox>
+      <div class="space"/>
+      <veui-checkbox v-model="readonly">readonly</veui-checkbox>
     </div>
     <div>
       MaxCount:
@@ -334,6 +343,8 @@ export default {
       maxCount: 5,
       maxSize: '1mb',
       multiple: undefined,
+      draggable: undefined,
+      readonly: undefined,
 
       action:
         process.env.NODE_ENV === 'development'
@@ -376,6 +387,8 @@ export default {
           'accept',
           'maxCount',
           'multiple',
+          'draggable',
+          'readonly',
           'maxSize',
           'action',
           'requestMode',
