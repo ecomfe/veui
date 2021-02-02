@@ -39,7 +39,12 @@
     v-model="locale"
     :options="locales"
   />
-  <main id="content">
+  <main
+    id="content"
+    :class="{
+      fullscreen: $route.path === '/form-experiment'
+    }"
+  >
     <router-view/>
   </main>
   <v-console id="console"/>
@@ -81,14 +86,16 @@ export default {
       routes,
       year: new Date().getFullYear(),
       locales: LOCALES,
-      locale: i18n.locale,
-
+      locale: 'zh-Hans',
       collapsedNav: false
     }
   },
   watch: {
-    locale (val) {
-      i18n.locale = val
+    locale: {
+      handler (val) {
+        i18n.locale = val
+      },
+      immediate: true
     }
   }
 }
@@ -275,5 +282,18 @@ main {
   right: 4em;
   width: 135px;
   z-index: 200;
+}
+
+#content.fullscreen {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+  z-index: 300;
+  height: auto;
+  background-color: @dls-background-color-base-2;
+  padding: 24px;
 }
 </style>

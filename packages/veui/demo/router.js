@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import routes from './cases'
+import FormExperiment from './cases/FormExperiment'
 
 Vue.use(Router)
 
@@ -21,6 +22,11 @@ const router = new Router({
           ])
         }
       }
+    },
+    {
+      path: '/form-experiment',
+      name: 'FormExperiment',
+      component: FormExperiment
     },
     ...routes
   ]

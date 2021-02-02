@@ -1,12 +1,14 @@
 @import "../lib.less";
 
 .@{veui-prefix}-fieldset {
-
   // 水平排列多个 Field，添加水平 margin，覆盖掉 Field 自己设置的 margin
   .@{veui-prefix}-field {
     margin-bottom: @dls-form-field-spacing-vertical;
   }
 
-  // todo1: 当 error 信息超长时怎么处理？要么换行？要么每个 error 单独显示一行？
-  // 单独显示一行怎么写 css 还没想好。。
+  &-required > .@{veui-prefix}-field-label::before {
+    content: "*";
+    margin-right: @dls-form-label-content-spacing;
+    color: @dls-form-label-required-color;
+  }
 }
