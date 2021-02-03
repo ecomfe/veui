@@ -319,9 +319,6 @@ export default {
     realMultiple () {
       return this.maxCount === 1 ? this.multiple : true
     },
-    isIframeRequest () {
-      return this.requestMode === 'iframe'
-    },
 
     uploadRequest () {
       const options = pick(this, [

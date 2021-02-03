@@ -50,6 +50,9 @@ registerHandler('sort', SortHandler, true)
 
 function clear (el) {
   let dragData = el.__dragData__
+  if (!dragData) {
+    return
+  }
   dragData.handler.destroy()
   el.removeEventListener('mousedown', dragData.mousedownHandler)
   el.__dragData__ = null

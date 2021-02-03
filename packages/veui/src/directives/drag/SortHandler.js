@@ -412,7 +412,8 @@ function setDragSnapshotImage (el, event) {
       position: 'fixed',
       top: 0,
       left: 0,
-      zIndex: 214748364
+      zIndex: 214748364,
+      margin: 0
     })
     document.body.append(newEl)
     requestAnimationFrame(() => document.body.removeChild(newEl))

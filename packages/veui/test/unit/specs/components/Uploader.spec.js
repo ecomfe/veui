@@ -1,4 +1,4 @@
-import { pick, omit } from 'lodash'
+import { pick, omit, identity } from 'lodash'
 import { mount } from '@vue/test-utils'
 import Uploader from '@/components/Uploader'
 import Dropdown from '@/components/Dropdown'
@@ -19,7 +19,8 @@ describe('components/Uploader', function () {
       propsData: {
         value: null,
         action: '/upload/xhr',
-        autoupload: false
+        autoupload: false,
+        convertResponse: identity
       }
     })
 
@@ -225,7 +226,10 @@ describe('components/Uploader', function () {
       propsData: {
         action: '/upload/xhr?force=success&latency=0',
         maxSize: '100kb',
-        maxCount: 1
+        maxCount: 1,
+        order: 'desc',
+        type: 'file',
+        accept: 'image/*'
       }
     })
 
@@ -245,6 +249,7 @@ describe('components/Uploader', function () {
     // type
     wrapper.vm.prune()
     wrapper.setProps({ accept: '.xlsx,.pdf', maxSize: 1024 * 1024 })
+    await wait(0)
     promise = waitForEvent(wrapper.vm, 'invalid')
     wrapper.vm.addFiles([mockFile])
     await promise
@@ -252,6 +257,7 @@ describe('components/Uploader', function () {
     // will pass validation
     wrapper.vm.prune()
     wrapper.setProps({ accept: 'image/*', extensions: ['jpg', 'png', 'gif'] })
+    await wait(0)
     promise = waitForEvent(wrapper.vm, 'success')
     wrapper.vm.addFiles([mockFile]) // will be uploaded successfully
     await promise
@@ -261,6 +267,7 @@ describe('components/Uploader', function () {
       .filter(e => e.name === 'invalid')
       .map(e => e.args[0])
     expect(invalidEvents.length).to.equal(3)
+    console.log(invalidEvents[1])
 
     expect(invalidEvents[0].file).to.be.an('undefined')
     expect(invalidEvents[0].errors[0].type).to.equal('count')
@@ -425,7 +432,8 @@ describe('components/Uploader', function () {
         action:
           '/upload/iframe?force=success&includeRequest=true&convert=false&latency=0',
         requestMode: 'iframe',
-        payload
+        payload,
+        order: 'append'
       },
       attachToDocument: true
     })
@@ -927,6 +935,38 @@ describe('components/Uploader', function () {
     let after = wrapper.findAll('.test-file-after')
     expect(after.at(0).text()).to.equal('/test1.jpg')
     expect(after.at(1).text()).to.equal('/test2.jpg')
+
+    wrapper.destroy()
+  })
+
+  it('should reorder files when move event triggered.', async function () {
+    let wrapper = mount(Uploader, {
+      sync: false,
+      propsData: {
+        type: 'image',
+        action: '/upload/xhr',
+        attachToDocument: true,
+        value: [
+          {
+            key: 'xxxx',
+            name: '大娃.jpg',
+            src: 'a.jpg'
+          },
+          {
+            key: 'yyyy',
+            name: '二娃.jpg',
+            src: 'b.jpg'
+          }
+        ]
+      }
+    })
+
+    await wait(0)
+    wrapper.vm.$children[0].$emit('move', 0, 2)
+
+    let value = wrapper.emitted('change')[0][0]
+    expect(value[0].key).to.equal('yyyy')
+    expect(value[1].key).to.equal('xxxx')
 
     wrapper.destroy()
   })

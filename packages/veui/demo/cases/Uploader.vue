@@ -93,81 +93,91 @@
       Uploader
       <sup v-if="status">{{ statusTexts[status] }}</sup>
     </legend>
-    <veui-uploader
-      ref="uploader"
-      v-model="files"
-      v-bind="uploaderOptions"
-      @success="handleUploaderEvent('success', ...arguments)"
-      @failure="handleUploaderEvent('failure', ...arguments)"
-      @invalid="handleUploaderEvent('invalid', ...arguments)"
-      @remove="handleUploaderEvent('remove', ...arguments)"
-      @statuschange="handleUploaderEvent('statuschange', ...arguments)"
+
+    <component
+      :is="inDialog ? 'veui-dialog' : 'div'"
+      ui="wide"
+      :open.sync="inDialog"
+      draggable
     >
-      <template
-        v-if="includes(enabledCustoms, '#desc')"
-        #desc
+      <template #title>文件上传</template>
+
+      <veui-uploader
+        ref="uploader"
+        v-model="files"
+        v-bind="uploaderOptions"
+        @success="handleUploaderEvent('success', ...arguments)"
+        @failure="handleUploaderEvent('failure', ...arguments)"
+        @invalid="handleUploaderEvent('invalid', ...arguments)"
+        @remove="handleUploaderEvent('remove', ...arguments)"
+        @statuschange="handleUploaderEvent('statuschange', ...arguments)"
       >
-        请选择{{ accept }}图片， 大小在{{ maxSize }}以内， 宽、高大于100像素，
-        最多上传{{ maxCount }}张图
-      </template>
-      <template
-        v-if="includes(enabledCustoms, '#button-label')"
-        #button-label
-      >
-        <veui-icon name="id-card"/>
-      </template>
-      <template
-        v-if="includes(enabledCustoms, '#file-after')"
-        #file-after="{ name }"
-      >
-        <div class="ellipsis">{{ name }}</div>
-      </template>
-      <template
-        v-if="includes(enabledCustoms, '#upload')"
-        #upload
-      >
-        <div class="veui-uploader-list-image-container">
-          <veui-button
-            @click="$refs.uploader.clickInput()"
-          >上传文件</veui-button>
-          <veui-button ref="custom-add-image">图库上传</veui-button>
-        </div>
-        <veui-popover
-          target="custom-add-image"
-          :open.sync="tooltipOpen"
-          trigger="click"
-          autofocus
+        <template
+          v-if="includes(enabledCustoms, '#desc')"
+          #desc
         >
-          <form @submit.prevent="handleTooltipImageSubmit">
-            <veui-span>图片地址：</veui-span>
-            <veui-input
-              name="src"
-              placeholder="https://"
-            />
-            <veui-button type="submit">确定</veui-button>
-          </form>
-        </veui-popover>
-      </template>
-      <template
-        v-if="includes(enabledCustoms, '#uploading')"
-        #uploading="{ name, loaded, total }"
-      >
-        <div class="veui-uploader-list-image-container">
-          <p>“{{ name }}”上传中</p>
-          <p>
-            已完成 <strong>{{ loaded }}</strong>字节，剩余<strong>{{ total - loaded }}</strong>字节
-          </p>
-        </div>
-      </template>
-      <template
-        v-if="includes(enabledCustoms, '#file')"
-        #file="{ name, status }"
-      >
-        <div class="veui-uploader-list-media-container">
-          <p>{{ statusIcons[status] }} {{ status }} {{ name }}</p>
-        </div>
-      </template>
-    </veui-uploader>
+          请选择{{ accept }}图片， 大小在{{ maxSize }}以内，
+          宽、高大于100像素， 最多上传{{ maxCount }}张图
+        </template>
+        <template
+          v-if="includes(enabledCustoms, '#button-label')"
+          #button-label
+        >
+          <veui-icon name="id-card"/>
+        </template>
+        <template
+          v-if="includes(enabledCustoms, '#file-after')"
+          #file-after="{ name }"
+        >
+          <div class="ellipsis">{{ name }}</div>
+        </template>
+        <template
+          v-if="includes(enabledCustoms, '#upload')"
+          #upload
+        >
+          <div class="veui-uploader-list-image-container">
+            <veui-button
+              @click="$refs.uploader.clickInput()"
+            >上传文件</veui-button>
+            <veui-button ref="custom-add-image">图库上传</veui-button>
+          </div>
+          <veui-popover
+            target="custom-add-image"
+            :open.sync="tooltipOpen"
+            trigger="click"
+            autofocus
+          >
+            <form @submit.prevent="handleTooltipImageSubmit">
+              <veui-span>图片地址：</veui-span>
+              <veui-input
+                name="src"
+                placeholder="https://"
+              />
+              <veui-button type="submit">确定</veui-button>
+            </form>
+          </veui-popover>
+        </template>
+        <template
+          v-if="includes(enabledCustoms, '#uploading')"
+          #uploading="{ name, loaded, total }"
+        >
+          <div class="veui-uploader-list-image-container">
+            <p>“{{ name }}”上传中</p>
+            <p>
+              已完成 <strong>{{ loaded }}</strong>字节，剩余<strong>{{ total - loaded }}</strong>字节
+            </p>
+          </div>
+        </template>
+        <template
+          v-if="includes(enabledCustoms, '#file')"
+          #file="{ name, status }"
+        >
+          <div class="veui-uploader-list-media-container">
+            <p>{{ statusIcons[status] }} {{ status }} {{ name }}</p>
+          </div>
+        </template>
+      </veui-uploader>
+    </component>
   </fieldset>
 
   <fieldset>
@@ -191,6 +201,14 @@
       ui="basic s"
       @click="handleComponentRemoveButtonClick"
     >{{ removed ? '恢复' : '移除' }}上传组件</veui-button>
+    <div class="space"/>
+    <veui-button
+      v-if="!removed"
+      ui="basic s"
+      @click="inDialog = !inDialog"
+    >{{
+      inDialog ? '-' : '放在对话框里'
+    }}</veui-button>
   </fieldset>
 
   <fieldset>
@@ -219,7 +237,8 @@ import {
   Checkbox,
   RadioButtonGroup,
   CheckButtonGroup,
-  Textarea
+  Textarea,
+  Dialog
 } from 'veui'
 import 'veui-theme-dls-icons/chevron-right'
 import 'veui-theme-dls-icons/id-card'
@@ -314,6 +333,7 @@ export default {
     'veui-checkbox': Checkbox,
     'veui-searchbox': SearchBox,
     'veui-textarea': Textarea,
+    'veui-dialog': Dialog,
     'veui-radio-button-group': RadioButtonGroup,
     'veui-check-button-group': CheckButtonGroup
   },
@@ -330,6 +350,7 @@ export default {
       availableRequestIframeModes,
       availablePickerPositions,
       removed: false,
+      inDialog: false,
 
       enabledCustoms: ['#file-after'],
       tooltipOpen: false,
@@ -638,7 +659,7 @@ fieldset > div {
 
 .space {
   display: inline-block;
-  width: 2em;
+  width: 1.2em;
 }
 
 .ellipsis {
