@@ -4,6 +4,11 @@ function attach (el, binding, vnode) {
   clear(el)
 
   const vm = vnode.componentInstance
+  if (vm.$options._componentTag !== 'transition-group') {
+    throw new Error(
+      '`v-move-end` directive can only be applied on `<TransitionGroup>`'
+    )
+  }
   const moveClass = `${vm.name || 'v'}-move`
 
   let isMoving

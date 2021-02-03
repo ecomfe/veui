@@ -267,7 +267,6 @@ describe('components/Uploader', function () {
       .filter(e => e.name === 'invalid')
       .map(e => e.args[0])
     expect(invalidEvents.length).to.equal(3)
-    console.log(invalidEvents[1])
 
     expect(invalidEvents[0].file).to.be.an('undefined')
     expect(invalidEvents[0].errors[0].type).to.equal('count')
