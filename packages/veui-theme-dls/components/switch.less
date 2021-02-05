@@ -189,13 +189,16 @@
     }
   }
 
-  &-on&-loading &-switcher,
-  &-on.@{veui-prefix}-readonly &-switcher,
-  &-on.@{veui-prefix}-disabled &-switcher {
-    background-color: @dls-switch-track-color-on-disabled;
+  &-on&-loading,
+  &-on.@{veui-prefix}-readonly,
+  &-on.@{veui-prefix}-disabled {
+    .@{veui-prefix}-switch-switcher,
+    &:hover .@{veui-prefix}-switch-switcher {
+      background-color: @dls-switch-track-color-on-disabled;
 
-    .@{veui-prefix}-switch-button {
-      background-color: @dls-switch-thumb-color-on-disabled;
+      .@{veui-prefix}-switch-button {
+        background-color: @dls-switch-thumb-color-on-disabled;
+      }
     }
   }
 
