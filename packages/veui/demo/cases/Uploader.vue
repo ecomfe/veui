@@ -434,7 +434,11 @@ export default {
       this.localFiles = undefined
     },
     files (val) {
-      console.log('Files updated', this.files)
+      console.log(
+        'Files updated',
+        this.files,
+        this.files.map(file => [file.key, file.name].join('\t'))
+      )
     },
     maxCount (val) {
       this.multiple = undefined

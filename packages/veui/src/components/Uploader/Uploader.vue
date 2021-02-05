@@ -371,40 +371,35 @@ export default {
           }
         }
 
-        // 根据 key 匹配
-        let [rest, patched] = values.reduce(
-          ([rest, patched], value) => {
-            if (value[this.keyField]) {
-              let i = findIndex(
-                this.fileList,
-                file => file.key === value[this.keyField]
-              )
-              if (i >= 0) {
-                this.fileList[i].value = value
-                return [rest, patched.concat(i)]
-              }
-            }
-            return [rest.concat(value), patched]
-          },
-          [[], []]
-        )
-
-        // 剩余的按顺序匹配
         let j = 0
         this.fileList = this.fileList
           .map((file, i) => {
-            if (includes(patched, i) || !file.isSuccess) {
+            if (!file.isSuccess) {
               return file
             }
-            if (j < rest.length) {
-              return this.createUploaderFile(rest[j++], file)
+
+            let value = values[j++]
+            if (!value) {
+              return
             }
-            // 处理外部直接减少文件的情形
+
+            if (value[this.keyField]) {
+              let file = find(
+                this.fileList,
+                file => file.key === value[this.keyField]
+              )
+              if (file) {
+                file.value = value
+                return file
+              }
+            }
+
+            return this.createUploaderFile(value)
           })
           .filter(Boolean)
           .concat(
             // 还有剩的添加到最后（TODO: 需要考虑 order 么？）
-            rest.slice(j).map(val => this.createUploaderFile(val))
+            values.slice(j).map(val => this.createUploaderFile(val))
           )
       },
       deep: true,
