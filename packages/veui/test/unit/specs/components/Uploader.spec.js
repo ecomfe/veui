@@ -4,6 +4,7 @@ import Uploader from '@/components/Uploader'
 import Dropdown from '@/components/Dropdown'
 import Lightbox from '@/components/Lightbox'
 import { wait } from '../../../utils'
+import { UploaderFile } from '@/components/Uploader/_helper'
 import { addOnceEventListener } from '@/utils/dom'
 import { createFileList } from '@/utils/file'
 import 'veui-theme-dls-icons/check'
@@ -133,50 +134,71 @@ describe('components/Uploader', function () {
             key: 'yyyy',
             name: '二娃.jpg',
             src: 'b.jpg'
+          },
+          {
+            key: 'zzz',
+            name: '三娃.jpg',
+            src: 'c.jpg'
           }
         ]
       }
     })
 
     await wait(0)
-    expect(wrapper.vm.fileList.length).to.equal(2)
+    expect(wrapper.vm.fileList.length, '初始文件个数').to.equal(3)
 
     // update, replace
     wrapper.setProps({
       value: [
-        { name: '三娃.png', src: 'http://example.com/三娃.png' },
+        { name: '水娃.png', src: 'http://example.com/水娃.png' },
         { name: '火娃.png', src: 'http://example.com/火娃.png' },
+        { key: 'yyyy', name: '二娃.jpg', src: 'http://example.com/二娃.jpg' },
         { key: 'xxxx', name: '大娃.jpg', src: 'http://example.com/大娃.jpg' }
       ]
     })
     await wait(0)
-    let files = wrapper.vm.fileList
+    let files = wrapper.vm.fileList.map(file => file.value)
+    expect(files.length, '填充后文件个数').to.equal(4)
 
-    const keys = ['key', 'name', 'src']
-    expect(files.length).to.equal(3)
-    expect(pick(files[0], keys)).to.eql({
-      key: 'xxxx',
-      name: '大娃.jpg',
-      src: 'http://example.com/大娃.jpg'
-    })
-    expect(pick(files[1], keys)).to.eql({
-      key: 'yyyy',
-      name: '三娃.png',
-      src: 'http://example.com/三娃.png'
-    })
-    expect(files[2].key).to.be.a('string')
-    expect(files[2].name).to.equal('火娃.png')
-    expect(files[2].src).to.equal('http://example.com/火娃.png')
+    expect(files[0].key, '第一个文件 key').to.be.a('string')
+    expect(files[0].name, '第一个文件 name').to.equal('水娃.png')
+    expect(files[0].src, '第一个文件 src').to.equal(
+      'http://example.com/水娃.png'
+    )
+
+    expect(files[1].key, '第二个文件 key').to.be.a('string')
+    expect(files[1].name, '第二个文件 name').to.equal('火娃.png')
+    expect(files[1].src, '第二个文件 src').to.equal(
+      'http://example.com/火娃.png'
+    )
+
+    expect(files[2].key, '第三个文件 key').to.equal('yyyy')
+    expect(files[2].name, '第三个文件 name').to.equal('二娃.jpg')
+    expect(files[2].src, '第三个文件 src').to.equal(
+      'http://example.com/二娃.jpg'
+    )
+
+    expect(files[3].key, '第四个文件 key').to.equal('xxxx')
+    expect(files[3].name, '第四个文件 name').to.equal('大娃.jpg')
+    expect(files[3].src, '第四个文件 src').to.equal(
+      'http://example.com/大娃.jpg'
+    )
 
     // delete
+    let file = UploaderFile.fromValue({ name: '七娃.gif' }, { keyField: 'key' })
+    file.isFailure = true
+    wrapper.vm.fileList.splice(1, 0, file)
     wrapper.setProps({
       value: [
-        { key: 'xxxx', name: '大娃.jpg', src: 'http://example.com/大娃.jpg' }
+        { key: 'xxxx', name: '大娃.jpg', src: 'http://example.com/大娃.jpg' },
+        { name: '六娃.jpg' }
       ]
     })
     await wait(0)
-    expect(wrapper.vm.fileList.length).to.equal(1)
+    expect(wrapper.vm.fileList.length, '删除后文件个数').to.equal(3)
     expect(wrapper.vm.fileList[0].key).to.equal('xxxx')
+    expect(wrapper.vm.fileList[1].name).to.equal('七娃.gif')
+    expect(wrapper.vm.fileList[2].name).to.equal('六娃.jpg')
 
     wrapper.destroy()
   })
