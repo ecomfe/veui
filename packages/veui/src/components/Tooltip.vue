@@ -55,7 +55,8 @@ export default {
       type: Boolean,
       default: true
     },
-    autofocus: Boolean
+    autofocus: Boolean,
+    overlayPriority: Number
   },
   data () {
     return {
@@ -172,6 +173,7 @@ export default {
         target={this.targetNode}
         open={this.realOpen && !!this.targetNode}
         options={this.realOverlayOptions}
+        priority={this.overlayPriority}
         overlayClass={this.mergeOverlayClass({
           [this.$c('tooltip-box')]: true,
           [this.$c('tooltip-box-transparent')]: !this.interactive
