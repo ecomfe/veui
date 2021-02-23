@@ -565,15 +565,14 @@ export default {
   },
   mounted () {
     const exp = localStorage.getItem('light-experiment')
-    if (exp) {
-      try {
-        const data = JSON.parse(exp)
-        this.expData = data || {}
-        this.done = !!(data.form_v1 && data.form_v1.done)
-      } catch (e) {
-        this.expData = { form_v1: {} }
-      }
+    try {
+      const data = JSON.parse(exp)
+      this.expData = data || {}
+      this.done = !!(data.form_v1 && data.form_v1.done)
+    } catch (e) {
+      this.expData = { form_v1: {} }
     }
+    console.log(this.expData)
 
     this.startTime = Date.now()
   },
@@ -595,14 +594,15 @@ export default {
         .veui-invalid .veui-input
       `)
       if (target) {
-        target.scrollIntoView()
         target.__vue__.focus && target.__vue__.focus()
       }
     },
     handleSubmit (data) {
       this.tryCount++
 
-      localStorage.setItem()
+      this.expData.form_v1.done = true
+      localStorage.setItem('light-experiment', JSON.stringify(this.expData))
+      this.done = true
 
       if (window._hmt) {
         window._hmt.push([
