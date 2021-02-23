@@ -402,7 +402,7 @@ function getLeafs (item, checked) {
   let leafs = []
   walk(item.children, i => {
     if (!i.disabled) {
-      if (!hasChildren(i) && i.checked === checked) {
+      if (!hasChildren(i) && i.checked === checked && !i.hidden) {
         leafs.push(i.value)
       }
     }

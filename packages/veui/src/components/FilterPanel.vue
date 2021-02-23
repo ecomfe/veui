@@ -7,7 +7,7 @@
   :ui="realUi"
 >
   <h3 :class="$c('filter-panel-title')">
-    <slot name="head">
+    <slot name="head" :items="filteredDatasource">
       {{ title }}
     </slot>
   </h3>

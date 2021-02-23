@@ -9,7 +9,7 @@
   :ui="ui"
 >
   <template slot="head">
-    <slot name="head">
+    <slot name="head" slot-scope="{ items }">
       <slot name="title">
         {{ t('@transfer.available') }}
       </slot>
@@ -17,7 +17,7 @@
         :ui="uiParts.selectAll"
         :class="$c('transfer-select-all')"
         :disabled="!isSelectable"
-        @click="selectAll"
+        @click="selectAll(items)"
       >
         {{ t('@transfer.selectAll') }}
       </veui-button>
@@ -105,8 +105,8 @@ export default {
     realFilter (keyword, option) {
       return this.filter('candidate', keyword, option, this.datasource)
     },
-    selectAll () {
-      this.$emit('selectall')
+    selectAll (items) {
+      this.$emit('selectall', items)
     },
     select (...args) {
       this.$emit('select', ...args)

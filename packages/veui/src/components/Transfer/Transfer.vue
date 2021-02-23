@@ -104,10 +104,18 @@ export default {
       let values = []
 
       let walk = data => {
-        data.forEach(({ disabled, value, children }) => {
+        data.forEach(({ disabled, value, children, hidden }) => {
           if (!disabled) {
-            values.push(value)
-            if (children && children.length) {
+            if (hidden) {
+              return
+            }
+            if (!children) {
+              values.push(value)
+            }
+            else if (children.filter(child => child.hidden).length === children.length) {
+              values = values.concat(value, children.map(child => child.value))
+            }
+            else {
               walk(children)
             }
           }
@@ -192,8 +200,8 @@ export default {
               select: (...args) => {
                 this.handleSelect(...args)
               },
-              selectall: (...args) => {
-                this.commit('selected', this.collectDescendantValue(this.datasource))
+              selectall: (items, ...args) => {
+                this.commit('selected', this.collectDescendantValue(items))
               }
             },
             scopedSlots: generateItem.call(this, 'candidate'),
