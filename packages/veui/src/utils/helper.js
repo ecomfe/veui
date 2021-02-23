@@ -1,4 +1,12 @@
-import { includes, camelCase, get, isString, isObject, assign } from 'lodash'
+import {
+  includes,
+  camelCase,
+  get,
+  isString,
+  isObject,
+  assign,
+  reduce
+} from 'lodash'
 import Vue from 'vue'
 
 export function getTypedAncestorTracker (type, direct = false) {
@@ -287,4 +295,24 @@ export function renderSlot (vm, name, props = {}) {
 
 export const Void = {
   render: h => h()
+}
+
+export function forwardSlots (slots, vm) {
+  let { $scopedSlots, $slots, $createElement: h } = vm
+  return reduce(
+    slots,
+    (result, to, from) => {
+      let scoped = $scopedSlots[from]
+      if (scoped) {
+        result.scopedSlots[to] = props => scoped(props)
+      } else if ($slots[from]) {
+        result.slots.push(h('template', { slot: to }, $slots[from]))
+      }
+      return result
+    },
+    // JSX 中：
+    //   1. scopedSlots 作为 props 传递，数据类型是: { name: props => slotContent }
+    //   2. slots 作为 children 传递，数据类型是：[<template slot="name">slotContent</template>, ...]
+    { scopedSlots: {}, slots: [] }
+  )
 }

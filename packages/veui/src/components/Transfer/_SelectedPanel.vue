@@ -11,8 +11,14 @@
   :ui="ui"
 >
   <template slot="head">
-    <slot name="head">
-      <slot name="title">
+    <slot
+      name="head"
+      v-bind="slotApi"
+    >
+      <slot
+        name="title"
+        v-bind="slotApi"
+      >
         {{ t('@transfer.selected') }}
       </slot>
       <veui-button
@@ -74,15 +80,14 @@
           </template>
         </template>
       </template>
-      <template
-        slot="item-after"
-        slot-scope="props"
-      >
+      <template #item-after="{ item, disabled, parents }">
         <veui-button
           :class="$c('tree-item-remove')"
           :ui="uiParts.remove"
-          :disabled="!isSelectable || !!props.disabled"
-          @click.stop="remove(props.item, props.parents)"
+          :disabled="
+            !isSelectable || !!disabled || parents.some(i => !!i.disabled)
+          "
+          @click.stop="remove(item, parents)"
         >
           <veui-icon
             :aria-label="t('@transfer.remove')"
@@ -109,6 +114,7 @@ import Tree from '../Tree'
 import prefix from '../../mixins/prefix'
 import i18n from '../../mixins/i18n'
 import { get } from 'lodash'
+import { getLeaves } from '../../utils/datasource'
 
 export default {
   name: 'veui-selected-panel',
@@ -132,6 +138,16 @@ export default {
     return {
       flattenOptions: [],
       expanded: []
+    }
+  },
+  computed: {
+    leavesCount () {
+      return getLeaves(this.datasource).length
+    },
+    slotApi () {
+      return {
+        count: this.leavesCount
+      }
     }
   },
   watch: {
