@@ -1,13 +1,22 @@
 <template>
 <section :class="{ compact: 'compact' in $route.query }">
   <h1>Light Design 表单测试实验</h1>
-  <v-form :data="data">
+  <section v-if="done">
+    <h2>填写完成</h2>
+    <p>您已填写完毕，谢谢参与！</p>
+  </section>
+  <v-form
+    v-else
+    :data="data"
+    @invalid="handleInvalid"
+    @submit="handleSubmit"
+  >
     <section class="block">
       <h1>个人基本信息</h1>
       <v-field
         label="姓名"
         field="name"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'input' }]"
       >
         <v-input
           v-model="data.name"
@@ -18,7 +27,7 @@
       <v-field
         label="性别"
         field="gender"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-radio-button-group
           v-model="data.gender"
@@ -31,7 +40,7 @@
       <v-field
         label="职位"
         field="role"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-radio-button-group
           v-model="data.role"
@@ -47,7 +56,7 @@
       <v-field
         label="手机号码"
         field="mobile"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'input' }]"
       >
         <v-input
           v-model="data.mobile"
@@ -58,7 +67,7 @@
       <v-field
         label="民族"
         field="ethnicity"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-select
           v-model="data.ethnicity"
@@ -79,7 +88,7 @@
       >
         <v-field
           field="birthYear"
-          rules="required"
+          :rules="[{ name: 'required', triggers: 'change' }]"
         >
           <v-select
             v-model="data.birthYear"
@@ -90,7 +99,7 @@
         </v-field>
         <v-field
           field="birthMonth"
-          rules="required"
+          :rules="[{ name: 'required', triggers: 'change' }]"
         >
           <v-select
             v-model="data.birthMonth"
@@ -104,7 +113,7 @@
       <v-field
         label="星座"
         field="constellation"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-select
           v-model="data.constellation"
@@ -123,7 +132,7 @@
       <v-field
         label="婚姻状况"
         field="maritalStatus"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-radio-button-group
           v-model="data.maritalStatus"
@@ -137,7 +146,7 @@
       <v-field
         label="学历"
         field="acdemic"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-radio-button-group
           v-model="data.acdemic"
@@ -157,7 +166,7 @@
       >
         <v-field
           field="graduateYear"
-          rules="required"
+          :rules="[{ name: 'required', triggers: 'change' }]"
         >
           <v-select
             v-model="data.graduateYear"
@@ -168,7 +177,7 @@
         </v-field>
         <v-field
           field="graduateMonth"
-          rules="required"
+          :rules="[{ name: 'required', triggers: 'change' }]"
         >
           <v-select
             v-model="data.graduateMonth"
@@ -182,7 +191,7 @@
       <v-field
         label="毕业院校"
         field="colledge"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'input' }]"
       >
         <v-input
           v-model="data.colledge"
@@ -197,7 +206,7 @@
       >
         <v-field
           field="city"
-          rules="required"
+          :rules="[{ name: 'required', triggers: 'change' }]"
         >
           <v-select
             v-model="data.city"
@@ -214,7 +223,7 @@
         </v-field>
         <v-field
           field="district"
-          rules="required"
+          :rules="[{ name: 'required', triggers: 'change' }]"
         >
           <v-select
             v-model="data.district"
@@ -234,7 +243,7 @@
       <v-field
         label="邮政编码"
         field="zip"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'input' }]"
       >
         <v-input
           v-model="data.zip"
@@ -246,7 +255,7 @@
       <v-field
         label="爱好"
         field="hobbies"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-check-button-group
           v-model="data.hobbies"
@@ -267,7 +276,7 @@
       <v-field
         label="入职时间"
         field="onboardYear"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-select
           v-model="data.onboardYear"
@@ -280,7 +289,7 @@
       <v-field
         label="公司名称"
         field="company"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'input' }]"
       >
         <v-input
           v-model="data.company"
@@ -291,7 +300,7 @@
       </v-field>
       <v-field
         field="department"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-select
           v-model="data.department"
@@ -308,7 +317,7 @@
       <v-field
         label="工作年限"
         field="experience"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-radio-button-group
           v-model="data.experience"
@@ -323,7 +332,7 @@
       <v-field
         label="工资水平"
         field="salary"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-select
           v-model="data.salary"
@@ -339,7 +348,7 @@
       <v-field
         label="工作类型"
         field="type"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-radio-button-group
           v-model="data.type"
@@ -353,7 +362,7 @@
       <v-field
         label="职级"
         field="level"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-select
           v-model="data.level"
@@ -371,7 +380,7 @@
       <v-field
         label="公司邮箱"
         field="email"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'input' }]"
       >
         <v-input
           v-model="data.email"
@@ -384,7 +393,7 @@
       <v-field
         label="工号"
         field="id"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'input' }]"
       >
         <v-input
           v-model="data.id"
@@ -399,7 +408,7 @@
       >
         <v-field
           field="office"
-          rules="required"
+          :rules="[{ name: 'required', triggers: 'change' }]"
         >
           <v-select
             v-model="data.office"
@@ -414,7 +423,7 @@
         </v-field>
         <v-field
           field="floor"
-          rules="required"
+          :rules="[{ name: 'required', triggers: 'change' }]"
         >
           <v-select
             v-model="data.floor"
@@ -432,7 +441,7 @@
       <v-field
         label="电脑型号"
         field="computer"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-radio-button-group
           v-model="data.computer"
@@ -447,7 +456,7 @@
       <v-field
         label="手机品牌"
         field="mobileBrand"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-radio-button-group
           v-model="data.mobileBrand"
@@ -463,7 +472,7 @@
       <v-field
         label="通勤方式"
         field="commuting"
-        rules="required"
+        :rules="[{ name: 'required', triggers: 'change' }]"
       >
         <v-check-button-group
           v-model="data.commuting"
@@ -549,14 +558,66 @@ export default {
         computer: null,
         mobileBrand: null,
         commuting: null
+      },
+      tryCount: 0,
+      done: false
+    }
+  },
+  mounted () {
+    const exp = localStorage.getItem('light-experiment')
+    if (exp) {
+      try {
+        const data = JSON.parse(exp)
+        this.expData = data || {}
+        this.done = !!(data.form_v1 && data.form_v1.done)
+      } catch (e) {
+        this.expData = { form_v1: {} }
       }
     }
+
+    this.startTime = Date.now()
   },
   methods: {
     getSequenceOptions (start, end) {
       return Array.from({ length: Math.abs(start - end) + 1 })
         .map((_, i) => start + i * Math.sign(end - start))
         .map(val => ({ label: String(val), value: val }))
+    },
+    handleInvalid (...args) {
+      this.tryCount++
+
+      const target = document.querySelector(`
+        .veui-invalid .veui-input,
+        .veui-invalid .veui-radio-button-group,
+        .veui-invalid .veui-check-button-group,
+        .veui-invalid .veui-select,
+        .veui-invalid .veui-input,
+        .veui-invalid .veui-input
+      `)
+      if (target) {
+        target.scrollIntoView()
+        target.__vue__.focus && target.__vue__.focus()
+      }
+    },
+    handleSubmit (data) {
+      this.tryCount++
+
+      localStorage.setItem()
+
+      if (window._hmt) {
+        window._hmt.push([
+          '_trackCustomEvent',
+          'form_exp_submit',
+          {
+            form_exp_try_count: this.tryCount,
+            form_exp_role: data.role,
+            form_exp_gender: data.gender,
+            form_exp_total_time: Date.now() - this.startTime,
+            form_exp_name: data.name,
+            form_exp_compact: 'compact' in this.$route.query
+          }
+        ])
+      }
     }
   }
 }
