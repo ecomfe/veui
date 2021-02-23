@@ -7,7 +7,10 @@
   :ui="realUi"
 >
   <h3 :class="$c('filter-panel-title')">
-    <slot name="head">
+    <slot
+      name="head"
+      v-bind="slotProps"
+    >
       {{ title }}
     </slot>
   </h3>
@@ -26,16 +29,16 @@
       ref="main"
       :class="$c('filter-panel-content-main')"
     >
-      <slot
-        :items="filteredDatasource"
-        :keyword="keyword"
-      />
+      <slot v-bind="slotProps"/>
     </div>
     <div
       v-else
       :class="$c('filter-panel-no-data')"
     >
-      <slot name="no-data">
+      <slot
+        name="no-data"
+        v-bind="slotProps"
+      >
         {{ t('noData') }}
       </slot>
     </div>
@@ -96,6 +99,12 @@ export default {
       return !this.datasource.some(
         item => item.children && item.children.length > 0
       )
+    },
+    slotProps () {
+      return {
+        items: this.filteredDatasource,
+        keyword: this.keyword
+      }
     }
   },
   watch: {

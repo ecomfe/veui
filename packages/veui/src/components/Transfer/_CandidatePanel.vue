@@ -8,16 +8,22 @@
   :disabled="!isSelectable"
   :ui="ui"
 >
-  <template slot="head">
-    <slot name="head">
-      <slot name="title">
+  <template #head="{ items }">
+    <slot
+      name="head"
+      v-bind="slotApi"
+    >
+      <slot
+        name="title"
+        v-bind="slotApi"
+      >
         {{ t('@transfer.available') }}
       </slot>
       <veui-button
         :ui="uiParts.selectAll"
         :class="$c('transfer-select-all')"
         :disabled="!isSelectable"
-        @click="selectAll"
+        @click="selectAll(items)"
       >
         {{ t('@transfer.selectAll') }}
       </veui-button>
@@ -29,6 +35,8 @@
       ref="tree"
       :datasource="items"
       :expanded.sync="expanded"
+      :merge-checked="mergeChecked"
+      :include-indeterminate="includeIndeterminate"
       checkable
       :checked="realSelected"
       :ui="uiParts.tree"
@@ -70,7 +78,9 @@ import Tree from '../Tree'
 import Button from '../Button'
 import prefix from '../../mixins/prefix'
 import i18n from '../../mixins/i18n'
+import useTree from '../../mixins/tree'
 import useControllable from '../../mixins/controllable'
+import { getLeaves } from '../../utils/datasource'
 
 export default {
   name: 'veui-candidate-panel',
@@ -79,13 +89,17 @@ export default {
     'veui-tree': Tree,
     'veui-button': Button
   },
-  mixins: [prefix, i18n, useControllable({
-    prop: 'selected',
-    event: 'select',
-    get (val) {
-      return val || []
-    }
-  })],
+  mixins: [
+    prefix,
+    i18n,
+    useControllable({
+      prop: 'selected',
+      event: 'select',
+      get (val) {
+        return val || []
+      }
+    })
+  ],
   props: {
     datasource: Array,
     searchable: Boolean,
@@ -93,6 +107,7 @@ export default {
     placeholder: String,
     isSelectable: Boolean,
     selected: Array,
+    ...useTree().props,
     uiParts: Object,
     ui: String
   },
@@ -101,12 +116,22 @@ export default {
       expanded: []
     }
   },
+  computed: {
+    leavesCount () {
+      return getLeaves(this.datasource).length
+    },
+    slotApi () {
+      return {
+        count: this.leavesCount
+      }
+    }
+  },
   methods: {
     realFilter (keyword, option) {
       return this.filter('candidate', keyword, option, this.datasource)
     },
-    selectAll () {
-      this.$emit('selectall')
+    selectAll (items) {
+      this.$emit('selectall', items)
     },
     select (...args) {
       this.$emit('select', ...args)

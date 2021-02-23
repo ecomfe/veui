@@ -26,7 +26,6 @@
         :depth="depth + 1"
         :children-key="childrenKey"
         :expanded="expanded"
-        :matches="matches"
         :parents="[...parents, item]"
         :group-class="groupClass"
         :class="realGroupClass"
@@ -86,12 +85,6 @@ export default {
         return []
       }
     },
-    matches: {
-      type: Function,
-      default (val, item) {
-        return val === item.value
-      }
-    },
     groupClass: {
       type: [String, Object]
     }
@@ -103,8 +96,15 @@ export default {
   },
   methods: {
     isExpanded (item) {
-      return (this.expanded || []).some(i => this.matches(i, item))
+      // 先用 name 再用 value 来控制 expanded（父节点没有 value 的情况也能展开）
+      return includesItem(this.expanded, item)
     }
   }
+}
+
+export function includesItem (collection, { name, value }) {
+  return (collection || []).some(i => {
+    return name != null ? i === name : value != null ? i === value : false
+  })
 }
 </script>

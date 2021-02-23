@@ -135,6 +135,35 @@ let datasource = [
   }
 ]
 
+let dsForStrategy = [
+  {
+    label: 'Infused',
+    value: 'infused',
+    children: [
+      {
+        label: 'Brewed',
+        value: 'brewed',
+        children: [
+          {
+            label: 'Drip brewed',
+            value: 'drip-brewed'
+          },
+          {
+            label: 'Immersion brewed',
+            value: 'immersion-brewed'
+          }
+        ]
+      },
+      {
+        label: 'French press',
+        value: 'french-press'
+      }
+    ]
+  }
+]
+
+let dsWithoutGroupValue = omitGroupValue(dsForStrategy, ['infused'])
+
 describe('components/Tree', () => {
   it('should render datasource correctly when `expanded` was not set', () => {
     let wrapper = mount(Tree, {
@@ -522,12 +551,12 @@ describe('components/Tree', () => {
     // select middle node 'brewed'
     select(1)
     await wrapper.vm.$nextTick()
-    expect(data.checked).to.deep.equal([
+    unorderedEqual(data.checked, [
+      'brewed',
       'drip-brewed',
       'filtered',
       'pour-over',
-      'immersion-brewed',
-      'brewed'
+      'immersion-brewed'
     ])
     expect(checkboxes.at(0).props('indeterminate')).to.equal(true)
     expect(checkboxes.at(1).props('checked')).to.equal(true)
@@ -539,12 +568,12 @@ describe('components/Tree', () => {
     // select leaf 'turkish' under another middle node 'boiled'
     select(10)
     await wrapper.vm.$nextTick()
-    expect(data.checked).to.deep.equal([
+    unorderedEqual(data.checked, [
+      'brewed',
       'drip-brewed',
       'filtered',
       'pour-over',
       'immersion-brewed',
-      'brewed',
       'turkish'
     ])
 
@@ -610,6 +639,17 @@ describe('components/Tree', () => {
                   {
                     label: 'Cold brew',
                     value: 'cold-brew'
+                  },
+                  {
+                    label: 'Cold Group',
+                    value: 'cold-group',
+                    disabled: true,
+                    children: [
+                      {
+                        label: 'Cold1',
+                        value: 'cold1'
+                      }
+                    ]
                   }
                 ]
               }
@@ -627,17 +667,17 @@ describe('components/Tree', () => {
       }
     )
 
+    let { vm } = wrapper
     let checkboxes = wrapper.findAll(Checkbox)
 
     // select 'drip-brewed'
     select(2)
-    await wrapper.vm.$nextTick()
+    await vm.$nextTick()
     // select 'immersion-brewed'
     select(5)
-    await wrapper.vm.$nextTick()
+    await vm.$nextTick()
 
-    let data = wrapper.vm.$data
-    expect(data.checked).to.deep.equal([
+    unorderedEqual(vm.checked, [
       'drip-brewed',
       'filtered',
       'immersion-brewed',
@@ -651,13 +691,527 @@ describe('components/Tree', () => {
 
     // remove children of brewed
     select(1)
-    await wrapper.vm.$nextTick()
+    await vm.$nextTick()
 
-    expect(data.checked).to.deep.equal(['filtered', 'cold-brew'])
+    expect(vm.checked).to.deep.equal(['filtered', 'cold-brew'])
     expect(checkboxes.at(0).props('indeterminate')).to.equal(true)
     expect(checkboxes.at(0).props('checked')).to.equal(false)
     expect(checkboxes.at(1).props('indeterminate')).to.equal(true)
     expect(checkboxes.at(1).props('checked')).to.equal(false)
+
+    // can't select leafs of disabled parent
+    select(checkboxes.length - 1)
+    await vm.$nextTick()
+    expect(vm.checked).to.deep.equal(['filtered', 'cold-brew'])
+
+    // 全选不能选中 disabled 的
+    vm.checked = null
+    await vm.$nextTick()
+    select(0)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, [
+      'drip-brewed',
+      'immersion-brewed',
+      'french-press',
+      'cold-brew'
+    ])
+
+    wrapper.destroy()
+
+    function select (index) {
+      checkboxes
+        .at(index)
+        .find('input[type="checkbox"]')
+        .trigger('change')
+    }
+  })
+
+  it('should handle downwards mergeChecked correctly.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tree': Tree
+        },
+        data () {
+          return {
+            datasource: dsForStrategy,
+            checked: [],
+            expanded: ['infused', 'brewed']
+          }
+        },
+        template:
+          '<veui-tree :datasource="datasource" v-model="checked" merge-checked="downwards" :expanded.sync="expanded" checkable/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let checkboxes = wrapper.findAll(Checkbox)
+    let { vm } = wrapper
+    // 全选
+    select(0)
+    await vm.$nextTick()
+    expect(vm.checked).to.deep.equal([
+      'drip-brewed',
+      'immersion-brewed',
+      'french-press'
+    ])
+    // 取消
+    select(0)
+    await vm.$nextTick()
+    expect(vm.checked.length).to.equal(0)
+
+    select(1)
+    await vm.$nextTick()
+    expect(vm.checked).to.deep.equal(['drip-brewed', 'immersion-brewed'])
+
+    select(2)
+    await vm.$nextTick()
+    expect(vm.checked).to.deep.equal(['immersion-brewed'])
+
+    select(1)
+    await vm.$nextTick()
+    expect(vm.checked.length).to.equal(0)
+
+    // 全选
+    select(0)
+    await vm.$nextTick()
+    select(1)
+    await vm.$nextTick()
+    expect(vm.checked).to.deep.equal(['french-press'])
+    wrapper.destroy()
+
+    function select (index) {
+      checkboxes
+        .at(index)
+        .find('input[type="checkbox"]')
+        .trigger('change')
+    }
+  })
+
+  it('should handle upwards mergeChecked correctly.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tree': Tree
+        },
+        data () {
+          return {
+            datasource: dsForStrategy,
+            checked: [],
+            expanded: ['infused', 'brewed']
+          }
+        },
+        template:
+          '<veui-tree :datasource="datasource" v-model="checked" merge-checked="upwards" :expanded.sync="expanded" checkable/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let checkboxes = wrapper.findAll(Checkbox)
+    let { vm } = wrapper
+    // 全选
+    select(0)
+    await vm.$nextTick()
+    expect(vm.checked).to.deep.equal(['infused'])
+
+    // 取消全选
+    select(0)
+    await vm.$nextTick()
+    expect(vm.checked.length).to.equal(0)
+
+    // 选中 brewed 组
+    select(1)
+    await vm.$nextTick()
+    expect(vm.checked).to.deep.equal(['brewed'])
+
+    // 取消 brewed 组下 drip-brewed
+    select(2)
+    await vm.$nextTick()
+    expect(vm.checked).to.deep.equal(['immersion-brewed'])
+
+    // 选中最后剩余项
+    select(2)
+    await vm.$nextTick()
+    expect(vm.checked).to.deep.equal(['brewed'])
+    select(4)
+    await vm.$nextTick()
+    expect(vm.checked).to.deep.equal(['infused'])
+
+    // 取消 brewed 组
+    select(1)
+    await vm.$nextTick()
+    expect(vm.checked).to.deep.equal(['french-press'])
+
+    select(1)
+    await vm.$nextTick()
+    expect(vm.checked).to.deep.equal(['infused'])
+    // 取消 brewed 组下 drip-brewed
+    select(2)
+    await vm.$nextTick()
+    expect(vm.checked).to.deep.equal(['immersion-brewed', 'french-press'])
+
+    select(0)
+    await vm.$nextTick()
+    expect(vm.checked.length).to.equal(0)
+
+    wrapper.destroy()
+
+    function select (index) {
+      checkboxes
+        .at(index)
+        .find('input[type="checkbox"]')
+        .trigger('change')
+    }
+  })
+
+  it('should handle keep-all mergeChecked correctly.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tree': Tree
+        },
+        data () {
+          return {
+            datasource: dsForStrategy,
+            checked: [],
+            expanded: ['infused', 'brewed']
+          }
+        },
+        template:
+          '<veui-tree :datasource="datasource" v-model="checked" merge-checked="keep-all" :expanded.sync="expanded" checkable/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let checkboxes = wrapper.findAll(Checkbox)
+    let { vm } = wrapper
+    // 全选
+    select(0)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, [
+      'drip-brewed',
+      'immersion-brewed',
+      'brewed',
+      'french-press',
+      'infused'
+    ])
+
+    // 取消全选
+    select(0)
+    await vm.$nextTick()
+    expect(vm.checked.length).to.equal(0)
+
+    // 选中 brewed 组
+    select(1)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['drip-brewed', 'immersion-brewed', 'brewed'])
+
+    // 取消 brewed 组下 drip-brewed
+    select(2)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['immersion-brewed'])
+
+    // 取消 brewed 组下 immersion-brewed
+    select(3)
+    await vm.$nextTick()
+    expect(vm.checked.length).to.equal(0)
+
+    // 选中 french-press
+    select(4)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['french-press'])
+
+    select(3)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['french-press', 'immersion-brewed'])
+
+    select(2)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, [
+      'drip-brewed',
+      'immersion-brewed',
+      'brewed',
+      'french-press',
+      'infused'
+    ])
+
+    select(4)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['drip-brewed', 'immersion-brewed', 'brewed'])
+
+    select(1)
+    await vm.$nextTick()
+    expect(vm.checked.length).to.equal(0)
+
+    wrapper.destroy()
+
+    function select (index) {
+      checkboxes
+        .at(index)
+        .find('input[type="checkbox"]')
+        .trigger('change')
+    }
+  })
+
+  it('should handle include-indeterminate correctly.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tree': Tree
+        },
+        data () {
+          return {
+            datasource: dsForStrategy,
+            checked: [],
+            expanded: ['infused', 'brewed']
+          }
+        },
+        template:
+          '<veui-tree :datasource="datasource" v-model="checked" include-indeterminate :expanded.sync="expanded" checkable/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let checkboxes = wrapper.findAll(Checkbox)
+    let { vm } = wrapper
+    // 全选
+    select(0)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, [
+      'drip-brewed',
+      'immersion-brewed',
+      'brewed',
+      'french-press',
+      'infused'
+    ])
+
+    // 取消全选
+    select(0)
+    await vm.$nextTick()
+    expect(vm.checked.length).to.equal(0)
+
+    // 选中 brewed 组
+    select(1)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, [
+      'drip-brewed',
+      'immersion-brewed',
+      'brewed',
+      'infused'
+    ])
+
+    // 取消 brewed 组下 drip-brewed
+    select(2)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['immersion-brewed', 'brewed', 'infused'])
+
+    // 取消 brewed 组下 immersion-brewed
+    select(3)
+    await vm.$nextTick()
+    expect(vm.checked.length).to.equal(0)
+
+    // 选中 french-press
+    select(4)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['french-press', 'infused'])
+
+    select(3)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, [
+      'french-press',
+      'immersion-brewed',
+      'brewed',
+      'infused'
+    ])
+
+    select(2)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, [
+      'drip-brewed',
+      'immersion-brewed',
+      'brewed',
+      'french-press',
+      'infused'
+    ])
+
+    select(4)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, [
+      'drip-brewed',
+      'immersion-brewed',
+      'brewed',
+      'infused'
+    ])
+
+    select(1)
+    await vm.$nextTick()
+    expect(vm.checked.length).to.equal(0)
+
+    wrapper.destroy()
+
+    function select (index) {
+      checkboxes
+        .at(index)
+        .find('input[type="checkbox"]')
+        .trigger('change')
+    }
+  })
+
+  it('should handle groups without value correctly.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tree': Tree
+        },
+        data () {
+          return {
+            datasource: dsWithoutGroupValue,
+            checked: [],
+            expanded: ['infused', 'brewed']
+          }
+        },
+        template:
+          '<veui-tree :datasource="datasource" v-model="checked" merge-checked="upwards" :expanded.sync="expanded" checkable/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let checkboxes = wrapper.findAll(Checkbox)
+    let { vm } = wrapper
+    // 全选
+    select(0)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['infused'])
+
+    // 取消全选
+    select(0)
+    await vm.$nextTick()
+    expect(vm.checked.length).to.equal(0)
+
+    // 选中 brewed 组
+    select(1)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['drip-brewed', 'immersion-brewed'])
+
+    // 取消 brewed 组下 drip-brewed
+    select(2)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['immersion-brewed'])
+
+    // 取消 brewed 组下 immersion-brewed
+    select(3)
+    await vm.$nextTick()
+    expect(vm.checked.length).to.equal(0)
+
+    // 选中 french-press
+    select(4)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['french-press'])
+
+    // 全选之后再选中一个叶子，无 value 的 group 的子还要都是选中的
+    vm.checked = ['infused']
+    await vm.$nextTick()
+    select(4)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['drip-brewed', 'immersion-brewed'])
+    select(4)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['infused'])
+    select(2)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['immersion-brewed', 'french-press'])
+
+    wrapper.destroy()
+
+    function select (index) {
+      checkboxes
+        .at(index)
+        .find('input[type="checkbox"]')
+        .trigger('change')
+    }
+  })
+
+  it('should handle imcomplete data between keep-all, upwards and downwards strategies correctly.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tree': Tree
+        },
+        data () {
+          return {
+            datasource: dsForStrategy,
+            checked: [],
+            expanded: ['infused', 'brewed'],
+            mergeChecked: 'upwards'
+          }
+        },
+        template:
+          '<veui-tree :datasource="datasource" v-model="checked" :merge-checked="mergeChecked" :expanded.sync="expanded" checkable/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let checkboxes = wrapper.findAll(Checkbox)
+    let { vm } = wrapper
+    // 全选
+    select(0)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['infused'])
+
+    // 在 all 策略下的全选（但此时 value 是 infused）下取消 french-press 也能正确同步
+    vm.mergeChecked = 'keep-all'
+    await vm.$nextTick()
+    select(4)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['brewed', 'drip-brewed', 'immersion-brewed'])
+
+    // 在 leaf 策略下的再选中 french-press 能正确同步
+    vm.mergeChecked = 'downwards'
+    await vm.$nextTick()
+    select(4)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, [
+      'drip-brewed',
+      'immersion-brewed',
+      'french-press'
+    ])
+    vm.checked = ['brewed']
+    await vm.$nextTick()
+    select(4)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, [
+      'drip-brewed',
+      'immersion-brewed',
+      'french-press'
+    ])
+
+    vm.mergeChecked = 'upwards'
+    await vm.$nextTick()
+    select(4)
+    await vm.$nextTick()
+    unorderedEqual(vm.checked, ['brewed'])
+    vm.checked = ['drip-brewed', 'immersion-brewed']
+    await vm.$nextTick()
+    select(4)
+    unorderedEqual(vm.checked, ['infused'])
 
     wrapper.destroy()
 
@@ -669,3 +1223,24 @@ describe('components/Tree', () => {
     }
   })
 })
+
+function unorderedEqual (a, b) {
+  expect(a)
+    .to.have.members(b)
+    .and.to.have.lengthOf(b.length)
+}
+
+function omitGroupValue (original, except) {
+  except = except || []
+  return original.map(i => {
+    i = { ...i }
+    if (i.children && i.children.length) {
+      if (except.indexOf(i.value) === -1) {
+        i.name = i.value
+        delete i.value
+      }
+      i.children = omitGroupValue(i.children)
+    }
+    return i
+  })
+}

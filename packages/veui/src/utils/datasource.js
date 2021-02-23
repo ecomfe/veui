@@ -1,7 +1,12 @@
-import { find as _find } from 'lodash'
+import { find as _find, isPlainObject } from 'lodash'
 
-export function walk (array, callback, alias = 'children') {
-  _walk(array, callback, { depth: 0 }, alias)
+export function walk (array, callback, alias = 'children', context = {}) {
+  return _walk(
+    array,
+    callback,
+    { ...context, depth: 0, parents: [], parentIndices: [] },
+    alias
+  )
 }
 
 function _walk (array, callback, context, alias = 'children') {
@@ -29,25 +34,43 @@ function _walk (array, callback, context, alias = 'children') {
     }
   }
 
-  let { depth } = context
+  let { depth, parents, parentIndices } = context
+  let childrenResult = []
   array.forEach((item, index) => {
-    let ctx = { ...context, index, depth }
+    let selfContext = { ...context, index }
+    let skipChildren = false
+    let childrenContext = selfContext
 
     if (typeof enter === 'function') {
-      if (enter(item, ctx) === false) {
-        return
+      let result = enter(item, selfContext)
+      if (result === false) {
+        skipChildren = true
+      } else if (isPlainObject(result)) {
+        // 支持父给子传递上下文
+        childrenContext = result
       }
     }
 
     let children = getChildrenByAlias(item, alias)
-    if (children) {
-      _walk(children, callback, { ...ctx, depth: depth + 1 }, alias)
+    if (children && !skipChildren) {
+      selfContext.childrenResult = _walk(
+        children,
+        callback,
+        {
+          ...childrenContext,
+          parents: [...parents, item],
+          parentIndices: [...parentIndices, index],
+          depth: depth + 1
+        },
+        alias
+      )
     }
 
     if (typeof exit === 'function') {
-      exit(item, ctx)
+      childrenResult.push(exit(item, selfContext))
     }
   })
+  return childrenResult
 }
 
 export function find (array, predicate, alias = 'children') {
@@ -82,4 +105,65 @@ function getChildrenByAlias (obj, alias) {
   })
 
   return key ? obj[key] : null
+}
+
+export function mapDatasource (datasource, callback) {
+  return walk(datasource, {
+    exit: (item, context) => {
+      return {
+        ...callback(item, context),
+        ...(hasChildren(item) ? { children: context.childrenResult } : {})
+      }
+    }
+  })
+}
+
+export function hasChildren (item, field = 'children') {
+  return !!item[field] && item[field].length !== 0
+}
+
+export function getLeaves (root) {
+  return getDescendants(root, descendant => {
+    return {
+      keep: hasChildren(descendant) ? false : 'value'
+    }
+  })
+}
+
+export function getGroupDescendants (root) {
+  return getDescendants(root, descendant => {
+    return {
+      keep: hasChildren(descendant) ? 'value' : false
+    }
+  })
+}
+
+export function getEnabledDescendants (root) {
+  return getDescendants(root, ({ disabled }) => {
+    return {
+      keep: disabled ? false : 'value',
+      skipChildren: disabled
+    }
+  })
+}
+
+/**
+ * 获取后代节点的值
+ * @param {object} root 父节点
+ * @param {Function} visit 控制如何获取后代节点的值，签名： (root, context) => ({keep, skipChildren})
+ *                   keep 为 false 表示不获取该节点的值，为 string 表示值对应的字段名
+ *                   skipChildren 为 Boolean，表示是否跳过该节点之下的后代
+ * @return {Array} 获取到的后代节点的值
+ */
+export function getDescendants (root, visit) {
+  let result = []
+  walk(root, (child, context) => {
+    let { keep = 'value', skipChildren } =
+      typeof visit === 'function' ? visit(child, context) : {}
+    if (keep && child[keep] !== undefined) {
+      result.push(child[keep])
+    }
+    return !skipChildren
+  })
+  return result
 }

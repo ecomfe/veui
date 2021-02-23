@@ -37,34 +37,67 @@
   </section>
   <section>
     <h4>Checkable & Selectable item</h4>
+    checkStrategy：
+    <veui-radio-group
+      v-model="strategy"
+      class="check-strategy"
+      :items="strategies"
+    />
     <veui-tree
-      v-model="checked"
+      v-model="checked2"
       :datasource="coffees"
       :expanded.sync="expanded2"
       :selected.sync="selected"
+      :merge-checked="
+        strategy === 'include-indeterminate' ? 'keep-all' : strategy
+      "
+      :include-indeterminate="strategy === 'include-indeterminate'"
       checkable
       selectable
-      include-indeterminate
     />
   </section>
   <section>
     <h4>Checked items</h4>
-    {{ checked }}
+    {{ checked2 }}
   </section>
   <section>
     <h4>Selected items</h4>
     {{ selected }}
   </section>
+  <section>
+    <h4>Checkable & Selectable item(存在父节点无value)</h4>
+    mergeChecked：
+    <veui-radio-group
+      v-model="strategy3"
+      class="check-strategy"
+      :items="strategies"
+    />
+    <veui-tree
+      v-model="checked3"
+      :datasource="coffeesWithoutGroupValue"
+      :expanded.sync="expanded3"
+      :selected.sync="selected3"
+      :merge-checked="strategy3"
+      checkable
+      selectable
+    />
+    <h4>Checked items</h4>
+    {{ checked3 }}
+    <h4>Selected items</h4>
+    {{ selected3 }}
+  </section>
 </article>
 </template>
 
 <script>
-import { Tree } from 'veui'
+import { Tree, RadioGroup } from 'veui'
+import { omit } from 'lodash'
 
 export default {
   name: 'tree',
   components: {
-    'veui-tree': Tree
+    'veui-tree': Tree,
+    'veui-radio-group': RadioGroup
   },
   data () {
     return {
@@ -72,6 +105,18 @@ export default {
       expanded2: [],
       checked: [],
       selected: null,
+      checked2: null,
+      strategy: 'keep-all',
+      expanded3: [],
+      selected3: null,
+      checked3: null,
+      strategy3: 'keep-all',
+      strategies: [
+        { label: 'keep-all', value: 'keep-all' },
+        { label: 'downwards', value: 'downwards' },
+        { label: 'upwards', value: 'upwards' },
+        { label: 'include-indeterminate', value: 'include-indeterminate' }
+      ],
       coffees: [
         {
           label: 'Infused',
@@ -190,7 +235,17 @@ export default {
             },
             {
               label: 'Cappuccino',
-              value: 'cappuccino'
+              value: 'cappuccino',
+              children: [
+                {
+                  label: 'Cap1',
+                  value: 'cap1'
+                },
+                {
+                  label: 'Cap2',
+                  value: 'cap2'
+                }
+              ]
             },
             {
               label: 'White coffee',
@@ -200,6 +255,38 @@ export default {
         }
       ]
     }
+  },
+  computed: {
+    coffeesWithoutGroupValue () {
+      return this.omitGroupValue(this.coffees)
+    }
+  },
+  methods: {
+    omitGroupValue (original) {
+      return original.map(i => {
+        if (i.children && i.children.length) {
+          if (i.value === 'milk-coffee') {
+            i = {
+              ...i,
+              label: `${i.label}(有value)`
+            }
+          } else if (i.value === 'cappuccino') {
+            i = {
+              ...omit(i, 'value'),
+              label: `${i.label}(无value无name)`
+            }
+          } else {
+            i = {
+              ...omit(i, 'value'),
+              label: `${i.label}(无value)`,
+              name: i.value
+            }
+          }
+          i.children = this.omitGroupValue(i.children)
+        }
+        return i
+      })
+    }
   }
 }
 </script>
@@ -207,5 +294,8 @@ export default {
 <style scoped>
 p {
   margin: 30px;
+}
+.check-strategy {
+  display: inline-flex;
 }
 </style>
