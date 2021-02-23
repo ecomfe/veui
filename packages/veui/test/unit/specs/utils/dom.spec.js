@@ -3,7 +3,9 @@ import {
   toggleClass,
   scrollToAlign,
   scrollTo,
-  getElementScrollbarWidth
+  getElementScrollbarWidth,
+  isInsideTransformedContainer,
+  addOnceEventListener
 } from '@/utils/dom'
 import { wait } from '../../../utils'
 
@@ -95,6 +97,35 @@ describe('utils/dom', () => {
     expect(el.scrollTop, 'scrollTo top 100px').to.be.equal(100)
     expect(el.scrollLeft, 'scrollTo left 100px').to.be.equal(100)
     document.body.removeChild(el)
+  })
+
+  it('should check is an element inside a transformed container correctly', async () => {
+    let el = document.createElement('div')
+    el.innerHTML = `<div>
+      <div class="a" style="transform: translate(100px, 50px)">
+        <div class="b">1111</div>
+      </div>
+    </div>`
+    document.body.appendChild(el)
+
+    expect(isInsideTransformedContainer(el.querySelector('.a'))).to.equal(false)
+    expect(isInsideTransformedContainer(el.querySelector('.b'))).to.equal(true)
+
+    document.body.removeChild(el)
+  })
+
+  it('should callback only once after event trigger', async () => {
+    let el = document.createElement('button')
+    let count = 0
+    addOnceEventListener(el, 'click', () => count++)
+    el.click()
+    el.click()
+    el.click()
+    expect(count).to.equal(1)
+
+    addOnceEventListener(el, 'click', () => count++)()
+    el.click()
+    expect(count).to.equal(1)
   })
 })
 

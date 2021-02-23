@@ -64,9 +64,7 @@ export default {
   },
   computed: {
     realOpen () {
-      return (
-        this.open && (this.inline || this.local || this.zIndex !== null)
-      )
+      return this.open && (this.inline || this.local || this.zIndex !== null)
     },
     realOverlayClass () {
       return mergeClasses(this.overlayClass, config.get('overlay.overlayClass'))
@@ -208,7 +206,7 @@ export default {
     findParentOverlayId () {
       let cur = this.$parent
       while (cur) {
-        if (cur && this.isOverlay(cur)) {
+        if (cur && isType(cur, 'overlay') && cur.overlayNode) {
           return cur.overlayNode.id
         }
         cur = cur.$parent
@@ -281,10 +279,6 @@ export default {
       } else {
         this.targetEl = null
       }
-    },
-
-    isOverlay (componentInstance) {
-      return isType(componentInstance, 'overlay')
     },
 
     focus () {

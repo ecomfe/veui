@@ -5,6 +5,12 @@
   align-items: center;
   display: inline-flex;
   font-size: @dls-loading-font-size-m;
+  .veui-transition(opacity);
+
+  &-fade-enter,
+  &-fade-leave-to {
+    opacity: 0;
+  }
 
   &[ui~="s"] {
     font-size: @dls-loading-font-size-s;

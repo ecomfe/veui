@@ -10,7 +10,12 @@
 >
   <slot
     name="trigger"
-    v-bind="{ props: triggerProps, handlers: triggerHandlers }"
+    v-bind="{
+      attrs: triggerAttrs,
+      handlers: triggerHandlers,
+      expanded: realExpanded,
+      toggle: toggleExpanded
+    }"
   >
     <veui-button
       v-if="split"
@@ -29,7 +34,7 @@
     <veui-button
       ref="button"
       :class="$c('dropdown-button')"
-      v-bind="triggerProps"
+      v-bind="triggerAttrs"
       v-on="triggerHandlers"
     >
       <span
@@ -257,7 +262,7 @@ export default {
         keydown: this.handleTriggerKeydown
       }
     },
-    triggerProps () {
+    triggerAttrs () {
       return {
         disabled: this.disabled,
         'aria-haspopup': 'menu',
@@ -267,6 +272,13 @@ export default {
     },
     isSearching () {
       return this.searchable && this.keyword
+    }
+  },
+  watch: {
+    realExpanded (val) {
+      if (val) {
+        this.keyword = ''
+      }
     }
   },
   methods: {
@@ -286,15 +298,15 @@ export default {
           break
       }
     },
+    toggleExpanded (force) {
+      this.commit('expanded', force == null ? !this.realExpanded : !!force)
+    },
     handleToggle () {
       let mode = MODE_MAP[this.trigger]
       if (mode === 'toggle') {
-        this.commit('expanded', !this.realExpanded)
+        this.toggleExpanded()
       } else if (mode === 'expand') {
-        this.commit('expanded', true)
-      }
-      if (this.realExpanded) {
-        this.keyword = ''
+        this.toggleExpanded(true)
       }
     },
     handleSelect (value) {

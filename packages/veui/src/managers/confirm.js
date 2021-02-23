@@ -43,8 +43,12 @@ export class ConfirmManager extends SimpleDialog {
     let cancel = isFunction(options.cancel) ? options.cancel : noop
     return new Promise(resolve => {
       let checkRemove = isOk => {
-        component.loading = true
-        Promise.resolve(isOk ? ok() : cancel()).then(returnVal => {
+        let result = isOk ? ok() : cancel()
+        if (result && isFunction(result.then)) {
+          // 如果不是异步就不需要显示 loading
+          component.loading = true
+        }
+        Promise.resolve(result).then(returnVal => {
           component.loading = false
           if (returnVal !== false) {
             component.open = false

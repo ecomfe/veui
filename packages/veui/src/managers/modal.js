@@ -1,21 +1,5 @@
 import { getScrollbarWidth } from '../utils/dom'
-import config from './config'
 
-/**
- * Modal locking supports two modes, which will adopt different strategies when
- * the viewport is scrollable, to prevent flickering content position:
- *
- * - safe
- * Add extra padding to <html>, but contents with position: fixed/absolute may still
- * experience flickering.
- *
- * - advanced
- * Make <body> position: fixed and fullscreen, and make the viewport's native scrollbar
- * still visible. May cause contents with position: absolute.
- */
-config.defaults({
-  'modal.scrollLockMode': 'safe'
-})
 export class ModalManager {
   count = 0
 
@@ -100,42 +84,19 @@ function lockScroll (trigger, target = trigger) {
   let isRoot = target === document.documentElement
 
   if (overflowY !== 'hidden' && (isRoot || overflowY !== 'visible')) {
-    let mode = config.get('modal.scrollLockMode')
+    let targetStyle = target.getAttribute('style') || ''
+    let { paddingRight } = getComputedStyle(target)
+    let scrollbarWidth = getScrollbarWidth()
 
-    if (isRoot && mode === 'advanced') {
-      let { body } = document
-      let html = target
-      let bodyStyle = body.getAttribute('style') || ''
-      body.setAttribute(
-        'style',
-        `${bodyStyle};position:fixed;top:0;right:0;bottom:0;left:0`
-      )
+    let newPaddingRight = `${parseInt(paddingRight, 10) + scrollbarWidth}px`
+    target.setAttribute(
+      'style',
+      `${targetStyle};padding-right:${newPaddingRight};overflow-y:hidden`
+    )
 
-      let htmlStyle = html.getAttribute('style') || ''
-      html.setAttribute(
-        'style',
-        `${htmlStyle};overflow-x:hidden;overflow-y:scroll`
-      )
-
-      return () => {
-        body.setAttribute('style', bodyStyle)
-        html.setAttribute('style', htmlStyle)
-      }
-    } else {
-      let targetStyle = target.getAttribute('style') || ''
-      let { paddingRight } = getComputedStyle(target)
-      let scrollbarWidth = getScrollbarWidth()
-
-      let newPaddingRight = `${parseInt(paddingRight, 10) + scrollbarWidth}px`
-      target.setAttribute(
-        'style',
-        `${targetStyle};padding-right:${newPaddingRight};overflow-y:hidden`
-      )
-
-      return () => {
-        trigger.setAttribute('style', triggerStyle)
-        target.setAttribute('style', targetStyle)
-      }
+    return () => {
+      trigger.setAttribute('style', triggerStyle)
+      target.setAttribute('style', targetStyle)
     }
   }
 

@@ -32,11 +32,19 @@
   <section>
     <veui-link
       to="https://www.baidu.com/"
-      native
       target="_blank"
       rel="next"
     >Baidu.com</veui-link>
     &larr; <code>native</code> &amp; <code>target="_blank"</code>
+  </section>
+  <section>
+    <veui-link
+      to="https://www.baidu.com/"
+      native
+      target="_blank"
+      rel="next"
+    >Baidu.com</veui-link>
+    &larr; absolute to
   </section>
   <section>
     <veui-link

@@ -1,161 +1,315 @@
+import { pick, omit, identity } from 'lodash'
 import { mount } from '@vue/test-utils'
 import Uploader from '@/components/Uploader'
 import Dropdown from '@/components/Dropdown'
+import Lightbox from '@/components/Lightbox'
 import { wait } from '../../../utils'
+import { UploaderFile } from '@/components/Uploader/_helper'
+import { addOnceEventListener } from '@/utils/dom'
+import { createFileList } from '@/utils/file'
 import 'veui-theme-dls-icons/check'
 import 'veui-theme-dls-icons/crop'
 import 'veui-theme-dls-icons/cut'
 
-describe('components/Uploader', () => {
-  it('should handle value prop with `null` value.', () => {
+describe('components/Uploader', function () {
+  it('should add files to list after choosing', async function () {
     let wrapper = mount(Uploader, {
+      // 解决 Cannot read property '$scopedSlots' of undefined 的问题
+      sync: false,
+      attachToDocument: true,
       propsData: {
         value: null,
-        action: '/upload'
+        action: '/upload/xhr',
+        autoupload: false,
+        convertResponse: identity
       }
     })
 
-    expect(wrapper.vm.$data.fileList).to.eql([])
-    wrapper.destroy()
-  })
+    let promise = waitForEvent(wrapper.vm, 'statuschange')
+    wrapper.vm.chooseFiles()
+    wrapper.vm.chooseFiles()
+    wrapper.vm.chooseFiles() // only last choose active
 
-  it('should handle value of object type correctly.', () => {
-    let wrapper = mount(Uploader, {
-      propsData: {
-        value: { name: 'test.jpg', src: '/test.jpg' },
-        action: '/upload'
-      }
-    })
-
-    expect(wrapper.vm.$data.fileList).to.eql([
-      { name: 'test.jpg', src: '/test.jpg', status: 'success', type: 'image' }
-    ])
-    wrapper.destroy()
-  })
-
-  it('should transparently pass-through attrs to the <input> element.', async () => {
-    let wrapper = mount(Uploader, {
-      propsData: {
-        action: '/upload',
-        name: 'filedata',
-        accept: 'jpg,jpeg,png'
-      }
-    })
-
+    let mockFiles = [
+      createFile('力大无穷.png', 'image/png', 128 * 1024),
+      createFile('千里眼，顺风耳.png', 'image/png', 128 * 1024)
+    ]
     let input = wrapper.find('input[type="file"]')
-    expect(input.attributes('name')).to.equal('filedata')
-    expect(input.attributes('accept')).to.equal('jpg,jpeg,png')
+    input.element.files = createFileList(mockFiles)
+    input.trigger('change')
+
+    await promise
+
+    expect(wrapper.vm.fileList.length).to.equal(2)
+    expect(wrapper.vm.fileList[0].native).to.equal(mockFiles[0])
+    expect(wrapper.vm.fileList[1].native).to.equal(mockFiles[1])
+
     wrapper.destroy()
   })
 
-  it('should set action to form correctly when mode is iframe.', async () => {
+  it('should handle value prop with `null` value.', async function () {
     let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
       propsData: {
-        action: '/upload',
-        requestMode: 'iframe'
+        maxCount: 3,
+        value: null,
+        action: '/upload/xhr?force=success&latency=0'
+      }
+    })
+    expect(wrapper.vm.$data.fileList).to.eql([])
+
+    let mockFile = createFile('葫芦娃.png', 'image/png', 128 * 1024)
+    let promise = waitForEvent(wrapper.vm, 'success')
+    wrapper.vm.addFiles([mockFile])
+    await promise
+
+    wrapper.vm.prune()
+    wrapper.setProps({ maxCount: 1 })
+    await wait(0)
+    promise = waitForEvent(wrapper.vm, 'success')
+    wrapper.vm.addFiles([mockFile])
+    await promise
+
+    wrapper.vm.prune()
+    wrapper.setProps({ maxCount: 1, multiple: true })
+    await wait(0)
+    promise = waitForEvent(wrapper.vm, 'success')
+    wrapper.vm.addFiles([mockFile])
+    await promise
+
+    let changes = wrapper
+      .emittedByOrder()
+      .filter(e => e.name === 'change')
+      .map(e => e.args[0])
+    expect(changes[0]).to.be.a('array')
+    expect(changes[1]).to.eql([])
+    expect(changes[2]).to.be.a('object')
+    expect(changes[3]).to.equal(null)
+    expect(changes[4]).to.be.a('array')
+
+    wrapper.destroy()
+  })
+
+  it('should handle value of object type correctly.', function () {
+    let wrapper = mount(Uploader, {
+      sync: false,
+      propsData: {
+        value: {
+          _key_: 'op[ivxcsda',
+          name: 'test.jpg',
+          src: 'http://example.com/test.jpg'
+        },
+        action: '/upload/xhr',
+        keyField: '_key_'
       }
     })
 
-    wrapper.vm.submit({ name: 'test.jpg' })
-    expect(wrapper.find('form').attributes('action')).to.equal('/upload')
+    let fileList = wrapper.vm.$data.fileList
+    expect(fileList.length).to.equal(1)
 
-    await wrapper.vm.$nextTick()
+    let internalFile = fileList[0]
+    expect(internalFile.key).to.be.equal('op[ivxcsda')
+    expect(internalFile.status).to.equal('success')
+    expect(internalFile.type).to.equal('image')
+    expect(internalFile.name).to.equal('test.jpg')
+    expect(internalFile.src).to.equal('http://example.com/test.jpg')
+
     wrapper.destroy()
   })
 
-  it('should set payload to form correctly when mode is iframe.', async () => {
+  it('should handle external value updating correctly.', async function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
-        action: '/upload',
-        requestMode: 'iframe',
-        payload: {
-          month: 7,
-          day: 1
+        action: '/upload/xhr',
+        attachToDocument: true,
+        value: [
+          {
+            key: 'xxxx',
+            name: '大娃.jpg',
+            src: 'a.jpg'
+          },
+          {
+            key: 'yyyy',
+            name: '二娃.jpg',
+            src: 'b.jpg'
+          },
+          {
+            key: 'zzz',
+            name: '三娃.jpg',
+            src: 'c.jpg'
+          }
+        ]
+      }
+    })
+
+    await wait(0)
+    expect(wrapper.vm.fileList.length, '初始文件个数').to.equal(3)
+
+    // update, replace
+    wrapper.setProps({
+      value: [
+        { name: '水娃.png', src: 'http://example.com/水娃.png' },
+        { name: '火娃.png', src: 'http://example.com/火娃.png' },
+        { key: 'yyyy', name: '二娃.jpg', src: 'http://example.com/二娃.jpg' },
+        { key: 'xxxx', name: '大娃.jpg', src: 'http://example.com/大娃.jpg' }
+      ]
+    })
+    await wait(0)
+    let files = wrapper.vm.fileList.map(file => file.value)
+    expect(files.length, '填充后文件个数').to.equal(4)
+
+    expect(files[0].key, '第一个文件 key').to.be.a('string')
+    expect(files[0].name, '第一个文件 name').to.equal('水娃.png')
+    expect(files[0].src, '第一个文件 src').to.equal(
+      'http://example.com/水娃.png'
+    )
+
+    expect(files[1].key, '第二个文件 key').to.be.a('string')
+    expect(files[1].name, '第二个文件 name').to.equal('火娃.png')
+    expect(files[1].src, '第二个文件 src').to.equal(
+      'http://example.com/火娃.png'
+    )
+
+    expect(files[2].key, '第三个文件 key').to.equal('yyyy')
+    expect(files[2].name, '第三个文件 name').to.equal('二娃.jpg')
+    expect(files[2].src, '第三个文件 src').to.equal(
+      'http://example.com/二娃.jpg'
+    )
+
+    expect(files[3].key, '第四个文件 key').to.equal('xxxx')
+    expect(files[3].name, '第四个文件 name').to.equal('大娃.jpg')
+    expect(files[3].src, '第四个文件 src').to.equal(
+      'http://example.com/大娃.jpg'
+    )
+
+    // delete
+    let file = UploaderFile.fromValue({ name: '七娃.gif' }, { keyField: 'key' })
+    file.isFailure = true
+    wrapper.vm.fileList.splice(1, 0, file)
+    wrapper.setProps({
+      value: [
+        { key: 'xxxx', name: '大娃.jpg', src: 'http://example.com/大娃.jpg' },
+        { name: '六娃.jpg' }
+      ]
+    })
+    await wait(0)
+    expect(wrapper.vm.fileList.length, '删除后文件个数').to.equal(3)
+    expect(wrapper.vm.fileList[0].key).to.equal('xxxx')
+    expect(wrapper.vm.fileList[1].name).to.equal('七娃.gif')
+    expect(wrapper.vm.fileList[2].name).to.equal('六娃.jpg')
+
+    wrapper.destroy()
+  })
+
+  it('should call `afterPick` hook after files are choosed.', async function () {
+    let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
+      propsData: {
+        action: '/upload/xhr',
+        requestMode: 'custom',
+        upload (file, { onload }) {
+          onload({
+            success: true,
+            name: file.name,
+            src: file.jiale
+          })
+        },
+        afterPick (files) {
+          files = files.map(file => {
+            file.jiale = '强力被夹.jpg'
+            return file
+          })
+          return wait(0).then(() => files)
         }
       }
     })
 
-    wrapper.vm.submit({ name: 'test.jpg' })
+    let mockFile = createFile('葫芦娃.png', 'image/png', 128 * 1024)
+    let promise = waitForEvent(wrapper.vm, 'change')
+    wrapper.vm.chooseFiles()
+    let input = wrapper.find('input[type="file"]')
+    input.element.files = createFileList(mockFile)
+    input.trigger('change')
+    await promise
 
-    let form = wrapper.find('form')
+    let values = wrapper.emitted('change')[0][0]
+    expect(values[0].name).to.equal('葫芦娃.png')
+    expect(values[0].src).to.equal('强力被夹.jpg')
 
-    let input = form.findAll('input').at(0)
-    expect({
-      value: input.element.value,
-      name: input.attributes('name')
-    }).to.eql({ value: '7', name: 'month' })
-
-    let input2 = form.findAll('input').at(1)
-    expect({
-      value: input2.element.value,
-      name: input2.attributes('name')
-    }).to.eql({ value: '1', name: 'day' })
-
-    await wrapper.vm.$nextTick()
     wrapper.destroy()
   })
 
-  it('should validate file size correctly.', () => {
+  it('should validate file count/size/type correctly.', async function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
-        action: '/upload',
-        maxSize: 5000
+        action: '/upload/xhr?force=success&latency=0',
+        maxSize: '100kb',
+        maxCount: 1,
+        order: 'desc',
+        type: 'file',
+        accept: 'image/*'
       }
     })
 
-    expect(wrapper.vm.validateSize(6000)).to.equal(false)
+    let mockFile = createFile('葫芦娃.png', 'image/png', 128 * 1024)
 
-    wrapper.setProps({ maxSize: '20mb' })
-    expect(wrapper.vm.validateSize(20 * 1024 * 1024 + 1)).to.equal(false)
-    expect(wrapper.vm.validateSize(20 * 1024 * 1024 - 1)).to.equal(true)
+    // count
+    let promise = waitForEvent(wrapper.vm, 'invalid')
+    wrapper.vm.addFiles([mockFile, mockFile])
+    await promise
 
-    wrapper.setProps({ maxSize: undefined })
-    expect(wrapper.vm.validateSize(10000)).to.equal(true)
+    // size
+    wrapper.vm.prune()
+    promise = waitForEvent(wrapper.vm, 'invalid')
+    wrapper.vm.addFiles([mockFile])
+    await promise
+
+    // type
+    wrapper.vm.prune()
+    wrapper.setProps({ accept: '.xlsx,.pdf', maxSize: 1024 * 1024 })
+    await wait(0)
+    promise = waitForEvent(wrapper.vm, 'invalid')
+    wrapper.vm.addFiles([mockFile])
+    await promise
+
+    // will pass validation
+    wrapper.vm.prune()
+    wrapper.setProps({ accept: 'image/*', extensions: ['jpg', 'png', 'gif'] })
+    await wait(0)
+    promise = waitForEvent(wrapper.vm, 'success')
+    wrapper.vm.addFiles([mockFile]) // will be uploaded successfully
+    await promise
+
+    let invalidEvents = wrapper
+      .emittedByOrder()
+      .filter(e => e.name === 'invalid')
+      .map(e => e.args[0])
+    expect(invalidEvents.length).to.equal(3)
+
+    expect(invalidEvents[0].file).to.be.an('undefined')
+    expect(invalidEvents[0].errors[0].type).to.equal('count')
+    expect(invalidEvents[0].errors[0].value).to.equal(2)
+
+    expect(invalidEvents[1].file).to.equal(mockFile)
+    expect(invalidEvents[1].errors[0].type).to.equal('size')
+    expect(invalidEvents[1].errors[0].value).to.equal(mockFile.size)
+
+    expect(invalidEvents[2].file).to.equal(mockFile)
+    expect(invalidEvents[2].errors[0].type).to.equal('type')
+    expect(invalidEvents[2].errors[0].value).to.equal(mockFile.name)
+
     wrapper.destroy()
   })
 
-  it('should validate file type correctly.', () => {
+  it('should validate file with custom async validator correctly.', async function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
-        action: '/upload',
-        accept: 'jpg,.png,.gif'
-      }
-    })
-
-    expect(wrapper.vm.validateType('test.1.jpg')).to.equal(true)
-    expect(wrapper.vm.validateType('test.1.gif')).to.equal(true)
-    expect(wrapper.vm.validateType('test.1.txt')).to.equal(false)
-
-    wrapper.setProps({ accept: 'application/*,.xlsx,.pdf' })
-    expect(wrapper.vm.validateType('test2.gif')).to.equal(true)
-    expect(wrapper.vm.validateType('test2.jpg')).to.equal(true)
-    expect(wrapper.vm.validateType('test.2.pdf')).to.equal(true)
-    expect(wrapper.vm.validateType('test.2.ppt')).to.equal(true)
-
-    wrapper.setProps({ accept: undefined })
-    expect(wrapper.vm.validateType('test.3.ppt')).to.equal(true)
-    wrapper.destroy()
-  })
-
-  it('should validate file type correctly by extensions.', () => {
-    let wrapper = mount(Uploader, {
-      propsData: {
-        accept: 'image/*',
-        action: '/upload',
-        extensions: ['jpg', 'png', 'gif']
-      }
-    })
-
-    expect(wrapper.vm.validateType('test.1.gif')).to.equal(true)
-    expect(wrapper.vm.validateType('test.1.txt')).to.equal(false)
-    wrapper.destroy()
-  })
-
-  it('should validate file with custom async validator correctly.', async () => {
-    let wrapper = mount(Uploader, {
-      propsData: {
-        action: '/upload',
-        accept: 'jpg',
+        action: '/upload/xhr?latency=0',
         validator (file) {
           return new Promise(resolve => {
             setTimeout(() => {
@@ -163,374 +317,305 @@ describe('components/Uploader', () => {
                 valid: file.name.length > 10,
                 message: 'file name too short'
               })
-            }, 0)
+            }, 10)
           })
         }
       }
     })
 
-    let input = wrapper.find('input[type="file"]')
-    let dT = new DataTransfer()
-    dT.items.add(new File(['foo'], 'test.jpg'))
-    dT.items.add(new File(['bar'], 'testLongName.jpg'))
-    input.element.files = dT.files
-    input.trigger('change')
-    clearXHR(wrapper)
+    let mockFile = createFile('a.png', 'image/png', 128 * 1024)
+    let promise = waitForEvent(wrapper.vm, 'invalid')
+    wrapper.vm.addFiles([mockFile])
+    await promise
 
-    // change事件的回调里有异步，这里等待一下
-    await wait(0)
-
-    let validatedFiles = wrapper.vm.$data.fileList
-    expect(validatedFiles.length).to.equal(2)
-    // test.jpg
-    expect(validatedFiles[0].status).to.equal('failure')
-    expect(validatedFiles[0].message).to.equal('file name too short')
-    // testLongName.jpg
-    expect(validatedFiles[1].status).to.equal('uploading')
-    expect(validatedFiles[1].message).to.equal(undefined)
+    let arg = wrapper.emitted('invalid')[0][0]
+    expect(arg.errors[0].type).to.equal('custom')
+    expect(arg.errors[0].message).to.equal('file name too short')
 
     wrapper.destroy()
   })
 
-  it('should emit `statuschange` event when status is changed.', async () => {
+  it('should emit `statuschange` event when status is changed.', async function () {
     let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
       propsData: {
-        action: '/upload'
+        action: '/upload/xhr?force=success&latency=0',
+        accept: '.png'
       }
     })
 
-    let input = wrapper.find('input[type="file"]')
-    let dT = new DataTransfer()
-    dT.items.add(new File(['foo'], 'test.jpg'))
-    input.element.files = dT.files
-    input.trigger('change')
-    clearXHR(wrapper)
+    let mockFile = createFile('a.jpg', 'image/jpg', 128 * 1024)
+    let promise = waitForEvents(wrapper.vm, ['failure', 'statuschange'])
+    wrapper.vm.addFiles([mockFile])
+    await promise
     await wait(0)
 
-    expect(wrapper.emitted().statuschange[1][0]).to.equal('uploading')
-
-    wrapper.vm.uploadCallback({ success: true }, dT.files[0])
-    expect(wrapper.emitted().statuschange[2][0]).to.equal('success')
-
-    dT = new DataTransfer()
-    dT.items.add(new File(['foo'], 'test2.jpg'))
-    input.element.files = dT.files
-    input.trigger('change')
-    clearXHR(wrapper)
+    mockFile = createFile('a.png', 'image/png', 128 * 1024)
+    promise = waitForEvents(wrapper.vm, ['success', 'statuschange'])
+    wrapper.vm.addFiles([mockFile])
+    await promise
     await wait(0)
 
-    expect(wrapper.emitted().statuschange[3][0]).to.equal('uploading')
+    wrapper.setProps({ action: '/upload/xhr?force=failure&latency=0' })
+    await wait(0)
+    promise = waitForEvents(wrapper.vm, ['failure', 'statuschange'])
+    wrapper.vm.addFiles([mockFile])
+    await promise
+    await wait(0)
+
+    wrapper.vm.clear()
+    await wait(0)
+
+    wrapper.setProps({ value: [] })
+    await wait(0)
+
+    const eventNames = wrapper
+      .emittedByOrder()
+      .filter(e => e.name !== 'progress')
+      .map(({ name, args }) => {
+        switch (name) {
+          case 'statuschange':
+            return `${name}:${args[0]}`
+          case 'invalid':
+            return `${name}:${args[0].file.name}`
+          case 'change':
+            return `${name}:${args[0].length}`
+        }
+        return name
+      })
+    expect(eventNames).to.eql([
+      'statuschange:uploading',
+      'invalid:a.jpg',
+      'failure',
+      'statuschange:failure', // invalid
+      'statuschange:uploading',
+      'change:1',
+      'success',
+      'statuschange:failure', // success
+      'statuschange:uploading',
+      'failure',
+      'statuschange:failure', // failure
+      'remove',
+      'remove',
+      'statuschange:success', // remove
+      'statuschange:empty' // empty
+    ])
+
     wrapper.destroy()
   })
 
-  it('should handle callback correctly when upload is finished.', async () => {
+  it('should upload file correctly when mode is xhr.', async function () {
+    let headers = {
+      'x-aaa': 'aaa',
+      'x-bbb': 'bbb'
+    }
+    let payload = {
+      current: Date.now()
+    }
+
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
-        action: '/upload',
-        value: [{ name: 'test1.jpg', src: '/test1.jpg', id: 5 }]
-      }
+        action:
+          '/upload/xhr?force=success&includeRequest=true&name=filedata&latency=0',
+        name: 'filedata',
+        accept: 'jpg,jpeg,png',
+        headers,
+        payload
+      },
+      attachToDocument: true
     })
 
-    let input = wrapper.find('input[type="file"]')
-    let dT = new DataTransfer()
-    dT.items.add(new File(['foo'], 'test2.jpg'))
-    input.element.files = dT.files
-    input.trigger('change')
-    await wait(0)
-    clearXHR(wrapper)
+    let filename = 'xxx.png'
+    let mockFile = createFile(filename, 'image/png', 128 * 1024)
+    let promise = waitForEvent(wrapper.vm, 'success')
+    wrapper.vm.addFiles([mockFile])
+    await promise
 
-    let callbackData = { src: '/test2.jpg', id: 6, success: true }
-    wrapper.vm.uploadCallback(callbackData, dT.files[0])
-    expect(wrapper.emitted().change[0][0]).to.eql([
-      { name: 'test2.jpg', src: '/test2.jpg', id: 6 },
-      { name: 'test1.jpg', src: '/test1.jpg', id: 5 }
-    ])
+    let arg = wrapper.emitted('success')[0][0]
+    expect(pick(arg._req.headers, Object.keys(headers))).to.eql(headers)
+    // formdata.append 会把 value 转字符串
+    expect(arg._req.fields.current).to.equal(payload.current.toString())
+    expect(arg._req.file.name).to.equal(filename)
 
-    expect(wrapper.emitted().success[0]).to.eql([
-      {
-        name: 'test2.jpg',
-        src: '/test2.jpg',
-        id: 6,
-        status: 'success'
-      },
-      0
-    ])
-
-    dT = new DataTransfer()
-    dT.items.add(new File(['foo'], 'test3.jpg'))
-    input.element.files = dT.files
-    input.trigger('change')
-    await wait(0)
-    clearXHR(wrapper)
-
-    callbackData = { success: false, message: 'image too large' }
-    wrapper.vm.uploadCallback(callbackData, dT.files[0])
-    expect(wrapper.emitted().failure[0]).to.eql([
-      {
-        name: 'test3.jpg',
-        status: 'failure',
-        message: 'image too large'
-      },
-      0
-    ])
     wrapper.destroy()
   })
 
-  it('should handle post message callback correctly when iframe mode is post message.', async () => {
+  it('should upload file correctly when mode is iframe.', async function () {
+    const payload = {
+      current: Date.now()
+    }
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
-        action: '/upload',
+        type: 'media',
+        action:
+          '/upload/iframe?force=success&includeRequest=true&convert=false&latency=0',
         requestMode: 'iframe',
-        iframeMode: 'postmessage'
-      }
-    })
-
-    let input = wrapper.find('input[type="file"]')
-    let dT = new DataTransfer()
-    dT.items.add(new File(['foo'], 'test.jpg'))
-    input.element.files = dT.files
-    input.trigger('change')
-    clearXHR(wrapper)
-    await wait(0)
-
-    wrapper.vm.submit(input.element.files[0])
-
-    await wrapper.vm.$nextTick()
-
-    // 这里的iframe里调postMessage无法完全模拟真实环境，所以直接调message事件的回调函数
-    wrapper.vm.handlePostmessage({
-      source: {
-        frameElement: {
-          id: wrapper.vm.$data.iframeId
-        }
-      },
-      origin: location.origin,
-      data: { src: '/test.jpg', success: true }
-    })
-
-    expect(wrapper.emitted().change[0][0]).to.eql([
-      { name: 'test.jpg', src: '/test.jpg' }
-    ])
-
-    await wrapper.vm.$nextTick()
-    wrapper.destroy()
-  })
-
-  it('should support custom upload function with type `image` correctly.', async () => {
-    let count = 0
-    let wrapper = mount(Uploader, {
-      propsData: {
-        action: '/upload',
-        requestMode: 'custom',
-        type: 'image',
-        upload: async (file, { onload, onprogress, oncancel }) => {
-          onprogress({
-            loaded: 50,
-            total: 100
-          })
-
-          await wrapper.vm.$nextTick()
-          expect(wrapper.emitted().progress[count][1]).to.equal(0)
-          expect(wrapper.emitted().progress[count][2]).to.eql({ loaded: 50, total: 100 })
-
-          if (count === 1) {
-            oncancel()
-          } else {
-            onload({ src: `/test${count}.jpg`, success: true })
-          }
-          count++
-        }
+        payload,
+        order: 'append'
       },
       attachToDocument: true
     })
 
-    let input = wrapper.find('input[type="file"]')
-    let dt = new DataTransfer()
-    dt.items.add(new File(['foo'], 'test.jpg'))
-    input.element.files = dt.files
-    input.trigger('change')
-    await wait(0)
-
-    expect(wrapper.emitted().change[0][0]).to.eql([
-      { name: 'test.jpg', src: '/test0.jpg' }
+    // iframeMode: postmessage (default according to global config)
+    let mockFile = createFile('xxx.png', 'image/png', 128 * 1024)
+    let promise = Promise.all([
+      waitForEvent(wrapper.vm, 'success'),
+      new Promise(resolve => addOnceEventListener(window, 'message', resolve))
     ])
+    wrapper.vm.addFiles([mockFile])
+    await promise
 
-    await wrapper.vm.$nextTick()
-    wrapper.find('.veui-uploader-list-media-mask label').trigger('click')
-    dt = new DataTransfer()
-    dt.items.add(new File(['foo'], 'test.jpg'))
-    input.element.files = dt.files
-    input.trigger('change')
+    let arg = wrapper.emitted('success')[0][0]
+    expect(arg._req.fields.current).to.equal(payload.current.toString())
+    expect(arg._req.file.name).to.equal(mockFile.name)
 
+    // iframeMode: callback
+    wrapper.setProps({ iframeMode: 'callback' })
     await wait(0)
-    expect(wrapper.findAll('.veui-uploader-list-media-item:not(.veui-uploader-list-media-item-upload)').length).to.equal(1)
-    // should restore uploaded image
-    expect(wrapper.find('.veui-uploader-list-media-container-media').attributes('src')).to.equal('/test0.jpg')
+    mockFile = createFile('yyyy.mp4', 'video/mp4', 128 * 1024)
+    promise = waitForEvent(wrapper.vm, 'success')
+    wrapper.vm.addFiles([mockFile])
+    await promise
+
+    arg = wrapper.emitted('success')[1][0]
+    expect(arg._req.fields.current).to.equal(payload.current.toString())
+    expect(arg._req.file.name).to.equal(mockFile.name)
 
     wrapper.destroy()
   })
 
-  it('should support custom upload function with type `file` correctly.', async () => {
-    let count = 0
+  it('should upload file correctly when mode is custom.', async function () {
+    let thisInsideUpload
+    function successUpload (file, { onload, onprogress }) {
+      thisInsideUpload = this
+
+      setTimeout(function () {
+        onprogress({
+          loaded: 50,
+          total: file.size
+        })
+      }, 10)
+      setTimeout(function () {
+        onload({
+          success: true,
+          name: 'xxx.jpg',
+          src: './xxx.jpg'
+        })
+      }, 30)
+    }
+
+    function failureUpload (file, { onerror }) {
+      setTimeout(function () {
+        onerror({
+          success: false,
+          message: '🈲🈲'
+        })
+      }, 0)
+    }
+
+    function cancelUpload (file, { oncancel }) {
+      setTimeout(oncancel, 20)
+    }
+
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
-        action: '/upload',
         requestMode: 'custom',
-        upload: async (file, { onload, onprogress, oncancel }) => {
-          onprogress({
-            loaded: count * 10 + 30,
-            total: 100
-          })
-
-          await wrapper.vm.$nextTick()
-          expect(wrapper.emitted().progress[count][1]).to.equal(0)
-          expect(wrapper.emitted().progress[count][2]).to.eql({ loaded: count * 10 + 30, total: 100 })
-
-          if (count === 1) {
-            oncancel()
-          } else {
-            onload({ src: `/test${count}.jpg`, success: true })
-          }
-          count++
-        }
+        order: 'append',
+        upload: successUpload
       },
       attachToDocument: true
     })
 
-    let input = wrapper.find('input[type="file"]')
-    let dt = new DataTransfer()
-    dt.items.add(new File(['foo'], 'test.jpg'))
-    input.element.files = dt.files
-    input.trigger('change')
+    let mockFile = createFile('xxx.png', 'image/png', 128 * 1024)
+    let promise = waitForEvent(wrapper.vm, 'success')
+    wrapper.vm.addFiles([mockFile])
+    expect(wrapper.vm.fileList[0].status).to.equal('uploading')
+    expect(wrapper.vm.fileList[0].name).to.equal('xxx.png')
+    await promise
+    expect(wrapper.vm.fileList[0].status).to.equal('success')
+    expect(wrapper.vm.fileList[0].name).to.equal('xxx.jpg')
+    expect(wrapper.emitted('progress')[0][2]).to.eql({
+      loaded: 50,
+      total: mockFile.size
+    })
+    expect(thisInsideUpload).to.equal(undefined)
+
+    wrapper.setProps({ upload: failureUpload })
     await wait(0)
+    promise = waitForEvent(wrapper.vm, 'failure')
+    wrapper.vm.addFiles([mockFile])
+    await promise
+    expect(wrapper.vm.fileList[1].status).to.equal('failure')
+    expect(wrapper.vm.fileList[1].message).to.equal('🈲🈲')
 
-    expect(wrapper.emitted().change[0][0]).to.eql([
-      { name: 'test.jpg', src: '/test0.jpg' }
-    ])
-
-    await wrapper.vm.$nextTick()
-    dt = new DataTransfer()
-    dt.items.add(new File(['foo'], 'test2.jpg'))
-    input.element.files = dt.files
-    input.trigger('change')
-
+    wrapper.setProps({ upload: cancelUpload })
     await wait(0)
-    expect(wrapper.findAll('.veui-uploader-list-item').length).to.equal(1)
+    promise = waitForEvent(wrapper.vm, 'remove')
+    expect(wrapper.vm.fileList.length).to.equal(2)
+    wrapper.vm.addFiles([mockFile])
+    expect(wrapper.vm.fileList.length).to.equal(3)
+    await promise
+    expect(wrapper.vm.fileList.length).to.equal(2)
 
     wrapper.destroy()
   })
 
-  it('should parse callback data correctly.', () => {
+  it('should handle cancel correctly.', async function () {
+    let called = 0
+    let cancel
+    let cancelled = new Promise(resolve => {
+      cancel = resolve
+    })
     let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
       propsData: {
-        action: '/upload',
-        dataType: 'json'
+        requestMode: 'custom',
+        upload (file, { onprogress }) {
+          called++
+          onprogress({ loaded: 10, total: 100 })
+          return function () {
+            called++
+            cancel()
+          }
+        }
       }
     })
-
-    let callbackData = JSON.stringify({ src: '/test.jpg', id: '23' })
-    expect(wrapper.vm.parseData(callbackData)).to.eql({
-      src: '/test.jpg',
-      id: '23'
-    })
-
-    callbackData = { src: '/test.jpg', id: '23' }
-    expect(wrapper.vm.parseData(callbackData)).to.eql({
-      src: '/test.jpg',
-      id: '23'
-    })
-
-    wrapper.setProps({ dataType: 'text' })
-    callbackData = 'callback text'
-    expect(wrapper.vm.parseData(callbackData)).to.equal('callback text')
-
+    let progressPromise = waitForEvent(wrapper.vm, 'progress')
+    let mockFile = createFile('xxx.png', 'image/png', 128 * 1024)
+    wrapper.vm.addFiles([mockFile])
+    await progressPromise
     wrapper.destroy()
-  })
+    await cancelled
+    expect(called).to.equal(2)
 
-  it('should handle `remove` event correctly.', () => {
-    let wrapper = mount(Uploader, {
+    wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
       propsData: {
-        action: '/upload',
-        value: [
-          { name: 'test1.jpg', src: '/test1.jpg' },
-          { name: 'test2.jpg', src: '/test2.jpg' }
-        ]
+        requestMode: 'custom',
+        upload (file) {
+          called++
+          return function () {}
+        }
       }
     })
-
-    wrapper
-      .findAll('.veui-uploader-list-remove')
-      .at(1)
-      .trigger('click')
-    expect(wrapper.emitted().remove[0]).to.eql([
-      { name: 'test2.jpg', src: '/test2.jpg', status: 'success' },
-      1
-    ])
-    expect(wrapper.emitted().change[0][0]).to.eql([
-      { name: 'test1.jpg', src: '/test1.jpg' }
-    ])
+    wrapper.vm.addFiles([mockFile])
     wrapper.destroy()
+    await wait(100)
+    expect(called).to.equal(2)
+    expect(wrapper.emitted('failure')).to.be.a('undefined')
   })
 
-  it('should set request `withCredentials` correctly.', () => {
+  it('should be disabled when number of files reach max count.', function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
-        action: '/upload',
-        withCredentials: false
-      }
-    })
-
-    let fileList = [{ name: 'test.jpg' }]
-    wrapper.vm.$data.fileList = fileList
-    wrapper.vm.uploadFile(fileList[0])
-
-    let xhr = fileList[0].xhr
-    expect(xhr.withCredentials).to.equal(false)
-    clearXHR(wrapper)
-    wrapper.destroy()
-  })
-
-  it('should emit `progress` event when uploading.', () => {
-    let wrapper = mount(Uploader, {
-      propsData: {
-        action: '/upload'
-      }
-    })
-
-    let fileList = [{ name: 'test.jpg' }]
-    wrapper.vm.$data.fileList = fileList
-    wrapper.vm.uploadFile(fileList[0])
-
-    // 模拟progress
-    fileList[0].xhr.upload.onprogress({ loaded: 10, total: 100 })
-    expect(wrapper.emitted().progress[0][1]).to.equal(0)
-    expect(wrapper.emitted().progress[0][2]).to.eql({ loaded: 10, total: 100 })
-    clearXHR(wrapper)
-    wrapper.destroy()
-  })
-
-  it('should handle cancel correctly.', () => {
-    let wrapper = mount(Uploader, {
-      propsData: {
-        action: '/upload',
-        requestMode: 'iframe'
-      }
-    })
-
-    wrapper.vm.$data.fileList = [{ name: 'test.jpg', status: 'uploading' }]
-
-    wrapper
-      .find('li')
-      .find('button')
-      .trigger('click')
-    expect(wrapper.vm.$data.fileList).to.eql([])
-    wrapper.destroy()
-  })
-
-  it('should be disabled when number of files reach max count.', () => {
-    let wrapper = mount(Uploader, {
-      propsData: {
-        action: '/upload',
+        action: '/upload/xhr',
         value: [
           { name: 'test1.jpg', src: '/test1.jpg' },
           { name: 'test2.jpg', src: '/test2.jpg' }
@@ -539,17 +624,19 @@ describe('components/Uploader', () => {
       }
     })
 
-    expect(wrapper.vm.inputDisabled).to.equal(true)
-
+    expect(wrapper.vm.canAddImage).to.equal(false)
+    expect(wrapper.find('.veui-button').element.disabled).to.equal(true)
     wrapper.find('.veui-uploader-list-remove').trigger('click')
-    expect(wrapper.vm.inputDisabled).to.equal(false)
+    expect(wrapper.vm.canAddImage).to.equal(true)
+
     wrapper.destroy()
   })
 
-  it('should set src of image correctly when type is image.', () => {
+  it('should set src of image correctly when type is image.', function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
-        action: '/upload',
+        action: '/upload/xhr',
         value: [
           { name: 'test1.jpg', src: '/test1.jpg' },
           { name: 'test2.jpg', src: '/test2.jpg' }
@@ -564,10 +651,11 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should set src of video correctly when type is video.', () => {
+  it('should set src of video correctly when type is video.', function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
-        action: '/upload',
+        action: '/upload/xhr',
         value: [
           { name: 'test1.mp4', src: '/test1.mp4' },
           { name: 'test2.mp4', src: '/test2.mp4' }
@@ -582,10 +670,11 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should set src of video or image correctly when type is media.', () => {
+  it('should set src of video or image correctly when type is media.', function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
-        action: '/upload',
+        action: '/upload/xhr',
         value: [
           { name: 'test1.mp4', src: '/test1.mp4' },
           { name: 'test2.jpg', src: '/test2.jpg' },
@@ -603,10 +692,12 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should config controls of media correctly.', () => {
+  it('should config controls of media correctly.', function () {
     let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
       propsData: {
-        action: '/upload',
+        action: '/upload/xhr',
         value: [{ name: 'test1.jpg', src: '/test1.jpg' }],
         type: 'image',
         controls (file, defaultControls) {
@@ -618,7 +709,9 @@ describe('components/Uploader', () => {
                 icon: 'crop',
                 children: [
                   {
-                    name: 'test11', icon: 'cut', label: 'test11'
+                    name: 'test11',
+                    icon: 'cut',
+                    label: 'test11'
                   }
                 ]
               },
@@ -630,38 +723,49 @@ describe('components/Uploader', () => {
       }
     })
 
-    let items = wrapper.find('.veui-uploader-list-media-mask').findAll('.veui-control-item')
+    let items = wrapper
+      .find('.veui-uploader-list-media-mask')
+      .findAll('.veui-control-item')
     items.at(0).trigger('click')
-    expect(wrapper.emitted().test[0][0]).to.eql(
-      { name: 'test1.jpg', src: '/test1.jpg', status: 'success', type: 'image' },
+    let file = wrapper.emitted('test')[0][0]
+    expect(omit(file, ['key'])).to.eql(
+      {
+        name: 'test1.jpg',
+        src: '/test1.jpg',
+        status: 'success',
+        type: 'image'
+      },
       0
     )
+    expect(file.key).to.be.a('string')
 
     const dropdown = items.at(1).find(Dropdown).vm
-    expect(dropdown.$props.options).to.eql(
-      [{
+    expect(dropdown.$props.options).to.eql([
+      {
         name: 'test11',
         icon: 'cut',
         label: 'test11',
         value: 'test11',
         children: []
-      }]
-    )
-    items.at(1).find('button').trigger('mouseenter')
-    expect(dropdown.expanded).to.equal(true)
+      }
+    ])
+    items
+      .at(1)
+      .find('button')
+      .trigger('mouseenter')
+    expect(dropdown.localExpanded).to.equal(true)
     dropdown.handleSelect('test11')
-    expect(wrapper.emitted().test11[0][0]).to.eql(
-      { name: 'test1.jpg', src: '/test1.jpg', status: 'success', type: 'image' },
-      0
-    )
+    expect(wrapper.emitted('test11')[0][0].name).to.equal('test1.jpg')
 
     wrapper.destroy()
   })
 
-  it('should config entries of media correctly.', async () => {
+  it('should config entries of media correctly.', async function () {
     let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
       propsData: {
-        action: '/upload',
+        action: '/upload/xhr',
         value: [{ name: 'test1.jpg', src: '/test1.jpg' }],
         type: 'media',
         entries (defaultEntries) {
@@ -686,7 +790,7 @@ describe('components/Uploader', () => {
     })
 
     let entryContainer = wrapper.find('.veui-uploader-entries-container')
-    let items = entryContainer.findAll('li')
+    let items = entryContainer.findAll('.veui-control-item')
     expect(items.length).to.equal(3)
 
     expect(items.at(0).text()).to.equal('test')
@@ -697,38 +801,40 @@ describe('components/Uploader', () => {
       .findAll('button')
 
     buttons.at(0).trigger('click')
-    expect(wrapper.emitted().test).to.eql([[]])
+    expect(wrapper.emitted('test')[0]).to.eql([])
 
     const dropdown = items.at(1).find(Dropdown).vm
-    expect(dropdown.$props.options).to.eql(
-      [{
+    expect(dropdown.$props.options).to.eql([
+      {
         name: 'test11',
         icon: 'cut',
         label: 'test11',
         value: 'test11',
         children: []
-      }]
-    )
+      }
+    ])
 
     buttons.at(1).trigger('mouseenter')
-    expect(dropdown.expanded).to.equal(true)
+    expect(dropdown.localExpanded).to.equal(true)
     dropdown.handleSelect('test11')
-    expect(wrapper.emitted().test11).to.eql([[]])
+    expect(wrapper.emitted('test11')[0]).to.eql([])
 
     let input = wrapper.find('input[type="file"]').element
-    let clickTriggeredPromise = Promise.race(
-      [
-        new Promise(resolve => {
+    let clickTriggeredPromise = Promise.race([
+      new Promise(
+        resolve => {
           input.addEventListener('click', function () {
             resolve(true)
           })
-        }, { once: true }),
-        new Promise(resolve => {
-          setTimeout(function () {
-            resolve(false)
-          }, 2000)
-        })
-      ])
+        },
+        { once: true }
+      ),
+      new Promise(resolve => {
+        setTimeout(function () {
+          resolve(false)
+        }, 2000)
+      })
+    ])
 
     buttons.at(3).trigger('click')
 
@@ -738,58 +844,70 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should handle replace correctly.', async () => {
+  it('should show preview of media correctly.', async function () {
     let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
       propsData: {
-        action: '/upload',
+        action: '/upload/xhr',
+        value: [
+          { name: 'test1.jpg', src: '/test1.jpg' },
+          { name: 'test2.mp4', src: '/test2.mp4' }
+        ],
+        type: 'media'
+      }
+    })
+
+    let items = wrapper
+      .findAll('.veui-uploader-list-media-mask')
+      .at(1)
+      .findAll('.veui-control-item')
+    items.at(0).trigger('click')
+    await wait(0)
+    let lightBox = wrapper.find(Lightbox)
+    expect(lightBox.vm.open).to.equal(true)
+    expect(lightBox.vm.index).to.equal(1)
+
+    wrapper.destroy()
+  })
+
+  it('should handle replace correctly.', async function () {
+    let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
+      propsData: {
+        action: '/upload/xhr?force=success&latency=0',
         value: [{ name: 'test.jpg', src: '/test.jpg' }],
         type: 'image'
       }
     })
 
-    wrapper
-      .find('li')
-      .find('label')
-      .trigger('click')
+    let promise = waitForEvent(wrapper.vm, 'success')
 
-    let input = wrapper.find('input[type="file"]')
-    let dT = new DataTransfer()
-    dT.items.add(new File(['foo'], 'test2.jpg'))
-    input.element.files = dT.files
-    input.trigger('change')
-    clearXHR(wrapper)
+    wrapper
+      .find('.veui-uploader-controls')
+      .findAll('.veui-control-item')
+      .at(1)
+      .trigger('click')
     await wait(0)
 
-    let callbackData = { src: '/test2.jpg', success: true }
-    wrapper.vm.uploadCallback(callbackData, dT.files[0])
+    let mockFile = createFile('虚化身体.png', 'image/png', 128 * 1024)
+    let input = wrapper.find('input[type="file"]')
+    input.element.files = createFileList(mockFile)
+    input.trigger('change')
+    await promise
 
-    expect(wrapper.emitted().change[0][0]).to.eql([])
-
-    expect(wrapper.emitted().change[1][0]).to.eql([
-      { name: 'test2.jpg', src: '/test2.jpg' }
-    ])
+    let file = wrapper.emitted('change')[0][0][0]
+    expect(file.name).to.equal('虚化身体.png')
 
     wrapper.destroy()
   })
 
-  it('should set callback function correctly when request mode is iframe.', () => {
+  it('should render desc slot correctly.', function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
-        action: '/upload',
-        requestMode: 'iframe',
-        iframeMode: 'callback',
-        callbackNamespace: 'testNameSpace'
-      }
-    })
-
-    expect(window.testNameSpace).to.be.an('object')
-    wrapper.destroy()
-  })
-
-  it('should render desc slot correctly.', () => {
-    let wrapper = mount(Uploader, {
-      propsData: {
-        action: '/upload'
+        action: '/upload/xhr'
       },
       slots: {
         desc: 'jpg only.'
@@ -800,10 +918,10 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should render button label slot correctly.', () => {
+  it('should render button label slot correctly.', function () {
     let wrapper = mount(Uploader, {
       propsData: {
-        action: '/upload'
+        action: '/upload/xhr'
       },
       slots: {
         'button-label': '<span class="test-label">upload</span>'
@@ -814,10 +932,11 @@ describe('components/Uploader', () => {
     wrapper.destroy()
   })
 
-  it('should render file-before file-after slot correctly.', async () => {
+  it('should render file-before file-after slot correctly.', async function () {
     let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
-        action: '/upload',
+        action: '/upload/xhr',
         value: [
           { name: 'test1.jpg', src: '/test1.jpg' },
           { name: 'test2.jpg', src: '/test2.jpg' }
@@ -839,47 +958,63 @@ describe('components/Uploader', () => {
     expect(after.at(1).text()).to.equal('/test2.jpg')
 
     wrapper.destroy()
+  })
 
-    wrapper = mount(Uploader, {
+  it('should reorder files when move event triggered.', async function () {
+    let wrapper = mount(Uploader, {
+      sync: false,
       propsData: {
-        action: '/upload',
+        type: 'image',
+        action: '/upload/xhr',
+        attachToDocument: true,
         value: [
-          { name: 'test1.jpg', src: '/test1.jpg' },
-          { name: 'test2.jpg', src: '/test2.jpg' }
+          {
+            key: 'xxxx',
+            name: '大娃.jpg',
+            src: 'a.jpg'
+          },
+          {
+            key: 'yyyy',
+            name: '二娃.jpg',
+            src: 'b.jpg'
+          }
         ]
-      },
-      scopedSlots: {
-        'file-before':
-          '<p class="test-file-before" slot-scope="file">{{ file.name }}</p>',
-        'file-after':
-          '<p class="test-file-after" slot-scope="file">{{ file.status }}</p>'
       }
     })
 
-    let input = wrapper.find('input[type="file"]')
-    let dT = new DataTransfer()
-    dT.items.add(new File(['foo'], 'test2.jpg'))
-    input.element.files = dT.files
-    input.trigger('change')
     await wait(0)
-    clearXHR(wrapper)
+    wrapper.vm.$children[0].$emit('move', 0, 2)
 
-    let callbackData = { src: '/test2.jpg', id: 6, success: true }
-    wrapper.vm.uploadCallback(callbackData, dT.files[0])
-
-    before = wrapper.findAll('.test-file-before')
-    after = wrapper.findAll('.test-file-after')
-    expect(before.at(2).text()).to.equal('test2.jpg')
-    expect(after.at(2).text()).to.equal('success')
+    let value = wrapper.emitted('change')[0][0]
+    expect(value[0].key).to.equal('yyyy')
+    expect(value[1].key).to.equal('xxxx')
 
     wrapper.destroy()
   })
 })
 
-function clearXHR (wrapper) {
-  wrapper.vm.$data.fileList.forEach(file => {
-    if (file.xhr) {
-      file.xhr.abort()
+function waitForEvent (vm, event) {
+  return new Promise(function (resolve, reject) {
+    vm.$once(event, resolve)
+  })
+}
+
+function waitForEvents (vm, events) {
+  let p = waitForEvent(vm, events[0])
+  events.slice(1).reduce(function (promise, event) {
+    let p = waitForEvent(vm, event)
+    promise.then(() => p)
+    return p
+  }, p)
+  return p
+}
+
+function createFile (name, type, size) {
+  let file = new File(['㊙️'], name, { type })
+  Object.defineProperty(file, 'size', {
+    get () {
+      return size
     }
   })
+  return file
 }

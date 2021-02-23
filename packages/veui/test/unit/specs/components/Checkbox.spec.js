@@ -294,4 +294,36 @@ describe('components/Checkbox', () => {
 
     wrapper.vm.activate()
   })
+
+  it('should only trigger click once', async () => {
+    let count = 0
+
+    let wrapper = mount(
+      {
+        components: {
+          'veui-checkbox': Checkbox
+        },
+        data () {
+          return {
+            checked: false
+          }
+        },
+        methods: {
+          handleClick () {
+            count++
+          }
+        },
+        template: '<veui-checkbox :checked="checked" @click="handleClick"/>'
+      },
+      {
+        sync: false
+      }
+    )
+
+    wrapper.trigger('click')
+
+    await wrapper.vm.$nextTick()
+
+    expect(count).to.equal(1)
+  })
 })

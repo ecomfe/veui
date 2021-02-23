@@ -1,0 +1,20 @@
+@import "./lib.less";
+
+._veui-drag-sort {
+  @drag-sort: ~"@{veui-prefix}-drag-sort";
+
+  @data-drag-sort: ~"[data-@{drag-sort}]";
+  @data-drag-sort-dragging: ~"[data-@{drag-sort}-dragging]";
+  @{data-drag-sort} {
+    cursor: grab;
+  }
+  .@{drag-sort}-dragging,
+  @{data-drag-sort-dragging} {
+    cursor: grabbing;
+  }
+
+  @data-drag-sort-dragging-ghost: ~"[data-@{drag-sort}-dragging-ghost]";
+  @{data-drag-sort-dragging-ghost} {
+    visibility: hidden !important;
+  }
+}

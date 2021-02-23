@@ -210,6 +210,18 @@ export function isFocusable (el) {
   return matches(el, FOCUSABLE_SELECTOR) && isPreventFocus(el)
 }
 
+export function isInsideFocusable (el, context = document.body) {
+  while (el && el !== context) {
+    if (isFocusable(el)) {
+      return true
+    }
+
+    el = el.parentNode
+  }
+
+  return false
+}
+
 /**
  * 获取目标元素下所有可以获取焦点的元素
  *
@@ -807,4 +819,39 @@ export function triggerCustom (el, type, detail) {
   let evt = document.createEvent('CustomEvent')
   evt.initCustomEvent(type, true, false, detail)
   el.dispatchEvent(evt)
+}
+
+export function isInsideTransformedContainer (el) {
+  let current = el.parentElement
+  while (current) {
+    let styles = window.getComputedStyle(current)
+    if (styles.transform !== 'none' || styles.transformStyle !== 'flat') {
+      return true
+    }
+    current = current.parentElement
+  }
+  return false
+}
+
+export function cloneElementWithComputedStyle (el) {
+  let newEl = el.cloneNode(false)
+  if (el.nodeType === Node.ELEMENT_NODE) {
+    newEl.style.cssText = window.getComputedStyle(el).cssText
+  }
+  ;[...el.childNodes].forEach(function (node) {
+    newEl.appendChild(cloneElementWithComputedStyle(node))
+  })
+  return newEl
+}
+
+export function addOnceEventListener (el, evt, listener) {
+  function callback (...args) {
+    remove()
+    listener.apply(el, args)
+  }
+  function remove () {
+    el.removeEventListener(evt, callback)
+  }
+  el.addEventListener(evt, callback)
+  return remove
 }

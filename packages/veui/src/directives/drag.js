@@ -9,13 +9,17 @@ import {
   omit
 } from 'lodash'
 import { getNodes } from '../utils/context'
+import { isFirefox as checkIsFirefox } from '../utils/bom'
 import BaseHandler from './drag/BaseHandler'
 import TranslateHandler from './drag/TranslateHandler'
+import SortHandler from './drag/SortHandler'
 import config from '../managers/config'
 
 config.defaults({
   'drag.prefix': '@'
 })
+
+const isFirefox = checkIsFirefox()
 
 const HANDLERS = {}
 
@@ -34,17 +38,21 @@ const OPTIONS_SCHEMA = {
   }
 }
 
-export function registerHandler (name, Handler) {
+export function registerHandler (name, Handler, isNativeDrag) {
   if (!(Handler.prototype instanceof BaseHandler)) {
     throw new Error('The handler class must derive from `BaseHandler`.')
   }
-  HANDLERS[name] = Handler
+  HANDLERS[name] = { Handler, isNativeDrag }
 }
 
-registerHandler('translate', TranslateHandler)
+registerHandler('translate', TranslateHandler, false)
+registerHandler('sort', SortHandler, true)
 
 function clear (el) {
   let dragData = el.__dragData__
+  if (!dragData) {
+    return
+  }
   dragData.handler.destroy()
   el.removeEventListener('mousedown', dragData.mousedownHandler)
   el.__dragData__ = null
@@ -69,6 +77,11 @@ function getOptions (binding, vnode) {
 function refresh (el, binding, vnode) {
   const options = getOptions(binding, vnode)
 
+  if (options.disabled) {
+    // TODO：先不支持动态切换
+    return
+  }
+
   const oldOptions = el.__dragOldOptions__
   // 如果参数没发生变化，就不要刷新了
   if (
@@ -85,9 +98,11 @@ function refresh (el, binding, vnode) {
   } else {
     let contextComponent = vnode.context
     let handler = null
+    let isNativeDrag
     if (HANDLERS[options.type]) {
-      let Handler = HANDLERS[options.type]
-      handler = new Handler(options, contextComponent)
+      let { Handler, isNativeDrag: _isNativeDrag } = HANDLERS[options.type]
+      isNativeDrag = _isNativeDrag
+      handler = new Handler(options, contextComponent, vnode)
     } else {
       throw new Error(`No handler is registered for type "${options.type}".`)
     }
@@ -140,7 +155,7 @@ function refresh (el, binding, vnode) {
             },
             event
           }
-          handler.drag(dragParams)
+          handler.drag({ ...dragParams, last: true })
           contextComponent.$emit('dragend', dragParams)
           options.dragend(dragParams)
           handler.end(
@@ -153,8 +168,17 @@ function refresh (el, binding, vnode) {
               : dragParams
           )
 
-          window.removeEventListener('mousemove', mouseMoveHandler)
-          window.removeEventListener('mouseup', mouseupHandler)
+          if (isNativeDrag) {
+            if (isFirefox) {
+              window.removeEventListener('dragover', mouseMoveHandler)
+            } else {
+              el.removeEventListener('drag', mouseMoveHandler)
+            }
+            el.removeEventListener('dragend', mouseupHandler)
+          } else {
+            window.removeEventListener('mousemove', mouseMoveHandler)
+            window.removeEventListener('mouseup', mouseupHandler)
+          }
           window.removeEventListener('selectstart', selectStartHandler)
         }
 
@@ -162,12 +186,26 @@ function refresh (el, binding, vnode) {
         window.getSelection().removeAllRanges()
         window.addEventListener('selectstart', selectStartHandler)
 
-        window.addEventListener('mousemove', mouseMoveHandler)
-        window.addEventListener('mouseup', mouseupHandler)
+        if (isNativeDrag) {
+          if (isFirefox) {
+            // Firefox dragevent 里面的鼠标坐标是 0
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=505521
+            window.addEventListener('dragover', mouseMoveHandler)
+          } else {
+            el.addEventListener('drag', mouseMoveHandler)
+          }
+          el.addEventListener('dragend', mouseupHandler)
+        } else {
+          window.addEventListener('mousemove', mouseMoveHandler)
+          window.addEventListener('mouseup', mouseupHandler)
+        }
       }
     }
 
-    el.addEventListener('mousedown', dragData.mousedownHandler)
+    el.addEventListener(
+      isNativeDrag ? 'dragstart' : 'mousedown',
+      dragData.mousedownHandler
+    )
     el.__dragData__ = dragData
   }
 }

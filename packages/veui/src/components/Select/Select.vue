@@ -69,7 +69,7 @@ export default {
   data () {
     return {
       labelId: uniqueId('veui-select-label-'),
-      outsideRefs: ['input'],
+      outsideRefs: ['root'],
       inputValue: '',
       inlineOptions: null
     }
@@ -168,13 +168,25 @@ export default {
     hasSelectedSlot () {
       return !!(this.$scopedSlots.selected || this.$slots.selected)
     },
+    triggerAttrs () {
+      return {
+        ui: this.realUi,
+        role: 'listbox',
+        'aria-owns': this.dropdownId,
+        'aria-readonly': this.realReadonly,
+        'aria-expanded': this.realExpanded,
+        'aria-disabled': this.realDisabled,
+        'aria-labelledby': this.labelId,
+        'aria-haspopup': 'listbox',
+        tabindex:
+          (this.searchable && this.multiple) || this.realDisabled ? null : '0'
+      }
+    },
     slotProps () {
       return {
         expanded: this.realExpanded,
         value: this.realValue,
-        toggle: val => {
-          this.commit('expanded', val == null ? !this.realExpanded : val)
-        },
+        toggle: this.toggleExpanded,
         select: val => this.commit('value', val)
       }
     },
@@ -198,6 +210,9 @@ export default {
     this.nativeInput = this.$refs.input && this.$refs.input.$refs.input
   },
   methods: {
+    toggleExpanded (force) {
+      this.commit('expanded', force == null ? !this.realExpanded : !!force)
+    },
     clear (e) {
       if (this.multiple) {
         let disabledValues = this.realValue
@@ -528,26 +543,17 @@ export default {
         }}
         ui={this.realUi}
         ref="root"
-        role="listbox"
-        aria-owns={this.dropdownId}
-        aria-readonly={this.realReadonly}
-        aria-expanded={this.realExpanded}
-        aria-disabled={this.realDisabled}
-        aria-labelledby={this.labelId}
-        aria-haspopup="listbox"
-        tabindex={
-          (this.searchable && this.multiple) || this.realDisabled ? null : '0'
-        }
         onKeydown={this.handleTriggerKeydown}
       >
         {this.$scopedSlots.trigger ? (
           this.$scopedSlots.trigger({
-            props: this.slotProps,
             handlers: {
-              mouseup: this.handleInputMouseup,
+              click: this.handleInputMouseup,
               blur: this.handleInputBlur,
               input: this.handleTriggerInput
-            }
+            },
+            attrs: this.triggerAttrs,
+            ...this.slotProps
           })
         ) : (
           <Input
@@ -563,6 +569,7 @@ export default {
             onInput={this.handleTriggerInput}
             autocomplete="off"
             composition
+            {...{ attrs: this.triggerAttrs }}
           >
             {!this.multiple &&
             this.searchable &&
@@ -652,7 +659,7 @@ export default {
             >
               {renderSlot(this, 'before', this.slotProps)}
               {!this.options
-                ? renderGroup(null, this.$slots.default, 'data')
+                ? renderGroup(null, renderSlot(this, 'default'), 'data')
                 : null}
               {renderGroup(
                 this.isFiltered ? this.filteredOptions : this.realOptions,

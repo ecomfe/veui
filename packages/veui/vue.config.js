@@ -1,6 +1,7 @@
 const path = require('path')
-const veuiLoaderOptions = require('./build/veui-loader.conf')
 const webpack = require('webpack')
+const veuiLoaderOptions = require('./build/veui-loader.conf')
+const devServer = require('./build/dev-server')
 
 function resolve (dir) {
   return path.join(__dirname, dir)
@@ -10,6 +11,7 @@ const VEUI_PREFIX = process.env.VEUI_PREFIX || process.env.VUE_APP_VEUI_PREFIX
 const vars = {}
 
 module.exports = {
+  lintOnSave: false,
   css: {
     loaderOptions: {
       less: {
@@ -82,23 +84,5 @@ module.exports = {
       .plugin('context-replacement')
       .use(webpack.ContextReplacementPlugin, [/moment[\\/]locale$/, /^$/])
   },
-  devServer: {
-    before (app) {
-      app.post('/upload', (req, res) => {
-        res.json({
-          success: Math.random() > 0.5,
-          src: 'https://images.pexels.com/videos/857134/free-video-857134.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-          message: 'image too large'
-        })
-      })
-
-      app.post('/uploadiframe', (req, res) => {
-        res.send(
-          `<script>window.parent.postMessage({code: ${
-            Math.random() > 0.5 ? 1 : 0
-          }, result: {src: "https://webpack.js.org/e0b5805d423a4ec9473ee315250968b2.svg"}})</script>`
-        )
-      })
-    }
-  }
+  devServer
 }

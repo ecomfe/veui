@@ -129,7 +129,7 @@
   }
 
   &-cell-right &-cell {
-    flex-flow: row-reverse;
+    justify-content: flex-end;
   }
 
   &-cell-select:first-child,
@@ -240,27 +240,42 @@
     .dls-icon-size(@dls-table-icon-size-aux);
   }
 
-  &-header-icon {
+  &-header-op {
+    width: auto;
     margin-left: @dls-table-cell-content-spacing;
+  }
 
-    .@{veui-prefix}-icon,
-    .dls-icon {
-      .dls-icon-size(@dls-table-icon-size);
+  &-header-icon {
+    color: @dls-table-header-icon-color;
+    .veui-transition(color);
+
+    .@{veui-prefix}-button:hover &,
+    .@{veui-prefix}-hover & {
+      color: @dls-table-header-icon-color-hover;
     }
 
-    &[ui] {
-      color: @dls-table-header-icon-color;
+    .@{veui-prefix}-button:active &,
+    th:active .@{veui-prefix}-hover & {
+      color: @dls-table-header-icon-color-active;
+    }
 
-      &:hover {
-        color: @dls-table-header-icon-color-hover;
+    &.@{veui-prefix}-disabled {
+      color: @dls-table-header-icon-color-disabled;
+    }
+
+    .dls-icon-size(@dls-table-icon-size);
+
+    &-active {
+      color: @dls-button-font-color-text-strong;
+
+      .@{veui-prefix}-button:hover &,
+      .@{veui-prefix}-hover & {
+        color: @dls-button-font-color-text-strong-hover;
       }
 
-      &:active {
-        color: @dls-table-header-icon-color-active;
-      }
-
-      &.@{veui-prefix}-disabled {
-        color: @dls-table-header-icon-color-disabled;
+      .@{veui-prefix}-button:active &,
+      th:active .@{veui-prefix}-hover & {
+        color: @dls-button-font-color-text-strong-active;
       }
     }
   }
@@ -284,25 +299,8 @@
       .veui-transition(color);
     }
 
-    &-asc .@{veui-prefix}-table-sorter-icon-asc,
-    &-desc .@{veui-prefix}-table-sorter-icon-desc {
-      color: @dls-button-background-color-primary;
-    }
-
     &.@{veui-prefix}-hover {
       color: @dls-table-header-icon-color-hover;
-    }
-
-    &-asc:hover .@{veui-prefix}-table-sorter-icon-asc,
-    &-asc.@{veui-prefix}-hover .@{veui-prefix}-table-sorter-icon-asc,
-    &-desc:hover .@{veui-prefix}-table-sorter-icon-desc,
-    &-desc.@{veui-prefix}-hover .@{veui-prefix}-table-sorter-icon-desc {
-      color: @dls-button-background-color-primary-hover;
-    }
-
-    &-asc:active .@{veui-prefix}-table-sorter-icon-asc,
-    &-desc:active .@{veui-prefix}-table-sorter-icon-desc {
-      color: @dls-button-background-color-primary-active;
     }
   }
 
@@ -375,6 +373,30 @@
         @dls-table-padding-x,
         1px
       );
+    }
+  }
+
+  &-filter-custom ~ .@{veui-prefix}-option-group {
+    display: none;
+  }
+
+  &-filter-actions {
+    @padding-top: dls-sum(
+      @dls-table-filter-action-padding-y,
+      -@dls-option-group-padding-y
+    );
+    .padding(@padding-top, _, @dls-table-filter-action-padding-y);
+
+    .@{veui-prefix}-button + .@{veui-prefix}-button {
+      margin-left: @dls-table-filter-action-spacing;
+    }
+
+    [ui~="m"] & {
+      .padding(_, @dls-option-padding-m);
+    }
+
+    [ui~="s"] & {
+      .padding(_, @dls-option-padding-s);
     }
   }
 

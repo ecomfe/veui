@@ -1,3 +1,74 @@
+## 2.0.0-beta.27
+
+### ⚠️ 非兼容性变更
+
+- [^] `Select` 与 `Dropdown` 组件的 `trigger` slot 属性中 `props` 被重命名为 `attrs`，用来表达需要输出到 DOM 元素上的属性。
+
+### 💡 主要变更
+
+- [+] `Column` 组件新增 `filter-options` 与 `filter-multiple` prop，用于开启内置的下拉筛选并设置单选/多选。
+- [^] `Column` 组件的 `filter-value` prop 可以支持 `true` 以外的其它属性，在使用内置下拉筛选时对应下拉选项的 `value` 值。当值为 `null` 时，用来指定筛选未激活的状态。
+- [+] `Column` 组件新增 `filter-title` prop，用于指定下拉筛选的标题说明。
+- [+] `Dropdown` 组件的 `trigger` slot 新增作用域参数 `expanded`/`toggle`，用于获取/切换下拉菜单的展开状态。
+
+### 🐞 问题修复
+
+- [^] 修复了 `less-plugin-dls` 版本依赖错误的问题。
+
+## 2.0.0-beta.26
+
+### ⚠️ 非兼容性变更
+
+- [-] 已移除 `Uploader` 组件的 `compat` prop，不再兼容 `string` 类型的 `value`。
+
+### 💡 主要变更
+
+- [^] `Uploader` 组件大幅重构，并拆分组件实现。
+- [+] `Uploader` 组件新增 `key-field` prop，用于指定 `value` 数组项的唯一键的键名。默认为 `'key'`。
+- [+] `Uploader` 组件的 `value` 数组项新增唯一键字段，用于数据回填时的定位到准确的位置。
+- [+] `Uploader` 组件新增 `multiple` prop，用于指定 `value` 的数据类型是否为数组。如果 `multiple` 为 `true`，即使 `maxCount` 为 `1`，`value` 仍为数组类型。而当指定了大于 `1` 的 `max-count` 值，即使 `multiple` 为 `false` 也不会生效，`value` 始终为数组。
+- [+] `Uploader` 组件新增 `after-pick` 函数 prop，用于新增在选择完文件后执行定的 hook 逻辑。
+
+### 🐞 问题修复
+
+- [^] 修正了 `Table` 组件没有正确处理非可排序列的标题交互状态导致可能报错的问题。
+
+## 2.0.0-beta.25
+
+### 💡 主要变更
+
+- [+] `v-drag` 指令增加 `sort` 类型，用于容器内元素列表的拖动排序。
+- [+] `Progress` 组件在进度条模式下支持新增的属性 `indeterminate`，用于展示不确定进度的情况。
+
+### 🐞 问题修复
+
+- [^] 修复 `Uploader` 组件的 `max-size` 校验在 iframe 上传模式下失效的问题。
+- [^] 为 `file` 类型的 `Uploader` 在 iframe 上传模式下提供正常的进度条展示（不确定进度）。
+
+## 2.0.0-beta.24
+
+### 💡 主要变更
+
+- [+] `Column` 组件新增 `filter-value` prop，用来指定表格列的筛选值。当前仅支持在发生过筛选后设置为 `true`。
+- [+] `Column` 组件新增 `filter` slot，用来指定自定义筛选下拉浮层内容。
+
+### 🐞 问题修复
+
+- [^] 修正 `RadioGroup`/`CheckboxGroup` 组件样式可能错误触发容器发生溢出滚动的问题。
+- [^] `Link` 组件的 `to` prop 现在可以正常使用绝对路径了。
+- [^] 修正 `Radio`/`Checkbox`/`Switch` 组件在点击时会触发两次 `click` 事件的问题。
+
+## 2.0.0-beta.23
+
+### ⚠️ 非兼容性变更
+
+- [-] 已移除实验性全局配置项 `modal.scrollLockMode`，原因是保留滚动位置时无法保证屏幕不发生瞬间闪烁。
+
+### 🐞 问题修复
+
+- [^] 修正 `Overlay` 组件在有开启 `inline`/`local` prop 的父级 `Overlay` 时报错的问题。
+- [^] 修正 `Uploader` 组件在单文件模式下外部修改文件列表不正常的问题。
+
 ## 2.0.0-beta.22
 
 ### 🐞 问题修复
@@ -9,7 +80,7 @@
 
 ### 💡 主要变更
 
-- [^] `Dialog` 触发滚动锁定时，新增全局配置项 `modal.scrollLockMode`，可选值为 `safe`/`advanced`。
+- [^] `Dialog` 触发滚动锁定时，新增实验性全局配置项 `modal.scrollLockMode`，可选值为 `safe`/`advanced`。
 
   > #### 详细说明
   >
@@ -1267,7 +1338,7 @@
 - [^] 修复了上一版本中引入的浮层 `autofocus` 失效的问题。
 - [^] 修复了上一版本中引入的在计算浮层层级过程中有时会导致死循环的问题。
 - [^] 修复了 `Textarea` 组件初始 `value` 为 `null` 时的问题。
-- [^] 修复了 `Input` 组件在 SSR 时报错的问题。
+- [^] 修复了 `Input` ���件在 SSR 时报错的问题。
 - [^] `input` 类型组件的错误状态通过组件数据进行传递，而不仅仅依赖于外层 `Field` 的 `class`。
 - [^] 修复了 `Tab` 使用路由模式时设置 `name` prop 会出错的问题。
 - [^] 修复了 `Table` 的 `update:selected` 事件有时未正确抛出的问题。

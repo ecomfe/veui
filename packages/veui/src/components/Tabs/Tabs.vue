@@ -65,7 +65,6 @@ export default {
   },
   data () {
     return {
-      items: [],
       focusedTab: null,
       listOverflow: false,
       stops: null,

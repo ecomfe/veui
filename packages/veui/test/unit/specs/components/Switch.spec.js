@@ -313,4 +313,36 @@ describe('components/Switch', () => {
     expect(input.element.checked).to.equal(false)
     wrapper.destroy()
   })
+
+  it('should only trigger click once', async () => {
+    let count = 0
+
+    let wrapper = mount(
+      {
+        components: {
+          'veui-switch': Switch
+        },
+        data () {
+          return {
+            checked: false
+          }
+        },
+        methods: {
+          handleClick () {
+            count++
+          }
+        },
+        template: '<veui-switch :checked="checked" @click="handleClick"/>'
+      },
+      {
+        sync: false
+      }
+    )
+
+    wrapper.trigger('click')
+
+    await wrapper.vm.$nextTick()
+
+    expect(count).to.equal(1)
+  })
 })

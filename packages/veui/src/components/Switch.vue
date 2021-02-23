@@ -15,8 +15,9 @@
     type="checkbox"
     v-bind="attrs"
     :checked.prop="realChecked"
-    @change="handleChange"
     v-on="boxListeners"
+    @change="handleChange"
+    @click.stop
   >
   <div :class="$c('switch-switcher')">
     <div
@@ -58,14 +59,17 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, input, useControllable({
-    prop: 'checked',
-    get (val) {
-      return this.isControlled('model')
-        ? this.model === this.trueValue
-        : val
-    }
-  })],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    useControllable({
+      prop: 'checked',
+      get (val) {
+        return this.isControlled('model') ? this.model === this.trueValue : val
+      }
+    })
+  ],
   model: {
     prop: 'model'
   },

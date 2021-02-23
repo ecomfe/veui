@@ -1,10 +1,27 @@
 const webpackConfig = require('@vue/cli-service/webpack.config.js')
+const devServer = require('./build/dev-server')
+
+let files = ['test/global.js']
+if (process.env.KARMA_TEST_FILES_ONLY) {
+  files = files.concat(
+    process.env.KARMA_TEST_FILES_ONLY.split(',').map(v => v.trim())
+  )
+} else {
+  files.push('test/unit/**/*.spec.js')
+}
+
+let browsers = []
+if (process.env.KARMA_TEST_WITH_UI) {
+  browsers.push('Chrome')
+} else {
+  browsers.push('ChromeHeadless')
+}
 
 module.exports = function (config) {
   config.set({
-    frameworks: ['mocha', 'chai'],
+    frameworks: ['mocha', 'chai', 'expressServer'],
 
-    files: ['test/global.js', 'test/unit/**/*.spec.js'],
+    files,
 
     preprocessors: {
       'test/global.js': ['webpack'],
@@ -20,7 +37,7 @@ module.exports = function (config) {
 
     reporters: ['spec', 'coverage-istanbul'],
 
-    browsers: ['ChromeHeadless'],
+    browsers,
 
     coverageIstanbulReporter: {
       dir: './test/coverage',
@@ -36,6 +53,22 @@ module.exports = function (config) {
           subdir: '.'
         }
       }
+    },
+
+    proxies: {
+      '/upload/': 'http://localhost:9877/upload/'
+    },
+
+    expressServer: {
+      port: 9877, // different than karma's port
+      extensions: [
+        function (
+          app, // express app
+          logger // karma logger
+        ) {
+          devServer.before(app)
+        }
+      ]
     }
   })
 }
