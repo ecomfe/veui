@@ -7,6 +7,7 @@ import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import useControllable from '../../mixins/controllable'
 import { focusIn } from '../../utils/dom'
+import { renderSlot } from '../../utils/helper'
 
 function defaultFilter (type, keyword, item, datasource) {
   return includes(item.label, keyword)
@@ -175,7 +176,7 @@ export default {
         }
       },
       [
-        h(
+        renderSlot(this, 'candidate', { datasource: this.datasource }) || h(
           CandidatePanel,
           {
             props: {

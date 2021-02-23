@@ -167,11 +167,36 @@
       </veui-button>
     </div>
   </veui-form>
+
+  <h2>自定义candidate</h2>
+  <veui-transfer
+    v-model="selected4"
+    :datasource="datasource4"
+  >
+    <template v-slot:candidate="{ datasource }">
+      <veui-table
+        class="custom-table"
+        :data="datasource"
+        selectable
+        :selected.sync="selected4"
+        key-field="value"
+      >
+        <veui-table-column
+          field="value"
+          title="ID"
+        />
+        <veui-table-column
+          field="label"
+          title="Name"
+        />
+      </veui-table>
+    </template>
+  </veui-transfer>
 </article>
 </template>
 
 <script>
-import { Transfer, Form, Field, Button, Tree, FilterPanel } from 'veui'
+import { Transfer, Form, Field, Button, Tree, FilterPanel, Table, Column } from 'veui'
 import { cloneDeep } from 'lodash'
 
 export default {
@@ -182,7 +207,9 @@ export default {
     'veui-field': Field,
     'veui-button': Button,
     'veui-tree': Tree,
-    'veui-filter-panel': FilterPanel
+    'veui-filter-panel': FilterPanel,
+    'veui-table': Table,
+    'veui-table-column': Column
   },
   data () {
     let coffees = [
@@ -413,6 +440,9 @@ export default {
     .veui-tree {
       padding: 0 20px;
     }
+  }
+  .custom-table {
+    width: 300px;
   }
 }
 </style>
