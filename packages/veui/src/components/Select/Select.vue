@@ -544,6 +544,11 @@ export default {
         ui={this.realUi}
         ref="root"
         onKeydown={this.handleTriggerKeydown}
+        {...(this.$scopedSlots.trigger
+          ? null
+          : {
+            attrs: this.triggerAttrs
+          })}
       >
         {this.$scopedSlots.trigger ? (
           this.$scopedSlots.trigger({
@@ -569,7 +574,6 @@ export default {
             onInput={this.handleTriggerInput}
             autocomplete="off"
             composition
-            {...{ attrs: this.triggerAttrs }}
           >
             {!this.multiple &&
             this.searchable &&
