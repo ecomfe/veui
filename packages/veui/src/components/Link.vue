@@ -95,9 +95,9 @@ export default {
       e.preventDefault = () => {
         prevented = true
       }
-      this.$emit('click', event)
+      this.$emit('click', e)
 
-      event.preventDefault = prevent
+      e.preventDefault = prevent
 
       if (prevented) {
         return
