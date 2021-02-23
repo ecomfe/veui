@@ -19,7 +19,11 @@
     :disabled="item.disabled || realDisabled || realReadonly"
     role="radio"
     :aria-selected="index === activeIndex"
-    :tabindex="index === activeIndex || activeIndex === -1 && index === 0 ? '0' : '-1'"
+    :tabindex="
+      index === activeIndex || (activeIndex === -1 && index === 0)
+        ? '0'
+        : '-1'
+    "
     @click="handleChange(item.value)"
   >
     <slot
@@ -79,7 +83,10 @@ export default {
       }
 
       let index =
-        ((this.activeIndex === -1 ? 0 : this.activeIndex) + step) % length
+        ((this.activeIndex === -1 ? 0 : this.activeIndex) +
+          (step % length) +
+          length) %
+        length
       this.commit('value', this.items[index].value)
 
       this.$nextTick(() => {
