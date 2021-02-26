@@ -112,7 +112,15 @@
   &-box &-options {
     &:extend(._veui-dropdown-overlay all);
     .padding(@dls-option-group-padding-y, _);
-    .margin(0, @dls-option-dropdown-target-spacing);
+    .margin(0, _);
     pointer-events: all;
+  }
+
+  &-box[x-placement*="right"] &-options {
+    margin-left: @dls-option-dropdown-target-spacing;
+  }
+
+  &-box[x-placement*="left"] &-options {
+    margin-right: @dls-option-dropdown-target-spacing;
   }
 }

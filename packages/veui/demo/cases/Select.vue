@@ -292,10 +292,63 @@
       v-model="hero"
       multiple
     >
-      <veui-option-group
-        position="popup"
-        trigger="hover"
-      >
+      <veui-option
+        value="a"
+        label="a"
+      />
+      <veui-option
+        value="a1"
+        label="a1"
+      />
+      <veui-option
+        value="a2"
+        label="a2"
+      />
+      <veui-option
+        value="a3"
+        label="a3"
+      />
+      <veui-option
+        value="a4"
+        label="a4"
+      />
+      <veui-option
+        value="a5"
+        label="a5"
+      />
+      <veui-option
+        value="a6"
+        label="a6"
+      />
+      <veui-option
+        value="a7"
+        label="a7"
+      />
+      <veui-option
+        value="a8"
+        label="a8"
+      />
+      <veui-option
+        value="a9"
+        label="a9"
+      />
+      <veui-option
+        value="a10"
+        label="a10"
+      />
+      <veui-option
+        value="a11"
+        label="a11"
+      />
+      <veui-option
+        value="a12"
+        label="a12"
+      />
+      <veui-option
+        value="a13"
+        label="a13"
+      />
+      <veui-option-group position="popup">
         <template slot="label">中国 🇨🇳</template>
         <veui-option-group
           label="互联网"
