@@ -30,7 +30,7 @@ export default {
     files: Array,
     addable: Boolean,
     disabled: Boolean,
-    draggable: Boolean,
+    sortable: Boolean,
 
     // the provide and inject bindings are NOT reactive, use object to work around
     options: Object
@@ -40,7 +40,7 @@ export default {
 
     dragSortOptions () {
       return {
-        disabled: !this.draggable,
+        disabled: !this.sortable,
         name: uniqueId('veui-uploader-drag-sort-'),
         callback: this.handleDragSort
       }

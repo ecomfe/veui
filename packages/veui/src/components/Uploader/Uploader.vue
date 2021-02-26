@@ -15,7 +15,7 @@
     :files="fileList"
     :addable="canAddImage"
     :disabled="realUneditable"
-    :draggable="!realUneditable && draggable"
+    :sortable="!realUneditable && sortable"
     :options="childOptions"
     @move="handleItemMove"
     @add="handleItemAdd"
@@ -217,7 +217,7 @@ export default {
       type: Boolean,
       default: false
     },
-    draggable: Boolean,
+    sortable: Boolean,
     upload: Function,
     controls: Function,
     pickerPosition: {
