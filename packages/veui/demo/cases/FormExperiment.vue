@@ -647,12 +647,12 @@ h1 {
   margin-left: 8px;
 }
 
-.veui-form >>> .veui-field .veui-field-no-label {
-  margin-bottom: 0 !important;
-}
-
 .compact >>> .veui-form .veui-field {
   margin-bottom: 24px !important;
+}
+
+.veui-form >>> .veui-field .veui-field-no-label {
+  margin-bottom: 0 !important;
 }
 
 .compact >>> .veui-field-error {
