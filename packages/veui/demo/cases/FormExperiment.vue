@@ -614,7 +614,7 @@ export default {
             form_exp_gender: data.gender,
             form_exp_total_time: Date.now() - this.startTime,
             form_exp_name: data.name,
-            form_exp_compact: 'compact' in this.$route.query
+            form_exp_compact: 'compact' in this.$route.query ? 1 : 0
           }
         ])
       }
