@@ -21,15 +21,12 @@ export default function ({ types: t }) {
             return
           }
 
-          node.specifiers.forEach(({ imported, local }) => {
+          let newImports = node.specifiers.map(({ imported, local }) => {
             if (imported.name === 'default') {
-              path.insertBefore(
-                t.importDeclaration(
-                  [t.importDefaultSpecifier(t.identifier(local.name))],
-                  t.stringLiteral(src)
-                )
+              return t.importDeclaration(
+                [t.importDefaultSpecifier(t.identifier(local.name))],
+                t.stringLiteral(src)
               )
-              path.getSibling(path.key - 1).skip()
             } else {
               let realName = getComponentName(imported.name)
 
@@ -40,17 +37,14 @@ export default function ({ types: t }) {
                 )
               }
               let name = local.name || imported.name
-              path.insertBefore(
-                t.importDeclaration(
-                  [t.importDefaultSpecifier(t.identifier(name))],
-                  t.stringLiteral(componentSrc)
-                )
+              return t.importDeclaration(
+                [t.importDefaultSpecifier(t.identifier(name))],
+                t.stringLiteral(componentSrc)
               )
-              path.getSibling(path.key - 1).skip()
             }
           })
 
-          path.remove()
+          path.replaceWithMultiple(newImports)
         }
       }
     }
