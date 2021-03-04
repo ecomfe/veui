@@ -47,7 +47,15 @@ export default {
       prop: 'value',
       event: 'change',
       get (val) {
-        return this.multiple ? (val != null ? [].concat(val) : []) : val
+        // 保证多选 realValue 一定是数组
+        // 保证单选没值一定是 null
+        return this.multiple
+          ? val != null
+            ? [].concat(val)
+            : []
+          : val != null
+            ? val
+            : null
       }
     }),
     i18n
@@ -76,15 +84,12 @@ export default {
   },
   computed: {
     selected () {
-      if (this.realValue == null) {
-        if (this.multiple) {
-          return []
-        }
-        return null
+      if (this.isEmpty) {
+        return this.realValue
       }
 
       if (this.multiple) {
-        return (this.realValue || [])
+        return this.realValue
           .map(val => findOptionByValue(this.realOptions, val))
           .filter(Boolean)
       }
@@ -98,17 +103,16 @@ export default {
     },
     inputPlaceholder () {
       if (this.multiple) {
-        if ((this.realValue && this.realValue.length > 0) || !this.searchable) {
+        if (!this.isEmpty || !this.searchable) {
           return ''
         }
         return this.realPlaceholder
       }
-
-      if (!this.searchable) {
-        return !this.realValue ? this.realPlaceholder : ''
-      }
-
-      return !this.realValue ? this.realPlaceholder : this.label
+      return this.isEmpty
+        ? this.realPlaceholder
+        : this.searchable
+          ? this.label
+          : ''
     },
     label () {
       return this.selected ? this.selected.label : ''
@@ -123,7 +127,7 @@ export default {
       if (this.inputValue) {
         return this.inputValue
       }
-      if (this.realValue === null || this.realExpanded) {
+      if (this.realValue == null || this.realExpanded) {
         return ''
       }
       return this.label
@@ -142,8 +146,7 @@ export default {
     },
     isEmpty () {
       return (
-        !this.realValue ||
-        (Array.isArray(this.realValue) && this.realValue.length === 0)
+        this.realValue == null || (this.multiple && this.realValue.length === 0)
       )
     },
     isMultiLevel () {
@@ -332,12 +335,12 @@ export default {
           }
           break
         case 'Backspace': {
-          let values = this.realValue
-          if (!values || !values.length) {
+          if (this.isEmpty) {
             break
           }
 
           if (this.multiple && this.searchable && !this.inputValue) {
+            let values = this.realValue
             for (let i = values.length - 1; i >= 0; i--) {
               let option = findOptionByValue(this.realOptions, values[i])
               if (!option.disabled) {
@@ -362,9 +365,6 @@ export default {
       this.$emit('input', val)
       this.inputValue = val
       this.commit('expanded', true)
-      if (!val && !this.multiple) {
-        this.commit('value', '')
-      }
       if (this.multiple && this.searchable) {
         this.nativeInput.style.width = ''
         this.nativeInput.style.width = `${this.nativeInput.scrollWidth}px`
@@ -493,17 +493,16 @@ export default {
     ) : null
 
     let beforeSlot =
-      !this.multiple && !this.searchable && this.realValue != null ? (
+      !this.multiple && !this.searchable && !this.isEmpty ? (
         <span
           class={{
-            [this.$c('select-label')]: true,
-            [this.$c('select-placeholder')]: this.realValue === null
+            [this.$c('select-label')]: true
           }}
           id={this.labelId}
         >
           {renderLabelOrSelected({
             ...this.selected,
-            selected: this.realValue != null
+            selected: true
           }) || this.label}
         </span>
       ) : null
@@ -582,7 +581,7 @@ export default {
                 <template slot="placeholder">
                   {renderLabelOrSelected({
                     ...this.selected,
-                    selected: this.realValue != null
+                    selected: !this.isEmpty
                   }) || this.label}
                 </template>
               ) : null}
@@ -594,28 +593,25 @@ export default {
                 <span class={this.$c('select-count')}>{this.limitLabel}</span>
               ) : null}
               <div class={this.$c('select-icon')}>
-                {this.clearable &&
-                (this.multiple
-                  ? this.realValue.length > 0
-                  : !!this.realValue) ? (
-                    <Button
-                      class={this.$c('select-clear')}
-                      ui={this.uiParts.clear}
-                      aria-label={this.t('clear')}
-                      disabled={this.realDisabled || this.realReadonly}
-                      // had to do so because of vuejs/jsx#77
-                      {...{
-                        on: {
-                          click: this.clear,
-                          '!keydown': stopPropagation,
-                          '!mousedown': stopPropagation,
-                          '!mouseup': stopPropagation
-                        }
-                      }}
-                    >
-                      <Icon name={this.icons.clear} />
-                    </Button>
-                  ) : null}
+                {this.clearable && !this.isEmpty ? (
+                  <Button
+                    class={this.$c('select-clear')}
+                    ui={this.uiParts.clear}
+                    aria-label={this.t('clear')}
+                    disabled={this.realDisabled || this.realReadonly}
+                    // had to do so because of vuejs/jsx#77
+                    {...{
+                      on: {
+                        click: this.clear,
+                        '!keydown': stopPropagation,
+                        '!mousedown': stopPropagation,
+                        '!mouseup': stopPropagation
+                      }
+                    }}
+                  >
+                    <Icon name={this.icons.clear} />
+                  </Button>
+                ) : null}
                 <Icon
                   class={this.$c('select-toggle')}
                   name={this.icons[this.realExpanded ? 'collapse' : 'expand']}
