@@ -163,6 +163,7 @@ export default {
           priority: this.priority,
           orderChangeCallback: order => {
             this.zIndex = order
+            this.$emit('orderchange', order)
           }
         })
       } else if (val) {
