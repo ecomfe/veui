@@ -1,7 +1,15 @@
 <script>
 import CandidatePanel from './_CandidatePanel'
 import SelectedPanel from './_SelectedPanel'
-import { includes, isString, clone, difference, omit, remove } from 'lodash'
+import {
+  includes,
+  isString,
+  clone,
+  difference,
+  omit,
+  remove,
+  uniq
+} from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
@@ -15,13 +23,18 @@ function defaultFilter (type, keyword, item, datasource) {
 
 export default {
   name: 'veui-transfer',
-  mixins: [prefix, ui, input, useControllable({
-    prop: 'selected',
-    event: 'select',
-    get (val) {
-      return val || []
-    }
-  })],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    useControllable({
+      prop: 'selected',
+      event: 'select',
+      get (val) {
+        return val || []
+      }
+    })
+  ],
   model: {
     prop: 'selected',
     event: 'select'
@@ -176,35 +189,40 @@ export default {
         }
       },
       [
-        renderSlot(this, 'candidate', { datasource: this.datasource }) || h(
-          CandidatePanel,
-          {
-            props: {
-              datasource: this.datasource,
-              searchable: this.searchable,
-              filter: this.filter,
-              placeholder: this.candidatePlaceholder,
-              isSelectable: this.isSelectable,
-              selected: this.realSelected,
-              uiParts: this.uiParts,
-              ui: this.realUi
-            },
-            on: {
-              select: (...args) => {
-                this.handleSelect(...args)
+        renderSlot(this, 'candidate', { datasource: this.datasource }) ||
+          h(
+            CandidatePanel,
+            {
+              props: {
+                datasource: this.datasource,
+                searchable: this.searchable,
+                filter: this.filter,
+                placeholder: this.candidatePlaceholder,
+                isSelectable: this.isSelectable,
+                selected: this.realSelected,
+                uiParts: this.uiParts,
+                ui: this.realUi
               },
-              selectall: (...args) => {
-                this.commit('selected', this.collectDescendantValue(this.datasource))
-              }
+              on: {
+                select: (...args) => {
+                  this.handleSelect(...args)
+                },
+                selectall: (...args) => {
+                  let selected = uniq([
+                    ...this.realSelected,
+                    ...this.collectDescendantValue(this.datasource)
+                  ])
+                  this.commit('selected', selected)
+                }
+              },
+              scopedSlots: generateItem.call(this, 'candidate'),
+              ref: 'candidatePanel'
             },
-            scopedSlots: generateItem.call(this, 'candidate'),
-            ref: 'candidatePanel'
-          },
-          [
-            ...generateHead.call(this, 'candidate'),
-            generateNoData.call(this, 'candidate')
-          ]
-        ),
+            [
+              ...generateHead.call(this, 'candidate'),
+              generateNoData.call(this, 'candidate')
+            ]
+          ),
         h(
           SelectedPanel,
           {
@@ -219,17 +237,18 @@ export default {
             },
             on: {
               remove: (item, parents) => {
-                let selected = difference(
-                  this.realSelected,
-                  [
-                    ...this.collectDescendantValue([item]),
-                    ...parents.map(i => i.value)
-                  ]
-                )
+                let selected = difference(this.realSelected, [
+                  ...this.collectDescendantValue([item]),
+                  ...parents.map(i => i.value)
+                ])
                 this.commit('selected', selected)
               },
               removeall: (...args) => {
-                this.commit('selected', [])
+                let selected = difference(
+                  this.realSelected,
+                  this.collectDescendantValue(this.selectedItems)
+                )
+                this.commit('selected', selected)
               }
             },
             scopedSlots: generateItem.call(this, 'selected')

@@ -241,7 +241,7 @@ describe('components/Transfer', () => {
     )
 
     wrapper.find('.veui-transfer-select-all').trigger('click')
-    expect(wrapper.vm.$data.selected).to.deep.equal([
+    unorderedEqual(wrapper.vm.$data.selected, [
       'aa',
       'aa0',
       'aa1',
@@ -341,7 +341,12 @@ describe('components/Transfer', () => {
       .trigger('change')
     await vm.$nextTick()
     expect(vm.$data.selected).to.deep.equal(['aa10', 'aa11', 'bb', 'cc11'])
-    expect(vm.$refs.transfer.$refs.candidatePanel.selected).to.deep.equal(['aa10', 'aa11', 'bb', 'cc11'])
+    expect(vm.$refs.transfer.$refs.candidatePanel.selected).to.deep.equal([
+      'aa10',
+      'aa11',
+      'bb',
+      'cc11'
+    ])
     wrapper.destroy()
   })
 
@@ -410,7 +415,9 @@ describe('components/Transfer', () => {
       .trigger('change')
     await vm.$nextTick()
     expect(vm.selected).to.deep.equal(['aa2'])
-    expect(vm.$refs.transfer.$refs.candidatePanel.selected).to.deep.equal(['aa2'])
+    expect(vm.$refs.transfer.$refs.candidatePanel.selected).to.deep.equal([
+      'aa2'
+    ])
 
     vm.selected = null
     await vm.$nextTick()
@@ -436,3 +443,9 @@ describe('components/Transfer', () => {
     wrapper.destroy()
   })
 })
+
+function unorderedEqual (a, b) {
+  expect(a)
+    .to.have.members(b)
+    .and.to.have.lengthOf(b.length)
+}

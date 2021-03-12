@@ -14,7 +14,10 @@
   }
 
   ul {
-    padding-left: dls-sum(@dls-tree-icon-size-aux, @dls-tree-node-content-spacing);
+    padding-left: dls-sum(
+      @dls-tree-icon-size-aux,
+      @dls-tree-node-content-spacing
+    );
   }
 
   &-item {
@@ -38,6 +41,7 @@
       background: none;
       border: none;
       padding: 0;
+      width: @dls-tree-icon-size-aux;
       margin-right: @dls-tree-node-content-spacing;
       cursor: pointer;
       outline: none;
@@ -151,7 +155,6 @@
     cursor: not-allowed;
   }
 
-  .@{veui-prefix}-disabled &-item-expand-switcher,
   .@{veui-prefix}-disabled &-item-expand-switcher {
     color: @dls-tree-icon-color-aux-disabled;
     cursor: not-allowed;

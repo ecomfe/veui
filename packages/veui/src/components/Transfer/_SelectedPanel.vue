@@ -81,8 +81,8 @@
         <veui-button
           :class="$c('tree-item-remove')"
           :ui="uiParts.remove"
-          :disabled="!isSelectable"
-          @click="remove(props.item, props.parents)"
+          :disabled="!isSelectable || !!props.disabled"
+          @click.stop="remove(props.item, props.parents)"
         >
           <veui-icon
             :aria-label="t('@transfer.remove')"
