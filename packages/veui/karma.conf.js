@@ -23,6 +23,8 @@ module.exports = function (config) {
 
     files,
 
+    browserNoActivityTimeout: 60000,
+
     preprocessors: {
       'test/global.js': ['webpack'],
       '**/*.spec.js': ['webpack', 'sourcemap']
