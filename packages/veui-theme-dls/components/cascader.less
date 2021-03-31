@@ -1,0 +1,42 @@
+@import "../lib.less";
+@import (reference) "../dropdown.less";
+@import (reference) "../trigger.less";
+
+.@{veui-prefix}-cascader {
+  display: inline-flex;
+
+  .@{veui-prefix}-trigger {
+    &:extend(._veui-select-trigger all);
+  }
+
+  &-pane-wrap {
+    &:extend(._veui-dropdown-overlay all);
+    &[ui] {
+      max-height: none;
+    }
+    overflow-y: auto;
+    background-color: @dls-option-background-color;
+    outline: none;
+  }
+
+  // 特殊处理：将全选伪造成第一层
+  &-select-all &-pane &-pane-menu:first-child > &-pane-tree > li > &-pane-tree {
+    padding-left: 0;
+  }
+
+  &-pane-option {
+    .veui-search-result();
+  }
+
+  &-search-result {
+    .@{veui-prefix}-cascader-pane-menu {
+      width: 100%;
+    }
+    .@{veui-prefix}-cascader-pane-menu > .@{veui-prefix}-cascader-pane-tree {
+      height: auto;
+    }
+    &-item-separator {
+      transform: rotate(-90deg);
+    }
+  }
+}

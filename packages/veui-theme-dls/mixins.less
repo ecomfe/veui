@@ -71,3 +71,13 @@
   outline-offset: @offset;
   box-shadow: none;
 }
+
+.veui-search-result() {
+  .@{veui-prefix}-search-result-item-matched {
+    color: @dls-option-font-color-highlighted;
+    background: transparent;
+  }
+  .@{veui-prefix}-search-result-item-separator {
+    margin: 0 2 * @dls-spacing-unit; // TODO
+  }
+}

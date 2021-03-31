@@ -1,0 +1,175 @@
+._veui-select-trigger {
+  @adjusted-select-padding-y: dls-sum(@dls-select-padding-y, -1px);
+  @trigger: ~"@{veui-prefix}-trigger";
+
+  &-icon {
+    display: flex;
+    position: relative;
+  }
+
+  &-placeholder {
+    color: @dls-input-placeholder-color;
+  }
+
+  &-count {
+    margin-right: @dls-select-content-spacing;
+  }
+
+  &-toggle {
+    .dls-icon-size(@dls-select-icon-size-aux);
+    .veui-transition(transform, color, opacity);
+    color: @dls-select-icon-color-aux;
+  }
+
+  &.@{veui-prefix}-readonly .@{trigger}-toggle,
+  &.@{veui-prefix}-disabled .@{trigger}-toggle {
+    color: @dls-select-icon-color-aux-disabled;
+  }
+
+  &:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
+    .@{trigger}-clear
+    + .@{trigger}-toggle,
+  .@{veui-prefix}-focus .@{trigger}-clear + .@{trigger}-toggle,
+  &-clear.focus-visible + .@{trigger}-toggle {
+    opacity: 0;
+  }
+
+  &-expanded .@{trigger}-toggle {
+    transform: rotateZ(180deg);
+  }
+
+  &-clear {
+    .absolute(50%, 50%, _, _);
+    transform: translate(50%, -50%);
+    opacity: 0;
+    z-index: 1;
+
+    .@{veui-prefix}-icon,
+    .dls-icon {
+      .dls-icon-size(@dls-input-icon-size);
+    }
+  }
+
+  &:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
+    .@{trigger}-clear,
+  .@{veui-prefix}-focus .@{trigger}-clear,
+  .@{trigger}-clear.focus-visible {
+    opacity: 1;
+  }
+
+  .@{veui-prefix}-input-input {
+    display: none;
+  }
+
+  &-searchable {
+    .@{veui-prefix}-input-input {
+      display: block;
+    }
+  }
+
+  &:not(.@{trigger}-empty):not(.@{trigger}-expanded):not(.@{veui-prefix}-focus)
+    .@{veui-prefix}-input-placeholder {
+    color: @dls-input-font-color;
+  }
+
+  &.@{veui-prefix}-readonly .@{veui-prefix}-input-placeholder {
+    color: @dls-input-font-color-read-only;
+  }
+
+  &-label {
+    max-width: none;
+    .ellipsis();
+
+    .@{veui-prefix}-readonly .@{trigger}-label {
+      color: @dls-input-font-color-read-only;
+    }
+
+    .@{veui-prefix}-disabled .@{trigger}-label {
+      color: @dls-input-font-color-disabled;
+    }
+  }
+
+  &-wrap.@{veui-prefix}-input {
+    display: block;
+    min-width: 100%;
+    height: auto;
+    overflow: hidden;
+
+    .@{veui-prefix}-input-before {
+      display: block;
+      overflow: visible;
+
+      .@{veui-prefix}-tag {
+        float: left;
+        margin-right: @dls-select-tag-spacing;
+        margin-top: @adjusted-select-padding-y;
+      }
+
+      .@{veui-prefix}-trigger-placeholder {
+        float: left;
+        margin-top: @adjusted-select-padding-y;
+      }
+    }
+
+    .@{veui-prefix}-input-input {
+      float: left;
+      margin-top: @adjusted-select-padding-y;
+      width: 0;
+    }
+
+    .@{veui-prefix}-input-placeholder {
+      margin-top: @adjusted-select-padding-y;
+    }
+
+    .@{veui-prefix}-input-after {
+      float: right;
+      margin: @adjusted-select-padding-y 0;
+    }
+  }
+
+  &-custom-label {
+    flex: 0 1 auto;
+    .ellipsis();
+  }
+
+  &-searchable.@{trigger}-multiple {
+    &:not(.@{veui-prefix}-trigger-empty) .@{veui-prefix}-input-content {
+      display: block;
+    }
+
+    .@{veui-prefix}-input-input {
+      width: 0;
+      max-width: 100%;
+    }
+
+    &.@{veui-prefix}-trigger-expanded {
+      .@{veui-prefix}-input-input {
+        width: 10px;
+      }
+    }
+  }
+
+  .make-metrics (@size) {
+    @height: ~"dls-select-tag-height-@{size}";
+
+    &.@{veui-prefix}-trigger.@{trigger}-wrap {
+      .@{veui-prefix}-trigger-placeholder {
+        line-height: @@height;
+      }
+
+      .@{veui-prefix}-input-after {
+        height: @@height;
+      }
+
+      .@{veui-prefix}-tag {
+        height: @@height;
+      }
+
+      .@{veui-prefix}-input-input {
+        height: @@height;
+      }
+    }
+  }
+
+  .make-metrics(m);
+}

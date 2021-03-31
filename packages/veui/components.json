@@ -64,6 +64,14 @@
     "path": "Carousel.vue"
   },
   {
+    "name": "Cascader",
+    "path": "Cascader/Cascader.vue"
+  },
+  {
+    "name": "CascaderPane",
+    "path": "Cascader/CascaderPane.vue"
+  },
+  {
     "name": "CheckButtonGroup",
     "path": "CheckButtonGroup.vue"
   },

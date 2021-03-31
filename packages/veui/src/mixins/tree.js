@@ -8,6 +8,8 @@ import {
 
 const INDETERMINATE = 'include-indeterminate'
 
+const call = (val, context) => (typeof val === 'function' ? val(context) : val)
+
 const methods = {
   /**
    * 向参数 tree 加上 checked 信息
@@ -17,12 +19,17 @@ const methods = {
    */
   markChecked (tree, checked) {
     let walker = {
-      enter (item, context) {
-        return markAncestorInChecked(item, checked, context)
+      enter: (item, context) => {
+        return markAncestorInChecked(
+          item,
+          checked,
+          context,
+          this.treeChildrenKey
+        )
       },
       exit: (item, context) => {
-        let { value, children } = item
-        if (hasChildren(item)) {
+        let { value, [this.treeChildrenKey]: children } = item
+        if (hasChildren(item, this.treeChildrenKey)) {
           item.checked = children.every(({ checked }) => checked)
           item.partialChecked =
             !item.checked &&
@@ -38,7 +45,7 @@ const methods = {
         }
       }
     }
-    walk(tree, walker)
+    walk(tree, walker, this.treeChildrenKey)
     return tree
   },
 
@@ -50,44 +57,54 @@ const methods = {
    * @param {Array} datasource 完整的数据源，用来normalize
    */
   toggleItem (prevChecked, item, parents, datasource) {
-    let strategy = this.strategy
-    let newChecked = _toggleItem(prevChecked, item, parents, { strategy })
-    return getNormalizedCheckedValues(datasource, newChecked, strategy)
+    let options = {
+      strategy: this.strategy,
+      childrenKey: this.treeChildrenKey
+    }
+    let newChecked = _toggleItem(prevChecked, item, parents, options)
+    return getNormalizedCheckedValues(datasource, newChecked, options)
   },
 
   // 参见上面 toggle，这里是 toggle 中的选中操作，类似 transfer candidate 中选中（不能选中 hidden 的）
   checkItem (prevChecked, item, parents, datasource) {
-    let strategy = this.strategy
-    let newChecked = _toggleItem(prevChecked, item, parents, {
-      strategy,
+    let options = {
+      strategy: this.strategy,
+      childrenKey: this.treeChildrenKey,
       operation: 'check'
-    })
-    return getNormalizedCheckedValues(datasource, newChecked, strategy)
+    }
+    let newChecked = _toggleItem(prevChecked, item, parents, options)
+    return getNormalizedCheckedValues(datasource, newChecked, options)
   },
 
   // 参见上面 toggle，这里是 toggle 中的取消操作，类似 transfer candidatePanel 中取消（不能取消 hidden 的）
   uncheckItem (prevChecked, item, parents, datasource) {
-    let strategy = this.strategy
-    let newChecked = _toggleItem(prevChecked, item, parents, {
-      strategy,
+    let options = {
+      strategy: this.strategy,
+      childrenKey: this.treeChildrenKey,
       operation: 'uncheck'
-    })
-    return getNormalizedCheckedValues(datasource, newChecked, strategy)
+    }
+    let newChecked = _toggleItem(prevChecked, item, parents, options)
+    return getNormalizedCheckedValues(datasource, newChecked, options)
   },
 
   // 参见上面 uncheckItem，不同的是这里忽略 hidden 的影响，类似 transfer selectedPanel 中取消
   clearItem (prevChecked, item, parents, datasource) {
-    let strategy = this.strategy
-    let newChecked = _toggleItem(prevChecked, item, parents, {
-      strategy,
+    let options = {
+      strategy: this.strategy,
+      childrenKey: this.treeChildrenKey,
       operation: 'clear'
-    })
-    return getNormalizedCheckedValues(datasource, newChecked, strategy)
+    }
+    let newChecked = _toggleItem(prevChecked, item, parents, options)
+    return getNormalizedCheckedValues(datasource, newChecked, options)
   },
 
   // transfer candidatePanel 中的全选（不能选中 hidden 的）
   checkAll (prevChecked, wholeTreeWithMarkingHidden) {
-    let options = { strategy: this.strategy, operation: 'check' }
+    let options = {
+      strategy: this.strategy,
+      childrenKey: this.treeChildrenKey,
+      operation: 'check'
+    }
     return batch(
       prevChecked,
       wholeTreeWithMarkingHidden,
@@ -97,23 +114,32 @@ const methods = {
   },
 
   clearAll (prevChecked, itemsToBatch, datasource) {
-    let options = { strategy: this.strategy, operation: 'clear' }
+    let options = {
+      strategy: this.strategy,
+      childrenKey: this.treeChildrenKey,
+      operation: 'clear'
+    }
     return batch(prevChecked, itemsToBatch, datasource, options)
   },
 
   // 用原始 tree 和 checked 选中数据派生出选中的子树
   getCheckedSubTree (tree, checked) {
     const walker = {
-      enter (item, context) {
-        return markAncestorInChecked(item, checked, context)
+      enter: (item, context) => {
+        return markAncestorInChecked(
+          item,
+          checked,
+          context,
+          this.treeChildrenKey
+        )
       },
       exit: (item, context) => {
-        if (hasChildren(item)) {
+        if (hasChildren(item, this.treeChildrenKey)) {
           let children = context.childrenResult.filter(i => !!i)
           if (children.length) {
             return {
               ...item,
-              children
+              [this.treeChildrenKey]: children
             }
           }
         } else {
@@ -127,18 +153,22 @@ const methods = {
         }
       }
     }
-    return walk(tree, walker).filter(i => !!i)
+    return walk(tree, walker, this.treeChildrenKey).filter(i => !!i)
   }
 }
 
 export default function treeFactory (options = {}) {
-  let { supportIndeterminate } = options
+  let {
+    supportIndeterminate,
+    childrenKey = 'children',
+    defaultMerge = 'keep-all'
+  } = options
 
   // props
   let props = {
     mergeChecked: {
       type: String,
-      default: 'keep-all',
+      default: defaultMerge,
       validator (value) {
         return includes(['keep-all', 'upwards', 'downwards'], value)
       }
@@ -156,6 +186,9 @@ export default function treeFactory (options = {}) {
           return INDETERMINATE
         }
         return this.mergeChecked
+      },
+      treeChildrenKey () {
+        return call(childrenKey, this) // 直接应该是 children or options
       }
     },
     methods
@@ -197,20 +230,25 @@ function getCheckedValues (
  * 重新生成一份符合当前 strategy 的选中数据
  * @param {Array} datasource 全量数据
  * @param {Array} checked 选中的数据
- * @param {string} strategy 选中数据的合并策略
+ * @param {string} options.strategy 选中数据的合并策略
+ * @param {string} options.childrenKey 子项的字段名
  * @return {Array} 符合当前 strategy 的选中数据
  */
-function getNormalizedCheckedValues (datasource, checked, strategy) {
+function getNormalizedCheckedValues (
+  datasource,
+  checked,
+  { strategy, childrenKey }
+) {
   let walker = {
     enter (item, context) {
-      return markAncestorInChecked(item, checked, context)
+      return markAncestorInChecked(item, checked, context, childrenKey)
     },
     exit (item, context) {
-      let { value, children } = item
+      let { value, [childrenKey]: children } = item
       let itemChecked = false
       let partialChecked = false
       let childrenCheckedValues = []
-      if (hasChildren(item)) {
+      if (hasChildren(item, childrenKey)) {
         itemChecked = context.childrenResult.every(i => !!i.checked)
         partialChecked =
           !itemChecked &&
@@ -236,7 +274,7 @@ function getNormalizedCheckedValues (datasource, checked, strategy) {
       return { checked: itemChecked, partialChecked, values }
     }
   }
-  return walk([{ children: datasource }], walker)[0].values
+  return walk([{ [childrenKey]: datasource }], walker, childrenKey)[0].values
 }
 
 function batch (prevChecked, itemsToBatch, datasource, options) {
@@ -249,7 +287,7 @@ function batch (prevChecked, itemsToBatch, datasource, options) {
   }, prevChecked)
 
   // 重新生成一份符合当前 strategy 的 checked
-  return getNormalizedCheckedValues(datasource, newChecked, options.strategy)
+  return getNormalizedCheckedValues(datasource, newChecked, options)
 }
 
 /**
@@ -260,10 +298,16 @@ function batch (prevChecked, itemsToBatch, datasource, options) {
  * @param {string} option.strategy 选中值合并策略
  * @param {string} option.operation toggle/check/uncheck/clear
  *   操作：check（选中参数中的item），uncheck（取消参数中的item），clear清空非disabled，默认是toggle
+ * @param {string} option.childrenKey 子项的字段名
  */
-function _toggleItem (prevChecked, item, parents, { strategy, operation }) {
+function _toggleItem (
+  prevChecked,
+  item,
+  parents,
+  { strategy, operation, childrenKey }
+) {
   let checked
-  let isGroup = hasChildren(item)
+  let isGroup = hasChildren(item, childrenKey)
   prevChecked = prevChecked || []
   let clear = operation === 'clear'
   operation = clear ? 'uncheck' : operation
@@ -273,24 +317,28 @@ function _toggleItem (prevChecked, item, parents, { strategy, operation }) {
     let leaves
     if (!operation || isUncheck(operation)) {
       leaves = clear
-        ? getEnabledLeavesFrom(item)
-        : getEnabledCheckedLeavesFrom(item)
+        ? getEnabledLeavesFrom(item, childrenKey)
+        : getEnabledCheckedLeavesFrom(item, childrenKey)
       if (!operation && leaves.length) {
         operation = 'uncheck'
       }
     }
 
     if (!operation || !isUncheck(operation)) {
-      leaves = getEnabledUncheckedLeavesFrom(item)
+      leaves = getEnabledUncheckedLeavesFrom(item, childrenKey)
       operation = 'check'
     }
     checked = isUncheck(operation)
-      ? uncheckGroup(prevChecked, item, parents, { strategy, leaves })
+      ? uncheckGroup(prevChecked, item, parents, {
+        strategy,
+        leaves,
+        childrenKey
+      })
       : checkGroup(prevChecked, leaves)
   } else {
     operation = operation || (item.checked ? 'uncheck' : 'check')
     checked = isUncheck(operation)
-      ? uncheckLeaf(prevChecked, item, parents, { strategy })
+      ? uncheckLeaf(prevChecked, item, parents, { strategy, childrenKey })
       : checkLeaf(prevChecked, item)
   }
   return checked
@@ -300,7 +348,7 @@ function checkLeaf (prevChecked, item) {
   return [...prevChecked, item.value]
 }
 
-function uncheckLeaf (prevChecked, item, parents, { strategy }) {
+function uncheckLeaf (prevChecked, item, parents, { strategy, childrenKey }) {
   let includeIndeterminate = strategy === INDETERMINATE
   let parentValues = parents.map(i => i.value).filter(val => val != null)
   let willUncheck = [item.value, ...parentValues] // 可能多删掉中间态的 parent，会在后面的 getNormalizedCheckedValues 中重新推导出来
@@ -308,7 +356,10 @@ function uncheckLeaf (prevChecked, item, parents, { strategy }) {
     includes(prevChecked, value)
   )
   let realChecked = !includeIndeterminate
-    ? [...prevChecked, ...(mostTopAncestor ? getLeaves(mostTopAncestor) : [])]
+    ? [
+      ...prevChecked,
+      ...(mostTopAncestor ? getLeaves(mostTopAncestor, childrenKey) : [])
+    ]
     : prevChecked
   return realChecked.filter(i => !includes(willUncheck, i))
 }
@@ -317,12 +368,17 @@ function checkGroup (prevChecked, leaves) {
   return [...prevChecked, ...leaves]
 }
 
-function uncheckGroup (prevChecked, item, parents, { strategy, leaves }) {
+function uncheckGroup (
+  prevChecked,
+  item,
+  parents,
+  { strategy, leaves, childrenKey }
+) {
   let includeIndeterminate = strategy === INDETERMINATE
   let parentValues = parents.map(i => i.value).filter(val => val != null)
   let willUncheck = [
     ...leaves,
-    ...getGroupDescendants(item),
+    ...getGroupDescendants(item, childrenKey),
     ...(item.value != null ? [item.value] : []),
     ...parentValues // 可能多删掉中间态的 parent，会在后面的 getNormalizedCheckedValues 中重新推导出来
   ]
@@ -338,30 +394,40 @@ function uncheckGroup (prevChecked, item, parents, { strategy, leaves }) {
   let realChecked = !includeIndeterminate
     ? [
       ...prevChecked,
-      ...replaceCheckedGroupWithLeaves(prevChecked, parents, item)
+      ...replaceCheckedGroupWithLeaves(
+        prevChecked,
+        parents,
+        item,
+        childrenKey
+      )
     ]
     : prevChecked
 
   return realChecked.filter(i => !includes(willUncheck, i))
 }
 
-function replaceCheckedGroupWithLeaves (prevChecked, parents, self) {
+function replaceCheckedGroupWithLeaves (
+  prevChecked,
+  parents,
+  self,
+  childrenKey
+) {
   let mostTopAncestor = find(parents, p => inChecked(prevChecked, p))
   // 祖先有选中的，那么直接替换最高祖先
   if (mostTopAncestor) {
-    return getLeaves(mostTopAncestor)
+    return getLeaves(mostTopAncestor, childrenKey)
   }
 
   // 自身是选中，直接替换自身
   if (inChecked(prevChecked, self)) {
-    return getLeaves(self)
+    return getLeaves(self, childrenKey)
   }
 
   // 遍历替换后代选中的 group 节点
   let result = []
   walk(self, item => {
-    if (hasChildren(item) && inChecked(prevChecked, item)) {
-      result.push(...getLeaves(item))
+    if (hasChildren(item, childrenKey) && inChecked(prevChecked, item)) {
+      result.push(...getLeaves(item, childrenKey))
       // 该节点以下已经替换过了
       return false
     }
@@ -369,7 +435,7 @@ function replaceCheckedGroupWithLeaves (prevChecked, parents, self) {
   return result
 }
 
-function getLeavesByContext (item, initialContext) {
+function getLeavesByContext (item, initialContext, childrenKey) {
   let result = []
   walk(
     item,
@@ -377,8 +443,8 @@ function getLeavesByContext (item, initialContext) {
       // 1. 只要 checked 叶子，disabled 或 disabled 父下的不要
       // 2. hidden条件：不是 true 的叶子，或者 leafAncestor 下的叶子
       let { disabled, value } = child
-      if (hasChildren(child)) {
-        if (context.hidden != null && isLeafAncestor(child)) {
+      if (hasChildren(child, childrenKey)) {
+        if (context.hidden != null && isLeafAncestor(child, childrenKey)) {
           context = { ...context, hidden: null }
         }
         return disabled ? false : context
@@ -391,7 +457,7 @@ function getLeavesByContext (item, initialContext) {
         result.push(value)
       }
     },
-    'children',
+    childrenKey,
     initialContext
   )
   return result
@@ -400,21 +466,33 @@ function getLeavesByContext (item, initialContext) {
 // under: 自身不会包含, from 自身如果是叶子会包含在结果中
 
 // 获取已选中的叶子，如果能获取到，那么可以做取消操作
-function getEnabledCheckedLeavesFrom (item) {
-  return getLeavesByContext([item], { checked: true, hidden: false })
+function getEnabledCheckedLeavesFrom (item, childrenKey) {
+  return getLeavesByContext(
+    [item],
+    { checked: true, hidden: false },
+    childrenKey
+  )
 }
 
 // 获取未选中的叶子，如果能获取到，那么可以做选中操作
-function getEnabledUncheckedLeavesFrom (item) {
-  return getLeavesByContext([item], { checked: false, hidden: false })
+function getEnabledUncheckedLeavesFrom (item, childrenKey) {
+  return getLeavesByContext(
+    [item],
+    { checked: false, hidden: false },
+    childrenKey
+  )
 }
 
-function getEnabledLeavesFrom (item) {
-  return getLeavesByContext([item], { checked: null, hidden: null })
+function getEnabledLeavesFrom (item, childrenKey) {
+  return getLeavesByContext(
+    [item],
+    { checked: null, hidden: null },
+    childrenKey
+  )
 }
 
-function markAncestorInChecked (item, checked, context) {
-  if (hasChildren(item)) {
+function markAncestorInChecked (item, checked, context, childrenKey) {
+  if (hasChildren(item, childrenKey)) {
     let isChecked = inChecked(checked, item)
     if (isChecked && !context.ancestorInChecked) {
       context.ancestorInChecked = true
@@ -427,9 +505,11 @@ function isUncheck (operation) {
   return operation === 'uncheck'
 }
 
-function isLeafAncestor (item) {
+function isLeafAncestor (item, childrenKey) {
   return (
-    !item.hidden && hasChildren(item) && item.children.every(i => !!i.hidden)
+    !item.hidden &&
+    hasChildren(item, childrenKey) &&
+    item[childrenKey].every(i => !!i.hidden)
   )
 }
 

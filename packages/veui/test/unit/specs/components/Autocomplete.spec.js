@@ -127,7 +127,7 @@ describe('components/Autocomplete', function () {
     nativeInput.trigger('input')
     await vm.$nextTick()
     let options = wrapper.findAll(SUGGESTION_ITEM)
-    expect(options.length === 1).to.equal(true)
+    expect(options.length).to.equal(1)
     document.body.click()
     await vm.$nextTick()
     expect(vm.value).to.equal('')
