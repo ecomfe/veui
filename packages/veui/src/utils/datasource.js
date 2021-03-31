@@ -73,14 +73,14 @@ function _walk (array, callback, context, alias = 'children') {
   return childrenResult
 }
 
-export function find (array, predicate, alias = 'children') {
+export function find (array, predicate, alias = 'children', parents = []) {
   if (!array || typeof predicate !== 'function') {
     return null
   }
 
   let result = null
   array.some(item => {
-    if (predicate(item)) {
+    if (predicate(item, parents)) {
       result = item
       return true
     }
@@ -88,13 +88,34 @@ export function find (array, predicate, alias = 'children') {
     if (!children) {
       return false
     }
-    let inner = find(children, predicate, alias)
+    let inner = find(children, predicate, alias, [...parents, item])
     if (inner !== null) {
       result = inner
       return true
     }
   })
   return result
+}
+
+export function findParents (
+  array,
+  predicate,
+  { alias = 'children', includeSelf = false } = {}
+) {
+  let parents = []
+  let self = find(
+    array,
+    (item, pts) => {
+      let match = !!predicate(item)
+      if (match) {
+        parents = pts
+      }
+      return match
+    },
+    alias
+  )
+
+  return self == null ? null : includeSelf ? parents.concat(self) : parents
 }
 
 function getChildrenByAlias (obj, alias) {
@@ -107,44 +128,62 @@ function getChildrenByAlias (obj, alias) {
   return key ? obj[key] : null
 }
 
-export function mapDatasource (datasource, callback) {
-  return walk(datasource, {
-    exit: (item, context) => {
-      return {
-        ...callback(item, context),
-        ...(hasChildren(item) ? { children: context.childrenResult } : {})
+export function mapDatasource (datasource, callback, childrenKey) {
+  return walk(
+    datasource,
+    {
+      exit: (item, context) => {
+        return {
+          ...callback(item, context),
+          ...(hasChildren(item, childrenKey)
+            ? { [childrenKey]: context.childrenResult }
+            : {})
+        }
       }
-    }
-  })
+    },
+    childrenKey
+  )
 }
 
-export function hasChildren (item, field = 'children') {
-  return !!item[field] && item[field].length !== 0
+export function hasChildren (item, childrenKey = 'children') {
+  return !!item[childrenKey] && item[childrenKey].length !== 0
 }
 
-export function getLeaves (root) {
-  return getDescendants(root, descendant => {
-    return {
-      keep: hasChildren(descendant) ? false : 'value'
-    }
-  })
+export function getLeaves (root, childrenKey) {
+  return getDescendants(
+    root,
+    descendant => {
+      return {
+        keep: hasChildren(descendant, childrenKey) ? false : 'value'
+      }
+    },
+    childrenKey
+  )
 }
 
-export function getGroupDescendants (root) {
-  return getDescendants(root, descendant => {
-    return {
-      keep: hasChildren(descendant) ? 'value' : false
-    }
-  })
+export function getGroupDescendants (root, childrenKey) {
+  return getDescendants(
+    root,
+    descendant => {
+      return {
+        keep: hasChildren(descendant, childrenKey) ? 'value' : false
+      }
+    },
+    childrenKey
+  )
 }
 
-export function getEnabledDescendants (root) {
-  return getDescendants(root, ({ disabled }) => {
-    return {
-      keep: disabled ? false : 'value',
-      skipChildren: disabled
-    }
-  })
+export function getEnabledDescendants (root, childrenKey) {
+  return getDescendants(
+    root,
+    ({ disabled }) => {
+      return {
+        keep: disabled ? false : 'value',
+        skipChildren: disabled
+      }
+    },
+    childrenKey
+  )
 }
 
 /**
@@ -152,18 +191,28 @@ export function getEnabledDescendants (root) {
  * @param {object} root 父节点
  * @param {Function} visit 控制如何获取后代节点的值，签名： (root, context) => ({keep, skipChildren})
  *                   keep 为 false 表示不获取该节点的值，为 string 表示值对应的字段名
- *                   skipChildren 为 Boolean，表示是否跳过该节点之下的后代
+ *                   skipChildren 为 boolean，表示是否跳过该节点之下的后代
+ * @param {string} childrenKey 子项的字段名
  * @return {Array} 获取到的后代节点的值
  */
-export function getDescendants (root, visit) {
+export function getDescendants (root, visit, childrenKey = 'children') {
   let result = []
-  walk(root, (child, context) => {
-    let { keep = 'value', skipChildren } =
-      typeof visit === 'function' ? visit(child, context) : {}
-    if (keep && child[keep] !== undefined) {
-      result.push(child[keep])
-    }
-    return !skipChildren
-  })
+  if (typeof visit === 'string') {
+    childrenKey = visit
+    visit = null
+  }
+
+  walk(
+    root,
+    (child, context) => {
+      let { keep = 'value', skipChildren } =
+        typeof visit === 'function' ? visit(child, context) : {}
+      if (keep && child[keep] !== undefined) {
+        result.push(child[keep])
+      }
+      return !skipChildren
+    },
+    childrenKey
+  )
   return result
 }

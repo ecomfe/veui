@@ -14,7 +14,12 @@ function match (item, keywordRe, { searchKey }) {
   return offsets.length ? offsets : false
 }
 
-function filter (matchResult) {
+function filter (matchResult, item, ancestors) {
+  let matched = toBoolean(matchResult)
+  return matched || ancestors.some(({ matched }) => matched)
+}
+
+function toBoolean (matchResult) {
   return Array.isArray(matchResult) ? !!matchResult.length : matchResult
 }
 
@@ -61,7 +66,6 @@ function search (datasource, keyword, options, result = [], ancestors = []) {
     matchFn,
     filterFn,
     limit,
-    exactMatch,
     searchKey,
     keywordRe
   } = options
@@ -71,18 +75,17 @@ function search (datasource, keyword, options, result = [], ancestors = []) {
     keywordRe = options.keywordRe = createKeywordRe(keyword, options)
   }
 
-  datasource.some(i => {
-    let item = {
-      item: { ...i },
-      parts: [],
-      matched: false
+  datasource.some(item => {
+    // 包下不会怕属性冲突
+    let itemWrap = {
+      item
     }
 
     // match
     let offsets =
       typeof matchFn === 'function'
-        ? matchFn(item, keyword)
-        : match(item.item, keywordRe, options)
+        ? matchFn(item, keyword, ancestors)
+        : match(item, keywordRe, options)
     let isArray = Array.isArray(offsets)
     let isBool = !isArray && typeof offsets === 'boolean'
     if (!isArray && !isBool) {
@@ -90,38 +93,36 @@ function search (datasource, keyword, options, result = [], ancestors = []) {
         'The return value of the `match` function must either be a boolean or an array.'
       )
     }
+    itemWrap.matched = toBoolean(offsets, item)
 
     // filter
     let filtered =
       typeof filterFn === 'function'
-        ? filterFn(offsets, item.item)
-        : filter(offsets, item.item)
+        ? filterFn(offsets, item, ancestors)
+        : filter(offsets, item, ancestors)
     if (typeof filtered !== 'boolean') {
       throw new Error(
         'The return value of the `filter` function must be a boolean.'
       )
     }
+    itemWrap.filtered = filtered
 
     // 即使没有匹配成功，为了渲染简单，还是生成 parts
-    if (i[searchKey]) {
-      item.parts = splitText(i[searchKey], offsets || [])
+    if (item[searchKey]) {
+      itemWrap.parts = splitText(item[searchKey], offsets || [])
     }
-    item.matched = filtered
 
-    let realMatched = exactMatch
-      ? item.matched
-      : item.matched || ancestors.some(({ matched }) => matched)
-    let path = [...ancestors, item]
+    let path = [...ancestors, itemWrap]
     let limited = limit && limit <= result.length
     if (!limited) {
-      if (i[valueKey] && realMatched) {
+      if (item[valueKey] && itemWrap.filtered) {
         result.push({
           matches: path,
-          ...omit(i, childrenKey) // for flat optionGroup
+          ...omit(item, childrenKey) // for flat optionGroup
         })
       }
-      if (i[childrenKey]) {
-        search(i[childrenKey], keyword, options, result, path)
+      if (item[childrenKey]) {
+        search(item[childrenKey], keyword, options, result, path)
         // update limit after searching children
         return limit && limit <= result.length
       }
@@ -141,12 +142,11 @@ const call = (val, context) => (typeof val === 'function' ? val(context) : val)
  * @param {string} options.keywordKey 搜索关键字的key
  * @param {string} options.resultKey 产出的 computed 的名称
  * @param {string} options.matchKey 搜索方法
- * @param {string} options.filterKey 过滤方法
+ * @param {string} options.filterKey 过滤方法（影响匹配过程，比如将父匹配结果改为false，那么后代如果自己不匹配就不会在结果集中）
  * @param {string} options.valueKey 该字段有值，该项才会作为搜索结果
  * @param {string} options.childrenKey children
  * @param {string} options.searchKey 被搜索的字段
  * @param {number} options.limit 限制结果的数量，0 表示不限制
- * @param {boolean} options.exactMatch 该项有valueKey且该项搜索到值才会被认为满足搜索
  * @param {string} options.flags 正则的模式
  * @param {boolean} options.literal 默认把 keyword 中的正则特殊字段当成普通字符匹配，如 \d 就是匹配`\d`
  */
@@ -161,7 +161,6 @@ export default function useSearchable ({
   filterKey,
   flags = 'ig',
   limit = 100,
-  exactMatch = false,
   literal = true
 } = {}) {
   return {
@@ -177,7 +176,6 @@ export default function useSearchable ({
             matchFn: this[matchKey],
             filterFn: this[filterKey],
             limit,
-            exactMatch,
             flags,
             literal
           }

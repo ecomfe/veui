@@ -169,7 +169,7 @@ export function isOverflow (elem) {
  *
  * @param {Element} elem 指定元素
  */
-export function scrollIntoView (elem) {
+export function scrollIntoView (elem, forceToTop) {
   let container = getScrollParent(elem)
   if (!container) {
     return
@@ -177,6 +177,10 @@ export function scrollIntoView (elem) {
   let { top: cTop, bottom: cBottom } = container.getBoundingClientRect()
   let { top: oTop, bottom: oBottom } = elem.getBoundingClientRect()
 
+  if (forceToTop) {
+    container.scrollTop -= cTop - oTop
+    return
+  }
   // fully visible
   if (oTop >= cTop && oBottom <= cBottom) {
     return
