@@ -2,8 +2,10 @@ import Cascader from 'veui/components/Cascader/Cascader'
 import { mount } from '@vue/test-utils'
 import { wait } from '../../../../utils'
 
-const OPTION = '.veui-cascader-pane-option'
+const OPTION = '.veui-cascader-pane-option-wrap'
 const MENU = '.veui-cascader-pane-menu'
+const SECOND_MENU = `${MENU}:nth-child(2)`
+const DISABLED = '.veui-cascader-pane-option-wrap-disabled'
 
 const casOptions = [
   {
@@ -76,16 +78,23 @@ describe('components/Cascader/Cascader', () => {
 
     vm.options = casOptions
     await vm.$nextTick()
+    options = wrapper.findAll('.veui-cascader-pane-option-wrap-popout')
+    expect(options.length).to.equal(2)
     options = wrapper.findAll(OPTION)
     expect(options.length).to.equal(4)
+
+    options
+      .at(0)
+      .find('.veui-button')
+      .trigger('click')
+    await vm.$nextTick()
+    expect(wrapper.findAll(`${SECOND_MENU} ${DISABLED}`).length).to.equal(2)
 
     vm.options = casOptions.map(i => ({ ...i, position: 'inline' }))
     await vm.$nextTick()
     options = wrapper.findAll(OPTION)
     expect(options.length).to.equal(9)
-    let disableOptions = wrapper.findAll(
-      '.veui-cascader-pane-option-wrap-disabled'
-    )
+    let disableOptions = wrapper.findAll(DISABLED)
     expect(disableOptions.length).to.equal(4)
     wrapper.destroy()
   })
@@ -104,7 +113,7 @@ describe('components/Cascader/Cascader', () => {
           }
         },
         template:
-          '<veui-cascader :expanded.sync="expanded" :options="options"/>'
+          '<veui-cascader v-model="value" :expanded.sync="expanded" :options="options"/>'
       },
       {
         sync: false
@@ -124,6 +133,14 @@ describe('components/Cascader/Cascader', () => {
     await vm.$nextTick()
     let optionsOfJiangsu = wrapper.findAll(optionsOfsecondMenu)
     expect(optionsOfJiangsu.length).to.equal(3)
+    expect(vm.expanded).to.equal('江苏')
+
+    // expand selected after dropdown opening
+    vm.expanded = false
+    vm.value = '苏州'
+    await vm.$nextTick()
+    wrapper.find('.veui-trigger').trigger('mouseup')
+    await vm.$nextTick()
     expect(vm.expanded).to.equal('江苏')
     wrapper.destroy()
   })
@@ -153,7 +170,6 @@ describe('components/Cascader/Cascader', () => {
     expect(pane.classes('veui-cascader-pane-inline')).to.equal(true)
     await wait(300)
     let paneWidth = pane.element.clientWidth
-    console.log(pane.element.getBoundingClientRect().width)
 
     vm.expanded = '江苏'
     await vm.$nextTick()
@@ -280,7 +296,7 @@ describe('components/Cascader/Cascader', () => {
           }
         },
         template:
-          '<veui-cascader v-model="value" searchable :multiple="multiple" has-select-all :options="options"/>'
+          '<veui-cascader ref="cas" v-model="value" searchable :multiple="multiple" has-select-all :options="options"/>'
       },
       {
         sync: false,
@@ -306,6 +322,10 @@ describe('components/Cascader/Cascader', () => {
     await vm.$nextTick()
     expect(vm.value).to.deep.equal(['苏州', '徐州'])
     expect(wrapper.findAll('.veui-tag').length).to.equal(2)
+
+    // 关闭下拉（body.click()会关闭但是不会 afterclose，那就手动触发下来测），清除搜索词
+    vm.$refs.cas.$refs.overlay.$emit('afterclose')
+    expect(vm.$refs.cas.keyword).to.equal('')
     wrapper.destroy()
   })
 
@@ -366,65 +386,6 @@ describe('components/Cascader/Cascader', () => {
     wrapper.destroy()
   })
 
-  it('should handle backfillOnExpand correctly', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-cascader': Cascader
-        },
-        data () {
-          return {
-            expanded: null,
-            value: null,
-            options: casOptions
-          }
-        },
-        template: `<veui-cascader
-            ref="cas"
-            v-model="value"
-            :expanded.sync="expanded"
-            expand-trigger="click"
-            backfill-on-expand
-            verbose-backfill
-            :options="options"
-          />`
-      },
-      {
-        sync: false,
-        attachToDocument: true
-      }
-    )
-    let { vm } = wrapper
-    let buttons = wrapper.findAll('.veui-button')
-    // 展开江苏
-    buttons.at(1).trigger('click')
-    await vm.$nextTick()
-    expect(vm.expanded).to.equal('江苏')
-    expect(vm.value).to.equal(null)
-    expect(vm.$refs.cas.$refs.trigger.selected.label).to.equal('江苏')
-    document.body.click()
-    await vm.$nextTick()
-    expect(vm.expanded).to.equal(false)
-    expect(vm.$refs.cas.$refs.trigger.selected == null).to.equal(true)
-    // 选中上海再打开江苏，input切换到江苏，失焦点之后恢复到上海
-    vm.expanded = true
-    wrapper
-      .findAll(OPTION)
-      .at(2)
-      .trigger('click')
-    await vm.$nextTick()
-    expect(vm.$refs.cas.$refs.trigger.selected.label).to.equal('上海')
-    buttons.at(1).trigger('click')
-    await vm.$nextTick()
-    expect(vm.expanded).to.equal('江苏')
-    expect(vm.$refs.cas.$refs.trigger.selected.label).to.equal('江苏')
-    document.body.click()
-    await vm.$nextTick()
-    expect(vm.expanded).to.equal(false)
-    expect(vm.$refs.cas.$refs.trigger.selected.label).to.equal('上海')
-    wrapper.destroy()
-  })
-
   it('should support hover expandTrigger prop correctly', async () => {
     let wrapper = mount(
       {
@@ -450,6 +411,11 @@ describe('components/Cascader/Cascader', () => {
     options.at(0).trigger('mouseenter')
     await vm.$nextTick()
     expect(vm.expanded).to.equal('浙江')
+
+    // 离开 dropdown 将展开项恢复到 true，下拉展开但是没有展开项
+    wrapper.find('.veui-cascader-pane-wrap').trigger('mouseleave')
+    await vm.$nextTick()
+    expect(vm.expanded).to.equal(true)
 
     options.at(1).trigger('mouseenter')
     await vm.$nextTick()
@@ -514,6 +480,100 @@ describe('components/Cascader/Cascader', () => {
     await vm.$nextTick()
     expect(vm.expanded).to.equal('江苏')
     expect(vm.value).to.deep.equal(['苏州'])
+    wrapper.destroy()
+  })
+
+  it('should handle remove/clear items correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-cascader': Cascader
+        },
+        data () {
+          return {
+            value: ['苏州', '徐州'],
+            options: casOptions
+          }
+        },
+        template:
+          '<veui-cascader v-model="value" clearable multiple :options="options"/>'
+      },
+      {
+        sync: false
+      }
+    )
+    let { vm } = wrapper
+    // remove
+    wrapper.find('.veui-tag .veui-button').trigger('click')
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['徐州'])
+    wrapper.find('.veui-tag .veui-button').trigger('click')
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal([])
+
+    // 先有值再 clear
+    vm.value = '苏州'
+    await vm.$nextTick()
+    wrapper.find('.veui-trigger-clear').trigger('click')
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal([])
+    wrapper.destroy()
+  })
+
+  it('should handle keyboard navigation correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-cascader': Cascader
+        },
+        data () {
+          return {
+            value: '苏州',
+            expanded: null,
+            multiple: false,
+            options: casOptions
+          }
+        },
+        template:
+          '<veui-cascader v-model="value" :expanded.sync="expanded" searchable clearable :multiple="multiple" :options="options"/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    // TODO
+    let { vm } = wrapper
+    let trigger = wrapper.find('.veui-trigger')
+    trigger.trigger('keydown', { key: 'Down' })
+    await vm.$nextTick()
+    expect(vm.expanded).to.equal('江苏')
+
+    vm.expanded = false
+    vm.value = null
+    await vm.$nextTick()
+    trigger.trigger('keydown', { key: 'Down' })
+    await vm.$nextTick()
+    trigger.trigger('keydown', { key: 'Up' })
+    await vm.$nextTick()
+    trigger.trigger('keydown', { key: 'Enter' })
+    await vm.$nextTick()
+    expect(vm.value).to.equal('北京')
+
+    trigger.trigger('keydown', { key: 'Esc' })
+    await vm.$nextTick()
+    expect(vm.expanded).to.equal(false)
+
+    vm.multiple = true
+    vm.value = ['苏州', '徐州']
+    await vm.$nextTick()
+    trigger.trigger('keydown', { key: 'Backspace' })
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['苏州'])
+    trigger.trigger('keydown', { key: 'Backspace' })
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal([])
     wrapper.destroy()
   })
 })

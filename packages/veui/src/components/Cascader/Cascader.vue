@@ -40,7 +40,7 @@
           v-bind="props"
         >
           {{
-            isVerboseBackfill && name === 'selected'
+            realVerboseBackfill && name === 'selected'
               ? backfillOption.chains.map(i => i.label).join(' > ')
               : null
           }}
@@ -49,6 +49,7 @@
     </veui-select-trigger>
   </slot>
   <veui-overlay
+    ref="overlay"
     :open="isExpanded"
     target="trigger"
     :overlay-class="overlayClass"
@@ -234,7 +235,6 @@ export default {
     },
     selectLeaves: Boolean,
     hasSelectAll: Boolean,
-    backfillOnExpand: Boolean,
     verboseBackfill: Boolean,
     inline: Boolean,
     max: Number
@@ -242,9 +242,7 @@ export default {
   data () {
     return {
       outsideRefs: ['root'],
-      keyword: '',
-      // 回填类型： selected/expanded, 为了区分实时显示 expanded 值
-      backfillType: 'selected'
+      keyword: ''
     }
   },
   computed: {
@@ -331,18 +329,6 @@ export default {
         .filter(Boolean)
       return this.multiple ? options : options[0]
     },
-    expandedWithParents () {
-      if (!this.realExpanded) {
-        return
-      }
-      let chains = this.getOptionWithParents(this.realExpanded)
-      return chains
-        ? {
-          ...chains[chains.length - 1],
-          chains
-        }
-        : null
-    },
     selectedWithParents () {
       if (!this.selectedOptions) {
         return
@@ -358,21 +344,16 @@ export default {
         }
         : null
     },
-    isVerboseBackfill () {
-      return this.backfillOption && !this.multiple && this.verboseBackfill
+    realVerboseBackfill () {
+      return !this.multiple && this.verboseBackfill
     },
     backfillOption () {
       if (this.multiple) {
         return this.selectedOptions
       }
-      return this.backfillType === 'expanded' &&
-        this.backfillOnExpand &&
-        this.verboseBackfill &&
-        this.realExpanded
-        ? this.expandedWithParents
-        : this.verboseBackfill
-          ? this.selectedWithParents
-          : this.selectedOptions
+      return this.realVerboseBackfill
+        ? this.selectedWithParents
+        : this.selectedOptions
     }
   },
   methods: {
@@ -383,7 +364,7 @@ export default {
         case 'ArrowUp':
         case 'Down':
         case 'ArrowDown':
-          this.commit('expanded', true)
+          this.expandSelected()
           passive = false
           if (this.searchable) {
             this.focusTrigger()
@@ -411,7 +392,7 @@ export default {
           if (this.searchable) {
             if (!this.realExpanded) {
               this.focusTrigger()
-              this.commit('expanded', true)
+              this.expandSelected()
               break
             }
             let elem = this.getCurrentActiveElement()
@@ -420,7 +401,7 @@ export default {
             }
             this.$el.focus()
           } else {
-            this.commit('expanded', true)
+            this.expandSelected()
           }
           break
         case 'Backspace': {
@@ -455,8 +436,6 @@ export default {
       } else {
         this.updateExpanded(false)
       }
-      // TODO: 打开时如果受控了 expanded 要在 trigger 里显示展开项？
-      this.backfillType = 'selected'
     },
     handleTriggerBlur (e) {
       if (
@@ -467,10 +446,7 @@ export default {
       }
     },
     handleTriggerRemove (option) {
-      // 单选
-      if (!this.multiple) {
-        this.commit('value', null)
-      } else {
+      if (this.multiple) {
         this.toggleOption(option, 'uncheck')
       }
     },
@@ -492,7 +468,6 @@ export default {
       // 单选
       if (!this.multiple) {
         this.commit('value', option.value)
-        this.backfillType = 'selected'
         // 只能选叶子或在搜索结果中，那么选完后直接关闭
         if (this.realSelectLeaves || this.keyword) {
           this.updateExpanded(false)
@@ -515,7 +490,6 @@ export default {
     },
     updateExpanded (expanded) {
       this.commit('expanded', expanded)
-      this.backfillType = expanded ? 'expanded' : 'selected'
       // afterclose 会清空搜索的，这里直接清空会下拉闪动
     },
     expandSelected () {
@@ -600,7 +574,11 @@ export default {
       let slots = TRIGGER_SLOTS.filter(
         name => !!this.$scopedSlots[name] || !!this.$slots[name]
       )
-      if (this.isVerboseBackfill && slots.indexOf('selected') === -1) {
+      if (
+        this.realVerboseBackfill &&
+        this.backfillOption &&
+        slots.indexOf('selected') === -1
+      ) {
         // 这里为 山东 > 济南 这种方式做了 fallback，所以补充上去
         slots.push('selected')
       }
