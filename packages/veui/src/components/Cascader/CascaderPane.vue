@@ -53,6 +53,8 @@
             )]: option.partialChecked
           }"
           :tabindex="option.disabled ? -1 : 0"
+          @click="handleClick(option)"
+          @mouseenter="handleExpand(option, depth, 'hover')"
         >
           <slot
             name="option"
@@ -68,8 +70,6 @@
                 [$c('cascader-pane-option')]: true
               }"
               :ui="realUi"
-              @click="handleClick(option)"
-              @mouseenter="handleExpand(option, depth, 'hover')"
             >
               <veui-checkbox
                 v-if="multiple"
@@ -240,9 +240,6 @@ const CascaderPane = {
     realOptions () {
       return this.options || []
     },
-    hasPopOut () {
-      return hasPopOut(this.realOptions)
-    },
     slotProps () {
       return {
         select: this.handleSelect,
@@ -278,6 +275,7 @@ const CascaderPane = {
       if (option.disabled) {
         return
       }
+      debugger
       // 点击内容区处理：
       // 多选
       if (this.multiple) {
@@ -359,16 +357,6 @@ const CascaderPane = {
       }
     }
   }
-}
-
-function hasPopOut (options) {
-  return (options || []).some(option => {
-    let result = canPopOut(option)
-    if (!result && hasChildren(option)) {
-      result = hasPopOut(option.options)
-    }
-    return result
-  })
 }
 
 export function canPopOut (option) {
