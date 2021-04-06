@@ -8,16 +8,9 @@
       <veui-checkbox
         v-model="selectLeaves1"
       >Only select leaves</veui-checkbox>
-      <veui-checkbox
-        v-model="backfill1"
-        @change="$event && (verboseBackfill1 = true)"
-      >展开实时回填</veui-checkbox>
       <veui-checkbox v-model="clearable1">Clearable</veui-checkbox>
       <veui-checkbox v-model="inline1">Inline</veui-checkbox>
-      <veui-checkbox
-        v-model="verboseBackfill1"
-        @change="!$event && (backfill1 = false)"
-      >逐级展示</veui-checkbox>
+      <veui-checkbox v-model="verboseBackfill1">逐级展示</veui-checkbox>
       <veui-radio
         v-model="trigger1"
         value="click"
@@ -35,7 +28,6 @@
       :searchable="searchable1"
       :expanded.sync="expanded1"
       :select-leaves="selectLeaves1"
-      :backfill-on-expand="backfill1"
       :expand-trigger="trigger1"
       :clearable="clearable1"
       :verbose-backfill="verboseBackfill1"
@@ -119,10 +111,10 @@
           <div class="center-align">after</div>
         </template>
         <template slot="menu-before">
-          <div class="center-align">panel-before</div>
+          <div class="center-align">menu-before</div>
         </template>
         <template slot="menu-after">
-          <div class="center-align">panel-after</div>
+          <div class="center-align">menu-after</div>
         </template>
       </cascader>
     </div>
@@ -204,7 +196,6 @@ export default {
       expanded1: false,
       searchable1: true,
       selectLeaves1: false,
-      backfill1: false,
       trigger1: 'click',
       clearable1: true,
       inline1: false,
