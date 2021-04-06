@@ -38,7 +38,11 @@ config.defaults({
   'keyselect.focusSelector': '[data-focus-visible-added]'
 })
 
-const useKeySelect = ({ useNativeFocus, handlers, expandedKey = 'expanded' }) => ({
+const useKeySelect = ({
+  useNativeFocus,
+  handlers,
+  expandedKey = 'expanded'
+}) => ({
   computed: {
     focusMode () {
       return typeof useNativeFocus === 'string'
@@ -57,6 +61,7 @@ const useKeySelect = ({ useNativeFocus, handlers, expandedKey = 'expanded' }) =>
         if (this.focusSelector) {
           this.clearFocusSelector()
         }
+        this.clearFocusableFilter()
       }
     })
   },
@@ -69,34 +74,66 @@ const useKeySelect = ({ useNativeFocus, handlers, expandedKey = 'expanded' }) =>
       let container = this.getFocusableContainer()
       return container ? getFocusable(container) : []
     },
+    getFilteredFocusable () {
+      let focusable = this.getFocusable()
+      if (typeof this.focusableFilter === 'function') {
+        return focusable.filter(this.focusableFilter)
+      }
+      return focusable
+    },
+    clearFocusableFilter () {
+      this.focusableFilter = null
+    },
     getCurrentActiveElement () {
       return find(this.getFocusable(), elem =>
         isActive(elem, this.focusSelector)
       )
     },
+    // 按 DOM 顺序线性导航
     navigate (forward = true) {
       this.focusAt(forward)
     },
-    focusAt (indexOrDir) {
+    /**
+     * 焦点导航到指定的层级， TODO 进一步标准化 data-kbd-xxx 来控制导航？
+     * @param {string} levelSelector 指定层级的选择器，如 [data-kbd-level="1"]
+     * @param {string} options.targetSelector 进一步指定指定层级中获得焦点的元素，一般用来关闭某个展开后，焦点回到该展开按钮上
+     * @param {boolean} options.lock 锁定之后的导航只能在该层级中进行
+     */
+    navigateToLevel (levelSelector, { targetSelector, lock } = {}) {
       let focusable = this.getFocusable()
+      let filter = elem => matches(elem, levelSelector)
+      let nextLevel = find(
+        focusable,
+        elem =>
+          filter(elem) && (!targetSelector || matches(elem, targetSelector))
+      )
+      if (nextLevel) {
+        this.focusElement(focusable, nextLevel)
+      }
+      if (lock) {
+        this.focusableFilter = filter
+      }
+    },
+    focusAt (indexOrDirection) {
+      let focusable = this.getFilteredFocusable()
       let length = focusable.length
       if (!length) {
         return
       }
 
-      let index = indexOrDir
+      let index = indexOrDirection
       if (typeof indexOrDir !== 'number') {
-        let forward = indexOrDir
+        let forward = indexOrDirection
         index = findIndex(focusable, elem => isActive(elem, this.focusSelector))
         index =
           index === -1 ? 0 : (index + length + (forward ? 1 : -1)) % length
       }
-      this.focusElement(focusable, index)
+      this.focusAtIndex(focusable, index)
     },
     clearFocusSelector () {
-      return this.focusElement(this.getFocusable(), -1)
+      return this.focusAtIndex(this.getFocusable(), -1)
     },
-    focusElement (focusableList, index) {
+    focusAtIndex (focusableList, index) {
       if (this.focusSelector) {
         focusableList.forEach((elem, idx) => {
           toggleSelector(elem, this.focusSelector, index === idx)
@@ -108,6 +145,12 @@ const useKeySelect = ({ useNativeFocus, handlers, expandedKey = 'expanded' }) =>
       if (index !== -1 && isOverflow(this.getFocusableContainer())) {
         scrollIntoView(focusableList[index])
       }
+    },
+    focusElement (focusableList, element) {
+      focusableList.forEach(elem => {
+        toggleSelector(elem, this.focusSelector, element === elem)
+      })
+      scrollIntoView(element)
     },
     handleKeydown (e) {
       let passive = false

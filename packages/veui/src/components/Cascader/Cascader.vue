@@ -113,6 +113,7 @@
           @update:expanded="handlePaneUpdateExpanded"
           @select="handlePaneSelect"
           @input="$emit('input', $event)"
+          @keydown.native="!searchable && handleCascaderKeydown($event)"
         >
           <template
             slot="option-label"
@@ -344,6 +345,18 @@ export default {
         }
         : null
     },
+    expandedWithParents () {
+      if (this.realExpanded != null && typeof this.realExpanded !== 'boolean') {
+        let chains = this.getOptionWithParents(this.realExpanded)
+        return chains
+          ? {
+            ...chains[chains.length - 1],
+            chains
+          }
+          : null
+      }
+      return null
+    },
     realVerboseBackfill () {
       return !this.multiple && this.verboseBackfill
     },
@@ -359,49 +372,78 @@ export default {
   methods: {
     handleCascaderKeydown (e) {
       let passive = true
+      let elem = null
       switch (e.key) {
         case 'Up':
         case 'ArrowUp':
         case 'Down':
         case 'ArrowDown':
-          this.expandSelected()
+          if (!this.realExpanded) {
+            this.expandSelected()
+          }
           passive = false
           if (this.searchable) {
             this.focusTrigger()
-            this.$nextTick(() => {
-              this.handleKeydown(e)
-              let elem = this.getCurrentActiveElement()
-              if (elem) {
-                scrollIntoView(elem)
-              }
-            })
           }
+          this.$nextTick(() => {
+            this.handleKeydown(e)
+            let elem = this.getCurrentActiveElement()
+            if (elem) {
+              scrollIntoView(elem)
+            }
+          })
           break
         case 'Esc':
         case 'Escape':
+          passive = false
+          elem = this.getCurrentActiveElement()
+          if (elem) {
+            let level = Number(elem.dataset.kbdLevel)
+            if (level > 1) {
+              let parents = this.expandedWithParents.chains.slice(0, -1)
+              let key = getKey(parents[parents.length - 1] || {})
+              this.navigateToLevel(`[data-kbd-level="${level - 1}"]`, {
+                lock: true,
+                targetSelector: `[data-kbd-key="${this.realExpanded}-expandable"]`
+              })
+              this.commit('expanded', key || true)
+              // expand 切换
+            } else {
+              this.commit('expanded', false)
+            }
+          }
           if (this.searchable) {
-            this.$el.focus()
-            this.commit('expanded', false)
-            passive = false
+            this.focusTrigger()
           }
           break
         case 'Tab':
-          this.commit('expanded', false)
+          if (this.realExpanded) {
+            this.navigate()
+          } else {
+            this.commit('expanded', false)
+          }
           break
         case 'Enter':
-          if (this.searchable) {
-            if (!this.realExpanded) {
+          if (!this.realExpanded) {
+            if (this.searchable) {
               this.focusTrigger()
-              this.expandSelected()
-              break
             }
-            let elem = this.getCurrentActiveElement()
-            if (elem) {
-              elem.click()
-            }
-            this.$el.focus()
-          } else {
             this.expandSelected()
+            break
+          }
+
+          elem = this.getCurrentActiveElement()
+          if (elem) {
+            elem.click()
+            let hasNext = elem.hasAttribute('data-kbd-next')
+            if (hasNext) {
+              let level = Number(elem.dataset.kbdLevel) + 1
+              this.$nextTick(() =>
+                this.navigateToLevel(`[data-kbd-level="${level}"]`, {
+                  lock: true
+                })
+              )
+            }
           }
           break
         case 'Backspace': {
@@ -480,6 +522,7 @@ export default {
     handlePaneUpdateExpanded (expanded) {
       return this.updateExpanded(expanded)
     },
+    // 在只选叶子的情况下，搜索出来的结果过滤掉非叶子节点
     filterParents (offsets, current, parents) {
       if (this.realSelectLeaves && hasChildren(current, 'options')) {
         return false
@@ -492,21 +535,19 @@ export default {
       this.commit('expanded', expanded)
       // afterclose 会清空搜索的，这里直接清空会下拉闪动
     },
+    getPopoutParents (value) {
+      let parents =
+        findParents(this.realOptions, item => getKey(item) === value, {
+          alias: 'options'
+        }) || []
+      return parents.filter(i => i.position !== 'inline')
+    },
     expandSelected () {
       let expanded = true
       if (this.realValue.length) {
-        let val = this.realValue[0]
-        let parents = findParents(
-          this.realOptions,
-          item => getKey(item) === val,
-          { alias: 'options' }
-        )
+        let parents = this.getPopoutParents(this.realValue[0])
         if (parents && parents.length) {
-          parents = parents.filter(i => i.position !== 'inline')
-          let parent = parents[parents.length - 1]
-          if (parent) {
-            expanded = getKey(parent) || true
-          }
+          expanded = getKey(parents[parents.length - 1]) || true
         }
       }
       this.updateExpanded(expanded)
@@ -526,9 +567,6 @@ export default {
     },
     focus () {
       return this.focusTrigger()
-    },
-    getFocusableContainer () {
-      return this.$refs.pane.$el
     },
     toggleOption (option, operation = 'toggle') {
       let parents = findParents(

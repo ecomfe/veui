@@ -52,6 +52,9 @@
               'cascader-pane-option-wrap-indeterminate'
             )]: option.partialChecked
           }"
+          :data-kbd-level="depth + 1"
+          :data-kbd-key="getKey(option)"
+          :data-kbd-next="canPopOut(option) && isClickTrigger"
           :tabindex="option.disabled ? -1 : 0"
           @click="handleClick(option)"
           @mouseenter="handleExpand(option, depth, 'hover')"
@@ -93,13 +96,14 @@
                 <veui-button
                   v-if="isClickTrigger"
                   ui="icon"
+                  :class="$c('cascader-pane-expandable')"
+                  :data-kbd-level="depth + 1"
+                  :data-kbd-next="true"
+                  :data-kbd-key="`${getKey(option)}-expandable`"
                   @click.native.stop
                   @click="handleExpand(option, depth, 'click')"
                 >
-                  <veui-icon
-                    :class="$c('cascader-pane-expandable')"
-                    :name="icons.expandable"
-                  />
+                  <veui-icon :name="icons.expandable"/>
                 </veui-button>
                 <veui-icon
                   v-else
@@ -145,7 +149,6 @@ import {
 } from '../../utils/datasource'
 import { scrollIntoView } from '../../utils/dom'
 import AbstractTree from '../Tree/_AbstractTree'
-import { uniqueId, includes } from 'lodash'
 
 const CascaderPane = {
   name: 'veui-cascader-pane',
@@ -181,7 +184,7 @@ const CascaderPane = {
       type: String,
       default: 'click',
       validator (val) {
-        return val == null || includes(['hover', 'click'], val)
+        return val == null || ['hover', 'click'].indexOf(val) >= 0
       }
     },
     value: {},
@@ -191,11 +194,6 @@ const CascaderPane = {
     multiple: Boolean,
     expanded: {},
     selectLeaves: Boolean
-  },
-  data () {
-    return {
-      popupId: uniqueId('veui-cascader-pane-popup-')
-    }
   },
   computed: {
     isClickTrigger () {
@@ -268,6 +266,9 @@ const CascaderPane = {
         }
       }
     },
+    getKey (item) {
+      return getKey(item)
+    },
     handleSelect (option) {
       this.$emit('select', option)
     },
@@ -275,7 +276,6 @@ const CascaderPane = {
       if (option.disabled) {
         return
       }
-      debugger
       // 点击内容区处理：
       // 多选
       if (this.multiple) {
