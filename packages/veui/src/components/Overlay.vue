@@ -59,7 +59,8 @@ export default {
       zIndex: null,
       minWidth: null,
       targetEl: null,
-      source: null
+      source: null,
+      leaving: false
     }
   },
   computed: {
@@ -71,10 +72,17 @@ export default {
     },
     realPosition () {
       return this.position || this.options.position || 'auto'
+    },
+    realLeaving () {
+      return !this.inline && this.leaving
     }
   },
   watch: {
     realOpen (val) {
+      if (val) {
+        this.leaving = false
+      }
+
       if (this.inline) {
         return
       }
@@ -158,10 +166,15 @@ export default {
       }
       if (!this.overlayNode) {
         let overlay = config.get('managers.overlay') || overlayManager
+        debugger
         this.overlayNode = overlay.createNode({
           parentId: this.findParentOverlayId(),
           priority: this.priority,
           orderChangeCallback: order => {
+            // 第一次会在 createNode 函数调用中触发，即 createNode 还没返回（肯定无 this.overlayNode），就会设置zIndex
+            // 可能会导致 realOpen 变化，在测试环境中很多渲染都没有改成 sync: false, 会导致 realOpen watcher 同步触发
+            // 又会进入 updateOverlayNode ，因为都是同步的（createNode 还没返回），会再次创建 createNode
+            // 所以单测还是统一用 sync: false
             this.zIndex = order
             this.$emit('orderchange', order)
           }
@@ -344,9 +357,10 @@ export default {
         ref="box"
         ui={this.realUi}
       >
-        {this.$slots.default}
+        {(this.realOpen || this.realLeaving) && this.$slots.default}
       </VEUI_OVERLAY_ELEMENT_NAME>
     )
+    // this.realLeaving： 只有 open || closing 过程中 才会渲染内容
 
     return this.inline ? (
       box
@@ -358,11 +372,15 @@ export default {
       >
         <transition
           name={this.$c('overlay')}
-          onAfterLeave={() => {
-            this.$emit('afterclose')
-          }}
           onAfterEnter={() => {
             this.$emit('afteropen')
+          }}
+          onLeave={() => {
+            this.leaving = true
+          }}
+          onAfterLeave={() => {
+            this.leaving = false
+            this.$emit('afterclose')
           }}
         >
           {box}

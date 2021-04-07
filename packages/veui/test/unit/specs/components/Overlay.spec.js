@@ -1,13 +1,15 @@
-import { mount } from '@vue/test-utils'
+import { mount, config as testConfig } from '@vue/test-utils'
 import Overlay from '@/components/Overlay'
 import Button from '@/components/Button'
 import overlay, { OverlayManager } from '@/managers/overlay'
 import config from '@/managers/config'
 import { wait } from '../../../utils'
 
+testConfig.stubs.transition = false
+
 describe('components/Overlay', () => {
   it('should put the layer root node directly below the body.', async () => {
-    let wrapper = mount(Overlay)
+    let wrapper = mount(Overlay, { sync: false })
 
     await wait(0)
 
@@ -19,11 +21,16 @@ describe('components/Overlay', () => {
   })
 
   it('should provide default slot.', async () => {
-    let wrapper = mount({
-      render () {
-        return <Overlay>content</Overlay>
+    let wrapper = mount(
+      {
+        render () {
+          return <Overlay open>content</Overlay>
+        }
+      },
+      {
+        sync: false
       }
-    })
+    )
 
     await wait(0)
 
@@ -33,15 +40,20 @@ describe('components/Overlay', () => {
   })
 
   it('should generate proper zIndex when the two overlays have parent-child relationship.', async () => {
-    let wrapper = mount({
-      render () {
-        return (
-          <Overlay class="parent-overlay" ref="parent">
-            <Overlay class="child-overlay" ref="child" />
-          </Overlay>
-        )
+    let wrapper = mount(
+      {
+        render () {
+          return (
+            <Overlay class="parent-overlay" ref="parent" open>
+              <Overlay class="child-overlay" ref="child" open />
+            </Overlay>
+          )
+        }
+      },
+      {
+        sync: false
       }
-    })
+    )
 
     await wait(0)
 
@@ -58,15 +70,20 @@ describe('components/Overlay', () => {
         baseOrder: 300
       })
     )
-    let wrapper = mount({
-      render () {
-        return (
-          <Overlay class="parent-overlay" ref="parent">
-            <Overlay class="child-overlay" ref="child" />
-          </Overlay>
-        )
+    let wrapper = mount(
+      {
+        render () {
+          return (
+            <Overlay class="parent-overlay" ref="parent" open>
+              <Overlay class="child-overlay" ref="child" open />
+            </Overlay>
+          )
+        }
+      },
+      {
+        sync: false
       }
-    })
+    )
 
     await wait(0)
 
@@ -78,25 +95,30 @@ describe('components/Overlay', () => {
   })
 
   it("should cover the previous overlay's child overlay.", async () => {
-    let wrapper = mount({
-      data () {
-        return {
-          parentVisible: false,
-          childVisible: false,
-          nextVisible: false
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            parentVisible: false,
+            childVisible: false,
+            nextVisible: false
+          }
+        },
+        render () {
+          return (
+            <div>
+              <Overlay ref="parent" open={this.parentVisible}>
+                <Overlay ref="child" open={this.childVisible} />
+              </Overlay>
+              <Overlay ref="next" open={this.nextVisible} />
+            </div>
+          )
         }
       },
-      render () {
-        return (
-          <div>
-            <Overlay ref="parent" open={this.parentVisible}>
-              <Overlay ref="child" open={this.childVisible} />
-            </Overlay>
-            <Overlay ref="next" open={this.nextVisible} />
-          </div>
-        )
+      {
+        sync: false
       }
-    })
+    )
 
     let { vm } = wrapper
 
@@ -118,23 +140,28 @@ describe('components/Overlay', () => {
   })
 
   it('should handle the `inline` prop correctly', async () => {
-    let wrapper = mount({
-      data () {
-        return {
-          inline: true
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            inline: true
+          }
+        },
+        render () {
+          return (
+            <div>
+              <Button ref="btn">toggle inline</Button>
+              <Overlay target="btn" open inline={this.inline}>
+                content
+              </Overlay>
+            </div>
+          )
         }
       },
-      render () {
-        return (
-          <div>
-            <Button ref="btn">toggle inline</Button>
-            <Overlay target="btn" open inline={this.inline}>
-              content
-            </Overlay>
-          </div>
-        )
+      {
+        sync: false
       }
-    })
+    )
 
     let { vm } = wrapper
     await wait(0)
@@ -152,23 +179,28 @@ describe('components/Overlay', () => {
   })
 
   it('should handle the `local` prop correctly', async () => {
-    let wrapper = mount({
-      data () {
-        return {
-          local: true
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            local: true
+          }
+        },
+        render () {
+          return (
+            <div>
+              <Button ref="btn">toggle inline</Button>
+              <Overlay target="btn" open local={this.local}>
+                content
+              </Overlay>
+            </div>
+          )
         }
       },
-      render () {
-        return (
-          <div>
-            <Button ref="btn">toggle inline</Button>
-            <Overlay target="btn" open local={this.local}>
-              content
-            </Overlay>
-          </div>
-        )
+      {
+        sync: false
       }
-    })
+    )
 
     let { vm } = wrapper
     await wait(0)
@@ -188,6 +220,49 @@ describe('components/Overlay', () => {
     expect(overlayVm.$refs.box.parentNode === overlayVm.$el, '#3').to.equal(
       true
     )
+    wrapper.destroy()
+  })
+
+  it('should destroy dom correctly when overlay is closed', async () => {
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            open: false
+          }
+        },
+        render () {
+          return (
+            <div>
+              <Button ref="btn">toggle inline</Button>
+              <Overlay target="btn" open={this.open}>
+                <div>content</div>
+              </Overlay>
+            </div>
+          )
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await wait(0)
+    let box = wrapper.find('.veui-overlay-box')
+    expect(box.element.children.length, '#1').to.equal(0)
+
+    vm.open = true
+    await wait(0)
+    expect(box.element.children.length, '#2').to.equal(1)
+
+    vm.open = false
+    await wait(0)
+    expect(box.element.children.length, '#3').to.equal(1)
+    // 过度后消失
+    await wait(300)
+    expect(box.element.children.length, '#4').to.equal(0)
     wrapper.destroy()
   })
 })
