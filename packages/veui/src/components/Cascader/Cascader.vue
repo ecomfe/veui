@@ -480,11 +480,14 @@ export default {
       }
     },
     handleTriggerBlur (e) {
+      let keepFocus = this.searchable && !this.keyword
+      // 这里会过多的将焦点抢到 trigger 上，如果box中操作会导致关闭行为，会在关闭时将焦点从 trigger 上 blur
       if (
-        (this.multiple || !this.realSelectLeaves) &&
+        keepFocus &&
+        this.realExpanded &&
         contains(this.$refs.box, e.relatedTarget, true)
       ) {
-        e.target.focus()
+        this.focusTrigger()
       }
     },
     handleTriggerRemove (option) {
@@ -533,7 +536,11 @@ export default {
     },
     updateExpanded (expanded) {
       this.commit('expanded', expanded)
-      // afterclose 会清空搜索的，这里直接清空会下拉闪动
+      // 关闭时将 trigger 上的焦点 blur
+      if (!expanded && this.searchable && !this.keyword) {
+        this.blurTrigger()
+      }
+      // afterclose 会清空搜索的，这里直接清空搜索会导致下拉重绘而闪动
     },
     getPopoutParents (value) {
       let parents =
@@ -591,6 +598,12 @@ export default {
       let { trigger } = this.$refs
       if (trigger && typeof trigger.focus === 'function') {
         trigger.focus()
+      }
+    },
+    blurTrigger () {
+      let { trigger } = this.$refs
+      if (trigger && typeof trigger.blur === 'function') {
+        trigger.blur()
       }
     },
     getOptionWithParents (value, field) {
