@@ -7,7 +7,6 @@ import prefix from '../mixins/prefix'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
 import { uniqueId } from 'lodash'
-import { focusIn } from '../utils/dom'
 import { renderSlot } from '../utils/helper'
 
 export default {
@@ -136,18 +135,15 @@ export default {
       return !!(this.$scopedSlots.selected || this.$slots.selected)
     },
     focus () {
-      if (!this.searchable) {
-        this.$el.focus()
-        return
-      }
-      this.focusInput()
-    },
-    focusInput () {
-      let { input, root } = this.$refs
+      let { input } = this.$refs
       if (input) {
         input.focus()
-      } else {
-        focusIn(root)
+      }
+    },
+    blur () {
+      let { input } = this.$refs
+      if (input && input.$refs.input) {
+        input.$refs.input.blur()
       }
     },
     // sub-renders
