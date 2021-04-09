@@ -34,22 +34,22 @@
   }
 
   &-content {
+    display: flex;
     flex-grow: 1;
-    overflow: hidden;
-    width: 100%;
     pointer-events: auto;
   }
 
   &-viewport {
     position: relative;
     display: flex;
-    height: 100%;
+    width: 100%;
     align-items: center;
   }
 
   &-viewport-content {
     .size(100%);
-    padding: @dls-lightbox-content-spacing-y dls-sum(@dls-lightbox-content-spacing-x, @dls-lightbox-control-size);
+    padding: @dls-lightbox-content-spacing-y
+      dls-sum(@dls-lightbox-content-spacing-x, @dls-lightbox-control-size);
     padding-bottom: 0;
   }
 
@@ -59,6 +59,7 @@
     .size(100%);
     margin: 0;
     padding: 0;
+    flex: 1;
   }
 
   &-item {
@@ -81,17 +82,19 @@
 
     &-content {
       display: flex;
-      align-items: center;
       justify-content: center;
       overflow: hidden;
       text-align: center;
       width: 100%;
       flex: 0 1 auto;
 
-      img {
+      img,
+      video {
         max-height: 100%;
         max-width: 100%;
+        object-fit: contain;
       }
+
       video {
         max-height: 100%;
         max-width: 100%;
