@@ -1,5 +1,5 @@
-import { mount } from '@vue/test-utils'
 import Lightbox from '@/components/Lightbox'
+import { mount } from '../../../utils'
 
 let items = [
   {
@@ -32,13 +32,16 @@ let items = [
   },
   {
     name: '330206454.sd.mp4',
-    src: 'https://player.vimeo.com/external/330206454.sd.mp4?s=243f3d7497ba5d1c7f7ee57071e947540484a89a&profile_id=164&oauth2_token_id=57447761',
-    poster: 'https://images.pexels.com/videos/2156021/free-video-2156021.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+    src:
+      'https://player.vimeo.com/external/330206454.sd.mp4?s=243f3d7497ba5d1c7f7ee57071e947540484a89a&profile_id=164&oauth2_token_id=57447761',
+    poster:
+      'https://images.pexels.com/videos/2156021/free-video-2156021.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     type: 'video'
   },
   {
     name: '380082136.sd.mp4',
-    src: 'https://player.vimeo.com/external/380082136.sd.mp4?s=930b81a8bf84310005cdb7f3d0c6489b777d7032&profile_id=139&oauth2_token_id=57447761',
+    src:
+      'https://player.vimeo.com/external/380082136.sd.mp4?s=930b81a8bf84310005cdb7f3d0c6489b777d7032&profile_id=139&oauth2_token_id=57447761',
     type: 'video'
   }
 ]
@@ -53,6 +56,7 @@ describe('components/Lightbox', () => {
         template: `
           <veui-lightbox
             :datasource="items"
+            open
           />`,
         data () {
           return {
@@ -91,6 +95,7 @@ describe('components/Lightbox', () => {
           <veui-lightbox
             :datasource="items"
             :options="options"
+            open
           />`,
         data () {
           return {
@@ -120,6 +125,7 @@ describe('components/Lightbox', () => {
         template: `
           <veui-lightbox
             :datasource="items"
+            open
           />`,
         data () {
           return {
@@ -174,6 +180,7 @@ describe('components/Lightbox', () => {
           <veui-lightbox
             :datasource="items"
             :index.sync="index"
+            open
           />`,
         data () {
           return {
@@ -229,6 +236,7 @@ describe('components/Lightbox', () => {
           <veui-lightbox
             :datasource="items"
             :index="index"
+            open
             @change="change"
           />`,
         data () {
@@ -301,6 +309,7 @@ describe('components/Lightbox', () => {
           <veui-lightbox
             :datasource="items"
             :indicator="indicator"
+            open
           />`,
         data () {
           return {
@@ -343,6 +352,7 @@ describe('components/Lightbox', () => {
           <veui-lightbox
             :datasource="items"
             :wrap="wrap"
+            open
           />`,
         data () {
           return {
@@ -395,6 +405,7 @@ describe('components/Lightbox', () => {
           <veui-lightbox
             :datasource="items"
             :wrap="wrap"
+            open
           />`,
         data () {
           return {
@@ -408,17 +419,29 @@ describe('components/Lightbox', () => {
       }
     )
 
-    expect(wrapper.find('.veui-lightbox-control-prev').isVisible()).to.equal(false)
-    expect(wrapper.find('.veui-lightbox-control-next').isVisible()).to.equal(false)
-    expect(wrapper.find('.veui-lightbox-indicator-numbers').exists()).to.equal(false)
+    expect(wrapper.find('.veui-lightbox-control-prev').isVisible()).to.equal(
+      false
+    )
+    expect(wrapper.find('.veui-lightbox-control-next').isVisible()).to.equal(
+      false
+    )
+    expect(wrapper.find('.veui-lightbox-indicator-numbers').exists()).to.equal(
+      false
+    )
 
     let { vm } = wrapper
     vm.wrap = true
     await vm.$nextTick()
 
-    expect(wrapper.find('.veui-lightbox-control-prev').isVisible()).to.equal(false)
-    expect(wrapper.find('.veui-lightbox-control-next').isVisible()).to.equal(false)
-    expect(wrapper.find('.veui-lightbox-indicator-numbers').exists()).to.equal(false)
+    expect(wrapper.find('.veui-lightbox-control-prev').isVisible()).to.equal(
+      false
+    )
+    expect(wrapper.find('.veui-lightbox-control-next').isVisible()).to.equal(
+      false
+    )
+    expect(wrapper.find('.veui-lightbox-indicator-numbers').exists()).to.equal(
+      false
+    )
 
     wrapper.destroy()
   })

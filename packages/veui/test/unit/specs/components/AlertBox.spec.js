@@ -11,7 +11,7 @@ describe('components/AlertBox', function () {
         components: {
           'veui-alert-box': AlertBox
         },
-        template: '<veui-alert-box title="this is title" />'
+        template: '<veui-alert-box open title="this is title" />'
       },
       {
         sync: false
@@ -30,7 +30,7 @@ describe('components/AlertBox', function () {
           'veui-alert-box': AlertBox
         },
         template: `
-        <veui-alert-box>
+        <veui-alert-box open>
           <div class="test-title-slot" slot="title">this is title</div>
           <div class="test-default-slot">this is content</div>
         </veui-alert-box>

@@ -1,6 +1,6 @@
-import { mount } from '@vue/test-utils'
 import Dropdown from '@/components/Dropdown'
 import Button from '@/components/Button'
+import { mount, wait } from '../../../utils'
 
 let datasource = [
   {
@@ -45,6 +45,7 @@ describe('components/Dropdown', () => {
         disabled: true,
         trigger: 'hover',
         options: datasource,
+        expanded: true,
         label: '测试Dropdown',
         overlayClass: 'test-overlay-class'
       },
@@ -78,6 +79,7 @@ describe('components/Dropdown', () => {
       propsData: {
         trigger: 'hover',
         options: datasource,
+        expanded: true,
         overlayClass: 'test-overlay-class'
       },
       scopedSlots: {
@@ -89,9 +91,8 @@ describe('components/Dropdown', () => {
     })
 
     wrapper.vm.focus()
-    expect(document.activeElement).to.satisfy(
-      item => item === document.querySelector('.veui-dropdown-button')
-    )
+    let button = wrapper.find('.veui-dropdown-button')
+    expect(button.element).to.equal(document.activeElement)
 
     let menuWrapper = wrapper.find('.test-overlay-class')
     let option = menuWrapper.find('.test-veui-option')
@@ -190,6 +191,7 @@ describe('components/Dropdown', () => {
       propsData: {
         split: true,
         options: datasource,
+        expanded: true,
         overlayClass: 'test-overlay-class'
       },
       sync: false,
@@ -249,7 +251,7 @@ describe('components/Dropdown', () => {
     menuWrapper
       .find('.veui-dropdown-options')
       .trigger('keydown.esc', { key: 'Escape' })
-    await $nextTick()
+    await wait(300)
     expect(menuWrapper.isVisible()).to.equal(false)
     wrapper.destroy()
   })
@@ -407,6 +409,7 @@ describe('components/Dropdown', () => {
 
     await vm.$nextTick()
     wrapper.find('.veui-dropdown-button').trigger('click')
+    await vm.$nextTick()
     wrapper
       .find('.test-overlay-class')
       .find('.veui-dropdown-options')
@@ -465,6 +468,7 @@ describe('components/Dropdown', () => {
     expect(vm.val).to.equal('male')
 
     vm.searchable = false
+    wrapper.find('.veui-dropdown-button').trigger('click')
     await vm.$nextTick()
     options = wrapper.find('.test-overlay-class').find('.veui-dropdown-options')
     options.trigger('keydown.down', { key: 'Down' })

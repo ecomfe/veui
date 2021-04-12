@@ -166,7 +166,6 @@ export default {
       }
       if (!this.overlayNode) {
         let overlay = config.get('managers.overlay') || overlayManager
-        debugger
         this.overlayNode = overlay.createNode({
           parentId: this.findParentOverlayId(),
           priority: this.priority,
@@ -310,8 +309,21 @@ export default {
       }
 
       let { box } = this.$refs
-      if (!this.focusContext && box) {
-        this.focusContext = focusManager.createContext(box, {
+      if (box) {
+        this.createFocusContext()
+      } else {
+        this.$nextTick(() => {
+          // 如果 nextTick 关闭了，就不会创建 focusContext
+          if (this.realOpen && this.$refs.box) {
+            this.createFocusContext()
+          }
+        })
+      }
+    },
+
+    createFocusContext () {
+      if (!this.focusContext) {
+        this.focusContext = focusManager.createContext(this.$refs.box, {
           source: document.activeElement,
           trap: this.modal
         })
@@ -360,7 +372,7 @@ export default {
         {(this.realOpen || this.realLeaving) && this.$slots.default}
       </VEUI_OVERLAY_ELEMENT_NAME>
     )
-    // this.realLeaving： 只有 open || closing 过程中 才会渲染内容
+    // 只有 open || closing 过程中 才会渲染内容
 
     return this.inline ? (
       box

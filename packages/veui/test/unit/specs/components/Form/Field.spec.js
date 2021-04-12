@@ -79,12 +79,14 @@ describe('components/Form/Field', () => {
     wrapper.destroy()
   })
 
-  it('should set other props correctly', () => {
+  it('should set other props correctly', async () => {
     let template = genTemplate('disabled')
     let { wrapper } = genWrapper(template)
     let fieldWrapper = wrapper.find('.veui-field')
     // should set label & tip correctly
     expect(wrapper.find('.veui-label').text()).to.equal('测试label')
+    wrapper.find('.veui-field-tip .veui-icon').trigger('mouseenter')
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('.veui-tooltip').text()).to.equal('测试tip')
     // should set ui correctly
     expect(fieldWrapper.attributes().ui).to.equal('large')
@@ -94,13 +96,15 @@ describe('components/Form/Field', () => {
     wrapper.destroy()
   })
 
-  it('should render slots correctly', () => {
+  it('should render slots correctly', async () => {
     let template = genTemplate('', slot)
     let { wrapper } = genWrapper(template)
     // label & tip
     expect(wrapper.find('.test-slot-label').text()).to.equal(
       '通过slot设置label'
     )
+    wrapper.find('.veui-field-tip .veui-icon').trigger('mouseenter')
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('.test-slot-tip').text()).to.equal('通过slot设置tip')
     // default slot
     expect(wrapper.find('.veui-input').exists()).to.equal(true)

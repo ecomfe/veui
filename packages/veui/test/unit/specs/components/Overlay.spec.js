@@ -260,7 +260,7 @@ describe('components/Overlay', () => {
     vm.open = false
     await wait(0)
     expect(box.element.children.length, '#3').to.equal(1)
-    // 过度后消失
+    // 过渡后消失
     await wait(300)
     expect(box.element.children.length, '#4').to.equal(0)
     wrapper.destroy()

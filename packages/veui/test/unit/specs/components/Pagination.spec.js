@@ -1,5 +1,4 @@
-import { mount } from '@vue/test-utils'
-import { wait } from '../../../utils'
+import { wait, mount } from '../../../utils'
 import Pagination from '@/components/Pagination'
 
 describe('components/Pagination', () => {
@@ -20,7 +19,8 @@ describe('components/Pagination', () => {
     )
 
     expect(wrapper.find('.veui-pagination-total').text()).to.equal('共 25 条')
-
+    wrapper.find('.veui-select-trigger').trigger('mouseup')
+    await wrapper.vm.$nextTick()
     let options = wrapper
       .find('.veui-pagination-select-overlay')
       .findAll('.veui-option')

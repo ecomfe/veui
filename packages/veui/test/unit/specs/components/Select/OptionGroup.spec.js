@@ -2,8 +2,7 @@ import Select from 'veui/components/Select'
 import Dropdown from 'veui/components/Dropdown'
 import Option from 'veui/components/Option'
 import OptionGroup from 'veui/components/OptionGroup'
-import { mount } from '@vue/test-utils'
-import { wait } from '../../../../utils'
+import { wait, mount } from '../../../../utils'
 
 describe('components/Select/OptionGroup', () => {
   it('should pass down the `disabled` prop to the Option.', async () => {
@@ -28,7 +27,7 @@ describe('components/Select/OptionGroup', () => {
             ]
           }
         },
-        template: `<veui-select :options="options"/>`
+        template: `<veui-select :options="options" expanded/>`
       },
       {
         sync: false,
@@ -71,7 +70,7 @@ describe('components/Select/OptionGroup', () => {
             ]
           }
         },
-        template: '<veui-select :options="options"/>'
+        template: '<veui-select :options="options" expanded/>'
       },
       {
         sync: false,
@@ -134,18 +133,21 @@ describe('components/Select/OptionGroup', () => {
     await wrapper.vm.$nextTick()
 
     let controlButton = wrapper.find('.veui-select-trigger')
-    controlButton.trigger('click')
+    controlButton.trigger('mouseup')
     await wrapper.vm.$nextTick()
     let options = wrapper.findAll('.veui-option')
-    let command = wrapper.findAll('.veui-option-group-button')
-    expect(options.length).to.equal(3)
-    command.wrappers[1].trigger('click')
+    let groups = wrapper.findAll('.veui-option-group-button')
+    expect(options.length).to.equal(0)
+    expect(groups.length).to.equal(2)
+
+    groups.at(1).trigger('click')
     await wrapper.vm.$nextTick()
     let menus = wrapper.findAll('.veui-option-group-box')
-    expect(menus.wrappers[1].isVisible()).to.equal(false)
-    command.wrappers[0].trigger('click')
+    expect(menus.at(1).isVisible()).to.equal(false)
+
+    groups.at(0).trigger('click')
     await wrapper.vm.$nextTick()
-    expect(menus.wrappers[0].isVisible()).to.equal(true)
+    expect(menus.at(0).isVisible()).to.equal(true)
     wrapper.destroy()
   })
 
@@ -362,6 +364,7 @@ describe('components/Select/OptionGroup', () => {
       }
     )
 
+    await wait(200)
     let option = wrapper.find('.veui-option')
     let group = wrapper.find('.veui-option-group-label')
     expect(option.element.tagName.toLowerCase()).to.equal('div')

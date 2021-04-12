@@ -77,7 +77,7 @@ describe('components/Form/Fieldset', () => {
     wrapper.destroy()
   })
 
-  it('should set other props correctly', () => {
+  it('should set other props correctly', async () => {
     let template = genTemplate('disabled')
     let wrapper = genWrapper(template)
     let fieldsetWrapper = wrapper.find('.veui-fieldset')
@@ -85,6 +85,8 @@ describe('components/Form/Fieldset', () => {
     expect(fieldsetWrapper.find('.veui-field-label').text()).to.equal(
       '测试label'
     )
+    wrapper.find('.veui-field-tip .veui-icon').trigger('mouseenter')
+    await wrapper.vm.$nextTick()
     expect(fieldsetWrapper.find('.veui-tooltip').text()).to.equal('测试tip')
     // should set ui correctly
     expect(fieldsetWrapper.attributes().ui).to.equal('tiny')
@@ -93,10 +95,12 @@ describe('components/Form/Fieldset', () => {
     wrapper.destroy()
   })
 
-  it('should render slots correctly', () => {
+  it('should render slots correctly', async () => {
     let template = genTemplate('', slot)
     let wrapper = genWrapper(template)
     // label & tip
+    wrapper.find('.veui-field-tip .veui-icon').trigger('mouseenter')
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('.test-slot-label').text()).to.equal(
       '通过slot设置label'
     )

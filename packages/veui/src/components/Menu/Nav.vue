@@ -88,7 +88,7 @@
             refs: outsideRefs,
             delay: 100,
             trigger: 'hover',
-            handler: close
+            handler: () => close(item)
           }"
           :class="$c('nav-dropdown')"
           @keydown="handleKeydown($event, null, item)"
@@ -261,14 +261,16 @@ export default {
   data () {
     return {
       hoverItem: null,
-      moreBtnPosition: (this.items || []).length,
-      outsideRefs: []
+      moreBtnPosition: (this.items || []).length
     }
   },
   computed: {
     // more 按钮下拉的 menu items
     restItems () {
       return this.normalizedItems.slice(this.moreBtnPosition)
+    },
+    outsideRefs () {
+      return this.hoverItem ? this.$refs[this.hoverItem.name] || [] : []
     },
     // 直接渲染的 menu items
     realItems () {
@@ -352,7 +354,12 @@ export default {
       }
       return len
     },
-    close () {
+    close (item) {
+      if (item && this.hoverItem) {
+        if (item.name !== this.hoverItem.name) {
+          return
+        }
+      }
       this.hoverItem = null
     },
     updateLayout () {
@@ -371,7 +378,6 @@ export default {
     handleItemHover (item) {
       this.hoverItem = item
       this.hover = true
-      this.$set(this.outsideRefs, 0, item.name)
     },
     handleItemClick (item) {
       let { disabled } = item

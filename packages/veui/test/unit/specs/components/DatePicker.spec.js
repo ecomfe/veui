@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { mount } from '../../../utils'
 import DatePicker from '@/components/DatePicker'
 
 const debugInBrowser = {
@@ -11,6 +11,7 @@ describe('components/DatePicker', () => {
     let wrapper = mount(DatePicker)
 
     wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await wrapper.vm.$nextTick()
     wrapper.find('.veui-calendar-day button').trigger('click')
     await wrapper.vm.$nextTick()
     let val = wrapper.find('.veui-date-picker-trigger .veui-input-input')
@@ -19,58 +20,67 @@ describe('components/DatePicker', () => {
     wrapper.destroy()
   })
 
-  it('should handle selected prop with `null` value.', done => {
-    let wrapper = mount(DatePicker, {
-      propsData: {
-        selected: null
-      }
+  it('should handle selected prop with `null` value.', async () => {
+    let wrapper = mount({
+      data () {
+        return {
+          selected: null
+        }
+      },
+      components: {
+        'veui-date-picker': DatePicker
+      },
+      template: `<veui-date-picker v-model="selected" type="year"/>`
     })
 
-    wrapper.vm.$on('select', val => {
-      expect(val instanceof Date).to.equal(true)
-
-      wrapper.destroy()
-      done()
-    })
-
+    let { vm } = wrapper
     wrapper.find('.veui-date-picker-trigger').trigger('click')
-    wrapper.find('.veui-calendar-day button').trigger('click')
-  })
-
-  it('should select year correctly.', done => {
-    let wrapper = mount(DatePicker, {
-      propsData: {
-        type: 'year'
-      }
-    })
-
-    wrapper.vm.$on('select', val => {
-      expect(val instanceof Date).to.equal(true)
-
-      wrapper.destroy()
-      done()
-    })
-
-    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await vm.$nextTick()
     wrapper.find('.veui-calendar-year button').trigger('click')
+    expect(vm.selected instanceof Date).to.equal(true)
+    wrapper.destroy()
   })
 
-  it('should select month correctly.', done => {
-    let wrapper = mount(DatePicker, {
-      propsData: {
-        type: 'month'
-      }
+  it('should select year correctly.', async () => {
+    let wrapper = mount({
+      data () {
+        return {
+          selected: []
+        }
+      },
+      components: {
+        'veui-date-picker': DatePicker
+      },
+      template: `<veui-date-picker v-model="selected" type="year"/>`
     })
 
-    wrapper.vm.$on('select', val => {
-      expect(val instanceof Date).to.equal(true)
-
-      wrapper.destroy()
-      done()
-    })
-
+    let { vm } = wrapper
     wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await vm.$nextTick()
+    wrapper.find('.veui-calendar-year button').trigger('click')
+    expect(vm.selected instanceof Date).to.equal(true)
+    wrapper.destroy()
+  })
+
+  it('should select month correctly.', async () => {
+    let wrapper = mount({
+      data () {
+        return {
+          selected: []
+        }
+      },
+      components: {
+        'veui-date-picker': DatePicker
+      },
+      template: `<veui-date-picker v-model="selected" type="month"/>`
+    })
+
+    let { vm } = wrapper
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await vm.$nextTick()
     wrapper.find('.veui-calendar-month button').trigger('click')
+    expect(vm.selected instanceof Date).to.equal(true)
+    wrapper.destroy()
   })
 
   it('should select date range correctly.', async () => {
@@ -85,11 +95,10 @@ describe('components/DatePicker', () => {
       },
       template: `<veui-date-picker v-model="selected" range/>`
     })
-
-    wrapper.find('.veui-date-picker-trigger').trigger('click')
-    let days = wrapper.findAll('.veui-calendar-day button')
     let { vm } = wrapper
-
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await vm.$nextTick()
+    let days = wrapper.findAll('.veui-calendar-day button')
     days.at(0).trigger('click')
     days.at(7).trigger('click')
 
@@ -102,50 +111,66 @@ describe('components/DatePicker', () => {
     wrapper.destroy()
   })
 
-  it('should support customized today property correctly.', () => {
+  it('should support customized today property correctly.', async () => {
     let wrapper = mount(DatePicker, {
       propsData: {
         today: new Date(2019, 10, 1)
       }
     })
 
-    expect(wrapper.vm.$refs.cal.today - new Date(2019, 10, 1)).to.equal(0)
+    let { vm } = wrapper
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await vm.$nextTick()
+
+    expect(vm.$refs.cal.today - new Date(2019, 10, 1)).to.equal(0)
     expect(wrapper.find('.veui-calendar-today').text()).to.equal('1')
 
     wrapper.destroy()
   })
 
-  it('should support customized week-start correctly.', () => {
+  it('should support customized week-start correctly.', async () => {
     let wrapper = mount(DatePicker, {
       propsData: {
         weekStart: 6
       }
     })
 
-    expect(wrapper.vm.$refs.cal.weekStart).to.equal(6)
+    let { vm } = wrapper
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await vm.$nextTick()
+
+    expect(vm.$refs.cal.weekStart).to.equal(6)
 
     wrapper.destroy()
   })
 
-  it('should support customized fill-month correctly.', () => {
+  it('should support customized fill-month correctly.', async () => {
     let wrapper = mount(DatePicker, {
       propsData: {
         fillMonth: false
       }
     })
 
-    expect(wrapper.vm.$refs.cal.fillMonth).to.equal(false)
+    let { vm } = wrapper
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await vm.$nextTick()
+
+    expect(vm.$refs.cal.fillMonth).to.equal(false)
     expect(wrapper.findAll('.veui-calendar'))
 
     wrapper.destroy()
   })
 
-  it('should support customized date-class correctly.', () => {
+  it('should support customized date-class correctly.', async () => {
     let wrapper = mount(DatePicker, {
       propsData: {
         dateClass: 'date-class'
       }
     })
+
+    let { vm } = wrapper
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await vm.$nextTick()
 
     let cells = wrapper.findAll('tbody td')
     let rand = Math.floor(Math.random() * cells.length)
@@ -161,7 +186,6 @@ describe('components/DatePicker', () => {
         disabled: true
       }
     })
-
     let trigger = wrapper.find('.veui-date-picker')
 
     expect(trigger.classes()).to.include('veui-disabled')
@@ -170,7 +194,7 @@ describe('components/DatePicker', () => {
     wrapper.destroy()
   })
 
-  it('should support disabled-date correctly.', () => {
+  it('should support disabled-date correctly.', async () => {
     let wrapper = mount(DatePicker, {
       propsData: {
         disabledDate: date => {
@@ -178,6 +202,10 @@ describe('components/DatePicker', () => {
         }
       }
     })
+
+    let { vm } = wrapper
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await vm.$nextTick()
 
     let button = wrapper
       .findAll('tbody tr')
@@ -219,15 +247,12 @@ describe('components/DatePicker', () => {
 
     let { vm } = wrapper
     wrapper.find('.veui-date-picker-trigger').trigger('click')
-    wrapper.find('.veui-calendar-day button').trigger('click')
-
     await vm.$nextTick()
-
+    wrapper.find('.veui-calendar-day button').trigger('click')
+    await vm.$nextTick()
     wrapper.find('.veui-date-picker-clear').trigger('click')
-
     await vm.$nextTick()
     expect(vm.selected).to.equal(null)
-
     wrapper.destroy()
   })
 
@@ -261,8 +286,8 @@ describe('components/DatePicker', () => {
 
     let { vm } = wrapper
     wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await vm.$nextTick()
     wrapper.find('.veui-calendar-day button').trigger('click')
-
     await vm.$nextTick()
 
     let reg = /^(\d{2})\/(\d{2})\/(\d{4})$/
@@ -309,7 +334,8 @@ describe('components/DatePicker', () => {
     })
 
     let { vm } = wrapper
-
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await vm.$nextTick()
     let shortcuts = wrapper.findAll('.veui-date-picker-shortcuts button')
     shortcuts.at(1).trigger('click')
 
@@ -319,7 +345,7 @@ describe('components/DatePicker', () => {
     wrapper.destroy()
   })
 
-  it('should support date slot correctly.', () => {
+  it('should support date slot correctly.', async () => {
     let wrapper = mount(DatePicker, {
       scopedSlots: {
         date: `<template slot-scope="props">{{ props.year }}</template>`
@@ -327,6 +353,9 @@ describe('components/DatePicker', () => {
     })
 
     let year = new Date().getFullYear()
+    let { vm } = wrapper
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await vm.$nextTick()
 
     expect(wrapper.find('.veui-calendar-day button').text()).to.equal('' + year)
 

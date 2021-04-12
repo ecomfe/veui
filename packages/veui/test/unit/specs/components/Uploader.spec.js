@@ -842,7 +842,7 @@ describe('components/Uploader', function () {
       })
     ])
 
-    buttons.at(3).trigger('click')
+    buttons.at(2).trigger('click')
 
     let clickTriggered = await clickTriggeredPromise
     expect(clickTriggered).to.equal(true)

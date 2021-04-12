@@ -1,7 +1,6 @@
-import { mount } from '@vue/test-utils'
 import Dialog from '@/components/Dialog'
 import Button from '@/components/Button'
-import { wait } from '../../../utils'
+import { wait, mount } from '../../../utils'
 
 describe('components/Dialog', () => {
   it('should support `sync` modifier for prop `open`.', async () => {
@@ -190,7 +189,6 @@ describe('components/Dialog', () => {
 
     let { vm } = wrapper
     vm.open = true
-
     await vm.$nextTick()
 
     wrapper
@@ -201,6 +199,8 @@ describe('components/Dialog', () => {
 
     expect(vm.foo).to.equal(true)
 
+    vm.open = true
+    await vm.$nextTick()
     wrapper.find('.veui-dialog-content-foot button:last-child').trigger('click')
 
     await vm.$nextTick()

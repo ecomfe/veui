@@ -1,7 +1,7 @@
-import { mount, config } from '@vue/test-utils'
+import { config } from '@vue/test-utils'
 import sinon from 'sinon'
 import PromptBox from '@/components/PromptBox'
-import { wait } from '../../../utils'
+import { wait, mount } from '../../../utils'
 
 config.stubs.transition = false
 
@@ -49,6 +49,9 @@ describe('components/PromptBox', function () {
 
   it('should render slots correctly', () => {
     let wrapper = mount(PromptBox, {
+      propsData: {
+        open: true
+      },
       slots: {
         default: '<div class="default-slot">content</div>',
         title: '<div class="title-slot" slot="title">title</div>',

@@ -1,4 +1,13 @@
 import { trim } from 'lodash'
+import { mount as vueMount } from '@vue/test-utils'
+
+export function mount (component, options = {}) {
+  options = {
+    ...options,
+    sync: false
+  }
+  return vueMount(component, options)
+}
 
 export function wait (timeout) {
   return new Promise(resolve => {

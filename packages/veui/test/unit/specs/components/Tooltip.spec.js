@@ -41,9 +41,12 @@ describe('components/Tooltip', function () {
         }
       },
       template: `
-        <veui-tooltip :open.sync="open">
+        <div>
+          <button ref="btn">btn</button>
+          <veui-tooltip target="btn" :open.sync="open">
             {{ message }}
-        </veui-tooltip>
+          </veui-tooltip>
+        </div>
         `
     })
     expect(wrapper.find('.veui-tooltip-box').text()).to.equal(

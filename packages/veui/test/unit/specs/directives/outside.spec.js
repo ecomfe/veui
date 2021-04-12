@@ -363,7 +363,7 @@ describe('directives/outside', () => {
               >
                 <p>外层浮层</p>
                 <div>
-                  <veui-select ref="select" id="select">
+                  <veui-select ref="select" id="select" expanded>
                     <veui-option value="a">
                       A
                     </veui-option>
