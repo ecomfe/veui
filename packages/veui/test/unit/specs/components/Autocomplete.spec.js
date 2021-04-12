@@ -102,7 +102,7 @@ describe('components/Autocomplete', function () {
       debugInBrowser
     )
     let { vm } = wrapper
-    wrapper.find(INPUT).trigger('click')
+    wrapper.find(NATIVE_INPUT).trigger('focus')
     await vm.$nextTick()
     let options = wrapper.findAll(SUGGESTION_ITEM)
     options.at(2).trigger('click')

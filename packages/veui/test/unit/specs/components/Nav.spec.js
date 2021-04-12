@@ -193,7 +193,7 @@ describe('components/Nav', () => {
     expect(count).to.equal(1)
     items.at(1).trigger('mouseenter')
     await wait(300)
-    document.querySelector('.veui-nav-overlay .veui-nav-item').click()
+    wrapper.find('.veui-nav-overlay .veui-nav-item').trigger('click')
     expect(count).to.equal(2)
     wrapper.destroy()
   })

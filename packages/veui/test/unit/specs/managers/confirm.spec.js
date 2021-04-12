@@ -82,7 +82,7 @@ describe('managers/confirm', () => {
         }
       }
     })
-
+    await wait(0)
     let buttons = getEl('.veui-dialog-content-foot').querySelectorAll(
       '.veui-button'
     )

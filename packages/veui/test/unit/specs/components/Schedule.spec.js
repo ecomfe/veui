@@ -30,9 +30,15 @@ describe('components/Schedule', () => {
       propsData: {
         selected: {
           0: [[0, 23]],
-          1: [[9, 11], [13, 17]],
+          1: [
+            [9, 11],
+            [13, 17]
+          ],
           3: [[13, 16]],
-          5: [[9, 9], [16, 17]]
+          5: [
+            [9, 9],
+            [16, 17]
+          ]
         }
       }
     })
@@ -69,7 +75,10 @@ describe('components/Schedule', () => {
                 label: '特选时间',
                 selected: {
                   3: [[13, 16]],
-                  5: [[9, 9], [16, 17]]
+                  5: [
+                    [9, 9],
+                    [16, 17]
+                  ]
                 }
               },
               {
@@ -174,7 +183,10 @@ describe('components/Schedule', () => {
     await vm.$nextTick()
     expect(vm.selected).to.deep.equal({
       3: [[13, 16]],
-      5: [[9, 9], [16, 17]]
+      5: [
+        [9, 9],
+        [16, 17]
+      ]
     })
 
     wrapper.find('.veui-dropdown-button').trigger('click')
@@ -401,8 +413,12 @@ describe('components/Schedule', () => {
     expect(wrapper.find('.veui-schedule-table-selected td').text()).to.equal(
       '0:00–2:00'
     )
-
-    expect(wrapper.find('.tooltip-content').text()).to.equal('1 1')
+    wrapper.find('.veui-schedule-table-interaction').trigger('mouseenter')
+    wrapper
+      .find('.veui-schedule-table-interaction button.veui-schedule-selected')
+      .trigger('mouseenter')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('.tooltip-content').text()).to.equal('1 0')
     wrapper.destroy()
   })
 })

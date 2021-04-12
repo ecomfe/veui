@@ -357,12 +357,17 @@ export default {
   watch: {
     realExpanded (val) {
       if (val) {
-        let cal = this.$refs.cal
-        cal.setExpanded(false)
-        let selected = [].concat(this.realSelected)
-        if (selected[0]) {
-          cal.navigate(selected)
-        }
+        // nextTick: overlay 内容可能还没渲染
+        this.$nextTick(() => {
+          if (this.realExpanded) {
+            let cal = this.$refs.cal
+            cal.setExpanded(false)
+            let selected = [].concat(this.realSelected)
+            if (selected[0]) {
+              cal.navigate(selected)
+            }
+          }
+        })
       }
     }
   },
@@ -381,7 +386,8 @@ export default {
       if (dates.length) {
         let valid = !this.isDisabled(dates[0], dates[1] || null)
         if (this.range && valid) {
-          valid = !this.isDisabled(dates[1], dates[0] || null) &&
+          valid =
+            !this.isDisabled(dates[1], dates[0] || null) &&
             lt(dates[0], dates[1])
         }
         if (valid) {
@@ -535,7 +541,11 @@ export default {
       this.$refs.cal.pick(picking)
     },
     isDisabled (date, another) {
-      return !!date && typeof this.disabledDate === 'function' && !!this.disabledDate(date, another)
+      return (
+        !!date &&
+        typeof this.disabledDate === 'function' &&
+        !!this.disabledDate(date, another)
+      )
     }
   }
 }

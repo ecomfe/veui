@@ -12,13 +12,20 @@ export default {
   },
   computed: getTypedAncestorTracker('menu').computed,
   created () {
-    if (!this.menu) {
+    if (!this.menu || !this.renderForData) {
       return
     }
     let index = getIndexOfType(this, 'menu')
     let label = this.label || this.getLabelNaive()
     this.menu.add({
-      ...pick(this, ['value', 'items', 'id', 'position', 'trigger', 'disabled']),
+      ...pick(this, [
+        'value',
+        'items',
+        'id',
+        'position',
+        'trigger',
+        'disabled'
+      ]),
       label,
       index,
       renderLabel:

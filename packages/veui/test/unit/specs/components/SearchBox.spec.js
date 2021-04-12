@@ -301,9 +301,9 @@ describe('components/SearchBox', () => {
     )
 
     let input = wrapper.find('input')
-    input.element.value = 'box'
+    input.element.value = 'cherry'
     input.trigger('input')
-
+    await wrapper.vm.$nextTick()
     wrapper.find('.test-overlay-class .veui-option').trigger('click')
 
     await wrapper.vm.$nextTick()
@@ -471,6 +471,7 @@ describe('components/SearchBox', () => {
           <veui-search-box
             :suggestions="suggestions"
             suggestTrigger="focus"
+            expanded
             overlayClass="test-overlay-class"
           >
             <template slot="group-label" slot-scope="suggestion">

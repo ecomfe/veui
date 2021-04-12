@@ -19,6 +19,7 @@ import { find } from '../../utils/datasource'
 import { uniqueId, omit } from 'lodash'
 import { contains, focusIn } from '../../utils/dom'
 import { renderSlot } from '../../utils/helper'
+import { SelectContextProvider } from '../_Context'
 import '../../common/uiTypes'
 
 config.defaults(
@@ -287,7 +288,11 @@ export default {
       e.stopPropagation()
     },
     handleInputBlur (e) {
-      if (this.multiple && contains(this.$refs.box, e.relatedTarget, true)) {
+      if (
+        this.multiple &&
+        this.$refs.box &&
+        contains(this.$refs.box, e.relatedTarget, true)
+      ) {
         e.target.focus()
       }
     },
@@ -509,21 +514,23 @@ export default {
 
     let renderGroup = (options, children, key) => {
       return (
-        <OptionGroup
-          key={key}
-          v-show={!!options}
-          hidden={!options}
-          aria-hidden={!options}
-          ref="options"
-          options={options}
-          scopedSlots={{
-            label: this.$scopedSlots['group-label'] || null,
-            option: this.$scopedSlots.option || option,
-            'option-label': this.$scopedSlots['option-label'] || optionLabel
-          }}
-        >
-          {children}
-        </OptionGroup>
+        <SelectContextProvider provide={{ renderForData: key === 'data' }}>
+          <OptionGroup
+            key={key}
+            v-show={!!options}
+            hidden={!options}
+            aria-hidden={!options}
+            ref="options"
+            options={options}
+            scopedSlots={{
+              label: this.$scopedSlots['group-label'] || null,
+              option: this.$scopedSlots.option || option,
+              'option-label': this.$scopedSlots['option-label'] || optionLabel
+            }}
+          >
+            {children}
+          </OptionGroup>
+        </SelectContextProvider>
       )
     }
 
@@ -549,6 +556,9 @@ export default {
             attrs: this.triggerAttrs
           })}
       >
+        {!this.options
+          ? renderGroup(null, renderSlot(this, 'default'), 'data')
+          : null}
         {this.$scopedSlots.trigger ? (
           this.$scopedSlots.trigger({
             handlers: {
@@ -658,9 +668,6 @@ export default {
               onKeydown={this.handleKeydown}
             >
               {renderSlot(this, 'before', this.slotProps)}
-              {!this.options
-                ? renderGroup(null, renderSlot(this, 'default'), 'data')
-                : null}
               {renderGroup(
                 this.isFiltered ? this.filteredOptions : this.realOptions,
                 this.isFiltered && !this.filteredOptions.length ? (

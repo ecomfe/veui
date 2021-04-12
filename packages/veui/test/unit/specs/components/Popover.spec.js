@@ -1,6 +1,5 @@
-import { mount } from '@vue/test-utils'
 import Popover from '@/components/Popover'
-import { wait } from '../../../utils'
+import { wait, mount } from '../../../utils'
 
 describe('components/Popover', function () {
   it('should put the layer root node directly below the body.', async () => {
@@ -29,7 +28,7 @@ describe('components/Popover', function () {
     wrapper.destroy()
   })
 
-  it('should render slot correctly for Popover', () => {
+  it('should render slot correctly for Popover', async () => {
     let wrapper = mount({
       components: {
         'veui-popover': Popover
@@ -41,11 +40,15 @@ describe('components/Popover', function () {
         }
       },
       template: `
-        <veui-popover :open.sync="open">
+        <div>
+          <button ref="btn">btn</button>
+          <veui-popover target="btn" :open="open">
             {{ message }}
-        </veui-popover>
+          </veui-popover>
+        </div>
         `
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('.veui-popover-box').text()).to.equal(
       'default slot content'
     )
@@ -72,6 +75,8 @@ describe('components/Popover', function () {
               </div>
               `
     })
+    // popover 现在需要在 nextTick 才能渲染出 overlay（因为 targetNode 在 nextTick 才能存在）
+    await wrapper.vm.$nextTick()
     wrapper.find('.popover-test').trigger('click')
 
     await wait(0)
@@ -99,7 +104,10 @@ describe('components/Popover', function () {
       }
     )
 
-    await wait(0)
+    // await wrapper.vm.$nextTick()
+    // await wait(0)
+    // 虽然上面的 wait 可以，但是还是对时机宽容点
+    await wait(100)
     expect(document.activeElement.tagName.toLowerCase()).to.equal('input')
     wrapper.destroy()
   })

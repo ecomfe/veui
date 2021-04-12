@@ -1,6 +1,7 @@
 <template>
 <div
   :is="tag"
+  v-if="!renderForData"
   v-show="!hidden"
   :type="tag === 'button' ? 'button' : null"
   :tabindex="hidden ? -1 : false"
@@ -33,10 +34,17 @@ import menuItem from '../../mixins/menu-item'
 import selectItem from '../../mixins/select-item'
 import { scrollIntoView } from '../../utils/dom'
 import { isType } from '../../utils/helper'
+import { useSelectContext } from '../_Context'
 
 export default {
   name: 'veui-option',
-  mixins: [prefix, ui, menuItem, selectItem],
+  mixins: [
+    prefix,
+    ui,
+    menuItem,
+    selectItem,
+    useSelectContext(['renderForData'])
+  ],
   props: {
     label: {
       type: [String, Number]

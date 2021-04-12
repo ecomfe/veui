@@ -23,6 +23,7 @@ import {
   isEqual,
   isFunction
 } from 'lodash'
+import { useSelectContext } from '../_Context'
 
 const EVENT_MAP = {
   hover: 'mouseenter',
@@ -45,6 +46,7 @@ const OptionGroup = {
     selectItem,
     overlay,
     keySelect,
+    useSelectContext(['renderForData']),
     useControllable([
       {
         prop: 'expanded',
@@ -95,6 +97,7 @@ const OptionGroup = {
         position: 'right-start'
       },
       outsideRefs: ['button'],
+      hasLabelContent: false,
       popupId: uniqueId('veui-option-group-popup-')
     }
   },
@@ -114,14 +117,6 @@ const OptionGroup = {
     realTrigger () {
       // derivable from parent group unless explicitly set
       return this.trigger || (this.menu && this.menu.trigger) || 'click'
-    },
-    canPopOut () {
-      return !!(
-        this.position === 'popup' &&
-        this.items &&
-        this.items.length &&
-        this.labelContent
-      )
     },
     realLocal () {
       if (this.realOverlayOptions.local != null) {
@@ -153,6 +148,15 @@ const OptionGroup = {
 
       let overlay = getTypedAncestor(this, 'overlay')
       return overlay ? overlay.$refs.box : null
+    },
+    // TODO items -> options 的影响？
+    canPopOut () {
+      return !!(
+        this.position === 'popup' &&
+        this.options &&
+        this.options.length &&
+        this.hasLabelContent
+      )
     }
   },
   watch: {
@@ -319,9 +323,22 @@ const OptionGroup = {
       })
       : []
 
+    if (this.renderForData) {
+      // default 是内联的标签
+      // content 是 options prop 渲染出来的，是不是应该直接把options往上注册即可？
+      return (
+        <div>
+          {this.$slots.default}
+          {!this.$slots.default && content}
+        </div>
+      )
+    }
+
     this.labelContent = this.getLabelContent()
+    // hasLabelContent 才是响应的（ boolean 值只要不变就不影响 ），避免 canPopout 无限渲染？
+    this.hasLabelContent = !!this.labelContent
     let LabelTag =
-      this.labelContent && this.componentAttrs.option
+      this.hasLabelContent && this.componentAttrs.option
         ? this.getOptionTag(this.componentAttrs.option)
         : 'div'
 

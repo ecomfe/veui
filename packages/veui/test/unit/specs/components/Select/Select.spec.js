@@ -1,7 +1,7 @@
 import Select from 'veui/components/Select'
 import OptionGroup from 'veui/components/OptionGroup'
 import Option from 'veui/components/Option'
-import { mount } from '@vue/test-utils'
+import { mount } from '../../../../utils'
 
 const datasource = [
   {
@@ -61,7 +61,7 @@ describe('components/Select/Select', () => {
             options: null
           }
         },
-        template: '<veui-select :options="options"/>'
+        template: '<veui-select :options="options" expanded/>'
       },
       {
         sync: false,
@@ -96,6 +96,7 @@ describe('components/Select/Select', () => {
         template: `
           <veui-select
             v-model="hero"
+            expanded
           >
             <veui-option
               value="baidu"
@@ -122,7 +123,7 @@ describe('components/Select/Select', () => {
     await vm.$nextTick()
     let options = wrapper.findAll(OPTION_ITEM)
     expect(options.length).to.equal(3)
-    expect(wrapper.text()).to.equal('请选择')
+    expect(wrapper.find('.veui-select-trigger').text()).to.equal('请选择')
 
     options.at(0).trigger('click')
     await vm.$nextTick()
@@ -340,6 +341,7 @@ describe('components/Select/Select', () => {
     wrapper.find('.veui-select-trigger').trigger('mouseup')
     await vm.$nextTick()
     options.at(2).trigger('click')
+    await vm.$nextTick()
     options.at(3).trigger('click')
     await vm.$nextTick()
     expect(overlay.isVisible()).to.equal(true)
@@ -524,7 +526,7 @@ describe('components/Select/Select', () => {
           }
         },
         template: `
-          <veui-select :options="options">
+          <veui-select :options="options" expanded>
             <template #option-label="{ label }">{{ label }} - 🤘</template>
             <template #group-label="{ label }">{{ label }} - 🤞</template>
           </veui-select>`
@@ -562,7 +564,7 @@ describe('components/Select/Select', () => {
           }
         },
         template: `
-          <veui-select>
+          <veui-select expanded>
             <veui-option
               v-for="o in options"
               :label="o.label"
@@ -606,7 +608,7 @@ describe('components/Select/Select', () => {
           }
         },
         template: `
-          <veui-select :value="value" :options="options"/>`
+          <veui-select :value="value" :options="options" expanded/>`
       },
       {
         sync: false,
@@ -637,7 +639,7 @@ describe('components/Select/Select', () => {
           }
         },
         template: `
-          <veui-select v-model="value" multiple searchable :options="options"/>`
+          <veui-select v-model="value" multiple searchable :options="options" expanded/>`
       },
       {
         sync: false,
@@ -680,7 +682,7 @@ describe('components/Select/Select', () => {
           }
         },
         template: `
-          <veui-select v-model="value" :options="options">
+          <veui-select v-model="value" :options="options" expanded>
             <template #trigger="{ toggle, value }">
               <button class="trigger-btn" @click="toggle">{{ value }}</button>
             </template>
@@ -726,6 +728,7 @@ describe('components/Select/Select', () => {
             v-model="value"
             :options="options"
             :searchable="searchable"
+            expanded
           >
             <template #label="{ label }">
               <em>{{ label }}</em>
@@ -841,6 +844,7 @@ describe('components/Select/Select', () => {
             v-model="value"
             :options="options"
             :searchable="searchable"
+            expanded
           >
             <template #selected="{ label }">
               <em>{{ label }}</em>

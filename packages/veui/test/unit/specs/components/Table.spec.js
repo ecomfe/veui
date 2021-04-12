@@ -1,10 +1,9 @@
-import { mount } from '@vue/test-utils'
 import { cloneDeep, isEqual } from 'lodash'
 import Popover from '@/components/Popover'
 import Table from '@/components/Table'
 import Column from '@/components/Table/Column'
 import Select from '@/components/Select'
-// import { wait } from '../../../utils'
+import { mount } from '../../../utils'
 
 describe('components/Table', () => {
   it('should select the specified fields.', async () => {
@@ -1471,6 +1470,7 @@ describe('components/Table', () => {
     const { vm } = wrapper
     const select = wrapper.find(Select)
     const filter = wrapper.find('.veui-button')
+    filter.trigger('click')
 
     await vm.$nextTick()
 
@@ -1551,7 +1551,7 @@ describe('components/Table', () => {
     const { vm } = wrapper
     const select = wrapper.find(Select)
     const filter = wrapper.find('.veui-button')
-
+    filter.trigger('click')
     await vm.$nextTick()
 
     const options = select.findAll('.veui-option')
@@ -1630,7 +1630,7 @@ describe('components/Table', () => {
     const select = wrapper.find(Select)
     const filter = wrapper.find('.veui-button')
     const column = wrapper.find(Column)
-
+    filter.trigger('click')
     await vm.$nextTick()
 
     const options = select.findAll('.veui-option')
@@ -1723,7 +1723,7 @@ describe('components/Table', () => {
     const { vm } = wrapper
     const select = wrapper.find(Select)
     const filter = wrapper.find('.veui-button')
-
+    filter.trigger('click')
     await vm.$nextTick()
 
     const options = select.findAll('.veui-option')
@@ -1757,6 +1757,9 @@ describe('components/Table', () => {
     document.body.click()
     await vm.$nextTick()
 
+    filter.trigger('click')
+    await vm.$nextTick()
+
     expect(vm.filterValue).to.eql(['b', 'c'])
     expect(filter.find('.veui-table-header-icon-active').exists()).to.equal(
       true
@@ -1769,6 +1772,10 @@ describe('components/Table', () => {
     expect(filter.find('.veui-table-header-icon-active').exists()).to.equal(
       true
     )
+
+    filter.trigger('click')
+    await vm.$nextTick()
+
     wrapper
       .find('.veui-table-filter-actions .veui-button + .veui-button')
       .trigger('click')
@@ -1826,7 +1833,7 @@ describe('components/Table', () => {
     const { vm } = wrapper
     const select = wrapper.find(Select)
     const filter = wrapper.find('.veui-button')
-
+    filter.trigger('click')
     await vm.$nextTick()
 
     const options = select.findAll('.veui-option')
@@ -1860,6 +1867,9 @@ describe('components/Table', () => {
     document.body.click()
     await vm.$nextTick()
 
+    filter.trigger('click')
+    await vm.$nextTick()
+
     expect(vm.filterValue).to.eql(['a', 'b'])
     expect(filter.find('.veui-table-header-icon-active').exists()).to.equal(
       true
@@ -1872,6 +1882,10 @@ describe('components/Table', () => {
     expect(filter.find('.veui-table-header-icon-active').exists()).to.equal(
       true
     )
+
+    filter.trigger('click')
+    await vm.$nextTick()
+
     wrapper
       .find('.veui-table-filter-actions .veui-button + .veui-button')
       .trigger('click')
@@ -1928,7 +1942,7 @@ describe('components/Table', () => {
     const select = wrapper.find(Select)
     const filter = wrapper.find('.veui-button')
     const column = wrapper.find(Column)
-
+    filter.trigger('click')
     await vm.$nextTick()
 
     const options = select.findAll('.veui-option')
@@ -1959,6 +1973,9 @@ describe('components/Table', () => {
     document.body.click()
     await vm.$nextTick()
 
+    filter.trigger('click')
+    await vm.$nextTick()
+
     expect(filter.find('.veui-table-header-icon-active').exists()).to.equal(
       true
     )
@@ -1969,6 +1986,10 @@ describe('components/Table', () => {
     expect(filter.find('.veui-table-header-icon-active').exists()).to.equal(
       true
     )
+
+    filter.trigger('click')
+    await vm.$nextTick()
+
     wrapper
       .find('.veui-table-filter-actions .veui-button + .veui-button')
       .trigger('click')

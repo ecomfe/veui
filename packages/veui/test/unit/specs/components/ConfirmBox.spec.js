@@ -1,7 +1,7 @@
-import { mount, config } from '@vue/test-utils'
+import { config } from '@vue/test-utils'
 import sinon from 'sinon'
 import ConfirmBox from '@/components/ConfirmBox'
-import { wait } from '../../../utils'
+import { wait, mount } from '../../../utils'
 
 config.stubs.transition = false
 
@@ -39,6 +39,9 @@ describe('components/ConfirmBox', function () {
 
   it('should render slot correctly', () => {
     let wrapper = mount(ConfirmBox, {
+      propsData: {
+        open: true
+      },
       slots: {
         title: '<div class="title-slot" slot="title">title</div>',
         default: '<div class="content-slot">content</div>',
@@ -90,6 +93,7 @@ describe('components/ConfirmBox', function () {
     await wait(600)
     expect(okHandler.calledOnce).to.equal(true)
     wrapper.vm.open = true
+    await wrapper.vm.$nextTick()
     buttons.at(1).trigger('click')
     await wait(600)
     expect(cancelHandler.calledOnce).to.equal(true)
