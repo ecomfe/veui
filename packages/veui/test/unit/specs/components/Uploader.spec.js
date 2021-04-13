@@ -520,12 +520,17 @@ describe('components/Uploader', function () {
       setTimeout(oncancel, 20)
     }
 
+    let called = false
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
         requestMode: 'custom',
         order: 'append',
-        upload: successUpload
+        upload: successUpload,
+        convertResponse: data => {
+          called = true
+          return data
+        }
       },
       attachToDocument: true
     })
@@ -536,6 +541,7 @@ describe('components/Uploader', function () {
     expect(wrapper.vm.fileList[0].status).to.equal('uploading')
     expect(wrapper.vm.fileList[0].name).to.equal('xxx.png')
     await promise
+    expect(called).to.equal(true)
     expect(wrapper.vm.fileList[0].status).to.equal('success')
     expect(wrapper.vm.fileList[0].name).to.equal('xxx.jpg')
     expect(wrapper.emitted('progress')[0][2]).to.eql({

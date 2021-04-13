@@ -546,9 +546,15 @@ function getXhrUploadRequest (options) {
   }
 }
 
-function getCustomUploadRequest ({ upload }) {
+function getCustomUploadRequest ({ upload, convertResponse = identity }) {
   // 之前的实现里自定义上传函数的 context 是 null，这里继续保留
   return function (file, callbacks) {
+    // 自定义上传也调用 convertResponse 处理结果
+    let original = callbacks.onload
+    callbacks = {
+      ...callbacks,
+      onload: (data, ...args) => original(convertResponse(data), ...args)
+    }
     let cancel = upload(file, callbacks)
     return function () {
       if (cancel) {
