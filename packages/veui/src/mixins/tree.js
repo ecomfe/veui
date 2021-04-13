@@ -62,7 +62,12 @@ const methods = {
       childrenKey: this.treeChildrenKey
     }
     let newChecked = _toggleItem(prevChecked, item, parents, options)
-    return getNormalizedCheckedValues(datasource, newChecked, options)
+    return getNormalizedCheckedValues(
+      datasource,
+      newChecked,
+      prevChecked,
+      options
+    )
   },
 
   // 参见上面 toggle，这里是 toggle 中的选中操作，类似 transfer candidate 中选中（不能选中 hidden 的）
@@ -73,7 +78,12 @@ const methods = {
       operation: 'check'
     }
     let newChecked = _toggleItem(prevChecked, item, parents, options)
-    return getNormalizedCheckedValues(datasource, newChecked, options)
+    return getNormalizedCheckedValues(
+      datasource,
+      newChecked,
+      prevChecked,
+      options
+    )
   },
 
   // 参见上面 toggle，这里是 toggle 中的取消操作，类似 transfer candidatePanel 中取消（不能取消 hidden 的）
@@ -84,7 +94,12 @@ const methods = {
       operation: 'uncheck'
     }
     let newChecked = _toggleItem(prevChecked, item, parents, options)
-    return getNormalizedCheckedValues(datasource, newChecked, options)
+    return getNormalizedCheckedValues(
+      datasource,
+      newChecked,
+      prevChecked,
+      options
+    )
   },
 
   // 参见上面 uncheckItem，不同的是这里忽略 hidden 的影响，类似 transfer selectedPanel 中取消
@@ -95,7 +110,12 @@ const methods = {
       operation: 'clear'
     }
     let newChecked = _toggleItem(prevChecked, item, parents, options)
-    return getNormalizedCheckedValues(datasource, newChecked, options)
+    return getNormalizedCheckedValues(
+      datasource,
+      newChecked,
+      prevChecked,
+      options
+    )
   },
 
   // transfer candidatePanel 中的全选（不能选中 hidden 的）
@@ -237,6 +257,7 @@ function getCheckedValues (
 function getNormalizedCheckedValues (
   datasource,
   checked,
+  prevChecked,
   { strategy, childrenKey }
 ) {
   let walker = {
@@ -274,7 +295,9 @@ function getNormalizedCheckedValues (
       return { checked: itemChecked, partialChecked, values }
     }
   }
-  return walk([{ [childrenKey]: datasource }], walker, childrenKey)[0].values
+  let normalized = walk([{ [childrenKey]: datasource }], walker, childrenKey)[0]
+    .values
+  return respectSelectionOrder(normalized, prevChecked)
 }
 
 function batch (prevChecked, itemsToBatch, datasource, options) {
@@ -287,7 +310,12 @@ function batch (prevChecked, itemsToBatch, datasource, options) {
   }, prevChecked)
 
   // 重新生成一份符合当前 strategy 的 checked
-  return getNormalizedCheckedValues(datasource, newChecked, options)
+  return getNormalizedCheckedValues(
+    datasource,
+    newChecked,
+    prevChecked,
+    options
+  )
 }
 
 /**
@@ -519,4 +547,21 @@ function hasEqualField (item, context, field) {
 
 function inChecked (checked, item) {
   return item.value != null && includes(checked, item.value)
+}
+
+function respectSelectionOrder (checked, prevChecked) {
+  if (checked.length && prevChecked && prevChecked.length) {
+    let stillChecked = []
+    let newChecked = []
+    checked.forEach(ck => {
+      let index = prevChecked.indexOf(ck)
+      if (index >= 0) {
+        stillChecked[index] = ck
+      } else {
+        newChecked.push(ck)
+      }
+    })
+    return stillChecked.filter(i => i != null).concat(newChecked)
+  }
+  return checked
 }

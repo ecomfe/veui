@@ -11,12 +11,12 @@
 
   &-pane-wrap {
     &:extend(._veui-dropdown-overlay all);
-    &[ui] {
-      max-height: none;
-    }
     overflow-y: auto;
     background-color: @dls-option-background-color;
     outline: none;
+  }
+  & &-pane-wrap {
+    max-height: none; // 覆盖 overlay 对下拉的高度限制
   }
 
   // 特殊处理：将全选伪造成第一层
@@ -29,14 +29,25 @@
   }
 
   &-search-result {
-    .@{veui-prefix}-cascader-pane-menu {
+    .@{veui-prefix}-cascader-pane-menu-wrap {
       width: 100%;
     }
-    .@{veui-prefix}-cascader-pane-menu > .@{veui-prefix}-cascader-pane-tree {
+    .@{veui-prefix}-cascader-pane-menu {
       height: auto;
     }
     &-item-separator {
       transform: rotate(-90deg);
     }
+  }
+  &-before,
+  &-after {
+    padding-top: 2 * @dls-padding-unit;
+    padding-bottom: 2 * @dls-padding-unit;
+  }
+  &-before {
+    border-bottom: 1px solid @dls-line-color-1;
+  }
+  &-after {
+    border-top: 1px solid @dls-line-color-1;
   }
 }

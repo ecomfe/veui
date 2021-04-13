@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { wait } from '../../../../utils'
 
 const OPTION = '.veui-cascader-pane-option-wrap'
-const MENU = '.veui-cascader-pane-menu'
+const MENU = '.veui-cascader-pane-menu-wrap'
 const SECOND_MENU = `${MENU}:nth-child(2)`
 const DISABLED = '.veui-cascader-pane-option-wrap-disabled'
 
@@ -68,6 +68,7 @@ describe('components/Cascader/Cascader', () => {
         template: '<veui-cascader :options="options"/>'
       },
       {
+        attachToDocument: true,
         sync: false
       }
     )
@@ -123,7 +124,7 @@ describe('components/Cascader/Cascader', () => {
     let { vm } = wrapper
     let menuPanel = wrapper.findAll(MENU)
     expect(menuPanel.length).to.equal(2)
-    const optionsOfsecondMenu = `${MENU}:nth-child(2) ${OPTION}`
+    const optionsOfsecondMenu = `${SECOND_MENU} ${OPTION}`
     let secOptions = wrapper.findAll(optionsOfsecondMenu)
     expect(secOptions.length).to.equal(2)
 
@@ -173,7 +174,7 @@ describe('components/Cascader/Cascader', () => {
 
     vm.expanded = '江苏'
     await vm.$nextTick()
-    let menu = wrapper.find('.veui-cascader-pane-menu')
+    let menu = wrapper.find(MENU)
     // inline 一直等分下去
     expect(menu.element.clientWidth * 2).to.equal(paneWidth)
     wrapper.destroy()
@@ -359,7 +360,7 @@ describe('components/Cascader/Cascader', () => {
     expect(vm.expanded).to.equal('江苏')
     expect(vm.value).to.equal('江苏')
 
-    const optionsOfsecondMenu = `${MENU}:nth-child(2) ${OPTION}`
+    const optionsOfsecondMenu = `${SECOND_MENU} ${OPTION}`
     let secOptions = wrapper.findAll(optionsOfsecondMenu)
     // 选中徐州，不是 only-select-leaves，不要关闭
     secOptions.at(2).trigger('click')
@@ -458,7 +459,7 @@ describe('components/Cascader/Cascader', () => {
     expect(vm.value).to.equal('江苏')
 
     // 单选点击叶子，即选中且不影响展开
-    let subOptions = wrapper.findAll(`${MENU}:nth-child(2) ${OPTION}`)
+    let subOptions = wrapper.findAll(`${SECOND_MENU} ${OPTION}`)
     subOptions.at(1).trigger('click')
     await vm.$nextTick()
     expect(vm.expanded).to.equal('江苏')
@@ -475,7 +476,7 @@ describe('components/Cascader/Cascader', () => {
     expect(vm.expanded).to.equal('江苏')
     expect(vm.value).to.equal(null)
 
-    subOptions = wrapper.findAll(`${MENU}:nth-child(2) ${OPTION}`)
+    subOptions = wrapper.findAll(`${SECOND_MENU} ${OPTION}`)
     subOptions.at(1).trigger('click')
     await vm.$nextTick()
     expect(vm.expanded).to.equal('江苏')
@@ -574,6 +575,26 @@ describe('components/Cascader/Cascader', () => {
     trigger.trigger('keydown', { key: 'Backspace' })
     await vm.$nextTick()
     expect(vm.value).to.deep.equal([])
+    wrapper.destroy()
+  })
+
+  it('should respect the order of selecting options', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-cascader': Cascader
+      },
+      data () {
+        return {
+          value: ['上海', '徐州'],
+          options: casOptions.map(i => ({ ...i, position: 'inline' }))
+        }
+      },
+      template: '<veui-cascader v-model="value" multiple :options="options"/>'
+    })
+    let { vm } = wrapper
+    select(wrapper, 5)
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['上海', '徐州', '苏州'])
     wrapper.destroy()
   })
 })

@@ -2,11 +2,12 @@
 @import (reference) "../dropdown.less";
 
 .@{veui-prefix}-cascader-pane {
-  @panel-height-xs: 6 * @dls-option-height-xs;
-  @panel-height-s: 6 * @dls-option-height-s;
-  @panel-height-m: 6 * @dls-option-height-m;
-  @panel-height-l: 6 * @dls-option-height-l;
+  @panel-height-xs: 6 * @dls-option-height-xs + 2 * @dls-option-group-padding-y;
+  @panel-height-s: 6 * @dls-option-height-s + 2 * @dls-option-group-padding-y;
+  @panel-height-m: 6 * @dls-option-height-m + 2 * @dls-option-group-padding-y;
+  @panel-height-l: 6 * @dls-option-height-l + 2 * @dls-option-group-padding-y;
   @min-panel-width: 26 * @dls-padding-unit;
+  @option-padding-x: 3 * @dls-padding-unit;
 
   display: flex;
 
@@ -17,37 +18,43 @@
     .veui-transition(height);
   }
 
+  &-menu-wrap {
+    overflow: auto;
+  }
+
   &-menu {
     .padding(@dls-option-group-padding-y, _);
-    display: flex;
-    flex-direction: column;
     position: relative;
-    overflow: hidden;
+    height: @panel-height-m;
+    max-height: @panel-height-m; // 用来控制搜索时最大高度，此时高度会 reset 成 auto
+  }
+  &[ui~="xs"] &-menu {
+    height: @panel-height-xs;
+    max-height: @panel-height-xs;
+  }
+
+  &[ui~="s"] &-menu {
+    height: @panel-height-s;
+    max-height: @panel-height-s;
+  }
+
+  &[ui~="l"] &-menu {
+    height: @panel-height-l;
+    max-height: @panel-height-l;
+  }
+
+  &-menu-wrap:not(:first-child) {
+    border-left: 1px solid @dls-line-color-1;
   }
 
   // 下拉第一层没有缩进，其他层缩进
   &-menu > &-tree {
-    height: @panel-height-m;
-    max-height: @panel-height-m; // 用来控制搜索时最大高度，此时高度会 reset 成 auto
     padding-left: 0;
     min-width: @min-panel-width;
     box-sizing: content-box;
     flex: auto;
-    overflow: auto;
     overflow-x: hidden;
     position: relative;
-  }
-
-  &[ui~="xs"] &-menu > &-tree {
-    height: @panel-height-xs;
-  }
-
-  &[ui~="s"] &-menu > &-tree {
-    height: @panel-height-s;
-  }
-
-  &[ui~="l"] &-menu > &-tree {
-    height: @panel-height-l;
   }
 
   &-tree &-tree {
@@ -55,7 +62,7 @@
   }
 
   // 内联平分
-  &-inline &-menu {
+  &-inline &-menu-wrap {
     flex-grow: 1;
     flex-shrink: 0;
   }
@@ -64,6 +71,7 @@
   &-group-label,
   &-option {
     &:extend(._veui-dropdown-option all);
+    .padding(_, @option-padding-x);
     // reset dropdown option background, use tree item background
     background-color: transparent;
     &:hover {
@@ -143,31 +151,6 @@
       }
     }
 
-    &:not(&-disabled)&-selected {
-      .@{veui-prefix}-cascader-pane-option-label {
-        color: @dls-option-font-color-selected;
-        font-weight: @dls-option-font-weight-selected;
-      }
-
-      &:hover {
-        .@{veui-prefix}-cascader-pane-option-label {
-          color: @dls-option-font-color-selected-hover;
-        }
-      }
-
-      &[data-focus-visible-added] {
-        .@{veui-prefix}-cascader-pane-option-label {
-          color: @dls-option-font-color-selected-focus;
-        }
-      }
-
-      &:active {
-        .@{veui-prefix}-cascader-pane-option-label {
-          color: @dls-option-font-color-selected-active;
-        }
-      }
-    }
-
     &-disabled {
       cursor: not-allowed;
       background-color: @dls-option-background-color;
@@ -179,13 +162,38 @@
     }
   }
 
+  &:not(&-multiple) &-option-wrap-selected:not(&-option-wrap-disabled) {
+    .@{veui-prefix}-cascader-pane-option-label {
+      color: @dls-option-font-color-selected;
+      font-weight: @dls-option-font-weight-selected;
+    }
+
+    &:hover {
+      .@{veui-prefix}-cascader-pane-option-label {
+        color: @dls-option-font-color-selected-hover;
+      }
+    }
+
+    &[data-focus-visible-added] {
+      .@{veui-prefix}-cascader-pane-option-label {
+        color: @dls-option-font-color-selected-focus;
+      }
+    }
+
+    &:active {
+      .@{veui-prefix}-cascader-pane-option-label {
+        color: @dls-option-font-color-selected-active;
+      }
+    }
+  }
+
   &-group-label {
     display: flex;
     align-items: center;
     max-width: @dls-option-max-width-m;
     font-size: @dls-option-font-size-m;
 
-    .padding(@dls-option-group-label-padding-y, @dls-option-padding-m);
+    .padding(@dls-option-group-label-padding-y, @option-padding-x);
 
     .@{veui-prefix}-cascader-pane-option-label {
       flex-grow: 1;
@@ -198,14 +206,18 @@
     }
   }
 
-  &-menu:not(:first-child) > &-panel-tree {
-    border-left: 1px solid @dls-line-color-1;
-  }
-
   &-menu-before,
   &-menu-after {
     padding-top: 2 * @dls-padding-unit;
     padding-bottom: 2 * @dls-padding-unit;
+  }
+  &-menu-before {
+    margin-top: -@dls-option-group-padding-y;
+  }
+  &-menu-after {
+    margin-bottom: -@dls-option-group-padding-y;
+    position: sticky;
+    top: 100%;
   }
 
   &[ui~="xs"] {
