@@ -101,7 +101,7 @@
           ref="pane"
           :class="{
             [$c('cascader-search-result')]: !!keyword,
-            [$c('cascader-panel-multiple')]: multiple
+            [$c('cascader-pane-multiple')]: multiple
           }"
           :inline="inline"
           :multiple="multiple"
@@ -551,8 +551,9 @@ export default {
     },
     expandSelected () {
       let expanded = true
-      if (this.realValue.length) {
-        let parents = this.getPopoutParents(this.realValue[0])
+      let len = this.realValue.length
+      if (len) {
+        let parents = this.getPopoutParents(this.realValue[len - 1])
         if (parents && parents.length) {
           expanded = getKey(parents[parents.length - 1]) || true
         }

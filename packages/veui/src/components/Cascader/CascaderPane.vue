@@ -11,121 +11,121 @@
     v-for="(group, depth) in expandedItems"
     ref="menu"
     :key="depth"
-    :class="{
-      [$c('cascader-pane-menu')]: true
-    }"
+    :class="$c('cascader-pane-menu-wrap')"
   >
-    <div
-      v-if="$scopedSlots['menu-before']"
-      :class="$c('cascader-pane-menu-before')"
-    >
-      <slot
-        name="menu-before"
-        v-bind="{
-          option: group
-        }"
-      />
-    </div>
-    <abstract-tree
-      children-key="options"
-      :items="group.options"
-      :expand="expand"
-      :class="$c('cascader-pane-tree')"
-      :group-class="$c('cascader-pane-tree')"
-    >
-      <template
-        slot="item"
-        slot-scope="{ item: option, parents }"
+    <div :class="$c('cascader-pane-menu')">
+      <div
+        v-if="$scopedSlots['menu-before']"
+        :class="$c('cascader-pane-menu-before')"
       >
-        <div
-          :class="{
-            [$c('cascader-pane-option-wrap')]: true,
-            [$c('cascader-pane-option-wrap-expanded')]: isExpanded(option),
-            [$c('cascader-pane-option-wrap-popout')]: canPopOut(option),
-            [$c('cascader-pane-option-wrap-disabled')]: isDisabled(
-              option,
-              parents,
-              group.parents
-            ),
-            [$c('cascader-pane-option-wrap-selected')]: isSelected(option),
-            [$c(
-              'cascader-pane-option-wrap-indeterminate'
-            )]: option.partialChecked
+        <slot
+          name="menu-before"
+          v-bind="{
+            option: group
           }"
-          :data-kbd-level="depth + 1"
-          :data-kbd-key="getKey(option)"
-          :data-kbd-next="canPopOut(option) && isClickTrigger"
-          :tabindex="option.disabled ? -1 : 0"
-          @click="handleClick(option)"
-          @mouseenter="handleExpand(option, depth, 'hover')"
+        />
+      </div>
+      <abstract-tree
+        children-key="options"
+        :items="group.options"
+        :expand="expand"
+        :class="$c('cascader-pane-tree')"
+        :group-class="$c('cascader-pane-tree')"
+      >
+        <template
+          slot="item"
+          slot-scope="{ item: option, parents }"
         >
-          <slot
-            name="option"
-            v-bind="{
-              ...slotProps,
-              option
+          <div
+            :class="{
+              [$c('cascader-pane-option-wrap')]: true,
+              [$c('cascader-pane-option-wrap-expanded')]: isExpanded(option),
+              [$c('cascader-pane-option-wrap-popout')]: canPopOut(option),
+              [$c('cascader-pane-option-wrap-disabled')]: isDisabled(
+                option,
+                parents,
+                group.parents
+              ),
+              [$c('cascader-pane-option-wrap-selected')]: isSelected(option),
+              [$c(
+                'cascader-pane-option-wrap-indeterminate'
+              )]: option.partialChecked
             }"
+            :data-kbd-level="depth + 1"
+            :data-kbd-key="getKey(option)"
+            :data-kbd-next="canPopOut(option) && isClickTrigger"
+            :tabindex="option.disabled ? -1 : 0"
+            @click="handleClick(option)"
+            @mouseenter="handleExpand(option, depth, 'hover')"
           >
-            <div
-              ref="button"
-              :class="{
-                [$c('cascader-pane-group-label')]: hasChildren(option),
-                [$c('cascader-pane-option')]: true
+            <slot
+              name="option"
+              v-bind="{
+                ...slotProps,
+                option
               }"
-              :ui="realUi"
             >
-              <veui-checkbox
-                v-if="multiple"
-                tabindex="-1"
-                :checked="option.checked"
-                :indeterminate="option.partialChecked"
-                :disabled="isDisabled(option, parents, group.parents)"
-                @click.native.stop
-                @change="handleSelect(option)"
-              />
-              <div :class="$c('cascader-pane-option-label')">
-                <slot
-                  name="option-label"
-                  v-bind="{
-                    ...slotProps,
-                    option
-                  }"
-                >{{ option.label }}</slot>
-              </div>
-              <template v-if="canPopOut(option)">
-                <veui-button
-                  v-if="isClickTrigger"
-                  ui="icon"
-                  :class="$c('cascader-pane-expandable')"
-                  :data-kbd-level="depth + 1"
-                  :data-kbd-next="true"
-                  :data-kbd-key="`${getKey(option)}-expandable`"
+              <div
+                ref="button"
+                :class="{
+                  [$c('cascader-pane-group-label')]: hasChildren(option),
+                  [$c('cascader-pane-option')]: true
+                }"
+                :ui="realUi"
+              >
+                <veui-checkbox
+                  v-if="multiple"
+                  tabindex="-1"
+                  :checked="option.checked"
+                  :indeterminate="option.partialChecked"
+                  :disabled="isDisabled(option, parents, group.parents)"
                   @click.native.stop
-                  @click="handleExpand(option, depth, 'click')"
-                >
-                  <veui-icon :name="icons.expandable"/>
-                </veui-button>
-                <veui-icon
-                  v-else
-                  :class="$c('cascader-pane-expandable')"
-                  :name="icons.expandable"
+                  @change="handleSelect(option)"
                 />
-              </template>
-            </div>
-          </slot>
-        </div>
-      </template>
-    </abstract-tree>
-    <div
-      v-if="$scopedSlots['menu-after']"
-      :class="$c('cascader-pane-menu-after')"
-    >
-      <slot
-        name="menu-after"
-        v-bind="{
-          option: group
-        }"
-      />
+                <div :class="$c('cascader-pane-option-label')">
+                  <slot
+                    name="option-label"
+                    v-bind="{
+                      ...slotProps,
+                      option
+                    }"
+                  >{{ option.label }}</slot>
+                </div>
+                <template v-if="canPopOut(option)">
+                  <veui-button
+                    v-if="isClickTrigger"
+                    ui="icon"
+                    :class="$c('cascader-pane-expandable')"
+                    :data-kbd-level="depth + 1"
+                    :data-kbd-next="true"
+                    :data-kbd-key="`${getKey(option)}-expandable`"
+                    @click.native.stop
+                    @click="handleExpand(option, depth, 'click')"
+                  >
+                    <veui-icon :name="icons.expandable"/>
+                  </veui-button>
+                  <veui-icon
+                    v-else
+                    :class="$c('cascader-pane-expandable')"
+                    :name="icons.expandable"
+                  />
+                </template>
+              </div>
+            </slot>
+          </div>
+        </template>
+      </abstract-tree>
+      <div
+        v-if="$scopedSlots['menu-after']"
+        :class="$c('cascader-pane-menu-after')"
+      >
+        <slot
+          name="menu-after"
+          v-bind="{
+            option: group
+          }"
+        />
+      </div>
     </div>
   </div>
 </div>
@@ -283,12 +283,21 @@ const CascaderPane = {
         if (this.canPopOut(option) && this.isClickTrigger) {
           this.updateExpanded(option)
         } else {
+          if (this.isClickTrigger) {
+            // 不能打开也要重置展开到上级
+            this.expandTo(option)
+          }
           this.handleSelect(option)
         }
       } else {
         // 单选 展开和选中没有优先级之分，没有选中区，能选中则选中，能展开也展开
-        if (this.canPopOut(option) && this.isClickTrigger) {
-          this.updateExpanded(option)
+        if (this.isClickTrigger) {
+          if (this.canPopOut(option)) {
+            this.updateExpanded(option)
+          } else {
+            // 不能打开也要重置展开到上级
+            this.expandTo(option)
+          }
         }
         if (!this.realSelectLeaves || !hasChildren(option)) {
           this.handleSelect(option)
@@ -300,9 +309,22 @@ const CascaderPane = {
       if (typeof option !== 'boolean') {
         key = getKey(option)
       }
-      if (key !== this.realExpanded) {
-        this.commit('expanded', key)
+      this.commit('expanded', key)
+    },
+    getPopoutParents (option) {
+      let parents =
+        findParents(this.realOptions, item => getKey(item) === getKey(option), {
+          alias: 'options'
+        }) || []
+      return parents.filter(i => i.position !== 'inline')
+    },
+    expandTo (option) {
+      let expanded = true
+      let parents = this.getPopoutParents(option)
+      if (parents && parents.length) {
+        expanded = getKey(parents[parents.length - 1]) || true
       }
+      this.commit('expanded', expanded)
     },
     canPopOut (option) {
       return canPopOut(option)

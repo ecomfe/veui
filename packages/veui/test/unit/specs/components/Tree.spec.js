@@ -533,7 +533,7 @@ describe('components/Tree', () => {
     await wrapper.vm.$nextTick()
 
     let data = wrapper.vm.$data
-    expect(data.checked).to.deep.equal(['drip-brewed', 'filtered'])
+    expect(data.checked).to.deep.equal(['filtered', 'drip-brewed'])
     expect(checkboxes.at(2).props('checked')).to.equal(true)
 
     // remove all leaves
