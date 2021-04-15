@@ -4,6 +4,7 @@
 
 .@{veui-prefix}-cascader {
   display: inline-flex;
+  .veui-stub();
 
   .@{veui-prefix}-trigger {
     &:extend(._veui-select-trigger all);
@@ -39,10 +40,10 @@
       transform: rotate(-90deg);
     }
   }
+
   &-before,
   &-after {
-    padding-top: 2 * @dls-padding-unit;
-    padding-bottom: 2 * @dls-padding-unit;
+    padding: 2 * @dls-padding-unit 3 * @dls-padding-unit;
     color: @dls-foreground-color-neutral-weak;
   }
   &-before {
