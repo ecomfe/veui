@@ -51,6 +51,10 @@
         value="hover"
         name="expandTrigger2"
       >expand: hover</veui-radio>
+      <label>
+        Max:
+        <veui-number-input v-model="max2"/>
+      </label>
     </div>
     <cascader
       v-model="value2"
@@ -61,6 +65,7 @@
       :clearable="clearable2"
       :inline="inline2"
       :has-select-all="hasSelectAll2"
+      :max="max2"
       multiple
     />
   </section>
@@ -181,14 +186,15 @@
 </template>
 
 <script>
-import { Cascader, Checkbox, Radio } from 'veui'
+import { Cascader, Checkbox, Radio, NumberInput } from 'veui'
 
 export default {
   name: 'cascader-demo',
   components: {
     Cascader,
     'veui-checkbox': Checkbox,
-    'veui-radio': Radio
+    'veui-radio': Radio,
+    'veui-number-input': NumberInput
   },
   data () {
     return {
@@ -208,6 +214,7 @@ export default {
       clearable2: true,
       inline2: false,
       hasSelectAll2: false,
+      max2: null,
 
       expanded3: false,
       options: [
