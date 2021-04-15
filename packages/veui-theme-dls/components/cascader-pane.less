@@ -18,14 +18,11 @@
     .veui-transition(height);
   }
 
-  &-menu-wrap {
-    overflow: auto;
-  }
-
   &-menu {
     .padding(@dls-option-group-padding-y, _);
     position: relative;
     height: @panel-height-m;
+    overflow: auto;
     max-height: @panel-height-m; // 用来控制搜索时最大高度，此时高度会 reset 成 auto
   }
   &[ui~="xs"] &-menu {
@@ -210,6 +207,7 @@
   &-menu-after {
     padding-top: 2 * @dls-padding-unit;
     padding-bottom: 2 * @dls-padding-unit;
+    color: @dls-foreground-color-neutral-weak;
   }
   &-menu-before {
     margin-top: -@dls-option-group-padding-y;
@@ -248,9 +246,5 @@
         max-width: @dls-option-max-width-l;
       }
     }
-  }
-
-  .@{veui-prefix}-text-highlighted {
-    color: @dls-option-font-color-highlighted;
   }
 }
