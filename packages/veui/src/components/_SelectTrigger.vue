@@ -73,6 +73,18 @@ export default {
         !this.hasSelectedSlot()
       )
     },
+    finalInvalid () {
+      if (this.realInvalid) {
+        return this.realInvalid
+      }
+      return this.countOverflow
+    },
+    countOverflow () {
+      if (this.multiple && this.max) {
+        return this.realSelected.length > this.max
+      }
+      return false
+    },
     limitLabel () {
       if (this.multiple && this.max) {
         return `${(this.labels || []).length}/${this.max}`
@@ -241,7 +253,7 @@ export default {
         }}
         disabled={this.realDisabled}
         readonly={this.realReadonly}
-        invalid={this.realInvalid}
+        invalid={this.finalInvalid}
         placeholder={this.inputPlaceholder}
         value={this.inputValue}
         onMouseup={this.handleInputMouseup}
@@ -266,7 +278,14 @@ export default {
         </template>
         <template slot="after">
           {this.limitLabel && (
-            <span class={this.$c('trigger-count')}>{this.limitLabel}</span>
+            <span
+              class={{
+                [this.$c('trigger-count')]: true,
+                [this.$c('count-overflow')]: this.countOverflow
+              }}
+            >
+              {this.limitLabel}
+            </span>
           )}
           <div class={this.$c('trigger-icon')}>
             {this.clearable && !this.isEmpty ? (

@@ -4,7 +4,19 @@
 
 .@{veui-prefix}-cascader {
   display: inline-flex;
+  outline: none;
   .veui-stub();
+
+  &[data-focus-visible-added] .@{veui-prefix}-input {
+    .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
+
+    &.@{veui-prefix}-invalid {
+      .dls-focus-ring(
+        @dls-input-border-color-error-focus,
+        @dls-input-shadow-error-focus
+      );
+    }
+  }
 
   .@{veui-prefix}-trigger {
     &:extend(._veui-select-trigger all);

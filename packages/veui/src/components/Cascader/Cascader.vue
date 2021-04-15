@@ -22,6 +22,7 @@
       :max="max"
       :disabled="realDisabled"
       :readonly="realReadonly"
+      :invalid="realInvalid"
       :icons="icons"
       :ui-parts="uiParts"
       @blur="handleTriggerBlur"
