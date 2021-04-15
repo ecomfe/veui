@@ -360,17 +360,24 @@ const CascaderPane = {
     },
     scrollToCurrent () {
       let menus = this.$refs.menu
+      let length = menus.length - 1
       if (menus) {
-        menus.forEach(menu => {
+        menus.forEach((menu, index) => {
+          let isLast = length === index
+          // 每个面板滚动到当前项：最后一个面板滚动选中项，其他面板优先滚动到展开项
           let active = menu.querySelector(
-            `.${this.$c('cascader-pane-option-wrap-selected')}`
+            `.${this.$c(
+              `cascader-pane-option-wrap-${isLast ? 'selected' : 'expanded'}`
+            )}`
           )
           if (active) {
             scrollIntoView(active, true)
             // eslint-disable-next-line no-cond-assign
           } else if (
             (active = menu.querySelector(
-              `.${this.$c('cascader-pane-option-wrap-expanded')}`
+              `.${this.$c(
+                `cascader-pane-option-wrap-${isLast ? 'expanded' : 'selected'}`
+              )}`
             ))
           ) {
             scrollIntoView(active, true)
