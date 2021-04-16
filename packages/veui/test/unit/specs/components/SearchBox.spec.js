@@ -314,7 +314,7 @@ describe('components/SearchBox', () => {
     wrapper.destroy()
   })
 
-  it('should support search event correctly.', () => {
+  it('should support search event correctly.', async () => {
     let params = []
 
     let wrapper = mount(
@@ -322,12 +322,18 @@ describe('components/SearchBox', () => {
         components: {
           'veui-search-box': SearchBox
         },
+        data () {
+          return {
+            suggestions: [{ label: '1', value: '1' }]
+          }
+        },
         methods: {
           searchHandler (val) {
             params.push(val)
           }
         },
-        template: '<veui-search-box @search="searchHandler"/>'
+        template:
+          '<veui-search-box :suggestions="suggestions" @search="searchHandler"/>'
       },
       {
         sync: false,
@@ -341,10 +347,12 @@ describe('components/SearchBox', () => {
 
     input.setValue('box')
     input.trigger('input')
+    await wrapper.vm.$nextTick()
+    input.trigger('keydown', { key: 'Enter' })
 
     wrapper.find('.veui-search-box-action').trigger('click')
 
-    expect(params).to.eql(['', 'box'])
+    expect(params).to.eql(['', 'box', 'box'])
     wrapper.destroy()
   })
 

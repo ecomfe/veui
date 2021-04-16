@@ -228,7 +228,7 @@ export default {
       validator (val) {
         return []
           .concat(val)
-          .every((trigger) => includes(['focus', 'input', 'submit'], trigger))
+          .every(trigger => includes(['focus', 'input', 'submit'], trigger))
       }
     },
     ...pick(Input.props, SHARED_PROPS)
@@ -259,7 +259,7 @@ export default {
       return this.replaceOnSelect
     },
     realSuggestions () {
-      return map(this.suggestions, (item) =>
+      return map(this.suggestions, item =>
         typeof item === 'string' ? { label: item, value: item } : item
       )
     },
@@ -360,13 +360,14 @@ export default {
           }
           break
         case 'Enter': {
-          if (!this.finalExpanded) {
+          let elem = null
+          if (this.finalExpanded) {
+            elem = this.getCurrentActiveElement()
+          }
+          if (!elem) {
             this.search(e)
             passive = false
-            break
-          }
-          let elem = this.getCurrentActiveElement()
-          if (elem) {
+          } else {
             // 会调用 selectSuggestion，所以已经会关闭了
             elem.click()
           }
@@ -412,7 +413,7 @@ function findSuggestion (suggestions, val) {
     return null
   }
   let result = null
-  suggestions.some((suggestion) => {
+  suggestions.some(suggestion => {
     if (!suggestion.options) {
       if (suggestion.value === val) {
         result = suggestion
