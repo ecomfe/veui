@@ -362,15 +362,15 @@ describe('components/Cascader/Cascader', () => {
 
     const optionsOfsecondMenu = `${SECOND_MENU} ${OPTION}`
     let secOptions = wrapper.findAll(optionsOfsecondMenu)
-    // 选中徐州，不是 only-select-leaves，不要关闭
+    // 选中徐州，是叶子节点，要关闭
     secOptions.at(2).trigger('click')
     await vm.$nextTick()
-    expect(vm.expanded).to.equal('江苏')
+    expect(vm.expanded, '叶子节点要关闭').to.equal(false)
     expect(vm.value).to.equal('徐州')
 
     vm.value = null
     vm.selectLeaves = true
-    vm.expanded = null
+    vm.expanded = false
     await vm.$nextTick()
     options.at(1).trigger('click')
     await vm.$nextTick()
@@ -462,7 +462,7 @@ describe('components/Cascader/Cascader', () => {
     let subOptions = wrapper.findAll(`${SECOND_MENU} ${OPTION}`)
     subOptions.at(1).trigger('click')
     await vm.$nextTick()
-    expect(vm.expanded).to.equal('江苏')
+    expect(vm.expanded, '选中叶子要关闭').to.equal(false)
     expect(vm.value).to.equal('苏州')
 
     vm.multiple = true
