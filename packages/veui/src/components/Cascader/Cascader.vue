@@ -514,10 +514,6 @@ export default {
       // 单选
       if (!this.multiple) {
         this.commit('value', option.value)
-        // 只能选叶子或在搜索结果中，那么选完后直接关闭
-        if (this.realSelectLeaves || this.keyword) {
-          this.updateExpanded(false)
-        }
       } else {
         this.toggleOption(option)
         this.focusTrigger()

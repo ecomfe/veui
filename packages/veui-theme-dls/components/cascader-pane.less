@@ -2,11 +2,16 @@
 @import (reference) "../dropdown.less";
 
 .@{veui-prefix}-cascader-pane {
-  @panel-height-xs: 6 * @dls-option-height-xs + 2 * @dls-option-group-padding-y;
-  @panel-height-s: 6 * @dls-option-height-s + 2 * @dls-option-group-padding-y;
-  @panel-height-m: 6 * @dls-option-height-m + 2 * @dls-option-group-padding-y;
-  @panel-height-l: 6 * @dls-option-height-l + 2 * @dls-option-group-padding-y;
-  @min-panel-width: 26 * @dls-padding-unit;
+  @option-count: 8;
+  @panel-height-xs: @option-count * @dls-option-height-xs + 2 *
+    @dls-option-group-padding-y;
+  @panel-height-s: @option-count * @dls-option-height-s + 2 *
+    @dls-option-group-padding-y;
+  @panel-height-m: @option-count * @dls-option-height-m + 2 *
+    @dls-option-group-padding-y;
+  @panel-height-l: @option-count * @dls-option-height-l + 2 *
+    @dls-option-group-padding-y;
+  @min-panel-width: 30 * @dls-padding-unit;
   @option-padding-x: 3 * @dls-padding-unit;
 
   display: flex;
