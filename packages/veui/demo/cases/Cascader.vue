@@ -326,9 +326,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.center-align {
-  text-align: center;
-}
 .cascader-config {
   display: flex;
   align-items: center;

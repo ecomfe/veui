@@ -291,15 +291,19 @@ const CascaderPane = {
         }
       } else {
         // 单选 展开和选中没有优先级之分，没有选中区，能选中则选中，能展开也展开
+        let hasCh = hasChildren(option)
         if (this.isClickTrigger) {
           if (this.canPopOut(option)) {
             this.updateExpanded(option)
-          } else {
-            // 不能打开也要重置展开到上级
+          } else if (hasCh) {
+            // 不能打开也不能关闭：要重置展开到上级
             this.expandTo(option)
+          } else {
+            // 叶子节点会选中，这里关闭下
+            this.commit('expanded', false)
           }
         }
-        if (!this.realSelectLeaves || !hasChildren(option)) {
+        if (!this.realSelectLeaves || !hasCh) {
           this.handleSelect(option)
         }
       }
