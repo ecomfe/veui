@@ -53,7 +53,7 @@
     ref="overlay"
     :open="isExpanded"
     target="trigger"
-    :overlay-class="overlayClass"
+    :overlay-class="realOverlayClass"
     :options="realOverlayOptions"
     :match-width="inline || !!keyword"
     :autofocus="!searchable"
@@ -253,6 +253,9 @@ export default {
     },
     isExpanded () {
       return this.realExpanded != null && this.realExpanded !== false
+    },
+    realOverlayClass () {
+      return this.mergeOverlayClass(this.$c('cascader-overlay'))
     },
     realOptions () {
       let options = mapDatasource(
