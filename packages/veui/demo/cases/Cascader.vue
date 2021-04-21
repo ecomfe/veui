@@ -15,12 +15,16 @@
         v-model="trigger1"
         value="click"
         name="expandTrigger"
-      >expand: click</veui-radio>
+      >点击展开</veui-radio>
       <veui-radio
         v-model="trigger1"
         value="hover"
         name="expandTrigger"
-      >expand: hover</veui-radio>
+      >hover展开</veui-radio>
+      <label>
+        列宽度:
+        <veui-input v-model="columnWidth1"/>
+      </label>
     </div>
     <cascader
       v-model="value1"
@@ -32,6 +36,7 @@
       :clearable="clearable1"
       :verbose-backfill="verboseBackfill1"
       :inline="inline1"
+      :column-width="getRealColumnWidth(columnWidth1)"
     />
   </section>
   <section>
@@ -45,15 +50,19 @@
         v-model="trigger2"
         value="click"
         name="expandTrigger2"
-      >expand: click</veui-radio>
+      >点击展开</veui-radio>
       <veui-radio
         v-model="trigger2"
         value="hover"
         name="expandTrigger2"
-      >expand: hover</veui-radio>
+      >hover展开</veui-radio>
       <label>
         Max:
         <veui-number-input v-model="max2"/>
+      </label>
+      <label>
+        列宽度:
+        <veui-input v-model="columnWidth2"/>
       </label>
     </div>
     <cascader
@@ -66,6 +75,7 @@
       :inline="inline2"
       :has-select-all="hasSelectAll2"
       :max="max2"
+      :column-width="getRealColumnWidth(columnWidth2)"
       multiple
     />
   </section>
@@ -186,7 +196,7 @@
 </template>
 
 <script>
-import { Cascader, Checkbox, Radio, NumberInput } from 'veui'
+import { Cascader, Checkbox, Radio, NumberInput, Input } from 'veui'
 
 export default {
   name: 'cascader-demo',
@@ -194,7 +204,8 @@ export default {
     Cascader,
     'veui-checkbox': Checkbox,
     'veui-radio': Radio,
-    'veui-number-input': NumberInput
+    'veui-number-input': NumberInput,
+    'veui-input': Input
   },
   data () {
     return {
@@ -205,6 +216,7 @@ export default {
       trigger1: 'click',
       clearable1: true,
       inline1: false,
+      columnWidth1: '',
       verboseBackfill1: false,
 
       value2: null,
@@ -213,6 +225,7 @@ export default {
       trigger2: 'click',
       clearable2: true,
       inline2: false,
+      columnWidth2: '',
       hasSelectAll2: false,
       max2: null,
 
@@ -321,6 +334,14 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    getRealColumnWidth (val) {
+      if (val && !isNaN(+val)) {
+        return `${+val}px`
+      }
+      return val
+    }
   }
 }
 </script>
@@ -332,6 +353,9 @@ export default {
   height: 32px;
   & > * {
     margin-right: 32px;
+  }
+  .veui-input {
+    width: 80px;
   }
 }
 .size-wrap {

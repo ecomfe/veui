@@ -110,6 +110,7 @@
           :expand-trigger="expandTrigger"
           :value="realValue"
           :select-leaves="realSelectLeaves"
+          :column-width="keyword ? null : columnWidth"
           :expanded="realExpanded"
           @update:expanded="handlePaneUpdateExpanded"
           @select="handlePaneSelect"
@@ -236,6 +237,7 @@ export default {
       }
     },
     selectLeaves: Boolean,
+    columnWidth: [Number, String],
     hasSelectAll: Boolean,
     verboseBackfill: Boolean,
     inline: Boolean,
