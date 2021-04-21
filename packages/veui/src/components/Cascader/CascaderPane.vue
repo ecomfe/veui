@@ -3,7 +3,8 @@
   ref="group"
   :class="{
     [$c('cascader-pane')]: true,
-    [$c('cascader-pane-inline')]: inline
+    [$c('cascader-pane-inline')]: inline && !realColumnWidth,
+    [$c('cascader-pane-custom-width')]: !!realColumnWidth
   }"
   :ui="realUi"
 >
@@ -12,6 +13,7 @@
     ref="menu"
     :key="depth"
     :class="$c('cascader-pane-menu-wrap')"
+    :style="realColumnWidth ? { width: realColumnWidth } : null"
   >
     <div :class="$c('cascader-pane-menu')">
       <div
@@ -193,6 +195,7 @@ const CascaderPane = {
     inline: Boolean,
     multiple: Boolean,
     expanded: {},
+    columnWidth: [Number, String],
     selectLeaves: Boolean
   },
   computed: {
@@ -237,6 +240,12 @@ const CascaderPane = {
     },
     realOptions () {
       return this.options || []
+    },
+    realColumnWidth () {
+      if (this.columnWidth && typeof this.columnWidth === 'number') {
+        return `${this.columnWidth}px`
+      }
+      return this.columnWidth
     },
     slotProps () {
       return {

@@ -52,7 +52,6 @@
   // 下拉第一层没有缩进，其他层缩进
   &-menu > &-tree {
     padding-left: 0;
-    min-width: @min-panel-width;
     box-sizing: content-box;
     flex: auto;
     overflow-x: hidden;
@@ -63,10 +62,20 @@
     padding-left: 3 * @dls-padding-unit;
   }
 
+  &-menu-wrap {
+    min-width: @min-panel-width;
+  }
+
   // 内联平分
   &-inline &-menu-wrap {
-    flex-grow: 1;
-    flex-shrink: 0;
+    flex: 1 0;
+  }
+
+  &-custom-width &-menu-wrap {
+    flex: none;
+    &:last-child {
+      flex: 1 0;
+    }
   }
 
   // option
