@@ -94,13 +94,22 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, input, activatable, i18n, useControllable({
-    prop: 'value',
-    event: 'input',
-    get (val) {
-      return val || ''
-    }
-  })],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    activatable,
+    i18n,
+    useControllable({
+      prop: 'value',
+      event: 'input',
+      get (val) {
+        // 兼容以前 prop value 是 number，这里统一格式化成 string
+        // 最好不要用 number 吧，toString 可能会有精度问题
+        return typeof val === 'number' && !isNaN(val) ? String(val) : val || ''
+      }
+    })
+  ],
   inheritAttrs: false,
   props: {
     ui: String,
@@ -161,10 +170,7 @@ export default {
     },
     empty () {
       // compositionValue 不会是数字 0
-      return (
-        !this.compositionValue &&
-        this.realValue === ''
-      )
+      return !this.compositionValue && this.realValue === ''
     },
     realSelectOnFocus () {
       return this.type !== 'hidden' && this.selectOnFocus
