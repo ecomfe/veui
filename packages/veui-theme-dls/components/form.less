@@ -1,6 +1,8 @@
 @import "../lib.less";
 
 .@{veui-prefix}-form {
+  line-height: @dls-line-height-1;
+
   .@{veui-prefix}-field {
     margin-bottom: @dls-form-field-spacing-vertical;
   }
@@ -12,7 +14,10 @@
 
   &-actions {
     margin-top: @dls-form-actions-spacing-before;
-    padding-left: dls-sum(@dls-form-label-width, @dls-form-label-spacing-after-horizontal);
+    padding-left: dls-sum(
+      @dls-form-label-width,
+      @dls-form-label-spacing-after-horizontal
+    );
 
     .@{veui-prefix}-button + .@{veui-prefix}-button {
       margin-left: @dls-form-actions-content-spacing;

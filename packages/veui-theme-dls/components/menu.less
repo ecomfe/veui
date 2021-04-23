@@ -7,6 +7,7 @@
   flex-direction: column;
   width: @dls-menu-width;
   will-change: width;
+  line-height: @dls-line-height-1;
   .veui-transition(width);
 
   &-collapsed {
@@ -340,7 +341,11 @@
   }
 
   &-popout &-group-title {
-    .padding(@dls-option-group-label-padding-y + @dls-option-group-label-padding-y, @dls-option-padding-m, @dls-option-group-label-padding-y);
+    .padding(
+      @dls-option-group-label-padding-y + @dls-option-group-label-padding-y,
+      @dls-option-padding-m,
+      @dls-option-group-label-padding-y
+    );
     color: @dls-menu-item-group-label-font-color;
     font-weight: @dls-menu-item-group-label-font-weight;
   }
