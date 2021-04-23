@@ -2,6 +2,8 @@
 @import (reference) "../dropdown.less";
 
 .@{veui-prefix}-nav {
+  line-height: @dls-line-height-1;
+
   &-body {
     padding: 0;
     margin: 0;
@@ -186,11 +188,10 @@
     }
 
     &.@{veui-prefix}-nav-item-exact-active {
-      & {
-        font-weight: @dls-menu-item-font-weight-current;
-        color: @dls-menu-item-font-color-horizontal-current;
-        background-color: @dls-menu-item-background-color-horizontal-current;
-      }
+      font-weight: @dls-menu-item-font-weight-current;
+      color: @dls-menu-item-font-color-horizontal-current;
+      background-color: @dls-menu-item-background-color-horizontal-current;
+
       &:hover {
         color: @dls-menu-item-font-color-horizontal-current-hover;
         background-color: @dls-menu-item-background-color-horizontal-current-hover;
@@ -270,7 +271,7 @@
       }
     }
 
-    &:active{
+    &:active {
       &,
       & + .@{veui-prefix}-option-group-expandable {
         color: @dls-menu-item-font-color-horizontal-active;
