@@ -3,17 +3,12 @@ import Checkbox from '@/components/Checkbox'
 
 describe('components/Checkbox', () => {
   it('should handle checked prop with `null` value.', done => {
-    let wrapper = mount(
-      Checkbox,
-      {
-        propsData: {
-          checked: null
-        }
+    let wrapper = mount(Checkbox, {
+      propsData: {
+        checked: null
       },
-      {
-        sync: false
-      }
-    )
+      sync: false
+    })
 
     wrapper.vm.$on('change', val => {
       expect(val).to.equal(true)
@@ -276,17 +271,12 @@ describe('components/Checkbox', () => {
   })
 
   it('should handle correctly when activated', () => {
-    let wrapper = mount(
-      Checkbox,
-      {
-        propsData: {
-          checked: false
-        }
+    let wrapper = mount(Checkbox, {
+      propsData: {
+        checked: false
       },
-      {
-        sync: false
-      }
-    )
+      sync: false
+    })
 
     wrapper.vm.$on('change', val => {
       expect(val).to.equal(true)

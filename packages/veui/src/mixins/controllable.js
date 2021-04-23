@@ -14,7 +14,9 @@ let options = {
         computedSetter(this, value, def, ...args)
         return
       }
-      throw new Error(`[controllable] Unkown prop key: '${prop}' on committing.`)
+      throw new Error(
+        `[controllable] Unkown prop key: '${prop}' on committing.`
+      )
     }
   }
 }
@@ -73,7 +75,7 @@ export default function useControllable (props) {
       result.computed[getRealName(def)] = {
         get () {
           if (get === false) {
-            throw new Error('[controllable] Can\'t access disabled getter!')
+            throw new Error("[controllable] Can't access disabled getter!")
           }
           return computedGetter(this, def)
         },
@@ -81,7 +83,7 @@ export default function useControllable (props) {
           // 一般可以用来禁用 assignment，而强制使用 vm.commit !
           // 对于 v-model/.sync，这个 set 还是有点用处
           if (set === false) {
-            throw new Error('[controllable] Can\'t access disabled setter!')
+            throw new Error("[controllable] Can't access disabled setter!")
           }
           return computedSetter(this, value, def)
         }
@@ -118,15 +120,14 @@ export default function useControllable (props) {
 
 function computedGetter (vm, def) {
   let { get } = def
-  return get
-    ? get.call(vm, getReal(vm, def))
-    : getReal(vm, def)
+  return get ? get.call(vm, getReal(vm, def)) : getReal(vm, def)
 }
 
 function computedSetter (vm, value, def, ...args) {
   let { set } = def
   // 值不同则更新, 若不更新：不设置 local，不 emit 事件
-  if (!sameValue(vm, value, def)) {
+  let oldReal = getReal(vm, def)
+  if (oldReal !== value) {
     return set
       ? set.call(vm, value, val => setReal(vm, val, def, ...args))
       : setReal(vm, value, def, ...args)
@@ -167,14 +168,11 @@ function getRealName ({ prop, computed } = {}) {
   return computed || `real${upperFirst(prop)}`
 }
 
-// 用来控制是否往上触发同步事件，有 prop 则判断是否相等，没有 prop 就用 real
-function sameValue (vm, value, def) {
-  return isControlled(vm, def.prop)
-    ? value === vm[def.prop]
-    : value === vm[getRealName(def)]
-}
-
 function isControlled (vm, prop) {
-  // 排除 default value 的影响
-  return prop in vm.$options.propsData && typeof vm[prop] !== 'undefined'
+  // 受控定义：显式传了 prop 且传的不是 undefined 就认为受控了
+
+  // eslint-disable-next-line no-unused-expressions
+  vm[prop] // 为了响应性，因为下面 in propsData 没有响应性
+  let propsData = vm.$options.propsData
+  return prop in propsData && typeof propsData[prop] !== 'undefined'
 }
