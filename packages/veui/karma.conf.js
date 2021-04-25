@@ -4,7 +4,9 @@ const devServer = require('./build/dev-server')
 let files = ['test/global.js']
 if (process.env.KARMA_TEST_FILES_ONLY) {
   files = files.concat(
-    process.env.KARMA_TEST_FILES_ONLY.split(',').map(v => v.trim())
+    process.env.KARMA_TEST_FILES_ONLY.split(',')
+      .map(v => v.trim())
+      .map(name => `test/unit/**/${name}.spec.js`)
   )
 } else {
   files.push('test/unit/**/*.spec.js')
