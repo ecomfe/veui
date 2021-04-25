@@ -249,4 +249,42 @@ describe('components/Dialog', () => {
 
     wrapper.destroy()
   })
+
+  it('should honor `loading` and `disabled` prop', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-dialog': Dialog
+        },
+        data () {
+          return {
+            disabled: false,
+            loading: false
+          }
+        },
+        template: '<veui-dialog open :disabled="disabled" :loading="loading"/>'
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    let btn = wrapper.find('.veui-dialog-content-foot button:first-child')
+    expect(btn.classes('veui-disabled')).to.equal(false)
+    expect(btn.classes('veui-button-loading')).to.equal(false)
+
+    vm.disabled = true
+    await vm.$nextTick()
+    expect(btn.classes('veui-disabled')).to.equal(true)
+    expect(btn.classes('veui-button-loading')).to.equal(false)
+
+    vm.disabled = false
+    vm.loading = true
+    await vm.$nextTick()
+    expect(btn.classes('veui-disabled')).to.equal(false)
+    expect(btn.classes('veui-button-loading')).to.equal(true)
+
+    wrapper.destroy()
+  })
 })

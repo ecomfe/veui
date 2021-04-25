@@ -71,6 +71,7 @@
       >
         <veui-button
           :ui="uiParts.ok"
+          :disabled="disabled"
           :loading="loading"
           @click="close('ok')"
         >
@@ -143,6 +144,7 @@ export default {
     priority: Number,
     beforeClose: Function,
     footless: Boolean,
+    disabled: Boolean,
     loading: Boolean
   },
   computed: {
