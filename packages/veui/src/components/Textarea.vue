@@ -1,5 +1,8 @@
 <template>
 <div
+  v-resize="{
+    handler: handleRootResize
+  }"
   :class="{
     [$c('textarea')]: true,
     [$c('focus')]: focused,
@@ -40,7 +43,7 @@
         aria-hidden="true"
         :style="{ width: `${measurerContentWidth}px` }"
       >
-        <span style="box-shadow: transparent 0 0;">{{ line }}</span>
+        <span style="box-shadow: transparent 0 0">{{ line }}</span>
       </div>
       <!-- eslint-enable vue/multiline-html-element-content-newline -->
     </div>
@@ -78,6 +81,7 @@
 import { pick } from 'lodash'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
+import resize from '../directives/resize'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
 import useControllable from '../mixins/controllable'
@@ -96,13 +100,22 @@ const COMPOSITION_INPUT = 'INPUT'
 
 export default {
   name: 'veui-textarea',
-  mixins: [prefix, ui, input, activatable, useControllable({
-    prop: 'value',
-    event: 'input',
-    get (val) {
-      return val || ''
-    }
-  })],
+  directives: {
+    resize
+  },
+  mixins: [
+    prefix,
+    ui,
+    input,
+    activatable,
+    useControllable({
+      prop: 'value',
+      event: 'input',
+      get (val) {
+        return val || ''
+      }
+    })
+  ],
   inheritAttrs: false,
   props: {
     placeholder: String,
@@ -133,7 +146,8 @@ export default {
       composing: false,
       // tmpInputValue 参见 Input
       tmpInputValue: null,
-      countOverlap: false
+      countOverlap: false,
+      lastHeight: 0
     }
   },
   computed: {
@@ -233,13 +247,7 @@ export default {
           return
         }
         this.$nextTick(() => {
-          if (this.$refs.input) {
-            this.measurerContentWidth = this.$refs.input.clientWidth
-
-            if (this.realAutoresize) {
-              this.measurerContentHeight = this.getMeasurersHeight()
-            }
-          }
+          this.updateMeasurer()
 
           if (this.realMaxlength !== null) {
             this.checkCountOverlap()
@@ -275,12 +283,24 @@ export default {
     this.$nextTick(() => this.syncScroll())
   },
   mounted () {
-    let { input } = this.$refs
-    this.lineHeight = getAbsoluteLineHeight(input)
     this.scrollTop = this.$refs.input.scrollTop
-    this.rowsHeight = this.getRowsHeight()
+    this.initHeight()
   },
   methods: {
+    initHeight () {
+      let { input } = this.$refs
+      this.lineHeight = getAbsoluteLineHeight(input)
+      this.rowsHeight = this.getRowsHeight()
+    },
+    updateMeasurer () {
+      if (this.$refs.input) {
+        this.measurerContentWidth = this.$refs.input.clientWidth
+      }
+
+      if (this.realAutoresize) {
+        this.measurerContentHeight = this.getMeasurersHeight()
+      }
+    },
     getRowsHeight () {
       if (!this.realRows) {
         return null
@@ -397,6 +417,18 @@ export default {
           this.scrollTop = input.scrollHeight - input.clientHeight
         }
       })
+    },
+    handleRootResize () {
+      let { input } = this.$refs
+      let { offsetHeight } = input
+      if (offsetHeight > 0 && this.lastHeight === 0) {
+        if (this.realAutoresize) {
+          this.updateMeasurer()
+        } else {
+          this.initHeight()
+        }
+      }
+      this.lastHeight = offsetHeight
     },
     focus () {
       this.$refs.input.focus()
