@@ -10,7 +10,7 @@
 
 - [^] `Tree` 组件的被禁用的子节点现在允许切换展开/收起。
 - [+] `Tree` 组件新增支持对于没有 `value` 的节点，根据 `name` 字段控制展开收起及节点选择（非勾选）状态，用来支持受控切换这两类状态且不出现在已勾选的输出值中（仅作为分组节点使用）。
-- [+] 在 `candidate-head`/`candidate-title`/`selected-head`/`selected-title` 插槽中新增了 `count` 插槽属性，分别表示备选数量和已选数量。
+- [+] 在 `Transfer` 组件的 `candidate-head`/`candidate-title`/`selected-head`/`selected-title` 插槽中新增了 `count` 插槽属性，分别表示备选数量和已选数量。
 
 ### 🐞 问题修复
 
