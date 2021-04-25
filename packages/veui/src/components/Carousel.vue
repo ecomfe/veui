@@ -74,12 +74,11 @@
         [$c('carousel-indicator-item')]: true,
         [$c('carousel-indicator-item-current')]: realIndex === i
       }"
+      aria-label="item.label || t('pageIndex', { index: i + 1 })"
       @click="select(i, 'click')"
       @focus="switchTrigger === 'hover' && select(i, 'hover')"
       @mouseenter="select(i, 'hover')"
-    >
-      {{ item.label || t('pageIndex', { index: i + 1 }) }}
-    </button>
+    />
   </nav>
   <veui-button
     :ui="uiParts.control"
