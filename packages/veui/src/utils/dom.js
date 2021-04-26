@@ -403,7 +403,7 @@ export function hasClass (el, className) {
   return klasses.some(k => k === className)
 }
 
-const NORMAL_LINE_HEIGHT = 1.2
+const NORMAL_LINE_HEIGHT = 1.4
 
 /**
  * 获取元素的行高 px 数
@@ -415,13 +415,12 @@ export function getAbsoluteLineHeight (el) {
   let { lineHeight, fontSize } = getComputedStyle(el)
   let value = parseFloat(lineHeight)
 
-  if (value) {
-    return value
+  if (isNaN(value)) {
+    // line-height: normal
+    value = parseFloat(fontSize) * NORMAL_LINE_HEIGHT
   }
 
-  // line-height: normal
-  let base = parseFloat(fontSize)
-  return base * NORMAL_LINE_HEIGHT
+  return value
 }
 
 export const MOUSE_EVENTS = [
