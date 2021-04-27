@@ -95,7 +95,9 @@ export default {
       return this.matches || this.tabs.matches || (() => false)
     }
   },
-  updated () {
+  // updated -> beforeUpdate
+  // 因为 updated 在 vue 更新队列之后触发，而 beforeUpdate 中的改动会在本次渲染中更新，nextTick 中就可以观察到这些更新了
+  beforeUpdate () {
     let parent = this.tabs
     if (!parent) {
       return
