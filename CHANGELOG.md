@@ -1,3 +1,18 @@
+## 2.0.0-beta.31
+
+### 💡 主要变更
+
+- [+] 新增 `Cascader` 及 `CascaderPane` 组件。
+- [+] `Dialog` 组件新增 `disabled` 属性，用于控制确定按钮的启用/禁用。
+
+### 🐞 问题修复
+
+- [^] 修正 `Select` 组件在 `s`/`xs` 尺寸下多选标签的样式。
+- [^] 修正 `Lightbox` 组件在 Safari 下无法正常显示内容的问题。
+- [^] 修正 `Uploader` 组件在 `request-mode` 为 `custom` 时没有对返回值调用 `convertResponse` 的问题。（#800）
+- [^] 修正 `SearchBox` 在显示搜索提示时按下 <kbd>enter</kbd> 没有触发 `search` 事件的问题。（#806）
+- [^] 修正 `Carousel` 组件尺寸不能通过最外层元素进行调整的问题。（#811）
+
 ## 2.0.0-beta.30
 
 ### 💡 主要变更
