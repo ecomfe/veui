@@ -280,9 +280,11 @@ export default {
       }
     },
     updateMeasurer () {
-      if (this.$refs.input) {
-        this.measurerContentWidth = this.$refs.input.clientWidth
+      let { input } = this.$refs
+      if (!input) {
+        return
       }
+      this.measurerContentWidth = input.clientWidth
 
       this.$nextTick(() => {
         if (this.realMaxlength !== null) {
