@@ -12,16 +12,16 @@
     v-for="(group, depth) in expandedItems"
     ref="menu"
     :key="depth"
-    :class="$c('cascader-pane-menu-wrap')"
+    :class="$c('cascader-pane-column-wrap')"
     :style="realColumnWidth ? { width: realColumnWidth } : null"
   >
-    <div :class="$c('cascader-pane-menu')">
+    <div :class="$c('cascader-pane-column')">
       <div
-        v-if="$scopedSlots['menu-before']"
-        :class="$c('cascader-pane-menu-before')"
+        v-if="$scopedSlots['column-before']"
+        :class="$c('cascader-pane-column-before')"
       >
         <slot
-          name="menu-before"
+          name="column-before"
           v-bind="{
             option: group
           }"
@@ -118,11 +118,11 @@
         </template>
       </abstract-tree>
       <div
-        v-if="$scopedSlots['menu-after']"
-        :class="$c('cascader-pane-menu-after')"
+        v-if="$scopedSlots['column-after']"
+        :class="$c('cascader-column-column-after')"
       >
         <slot
-          name="menu-after"
+          name="column-after"
           v-bind="{
             option: group
           }"
@@ -182,11 +182,11 @@ const CascaderPane = {
     ])
   ],
   props: {
-    expandTrigger: {
+    columnTrigger: {
       type: String,
       default: 'click',
       validator (val) {
-        return val == null || ['hover', 'click'].indexOf(val) >= 0
+        return ['hover', 'click'].indexOf(val) >= 0
       }
     },
     value: {},
@@ -196,14 +196,17 @@ const CascaderPane = {
     multiple: Boolean,
     expanded: {},
     columnWidth: [Number, String],
-    selectLeaves: Boolean
+    selectMode: {
+      type: String,
+      default: 'any',
+      validator (val) {
+        return ['leaf-only', 'any'].indexOf(val) >= 0
+      }
+    }
   },
   computed: {
     isClickTrigger () {
-      return this.realExpandTrigger === 'click'
-    },
-    realExpandTrigger () {
-      return this.expandTrigger || 'click'
+      return this.expandTrigger === 'click'
     },
     expandedItemWithParents () {
       if (this.expanded != null && typeof this.expanded !== 'boolean') {
@@ -236,7 +239,7 @@ const CascaderPane = {
       ].concat(items)
     },
     realSelectLeaves () {
-      return !this.multiple && this.selectLeaves
+      return !this.multiple && this.selectMode === 'leaf-only'
     },
     realOptions () {
       return this.options || []
@@ -261,7 +264,7 @@ const CascaderPane = {
   },
   methods: {
     handleExpand (option, depth, trigger) {
-      if (this.realExpandTrigger === trigger) {
+      if (this.expandTrigger === trigger) {
         clearTimeout(this.expandTimer)
         if (this.canPopOut(option)) {
           this.updateExpanded(option)

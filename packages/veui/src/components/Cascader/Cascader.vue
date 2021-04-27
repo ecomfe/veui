@@ -41,7 +41,7 @@
           v-bind="props"
         >
           {{
-            realVerboseBackfill && name === 'selected'
+            realCompleteDisplay && name === 'selected'
               ? backfillOption.chains.map(i => i.label).join(' > ')
               : null
           }}
@@ -71,7 +71,7 @@
       }"
       :class="{
         [$c('cascader-pane-wrap')]: true,
-        [$c('cascader-select-all')]: realHasSelectAll
+        [$c('cascader-select-all')]: realShowSelectAll
       }"
       tabindex="-1"
       :role="searchable ? 'listbox' : 'menu'"
@@ -107,9 +107,9 @@
           :inline="inline"
           :multiple="multiple"
           :options="keyword ? filteredOptions : realOptions"
-          :expand-trigger="expandTrigger"
+          :column-trigger="columnTrigger"
           :value="realValue"
-          :select-leaves="realSelectLeaves"
+          :select-mode="selectMode"
           :column-width="keyword ? null : columnWidth"
           :expanded="realExpanded"
           @update:expanded="handlePaneUpdateExpanded"
@@ -181,7 +181,7 @@ config.defaults(
   'cascader'
 )
 
-const PANE_SLOTS = ['menu-before', 'menu-after', 'option', 'option-label']
+const PANE_SLOTS = ['column-before', 'column-after', 'option', 'option-label']
 
 const TRIGGER_SLOTS = ['label', 'selected']
 
@@ -229,17 +229,29 @@ export default {
     options: Array,
     multiple: Boolean,
     expanded: {}, // 覆盖 dropdown 的定义，这里 expanded 不仅仅是 boolean
-    expandTrigger: {
+    columnTrigger: {
       type: String,
       default: 'click',
       validator (val) {
-        return !val || ['hover', 'click'].indexOf(val) >= 0
+        return ['hover', 'click'].indexOf(val) >= 0
       }
     },
-    selectLeaves: Boolean,
+    selectMode: {
+      type: String,
+      default: 'any',
+      validator (val) {
+        return ['leaf-only', 'any'].indexOf(val) >= 0
+      }
+    },
     columnWidth: [Number, String],
-    hasSelectAll: Boolean,
-    verboseBackfill: Boolean,
+    showSelectAll: Boolean,
+    valueDisplay: {
+      type: String,
+      default: 'simple',
+      validator (val) {
+        return ['complete', 'simple'].indexOf(val) >= 0
+      }
+    },
     inline: Boolean,
     max: Number
   },
@@ -250,9 +262,6 @@ export default {
     }
   },
   computed: {
-    realExpandTrigger () {
-      return this.expandTrigger || 'click'
-    },
     isExpanded () {
       return this.realExpanded != null && this.realExpanded !== false
     },
@@ -275,7 +284,7 @@ export default {
         },
         'options'
       )
-      options = this.realHasSelectAll
+      options = this.realShowSelectAll
         ? [{ label: this.t('selectAll'), position: 'inline', options }]
         : options
       return this.markChecked(options, this.value)
@@ -309,15 +318,15 @@ export default {
       }
     },
     searchableOptions () {
-      return this.realHasSelectAll
+      return this.realShowSelectAll
         ? this.realOptions[0].options
         : this.realOptions
     },
-    realHasSelectAll () {
-      return this.multiple && this.hasSelectAll
+    realShowSelectAll () {
+      return this.multiple && this.showSelectAll
     },
     realSelectLeaves () {
-      return !this.multiple && this.selectLeaves
+      return !this.multiple && this.selectMode === 'leaf-only'
     },
     realPlaceholder () {
       return this.placeholder == null
@@ -363,14 +372,14 @@ export default {
       }
       return null
     },
-    realVerboseBackfill () {
-      return !this.multiple && this.verboseBackfill
+    realCompleteDisplay () {
+      return !this.multiple && this.valueDisplay === 'complete'
     },
     backfillOption () {
       if (this.multiple) {
         return this.selectedOptions
       }
-      return this.realVerboseBackfill
+      return this.realCompleteDisplay
         ? this.selectedWithParents
         : this.selectedOptions
     }
@@ -511,7 +520,7 @@ export default {
       }
     },
     handleMouseLeave () {
-      if (this.realExpandTrigger === 'hover') {
+      if (this.columnTrigger === 'hover') {
         return this.updateExpanded(!!this.realExpanded)
       }
     },
@@ -629,7 +638,7 @@ export default {
         name => !!this.$scopedSlots[name] || !!this.$slots[name]
       )
       if (
-        this.realVerboseBackfill &&
+        this.realCompleteDisplay &&
         this.backfillOption &&
         slots.indexOf('selected') === -1
       ) {
