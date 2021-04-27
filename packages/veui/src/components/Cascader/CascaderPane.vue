@@ -206,7 +206,7 @@ const CascaderPane = {
   },
   computed: {
     isClickTrigger () {
-      return this.expandTrigger === 'click'
+      return this.columnTrigger === 'click'
     },
     expandedItemWithParents () {
       if (this.expanded != null && typeof this.expanded !== 'boolean') {
@@ -264,7 +264,7 @@ const CascaderPane = {
   },
   methods: {
     handleExpand (option, depth, trigger) {
-      if (this.expandTrigger === trigger) {
+      if (this.columnTrigger === trigger) {
         clearTimeout(this.expandTimer)
         if (this.canPopOut(option)) {
           this.updateExpanded(option)

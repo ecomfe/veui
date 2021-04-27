@@ -6,20 +6,26 @@
     <div class="cascader-config">
       <veui-checkbox v-model="searchable1">Searchable</veui-checkbox>
       <veui-checkbox
-        v-model="selectLeaves1"
+        v-model="selectMode1"
+        true-value="leaf-only"
+        false-value="any"
       >Only select leaves</veui-checkbox>
       <veui-checkbox v-model="clearable1">Clearable</veui-checkbox>
       <veui-checkbox v-model="inline1">Inline</veui-checkbox>
-      <veui-checkbox v-model="verboseBackfill1">逐级展示</veui-checkbox>
+      <veui-checkbox
+        v-model="verboseBackfill1"
+        true-value="complete"
+        false-value="simple"
+      >逐级展示</veui-checkbox>
       <veui-radio
         v-model="trigger1"
         value="click"
-        name="expandTrigger"
+        name="columnTrigger"
       >点击展开</veui-radio>
       <veui-radio
         v-model="trigger1"
         value="hover"
-        name="expandTrigger"
+        name="columnTrigger"
       >hover展开</veui-radio>
       <label>
         列宽度:
@@ -31,10 +37,10 @@
       :options="options"
       :searchable="searchable1"
       :expanded.sync="expanded1"
-      :select-leaves="selectLeaves1"
-      :expand-trigger="trigger1"
+      :select-mode="selectMode1"
+      :column-trigger="trigger1"
       :clearable="clearable1"
-      :verbose-backfill="verboseBackfill1"
+      :value-display="verboseBackfill1"
       :inline="inline1"
       :column-width="getRealColumnWidth(columnWidth1)"
     />
@@ -45,16 +51,16 @@
       <veui-checkbox v-model="searchable2">Searchable</veui-checkbox>
       <veui-checkbox v-model="clearable2">Clearable</veui-checkbox>
       <veui-checkbox v-model="inline2">Inline</veui-checkbox>
-      <veui-checkbox v-model="hasSelectAll2">有全选</veui-checkbox>
+      <veui-checkbox v-model="showSelectAll2">有全选</veui-checkbox>
       <veui-radio
         v-model="trigger2"
         value="click"
-        name="expandTrigger2"
+        name="columnTrigger2"
       >点击展开</veui-radio>
       <veui-radio
         v-model="trigger2"
         value="hover"
-        name="expandTrigger2"
+        name="columnTrigger2"
       >hover展开</veui-radio>
       <label>
         Max:
@@ -70,23 +76,23 @@
       :options="options"
       :searchable="searchable2"
       :expanded.sync="expanded2"
-      :expand-trigger="trigger2"
+      :column-trigger="trigger2"
       :clearable="clearable2"
       :inline="inline2"
-      :has-select-all="hasSelectAll2"
+      :show-select-all="showSelectAll2"
       :max="max2"
       :column-width="getRealColumnWidth(columnWidth2)"
       multiple
     />
   </section>
   <section>
-    <h3>Slots: before/after/menu-before/menu-after</h3>
+    <h3>Slots: before/after/column-before/column-after</h3>
     <cascader
       v-model="value2"
       :options="options"
       :searchable="searchable2"
       :expanded.sync="expanded3"
-      :expand-trigger="trigger2"
+      :column-trigger="trigger2"
       :clearable="clearable2"
       :inline="inline2"
       multiple
@@ -97,11 +103,11 @@
       <template slot="after">
         <div class="center-align">after</div>
       </template>
-      <template slot="menu-before">
-        <div class="center-align">menu-before</div>
+      <template slot="column-before">
+        <div class="center-align">column-before</div>
       </template>
-      <template slot="menu-after">
-        <div class="center-align">menu-after</div>
+      <template slot="column-after">
+        <div class="center-align">column-after</div>
       </template>
     </cascader>
   </section>
@@ -113,7 +119,7 @@
         v-model="value2"
         :options="options"
         :searchable="searchable2"
-        :expand-trigger="trigger2"
+        :column-trigger="trigger2"
         :clearable="clearable2"
         :inline="inline2"
         ui="xs"
@@ -125,11 +131,11 @@
         <template slot="after">
           <div class="center-align">after</div>
         </template>
-        <template slot="menu-before">
-          <div class="center-align">menu-before</div>
+        <template slot="column-before">
+          <div class="center-align">column-before</div>
         </template>
-        <template slot="menu-after">
-          <div class="center-align">menu-after</div>
+        <template slot="column-after">
+          <div class="center-align">column-after</div>
         </template>
       </cascader>
     </div>
@@ -138,8 +144,8 @@
       <cascader
         :options="options"
         :searchable="searchable1"
-        :select-leaves="selectLeaves1"
-        :expand-trigger="trigger1"
+        :select-mode="selectMode1"
+        :column-trigger="trigger1"
         :clearable="clearable1"
         :inline="inline1"
         ui="s"
@@ -150,8 +156,8 @@
       <cascader
         :options="options"
         :searchable="searchable1"
-        :select-leaves="selectLeaves1"
-        :expand-trigger="trigger1"
+        :select-mode="selectMode1"
+        :column-trigger="trigger1"
         :clearable="clearable1"
         :inline="inline1"
         ui="m"
@@ -162,7 +168,7 @@
       <cascader
         :options="options"
         :searchable="searchable2"
-        :expand-trigger="trigger2"
+        :column-trigger="trigger2"
         :clearable="clearable2"
         :inline="inline2"
         ui="l"
@@ -175,7 +181,7 @@
     <cascader
       :options="options"
       :searchable="searchable2"
-      :expand-trigger="trigger2"
+      :column-trigger="trigger2"
       :clearable="clearable2"
       :inline="inline2"
       disabled
@@ -186,7 +192,7 @@
     <cascader
       :options="options"
       :searchable="searchable2"
-      :expand-trigger="trigger2"
+      :column-trigger="trigger2"
       :clearable="clearable2"
       :inline="inline2"
       readonly
@@ -212,7 +218,7 @@ export default {
       value1: null,
       expanded1: false,
       searchable1: true,
-      selectLeaves1: false,
+      selectMode1: false,
       trigger1: 'click',
       clearable1: true,
       inline1: false,
@@ -226,7 +232,7 @@ export default {
       clearable2: true,
       inline2: false,
       columnWidth2: '',
-      hasSelectAll2: false,
+      showSelectAll2: false,
       max2: null,
 
       expanded3: false,
