@@ -34,7 +34,12 @@
   }
 
   // 特殊处理：将全选伪造成第一层
-  &-select-all &-pane &-pane-menu:first-child > &-pane-tree > li > &-pane-tree {
+  &-select-all
+    &-pane
+    &-pane-column:first-child
+    > &-pane-tree
+    > li
+    > &-pane-tree {
     padding-left: 0;
   }
 
@@ -43,10 +48,10 @@
   }
 
   &-search-result {
-    .@{veui-prefix}-cascader-pane-menu-wrap {
+    .@{veui-prefix}-cascader-pane-column-wrap {
       width: 100%;
     }
-    .@{veui-prefix}-cascader-pane-menu {
+    .@{veui-prefix}-cascader-pane-column {
       height: auto;
     }
     &-item-separator {

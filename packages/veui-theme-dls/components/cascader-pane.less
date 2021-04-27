@@ -23,34 +23,34 @@
     .veui-transition(height);
   }
 
-  &-menu {
+  &-column {
     .padding(@dls-option-group-padding-y, _);
     position: relative;
     height: @panel-height-m;
     overflow: auto;
     max-height: @panel-height-m; // 用来控制搜索时最大高度，此时高度会 reset 成 auto
   }
-  &[ui~="xs"] &-menu {
+  &[ui~="xs"] &-column {
     height: @panel-height-xs;
     max-height: @panel-height-xs;
   }
 
-  &[ui~="s"] &-menu {
+  &[ui~="s"] &-column {
     height: @panel-height-s;
     max-height: @panel-height-s;
   }
 
-  &[ui~="l"] &-menu {
+  &[ui~="l"] &-column {
     height: @panel-height-l;
     max-height: @panel-height-l;
   }
 
-  &-menu-wrap:not(:first-child) {
+  &-column-wrap:not(:first-child) {
     border-left: 1px solid @dls-line-color-1;
   }
 
   // 下拉第一层没有缩进，其他层缩进
-  &-menu > &-tree {
+  &-column > &-tree {
     padding-left: 0;
     box-sizing: content-box;
     flex: auto;
@@ -62,16 +62,16 @@
     padding-left: 3 * @dls-padding-unit;
   }
 
-  &-menu-wrap {
+  &-column-wrap {
     min-width: @min-panel-width;
   }
 
   // 内联平分
-  &-inline &-menu-wrap {
+  &-inline &-column-wrap {
     flex: 1 0;
   }
 
-  &-custom-width &-menu-wrap {
+  &-custom-width &-column-wrap {
     flex: none;
     &:last-child {
       flex: 1 0;
@@ -217,15 +217,15 @@
     }
   }
 
-  &-menu-before,
-  &-menu-after {
+  &-column-before,
+  &-column-after {
     padding: 2 * @dls-padding-unit 3 * @dls-padding-unit;
     color: @dls-foreground-color-neutral-weak;
   }
-  &-menu-before {
+  &-column-before {
     margin-top: -@dls-option-group-padding-y;
   }
-  &-menu-after {
+  &-column-after {
     margin-bottom: -@dls-option-group-padding-y;
     position: sticky;
     top: 100%;

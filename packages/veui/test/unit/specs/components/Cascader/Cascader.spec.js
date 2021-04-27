@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { wait } from '../../../../utils'
 
 const OPTION = '.veui-cascader-pane-option-wrap'
-const MENU = '.veui-cascader-pane-menu-wrap'
+const MENU = '.veui-cascader-pane-column-wrap'
 const SECOND_MENU = `${MENU}:nth-child(2)`
 const DISABLED = '.veui-cascader-pane-option-wrap-disabled'
 
@@ -254,7 +254,7 @@ describe('components/Cascader/Cascader', () => {
     wrapper.destroy()
   })
 
-  it('should support hasSelectAll prop correctly', async () => {
+  it('should support showSelectAll prop correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -267,7 +267,7 @@ describe('components/Cascader/Cascader', () => {
           }
         },
         template:
-          '<veui-cascader :multiple="multiple" has-select-all :options="options"/>'
+          '<veui-cascader :multiple="multiple" show-select-all :options="options"/>'
       },
       {
         sync: false
@@ -330,7 +330,7 @@ describe('components/Cascader/Cascader', () => {
     wrapper.destroy()
   })
 
-  it('should support selectLeaves prop correctly', async () => {
+  it('should support selectMode prop correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -339,13 +339,13 @@ describe('components/Cascader/Cascader', () => {
         data () {
           return {
             value: null,
-            selectLeaves: false,
+            selectMode: 'any',
             expanded: null,
             options: casOptions
           }
         },
         template:
-          '<veui-cascader v-model="value" :expanded.sync="expanded" :select-leaves="selectLeaves" :options="options"/>'
+          '<veui-cascader v-model="value" :expanded.sync="expanded" :select-mode="selectMode" :options="options"/>'
       },
       {
         sync: false
@@ -369,7 +369,7 @@ describe('components/Cascader/Cascader', () => {
     expect(vm.value).to.equal('徐州')
 
     vm.value = null
-    vm.selectLeaves = true
+    vm.selectMode = 'leaf-only'
     vm.expanded = false
     await vm.$nextTick()
     options.at(1).trigger('click')
@@ -387,7 +387,7 @@ describe('components/Cascader/Cascader', () => {
     wrapper.destroy()
   })
 
-  it('should support hover expandTrigger prop correctly', async () => {
+  it('should support hover columnTrigger prop correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -395,13 +395,13 @@ describe('components/Cascader/Cascader', () => {
         },
         data () {
           return {
-            expandTrigger: 'hover',
+            columnTrigger: 'hover',
             expanded: null,
             options: casOptions
           }
         },
         template:
-          '<veui-cascader :expanded.sync="expanded" :expand-trigger="expandTrigger" :options="options"/>'
+          '<veui-cascader :expanded.sync="expanded" :column-trigger="columnTrigger" :options="options"/>'
       },
       {
         sync: false
