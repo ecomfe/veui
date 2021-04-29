@@ -165,6 +165,7 @@ export default {
         return (
           <Tag
             key={value}
+            ui={this.uiParts.tag}
             data-key={value}
             onRemove={() => this.$emit('remove', item)}
             disabled={this.realDisabled || this.realReadonly || disabled}

@@ -78,6 +78,7 @@
                 <veui-checkbox
                   v-if="multiple"
                   tabindex="-1"
+                  :ui="uiParts.checkbox"
                   :checked="option.checked"
                   :indeterminate="option.partialChecked"
                   :disabled="isDisabled(option, parents, group.parents)"
@@ -119,7 +120,7 @@
       </abstract-tree>
       <div
         v-if="$scopedSlots['column-after']"
-        :class="$c('cascader-column-column-after')"
+        :class="$c('cascader-pane-column-after')"
       >
         <slot
           name="column-after"
