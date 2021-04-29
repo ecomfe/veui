@@ -287,7 +287,7 @@ export default {
       options = this.realShowSelectAll
         ? [{ label: this.t('selectAll'), position: 'inline', options }]
         : options
-      return this.markChecked(options, this.value)
+      return this.markChecked(options, this.realValue)
     },
     rootAttrs () {
       return {
@@ -599,7 +599,7 @@ export default {
       option = parents[parents.length - 1]
       parents = parents.slice(1)
       let newValues = this[`${operation}Item`](
-        this.value,
+        this.realValue,
         option,
         parents,
         this.realOptions
