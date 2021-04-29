@@ -36,6 +36,7 @@
       >
         <slot
           v-if="realIndex === i || isPreload(i)"
+          name="item"
           v-bind="{ ...item, preload: isPreload(i) }"
           :index="i"
         >

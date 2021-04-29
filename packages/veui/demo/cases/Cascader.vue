@@ -13,7 +13,7 @@
       <veui-checkbox v-model="clearable1">Clearable</veui-checkbox>
       <veui-checkbox v-model="inline1">Inline</veui-checkbox>
       <veui-checkbox
-        v-model="verboseBackfill1"
+        v-model="valueDisplay1"
         true-value="complete"
         false-value="simple"
       >逐级展示</veui-checkbox>
@@ -40,7 +40,7 @@
       :select-mode="selectMode1"
       :column-trigger="trigger1"
       :clearable="clearable1"
-      :value-display="verboseBackfill1"
+      :value-display="valueDisplay1"
       :inline="inline1"
       :column-width="getRealColumnWidth(columnWidth1)"
     />
@@ -218,12 +218,12 @@ export default {
       value1: null,
       expanded1: false,
       searchable1: true,
-      selectMode1: false,
+      selectMode1: 'leaf-only',
       trigger1: 'click',
       clearable1: true,
       inline1: false,
       columnWidth1: '',
-      verboseBackfill1: false,
+      valueDisplay1: 'simple',
 
       value2: null,
       expanded2: false,

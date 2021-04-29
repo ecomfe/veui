@@ -82,6 +82,7 @@
             <div :class="$c('lightbox-item-content-container')">
               <slot
                 v-if="realIndex === i || isPreload(i)"
+                name="item"
                 v-bind="{ ...item, preload: isPreload(i) }"
                 :index="i"
               >
@@ -99,7 +100,10 @@
                   >
                 </div>
               </slot>
-              <slot :desc="item">
+              <slot
+                name="desc"
+                v-bind="{ ...item, index: i }"
+              >
                 <div :class="$c('lightbox-item-desc')">
                   {{ item.desc }}
                 </div>
