@@ -1,13 +1,6 @@
 import { IconChevronDown, IconTimesCircle } from 'dls-icons-vue'
 import config from 'veui/managers/config'
 
-const CHECKBOX_SIZE_MAP = {
-  xs: 's',
-  s: 's',
-  m: 'm',
-  l: 'm'
-}
-
 const TAG_SIZE_MAP = {
   xs: 's',
   s: 's',
@@ -32,7 +25,6 @@ config.defaults(
     },
     parts: {
       clear: 'icon aux',
-      checkbox: ({ size }) => CHECKBOX_SIZE_MAP[size] || size,
       tag: ({ size }) => TAG_SIZE_MAP[size] || size
     }
   },

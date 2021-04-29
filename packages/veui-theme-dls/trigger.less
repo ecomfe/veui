@@ -2,6 +2,8 @@
   @adjusted-select-padding-y: dls-sum(@dls-select-padding-y, -1px);
   @trigger: ~"@{veui-prefix}-trigger";
 
+  cursor: pointer;
+
   &-icon {
     display: flex;
     position: relative;
@@ -62,6 +64,7 @@
   }
 
   &-searchable {
+    cursor: text;
     .@{veui-prefix}-input-input {
       display: block;
     }
