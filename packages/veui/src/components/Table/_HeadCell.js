@@ -179,7 +179,8 @@ export default {
                   options: col.filterOptions,
                   expanded: this.filterOpen || false,
                   multiple: col.filterMultiple,
-                  value: this.filterValue || null
+                  value: this.filterValue || null,
+                  overlayClass: this.$c('table-header-filter-overlay')
                 },
                 on: {
                   toggle: this.handleFilterToggle,
