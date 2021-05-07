@@ -25,6 +25,7 @@
       :invalid="realInvalid"
       :icons="icons"
       :ui-parts="uiParts"
+      @input="$emit('input', $event)"
       @blur="handleTriggerBlur"
       @toggle="handleTriggerToggle"
       @remove="handleTriggerRemove"
@@ -114,7 +115,6 @@
           :expanded="realExpanded"
           @update:expanded="handlePaneUpdateExpanded"
           @select="handlePaneSelect"
-          @input="$emit('input', $event)"
           @keydown.native="!searchable && handleCascaderKeydown($event)"
         >
           <template
@@ -310,9 +310,9 @@ export default {
         expanded: this.isExpanded,
         placeholder: this.realPlaceholder,
         keyword: this.keyword,
-        removeSelected: this.handleTriggerRemove,
-        clearSelected: this.handleTriggerClear,
-        updateExpanded: this.handleTriggerToggle,
+        remove: this.handleTriggerRemove,
+        clear: this.handleTriggerClear,
+        toggle: this.handleTriggerToggle,
         updateKeyword: val => (this.keyword = val),
         select: this.handlePaneSelect
       }
@@ -488,6 +488,10 @@ export default {
       }
     },
     handleTriggerToggle (expand) {
+      if (typeof expand === 'undefined') {
+        expand = !this.realExpanded
+      }
+
       if (expand) {
         this.expandSelected()
       } else {
@@ -597,7 +601,7 @@ export default {
         throw new Error(`[veui] Unknown option`)
       }
       option = parents[parents.length - 1]
-      parents = parents.slice(1)
+      parents = parents.slice(0, -1)
       let newValues = this[`${operation}Item`](
         this.realValue,
         option,
