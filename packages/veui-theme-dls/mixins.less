@@ -82,16 +82,10 @@
   }
 }
 
-.veui-dropdown-max-height(@ui, @option-height: "dls-option-height", @max-count: 8, @vertical-padding: @dls-option-dropdown-target-spacing) {
+.veui-dropdown-max-height(@ui, @option-height: "dls-option-height", @max-count: 8, @vertical-padding: @dls-option-group-padding-y) {
   .loop(@index: 1) when (@index <= length(@ui)) {
     @item: extract(@ui, @index);
     overflow-y: auto;
-
-    & when (@item = m) {
-      // 有些不输出m
-      @height: "@{option-height}-@{item}";
-      max-height: dls-sum(@@height * @max-count, @vertical-padding * 2);
-    }
 
     &[ui~="@{item}"] {
       @height: "@{option-height}-@{item}";

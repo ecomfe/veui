@@ -17,7 +17,8 @@ config.defaults(
       },
       size: {
         values: ['xs', 's', 'm', 'l'],
-        inherit: true
+        inherit: true,
+        default: 'm'
       }
     }
   },
