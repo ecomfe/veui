@@ -222,7 +222,7 @@ describe('components/SearchBox', () => {
     expect(wrapper.find('.veui-input-placeholder').text()).to.equal('content')
     expect(wrapper.find('input').element.value).to.equal('initial')
     expect(wrapper.attributes('autofocus')).to.equal('autofocus')
-    expect(wrapper.attributes('ui')).to.equal('primary')
+    expect(wrapper.attributes('ui')).to.include('primary')
 
     wrapper.find('button.veui-input-clear').trigger('click')
     await wrapper.vm.$nextTick()

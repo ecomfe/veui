@@ -89,6 +89,13 @@
     }
   }
 
+  &-header-filter-overlay {
+    & > .@{veui-prefix}-select-options > .@{veui-prefix}-option-group {
+      @sizes: s, m;
+      .veui-dropdown-max-height(@sizes);
+    }
+  }
+
   &-has-bordered-body {
     [role="cell"] {
       &:not(.@{veui-prefix}-table-cell-first) {

@@ -81,3 +81,19 @@
     margin: 0 2 * @dls-spacing-unit; // TODO
   }
 }
+
+.veui-dropdown-max-height(@sizes, @option-height: "dls-option-height", @max-count: 8, @vertical-padding: @dls-option-group-padding-y) {
+  .loop(@index: 1) when (@index <= length(@sizes)) {
+    @size: extract(@sizes, @index);
+    overflow-y: auto;
+
+    &[ui~="@{size}"] {
+      @height: "@{option-height}-@{size}";
+      max-height: dls-sum(@@height * @max-count, @vertical-padding * 2);
+    }
+
+    .loop(@index + 1);
+  }
+
+  .loop();
+}

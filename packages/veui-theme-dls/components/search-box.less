@@ -78,6 +78,8 @@
     &:extend(._veui-dropdown-overlay all);
     overflow-y: auto;
     background-color: @dls-option-background-color;
+    @sizes: xs, s, m, l;
+    .veui-dropdown-max-height(@sizes);
   }
 
   .@{veui-prefix}-option {

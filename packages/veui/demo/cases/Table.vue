@@ -107,7 +107,13 @@
         :filter-options="[
           { label: '高', value: 'high' },
           { label: '中', value: 'mid' },
-          { label: '低', value: 'low' }
+          { label: '低', value: 'low' },
+          { label: '高1', value: 'high1' },
+          { label: '中1', value: 'mid1' },
+          { label: '低1', value: 'low1' },
+          { label: '高2', value: 'high2' },
+          { label: '中2', value: 'mid2' },
+          { label: '低2', value: 'low2' }
         ]"
       >
         <!-- <template #filter="{ close }">
