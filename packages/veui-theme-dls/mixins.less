@@ -82,13 +82,13 @@
   }
 }
 
-.veui-dropdown-max-height(@ui, @option-height: "dls-option-height", @max-count: 8, @vertical-padding: @dls-option-group-padding-y) {
-  .loop(@index: 1) when (@index <= length(@ui)) {
-    @item: extract(@ui, @index);
+.veui-dropdown-max-height(@sizes, @size: "dls-option-height", @max-count: 8, @vertical-padding: @dls-option-group-padding-y) {
+  .loop(@index: 1) when (@index <= length(@sizes)) {
+    @item: extract(@sizes, @index);
     overflow-y: auto;
 
     &[ui~="@{item}"] {
-      @height: "@{option-height}-@{item}";
+      @height: "@{size}-@{item}";
       max-height: dls-sum(@@height * @max-count, @vertical-padding * 2);
     }
 
