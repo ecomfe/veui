@@ -12,14 +12,14 @@ const CommonProviderImpl = {
   uiTypes: ['transparent'],
   props: {
     // eslint-disable-next-line vue/require-prop-types
-    provide: {}
+    value: {}
   },
   render () {
     return this.$slots.default
   }
 }
 
-function createContext (name) {
+export function createContext (name) {
   let scopedId = uniqueId(name || CommonProviderImpl.name)
   let RealProviderImpl = {
     ...CommonProviderImpl,
@@ -32,16 +32,16 @@ function createContext (name) {
       }
     },
     computed: {
-      realProvide () {
+      realValue () {
         // 因为下面会 each $set, 所以这里 spread 下（避免属性的响应式丢失）
-        // 也不用在 watcher 中 deep 了，如果某个很 deep 的属性变化了，这里不用感知
+        // 也不用再 deep watch 了，如果某个很 deep 的属性变化了，这里不用感知
         return {
-          ...(this.provide || {})
+          ...(this.value || {})
         }
       }
     },
     watch: {
-      realProvide: {
+      realValue: {
         immediate: true,
         handler (val) {
           if (!this.bridge.parent) {
@@ -71,14 +71,15 @@ function createContext (name) {
       inject: {
         [scopedId]: {
           from: scopedId,
-          default: {}
+          default: () => ({})
         }
       },
       computed: injections.reduce((res, item) => {
         item = typeof item === 'string' ? { inject: item } : item
-        res[item.inject] = function () {
-          let ctx = this[scopedId]
-          return ctx ? ctx[item.from || item.inject] : item.default
+        let { from, inject, default: dft } = item
+        res[inject] = function () {
+          let value = this[scopedId][from || inject]
+          return typeof value === 'undefined' ? dft : value
         }
         return res
       }, {})
@@ -93,5 +94,13 @@ export const [SelectContextProvider, useSelectContext] = createContext(
 )
 
 function wrapChildren (h, { data, children }, Provider) {
-  return children.map(child => h(Provider, data, [child]))
+  return children.map(child =>
+    h(
+      Provider,
+      {
+        attrs: { value: data.attrs.value } // 分开避免相互影响
+      },
+      [child]
+    )
+  )
 }
