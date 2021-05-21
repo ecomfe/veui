@@ -38,13 +38,7 @@ import { useSelectContext } from '../_Context'
 
 export default {
   name: 'veui-option',
-  mixins: [
-    prefix,
-    ui,
-    menuItem,
-    selectItem,
-    useSelectContext(['renderForData'])
-  ],
+  mixins: [prefix, ui, menuItem, selectItem, useSelectContext('renderForData')],
   props: {
     label: {
       type: [String, Number]
