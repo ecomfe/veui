@@ -9,7 +9,12 @@
     [$c('table-hit-top')]: hit.top,
     [$c('table-hit-right')]: hit.right,
     [$c('table-hit-bottom')]: hit.bottom,
-    [$c('table-hit-left')]: hit.left
+    [$c('table-hit-left')]: hit.left,
+    [$c('table-overflow-left-edge')]:
+      scrollableX &&
+      (!supportSticky || (!needFixLeft && !selectable && !expandable)),
+    [$c('table-overflow-right-edge')]:
+      scrollableX && (!supportSticky || !hasFixedRight)
   }"
   :ui="realUi"
 >
@@ -86,31 +91,6 @@
       </table-foot>
     </table>
   </div>
-  <div
-    v-if="scrollableX"
-    aria-hidden="true"
-  >
-    <div
-      v-if="needFixLeft"
-      :class="{
-        [$c('table-overflow-shadow-left')]: true,
-        [$c('table-overflow-shadow-edge')]:
-          !hasFixedLeft && !selectable && !expandable
-      }"
-      :style="{
-        width: shadowOffset.left
-      }"
-    />
-    <div
-      :class="{
-        [$c('table-overflow-shadow-right')]: true,
-        [$c('table-overflow-shadow-edge')]: !hasFixedRight
-      }"
-      :style="{
-        width: shadowOffset.right
-      }"
-    />
-  </div>
   <veui-loading
     :class="$c('table-loading')"
     :loading="loading"
@@ -131,16 +111,7 @@ import colgroup from '../../mixins/colgroup'
 import useControllable from '../../mixins/controllable'
 import resize from '../../directives/resize'
 import Loading from '../Loading'
-import {
-  map,
-  mapValues,
-  intersection,
-  find,
-  findIndex,
-  findLastIndex,
-  omit,
-  filter
-} from 'lodash'
+import { map, mapValues, intersection, find, omit, filter } from 'lodash'
 import Body from './_Body'
 import Head from './_Head'
 import Foot from './_Foot'
@@ -161,7 +132,8 @@ const FIXED_PRIORITY = {
 }
 
 const DEFAULT_FIXED_COL_WIDTH = 120
-const SHADOW_WIDTH = 20
+
+let supportSticky = null
 
 export default {
   name: 'veui-table',
@@ -276,7 +248,7 @@ export default {
         bottom: false
       },
       width: null,
-      supportSticky: true
+      supportSticky
     }
   },
   computed: {
@@ -405,36 +377,6 @@ export default {
         row.filter(({ placeholder }) => !placeholder)
       )
     },
-    shadowOffset () {
-      if (!this.supportSticky) {
-        return {
-          left: SHADOW_WIDTH,
-          right: SHADOW_WIDTH
-        }
-      }
-      let row = this.headerGrid[this.headerGrid.length - 1]
-      let leftEnd = findLastIndex(row, cell => cell.fixed === 'left')
-      let rightStart = findIndex(row, cell => cell.fixed === 'right')
-      rightStart = rightStart === -1 ? row.length : rightStart
-
-      // make shadow placeholders at least 20px width because
-      // box-shadow will be affected by element size when
-      // either width or height is smaller than blur radius
-      return {
-        left: sumWidths(
-          row
-            .slice(0, leftEnd + 1)
-            .map(({ width }) => width)
-            .concat(this.offsetLeft, SHADOW_WIDTH)
-        ),
-        right: sumWidths(
-          row
-            .slice(rightStart)
-            .map(({ width }) => width)
-            .concat(this.hasFixedRight ? this.gutterWidth : [], SHADOW_WIDTH)
-        )
-      }
-    },
     realScroll () {
       let { scroll } = this
       if (typeof scroll === 'number' || typeof scroll === 'string') {
@@ -535,7 +477,12 @@ export default {
     }
   },
   mounted () {
-    this.supportSticky = cssSupports('position', 'sticky')
+    if (this.supportSticky === null) {
+      if (supportSticky === null) {
+        supportSticky = cssSupports('position', 'sticky')
+      }
+      this.supportSticky = supportSticky
+    }
     ;['scrollableX', 'scrollableY'].forEach(state => {
       this.$watch(
         state,

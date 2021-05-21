@@ -37,7 +37,11 @@ export default {
                 rowspan={depth}
                 class={{
                   [this.$c('table-cell-select')]: true,
-                  [this.$c('table-cell-sticky-left')]: table.needFixLeft
+                  [this.$c('table-cell-sticky-left')]: table.needFixLeft,
+                  [this.$c('table-cell-sticky-edge')]:
+                    table.needFixLeft &&
+                    !table.hasFixedLeft &&
+                    !table.expandable
                 }}
                 style={
                   table.scrollableX
@@ -76,7 +80,9 @@ export default {
                 role="columnheader"
                 class={{
                   [this.$c('table-cell-expand')]: true,
-                  [this.$c('table-cell-sticky-left')]: table.needFixLeft
+                  [this.$c('table-cell-sticky-left')]: table.needFixLeft,
+                  [this.$c('table-cell-sticky-edge')]:
+                    table.needFixLeft && !table.hasFixedLeft
                 }}
                 style={
                   table.needFixLeft
