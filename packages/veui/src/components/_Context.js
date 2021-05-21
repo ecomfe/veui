@@ -5,7 +5,7 @@
  *  2. functional 组件定义 provide vueOptions 无效
  */
 
-import { uniqueId, each } from 'lodash'
+import { uniqueId } from 'lodash'
 
 const CommonProviderImpl = {
   name: 'provider', // for better readability in devtools
@@ -24,34 +24,7 @@ export function createContext (name) {
   let RealProviderImpl = {
     ...CommonProviderImpl,
     provide () {
-      return { [scopedId]: this.bridge }
-    },
-    data () {
-      return {
-        bridge: {}
-      }
-    },
-    computed: {
-      realValue () {
-        // 因为下面会 each $set, 所以这里 spread 下（避免属性的响应式丢失）
-        // 也不用再 deep watch 了，如果某个很 deep 的属性变化了，这里不用感知
-        return {
-          ...(this.value || {})
-        }
-      }
-    },
-    watch: {
-      realValue: {
-        immediate: true,
-        handler (val) {
-          if (!this.bridge.parent) {
-            this.bridge.parent = this
-          }
-          each(val, (itemValue, key) => {
-            this.$set(this.bridge, key, itemValue)
-          })
-        }
-      }
+      return { [scopedId]: () => this.value }
     }
   }
 
@@ -62,27 +35,22 @@ export function createContext (name) {
   let Provider = {
     functional: true,
     // 这里实际上接受一个 value prop，用来传递 context，但是因为直接透传给 ProviderImpl，所以不用声明了
-    // props: ['provide'],
     render: (h, context) => wrapChildren(h, context, RealProviderImpl)
   }
 
-  let useContext = injections => {
+  let useContext = (injection = 'injection') => {
     return {
       inject: {
         [scopedId]: {
           from: scopedId,
-          default: () => ({})
+          default: () => () => undefined
         }
       },
-      computed: injections.reduce((res, item) => {
-        item = typeof item === 'string' ? { inject: item } : item
-        let { from, inject, default: dft } = item
-        res[inject] = function () {
-          let value = this[scopedId][from || inject]
-          return typeof value === 'undefined' ? dft : value
+      computed: {
+        [injection] () {
+          return this[scopedId]()
         }
-        return res
-      }, {})
+      }
     }
   }
 

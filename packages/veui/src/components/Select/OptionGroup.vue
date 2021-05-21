@@ -46,7 +46,7 @@ const OptionGroup = {
     selectItem,
     overlay,
     keySelect,
-    useSelectContext(['renderForData']),
+    useSelectContext('renderForData'),
     useControllable([
       {
         prop: 'expanded',
@@ -149,7 +149,8 @@ const OptionGroup = {
       let overlay = getTypedAncestor(this, 'overlay')
       return overlay ? overlay.$refs.box : null
     },
-    // TODO items -> options 的影响？
+    // items -> options 的影响：
+    // 应该只在渲染模式下这个属性才有意义，渲染模式下数据数据应该来自 options props 而非 items
     canPopOut () {
       return !!(
         this.position === 'popup' &&

@@ -514,7 +514,7 @@ export default {
 
     let renderGroup = (options, children, key) => {
       return (
-        <SelectContextProvider value={{ renderForData: key === 'data' }}>
+        <SelectContextProvider value={key === 'data'}>
           <OptionGroup
             key={key}
             v-show={!!options}
