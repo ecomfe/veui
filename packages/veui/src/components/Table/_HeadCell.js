@@ -126,6 +126,7 @@ export default {
           [this.$c('table-cell-sortable')]: !!col.sortable && isLeaf,
           [this.$c(`table-cell-sticky-${col.fixed}`)]:
             table.scrollableX && col.fixed,
+          [this.$c(`table-cell-sticky-edge`)]: table.scrollableX && col.edge,
           [this.$c('table-cell-first')]: col.first,
           [this.$c('table-cell-last')]: col.last
         }}

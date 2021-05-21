@@ -109,7 +109,9 @@ export default {
             {...data}
             class={{
               [this.$c('table-cell-select')]: true,
-              [this.$c('table-cell-sticky-left')]: table.scrollableX
+              [this.$c('table-cell-sticky-left')]: table.needFixLeft,
+              [this.$c('table-cell-sticky-edge')]:
+                table.needFixLeft && !table.hasFixedLeft && !table.expandable
             }}
             style={
               table.scrollableX
@@ -149,7 +151,9 @@ export default {
             role="cell"
             class={{
               [this.$c('table-cell-expand')]: true,
-              [this.$c('table-cell-sticky-left')]: table.scrollableX
+              [this.$c('table-cell-sticky-left')]: table.needFixLeft,
+              [this.$c('table-cell-sticky-edge')]:
+                table.needFixLeft && !table.hasFixedLeft
             }}
             style={
               table.scrollableX
@@ -233,6 +237,8 @@ export default {
               [this.$c(`table-cell-${col.align}`)]: !!col.align,
               [this.$c(`table-cell-sticky-${col.fixed}`)]:
                 table.scrollableX && col.fixed,
+              [this.$c(`table-cell-sticky-edge`)]:
+                table.scrollableX && col.edge,
               [this.$c('table-cell-first')]:
                 i === 0 && !table.selectable && !table.expandable,
               [this.$c('table-cell-last')]: i === realColumns.length - 1

@@ -154,41 +154,76 @@
     border-left: none !important;
   }
 
+  @shadow-width: 30px;
+
+  &-overflow-right-edge::after,
+  &-overflow-left-edge::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: @shadow-width;
+    z-index: 1;
+    .veui-transition(box-shadow);
+  }
+
+  &-overflow-right-edge::after {
+    left: 100%;
+    box-shadow: @dls-table-overflow-shadow-left;
+
+    .@{veui-prefix}-table-hit-right& {
+      box-shadow: none;
+    }
+  }
+
+  &-overflow-left-edge::before {
+    right: 100%;
+    box-shadow: @dls-table-overflow-shadow-right;
+
+    .@{veui-prefix}-table-hit-left& {
+      box-shadow: none;
+    }
+  }
+
   &-cell-sticky-left,
   &-cell-sticky-right {
     position: sticky;
     z-index: 1;
   }
 
-  &-overflow-shadow-right,
-  &-overflow-shadow-left {
-    .absolute(0, _);
-    pointer-events: none;
-    z-index: 2;
-    .veui-transition(box-shadow);
-  }
+  &-cell-sticky {
+    &-edge::before {
+      content: "";
+      position: absolute;
+      top: calc(-100% - 1px);
+      bottom: -1px;
+      width: @shadow-width;
 
-  &-overflow-shadow-edge {
-    z-index: 3;
-  }
+      .veui-transition(box-shadow);
+      tr:last-child & {
+        bottom: 0;
+      }
+    }
 
-  &-overflow-shadow-right {
-    right: -20px;
-    box-shadow: @dls-table-overflow-shadow-right;
-  }
+    &-left&-edge::before {
+      right: -1px;
+      box-shadow: @dls-table-overflow-shadow-right;
+      clip-path: polygon(50% 50%, 150% 50%, 150% 100%, 50% 100%);
 
-  &-overflow-shadow-left {
-    left: -20px;
-    box-shadow: @dls-table-overflow-shadow-left;
-  }
+      .@{veui-prefix}-table-hit-left & {
+        box-shadow: none;
+      }
+    }
 
-  &-bordered &-overflow-shadow-left {
-    left: -19px;
-  }
+    &-right&-edge::before {
+      left: -1px;
+      box-shadow: @dls-table-overflow-shadow-left;
+      clip-path: polygon(-50% 50%, 50% 50%, 50% 100%, -50% 100%);
 
-  &-hit-right &-overflow-shadow-right,
-  &-hit-left &-overflow-shadow-left {
-    box-shadow: none;
+      .@{veui-prefix}-table-hit-right & {
+        box-shadow: none;
+      }
+    }
   }
 
   &-bordered &-cell-sticky-left {
