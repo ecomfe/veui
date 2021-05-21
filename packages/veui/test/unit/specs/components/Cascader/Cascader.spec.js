@@ -62,10 +62,12 @@ describe('components/Cascader/Cascader', () => {
         data () {
           return {
             value: null,
-            options: null
+            options: null,
+            expanded: true
           }
         },
-        template: '<veui-cascader :options="options"/>'
+        template:
+          '<veui-cascader :expanded.sync="expanded" :options="options"/>'
       },
       {
         attachToDocument: true,
@@ -189,10 +191,12 @@ describe('components/Cascader/Cascader', () => {
         data () {
           return {
             value: null,
-            options: casOptions
+            options: casOptions,
+            expanded: true
           }
         },
-        template: '<veui-cascader v-model="value" :options="options"/>'
+        template:
+          '<veui-cascader :expanded="expanded" v-model="value" :options="options"/>'
       },
       {
         sync: false
@@ -225,10 +229,12 @@ describe('components/Cascader/Cascader', () => {
         data () {
           return {
             value: null,
-            options: casOptions
+            options: casOptions,
+            expanded: true
           }
         },
-        template: '<veui-cascader v-model="value" multiple :options="options"/>'
+        template:
+          '<veui-cascader :expanded.sync="expanded" v-model="value" multiple :options="options"/>'
       },
       {
         sync: false,
@@ -263,11 +269,12 @@ describe('components/Cascader/Cascader', () => {
         data () {
           return {
             multiple: true,
-            options: casOptions
+            options: casOptions,
+            expanded: true
           }
         },
         template:
-          '<veui-cascader :multiple="multiple" show-select-all :options="options"/>'
+          '<veui-cascader :multiple="multiple" :expanded.sync="expanded" show-select-all :options="options"/>'
       },
       {
         sync: false
@@ -292,12 +299,13 @@ describe('components/Cascader/Cascader', () => {
         data () {
           return {
             multiple: false,
+            expanded: true,
             value: null,
             options: casOptions
           }
         },
         template:
-          '<veui-cascader ref="cas" v-model="value" searchable :multiple="multiple" has-select-all :options="options"/>'
+          '<veui-cascader ref="cas" :expanded="expanded" v-model="value" searchable :multiple="multiple" has-select-all :options="options"/>'
       },
       {
         sync: false,
@@ -340,7 +348,7 @@ describe('components/Cascader/Cascader', () => {
           return {
             value: null,
             selectMode: 'any',
-            expanded: null,
+            expanded: true,
             options: casOptions
           }
         },
@@ -357,7 +365,7 @@ describe('components/Cascader/Cascader', () => {
     options.at(1).trigger('click')
     await vm.$nextTick()
     // 打开且选中
-    expect(vm.expanded).to.equal('江苏')
+    expect(vm.expanded, 'open1').to.equal('江苏')
     expect(vm.value).to.equal('江苏')
 
     const optionsOfsecondMenu = `${SECOND_MENU} ${OPTION}`
@@ -370,12 +378,13 @@ describe('components/Cascader/Cascader', () => {
 
     vm.value = null
     vm.selectMode = 'leaf-only'
-    vm.expanded = false
+    vm.expanded = true
     await vm.$nextTick()
+    options = wrapper.findAll(OPTION) // dom 重新渲染了，重新获取下
     options.at(1).trigger('click')
     await vm.$nextTick()
     // 只能打开
-    expect(vm.expanded).to.equal('江苏')
+    expect(vm.expanded, 'open2').to.equal('江苏')
     expect(vm.value).to.equal(null)
 
     secOptions = wrapper.findAll(optionsOfsecondMenu)
@@ -396,7 +405,7 @@ describe('components/Cascader/Cascader', () => {
         data () {
           return {
             columnTrigger: 'hover',
-            expanded: null,
+            expanded: true,
             options: casOptions
           }
         },
@@ -589,7 +598,8 @@ describe('components/Cascader/Cascader', () => {
           options: casOptions.map(i => ({ ...i, position: 'inline' }))
         }
       },
-      template: '<veui-cascader v-model="value" multiple :options="options"/>'
+      template:
+        '<veui-cascader :expanded="true" v-model="value" multiple :options="options"/>'
     })
     let { vm } = wrapper
     select(wrapper, 5)
