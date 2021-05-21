@@ -35,6 +35,7 @@
   </component>
 
   <veui-lightbox
+    v-if="isMediaType"
     :open.sync="previewOpen"
     :datasource="successFiles"
     :index.sync="previewIndex"
