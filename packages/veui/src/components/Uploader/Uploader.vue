@@ -281,7 +281,7 @@ export default {
         }
         if (this.order in mapping) {
           warn(
-            '[veui-uploader] `desc|asc` are deprecated for `order`. use `prepend|append` instead'
+            '[veui-uploader] `desc` and `asc` are deprecated for the `order` prop. Use `prepend` and `append` instead.'
           )
           return mapping[this.order]
         }
