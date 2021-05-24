@@ -1,4 +1,5 @@
 [
+  "ab-test",
   "abstract",
   "align-center",
   "align-left",
@@ -96,6 +97,7 @@
   "flag",
   "folder",
   "folder-open",
+  "full-square",
   "gateway",
   "gift",
   "hamburger",
@@ -148,6 +150,7 @@
   "pause",
   "pause-circle",
   "pencil",
+  "pie-chart",
   "play",
   "play-circle",
   "plus",
@@ -167,6 +170,8 @@
   "report",
   "report-check",
   "road",
+  "rotate-anticlockwise",
+  "rotate-clockwise",
   "save",
   "scan",
   "search",
@@ -174,6 +179,7 @@
   "search-history",
   "settings",
   "share",
+  "shield-check",
   "shopping-bag",
   "shopping-cart",
   "short-video",
@@ -231,6 +237,7 @@
   "video-history",
   "volume",
   "whirlpool",
+  "yingxiaotong",
   "zoom-in",
   "zoom-out"
 ]
