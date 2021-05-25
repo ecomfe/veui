@@ -69,7 +69,9 @@ export default {
             <td
               role="cell"
               class={{
-                [this.$c('table-cell-sticky-left')]: table.scrollableX
+                [this.$c('table-cell-sticky-left')]: table.scrollableX,
+                [this.$c('table-cell-sticky-edge')]:
+                  table.needFixLeft && !table.hasFixedLeft
               }}
               style={
                 table.scrollableX
