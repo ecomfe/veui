@@ -73,16 +73,10 @@ export default {
       return isType(this.select, 'input') ? 'option' : 'menuitem'
     }
   },
-  watch: {
-    'select.realExpanded' (val) {
-      if (val && this.selected && !this.select.multiple) {
-        this.select.$once('afteropen', this.scrollIntoView)
-      }
-    },
-    'menu.realExpanded' (val) {
-      if (val && this.selected && !this.select.multiple) {
-        this.menu.$once('afteropen', this.scrollIntoView)
-      }
+  mounted () {
+    if (!this.renderForData && this.selected && !this.select.multiple) {
+      this.select.$once('afteropen', this.scrollIntoView)
+      this.menu.$once('afteropen', this.scrollIntoView)
     }
   },
   methods: {

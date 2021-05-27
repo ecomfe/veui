@@ -1,8 +1,11 @@
+import { config } from '@vue/test-utils'
 import Select from 'veui/components/Select'
 import Dropdown from 'veui/components/Dropdown'
 import Option from 'veui/components/Option'
 import OptionGroup from 'veui/components/OptionGroup'
 import { wait, mount } from '../../../../utils'
+
+config.stubs.transition = false
 
 describe('components/Select/OptionGroup', () => {
   it('should pass down the `disabled` prop to the Option.', async () => {
@@ -380,7 +383,7 @@ describe('components/Select/OptionGroup', () => {
     wrapper.destroy()
   })
 
-  it('should scroll into view when a value is selected', async () => {
+  it('should scroll into view when a value is selected', done => {
     let wrapper = mount(
       {
         components: {
@@ -436,19 +439,25 @@ describe('components/Select/OptionGroup', () => {
             ]
           }
         },
-        template: `<veui-select :options="options" :value="11" expanded/>`
+        methods: {
+          afterOpen () {
+            // 所有 afteropen 完了之后检查滚动
+            setTimeout(() => {
+              expect(
+                wrapper.find('.veui-select-options').element.scrollTop > 0
+              ).to.equal(true)
+              wrapper.destroy()
+              done()
+            })
+          }
+        },
+        // searchable 是为了消除焦点带来的滚动
+        template: `<veui-select :options="options" searchable :value="11" expanded @afteropen="afterOpen"/>`
       },
       {
         sync: false,
         attachToDocument: true
       }
     )
-
-    await wait(0)
-    expect(wrapper.find('.veui-select-options').element.scrollTop > 0).to.equal(
-      true
-    )
-
-    wrapper.destroy()
   })
 })
