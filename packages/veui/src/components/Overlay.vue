@@ -130,14 +130,13 @@ export default {
     }
   },
   created () {
-    if (this.inline) {
-      return
+    if (!this.inline) {
+      // 初始化时，updateOverlayNode 依赖 created 在组件树中的执行顺序：
+      // 先父后子
+      // 而 mounted 执行顺序是先子后父，所以 updateOverlayNode 只能放在
+      // created 里面。
+      this.updateOverlayNode()
     }
-    // 初始化时，updateOverlayNode 依赖 created 在组件树中的执行顺序：
-    // 先父后子
-    // 而 mounted 执行顺序是先子后父，所以 updateOverlayNode 只能放在
-    // created 里面。
-    this.updateOverlayNode()
   },
   mounted () {
     if (!this.inline) {
@@ -307,18 +306,13 @@ export default {
       if (!this.autofocus) {
         return
       }
-
-      let { box } = this.$refs
-      if (box) {
-        this.createFocusContext()
-      } else {
-        this.$nextTick(() => {
-          // 如果 nextTick 关闭了，就不会创建 focusContext
-          if (this.realOpen && this.$refs.box) {
-            this.createFocusContext()
-          }
-        })
-      }
+      // nextTick 是为了保证本次 open 后 DOM 渲染出来再Lock focus。
+      this.$nextTick(() => {
+        // 如果 nextTick 关闭了，就不会创建 focusContext
+        if (this.realOpen && this.$refs.box) {
+          this.createFocusContext()
+        }
+      })
     },
 
     createFocusContext () {
@@ -384,6 +378,7 @@ export default {
       >
         <transition
           name={this.$c('overlay')}
+          appear
           onAfterEnter={() => {
             this.$emit('afteropen')
           }}

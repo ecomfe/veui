@@ -408,11 +408,12 @@ export default {
         value = this.util.getMinimumTimeOfIndex(index, val)
       }
       this.realValue = value
-      this.scrollSelectedToCenter()
 
       // Close if only hours are available
       if (this.mode === 'hour') {
         this.closeDropdown()
+      } else {
+        this.scrollSelectedToCenter()
       }
     },
     focus () {
