@@ -50,6 +50,30 @@
       </div>
     </transition-group>
   </section>
+  <section ref="itemGroup2x">
+    <h2>Axis: X 宽度一致</h2>
+    <transition-group
+      ref="transitionGroup"
+      name="list"
+      tag="div"
+      class="items"
+    >
+      <div
+        v-for="item in items"
+        :key="item"
+        v-drag.sort.x="{
+          name: 'mySortableButton2x',
+          containment: 'itemGroup2x',
+          callback: handleAxisXSortCallback,
+          debug,
+          align
+        }"
+        class="item-fixed-width"
+      >
+        {{ item }}
+      </div>
+    </transition-group>
+  </section>
   <section>
     <h2>Axis: Y</h2>
     <transition-group
@@ -268,9 +292,6 @@ export default {
     moveItem (items, fromIndex, toIndex) {
       let item = items[fromIndex]
       items.splice(fromIndex, 1)
-      if (toIndex > fromIndex) {
-        toIndex--
-      }
       items.splice(toIndex, 0, item)
     }
   }
@@ -292,16 +313,22 @@ section {
   align-items: center;
 }
 
+.item-fixed-width,
 .item {
   background: white;
   border: 1px solid pink;
   border-radius: 3px;
   margin: 0 10px 8px 0;
   padding: 1px 2px;
+}
 
-  &:nth-child(3n) {
-    font-size: 1.2em;
-  }
+.item:nth-child(3n) {
+  font-size: 1.2em;
+}
+
+.item-fixed-width {
+  display: inline-block;
+  width: 200px;
 }
 
 .list {

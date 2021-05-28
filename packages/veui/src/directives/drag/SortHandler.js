@@ -5,26 +5,17 @@ import {
   assign,
   isEqual,
   isUndefined,
-  includes,
   zip,
   camelCase,
   kebabCase
 } from 'lodash'
 import { prefixify } from '../../mixins/prefix'
-import config from '../../managers/config'
 import {
   isInsideTransformedContainer,
   cloneElementWithComputedStyle
 } from '../../utils/dom'
 import { isSafari as checkIsSafari } from '../../utils/bom'
 import BaseHandler from './BaseHandler'
-
-config.defaults({
-  'drag.sort.triggerPadding': {
-    x: [8, 0],
-    y: [0, 8]
-  }
-})
 
 const isSafari = checkIsSafari()
 
@@ -64,14 +55,13 @@ export default class SortHandler extends BaseHandler {
         'align'
       ])
     )
-
-    this.triggerPadding = config.get('drag.sort.triggerPadding')
   }
 
   start (...args) {
     super.start(...args)
     let { event } = args[0]
     let { currentTarget, offsetX, offsetY } = event
+    this.currentTarget = currentTarget
     let { offsetWidth, offsetHeight } = currentTarget
     // 算光标到元素中心的偏移量
     this.fixMouseoffset = [
@@ -128,8 +118,9 @@ export default class SortHandler extends BaseHandler {
     const hotRects = getHotRects(
       this.getElements(),
       this.container,
-      this.triggerPadding[this.options.axis],
-      this.options.axis
+      this.options.axis,
+      this.currentTarget,
+      this.dragElementIndex
     )
 
     if (process.env.NODE_ENV === 'development' && this.options.debug) {
@@ -179,7 +170,7 @@ export default class SortHandler extends BaseHandler {
 
     const fromIndex = this.dragElementIndex
     // 插入当前拖动元素或后面一个元素的前面，就是当前的位置，不用修改
-    if (!includes([fromIndex, fromIndex + 1], toIndex)) {
+    if (fromIndex !== toIndex) {
       // 标记一下开始回调
       this.isWaitingCallbackConfirm = true
       Promise.race([
@@ -193,9 +184,14 @@ export default class SortHandler extends BaseHandler {
             return
           }
           // 拖动成功后，更新下当前拖动元素索引
-          this.dragElementIndex = toIndex > fromIndex ? toIndex - 1 : toIndex
+          this.dragElementIndex = toIndex
           // 元素列表变了，热区也要更新下（需要等DOM更新了
-          Vue.nextTick(() => this.updateHotRects())
+          Vue.nextTick(() => {
+            // 在测试环境中，测完了就销毁了，这里的 nextTick 可能不需要更新
+            if (this.currentTarget) {
+              this.updateHotRects()
+            }
+          })
         })
         .finally(() => {
           this.isWaitingCallbackConfirm = undefined
@@ -220,6 +216,7 @@ export default class SortHandler extends BaseHandler {
   }
 
   clear () {
+    this.currentTarget = null
     if (this.cancelSource) {
       this.cancelSource.cancel()
     }
@@ -237,7 +234,13 @@ export default class SortHandler extends BaseHandler {
   }
 }
 
-function getHotRects (elements, container, hotExtra, axis) {
+function getHotRects (
+  elements,
+  container,
+  axis,
+  currentTarget,
+  dragElementIndex
+) {
   // TODO: rtl，把 leading, trailing 互换
 
   // 把水平方向的左右和垂直方向的上下归一为 leading(前)、trailing(后)，下面好统一处理
@@ -245,16 +248,14 @@ function getHotRects (elements, container, hotExtra, axis) {
     ['top', 'bottom', 'left', 'right'],
     axis
   )
-  // 把 x,y 方向上的扩展热区像素值处理成 对应 Rect Tuple 的几个值
-  const hotExtraValues = zip(
-    hotExtra.map(val => val * -1),
-    hotExtra
-  ).reduce((ret, values) => ret.concat(values))
+
   const containerBoundary = container.getBoundingClientRect()
 
   const elementRects = [...elements].map(function (el) {
     return el.getBoundingClientRect()
   })
+
+  let currentRect = currentTarget.getBoundingClientRect()
 
   // 找出换行的 index，切成行，按行处理热区
   const breakIndices = elementRects
@@ -301,19 +302,45 @@ function getHotRects (elements, container, hotExtra, axis) {
 
       // 从 元素边界 计算 热区边界
       // 变换后 Rect Tuple 元素：热区矩形的左、右、上、下，热区对应的插入索引
-      rects = rects.slice(1).map(function (current, i) {
-        let prev = rects[i]
+
+      // * - - - *  // rects, * 是上面首尾插入，下面 oldIdx 对应这里的索引，prev 和 next 也是取自这里
+      //   - - -    // 实际用来生成每个热区，下面 idx 对应这里的索引
+      rects = rects.slice(1, -1).map(function (current, idx) {
+        let oldIdx = idx + 1
+        let prev = rects[oldIdx - 1]
+        let next = rects[oldIdx + 1]
+        let isFirst = idx === 0
+        let isLast = idx === rects.length - 3 // 因为上面的 slice 2个，所以是 - 3
+        let dimension = axis === 'y' ? 'height' : 'width'
+        let totalIdx = count + idx // 上面 idx 都是行内，realIdx 则是总的索引
+        let half = currentRect[dimension] / 2
+
+        let start = prev
+        let end = next
+        let startSign = 1
+        let endSign = -1
+        if (totalIdx > dragElementIndex) {
+          start = current
+          startSign = -1
+        }
+        if (totalIdx < dragElementIndex) {
+          end = current
+          endSign = 1
+        }
+        // 几种 case 合到一起好像可读性不太好
         return exchangeAxisValues(
           [
-            prev[trailing],
-            current[leading],
-            Math.min(prev[top], current[top]),
-            Math.max(prev[bottom], current[bottom])
+            isFirst
+              ? prev[trailing]
+              : start[trailing] - start[dimension] / 2 + half * startSign,
+            isLast
+              ? next[leading]
+              : end[leading] + end[dimension] / 2 + half * endSign,
+            Math.min(start[top], end[top]),
+            Math.max(start[bottom], end[bottom])
           ],
           axis
-        )
-          .map((val, i) => val + hotExtraValues[i])
-          .concat(count + i)
+        ).concat(totalIdx)
       })
       count += rowCount
       return rects
