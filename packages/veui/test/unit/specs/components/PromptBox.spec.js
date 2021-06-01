@@ -180,4 +180,61 @@ describe('components/PromptBox', function () {
     expect(input.element.value).to.equal('ok')
     wrapper.destroy()
   })
+
+  it('should respect `loading` and `disabled` props', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-prompt-box': PromptBox
+      },
+      data () {
+        return {
+          disabled: false,
+          loading: false
+        }
+      },
+      template:
+        '<veui-prompt-box open :disabled="disabled" :loading="loading"/>'
+    })
+
+    let { vm } = wrapper
+    let btn = wrapper.find('.veui-dialog-content-foot button:first-child')
+    expect(btn.classes('veui-disabled')).to.equal(false)
+    expect(btn.classes('veui-button-loading')).to.equal(false)
+
+    vm.disabled = true
+    await vm.$nextTick()
+    expect(btn.classes('veui-disabled')).to.equal(true)
+    expect(btn.classes('veui-button-loading')).to.equal(false)
+
+    vm.disabled = false
+    vm.loading = true
+    await vm.$nextTick()
+    expect(btn.classes('veui-disabled')).to.equal(false)
+    expect(btn.classes('veui-button-loading')).to.equal(true)
+
+    wrapper.destroy()
+  })
+
+  it('should respect `ok-label` and `cancel-label` props', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-prompt-box': PromptBox
+      },
+      data () {
+        return {
+          disabled: false,
+          loading: false
+        }
+      },
+      template: '<veui-prompt-box open ok-label="👍" cancel-label="👎"/>'
+    })
+
+    await wrapper.vm.$nextTick()
+
+    let btns = wrapper.findAll('.veui-dialog-content-foot button')
+    expect(btns.at(0).text()).to.equal('👍')
+    expect(btns.at(1).text()).to.equal('👎')
+
+    wrapper.destroy()
+  })
 })

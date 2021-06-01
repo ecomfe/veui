@@ -135,4 +135,59 @@ describe('components/AlertBox', function () {
     expect(wrapper.find('.veui-alert-box-icon-wrapper').exists()).to.equal(true)
     wrapper.destroy()
   })
+
+  it('should respect `loading` and `disabled` props', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-alert-box': AlertBox
+      },
+      data () {
+        return {
+          disabled: false,
+          loading: false
+        }
+      },
+      template: '<veui-alert-box open :disabled="disabled" :loading="loading"/>'
+    })
+
+    let { vm } = wrapper
+    let btn = wrapper.find('.veui-dialog-content-foot button')
+    expect(btn.classes('veui-disabled')).to.equal(false)
+    expect(btn.classes('veui-button-loading')).to.equal(false)
+
+    vm.disabled = true
+    await vm.$nextTick()
+    expect(btn.classes('veui-disabled')).to.equal(true)
+    expect(btn.classes('veui-button-loading')).to.equal(false)
+
+    vm.disabled = false
+    vm.loading = true
+    await vm.$nextTick()
+    expect(btn.classes('veui-disabled')).to.equal(false)
+    expect(btn.classes('veui-button-loading')).to.equal(true)
+
+    wrapper.destroy()
+  })
+
+  it('should respect `ok-label` and `cancel-label` props', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-alert-box': AlertBox
+      },
+      data () {
+        return {
+          disabled: false,
+          loading: false
+        }
+      },
+      template: '<veui-alert-box open ok-label="👍"/>'
+    })
+
+    await wrapper.vm.$nextTick()
+
+    let btn = wrapper.find('.veui-dialog-content-foot button')
+    expect(btn.text()).to.equal('👍')
+
+    wrapper.destroy()
+  })
 })
