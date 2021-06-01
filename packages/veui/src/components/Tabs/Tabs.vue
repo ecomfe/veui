@@ -61,7 +61,8 @@ export default {
       default: null
     },
     tip: String,
-    eager: Boolean
+    eager: Boolean,
+    addLabel: String
   },
   data () {
     return {
@@ -104,6 +105,9 @@ export default {
       }
 
       return find(this.items, ({ matches, to }) => matches(this.$route, to))
+    },
+    realAddLabel () {
+      return this.addLabel || this.t('add')
     }
   },
   watch: {
@@ -412,7 +416,7 @@ export default {
               onClick={this.handleAdd}
             >
               <Icon name={this.icons.add} />
-              {this.t('add')}
+              {this.realAddLabel}
             </Button>
           ) : null}
           {this.tip || this.$slots.extra ? (

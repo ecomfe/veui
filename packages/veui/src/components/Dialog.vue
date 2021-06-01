@@ -15,6 +15,7 @@
   :inline="inline"
   :modal="modal"
   :priority="priority"
+  @mousedown="focusContent"
   @afterclose="handleAfterClose"
 >
   <div
@@ -75,14 +76,14 @@
           :loading="loading"
           @click="close('ok')"
         >
-          {{ t('ok') }}
+          {{ realOkLabel }}
         </veui-button>
         <veui-button
           :ui="uiParts.cancel"
           autofocus
           @click="cancel"
         >
-          {{ t('cancel') }}
+          {{ realCancelLabel }}
         </veui-button>
       </slot>
     </div>
@@ -145,9 +146,17 @@ export default {
     beforeClose: Function,
     footless: Boolean,
     disabled: Boolean,
-    loading: Boolean
+    loading: Boolean,
+    okLabel: String,
+    cancelLabel: String
   },
   computed: {
+    realOkLabel () {
+      return this.okLabel || this.t('ok')
+    },
+    realCancelLabel () {
+      return this.cancelLabel || this.t('cancel')
+    },
     attrs () {
       return {
         role: 'dialog',
@@ -190,6 +199,12 @@ export default {
       let { overlay } = this.$refs
       if (overlay) {
         overlay.focus()
+      }
+    },
+    focusContent () {
+      let { content } = this.$refs
+      if (content) {
+        content.focus()
       }
     },
     close (type) {

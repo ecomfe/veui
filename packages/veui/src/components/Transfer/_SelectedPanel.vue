@@ -19,7 +19,7 @@
         name="title"
         v-bind="slotApi"
       >
-        {{ t('@transfer.selected') }}
+        {{ realTitle }}
       </slot>
       <veui-button
         :ui="uiParts.removeAll"
@@ -129,6 +129,7 @@ export default {
     datasource: Array,
     showMode: String,
     placeholder: String,
+    title: String,
     isSelectable: Boolean,
     ui: String,
     icons: Object,
@@ -148,6 +149,9 @@ export default {
       return {
         count: this.leavesCount
       }
+    },
+    realTitle () {
+      return this.title || this.t('@transfer.selected')
     }
   },
   watch: {

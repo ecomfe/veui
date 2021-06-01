@@ -5,8 +5,11 @@
   :open.sync="realOpen"
   :priority="priority"
   :closable="false"
-  :loading="loading"
   :before-close="beforeClose"
+  :loading="loading"
+  :disabled="disabled"
+  :ok-label="okLabel"
+  :cancel-label="cancelLabel"
   role="alertdialog"
   @ok="$emit('ok')"
   @cancel="$emit('cancel')"
@@ -51,7 +54,15 @@ export default {
     'veui-dialog': Dialog
   },
   mixins: [prefix, ui, overlay, useControllable(['open'])],
-  props: pick(Dialog.props, ['open', 'title', 'beforeClose', 'loading']),
+  props: pick(Dialog.props, [
+    'open',
+    'title',
+    'beforeClose',
+    'loading',
+    'disabled',
+    'okLabel',
+    'cancelLabel'
+  ]),
   data () {
     return {
       localTitle: this.title,

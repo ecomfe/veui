@@ -8,6 +8,9 @@
   :closable="false"
   :before-close="beforeClose"
   :loading="loading"
+  :disabled="disabled"
+  :ok-label="okLabel"
+  :cancel-label="cancelLabel"
   role="alertdialog"
   @ok="ok"
   @cancel="cancel"
@@ -55,15 +58,28 @@ export default {
     'veui-input': Input,
     'veui-dialog': Dialog
   },
-  mixins: [prefix, ui, overlay, useControllable([
-    'open',
-    {
-      prop: 'value',
-      event: 'input'
-    }
-  ])],
+  mixins: [
+    prefix,
+    ui,
+    overlay,
+    useControllable([
+      'open',
+      {
+        prop: 'value',
+        event: 'input'
+      }
+    ])
+  ],
   props: {
-    ...pick(Dialog.props, ['open', 'title', 'beforeClose', 'loading']),
+    ...pick(Dialog.props, [
+      'open',
+      'title',
+      'beforeClose',
+      'loading',
+      'disabled',
+      'okLabel',
+      'cancelLabel'
+    ]),
     content: String,
     value: {
       type: String,
