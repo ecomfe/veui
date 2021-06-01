@@ -20,6 +20,8 @@ import { omit } from 'lodash'
 
 const VEUI_OVERLAY_ELEMENT_NAME = 'veui-x-overlay'
 
+const EMITS = ['locate', 'orderchange', 'afteropen', 'afterclose']
+
 ignoreElements(VEUI_OVERLAY_ELEMENT_NAME)
 
 config.defaults({
@@ -124,7 +126,7 @@ export default {
         this.$nextTick(this.initPortal)
       }
     },
-    local (val) {
+    local () {
       this.disposePortal()
       this.initPortal()
     }
@@ -362,6 +364,7 @@ export default {
         }}
         ref="box"
         ui={this.realUi}
+        {...{ on: omit(this.$listeners, EMITS) }}
       >
         {(this.realOpen || this.realLeaving) && this.$slots.default}
       </VEUI_OVERLAY_ELEMENT_NAME>

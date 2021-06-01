@@ -57,6 +57,8 @@ export default {
     },
     candidatePlaceholder: String,
     selectedPlaceholder: String,
+    candidateTitle: String,
+    selectedTitle: String,
     selectedShowMode: {
       type: String,
       default: 'tree',
@@ -125,80 +127,84 @@ export default {
         }
       },
       [
-        renderSlot(this, 'candidate', { datasource: this.datasource }) || h(
-          CandidatePanel,
-          {
-            props: {
-              datasource: this.datasource,
-              searchable: this.searchable,
-              filter: this.filter,
-              placeholder: this.candidatePlaceholder,
-              isSelectable: this.isSelectable,
-              selected: this.realSelected,
-              mergeChecked: this.mergeChecked,
-              includeIndeterminate: this.includeIndeterminate,
-              uiParts: this.uiParts,
-              ui: this.realUi
-            },
-            on: {
-              select: value => {
-                this.commit('selected', value)
+        renderSlot(this, 'candidate', { datasource: this.datasource }) ||
+          h(
+            CandidatePanel,
+            {
+              props: {
+                datasource: this.datasource,
+                searchable: this.searchable,
+                filter: this.filter,
+                placeholder: this.candidatePlaceholder,
+                title: this.candidateTitle,
+                isSelectable: this.isSelectable,
+                selected: this.realSelected,
+                mergeChecked: this.mergeChecked,
+                includeIndeterminate: this.includeIndeterminate,
+                uiParts: this.uiParts,
+                ui: this.realUi
               },
-              selectall: filtered => {
-                if (filtered && filtered.length) {
-                  let selected = this.checkAll(this.realSelected, filtered)
-                  if (!isEqualSet(selected, this.realSelected)) {
-                    this.commit('selected', selected)
+              on: {
+                select: value => {
+                  this.commit('selected', value)
+                },
+                selectall: filtered => {
+                  if (filtered && filtered.length) {
+                    let selected = this.checkAll(this.realSelected, filtered)
+                    if (!isEqualSet(selected, this.realSelected)) {
+                      this.commit('selected', selected)
+                    }
                   }
                 }
-              }
-            },
-            scopedSlots: slotsForCandidate.scopedSlots,
-            ref: 'candidatePanel'
-          },
-          slotsForCandidate.slots
-        ),
-        renderSlot(this, 'selected', { datasource: this.selectedItems }) || h(
-          SelectedPanel,
-          {
-            props: {
-              datasource: this.selectedItems,
-              showMode: this.selectedShowMode,
-              placeholder: this.selectedPlaceholder,
-              isSelectable: this.isSelectable,
-              icons: this.icons,
-              uiParts: this.uiParts,
-              ui: this.realUi
-            },
-            on: {
-              remove: (item, parents) => {
-                let selected = this.clearItem(
-                  this.realSelected,
-                  item,
-                  parents,
-                  this.datasource
-                )
-                if (!isEqualSet(selected, this.realSelected)) {
-                  this.commit('selected', selected)
-                }
               },
-              removeall: () => {
-                if (this.datasource && this.datasource.length) {
-                  let selected = this.clearAll(
+              scopedSlots: slotsForCandidate.scopedSlots,
+              ref: 'candidatePanel'
+            },
+            slotsForCandidate.slots
+          ),
+        renderSlot(this, 'selected', { datasource: this.selectedItems }) ||
+          h(
+            SelectedPanel,
+            {
+              props: {
+                datasource: this.selectedItems,
+                showMode: this.selectedShowMode,
+                placeholder: this.selectedPlaceholder,
+                title: this.selectedTitle,
+                isSelectable: this.isSelectable,
+                icons: this.icons,
+                uiParts: this.uiParts,
+                ui: this.realUi
+              },
+              on: {
+                remove: (item, parents) => {
+                  let selected = this.clearItem(
                     this.realSelected,
-                    this.selectedItems,
+                    item,
+                    parents,
                     this.datasource
                   )
                   if (!isEqualSet(selected, this.realSelected)) {
                     this.commit('selected', selected)
                   }
+                },
+                removeall: () => {
+                  if (this.datasource && this.datasource.length) {
+                    let selected = this.clearAll(
+                      this.realSelected,
+                      this.selectedItems,
+                      this.datasource
+                    )
+                    if (!isEqualSet(selected, this.realSelected)) {
+                      this.commit('selected', selected)
+                    }
+                  }
                 }
-              }
+              },
+              scopedSlots: slotsForSelected.scopedSlots
             },
-            scopedSlots: slotsForSelected.scopedSlots
-          },
-          slotsForSelected.slots
-        )
+            slotsForSelected.slots
+          )
       ]
     )
   }

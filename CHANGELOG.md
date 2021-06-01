@@ -1,3 +1,16 @@
+## 2.0.0-beta.33
+
+### 💡 主要变更
+
+- [+] 新增了部分组件的文案配置 prop（[#750](https://github.com/ecomfe/veui/issues/750)），具体包括：
+
+  - `Dialog`/`Drawer`/`ConfirmBox`/`PromptBox` 组件新增 `ok-label`/`cancel-label` prop；
+  - `AlertBox` 组件新增 `ok-label` prop；
+  - `Tabs` 组件新增 `add-label` prop；
+  - `Transfer` 组件新增 `candidate-title`/`selected-title` prop。
+
+- [+] `AlertBox`/`ConfirmBox`/`PromptBox` 均补齐 `disabled`/`loading` prop，与 `Dialog` 组件对齐。
+
 ## 2.0.0-beta.32
 
 ### 💡 主要变更

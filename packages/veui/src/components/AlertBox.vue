@@ -13,6 +13,8 @@
   :escapable="false"
   :priority="priority"
   :before-close="beforeClose"
+  :loading="loading"
+  :disabled="disabled"
   role="alertdialog"
   @ok="$emit('ok')"
   @afterclose="$emit('afterclose')"
@@ -44,7 +46,7 @@
       autofocus
       @click="close('ok')"
     >
-      {{ t('ok') }}
+      {{ realOkLabel }}
     </veui-button>
   </template>
 </veui-dialog>
@@ -75,7 +77,14 @@ export default {
   },
   mixins: [prefix, ui, overlay, i18n, useControllable(['open'])],
   props: {
-    ...pick(Dialog.props, ['open', 'title', 'beforeClose']),
+    ...pick(Dialog.props, [
+      'open',
+      'title',
+      'beforeClose',
+      'loading',
+      'disabled',
+      'okLabel'
+    ]),
     type: {
       type: String,
       validator (val) {
@@ -87,6 +96,11 @@ export default {
   data () {
     return {
       priority: config.get('alertbox.priority')
+    }
+  },
+  computed: {
+    realOkLabel () {
+      return this.okLabel || this.t('ok')
     }
   }
 }

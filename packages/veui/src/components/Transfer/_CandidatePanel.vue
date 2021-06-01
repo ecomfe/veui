@@ -17,7 +17,7 @@
         name="title"
         v-bind="slotApi"
       >
-        {{ t('@transfer.available') }}
+        {{ realTitle }}
       </slot>
       <veui-button
         :ui="uiParts.selectAll"
@@ -105,6 +105,7 @@ export default {
     searchable: Boolean,
     filter: Function,
     placeholder: String,
+    title: String,
     isSelectable: Boolean,
     selected: Array,
     ...useTree().props,
@@ -124,6 +125,9 @@ export default {
       return {
         count: this.leavesCount
       }
+    },
+    realTitle () {
+      return this.title || this.t('@transfer.available')
     }
   },
   methods: {
