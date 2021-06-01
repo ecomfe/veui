@@ -8,6 +8,7 @@
     <veui-alert-box
       :open.sync="alertBoxOpen"
       title="创建条目成功"
+      disabled
     >
       恭喜你，您的资料已经提交成功！
     </veui-alert-box>

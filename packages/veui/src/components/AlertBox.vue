@@ -13,8 +13,6 @@
   :escapable="false"
   :priority="priority"
   :before-close="beforeClose"
-  :loading="loading"
-  :disabled="disabled"
   role="alertdialog"
   @ok="$emit('ok')"
   @afterclose="$emit('afterclose')"
@@ -43,6 +41,8 @@
   >
     <veui-button
       :ui="uiParts.ok"
+      :loading="loading"
+      :disabled="disabled"
       autofocus
       @click="close('ok')"
     >
