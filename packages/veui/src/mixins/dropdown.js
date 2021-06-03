@@ -4,8 +4,9 @@ import outside from '../directives/outside'
 import overlay from './overlay'
 import activatable from './activatable'
 import useControllable from './controllable'
+import config from '../managers/config'
 
-export default {
+const baseMixin = {
   directives: { outside },
   mixins: [
     overlay,
@@ -92,6 +93,32 @@ export default {
     if (this.__overlay_scroll_handler__) {
       box.removeEventListener('scroll', this.__overlay_scroll_handler__, false)
       box.__overlay_scroll_handler__ = null
+    }
+  }
+}
+
+export default function dropdown ({ maxCount = false } = {}) {
+  if (!maxCount) {
+    return baseMixin
+  }
+
+  return {
+    ...baseMixin,
+    props: {
+      ...baseMixin.props,
+      maxCount: Number
+    },
+    computed: {
+      ...(baseMixin.computed || {}),
+      customCssProperties () {
+        const name = this.$options.name
+          .replace(/(?:^veui)?-/g, '')
+          .toLowerCase()
+        return {
+          '--veui-dropdown-overlay-max-count':
+            this.maxCount || config.get(`${name}.maxCount`)
+        }
+      }
     }
   }
 }

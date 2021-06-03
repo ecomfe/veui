@@ -82,18 +82,37 @@
   }
 }
 
-.veui-dropdown-max-height(@sizes, @option-height: "dls-option-height", @max-count: 8, @vertical-padding: @dls-option-group-padding-y) {
+.veui-max-height(@height, @max-count, @with-height: false, @vertical-padding: @dls-option-group-padding-y) {
+  & when (isnumber(@max-count)) {
+    max-height: dls-sum(@height * @max-count, @vertical-padding * 2);
+    & when (@with-height = true) {
+      height: dls-sum(@height * @max-count, @vertical-padding * 2);
+    }
+  }
+
+  & when not (isnumber(@max-count)) {
+    max-height: dls-sum(@height * 8, @vertical-padding * 2); // for ie
+    max-height: calc(@height * @max-count + @vertical-padding * 2);
+    & when (@with-height = true) {
+      height: dls-sum(@height * 8, @vertical-padding * 2);
+      height: calc(@height * @max-count + @vertical-padding * 2);
+    }
+  }
+}
+
+.veui-dropdown-max-height(@sizes, @max-count: 8, @with-height: false, @vertical-padding: @dls-option-group-padding-y, @option-height: "dls-option-height") {
   .loop(@index: 1) when (@index <= length(@sizes)) {
     @size: extract(@sizes, @index);
-    overflow-y: auto;
+    @height: "@{option-height}-@{size}";
 
     &[ui~="@{size}"] {
-      @height: "@{option-height}-@{size}";
-      max-height: dls-sum(@@height * @max-count, @vertical-padding * 2);
+      .veui-max-height(@@height, @max-count, @with-height, @vertical-padding);
     }
 
     .loop(@index + 1);
   }
 
   .loop();
+
+  overflow-y: auto;
 }

@@ -195,7 +195,7 @@ export default {
     prefix,
     ui,
     input,
-    dropdown,
+    dropdown(),
     i18n,
     useControllable({
       prop: 'value',

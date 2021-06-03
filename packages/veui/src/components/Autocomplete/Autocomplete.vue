@@ -8,11 +8,11 @@
       [$c('autocomplete-suggestions')]: true
     })
   "
-  :datasource="datasource"
+  :children-key="childrenKey"
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"
   aria-haspopup="listbox"
-  v-bind="baseProps"
+  v-bind="$attrs"
   v-on="$listeners"
 >
   <template
@@ -103,7 +103,7 @@ import overlay from '../../mixins/overlay'
 import outside from '../../directives/outside'
 import AutocompleteBase from './_AutocompleteBase'
 import Input from '../Input'
-import { includes, pick, omit } from 'lodash'
+import { includes, pick } from 'lodash'
 import OptionGroup from '../Select/OptionGroup'
 import '../../common/uiTypes'
 
@@ -125,8 +125,8 @@ export default {
   },
   directives: { outside },
   mixins: [prefix, ui, input, overlay],
+  inheritAttrs: false,
   props: {
-    ...AutocompleteBase.props,
     suggestTrigger: {
       type: [String, Array],
       default: 'input'
@@ -140,9 +140,6 @@ export default {
   computed: {
     inputProps () {
       return pick(this.$props, SHARED_PROPS)
-    },
-    baseProps () {
-      return omit(this.$props, ['suggestTrigger', ...SHARED_PROPS])
     },
     realTriggers () {
       return [].concat(this.suggestTrigger)

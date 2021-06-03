@@ -16,7 +16,7 @@ import {
   inheritScopeAttrs
 } from '../utils/helper'
 import '../common/uiTypes'
-import { omit } from 'lodash'
+import { omit, isObject } from 'lodash'
 
 const VEUI_OVERLAY_ELEMENT_NAME = 'veui-x-overlay'
 
@@ -38,6 +38,12 @@ export default {
   props: {
     position: String,
     overlayClass: getClassPropDef(),
+    overlayStyle: {
+      validator (value) {
+        return value == null || [].concat(value).every(val => isObject(val))
+      },
+      default: null
+    },
     open: Boolean,
     inline: Boolean,
     target: {
@@ -77,6 +83,15 @@ export default {
     },
     realLeaving () {
       return !this.inline && this.leaving
+    },
+    realStyle () {
+      return [
+        ...[].concat(this.overlayStyle || []),
+        {
+          zIndex: this.zIndex,
+          minWidth: this.minWidth
+        }
+      ]
     }
   },
   watch: {
@@ -354,10 +369,7 @@ export default {
     const box = (
       <VEUI_OVERLAY_ELEMENT_NAME
         v-show={this.realOpen}
-        style={{
-          zIndex: this.zIndex,
-          minWidth: this.minWidth
-        }}
+        style={this.realStyle}
         class={{
           [this.$c('overlay-box')]: true,
           ...this.realOverlayClass

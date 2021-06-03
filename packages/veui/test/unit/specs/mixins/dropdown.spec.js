@@ -11,7 +11,7 @@ const DropdownComponent = {
       realReadonly: false
     }
   },
-  mixins: [dropdown]
+  mixins: [dropdown()]
 }
 
 describe('mixins/dropdown', () => {

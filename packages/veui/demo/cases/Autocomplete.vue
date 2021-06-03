@@ -4,14 +4,14 @@
     <code>&lt;veui-autocomplete&gt;</code>
   </h1>
   <section>
-    <h2>普通</h2>
+    <h2>普通(m)</h2>
     <veui-autocomplete
       v-model="inputValue"
       :datasource="suggestions"
     />
   </section>
   <section>
-    <h2>可清除</h2>
+    <h2>可清除(s)</h2>
     <veui-autocomplete
       v-model="inputValue"
       ui="s"
@@ -20,7 +20,7 @@
     />
   </section>
   <section>
-    <h2>禁用</h2>
+    <h2>禁用(l)</h2>
     <veui-autocomplete
       v-model="inputValue"
       ui="l"
@@ -30,7 +30,7 @@
     />
   </section>
   <section>
-    <h2>只读</h2>
+    <h2>只读(xs)</h2>
     <veui-autocomplete
       v-model="inputValue"
       ui="xs"
@@ -57,12 +57,14 @@
     />
   </section>
   <section>
-    <h2>树型数据，focus 时下拉</h2>
+    <h2>树型数据，focus 时下拉，最多展示4个</h2>
     <veui-autocomplete
       v-model="treeValue"
       :datasource="treeSuggestions"
       placeholder="请输入"
       suggest-trigger="focus"
+      :max-count="4"
+      expanded
     />
   </section>
   <section>

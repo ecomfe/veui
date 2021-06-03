@@ -201,7 +201,7 @@ export default {
   mixins: [
     prefix,
     ui,
-    dropdown,
+    dropdown(),
     useKeySelect({
       useNativeFocus (vm) {
         return !vm.searchable
