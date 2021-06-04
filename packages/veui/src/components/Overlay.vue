@@ -9,14 +9,16 @@ import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import {
   getClassPropDef,
+  getStylePropDef,
   mergeClasses,
+  mergeStyles,
   isType,
   ignoreElements,
   createPortal,
   inheritScopeAttrs
 } from '../utils/helper'
 import '../common/uiTypes'
-import { omit, isObject } from 'lodash'
+import { omit } from 'lodash'
 
 const VEUI_OVERLAY_ELEMENT_NAME = 'veui-x-overlay'
 
@@ -38,12 +40,7 @@ export default {
   props: {
     position: String,
     overlayClass: getClassPropDef(),
-    overlayStyle: {
-      validator (value) {
-        return value == null || [].concat(value).every(val => isObject(val))
-      },
-      default: null
-    },
+    overlayStyle: getStylePropDef(),
     open: Boolean,
     inline: Boolean,
     target: {
@@ -78,20 +75,17 @@ export default {
     realOverlayClass () {
       return mergeClasses(this.overlayClass, config.get('overlay.overlayClass'))
     },
+    realOverlayStyle () {
+      return mergeStyles(this.overlayStyle, {
+        zIndex: this.zIndex,
+        minWidth: this.minWidth
+      })
+    },
     realPosition () {
       return this.position || this.options.position || 'auto'
     },
     realLeaving () {
       return !this.inline && this.leaving
-    },
-    realStyle () {
-      return [
-        ...[].concat(this.overlayStyle || []),
-        {
-          zIndex: this.zIndex,
-          minWidth: this.minWidth
-        }
-      ]
     }
   },
   watch: {
@@ -369,7 +363,7 @@ export default {
     const box = (
       <VEUI_OVERLAY_ELEMENT_NAME
         v-show={this.realOpen}
-        style={this.realStyle}
+        style={this.realOverlayStyle}
         class={{
           [this.$c('overlay-box')]: true,
           ...this.realOverlayClass

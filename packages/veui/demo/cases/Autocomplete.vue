@@ -63,7 +63,9 @@
       :datasource="treeSuggestions"
       placeholder="请输入"
       suggest-trigger="focus"
-      :max-count="4"
+      :overlay-style="{
+        '--dls-dropdown-max-display-count': 4
+      }"
       expanded
     />
   </section>

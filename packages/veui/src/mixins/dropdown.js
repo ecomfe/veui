@@ -97,27 +97,21 @@ const baseMixin = {
   }
 }
 
-export default function dropdown ({ maxCount = false } = {}) {
+export default function dropdown ({ maxCount = false, ns } = {}) {
   if (!maxCount) {
     return baseMixin
   }
 
   return {
     ...baseMixin,
-    props: {
-      ...baseMixin.props,
-      maxCount: Number
-    },
     computed: {
       ...(baseMixin.computed || {}),
-      customCssProperties () {
-        const name = this.$options.name
-          .replace(/(?:^veui)?-/g, '')
-          .toLowerCase()
-        return {
-          '--veui-dropdown-overlay-max-count':
-            this.maxCount || config.get(`${name}.maxCount`)
-        }
+      overlayStyleWithMaxDisplayCount () {
+        const name =
+          ns || this.$options.name.replace(/(?:^veui)?-/g, '').toLowerCase()
+        return this.mergeOverlayStyle({
+          '--dls-dropdown-max-display-count': config.get(`${name}.maxCount`)
+        })
       }
     }
   }
