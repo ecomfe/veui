@@ -288,13 +288,14 @@ function getHotRects (
       let rowCount = rects.length
       let first = rects[0]
       let last = rects[rects.length - 1]
+      let newRects = rects.slice(0)
       // 首尾插入一个相对容器边界的空矩形用于方便下面热区首尾计算
-      rects.unshift({
+      newRects.unshift({
         [top]: first[top],
         [bottom]: first[bottom],
         [trailing]: containerBoundary[leading] // 前一个的右边是后一个的左边
       })
-      rects.push({
+      newRects.push({
         [top]: last[top],
         [bottom]: last[bottom],
         [leading]: containerBoundary[trailing]
@@ -303,31 +304,29 @@ function getHotRects (
       // 从 元素边界 计算 热区边界
       // 变换后 Rect Tuple 元素：热区矩形的左、右、上、下，热区对应的插入索引
 
-      // * - - - *  // rects, * 是上面首尾插入，下面 oldIdx 对应这里的索引，prev 和 next 也是取自这里
+      // * - - - *  // newRects, * 是上面首尾插入，下面 oldIdx 对应这里的索引，prev 和 next 也是取自这里
       //   - - -    // 实际用来生成每个热区，下面 idx 对应这里的索引
-      rects = rects.slice(1, -1).map(function (current, idx) {
+      rects = rects.map(function (current, idx) {
         let oldIdx = idx + 1
-        let prev = rects[oldIdx - 1]
-        let next = rects[oldIdx + 1]
+        let prev = newRects[oldIdx - 1]
+        let next = newRects[oldIdx + 1]
         let isFirst = idx === 0
-        let isLast = idx === rects.length - 3 // 因为上面的 slice 2个，所以是 - 3
+        let isLast = idx === rects.length - 1
         let dimension = axis === 'y' ? 'height' : 'width'
-        let totalIdx = count + idx // 上面 idx 都是行内，realIdx 则是总的索引
+        let totalIdx = count + idx // 上面 idx 都是行内，totalIdx 则是总的索引
         let half = currentRect[dimension] / 2
 
-        let start = prev
-        let end = next
-        let startSign = 1
-        let endSign = -1
-        if (totalIdx > dragElementIndex) {
-          start = current
-          startSign = -1
-        }
-        if (totalIdx < dragElementIndex) {
-          end = current
-          endSign = 1
-        }
+        let afterDragging = totalIdx > dragElementIndex // 当前被计算热区的项目在 draging 项目的后面
+        let beforeDragging = totalIdx < dragElementIndex
+        let start = afterDragging ? current : prev
+        let end = beforeDragging ? current : next
+        let startSign = afterDragging ? -1 : 1
+        let endSign = beforeDragging ? 1 : -1
         // 几种 case 合到一起好像可读性不太好
+        // 有三种情况：计算 A 项目的热区，dragging 是正在被拖的元素
+        //  1) A 在 dragging 的前面，热区要加 half
+        //  2) A 是 dragging，那么热区前半部分要加 half，后半部分减 half
+        //  3) A 在 dragging 的后面，热区要减 half
         return exchangeAxisValues(
           [
             isFirst
