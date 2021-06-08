@@ -185,7 +185,7 @@
 
 <script>
 import drag from 'veui/directives/drag'
-import moveEnd from 'veui/directives/transitionGroupMoveEnd'
+import moveEnd from 'veui/directives/move-end'
 import { Dialog, Popover } from 'veui'
 
 const items = [

@@ -1,6 +1,6 @@
 import { pick, isNumber, uniqueId } from 'lodash'
 import drag from '../directives/drag'
-import transitionGroupMoveEnd from '../directives/transitionGroupMoveEnd'
+import moveEnd from '../directives/move-end'
 
 export const sharedProps = [
   'type',
@@ -24,7 +24,7 @@ const computed = sharedProps.reduce(function (ret, key) {
 export default {
   directives: {
     drag,
-    moveEnd: transitionGroupMoveEnd
+    moveEnd
   },
   props: {
     files: Array,

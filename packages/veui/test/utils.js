@@ -46,3 +46,19 @@ export function normalizeTransform (transform) {
   el.parentElement.removeChild(el)
   return result === 'none' ? 'matrix(1, 0, 0, 1, 0, 0)' : result
 }
+
+export function expectTooltip (content, position) {
+  const tooltip = document.body.querySelector('.veui-global-tooltip')
+  if (content === null) {
+    expect(tooltip).to.equal(null)
+  } else if (content === false) {
+    expect(tooltip.style.display).to.equal('none')
+  } else {
+    expect(tooltip).to.not.equal(null)
+    expect(tooltip.textContent.trim()).to.equal(content)
+
+    if (position) {
+      expect(tooltip.getAttribute('x-placement')).to.equal(position)
+    }
+  }
+}
