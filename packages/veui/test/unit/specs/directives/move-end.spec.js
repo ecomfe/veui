@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils'
-import moveEnd from '@/directives/transitionGroupMoveEnd'
+import moveEnd from '@/directives/move-end'
 import { wait } from '../../../utils'
 
-describe('directives/transitionGroupMoveEnd', () => {
+describe('directives/move-end', () => {
   let style = document.createElement('style')
   style.textContent = `.item-move {transition: transform .5s}`
 

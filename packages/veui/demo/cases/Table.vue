@@ -145,13 +145,8 @@
         title="更新时间"
         align="center"
       >
-        <template slot-scope="props">
-          <span :ref="`time-a-${props.item.id}`">{{
-            props.item.updateDate | date
-          }}</span>
-          <veui-tooltip :target="`time-a-${props.item.id}`">{{
-            props.item.updateDate | time
-          }}</veui-tooltip>
+        <template #default="{ updateDate }">
+          <span v-tooltip="time(updateDate)">{{ updateDate | date }}</span>
         </template>
       </veui-table-column>
       <veui-table-column
@@ -237,13 +232,8 @@
           { label: '一周内', value: 'late' }
         ]"
       >
-        <template slot-scope="props">
-          <span :ref="`time-b-${props.item.id}`">{{
-            props.item.updateDate | date
-          }}</span>
-          <veui-tooltip :target="`time-b-${props.item.id}`">{{
-            props.item.updateDate | time
-          }}</veui-tooltip>
+        <template #default="{ updateDate }">
+          <span v-tooltip="time(updateDate)">{{ updateDate | date }}</span>
         </template>
       </veui-table-column>
     </veui-table>
@@ -281,13 +271,8 @@
         title="更新时间"
         align="right"
       >
-        <template slot-scope="props">
-          <span :ref="`time-b-${props.item.id}`">{{
-            props.item.updateDate | date
-          }}</span>
-          <veui-tooltip :target="`time-b-${props.item.id}`">{{
-            props.item.updateDate | time
-          }}</veui-tooltip>
+        <template #default="{ updateDate }">
+          <span v-tooltip="time(updateDate)">{{ updateDate | date }}</span>
         </template>
       </veui-table-column>
       <template
@@ -334,13 +319,8 @@
         title="更新时间"
         align="right"
       >
-        <template slot-scope="props">
-          <span :ref="`time-b-${props.item.id}`">{{
-            props.item.updateDate | date
-          }}</span>
-          <veui-tooltip :target="`time-b-${props.item.id}`">{{
-            props.item.updateDate | time
-          }}</veui-tooltip>
+        <template #default="{ updateDate }">
+          <span v-tooltip="time(updateDate)">{{ updateDate | date }}</span>
         </template>
       </veui-table-column>
       <template slot="foot">An awesome table foot!</template>
@@ -492,9 +472,9 @@ import {
   CheckboxGroup,
   Table,
   Column,
-  Tooltip,
   Link
 } from 'veui'
+import { tooltip } from 'veui/directives'
 
 const tableData = [
   {
@@ -645,28 +625,36 @@ const tableData = [
   }
 ]
 
+function currency (value) {
+  return '¥' + value.toFixed(2)
+}
+
+function time (value) {
+  return moment(value).format('YYYY-MM-DD HH:mm:ss')
+}
+
+function date (value) {
+  return moment(value).format('YYYY-MM-DD')
+}
+
 export default {
   name: 'table-demo',
   components: {
     'veui-button': Button,
     'veui-table': Table,
     'veui-table-column': Column,
-    'veui-tooltip': Tooltip,
     'veui-checkbox': Checkbox,
     'veui-input': Input,
     'veui-link': Link,
     'veui-checkboxgroup': CheckboxGroup
   },
+  directives: {
+    tooltip
+  },
   filters: {
-    currency (value) {
-      return '¥' + value.toFixed(2)
-    },
-    date (value) {
-      return moment(value).format('YYYY-MM-DD')
-    },
-    time (value) {
-      return moment(value).format('YYYY-MM-DD HH:mm:ss')
-    }
+    currency,
+    date,
+    time
   },
   data () {
     return {
@@ -761,6 +749,9 @@ export default {
     // }
   },
   methods: {
+    currency,
+    date,
+    time,
     toggle () {
       this.data = this.data === tableData ? [] : tableData
     },

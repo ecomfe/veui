@@ -11,9 +11,7 @@
   </section>
   <section>
     <div class="demo-wrap">
-      <div style="margin-bottom:10px;">
-        hover事件
-      </div>
+      <div style="margin-bottom: 10px">hover事件</div>
       <div class="box">
         <div class="top">
           <veui-button
@@ -182,9 +180,7 @@
   </section>
   <section>
     <div class="demo-wrap">
-      <div style="margin-bottom:10px;">
-        click事件
-      </div>
+      <div style="margin-bottom: 10px">click事件</div>
       <div class="box">
         <div class="top">
           <veui-button
@@ -351,9 +347,7 @@
     </veui-tooltip>
   </section>
   <section>
-    <div style="margin-bottom:10px;">
-      自定义事件
-    </div>
+    <div style="margin-bottom: 10px">自定义事件</div>
     <veui-input
       ref="number"
       v-model="number"
@@ -375,12 +369,8 @@
   </section>
 
   <section>
-    <div style="margin-bottom:10px;">
-      排除自己
-    </div>
-    <veui-button ref="exclude">
-      target
-    </veui-button>
+    <div style="margin-bottom: 10px">排除自己</div>
+    <veui-button ref="exclude"> target </veui-button>
     <veui-tooltip
       position="top"
       target="exclude"
@@ -391,15 +381,44 @@
       你focus到了
     </veui-tooltip>
   </section>
+  <section>
+    <h3><code>v-tooltip</code></h3>
+    <section class="group">
+      <mark
+        v-tooltip="{
+          content: descA,
+          disabled: !showDesc
+        }"
+      >[A]</mark>
+      <mark
+        v-tooltip="{
+          content: descB,
+          disabled: !showDesc
+        }"
+      >[B]</mark>
+      <veui-button
+        v-tooltip.bottom-start="'Change content of A and B'"
+        @click="changeDesc"
+      >Change</veui-button>
+      <veui-button
+        v-tooltip="'Toggle content of A and B'"
+        @click="showDesc = !showDesc"
+      >{{ showDesc ? 'Disable' : 'Enable' }}</veui-button>
+    </section>
+  </section>
 </article>
 </template>
 
 <script>
 import bus from '../bus'
 import { Tooltip, Button, Input } from 'veui'
+import { tooltip } from 'veui/directives'
 
 export default {
   name: 'tooltip-demo',
+  directives: {
+    tooltip
+  },
   components: {
     'veui-button': Button,
     'veui-tooltip': Tooltip,
@@ -416,7 +435,10 @@ export default {
       clickOpen: false,
       number: '12345678910987654321',
       numberOpen: false,
-      overlayOptions: {}
+      overlayOptions: {},
+      descA: 1,
+      descB: 'B',
+      showDesc: true
     }
   },
   mounted () {
@@ -436,6 +458,10 @@ export default {
       this.clickPosition = obj.clickPosition
       this.clickTarget = obj.clickTarget
       this.clickOpen = true
+    },
+    changeDesc () {
+      this.descA++
+      this.descB += 'B'
     }
   }
 }
@@ -477,5 +503,11 @@ section {
 .left .veui-button,
 .right .veui-button {
   margin-bottom: 10px;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 </style>

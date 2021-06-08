@@ -1,6 +1,6 @@
 const KEY_FIELD = '__transitionGroupMoveEndObserver__'
 
-function attach (el, binding, vnode) {
+function attach (el, _, vnode) {
   clear(el)
 
   const vm = vnode.componentInstance
