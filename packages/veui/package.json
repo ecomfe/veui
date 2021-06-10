@@ -26,9 +26,9 @@
     "vue-directive-normalizer": "^0.1.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.2.3",
-    "@vue/cli-plugin-eslint": "~4.2.3",
-    "@vue/cli-service": "~4.2.3",
+    "@vue/cli-plugin-babel": "^4.5.13",
+    "@vue/cli-plugin-eslint": "^4.5.13",
+    "@vue/cli-service": "^4.5.13",
     "@vue/eslint-config-standard": "^5.1.2",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.0.1",
