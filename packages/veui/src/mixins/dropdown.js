@@ -4,7 +4,7 @@ import outside from '../directives/outside'
 import overlay from './overlay'
 import activatable from './activatable'
 import useControllable from './controllable'
-import config from '../managers/config'
+// import config from '../managers/config'
 
 const baseMixin = {
   directives: { outside },
@@ -97,22 +97,24 @@ const baseMixin = {
   }
 }
 
-export default function dropdown ({ maxCount = false, ns } = {}) {
-  if (!maxCount) {
-    return baseMixin
-  }
+export default function dropdown () {
+  // 先保留 mixin factory 的写法吧
+  return baseMixin
+  // if (!maxCount) {
+  //   return baseMixin
+  // }
 
-  return {
-    ...baseMixin,
-    computed: {
-      ...(baseMixin.computed || {}),
-      overlayStyleWithMaxDisplayCount () {
-        const name =
-          ns || this.$options.name.replace(/(?:^veui)?-/g, '').toLowerCase()
-        return this.mergeOverlayStyle({
-          '--dls-dropdown-max-display-count': config.get(`${name}.maxCount`)
-        })
-      }
-    }
-  }
+  // return {
+  //   ...baseMixin,
+  //   computed: {
+  //     ...(baseMixin.computed || {}),
+  //     overlayStyleWithMaxDisplayCount () {
+  //       const name =
+  //         ns || this.$options.name.replace(/(?:^veui)?-/g, '').toLowerCase()
+  //       return this.mergeOverlayStyle({
+  //         '--dls-dropdown-max-display-count': config.get(`${name}.maxCount`)
+  //       })
+  //     }
+  //   }
+  // }
 }

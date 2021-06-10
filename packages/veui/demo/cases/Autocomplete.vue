@@ -64,7 +64,7 @@
       placeholder="请输入"
       suggest-trigger="focus"
       :overlay-style="{
-        '--dls-dropdown-max-display-count': 4
+        '--dls-dropdown-max-display-items': 4
       }"
       expanded
     />

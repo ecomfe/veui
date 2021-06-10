@@ -8,8 +8,7 @@ config.defaults(
         default: 'm',
         inherit: true
       }
-    },
-    maxCount: 8
+    }
   },
   'autocomplete'
 )
