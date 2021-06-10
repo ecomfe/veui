@@ -1,3 +1,15 @@
+## 2.0.0-rc.0
+
+### 💡 主要变更
+
+- [+] 为 `Overlay`/`Popover`/`Tooltip`/`Autocomplete`/`AlertBox`/`ConfirmBox`/`PromptBox`/`Dialog`/`Select`/`Dropdown`/`Lightbox`/`DatePicker`/`TimePicker`/`SearchBox`/`Cascader`/`CascaderPane` 等组件新增 `overlay-style` prop，用于自定义浮层样式。
+- [+] 新增 `v-tooltip` 指令，用于指定全局共享的浮层提示。
+- [^] 优化了 `v-drag.sort` 的移动触发交互，使拖动排序更顺畅。
+
+### 🐞 问题修复
+
+- [^] 修复 modal 类型浮层的 focus trap 功能。
+
 ## 2.0.0-beta.33
 
 ### 💡 主要变更
