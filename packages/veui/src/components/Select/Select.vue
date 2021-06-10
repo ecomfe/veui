@@ -36,7 +36,7 @@ export default {
     prefix,
     ui,
     input,
-    dropdown,
+    dropdown(),
     useKeySelect({ expandedKey: 'realExpanded' }),
     useSearchable({
       datasourceKey: 'realOptions',

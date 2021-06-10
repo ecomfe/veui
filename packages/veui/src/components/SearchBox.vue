@@ -187,7 +187,7 @@ export default {
     prefix,
     ui,
     input,
-    dropdown,
+    dropdown(),
     useKeySelect({
       expandedKey: 'realExpanded',
       useNativeFocus: false

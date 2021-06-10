@@ -8,7 +8,6 @@
       [$c('autocomplete-suggestions')]: true
     })
   "
-  :datasource="datasource"
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"
   aria-haspopup="listbox"
@@ -125,8 +124,8 @@ export default {
   },
   directives: { outside },
   mixins: [prefix, ui, input, overlay],
+  inheritAttrs: false,
   props: {
-    ...AutocompleteBase.props,
     suggestTrigger: {
       type: [String, Array],
       default: 'input'
@@ -142,7 +141,10 @@ export default {
       return pick(this.$props, SHARED_PROPS)
     },
     baseProps () {
-      return omit(this.$props, ['suggestTrigger', ...SHARED_PROPS])
+      return {
+        ...omit(this.$props, [...SHARED_PROPS, 'suggestTrigger']),
+        ...this.$attrs
+      }
     },
     realTriggers () {
       return [].concat(this.suggestTrigger)

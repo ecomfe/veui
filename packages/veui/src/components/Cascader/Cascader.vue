@@ -197,7 +197,7 @@ export default {
     prefix,
     ui,
     i18n,
-    dropdown,
+    dropdown(),
     input,
     useTree({ childrenKey: 'options', defaultMerge: 'downwards' }),
     useKeySelect({ expandedKey: 'realExpanded' }),

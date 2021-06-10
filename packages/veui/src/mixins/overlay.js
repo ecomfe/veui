@@ -1,8 +1,14 @@
-import { mergeClasses, getClassPropDef } from '../utils/helper'
+import {
+  mergeClasses,
+  mergeStyles,
+  getClassPropDef,
+  getStylePropDef
+} from '../utils/helper'
 
 export default {
   props: {
     overlayClass: getClassPropDef(),
+    overlayStyle: getStylePropDef(),
     overlayOptions: {
       type: Object,
       default () {
@@ -23,6 +29,11 @@ export default {
   methods: {
     mergeOverlayClass (klass) {
       return mergeClasses(this.overlayClass, klass)
+    },
+    mergeOverlayStyle (style, override) {
+      return override
+        ? mergeStyles(this.overlayStyle, style)
+        : mergeStyles(style, this.overlayStyle)
     },
     relocate () {
       if (!this.$refs.overlay) {

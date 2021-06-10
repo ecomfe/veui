@@ -18,6 +18,7 @@
     target="self"
     :open="finalExpanded"
     :overlay-class="overlayClass"
+    :overlay-style="overlayStyle"
     :local="realOverlayOptions.local"
     :options="realOverlayOptions"
     :priority="overlayPriority"
@@ -70,7 +71,7 @@ export default {
     'veui-overlay': Overlay
   },
   mixins: [
-    dropdown,
+    dropdown(),
     useKeySelect({
       expandedKey: 'realExpanded',
       useNativeFocus: false

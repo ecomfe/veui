@@ -154,6 +154,12 @@ export function mergeClasses (...klasses) {
   return assign({}, ...klasses.map(normalizeClass))
 }
 
+export function mergeStyles (...styles) {
+  return styles.reduce((result, style) => {
+    return result.concat(style || [])
+  }, [])
+}
+
 export function getConfigKey (name) {
   return name.replace(/^veui|-*/g, '').toLowerCase()
 }
@@ -165,8 +171,19 @@ const CLASS_PROP_DEF = {
   default: null
 }
 
+const STYLE_PROP_DEF = {
+  validator (value) {
+    return value == null || [].concat(value).every(val => isObject(val))
+  },
+  default: null
+}
+
 export function getClassPropDef () {
   return { ...CLASS_PROP_DEF }
+}
+
+export function getStylePropDef () {
+  return { ...STYLE_PROP_DEF }
 }
 
 const RE_INDEX = /\d+/

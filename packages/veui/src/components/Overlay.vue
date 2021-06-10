@@ -9,7 +9,9 @@ import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import {
   getClassPropDef,
+  getStylePropDef,
   mergeClasses,
+  mergeStyles,
   isType,
   ignoreElements,
   createPortal,
@@ -38,6 +40,7 @@ export default {
   props: {
     position: String,
     overlayClass: getClassPropDef(),
+    overlayStyle: getStylePropDef(),
     open: Boolean,
     inline: Boolean,
     target: {
@@ -71,6 +74,12 @@ export default {
     },
     realOverlayClass () {
       return mergeClasses(this.overlayClass, config.get('overlay.overlayClass'))
+    },
+    realOverlayStyle () {
+      return mergeStyles(this.overlayStyle, {
+        zIndex: this.zIndex,
+        minWidth: this.minWidth
+      })
     },
     realPosition () {
       return this.position || this.options.position || 'auto'
@@ -354,10 +363,7 @@ export default {
     const box = (
       <VEUI_OVERLAY_ELEMENT_NAME
         v-show={this.realOpen}
-        style={{
-          zIndex: this.zIndex,
-          minWidth: this.minWidth
-        }}
+        style={this.realOverlayStyle}
         class={{
           [this.$c('overlay-box')]: true,
           ...this.realOverlayClass
