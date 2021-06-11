@@ -76,6 +76,7 @@
     target="button"
     :open="realExpanded"
     :overlay-class="overlayClass"
+    :overlay-style="overlayStyle"
     :local="realOverlayOptions.local"
     :options="realOverlayOptions"
     :priority="overlayPriority"

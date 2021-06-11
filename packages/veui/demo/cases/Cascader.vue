@@ -43,6 +43,9 @@
       :value-display="valueDisplay1"
       :inline="inline1"
       :column-width="getRealColumnWidth(columnWidth1)"
+      :overlay-style="{
+        '--dls-dropdown-max-display-items': 8
+      }"
     />
   </section>
   <section>

@@ -10,6 +10,7 @@
       [$c('dialog-inline')]: inline
     })
   "
+  :overlay-style="overlayStyle"
   :ui="realUi"
   autofocus
   :inline="inline"

@@ -176,6 +176,7 @@ export default {
           [this.$c('tooltip-box')]: true,
           [this.$c('tooltip-box-transparent')]: !this.interactive
         })}
+        overlayStyle={this.overlayStyle}
         autofocus={this.realAutofocus}
       >
         <div

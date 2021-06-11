@@ -141,7 +141,6 @@ import Icon from '../Icon'
 import Button from '../Button'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
-import overlay from '../../mixins/overlay'
 import keySelect from '../../mixins/key-select'
 import useControllable from '../../mixins/controllable'
 import outside from '../../directives/outside'
@@ -168,7 +167,6 @@ const CascaderPane = {
   mixins: [
     prefix,
     ui,
-    overlay,
     keySelect,
     useControllable([
       {

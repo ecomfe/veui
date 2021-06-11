@@ -362,6 +362,9 @@
       :ui="ui"
       target="number"
       trigger="custom"
+      :overlay-style="{
+        '--dls-dropdown-max-display-items': 8
+      }"
       :open.sync="numberOpen"
     >
       你focus到了

@@ -8,11 +8,18 @@
     >
       open confirm
     </veui-button>
-    <veui-confirm-box :open.sync="confirmOpen">
+    <veui-confirm-box
+      :open.sync="confirmOpen"
+      :overlay-style="{
+        '--dls-dropdown-max-display-items': 8
+      }"
+    >
       <template slot="title">
         弹窗标题
       </template>
-      <p>这是一个对话框弹窗，这是一个对话框弹窗，这是一个对话框弹窗，这是一个对话框弹窗……</p>
+      <p>
+        这是一个对话框弹窗，这是一个对话框弹窗，这是一个对话框弹窗，这是一个对话框弹窗……
+      </p>
       <p>你要关闭它吗？</p>
     </veui-confirm-box>
   </p>
@@ -35,5 +42,4 @@ export default {
 }
 </script>
 
-<style lang="less">
-</style>
+<style lang="less"></style>

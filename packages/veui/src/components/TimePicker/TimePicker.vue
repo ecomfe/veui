@@ -52,6 +52,7 @@
         [$c('time-picker-overlay')]: true
       })
     "
+    :overlay-style="overlayStyle"
     :local="realOverlayOptions.local"
     :options="realOverlayOptions"
     :open="realExpanded"

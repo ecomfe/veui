@@ -3,6 +3,7 @@
   ref="dialog"
   :ui="realUi"
   :overlay-class="mergeOverlayClass($c('prompt-box'))"
+  :overlay-style="overlayStyle"
   :open.sync="realOpen"
   :priority="priority"
   :closable="false"

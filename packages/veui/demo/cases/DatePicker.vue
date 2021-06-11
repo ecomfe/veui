@@ -8,6 +8,9 @@
     <veui-date-picker
       range
       clearable
+      :overlay-style="{
+        '--dls-dropdown-max-display-items': 8
+      }"
     />
   </section>
   <section>

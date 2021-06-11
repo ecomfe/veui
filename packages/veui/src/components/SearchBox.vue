@@ -61,6 +61,7 @@
     match-width
     :open="finalExpanded"
     :overlay-class="overlayClass"
+    :overlay-style="overlayStyle"
     :local="realOverlayOptions.local"
     :options="realOverlayOptions"
     :priority="overlayPriority"

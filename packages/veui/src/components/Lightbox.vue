@@ -7,6 +7,7 @@
       [$c('lightbox-mask')]: true
     })
   "
+  :overlay-style="overlayStyle"
   autofocus
   :ui="realUi"
   modal

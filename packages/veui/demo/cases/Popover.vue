@@ -166,6 +166,9 @@
       :target="target"
       :open.sync="open"
       :overlay-options="overlayOptions"
+      :overlay-style="{
+        '--dls-dropdown-max-display-items': 8
+      }"
       trigger="hover"
     >
       当前是hover事件
