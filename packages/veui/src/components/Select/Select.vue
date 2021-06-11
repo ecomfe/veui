@@ -638,6 +638,7 @@ export default {
             autofocus={!this.searchable}
             modal
             overlay-class={this.overlayClass}
+            overlay-style={this.overlayStyle}
             local={this.realOverlayOptions.local}
             options={this.realOverlayOptions}
             match-width={this.isMatchWidth}

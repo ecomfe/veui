@@ -10,6 +10,9 @@
       :min="min0"
       :max="max0"
       clearable
+      :overlay-style="{
+        '--dls-dropdown-max-display-items': 8
+      }"
     />
     <veui-input
       ui="s"

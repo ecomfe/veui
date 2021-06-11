@@ -10,6 +10,9 @@
         replace-on-select
         :placeholder="placeholder"
         :suggestions="suggestions4"
+        :overlay-style="{
+          '--dls-dropdown-max-display-items': 8
+        }"
         @input="handleSuggest('4', $event)"
         @search="log($event)"
         @select="log('select', $event)"

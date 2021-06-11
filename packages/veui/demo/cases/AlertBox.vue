@@ -21,6 +21,9 @@
     <veui-alert-box
       :open.sync="alertSuccessBoxOpen"
       type="success"
+      :overlay-style="{
+        '--dls-dropdown-max-display-items': 8
+      }"
     >
       <template slot="title">
         创建条目成功

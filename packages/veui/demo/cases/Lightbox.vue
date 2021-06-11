@@ -9,6 +9,9 @@
     :index.sync="index"
     indicator="number"
     wrap
+    :overlay-style="{
+      '--dls-dropdown-max-display-items': 8
+    }"
   />
   <h2>非wrap模式</h2>
   <veui-button @click="handleClick(1)">打开</veui-button>
@@ -76,7 +79,8 @@ export default {
           desc: 'hahahahahhahaha3'
         },
         {
-          src: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm',
+          src:
+            'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm',
           alt: 'flower video',
           name: '花',
           type: 'video',

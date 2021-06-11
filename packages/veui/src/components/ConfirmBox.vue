@@ -2,6 +2,7 @@
 <veui-dialog
   :ui="realUi"
   :overlay-class="mergeOverlayClass($c('confirm-box'))"
+  :overlay-style="overlayStyle"
   :open.sync="realOpen"
   :priority="priority"
   :closable="false"

@@ -231,6 +231,9 @@
         label="汽车类型"
         trigger="click"
         :options="multiLevelUnlabeledOptions"
+        :overlay-style="{
+          '--dls-dropdown-max-display-items': 8
+        }"
       />
     </div>
   </section>

@@ -7,8 +7,16 @@
       :open.sync="modalDialogVisible"
       title="Dialog Title"
       modal
+      :overlay-style="{
+        '--dls-dropdown-max-display-items': 8
+      }"
     >
-      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti, eos? Perferendis neque beatae quisquam dolore consequatur quidem. Nesciunt, odio alias consequuntur cum dolores distinctio officia nam nisi beatae possimus. Accusantium.</p>
+      <p>
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti,
+        eos? Perferendis neque beatae quisquam dolore consequatur quidem.
+        Nesciunt, odio alias consequuntur cum dolores distinctio officia nam
+        nisi beatae possimus. Accusantium.
+      </p>
     </veui-dialog>
     <veui-button
       ui="primary"
@@ -24,7 +32,12 @@
       modal
       ui="fullscreen"
     >
-      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti, eos? Perferendis neque beatae quisquam dolore consequatur quidem. Nesciunt, odio alias consequuntur cum dolores distinctio officia nam nisi beatae possimus. Accusantium.</p>
+      <p>
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti,
+        eos? Perferendis neque beatae quisquam dolore consequatur quidem.
+        Nesciunt, odio alias consequuntur cum dolores distinctio officia nam
+        nisi beatae possimus. Accusantium.
+      </p>
     </veui-dialog>
     <veui-button
       ui="primary"
@@ -55,7 +68,12 @@
       overlay-class="test demo-dialog-standard-dialog"
       :open.sync="titlelessDialogVisible"
     >
-      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti, eos? Perferendis neque beatae quisquam dolore consequatur quidem. Nesciunt, odio alias consequuntur cum dolores distinctio officia nam nisi beatae possimus. Accusantium.</p>
+      <p>
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti,
+        eos? Perferendis neque beatae quisquam dolore consequatur quidem.
+        Nesciunt, odio alias consequuntur cum dolores distinctio officia nam
+        nisi beatae possimus. Accusantium.
+      </p>
     </veui-dialog>
     <veui-button
       ui="primary"

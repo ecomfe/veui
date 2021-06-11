@@ -516,6 +516,9 @@
         clearable
         searchable
         :options="complexResult"
+        :overlay-style="{
+          '--dls-dropdown-max-display-items': 8
+        }"
         @input="handleSearch"
       >
         <template v-if="complexResult">

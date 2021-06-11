@@ -278,6 +278,7 @@ const OptionGroup = {
             aria-hidden={option.hidden}
             disabled={option.disabled}
             overlayClass={this.overlayClass}
+            overlayStyle={this.overlayStyle}
             optionTag={this.optionTag}
             labelTag={this.labelTag}
             key={i}
@@ -412,6 +413,7 @@ const OptionGroup = {
             local={this.realLocal}
             options={this.realOverlayOptions}
             overlayClass={this.mergeOverlayClass(this.$c('option-group-box'))}
+            overlayStyle={this.overlayStyle}
             autofocus
             modal
             onAfteropen={this.handleAfteropen}

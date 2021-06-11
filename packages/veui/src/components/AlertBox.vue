@@ -8,6 +8,7 @@
       [$c('alert-box-titleless')]: !title && !$slots.title
     })
   "
+  :overlay-style="overlayStyle"
   :open.sync="realOpen"
   :closable="false"
   :escapable="false"

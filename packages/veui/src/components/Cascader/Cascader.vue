@@ -55,6 +55,7 @@
     :open="isExpanded"
     target="trigger"
     :overlay-class="realOverlayClass"
+    :overlay-style="overlayStyle"
     :options="realOverlayOptions"
     :match-width="inline || !!keyword"
     :autofocus="!searchable"
