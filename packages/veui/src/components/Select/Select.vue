@@ -187,11 +187,13 @@ export default {
       }
     },
     slotProps () {
+      // vue methods 都是绑定过的
       return {
         expanded: this.realExpanded,
         value: this.realValue,
         toggle: this.toggleExpanded,
-        select: val => this.commit('value', val)
+        select: val => this.commit('value', val),
+        close: this.close
       }
     },
     layoutWrap () {
