@@ -48,6 +48,41 @@
     </p>
   </section>
   <section>
+    <h3>With same <code>name</code></h3>
+    <h4>Outside a &lt;form&gt;</h4>
+    <veui-radio
+      value="m"
+      name="g1"
+      :checked.sync="c1"
+    >
+      {{ c1 }}
+    </veui-radio>
+    <veui-radio
+      value="s"
+      name="g1"
+      :checked.sync="c2"
+    >
+      {{ c2 }}
+    </veui-radio>
+    <h4>Inside a &lt;form&gt;</h4>
+    <form>
+      <veui-radio
+        value="m"
+        name="g1"
+        :checked.sync="c1"
+      >
+        {{ c1 }}
+      </veui-radio>
+      <veui-radio
+        value="s"
+        name="g1"
+        :checked.sync="c2"
+      >
+        {{ c2 }}
+      </veui-radio>
+    </form>
+  </section>
+  <section>
     <veui-radio
       ui="s"
       checked
@@ -170,7 +205,9 @@ export default {
     return {
       size: null,
       checked: false,
-      group: null
+      group: null,
+      c1: false,
+      c2: false
     }
   }
 }

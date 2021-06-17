@@ -128,4 +128,108 @@ describe('components/Radio', () => {
 
     expect(count).to.equal(1)
   })
+
+  it('should support named radio group correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-radio': Radio
+        },
+        data () {
+          return {
+            c1: false,
+            c2: false,
+            c5: true
+          }
+        },
+        template: `
+          <div>
+            <veui-radio name="a" value="0"/>
+            <veui-radio :checked.sync="c1" name="a" value="1"/>
+            <veui-radio :checked.sync="c2" name="a" value="2"/>
+            <form>
+              <veui-radio name="a" value="3"/>
+              <veui-radio name="a" value="4"/>
+              <veui-radio :checked.sync="c5" name="a" value="5"/>
+            </form>
+          </div>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    function expectData (values) {
+      expect([vm.c1, vm.c2, vm.c5]).to.eql(values)
+    }
+    function expectChecked (values) {
+      expect(radios.wrappers.map(wrapper => wrapper.element.checked)).to.eql(
+        values
+      )
+    }
+
+    let { vm } = wrapper
+    const radios = wrapper.findAll('input[type="radio"]')
+    expectChecked([false, false, false, false, false, true])
+
+    radios.at(1).trigger('click')
+    await vm.$nextTick()
+    expectChecked([false, true, false, false, false, true])
+
+    radios.at(2).trigger('click')
+    await vm.$nextTick()
+    expectData([false, true, true])
+    expectChecked([false, false, true, false, false, true])
+
+    radios.at(0).trigger('click')
+    await vm.$nextTick()
+    expectData([false, false, true])
+    expectChecked([true, false, false, false, false, true])
+
+    radios.at(3).trigger('click')
+    await vm.$nextTick()
+    expectData([false, false, false])
+    expectChecked([true, false, false, true, false, false])
+
+    radios.at(4).trigger('click')
+    await vm.$nextTick()
+    expectData([false, false, false])
+    expectChecked([true, false, false, false, true, false])
+
+    radios.at(5).trigger('click')
+    await vm.$nextTick()
+    expectData([false, false, true])
+    expectChecked([true, false, false, false, false, true])
+
+    radios.at(3).trigger('click')
+    await vm.$nextTick()
+    expectData([false, false, false])
+    expectChecked([true, false, false, true, false, false])
+
+    vm.c1 = true
+    await vm.$nextTick()
+    expectData([true, false, false])
+    expectChecked([false, true, false, true, false, false])
+
+    vm.c2 = true
+    await vm.$nextTick()
+    expectData([false, true, false])
+    expectChecked([false, false, true, true, false, false])
+
+    vm.c2 = false
+    await vm.$nextTick()
+    expectData([false, false, false])
+    expectChecked([false, false, false, true, false, false])
+
+    vm.c5 = true
+    await vm.$nextTick()
+    expectData([false, false, true])
+    expectChecked([false, false, false, false, false, true])
+
+    vm.c5 = false
+    await vm.$nextTick()
+    expectData([false, false, false])
+    expectChecked([false, false, false, false, false, false])
+  })
 })
