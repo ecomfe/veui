@@ -231,5 +231,7 @@ describe('components/Radio', () => {
     await vm.$nextTick()
     expectData([false, false, false])
     expectChecked([false, false, false, false, false, false])
+
+    wrapper.destroy()
   })
 })
