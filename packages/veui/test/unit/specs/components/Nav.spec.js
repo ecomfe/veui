@@ -92,6 +92,30 @@ describe('components/Nav', () => {
     wrapper.destroy()
   })
 
+  it('should highlight item on hovering correctly', async () => {
+    let wrapper = mount(
+      {
+        ...options,
+        template: `<veui-nav class="small-nav":items="items"/>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    let { vm } = wrapper
+
+    let last = wrapper.find('.small-nav .veui-nav-item:last-child')
+    last.trigger('mouseenter')
+    await vm.$nextTick()
+    expect(last.classes()).to.include('veui-nav-item-open')
+
+    last.trigger('mouseleave')
+    await vm.$nextTick()
+    expect(last.classes()).to.not.include('veui-nav-item-open')
+    wrapper.destroy()
+  })
+
   it('should handle controlled active prop correctly', async () => {
     let wrapper = mount(
       {
