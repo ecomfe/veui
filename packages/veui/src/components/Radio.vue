@@ -42,7 +42,11 @@ import {
   KEYBOARD_EVENTS
 } from '../utils/dom'
 
-// radio boxes that are not associated with any form
+// Track named radio boxes that are not associated with any form,
+// those sharing the same name will be silently unchecked when
+// one of them is checked.
+// For those are under a `<form>` element we just retrieve their
+// siblings with `radio.form.querySelectorAll`.
 const orphans = new Map()
 
 export default {
@@ -143,8 +147,8 @@ export default {
       let name = this.realName
       if (name) {
         this.$nextTick(() => {
-          // change is blocked, reset native checked state for grouped siblings,
-          // otherwise update component state for the unchecked radio box
+          // If change is blocked, reset native checked state for grouped siblings,
+          // otherwise update component state for the unchecked radio box.
           this.triggerSiblings(this.realChecked ? 'veui:uncheck' : 'veui:sync')
         })
       }
@@ -173,11 +177,9 @@ export default {
       let form = radio.form
       let siblings = form
         ? form.querySelectorAll(`input[name="${name}"][type="radio"]`)
-        : orphans.get(name) || []
-      ;[...siblings].forEach(sibling => {
+        : orphans.get(name)
+      ;[...(siblings || [])].forEach(sibling => {
         if (radio !== sibling) {
-          // change is blocked, reset native checked state for grouped siblings,
-          // otherwise update component state for the unchecked radio box
           triggerCustom(sibling, event)
         }
       })
