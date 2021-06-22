@@ -14,6 +14,13 @@
     "test:start": "cross-env NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=test BABEL_ENV=test karma start"
   },
   "module": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./directives": "./directives/index.js",
+    "./plugins": "./plugins/index.js",
+    "./mixins": "./mixins/exports.js",
+    "./managers": "./managers/exports.js"
+  },
   "dependencies": {
     "bytes": "^3.0.0",
     "core-js": "^3.6.1",
