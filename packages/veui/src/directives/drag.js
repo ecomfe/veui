@@ -14,6 +14,7 @@ import BaseHandler from './drag/BaseHandler'
 import TranslateHandler from './drag/TranslateHandler'
 import SortHandler from './drag/SortHandler'
 import config from '../managers/config'
+import warn from '../utils/warn'
 
 config.defaults({
   'drag.prefix': '@'
@@ -22,6 +23,9 @@ config.defaults({
 const isFirefox = checkIsFirefox()
 
 const HANDLERS = {}
+
+// TODO: remove this after 2.0.0.
+let draggableDeprecationWarned = false
 
 const OPTIONS_SCHEMA = {
   arg: 'targets[]',
@@ -77,7 +81,14 @@ function getOptions (binding, vnode) {
 function refresh (el, binding, vnode) {
   const options = getOptions(binding, vnode)
 
-  if (options.disabled) {
+  if ('draggable' in options && !draggableDeprecationWarned) {
+    warn(
+      '[v-drag] The `draggable` option is deprecated and will be removed in v2.0.0. Please use `disabled` instead.'
+    )
+    draggableDeprecationWarned = true
+  }
+
+  if (options.disabled || options.draggable === false) {
     // TODO：先不支持动态切换
     return
   }
