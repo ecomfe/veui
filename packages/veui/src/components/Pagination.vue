@@ -65,7 +65,7 @@
               : t('pageLabel', { page: item.page })
           "
           @click="handleRedirect(item, $event)"
-          @keydown.native.enter="handleEnter(item, $event)"
+          @keydown.enter="handleEnter(item, $event)"
         >
           <template v-if="item.more">
             <veui-icon

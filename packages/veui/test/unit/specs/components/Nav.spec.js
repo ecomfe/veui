@@ -96,7 +96,7 @@ describe('components/Nav', () => {
     let wrapper = mount(
       {
         ...options,
-        template: `<veui-nav class="small-nav":items="items"/>`
+        template: `<veui-nav class="small-nav" :items="items"/>`
       },
       {
         sync: false,
