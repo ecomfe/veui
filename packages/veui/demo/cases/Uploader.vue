@@ -355,7 +355,7 @@ export default {
       enabledCustoms: ['#file-after'],
       tooltipOpen: false,
       localFiles: undefined,
-      status: undefined,
+      status: null,
 
       autoupload: true,
       type: 'image',
@@ -363,9 +363,9 @@ export default {
       accept: '.jpg,.jpeg,.png',
       maxCount: 5,
       maxSize: '1mb',
-      multiple: undefined,
-      sortable: undefined,
-      readonly: undefined,
+      multiple: false,
+      sortable: false,
+      readonly: false,
 
       action:
         process.env.NODE_ENV === 'development'

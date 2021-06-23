@@ -38,8 +38,7 @@ export default {
       return {
         disabled: !this.sortable,
         name: uniqueId('veui-uploader-drag-sort-'),
-        sort: this.handleDragSort,
-        debug: true
+        sort: this.handleDragSort
       }
     }
   },

@@ -49,7 +49,7 @@ export default class SortHandler extends BaseHandler {
     }
     super.setOptions(options)
 
-    if (options.callback && !callbackDeprecationWarned) {
+    if ('callback' in options && !callbackDeprecationWarned) {
       warn(
         '[v-drag.sort] The `callback` option is deprecated and will be removed in v2.0.0. Please use `sort` instead.'
       )
