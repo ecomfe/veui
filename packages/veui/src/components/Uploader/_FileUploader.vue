@@ -20,8 +20,6 @@
   </div>
 
   <transition-group
-    ref="transitionGroup"
-    v-move-end
     tag="ul"
     :class="$c('uploader-list')"
   >

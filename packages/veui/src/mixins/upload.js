@@ -1,6 +1,5 @@
 import { pick, isNumber, uniqueId } from 'lodash'
 import drag from '../directives/drag'
-import moveEnd from '../directives/move-end'
 
 export const sharedProps = [
   'type',
@@ -22,10 +21,7 @@ const computed = sharedProps.reduce(function (ret, key) {
 }, {})
 
 export default {
-  directives: {
-    drag,
-    moveEnd
-  },
+  directives: { drag },
   props: {
     files: Array,
     addable: Boolean,
@@ -42,7 +38,8 @@ export default {
       return {
         disabled: !this.sortable,
         name: uniqueId('veui-uploader-drag-sort-'),
-        callback: this.handleDragSort
+        sort: this.handleDragSort,
+        debug: true
       }
     }
   },
@@ -59,16 +56,11 @@ export default {
       return !isNumber(loaded) || !isNumber(total) || loaded < 0 || total <= 0
     },
 
-    handleDragSort (toIndex, fromIndex) {
+    handleDragSort (fromIndex, toIndex) {
       if (toIndex === fromIndex) {
         return
       }
-      let promise = new Promise(resolve => {
-        this.$refs.transitionGroup.$once('move-end', resolve)
-      })
       this.$emit('move', fromIndex, toIndex)
-      // 动画完了再回调成功
-      return promise
     }
   }
 }

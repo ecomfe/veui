@@ -15,10 +15,10 @@
       <veui-checkbox v-model="autoupload">autoupload</veui-checkbox>
       <div class="space"/>
       <veui-checkbox
-        v-model="draggable"
-        :readonly="draggable"
+        v-model="sortable"
+        :readonly="sortable"
       >
-        <span title="暂不支持动态切换">draggable</span>
+        <span title="暂不支持动态切换">sortable</span>
       </veui-checkbox>
       <div class="space"/>
       <veui-checkbox v-model="readonly">readonly</veui-checkbox>
@@ -364,7 +364,7 @@ export default {
       maxCount: 5,
       maxSize: '1mb',
       multiple: undefined,
-      draggable: undefined,
+      sortable: undefined,
       readonly: undefined,
 
       action:
@@ -408,7 +408,7 @@ export default {
           'accept',
           'maxCount',
           'multiple',
-          'draggable',
+          'sortable',
           'readonly',
           'maxSize',
           'action',

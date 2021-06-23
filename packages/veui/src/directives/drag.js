@@ -30,7 +30,7 @@ const OPTIONS_SCHEMA = {
     axis: [null, 'x', 'y']
   }),
   defaults: {
-    draggable: true,
+    disabled: false,
     dragstart: noop,
     drag: noop,
     dragend: noop,
@@ -116,7 +116,7 @@ function refresh (el, binding, vnode) {
       handler,
 
       mousedownHandler (event) {
-        if (!options.draggable || event.button !== 0) {
+        if (options.disabled || event.button !== 0) {
           return
         }
 
@@ -251,10 +251,10 @@ function isRect (containment) {
  * <div v-drag.translate="['target1', 'target2']"></div>
  * ```
  *
- * drag 指令也可以随时关闭 drag 功能，只需要传入值为 false 的 draggable 参数即可：
+ * drag 指令也可以随时关闭 drag 功能，只需要传入值为 true 的 disabled 参数即可：
  *
  * ```html
- * <div v-drag="{targets: ['target1', 'target2'], type: 'translate', draggable: false}"></div>
+ * <div v-drag="{targets: ['target1', 'target2'], type: 'translate', disabled: true}"></div>
  * ```
  *
  * 可以通过传递 containment 参数来限制拖动的范围。

@@ -16,6 +16,7 @@ import {
 } from '../../utils/dom'
 import { isSafari as checkIsSafari } from '../../utils/bom'
 import BaseHandler from './BaseHandler'
+import warn from '../../utils/warn'
 
 const isSafari = checkIsSafari()
 
@@ -25,6 +26,9 @@ const preventDragOverDefault = evt => evt.preventDefault()
 const datasetDragSortKey = camelCase(prefixify('drag-sort'))
 const datasetDraggingKey = datasetDragSortKey + 'Dragging'
 const datasetDragGhostKey = datasetDraggingKey + 'Ghost'
+
+// TODO: remove this after 2.0.0.
+let callbackDeprecationWarned = false
 
 export default class SortHandler extends BaseHandler {
   constructor (options, context, vnode) {
@@ -44,13 +48,22 @@ export default class SortHandler extends BaseHandler {
       options = { ...options, align: defaultDragSortInsertAlign }
     }
     super.setOptions(options)
+
+    if (options.callback && !callbackDeprecationWarned) {
+      warn(
+        '[v-drag.sort] The `callback` option is deprecated and will be removed in v2.0.0. Please use `sort` instead.'
+      )
+      callbackDeprecationWarned = true
+    }
+
     this.options = assign(
       this.options,
       pick(options, [
         'name',
         'containment',
         'axis',
-        'callback',
+        'sort',
+        'callback', // deprecated
         'debug',
         'align'
       ])
@@ -72,12 +85,12 @@ export default class SortHandler extends BaseHandler {
     // 找出被拖动元素的所在容器。优先用传入的 containment
     this.container = this.options.containment
       ? getHtmlElement(this.options.containment)
-      : getHtmlElement(this.context)
+      : currentTarget.parentElement
 
     // 找出被拖动元素的索引
     this.dragElementIndex = [...this.getElements()].indexOf(currentTarget)
     if (this.dragElementIndex < 0) {
-      throw new Error('missing dragging element in elements')
+      throw new Error('[v-drag] Missing dragging element in elements.')
     }
 
     // 避免拖动完成后的原生动画
@@ -86,10 +99,6 @@ export default class SortHandler extends BaseHandler {
     // 加上拖动中标记，用于匹配css
     currentTarget.dataset[datasetDraggingKey] = ''
     document.body.classList.add(kebabCase(datasetDraggingKey))
-
-    // 拖动完成后，如果拖动回调还没完成就不用再等了
-    this.cancelSource = getCancelSource(this)
-    this.isWaitingCallbackConfirm = undefined
 
     // 计算热区
     this.updateHotRects()
@@ -103,7 +112,7 @@ export default class SortHandler extends BaseHandler {
     setDragSnapshotImage(currentTarget, event)
 
     // 下一帧再加上 ghost 样式，避免拖动的 snapshot 也是 ghost 样式
-    requestAnimationFrame(function () {
+    requestAnimationFrame(() => {
       currentTarget.dataset[datasetDragGhostKey] = ''
     })
   }
@@ -141,13 +150,11 @@ export default class SortHandler extends BaseHandler {
   }
 
   drag ({ event: { pageX, pageY }, last }) {
-    // 1. Safari上 drag 和 dragend event里的 pageX/Y 不一致
-    //    而 drag.js 里在 dragend 时也会再回调一次 drag
-    //    所以通过 last 来判断是不是最后一次 drag
-    //    这里如果是在 dragend 里触发的 drag 就无视
-    // 2. 有transition的话需要等动画完成后才认为完成拖动
-    //    前一次拖动回调完成后才能进去下一次
-    if (last || this.isWaitingCallbackConfirm) {
+    // Safari上 drag 和 dragend event里的 pageX/Y 不一致
+    // 而 drag.js 里在 dragend 时也会再回调一次 drag
+    // 所以通过 last 来判断是不是最后一次 drag
+    // 这里如果是在 dragend 里触发的 drag 就无视
+    if (last) {
       return
     }
 
@@ -171,31 +178,22 @@ export default class SortHandler extends BaseHandler {
     const fromIndex = this.dragElementIndex
     // 插入当前拖动元素或后面一个元素的前面，就是当前的位置，不用修改
     if (fromIndex !== toIndex) {
-      // 标记一下开始回调
-      this.isWaitingCallbackConfirm = true
-      Promise.race([
-        this.options.callback(toIndex, fromIndex),
-        this.cancelSource.promise
-      ])
-        .catch(() => false)
-        .then(success => {
-          // 如果回调 false 表示这次拖动不生效
-          if (success === false) {
-            return
+      // TODO: remove the compatibility code after 2.0.
+      let { sort, callback } = this.options
+      let result = sort
+        ? sort(fromIndex, toIndex)
+        : callback(toIndex, fromIndex)
+      if (result !== false) {
+        // 拖动成功后，更新下当前拖动元素索引
+        this.dragElementIndex = toIndex
+        // 元素列表变了，热区也要更新下（需要等DOM更新了
+        Vue.nextTick(() => {
+          // 在测试环境中，测完了就销毁了，这里的 nextTick 可能不需要更新
+          if (this.currentTarget) {
+            this.updateHotRects()
           }
-          // 拖动成功后，更新下当前拖动元素索引
-          this.dragElementIndex = toIndex
-          // 元素列表变了，热区也要更新下（需要等DOM更新了
-          Vue.nextTick(() => {
-            // 在测试环境中，测完了就销毁了，这里的 nextTick 可能不需要更新
-            if (this.currentTarget) {
-              this.updateHotRects()
-            }
-          })
         })
-        .finally(() => {
-          this.isWaitingCallbackConfirm = undefined
-        })
+      }
     }
 
     this.prevInsertIndex = toIndex
@@ -217,9 +215,7 @@ export default class SortHandler extends BaseHandler {
 
   clear () {
     this.currentTarget = null
-    if (this.cancelSource) {
-      this.cancelSource.cancel()
-    }
+
     // delete document.body.dataset[datasetDraggingKey]
     document.body.classList.remove(kebabCase(datasetDraggingKey))
     document.removeEventListener('dragover', preventDragOverDefault)
@@ -251,16 +247,14 @@ function getHotRects (
 
   const containerBoundary = container.getBoundingClientRect()
 
-  const elementRects = [...elements].map(function (el) {
-    return el.getBoundingClientRect()
-  })
+  const elementRects = [...elements].map(getStableBoundingClientRect)
 
-  let currentRect = currentTarget.getBoundingClientRect()
+  let currentRect = getStableBoundingClientRect(currentTarget)
 
   // 找出换行的 index，切成行，按行处理热区
   const breakIndices = elementRects
     .reduce(
-      function (indices, current, i) {
+      (indices, current, i) => {
         if (i === 0) {
           return indices
         }
@@ -279,11 +273,11 @@ function getHotRects (
   let count = 0
   const hotRects = breakIndices
     .slice(1)
-    .reduce(function (rows, breakIndex, i) {
+    .reduce((rows, breakIndex, i) => {
       rows.push(elementRects.slice(breakIndices[i], breakIndex))
       return rows
     }, [])
-    .map(function (rects) {
+    .map(rects => {
       // 此时 rect 为 元素的边界
       let rowCount = rects.length
       let first = rects[0]
@@ -306,7 +300,7 @@ function getHotRects (
 
       // * - - - *  // newRects, * 是上面首尾插入，下面 oldIdx 对应这里的索引，prev 和 next 也是取自这里
       //   - - -    // 实际用来生成每个热区，下面 idx 对应这里的索引
-      rects = rects.map(function (current, idx) {
+      rects = rects.map((current, idx) => {
         let oldIdx = idx + 1
         let prev = newRects[oldIdx - 1]
         let next = newRects[oldIdx + 1]
@@ -349,9 +343,10 @@ function getHotRects (
 }
 
 function findInsertIndexByMousePointFromHotRect ([x, y], hotRects) {
-  let rect = find(hotRects, function ([x1, x2, y1, y2]) {
-    return x >= x1 && x <= x2 && y >= y1 && y <= y2
-  })
+  let rect = find(
+    hotRects,
+    ([x1, x2, y1, y2]) => x >= x1 && x <= x2 && y >= y1 && y <= y2
+  )
   return rect ? rect[4] : -1
 }
 
@@ -383,7 +378,7 @@ function getHotRectsDebugLayer (hotRects, containerBoundary) {
   containerDiv.style.boxSizing = 'border-box'
   layer.appendChild(containerDiv)
 
-  hotRects.forEach(function ([x1, x2, y1, y2, i]) {
+  hotRects.forEach(([x1, x2, y1, y2, i]) => {
     let div = document.createElement('div')
     div.style.width = x2 - x1 + 'px'
     div.style.height = y2 - y1 + 'px'
@@ -408,27 +403,6 @@ function calculatePoints (points, calc) {
   return zip(...points).map(values => calc(...values))
 }
 
-function getCancelSource (context) {
-  return new (class {
-    constructor () {
-      let promise = new Promise((resolve, reject) => {
-        this._reject = reject
-      })
-      this.promise = promise.catch(err => {
-        // 只有在等待回调时才抛错，用于取消等待
-        // 其它时候抛错会在 console 里输出 Uncaught promise error
-        if (context.isWaitingCallbackConfirm) {
-          throw err
-        }
-      })
-    }
-
-    cancel (...args) {
-      this._reject(...args)
-    }
-  })()
-}
-
 function setDragSnapshotImage (el, event) {
   let { offsetX, offsetY } = event
   let newEl
@@ -438,7 +412,7 @@ function setDragSnapshotImage (el, event) {
       position: 'fixed',
       top: 0,
       left: 0,
-      zIndex: 214748364,
+      zIndex: 214748364, // max value of z-index
       margin: 0
     })
     document.body.append(newEl)
@@ -446,5 +420,57 @@ function setDragSnapshotImage (el, event) {
   }
   if (event.dataTransfer.setDragImage) {
     event.dataTransfer.setDragImage(newEl || el, offsetX, offsetY)
+  }
+}
+
+/**
+ * To get relatively stable bounding client rect based on the offsetParent
+ * @param {HTMLElement} el The target element
+ */
+function getStableBoundingClientRect (el) {
+  let parent = el.offsetParent
+  let parentRect = parent ? parent.getBoundingClientRect() : null
+  let scroll = getScrollOffset(el, parent)
+
+  let top = parentRect
+    ? parentRect.top + el.offsetTop - scroll.top
+    : el.offsetTop
+  let left = parentRect
+    ? parentRect.left + el.offsetLeft - scroll.left
+    : el.offsetLeft
+  let width = el.offsetWidth
+  let height = el.offsetHeight
+
+  return {
+    width,
+    height,
+    top,
+    right: left + width,
+    bottom: top + height,
+    left
+  }
+}
+
+/**
+ * Get accumulated scroll offsets from the starting element to a specified context element
+ * @param {HTMLElement} el the starting element
+ * @param {HTMLElement} context the context element
+ */
+function getScrollOffset (el, context) {
+  if (!context.contains(el)) {
+    throw new Error('The context element must contain the starting element.')
+  }
+  let current = el
+  let top = 0
+  let left = 0
+  while (current !== context) {
+    current = current.parentElement
+    top += current.scrollTop
+    left += current.scrollLeft
+  }
+
+  return {
+    top,
+    left
   }
 }
