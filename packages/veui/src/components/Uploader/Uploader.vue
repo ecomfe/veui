@@ -454,12 +454,11 @@ export default {
     },
 
     handleItemMove (fromIndex, toIndex) {
-      let item = this.fileList[fromIndex]
-      this.fileList.splice(fromIndex, 1)
-      if (toIndex > fromIndex) {
-        toIndex--
-      }
-      this.fileList.splice(toIndex, 0, item)
+      let { fileList } = this
+      let item = fileList[fromIndex]
+      fileList.splice(fromIndex, 1)
+      fileList.splice(toIndex, 0, item)
+
       this.$emit('change', this.getValueForChange(this.successFiles))
     },
 

@@ -1,8 +1,6 @@
 <template>
 <div :class="$c('uploader-media')">
   <transition-group
-    ref="transitionGroup"
-    v-move-end
     tag="ul"
     :class="{
       [listClass]: true,

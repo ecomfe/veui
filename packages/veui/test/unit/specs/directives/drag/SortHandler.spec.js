@@ -1,13 +1,9 @@
 import { mount } from '@vue/test-utils'
 import drag from '@/directives/drag'
+import { wait } from '../../../../utils'
 
 describe('directives/drag/SortHandler', () => {
   it(`should callback with insert index when the dragging item matches insert zone`, async () => {
-    let callDragEnd
-    let dragEndPromise = new Promise(resolve => {
-      callDragEnd = resolve
-    })
-
     let results = []
     let wrapper = mount(
       {
@@ -15,7 +11,7 @@ describe('directives/drag/SortHandler', () => {
         template: `<div ref="self" style="position: fixed; top: 200px; left: 200px; transform: translate(-100px, -100px); border: 1px solid red; width: 300px">
           <div style="height: 20px; margin: 5px 0;" v-drag.sort.y="dragOptions">1</div>
           <div style="height: 20px; margin: 5px 0;" v-drag.sort.y="dragOptions">2</div>
-          <div style="height: 20px; margin: 5px 0;" class="third" v-drag.sort.y="dragOptions">3</div>
+          <div style="height: 20px; margin: 5px 0;" v-drag.sort.y="dragOptions" class="third">3</div>
           <div style="height: 20px; margin: 5px 0;" v-drag.sort.y="dragOptions">4</div>
         </div>`,
         data () {
@@ -23,16 +19,14 @@ describe('directives/drag/SortHandler', () => {
             dragOptions: {
               name: '🤯',
               containment: 'self',
-              callback: this.handleSortCallback,
-              dragend: this.handleDragEnd
+              sort: this.handleSort
             }
           }
         },
         methods: {
-          handleSortCallback (to, from) {
-            results.push([to, from])
-          },
-          handleDragEnd: callDragEnd
+          handleSort (from, to) {
+            results.push([from, to])
+          }
         }
       },
       {
@@ -62,14 +56,14 @@ describe('directives/drag/SortHandler', () => {
         }
       }
     )
-    await dragEndPromise
+    await wait(1000)
 
-    expect(results).to.eql([[1, 2]])
+    expect(results).to.eql([[2, 0]])
     expect(attrs).to.eql(['', undefined])
   })
 })
 
-function performDrag (el, series, handler = {}) {
+async function performDrag (el, series, handler = {}) {
   let [start, ...moves] = series
   let end = moves.pop()
 
@@ -80,14 +74,19 @@ function performDrag (el, series, handler = {}) {
     handler.onDragStart()
   }
 
-  moves.forEach(move => {
+  await wait(50)
+
+  for (let i = 0; i < moves.length; i++) {
+    let move = moves[i]
     el.dispatchEvent(
       createDragEvent('drag', {
         clientX: move[0],
         clientY: move[1]
       })
     )
-  })
+
+    await wait(300)
+  }
 
   el.dispatchEvent(
     createDragEvent('dragend', {

@@ -29,7 +29,6 @@
   <section ref="itemGroup">
     <h2>Axis: X</h2>
     <transition-group
-      ref="transitionGroup"
       name="list"
       tag="div"
       class="items"
@@ -40,7 +39,7 @@
         v-drag.sort.x="{
           name: 'mySortableButton',
           containment: 'itemGroup',
-          callback: handleAxisXSortCallback,
+          sort: handleSort,
           debug,
           align
         }"
@@ -53,7 +52,6 @@
   <section ref="itemGroup2x">
     <h2>Axis: X 宽度一致</h2>
     <transition-group
-      ref="transitionGroup"
       name="list"
       tag="div"
       class="items"
@@ -64,7 +62,7 @@
         v-drag.sort.x="{
           name: 'mySortableButton2x',
           containment: 'itemGroup2x',
-          callback: handleAxisXSortCallback,
+          sort: handleSort,
           debug,
           align
         }"
@@ -77,7 +75,6 @@
   <section>
     <h2>Axis: Y</h2>
     <transition-group
-      ref="transitionGroup2"
       name="list"
       tag="ol"
       class="list"
@@ -87,7 +84,7 @@
         :key="item"
         v-drag.sort.y="{
           name: 'otherSortableButton',
-          callback: handleAxisYSortCallback,
+          sort: handleSort2,
           debug,
           align
         }"
@@ -132,7 +129,7 @@
             v-drag.sort.x="{
               name: 'buttonInDialog',
               containment: 'dialogContent',
-              callback: handleSortCallback,
+              sort: handleSort2,
               debug,
               align
             }"
@@ -157,7 +154,6 @@
         </div>
         <transition-group
           ref="popoverContent"
-          v-move-end
           name="list"
           tag="div"
           class="items"
@@ -168,7 +164,7 @@
             v-drag.sort.x="{
               name: 'buttonInPopover',
               containment: 'popoverContent',
-              callback: handleTransitionMoveEndSortCallback,
+              sort: handleSort2,
               debug,
               align
             }"
@@ -185,7 +181,6 @@
 
 <script>
 import drag from 'veui/directives/drag'
-import moveEnd from 'veui/directives/move-end'
 import { Dialog, Popover } from 'veui'
 
 const items = [
@@ -226,8 +221,7 @@ const items = [
 export default {
   name: 'v-drag-sort-demo',
   directives: {
-    drag,
-    moveEnd
+    drag
   },
   components: {
     'veui-dialog': Dialog,
@@ -247,47 +241,14 @@ export default {
   computed: {
     hasDebug () {
       return process.env.NODE_ENV === 'development'
-    },
-    handleAxisXSortCallback () {
-      return this.getTransitionSortCallback('items', 'transitionGroup')
-    },
-    handleAxisYSortCallback () {
-      return this.getTransitionSortCallback('items2', 'transitionGroup2')
-    },
-    handleSortCallback () {
-      return this.getTransitionSortCallback('items2')
     }
   },
   methods: {
-    getTransitionSortCallback (itemsKey, transitionGroupRefKey) {
-      return (toIndex, fromIndex) => {
-        if (toIndex === fromIndex) {
-          return
-        }
-        let promise
-        if (transitionGroupRefKey) {
-          promise = new Promise((resolve, reject) => {
-            let el = this.$refs[transitionGroupRefKey].$el
-            let handleTransitionEnd = () => {
-              el.removeEventListener('transitionend', handleTransitionEnd)
-              resolve()
-            }
-            el.addEventListener('transitionend', handleTransitionEnd)
-          })
-        }
-        this.moveItem(this[itemsKey], fromIndex, toIndex)
-        // 动画完了再回调成功
-        return promise
-      }
+    handleSort (from, to) {
+      this.moveItem(this.items, from, to)
     },
-    handleTransitionMoveEndSortCallback (toIndex, fromIndex) {
-      if (toIndex === fromIndex) {
-        return
-      }
-      this.moveItem(this.items2, fromIndex, toIndex)
-      return new Promise(resolve => {
-        this.$refs.popoverContent.$once('move-end', resolve)
-      })
+    handleSort2 (from, to) {
+      this.moveItem(this.items2, from, to)
     },
     moveItem (items, fromIndex, toIndex) {
       let item = items[fromIndex]
