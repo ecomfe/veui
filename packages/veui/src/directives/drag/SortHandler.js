@@ -248,9 +248,10 @@ function getHotRects (
 
   const containerBoundary = container.getBoundingClientRect()
 
-  const elementRects = [...elements].map(getStableBoundingClientRect)
-
-  let currentRect = getStableBoundingClientRect(currentTarget)
+  // `getStableBoundingClientRect` is used here as it will ignore interpolated
+  // values during transition
+  const elementRects = [...elements].map(el => getStableBoundingClientRect(el))
+  const currentRect = getStableBoundingClientRect(currentTarget)
 
   // 找出换行的 index，切成行，按行处理热区
   const breakIndices = elementRects
