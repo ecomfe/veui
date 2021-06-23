@@ -12,8 +12,10 @@
   ],
   "scripts": {
     "icons": "node -r esm build/svg2json.js && node -r esm build/icons.js",
-    "lint": "stylelint **/*.less --syntax=less"
+    "lint": "stylelint **/*.less --syntax=less",
+    "prepublishOnly": "rollup -c"
   },
+  "module": "dist/dls.esm.js",
   "dependencies": {
     "classlist-polyfill": "^1.2.0",
     "dls-icons-vue": "^0.23.0",
@@ -33,7 +35,6 @@
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-preset-env": "^1.2.1",
     "babel-preset-stage-2": "^6.22.0",
-    "enhanced-resolve": "^5.8.2",
     "esm": "^3.2.25",
     "less": "^4.1.1",
     "rollup": "^2.49.0",

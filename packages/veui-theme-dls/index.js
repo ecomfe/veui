@@ -55,6 +55,7 @@ import './components/Transfer'
 import './components/Tree'
 import './components/Uploader'
 
+import './common.less'
 import './components/accordion.less'
 import './components/alert-box.less'
 import './components/alert.less'

@@ -1,3 +1,26 @@
+## 2.0.0-rc.4
+
+### 💡 主要变更
+
+- [^] `veui` 产出中新增文件：
+  - `dist/veui.js` UMD 版本，包含中英文语言包。
+  - `dist/veui.esm.js` ESM 版本，不包含中英文语言包。
+  - `dist/locale.en-US.esm.js` 英文语言包。
+  - `dist/locale.zh-Hans.esm.js` 中文语言包。
+- [^] `veui-theme-dls` 产出中新增文件：
+  - `dist/dls.js` UMD 版本，Baidu DLS 主题包。
+  - `dist/dls.esm.js` ESM 版本，Baidu DLS 主题包。
+- [^] `veui` 调整模块导出：
+```js
+import {
+  ..., // components
+  config, i18n, validation, // managers
+  useControllable, useSearchable, // mixin
+  alertPlugin, confirmPlugin, promptPlugin, toastPlugin, // plugin
+  drag, outside, resize, nudge, longpress, tooltip // directive
+} from 'veui'
+```
+
 ## 2.0.0-rc.3
 
 ### ⚠️ 非兼容性变更
