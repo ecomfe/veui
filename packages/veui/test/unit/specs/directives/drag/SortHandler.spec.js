@@ -56,10 +56,12 @@ describe('directives/drag/SortHandler', () => {
         }
       }
     )
-    await wait(1000)
+    await wait(500)
 
     expect(results).to.eql([[2, 0]])
     expect(attrs).to.eql(['', undefined])
+
+    wrapper.destroy()
   })
 })
 
@@ -85,7 +87,7 @@ async function performDrag (el, series, handler = {}) {
       })
     )
 
-    await wait(300)
+    await wait(100)
   }
 
   el.dispatchEvent(
