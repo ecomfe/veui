@@ -13,7 +13,7 @@ export const sharedProps = [
   'requestMode'
 ]
 
-const computed = sharedProps.reduce(function (ret, key) {
+const computed = sharedProps.reduce((ret, key) => {
   ret[key] = function () {
     return this.options[key]
   }
