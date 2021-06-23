@@ -1,5 +1,5 @@
 <script>
-import { uniq, noop } from 'lodash'
+import { uniq, noop, omit } from 'lodash'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 
@@ -120,13 +120,8 @@ export default {
         ? 'router-link'
         : 'a'
 
-    const forwardEvents = ['mouseenter', 'mouseleave', 'keydown'].reduce(
-      (acc, event) => {
-        acc[event] = (...args) => this.$emit(event, ...args)
-        return acc
-      },
-      {}
-    )
+    // 除了 click，其他的事件全部透传
+    const forwardEvents = omit(this.$listeners, 'click')
 
     return h(
       component,
