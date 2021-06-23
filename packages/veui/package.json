@@ -8,19 +8,12 @@
     "lint": "vue-cli-service lint",
     "components": "node ./build/components.js",
     "index": "node ./build/components.js index",
-    "prepublishOnly": "cp -r ./src/* .",
-    "publish": "rm -rf ./common ./components ./directives ./locale ./managers ./mixins ./plugins ./utils ./icons.js ./index.js",
+    "prepublishOnly": "rollup -c && cp -r ./src/* .",
+    "publish": "rm -rf ./common ./components ./directives ./locale ./managers ./mixins ./plugins ./utils ./icons.js ./index.js ./index-with-locale.js",
     "test": "cross-env NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=test BABEL_ENV=test karma start --single-run",
     "test:start": "cross-env NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=test BABEL_ENV=test karma start"
   },
   "module": "index.js",
-  "exports": {
-    ".": "./index.js",
-    "./directives": "./directives/index.js",
-    "./plugins": "./plugins/index.js",
-    "./mixins": "./mixins/exports.js",
-    "./managers": "./managers/exports.js"
-  },
   "dependencies": {
     "bytes": "^3.0.0",
     "core-js": "^3.6.1",
@@ -78,7 +71,6 @@
     "promise-polyfill": "^8.1.0",
     "rollup": "^2.49.0",
     "rollup-plugin-replace": "^2.2.0",
-    "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-vue": "^5.1.9",
     "sinon": "^8.0.4",
     "veui-loader": "^2.0.0-rc.3",

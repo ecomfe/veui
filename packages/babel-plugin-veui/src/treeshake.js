@@ -13,12 +13,16 @@ export default function ({ types: t }) {
         let src = normalize(node.source.value)
 
         if (src === alias) {
-          if (
-            node.specifiers.length === 1 &&
-            (node.specifiers[0].type === 'ImportDefaultSpecifier' ||
-              node.specifiers[0].type === 'ImportNamespaceSpecifier')
-          ) {
-            return
+          if (node.specifiers.length === 1) {
+            let { type, imported } = node.specifiers[0]
+            if (
+              ['ImportDefaultSpecifier', 'ImportNamespaceSpecifier'].indexOf(
+                type
+              ) >= 0 ||
+              !getComponentPath(getComponentName(imported.name), alias)
+            ) {
+              return
+            }
           }
 
           let newImports = node.specifiers.map(({ imported, local }) => {
@@ -32,10 +36,17 @@ export default function ({ types: t }) {
 
               let componentSrc = getComponentPath(realName, alias)
               if (!componentSrc) {
-                throw new Error(
-                  `[${realName}] is not a valid component in VEUI.`
+                return t.importDeclaration(
+                  [
+                    t.importSpecifier(
+                      t.identifier(local.name),
+                      t.identifier(imported ? imported.name : local.name)
+                    )
+                  ],
+                  t.stringLiteral(src)
                 )
               }
+
               let name = local.name || imported.name
               return t.importDeclaration(
                 [t.importDefaultSpecifier(t.identifier(name))],
@@ -54,7 +65,7 @@ export default function ({ types: t }) {
 const VAR_PATTERN = /(?:V(?:eui)?)?([A-Z][a-zA-Z]*)/
 
 function getComponentName (importedName) {
-  let [, name] = importedName.match(VAR_PATTERN)
+  let [, name] = importedName.match(VAR_PATTERN) || []
   return name || null
 }
 

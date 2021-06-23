@@ -1,4 +1,4 @@
-export * from './all-components'
+export * from './components'
 
 export { default as config } from './managers/config'
 export { default as i18n } from './managers/i18n'
