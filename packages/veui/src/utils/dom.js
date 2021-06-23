@@ -859,3 +859,56 @@ export function addOnceEventListener (el, evt, listener) {
   el.addEventListener(evt, callback)
   return remove
 }
+
+/**
+ * To get relatively stable bounding client rect based on the offsetParent to
+ * avoid interpolated values during transition.
+ * @param {HTMLElement} el The target element
+ */
+export function getStableBoundingClientRect (el) {
+  let parent = el.offsetParent
+  let parentRect = parent ? parent.getBoundingClientRect() : null
+  let scroll = getScrollOffset(el, parent)
+
+  let top = parentRect
+    ? parentRect.top + el.offsetTop - scroll.top
+    : el.offsetTop
+  let left = parentRect
+    ? parentRect.left + el.offsetLeft - scroll.left
+    : el.offsetLeft
+  let width = el.offsetWidth
+  let height = el.offsetHeight
+
+  return {
+    width,
+    height,
+    top,
+    right: left + width,
+    bottom: top + height,
+    left
+  }
+}
+
+/**
+ * Get accumulated scroll offsets from the starting element to a specified context element
+ * @param {HTMLElement} el the starting element
+ * @param {HTMLElement} context the context element
+ */
+export function getScrollOffset (el, context) {
+  if (!context.contains(el)) {
+    throw new Error('The context element must contain the starting element.')
+  }
+  let current = el
+  let top = 0
+  let left = 0
+  while (current !== context) {
+    current = current.parentElement
+    top += current.scrollTop
+    left += current.scrollLeft
+  }
+
+  return {
+    top,
+    left
+  }
+}
