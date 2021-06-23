@@ -47,7 +47,7 @@
                 depth === 1 ? link.tabIndex : link.disabled ? null : '-1'
               "
               @click="handleItemClick(link, true)"
-              @keydown.native="handleKeydown($event, link)"
+              @keydown="handleKeydown($event, link)"
             >
               <span
                 v-if="link.icon || $scopedSlots.icon || $slots.icon"

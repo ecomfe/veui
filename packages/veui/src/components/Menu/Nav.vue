@@ -53,10 +53,10 @@
           }"
           :tabindex="item.tabIndex"
           v-bind="pickLinkProps(item)"
-          @mouseenter.native="handleItemHover(item)"
-          @mouseleave.native="close(item)"
+          @mouseenter="handleItemHover(item)"
+          @mouseleave="close(item)"
           @click="handleItemClick(item)"
-          @keydown.native="handleKeydown($event, item)"
+          @keydown="handleKeydown($event, item)"
         >
           <slot
             name="item-label"

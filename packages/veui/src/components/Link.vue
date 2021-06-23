@@ -119,6 +119,15 @@ export default {
       : this.useRouter
         ? 'router-link'
         : 'a'
+
+    const forwardEvents = ['mouseenter', 'mouseleave', 'keydown'].reduce(
+      (acc, event) => {
+        acc[event] = (...args) => this.$emit(event, ...args)
+        return acc
+      },
+      {}
+    )
+
     return h(
       component,
       {
@@ -151,9 +160,12 @@ export default {
         },
         ...(component === 'router-link'
           ? {
-            nativeOn: { click: this.handleNativeClick }
+            nativeOn: {
+              click: this.handleNativeClick,
+              ...forwardEvents
+            }
           }
-          : { on: { click: this.handleRedirect } })
+          : { on: { click: this.handleRedirect, ...forwardEvents } })
       },
       this.$slots.default
     )
