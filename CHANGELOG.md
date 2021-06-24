@@ -1,3 +1,19 @@
+## 2.0.0-rc.1
+
+### 💡 主要变更
+
+- [+] 为 `Popover`/`Tooltip`/`AlertBox`/`ConfirmBox`/`PromptBox`/`Dialog`/`Select`/`Dropdown`/`Lightbox`/`DatePicker`/`TimePicker`/`SearchBox`/`Cascader`/`CascaderPane` 等组件新增 `overlay-style` prop，用于自定义浮层样式。
+
+### 🐞 问题修复
+
+- [^] 修复 `Nav` 组件项目在光标悬浮状态下的样式问题。
+- [^] 修复 `Select` 组件的 slot prop 中缺失 `close` 方法的问题。
+- [^] 修复 `NumberInput` 组件在非法值的基础上使用步进操作产生 `NaN` 的问题。
+
+### 🧪 实验性功能
+
+- [+] 为 `Select`/`Dropdown`/`SearchBox`/`Cascader` 新增 `--dls-dropdown-max-display-items` 配置支持，见 `2.0.0-rc.0` 版本实验性功能说明。
+
 ## 2.0.0-rc.0
 
 ### ⚠️ 非兼容性变更
@@ -6,13 +22,25 @@
 
 ### 💡 主要变更
 
-- [+] 为 `Overlay`/`Popover`/`Tooltip`/`Autocomplete`/`AlertBox`/`ConfirmBox`/`PromptBox`/`Dialog`/`Select`/`Dropdown`/`Lightbox`/`DatePicker`/`TimePicker`/`SearchBox`/`Cascader`/`CascaderPane` 等组件新增 `overlay-style` prop，用于自定义浮层样式。
+- [+] 为 `Overlay`/`Autocomplete` 等组件新增 `overlay-style` prop，用于自定义浮层样式。
 - [+] 新增 `v-tooltip` 指令，用于指定全局共享的浮层提示。
 - [^] 优化了 `v-drag.sort` 的移动触发交互，使拖动排序更顺畅。
 
 ### 🐞 问题修复
 
 - [^] 修复 modal 类型浮层的 focus trap 功能。
+
+### 🧪 实验性功能
+
+- [+] 新增支持通过给浮层设置 CSS 自定义属性 `--dls-dropdown-max-display-items` 来设置 `Autocomplete` 组件下拉浮层最大显示项目数，超出此高度将触发滚动。（给浮层设置样式可通过 `overlay-class`/`overlay-style` prop 的方式。）
+
+  > #### 使用示例
+  >
+  > ```vue
+  > <!-- 配置最多显示 6 个选项（为提高在溢出且隐藏滚动条环境中的可访问性， -->
+  > <!-- 实际最大高度为 6.5 个选项的高度以提示更多选项的存在） -->
+  > <veui-dropdown :overlay-style="{ '--dls-dropdown-max-display-items': 6 }" .../>
+  > ```
 
 ## 2.0.0-beta.33
 
