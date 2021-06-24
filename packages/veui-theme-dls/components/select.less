@@ -212,6 +212,14 @@
     &-multiple .@{veui-prefix}-option-selected {
       font-weight: @dls-font-weight-1;
     }
+
+    & > .@{veui-prefix}-option-group {
+      @sizes: xs, s, m, l;
+      .veui-dropdown-max-height(
+        @sizes,
+        var(--dls-dropdown-max-display-items, 8)
+      );
+    }
   }
 
   .make-metrics (@size) {

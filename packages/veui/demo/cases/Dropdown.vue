@@ -11,6 +11,9 @@
         ui="primary xs"
         label="操作"
         :options="options"
+        :overlay-style="{
+          '--dls-dropdown-max-display-items': 4
+        }"
       />
       <veui-dropdown
         ui="primary s"
@@ -232,7 +235,7 @@
         trigger="click"
         :options="multiLevelUnlabeledOptions"
         :overlay-style="{
-          '--dls-dropdown-max-display-items': 8
+          '--dls-dropdown-max-display-items': 2
         }"
       />
     </div>
@@ -340,7 +343,6 @@ export default {
     'veui-input': Input
   },
   data () {
-    console.log('insert')
     setTimeout(() => {
       this.multiLevelUnlabeledOptions.splice(1, 0, {
         label: '丰田1',

@@ -2,15 +2,6 @@
 @import (reference) "../dropdown.less";
 
 .@{veui-prefix}-cascader-pane {
-  @option-count: 8;
-  @panel-height-xs: @option-count * @dls-option-height-xs + 2 *
-    @dls-option-group-padding-y;
-  @panel-height-s: @option-count * @dls-option-height-s + 2 *
-    @dls-option-group-padding-y;
-  @panel-height-m: @option-count * @dls-option-height-m + 2 *
-    @dls-option-group-padding-y;
-  @panel-height-l: @option-count * @dls-option-height-l + 2 *
-    @dls-option-group-padding-y;
   @min-panel-width: 30 * @dls-padding-unit;
   @option-padding-x: 3 * @dls-padding-unit;
 
@@ -26,23 +17,14 @@
   &-column {
     .padding(@dls-option-group-padding-y, _);
     position: relative;
-    height: @panel-height-m;
     overflow: auto;
-    max-height: @panel-height-m; // 用来控制搜索时最大高度，此时高度会 reset 成 auto
-  }
-  &[ui~="xs"] &-column {
-    height: @panel-height-xs;
-    max-height: @panel-height-xs;
-  }
-
-  &[ui~="s"] &-column {
-    height: @panel-height-s;
-    max-height: @panel-height-s;
-  }
-
-  &[ui~="l"] &-column {
-    height: @panel-height-l;
-    max-height: @panel-height-l;
+    // max-height 用来控制搜索时最大高度，此时高度会 reset 成 auto
+    @sizes: xs, s, m, l;
+    .veui-dropdown-max-height(
+      @sizes,
+      var(--dls-dropdown-max-display-items, 8),
+      true
+    );
   }
 
   &-column-wrap:not(:first-child) {

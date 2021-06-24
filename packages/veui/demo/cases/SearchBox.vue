@@ -167,6 +167,9 @@
         :placeholder="placeholder"
         :suggestions="suggestions8"
         suggest-trigger="focus"
+        :overlay-style="{
+          '--dls-dropdown-max-display-items': 2
+        }"
         @search="log($event)"
         @suggest="suggestHandler"
       >

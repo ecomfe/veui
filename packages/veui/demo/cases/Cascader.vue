@@ -43,9 +43,6 @@
       :value-display="valueDisplay1"
       :inline="inline1"
       :column-width="getRealColumnWidth(columnWidth1)"
-      :overlay-style="{
-        '--dls-dropdown-max-display-items': 8
-      }"
     />
   </section>
   <section>
@@ -99,6 +96,9 @@
       :clearable="clearable2"
       :inline="inline2"
       multiple
+      :overlay-style="{
+        '--dls-dropdown-max-display-items': 4
+      }"
     >
       <template slot="before">
         <div class="center-align">before</div>
