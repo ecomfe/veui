@@ -116,13 +116,20 @@ export default {
     'veui-input': Input,
     'veui-button': Button
   },
-  mixins: [prefix, ui, input, activatable, i18n, useControllable({
-    prop: 'value',
-    event: 'input',
-    get (val) {
-      return val == null ? null : val
-    }
-  })],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    activatable,
+    i18n,
+    useControllable({
+      prop: 'value',
+      event: 'input',
+      get (val) {
+        return val == null ? null : val
+      }
+    })
+  ],
   inhertiAttrs: false,
   props: {
     ui: String,
@@ -154,9 +161,10 @@ export default {
     realInputValue () {
       if (this.parsedInputValue == null) {
         // decimal 1 ; prop value 0.01; 这个时候最好也显示成 0.01
-        let decimal = this.decimalPlace === -1 || typeof this.realValue !== 'number'
-          ? -1
-          : Math.max(getDecimalPlace(this.realValue), this.decimalPlace)
+        let decimal =
+          this.decimalPlace === -1 || typeof this.realValue !== 'number'
+            ? -1
+            : Math.max(getDecimalPlace(this.realValue), this.decimalPlace)
         return this.formatValue(this.realValue, decimal)
       }
       return this.formatValue(this.parsedInputValue, -1)
@@ -202,10 +210,18 @@ export default {
       return min
     },
     reachMaxLimit () {
-      return this.realMax != null && this.realValue != null && this.realValue >= this.realMax
+      return (
+        this.realMax != null &&
+        this.realValue != null &&
+        this.realValue >= this.realMax
+      )
     },
     reachMinLimit () {
-      return this.realMin != null && this.realValue != null && this.realValue <= this.realMin
+      return (
+        this.realMin != null &&
+        this.realValue != null &&
+        this.realValue <= this.realMin
+      )
     },
     checkValues () {
       return {
@@ -243,22 +259,18 @@ export default {
   },
   methods: {
     parseValue (val, asNumber) {
-      val = isFunction(this.parse)
-        ? this.parse(val)
-        : val
-      return asNumber ? parseNumber(val) : val
+      val = isFunction(this.parse) ? this.parse(val) : val
+      return asNumber ? parseFloat(val) : val
     },
     formatValue (val, decimalPlace) {
       let strVal = formatDecimal(val, decimalPlace)
-      return isFunction(this.format)
-        ? this.format(val, strVal)
-        : strVal
+      return isFunction(this.format) ? this.format(val, strVal) : strVal
     },
     handleInput (val) {
       this.parsedInputValue = this.parseValue(val, false)
     },
     getValidValue (val, decimalPlace = -1) {
-      val = parseNumber(val)
+      val = parseFloat(val)
       if (isNaN(val)) {
         return val
       }
@@ -281,9 +293,10 @@ export default {
       //  1. 置空(null, 会 commit null)
       //  2. local 输入置空(NaN), 清空 local，让 realValue 生效
       //  3. commit
-      parsed = parsed === '' || parsed == null
-        ? null
-        : this.getValidValue(parsed, this.decimalPlace)
+      parsed =
+        parsed === '' || parsed == null
+          ? null
+          : this.getValidValue(parsed, this.decimalPlace)
 
       if (!isNaN(parsed)) {
         this.updateValue(parsed)
@@ -312,9 +325,10 @@ export default {
         val = this.getValidValue(this.parsedInputValue)
       }
       if (isNaN(val) && this.realValue != null) {
-        val = typeof this.realValue === 'number'
-          ? this.realValue
-          : this.getValidValue(this.realValue) // in case of prop value: `1km`
+        val =
+          typeof this.realValue === 'number'
+            ? this.realValue
+            : this.getValidValue(this.realValue) // in case of prop value: `1km`
       }
       if (isNaN(val)) {
         // 保留之前 fallback 到0 的逻辑吧，如果 0 不在范围内会 clamp
@@ -360,9 +374,7 @@ function getDecimalPlace (val) {
     return Number(val.slice(idx + 2))
   }
   idx = val.indexOf('.')
-  return idx >= 0
-    ? val.length - idx - 1
-    : 0
+  return idx >= 0 ? val.length - idx - 1 : 0
 }
 
 function getMaxDecimalPlace (val1, val2) {
@@ -376,10 +388,5 @@ function formatDecimal (val, decimalPlace) {
   } else if (isNum) {
     return val.toFixed(decimalPlace)
   }
-}
-
-function parseNumber (val) {
-  let parsed = parseFloat(val)
-  return isNaN(parsed) ? val : parsed
 }
 </script>
