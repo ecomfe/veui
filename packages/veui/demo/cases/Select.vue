@@ -517,7 +517,7 @@
         searchable
         :options="complexResult"
         :overlay-style="{
-          '--dls-dropdown-max-display-items': 8
+          '--dls-dropdown-max-display-items': 2
         }"
         @input="handleSearch"
       >

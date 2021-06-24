@@ -1,8 +1,13 @@
 ## 2.0.0-rc.0
 
+### ⚠️ 非兼容性变更
+
+- [^] v-drag.sort指令的 callback 函数 (toIndex, fromIndex) => void的 toIndex 参数含义变更，从原来的 「移动到 toIndex 前」变更成「移动到 toIndex 处」。
+
 ### 💡 主要变更
 
 - [+] 为 `Overlay`/`Popover`/`Tooltip`/`Autocomplete`/`AlertBox`/`ConfirmBox`/`PromptBox`/`Dialog`/`Select`/`Dropdown`/`Lightbox`/`DatePicker`/`TimePicker`/`SearchBox`/`Cascader`/`CascaderPane` 等组件新增 `overlay-style` prop，用于自定义浮层样式。
+- [+] Autocomplete组件支持使用 :overlay-style="{'--dls-dropdown-max-display-items': 4}" 来定制下拉最大展示高度。
 - [+] 新增 `v-tooltip` 指令，用于指定全局共享的浮层提示。
 - [^] 优化了 `v-drag.sort` 的移动触发交互，使拖动排序更顺畅。
 

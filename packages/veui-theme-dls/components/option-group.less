@@ -114,6 +114,9 @@
     .padding(@dls-option-group-padding-y, _);
     .margin(0, _);
     pointer-events: all;
+
+    @sizes: xs, s, m, l;
+    .veui-dropdown-max-height(@sizes, var(--dls-dropdown-max-display-items, 8));
   }
 
   &-box[x-placement*="right"] &-options {

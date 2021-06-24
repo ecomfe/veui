@@ -136,7 +136,8 @@ export default {
 
       if (this.multiple && this.searchable) {
         this.nativeInput.style.width = ''
-        this.nativeInput.style.width = `${this.nativeInput.scrollWidth}px`
+        // +1: 修复 Chrome 下搜索词失去焦点时会 ellipsis
+        this.nativeInput.style.width = `${this.nativeInput.scrollWidth + 1}px`
       }
     },
     // 这样判断 slots 不会响应的，所以写成方法每次重新计算（只要 slot 变化 vue 都会执行 update render）

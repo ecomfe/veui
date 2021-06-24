@@ -84,18 +84,18 @@
 
 .veui-max-height(@height, @max-count, @with-height: false, @vertical-padding: @dls-option-group-padding-y) {
   & when (isnumber(@max-count)) {
-    max-height: dls-sum(@height * @max-count, @vertical-padding * 2);
+    max-height: dls-sum(@height * (@max-count + 0.5), @vertical-padding);
     & when (@with-height = true) {
-      height: dls-sum(@height * @max-count, @vertical-padding * 2);
+      height: dls-sum(@height * (@max-count + 0.5), @vertical-padding);
     }
   }
 
   & when not (isnumber(@max-count)) {
-    max-height: dls-sum(@height * 8, @vertical-padding * 2); // for ie
-    max-height: calc(@height * @max-count + @vertical-padding * 2);
+    max-height: dls-sum(@height * 8.5, @vertical-padding * 2); // ie 降级到 8.5
+    max-height: calc(@height * (@max-count + 0.5) + @vertical-padding);
     & when (@with-height = true) {
-      height: dls-sum(@height * 8, @vertical-padding * 2);
-      height: calc(@height * @max-count + @vertical-padding * 2);
+      height: dls-sum(@height * 8.5, @vertical-padding); // ie 降级到 8.5
+      height: calc(@height * (@max-count + 0.5) + @vertical-padding);
     }
   }
 }

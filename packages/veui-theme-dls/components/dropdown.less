@@ -128,6 +128,15 @@
 
     & > .@{veui-prefix}-option-group {
       overflow: auto;
+
+      // 完全自定义下拉区域不要限制最大展示个数
+      &:not(.@{veui-prefix}-dropdown-options-custom) {
+        @sizes: xs, s, m, l;
+        .veui-dropdown-max-height(
+          @sizes,
+          var(--dls-dropdown-max-display-items, 8)
+        );
+      }
     }
   }
 

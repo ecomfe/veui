@@ -101,6 +101,11 @@
       <veui-option-group
         v-else
         ref="options"
+        :class="{
+          [$c('dropdown-options-custom')]:
+            ($slots.default || $scopedSlots.default) &&
+            (!options || !options.length)
+        }"
         :options="isSearching ? filteredSuggestions : options"
         :trigger="trigger"
         :overlay-class="overlayClass"

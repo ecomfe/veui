@@ -515,6 +515,7 @@ export default {
       ) : null
 
     let renderGroup = (options, children, key) => {
+      // overlay-class={this.overlayClass} 先不透传吧
       return (
         <SelectContextProvider value={key === 'data'}>
           <OptionGroup
@@ -524,6 +525,7 @@ export default {
             aria-hidden={!options}
             ref="options"
             options={options}
+            overlay-style={this.overlayStyle}
             scopedSlots={{
               label: this.$scopedSlots['group-label'] || null,
               option: this.$scopedSlots.option || option,

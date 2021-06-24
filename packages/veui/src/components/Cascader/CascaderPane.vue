@@ -15,7 +15,10 @@
     :class="$c('cascader-pane-column-wrap')"
     :style="realColumnWidth ? { width: realColumnWidth } : null"
   >
-    <div :class="$c('cascader-pane-column')">
+    <div
+      :class="$c('cascader-pane-column')"
+      :ui="realUi"
+    >
       <div
         v-if="$scopedSlots['column-before']"
         :class="$c('cascader-pane-column-before')"
