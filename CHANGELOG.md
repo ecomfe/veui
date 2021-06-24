@@ -3,6 +3,7 @@
 ### 💡 主要变更
 
 - [+] 为 `Popover`/`Tooltip`/`AlertBox`/`ConfirmBox`/`PromptBox`/`Dialog`/`Select`/`Dropdown`/`Lightbox`/`DatePicker`/`TimePicker`/`SearchBox`/`Cascader`/`CascaderPane` 等组件新增 `overlay-style` prop，用于自定义浮层样式。
+- [+] `Link` 组件现在支持绑定通用的鼠标、键盘事件，无需使用 `.native` 修饰符。
 
 ### 🐞 问题修复
 
