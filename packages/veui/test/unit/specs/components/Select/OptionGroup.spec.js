@@ -444,7 +444,8 @@ describe('components/Select/OptionGroup', () => {
             // 所有 afteropen 完了之后检查滚动
             setTimeout(() => {
               expect(
-                wrapper.find('.veui-select-options').element.scrollTop > 0
+                wrapper.find('.veui-select-options > .veui-option-group')
+                  .element.scrollTop > 0
               ).to.equal(true)
               wrapper.destroy()
               done()
