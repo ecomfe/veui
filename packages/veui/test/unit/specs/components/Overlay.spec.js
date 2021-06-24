@@ -265,4 +265,34 @@ describe('components/Overlay', () => {
     expect(box.element.children.length, '#4').to.equal(0)
     wrapper.destroy()
   })
+
+  it('should handle overlayStyle correctly.', () => {
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            open: false
+          }
+        },
+        render () {
+          return (
+            <Overlay
+              overlayClass="overlay-style-test"
+              overlayStyle={{ '--foo': 1 }}
+            />
+          )
+        }
+      },
+      {
+        sync: false
+      }
+    )
+
+    expect(
+      wrapper
+        .find('.overlay-style-test')
+        .element.style.getPropertyValue('--foo')
+    ).to.equal('1')
+    wrapper.destroy()
+  })
 })

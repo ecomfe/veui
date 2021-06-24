@@ -82,31 +82,31 @@
   }
 }
 
-.veui-max-height(@height, @max-count, @with-height: false, @vertical-padding: @dls-option-group-padding-y) {
+.veui-max-height(@item-height, @max-count, @fixed-height: false, @padding-y: @dls-option-group-padding-y) {
   & when (isnumber(@max-count)) {
-    max-height: dls-sum(@height * (@max-count + 0.5), @vertical-padding);
-    & when (@with-height = true) {
-      height: dls-sum(@height * (@max-count + 0.5), @vertical-padding);
+    max-height: dls-sum(@item-height * (@max-count + 0.5), @padding-y);
+    & when (@fixed-height = true) {
+      height: dls-sum(@item-height * (@max-count + 0.5), @padding-y);
     }
   }
 
   & when not (isnumber(@max-count)) {
-    max-height: dls-sum(@height * 8.5, @vertical-padding * 2); // ie 降级到 8.5
-    max-height: calc(@height * (@max-count + 0.5) + @vertical-padding);
-    & when (@with-height = true) {
-      height: dls-sum(@height * 8.5, @vertical-padding); // ie 降级到 8.5
-      height: calc(@height * (@max-count + 0.5) + @vertical-padding);
+    max-height: dls-sum(@item-height * 8.5, @padding-y); // ie 降级到 8.5
+    max-height: calc(@item-height * (@max-count + 0.5) + @padding-y);
+    & when (@fixed-height = true) {
+      height: dls-sum(@item-height * 8.5, @padding-y); // ie 降级到 8.5
+      height: calc(@item-height * (@max-count + 0.5) + @padding-y);
     }
   }
 }
 
-.veui-dropdown-max-height(@sizes, @max-count: 8, @with-height: false, @vertical-padding: @dls-option-group-padding-y, @option-height: "dls-option-height") {
+.veui-dropdown-max-height(@sizes, @max-count: 8, @fixed-height: false, @padding-y: @dls-option-group-padding-y, @option-height: "dls-option-height") {
   .loop(@index: 1) when (@index <= length(@sizes)) {
     @size: extract(@sizes, @index);
     @height: "@{option-height}-@{size}";
 
     &[ui~="@{size}"] {
-      .veui-max-height(@@height, @max-count, @with-height, @vertical-padding);
+      .veui-max-height(@@height, @max-count, @fixed-height, @padding-y);
     }
 
     .loop(@index + 1);

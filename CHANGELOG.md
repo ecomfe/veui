@@ -2,7 +2,7 @@
 
 ### ⚠️ 非兼容性变更
 
-- [^] v-drag.sort指令的 callback 函数 (toIndex, fromIndex) => void的 toIndex 参数含义变更，从原来的 「移动到 toIndex 前」变更成「移动到 toIndex 处」。
+- [^] `v-drag.sort` 指令的 `callback` 函数参数 `(toIndex, fromIndex)` 中的 `toIndex` 参数含义变更，从原来的“移动到 `toIndex` 前”变更成“移动到 `toIndex` 处”。
 
 ### 💡 主要变更
 

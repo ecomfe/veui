@@ -190,4 +190,28 @@ describe('components/NumberInput', () => {
     await wrapper.vm.$nextTick()
     expect(input.element.value).to.equal('2.123')
   })
+
+  it('should step value from a invalid value correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'v-number-input': NumberInput
+        },
+        data () {
+          return {
+            val: 'aaa'
+          }
+        },
+        template: `<v-number-input v-model="val">`
+      },
+      {
+        sync: false
+      }
+    )
+
+    wrapper.find('button.veui-number-input-step-up').trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.val).to.equal(1)
+    wrapper.destroy()
+  })
 })
