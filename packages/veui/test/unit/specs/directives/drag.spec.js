@@ -14,7 +14,7 @@ describe('directives/drag', () => {
           drag: handleMove,
           dragend: handleEnd
         }"
-        style="width: 20px; height: 20px">foo</div>`,
+        style="width: 20px; height: 20px">foo1</div>`,
         methods: {
           handleStart ({ event }) {
             results.push({
@@ -70,7 +70,7 @@ describe('directives/drag', () => {
     let wrapper = mount(
       {
         directives: { drag },
-        template: `<div ref="self" v-drag:self="dragOptions">foo</div>`,
+        template: `<div ref="self" v-drag:self="dragOptions">foo2</div>`,
         data () {
           return {
             dragOptions: {
@@ -115,7 +115,7 @@ describe('directives/drag', () => {
     let wrapper = mount(
       {
         directives: { drag },
-        template: `<div ref="self" v-drag:self>foo</div>`
+        template: `<div ref="self" v-drag:self>foo3</div>`
       },
       {
         attachToDocument: true
@@ -134,7 +134,7 @@ describe('directives/drag', () => {
         directives: { drag },
         template: `<div ref="self" v-drag:self="{
         containment: '@window'
-      }">foo</div>`
+      }">foo4</div>`
       },
       {
         attachToDocument: true
@@ -166,7 +166,7 @@ describe('directives/drag', () => {
           width: 100,
           height: 100
         }
-      }" style="width: 20px; height: 20px">foo</div>`
+      }" style="width: 20px; height: 20px">foo5</div>`
       },
       {
         attachToDocument: true
@@ -189,7 +189,7 @@ describe('directives/drag', () => {
     let wrapper = mount(
       {
         directives: { drag },
-        template: `<div ref="self" v-drag:self="dragOptions">foo</div>`,
+        template: `<div ref="self" v-drag:self="dragOptions">foo6</div>`,
         data () {
           return {
             dragOptions: {
@@ -214,7 +214,7 @@ describe('directives/drag', () => {
         directives: { drag },
         template: `<div ref="self" v-drag:self="{
         ready
-      }">foo</div>`,
+      }">foo7</div>`,
         methods: {
           ready ({ reset }) {
             this.reset = reset
@@ -246,7 +246,7 @@ describe('directives/drag', () => {
         directives: { drag },
         template: `<div ref="self" v-drag:self="{
         dragend: dragEnd
-      }">foo</div>`,
+      }">foo8</div>`,
         methods: {
           dragEnd ({ distanceX, cancel }) {
             if (distanceX > 200) {
@@ -269,43 +269,44 @@ describe('directives/drag', () => {
     wrapper.destroy()
   })
 
-  it(
-    'should handle `disabled` option correctly',
-    () => {
-      let wrapper = mount({
+  it('should handle `disabled` option correctly', () => {
+    let wrapper = mount(
+      {
         directives: { drag },
         template: `<div ref="self" v-drag:self="{
         disabled: true
-      }">foo</div>`
-      })
+      }">foo9</div>`
+      },
+      {
+        attachToDocument: true
+      }
+    )
 
-      performDrag(wrapper, [
-        [0, 0],
-        [100, 100]
-      ])
-      assertTransform(wrapper, '')
+    performDrag(wrapper, [
+      [0, 0],
+      [100, 100]
+    ])
+    assertTransform(wrapper, '')
 
-      wrapper.destroy()
-    },
-    {
-      attachToDocument: true
-    }
-  )
+    wrapper.destroy()
+  })
 
   it('should handle unknown type option correctly', () => {
     expect(() => {
       mount(
         {
           directives: { drag },
-          template: `<div ref="self" v-drag:self="{
+          template: `<div ref="self" id="foo10" v-drag:self="{
           type: 'foo'
-        }">foo</div>`
+        }">foo10</div>`
         },
         {
           attachToDocument: true
         }
       )
-    }).to.throw('No handler is registered for type "foo".')
+    }).to.throw('[v-drag] The handler type "foo" is not registered.')
+
+    document.getElementById('foo10').remove()
   })
 })
 

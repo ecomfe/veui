@@ -1,3 +1,15 @@
+## 2.0.0-rc.3
+
+### ⚠️ 非兼容性变更
+
+- [^] `v-drag.sort` 指令的 `callback` 选项重命名为 `sort`。参数从 `(toIndex: number, fromIndex: number)` 修改为 `(fromIndex: number, toIndex: number)`。同时排序回调不再需要关心移动动画的完成状态。
+- [^] `v-drag` 指令的 `draggable` 选项被 `disabled` 选项取代，默认值为 `false`。
+- [-] 移除全局配置项 `drag.prefix`。
+
+### 💡 主要变更
+
+- [+] 为 `v-drag` 指令新增选项 `handle`，可用于指定拖动的“把手”元素。
+
 ## 2.0.0-rc.2
 
 ### 🐞 问题修复
@@ -16,6 +28,7 @@
 - [^] 修复 `Nav` 组件项目在光标悬浮状态下的样式问题。
 - [^] 修复 `Select` 组件的 slot prop 中缺失 `close` 方法的问题。
 - [^] 修复 `NumberInput` 组件在非法值的基础上使用步进操作产生 `NaN` 的问题。
+- [^] 修复 `Radio` 组件在有相同 `name` 的组件时，因为其它同组组件被选中导致的 DOM 状态与组件状态不同步的问题。
 
 ### 🧪 实验性功能
 

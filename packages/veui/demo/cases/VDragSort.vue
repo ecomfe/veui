@@ -85,11 +85,13 @@
         v-drag.sort.y="{
           name: 'otherSortableButton',
           sort: handleSort2,
+          handle: `handle-${item}`,
           debug,
           align
         }"
         class="item"
       >
+        <span :ref="`handle-${item}`">🤏</span>
         {{ item }}
       </li>
     </transition-group>

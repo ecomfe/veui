@@ -13,12 +13,7 @@ import { isFirefox as checkIsFirefox } from '../utils/bom'
 import BaseHandler from './drag/BaseHandler'
 import TranslateHandler from './drag/TranslateHandler'
 import SortHandler from './drag/SortHandler'
-import config from '../managers/config'
 import warn from '../utils/warn'
-
-config.defaults({
-  'drag.prefix': '@'
-})
 
 const isFirefox = checkIsFirefox()
 
@@ -57,8 +52,18 @@ function clear (el) {
   if (!dragData) {
     return
   }
+
+  let {
+    isNativeDrag,
+    mousedownHandler,
+    options: { target }
+  } = dragData.handler
+  target.removeEventListener(
+    isNativeDrag ? 'dragstart' : 'mousedown',
+    mousedownHandler
+  )
   dragData.handler.destroy()
-  el.removeEventListener('mousedown', dragData.mousedownHandler)
+
   el.__dragData__ = null
   el.__dragOldOptions__ = null
 }
@@ -66,7 +71,7 @@ function clear (el) {
 function getOptions (binding, vnode) {
   let options = normalize(binding, OPTIONS_SCHEMA)
 
-  let { containment } = options
+  let { containment, handle } = options
 
   // 如果 containment 不是特殊配置，也不是 object ，或者是 object ，
   // 但是没有完整的 top 、 left 、 width 、 height 属性，
@@ -74,6 +79,9 @@ function getOptions (binding, vnode) {
   if (!isSpecialSyntax(containment) && !isRect(containment)) {
     options.containment = get(getNodes(containment, vnode.context), '[0]', null)
   }
+
+  options.target = vnode.elm
+  options.handle = get(getNodes(handle, vnode.context), '[0]', vnode.elm)
 
   return options
 }
@@ -86,9 +94,13 @@ function refresh (el, binding, vnode) {
       '[v-drag] The `draggable` option is deprecated and will be removed in v2.0.0. Please use `disabled` instead.'
     )
     draggableDeprecationWarned = true
+
+    if (options.draggable === false) {
+      options.disabled = true
+    }
   }
 
-  if (options.disabled || options.draggable === false) {
+  if (options.disabled) {
     // TODO：先不支持动态切换
     return
   }
@@ -104,125 +116,142 @@ function refresh (el, binding, vnode) {
   }
   el.__dragOldOptions__ = options
 
-  if (el.__dragData__) {
-    el.__dragData__.handler.setOptions(options)
+  clear(el)
+
+  let contextComponent = vnode.context
+  let handler = null
+  let isNative
+  if (HANDLERS[options.type]) {
+    let { Handler, isNativeDrag } = HANDLERS[options.type]
+    isNative = isNativeDrag
+    handler = new Handler(options, contextComponent, vnode)
   } else {
-    let contextComponent = vnode.context
-    let handler = null
-    let isNativeDrag
-    if (HANDLERS[options.type]) {
-      let { Handler, isNativeDrag: _isNativeDrag } = HANDLERS[options.type]
-      isNativeDrag = _isNativeDrag
-      handler = new Handler(options, contextComponent, vnode)
-    } else {
-      throw new Error(`No handler is registered for type "${options.type}".`)
-    }
+    throw new Error(
+      `[v-drag] The handler type "${options.type}" is not registered.`
+    )
+  }
 
-    options.ready({ reset: () => handler.reset() })
+  options.ready({ reset: () => handler.reset() })
 
-    let dragData = {
-      dragging: false,
-      initX: 0,
-      initY: 0,
-      handler,
+  let { target, handle } = options
 
-      mousedownHandler (event) {
-        if (options.disabled || event.button !== 0) {
-          return
-        }
+  let dragData = {
+    dragging: false,
+    initX: 0,
+    initY: 0,
+    handler,
 
+    prepareHandler () {
+      // 原生拖拽需要在 handle 触发 mousedown 时设置 draggable 后，在 dragend 时重置
+      target.draggable = true
+    },
+
+    mousedownHandler (event) {
+      if (options.disabled || event.button !== 0) {
+        return
+      }
+
+      let { clientX, clientY } = event
+      dragData.initX = clientX
+      dragData.initY = clientY
+      let args = { event }
+      handler.start({ ...args })
+      contextComponent.$emit('dragstart', { ...args })
+      options.dragstart({ ...args })
+
+      function selectStartHandler (e) {
+        e.preventDefault()
+      }
+
+      function mouseMoveHandler (event) {
         let { clientX, clientY } = event
-        dragData.initX = clientX
-        dragData.initY = clientY
-        handler.start({ event })
-        contextComponent.$emit('dragstart', { event })
-        options.dragstart({ event })
-
-        function selectStartHandler (e) {
-          e.preventDefault()
+        let args = {
+          distanceX: clientX - dragData.initX,
+          distanceY: clientY - dragData.initY,
+          event
         }
+        handler.drag({ ...args })
+        contextComponent.$emit('drag', { ...args })
+        options.drag({ ...args })
+      }
 
-        function mouseMoveHandler (event) {
-          let { clientX, clientY } = event
-          let dragParams = {
-            distanceX: clientX - dragData.initX,
-            distanceY: clientY - dragData.initY,
-            event
-          }
-          handler.drag(dragParams)
-          contextComponent.$emit('drag', dragParams)
-          options.drag(dragParams)
+      function mouseupHandler (event) {
+        let { clientX, clientY } = event
+
+        let cancelled = false
+        let args = {
+          distanceX: clientX - dragData.initX,
+          distanceY: clientY - dragData.initY,
+          cancel: () => {
+            cancelled = true
+          },
+          event
         }
-
-        function mouseupHandler (event) {
-          let { clientX, clientY } = event
-
-          let cancelled = false
-          let dragParams = {
-            distanceX: clientX - dragData.initX,
-            distanceY: clientY - dragData.initY,
-            cancel: () => {
-              cancelled = true
-            },
-            event
-          }
-          handler.drag({ ...dragParams, last: true })
-          contextComponent.$emit('dragend', dragParams)
-          options.dragend(dragParams)
-          handler.end(
-            cancelled
-              ? {
-                distanceX: 0,
-                distanceY: 0,
-                event
-              }
-              : dragParams
-          )
-
-          if (isNativeDrag) {
-            if (isFirefox) {
-              window.removeEventListener('dragover', mouseMoveHandler)
-            } else {
-              el.removeEventListener('drag', mouseMoveHandler)
+        handler.drag({ ...args, last: true })
+        contextComponent.$emit('dragend', { ...args })
+        options.dragend({ ...args })
+        handler.end({
+          ...args,
+          ...(cancelled
+            ? {
+              distanceX: 0,
+              distanceY: 0
             }
-            el.removeEventListener('dragend', mouseupHandler)
-          } else {
-            window.removeEventListener('mousemove', mouseMoveHandler)
-            window.removeEventListener('mouseup', mouseupHandler)
-          }
-          window.removeEventListener('selectstart', selectStartHandler)
-        }
+            : {})
+        })
 
-        // TODO: 非IE下面不用移除选区
-        window.getSelection().removeAllRanges()
-        window.addEventListener('selectstart', selectStartHandler)
-
-        if (isNativeDrag) {
+        if (isNative) {
           if (isFirefox) {
-            // Firefox dragevent 里面的鼠标坐标是 0
-            // https://bugzilla.mozilla.org/show_bug.cgi?id=505521
-            window.addEventListener('dragover', mouseMoveHandler)
+            window.removeEventListener('dragover', mouseMoveHandler)
           } else {
-            el.addEventListener('drag', mouseMoveHandler)
+            target.removeEventListener('drag', mouseMoveHandler)
           }
-          el.addEventListener('dragend', mouseupHandler)
+          target.removeEventListener('dragend', mouseupHandler)
+
+          target.draggable = false
+          if (target !== handle) {
+            target.removeEventListener('mousedown', dragData.prepareHandler)
+          }
         } else {
-          window.addEventListener('mousemove', mouseMoveHandler)
-          window.addEventListener('mouseup', mouseupHandler)
+          window.removeEventListener('mousemove', mouseMoveHandler)
+          window.removeEventListener('mouseup', mouseupHandler)
         }
+        window.removeEventListener('selectstart', selectStartHandler)
+      }
+
+      // TODO: 非IE下面不用移除选区
+      window.getSelection().removeAllRanges()
+      window.addEventListener('selectstart', selectStartHandler)
+
+      if (isNative) {
+        if (isFirefox) {
+          // Firefox dragevent 里面的鼠标坐标是 0
+          // https://bugzilla.mozilla.org/show_bug.cgi?id=505521
+          window.addEventListener('dragover', mouseMoveHandler)
+        } else {
+          target.addEventListener('drag', mouseMoveHandler)
+        }
+        target.addEventListener('dragend', mouseupHandler)
+      } else {
+        window.addEventListener('mousemove', mouseMoveHandler)
+        window.addEventListener('mouseup', mouseupHandler)
       }
     }
-
-    el.addEventListener(
-      isNativeDrag ? 'dragstart' : 'mousedown',
-      dragData.mousedownHandler
-    )
-    el.__dragData__ = dragData
   }
+
+  if (isNative) {
+    handle.addEventListener('mousedown', dragData.prepareHandler)
+  }
+
+  target.addEventListener(
+    isNative ? 'dragstart' : 'mousedown',
+    dragData.mousedownHandler
+  )
+  el.__dragData__ = dragData
 }
 
 function isSpecialSyntax (value) {
-  return isString(value) && value.indexOf(config.get('drag.prefix')) === 0
+  return isString(value) && value.indexOf('@') === 0
 }
 
 function isRect (containment) {
