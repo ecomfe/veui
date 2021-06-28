@@ -25,7 +25,7 @@
   >
     <li
       v-for="(file, index) in files"
-      :key="`${file.name}-${file.src}`"
+      :key="file.key"
       v-drag.sort.y="dragSortOptions"
       :class="{
         [$c('uploader-list-item')]: true,

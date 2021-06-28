@@ -45,7 +45,7 @@ describe('components/DatePicker', () => {
     let wrapper = mount({
       data () {
         return {
-          selected: []
+          selected: null
         }
       },
       components: {
@@ -66,7 +66,7 @@ describe('components/DatePicker', () => {
     let wrapper = mount({
       data () {
         return {
-          selected: []
+          selected: null
         }
       },
       components: {

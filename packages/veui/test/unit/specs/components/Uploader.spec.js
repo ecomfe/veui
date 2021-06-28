@@ -249,7 +249,7 @@ describe('components/Uploader', function () {
         action: '/upload/xhr?force=success&latency=0',
         maxSize: '100kb',
         maxCount: 1,
-        order: 'desc',
+        order: 'prepend',
         type: 'file',
         accept: 'image/*'
       }
