@@ -25,6 +25,7 @@ const defaultDragSortInsertAlign = 'middle'
 const preventDragOverDefault = evt => evt.preventDefault()
 
 const datasetDragSortKey = camelCase(prefixify('drag-sort'))
+const datasetDragSortHandleKey = camelCase(prefixify('drag-sort-handle'))
 const datasetDraggingKey = datasetDragSortKey + 'Dragging'
 const datasetDragGhostKey = datasetDraggingKey + 'Ghost'
 
@@ -33,12 +34,11 @@ let callbackDeprecationWarned = false
 
 export default class SortHandler extends BaseHandler {
   constructor (options, context, vnode) {
-    super(options, context)
-    this.vnode = vnode
+    super(options, context, vnode)
 
     // 加上标记，开始拖动时需要通过这个找到同组元素
-    vnode.elm.dataset[datasetDragSortKey] = this.options.name
-    vnode.elm.draggable = true
+    options.target.dataset[datasetDragSortKey] = this.options.name
+    options.handle.dataset[datasetDragSortHandleKey] = ''
   }
 
   setOptions (options) {
@@ -74,9 +74,9 @@ export default class SortHandler extends BaseHandler {
   start (...args) {
     super.start(...args)
     let { event } = args[0]
-    let { currentTarget, offsetX, offsetY } = event
-    this.currentTarget = currentTarget
-    let { offsetWidth, offsetHeight } = currentTarget
+    let { offsetX, offsetY } = event
+    let { target } = this.options
+    let { offsetWidth, offsetHeight } = target
     // 算光标到元素中心的偏移量
     this.fixMouseoffset = [
       offsetWidth / 2 - offsetX,
@@ -86,10 +86,10 @@ export default class SortHandler extends BaseHandler {
     // 找出被拖动元素的所在容器。优先用传入的 containment
     this.container = this.options.containment
       ? getHtmlElement(this.options.containment)
-      : currentTarget.parentElement
+      : target.parentElement
 
     // 找出被拖动元素的索引
-    this.dragElementIndex = [...this.getElements()].indexOf(currentTarget)
+    this.dragElementIndex = [...this.getElements()].indexOf(target)
     if (this.dragElementIndex < 0) {
       throw new Error('[v-drag] Missing dragging element in elements.')
     }
@@ -98,7 +98,7 @@ export default class SortHandler extends BaseHandler {
     document.addEventListener('dragover', preventDragOverDefault)
 
     // 加上拖动中标记，用于匹配css
-    currentTarget.dataset[datasetDraggingKey] = ''
+    target.dataset[datasetDraggingKey] = ''
     document.body.classList.add(kebabCase(datasetDraggingKey))
 
     // 计算热区
@@ -110,11 +110,11 @@ export default class SortHandler extends BaseHandler {
     // 对比了 react-dnd, sortable.js 等其它使用原生 DnD 接口的拖动库，都存在上述问题。
     // 经过实验发现，通过主动设置 drag image (setDragImage) 可以在 firefox 上解决偏移问题
     // 再额外增加 safari 且被拖动元素处于 transformed 容器内的兼容处理————克隆被拖动元素且保证在视口内使得safari可以正常生成 snapshot
-    setDragSnapshotImage(currentTarget, event)
+    setDragSnapshotImage(target, event)
 
     // 下一帧再加上 ghost 样式，避免拖动的 snapshot 也是 ghost 样式
     requestAnimationFrame(() => {
-      currentTarget.dataset[datasetDragGhostKey] = ''
+      target.dataset[datasetDragGhostKey] = ''
     })
   }
 
@@ -129,7 +129,7 @@ export default class SortHandler extends BaseHandler {
       this.getElements(),
       this.container,
       this.options.axis,
-      this.currentTarget,
+      this.options.target,
       this.dragElementIndex
     )
 
@@ -150,7 +150,7 @@ export default class SortHandler extends BaseHandler {
     this.hotRects = hotRects
   }
 
-  drag ({ event: { pageX, pageY }, last }) {
+  drag ({ event: { pageX, pageY }, last, target }) {
     // Safari上 drag 和 dragend event里的 pageX/Y 不一致
     // 而 drag.js 里在 dragend 时也会再回调一次 drag
     // 所以通过 last 来判断是不是最后一次 drag
@@ -190,7 +190,7 @@ export default class SortHandler extends BaseHandler {
         // 元素列表变了，热区也要更新下（需要等DOM更新了
         Vue.nextTick(() => {
           // 在测试环境中，测完了就销毁了，这里的 nextTick 可能不需要更新
-          if (this.currentTarget) {
+          if (this.target) {
             this.updateHotRects()
           }
         })
@@ -202,21 +202,15 @@ export default class SortHandler extends BaseHandler {
 
   end (...args) {
     super.end(...args)
-    let [
-      {
-        event: { currentTarget }
-      }
-    ] = args
+    let { target } = this.options
 
     // 清理
-    delete currentTarget.dataset[datasetDragGhostKey]
-    delete currentTarget.dataset[datasetDraggingKey]
+    delete target.dataset[datasetDragGhostKey]
+    delete target.dataset[datasetDraggingKey]
     this.clear()
   }
 
   clear () {
-    this.currentTarget = null
-
     // delete document.body.dataset[datasetDraggingKey]
     document.body.classList.remove(kebabCase(datasetDraggingKey))
     document.removeEventListener('dragover', preventDragOverDefault)
@@ -226,18 +220,16 @@ export default class SortHandler extends BaseHandler {
 
   destroy () {
     this.clear()
-    delete this.vnode.elm.dataset[datasetDragSortKey]
-    this.vnode.elm.draggable = false
+
+    let { target, handle } = this.options
+    target.draggable = false
+
+    delete target.dataset[datasetDragSortKey]
+    delete handle.dataset[datasetDragSortHandleKey]
   }
 }
 
-function getHotRects (
-  elements,
-  container,
-  axis,
-  currentTarget,
-  dragElementIndex
-) {
+function getHotRects (elements, container, axis, target, dragElementIndex) {
   // TODO: rtl，把 leading, trailing 互换
 
   // 把水平方向的左右和垂直方向的上下归一为 leading(前)、trailing(后)，下面好统一处理
@@ -251,7 +243,7 @@ function getHotRects (
   // `getStableBoundingClientRect` is used here as it will ignore interpolated
   // values during transition
   const elementRects = [...elements].map(el => getStableBoundingClientRect(el))
-  const currentRect = getStableBoundingClientRect(currentTarget)
+  const currentRect = getStableBoundingClientRect(target)
 
   // 找出换行的 index，切成行，按行处理热区
   const breakIndices = elementRects

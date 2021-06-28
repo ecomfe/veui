@@ -1,12 +1,7 @@
 import { pick } from 'lodash'
 import TranslateHandler from '@/directives/drag/TranslateHandler'
-import config from '@/managers/config'
 import { mount } from '@vue/test-utils'
 import { normalizeTransform } from '../../../../utils'
-
-config.defaults({
-  'drag.prefix': '@'
-})
 
 function createHandler (options = { targets: ['target'] }, style = '') {
   let wrapper = mount(
@@ -21,7 +16,7 @@ function createHandler (options = { targets: ['target'] }, style = '') {
   )
 
   let { vm, element } = wrapper
-  let handler = new TranslateHandler(options, vm)
+  let handler = new TranslateHandler(options, vm, vm.$vnode)
 
   return {
     wrapper,

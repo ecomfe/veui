@@ -5,9 +5,10 @@ export default class BaseHandler {
 
   isDragging = false
 
-  constructor (options, context) {
+  constructor (options, context, vnode) {
     this.setOptions(options)
     this.context = context
+    this.vnode = vnode
   }
 
   start () {

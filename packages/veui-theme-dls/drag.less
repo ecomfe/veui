@@ -3,9 +3,11 @@
 ._veui-drag-sort {
   @drag-sort: ~"@{veui-prefix}-drag-sort";
 
-  @data-drag-sort: ~"[data-@{drag-sort}]";
+  @data-drag-sort-handle: ~"[data-@{drag-sort}-handle]";
   @data-drag-sort-dragging: ~"[data-@{drag-sort}-dragging]";
-  @{data-drag-sort} {
+
+  @{data-drag-sort-handle} {
+    user-select: none;
     cursor: grab;
   }
   .@{drag-sort}-dragging,
