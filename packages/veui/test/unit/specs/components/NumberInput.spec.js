@@ -214,4 +214,30 @@ describe('components/NumberInput', () => {
     expect(wrapper.vm.val).to.equal(1)
     wrapper.destroy()
   })
+
+  it('should clear value correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'v-number-input': NumberInput
+        },
+        data () {
+          return {
+            val: 123
+          }
+        },
+        template: `<v-number-input v-model="val">`
+      },
+      {
+        sync: false
+      }
+    )
+
+    let nativeInput = wrapper.find('.veui-number-input .veui-input-input')
+    nativeInput.element.value = ''
+    nativeInput.trigger('change')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.val).to.equal(null)
+    wrapper.destroy()
+  })
 })

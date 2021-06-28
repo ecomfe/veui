@@ -287,18 +287,18 @@ export default {
         : Number(round(val, decimalPlace).toFixed(decimalPlace))
     },
     handleChange (val) {
-      let parsed = this.parseValue(val, true)
-      this.parsedInputValue = null
+      let parsed = this.parseValue(val, false)
+      this.parsedInputValue = null // 下面三种 case 都是 realValue 生效，所以直接置空该值
       // 3 种 case:
-      //  1. 置空(null, 会 commit null)
-      //  2. local 输入置空(NaN), 清空 local，让 realValue 生效
-      //  3. commit
-      parsed =
-        parsed === '' || parsed == null
-          ? null
-          : this.getValidValue(parsed, this.decimalPlace)
+      //  1. 输入是空，会 commit null
+      //  2. 输入解析出来是 NaN， 那么 local 置空，让 realValue 生效
+      //  3. 输入合法，commit
+      parsed = isEmpty(parsed)
+        ? null
+        : this.getValidValue(parsed, this.decimalPlace)
 
       if (!isNaN(parsed)) {
+        // 非法值，直接上面置空了，让 realValue 生效
         this.updateValue(parsed)
       }
     },
@@ -388,5 +388,9 @@ function formatDecimal (val, decimalPlace) {
   } else if (isNum) {
     return val.toFixed(decimalPlace)
   }
+}
+
+function isEmpty (val) {
+  return val == null || (typeof val === 'string' && val.trim() === '')
 }
 </script>
