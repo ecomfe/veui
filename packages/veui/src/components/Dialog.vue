@@ -20,7 +20,12 @@
   @afterclose="handleAfterClose"
 >
   <div
-    ref="content"
+    v-drag.translate="{
+      disabled: !draggable,
+      containment: '@window',
+      handle: 'head',
+      ready: dragReady
+    }"
     v-outside="outside"
     :class="$c('dialog-content')"
     tabindex="-1"
@@ -29,11 +34,7 @@
     @keydown.esc="handleEscape"
   >
     <div
-      v-drag:content.translate="{
-        draggable,
-        containment: '@window',
-        ready: dragReady
-      }"
+      ref="head"
       :class="{
         [$c('dialog-content-head')]: true,
         [$c('dialog-draggable')]: draggable
