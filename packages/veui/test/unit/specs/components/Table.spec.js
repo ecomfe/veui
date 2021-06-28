@@ -37,7 +37,7 @@ describe('components/Table', () => {
           }
         },
         template: `
-        <veui-table :data="data" keys="field2" selectable :selected.sync="selected">
+        <veui-table :data="data" key-field="field2" selectable :selected.sync="selected">
           <veui-table-column field="field1"></veui-table-column>
         </veui-table>`
       },
@@ -53,7 +53,7 @@ describe('components/Table', () => {
     boxes.at(1).trigger('change')
     await vm.$nextTick()
 
-    expect(vm.selected).to.deep.equal(['11', '22'])
+    expect(vm.selected).to.eql([11, 22])
 
     wrapper.destroy()
   })
@@ -329,7 +329,7 @@ describe('components/Table', () => {
               { id: 2, disabled: false }
             ],
             order: false,
-            orderBy: false
+            orderBy: null
           }
         },
         template: `
@@ -582,7 +582,7 @@ describe('components/Table', () => {
           }
         },
         template: `
-          <veui-table :data="data" keys="field2" selectable :selected.sync="selected">
+          <veui-table :data="data" key-field="field2" selectable :selected.sync="selected">
             <veui-table-column field="field1" title="field1"/>
             <veui-table-column field="field2" title="field2" align="left"/>
           </veui-table>`
@@ -597,7 +597,7 @@ describe('components/Table', () => {
     let { vm } = wrapper
     await vm.$nextTick()
 
-    expect(vm.selected).to.deep.equal(['11', '22', '33'])
+    expect(vm.selected).to.eql([11, 22, 33])
 
     wrapper.find('th input[type="checkbox"]').trigger('change')
 
@@ -642,7 +642,7 @@ describe('components/Table', () => {
           }
         },
         template: `
-          <veui-table :data="data" keys="field2" selectable :selected="selected" @update:selected="updateSelected" select-mode="single">
+          <veui-table :data="data" key-field="field2" selectable :selected="selected" @update:selected="updateSelected" select-mode="single">
             <veui-table-column field="field1" title="field1"/>
             <veui-table-column field="field2" title="field2" align="left">
               <template slot="foot">总计</template>
@@ -662,14 +662,14 @@ describe('components/Table', () => {
 
     await vm.$nextTick()
 
-    expect(wrapper.vm.selected).to.equal('11')
+    expect(wrapper.vm.selected).to.equal(11)
 
     list.at(1).element.checked = true
     list.at(1).trigger('change')
 
     await vm.$nextTick()
 
-    expect(wrapper.vm.selected).to.equal('22')
+    expect(wrapper.vm.selected).to.equal(22)
 
     // fully controlled
     vm.selected = null
@@ -1126,7 +1126,7 @@ describe('components/Table', () => {
 
     wrapper.find('th input[type="checkbox"]').trigger('change')
     await vm.$nextTick()
-    expect(vm.selected).to.deep.equal([1])
+    expect(vm.selected).to.eql([1])
     wrapper.destroy()
   })
 

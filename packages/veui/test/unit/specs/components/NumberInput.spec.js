@@ -195,14 +195,14 @@ describe('components/NumberInput', () => {
     let wrapper = mount(
       {
         components: {
-          'v-number-input': NumberInput
+          'veui-number-input': NumberInput
         },
         data () {
           return {
             val: 'aaa'
           }
         },
-        template: `<v-number-input v-model="val">`
+        template: `<veui-number-input v-model="val"/>`
       },
       {
         sync: false
