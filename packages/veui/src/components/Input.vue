@@ -273,7 +273,10 @@ export default {
       this.focused = false
     },
     focus () {
-      this.$refs.input.focus()
+      let { input } = this.$refs
+      if (input) {
+        input.focus()
+      }
     },
     activate () {
       if (this.realDisabled || this.realReadonly) {
