@@ -53,16 +53,7 @@ function clear (el) {
     return
   }
 
-  let {
-    isNativeDrag,
-    mousedownHandler,
-    options: { target }
-  } = dragData.handler
-  target.removeEventListener(
-    isNativeDrag ? 'dragstart' : 'mousedown',
-    mousedownHandler
-  )
-  dragData.handler.destroy()
+  dragData.cleanup()
 
   el.__dragData__ = null
   el.__dragOldOptions__ = null
@@ -101,7 +92,7 @@ function refresh (el, binding, vnode) {
   }
 
   if (options.disabled) {
-    // TODO：先不支持动态切换
+    clear(el)
     return
   }
 
@@ -146,7 +137,18 @@ function refresh (el, binding, vnode) {
       target.draggable = true
     },
 
-    mousedownHandler (event) {
+    cleanupOnce: noop,
+    cleanup () {
+      dragData.cleanupOnce()
+
+      target.removeEventListener(
+        isNative ? 'dragstart' : 'mousedown',
+        dragData.mouseDownHandler
+      )
+      dragData.handler.destroy()
+    },
+
+    mouseDownHandler (event) {
       if (options.disabled || event.button !== 0) {
         return
       }
@@ -175,7 +177,7 @@ function refresh (el, binding, vnode) {
         options.drag({ ...args })
       }
 
-      function mouseupHandler (event) {
+      function mouseUpHandler (event) {
         let { clientX, clientY } = event
 
         let cancelled = false
@@ -200,23 +202,7 @@ function refresh (el, binding, vnode) {
             : {})
         })
 
-        if (isNative) {
-          if (isFirefox) {
-            window.removeEventListener('dragover', mouseMoveHandler)
-          } else {
-            target.removeEventListener('drag', mouseMoveHandler)
-          }
-          target.removeEventListener('dragend', mouseupHandler)
-
-          target.draggable = false
-          if (target !== handle) {
-            target.removeEventListener('mousedown', dragData.prepareHandler)
-          }
-        } else {
-          window.removeEventListener('mousemove', mouseMoveHandler)
-          window.removeEventListener('mouseup', mouseupHandler)
-        }
-        window.removeEventListener('selectstart', selectStartHandler)
+        removeOnceListeners()
       }
 
       // TODO: 非IE下面不用移除选区
@@ -231,11 +217,33 @@ function refresh (el, binding, vnode) {
         } else {
           target.addEventListener('drag', mouseMoveHandler)
         }
-        target.addEventListener('dragend', mouseupHandler)
+        target.addEventListener('dragend', mouseUpHandler)
       } else {
         window.addEventListener('mousemove', mouseMoveHandler)
-        window.addEventListener('mouseup', mouseupHandler)
+        window.addEventListener('mouseup', mouseUpHandler)
       }
+
+      function removeOnceListeners () {
+        if (isNative) {
+          if (isFirefox) {
+            window.removeEventListener('dragover', mouseMoveHandler)
+          } else {
+            target.removeEventListener('drag', mouseMoveHandler)
+          }
+          target.removeEventListener('dragend', mouseUpHandler)
+
+          target.draggable = false
+          target.removeEventListener('mousedown', dragData.prepareHandler)
+        } else {
+          window.removeEventListener('mousemove', mouseMoveHandler)
+          window.removeEventListener('mouseup', mouseUpHandler)
+        }
+        window.removeEventListener('selectstart', selectStartHandler)
+
+        dragData.cleanupOnce = noop
+      }
+
+      dragData.cleanupOnce = removeOnceListeners
     }
   }
 
@@ -245,7 +253,7 @@ function refresh (el, binding, vnode) {
 
   target.addEventListener(
     isNative ? 'dragstart' : 'mousedown',
-    dragData.mousedownHandler
+    dragData.mouseDownHandler
   )
   el.__dragData__ = dragData
 }

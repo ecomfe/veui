@@ -115,7 +115,6 @@
             <template v-if="file.type === 'image'">
               <veui-uploader-file-viewer
                 tag="img"
-                :draggable="!sortable"
                 :src="file.src || file.native"
                 :alt="file.alt"
                 :class="$c('uploader-list-media-container-media')"
@@ -124,7 +123,6 @@
             <template v-else-if="file.type === 'video'">
               <img
                 v-if="file.poster"
-                :draggable="!sortable"
                 :src="file.poster"
                 :alt="file.alt"
                 :class="$c('uploader-list-media-container-media')"
