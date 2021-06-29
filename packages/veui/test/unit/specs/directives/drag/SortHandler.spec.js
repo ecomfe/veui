@@ -39,7 +39,7 @@ describe('directives/drag/SortHandler', () => {
 
     let attrs = []
     performDrag(
-      $el.element,
+      $el,
       [
         [120, 175],
         [125, 160],
@@ -47,6 +47,95 @@ describe('directives/drag/SortHandler', () => {
         [130, 130],
         [131, 128]
       ],
+      $el,
+      {
+        onDragStart () {
+          attrs.push($el.attributes('data-veui-drag-sort-dragging'))
+        },
+        onDragEnd () {
+          attrs.push($el.attributes('data-veui-drag-sort-dragging'))
+        }
+      }
+    )
+    await wait(500)
+
+    expect(results).to.eql([[2, 0]])
+    expect(attrs).to.eql(['', undefined])
+
+    wrapper.destroy()
+  })
+
+  it(`should respect handle option correctly`, async () => {
+    let results = []
+    let wrapper = mount(
+      {
+        directives: { drag },
+        template: `<div ref="self" style="position: fixed; top: 200px; left: 200px; transform: translate(-100px, -100px); border: 1px solid red; width: 300px">
+          <div style="height: 20px; margin: 5px 0;" v-drag.sort.y="dragOptions">1</div>
+          <div style="height: 20px; margin: 5px 0;" v-drag.sort.y="dragOptions">2</div>
+          <div style="height: 20px; margin: 5px 0; display: flex;" v-drag.sort.y="{ ...dragOptions, handle: 'h' }" class="third"><div class="h" ref="h" style="width: 40px; height: 20px"></div>3</div>
+          <div style="height: 20px; margin: 5px 0;" v-drag.sort.y="dragOptions">4</div>
+        </div>`,
+        data () {
+          return {
+            dragOptions: {
+              name: '🤯',
+              containment: 'self',
+              sort: this.handleSort
+            }
+          }
+        },
+        methods: {
+          handleSort (from, to) {
+            results.push([from, to])
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    let $el = wrapper.find('.third')
+    let $handle = $el.find('.h')
+    expect($el.attributes('data-veui-drag-sort')).to.be.equal('🤯')
+
+    let attrs = []
+    performDrag(
+      $el,
+      [
+        [220, 175],
+        [225, 160],
+        [228, 162],
+        [230, 130],
+        [231, 128]
+      ],
+      $handle,
+      {
+        onDragStart () {
+          attrs.push($el.attributes('data-veui-drag-sort-dragging'))
+        },
+        onDragEnd () {
+          attrs.push($el.attributes('data-veui-drag-sort-dragging'))
+        }
+      }
+    )
+    await wait(500)
+
+    expect(results).to.eql([])
+    expect(attrs).to.eql([])
+
+    attrs = []
+    performDrag(
+      $el,
+      [
+        [120, 175],
+        [125, 160],
+        [128, 162],
+        [130, 130],
+        [131, 128]
+      ],
+      $handle,
       {
         onDragStart () {
           attrs.push($el.attributes('data-veui-drag-sort-dragging'))
@@ -65,47 +154,80 @@ describe('directives/drag/SortHandler', () => {
   })
 })
 
-async function performDrag (el, series, handler = {}) {
+async function performDrag ($el, series, $handle = $el, handlers = {}) {
   let [start, ...moves] = series
   let end = moves.pop()
 
-  el.dispatchEvent(
-    createDragEvent('dragstart', { clientX: start[0], clientY: start[1] })
-  )
-  if (handler.onDragStart) {
-    handler.onDragStart()
+  let el = $el.element
+
+  let { top, left, right, bottom } = $handle.element.getBoundingClientRect()
+  let [x, y] = start
+  if (top < y && right > x && bottom > y && left < x) {
+    $handle.trigger('mousedown', {
+      clientX: start[0],
+      clientY: start[1]
+    })
   }
+
+  dispatchDrag(
+    el,
+    'dragstart',
+    {
+      clientX: start[0],
+      clientY: start[1]
+    },
+    handlers
+  )
 
   await wait(50)
 
   for (let i = 0; i < moves.length; i++) {
     let move = moves[i]
-    el.dispatchEvent(
-      createDragEvent('drag', {
+    dispatchDrag(
+      el,
+      'drag',
+      {
         clientX: move[0],
         clientY: move[1]
-      })
+      },
+      handlers
     )
 
     await wait(100)
   }
 
-  el.dispatchEvent(
-    createDragEvent('dragend', {
+  dispatchDrag(
+    el,
+    'dragend',
+    {
       clientX: end[0],
       clientY: end[1]
-    })
+    },
+    handlers
   )
-  if (handler.onDragEnd) {
-    handler.onDragEnd()
-  }
 }
 
 // wrapper.trigger doesn't work for DragEvent for now
 // https://github.com/vuejs/vue-test-utils/issues/1762
-function createDragEvent (type, props) {
+function createDragEvent (type, args) {
   return new DragEvent(type, {
     dataTransfer: new DataTransfer(),
-    ...props
+    ...args
   })
+}
+
+function dispatchDrag (el, type, args, handlers) {
+  if (!el.draggable) {
+    return
+  }
+
+  el.dispatchEvent(createDragEvent(type, args))
+
+  let handler = {
+    dragstart: handlers.onDragStart,
+    dragend: handlers.onDragEnd
+  }[type]
+  if (handler) {
+    handler()
+  }
 }
