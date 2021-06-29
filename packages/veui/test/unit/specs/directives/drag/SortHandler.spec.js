@@ -65,7 +65,119 @@ describe('directives/drag/SortHandler', () => {
     wrapper.destroy()
   })
 
-  it(`should respect handle option correctly`, async () => {
+  it('should respect `disabled` option correctly', async () => {
+    let results = []
+    let wrapper = mount(
+      {
+        directives: { drag },
+        template: `<div ref="self" style="position: fixed; top: 200px; left: 200px; transform: translate(-100px, -100px); border: 1px solid red; width: 300px">
+          <div style="height: 20px; margin: 5px 0;" v-drag.sort.y="dragOptions">1</div>
+          <div style="height: 20px; margin: 5px 0;" v-drag.sort.y="dragOptions">2</div>
+          <div style="height: 20px; margin: 5px 0;" v-drag.sort.y="dragOptions" class="third">3</div>
+          <div style="height: 20px; margin: 5px 0;" v-drag.sort.y="dragOptions">4</div>
+        </div>`,
+        data () {
+          return {
+            disabled: false
+          }
+        },
+        computed: {
+          dragOptions () {
+            return {
+              name: '🤯',
+              containment: 'self',
+              sort: this.handleSort,
+              disabled: this.disabled
+            }
+          }
+        },
+        methods: {
+          handleSort (from, to) {
+            results.push([from, to])
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    let $el = wrapper.find('.third')
+    expect($el.attributes('data-veui-drag-sort')).to.be.equal('🤯')
+
+    let attrs = []
+    let handlers = {
+      onDragStart () {
+        attrs.push($el.attributes('data-veui-drag-sort-dragging'))
+      },
+      onDragEnd () {
+        attrs.push($el.attributes('data-veui-drag-sort-dragging'))
+      }
+    }
+
+    performDrag(
+      $el,
+      [
+        [120, 175],
+        [125, 160],
+        [128, 162],
+        [130, 130],
+        [131, 128]
+      ],
+      $el,
+      handlers
+    )
+    await wait(500)
+
+    expect(results).to.eql([[2, 0]])
+    expect(attrs).to.eql(['', undefined])
+
+    wrapper.vm.disabled = true
+
+    await wrapper.vm.$nextTick()
+    performDrag(
+      $el,
+      [
+        [120, 175],
+        [125, 160],
+        [128, 162],
+        [130, 130],
+        [131, 128]
+      ],
+      $el,
+      handlers
+    )
+    await wait(500)
+
+    expect(results).to.eql([[2, 0]])
+    expect(attrs).to.eql(['', undefined])
+
+    wrapper.vm.disabled = false
+
+    await wrapper.vm.$nextTick()
+    performDrag(
+      $el,
+      [
+        [120, 175],
+        [125, 160],
+        [128, 162],
+        [130, 130],
+        [131, 128]
+      ],
+      $el,
+      handlers
+    )
+    await wait(500)
+
+    expect(results).to.eql([
+      [2, 0],
+      [2, 0]
+    ])
+    expect(attrs).to.eql(['', undefined, '', undefined])
+    wrapper.destroy()
+  })
+
+  it('should respect `handle` option correctly', async () => {
     let results = []
     let wrapper = mount(
       {

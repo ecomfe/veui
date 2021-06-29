@@ -14,12 +14,7 @@
       <div class="space"/>
       <veui-checkbox v-model="autoupload">autoupload</veui-checkbox>
       <div class="space"/>
-      <veui-checkbox
-        v-model="sortable"
-        :readonly="sortable"
-      >
-        <span title="暂不支持动态切换">sortable</span>
-      </veui-checkbox>
+      <veui-checkbox v-model="sortable">sortable</veui-checkbox>
       <div class="space"/>
       <veui-checkbox v-model="readonly">readonly</veui-checkbox>
     </div>

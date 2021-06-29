@@ -23,14 +23,18 @@ export default {
         if (val === oldVal) {
           return
         }
-        if (oldVal && (oldVal instanceof File)) {
+        if (oldVal && oldVal instanceof File) {
           this.revoke()
         }
         if (val) {
-          this.realSrc = (val instanceof File) ? window.URL.createObjectURL(val) : val
+          this.realSrc =
+            val instanceof File ? window.URL.createObjectURL(val) : val
         }
       }
     }
+  },
+  beforeDestroy () {
+    this.revoke()
   },
   methods: {
     revoke () {
@@ -39,9 +43,6 @@ export default {
         this.realSrc = undefined
       }
     }
-  },
-  beforeDestroy () {
-    this.revoke()
   }
 }
 </script>
