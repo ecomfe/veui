@@ -153,6 +153,10 @@ function refresh (el, binding, vnode) {
         return
       }
 
+      if (isNative && event.target !== target) {
+        return
+      }
+
       let { clientX, clientY } = event
       dragData.initX = clientX
       dragData.initY = clientY
