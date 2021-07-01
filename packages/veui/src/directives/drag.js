@@ -134,7 +134,7 @@ function refresh (el, binding, vnode) {
 
     prepareHandler () {
       // 原生拖拽需要在 handle 触发 mousedown 时设置 draggable 后，在 dragend 时重置
-      target.draggable = true
+      target.setAttribute('draggable', 'true')
     },
 
     cleanupOnce: noop,
@@ -145,6 +145,9 @@ function refresh (el, binding, vnode) {
         isNative ? 'dragstart' : 'mousedown',
         dragData.mouseDownHandler
       )
+      if (isNative) {
+        target.removeEventListener('mousedown', dragData.prepareHandler)
+      }
       dragData.handler.destroy()
     },
 
@@ -236,8 +239,7 @@ function refresh (el, binding, vnode) {
           }
           target.removeEventListener('dragend', mouseUpHandler)
 
-          target.draggable = false
-          target.removeEventListener('mousedown', dragData.prepareHandler)
+          target.removeAttribute('draggable')
         } else {
           window.removeEventListener('mousemove', mouseMoveHandler)
           window.removeEventListener('mouseup', mouseUpHandler)
