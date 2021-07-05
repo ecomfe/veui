@@ -26,6 +26,7 @@
     :open.sync="topOpen"
     class="drawer-demo-instance"
     :outside-closable="outsideClosable"
+    overlay-class="drawer-demo-overlay"
     :modal="modal"
     placement="top"
   >

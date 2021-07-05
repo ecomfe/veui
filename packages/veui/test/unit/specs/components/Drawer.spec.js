@@ -410,4 +410,19 @@ describe('components/Drawer', () => {
 
     wrapper.destroy()
   })
+
+  it('should forward `overlayClass` prop correctly.', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-drawer': Drawer
+      },
+      template: '<veui-drawer open overlay-class="drawer-overlay-overlay"/>'
+    })
+
+    await wrapper.vm.$nextTick()
+
+    let box = wrapper.find('.veui-drawer-box')
+    expect(box.classes()).to.include('drawer-overlay-overlay')
+    wrapper.destroy()
+  })
 })
