@@ -16,7 +16,9 @@ export default {
       validator (value) {
         return PLACEMENT.indexOf(value) >= 0
       }
-    }
+    },
+    // eslint-disable-next-line vue/require-prop-types
+    overlayClass: {}
   },
   render (h) {
     let data = {
@@ -28,7 +30,7 @@ export default {
             [this.$c(`drawer-${this.placement}`)]: true,
             [this.$c('drawer-box')]: true
           },
-          this.$attrs.overlayClass
+          this.overlayClass
         ),
         draggable: false
       },
