@@ -14,6 +14,7 @@
     "test:start": "cross-env NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=test BABEL_ENV=test karma start"
   },
   "module": "index.js",
+  "sideEffects": ["./src/index-with-locale.js", "./index-with-locale.js", "./src/locale/**/*.js", "./locale/**/*.js", "./src/common/uiTypes.js", "./common/uiTypes.js"],
   "dependencies": {
     "bytes": "^3.0.0",
     "core-js": "^3.6.1",

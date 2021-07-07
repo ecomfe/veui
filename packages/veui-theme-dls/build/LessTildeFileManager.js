@@ -12,7 +12,7 @@ export default class LessTildeFileManager extends less.FileManager {
     return !this.isPathAbsolute(filename)
   }
 
-  async loadFile (filename, ...args) {
+  loadFile (filename, ...args) {
     if (filename.startsWith('~')) {
       filename = filename.slice(1)
     }
