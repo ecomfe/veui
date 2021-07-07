@@ -15,10 +15,19 @@
 import {
   ..., // components
   config, i18n, validation, // managers
-  useControllable, useSearchable, // mixin
-  alertPlugin, confirmPlugin, promptPlugin, toastPlugin, // plugin
-  drag, outside, resize, nudge, longpress, tooltip // directive
+  useControllable, useSearchable, // mixins
+  alertPlugin, confirmPlugin, promptPlugin, toastPlugin, // plugins
+  drag, outside, resize, nudge, longpress, tooltip // directives
 } from 'veui'
+```
+
+```html
+<script src="/path/to/vue.js"></script>
+<script src="/veui/dist/veui.js"></script>
+<script src="/veui-theme-dls/dist/dls.js"></script>
+<script>
+  // const { Button, i18n, outside } = window.veui
+</script>
 ```
 
 ## 2.0.0-rc.3
