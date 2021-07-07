@@ -8,6 +8,8 @@
   &-box {
     .fixed(0);
     display: flex;
+    justify-content: center;
+    align-items: center;
 
     &:not(&-mask) {
       pointer-events: none;
@@ -28,7 +30,6 @@
     flex-direction: column;
     background: @dls-dialog-background-color;
     padding-bottom: @dls-dialog-padding-y;
-    .veui-position-center();
     max-height: @dls-dialog-max-height;
     overflow-y: auto;
     outline: none;
@@ -164,6 +165,6 @@
 
   .@{veui-prefix}-overlay-enter &-content,
   .@{veui-prefix}-overlay-leave-to &-content {
-    transform: translate(50%, calc(50% - @transition-offset));
+    transform: translateY(-@transition-offset);
   }
 }

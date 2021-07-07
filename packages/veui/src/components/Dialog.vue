@@ -20,7 +20,8 @@
   @afterclose="handleAfterClose"
 >
   <div
-    v-drag.translate="{
+    ref="content"
+    v-drag:content.translate="{
       disabled: !draggable,
       containment: '@window',
       handle: 'head',
