@@ -1,4 +1,4 @@
-import Icon from 'veui/components/Icon'
+import { Icon } from 'veui'
 import { IconHamburger } from 'dls-icons-vue'
 
 Icon.register('hamburger', IconHamburger)

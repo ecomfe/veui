@@ -1,4 +1,4 @@
-import Icon from 'veui/components/Icon'
+import { Icon } from 'veui'
 import { IconLink } from 'dls-icons-vue'
 
 Icon.register('link', IconLink)

@@ -1,4 +1,4 @@
-import Icon from 'veui/components/Icon'
+import { Icon } from 'veui'
 import { IconEyeBright } from 'dls-icons-vue'
 
 Icon.register('eye-bright', IconEyeBright)
