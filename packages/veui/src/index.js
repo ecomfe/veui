@@ -14,10 +14,10 @@ export { default as useUi } from './mixins/ui'
 export { default as useInput } from './mixins/input'
 
 export {
-  alert as alertPlugin,
-  confirm as confirmPlugin,
-  prompt as promptPlugin,
-  toast as toastPlugin
+  alert as $alert,
+  confirm as $confirm,
+  prompt as $prompt,
+  toast as $toast
 } from './plugins'
 
 export * from './directives'
