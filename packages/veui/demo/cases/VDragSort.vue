@@ -26,7 +26,10 @@
       value="middle"
     >中心点</label>
   </section>
-  <section ref="itemGroup">
+  <section
+    ref="itemGroup"
+    style="transform: translate(200px, 0)"
+  >
     <h2>Axis: X</h2>
     <transition-group
       name="list"

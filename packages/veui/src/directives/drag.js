@@ -105,7 +105,6 @@ function refresh (el, binding, vnode) {
   ) {
     return
   }
-  el.__dragOldOptions__ = options
 
   clear(el)
 
@@ -121,8 +120,6 @@ function refresh (el, binding, vnode) {
       `[v-drag] The handler type "${options.type}" is not registered.`
     )
   }
-
-  options.ready({ reset: () => handler.reset() })
 
   let { target, handle } = options
 
@@ -141,13 +138,13 @@ function refresh (el, binding, vnode) {
     cleanup () {
       dragData.cleanupOnce()
 
-      target.removeEventListener(
-        isNative ? 'dragstart' : 'mousedown',
-        dragData.mouseDownHandler
-      )
       if (isNative) {
-        target.removeEventListener('mousedown', dragData.prepareHandler)
+        handle.removeEventListener('mousedown', dragData.prepareHandler)
+        target.removeEventListener('dragstart', dragData.mouseDownHandler)
+      } else {
+        handle.removeEventListener('mousedown', dragData.mouseDownHandler)
       }
+
       dragData.handler.destroy()
     },
 
@@ -255,13 +252,16 @@ function refresh (el, binding, vnode) {
 
   if (isNative) {
     handle.addEventListener('mousedown', dragData.prepareHandler)
+    target.addEventListener('dragstart', dragData.mouseDownHandler)
+  } else {
+    handle.addEventListener('mousedown', dragData.mouseDownHandler)
   }
 
-  target.addEventListener(
-    isNative ? 'dragstart' : 'mousedown',
-    dragData.mouseDownHandler
-  )
   el.__dragData__ = dragData
+  el.__dragOldOptions__ = options
+
+  handler.ready()
+  options.ready({ reset: () => handler.reset() })
 }
 
 function isSpecialSyntax (value) {

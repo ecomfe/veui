@@ -1,6 +1,7 @@
 import { find, pick, assign, isEqual } from 'lodash'
 import BaseHandler from './BaseHandler'
 import { getNodes } from '../../utils/context'
+import { appendTemporaryStyle, draggingStyle } from '../../utils/dom'
 
 let style =
   process.env.VUE_ENV === 'server'
@@ -30,9 +31,7 @@ function combineTransform (oldTransform, [x, y]) {
 export default class TranslateHandler extends BaseHandler {
   elms = []
 
-  originalStyles = []
-
-  initialStyles = []
+  restoreStyles = []
 
   initialTransforms = []
 
@@ -45,10 +44,6 @@ export default class TranslateHandler extends BaseHandler {
   // 是否被拖动过。
   // 只有被拖动过，才记录总的拖动距离
   isDragged = false
-
-  tempStyle =
-    'user-select:none;-ms-user-select:none;-webkit-user-select:none;-moz-user-select:none;' +
-    'transition:none;animation:none;-ms-animation:none;-webkit-animation:none;-moz-animation:none'
 
   setOptions (options) {
     if (isEqual(this.options, options)) {
@@ -67,13 +62,10 @@ export default class TranslateHandler extends BaseHandler {
     super.start()
 
     if (!this.elms || !this.elms.length) {
-      this.elms = this.options.targets.reduce(
-        (prev, cur) => {
-          prev.push(...getNodes(cur, this.context))
-          return prev
-        },
-        [this.vnode.elm]
-      )
+      this.elms = this.options.targets.reduce((prev, cur) => {
+        prev.push(...getNodes(cur, this.context))
+        return prev
+      }, [])
     }
 
     if (!this.originalStyles || !this.originalStyles.length) {
@@ -88,9 +80,7 @@ export default class TranslateHandler extends BaseHandler {
       this.initialTransforms[index] =
         initialTransform === 'none' ? '' : initialTransform
 
-      let elmStyle = elm.getAttribute('style') || ''
-      this.initialStyles[index] = elmStyle
-      elm.setAttribute('style', elmStyle + ';' + this.tempStyle)
+      this.restoreStyles[index] = appendTemporaryStyle(elm, draggingStyle)
 
       let rect = elm.getBoundingClientRect()
       this.initialPositions[index] = rect
@@ -120,9 +110,8 @@ export default class TranslateHandler extends BaseHandler {
       distanceX,
       distanceY,
       (elm, index, realDistanceX, realDistanceY) => {
-        let initialStyle = this.initialStyles[index] || ''
+        this.restoreStyles[index]()
         let initialTransform = this.initialTransforms[index] || ''
-        elm.setAttribute('style', initialStyle)
         elm.style[TRANSFORM_ACCESSOR] = combineTransform(initialTransform, [
           realDistanceX,
           realDistanceY
@@ -153,7 +142,7 @@ export default class TranslateHandler extends BaseHandler {
       ])
       constraint.width = constraint.right - constraint.left
       constraint.height = constraint.bottom - constraint.top
-    } else if (options.containment === `@window`) {
+    } else if (options.containment === '@window') {
       constraint = {
         top: 0,
         left: 0,
