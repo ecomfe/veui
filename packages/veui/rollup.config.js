@@ -16,7 +16,7 @@ const commonPlugins = [
   vue({
     template: {
       compilerOptions: {
-        whitespace: 'condense' // Textarea 样式依赖这个(white-space: pre-wrap;)
+        whitespace: 'condense'
       }
     }
   }),

@@ -10,25 +10,24 @@
 - [^] `veui-theme-dls` 产出中新增文件：
   - `dist/dls.js` UMD 版本，Baidu DLS 主题包。
   - `dist/dls.esm.js` ESM 版本，Baidu DLS 主题包。
-- [^] `veui` 调整模块导出：
-```js
-import {
-  ..., // components
-  config, i18n, validation, // managers
-  useControllable, useSearchable, // mixins
-  alertPlugin, confirmPlugin, promptPlugin, toastPlugin, // plugins
-  drag, outside, resize, nudge, longpress, tooltip // directives
-} from 'veui'
-```
-
-```html
-<script src="/path/to/vue.js"></script>
-<script src="/veui/dist/veui.js"></script>
-<script src="/veui-theme-dls/dist/dls.js"></script>
-<script>
+- [^] `veui` 的公共模块导出调整为：
+  ```js
+  import {
+    ..., // components
+    config, i18n, validation, // managers
+    useControllable, useSearchable, // mixins
+    $alert, $confirm, $prompt, $toast, // plugins
+    drag, outside, resize, nudge, longpress, tooltip // directives
+  } from 'veui'
+  ```
+  ```html
+  <script src="/path/to/vue.js"></script>
+  <script src="/veui/dist/veui.js"></script>
+  <script src="/veui-theme-dls/dist/dls.js"></script>
+  <script>
   // const { Button, i18n, outside } = window.veui
-</script>
-```
+  </script>
+  ```
 
 ## 2.0.0-rc.3
 
