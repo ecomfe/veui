@@ -118,7 +118,7 @@
                 :src="file.src || file.native"
                 :alt="file.alt"
                 :class="$c('uploader-list-media-container-media')"
-                draggable="false"
+                :draggable="!sortable"
               />
             </template>
             <template v-else-if="file.type === 'video'">
@@ -127,14 +127,14 @@
                 :src="file.poster"
                 :alt="file.alt"
                 :class="$c('uploader-list-media-container-media')"
-                draggable="false"
+                :draggable="!sortable"
               >
               <veui-uploader-file-viewer
                 v-else
                 tag="video"
                 :src="file.src || file.native"
                 :class="$c('uploader-list-media-container-media')"
-                draggable="false"
+                :draggable="!sortable"
               />
             </template>
 
