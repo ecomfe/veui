@@ -11,23 +11,38 @@
   - `dist/dls.js` UMD 版本，Baidu DLS 主题包。
   - `dist/dls.esm.js` ESM 版本，Baidu DLS 主题包。
 - [^] `veui` 的公共模块导出调整为：
+
+  #### ESM
+
   ```js
   import {
-    ..., // components
+    Button, // components
     config, i18n, validation, // managers
     useControllable, useSearchable, // mixins
     $alert, $confirm, $prompt, $toast, // plugins
     drag, outside, resize, nudge, longpress, tooltip // directives
   } from 'veui'
   ```
+
+  #### 全局对象
+
   ```html
   <script src="/path/to/vue.js"></script>
-  <script src="/veui/dist/veui.js"></script>
-  <script src="/veui-theme-dls/dist/dls.js"></script>
+  <script src="/path/to/veui/dist/veui.js"></script>
+  <script src="/path/to/veui-theme-dls/dist/dls.js"></script>
   <script>
-  // const { Button, i18n, outside } = window.veui
+  const { Button, i18n, outside } = window.veui
   </script>
   ```
+
+### 🐞 问题修复
+
+- [^] `Dropdown` 组件现在支持 `ui="strong text"`。
+- [^] 修正了 `Dialog` 组件的 `draggable` prop 失效的问题。
+- [^] 修正了 `Drawer` 组件的 `overlay-class` prop 没有正确输出的问题。
+- [^] 修正了 `v-drag` 指令在非使用 `target` 选项非受控拖动时失效的问题。
+- [^] 修正了 `v-drag.sort` 在 Safari 下容器有 `transform` 时产生偏移的问题。
+- [^] 修正了 `Uploader` 组件按住图片拖拽排序时失效的问题。
 
 ## 2.0.0-rc.3
 
