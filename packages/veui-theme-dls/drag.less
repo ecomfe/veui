@@ -7,12 +7,12 @@
   @data-drag-sort-dragging: ~"[data-@{drag-sort}-dragging]";
 
   @{data-drag-sort-handle} {
-    user-select: none;
-    cursor: grab;
+    user-select: none !important;
+    cursor: grab !important;
   }
   .@{drag-sort}-dragging,
   @{data-drag-sort-dragging} {
-    cursor: grabbing;
+    cursor: grabbing !important;
   }
 
   @data-drag-sort-dragging-ghost: ~"[data-@{drag-sort}-dragging-ghost]";
