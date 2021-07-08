@@ -898,9 +898,11 @@ export function getScrollOffset (el, context) {
   if (!context.contains(el)) {
     throw new Error('The context element must contain the starting element.')
   }
+
   let current = el
   let top = 0
   let left = 0
+
   while (current !== context) {
     current = current.parentElement
     top += current.scrollTop
@@ -910,5 +912,28 @@ export function getScrollOffset (el, context) {
   return {
     top,
     left
+  }
+}
+
+export const draggingStyle =
+  'user-select:none;-ms-user-select:none;-webkit-user-select:none;-moz-user-select:none;' +
+  'transition:none;animation:none;-ms-animation:none;-webkit-animation:none;-moz-animation:none'
+
+/**
+ * Apply style temporarily and clean up later
+ *
+ * @param {HTMLElement} el the target element
+ * @param {string} style the style string
+ * @returns {Function} the remove function
+ */
+export function appendTemporaryStyle (el, style) {
+  let originalStyle = el.getAttribute('style')
+  el.setAttribute('style', originalStyle ? `${originalStyle};${style}` : style)
+  return () => {
+    if (originalStyle === null) {
+      el.removeAttribute('style')
+    } else {
+      el.setAttribute('style', originalStyle)
+    }
   }
 }

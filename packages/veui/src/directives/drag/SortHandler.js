@@ -13,7 +13,8 @@ import { prefixify } from '../../mixins/prefix'
 import {
   isInsideTransformedContainer,
   cloneElementWithComputedStyle,
-  getStableBoundingClientRect
+  getStableBoundingClientRect,
+  appendTemporaryStyle
 } from '../../utils/dom'
 import { isSafari as checkIsSafari } from '../../utils/bom'
 import BaseHandler from './BaseHandler'
@@ -28,6 +29,8 @@ const datasetDragSortKey = camelCase(prefixify('drag-sort'))
 const datasetDragSortHandleKey = camelCase(prefixify('drag-sort-handle'))
 const datasetDraggingKey = datasetDragSortKey + 'Dragging'
 const datasetDragGhostKey = datasetDraggingKey + 'Ghost'
+const dragContainerChildrenKey = '__drag_container_children__'
+const dragContainerRestoreKey = '__drag_container_restore__'
 
 // TODO: remove this after 2.0.0.
 let callbackDeprecationWarned = false
@@ -71,6 +74,36 @@ export default class SortHandler extends BaseHandler {
     )
   }
 
+  ready () {
+    let { target, containment } = this.options
+
+    // 找出被拖动元素的所在容器。优先用传入的 containment
+    let container = (this.container = containment
+      ? getHtmlElement(containment)
+      : target.parentElement)
+
+    if (!container) {
+      throw new Error(
+        '[v-drag] Sortable element must be inside a container element.'
+      )
+    }
+
+    let siblings = container[dragContainerChildrenKey]
+    if (!siblings) {
+      siblings = container[dragContainerChildrenKey] = []
+      let restoreContainerStyle = appendTemporaryStyle(
+        container,
+        'position: relative !important'
+      )
+      container[dragContainerRestoreKey] = () => {
+        restoreContainerStyle()
+        delete container[dragContainerChildrenKey]
+        delete container[dragContainerRestoreKey]
+      }
+    }
+    siblings.push(target)
+  }
+
   start (...args) {
     super.start(...args)
     let { event } = args[0]
@@ -82,11 +115,6 @@ export default class SortHandler extends BaseHandler {
       offsetWidth / 2 - offsetX,
       offsetHeight / 2 - offsetY
     ]
-
-    // 找出被拖动元素的所在容器。优先用传入的 containment
-    this.container = this.options.containment
-      ? getHtmlElement(this.options.containment)
-      : target.parentElement
 
     // 找出被拖动元素的索引
     this.dragElementIndex = [...this.getElements()].indexOf(target)
@@ -125,8 +153,14 @@ export default class SortHandler extends BaseHandler {
   }
 
   updateHotRects () {
+    const els = this.getElements()
+
+    if (els.length === 0) {
+      return
+    }
+
     const hotRects = getHotRects(
-      this.getElements(),
+      els,
       this.container,
       this.options.axis,
       this.options.target,
@@ -150,7 +184,7 @@ export default class SortHandler extends BaseHandler {
     this.hotRects = hotRects
   }
 
-  drag ({ event: { pageX, pageY }, last, target }) {
+  drag ({ event: { pageX, pageY }, last }) {
     // Safari上 drag 和 dragend event里的 pageX/Y 不一致
     // 而 drag.js 里在 dragend 时也会再回调一次 drag
     // 所以通过 last 来判断是不是最后一次 drag
@@ -189,10 +223,7 @@ export default class SortHandler extends BaseHandler {
         this.dragElementIndex = toIndex
         // 元素列表变了，热区也要更新下（需要等DOM更新了
         Vue.nextTick(() => {
-          // 在测试环境中，测完了就销毁了，这里的 nextTick 可能不需要更新
-          if (this.target) {
-            this.updateHotRects()
-          }
+          this.updateHotRects()
         })
       }
     }
@@ -211,7 +242,6 @@ export default class SortHandler extends BaseHandler {
   }
 
   clear () {
-    // delete document.body.dataset[datasetDraggingKey]
     document.body.classList.remove(kebabCase(datasetDraggingKey))
     document.removeEventListener('dragover', preventDragOverDefault)
   }
@@ -226,6 +256,14 @@ export default class SortHandler extends BaseHandler {
 
     delete target.dataset[datasetDragSortKey]
     delete handle.dataset[datasetDragSortHandleKey]
+
+    let { container } = this
+
+    let siblings = container[dragContainerChildrenKey]
+    siblings.splice(siblings.indexOf(target), 1)
+    if (siblings.length === 0) {
+      container[dragContainerRestoreKey]()
+    }
   }
 }
 

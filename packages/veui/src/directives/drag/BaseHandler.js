@@ -11,6 +11,8 @@ export default class BaseHandler {
     this.vnode = vnode
   }
 
+  ready () {}
+
   start () {
     this.isDragging = true
   }
