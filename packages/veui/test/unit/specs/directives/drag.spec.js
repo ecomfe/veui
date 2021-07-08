@@ -86,7 +86,7 @@ describe('directives/drag', () => {
 
     let { vm } = wrapper
 
-    performDrag(wrapper)
+    await performDrag(wrapper)
     assertTransform(wrapper, 'translate(200px, 0px)')
 
     await vm.$nextTick()
@@ -94,12 +94,12 @@ describe('directives/drag', () => {
     // should skip
     wrapper.vm.dragOptions = { axis: 'y' }
     await vm.$nextTick()
-    performDrag(wrapper)
+    await performDrag(wrapper)
     assertTransform(wrapper, 'translate(200px, 200px)')
 
     wrapper.vm.dragOptions = { axis: 'x' }
     await vm.$nextTick()
-    performDrag(wrapper)
+    await performDrag(wrapper)
     assertTransform(wrapper, 'translate(400px, 200px)')
 
     wrapper.destroy()
@@ -127,7 +127,7 @@ describe('directives/drag', () => {
     wrapper.destroy()
   })
 
-  it('should handle @window containment correctly', () => {
+  it('should handle @window containment correctly', async () => {
     document.body.style = 'margin: 0'
     let wrapper = mount(
       {
@@ -141,7 +141,7 @@ describe('directives/drag', () => {
       }
     )
 
-    performDrag(wrapper, [
+    await performDrag(wrapper, [
       [0, 0],
       [-100, 2000]
     ])
@@ -154,7 +154,7 @@ describe('directives/drag', () => {
     wrapper.destroy()
   })
 
-  it('should handle rect containment correctly', () => {
+  it('should handle rect containment correctly', async () => {
     document.body.style = 'margin: 0'
     let wrapper = mount(
       {
@@ -173,7 +173,7 @@ describe('directives/drag', () => {
       }
     )
 
-    performDrag(wrapper, [
+    await performDrag(wrapper, [
       [0, 0],
       [-100, 200]
     ])
@@ -185,7 +185,7 @@ describe('directives/drag', () => {
     wrapper.destroy()
   })
 
-  it('should ignore dragging triggered from right click', () => {
+  it('should ignore dragging triggered from right click', async () => {
     let wrapper = mount(
       {
         directives: { drag },
@@ -203,7 +203,7 @@ describe('directives/drag', () => {
       }
     )
 
-    performDrag(wrapper, { button: 2 })
+    await performDrag(wrapper, { button: 2 })
     assertTransform(wrapper, '')
     wrapper.destroy()
   })
@@ -227,7 +227,7 @@ describe('directives/drag', () => {
     )
 
     let { vm } = wrapper
-    performDrag(wrapper, [
+    await performDrag(wrapper, [
       [0, 0],
       [100, 100]
     ])
@@ -260,7 +260,7 @@ describe('directives/drag', () => {
       }
     )
 
-    performDrag(wrapper, [
+    await performDrag(wrapper, [
       [0, 0],
       [100, 100],
       [400, 200]
@@ -269,7 +269,7 @@ describe('directives/drag', () => {
     wrapper.destroy()
   })
 
-  it('should handle `disabled` option correctly', () => {
+  it('should handle `disabled` option correctly', async () => {
     let wrapper = mount(
       {
         directives: { drag },
@@ -282,7 +282,7 @@ describe('directives/drag', () => {
       }
     )
 
-    performDrag(wrapper, [
+    await performDrag(wrapper, [
       [0, 0],
       [100, 100]
     ])
@@ -308,6 +308,85 @@ describe('directives/drag', () => {
 
     document.getElementById('foo10').remove()
   })
+
+  it('should handle controlled translate correctly', async () => {
+    let child = {
+      directives: { drag },
+      template: `<div ref="foo" style="width: 150px; height: 150px;"><div class="draggable" v-drag="{
+        drag: handleMove,
+        dragend: handleEnd,
+        containment
+      }" :style="style">{{ x }}, {{ y }}</div></div>`,
+      props: {
+        x: Number,
+        y: Number
+      },
+      data () {
+        return {
+          anchorX: 0,
+          anchorY: 0,
+          containment: null
+        }
+      },
+      computed: {
+        style () {
+          return `width: 100px; height: 100px; transform: translate(${this.x}px, ${this.y}px)`
+        }
+      },
+      mounted () {
+        this.containment = 'foo'
+      },
+      methods: {
+        handleMove (e) {
+          this.$emit('move', {
+            x: this.anchorX + e.distanceX,
+            y: this.anchorY + e.distanceY
+          })
+        },
+        handleEnd (e) {
+          this.$emit('move', {
+            x: this.anchorX + e.distanceX,
+            y: this.anchorY + e.distanceY
+          })
+          this.anchorX += e.distanceX
+          this.anchorY += e.distanceY
+        }
+      }
+    }
+
+    let parent = {
+      template: '<div><child :x="x" :y="y" @move="handleMove"/></div>',
+      components: {
+        child
+      },
+      data () {
+        return {
+          x: 0,
+          y: 0,
+          containment: null
+        }
+      },
+      methods: {
+        handleMove ({ x, y }) {
+          this.x = x
+          this.y = y
+        }
+      }
+    }
+
+    let wrapper = mount(parent, {
+      attachToDocument: true,
+      sync: false
+    })
+
+    await wrapper.vm.$nextTick()
+
+    let draggable = wrapper.find('.draggable')
+    await performDrag(draggable)
+    assertTransform(draggable, 'translate(200px, 200px)')
+
+    wrapper.destroy()
+  })
 })
 
 let DEFAULT_MOVEMENT = [
@@ -315,7 +394,8 @@ let DEFAULT_MOVEMENT = [
   [105, 105],
   [205, 205]
 ]
-function performDrag (wrapper, ...rest) {
+
+async function performDrag (wrapper, ...rest) {
   let series = DEFAULT_MOVEMENT
   let data = {}
   if (rest.length === 1) {
@@ -338,7 +418,10 @@ function performDrag (wrapper, ...rest) {
 
   window.dispatchEvent(new Event('selectstart'))
 
-  moves.forEach(move => {
+  await wait(50)
+
+  for (let i = 0; i < moves.length; i++) {
+    let move = moves[i]
     window.dispatchEvent(
       new MouseEvent('mousemove', {
         clientX: move[0],
@@ -346,7 +429,9 @@ function performDrag (wrapper, ...rest) {
         ...data
       })
     )
-  })
+
+    await wait(100)
+  }
 
   window.dispatchEvent(
     new MouseEvent('mouseup', {
@@ -360,7 +445,7 @@ function performDrag (wrapper, ...rest) {
 function assertTransform (target, transform) {
   let el
 
-  if (target.element && target.vm) {
+  if (target.element) {
     el = target.element // wrapper
   } else if (target.$el) {
     el = target.$el

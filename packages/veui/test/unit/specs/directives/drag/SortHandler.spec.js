@@ -38,7 +38,7 @@ describe('directives/drag/SortHandler', () => {
     expect($el.attributes('data-veui-drag-sort')).to.be.equal('🤯')
 
     let attrs = []
-    performDrag(
+    await performDrag(
       $el,
       [
         [120, 175],
@@ -57,7 +57,6 @@ describe('directives/drag/SortHandler', () => {
         }
       }
     )
-    await wait(500)
 
     expect(results).to.eql([[2, 0]])
     expect(attrs).to.eql(['', undefined])
@@ -115,7 +114,7 @@ describe('directives/drag/SortHandler', () => {
       }
     }
 
-    performDrag(
+    await performDrag(
       $el,
       [
         [120, 175],
@@ -127,7 +126,6 @@ describe('directives/drag/SortHandler', () => {
       $el,
       handlers
     )
-    await wait(500)
 
     expect(results).to.eql([[2, 0]])
     expect(attrs).to.eql(['', undefined])
@@ -135,7 +133,7 @@ describe('directives/drag/SortHandler', () => {
     wrapper.vm.disabled = true
 
     await wrapper.vm.$nextTick()
-    performDrag(
+    await performDrag(
       $el,
       [
         [120, 175],
@@ -147,7 +145,6 @@ describe('directives/drag/SortHandler', () => {
       $el,
       handlers
     )
-    await wait(500)
 
     expect(results).to.eql([[2, 0]])
     expect(attrs).to.eql(['', undefined])
@@ -155,7 +152,7 @@ describe('directives/drag/SortHandler', () => {
     wrapper.vm.disabled = false
 
     await wrapper.vm.$nextTick()
-    performDrag(
+    await performDrag(
       $el,
       [
         [120, 175],
@@ -167,7 +164,6 @@ describe('directives/drag/SortHandler', () => {
       $el,
       handlers
     )
-    await wait(500)
 
     expect(results).to.eql([
       [2, 0],
@@ -213,7 +209,7 @@ describe('directives/drag/SortHandler', () => {
     expect($el.attributes('data-veui-drag-sort')).to.be.equal('🤯')
 
     let attrs = []
-    performDrag(
+    await performDrag(
       $el,
       [
         [220, 175],
@@ -232,13 +228,12 @@ describe('directives/drag/SortHandler', () => {
         }
       }
     )
-    await wait(500)
 
     expect(results).to.eql([])
     expect(attrs).to.eql([])
 
     attrs = []
-    performDrag(
+    await performDrag(
       $el,
       [
         [120, 175],
@@ -257,7 +252,6 @@ describe('directives/drag/SortHandler', () => {
         }
       }
     )
-    await wait(500)
 
     expect(results).to.eql([[2, 0]])
     expect(attrs).to.eql(['', undefined])
