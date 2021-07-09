@@ -20,7 +20,9 @@
     "./src/locale/**/*.js",
     "./locale/**/*.js",
     "./src/common/uiTypes.js",
-    "./common/uiTypes.js"
+    "./common/uiTypes.js",
+    "**/*.less",
+    "./demo/**/*.vue"
   ],
   "dependencies": {
     "bytes": "^3.0.0",
