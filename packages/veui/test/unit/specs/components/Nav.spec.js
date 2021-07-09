@@ -105,7 +105,8 @@ describe('components/Nav', () => {
     )
     let { vm } = wrapper
 
-    let last = wrapper.find('.small-nav .veui-nav-item:last-child')
+    let items = wrapper.findAll('.small-nav .veui-nav-item')
+    let last = items.at(items.length - 1)
     last.trigger('mouseenter')
     await vm.$nextTick()
     expect(last.classes()).to.include('veui-nav-item-open')
@@ -113,6 +114,16 @@ describe('components/Nav', () => {
     last.trigger('mouseleave')
     await vm.$nextTick()
     expect(last.classes()).to.not.include('veui-nav-item-open')
+
+    let second = items.at(1)
+    second.trigger('mouseenter')
+    await vm.$nextTick()
+    second.trigger('mouseout', {
+      relatedTarget: wrapper.find('.veui-nav-dropdown').element
+    })
+    // 等 outside 触发之后
+    await wait(300)
+    expect(second.classes()).to.include('veui-nav-item-open')
     wrapper.destroy()
   })
 

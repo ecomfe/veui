@@ -30,7 +30,6 @@
           }"
           :tabindex="item.tabIndex"
           @mouseenter="handleItemHover(item)"
-          @mouseleave="close(item)"
           @keydown="handleKeydown($event, item)"
         >
           <slot name="more-icon">
@@ -54,7 +53,7 @@
           :tabindex="item.tabIndex"
           v-bind="pickLinkProps(item)"
           @mouseenter="handleItemHover(item)"
-          @mouseleave="close(item)"
+          @mouseleave="!hasChildren(item) && close(item)"
           @click="handleItemClick(item)"
           @keydown="handleKeydown($event, item)"
         >
