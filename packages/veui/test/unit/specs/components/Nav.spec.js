@@ -118,12 +118,11 @@ describe('components/Nav', () => {
     let second = items.at(1)
     second.trigger('mouseenter')
     await vm.$nextTick()
-    second.trigger('mouseout', {
-      relatedTarget: wrapper.find('.veui-nav-dropdown').element
-    })
-    // 等 outside 触发之后
-    await wait(300)
-    expect(second.classes()).to.include('veui-nav-item-open')
+    second.trigger('mouseleave')
+    await vm.$nextTick()
+    expect(second.classes(), '有下拉的不会监听mouseleave').to.include(
+      'veui-nav-item-open'
+    )
     wrapper.destroy()
   })
 
