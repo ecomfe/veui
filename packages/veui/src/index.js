@@ -1,4 +1,5 @@
-export * from './components'
+// keep `./components/index` in case of resolving to `./components.json`
+export * from './components/index'
 
 export { default as config } from './managers/config'
 export { default as i18n } from './managers/i18n'
