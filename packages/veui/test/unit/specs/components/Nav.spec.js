@@ -117,13 +117,15 @@ describe('components/Nav', () => {
 
     let second = items.at(1)
     second.trigger('mouseenter')
-    await vm.$nextTick()
+    await wait(300)
     second.trigger('mouseout', {
       relatedTarget: wrapper.find('.veui-nav-dropdown').element
     })
     // 等 outside 触发之后
     await wait(300)
-    expect(second.classes()).to.include('veui-nav-item-open')
+    expect(second.classes(), '移到 dropdown 上不要关闭').to.include(
+      'veui-nav-item-open'
+    )
     wrapper.destroy()
   })
 
