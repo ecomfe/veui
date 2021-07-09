@@ -123,9 +123,7 @@ describe('components/Nav', () => {
     })
     // 等 outside 触发之后
     await wait(300)
-    expect(second.classes(), '移到 dropdown 上不要关闭').to.include(
-      'veui-nav-item-open'
-    )
+    expect(second.classes()).to.include('veui-nav-item-open')
     wrapper.destroy()
   })
 
