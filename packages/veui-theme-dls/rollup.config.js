@@ -20,6 +20,7 @@ const commonPlugins = [
     }
   },
   replace({
+    preventAssignment: true,
     'process.env.NODE_ENV': '"development"'
   }),
   nodeResolve(),
