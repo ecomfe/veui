@@ -14,7 +14,7 @@ config.defaults(
         default: 'm'
       },
       style: {
-        values: ['primary', 'basic', 'normal', 'strong'],
+        values: ['primary', 'basic', 'normal'],
         default: 'basic',
         inherit: true
       },
