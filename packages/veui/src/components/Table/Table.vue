@@ -201,7 +201,6 @@ export default {
       }
     },
     scroll: [Number, String, Object],
-    keys: [String, Array],
     keyField: String,
     selectable: Boolean,
     expandable: Boolean,
@@ -468,14 +467,6 @@ export default {
       return this.selectColumnWidth + this.expandColumnWidth
     }
   },
-  created () {
-    if ('keys' in this.$options.propsData) {
-      warn(
-        '[veui-talbe] The `keys` prop is deprecated and will be removed in v2.0.0. Use `key-field` instead.',
-        this
-      )
-    }
-  },
   mounted () {
     if (this.supportSticky === null) {
       if (supportSticky === null) {
@@ -552,30 +543,20 @@ export default {
       }, {})
     },
     getKeys (data) {
-      if (this.keyField) {
-        let { span } =
-          find(this.realColumns, ({ field }) => field === this.keyField) || {}
-        if (typeof span === 'function') {
-          return Object.keys(data)
-            .map(index => {
-              return {
-                index,
-                span: span(index)
-              }
-            })
-            .filter(({ span: { row = 1, col = 1 } }) => row >= 1 && col >= 1)
-            .map(({ index }) => data[index][this.keyField])
-        }
-        return map(data, this.keyField)
+      let { span } =
+        find(this.realColumns, ({ field }) => field === this.keyField) || {}
+      if (typeof span === 'function') {
+        return Object.keys(data)
+          .map(index => {
+            return {
+              index,
+              span: span(index)
+            }
+          })
+          .filter(({ span: { row = 1, col = 1 } }) => row >= 1 && col >= 1)
+          .map(({ index }) => data[index][this.keyField])
       }
-      let keys = this.keys
-      if (!keys) {
-        keys = Object.keys(data)
-      }
-      if (typeof keys === 'string') {
-        keys = map(data, keys)
-      }
-      return keys.map(String)
+      return map(data, this.keyField)
     },
     expand (expanded, index) {
       let key = this.getKeyByIndex(index)
