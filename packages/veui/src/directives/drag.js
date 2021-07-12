@@ -13,14 +13,10 @@ import { isFirefox as checkIsFirefox } from '../utils/bom'
 import BaseHandler from './drag/BaseHandler'
 import TranslateHandler from './drag/TranslateHandler'
 import SortHandler from './drag/SortHandler'
-import warn from '../utils/warn'
 
 const isFirefox = checkIsFirefox()
 
 const HANDLERS = {}
-
-// TODO: remove this after 2.0.0.
-let draggableDeprecationWarned = false
 
 const OPTIONS_SCHEMA = {
   arg: 'targets[]',
@@ -79,17 +75,6 @@ function getOptions (binding, vnode) {
 
 function refresh (el, binding, vnode) {
   const options = getOptions(binding, vnode)
-
-  if ('draggable' in options && !draggableDeprecationWarned) {
-    warn(
-      '[v-drag] The `draggable` option is deprecated and will be removed in v2.0.0. Please use `disabled` instead.'
-    )
-    draggableDeprecationWarned = true
-
-    if (options.draggable === false) {
-      options.disabled = true
-    }
-  }
 
   if (options.disabled) {
     clear(el)

@@ -12,12 +12,10 @@ import type from './type'
 /**
  * 变量匹配正则
  *
- * @deprecated
  * @type {RegExp}
  */
-const oldRuleValueRe = /%\{ruleValue\}/g
-
 const ruleValueRe = /\$?\{ruleValue\}/g
+
 const valueRe = /\$?\{value\}/g
 
 export class Rule {
@@ -51,10 +49,7 @@ export class Rule {
           message: isFunction(realMessage)
             ? realMessage(val, rule.value)
             : (realMessage + '')
-              .replace(
-                ruleValueRe.test(realMessage) ? ruleValueRe : oldRuleValueRe,
-                rule.value
-              )
+              .replace(ruleValueRe, rule.value)
               .replace(valueRe, val)
         }
       }

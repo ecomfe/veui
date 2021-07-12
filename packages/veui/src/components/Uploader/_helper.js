@@ -29,8 +29,6 @@ export const STATUS = {
 }
 
 export const ORDERS = {
-  LEGACY_PREPEND: 'desc',
-  LEGACY_APPEND: 'asc',
   PREPEND: 'prepend',
   APPEND: 'append'
 }

@@ -50,7 +50,6 @@ import {
   pick,
   includes,
   isString,
-  startsWith,
   findIndex,
   find,
   omit,
@@ -184,16 +183,6 @@ export default {
         return includes(['json', 'text'], value)
       }
     },
-    extensions: {
-      type: Array,
-      validator () {
-        warn(
-          '[veui-uploader] `extensions` is deprecated and will be removed in future versions. Use `accept` instead.',
-          this
-        )
-        return true
-      }
-    },
     accept: String,
     validator: {
       type: Function
@@ -275,16 +264,6 @@ export default {
     },
     realOrder () {
       if (this.order) {
-        let mapping = {
-          [ORDERS.LEGACY_PREPEND]: ORDERS.PREPEND,
-          [ORDERS.LEGACY_APPEND]: ORDERS.APPEND
-        }
-        if (this.order in mapping) {
-          warn(
-            '[veui-uploader] `desc` and `asc` are deprecated for the `order` prop. Use `prepend` and `append` instead.'
-          )
-          return mapping[this.order]
-        }
         return this.order
       }
       return this.type === 'file' ? ORDERS.PREPEND : ORDERS.APPEND
@@ -293,13 +272,6 @@ export default {
       return ['image', 'video', 'media'].indexOf(this.type) > -1
     },
     realAccept () {
-      if (this.extensions) {
-        return this.extensions
-          .map(extension =>
-            startsWith(extension, '.') ? extension : `.${extension}`
-          )
-          .join(',')
-      }
       if (this.accept) {
         return this.accept
       }
@@ -558,10 +530,10 @@ export default {
           : this.fileList.concat(files)
 
       if (this.autoupload) {
-        this.triggerUpload()
+        this.startUpload()
       }
     },
-    triggerUpload () {
+    startUpload () {
       this.fileList.forEach(file => this.uploadFile(file))
     },
     uploadFile (file) {
@@ -702,33 +674,12 @@ export default {
       return file
     },
 
-    // legacy APIs
-    clickInput () {
+    triggerUpload () {
       warn(
-        '[veui-uploader] `clickInput` is deprecated. use `chooseFiles` instead',
+        '[veui-uploader] `triggerUpload` is deprecated and will be removed in future versions. Use `startUpload` instead.',
         this
       )
-      this.chooseFiles()
-    },
-    submit (file) {
-      warn(
-        '[veui-uploader] `submit` is deprecated. use `triggerUpload` instead',
-        this
-      )
-      let internalFile = find(
-        this.fileList,
-        item => item[this.keyField] === file[this.keyField]
-      )
-      if (internalFile) {
-        this.uploadFile(internalFile)
-      }
-    },
-    uploadFiles () {
-      warn(
-        '[veui-uploader] `uploadFiles` is deprecated. use `triggerUpload` instead',
-        this
-      )
-      this.triggerUpload()
+      this.startUpload()
     }
   }
 }

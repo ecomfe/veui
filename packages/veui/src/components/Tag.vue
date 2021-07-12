@@ -30,35 +30,17 @@ export default {
     selectable: Boolean,
     selected: Boolean,
     removable: Boolean,
-    closable: Boolean,
     removed: Boolean,
     disabled: Boolean
   },
   computed: {
     tabIndex () {
       return !this.disabled && this.selectable ? 0 : null
-    },
-    realRemovable () {
-      return this.removable || this.closable
     }
   },
   created () {
-    if (this.realRemovable && this.selectable) {
+    if (this.removable && this.selectable) {
       warn('[veui-tag] `removable` and `selectable` cannot be both true.', this)
-    }
-
-    if ('closable' in this.$options.propsData) {
-      warn(
-        '[veui-tag] The `closable` prop is deprecated and will be removed in v2.0.0. Use `removable` instead.',
-        this
-      )
-    }
-
-    if (this.$listeners.close) {
-      warn(
-        '[veui-tag] The `close` event is deprecated and will be removed in v2.0.0. Use `remove` instead.',
-        this
-      )
     }
   },
   methods: {
@@ -78,7 +60,6 @@ export default {
       e.stopPropagation()
       e.preventDefault()
       this.commit('removed', true)
-      this.$emit('close')
       this.$emit('remove')
     }
   },
@@ -99,7 +80,7 @@ export default {
         onClick={this.handleClick}
       >
         {this.$slots.default}
-        {this.realRemovable ? (
+        {this.removable ? (
           <veui-button
             ui={this.uiParts.remove}
             class={this.$c('tag-remove')}

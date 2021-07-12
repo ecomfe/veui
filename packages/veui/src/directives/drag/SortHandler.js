@@ -18,7 +18,6 @@ import {
 } from '../../utils/dom'
 import { isSafari as checkIsSafari } from '../../utils/bom'
 import BaseHandler from './BaseHandler'
-import warn from '../../utils/warn'
 
 const isSafari = checkIsSafari()
 
@@ -31,9 +30,6 @@ const datasetDraggingKey = datasetDragSortKey + 'Dragging'
 const datasetDragGhostKey = datasetDraggingKey + 'Ghost'
 const dragContainerChildrenKey = '__drag_container_children__'
 const dragContainerRestoreKey = '__drag_container_restore__'
-
-// TODO: remove this after 2.0.0.
-let callbackDeprecationWarned = false
 
 export default class SortHandler extends BaseHandler {
   constructor (options, context, vnode) {
@@ -53,24 +49,9 @@ export default class SortHandler extends BaseHandler {
     }
     super.setOptions(options)
 
-    if ('callback' in options && !callbackDeprecationWarned) {
-      warn(
-        '[v-drag.sort] The `callback` option is deprecated and will be removed in v2.0.0. Please use `sort` instead.'
-      )
-      callbackDeprecationWarned = true
-    }
-
     this.options = assign(
       this.options,
-      pick(options, [
-        'name',
-        'containment',
-        'axis',
-        'sort',
-        'callback', // deprecated
-        'debug',
-        'align'
-      ])
+      pick(options, ['name', 'containment', 'axis', 'sort', 'debug', 'align'])
     )
   }
 
@@ -213,12 +194,8 @@ export default class SortHandler extends BaseHandler {
     const fromIndex = this.dragElementIndex
     // 插入当前拖动元素或后面一个元素的前面，就是当前的位置，不用修改
     if (fromIndex !== toIndex) {
-      // TODO: remove the compatibility code after 2.0.
-      let { sort, callback } = this.options
-      let result = sort
-        ? sort(fromIndex, toIndex)
-        : callback(toIndex, fromIndex)
-      if (result !== false) {
+      let { sort } = this.options
+      if (sort(fromIndex, toIndex) !== false) {
         // 拖动成功后，更新下当前拖动元素索引
         this.dragElementIndex = toIndex
         // 元素列表变了，热区也要更新下（需要等DOM更新了
