@@ -73,6 +73,17 @@ module.exports = {
       }))
 
     config.module
+      .rule('vueMain')
+      .test(/\.vue$/)
+      .sideEffects(false)
+
+    config.module
+      .rule('vueStyle')
+      .test(/\.vue$/)
+      .resourceQuery(/type=style/)
+      .sideEffects(true)
+
+    config.module
       .rule('veui')
       .test(/\.vue$/)
       .pre()
