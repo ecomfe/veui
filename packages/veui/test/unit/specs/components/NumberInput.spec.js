@@ -226,7 +226,7 @@ describe('components/NumberInput', () => {
             val: 123
           }
         },
-        template: `<v-number-input v-model="val">`
+        template: `<v-number-input v-model="val"/>`
       },
       {
         sync: false
