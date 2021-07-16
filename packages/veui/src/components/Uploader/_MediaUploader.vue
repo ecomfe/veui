@@ -2,6 +2,7 @@
 <div :class="$c('uploader-media')">
   <transition-group
     tag="ul"
+    :name="$c('uploader-list-media')"
     :class="{
       [listClass]: true,
       [`${listClass}-picker-before`]: pickerPosition === 'before'
