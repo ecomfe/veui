@@ -21,6 +21,7 @@
 
   <transition-group
     tag="ul"
+    :name="$c('uploader-list')"
     :class="$c('uploader-list')"
   >
     <li
