@@ -1,5 +1,8 @@
 <template>
 <div
+  v-resize="{
+    handler: handleRootResize
+  }"
   :class="{
     [$c('textarea')]: true,
     [$c('focus')]: focused,
@@ -40,7 +43,7 @@
         aria-hidden="true"
         :style="{ width: `${measurerContentWidth}px` }"
       >
-        <span style="box-shadow: transparent 0 0;">{{ line }}</span>
+        <span style="box-shadow: transparent 0 0">{{ line }}</span>
       </div>
       <!-- eslint-enable vue/multiline-html-element-content-newline -->
     </div>
@@ -78,6 +81,7 @@
 import { pick } from 'lodash'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
+import resize from '../directives/resize'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
 import useControllable from '../mixins/controllable'
@@ -96,13 +100,22 @@ const COMPOSITION_INPUT = 'INPUT'
 
 export default {
   name: 'veui-textarea',
-  mixins: [prefix, ui, input, activatable, useControllable({
-    prop: 'value',
-    event: 'input',
-    get (val) {
-      return val || ''
-    }
-  })],
+  directives: {
+    resize
+  },
+  mixins: [
+    prefix,
+    ui,
+    input,
+    activatable,
+    useControllable({
+      prop: 'value',
+      event: 'input',
+      get (val) {
+        return val || ''
+      }
+    })
+  ],
   inheritAttrs: false,
   props: {
     placeholder: String,
@@ -129,11 +142,11 @@ export default {
       scrollTop: 0,
       rowsHeight: null,
       originalPadding: null,
-      lineHeight: 0,
       composing: false,
       // tmpInputValue 参见 Input
       tmpInputValue: null,
-      countOverlap: false
+      countOverlap: false,
+      lastHeight: 0
     }
   },
   computed: {
@@ -232,28 +245,9 @@ export default {
         if (!this.measure) {
           return
         }
-        this.$nextTick(() => {
-          if (this.$refs.input) {
-            this.measurerContentWidth = this.$refs.input.clientWidth
-
-            if (this.realAutoresize) {
-              this.measurerContentHeight = this.getMeasurersHeight()
-            }
-          }
-
-          if (this.realMaxlength !== null) {
-            this.checkCountOverlap()
-          }
-        })
+        this.$nextTick(this.updateMeasurer)
       },
       immediate: true
-    },
-    measurerContentWidth () {
-      if (this.realAutoresize) {
-        this.$nextTick(() => {
-          this.measurerContentHeight = this.getMeasurersHeight()
-        })
-      }
     },
     countOverlap (val) {
       if (!val) {
@@ -275,18 +269,43 @@ export default {
     this.$nextTick(() => this.syncScroll())
   },
   mounted () {
-    let { input } = this.$refs
-    this.lineHeight = getAbsoluteLineHeight(input)
     this.scrollTop = this.$refs.input.scrollTop
-    this.rowsHeight = this.getRowsHeight()
+    this.updateRowsHeight()
   },
   methods: {
+    updateRowsHeight () {
+      let { input } = this.$refs
+      if (input) {
+        this.rowsHeight = this.getRowsHeight()
+      }
+    },
+    updateMeasurer () {
+      let { input } = this.$refs
+      if (!input) {
+        return
+      }
+      this.measurerContentWidth = input.clientWidth
+
+      this.$nextTick(() => {
+        if (this.realMaxlength !== null) {
+          this.checkCountOverlap()
+
+          this.$nextTick(() => {
+            if (this.realAutoresize) {
+              this.updateMeasurerHeight()
+            }
+          })
+        } else if (this.realAutoresize) {
+          this.updateMeasurerHeight()
+        }
+      })
+    },
     getRowsHeight () {
       if (!this.realRows) {
         return null
       }
       let { input } = this.$refs
-      let lineHeight = this.lineHeight
+      let lineHeight = getAbsoluteLineHeight(input)
       let {
         borderTopWidth,
         paddingTop,
@@ -303,6 +322,9 @@ export default {
     },
     isCountOverlap () {
       let { measurer, input, count } = this.$refs
+      if (!measurer || !input || !count) {
+        return false
+      }
       let lines = [
         ...measurer.querySelectorAll(
           `.${this.$c('textarea-measurer-line-content')}`
@@ -337,14 +359,6 @@ export default {
     },
     handleBlur () {
       this.focused = false
-    },
-    getLineHeight (elem) {
-      let computedStyle = getComputedStyle(elem)
-      let lineHeight = parseFloat(computedStyle.lineHeight)
-      if (isNaN(lineHeight)) {
-        lineHeight = parseFloat(computedStyle.fontSize) * 1.2
-      }
-      return lineHeight
     },
     updateValue (value, ...args) {
       this.commit('value', value, ...args)
@@ -389,7 +403,7 @@ export default {
         if (!input) {
           return
         }
-        let inputLineHeight = this.getLineHeight(input)
+        let inputLineHeight = getAbsoluteLineHeight(input)
         if (
           input.scrollHeight - input.clientHeight - input.scrollTop <
           inputLineHeight
@@ -398,8 +412,23 @@ export default {
         }
       })
     },
+    handleRootResize () {
+      let { input } = this.$refs
+      let { offsetHeight } = input
+      if (offsetHeight > 0 && this.lastHeight === 0) {
+        if (this.realAutoresize) {
+          this.updateMeasurer()
+        } else {
+          this.updateRowsHeight()
+        }
+      }
+      this.lastHeight = offsetHeight
+    },
     focus () {
-      this.$refs.input.focus()
+      let { input } = this.$refs
+      if (input) {
+        input.focus()
+      }
     },
     activate () {
       if (this.realDisabled || this.realReadonly) {
@@ -407,8 +436,11 @@ export default {
       }
       this.focus()
     },
-    getMeasurersHeight () {
-      return this.$refs.measurer.offsetHeight
+    updateMeasurerHeight () {
+      let { measurer } = this.$refs
+      if (measurer) {
+        this.measurerContentHeight = measurer.offsetHeight
+      }
     },
     handleScroll () {
       if (!this.measure) {

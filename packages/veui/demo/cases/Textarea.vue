@@ -85,10 +85,13 @@
   </section>
   <section>
     <h3>自动扩展</h3>
-    <veui-textarea
-      v-model="value"
-      autoresize
-    />
+    <details>
+      <summary>Toggle</summary>
+      <veui-textarea
+        v-model="longValue"
+        autoresize
+      />
+    </details>
   </section>
   <section>
     <h3>只读样式</h3>
@@ -157,7 +160,9 @@ export default {
       controlled1: '',
       controlled2: '',
       uncontrolled1: '',
-      uncontrolled2: ''
+      uncontrolled2: '',
+      longValue:
+        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellendus corporis non praesentium cupiditate architecto numquam distinctio corrupti magnam at voluptatem quis et consequuntur enim, nulla tempora laborum eum ab maiores?'
     }
   },
   mounted () {
