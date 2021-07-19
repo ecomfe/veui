@@ -63,13 +63,15 @@
                   />
                 </slot>
               </span>
-              <slot
-                v-if="!realCollapsed"
-                name="item-label"
-                v-bind="link"
-              >
-                <span :class="$c('menu-item-label')">{{ link.label }}</span>
-              </slot>
+              <span :class="$c('menu-item-label')">
+                <slot
+                  v-if="!realCollapsed"
+                  name="item-label"
+                  v-bind="link"
+                >
+                  {{ link.label }}
+                </slot>
+              </span>
             </veui-link>
             <veui-button
               v-if="

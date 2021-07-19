@@ -276,4 +276,60 @@ describe('components/Menu', () => {
     expect(links.at(endIndex).attributes().tabindex).to.equal('-1')
     wrapper.destroy()
   })
+
+  it('should handle slots correctly', () => {
+    let wrapper = mount(
+      {
+        ...options,
+        template: `
+          <div>
+            <veui-menu :items="items">
+              <template #item="{ label }">
+                <span class="my-item">{{ label }}</span>
+              </template>
+            </veui-menu>
+            <veui-menu :items="items">
+              <template #item-label="{ label }">
+                😀 {{ label }}
+              </template>
+            </veui-menu>
+          </div>`
+      },
+      {
+        sync: false
+      }
+    )
+
+    const menus = wrapper.findAll(Menu)
+    expect(
+      menus
+        .at(0)
+        .find('.veui-menu-item-label')
+        .exists()
+    ).to.equal(false)
+    expect(
+      menus
+        .at(0)
+        .find('.veui-menu-item')
+        .exists()
+    ).to.equal(false)
+    expect(
+      menus
+        .at(0)
+        .find('.my-item')
+        .exists()
+    ).to.equal(true)
+    expect(
+      menus
+        .at(1)
+        .find('.veui-menu-item-label')
+        .exists()
+    ).to.equal(true)
+    expect(
+      menus
+        .at(1)
+        .find('.veui-menu-item')
+        .exists()
+    ).to.equal(true)
+  })
 })
