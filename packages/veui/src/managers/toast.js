@@ -50,7 +50,7 @@ export class ToastManager {
   show (message, type) {
     let options = {}
     if (isObject(message)) {
-      options = { ...options, ...message }
+      options = { ...message }
     } else if (isString(message)) {
       options.message = message
     }
@@ -62,20 +62,20 @@ export class ToastManager {
     return this.add(options)
   }
 
-  success (message) {
-    return this.show(message, 'success')
+  success (message, options) {
+    return this.show(message, { ...options, type: 'success' })
   }
 
-  warn (message) {
-    return this.show(message, 'warning')
+  warn (message, options) {
+    return this.show(message, { ...options, type: 'warning' })
   }
 
-  info (message) {
-    return this.show(message, 'info')
+  info (message, options) {
+    return this.show(message, { ...options, type: 'info' })
   }
 
-  error (message) {
-    return this.show(message, 'error')
+  error (message, options) {
+    return this.show(message, { ...options, type: 'error' })
   }
 }
 
