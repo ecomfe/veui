@@ -101,8 +101,8 @@ import { sign, add, round } from '../utils/math'
 import warn from '../utils/warn'
 import { VALUE_EVENTS } from '../utils/dom'
 import { isInteger, isNaN, get, find, omit, isFunction } from 'lodash'
-import nudge from 'veui/directives/nudge'
-import longpress from 'veui/directives/longpress'
+import nudge from '../directives/nudge'
+import longpress from '../directives/longpress'
 import useControllable from '../mixins/controllable'
 
 export default {
