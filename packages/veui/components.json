@@ -4,16 +4,76 @@
     "path": "Accordion.vue"
   },
   {
+    "name": "Icon",
+    "path": "Icon.vue"
+  },
+  {
+    "name": "Loading",
+    "path": "Loading.vue"
+  },
+  {
+    "name": "Button",
+    "path": "Button.vue"
+  },
+  {
     "name": "Alert",
     "path": "Alert.vue"
+  },
+  {
+    "name": "Overlay",
+    "path": "Overlay.vue"
+  },
+  {
+    "name": "Dialog",
+    "path": "Dialog.vue"
   },
   {
     "name": "AlertBox",
     "path": "AlertBox.vue"
   },
   {
+    "name": "Checkbox",
+    "path": "Checkbox.vue"
+  },
+  {
+    "name": "Tree",
+    "path": "Tree/Tree.vue"
+  },
+  {
+    "name": "Tree",
+    "path": "Tree"
+  },
+  {
+    "name": "Tree",
+    "path": "Tree/index.js"
+  },
+  {
+    "name": "Link",
+    "path": "Link.vue"
+  },
+  {
     "name": "Anchor",
     "path": "Anchor.vue"
+  },
+  {
+    "name": "Input",
+    "path": "Input.vue"
+  },
+  {
+    "name": "Option",
+    "path": "Option.js"
+  },
+  {
+    "name": "Option",
+    "path": "Select/Option.vue"
+  },
+  {
+    "name": "OptionGroup",
+    "path": "OptionGroup.js"
+  },
+  {
+    "name": "OptionGroup",
+    "path": "Select/OptionGroup.vue"
   },
   {
     "name": "Autocomplete",
@@ -32,16 +92,12 @@
     "path": "Badge.vue"
   },
   {
-    "name": "Breadcrumb",
-    "path": "Breadcrumb.vue"
-  },
-  {
     "name": "BreadcrumbItem",
     "path": "BreadcrumbItem.vue"
   },
   {
-    "name": "Button",
-    "path": "Button.vue"
+    "name": "Breadcrumb",
+    "path": "Breadcrumb.vue"
   },
   {
     "name": "ButtonGroup",
@@ -64,20 +120,32 @@
     "path": "Carousel.vue"
   },
   {
+    "name": "CascaderPane",
+    "path": "Cascader/CascaderPane.vue"
+  },
+  {
+    "name": "Tag",
+    "path": "Tag.vue"
+  },
+  {
     "name": "Cascader",
     "path": "Cascader/Cascader.vue"
   },
   {
-    "name": "CascaderPane",
-    "path": "Cascader/CascaderPane.vue"
+    "name": "Cascader",
+    "path": "Cascader"
+  },
+  {
+    "name": "Cascader",
+    "path": "Cascader/index.js"
   },
   {
     "name": "CheckButtonGroup",
     "path": "CheckButtonGroup.vue"
   },
   {
-    "name": "Checkbox",
-    "path": "Checkbox.vue"
+    "name": "Radio",
+    "path": "Radio.vue"
   },
   {
     "name": "CheckboxGroup",
@@ -92,6 +160,10 @@
     "path": "Column.js"
   },
   {
+    "name": "Column",
+    "path": "Table/Column.vue"
+  },
+  {
     "name": "ConfirmBox",
     "path": "ConfirmBox.vue"
   },
@@ -100,12 +172,16 @@
     "path": "DatePicker.vue"
   },
   {
-    "name": "Dialog",
-    "path": "Dialog.vue"
-  },
-  {
     "name": "Drawer",
     "path": "Drawer.vue"
+  },
+  {
+    "name": "InputGroup",
+    "path": "InputGroup.vue"
+  },
+  {
+    "name": "SearchBox",
+    "path": "SearchBox.vue"
   },
   {
     "name": "Dropdown",
@@ -116,16 +192,16 @@
     "path": "Embedded.vue"
   },
   {
+    "name": "Label",
+    "path": "Label.vue"
+  },
+  {
+    "name": "Tooltip",
+    "path": "Tooltip.vue"
+  },
+  {
     "name": "Field",
     "path": "Field.js"
-  },
-  {
-    "name": "Fieldset",
-    "path": "Fieldset.js"
-  },
-  {
-    "name": "FilterPanel",
-    "path": "FilterPanel.vue"
   },
   {
     "name": "Field",
@@ -133,7 +209,15 @@
   },
   {
     "name": "Fieldset",
+    "path": "Fieldset.js"
+  },
+  {
+    "name": "Fieldset",
     "path": "Form/Fieldset.vue"
+  },
+  {
+    "name": "FilterPanel",
+    "path": "FilterPanel.vue"
   },
   {
     "name": "Form",
@@ -152,16 +236,12 @@
     "path": "Grid/GridColumn.vue"
   },
   {
-    "name": "GridContainer",
-    "path": "Grid/GridContainer.vue"
-  },
-  {
-    "name": "GridRow",
-    "path": "Grid/GridRow.vue"
-  },
-  {
     "name": "GridColumn",
     "path": "GridColumn.js"
+  },
+  {
+    "name": "GridContainer",
+    "path": "Grid/GridContainer.vue"
   },
   {
     "name": "GridContainer",
@@ -169,47 +249,27 @@
   },
   {
     "name": "GridRow",
+    "path": "Grid/GridRow.vue"
+  },
+  {
+    "name": "GridRow",
     "path": "GridRow.js"
-  },
-  {
-    "name": "Icon",
-    "path": "Icon.vue"
-  },
-  {
-    "name": "Input",
-    "path": "Input.vue"
-  },
-  {
-    "name": "InputGroup",
-    "path": "InputGroup.vue"
-  },
-  {
-    "name": "Label",
-    "path": "Label.vue"
   },
   {
     "name": "Lightbox",
     "path": "Lightbox.vue"
   },
   {
-    "name": "Link",
-    "path": "Link.vue"
-  },
-  {
-    "name": "Loading",
-    "path": "Loading.vue"
-  },
-  {
     "name": "Menu",
     "path": "Menu/Menu.vue"
   },
   {
-    "name": "Nav",
-    "path": "Menu/Nav.vue"
-  },
-  {
     "name": "Menu",
     "path": "Menu.js"
+  },
+  {
+    "name": "Nav",
+    "path": "Menu/Nav.vue"
   },
   {
     "name": "Nav",
@@ -220,16 +280,16 @@
     "path": "NumberInput.vue"
   },
   {
-    "name": "Option",
-    "path": "Option.js"
+    "name": "Select",
+    "path": "Select/Select.vue"
   },
   {
-    "name": "OptionGroup",
-    "path": "OptionGroup.js"
+    "name": "Select",
+    "path": "Select"
   },
   {
-    "name": "Overlay",
-    "path": "Overlay.vue"
+    "name": "Select",
+    "path": "Select/index.js"
   },
   {
     "name": "Pagination",
@@ -248,10 +308,6 @@
     "path": "PromptBox.vue"
   },
   {
-    "name": "Radio",
-    "path": "Radio.vue"
-  },
-  {
     "name": "RadioButtonGroup",
     "path": "RadioButtonGroup.vue"
   },
@@ -266,30 +322,6 @@
   {
     "name": "Schedule",
     "path": "Schedule.vue"
-  },
-  {
-    "name": "SearchBox",
-    "path": "SearchBox.vue"
-  },
-  {
-    "name": "Option",
-    "path": "Select/Option.vue"
-  },
-  {
-    "name": "OptionGroup",
-    "path": "Select/OptionGroup.vue"
-  },
-  {
-    "name": "Select",
-    "path": "Select/Select.vue"
-  },
-  {
-    "name": "Select",
-    "path": "Select"
-  },
-  {
-    "name": "Select",
-    "path": "Select/index.js"
   },
   {
     "name": "Slider",
@@ -312,8 +344,8 @@
     "path": "Tab.js"
   },
   {
-    "name": "Column",
-    "path": "Table/Column.vue"
+    "name": "Tab",
+    "path": "Tabs/Tab.vue"
   },
   {
     "name": "Table",
@@ -328,10 +360,6 @@
     "path": "Table/index.js"
   },
   {
-    "name": "Tab",
-    "path": "Tabs/Tab.vue"
-  },
-  {
     "name": "Tabs",
     "path": "Tabs/Tabs.vue"
   },
@@ -342,10 +370,6 @@
   {
     "name": "Tabs",
     "path": "Tabs/index.js"
-  },
-  {
-    "name": "Tag",
-    "path": "Tag.vue"
   },
   {
     "name": "Textarea",
@@ -372,10 +396,6 @@
     "path": "ToastList.vue"
   },
   {
-    "name": "Tooltip",
-    "path": "Tooltip.vue"
-  },
-  {
     "name": "Transfer",
     "path": "Transfer/Transfer.vue"
   },
@@ -386,18 +406,6 @@
   {
     "name": "Transfer",
     "path": "Transfer/index.js"
-  },
-  {
-    "name": "Tree",
-    "path": "Tree/Tree.vue"
-  },
-  {
-    "name": "Tree",
-    "path": "Tree"
-  },
-  {
-    "name": "Tree",
-    "path": "Tree/index.js"
   },
   {
     "name": "Uploader",

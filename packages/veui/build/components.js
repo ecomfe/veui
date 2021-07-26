@@ -1,10 +1,11 @@
 let fs = require('fs')
 let path = require('path')
 let dir = require('node-dir')
+const { getSortedComponents } = require('./getSortedComponents')
 
 const componentDir = path.resolve(__dirname, '../src/components')
 
-function genComponentJson () {
+async function genComponentJson () {
   let mappings = dir
     .files(componentDir, { sync: true })
     .reduce((mappings, file) => {
@@ -26,6 +27,10 @@ function genComponentJson () {
       return mappings
     }, [])
     .filter(({ name }) => name && name !== 'index' && name.charAt(0) !== '_')
+
+  // components.json 里组件声明的顺序要确保是样式正确的
+  const sorted = await getSortedComponents()
+  mappings.sort((a, b) => sorted.indexOf(a.name) - sorted.indexOf(b.name))
 
   fs.writeFileSync(
     path.resolve(__dirname, '../components.json'),
@@ -75,5 +80,8 @@ function genComponentIndex () {
 if (process.argv.indexOf('index') >= 0) {
   genComponentIndex()
 } else {
-  genComponentJson()
+  genComponentJson().catch(err => {
+    console.error(err)
+    process.exit(1)
+  })
 }

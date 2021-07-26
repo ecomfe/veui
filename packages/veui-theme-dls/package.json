@@ -13,6 +13,7 @@
   "scripts": {
     "icons": "node -r esm build/svg2json.js && node -r esm build/icons.js",
     "lint": "stylelint **/*.less --syntax=less",
+    "theme": "node -r esm build/theme.js",
     "prepublishOnly": "rollup -c"
   },
   "module": "dist/dls.esm.js",
