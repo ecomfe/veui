@@ -1,11 +1,11 @@
 const { build } = require('esbuild')
 const { resolve, dirname } = require('path')
-const { readFileSync, writeFileSync, existsSync } = require('fs')
-const { uniq, kebabCase } = require('lodash')
+const { readFileSync, existsSync } = require('fs')
+const { uniq } = require('lodash')
 
 const componentsDir = resolve(__dirname, '../src/components')
+const indexPath = resolve(componentsDir, './index.js')
 const scriptRE = /<script\b(?:\s[^>]*>|>)(.*?)<\/script>/ims
-const themeDir = resolve(__dirname, '../../veui-theme-dls')
 
 function getComponentDeps () {
   let depMap = {}
@@ -17,14 +17,12 @@ function getComponentDeps () {
     logLevel: 'error',
     plugins: [scanDepsPlugin(depMap)]
   }).then(() => {
-    const componentDeps = {}
-    Object.keys(depMap).forEach(key => {
-      const name = getComponentName(key)
-      if (name) {
-        componentDeps[name] = resolveDirectDeps(depMap[key], depMap)
-      }
-    })
-    return componentDeps
+    // deps array
+    // 用 index 文件中的引入顺序来保证相对顺序的稳定，避免两次运行而顺序不一致导致的 diff。
+    return depMap[indexPath].map(key => ({
+      name: getComponentName(key),
+      deps: depMap[key] ? resolveDirectDeps(depMap[key], depMap) : []
+    }))
   })
 }
 
@@ -43,13 +41,18 @@ function scanDepsPlugin (store) {
         if (importer) {
           let realPath = resolve(dirname(importer), path)
           store[importer] = store[importer] || []
+
           if (existsSync(`${realPath}.vue`)) {
             realPath = `${realPath}.vue`
-            store[importer].push(realPath)
-            return { path: realPath }
+          } else if (existsSync(`${realPath}.js`)) {
+            realPath = `${realPath}.js`
+          } else if (existsSync(`${realPath}/index.js`)) {
+            realPath = `${realPath}/index.js`
           } else {
-            store[importer].push(realPath + '.js')
+            throw new Error(`Can't resolve: ${path} in ${importer}`)
           }
+          store[importer].push(realPath)
+          return { path: realPath }
         }
       })
 
@@ -104,11 +107,11 @@ function resolveDirectDeps (directDeps, depMap) {
   }, [])
 }
 
-function getSortedComponents (components) {
+function getSortedComponents (componentDeps) {
   let result = []
-  Object.keys(components).forEach(name => {
-    components[name].push(name)
-    components[name].forEach(name => {
+  componentDeps.forEach(({ name, deps }) => {
+    deps.push(name)
+    deps.forEach(name => {
       if (!result.includes(name)) {
         result.push(name)
       }
@@ -117,37 +120,8 @@ function getSortedComponents (components) {
   return result
 }
 
-function genThemeIndex (sortedComponents) {
-  const theme = sortedComponents.reduce(
-    (acc, name) => {
-      if (existsSync(`${themeDir}/components/${name}.js`)) {
-        acc.js.push(`import './components/${name}'`)
-      }
-      if (existsSync(`${themeDir}/components/${kebabCase(name)}.less`)) {
-        acc.less.push(`import './components/${kebabCase(name)}.less'`)
-      }
-      return acc
-    },
-    { js: [], less: [] }
-  )
-
-  const content =
-    '// This file is generated automatically by `npm run theme`\n' +
-    theme.js.join('\n') +
-    '\n\n' +
-    `import './common.less'\n` +
-    theme.less.join('\n') +
-    '\n'
-
-  writeFileSync(`${themeDir}/index.js`, content, { encoding: 'utf-8' })
+module.exports = {
+  getSortedComponents () {
+    return getComponentDeps().then(deps => getSortedComponents(deps))
+  }
 }
-
-getComponentDeps()
-  .then(deps => {
-    const sorted = getSortedComponents(deps)
-    genThemeIndex(sorted)
-  })
-  .catch(err => {
-    console.error(err)
-    process.exit(1)
-  })
