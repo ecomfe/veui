@@ -346,7 +346,7 @@ export default {
 
         let j = 0
         this.fileList = this.fileList
-          .map((file, i) => {
+          .map(file => {
             if (!file.isSuccess) {
               return file
             }
@@ -412,14 +412,14 @@ export default {
       this.fileList.forEach(file => file.cancel())
     },
     clear () {
-      this.fileList.forEach((file, index) => {
+      this.fileList.forEach(file => {
         if (file.isFailure) {
           this.removeFile(this.fileList.indexOf(file))
         }
       })
     },
     prune () {
-      this.fileList.forEach((file, index) => this.removeFile(index))
+      this.fileList.forEach((_, index) => this.removeFile(index))
     },
     focus () {
       this.$el.focus()
@@ -657,7 +657,7 @@ export default {
     },
     createUploaderFile (val, file) {
       const options = { keyField: this.keyField }
-      if (val instanceof File) {
+      if (process.env.VUE_ENV !== 'server' && val instanceof File) {
         return new UploaderFile(val, options)
       }
 

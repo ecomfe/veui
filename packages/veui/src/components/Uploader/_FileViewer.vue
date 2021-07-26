@@ -9,7 +9,7 @@
 export default {
   props: {
     tag: String,
-    src: [File, String]
+    src: process.env.VUE_ENV === 'server' ? String : [String, File]
   },
   data () {
     return {
