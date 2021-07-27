@@ -58,6 +58,7 @@ import { pick, includes } from 'lodash'
 import Dialog from './Dialog'
 import Button from './Button'
 import Icon from './Icon'
+import configMixin from '../mixins/config'
 import config from '../managers/config'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
@@ -76,7 +77,14 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, overlay, i18n, useControllable(['open'])],
+  mixins: [
+    prefix,
+    ui,
+    overlay,
+    i18n,
+    useControllable(['open']),
+    configMixin('config')
+  ],
   props: {
     ...pick(Dialog.props, [
       'open',
@@ -94,14 +102,12 @@ export default {
       default: 'success'
     }
   },
-  data () {
-    return {
-      priority: config.get('alertbox.priority')
-    }
-  },
   computed: {
     realOkLabel () {
       return this.okLabel || this.t('ok')
+    },
+    priority () {
+      return this.config['alertbox.priority']
     }
   }
 }

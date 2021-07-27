@@ -1,5 +1,5 @@
 import { IconChevronDown, IconTimesCircle } from 'dls-icons-vue'
-import config from 'veui/managers/config'
+import ui from 'veui/managers/ui'
 
 const TAG_SIZE_MAP = {
   xs: 's',
@@ -8,7 +8,7 @@ const TAG_SIZE_MAP = {
   l: 'm'
 }
 
-config.defaults(
+ui.defaults(
   {
     icons: {
       expand: IconChevronDown,

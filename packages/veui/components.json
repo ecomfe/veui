@@ -164,6 +164,10 @@
     "path": "Table/Column.vue"
   },
   {
+    "name": "ConfigProvider",
+    "path": "ConfigProvider.js"
+  },
+  {
     "name": "ConfirmBox",
     "path": "ConfirmBox.vue"
   },

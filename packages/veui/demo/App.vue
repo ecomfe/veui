@@ -39,9 +39,17 @@
     v-model="locale"
     :options="locales"
   />
-  <main id="content">
-    <router-view/>
-  </main>
+  <veui-config-provider :value="context1">
+    <main id="content">
+      <veui-config-provider :value="context2">
+        <router-view/>
+      </veui-config-provider>
+      <veui-input
+        v-if="$route.name === 'AlertBox'"
+        @change="context2['alertbox.priority'] = +$event || 100"
+      />
+    </main>
+  </veui-config-provider>
   <v-console id="console"/>
 </div>
 </template>
@@ -51,6 +59,8 @@ import routes from './cases'
 import Console from './Console'
 import Icon from '@/components/Icon'
 import Select from '@/components/Select'
+import Input from '@/components/Input'
+import ConfigProvider from '@/components/ConfigProvider'
 import i18n from '@/managers/i18n'
 import 'vue-awesome/icons/ban'
 import 'vue-awesome/icons/brands/github'
@@ -74,7 +84,9 @@ export default {
   components: {
     'v-console': Console,
     'veui-icon': Icon,
-    'veui-select': Select
+    'veui-select': Select,
+    'veui-input': Input,
+    'veui-config-provider': ConfigProvider
   },
   data () {
     return {
@@ -83,7 +95,13 @@ export default {
       locales: LOCALES,
       locale: i18n.locale,
 
-      collapsedNav: false
+      collapsedNav: false,
+      context1: {
+        'datepicker.placeholder': '选个好日子'
+      },
+      context2: {
+        'alertbox.priority': 200
+      }
     }
   },
   watch: {

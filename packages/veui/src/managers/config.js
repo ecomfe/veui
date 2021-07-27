@@ -1,6 +1,7 @@
 import { isObject, startsWith, forEach } from 'lodash'
 import Vue from 'vue'
 import i18n from './i18n'
+import { createContext } from './context'
 
 export class ConfigManager {
   store = new Vue({
@@ -38,6 +39,7 @@ export class ConfigManager {
 
         this.transformValue(obj, key, null)
       },
+      // 为了 @@xxx 和 i18n 配置联动起来
       transformValue (context, key, path) {
         if (context && (context._isVue || context._Ctor)) {
           return
@@ -101,4 +103,11 @@ export class ConfigManager {
   }
 }
 
-export default new ConfigManager()
+let config = new ConfigManager()
+
+export let configContext = createContext(
+  'veui-context',
+  () => config.store.store
+)
+
+export default config

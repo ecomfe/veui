@@ -23,7 +23,7 @@ import {
   isEqual,
   isFunction
 } from 'lodash'
-import { useSelectContext } from '../_Context'
+import SelectContext from './_SelectContext'
 
 const EVENT_MAP = {
   hover: 'mouseenter',
@@ -46,7 +46,7 @@ const OptionGroup = {
     selectItem,
     overlay,
     keySelect,
-    useSelectContext('renderForData'),
+    SelectContext.useConsumer('renderForData'),
     useControllable([
       {
         prop: 'expanded',
