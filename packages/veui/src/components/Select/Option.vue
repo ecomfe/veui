@@ -34,11 +34,17 @@ import menuItem from '../../mixins/menu-item'
 import selectItem from '../../mixins/select-item'
 import { scrollIntoView } from '../../utils/dom'
 import { isType } from '../../utils/helper'
-import { useSelectContext } from '../_Context'
+import SelectContext from './_SelectContext'
 
 export default {
   name: 'veui-option',
-  mixins: [prefix, ui, menuItem, selectItem, useSelectContext('renderForData')],
+  mixins: [
+    prefix,
+    ui,
+    menuItem,
+    selectItem,
+    SelectContext.useConsumer('renderForData')
+  ],
   props: {
     label: {
       type: [String, Number]

@@ -19,7 +19,7 @@ import { find } from '../../utils/datasource'
 import { uniqueId, omit } from 'lodash'
 import { contains, focusIn } from '../../utils/dom'
 import { renderSlot } from '../../utils/helper'
-import { SelectContextProvider } from '../_Context'
+import SelectContext from './_SelectContext'
 import '../../common/uiTypes'
 
 config.defaults(
@@ -517,7 +517,7 @@ export default {
     let renderGroup = (options, children, key) => {
       // overlay-class={this.overlayClass} 先不透传吧
       return (
-        <SelectContextProvider value={key === 'data'}>
+        <SelectContext.Provider value={key === 'data'}>
           <OptionGroup
             key={key}
             v-show={!!options}
@@ -534,7 +534,7 @@ export default {
           >
             {children}
           </OptionGroup>
-        </SelectContextProvider>
+        </SelectContext.Provider>
       )
     }
 

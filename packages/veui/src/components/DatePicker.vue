@@ -178,6 +178,7 @@ import dropdown from '../mixins/dropdown'
 import useControllable from '../mixins/controllable'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
+import configMixin from '../mixins/config'
 import warn from '../utils/warn'
 import { toDateData, getExactDateData, lt } from '../utils/date'
 import { isNumber, pick, omit, defaults } from 'lodash'
@@ -243,7 +244,8 @@ export default {
     useControllable({
       prop: 'selected',
       event: 'select'
-    })
+    }),
+    configMixin('config')
   ],
   model: {
     prop: 'selected',
@@ -309,23 +311,21 @@ export default {
     realPlaceholder () {
       let placeholder = this.placeholder
       if (!placeholder) {
+        let placeholderKey
         if (!this.range) {
-          placeholder = config.get(
-            {
-              date: 'datepicker.placeholder',
-              month: 'datepicker.monthPlaceholder',
-              year: 'datepicker.yearPlaceholder'
-            }[this.type]
-          )
+          placeholderKey = {
+            date: 'datepicker.placeholder',
+            month: 'datepicker.monthPlaceholder',
+            year: 'datepicker.yearPlaceholder'
+          }[this.type]
         } else {
-          placeholder = config.get(
-            {
-              date: 'datepicker.rangePlaceholder',
-              month: 'datepicker.monthRangePlaceholder',
-              year: 'datepicker.yearRangePlaceholder'
-            }[this.type]
-          )
+          placeholderKey = {
+            date: 'datepicker.rangePlaceholder',
+            month: 'datepicker.monthRangePlaceholder',
+            year: 'datepicker.yearRangePlaceholder'
+          }[this.type]
         }
+        placeholder = this.config[placeholderKey]
       }
       return [].concat(placeholder)
     },
@@ -333,7 +333,7 @@ export default {
       return this.range && this.type !== 'year' ? 2 : 1
     },
     realShortcuts () {
-      let shortcuts = this.shortcuts || config.get('datepicker.shortcuts')
+      let shortcuts = this.shortcuts || this.config['datepicker.shortcuts']
       if (!shortcuts) {
         return null
       }

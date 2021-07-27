@@ -4,9 +4,9 @@ import {
   IconChevronRight,
   IconCaretRight
 } from 'dls-icons-vue'
-import config from 'veui/managers/config'
+import ui from 'veui/managers/ui'
 
-config.defaults(
+ui.defaults(
   {
     icons: {
       checked: IconCheck,
