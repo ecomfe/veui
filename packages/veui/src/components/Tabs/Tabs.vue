@@ -6,6 +6,7 @@ import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import config from '../../managers/config'
+import useConfig from '../../mixins/config'
 import { useCoupledParent } from '../../mixins/coupled'
 import useControllable from '../../mixins/controllable'
 import resize from '../../directives/resize'
@@ -42,15 +43,19 @@ export default {
   directives: {
     resize
   },
-  mixins: [prefix, ui, i18n, tabs, useControllable(['active'])],
+  mixins: [
+    prefix,
+    ui,
+    i18n,
+    tabs,
+    useControllable(['active']),
+    useConfig('config', 'tabs.')
+  ],
   props: {
     active: {
       type: String
     },
     matches: {
-      default () {
-        return config.get('tabs.matches')
-      },
       validator (value) {
         return typeof value === 'function'
       }
@@ -76,6 +81,9 @@ export default {
     }
   },
   computed: {
+    realMatches () {
+      return this.matches == null ? this.config['tabs.matches'] : this.matches
+    },
     tabAttrs () {
       return this.items.map(({ id, name, attrs }, index) => {
         return {

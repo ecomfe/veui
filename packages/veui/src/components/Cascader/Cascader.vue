@@ -156,6 +156,7 @@
 import Overlay from '../Overlay'
 import CascaderPane from './CascaderPane'
 import config from '../../managers/config'
+import useConfig from '../../mixins/config'
 import dropdown from '../../mixins/dropdown'
 import useControllable from '../../mixins/controllable'
 import useSearchable from '../../mixins/searchable'
@@ -200,6 +201,7 @@ export default {
     i18n,
     dropdown(),
     input,
+    useConfig('config', 'cascader.'),
     useTree({ childrenKey: 'options', defaultMerge: 'downwards' }),
     useKeySelect({ expandedKey: 'realExpanded' }),
     useControllable({
@@ -331,7 +333,7 @@ export default {
     },
     realPlaceholder () {
       return this.placeholder == null
-        ? config.get('cascader.placeholder')
+        ? this.config['cascader.placeholder']
         : this.placeholder
     },
     selectedOptions () {

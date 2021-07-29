@@ -178,7 +178,7 @@ import dropdown from '../mixins/dropdown'
 import useControllable from '../mixins/controllable'
 import i18n from '../mixins/i18n'
 import config from '../managers/config'
-import configMixin from '../mixins/config'
+import useConfig from '../mixins/config'
 import warn from '../utils/warn'
 import { toDateData, getExactDateData, lt } from '../utils/date'
 import { isNumber, pick, omit, defaults } from 'lodash'
@@ -224,6 +224,18 @@ const TYPE_FORMAT_MAP = {
   year: 'yyyy'
 }
 
+const PLACEHOLDER_KEY_MAP = {
+  date: 'datepicker.placeholder',
+  month: 'datepicker.monthPlaceholder',
+  year: 'datepicker.yearPlaceholder'
+}
+
+const RANGE_PLACEHOLDER_KEY_MAP = {
+  date: 'datepicker.rangePlaceholder',
+  month: 'datepicker.monthRangePlaceholder',
+  year: 'datepicker.yearRangePlaceholder'
+}
+
 const DEFAULT_DATE_SEP = '[/.-]'
 
 export default {
@@ -245,7 +257,7 @@ export default {
       prop: 'selected',
       event: 'select'
     }),
-    configMixin('config')
+    useConfig('config', 'datepicker.')
   ],
   model: {
     prop: 'selected',
@@ -313,17 +325,9 @@ export default {
       if (!placeholder) {
         let placeholderKey
         if (!this.range) {
-          placeholderKey = {
-            date: 'datepicker.placeholder',
-            month: 'datepicker.monthPlaceholder',
-            year: 'datepicker.yearPlaceholder'
-          }[this.type]
+          placeholderKey = PLACEHOLDER_KEY_MAP[this.type]
         } else {
-          placeholderKey = {
-            date: 'datepicker.rangePlaceholder',
-            month: 'datepicker.monthRangePlaceholder',
-            year: 'datepicker.yearRangePlaceholder'
-          }[this.type]
+          placeholderKey = RANGE_PLACEHOLDER_KEY_MAP[this.type]
         }
         placeholder = this.config[placeholderKey]
       }

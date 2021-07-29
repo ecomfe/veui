@@ -101,13 +101,14 @@ export class ConfigManager {
   get (path) {
     return this.store.get(path)
   }
+
+  getAll () {
+    return this.store.store
+  }
 }
 
 let config = new ConfigManager()
 
-export let configContext = createContext(
-  'veui-context',
-  () => config.store.store
-)
+export let configContext = createContext('veui-context', () => config.getAll())
 
 export default config

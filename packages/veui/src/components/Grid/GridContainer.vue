@@ -9,6 +9,7 @@
 
 <script>
 import config from '../../managers/config'
+import useConfig from '../../mixins/config'
 import prefix from '../../mixins/prefix'
 
 config.defaults(
@@ -22,55 +23,62 @@ config.defaults(
 
 export default {
   name: 'veui-grid-container',
-  mixins: [prefix],
+  mixins: [prefix, useConfig('config', 'gridcontainer.')],
   props: {
     width: {
       type: Number
     },
     columns: {
       type: Number,
-      default () {
-        return config.get('gridcontainer.columns')
-      },
       validator (val) {
         return val > 0
       }
     },
     gutter: {
       type: Number,
-      default () {
-        return config.get('gridcontainer.gutter')
-      },
       validator (val) {
         return val >= 0
       }
     },
     margin: {
       type: Number,
-      default () {
-        return config.get('gridcontainer.margin')
-      },
       validator (val) {
         return val >= 0
       }
     }
   },
   computed: {
+    realColumns () {
+      return this.columns == null
+        ? this.config['gridcontainer.columns']
+        : this.columns
+    },
+    realGutter () {
+      return this.gutter == null
+        ? this.config['gridcontainer.gutter']
+        : this.gutter
+    },
+    realMargin () {
+      return this.margin == null
+        ? this.config['gridcontainer.margin']
+        : this.margin
+    },
     style () {
-      let { margin } = this
+      let { realMargin } = this
       return {
-        ...(margin
-          ? { 'padding-right': `${margin}px`, 'padding-left': `${margin}px` }
+        ...(realMargin
+          ? {
+            'padding-right': `${realMargin}px`,
+            'padding-left': `${realMargin}px`
+          }
           : {})
       }
     }
   },
   provide () {
-    let { columns, gutter } = this
-
     return {
-      columns,
-      gutter
+      columns: this.realColumns,
+      gutter: this.gutter
     }
   }
 }

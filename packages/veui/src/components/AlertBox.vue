@@ -58,7 +58,7 @@ import { pick, includes } from 'lodash'
 import Dialog from './Dialog'
 import Button from './Button'
 import Icon from './Icon'
-import configMixin from '../mixins/config'
+import useConfig from '../mixins/config'
 import config from '../managers/config'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
@@ -83,7 +83,7 @@ export default {
     overlay,
     i18n,
     useControllable(['open']),
-    configMixin('config')
+    useConfig('config', 'alertbox.')
   ],
   props: {
     ...pick(Dialog.props, [

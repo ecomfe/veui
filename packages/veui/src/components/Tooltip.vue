@@ -7,6 +7,7 @@ import outside from '../directives/outside'
 import { getNodes, isValidNodesResolver } from '../utils/context'
 import { isString } from 'lodash'
 import config from '../managers/config'
+import useConfig from '../mixins/config'
 import useControllable from '../mixins/controllable'
 
 const TRIGGER_MAP = {
@@ -27,6 +28,7 @@ export default {
     prefix,
     ui,
     overlay,
+    useConfig('config', 'tooltip.'),
     useControllable([{ prop: 'open', event: 'toggle' }])
   ],
   props: {
@@ -44,8 +46,7 @@ export default {
       default: 'hover'
     },
     hideDelay: {
-      type: Number,
-      default: config.get('tooltip.hideDelay')
+      type: Number
     },
     open: {
       type: Boolean,
@@ -82,6 +83,11 @@ export default {
         close
       }
     },
+    realHideDelay () {
+      return this.hideDelay == null
+        ? this.config['tooltip.hideDelay']
+        : this.hideDelay
+    },
     targetNode () {
       return this.getTargetNode(this.target)
     },
@@ -90,7 +96,7 @@ export default {
         handler: this.closeHandler,
         refs: [this.targetNode],
         trigger: this.realTrigger.close,
-        delay: this.hideDelay,
+        delay: this.realHideDelay,
         excludeSelf: !this.interactive
       }
     },

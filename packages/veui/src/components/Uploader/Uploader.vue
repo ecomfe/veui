@@ -64,6 +64,7 @@ import input from '../../mixins/input'
 import i18n from '../../mixins/i18n'
 import { sharedProps } from './_mixin'
 import config from '../../managers/config'
+import useConfig from '../../mixins/config'
 import toast from '../../managers/toast'
 import warn from '../../utils/warn'
 import { addOnceEventListener } from '../../utils/dom'
@@ -117,7 +118,7 @@ export default {
     'veui-uploader-file': FileUploader,
     'veui-uploader-media': MediaUploader
   },
-  mixins: [prefix, ui, input, i18n],
+  mixins: [prefix, ui, input, i18n, useConfig('config', 'uploader.')],
   model: {
     event: 'change'
   },
@@ -138,10 +139,7 @@ export default {
     },
     action: String,
     headers: {
-      type: Object,
-      default () {
-        return config.get('uploader.headers')
-      }
+      type: Object
     },
     withCredentials: {
       type: Boolean,
@@ -149,32 +147,20 @@ export default {
     },
     requestMode: {
       type: String,
-      default () {
-        return config.get('uploader.requestMode')
-      },
       validator (value) {
         return includes(['xhr', 'iframe', 'custom'], value)
       }
     },
     iframeMode: {
-      type: String,
-      default () {
-        return config.get('uploader.iframeMode')
-      }
+      type: String
     },
     convertResponse: {
-      default () {
-        return config.get('uploader.convertResponse')
-      },
       validator (value) {
         return typeof value === 'function'
       }
     },
     callbackNamespace: {
-      type: String,
-      default () {
-        return config.get('uploader.callbackNamespace')
-      }
+      type: String
     },
     dataType: {
       type: String,
@@ -211,10 +197,7 @@ export default {
     upload: Function,
     controls: Function,
     pickerPosition: {
-      type: String,
-      default () {
-        return config.get('uploader.pickerPosition')
-      }
+      type: String
     },
     entries: Function,
     previewOptions: {
@@ -241,8 +224,38 @@ export default {
     }
   },
   computed: {
+    realHeaders () {
+      return this.headers == null
+        ? this.config['uploader.headers']
+        : this.headers
+    },
+    realRequestMode () {
+      return this.requestMode == null
+        ? this.config['uploader.requestMode']
+        : this.requestMode
+    },
+    realIframeMode () {
+      return this.iframeMode == null
+        ? this.config['uploader.iframeMode']
+        : this.iframeMode
+    },
+    realConvertResponse () {
+      return this.convertResponse == null
+        ? this.config['uploader.convertResponse']
+        : this.convertResponse
+    },
+    realCallbackNamespace () {
+      return this.callbackNamespace == null
+        ? this.config['uploader.callbackNamespace']
+        : this.callbackNamespace
+    },
     realUneditable () {
       return this.realDisabled || this.realReadonly
+    },
+    realPickerPosition () {
+      return this.pickerPosition == null
+        ? this.config['uploader.pickerPosition']
+        : this.pickerPosition
     },
     canAddImage () {
       return !this.realUneditable && this.fileList.length < this.maxCount
@@ -294,38 +307,42 @@ export default {
     },
 
     uploadRequest () {
-      const options = pick(this, [
-        'name',
-        'action',
-        'headers',
-        'withCredentials',
-        'requestMode',
-        'iframeMode',
-        'callbackNamespace',
-        'dataType',
-        'convertResponse',
-        'payload',
-        'upload'
-      ])
+      const options = {
+        ...pick(this, [
+          'name',
+          'action',
+          'withCredentials',
+          'dataType',
+          'payload',
+          'upload'
+        ]),
+        headers: this.realHeaders,
+        requestMode: this.realRequestMode,
+        iframeMode: this.realIframeMode,
+        callbackNamespace: this.realCallbackNamespace,
+        convertResponse: this.realConvertResponse
+      }
       return getUploadRequest(options)
     },
     validateOptions () {
       return {
         type: this.type,
         accept: this.realAccept,
-        extensions: this.extensions,
+        extensions: this.config['uploader.mediaExtensions'],
         maxSize: this.maxSize,
         validator: this.validator
       }
     },
     childOptions () {
-      return pick(this, sharedProps)
+      let options = pick(this, sharedProps)
+      options.pickerPosition = this.realPickerPosition
+      return options
     },
     preferType () {
       return includes(['image', 'video'], this.type) ? this.type : undefined
     },
     canMultipleChoose () {
-      return this.requestMode !== 'iframe' || isSupportFileListContructor()
+      return this.realRequestMode !== 'iframe' || isSupportFileListContructor()
     },
     valueAndMaxCount () {
       return {
@@ -424,7 +441,7 @@ export default {
     }
   },
   created () {
-    if (this.requestMode !== 'custom' && !this.action) {
+    if (this.realRequestMode !== 'custom' && !this.action) {
       warn(
         '[veui-uploader] `action` is required when `request-mode` is not `custom`.',
         this
@@ -692,10 +709,16 @@ export default {
       return { ...file.value, status: file.status }
     },
     guessFileType (val) {
-      return this.preferType || getFileMediaType(val)
+      return (
+        this.preferType ||
+        getFileMediaType(val, this.config['uploader.mediaExtensions'])
+      )
     },
     createUploaderFile (val, file) {
-      const options = { keyField: this.keyField }
+      const options = {
+        keyField: this.keyField,
+        extensions: this.config['uploader.mediaExtensions']
+      }
       if (process.env.VUE_ENV !== 'server' && val instanceof File) {
         return new UploaderFile(val, options)
       }

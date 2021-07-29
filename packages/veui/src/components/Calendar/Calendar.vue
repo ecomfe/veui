@@ -338,6 +338,7 @@ import input from '../../mixins/input'
 import useControllable from '../../mixins/controllable'
 import i18n from '../../mixins/i18n'
 import config from '../../managers/config'
+import useConfig from '../../mixins/config'
 import Icon from '../Icon'
 import Button from '../Button'
 import InfiniteScroll from '../Calendar/_InfiniteScroll'
@@ -365,6 +366,7 @@ export default {
     ui,
     input,
     i18n,
+    useConfig('config', 'calendar.'),
     useControllable({
       prop: 'selected',
       event: 'select'
@@ -464,7 +466,7 @@ export default {
     realWeekStart () {
       return this.weekStart != null
         ? this.weekStart
-        : config.get('calendar.weekStart')
+        : this.config['calendar.weekStart']
     },
     isDateType () {
       return this.type === 'date'

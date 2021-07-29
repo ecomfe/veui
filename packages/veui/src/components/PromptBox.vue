@@ -44,6 +44,7 @@ import Input from './Input'
 import Dialog from './Dialog'
 import { pick } from 'lodash'
 import config from '../managers/config'
+import useConfig from '../mixins/config'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
@@ -69,7 +70,8 @@ export default {
         prop: 'value',
         event: 'input'
       }
-    ])
+    ]),
+    useConfig('config', 'promptbox.')
   ],
   props: {
     ...pick(Dialog.props, [
@@ -88,9 +90,9 @@ export default {
     },
     invalid: Boolean
   },
-  data () {
-    return {
-      priority: config.get('promptbox.priority')
+  computed: {
+    priority () {
+      return this.config['promptbox.priority']
     }
   },
   watch: {

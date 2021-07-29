@@ -5,10 +5,10 @@
  *  2. functional 组件定义 provide 无效（inject 有效）
  */
 
-import { uniqueId, isPlainObject, merge as _merge } from 'lodash'
+import { uniqueId, isPlainObject, assign } from 'lodash'
 
 const CommonProviderImpl = {
-  name: 'provider', // for better readability in devtools
+  name: 'veui-provider', // for better readability in devtools
   uiTypes: ['transparent'],
   props: {
     // eslint-disable-next-line vue/require-prop-types
@@ -21,7 +21,7 @@ const CommonProviderImpl = {
 
 export function createContext (name, defaultValue) {
   name = name ? `${name}-provider` : name
-  let contextId = `$${uniqueId(name || CommonProviderImpl.name)}`
+  let contextId = `__${uniqueId(name || CommonProviderImpl.name)}`
   let RealProviderImpl = {
     ...CommonProviderImpl,
     inject: {
@@ -38,7 +38,7 @@ export function createContext (name, defaultValue) {
             isPlainObject(parentContextValue) &&
             isPlainObject(this.value) // provide 的值时函数，最后在消费方的 computed 调用，这样保证最终值依赖每个 provider 的 this.value
           ) {
-            return _merge({}, parentContextValue, this.value) // 每层 provider 都会和上一层的值合并
+            return assign({}, parentContextValue, this.value) // 每层 provider 都会和上一层的值合并
           }
           return this.value
         }
@@ -66,12 +66,11 @@ export function createContext (name, defaultValue) {
       },
       computed: {
         [injectionKey] () {
-          // TODO 现在这个响应式范围有点大，是不是最好 alert.xxx 变化只影响 Alert。
           if (defaultValue) {
             defaultValue =
               typeof defaultValue === 'function' ? defaultValue() : defaultValue
             // 消费方获取 context 值时和初始值做合并
-            return _merge({}, defaultValue, this[contextId]())
+            return assign({}, defaultValue, this[contextId]())
           }
           return this[contextId]()
         }

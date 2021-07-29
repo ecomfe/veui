@@ -17,7 +17,6 @@ import {
   forEach,
   isUndefined
 } from 'lodash'
-import config from '../../managers/config'
 import { createFileList } from '../../utils/file'
 
 export const STATUS = {
@@ -49,15 +48,13 @@ export const ERRORS = {
   CUSTOM_INVALID: 'custom'
 }
 
-export function getFileMediaType (file) {
-  const mediaExtensions = config.get('uploader.mediaExtensions')
+export function getFileMediaType (file, mediaExtensions) {
   return find(keys(mediaExtensions), function (type) {
     return some(mediaExtensions[type], ext => endsWith(file.name, `.${ext}`))
   })
 }
 
-function getMediaExtensionsByType (type) {
-  const mediaExtensions = config.get('uploader.mediaExtensions')
+function getMediaExtensionsByType (type, mediaExtensions) {
   switch (type) {
     case 'image':
     case 'video':
@@ -69,7 +66,7 @@ function getMediaExtensionsByType (type) {
 }
 
 function getValidateFileType ({ accept, extensions, type }) {
-  const mediaExtensions = getMediaExtensionsByType(type)
+  const mediaExtensions = getMediaExtensionsByType(type, extensions)
 
   return function validateFileType (file) {
     if (!accept) {
@@ -77,9 +74,6 @@ function getValidateFileType ({ accept, extensions, type }) {
     }
 
     let ext = last(file.name.split('.')).toLowerCase()
-    if (extensions) {
-      return includes(extensions, ext)
-    }
 
     return accept.split(/,\s*/).some(item => {
       let acceptExtention = last(item.split(/[./]/)).toLowerCase()
@@ -162,7 +156,7 @@ export function getValidateFile (options, ctx) {
 }
 
 export class UploaderFile {
-  constructor (file, { keyField }) {
+  constructor (file, { keyField, extensions }) {
     this.keyField = keyField
 
     this.key = uniqueId('veuiUploaderFile')
@@ -173,7 +167,7 @@ export class UploaderFile {
     this.meta = file
       ? {
         ...pick(file, ['name', 'size']),
-        type: getFileMediaType(file)
+        type: getFileMediaType(file, extensions)
       }
       : {}
 

@@ -3,6 +3,7 @@ import Overlay from './Overlay'
 import Toast from './Toast'
 import { assign, findIndex, uniqueId } from 'lodash'
 import config from '../managers/config'
+import useConfig from '../mixins/config'
 import prefix from '../mixins/prefix'
 import overlay from '../mixins/overlay'
 
@@ -12,11 +13,15 @@ config.defaults({
 
 export default {
   name: 'toast-list',
-  mixins: [prefix, overlay],
+  mixins: [prefix, overlay, useConfig('config', 'toast.')],
   data () {
     return {
-      messages: [],
-      priority: config.get('toast.priority')
+      messages: []
+    }
+  },
+  computed: {
+    priority () {
+      return this.config['toast.priority']
     }
   },
   methods: {

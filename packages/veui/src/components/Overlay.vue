@@ -3,6 +3,7 @@ import Popper from 'popper.js'
 import { getNodes } from '../utils/context'
 import overlayManager from '../managers/overlay'
 import focusManager from '../managers/focus'
+import useConfig from '../mixins/config'
 import config from '../managers/config'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
@@ -36,7 +37,12 @@ overlayManager.setBaseOrder(config.get('overlay.baseZIndex'))
 export default {
   name: 'veui-overlay',
   uiTypes: ['overlay', 'transparent'],
-  mixins: [prefix, ui, focusable],
+  mixins: [
+    prefix,
+    ui,
+    focusable,
+    useConfig('config', ['overlay.', 'managers.overlay'])
+  ],
   props: {
     position: String,
     overlayClass: getClassPropDef(),
@@ -73,7 +79,10 @@ export default {
       return this.open && (this.inline || this.local || this.zIndex !== null)
     },
     realOverlayClass () {
-      return mergeClasses(this.overlayClass, config.get('overlay.overlayClass'))
+      return mergeClasses(
+        this.overlayClass,
+        this.config['overlay.overlayClass']
+      )
     },
     realOverlayStyle () {
       return mergeStyles(this.overlayStyle, {
@@ -175,7 +184,7 @@ export default {
         return
       }
       if (!this.overlayNode) {
-        let overlay = config.get('managers.overlay') || overlayManager
+        let overlay = this.config['managers.overlay'] || overlayManager
         this.overlayNode = overlay.createNode({
           parentId: this.findParentOverlayId(),
           priority: this.priority,
