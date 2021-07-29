@@ -168,6 +168,7 @@ import {
   constant
 } from 'lodash'
 import config from '../../managers/config'
+import useConfig from '../../mixins/config'
 import { scrollToAlign } from '../../utils/dom'
 import TimePickerUtil from './_TimePickerUtil'
 
@@ -198,6 +199,7 @@ export default {
     input,
     dropdown(),
     i18n,
+    useConfig('config', 'timepicker.'),
     useControllable({
       prop: 'value',
       event: 'input',
@@ -243,7 +245,7 @@ export default {
   computed: {
     realPlaceholder () {
       return this.placeholder == null
-        ? config.get('timepicker.placeholder')
+        ? this.config['timepicker.placeholder']
         : this.placeholder
     },
     enableSeconds () {

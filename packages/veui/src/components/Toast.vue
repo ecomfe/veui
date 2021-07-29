@@ -61,6 +61,7 @@ import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import useControllable from '../mixins/controllable'
 import config from '../managers/config'
+import useConfig from '../mixins/config'
 import { includes } from 'lodash'
 
 config.defaults(
@@ -78,7 +79,13 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button
   },
-  mixins: [prefix, ui, i18n, useControllable(['open'])],
+  mixins: [
+    prefix,
+    ui,
+    i18n,
+    useControllable(['open']),
+    useConfig('config', 'toast.')
+  ],
   props: {
     type: {
       type: String,
@@ -92,8 +99,7 @@ export default {
     message: String,
     open: Boolean,
     duration: {
-      type: Number,
-      default: config.get('toast.duration')
+      type: Number
     }
   },
   data () {
@@ -104,14 +110,19 @@ export default {
   computed: {
     isTitled () {
       return this.title || this.$slots.title
+    },
+    realDuration () {
+      return this.duration == null
+        ? this.config['toast.duration']
+        : this.duration
     }
   },
   mounted () {
-    if (this.duration > 0) {
+    if (this.realDuration > 0) {
       this.timer = setTimeout(() => {
         this.$emit('update:open', false)
         this.$emit('close')
-      }, this.duration)
+      }, this.realDuration)
     }
 
     let { message } = this.$refs

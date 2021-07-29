@@ -7,6 +7,7 @@ import {
   isOverflow
 } from '../utils/dom'
 import config from '../managers/config'
+import useConfig from './config'
 
 function isActive (elem, focusSelector) {
   return focusSelector
@@ -43,6 +44,7 @@ const useKeySelect = ({
   handlers,
   expandedKey = 'expanded'
 }) => ({
+  mixins: [useConfig('keySelectConfig', 'keyselect.')],
   computed: {
     focusMode () {
       return typeof useNativeFocus === 'string'
@@ -52,7 +54,9 @@ const useKeySelect = ({
           : useNativeFocus
     },
     focusSelector () {
-      return this.focusMode ? null : config.get('keyselect.focusSelector')
+      return this.focusMode
+        ? null
+        : this.keySelectConfig['keyselect.focusSelector']
     }
   },
   created () {

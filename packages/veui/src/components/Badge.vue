@@ -30,6 +30,7 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import { isNumber } from 'lodash'
 import config from '../managers/config'
+import useConfig from '../mixins/config'
 
 config.defaults({
   'badge.max': 999
@@ -37,14 +38,13 @@ config.defaults({
 
 export default {
   name: 'veui-badge',
-  mixins: [prefix, ui],
+  mixins: [prefix, ui, useConfig('config', 'badge.')],
   props: {
     value: [Number, String],
     max: {
       type: Number,
-      default: config.get('badge.max'),
       validator (val) {
-        return Math.floor(val) === val && val > 0
+        return val == null || (Math.floor(val) === val && val > 0)
       }
     },
     hidden: Boolean,
@@ -56,6 +56,9 @@ export default {
   computed: {
     standalone () {
       return !this.$slots.default
+    },
+    realMax () {
+      return this.max || this.config['badge.max']
     },
     content () {
       if (!isNumber(this.value)) {

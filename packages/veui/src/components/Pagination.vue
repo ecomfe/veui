@@ -129,6 +129,7 @@ import Select from './Select'
 import Input from './Input'
 import Button from './Button'
 import config from '../managers/config'
+import useConfig from '../mixins/config'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
@@ -169,25 +170,17 @@ export default {
     'veui-input': Input,
     'veui-button': Button
   },
-  mixins: [prefix, ui, i18n],
+  mixins: [prefix, ui, i18n, useConfig('config', ['pagination.', 'pager.'])],
   props: {
     page: {
       type: Number,
       default: 1
     },
     pageSize: {
-      type: Number,
-      default () {
-        return config.get('pagination.pageSize') || config.get('pager.pageSize')
-      }
+      type: Number
     },
     pageSizes: {
-      type: Array,
-      default () {
-        return (
-          config.get('pagination.pageSizes') || config.get('pager.pageSizes')
-        )
-      }
+      type: Array
     },
     total: {
       type: Number
@@ -231,7 +224,12 @@ export default {
     },
     realPageSize: {
       get () {
-        return this.customPageSize || this.pageSize
+        if (this.customPageSize) {
+          return this.customPageSize
+        }
+        return this.pageSize == null
+          ? this.config['pagination.pageSize'] || this.config['pager.pageSize']
+          : this.pageSize
       },
       set (val) {
         val = parseInt(val, 10)
@@ -239,7 +237,12 @@ export default {
       }
     },
     realPageSizes () {
-      return this.pageSizes.map(size => ({
+      const pageSizes =
+        this.pageSizes == null
+          ? this.config['pagination.pageSizes'] ||
+            this.config['pager.pageSizes']
+          : this.pageSizes
+      return pageSizes.map(size => ({
         label: size,
         value: size
       }))

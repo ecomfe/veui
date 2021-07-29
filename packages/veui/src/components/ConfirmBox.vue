@@ -40,6 +40,7 @@
 import { pick } from 'lodash'
 import Dialog from './Dialog'
 import config from '../managers/config'
+import useConfig from '../mixins/config'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
@@ -54,7 +55,13 @@ export default {
   components: {
     'veui-dialog': Dialog
   },
-  mixins: [prefix, ui, overlay, useControllable(['open'])],
+  mixins: [
+    prefix,
+    ui,
+    overlay,
+    useControllable(['open']),
+    useConfig('config', 'confirmbox.')
+  ],
   props: pick(Dialog.props, [
     'open',
     'title',
@@ -66,8 +73,12 @@ export default {
   ]),
   data () {
     return {
-      localTitle: this.title,
-      priority: config.get('confirmbox.priority')
+      localTitle: this.title
+    }
+  },
+  computed: {
+    priority () {
+      return this.config['confirmbox.priority']
     }
   }
 }

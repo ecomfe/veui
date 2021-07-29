@@ -7,6 +7,7 @@ import OptionGroup from './OptionGroup'
 import Overlay from '../Overlay'
 import Checkbox from '../Checkbox'
 import config from '../../managers/config'
+import useConfig from '../../mixins/config'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
@@ -19,7 +20,7 @@ import { find } from '../../utils/datasource'
 import { uniqueId, omit } from 'lodash'
 import { contains, focusIn } from '../../utils/dom'
 import { renderSlot } from '../../utils/helper'
-import SelectContext from './_SelectContext'
+import { SelectProvider } from './_SelectContext'
 import '../../common/uiTypes'
 
 config.defaults(
@@ -37,6 +38,7 @@ export default {
     ui,
     input,
     dropdown(),
+    useConfig('config', 'select.'),
     useKeySelect({ expandedKey: 'realExpanded' }),
     useSearchable({
       datasourceKey: 'realOptions',
@@ -99,7 +101,7 @@ export default {
     },
     realPlaceholder () {
       return this.placeholder == null
-        ? config.get('select.placeholder')
+        ? this.config['select.placeholder']
         : this.placeholder
     },
     inputPlaceholder () {
@@ -164,7 +166,7 @@ export default {
       return !this.isMultiLevel || !!this.inputValue
     },
     focusSelector () {
-      return this.searchable ? config.get('keyselect.focusSelector') : null
+      return this.searchable ? this.config['keyselect.focusSelector'] : null
     },
     hasLabelSlot () {
       return !!(this.$scopedSlots.label || this.$slots.label)
@@ -517,7 +519,7 @@ export default {
     let renderGroup = (options, children, key) => {
       // overlay-class={this.overlayClass} 先不透传吧
       return (
-        <SelectContext.Provider value={key === 'data'}>
+        <SelectProvider value={key === 'data'}>
           <OptionGroup
             key={key}
             v-show={!!options}
@@ -534,7 +536,7 @@ export default {
           >
             {children}
           </OptionGroup>
-        </SelectContext.Provider>
+        </SelectProvider>
       )
     }
 

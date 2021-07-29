@@ -227,6 +227,7 @@ import i18n from '../mixins/i18n'
 import outside from '../directives/outside'
 import { merge } from '../utils/range'
 import config from '../managers/config'
+import useConfig from '../mixins/config'
 import { normalizeClass } from '../utils/helper'
 import Checkbox from './Checkbox'
 import Tooltip from './Tooltip'
@@ -251,7 +252,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-dropdown': Dropdown
   },
-  mixins: [prefix, ui, input, i18n],
+  mixins: [prefix, ui, input, i18n, useConfig('config', 'schedule.')],
   model: {
     prop: 'selected',
     event: 'select'
@@ -298,7 +299,7 @@ export default {
   },
   computed: {
     realStatuses () {
-      return this.statuses || config.get('schedule.statuses')
+      return this.statuses || this.config['schedule.statuses']
     },
     dayNames () {
       return [...this.t('daysAbbr')]
@@ -382,7 +383,7 @@ export default {
       return `${current.hour}:00–${current.hour + 1}:00`
     },
     realShortcuts () {
-      let shortcuts = this.shortcuts || config.get('schedule.shortcuts')
+      let shortcuts = this.shortcuts || this.config['schedule.shortcuts']
       return shortcuts.map(({ label, selected }) => {
         return {
           label,

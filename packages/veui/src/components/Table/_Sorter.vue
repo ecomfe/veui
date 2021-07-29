@@ -33,6 +33,7 @@ import Button from '../Button'
 import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import config from '../../managers/config'
+import useConfig from '../../mixins/config'
 import '../../common/uiTypes'
 import warn from '../../utils/warn'
 import { intersection, includes } from 'lodash'
@@ -52,13 +53,12 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button
   },
-  mixins: [prefix, table],
+  mixins: [prefix, table, useConfig('config', 'table.')],
   uiTypes: ['transparent'],
   props: {
     order: [Boolean, String],
     allowedOrders: {
       type: Array,
-      default: () => config.get('table.allowedOrders'),
       validator (val) {
         if (!Array.isArray(val)) {
           return false
@@ -68,8 +68,13 @@ export default {
     }
   },
   computed: {
+    realAllowedOrders () {
+      return this.allowedOrders == null
+        ? this.config['table.allowedOrders']
+        : this.allowedOrders
+    },
     klass () {
-      let orders = this.allowedOrders.filter(i => i !== false)
+      let orders = this.realAllowedOrders.filter(i => i !== false)
       return {
         [this.$c('table-sorter')]: true,
         [this.$c(`table-sorter-${this.realOrder}`)]: true,
@@ -83,7 +88,7 @@ export default {
       return !this.order ? 'unordered' : this.order
     },
     orderOptions () {
-      return { order: this.order, allowedOrders: this.allowedOrders }
+      return { order: this.order, allowedOrders: this.realAllowedOrders }
     }
   },
   watch: {
@@ -102,11 +107,9 @@ export default {
   methods: {
     sort () {
       // -1 + 1 = 0, 正好取第一个
-      let index = this.allowedOrders.indexOf(this.order)
-      this.$emit(
-        'sort',
-        this.allowedOrders[(index + 1) % this.allowedOrders.length]
-      )
+      let orders = this.realAllowedOrders
+      let index = orders.indexOf(this.order)
+      this.$emit('sort', orders[(index + 1) % orders.length])
     }
   }
 }

@@ -1,6 +1,6 @@
 import { getConfigKey, findAncestor, isTransparent } from '../utils/helper'
 import warn from '../utils/warn'
-import config from '../managers/config'
+import ui from '../managers/ui'
 import {
   compact,
   uniq,
@@ -151,7 +151,7 @@ export default {
   },
   methods: {
     getComponentConfig (key) {
-      return config.get(`${getConfigKey(this.$options.name)}.${key}`)
+      return ui.get(`${getConfigKey(this.$options.name)}.${key}`)
     }
   }
 }

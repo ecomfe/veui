@@ -105,7 +105,7 @@ import bus from '../bus'
 import { Alert, Button } from 'veui'
 
 export default {
-  name: 'alert',
+  name: 'alert-demo',
   components: {
     'veui-alert': Alert,
     'veui-button': Button
@@ -124,7 +124,7 @@ export default {
     }
   },
   mounted () {
-    this.$children.forEach((child) => {
+    this.$children.forEach(child => {
       child.$on('click', () => {
         bus.$emit('log', child.$el.getAttribute('ui'))
       })
