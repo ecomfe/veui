@@ -62,7 +62,7 @@ import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import i18n from '../../mixins/i18n'
-import { sharedProps } from '../../mixins/upload'
+import { sharedProps } from './_mixin'
 import config from '../../managers/config'
 import toast from '../../managers/toast'
 import warn from '../../utils/warn'
@@ -326,11 +326,18 @@ export default {
     },
     canMultipleChoose () {
       return this.requestMode !== 'iframe' || isSupportFileListContructor()
+    },
+    valueAndMaxCount () {
+      return {
+        value: this.value,
+        maxCount: this.maxCount
+      }
     }
   },
   watch: {
-    value: {
-      handler (val) {
+    valueAndMaxCount: {
+      handler ({ value: val, maxCount }) {
+        // 并不是 value 变化了才更新 fileList
         let values = [].concat(val).filter(Boolean)
         if (process.env.NODE_ENV !== 'test') {
           if (some(values, val => isString(val))) {
@@ -353,6 +360,7 @@ export default {
 
             let value = values[j++]
             if (!value) {
+              // prop value array 用完了
               return
             }
 
@@ -361,8 +369,9 @@ export default {
                 this.fileList,
                 file => file.key === value[this.keyField]
               )
+              // file.value 对应 value array 中的元素
               if (file) {
-                file.value = value
+                file.value = value // 会同步设置 status 为成功
                 return file
               }
             }
@@ -374,6 +383,30 @@ export default {
             // 还有剩的添加到最后（TODO: 需要考虑 order 么？）
             values.slice(j).map(val => this.createUploaderFile(val))
           )
+
+        // fileList 不能超过 maxCount，若超过，先删除失败的，再删除上传中的，最后删除成功的
+        if (this.fileList.length > maxCount) {
+          // 成功..上传中..失败排序
+          let sorted = [...this.fileList].sort((a, b) => {
+            if (
+              (a.isSuccess && !b.isSuccess) ||
+              (a.isUploading && b.isFailure)
+            ) {
+              return -1
+            }
+            if (
+              (b.isSuccess && !a.isSuccess) ||
+              (b.isUploading && a.isFailure)
+            ) {
+              return 1
+            }
+            // 返回原来的顺序
+            return this.fileList.indexOf(a) - this.fileList.indexOf(b)
+          })
+          this.fileList = this.fileList.filter(
+            file => sorted.indexOf(file) < maxCount
+          )
+        }
       },
       deep: true,
       immediate: true

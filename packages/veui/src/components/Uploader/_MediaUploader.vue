@@ -154,6 +154,7 @@
         </slot>
       </template>
     </li>
+    <!-- 继续上传按钮 -->
     <li
       key="input"
       :class="{
@@ -216,7 +217,7 @@
 <script>
 import { includes } from 'lodash'
 import prefix from '../../mixins/prefix'
-import upload from '../../mixins/upload'
+import upload from './_mixin'
 import i18n from '../../mixins/i18n'
 import Icon from '../Icon'
 import Progress from '../Progress'

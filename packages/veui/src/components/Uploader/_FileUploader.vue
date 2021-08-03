@@ -107,7 +107,7 @@
 
 <script>
 import prefix from '../../mixins/prefix'
-import upload from '../../mixins/upload'
+import upload from './_mixin'
 import i18n from '../../mixins/i18n'
 import Button from '../Button'
 import Icon from '../Icon'
