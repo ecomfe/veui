@@ -1,13 +1,13 @@
 const { writeFileSync, statSync, existsSync } = require('fs')
 const { resolve, relative, join, extname } = require('path')
-const dir = require('node-dir')
+const recursive = require('recursive-readdir')
 const { getSortedComponents } = require('./utils')
 
 const componentDir = resolve(__dirname, '../src/components')
 
 async function genComponentJson () {
-  let mappings = dir
-    .files(componentDir, { sync: true })
+  let files = await recursive(componentDir)
+  let mappings = files
     .reduce((mappings, file) => {
       let modulePath = relative(componentDir, file)
       let segments = modulePath.split('/')
@@ -39,8 +39,9 @@ async function genComponentJson () {
   )
 }
 
-function genComponentIndex () {
-  let res = dir
+async function genComponentIndex () {
+  let files = await recursive(componentDir)
+  let res = files
     .files(componentDir, 'combine', null, {
       sync: true,
       recursive: false,

@@ -233,27 +233,27 @@
   },
   {
     "name": "GridColumn",
-    "path": "Grid/GridColumn.vue"
-  },
-  {
-    "name": "GridColumn",
     "path": "GridColumn.js"
   },
   {
-    "name": "GridContainer",
-    "path": "Grid/GridContainer.vue"
+    "name": "GridColumn",
+    "path": "Grid/GridColumn.vue"
   },
   {
     "name": "GridContainer",
     "path": "GridContainer.js"
   },
   {
-    "name": "GridRow",
-    "path": "Grid/GridRow.vue"
+    "name": "GridContainer",
+    "path": "Grid/GridContainer.vue"
   },
   {
     "name": "GridRow",
     "path": "GridRow.js"
+  },
+  {
+    "name": "GridRow",
+    "path": "Grid/GridRow.vue"
   },
   {
     "name": "Lightbox",
@@ -261,19 +261,19 @@
   },
   {
     "name": "Menu",
-    "path": "Menu/Menu.vue"
-  },
-  {
-    "name": "Menu",
     "path": "Menu.js"
   },
   {
-    "name": "Nav",
-    "path": "Menu/Nav.vue"
+    "name": "Menu",
+    "path": "Menu/Menu.vue"
   },
   {
     "name": "Nav",
     "path": "Nav.js"
+  },
+  {
+    "name": "Nav",
+    "path": "Menu/Nav.vue"
   },
   {
     "name": "NumberInput",
