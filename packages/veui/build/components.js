@@ -1,5 +1,5 @@
-const { relative, writeFileSync, statSync, existsSync } = require('fs')
-const { resolve, join, extname } = require('path')
+const { writeFileSync, statSync, existsSync } = require('fs')
+const { resolve, relative, join, extname } = require('path')
 const dir = require('node-dir')
 const { getSortedComponents } = require('./utils')
 

@@ -10,7 +10,7 @@ const scriptRE = /<script\b(?:\s[^>]*>|>)(.*?)<\/script>/ims
 function getComponentDeps () {
   let depMap = {}
   return build({
-    entryPoints: [resolve(componentsDir, 'index.js')],
+    entryPoints: ['./src/components/index.js'],
     write: false,
     bundle: true,
     format: 'esm',
