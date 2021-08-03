@@ -1,15 +1,15 @@
-let fs = require('fs')
-let path = require('path')
-let dir = require('node-dir')
-const { getSortedComponents } = require('./getSortedComponents')
+const { relative, writeFileSync, statSync, existsSync } = require('fs')
+const { resolve, join, extname } = require('path')
+const dir = require('node-dir')
+const { getSortedComponents } = require('./utils')
 
-const componentDir = path.resolve(__dirname, '../src/components')
+const componentDir = resolve(__dirname, '../src/components')
 
 async function genComponentJson () {
   let mappings = dir
     .files(componentDir, { sync: true })
     .reduce((mappings, file) => {
-      let modulePath = path.relative(componentDir, file)
+      let modulePath = relative(componentDir, file)
       let segments = modulePath.split('/')
       let last = segments[segments.length - 1].split('.')[0]
       let name
@@ -28,12 +28,12 @@ async function genComponentJson () {
     }, [])
     .filter(({ name }) => name && name !== 'index' && name.charAt(0) !== '_')
 
-  // components.json 里组件声明的顺序要确保是样式正确的
+  // components.json 里组件声明的顺序要确保遵循了依赖关系，样式打包时可参照此顺序输出
   const sorted = await getSortedComponents()
   mappings.sort((a, b) => sorted.indexOf(a.name) - sorted.indexOf(b.name))
 
-  fs.writeFileSync(
-    path.resolve(__dirname, '../components.json'),
+  writeFileSync(
+    resolve(__dirname, '../components.json'),
     JSON.stringify(mappings, null, '  ') + '\n',
     'utf8'
   )
@@ -50,9 +50,9 @@ function genComponentIndex () {
       let match = /^[A-Z]/.exec(file)
       // 没有 index.js 的目录不要
       if (match) {
-        let abs = path.join(componentDir, file)
-        if (fs.statSync(abs).isDirectory()) {
-          return fs.existsSync(path.join(abs, 'index.js'))
+        let abs = join(componentDir, file)
+        if (statSync(abs).isDirectory()) {
+          return existsSync(join(abs, 'index.js'))
         }
       }
       return !!match
@@ -60,7 +60,7 @@ function genComponentIndex () {
     .sort()
     .reduce(
       (res, file) => {
-        file = file.slice(0, file.length - path.extname(file).length)
+        file = file.slice(0, file.length - extname(file).length)
         if (res.components.indexOf(file) === -1) {
           res.components.push(file)
           res.exports.push(`export { default as ${file} } from './${file}'`)
@@ -74,7 +74,7 @@ function genComponentIndex () {
     '// This file is generated automatically by `npm run components index`.\n' +
     res.exports.join('\n') +
     '\n'
-  fs.writeFileSync(path.resolve(componentDir, 'index.js'), content, 'utf8')
+  writeFileSync(resolve(componentDir, 'index.js'), content, 'utf8')
 }
 
 if (process.argv.indexOf('index') >= 0) {
