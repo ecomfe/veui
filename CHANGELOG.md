@@ -1,8 +1,29 @@
 ## 2.0.2
 
+### 💡 主要变更
+
+- [+] 在 UMD 版本输出中新增整体注册功能，将自动注册所有组件并启用 VEUI 的所有插件。
+
+  #### 使用方法
+
+  ```html
+  <div id="app">
+    <v-button ui="primary">OK</v-button>
+  </div>
+  ```
+
+  ```js
+  Vue.use(veui, { prefix: 'v' }) // prefix 可选，默认为 `veui`
+
+  new Vue({
+    el: '#app'
+  })
+  ```
+
 ### 🐞 问题修复
 
 - [^] 修正了 `Uploader` 组件在 SSR 环境下异常的问题。
+- [^] 修正了 `Uploader` 组件渲染的文件列表可能超过 `max-count` 定义的上限的问题。
 - [^] 修正了 `options` 参数在 `toast` 插件调用时没有正常生效的问题。
 - [^] 修正了 `veui-theme-dls` 单独打包输出的样式顺序问题。
 
