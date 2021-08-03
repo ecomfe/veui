@@ -997,6 +997,74 @@ describe('components/Uploader', function () {
 
     wrapper.destroy()
   })
+
+  it('should respect maxCount prop when value exceeds.', async function () {
+    let status
+    function upload (file, { onload, onprogress }) {
+      if (status !== 'uploading') {
+        return onload({
+          success: status === 'success',
+          name: 'foo',
+          src: 'foo'
+        })
+      }
+      onprogress({ loaded: 10, total: 100 })
+    }
+
+    let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
+      propsData: {
+        type: 'image',
+        requestMode: 'custom',
+        upload,
+        maxCount: 3,
+        value: []
+      },
+      listeners: {
+        change (val) {
+          wrapper.setProps({ value: val })
+        }
+      }
+    })
+
+    let { vm } = wrapper
+
+    function triggerUpload (event) {
+      let mockFile = createFile('葫芦娃.png', 'image/png', 128 * 1024)
+      let promise = waitForEvent(vm, event)
+      vm.chooseFiles()
+      let input = wrapper.find('input[type="file"]')
+      input.element.files = createFileList(mockFile)
+      input.trigger('change')
+      return promise
+    }
+
+    status = 'failure'
+    await triggerUpload('failure')
+
+    status = 'uploading'
+    await triggerUpload('progress')
+
+    status = 'success'
+    await triggerUpload('success')
+
+    expect(vm.fileList[0].isFailure, 'isFailure').to.equal(true)
+    expect(vm.fileList[1].isUploading, 'isUploading').to.equal(true)
+    expect(vm.fileList[2].isSuccess, 'isSuccess').to.equal(true)
+
+    wrapper.setProps({ maxCount: 2 })
+    await vm.$nextTick()
+    expect(vm.fileList.length).to.equal(2)
+    expect(vm.fileList[0].isUploading, '先删除失败的isUploading').to.equal(true)
+    expect(vm.fileList[1].isSuccess, '先删除失败的isSuccess').to.equal(true)
+
+    wrapper.setProps({ maxCount: 1 })
+    await vm.$nextTick()
+    expect(vm.fileList.length).to.equal(1)
+    expect(vm.fileList[0].isSuccess, '再删除上传中的').to.equal(true)
+    wrapper.destroy()
+  })
 })
 
 function waitForEvent (vm, event) {
