@@ -1,14 +1,14 @@
+import path from 'path'
 import vue from 'rollup-plugin-vue'
 import resolve from '@rollup/plugin-node-resolve'
 import babel from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
 import replace from 'rollup-plugin-replace'
 import alias from '@rollup/plugin-alias'
-import path from 'path'
 
 const commonPlugins = [
   alias({
-    entries: [{ find: 'veui', replacement: path.resolve(__dirname, './src') }]
+    entries: [{ find: 'veui', replacement: path.resolve(__dirname, 'src') }]
   }),
   resolve({
     extensions: ['.mjs', '.js', '.jsx', '.json', '.vue']
@@ -56,7 +56,7 @@ const commonPlugins = [
 
 function bundleUmd () {
   return {
-    input: 'src/index-with-locale.js',
+    input: 'src/index-standalone.js',
     output: {
       file: 'dist/veui.js',
       format: 'umd',
