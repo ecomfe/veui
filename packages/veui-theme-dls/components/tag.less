@@ -87,7 +87,11 @@
   .apply-color(@color) {
     border: 1px solid fade(@color, percentage(@dls-tag-border-opacity));
     color: @color;
-    background-color: fade(@color, percentage(@dls-tag-background-opacity));
+    // 将 rgba 转成相近的 rgb
+    background-color: multiply(
+      fade(@color, percentage(@dls-tag-background-opacity)),
+      #fff
+    );
 
     &.@{veui-prefix}-tag-selectable:not(.@{veui-prefix}-disabled) {
       &:hover {
