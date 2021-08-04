@@ -406,6 +406,12 @@ export default {
           this.fileList = this.fileList.filter(
             file => sorted.indexOf(file) < maxCount
           )
+          // 要取消上传中的
+          sorted.slice(maxCount).forEach(file => {
+            if (file.isUploading) {
+              file.cancel()
+            }
+          })
         }
       },
       deep: true,
