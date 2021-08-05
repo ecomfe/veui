@@ -24,6 +24,6 @@ body:
     id: repro
     attributes:
       label: 问题复现
-      description: "请提供一个精炼的问题复现（去除无关依赖的最小化可运行 demo）。 请在下方贴入在 CodePen 上 demo 的链接（[点此使用模板](https://codepen.io/Justineo/pen/yLbxxOR)）或者复现项目的 repo 地址："
+      description: "请提供一个精炼的问题复现（去除无关依赖的最小化可运行 demo）。 请在下方贴入在 CodePen 上 demo 的链接（[<kbd>⌘</kbd>+点击这里打开模板](https://codepen.io/Justineo/pen/yLbxxOR)）或者复现项目的 repo 地址："
     validations:
       required: true
