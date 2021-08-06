@@ -1,4 +1,4 @@
-const { writeFileSync, statSync, existsSync } = require('fs')
+const { writeFileSync, statSync, existsSync, readdirSync } = require('fs')
 const { resolve, relative, join, extname } = require('path')
 const recursive = require('recursive-readdir')
 const { getSortedComponents } = require('./utils')
@@ -39,16 +39,14 @@ async function genComponentJson () {
   )
 }
 
-async function genComponentIndex () {
-  let files = await recursive(componentDir)
+/**
+ * 用 components/[A-Z]xxx(.js|.vue|/index.js) 生成 components/index.js
+ */
+function genComponentIndex () {
+  let files = readdirSync(componentDir, { encoding: 'utf8' })
   let res = files
-    .files(componentDir, 'combine', null, {
-      sync: true,
-      recursive: false,
-      shortName: true
-    })
     .filter(file => {
-      let match = /^[A-Z]/.exec(file)
+      let match = /^[A-Z]/.test(file)
       // 没有 index.js 的目录不要
       if (match) {
         let abs = join(componentDir, file)
@@ -56,7 +54,7 @@ async function genComponentIndex () {
           return existsSync(join(abs, 'index.js'))
         }
       }
-      return !!match
+      return !!match && /\.(?:js|vue)$/.test(file)
     })
     .sort()
     .reduce(
