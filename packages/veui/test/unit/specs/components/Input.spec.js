@@ -241,7 +241,7 @@ describe('components/Input', () => {
     input.trigger('input')
   })
 
-  it('should handle getLength prop correctly.', () => {
+  it('should handle `getLength` prop correctly', () => {
     let wrapper = mount({
       components: {
         'veui-input': Input
@@ -257,5 +257,77 @@ describe('components/Input', () => {
     })
 
     expect(wrapper.find('.veui-input-after').text()).to.equal('4/5')
+  })
+
+  it('should handle `trim` prop correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-input': Input
+        },
+        data () {
+          return {
+            text: '  123  ',
+            trim: null
+          }
+        },
+        template: `
+        <veui-input :trim="trim" v-model="text"/>
+      `
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    let input = wrapper.find('input')
+    let el = input.element
+    expect(el.value).to.equal('  123  ')
+
+    el.value += ' '
+    input.trigger('input')
+    await vm.$nextTick()
+    expect(el.value).to.equal('  123   ')
+
+    vm.trim = true
+    await vm.$nextTick()
+    expect(el.value).to.equal('  123   ')
+
+    input.trigger('input')
+    await vm.$nextTick()
+    expect(el.value).to.equal('123')
+
+    el.value = '  123  '
+    input.trigger('input')
+    await vm.$nextTick()
+    expect(el.value).to.equal('123')
+
+    vm.trim = 'start'
+    await vm.$nextTick()
+    expect(el.value).to.equal('123')
+
+    el.value = '  123  '
+    input.trigger('input')
+    await vm.$nextTick()
+    expect(el.value).to.equal('123  ')
+
+    vm.trim = 'end'
+    await vm.$nextTick()
+    expect(el.value).to.equal('123  ')
+
+    el.value = '  123  '
+    input.trigger('input')
+    await vm.$nextTick()
+    expect(el.value).to.equal('  123')
+
+    vm.trim = 'both'
+    await vm.$nextTick()
+    expect(el.value).to.equal('  123')
+
+    el.value = '  123  '
+    input.trigger('input')
+    await vm.$nextTick()
+    expect(el.value).to.equal('123')
   })
 })

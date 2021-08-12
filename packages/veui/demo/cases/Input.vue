@@ -53,10 +53,10 @@
       />
       <veui-button ui="xs">Submit</veui-button>
       <h3>受控（不感知输入法，固定值）</h3>
-      <p class="attention">现象：英文直接不能输入，中文输入法结束时直接被重置</p>
-      <veui-input
-        value="固定内容"
-      />
+      <p class="attention">
+        现象：英文直接不能输入，中文输入法结束时直接被重置
+      </p>
+      <veui-input value="固定内容"/>
       <h3>受控（感知输入法, 且用 v-model 同步），value: {{ controlled1 }}</h3>
       <p class="attention">现象：value的值实时在同步</p>
       <veui-input
@@ -64,20 +64,20 @@
         composition
       />
       <veui-button @click="delaySet">delaySet</veui-button>
-      <h3>受控（不感知输入法, 且用 v-model 同步），value: {{ controlled2 }}</h3>
-      <p class="attention">现象：输入中文时，value的值只有在输入法结束后同步</p>
-      <veui-input
-        v-model="controlled2"
-      />
+      <h3>
+        受控（不感知输入法, 且用 v-model 同步），value: {{ controlled2 }}
+      </h3>
+      <p class="attention">
+        现象：输入中文时，value的值只有在输入法结束后同步
+      </p>
+      <veui-input v-model="controlled2"/>
       <h3>非受控（感知输入法），localValue：{{ uncontrolled1 }}</h3>
       <veui-input
         composition
         @input="uncontrolled1 = $event"
       />
       <h3>非受控（不感知输入法），localValue：{{ uncontrolled2 }}</h3>
-      <veui-input
-        @input="uncontrolled2 = $event"
-      />
+      <veui-input @input="uncontrolled2 = $event"/>
     </section>
     <section>
       <h3>事件及功能展示</h3>
@@ -266,6 +266,24 @@
         maxlength="5"
         clearable
         strict
+      />
+    </section>
+  </section>
+
+  <section>
+    <h3>移除前后空白</h3>
+    <section>
+      <veui-input
+        placeholder="both"
+        trim
+      />
+      <veui-input
+        placeholder="start"
+        trim="start"
+      />
+      <veui-input
+        placeholder="end"
+        trim="end"
       />
     </section>
   </section>
