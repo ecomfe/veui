@@ -88,6 +88,11 @@ const TYPE_LIST = ['text', 'password', 'hidden']
 const COMPOSITION_UPDATE = 'UPDATE'
 const COMPOSITION_INPUT = 'INPUT'
 
+const TRIM_RE = {
+  start: /^\s+/g,
+  end: /\s+$/g
+}
+
 export default {
   name: 'veui-input',
   components: {
@@ -130,7 +135,19 @@ export default {
     clearable: Boolean,
     maxlength: [Number, String],
     getLength: Function,
-    strict: Boolean
+    strict: Boolean,
+    trim: {
+      type: [Boolean, String],
+      default: false,
+      validator (val) {
+        return (
+          typeof val === 'boolean' ||
+          val === 'start' ||
+          val === 'end' ||
+          val === 'both'
+        )
+      }
+    }
   },
   data () {
     return {
@@ -253,8 +270,17 @@ export default {
       }
       this.composing = false
     },
+    trimValue (val) {
+      if (!this.trim) {
+        return val
+      }
+      if (this.trim === true || this.trim === 'both') {
+        return val.trim()
+      }
+      return val.replace(TRIM_RE[this.trim], '')
+    },
     updateValue (value, ...args) {
-      this.commit('value', value, ...args)
+      this.commit('value', this.trimValue(value), ...args)
       this.$nextTick(() => {
         let input = this.$refs.input
         this.tmpInputValue = null
