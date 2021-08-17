@@ -3,7 +3,7 @@ import Textarea from '@/components/Textarea'
 import { wait } from '../../../utils'
 
 describe('components/Textarea', () => {
-  it('should handle value prop with `null` value.', done => {
+  it('should handle value prop with `null` value', done => {
     let wrapper = mount(
       Textarea,
       {
@@ -27,7 +27,7 @@ describe('components/Textarea', () => {
     wrapper.find('textarea').trigger('input')
   })
 
-  it('should transparently pass-through attrs to the <textarea> element.', () => {
+  it('should transparently pass-through attrs to the <textarea> element', () => {
     let wrapper = mount(
       Textarea,
       {
@@ -63,7 +63,7 @@ describe('components/Textarea', () => {
     wrapper.destroy()
   })
 
-  it('should render maxlength limit correctly', () => {
+  it('should render `maxlength` limit correctly', () => {
     let wrapper = mount({
       components: {
         'veui-textarea': Textarea
@@ -154,7 +154,7 @@ describe('components/Textarea', () => {
     input.trigger('input')
   })
 
-  it('should handle getLength prop correctly.', () => {
+  it('should handle `getLength` prop correctly', () => {
     let wrapper = mount({
       components: {
         'veui-textarea': Textarea
@@ -170,5 +170,71 @@ describe('components/Textarea', () => {
     })
 
     expect(wrapper.find('.veui-textarea-count').text()).to.equal('4/5')
+  })
+
+  it('should handle `autoresize` prop correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-textarea': Textarea
+        },
+        template: `
+        <veui-textarea autoresize v-model="text"/>
+      `,
+        data () {
+          return {
+            text: '\n'.repeat(9)
+          }
+        }
+      },
+      {
+        attachToDocument: true,
+        sync: false
+      }
+    )
+
+    let { vm, element } = wrapper
+
+    await wait(0)
+    let initialHeight = element.offsetHeight
+
+    async function testRows (rows) {
+      vm.text = '\n'.repeat(rows - 1)
+      await wait(0)
+      expect(Math.ceil(element.offsetHeight / initialHeight)).to.equal(
+        rows / 10
+      )
+    }
+
+    await testRows(100)
+    await testRows(50)
+    await testRows(120)
+    await testRows(80)
+
+    wrapper.destroy()
+  })
+
+  it('should be focusable', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-textarea': Textarea
+        },
+        template: '<veui-textarea/>'
+      },
+      {
+        attachToDocument: true,
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper.find(Textarea)
+    vm.focus()
+
+    await wait(0)
+    expect(document.activeElement).to.equal(wrapper.find('textarea').element)
+    expect(wrapper.classes()).to.contain('veui-focus')
+
+    wrapper.destroy()
   })
 })
