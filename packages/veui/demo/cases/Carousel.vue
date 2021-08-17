@@ -2,15 +2,6 @@
 <article>
   <h1><code>&lt;veui-carousel&gt;</code></h1>
   <p>
-    <code>index</code>:
-    <veui-number-input
-      v-model="index"
-      ui="tiny"
-      :min="0"
-      :max="items.length - 1"
-    />
-  </p>
-  <p>
     <code>interval</code>:
     <veui-number-input
       v-model="interval"
@@ -47,11 +38,50 @@
   </p>
   <p>
     <veui-radio-group
+      v-model="effect"
+      :items="effects"
+    />
+  </p>
+  <p>
+    <veui-radio-group
       v-model="indicator"
       :items="indicators"
     />
   </p>
-  <section>
+  <p>
+    <veui-radio-group
+      v-model="place1"
+      :items="place1s"
+    />
+  </p>
+  <p>
+    <veui-radio-group
+      v-model="place2"
+      :items="place2s"
+    />
+  </p>
+  <p>
+    <veui-radio-group
+      v-model="control"
+      :items="controls"
+    />
+  </p>
+  <p>
+    <veui-checkbox v-model="vertical">
+      <code>vertical</code>
+    </veui-checkbox>
+  </p>
+  <section class="carousel-section">
+    <h4>show 1, step 1</h4>
+    <p>
+      <code>index</code>:
+      <veui-number-input
+        v-model="index"
+        ui="tiny"
+        :min="0"
+        :max="items.length - 1"
+      />
+    </p>
     <veui-carousel
       :datasource="items"
       :index.sync="index"
@@ -60,8 +90,156 @@
       :pause-on-hover="pauseOnHover"
       :switch-trigger="trigger"
       :wrap="wrap"
-      :indicator="indicator"
+      :indicator="`${indicator} ${place1} ${place2}`"
       :autoplay="autoplay"
+      :vertical="vertical"
+      :controls="control"
+      :effect="effect"
+      lazy
+    />
+  </section>
+  <section class="carousel-section">
+    <h4>show 2, step 1</h4>
+    <p>
+      <code>index</code>:
+      <veui-number-input
+        v-model="index21"
+        ui="tiny"
+        :min="0"
+        :max="items.length - 1"
+      />
+    </p>
+    <veui-carousel
+      :datasource="items"
+      :index.sync="index21"
+      :ui="ui"
+      :interval="interval"
+      :pause-on-hover="pauseOnHover"
+      :switch-trigger="trigger"
+      :wrap="wrap"
+      :indicator="`${indicator} ${place1} ${place2}`"
+      :autoplay="autoplay"
+      :vertical="vertical"
+      :controls="control"
+      :effect="effect"
+      :show-count="2"
+      :step-count="1"
+      lazy
+    />
+  </section>
+  <section class="carousel-section">
+    <h4>show 2, step 2</h4>
+    <p>
+      <code>index</code>:
+      <veui-number-input
+        v-model="index22"
+        ui="tiny"
+        :min="0"
+        :max="Math.ceil(items.length / 2) - 1"
+      />
+    </p>
+    <veui-carousel
+      :datasource="items"
+      :index.sync="index22"
+      :ui="ui"
+      :interval="interval"
+      :pause-on-hover="pauseOnHover"
+      :switch-trigger="trigger"
+      :wrap="wrap"
+      :indicator="`${indicator} ${place1} ${place2}`"
+      :autoplay="autoplay"
+      :vertical="vertical"
+      :controls="control"
+      :effect="effect"
+      :show-count="2"
+      :step-count="2"
+      lazy
+    />
+  </section>
+  <section class="carousel-section">
+    <h4>show 3, step 3</h4>
+    <p>
+      <code>index</code>:
+      <veui-number-input
+        v-model="index33"
+        ui="tiny"
+        :min="0"
+        :max="Math.ceil(items.length / 3) - 1"
+      />
+    </p>
+    <veui-carousel
+      :datasource="items"
+      :index.sync="index33"
+      :ui="ui"
+      :interval="interval"
+      :pause-on-hover="pauseOnHover"
+      :switch-trigger="trigger"
+      :wrap="wrap"
+      :indicator="`${indicator} ${place1} ${place2}`"
+      :autoplay="autoplay"
+      :vertical="vertical"
+      :controls="control"
+      :effect="effect"
+      :show-count="3"
+      :step-count="3"
+      lazy
+    />
+  </section>
+  <section class="carousel-section">
+    <h4>fade effect with aspect-ratio: `1:1`</h4>
+    <p>
+      <code>index</code>:
+      <veui-number-input
+        v-model="index"
+        ui="tiny"
+        :min="0"
+        :max="items.length - 1"
+      />
+    </p>
+    <veui-carousel
+      :datasource="items"
+      :index.sync="index"
+      :ui="ui"
+      :interval="interval"
+      :pause-on-hover="pauseOnHover"
+      :switch-trigger="trigger"
+      :wrap="wrap"
+      :indicator="`${indicator} ${place1} ${place2}`"
+      :autoplay="autoplay"
+      :vertical="vertical"
+      :controls="control"
+      effect="fade"
+      aspect-ratio="1:1"
+      lazy
+    />
+  </section>
+  <section class="carousel-section">
+    <h4>show 2, step 2 , aspect-ratio: `2:1`</h4>
+    <p>
+      <code>index</code>:
+      <veui-number-input
+        v-model="index22"
+        ui="tiny"
+        :min="0"
+        :max="Math.ceil(items.length / 2) - 1"
+      />
+    </p>
+    <veui-carousel
+      :datasource="items"
+      :index.sync="index22"
+      :ui="ui"
+      :interval="interval"
+      :pause-on-hover="pauseOnHover"
+      :switch-trigger="trigger"
+      :wrap="wrap"
+      :indicator="`${indicator} ${place1} ${place2}`"
+      :autoplay="autoplay"
+      :vertical="vertical"
+      :controls="control"
+      :effect="effect"
+      :show-count="2"
+      :step-count="2"
+      aspect-ratio="2:1"
       lazy
     />
   </section>
@@ -82,21 +260,45 @@ export default {
   data () {
     return {
       index: 0,
+      index21: 0,
+      index22: 0,
+      index33: 0,
       interval: 3000,
       pauseOnHover: true,
       loose: false,
-      autoplay: true,
+      autoplay: false,
       wrap: true,
       trigger: 'hover',
+      vertical: false,
+      place1: 'start',
+      place2: 'inside',
+      control: 'inside',
+      effect: 'slide',
+      effects: [
+        { value: 'fade', label: 'fade' },
+        { value: 'slide', label: 'slide' }
+      ],
       triggers: [
         { value: 'hover', label: 'hover' },
         { value: 'click', label: 'click' }
+      ],
+      place1s: [
+        { value: 'start', label: 'start' },
+        { value: 'end', label: 'end' }
+      ],
+      place2s: [
+        { value: 'inside', label: 'inside indicator' },
+        { value: 'outside', label: 'outside indicator' }
+      ],
+      controls: [
+        { value: 'inside', label: 'inside control' },
+        { value: 'outside', label: 'outside control' }
       ],
       indicator: 'radio',
       indicators: [
         { value: 'radio', label: 'radio' },
         { value: 'number', label: 'number' },
-        { value: 'tab', label: 'tab' },
+        { value: 'dot', label: 'dot' },
         { value: 'none', label: 'none' }
       ],
       items: [
@@ -139,3 +341,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.carousel-section {
+  margin-bottom: 12px;
+}
+</style>
