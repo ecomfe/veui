@@ -49,7 +49,7 @@ export default {
     i18n,
     tabs,
     useControllable(['active']),
-    useConfig('config', 'tabs.')
+    useConfig('config', 'tabs')
   ],
   props: {
     active: {

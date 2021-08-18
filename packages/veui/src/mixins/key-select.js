@@ -6,8 +6,6 @@ import {
   scrollIntoView,
   isOverflow
 } from '../utils/dom'
-import config from '../managers/config'
-import useConfig from './config'
 
 function isActive (elem, focusSelector) {
   return focusSelector
@@ -30,21 +28,16 @@ function toggleSelector (elem, selector, force) {
     }
   } else {
     throw new Error(
-      '[keyselect.focusSelector] only accepts a simple class selector (.foo) or an attribute existence selector ([foo]).'
+      'focusSelector only accepts a simple class selector (.foo) or an attribute existence selector ([foo]).'
     )
   }
 }
-
-config.defaults({
-  'keyselect.focusSelector': '[data-focus-visible-added]'
-})
 
 const useKeySelect = ({
   useNativeFocus,
   handlers,
   expandedKey = 'expanded'
 }) => ({
-  mixins: [useConfig('keySelectConfig', 'keyselect.')],
   computed: {
     focusMode () {
       return typeof useNativeFocus === 'string'
@@ -54,9 +47,7 @@ const useKeySelect = ({
           : useNativeFocus
     },
     focusSelector () {
-      return this.focusMode
-        ? null
-        : this.keySelectConfig['keyselect.focusSelector']
+      return this.focusMode ? null : '[data-focus-visible-added]'
     }
   },
   created () {

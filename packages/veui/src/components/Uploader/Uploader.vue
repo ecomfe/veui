@@ -64,7 +64,7 @@ import input from '../../mixins/input'
 import i18n from '../../mixins/i18n'
 import { sharedProps } from './_mixin'
 import config from '../../managers/config'
-import useConfig from '../../mixins/config'
+import { useConfigurable } from '../../mixins/config'
 import toast from '../../managers/toast'
 import warn from '../../utils/warn'
 import { addOnceEventListener } from '../../utils/dom'
@@ -118,7 +118,23 @@ export default {
     'veui-uploader-file': FileUploader,
     'veui-uploader-media': MediaUploader
   },
-  mixins: [prefix, ui, input, i18n, useConfig('config', 'uploader.')],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    i18n,
+    useConfigurable('config', {
+      namespace: 'uploader',
+      props: [
+        'headers',
+        'requestMode',
+        'iframeMode',
+        'convertResponse',
+        'callbackNamespace',
+        'pickerPosition'
+      ]
+    })
+  ],
   model: {
     event: 'change'
   },
@@ -224,38 +240,8 @@ export default {
     }
   },
   computed: {
-    realHeaders () {
-      return this.headers == null
-        ? this.config['uploader.headers']
-        : this.headers
-    },
-    realRequestMode () {
-      return this.requestMode == null
-        ? this.config['uploader.requestMode']
-        : this.requestMode
-    },
-    realIframeMode () {
-      return this.iframeMode == null
-        ? this.config['uploader.iframeMode']
-        : this.iframeMode
-    },
-    realConvertResponse () {
-      return this.convertResponse == null
-        ? this.config['uploader.convertResponse']
-        : this.convertResponse
-    },
-    realCallbackNamespace () {
-      return this.callbackNamespace == null
-        ? this.config['uploader.callbackNamespace']
-        : this.callbackNamespace
-    },
     realUneditable () {
       return this.realDisabled || this.realReadonly
-    },
-    realPickerPosition () {
-      return this.pickerPosition == null
-        ? this.config['uploader.pickerPosition']
-        : this.pickerPosition
     },
     canAddImage () {
       return !this.realUneditable && this.fileList.length < this.maxCount

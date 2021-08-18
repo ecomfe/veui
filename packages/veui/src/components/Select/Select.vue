@@ -38,8 +38,13 @@ export default {
     ui,
     input,
     dropdown(),
-    useConfig('config', 'select.'),
-    useKeySelect({ expandedKey: 'realExpanded' }),
+    useConfig('config', 'select'),
+    useKeySelect({
+      useNativeFocus (vm) {
+        return !vm.searchable
+      },
+      expandedKey: 'realExpanded'
+    }),
     useSearchable({
       datasourceKey: 'realOptions',
       childrenKey: 'options',
@@ -164,9 +169,6 @@ export default {
     },
     isMatchWidth () {
       return !this.isMultiLevel || !!this.inputValue
-    },
-    focusSelector () {
-      return this.searchable ? this.config['keyselect.focusSelector'] : null
     },
     hasLabelSlot () {
       return !!(this.$scopedSlots.label || this.$slots.label)

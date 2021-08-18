@@ -20,10 +20,11 @@ const CommonProviderImpl = {
 }
 
 export function createContext (name, defaultValue) {
-  name = name ? `${name}-provider` : name
-  let contextId = `__${uniqueId(name || CommonProviderImpl.name)}`
+  const realName = name ? `${name}-provider` : CommonProviderImpl.name
+  let contextId = `__${uniqueId(realName)}`
   let RealProviderImpl = {
     ...CommonProviderImpl,
+    name: realName,
     inject: {
       [contextId]: {
         from: contextId,
@@ -40,14 +41,11 @@ export function createContext (name, defaultValue) {
           ) {
             return assign({}, parentContextValue, this.value) // 每层 provider 都会和上一层的值合并
           }
+          // 无法合并，则以最近的 provider 为准
           return this.value
         }
       }
     }
-  }
-
-  if (name) {
-    RealProviderImpl.name = name
   }
 
   let Provider = {

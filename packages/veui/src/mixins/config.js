@@ -1,13 +1,13 @@
 import config, { configContext } from '../managers/config'
-import { assign, pick } from 'lodash'
+import { assign, pick, upperFirst } from 'lodash'
 
-function factory (injectionKey, configPrefixes = ['']) {
+export default function useConfig (injectionKey, configPrefixes = ['']) {
   const internalKey = '__veui_config' // 直接固定保留吧，保证多次 useConfig 时可以复用统一注入逻辑
   configPrefixes = Array.isArray(configPrefixes)
     ? configPrefixes
     : [configPrefixes]
   const keys = Object.keys(config.getAll()).filter(k =>
-    configPrefixes.some(cp => k.indexOf(cp) === 0)
+    configPrefixes.some(cp => cp === k || k.indexOf(`${cp}.`) === 0)
   )
   return {
     ...configContext.useConsumer(internalKey),
@@ -31,4 +31,36 @@ function factory (injectionKey, configPrefixes = ['']) {
   }
 }
 
-export default factory
+// 先取 prop，没有再取 context。
+export function useConfigurable (injectionKey, configurable) {
+  // normalize
+  const realConfigurable = map(configurable, conf => {
+    let realConf = typeof conf === 'string' ? { namespace: conf } : conf
+    realConf.props = map(realConf.props, prop =>
+      typeof prop === 'string' ? { prop } : prop
+    )
+    return realConf
+  })
+
+  // generate computeds
+  const namespaces = realConfigurable.map(i => i.namespace)
+  return {
+    mixins: [useConfig(injectionKey, namespaces)],
+    computed: realConfigurable.reduce((acc, { namespace, props }) => {
+      return props.reduce((acc, { prop, computed }) => {
+        acc[computed || `real${upperFirst(prop)}`] = function () {
+          return this[prop] == null
+            ? this[injectionKey][`${namespace}.${prop}`]
+            : this[prop]
+        }
+        return acc
+      }, acc)
+    }, {})
+  }
+}
+
+function map (target, iterator) {
+  return (Array.isArray(target) ? target : target == null ? [] : [target]).map(
+    iterator
+  )
+}

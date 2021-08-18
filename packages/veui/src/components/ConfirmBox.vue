@@ -60,7 +60,7 @@ export default {
     ui,
     overlay,
     useControllable(['open']),
-    useConfig('config', 'confirmbox.')
+    useConfig('config', 'confirmbox')
   ],
   props: pick(Dialog.props, [
     'open',

@@ -201,7 +201,7 @@ export default {
     i18n,
     dropdown(),
     input,
-    useConfig('config', 'cascader.'),
+    useConfig('config', 'cascader'),
     useTree({ childrenKey: 'options', defaultMerge: 'downwards' }),
     useKeySelect({ expandedKey: 'realExpanded' }),
     useControllable({

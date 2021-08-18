@@ -252,7 +252,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-dropdown': Dropdown
   },
-  mixins: [prefix, ui, input, i18n, useConfig('config', 'schedule.')],
+  mixins: [prefix, ui, input, i18n, useConfig('config', 'schedule')],
   model: {
     prop: 'selected',
     event: 'select'

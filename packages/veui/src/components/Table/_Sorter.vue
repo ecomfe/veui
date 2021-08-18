@@ -53,7 +53,7 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button
   },
-  mixins: [prefix, table, useConfig('config', 'table.')],
+  mixins: [prefix, table, useConfig('config', 'table')],
   uiTypes: ['transparent'],
   props: {
     order: [Boolean, String],

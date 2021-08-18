@@ -83,7 +83,7 @@ export default {
     overlay,
     i18n,
     useControllable(['open']),
-    useConfig('config', 'alertbox.')
+    useConfig('config', 'alertbox')
   ],
   props: {
     ...pick(Dialog.props, [

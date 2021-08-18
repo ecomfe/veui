@@ -13,7 +13,7 @@ config.defaults({
 
 export default {
   name: 'toast-list',
-  mixins: [prefix, overlay, useConfig('config', 'toast.')],
+  mixins: [prefix, overlay, useConfig('config', 'toast')],
   data () {
     return {
       messages: []

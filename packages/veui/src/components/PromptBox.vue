@@ -71,7 +71,7 @@ export default {
         event: 'input'
       }
     ]),
-    useConfig('config', 'promptbox.')
+    useConfig('config', 'promptbox')
   ],
   props: {
     ...pick(Dialog.props, [
