@@ -366,7 +366,7 @@ export default {
     ui,
     input,
     i18n,
-    useConfig('config', 'calendar.'),
+    useConfig('config', 'calendar'),
     useControllable({
       prop: 'selected',
       event: 'select'

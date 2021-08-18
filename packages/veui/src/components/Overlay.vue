@@ -40,7 +40,7 @@ export default {
     prefix,
     ui,
     focusable,
-    useConfig('config', ['overlay.', 'managers.overlay'])
+    useConfig('config', ['overlay', 'managers.overlay'])
   ],
   props: {
     position: String,

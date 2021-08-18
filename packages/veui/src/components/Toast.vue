@@ -84,7 +84,7 @@ export default {
     ui,
     i18n,
     useControllable(['open']),
-    useConfig('config', 'toast.')
+    useConfig('config', 'toast')
   ],
   props: {
     type: {

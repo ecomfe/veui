@@ -136,9 +136,7 @@ import i18n from '../mixins/i18n'
 
 config.defaults({
   'pagination.pageSize': 30,
-  'pagination.pageSizes': [30, 50, 100],
-  'pager.pageSize': 30,
-  'pager.pageSizes': [30, 50, 100]
+  'pagination.pageSizes': [30, 50, 100]
 })
 
 const HREF_TPL_PLACEHOLDER = /:page\b/g
@@ -170,7 +168,7 @@ export default {
     'veui-input': Input,
     'veui-button': Button
   },
-  mixins: [prefix, ui, i18n, useConfig('config', ['pagination.', 'pager.'])],
+  mixins: [prefix, ui, i18n, useConfig('config', ['pagination'])],
   props: {
     page: {
       type: Number,
@@ -228,7 +226,7 @@ export default {
           return this.customPageSize
         }
         return this.pageSize == null
-          ? this.config['pagination.pageSize'] || this.config['pager.pageSize']
+          ? this.config['pagination.pageSize']
           : this.pageSize
       },
       set (val) {
@@ -239,8 +237,7 @@ export default {
     realPageSizes () {
       const pageSizes =
         this.pageSizes == null
-          ? this.config['pagination.pageSizes'] ||
-            this.config['pager.pageSizes']
+          ? this.config['pagination.pageSizes']
           : this.pageSizes
       return pageSizes.map(size => ({
         label: size,

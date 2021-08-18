@@ -199,7 +199,7 @@ export default {
     input,
     dropdown(),
     i18n,
-    useConfig('config', 'timepicker.'),
+    useConfig('config', 'timepicker'),
     useControllable({
       prop: 'value',
       event: 'input',

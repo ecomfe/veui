@@ -257,7 +257,7 @@ export default {
       prop: 'selected',
       event: 'select'
     }),
-    useConfig('config', 'datepicker.')
+    useConfig('config', 'datepicker')
   ],
   model: {
     prop: 'selected',

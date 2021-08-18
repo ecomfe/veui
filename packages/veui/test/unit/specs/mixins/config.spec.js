@@ -10,7 +10,7 @@ config.defaults({
 })
 
 const DummyConsumer = {
-  mixins: [useConfig('config', '__veui_test.')],
+  mixins: [useConfig('config', '__veui_test')],
   render () {
     this.renderCount = (this.renderCount || 0) + 1
     return <div>{JSON.stringify(this.config[TEST_FIELD])}</div>

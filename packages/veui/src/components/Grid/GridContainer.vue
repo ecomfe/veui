@@ -23,7 +23,7 @@ config.defaults(
 
 export default {
   name: 'veui-grid-container',
-  mixins: [prefix, useConfig('config', 'gridcontainer.')],
+  mixins: [prefix, useConfig('config', 'gridcontainer')],
   props: {
     width: {
       type: Number

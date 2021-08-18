@@ -38,7 +38,7 @@ config.defaults({
 
 export default {
   name: 'veui-badge',
-  mixins: [prefix, ui, useConfig('config', 'badge.')],
+  mixins: [prefix, ui, useConfig('config', 'badge')],
   props: {
     value: [Number, String],
     max: {

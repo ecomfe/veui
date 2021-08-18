@@ -28,7 +28,7 @@ export default {
     prefix,
     ui,
     overlay,
-    useConfig('config', 'tooltip.'),
+    useConfig('config', 'tooltip'),
     useControllable([{ prop: 'open', event: 'toggle' }])
   ],
   props: {
