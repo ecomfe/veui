@@ -11,7 +11,7 @@ const DummyConsumer = {
 }
 
 describe('managers/context', () => {
-  it('should Provider and Consumer work with primitives/objects correctly', async () => {
+  it('should work with Provider + Consumer', async () => {
     let wrapper = mount({
       data () {
         return {
@@ -35,44 +35,14 @@ describe('managers/context', () => {
     let { vm } = wrapper
     expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
 
-    vm.value = '2'
-    await vm.$nextTick()
-    expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
-
-    vm.value = true
-    await vm.$nextTick()
-    expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
-
-    // test some falsy values
-    vm.value = false
-    await vm.$nextTick()
-    expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
-
-    vm.value = 0
-    await vm.$nextTick()
-    expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
-
-    vm.value = ''
-    await vm.$nextTick()
-    expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
-
-    vm.value = null
-    await vm.$nextTick()
-    expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
-
-    // test object values
-    vm.value = { foo: 1 }
-    await vm.$nextTick()
-    expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
-
-    // test array values
-    vm.value = [{ foo: 1 }]
-    await vm.$nextTick()
-    expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
+    await serialAssert(
+      ['2', true, false, 0, '', null, { foo: 1 }, [{ foo: 1 }]],
+      wrapper
+    )
     wrapper.destroy()
   })
 
-  it('should Provider and useConsumer work correctly', async () => {
+  it('should work with Provider + useConsumer', async () => {
     let wrapper = mount({
       data () {
         return {
@@ -91,27 +61,7 @@ describe('managers/context', () => {
     let { vm } = wrapper
     expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
 
-    vm.value = false
-    await vm.$nextTick()
-    expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
-
-    vm.value = 0
-    await vm.$nextTick()
-    expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
-
-    vm.value = null
-    await vm.$nextTick()
-    expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
-
-    // test object values
-    vm.value = { foo: 1 }
-    await vm.$nextTick()
-    expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
-
-    // test array values
-    vm.value = [{ foo: 1 }]
-    await vm.$nextTick()
-    expect(wrapper.text()).to.equal(JSON.stringify(vm.value))
+    await serialAssert([false, 0, null, { foo: 1 }, [{ foo: 1 }]], wrapper)
     wrapper.destroy()
   })
 
@@ -150,3 +100,11 @@ describe('managers/context', () => {
     wrapper.destroy()
   })
 })
+
+async function serialAssert (values, wrapper) {
+  for (let i = 0; i < values.length; i++) {
+    wrapper.vm.value = values[i]
+    await wrapper.vm.$nextTick()
+    expect(wrapper.text()).to.equal(JSON.stringify(wrapper.vm.value))
+  }
+}
