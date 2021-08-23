@@ -38,6 +38,7 @@
     "babel-preset-stage-2": "^6.22.0",
     "esm": "^3.2.25",
     "less": "^4.1.1",
+    "postcss": "^8.3.6",
     "rollup": "^2.49.0",
     "rollup-plugin-postcss": "^4.0.0"
   }
