@@ -3,7 +3,7 @@
   v-if="indicator === 'number'"
   :class="[$c('carousel-indicator'), $c('carousel-indicator-numbers')]"
 >
-  {{ index + 1 }}/{{ count }}
+  {{ index + 1 }}/{{ labels.length }}
 </div>
 <nav
   v-else
@@ -15,18 +15,18 @@
   }"
 >
   <button
-    v-for="i in count"
-    :key="i - 1"
+    v-for="(label, idx) in labels"
+    :key="idx"
     type="button"
     tabindex="-1"
     :class="{
       [$c('carousel-indicator-item')]: true,
-      [$c('carousel-indicator-item-current')]: index === i - 1
+      [$c('carousel-indicator-item-current')]: index === idx
     }"
-    aria-label="item.label || t('pageIndex', { index: i + 1 })"
-    @click="$emit('trigger', i - 1, 'click')"
-    @focus="$emit('trigger', i - 1, 'focus')"
-    @mouseenter="$emit('trigger', i - 1, 'hover')"
+    :aria-label="label"
+    @click="$emit('trigger', idx, 'click')"
+    @focus="$emit('trigger', idx, 'focus')"
+    @mouseenter="$emit('trigger', idx, 'hover')"
   />
 </nav>
 </template>
@@ -38,17 +38,9 @@ export default {
   name: 'veui-carousel-indicator',
   mixins: [prefix],
   props: {
-    indicator: {
-      type: String,
-      validator (value) {
-        return ['radio', 'number', 'dot', 'none'].indexOf(value) >= 0
-      }
-    },
-    count: Number,
-    index: {
-      type: Number,
-      default: 0
-    },
+    indicator: String,
+    labels: Array,
+    index: Number,
     vertical: Boolean
   }
 }

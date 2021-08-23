@@ -50,14 +50,14 @@
   </p>
   <p>
     <veui-radio-group
-      v-model="place1"
-      :items="place1s"
+      v-model="alignment"
+      :items="alignments"
     />
   </p>
   <p>
     <veui-radio-group
-      v-model="place2"
-      :items="place2s"
+      v-model="indicatorPosition"
+      :items="indicatorPositions"
     />
   </p>
   <p>
@@ -90,10 +90,13 @@
       :pause-on-hover="pauseOnHover"
       :switch-trigger="trigger"
       :wrap="wrap"
-      :indicator="`${indicator} ${place1} ${place2}`"
+      :indicator="indicator"
+      :indicator-alignment="alignment"
+      :indicator-position="indicatorPosition"
       :autoplay="autoplay"
       :vertical="vertical"
-      :controls="control"
+      :controls="!!control"
+      :controls-position="control || undefined"
       :effect="effect"
       lazy
     />
@@ -117,13 +120,16 @@
       :pause-on-hover="pauseOnHover"
       :switch-trigger="trigger"
       :wrap="wrap"
-      :indicator="`${indicator} ${place1} ${place2}`"
+      :indicator="indicator"
+      :indicator-alignment="alignment"
+      :indicator-position="indicatorPosition"
       :autoplay="autoplay"
       :vertical="vertical"
-      :controls="control"
+      :controls="!!control"
+      :controls-position="control || undefined"
       :effect="effect"
-      :show-count="2"
-      :step-count="1"
+      :slides-per-view="2"
+      :slides-per-group="1"
       lazy
     />
   </section>
@@ -146,13 +152,16 @@
       :pause-on-hover="pauseOnHover"
       :switch-trigger="trigger"
       :wrap="wrap"
-      :indicator="`${indicator} ${place1} ${place2}`"
+      :indicator="indicator"
+      :indicator-alignment="alignment"
+      :indicator-position="indicatorPosition"
       :autoplay="autoplay"
       :vertical="vertical"
-      :controls="control"
+      :controls="!!control"
+      :controls-position="control || undefined"
       :effect="effect"
-      :show-count="2"
-      :step-count="2"
+      :slides-per-view="2"
+      :slides-per-group="2"
       lazy
     />
   </section>
@@ -175,50 +184,25 @@
       :pause-on-hover="pauseOnHover"
       :switch-trigger="trigger"
       :wrap="wrap"
-      :indicator="`${indicator} ${place1} ${place2}`"
+      :indicator="indicator"
+      :indicator-alignment="alignment"
+      :indicator-position="indicatorPosition"
       :autoplay="autoplay"
       :vertical="vertical"
-      :controls="control"
+      :controls="!!control"
+      :controls-position="control || undefined"
       :effect="effect"
-      :show-count="3"
-      :step-count="3"
+      :slides-per-view="3"
+      :slides-per-group="3"
       lazy
     />
   </section>
   <section class="carousel-section">
-    <h4>fade effect with aspect-ratio: `1:1`</h4>
+    <h4>show 3, step 2</h4>
     <p>
       <code>index</code>:
       <veui-number-input
-        v-model="index"
-        ui="tiny"
-        :min="0"
-        :max="items.length - 1"
-      />
-    </p>
-    <veui-carousel
-      :datasource="items"
-      :index.sync="index"
-      :ui="ui"
-      :interval="interval"
-      :pause-on-hover="pauseOnHover"
-      :switch-trigger="trigger"
-      :wrap="wrap"
-      :indicator="`${indicator} ${place1} ${place2}`"
-      :autoplay="autoplay"
-      :vertical="vertical"
-      :controls="control"
-      effect="fade"
-      aspect-ratio="1:1"
-      lazy
-    />
-  </section>
-  <section class="carousel-section">
-    <h4>show 2, step 2 , aspect-ratio: `2:1`</h4>
-    <p>
-      <code>index</code>:
-      <veui-number-input
-        v-model="index22"
+        v-model="index33"
         ui="tiny"
         :min="0"
         :max="Math.ceil(items.length / 2) - 1"
@@ -226,20 +210,118 @@
     </p>
     <veui-carousel
       :datasource="items"
-      :index.sync="index22"
+      :index.sync="index32"
       :ui="ui"
       :interval="interval"
       :pause-on-hover="pauseOnHover"
       :switch-trigger="trigger"
       :wrap="wrap"
-      :indicator="`${indicator} ${place1} ${place2}`"
+      :indicator="indicator"
+      :indicator-alignment="alignment"
+      :indicator-position="indicatorPosition"
       :autoplay="autoplay"
       :vertical="vertical"
-      :controls="control"
+      :controls="!!control"
+      :controls-position="control || undefined"
       :effect="effect"
-      :show-count="2"
-      :step-count="2"
-      aspect-ratio="2:1"
+      :slides-per-view="3"
+      :slides-per-group="2"
+      lazy
+    />
+  </section>
+  <section class="carousel-section">
+    <h4>fade effect with slide-aspect-ratio: `1/1`</h4>
+    <p>
+      <code>index</code>:
+      <veui-number-input
+        v-model="index11"
+        ui="tiny"
+        :min="0"
+        :max="items.length - 1"
+      />
+    </p>
+    <veui-carousel
+      :datasource="items"
+      :index.sync="index11"
+      :ui="ui"
+      :interval="interval"
+      :pause-on-hover="pauseOnHover"
+      :switch-trigger="trigger"
+      :wrap="wrap"
+      :indicator="indicator"
+      :indicator-alignment="alignment"
+      :indicator-position="indicatorPosition"
+      :autoplay="autoplay"
+      :vertical="vertical"
+      :controls="!!control"
+      :controls-position="control || undefined"
+      effect="fade"
+      :slide-aspect-ratio="1"
+      lazy
+    />
+  </section>
+  <section class="carousel-section">
+    <h4>show 2, step 2 , slide-aspect-ratio: `2/1`</h4>
+    <p>
+      <code>index</code>:
+      <veui-number-input
+        v-model="index2221"
+        ui="tiny"
+        :min="0"
+        :max="Math.ceil(items.length / 2) - 1"
+      />
+    </p>
+    <veui-carousel
+      :datasource="items"
+      :index.sync="index2221"
+      :ui="ui"
+      :interval="interval"
+      :pause-on-hover="pauseOnHover"
+      :switch-trigger="trigger"
+      :wrap="wrap"
+      :indicator="indicator"
+      :indicator-alignment="alignment"
+      :indicator-position="indicatorPosition"
+      :autoplay="autoplay"
+      :vertical="vertical"
+      :controls="!!control"
+      :controls-position="control || undefined"
+      :effect="effect"
+      :slides-per-view="2"
+      :slides-per-group="2"
+      slide-aspect-ratio="2/1"
+      lazy
+    />
+  </section>
+  <section class="carousel-section">
+    <h4>show 1, step 1</h4>
+    <p>
+      <code>index</code>:
+      <veui-number-input
+        v-model="index112"
+        ui="tiny"
+        :min="0"
+        :max="Math.ceil(items.length / 1) - 1"
+      />
+    </p>
+    <veui-carousel
+      :datasource="[items[0]]"
+      :index.sync="index112"
+      :ui="ui"
+      :interval="interval"
+      :pause-on-hover="pauseOnHover"
+      :switch-trigger="trigger"
+      :wrap="wrap"
+      :indicator="indicator"
+      :indicator-alignment="alignment"
+      :indicator-position="indicatorPosition"
+      :autoplay="autoplay"
+      :vertical="vertical"
+      :controls="!!control"
+      :controls-position="control || undefined"
+      :effect="effect"
+      :slides-per-view="1"
+      :slides-per-group="1"
       lazy
     />
   </section>
@@ -263,6 +345,10 @@ export default {
       index21: 0,
       index22: 0,
       index33: 0,
+      index32: 0,
+      index11: 0,
+      index112: 0,
+      index2221: 0,
       interval: 3000,
       pauseOnHover: true,
       loose: false,
@@ -270,8 +356,8 @@ export default {
       wrap: true,
       trigger: 'hover',
       vertical: false,
-      place1: 'start',
-      place2: 'inside',
+      alignment: 'start',
+      indicatorPosition: 'inside',
       control: 'inside',
       effect: 'slide',
       effects: [
@@ -282,26 +368,34 @@ export default {
         { value: 'hover', label: 'hover' },
         { value: 'click', label: 'click' }
       ],
-      place1s: [
+      alignments: [
         { value: 'start', label: 'start' },
         { value: 'end', label: 'end' }
       ],
-      place2s: [
+      indicatorPositions: [
         { value: 'inside', label: 'inside indicator' },
         { value: 'outside', label: 'outside indicator' }
       ],
       controls: [
-        { value: 'inside', label: 'inside control' },
-        { value: 'outside', label: 'outside control' }
+        { value: false, label: 'no controls' },
+        { value: 'inside', label: 'inside controls' },
+        { value: 'outside', label: 'outside controls' }
       ],
-      indicator: 'radio',
+      indicator: 'bar',
       indicators: [
-        { value: 'radio', label: 'radio' },
+        { value: 'bar', label: 'bar' },
         { value: 'number', label: 'number' },
         { value: 'dot', label: 'dot' },
         { value: 'none', label: 'none' }
       ],
       items: [
+        {
+          src:
+            'https://nadvideo2.baidu.com/b45f066cccd13549219cb475ca520cee_1920_1080.mp4',
+          alt: 'A 1080p video.',
+          label: 'A 1080p video',
+          type: 'video'
+        },
         {
           src:
             'http://ecmb.bdimg.com/public01/one-design/2b77cc4a4c5c906993c0e512f3ddaf03.jpg',
@@ -331,6 +425,12 @@ export default {
           alt: 'Tesla logo.',
           label: '特斯拉'
         }
+        // {
+        //   src: 'https://nadvideo2.baidu.com/b45f066cccd13549219cb475ca520cee_1920_1080.mp4',
+        //   alt: 'A 1080p video.',
+        //   label: 'A 1080p video',
+        //   type: 'video'
+        // }
       ]
     }
   },
