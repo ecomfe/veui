@@ -17,7 +17,7 @@ const DummyConsumer = {
   }
 }
 
-describe('mixins/config', () => {
+describe('components/ConfigProvider', () => {
   it('should ConfigProvider works correctly', async () => {
     let wrapper = mount(
       {
