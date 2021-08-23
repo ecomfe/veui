@@ -8,8 +8,7 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import {
-  getClassPropDef,
-  getStylePropDef,
+  LOOSE_PROP_DEF,
   mergeClasses,
   mergeStyles,
   isType,
@@ -39,8 +38,8 @@ export default {
   mixins: [prefix, ui, focusable],
   props: {
     position: String,
-    overlayClass: getClassPropDef(),
-    overlayStyle: getStylePropDef(),
+    overlayClass: LOOSE_PROP_DEF,
+    overlayStyle: LOOSE_PROP_DEF,
     open: Boolean,
     inline: Boolean,
     target: {

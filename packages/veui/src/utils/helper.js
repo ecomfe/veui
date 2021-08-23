@@ -164,26 +164,12 @@ export function getConfigKey (name) {
   return name.replace(/^veui|-*/g, '').toLowerCase()
 }
 
-const CLASS_PROP_DEF = {
-  validator (value) {
-    return isObject(value) || isString(value)
-  },
+/**
+ * Just transparently pass to Vue itself
+ * we don't need to perform any additional check here
+ */
+export const LOOSE_PROP_DEF = {
   default: null
-}
-
-const STYLE_PROP_DEF = {
-  validator (value) {
-    return value == null || [].concat(value).every(val => isObject(val))
-  },
-  default: null
-}
-
-export function getClassPropDef () {
-  return { ...CLASS_PROP_DEF }
-}
-
-export function getStylePropDef () {
-  return { ...STYLE_PROP_DEF }
 }
 
 const RE_INDEX = /\d+/

@@ -1,14 +1,9 @@
-import {
-  mergeClasses,
-  mergeStyles,
-  getClassPropDef,
-  getStylePropDef
-} from '../utils/helper'
+import { mergeClasses, mergeStyles, LOOSE_PROP_DEF } from '../utils/helper'
 
 export default {
   props: {
-    overlayClass: getClassPropDef(),
-    overlayStyle: getStylePropDef(),
+    overlayClass: LOOSE_PROP_DEF,
+    overlayStyle: LOOSE_PROP_DEF,
     overlayOptions: {
       type: Object,
       default () {
