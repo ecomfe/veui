@@ -20,7 +20,7 @@ export default {
     src: {
       immediate: true,
       handler (val, oldVal) {
-        if (val === oldVal) {
+        if (process.env.VUE_ENV === 'server' || val === oldVal) {
           return
         }
         if (oldVal && oldVal instanceof File) {
