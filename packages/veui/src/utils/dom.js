@@ -34,6 +34,7 @@ function testIndeterminate () {
   checkbox.type = 'checkbox'
   checkbox.indeterminate = true
   document.body.appendChild(checkbox)
+  checkbox.addEventListener('click', event => event.stopPropagation())
   checkbox.click()
   let needPatch = !checkbox.checked
   checkbox.parentNode.removeChild(checkbox)
