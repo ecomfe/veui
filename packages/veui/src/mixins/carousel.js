@@ -7,6 +7,7 @@ import useControllable from '../mixins/controllable'
 const DEFAULT_LAZY_OPTIONS = {
   preload: 1
 }
+
 export default {
   mixins: [prefix, ui, i18n, useControllable(['index'])],
   props: {
@@ -59,6 +60,9 @@ export default {
         (this.count + this.realIndex + this.realLazy.preload) % this.count
       ]
     }
+  },
+  beforeDestroy () {
+    clearTimeout(this.focusTimer)
   },
   methods: {
     step (delta, focus) {

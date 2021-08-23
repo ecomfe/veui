@@ -6,17 +6,20 @@
     [$c('carousel-vertical')]: vertical,
     [$c(`carousel-gutter`)]: hasGutter,
     [$c(`carousel-${effect}`)]: true,
-    [$c('carousel-outside-indicator')]: realIndicator.isOutside,
-    [$c('carousel-outside-controls')]: isOutside,
-    [$c(`carousel-aspect-ratio`)]: aspectRatio
+    [$c('carousel-outside-indicator')]: isOutsideIndicator,
+    [$c('carousel-outside-controls')]:
+      hasControls && controlsPosition === 'outside',
+    [$c(`carousel-aspect-ratio`)]: slideAspectRatio
   }"
   :ui="realUi"
-  :style="style"
+  :tabindex="0"
   @focusin="handleFocusIn"
   @focusout="handleFocusOut"
   @mouseleave="handleFocusOut"
-  @keydown.left="step(-1, true)"
-  @keydown.right="step(1, true)"
+  @keydown.left="handleKeydown(-1, $event, false)"
+  @keydown.right="handleKeydown(1, $event, false)"
+  @keydown.up="handleKeydown(-1, $event, true)"
+  @keydown.down="handleKeydown(1, $event, true)"
 >
   <div :class="$c('carousel-viewport-wrap')">
     <div
@@ -26,65 +29,72 @@
     >
       <veui-carousel-fade
         v-if="isFade"
+        ref="scene"
         :datasource="datasource"
         :index="realIndex"
-        :aspect-ratio="aspectRatio"
+        :slide-aspect-ratio="slideAspectRatio"
+        :preload-range="preloadRange"
+        :options="options"
       />
       <veui-carousel-slide
         v-else
-        ref="slide"
+        ref="scene"
         :datasource="datasource"
         :index.sync="realIndex"
         :vertical="vertical"
-        :effect="effect"
-        :wrap="wrap"
-        :aspect-ratio="aspectRatio"
+        :slide-aspect-ratio="slideAspectRatio"
+        :preload-range="preloadRange"
+        :options="options"
         v-bind="slideProps"
       />
     </div>
-    <veui-button
-      :ui="uiParts.control"
-      :class="{
-        [$c('carousel-control')]: true,
-        [$c('carousel-control-prev')]: true,
-        [$c('carousel-control-vertical')]: vertical
-      }"
-      :disabled="!wrap && realIndex === 0"
-      @click="doStep(-1)"
-    >
-      <veui-icon
-        :name="icons.prev"
-        :aria-label="t('prev')"
-      />
-    </veui-button>
-    <veui-button
-      :ui="uiParts.control"
-      :class="{
-        [$c('carousel-control')]: true,
-        [$c('carousel-control-next')]: true,
-        [$c('carousel-control-vertical')]: vertical
-      }"
-      :disabled="!wrap && realIndex === count - 1"
-      @click="doStep(1)"
-    >
-      <veui-icon
-        :name="icons.next"
-        :aria-label="t('next')"
-      />
-    </veui-button>
+    <template v-if="hasControls">
+      <veui-button
+        :ui="uiParts.control"
+        :class="{
+          [$c('carousel-control')]: true,
+          [$c('carousel-control-prev')]: true,
+          [$c('carousel-control-vertical')]: vertical
+        }"
+        :disabled="!wrap && realIndex === 0"
+        tabindex="-1"
+        @click="doStep(-1)"
+      >
+        <veui-icon
+          :name="icons.prev"
+          :aria-label="t('prev')"
+        />
+      </veui-button>
+      <veui-button
+        :ui="uiParts.control"
+        :class="{
+          [$c('carousel-control')]: true,
+          [$c('carousel-control-next')]: true,
+          [$c('carousel-control-vertical')]: vertical
+        }"
+        :disabled="!wrap && realIndex === count - 1"
+        tabindex="-1"
+        @click="doStep(1)"
+      >
+        <veui-icon
+          :name="icons.next"
+          :aria-label="t('next')"
+        />
+      </veui-button>
+    </template>
   </div>
   <veui-carousel-indicator
-    v-if="realIndicator.type !== 'none'"
+    v-if="indicator !== 'none'"
     :class="{
-      [$c(`carousel-indicator-left`)]: vertical && !realIndicator.isEnd,
-      [$c(`carousel-indicator-right`)]: vertical && realIndicator.isEnd,
-      [$c(`carousel-indicator-top`)]: !vertical && !realIndicator.isEnd,
-      [$c(`carousel-indicator-bottom`)]: !vertical && realIndicator.isEnd,
-      [$c(`carousel-indicator-outside`)]: realIndicator.isOutside
+      [$c(`carousel-indicator-left`)]: vertical && !isEndIndicator,
+      [$c(`carousel-indicator-right`)]: vertical && isEndIndicator,
+      [$c(`carousel-indicator-top`)]: !vertical && !isEndIndicator,
+      [$c(`carousel-indicator-bottom`)]: !vertical && isEndIndicator,
+      [$c(`carousel-indicator-outside`)]: isOutsideIndicator
     }"
-    :indicator="realIndicator.type"
+    :indicator="indicator"
     :index="realIndex"
-    :count="pageCount"
+    :labels="indicatorLabels"
     :vertical="vertical"
     @trigger="handleIndicator"
   />
@@ -96,7 +106,7 @@
     {{ t('detail', { index: realIndex + 1, total: datasource.length }) }}
   </div>
   <div
-    v-if="vertical && aspectRatio && !isFade"
+    v-if="vertical && slideAspectRatio && !isFade"
     :class="$c('carousel-dummy')"
     :style="dummyStyle"
   />
@@ -104,16 +114,15 @@
 </template>
 
 <script>
-import { includes, pick } from 'lodash'
+import { includes, pick, range } from 'lodash'
 import Button from '../Button'
 import Icon from '../Icon'
 import Indicator from './_Indicator'
-import Slide, { Props as SlidePropDefs } from './_Slide'
+import Slide, { Props as SlideProps } from './_Slide'
 import Fade from './_Fade'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
-import useControllable from '../../mixins/controllable'
 import carousel from '../../mixins/carousel'
 
 const CUSTOM_GUTTER = '--dls-carousel-gutter'
@@ -127,19 +136,35 @@ export default {
     'veui-carousel-fade': Fade,
     'veui-carousel-slide': Slide
   },
-  mixins: [prefix, ui, i18n, useControllable(['index']), carousel],
+  mixins: [prefix, ui, i18n, carousel],
   props: {
     indicator: {
       type: String,
-      default: 'radio',
+      default: 'bar',
       validator (value) {
-        // return includes(['radio', 'number', 'none', 'dot'], value)
-        return true
+        return includes(['bar', 'radio', 'number', 'none', 'dot'], value)
       }
-    }, // start/end outside/inside
-    controls: {
+    },
+    indicatorAlignment: {
+      type: String,
+      default: 'start',
+      validator (value) {
+        return includes(['start', 'end'], value)
+      }
+    },
+    indicatorPosition: {
       type: String,
       default: 'inside',
+      validator (value) {
+        return includes(['inside', 'outside'], value)
+      }
+    },
+    controls: {
+      type: Boolean,
+      default: undefined
+    },
+    controlsPosition: {
+      type: String,
       validator (value) {
         return includes(['inside', 'outside'], value)
       }
@@ -162,56 +187,94 @@ export default {
       type: String,
       default: 'fade'
     },
-    aspectRatio: String,
-    ...SlidePropDefs
+    slideAspectRatio: {
+      type: [String, Number],
+      validator (val) {
+        if (val != null) {
+          if (typeof val === 'number') {
+            return val > 0
+          }
+          let splited = val.split('/').map(Number)
+          return splited.length === 2 && splited.every(i => i > 0)
+        }
+        return true
+      }
+    },
+    options: {
+      type: Object,
+      default () {
+        return {
+          video: {
+            muted: true,
+            autoplay: true,
+            controls: true,
+            loop: true
+          }
+        }
+      }
+    },
+    ...SlideProps
   },
   computed: {
-    slideProps () {
-      return pick(this.$props, Object.keys(SlidePropDefs))
-    },
     isFade () {
       return this.effect === 'fade'
     },
-    style () {
-      return {
-        // TODO
-        '--dls-carousel-gutter': '12px'
-      }
+    slideProps () {
+      return pick(this.$props, Object.keys(SlideProps))
     },
+    hasControls () {
+      // 非自动播放，必须有 controls
+      return this.autoplay ? this.controls !== false : true
+    },
+    hasIndicator () {
+      return this.indicator !== 'none'
+    },
+    indicatorLabels () {
+      let isSingle =
+        this.isFade || (this.slidesPerView === 1 && this.slidesPerGroup === 1)
+      return isSingle
+        ? this.datasource.map(
+          ({ label }, index) => label || this.t('pageIndex', { index })
+        )
+        : range(1, this.pageCount + 1).map(index =>
+          this.t('pageIndex', { index })
+        )
+    },
+    isEndIndicator () {
+      return this.indicatorAlignment === 'end'
+    },
+    isOutsideIndicator () {
+      return (
+        this.isEndIndicator &&
+        !this.vertical &&
+        this.indicatorPosition === 'outside'
+      )
+    },
+    /**
+     * 在垂直转场的情况下，利用 padding 来撑开容器（内部是多屏在一起，没法靠内容撑开）
+     */
     dummyStyle () {
-      const [w, h] = this.aspectRatio.split(':').map(Number)
-      let itemsHeight = this.showCount * (h / w) * 100
+      let ratio = this.slideAspectRatio
+      if (typeof ratio === 'string') {
+        const [w, h] = ratio.split('/').map(Number)
+        ratio = h / w
+      } else {
+        ratio = 1 / ratio
+      }
+      let itemsHeight = this.slidesPerView * ratio * 100
       return {
-        'padding-top': `calc(${itemsHeight}% + ${this.showCount -
+        'padding-top': `calc(${itemsHeight}% + ${this.slidesPerView -
           1} * var(${CUSTOM_GUTTER}))`
       }
     },
     hasGutter () {
-      return !!(this.showCount - 1)
+      return !this.isFade && !!(this.slidesPerView - 1)
     },
     realStep () {
-      return this.isFade ? 1 : this.stepCount
+      return this.isFade ? 1 : this.slidesPerGroup
     },
     pageCount () {
-      return Math.ceil(this.datasource.length / Math.floor(this.realStep))
-    },
-    realIndicator () {
-      const type = /(?:^|\s)(radio|number|none|dot)(?:$|\s)/.exec(
-        this.indicator
-      )[1]
-      const isNone = type === 'none'
-      const isEnd = !isNone && /(?:^|\s)(end)(?:$|\s)/.test(this.indicator)
-      return {
-        type,
-        isEnd,
-        isOutside:
-          isEnd &&
-          !this.vertical &&
-          /(?:^|\s)(outside)(?:$|\s)/.test(this.indicator)
-      }
-    },
-    isOutside () {
-      return this.controls === 'outside'
+      return Math.ceil(this.datasource.length / this.realStep)
     }
   },
   mounted () {
@@ -224,15 +287,21 @@ export default {
   },
   beforeDestroy () {
     this.stop()
-    clearTimeout(this.focusTimer)
   },
   methods: {
+    canStep (step) {
+      const result =
+        !this.wrap &&
+        (this.realIndex + step < 0 || this.realIndex + step >= this.pageCount)
+      return !result
+    },
     select (index, event) {
       if (event !== this.switchTrigger) {
         return
       }
       if (this.effect === 'slide') {
-        this.$refs.slide.setTransition(index, 0.2)
+        // 不能仅仅更新 index，再根据 index 来播放（浏览器会拦截，认为非用户触发）
+        this.$refs.scene.goToView(index)
       }
       this.triggerChange(index)
 
@@ -254,7 +323,7 @@ export default {
         return
       }
       this.playTimer = setInterval(() => {
-        this.step(1)
+        this.doStep(1)
       }, this.interval)
     },
     stop () {
@@ -270,12 +339,34 @@ export default {
         this.initPlay()
       }
     },
-    doStep (i) {
-      if (this.isFade) {
-        this.step(i)
-        return
+    // TODO: mixin 那个不太适合了
+    focusCurrent () {
+      clearTimeout(this.focusTimer)
+      this.focusTimer = setTimeout(() => {
+        this.focused = true
+        this.focusedIndex = this.realIndex
+        this.$refs.scene.focusCurrent(this.realIndex)
+      })
+    },
+    // TODO 统一
+    doStep (i, focus) {
+      if (this.canStep(i)) {
+        if (this.isFade) {
+          this.step(i, focus)
+        } else {
+          this.$refs.scene.stepView(i)
+          if (focus) {
+            this.focusCurrent()
+          }
+        }
       }
-      this.$refs.slide.stepSlide(i)
+    },
+    handleKeydown (step, event, vertical) {
+      if (this.vertical === vertical) {
+        this.doStep(step, true)
+      }
+      // 避免按上下导致页面滚动
+      event.preventDefault()
     }
   }
 }

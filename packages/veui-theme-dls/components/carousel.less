@@ -5,11 +5,15 @@
   @width-normal: 480px;
   @height-normal: 270px;
 
+  --dls-carousel-gutter: 12px;
   position: relative;
   .size(@width-normal, @height-normal);
   display: flex;
   flex-direction: column;
   align-items: center;
+  &-viewport-wrap[data-focus-visible-added] {
+    .dls-focus-ring();
+  }
 
   &-viewport-wrap,
   &-viewport {
@@ -40,9 +44,15 @@
     overflow: hidden;
     outline: none;
 
-    &-image {
+    &-media {
+      position: relative;
       .size(100%);
       background: no-repeat center/cover;
+    }
+    &-video {
+      .size(100%);
+      .absolute(0); // for vertical
+      object-fit: cover;
     }
   }
 
@@ -115,12 +125,12 @@
       .absolute(auto, auto, auto, 50%);
     }
     &-vertical&-prev {
-      top: @dls-carousel-control-spacing + 14px;
-      transform: translate(-50%, -50%) rotate(90deg);
+      top: @dls-carousel-control-spacing;
+      transform: translate(-50%, 0) rotate(90deg);
     }
     &-vertical&-next {
-      bottom: @dls-carousel-control-spacing + 14px;
-      transform: translate(-50%, 50%) rotate(90deg);
+      bottom: @dls-carousel-control-spacing;
+      transform: translate(-50%, 0) rotate(90deg);
     }
   }
 
@@ -168,11 +178,40 @@
       transform: translateX(-50%);
     }
     &-vertical&-right {
-      .absolute(50%, @dls-carousel-indicator-spacing-outer, auto, auto);
+      .absolute(
+        50%,
+        @dls-carousel-indicator-spacing-outer + 3px / 2,
+        auto,
+        auto
+      );
       transform: translate(50%, -50%) rotate(90deg);
     }
     &-vertical&-left {
-      .absolute(50%, auto, auto, @dls-carousel-indicator-spacing-outer);
+      .absolute(
+        50%,
+        auto,
+        auto,
+        @dls-carousel-indicator-spacing-outer + 3px / 2
+      );
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    &-dots&-vertical&-right {
+      .absolute(
+        50%,
+        @dls-carousel-indicator-spacing-outer + 6px / 2,
+        auto,
+        auto
+      );
+      transform: translate(50%, -50%) rotate(90deg);
+    }
+    &-dots&-vertical&-left {
+      .absolute(
+        50%,
+        auto,
+        auto,
+        @dls-carousel-indicator-spacing-outer + 6px / 2
+      );
       transform: translate(-50%, -50%) rotate(90deg);
     }
 
@@ -183,7 +222,8 @@
       flex: 0 0 auto;
       padding: 0;
       margin-left: @dls-carousel-indicator-spacing-inner;
-      .size(@dls-carousel-indicator-width, @dls-carousel-indicator-height);
+      // dls-carousel-indicator-height 要更新为 3px
+      .size(@dls-carousel-indicator-width, 3px);
       .veui-transition(width, background-color);
       color: transparent;
       background-color: @dls-carousel-indicator-background-color;

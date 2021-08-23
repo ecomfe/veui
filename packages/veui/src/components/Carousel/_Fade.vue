@@ -6,6 +6,7 @@
     [$c('carousel-items-fade')]: true
   }"
   tag="ol"
+  @transitionend.native="handleTransitionEnd"
 >
   <li
     v-for="(item, idx) in datasource"
@@ -16,7 +17,7 @@
       [$c('carousel-item')]: true,
       [$c('carousel-item-current')]: idx === index
     }"
-    tabindex="0"
+    tabindex="-1"
     @focusin="focusedIndex = idx"
     @focusout="focusedIndex = null"
   >
@@ -27,13 +28,27 @@
       :index="idx"
     >
       <div
-        :class="$c('carousel-item-image')"
+        :class="$c('carousel-item-media')"
         :style="{
           ...aspectRatioStyle,
-          'background-image': `url(${item.src})`
+          ...(item.type !== 'video' && {
+            'background-image': `url(${item.src})`
+          })
         }"
       >
+        <video
+          v-if="item.type === 'video'"
+          :ref="`video#${idx}`"
+          :class="$c('carousel-item-video')"
+          :src="item.src"
+          preload="auto"
+          tabindex="-1"
+          v-bind="options.video"
+          :autoplay="idx === index && options.video.autoplay"
+          :muted="isAutoplay || options.video.muted"
+        />
         <img
+          v-else
           :class="$c('sr-only')"
           :src="item.src"
           :alt="item.alt"
@@ -49,6 +64,23 @@ import carousel from './mixin'
 
 export default {
   name: 'veui-carousel-fade',
-  mixins: [carousel]
+  mixins: [carousel],
+  watch: {
+    index (_, oldVal) {
+      if (oldVal != null) {
+        this.pauseVideos(oldVal)
+      }
+    }
+  },
+  methods: {
+    handleTransitionEnd () {
+      // 过渡完成再 reset 视频，以免画面抖动
+      this.resetVideos()
+      this.playVideos(this.index)
+    },
+    focusCurrent (index) {
+      this.$refs.item[index].focus()
+    }
+  }
 }
 </script>
