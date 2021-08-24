@@ -38,7 +38,7 @@
       @input="handleInput"
       @compositionupdate="handleCompositionUpdate"
       @compositionend="handleCompositionEnd"
-      @change="$emit('change', $event.target.value, $event)"
+      @change="handleChange"
     >
   </div>
   <template v-if="$slots.after || clearable || realMaxlength !== null">
@@ -252,6 +252,11 @@ export default {
         this.updateValue(e.target.value, e)
       }
     },
+    handleChange (e) {
+      let val = this.trimValue(e.target.value)
+      this.updateValue(val)
+      this.$emit('change', val, e)
+    },
     handleMousedown (e) {
       setTimeout(() => {
         this.focus()
@@ -280,7 +285,7 @@ export default {
       return val.replace(TRIM_RE[this.trim], '')
     },
     updateValue (value, ...args) {
-      this.commit('value', this.trimValue(value), ...args)
+      this.commit('value', value, ...args)
       this.$nextTick(() => {
         let input = this.$refs.input
         this.tmpInputValue = null

@@ -289,6 +289,9 @@ describe('components/Input', () => {
     input.trigger('input')
     await vm.$nextTick()
     expect(el.value).to.equal('  123   ')
+    input.trigger('change')
+    await vm.$nextTick()
+    expect(el.value).to.equal('  123   ')
 
     vm.trim = true
     await vm.$nextTick()
@@ -296,10 +299,16 @@ describe('components/Input', () => {
 
     input.trigger('input')
     await vm.$nextTick()
+    expect(el.value).to.equal('  123   ')
+    input.trigger('change')
+    await vm.$nextTick()
     expect(el.value).to.equal('123')
 
     el.value = '  123  '
     input.trigger('input')
+    await vm.$nextTick()
+    expect(el.value).to.equal('  123  ')
+    input.trigger('change')
     await vm.$nextTick()
     expect(el.value).to.equal('123')
 
@@ -310,6 +319,9 @@ describe('components/Input', () => {
     el.value = '  123  '
     input.trigger('input')
     await vm.$nextTick()
+    expect(el.value).to.equal('  123  ')
+    input.trigger('change')
+    await vm.$nextTick()
     expect(el.value).to.equal('123  ')
 
     vm.trim = 'end'
@@ -319,6 +331,9 @@ describe('components/Input', () => {
     el.value = '  123  '
     input.trigger('input')
     await vm.$nextTick()
+    expect(el.value).to.equal('  123  ')
+    input.trigger('change')
+    await vm.$nextTick()
     expect(el.value).to.equal('  123')
 
     vm.trim = 'both'
@@ -327,6 +342,9 @@ describe('components/Input', () => {
 
     el.value = '  123  '
     input.trigger('input')
+    await vm.$nextTick()
+    expect(el.value).to.equal('  123  ')
+    input.trigger('change')
     await vm.$nextTick()
     expect(el.value).to.equal('123')
   })
