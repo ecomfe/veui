@@ -6,6 +6,7 @@
     [$c('carousel-items-vertical')]: vertical
   }"
   @transitionend="handleTransitionEnd"
+  @transitioncancel="handleTransitionEnd"
 >
   <li
     v-for="(item, rdIndex) in realDatasource"
@@ -40,6 +41,7 @@
           :ref="`video#${rdIndex}`"
           :class="$c('carousel-item-video')"
           :src="item.raw.src"
+          :alt="item.raw.alt"
           preload="auto"
           tabindex="-1"
           v-bind="options.video"
@@ -152,20 +154,16 @@ export default {
         const dup = {
           ...real,
           duplicate: true,
-          real,
           key: `ds#${real.key}`
         }
-        real.duplicates = real.duplicates ? [...real.duplicates, dup] : [dup]
         return dup
       })
       const endDups = normalized.slice(-this.slidesPerGroup).map(real => {
         const dup = {
           ...real,
           duplicate: true,
-          real,
           key: `de#${real.key}`
         }
-        real.duplicates = real.duplicates ? [...real.duplicates, dup] : [dup]
         return dup
       })
 
@@ -201,14 +199,14 @@ export default {
       this.setTransition(this.index)
     },
     vertical () {
-      this.setTransition(this.index, 0)
+      this.setTransition(this.index, true)
     }
   },
   created () {
     this.inTransition = false
   },
   mounted () {
-    this.setTransition(this.index, 0)
+    this.setTransition(this.index, true)
   },
   methods: {
     shouldRenderItem ({ pad, index: dIndex }, index) {
@@ -240,7 +238,7 @@ export default {
     playVideoForSlideIns (loopViewIndex) {
       return this.playVideos(this.getRdIndexesByLoopViewIndex(loopViewIndex))
     },
-    setTransition (loopViewIndex, duration) {
+    setTransition (loopViewIndex, immediate) {
       this.loopViewIndex = loopViewIndex
       const count =
         (this.slidesPerGroup / this.slidesPerView) * (loopViewIndex + 1)
@@ -248,14 +246,15 @@ export default {
         this.hasGutter ? `- var(${CUSTOM_GUTTER})` : ''
       }) * ${count})`
       // duration 可能 0 表示立即转到，否则让 CSS 中设置生效
-      this.$el.style.transitionDuration = duration == null ? '' : `${duration}s`
+      let duration = ''
+      if (immediate) {
+        duration = '0s'
+      }
+      this.inTransition = !immediate
+      this.$el.style.transitionDuration = duration
       this.$el.style.transform = `translate3d(${
         this.vertical ? `0,${offset},0` : `${offset},0,0`
       })`
-    },
-    cancelTransition () {
-      this.setTransition(this.index, 0)
-      this.inTransition = false
     },
     loopFix () {
       // 从 duplicate 同步时间并播放
@@ -263,7 +262,7 @@ export default {
       // 暂停 duplicate
       this.pauseVideoForSlideOuts(this.loopViewIndex, this.index)
       // 立即切换
-      this.setTransition(this.index, 0)
+      this.setTransition(this.index, true)
       // 重置 duplicate
       this.resetVideos()
     },
@@ -304,7 +303,6 @@ export default {
       }
     },
     tryStepView (step) {
-      this.inTransition = true
       const oldIndex = this.index
       const newLoopViewIndex = this.index + step
       const newIndex = (newLoopViewIndex + this.pageCount) % this.pageCount
@@ -318,7 +316,7 @@ export default {
       // 受控检查 TODO
       this.$nextTick(() => {
         if (newIndex !== this.index) {
-          this.cancelTransition()
+          this.setTransition(this.index, true)
           // play?
         }
       })
