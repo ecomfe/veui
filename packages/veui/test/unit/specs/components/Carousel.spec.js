@@ -1,6 +1,9 @@
-import { mount } from '@vue/test-utils'
+import { mount, config as testConfig } from '@vue/test-utils'
 import { wait } from '../../../utils'
 import Carousel from '@/components/Carousel'
+
+testConfig.stubs.transition = false
+testConfig.stubs['transition-group'] = false
 
 let items = [
   {
@@ -300,7 +303,7 @@ describe('components/Carousel', () => {
         data () {
           return {
             items,
-            indicator: 'radio'
+            indicator: 'bar'
           }
         }
       },
@@ -310,7 +313,7 @@ describe('components/Carousel', () => {
     )
 
     let { vm } = wrapper
-    expect(wrapper.find('.veui-carousel-indicator-radios').exists()).to.equal(
+    expect(wrapper.find('.veui-carousel-indicator-bars').exists()).to.equal(
       true
     )
     expect(
@@ -328,10 +331,10 @@ describe('components/Carousel', () => {
     expect(wrapper.find('.veui-carousel-indicator-numbers').text()).to.equal(
       '1/5'
     )
-    vm.indicator = 'tab'
+    vm.indicator = 'dot'
 
     await vm.$nextTick()
-    expect(wrapper.find('.veui-carousel-indicator-tabs').exists()).to.equal(
+    expect(wrapper.find('.veui-carousel-indicator-dots').exists()).to.equal(
       true
     )
     expect(
@@ -343,13 +346,13 @@ describe('components/Carousel', () => {
     vm.indicator = 'none'
 
     await vm.$nextTick()
-    expect(wrapper.find('.veui-carousel-indicator-radios').exists()).to.equal(
+    expect(wrapper.find('.veui-carousel-indicator-bars').exists()).to.equal(
       false
     )
     expect(wrapper.find('.veui-carousel-indicator-numbers').exists()).to.equal(
       false
     )
-    expect(wrapper.find('.veui-carousel-indicator-tabs').exists()).to.equal(
+    expect(wrapper.find('.veui-carousel-indicator-dots').exists()).to.equal(
       false
     )
     vm.indicator = 'number'
@@ -674,4 +677,390 @@ describe('components/Carousel', () => {
 
     wrapper.destroy()
   })
+
+  it('should render indicator and control prop correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-carousel': Carousel
+        },
+        template: `
+          <veui-carousel
+            :datasource="items"
+            :vertical="vertical"
+            :autoplay="autoplay"
+            indicator-alignment="end"
+            :indicator-position="position"
+            :controls="controls"
+            :controls-position="position"
+          />`,
+        data () {
+          return {
+            items,
+            vertical: true,
+            autoplay: false,
+            controls: true,
+            position: 'inside'
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    let { vm } = wrapper
+    // vertical indicator
+    let indicator = wrapper.find('.veui-carousel-indicator')
+    expect(indicator.classes()).to.include('veui-carousel-indicator-vertical')
+    expect(indicator.classes()).to.include('veui-carousel-indicator-right')
+
+    // vertical control
+    let control = wrapper.find('.veui-carousel-control')
+    expect(control.classes()).to.include('veui-carousel-control-vertical')
+
+    // controls always exists on playing manually
+    vm.autoplay = false
+    vm.controls = false
+    await vm.$nextTick()
+    expect(
+      wrapper.find('.veui-carousel-control').exists(),
+      'controls always exists on playing manually.'
+    ).to.equal(true)
+
+    // test outside
+    vm.position = 'outside'
+    vm.vertical = false
+    await vm.$nextTick()
+    let viewport = wrapper.find('.veui-carousel-viewport')
+    expect(inViewport(viewport, control), '#outside control').to.equal(false)
+    expect(inViewport(viewport, indicator), '#outside indicator').to.equal(
+      false
+    )
+
+    wrapper.destroy()
+  })
+
+  it('should handle slide effect correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-carousel': Carousel
+        },
+        template: `
+          <veui-carousel
+            :datasource="items"
+            effect="slide"
+          />`,
+        data () {
+          return {
+            items
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let slides = wrapper.findAll(
+      '.veui-carousel-item:not(.veui-carousel-item-duplicate):not(.veui-carousel-item-pad)'
+    )
+    let viewport = wrapper.find('.veui-carousel-viewport')
+    expect(inViewport(viewport, slides.at(0))).to.equal(true)
+    expect(inViewport(viewport, slides.at(1))).to.equal(false)
+
+    let next = wrapper.find('.veui-carousel-control-next')
+    next.trigger('click')
+    await wait(300)
+    expect(inViewport(viewport, slides.at(0))).to.equal(false)
+    expect(inViewport(viewport, slides.at(1))).to.equal(true)
+    wrapper.destroy()
+  })
+
+  it('should handle slidesPerGroup/slidesPerView correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-carousel': Carousel
+        },
+        template: `
+          <veui-carousel
+            :datasource="items"
+            :index.sync="index"
+            :slides-per-group="group"
+            :slides-per-view="view"
+            effect="slide"
+          />`,
+        data () {
+          return {
+            items,
+            group: 2,
+            index: 0,
+            view: 2
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    let slides = wrapper.findAll(
+      '.veui-carousel-item:not(.veui-carousel-item-duplicate):not(.veui-carousel-item-pad)'
+    )
+    let viewport = wrapper.find('.veui-carousel-viewport')
+    expect(slides.at(0).classes()).to.includes('veui-carousel-item-current')
+    expect(slides.at(1).classes()).to.includes('veui-carousel-item-current')
+    expect(slides.at(2).classes()).to.not.includes('veui-carousel-item-current')
+    expect(inViewport(viewport, slides.at(0)), '#per1').to.equal(true)
+    expect(inViewport(viewport, slides.at(1)), '#per2').to.equal(true)
+    expect(inViewport(viewport, slides.at(2)), '#per3').to.equal(false)
+
+    let next = wrapper.find('.veui-carousel-control-next')
+    next.trigger('click')
+    await wait(300)
+    expect(slides.at(1).classes()).to.not.includes('veui-carousel-item-current')
+    expect(slides.at(2).classes()).to.includes('veui-carousel-item-current')
+    expect(slides.at(3).classes()).to.includes('veui-carousel-item-current')
+    expect(inViewport(viewport, slides.at(1)), '#per4').to.equal(false)
+    expect(inViewport(viewport, slides.at(2)), '#per5').to.equal(true)
+    expect(inViewport(viewport, slides.at(3)), '#per6').to.equal(true)
+
+    // view/group 目前没有做成响应式的，感觉变化的意义不大？有需求再支持
+    vm.index = 0
+    vm.view = 2
+    vm.group = 1
+    await wait(300) // index 变化效果也是slide
+    slides = wrapper.findAll(
+      '.veui-carousel-item:not(.veui-carousel-item-duplicate):not(.veui-carousel-item-pad)'
+    )
+    expect(slides.at(0).classes()).to.includes('veui-carousel-item-current')
+    expect(slides.at(1).classes()).to.includes('veui-carousel-item-current')
+    expect(slides.at(2).classes()).to.not.includes('veui-carousel-item-current')
+    expect(inViewport(viewport, slides.at(0)), '#per7').to.equal(true)
+    expect(inViewport(viewport, slides.at(1)), '#per8').to.equal(true)
+    expect(inViewport(viewport, slides.at(2)), '#per9').to.equal(false)
+
+    next.trigger('click')
+    await wait(300)
+    expect(slides.at(0).classes()).to.not.includes('veui-carousel-item-current')
+    expect(slides.at(1).classes()).to.includes('veui-carousel-item-current')
+    expect(slides.at(2).classes()).to.includes('veui-carousel-item-current')
+    expect(inViewport(viewport, slides.at(0)), '#per10').to.equal(false)
+    expect(inViewport(viewport, slides.at(1)), '#per11').to.equal(true)
+    expect(inViewport(viewport, slides.at(2)), '#per12').to.equal(true)
+    wrapper.destroy()
+  })
+
+  it('should work with wrap + slidesPerGroup/slidesPerView', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-carousel': Carousel
+        },
+        template: `
+          <veui-carousel
+            :datasource="items"
+            :index.sync="index"
+            :slides-per-group="group"
+            :slides-per-view="view"
+            wrap
+            effect="slide"
+          />`,
+        data () {
+          return {
+            items,
+            group: 2,
+            index: 0,
+            view: 2
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    // 2/2 那么在5个里面需要补1个空白pad
+    let { vm } = wrapper
+    let pads = wrapper.findAll(
+      '.veui-carousel-item-pad:not(.veui-carousel-item-duplicate)'
+    )
+    expect(pads.length).to.equal(1)
+    let prev = wrapper.find('.veui-carousel-control-prev')
+    // 这里一定要 wait
+    await wait(0)
+    prev.trigger('click')
+    await wait(300)
+    expect(vm.index).to.equal(2)
+
+    let next = wrapper.find('.veui-carousel-control-next')
+    next.trigger('click')
+    await wait(300)
+    expect(vm.index).to.equal(0)
+
+    // 3/2 那么在5个里面需要补1个空白 pad 且最后一个 view 的最后一个是第一个项目
+    vm.index = 2
+    vm.view = 3
+    vm.group = 2
+    await wait(300)
+    pads = wrapper.findAll(
+      '.veui-carousel-item-pad:not(.veui-carousel-item-duplicate)'
+    )
+    expect(pads.length).to.equal(1)
+    let slide = wrapper.findAll('.veui-carousel-item-current').at(vm.view - 1)
+    expect(slide.find('img').attributes('src')).to.equal(vm.items[0].src)
+    wrapper.destroy()
+  })
+
+  it('should work with slideAspectRatio + slidesPerView', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-carousel': Carousel
+        },
+        template: `
+          <veui-carousel
+            :datasource="items"
+            :slides-per-view="view"
+            :slide-aspect-ratio="2/1"
+            effect="slide"
+            :vertical="vertical"
+          />`,
+        data () {
+          return {
+            items,
+            view: 2,
+            vertical: false
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    let { vm } = wrapper
+    let slides = wrapper.findAll(
+      '.veui-carousel-item:not(.veui-carousel-item-duplicate):not(.veui-carousel-item-pad)'
+    )
+    let rect0 = slides.at(0).element.getBoundingClientRect()
+    let rect1 = slides.at(1).element.getBoundingClientRect()
+    let rectViewport = wrapper
+      .find('.veui-carousel-viewport')
+      .element.getBoundingClientRect()
+    expect(rect0.width, '#width aspectRatio').to.equal(rect0.height * 2)
+    expect(rect0.left, '#width aspectRatio2').to.equal(rectViewport.left)
+    expect(rect1.right, '#width aspectRatio3').to.equal(rectViewport.right)
+
+    vm.vertical = true
+    await wait(300)
+    slides = wrapper.findAll(
+      '.veui-carousel-item:not(.veui-carousel-item-duplicate):not(.veui-carousel-item-pad)'
+    )
+    rect0 = slides.at(0).element.getBoundingClientRect()
+    rect1 = slides.at(1).element.getBoundingClientRect()
+    rectViewport = wrapper
+      .find('.veui-carousel-viewport')
+      .element.getBoundingClientRect()
+    expect(rect0.width, '#height aspectRatio').to.equal(rect0.height * 2)
+    expect(rect0.top, '#height aspectRatio2').to.equal(rectViewport.top)
+    expect(rect1.bottom, '#height aspectRatio3').to.equal(rectViewport.bottom)
+    wrapper.destroy()
+  })
+
+  it('should handle video content correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-carousel': Carousel
+        },
+        template: `
+          <veui-carousel
+            :datasource="items"
+            :slides-per-view="view"
+            :slide-aspect-ratio="2/1"
+            :options="options"
+            :effect="effect"
+            :index.sync="index"
+            wrap
+            :vertical="vertical"
+          />`,
+        data () {
+          return {
+            items: [
+              {
+                src:
+                  'https://nadvideo2.baidu.com/b45f066cccd13549219cb475ca520cee_1920_1080.mp4',
+                alt: 'A 1080p video.',
+                label: 'A 1080p video',
+                type: 'video'
+              },
+              ...items
+            ],
+            view: 2,
+            options: {
+              video: {
+                autoplay: false
+              }
+            },
+            index: 0,
+            effect: 'slide',
+            vertical: false
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    let { vm } = wrapper
+    let video = wrapper.find('.veui-carousel-item-current video')
+    video.element.currentTime = 1
+    await wait(0)
+    let next = wrapper.find('.veui-carousel-control-next')
+    next.trigger('click')
+    await wait(300)
+    let prev = wrapper.find('.veui-carousel-control-prev')
+    prev.trigger('click')
+    await wait(300)
+    video = wrapper.find('.veui-carousel-item-current video')
+    expect(video.element.currentTime, '#video1').to.equal(0)
+    video.element.currentTime = 1
+    prev.trigger('click')
+    await wait(300)
+    video = wrapper.find('.veui-carousel-item-current video')
+    expect(
+      video.element.currentTime,
+      '即使发生loopfix也要保留原来的时间'
+    ).to.equal(1)
+
+    vm.effect = 'fade'
+    vm.index = 0
+    await wait(0)
+    video = wrapper.find('.veui-carousel-item-current video')
+    video.element.currentTime = 1
+    next.trigger('click')
+    await wait(300)
+    prev.trigger('click')
+    await wait(300)
+    expect(video.element.currentTime, 'fade 重置时间').to.equal(0)
+    wrapper.destroy()
+  })
 })
+
+function inViewport (viewport, scene) {
+  let { left, top, right, bottom } = scene.element.getBoundingClientRect()
+  let {
+    left: vLeft,
+    top: vTop,
+    right: vRight,
+    bottom: vBottom
+  } = viewport.element.getBoundingClientRect()
+  return left >= vLeft && top >= vTop && right <= vRight && bottom <= vBottom
+}

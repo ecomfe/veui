@@ -6,13 +6,13 @@
     [$c('carousel-items-fade')]: true
   }"
   tag="ol"
-  @transitionend.native="handleTransitionEnd"
+  @after-leave="handleTransitionEnd"
 >
   <li
     v-for="(item, idx) in datasource"
     v-show="idx === index"
     ref="item"
-    :key="item.src"
+    :key="`item#${idx}`"
     :class="{
       [$c('carousel-item')]: true,
       [$c('carousel-item-current')]: idx === index
@@ -41,6 +41,7 @@
           :ref="`video#${idx}`"
           :class="$c('carousel-item-video')"
           :src="item.src"
+          :alt="item.alt"
           preload="auto"
           tabindex="-1"
           v-bind="options.video"

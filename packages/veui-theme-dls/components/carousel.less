@@ -86,7 +86,7 @@
     position: static;
     flex: 1 0 auto;
   }
-  &-gutter &-item:not(:last-child) {
+  &-gutter:not(&-vertical) &-item:not(:last-child) {
     margin-right: var(--dls-carousel-gutter, 12px);
   }
   &-gutter&-vertical &-item:not(:last-child) {
@@ -121,7 +121,8 @@
       .dls-icon-size(@dls-carousel-control-icon-size);
     }
 
-    &-vertical {
+    // 测试的时候发现css样式顺序有问题，增加下优先级吧
+    &&-vertical {
       .absolute(auto, auto, auto, 50%);
     }
     &-vertical&-prev {

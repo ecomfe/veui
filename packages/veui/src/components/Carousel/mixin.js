@@ -39,8 +39,8 @@ export default {
     resetVideos () {
       if (this.willReset.length) {
         this.willReset.forEach(ref => {
-          if (this.$refs[ref]) {
-            // video 都是在循环里面
+          // video 都是在循环里面
+          if (this.$refs[ref] && this.$refs[ref][0]) {
             this.$refs[ref][0].currentTime = 0
           }
         })

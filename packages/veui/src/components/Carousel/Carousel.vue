@@ -72,7 +72,7 @@
           [$c('carousel-control-next')]: true,
           [$c('carousel-control-vertical')]: vertical
         }"
-        :disabled="!wrap && realIndex === count - 1"
+        :disabled="!wrap && realIndex === pageCount - 1"
         tabindex="-1"
         @click="doStep(1)"
       >
@@ -159,10 +159,7 @@ export default {
         return includes(['inside', 'outside'], value)
       }
     },
-    controls: {
-      type: Boolean,
-      default: undefined
-    },
+    controls: Boolean,
     controlsPosition: {
       type: String,
       validator (value) {
@@ -224,7 +221,7 @@ export default {
     },
     hasControls () {
       // 非自动播放，必须有 controls
-      return this.autoplay ? this.controls !== false : true
+      return this.autoplay ? this.controls : true
     },
     hasIndicator () {
       return this.indicator !== 'none'
