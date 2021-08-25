@@ -621,10 +621,8 @@ export default {
         .then(status => {
           this.updateFileStatus(this.fileList.indexOf(file), status)
         })
-        .catch(function (err) {
-          if (process.env.NODE_ENV === 'development') {
-            console.log('Upload file exception: ', err)
-          }
+        .catch(err => {
+          warn(`[veui-uploader] File upload failed: ${err.message}`, this)
         })
     },
     updateFileStatus (index, status) {
