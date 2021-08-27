@@ -12,6 +12,7 @@
   :ui="realUi"
   modal
   :priority="priority"
+  @afterclose="handleAfterClose"
 >
   <div :class="$c('lightbox-head')">
     <div
@@ -137,7 +138,7 @@ import Overlay from './Overlay'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
-import modal from '../managers/modal'
+import modal from '../mixins/modal'
 import useControllable from '../mixins/controllable'
 import overlay from '../mixins/overlay'
 import carousel from '../mixins/carousel'
@@ -153,6 +154,7 @@ export default {
     prefix,
     ui,
     overlay,
+    modal,
     carousel,
     i18n,
     useControllable(['index']),
@@ -206,21 +208,17 @@ export default {
   watch: {
     realOpen (val) {
       if (val) {
-        modal.open()
-      } else {
-        modal.close()
+        this.openModal()
       }
     }
   },
   mounted () {
     if (this.realOpen) {
-      modal.open()
+      this.openModal()
     }
   },
   destroyed () {
-    if (this.realOpen) {
-      modal.close()
-    }
+    this.closeModal()
   },
   methods: {
     close (type) {
@@ -246,6 +244,10 @@ export default {
         e.stopPropagation()
         this.cancel()
       }
+    },
+    handleAfterClose () {
+      this.closeModal()
+      this.$emit('afterclose')
     }
   }
 }

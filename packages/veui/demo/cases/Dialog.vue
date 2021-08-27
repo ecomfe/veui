@@ -17,6 +17,7 @@
         Nesciunt, odio alias consequuntur cum dolores distinctio officia nam
         nisi beatae possimus. Accusantium.
       </p>
+      <p><veui-button @click="handleGoto">Goto Button</veui-button></p>
     </veui-dialog>
     <veui-button
       ui="primary"
@@ -486,6 +487,10 @@ export default {
     }
   },
   methods: {
+    handleGoto () {
+      this.modalDialogVisible = false
+      this.$router.push({ name: 'Button' })
+    },
     popupAlert (type, content, title) {
       alertManager[type](content, title)
     },

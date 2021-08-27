@@ -102,7 +102,7 @@ import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import focusable from '../mixins/focusable'
 import i18n from '../mixins/i18n'
-import modal from '../managers/modal'
+import modal from '../mixins/modal'
 import outside from '../directives/outside'
 import drag from '../directives/drag'
 import Icon from './Icon'
@@ -116,7 +116,15 @@ export default {
     'veui-icon': Icon
   },
   directives: { outside, drag },
-  mixins: [prefix, ui, overlay, focusable, i18n, useControllable(['open'])],
+  mixins: [
+    prefix,
+    ui,
+    overlay,
+    modal,
+    focusable,
+    i18n,
+    useControllable(['open'])
+  ],
   inheritAttrs: false,
   props: {
     modal: {
@@ -172,19 +180,19 @@ export default {
     realOpen (val) {
       if (this.modal) {
         if (val) {
-          modal.open()
+          this.openModal()
         }
       }
     }
   },
   mounted () {
     if (this.realOpen && this.modal) {
-      modal.open()
+      this.openModal()
     }
   },
   destroyed () {
-    if (this.realOpen && this.modal) {
-      modal.close()
+    if (this.modal) {
+      this.closeModal()
     }
   },
   methods: {
@@ -240,7 +248,7 @@ export default {
       }
     },
     handleAfterClose () {
-      modal.close()
+      this.closeModal()
       this.$emit('afterclose')
     }
   }
