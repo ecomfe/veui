@@ -1,6 +1,9 @@
 import prefix from '../../mixins/prefix'
 import { get, noop } from 'lodash'
 
+export const CUSTOM_GUTTER = '--dls-carousel-slide-gutter'
+export const FALLBACK_GUTTER = '24px'
+
 export default {
   mixins: [prefix],
   props: {
@@ -17,14 +20,7 @@ export default {
   computed: {
     aspectRatioStyle () {
       if (this.slideAspectRatio) {
-        let ratio = this.slideAspectRatio
-        if (typeof ratio === 'string') {
-          const [w, h] = ratio.split('/').map(Number)
-          ratio = h / w
-        } else {
-          ratio = 1 / ratio
-        }
-        return { 'padding-top': `${ratio * 100}%` }
+        return { 'padding-top': `${getRatio(this.slideAspectRatio) * 100}%` }
       }
       return null
     },
@@ -94,4 +90,14 @@ export default {
 
 export function isVideo ({ type, raw }) {
   return type === 'video' || (!!raw && raw.type === 'video')
+}
+
+export function getRatio (ratio) {
+  if (typeof ratio === 'string') {
+    const [w, h] = ratio.split('/').map(Number)
+    ratio = h / w
+  } else {
+    ratio = 1 / ratio
+  }
+  return ratio
 }

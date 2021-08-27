@@ -72,7 +72,7 @@
     </veui-checkbox>
   </p>
   <section class="carousel-section">
-    <h4>show 1, step 1</h4>
+    <h4>1 per view, 1 per group</h4>
     <p>
       <code>index</code>:
       <veui-number-input
@@ -102,7 +102,7 @@
     />
   </section>
   <section class="carousel-section">
-    <h4>show 2, step 1</h4>
+    <h4>2 per view, 1 per group</h4>
     <p>
       <code>index</code>:
       <veui-number-input
@@ -134,7 +134,7 @@
     />
   </section>
   <section class="carousel-section">
-    <h4>show 2, step 2</h4>
+    <h4>2 per view, 2 per group</h4>
     <p>
       <code>index</code>:
       <veui-number-input
@@ -166,7 +166,7 @@
     />
   </section>
   <section class="carousel-section">
-    <h4>show 3, step 3</h4>
+    <h4>3 per view, 3 per group</h4>
     <p>
       <code>index</code>:
       <veui-number-input
@@ -198,7 +198,7 @@
     />
   </section>
   <section class="carousel-section">
-    <h4>show 3, step 2</h4>
+    <h4>3 per view, 2 per group</h4>
     <p>
       <code>index</code>:
       <veui-number-input
@@ -261,7 +261,7 @@
     />
   </section>
   <section class="carousel-section">
-    <h4>show 2, step 2 , slide-aspect-ratio: `2/1`</h4>
+    <h4>2 per view, 2 per group, slide-aspect-ratio: `2/1`</h4>
     <p>
       <code>index</code>:
       <veui-number-input
@@ -294,7 +294,7 @@
     />
   </section>
   <section class="carousel-section">
-    <h4>show 1, step 1</h4>
+    <h4>1 per view, 1 per group，only 1 pic</h4>
     <p>
       <code>index</code>:
       <veui-number-input
@@ -305,7 +305,7 @@
       />
     </p>
     <veui-carousel
-      :datasource="[items[0]]"
+      :datasource="[items[1]]"
       :index.sync="index112"
       :ui="ui"
       :interval="interval"
@@ -318,7 +318,7 @@
       :autoplay="autoplay"
       :vertical="vertical"
       :controls="!!control"
-      :controls-position="control || undefined"
+      :controls-position="control"
       :effect="effect"
       :slides-per-view="1"
       :slides-per-group="1"

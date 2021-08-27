@@ -1,32 +1,27 @@
 <template>
 <div
-  v-if="indicator === 'number'"
-  :class="[$c('carousel-indicator'), $c('carousel-indicator-numbers')]"
+  v-if="type === 'number'"
+  :class="rootClass"
 >
   {{ index + 1 }}/{{ labels.length }}
 </div>
 <nav
   v-else
-  :class="{
-    [$c('carousel-indicator')]: true,
-    [$c(`carousel-indicator-${indicator}s`)]: true,
-    [$c(`carousel-indicator-vertical`)]: vertical,
-    [$c(`carousel-indicator-horizontal`)]: !vertical
-  }"
+  :class="rootClass"
 >
   <button
-    v-for="(label, idx) in labels"
-    :key="idx"
+    v-for="(label, i) in labels"
+    :key="i"
     type="button"
     tabindex="-1"
     :class="{
       [$c('carousel-indicator-item')]: true,
-      [$c('carousel-indicator-item-current')]: index === idx
+      [$c('carousel-indicator-item-current')]: index === i
     }"
     :aria-label="label"
-    @click="$emit('trigger', idx, 'click')"
-    @focus="$emit('trigger', idx, 'focus')"
-    @mouseenter="$emit('trigger', idx, 'hover')"
+    @click="$emit('trigger', i, 'click')"
+    @focus="$emit('trigger', i, 'focus')"
+    @mouseenter="$emit('trigger', i, 'hover')"
   />
 </nav>
 </template>
@@ -38,10 +33,20 @@ export default {
   name: 'veui-carousel-indicator',
   mixins: [prefix],
   props: {
-    indicator: String,
+    type: String,
     labels: Array,
     index: Number,
     vertical: Boolean
+  },
+  computed: {
+    rootClass () {
+      return {
+        [this.$c('carousel-indicator')]: true,
+        [this.$c(`carousel-indicator-${this.type}s`)]: true,
+        [this.$c(`carousel-indicator-vertical`)]: this.vertical,
+        [this.$c(`carousel-indicator-horizontal`)]: !this.vertical
+      }
+    }
   }
 }
 </script>

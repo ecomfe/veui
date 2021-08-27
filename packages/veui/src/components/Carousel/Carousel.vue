@@ -7,8 +7,7 @@
     [$c(`carousel-gutter`)]: hasGutter,
     [$c(`carousel-${effect}`)]: true,
     [$c('carousel-outside-indicator')]: isOutsideIndicator,
-    [$c('carousel-outside-controls')]:
-      hasControls && controlsPosition === 'outside',
+    [$c('carousel-outside-controls')]: isOutsideControl,
     [$c(`carousel-aspect-ratio`)]: slideAspectRatio
   }"
   :ui="realUi"
@@ -21,36 +20,33 @@
   @keydown.up="handleKeydown(-1, $event, true)"
   @keydown.down="handleKeydown(1, $event, true)"
 >
-  <div :class="$c('carousel-viewport-wrap')">
-    <div
-      :class="$c('carousel-viewport')"
-      @mouseenter="handleEnter"
-      @mouseleave="handleLeave"
-    >
-      <veui-carousel-fade
-        v-if="isFade"
-        ref="scene"
-        :datasource="datasource"
-        :index="realIndex"
-        :slide-aspect-ratio="slideAspectRatio"
-        :preload-range="preloadRange"
-        :options="options"
-      />
-      <veui-carousel-slide
-        v-else
-        ref="scene"
-        :datasource="datasource"
-        :index.sync="realIndex"
-        :vertical="vertical"
-        :slide-aspect-ratio="slideAspectRatio"
-        :preload-range="preloadRange"
-        :options="options"
-        v-bind="slideProps"
+  <div :class="$c('carousel-player')">
+    <div :class="$c('carousel-viewport-wrap')">
+      <div
+        :class="$c('carousel-viewport')"
+        @mouseenter="handleEnter"
+        @mouseleave="handleLeave"
+      >
+        <component
+          :is="`veui-carousel-${effect}`"
+          ref="effect"
+          :datasource="datasource"
+          :index.sync="realIndex"
+          :slide-aspect-ratio="slideAspectRatio"
+          :preload-range="preloadRange"
+          :options="options"
+          v-bind="isFade ? {} : slideProps"
+        />
+      </div>
+      <div
+        v-if="vertical && slideAspectRatio && !isFade"
+        :class="$c('carousel-dummy')"
+        :style="dummyStyle"
       />
     </div>
     <template v-if="hasControls">
       <veui-button
-        :ui="uiParts.control"
+        :ui="controlUi"
         :class="{
           [$c('carousel-control')]: true,
           [$c('carousel-control-prev')]: true,
@@ -66,13 +62,13 @@
         />
       </veui-button>
       <veui-button
-        :ui="uiParts.control"
+        :ui="controlUi"
         :class="{
           [$c('carousel-control')]: true,
           [$c('carousel-control-next')]: true,
           [$c('carousel-control-vertical')]: vertical
         }"
-        :disabled="!wrap && realIndex === pageCount - 1"
+        :disabled="!wrap && realIndex === groupCount - 1"
         tabindex="-1"
         @click="doStep(1)"
       >
@@ -92,7 +88,7 @@
       [$c(`carousel-indicator-bottom`)]: !vertical && isEndIndicator,
       [$c(`carousel-indicator-outside`)]: isOutsideIndicator
     }"
-    :indicator="indicator"
+    :type="indicator"
     :index="realIndex"
     :labels="indicatorLabels"
     :vertical="vertical"
@@ -105,11 +101,6 @@
   >
     {{ t('detail', { index: realIndex + 1, total: datasource.length }) }}
   </div>
-  <div
-    v-if="vertical && slideAspectRatio && !isFade"
-    :class="$c('carousel-dummy')"
-    :style="dummyStyle"
-  />
 </div>
 </template>
 
@@ -118,14 +109,13 @@ import { includes, pick, range } from 'lodash'
 import Button from '../Button'
 import Icon from '../Icon'
 import Indicator from './_Indicator'
-import Slide, { Props as SlideProps } from './_Slide'
+import Slide, { props as slideProps } from './_Slide'
 import Fade from './_Fade'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import carousel from '../../mixins/carousel'
-
-const CUSTOM_GUTTER = '--dls-carousel-gutter'
+import { CUSTOM_GUTTER, FALLBACK_GUTTER, getRatio } from './mixin'
 
 export default {
   name: 'veui-carousel',
@@ -210,18 +200,24 @@ export default {
         }
       }
     },
-    ...SlideProps
+    ...slideProps
   },
   computed: {
     isFade () {
       return this.effect === 'fade'
     },
     slideProps () {
-      return pick(this.$props, Object.keys(SlideProps))
+      return pick(this.$props, Object.keys(slideProps))
     },
     hasControls () {
       // 非自动播放，必须有 controls
       return this.autoplay ? this.controls : true
+    },
+    isOutsideControl () {
+      return this.hasControls && this.controlsPosition === 'outside'
+    },
+    controlUi () {
+      return this.uiParts[this.isOutsideControl ? 'outsideControl' : 'control']
     },
     hasIndicator () {
       return this.indicator !== 'none'
@@ -233,7 +229,7 @@ export default {
         ? this.datasource.map(
           ({ label }, index) => label || this.t('pageIndex', { index })
         )
-        : range(1, this.pageCount + 1).map(index =>
+        : range(1, this.groupCount + 1).map(index =>
           this.t('pageIndex', { index })
         )
     },
@@ -251,34 +247,39 @@ export default {
      * 在垂直转场的情况下，利用 padding 来撑开容器（内部是多屏在一起，没法靠内容撑开）
      */
     dummyStyle () {
-      let ratio = this.slideAspectRatio
-      if (typeof ratio === 'string') {
-        const [w, h] = ratio.split('/').map(Number)
-        ratio = h / w
-      } else {
-        ratio = 1 / ratio
-      }
-      let itemsHeight = this.slidesPerView * ratio * 100
-      return {
-        'padding-top': `calc(${itemsHeight}% + ${this.slidesPerView -
-          1} * var(${CUSTOM_GUTTER}))`
-      }
+      let ratio = getRatio(this.slideAspectRatio)
+      const itemsHeight = this.slidesPerView * ratio * 100
+      const gutterCount = this.slidesPerView - 1
+      return [
+        {
+          'padding-top': `calc(${itemsHeight}% + ${gutterCount} * ${FALLBACK_GUTTER})`
+        },
+        {
+          'padding-top': `calc(${itemsHeight}% + ${gutterCount} * var(${CUSTOM_GUTTER}))`
+        }
+      ]
     },
     hasGutter () {
       return !this.isFade && !!(this.slidesPerView - 1)
     },
-    realStep () {
+    realSlidesPerGroup () {
       return this.isFade ? 1 : this.slidesPerGroup
     },
-    pageCount () {
-      return Math.ceil(this.datasource.length / this.realStep)
+    groupCount () {
+      return Math.ceil(this.datasource.length / this.realSlidesPerGroup)
     }
   },
   mounted () {
     this.initPlay()
 
     this.$watch(
-      () => [this.interval, this.realIndex, this.autoplay],
+      () => [
+        this.interval,
+        this.realIndex,
+        this.autoplay,
+        this.vertical,
+        this.effect
+      ],
       this.initPlay
     )
   },
@@ -289,7 +290,7 @@ export default {
     canStep (step) {
       const result =
         !this.wrap &&
-        (this.realIndex + step < 0 || this.realIndex + step >= this.pageCount)
+        (this.realIndex + step < 0 || this.realIndex + step >= this.groupCount)
       return !result
     },
     select (index, event) {
@@ -298,7 +299,7 @@ export default {
       }
       if (this.effect === 'slide') {
         // 不能仅仅更新 index，再根据 index 来播放（浏览器会拦截，认为非用户触发）
-        this.$refs.scene.goToView(index)
+        this.$refs.effect.goToGroup(index)
       }
       this.triggerChange(index)
 
@@ -342,7 +343,7 @@ export default {
       this.focusTimer = setTimeout(() => {
         this.focused = true
         this.focusedIndex = this.realIndex
-        this.$refs.scene.focusCurrent(this.realIndex)
+        this.$refs.effect.focusCurrent(this.realIndex)
       })
     },
     // TODO 统一
@@ -351,7 +352,7 @@ export default {
         if (this.isFade) {
           this.step(i, focus)
         } else {
-          this.$refs.scene.stepView(i)
+          this.$refs.effect.step(i)
           if (focus) {
             this.focusCurrent()
           }
