@@ -4,7 +4,8 @@ import config from 'veui/managers/config'
 config.defaults(
   {
     parts: {
-      control: 'translucent'
+      control: 'translucent',
+      outsideControl: 'basic'
     },
     icons: {
       prev: IconChevronLeft,

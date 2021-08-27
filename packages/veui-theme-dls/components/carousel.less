@@ -5,14 +5,30 @@
   @width-normal: 480px;
   @height-normal: 270px;
 
-  --dls-carousel-gutter: 12px;
+  // TODO remove
+  @dls-carousel-indicator-dot-size: 6px;
+  @dls-carousel-control-shadow: @dls-shadow-1;
+  @dls-carousel-slide-gutter: 24px;
+  @dls-carousel-control-spacing-inside: 24px;
+  @dls-carousel-control-spacing-outside: 16px;
+  @dls-carousel-indicator-height: 3px;
+
+  --dls-carousel-slide-gutter: @dls-carousel-slide-gutter;
   position: relative;
   .size(@width-normal, @height-normal);
   display: flex;
   flex-direction: column;
   align-items: center;
-  &-viewport-wrap[data-focus-visible-added] {
-    .dls-focus-ring();
+
+  &-player {
+    display: flex;
+    flex: 1 1 auto;
+    .size(100%);
+    align-items: center;
+  }
+
+  &-vertical &-player {
+    flex-direction: column;
   }
 
   &-viewport-wrap,
@@ -24,11 +40,9 @@
 
   &-viewport-wrap {
     display: flex;
+    flex: 1 1 auto;
     align-items: center;
-  }
-
-  &-vertical &-viewport-wrap {
-    flex-direction: column;
+    position: relative;
   }
 
   &-items {
@@ -49,6 +63,7 @@
       .size(100%);
       background: no-repeat center/cover;
     }
+
     &-video {
       .size(100%);
       .absolute(0); // for vertical
@@ -60,10 +75,12 @@
   &-fade &-item {
     width: 100%;
     .veui-transition(opacity);
+
     &-enter,
     &-leave-to {
       opacity: 0;
     }
+
     // current占下位置（aspectRatio 需要 padding 要撑开高度），其他的叠起来
     &:not(.@{veui-prefix}-carousel-item-current) {
       .absolute(0);
@@ -81,16 +98,17 @@
   }
 
   &-slide &-item {
-    height: 100%;
-    width: 100%;
+    .size(100%);
     position: static;
     flex: 1 0 auto;
   }
+
   &-gutter:not(&-vertical) &-item:not(:last-child) {
-    margin-right: var(--dls-carousel-gutter, 12px);
+    margin-right: var(--dls-carousel-slide-gutter, @dls-carousel-slide-gutter);
   }
+
   &-gutter&-vertical &-item:not(:last-child) {
-    margin-bottom: var(--dls-carousel-gutter, 12px);
+    margin-bottom: var(--dls-carousel-slide-gutter, @dls-carousel-slide-gutter);
   }
 
   // controls
@@ -110,11 +128,11 @@
     }
 
     &-prev {
-      left: @dls-carousel-control-spacing;
+      left: @dls-carousel-control-spacing-inside;
     }
 
     &-next {
-      right: @dls-carousel-control-spacing;
+      right: @dls-carousel-control-spacing-inside;
     }
 
     .@{veui-prefix}-icon {
@@ -125,13 +143,20 @@
     &&-vertical {
       .absolute(auto, auto, auto, 50%);
     }
-    &-vertical&-prev {
-      top: @dls-carousel-control-spacing;
-      transform: translate(-50%, 0) rotate(90deg);
+
+    &-vertical {
+      transform: translateX(-50%);
+      .@{veui-prefix}-icon {
+        transform: rotate(90deg);
+      }
     }
+
+    &-vertical&-prev {
+      top: @dls-carousel-control-spacing-inside;
+    }
+
     &-vertical&-next {
-      bottom: @dls-carousel-control-spacing;
-      transform: translate(-50%, 0) rotate(90deg);
+      bottom: @dls-carousel-control-spacing-inside;
     }
   }
 
@@ -145,75 +170,76 @@
     position: static;
     opacity: 1;
     flex: 0 0 auto;
-    transform: translate(0, 0);
+    transform: none; // 用 flex 对齐了
+    box-shadow: @dls-carousel-control-shadow;
+    border: none;
   }
+
   &-outside-controls &-control-prev {
     order: 1;
   }
-  &-outside-controls &-viewport {
+
+  &-outside-controls &-viewport-wrap {
     order: 2;
-    margin: 0 16px;
+    margin: 0 @dls-carousel-control-spacing-outside;
   }
+
   &-outside-controls &-control-next {
     order: 3;
   }
 
   // vertical outside controls
-  &-vertical&-outside-controls &-viewport {
-    margin: 16px 0;
-  }
-  &-vertical&-outside-controls &-control {
-    transform: rotate(90deg);
+  &-vertical&-outside-controls &-viewport-wrap {
+    margin: @dls-carousel-control-spacing-outside 0;
   }
 
   // indictor starts
   &-indicator {
     display: flex;
     justify-content: center;
+
+    &-horizontal {
+      transform: translateX(-50%);
+    }
+
     &-horizontal&-bottom {
-      .absolute(auto, auto, @dls-carousel-indicator-spacing-outer, 50%);
-      transform: translateX(-50%);
+      .absolute(_, _, @dls-carousel-indicator-spacing-outer, 50%);
     }
+
     &-horizontal&-top {
-      .absolute(@dls-carousel-indicator-spacing-outer, auto, auto, 50%);
-      transform: translateX(-50%);
+      .absolute(@dls-carousel-indicator-spacing-outer, _, _, 50%);
     }
+
     &-vertical&-right {
       .absolute(
         50%,
-        @dls-carousel-indicator-spacing-outer + 3px / 2,
-        auto,
-        auto
+        @dls-carousel-indicator-spacing-outer + @dls-carousel-indicator-height /
+          2,
+        _,
+        _
       );
       transform: translate(50%, -50%) rotate(90deg);
     }
+
     &-vertical&-left {
       .absolute(
         50%,
-        auto,
-        auto,
-        @dls-carousel-indicator-spacing-outer + 3px / 2
+        _,
+        _,
+        @dls-carousel-indicator-spacing-outer + @dls-carousel-indicator-height /
+          2
       );
       transform: translate(-50%, -50%) rotate(90deg);
     }
 
     &-dots&-vertical&-right {
-      .absolute(
-        50%,
-        @dls-carousel-indicator-spacing-outer + 6px / 2,
-        auto,
-        auto
-      );
-      transform: translate(50%, -50%) rotate(90deg);
+      right: @dls-carousel-indicator-spacing-outer +
+        @dls-carousel-indicator-dot-size / 2;
     }
+
     &-dots&-vertical&-left {
-      .absolute(
-        50%,
-        auto,
-        auto,
-        @dls-carousel-indicator-spacing-outer + 6px / 2
-      );
-      transform: translate(-50%, -50%) rotate(90deg);
+      left: @dls-carousel-indicator-spacing-outer +
+        @dls-carousel-indicator-dot-size / 2;
     }
 
     &-item {
@@ -223,8 +249,7 @@
       flex: 0 0 auto;
       padding: 0;
       margin-left: @dls-carousel-indicator-spacing-inner;
-      // dls-carousel-indicator-height 要更新为 3px
-      .size(@dls-carousel-indicator-width, 3px);
+      .size(@dls-carousel-indicator-width, @dls-carousel-indicator-height);
       .veui-transition(width, background-color);
       color: transparent;
       background-color: @dls-carousel-indicator-background-color;
@@ -260,7 +285,7 @@
     }
 
     &-dots &-item {
-      .size(6px);
+      .size(@dls-carousel-indicator-dot-size);
       border-radius: 50%;
     }
 
@@ -275,38 +300,35 @@
       cursor: default;
     }
 
-    &-numbers&-bottom {
-      .absolute(auto, auto, @dls-carousel-indicator-spacing-outer, 50%);
-      transform: translateX(-50%);
-    }
-    &-numbers&-top {
-      .absolute(@dls-carousel-indicator-spacing-outer, auto, auto, 50%);
-      transform: translateX(-50%);
-    }
+    // 水平不需要特殊处理
     &-numbers&-left {
-      .absolute(50%, auto, auto, @dls-carousel-indicator-spacing-outer);
+      .absolute(50%, _, _, @dls-carousel-indicator-spacing-outer);
       transform: translateY(-50%);
     }
+
     &-numbers&-right {
-      .absolute(50%, @dls-carousel-indicator-spacing-outer, auto, auto);
+      .absolute(50%, @dls-carousel-indicator-spacing-outer, _, _);
       transform: translateY(-50%);
     }
   }
 
   &-outside-indicator &-indicator-bottom {
     position: static;
-    margin-top: 12px;
-    transform: none;
+    margin-top: @dls-carousel-indicator-spacing-outer;
+    transform: none; // flex 对齐了
   }
 
   &-outside-indicator &-indicator-item {
     background-color: @dls-color-gray-4;
+
     &:hover {
       background-color: @dls-color-brand-7;
     }
+
     &:active {
       background-color: @dls-color-brand-7;
     }
+
     &-current {
       &,
       &:hover {
@@ -318,12 +340,8 @@
   &-aspect-ratio {
     height: auto !important;
   }
-  &-vertical&-slide&-aspect-ratio &-viewport-wrap {
+
+  &-vertical&-slide&-aspect-ratio &-viewport {
     .absolute(0);
-  }
-  &-vertical&-slide&-aspect-ratio &-dummy {
-    content: "";
-    display: block;
-    // padding-top 由代码输出
   }
 }

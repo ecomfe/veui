@@ -63,16 +63,15 @@
 </template>
 
 <script>
-import carousel, { isVideo } from './mixin'
+import carousel, { isVideo, CUSTOM_GUTTER, FALLBACK_GUTTER } from './mixin'
 
-const CUSTOM_GUTTER = '--dls-carousel-gutter'
 // index 解释
-// 1. prop index 其实是 view 的 index，即 viewIndex
-// 2. local loopViewIndex, 在 viewIndex 上填上了 -1 和 length，方便循环
+// 1. prop index 其实是 view 的 index，即 groupIndex
+// 2. local loopGroupIndex, 在 groupIndex 上填上了 -1 和 length，方便循环
 // 3. index in realDatasource, rdIndex，循环时候的 offset
 // 4. index in datasource, dIndex，实际预加载等感知的 index
 
-export const Props = {
+export const props = {
   slidesPerView: {
     type: Number,
     default: 1
@@ -87,15 +86,15 @@ export const Props = {
 export default {
   name: 'veui-carousel-slide',
   mixins: [carousel],
-  props: Props,
+  props,
   data () {
     return {
-      // 比如 index 是 0~3，那么 loopViewIndex 是 -1~4， -1过渡完变成3，4过渡完变成0，形成循环
-      loopViewIndex: this.index
+      // 比如 index 是 0~3，那么 loopGroupIndex 是 -1~4， -1过渡完变成3，4过渡完变成0，形成循环
+      loopGroupIndex: this.index
     }
   },
   computed: {
-    pageCount () {
+    groupCount () {
       return Math.ceil(this.datasource.length / this.slidesPerGroup)
     },
     hasGutter () {
@@ -103,18 +102,29 @@ export default {
     },
     dimension () {
       const gutterCount = this.slidesPerView - 1
-      const dimension = this.vertical ? 'height' : 'width'
-      return {
-        [dimension]: gutterCount
-          ? `calc((100% - var(${CUSTOM_GUTTER}) * ${gutterCount}) / ${this.slidesPerView})`
-          : '100%'
+      if (!gutterCount) {
+        return getDimension(this.vertical)
       }
+      return [
+        getDimension(
+          this.vertical,
+          FALLBACK_GUTTER,
+          gutterCount,
+          this.slidesPerView
+        ),
+        getDimension(
+          this.vertical,
+          `var(${CUSTOM_GUTTER})`,
+          gutterCount,
+          this.slidesPerView
+        )
+      ]
     },
     /**
      * 空白 pad 的数量
      */
     padCount () {
-      const nextDupPageNo = this.pageCount
+      const nextDupPageNo = this.groupCount
       return this.datasource.length % this.slidesPerGroup
         ? nextDupPageNo * this.slidesPerGroup - this.datasource.length
         : 0
@@ -131,13 +141,13 @@ export default {
 
       // 补齐 pad 空白
       if (this.padCount) {
-        let paddCount = this.padCount
+        let padCount = this.padCount
         let len = this.datasource.length
-        while (paddCount--) {
+        while (padCount--) {
           normalized.push({
             pad: true,
-            index: len + paddCount,
-            key: `pad#${paddCount}`
+            index: len + padCount,
+            key: `pad#${padCount}`
           })
         }
       }
@@ -172,25 +182,24 @@ export default {
     currentRdIndexes () {
       let indexes = []
       let sc = this.slidesPerView
-      const start = (this.loopViewIndex + 1) * this.slidesPerGroup
+      const start = (this.loopGroupIndex + 1) * this.slidesPerGroup
       while (sc--) {
         indexes.push(start + sc)
       }
       return indexes
     },
-    adjustedLoopViewIndex () {
-      return (this.loopViewIndex + this.pageCount) % this.pageCount
+    groupIndex () {
+      return (this.loopGroupIndex + this.groupCount) % this.groupCount
     },
     needFixLoop () {
       return (
-        this.index === this.adjustedLoopViewIndex &&
-        this.index !== this.loopViewIndex
+        this.index === this.groupIndex && this.index !== this.loopGroupIndex
       )
     }
   },
   watch: {
     index (val, oldVal) {
-      if (val === this.adjustedLoopViewIndex) {
+      if (val === this.groupIndex) {
         return
       }
       this.inTransition = true
@@ -210,67 +219,66 @@ export default {
   },
   methods: {
     shouldRenderItem ({ pad, index: dIndex }, index) {
-      // 当前 or 预加载需要将项目渲染出来
       if (pad) {
         return false
       }
-
+      // 当前 or 预加载需要将项目渲染出来
       if (this.currentRdIndexes.indexOf(index) >= 0 || this.isPreload(dIndex)) {
         return true
       }
 
       // 当需要 fixLoop 时，将修复目标的 view 也渲染出来
       if (this.needFixLoop) {
-        const [start, end] = this.getRdIndexesByLoopViewIndex(
-          this.adjustedLoopViewIndex
-        )
+        const [start, end] = this.getRdIndexesByLoopGroupIndex(this.groupIndex)
         if (start <= index && index < end) {
           return true
         }
       }
       return false
     },
-    pauseVideoForSlideOuts (fromLoopViewIndex, toLoopViewIndex) {
+    pauseVideoForSlideOuts (fromLoopGroupIndex, toLoopGroupIndex) {
       return this.pauseVideos(
-        this.getSlideOutRange(fromLoopViewIndex, toLoopViewIndex)
+        this.getSlideOutRange(fromLoopGroupIndex, toLoopGroupIndex)
       )
     },
-    playVideoForSlideIns (loopViewIndex) {
-      return this.playVideos(this.getRdIndexesByLoopViewIndex(loopViewIndex))
+    playVideoForSlideIns (loopGroupIndex) {
+      return this.playVideos(this.getRdIndexesByLoopGroupIndex(loopGroupIndex))
     },
-    setTransition (loopViewIndex, immediate) {
-      this.loopViewIndex = loopViewIndex
+    setTransition (loopGroupIndex, immediate) {
+      this.loopGroupIndex = loopGroupIndex
       const count =
-        (this.slidesPerGroup / this.slidesPerView) * (loopViewIndex + 1)
-      let offset = `calc((-100% ${
-        this.hasGutter ? `- var(${CUSTOM_GUTTER})` : ''
-      }) * ${count})`
-      // duration 可能 0 表示立即转到，否则让 CSS 中设置生效
-      let duration = ''
-      if (immediate) {
-        duration = '0s'
-      }
+        (this.slidesPerGroup / this.slidesPerView) * (loopGroupIndex + 1)
       this.inTransition = !immediate
-      this.$el.style.transitionDuration = duration
-      this.$el.style.transform = `translate3d(${
-        this.vertical ? `0,${offset},0` : `${offset},0,0`
-      })`
+      this.$el.style.transitionDuration = immediate ? '0s' : '' // 让 CSS 中设置生效
+      // 先设置 fallback 再设置 custom 语法
+      this.$el.style.transform = getTranslate(
+        this.hasGutter ? FALLBACK_GUTTER : '',
+        count,
+        this.vertical
+      )
+      this.$el.style.transform = getTranslate(
+        this.hasGutter ? `var(${CUSTOM_GUTTER})` : '',
+        count,
+        this.vertical
+      )
     },
+    // 从 duplidate group 切换到实际的
     loopFix () {
       // 从 duplicate 同步时间并播放
       this.syncVideoCurrentTimeOnLoopFix()
       // 暂停 duplicate
-      this.pauseVideoForSlideOuts(this.loopViewIndex, this.index)
+      this.pauseVideoForSlideOuts(this.loopGroupIndex, this.index)
       // 立即切换
       this.setTransition(this.index, true)
       // 重置 duplicate
       this.resetVideos()
     },
+    // loopFix 时将调整
     syncVideoCurrentTimeOnLoopFix () {
-      const offset = (this.index - this.loopViewIndex) * this.slidesPerGroup
-      let [start, end] = this.getRdIndexesByLoopViewIndex(this.loopViewIndex)
+      const offset = (this.index - this.loopGroupIndex) * this.slidesPerGroup
+      let [start, end] = this.getRdIndexesByLoopGroupIndex(this.loopGroupIndex)
       const [preserveStart, preserveEnd] =
-        this.loopViewIndex === -1
+        this.loopGroupIndex === -1
           ? [this.slidesPerGroup, this.slidesPerView]
           : [start, end - this.slidesPerGroup]
       while (start < end) {
@@ -290,7 +298,8 @@ export default {
         start++
       }
     },
-    goToView (newIndex) {
+    // public
+    goToGroup (newIndex) {
       this.resetVideos()
       if (this.needFixLoop) {
         this.loopFix()
@@ -302,17 +311,17 @@ export default {
         this.pauseVideoForSlideOuts(this.index, newIndex)
       }
     },
-    tryStepView (step) {
+    doStep (delta) {
       const oldIndex = this.index
-      const newLoopViewIndex = this.index + step
-      const newIndex = (newLoopViewIndex + this.pageCount) % this.pageCount
+      const newLoopGroupIndex = this.index + delta
+      const newIndex = (newLoopGroupIndex + this.groupCount) % this.groupCount
 
       // 数据同步
       this.$emit('update:index', newIndex)
       // 开始过渡到新view
-      this.setTransition(newLoopViewIndex)
+      this.setTransition(newLoopGroupIndex)
       // 暂停即将滑动出去的
-      this.pauseVideoForSlideOuts(oldIndex, newLoopViewIndex)
+      this.pauseVideoForSlideOuts(oldIndex, newLoopGroupIndex)
       // 受控检查 TODO
       this.$nextTick(() => {
         if (newIndex !== this.index) {
@@ -322,7 +331,7 @@ export default {
       })
     },
     // public
-    stepView (step) {
+    step (delta) {
       if (this.inTransition) {
         return
       }
@@ -330,7 +339,7 @@ export default {
       if (this.needFixLoop) {
         this.loopFix()
       }
-      this.tryStepView(step)
+      this.doStep(delta)
     },
 
     handleTransitionEnd () {
@@ -345,11 +354,14 @@ export default {
     focusCurrent (index) {
       this.$refs.item[index + 1].focus({ preventScroll: true })
     },
-    getSlideOutRange (fromLoopViewIndex, toLoopViewIndex) {
-      const [fromStart, fromEnd] = this.getRdIndexesByLoopViewIndex(
-        fromLoopViewIndex
+    // 获取将要滚动出去的索引（并非 view 中所有项目都会滚动出去）
+    getSlideOutRange (fromLoopGroupIndex, toLoopGroupIndex) {
+      const [fromStart, fromEnd] = this.getRdIndexesByLoopGroupIndex(
+        fromLoopGroupIndex
       )
-      const [toStart, toEnd] = this.getRdIndexesByLoopViewIndex(toLoopViewIndex)
+      const [toStart, toEnd] = this.getRdIndexesByLoopGroupIndex(
+        toLoopGroupIndex
+      )
       let start = fromStart
       let end = fromEnd
 
@@ -361,10 +373,24 @@ export default {
       }
       return [start, end]
     },
-    getRdIndexesByLoopViewIndex (loopViewIndex) {
-      let start = (loopViewIndex + 1) * this.slidesPerGroup
+    // 获取当前 group 在 realDatasource 中的索引
+    getRdIndexesByLoopGroupIndex (loopGroupIndex) {
+      let start = (loopGroupIndex + 1) * this.slidesPerGroup
       return [start, start + this.slidesPerView]
     }
   }
+}
+
+function getTranslate (gutter, count, vertical) {
+  let calc = `calc((-100%${gutter ? ` - ${gutter}` : ''}) * ${count})`
+  return `translate3d(${vertical ? `0,${calc},0` : `${calc},0,0`})`
+}
+
+function getDimension (vertical, gutter, gutterCount, slidesPerView) {
+  const dimension = vertical ? 'height' : 'width'
+  const content = gutterCount
+    ? `calc((100% - ${gutter} * ${gutterCount}) / ${slidesPerView})`
+    : '100%'
+  return { [dimension]: content }
 }
 </script>
