@@ -217,7 +217,7 @@ export default {
       return this.hasControls && this.controlsPosition === 'outside'
     },
     controlUi () {
-      return this.uiParts[this.isOutsideControl ? 'outsideControl' : 'control']
+      return this.uiParts[this.isOutsideControl ? 'controlOutside' : 'control']
     },
     hasIndicator () {
       return this.indicator !== 'none'

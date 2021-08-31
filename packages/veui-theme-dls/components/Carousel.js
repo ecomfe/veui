@@ -5,7 +5,7 @@ ui.defaults(
   {
     parts: {
       control: 'translucent',
-      outsideControl: 'basic'
+      controlOutside: 'basic'
     },
     icons: {
       prev: IconChevronLeft,
