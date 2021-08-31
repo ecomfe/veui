@@ -4,15 +4,10 @@
   // TODO: use a better default size
   @width-normal: 480px;
   @height-normal: 270px;
+  @dls-carousel-default-timing-function: ease;
 
-  // TODO remove
-  @dls-carousel-indicator-dot-size: 6px;
-  @dls-carousel-control-shadow: @dls-shadow-1;
-  @dls-carousel-slide-gutter: 24px;
-  @dls-carousel-control-spacing-inside: 24px;
-  @dls-carousel-control-spacing-outside: 16px;
-  @dls-carousel-indicator-height: 3px;
-
+  --dls-carousel-transition-timing-function: @dls-carousel-default-timing-function;
+  --dls-carousel-transition-duration: @veui-transition-duration;
   --dls-carousel-slide-gutter: @dls-carousel-slide-gutter;
   position: relative;
   .size(@width-normal, @height-normal);
@@ -75,6 +70,9 @@
   &-fade &-item {
     width: 100%;
     .veui-transition(opacity);
+    transition-duration: var(--dls-carousel-transition-duration);
+    transition-timing-function: @dls-carousel-default-timing-function;
+    transition-timing-function: var(--dls-carousel-transition-timing-function);
 
     &-enter,
     &-leave-to {
@@ -95,6 +93,9 @@
       flex-direction: column;
     }
     .veui-transition(transform);
+    transition-duration: var(--dls-carousel-transition-duration);
+    transition-timing-function: @dls-carousel-default-timing-function;
+    transition-timing-function: var(--dls-carousel-transition-timing-function);
   }
 
   &-slide &-item {
@@ -213,8 +214,10 @@
     &-vertical&-right {
       .absolute(
         50%,
-        @dls-carousel-indicator-spacing-outer + @dls-carousel-indicator-height /
-          2,
+        dls-sum(
+          @dls-carousel-indicator-spacing-outer,
+          @dls-carousel-indicator-height / 2
+        ),
         _,
         _
       );
@@ -226,20 +229,26 @@
         50%,
         _,
         _,
-        @dls-carousel-indicator-spacing-outer + @dls-carousel-indicator-height /
-          2
+        dls-sum(
+          @dls-carousel-indicator-spacing-outer,
+          @dls-carousel-indicator-height / 2
+        )
       );
       transform: translate(-50%, -50%) rotate(90deg);
     }
 
     &-dots&-vertical&-right {
-      right: @dls-carousel-indicator-spacing-outer +
-        @dls-carousel-indicator-dot-size / 2;
+      right: dls-sum(
+        @dls-carousel-indicator-spacing-outer,
+        @dls-carousel-indicator-dot-size / 2
+      );
     }
 
     &-dots&-vertical&-left {
-      left: @dls-carousel-indicator-spacing-outer +
-        @dls-carousel-indicator-dot-size / 2;
+      left: dls-sum(
+        @dls-carousel-indicator-spacing-outer,
+        @dls-carousel-indicator-dot-size / 2
+      );
     }
 
     &-item {

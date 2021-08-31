@@ -71,6 +71,24 @@
       <code>vertical</code>
     </veui-checkbox>
   </p>
+  <p>
+    <code>duration</code>:
+    <veui-number-input
+      v-model="duration"
+      ui="tiny"
+      :step="0.1"
+      :decimal-place="1"
+      :min="0"
+      :max="5"
+    />
+  </p>
+  <p>
+    <code>timing-function</code>:
+    <veui-radio-group
+      v-model="timing"
+      :items="timings"
+    />
+  </p>
   <section class="carousel-section">
     <h4>1 per view, 1 per group</h4>
     <p>
@@ -99,6 +117,10 @@
       :controls-position="control || undefined"
       :effect="effect"
       lazy
+      :style="{
+        '--dls-carousel-transition-duration': `${duration}s`,
+        '--dls-carousel-transition-timing-function': timing
+      }"
     />
   </section>
   <section class="carousel-section">
@@ -131,6 +153,10 @@
       :slides-per-view="2"
       :slides-per-group="1"
       lazy
+      :style="{
+        '--dls-carousel-transition-duration': `${duration}s`,
+        '--dls-carousel-transition-timing-function': timing
+      }"
     />
   </section>
   <section class="carousel-section">
@@ -350,6 +376,7 @@ export default {
       index112: 0,
       index2221: 0,
       interval: 3000,
+      duration: 0.2,
       pauseOnHover: true,
       loose: false,
       autoplay: false,
@@ -360,6 +387,14 @@ export default {
       indicatorPosition: 'inside',
       control: 'inside',
       effect: 'slide',
+      timing: 'ease',
+      timings: [
+        { value: 'ease', label: 'ease' },
+        { value: 'ease-in', label: 'ease-in' },
+        { value: 'ease-out', label: 'ease-out' },
+        { value: 'ease-in-out', label: 'ease-in-out' },
+        { value: 'linear', label: 'linear' }
+      ],
       effects: [
         { value: 'fade', label: 'fade' },
         { value: 'slide', label: 'slide' }

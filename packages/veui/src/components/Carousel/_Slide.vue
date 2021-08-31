@@ -90,7 +90,8 @@ export default {
   data () {
     return {
       // 比如 index 是 0~3，那么 loopGroupIndex 是 -1~4， -1过渡完变成3，4过渡完变成0，形成循环
-      loopGroupIndex: this.index
+      loopGroupIndex: this.index,
+      oldIndex: this.index
     }
   },
   computed: {
@@ -195,10 +196,21 @@ export default {
       return (
         this.index === this.groupIndex && this.index !== this.loopGroupIndex
       )
+    },
+    transitionRdIndexRange () {
+      if (this.oldIndex != null && this.oldIndex !== this.index) {
+        let [oldStart, oldEnd] = this.getRdIndexesByLoopGroupIndex(
+          this.oldIndex
+        )
+        let [start, end] = this.getRdIndexesByLoopGroupIndex(this.index)
+        return [Math.min(oldStart, start), Math.max(oldEnd, end)]
+      }
+      return null
     }
   },
   watch: {
     index (val, oldVal) {
+      this.oldIndex = oldVal
       if (val === this.groupIndex) {
         return
       }
@@ -213,6 +225,7 @@ export default {
   },
   created () {
     this.inTransition = false
+    this.renderedItems = []
   },
   mounted () {
     this.setTransition(this.index, true)
@@ -222,19 +235,31 @@ export default {
       if (pad) {
         return false
       }
-      // 当前 or 预加载需要将项目渲染出来
-      if (this.currentRdIndexes.indexOf(index) >= 0 || this.isPreload(dIndex)) {
+      // 已经渲染的继续渲染
+      if (this.renderedItems.indexOf(index) >= 0) {
         return true
       }
 
-      // 当需要 fixLoop 时，将修复目标的 view 也渲染出来
-      if (this.needFixLoop) {
-        const [start, end] = this.getRdIndexesByLoopGroupIndex(this.groupIndex)
-        if (start <= index && index < end) {
-          return true
-        }
+      // 当前 or 预加载需要将项目渲染出来
+      let result =
+        this.currentRdIndexes.indexOf(index) >= 0 || this.isPreload(dIndex)
+
+      // 移动经过的也渲染
+      if (!result && this.transitionRdIndexRange) {
+        const [start, end] = this.transitionRdIndexRange
+        result = start <= index && index < end
       }
-      return false
+
+      // 当需要 fixLoop 时，将修复目标的 view 也渲染出来
+      if (!result && this.needFixLoop) {
+        const [start, end] = this.getRdIndexesByLoopGroupIndex(this.groupIndex)
+        result = start <= index && index < end
+      }
+
+      if (result) {
+        this.renderedItems.push(index)
+      }
+      return result
     },
     pauseVideoForSlideOuts (fromLoopGroupIndex, toLoopGroupIndex) {
       return this.pauseVideos(
