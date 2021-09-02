@@ -101,7 +101,7 @@
       :is="inDialog ? 'veui-dialog' : 'div'"
       ui="wide"
       :open.sync="inDialog"
-      draggable
+      :draggable="inDialog ? 'true' : undefined"
     >
       <template #title>文件上传</template>
 
