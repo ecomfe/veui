@@ -30,10 +30,9 @@
       >{{ contentLabel }}</slot>
     </div>
     <div :class="$c('switch-button')">
-      <veui-icon
+      <veui-loading
         v-if="loading"
-        spin
-        :name="icons.loading"
+        loading
       />
     </div>
   </div>
@@ -46,7 +45,7 @@
 </template>
 
 <script>
-import Icon from './Icon'
+import Loading from './Loading'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
@@ -57,7 +56,7 @@ import { MOUSE_EVENTS, FOCUS_EVENTS, KEYBOARD_EVENTS } from '../utils/dom'
 export default {
   name: 'veui-switch',
   components: {
-    'veui-icon': Icon
+    'veui-loading': Loading
   },
   mixins: [
     prefix,

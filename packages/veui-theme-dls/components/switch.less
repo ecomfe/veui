@@ -17,7 +17,7 @@
       &-button {
         .size(@@thumb-size);
 
-        .@{veui-prefix}-icon {
+        .@{veui-prefix}-loading-content {
           .dls-icon-size(dls-sum(@@thumb-size, -2px));
         }
       }
@@ -164,13 +164,13 @@
   }
 
   &-loading &-switcher {
-    .@{veui-prefix}-icon {
+    .@{veui-prefix}-loading-spinner {
       color: @dls-switch-track-color-off;
     }
   }
 
   &-on&-loading &-switcher {
-    .@{veui-prefix}-icon {
+    .@{veui-prefix}-loading-spinner {
       color: @dls-switch-track-color-on;
     }
   }
