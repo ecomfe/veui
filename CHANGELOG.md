@@ -1,4 +1,28 @@
+## 2.1.0
+
+### 💡 主要变更
+
+- [+] 新增了 `ConfigProvider` 组件，用于对局部组件进行全局配置的自定义。
+- [^] 对 `Carousel` 组件进行了功能、样式升级
+
+  - `indicator` prop 新增 `bar`/`dot` 值，用于指定播放指示器的样式类型。其中 `bar` 用于替换之前的 `radio`（`radio` 也保持兼容支持）。
+  - 新增了 `effect` prop，用于指定轮播切换效果，其中 `fade` 仅在切换组个数与同时显示个数相同时生效。
+  - 新增了 `vertical` prop，用于支持纵向布局的轮播。
+  - 新增了 `indicator-alignment` prop，用于支持指示器的相对于布局方向的位置。
+  - 新增了 `indicator-position` prop，用于支持指示器显示在轮播容器的内部/外部。
+  - 新增了 `controls-position` prop，用于支持切换按钮相对于布局方向的位置。
+  - 新增了 `slide-aspect-ratio` prop，用于指定每个轮播项的纵横比。
+  - 新增了视频轮播项的支持，并新增 `options` prop 用于指定不同轮播项类型的默认配置。
+  - 新增了 `slides-per-view` prop，用于指定同时显示多少个轮播项。
+  - 新增了 `slides-per-group` prop，用于指定每次前后切换的一组包含多少个轮播项。
+
+### 🐞 问题修复
+
+- [^] 修正了 `Switch` 组件加载状态没有使用 `Loading` 组件的问题。
+
 ## 2.0.6
+
+### 🐞 问题修复
 
 - [^] 优化了 `Dialog`、`Drawer` 及 `Lightbox` 等触发模态层组件释放滚动锁定的逻辑，已避免模态层关闭时进行路由跳转可能导致解锁逻辑没有执行的问题。
 
